@@ -148,25 +148,25 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   !     fspac needed for conversion of reactance at 1 meter
   !     spacing to 1 foot spacing.
   !              start of constants definition.
-  valu1    =  558 4596.2 d0
-  valu2    =  .0008 5646 541 d0
-  valu3    =  .0006 4373 888  d0
-  valu4    =  .6159 3152 d0
-  valu5    =  8.6858 8964 d0
-  valu6    =  .0005000000 d0
+  valu1    =  5584596.2d0
+  valu2    =  .00085646541d0
+  valu3    =  .00064373888d0
+  valu4    =  .61593152d0
+  valu5    =  8.68588964d0
+  valu6    =  .0005000000d0
   valu7 = 3.0
   valu7    =  onehaf * sqrtz( valu7 )
-  valu8    =  .0040 4473 06  d0
-  valu9    =  .2113 9217 d0
-  valu10   =  .5772 1566 4901 5328 606  d0
-  valu11   =  .3926 991  d0
-  valu12   =  .3989 4228 0401 433 d0
-  valu13   =  1.2533 1413 7315 5   d0
-  valu14 = 2.3025 8509 3000 d0
-  aaa1    = .785398163397448 d0
-  aaa2    = .318309886183791 d0
-  sqrt2 = 1.414 2135 6237 3095 0488 d0
-  ccars(2)=1.365 9315 1565 8412 4488 d0
+  valu8    =  .0040447306d0
+  valu9    =  .21139217d0
+  valu10   =  .5772156649015328606d0
+  valu11   =  .3926991d0
+  valu12   =  .398942280401433d0
+  valu13   =  1.2533141373155d0
+  valu14 = 2.302585093000d0
+  aaa1    = .785398163397448d0
+  aaa2    = .318309886183791d0
+  sqrt2 = 1.4142135623730950488d0
+  ccars(2)=1.3659315156584124488d0
   ll0   =   0
   ll1   =   1
   ll2   =   2
@@ -219,30 +219,30 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   end do
   fked(14) = 0.0
   valu9=fke(1)/32.
-  fbe(15) = .011 048 60 d0
+  fbe(15) = .01104860d0
   fbe(16) = 0.0
-  fbe(17) = -.000 090 60 d0
-  fbe(18) = -.000 025 20 d0
-  fbe(19) = -.000 003 40 d0
-  fbe(20) =  .000 000 60 d0
-  fbed(15) = -.011 048 50 d0
-  fbed(16) = -.000 976 50 d0
-  fbed(17) = -.000 090 10 d0
+  fbe(17) = -.00009060d0
+  fbe(18) = -.00002520d0
+  fbe(19) = -.00000340d0
+  fbe(20) =  .00000060d0
+  fbed(15) = -.01104850d0
+  fbed(16) = -.00097650d0
+  fbed(17) = -.00009010d0
   fbed(18) =  .0
-  fbed(19) = .000 005 10 d0
-  fbed(20) = .000 001 90 d0
-  fke(15) = -.062 500 10 d0
-  fke(16) = -.001 381 30 d0
-  fke(17) =  .000 000 50 d0
-  fke(18) =  .000 034 60 d0
-  fke(19) =  .000 011 70 d0
-  fke(20) = .000 001 60 d0
-  fked(15) = -.000 000 10 d0
-  fked(16) =  .001 381 10 d0
-  fked(17) =  .000 245 20 d0
-  fked(18) =  .000 033 80 d0
-  fked(19) = -.000 002 40 d0
-  fked(20) = -.000 003 20 d0
+  fbed(19) = .00000510d0
+  fbed(20) = .00000190d0
+  fke(15) = -.06250010d0
+  fke(16) = -.00138130d0
+  fke(17) =  .00000050d0
+  fke(18) =  .00003460d0
+  fke(19) =  .00001170d0
+  fke(20) = .00000160d0
+  fked(15) = -.00000010d0
+  fked(16) =  .00138110d0
+  fked(17) =  .00024520d0
+  fked(18) =  .00003380d0
+  fked(19) = -.00000240d0
+  fked(20) = -.00000320d0
   if(iprsup.ge.2)write(lunit6,333)(fbe(i),i=1,20),(fbed(i),i=1,20), (fke(i),i=1,20),(fked(i),i=1,20),(bcars(i),i=1,30), &
        (dcars(i),i=1,30),(ccars(i),i=1,30)
 333 format(1x,10hdata fbe /  ,/,4(1x,5e25.15,/),/,12h data fbed / ,/ 4(1x,5e25.15,/),/,11h data fke / ,/,4(1x,5e25.15,/),/, &
@@ -543,7 +543,7 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   if ( metrik .eq. 1 )  gmode = gmode * fmipkm
 217 jspecl = j1 + j2 + j3 + j4 + j5 + j6 + j7 + j8 + j9 +j10 + j11 + j12
   nfreq = nfreq + 1
-  if ( lastov .ne. 1 .and. imodal .eq. 0 .and. nfreq .eq. 2 .and. .eq. 0 .and. ips .eq. 0 .and. lastov .ne. 45) go to 33316
+  if ( lastov .ne. 1 .and. imodal .eq. 0 .and. nfreq .eq. 2 .and. ik .eq. 0 .and. ips .eq. 0 .and. lastov .ne. 45) go to 33316
   j5out = j5
   j8out = j8
   j2out = j2
@@ -881,8 +881,7 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   ip=ip+1
   if(i.eq.k) go to 124
   j=i-kcirct
-  if ( i  .le.  kcirct )
-1 j = lphpl1- i
+  if ( i  .le.  kcirct ) j = lphpl1- i
   rm=0.
   if(izero.eq.0) go to 126
   xm=p(ip)/4.0
@@ -944,7 +943,7 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   s2=sn*cs*2.0
   c2=cs*cs-sn*sn
   rm=-c2
-  do 1006 i5=1,7,2
+  do i5=1,7,2
      rm=rm+ccars(i5)*cs
      xm=xm+dcars(i5)*cs
      h1=cs*s2+sn*c2
@@ -1400,9 +1399,9 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   wave1= twopi /bet1
   if( metrik .eq. 1 ) go to 9992
   write(lunit6,9991)zso,zsodrg,alphao,vol,waveo,rzero,xzero1,yzero1, zs1,zs1drg,alpha1,v1l,wave1,rpos,xpos1,ypos1
-9991 format(9h0sequence,6x,15hsurge impedance,7x,76hattenuation   velocity    wavelength   resistance    reactance   susceptance/9x, &
-          102hmagnitude(ohm) angle(degr.)   db/mile      miles/s       miles ohm/mile     ohm/mile     mho/mile/9h   zero  ,8e13.5/ &
-          9h positive,8e13.5)
+9991 format('0sequence', 6x, 'surge impedance', 7x, 'attenuation   velocity    wavelength   resistance    reactance   susceptance', /, 9x, &
+          'magnitude(Ohm) angle(degr.)   dB/mile      miles/s       miles Ohm/mile     Ohm/mile     mho/mile', /, '   zero  ', 8e13.5/ &
+          ' positive', 8e13.5)
   go to 9998
 9992 alphao = alphao * fmipkm
   alpha1 = alpha1 * fmipkm
@@ -1416,10 +1415,10 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   xpos1 = xpos1 * fmipkm
   yzero1 = yzero1 * fmipkm
   ypos1 = ypos1 * fmipkm
-  write(lunit6,9993)zso,zsodrg,alphao,vol,waveo,rzero1,xzero1, yzero1,zs1,zs1drg,alpha1,v1l,wave1,rpos1,xpos1,ypos1
-9993 format(9h0sequence,6x,15hsurge impedance,7x,76hattenuation   velocity    wavelength   resistance    reactance   susceptance/9x, &
-          102hmagnitude(ohm) angle(degr.)    db/km         km/s          km ohm/km       ohm/km       mho/km /9h   zero  ,8e13.5/ &
-          9h positive,8e13.5 )
+  write (lunit6, 9993) zso,zsodrg,alphao,vol,waveo,rzero1,xzero1, yzero1,zs1,zs1drg,alpha1,v1l,wave1,rpos1,xpos1,ypos1
+9993 format('0sequence', 6x, 'surge impedance', 7x, 'attenuation   velocity    wavelength   resistance    reactance   susceptance', /, 9x, &
+          'magnitude(Ohm) angle(degr.)    dB/km         km/s          km Ohm/km       Ohm/km       mho/km ', /, '   zero  ', 8e13.5, / &
+          ' positive', 8e13.5)
 9998 if ( kexact .ne. 88333 )  go to 9996
   n1 = 1
   n9sq = kcirct ** 2
@@ -1508,11 +1507,10 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   call output ( metrik, p(1), z(1), switch, kfull, i2, ll1 )
   go to 31
 37 i2=3
-  if ( iprsup  .ge.  1 )
-1 write (lunit6, 4444)  iw, ip, ll0, ll1
+  if ( iprsup  .ge.  1 ) write (lunit6, 4444)  iw, ip, ll0, ll1
 4444 format ( /,  28h at 4444.  iw, ip, ll0, ll1=, 4i10 )
   if (iw.eq.0) i2 = i2+1
-  do 371 i=1,ip
+  do i=1,ip
 371  z(i)=-p(i)
   end do
   call redu44 ( z(1), workr1(1), kfull, ll0 )
@@ -1548,7 +1546,7 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   !     in order 1-2-3, 4-5-6 etc.) is in p(1),...p(kk*(kk+1)/2) for real
   !     part and z(1),...z(kk*(kk+1)/2) for imaginary part with kk=highest
   !     number of equivalent conductor being a multiple of 3.
-  if(ik.le.0)calloutput ( metrik, p(1), z(1), unity, kk, i2, ll3 )
+  if(ik.le.0) call output ( metrik, p(1), z(1), unity, kk, i2, ll3 )
   if (j56.eq.0) go to 33
   read (lunt13)  d1
   read (lunt13)  (p(i),i=1,kp)
@@ -2054,7 +2052,7 @@ subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, 
 2 i=i+1
   cr=0.0
   cl=0.0
-  do 1 j=1,m
+  do j=1,m
      !     n=max0z(j,i)
      n = j
      if ( n .lt. i )  n = i
@@ -2247,7 +2245,7 @@ subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, 
      theta = atan2z( cr, fnorm) / 2.
      cr = cosz( theta )
      cl = sinz( theta )
-     do 467 i = 1, m
+     do i = 1, m
         tir(i,j) = tir(i,j) * cr - tii(i,j) * cl
 467     tii(i,j) = 0.
      end do
@@ -2328,9 +2326,9 @@ subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, 
 43      g=g+xa*c-xb*d1
      end do
      if ( iprsup .ge. 1 ) write (lunit6, *) ' modal admittance ym for mode ', i, g, b
-44   format(//,106h mode   resistance  reactance  susceptance surge impedance(Ohm)          velocity  attenuation)
-65   format(104h          ohm/mile    ohm/mile   s/mile        real     imag       lossless     mile/sec  neper/mile)
-7031 format(102h          ohm/km      ohm/km     s/km         real     imag      lossless     km/sec     neper/km)
+44   format(//, ' mode   resistance  reactance  susceptance surge impedance(Ohm)          velocity  attenuation')
+65   format('          Ohm/mile    Ohm/mile   S/mile        real     imag       lossless     mile/sec  neper/mile')
+7031 format('          Ohm/km      Ohm/km     S/km         real     imag      lossless     km/sec     neper/km')
 33   format(i5,3x,9e12.5)
      ! to get rotation for  y=0+xwc
      ya = atan2z(b,g)
@@ -2471,7 +2469,7 @@ subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, 
   ! ***** end of rotation of ti matrix for k.c.lee's const.param.*******
 39 format(//,33h      real components, row by row)
 166 write(lunit6,66)
-66 format(////,69h eigenvector matrix ti for current transformation i (phase)=ti*i(mode))
+66 format(////, ' Eigenvector matrix ti for current transformation i (phase)=ti*i(mode)')
   write(lunit6,39)
 9 format(2x,6e12.5)
   do k=1,m
@@ -2499,8 +2497,8 @@ subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, 
      end do
   end do
   n=0
-  do 82 i=1,m
-     do 82 k=1,i
+  do i=1,m
+     do k=1,i
         c = 0.0
         do j=1,m
 81         c=c-tir(i,j)*yzr(j,k)
