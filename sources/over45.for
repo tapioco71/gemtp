@@ -2094,125 +2094,123 @@ subroutine tdfit(vresp, si, fv, hhm, hhn, cosi)
   if ( ktzer .le. 5 ) go to 40069
   write ( lunit6, 40070 )
 40070 format (' Trouble in tdfit - - portions of ift results have been discarded more than five times ', /, &
-           ' in search for positive data.    Temporary error stop in "tdfit".')
-                      call stoptp
-40069                 km = npoint - kzero
-                      kmax = kmax - kzero
-                      do 40062 k = 1, km
-                         kp = k + kzero
-40062                    fv(k) = fv(kp)
-                         kmp = km + 1
-                         tstrt = tstrt  +  kzero * tstep
-                         kzero = 0
-                         go to 40063
-40061                    if ( ictrl .ge. 0 .or. kmax .ge. kcrit ) go to 40067
-                         tt = kmax * tstep / 2.
-                         tstep = tt / no
-                         ktdiv = ktdiv + 1
-                         if ( ktdiv .le. 5 ) go to 40066
-                         write ( lunit6, 40068 )
-40068                    format (  69h trouble in tdfit - - time span has been reduced more
-1                        than five times  ,/, 37h in search of legitimate ift results.
-2                        ,/,  35h   temporary error stop in "tdfit".    )
-                         call stoptp
-40067                    continue
-                         if (ictrl .eq. -10) go to 40500
-                         !     this routine fits two exponentials with an artificial time delay
-                         !     to the line prop or adm step response using a least square error
-                         !     minimizing technique solved by a newton-raphson algorithm.
-                         !     list of variables.
-                         !        fv -    vector containing numerical values of the curve
-                         !               to be fitted
-                         !        nvar - number of variables to be determined by newton-raphson
-                         !               algorithm. the subroutine fixes by itself the value
-                         !               of "nvar" to 3 for propagation and 2 for admittance.
-                         !        x - vector containing parameters of the exponential fitting 'z'
-                         !            in the form'
-                         c
-                         !     z(t) = d * (1.0 - exp(-(t - x(3)) / x(1))) + (ffin - d) *
-                         !           (1.0-exp(-(t-x(3))/x(2)))
-                         c
-                         !             where'
-                         !        ffin - final value for the curve 'y'
-                         !        x(3) - artifical time delay  (equal to zero for admittance)
-                         !        e - right hand side of system of equations to be solved
-                         !            for increment 'dx' by a newton raphson algorithm.
-                         !            after solving the solution 'dx' will be stored in e.
-                         !        jac - jacobian matrix.
-                         !        b,db - auxiliary matrices for calculating jacobian 'jac'.
-                         !        eps - the least square error desired to be attained
-                         !              in the fitting rocess.
-                         !        eps1 - the fitting is stopped if the relative increment 'dx/x'
-                         !               is less than eps1
-                         !        npoint - number of known points for the step response
-                         !                 to be used for fitting.
-                         !        niter - maximum number of iterations allowed.
-                         jgrad=0
-                         iter=0
-                         nvar=3
-                         error = 100.
-                         db(1,2)=0.
-                         !     calculate initial guess for 'x'.
-                         temp = ffin * fit2z
-                         if ( ictrl .lt. 0 ) temp = temp * 0.1
-                         do 60050 i=1, npoint
-                            if (fv(i) .lt. temp) go to 60050
-                            d1 = i - 1
-                            x(3)=  d1 / no
-                            go to 60051
-60050                       continue
-                            kill = 157
-                            lstat(14) = i1
-                            lstat(15) = npoint
-                            flstat(14) = fv(npoint)
-                            flstat(15) = temp
-4521                        lstat(19) = 4521
-                            go to 9200
-60051                       do 60052 k=i, npoint
-                               if (k .eq. 1) go to 60053
-                               y1 = fv(k+1) - fv(k)
-                               y2 = fv(k) - fv(k-1)
-                               if (y1 .gt. y2) go to 60052
-                               ncount=k
-                               go to 60054
-60053                          if (fv(k+1) - fv(k) .gt. fv(k)) go to 60052
-                               ncount=k
-                               go to 60054
-60052                          continue
-                               kill = 157
-                               lstat(14) = 0
-                               lstat(15) = npoint
-                               lstat(16) = i
-                               lstat(17) = k
-                               flstat(14) = fv(k-1)
-                               flstat(15) = fv(k)
-                               flstat(16) = fv(k+1)
-4533                           lstat(19) = 4533
-                               go to 9200
-60054                          ntrd = npoint / 3
-                               dy = ( fv(npoint) - fv(npoint - ntrd) ) * no / ntrd
-                               if (dy .le. 0.) dy = pivthr
-                               x(2) = dy/(ffin - fv(npoint))
-                               x(2)=absz(x(2))
-                               if ( ncount .eq. 1 ) ncount = 2
-                               if ( ncount .eq. 1 )   ncount = 2
-                               dy = (fv(ncount) - fv(ncount-1))*no
-                               x(1) = dy / fv(ncount) / 2.
-                               d1 = ncount - onehaf
-                               x(3) =  d1 / no   -  onehaf *(fv(ncount)+fv(ncount-1))/dy
-                               x1=x(1)
-                               if (ictrl .lt. 0) go to 60055
-                               write(lunit6,60200)
-60200                          format ( /,  2x,  8hno.iter.,  8x,  5hampl.,  13x,  4hx(1),
-1 13                           x,  4hx(2),  13x,  4hx(3),   13x,  5herror,  /,  1x  )
-                               go to 60012
-60055                          x(1) = no * fv(2) * onehaf / fvmx
-                               nvar=2
-                               x1 = x(2) / 1.2
-                               x(3)=0.
-                               write (lunit6,60400)
-60400                          format ( /,  2x,  8hno.iter.,  8x,  5hampl.,  13x,  4hx(1),
-1 13                           x,  4hx(2),  13x,  5herror  ,/,  1x )
+           ' in search for positive data. ', /, ' Temporary error stop in "tdfit".')
+  call stoptp
+40069 km = npoint - kzero
+  kmax = kmax - kzero
+  do k = 1, km
+     kp = k + kzero
+40062 fv(k) = fv(kp)
+  end do
+  kmp = km + 1
+  tstrt = tstrt  +  kzero * tstep
+  kzero = 0
+  go to 40063
+40061 if ( ictrl .ge. 0 .or. kmax .ge. kcrit ) go to 40067
+  tt = kmax * tstep / 2.
+  tstep = tt / no
+  ktdiv = ktdiv + 1
+  if ( ktdiv .le. 5 ) go to 40066
+  write ( lunit6, 40068 )
+40068 format (' Trouble in tdfit - - time span has been reduced more than five times  ', /, &
+           ' in search of legitimate ift results. ', /,  '   Temporary error stop in "tdfit"'.    )
+  call stoptp
+40067 continue
+  if (ictrl .eq. -10) go to 40500
+  !     this routine fits two exponentials with an artificial time delay
+  !     to the line prop or adm step response using a least square error
+  !     minimizing technique solved by a newton-raphson algorithm.
+  !     list of variables.
+  !        fv -    vector containing numerical values of the curve
+  !               to be fitted
+  !        nvar - number of variables to be determined by newton-raphson
+  !               algorithm. the subroutine fixes by itself the value
+  !               of "nvar" to 3 for propagation and 2 for admittance.
+  !        x - vector containing parameters of the exponential fitting 'z'
+  !            in the form'
+  !
+  !     z(t) = d * (1.0 - exp(-(t - x(3)) / x(1))) + (ffin - d) *
+  !           (1.0-exp(-(t-x(3))/x(2)))
+  !
+  !             where'
+  !        ffin - final value for the curve 'y'
+  !        x(3) - artifical time delay  (equal to zero for admittance)
+  !        e - right hand side of system of equations to be solved
+  !            for increment 'dx' by a newton raphson algorithm.
+  !            after solving the solution 'dx' will be stored in e.
+  !        jac - jacobian matrix.
+  !        b,db - auxiliary matrices for calculating jacobian 'jac'.
+  !        eps - the least square error desired to be attained
+  !              in the fitting rocess.
+  !        eps1 - the fitting is stopped if the relative increment 'dx/x'
+  !               is less than eps1
+  !        npoint - number of known points for the step response
+  !                 to be used for fitting.
+  !        niter - maximum number of iterations allowed.
+  jgrad=0
+  iter=0
+  nvar=3
+  error = 100.
+  db(1,2)=0.
+  !     calculate initial guess for 'x'.
+  temp = ffin * fit2z
+  if ( ictrl .lt. 0 ) temp = temp * 0.1
+  do i=1, npoint
+     if (fv(i) .lt. temp) go to 60050
+     d1 = i - 1
+     x(3)=  d1 / no
+     go to 60051
+60050 end do
+  kill = 157
+  lstat(14) = i1
+  lstat(15) = npoint
+  flstat(14) = fv(npoint)
+  flstat(15) = temp
+4521 lstat(19) = 4521
+  go to 9200
+60051 do k=i, npoint
+     if (k .eq. 1) go to 60053
+     y1 = fv(k+1) - fv(k)
+     y2 = fv(k) - fv(k-1)
+     if (y1 .gt. y2) go to 60052
+     ncount=k
+     go to 60054
+60053 if (fv(k+1) - fv(k) .gt. fv(k)) go to 60052
+     ncount=k
+     go to 60054
+60052 end do
+  kill = 157
+  lstat(14) = 0
+  lstat(15) = npoint
+  lstat(16) = i
+  lstat(17) = k
+  flstat(14) = fv(k-1)
+  flstat(15) = fv(k)
+  flstat(16) = fv(k+1)
+4533 lstat(19) = 4533
+  go to 9200
+60054 ntrd = npoint / 3
+  dy = ( fv(npoint) - fv(npoint - ntrd) ) * no / ntrd
+  if (dy .le. 0.) dy = pivthr
+  x(2) = dy/(ffin - fv(npoint))
+  x(2)=absz(x(2))
+  if ( ncount .eq. 1 ) ncount = 2
+  if ( ncount .eq. 1 )   ncount = 2
+  dy = (fv(ncount) - fv(ncount-1))*no
+  x(1) = dy / fv(ncount) / 2.
+  d1 = ncount - onehaf
+  x(3) =  d1 / no   -  onehaf *(fv(ncount)+fv(ncount-1))/dy
+  x1=x(1)
+  if (ictrl .lt. 0) go to 60055
+  write(lunit6,60200)
+60200 format ( /,  2x,  8hno.iter.,  8x,  5hampl.,  13x,  4hx(1), 13x,  4hx(2),  13x,  4hx(3),   13x,  5herror,  /,  1x  )
+  go to 60012
+60055 x(1) = no * fv(2) * onehaf / fvmx
+  nvar=2
+  x1 = x(2) / 1.2
+  x(3)=0.
+  write (lunit6,60400)
+60400 format ( /,  2x,  8hno.iter.,  8x,  5hampl.,  13x,  4hx(1), 13x,  4hx(2),  13x,  5herror  ,/,  1x )
                                !     newton-raphson iterative solution process begins here.
 60012                          iter = iter + 1
                                iter2 = 0
