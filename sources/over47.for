@@ -1250,9 +1250,11 @@ subroutine cha645(k,k1)
 30 k1=5
   return
 end subroutine cha645
+!
+! subroutine cha312.
+!
 subroutine cha312(j,j1)
-  implicit real*8 (a-h, o-z) ,
-1 integer*4 (i-n)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
   go to (10,20,30),j
 10 j1=3
   return
@@ -1261,18 +1263,19 @@ subroutine cha312(j,j1)
 30 j1=2
   return
 end subroutine cha312
+!
+! subroutine cha444.
+!
 subroutine cha444(k,kk)
-  implicit real*8 (a-h, o-z) ,
-1 integer*4 (i-n)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
   if(k.le.3.or.k.gt.7) return
   kk=4
   return
 end subroutine cha444
-c
+!
 !     subroutine pri.
-c
-subroutine pri(i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c,
-1 npk)
+!!
+subroutine pri(i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
   implicit real*8 (a-h, o-z) ,
 1 integer*4 (i-n)
   character cha
