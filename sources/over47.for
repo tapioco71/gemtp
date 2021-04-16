@@ -587,110 +587,101 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
 186   format ( 10x,  31hresistivity(ohm-m) | phase wire, e11.4,  3x,  11hground wire,  e11.4,  /,  10x,23hrelative permeability |, 8x,  f11.4,  14x,  f11.4,  /, &
            10x,  22hdc resistance(ohm/m) |,  9x,  e11.4,14x,  e11.4  )
 150 end do
-      do 160   i=1, npc
-  160 hi(i) = (2. * dci(i) + thc(i) ) / 3.
-      write (lunit6, 165)  (i, hi(i), i=1, npc)
-  165 format(10x, 29heffective height of the line , 5(i5, f12.5))
-      write(lunit6,915) (di(i),i=1,npc)
+   do i=1, npc
+160   hi(i) = (2. * dci(i) + thc(i) ) / 3.
+   end do
+   write (lunit6, 165)  (i, hi(i), i=1, npc)
+165 format(10x, 29heffective height of the line , 5(i5, f12.5))
+   write(lunit6,915) (di(i),i=1,npc)
   915 format ( 10x,  29hdistance between phases     |,  5f17.5  )
-      write (lunit6, 917)  freq, ik, ips
-  917 format (10x, 20hbeginning frequency ,5x,e15.6,5x,18hnumber of deca
-     1des , i5, 5x, 32hnumber of points in each decade , i5)
-      write(lunit6,913) roe
-  913 format (10x, 19hearth | resistivity, f12.5)
-      if (iearth .ne. 99)
-     1   go to 167
-      write(lunit6,916) dep1,dep2,roe,roe3,roe4,htoj2,htoj3,htoj4,
-     1  hyud2,hyud3,hyud4
-  916 format(10x,13h3-layer earth ,/,10x,30hdepth from surface , 1st lay
-     1er, f7.2,3x,9h2nd layer,f8.2,3x,21h3rd layer to infinite,/,
-     2 10x, 19hearth resistivity 0, e18.2, 6x, e14.2, 6x, e18.2,/,
-     3 10x,23hrelative permeability 0, e14.2, 6x,e14.2,6x,e18.2,/,
-     4 10x,23hrelative permittivity 0, e14.2,6x,e14.2,6x,e18.2)
-  167 nw = npc
-      nz = npc
-      ngrnd=ncc
-      go to 700
-!     cable data outputs and precalculation
-  200 do 210 i=1,npc
+   write (lunit6, 917)  freq, ik, ips
+917 format (10x, 20hbeginning frequency ,5x,e15.6,5x,18hnumber of decades , i5, 5x, 32hnumber of points in each decade , i5)
+   write(lunit6,913) roe
+913 format (10x, 19hearth | resistivity, f12.5)
+   if (iearth .ne. 99) go to 167
+   write(lunit6,916) dep1,dep2,roe,roe3,roe4,htoj2,htoj3,htoj4,hyud2,hyud3,hyud4
+916 format(10x,13h3-layer earth ,/,10x,30hdepth from surface , 1st layer, f7.2,3x,9h2nd layer,f8.2,3x,21h3rd layer to infinite,/, &
+         10x, 19hearth resistivity 0, e18.2, 6x, e14.2, 6x, e18.2,/, 10x,23hrelative permeability 0, e14.2, 6x,e14.2,6x,e18.2,/, &
+         10x,23hrelative permittivity 0, e14.2,6x,e14.2,6x,e18.2)
+167 nw = npc
+   nz = npc
+   ngrnd=ncc
+   go to 700
+   !     cable data outputs and precalculation
+200 do i=1,npc
       rad(i) = radi(i,7)
-      do 210 j=1,3
-      gi(i,j) = speedl/sqrtz(esi(i,j))
-  210 continue
-      write (lunit6, 170)
-      if (isyst .ge. 0)   go to 211
-      write (lunit6, 280)
-  280 format (39h table of under-ground cable parameters,/,1x)
-      go to 214
-  211 if (isyst .gt. 0)   go to 213
-      write (lunit6, 281)
-  281 format(58h table of cable parameters for cables on the earth surfa
-     1ce)
-      go to 214
-  213 write(lunit6,282)
-  282 format (35h table of overhead cable parameters,/,1x)
-  214 if ( ngrnd  .gt.  3 ) go to 1980
-      if ( ngrnd  .ne.  0 )  go to 325
-      ngrnd = ncc
-      go to 215
-  325 if ( ngrnd  .gt.  1 )  go to 330
-      ngrnd = ncc
-      if ( itypec  .eq.  2 ) go to 215
-      ngrnd = ncc - 1
-      go to 215
-  330 if( ngrnd .gt. 2 ) go to 3333
-      ngrnd = npc2
-      go to 215
- 3333 ngrnd = npc
-      go to 215
- 1980 do 1982 i = 1, ncc
+      do j=1,3
+         gi(i,j) = speedl/sqrtz(esi(i,j))
+210   end do
+   end do
+   write (lunit6, 170)
+   if (isyst .ge. 0)   go to 211
+   write (lunit6, 280)
+280 format (39h table of under-ground cable parameters,/,1x)
+   go to 214
+211 if (isyst .gt. 0)   go to 213
+   write (lunit6, 281)
+281 format(58h table of cable parameters for cables on the earth surface)
+   go to 214
+213 write(lunit6,282)
+282 format (35h table of overhead cable parameters,/,1x)
+214 if ( ngrnd  .gt.  3 ) go to 1980
+   if ( ngrnd  .ne.  0 )  go to 325
+   ngrnd = ncc
+   go to 215
+325 if ( ngrnd  .gt.  1 )  go to 330
+   ngrnd = ncc
+   if ( itypec  .eq.  2 ) go to 215
+   ngrnd = ncc - 1
+   go to 215
+330 if( ngrnd .gt. 2 ) go to 3333
+   ngrnd = npc2
+   go to 215
+3333 ngrnd = npc
+   go to 215
+1980 do i = 1, ncc
       kpd = ncc + 1 - i
       if ( ngg(kpd)  .gt.  0 ) go to 1982
       ngrnd = kpd
       go to 215
- 1982 continue
-      write ( lunit6, 1777 )
- 1777 format( 43h  no ungrounded conductor needs calculation )
-      call stoptp
-  215 if (itypec .eq. 2)   go to 1215
-      write (lunit6, 370)
-  370 format (17h pipe type cables,/,1x)
-      if (npp .ne. 0)   go to 216
-      write (lunit6, 371)
-  371 format (31h earth return path not included)
-  216 write (lunit6, 380)
-  380 format (10x, 23h pipe and its insulator)
-      if (npp .ne. 0)  go to 1216
-      radp(2) = fltinf
-      radp(3) = fltinf
- 1216 write (lunit6, 381)  (radp(i), i=1,3), rop, usp
-  381 format (10x, 19hpipe | inner radius, e13.5, 2x, 5houter, e13.5,
-     1 2x, 30houter radius of pipe insulator, e13.5,/, 18x, 18hresistivi
-     2ty(ohm-m), e16.5, 2x, 21hrelative permeability, f8.1)
-      write (lunit6, 382)  es1, es2
-  382 format (10x, 40hinsulator | relative permittivity  inner,
-     1   f8.1, 2x, 5houter, f8.1)
-      if (es2 .eq. 0.0)   es2 = 1.0
-      if (npp .ne. 0)
-     1 write (lunit6, 383)  (i, hi(i), di(i), i=1, npp)
-  383 format (10x, 4hpipe, i2, 27h | dist. from earth surface, f9.4,
-     1 1hm, 3x, 17hdist. from pipe 1, f9.4, 1hm)
-      write (lunit6, 390)
-  390 format (10x, 28hinner conductors (sc cables))
-      write (lunit6, 391)  (i,dci(i), i=1, npc)
-  391 format (10x, 24hdist. from pipe center |, 6(i5, f9.4))
-      write (lunit6, 392)  (thc(i), i=1, npc)
-  392 format (10x, 24hangle to first cable   |, 6(f14.4))
- 1215 do 217  i=1, npc
+1982 end do
+   write ( lunit6, 1777 )
+1777 format( 43h  no ungrounded conductor needs calculation )
+   call stoptp
+215 if (itypec .eq. 2)   go to 1215
+   write (lunit6, 370)
+370 format (17h pipe type cables,/,1x)
+   if (npp .ne. 0)   go to 216
+   write (lunit6, 371)
+371 format (31h earth return path not included)
+216 write (lunit6, 380)
+380 format (10x, 23h pipe and its insulator)
+   if (npp .ne. 0)  go to 1216
+   radp(2) = fltinf
+   radp(3) = fltinf
+1216 write (lunit6, 381)  (radp(i), i=1,3), rop, usp
+381 format (10x, 'pipe | inner radius', e13.5, 2x, 'outer', e13.5, 2x, 'houter radius of pipe insulator', e13.5,/, 18x, &
+         'resistivity(Ohm-m)', e16.5, 2x, 'relative permeability', f8.1)
+   write (lunit6, 382)  es1, es2
+382 format (10x, 40hinsulator | relative permittivity  inner, f8.1, 2x, 5houter, f8.1)
+   if (es2 .eq. 0.0)   es2 = 1.0
+   if (npp .ne. 0) write (lunit6, 383)  (i, hi(i), di(i), i=1, npp)
+383 format (10x, 4hpipe, i2, 27h | dist. from earth surface, f9.4, 1hm, 3x, 17hdist. from pipe 1, f9.4, 1hm)
+   write (lunit6, 390)
+390 format (10x, 28hinner conductors (sc cables))
+   write (lunit6, 391)  (i,dci(i), i=1, npc)
+391 format (10x, 24hdist. from pipe center |, 6(i5, f9.4))
+   write (lunit6, 392)  (thc(i), i=1, npc)
+392 format (10x, 24hangle to first cable   |, 6(f14.4))
+1215 do i=1, npc
       jn=ncpp(i)
       write (lunit6, 284) i, (j, radi(i,j), j=1, 7)
-  284 format(10x,5hphase,i2,1x,17hboundary radii  | ,/10x,7(i3,e13.5))
-  217 write (lunit6, 285)  (roi(i, j), j =1,3), (usr(i, j), j=1,3),
-     1(j,usi(i,j),esi(i,j),gi(i,j),j=1,jn)
-  285 format(18x,24hresistivity(ohm-m)| core,e12.5,3x,6hsheath,e12.5,3x,
-     15harmor,e12.5/18x,25hrelative permeability |  ,f12.5,9x,f12.5,8x,f
-     212.5/3(18x,9hinsulator,i2,25h| (relative) permeability,f 6.2,3x,
-     312hpermittivity,f6.2,3x,13hvelocity(m/s),e12.5/,1x))
+284   format(10x,5hphase,i2,1x,17hboundary radii  | ,/10x,7(i3,e13.5))
+217   write (lunit6, 285)  (roi(i, j), j =1,3), (usr(i, j), j=1,3),(j,usi(i,j),esi(i,j),gi(i,j),j=1,jn)
+   end do
+285 format (18x, 'resistivity(Ohm-m)| core', e12.5, 3x, 'sheath', e12.5, 3x, 'armor', e12.5,, /, 18x, 'relative permeability |  ', &
+         f12.5, 9x, f12.5, 8x, f12.5, /, 3(18x, 'insulator', i2, '| (relative) permeability', f6.2,3x, &
+         'permittivity', f6.2, 3x, 'velocity(m/s)', e12.5, /, 1x))
       if(itypec . ne . 3 )  go to 220
       three = 3.0
       rlimit = ( 1.0 + 2.0/sqrtz(three)) * radi(1,7)
