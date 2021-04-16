@@ -3818,402 +3818,396 @@ subroutine skin (s,r,freq,rf,xf)
   double precision  vsmall
   vsmall = 1.e-37
   call undrfl(jjj)
-      s2 = s*s
-      s3=(unity-s2)*r
-      r2 = freq * valu8 / s3
-      rf=r
-      xf=0.
-      if(r2.eq.0.) go to 9900
-      qremb = 0.0
-      if ( s  .lt.  tenm6 )   go to 5
-      q2 = r2*s2
-      if (s2 .lt. 0.8)  go to 11
-      if (q2 .le. 64.0 .and. r2 .gt. 64.0)  write(lunit6,10) q2, r2
-10    format (52h results from subroutine skin unreliable with mq**2=,
-     1  f9.4, 11h and mr**2=, f9.4)
-   11 if (q2 .gt. 64.0)  qremb=sqrtz(q2) * sqrt2
-      x = sqrtz(q2)
-      x2=x*x/64.0
-      iback = 2
-      if (x2.le.unity) go to 100
-      go to 200
-    4 a = - berd
-      b = - beid
-      aremb = gerd
-      bremb = geid
-      xremb = x
-    5 x = sqrtz(r2)
-      x2=x*x/64.0
-      iback = 1
-      if (x2.le.unity) go to 100
-      go to 200
-    6 g = ber
-      h = bei
-      e = berd
-      f = beid
-      if ( s  .lt.  tenm6 )   go to 7
-      g = a*ger - b*gei + aremb*ber - bremb *bei
-      h = a*gei + b*ger + aremb*bei + bremb*ber
-      e = a*gerd - b*geid + aremb*berd - bremb*beid
-      f = a*geid + b*gerd + aremb*beid + bremb*berd
-    7 e2f2 = e**2 + f**2
-      s2 =  x * s3 * onehaf / e2f2
-      if (iprsup .ge. 1)
-     1 write (lunit6, 320)  e, f, e2f2, s2
-  320 format (27h e, f,  e2f2, and s2 at 320, 4e16.6)
-      rf = (-h*e+g*f)*s2
-      xf = (g*e+h*f)*s2
-      go to 9900
-!      calculation of kelvin-functions for argument.le.8.
-  100 z = x2
-      ber = unity
-      bei = 0.0
-      berd = 0.0
-      beid = onehaf
-      gerd = 0.0
-      geid =  valu9
-      ger = - valu10
-      gei = 0.0
-      ialt = 1
-      do 103 k=1,14
-      if(ialt.eq.1) go to 101
-      ber = ber+fbe(k)*z
-      beid = beid+fbed(k)*z
-      if ( s  .lt.  tenm6 )   go to 102
-      geid = geid+fked(k)*z
-      if(iback.eq.2) go to 102
-      ger = ger+fke(k)*z
-      go to 102
-  101 bei = bei+fbe(k)*z
-      berd = berd+fbed(k)*z
-      if ( s  .lt.  tenm6 )   go to 102
-      gerd = gerd+fked(k)*z
-      if(iback.eq.2) go to 102
-      gei = gei+fke(k)*z
-  102 z = z*x2
-  103 ialt = -ialt
-      beid = beid*x
-      berd = berd*x
-      if ( s  .lt.  tenm6 )   go to 104
-      xl = alogz(x*onehaf )
-      gerd = -xl*berd-ber/x+beid* aaa1            +x*gerd
-      geid = -xl*beid-bei/x-berd* aaa1            +x*geid
-      if (iback.eq.2) go to 104
-      ger = -xl*ber+bei* aaa1            +ger
-      gei = -xl*bei-ber* aaa1            +gei
-  104 go to (6 , 4 ),iback
-!      calculations of kelvin-functions for argument.gt.8.
-  200 x2 = 8.0  /x
-      z = x2
-      ber = 0.0
-      bei = - valu11
-      berd = ber
-      beid = bei
-      ger = unity / sqrt2
-      gei = ger
-      gerd = ger
-      geid = gei
-      ialt = 1
-      do 203  k=1, 6
-      thetar = fbe(k+14) * z
-      thetai = fbed(k+14)*z
-      phir = fke(k+14)*z
-      phii = fked(k+14)*z
-      ber = ber+thetar
-      bei = bei+thetai
-      ger = ger+phir
-      gei = gei+phii
-      if (ialt.eq.1) go to 201
-      berd = berd+thetar
-      beid = beid+thetai
-      gerd = gerd+phir
-      geid = geid+phii
-      go to 202
-  201 berd = berd-thetar
-      beid = beid-thetai
-      gerd = gerd-phir
-      geid = geid-phii
-  202 ialt = -ialt
-  203 z = z*x2
-      xl=x* sqrt2
-      if (qremb .lt. 1.0)  go to 204
-      xl = xl - qremb
-  204 thetar = - xl + berd
-      thetai = -xl+beid
-      z = sqrtz(x)
-      x2 =  valu12 / z
-      z = valu13 / z* expz(thetar)
-      fr = z* cosz(thetai)
-      fi = z* sinz(thetai)
-      x2=x2* expz(ber)
-      thetar=x2* cosz(bei)
-      thetai=x2* sinz(bei)
-      z = -fr*gerd+fi*geid
-      geid = -fr*geid-fi*gerd
-      gerd = z
-      z = aaa2 * expz(-qremb)
-      gr = z*sinz(qremb)
-      gi = z*cosz(qremb)
-      berd = thetar*ger - thetai*gei + gerd*gr - geid*gi
-      beid = thetar*gei + thetai*ger + gerd*gi + geid*gr
-      ger = fr
-      gei = fi
-      ber = thetar + ger*gr - gei*gi
-      bei = thetai + ger*gi + gei*gr
-      go to ( 6 , 4 ),iback
- 9900 continue
-      if( jjj .eq. 3 ) z = vsmall
-      return
-      end
-      subroutine undrfl ( n1 )
-      implicit real*8 (a-h, o-z) ,
-     1      integer*4 (i-n)
-!     dummy imitation of ontario hydro univac module.
-      n1 = -7654
-      return
-      end
-      subroutine wrte ( p, i2, i3, iflag, l, unit, lunit6 )
-      implicit real*8 (a-h, o-z) ,
-     1      integer*4 (i-n)
-      dimension p(1),r(10)
-      j=0
-      do 30 i=i2,i3
-      j=j+1
-   30 r(j)=p(i)*unit
-      goto (1,2,3),iflag
-    1 write(lunit6,11)(r(i), i=1,j)
-      return
-    2 write(lunit6,22)(r(i),i=1,j)
-      return
-    3 write(lunit6,33) l, (r(i),i=1,j)
-      return
-   11 format(1h0,3x,9e14.5)
-   22 format(4x,9e14.5)
-   33 format(1h0,i3,9e14.5)
-      end
-c
+  s2 = s*s
+  s3=(unity-s2)*r
+  r2 = freq * valu8 / s3
+  rf=r
+  xf=0.
+  if(r2.eq.0.) go to 9900
+  qremb = 0.0
+  if ( s  .lt.  tenm6 )   go to 5
+  q2 = r2*s2
+  if (s2 .lt. 0.8)  go to 11
+  if (q2 .le. 64.0 .and. r2 .gt. 64.0)  write(lunit6,10) q2, r2
+10 format (' Results from subroutine skin unreliable with mq**2= ', f9.4, ' and mr**2= ', f9.4)
+11 if (q2 .gt. 64.0)  qremb=sqrtz(q2) * sqrt2
+  x = sqrtz(q2)
+  x2=x*x/64.0
+  iback = 2
+  if (x2.le.unity) go to 100
+  go to 200
+4 a = - berd
+  b = - beid
+  aremb = gerd
+  bremb = geid
+  xremb = x
+5 x = sqrtz(r2)
+  x2=x*x/64.0
+  iback = 1
+  if (x2.le.unity) go to 100
+  go to 200
+6 g = ber
+  h = bei
+  e = berd
+  f = beid
+  if ( s  .lt.  tenm6 )   go to 7
+  g = a*ger - b*gei + aremb*ber - bremb *bei
+  h = a*gei + b*ger + aremb*bei + bremb*ber
+  e = a*gerd - b*geid + aremb*berd - bremb*beid
+  f = a*geid + b*gerd + aremb*beid + bremb*berd
+7 e2f2 = e**2 + f**2
+  s2 =  x * s3 * onehaf / e2f2
+  if (iprsup .ge. 1) write (lunit6, 320)  e, f, e2f2, s2
+320 format (27h e, f,  e2f2, and s2 at 320, 4e16.6)
+  rf = (-h*e+g*f)*s2
+  xf = (g*e+h*f)*s2
+  go to 9900
+  !      calculation of kelvin-functions for argument.le.8.
+100 z = x2
+  ber = unity
+  bei = 0.0
+  berd = 0.0
+  beid = onehaf
+  gerd = 0.0
+  geid =  valu9
+  ger = - valu10
+  gei = 0.0
+  ialt = 1
+  do k=1,14
+     if(ialt.eq.1) go to 101
+     ber = ber+fbe(k)*z
+     beid = beid+fbed(k)*z
+     if ( s  .lt.  tenm6 )   go to 102
+     geid = geid+fked(k)*z
+     if(iback.eq.2) go to 102
+     ger = ger+fke(k)*z
+     go to 102
+101  bei = bei+fbe(k)*z
+     berd = berd+fbed(k)*z
+     if ( s  .lt.  tenm6 )   go to 102
+     gerd = gerd+fked(k)*z
+     if(iback.eq.2) go to 102
+     gei = gei+fke(k)*z
+102  z = z*x2
+103  ialt = -ialt
+  end do
+  beid = beid*x
+  berd = berd*x
+  if ( s  .lt.  tenm6 )   go to 104
+  xl = alogz(x*onehaf )
+  gerd = -xl*berd-ber/x+beid* aaa1            +x*gerd
+  geid = -xl*beid-bei/x-berd* aaa1            +x*geid
+  if (iback.eq.2) go to 104
+  ger = -xl*ber+bei* aaa1            +ger
+  gei = -xl*bei-ber* aaa1            +gei
+104 go to (6 , 4 ),iback
+  !      calculations of kelvin-functions for argument.gt.8.
+200 x2 = 8.0  /x
+  z = x2
+  ber = 0.0
+  bei = - valu11
+  berd = ber
+  beid = bei
+  ger = unity / sqrt2
+  gei = ger
+  gerd = ger
+  geid = gei
+  ialt = 1
+  do k=1, 6
+     thetar = fbe(k+14) * z
+     thetai = fbed(k+14)*z
+     phir = fke(k+14)*z
+     phii = fked(k+14)*z
+     ber = ber+thetar
+     bei = bei+thetai
+     ger = ger+phir
+     gei = gei+phii
+     if (ialt.eq.1) go to 201
+     berd = berd+thetar
+     beid = beid+thetai
+     gerd = gerd+phir
+     geid = geid+phii
+     go to 202
+201  berd = berd-thetar
+     beid = beid-thetai
+     gerd = gerd-phir
+     geid = geid-phii
+202  ialt = -ialt
+203  z = z*x2
+  end do
+  xl=x* sqrt2
+  if (qremb .lt. 1.0)  go to 204
+  xl = xl - qremb
+204 thetar = - xl + berd
+  thetai = -xl+beid
+  z = sqrtz(x)
+  x2 =  valu12 / z
+  z = valu13 / z* expz(thetar)
+  fr = z* cosz(thetai)
+  fi = z* sinz(thetai)
+  x2=x2* expz(ber)
+  thetar=x2* cosz(bei)
+  thetai=x2* sinz(bei)
+  z = -fr*gerd+fi*geid
+  geid = -fr*geid-fi*gerd
+  gerd = z
+  z = aaa2 * expz(-qremb)
+  gr = z*sinz(qremb)
+  gi = z*cosz(qremb)
+  berd = thetar*ger - thetai*gei + gerd*gr - geid*gi
+  beid = thetar*gei + thetai*ger + gerd*gi + geid*gr
+  ger = fr
+  gei = fi
+  ber = thetar + ger*gr - gei*gi
+  bei = thetai + ger*gi + gei*gr
+  go to ( 6 , 4 ),iback
+9900 continue
+  if( jjj .eq. 3 ) z = vsmall
+  return
+end subroutine skin
+!
+! subroutine undrfl.
+!
+subroutine undrfl ( n1 )
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  !     dummy imitation of ontario hydro univac module.
+  n1 = -7654
+  return
+end subroutine undrfl
+!
+! subroutine wrte.
+!
+subroutine wrte ( p, i2, i3, iflag, l, unit, lunit6 )
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  dimension p(1),r(10)
+  j=0
+  do i=i2,i3
+     j=j+1
+30   r(j)=p(i)*unit
+  end do
+  goto (1,2,3),iflag
+1 write(lunit6,11)(r(i), i=1,j)
+  return
+2 write(lunit6,22)(r(i),i=1,j)
+  return
+3 write(lunit6,33) l, (r(i),i=1,j)
+  return
+11 format(1h0,3x,9e14.5)
+22 format(4x,9e14.5)
+33 format(1h0,i3,9e14.5)
+end subroutine wrte
+!
 !     subroutine redu44.
-c
-      subroutine redu44 ( a, b, n, m )
-      implicit real*8 (a-h, o-z) ,
-     1     integer*4 (i-n)
-!)    Elimination of variables m+1,...n in symmetric matrix a. A is
-!)    stored as triangle (1 element for 1.column,2 for 2.column etc.).
-!)    Result is reduced matrix in columns 1,...m in case of reduction
-!)    (m unequal 0) or negative inverse matrix in columns 1,...n in case
-!)    of inversion (m=0).
-      dimension a(1), b(1)
-      include 'blkcom.ftn'
-      include 'labl44.ftn'
-      j = n + 1
-      w=unity
-      if(m.gt.0) w=-w
-      ij=n*j/2
-      if ( iprsup  .ge.  4 )
-     1 write (lunit6, 2692)  n, m, ij,  ( a(k), k=1, ij )
- 2692 format ( /,  24h at start of  'redu44' .,
-     1 24h       n       m      ij  ,/,
-     2 24x,  3i8  ,/,  29h (a(k), k=1, ij)  follow ....  ,/,
-     3 ( 1x,  8e16.7 )  )
-    3 j=j-1
-      if(j.eq.m) return
-      h1=a(ij)
-      if ( absz(h1)  .gt.  epsiln )  go to 6421
-      kill = 86
-      lstat(19) = 6421
-      lstat(18) = 51
-      lstat(13) = n
-      lstat(14) = m
-      lstat(15) = j
-      flstat(15) = epsiln
-      flstat(16) = h1
-      return
- 6421 h1=-unity/h1
-      b(j)=h1
-      ij=ij-j
-      k=0
-      ik=0
-!                                   begin k-loop
-    4 ik=ik+k
-      i1=ik+1
-      k=k+1
-      if(k.gt.n) go to 3
-      if(k.lt.j) go to 9
-      if(w.lt.0.) go to 3
-      if(k.eq.j) go to 7
-      i=ik+j
-    5 h2=a(i)
-      b(k)=h2*h1
-!                                   begin i-loop
-      i2=ik+k
-      l=0
-      do 6 i=i1,i2
-      l=l+1
-    6 a(i)=a(i)+b(l)*h2
-      if(k.lt.j) go to 4
-      i=ik+j
-      a(i)=b(k)
-      go to 4
-!                                   end i-loop
-    7 i=ij
-      do 8 l=1,j
-      i=i+1
-    8 a(i)=b(l)
-      go to 4
-!                                   end k-loop
-    9 i=ij+k
-      go to 5
-      end
-c
+!
+subroutine redu44 ( a, b, n, m )
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  !)    Elimination of variables m+1,...n in symmetric matrix a. A is
+  !)    stored as triangle (1 element for 1.column,2 for 2.column etc.).
+  !)    Result is reduced matrix in columns 1,...m in case of reduction
+  !)    (m unequal 0) or negative inverse matrix in columns 1,...n in case
+  !)    of inversion (m=0).
+  dimension a(1), b(1)
+  include 'blkcom.ftn'
+  include 'labl44.ftn'
+  j = n + 1
+  w=unity
+  if(m.gt.0) w=-w
+  ij=n*j/2
+  if ( iprsup  .ge.  4 ) write (lunit6, 2692)  n, m, ij,  ( a(k), k=1, ij )
+2692 format ( /,  24h at start of  'redu44' ., 24h       n       m      ij  ,/, &
+          24x,  3i8  ,/,  29h (a(k), k=1, ij)  follow ....  ,/, ( 1x,  8e16.7 )  )
+3 j=j-1
+  if(j.eq.m) return
+  h1=a(ij)
+  if ( absz(h1)  .gt.  epsiln )  go to 6421
+  kill = 86
+  lstat(19) = 6421
+  lstat(18) = 51
+  lstat(13) = n
+  lstat(14) = m
+  lstat(15) = j
+  flstat(15) = epsiln
+  flstat(16) = h1
+  return
+6421 h1=-unity/h1
+  b(j)=h1
+  ij=ij-j
+  k=0
+  ik=0
+  !                                   begin k-loop
+4 ik=ik+k
+  i1=ik+1
+  k=k+1
+  if(k.gt.n) go to 3
+  if(k.lt.j) go to 9
+  if(w.lt.0.) go to 3
+  if(k.eq.j) go to 7
+  i=ik+j
+5 h2=a(i)
+  b(k)=h2*h1
+  !                                   begin i-loop
+  i2=ik+k
+  l=0
+  do i=i1,i2
+     l=l+1
+6    a(i)=a(i)+b(l)*h2
+  end do
+  if(k.lt.j) go to 4
+  i=ik+j
+  a(i)=b(k)
+  go to 4
+  !                                   end i-loop
+7 i=ij
+  do l=1,j
+     i=i+1
+8    a(i)=b(l)
+  end do
+  go to 4
+  !                                   end k-loop
+9 i=ij+k
+  go to 5
+end subroutine redu44
+!
 !     subroutine output.
-c
-      subroutine output(metrik, p, z, switch, kmax, is, k2)
-      implicit real*8 (a-h, o-z) ,
-     1     integer*4 (i-n)
-      include 'blkcom.ftn'
-      include 'labl44.ftn'
-      dimension p(1), z(1)
-      character*8 txtmi, txtkm, txtunt
-      data txtmi / 6hmiles  /
-      data txtkm / 6h  km    /
-      if ( jpralt  .eq.  0 )   return
-      ll1 = 1
-      ll2 = 2
-      ll3 = 3
-      txtunt = txtmi
-      unit = 1.0
-      if ( metrik .eq. 1 ) txtunt = txtkm
-      if ( metrik .eq. 1 ) unit = 5280. * 12. *2.54d0/ 100000.d0
-      check=switch
-      write(lunit6,66)
-   66 format(1h0)
-      go to (305,306,307,308,332,333,336,337,340,341), is
-  305 write(lunit6,301) txtunt
-  301 format(1h0,12x,35hinverted capacitance matrix (daraf- ,a4, 1h) )
-      go to 5
-  306 write(lunit6,302) txtunt
-  302 format(1h0,14x,33hinverted susceptance matrix (ohm- ,a4, 1h) )
-      go to 5
-  307 write(lunit6,303) txtunt
-  303 format(1h0,21x,26hcapacitance matrix (farad/ ,a4, 1h) )
-      unit = 1.0 / unit
-      go to 5
-  308 write(lunit6,304) txtunt
-  304 format(1h0,23x,24hsusceptance matrix (mho/ ,a4, 1h) )
-      unit = 1.0 / unit
-      go to 5
-  332 write(lunit6,330) txtunt
-  330 format(1h0,16x,31hinverted impedance matrix (mho- ,a4, 1h) )
-      go to 5
-  333 write(lunit6,331) txtunt
-  331 format(1h0,25x,22himpedance matrix (ohm/ ,a4, 1h) )
-      unit = 1.0 / unit
-      go to 5
-  336 write(lunit6,334)
-  334 format(1h0,19x,33htransfer admittance matrix (mhos))
-      go to 5
-  337 write(lunit6,335)
-  335 format(1h0, 16x, 36htwice shunt admittance matrix (mhos))
-      go to 5
-  340 write(lunit6,338)
-  338 format(1h0,20x,32htransfer impedance matrix (ohms))
-      go to 5
-  341 write(lunit6,339)
-  339 format(1h0, 11x, 41hone half of shunt impedance matrix (ohms))
-    5 go to (320,321,322),k2
-  320 write(lunit6,309)
-  309 format(1h+,53x,37hfor the system of physical conductors)
-      go to 6
-  321 write(lunit6,310)
-  310 format(1h+,53x,45hfor the system of equivalent phase conductors)
-      go to 6
-  322 write(lunit6,311)
-  311 format(1h+,53x,65hfor the symmetrical components of the equivalent
-     1 phase conductors)
-    6 if (k2.eq.3  ) go to 3
-      write (lunit6,312)
-  312 format(1h ,30x,54hrows and columns proceed in same order as sorted
-     1 input)
-    4 k=0
-      if (is .eq. 8)  write(lunit6, 350)
-      if (is .eq.10)  write(lunit6, 350)
-  350 format(124h sum of two equal shunt admittances at both terminals,
-     1or its inverse, printed to conform to transients program input for
-     2mat)
-      kk=0
-      ki = 0
-    1 k = k+1
-      if(k.gt.kmax) return
-      icount=0
-      i2 = ki + 1
-      i3=i2+8
-      ki = ki+k
-    7 if(i3.gt.ki) i3=ki
-      if(icount.eq.0) go to 8
-      call wrte ( p(1), i2, i3, ll1, l, unit, lunit6 )
-   10 if ( check  .gt.  0.0 )
-     1 call wrte ( z(1), i2, i3, ll2, l, unit, lunit6 )
-      if(i3.eq.ki) go to 1
-      i2=i3+1
-      i3=i2+8
-      go to 7
-    8 icount=1
-      if(k2.eq.3) go to 20
-      l=k
-   21 call wrte ( p(1), i2, i3, ll3, l, unit, lunit6 )
-      go to 10
-    3 if(kmax.eq.2) go to 400
-      write(lunit6,313)
-  313 format(1h ,25x,92hrows proceed in sequence 0,1,2, 0,1,2 etc. and c
-     1olumns proceed in sequence 0,2,1, 0,2,1 etc.)
-      go to 4
-  400 write(lunit6,401)
-  401 format(1h ,38x,66hthis is a two-phase line. rows and columns proce
-     1ed in sequence 0,1)
-      if(is.le.4) check=-1.0
-      go to 4
-   20 l=kk
-      kk=kk+1
-      if(kk.eq.3) kk=0
-      go to 21
-      end
-      subroutine outspc(p   , z   ,kmax  ,metrik,fmipkm)
-      implicit real*8 (a-h, o-z) ,
-     1      integer*4 (i-n)
-      dimension p(1), z(1)
-      include  'blkcom.ftn'
-      include  'labl44.ftn'
-      if(kmax.eq.4) go to 999
-      write(lunit6,222)
-  222 format ( /, 55h special output for mutuals not applicable to this
-     1case   )
-      return
-  999 aa= valu7 *(z(8)-z(9))
-      bb= -valu7 *(p(8)-p(9))
-      a2=p(7)-onehaf*(p(8)+p(9))
-      b2=z(7)-onehaf*(z(8)+z(9))
-      a1=a2+aa
-      b1=b2+bb
-      a2=a2-aa
-      b2=b2-bb
-      a0=p(7)+p(8)+p(9)
-      b0=z(7)+z(8)+z(9)
-      c0=sqrtz(a0**2+b0**2)
-      c1=sqrtz(a1**2+b1**2)
-      c2=sqrtz(a2**2+b2**2)
-      if(metrik .eq. 1)go to 1120
-      write(lunit6,1111) c1,c2,c0
- 1111 format(28h mutual impedance  positive=,f8.5,20h ohm/mile  negative
-     1=,f8.5,16h ohm/mile  zero=,f8.4,9h ohm/mile)
-      return
- 1120 c1 = c1 * fmipkm
-      c2 = c2 * fmipkm
-      c0 = c0 * fmipkm
-      write(lunit6, 1121) c1, c2, c0
- 1121 format(28h mutual impedance  positive=,f8.5,20h ohm/km    negative
-     1=,f8.5,16h ohm/km    zero=,f8.4,9h ohm/km   )
-      return
-      end
-c
+!
+subroutine output(metrik, p, z, switch, kmax, is, k2)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  include 'blkcom.ftn'
+  include 'labl44.ftn'
+  dimension p(1), z(1)
+  character*8 txtmi, txtkm, txtunt
+  data txtmi / 6hmiles  /
+  data txtkm / 6h  km    /
+  if ( jpralt  .eq.  0 )   return
+  ll1 = 1
+  ll2 = 2
+  ll3 = 3
+  txtunt = txtmi
+  unit = 1.0
+  if ( metrik .eq. 1 ) txtunt = txtkm
+  if ( metrik .eq. 1 ) unit = 5280. * 12. *2.54d0/ 100000.d0
+  check=switch
+  write(lunit6,66)
+66 format(1h0)
+  go to (305,306,307,308,332,333,336,337,340,341), is
+305 write(lunit6,301) txtunt
+301 format(1h0,12x,35hinverted capacitance matrix (daraf- ,a4, 1h) )
+  go to 5
+306 write(lunit6,302) txtunt
+302 format(1h0,14x,33hinverted susceptance matrix (ohm- ,a4, 1h) )
+  go to 5
+307 write(lunit6,303) txtunt
+303 format(1h0,21x,26hcapacitance matrix (farad/ ,a4, 1h) )
+  unit = 1.0 / unit
+  go to 5
+308 write(lunit6,304) txtunt
+304 format(1h0,23x,24hsusceptance matrix (mho/ ,a4, 1h) )
+  unit = 1.0 / unit
+  go to 5
+332 write(lunit6,330) txtunt
+330 format(1h0,16x,31hinverted impedance matrix (mho- ,a4, 1h) )
+  go to 5
+333 write(lunit6,331) txtunt
+331 format(1h0,25x,22himpedance matrix (ohm/ ,a4, 1h) )
+  unit = 1.0 / unit
+  go to 5
+336 write(lunit6,334)
+334 format(1h0,19x,33htransfer admittance matrix (mhos))
+  go to 5
+337 write(lunit6,335)
+335 format(1h0, 16x, 36htwice shunt admittance matrix (mhos))
+  go to 5
+340 write(lunit6,338)
+338 format(1h0,20x,32htransfer impedance matrix (ohms))
+  go to 5
+341 write(lunit6,339)
+339 format(1h0, 11x, 41hone half of shunt impedance matrix (ohms))
+5 go to (320,321,322),k2
+320 write(lunit6,309)
+309 format(1h+,53x,37hfor the system of physical conductors)
+  go to 6
+321 write(lunit6,310)
+310 format(1h+,53x,45hfor the system of equivalent phase conductors)
+  go to 6
+322 write(lunit6,311)
+311 format(1h+,53x,65hfor the symmetrical components of the equivalent phase conductors)
+6 if (k2.eq.3  ) go to 3
+  write (lunit6,312)
+312 format(1h ,30x,54hrows and columns proceed in same order as sorted input)
+4 k=0
+  if (is .eq. 8)  write(lunit6, 350)
+  if (is .eq.10)  write(lunit6, 350)
+350 format(' Sum of two equal shunt admittances at both terminals or its inverse, printed to conform to transients program input format')
+  kk=0
+  ki = 0
+1 k = k+1
+  if(k.gt.kmax) return
+  icount=0
+  i2 = ki + 1
+  i3=i2+8
+  ki = ki+k
+7 if(i3.gt.ki) i3=ki
+  if(icount.eq.0) go to 8
+  call wrte ( p(1), i2, i3, ll1, l, unit, lunit6 )
+10 if ( check  .gt.  0.0 ) call wrte ( z(1), i2, i3, ll2, l, unit, lunit6 )
+  if(i3.eq.ki) go to 1
+  i2=i3+1
+  i3=i2+8
+  go to 7
+8 icount=1
+  if(k2.eq.3) go to 20
+  l=k
+21 call wrte ( p(1), i2, i3, ll3, l, unit, lunit6 )
+  go to 10
+3 if(kmax.eq.2) go to 400
+  write(lunit6,313)
+313 format(' ', 25x, 'Rows proceed in sequence 0,1,2, 0,1,2 etc. and columns proceed in sequence 0,2,1, 0,2,1 etc.')
+  go to 4
+400 write(lunit6,401)
+401 format(' ', 38x, 'This is a two-phase line. Rows and columns proceed in sequence 0,1')
+  if(is.le.4) check=-1.0
+  go to 4
+20 l=kk
+  kk=kk+1
+  if(kk.eq.3) kk=0
+  go to 21
+end subroutine output
+!
+! subroutine outspc.
+!
+subroutine outspc(p   , z   ,kmax  ,metrik,fmipkm)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  dimension p(1), z(1)
+  include 'blkcom.ftn'
+  include 'labl44.ftn'
+  if(kmax.eq.4) go to 999
+  write(lunit6,222)
+222 format (/, ' Special output for mutuals not applicable to this case')
+  return
+999 aa= valu7 *(z(8)-z(9))
+  bb= -valu7 *(p(8)-p(9))
+  a2=p(7)-onehaf*(p(8)+p(9))
+  b2=z(7)-onehaf*(z(8)+z(9))
+  a1=a2+aa
+  b1=b2+bb
+  a2=a2-aa
+  b2=b2-bb
+  a0=p(7)+p(8)+p(9)
+  b0=z(7)+z(8)+z(9)
+  c0=sqrtz(a0**2+b0**2)
+  c1=sqrtz(a1**2+b1**2)
+  c2=sqrtz(a2**2+b2**2)
+  if(metrik .eq. 1)go to 1120
+  write(lunit6,1111) c1,c2,c0
+1111 format(' Mutual impedance  positive= ', f8.5, ' Ohm/mile  negative= ', f8.5, ' Ohm/mile  zero= ', f8.4, ' Ohm/mile')
+  return
+1120 c1 = c1 * fmipkm
+  c2 = c2 * fmipkm
+  c0 = c0 * fmipkm
+  write(lunit6, 1121) c1, c2, c0
+1121 format(' Mutual impedance  positive= ', f8.5, ' Ohm/km    negative= ', f8.5, ' Ohm/km    zero= ', f8.4, ' Ohm/km')
+  return
+end subroutine outspc
+!
 !     end of file: over44.for
-c
+!
