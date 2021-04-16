@@ -7,17 +7,17 @@
 !
 subroutine subr45
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-!     Code connected to  'semlyen setup'  special request card.
-!)  This overlay is used to calculate
-!)     1)  propagation step response as approximated by an analytic
-!)         (two exponebtials and a constant) function.
-!)     2)  admittance step response as approximated by an analytic
-!)         (two exponentials and a constant) function.
-!)     3)  steady state modal distributed impedance and admittance of
-!)         the line.
-!)     4)  phase to mode transformation matrices.
-!)  this routine punches the branch cards to be read in as data when
-!)  Using the 'semlyen recursive convolution' frequency dependent line.
+  !     Code connected to  'semlyen setup'  special request card.
+  !)  This overlay is used to calculate
+  !)     1)  propagation step response as approximated by an analytic
+  !)         (two exponebtials and a constant) function.
+  !)     2)  admittance step response as approximated by an analytic
+  !)         (two exponentials and a constant) function.
+  !)     3)  steady state modal distributed impedance and admittance of
+  !)         the line.
+  !)     4)  phase to mode transformation matrices.
+  !)  this routine punches the branch cards to be read in as data when
+  !)  Using the 'semlyen recursive convolution' frequency dependent line.
   include 'blkcom.ftn'
   include 'deck45.ftn'
   include 'labl45.ftn'
@@ -85,11 +85,11 @@ subroutine subr45
   lhhm = lfv + npoint
   lhhn = lhhm + npoint
 20 call guts45 ( stg(lpbuf), stg(lcq), stg(lz), stg(ly), stg(lzy), stg(lzya), stg(lzyb), stg(lzyc), stg(lzyd), stg(lcqt), &
-        stg(lq), stg(lqi), stg(lg), stg(lg60), stg(lyo), stg(lxr), stg(lxl), stg(lxg), stg(lxc), stg(lum), stg(lsi), &
-        stg(lvresp),stg(lym),stg(lfv),stg(lhhm),stg(lhhn),zift(lzift))
+       stg(lq), stg(lqi), stg(lg), stg(lg60), stg(lyo), stg(lxr), stg(lxl), stg(lxg), stg(lxc), stg(lum), stg(lsi), &
+       stg(lvresp),stg(lym),stg(lfv),stg(lhhm),stg(lhhn),zift(lzift))
   if ( kill .gt. 0 )     go to 9999
   if ( ialter .ne. 3 )   go to 9999
-!     segmented, 1, vax e/t can skip translation of rewind:
+  !     segmented, 1, vax e/t can skip translation of rewind:
   rewind lunit3
   go to 5655
 9999 return
@@ -141,8 +141,8 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   ll6 = 6
   if ( lastov  .eq.  1 )   go to 3107
   if ( iprsup  .ge.  1 ) write (lunit6, 3106)  lunit5, ialter, lastov, nss, icheck, iotx, ioss, iofl, ktab, ci1, ck1, voltbc(1), voltk(1), volti(1)
- 3106 format (/,  " At beginning of 'over45' .  lunit5  ialter  lastov     nss  icheck    iotx    ioss    iofl    ktab", /, &
-           27x,  9i8, /, 13x, 3hci1, 12x, 3hck1, 6x, 9hvoltbc(1), 7x, 8hvoltk(1), 7x, 8hvolti(1),    /, 1x, 5e15.6     )
+3106 format (/,  " At beginning of 'over45' .  lunit5  ialter  lastov     nss  icheck    iotx    ioss    iofl    ktab", /, &
+       27x,  9i8, /, 13x, 3hci1, 12x, 3hck1, 6x, 9hvoltbc(1), 7x, 8hvoltk(1), 7x, 8hvolti(1),    /, 1x, 5e15.6     )
   if ( ialter  .eq.  3 )   go to 10140
   go to 10180
   !     default definition of  'tolerances'  parameters.
@@ -519,7 +519,7 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
      d1 = 1.0/(2.*tt)
      if (n1 .ne. 0) write (lunit6,10651) d1
 10651 format('1', 10x, 'This frequency is closest(from below) to the natural frequency, f = (speed of light)/(2*length) = ', f10.2, /, 11x, &
-           'it will be used to calculate the constant characteristic admittance for use in the time-step loop convolution.'   )
+          'it will be used to calculate the constant characteristic admittance for use in the time-step loop convolution.'   )
      ww(1) = w
      do i=1, nph2
 10652   um(i) = yo(i)
@@ -584,8 +584,8 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   if (iprsup .lt. 3) go to 70140
   write (lunit6,70550) (i,i=1, nph)
 70550 format ( 1h0, 5x, 'Propagation step response in the frequency domain.' &
-           ,/,  '0',  5x,  5homega,  3( 21x, 5hmode , i2, 6x) &
-           ,/, (11x,  3(21x, 5hmode , i2, 6x)  )  )
+       ,/,  '0',  5x,  5homega,  3( 21x, 5hmode , i2, 6x) &
+       ,/, (11x,  3(21x, 5hmode , i2, 6x)  )  )
   jmax = nfrph
   do i=1, nfr1
 70130 write(lunit6,70510) si(i), ( vresp(n2), vresp(n2+nfrph), n2 = i, jmax, nfr1 )
@@ -593,7 +593,7 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   if ( kfit .le. 9 .and. kypr .le. 0 ) go to 70140
   write( lunit6,70131) ( i, i=1,nph )
 70131 format(1h1, 5x, 49hadmittance step response in the frequency domain. ,/, 1h0, 5x, 5homega, 3( 21x, 5hmode ,i2, 6x ) ,/, &
-           ( 11x, 3( 21x, 5hmode ,i2, 6x ) ) )
+       ( 11x, 3( 21x, 5hmode ,i2, 6x ) ) )
   jmax = 3 * nfrph
   do i = 1, nfr1
      n1 = 2 * nfrph + i
@@ -640,7 +640,7 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
 240 if (iprsup .le. 5) go to 640
   write (lunit6,610)
 610 format ( 1h0, 5x, 73hdata for fitting of characteristic admittance exponential approximation.  ,/,  10x,  9hfrequency,  17x, &
-         31h... cmplx. char. admittance ...   )
+       31h... cmplx. char. admittance ...   )
   do i=1, nph
      n1 = (i - 1) * nph2 + 1
      n2 = n1 - 1 + nph2
@@ -889,8 +889,8 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   w2 = w * w
   write( lunit6,706 ) w
 706 format(//, 15x, f5.1, 'Hz steady state modal parameters in ohms and micromhos  ', /,  &
-         15x,  'as calculated from fitted exponentials via Fourier transform ', //, 25x, &
-         'mode     r           x     g           b ')
+       15x,  'as calculated from fitted exponentials via Fourier transform ', //, 25x, &
+       'mode     r           x     g           b ')
   do i1 = 1, nph
      i3 = 14 * i1
      i2 = i3-13
@@ -903,7 +903,7 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
      hssr = 1.0 - pbuf(i3-4) * w2 / den1 - pbuf(i3-2) * w2 / den2
      hssi = - pbuf(i3-4) / pbuf(i3-3) * w / den1 - pbuf(i3-2) / pbuf(i3-1) * w / den2
      den1 = 1.0 / pbuf(i3-8)
-    den1 = den1 * den1 + w2
+     den1 = den1 * den1 + w2
      den2 = 1.0 / pbuf(i3-6)
      den2 = den2 * den2 + w2
      yssr = pbuf(i3-5) -(pbuf(i3-9) + pbuf(i3-7)  ) + pbuf(i3-9) * w2 / den1 + pbuf(i3-7) * w2 / den2
@@ -930,8 +930,8 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   !     documentation of output cards to be punched.
   if (ipun .ne. 1) write (lunit6,425)
 425 format(//,27x, 34hsequential list of punched output.     ,/, 27x,34(1h-),//,4x, &
-         '0         1         2         3         4        5         6         7         8  ', /, &
-         9(4x,1h0,5x), /, 4x, 81('-' ), /, 1x)
+       '0         1         2         3         4        5         6         7         8  ', /, &
+       9(4x,1h0,5x), /, 4x, 81('-' ), /, 1x)
   nss = iabs(nss)
   kfit = iabs(kfit)
   kps = iabs(kps)
@@ -1169,1366 +1169,1336 @@ end subroutine cxc
 !
 ! subroutine frqdom.
 !
-      subroutine frqdom(ioutp, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq,
-     1     cqt, q, qi, g, g60, yo, xr, xl, xg, xc)
-      implicit real*8 (a-h, o-z) ,
-     1      integer*4 (i-n)
-!)  this subroutine is used to process line/cable constants data at a
-!)  specific frequency.  the r, l, c matrices (low. tri, col order) are
-!)  read from tape3.  each matrix is a separate record.  the routine can
-!)  selectively calculate and/or output the following quantities.
-c)
-!)     1.  modal transformation marrices(exact only).
-!)     2.  alpha, beta, attenuation % velocity for each mode.
-!)     3.  modal distributed impedance and shunt admittance.
-!)     4.  modal characteristic impedance.
-!)     5.  modal equivalent pi impedance and admitance.
-!)     6.  phase equivalent pi matrices.
-c)
-!)  these values may be calculated on the basis of exact diagonal-
-!)  ization of zy matrix or by use of pre-calculated transformation
-!)  matrices.
-      include  'blkcom.ftn'
-      include  'labl45.ftn'
-      include  'volt45.ftn'
-      equivalence (vim(8),epseig),(ipntv(5),nieig),(indtv(2),nss)
-      dimension pbuf(1), z(1), y(1), zy(1), zya(1), zyb(1), zyc(1)
-      dimension zyd(1), cq(1), cqt(1), q(1), qi(1), g(1), g60(1)
-      dimension yo(1), xr(1), xl(1), xg(1), xc(1)
-      ll1 = 1
-      ll2 = 2
-      ll3 = 3
-      ll4 = 4
-      ll5 = 5
-      ll6 = 6
-      i = ioutp
-      j = iwork
-      k = 1
-   61 n1 = i/2
-      n2 = j/2
-      if (i .ne. n1 + n1 .and. j .eq. n2 + n2) iwork = iwork + k
-      k = k + k
-      i = n1
-      j = n2
-      if (i .ne. 0) go to 61
-!     read matrices  (g), (b), (r), and (x)  from unit 3.
-      if ( iprsup  .ge.  1 )
-     1 write (lunit6, 3614)  ioutp, iwork, nph, ntri, nph2, nss, cold, f
-     +, w
- 3614 format ( /,  20h at begin 'frqdom' .,
-     1 48h   ioutp   iwork     nph    ntri    nph2     nss    ,
-     2 11x,  4hcold,  14x,  1hf,  14x,  1hw   ,/,
-     3 20x, 6i8, 3e15.5  )
-      if ( kreqab  .eq.  0 )   go to 3603
-      n1 = 2 * nph * nph
-      read (lunit3)  ( y(i), i=1, n1 )
-      read (lunit3)  ( z(i), i=1, n1 )
-      m=1
-      do 3615  i = 1, nph
-      kcol = 2 * nph * (i-1) + 1
-      ktri = kcol + 2 * ( i-1 )
-      do 888  j= kcol, ktri, 2
-      xg(m) = y(j)
-      xr(m) = z(j)
-      xc(m) = y(j+1)
-      xl(m) = z(j+1)
-  888 m = m + 1
- 3615 continue
-      d1 = y(2) / f
-      go to 3622
- 3603 read (lunit3) (xg(i),i=1,ntri)
-      read (lunit3) (xc(i),i=1,ntri)
-      read (lunit3) (xr(i),i=1,ntri)
-      read (lunit3) (xl(i),i=1,ntri)
-      if ( iprsup  .ge.  4 )
-     1 write (lunit6, 3617)  xg(1), xc(1), xr(1), xl(1)
- 3617 format ( /,  19h after unit 3 read.  ,  10x,  5hxg(1),
-     2 10x, 5hxc(1), 10x, 5hxr(1), 10x, 5hxl(1)  ,/,
-     3 19x,  4e15.5  )
-      d1 = xc(1) / f
- 3622 if ( cold  .eq.  0.0 )   go to 1
-      d2 = ( d1 - cold ) / d1
-      d3 = epsiln * 100.
-      if ( absz(d2)  .le.  d3 )   go to 1
-      write (lunit6, 3629)  f, cold, d1, d2
- 3629 format ( /, 9h at 3629     ,  4e20.10  )
-      kill = 188
-      flstat(13) = d1
-      flstat(14) = f
-      flstat(15) = cold
-      flstat(19) = 1
-      return
-    1 cold = d1
-      if (ioutp .ne. 0) write (lunit6,136) f
-  136 format( ///, 54x, 12hfrequency = , e13.4  ,/,  54x,
-     1     25(1h*) ,/, 1x )
-      if ( kreqab  .gt.  0 )   go to 3637
-      l = 1
-      do 3 i=1, nph
-      j = (i - 1)*nph2 + 1
-      k = i + i - 1
-      do 2 n1=1, i
-      z(j) = xr(l)
-      z(k) = xr(l)
-      y(j) = xg(l)
-      y(k) = xg(l)
-      z(j+1) = xl(l)
-      z(k+1) = xl(l)
-      y(j+1) = xc(l)
-      y(k+1) = xc(l)
-      j = j + 2
-      k = k + nph2
-    2 l = l + 1
-    3 continue
-      if (nss .eq. 0)   go to 3637
-      if (nph .eq. 1)   go to 3637
-      zoff = 0.0
-      zoff1 = 0.0
-      zdia = 0.0
-      zdia1 = 0.0
-      yoff = 0.0
-      yoff1 = 0.0
-      ydia = 0.0
-      ydia1 = 0.0
-      do 90   i=1, nph2, 2
-      k = ( i + 1) / 2
-      l = (k-1) * nphpi2
-      n = l + 1
-      j = 1
-      if (j .eq. k)   go to 75
-      do 70   m=i, l, nph2
-      m1 = m + 1
-      zoff = zoff + z(m)
-      yoff = yoff + y(m)
-      zoff1 = zoff1 + z(m1)
-      yoff1 = yoff1 + y(m1)
-   70 continue
-      go to 80
-   75 n1 = n + 1
-      zdia = zdia + z(n)
-      ydia = ydia + y(n)
-      zdia1 = zdia1 + z(n1)
-      ydia1 = ydia1 + y(n1)
-   80 if (i .eq. 1)   go to 90
-      j = j + k - 1
-      if (j .le. k)   go to 75
-   90 continue
-      noff = nph * (nph - 1) / 2
-      zoff = zoff/noff
-      yoff = yoff/noff
-      zoff1 = zoff1/noff
-      yoff1 = yoff1/noff
-      zdia = zdia/nph
-      ydia = ydia/nph
-      zdia1 = zdia1/nph
-      ydia1 = ydia1/nph
-      do 95   i=1, nph
-      j = (i-1) * nphpi2 + 1
-      l = (i - 1) * nph2+ 1
-      l1 = i *nph2
-      do 94   k = l, l1, 2
-      k1 = k + 1
-      if (k .eq. j)   go to 93
-      z(k) = zoff
-      y(k) = yoff
-      z(k1) = zoff1
-      y(k1) = yoff1
-      go to 94
-   93 z(k) = zdia
-      y(k) = ydia
-      z(k1) = zdia1
-      y(k1) = ydia1
-   94 continue
-   95 continue
- 3637 iwork = -iwork
-      iout1 = ioutp
-      ioutp = ioutp/2
-      if (ioutp + ioutp .eq. iout1) go to 13
-      if( kreqab .eq. 1 ) go to 34
-      write (lunit6,131)
-  131 format ( /, 10x, 16himpedance matrix, 25x,  17hadmittance matrix
-     1 ,/, 13x,  10h(ohm/mile),  31x,  10h(mho/mile)   )
-      go to 27
-   34 write( lunit6,134 )
-  134 format( /,  10x, 16himpedance matrix, 25x,  17hadmittance matrix
-     1 ,/, 14x,   8h(ohm/m ) ,  33x,   8h(mho/m )  )
-      go to 27
-   30 iwork = iwork/2
-      n1 = iwork/64
-      n2 = ioutp/64
-      if (64*n1 .eq. iwork .or. nss .eq. 1) go to 35
-      if (64*n2 .ne. ioutp) write (lunit6,139)
-  139 format ( /, 10x,  82hthe following values are computed on the basi
-     1s of exact diagonalization of zy mtx.    )
-      dx = -(spdlt/w)**2
-      j = 1
-      do 14 i=1, n22
-      zya(i) = dx*zy(i)
-      if (i .ne. j) go to 14
-      zya(i) = zya(i) - unity
-      j = j + nphpi2
-   14 continue
-!     calculation of eigenvalues and eigenvectors by the power method.
-      do 41 i=1, n22
-   41 zyb(i) = zya(i)
-      l = 0
-   42 l = l + 1
-      iq  = 0
-      if (l .ge. nph) go to 414
-   43 iq = iq + 1
-      if (iq .le. nieig) go to 44
-      lstat(19) = 44
-      kill = 165
-      lstat(19) = 44
-      return
-   44 do 45 i=1, n22
-   45 zyc(i) = zyb(i)
-      call cxc(zyc,zyc,zyb,ll1)
-      diagx = 0.
-      j = 1
-      do 46 i=1, nph2, 2
-      dx = zyb(j)*zyb(j) + zyb(j+1)*zyb(j+1)
-      if (dx .le. diagx) go to 46
-      diagx = dx
-      n1 = j
-      n2 = i
-   46 j = j + nphpi2
-      zyr = zyb(n1)/diagx
-      zyi = - zyb(n1+1)/diagx
-      do 47 i=1, n22, 2
-      dx = zyr*zyb(i) - zyi*zyb(i+1)
-      zyb(i+1) = zyr*zyb(i+1) + zyi*zyb(i)
-   47 zyb(i) = dx
-      diag = 0.
-      j = (n2 - 1)*nph + 1
-      k = j + nph2 - 2
-      do 48 i=j, k, 2
-      if (i .eq. n1) go to 48
-      dx = zyb(i)*zyb(i) + zyb(i+1)*zyb(i+1)
-      if (dx .le. diag) go to 48
-      diag = dx
-      n3 = i
-   48 continue
-      if (diag .gt. 0.) go to 410
-      do 49 i=n2, n22, nph2
-      if (i .eq. n1) go to 49
-      dx = zyb(i) * zyb(i) + zyb(i+1) * zyb(i+1)
-      if (dx .le. diag) go to 49
-      diag = dx
-      n3 = i
-   49 continue
-  410 dx = (zyc(n1)*zyc(n1) + zyc(n1+1)*zyc(n1+1))/(zyc(n3)*zyc(n3) +
-     1     zyc(n3+1)*zyc(n3+1))
-      if (iprsup .gt. 6)
-     1     write (lunit6,10101) n1, n2, n3, j, iq, dx, diag, diagx,
-     1     epseig, (zyb(i), i=j, k), (zyb(i), i=n2, n22, nph2)
-10101 format(/, 53h in eigen power loop.  n1, n2, n3,  j, iq, dx, diag,
-     1,61hdiagx, epsieg, (zyb(i), i=j, k), (zyb(i), i=n2, n22, nph2) =
-     2 ,/, 1x, i9, 4i10, 4e20.11  ,/,  ( 1x, 6e20.11 )  )
-      if (absz(sqrtz(dx*diag) - 1.0) .gt. epseig) go to 43
-      l2 = l*nph2 + 1
-      n3 = l2 - nph2
-      k = (n2 - 1)*nph + 1
-      zyr = 0.
-      zr = 0.
-      zyi = 0.
-      zi = 0.
-      do 411 i=n2, n22, nph2
-      zyr = zyr + zya(i)*zyb(k) - zya(i+1)*zyb(k+1)
-      zyi = zyi + zya(i)*zyb(k+1) + zya(i+1)*zyb(k)
-      zr = zr + zyb(i)*zyb(k) - zyb(i+1)*zyb(k+1)
-      zi = zi + zyb(i)*zyb(k+1) + zyb(i+1)*zyb(k)
-      cq(n3) = zyb(k)
-      cq(n3+1) = zyb(k+1)
-      cq(l2) = zyb(i)
-      cq(l2+1) = zyb(i+1)
-      k = k + 2
-      n3 = n3 + 2
-  411 l2 = l2 + 2
-      l2 = l + l
-      g(l2-1) = zyr
-      g(l2) = zyi
-      dx = zr*zr + zi*zi
-      zyr = (zr*g(l2-1) + zi*g(l2))/dx
-      zyi = (zr*g(l2) - zi*g(l2-1))/dx
-      k = 1
-      n2 = l*nph2 + 1
-      n1 = n2 - nph2
-      n3 = n2 - 2
-      n4 = n3 + nph2
-      do 413 i=n2, n4, 2
-      zr = cq(i)*zyr - cq(i+1)*zyi
-      zi = cq(i)*zyi + cq(i+1)*zyr
-      do 412 j=n1, n3, 2
-      zyb(k) = zya(k) - cq(j)*zr + cq(j+1)*zi
-      zyb(k+1) = zya(k+1) - cq(j)*zi - cq(j+1)*zr
-      zya(k) = zyb(k)
-      zya(k+1) = zyb(k+1)
-  412 k = k + 2
-  413 continue
-      go to 42
-  414 diagx = 0.
-      j = 1
-      do 415 i=1, nph2, 2
-      dx = zya(j)*zya(j) + zya(j+1)*zya(j+1)
-      if (dx .le. diagx) go to 415
-      diagx = dx
-      n1 = j
-      n2 = i
-  415 j= j + nphpi2
-      n3 = (l-1)*nph2 + 1
-      k = (n2 - 1)*nph + 1
-      zyr = 0.
-      zyi = 0.
-      zr = zya(n1)/diagx
-      zi = -zya(n1+1)/diagx
-      do 416 i=n2, n22, nph2
-      zyr = zyr + zya(i)*zya(k) - zya(i+1)*zya(k+1)
-      zyi = zyi + zya(i)*zya(k+1) + zya(i+1)*zya(k)
-      cq(n3) = zr*zya(k) - zya(k+1)*zi
-      cq(n3+1) = zi*zya(k) + zya(k+1)*zr
-      n3 = n3 + 2
-  416 k = k + 2
-      l2 = l + l
-      g(l2-1) = zr*zyr - zi*zyi
-      g(l2) = zr*zyi + zi*zyr
-      if (iprsup .lt. 5) go to 418
-      write (lunit6,135) (g(i),i=1,nph2)
-  135 format ( /, 5x,  31hraw eigenvalues % vector output  ,/,
-     1 ( /,  10e12.5 ) )
-      do 417 i=1, n22, nph2
-      j = i + nph2 - 1
-  417 write (lunit6,107) (cq(k),k=i,j)
-  107 format ( 1h0, 5x,  6(5x, e12.5) ,/, 6x,  6(5x, e12.5 ) )
-  418 continue
-      dx = w/spdlt
-      do 16 i=1, nph2, 2
-      g(i) = g(i) + 1.0
-      zyr = sqrtz(g(i)*g(i) + g(i+1)*g(i+1))
-      if (g(i) .lt. 0.0)   go to 200
-      zr = sqrtz((g(i) + zyr)/2.)
-      zi = g(i+1) / zr / 2.
-      go to 201
-  200 zi = sqrtz((-g(i) +zyr) / 2.)
-      if (g(i+1) .lt. 0.0) zi = -zi
-      zr = g(i+1) / zi /2.
-  201 g(i) = - dx * zi
-      g(i+1) = dx*zr
-   16 continue
-!     calculation of current transformation matrix
-      call cxc(cq,zyb,zya,ll6)
-      if ( kill  .gt.  0 )   go to 9200
-      n1 = 1
-      do 56 i=1, nph2, 2
-      k = n1
-      do 55 j=i, n22, nph2
-      zya(k) = zyb(j)
-      zya(k+1) = zyb(j+1)
-   55 k = k + 2
-   56 n1 = n1 + nph2
-      iwork = iwork / 2
-      iout1 = ioutp
-      ioutp = ioutp / 2
-      if ( ioutp + ioutp   .eq.   iout1 )   go to 18
-!     output the transformation matrices.
-      if (nph .le. 6) go to 127
-      write (lunit6, 120)
-  120 format(//,42x,21hmode to phase voltage   ,/,
-     1     42x, 21htransformation matrix ,/, 1x    )
-      n1 = 5 * nph2
-      do 124 i=1, nph2, 2
-      n2 = i
-      write (lunit6, 121)
-  121 format (1x)
-  122 n3 = n2 + n1
-      if (n3 .gt. n22) n3 = n22
-      n4 = n2 + 1
-      n5 = n3 + 1
-      write (lunit6, 121)
-      write (lunit6, 123) (cq(j), j=n2, n3, nph2)
-      write (lunit6, 123) (cq(j), j=n4, n5, nph2)
-      n2 = n3 + nph2
-      if (n3 .lt. n22) go to 122
-  123 format (1x, 12(2x,f8.2))
-  124 continue
-      write( lunit6,119 )
-  119 format(//, 42x,  21hmode to phase current  ,/,
-     1    42x,  21htransformation matrix  ,/,  1x  )
-      do 126 i=1, nph2, 2
-      n2 = i
-      write (lunit6,121)
-  125 n3 = n2 + n1
-      if (n3 .gt. n22) n3 = n22
-      n4 = n2 + 1
-      n5 = n3 + 1
-      write (lunit6, 121)
-      write (lunit6, 123) (zya(j), j=n2, n3, nph2)
-      write (lunit6, 123) (zya(j), j=n4, n5, nph2)
-      n2 = n3 + nph2
-      if (n3 .lt. n22) go to 125
-  126 continue
-  127 write (lunit6, 141 )
-  141 format ( /,  22x,  21hmode to phase voltage,  44x,
-     1 21hmode to phase current,  /,  22x,  21htransformation matrix,
-     2 44x,  21htransformation matrix,  /,  1x  )
-      do 17  i=1, nph2, 2
-      write (lunit6, 116)
-  116 format ( 65x, 1h*  )
-      write (lunit6, 109)  ( cq(j), j=i, n22, nph2 )
-  109 format ( 1x,  6(2x, f8.5)  )
-      write (lunit6, 110)  ( zya(j), j=i, n22, nph2 )
-  110 format ( 1h+, 64x, 1h*, 1x, 6(2x, f8.5)  )
-      k = i + 1
-      write (lunit6, 109)  ( cq(j), j=k, n22, nph2 )
-   17 write (lunit6, 110)  ( zya(j), j=k, n22, nph2 )
-!     output eigenvectors, attenuation, and velocity
-   18 iout1 = ioutp
-      ioutp = ioutp / 2
-      if ( ioutp + ioutp   .eq.   iout1 )   go to 21
-      if (kreqab .eq. 1)   go to 39138
-      write (lunit6, 138)
-  138 format ( /, 20x,  5halpha,  13x,  4hbeta,  9x,
-     1 11hattenuation,  8x,  8hvelocity,  /,  9x,  4hmode,  5x,
-     2 10h(neper/mi),  6x,  12h(radians/mi),  7x,  7h(db/mi),
-     3 9x,  10h(mile/sec)    ,/,  1x  )
-      go to 39168
+subroutine frqdom(ioutp, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq,cqt, q, qi, g, g60, yo, xr, xl, xg, xc)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  !)  this subroutine is used to process line/cable constants data at a
+  !)  specific frequency.  the r, l, c matrices (low. tri, col order) are
+  !)  read from tape3.  each matrix is a separate record.  the routine can
+  !)  selectively calculate and/or output the following quantities.
+  !)
+  !)     1.  modal transformation marrices(exact only).
+  !)     2.  alpha, beta, attenuation % velocity for each mode.
+  !)     3.  modal distributed impedance and shunt admittance.
+  !)     4.  modal characteristic impedance.
+  !)     5.  modal equivalent pi impedance and admitance.
+  !)     6.  phase equivalent pi matrices.
+  !)
+  !)  these values may be calculated on the basis of exact diagonal-
+  !)  ization of zy matrix or by use of pre-calculated transformation
+  !)  matrices.
+  include 'blkcom.ftn'
+  include 'labl45.ftn'
+  include 'volt45.ftn'
+  equivalence (vim(8),epseig),(ipntv(5),nieig),(indtv(2),nss)
+  dimension pbuf(1), z(1), y(1), zy(1), zya(1), zyb(1), zyc(1)
+  dimension zyd(1), cq(1), cqt(1), q(1), qi(1), g(1), g60(1)
+  dimension yo(1), xr(1), xl(1), xg(1), xc(1)
+  ll1 = 1
+  ll2 = 2
+  ll3 = 3
+  ll4 = 4
+  ll5 = 5
+  ll6 = 6
+  i = ioutp
+  j = iwork
+  k = 1
+61 n1 = i/2
+  n2 = j/2
+  if (i .ne. n1 + n1 .and. j .eq. n2 + n2) iwork = iwork + k
+  k = k + k
+  i = n1
+  j = n2
+  if (i .ne. 0) go to 61
+  !     read matrices  (g), (b), (r), and (x)  from unit 3.
+  if ( iprsup  .ge.  1 ) write (lunit6, 3614)  ioutp, iwork, nph, ntri, nph2, nss, cold, f, w
+3614 format ( /,  20h at begin 'frqdom' ., 48h   ioutp   iwork     nph    ntri    nph2     nss    , &
+       11x,  4hcold,  14x,  1hf,  14x,  1hw   ,/, 20x, 6i8, 3e15.5  )
+  if ( kreqab  .eq.  0 )   go to 3603
+  n1 = 2 * nph * nph
+  read (lunit3)  ( y(i), i=1, n1 )
+  read (lunit3)  ( z(i), i=1, n1 )
+  m=1
+  do i = 1, nph
+     kcol = 2 * nph * (i-1) + 1
+     ktri = kcol + 2 * ( i-1 )
+     do j= kcol, ktri, 2
+        xg(m) = y(j)
+        xr(m) = z(j)
+        xc(m) = y(j+1)
+        xl(m) = z(j+1)
+888     m = m + 1
+     end do
+3615 end do
+  d1 = y(2) / f
+  go to 3622
+3603 read (lunit3) (xg(i),i=1,ntri)
+  read (lunit3) (xc(i),i=1,ntri)
+  read (lunit3) (xr(i),i=1,ntri)
+  read (lunit3) (xl(i),i=1,ntri)
+  if ( iprsup  .ge.  4 ) write (lunit6, 3617)  xg(1), xc(1), xr(1), xl(1)
+3617 format ( /,  19h after unit 3 read.  ,  10x,  5hxg(1), 10x, 5hxc(1), 10x, 5hxr(1), 10x, 5hxl(1)  ,/, 19x,  4e15.5  )
+  d1 = xc(1) / f
+3622 if ( cold  .eq.  0.0 )   go to 1
+  d2 = ( d1 - cold ) / d1
+  d3 = epsiln * 100.
+  if ( absz(d2)  .le.  d3 )   go to 1
+  write (lunit6, 3629)  f, cold, d1, d2
+3629 format ( /, 9h at 3629     ,  4e20.10  )
+  kill = 188
+  flstat(13) = d1
+  flstat(14) = f
+  flstat(15) = cold
+  flstat(19) = 1
+  return
+1 cold = d1
+  if (ioutp .ne. 0) write (lunit6,136) f
+136 format( ///, 54x, 12hfrequency = , e13.4  ,/,  54x,     25(1h*) ,/, 1x )
+  if ( kreqab  .gt.  0 )   go to 3637
+  l = 1
+  do i=1, nph
+     j = (i - 1)*nph2 + 1
+     k = i + i - 1
+     do n1=1, i
+        z(j) = xr(l)
+        z(k) = xr(l)
+        y(j) = xg(l)
+        y(k) = xg(l)
+        z(j+1) = xl(l)
+        z(k+1) = xl(l)
+        y(j+1) = xc(l)
+        y(k+1) = xc(l)
+        j = j + 2
+        k = k + nph2
+2       l = l + 1
+     end do
+3 end do
+  if (nss .eq. 0)   go to 3637
+  if (nph .eq. 1)   go to 3637
+  zoff = 0.0
+  zoff1 = 0.0
+  zdia = 0.0
+  zdia1 = 0.0
+  yoff = 0.0
+  yoff1 = 0.0
+  ydia = 0.0
+  ydia1 = 0.0
+  do i=1, nph2, 2
+     k = ( i + 1) / 2
+     l = (k-1) * nphpi2
+     n = l + 1
+     j = 1
+     if (j .eq. k)   go to 75
+     do m=i, l, nph2
+        m1 = m + 1
+        zoff = zoff + z(m)
+        yoff = yoff + y(m)
+        zoff1 = zoff1 + z(m1)
+        yoff1 = yoff1 + y(m1)
+70   end do
+     go to 80
+75   n1 = n + 1
+     zdia = zdia + z(n)
+     ydia = ydia + y(n)
+     zdia1 = zdia1 + z(n1)
+     ydia1 = ydia1 + y(n1)
+80   if (i .eq. 1)   go to 90
+     j = j + k - 1
+     if (j .le. k)   go to 75
+90 end do
+  noff = nph * (nph - 1) / 2
+  zoff = zoff/noff
+  yoff = yoff/noff
+  zoff1 = zoff1/noff
+  yoff1 = yoff1/noff
+  zdia = zdia/nph
+  ydia = ydia/nph
+  zdia1 = zdia1/nph
+  ydia1 = ydia1/nph
+  do i=1, nph
+     j = (i-1) * nphpi2 + 1
+     l = (i - 1) * nph2+ 1
+     l1 = i *nph2
+     do k = l, l1, 2
+        k1 = k + 1
+        if (k .eq. j)   go to 93
+        z(k) = zoff
+        y(k) = yoff
+        z(k1) = zoff1
+        y(k1) = yoff1
+        go to 94
+93      z(k) = zdia
+        y(k) = ydia
+        z(k1) = zdia1
+        y(k1) = ydia1
+94   end do
+95 end do
+3637 iwork = -iwork
+  iout1 = ioutp
+  ioutp = ioutp/2
+  if (ioutp + ioutp .eq. iout1) go to 13
+  if( kreqab .eq. 1 ) go to 34
+  write (lunit6,131)
+131 format ( /, 10x, 16himpedance matrix, 25x,  17hadmittance matrix ,/, 13x,  10h(ohm/mile),  31x,  10h(mho/mile)   )
+  go to 27
+34 write( lunit6,134 )
+134 format( /,  10x, 16himpedance matrix, 25x,  17hadmittance matrix ,/, 14x,   8h(ohm/m ) ,  33x,   8h(mho/m )  )
+  go to 27
+30 iwork = iwork/2
+  n1 = iwork/64
+  n2 = ioutp/64
+  if (64*n1 .eq. iwork .or. nss .eq. 1) go to 35
+  if (64*n2 .ne. ioutp) write (lunit6,139)
+139 format ( /, 10x,  82hthe following values are computed on the basis of exact diagonalization of zy mtx.    )
+  dx = -(spdlt/w)**2
+  j = 1
+  do i=1, n22
+     zya(i) = dx*zy(i)
+     if (i .ne. j) go to 14
+     zya(i) = zya(i) - unity
+     j = j + nphpi2
+14 end do
+  !     calculation of eigenvalues and eigenvectors by the power method.
+  do i=1, n22
+41   zyb(i) = zya(i)
+  end do
+  l = 0
+42 l = l + 1
+  iq  = 0
+  if (l .ge. nph) go to 414
+43 iq = iq + 1
+  if (iq .le. nieig) go to 44
+  lstat(19) = 44
+  kill = 165
+  lstat(19) = 44
+  return
+44 do i=1, n22
+45   zyc(i) = zyb(i)
+  end do
+  call cxc(zyc,zyc,zyb,ll1)
+  diagx = 0.
+  j = 1
+  do i=1, nph2, 2
+     dx = zyb(j)*zyb(j) + zyb(j+1)*zyb(j+1)
+     if (dx .le. diagx) go to 46
+     diagx = dx
+     n1 = j
+     n2 = i
+46   j = j + nphpi2
+  end do
+  zyr = zyb(n1)/diagx
+  zyi = - zyb(n1+1)/diagx
+  do i=1, n22, 2
+     dx = zyr*zyb(i) - zyi*zyb(i+1)
+     zyb(i+1) = zyr*zyb(i+1) + zyi*zyb(i)
+47   zyb(i) = dx
+  end do
+  diag = 0.
+  j = (n2 - 1)*nph + 1
+  k = j + nph2 - 2
+  do i=j, k, 2
+     if (i .eq. n1) go to 48
+     dx = zyb(i)*zyb(i) + zyb(i+1)*zyb(i+1)
+     if (dx .le. diag) go to 48
+     diag = dx
+     n3 = i
+48 end do
+  if (diag .gt. 0.) go to 410
+  do i=n2, n22, nph2
+     if (i .eq. n1) go to 49
+     dx = zyb(i) * zyb(i) + zyb(i+1) * zyb(i+1)
+     if (dx .le. diag) go to 49
+     diag = dx
+     n3 = i
+49 end do
+410 dx = (zyc(n1)*zyc(n1) + zyc(n1+1)*zyc(n1+1))/(zyc(n3)*zyc(n3) + zyc(n3+1)*zyc(n3+1))
+  if (iprsup .gt. 6) write (lunit6,10101) n1, n2, n3, j, iq, dx, diag, diagx, epseig, (zyb(i), i=j, k), (zyb(i), i=n2, n22, nph2)
+10101 format(/, 53h in eigen power loop.  n1, n2, n3,  j, iq, dx, diag,,61hdiagx, epsieg, (zyb(i), i=j, k), (zyb(i), i=n2, n22, nph2) = , &
+       /, 1x, i9, 4i10, 4e20.11  ,/,  ( 1x, 6e20.11 )  )
+  if (absz(sqrtz(dx*diag) - 1.0) .gt. epseig) go to 43
+  l2 = l*nph2 + 1
+  n3 = l2 - nph2
+  k = (n2 - 1)*nph + 1
+  zyr = 0.
+  zr = 0.
+  zyi = 0.
+  zi = 0.
+  do i=n2, n22, nph2
+     zyr = zyr + zya(i)*zyb(k) - zya(i+1)*zyb(k+1)
+     zyi = zyi + zya(i)*zyb(k+1) + zya(i+1)*zyb(k)
+     zr = zr + zyb(i)*zyb(k) - zyb(i+1)*zyb(k+1)
+     zi = zi + zyb(i)*zyb(k+1) + zyb(i+1)*zyb(k)
+     cq(n3) = zyb(k)
+     cq(n3+1) = zyb(k+1)
+     cq(l2) = zyb(i)
+     cq(l2+1) = zyb(i+1)
+     k = k + 2
+     n3 = n3 + 2
+411  l2 = l2 + 2
+  end do
+  l2 = l + l
+  g(l2-1) = zyr
+  g(l2) = zyi
+  dx = zr*zr + zi*zi
+  zyr = (zr*g(l2-1) + zi*g(l2))/dx
+  zyi = (zr*g(l2) - zi*g(l2-1))/dx
+  k = 1
+  n2 = l*nph2 + 1
+  n1 = n2 - nph2
+  n3 = n2 - 2
+  n4 = n3 + nph2
+  do i=n2, n4, 2
+     zr = cq(i)*zyr - cq(i+1)*zyi
+     zi = cq(i)*zyi + cq(i+1)*zyr
+     do j=n1, n3, 2
+        zyb(k) = zya(k) - cq(j)*zr + cq(j+1)*zi
+        zyb(k+1) = zya(k+1) - cq(j)*zi - cq(j+1)*zr
+        zya(k) = zyb(k)
+        zya(k+1) = zyb(k+1)
+412     k = k + 2
+     end do
+413 end do
+  go to 42
+414 diagx = 0.
+  j = 1
+  do i=1, nph2, 2
+     dx = zya(j)*zya(j) + zya(j+1)*zya(j+1)
+     if (dx .le. diagx) go to 415
+     diagx = dx
+     n1 = j
+     n2 = i
+415  j= j + nphpi2
+  end do
+  n3 = (l-1)*nph2 + 1
+  k = (n2 - 1)*nph + 1
+  zyr = 0.
+  zyi = 0.
+  zr = zya(n1)/diagx
+  zi = -zya(n1+1)/diagx
+  do i=n2, n22, nph2
+     zyr = zyr + zya(i)*zya(k) - zya(i+1)*zya(k+1)
+     zyi = zyi + zya(i)*zya(k+1) + zya(i+1)*zya(k)
+     cq(n3) = zr*zya(k) - zya(k+1)*zi
+     cq(n3+1) = zi*zya(k) + zya(k+1)*zr
+     n3 = n3 + 2
+416  k = k + 2
+  end do
+  l2 = l + l
+  g(l2-1) = zr*zyr - zi*zyi
+  g(l2) = zr*zyi + zi*zyr
+  if (iprsup .lt. 5) go to 418
+  write (lunit6,135) (g(i),i=1,nph2)
+135 format ( /, 5x,  31hraw eigenvalues % vector output  ,/, ( /,  10e12.5 ) )
+  do i=1, n22, nph2
+     j = i + nph2 - 1
+417  write (lunit6,107) (cq(k),k=i,j)
+  end do
+107 format ( 1h0, 5x,  6(5x, e12.5) ,/, 6x,  6(5x, e12.5 ) )
+418 continue
+  dx = w/spdlt
+  do i=1, nph2, 2
+     g(i) = g(i) + 1.0
+     zyr = sqrtz(g(i)*g(i) + g(i+1)*g(i+1))
+     if (g(i) .lt. 0.0)   go to 200
+     zr = sqrtz((g(i) + zyr)/2.)
+     zi = g(i+1) / zr / 2.
+     go to 201
+200  zi = sqrtz((-g(i) +zyr) / 2.)
+     if (g(i+1) .lt. 0.0) zi = -zi
+     zr = g(i+1) / zi /2.
+201  g(i) = - dx * zi
+     g(i+1) = dx*zr
+16 end do
+  !     calculation of current transformation matrix
+  call cxc(cq,zyb,zya,ll6)
+  if ( kill  .gt.  0 )   go to 9200
+  n1 = 1
+  do i=1, nph2, 2
+     k = n1
+     do j=i, n22, nph2
+        zya(k) = zyb(j)
+        zya(k+1) = zyb(j+1)
+55      k = k + 2
+     end do
+56   n1 = n1 + nph2
+  end do
+  iwork = iwork / 2
+  iout1 = ioutp
+  ioutp = ioutp / 2
+  if ( ioutp + ioutp   .eq.   iout1 )   go to 18
+  !     output the transformation matrices.
+  if (nph .le. 6) go to 127
+  write (lunit6, 120)
+120 format(//,42x,21hmode to phase voltage   ,/, 42x, 21htransformation matrix ,/, 1x    )
+  n1 = 5 * nph2
+  do i=1, nph2, 2
+     n2 = i
+     write (lunit6, 121)
+121  format (1x)
+122  n3 = n2 + n1
+     if (n3 .gt. n22) n3 = n22
+     n4 = n2 + 1
+     n5 = n3 + 1
+     write (lunit6, 121)
+     write (lunit6, 123) (cq(j), j=n2, n3, nph2)
+     write (lunit6, 123) (cq(j), j=n4, n5, nph2)
+     n2 = n3 + nph2
+     if (n3 .lt. n22) go to 122
+123  format (1x, 12(2x,f8.2))
+124 end do
+  write( lunit6,119 )
+119 format(//, 42x,  21hmode to phase current  ,/, 42x,  21htransformation matrix  ,/,  1x  )
+  do i=1, nph2, 2
+     n2 = i
+     write (lunit6,121)
+125  n3 = n2 + n1
+     if (n3 .gt. n22) n3 = n22
+     n4 = n2 + 1
+     n5 = n3 + 1
+     write (lunit6, 121)
+     write (lunit6, 123) (zya(j), j=n2, n3, nph2)
+     write (lunit6, 123) (zya(j), j=n4, n5, nph2)
+     n2 = n3 + nph2
+     if (n3 .lt. n22) go to 125
+126 end do
+127 write (lunit6, 141 )
+141 format ( /,  22x,  21hmode to phase voltage,  44x, 21hmode to phase current,  /,  22x,  21htransformation matrix, &
+       44x,  21htransformation matrix,  /,  1x  )
+  do i=1, nph2, 2
+     write (lunit6, 116)
+116  format ( 65x, 1h*  )
+     write (lunit6, 109)  ( cq(j), j=i, n22, nph2 )
+109  format ( 1x,  6(2x, f8.5)  )
+     write (lunit6, 110)  ( zya(j), j=i, n22, nph2 )
+110  format ( 1h+, 64x, 1h*, 1x, 6(2x, f8.5)  )
+     k = i + 1
+     write (lunit6, 109)  ( cq(j), j=k, n22, nph2 )
+17   write (lunit6, 110)  ( zya(j), j=k, n22, nph2 )
+  end do
+  !     output eigenvectors, attenuation, and velocity
+18 iout1 = ioutp
+  ioutp = ioutp / 2
+  if ( ioutp + ioutp   .eq.   iout1 )   go to 21
+  if (kreqab .eq. 1)   go to 39138
+  write (lunit6, 138)
+138 format ( /, 20x,  5halpha,  13x,  4hbeta,  9x, 11hattenuation,  8x,  8hvelocity,  /,  9x,  4hmode,  5x, &
+       10h(neper/mi),  6x,  12h(radians/mi),  7x,  7h(db/mi), 9x,  10h(mile/sec)    ,/,  1x  )
+  go to 39168
 39138 write (lunit6, 39148)
-39148 format ( /, 20x,  5halpha,  13x,  4hbeta,  9x,
-     1 11hattenuation,  8x,  8hvelocity,  /,  9x,  4hmode,  5x,
-     2 10h(neper/m ),  6x,  12h(radians/m ),  7x,  7h(db/m ),
-     3 9x, 10h  (m/sec)     ,/, 1x)
-39168 do 20  i = 1, nph
-      j = i + i
-      zyr = conv5 * g(j-1)
-      zyi = w / g(j)
-   20 write (lunit6, 115)  i, g(j-1), g(j), zyr, zyi
-  115 format ( 10x, i2,  4(5x, e12.5)  )
-   21 iwork = iwork / 2
-      n2 = ioutp / 16
-      n1 = iwork / 16
-      if ( 16*n1   .eq.   iwork )   go to 35
-      n = 1
-      do 2156   j = 1, n22, nph2
-      k = j + nph2 - 1
-      l = n
-      do 2056  i = j, k, 2
-      cqt(l) = cq(i)
-      cqt(l+1) = cq(i+1)
-      l = l + nph2
- 2056 continue
-      n = n + 2
- 2156 continue
-      call cxc(z,zya,zyd,ll1)
-      call cxc(y,cq,zyc,ll1)
-      call cxc(zyb,zyd,z,ll1)
-      call cxc(cqt,zyc,y,ll1)
-      j = 1
-      do 19121 i = 1, nph
-      y(j) = 0.0
+39148 format ( /, 20x,  5halpha,  13x,  4hbeta,  9x, 11hattenuation,  8x,  8hvelocity,  /,  9x,  4hmode,  5x, &
+       10h(neper/m ),  6x,  12h(radians/m ),  7x,  7h(db/m ), 9x, 10h  (m/sec)     ,/, 1x)
+39168 do i = 1, nph
+     j = i + i
+     zyr = conv5 * g(j-1)
+     zyi = w / g(j)
+20   write (lunit6, 115)  i, g(j-1), g(j), zyr, zyi
+  end do
+115 format ( 10x, i2,  4(5x, e12.5)  )
+21 iwork = iwork / 2
+  n2 = ioutp / 16
+  n1 = iwork / 16
+  if ( 16*n1   .eq.   iwork )   go to 35
+  n = 1
+  do j = 1, n22, nph2
+     k = j + nph2 - 1
+     l = n
+     do i = j, k, 2
+        cqt(l) = cq(i)
+        cqt(l+1) = cq(i+1)
+        l = l + nph2
+2056 end do
+     n = n + 2
+2156 end do
+  call cxc(z,zya,zyd,ll1)
+  call cxc(y,cq,zyc,ll1)
+  call cxc(zyb,zyd,z,ll1)
+  call cxc(cqt,zyc,y,ll1)
+  j = 1
+  do i = 1, nph
+     y(j) = 0.0
 19121 j = j + nphpi2
-      if ( iss  .eq.  0 )   go to 23
-      do 1976  i=1, nph2
- 1976 g60(i) = g(i)
-      j = 1
-      do 22  i=1, n22, nphpi2
-      pbuf(j) = sll*z(i)
-      pbuf(j+1) = sll*z(i+1)
-      pbuf(j+2) = sll*y(i)
-      pbuf(j+3) = sll * y(i+1)/tenm6
-   22 j= j + 14
-   23 i = iwork / 2
-      n1 = i - 8 * (i/8)
-      i = i / 2
-      n2 = i - 4 * ( i / 4 )
-      i = 2 * ( ioutp / 2 )
-      n3 = ioutp - i
-      j = 4 * ( i / 4 )
-      n4 = i - j
-      n5 = j - 8 * ( j / 8 )
-      i1 = n3 + n4 + n5
-      if (i1 .eq. 0)   go to 49500
-      if (kreqab .eq. 1)   go to 49410
-      write (lunit6, 137)
-  137 format (/, 9x,  18hdistributed series,  7x,  17hdistributed shunt
-     1  ,10x,  14hcharacteristic,  8x,  20hequivalent pi series,
-     2 5x,  19hhalf equiv pi shunt,  /,  9x,
-     3 19himpedance(ohm/mile),  5x,  20hadmittance(mho/mile),
-     4 8x,  15himpedance(ohms),  9x,  15himpedance(ohms),
-     5 10x,  16hadmittance(mhos),  /,  5h mode,
-     6 5(5x, 4hreal, 8x, 4himag, 4x)    ,/,  1x  )
-      go to 49500
+  end do
+  if ( iss  .eq.  0 )   go to 23
+  do i=1, nph2
+1976 g60(i) = g(i)
+  end do
+  j = 1
+  do i=1, n22, nphpi2
+     pbuf(j) = sll*z(i)
+     pbuf(j+1) = sll*z(i+1)
+     pbuf(j+2) = sll*y(i)
+     pbuf(j+3) = sll * y(i+1)/tenm6
+22   j= j + 14
+  end do
+23 i = iwork / 2
+  n1 = i - 8 * (i/8)
+  i = i / 2
+  n2 = i - 4 * ( i / 4 )
+  i = 2 * ( ioutp / 2 )
+  n3 = ioutp - i
+  j = 4 * ( i / 4 )
+  n4 = i - j
+  n5 = j - 8 * ( j / 8 )
+  i1 = n3 + n4 + n5
+  if (i1 .eq. 0)   go to 49500
+  if (kreqab .eq. 1)   go to 49410
+  write (lunit6, 137)
+137 format (/, 9x,  18hdistributed series,  7x,  17hdistributed shunt ,10x,  14hcharacteristic,  8x,  20hequivalent pi series, &
+       5x,  19hhalf equiv pi shunt,  /,  9x, 19himpedance(ohm/mile),  5x,  20hadmittance(mho/mile), 8x,  15himpedance(ohms),  &
+       9x,  15himpedance(ohms), 10x,  16hadmittance(mhos),  /,  5h mode, 5(5x, 4hreal, 8x, 4himag, 4x)    ,/,  1x  )
+  go to 49500
 49410 write (lunit6, 49420)
-49420 format (/, 9x,  18hdistributed series,  7x,  17hdistributed shunt
-     1  ,10x,  14hcharacteristic,  8x,  20hequivalent pi series,
-     2 5x,  19hhalf equiv pi shunt,  /,  9x,
-     3 19h impedance(ohm/m)  , 5x, 20h admittance(mho/m)  ,
-     4 8x,  15himpedance(ohms),  9x,  15himpedance(ohms),
-     5 10x,  16hadmittance(mhos),  /,  5h mode,
-     6 5(5x, 4hreal, 8x, 4himag, 4x)    ,/,  1x  )
+49420 format (/, 9x,  18hdistributed series,  7x,  17hdistributed shunt ,10x,  14hcharacteristic,  8x,  20hequivalent pi series, &
+       5x,  19hhalf equiv pi shunt,  /,  9x, 19h impedance(ohm/m)  , 5x, 20h admittance(mho/m), 8x,  15himpedance(ohms),  9x,  &
+       15himpedance(ohms), 10x,  16hadmittance(mhos),  /,  5h mode, 5(5x, 4hreal, 8x, 4himag, 4x)    ,/,  1x  )
 49500 j = 1
-      call mover0 ( zyb, n22 )
-      call mover0 ( zyc, n22 )
-      do 24  i=1, nph
-      if (i1 .ne. 0) write (lunit6,111) i
-  111 format ( 3x, i1 )
-      if ( n3  .ne.  0 )
-     1 write (lunit6, 112 )  z(j), z(j+1), y(j), y(j+1)
-  112 format ( 1h+, 5x, 2e12.5, 1x, 2e12.5 )
-      if ( n1  .eq.  0 )   go to 24
-      l = 2 * i - 1
-      zr = g(l+1)/y(j+1)
-      zi = - g(l)/y(j+1)
-  205 k = i + i
-      dx  =  zr * zr  +  zi * zi
-      yo(k-1) = zr/dx
-      yo(k) = -zi/dx
-      if ( n4  .ne.  0 )
-     1 write (lunit6, 113 )  zr, zi
-  113 format ( 1h+, 55x, 2e12.5 )
-      if ( n2  .eq.  0 )   go to 24
-      d1 = z(j)*y(j)  -  z(j+1)*y(j+1)
-      d2 = z(j)*y(j+1)  +  z(j+1)*y(j)
-      dx = sqrtz ( d1*d1  +  d2*d2 )
-      if (d1 .lt. 0.0)   go to 202
-      d3 = sqrtz((d1 + dx) / 2.)
-      d4 = d2 / d3 / 2.
-      go to 203
-  202 d4 = sqrtz((-d1 +dx) / 2.)
-      if ( d2  .lt.  0.0 )     d4 = -d4
-      d3 = d2 / d4 /2.
-  203 d3 = sll * d3
-      d4 = sll * d4
-      dx = expz ( d3 )
-      d3 = dx * cosz(d4 )
-      d4 = dx * sinz(d4 )
-      dx = d3*d3 + d4*d4
-      d1 = ( d3 - d3/dx ) / 2.0
-      d2 = ( d4 + d4/dx ) / 2.0
-      zyb(j) = d1*zr - d2*zi
-      zyb(j+1) = d1*zi + zr*d2
-      diag = d3 - 1.0
-      d1 = diag*diag - d4*d4
-      d2 = 2.0 * diag * d4
-      dx = 2.0 * dx
-      zyr  =  ( d1*d3 + d2*d4 ) / dx
-      zyi = ( d2*d3 - d1*d4 ) / dx
-      dx  =  zyb(j) * zyb(j)  +  zyb(j+1) * zyb(j+1)
-      zyc(j)  =  ( zyr*zyb(j)  +  zyi * zyb(j+1) ) / dx
-      zyc(j+1)  =  ( zyi * zyb(j)  -  zyr * zyb(j+1) ) / dx
-      if ( n5  .ne.  0 )
-     1 write (lunit6, 114)  zyb(j), zyb(j+1), zyc(j), zyc(j+1)
-  114 format ( 1h+, 80x, 2e12.5, 1x, 2e12.5 )
-   24 j = j + nphpi2
-      iwork = iwork / 8
-      n2 = ioutp / 16
-      n1 = iwork / 2
-      if ( n1+n1  .eq.  iwork )   go to 35
-      call cxc(cq,zyb,y,ll4)
-      call cxc(y,cq,z,ll3)
-      call cxc(zya,zyc,zyb,ll4)
-      call cxc(zyb,zya,y,ll3)
-      ioutp = ioutp / 8
-      iout1 = ioutp
-      ioutp = ioutp / 2
-      if ( ioutp + ioutp   .eq.   iout1 )   go to 13
-      write (lunit6, 132 )
-  132 format ( /, 9x,  20hpi equivalent series, 23x,
-     1 19hhalf pi equiv shunt   ,/,  8x,  22himpedance matrix(ohms),
-     2 20x, 23hadmittance matrix(mhos)   )
-   27 if (nph .le. 6) go to 157
-      nphpi = nph + 1
-      n1 = 5 * nph2
-      do 154 i=1, nph2, 2
-      n2 = i
-      n3 = (i - 1) * nphpi + 1
-      write (lunit6, 121)
-  151 n4 = n2 + n1
-      if (n4 .lt. n3) n4 = n3
-      write (lunit6,152) (z(j), j=n2, n4, nph2)
-      n5 = n2 + 1
-      n6 = n4 + 1
-      write (lunit6, 153) (z(j), j=n5, n6, nph2)
-      n2 = n4 + nph2
-      if ( n4 .lt. n3) go to 151
-  152 format(/8(3x,e12.5))
-  153 format( 8(3x,e12.5))
-  154 continue
-      write (lunit6, 121)
-      do 156 i=1, nph2, 2
-      n2 = i
-      n3 = (i - 1) * nphpi + 1
-      write (lunit6, 121)
-  155 n4 = n2 + n1
-      write (lunit6, 152) (y(j), j=n2, n4, nph2)
-      n5 = n2 + 1
-      n6 = n4 + 1
-      write (lunit6, 153) (y(j), j=n5, n4, nph2)
-      n2 = n4 + nph2
-      if (n4 .lt. n3) go to 155
-  156 continue
-      go to 13
-  157 n2 = 1
-      n3 = 1
-      do 12  n1=1, nph
-      write (lunit6, 108 )
-  108 format ( 1x )
-    4 go to (5, 6, 7, 8, 9, 10 ), n1
-    5 write (lunit6, 101)   ( z(i), i=n2, n3, nph2 ),
-     1                 ( y(i), i=n3, n22, nph2 )
-  101 format ( 1(3x, e12.5), 25x, 6(3x, e12.5)  )
-      go to 11
-    6 write (lunit6, 102)   ( z(i), i=n2, n3, nph2 ),
-     1                 ( y(i), i=n3, n22, nph2 )
-  102 format ( 2(3x, e12.5), 25x, 5(3x, e12.5)  )
-      go to 11
-    7 write (lunit6, 103)   ( z(i), i=n2, n3, nph2 ),
-     1                 ( y(i), i=n3, n22, nph2 )
-  103 format ( 3(3x, e12.5), 25x, 4(3x, e12.5)  )
-      go to 11
-    8 write (lunit6, 104)   ( z(i), i=n2, n3, nph2 ),
-     1                 ( y(i), i=n3, n22, nph2 )
-  104 format ( 4(3x, e12.5), 25x, 3(3x, e12.5)  )
-      go to 11
-    9 write (lunit6, 105)   ( z(i), i=n2, n3, nph2 ),
-     1                 ( y(i), i=n3, n22, nph2 )
-  105 format ( 5(3x, e12.5), 25x, 2(3x, e12.5)  )
-      go to 11
-   10 write (lunit6, 106)   ( z(i), i=n2, n3, nph2 ),
-     1                 ( y(i), i=n3, n22, nph2 )
-  106 format ( 6(3x, e12.5), 25x, 1(3x, e12.5)  )
-   11 n2 = n2 + 1
-      n3 = n3 + 1
-      if ( n2  .le.  n1+n1 )   go to 4
-   12 n3 = n3 + nph2
-   13 if ( iwork  .eq.  0 )   return
-      if ( iwork  .gt.  0 )   go to 31
-      iwork = -iwork
-      call cxc(z,y,zy,ll1)
-      if ( iprsup  .lt.  5 )   go to 29
-      write (lunit6, 133 )
-  133 format ( /, 5x,   22htranspose of zy matrix    ,/,  1x  )
-      do 28  i=1, n22, nph2
-      j = i + nph2 - 1
-   28 write (lunit6, 107)  ( zy(k),k=i, j)
-   29 go to 30
-   31 call mover0 ( cq(1), n22 )
-      call mover0 ( zya(1), n22 )
-      i = 1
-      do  32  j=1, n22, 2
-      cq(j) = q(i)
-      zya(j) = qi(i)
-   32 i = i + 1
-      call cxc(zya,zy,zyb,ll5)
-      call cxc(zyb,cq,zyc,ll2)
-      i = 1
-      do 33  j=1, nph2, 2
-      dx = sqrtz( zyc(i) * zyc(i) + zyc(i+1) * zyc(i+1) )
-      if (zyc(i) .lt. 0.0)   go to 206
-      g(j) = sqrtz ( ( zyc(i) + dx ) / 2. )
-      g(j+1) = zyc(i+1)/g(j)/2.
-      go to 33
-  206 g(j+1) = sqrtz((-zyc(i) + dx) /2.)
-      if ( zyc(i+1) .lt. 0. ) g(j+1) = - g(j+1)
-      g(j) = zyc(i+1)/g(j+1)/2.
-   33 i = i + nphpi2
-      if (ioutp .ne. 0)
-     1 write (lunit6, 140 )
-  140 format ( /,  10x,   77hthe following values are computed by use of
-     1 constant transformation matrices.   )
-      call cxc(cq,zyb,zya,ll6)
-      if (nss .eq. 1)   go to 19763
-      l = 1
-      do 63 i=1, nph
-      j = (i-1) * nph2 + 1
-      k = 2 * i - 1
-      do 62  n1=1, i
-      z(j) = xr(l)
-      z(k) = xr(l)
-      y(j) = xg(l)
-      y(k) = xg(l)
-      z(j+1) = xl(l)
-      z(k+1) = z(j+1)
-      y(j+1) = xc(l)
-      y(k+1) = y(j+1)
-      j = j + 2
-      k = k + nph2
-   62 l = l + 1
-   63 continue
+  call mover0 ( zyb, n22 )
+  call mover0 ( zyc, n22 )
+  do i=1, nph
+     if (i1 .ne. 0) write (lunit6,111) i
+111  format ( 3x, i1 )
+     if ( n3  .ne.  0 ) write (lunit6, 112 )  z(j), z(j+1), y(j), y(j+1)
+112  format ( 1h+, 5x, 2e12.5, 1x, 2e12.5 )
+     if ( n1  .eq.  0 )   go to 24
+     l = 2 * i - 1
+     zr = g(l+1)/y(j+1)
+     zi = - g(l)/y(j+1)
+205  k = i + i
+     dx  =  zr * zr  +  zi * zi
+     yo(k-1) = zr/dx
+     yo(k) = -zi/dx
+     if ( n4  .ne.  0 ) write (lunit6, 113 )  zr, zi
+113  format ( 1h+, 55x, 2e12.5 )
+     if ( n2  .eq.  0 )   go to 24
+     d1 = z(j)*y(j)  -  z(j+1)*y(j+1)
+     d2 = z(j)*y(j+1)  +  z(j+1)*y(j)
+     dx = sqrtz ( d1*d1  +  d2*d2 )
+     if (d1 .lt. 0.0)   go to 202
+     d3 = sqrtz((d1 + dx) / 2.)
+     d4 = d2 / d3 / 2.
+     go to 203
+202  d4 = sqrtz((-d1 +dx) / 2.)
+     if ( d2  .lt.  0.0 )     d4 = -d4
+     d3 = d2 / d4 /2.
+203  d3 = sll * d3
+     d4 = sll * d4
+     dx = expz ( d3 )
+     d3 = dx * cosz(d4 )
+     d4 = dx * sinz(d4 )
+     dx = d3*d3 + d4*d4
+     d1 = ( d3 - d3/dx ) / 2.0
+     d2 = ( d4 + d4/dx ) / 2.0
+     zyb(j) = d1*zr - d2*zi
+     zyb(j+1) = d1*zi + zr*d2
+     diag = d3 - 1.0
+     d1 = diag*diag - d4*d4
+     d2 = 2.0 * diag * d4
+     dx = 2.0 * dx
+     zyr  =  ( d1*d3 + d2*d4 ) / dx
+     zyi = ( d2*d3 - d1*d4 ) / dx
+     dx  =  zyb(j) * zyb(j)  +  zyb(j+1) * zyb(j+1)
+     zyc(j)  =  ( zyr*zyb(j)  +  zyi * zyb(j+1) ) / dx
+     zyc(j+1)  =  ( zyi * zyb(j)  -  zyr * zyb(j+1) ) / dx
+     if ( n5  .ne.  0 ) write (lunit6, 114)  zyb(j), zyb(j+1), zyc(j), zyc(j+1)
+114  format ( 1h+, 80x, 2e12.5, 1x, 2e12.5 )
+24   j = j + nphpi2
+  end do
+  iwork = iwork / 8
+  n2 = ioutp / 16
+  n1 = iwork / 2
+  if ( n1+n1  .eq.  iwork )   go to 35
+  call cxc(cq,zyb,y,ll4)
+  call cxc(y,cq,z,ll3)
+  call cxc(zya,zyc,zyb,ll4)
+  call cxc(zyb,zya,y,ll3)
+  ioutp = ioutp / 8
+  iout1 = ioutp
+  ioutp = ioutp / 2
+  if ( ioutp + ioutp   .eq.   iout1 )   go to 13
+  write (lunit6, 132 )
+132 format ( /, 9x,  20hpi equivalent series, 23x, 19hhalf pi equiv shunt   ,/,  8x,  22himpedance matrix(ohms),  20x, 23hadmittance matrix(mhos)   )
+27 if (nph .le. 6) go to 157
+  nphpi = nph + 1
+  n1 = 5 * nph2
+  do i=1, nph2, 2
+     n2 = i
+     n3 = (i - 1) * nphpi + 1
+     write (lunit6, 121)
+151  n4 = n2 + n1
+     if (n4 .lt. n3) n4 = n3
+     write (lunit6,152) (z(j), j=n2, n4, nph2)
+     n5 = n2 + 1
+     n6 = n4 + 1
+     write (lunit6, 153) (z(j), j=n5, n6, nph2)
+     n2 = n4 + nph2
+     if ( n4 .lt. n3) go to 151
+152  format(/8(3x,e12.5))
+153  format( 8(3x,e12.5))
+154 end do
+  write (lunit6, 121)
+  do i=1, nph2, 2
+     n2 = i
+     n3 = (i - 1) * nphpi + 1
+     write (lunit6, 121)
+155  n4 = n2 + n1
+     write (lunit6, 152) (y(j), j=n2, n4, nph2)
+     n5 = n2 + 1
+     n6 = n4 + 1
+     write (lunit6, 153) (y(j), j=n5, n4, nph2)
+     n2 = n4 + nph2
+     if (n4 .lt. n3) go to 155
+156 end do
+  go to 13
+157 n2 = 1
+  n3 = 1
+  do n1=1, nph
+     write (lunit6, 108 )
+108  format ( 1x )
+4    go to (5, 6, 7, 8, 9, 10 ), n1
+5    write (lunit6, 101)   ( z(i), i=n2, n3, nph2 ), ( y(i), i=n3, n22, nph2 )
+101  format ( 1(3x, e12.5), 25x, 6(3x, e12.5)  )
+     go to 11
+6    write (lunit6, 102)   ( z(i), i=n2, n3, nph2 ), ( y(i), i=n3, n22, nph2 )
+102  format ( 2(3x, e12.5), 25x, 5(3x, e12.5)  )
+     go to 11
+7    write (lunit6, 103)   ( z(i), i=n2, n3, nph2 ), ( y(i), i=n3, n22, nph2 )
+103  format ( 3(3x, e12.5), 25x, 4(3x, e12.5)  )
+     go to 11
+8    write (lunit6, 104)   ( z(i), i=n2, n3, nph2 ), ( y(i), i=n3, n22, nph2 )
+104  format ( 4(3x, e12.5), 25x, 3(3x, e12.5)  )
+     go to 11
+9    write (lunit6, 105)   ( z(i), i=n2, n3, nph2 ), ( y(i), i=n3, n22, nph2 )
+105  format ( 5(3x, e12.5), 25x, 2(3x, e12.5)  )
+     go to 11
+10   write (lunit6, 106)   ( z(i), i=n2, n3, nph2 ), ( y(i), i=n3, n22, nph2 )
+106  format ( 6(3x, e12.5), 25x, 1(3x, e12.5)  )
+11   n2 = n2 + 1
+     n3 = n3 + 1
+     if ( n2  .le.  n1+n1 )   go to 4
+12   n3 = n3 + nph2
+  end do
+13 if ( iwork  .eq.  0 )   return
+  if ( iwork  .gt.  0 )   go to 31
+  iwork = -iwork
+  call cxc(z,y,zy,ll1)
+  if ( iprsup  .lt.  5 )   go to 29
+  write (lunit6, 133 )
+133 format ( /, 5x,   22htranspose of zy matrix    ,/,  1x  )
+  do i=1, n22, nph2
+     j = i + nph2 - 1
+28   write (lunit6, 107)  ( zy(k),k=i, j)
+  end do
+29 go to 30
+31 call mover0 ( cq(1), n22 )
+  call mover0 ( zya(1), n22 )
+  i = 1
+  do j=1, n22, 2
+     cq(j) = q(i)
+     zya(j) = qi(i)
+32   i = i + 1
+  end do
+  call cxc(zya,zy,zyb,ll5)
+  call cxc(zyb,cq,zyc,ll2)
+  i = 1
+  do j=1, nph2, 2
+     dx = sqrtz( zyc(i) * zyc(i) + zyc(i+1) * zyc(i+1) )
+     if (zyc(i) .lt. 0.0)   go to 206
+     g(j) = sqrtz ( ( zyc(i) + dx ) / 2. )
+     g(j+1) = zyc(i+1)/g(j)/2.
+     go to 33
+206  g(j+1) = sqrtz((-zyc(i) + dx) /2.)
+     if ( zyc(i+1) .lt. 0. ) g(j+1) = - g(j+1)
+     g(j) = zyc(i+1)/g(j+1)/2.
+33   i = i + nphpi2
+  end do
+  if (ioutp .ne. 0) write (lunit6, 140 )
+140 format ( /,  10x,   77hthe following values are computed by use of constant transformation matrices.   )
+  call cxc(cq,zyb,zya,ll6)
+  if (nss .eq. 1)   go to 19763
+  l = 1
+  do i=1, nph
+     j = (i-1) * nph2 + 1
+     k = 2 * i - 1
+     do n1=1, i
+        z(j) = xr(l)
+        z(k) = xr(l)
+        y(j) = xg(l)
+        y(k) = xg(l)
+        z(j+1) = xl(l)
+        z(k+1) = z(j+1)
+        y(j+1) = xc(l)
+        y(k+1) = y(j+1)
+        j = j + 2
+        k = k + nph2
+62      l = l + 1
+     end do
+63 end do
 19763 if (iss .eq. 0)   go to 18
-      do 57 i=1, nph2
-   57 g60(i) = g(i)
-      go to 18
-   35 iwork = n1
-      ioutp = n2
-      go to 13
- 9200 return
-      end
-      function xift( tsp, omegas, funw, cosi )
-      implicit real*8 (a-h, o-z) ,
-     1      integer*4 (i-n)
-      include  'labl45.ftn'
-      include  'blkcom.ftn'
-c  this routine calculates the inverse fourier transform of a geometric
-!     series of frequencies in omegas  with the points in the frequency
-!     domain in funw(nfr1).  linear interpolation between the frequency
-!     sequence is used in order to perform the numerical integration.
-!     note.  the first point in 'funw' corresponds to zero prequency.
-!     this value, of course, is not multiplied by (1/(j*w)) to convert
-!     from impulse to step response.  the limit of sin(w*t)/w for w = 0.
-!     being equal to t is used.
-      dimension omegas(1), funw(1)
-      double precision xtmp, ttft, time, dtemp, cosi(1)
-      equivalence (indtv(10), npan)
-      data n1 / 3 /
-      time = tsp
-      if (npan .gt. 0) go to 40004
-      ttft = time * time
-      do 40002 j = 1, nfr
-      xtmp = time * omegas( j+1 )
-      nw =  xtmp / twopi
-      xtmp =  xtmp - nw * twopi
+  do i=1, nph2
+57   g60(i) = g(i)
+  end do
+  go to 18
+35 iwork = n1
+  ioutp = n2
+  go to 13
+9200 return
+end subroutine frqdom
+!
+! subroutine xift.
+!
+function xift( tsp, omegas, funw, cosi )
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  include 'labl45.ftn'
+  include 'blkcom.ftn'
+  !  this routine calculates the inverse fourier transform of a geometric
+  !     series of frequencies in omegas  with the points in the frequency
+  !     domain in funw(nfr1).  linear interpolation between the frequency
+  !     sequence is used in order to perform the numerical integration.
+  !     note.  the first point in 'funw' corresponds to zero prequency.
+  !     this value, of course, is not multiplied by (1/(j*w)) to convert
+  !     from impulse to step response.  the limit of sin(w*t)/w for w = 0.
+  !     being equal to t is used.
+  dimension omegas(1), funw(1)
+  double precision xtmp, ttft, time, dtemp, cosi(1)
+  equivalence (indtv(10), npan)
+  data n1 / 3 /
+  time = tsp
+  if (npan .gt. 0) go to 40004
+  ttft = time * time
+  do j = 1, nfr
+     xtmp = time * omegas( j+1 )
+     nw =  xtmp / twopi
+     xtmp =  xtmp - nw * twopi
 40002 call dsinz( xtmp, cosi(j) )
-      xtmp = omegas(2) * time
-      call dcosz( xtmp, dtemp )
-      xtmp = xtmp * onehaf * ( funw(1) * ttft + funw(2) * time *
-     1 ( 2. * dtemp / xtmp + cosi(1) ) )
-     2 - ratio / dmin * funw(2) * ( cosi(2) - cosi(1) ) / omegas(3)
-      do 40003 j = 3, nfr
-      xtmp = xtmp + funw(j) * ( dplu * cosi(j-1) - ratio * cosi(j-2)
-     1   - cosi(j) ) / ( dmin * omegas(j) )
-40003 continue
-      xift = pi2 * xtmp / ttft
-      return
+  end do
+  xtmp = omegas(2) * time
+  call dcosz( xtmp, dtemp )
+  xtmp = xtmp * onehaf * ( funw(1) * ttft + funw(2) * time * ( 2. * dtemp / xtmp + cosi(1) ) ) - ratio / dmin * funw(2) * ( cosi(2) - cosi(1) ) / omegas(3)
+  do j = 3, nfr
+     xtmp = xtmp + funw(j) * ( dplu * cosi(j-1) - ratio * cosi(j-2) - cosi(j) ) / ( dmin * omegas(j) )
+40003 end do
+  xift = pi2 * xtmp / ttft
+  return
 40004 if (iprsup .eq. 0) n1 = 0
-      xift = 0.0
-      w  = 0.0
-      d4 = funw(1)
-      d3 = omegas(1)
-      d2 = funw(2)
-      d1 = omegas(2)
-      d7 = d2 * d1
-      d5 = (d7 - d4) / (d1 - d3)
-      d6 = d4 - d5 * d3
-      d7 = onehaf * time * d4
-      deltaw = (omegas(2) - omegas(1)) / npan
-      do 5 i=1, npan
-      xift = xift + d7
-      w = w + deltaw
-      xtmp = w * time
-      nw = xtmp / twopi
-      d7 = xtmp - nw * twopi
-    5 d7 = ( d5 * w + d6 ) * sinz( d7 ) / w
-      d7 = onehaf * d7
-      xift = deltaw * (xift + d7)
-      d4 = (omegas(3) - omegas(2)) / npan
-      deltaw = xpan / absz(tsp)
-      i = 1
-      if (n1 .gt. 0) write (lunit6,100) npan, xpan, pi2, deltaw, time,
-     1     xift, d1, d2, d3, d4, d5, d6, d7, (omegas(i), funw(i), i=1,5)
-  100 format(/,51h before integration loop.  npan, xpan, pi2, deltaw,  ,
-     1   60htime, xift, d1, d2, d3, d4, d5, d6, d7, (omegas(i), funw(i),
-     2  ,11h i=1, 5) =   ,/,i10,6(1x,e20.10)/(6(1x,e20.10)))
-      if (deltaw .le. d4) go to 40
-      do 30 i=2, nfr
-      d3 = 0.
-      d5 = (funw(i+1) - d2) / (omegas(i+1) - d1)
-      d6 = d2 - d5*d1
-      d1 = omegas(i+1)
-      d2 = funw(i+1)
-      do 10 k=1, npan
-      d3 = d3 + d7
-      w = w + d4
-      xtmp = w * time
-      nw = xtmp / twopi
-      d7 = xtmp - nw * twopi
-   10 d7 = ( d5 * w + d6 ) * sinz( d7 )
-      d7 = onehaf * d7
-      xift = xift + d4 * (d3 + d7)
-      if (n1 .gt. 0) write (lunit6, 200) i, w, deltaw, omegas(i),
-     1     funw(i), xift, d1, d2, d3, d4, d5, d6, d7
-  200 format(/,52h inside ift loop.  i, w, deltaw, omegas(i), funw(i), ,
-     1   36hxift, d1, d2, d3, d4, d5, d6, d7 =    ,/,
-     3     i10,6(1x,e20.10)/(6(1x,e20.10)))
-      d4 = (omegas(i+2) - d1) / npan
-      if (d4 .gt. deltaw) go to 40
-   30 continue
-      go to 70
-   40 i = i + 1
-      d3 = d7
-      do 60 j=i, nfr
-      d5 = (funw(j+1) - d2) / (omegas(j+1) - d1)
-      d6 = d2 - d5 * d1
-      d1 = omegas(j+1)
-      d2 = funw(j+1)
-      if (n1 .gt. 0) write (lunit6, 200) i, w, deltaw, omegas(i),
-     1     funw(i), xift, d1, d2, d3, d4, d5, d6, d7
-   50 if (w .gt. d1) go to 60
-      d3 = d3 + d7
-      w = w + deltaw
-      xtmp = w * time
-      nw = xtmp / twopi
-      d7 = xtmp - nw * twopi
-      d7 = ( d5 * w + d6 ) * sinz( d7 )
-      go to 50
-   60 continue
-      xift = xift + deltaw * (d3 - onehaf * d7)
-   70 xift = pi2 * xift
-      if (n1 .gt. 0) write (lunit6,300) time, xift
-  300 format (/,24h  ift of funw(w) at t = ,e20.10,4h is ,e20.10)
-      if (n1 .gt. 0) n1 = n1 - 1
-      return
-      end
-      subroutine rise(time, thr, t2, vresp, si, cosi)
-      implicit real*8 (a-h, o-z) ,
-     1      integer*4 (i-n)
-!     this routine is used to estimate the time at which the step
-!     response in the time domain is at value 'thr'(0.0 to 1.0).
-!     the initial guess is in 'time' when the  'rise' function is called
-!     and the final approximation is returned thru the same argument.
-!     the principle of operation is linear interpolation/extrapolation
-!     to find a new time closer to 'thr'.
-c
-      include  'blkcom.ftn'
-      include  'labl45.ftn'
-      include  'volt45.ftn'
-      dimension si(1), vresp(1)
-      double precision cosi(1)
-      equivalence (ipntv(1), nfit),  (vim(5), epsrse)
-      n1 = nfit
-      temp = time
-      mitt = 0
- 7403 x1 = xift ( time, si, vresp, cosi )
-      target = ffin * absz(thr)
-      close = ffin * epsrse
-   15 t1 = time + t2
-      if( x1 .gt. target  ) t1 = time - t2
-      if ( t1 .le. 0.)  t1 = time / 10.
-      x2 = xift(t1, si, vresp, cosi)
-      if ( iprsup .ge. 4)
-     1  write (lunit6, 1)
-    1 format ( /, 10x,2hx2,13x,2ht1,13x,2hx1,12x,4htime)
-      if ( iprsup .ge. 4)
-     1 write (lunit6, 2) x2, t1, x1, time
-    2 format ( 4e15.5)
-      if ( (x2-x1)/(t1-time)  .lt.  0. )   go to 30
-      if( x1 .ge. target .and. x2 .le. target ) go to 5
-      if( x1 .le. target .and. x2 .ge. target ) go to 5
-   30 time = t1
-      x1 = x2
-      if( time .lt. 0. .or. time .gt. 2. * tt ) go to 25
-      go to 15
-   25 if ( mitt .gt. 3 .or. ictrl .ge. 0 ) go to 26
-      thr = thr * onehaf
-      time = temp
-      mitt = mitt + 1
-      go to 7403
-   26 kill = 156
-      lstat(11) = nfit
-      lstat(12) = 1
-      return
-    5 t2 = ( time + t1 ) / 2.
-      x3 = xift( t2, si, vresp, cosi )
-      if ( iprsup .gt. 3 )
-     1 write (lunit6,10) n1, x1, x2, x3, time, t1, t2
-   10 format ( /, 41h in rise.  n1, x1, x2, x3, time, t1, t2 =
-     1  ,/,  i10,  6e20.5 )
-      if ( absz(x3 - target)  .gt.  close ) go to 40
-      time = t2
-      return
-   40 if ( x2 .gt. target  .and.  x3 .lt. target )   go to 41
-      if ( x2 .lt. target  .and.  x3 .gt. target )   go to 41
-      t1 = t2
-      x2 = x3
-      n1 = n1 - 1
-      go to 42
-   41 time = t2
-      x1 = x3
-      n1 = n1 - 1
-   42 if ( n1 .ge. nfit / 2 )   go to 5
-   43 t2 = time + ( t1 - time ) * ( target - x1 ) / ( x2 - x1 )
-      x3 = xift( t2, si, vresp, cosi )
-      if ( iprsup .gt. 3 )
-     1 write (lunit6, 10)  n1, x1, x2, x3, time, t1, t2
-      if ( x2 .gt. target .and. x3 .lt. target )   go to 20
-      if ( x2 .lt. target .and. x3 .gt. target )   go to 20
-      t1 = time
-      x2 = x1
-   20 time = t2
-      x1 = x3
-      n1 = n1 - 1
-      if (absz(x1 - target) .lt. close) return
-      if ( n1 .gt. 0 )   go to 43
-      kill = 156
-      lstat(11) =  nfit
-      lstat(12) = nfit - n1 + 1
-      return
-      end
-c
+  xift = 0.0
+  w  = 0.0
+  d4 = funw(1)
+  d3 = omegas(1)
+  d2 = funw(2)
+  d1 = omegas(2)
+  d7 = d2 * d1
+  d5 = (d7 - d4) / (d1 - d3)
+  d6 = d4 - d5 * d3
+  d7 = onehaf * time * d4
+  deltaw = (omegas(2) - omegas(1)) / npan
+  do i=1, npan
+     xift = xift + d7
+     w = w + deltaw
+     xtmp = w * time
+     nw = xtmp / twopi
+     d7 = xtmp - nw * twopi
+5    d7 = ( d5 * w + d6 ) * sinz( d7 ) / w
+  end do
+  d7 = onehaf * d7
+  xift = deltaw * (xift + d7)
+  d4 = (omegas(3) - omegas(2)) / npan
+  deltaw = xpan / absz(tsp)
+  i = 1
+  if (n1 .gt. 0) write (lunit6,100) npan, xpan, pi2, deltaw, time, xift, d1, d2, d3, d4, d5, d6, d7, (omegas(i), funw(i), i=1,5)
+100 format(/,51h before integration loop.  npan, xpan, pi2, deltaw,  ,60htime, xift, d1, d2, d3, d4, d5, d6, d7, (omegas(i), funw(i), &
+         11h i=1, 5) =   ,/,i10,6(1x,e20.10)/(6(1x,e20.10)))
+  if (deltaw .le. d4) go to 40
+  do i=2, nfr
+     d3 = 0.
+     d5 = (funw(i+1) - d2) / (omegas(i+1) - d1)
+     d6 = d2 - d5*d1
+     d1 = omegas(i+1)
+     d2 = funw(i+1)
+     do k=1, npan
+        d3 = d3 + d7
+        w = w + d4
+        xtmp = w * time
+        nw = xtmp / twopi
+        d7 = xtmp - nw * twopi
+10      d7 = ( d5 * w + d6 ) * sinz( d7 )
+     end do
+     d7 = onehaf * d7
+     xift = xift + d4 * (d3 + d7)
+     if (n1 .gt. 0) write (lunit6, 200) i, w, deltaw, omegas(i), funw(i), xift, d1, d2, d3, d4, d5, d6, d7
+200  format(/,52h inside ift loop.  i, w, deltaw, omegas(i), funw(i), , 36hxift, d1, d2, d3, d4, d5, d6, d7 =    ,/, &
+          i10,6(1x,e20.10)/(6(1x,e20.10)))
+     d4 = (omegas(i+2) - d1) / npan
+     if (d4 .gt. deltaw) go to 40
+30 end do
+  go to 70
+40 i = i + 1
+  d3 = d7
+  do j=i, nfr
+     d5 = (funw(j+1) - d2) / (omegas(j+1) - d1)
+     d6 = d2 - d5 * d1
+     d1 = omegas(j+1)
+     d2 = funw(j+1)
+     if (n1 .gt. 0) write (lunit6, 200) i, w, deltaw, omegas(i), funw(i), xift, d1, d2, d3, d4, d5, d6, d7
+50   if (w .gt. d1) go to 60
+     d3 = d3 + d7
+     w = w + deltaw
+     xtmp = w * time
+     nw = xtmp / twopi
+     d7 = xtmp - nw * twopi
+     d7 = ( d5 * w + d6 ) * sinz( d7 )
+     go to 50
+60 end do
+  xift = xift + deltaw * (d3 - onehaf * d7)
+70 xift = pi2 * xift
+  if (n1 .gt. 0) write (lunit6,300) time, xift
+300 format (/,24h  ift of funw(w) at t = ,e20.10,4h is ,e20.10)
+  if (n1 .gt. 0) n1 = n1 - 1
+  return
+end function xift
+!
+! subroutine rise.
+!
+subroutine rise(time, thr, t2, vresp, si, cosi)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  !     this routine is used to estimate the time at which the step
+  !     response in the time domain is at value 'thr'(0.0 to 1.0).
+  !     the initial guess is in 'time' when the  'rise' function is called
+  !     and the final approximation is returned thru the same argument.
+  !     the principle of operation is linear interpolation/extrapolation
+  !     to find a new time closer to 'thr'.
+  !
+  include 'blkcom.ftn'
+  include 'labl45.ftn'
+  include 'volt45.ftn'
+  dimension si(1), vresp(1)
+  double precision cosi(1)
+  equivalence (ipntv(1), nfit),  (vim(5), epsrse)
+  n1 = nfit
+  temp = time
+  mitt = 0
+7403 x1 = xift ( time, si, vresp, cosi )
+  target = ffin * absz(thr)
+  close = ffin * epsrse
+15 t1 = time + t2
+  if( x1 .gt. target  ) t1 = time - t2
+  if ( t1 .le. 0.)  t1 = time / 10.
+  x2 = xift(t1, si, vresp, cosi)
+  if ( iprsup .ge. 4) write (lunit6, 1)
+1 format ( /, 10x,2hx2,13x,2ht1,13x,2hx1,12x,4htime)
+  if ( iprsup .ge. 4) write (lunit6, 2) x2, t1, x1, time
+2 format ( 4e15.5)
+  if ( (x2-x1)/(t1-time)  .lt.  0. )   go to 30
+  if( x1 .ge. target .and. x2 .le. target ) go to 5
+  if( x1 .le. target .and. x2 .ge. target ) go to 5
+30 time = t1
+  x1 = x2
+  if( time .lt. 0. .or. time .gt. 2. * tt ) go to 25
+  go to 15
+25 if ( mitt .gt. 3 .or. ictrl .ge. 0 ) go to 26
+  thr = thr * onehaf
+  time = temp
+  mitt = mitt + 1
+  go to 7403
+26 kill = 156
+  lstat(11) = nfit
+  lstat(12) = 1
+  return
+5 t2 = ( time + t1 ) / 2.
+  x3 = xift( t2, si, vresp, cosi )
+  if ( iprsup .gt. 3 ) write (lunit6,10) n1, x1, x2, x3, time, t1, t2
+10 format ( /, 41h in rise.  n1, x1, x2, x3, time, t1, t2 = ,/,  i10,  6e20.5 )
+  if ( absz(x3 - target)  .gt.  close ) go to 40
+  time = t2
+  return
+40 if ( x2 .gt. target  .and.  x3 .lt. target )   go to 41
+  if ( x2 .lt. target  .and.  x3 .gt. target )   go to 41
+  t1 = t2
+  x2 = x3
+  n1 = n1 - 1
+  go to 42
+41 time = t2
+  x1 = x3
+  n1 = n1 - 1
+42 if ( n1 .ge. nfit / 2 )   go to 5
+43 t2 = time + ( t1 - time ) * ( target - x1 ) / ( x2 - x1 )
+  x3 = xift( t2, si, vresp, cosi )
+  if ( iprsup .gt. 3 ) write (lunit6, 10)  n1, x1, x2, x3, time, t1, t2
+  if ( x2 .gt. target .and. x3 .lt. target )   go to 20
+  if ( x2 .lt. target .and. x3 .gt. target )   go to 20
+  t1 = time
+  x2 = x1
+20 time = t2
+  x1 = x3
+  n1 = n1 - 1
+  if (absz(x1 - target) .lt. close) return
+  if ( n1 .gt. 0 )   go to 43
+  kill = 156
+  lstat(11) =  nfit
+  lstat(12) = nfit - n1 + 1
+  return
+end subroutine rise
+!
 !     subroutine tdfit.
-c
-      subroutine tdfit(vresp, si, fv, hhm, hhn, cosi)
-      implicit real*8 (a-h, o-z) ,
-     1     integer*4 (i-n)
-!     This routine calculates the time domain sequence of points
-!     representing the step response in 'fv' by inverse fourier trans-
-!     formation of 'vresp'.  This sequence is then fitted by a least-
-!     squares newton-raphson algorithm to the function
-c
-!     z(t) = d*(1.0 - exp(-(t - x(3))/x(1))) + (ffin - d) *
-!                          (1.0 -exp(-(t-x(3))/x(2)))
-c
-      include 'blkcom.ftn'
-      include 'labl45.ftn'
-      include 'volt45.ftn'
-      equivalence (vim(1),eps),(vim(2),eps1),(vim(3),fit2z)
-      equivalence (vim(4),pivthr),(vim(7),ft2emx),(vim(9),epspv2)
-      equivalence (ipntv(2),niter1),(ipntv(3),niter),(indtv(1),npoint)
-      dimension vresp(1), si(1), fv(1), hhm(1), hhn(1)
-      double precision cosi(1)
-      dimension b(4), db(3,3), hac(3,3), e(4), eold(3), xold(3)
-      character*8 text7, text8, text9
-      data text7  / 6h.      /
-      data text8  / 6h0      /
-      data text9  / 6h*      /
-      ktdiv = 0
-      ktzer = 0
-      kcrit = npoint * 0.8
+!
+subroutine tdfit(vresp, si, fv, hhm, hhn, cosi)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  !     This routine calculates the time domain sequence of points
+  !     representing the step response in 'fv' by inverse fourier trans-
+  !     formation of 'vresp'.  This sequence is then fitted by a least-
+  !     squares newton-raphson algorithm to the function
+  !
+  !     z(t) = d*(1.0 - exp(-(t - x(3))/x(1))) + (ffin - d) *
+  !                          (1.0 -exp(-(t-x(3))/x(2)))
+  !
+  include 'blkcom.ftn'
+  include 'labl45.ftn'
+  include 'volt45.ftn'
+  equivalence (vim(1),eps),(vim(2),eps1),(vim(3),fit2z)
+  equivalence (vim(4),pivthr),(vim(7),ft2emx),(vim(9),epspv2)
+  equivalence (ipntv(2),niter1),(ipntv(3),niter),(indtv(1),npoint)
+  dimension vresp(1), si(1), fv(1), hhm(1), hhn(1)
+  double precision cosi(1)
+  dimension b(4), db(3,3), hac(3,3), e(4), eold(3), xold(3)
+  character*8 text7, text8, text9
+  data text7  / 6h.      /
+  data text8  / 6h0      /
+  data text9  / 6h*      /
+  ktdiv = 0
+  ktzer = 0
+  kcrit = npoint * 0.8
 40066 no = tt / tstep + onehaf
-      kmax = 0
-      tstep = tt / no
-      kzero = 0
-!     calculate (by ift) step response in time domain
-      if (iprsup .gt. 3)
-     1     write (lunit6, 70560)
+  kmax = 0
+  tstep = tt / no
+  kzero = 0
+  !     calculate (by ift) step response in time domain
+  if (iprsup .gt. 3) write (lunit6, 70560)
 70560 format(/,5x,13houtput of ift,/,9x,1ht,11x,5hfv(k),/,1x)
-      t = tstep
-      if( ictrl .lt. 0 ) t = 5. * tstep
-      fvmx = - fltinf
-      fvmin = ffin/1000.
-      kmp = 1
-40063 do 40050  k = kmp, npoint
-      fv(k) = xift(t, si, vresp, cosi)
-      if ( fv(k) .le. fvmx ) go to 40065
-      fvmx = fv(k)
-      kmax = k
+  t = tstep
+  if( ictrl .lt. 0 ) t = 5. * tstep
+  fvmx = - fltinf
+  fvmin = ffin/1000.
+  kmp = 1
+40063 do k = kmp, npoint
+     fv(k) = xift(t, si, vresp, cosi)
+     if ( fv(k) .le. fvmx ) go to 40065
+     fvmx = fv(k)
+     kmax = k
 40065 if ( fv(k) .ge. fvmin )  go to 40064
-      kzero = k
-      fvmx = -fltinf
+     kzero = k
+     fvmx = -fltinf
 40064 if ( iprsup .gt. 3 )   write (lunit6, 70510)  t, fv(k)
-      t = t + tstep
-40050 continue
-      if( ictrl .lt. 0 ) go to 40061
-      if ( kzero  .le.  0 )   go to 40061
-      ktzer = ktzer + 1
-      if ( ktzer .le. 5 ) go to 40069
-      write ( lunit6, 40070 )
-40070 format ( 86h trouble in tdfit - - portions of ift results have bee
-     2n discarded more than five times ,/,  29h in search for positive d
-     3ata.,  35h   temporary error stop in "tdfit".   )
-      call stoptp
-40069 km = npoint - kzero
-      kmax = kmax - kzero
-      do 40062 k = 1, km
-      kp = k + kzero
-40062 fv(k) = fv(kp)
-      kmp = km + 1
-      tstrt = tstrt  +  kzero * tstep
-      kzero = 0
-      go to 40063
-40061 if ( ictrl .ge. 0 .or. kmax .ge. kcrit ) go to 40067
-      tt = kmax * tstep / 2.
-      tstep = tt / no
-      ktdiv = ktdiv + 1
-      if ( ktdiv .le. 5 ) go to 40066
-      write ( lunit6, 40068 )
-40068 format (  69h trouble in tdfit - - time span has been reduced more
-     1 than five times  ,/, 37h in search of legitimate ift results.
-     2  ,/,  35h   temporary error stop in "tdfit".    )
-      call stoptp
-40067 continue
-      if (ictrl .eq. -10) go to 40500
-!     this routine fits two exponentials with an artificial time delay
-!     to the line prop or adm step response using a least square error
-!     minimizing technique solved by a newton-raphson algorithm.
-!     list of variables.
-!        fv -    vector containing numerical values of the curve
-!               to be fitted
-!        nvar - number of variables to be determined by newton-raphson
-!               algorithm. the subroutine fixes by itself the value
-!               of "nvar" to 3 for propagation and 2 for admittance.
-!        x - vector containing parameters of the exponential fitting 'z'
-!            in the form'
-c
-!     z(t) = d * (1.0 - exp(-(t - x(3)) / x(1))) + (ffin - d) *
-!           (1.0-exp(-(t-x(3))/x(2)))
-c
-!             where'
-!        ffin - final value for the curve 'y'
-!        x(3) - artifical time delay  (equal to zero for admittance)
-!        e - right hand side of system of equations to be solved
-!            for increment 'dx' by a newton raphson algorithm.
-!            after solving the solution 'dx' will be stored in e.
-!        jac - jacobian matrix.
-!        b,db - auxiliary matrices for calculating jacobian 'jac'.
-!        eps - the least square error desired to be attained
-!              in the fitting rocess.
-!        eps1 - the fitting is stopped if the relative increment 'dx/x'
-!               is less than eps1
-!        npoint - number of known points for the step response
-!                 to be used for fitting.
-!        niter - maximum number of iterations allowed.
-      jgrad=0
-      iter=0
-      nvar=3
-      error = 100.
-      db(1,2)=0.
-!     calculate initial guess for 'x'.
-      temp = ffin * fit2z
-      if ( ictrl .lt. 0 ) temp = temp * 0.1
-      do 60050 i=1, npoint
-      if (fv(i) .lt. temp) go to 60050
-      d1 = i - 1
-      x(3)=  d1 / no
-      go to 60051
-60050 continue
-      kill = 157
-      lstat(14) = i1
-      lstat(15) = npoint
-      flstat(14) = fv(npoint)
-      flstat(15) = temp
- 4521 lstat(19) = 4521
-      go to 9200
-60051 do 60052 k=i, npoint
-      if (k .eq. 1) go to 60053
-      y1 = fv(k+1) - fv(k)
-      y2 = fv(k) - fv(k-1)
-      if (y1 .gt. y2) go to 60052
-      ncount=k
-      go to 60054
-60053 if (fv(k+1) - fv(k) .gt. fv(k)) go to 60052
-      ncount=k
-      go to 60054
-60052 continue
-      kill = 157
-      lstat(14) = 0
-      lstat(15) = npoint
-      lstat(16) = i
-      lstat(17) = k
-      flstat(14) = fv(k-1)
-      flstat(15) = fv(k)
-      flstat(16) = fv(k+1)
- 4533 lstat(19) = 4533
-      go to 9200
-60054 ntrd = npoint / 3
-      dy = ( fv(npoint) - fv(npoint - ntrd) ) * no / ntrd
-      if (dy .le. 0.) dy = pivthr
-      x(2) = dy/(ffin - fv(npoint))
-      x(2)=absz(x(2))
-      if ( ncount .eq. 1 ) ncount = 2
-      if ( ncount .eq. 1 )   ncount = 2
-      dy = (fv(ncount) - fv(ncount-1))*no
-      x(1) = dy / fv(ncount) / 2.
-      d1 = ncount - onehaf
-      x(3) =  d1 / no   -  onehaf *(fv(ncount)+fv(ncount-1))/dy
-      x1=x(1)
-      if (ictrl .lt. 0) go to 60055
-      write(lunit6,60200)
-60200 format ( /,  2x,  8hno.iter.,  8x,  5hampl.,  13x,  4hx(1),
-     1 13x,  4hx(2),  13x,  4hx(3),   13x,  5herror,  /,  1x  )
-      go to 60012
-60055 x(1) = no * fv(2) * onehaf / fvmx
-      nvar=2
-      x1 = x(2) / 1.2
-      x(3)=0.
-      write (lunit6,60400)
-60400 format ( /,  2x,  8hno.iter.,  8x,  5hampl.,  13x,  4hx(1),
-     1 13x,  4hx(2),  13x,  5herror  ,/,  1x )
-!     newton-raphson iterative solution process begins here.
-60012 iter = iter + 1
-      iter2 = 0
-      cnt = 1.0
-      error1=error
-60014 jgrad = jgrad + 1
-      if ( jgrad .gt. 20 ) go to 62500
-      if ( ictrl .ge. 0 ) x(1) = x1 * ( 1. + fit2z * ( jgrad - 1 ) )
-      if ( ictrl .lt. 0 ) x(2) = x1 * ( 1. + fit2z * ( jgrad - 1 ) )
-62500 error = 0.
-      if ( jgrad .ne. 21 ) go to 62501
-      if ( ictrl .ge. 0 ) x(1) = x11
-      if ( ictrl .lt. 0 ) x(2) = x11
-62501 if ( x(3) .lt. 0. ) x(3) = 0.
-      if (x(2) .lt. 0.) go to 60019
-      if (x(1) .lt. 0.) go to 60019
-      dd=0.
-      if (iprsup .ge. 4)
-     1 write (lunit6,80002) iter,x(1),x(2),x(3)
-80002 format(8h  calc d,5x,i5,3(5x,e20.10 ))
-      d=0.
-      do 60003 j=1, nvar
-      e(j)=0.
-      do 60003 k=1, nvar
-60003 hac(j,k) = 0.
-!     calculation of the first exponential amplitude 'd'.
-      nn2 = x(3)*no + 1
-      do 60001 i=nn2, npoint
-      ppi = i
-      pno = no
-      t2 = ppi / pno
-      ddt = t2 -x(3)
-      hhm(i)=x(1)*ddt
-      if(hhm(i).gt.80.)hhm(i)=80.
-      hhm(i)=expz(-hhm(i))
-      hhn(i)=x(2)*ddt
-      if(hhn(i).gt.80.)hhn(i)=80.
-      hhn(i)=expz(-hhn(i))
-      d = d + (hhm(i) - hhn(i))*(ffin*(1.-hhn(i))-fv(i))
-      dd=dd+(hhm(i)-hhn(i))**2
-60001 continue
-      d=d/dd
-!     calculation of the fitted curve 'z' and square error 'error'.
-      dd = ffin - d
-      do 60016 i=nn2, npoint
-      zp = ffin - d*hhm(i) - dd*hhn(i)
-      a = zp - fv(i)
-      error=error+a*a
-      if ( jgrad .le. 20 ) go to 60016
-      d1 = i
-      t2 =  d1 / no
-      ddt = t2 - x(3)
-      b(1)=ddt*hhm(i)*d
-      b(2) = ddt*hhn(i)*dd
-      b(3) = -hhm(i)*d*x(1) - hhn(i)*dd*x(2)
-      db(1,1)=-ddt*ddt*hhm(i)*d
-      db(1,3)=-hhm(i)*(1.-x(1)*ddt)*d
-      db(2,2) = -ddt*ddt*hhn(i)*dd
-      db(2,3) = -hhn(i)*(1.0 - x(2)*ddt)*dd
-      db(3,3) = -x(1)*x(1)*d*hhm(i) - x(2)*x(2)*dd*hhn(i)
-      do 60002 j=1, nvar
-      do 60002 k=1, j
-60002 db(j,k) = db(k,j)
-!     form the jacobian matrix in 'hac'
-      do 60017 j=1, nvar
-      e(j)=e(j)-a*b(j)
-      do 60017 k=1, nvar
-      hac(j,k)=hac(j,k)+b(j)*b(k)+a*db(j,k)
-60017 continue
-60016 continue
-      error = error / (npoint * ffin * ffin)
-      write(lunit6,60300) iter,d,(x(j),j=1,nvar),error
-60300 format(4x,i2,4x,5(5x ,e12.5))
-      if ( jgrad .gt. 20 .and. error .gt. error1 ) go to 60019
-      if ( error .ge. error1 ) go to 60306
-      error1 = error
-      x11 = x(1)
-      if ( ictrl .lt. 0 ) x11 = x(2)
-60306 if ( jgrad .le. 20 ) go to 60014
-      if ( iter .lt. niter ) go to 60302
-      write ( lunit6,60301 )niter
-60301 format( 26h reached max itterations = , i3 )
-      go to 60010
-60302 if ( error .ge. eps ) go to 60304
-      write ( lunit6,60303 )
-60303 format ( 23h successful convergence )
-      go to 60010
-!     solve the system of equations for incrementing variables 'x'.
-60304 if ( iprsup .ge. 4 )
-     1 write (lunit6,80003) ((hac(i,j),j=i,3),e(i),i=1,3)
-80003 format (9(2x,e12.5))
-      do 50009 i=1, nvar
-      ipi = i + 1
-      if (absz(hac(i,i)).ge. epspv2)   go to 50004
-      if (ipi .gt. nvar) go to 50003
-      do 50002 j=ipi, nvar
-      if (absz(hac(j,i)).lt. epspv2)   go to 50002
-      do 50001 k=i, nvar
-      temp = hac(j,k)
-      hac(j,k) = hac(i,k)
-50001 hac(i,k) = temp
-      go to 50004
-50002 continue
-!     kill the case if jacobian matrix is singular.
-50003 kill = 156
- 4545 lstat(19) = 4545
-      go to 9200
-50004 temp = hac(i,i)
-      e(i) = e(i)/temp
-      if (ipi .gt. nvar) go to 50006
-      do 50005 k=ipi, nvar
-50005 hac(i,k) = hac(i,k)/temp
-50006 do 50008 j=1, nvar
-      if (j .eq. i) go to 50008
-      temp = hac(j,i)
-      e(j) = e(j) - temp*e(i)
-      if (ipi .gt. nvar) go to 50008
-      do 50007 k=ipi, nvar
-50007 hac(j,k) = hac(j,k) - temp*hac(i,k)
-50008 continue
-50009 continue
-      go to 60015
-!                           type 3 iteration
-c
-!     the sum of the square error has increased over the last iteration.
-!     recover the original increment to the x vector and use a scaled
-!     multiple of this increment to form the new x vector.
-60019 cnt = cnt / 10.
-      iter2 = iter2 + 1
-      if ( jgrad .le. 20 ) go to 4557
-      do 60020 j=1, nvar
-60020 x(j) = xold(j) + cnt * xold(j) * eold(j) / absz(eold(j))
-      if ( iter2 .le. niter ) go to 62500
-!     program stuck in 'type 3' loop.   kill the run.
- 4557 kill = 156
-      lstat(19) = 4557
-      go to 9200
-!     update variables 'x'
-60015 do 60005 j=1, nvar
-      xold(j) = x(j)
-      eold(j) = e(j)
-60005 x(j) = x(j) + e(j)
-      do 60013 j=1, nvar
-      if (absz(e(j)/x(j)) .gt. eps1) go to 60012
-60013 continue
-      write ( lunit6,60305 )
-60305 format ( 74h termination of itteration because relative correction
-     1s are less than eps1 )
-60010 x(3) = x(3) * tt + tstrt
-      x(1)=tt/x(1)
-      if ( ictrl .lt. 0 ) ictrl = - ictrl - 1
-      d1 = w * x(3)
-      d2 = sinz(d1)
-      d1 = cosz(d1)
-      d3 = shiftr * d1 + shifti * d2
-      shifti = shiftr * d2 - shifti * d1
-      shiftr = d3
-      write (lunit6, 60406)  shiftr, shifti
-60406 format(/, 5x, 72hsteady state frequency impulse response, rotated
-     1through delay time x(3)  ,/, 5x, 72hfor use in adjusting by hand f
-     2or a precise fit at steady state frequency  ,/, 5x, 2e14.5)
-      if (ictrl .eq. 0) go to 60205
-!     adjust fitting to agree exactly at steady state
-70510 format(8(2x,e12.5))
-      write(lunit6,60401)
-60401 format (/, 2x, 54hiterations to adjust fitting at steady state fre
-     1quency  ,/,
-     1 18x,  6hampl 1,  11x,  6hampl 2,  9x,  10htime const,  8x,
-     2 13herror at 60hz  ,/,  1x )
-      error = tt / x(2)
-      if ( error / x(1)  .lt.  10. )  go to 60205
-      x1=d
-      a = ffin - d
-      iiter=0
-      ddt = w * x(1)
-      zp = unity + ddt * ddt
-      ddt = ddt / zp
-      temp = ft2emx * sqrtz(shiftr * shiftr + shifti * shifti)
-!     this loop adjusts d and x(2) to make the analytically computed
-!     fourier transform of the analytical approximation agree exactly
-!     with the data at steady state frequency.
-c
-!     fouriertx((d/dt)z(t)) = cexp(cmplx(0,-x(3) * w)) *
-!          (d/cmplx(1,w / x(1)) + (ffin - d)/cmplx(1,w / x(2)))
-      if ( iprsup .ge. 3)
-     1 write (lunit6, 40001) shiftr, shifti, ddt, tt, w, x(1),
-     2                       x(2), zp, x1, a, error
-40001 format(//,105h prior to steady state iteration in tdfit, shiftr,
-     1shifti, ddt, tt, w, x(1), x(2), zp, x1, a, error are ,/,
-     2  (2x, 6e12.5) )
-61002 zr = shiftr - x1 / zp
-      zi = shifti + x1 * ddt
-      d1 = w * error
-      d2 = 1.0  +  d1 * d1
-      d3 = zr - a / d2
-      d4 = zi + a * d1/d2
-      error1 = sqrtz ( d3*d3 + d4*d4 )
-      if (error1 .lt. ft2emx)  go to 61000
-      iiter=iiter+1
-      if (iiter .lt. niter1) go to 61001
-      if ( ictrl .eq. 2 )  go to 60205
-      write(lunit6, 61006)
-61006 format( 5x, 96hwarning---iteration to adjust time domain step resp
-     1onse to fit exactly at steady state frequency  ,/, 5x, 59hhas fail
-     2ed to converge,  last steady state fitting assumed.  )
-      go to 61004
-61001 error = -zi / zr / w
-      if ( error  .le.  0.0 )   go to 60205
-      a = ( zr*zr + zi*zi ) / zr
-      x1 = ffin - a
-      if ( iprsup .ge. 3)
-     1 write (lunit6, 40002) iiter, zr, zi, d1, d2, d3, d4, error1,
-     2                       error, a, x1
-40002 format(//,58h in the steady state iteration loop in tdfit, at iter
-     1ation,i3,49h zr, zi, d1, d2, d3, d4, error1, error, a, x1 are,
-     2      /, 2x, 10e12.5)
-      write (lunit6,60300) iiter,x1,a,error,error1
-      go to 61002
-61000 write (lunit6,61003) iiter,error1
-61003 format( /, 5x, 43h steady state frequency fitting iterations=,
-     1  i3, 20x,
-     1 21h60 hz fitting error =, e14.5, /, 1x )
-61004 x(2) = error
-      d=x1
-      go to 60206
-60205 a = ffin - d
-      x(2)=tt/x(2)
-      if (ictrl .eq. 0) go to 60206
-      write (lunit6,60207)
-60207 format( 5x,   100hwarning---program can not adjust time domain ste
-     1p response to fit exactly at steady state frequency.  ,/,
-     2 15x,  24hinitial fitting assumed.    )
-60206 call setplt
-      write (lunit6, 60203)
-60203 format ( ///// )
-      write( lunit6, 60201 ) d, x(1), a, x(2), x(3)
-60201 format ( //,  30x,  23hfirst amplitude      = ,  e15.6  ,/,
-     1 30x,  23hfirst time constant  = ,  e15.6  ,/,
-     2 30x,  23hsecond amplitude     = ,  e15.6  ,/,
-     3 30x,  23hsecond time constant = ,  e15.6  ,/,
-     4 30x,  23hdelay                = ,  e15.6,  /,  1x  )
-!     output printer plot of step function and its analytical approx-
-!     imation and calcualte the final error.
-40500 x3 = x(3) - tstrt
-      a = ffin - d
-      error1=0.
-      if (fvmx .lt. ffin) fvmx = ffin
-      write (lunit6,60405) i1,tstep,fvmx
-60405 format(1h0,5x,5hmode ,i1,5x,12htime step = ,e12.5,57h sec.(. = exp
-     1. approx., 0 = ift output, * = intersection)  ,/,
-     2 8x,  5herror,  11x,  4htime,  5x,  3h0.0,
-     3 80x,  e12.5  ,/,  33x,  2h.1,  10(9h........1)  )
-      fvmx = 90./fvmx
-      do 60500 i=1, npoint
-      t2 = i*tstep - x3
-      if (t2 .lt. 0.0) go to 60403
-      hhm(i) = t2/x(1)
-      if (hhm(i) .gt. 30.) hhm(i) = 30.
-      hhm(i) = expz(-hhm(i))
-      hhn(i) = t2/x(2)
-      if (hhn(i) .gt. 30.)   hhn(i) = 30.
-      hhn(i) = expz(-hhn(i))
-      zp = d*(1.0 - hhm(i)) + a*(1.0 - hhn(i))
-      error = zp - fv(i)
-      go to 60402
-60403 zp = 0.0
-      error = 0.0
-60402 error1 = error1 + error * error
-      j = fvmx*zp + 1.5
-      k = fvmx*fv(i) + 1.5
-      if (j .ge. 1 .and. j .le. 91) pl(j) = text7
-      if (k .ge. 1 .and. k .le. 91) pl(k) = text8
-      if (j .eq. k .and. j .ge. 1 .and. k .le. 91) pl(j) = text9
-      t2 = t2 + x(3)
-      write (lunit6,60600) error,t2,(pl(l),l=1,91)
-60600 format(5x,e12.5,3x,e12.5,2h .,91a1)
-      if (k .ge. 1 .and. k .le. 91) pl(k) = blank
-      if (j .ge. 1 .and. j .le. 91) pl(j) = blank
-60500 continue
-      error1 = error1 / (npoint * ffin * ffin)
-      write (lunit6,60204) iter, error1
-60204 format ( 2x,  13hiterations = ,  i3,  60x,
-     1     36hnormalized square error per point = ,e12.5,/,1x)
-      call setstd
- 9200 return
-      end
-c
-!     end of file: over45.for
-c
+     t = t + tstep
+40050 end do
+  if( ictrl .lt. 0 ) go to 40061
+  if ( kzero  .le.  0 )   go to 40061
+  ktzer = ktzer + 1
+  if ( ktzer .le. 5 ) go to 40069
+  write ( lunit6, 40070 )
+40070 format (' Trouble in tdfit - - portions of ift results have been discarded more than five times ', /, &
+           ' in search for positive data.    Temporary error stop in "tdfit".')
+                      call stoptp
+40069                 km = npoint - kzero
+                      kmax = kmax - kzero
+                      do 40062 k = 1, km
+                         kp = k + kzero
+40062                    fv(k) = fv(kp)
+                         kmp = km + 1
+                         tstrt = tstrt  +  kzero * tstep
+                         kzero = 0
+                         go to 40063
+40061                    if ( ictrl .ge. 0 .or. kmax .ge. kcrit ) go to 40067
+                         tt = kmax * tstep / 2.
+                         tstep = tt / no
+                         ktdiv = ktdiv + 1
+                         if ( ktdiv .le. 5 ) go to 40066
+                         write ( lunit6, 40068 )
+40068                    format (  69h trouble in tdfit - - time span has been reduced more
+1                        than five times  ,/, 37h in search of legitimate ift results.
+2                        ,/,  35h   temporary error stop in "tdfit".    )
+                         call stoptp
+40067                    continue
+                         if (ictrl .eq. -10) go to 40500
+                         !     this routine fits two exponentials with an artificial time delay
+                         !     to the line prop or adm step response using a least square error
+                         !     minimizing technique solved by a newton-raphson algorithm.
+                         !     list of variables.
+                         !        fv -    vector containing numerical values of the curve
+                         !               to be fitted
+                         !        nvar - number of variables to be determined by newton-raphson
+                         !               algorithm. the subroutine fixes by itself the value
+                         !               of "nvar" to 3 for propagation and 2 for admittance.
+                         !        x - vector containing parameters of the exponential fitting 'z'
+                         !            in the form'
+                         c
+                         !     z(t) = d * (1.0 - exp(-(t - x(3)) / x(1))) + (ffin - d) *
+                         !           (1.0-exp(-(t-x(3))/x(2)))
+                         c
+                         !             where'
+                         !        ffin - final value for the curve 'y'
+                         !        x(3) - artifical time delay  (equal to zero for admittance)
+                         !        e - right hand side of system of equations to be solved
+                         !            for increment 'dx' by a newton raphson algorithm.
+                         !            after solving the solution 'dx' will be stored in e.
+                         !        jac - jacobian matrix.
+                         !        b,db - auxiliary matrices for calculating jacobian 'jac'.
+                         !        eps - the least square error desired to be attained
+                         !              in the fitting rocess.
+                         !        eps1 - the fitting is stopped if the relative increment 'dx/x'
+                         !               is less than eps1
+                         !        npoint - number of known points for the step response
+                         !                 to be used for fitting.
+                         !        niter - maximum number of iterations allowed.
+                         jgrad=0
+                         iter=0
+                         nvar=3
+                         error = 100.
+                         db(1,2)=0.
+                         !     calculate initial guess for 'x'.
+                         temp = ffin * fit2z
+                         if ( ictrl .lt. 0 ) temp = temp * 0.1
+                         do 60050 i=1, npoint
+                            if (fv(i) .lt. temp) go to 60050
+                            d1 = i - 1
+                            x(3)=  d1 / no
+                            go to 60051
+60050                       continue
+                            kill = 157
+                            lstat(14) = i1
+                            lstat(15) = npoint
+                            flstat(14) = fv(npoint)
+                            flstat(15) = temp
+4521                        lstat(19) = 4521
+                            go to 9200
+60051                       do 60052 k=i, npoint
+                               if (k .eq. 1) go to 60053
+                               y1 = fv(k+1) - fv(k)
+                               y2 = fv(k) - fv(k-1)
+                               if (y1 .gt. y2) go to 60052
+                               ncount=k
+                               go to 60054
+60053                          if (fv(k+1) - fv(k) .gt. fv(k)) go to 60052
+                               ncount=k
+                               go to 60054
+60052                          continue
+                               kill = 157
+                               lstat(14) = 0
+                               lstat(15) = npoint
+                               lstat(16) = i
+                               lstat(17) = k
+                               flstat(14) = fv(k-1)
+                               flstat(15) = fv(k)
+                               flstat(16) = fv(k+1)
+4533                           lstat(19) = 4533
+                               go to 9200
+60054                          ntrd = npoint / 3
+                               dy = ( fv(npoint) - fv(npoint - ntrd) ) * no / ntrd
+                               if (dy .le. 0.) dy = pivthr
+                               x(2) = dy/(ffin - fv(npoint))
+                               x(2)=absz(x(2))
+                               if ( ncount .eq. 1 ) ncount = 2
+                               if ( ncount .eq. 1 )   ncount = 2
+                               dy = (fv(ncount) - fv(ncount-1))*no
+                               x(1) = dy / fv(ncount) / 2.
+                               d1 = ncount - onehaf
+                               x(3) =  d1 / no   -  onehaf *(fv(ncount)+fv(ncount-1))/dy
+                               x1=x(1)
+                               if (ictrl .lt. 0) go to 60055
+                               write(lunit6,60200)
+60200                          format ( /,  2x,  8hno.iter.,  8x,  5hampl.,  13x,  4hx(1),
+1 13                           x,  4hx(2),  13x,  4hx(3),   13x,  5herror,  /,  1x  )
+                               go to 60012
+60055                          x(1) = no * fv(2) * onehaf / fvmx
+                               nvar=2
+                               x1 = x(2) / 1.2
+                               x(3)=0.
+                               write (lunit6,60400)
+60400                          format ( /,  2x,  8hno.iter.,  8x,  5hampl.,  13x,  4hx(1),
+1 13                           x,  4hx(2),  13x,  5herror  ,/,  1x )
+                               !     newton-raphson iterative solution process begins here.
+60012                          iter = iter + 1
+                               iter2 = 0
+                               cnt = 1.0
+                               error1=error
+60014                          jgrad = jgrad + 1
+                               if ( jgrad .gt. 20 ) go to 62500
+                               if ( ictrl .ge. 0 ) x(1) = x1 * ( 1. + fit2z * ( jgrad - 1 ) )
+                               if ( ictrl .lt. 0 ) x(2) = x1 * ( 1. + fit2z * ( jgrad - 1 ) )
+62500                          error = 0.
+                               if ( jgrad .ne. 21 ) go to 62501
+                               if ( ictrl .ge. 0 ) x(1) = x11
+                               if ( ictrl .lt. 0 ) x(2) = x11
+62501                          if ( x(3) .lt. 0. ) x(3) = 0.
+                               if (x(2) .lt. 0.) go to 60019
+                               if (x(1) .lt. 0.) go to 60019
+                               dd=0.
+                               if (iprsup .ge. 4)
+1                              write (lunit6,80002) iter,x(1),x(2),x(3)
+80002                          format(8h  calc d,5x,i5,3(5x,e20.10 ))
+                               d=0.
+                               do 60003 j=1, nvar
+                                  e(j)=0.
+                                  do 60003 k=1, nvar
+60003                                hac(j,k) = 0.
+                                     !     calculation of the first exponential amplitude 'd'.
+                                     nn2 = x(3)*no + 1
+                                     do 60001 i=nn2, npoint
+                                        ppi = i
+                                        pno = no
+                                        t2 = ppi / pno
+                                        ddt = t2 -x(3)
+                                        hhm(i)=x(1)*ddt
+                                        if(hhm(i).gt.80.)hhm(i)=80.
+                                        hhm(i)=expz(-hhm(i))
+                                        hhn(i)=x(2)*ddt
+                                        if(hhn(i).gt.80.)hhn(i)=80.
+                                        hhn(i)=expz(-hhn(i))
+                                        d = d + (hhm(i) - hhn(i))*(ffin*(1.-hhn(i))-fv(i))
+                                        dd=dd+(hhm(i)-hhn(i))**2
+60001                                   continue
+                                        d=d/dd
+                                        !     calculation of the fitted curve 'z' and square error 'error'.
+                                        dd = ffin - d
+                                        do 60016 i=nn2, npoint
+                                           zp = ffin - d*hhm(i) - dd*hhn(i)
+                                           a = zp - fv(i)
+                                           error=error+a*a
+                                           if ( jgrad .le. 20 ) go to 60016
+                                           d1 = i
+                                           t2 =  d1 / no
+                                           ddt = t2 - x(3)
+                                           b(1)=ddt*hhm(i)*d
+                                           b(2) = ddt*hhn(i)*dd
+                                           b(3) = -hhm(i)*d*x(1) - hhn(i)*dd*x(2)
+                                           db(1,1)=-ddt*ddt*hhm(i)*d
+                                           db(1,3)=-hhm(i)*(1.-x(1)*ddt)*d
+                                           db(2,2) = -ddt*ddt*hhn(i)*dd
+                                           db(2,3) = -hhn(i)*(1.0 - x(2)*ddt)*dd
+                                           db(3,3) = -x(1)*x(1)*d*hhm(i) - x(2)*x(2)*dd*hhn(i)
+                                           do 60002 j=1, nvar
+                                              do 60002 k=1, j
+60002                                            db(j,k) = db(k,j)
+                                                 !     form the jacobian matrix in 'hac'
+                                                 do 60017 j=1, nvar
+                                                    e(j)=e(j)-a*b(j)
+                                                    do 60017 k=1, nvar
+                                                       hac(j,k)=hac(j,k)+b(j)*b(k)+a*db(j,k)
+60017                                                  continue
+60016                                                  continue
+                                                       error = error / (npoint * ffin * ffin)
+                                                       write(lunit6,60300) iter,d,(x(j),j=1,nvar),error
+60300                                                  format(4x,i2,4x,5(5x ,e12.5))
+                                                       if ( jgrad .gt. 20 .and. error .gt. error1 ) go to 60019
+                                                       if ( error .ge. error1 ) go to 60306
+                                                       error1 = error
+                                                       x11 = x(1)
+                                                       if ( ictrl .lt. 0 ) x11 = x(2)
+60306                                                  if ( jgrad .le. 20 ) go to 60014
+                                                       if ( iter .lt. niter ) go to 60302
+                                                       write ( lunit6,60301 )niter
+60301                                                  format( 26h reached max itterations = , i3 )
+                                                       go to 60010
+60302                                                  if ( error .ge. eps ) go to 60304
+                                                       write ( lunit6,60303 )
+60303                                                  format ( 23h successful convergence )
+                                                       go to 60010
+                                                       !     solve the system of equations for incrementing variables 'x'.
+60304                                                  if ( iprsup .ge. 4 )
+1                                                      write (lunit6,80003) ((hac(i,j),j=i,3),e(i),i=1,3)
+80003                                                  format (9(2x,e12.5))
+                                                       do 50009 i=1, nvar
+                                                          ipi = i + 1
+                                                          if (absz(hac(i,i)).ge. epspv2)   go to 50004
+                                                          if (ipi .gt. nvar) go to 50003
+                                                          do 50002 j=ipi, nvar
+                                                             if (absz(hac(j,i)).lt. epspv2)   go to 50002
+                                                             do 50001 k=i, nvar
+                                                                temp = hac(j,k)
+                                                                hac(j,k) = hac(i,k)
+50001                                                           hac(i,k) = temp
+                                                                go to 50004
+50002                                                           continue
+                                                                !     kill the case if jacobian matrix is singular.
+50003                                                           kill = 156
+4545                                                            lstat(19) = 4545
+                                                                go to 9200
+50004                                                           temp = hac(i,i)
+                                                                e(i) = e(i)/temp
+                                                                if (ipi .gt. nvar) go to 50006
+                                                                do 50005 k=ipi, nvar
+50005                                                              hac(i,k) = hac(i,k)/temp
+50006                                                              do 50008 j=1, nvar
+                                                                      if (j .eq. i) go to 50008
+                                                                      temp = hac(j,i)
+                                                                      e(j) = e(j) - temp*e(i)
+                                                                      if (ipi .gt. nvar) go to 50008
+                                                                      do 50007 k=ipi, nvar
+50007                                                                    hac(j,k) = hac(j,k) - temp*hac(i,k)
+50008                                                                    continue
+50009                                                                    continue
+                                                                         go to 60015
+                                                                         !                           type 3 iteration
+                                                                         c
+                                                                         !     the sum of the square error has increased over the last iteration.
+                                                                         !     recover the original increment to the x vector and use a scaled
+                                                                         !     multiple of this increment to form the new x vector.
+60019                                                                    cnt = cnt / 10.
+                                                                         iter2 = iter2 + 1
+                                                                         if ( jgrad .le. 20 ) go to 4557
+                                                                         do 60020 j=1, nvar
+60020                                                                       x(j) = xold(j) + cnt * xold(j) * eold(j) / absz(eold(j))
+                                                                            if ( iter2 .le. niter ) go to 62500
+                                                                            !     program stuck in 'type 3' loop.   kill the run.
+4557                                                                        kill = 156
+                                                                            lstat(19) = 4557
+                                                                            go to 9200
+                                                                            !     update variables 'x'
+60015                                                                       do 60005 j=1, nvar
+                                                                               xold(j) = x(j)
+                                                                               eold(j) = e(j)
+60005                                                                          x(j) = x(j) + e(j)
+                                                                               do 60013 j=1, nvar
+                                                                                  if (absz(e(j)/x(j)) .gt. eps1) go to 60012
+60013                                                                             continue
+                                                                                  write ( lunit6,60305 )
+60305                                                                             format ( 74h termination of itteration because relative correction
+1                                                                                 s are less than eps1 )
+60010                                                                             x(3) = x(3) * tt + tstrt
+                                                                                  x(1)=tt/x(1)
+                                                                                  if ( ictrl .lt. 0 ) ictrl = - ictrl - 1
+                                                                                  d1 = w * x(3)
+                                                                                  d2 = sinz(d1)
+                                                                                  d1 = cosz(d1)
+                                                                                  d3 = shiftr * d1 + shifti * d2
+                                                                                  shifti = shiftr * d2 - shifti * d1
+                                                                                  shiftr = d3
+                                                                                  write (lunit6, 60406)  shiftr, shifti
+60406                                                                             format(/, 5x, 72hsteady state frequency impulse response, rotated
+1                                                                                 through delay time x(3)  ,/, 5x, 72hfor use in adjusting by hand f
+2                                                                                 or a precise fit at steady state frequency  ,/, 5x, 2e14.5)
+                                                                                  if (ictrl .eq. 0) go to 60205
+                                                                                  !     adjust fitting to agree exactly at steady state
+70510                                                                             format(8(2x,e12.5))
+                                                                                  write(lunit6,60401)
+60401                                                                             format (/, 2x, 54hiterations to adjust fitting at steady state fre
+1                                                                                 quency  ,/,
+1 18                                                                              x,  6hampl 1,  11x,  6hampl 2,  9x,  10htime const,  8x,
+2 13                                                                              herror at 60hz  ,/,  1x )
+                                                                                  error = tt / x(2)
+                                                                                  if ( error / x(1)  .lt.  10. )  go to 60205
+                                                                                  x1=d
+                                                                                  a = ffin - d
+                                                                                  iiter=0
+                                                                                  ddt = w * x(1)
+                                                                                  zp = unity + ddt * ddt
+                                                                                  ddt = ddt / zp
+                                                                                  temp = ft2emx * sqrtz(shiftr * shiftr + shifti * shifti)
+                                                                                  !     this loop adjusts d and x(2) to make the analytically computed
+                                                                                  !     fourier transform of the analytical approximation agree exactly
+                                                                                  !     with the data at steady state frequency.
+                                                                                  c
+                                                                                  !     fouriertx((d/dt)z(t)) = cexp(cmplx(0,-x(3) * w)) *
+                                                                                  !          (d/cmplx(1,w / x(1)) + (ffin - d)/cmplx(1,w / x(2)))
+                                                                                  if ( iprsup .ge. 3)
+1                                                                                 write (lunit6, 40001) shiftr, shifti, ddt, tt, w, x(1),
+2                                                                                 x(2), zp, x1, a, error
+40001                                                                             format(//,105h prior to steady state iteration in tdfit, shiftr,
+1                                                                                 shifti, ddt, tt, w, x(1), x(2), zp, x1, a, error are ,/,
+2                                                                                 (2x, 6e12.5) )
+61002                                                                             zr = shiftr - x1 / zp
+                                                                                  zi = shifti + x1 * ddt
+                                                                                  d1 = w * error
+                                                                                  d2 = 1.0  +  d1 * d1
+                                                                                  d3 = zr - a / d2
+                                                                                  d4 = zi + a * d1/d2
+                                                                                  error1 = sqrtz ( d3*d3 + d4*d4 )
+                                                                                  if (error1 .lt. ft2emx)  go to 61000
+                                                                                  iiter=iiter+1
+                                                                                  if (iiter .lt. niter1) go to 61001
+                                                                                  if ( ictrl .eq. 2 )  go to 60205
+                                                                                  write(lunit6, 61006)
+61006                                                                             format( 5x, 96hwarning---iteration to adjust time domain step resp
+1                                                                                 onse to fit exactly at steady state frequency  ,/, 5x, 59hhas fail
+2                                                                                 ed to converge,  last steady state fitting assumed.  )
+                                                                                  go to 61004
+61001                                                                             error = -zi / zr / w
+                                                                                  if ( error  .le.  0.0 )   go to 60205
+                                                                                  a = ( zr*zr + zi*zi ) / zr
+                                                                                  x1 = ffin - a
+                                                                                  if ( iprsup .ge. 3)
+1                                                                                 write (lunit6, 40002) iiter, zr, zi, d1, d2, d3, d4, error1,
+2                                                                                 error, a, x1
+40002                                                                             format(//,58h in the steady state iteration loop in tdfit, at iter
+1                                                                                 ation,i3,49h zr, zi, d1, d2, d3, d4, error1, error, a, x1 are,
+2                                                                                 /, 2x, 10e12.5)
+                                                                                  write (lunit6,60300) iiter,x1,a,error,error1
+                                                                                  go to 61002
+61000                                                                             write (lunit6,61003) iiter,error1
+61003                                                                             format( /, 5x, 43h steady state frequency fitting iterations=,
+1                                                                                 i3, 20x,
+1 21                                                                              h60 hz fitting error =, e14.5, /, 1x )
+61004                                                                             x(2) = error
+                                                                                  d=x1
+                                                                                  go to 60206
+60205                                                                             a = ffin - d
+                                                                                  x(2)=tt/x(2)
+                                                                                  if (ictrl .eq. 0) go to 60206
+                                                                                  write (lunit6,60207)
+60207                                                                             format( 5x,   100hwarning---program can not adjust time domain ste
+1                                                                                 p response to fit exactly at steady state frequency.  ,/,
+2 15                                                                              x,  24hinitial fitting assumed.    )
+60206                                                                             call setplt
+                                                                                  write (lunit6, 60203)
+60203                                                                             format ( ///// )
+                                                                                  write( lunit6, 60201 ) d, x(1), a, x(2), x(3)
+60201                                                                             format ( //,  30x,  23hfirst amplitude      = ,  e15.6  ,/,
+1 30                                                                              x,  23hfirst time constant  = ,  e15.6  ,/,
+2 30                                                                              x,  23hsecond amplitude     = ,  e15.6  ,/,
+3 30                                                                              x,  23hsecond time constant = ,  e15.6  ,/,
+4 30                                                                              x,  23hdelay                = ,  e15.6,  /,  1x  )
+                                                                                  !     output printer plot of step function and its analytical approx-
+                                                                                  !     imation and calcualte the final error.
+40500                                                                             x3 = x(3) - tstrt
+                                                                                  a = ffin - d
+                                                                                  error1=0.
+                                                                                  if (fvmx .lt. ffin) fvmx = ffin
+                                                                                  write (lunit6,60405) i1,tstep,fvmx
+60405                                                                             format(1h0,5x,5hmode ,i1,5x,12htime step = ,e12.5,57h sec.(. = exp
+1                                                                                 . approx., 0 = ift output, * = intersection)  ,/,
+2 8                                                                               x,  5herror,  11x,  4htime,  5x,  3h0.0,
+3 80                                                                              x,  e12.5  ,/,  33x,  2h.1,  10(9h........1)  )
+                                                                                  fvmx = 90./fvmx
+                                                                                  do 60500 i=1, npoint
+                                                                                     t2 = i*tstep - x3
+                                                                                     if (t2 .lt. 0.0) go to 60403
+                                                                                     hhm(i) = t2/x(1)
+                                                                                     if (hhm(i) .gt. 30.) hhm(i) = 30.
+                                                                                     hhm(i) = expz(-hhm(i))
+                                                                                     hhn(i) = t2/x(2)
+                                                                                     if (hhn(i) .gt. 30.)   hhn(i) = 30.
+                                                                                     hhn(i) = expz(-hhn(i))
+                                                                                     zp = d*(1.0 - hhm(i)) + a*(1.0 - hhn(i))
+                                                                                     error = zp - fv(i)
+                                                                                     go to 60402
+60403                                                                                zp = 0.0
+                                                                                     error = 0.0
+60402                                                                                error1 = error1 + error * error
+                                                                                     j = fvmx*zp + 1.5
+                                                                                     k = fvmx*fv(i) + 1.5
+                                                                                     if (j .ge. 1 .and. j .le. 91) pl(j) = text7
+                                                                                     if (k .ge. 1 .and. k .le. 91) pl(k) = text8
+                                                                                     if (j .eq. k .and. j .ge. 1 .and. k .le. 91) pl(j) = text9
+                                                                                     t2 = t2 + x(3)
+                                                                                     write (lunit6,60600) error,t2,(pl(l),l=1,91)
+60600                                                                                format(5x,e12.5,3x,e12.5,2h .,91a1)
+                                                                                     if (k .ge. 1 .and. k .le. 91) pl(k) = blank
+                                                                                     if (j .ge. 1 .and. j .le. 91) pl(j) = blank
+60500                                                                                continue
+                                                                                     error1 = error1 / (npoint * ffin * ffin)
+                                                                                     write (lunit6,60204) iter, error1
+60204                                                                                format ( 2x,  13hiterations = ,  i3,  60x,
+1     36                                                                             hnormalized square error per point = ,e12.5,/,1x)
+                                                                                     call setstd
+9200                                                                                 return
+                                                                                  end do
+                                                                                  c
+                                                                                  !     end of file: over45.for
+                                                                                  c
