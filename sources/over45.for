@@ -2362,150 +2362,131 @@ subroutine tdfit(vresp, si, fv, hhm, hhn, cosi)
      eold(j) = e(j)
 60005 x(j) = x(j) + e(j)
   end do
-                          do 60013 j=1, nvar
-                             if (absz(e(j)/x(j)) .gt. eps1) go to 60012
-60013                        continue
-                             write ( lunit6,60305 )
-60305                        format ( 74h termination of itteration because relative correction
-1                            s are less than eps1 )
-60010                        x(3) = x(3) * tt + tstrt
-                             x(1)=tt/x(1)
-                             if ( ictrl .lt. 0 ) ictrl = - ictrl - 1
-                             d1 = w * x(3)
-                             d2 = sinz(d1)
-                             d1 = cosz(d1)
-                             d3 = shiftr * d1 + shifti * d2
-                             shifti = shiftr * d2 - shifti * d1
-                             shiftr = d3
-                             write (lunit6, 60406)  shiftr, shifti
-60406                        format(/, 5x, 72hsteady state frequency impulse response, rotated
-1                            through delay time x(3)  ,/, 5x, 72hfor use in adjusting by hand f
-2                            or a precise fit at steady state frequency  ,/, 5x, 2e14.5)
-                             if (ictrl .eq. 0) go to 60205
-                             !     adjust fitting to agree exactly at steady state
-70510                        format(8(2x,e12.5))
-                             write(lunit6,60401)
-60401                        format (/, 2x, 54hiterations to adjust fitting at steady state fre
-1                            quency  ,/,
-1 18                         x,  6hampl 1,  11x,  6hampl 2,  9x,  10htime const,  8x,
-2 13                         herror at 60hz  ,/,  1x )
-                             error = tt / x(2)
-                             if ( error / x(1)  .lt.  10. )  go to 60205
-                             x1=d
-                             a = ffin - d
-                             iiter=0
-                             ddt = w * x(1)
-                             zp = unity + ddt * ddt
-                             ddt = ddt / zp
-                             temp = ft2emx * sqrtz(shiftr * shiftr + shifti * shifti)
-                             !     this loop adjusts d and x(2) to make the analytically computed
-                             !     fourier transform of the analytical approximation agree exactly
-                             !     with the data at steady state frequency.
-                             c
-                             !     fouriertx((d/dt)z(t)) = cexp(cmplx(0,-x(3) * w)) *
-                             !          (d/cmplx(1,w / x(1)) + (ffin - d)/cmplx(1,w / x(2)))
-                             if ( iprsup .ge. 3)
-1                            write (lunit6, 40001) shiftr, shifti, ddt, tt, w, x(1),
-2                            x(2), zp, x1, a, error
-40001                        format(//,105h prior to steady state iteration in tdfit, shiftr,
-1                            shifti, ddt, tt, w, x(1), x(2), zp, x1, a, error are ,/,
-2                            (2x, 6e12.5) )
-61002                        zr = shiftr - x1 / zp
-                             zi = shifti + x1 * ddt
-                             d1 = w * error
-                             d2 = 1.0  +  d1 * d1
-                             d3 = zr - a / d2
-                             d4 = zi + a * d1/d2
-                             error1 = sqrtz ( d3*d3 + d4*d4 )
-                             if (error1 .lt. ft2emx)  go to 61000
-                             iiter=iiter+1
-                             if (iiter .lt. niter1) go to 61001
-                             if ( ictrl .eq. 2 )  go to 60205
-                             write(lunit6, 61006)
-61006                        format( 5x, 96hwarning---iteration to adjust time domain step resp
-1                            onse to fit exactly at steady state frequency  ,/, 5x, 59hhas fail
-2                            ed to converge,  last steady state fitting assumed.  )
-                             go to 61004
-61001                        error = -zi / zr / w
-                             if ( error  .le.  0.0 )   go to 60205
-                             a = ( zr*zr + zi*zi ) / zr
-                             x1 = ffin - a
-                             if ( iprsup .ge. 3)
-1                            write (lunit6, 40002) iiter, zr, zi, d1, d2, d3, d4, error1,
-2                            error, a, x1
-40002                        format(//,58h in the steady state iteration loop in tdfit, at iter
-1                            ation,i3,49h zr, zi, d1, d2, d3, d4, error1, error, a, x1 are,
-2                            /, 2x, 10e12.5)
-                             write (lunit6,60300) iiter,x1,a,error,error1
-                             go to 61002
-61000                        write (lunit6,61003) iiter,error1
-61003                        format( /, 5x, 43h steady state frequency fitting iterations=,
-1                            i3, 20x,
-1 21                         h60 hz fitting error =, e14.5, /, 1x )
-61004                        x(2) = error
-                             d=x1
-                             go to 60206
-60205                        a = ffin - d
-                             x(2)=tt/x(2)
-                             if (ictrl .eq. 0) go to 60206
-                             write (lunit6,60207)
-60207                        format( 5x,   100hwarning---program can not adjust time domain ste
-1                            p response to fit exactly at steady state frequency.  ,/,
-2 15                         x,  24hinitial fitting assumed.    )
-60206                        call setplt
-                             write (lunit6, 60203)
-60203                        format ( ///// )
-                             write( lunit6, 60201 ) d, x(1), a, x(2), x(3)
-60201                        format ( //,  30x,  23hfirst amplitude      = ,  e15.6  ,/,
-1 30                         x,  23hfirst time constant  = ,  e15.6  ,/,
-2 30                         x,  23hsecond amplitude     = ,  e15.6  ,/,
-3 30                         x,  23hsecond time constant = ,  e15.6  ,/,
-4 30                         x,  23hdelay                = ,  e15.6,  /,  1x  )
-                             !     output printer plot of step function and its analytical approx-
-                             !     imation and calcualte the final error.
-40500                        x3 = x(3) - tstrt
-                             a = ffin - d
-                             error1=0.
-                             if (fvmx .lt. ffin) fvmx = ffin
-                             write (lunit6,60405) i1,tstep,fvmx
-60405                        format(1h0,5x,5hmode ,i1,5x,12htime step = ,e12.5,57h sec.(. = exp
-1                            . approx., 0 = ift output, * = intersection)  ,/,
-2 8                          x,  5herror,  11x,  4htime,  5x,  3h0.0,
-3 80                         x,  e12.5  ,/,  33x,  2h.1,  10(9h........1)  )
-                             fvmx = 90./fvmx
-                             do 60500 i=1, npoint
-                                t2 = i*tstep - x3
-                                if (t2 .lt. 0.0) go to 60403
-                                hhm(i) = t2/x(1)
-                                if (hhm(i) .gt. 30.) hhm(i) = 30.
-                                hhm(i) = expz(-hhm(i))
-                                hhn(i) = t2/x(2)
-                                if (hhn(i) .gt. 30.)   hhn(i) = 30.
-                                hhn(i) = expz(-hhn(i))
-                                zp = d*(1.0 - hhm(i)) + a*(1.0 - hhn(i))
-                                error = zp - fv(i)
-                                go to 60402
-60403                           zp = 0.0
-                                error = 0.0
-60402                           error1 = error1 + error * error
-                                j = fvmx*zp + 1.5
-                                k = fvmx*fv(i) + 1.5
-                                if (j .ge. 1 .and. j .le. 91) pl(j) = text7
-                                if (k .ge. 1 .and. k .le. 91) pl(k) = text8
-                                if (j .eq. k .and. j .ge. 1 .and. k .le. 91) pl(j) = text9
-                                t2 = t2 + x(3)
-                                write (lunit6,60600) error,t2,(pl(l),l=1,91)
-60600                           format(5x,e12.5,3x,e12.5,2h .,91a1)
-                                if (k .ge. 1 .and. k .le. 91) pl(k) = blank
-                                if (j .ge. 1 .and. j .le. 91) pl(j) = blank
-60500                           continue
-                                error1 = error1 / (npoint * ffin * ffin)
-                                write (lunit6,60204) iter, error1
-60204                           format ( 2x,  13hiterations = ,  i3,  60x,
-1     36                        hnormalized square error per point = ,e12.5,/,1x)
-                                call setstd
-9200                            return
-                             end do
-                             c
-                             !     end of file: over45.for
-                             c
+  do j=1, nvar
+     if (absz(e(j)/x(j)) .gt. eps1) go to 60012
+60013 end do
+  write ( lunit6,60305 )
+60305 format ( 74h termination of itteration because relative corrections are less than eps1 )
+60010 x(3) = x(3) * tt + tstrt
+  x(1)=tt/x(1)
+  if ( ictrl .lt. 0 ) ictrl = - ictrl - 1
+  d1 = w * x(3)
+  d2 = sinz(d1)
+  d1 = cosz(d1)
+  d3 = shiftr * d1 + shifti * d2
+  shifti = shiftr * d2 - shifti * d1
+  shiftr = d3
+  write (lunit6, 60406)  shiftr, shifti
+60406 format(/, 5x, 'Steady state frequency impulse response, rotated through delay time x(3)  ', /, &
+           5x, 'for use in adjusting by hand for a precise fit at steady state frequency  ',/, 5x, 2e14.5)
+  if (ictrl .eq. 0) go to 60205
+  !     adjust fitting to agree exactly at steady state
+70510 format(8(2x,e12.5))
+  write(lunit6,60401)
+60401 format (/, 2x, 'Iterations to adjust fitting at steady state frequency  ',/,18x,  'ampl 1',  11x,  &
+           'ampl 2', 9x, 'time const', 8x, 'error at 60 Hz  ',/,  1x )
+  error = tt / x(2)
+  if ( error / x(1)  .lt.  10. )  go to 60205
+  x1=d
+  a = ffin - d
+  iiter=0
+  ddt = w * x(1)
+  zp = unity + ddt * ddt
+  ddt = ddt / zp
+  temp = ft2emx * sqrtz(shiftr * shiftr + shifti * shifti)
+  !     this loop adjusts d and x(2) to make the analytically computed
+  !     fourier transform of the analytical approximation agree exactly
+  !     with the data at steady state frequency.
+  !
+  !     fouriertx((d/dt)z(t)) = cexp(cmplx(0,-x(3) * w)) *
+  !          (d/cmplx(1,w / x(1)) + (ffin - d)/cmplx(1,w / x(2)))
+  if ( iprsup .ge. 3) write (lunit6, 40001) shiftr, shifti, ddt, tt, w, x(1), x(2), zp, x1, a, error
+40001 format(//, ' Prior to steady state iteration in tdfit, shiftr, shifti, ddt, tt, w, x(1), x(2), zp, x1, a, error are ', /, &
+           (2x, 6e12.5))
+61002 zr = shiftr - x1 / zp
+  zi = shifti + x1 * ddt
+  d1 = w * error
+  d2 = 1.0  +  d1 * d1
+  d3 = zr - a / d2
+  d4 = zi + a * d1/d2
+  error1 = sqrtz ( d3*d3 + d4*d4 )
+  if (error1 .lt. ft2emx)  go to 61000
+  iiter=iiter+1
+  if (iiter .lt. niter1) go to 61001
+  if ( ictrl .eq. 2 )  go to 60205
+  write(lunit6, 61006)
+61006 format( 5x, 'Warning---iteration to adjust time domain step response to fit exactly at steady state frequency  ', /, &
+           5x, 'has failed to converge,  last steady state fitting assumed.  ')
+  go to 61004
+61001 error = -zi / zr / w
+  if ( error  .le.  0.0 )   go to 60205
+  a = ( zr*zr + zi*zi ) / zr
+  x1 = ffin - a
+  if ( iprsup .ge. 3) write (lunit6, 40002) iiter, zr, zi, d1, d2, d3, d4, error1, error, a, x1
+40002 format(//, ' In the steady state iteration loop in tdfit, at iteration', i3, ' zr, zi, d1, d2, d3, d4, error1, error, a, x1 are', /, &
+           2x, 10e12.5)
+  write (lunit6,60300) iiter,x1,a,error,error1
+  go to 61002
+61000 write (lunit6,61003) iiter,error1
+61003 format( /, 5x, 43h steady state frequency fitting iterations=, i3, 20x,21h60 Hz fitting error =, e14.5, /, 1x )
+61004 x(2) = error
+  d=x1
+  go to 60206
+60205 a = ffin - d
+  x(2)=tt/x(2)
+  if (ictrl .eq. 0) go to 60206
+  write (lunit6,60207)
+60207 format( 5x,   100hwarning---program can not adjust time domain step response to fit exactly at steady state frequency.  ,/, &
+           15x,  24hinitial fitting assumed.    )
+60206 call setplt
+  write (lunit6, 60203)
+60203 format ( ///// )
+  write( lunit6, 60201 ) d, x(1), a, x(2), x(3)
+60201 format ( //,  30x,  23hfirst amplitude      = ,  e15.6  ,/,30x,  23hfirst time constant  = ,  e15.6  ,/, &
+           30x,  23hsecond amplitude     = ,  e15.6  ,/,30x,  23hsecond time constant = ,  e15.6  ,/, &
+           30x,  23hdelay                = ,  e15.6,  /,  1x  )
+  !     output printer plot of step function and its analytical approx-
+  !     imation and calcualte the final error.
+40500 x3 = x(3) - tstrt
+  a = ffin - d
+  error1=0.
+  if (fvmx .lt. ffin) fvmx = ffin
+  write (lunit6,60405) i1,tstep,fvmx
+60405 format(1h0,5x,5hmode ,i1,5x,12htime step = ,e12.5,57h sec.(. = exp. approx., 0 = ift output, * = intersection)  ,/, &
+           8x,  5herror,  11x,  4htime,  5x,  3h0.0, 80x,  e12.5  ,/,  33x,  2h.1,  10(9h........1)  )
+  fvmx = 90./fvmx
+  do i=1, npoint
+     t2 = i*tstep - x3
+     if (t2 .lt. 0.0) go to 60403
+     hhm(i) = t2/x(1)
+     if (hhm(i) .gt. 30.) hhm(i) = 30.
+     hhm(i) = expz(-hhm(i))
+     hhn(i) = t2/x(2)
+     if (hhn(i) .gt. 30.)   hhn(i) = 30.
+     hhn(i) = expz(-hhn(i))
+     zp = d*(1.0 - hhm(i)) + a*(1.0 - hhn(i))
+     error = zp - fv(i)
+     go to 60402
+60403 zp = 0.0
+     error = 0.0
+60402 error1 = error1 + error * error
+     j = fvmx*zp + 1.5
+     k = fvmx*fv(i) + 1.5
+     if (j .ge. 1 .and. j .le. 91) pl(j) = text7
+     if (k .ge. 1 .and. k .le. 91) pl(k) = text8
+     if (j .eq. k .and. j .ge. 1 .and. k .le. 91) pl(j) = text9
+     t2 = t2 + x(3)
+     write (lunit6,60600) error,t2,(pl(l),l=1,91)
+60600 format(5x,e12.5,3x,e12.5,2h .,91a1)
+     if (k .ge. 1 .and. k .le. 91) pl(k) = blank
+     if (j .ge. 1 .and. j .le. 91) pl(j) = blank
+60500 end do
+  error1 = error1 / (npoint * ffin * ffin)
+  write (lunit6,60204) iter, error1
+60204 format ( 2x,  13hiterations = ,  i3,  60x, 36hnormalized square error per point = ,e12.5,/,1x)
+  call setstd
+9200 return
+end subroutine tdfit
+!
+!     end of file: over45.for
+!
