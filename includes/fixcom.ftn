@@ -1,0 +1,10 @@
+  !-*- mode: fortran; syntax: ansi-fortran-90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+  !
+  !     file: fixcom.ftn
+  !
+  common /ekcom1/    ekbuf(15, 9),  ektemp(45, 5), errchk
+  common /ekcom1/    solrsv(2500),  solisv(2500),  nitera
+  common /ekcom1/    nekreq,        nekcod(15)
+  !
+  !     end of file: fixcom.ftn
+  !

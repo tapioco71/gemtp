@@ -1,0 +1,67 @@
+!-*- mode: fortran; syntax: ansi-fortran-90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!
+!     file: blkcom.ins
+!
+equivalence (kunit6, lunit6)
+!     flag-1.   begin class-1  /blank/  variables
+!               (alphanumeric variables, capable of storing  a6  info).
+character*8 bus1, bus2, bus3, bus4, bus5, bus6
+character*8 trash, blank, terra, userid, branch, copy
+character*8 csepar, chcont, texcol, texta6
+character*8 date1, tclock, vstacs, abuff
+common bus1, bus2, bus3, bus4, bus5, bus6
+common trash, blank, terra, userid, branch, copy
+common csepar, chcont, texcol(80), texta6(15)
+common date1(2), tclock(2), vstacs(24)
+common abuff(20)
+!     flag-2.   begin class-2  /blank/  variables
+!               (floating-point numeric usage only, with scalars
+!               preceding arrays).
+common ci1, ck1, deltat, delta2, freqcs
+common epsiln, xunits, aincr, xmaxmx
+common znolim(2), epszno, epwarn, epstop, t, tolmat
+common twopi, tmax, omega, copt, xopt, szplt
+common szbed, sglfir, sigmax,  epsuba,  epdgel,  epomeg
+common fminfs, delffs, fmaxfs, tenerg, begmax(6)
+common tenm3, tenm6, unity, onehaf, peaknd(3)
+common fltinf, flzero, degmin, degmax, statfr, voltbc(50)
+common flstat(20), angle, pu, dltinv, speedl
+!     flag-3.   begin class-3  /blank/  variables
+!               (integer-numeric usage only, with arrays
+!                preceding scalars).
+common moncar(10)
+common lunit1, lunit2, lunit3, lunit4, lunit5, lunit6
+common lunit7, lunit8, lunit9, lunt10, lunt11
+common lunt12, lunt13, lunt14, lunt15
+common nright, nfrfld, kolbeg, max99m
+common kprchg(6), multpr(5), ipntv(11), indtv(10)
+common lstat(80), nbyte(6), lunsav(15),iprsov(39)
+common icheck, iline, inonl, iout, ipunch, iread
+common kol132, istep, kwtspy,itype, it1, it2, izero
+common kcount, istead, ldata, lbrnch
+common lexct, lbus, lymat, lswtch, lnonl, lchar, m4plot
+common lpast, lsize7, iplot, ncomp, nv, lcomp, numsm
+common ifdep, ltails, lfdep, lwt, last, npower, maxpe
+common lsiz12, lsmout, limass, iv
+common ktrlsw(8), num99,   kpartb, llbuff, kanal, nsmth
+common ntcsex, nstacs, maxbus, lastov, ltacst
+common lhist, ifx, isubc1,         inecho, noutpr
+common ktab, jflsos, numdcd, numum, lspcum
+common nphcas, ialter, ixxxx, ktref, memsav, lisoff
+common kburro, iaverg, lsiz23, lsiz26, numout, moldat
+common lsiz27, lsiz28, ltlabl, iwt,  ifdep2, idoubl, ioutin
+common ipun, jst, jst1, muntsv(2), numsub, maxzno
+common ifsem, lfsem, iadd, lfd, nexout(17)
+common iofgnd, iofbnd,          modout, lint
+common iftail, ncurr, ioffd, isplot, isprin, maxout
+common kill, ivolt,         nchain, iprsup
+common intinf,      kconst, kswtch, it, ntot,  ibr
+common lsyn,  kssout, loopss(13)
+common numref, nword1, nword2, iloaep, lnpin
+common ntot1, limstp, indstp, nc
+common icat, numnvo,      nenerg
+common /comthl /  angtpe, nswtpe
+common / comld /  newtac
+!
+!    end of file: blkcom.ins
+!

@@ -1,0 +1,55 @@
+  !-*- Mode: Fortran; Syntax: ANSI-Fortran-90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+  !
+  !     file: deskspy.ftn
+  !
+  !     This deck is used only by interactive execution modules
+  !     which begin with "emtspy".  Note "deck29" working space:
+  common /c29b01/ karray(3) ! "deck29" stores plot points
+  real*8 pltbuf(1), forbyt(600) ! real*4 plot storage
+  equivalence (pltbuf(1), karray(1)) ! /c29b01/ plot points
+  logical logvar            ! logical variable for "inquire" usage
+  common /spycom/ rampcn(20), rampsl(20), kyramp(20)
+  common /spycom/ fendrp(20), tminrp, tmaxrp
+  common /spycom/ tbegrp(20), tendrp(20), fbegrp(20)
+  common /spycom/ tbreak, epskon(14)
+  !     end reals, next come integers, in new common block:
+  common /spykom/ indxrp(20), ivec(1000), iascii(1000)
+  common /spykom/ numsym,  jjroll, itexp, labels(15)
+  common /spykom/ maxarg, kilper, kfile5, kverfy, jword
+  common /spykom/ ibegcl, iendcl, lidnt1, lidnt2, nbreak
+  common /spykom/ linnow, linspn, numcrd, munit5, numkey
+  common /spykom/ indbuf, indbeg, mflush, newvec, maxflg
+  common /spykom/ kspsav, memkar, noback, ksmspy(3)
+  common /spykom/ lserlc, kserlc, kbrser, lockbr, kerase
+  common /spykom/ komadd
+  common /spykom/ iprspy,  monitr, monits, locate(1000)
+  common /spykom/ nline(1000),  kbreak, limbuf, kolout
+  common /spykom/ limarr(4), imin(55), imax(55), numex
+  common /spykom/ locout(55), intout(55), nexmod, nextsn
+  common /spykom/ inchlp, ksymbl, kopyit, kslowr, limcrd
+  common /spykom/ looprp(20), n10rmp(20), memrmp(20)
+  common /spykom/ kontac(14), konadd(14), kbegtx(85)
+  common /spykom/ kar1(1), kar2(2), numrmp, luntsp, logvar
+  dimension fkar1(1), fkar2(1)
+  equivalence (kar1, fkar1), (kar2, fkar2)
+  !     character*1 char1, filbyt(1), col, filext, digit
+  character*1 char1, col, filext, digit
+  character*8 symb, symbrp, junker, texpar, spykwd
+  character*8 ansi8, brobus
+  character*16 ansi16
+  character*20 bytfnd
+  character*32 ansi32
+  character*35 spycd2
+  character*80 bytbuf, buff77, file6, file6b, blan80
+  character*80 prom80, answ80, texspy, abufsv
+  character*132 munit6, outlin, outsav, heding
+  common /spyf77/ filext(10), symb(1000), col(25)
+  common /spyf77/ bytfnd, char1, symbrp(20), abufsv, junker
+  common /spyf77/ bytbuf, buff77, file6b(20), file6(30000)
+  common /spyf77/ blan80, prom80, digit(10), texpar(10)
+  common /spyf77/ spykwd(75), ansi8, ansi16, ansi32
+  common /spyf77/ spycd2, answ80, brobus, munit6
+  common /spyf77/ outlin, outsav, heding, texspy(1250)
+  !
+  !     end of file: dekspy.ftn
+  !

@@ -1,0 +1,197 @@
+# -*- Mode: makefile; Syntax: makefile; indent-tabs-mode-nil; coding: utf-8; show-trailing-whitespace: t -*-
+# Copyright 2019 Angelo Rossi <angelo.rossi.homelab@gmail.com>
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+#    this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+#    this list of conditions and the following disclaimer in the documentation
+#    and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its contributors
+#    may be used to endorse or promote products derived from this software
+#    without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+# file: Makefile.global
+
+# Get and store the OS name.
+OS:=$(shell uname)
+
+# Is an assembler defined?
+ifndef COMPILER
+COMPILER=gcc
+endif
+
+ifeq (${COMPILER},gcc)
+ifeq (${OS},OpenBSD)
+CC=${shell which egcc}
+CPP=${shell which eg++}
+FORTRAN=${shell which egfortran}
+else
+CC=${shell which gcc}
+CPP=${shell which g++}
+FORTRAN=${shell which gfortran}
+endif
+AS=${shell which as}
+LD=${shell which ld}
+OBJCOPY=${shell which objcopy}
+OBJDUMP=${shell which objdump}
+MAKEDEPEND=${shell which makedepend}
+
+# Assembler flags.
+AS_FLAGS=	-Wall			\
+		-al			\
+		-c
+
+# gcc flags.
+CC_FLAGS=	-Wall			\
+		-c	  		\
+		-std=gnu1x
+
+# g++ flags.
+CPP_FLAGS=	-Wall			\
+		-c
+
+# gfortran flags.
+FORTRAN_FLAGS=	-Os			\
+		-std=gnu		\
+		-c			\
+		-cpp			\
+		-ffixed-form		\
+		-fdec			\
+		-fno-align-commons	\
+		-fdollar-ok		\
+		-fall-intrinsics	\
+		-fdollar-ok		\
+		-ffree-line-length-0	\
+		-fdefault-double-8
+
+# objdump most common flags.
+OBJDUMP_FLAGS=	-h	\
+		-EL	\
+		-s	\
+		-S	\
+		-d
+
+# objcopy most common flags.
+OBJCOPY_FLAGS=	-S		\
+		-R .data
+
+# Linker flags.
+LD_FLAGS=
+
+# Makedepend flags.
+MAKEDEPEND_FLAGS=	-- ${CC_FLAGS} -- ${SOURCES}
+
+# Add the include file paths to AS_FLAGS, CC_FLAGS and CPP_FLAGS.
+AS_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
+CC_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
+CPP_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
+
+# Add the library path to LD_FLAGS.
+LD_FLAGS+=${patsubst %,-L%,${subst :, ,${LIBRARY_PATH}}}
+
+# Location of libgcc.a, libc.a and libm.a
+LIBGCC=${shell ${CC} -print-file-name=libgcc.a}
+LIBC=${shell ${CC} -print-file-name=libc.a}
+LIBM=${shell ${CC} -print-file-name=libm.a}
+LIBGFORTRAN=${shell ${FORTRAN} -print-file-name=libgfortran.a}
+
+LIBRARIES=	quadmath
+LD_FLAGS+=${patsubst %,-l%,${subst :, ,${LIBRARIES}}}
+
+ifdef DEBUG
+AS_FLAGS+=-g
+CC_FLAGS+=-g
+CPP_FLAGS+=-g
+FORTRAN_FLAGS+=-g
+endif
+
+# Rule for building the object file from each assembly source files.
+${COMPILER}/%.o: %.S
+	@if [ 'x${VERBOSE}' = x ];			\
+	then						\
+		echo " [ AS ] ${<}";			\
+	else						\
+		echo "${AS} ${AS_FLAGS}  ${<} -o ${@}";	\
+	fi
+	@${AS} ${AS_FLAGS} ${<} -o ${@}
+
+# Rule for building the object file from each c source files.
+${COMPILER}/%.o: %.c
+	@if [ 'x${VERBOSE}' = x ];			\
+	then						\
+		echo " [ CC ] ${<}";			\
+	else						\
+		echo "${CC} ${CC_FLAGS}  ${<} -o ${@}";	\
+	fi
+	@${CC} ${CC_FLAGS} ${<} -o ${@}
+
+# Rule for building the object file from each c source files.
+${COMPILER}/%.o: %.cpp
+	@if [ 'x${VERBOSE}' = x ];				\
+	then							\
+		echo " [ CPP ] ${<}";				\
+	else							\
+		echo "${CPP} ${CPP_FLAGS}  ${<} -o ${@}";	\
+	fi
+	@${CPP} ${CPP_FLAGS} ${<} -o ${@}
+
+# Rule for building the object file from each c source files.
+${COMPILER}/%.o: %.for
+	@if [ 'x${VERBOSE}' = x ];					\
+	then								\
+		echo " [ FOR ] ${<}";					\
+	else								\
+		echo "${FORTRAN} ${FORTRAN_FLAGS}  ${<} -o ${@}";	\
+	fi
+	@${FORTRAN} ${FORTRAN_FLAGS} ${<} -o ${@}
+
+# Rule for linking the final program file.
+${COMPILER}/%:
+	@if [ 'x${VERBOSE}' = x ];						\
+	then									\
+		echo " [ LD ] ${@}";						\
+	else									\
+		echo ${CC} 	-Wl,--start-group				\
+				${LD_FLAGS} -o ${@} $(filter %.o %.a, ${^})	\
+				'${LIBGCC}'					\
+				'${LIBGFORTRAN}'				\
+				'${LIBC}'					\
+				'${LIBM}'					\
+				-Wl,--end-group;				\
+	fi
+	@${CC} 	-Wl,--start-group				\
+		${LD_FLAGS} -o ${@} $(filter %.o %.a, ${^})	\
+		'${LIBGCC}'					\
+		'${LIBGFORTRAN}'				\
+		'${LIBC}'					\
+		'${LIBM}'					\
+		 -Wl,--end-group
+
+# Rule to create a .lst file.
+${COMPILER}/%.lst:
+	@if [ 'x${VERBOSE}' = x ];				\
+	then							\
+		echo " [ objdump ] ${@}";			\
+	else							\
+		echo "${OBJDUMP} ${OBJDUMP_FLAGS} ${<} > ${@}";	\
+	fi
+	@${OBJDUMP} ${OBJDUMP_FLAGS} ${<} > ${@}
+
+endif

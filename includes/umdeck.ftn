@@ -1,0 +1,28 @@
+  !-*- mode: fortran; syntax: ansi-fortran-90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+  !
+  !     file: umdeck.ftn
+  !
+  character*8 busum
+  common /umcom/ busum(50),ptheta(3,3),zthevr(3,3)
+  common /umcom/ vinp(40), zthevs(40), umcur(40), con(10)
+  common /umcom/ dumvec(40),dummat(3,3),date(2),clock(2)
+  common /umcom/ pi, sroot2, sroot3, omegrf
+  common /umcom/ inpu, numbus, ncltot, ndum(40), initum
+  !     next come offsets for variable-dimensioning, in order.
+  common /umcom/ iureac, iugpar, iufpar, iuhist, iuumrp
+  common /umcom/ iunod1, iunod2, iujclt, iujclo
+  common /umcom/ iujtyp, iunodo, iujtmt, iuhism
+  common /umcom/ iuomgm, iuomld, iutham, iuredu
+  common /umcom/ iureds, iuflds, iufldr, iurequ
+  common /umcom/ iuflqs, iuflqr, iujcds, iujcqs
+  common /umcom/ iuflxd, iuflxq, iunppa, iurotm
+  common /umcom/ iuncld, iunclq, iujtqo, iujomo
+  common /umcom/ iujtho, iureqs, iuepso, iudcoe
+  common /umcom/ iukcoi, iuvolt, iuangl, iunodf
+  common /umcom/ iunodm, iukumo, iujumo, iuumou
+  !     done with offsets for subroutine calls.
+  common /umcom/ nclfix, numfix, iotfix, ibsfix, ksubum
+  common /umcom/ nsmach, istart
+  !
+  !	end of file: umdeck.ftn
+  !

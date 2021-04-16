@@ -1,0 +1,10 @@
+!-*- mode: fortran; syntax: ansi-fortran-90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!
+!     file: syncom.ftn
+!
+!     this deck contains s.m. storage used by tacs modules.
+  common  /smtacs/   etac(20)
+  common  /smtacs/   ismtac(20), ntotac, lbstac
+!
+!     end of file: syncom.ftn
+!

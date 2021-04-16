@@ -1,0 +1,34 @@
+c-*- mode: fortran; syntax: ansi-fortran-77; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+c
+c     file: deck10.ftn
+c
+      character fixbu1, fixbu2
+      common  / c10b01 /   jndex (1)
+      common  / c10b02 /   diagg (1)
+      common  / c10b03 /   diabb (1)
+      common  / c10b04 /   solrsv(1)
+      common  / c10b05 /   solisv(1)
+      common  / c10b06 /   gndd  (1)
+      common  / c10b07 /   bndd  (1)
+      common  / c10b08 /   nekfix(1)
+      common  / c10b09 /   fxtem1(100)
+      common  / c10b10 /   fxtem2(100)
+      common  / c10b11 /   fxtem3(100)
+      common  / c10b12 /   fxtem4(100)
+      common  / c10b13 /   fxtem5(100)
+      common  / c10b14 /   fxtem6(100)
+      common  / c10b15 /   fixbu1(1)
+      common  / c10b16 /   fixbu2(1)
+      common  / c10b17 /   fixbu3(100)
+      common  / c10b18 /   fixbu4(100)
+      common  / c10b19 /   fixbu5(100)
+      common  / c10b20 /   fixbu6(100)
+      common  / c10b21 /   fixbu7(100)
+      common  / c10b22 /   fixbu8(100)
+      common  / c10b23 /   fixbu9(100)
+      common  / c10b24 /   fixb10(100)
+      common  / c10b25 /   fixb11(100)
+      common  / c10b26 /   kndex (1)
+c
+c     end of file: deck10.ftn
+c

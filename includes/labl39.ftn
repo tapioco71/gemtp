@@ -1,0 +1,27 @@
+c-*- mode: fortran; syntax: ansi-fortran-77; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+c
+c     file: labl39.ftn
+c
+c     begin with functions of  mmodes=18  limit on modes:
+      common   /com39/   tir(18,18), tii(18,18), tdum(18,18)
+      common   /com39/   modskp(2,18), alinvc(90)
+c     next come functions of  mpoles=100  limit on poles:
+      common   /com39/   akfrac(100), alphaf(100), fczr(100)
+      common   /com39/   fcpr(100), fcz(100), fcp(100)
+      common   /com39/   indxv(100), xauxd(200)
+      common   /com39/   zoprau(400), zoprao(400), azepo(400)
+c     next  mxchkr=2*sum(2**i), i=0,1,..n  with 2**n .ge. mpoles
+      common   /com39/   xchkra(255)
+c     next come functions of  mxknee=100  limit on ups and downs:
+      common   /com39/   xknee(100), noprao(100)
+c     next come scalars, with reals before integers (a la ibm):
+      common   /com39/   hreflg, aptdec, gmode, amina1, onehav
+      common   /com39/   oneqtr, hrflgr, epstol, refa,  refb
+      common   /com39/   idebug, iftype, lout, ndata, ntotra
+      common   /com39/   nzone, izone, nrange, modify, nexmis
+      common   /com39/   normax, ifwta, koutpr, inelim, ifplot
+      common   /com39/   ifdat, iecode, nzeror, npoler, modesk
+      common   /com39/   metrik
+c
+c     end of file: labl39.ftn
+c
