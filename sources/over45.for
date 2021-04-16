@@ -371,8 +371,7 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   dmin = ratio - 1.0
   lcosi = 3 * nfrph + 1
   kprec = 1
-  if( locint( pbuf(11)) - locint(pbuf(1)) .eq. locint(zcos(11)) - locint(zcos(1)) )
-1 kprec = 2
+  if( locint( pbuf(11)) - locint(pbuf(1)) .eq. locint(zcos(11)) - locint(zcos(1)) ) kprec = 2
   lcosd = lcosi / 2 + 1
   if( kprec .eq. 2 ) lcosd = lcosi
   lift = lcosi + nfr1 * 2 + 1
@@ -2113,7 +2112,7 @@ subroutine tdfit(vresp, si, fv, hhm, hhn, cosi)
   if ( ktdiv .le. 5 ) go to 40066
   write ( lunit6, 40068 )
 40068 format (' Trouble in tdfit - - time span has been reduced more than five times  ', /, &
-       ' in search of legitimate ift results. ', /,  '   Temporary error stop in "tdfit"'.    )
+           ' in search of legitimate ift results. ', /,  '   Temporary error stop in "tdfit".'    )
   call stoptp
 40067 continue
   if (ictrl .eq. -10) go to 40500
@@ -2303,8 +2302,7 @@ subroutine tdfit(vresp, si, fv, hhm, hhn, cosi)
 60303 format ( 23h successful convergence )
   go to 60010
   !     solve the system of equations for incrementing variables 'x'.
-60304 if ( iprsup .ge. 4 )
-1 write (lunit6,80003) ((hac(i,j),j=i,3),e(i),i=1,3)
+60304 if ( iprsup .ge. 4 ) write (lunit6,80003) ((hac(i,j),j=i,3),e(i),i=1,3)
 80003 format (9(2x,e12.5))
   do i=1, nvar
      ipi = i + 1
