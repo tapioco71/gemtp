@@ -134,7 +134,7 @@ subroutine subr39
      if ( texta(k)  .ne.  blank )  go to 4044
 1023 end do
   write (kunit6, 1719)
-1719 format('+blank card ending Marti setup' )
+1719 format ('+blank card ending Marti setup' )
   call interp
   go to 9200
   !     check for key word  'line constants'  (or  'lc' ).
@@ -162,7 +162,7 @@ subroutine subr39
   !     read data card using cimage
   call cimage
   read (unit = abuff(1), fmt = 4027) ktab, imodal, metrik, d9
-4027 format(3i8,e8.0)
+4027 format (3i8,e8.0)
   ck1 = d9
   if( metrik .eq. 0 )  ck1 = ck1 * .62135896d0
 !!!      write (*,*) ' subr39.  ready to to rewind lunit9 =',
@@ -176,7 +176,7 @@ subroutine subr39
   !     read data card using cimage
   call cimage
   read (unit = abuff(1), fmt = 4029) (voltbc(i), i = 1, 3)
-4029 format( 5e16.0)
+4029 format ( 5e16.0)
   !     read in the current transformation matrix   *  *  *  *  *  *  *
   if( imodal .eq. 0 ) go to 4033
   do j = 1, ktab
@@ -479,7 +479,7 @@ subroutine subr39
            d4 = (dist/d3)*1.d3
            d5 = phdat*360.d0/twopi
            write(lunit6,7039) fdat,d3,d4,adat,d5,fdat
-7039       format(1x,6d11.4)
+7039       format (1x,6d11.4)
 3120       d11 = fdat/twopi
            xdat(ipoint) = alog1z(d11)
            ydat(ipoint) = alog1z(adat)
@@ -563,10 +563,10 @@ subroutine subr39
         xknee(iknee) = xdat(ndata)
         if (idebug.eq.0) go to 250
         write(lunit6,7044)
-7044    format(/,1x,13x,'--- curve zones ---',1x)
+7044    format (/,1x,13x,'--- curve zones ---',1x)
         do 240 i=1,iknee
            write(lunit6,7047) i,xknee(i)
-7047       format(/,10x,i10,f10.3)
+7047       format (/,10x,i10,f10.3)
 240     end do
 250     nzone = iknee-1
         !   == parameters for least squares error checking ==
@@ -613,7 +613,7 @@ subroutine subr39
         tolmin = .20d0
 260     iterlp = iterlp+1
         if (idebug.ge.1) write(lunit6,7049) iterlp
-7049    format(//,2x,'###  a l l o c a t i o n  l o o p  no.',i3,4x, '###',1x)
+7049    format (//,2x,'###  a l l o c a t i o n  l o o p  no.',i3,4x, '###',1x)
 265     ntotra = 0
         do izone=1,nzone
            xbegz = xknee(izone)
@@ -651,7 +651,7 @@ subroutine subr39
 310        if (xcla.ne.0.) xlim1 = xcla
            if (xclb.ne.0.) xlim2 = xclb
            if (idebug.ge.3) write(lunit6,7051) xbegr,xendr
-7051       format(//,1x, 'region:',3x, 'xbeg=',e11.4,3x, 'xend=',e11.4,/)
+7051       format (//,1x, 'region:',3x, 'xbeg=',e11.4,3x, 'xend=',e11.4,/)
 !!!      write (*,*) ' after #130 xlim2, xlim1  ', xlim2 , xlim1
            abeta = ( refb - refa ) / (xlim2-xlim1)
            nalph1 = abeta
@@ -672,7 +672,7 @@ subroutine subr39
            d1 = 100.*(10.**erymax-1.)
            d2 = 100.*(10.**tolera-1.)
            write(lunit6,7054) xmidr,xcorna,xcornb,abeta,alpha,d1,d2
-7054       format(/,1x, 'xmidr=',e11.4,3x, 'xcorna=',e11.4,3x, 'xcornb=',e11.4,/,1x, &
+7054       format (/,1x, 'xmidr=',e11.4,3x, 'xcorna=',e11.4,3x, 'xcornb=',e11.4,/,1x, &
                 'abeta =',f7.2,4x, 'alpha =',f7.2,/, 1x, 'erymax=',f7.2, '%',3x, 'tolera=',f7.2, '%',1x)
 315        if (erymax.lt.tolera) go to 330
            !   divide region into two subregions
@@ -1204,10 +1204,10 @@ subroutine subr39
 8790    format ( '-', i1, 2a6, 12x, f6.0,4x, '1.',14x, '-4', 2i2)
         if (idebug.eq.0) go to 8794
         write (lunit1, 8791)  imode, vstacs(n8-1), vstacs(n8), d6, nmode, ifqdpt
-8791    format ( 1x,'-',i1,2a6, 12x, f6.0,4x,'1.',14x, '-4',2i2, '                        ')
+8791    format (1x,'-',i1,2a6, 12x, f6.0,4x,'1.',14x, '-4',2i2, '                        ')
         kount = kount+1
         go to 8794
-8793    write (lunit6, *) ' this is a near-zero tij element.'
+8793    write (lunit6, *) ' This is a near-zero tij element.'
         npoler = 1
         hrefr  = 0.
         akfrac(1) = 0.0
@@ -1247,20 +1247,20 @@ subroutine subr39
         kount = kount+2*n2
         if (d1.gt.n2) kount = kount+2
 8810    if ( imode  .lt. 2 )  go to 3200
-        if ( iprsup .ge. 1) write (lunit6,*) ' imode , imodal, and mspedb at 8810 =', imode, imodal, mspedb
+        if ( iprsup .ge. 1) write (lunit6,*) ' imode, imodal and mspedb at 8810 =', imode, imodal, mspedb
         if ( imodal .gt. 0 )  go to 3200
         if ( mspedb .eq. 1  .and.  imode .eq. 2 )  go to 3200
         if ( iprsup .ge. 1 ) write (lunit6,*) ' icurve =', icurve
         if ( icurve .eq. 2 .and. nfitmx .eq. 0 )  go to 8815
         npols1 = npoler
-        if ( iprsup .ge. 1 ) write (lunit6,*) ' storing  zc info.'
+        if ( iprsup .ge. 1 ) write (lunit6,*) ' Storing  zc info.'
         do kp = 1, npoler
            akfrs1(kp) = akfrac(kp)
            alphs1(kp) = alphaf(kp)
 8812    end do
         go to 3200
 8815    npols2 = npoler
-        if ( iprsup .ge. 1 ) write (lunit6,*) ' storing a1 info.'
+        if ( iprsup .ge. 1 ) write (lunit6,*) ' Storing a1 info.'
         do kp = 1, npoler
            akfrs2(kp) = akfrac(kp)
            alphs2(kp) = alphaf(kp)
