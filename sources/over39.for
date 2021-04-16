@@ -35,7 +35,7 @@ subroutine subr39
   data  text14  /  6hprinte /
   data  text15  /  6hr plot /
   if ( iprsup  .ge.  1 ) write (lunit6, 1546)  lastov
-1546 format (  27h top of "subr39".  lastov =,  i6 )
+1546 format (  ' Top of "subr39".  lastov =',  i6 )
   if (lastov .eq. 1 )  go to 5657
   onehav = onehaf
   oneqtr = 0.25d0
@@ -67,7 +67,7 @@ subroutine subr39
   jdatcs = 0
   call dimens ( lltemp(1), nchain, trash, trash )
   if ( iprsup .ge. 1) write (6, 7001)   lltemp(1), lltemp(2)
-7001 format ( /, 1x, 13hlltemp(1:2) =,  2i8  )
+7001 format ( /, 1x, 'lltemp(1:2) =',  2i8  )
   n3 = 0
   do i=1, 9999, 2
      if ( n3  .ge.  1 )   go to 1550
@@ -100,10 +100,10 @@ subroutine subr39
   read (unit = abuff, fmt = 7609) (vstacs(i), i = m, n1)
 7609 format(8x,12a6)
   if (iprsup .ge. 6 ) write (lunit6, 7613)  m, (vstacs(i), i=m, n1)
-7613 format ( 14h vstacs names:,  12a6  )
+7613 format ( ' vstacs names:',  12a6  )
   m = m + 12
   write (kunit6, 7616)
-7616 format (26h+bus names for each phase.)
+7616 format ('+bus names for each phase.')
   go to 4040
 7618 if(texta6(1).ne.text7 ) go to 4042
   if(texta6(2).ne.text8 ) go to 4042
@@ -117,7 +117,7 @@ subroutine subr39
   call freone ( dist )
 7624 if ( metrik  .eq.  0   .and.  n13  .ne.  8765 ) dist = dist * 1.60935
   write (kunit6, 7625)  dist
-7625 format ( 33h+same line, but with new length =, f9.2,   5h  km.   )
+7625 format ('+same line, but with new length =', f9.2,   '  km.'   )
   go to 4040
 4042 if(texta6(1).ne.text9) go to 4043
   if(texta6(2).ne.text10) go to 4043
@@ -126,7 +126,7 @@ subroutine subr39
   if ( texta6(2) .ne. text15 )  go to 8819
   read (unit = abuff, fmt = 7622) sglfir
   write (kunit6, 8814)  sglfir
-8814 format ( 42h+new log-f/line of printer plot.  sglfir =, f8.4 )
+8814 format ( '+new log-f/line of printer plot.  sglfir =', f8.4 )
 8819 continue
   read (unit = abuff(1), fmt = 1019) (texta(k), k = 1, 14)
 1019 format ( 13a6, a2 )
@@ -134,7 +134,7 @@ subroutine subr39
      if ( texta(k)  .ne.  blank )  go to 4044
 1023 end do
   write (kunit6, 1719)
-1719 format(30h+blank card ending marti setup )
+1719 format('+blank card ending Marti setup' )
   call interp
   go to 9200
   !     check for key word  'line constants'  (or  'lc' ).
@@ -143,7 +143,7 @@ subroutine subr39
   if ( texta6(2)  .ne.  text2 )   go to 4049
   if ( texta6(3)  .ne.  text3 )   go to 4049
 1706 if ( iprsup .ge. 1 ) write (lunit6, 4045)
-4045 format (  32h transfer to  'line constants' .     )
+4045 format (  " Transfer to  'line constants' ."     )
   lastov = nchain
   nchain = 44
   go to 9999
@@ -153,7 +153,7 @@ subroutine subr39
   if ( texta6(2)  .ne.  text2 )   go to 4055
   if ( texta6(3)  .ne.  text3 )   go to 4055
 1716 write (kunit6, 4053)
-4053 format (  33h+transfer to  'cable constants' .     )
+4053 format (  "+transfer to  'cable constants' ."     )
   lastov = nchain
   nchain = 47
   go to 9999
@@ -239,7 +239,7 @@ subroutine subr39
      read (lunit9) ( tir(ip,jp), tii(ip,jp), jp=1, ktab )
      if( iprsup .lt. 9 ) go to 8203
      write( lunit6, 9436 ) ip, ( tir(ip,jp), jp = 1, ktab )
-9436 format (  4h row,  i3,  1h.,  9e13.5  )
+9436 format (  ' row',  i3,  '.',  9e13.5  )
      write( lunit6, 9436 ) ip, ( tii(ip,jp), jp = 1, ktab )
 8203 end do
   !
@@ -265,14 +265,14 @@ subroutine subr39
   kount = 0
   rewind lunit1
   if ( ipunch  .eq.  0 ) write (lunit7, 8769)  tclock, date1
-8769 format (    42hc    punched card output of "jmarti setup", 15h which began at,  2x,  2a4,  2x,  2a4  )
+8769 format ('c    punched card output of "jmarti setup" which began at',  2x,  2a4,  2x,  2a4  )
   if ( ipunch .ne. 0 )  go to 8789
   if ( imodal .eq. 1 ) write (lunit7, 8770)
-8770 format (53hc   ***** untransposed jmarti line segment ******    )
+8770 format ('c   ***** untransposed jmarti line segment ******'    )
   if ( imodal .eq. 0 .and. mspedb .eq. 0) write (lunit7, 8780)
-8780 format (53hc   *****  transposed jmarti line segment  ******    )
+8780 format ('c   *****  transposed jmarti line segment  ******'    )
   if ( imodal .eq. 0 .and. mspedb .eq. 1) write (lunit7, 8785)
-8785 format (75hc   ***** special double circuit transposed jmarti line segment ******           )
+8785 format ('c   ***** special double circuit transposed jmarti line segment ******'           )
 8789 rewind lunit2
   n5 = 0
   if ( jdatcs .gt. 0 )  go to 8777
@@ -280,10 +280,10 @@ subroutine subr39
      read (lunit2, 8771)  ( texta6(i), i=1, 14 )
 8771 format ( 13a6, a2 )
      if ( ipunch  .eq.  0 ) write (lunit7, 8772)  ( texta6(i), i=1, 13 )
-8772 format ( 2hc ,  13a6 )
+8772 format ( 'c ',  13a6 )
      if (idebug.eq.0) go to 8100
      write (lunit1, 8773)  ( texta6(i), i=1, 14 )
-8773 format ( 3h c ,  13a6,  a2 )
+8773 format (' c ',  13a6,  a2 )
      kount = kount+1
 8100 if ( texta6(1) .eq. blank     .and. texta6(2) .eq. blank )   n5 = n5 + 1
      if ( n5  .ge.  2 )   go to 8777
@@ -367,13 +367,12 @@ subroutine subr39
         write(lunit6,*) ' this tij = (1.,0.)  '
         go to 8792
 3156    write(lunit6,7007) imode
-7007    format(//,1x,31h@@@ begin  yc  fitting for mode,i3,3x, 3h@@@,1x)
+7007    format(//, 1x, '@@@ begin  yc  fitting for mode',i3,3x, '@@@', 1x)
         go to 3160
 3150    if (imode.ne.1) go to 3170
         if (nexmis.eq.-1) go to 3170
         write(lunit6,7009) nexmis
-7009    format(//,1x,39h*** error stop. user has not requested , 38hthe reading of miscellaneous data for , &
-             30hmode 1 of a1 fitting. nexmis =,i5)
+7009    format(//, 1x, '*** error stop. User has not requested the reading of miscellaneous data for mode 1 of a1 fitting. nexmis =',i5)
         call stoptp
 3170    if (imode.ne.-nexmis) go to 3180
         !     this mode of a1 has new miscellaneous data:
@@ -388,7 +387,7 @@ subroutine subr39
         inela1 = inelim
 3180    if (modskp(2,imode).eq.0) go to 3200
         write(lunit6,7012) imode
-7012    format(//,1x,31h@@@ begin  a1  fitting for mode,i3,3x, 3h@@@,1x)
+7012    format(//, 1x, '@@@ begin  a1  fitting for mode', i3, 3x, '@@@', 1x)
 3160    if (icurve.eq.2 .and. nfitmx .eq. 0) go to 3162
         epstol = epstzc
         normax = normzc
@@ -407,31 +406,31 @@ subroutine subr39
         inelim = inela1
 3164    if (normax.le.mpoles) go to 3165
         write(lunit6,7015) normax,mpoles
-7015    format(//,1x,29h%%% specified maximum order (,i3, 28h) exceeds dimensions limit (,i3, 2h).,/,1x, &
-             49hmaximum order will be set equal to this limit %%%,1x)
+7015    format(//, 1x, '%%% specified maximum order (', i3, ') exceeds dimensions limit (', i3, ').', /, 1x, &
+             'maximum order will be set equal to this limit %%%', 1x)
         normax = mpoles
         !
         !             read data points
         !
 3165    if (ifdat.eq.0) go to 3210
         write(lunit6,7017)
-7017    format(//,1x,30x,34h###  d a t a  f u n c t i o n  ###)
+7017    format(//, 1x, 30x, '###  d a t a  f u n c t i o n  ###')
         if (icurve .ge. 2 .or. nfitmx .eq. 1) go to 3167
         write(lunit6,7019)
-7019    format(//,1x, ' units: freq in hz; yc in mhos, phyc in degrees' )
+7019    format(//, x, ' units: freq in hz; yc in mhos, phyc in degrees' )
         write(lunit6,7021)
-7021    format(/,1x,4x, 4hfreq,8x,  2hyc,8x, 4hphyc,7x, 4hfreq)
+7021    format(/, 1x, 4x, 'freq', 8x, 'yc', 8x, 'phyc', 7x, 'freq')
         go to 3210
 3166    write(lunit6,7024)
-7024    format(//,1x,'units: freq in hz; ti unitless, phti in degrees' )
+7024    format(//, 1x, 'units: freq in hz; ti unitless, phti in degrees' )
         write(lunit6,7027)
-7027    format(/,1x,4x, 4hfreq,8x,  2hti,8x, 4hphti,7x, 4hfreq)
+7027    format(/, 1x, 4x, 'freq', 8x, 'ti', 8x, 'phti', 7x, 'freq')
         go to 3210
 3167    if ( nfitmx .eq. 1 )  go to 3166
         write(lunit6,7029)
-7029    format(//,1x, ' units: freq in hz; velocity in km/sec, traveling time in millisec, a1 in per unit, pha1 in degrees' )
+7029    format(//, 1x, ' units: freq in hz; velocity in km/sec, traveling time in millisec, a1 in per unit, pha1 in degrees' )
         write(lunit6,7031)
-7031    format(/,5x, 4hfreq,4x, 8hvelocity,3x, 9htrav.time,5x, 2ha1,8x, 4hpha1,7x, 4hfreq)
+7031    format(/, 5x, 'freq', 4x, 'velocity', 3x, 'trav.time', 5x, 'a1', 8x, 'pha1', 7x, 'freq')
 3210    do ipoint = 1,npoint
            if (ipoint.eq.1)     f0=alintp(1)
            index = (ipoint-1) *  5
@@ -447,7 +446,7 @@ subroutine subr39
 3102       if (ifdat.eq.0) go to 3120
            d3 = phdat * 360. / twopi
            write(lunit6,7034) fdat,adat,d3,fdat
-7034       format(1x,4d11.4)
+7034       format(1x, 4d11.4)
            go to 3120
 3104       l = index + 2 * (icurve-1) + 2
            adat = alintp( l )
@@ -497,17 +496,16 @@ subroutine subr39
 3130    ndata = ipoint-1
         go to 3140
 3132    write(lunit6,7037) imode
-7037    format(//,1x, 25x,        41h??????????  a t t e n t i o n  ??????????, &
-             /,1x, 'The magnitude of the line propagation function (a1) for mode', &
+7037    format(//, 1x, 25x, '??????????  a t t e n t i o n  ??????????', &
+             /, 1x, 'The magnitude of the line propagation function (a1) for mode', &
              i3,3x,'attains values larger than 1.', /, 1x, &
              'This condition is probably caused by the limitations of using a constant complex transformation matrix, ', &
              /,1x, 'to diagonalize the line matrices at all frequencies.', &
              'Nevertheless, the function will be fit up to a', /,1x, 'magnitude value of 1.5.')
         write(lunit6,7041)
-7041    format(1x, 50hhowever, more realistic results could probably be , &
-             50hobtained by using only the real part of the transf, &
-             8hormation, /,1x,   50hmatrix (option -2 in frequency loop card in line c, &
-             15honstants data).)
+7041    format(1x, 'However, more realistic results could probably be ', &
+             'obtained by using only the real part of the transformation', /,1x, &
+             'matrix (option -2 in frequency loop card in line constants data).')
         ndata = ipoint-1
         !   == travelling time of highest freq. point ==
 3140    if (icurve.eq.2 .and. nfitmx .eq. 0) travhf = dist*beta/fdat
@@ -565,7 +563,7 @@ subroutine subr39
         xknee(iknee) = xdat(ndata)
         if (idebug.eq.0) go to 250
         write(lunit6,7044)
-7044    format(/,1x,13x,19h--- curve zones ---,1x)
+7044    format(/,1x,13x,'--- curve zones ---',1x)
         do 240 i=1,iknee
            write(lunit6,7047) i,xknee(i)
 7047       format(/,10x,i10,f10.3)
@@ -615,7 +613,7 @@ subroutine subr39
         tolmin = .20d0
 260     iterlp = iterlp+1
         if (idebug.ge.1) write(lunit6,7049) iterlp
-7049    format(//,2x,38h###  a l l o c a t i o n  l o o p  no.,i3,4x, 3h###,1x)
+7049    format(//,2x,'###  a l l o c a t i o n  l o o p  no.',i3,4x, '###',1x)
 265     ntotra = 0
         do izone=1,nzone
            xbegz = xknee(izone)
@@ -653,7 +651,7 @@ subroutine subr39
 310        if (xcla.ne.0.) xlim1 = xcla
            if (xclb.ne.0.) xlim2 = xclb
            if (idebug.ge.3) write(lunit6,7051) xbegr,xendr
-7051       format(//,1x, 7hregion:,3x, 5hxbeg=,e11.4,3x, 5hxend=,e11.4,/)
+7051       format(//,1x, 'region:',3x, 'xbeg=',e11.4,3x, 'xend=',e11.4,/)
 !!!      write (*,*) ' after #130 xlim2, xlim1  ', xlim2 , xlim1
            abeta = ( refb - refa ) / (xlim2-xlim1)
            nalph1 = abeta
@@ -674,8 +672,8 @@ subroutine subr39
            d1 = 100.*(10.**erymax-1.)
            d2 = 100.*(10.**tolera-1.)
            write(lunit6,7054) xmidr,xcorna,xcornb,abeta,alpha,d1,d2
-7054       format(/,1x, 6hxmidr=,e11.4,3x, 7hxcorna=,e11.4,3x, 7hxcornb=,e11.4,/,1x, &
-                7habeta =,f7.2,4x, 7halpha =,f7.2,/, 1x, 7herymax=,f7.2, 1h%,3x, 7htolera=,f7.2, 1h%,1x)
+7054       format(/,1x, 'xmidr=',e11.4,3x, 'xcorna=',e11.4,3x, 'xcornb=',e11.4,/,1x, &
+                'abeta =',f7.2,4x, 'alpha =',f7.2,/, 1x, 'erymax=',f7.2, '%',3x, 'tolera=',f7.2, '%',1x)
 315        if (erymax.lt.tolera) go to 330
            !   divide region into two subregions
            id = 2*(nchkra+1)
@@ -705,16 +703,16 @@ subroutine subr39
            !
 350        if (idebug.lt.3) go to 360
            write(lunit6,7057)
-7057       format(//,16x,22h--- ranges checked ---,/)
+7057       format(//,16x,'--- ranges checked ---',/)
            do i = 1,nchkra
               id = 2*i
               write(lunit6,7059) xchkra(id-1),xchkra(id)
 7059          format(15x,2e11.4)
 353        end do
            write(lunit6,7061)
-7061       format(/,5x,44h----- ranges in zone vector. unordered -----)
+7061       format(/,5x,'----- ranges in zone vector. unordered -----')
            write(lunit6,7064)
-7064       format(/,10x, 5hxbegr,6x, 6hxcorna,6x, 6hxcornb,4x, 5halpha)
+7064       format(/,10x, 'xbegr',6x, 'xcorna',6x, 'xcornb',4x, 'alpha')
            do i = 1,ioprau
               id = 4*i
               write(lunit6,7067) zoprau(id-3),zoprau(id-2), zoprau(id-1),zoprau(id)
@@ -778,13 +776,12 @@ subroutine subr39
         !
         if (idebug.lt.2) go to 450
         write(lunit6,7069)
-7069    format(/,6x,40h-----  all-ranges vector. ordered  -----)
+7069    format(/,6x,'-----  all-ranges vector. ordered  -----')
         write(lunit6,7071)
-7071    format(/,10x, 5hxbegr,6x, 6hxcorna,6x, 6hxcornb,4x, 5halpha)
+7071    format(/,10x, 'xbegr',6x, 'xcorna',6x, 'xcornb',4x, 'alpha')
         do i = 1,ntotra
            id = 4*i
-           write(lunit6,7074) zoprao(id-3),zoprao(id-2),
-1          zoprao(id-1),zoprao(id)
+           write(lunit6,7074) zoprao(id-3),zoprao(id-2),zoprao(id-1),zoprao(id)
 7074       format(1x,4x,3e12.4,f6.0)
 445     end do
         !  check number of poles
@@ -860,7 +857,7 @@ subroutine subr39
         if (idebug.lt.2) go to 570
         !   output azepo vector
         write(lunit6,7077)
-7077    format(//,1x,4x, 5hxbegr,3x, 5halpha,10x, 42hpoles and zeroes before adjustment (log f),/)
+7077    format(//,1x,4x, 'xbegr',3x, 'alpha',10x, 'poles and zeroes before adjustment (log f)',/)
         index = 0
         do irange = 1,ntotra
            alpha = azepo(index+2)
@@ -904,7 +901,7 @@ subroutine subr39
         !
         do j=1,3
            if (idebug.ge.3) write(lunit6,7081) j
-7081       format(//,10x,31h*** corners adjustment loop no.,i2,3x, 3h***)
+7081       format(//,10x,'*** corners adjustment loop no.',i2,3x, '***')
            call adjpk
            call adjcr
            if ( idebug .lt. 4 )  go to 610   !thl
@@ -923,7 +920,7 @@ subroutine subr39
         if (idebug.lt.3) go to 630
         !             output poles & zeroes after adjustments
         write(lunit6,7083)
-7083    format(//,1x,4x, 5hxbegr,3x,5halpha,10x, 38hpoles and zeroes after adjustment (hz),/)
+7083    format(//,1x,4x, 'xbegr',3x,'alpha',10x, 'poles and zeroes after adjustment (Hz)',/)
         index = 0
         do irange=1,ntotra
            alpha = azepo(index+2)
@@ -993,15 +990,15 @@ subroutine subr39
         d1 = 100.d0*(10.d0**sqrtz(epser1)-1.d0)
         d2 = 100.d0*(10.d0**sqrtz(epser2)-1.d0)
         write(lunit6,7085) d1,d2,npole,nzero
-7085    format(//,1x,19h*** lsq ave error =,e12.4,1x, 1h%,7x, 17hlsq check error =,e12.4,1x, 1h%,2x, 3h***,/,1x, &
-             3h***,6x,14hno. of poles =,i3,20x,  15hno. of zeroes =,i3,9x, 3h***,1x)
+7085    format(//,1x,'*** lsq ave error =',e12.4,1x, '%',7x, 'lsq check error =',e12.4,1x, '%',2x, '***',/,1x, &
+             '***',6x,'no. of poles =',i3,20x,  'no. of zeroes =',i3,9x, '***',1x)
         if (iecode.eq.1) go to 754
         d1 = 100.d0*(10.d0**sqrtz(epstol)-1.d0)
         write(lunit6,7087) d1
-7087    format(/,1x,46h--- error criterion: lsq check error less than, f5.2,1x, 6h%  ---,1x)
+7087    format(/,1x,'--- error criterion: lsq check error less than', f5.2,1x, '%  ---',1x)
         go to 756
 754     write(lunit6,7089) normax
-7089    format(/,1x,45h--- error criterion: minimum lsq check error , 28hwithin given maximum order (,i3,2x,11hpoles ) ---)
+7089    format(/,1x,'--- error criterion: minimum lsq check error within given maximum order (',i3,2x,'poles ) ---')
 756     if (epserr.ge.erropt) go to 780
         !  store optimum values
         do j=1,npole
@@ -1019,18 +1016,18 @@ subroutine subr39
         tolfac = .8d0*tolfac
         go to 260
 790     if (idebug.ge.1) write(lunit6,7091)
-7091    format(//,1x,35h--- further order increase was not , 43hpossible because, of vectors dimensions ---,1x)
+7091    format(//,1x,'--- Further order increase was not possible because, of vectors dimensions ---',1x)
         go to 800
 795     if (idebug.ge.1) write(lunit6,7093) npoles,normax
-7093    format(//,1x,31h--- no. of poles in this loop (,i3,34h) is larger than specified limit (,i3, 5h) ---,1x)
+7093    format(//,1x,'--- No. of poles in this loop (',i3,') is larger than specified limit (',i3, ') ---',1x)
         go to 800
 797     if (idebug.ge.1) write(lunit6,7095)
-7095    format(//,1x, 55h--- no further order increase was allowed because error,/,1x, &
-             54hin this loop was 5 times larger than previous minimum.,/,1x, &
-             55hif further order increase is desired make "inelim = 1" ,/,1x, &
-             22hin parameters list ---,1x)
+7095    format(//,1x, '--- No further order increase was allowed because error',/,1x, &
+             'in this loop was 5 times larger than previous minimum.',/,1x, &
+             'If further order increase is desired make "inelim = 1" ',/,1x, &
+             'in parameters list ---',1x)
 800     if (erropt.gt.epstol.and.idebug.ge.1) write(lunit6,7097)
-7097    format(//,1x,42h--- maximum tolerance criterion could not , 10hbe met ---)
+7097    format(//,1x,'--- Maximum tolerance criterion could not be met ---')
         !
         !             time delay for propagation function
         !
@@ -1065,18 +1062,18 @@ subroutine subr39
 940     taur = sumtau/(n*twopi)
         go to 950
 910     write(lunit6,7099)
-7099    format(//,1x,60h*** specified frequency range does not contain enough curve , &
-             /,57h dynamics for an accurate phase displacement evaluation. , &
-             /,57h tau will be taken as the travelling time at the highest , &
-             /,20h given frequency ***)
+7099    format(//,1x,'*** Specified frequency range does not contain enough curve ', &
+             /,' dynamics for an accurate phase displacement evaluation. ', &
+             /,' tau will be taken as the travelling time at the highest ', &
+             /,' given frequency ***')
         taur = travhf
 950     if (idebug.eq.0) go to 807
         d1 = 1.d3*taur
         d2 = 10.d0**xdat(ndata)
         d3 = 1.d3*travhf
         write(lunit6,8001) d1,d2,d3
-8001    format(//,1x,24hphase displacement tau =,e12.4,3x, 4hmsec, /,1x, 18htravelling time at,e12.4,2x, 2hhz,3x, 2his, &
-             e12.4,3x, 4hmsec)
+8001    format(//,1x,'Phase displacement tau =',e12.4,3x, 'msec', /,1x, 'travelling time at',e12.4,2x, 'Hz',3x, 'is', &
+             e12.4,3x, 'msec')
         !   == add extra pole to a1 function with type 1 fit ==
 807     if (iftype.eq.2) go to 805
         npoler = npoler+1
@@ -1089,24 +1086,23 @@ subroutine subr39
         !
         d1 = 10.d0**hrflgr
         write(lunit6,8003) iftype,d1
-8003    format(/,1x,12hcurve type =,i2,4x,17hreference level =,e11.4)
+8003    format(/,1x,'Curve type =',i2,4x,'reference level =',e11.4)
         write(lunit6,8005) npoler,nzeror
-8005    format(/,1x,11hno. poles =,i3,4x,12hno. zeroes =,i3)
+8005    format(/,1x,'No. poles =',i3,4x,'no. zeroes =',i3)
         if (icurve .eq. 2  .or. nfitmx .eq. 1) go to 812
         write(lunit6,8007) imode
-8007    format(//,30h table of yc vs. yceq for mode,i3,/,81h units: freq. in hz, magnitude in ohms, phase in deg., delmag in %, delph in deg., &
-             //,5x,4hfreq,6x,5hycmag,5x,7hyceqmag,5x,6hdelmag,6x,4hycph, 6x,6hyceqph,5x,5hdelph,7x,4hfreq)
+8007    format(//,' Table of yc vs. yceq for mode',i3,/,' units: freq. in Hz, magnitude in Ohms, phase in Deg., delmag in %, delph in Deg.', &
+             //,5x,'freq',6x,'ycmag',5x,'yceqmag',5x,'delmag',6x,'ycph', 6x,'yceqph',5x,'delph',7x,'freq')
         go to 814
 812     if ( nfitmx .eq. 1 )  go to 813
         write(lunit6,8009) imode
-8009    format ( /,1x,37htable of  "a1"  vs.  "a1eq"  for mode,i3, /,1x,38hunits: frequency in hertz,  magnitude , &
-             40hin per unit,  phase in degrees,  delmag ,  24hin %,  delph in degrees., / , 1x, &
-             51hp1ph = a1eqph+omega*tau; tau in msec; deltau in % ., //,5x,4hfreq,6x,5ha1mag,5x,7ha1eqmag,5x,6hdelmag,6x,4ha1ph, &
-             6x,6ha1eqph,5x,5hdelph,7x,4hp1ph,7x,3htau,7x,6hdeltau, 6x,4hfreq)
+8009    format (/,1x,'Table of  "a1"  vs.  "a1eq"  for mode',i3, /,1x,'units: frequency in Hz,  magnitude in per unit,  phase in Deg.', &
+             'delmag in %,  delph in Deg.', / , 1x, 'p1ph = a1eqph+omega*tau; tau in msec; deltau in % .', &
+             //,5x,'freq',6x,'a1mag',5x,'a1eqmag',5x,'delmag',6x,'a1ph', 6x,'a1eqph',5x,'delph',7x,'p1ph',7x,'tau',7x,'deltau', 6x,'freq')
         go to 814
 813     write(lunit6,1813) icurve, imode
 1813    format(//,' table of ti vs. tieq for element ', 2i2, /, ' units: freq. in hz, magnitude unitless, phase in deg., delmag in %, delph in deg.', &
-             //,5x,4hfreq,6x,5htimag,5x,7htieqmag,5x, 6hdelmag,6x,4htiph, 6x,6htieqph,5x,5hdelph,7x,4hfreq)
+             //,5x,'freq',6x,'timag',5x,'tieqmag',5x, 'delmag',6x,'tiph', 6x,'tieqph',5x,'delph',7x,'freq')
 814     dxcomp = .1d0
         x = xdat(1)-dxcomp
 810     x = x+dxcomp
@@ -1197,18 +1193,18 @@ subroutine subr39
         n8 = 2 * imode
         if ( imodal  .gt.  0 .or. mspedb .eq. 1 )   go to  8787
         if ( ipunch  .eq.  0 ) write (lunit7, 8781) imode, vstacs(n8-1), vstacs(n8), d6
-8781    format ( 1h-,  i1,  2a6,  12x,  f6.0,4x, 2h1.,14x, 2h-4, 3x, 1h1 )
+8781    format ( '-',  i1,  2a6,  12x,  f6.0,4x, '1.',14x, '-4', 3x, '1' )
         if (idebug.eq.0) go to 8794
         write (lunit1, 8782) imode, vstacs(n8-1), vstacs(n8), d6
-8782    format ( 1x,  1h-,  i1,  2a6,  12x,  f6.0, 4x, 2h1.,14x, 2h-4,3x,1h1,24h                                       )
+8782    format ( 1x,  '-',  i1,  2a6,  12x,  f6.0, 4x, '1.',14x, '-4',3x,'1','                         ')
         kount = kount+1
         go to 8794
 8787    if ( itrnsf .eq. 1 )  ifqdpt = 0
         if ( ipunch  .eq.  0 ) write (lunit7, 8790)  imode, vstacs(n8-1), vstacs(n8), d6, nmode, ifqdpt
-8790    format ( 1h-, i1, 2a6, 12x, f6.0,4x, 2h1.,14x, 2h-4, 2i2)
+8790    format ( '-', i1, 2a6, 12x, f6.0,4x, '1.',14x, '-4', 2i2)
         if (idebug.eq.0) go to 8794
         write (lunit1, 8791)  imode, vstacs(n8-1), vstacs(n8), d6, nmode, ifqdpt
-8791    format ( 1x,1h-,i1,2a6, 12x, f6.0,4x,2h1.,14x, 2h-4,2i2, 24h                                        )
+8791    format ( 1x,'-',i1,2a6, 12x, f6.0,4x,'1.',14x, '-4',2i2, '                        ')
         kount = kount+1
         go to 8794
 8793    write (lunit6, *) ' this is a near-zero tij element.'
@@ -1231,7 +1227,7 @@ subroutine subr39
 8798    format ( i8, e32.20 )
         if (idebug.eq.0) go to 8788
         write (lunit1, 8799)  npoler,hrefr
-8799    format ( 1x,  i8,  e32.20, 42h                                              )
+8799    format ( 1x,  i8,  e32.20, '                                              ')
         kount = kount+1
         go to 8788
 8779    if ( ipunch  .eq.  0 ) write (lunit7, 8798)  npoler,taur
@@ -1242,7 +1238,7 @@ subroutine subr39
 8803    format ( 3e26.18 )
         if (idebug.eq.0) go to 8806
         write (lunit1, 8804)  ( akfrac(kp), kp=1, n23 )
-8804    format ( 1x,  3e26.18,  4h      )
+8804    format ( 1x,  3e26.18,  '    ')
 8806    if ( ipunch  .eq.  0 ) write (lunit7, 8803)  ( alphaf(kp), kp=1,npoler )
         if (idebug.eq.0) go to 8810
         write (lunit1, 8804)  ( alphaf(kp), kp=1, n23 )
@@ -1404,11 +1400,11 @@ subroutine subr39
 8832 end do
   !
 8841 if ( idebug  .ge.  1 ) write (lunit6, 8768)
-8768 format ( /, 39h punched output (on lunit7) begins with, 30h comment cards documenting the, &
-       31h transmission circuit geometry.    ,/, 33h the following is a record of the, &
-       35h punching,  including the final two, 34h columns which do not fit on card.  ,/, &
-       1x,  82( 1h= )  ,/, 43h 001234567890123456789012345678901234567890, &
-       40h1234567890123456789012345678901234567890, /, 1x,  82( 1h= )    )
+8768 format ( /, ' Punched output (on lunit7) begins with comment cards documenting the', &
+          ' transmission circuit geometry.    ',/, 'The following is a record of the', &
+          ' punching,  including the final two columns which do not fit on card.  ',/, &
+          1x,  82( '=' )  ,/, ' 001234567890123456789012345678901234567890', &
+          '1234567890123456789012345678901234567890', /, 1x,  82( '=' )    )
   !   == recover information from lunit1, print on lunit6 ==
   rewind lunit1
   if ( kount .eq. 0 )  go to 1550
@@ -1421,37 +1417,36 @@ subroutine subr39
 9200 lstat(18)=nchain
   lastov=nchain
   nchain=51
-9999 if ( iprsup  .ge.  6 )
-1 write (lunit6, 9998)  nchain, kill
-9998 format (  32h exit "subr39".   nchain, kill =,  2i6  )
+9999 if ( iprsup  .ge.  6 ) write (lunit6, 9998)  nchain, kill
+9998 format (  ' Exit "subr39".   nchain, kill =',  2i6  )
   return
   !
   !             terminating conditions
   !
 2170 write(lunit6,8050) nmode,mmodes
-8050 format(//,1x,21h%%% number of modes (,i2,17h) exceeds limit (, i2,27h). execution terminated %%%)
+8050 format(//, 1x, '%%% Number of modes (', i2, ') exceeds limit (', i2, '). Execution terminated %%%')
   call stoptp
 2100 write(lunit6,8051) mdapts
-8051 format(//,1x,31h%%% dimension of data vectors (,i3, 36h) exceeded. execution terminated %%%)
+8051 format(//, 1x, '%%% Dimension of data vectors (', i3, ') exceeded. Execution terminated %%%')
   call stoptp
 2110 write(lunit6,8053) mxknee
-8053 format(//,1x,24h%%% dimension of xknee (,i2, 36h) exceeded. execution terminated %%%)
+8053 format(//, 1x, '%%% Dimension of xknee (', i2, ') exceeded. Execution terminated %%%')
   call stoptp
 2120 write(lunit6,8055) mxchkr
-8055 format(//,1x,25h%%% dimension of xchkra (,i3, 36h) exceeded. execution terminated %%%)
+8055 format(//, 1x, '%%% Dimension of xchkra (', i3, ') exceeded. Execution terminated %%%')
   call stoptp
 2130 write(lunit6,8057) mzopra
-8057 format(//,1x,25h%%% dimension of zoprau (,i3, 36h) exceeded. execution terminated %%%)
+8057 format(//, 1x, '%%% Dimension of zoprau (', i3, ') exceeded. Execution terminated %%%')
   call stoptp
 2140 write(lunit6,8059) mzopra
-8059 format(//,1x,25h%%% dimension of zoprao (,i3, 36h) exceeded. execution terminated %%%)
+8059 format(//, 1x, '%%% Dimension of zoprao (', i3, ') exceeded. Execution terminated %%%')
   call stoptp
 2160 write(lunit6,8061) normax
-8061 format(//,1x,39h%%% the algorithm cannot fit this curve, 37h within the maximum order specified (,i3, &
-       2h).,/,1x,28h=== increase this limit ===.,/,1x, 34hno approximation was generated %%%)
+8061 format(//, 1x, '%%% The algorithm cannot fit this curve, within the maximum order specified (', i3, ').', &
+          /, 1x, '=== increase this limit ===.', /, 1x, 'No approximation was generated %%%')
   call stoptp
 2150 write(lunit6,8063) mpoles
-8063 format(//,1x,33h%%% dimension of corner vectors (,i2, 36h) exceeded. execution terminated %%%)
+8063 format(//, 1x, '%%% Dimension of corner vectors (', i2, ') exceeded. Execution terminated %%%')
   call stoptp
   return
 end subroutine subr39
@@ -1474,7 +1469,7 @@ subroutine locsl (xbeg,xend,alpha,xmid,xcorna,xcornb,erymax)
   refd2 = absz ( (refa-refb) * onehav )
   refdpc = 100.d0*(10.d0**refd2-1.d0)
   write(lout,8065) refa,refb,refdpc
-8065 format(1x, 5hrefa=,e11.4,3x, 5hrefb=,e11.4,3x, 7hrefdpc=, e11.4, 1h%  )
+8065 format(1x, 'refa=',e11.4,3x, 'refb=',e11.4,3x, 'refdpc=', e11.4, '%')
   !   place segment initially at mid point
 2100 d2 = (refb-refa)/2./alpha
   xcorna = xmid - d2
@@ -1501,7 +1496,7 @@ subroutine locsl (xbeg,xend,alpha,xmid,xcorna,xcornb,erymax)
            idefac = idefac+lsign
            xcorna = xcorna+xdelta*lsign
            xcornb = xcornb+xdelta*lsign
-           c   check allocation error
+           !   check allocation error
            error = 0.
            x = xbeg-xdelta
 100        x = x+xdelta
@@ -1517,9 +1512,9 @@ subroutine locsl (xbeg,xend,alpha,xmid,xcorna,xcornb,erymax)
            go to 100
 140        if (idebug.lt.4)  go to 8069
            if ( n .eq. 1 ) write(lout,8067) idefac,xcorna,xcornb,error,erropt
-8067       format(1x, 7hshift r,i5,4e12.4)
+8067       format(1x, 'shift r',i5,4e12.4)
            if ( n .eq. 2 ) write(lout,8068) idefac, xcorna, xcornb, error, erropt
-8068       format(1x, 7hshift l, i5, 4e12.4)
+8068       format(1x, 'shift l', i5, 4e12.4)
 8069       if(error.ge.erropt) go to 150    ! avoid infinite loop, change
            erropt = error                   ! .gt. to .ge.,  thl, 9/12/89
            idefop = idefac
@@ -1597,7 +1592,7 @@ subroutine adjpk
      flim1 = azepo(id1)
      flim2 = azepo(id2+jn2+1)
      if (idebug.ge.3) write(lout,8071) xpeak
-8071 format(/,1x,10x,19hadjustment of peak:,e12.4)
+8071 format(/,1x,10x,'adjustment of peak:',e12.4)
      djn1 = 1.d0 / jn1
      djn2 = 1.d0 / jn2
      erropt = 1.e12   !  thl
@@ -1644,9 +1639,8 @@ subroutine adjpk
            yapprx = amaglg
            error = error+(yapprx-yfun39(x))**2
            go to 160
-170        if (idebug.ge.4)
-1          write(lout,8073) idefac,fcorn1,fcorn2,error,erropt
-8073       format(1x, 9hshift in ,i5,4e12.4)
+170        if (idebug.ge.4) write(lout,8073) idefac,fcorn1,fcorn2,error,erropt
+8073       format(1x, 'shift in ',i5,4e12.4)
            if (error.ge.erropt) go to 180    ! thl
            erropt = error
            idefop = idefac
@@ -1685,7 +1679,7 @@ subroutine adjpk
            error = error+(yapprx-yfun39(x))**2
            go to 250
 260        if (idebug.ge.4) write(lout,8075) idefac,fcorn1,fcorn2,error,erropt
-8075       format(1x, 9hshift out,i5,4e12.4)
+8075       format(1x, 'shift out',i5,4e12.4)
            if (error.ge.erropt) go to 270   ! thl
            erropt = error
            idefop = idefac
@@ -1705,7 +1699,7 @@ subroutine adjpk
 340 return
   !               terminating conditions
 2100 write(lout,8077) mdimpz
-8077 format(//,1x,31h%%% dimension of fpz1 or fpz2 (,i2, 36h) exceeded. execution terminated %%%   )
+8077 format(//,1x,'%%% dimension of fpz1 or fpz2 (',i2, ') exceeded. Execution terminated %%%'   )
   call stoptp
   return
 end subroutine adjpk
@@ -1861,8 +1855,8 @@ end subroutine adjcr
 subroutine shira (xbeg,xend,fbeg,fend,iter,index,irange)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   dimension fpz(50)
-  include  'labl39.ftn'
-  include  'deck39.ftn'
+  include 'labl39.ftn'
+  include 'deck39.ftn'
   !  change this limit if dimension is changed
   !   order of slope in segment * 2
   mdifpz = 100
@@ -1884,7 +1878,7 @@ subroutine shira (xbeg,xend,fbeg,fend,iter,index,irange)
      dfx = 10.d0**( dxecr*.1d0 )
      fdelta = dfx**d13
      fdelt1 = 1.d0 / fdelta
-     c   preserve original positions and prepare for shifting
+     !   preserve original positions and prepare for shifting
      do j = 1,j2n
         fpz(j) = azepo(id+j)
         azepo(id+j) = azepo(id+j) * fdelt1
@@ -1928,7 +1922,7 @@ subroutine shira (xbeg,xend,fbeg,fend,iter,index,irange)
         fcorn1 = azepo(id+1) * fdelt1
         if (fcorn1.lt.fbeg) go to 230
         idefac = idefac-1
-        do 180 j = 1,j2n
+        do j = 1,j2n
 180        azepo(id+j) = azepo(id+j) * fdelt1
         end do
         !   check error
@@ -2186,19 +2180,19 @@ subroutine ftplot (icurve,imode,nfitmx)
   if ( nfitmx .gt. 0 )  go to 112   !  ti fitting
   write(lout,8091) imode
 8091 format ( //, 38h printer plot of  yc  fitting for mode,  i3,/, &
-          35h plot of ycmag vs. yceqmag in mhos ,/, &
-          26h plot symbols:   0 = ycmag , &
-          15h    i = yceqmag , &
-          27h    * = intersection point.     )
+       35h plot of ycmag vs. yceqmag in mhos ,/, &
+       26h plot symbols:   0 = ycmag , &
+       15h    i = yceqmag , &
+       27h    * = intersection point.     )
   write(lout,8093) amin,amax
 8093 format(/,3x,5hycmag,6x,7hyceqmag,15x,e10.4,74x,e10.4,/,28x,4hfreq,/,35x,2h.1,10(9h........1))
   go to 130
 112 write(lout,114) icurve, imode
 114 format ( //,41h printer plot of  ti  fitting for element, 2i2,/, &
-         27h plot of timag vs. tieqmag  ,/, &
-         26h plot symbols:   0 = timag , &
-         15h    i = tieqmag , &
-         27h    * = intersection point.     )
+       27h plot of timag vs. tieqmag  ,/, &
+       26h plot symbols:   0 = timag , &
+       15h    i = tieqmag , &
+       27h    * = intersection point.     )
   write(lout,116) amin,amax
 116 format(/,3x,5htimag,6x,7htieqmag,15x,e10.4,74x,e10.4,/,28x,4hfreq,/,35x,2h.1,10(9h........1))
   go to 130
@@ -2212,10 +2206,10 @@ subroutine ftplot (icurve,imode,nfitmx)
   dfamp = 1.5d0
 124 write(lout,8095) imode
 8095 format ( //, 38h printer plot of  a1  fitting for mode,  i3,/, &
-          35h plot of a1mag vs. a1eqmag in p.u. ,/, &
-          26h plot symbols:   0 = a1mag , &
-          15h    i = a1eqmag , &
-          27h    * = intersection point.     )
+       35h plot of a1mag vs. a1eqmag in p.u. ,/, &
+       26h plot symbols:   0 = a1mag , &
+       15h    i = a1eqmag , &
+       27h    * = intersection point.     )
   write(lout,8097) amin,amax
 8097 format(/, 3x,5ha1mag,6x,7ha1eqmag,15x,e10.4,74x,e10.4,/,28x,4hfreq,/,35x,2h.1,10(9h........1))
 130 x = xdat(1)-.2d0
@@ -2243,8 +2237,7 @@ subroutine ftplot (icurve,imode,nfitmx)
   if (intd2.lt.1.or.intd2.gt.91) intd2 = 92
   pl(intd1) = text1
   pl(intd2) = text2
-  if (intd1.eq.intd2)
-1 pl(intd1) = text3
+  if (intd1.eq.intd2) pl(intd1) = text3
   write(lout,8099) ax,amagp,freq,( pl(i), i=1,91 )
 8099 format(1x,e10.4,2x,e10.4,2x,e10.4,1x,91a1)
   pl(intd1) = blank
