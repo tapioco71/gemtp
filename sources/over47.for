@@ -3214,178 +3214,168 @@ end subroutine transp
 !
 subroutine skin47(b1,b2,ur,cjw,sjw,zcc)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-                                                                                                                        include  'labl47.ftn'
-                                                                                                                        common  / komthl /  pekexp
-                                                                                                                        complex*16  cjw, sjw, x1, x2, x3, x4, zcc
-                                                                                                                        complex*16  cexpz, cmplxz
-                                                                                                                        complex*16  c1, c2
-                                                                                                                        c1 = cmplxz(u2p, fzero)
-                                                                                                                        c2 = cmplxz(ur, fzero)
-                                                                                                                        x1 = cmplxz(b1, fzero) * sjw
-                                                                                                                        x2 = cmplxz(b2, fzero) * sjw
-                                                                                                                        ixa = 0
-                                                                                                                        xa = cabsz(x2)
-                                                                                                                        ll1 = 1
-                                                                                                                        ll2 = 2
-                                                                                                                        d15 = value1 * value5 / 100.
-                                                                                                                        if ( iprs47  .ge.  2 )
-1                                                                                                                       write (logsix, 3672)  b1, b2, d15, xa, xb
-3672                                                                                                                    format ( /,  18h begin  'skin47' .,  18x,  2hb1,  18x,  2hb2,
-1  17                                                                                                                   x,  3hd15,  18x,  2hxa,  18x,  2hxb  ,/,  18x,  5e20.11  )
-                                                                                                                        if (b1 .lt. d15)   go to 30
-                                                                                                                        xb = cabsz(x1)
-                                                                                                                        ten = 10.
-                                                                                                                        if (xa .lt. ten)  go to 10
-                                                                                                                        d1 = 15./4.
-                                                                                                                        if (xb .gt. d1)  ixa = 1
-10                                                                                                                      call bsikm ( x1, ll2, bin, bkn, ll1, ixa )
-                                                                                                                        x3 = bin(2)
-                                                                                                                        x4 = bkn(2)
-                                                                                                                        call bsikm ( x2, ll2, bin, bkn, ll1, ixa )
-                                                                                                                        if (ixa .eq. 1) go to 20
-                                                                                                                        zcc = cjw * c1/x2 * (bin(1) * x4 + bkn(1) * x3) * c2
-                                                                                                                        x3 = bin(2) * x4  -  bkn(2) * x3
-                                                                                                                        go to 25
-20                                                                                                                      x1=x2-x1
+  include 'labl47.ftn'
+  common  / komthl /  pekexp
+  complex*16  cjw, sjw, x1, x2, x3, x4, zcc
+  complex*16  cexpz, cmplxz
+  complex*16  c1, c2
+  c1 = cmplxz(u2p, fzero)
+  c2 = cmplxz(ur, fzero)
+  x1 = cmplxz(b1, fzero) * sjw
+  x2 = cmplxz(b2, fzero) * sjw
+  ixa = 0
+  xa = cabsz(x2)
+  ll1 = 1
+  ll2 = 2
+  d15 = value1 * value5 / 100.
+  if ( iprs47  .ge.  2 ) write (logsix, 3672)  b1, b2, d15, xa, xb
+3672 format ( /,  18h begin  'skin47' .,  18x,  2hb1,  18x,  2hb2, 17x,  3hd15,  18x,  2hxa,  18x,  2hxb  ,/,  18x,  5e20.11  )
+  if (b1 .lt. d15)   go to 30
+  xb = cabsz(x1)
+  ten = 10.
+  if (xa .lt. ten)  go to 10
+  d1 = 15./4.
+  if (xb .gt. d1)  ixa = 1
+10 call bsikm ( x1, ll2, bin, bkn, ll1, ixa )
+  x3 = bin(2)
+  x4 = bkn(2)
+  call bsikm ( x2, ll2, bin, bkn, ll1, ixa )
+  if (ixa .eq. 1) go to 20
+  zcc = cjw * c1/x2 * (bin(1) * x4 + bkn(1) * x3) * c2
+  x3 = bin(2) * x4  -  bkn(2) * x3
+  go to 25
+20 x1=x2-x1
 !!!!  d2 = 50.
-                                                                                                                        if (cabsz(x1) .gt. pekexp )  go to 33
-                                                                                                                        x1=cexpz(x1)
-                                                                                                                        zcc= cjw * c1  / x2  *  ( bin(1)*x4*x1 + bkn(1)*x3/x1 ) * c2
-                                                                                                                        x3 = bin(2) * x4 * x1  -  bkn(2) * x3 / x1
-25                                                                                                                      zcc = zcc/x3
-                                                                                                                        go to 40
-30                                                                                                                      call bsikm ( x2, ll2, bin, bkn, ll1, ll1 )
-33                                                                                                                      zcc= cjw * c1  / x2  *  bin(1) / bin(2)  *  c2
-40                                                                                                                      if ( iprs47  .ge.  2 )
-1                                                                                                                       write (logsix, 3688)  ur, cjw, zcc
-3688                                                                                                                    format ( /,  17h exit  'skin47' .,  18x,  2hur,
-1  12                                                                                                                   x,  8hreal-cjw,  12x,  8himag-cjw,
-2  12                                                                                                                   x,  8hreal-zcc,  12x,  8himag-zcc  ,/,  17x,  5e20.11  )
-                                                                                                                        return
-                                                                                                                      end subroutine skin47
-                                                                                                                      subroutine zegen(be1,be2,th,w,xe,isyst)
-                                                                                                                        implicit real*8 (a-h, o-z) ,
-1                                                                                                                       integer*4 (i-n)
-                                                                                                                        include  'labl47.ftn'
-                                                                                                                        common  / komthl /  pekexp
-                                                                                                                        complex*16  cj, cjw, x1, x2, xe
-                                                                                                                        complex*16  cexpz, cmplxz, csqrtz
-                                                                                                                        complex*16  c1
-                                                                                                                        unity = 1.0
-                                                                                                                        c1 = cmplxz(u2p, fzero)
-                                                                                                                        cj = cimag1
-                                                                                                                        euc = 2./value4
-                                                                                                                        d1 = 2.0
-                                                                                                                        sq2 = sqrtz(d1)
-                                                                                                                        ll1 = 1
-                                                                                                                        ll2 = 2
-                                                                                                                        if (isyst .ge. 0)   go to 140
-                                                                                                                        cjw = cj * cmplxz(w, fzero)
-                                                                                                                        xe=csqrtz(cjw)
-                                                                                                                        x1 = cmplxz(be1, fzero) * xe
-                                                                                                                        x2 = cmplxz(be2, fzero) * xe
-                                                                                                                        ixa=0
-                                                                                                                        xa=cabsz(x2)
-                                                                                                                        if(xa.gt.10.) ixa=1
-                                                                                                                        call bsikm(x1,ll2,bin,bkn,ll1,ixa)
-                                                                                                                        xe=bkn(1)
-                                                                                                                        if(xa.gt.100.) go to 130
-                                                                                                                        call bsikm(x2,ll2,bin,bkn,ll1,ixa)
-                                                                                                                        if (ixa .gt. 0)   go to 120
-110                                                                                                                     xe = cjw * c1 * (xe - bkn(1))
-                                                                                                                        go to 5
-120                                                                                                                     xe=cjw*c1 *(xe-bkn(1) /cexpz(x2-x1))/cexpz(x1)
-                                                                                                                        go to 5
-130                                                                                                                     xa1=cabsz(x1)
-                                                                                                                        if(xa1 .gt. pekexp ) go to 140
-                                                                                                                        xe = cjw * c1 * xe/cexpz(x1)
-                                                                                                                        go to 5
-140                                                                                                                     xe = czero
-5                                                                                                                       e = be2 * sqrtz ( w )
-                                                                                                                        if ( iprs47  .ge.  2 )
-1                                                                                                                       write (logsix, 3741)  isyst, ixa, be1, be2, xa, th, xa1, xe, w,e
-3741                                                                                                                    format ( /,  18h within  'zegen' .,  16h   isyst     ixa,
-1  16                                                                                                                   x,  3hbe1,  16x,  3hbe2,  17x,  2hxa,  17x,  2hth,
-2  16                                                                                                                   x,  3hxa1  ,/,  18x,  2i8,  5e19.10  ,/,  1x,
-3  13                                                                                                                   x,  7hreal-xe,  13x,  7himag-xe,
-4  19                                                                                                                   x, 1hw, 19x, 1he,/, 1x, 4e20.11 )
-                                                                                                                        if ( e  .gt.  5.)   go to 60
-                                                                                                                        r2 = e ** 4
-                                                                                                                        r1=r2/16.
-                                                                                                                        sn = e**2/8.
-                                                                                                                        bn=r1/12.
-                                                                                                                        cn = e/3.
-                                                                                                                        dn=5./4.
-                                                                                                                        en = e**3/45.
-                                                                                                                        fn=5./3.
-                                                                                                                        iter=11
-                                                                                                                        if(e.ge.1. ) iter=21
-                                                                                                                        iter = 21
-15                                                                                                                      do 50 i=1,iter
-                                                                                                                           t=i-1
-                                                                                                                           t1=t*2.
-                                                                                                                           t2=t*4.
-                                                                                                                           cs1=cosz((t2+2.)*th)
-                                                                                                                           ss1=sinz((t2+2.)*th)
-                                                                                                                           cs2=cosz((t2+4.)*th)
-                                                                                                                           ss2=sinz((t2+4.)*th)
-                                                                                                                           cs3=cosz((t2+1.)*th)
-                                                                                                                           cs4=cosz((t2+3.)*th)
-                                                                                                                           if (i.gt. 1)   go to 30
-                                                                                                                           a1 = sn * cs1
-                                                                                                                           a2=sn*ss1
-                                                                                                                           a3=bn*cs2
-                                                                                                                           a4=bn*ss2
-                                                                                                                           b1=cn*cs3
-                                                                                                                           b2=dn*a1
-                                                                                                                           b3=en*cs4
-                                                                                                                           b4=fn*a3
-                                                                                                                           evennn = a1 + a2 + a3 + a4 + b1 + b2 + b3 + b4
-                                                                                                                           go to 50
-30                                                                                                                         t3=-t1*(t1+1.)**2*(t1+2.)
-                                                                                                                           t4=-(t1+1.)*(t1+2.)**2*(t1+3.)
-                                                                                                                           t5=-(t2-1.)*(t2+1.)**2*(t2+3.)
-                                                                                                                           t6=1./t2+1./(t1+1.)+1./(t1+2.)-1./(t2+4.)
-                                                                                                                           t7=-(t2+1.)*(t2+3.)**2*(t2+5.)
-                                                                                                                           t8=1./(t2+2.)+1./(t1+2.)+1./(t1+3.)-1./(t2+6.)
-                                                                                                                           sn=sn*r1/t3
-                                                                                                                           bn=bn*r1/t4
-                                                                                                                           cn=cn*r2/t5
-                                                                                                                           dn=dn+t6
-                                                                                                                           en=en*r2/t7
-                                                                                                                           fn=fn+t8
-                                                                                                                           a1=a1+sn*cs1
-                                                                                                                           a2=a2+sn*ss1
-                                                                                                                           a3=a3+bn*cs2
-                                                                                                                           a4=a4+bn*ss2
-                                                                                                                           b1=b1+cn*cs3
-                                                                                                                           b2=b2+dn*sn*cs1
-                                                                                                                           b3=b3+en*cs4
-                                                                                                                           b4=b4+fn*bn*cs2
-                                                                                                                           verbin = evennn
-                                                                                                                           evennn = a1 + a2 + a3 + a4 + b1 + b2 + b3 + b4
-                                                                                                                           if ((1.-verbin/evennn)*(1.-verbin/evennn) .lt. 1.e-12)
-1                                                                                                                          go to 888
-50                                                                                                                         continue
-888                                                                                                                        continue
-                                                                                                                           p1=pai*(1.-a3)/4.+a1*alogz(euc/e) + th*a2 + b2 + sq2*(b3-b1)
-                                                                                                                           q1=0.5+(1.-a3)*alogz(euc/e)-th*a4-pai*a1/4.-b4+sq2*(b1+b3)
-                                                                                                                           go to 70
-60                                                                                                                         cs1=sq2*cosz(th)
-                                                                                                                           cs2=cosz(2.*th)*2.
-                                                                                                                           cs3=sq2*cosz(3.*th)
-                                                                                                                           cs4=3.*sq2*cosz(5.*th)
-                                                                                                                           p1=(cs1+(cs4/e**3+cs3/e-cs2)/e)/e
-                                                                                                                           q1=(cs1+(cs4/e**2-cs3)/e**2)/e
-70                                                                                                                         xe = cmplxz(w,fzero) * c1 * (cmplxz(p1,fzero) + cj *
-1                                                                                                                          cmplxz(q1, fzero)) + xe
-                                                                                                                           if ( iprs47  .ge.  2 )
-1                                                                                                                          write (logsix, 3782)  p1, q1, xe
-3782                                                                                                                       format ( /,  16h exit  'zegen' .,
-1  17                                                                                                                      x, 2hp1, 17x, 2hq1,
-2  12                                                                                                                      x,  7hreal-xe,  12x,  7himag-xe  ,/,  16x,  4e19.10  )
-                                                                                                                           return
-                                                                                                                        end do
+  if (cabsz(x1) .gt. pekexp )  go to 33
+  x1=cexpz(x1)
+  zcc= cjw * c1  / x2  *  ( bin(1)*x4*x1 + bkn(1)*x3/x1 ) * c2
+  x3 = bin(2) * x4 * x1  -  bkn(2) * x3 / x1
+25 zcc = zcc/x3
+  go to 40
+30 call bsikm ( x2, ll2, bin, bkn, ll1, ll1 )
+33 zcc= cjw * c1  / x2  *  bin(1) / bin(2)  *  c2
+40 if ( iprs47  .ge.  2 ) write (logsix, 3688)  ur, cjw, zcc
+3688 format ( /,  17h exit  'skin47' .,  18x,  2hur, 12x,  8hreal-cjw,  12x,  8himag-cjw, 12x,  8hreal-zcc,  12x,  8himag-zcc  ,/,  17x,  5e20.11  )
+  return
+end subroutine skin47
+!
+! subroutine zegen.
+!
+subroutine zegen(be1,be2,th,w,xe,isyst)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  include 'labl47.ftn'
+  common  / komthl /  pekexp
+  complex*16  cj, cjw, x1, x2, xe
+  complex*16  cexpz, cmplxz, csqrtz
+  complex*16  c1
+  unity = 1.0
+  c1 = cmplxz(u2p, fzero)
+  cj = cimag1
+  euc = 2./value4
+  d1 = 2.0
+  sq2 = sqrtz(d1)
+  ll1 = 1
+  ll2 = 2
+  if (isyst .ge. 0)   go to 140
+  cjw = cj * cmplxz(w, fzero)
+  xe=csqrtz(cjw)
+  x1 = cmplxz(be1, fzero) * xe
+  x2 = cmplxz(be2, fzero) * xe
+  ixa=0
+  xa=cabsz(x2)
+  if(xa.gt.10.) ixa=1
+  call bsikm(x1,ll2,bin,bkn,ll1,ixa)
+  xe=bkn(1)
+  if(xa.gt.100.) go to 130
+  call bsikm(x2,ll2,bin,bkn,ll1,ixa)
+  if (ixa .gt. 0)   go to 120
+110 xe = cjw * c1 * (xe - bkn(1))
+  go to 5
+120 xe=cjw*c1 *(xe-bkn(1) /cexpz(x2-x1))/cexpz(x1)
+  go to 5
+130 xa1=cabsz(x1)
+  if(xa1 .gt. pekexp ) go to 140
+  xe = cjw * c1 * xe/cexpz(x1)
+  go to 5
+140 xe = czero
+5 e = be2 * sqrtz ( w )
+  if ( iprs47  .ge.  2 )
+1 write (logsix, 3741)  isyst, ixa, be1, be2, xa, th, xa1, xe, w,e
+3741 format ( /,  18h within  'zegen' .,  16h   isyst     ixa, 16x,  3hbe1,  16x,  3hbe2,  17x,  2hxa,  17x,  2hth, &
+          16x,  3hxa1  ,/,  18x,  2i8,  5e19.10  ,/,  1x, 13x,  7hreal-xe,  13x,  7himag-xe, &
+          19x, 1hw, 19x, 1he,/, 1x, 4e20.11 )
+  if ( e  .gt.  5.)   go to 60
+  r2 = e ** 4
+  r1=r2/16.
+  sn = e**2/8.
+  bn=r1/12.
+  cn = e/3.
+  dn=5./4.
+  en = e**3/45.
+  fn=5./3.
+  iter=11
+  if(e.ge.1. ) iter=21
+  iter = 21
+15 do i=1,iter
+     t=i-1
+     t1=t*2.
+     t2=t*4.
+     cs1=cosz((t2+2.)*th)
+     ss1=sinz((t2+2.)*th)
+     cs2=cosz((t2+4.)*th)
+     ss2=sinz((t2+4.)*th)
+     cs3=cosz((t2+1.)*th)
+     cs4=cosz((t2+3.)*th)
+     if (i.gt. 1)   go to 30
+     a1 = sn * cs1
+     a2=sn*ss1
+     a3=bn*cs2
+     a4=bn*ss2
+     b1=cn*cs3
+     b2=dn*a1
+     b3=en*cs4
+     b4=fn*a3
+     evennn = a1 + a2 + a3 + a4 + b1 + b2 + b3 + b4
+     go to 50
+30   t3=-t1*(t1+1.)**2*(t1+2.)
+     t4=-(t1+1.)*(t1+2.)**2*(t1+3.)
+     t5=-(t2-1.)*(t2+1.)**2*(t2+3.)
+     t6=1./t2+1./(t1+1.)+1./(t1+2.)-1./(t2+4.)
+     t7=-(t2+1.)*(t2+3.)**2*(t2+5.)
+     t8=1./(t2+2.)+1./(t1+2.)+1./(t1+3.)-1./(t2+6.)
+     sn=sn*r1/t3
+     bn=bn*r1/t4
+     cn=cn*r2/t5
+     dn=dn+t6
+     en=en*r2/t7
+     fn=fn+t8
+     a1=a1+sn*cs1
+     a2=a2+sn*ss1
+     a3=a3+bn*cs2
+     a4=a4+bn*ss2
+     b1=b1+cn*cs3
+     b2=b2+dn*sn*cs1
+     b3=b3+en*cs4
+     b4=b4+fn*bn*cs2
+     verbin = evennn
+     evennn = a1 + a2 + a3 + a4 + b1 + b2 + b3 + b4
+     if ((1.-verbin/evennn)*(1.-verbin/evennn) .lt. 1.e-12) go to 888
+50 end do
+888 continue
+  p1=pai*(1.-a3)/4.+a1*alogz(euc/e) + th*a2 + b2 + sq2*(b3-b1)
+  q1=0.5+(1.-a3)*alogz(euc/e)-th*a4-pai*a1/4.-b4+sq2*(b1+b3)
+  go to 70
+60 cs1=sq2*cosz(th)
+  cs2=cosz(2.*th)*2.
+  cs3=sq2*cosz(3.*th)
+  cs4=3.*sq2*cosz(5.*th)
+  p1=(cs1+(cs4/e**3+cs3/e-cs2)/e)/e
+  q1=(cs1+(cs4/e**2-cs3)/e**2)/e
+70 xe = cmplxz(w,fzero) * c1 * (cmplxz(p1,fzero) + cj * cmplxz(q1, fzero)) + xe
+  if ( iprs47  .ge.  2 ) write (logsix, 3782)  p1, q1, xe
+3782 format ( /,  16h exit  'zegen' ., 17x, 2hp1, 17x, 2hq1, 12x,  7hreal-xe,  12x,  7himag-xe  ,/,  16x,  4e19.10  )
+  return
+end subroutine zegen
                                                                                                                         subroutine eigen ( cjw, p, n, a, ai, qn, q, xx, yy, ldn )
                                                                                                                           implicit real*8 (a-h, o-z) ,
 1                                                                                                                         integer*4 (i-n)
