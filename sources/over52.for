@@ -163,51 +163,35 @@ subroutine over52
           5x,  "Data parameters.   The first of these is  'rmax'  with value", e12.3,  ", and the second is  'mnum'  with value   ",/, &
           5x, i3, '.   Either these were user-punched numbers, or they are default values built into the EMTP   anyway, these   ',/, &
           5x, 'parameters combine to produce a storage requirement for the finite line given by    (rmax-1)*mnum = ', i4,  ' points.   ')
-      write(lunit6,7168) lstat(12)
-7168  format( 5x, 45hthe present dimensions of the program permit , i4,
-1  8  h points. )
-      if ( flstat(13) .gt. 0. ) write(lunit6,7268)
-7268  format(5x,100hsince variable time increment dt was requested by mn
-1     um less than zero, the total storage requirement ,/, 5x,109hwas es
-2     tablished by summation of similar expressions with adjusted values
-3     of rmax and mnum for each time span. )
-      go to 6220
-6069  write(lunit6,7069)
-7069  format( 5x, 101hthe user is presently trying to input i-v points w
-1     hich define his magnetic saturation characteristic.    ,/,
-2 5   x,  53hbut he is using too many points to define this curve.   )
-      write(lunit6, 7166)  lstat(12)
-      go to 6220
-6070  write(lunit6,7070)
-7070  format( 5x, 108hthis error is most likely due to the computer syst
-1     em library subroutine for the sine function giving a value   ,/,
-2 5     x, 112hgreater than unity.   if there were any justice in the wo
-3       rld, this trouble would not have arisen.   in any case,   ,/,
-4 5     x, 115hthe difficulty is probably not the user's fault, so he sh
-5       ould go complain to program maintenance about his trouble.    )
-        go to 6220
-6071    write(lunit6, 7071)  lstat(12), flstat(13), flstat(14)
-7071    format( 5x, 101hthe user is presently trying to input i-v points w
-1       hich define his magnetic saturation characteristic.    ,/,
-2 5     x, 110hbut he has violated the rule which requires that both vol
-3       tage and current be strictly monotone-increasing (for    ,/,
-4 5     x,  60hthe order of data-card input).   the last-read card (numb
-5       er , i3,  37h of the characteristic) violates this   ,/,
-6 5     x,  91hrequirement, as shown by the following variable values wh
-7       ich were punched by the user .....    ,/,
-8 20    x, 16hlatest current = , e13.4, 10x, 19hpreceding current = ,
-9       e13.4   )
-        write(lunit6, 7171)  flstat(15), flstat(16)
-7171    format( 20x, 16hlatest voltage = , e13.4, 10x,
-1 19    hpreceding voltage = , e13.4, 1h.  )
-        if( lstat(12) .gt. 1 )  go to 6220
-        write(lunit6, 7271)
-7271    format( 5x, 108hof course since trouble was spotted upon an examin
-1       ation of the user's very first card of the characteristic,   ,/,
-2 5     x, 111hthe 'preceding card' refers to the implied point (0, 0) w
-3       hich represents the origin.   in this case, the user's   ,/,
-4 5     x, 113htrouble stems from his failure to punch a positive pair o
-5       f values (i, v) on his first card of the characteristic.   )
+  write(lunit6,7168) lstat(12)
+7168 format (5x, 'The present dimensions of the program permit ', i4, ' points. ')
+  if ( flstat(13) .gt. 0. ) write(lunit6,7268)
+7268 format (5x, 'Since variable time increment dt was requested by mnum less than zero, the total storage requirement ',/, &
+          5x, 'was established by summation of similar expressions with adjusted values of rmax and mnum for each time span. ')
+  go to 6220
+6069 write(lunit6,7069)
+7069 format (5x, 'The user is presently trying to input i-v points which define his magnetic saturation characteristic.    ',/, &
+          5x, 'But he is using too many points to define this curve.   ')
+  write(lunit6, 7166)  lstat(12)
+  go to 6220
+6070 write(lunit6,7070)
+7070 format (5x, 'This error is most likely due to the computer system library subroutine for the sine function giving a value   ',/, &
+          5x, 'greater than unity.   If there were any justice in the world, this trouble would not have arisen.   In any case,   ',/, &
+          5x, "the difficulty is probably not the user's fault, so he should go complain to program maintenance about his trouble.    ")
+  go to 6220
+6071 write(lunit6, 7071)  lstat(12), flstat(13), flstat(14)
+7071 format (5x, 'The user is presently trying to input i-v points which define his magnetic saturation characteristic.    ',/, &
+          5x, 'But he has violated the rule which requires that both voltage and current be strictly monotone-increasing (for    ',/, &
+          5x, 'the order of data-card input).   The last-read card (number ', i3,  ' of the characteristic) violates this   ',/, &
+          5x, 'requirement, as shown by the following variable values which were punched by the user .....    ',/, &
+          20x, 'Latest current = ', e13.4, 10x, 'preceding current = ', e13.4   )
+  write(lunit6, 7171)  flstat(15), flstat(16)
+7171 format (20x, 'Latest voltage = ', e13.4, 10x, 'preceding voltage = ', e13.4, '.'  )
+  if( lstat(12) .gt. 1 )  go to 6220
+  write(lunit6, 7271)
+7271 format (5x, "Of course since trouble was spotted upon an examination of the user's very first card of the characteristic,   ",/, &
+          5x, "the 'preceding card' refers to the implied point (0, 0) which represents the origin.   In this case, the user's   ",/, &
+          5x, 'trouble stems from his failure to punch a positive pair of values (i, v) on his first card of the characteristic.   ')
         go to 6220
 6072    write(lunit6, 7072)  flstat(16)
 7072    format( 5x, 106hthe user has been inputting a type-97 (staircase)
