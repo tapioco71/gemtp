@@ -62,27 +62,18 @@ subroutine over53
           5x, 'Provided one is starting from the sinusoidal steady state, the added delay of an integer number of cycles simply   ',/, &
           5x, 'delays the response accordingly, leaving it otherwise unchanged.   By adding one cycle of fundamental-frequency time   ')
   write (lunit6, 7394)
- 7394 format ( 5x, 112hto the mean of the closing time of all switches i
-     1n the data case, the aforementioned problem of negative closing,/,
-     2 5x,  72htimes is usually eliminated, and the case can be run with
-     3out difficulty.    )
-      write (lunit6, 7594)
- 7594 format ( /, 5x, 102hfor an independent switch (fields  'bus5'  and
-     1  'bus6'  of columns 65-76 of the switch card being both      ,/,
-     2 5x, 110hblank), the mean closing time  'tbar'  is read from colum
-     3ns  15-24 ,   and the standard deviation  'sigma'  is        ,/,
-     4 5x, 110hread from columns  25-34 .    this is simple.   but shoul
-     5d the  'bus5'  and  'bus6'  fields be other than both        ,/,
-     6 5x, 107hblank, then  'tbar'  and  'sigma'  depend not only on the
-     7 column  15-34  numbers of the switch card for the           )
-      write (lunit6, 7694)
- 7694 format (5x, 109hswitch in question, but also on all of the other c
-     1orresponding column  15-34  numbers as the dependency chain    ,/,
-     2 5x, 111his traced back through previously-inputted switches.   in
-     3 this case of a dependent switch,   'tbar'  is the sum        ,/,
-     4 5x, 111hof the column  15-24  numbers in the chain, while  'sigma
-     5'  is the square root of the sum of the squares of the       ,/,
-     6 5x,  36hcolumn  25-36  numbers in the chain.         )
+7394 format ( 5x, 'to the mean of the closing time of all switches in the data case, the aforementioned problem of negative closing',/, &
+          5x,  'times is usually eliminated, and the case can be run without difficulty.    ')
+  write (lunit6, 7594)
+7594 format (/, 5x, "For an independent switch (fields  'bus5'  and 'bus6'  of columns 65-76 of the switch card being both      ",/, &
+          5x, "blank), the mean closing time  'tbar'  is read from columns  15-24 ,   and the standard deviation  'sigma'  is        ",/, &
+          5x, "read from columns  25-34 .    This is simple.   But should the  'bus5'  and  'bus6'  fields be other than both        ",/, &
+          5x, "blank, then  'tbar'  and  'sigma'  depend not only on the column  15-34  numbers of the switch card for the           ")
+  write (lunit6, 7694)
+7694 format (5x, 'switch in question, but also on all of the other corresponding column  15-34  numbers as the dependency chain    ',/, &
+          5x, "is traced back through previously-inputted switches.   In this case of a dependent switch,   'tbar'  is the sum        ",/, &
+          5x, "of the column  15-24  numbers in the chain, while  'sigma'  is the square root of the sum of the squares of the       ",/, &
+          5x,  'column  25-36  numbers in the chain.         ')
       go to 6220
  6095 write (lunit6, 7094)  flstat(14), flstat(15)
       write (lunit6, 7095)
@@ -524,7 +515,7 @@ subroutine over53
  6117 n9 = 50
       write (lunit6, 7117)   n9, ipunch
  7117 format (5x, 108hthe last-read data card is the first branch card f
-     1or a multi-phase line which is to be modeled using semlyen     ,/,
+     1or a multi-phase line which is to be modeled using Semlyen     ,/,
      2 5x, 108hor ametani recursive convolution for the frequency-depend
      3ent representation.   such modeling is limited to a          ,/,
      4 5x,  10hmaximum of, i4, 93h   modes (coupled phases).   but this
@@ -535,7 +526,7 @@ subroutine over53
  7217 format (5x, 110htheoretical questions) would be required in order
      1to extend this modeling limitation, so the user has no other   ,/,
      2 5x, 104halternative than decreasing the number of coupled ametani
-     3 or semlyen phases in his coupled branch group.       )
+     3 or Semlyen phases in his coupled branch group.       )
       go to 6220
  6118 write (lunit6, 7118)
  7118 format (5x, 107hthe blank card which terminates the input of tacs
@@ -1133,16 +1124,12 @@ subroutine over53
       go to 6220
  6150 d1 = flstat(14) / deltat
       write (lunit6, 7150)  deltat, bus1, bus2
- 7150 format (5x, 106hthe user has picked a time-step size  'deltat'  (r
-     1ead from columns 1-8 of the floating-point miscellaneous      ,/,
-     2 5x, 113hdata card) which is too small for one of the distributed
-     3parameter transmission lines that is to be modeled using      ,/,
-     4 5x,  47hsemlyen recursive convolution.   a step-size of,
-     5 e14.4,  43h  seconds was requested, which is too large      ,/,
-     6 5x,  64hfor the semlyen line having phase number 1 that connects
-     7node  ', a6,   15h'  with node  ', a6,   9h' .   the          )
+7150  format (5x, "The user has picked a time-step size  'deltat'  (read from columns 1-8 of the floating-point miscellaneous      ",/, &
+           5x, 'data card) which is too small for one of the distributed parameter transmission lines that is to be modeled using      ',/, &
+           5x, 'Semlyen recursive convolution.   A step-size of', e14.4,  '  seconds was requested, which is too large      ',/, &
+           5x, 'for the Semlyen line having phase number 1 that connects node  ', "'", a6,   "'", ' with node  ', "'", a6, "'", '.   The')
       write (lunit6, 7250)  lstat(15), flstat(14), d1
- 7250 format (5x, 'rule is that the travel time for all semlyen modes must exceed  two  time steps.   but for mode number',  i4, /, &
+ 7250 format (5x, 'rule is that the travel time for all Semlyen modes must exceed  two  time steps.   but for mode number',  i4, /, &
            5x,  "of the aforementioned line, the travel time  'tau'  is only",    e14.4,    '  seconds.   The ratio of these gives     ',/, &
            5x,  'tau/deltat =',   e12.4,   " ,   which is too small (less than 2.0).   Decrease the time-step size  'deltat'          ",/, &
            5x, 'accordingly, or alter the transmission line modeling, in order to make this data case solvable using the EMTP.          ')
