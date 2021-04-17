@@ -3376,154 +3376,157 @@ subroutine zegen(be1,be2,th,w,xe,isyst)
 3782 format ( /,  16h exit  'zegen' ., 17x, 2hp1, 17x, 2hq1, 12x,  7hreal-xe,  12x,  7himag-xe  ,/,  16x,  4e19.10  )
   return
 end subroutine zegen
-                                                                                                                        subroutine eigen ( cjw, p, n, a, ai, qn, q, xx, yy, ldn )
-                                                                                                                          implicit real*8 (a-h, o-z) ,
-1                                                                                                                         integer*4 (i-n)
-                                                                                                                          include  'blkcom.ftn'
-                                                                                                                          include  'labl47.ftn'
-                                                                                                                          complex*16  ad, cjw, qi, s, sa
-                                                                                                                          complex*16  cmplxz, csqrtz
-                                                                                                                          complex*16  q(ldn, ldn), xx(ldn, ldn), yy(ldn, ldn)
-                                                                                                                          complex*16  p(ldn, ldn), a(ldn, ldn), ai(ldn, ldn), qn(ldn)
-                                                                                                                          complex*16  c1, c2
-                                                                                                                          !     eigenvalue calculation subroutine.   'kvalue'  =  iteration limit.
-                                                                                                                          kvalue = 20
-                                                                                                                          c1 = cjw/cmplxz(spdlgt, fzero)
-                                                                                                                          c2 = cmplxz(unity, fzero)
-                                                                                                                          qi = c2 / c1
-                                                                                                                          qi = qi * qi
-                                                                                                                          if ( iprs47  .ge.  1 )
-1                                                                                                                         write (logsix, 3806)  n, cjw, qi
-3806                                                                                                                      format ( /,  17h enter  'eigen' .,  8h       n,
-1  12                                                                                                                     x,  8hreal-cjw,  12x,  8himag-cjw,
-2  13                                                                                                                     x,  7hreal-qi,   13x,  7himag-qi  ,/,
-3  17                                                                                                                     x,  i8,  4e20.11  ,/,  1x  )
-                                                                                                                          do 5 i=1,n
-                                                                                                                             do 4 j=1,n
-4                                                                                                                               p(i,j)=p(i,j)*qi
-5                                                                                                                               p(i, i) = p(i, i) - c2
-                                                                                                                                do 10 i=1,n
-                                                                                                                                   do 10 j=1,n
-10                                                                                                                                    q(i,j)=p(i,j)
-                                                                                                                                      l=0
-15                                                                                                                                    l=l+1
-                                                                                                                                      iq=0
-                                                                                                                                      if(l-n) 20,90,90
-20                                                                                                                                    iq=iq+1
-                                                                                                                                      if(iq.le. kvalue ) go to 25
-                                                                                                                                      iq=iq-1
-                                                                                                                                      write(lunit6,902) iq
-902                                                                                                                                   format(5x,36hwarning ; a higher accuracy can't be,
-1          27                                                                                                                         h achieved by this computer.,   /
-2 5                                                                                                                                   x,42heigen values   1 vectors at itteration iq= ,
-3                                                                                                                                     i3,      12h is adopted.    )
-                                                                                                                                      go to 63
-25                                                                                                                                    do 30 i=1,n
-                                                                                                                                         do 30 j=1,n
-                                                                                                                                            xx(i,j) = q(i,j)
-30                                                                                                                                          yy(i,j) = q(i,j)
-                                                                                                                                            do 35 i=1,n
-                                                                                                                                               do 35 j=1,n
-                                                                                                                                                  q(i,j)=czero
-                                                                                                                                                  do 35 k=1,n
-35                                                                                                                                                   q(i,j) = q(i,j) + xx(i,k) * yy(k,j)
-                                                                                                                                                     dm=0.
-                                                                                                                                                     do 40 i=1,n
-                                                                                                                                                        dx=cabsz(q(i,i))
-                                                                                                                                                        if(dx.le.dm) go to 40
-                                                                                                                                                        dm=dx
-                                                                                                                                                        im=i
-40                                                                                                                                                      continue
-                                                                                                                                                        qi=1./q(im,im)
-                                                                                                                                                        do 45 i=1,n
-                                                                                                                                                           do 45 j=1,n
-45                                                                                                                                                            q(i,j)=q(i,j)*qi
-                                                                                                                                                              dm=0.
-                                                                                                                                                              do 50 i=1,n
-                                                                                                                                                                 if(i.eq.im) go to 50
-                                                                                                                                                                 dx=cabsz(q(i,im))
-                                                                                                                                                                 if(dx.le.dm) go to 50
-                                                                                                                                                                 dm=dx
-                                                                                                                                                                 i1=i
-                                                                                                                                                                 i2=im
-50                                                                                                                                                               continue
-                                                                                                                                                                 if (dm .ne. 0.)   go to 60
-                                                                                                                                                                 do 59   i=1, n
-                                                                                                                                                                    if(i.eq.im) go to 59
-                                                                                                                                                                    dx=cabsz(q(im,i))
-                                                                                                                                                                    if(dx.le.dm) go to 59
-                                                                                                                                                                    dm=dx
-                                                                                                                                                                    i1=im
-                                                                                                                                                                    i2=i
-59                                                                                                                                                                  continue
-60                                                                                                                                                                  sa = q(im, im) / q(i1, i2)
-                                                                                                                                                                    s = xx(im, im) / xx(i1, i2)
-                                                                                                                                                                    r = cabsz(s / sa)
-                                                                                                                                                                    d1 = 50.* epsiln
-                                                                                                                                                                    !     non-64-bit complex math redefines tolerance in "sysdep":
-                                                                                                                                                                    if ( znvref .ne. 0.0 )  d1 = 50. * znvref
-                                                                                                                                                                    d2 = r - unity
-                                                                                                                                                                    if ( iprs47  .ge.  31 )
-1                                                                                                                                                                   write (logsix, 3827)  l, iq, kvalue, d2, d1
-3827                                                                                                                                                                format (  42h done another iteration.   l, iq, kvalue =,
-1  3                                                                                                                                                                i8,  10x,  8hd2, d1 =,  2e15.6  )
-                                                                                                                                                                    if (absz(d2) .gt. d1)   go to 20
-63                                                                                                                                                                  do 65 i=1,n
-                                                                                                                                                                       a(i,l)=q(i,im)
-65                                                                                                                                                                     ai(l,i)=q(im,i)
-                                                                                                                                                                       ad=czero
-                                                                                                                                                                       do 70 i=1,n
-70                                                                                                                                                                        ad=ad+p(im,i)*q(i,im)
-                                                                                                                                                                          qn(l)=ad/q(im,im)
-                                                                                                                                                                          ad=czero
-                                                                                                                                                                          do 75 i=1,n
-75                                                                                                                                                                           ad=ad+ai(l,i)*a(i,l)
-                                                                                                                                                                             ad=1./ad
-                                                                                                                                                                             do 80 i=1,n
-80                                                                                                                                                                              ai(l,i)=ad*ai(l,i)
-                                                                                                                                                                                do 85 i=1,n
-                                                                                                                                                                                   do 85 j=1,n
-                                                                                                                                                                                      q(i,j)=p(i,j)-a(i,l)*qn(l)*ai(l,j)
-85                                                                                                                                                                                    p(i,j)=q(i,j)
-                                                                                                                                                                                      if ( iprs47  .ge.  7 )
-1                                                                                                                                                                                     write (logsix, 3842)  l, qn(l), ad
-3842                                                                                                                                                                                  format (  21h eigenvalue finished.,  8h       l,
-1  10                                                                                                                                                                                 x,  10hreal-qn(l),  10x,  10himag-qn(l),
-2  13                                                                                                                                                                                 x,  7hreal-ad,  13x,  7himag-ad  ,/,
-3  21                                                                                                                                                                                 x,  i8,  4e20.11  ,/,  1x  )
-                                                                                                                                                                                      go to 15
-90                                                                                                                                                                                    dm=0.
-                                                                                                                                                                                      do 95 i=1,n
-                                                                                                                                                                                         dx=cabsz(p(i,i))
-                                                                                                                                                                                         if(dx.le.dm) go to 95
-                                                                                                                                                                                         dm=dx
-                                                                                                                                                                                         im=i
-95                                                                                                                                                                                       continue
-                                                                                                                                                                                         ad=czero
-                                                                                                                                                                                         do 98 i=1,n
-                                                                                                                                                                                            ad=ad+p(im,i)*p(i,im)
-98                                                                                                                                                                                          a(i,l)=p(i,im)/p(im,im)
-                                                                                                                                                                                            qn(l)=ad/p(im,im)
-                                                                                                                                                                                            do 100 i=1,n
-100                                                                                                                                                                                            ai(l,i)=p(im,i)/qn(l)
-                                                                                                                                                                                               do 110 i=1,n
-110                                                                                                                                                                                               qn(i) = c1 * csqrtz(c2 + qn(i))
-9200                                                                                                                                                                                              if ( iprs47  .ge.  3 )
-1                                                                                                                                                                                                 write (logsix, 3854)  dm, spdlgt, p(im,im), ( qn(i), i=1, n )
-3854                                                                                                                                                                                              format ( /, 35h done all eigenvalues in  'eigen' .,
-1  18                                                                                                                                                                                             x,  2hdm,  14x,  6hspdlgt,  7x,  13hreal-p(im,im),
-2  7                                                                                                                                                                                              x,  13himag-p(im,im)  ,/,  35x,  4e20.11,   /,
-3  49                                                                                                                                                                                             h complex eigenvalues  (qn(i), i=1, n)  follow ...  ,/,
-4                                                                                                                                                                                                 ( 1x,  6e20.11 )  )
-                                                                                                                                                                                                  if ( iprs47  .ge.  1 )
-1                                                                                                                                                                                                 write (logsix, 3867)
-3867                                                                                                                                                                                              format ( /,  88h diagnostic upon exit  'eigen' .   matrix of eigen
-1                                                                                                                                                                                                 vectors  a(i,l)  for  (i,l)=1, ... n .    )
-                                                                                                                                                                                                  ll0 = 0
-                                                                                                                                                                                                  if ( iprs47  .ge.  6 )
-1                                                                                                                                                                                                 call print ( a(1,1), n, ll0, ldn )
-                                                                                                                                                                                                  return
-                                                                                                                                                                                               end do
+subroutine eigen ( cjw, p, n, a, ai, qn, q, xx, yy, ldn )
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  include 'blkcom.ftn'
+  include  'labl47.ftn'
+  complex*16  ad, cjw, qi, s, sa
+  complex*16  cmplxz, csqrtz
+  complex*16  q(ldn, ldn), xx(ldn, ldn), yy(ldn, ldn)
+  complex*16  p(ldn, ldn), a(ldn, ldn), ai(ldn, ldn), qn(ldn)
+  complex*16  c1, c2
+  !     eigenvalue calculation subroutine.   'kvalue'  =  iteration limit.
+  kvalue = 20
+  c1 = cjw/cmplxz(spdlgt, fzero)
+  c2 = cmplxz(unity, fzero)
+  qi = c2 / c1
+  qi = qi * qi
+  if ( iprs47  .ge.  1 ) write (logsix, 3806)  n, cjw, qi
+3806 format ( /,  17h enter  'eigen' .,  8h       n,12x, 8hreal-cjw,  12x,  8himag-cjw,13x, 7hreal-qi,   13x,  7himag-qi  ,/, &
+          17x, i8,  4e20.11  ,/,  1x  )
+  do i=1,n
+     do j=1,n
+4       p(i,j)=p(i,j)*qi
+     end do
+5    p(i, i) = p(i, i) - c2
+  end do
+  do i=1,n
+     do j=1,n
+10      q(i,j)=p(i,j)
+     end do
+  end do
+  l=0
+15 l=l+1
+  iq=0
+  if(l-n) 20,90,90
+20 iq=iq+1
+  if(iq.le. kvalue ) go to 25
+  iq=iq-1
+  write(lunit6,902) iq
+902 format(5x, "Warning ; a higher accuracy can't be, achieved by this computer.", /, &
+         5x, 'eigen values   1 vectors at itteration iq= ', i3, ' is adopted.    ')
+  go to 63
+25 do i=1,n
+     do j=1,n
+        xx(i,j) = q(i,j)
+30      yy(i,j) = q(i,j)
+     end do
+  end do
+  do i=1,n
+     do j=1,n
+        q(i,j)=czero
+        do k=1,n
+35         q(i,j) = q(i,j) + xx(i,k) * yy(k,j)
+        end do
+     end do
+  end do
+  dm=0.
+  do i=1,n
+     dx=cabsz(q(i,i))
+     if(dx.le.dm) go to 40
+     dm=dx
+     im=i
+40 end do
+  qi=1./q(im,im)
+  do i=1,n
+     do j=1,n
+45      q(i,j)=q(i,j)*qi
+     end do
+  end do
+  dm=0.
+  do i=1,n
+     if(i.eq.im) go to 50
+     dx=cabsz(q(i,im))
+     if(dx.le.dm) go to 50
+     dm=dx
+     i1=i
+     i2=im
+50 end do
+  if (dm .ne. 0.)   go to 60
+  do i=1, n
+     if(i.eq.im) go to 59
+     dx=cabsz(q(im,i))
+     if(dx.le.dm) go to 59
+     dm=dx
+     i1=im
+     i2=i
+59 end do
+60 sa = q(im, im) / q(i1, i2)
+  s = xx(im, im) / xx(i1, i2)
+  r = cabsz(s / sa)
+  d1 = 50.* epsiln
+  !     non-64-bit complex math redefines tolerance in "sysdep":
+  if ( znvref .ne. 0.0 )  d1 = 50. * znvref
+  d2 = r - unity
+  if ( iprs47  .ge.  31 ) write (logsix, 3827)  l, iq, kvalue, d2, d1
+3827 format (  42h done another iteration.   l, iq, kvalue =, 3i8,  10x,  8hd2, d1 =,  2e15.6  )
+  if (absz(d2) .gt. d1)   go to 20
+63 do i=1,n
+     a(i,l)=q(i,im)
+65   ai(l,i)=q(im,i)
+  end do
+  ad=czero
+  do 70 i=1,n
+70   ad=ad+p(im,i)*q(i,im)
+  end do
+  qn(l)=ad/q(im,im)
+  ad=czero
+  do i=1,n
+75   ad=ad+ai(l,i)*a(i,l)
+  end do
+  ad=1./ad
+  do i=1,n
+80   ai(l,i)=ad*ai(l,i)
+  end do
+  do i=1,n
+     do j=1,n
+        q(i,j)=p(i,j)-a(i,l)*qn(l)*ai(l,j)
+85      p(i,j)=q(i,j)
+     end do
+  end do
+  if ( iprs47  .ge.  7 ) write (logsix, 3842)  l, qn(l), ad
+3842 format (  21h eigenvalue finished.,  8h       l, 10x,  10hreal-qn(l),  10x,  10himag-qn(l), 13x,  7hreal-ad,  13x,  7himag-ad  ,/, &
+          21x,  i8,  4e20.11  ,/,  1x  )
+  go to 15
+90 dm=0.
+  do i=1,n
+     dx=cabsz(p(i,i))
+     if(dx.le.dm) go to 95
+     dm=dx
+     im=i
+95 end do
+  ad=czero
+  do i=1,n
+     ad=ad+p(im,i)*p(i,im)
+98   a(i,l)=p(i,im)/p(im,im)
+  end do
+  qn(l)=ad/p(im,im)
+  do i=1,n
+100  ai(l,i)=p(im,i)/qn(l)
+  end do
+  do i=1,n
+110  qn(i) = c1 * csqrtz(c2 + qn(i))
+  end do
+9200 if ( iprs47  .ge.  3 ) write (logsix, 3854)  dm, spdlgt, p(im,im), ( qn(i), i=1, n )
+3854 format ( /, 35h done all eigenvalues in  'eigen' ., 18x,  2hdm,  14x,  6hspdlgt,  7x,  13hreal-p(im,im), &
+          7x,  13himag-p(im,im)  ,/,  35x,  4e20.11,   /, 49h complex eigenvalues  (qn(i), i=1, n)  follow ...  ,/, &
+          ( 1x,  6e20.11 )  )
+  if ( iprs47  .ge.  1 ) write (logsix, 3867)
+3867 format ( /,  88h diagnostic upon exit  'eigen' .   matrix of eigenvectors  a(i,l)  for  (i,l)=1, ... n .    )
+  ll0 = 0
+  if ( iprs47  .ge.  6 ) call print ( a(1,1), n, ll0, ldn )
+  return
+end subroutine eigen
                                                                                                                                                                                                subroutine  zest ( h1, h2, e, res, omg, s )
                                                                                                                                                                                                  implicit real*8 (a-h, o-z) ,
 1                                                                                                                                                                                                integer*4 (i-n)
