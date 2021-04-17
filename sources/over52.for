@@ -128,7 +128,7 @@ subroutine over52
           11x, "data field which is read under 'e'-format control, which is clearly illegal.   The user should check that   ")
   write(lunit6, 7463)
 7463 format (11x, 'blank cards, and any other data-termination or delineation cards, are properly positioned in the data   ',/, &
-          11x, 'stream.   Only with such care will the emtp think that it is reading what the user thinks he is inputting,    ',/, &
+          11x, 'stream.   Only with such care will the EMTP think that it is reading what the user thinks he is inputting,    ',/, &
           11x, 'at said point in time.    ')
   go to 6220
 6064 write (lunit6, 7064)  bus1
@@ -211,123 +211,75 @@ subroutine over52
           5x,  "'aesthetic difficulty', and try again.   Who knows, next time the job may run further.   ")
   go to 6220
 6074 write(lunit6, 7074)  flstat(15), lstat(16)
-7074 format( 5x, 109hwhile solution of this problem could continue, the
-1       emtp has become suspicious of a data 'misunderstanding' on   ,/,
-2 5     x, 110hthe part of the user.   note that the termination time of
-3       the study ( 'tmax' ) is nonpositive, indicating that   ,/,
-4 5     x, 110honly a sinusoidal steady-state solution is desired.   the
-5       value of  'tmax'  actually read from columns 9-16 of   ,/,
-6 5     x,  36hthe first miscellaneous data card is, e13.4,
-7 14    h.   yet of the , i3,  27h sources which the user has  ,/,
-8 5     x, 107hinputted, none is a sinusoidal source which is to be pres
-9       ent in the steady-state (for time less than zero).     )
-        write(lunit6, 7174)
-7174    format( 5x, 105hrecall that  'tstart'  of columns 61-70 of the sou
-1       rce card must be punched with a negative number, if the  ,/,
-2 5     x, 111hsource is to be present in the steady-state solution.   t
-3       hus there are no sources for the phasor solution which  ,/,
-4 5     x, 111hwas requested, and the solution must necessarily be ident
-5       ically zero.   such a degenerate, trivial problem will   ,/,
-6 5     x,  15hnot be allowed.   )
-        go to 6220
-6075    write(lunit6, 7075)
-7075    format( 5x,  99hthe user has been inputting frequency-dependent li
-1       ne constants to the weighting-function supporting    ,/,
-2 5       x, 110hprogram, in order to calculate  a1(t)  and  a2(t)  for th
-3         e zero-sequence mode of a distributed-parameter line.   )
-          write(lunit6, 7175)  flstat(15)
-7175      format( 5x, 105hbut the last-read data card has gotten him in trou
-1         ble.   columns 1-10 (the resistance field, r) are blank   ,/,
-2 5       x,  96hor zero, while columns 11-20 (the inductance field, l) co
-3         ntain the nonzero floating-point number,  e14.4,  4h   .    ,/,
-4 5       x, 108hnow if this card was meant to be the blank card terminati
-5         ng the line-constants input, the user should remove  ,/,
-6 5       x, 107hthe punches from columns 11-20, and resubmit the job.   i
-7         f on the other hand this card was intended to be a   ,/,
-8 5       x, 110hline-constants card, the user had better re-think the mat
-9         ter.   resistance is the parameter which provides the   )
-          write(lunit6, 7275)
-7275      format( 5x, 109hdamping in the zero-sequence network which increas
-1         es dramatically with frequency, and is a crucial ingredient  ,/,
-2 5       x, 112hto this sophisticated distributed-line representation.
-3         the emtp will not allow the user to calculate weighting  ,/,
-4 5       x, 113hfunctions without resistance present.   it is not even cl
-5         ear if the inverse fourier transformation logic is valid  ,/,
-6 5       x, 111hfor such a case, since would not the impulse response of
-7         such a distortionless line produce an impulse for  a1.    ,/,
-8 5       x, 114hin this case, re-run a line-constants program to calculat
-9         e legitimate line constants, and then try this job again.  )
-          go to 6220
-6076      write(lunit6, 7076)  lstat(16)
-7076      format( 5x, 112hthe emtp logic has interpreted the last-read data
-1         card to be part of the specification cards for plotted output. ,/,
-2 5       x,  73hbut the type-code read from columns 1-2 cannot be accepte
-3         d.   a value of , i2, 25h was read, which does not   ,/,
-4 5       x, 114hcorrespond to any of the legitimate existing codes (0, 1,
-5 2       ).   if the card in question really is not a plot card,    ,/,
-6 5       x, 108hthe user must discover how his data does not conform to t
-7         he assumed input sequencing, and rectify the error.     ,/,
-8 5       x, 116hthe correct number of, and placement of, blank delimiter
-9         cards is a notorious cause of data-synchronization trouble.   )
-          go to 6220
-6077      write(lunit6, 7077)  lstat(14), flstat(15), flstat(16)
-7077      format( 5x,  92hthe last-read data card has been taken by the emtp
-1         to be a branch card for conductor number , i2,  5h of a   ,/,
-2 5       x, 110hdistributed-parameter transmission line.   the user is in
-3         trouble because of an inconsistent line-length which  ,/,
-4 5       x, 114hhe has punched in columns 45-50 of this last-read card.
-5         the first card for this multiphase line carries a length   ,/,
-6 5       x,   3hof , e13.4,  41h, while the last-read card is for length
-7         , e13.4,  41h.   get it all together, guy, and correct   ,/,
-8 5       x, 110hthis contradiction.   the easiest way is to put the corre
-9         ct length on the first (zero-sequence) card only, and    )
-          write(lunit6, 7177)
-7177      format( 5x, 112hthen leave columns 45-50 of the other cards blank.
-1         such a blank or zero length is interpreted by the emtp as a ,/,
-2 5       x,  85hdefault value, meaning the same length as on the first ca
-3         rd for the distributed line.    )
-          go to 6220
-6078      write(lunit6, 7078 )  flstat(16)
-7078      format( 5x, 106hthe last-read data card is for the first conductor
-1         (or mode) of a distributed-parameter transmission line.   ,/,
-2 5       x,  91hthe field of columns 45-50 is supposed to be punched with
-3         the line length, with a value of , e13.4,  5h read   ,/,
-4 5       x, 114hby the emtp from the user's card.   thou shalt not input
-5         transmission lines having nonpositive length, good buddy.   )
-          go to 6220
-6079      write(lunit6, 7079)
-7079      format( 5x,  40hsince an interactive emtp version is not,
-1             36 h being used, illegal data card shown,
-2             41 h before "error" heading must be corrected
-3         ,/,  5x,   38hafter the program stops, and then case,
-4             38 h must be re-run.  too bad (interactive,
-5             38 h correction might have been possible).  )
-          call stoptp
-6080      write(lunit6, 7080)  lbus, intinf
-7080      format (5x, 111hassociated with the steady-state phasor solution i
-1         s a bias applied to node numbers of sources.   the bus tables  ,/,
-2 5       x,  18hare dimensioned at, i6,  87h, which is over one third of
-3         the largest integer permitted for this program conversion.   ,/,
-4 5       x,  99hthe latter figure is stored in variable  'intinf' ,  whic
-5         h for this conversion was given a value of, i6,  7h.   the   ,/,
-6 5       x, 115hemtp wonders how in the hell the user can have so many bu
-7         sses, or such short integers.   go see program maintenance   ,/,
-8 5       x,  37habout this problem, fella, .... fast.   )
-          go to 6220
-6081      write(lunit6, 7081)  flstat(15), flstat(16), tmax, deltat
-7081      format( 5x,  96hthe user's first miscellaneous data card implies a
-1         transient simulation of (in e-field notation), e15.6,   /,
-2 5       x, 115hsteps.   this exceeds the limit  'intinf'  for integer nu
-3         mbers for this program conversion of (in e-field notation),
-3         /, 1x, e15.6,  41h.   the case thus can not be run, because   ,/,
-4 5       x,         104hwe can not count high enough to count the final t
-5         ime step.   the aforementioned number of solution steps   ,/,
-6 5       x,  92his calculated by dividing the user's  'tmax'  (columns 9-
-716       of the first misc. data card) of, e13.4,  8h seconds   ,/,
-8 5       x,  61hby his time-step  'deltat'  (columns 1-8 of the same card
-9         ) of, e13.4,  35h.   if the user does not understand    )
-          write(lunit6, 7181)
-7181      format( 5x, 101hthe error of his ways, he had better pay a call to
+7074 format (5x, "While solution of this problem could continue, the EMTP has become suspicious of a data 'misunderstanding' on   ",/, &
+          5x, "the part of the user.   Note that the termination time of the study ( 'tmax' ) is nonpositive, indicating that   ",/, &
+          5x, "only a sinusoidal steady-state solution is desired.   The value of  'tmax'  actually read from columns 9-16 of   ",/, &
+          5x,  'the first miscellaneous data card is', e13.4, '.   Yet of the ', i3,  ' sources which the user has  ',/, &
+          5x, 'inputted, none is a sinusoidal source which is to be present in the steady-state (for time less than zero).     ')
+  write(lunit6, 7174)
+7174 format (5x, "Recall that  'tstart'  of columns 61-70 of the source card must be punched with a negative number, if the  ",/, &
+          5x, 'source is to be present in the steady-state solution.   Thus there are no sources for the phasor solution which  ',/, &
+          5x, 'was requested, and the solution must necessarily be identically zero.   Such a degenerate, trivial problem will   ',/, &
+          5x,  'not be allowed.   ')
+  go to 6220
+6075 write(lunit6, 7075)
+7075 format (5x,  'The user has been inputting frequency-dependent line constants to the weighting-function supporting    ',/, &
+          5x, 'program, in order to calculate  a1(t)  and  a2(t)  for the zero-sequence mode of a distributed-parameter line.   ')
+  write(lunit6, 7175)  flstat(15)
+7175 format (5x, 'But the last-read data card has gotten him in trouble.   Columns 1-10 (the resistance field, r) are blank   ',/, &
+          5x,  'or zero, while columns 11-20 (the inductance field, l) contain the nonzero floating-point number',  e14.4,  '   .'    ,/, &
+          5x, 'Now if this card was meant to be the blank card terminating the line-constants input, the user should remove  ',/, &
+          5x, 'the punches from columns 11-20, and resubmit the job.   If on the other hand this card was intended to be a   ',/, &
+          5x, 'line-constants card, the user had better re-think the matter.   Resistance is the parameter which provides the   ')
+  write(lunit6, 7275)
+7275 format (5x, 'damping in the zero-sequence network which increases dramatically with frequency, and is a crucial ingredient  ',/, &
+          5x, 'to this sophisticated distributed-line representation.         The EMTP will not allow the user to calculate weighting  ',/, &
+          5x, 'functions without resistance present.   It is not even clear if the inverse fourier transformation logic is valid  ',/, &
+          5x, 'for such a case, since would not the impulse response of such a distortionless line produce an impulse for  a1.    ',/, &
+          5x, 'In this case, re-run a line-constants program to calculate legitimate line constants, and then try this job again.  ')
+  go to 6220
+6076 write(lunit6, 7076)  lstat(16)
+7076 format (5x, 'The EMTP logic has interpreted the last-read data card to be part of the specification cards for plotted output. ',/, &
+          5x, 'But the type-code read from columns 1-2 cannot be accepted.   A value of , i2, 25h was read, which does not   ',/, &
+          5x, 'correspond to any of the legitimate existing codes (0, 1, 2       ).   If the card in question really is not a plot card,    ',/, &
+          5x, 'the user must discover how his data does not conform to the assumed input sequencing, and rectify the error.     ',/, &
+          5x, 'the correct number of, and placement of, blank delimiter cards is a notorious cause of data-synchronization trouble.   ')
+  go to 6220
+6077 write(lunit6, 7077)  lstat(14), flstat(15), flstat(16)
+7077 format (5x, 'The last-read data card has been taken by the EMTP to be a branch card for conductor number ', i2,  ' of a   ',/, &
+          5x, 'distributed-parameter transmission line.   The user is in trouble because of an inconsistent line-length which  ',/, &
+          5x, 'he has punched in columns 45-50 of this last-read card.   The first card for this multiphase line carries a length   ',/, &
+          5x, 'of ', e13.4,  ', while the last-read card is for length', e13.4,  '.   Get it all together, guy, and correct   ',/, &
+          5x, 'this contradiction.   The easiest way is to put the correct length on the first (zero-sequence) card only, and    ')
+  write(lunit6, 7177)
+7177 format (5x, 'then leave columns 45-50 of the other cards blank.   Such a blank or zero length is interpreted by the emtp as a ',/, &
+          5x, 'default value, meaning the same length as on the first card for the distributed line.    ')
+  go to 6220
+6078 write(lunit6, 7078 )  flstat(16)
+7078 format (5x, 'The last-read data card is for the first conductor (or mode) of a distributed-parameter transmission line.   ',/, &
+          5x, 'The field of columns 45-50 is supposed to be punched with the line length, with a value of ', e13.4,  ' read   ',/, &
+          5x, "by the EMTP from the user's card.   Thou shalt not input transmission lines having nonpositive length, good buddy.   ")
+  go to 6220
+6079 write(lunit6, 7079)
+7079 format (5x,  'Since an interactive EMTP version is not, being used, illegal data card shown, before "error" heading must be corrected         ',/,  &&
+          5x, 'after the program stops, and then case, must be re-run.  Too bad (interactive, correction might have been possible).  ')
+  call stoptp
+6080 write(lunit6, 7080)  lbus, intinf
+7080 format (5x, 'Associated with the steady-state phasor solution is a bias applied to node numbers of sources.   The bus tables  ',/, &
+          5x,  'are dimensioned at', i6,  ', which is over one third of the largest integer permitted for this program conversion.   ',/, &
+          5x,  "The latter figure is stored in variable  'intinf' ,  which for this conversion was given a value of", i6,  '.   The   ',/, &
+          5x, 'EMTP wonders how in the hell the user can have so many busses, or such short integers.   Go see program maintenance   ',/, &
+          5x,  'about this problem, fella, .... Fast.   ')
+  go to 6220
+6081 write(lunit6, 7081)  flstat(15), flstat(16), tmax, deltat
+7081 format (5x,  "The user's first miscellaneous data card implies a transient simulation of (in e-field notation)", e15.6,   /, &
+          5x, "steps.   This exceeds the limit  'intinf'  for integer numbers for this program conversion of (in e-field notation)", /, &
+          1x, e15.6,  '.   The case thus can not be run, because   ',/, &
+          5x, 'we can not count high enough to count the final time step.   The aforementioned number of solution steps   ',/, &
+          5x,  "his calculated by dividing the user's  'tmax'  (columns 9-16 of the first misc. data card) of", e13.4,  ' seconds   ',/, &
+          5x,  "by his time-step  'deltat'  (columns 1-8 of the same card) of", e13.4,  '.   if the user does not understand    ')
+  write(lunit6, 7181)
+7181 format( 5x, 101hthe error of his ways, he had better pay a call to
 1         his friendly neighborhood program maintenance man.   )
           go to 6220
 6082      write(lunit6, 7082)  lstat(15)
