@@ -69,157 +69,100 @@ subroutine over52
   goto6220
 6056 write(lunit6, 7154)
   write(lunit6,7056) lstat(13), lstat(14), lstat(12)
-7056 format( 5x,  62hthe most-recently-inputted group of r-l-c shunt br
-1 anches were , i2,  36h in number, with both ends of number  ,/,
-2 5 x, i2,  49h of this group connected to the same node number ,
-3 i2,  41h.   now while such a requested connection    ,/,
-4 5 x, 114hpresents no problem if taken literally, the emtp's infall
-5 ible intuition is inclined to feel that the user has made  ,/,
-6 5 x, 110ha punching error in columns 3-14 of his data card (where
-7 the two numbers in question are read in).   a network  ,/,
-8 5 x,  81hsolution with such degenerate topology will not be permit
-9 ted.   sorry 'bout that.    )
+7056 format(5x,  'The most-recently-inputted group of r-l-c shunt branches were ', i2,  ' in number, with both ends of number  ',/, &
+          5x, i2,  ' of this group connected to the same node number ', i2,  '.   Now while such a requested connection    ',/, &
+          5x, "presents no problem if taken literally, The EMTP's infallible intuition is inclined to feel that the user has made  ",/, &
+          5x, 'a punching error in columns 3-14 of his data card (where the two numbers in question are read in).   A network  ',/, &
+          5x,  "solution with such degenerate topology will not be permitted.   Sorry 'bout that.    ")
   goto6220
 6057 write(lunit6, 7154)
   write(lunit6,7057)lstat(12),lstat(13)
-7057 format(5x,26herror in cascaded-pi data.  ,/,
-15x,4hnode ,i4,24h short circuited to node ,i4,57h.  one of these n
-2 odes should be removed from the circuit.  )
+7057 format (5x, 'Error in cascaded-pi data.  ',/,5x, 'node ', i4, ' short circuited to node ', i4, '.  One of these nodes should be removed from the circuit.  ')
   goto6220
 6058 write(lunit6, 7154)
   write(lunit6,7058)
-7058 format(5x,103h'stop cascade' card missing in referenced cascaded p
-1 i section.  this can be corrected by either putting,/,5x,48hthis c
-2 ard in or removing the 'cascaded pi' card.)
+7058 format (5x, "'stop cascade' card missing in referenced cascaded pi section.  This can be corrected by either putting",/, &
+          5x, "this card in or removing the 'cascaded pi' card.")
   go to 6220
 6059 write (lunit6, 7059)  lstat(16), bus1
-7059 format( 5x,  52h3-phase compensation for synchronous machine numbe
-1 r , i2,  30h breaks down.   terminal bus ', a6, 1h' , /,
-2 5 x,  67halready has another element requiring compensation connec
-3 ted to it.   )
+7059 format (5x,  '3-phase compensation for synchronous machine number ', i2,  ' breaks down.   Terminal bus ', "'", a6, "' ", /, &
+          5x, 'already has another element requiring compensation connected to it.   ')
   go to 6220
 6060 write(lunit6, 7154)
   write(lunit6,7060)lstat(12)
-7060 format(5x,32hinvalid shunt r-l-c node number  ,i3,42hwas used.  th
-1 is number is out of sequence.  ,/,5x,50hcheck connections in this
-2 area and renumber nodes.   )
+7060 format (5x, 'Invalid shunt r-l-c node number  ', i3, 'was used.  This number is out of sequence.  ', /, &
+          5x, 'Check connections in this area and renumber nodes.   ')
   go to 6220
 6061 write(lunit6, 7061)  flstat(15), flstat(16)
-7061 format( 5x, 101hswitched-inductance element just read has inductan
-1 ce parameters  l1  and  l2  (columns 25-44) punched  ,/,
-2 5 x,  2has, e14.3, 4h and, e14.3,  83h, respectively.   one or bot
-3 h of these are non-positive, which is illegal.   if the  ,/,
-4 5 x,  63huser wants a zero value, he must punch a small positive n
-5 umber.   )
+7061 format (5x, 'Switched-inductance element just read has inductance parameters  l1  and  l2  (columns 25-44) punched  ',/, &
+          5x, 'as', e14.3, ' and', e14.3,  ', respectively.   One or both of these are non-positive, which is illegal.   If the  ',/, &
+          5x,  'user wants a zero value, he must punch a small positive number.   ')
   go to 6220
 6062 write(lunit6, 7062)  flstat(14), flstat(15)
-7062 format( 5x,  94hswitched-resistance element just read has resistan
-1 ce  r  (columns 15-24) or breakpoint voltage  ,/,
-2 5 x, 118h(columns 35-44) nonpositive, which is illegal.   if the u
-3 ser wants a zero value, he must punch a small positve number.  ,/,
-4 5 x,  48hnumbers read from the two fields in question are,
-5 e13.3, 5h and , e13.3,  15h, respectively.  )
+7062 format (5x, 'Switched-resistance element just read has resistance  r  (columns 15-24) or breakpoint voltage  ',/, &
+          5x, '(columns 35-44) nonpositive, which is illegal.   If the user wants a zero value, he must punch a small positve number.  ',/, &
+          5x,  'Numbers read from the two fields in question are', e13.3, ' and ', e13.3,  ', respectively.  ')
   go to 6220
 6063 write(lunit6, 7063)
-7063 format( 5x, 102htrouble has been encountered during decoding of us
-1 er's input data.   had not this very civilized error  ,/,
-2 5 x, 110hmessage been specially provided, the computer operating s
-3 ystem would have performed the termination in its own ,/,
-4 5 x, 109hcursory, inimitably-inscrutable manner.   most probably,
-5 the last data card read carries some erroneous data,   ,/,
-6 5 x,  37has per the following suggestions ....   ,/,
-7 8 x, 111h1) it is possible that one or more columns carry illegal,
-8 completely-uninterpretable punches, in which case the   )
+7063 format (5x, "Trouble has been encountered during decoding of user's input data.   Had not this very civilized error  ",/, &
+          5x, 'message been specially provided, the computer operating system would have performed the termination in its own ',/, &
+          5x, 'cursory, inimitably-inscrutable manner.   Most probably, the last data card read carries some erroneous data,   ',/, &
+          5x,  'has per the following suggestions ....   ',/, &
+          8x, '1) it is possible that one or more columns carry illegal, completely-uninterpretable punches, in which case the   ')
   write(lunit6, 7163)
-7163 format( 11x, 104hlast 80-column card image printed out above might
-1 not be an accurate image of the data card in question.   ,/,
-2 11 x, 102hthe user should be aware of this limitation on the fidel
-3 ity of the printed card images, which can only   ,/,
-4 11 x, 116hbe guaranteed if all characters are legally-punched.   y
-5 et this case of illegal punches is rare.   continue reading.  ,/,
-6 8 x, 101h2) more commonly, the user may have punched data a little
-7 to the left or to the right of where he had   ,/,
-8 11 x, 104hintended, thereby placing a decimal point in an integer
-9 field, or a non-numeric character in a numerical    )
+7163 format (11x, 'Last 80-column card image printed out above might not be an accurate image of the data card in question.   ',/, &
+          11x, 'The user should be aware of this limitation on the fidelity of the printed card images, which can only   ',/, &
+          11x, 'be guaranteed if all characters are legally-punched.   Yet this case of illegal punches is rare.   Continue reading.  ',/, &
+          8x, '2) more commonly, the user may have punched data a little to the left or to the right of where he had   ',/, &
+          11x, 'intended, thereby placing a decimal point in an integer field, or a non-numeric character in a numerical    ')
   write(lunit6, 7263)
-7263 format( 11x,   6hfield.  ,/,
-1 8 x, 101h3) one or more random punching errors in a numeric field
-2 will generally produce trouble.   letters or   ,/,
-3 11 x, 105hpunctuation are not allowed, of course (with a few very
-4 special exceptions, which are highly improbable).    ,/,
-5 8 x, 109h4) punching of floating-point numbers with an 'e' (power
-6 of 10) can lead to trouble if not right-justified in  ,/,
-7 11 x, 108hthe field, since any blank spaces to the right of the la
-8 st-punched exponent digit are interpreted as zeroes,    )
+7263 format (11x, 'field.  ',/, 8x, '3) one or more random punching errors in a numeric field will generally produce trouble.   Letters or   ',/, &
+          11x, 'punctuation are not allowed, of course (with a few very special exceptions, which are highly improbable).    ',/, &
+          8x, "4) punching of floating-point numbers with an 'e' (power of 10) can lead to trouble if not right-justified in  ",/, &
+          11x, 'the field, since any blank spaces to the right of the last-punched exponent digit are interpreted as zeroes,    ')
   write(lunit6, 7363)
-7363 format( 11x,  99hthereby increasing the exponent by a power of ten
-1 .   this may produce a result which is outside the   ,/,
-2 11 x,  38hlegal range of floating-point numbers.    ,/,
-3 8 x, 111h5) out-of-sequence data is a notorious offender.   for ex
-4 ample, if a legitimate branch card is read as a switch  ,/,
-5 11 x, 107hcard (maybe it was mixed in with the switch cards by mis
-6 take), one could have 2 decimal points punched in a  ,/,
-7 11 x,105 hdata field which is read under 'e'-format control, which
-8 is clearly illegal.   the user should check that   )
+7363 format (11x, 'thereby increasing the exponent by a power of ten.   This may produce a result which is outside the   ',/, &
+          11x, 'legal range of floating-point numbers.    ',/, &
+          8x, '5) out-of-sequence data is a notorious offender.   For example, if a legitimate branch card is read as a switch  ',/, &
+          11x, 'card (maybe it was mixed in with the switch cards by mistake), one could have 2 decimal points punched in a  ',/, &
+          11x, "data field which is read under 'e'-format control, which is clearly illegal.   The user should check that   ")
   write(lunit6, 7463)
-7463 format( 11x, 101hblank cards, and any other data-termination or de
-1 lineation cards, are properly positioned in the data   ,/,
-2 11 x, 106hstream.   only with such care will the emtp think that i
-3 t is reading what the user thinks he is inputting,    ,/,
-4 11 x, 22hat said point in time.    )
+7463 format (11x, 'blank cards, and any other data-termination or delineation cards, are properly positioned in the data   ',/, &
+          11x, 'stream.   Only with such care will the emtp think that it is reading what the user thinks he is inputting,    ',/, &
+          11x, 'at said point in time.    ')
   go to 6220
 6064 write (lunit6, 7064)  bus1
-7064 format( 5x, 38hswitch connectivity error.  subroutine,
-1            37 h switch has determined that a loop of,
-2            31 h closed switches is about to be   ,/,
-3        5 x, 24hcreated involving bus  ",  a6,
-4            35 h".   such switch loops are illegal.  )
+7064 format (5x, 'Switch connectivity error.  Subroutine switch has determined that a loop of closed switches is about to be   ',/, &
+          5x, 'created involving bus  "',  a6, '".   Such switch loops are illegal.  ')
   go to 6220
-6065 write(lunit6, 7065)  lstat(14), flstat(15), flstat(16)
-7065 format( 5x,  69hthe last-read data card has been taken by the emtp
-1 to be card number , i3,  25h of the user's frequency-   ,/,
-2 5 x, 115hdependent line-constants input.   it is illegal because t
-3 he frequency, as read from columns 21-30 using 'e' format,   ,/,
-4 5 x,  86his not greater than that read from the preceding card.
-5 the frequency of this card is, e13.4,  12h, while that   ,/,
-6 5 x,  25hof the preceding card was, e13.4,  73h.   data cards for
-7 line constants must be inputted in order of increasing  ,/,
-8 5 x,  44hfrequency ---- strictly monotone-increasing.  )
+6065 write (lunit6, 7065)  lstat(14), flstat(15), flstat(16)
+7065 format (5x,  'The last-read data card has been taken by the EMTP to be card number ', i3,  " of the user's frequency-   ",/, &
+          5x, "dependent line-constants input.   It is illegal because the frequency, as read from columns 21-30 using 'e' format,   ",/, &
+          5x,  'is not greater than that read from the preceding card. The frequency of this card is', e13.4,  ', while that   ',/, &
+          5x,  'of the preceding card was', e13.4,  '.   Data cards for line constants must be inputted in order of increasing  ',/, &
+          5x,  'frequency ---- strictly monotone-increasing.  ')
   go to 6220
 6066 write(lunit6, 7066)
-7066 format( 5x, 105hthe user is presently trying to input line constan
-1 ts ('r', 'l', and 'f' fields) for too many frequencies.   )
+7066 format (5x, "The user is presently trying to input line constants ('r', 'l', and 'f' fields) for too many frequencies.   ")
   write(lunit6, 7166)  lstat(12)
-7166 format( 5x,  59hthe current program dimensioned storage for such p
-1 oints is , i3,  36h.   does the user really need all of   ,/,
-2 5 x, 108hthese points that he is using, the emtp wonders.   if he
-3 really does, and can justify his request to program   ,/,
-4 5 x, 111hmaintenance, an expansion of these tables which have just
-5 overflowed could easily be made.   otherwise, maybe a   ,/,
-6 5 x, 108hre-reading of the user's manual, or a talk with someone f
-7 amiliar with the weighting-function calculation, or   ,/,
-8 5 x,  24hboth, might be in order.    )
-    go to 6220
+7166 format (5x,  'The current program dimensioned storage for such points is ', i3,  '.   Does the user really need all of   ',/, &
+          5x, 'these points that he is using, the EMTP wonders.   If he really does, and can justify his request to program   ',/, &
+          5x, 'maintenance, an expansion of these tables which have just overflowed could easily be made.   Otherwise, maybe a   ',/, &
+          5x, "re-reading of the user's manual, or a talk with someone familiar with the weighting-function calculation, or   ",/, &
+          5x,  'both, might be in order.    ')
+  go to 6220
 6067 write(lunit6, 7067)  lstat(13)
-7067 format( 5x, 106hto find the near-end weighting function  a2(t) ,
-1     recourse is made to the infinitely-long line.   for time  ,/,
-2 5   x, 108hless than the infinite-frequency travel time 'tau', it is
-3     the infinite-line response which is actually used.    ,/,
-4 5   x, 112hinput parameter  'npinf'  (columns 25-32 of the second mi
-5     sc. data card) specifies the number of points which are   ,/,
-6 5   x,  54hused to define this response, with the user requesting,
-7     i4,  1h.   )
-      write(lunit6, 7166)  lstat(12)
-      go to 6220
-6068  write(lunit6, 7068)  flstat(14), lstat(15), lstat(13)
-7068  format( 5x, 106hthe number of points which are used to define the
-1     weighting functions is controlled (in part) by two misc.   ,/,
-2 5   x,  60hdata parameters.   the first of these is  'rmax'  with va
-3     lue, e12.3,  39h, and the second is  'mnum'  with value   ,/,
-4 5   x, i3, 106h.   either these were user-punched numbers, or they a
-5     re default values built into the emtp   anyway, these   ,/,
-6 5   x, 100hparameters combine to produce a storage requirement for t
-7     he finite line given by    (rmax-1)*mnum = , i4,  8h points.   )
+7067 format (5x, 'To find the near-end weighting function  a2(t) ,     recourse is made to the infinitely-long line.   For time  ',/, &
+          5x, "less than the infinite-frequency travel time 'tau', it is the infinite-line response which is actually used.    ",/, &
+          5x, "Input parameter  'npinf'  (columns 25-32 of the second misc. data card) specifies the number of points which are   ",/, &
+          5x,  'used to define this response, with the user requesting', i4,  '.'   )
+  write(lunit6, 7166)  lstat(12)
+  go to 6220
+6068 write(lunit6, 7068)  flstat(14), lstat(15), lstat(13)
+7068 format (5x, 'the number of points which are used to define the weighting functions is controlled (in part) by two misc.   ',/, &
+          5x,  "Data parameters.   The first of these is  'rmax'  with value", e12.3,  ", and the second is  'mnum'  with value   ",/, &
+          5x, i3, '.   Either these were user-punched numbers, or they are default values built into the EMTP   anyway, these   ',/, &
+          5x, 'parameters combine to produce a storage requirement for the finite line given by    (rmax-1)*mnum = ', i4,  ' points.   ')
       write(lunit6,7168) lstat(12)
 7168  format( 5x, 45hthe present dimensions of the program permit , i4,
 1  8  h points. )
