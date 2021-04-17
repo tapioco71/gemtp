@@ -261,7 +261,7 @@ subroutine over52
           5x, "by the EMTP from the user's card.   Thou shalt not input transmission lines having nonpositive length, good buddy.   ")
   go to 6220
 6079 write(lunit6, 7079)
-7079 format (5x,  'Since an interactive EMTP version is not, being used, illegal data card shown, before "error" heading must be corrected         ',/,  &&
+7079 format (5x,  'Since an interactive EMTP version is not, being used, illegal data card shown, before "error" heading must be corrected         ',/, &
           5x, 'after the program stops, and then case, must be re-run.  Too bad (interactive, correction might have been possible).  ')
   call stoptp
 6080 write(lunit6, 7080)  lbus, intinf
@@ -349,8 +349,7 @@ subroutine over52
           5x, "variable mean (punched in field  'tclose' ,   columns 15-24       ) or the standard deviation (field  'topen' ,  columns   ",/, &
           5x,  '25-34) has been punched as negative, which is not allowed.   The two values read are', e14.5,    ' and', /, &
           5x, e14.5,   ', respectively.    ')
-  if ( lstat(15) .eq. 4433 )
-1 write (lunit6, 7189)  lstat(14)
+  if ( lstat(15) .eq. 4433 ) write (lunit6, 7189)  lstat(14)
 7189 format (5x, '====  correction  ====  the problem switch in question is not the last-read one, but rather switch number',  i5 ,/,   &
           5x, '                        in order of input.  In fact, all switches have been read by now.         ')
   go to 6220
@@ -364,7 +363,7 @@ subroutine over52
   if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
 4568 format ( '  "exit  module over52." ')
 99999 return
-end function supporting
+end subroutine over52
 !
 ! subroutine err87.
 !
