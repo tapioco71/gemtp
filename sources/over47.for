@@ -2796,7 +2796,7 @@ subroutine  ptzy1 ( radi, dci, thc, dr0, th0, al0, ldm )
   bp2=radp(2)*sqrtz(u0/rop*usp)
   if ( iprs47  .ge.  1 ) write (logsix, 3238)  npp, npc, bp1, bp2, radp(3)
 3238 format ( /,  17h begin  'ptzy1' .,  16h     npp     npc, 17x,  3hbp1,  17x,  3hbp2,  13x,  7hradp(3)  ,/, &
-          17x,  2i8,  3e20.11 )
+       17x,  2i8,  3e20.11 )
   if (npp .eq. 0)   go to 5
   alpi=alogz(radp(3)/radp(2))
   go to 8
@@ -2834,7 +2834,7 @@ subroutine  ptzy1 ( radi, dci, thc, dr0, th0, al0, ldm )
   end do
   if ( iprs47  .ge.  1 ) write (logsix, 3256)  dkl, cn, alpi, al0(1,1), al0(1,2)
 3256 format ( /,  16h exit  'ptzy1' .,  17x,  3hdkl,  18x,  2hcn, 16x,  4halpi,  12x,  8hal0(1,1),  12x,  8hal0(1,2)  ,/, &
-          16x,  5e20.11 )
+       16x,  5e20.11 )
   if ( iprs47  .ge.  4 ) write (logsix, 3263)  ( (al0(i,j), j=1, npc), i=1, npc )
 3263 format ( /,  63h diagnostic output matrix.    ( (al0(i,j), j=1, npc), i=1, npc)     ,/,  ( 1x,  6e20.11 ) )
   return
@@ -2939,7 +2939,7 @@ subroutine ptzy2(s,ncpp,dci,dr0,th0,al0,zp,zpc,ldm,ldn)
   end do
   if ( iprs47  .ge.  2 ) write (logsix, 3327)  ( zp(1,j), j=1, 3 )
 3327 format ( /,  8h middle.,8x,  12hreal-zp(1,1),  8x,  12himag-zp(1,1),8x,  12hreal-zp(1,2),  8x,  12himag-zp(1,2), &
-          8x,  12hreal-zp(1,3),  8x,  12himag-zp(1,3)  ,/, 8x,  6e20.11  ,/,46h diagnostic   zp(i,j)  for  (i,j)=1, ... npc .   )
+       8x,  12hreal-zp(1,3),  8x,  12himag-zp(1,3)  ,/, 8x,  6e20.11  ,/,46h diagnostic   zp(i,j)  for  (i,j)=1, ... npc .   )
   ll0 = 0
   if ( iprs47  .ge.  5 ) call print ( zp(1,1), npc, ll0, ldn )
   if ( npp  .eq.  0 )   go to 90
@@ -2954,7 +2954,7 @@ subroutine ptzy2(s,ncpp,dci,dr0,th0,al0,zp,zpc,ldm,ldn)
   if(realz(s2) .lt. 0.) s2=s3*c2
   if ( iprs47  .ge.  3 ) write (logsix, 3345)  ss, zm, zzo
 3345 format ( /,  6h pipe.,13x,  7hreal-ss,  13x,  7himag-ss,13x,  7hreal-zm,  13x,  7himag-zm, &
-          12x,  8hreal-zzo,  12x,  8himag-zzo  ,/,  6x,  6e20.11 )
+       12x,  8hreal-zzo,  12x,  8himag-zzo  ,/,  6x,  6e20.11 )
   nc1=ncc-npp
   if (iprs47 .gt. 1) write (logsix, 3354)  ncc, nc1, ixa, s1, s2
 3354 format ( /,  11h more pipe.,  24h     ncc     nc1     ixa, 13x,  7hreal-s1,  13x,  7himag-s1,13x,  7hreal-s2,  13x,  7himag-s2  ,/,  11x,  3i8,  4e20.11 )
@@ -2991,7 +2991,7 @@ subroutine bsikm (x, kn, bbin, bbkn, ikm, ixa)
   y = x/cmplxz(c1, fzero)
   if ( iprs47  .ge.  5 ) write (logsix, 3426)  kn, ikm, ixa, x, y, xa
 3426 format ( /,  17h begin  'bsikm' .,  24h      kn     ikm     ixa, 9x,  6hreal-x,  9x,  6himag-x,  9x,  6hreal-y,  9x,  6himag-y, &
-          13x,  2hxa  ,/,  17x,  3i8,  5e15.6  )
+       13x,  2hxa  ,/,  17x,  3i8,  5e15.6  )
   if (xa .gt. c1)  go to 25
   y1 = y * y
   y2=y1*y1
@@ -3042,7 +3042,7 @@ subroutine bsikm (x, kn, bbin, bbkn, ikm, ixa)
   bbkn(2)=bk1
   if ( iprs47  .ge.  5 ) write (logsix, 3452)  bi0, bj1, bk0, bk1
 3452 format ( /,  9h scalars.,7x,  8hreal-bi0,  7x,  8himag-bi0,7x,  8hreal-bj1,  7x,  8himag-bj1, &
-          7x,  8hreal-bk0,  7x,  8himag-bk0,7x,  8hreal-bk1,  7x,  8himag-bk1  ,/,  9x,  8e15.6  )
+       7x,  8hreal-bk0,  7x,  8himag-bk0,7x,  8hreal-bk1,  7x,  8himag-bk1  ,/,  9x,  8e15.6  )
   if(ikm.eq.1) go to 70
   do ikn=3,kn
      bbin(ikn) = creal1
@@ -3142,7 +3142,7 @@ subroutine transp(yyc, ncpp, ann, jnn, znn, ldm, ldn)
   dimension ncpp(ldm), ann(ldn), jnn(ldn)
   if (iprs47 .ge. 1) write (logsix, 3611)  ncct, yyc(1,1), yyc(1,2)
 3611 format ( /,  " enter  'transp' .,  8h    ncct", 7x,  'real-yyc(1,1)', 7x, 'imag-yyc(1,1)', 7x,  'real-yyc(1,2)', 7x, 'imag-yyc(1,2)', /,  &
-          18x, i8, 4e20.11, /, ' diagnostic input matrix.   yyc(i,j)  for  (i,j)=1, ... i2 .')
+       18x, i8, 4e20.11, /, ' diagnostic input matrix.   yyc(i,j)  for  (i,j)=1, ... i2 .')
   i2 = 6
   ll0 = 0
   if ( iprs47  .ge.  4 ) call print ( yyc(1,1), i2, ll0, ldn )
@@ -3205,7 +3205,7 @@ subroutine transp(yyc, ncpp, ann, jnn, znn, ldm, ldn)
 100 end do
   if ( iprs47  .ge.  1 ) write (logsix, 3623)  yyc(1,1), yyc(1,2)
 3623 format ( /,  " exit  'transp' .", 7x,  'real-yyc(1,1)', 7x, 'imag-yyc(1,1)', 7x,  'real-yyc(1,2)', 7x, 'imag-yyc(1,2)', &
-          /, 17x, 4e20.11 , /,' diagnostic output matrix.  yyc(i,j)  for  (i,j)=1, ... i2 .')
+       /, 17x, 4e20.11 , /,' diagnostic output matrix.  yyc(i,j)  for  (i,j)=1, ... i2 .')
   if (iprs47 .ge. 4) call print(yyc(1, 1), i2, ll0, ldn)
   return
 end subroutine transp
@@ -3302,8 +3302,8 @@ subroutine zegen(be1,be2,th,w,xe,isyst)
   if ( iprs47  .ge.  2 )
 1 write (logsix, 3741)  isyst, ixa, be1, be2, xa, th, xa1, xe, w,e
 3741 format ( /,  18h within  'zegen' .,  16h   isyst     ixa, 16x,  3hbe1,  16x,  3hbe2,  17x,  2hxa,  17x,  2hth, &
-          16x,  3hxa1  ,/,  18x,  2i8,  5e19.10  ,/,  1x, 13x,  7hreal-xe,  13x,  7himag-xe, &
-          19x, 1hw, 19x, 1he,/, 1x, 4e20.11 )
+       16x,  3hxa1  ,/,  18x,  2i8,  5e19.10  ,/,  1x, 13x,  7hreal-xe,  13x,  7himag-xe, &
+       19x, 1hw, 19x, 1he,/, 1x, 4e20.11 )
   if ( e  .gt.  5.)   go to 60
   r2 = e ** 4
   r1=r2/16.
@@ -3393,7 +3393,7 @@ subroutine eigen ( cjw, p, n, a, ai, qn, q, xx, yy, ldn )
   qi = qi * qi
   if ( iprs47  .ge.  1 ) write (logsix, 3806)  n, cjw, qi
 3806 format ( /,  17h enter  'eigen' .,  8h       n,12x, 8hreal-cjw,  12x,  8himag-cjw,13x, 7hreal-qi,   13x,  7himag-qi  ,/, &
-          17x, i8,  4e20.11  ,/,  1x  )
+       17x, i8,  4e20.11  ,/,  1x  )
   do i=1,n
      do j=1,n
 4       p(i,j)=p(i,j)*qi
@@ -3414,7 +3414,7 @@ subroutine eigen ( cjw, p, n, a, ai, qn, q, xx, yy, ldn )
   iq=iq-1
   write(lunit6,902) iq
 902 format(5x, "Warning ; a higher accuracy can't be, achieved by this computer.", /, &
-         5x, 'eigen values   1 vectors at itteration iq= ', i3, ' is adopted.    ')
+       5x, 'eigen values   1 vectors at itteration iq= ', i3, ' is adopted.    ')
   go to 63
 25 do i=1,n
      do j=1,n
@@ -3496,7 +3496,7 @@ subroutine eigen ( cjw, p, n, a, ai, qn, q, xx, yy, ldn )
   end do
   if ( iprs47  .ge.  7 ) write (logsix, 3842)  l, qn(l), ad
 3842 format (  21h eigenvalue finished.,  8h       l, 10x,  10hreal-qn(l),  10x,  10himag-qn(l), 13x,  7hreal-ad,  13x,  7himag-ad  ,/, &
-          21x,  i8,  4e20.11  ,/,  1x  )
+       21x,  i8,  4e20.11  ,/,  1x  )
   go to 15
 90 dm=0.
   do i=1,n
@@ -3519,405 +3519,384 @@ subroutine eigen ( cjw, p, n, a, ai, qn, q, xx, yy, ldn )
   end do
 9200 if ( iprs47  .ge.  3 ) write (logsix, 3854)  dm, spdlgt, p(im,im), ( qn(i), i=1, n )
 3854 format ( /, 35h done all eigenvalues in  'eigen' ., 18x,  2hdm,  14x,  6hspdlgt,  7x,  13hreal-p(im,im), &
-          7x,  13himag-p(im,im)  ,/,  35x,  4e20.11,   /, 49h complex eigenvalues  (qn(i), i=1, n)  follow ...  ,/, &
-          ( 1x,  6e20.11 )  )
+       7x,  13himag-p(im,im)  ,/,  35x,  4e20.11,   /, 49h complex eigenvalues  (qn(i), i=1, n)  follow ...  ,/, &
+       ( 1x,  6e20.11 )  )
   if ( iprs47  .ge.  1 ) write (logsix, 3867)
 3867 format ( /,  88h diagnostic upon exit  'eigen' .   matrix of eigenvectors  a(i,l)  for  (i,l)=1, ... n .    )
   ll0 = 0
   if ( iprs47  .ge.  6 ) call print ( a(1,1), n, ll0, ldn )
   return
 end subroutine eigen
-                                                                                                                                                                                               subroutine  zest ( h1, h2, e, res, omg, s )
-                                                                                                                                                                                                 implicit real*8 (a-h, o-z) ,
-1                                                                                                                                                                                                integer*4 (i-n)
-                                                                                                                                                                                                 include  'labl47.ftn'
-                                                                                                                                                                                                 complex*16  qq, bbb, rom, s, sa, s1, s2
-                                                                                                                                                                                                 complex*16  s3, s5, s6, s8, sp12, sp23, sm12
-                                                                                                                                                                                                 complex*16  sm23, sq1, sq3, u, u1, u2, z
-                                                                                                                                                                                                 complex*16  cexpz, cmplxz, csqrtz
-                                                                                                                                                                                                 complex*16  c1, c2, c3, c4, c5, c6, c7, c8
-                                                                                                                                                                                                 toj = u0
-                                                                                                                                                                                                 if ( iprs47  .ge.  2 )
-1                                                                                                                                                                                                write (logsix, 3917)  h1, h2, e, res, omg
-3917                                                                                                                                                                                             format ( /,  16h enter  'zest' .,  18x,  2hh1,  18x,  2hh2,
-1  19                                                                                                                                                                                            x,  1he,  17x,  3hres,  17x,  3homg  ,/,  16x,  5e20.11  )
-                                                                                                                                                                                                 hkr = spdlgt**2
-                                                                                                                                                                                                 yud=1./toj/hkr
-                                                                                                                                                                                                 h1ph2=h1+h2
-                                                                                                                                                                                                 ab = 10. * e/h1ph2
-                                                                                                                                                                                                 omg2=omg*omg
-                                                                                                                                                                                                 d1 = toj * omg/res
-                                                                                                                                                                                                 rom = cmplxz(fzero, d1)
-                                                                                                                                                                                                 bp=pai/2.
-                                                                                                                                                                                                 rmax=0.
-                                                                                                                                                                                                 s = czero
-                                                                                                                                                                                                 l=2
-                                                                                                                                                                                                 ram=0.
-700                                                                                                                                                                                              ram2=ram*ram
-                                                                                                                                                                                                 d2 = ram2 + omg2 * (1. - htoj2 * hyud2)/hkr
-                                                                                                                                                                                                 c1 = cmplxz(d2, fzero)
-                                                                                                                                                                                                 c2 = rom * cmplxz(htoj2, fzero)
-                                                                                                                                                                                                 s1 = csqrtz(c1 + c2)
-                                                                                                                                                                                                 d3 = ram2 + omg2 * (1. - htoj3 * hyud3)/hkr
-                                                                                                                                                                                                 c3 = cmplxz(d3, fzero)
-                                                                                                                                                                                                 c4 = cmplxz(alf1, fzero) * rom * cmplxz(htoj3, fzero)
-                                                                                                                                                                                                 s2 = csqrtz(c3 + c4)
-                                                                                                                                                                                                 d4 = ram2 + omg2 * (1. - htoj4 * hyud4)/hkr
-                                                                                                                                                                                                 c5 = cmplxz(d4, fzero)
-                                                                                                                                                                                                 c6 = cmplxz(alf2, fzero) * rom * cmplxz(htoj4, fzero)
-                                                                                                                                                                                                 s3 = csqrtz(c5 + c6)
-                                                                                                                                                                                                 s6=s2
-                                                                                                                                                                                                 s5=s1
-                                                                                                                                                                                                 d5 = 1./htoj2/toj
-                                                                                                                                                                                                 s1 = s1 * cmplxz(d5, fzero)
-                                                                                                                                                                                                 d6 = 1./htoj3/toj
-                                                                                                                                                                                                 s2 = s2 * cmplxz(d6, fzero)
-                                                                                                                                                                                                 d7 = 1./htoj4/toj
-                                                                                                                                                                                                 s3 = s3 * cmplxz(d7, fzero)
-                                                                                                                                                                                                 s8 = cmplxz(toj, fzero) * s1
-                                                                                                                                                                                                 sp12=s1+s2
-                                                                                                                                                                                                 sp23=s2+s3
-                                                                                                                                                                                                 sm12=s1-s2
-                                                                                                                                                                                                 d8 = 2.*( dep1 - dep2)
-                                                                                                                                                                                                 c7 = cmplxz(d8,fzero)
-                                                                                                                                                                                                 sm23 = (s2 - s3) * cexpz(s6 * c7)
-                                                                                                                                                                                                 d9 = -2. * dep1
-                                                                                                                                                                                                 c8 = cmplxz(d9, fzero)
-                                                                                                                                                                                                 bbb = cexpz(s5 * c8)
-                                                                                                                                                                                                 d10 = expz(-h1ph2 * ram) * cosz(e * ram)
-                                                                                                                                                                                                 contwo = 2.0
-                                                                                                                                                                                                 z=cmplxz(fzero,contwo )*(sp12*sp23+sm12*sm23+bbb*(sm12*sp23+sp12
-1                                                                                                                                                                                                * sm23)) *
-1                                                                                                                                                                                                cmplxz(d10, fzero)/((cmplxz(ram, fzero) +s8) *(sp12*sp23+sm12*
-1                                                                                                                                                                                                sm23)
-2                                                                                                                                                                                                + (cmplxz(ram,fzero) - s8) * bbb*(sm12*sp23+sp12*sm23))
-                                                                                                                                                                                                 if ( iprs47  .ge.  5 )
-1                                                                                                                                                                                                write (logsix, 3928)  l, bp, ab, ram, rmax, z
-3928                                                                                                                                                                                             format ( /,  1x,  8h       l,  18x,  2hbp,  18x,  2hab,
-1  17                                                                                                                                                                                            x,  3hram,  16x,  4hrmax,  14x,  6hreal-z,  14x,  6himag-z
-2                                                                                                                                                                                                ,/,  1x,  i8,  6e20.11  )
-                                                                                                                                                                                                 go to (702,701),l
-701                                                                                                                                                                                              u1=z
-                                                                                                                                                                                                 jd=50
-                                                                                                                                                                                                 go to 650
-600                                                                                                                                                                                              u1 = czero
-650                                                                                                                                                                                              if (bp .lt. ab)   go to 300
-                                                                                                                                                                                                 jd = 100
-                                                                                                                                                                                                 rmin=rmax
-                                                                                                                                                                                                 rmax=10./h1ph2
-                                                                                                                                                                                                 l=1
-                                                                                                                                                                                                 ram=rmax
-                                                                                                                                                                                                 go to 700
-702                                                                                                                                                                                              u2=z
-                                                                                                                                                                                                 go to 210
-300                                                                                                                                                                                              rmin=rmax
-                                                                                                                                                                                                 rmax=bp/e
-                                                                                                                                                                                                 bp=bp+pai
-                                                                                                                                                                                                 u2 = czero
-210                                                                                                                                                                                              jjj=1
-                                                                                                                                                                                                 qq=u1+u2
-                                                                                                                                                                                                 n=123
-                                                                                                                                                                                                 dx=rmax-rmin
-                                                                                                                                                                                                 d11 = dx/2.
-                                                                                                                                                                                                 sq1 = qq * cmplxz(d11, fzero)
-                                                                                                                                                                                                 if ( iprs47  .ge.  6 )
-1                                                                                                                                                                                                write (logsix, 3943)  dx, htoj2, rmin, omg2, toj, value5, qq
-3943                                                                                                                                                                                             format ( /,  1x,  14x,  2hdx,  11x,  5hhtoj2,  12x,  4hrmin,
-1  12                                                                                                                                                                                            x,  4homg2,  13x,  3htoj,  10x,  6hvalue5,  9x,  7hreal-qq,
-2  9                                                                                                                                                                                             x,  7himag-qq  ,/,  1x,  8e16.7  )
-75                                                                                                                                                                                               dx2=dx
-                                                                                                                                                                                                 dx=dx/2.0
-                                                                                                                                                                                                 ram=rmin+dx
-                                                                                                                                                                                                 n=2*n
-                                                                                                                                                                                                 if(jjj.eq.1) n=1
-                                                                                                                                                                                                 jjj=100
-                                                                                                                                                                                                 do 77 kn=1,n
-                                                                                                                                                                                                    ram2=ram*ram
-                                                                                                                                                                                                    d2 = ram2 + omg2 * (1. - htoj2 * hyud2)/hkr
-                                                                                                                                                                                                    c1 = cmplxz(d2, fzero)
-                                                                                                                                                                                                    c2 = rom * cmplxz(htoj2, fzero)
-                                                                                                                                                                                                    s1 = csqrtz(c1 + c2)
-                                                                                                                                                                                                    d3 = ram2 + omg2 * (1. - htoj3 * hyud3)/hkr
-                                                                                                                                                                                                    c3 = cmplxz(d3, fzero)
-                                                                                                                                                                                                    c4 = cmplxz(alf1, fzero) * rom * cmplxz(htoj3, fzero)
-                                                                                                                                                                                                    s2 = csqrtz(c3 + c4)
-                                                                                                                                                                                                    d4 = ram2 + omg2 * (1. - htoj4 * hyud4)/hkr
-                                                                                                                                                                                                    c5 = cmplxz(d4, fzero)
-                                                                                                                                                                                                    c6 = cmplxz(alf2, fzero) * rom * cmplxz(htoj4, fzero)
-                                                                                                                                                                                                    s3 = csqrtz(c5 + c6)
-                                                                                                                                                                                                    s6=s2
-                                                                                                                                                                                                    s5=s1
-                                                                                                                                                                                                    d5 = 1./htoj2/toj
-                                                                                                                                                                                                    s1 = s1 * cmplxz(d5, fzero)
-                                                                                                                                                                                                    d6 = 1./htoj3/toj
-                                                                                                                                                                                                    s2 = s2 * cmplxz(d6, fzero)
-                                                                                                                                                                                                    d7 = 1./htoj4/toj
-                                                                                                                                                                                                    s3 = s3 * cmplxz(d7, fzero)
-                                                                                                                                                                                                    s8 = cmplxz(toj, fzero) * s1
-                                                                                                                                                                                                    sp12=s1+s2
-                                                                                                                                                                                                    sp23=s2+s3
-                                                                                                                                                                                                    sm12=s1-s2
-                                                                                                                                                                                                    d8 = 2.*( dep1 - dep2)
-                                                                                                                                                                                                    c7 = cmplxz(d8,fzero)
-                                                                                                                                                                                                    sm23 = (s2 - s3) * cexpz(s6 * c7)
-                                                                                                                                                                                                    d9 = -2. * dep1
-                                                                                                                                                                                                    c8 = cmplxz(d9, fzero)
-                                                                                                                                                                                                    bbb = cexpz(s5 * c8)
-                                                                                                                                                                                                    d10 = expz(-h1ph2 * ram) * cosz(e * ram)
-                                                                                                                                                                                                    z=cmplxz(fzero,contwo)*(sp12*sp23+sm12*sm23+bbb*(sm12*sp23+sp12*
-1                                                                                                                                                                                                   sm23))*
-1                                                                                                                                                                                                   cmplxz(d10, fzero)/((cmplxz(ram, fzero) +s8) *(sp12*sp23+sm12*
-1                                                                                                                                                                                                   sm23)
-2                                                                                                                                                                                                   + (cmplxz(ram,fzero) - s8) * bbb*(sm12*sp23+sp12*sm23))
-                                                                                                                                                                                                    ram=ram+dx2
-                                                                                                                                                                                                    u=2.*z
-77                                                                                                                                                                                                  qq=qq+u
-                                                                                                                                                                                                    d12 = dx/2.
-                                                                                                                                                                                                    sq3 = qq * cmplxz(d12, fzero)
-                                                                                                                                                                                                    sa = sq1 - sq3
-                                                                                                                                                                                                    r = cabsz(sa)/cabsz(sq3)
-                                                                                                                                                                                                    v5 = value5 * .5
-                                                                                                                                                                                                    if ( iprs47  .ge.  24 )
-1                                                                                                                                                                                                   write (logsix, 3956)  n, r, dx, ram, qq
-3956                                                                                                                                                                                                format ( /,  13h bottom loop.,  8h       n,  19x,  1hr,
-1  18                                                                                                                                                                                               x,  2hdx,  17x,  3hram,  13x,  7hreal-qq,  13x,  7himag-qq
-2                                                                                                                                                                                                   ,/,  13x,  i8,  5e20.11  )
-                                                                                                                                                                                                    if ( r .le. v5)   go to 50
-                                                                                                                                                                                                    sq1 = sq3
-                                                                                                                                                                                                    go to 75
-50                                                                                                                                                                                                  s = s + sq3
-                                                                                                                                                                                                    if(jd.eq.100) go to 55
-                                                                                                                                                                                                    go to 600
-55                                                                                                                                                                                                  c9 = .5 * u0/ pai
-                                                                                                                                                                                                    s = s * cmplxz(omg, fzero) * cmplxz(c9, fzero)
-                                                                                                                                                                                                    if ( iprs47  .ge.  2 )
-1                                                                                                                                                                                                   write (logsix, 3968)  omg, value2, s
-3968                                                                                                                                                                                                format ( /,  15h exit  'zest' .,  17x,  3homg,  14x,  6hvalue2,
-1  14                                                                                                                                                                                               x,  6hreal-s,  14x,  6himag-s  ,/,  15x,  4e20.11  )
-                                                                                                                                                                                                    return
-                                                                                                                                                                                                 end do
-                                                                                                                                                                                                 subroutine minv ( tcmpx, m, f, ldn, ldn2 )
-                                                                                                                                                                                                   implicit real*8 (a-h, o-z) ,
-1                                                                                                                                                                                                  integer*4 (i-n)
-                                                                                                                                                                                                   include  'blkcom.ftn'
-                                                                                                                                                                                                   complex*16  ad, cc, d
-                                                                                                                                                                                                   include  'labl47.ftn'
-                                                                                                                                                                                                   complex*16  tcmpx(ldn,ldn), f(ldn, ldn2),  d2,  cmplxz, fnew
-                                                                                                                                                                                                   complex*16  fident
-                                                                                                                                                                                                   dimension  fr(10,20), fi(10,20), fnew(10,20), fident(10,20)
-                                                                                                                                                                                                   d1 = 0.0
-                                                                                                                                                                                                   do 4 i=1,m
-                                                                                                                                                                                                      do 4 j=1,m
-                                                                                                                                                                                                         d2 = tcmpx(i,j)
-                                                                                                                                                                                                         if ( cabsz ( d2 ) .gt. d1)   d1 = cabsz(d2)
-                                                                                                                                                                                                         fr(i,j) = realz ( d2 )
-4                                                                                                                                                                                                        fi(i,j) = aimagz ( d2 )
-                                                                                                                                                                                                         ccc!    4 f(i,j) = d2
-                                                                                                                                                                                                         d1 = d1 * value2
-                                                                                                                                                                                                         if ( iprs47  .ge.  1 )
-1                                                                                                                                                                                                        write(logsix, 4005) m, value2, d1, f(1, 1)
-4005                                                                                                                                                                                                     format ( /,  16h start  'minv' .,  8h       m,  14x,  6hvalue6,
-1  18                                                                                                                                                                                                    x,  2hd1,  9x,  11hreal-f(1,1),  9x,  11himag-f(1,1)  ,/,
-2  16                                                                                                                                                                                                    x,  i8,  4e20.11  ,/,
-3  47                                                                                                                                                                                                    h diagnostic   tcmpx(i,j)  for  (i,j)=1, ... m .    )
-                                                                                                                                                                                                         ll0 = 0
-                                                                                                                                                                                                         if ( iprs47  .ge.  7 )
-1                                                                                                                                                                                                        call print ( tcmpx(1,1), m, ll0, ldn )
-                                                                                                                                                                                                         do 30   i=1, m
-                                                                                                                                                                                                            j1=m+1
-                                                                                                                                                                                                            m1=m*2
-                                                                                                                                                                                                            do 25   j = j1, m1
-                                                                                                                                                                                                               if ((j-m) .eq. i)   go to 20
-                                                                                                                                                                                                               ccc!     f(i,j) = czero
-                                                                                                                                                                                                               fr(i,j) = 0.0
-                                                                                                                                                                                                               fi(i,j) = 0.0
-                                                                                                                                                                                                               go to 25
+!
+! subroutine zest.
+!
+subroutine  zest ( h1, h2, e, res, omg, s )
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  include 'labl47.ftn'
+  complex*16  qq, bbb, rom, s, sa, s1, s2
+  complex*16  s3, s5, s6, s8, sp12, sp23, sm12
+  complex*16  sm23, sq1, sq3, u, u1, u2, z
+  complex*16  cexpz, cmplxz, csqrtz
+  complex*16  c1, c2, c3, c4, c5, c6, c7, c8
+  toj = u0
+  if ( iprs47  .ge.  2 ) write (logsix, 3917)  h1, h2, e, res, omg
+3917 format ( /,  16h enter  'zest' .,  18x,  2hh1,  18x,  2hh2, 19 x,  1he,  17x,  3hres,  17x,  3homg  ,/,  16x,  5e20.11  )
+  hkr = spdlgt**2
+  yud=1./toj/hkr
+  h1ph2=h1+h2
+  ab = 10. * e/h1ph2
+  omg2=omg*omg
+  d1 = toj * omg/res
+  rom = cmplxz(fzero, d1)
+  bp=pai/2.
+  rmax=0.
+  s = czero
+  l=2
+  ram=0.
+700 ram2=ram*ram
+  d2 = ram2 + omg2 * (1. - htoj2 * hyud2)/hkr
+  c1 = cmplxz(d2, fzero)
+  c2 = rom * cmplxz(htoj2, fzero)
+  s1 = csqrtz(c1 + c2)
+  d3 = ram2 + omg2 * (1. - htoj3 * hyud3)/hkr
+  c3 = cmplxz(d3, fzero)
+  c4 = cmplxz(alf1, fzero) * rom * cmplxz(htoj3, fzero)
+  s2 = csqrtz(c3 + c4)
+  d4 = ram2 + omg2 * (1. - htoj4 * hyud4)/hkr
+  c5 = cmplxz(d4, fzero)
+  c6 = cmplxz(alf2, fzero) * rom * cmplxz(htoj4, fzero)
+  s3 = csqrtz(c5 + c6)
+  s6=s2
+  s5=s1
+  d5 = 1./htoj2/toj
+  s1 = s1 * cmplxz(d5, fzero)
+  d6 = 1./htoj3/toj
+  s2 = s2 * cmplxz(d6, fzero)
+  d7 = 1./htoj4/toj
+  s3 = s3 * cmplxz(d7, fzero)
+  s8 = cmplxz(toj, fzero) * s1
+  sp12=s1+s2
+  sp23=s2+s3
+  sm12=s1-s2
+  d8 = 2.*( dep1 - dep2)
+  c7 = cmplxz(d8,fzero)
+  sm23 = (s2 - s3) * cexpz(s6 * c7)
+  d9 = -2. * dep1
+  c8 = cmplxz(d9, fzero)
+  bbb = cexpz(s5 * c8)
+  d10 = expz(-h1ph2 * ram) * cosz(e * ram)
+  contwo = 2.0
+  z=cmplxz(fzero,contwo )*(sp12*sp23+sm12*sm23+bbb*(sm12*sp23+sp12 * sm23)) * cmplxz(d10, fzero)/((cmplxz(ram, fzero) +s8) * &
+       (sp12*sp23+sm12* sm23) + (cmplxz(ram,fzero) - s8) * bbb*(sm12*sp23+sp12*sm23))
+  if ( iprs47  .ge.  5 ) write (logsix, 3928)  l, bp, ab, ram, rmax, z
+3928 format ( /,  1x,  8h       l,  18x,  2hbp,  18x,  2hab, 17x,  3hram,  16x,  4hrmax,  14x,  6hreal-z,  14x,  6himag-z,/,  1x,  i8,  6e20.11  )
+  go to (702,701),l
+701 u1=z
+  jd=50
+  go to 650
+600 u1 = czero
+650 if (bp .lt. ab)   go to 300
+  jd = 100
+  rmin=rmax
+  rmax=10./h1ph2
+  l=1
+  ram=rmax
+  go to 700
+702 u2=z
+  go to 210
+300 rmin=rmax
+  rmax=bp/e
+  bp=bp+pai
+  u2 = czero
+210 jjj=1
+  qq=u1+u2
+  n=123
+  dx=rmax-rmin
+  d11 = dx/2.
+  sq1 = qq * cmplxz(d11, fzero)
+  if ( iprs47  .ge.  6 ) write (logsix, 3943)  dx, htoj2, rmin, omg2, toj, value5, qq
+3943 format ( /,  1x,  14x,  2hdx,  11x,  5hhtoj2,  12x,  4hrmin, 12x,  4homg2,  13x,  3htoj,  10x,  6hvalue5,  9x,  7hreal-qq, 9x,  7himag-qq  ,/,  1x,  8e16.7  )
+75 dx2=dx
+  dx=dx/2.0
+  ram=rmin+dx
+  n=2*n
+  if(jjj.eq.1) n=1
+  jjj=100
+  do kn=1,n
+     ram2=ram*ram
+     d2 = ram2 + omg2 * (1. - htoj2 * hyud2)/hkr
+     c1 = cmplxz(d2, fzero)
+     c2 = rom * cmplxz(htoj2, fzero)
+     s1 = csqrtz(c1 + c2)
+     d3 = ram2 + omg2 * (1. - htoj3 * hyud3)/hkr
+     c3 = cmplxz(d3, fzero)
+     c4 = cmplxz(alf1, fzero) * rom * cmplxz(htoj3, fzero)
+     s2 = csqrtz(c3 + c4)
+     d4 = ram2 + omg2 * (1. - htoj4 * hyud4)/hkr
+     c5 = cmplxz(d4, fzero)
+     c6 = cmplxz(alf2, fzero) * rom * cmplxz(htoj4, fzero)
+     s3 = csqrtz(c5 + c6)
+     s6=s2
+     s5=s1
+     d5 = 1./htoj2/toj
+     s1 = s1 * cmplxz(d5, fzero)
+     d6 = 1./htoj3/toj
+     s2 = s2 * cmplxz(d6, fzero)
+     d7 = 1./htoj4/toj
+     s3 = s3 * cmplxz(d7, fzero)
+     s8 = cmplxz(toj, fzero) * s1
+     sp12=s1+s2
+     sp23=s2+s3
+     sm12=s1-s2
+     d8 = 2.*( dep1 - dep2)
+     c7 = cmplxz(d8,fzero)
+     sm23 = (s2 - s3) * cexpz(s6 * c7)
+     d9 = -2. * dep1
+     c8 = cmplxz(d9, fzero)
+     bbb = cexpz(s5 * c8)
+     d10 = expz(-h1ph2 * ram) * cosz(e * ram)
+     z=cmplxz(fzero,contwo)*(sp12*sp23+sm12*sm23+bbb*(sm12*sp23+sp12*sm23))*cmplxz(d10, fzero)/((cmplxz(ram, fzero) +s8)*&
+          (sp12*sp23+sm12*sm23)+(cmplxz(ram,fzero) - s8) * bbb*(sm12*sp23+sp12*sm23))
+     ram=ram+dx2
+     u=2.*z
+77   qq=qq+u
+  end do
+  d12 = dx/2.
+  sq3 = qq * cmplxz(d12, fzero)
+  sa = sq1 - sq3
+  r = cabsz(sa)/cabsz(sq3)
+  v5 = value5 * .5
+  if ( iprs47  .ge.  24 ) write (logsix, 3956)  n, r, dx, ram, qq
+3956 format ( /,  13h bottom loop.,  8h       n,  19x,  1hr, 18x,  2hdx,  17x,  3hram,  13x,  7hreal-qq,  13x,  7himag-qq,/,  13x,  i8,  5e20.11  )
+  if ( r .le. v5)   go to 50
+  sq1 = sq3
+  go to 75
+50 s = s + sq3
+  if(jd.eq.100) go to 55
+  go to 600
+55 c9 = .5 * u0/ pai
+  s = s * cmplxz(omg, fzero) * cmplxz(c9, fzero)
+  if ( iprs47  .ge.  2 ) write (logsix, 3968)  omg, value2, s
+3968 format ( /,  15h exit  'zest' .,  17x,  3homg,  14x,  6hvalue2, 14x,  6hreal-s,  14x,  6himag-s  ,/,  15x,  4e20.11  )
+  return
+end subroutine zest
+!
+! subroutine minv.
+!
+subroutine minv ( tcmpx, m, f, ldn, ldn2 )
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  include 'blkcom.ftn'
+  complex*16  ad, cc, d
+  include  'labl47.ftn'
+  complex*16  tcmpx(ldn,ldn), f(ldn, ldn2),  d2,  cmplxz, fnew
+  complex*16  fident
+  dimension  fr(10,20), fi(10,20), fnew(10,20), fident(10,20)
+  d1 = 0.0
+  do i=1,m
+     do j=1,m
+        d2 = tcmpx(i,j)
+        if ( cabsz ( d2 ) .gt. d1)   d1 = cabsz(d2)
+        fr(i,j) = realz ( d2 )
+4       fi(i,j) = aimagz ( d2 )
+     end do
+  end do
+  !!!!    4 f(i,j) = d2
+  d1 = d1 * value2
+  if ( iprs47  .ge.  1 ) write(logsix, 4005) m, value2, d1, f(1, 1)
+4005 format ( /,  16h start  'minv' .,  8h       m,  14x,  6hvalue6, 18x,  2hd1,  9x,  11hreal-f(1,1),  9x,  11himag-f(1,1)  ,/, &
+          16x,  i8,  4e20.11  ,/, 47h diagnostic   tcmpx(i,j)  for  (i,j)=1, ... m .    )
+  ll0 = 0
+  if ( iprs47  .ge.  7 ) call print ( tcmpx(1,1), m, ll0, ldn )
+  do i=1, m
+     j1=m+1
+     m1=m*2
+     do j = j1, m1
+        if ((j-m) .eq. i)   go to 20
+        ccc!     f(i,j) = czero
+        fr(i,j) = 0.0
+        fi(i,j) = 0.0
+        go to 25
 !!!!  20 f(i,j) = creal1
-20                                                                                                                                                                                                             fr(i,j) = 1.0
-                                                                                                                                                                                                               fi(i,j) = 0.0
-25                                                                                                                                                                                                             continue
-30                                                                                                                                                                                                             continue
-                                                                                                                                                                                                               do 115  k1 =1, m
-                                                                                                                                                                                                                  d9 = 0.0
-                                                                                                                                                                                                                  n=k1
-                                                                                                                                                                                                                  do 50   i2 = k1, m
-                                                                                                                                                                                                                     ccc!     bx=cabsz(f(i2,k1))
-                                                                                                                                                                                                                     ccc!     if (bx .le. d9)   go to 50
-                                                                                                                                                                                                                     d18 = absz ( fr(i2,k1) )
-                                                                                                                                                                                                                     d19 = absz ( fi(i2,k1) )
-                                                                                                                                                                                                                     if ( d18 .lt. d19 ) d18 = d19
-                                                                                                                                                                                                                     if ( d18 .le. d9 )  go to 50
-                                                                                                                                                                                                                     d9 = d18
-                                                                                                                                                                                                                     n=i2
-50                                                                                                                                                                                                                   continue
-                                                                                                                                                                                                                     !      write (*,*) ' next variable.  k1, n, d9, d1 =',
-                                                                                                                                                                                                                     !     1                              k1, n, d9, d1
-                                                                                                                                                                                                                     if ( d9 .gt. d1 ) go to 60
-                                                                                                                                                                                                                     write (lunit6, 5706)  m, k1, d9
-5706                                                                                                                                                                                                                 format ( /, 106h stop. ---- matrix inversion within subroutine  'm
-1                                                                                                                                                                                                                    inv'  has been suspended, due to failure to find a large     ,/,
-2        12                                                                                                                                                                                                          x,  58henough pivot element.   the matrix in question is
-3                                                                                                                                                                                                                    of order,  i5,  36h ,    with breakdown having occurred     ,/,
-4       12                                                                                                                                                                                                           x,  51hwhile working on the elimination of variable numbe
-5                                                                                                                                                                                                                    r,  i5,   '.   in this columns, the largest real or'       ,/,
-6       12                                                                                                                                                                                                           x,  ' imaginary part had absolute value',
-7                                                                                                                                                                                                                    e14.3,  45h ,   while the applicable near-zero tolerance     )
-                                                                                                                                                                                                                     write(lunit6, 5707) d1, value2
-5707                                                                                                                                                                                                                 format (12x,  11his equal to,   e14.3,   36h .    this latter numb
-1                                                                                                                                                                                                                    er is equal to,   e14.3,   20h   times the largest           ,/,
-2       12                                                                                                                                                                                                           x,  67helement of the original input matrix (considering
-3                                                                                                                                                                                                                    absolute values).     )
-                                                                                                                                                                                                                     stop
-60                                                                                                                                                                                                                   if (n .eq. k1)   go to 75
-                                                                                                                                                                                                                     do 70   j = k1, m1
-                                                                                                                                                                                                                        ccc!     cc=f(k1,j)
-                                                                                                                                                                                                                        ccr = fr(k1,j)
-                                                                                                                                                                                                                        cci = fi(k1,j)
-                                                                                                                                                                                                                        ccc!     f(k1,j)=f(n,j)
-                                                                                                                                                                                                                        fr(k1,j) = fr(n,j)
-                                                                                                                                                                                                                        fi(k1,j) = fi(n,j)
+20      fr(i,j) = 1.0
+        fi(i,j) = 0.0
+25   end do
+30 end do
+  do 115  k1 =1, m
+     d9 = 0.0
+     n=k1
+     do i2 = k1, m
+        !!!!     bx=cabsz(f(i2,k1))
+        !!!!     if (bx .le. d9)   go to 50
+        d18 = absz ( fr(i2,k1) )
+        d19 = absz ( fi(i2,k1) )
+        if ( d18 .lt. d19 ) d18 = d19
+        if ( d18 .le. d9 )  go to 50
+        d9 = d18
+        n=i2
+50   end do
+     !      write (*,*) ' next variable.  k1, n, d9, d1 =',
+     !     1                              k1, n, d9, d1
+     if ( d9 .gt. d1 ) go to 60
+     write (lunit6, 5706)  m, k1, d9
+5706 format ( /, 106h stop. ---- matrix inversion within subroutine  'minv'  has been suspended, due to failure to find a large     ,/, &
+          12x,  58henough pivot element.   the matrix in question is of order,  i5,  36h ,    with breakdown having occurred     ,/, &
+          12x,  51hwhile working on the elimination of variable number,  i5,   '.   in this columns, the largest real or'       ,/, &
+          12x,  ' imaginary part had absolute value', e14.3,  45h ,   while the applicable near-zero tolerance     )
+     write(lunit6, 5707) d1, value2
+5707 format (12x,  11his equal to,   e14.3,   36h .    this latter number is equal to,   e14.3,   20h   times the largest           ,/, &
+          12x,  67helement of the original input matrix (considering absolute values).     )
+     stop
+60   if (n .eq. k1)   go to 75
+     do j = k1, m1
+        !!!!     cc=f(k1,j)
+        ccr = fr(k1,j)
+        cci = fi(k1,j)
+        !!!!     f(k1,j)=f(n,j)
+        fr(k1,j) = fr(n,j)
+        fi(k1,j) = fi(n,j)
 !!!!   70 f(n,j)=cc
-                                                                                                                                                                                                                        fr(n,j) = ccr
-70                                                                                                                                                                                                                      fi(n,j) = cci
-75                                                                                                                                                                                                                      do 100 i=1,m
-                                                                                                                                                                                                                           if (i.eq. k1)   go to 100
-                                                                                                                                                                                                                           ccc!     d = f(i,k1)
-                                                                                                                                                                                                                           dr = fr(i,k1)
-                                                                                                                                                                                                                           di = fi(i,k1)
-                                                                                                                                                                                                                           do 95   j=k1, m1
+        fr(n,j) = ccr
+70      fi(n,j) = cci
+     end do
+75   do i=1,m
+        if (i.eq. k1)   go to 100
+!!!!     d = f(i,k1)
+        dr = fr(i,k1)
+        di = fi(i,k1)
+        do j=k1, m1
 !!!!  f(i,j) = f(i,j) - d/f(k1,k1) * f(k1,j)
-                                                                                                                                                                                                                              d14 = fr(k1,k1)**2 + fi(k1,k1)**2
-                                                                                                                                                                                                                              d22 = dr * fr(k1,k1) + di * fi(k1,k1)
-                                                                                                                                                                                                                              d23 = di * fr(k1,k1) - dr * fi(k1,k1)
-                                                                                                                                                                                                                              d5 = d22 * fr(k1,j) - d23 * fi(k1,j)
-                                                                                                                                                                                                                              d6 = d22 * fi(k1,j) + d23 * fr(k1,j)
-                                                                                                                                                                                                                              fr(i,j) = fr(i,j) - d5 / d14
-                                                                                                                                                                                                                              fi(i,j) = fi(i,j) - d6 / d14
-                                                                                                                                                                                                                              !      write (*,*) ' revise f(i,j).  i, j, k1, f(i,j) =',
-                                                                                                                                                                                                                              !     1                              i, j, k1, fr(i,j), fi(i,j)
-95                                                                                                                                                                                                                            continue
-100                                                                                                                                                                                                                           continue
-                                                                                                                                                                                                                              ccc!     ad = f(k1, k1)
-                                                                                                                                                                                                                              adr = fr(k1,k1)
-                                                                                                                                                                                                                              adi = fi(k1,k1)
-                                                                                                                                                                                                                              d14 = adr**2 + adi**2
-                                                                                                                                                                                                                              adr = adr / d14
-                                                                                                                                                                                                                              adi = -adi / d14
-                                                                                                                                                                                                                              do 110  j=k1, m1
-                                                                                                                                                                                                                                 cccc 110 f(k1,j) = f(k1,j)/ad
-                                                                                                                                                                                                                                 d16  =     fr(k1,j) * adr - fi(k1,j) * adi
-                                                                                                                                                                                                                                 fi(k1,j) = fr(k1,j) * adi + fi(k1,j) * adr
-110                                                                                                                                                                                                                              fr(k1,j) = d16
-                                                                                                                                                                                                                                 c  110 write (*,*) ' new  f(k1,j).   k1, j, fr(k1,j), fi(k1,j) =',
-                                                                                                                                                                                                                                 !     1                              k1, j, fr(k1,j), fi(k1,j)
-115                                                                                                                                                                                                                              continue
-                                                                                                                                                                                                                                 do 325  i = 1, m
-                                                                                                                                                                                                                                    do 325 j=1,m
-                                                                                                                                                                                                                                       j1=j+m
-325                                                                                                                                                                                                                                    fnew(i,j) = cmplxz ( fr(i,j1), fi(i,j1) )
-                                                                                                                                                                                                                                       do 625  i = 1, m
-                                                                                                                                                                                                                                          do 625 j=1, m
-                                                                                                                                                                                                                                             fident(i,j) = czero
-                                                                                                                                                                                                                                             do 288  k=1, m
-288                                                                                                                                                                                                                                             fident(i,j) = fident(i,j) + tcmpx(i,k) * fnew(k,j)
-625                                                                                                                                                                                                                                             continue
-                                                                                                                                                                                                                                                !      write (*,*) ' minv, [a]*[a]-1  follows.   m =',  m
-                                                                                                                                                                                                                                                !      do 725  i = 1, m
-                                                                                                                                                                                                                                                c  725 write (*,*) ' row', i, ( fident(i,j), j=1, m )
-                                                                                                                                                                                                                                                do 125  i = 1, m
-                                                                                                                                                                                                                                                   do 125 j=1,m
-                                                                                                                                                                                                                                                      j1=j+m
-                                                                                                                                                                                                                                                      cccc 125 tcmpx(i,j) = f(i,j1)
-125                                                                                                                                                                                                                                                   tcmpx(i,j) = cmplxz ( fr(i,j1), fi(i,j1) )
-                                                                                                                                                                                                                                                      c  125 write (*,*) ' transfer.',
-                                                                                                                                                                                                                                                      !     1  ' i, j, j1, fr(i,j1), fi(i,j1), tcmpx(i,j) =',
-                                                                                                                                                                                                                                                      !     2    i, j, j1, fr(i,j1), fi(i,j1), tcmpx(i,j)
-                                                                                                                                                                                                                                                      if ( iprs47  .ge.  1 )
-1                                                                                                                                                                                                                                                     write (logsix, 4027)  tcmpx(1,1), tcmpx(1,2)
-4027                                                                                                                                                                                                                                                  format ( /,  24h exit  'minv'  normally.,
-1  5                                                                                                                                                                                                                                                  x,  15hreal-tcmpx(1,1),  5x,  15himag-tcmpx(1,1),
-2  5                                                                                                                                                                                                                                                  x,  15hreal-tcmpx(1,2),  5x,  15himag-tcmpx(1,2)  ,/,
-3  24                                                                                                                                                                                                                                                 x,  4e20.11  ,/,
-4  55                                                                                                                                                                                                                                                 h diagnostic inverse.   tcmpx(i,j)  for  (i,j)=1, ... m.  )
-                                                                                                                                                                                                                                                      if ( iprs47  .ge.  7 )
-1                                                                                                                                                                                                                                                     call print ( tcmpx(1,1), m, ll0, ldn )
-150                                                                                                                                                                                                                                                   return
-                                                                                                                                                                                                                                                   end do
-                                                                                                                                                                                                                                                   subroutine mxm(xm,yym,c,n,ldn)
-                                                                                                                                                                                                                                                     implicit real*8 (a-h, o-z) ,
-1                                                                                                                                                                                                                                                    integer*4 (i-n)
-                                                                                                                                                                                                                                                     include  'labl47.ftn'
-                                                                                                                                                                                                                                                     complex*16  xm(ldn,ldn), yym(ldn,ldn), c(ldn,ldn)
-                                                                                                                                                                                                                                                     if ( iprs47  .ge.  1 )
-1                                                                                                                                                                                                                                                    write (logsix, 4062)  n, xm(1,1), yym(1,1)
-4062                                                                                                                                                                                                                                                 format ( /,  15h enter  'mxm' .,  8h       n,
-1  7                                                                                                                                                                                                                                                 x,  13hreal- xm(1,1),  7x,  13himag- xm(1,1),
-2  7                                                                                                                                                                                                                                                 x,  13hreal-yym(1,1),  7x,  13himag-yym(1,1)  ,/,
-3  15                                                                                                                                                                                                                                                x,  i8,  4e20.11  ,/,
-4  57                                                                                                                                                                                                                                                h diagnostic left factor.   xm(i,j)  for  (i,j)=1, ... n .  )
-                                                                                                                                                                                                                                                     if ( iprs47  .lt.  8 )   go to 4079
-                                                                                                                                                                                                                                                     ll0 = 0
-                                                                                                                                                                                                                                                     call print ( xm(1,1), n, ll0, ldn )
-                                                                                                                                                                                                                                                     write (logsix, 4073)
-4073                                                                                                                                                                                                                                                 format ( /,
-1  58                                                                                                                                                                                                                                                h diagnostic right factor.  yym(i,j)  for  (i,j)=1, ... n . )
-                                                                                                                                                                                                                                                     call print ( yym(1,1), n, ll0, ldn )
-4079                                                                                                                                                                                                                                                 do 10  i=1, n
-                                                                                                                                                                                                                                                        do 10 j=1,n
-                                                                                                                                                                                                                                                           c(i,j)=czero
-                                                                                                                                                                                                                                                           do 10 k=1,n
-10                                                                                                                                                                                                                                                            c(i,j) = c(i,j) + xm(i,k) * yym(k,j)
-                                                                                                                                                                                                                                                              if ( iprs47  .ge.  1 )
-1                                                                                                                                                                                                                                                             write (logsix, 4091)  c(1,1), c(1,2)
-4091                                                                                                                                                                                                                                                          format ( /,  14h exit  'mxm' .,
-1  9                                                                                                                                                                                                                                                          x,  11hreal-c(1,1),  9x,  11himag-c(1,1),
-2  9                                                                                                                                                                                                                                                          x,  11hreal-c(1,2),  9x,  11himag-c(1,2)  ,/,
-3  14                                                                                                                                                                                                                                                         x,  4e20.11  ,/,
-4  52                                                                                                                                                                                                                                                         h diagnostic product.   c(i,j)  for  (i,j)=1, ... n .   )
-                                                                                                                                                                                                                                                              if ( iprs47  .ge.  8 )
-1                                                                                                                                                                                                                                                             call print ( c(1,1), n, ll0, ldn )
-                                                                                                                                                                                                                                                              return
-                                                                                                                                                                                                                                                           end do
-                                                                                                                                                                                                                                                           subroutine print(c,n,iform,ldn)
-                                                                                                                                                                                                                                                             implicit real*8 (a-h, o-z) ,
-1                                                                                                                                                                                                                                                            integer*4 (i-n)
-                                                                                                                                                                                                                                                             include  'blkcom.ftn'
-                                                                                                                                                                                                                                                             include  'labl47.ftn'
-                                                                                                                                                                                                                                                             complex*16  c(ldn,ldn)
-                                                                                                                                                                                                                                                             dimension  workr(8), worki(8)
-                                                                                                                                                                                                                                                             real*8          text1, text2, text3
-                                                                                                                                                                                                                                                             data  text1   /  3hrow  /
-                                                                                                                                                                                                                                                             data  text2   /  3h     /
-                                                                                                                                                                                                                                                             nline = ( n + 7 ) / 8
-                                                                                                                                                                                                                                                             do 4695  i=1, n
-                                                                                                                                                                                                                                                                text3 = text2
-                                                                                                                                                                                                                                                                im = -7
-                                                                                                                                                                                                                                                                do 4681  k=1, nline
-                                                                                                                                                                                                                                                                   im = im + 8
-                                                                                                                                                                                                                                                                   in = im + 7
-                                                                                                                                                                                                                                                                   if ( in  .gt.  n )   in = n
-                                                                                                                                                                                                                                                                   l = 0
-                                                                                                                                                                                                                                                                   do 4617  j=im, in
-                                                                                                                                                                                                                                                                      l = l + 1
-                                                                                                                                                                                                                                                                      workr(l) = realz( c(i,j) )
-4617                                                                                                                                                                                                                                                                  worki(l) = aimagz( c(i,j) )
-                                                                                                                                                                                                                                                                      if ( k  .eq.  nline )
-1                                                                                                                                                                                                                                                                     text3 = text1
-                                                                                                                                                                                                                                                                      if ( iform  .eq.  1 )   go to 4658
-                                                                                                                                                                                                                                                                      write (lunit6, 4649)  text3,  ( workr(m), m=1, l )
-4649                                                                                                                                                                                                                                                                  format ( 1x, a3, 8e16.7  )
-                                                                                                                                                                                                                                                                      write (lunit6, 4651)  ( worki(m), m=1, l )
-4651                                                                                                                                                                                                                                                                  format ( 4x, 8e16.7 )
-                                                                                                                                                                                                                                                                      go to 4681
-4658                                                                                                                                                                                                                                                                  write (lunit6, 4659)  text3,  ( workr(m), m=1, l )
-4659                                                                                                                                                                                                                                                                  format ( 1x, a3, 8f16.7 )
-                                                                                                                                                                                                                                                                      write (lunit6, 4661)  ( worki(m), m=1, l )
-4661                                                                                                                                                                                                                                                                  format ( 4x, 8f16.7  )
-4681                                                                                                                                                                                                                                                                  continue
-4695                                                                                                                                                                                                                                                                  write (lunit6, 4632)  i
-4632                                                                                                                                                                                                                                                                  format ( 1h+, i2, /, 1x )
-                                                                                                                                                                                                                                                                      return
-                                                                                                                                                                                                                                                                   end do
-                                                                                                                                                                                                                                                                   c
-                                                                                                                                                                                                                                                                   !     end of file: over47.for
-                                                                                                                                                                                                                                                                   c
+           d14 = fr(k1,k1)**2 + fi(k1,k1)**2
+           d22 = dr * fr(k1,k1) + di * fi(k1,k1)
+           d23 = di * fr(k1,k1) - dr * fi(k1,k1)
+           d5 = d22 * fr(k1,j) - d23 * fi(k1,j)
+           d6 = d22 * fi(k1,j) + d23 * fr(k1,j)
+           fr(i,j) = fr(i,j) - d5 / d14
+           fi(i,j) = fi(i,j) - d6 / d14
+           !      write (*,*) ' revise f(i,j).  i, j, k1, f(i,j) =',
+           !     1                              i, j, k1, fr(i,j), fi(i,j)
+95      end do
+100  end do
+!!!!     ad = f(k1, k1)
+     adr = fr(k1,k1)
+     adi = fi(k1,k1)
+     d14 = adr**2 + adi**2
+     adr = adr / d14
+     adi = -adi / d14
+     do 110  j=k1, m1
+        cccc 110 f(k1,j) = f(k1,j)/ad
+        d16  =     fr(k1,j) * adr - fi(k1,j) * adi
+        fi(k1,j) = fr(k1,j) * adi + fi(k1,j) * adr
+110     fr(k1,j) = d16
+     end do
+     !  110 write (*,*) ' new  f(k1,j).   k1, j, fr(k1,j), fi(k1,j) =',
+     !     1                              k1, j, fr(k1,j), fi(k1,j)
+115 end do
+  do i = 1, m
+     do j=1,m
+        j1=j+m
+325     fnew(i,j) = cmplxz ( fr(i,j1), fi(i,j1) )
+     end do
+  end do
+  do i = 1, m
+     do j=1, m
+        fident(i,j) = czero
+        do k=1, m
+288        fident(i,j) = fident(i,j) + tcmpx(i,k) * fnew(k,j)
+        end do
+625  end do
+  end do
+  !      write (*,*) ' minv, [a]*[a]-1  follows.   m =',  m
+  !      do 725  i = 1, m
+  !  725 write (*,*) ' row', i, ( fident(i,j), j=1, m )
+  do i = 1, m
+     do j=1,m
+        j1=j+m
+!!!! 125 tcmpx(i,j) = f(i,j1)
+125     tcmpx(i,j) = cmplxz ( fr(i,j1), fi(i,j1) )
+     end do
+  end do
+  !  125 write (*,*) ' transfer.',
+  !     1  ' i, j, j1, fr(i,j1), fi(i,j1), tcmpx(i,j) =',
+  !     2    i, j, j1, fr(i,j1), fi(i,j1), tcmpx(i,j)
+  if ( iprs47  .ge.  1 ) write (logsix, 4027)  tcmpx(1,1), tcmpx(1,2)
+4027 format ( /,  24h exit  'minv'  normally., 5x,15hreal-tcmpx(1,1),  5x,  15himag-tcmpx(1,1),5x,,15hreal-tcmpx(1,2),  5x,  15himag-tcmpx(1,2)  ,/, &
+          24x,  4e20.11  ,/,55h diagnostic inverse.   tcmpx(i,j)  for  (i,j)=1, ... m.  )
+  if ( iprs47  .ge.  7 ) call print ( tcmpx(1,1), m, ll0, ldn )
+150 return
+end subroutine minv
+!
+! subroutine mxm.
+!
+subroutine mxm(xm,yym,c,n,ldn)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  include 'labl47.ftn'
+  complex*16  xm(ldn,ldn), yym(ldn,ldn), c(ldn,ldn)
+  if ( iprs47  .ge.  1 ) write (logsix, 4062)  n, xm(1,1), yym(1,1)
+4062 format ( /,  15h enter  'mxm' .,  8h       n, 7x,  13hreal- xm(1,1),  7x,  13himag- xm(1,1), 7x,  13hreal-yym(1,1),  7x,  13himag-yym(1,1)  ,/, &
+          15x,  i8,  4e20.11  ,/, 57h diagnostic left factor.   xm(i,j)  for  (i,j)=1, ... n .  )
+  if ( iprs47  .lt.  8 )   go to 4079
+  ll0 = 0
+  call print ( xm(1,1), n, ll0, ldn )
+  write (logsix, 4073)
+4073 format ( /, 58h diagnostic right factor.  yym(i,j)  for  (i,j)=1, ... n . )
+  call print ( yym(1,1), n, ll0, ldn )
+4079 do i=1, n
+     do j=1,n
+        c(i,j)=czero
+        do k=1,n
+10         c(i,j) = c(i,j) + xm(i,k) * yym(k,j)
+        end do
+     end do
+  end do
+  if ( iprs47  .ge.  1 ) write (logsix, 4091)  c(1,1), c(1,2)
+4091 format ( /,  14h exit  'mxm' ., 9x,  11hreal-c(1,1),  9x,  11himag-c(1,1), 9x,  11hreal-c(1,2),  9x,  11himag-c(1,2)  ,/, &
+          14x,  4e20.11  ,/, 52h diagnostic product.   c(i,j)  for  (i,j)=1, ... n .   )
+  if ( iprs47  .ge.  8 ) call print ( c(1,1), n, ll0, ldn )
+  return
+end subroutine mxm
+!
+! subroutine print.
+!
+subroutine print(c,n,iform,ldn)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  include 'blkcom.ftn'
+  include 'labl47.ftn'
+  complex*16  c(ldn,ldn)
+  dimension  workr(8), worki(8)
+  real*8          text1, text2, text3
+  data  text1   /  3hrow  /
+  data  text2   /  3h     /
+  nline = ( n + 7 ) / 8
+  do i=1, n
+     text3 = text2
+     im = -7
+     do k=1, nline
+        im = im + 8
+        in = im + 7
+        if ( in  .gt.  n )   in = n
+        l = 0
+        do j=im, in
+           l = l + 1
+           workr(l) = realz( c(i,j) )
+4617       worki(l) = aimagz( c(i,j) )
+        end do
+        if ( k  .eq.  nline ) text3 = text1
+        if ( iform  .eq.  1 )   go to 4658
+        write (lunit6, 4649)  text3,  ( workr(m), m=1, l )
+4649    format ( 1x, a3, 8e16.7  )
+        write (lunit6, 4651)  ( worki(m), m=1, l )
+4651    format ( 4x, 8e16.7 )
+        go to 4681
+4658    write (lunit6, 4659)  text3,  ( workr(m), m=1, l )
+4659    format ( 1x, a3, 8f16.7 )
+        write (lunit6, 4661)  ( worki(m), m=1, l )
+4661    format ( 4x, 8f16.7  )
+4681 end do
+4695 write (lunit6, 4632)  i
+  end do
+4632 format ( 1h+, i2, /, 1x )
+  return
+end subroutine print
+!
+!     end of file: over47.for
+!
