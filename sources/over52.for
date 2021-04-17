@@ -46,38 +46,26 @@ subroutine over52
           5x,  'the size of list number 8 (see below).   ')
 7253 if( lstat(15) .ne. 2 )  go to 6220
   write(lunit6, 7353)  lstat(16), lbus
-7353 format( 5x,  21hnphcas*(nphcas+1)/2 = , i5,   19h  exceeds 'lbus'
-1 of, i5,  41hwhere 'lbus' is the size of list number 1  ,/,
-2 5 x,  12h(see below).   )
+7353 format (5x,  'nphcas*(nphcas+1)/2 = ', i5,   "  exceeds 'lbus' of", i5,  "where 'lbus' is the size of list number 1  ",/, &
+          5x,  '(see below).   ')
   goto6220
 6054 write(lunit6, 7154)
-7154 format( 5x, 113hthe user has attempted to use the steady-state cas
-1 cading of pi-circuits option, but has made an input data error.  )
+7154 format (5x, 'The user has attempted to use the steady-state cascading of pi-circuits option, but has made an input data error.  ')
   write(lunit6,7054)lstat(13),lstat(12)
-7054 format( 5x, 101hthe line-position card provides for specification
-1 of a transposition by means of a phase-position map   ,/,
-2 5 x, 101hbeginning in column 25, and using 'i4' format for each of
-3 'nphcas' entries.   these entries must be a   ,/,
-4 5 x,  67hpermutation of the integers 1, 2, 3, ..., 'nphcas', with
-5 'nphcas' =, i3,  35h for the present line.   but one of  ,/,
-6 5 x,  42hthe position-map entries has been read as , i4,
-7  50 h, which is clearly impossible.   assuming that the   )
+7054 format (5x, 'The line-position card provides for specification of a transposition by means of a phase-position map   ',/, &
+          5x, "beginning in column 25, and using 'i4' format for each of 'nphcas' entries.   These entries must be a   ",/, &
+          5x, "permutation of the integers 1, 2, 3, ..., 'nphcas', with 'nphcas' =", i3,  ' for the present line.   But one of  ',/, &
+          5x,  'the position-map entries has been read as ', i4, ', which is clearly impossible.   Assuming that the   ')
   write(lunit6, 7254)
-7254 format( 5x,106hdigits which were punched on the card were ok, chec
-1 k for right-justification within the fields of width 4.   ,/,
-2 5 x, 112hrecall that an erroneous shift to the left by one column
-3 multiplies the number by 10, while a shift to the right  ,/,
-4 5 x, 112hwill spill over into the following field, generally creat
-5 ing a very large integer when the latter field is read.    )
+7254 format (5x, 'digits which were punched on the card were ok, check for right-justification within the fields of width 4.   ',/, &
+          5x, 'Recall that an erroneous shift to the left by one column multiplies the number by 10, while a shift to the right  ',/, &
+          5x, 'will spill over into the following field, generally creating a very large integer when the latter field is read.    ')
   goto6220
 6055 write(lunit6, 7154)
   write(lunit6,7055)lstat(12)
-7055 format( 5x, 108h'multip' is the multiplicity parameter, read from
-1 columns 9-12 of the line-position card.   as such, it must  ,/,
-2 5 x, 111hbe a non-negative integer, with zero or blank given the d
-3 efault value of unity.   but the emtp has read a value   ,/,  5x,
-4  3 hof , i4,  67h for 'multip', which has no physical meaning, and
-5 must be rejected.  )
+7055 format (5x, "'multip' is the multiplicity parameter, read from columns 9-12 of the line-position card.   As such, it must  ",/, &
+          5x, 'be a non-negative integer, with zero or blank given the default value of unity.   But the EMTP has read a value   ',/, &
+          5x, 'of ', i4,  " for 'multip', which has no physical meaning, andmust be rejected.  ")
   goto6220
 6056 write(lunit6, 7154)
   write(lunit6,7056) lstat(13), lstat(14), lstat(12)
