@@ -238,7 +238,7 @@ subroutine subr51
 7019 format (5x, 'Steady-state solution logic trouble.   See program maintenance, since this is their fault.   ')
   go to 6220
 6020 write(lunit6, 7020)
-7020 format( 5x,  'Llogic breakdown in steady-state solution while building admittance matrix.   ')
+7020 format( 5x,  'Logic breakdown in steady-state solution while building admittance matrix.   ')
   write(lunit6, 7115)
   go to 6220
 6021 write(lunit6, 7021)
@@ -306,7 +306,7 @@ subroutine subr51
   go to 6220
 6031 write(lunit6, 7031)  bus1
 7031 format( 5x,  84hlast card gives node-voltage initial condition for unrecognizable node.   the name ', a6,  11h' which was ,/, &
-          5x,  52hpunched could not be found in the list of bus names.  )
+          5x, 52hpunched could not be found in the list of bus names.  )
   write(lunit6, 7131)
 7131 format( 5x, 105hcheck name(s) for spelling, as well as the column-positioning of any blanks in the field(s) which is(are)  ,/, &
           5x,  20hsix characters wide.   )
@@ -328,41 +328,26 @@ subroutine subr51
   go to 6220
 6035 write(lunit6, 7035)  lstat(16), bus1, bus2, flstat(11), flstat(12), flstat(13)
 7035 format (5x,  90hbreakdown of solution when using compensation (superposition) on nonlinear element number , i3,  /, &
-     2 5x,  21hwhich connects node ', a6, 6h' to ', a6, 2h'.  ,/,
-     3 5x, 114hthevenin load line does not intersect the nonlinear chara
-     4cteristic.   maybe user should extend the characteristic, /,
-     5 5x, 112hassuming that the problem is otherwise well-posed.   some
-     6 program solution quantities bearing on this breakdown,   ,/,
-     7 5x,  91hpotentially useful to your program maintenance man (if no
-     8t to the user), are as follows ...   ,/,
-     9 5x,  16he(k), e(m), a2 = , 3e13.4  )
-      write (lunit6, 6135)
- 6135 format (5x, 108hpast experience based on a number of encounters wi
-     1th this emtp error stop has shown that most often the user    ,/,
-     2 5x, 110hhas under-estimated the peak nonlinear (or time-varying)
-     3element ordinate value.   that is, the characteristic        ,/,
-     4 5x, 116has inputted was correct, perhaps, but was simply not defi
-     5ned for large enough values.   remember that true nonlinear   ,/,
-     6 5x, 103hor time-varying elements (with type codes 91, 92, or 93)
-     7do not have the final segments on the two ends                )
-      write (lunit6, 6235)
- 6235 format (5x, 111hextrapolated linearly to infinity (as is the case
-     1with pseudo-nonlinear elements of type codes 97, 98, and 99).  ,/,
-     2 5x, 105hbefore looking for any more sophisticated trouble, this v
-     3ery simple possibility should always be checked.            )
-      go to 6220
- 6036 write (lunit6, 7036)  lstat(16), bus1, bus2,
-     1 flstat(12), flstat(13), flstat(11)
- 7036 format( 5x,  63hbreakdown surrounding nonlinear or time-varying el
-     1ement number , i3, 24h having terminal nodes ', a6,
-     2 7h' and ', a6, 2h'.  ,/,
-     3 5x,  99hthis is a time-varying resistance with last time point of
-     4 characteristic defined by user being for , e13.4,  /,
-     5 5x, 11hsec.   but , e13.4,   89h sec have elapsed since element w
-     6as turned on.   user must extend characteristic if study  ,/,
-     7 5x,  66his to be run out further than the present simulation time
-     8 of   t =, e12.3,  31h sec   at which this run is now  ,/,
-     9 5x,  17hbeing terminated.   )
+          5x, 'which connects node ', "'", a6, "'", ' to ', "'", a6, "'", '. ',/, &
+          5x, 'Thevenin load line does not intersect the nonlinear characteristic.   Maybe user should extend the characteristic', /, &
+          5x, 'assuming that the problem is otherwise well-posed.   Some program solution quantities bearing on this breakdown,   ',/, &
+          5x,  'potentially useful to your program maintenance man (if not to the user), are as follows ...   ', /, &
+          5x,  'e(k), e(m), a2 = ', 3e13.4  )
+  write (lunit6, 6135)
+6135 format (5x, 'Past experience based on a number of encounters with this EMTP error stop has shown that most often the user    ',/, &
+          5x, 'has under-estimated the peak nonlinear (or time-varying) element ordinate value.   that is, the characteristic        ',/, &
+          5x, 'has inputted was correct, perhaps, but was simply not defined for large enough values.   Remember that true nonlinear   ',/, &
+          5x, 'or time-varying elements (with type codes 91, 92, or 93) do not have the final segments on the two ends                ')
+  write (lunit6, 6235)
+6235 format (5x, 'Extrapolated linearly to infinity (as is the case with pseudo-nonlinear elements of type codes 97, 98, and 99).  ',/, &
+          5x, 'Before looking for any more sophisticated trouble, this very simple possibility should always be checked.            ')
+  go to 6220
+6036 write (lunit6, 7036)  lstat(16), bus1, bus2, flstat(12), flstat(13), flstat(11)
+7036 format ( 5x,  'Breakdown surrounding nonlinear or time-varying element number ', i3, ' having terminal nodes ', "'", a6, &
+          "' and '", a6, "'."  ,/, 5x, 'This is a time-varying resistance with last time point of characteristic defined by user being for ', e13.4,  /, &
+          5x, 'sec.   But ', e13.4,   ' sec have elapsed since element was turned on.   User must extend characteristic if study  ',/, &
+          5x, 'his to be run out further than the present simulation time of   t =', e12.3,  ' sec   at which this run is now  ',/, &
+          5x,  'being terminated.   ')
       go to 6220
  6037 write (lunit6, 7037)
  7037 format  (5x, 32hlast data card was decoded using,
@@ -608,7 +593,7 @@ subroutine subr51
      1 write (lunit6, 8943)  nchain, kill
  8943 format ( 31h exit "subr51".  nchain, kill =,  2i6 )
  9000 return
-      end
-c
-c     file: over51.for
-c
+    end
+!
+!     file: over51.for
+!
