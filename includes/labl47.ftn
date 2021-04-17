@@ -1,20 +1,20 @@
-c-*- mode: fortran; syntax: ansi-fortran-77; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
-c
-c     file: labl47.ftn
-c
-      common/com47/  bin(20), bkn(20), cimag1, creal1, czero, ypo       m35. 163
-c     end of complex variables                                          m29.  14
-      common/com47/  alf1, alf2, dep1, dep2, e0, e2p, radp(3)           m35. 164
-      common/com47/  alpi, bp1, bp2, es1, es2, rop, usp                 m35. 165
-      common/com47/  hyud2, hyud3, hyud4, htoj2, htoj3, fzero           m35. 166
-      common/com47/  htoj4,pai,roe,spdlgt,u0,u2p                        m35. 167
-      common/com47/  value1, value2, value3, value4, value5,valu14      m35. 168
-c     end of real variables                                             m29.  18
-      common/com47/  iearth,itypec,ncct,ncc,npc,izflag,iyflag,npc2      m35. 169
-      common/com47/  np2,logsix,kmode,iprs47,npais,ncros,numaki,npp     m35. 170
-      common/com47/  iprint                                             vax.   3
-c     end of integer variables                                          m29.  19
-      complex*16  bin, bkn, cimag1, creal1, czero, ypo                  m35. 171
-c
-c     end of file: labl47.ftn
-c
+!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!
+!     file: labl47.ftn
+!
+  common /com47/  bin(20), bkn(20), cimag1, creal1, czero, ypo
+  !     end of complex variables
+  common /com47/  alf1, alf2, dep1, dep2, e0, e2p, radp(3)
+  common /com47/  alpi, bp1, bp2, es1, es2, rop, usp
+  common /com47/  hyud2, hyud3, hyud4, htoj2, htoj3, fzero
+  common /com47/  htoj4,pai,roe,spdlgt,u0,u2p
+  common /com47/  value1, value2, value3, value4, value5,valu14
+  !     end of real variables
+  common /com47/  iearth,itypec,ncct,ncc,npc,izflag,iyflag,npc2
+  common /com47/  np2,logsix,kmode,iprs47,npais,ncros,numaki,npp
+  common /com47/  iprint
+  !     end of integer variables
+  complex*16  bin, bkn, cimag1, creal1, czero, ypo
+!
+!     end of file: labl47.ftn
+!

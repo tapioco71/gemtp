@@ -91,7 +91,7 @@ subroutine subr47
   iof51 = iof50 + lnq
   iof52 = iof51 + lnq
   iof53 = iof52 + lnq
-  c     step over last vector to find total memory requirements:
+  !     step over last vector to find total memory requirements:
   n13 = ( iof53 + lnq2 ) * 2 * nbyte(2) / nbyte(3)
   if ( n13  .le.  n7 )  go to 7835
   lstat(19) = 7835
@@ -169,9 +169,9 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
   value2 = epsiln
   value1 = .5 * value2/1000.
   value3 = 20. * 1000. / alogz(ten)
-  value4 = 1.7810 7241 7990 d0
+  value4 = 1.781072417990d0
   value5 = tenm3
-  valu14 = 2.3025 8509 3000 d0
+  valu14 = 2.302585093000d0
   liu = 0
   pai = twopi/2.
   u0 = 2 * twopi * tenm6 / ten
@@ -679,10 +679,10 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
 284  format(10x,5hphase,i2,1x,17hboundary radii  | ,/10x,7(i3,e13.5))
 217  write (lunit6, 285)  (roi(i, j), j =1,3), (usr(i, j), j=1,3),(j,usi(i,j),esi(i,j),gi(i,j),j=1,jn)
   end do
-285 format (18x, 'resistivity(Ohm-m)| core', e12.5, 3x, 'sheath', e12.5, 3x, 'armor', e12.5,, /, 18x, 'relative permeability |  ', &
+285 format (18x, 'resistivity(Ohm-m)| core', e12.5, 3x, 'sheath', e12.5, 3x, 'armor', e12.5, /, 18x, 'relative permeability |  ', &
        f12.5, 9x, f12.5, 8x, f12.5, /, 3(18x, 'insulator', i2, '| (relative) permeability', f6.2,3x, &
        'permittivity', f6.2, 3x, 'velocity(m/s)', e12.5, /, 1x))
-  if(itypec . ne . 3 )  go to 220
+  if(itypec .ne. 3 )  go to 220
   three = 3.0
   rlimit = ( 1.0 + 2.0/sqrtz(three)) * radi(1,7)
   if(npc.eq.2) rlimit=2.0*radi(1,7)
@@ -699,7 +699,7 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
      if(ncpp(i1).ge.ncpp(i)) go to 223
      write(lunit6,289)
      call stoptp
-289  format('0', 10x, "Invalid data of 'ncpp(i)', no further calculation.  It should be 'ncpp(i-1).ge.ncpp(i)'.", /, 11x,, 'Please check your data.'  )
+289  format('0', 10x, "Invalid data of 'ncpp(i)', no further calculation.  It should be 'ncpp(i-1).ge.ncpp(i)'.", /, 11x, 'Please check your data.'  )
 223  continue
      bio(i) = radi(i,1) * sqrtz(u0/roi(i,1) *usr(i,1))
      bi1(i) = radi(i,2) * sqrtz(u0/roi(i,1) *usr(i,1))
@@ -1720,7 +1720,7 @@ subroutine  prcon(w,nconpw, zc,zs,ys,yc,yo,qn,gn,ze,a,ai,b,bi,an,  ca, zo, cc, f
         !     zo(i,i) = qn(i)/ys(i,i)
         zs(i,i) = qn(i)**2 / ys(i,i)
 9803    continue
-        cc  $$$$ end of protection  $$$$
+        !!  $$$$ end of protection  $$$$
         !     yo(i,i) = 1./zo(i,i)
         !     zs(i,i) = qn(i) * zo(i,i)
         yo(i,i) = csqrtz( ys(i,i)/zs(i,i) )
@@ -1756,9 +1756,8 @@ subroutine  prcon(w,nconpw, zc,zs,ys,yc,yo,qn,gn,ze,a,ai,b,bi,an,  ca, zo, cc, f
 78   end do
      write(lunit9) ( pp1(k,i),pp2(k,i), k = 1, nconpw )
      !    **********  thlthl
-1978 if ( iprsup .ge. 0 )
      !    **********  thlthl
-1    write (lunit6, 1979)  i, w, ycharm, ychara, alpha, beta
+1978 if ( iprsup .ge. 0 ) write (lunit6, 1979)  i, w, ycharm, ychara, alpha, beta
 1979 format ( ' ychar and eigenvalue for mode', i3, ' at frequency =' , e12.5,  2x, 5h are , 4e12.5)
 1980 end do
   if (numaki .gt. 3)   go to 9900
@@ -1874,7 +1873,7 @@ subroutine unwind (ping,kthl,mrr,nrp,ntol,iseq)
 !!!!!      iseq(l) = l
 !!!!!   88 continue
   do 601 i=1,kpt
-     cccc!      sb(i)=bom(i)
+!!!!!      sb(i)=bom(i)
      sb(i)=tping(i+1)
 601 end do
   ic=0
@@ -1918,17 +1917,12 @@ subroutine unwind (ping,kthl,mrr,nrp,ntol,iseq)
         ai=0.
         if((bom(j-1+kpt) - bom(j-1+2*kpt)) .eq. 0. ) aj=1.0e-12
         if((bom(i-1+kpt) - bom(i-1+2*kpt)) .eq. 0. ) ai=1.0e-12
-        smj1=
-1       (bom(j-1)-bom(j-1+kpt))/((bom(j-1+kpt)-bom(j-1+2*kpt))+aj)
-        smi1=
-1       (bom(i-1)-bom(i-1+kpt))/((bom(i-1+kpt)-bom(i-1+2*kpt))+ai)
-        smj2=
-1       (bom(i-1)-bom(j-1+kpt))/((bom(j-1+kpt)-bom(j-1+2*kpt))+aj)
-        smi2=
-1       (bom(j-1)-bom(i-1+kpt))/((bom(i-1+kpt)-bom(i-1+2*kpt))+ai)
-        if ((abs( smj1 -1 ) .lt. abs( smj2-1 )) .and.
-1       (abs( smi1 -1 ) .lt. abs( smi2 -1 ))) go to 102
-        c   * switching *
+        smj1=(bom(j-1)-bom(j-1+kpt))/((bom(j-1+kpt)-bom(j-1+2*kpt))+aj)
+        smi1=(bom(i-1)-bom(i-1+kpt))/((bom(i-1+kpt)-bom(i-1+2*kpt))+ai)
+        smj2=(bom(i-1)-bom(j-1+kpt))/((bom(j-1+kpt)-bom(j-1+2*kpt))+aj)
+        smi2=(bom(j-1)-bom(i-1+kpt))/((bom(i-1+kpt)-bom(i-1+2*kpt))+ai)
+        if ((abs( smj1 -1 ) .lt. abs( smj2-1 )) .and. (abs( smi1 -1 ) .lt. abs( smi2 -1 ))) go to 102
+        !   * switching *
         iq=0
         t=iseq( (j+2)/4 )
         iseq( (j+2)/4 ) = iseq( (i+2)/4 )
@@ -2029,8 +2023,7 @@ subroutine unwind (ping,kthl,mrr,nrp,ntol,iseq)
      mu=0
      do i=j+4, kpt-3, 4
         if((abs(bom(j)-bom(i)).gt.abs(bom(j)*1e-6)).or.(abs(bom(j+1)-bom(i+1)).gt.abs(bom(j+1)*1e-6)))go to 1005
-        if((abs(bom(j+kpt)-bom(i+kpt)).gt.abs(bom(j+kpt)*1e-6)).or. (abs(bom(j+1+kpt)-bom(i+1+kpt)).gt.abs(bom(j+1+kpt)*1e-6)))
-2       go to 1005
+        if((abs(bom(j+kpt)-bom(i+kpt)).gt.abs(bom(j+kpt)*1e-6)).or. (abs(bom(j+1+kpt)-bom(i+1+kpt)).gt.abs(bom(j+1+kpt)*1e-6))) go to 1005
 !!!!      if((bom(j).ne.bom(i)).or.(bom(j+1).ne.bom(i+1))) go to 1005
 !!!!      if((bom(j+kpt).ne.bom(i+kpt)).or.
 !!!!     1 (bom(j+1+kpt).ne.bom(i+1+kpt))) go to 1005
@@ -2365,7 +2358,7 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
 1719 format ( /,  28h at beginning of  'ymatrx' .,40h   isyst     np2  itypec     npc     npp    ,/,28x,  5i8  )
   if ( iprs47  .ge.  2 ) write (lunit6, 1724)  ( i, ncpp(i), al1i(i), al2i(i), al3i(i), esi(i,1), esi(i,2), esi(i,3), i=1, 10)
 1724 format ( /,  5x,  3hrow,  4x,  4hncpp,  11x,  4hal1i, 11x,4hal2i,11x,  4hal3i,  7x,  8hesi(i,1),  7x,  8hesi(i,2),7x,8hesi(i,3),/, ( 1x, i7, i8, 6e15.6 )   )
-  if(itypec . eq . 3 )  go to 25
+  if(itypec .eq. 3 )  go to 25
   if(isyst.eq.-1) go to 25
   do i=1,npc
      do j=1,npc
@@ -2374,7 +2367,7 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
         yz(j,i)=zy(i,j)
 15   end do
   end do
-  if( itypec . eq . 1 ) go to 200
+  if( itypec .eq. 1 ) go to 200
   do i=1,ncc
      i1=i
      if(i.gt.npc) i1=i-npc
@@ -2391,7 +2384,7 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
 25 do i=1,npc
      i1=i+npc
      i2=i+npc2
-     if( i2 . gt . ncc )  go to 35
+     if( i2 .gt. ncc )  go to 35
      a1(i2,i2)=al3i(i)/esi(i,3)
      a1(i2,i)=a1(i2,i2)
      a1(i,i2)=a1(i2,i2)
@@ -2404,7 +2397,7 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
      a1(i,i1)=a1(i1,i1)
 39   a1(i,i)=a1(i1,i1)+al1i(i)/esi(i,1)
 40 end do
-  if( itypec . eq . 3 )  go to 60
+  if( itypec .eq. 3 )  go to 60
   do i=1,ncc
      do j=1,ncc
         if(j.lt.i) go to 50
@@ -2547,7 +2540,7 @@ subroutine  sczy1 ( w,isyst,zy,dir,dij,ang,hi,di,zs,ze,ldm,ldn )
 3039 format ( /,  44h diagnostic within  'sczy1' ,   ze(i,j)  for, 18h(i,j)=1, ... npc .    )
   ll0 = 0
   if ( iprs47  .ge.  4 ) call print ( ze(1,1), npc, ll0, ldn )
-  if( npc . eq . ncc ) go to 90
+  if( npc .eq. ncc ) go to 90
   if (isyst .eq. -1)  go to  45
   do i=1, ncc
      do j=1, ncc
@@ -3118,7 +3111,7 @@ subroutine  olzy( w,ncpp,zy,dij,ang,usi,usr,esi,hi,di,zs,ze,zc,ldm,ldn )
         j1 = im + j - 1
         j1 = ncpp(j1)
         j2 = j1 + jnc - 1
-        do 35  k=jnc, j2
+        do k=jnc, j2
 35         zc(k,k) = xc
         end do
         if ( iprs47  .ge.  6 ) write (logsix, 3541)  j, i, jnc, j2, j1, xc
@@ -3299,8 +3292,7 @@ subroutine zegen(be1,be2,th,w,xe,isyst)
   go to 5
 140 xe = czero
 5 e = be2 * sqrtz ( w )
-  if ( iprs47  .ge.  2 )
-1 write (logsix, 3741)  isyst, ixa, be1, be2, xa, th, xa1, xe, w,e
+  if ( iprs47  .ge.  2 ) write (logsix, 3741)  isyst, ixa, be1, be2, xa, th, xa1, xe, w,e
 3741 format ( /,  18h within  'zegen' .,  16h   isyst     ixa, 16x,  3hbe1,  16x,  3hbe2,  17x,  2hxa,  17x,  2hth, &
        16x,  3hxa1  ,/,  18x,  2i8,  5e19.10  ,/,  1x, 13x,  7hreal-xe,  13x,  7himag-xe, &
        19x, 1hw, 19x, 1he,/, 1x, 4e20.11 )
@@ -3476,7 +3468,7 @@ subroutine eigen ( cjw, p, n, a, ai, qn, q, xx, yy, ldn )
 65   ai(l,i)=q(im,i)
   end do
   ad=czero
-  do 70 i=1,n
+  do i=1,n
 70   ad=ad+p(im,i)*q(i,im)
   end do
   qn(l)=ad/q(im,im)
@@ -3712,7 +3704,7 @@ subroutine minv ( tcmpx, m, f, ldn, ldn2 )
      m1=m*2
      do j = j1, m1
         if ((j-m) .eq. i)   go to 20
-        ccc!     f(i,j) = czero
+!!!!     f(i,j) = czero
         fr(i,j) = 0.0
         fi(i,j) = 0.0
         go to 25
@@ -3782,8 +3774,8 @@ subroutine minv ( tcmpx, m, f, ldn, ldn2 )
      d14 = adr**2 + adi**2
      adr = adr / d14
      adi = -adi / d14
-     do 110  j=k1, m1
-        cccc 110 f(k1,j) = f(k1,j)/ad
+     do j=k1, m1
+        !!!! 110 f(k1,j) = f(k1,j)/ad
         d16  =     fr(k1,j) * adr - fi(k1,j) * adi
         fi(k1,j) = fr(k1,j) * adi + fi(k1,j) * adr
 110     fr(k1,j) = d16
@@ -3819,7 +3811,7 @@ subroutine minv ( tcmpx, m, f, ldn, ldn2 )
   !     1  ' i, j, j1, fr(i,j1), fi(i,j1), tcmpx(i,j) =',
   !     2    i, j, j1, fr(i,j1), fi(i,j1), tcmpx(i,j)
   if ( iprs47  .ge.  1 ) write (logsix, 4027)  tcmpx(1,1), tcmpx(1,2)
-4027 format ( /,  24h exit  'minv'  normally., 5x,15hreal-tcmpx(1,1),  5x,  15himag-tcmpx(1,1),5x,,15hreal-tcmpx(1,2),  5x,  15himag-tcmpx(1,2)  ,/, &
+4027 format ( /,  24h exit  'minv'  normally., 5x,15hreal-tcmpx(1,1),  5x,  15himag-tcmpx(1,1),5x,15hreal-tcmpx(1,2),  5x,  15himag-tcmpx(1,2)  ,/, &
           24x,  4e20.11  ,/,55h diagnostic inverse.   tcmpx(i,j)  for  (i,j)=1, ... m.  )
   if ( iprs47  .ge.  7 ) call print ( tcmpx(1,1), m, ll0, ldn )
 150 return

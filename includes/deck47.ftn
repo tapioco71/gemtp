@@ -1,8 +1,8 @@
-c     -*- mode: fortran; syntax: ansi-fortran-77; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
-c
-c     file: deck47.ftn
-c
-      common  / c29b01 /   karray(3)
-c
-c     end of file: deck47.ftn
-c
+!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!
+!     file: deck47.ftn
+!
+  common  / c29b01 /   karray(3)
+!
+!     end of file: deck47.ftn
+!
