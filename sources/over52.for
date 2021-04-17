@@ -192,37 +192,26 @@ subroutine over52
 7271 format (5x, "Of course since trouble was spotted upon an examination of the user's very first card of the characteristic,   ",/, &
           5x, "the 'preceding card' refers to the implied point (0, 0) which represents the origin.   In this case, the user's   ",/, &
           5x, 'trouble stems from his failure to punch a positive pair of values (i, v) on his first card of the characteristic.   ')
-        go to 6220
-6072    write(lunit6, 7072)  flstat(16)
-7072    format( 5x, 106hthe user has been inputting a type-97 (staircase)
-1       time-varying resistance element, and has violated one of  ,/,
-2 5     x, 103hthe data rules pertaining there to.   in particular, the
-3       last-read data card has a nonpositive value of  , e13.4,  /,
-4 5     x, 112hpunched in columns 9-16.   such a nonpositive resistance
-5       for a portion of the time-vs.-resistance characteristic   ,/,
-6 5     x,  51his interpreted as a data-punching error by the emtp   )
-        go to 6220
-6073    write(lunit6, 7073)  lstat(16), bus1
-7073    format( 5x, 103hthe last-read data card has been taken by the emtp
-1       to be a source card, specifying a generator of type , i2, /,
-2 5     x,  16hlocated on bus ', a6,    83h'.   now for such a source, c
-3       olumns 11-20 are to be punched with the amplitude (for   ,/,
-4 5     x, 113ha type-14 sinusoidal source, this is the peak value).   b
-5       ut the user has punched a zero, or left the field blank.   ,/,
-6 5     x, 109hwhile such a case could easily be solved, the emtp's supe
-7       rbly-honed perspicacity is offended by such an idea.   ,/,
-8 5     x, 109hafter all, if a voltage source is involved, zero amplitud
-9       e means permanent grounding, in which case  '      '    )
-        write(lunit6, 7173)
-7173    format( 5x, 105h(6 blank characters as bus name) or a switch to gr
-1       ound should be used, for clarity.   if a current source   ,/,
-2 5     x, 114his involved, zero amplitude means that the source doesn't
-3       exist at all.   either way, the user should correct this  ,/,
-4 5     x,  86h'aesthetic difficulty', and try again.   who knows, next
-5       time the job may run further.   )
-        go to 6220
-6074    write(lunit6, 7074)  flstat(15), lstat(16)
-7074    format( 5x, 109hwhile solution of this problem could continue, the
+  go to 6220
+6072 write(lunit6, 7072)  flstat(16)
+7072 format (5x, 'The user has been inputting a type-97 (staircase) time-varying resistance element, and has violated one of  ',/, &
+          5x, 'the data rules pertaining there to.   In particular, the last-read data card has a nonpositive value of  ', e13.4, /, &
+          5x, 'punched in columns 9-16.   Such a nonpositive resistance for a portion of the time-vs.-resistance characteristic   ',/, &
+          5x,  'is interpreted as a data-punching error by the EMTP   ')
+  go to 6220
+6073 write(lunit6, 7073)  lstat(16), bus1
+7073 format (5x, 'The last-read data card has been taken by the EMTP to be a source card, specifying a generator of type ', i2, /, &
+          5x,  'located on bus ', "'", a6, "'.   Now for such a source, columns 11-20 are to be punched with the amplitude (for   ",/, &
+          5x, 'a type-14 sinusoidal source, this is the peak value).   But the user has punched a zero, or left the field blank.   ',/, &
+          5x, "While such a case could easily be solved, the EMTP's superbly-honed perspicacity is offended by such an idea.   ",/, &
+          5x, "After all, if a voltage source is involved, zero amplitude means permanent grounding, in which case  '      '    ")
+  write(lunit6, 7173)
+7173 format (5x, '(6 blank characters as bus name) or a switch to ground should be used, for clarity.   If a current source   ',/, &
+          5x, "is involved, zero amplitude means that the source doesn't exist at all.   Either way, the user should correct this  ", /, &
+          5x,  "'aesthetic difficulty', and try again.   Who knows, next time the job may run further.   ")
+  go to 6220
+6074 write(lunit6, 7074)  flstat(15), lstat(16)
+7074 format( 5x, 109hwhile solution of this problem could continue, the
 1       emtp has become suspicious of a data 'misunderstanding' on   ,/,
 2 5     x, 110hthe part of the user.   note that the termination time of
 3       the study ( 'tmax' ) is nonpositive, indicating that   ,/,
