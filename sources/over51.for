@@ -285,7 +285,7 @@ subroutine subr51
        'index) will perform all such conversion for the user automatically in a single pass.  Try it.               ')
   go to 6220
 6029 write (lunit6, 7029)  bus1, bus2, flstat(16)
-7029 format (5x, "Distributed-parameter branch card connecting node ". "'", a6, "'", ' to ', "'", a6, "'",  ' represents propagation mode ', /, &
+7029 format (5x, 'Distributed-parameter branch card connecting node.', "'", a6, "'", ' to ', "'", a6, "'",  ' represents propagation mode ', /, &
        5x,  'with travel time (sec) =', e14.5, '.   This is less than time-step size  deltat, a case which is illegal.   Either ', /, &
        5x,  'run with small enough deltat, or replace the distributed modelling by lumped pi-circuit model.   ')
   if( flstat(16)  .eq.  0.0 ) write(lunit6, 7129)
