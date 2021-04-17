@@ -1,104 +1,67 @@
-c-*- mode: fortran; syntax: ansi-fortran-77; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
-c
-c     file: over53.for
-c
-c
-c     subroutine over53.
-c
-      subroutine over53
-      implicit real*8 (a-h, o-z) ,
-     1      integer*4 (i-n)
-      include  'blkcom.ftn'
-      if ( iprsup  .ge.  1 )
-     1 write ( lunit6, 4567 )
- 4567 format ( 24h "begin module over53." )
-      if ( nchain  .ne.  53 )   go to 99999
-      n1 = kill - 90
-      go to (
-     1 6091, 6092, 6093, 6094, 6095, 6096, 6097, 6098, 6099, 6100,
-     2 6101, 6102, 6103, 6104, 6105, 6106, 6107, 6108, 6109, 6110,
-     3 6111, 6112, 6113, 6114, 6115, 6116, 6117, 6118, 6119, 6120,
-     4 6121, 6122, 6123, 6124, 6125, 6126, 6127, 6128, 6129, 6130,
-     5 6131, 6132, 6133, 6134, 6135, 6136, 6137, 6138, 6139, 6140,
-     6 6141, 6142, 6143, 6144, 6145, 6146, 6147, 6148, 6149, 6150,
-     8 6220 ) , n1
- 6091 write (lunit6, 7091)
- 7091 format (5x, 108hthe data case now in its final stages of input is
-     1for a statistical overvoltage study, since field  'nenerg'   ,/,
-     2 5x, 112hof columns 65-72 of the 2nd miscellaneous data card was p
-     3unched with a positive number.   yet the last-read data    ,/,
-     4 5x, 112hcard requests the output of all network node voltages, by
-     5 means of the  '1'  punched in column 2.   but the emtp    ,/,
-     6 5x, 115hdoes not allow this complete voltage output for statistic
-     7al overvoltage studies.   if the user really wants to look    )
-      write (lunit6, 7191)
- 7191 format (5x, 105hat every node voltage in such a study, he must req
-     1uest each such output individually, using the selective    ,/,
-     2 5x,  27hnode voltage output option.   )
- 6092 write (lunit6, 7092)
- 7092 format ( 5x, 104hthe emtp logic has just attempted to read another
-     1 data card by means of a call to subroutine  'cimage' .   ,/,
-     2 5x, 116hbut no more data is to be found on logical unit number 5.
-     3   an end-of-file mark has been encountered upon attempting   ,/,
-     4 5x, 111hto read from this unit.   execution must be stopped, sinc
-     5e data which is required for continuation of the study   ,/,
-     6 5x,  22hsimply does not exist.    )
-      go to 6220
- 6093 write (lunit6, 7093)
- 7093 format ( 5x, 111hthe last-read data card is for one phase (mode) o
-     1f a distributed-parameter transmission line.   but one or more ,/,
-     2 5x, 109hof the parameter values read therefrom makes the data ill
-     3egal.   the four fields of columns 27-50 are not all   ,/,
-     4 5x, 117hblank, so this mode data is not taken by the emtp to be a
-     5 request for a copy of the parameters of the preceding mode.   ,/,
-     6 5x, 111hhence columns 27-32 must be punched with mode resistance
-     7per unit length, columns 33-44 must be punched for the   )
-      write (lunit6, 7193)  flstat(14), flstat(15)
- 7193 format ( 5x, 103hmode inductance and capacitance (possibly disguiz
-     1ed, in terms of surge impedance, propagation speed, or   ,/,
-     2 5x, 112htravel time), and finally, columns 45-50 must contain the
-     3 line length.   now one or both of the two fields which  ,/,
-     4 5x, 108hequally divide columns 33-44 is non-positive, which is il
-     5legal.   values read from the user's card for these   ,/,
-     6 5x,  15htwo fields were,    e14.4 ,   4h and,   e14.4 ,
-     7  49h ,   respectively.   remember, zero inductance or   )
-      write (lunit6, 7293)
- 7293 format ( 5x, 110hcapacitance (the case when  'iline'  is zero)  is
-     1 illegal because it implies infinite velocity of propagation.  ,/,
-     2 5x, 110hsimilar absurdities result for the other two forms of dis
-     3guizing inductance and capacitance, it can readily be  ,/,
-     4 5x,   5hseen.   )
-      go to 6220
- 6094 write (lunit6, 7094)  flstat(14), flstat(15)
- 7094 format ( 5x, 106hthe last-read data card has been taken by the t.p
-     1. to be a switch card, with closing time to be determined  ,/,
-     2 5x,  83hrandomly as part of a statistical overvoltage study.   bu
-     3t the mean closing time of,  e13.4, 17h  seconds and the     ,/,
-     4 5x,  21hstandard deviation of,  e13.4, 80h  seconds are such that
-     5 switch closing times less than zero would not be totally     ,/,
-     6 5x, 112hunexpected.   the mean must not be less than  3.0  times
-     7the standard deviation, if the data is to be acceptable        )
-      write (lunit6, 7194)
- 7194 format (5x, 101hto the emtp in the case of gaussian (normal) distr
-     1ibution of the switch closing times.   this ensures          ,/,
-     2 5x, 109hthat there is a probability of less than  0.13  percent f
-     3or any particular switch closing time to be negative         ,/,
-     4 5x, 111hfor a normal distribution.   but the user's data has fail
-     5ed this check, for the last-read switch.   because the   ,/,
-     6 5x, 114hemtp has no proper way of handling negative switch closin
-     7g times (they are set to time zero, actually), the user's    ,/,
-     8         5x,  27hdata case must be rejected.      ,/,1x)
-      write (lunit6, 7294)
- 7294 format (
-     1 5x, 115hif the user really did desire to use the mean and standar
-     2d deviation which got him into trouble here, he is advised   ,/,
-     3 5x, 109hof the possibility of delaying closure of all switches by
-     4 exactly one (or more) fundamental-frequency cycles.     ,/,
-     5 5x, 112hprovided one is starting from the sinusoidal steady state
-     6, the added delay of an integer number of cycles simply   ,/,
-     7 5x, 116hdelays the response accordingly, leaving it otherwise unc
-     8hanged.   by adding one cycle of fundamental-frequency time   )
-      write (lunit6, 7394)
+!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!
+!     file: over53.for
+!
+!
+!     subroutine over53.
+!
+subroutine over53
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  include 'blkcom.ftn'
+  if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
+4567 format ( ' "begin module over53." ')
+  if ( nchain  .ne.  53 )   go to 99999
+  n1 = kill - 90
+  go to (6091 , 6092, 6093, 6094, 6095, 6096, 6097, 6098, 6099, 6100, 6101, 6102, 6103, 6104, 6105, 6106, 6107, 6108, 6109, 6110, &
+       6111, 6112, 6113, 6114, 6115, 6116, 6117, 6118, 6119, 6120, 6121, 6122, 6123, 6124, 6125, 6126, 6127, 6128, 6129, 6130, &
+       6131, 6132, 6133, 6134, 6135, 6136, 6137, 6138, 6139, 6140, 6141, 6142, 6143, 6144, 6145, 6146, 6147, 6148, 6149, 6150, &
+       6220 ) , n1
+6091 write (lunit6, 7091)
+7091 format (5x, "The data case now in its final stages of input is for a statistical overvoltage study, since field  'nenerg'   ",/, &
+          5x, 'of columns 65-72 of the 2nd miscellaneous data card was punched with a positive number.   Yet the last-read data    ',/, &
+          5x, "card requests the output of all network node voltages, by means of the  '1'  punched in column 2.   But the EMTP    ",/, &
+          5x, 'does not allow this complete voltage output for statistical overvoltage studies.   If the user really wants to look    ')
+  write (lunit6, 7191)
+7191 format (5x, 'at every node voltage in such a study, he must request each such output individually, using the selective    ',/, &
+          5x,  'node voltage output option.   ')
+6092 write (lunit6, 7092)
+7092 format (5x, "The EMTP logic has just attempted to read another data card by means of a call to subroutine  'cimage' .   ",/, &
+          5x, 'But no more data is to be found on logical unit number 5.   An end-of-file mark has been encountered upon attempting   ',/, &
+          5x, 'to read from this unit.   execution must be stopped, since data which is required for continuation of the study   ',/, &
+          5x,  'simply does not exist.    ')
+  go to 6220
+6093 write (lunit6, 7093)
+7093 format (5x, 'The last-read data card is for one phase (mode) of a distributed-parameter transmission line.   But one or more ',/, &
+          5x, 'of the parameter values read therefrom makes the data illegal.   The four fields of columns 27-50 are not all   ',/, &
+          5x, 'blank, so this mode data is not taken by the EMTP to be a request for a copy of the parameters of the preceding mode.   ',/, &
+          5x, 'Hence columns 27-32 must be punched with mode resistance per unit length, columns 33-44 must be punched for the   ')
+  write (lunit6, 7193)  flstat(14), flstat(15)
+7193 format (5x, 'mode inductance and capacitance (possibly disguized, in terms of surge impedance, propagation speed, or   ',/, &
+          5x, 'travel time), and finally, columns 45-50 must contain the line length.   Now one or both of the two fields which  ',/, &
+          5x, "equally divide columns 33-44 is non-positive, which is illegal.   Values read from the user's card for these   ",/, &
+          5x, 'two fields were',    e14.4 ,   ' and',   e14.4 , ' ,   respectively.   Remember, zero inductance or   ')
+  write (lunit6, 7293)
+7293 format (5x, "capacitance (the case when  'iline'  is zero)  is illegal because it implies infinite velocity of propagation.  ",/, &
+          5x, 'Similar absurdities result for the other two forms of disguizing inductance and capacitance, it can readily be  ',/, &
+          5x,   'seen.   ')
+  go to 6220
+6094 write (lunit6, 7094)  flstat(14), flstat(15)
+7094 format (5x, 'The last-read data card has been taken by the t.p. to be a switch card, with closing time to be determined  ',/, &
+          5x, 'randomly as part of a statistical overvoltage study.   But the mean closing time of',  e13.4, '  seconds and the     ',/, &
+          5x,  'standard deviation of',  e13.4, '  seconds are such that switch closing times less than zero would not be totally     ',/, &
+          5x, 'unexpected.   The mean must not be less than  3.0  times the standard deviation, if the data is to be acceptable        ')
+  write (lunit6, 7194)
+7194 format (5x, 'to the EMTP in the case of gaussian (normal) distribution of the switch closing times.   This ensures          ',/, &
+          5x, 'that there is a probability of less than  0.13  percent for any particular switch closing time to be negative         ',/, &
+          5x, "for a normal distribution.   But the user's data has failed this check, for the last-read switch.   Because the   ",/, &
+          5x, "EMTP has no proper way of handling negative switch closing times (they are set to time zero, actually), the user's    ",/, &
+          5x,  'data case must be rejected.      ',/,1x)
+  write (lunit6, 7294)
+7294 format (5x, 'If the user really did desire to use the mean and standard deviation which got him into trouble here, he is advised   ',/, &
+          5x, 'of the possibility of delaying closure of all switches by exactly one (or more) fundamental-frequency cycles.     ',/, &
+          5x, 'Provided one is starting from the sinusoidal steady state, the added delay of an integer number of cycles simply   ',/, &
+          5x, 'delays the response accordingly, leaving it otherwise unchanged.   By adding one cycle of fundamental-frequency time   ')
+  write (lunit6, 7394)
  7394 format ( 5x, 112hto the mean of the closing time of all switches i
      1n the data case, the aforementioned problem of negative closing,/,
      2 5x,  72htimes is usually eliminated, and the case can be run with
@@ -129,7 +92,7 @@ c
      3ive, for the uniform distribution which the user has   ,/,
      4 5x,  95hrequested.   but the user's data has failed this check, f
      5or the last-read switch.   because the   ,/,
-     6 5x, 114hemtp has no proper way of handling negative switch closin
+     6 5x, 114hEMTP has no proper way of handling negative switch closin
      7g times (they are set to time zero, actually), the user's    ,/,
      8         5x,  27hdata case must be rejected.      ,/,1x)
       write (lunit6, 7294)
@@ -137,7 +100,7 @@ c
       go to 6220
  6096 write (lunit6, 7096)
  7096 format ( 5x, 103hthis run is being terminated due to an attempt to
-     1 plot results.   the emtp can be variably-dimensioned,   ,/,
+     1 plot results.   the EMTP can be variably-dimensioned,   ,/,
      2 5x, 111hof course, with the present version simply having no avai
      3lable working space in which even the plot-file header   ,/,
      4 5x, 112hinformation can be stored.   if the user wants to do plot
@@ -164,9 +127,9 @@ c
      7 5x, 113hgenerally requires positive dimensions for all arrays).
      8 recall that  'szlab'  is printed out for the user every     )
       write (lunit6, 7396)   lstat(14), lstat(15)
- 7396 format (5x, 105htime the emtp is executed, as part of the header i
+ 7396 format (5x, 105htime the EMTP is executed, as part of the header i
      1nformation that precedes the listing of the input data.    ,/,
-     2 5x,  66hfor the present case in question, the emtp finds  'size'
+     2 5x,  66hfor the present case in question, the EMTP finds  'size'
      3 equal to,  i6, 23h ,   while a minimum of,  i7,  7h  words   ,/,
      4 5x, 114hare needed in order for execution to continue beyond the
      5point where it is now being stopped.   if it is not clear    ,/,
@@ -201,12 +164,12 @@ c
      5 5x, 106hnow it may well be that such usage is indeed legal fortra
      5n data-format input for the user's own particular     ,/,
      6 5x, 109hcomputer system, but it offends the keenly-honed sensibil
-     7ities of the emtp (at whose mercy the user now finds    )
+     7ities of the EMTP (at whose mercy the user now finds    )
       write (lunit6, 7197)
  7197 format ( 5x, 106hhimself, it may be noted).   too often a user wil
      1l erroneously wind up with an exponent of ten which is in    ,/,
      2 5x, 112herror by a power of ten itself, in such a case.   hence s
-     3uch data is not allowed by the emtp   repunch this data    ,/,
+     3uch data is not allowed by the EMTP   repunch this data    ,/,
      4 5x,  30hrecord, and try again, friend.       )
       write (lunit6, 7297 )
  7297 format ( 5x, 104halternatively, a card sequence error may have res
@@ -221,16 +184,16 @@ c
      4 5x, 114hright-most column of the field in question, is blank.   n
      5ow maybe such usage is legal fortran input for the user=s   ,/,
      6 5x, 109hcomputer system, but it offends the keenly-honed sensibil
-     7ities of the emtp (at whose mercy the user now finds    )
+     7ities of the EMTP (at whose mercy the user now finds    )
       write (lunit6, 7198)
  7198 format ( 5x, 104hhimself, it may be noted).   too often a user wil
      1l erroneously wind up with a value which is in error by  ,/,
      2 5x, 103ha power of ten, in such a case.   hence such data is simp
-     3ly not allowed by the emtp   repunch this data    ,/,
+     3ly not allowed by the EMTP   repunch this data    ,/,
      4 5x,  30hrecord, and try again, friend.       )
       go to 6220
  6099 write (lunit6, 7099)
- 7099 format ( 5x, 106hthe emtp has finished the calculation of weightin
+ 7099 format ( 5x, 106hthe EMTP has finished the calculation of weightin
      1g functions  a1(t)  and  a2(t)  for the user=s frequency-   ,/,
      2 5x, 111hdependent line-mode.   now the program is ready to output
      3 these functions --- on punched cards, if the user has   ,/,
@@ -275,7 +238,7 @@ c
      2 5x, 110hinto maybe five identical segments of  200  miles each.
      3 then he derives weighting functions for one 200-mile   ,/,
      4 5x, 111hsegment, and uses the reference-branch capability in sett
-     5ing up the emtp data case for the network in question,    ,/,
+     5ing up the EMTP data case for the network in question,    ,/,
      6 5x,   94hthereby saving  4/5  on the otherwise-required weighting
      7-function storage of list number  14 .     )
       go to 6220
@@ -360,7 +323,7 @@ c
      2 /, 5x,   86hvalues of parameters 'smoutp' and/or 'smoutq' for the
      3 involved s.m.'s add up to zero., /,
      4 5x, 107hrecall that any blank field used in the above data is rep
-     5laced by the near-zero emtp tolerance 1.0/fltinf =)
+     5laced by the near-zero EMTP tolerance 1.0/fltinf =)
       write (lunit6, 7206)  d1
  7206 format (5x,   e14.3,        91h .   the user should never use the
      1negative of this value for any of the four parameters in     ,/,
@@ -373,7 +336,7 @@ c
      1 28h to rules -- see user manual,/)
       go to 6220
  6108 write (lunit6, 7108)
- 7108 format (5x, 110hthe last-read data card is taken by the emtp to be
+ 7108 format (5x, 110hthe last-read data card is taken by the EMTP to be
      1 a request for an auxiliary synchronous machine (s.m.) input   ,/,
      2 5x, 112hto tacs.   recall that such data cards (if any) complete
      3the data input for a dynamic s.m., after being followed      ,/,
@@ -407,16 +370,16 @@ c
      1data card was punched nonzero (value, i5, 14h  )   for this    ,/,
      2 5x, 112hdata case, representing a request for a  'statistics'  or
      3 a  'systematic'  simulation.   the last-read data card      ,/,
-     4 5x, 108his for an emtp switch, and it bears one of the two just-m
+     4 5x, 108his for an EMTP switch, and it bears one of the two just-m
      5entioned key words in columns 55-64, which is fine.          ,/,
      6 5x,  63hbut this is a dependent switch, with illegal reference na
      7mes  ', a6,  9h'  and  ', a6,  19h'  punched for data        )
       write (lunit6, 7210)  lstat(15), lstat(16)
  7210 format (5x, 108hfields  'bus5'  and  'bus6'  (columns 65-76).   th
-     1e ordered pair of reference names corresponds to emtp node     ,/,
+     1e ordered pair of reference names corresponds to EMTP node     ,/,
      2 5x,   7hnumbers, i5,  5h  and,  i5, 77h ,   respectively, with a
      3zero value meaning that the associated  a6  name is          ,/,
-     4 5x, 105hillegal (unrecognizable as a legitimate emtp electrical n
+     4 5x, 105hillegal (unrecognizable as a legitimate EMTP electrical n
      5etwork node name).   if both of the just-printed             ,/,
      6 5x, 112hintegers are positive, then both names are legitimate emt
      7p network names, but do not correspond to a previously-        )
@@ -439,7 +402,7 @@ c
      9   either request fewer outputs, or redimension the tables.    )
       go to 6220
  6112 write (lunit6, 7112)  kswtch
- 7112 format (5x, 108hwow.   double wow (wow, wow).   the emtp has finis
+ 7112 format (5x, 108hwow.   double wow (wow, wow).   the EMTP has finis
      1hed with the input of all switch cards for this data case.     ,/,
      2 5x,   6hof the, i5,  96h  switches, over ten had the key word  's
      3tatistics'  or  'systematic'  punched in columns 55-64.      ,/,
@@ -448,9 +411,9 @@ c
      6 5x, 107hfield  'bus5'  (cols. 65-70)  punched with  'target' ,
      7or both fields  'bus5'  and  'bus6'  (cols. 65-76)           )
       write (lunit6, 7212)  lstat(14), bus1, bus2
- 7212 format (5x,  81hleft blank.   the emtp limit is ten, however, whic
+ 7212 format (5x,  81hleft blank.   the EMTP limit is ten, however, whic
      1h was exceeded by switch number, i5,  19h ,   which connects   ,/,
-     2 5x,   7hnode  ', a6,  15h'  with node  ', a6,  62h' .   the emtp
+     2 5x,   7hnode  ', a6,  15h'  with node  ', a6,  62h' .   the EMTP
      3wonders whether the user really appreciates the              ,/,
      4 5x, 106hsignificance of ten independent switches, or equivalently
      5, the vastness of a ten-dimensional vector space.            ,/,
@@ -477,7 +440,7 @@ c
      7ultiplying together the number of steps to be taken          )
       write (lunit6, 7213)  lstat(12), kswtch
  7213 format (5x, 100hby each independent  'systematic'  switch.   but w
-     1hen the emtp multiplies together all such integers    ,/,
+     1hen the EMTP multiplies together all such integers    ,/,
      2 5x, 112hwhich were read using  i10  format from columns 35-44 of
      3 'systematic'  switch cards, it finds the product to be       ,/,
      4 5x,   8hequal to, i6,  90h .    this value is inconsistent with t
@@ -493,7 +456,7 @@ c
  7413 continue
       go to 6220
  7513 write (lunit6, 7613)  i, ipntv(i)
- 7613 format (5x,  71hupon inspecting these figures, the emtp immediatel
+ 7613 format (5x,  71hupon inspecting these figures, the EMTP immediatel
      1y notices that number, i4,  26h  is illegal.   a value of     ,/,
      2 5x, i6, 114h   is seen, which certainly is not positive (as per t
      3he user's manual instructions).   remember, any  'systematic'  ,/,
@@ -517,20 +480,20 @@ c
      6 5x, 114hthe special code numbers which are used to indicate speci
      7al block types (e.g., n=99 for a zero-th order block), it    )
       write (lunit6, 7215)
- 7215 format (5x,106his taken by the emtp to be the order of the laplace
+ 7215 format (5x,106his taken by the EMTP to be the order of the laplace
      1 transfer function  h(s)  of the block.   but this must   ,/,
      2 5x, 111hbe positive.   also, a limit of 10-th order has been arbi
-     3trarily imposed by the emtp.   if the user really does   ,/,
+     3trarily imposed by the EMTP.   if the user really does   ,/,
      4 5x, 111hhave a higher-order  h(s)  than 10 (highly unlikely), he
      5must simply split his original  h(s)  into two or more   ,/,
      6 5x,  60hcascaded sub-blocks, each of which is of order  10  or le
      7ss.     )
       go to 6220
  6116 write (lunit6, 7116)  bus1, lstat(14)
- 7116 format (5x, 107hthe emtp data case under consideration includes a
+ 7116 format (5x, 107hthe EMTP data case under consideration includes a
      1tacs representation, the function blocks of which are now     ,/,
      2 5x,  99hbeing inputted.   now, the last tacs function block which
-     3 was read by the emtp had (output) name  ', a6,   1h'        ,/,
+     3 was read by the EMTP had (output) name  ', a6,   1h'        ,/,
      4 5x,  83h(punched in columns 3-8), and was purported to be a dynam
      5ic function block of order, i3,  21h  (punched in columns     ,/,
      6 5x, 109h1-2).   the tacs function block is characterized by a lap
@@ -594,7 +557,7 @@ c
  6119 write (lunit6, 7147)  bus6
       go to 7421
  6120 write (lunit6, 7120)  bus1, lstat(14)
- 7120 format (5x, 108hthe emtp is in the process of inputting the user's
+ 7120 format (5x, 108hthe EMTP is in the process of inputting the user's
      1 tacs supplemental-variable data cards, with the last-read     ,/,
      2 5x, 109hsuch data card being in error.   specifically, the user h
      3as attempted to define a supplemental variable named     ,/,
@@ -617,7 +580,7 @@ c
      1her the output of another function block, nor a supplemental   ,/,
      2 5x, 119hvariable, nor a tacs source of any type (1, 2, 90, 91, 92
      3, or 93 type codes).   did the user make a spelling error, the ,/,
-     4 5x, 113hemtp wonders.   the emtp does not know what to do with th
+     4 5x, 113hEMTP wonders.   the EMTP does not know what to do with th
      5e aforementioned input, so execution will be terminated.      )
  7421 write (lunit6, 7521)
  7521 format (/, 5x, 105hsince the user is having trouble with 6-charact
@@ -629,7 +592,7 @@ c
      7 5x, 108hname.   when for some particular tacs component a given n
      8ame  'name1 '  can not be found in a table where it           )
       write (lunit6, 7621)
- 7621 format (5x, 103hbelongs, the emtp says that the former is unrecogn
+ 7621 format (5x, 103hbelongs, the EMTP says that the former is unrecogn
      1izable.   yet, as used with the component explicitely      ,/,
      2 5x, 113hmentioned in the message,   'name1 '   may in fact be spe
      3lled exactly as the user intended.   it may be the table     ,/,
@@ -650,8 +613,8 @@ c
      6 5x, 111hof imbedded blanks is indeed crucial, then.   for example
      7,   'raver '  and  ' raver'  are completely different,        )
       write (lunit6, 7921)
- 7921 format (   5x,  99hdistinct 6-character names, as far as the emtp
-     1is concerned.   emtp names (including those of tacs)     ,/,
+ 7921 format (   5x,  99hdistinct 6-character names, as far as the EMTP
+     1is concerned.   EMTP names (including those of tacs)     ,/,
      2 5x, 111hconsist of an ordered string of 6 characters, with 'blank
      3' being a character like any other one.   two variable       ,/,
      4 5x, 109hnames are equal if and only if both characters of any cha
@@ -670,13 +633,13 @@ c
      1ion time, the user can simply increase the appropriate table   ,/,
      2 5x, 111hsizes on his  tacs-table-size cards , and try the data  c
      3ase again.  yet such relative size changes can only be      ,/,
-     4 5x, 110hmade within the overall emtp variable-dimensioning limita
-     5tion of emtp list number 19, which constrains the sum    ,/,
+     4 5x, 110hmade within the overall EMTP variable-dimensioning limita
+     5tion of EMTP list number 19, which constrains the sum    ,/,
      6 5x, 109htotal space which is allowed for tacs arrays.   hence ove
-     7rall emtp redimensioning with a larger size for list      )
+     7rall EMTP redimensioning with a larger size for list      )
       write (lunit6, 7322)
- 7322 format (5x, 105hnumber 19 may also be necessary.   see the emtp ca
-     1se summary statistics for the current size of emtp list     ,/,
+ 7322 format (5x, 105hnumber 19 may also be necessary.   see the EMTP ca
+     1se summary statistics for the current size of EMTP list     ,/,
      2 5x, 114hnumber 19.   the user is reminded that the existing list-
      319 space can be allocated either in absolute terms (using   ,/,
      4 5x, 116hthe  'absolute tacs dimensions'  request) or in relative
@@ -733,14 +696,14 @@ c
      1s than was indicated above, if the user's problem            ,/,
      2 12x,      103hpossesses an electric network.   the extra output-i
      3dentification name  'tacs  '  is internally added to         ,/,
-     4 12x,       44hthe output vector by the emtp, in this case.,
+     4 12x,       44hthe output vector by the EMTP, in this case.,
      5            38h   more importantly, if the user asked,
      6            38h for the output of all tacs variables, ,/,
      7 12x,       39hhe just shot himself in the foot.  this,
      8            37h will never work, due to astronomical,
      9            40h csp spy demands.  use selective output. )
       write (lunit6, 7822)   (i, i=1, 15)
- 7822 format (5x, 109hok, so just as with overall emtp variable dimensio
+ 7822 format (5x, 109hok, so just as with overall EMTP variable dimensio
      1ning, the user can intelligently allocate storage among the    ,/,
      2 5x, 110hdifferent tacs tables only if he knows the multiplicity o
      3f each.   for the tacs table numbers just delineated,         ,/,
@@ -766,47 +729,47 @@ c
  6124 write (lunit6, 7124)
  7124 format (5x, 110hpreceding all tacs data cards, the user inputted a
      1 special request card which was punched with the text  'tacs   ,/,
-     2 5x, 113hemtp sources'  in columns 1-17.   now, columns 21-80 of t
-     3his card are to be read by the emtp using  10a6  format,     ,/,
-     4 5x, 109hin order to discover which type 1 through 10 emtp sources
+     2 5x, 113hEMTP sources'  in columns 1-17.   now, columns 21-80 of t
+     3his card are to be read by the EMTP using  10a6  format,     ,/,
+     4 5x, 109hin order to discover which type 1 through 10 EMTP sources
      5 the user wants to have controlled by specified tacs      ,/,
      6 5x, 106hvariables.   recall that if the k-th field so-read contai
      7ns the nonblank  a6  text  'name' ,   then on the        )
       write (lunit6, 7224)  lstat(14), bus1
- 7224 format (5x, 109helectrical side it will be the emtp source of type
+ 7224 format (5x, 109helectrical side it will be the EMTP source of type
      1-code  'k'  which will be given the numerical value of tacs   ,/,
-     2 5x,  96hvariable  'name' .   now, the user's  'tacs emtp sources'
+     2 5x,  96hvariable  'name' .   now, the user's  'tacs EMTP sources'
      3  card is in error because field number, i3,  13h  was punched ,/,
      4 5x,  16hwith the name  ', a6,  87h' ,   which does not correspond
      5 to any tacs variable.   maybe this name was misspelled,      ,/,
-     6 5x, 115hthe emtp wonders.   in any case, since tacs cannot supply
+     6 5x, 115hthe EMTP wonders.   in any case, since tacs cannot supply
      7 a necessary interface request, execution will be stopped.     )
       go to 7421
  6125 n1 = 90
       write (lunit6, 7125)  n1, bus1
  7125 format (5x,  97has part of the user's tacs data which has now been
-     1 completely read by the emtp, there was a type-, i2,  5h tacs  ,/,
+     1 completely read by the EMTP, there was a type-, i2,  5h tacs  ,/,
      2 5x,  59hsource card which bore the 6-character alphanumeric name
      3 ', a6,  45h'  in columns 3-8.   now, by definition, this      ,/,
      4 5x, 114hfield must be punched with a node name (a6 format) of the
-     5 emtp electrical network which is a part of this 'hybrid'    ,/,
+     5 EMTP electrical network which is a part of this 'hybrid'    ,/,
      6 5x,  10hdata case.     )
       write (lunit6, 7225)
  7225 format (   1h+,   17x,  99hbut no branch or switch card of the sub
      1sequently-inputted electrical network defined this  a6  node   ,/,
-     2 5x, 115hname.   since the emtp does not know what variable of the
+     2 5x, 115hname.   since the EMTP does not know what variable of the
      3 electrical network should be used to control this type-90   ,/,
      4 5x,  55hsource, execution of the data case will now be stopped. )
       go to 7421
  6126 n1 = 91
       write (lunit6, 7125)  n1, bus1
       write (lunit6, 7226)
- 7226 format (   1h+,  17x,  91halso, this emtp electrical-network node
+ 7226 format (   1h+,  17x,  91halso, this EMTP electrical-network node
      1must have a switch connected to it, since it is the    ,/,
      2 5x, 111hcurrent in the first (in order of data input) such adjace
      3nt switch which is to control the type-91 tacs source.   ,/,
-     4 5x, 107hbut no such switch can be found by the emtp.   since the
-     5emtp does not know what variable of the electrical       ,/,
+     4 5x, 107hbut no such switch can be found by the EMTP.   since the
+     5EMTP does not know what variable of the electrical       ,/,
      6 5x,  86hnetwork should be used to control this type-91 tacs sourc
      7e, execution must be stopped.    )
       go to 7421
@@ -842,7 +805,7 @@ c
  7328 format (5x,  93h(sign included), while just prior to reciprocation
      1 this has diminished (in absolute value) to,  e14.5,  2h .    ,/,
      2 5x, 109ha near-zero diagonal value has thus occurred, as measured
-     3 by the ratio of these two values vis-a-vis the emtp    ,/,
+     3 by the ratio of these two values vis-a-vis the EMTP    ,/,
      4 5x,  63hmiscellaneous data parameter  'epsiln' ,   which has a va
      5lue of, e13.4, 31h .   most probably the user has    )
       write (lunit6, 7428)
@@ -866,13 +829,13 @@ c
  7329 format (5x,  86h(in magnitude), while just prior to reciprocation,
      1 this has diminished in magnitude to, e14.5,  2h .    ,/,
      2 5x, 109ha near-zero diagonal value has thus occurred, as measured
-     3 by the ratio of these two values vis-a-vis the emtp    ,/,
+     3 by the ratio of these two values vis-a-vis the EMTP    ,/,
      4 5x,  63hmiscellaneous data parameter  'tolmat' ,   which has a va
      5lue of, e13.4, 31h .   most probably the user has    )
       write (lunit6, 7428)
       go to 6220
  6130 write (lunit6, 7130)  bus2
- 7130 format (5x, 108hthe emtp is in the process of inputting the user's
+ 7130 format (5x, 108hthe EMTP is in the process of inputting the user's
      1 tacs supplemental-variable data cards, with the last-read     ,/,
      2 5x, 110hsuch data card being in error.   specifically, the user h
      3as attempted to define a supplemental variable having        ,/,
@@ -888,17 +851,17 @@ c
      6 5x, 108his advised to study the tacs rules related to the constru
      7ction of supplemental-variable cards, and then look          ,/,
      8 5x,  78hclosely at the last-read data card, to see precisely what
-     9 the emtp objects to.                                      )
+     9 the EMTP objects to.                                      )
       go to 6220
  6131 n1 = lstat(14)
       write (lunit6, 7131)
  7131 format (5x, 107hthe problem under consideration includes tacs data
      1, the tacs function blocks of which have already all been     ,/,
-     2 5x, 111hread by the emtp.   columns 69-80 of the leading data car
+     2 5x, 111hread by the EMTP.   columns 69-80 of the leading data car
      3d for each function block are read using  2a6  format,       ,/,
      4 5x, 108hin order to determine which tacs variables (if any....if
      5the fields are nonblank) are to be used as variable           ,/,
-     6 5x, 111hlimits for the block.   now, on this basis the emtp takes
+     6 5x, 111hlimits for the block.   now, on this basis the EMTP takes
      7 exception to the data card which defines the function        )
       write (lunit6, 7231)  bus1
  7231 format (5x,  18hblock with name  ', a6,  77h'  (as read from colum
@@ -910,11 +873,11 @@ c
      1 write (lunit6, 7431)
  7431 format ( 1h+, 70x,  5h75-80,14x,  4hhigh    )
       write (lunit6, 7531)  bus6
- 7531 format (5x,   7hwith  ', a6,  86h'  read therefrom by the emtp.
-     1this limit variable is unknown to the emtp, not being     ,/,
+ 7531 format (5x,   7hwith  ', a6,  86h'  read therefrom by the EMTP.
+     1this limit variable is unknown to the EMTP, not being     ,/,
      2 5x, 111hrecognized as any valid tacs variable name.   did the use
-     3r make a spelling error, the emtp wonders.   since the     ,/,
-     4 5x, 114hemtp is uncertain as to what the user wants done with thi
+     3r make a spelling error, the EMTP wonders.   since the     ,/,
+     4 5x, 114hEMTP is uncertain as to what the user wants done with thi
      5s limit, execution of this data case is being terminated.     )
       go to 7421
  6132 write (lunit6, 7130)  bus2
@@ -924,13 +887,13 @@ c
      2 5x,  80hone of the  a5  fields in which the functions are to be s
      3pecified was read as  ', a5,  17h' ,   which is an           ,/,
      4 5x, 113hunrecognizable name for a supplemental variable function.
-     5   did the user make a spelling error, the emtp wonders.      )
+     5   did the user make a spelling error, the EMTP wonders.      )
       go to 6220
  6133 write (lunit6, 7130)   bus1
       write (lunit6, 7133)
  7133 format ( 1h+, 68x,
      1 48hfor which no operator, function, or argument has         ,/,
-     2 5x,  93hbeen defined.   the emtp cannot calculate the output for
+     2 5x,  93hbeen defined.   the EMTP cannot calculate the output for
      3a tacs block whose input is unknown.           )
       go to 6220
  6134 write (lunit6, 7130)  bus1
@@ -954,11 +917,11 @@ c
      3he inputs to this block have been used (all associated     ,/,
      4 5x, 115hdata fields are blank).   these are for alphanumeric name
      5s, read from columns 12-17, 20-25, 28-33, 36-41, and 44-49    ,/,
-     6 5x, 104husing  a6  formats.   the emtp can not calculate the outp
+     6 5x, 104husing  a6  formats.   the EMTP can not calculate the outp
      7ut of a block for which the input is a mystery.      )
       go to 6220
  6137 write (lunit6, 7137)  bus1, lstat(14), bus2, bus3
- 7137 format ( 5x, 107hthe emtp has been inputting tacs function blocks,
+ 7137 format ( 5x, 107hthe EMTP has been inputting tacs function blocks,
      1 with the last-read data card representing an illegal such     ,/,
      2 5x,  90hrequest.   this was to have been the lead card of a funct
      3ion block having (output) name  ', a6,  15h'  (cols. 3-8).    ,/,
@@ -975,14 +938,14 @@ c
      5le.   )
       go to 6220
  6138 write (lunit6, 7138)  lstat(14)
- 7138 format (5x, 105hthe last-read data card has been taken by the emtp
+ 7138 format (5x, 105hthe last-read data card has been taken by the EMTP
      1 to be a card specifying which tacs variables are to be      ,/,
-     2 5x, 115hplaced in the emtp output vector (and hence will be avail
+     2 5x, 115hplaced in the EMTP output vector (and hence will be avail
      3able for printing and/or plotting purposes).   yet the  i2     ,/,
      4 5x,  57hfield of columns 1-2 contains an illegal integer value  '
      5, i2,  48h' .   only values of zero (for selective output)    ,/,
      6 5x,  68hor unity (for output of all tacs variables) are allowed b
-     7y the emtp.      )
+     7y the EMTP.      )
       go to 6220
  6139 write (lunit6, 7130)  bus3
       n1 = lstat(14)
@@ -1004,19 +967,19 @@ c
       go to 6220
  6140 write (lunit6, 7140)
  7140 format (5x, 106hwere it not for the sharp eye and always helpful g
-     1ood common sense of the emtp, this simulation might have     ,/,
+     1ood common sense of the EMTP, this simulation might have     ,/,
      2 5x, 108hcontinued.   but there are no requests for tacs variables
-     3 to be placed in the output vector, nor is the emtp        ,/,
+     3 to be placed in the output vector, nor is the EMTP        ,/,
      4 5x, 110hexpecting any electrical network data to follow, as part
      5of this data case.   recall that one or more nonblank       ,/,
-     6 5x, 111hfields on either the  'tacs outputs'  or the  'tacs emtp
-     7sources'  card is required for emtp electrical network         )
+     6 5x, 111hfields on either the  'tacs outputs'  or the  'tacs EMTP
+     7sources'  card is required for EMTP electrical network         )
       write (lunit6, 7240)
  7240 format (5x, 107hdata to follow the tacs data, as part of a hybrid
      1data case.   there would thus be no output vector, and if     ,/,
      2 5x, 112hthe simulation were allowed to continue, results would go
      3 unobserved.   possibly the user wanted this situation,      ,/,
-     4 5x, 113hbut the emtp will not allow it.   for a data case to be a
+     4 5x, 113hbut the EMTP will not allow it.   for a data case to be a
      5llowed to enter the time-step loop, there must have been      ,/,
      6 5x,  99hrequested one or more output variables (either a tacs var
      7iable, or an electrical-network variable).          )
@@ -1060,24 +1023,24 @@ c
      6 5x, 109hbefore the appearance of the problem supplemental variabl
      7e or device (as required by tacs rules on ordering).         )
       write (lunit6, 7343)
- 7343 format (5x,  53hdid the user make a spelling error, the emtp wonde
+ 7343 format (5x,  53hdid the user make a spelling error, the EMTP wonde
      1rs.          )
       go to 7421
  6144 n1 = 93
       write (lunit6, 7125)  n1, bus1
       write (lunit6, 7144)
- 7144 format ( 1h+,      17x,      91halso, this emtp electrical-network
+ 7144 format ( 1h+,      17x,      91halso, this EMTP electrical-network
      1 node must have a switch connected to it, since it is the      ,/,
-     2 5x, 108hstatus of the first (in order of emtp data input) such sw
+     2 5x, 108hstatus of the first (in order of EMTP data input) such sw
      3itch which is to be controlled by this type-93 tacs          ,/,
-     4 5x, 109hsource.   but no emtp switch adjacent to the node in ques
-     5tion can be found by the emtp.   since the emtp does         ,/,
+     4 5x, 109hsource.   but no EMTP switch adjacent to the node in ques
+     5tion can be found by the EMTP.   since the EMTP does         ,/,
      6 5x, 110hnot know what variable of the electrical network should b
      7e used to control this type-93 tacs source, execution        ,/,
      8 5x,  33hmust be terminated at this point.            )
       go to 7421
  6145 write (lunit6, 7145)
- 7145 format (5x, 104hthe emtp data case now being inputted involves one
+ 7145 format (5x, 104hthe EMTP data case now being inputted involves one
      1 or more continuously-transposed distributed-parameter       ,/,
      2 5x, 112htransmission lines, with frequency-dependent representati
      3on of resistance  r  and  inductance  l  in one or more       ,/,
@@ -1096,15 +1059,15 @@ c
      1 write (lunit6, 7445)
  7445 format (
      1   5x,         98hconcerning this latter figure, the user should b
-     7e aware that the   /label/   storage of emtp lists            )
+     7e aware that the   /label/   storage of EMTP lists            )
       if ( kburro .eq. 0 )
      1 write (lunit6, 7345)
  7345 format (5x, 109hnumber  5  and  7  only is involved.   this limite
      1d region of memory is divided into four equal-sized arrays,    ,/,
      2 5x, 112heach having the aforestated inadequate dimension.   in or
-     3der to get the user's wieghting functions into the emtp      ,/,
+     3der to get the user's wieghting functions into the EMTP      ,/,
      4 5x, 111h(and compacted into their final storage in the array of e
-     5mtp list number 14), the sizes of emtp list numbers  5       ,/,
+     5mtp list number 14), the sizes of EMTP list numbers  5       ,/,
      6 5x, 109hand/or  7  must be increased.   use the above explanation
      7 together with known list multiplicities in order to         ,/,
      8 5x,  40hdetermine the required increase in size.           )
@@ -1121,7 +1084,7 @@ c
      8             40h weighting functions, list 23 must grow.   )
       go to 6220
  6146 write (lunit6, 7146)  bus1, bus2
- 7146 format (5x, 110hswitch cards are now being inputted, for the emtp
+ 7146 format (5x, 110hswitch cards are now being inputted, for the EMTP
      1data case under consideration.   specifically, the last-read   ,/,
      2 5x, 101hdata card represents a request for a type-11 switch (i.e.
      3, a diode or a valve) which connects node  ', a6,  1h'       ,/,
@@ -1135,7 +1098,7 @@ c
      4 5x,  56hpreceding type-11 switch element.   but of the preceding,
      5 i4,  45h  switch cards, none were type-11 (punched in       ,/,
      6 5x, 104hcols. 1-2).   thus the reference switch does not exist, a
-     7nd the emtp has no way of knowing what modeling              ,/,
+     7nd the EMTP has no way of knowing what modeling              ,/,
      8 5x,  65hparameters should be used to describe the present diode o
      9r valve.       )
       go to 6220
@@ -1155,16 +1118,16 @@ c
      6 5x,  64he10.6  format).   the numerical values for these two numb
      7ers are,     e15.4  ,  5h  and,    e15.4 , 17h ,  respectively.  )
       write (lunit6, 7248)
- 7248 format (5x,  56hcorrect this violation of the emtp rules, and try
+ 7248 format (5x,  56hcorrect this violation of the EMTP rules, and try
      1again.           )
       go to 6220
  6149 write (lunit6, 7149)  flstat(14)
- 7149 format (5x, 105hthe last-read data card has been taken by the emtp
+ 7149 format (5x, 105hthe last-read data card has been taken by the EMTP
      1 to be a source card of type 14 (sinusoidal generator).       ,/,
      2 5x, 111hbut the frequency as read from columns 21-30 of this card
-     3 is not positive, as required by emtp rules.   a value       ,/,
+     3 is not positive, as required by EMTP rules.   a value       ,/,
      4 5x, 2hof,     e13.4,   88h  was read.   sinusoids of other than p
-     5ositive frequency must be rejected by the emtp on           ,/,
+     5ositive frequency must be rejected by the EMTP on           ,/,
      6 5x,  74haesthetic grounds.   the user should correct columns 21-3
      70, and try again.         )
       go to 6220
@@ -1179,20 +1142,15 @@ c
      6 5x,  64hfor the semlyen line having phase number 1 that connects
      7node  ', a6,   15h'  with node  ', a6,   9h' .   the          )
       write (lunit6, 7250)  lstat(15), flstat(14), d1
- 7250 format (5x, 102hrule is that the travel time for all semlyen modes
-     1 must exceed  two  time steps.   but for mode number,  i4,   /,
-     2 5x,  59hof the aforementioned line, the travel time  'tau'  is on
-     3ly,    e14.4,    37h  seconds.   the ratio of these gives     ,/,
-     4 5x,  12htau/deltat =,   e12.4,   80h ,   which is too small (less
-     5 than 2.0).   decrease the time-step size  'deltat'          ,/,
-     6 5x, 110haccordingly, or alter the transmission line modeling, in
-     7order to make this data case solvable using the emtp.          )
+ 7250 format (5x, 'rule is that the travel time for all semlyen modes must exceed  two  time steps.   but for mode number',  i4, /, &
+           5x,  "of the aforementioned line, the travel time  'tau'  is only",    e14.4,    '  seconds.   The ratio of these gives     ',/, &
+           5x,  'tau/deltat =',   e12.4,   " ,   which is too small (less than 2.0).   Decrease the time-step size  'deltat'          ",/, &
+           5x, 'accordingly, or alter the transmission line modeling, in order to make this data case solvable using the EMTP.          ')
       go to 6220
- 6220 lastov = nchain
+6220  lastov = nchain
       nchain = nfrfld + 50
-      if ( iprsup  .ge.  1 )
-     1 write ( lunit6, 4568 )
- 4568 format ( 24h "exit  module over53." )
+      if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
+4568  format ( 24h "exit  module over53." )
 99999 return
       end
 c
