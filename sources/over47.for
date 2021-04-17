@@ -1276,8 +1276,7 @@ end subroutine cha444
 !     subroutine pri.
 !!
 subroutine pri(i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
-  implicit real*8 (a-h, o-z) ,
-1 integer*4 (i-n)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
   character cha
   dimension r(npk),al(npk),c(npk)
   lunit6 = 6
@@ -1304,210 +1303,175 @@ subroutine pri(i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
 1101 format(i2,a1,3hin ,i2,a1,i2,i1,i2,12x,3e16.5)
 2000 continue
   if(k.eq.1) return
-  do 100 ll=2,k
+  do ll=2,k
      l=l+1
      write(lunit6,1110) r(l),al(l),c(l)
      write(lunit7,1111) r(l),al(l),c(l)
 1110 format(1h ,26x,3e16.5)
 1111 format(26x,3e16.5)
-100  continue
-     return
-30   continue
-     if(k.ne.1) go to 35
-     write(lunit6,1200) k,cha,i1,j1,k1,cha,k2,cha,cha
-     write(lunit7,1201) k,cha,i1,j1,k1,cha,k2,cha,cha
+100 end do
+  return
+30 continue
+  if(k.ne.1) go to 35
+  write(lunit6,1200) k,cha,i1,j1,k1,cha,k2,cha,cha
+  write(lunit7,1201) k,cha,i1,j1,k1,cha,k2,cha,cha
 1200 format(1h ,i2,a1,i2,i1,i2,a1,3hout,i2,a1,5hin  1,a1,5h 11 1)
 1201 format(i2,a1,i2,i1,i2,a1,3hout,i2,a1,5hin  1,a1,5h 11 1)
-     return
-35   continue
-     write(lunit6,1210) k,cha,i1,j1,k1,cha,k2
-     write(lunit7,1211) k,cha,i1,j1,k1,cha,k2
+  return
+35 continue
+  write(lunit6,1210) k,cha,i1,j1,k1,cha,k2
+  write(lunit7,1211) k,cha,i1,j1,k1,cha,k2
 1210 format(1h ,i2,a1,i2,i1,i2,a1,3hout,i2)
 1211 format(i2,a1,i2,i1,i2,a1,3hout,i2)
-     return
-40   continue
-     l = l + 1
-     write(lunit6,1300) k,cha,k1,cha,k2,r(l),al(l),c(l)
-     write(lunit7,1301) k,cha,k1,cha,k2,r(l),al(l),c(l)
+  return
+40 continue
+  l = l + 1
+  write(lunit6,1300) k,cha,k1,cha,k2,r(l),al(l),c(l)
+  write(lunit7,1301) k,cha,k1,cha,k2,r(l),al(l),c(l)
 1300 format(1h ,i2,a1,3hin ,i2,a1,3hout,i2,12x,3e16.5)
 1301 format(i2,a1,3hin ,i2,a1,3hout,i2,12x,3e16.5)
-     go to 2000
-  end do
-  c
-  !     subroutine nyan.
-  c
-  subroutine nyan(itype,npc,nc,ncpp,ngrnd,ncros,npais,ldm)
-    implicit real*8 (a-h, o-z) ,
-1   integer*4 (i-n)
-    dimension ncpp(ldm)
-    lunit6=6
-    if(itype.eq.1) return
-    if(ncros.eq.0) return
-    if(npc.ne.3) go to 9000
-    do 100 i=1,3
-       if(ncpp(i).eq.1.or.ncpp(i).gt.3) go to 9100
-100    continue
-       nwork=6+ngrnd
-       if(nwork.ne.nc) go to 9200
-       if(ncpp(1).le.ncpp(2).and.ncpp(2).le.ncpp(3)) return
-       go to 9300
-9000   continue
-       write(lunit6,7000)
-       write(lunit6,8000)
-8000   format(1h0,10x,31hnumber of phases should be '3'.)
-       call stoptp
-9100   continue
-       write(lunit6,7000)
-       write(lunit6,8100)
-8100   format('0', 10x, 'number of conductors in one phase should',
-1      "be '2' (core and sheath) with 'ngrnd'='0",
-1      "' for an sc cable and 'ngrnd'='1' for a /",
-1      ' ', 10x, "pt cable, of '3' (core, sheath and armor",
-1      ") with 'ngrnd'='3, considering the fact ",
-1      'that all the 3-phase cables have the    /'
-1      ' ', 10x, 'same configuration.                     ')
-       call stoptp
-9200   continue
-       write(lunit6,7000)
-       write(lunit6,8200)
-8200   format(1h0,10x,46hin the case of 'npais.ge.0 .and. ncros.ne.0',
-1      ,31hthe final number of conductors  /11x
-2      ,56hconsidering grounded conductors reduction should be '6'.
-1      /11x,40h'ngrnd' should be '3' for an sc cable wi,
-1               40 hth armor and '1' for a pt cable.  if a 3,
-1               40 h-phase sc cable with armor is enclosed  /
-1       1 h ,10x,39hwithin a pipe (i.e., pt cable), please  ,
-1               40 hnegrect the pipe, i.e., regard as an sc ,
-1               40 hcable with 'ngrand'='3', considering the/
-1       1 h ,10x,38hfact that all the 3-phase cables have   ,
-1               40 hthe same configuration.                 )
-       call stoptp
-9300   continue
-       write(lunit6,7000)
-       write(lunit6,8300)
-8300   format(1h0,10x,40heach cable of a 3-phase cable system has,
-1               40 h the same configulation in general. if n,
-1               40 hot, please arrange the data cards as    /
-1       1 h ,10x,40hfollows : first comes a cable of which t,
-1               40 hhe number of conductors is smallest, sec,
-1               40 hond comes a cable of the second smallest/
-1       1 h ,10x,40hnumber of conductors,.... please check y,
-1               40 hour data.                               )
-       call stoptp
-       return
-7000   format(1h0,10x,40herrors for a crossbonded cable (ncros.ne,
-1               40 h.0) when 'npais'='0'.                   )
-    end do
-    subroutine gomen(itype,npc,nx,npais,ncros,irsep,ncpp,ldm)
-      implicit real*8 (a-h, o-z) ,
-1     integer*4 (i-n)
-      dimension ncpp(ldm)
-      lunit6=6
-      if(npais.lt.0) go to 1000
-      if(ncros.ne.0) go to 1200
-      if(irsep.eq.0) return
-      go to 9120
-1000  if(ncros.eq.0) go to 1100
-      if(nx.lt.6.or.nx.gt.7) go to 9010
-1200  if(npc.ne.3) go to 9020
-      do 100 i=1,3
-         if(ncpp(i).eq.1.or.ncpp(i).gt.3) go to 9030
-100      continue
-         if(ncpp(1).gt.ncpp(2).or.ncpp(2).gt.ncpp(3)) go to 9040
-         if(nx.eq.6) return
-         if(npais.le.0 .or. ncros.eq.0) go to 200
-         if(nx.eq.4) return
-200      if(ncpp(2).eq.2) return
-         go to 9110
-1100     if(nx.gt.7) go to 9050
-         if(nx.ge.6) go to 1200
-         if(nx.eq.2) go to 1300
-         if(nx.eq.3) go to 1400
-         go to 9060
-1400     if(irsep.eq.0) go to 9070
-         if(npc.ne.1) go to 9080
-         return
-1300     if(npc.ne.1) go to 9090
-         return
-9010     continue
-         write(lunit6,8010)
-8010     format(1h0,10x,40hin the case of 'npais.lt.0.and.ncros.ne.,
-1               40 h0' the final number of conductors includ,
-1               40 hing grounded conductors reduction should/
-1       1 h ,10x,40hbe 6 or 7, i.e., 'total number of conduc,
-1               40 htors of the cable system'-'ngrnd'='6' or,
-1               40 h '7', but 'ngrnd' should be '1' for a pt/
-1       1 h ,10x,40hcable.                                  )
-         call stoptp
-9020     continue
-         write(lunit6,8020)
-8020     format(1h0,10x,40hnumber of phases should be '3'.         )
-         call stoptp
-9030     continue
-         write(lunit6,8030)
-8030     format(1h0,10x,40hnumber of conductors in one phase should,
-1               40 h be '2' (core and sheath) with 'ngrnd'=',
-1               40 h0' for an sc cable and 'ngrnd'='1' for a/
-1       1 h ,10x,40hpt cable, or '3' (core, sheath and armor,
-1               40 h) with 'ngrnd'='3' for an sc cable.     )
-         call stoptp
-9040     continue
-         write(lunit6,8040)
-8040     format(1h0,10x,40heach cable of a 3-phase cable system has,
-1               40 h the same configulation in general. if n,
-1               40 hot, please arrange the data cards as    /
-1       1 h ,10x,40hfollows : first comes a cable of which t,
-1               40 hhe number of conductors is smallest, sec,
-1               40 hond comes a cable of the second smallest/
-1       1 h ,10x,40hnumber of conductors,.... please check y,
-1               40 hour data                                )
-         call stoptp
-9050     continue
-         write(lunit6,8050)
-8050     format(1h0,10x,40hin the case of 'npais.lt.0', the final n,
-1               40 humber of conductors including grounded c,
-1               40 honductors reduction should not be       /
-1       1 h ,10x,41hgreater than '7'. please check your data.)
-         call stoptp
-9060     continue
-         write(lunit6,8060)
-8060     format(1h0,10x,40hin the case of 'npais.lt.0', the final n,
-1               40 humber of conductors including grounded c,
-1               40 honductors reduction should not be '1' or/
-1       1 h ,10x,40h'4' or '5'. please check your data.            )
-         call stoptp
-9070     continue
-         write(lunit6,8070)
-8070     format(1h0,10x,40hin this case, it should not be 'irsep=0',
-1               40 hplease change 'irsep=1'                 )
-         call stoptp
-9080     continue
-         write(lunit6,8080)
-8080     format(1h0,10x,40hin this case, number of phases (npc) sho,
-1               40 huld only be '1'. please check your data.)
-         call stoptp
-9090     continue
-         write(lunit6,8090)
-8090     format(1h0,10x,40hsorry, in the case of 'npais.lt.0', a tw,
-1               40 ho phase cable (npc=2) consisting only of,
-1               40 h core or consisting of core and sheath  /
-1       1 h ,10x,40hcan not be dealt with. please check your,
-1               40 hdata.                                   )
-         call stoptp
-9110     continue
-         write(lunit6,8110)
-8110     format(1h0,10x,40hin this case, ncpp(2) should be '2' plea,
-1               40 hse check your data.                       )
-         call stoptp
-9120     continue
-         write(lunit6,8120)
-8120     format(1h0,10x,34hinthe case of 'npais.gt.0.and.ncro,
-1               34 hs.eq.0', it should not be 'irsep=1,
-1               34 h',please change 'irsep=0'.        )
-         call stoptp
-         return
-      end do
-      subroutine  prcon(w,nconpw, zc,zs,ys,yc,yo,qn,gn,ze,a,ai,b,bi,
+  go to 2000
+end subroutine pri
+!
+!     subroutine nyan.
+!
+subroutine nyan(itype,npc,nc,ncpp,ngrnd,ncros,npais,ldm)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  dimension ncpp(ldm)
+  lunit6=6
+  if(itype.eq.1) return
+  if(ncros.eq.0) return
+  if(npc.ne.3) go to 9000
+  do i=1,3
+     if(ncpp(i).eq.1.or.ncpp(i).gt.3) go to 9100
+100 end do
+  nwork=6+ngrnd
+  if(nwork.ne.nc) go to 9200
+  if(ncpp(1).le.ncpp(2).and.ncpp(2).le.ncpp(3)) return
+  go to 9300
+9000 continue
+  write(lunit6,7000)
+  write(lunit6,8000)
+8000 format(1h0,10x,31hnumber of phases should be '3'.)
+  call stoptp
+9100 continue
+  write(lunit6,7000)
+  write(lunit6,8100)
+8100 format('0', 10x, 'number of conductors in one phase should', "be '2' (core and sheath) with 'ngrnd'='0", &
+          "' for an sc cable and 'ngrnd'='1' for a /", ' ', 10x, "pt cable, of '3' (core, sheath and armor", &
+          ") with 'ngrnd'='3, considering the fact ", 'that all the 3-phase cables have the    /' &
+          ' ', 10x, 'same configuration.                     ')
+  call stoptp
+9200 continue
+  write(lunit6,7000)
+  write(lunit6,8200)
+8200 format('0', 10x, "In the case of 'npais.ge.0 .and. ncros.ne.0', the final number of conductors  ",/,11x, &
+          "considering grounded conductors reduction should be '6'.", /, 11x, &
+          "'ngrnd' should be '3' for an sc cable with armor and '1' for a pt cable.  If a 3-phase sc cable with armor is enclosed  ",/, &
+          ' ', 10x, 'within a pipe (i.e., pt cable), please,  neglect the pipe, i.e., regard as an sc ', &
+          "cable with 'ngrand'='3', considering the", /, ' ', 10x, 'fact that all the 3-phase cables have   the same configuration.                 ')
+  call stoptp
+9300 continue
+  write(lunit6,7000)
+  write(lunit6,8300)
+8300 format('0',10x, 'Eeach cable of a 3-phase cable system has the same configuration in general. If not, please arrange the data cards as    ', /, &
+          ' ', 10x, 'follows : first comes a cable of which the number of conductors is smallest, second comes a cable of the second smallest', /, &
+          ' ', 10x, 'number of conductors,.... Please check your data.')
+  call stoptp
+  return
+7000 format('0', 10x, "Errors for a crossbonded cable (ncros.ne.0) when 'npais'='0'.")
+end subroutine nyan
+!
+! subroutine gomen.
+!
+subroutine gomen(itype,npc,nx,npais,ncros,irsep,ncpp,ldm)
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  dimension ncpp(ldm)
+  lunit6=6
+  if(npais.lt.0) go to 1000
+  if(ncros.ne.0) go to 1200
+  if(irsep.eq.0) return
+  go to 9120
+1000 if(ncros.eq.0) go to 1100
+  if(nx.lt.6.or.nx.gt.7) go to 9010
+1200 if(npc.ne.3) go to 9020
+  do i=1,3
+     if(ncpp(i).eq.1.or.ncpp(i).gt.3) go to 9030
+100 end do
+  if(ncpp(1).gt.ncpp(2).or.ncpp(2).gt.ncpp(3)) go to 9040
+  if(nx.eq.6) return
+  if(npais.le.0 .or. ncros.eq.0) go to 200
+  if(nx.eq.4) return
+200 if(ncpp(2).eq.2) return
+  go to 9110
+1100 if(nx.gt.7) go to 9050
+  if(nx.ge.6) go to 1200
+  if(nx.eq.2) go to 1300
+  if(nx.eq.3) go to 1400
+  go to 9060
+1400 if(irsep.eq.0) go to 9070
+  if(npc.ne.1) go to 9080
+  return
+1300 if(npc.ne.1) go to 9090
+  return
+9010 continue
+  write(lunit6,8010)
+8010 format('0', 10x, "In the case of 'npais.lt.0.and.ncros.ne.0' the final number of conductors including grounded conductors reduction should", / &
+          ' ', 10x, "be 6 or 7, i.e., 'total number of conductors of the cable system'-'ngrnd'='6' or, '7', but 'ngrnd' should be '1' for a pt", / &
+          ' ' ,10x, 'cable.                                  ')
+  call stoptp
+9020 continue
+  write(lunit6,8020)
+8020 format(1h0,10x,40hnumber of phases should be '3'.         )
+  call stoptp
+9030 continue
+  write(lunit6,8030)
+8030 format(1h0,10x,40hnumber of conductors in one phase should, 40 h be '2' (core and sheath) with 'ngrnd'=', 40 h0' for an sc cable and 'ngrnd'='1' for a/ &
+          1 h ,10x,40hpt cable, or '3' (core, sheath and armor, 40 h) with 'ngrnd'='3' for an sc cable.     )
+  call stoptp
+9040 continue
+  write(lunit6,8040)
+8040 format('0', 10x, 'Eeach cable of a 3-phase cable system has the same configuration in general. If not, please arrange the data cards as    ', / &
+          ' ', 10x, 'follows : first comes a cable of which the number of conductors is smallest, second comes a cable of the second smallest ', / &
+          ' ', 10x, 'number of conductors,.... Please check your data                                ')
+  call stoptp
+9050 continue
+  write(lunit6,8050)
+8050 format('0', 10x, "In the case of 'npais.lt.0', the final number of conductors including grounded conductors reduction should not be       ", / &
+          ' ', 10x, "greater than '7'. Please check your data.")
+  call stoptp
+9060 continue
+  write(lunit6,8060)
+8060 format('0', 10x, "In the case of 'npais.lt.0', the final number of conductors including grounded conductors reduction should not be '1' or", / &
+          ' ', 10x, "'4' or '5'. Please check your data.            ")
+  call stoptp
+9070 continue
+  write(lunit6,8070)
+8070 format('0', 10x, "In this case, it should not be 'irsep=0', please change 'irsep=1'                 ")
+  call stoptp
+9080 continue
+  write(lunit6,8080)
+8080 format('0', 10x, "In this case, number of phases (npc) shohuld only be '1'. Please check your data.")
+  call stoptp
+9090 continue
+  write(lunit6,8090)
+8090 format('0', 10x, "Sorry, in the case of 'npais.lt.0', a two phase cable (npc=2) consisting only of core or consisting of core and sheath  ", / &
+          ' ', 10x, 'can not be dealt with. Please check your data.                                   ')
+  call stoptp
+9110 continue
+  write(lunit6,8110)
+8110 format(' ', 10x, "In this case, ncpp(2) should be '2'. Please check your data.                       ")
+  call stoptp
+9120 continue
+  write(lunit6,8120)
+8120 format('0', 10x, "In the case of 'npais.gt.0.and.ncro,34 hs.eq.0', it should not be 'irsep=1,', please change 'irsep=0'.        ")
+  call stoptp
+  return
+end subroutine gomen
+!
+! subroutine prcon.
+!
+subroutine  prcon(w,nconpw, zc,zs,ys,yc,yo,qn,gn,ze,a,ai,b,bi,
 1       an,  ca, zo, cc, f, ldn, ldn2, lnq2, mrr, nrp )
         implicit real*8 (a-h, o-z) ,
 1       integer*4 (i-n)
