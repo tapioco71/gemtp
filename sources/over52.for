@@ -359,28 +359,25 @@ subroutine over52
           5x, "current-flux form.   But illegal values for either  'vbase'  or  'pbase'  have been read from the last-read data  ",/, &
           5x, 'card (columns 9-16  and  17-24, respectively).   Both of these fields must be punched with positive numbers.   ',/, &
           5x,  'But the EMTP has read values of', e14.4,  ' and', e14.4,  ' for these variables, respectively.  ')
-6220      lastov = nchain
-          nchain = nfrfld + 50
-          if ( iprsup  .ge.  1 )
-1         write ( lunit6, 4568 )
-4568      format ( 24h  "exit  module over52." )
-99999     return
-        end function supporting
-        subroutine err87 ( lstat, flstat, lunit6 )
-          implicit real*8 (a-h, o-z) ,
-1         integer*4 (i-n)
-          dimension lstat(1), flstat(1)
-          write (lunit6, 7087)
-7087      format (5x, 107has part of the interactive crt plotting or  'replo
-1         t'  features of the emtp,  plot data points are stored on   ,/,
-2 5       x, 111hdisk as a  'permanent file'  (as opposed to temporary, sc
-3         ratch storage, which is used for every emtp run).   it   ,/,
-4 5       x, 111his the operation of internally cataloging this data file
-5         as a permanent file, inside the emtp, which has gotten   ,/,
-6 5       x, 114hthe emtp into trouble with the computer operating system
-7         (otherwise affectionately known as 'bigger big brother').     )
-          return
-        end subroutine err87
-        c
-        c     end of file: over52.for
-        c
+6220 lastov = nchain
+  nchain = nfrfld + 50
+  if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
+4568 format ( '  "exit  module over52." ')
+99999 return
+end function supporting
+!
+! subroutine err87.
+!
+subroutine err87 ( lstat, flstat, lunit6 )
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  dimension lstat(1), flstat(1)
+  write (lunit6, 7087)
+7087 format (5x, "Has part of the interactive crt plotting or  'replot'  features of the EMTP,  plot data points are stored on   ",/, &
+          5x, "disk as a  'permanent file'  (as opposed to temporary, scratch storage, which is used for every emtp run).   It   ",/, &
+          5x, 'is the operation of internally cataloging this data file as a permanent file, inside the EMTP, which has gotten   ',/, &
+          5x, "the EMTP into trouble with the computer operating system (otherwise affectionately known as 'bigger big brother').     ")
+  return
+end subroutine err87
+!
+!     end of file: over52.for
+!
