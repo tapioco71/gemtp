@@ -337,44 +337,28 @@ subroutine over52
           10x,   'liminc  =',  i4,  '  =  maximum number of compartments for any one statistical tabulation.                          ')
   write (lunit6, 7488)   lstat(15),  lstat(16)
 7488 format (5x,  'But this requirement totals',  i7, '   cells, which exceeds the available',  i7   )
-          write (lunit6, 7188)
-7188      format (5x, 103hcells of working space.   to run this case without
-1         increasing the emtp dimensions, the user must either    ,/,
-2 5       x, 112hdecrease the number of energizations, or decrease the num
-3         ber of output quantities, or both.   alternatively, the    ,/,
-4 5       x, 111huser may be willing to increase program dimensions, in wh
-5         ich case any of the independent lists can be increased   ,/,
-6 5       x,  73h(all are equally good, directly contributing to the stora
-7         ge in question).     )
-          go to 6220
-6089      write (lunit6, 7089)  flstat(15), flstat(16)
-7089      format (5x, 106hthe last-read card is a switch-card, bearing the k
-1         ey word  'statistics'  in columns 55-64.   the switch is    ,/,
-2 5       x, 110hthus a circuit-breaker pole, for which the closing time i
-3         s to be a random variable.   but either the specified   ,/,
-4 5       x, 113hvariable mean (punched in field  'tclose' ,   columns 15-
-524       ) or the standard deviation (field  'topen' ,  columns   ,/,
-6 5       x,  84h25-34) has been punched as negative, which is not allowed
-7         .   the two values read are, e14.5,    4h and, /,
-8 5       x, e14.5,   15h, respectively.    )
-          if ( lstat(15) .eq. 4433 )
-1         write (lunit6, 7189)  lstat(14)
-7189      format ( 5x, 35h====  correction  ====  the problem,
-1             36 h switch in question is not the last-,
-2             34 hread one, but rather switch number,  i5
-3         ,/,   5x, 35h                        in order of,
-4             35 h input.  in fact, all switches have,
-5             18 h been read by now.         )
-          go to 6220
-6090      write (lunit6, 7090)  flstat(14), flstat(15)
-7090      format (5x, 103hthe emtp has just begun reading data for the conve
-1         rsion of an rms current-voltage saturation curve into   ,/,
-2 5       x, 112hcurrent-flux form.   but illegal values for either  'vbas
-3         e'  or  'pbase'  have been read from the last-read data  ,/,
-4 5       x, 108hcard (columns 9-16  and  17-24, respectively).   both of
-5         these fields must be punched with positive numbers.   ,/,
-6 5       x,  31hbut the emtp has read values of, e14.4,  4h and,
-7         e14.4,  35h for these variables, respectively.  )
+  write (lunit6, 7188)
+7188 format (5x, 'cells of working space.   To run this case without increasing the EMTP dimensions, the user must either    ',/, &
+          5x, 'decrease the number of energizations, or decrease the number of output quantities, or both.   Alternatively, the    ',/, &
+          5x, 'user may be willing to increase program dimensions, in which case any of the independent lists can be increased   ',/, &
+          5x,  '(all are equally good, directly contributing to the storage in question).     ')
+  go to 6220
+6089 write (lunit6, 7089)  flstat(15), flstat(16)
+7089 format (5x, "The last-read card is a switch-card, bearing the key word  'statistics'  in columns 55-64.   The switch is    ",/, &
+          5x, 'thus a circuit-breaker pole, for which the closing time is to be a random variable.   But either the specified   ',/, &
+          5x, "variable mean (punched in field  'tclose' ,   columns 15-24       ) or the standard deviation (field  'topen' ,  columns   ",/, &
+          5x,  '25-34) has been punched as negative, which is not allowed.   The two values read are', e14.5,    ' and', /, &
+          5x, e14.5,   ', respectively.    ')
+  if ( lstat(15) .eq. 4433 )
+1 write (lunit6, 7189)  lstat(14)
+7189 format (5x, '====  correction  ====  the problem switch in question is not the last-read one, but rather switch number',  i5 ,/,   &
+          5x, '                        in order of input.  In fact, all switches have been read by now.         ')
+  go to 6220
+6090 write (lunit6, 7090)  flstat(14), flstat(15)
+7090 format (5x, 'The EMTP has just begun reading data for the conversion of an rms current-voltage saturation curve into   ',/, &
+          5x, "current-flux form.   But illegal values for either  'vbase'  or  'pbase'  have been read from the last-read data  ",/, &
+          5x, 'card (columns 9-16  and  17-24, respectively).   Both of these fields must be punched with positive numbers.   ',/, &
+          5x,  'But the EMTP has read values of', e14.4,  ' and', e14.4,  ' for these variables, respectively.  ')
 6220      lastov = nchain
           nchain = nfrfld + 50
           if ( iprsup  .ge.  1 )
