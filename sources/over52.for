@@ -279,102 +279,64 @@ subroutine over52
           5x,  "his calculated by dividing the user's  'tmax'  (columns 9-16 of the first misc. data card) of", e13.4,  ' seconds   ',/, &
           5x,  "by his time-step  'deltat'  (columns 1-8 of the same card) of", e13.4,  '.   if the user does not understand    ')
   write(lunit6, 7181)
-7181 format( 5x, 101hthe error of his ways, he had better pay a call to
-1         his friendly neighborhood program maintenance man.   )
-          go to 6220
-6082      write(lunit6, 7082)  lstat(15)
-7082      format( 5x, 103hthe user has overflowed storage within the line-co
-1         nstants supporting program.   for the current program   ,/,
-2 5       x,  48hversion, one is limited to cases having not over, i4,
-3  53     h conductors.   storage for the arrays in question has   ,/,
-4 5       x, 115hbeen optimally (and dynamically) allocated so as to use a
-5         s much of the emtp core storage as is available.   it thus   ,/,
-6 5       x, 115his not the fault of the line-constants supporting program
-7         itself, but rather of the overall emtp dimensioning, that   ,/,
-8 5       x, 106hthis data case must be rejected.   go procure or make ano
-9         ther program version which has more total tabular    )
-          write (lunit6, 7182)
-7182      format ( 5x, 106hstorage space, and try the job over again.   reme
-1         mber, the line constants calculation requires the storage   ,/,
-2 5       x, 103hof full matrices, so memory requirements go up approximat
-3         ely as the square of the number of conductors.   )
-          go to 6220
-6083      write (lunit6, 7083)  lstat(15)
-7083      format (5x, 107hfor inputting conductor data of a line-constants c
-1         ase, data-field  'xtype'  of columns 17-18 can be punched   ,/,
-2 5       x, 115hwith a  '4' .   if this be the case, the emtp expects a s
-3         pecification for the skin-effect calculation to be punched   ,/,
-4 5       x, 114hin columns 4-8 (data field  'rtype' ).   but the user has
-5         left field  'rtype'  blank (or has punched a zero, which    ,/,
-6 5       x,  91his no better), indicating that no skin-effect correction
-7         is to be made for conductor number,  i3,  14h of the sorted  ,/,
-8 5       x, 113hinput list.   this contradictory situation is not permitt
-9         ed.   reconcile the data fields  'xtype'  and  'rtype' ,  )
-          write (lunit6, 7183)
-7183      format ( 5x,  14hand try again.    )
-          go to 6220
-6084      write (lunit6, 7084)  lstat(15)
-7084      format (5x, 106hthe just-printed conductor has geometrical x-y pos
-1         itioning (i.e., horizontal distance and height) which is   ,/,
-2 5       x,  39hidentical with that of conductor number, i3,  62h of the
-3         sorted input.   thou shalt not place two or more solid    ,/,
-4 5       x,  50hobjects in the same space at the same time, fella.   )
-          go to 6220
-6085      write (lunit6, 7085)  lstat(15)
-7085      format (5x,  59hthe user has failed to input a conductor for circu
-1         it number,  i3,  39h.   remember, circuit numbers must span   ,/,
-2 5       x, 111hthe full range of numbers from unity through the highest
-3         conductor number, without any gaps (unused numbers) in   ,/,
-4 5       x,  50hbetween.   renumber the conductors, and try again.   )
-          go to 6220
-6086      write (lunit6, 7086)  lstat(15), flstat(16), lstat(13), lstat(14)
-7086      format (5x, 110hgo see program maintenance about this one, fast.
-1         the case has stopped inside subroutine "redu44" of the line   ,/,
-2 5       x,  51hconstants calculation, with diagonal element of row, i3,
-3   9     h equal to, e14.5,  30h, which is less than hermann's   ,/,
-4 5       x,  80hbuild-in fixed tolerance of  1.0e-8 .   parameters  'n'
-5         and  'm'  are equal to , 2i5,  1h.   )
-          go to 6220
-6087      write (lunit6, 7087)
-7087      format (5x,  38h big trouble.   the computer operating,
-1             39 h system has interrupted emtp execution.,
-2             39 h   this emtp solution is hereby fatally
-3         ,/,  5x,  37h wounded.   if more information about,
-4             35 h the interrupt is known, it will be,
-5             38 h found immediately preceding the first
-6         ,/,  5x,  38h "error  error ...."  line above.   if,
-7             35 h this computer system can skip to a,
-8             38 h following data case, it will (below).  )
-          go to 6220
-6088      write (lunit6, 7088)  lstat(32), nenerg
-7088      format (5x, 107hthis is a statistical-overvoltage study, in which
-1         all solutions are now completed, and the emtp is ready to   ,/,
-2 5       x, 112hperform the final statistical processing (calculation of
-3         cumulative distribution functions, etc.).   to do this,     ,/,
-4 5       x,  20hthe output vectors (,  i3,  43h cells long) for all of th
-5         e energizations (,  i3, 34h in number) must be simultaneously  ,/,
-6 5       x, 110hstored in core.   this is the dominant demand for memory.
-7         there also is the need to store various vectors (a         )
-          write (lunit6, 7288)   kswtch,  nenerg
-7288      format (5x,  85hlinear overhead).   total memory requirements are
-1         given by the following formula ....         ,/,
-2 10      x,  70hstorage  =  9*kswtch  +  (nenerg +4)*nvar  +  nc  +  nto
-3         t  +  2*liminc            ,/,   5x,   10hwhere  ...   ,/,
-4 10      x,   9hkswtch  =,  i4,  45h  =  number of switches in the emtp
-5         data case            ,/,
-6 10      x,    9hnenerg  =,  i4,  28h  =  number of energizations    )
-          write (lunit6, 7388)   lstat(32), nc, ntot, lstat(14)
-7388      format ( 10x,   9hnvar    =,  i4,  64h  =  number of output variab
-1         les for the energization simulations                         ,/,
-2 10      x,   9hnc      =,  i4,  71h  =  number of branch output variabl
-3         es for the energization simulations                          ,/,
-4 10      x,   9hntot    =,  i4,  53h  =  total number of network nodes (
-5         including ground)                                            ,/,
-6 10      x,   9hliminc  =,  i4,  71h  =  maximum number of compartments
-7         for any one statistical tabulation.                          )
-          write (lunit6, 7488)   lstat(15),  lstat(16)
-7488      format ( 5x,  27hbut this requirement totals,  i7,
-1  37     h   cells, which exceeds the available,  i7   )
+7181 format (5x, 'the error of his ways, he had better pay a call to his friendly neighborhood program maintenance man.   ')
+  go to 6220
+6082 write(lunit6, 7082)  lstat(15)
+7082 format (5x, 'The user has overflowed storage within the line-constants supporting program.   For the current program   ',/, &
+          5x,  'version, one is limited to cases having not over', i4, ' conductors.   Storage for the arrays in question has   ',/, &
+          5x, 'been optimally (and dynamically) allocated so as to use as much of the EMTP core storage as is available.   It thus   ',/, &
+          5x, 'is not the fault of the line-constants supporting program itself, but rather of the overall EMTP dimensioning, that   ',/, &
+          5x, 'this data case must be rejected.   Go procure or make another program version which has more total tabular    ')
+  write (lunit6, 7182)
+7182 format (5x, 'storage space, and try the job over again.   Remember, the line constants calculation requires the storage   ',/, &
+          5x, 'of full matrices, so memory requirements go up approximately as the square of the number of conductors.   ')
+  go to 6220
+6083 write (lunit6, 7083)  lstat(15)
+7083 format (5x, "For inputting conductor data of a line-constants case, data-field  'xtype'  of columns 17-18 can be punched   ",/, &
+          5x, "with a  '4' .   If this be the case, the EMTP expects a specification for the skin-effect calculation to be punched   ",/, &
+          5x, "in columns 4-8 (data field  'rtype' ).   But the user has left field  'rtype'  blank (or has punched a zero, which    ",/, &
+          5x,  'is no better), indicating that no skin-effect correction is to be made for conductor number',  i3,  ' of the sorted  ',/, &
+          5x, "input list.   This contradictory situation is not permitted.   Reconcile the data fields  'xtype'  and  'rtype' ,  ")
+  write (lunit6, 7183)
+7183 format (5x, 'and try again.    ')
+  go to 6220
+6084 write (lunit6, 7084)  lstat(15)
+7084 format (5x, 'The just-printed conductor has geometrical x-y positioning (i.e., horizontal distance and height) which is   ',/, &
+          5x,  'identical with that of conductor number', i3,  ' of the sorted input.   Thou shalt not place two or more solid    ',/, &
+          5x,  'objects in the same space at the same time, fella.   ')
+  go to 6220
+6085 write (lunit6, 7085)  lstat(15)
+7085 format (5x,  'The user has failed to input a conductor for circuit number',  i3,  '.   Remember, circuit numbers must span   ',/, &
+          5x, 'the full range of numbers from unity through the highest conductor number, without any gaps (unused numbers) in   ',/, &
+          5x,  'between.   Renumber the conductors, and try again.   ')
+  go to 6220
+6086 write (lunit6, 7086)  lstat(15), flstat(16), lstat(13), lstat(14)
+7086 format (5x, 'Go see program maintenance about this one, fast.    The case has stopped inside subroutine "redu44" of the line   ',/, &
+          5x,  'constants calculation, with diagonal element of row', i3, ' equal to', e14.5,  ", which is less than Hermann's   ",/, &
+          5x,  "build-in fixed tolerance of  1.0e-8 .   Parameters  'n' and  'm'  are equal to ", 2i5,  '.'   )
+  go to 6220
+6087 write (lunit6, 7087)
+7087 format (5x,  ' big trouble.   The computer operating system has interrupted emtp execution.   This EMTP solution is hereby fatally',/,  &
+          5x,  ' wounded.   If more information about, the interrupt is known, it will be, found immediately preceding the first',/,  &
+          5x, ' "error  error ...."  line above.   If this computer system can skip to a following data case, it will (below).  ')
+  go to 6220
+6088 write (lunit6, 7088)  lstat(32), nenerg
+7088 format (5x, 'This is a statistical-overvoltage study, in which all solutions are now completed, and the EMTP is ready to   ',/, &
+          5x, 'perform the final statistical processing (calculation of cumulative distribution functions, etc.).   To do this,     ',/, &
+          5x,  'the output vectors (',  i3,  ' cells long) for all of the energizations (',  i3, ' in number) must be simultaneously  ',/, &
+          5x, 'stored in core.   This is the dominant demand for memory.   There also is the need to store various vectors (a ')
+  write (lunit6, 7288)   kswtch,  nenerg
+7288 format (5x,  'linear overhead).   Total memory requirements are given by the following formula ....         ',/, &
+          10x,  'Storage  =  9*kswtch  +  (nenerg +4)*nvar  +  nc  +  ntot  +  2*liminc            ',/,   &
+          5x,   'where  ...   ',/, 10x,   'kswtch  =',  i4,  '  =  number of switches in the EMTP data case            ',/, &
+          10x,    'nenerg  =',  i4,  '  =  number of energizations    ')
+  write (lunit6, 7388)   lstat(32), nc, ntot, lstat(14)
+7388 format (10x, 'nvar    =',  i4,  '  =  number of output variables for the energization simulations                         ',/, &
+          10x,   'nc      =',  i4,  '  =  number of branch output variables for the energization simulations                          ',/, &
+          10x,   'ntot    =',  i4,  '  =  total number of network nodes (including ground)                                            ',/, &
+          10x,   'liminc  =',  i4,  '  =  maximum number of compartments for any one statistical tabulation.                          ')
+  write (lunit6, 7488)   lstat(15),  lstat(16)
+7488 format (5x,  'But this requirement totals',  i7, '   cells, which exceeds the available',  i7   )
           write (lunit6, 7188)
 7188      format (5x, 103hcells of working space.   to run this case without
 1         increasing the emtp dimensions, the user must either    ,/,
