@@ -177,245 +177,157 @@ subroutine subr51
           5x, 'allowed to connect sources to network nodes which are not a part of the network previously defined by branch and ',/, &
           5x, 'switch cards of this data case.   After all, such nodes would be completely disconnected from the network, so could  ',/, &
           5x, 'not affect the network solution.   Most probably, one or more spelling errors have been made in punching node names.  ')
-      write(lunit6, 7131)
-      go to 6220
-6013  write(lunit6, 7013)
-7013  format( 5x,  34h simulator voltage outside limits.   )
-      go to 6220
- 6014 write (lunit6, 7014)  bus1, bus2, flstat(16)
- 7014 format( 5x,  35htype-93 nonlinear inductance from ', a6,
-     1 6h' to ', a6,  37h' has psi-steady (columns 33-38) zero   ,/,
-     2 5x,  71hwhile i-steady (columns 27-32) is nonzero.   value read f
-     3or i-steady = , e12.3, 2h . , /,
-     4 5x,  47hsuch zero-impedance branches are not permitted.   )
-      go to 6220
- 6015 write(lunit6, 7015)  lstat(15), lstat(16)
- 7015 format( 5x,  86hbreakdown of logic in steady-state setup before ca
-     1ll to subroutine number.   next, ii=, 2i10 )
-      write(lunit6, 7115)
- 7115 format( 5x, 110hthis is probably a program bug, not the fault of t
-     1he user.   go seek help from program maintenance about this.   )
-      go to 6220
- 6016 write(lunit6, 7016)  lstat(16), ntot, lstat(15)
- 7016 format( 5x,104harrays 'kolum' and 'korder' of the renumbering calc
-     1ulation for the steady-state network have overflowed.   ,/,
-     2 5x, 115hthe problem is simply too big or too dense (admittance ma
-     3trix has too many nonzero elements) for the existing array  ,/,
-     4 5x,   8hsizes of,  i7,  18h   cells.   of the,  i6,  64h   matrix
-     5 rows total, overflow has occurred while working on the      ,/,
-     6 5x, 29hsimulated elimination for row, i4,  64h.   this overflow t
-     7rouble is really trouble with dependent list         )
-      write (lunit6, 7116)
- 7116 format (5x,  56hnumber 99, about which an explanation will follow
-     1below.     ,/,
-     2 5x,  87hif the core storage needed to prevent this overflow can n
-     3ot be spared, as a last resort     ,/,
-     8 5x, 112hthe user might bypass the steady-state calculation comple
-     9tely, and simply run in the transients mode for several  )
-      write(lunit6, 7216)
- 7216 format( 5x, 104hcycles, hoping that by then the solution will have
-     1 settled sufficiently into the sinusoidal steady-state  ,/,
-     2 5x,  61h(following the energization shock which occurs at time ze
-     3ro).    )
-      kill = 1
-      lstat(16) = 99
-      nchain = 51
-      if ( iprsup  .ge.  1 )
-     1 write ( lunit6, 8943 )  nchain, kill
-      go to 9000
- 6017 write(lunit6, 7017)
- 7017 format( 5x, 111hlogic breakdown in steady-state solution after ren
-     1umbering of the s.s. network has been successfully completed.  )
-      write(lunit6, 7115)
-      write (lunit6, 7117)
- 7117 format ( 5x,  31hbut then again, maybe it is not,
-     1       38h the fault of the emtp.  several years,
-     2       37h of experience with this message have   ,/,
-     3         5x,  30hshown that the user's data was,
-     4       41h invariably erroneous, though not stopped,
-     5       40h at the time the branches were inputted.   )
-      write (lunit6, 7217)  bus1, lstat(15)
- 7217 format ( 5x,  29hfor example, there might be a,
-     1       40h branch both ends of which touch node  ',
-     2         a6,  25h' ,   found in row number,   i4,/,2x,
-     3       40h   of the branch table (order of input).  )
-      go to 6220
- 6018 write (lunit6, 7018)  lstat(14), bus1, bus2
- 7018 format( 5x, 109hin forming the network admittance matrix for the s
-     1teady-state phasor solution for initial conditions, trouble ,/,
-     2 5x,  34hhas occurred while processing the , i2,
-     3 55h-phase coupled r-l elements the first of which connects, /,5x,
-     4  5hbus ', a6, 12h' with bus ', a6,  81h'.   this could either be
-     5an actual coupled r-l group, or the series sub-branches ,/,
-     6 5x, 115hof a multi-phase pi-circuit.   in either case, the couple
-     7d-branch-group impedance matrix    (z) = (r) + jw(l)   has ,/,
-     8 5x, 112hbeen found to be near-singular (uninvertible).   in parti
-     9cular, a near-zero diagonal element has been found just  )
-      write(lunit6, 7118)  flstat(11), flstat(12), flstat(13)
- 7118 format( 5x, 112hbefore reciprocation, during the inversion attempt
-     1.   using magnitudes squared for all three quantities, we have ,/,
-     2 5x, 25horiginal diagonal value =, e12.3,
-     3 24h,   questionable value =, e12.3, 21h,   tolerance ratio =,
-     4 e12.3, 1h. ,/,  5x,
-     5 117hthe user had better check his data values for this coupled gr
-     6oup very carefully, to see if something is not abnormal.   )
-      write(lunit6, 7218)
- 7218 format( 5x, 104hthe program tolerance ratio for near-zero checking
-     1 is miscellaneous data parameter 'tolmat'.   perhaps a   ,/,
-     2 5x, 109hrereading of the user's manual explanation of this input
-     3constant would be in order, should the user still be   ,/,
-     4 5x,  40huncertain of the reason for his trouble.   )
-      go to 6220
- 6019 write(lunit6, 7019)
- 7019 format( 5x,  90hsteady-state solution logic trouble.   see program
-     1 maintenance, since this is their fault.   )
-      go to 6220
- 6020 write(lunit6, 7020)
- 7020 format( 5x,  74hlogic breakdown in steady-state solution while bui
-     1lding admittance matrix.   )
-      write(lunit6, 7115)
-      go to 6220
- 6021 write(lunit6, 7021)
- 7021 format( 5x, 105hsteady-state solution breakdown because over 25 no
-     1des of network are switched together.   this represents  ,/,
-     2 5x, 113hoverflow of array itemp(??).   to solve the problem, simp
-     3ly redimension  list 26  , or get rid of that inordinate  , /,
-     4 5x, 118hnumber of switches which are all connected together.   th
-     5at any legitimate power-system problem should ever reach this  ,/,
-     6 5x, 109htermination is highly improbable, and somewhat suspect.
-     7 unless the user understands what is wrong, and why,   ,/,
-     8 5x, 104hsome consultation with the user's friendly neighborhood p
-     9rogram maintenance man is strongly recommended.   )
-      go to 6220
- 6022 write(lunit6, 7022)  lstat(16)
- 7022 format( 5x,  70hbig trouble.   singular nodal admittance matrix in
-     1volving node number , i3,
-     1                    41h of steady-state solution has been found. ,
-     2 /, 5x, 103hbut user bus number for this node could not be found i
-     3n renumbering map  norder.   program logic error.    )
-      write(lunit6, 7115)
-      go to 6220
- 6023 write(lunit6, 7023)  bus1
- 7023 format( 5x, 105hno.   we can not validly set voltage of disconnect
-     1ed subnetwork last identified to zero, since it appears   , /,
-     2 5x, 111hthat a current source feeds this subnetwork.   for this c
-     3ase, either kirchhoff's current law for the subnetwork  ,/,
-     4 5x,    114his violated (current in does not equal current out), o
-     5r the solution is indeterminate (subnetwork voltage solution  ,/,
-     6 5x, 107his only determined up to an arbitrary constant).   in eit
-     7her case, the problem is ill-posed physically, and  ,/,
-     8 5x,  84hmust be rejected.   user had better reconsider his networ
-     9k in the vicinity of node ', a6,  19h', to either remove    )
-      write(lunit6, 7123)
- 7123 format( 5x,  51hthe singularity, or the current source(s), or both
-     1.  )
-      go to 6220
- 6024 write(lunit6, 7024)  lstat(16), lstat(15), lstat(14)
- 7024 format( 5x, 68hlogic failure near end steady-state solution.   kk,
-     1 ia, index(ia+1)=, 3i10 )
-      write(lunit6, 7115)
-      go to 6220
- 6025 write(lunit6, 7025)  ( lstat(i), i=11, 16 )
- 7025 format( 5x,  79hlogic trouble within steady-state renumbering.   n
-     1ext, mext, ib, i, jbs, nelim=, 6i8 )
-      write(lunit6, 7115)
-      go to 6220
- 6026 write(lunit6, 7026)
- 7026 format( 5x,  77hlogic error in steady-state renumbering.   kolum a
-     1rray has erroneous numbers.   )
-      write(lunit6, 7115)
-      go to 6220
- 6027 write(lunit6, 7127)  bus1, bus2, bus3
- 7127 format ( 5x, 28hsource being read is type-18,
-     1             31h ideal-transformer plus source.,
-     2             32h   but one or more of the column   ,/,
-     3         5x, 34h3-22 name fields are unrecognized.,
-     4             17h   names are ....,    3( 2x, 1h", a6,
-     5                      1h"),  2h .                  ,/,
-     6         5x, 31hunless all three are legal emtp,
-     7             30h network node names,  the case,
-     8             30h can not be run.   correct it.     )
-      go to 6220
- 6028 write (lunit6, 7028)
- 7028 format ( 5x, 32hthe last-read component has been,
-     1             34h identified as an old-format (pre-,
-     2             34h"m37.") zinc-oxide surge arrester.  ,/,
-     3         5x, 34hsuch old data must be converted to,
-     4             35h the newer format.   the supporting,
-     5             32h program "zinold" (see rule book    ,/,
-     6         5x, 39hindex) will perform all such conversion,
-     7             33h for the user automatically, in a,
-     8             22h single pass.  try it.               )
-      go to 6220
- 6029 write (lunit6, 7029)  bus1, bus2, flstat(16)
- 7029 format( 5x,  51hdistributed-parameter branch card connecting node
-     1', a6, 6h' to ', a6,  29h' represents propagation mode , /,
-     2 5x,  24hwith travel time (sec) =, e14.5,  79h.   this is less tha
-     3n time-step size  deltat, a case which is illegal.   either , /,
-     4 5x,  94hrun with small enough deltat, or replace the distributed
-     5modelling by lumped pi-circuit model.   )
-      if( flstat(16)  .eq.  0.0 )
-     1 write(lunit6, 7129)
- 7129 format( 5x, 104hthe just-printed travel time is seen to be zero, t
-     1hough, which is generally a default value deserving of    ,/,
-     2 5x, 112hfurther comment.   assuming that the user has actually in
-     3putted a line of finite length, the travel time must of  ,/,
-     4 5x, 110hcourse be positive.   a zero value is used for default in
-     5 the case of a frequency-dependent mode, however, for   ,/,
-     6 5x, 110hthe case where the infinite-frequency travel time is less
-     7 than the time-step-size  'deltat'  that the user has   ,/,
-     8 5x, 115hselected.   to find the actual offending travel-time valu
-     9e, the user can consult the data-card interpretation which   )
-      if( flstat(16) .eq. 0.0 )
-     1 write(lunit6, 7229)
- 7229 format( 5x, 108hgoes along with the associated branch card as it w
-     1as read in.   the emtp does not have the value in question  ,/,
-     2 5x, 112himmediately available at this point, and can only tell th
-     3e user that he's in trouble (without knowing how much).   )
-      go to 6220
- 6030 write(lunit6, 7030)  lstat(16)
- 7030 format( 5x,  47hfrom columns 1-2 of last data card, a value of ,
-     1 i2,  52h was read.   this is illegal.   the card in question , /,
-     2 5x, 111hshould be either an initial-condition card, where values
-     32, 3, or 4 are legal, or it is an output-specification  , /,
-     4 5x,  57hcard, where values 0 or 1 are allowed.   shape up, fella.
-     5 )
-      go to 6220
- 6031 write(lunit6, 7031)  bus1
- 7031 format( 5x,  84hlast card gives node-voltage initial condition for
-     1 unrecognizable node.   the name ', a6,  11h' which was ,/,
-     2 5x,  52hpunched could not be found in the list of bus names.  )
-      write(lunit6, 7131)
- 7131 format( 5x, 105hcheck name(s) for spelling, as well as the column-
-     1positioning of any blanks in the field(s) which is(are)  ,/,
-     2 5x,  20hsix characters wide.   )
-      go to 6220
- 6032 write (lunit6, 7032)  bus1, bus2
- 7032 format( 5x,  71hlast card gives initial-conditon currents for line
-     1ar branch from node ', a6, 6h' to ', a6, 1h. )
- 7232 write(lunit6, 7132)
- 7132 format( 5x, 112hbut the branch referred to could not be found in t
-     1he appropriate list of branches.   is the orientation correct.  )
-      write(lunit6, 7131)
-      go to 6220
- 6033 write (lunit6, 7033)  bus1, bus2
- 7033 format( 5x,  75hlast card gives initial condition currents for non
-     1linear branch from node ', a6, 6h' to ', a6, 1h.  )
-      go to 7232
- 6034 write(lunit6, 7034)  lstat(13), lstat(14), flstat(15), flstat(16)
- 7034 format( 5x,  80hlast card gives initial condition which is illegal
-     1 for nonlinear element number , i3, 18h.   the last point ,/,
-     2 5x,  60hof the nonlinear characteristic is stored in table locati
-     3on , i3, 15h and has value , e13.4, 15h.   but initial ,/,
-     4 5x,  30hcondition requires a value of , e13.4,  68h, which is off
-     5 the end of the characteristic.   user must extend the ,/,
-     6 5x,  70hcharacteristic, if this is really the initial condition t
-     7hat he wants.   )
-      go to 6220
- 6035 write(lunit6, 7035)  lstat(16), bus1, bus2,
-     1 flstat(11), flstat(12), flstat(13)
- 7035 format( 5x,  90hbreakdown of solution when using compensation (sup
-     1erposition) on nonlinear element number , i3,  /,
+  write(lunit6, 7131)
+  go to 6220
+6013 write(lunit6, 7013)
+7013 format( 5x,  34h simulator voltage outside limits.   )
+  go to 6220
+6014 write (lunit6, 7014)  bus1, bus2, flstat(16)
+7014 format (5x, 'Type-93 nonlinear inductance from ', a6, "'", ' to ', "'", a6,  ' has psi-steady (columns 33-38) zero   ',/, &
+          5x, 'while i-steady (columns 27-32) is nonzero.   Value read for i-steady = ', e12.3, ' . ', /, &
+          5x,  'such zero-impedance branches are not permitted.   ')
+  go to 6220
+6015 write(lunit6, 7015)  lstat(15), lstat(16)
+7015 format(5x,  'Breakdown of logic in steady-state setup before call to subroutine number.   Next, ii=', 2i10)
+  write(lunit6, 7115)
+7115 format(5x, 'This is probably a program bug, not the fault of the user.   Go seek help from program maintenance about this.   ')
+  go to 6220
+6016 write(lunit6, 7016)  lstat(16), ntot, lstat(15)
+7016 format (5x, "Arrays 'kolum' and 'korder' of the renumbering calculation for the steady-state network have overflowed.   ",/, &
+          5x, 'the problem is simply too big or too dense (admittance matrix has too many nonzero elements) for the existing array  ',/, &
+          5x, 'sizes of',  i7,  '   cells.   Of the',  i6,  '   matrix rows total, overflow has occurred while working on the      ',/, &
+          5x, 'simulated elimination for row', i4,  '.   This overflow trouble is really trouble with dependent list         ')
+  write (lunit6, 7116)
+7116 format (5x,  56hnumber 99, about which an explanation will follow below.     ,/, &
+          5x,  'If the core storage needed to prevent this overflow can not be spared, as a last resort     ',/, &
+          5x, 'the user might bypass the steady-state calculation completely, and simply run in the transients mode for several  ')
+  write(lunit6, 7216)
+7216 format( 5x, 'Cycles, hoping that by then the solution will have settled sufficiently into the sinusoidal steady-state  ',/, &
+          5x, '(following the energization shock which occurs at time zero).    ')
+  kill = 1
+  lstat(16) = 99
+  nchain = 51
+  if ( iprsup  .ge.  1 ) write ( lunit6, 8943 )  nchain, kill
+  go to 9000
+6017 write(lunit6, 7017)
+7017 format( 5x, 111hlogic breakdown in steady-state solution after renumbering of the s.s. network has been successfully completed.  )
+  write(lunit6, 7115)
+  write (lunit6, 7117)
+7117 format (5x, 'But then again, maybe it is not the fault of the EMTP.  Several years, of experience with this message have   ',/, &
+          "shown that the user's data was invariably erroneous, though not stopped, at the time the branches were inputted.   ")
+  write (lunit6, 7217)  bus1, lstat(15)
+7217 format (5x, 'For example, there might be a branch both ends of which touch node ', "'", a6,  "'", ',   found in row number,   i4', /, &
+          2x, '   of the branch table (order of input).  ')
+  go to 6220
+6018 write (lunit6, 7018)  lstat(14), bus1, bus2
+7018 format (5x, 'In forming the network admittance matrix for the steady-state phasor solution for initial conditions, trouble ',/, &
+          5x, 'has occurred while processing the ', i2, '-phase coupled r-l elements the first of which connects', /, 5x, &
+          'bus ', "'", a6, "'", ' with bus ', "'", a6, "'", '.   This could either be an actual coupled r-l group, or the series sub-branches ',/, &
+          5x, 'of a multi-phase pi-circuit.   In either case, the coupled-branch-group impedance matrix    (z) = (r) + jw(l)   has ',/, &
+          5x, 'been found to be near-singular (uninvertible).   In particular, a near-zero diagonal element has been found just  ')
+  write(lunit6, 7118)  flstat(11), flstat(12), flstat(13)
+7118 format( 5x, 'Before reciprocation, during the inversion attempt.   using magnitudes squared for all three quantities, we have ',/, &
+          5x, 'original diagonal value =', e12.3, ',   questionable value =', e12.3, ',   tolerance ratio =, e12.3, 1h. ',/,  5x, &
+          'The user had better check his data values for this coupled group very carefully, to see if something is not abnormal.   ')
+  write(lunit6, 7218)
+7218 format( 5x, "The program tolerance ratio for near-zero checking is miscellaneous data parameter 'tolmat'.   perhaps a   "/, &
+          2 5x, "rereading of the user's manual explanation of this input constant would be in order, should the user still be   ",/, &
+          5x, 'uncertain of the reason for his trouble.   ')
+  go to 6220
+6019 write(lunit6, 7019)
+7019 format (5x, 'Steady-state solution logic trouble.   See program maintenance, since this is their fault.   ')
+  go to 6220
+6020 write(lunit6, 7020)
+7020 format( 5x,  'Llogic breakdown in steady-state solution while building admittance matrix.   ')
+  write(lunit6, 7115)
+  go to 6220
+6021 write(lunit6, 7021)
+7021 format (5x, 'Steady-state solution breakdown because over 25 nodes of network are switched together.   This represents  ',/, &
+          5x, 'overflow of array itemp(??).   To solve the problem, simply redimension  list 26  , or get rid of that inordinate  ', /, &
+          5x, 'number of switches which are all connected together.   That any legitimate power-system problem should ever reach this  ',/, &
+          5x, 'termination is highly improbable, and somewhat suspect. Unless the user understands what is wrong, and why,   ',/, &
+          5x, "some consultation with the user's friendly neighborhood program maintenance man is strongly recommended.   ")
+  go to 6220
+6022 write(lunit6, 7022)  lstat(16)
+7022 format (5x, 'Big trouble.   Singular nodal admittance matrix involving node number ', i3, ' of steady-state solution has been found. ', &
+          /, 5x, 'But user bus number for this node could not be found in renumbering map  norder.   Program logic error.    ')
+  write(lunit6, 7115)
+  go to 6220
+6023 write(lunit6, 7023)  bus1
+7023 format( 5x, 'No.   We can not validly set voltage of disconnected subnetwork last identified to zero, since it appears   ', /, &
+          5x, "that a current source feeds this subnetwork.   For this case, either Kirchhoff's current law for the subnetwork  ",/, &
+          5x, 'is violated (current in does not equal current out), or the solution is indeterminate (subnetwork voltage solution  ',/, &
+          5x, 'is only determined up to an arbitrary constant).   In either case, the problem is ill-posed physically, and  ',/, &
+          5x,  'must be rejected.   User had better reconsider his network in the vicinity of node ', "'", a6, "'",  ', to either remove    ')
+  write(lunit6, 7123)
+7123 format (5x, 'The singularity, or the current source(s), or both ')
+  go to 6220
+6024 write(lunit6, 7024)  lstat(16), lstat(15), lstat(14)
+7024 format( 5x, 68hlogic failure near end steady-state solution.   kk, ia, index(ia+1)=, 3i10 )
+  write(lunit6, 7115)
+  go to 6220
+6025 write(lunit6, 7025)  ( lstat(i), i=11, 16 )
+7025 format (5x, 'Logic trouble within steady-state renumbering.   next, mext, ib, i, jbs, nelim=', 6i8 )
+  write(lunit6, 7115)
+  go to 6220
+6026 write(lunit6, 7026)
+7026 format( 5x,  77hlogic error in steady-state renumbering.   kolum a
+1 rray has erroneous numbers.   )
+  write(lunit6, 7115)
+  go to 6220
+6027 write(lunit6, 7127)  bus1, bus2, bus3
+7127 format (5x, 'Source being read is type-18 ideal-transformer plus source.   But one or more of the column   ',/, &
+          5x, '3-22 name fields are unrecognized.   Names are ....', 3( 2x, '"', a6, '"'), ' .'                  ,/, &
+          5x, 'unless all three are legal EMTP network node names,  the case can not be run.   Correct it.     ')
+  go to 6220
+6028 write (lunit6, 7028)
+7028 format (5x, 'The last-read component has been identified as an old-format (pre-', '"m37."', ') zinc-oxide surge arrester.  ',/, &
+          5x, 'such old data must be converted to the newer format.   The supporting program "zinold" (see rule book    ',/, &
+          'index) will perform all such conversion for the user automatically in a single pass.  Try it.               ')
+  go to 6220
+6029 write (lunit6, 7029)  bus1, bus2, flstat(16)
+7029 format (5x, "Distributed-parameter branch card connecting node ". "'", a6, "'", ' to ', "'", a6, "'",  ' represents propagation mode ', /, &
+          5x,  'with travel time (sec) =', e14.5, '.   This is less than time-step size  deltat, a case which is illegal.   Either ', /, &
+          5x,  'run with small enough deltat, or replace the distributed modelling by lumped pi-circuit model.   ')
+  if( flstat(16)  .eq.  0.0 ) write(lunit6, 7129)
+7129 format (5x, 'The just-printed travel time is seen to be zero, though, which is generally a default value deserving of    ',/, &
+          5x, 'further comment.   Assuming that the user has actually inputted a line of finite length, the travel time must of  ',/, &
+          5x, 'course be positive.   A zero value is used for default in the case of a frequency-dependent mode, however, for   ',/, &
+          5x, "the case where the infinite-frequency travel time is less than the time-step-size  'deltat'  that the user has   ",/, &
+          5x, 'selected.   To find the actual offending travel-time value, the user can consult the data-card interpretation which   ')
+  if( flstat(16) .eq. 0.0 ) write(lunit6, 7229)
+7229 format( 5x, 'Goes along with the associated branch card as it was read in.   The EMTP does not have the value in question  ',/, &
+          5x, "immediately available at this point, and can only tell the user that he's in trouble (without knowing how much).   ")
+  go to 6220
+6030 write(lunit6, 7030)  lstat(16)
+7030 format ( 5x, 'From columns 1-2 of last data card, a value of ', i2,  ' was read.   This is illegal.   The card in question ', /, &
+          5x, 'should be either an initial-condition card, where values 2, 3, or 4 are legal, or it is an output-specification ', /, &
+          5x,  'card, where values 0 or 1 are allowed.   Shape up, fella. ')
+  go to 6220
+6031 write(lunit6, 7031)  bus1
+7031 format( 5x,  84hlast card gives node-voltage initial condition for unrecognizable node.   the name ', a6,  11h' which was ,/, &
+          5x,  52hpunched could not be found in the list of bus names.  )
+  write(lunit6, 7131)
+7131 format( 5x, 105hcheck name(s) for spelling, as well as the column-positioning of any blanks in the field(s) which is(are)  ,/, &
+          5x,  20hsix characters wide.   )
+  go to 6220
+6032 write (lunit6, 7032)  bus1, bus2
+7032 format( 5x,  'Last card gives initial-conditon currents for linear branch from node ', "'", a6, "'", ' to ', "'", a6, "'.")
+7232 write(lunit6, 7132)
+7132 format (5x, 'But the branch referred to could not be found in the appropriate list of branches.   Is the orientation correct.  ')
+  write(lunit6, 7131)
+  go to 6220
+6033 write (lunit6, 7033)  bus1, bus2
+7033 format (5x, 'Last card gives initial condition currents for non linear branch from node ', "'", a6, "'", ' to ', "'", a6, "'.")
+  go to 7232
+6034 write(lunit6, 7034)  lstat(13), lstat(14), flstat(15), flstat(16)
+7034 format (5x,  'Last card gives initial condition which is illegal for nonlinear element number ', i3, '.   The last point ',/, &
+          5x, 'of the nonlinear characteristic is stored in table location ', i3, ' and has value ', e13.4, '.   But initial ',/, &
+          5x,  'condition requires a value of ', e13.4,  ', which is off the end of the characteristic.   User must extend the ',/, &
+          5x, 'characteristic, if this is really the initial condition that he wants.   ')
+  go to 6220
+6035 write(lunit6, 7035)  lstat(16), bus1, bus2, flstat(11), flstat(12), flstat(13)
+7035 format (5x,  90hbreakdown of solution when using compensation (superposition) on nonlinear element number , i3,  /, &
      2 5x,  21hwhich connects node ', a6, 6h' to ', a6, 2h'.  ,/,
      3 5x, 114hthevenin load line does not intersect the nonlinear chara
      4cteristic.   maybe user should extend the characteristic, /,
