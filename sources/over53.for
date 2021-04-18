@@ -462,75 +462,51 @@ subroutine over53
           10x, 'integer multiplicity.',  7x,   '    7    3    1    1    3    2    0    3    1    0    0    3    0    1    1 ',/, &
           10x, 'total multiplicity.   ',  9x,   '   19    9    2    7   4    3    1    8    2    1    5    6    8    3    7 ')
   write(lunit6,2122)  (i, i=1, 15),  (lstat( i), i=1, 15)
-2122 format (5x,  92hdimensioned sizes of the tacs tables which were us
-1 ed for the present run are as follows ....     ,/,
-2 10 x,    18htacs table number.,   10x,   15i5,  /,
-3 10 x, 18hpresent dimension.,   10x,   15i5    )
+2122 format (5x,  'Dimensioned sizes of the tacs tables which were used for the present run are as follows ....',/, &
+          10x, 'tacs table number.', 10x, 15i5, /, &
+          10x, 'present dimension.',   10x,   15i5)
   go to 6220
 6123 write (lunit6, 7123)
-7123 format (  8h unused.  )
+7123 format (' unused.')
 6124 write (lunit6, 7124)
-7124 format (5x, 110hpreceding all tacs data cards, the user inputted a
-1 special request card which was punched with the text  'tacs   ,/,
-2 5 x, 113hEMTP sources'  in columns 1-17.   now, columns 21-80 of t
-3 his card are to be read by the EMTP using  10a6  format,     ,/,
-4 5 x, 109hin order to discover which type 1 through 10 EMTP sources
-5 the user wants to have controlled by specified tacs      ,/,
-6 5 x, 106hvariables.   recall that if the k-th field so-read contai
-7 ns the nonblank  a6  text  'name' ,   then on the        )
+7124 format (5x, "Preceding all tacs data cards, the user inputted a special request card which was punched with the text  'tacs",/, &
+          5x, "EMTP sources'  in columns 1-17.   Now, columns 21-80 of this card are to be read by the EMTP using  10a6  format,",/, &
+          5x, 'in order to discover which type 1 through 10 EMTP sources the user wants to have controlled by specified tacs',/, &
+          5x, "variables.   Recall that if the k-th field so-read contains the nonblank  a6  text  'name' ,   then on the ")
   write (lunit6, 7224)  lstat(14), bus1
-7224 format (5x, 109helectrical side it will be the EMTP source of type
-1 -code  'k'  which will be given the numerical value of tacs   ,/,
-2 5 x,  96hvariable  'name' .   now, the user's  'tacs EMTP sources'
-3 card is in error because field number, i3,  13h  was punched ,/,
-4 5 x,  16hwith the name  ', a6,  87h' ,   which does not correspond
-5 to any tacs variable.   maybe this name was misspelled,      ,/,
-6 5 x, 115hthe EMTP wonders.   in any case, since tacs cannot supply
-7 a necessary interface request, execution will be stopped.     )
+7224 format (5x, "electrical side it will be the EMTP source of type-code  'k'  which will be given the numerical value of tacs",/, &
+          5x, "variable  'name' .   Now, the user's  'tacs EMTP sources' card is in error because field number", i3,  '  was punched',/, &
+          5x, 'with the name  ', "'", a6,  "'", ' ,   which does not correspond to any tacs variable.   Maybe this name was misspelled,',/, &
+          5x, 'the EMTP wonders.   In any case, since tacs cannot supply a necessary interface request, execution will be stopped. ')
   go to 7421
 6125 n1 = 90
   write (lunit6, 7125)  n1, bus1
-7125 format (5x,  97has part of the user's tacs data which has now been
-1 completely read by the EMTP, there was a type-, i2,  5h tacs  ,/,
-2 5 x,  59hsource card which bore the 6-character alphanumeric name
-3 ', a6,  45h'  in columns 3-8.   now, by definition, this      ,/,
-4 5 x, 114hfield must be punched with a node name (a6 format) of the
-5 EMTP electrical network which is a part of this 'hybrid'    ,/,
-6 5 x,  10hdata case.     )
+7125 format (5x,  "As part of the user's tacs data which has now been completely read by the EMTP, there was a type-", i2,  ' tacs',/, &
+          5x,  'source card which bore the 6-character alphanumeric name ', "'", a6, "'", '  in columns 3-8.   Now, by definition, this',/, &
+          5x, "field must be punched with a node name (a6 format) of the EMTP electrical network which is a part of this 'hybrid'",/, &
+          5x,  'data case. ')
   write (lunit6, 7225)
-7225 format (   1h+,   17x,  99hbut no branch or switch card of the sub
-1 sequently-inputted electrical network defined this  a6  node   ,/,
-2 5 x, 115hname.   since the EMTP does not know what variable of the
-3 electrical network should be used to control this type-90   ,/,
-4 5 x,  55hsource, execution of the data case will now be stopped. )
+7225 format ('+',   17x,  'but no branch or switch card of the subsequently-inputted electrical network defined this  a6  node',/, &
+          5x, 'name.   Since the EMTP does not know what variable of the electrical network should be used to control this type-90',/, &
+          5x, 'source, execution of the data case will now be stopped. ')
   go to 7421
 6126 n1 = 91
   write (lunit6, 7125)  n1, bus1
   write (lunit6, 7226)
-7226 format (   1h+,  17x,  91halso, this EMTP electrical-network node
-1 must have a switch connected to it, since it is the    ,/,
-2 5 x, 111hcurrent in the first (in order of data input) such adjace
-3 nt switch which is to control the type-91 tacs source.   ,/,
-4 5 x, 107hbut no such switch can be found by the EMTP.   since the
-5 EMTP does not know what variable of the electrical       ,/,
-6 5 x,  86hnetwork should be used to control this type-91 tacs sourc
-7                e, execution must be stopped.    )
+7226 format ('+',  17x,  'aalso, this EMTP electrical-network node must have a switch connected to it, since it is the',/, &
+          5x, 'current in the first (in order of data input) such adjacent switch which is to control the type-91 tacs source.',/, &
+          5x, 'But no such switch can be found by the EMTP.   Since the EMTP does not know what variable of the electrical',/, &
+          5x, 'network should be used to control this type-91 tacs source, execution must be stopped. ')
   go to 7421
 6127 write (lunit6, 7127)  lstat(14), bus1
-7127 format (5x, 104has part of the input of tacs data which is now com
-1                plete, the user has elected to manually define initial   ,/,
-2 5 x, 111hconditions for one or more tacs variables.   recall that
-3 such data follows the blank card which terminates tacs    ,/,
-4 5              x, 105houtput-variable specification cards, with one tacs variab
-5 le name and associated initial condition on each             ,/,
-6 5 x,  43hcard.   now, of such specifications, number, i4,
-7 51 h  in order of input is for a tacs variable which is       ,/,
-8 5              x,  54hpurported to have the 6-character alphanumeric name  ',
-9 a6,  40h' .   but no such tacs variable has been         )
+7127 format (5x, 'Has part of the input of tacs data which is now complete, the user has elected to manually define initial',/, &
+          5x, 'conditions for one or more tacs variables.   Recall that such data follows the blank card which terminates tacs',/, &
+          5x, 'output-variable specification cards, with one tacs variable name and associated initial condition on each',/, &
+          5x, 'card.   Now, of such specifications, number', i4, '  in order of input is for a tacs variable which is',/,&
+          5x, 'purported to have the 6-character alphanumeric name  ', "'", a6, "'", ' .   But no such tacs variable has been ')
   write (lunit6, 7227)
-7227 format (5x, 107hpreviously defined.   rather than allow the soluti
-1 on to continue with initial conditions which are probably    ,/,
-2 5 x,  44hincorrect, execution will now be terminated.    )
+7227 format (5x, 'previously defined.   Rather than allow the solution to continue with initial conditions which are probably',/, &
+          5x, 'incorrect, execution will now be terminated. ')
   go to 7421
 6128 write (lunit6, 7128)
 7128 format (5x, 105hduring triangularization of the real coefficient m
