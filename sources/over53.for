@@ -112,26 +112,18 @@ subroutine over53
           5x, 'flushing-type spillover onto logical unit number  9  during the plotting of each graph, with its associated     ',/, &
           5x, "slowdown in execution speed.   In order to avoid all such temporary disk storage,   'size'  can be set no smaller    ")
   write (lunit6, 7596)
-7596 format (5x, 109hthan twice the number of plot points of the partic
-1 ular graph multiplied by the number of curves on the graph.    ,/,
-2 5x, 111hdouble-precision conversions (ibm  real*8  is the common
-3 example) can generally ignore the just-stated  'twice'   ,/,
-4 5x, 110hfactor, since plotting-point storage for use with softwar
-5 e plotting routines like calcomp is almost invariably    ,/,
-6 5x,  17hsingle-precision.    )
+7596 format (5x, 'than twice the number of plot points of the particular graph multiplied by the number of curves on the graph.    ',/, &
+          5x, "double-precision conversions (ibm  real*8  is the common example) can generally ignore the just-stated  'twice'   ",/, &
+          5x, 'factor, since plotting-point storage for use with software plotting routines like calcomp is almost invariably    ',/, &
+          5x,  'single-precision.    ')
   go to 6220
 6097 write (lunit6, 7097)  lstat(14), lstat(15)
-7097 format ( 5x,  94hthe last-read data card has an =e=-field number w
-1 hich is not right-adjusted in its data field. ,/, 5x,  90hin parti
-2 cular, either the letter =e=, or a sign following a numeral was fo
-3 und in the field ,/, 5x,  29hwhich starts in column number , i4,
-421 h, while column number , i4,  45h, which is the right-most colum
-5 n of the field  ,/, 5x,  70his not punched explicitely with a deci
-6 mal digit (i.e., 0, 1, .... 9 ).  ,/,
-5 5x, 106hnow it may well be that such usage is indeed legal fortra
-5 n data-format input for the user's own particular     ,/,
-6 5x, 109hcomputer system, but it offends the keenly-honed sensibil
-7 ities of the EMTP (at whose mercy the user now finds    )
+7097 format (5x,  'The last-read data card has an =e=-field number which is not right-adjusted in its data field. ',/, &
+          5x,  'In particular, either the letter =e=, or a sign following a numeral was found in the field ',/, &
+          5x,  'which starts in column number ', i4, ', while column number ', i4,  ', which is the right-most column of the field  ',/, &
+          5x,  'is not punched explicitely with a decimal digit (i.e., 0, 1, .... 9 ).  ',/, &
+          5x, "Now it may well be that such usage is indeed legal fortran data-format input for the user's own particular     ",/, &
+          5x, 'computer system, but it offends the keenly-honed sensibilities of the EMTP (at whose mercy the user now finds    ')
   write (lunit6, 7197)
 7197 format ( 5x, 106hhimself, it may be noted).   too often a user wil
 1 l erroneously wind up with an exponent of ten which is in    ,/,
