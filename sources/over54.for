@@ -166,80 +166,56 @@ subroutine over54
 7258 format (8x, 'The EMTP is just beginning a new conversion case, and it expects the last-read data card (since non-blank) to',/, &
           8x, "have key word  'transformer'  punched in columns  3-14 .   But columns  3-8  contain   ",  "'", a6,  "'", ' . ')
   if ( n1  .eq.  2 ) write (lunit6, 7358)
-7358 format (8x, 108hthe data card for winding number one can not be lo
-1   cated.   column  2  must be punched with unity, of course,   ,/, &
-2 8 x, 114hand column  1  must be either blank or be punched with ze
-3   ro.   reread the rules governing saturable  'transformer'   ,/, &
-4 8 x,  44hcomponent, and correct the data accordingly.       )
-    if ( n1  .eq.  3 )
-1   write (lunit6, 7458)
-7458 format (8x, 106hprogram working space allows for a maximum of  19
-1   windings,   which has been exceeded by the user's data.      )
-    go to 6220
+7358 format (8x, 'The data card for winding number one can not be located.   Column  2  must be punched with unity, of course,',/, &
+          8x, "and column  1  must be either blank or be punched with zero.   Reread the rules governing saturable  'transformer'",/, &
+          8x, 'component, and correct the data accordingly. ')
+  if ( n1  .eq.  3 ) write (lunit6, 7458)
+7458 format (8x, "Program working space allows for a maximum of  19 windings,   which has been exceeded by the user's data. ")
+  go to 6220
 6159 write(lunit6,7159)  kill
 7159 format(5x, 19hinvalid kill code =, i5 )
-    go  to  6220
+  go  to  6220
 6160 write (lunit6, 7160)  lstat(14)
-7160 format(5x, 93hthe frequency card containing the number of decades
-1   and the number of frequencies per decade,/, & 5x, 58hik and ips res
-2   pectively, for the inverse fourier transform,/, & 5x, 81hhas request
-3   ed a total number of frequencies greater than the available storag
-4   e of , i5,/, & 5x, 85hsurely with a geometric progression of frequen
-5   cies, this many steps is not necessary. )
-    go to 6220
+7160 format(5x, 'The frequency card containing the number of decades and the number of frequencies per decade',/, &
+          5x, 'ik and ips respectively, for the inverse Fourier transform',/, &
+          5x, 'has requested a total number of frequencies greater than the available storage of ', i5,/, &
+          5x, 'surely with a geometric progression of frequencies, this many steps is not necessary. ')
+  go to 6220
 6161 write (lunit6, 7161)
-7161 format (5x, 108h the last-read data card bears the special request
-1   word  'transformer '   in columns  3-14, and is the first     ,/, &
-2 5x, 109hof several cards used to define a saturable transformer c
-3   omponent.   but the user has failed to punch columns         ,/, &
-4 5x, 112h39-44  (field  'bustop' )   with a non-blank 6-character
-5   (a6) alphanumeric name.   this is the node name for the       ,/, &
-6 5x, 114hextra, internal node of the saturable transformer compone
-7   nt, at the top of the magnetizing branch (see transformer      )
-    write (lunit6, 7261)
-7261 format (5x, 105hequivalent circuit in the EMTP user's manual).   t
-1   he data field  'bustop'  for each saturable transformer      ,/, &
-2 5x, 112hcomponent must be non-blank, and all should be unique ---
-3   different from each other, and also different from all      ,/, &
-4 5x,  25hother EMTP network nodes.        )
-    go to 6220
+7161 format (5x, " The last-read data card bears the special request word  'transformer '   in columns  3-14, and is the first",/, &
+          5x, 'of several cards used to define a saturable transformer component.   But the user has failed to punch columns',/, &
+          5x, "39-44  (field  'bustop' )   with a non-blank 6-character (a6) alphanumeric name.   This is the node name for the",/, &
+          6 5x, 'extra, internal node of the saturable transformer component, at the top of the magnetizing branch (see transformer ')
+  write (lunit6, 7261)
+7261 format (5x, "equivalent circuit in the EMTP user's manual).   The data field  'bustop'  for each saturable transformer",/, &
+          5x, 'component must be non-blank, and all should be unique --- different from each other, and also different from all',/, &
+          5x, 'other EMTP network nodes. ')
+  go to 6220
 6162 write (lunit6, 7162)  ipunch
-7162 format (5x, 108hthe user is running a  'line constants'  derivatio
-1   n in which the EMTP automatically loops over the different     ,/, &
-2 5x, 110hfrequencies of interest.   on the frequency card which re
-3   quested this mode of program execution, the field for        ,/, &
-4 5x, 106hEMTP variable  'ipunch'  (columns  66-68 ,   read using
-5   i3  format)  contains an illegal numerical value.            ,/, &
-6 5x, 101honly values  0,  1,  2,  3,  88,  and  89  are recognized
-7   as being legitimate, although a value of  ', i3,  6h'  was    )
-    write (lunit6, 7262)
-7262 format (5x,  73hread from the user's frequency card.   correct thi
-1   s value, and try again.             )
-    go to 6220
+7162 format (5x, "The user is running a  'line constants'  derivation in which the EMTP automatically loops over the different",/, &
+          5x, 'frequencies of interest.   On the frequency card which requested this mode of program execution, the field for',/, &
+          5x, "EMTP variable  'ipunch'  (columns  66-68 ,   read using i3  format)  contains an illegal numerical value.",/, &
+          5x, 'only values  0,  1,  2,  3,  88,  and  89  are recognized as being legitimate, although a value of  ', "'", i3,  "'", '  was ')
+  write (lunit6, 7262)
+7262 format (5x,  "read from the user's frequency card.   Correct this value, and try again. ")
+  go to 6220
 6163 write (lunit6, 7163)  lstat(14)
-7163 format (5x,  52hthe last-read data card is for a tacs source of ty
-1   pe, i5,  50h (type code as read from columns 1-2 of the source ,/, &
-2 5x, 111hcard).   but no valid EMTP electric-network node names we
-3   re specified by the user on either a preceding   'tacs       ,/, &
-4 5x, 109hEMTP sources'   card,  or on a preceding   'tacs outputs'
-5   card.   hence the EMTP concludes that there is no         ,/, &
-6 5x, 109helectric network, that the present problem being inputted
-7   is a tacs stand-alone case.   but tacs source types         )
-    write (lunit6, 7263)
-7263 format (5x, 107h 90,  91,  etc.  all come from the electric-networ
-1   k side of the EMTP, by definition.   in sum, the user has     ,/, &
-2 5x, 108hrequested that a tacs source be determined by a non-exist
-3   ent part of the problem.   this discrepancy must be          ,/, &
-4 5x,  56hcorrected, before execution will be allowed to continue.)
-    go to 6220
+7163 format (5x,  'The last-read data card is for a tacs source of type', i5,  ' (type code as read from columns 1-2 of the source',/, &
+          5x, "card).   But no valid EMTP electric-network node names were specified by the user on either a preceding   'tacs",/, &
+          5x, "EMTP sources'   card,  or on a preceding   'tacs outputs' card.   Hence the EMTP concludes that there is no",/, &
+          5x, 'electric network, that the present problem being inputted is a tacs stand-alone case.   But tacs source types ')
+  write (lunit6, 7263)
+7263 format (5x, ' 90,  91,  etc.  all come from the electric-network side of the EMTP, by definition.   In sum, the user has',/, &
+          5x, 'requested that a tacs source be determined by a non-existent part of the problem.   This discrepancy must be',/, &
+          5x, 'corrected, before execution will be allowed to continue. ')
+  go to 6220
 6164 write (lunit6, 7164)
-7164 format ( 5x,  15h  unused.                         )
-    go to 6220
+7164 format (5x, '  Unused.     ')
+  go to 6220
 6165 write (lunit6, 7165)
-7165 format(5x,  71hduring calculation of eigenvalues and eigenvectors
-1   by the power method, ,/, & 5x,  95hthe itteration count has exceeded
-2   "nieig".  this limit and the corresponding tolerance "epseig" ,/, &
-3 5x,  38hmay be changed by a "tolerances" card. )
+7165 format(5x, 'During calculation of eigenvalues and eigenvectors by the power method, ',/, &
+          5x, 'the iteration count has exceeded "nieig".  This limit and the corresponding tolerance "epseig"',/, &
+          5x, 'may be changed by a "tolerances" card. ')
     go to 6220
 6166 write (lunit6, 7166)  csepar, chcont
 7166 format (5x, 108hthe last-read data card is assumed by the EMTP to
