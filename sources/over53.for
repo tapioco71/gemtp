@@ -694,26 +694,19 @@ subroutine over53
           5x,  'aforementioned inadequate size.  In order to successfully process the weighting functions, list 23 must grow. ')
     go to 6220
 6146 write (lunit6, 7146)  bus1, bus2
-7146 format (5x, 110hswitch cards are now being inputted, for the EMTP
-1   data case under consideration.   specifically, the last-read   ,/,
-2 5 x, 101hdata card represents a request for a type-11 switch (i.e.
-3   , a diode or a valve) which connects node  ', a6,  1h'       ,/,
-4 5 x,  12hwith node  ', a6,  3h' .    )
+7146 format (5x, 'Switch cards are now being inputted, for the EMTP data case under consideration.   Specifically, the last-read',/, &
+          5x, 'data card represents a request for a type-11 switch (i.e. , a diode or a valve) which connects node  ', "'", a6,  "'",/, &
+          5x,  'with node  ', "'", a6, "'", ' . ')
     n1 = kswtch - 1
     write (lunit6, 7246)  n1
-7246 format ( 1h+,    28x,             87hnow, columns 61-64 were punch
-1   ed with the key-word  'same' ,   which is understood to be     ,/,
-2 5 x, 114ha request that the physical characteristics of the presen
-3   t valve or diode be identical to those of the most-recent      ,/,
-4 5 x,  56hpreceding type-11 switch element.   but of the preceding,
-5   i4,  45h  switch cards, none were type-11 (punched in       ,/,
-6 5 x, 104hcols. 1-2).   thus the reference switch does not exist, a
-7   nd the EMTP has no way of knowing what modeling              ,/,
-8 5 x,  65hparameters should be used to describe the present diode o
-9   r valve.       )
+7246 format ('+', 28x, "Now, columns 61-64 were punched with the key-word  'same' ,   which is understood to be",/, &
+          5x, 'a request that the physical characteristics of the present valve or diode be identical to those of the most-recent',/, &
+          5x, 'preceding type-11 switch element.   But of the preceding', i4,  '  switch cards, none were type-11 (punched in',/, &
+          5x, 'cols. 1-2).   Thus the reference switch does not exist, and the EMTP has no way of knowing what modeling',/, &
+          5x, 'parameters should be used to describe the present diode or valve. ')
     go to 6220
 6147 write (lunit6, 7147)  bus5
-7147 format ( 1x, 100( 1h- ),  /,
+7147 format (1x, 100( '-' ),  /,
 1   / 5x,  39hthis switch makes reference to the non-,
 2           33 hexisting control tacs variable  ',
 3   a6,   1h'  , // 1x, 100(1h-)  )
