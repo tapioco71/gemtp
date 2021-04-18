@@ -107,14 +107,10 @@ subroutine over53
           5x, 'are needed in order for execution to continue beyond the point where it is now being stopped.   If it is not clear    ',/, &
           5x, 'as to what remedial action should be taken, the user is advised to seek experienced counsel about this matter.     ')
   write (lunit6, 7496)
-7496 format(5x, 106ha brief caution about use of a marginal working are
-1 a for plotting is perhaps also in order, however.   the    ,/,
-2 5x, 108haforementioned minimum figure should allow for correct pl
-3 otting, but will generally produce repeated buffer-       ,/,
-4 5x, 107hflushing-type spillover onto logical unit number  9  duri
-5 ng the plotting of each graph, with its associated     ,/,
-6 5x, 113hslowdown in execution speed.   in order to avoid all such
-7 temporary disk storage,   'size'  can be set no smaller    )
+7496 format (5x, 'A brief caution about use of a marginal working are a for plotting is perhaps also in order, however.   The    ',/, &
+          5x, 'aforementioned minimum figure should allow for correct plotting, but will generally produce repeated buffer-       ',/, &
+          5x, 'flushing-type spillover onto logical unit number  9  during the plotting of each graph, with its associated     ',/, &
+          5x, "slowdown in execution speed.   In order to avoid all such temporary disk storage,   'size'  can be set no smaller    ")
   write (lunit6, 7596)
 7596 format (5x, 109hthan twice the number of plot points of the partic
 1 ular graph multiplied by the number of curves on the graph.    ,/,
