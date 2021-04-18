@@ -143,45 +143,28 @@ subroutine over53
           5x,  'record, and try again, friend.       ')
   go to 6220
 6099 write (lunit6, 7099)
-7099 format ( 5x, 106hthe EMTP has finished the calculation of weightin
-1 g functions  a1(t)  and  a2(t)  for the user=s frequency-   ,/,
-2 5x, 111hdependent line-mode.   now the program is ready to output
-3 these functions --- on punched cards, if the user has   ,/,
-4 5x, 112hgiven variable  =ipunch=  (of columns 33-40 of the second
-5 data card) a value of zero.   but this is not possible   ,/,
-6 5x,  83hwithin the  =f=-format fields which have been provided, w
-7 ithout overflow occurring.     )
+7099 format (5x, 'The EMTP has finished the calculation of weighting functions  a1(t)  and  a2(t)  for the user=s frequency-   ',/, &
+          5x, 'dependent line-mode.   Now the program is ready to output these functions --- on punched cards, if the user has   ',/, &
+          5x, 'given variable  =ipunch=  (of columns 33-40 of the second data card) a value of zero.   But this is not possible   ',/, &
+          5x,  'within the  =f=-format fields which have been provided, without overflow occurring.     ')
   write (lunit6, 7199)  flstat(15), flstat(16)
-7199 format ( 5x, 105hspecifically, the peak weighting function values
-1   can not both be punched using  f10.0  format.   the peak    ,/,
-2 5x,  22hvalues in question are, /, 10x, 12hmax(a1(t)) =,
-3   e14.5, 10x, 12hmax(a2(t)) =, e14.5, 2h .   ,/,
-4 5x, 113hin some way, the user=s data would seem to be highly unus
-5   ual, and worthy of careful scrutiny.   two special cases   ,/,
-6 5x, 112hwhich will always lead to numerical trouble are perhaps w
-7   orthy of mention, in this regard.   first, as the line-    )
-    write (lunit6, 7299)
-7299 format ( 5x, 107hlength  =dist=  (columns 1-8 of the first data ca
-1   rd) approaches zero,    max(a1(t))    is known to approach    ,/,
-2 5x, 110hinfinity.   similar behavior will also result for any fix
-3   ed-length line, as the impulse attenuation approaches   ,/,
-4 5x, 112hzero (e.g., let  r  approach zero and  l  approach a cons
-5   tant value, for all frequencies).   the user is advised   ,/,
-6 5x,  89hto seek experienced counsel, if he can not find an obviou
-7   s massive data error on his own.     )
+7199 format (5x, 'Specifically, the peak weighting function values can not both be punched using  f10.0  format.   The peak    ',/, &
+          5x,  'values in question are, /, 10x, 12hmax(a1(t)) =', e14.5, 10x, 'max(a2(t)) =', e14.5, ' .'   ,/, &
+          5x, 'in some way, the user=s data would seem to be highly unusual, and worthy of careful scrutiny.   Two special cases   ',/, &
+          5x, 'which will always lead to numerical trouble are perhaps worthy of mention, in this regard.   First, as the line-    ')
+  write (lunit6, 7299)
+7299 format (5x, 'length  =dist=  (columns 1-8 of the first data card) approaches zero,    max(a1(t))    is known to approach    ',/, &
+          5x, 'infinity.   Similar behavior will also result for any fixed-length line, as the impulse attenuation approaches   ',/, &
+          5x, 'zero (e.g., let  r  approach zero and  l  approach a constant value, for all frequencies).   The user is advised   ',/, &
+          5x,  'to seek experienced counsel, if he can not find an obvious massive data error on his own.     ')
     go to 6220
 6100 write (lunit6, 7099)
     write (lunit6, 7100)  flstat(15)
-7100 format ( 5x, 104hspecifically, the weighting functions extend too
-1   far out in time, with duration in excess of the  100000     ,/,
-2 5x, 107hmicroseconds which can be punched legally using  f10.4  f
-3   ormat.   with light traveling at a rate of  300 km   ,/,
-4 5x, 111h(186 miles)  per millisecond, this is absurd for a power
-5   line, and must be rejected.   electrically, the user=s    ,/,
-6 5x, 110hline is approximately one order of magnitude longer than
-7   anything which is typical for american power systems. ,/,
-8 5x,  49hthe user's weighting functions have a duration of,
-9   e13.4,  15h  microseconds.   )
+7100 format (5x, 'Specifically, the weighting functions extend too far out in time, with duration in excess of the  100000     ',/, &
+          5x, 'microseconds which can be punched legally using  f10.4  format.   With light traveling at a rate of  300 km   ',/, &
+          5x, '(186 miles)  per millisecond, this is absurd for a power line, and must be rejected.   Electrically, the user=s    ',/, &
+          5x, 'line is approximately one order of magnitude longer than anything which is typical for american power systems. ',/, &
+          5x,  "The user's weighting functions have a duration of", e13.4,  '  microseconds.   ')
     write (lunit6, 7200)
 7200 format ( 5x, 107hthe user is reminded that even if he has a very l
 1   ong line of say  1000  miles, he is advised to break it up   ,/,
