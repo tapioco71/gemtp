@@ -121,26 +121,20 @@ subroutine over54
           5x,  'the number of points "npoint" as requested by the user =', i4,  ' . ')
   go to 6220
 7556 write (lunit6, 7656)  lstat(13)
-7656 format ( 5x, 117hthe technique for fitting of the admittance step
-1   response has been determined by the first column in parameter 'kfi
-2   t' ,/, & 5x,  42hfor which the user has supplied a value of,i2,2h .)
-    write (lunit6, 7756)  flstat(16)
-7756 format (5x, 119hif '1', the user has requested a time domain fit,
-1   which requires the program to determine the time period to be fitt
-2   ed.  ,/, & 5x,  85hin this process the program searches a limited ti
-3   me frame for a change in response of , f4.2,  23h of the initial v
-4   alue . ,/, & 5x,  99hthe program has been unable to locate this valu
-5   e, either because the period searched was too short, ,/, & 5x,  48ho
-6   r because the ift routine failed to produce it. ,/, & 5x,  83ha wide
-7   r frequency range or more numerous frequency data may improve the
-8   ift result. ,/, & 5x,  94ha value of '2' will result in a preliminar
-9   y frequency domain fit to determine the time period. )
-    write (lunit6, 7856) flstat(11),flstat(13),lstat(10)
-7856 format ( 5x,  64hother parameters relevant to this search failure
-1   are as follows: ,/, & 5x,  42hthe initial size of the time increment
-2   was ,e15.5,  30h .  the time zone searched was ,e15.5 ,/, & 5x,  56
-3   hthe number of points 'npoint' as requested by the user = , i4)
-    go to 6220
+7656 format (5x, "The technique for fitting of the admittance step response has been determined by the first column in parameter 'kfit'",/, &
+          5x, 'for which the user has supplied a value of', i2, ' . ')
+  write (lunit6, 7756)  flstat(16)
+7756 format (5x, "if '1', the user has requested a time domain fit, which requires the program to determine the time period to be fitted.",/, &
+          5x, 'in this process the program searches a limited time frame for a change in response of ', f4.2,  ' of the initial value .',/, &
+          5x,  'Tthe program has been unable to locate this value, either because the period searched was too short,',/, &
+          5x,  'or because the ift routine failed to produce it.',/, &
+          5x,  'a wider frequency range or more numerous frequency data may improve the ift result.',/, &
+          5x,  "a value of '2' will result in a preliminary frequency domain fit to determine the time period. ")
+  write (lunit6, 7856) flstat(11),flstat(13),lstat(10)
+7856 format (5x, 'Other parameters relevant to this search failure are as follows: ',/, &
+          5x,  'the initial size of the time increment was ',e15.5,  ' .   The time zone searched was ',e15.5 ,/, &
+          5x,  "the number of points 'npoint' as requested by the user = ", i4)
+  go to 6220
 7956 write(lunit6,8056)
 8056 format( 5x,  93hthe newton-raphson algorithm, used to fit the line
 1   response with exponentials, is in trouble. ,/, & 5x, 101heither the
