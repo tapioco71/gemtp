@@ -542,135 +542,96 @@ subroutine over53
        5x, 'such data card being in error.   Specifically, the user has attempted to define a supplemental variable having',/, &
        5x, '6-character name  ', "'", a6,  "'", '  (read from cols. 3-8 of the card) ')
   write (lunit6, 7230)  bus1
-7230 format (1h+,   68x,
-1      45 hfor which one of the algebraic operator codes         ,/,
-2 5 x, 110his illegal according to tacs rules.   one of the  a1  fie
-3 lds in which specification of the algebraic operators       ,/,
-4        5 x,  31his to be punched was read as  ', a1,  67h' ,   whi
-5 ch is an unrecognized character for this usage.   the user    ,/,
-6 5 x, 108his advised to study the tacs rules related to the constru
-7 ction of supplemental-variable cards, and then look          ,/,
-8 5 x,  78hclosely at the last-read data card, to see precisely what
-9 the EMTP objects to.                                      )
+7230 format ('+', 68x, 'for which one of the algebraic operator codes',/, &
+          5x, 'is illegal according to tacs rules.   One of the  a1  fields in which specification of the algebraic operators',/, &
+          5x, 'is to be punched was read as  ', "'", a1,  "'", ' ,   which is an unrecognized character for this usage.   The user',/, &
+          5x, 'is advised to study the tacs rules related to the construction of supplemental-variable cards, and then look',/, &
+          5x, 'closely at the last-read data card, to see precisely what the EMTP objects to. ')
   go to 6220
 6131 n1 = lstat(14)
   write (lunit6, 7131)
-7131 format (5x, 107hthe problem under consideration includes tacs data
-1 , the tacs function blocks of which have already all been     ,/,
-2 5 x, 111hread by the EMTP.   columns 69-80 of the leading data car
-3   d for each function block are read using  2a6  format,       ,/,
-4 5   x, 108hin order to determine which tacs variables (if any....if
-5     the fields are nonblank) are to be used as variable           ,/,
-6 5   x, 111hlimits for the block.   now, on this basis the EMTP takes
-7     exception to the data card which defines the function        )
-      write (lunit6, 7231)  bus1
-7231  format (5x,  18hblock with name  ', a6,  77h'  (as read from colum
-1     ns 3-8).   columns         are for the     -limit name,       )
-      if ( n1  .eq.  1 )
-1     write (lunit6, 7331)
-7331  format ( 1h+, 70x,  5h69-74,15x,  3hlow     )
-      if ( n1  .eq.  2 )
-1     write (lunit6, 7431)
-7431  format ( 1h+, 70x,  5h75-80,14x,  4hhigh    )
-      write (lunit6, 7531)  bus6
-7531  format (5x,   7hwith  ', a6,  86h'  read therefrom by the EMTP.
-1     this limit variable is unknown to the EMTP, not being     ,/,
-2 5   x, 111hrecognized as any valid tacs variable name.   did the use
-3     r make a spelling error, the EMTP wonders.   since the     ,/,
-4 5   x, 114hEMTP is uncertain as to what the user wants done with thi
-5     s limit, execution of this data case is being terminated.     )
-      go to 7421
-6132  write (lunit6, 7130)  bus2
-      write (lunit6, 7132)  bus1
-7132  format ( 1h+, 68x,
-1  47 hfor which one of the function codes is invalid.         ,/,
-2 5     x,  80hone of the  a5  fields in which the functions are to be s
-3       pecified was read as  ', a5,  17h' ,   which is an           ,/,
-4 5     x, 113hunrecognizable name for a supplemental variable function.
-5       did the user make a spelling error, the EMTP wonders.      )
-        go to 6220
-6133    write (lunit6, 7130)   bus1
-        write (lunit6, 7133)
-7133    format ( 1h+, 68x,
-1 48    hfor which no operator, function, or argument has         ,/,
-2 5     x,  93hbeen defined.   the EMTP cannot calculate the output for
-3       a tacs block whose input is unknown.           )
-        go to 6220
-6134    write (lunit6, 7130)  bus1
-        write (lunit6, 7134)  lstat(14)
-7134    format ( 1h+, 68x,
-1 47    hfor which the device code is invalid.   a value          ,/,
-2 5     x,    2hof,  i4, 100h  was read from columns 9-10 of the card, w
-3       hich is not a legal tacs supplemental device code number.      )
-        go to 6220
-6135    write (lunit6, 7130)   bus1
-        write (lunit6, 7236)
-        go to 6220
-6136    write (lunit6, 7136)   bus1
-7136    format (5x, 105hthe user has been inputting tacs data, with the la
-1       st-read data card being a request for a function block.       ,/,
-2 5       x,  46hthis was to be given (output) variable name  ', a6,
-3 58      h' ,   as read from columns 3-8 of the last-read data card.   )
-          write (lunit6, 7236)
-7236      format (
-2 5       x, 111hyet none of the five available data fields which define t
-3         he inputs to this block have been used (all associated     ,/,
-4 5       x, 115hdata fields are blank).   these are for alphanumeric name
-5         s, read from columns 12-17, 20-25, 28-33, 36-41, and 44-49    ,/,
-6 5       x, 104husing  a6  formats.   the EMTP can not calculate the outp
-7         ut of a block for which the input is a mystery.      )
-          go to 6220
-6137      write (lunit6, 7137)  bus1, lstat(14), bus2, bus3
-7137      format ( 5x, 107hthe EMTP has been inputting tacs function blocks,
-1           with the last-read data card representing an illegal such     ,/,
-2 5         x,  90hrequest.   this was to have been the lead card of a funct
-3           ion block having (output) name  ', a6,  15h'  (cols. 3-8).    ,/,
-4 5         x,  18hinput field number, i3,  50h  to this block has been punc
-5           hed with tacs name  ', a6,  28h' ,   but is not immediately    ,/,
-6 5         x,  74hpreceded by either a plus sign or a minus sign.   rather,
-7           the character  ', a1,  24h'  was read.   remember,        )
-            write (lunit6, 7237)
-7237        format (5x, 107heach non-blank tacs input-name field ( a6  informa
-1           tion, columns 12-17, 20-25, 28-33, 36-41, 44-49)  must be     ,/,
-2 5         x, 117himmediately preceded by either a plus sign or a minus sig
-3           n ( a1  information, columns 11, 19, 27, 35, 43), indicating   ,/,
-4 5         x,  60hthe polarity to be applied to the associated input variab
-5           le.   )
-            go to 6220
-6138        write (lunit6, 7138)  lstat(14)
-7138        format (5x, 105hthe last-read data card has been taken by the EMTP
-1           to be a card specifying which tacs variables are to be      ,/,
-2 5         x, 115hplaced in the EMTP output vector (and hence will be avail
-3           able for printing and/or plotting purposes).   yet the  i2     ,/,
-4 5         x,  57hfield of columns 1-2 contains an illegal integer value  '
-5           , i2,  48h' .   only values of zero (for selective output)    ,/,
-6 5         x,  68hor unity (for output of all tacs variables) are allowed b
-7           y the EMTP.      )
-            go to 6220
-6139        write (lunit6, 7130)  bus3
-            n1 = lstat(14)
-            go to  (7139, 7239, 7339), n1
-7139        write (lunit6, 7439)  bus1
-7439        format (5x,  40hone of the arguments has been read as  ', a6,
-1  48       h' ,   for which the user has failed to define an         ,/,
-2 5         x,  32halgebraic or a logical operator.       )
-            go to 6220
-7239        write (lunit6, 7539)  flstat(16)
-7539        format (5x,  63hone of the arguments has been read as the floating
-1           -point number,   e14.6,   27h ,   for which the user has      ,/,
-2 5         x,  52hfailed to define an algebraic or a logical operator.   )
-            go to 6220
-7339        write (lunit6, 7639)  bus2
-7639        format (5x,  62hone of the operators has been read as the alphanum
-1           eric text  ', a1,  35h' ,   for which the user has failed      ,/,
-2 5         x,  40hto define a function and/or an argument.    )
-              go to 6220
-6140          write (lunit6, 7140)
-7140          format (5x, 106hwere it not for the sharp eye and always helpful g
-1             ood common sense of the EMTP, this simulation might have     ,/,
-2 5           x, 108hcontinued.   but there are no requests for tacs variables
-3             to be placed in the output vector, nor is the EMTP        ,/,
-4 5           x, 110hexpecting any electrical network data to follow, as part
+7131 format (5x, 'The problem under consideration includes tacs data, the tacs function blocks of which have already all been',/, &
+          5x, 'read by the EMTP.   Columns 69-80 of the leading data card for each function block are read using  2a6  format,',/, &
+          5x, 'in order to determine which tacs variables (if any....if the fields are nonblank) are to be used as variable',/, &
+          5x, 'limits for the block.   Now, on this basis the EMTP takes exception to the data card which defines the function ')
+  write (lunit6, 7231)  bus1
+7231 format (5x, 'block with name  ', "'", a6,  "'", '  (as read from columns 3-8).   Columns         are for the     -limit name, ')
+  if ( n1  .eq.  1 )
+1 write (lunit6, 7331)
+7331 format ('+', 70x,  '69-74',15x, 'low')
+  if ( n1  .eq.  2 ) write (lunit6, 7431)
+7431 format ('+', 70x, '75-80', 14x, 'high')
+  write (lunit6, 7531)  bus6
+7531 format (5x, 'with  ', "'", a6, "'", '  read therefrom by the EMTP.   This limit variable is unknown to the EMTP, not being',/, &
+          5x, 'recognized as any valid tacs variable name.   Did the user make a spelling error, the EMTP wonders.   Since the',/, &
+          5x, 'EMTP is uncertain as to what the user wants done with this limit, execution of this data case is being terminated. ')
+  go to 7421
+6132 write (lunit6, 7130)  bus2
+  write (lunit6, 7132)  bus1
+7132 format ('+', 68x, 'for which one of the function codes is invalid.',/, &
+          5x,  'one of the  a5  fields in which the functions are to be specified was read as  ', "'", a5,  "'", ' ,   which is an',/, &
+          5x, 'unrecognizable name for a supplemental variable function.      Did the user make a spelling error, the EMTP wonders. ')
+  go to 6220
+6133 write (lunit6, 7130)   bus1
+  write (lunit6, 7133)
+7133 format ('+', 68x, 'for which no operator, function, or argument has',/, &
+          5x, 'been defined.   The EMTP cannot calculate the output for a tacs block whose input is unknown. ')
+  go to 6220
+6134 write (lunit6, 7130)  bus1
+  write (lunit6, 7134)  lstat(14)
+7134 format ('+', 68x, 'for which the device code is invalid.   A value',/, &
+          5x, 'of',  i4, '  was read from columns 9-10 of the card, which is not a legal tacs supplemental device code number. ')
+  go to 6220
+6135 write (lunit6, 7130)   bus1
+  write (lunit6, 7236)
+  go to 6220
+6136 write (lunit6, 7136)   bus1
+7136 format (5x, 'The user has been inputting tacs data, with the last-read data card being a request for a function block.',/, &
+          5x,  'This was to be given (output) variable name  ', "'", a6, "'", ' ,   as read from columns 3-8 of the last-read data card. ')
+  write (lunit6, 7236)
+7236 format (5x, 'Yet none of the five available data fields which define the inputs to this block have been used (all associated',/, &
+          5x, 'data fields are blank).   These are for alphanumeric names, read from columns 12-17, 20-25, 28-33, 36-41, and 44-49',/, &
+          5x, 'using  a6  formats.   The EMTP can not calculate the output of a block for which the input is a mystery. ')
+  go to 6220
+6137 write (lunit6, 7137)  bus1, lstat(14), bus2, bus3
+7137 format ( 5x, 'The EMTP has been inputting tacs function blocks, with the last-read data card representing an illegal such',/, &
+          5x,  'request.   This was to have been the lead card of a function block having (output) name  ', "'", a6,  "'", '  (cols. 3-8).',/, &
+          5x,  'input field number', i3,  '  to this block has been punched with tacs name  ', "'", a6,  "'", ' ,   but is not immediately',/, &
+          5x, 'preceded by either a plus sign or a minus sign.   Rather, the character  ', "'", a1, "'", '  was read.   Remember, ')
+  write (lunit6, 7237)
+7237 format (5x, 'each non-blank tacs input-name field ( a6  information, columns 12-17, 20-25, 28-33, 36-41, 44-49)  must be',/, &
+          5x, 'immediately preceded by either a plus sign or a minus sign ( a1  information, columns 11, 19, 27, 35, 43), indicating',/, &
+          5x,  'the polarity to be applied to the associated input variable. ')
+  go to 6220
+6138 write (lunit6, 7138)  lstat(14)
+7138 format (5x, 'The last-read data card has been taken by the EMTP to be a card specifying which tacs variables are to be',/, &
+          5x, 'placed in the EMTP output vector (and hence will be available for printing and/or plotting purposes).   Yet the  i2',/, &
+          5x, 'field of columns 1-2 contains an illegal integer value  ', "'", i2,  "'", ' .   Only values of zero (for selective output)',/, &
+          5x,  'or unity (for output of all tacs variables) are allowed by the EMTP. ')
+  go to 6220
+6139 write (lunit6, 7130)  bus3
+  n1 = lstat(14)
+  go to  (7139, 7239, 7339), n1
+7139 write (lunit6, 7439)  bus1
+7439 format (5x,  'One of the arguments has been read as  ', "'", a6, "'",  ' ,   for which the user has failed to define an',/, &
+          5x,  'algebraic or a logical operator. ')
+  go to 6220
+7239 write (lunit6, 7539)  flstat(16)
+7539 format (5x,  63hone of the arguments has been read as the floating
+1 -point number,   e14.6,   27h ,   for which the user has      ,/,
+2 5 x,  52hfailed to define an algebraic or a logical operator.   )
+  go to 6220
+7339 write (lunit6, 7639)  bus2
+7639 format (5x,  62hone of the operators has been read as the alphanum
+1 eric text  ', a1,  35h' ,   for which the user has failed      ,/,
+2 5 x,  40hto define a function and/or an argument.    )
+  go to 6220
+6140 write (lunit6, 7140)
+7140 format (5x, 106hwere it not for the sharp eye and always helpful g
+1 ood common sense of the EMTP, this simulation might have     ,/,
+2 5 x, 108hcontinued.   but there are no requests for tacs variables
+3 to be placed in the output vector, nor is the EMTP        ,/,
+4 5 x, 110hexpecting any electrical network data to follow, as part
 5             of this data case.   recall that one or more nonblank       ,/,
 6 5           x, 111hfields on either the  'tacs outputs'  or the  'tacs EMTP
 7             sources'  card is required for EMTP electrical network         )
