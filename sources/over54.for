@@ -394,22 +394,16 @@ subroutine over54
     write (lunit6, 7188)  d1, flstat(14)
 7188 format (5x, "After having completed the  'line constants'  or 'cable constants'  calculation, program control is now",/, &
           5x, "back in the  'Semlyen setup'  overlay where matrices  (r),  (x),  (g),  and  (b)  are being read from input/output",/, &
-4 5x, 112hunit number  3 .   but the capacitance matrix is erroneou
-5   s.   it should be independent of frequency, but is not.      ,/, &
-6 5x,  49hin particular, the first diagonal entry  c(1,1) =,
-7   e20.8 ,       29h   farad/length for frequency,  e18.6     )
+          5x, 'unit number  3 .   But the capacitance matrix is erroneous.   It should be independent of frequency, but is not.',/, &
+          5x, 'in particular, the first diagonal entry  c(1,1) =', e20.8 , '   Farad/length for frequency',  e18.6     )
     write (lunit6, 7288)  d2, epsiln
-7288 format (5x,  61hhz,  while the  c(1,1)  value for the preceding fr
-1   equency was,     e20.8 ,    24h .   it is required that      ,/, &
-2 5x,  46hthese capacitances agree within a tolerance of,   e14.2,
-3    47 h   (floating-point miscellaneous data parameter       ,/, &
-4 5x, 108h 'epsiln' ).   for the user's data, this check has not be
-5   en met.   the capacitance matrices are judged to be          ,/, &
-6 5x,  46hinvalid, and the solution is being terminated.     )
+7288 format (5x,  'Hz,  while the  c(1,1)  value for the preceding frequency was',     e20.8 ,    ' .   it is required that',/, &
+          5x, 'these capacitances agree within a tolerance of',   e14.2, '   (floating-point miscellaneous data parameter',/, &
+          5x, " 'epsiln' ).   For the user's data, this check has not been met.   The capacitance matrices are judged to be",/, &
+          5x, 'invalid, and the solution is being terminated. ')
     go to 6220
 6189 write (lunit6, 7189)  lstat(15)
-7189 format (5x, 106hthe EMTP data case now being processed makes use o
-1   f the tacs modeling capability, all data cards for which       ,/, &
+7189 format (5x, 'The EMTP data case now being processed makes use of the tacs modeling capability, all data cards for which',/, &
 2 5x, 110hhave now been read.   as the preceding printout shows, th
 3   e vector of tacs variable names has repeated entries.         ,/, &
 4 5x,   9hthere are,  i4,   94h   such conflicts.   the trouble can
