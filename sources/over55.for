@@ -234,10 +234,10 @@ subroutine subr55
 7506 format (5x, 'never try to combine results which belong to differently-structured problems, as in this data case. ')
   go to 6550
 6207 write (lunit6, 7207)  tmax, tenerg
-7207 format (5x, 'This data case has  'statistics'  switches, but it is highly improbable that any would ever close.   The',/, &
-       5x, "termination time  'tmax'  of the simulation equals", e14.4, ' ,   while all random switch-closing times',/, &
-       5x, 'exceed',  e14.4, '   seconds with  3*sigma  probability.   Such a waste of computer resources will not be tolerated.',/, &
-       5x,  "Either increase  'tmax'  beyond this latter figure, or appropriately decrease the closing times. ")
+7207 format (5x, "This data case has  'statistics'  switches, but it is highly improbable that any would ever close.   The",/, &
+          5x, "termination time  'tmax'  of the simulation equals", e14.4, ' ,   while all random switch-closing times',/, &
+          5x, 'exceed',  e14.4, '   seconds with  3*sigma  probability.   Such a waste of computer resources will not be tolerated.',/, &
+          5x,  "Either increase  'tmax'  beyond this latter figure, or appropriately decrease the closing times. ")
   go to 6550
 6208 continue
   go  to  6550
@@ -252,7 +252,7 @@ subroutine subr55
 6211 write(lunit6,7211) lstat(14),flstat(13),flstat(14),flstat(15)
 7211 format (5x, 'The program was inputting data for synchronous machine no.', i8, 'a non-positive set of saturation data', /, &
        5x, 'for one of the axis has been detected.   The read in data follow below this line ........',/, &
-       10x, 3e20.8, /, 5x, "in a case of an unsaturated s.m. this kill-code is caused by a nonspecified value of parameter 'agline' ".)
+       10x, 3e20.8, /, 5x, "in a case of an unsaturated s.m. this kill-code is caused by a nonspecified value of parameter 'agline' . ")
   go to 6550
 6212 write (lunit6, 7212)  maxzno, epstop, flstat(14)
 7212 format (5x,  'a rigorous solution for one or more zinc-oxide arresters has failed.   up to',  i5, "   iterations (variable 'maxzno')",/, &
@@ -353,7 +353,7 @@ subroutine subr55
 62189 write (lunit6, 72189)  bus2, bus3
 72189 format (10x, 'This expression is not homogeneous.',/, &
        10x, 'The two operators upon which this condition was detected are',/, &
-       15x, "'", a6, "'", ' and ', "'", a6, "'". ' . ')
+       15x, "'", a6, "'", ' and ', "'", a6, "'", ' . ')
   go to 6550
 62190 write (lunit6, 72190) lstat( 16)
 72190 format (10x, 'The numerical argument ending in column  ',  i2,/, &
@@ -454,7 +454,7 @@ subroutine subr55
 3391 format (/, ' For   kill = 1   error stops, program maintenance may sometimes wish to inspect the contents of error-',/, &
        " interface vectors  'lstat'  and  'flstat' .   These follow ....",//, "vector  'lstat'",/, ( 1x, 10i13 ) )
   write (lunit6, 3392)  flstat
-3392 format ( /,   17h vector  'flstat'   ,/, &  ( 1x, 10e13.4 ) )
+3392 format ( /,   17h vector  'flstat'   ,/, ( 1x, 10e13.4 ) )
   n1 = lstat(16)
   write(lunit6, 4000 )  n1
 4000 format (/, ' of course maybe the user would like some suggestions as to why the table in question (list number , i2, 1h)', /, &
@@ -508,7 +508,7 @@ subroutine subr55
           8x, '2.  Each n-phase pi-circuit component, or each n-phase mutually-coupled r-l component, contributes   n(n+1)/2',/, &
           12x, 'entries.',/, &
           8x, '3.  Each single-phase n-winding saturable-transformer component contributes   3n-2   entries, at least.   If',/, &
-          12x, 'magnetizing resistance  'rmag'  is used, add another entry.   If the transformer is actually linear, with finite-',/, &
+          12x, "magnetizing resistance  'rmag'  is used, add another entry.   If the transformer is actually linear, with finite-",/, &
           12x,  'slope magnetization characteristic, add another entry. ')
   write (lunit6, 4303)
 4303 format (8x, '4.  A 3-phase saturable transformer has the aforementioned entries in the table for the three single-phase' ,/, &
@@ -557,7 +557,7 @@ subroutine subr55
   go to 4099
 4006 write (lunit6, 4106)
 4106 format (5x, 'Switches are completely straightforward, being defined only by switch cards.   One entry in the switch table',/, &
-          5x, 'is created for every switch card, whether it is for an ordinary switch ( 'itype'  of columns 1-2 equal to zero),',/, &
+          5x, "is created for every switch card, whether it is for an ordinary switch ( 'itype'  of columns 1-2 equal to zero),",/, &
           5x, "a switched resistance element ( 'itype' = 92), or a switched-inductance element ( 'itype' = 93). "   )
   go to 4099
   !       ???????????   list 7 is presently unused   ????????????????
@@ -571,7 +571,7 @@ subroutine subr55
           5x, "where  'tau'  is the modal travel-time of the line,  'deltat'  is the time-step size, and the division involves " )
   write (lunit6, 4208)
 4208 format (5x, 'integer truncation followed by the addition of unity.   For a frequency-dependent mode, more past-history',/, &
-          5x, 'than this is needed, enough to perform the  a2(t)  convolution.   In the preceding formula, take  'tau'  to be the',/, &
+          5x, "than this is needed, enough to perform the  a2(t)  convolution.   In the preceding formula, take  'tau'  to be the",/, &
           5x,  "time  't2'  at which the exponential tail on  a2(t)  begins (typically 3 travel-times or so). "    )
   go to 4099
 4009 write (lunit6, 4109)
