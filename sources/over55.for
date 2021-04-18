@@ -571,323 +571,218 @@ subroutine subr55
            5x, 111hwhere  'tau'  is the modal travel-time of the line,  'deltat'  is the time-step size, and the division involves    )
       write (lunit6, 4208)
 4208  format (5x, 105hinteger truncation followed by the addition of unity.   for a frequency-dependent mode, more past-history   ,/, &
-           2 5x, 114hthan this is needed, enough to perform the  a2(t)  convol
-     3ution.   in the preceding formula, take  'tau'  to be the    ,/, &
-     4 5x,  93htime  't2'  at which the exponential tail on  a2(t)  begi
-     5ns (typically 3 travel-times or so).     )
+           5x, 114hthan this is needed, enough to perform the  a2(t)  convolution.   in the preceding formula, take  'tau'  to be the    ,/, &
+           5x,  93htime  't2'  at which the exponential tail on  a2(t)  begins (typically 3 travel-times or so).     )
       go to 4099
- 4009 write (lunit6, 4109)
- 4109 format ( 5x,  86hentries in the nonlinear-element table are create
-     1d by the following element types ....    ,/, &
-     2 8x,  79h1.  piecewise-linear time-varying resistance elements  r(
-     3t) ,   branch-type 91.      ,/, &
-     4 8x,  56h2.  true nonlinear  v-i  characteristic, branch-type 92.
-     5  ,/, &
-     6 8x,  54h3.  true nonlinear inductance element, branch-type 93.,/, &
-     7 8x,  71h4.  staircase time-varying resistance element  r(t) ,   b
-     8ranch-type 97.         )
+4009  write (lunit6, 4109)
+4109  format ( 5x,  86hentries in the nonlinear-element table are created by the following element types ....    ,/, &
+           2 8x,  79h1.  piecewise-linear time-varying resistance elements  R(t) ,   branch-type 91.      ,/, &
+           8x,  56h2.  true nonlinear  v-i  characteristic, branch-type 92.,/, &
+           8x,  54h3.  true nonlinear inductance element, branch-type 93.,/, &
+           8x,  71h4.  staircase time-varying resistance element  r(t) ,   branch-type 97.         )
       write (lunit6, 4209)
- 4209 format (8x,  56h5.  pseudo-nonlinear inductance element, branch-ty
-     1pe 98.     ,/, &
-     2 8x,  58h6.  pseudo-nonlinear  v-i  characteristic, branch-type 99
-     3.   ,/, &
-     4 5x,  79hevery element falling into this classification contribute
-     5s one entry to list 9.     )
+4209  format (8x,  56h5.  pseudo-nonlinear inductance element, branch-type 98.     ,/, &
+           8x,  58h6.  pseudo-nonlinear  v-i  characteristic, branch-type 99.   ,/, &
+           5x,  79hevery element falling into this classification contributes one entry to list 9.     )
       go to 4099
- 4010 write (lunit6, 4110)
- 4110 format (5x, 108hthis list-10 storage applies to all characteristic
-     1s which are defined as pairs of coordinates, terminated by    ,/, &
-     2 5x,    108ha  9999-card.   each pair of coordinates so seen on th
-     3e input-data listing contributes one entry to list 10.   ,/, &
-     4 5x, 111hbut note carefully the wording of this rule.   it is only
-     5 the ones which are actually seen visually on the data   ,/, &
-     6 5x, 113hlisting (use of the reference-branch procedure adds nothi
-     7ng to list 10, and will not be seen on the data listing.   )
+4010  write (lunit6, 4110)
+4110  format (5x, 108hthis list-10 storage applies to all characteristics which are defined as pairs of coordinates, terminated by    ,/, &
+           5x,    108ha  9999-card.   each pair of coordinates so seen on the input-data listing contributes one entry to list 10.   ,/, &
+           5x, 111hbut note carefully the wording of this rule.   it is only the ones which are actually seen visually on the data   ,/, &
+           5x, 113hlisting (use of the reference-branch procedure adds nothing to list 10, and will not be seen on the data listing.   )
       write (lunit6, 4210)
- 4210 format (/, 5x, 105ha second contributor to the list-10 storage req
-     1uirement is the type-94 nonlinear element component (surge     ,/, &
-     2 5x, 110harrester with current limiting gap).   each such surge ar
-     3rester which does not use the reference-branch option        ,/, &
-     4 5x, 115hadds  18  entries to the list-10 storage requirement.   f
-     5or each surge arrester which does use the reference-branch     ,/, &
-     6 5x,  86hprocedure, there is a contribution of  11  entries to the
-     7 list-10 storage requirement.              )
+4210  format (/, 5x, 105ha second contributor to the list-10 storage requirement is the type-94 nonlinear element component (surge     ,/, &
+           5x, 110harrester with current limiting gap).   each such surge arrester which does not use the reference-branch option        ,/, &
+           5x, 115hadds  18  entries to the list-10 storage requirement.   for each surge arrester which does use the reference-branch     ,/, &
+           5x,  86hprocedure, there is a contribution of  11  entries to the list-10 storage requirement.              )
       write (lunit6, 4310)
- 4310 format (/, 5x, 118hfinally, if you have zno surge arresters in the
-     1 case, four addtional cells are required for each of the zno arres
-     2ters.  )
+4310  format (/, 5x, 118hfinally, if you have zno surge arresters in the case, four addtional cells are required for each of the zno arresters.  )
       go to 4099
- 4011 write (lunit6, 4111)
- 4111 format (5x, 109hbranch-output quantities are generated by column-8
-     10 punches on branch cards and on switch cards.   each punch    ,/, &
-     2 5x, 110hof  '1'  or  '2'  (branch current or branch voltage) cont
-     3ributes one entry to list 11.   punches of  '3'  (for   ,/, &
-     4 5x, 107hbranch current and voltage) or  '4'  (for branch power an
-     5d energy) contribute two entries each, to list 11.     ,/, &
-     6 5x, 110hnode-voltage outputs which are specified individually, on
-     7e at a time, ----- i.e., by punching 6-character node      )
+4011  write (lunit6, 4111)
+4111  format (5x, 109hbranch-output quantities are generated by column-80 punches on branch cards and on switch cards.   each punch    ,/, &
+           5x, 110hof  '1'  or  '2'  (branch current or branch voltage) contributes one entry to list 11.   punches of  '3'  (for   ,/, &
+           5x, 107hbranch current and voltage) or  '4'  (for branch power and energy) contribute two entries each, to list 11.     ,/, &
+           5x, 110hnode-voltage outputs which are specified individually, one at a time, ----- i.e., by punching 6-character node      )
       write (lunit6, 4211)
- 4211 format (5x, 110hnames in the  13a6  field of the node-voltage outp
-     1ut-specification card ----- are likewise limited by list 11.   ,/, &
-     2 5x, 111hif the user has requested the automatic output of every n
-     3ode voltage instead of this selective output (by means      ,/, &
-     4 5x, 109hof a  '1'  punched in column 2 of the aforementioned card
-     5), this list-11 limit does not apply to node voltage  ,/, &
-     6 5x,   8houtputs.    )
+4211  format (5x, 110hnames in the  13a6  field of the node-voltage output-specification card ----- are likewise limited by list 11.   ,/, &
+           5x, 111hif the user has requested the automatic output of every node voltage instead of this selective output (by means      ,/, &
+           5x, 109hof a  '1'  punched in column 2 of the aforementioned card), this list-11 limit does not apply to node voltage  ,/, &
+           5x,   8houtputs.    )
       go to 4099
- 4012 write (lunit6, 4112)
- 4112 format ( 5x,  35hsorry, no special advice available.     )
+4012  write (lunit6, 4112)
+4112  format ( 5x,  35hsorry, no special advice available.     )
       go to 4099
- 4013 write (lunit6, 4113)
- 4113 format (5x, 110hevery continuously-transposed distributed-paramete
-     1r transmission-line component (branch type-code  'itype'  of   ,/, &
-     2 5x, 110hcolumns 1-2 equal to  -1,  -2,  etc.) represents a possib
-     3le contribution to list 13.   each line mode which is   ,/, &
-     4 5x, 113hmodelled as being frequency-dependent (variable  'ipunch'
-     5  of columns 53-54 equal to  -1 )  contributes one entry   ,/, &
-     6 5x, 110hto list 13.   generally this will only be for the zero-se
-     7quence mode (the first card of the group), if at all.    )
+4013  write (lunit6, 4113)
+4113  format (5x, 110hevery continuously-transposed distributed-parameter transmission-line component (branch type-code  'itype'  of   ,/, &
+           5x, 110hcolumns 1-2 equal to  -1,  -2,  etc.) represents a possible contribution to list 13.   each line mode which is   ,/, &
+           5x, 113hmodelled as being frequency-dependent (variable  'ipunch'  of columns 53-54 equal to  -1 )  contributes one entry   ,/, &
+           5x, 110hto list 13.   generally this will only be for the zero-sequence mode (the first card of the group), if at all.    )
       go to 4099
- 4014 write (lunit6, 4114)
- 4114 format (5x, 108hfrequency-dependent representation for a mode of a
-     1 distributed-parameter transmission line is requested by a   ,/, &
-     2 5x, 108hvalue of  -1  punched in field  'ipunch'  (columns 53-54)
-     3 of the associated branch card.   assuming that the    ,/, &
-     4 5x, 114hreference-branch procedure is not used, the input of weig
-     5hting functions  a1(t)  and  a2(t)  follows.   the number    ,/, &
-     6 5x, 109hof points on these input cards is irrelevant, and is in n
-     7o way related to the size of list 14.   instead, the     )
+4014  write (lunit6, 4114)
+4114  format (5x, 108hfrequency-dependent representation for a mode of a distributed-parameter transmission line is requested by a   ,/, &
+           5x, 108hvalue of  -1  punched in field  'ipunch'  (columns 53-54) of the associated branch card.   assuming that the    ,/, &
+           5x, 114hreference-branch procedure is not used, the input of weighting functions  a1(t)  and  a2(t)  follows.   the number    ,/, &
+     6 5x, 109hof points on these input cards is irrelevant, and is in no way related to the size of list 14.   instead, the     )
       write (lunit6, 4214)
- 4214 format (5x, 108hlist-14 storage depends upon both the time-span of
-     1 the weighting functions, and also upon the time-step size   ,/, &
-     2 5x, 112h'deltat' ,  as follows.   let  't1'  be the time span fro
-     3m the nonzero beginning of  a1(t)  (at about one travel    ,/, &
-     4 5x, 110htime) to where its exponential tail begins (typically abo
-     5ut two travel times).   also, define  't2'  to be the    ,/, &
-     6 5x, 109htime at which the exponential tail of  a2(t)  begins (typ
-     7ically about three travel times).   then the storage     )
+4214  format (5x, 108hlist-14 storage depends upon both the time-span of the weighting functions, and also upon the time-step size   ,/, &
+           5x, 112h'deltat' ,  as follows.   let  't1'  be the time span from the nonzero beginning of  a1(t)  (at about one travel    ,/, &
+           5x, 110htime) to where its exponential tail begins (typically about two travel times).   also, define  't2'  to be the    ,/, &
+           5x, 109htime at which the exponential tail of  a2(t)  begins (typically about three travel times).   then the storage     )
       write (lunit6, 4314)
- 4314 format (5x, 102hrequirement in list 14 is given by the relation
-     1  np = (t1 + t2) / deltat  .     lines which use the     ,/, &
-     2 5x,  60hreference-branch procedure require no list-14 storage, no
-     3te.    )
+4314  format (5x, 102hrequirement in list 14 is given by the relation  np = (t1 + t2) / deltat  .     lines which use the     ,/, &
+           5x,  60hreference-branch procedure require no list-14 storage, note.    )
       go to 4099
- 4015 write (lunit6, 4115)
- 4115 format (5x, 106hto perform the convolution associated with frequen
-     1cy-dependent modes of distributed-parameter transmission    ,/, &
-     2 5x, 112hlines, modal past-history must be stored for both ends of
-     3 the line.   whether the reference-branch procedure was   ,/, &
-     4 5x, 109hused or not in no way modifies this requirement.   for ev
-     5ery frequency-dependent mode, two cells are taken up    ,/, &
-     6 5x,  11hin list 15.    )
+4015  write (lunit6, 4115)
+4115  format (5x, 106hto perform the convolution associated with frequency-dependent modes of distributed-parameter transmission    ,/, &
+           5x, 112hlines, modal past-history must be stored for both ends of the line.   whether the reference-branch procedure was   ,/, &
+           5x, 109hused or not in no way modifies this requirement.   for every frequency-dependent mode, two cells are taken up    ,/, &
+           5x,  11hin list 15.    )
       go to 4099
- 4016 go to 4012
- 4017 go to 4012
- 4018 go to 4012
- 4019 write (lunit6, 4119)
- 4119 format (5x, 109hdo not dispair, all is not lost (yet).   what has
-     1happened is that list  19  is inadequate for the tacs table  ,/, &
-     2 5x, 112hsizes which were requested.   either the user specified t
-     3hese sizes explicitely himself using an  'absolute tacs     ,/, &
-     4 5x, 115hdimensions'  card, or the EMTP supplied its own default s
-     5et.   in either case, these absolute tacs table sizes will  ,/, &
-     6 5x, 114hrequire a list-19 size as shown under the  'present figur
-     7e' column in row  19 .   before simply redimensioning the   )
+4016  go to 4012
+4017  go to 4012
+4018  go to 4012
+4019  write (lunit6, 4119)
+4119  format (5x, 109hdo not dispair, all is not lost (yet).   what has happened is that list  19  is inadequate for the tacs table  ,/, &
+           5x, 112hsizes which were requested.   either the user specified these sizes explicitely himself using an  'absolute tacs     ,/, &
+           5x, 115hdimensions'  card, or the EMTP supplied its own default set.   in either case, these absolute tacs table sizes will  ,/, &
+           5x, 114hrequire a list-19 size as shown under the  'present figure' column in row  19 .   before simply redimensioning the   )
       write (lunit6, 4219)
- 4219 format (5x, 110hEMTP to provide such a list-19 figure, however, th
-     1e user might try to more optimally divide the existing total ,/, &
-     2 5x, 115hamong the different tacs tables, using either an  'absolu
-     3te tacs dimensions'  card or a  'relative tacs dimensions'  ,/, &
-     4 5x, 111hcard.   finally, because   kill = 122   provides much gen
-     5eral information about tacs dimensioning, we shall now      ,/, &
-     6 5x,  20hprint it as well....    )
+4219  format (5x, 110hEMTP to provide such a list-19 figure, however, the user might try to more optimally divide the existing total ,/, &
+           5x, 115hamong the different tacs tables, using either an  'absolute tacs dimensions'  card or a  'relative tacs dimensions'  ,/, &
+           5x, 111hcard.   finally, because   kill = 122   provides much general information about tacs dimensioning, we shall now      ,/, &
+           5x,  20hprint it as well....    )
       kill = 122
       lstat(17) = 0
       lstat(16) = 0
       lastov = nchain
       nchain = 51
-      if ( iprsup  .ge.  1 )
-     1 write (lunit6, 4568)  kill
+      if ( iprsup  .ge.  1 ) write (lunit6, 4568)  kill
       go to 9000
- 4020 go to 4012
- 4021 go to 4012
- 4022 go to 4012
- 4023 go to 4012
- 4024 n9 = lcomp * lbus / ntot
+4020  go to 4012
+4021  go to 4012
+4022  go to 4012
+4023  go to 4012
+4024  n9 = lcomp * lbus / ntot
       write (lunit6, 4124)  ncomp, n9
- 4124 format (5x,  30hthe present data case involves,  i4,
-     1             36h   phase compensation, which exceeds,
-     2             31h the effective program limit of, i4,
-     3              2h .   ,/, &
-     4        5x,  34hthis latter figure is the limiting,
-     5             31h value of list 24 multiplied by,
-     6             30h  lbus/ntot  (the ratio of the     ,/, &
-     7        5x,  30hmaximum number of buses to the,
-     8             33h actual number for this problem).   )
+4124  format (5x,  30hthe present data case involves,  i4, 36h   phase compensation, which exceeds, 31h the effective program limit of, i4, 2h .   ,/, &
+           5x,  34hthis latter figure is the limiting, 31h value of list 24 multiplied by, 30h  lbus/ntot  (the ratio of the     ,/, &
+           5x,  30hmaximum number of buses to the, 33h actual number for this problem).   )
       write (lunit6, 4224)
- 4224 format (5x,  36hnote that the effective limit on the,
-     1             33h number of phases of compensation,
-     2             35h thus varies inversely with problem  ,/, &
-     3        5x,  38hsize.  cut the size in half, and twice,
-     4             38h as many phases are available, without,
-     5             38h redimensioning with a larger list 24.  )
+4224  format (5x,  36hnote that the effective limit on the, 33h number of phases of compensation, 35h thus varies inversely with problem  ,/, &
+           5x,  38hsize.  cut the size in half, and twice, 38h as many phases are available, without, 38h redimensioning with a larger list 24.  )
       go to 4099
- 4025 go to 4012
- 4026 if ( lstat(13)  .eq.  0 )   go to 4226
+4025  go to 4012
+4026  if ( lstat(13)  .eq.  0 )   go to 4226
       write (lunit6, 4126)  lstat(13), lsiz26
- 4126 format (5x,  34hthe user's data includes a coupled,
-     1             16h branch group of,  i5,
-     2             33h   phases.   squaring this number,
-     3             20h exceeds  list 26  (,  i5,  3h ).    )
+4126  format (5x,  "The user's data includes a coupled, 16h branch group of,  i5, 33h   phases.   squaring this number, 20h exceeds  list 26  (,  i5,  3h ). ")
       go to 4099
- 4226 write (lunit6, 4326)
- 4326 format (5x,  40hlist 26 working vectors "volt", "volti",,
-     1             38h "voltk", "vim", and "volta"  are used,
-     2             32h in various ways.   this is one.     ,/, &
-     3        5x,  36hif user does not request 50 or more,,
-     4             29h  and if he has trouble,  see,
-     5             33h program maintenance for details.    )
+4226  write (lunit6, 4326)
+4326  format (5x,  40hlist 26 working vectors "volt", "volti",, 38h "voltk", "vim", and "volta"  are used, 32h in various ways.   this is one.     ,/, &
+           5x,  36hif user does not request 50 or more,, 29h  and if he has trouble,  see, 33h program maintenance for details.    )
       go to 4099
- 4027 go to 4012
- 4028 go to 4012
- 4029 go to 4012
- 4499 write (lunit6, 4199)
- 4199 format (5x, 109hboth network node-renumbering (transient and also
-     1steady-state) and the steady-state phasor solution make use   ,/, &
-     2 5x, 113hof three very large arrays which overlay most of the labe
-     3led-common storage space (the data of which is preserved    ,/, &
-     4 5x, 111hon logical 4 during these calculations).   this is a dyna
-     5mically-dimensioned table, then, which is sized to use   ,/, &
-     6 5x, 107hall available space (perhaps 2/3 of labeled common).   in
-     7 particular, this working area includes all of the    )
+4027  go to 4012
+4028  go to 4012
+4029  go to 4012
+4499  write (lunit6, 4199)
+4199  format (5x, 109hboth network node-renumbering (transient and also steady-state) and the steady-state phasor solution make use   ,/, &
+           5x, 113hof three very large arrays which overlay most of the labeled-common storage space (the data of which is preserved    ,/, &
+           5x, 111hon logical 4 during these calculations).   this is a dynamically-dimensioned table, then, which is sized to use   ,/, &
+           5x, 107hall available space (perhaps 2/3 of labeled common).   in particular, this working area includes all of the    )
       write (lunit6, 4299)
- 4299 format (5x, 113hgenerally-large storage for lists 5 and 8.   incre
-     1asing the dimensions of either of these two lists will directly,/, &
-     2 5x, 105h(and without any loss) increase the size of list 99.   it
-     3 might be mentioned that the steady-state phasor    ,/, &
-     4 5x, 107hmanipulations (renumbering, solution) will almost always
-     5provide the limiting difficulty.   this is because    ,/, &
-     6 5x, 110hsparsity of the steady-state phasor network is generally
-     7worse than for the time-step-loop network, due to the    )
+4299  format (5x, 113hgenerally-large storage for lists 5 and 8.   increasing the dimensions of either of these two lists will directly,/, &
+           5x, 105h(and without any loss) increase the size of list 99.   it might be mentioned that the steady-state phasor    ,/, &
+           5x, 107hmanipulations (renumbering, solution) will almost always provide the limiting difficulty.   this is because    ,/, &
+           5x, 110hsparsity of the steady-state phasor network is generally worse than for the time-step-loop network, due to the    )
       write (lunit6, 4399)
- 4399 format (5x, 104hdifference in treatment of distributed-parameter l
-     1ines.   for steady-state solution, equivalent branches   ,/, &
-     2 5x, 110hinterconnect every terminal node of the line, while the t
-     3wo ends are disconnected by bergeron's method for the   ,/, &
-     4 5x, 110htime-step-loop network.   double-circuit (6-conductor) li
-     5nes are particularly nasty in the steady-state, then,    ,/, &
-     6 5x,  77hhaving 12 terminal nodes which are all interconnected by
-     7equivalent branches.    )
- 4099 write (lunit6, 4098)
- 4098 format ( /, 107h in order to effectively trade memory space among
-     1the different tables, one must know how many arrays there   ,/, &
-     2 114h are in each table (effectively).   the following tabulation
-     3shows the effective multiplicity associated with each    ,/, &
-     4 113h independent list ----- those lists whose lengths are under u
-     5ser  control by means of EMTP variable dimensioning.   )
+4399  format (5x, 104hdifference in treatment of distributed-parameter lines.   for steady-state solution, equivalent branches   ,/, &
+           5x, "interconnect every terminal node of the line, while the two ends are disconnected by Bergeron's method for the" ,/, &
+           5x, 110htime-step-loop network.   double-circuit (6-conductor) lines are particularly nasty in the steady-state, then,    ,/, &
+           5x,  77hhaving 12 terminal nodes which are all interconnected by equivalent branches.    )
+4099  write (lunit6, 4098)
+4098  format ( /, 107h in order to effectively trade memory space among the different tables, one must know how many arrays there   ,/, &
+           114h are in each table (effectively).   the following tabulation shows the effective multiplicity associated with each    ,/, &
+           113h independent list ----- those lists whose lengths are under user  control by means of EMTP variable dimensioning.   )
       write (lunit6, 4096)
- 4096 format ( 5x,  30h-------------1----------------,
-     1              30h------------------------------,
-     2              30h------------------------------,
-     3              24h------------------------    )
+4096  format ( 5x,  30h-------------1----------------, 30h------------------------------, 30h------------------------------, 24h------------------------    )
       write (lunit6, 4095)  ( i, i=1, 25 )
- 4095 format ( 5x, 14hlist number  1, 25i4 )
+4095  format ( 5x, 14hlist number  1, 25i4 )
       write (lunit6, 4096)
       write (lunit6, 4093)
- 4093 format ( 5x, 14hfloating pt. 1,
-     1100h   6   5   3   6   1  12   2   2   8   3   1   4   8   1   2
-     2 0   6   1   1  24   2   1   #   *   1     )
+4093  format ( 5x, 14hfloating pt. 1, 100h   6   5   3   6   1  12   2   2   8   3   1   4   8   1   2   2 0   6   1   1  24   2   1   #   *   1     )
       write (lunit6, 4097)
- 4097 format(5x, 14hinteger      1,
-     1100h   4   7   0   2   1  10   0   0  11   0   3   0   4   0   0
-     2 1  10   2   0   0   0   0   0   0   0       ,/, &
-     2  5x,  14htotal        1,
-     3100h  10  12   3   8   2  22   2   2  19   3   4   4  12   1   2
-     4 1  16   3   1  24   2   1   #   *   1       )
+4097  format(5x, 14hinteger      1, 100h   4   7   0   2   1  10   0   0  11   0   3   0   4   0   0   1  10   2   0   0   0   0   0   0   0       ,/, &
+           5x,  14htotal        1, 100h  10  12   3   8   2  22   2   2  19   3   4   4  12   1   2   1  16   3   1  24   2   1   #   *   1       )
       write (lunit6, 4096)
       write (lunit6, 4091)
- 4091 format ( 3x,  36h# --- used only for virtual machines,
-     1              38h (burroughs, prime, vax, apollo, etc.),
-     2              31h   others can ignore this list.   ,/, &
-     3         3x,  31h* --- rather than count list 24,
-     4              29h itself, add the value to the,
-     5              32h floating-point and total counts,
-     6              19h for lists 1 and 6.    )
- 4092 write(lunit6, 5315)
- 5315 format( 1h  )
+4091  format ( 3x,  36h# --- used only for virtual machines, 38h (burroughs, prime, vax, apollo, etc.), 31h   others can ignore this list.   ,/, &
+           3x,  31h* --- rather than count list 24, 29h itself, add the value to the, 32h floating-point and total counts, 19h for lists 1 and 6.    )
+4092  write(lunit6, 5315)
+5315  format( 1h  )
       write (lunit6, 5314)
- 5314 format ( 25x,   97hcaution.   be skeptical of above  'present figu
-     1re'  entries, due to abnormal termination of case.     )
+5314  format ( 25x,   97hcaution.   be skeptical of above  'present figure'  entries, due to abnormal termination of case.     )
       write(lunit6, 5316)
- 5316 format( 132h -----------------------------------------------------
-     1------------------------------------------------------------------
-     2------------     )
-      do 6512  i=1, 2
- 6512 write(lunit6, 5320)
- 5320 format( 132h error/error/error/error/error/error/error/error/error
-     1/error/error/error/error/error/error/error/error/error/error/error
-     2/error/error     )
+5316  format( 132h -----------------------------------------------------------------------------------------------------------------------------------     )
+      do  i=1, 2
+6512     write(lunit6, 5320)
+      end do
+5320  format( 132h error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error     )
       write(lunit6, 5316)
       if ( kilsav  .eq.  92 )    go to 6767
-c     lunit5 = mtape
-      write (*,*)  ' commented out  lunit5 = mtape.',
-     1             '   set kill = 0.'
+      !     lunit5 = mtape
+      write (*,*)  ' commented out  lunit5 = mtape.', '   set kill = 0.'
       kill = 0
       n6 = 0
-c     read input card using cimage
- 6740 call cimage
+      !     read input card using cimage
+6740  call cimage
       n13 = kolbeg
       nright = -2
       kolbeg = 1
       read (unit = abuff(1), fmt = 6741) texcol
- 6741 format ( 80a1 )
+6741  format ( 80a1 )
       call freone ( d1 )
       nright = 0
       if ( nfrfld  .ne.  1 )   go to 6743
       if ( texta6(1)  .eq.  text5 )   go to 6754
       if ( texta6(1)  .eq.  text13 )   go to 6764
       if ( texta6(1)  .eq.  text19 )   go to 6771
- 6743 if ( nfrfld  .ne.  4 )   go to 6770
+6743  if ( nfrfld  .ne.  4 )   go to 6770
       if ( texta6(4)  .ne.  text4 )   go to 6770
       if ( texta6(3)  .ne.  text3 )   go to 6770
       if ( texta6(2)  .ne.  text2 )   go to 6760
       if ( texta6(1)  .ne.  text1 )   go to 6760
- 6754 write (kunit6, 6755)
- 6755 format(  37h+marker card preceding new data case.    )
+6754  write (kunit6, 6755)
+6755  format(  37h+marker card preceding new data case.    )
       call interp
       if ( n6  .lt.  5 )   go to 6758
       n6 = n6 - 4
       write (lunit6, 6757)  n6
- 6757 format ( 51x,  27hend suppression of listing.,  i6,
-     1  22h  cards were unlisted.  )
- 6758 noutpr = 0
+6757  format ( 51x,  27hend suppression of listing.,  i6, 22h  cards were unlisted.  )
+6758  noutpr = 0
       kolbeg = -intinf
       lastov = nchain
       nchain = 1
-      if ( iprsup  .ge.  1 )
-     1 write ( lunit6, 4568)  4568
+      if ( iprsup  .ge.  1 ) write ( lunit6, 4568)  4568
       go to 9000
- 6760 if ( texta6(2)  .ne.  text12 )   go to 6770
+6760  if ( texta6(2)  .ne.  text12 )   go to 6770
       if ( texta6(1)  .ne.  text11 )   go to 6770
- 6764 write (kunit6, 6765)
- 6765 format(  38h+marker card following last data case.   )
+6764  write (kunit6, 6765)
+6765  format(  38h+marker card following last data case.   )
       call interp
- 6767 kill = 9999
+6767  kill = 9999
       lastov = nchain
       nchain = 31
-      if ( iprsup  .ge.  1 )
-     1 write ( lunit6, 4568)  kill
+      if ( iprsup  .ge.  1 ) write ( lunit6, 4568)  kill
       go to 9000
- 6770 if ( nfrfld  .ne.  5 )   go to 6773
+6770  if ( nfrfld  .ne.  5 )   go to 6773
       if ( texta6(1)  .ne.  text14 )   go to 6773
       if ( texta6(2)  .ne.  text15 )   go to 6773
       if ( texta6(3)  .ne.  text16 )   go to 6773
       if ( texta6(4)  .ne.  text17 )   go to 6773
       if ( texta6(5)  .ne.  text18 )   go to 6773
- 6771 if ( nenerg  .eq.  0 )   go to 6773
+6771  if ( nenerg  .eq.  0 )   go to 6773
       if ( knt     .le.  1 )   go to 6773
       write (kunit6, 6772)
- 6772 format ( 32h+request for statistics salvage.  )
+6772  format ( 32h+request for statistics salvage.  )
       call interp
       if ( jflsos  .gt.  0 )   go to 6773
       d7 = -9999.
@@ -898,13 +793,13 @@ c     read input card using cimage
       if ( n13  .eq.  -intinf )   kolbeg = n13
       if ( kolbeg  .gt.  0 )   go to 1773
       read (unit = abuff(1), fmt = 1764) n1
- 1764 format ( 29x, i3 )
+1764  format ( 29x, i3 )
       go to 1778
- 1773 call freone ( d1 )
+1773  call freone ( d1 )
       n1 = d1
- 1778 if ( n1  .gt.  0 )   go to 1774
+1778  if ( n1  .gt.  0 )   go to 1774
       if ( n1  .lt.  0 )   iprsup = 9
-c     find random integer  'n1'  between zero and 999.
+!     find random integer  'n1'  between zero and 999.
       call runtym ( d11, d12 )
       seed = seedy( tclock(1) )  +  1000. * ( d11 + d12 )
       n13 = alog1z(seed)  +  epsiln
@@ -922,24 +817,25 @@ c     find random integer  'n1'  between zero and 999.
       lstat(16) = n4
       call statsv
       go to 6740
- 6773 if ( noutpr  .eq.  0 )
-     1 write (kunit6, 6775)
- 6775 format (   47h+card ignored in search for new-case beginning.   )
+6773  if ( noutpr  .eq.  0 ) write (kunit6, 6775)
+6775  format (   47h+card ignored in search for new-case beginning.   )
       n6 = n6 + 1
       if ( n6  .lt.  5 )   go to 6769
       if ( noutpr  .eq.  1 )   go to 6769
       noutpr = 1
       write (lunit6, 6768)
- 6768 format ( 51x, 45hbegin suppression of skipped-record printout. )
- 6769 go to 6740
- 9000 return
-      end
-      subroutine statsv
-      implicit real*8 (a-h, o-z) ,
-     1      integer*4 (i-n)
+6768  format ( 51x, 45hbegin suppression of skipped-record printout. )
+6769  go to 6740
+9000  return
+    end subroutine subr55
+    !
+    ! subroutine statsv.
+    !
+    subroutine statsv
+      implicit real*8 (a-h, o-z), integer*4 (i-n)
       return
-      end
-c  m99.9999      overlay ( finish, 99999 )
-c
-c     end of file: over55.for
-c
+    end subroutine statsv
+!  m99.9999      overlay ( finish, 99999 )
+!
+!    end of file: over55.for
+!
