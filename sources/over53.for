@@ -665,59 +665,33 @@ subroutine over53
 6144 n1 = 93
     write (lunit6, 7125)  n1, bus1
     write (lunit6, 7144)
-7144 format ( 1h+,      17x,      91halso, this EMTP electrical-network
-1   node must have a switch connected to it, since it is the      ,/,
-2 5 x, 108hstatus of the first (in order of EMTP data input) such sw
-3   itch which is to be controlled by this type-93 tacs          ,/,
-4 5 x, 109hsource.   but no EMTP switch adjacent to the node in ques
-5   tion can be found by the EMTP.   since the EMTP does         ,/,
-6 5 x, 110hnot know what variable of the electrical network should b
-7   e used to control this type-93 tacs source, execution        ,/,
-8 5 x,  33hmust be terminated at this point.            )
+7144 format ('+', 17x, 'Also, this EMTP electrical-network node must have a switch connected to it, since it is the',/, &
+          5x, 'status of the first (in order of EMTP data input) such switch which is to be controlled by this type-93 tacs',/, &
+          5x, 'source.   But no EMTP switch adjacent to the node in question can be found by the EMTP.   Since the EMTP does',/, &
+          5x, 'not know what variable of the electrical network should be used to control this type-93 tacs source, execution',/, &
+          5x, 'must be terminated at this point. ')
     go to 7421
 6145 write (lunit6, 7145)
-7145 format (5x, 104hthe EMTP data case now being inputted involves one
-1   or more continuously-transposed distributed-parameter       ,/,
-2 5 x, 112htransmission lines, with frequency-dependent representati
-3   on of resistance  r  and  inductance  l  in one or more       ,/,
-4 5 x, 115hof the modes.   in fact, the last-read data card is the m
-5   iscellaneous data parameter card which precedes the point-    ,/,
-6 5 x, 109hby-point definition of a pair of weighting functions.   t
-7   he first 16 columns of this card are read using  2i8         )
+7145 format (5x, 'The EMTP data case now being inputted involves one or more continuously-transposed distributed-parameter',/, &
+          5x, 'transmission lines, with frequency-dependent representation of resistance  r  and  inductance  l  in one or more',/, &
+          5x, 'of the modes.   In fact, the last-read data card is the miscellaneous data parameter card which precedes the point-',/, &
+          5x, 'by-point definition of a pair of weighting functions.   The first 16 columns of this card are read using  2i8 ')
     write (lunit6, 7245)  lstat(14), lstat(15), lstat(16)
-7245 format (5x, 105hformat, to find parameters  'ntime1'  and  'ntime2
-1   ' .   these give the number of points which are used to      ,/,
-2 5 x,  81hdefine the two weighting functions  a1(t)  and  a2(t) ,
-3   and were read as values, i8, 6h   and, i8,  2h ,            ,/,
-4 5 x, 101hrespectively.   the larger of these exceeds the available
-5   maximum working space, which is dimensioned, i8,  9h   cells.  )
-    if ( kburro .eq. 0 )
-1   write (lunit6, 7445)
-7445 format (
-1   5 x,         98hconcerning this latter figure, the user should b
-7   e aware that the   /label/   storage of EMTP lists            )
-    if ( kburro .eq. 0 )
-1   write (lunit6, 7345)
-7345 format (5x, 109hnumber  5  and  7  only is involved.   this limite
-1   d region of memory is divided into four equal-sized arrays,    ,/,
-2 5 x, 112heach having the aforestated inadequate dimension.   in or
-3   der to get the user's wieghting functions into the EMTP      ,/,
-4 5 x, 111h(and compacted into their final storage in the array of e
-5   mtp list number 14), the sizes of EMTP list numbers  5       ,/,
-6 5 x, 109hand/or  7  must be increased.   use the above explanation
-7   together with known list multiplicities in order to         ,/,
-8 5 x,  40hdetermine the required increase in size.           )
-    if ( kburro .ne. 0 )
-1   write (lunit6, 7545)
-7545 format ( 5x, 39hconcerning this latter figure, the user,
-1             35 h should remember that he is using a,
-2             41 h virtual computer, so list 23 of "vardim"
-3   ,/,  5x,  38his used for storage.  such a region of,
-4             39 h memory is divided into four equal-size,
-5             38 h arrays, with each of these having the
-6   ,/,  5x,  35haforementioned inadequate size.  in,
-7             34 h order to successfully process the,
-8             40 h weighting functions, list 23 must grow.   )
+7245 format (5x, "format, to find parameters  'ntime1'  and  'ntime2' .   These give the number of points which are used to",/, &
+          5x, 'define the two weighting functions  a1(t)  and  a2(t) , and were read as values', i8, '   and', i8,  ' ,',/, &
+          5x, 'respectively.   The larger of these exceeds the available maximum working space, which is dimensioned', i8,  '   cells.')
+    if ( kburro .eq. 0 ) write (lunit6, 7445)
+7445 format (5x, 'Concerning this latter figure, the user should be aware that the   /label/   storage of EMTP lists ' )
+    if ( kburro .eq. 0 ) write (lunit6, 7345)
+7345 format (5x, 'number  5  and  7  only is involved.   This limited region of memory is divided into four equal-sized arrays,',/, &
+          5x, "each having the aforestated inadequate dimension.   In order to get the user's wieghting functions into the EMTP",/, &
+          4 5x, '(and compacted into their final storage in the array of EMTP list number 14), the sizes of EMTP list numbers  5',/, &
+          5x, 'and/or  7  must be increased.   Use the above explanation together with known list multiplicities in order to',/, &
+          5x, 'determine the required increase in size. ')
+    if ( kburro .ne. 0 ) write (lunit6, 7545)
+7545 format (5x, 'Concerning this latter figure, the user should remember that he is using a virtual computer, so list 23 of "vardim"',/,  &
+          5x, 'is used for storage.  Such a region of memory is divided into four equal-size arrays, with each of these having the',/,  &
+          5x,  'aforementioned inadequate size.  In order to successfully process the weighting functions, list 23 must grow. ')
     go to 6220
 6146 write (lunit6, 7146)  bus1, bus2
 7146 format (5x, 110hswitch cards are now being inputted, for the EMTP
