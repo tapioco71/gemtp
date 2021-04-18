@@ -332,54 +332,53 @@ subroutine over54
     lstat(16) = 11
     nchain = 51
     if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
-4568 format ( 24h  "exit  module over54." )
+4568 format (' "exit  module over54."')
     go to 99999
 6180 write(lunit6,7180) lstat(16), lstat(17)
-7180 format( 5x, 51hthe size of array 'voltbc', defined in blkcom to be, i6, 1h,, 3x, 48his not adequate for the use of that array in the, /, &
-          5x,  64hprocessing of output requests for the type 59 s.m.  a minimum of, i5, 3x,18hcells is required.)
+7180 format(5x, "The size of array 'voltbc', defined in blkcom to be", i6, ',', 3x, 'is not adequate for the use of that array in the',/, &
+          5x,  'processing of output requests for the type 59 s.m.  a minimum of', i5, 3x, 'cells is required. ')
     go  to  6220
 6181 write(lunit6,7181) lstat(15),lstat(16), lstat(16)
-7181 format( 5x, 77hinconsistency discoverd on one of the mass cards .   the specified mass no. was, i5, 1h., 3x, 15hfor a s.m. with, i5,8 h  masses, /, &
-          5x,  38hallowable range is between     1   and,   i5,  9h  masses.)
+7181 format(5x, 'inconsistency discoverd on one of the mass cards .   The specified mass no. was', i5, '.', 3x, 'for a s.m. with', i5, '  masses', /, &
+          5x,  'allowable range is between     1   and,   i5,  9h  masses. ')
     go  to  6220
 6182 write (lunit6, 7154)
     write (lunit6, 7182)  lstat(14), lstat(15)
-7182 format (5x, 104hthe number of frequency cards which are present in the previously-read line-constants data is incorrect.       ,/, &
-          2 5x,102hbefore the one which requests an automatic looping over logarithmically-spaced frequencies, there were, i4,            /,
-4 5x,    108hfrequency cards, each of which requests the line-constants calculation at an individual, discrete frequency.       ,/, &
-6 5x,  77hbut the transposition flag (miscellaneous data parameter 'nss'  )  had value,  i4,   23h .   these two integers        )
+7182 format (5x, 'The number of frequency cards which are present in the previously-read line-constants data is incorrect.',/, &
+          5x, 'before the one which requests an automatic looping over logarithmically-spaced frequencies, there were', i4, /, &
+          5x, 'frequency cards, each of which requests the line-constants calculation at an individual, discrete frequency.',/, &
+          5x, "But the transposition flag (miscellaneous data parameter 'nss'  )  had value",  i4,   ' .   these two integers ')
     write (lunit6, 7282)
-7282 format (5x, 108hshould add up to two.   but they do not.   remember, for an untransposed line, there are to be two discrete-    ,/, &
-2 5x,  62hfrequency cards, while a transposed line requires exactly one.    )
+7282 format (5x, 'should add up to two.   But they do not.   Remember, for an untransposed line, there are to be two discrete-',/, &
+          5x,  'frequency cards, while a transposed line requires exactly one. ')
     go to 6220
 6183 j = lstat(13)
     write (lunit6, 7154)
     write (lunit6, 7183)  volti(j), j, ci1
-7183 format (5x, 104hthe frequency cards which are present in the previously-read line-constants data are not all consistent.       ,/, &
-          2 5x, 110hthe EMTP requires that all such cards apply to the same model of the transmission line.   but it will be noted        ,/, &
-4 5x,  28hthat an earth resistivity of,    e17.5,  49h   ohm-meters was read from frequency card number, i4,   10h ,   while     ,/, &
-6 5x,     e17.5,      94h   was read from the first such card.   these two resistivities are unequal, which is illegal.         )
+7183 format (5x, 'The frequency cards which are present in the previously-read line-constants data are not all consistent.',/, &
+          5x, 'The EMTP requires that all such cards apply to the same model of the transmission line.   But it will be noted',/, &
+          5x, 'that an earth resistivity of',    e17.5,  '   Ohm-meters was read from frequency card number', i4,   ' ,   while',/, &
+          5x,     e17.5,      '   was read from the first such card.   These two resistivities are unequal, which is illegal. ')
     go to 6220
 6184 write (lunit6, 7154)
     write (lunit6, 7184)   lstat(13)
-7184 format (5x, 104hthe previously-read line-constants data cards are illegally-structured for usage with  'semlyen setup' .       ,/, &
-          2 5x, 109hfirst, there should be the line-conductor cards, terminated by a blank card.   then come the frequency cards,         ,/, &
-          4 5x, 104hwith only the last of these requesting the logarithmic frequency-looping option.   finally, a blank card              ,/, &
-          6 5x,  95hterminates the frequency cards, and a second blank card finishes the line constants data cards., 10x, 4hn1 =, i2 )
+7184 format (5x, "The previously-read line-constants data cards are illegally-structured for usage with  'Semlyen setup' .",/, &
+          5x, 'first, there should be the line-conductor cards, terminated by a blank card.   Then come the frequency cards,',/, &
+          5x, 'with only the last of these requesting the logarithmic frequency-looping option.   Finally, a blank card',/, &
+          5x,  'terminates the frequency cards, and a second blank card finishes the line constants data cards.', 10x, 'n1 =', i2 )
     go to 6220
 6185 write (lunit6, 7154)
     write (lunit6, 7185)   lstat(13), lstat(14)
-7185 format (5x,  39hthe EMTP has previously read a value of,  i6, 49h   (decimal) for the miscellaneous data parameter       ,/, &
-          2 5x,  82h 'iotx'  which controls printout.   but this exceeds the legal meaningful limit of,  i6,  12h  (decimal).     )
+7185 format (5x, 'The EMTP has previously read a value of',  i6, '   (decimal) for the miscellaneous data parameter',/, &
+          5x,  "'iotx'  which controls printout.   But this exceeds the legal meaningful limit of",  i6,  '  (decimal). ')
     go to 6220
 6186 write (lunit6, 7154)
     write (lunit6, 7186)  voltbc(1), voltk(icheck)
-7186 format (5x, 107hfor purposes of  'semlyen setup'  usage, the frequencies for which line constants have just been calculated     ,/, &
-2 5x, 112hare inappropriate.   recall that within the line-constants data, the frequency card for logarithmic looping over      ,/, &
-4 5x, 112ha range of frequencies is to be preceeded by a frequency card for the steady-state frequency.   the semlyen code      ,/, &
-6 5x, 112hrequires that the beginning loop-frequency exceed the steady-state frequency.   but such is not the case for the       ,/, &
-8 5x,  22huser's data (values of,   e16.4,    6h   and,    e16.4,
-9     41 h   were punched for these, respectively).        )
+7186 format (5x, "for purposes of  'Semlyen setup'  usage, the frequencies for which line constants have just been calculated",/, &
+          5x, 'are inappropriate.   Recall that within the line-constants data, the frequency card for logarithmic looping over',/, &
+          5x, 'a range of frequencies is to be preceeded by a frequency card for the steady-state frequency.   The semlyen code',/, &
+          5x, 'requires that the beginning loop-frequency exceed the steady-state frequency.   But such is not the case for the',/, &
+          5x, "user's data (values of",   e16.4,    '   and',    e16.4, '   were punched for these, respectively). ')
     go to 6220
 6187 write (lunit6, 7187)  bus3, bus4, bus5
 7187 format (5x, 105hthe last-read data card belongs to a  'semlyen set
