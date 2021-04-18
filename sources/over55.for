@@ -289,7 +289,7 @@ subroutine subr55
            5x, 'with the value of deltat = ', e14.6 ,/, &
            5x, 'correct this situation by changing either  d0,  d1,  or  deltat . ')
       go to 6550
- 6215 write (lunit6, 7214) bus1
+6215  write (lunit6, 7214) bus1
       write (lunit6, 7215)
 7215  format (5x,  'This  type-60  if-device  recognizes  3  and only  3  separate input signals.',//, &
            5x,  'of the  5  fields available for defining the inputs',/, &
@@ -301,20 +301,13 @@ subroutine subr55
 7216  format (5x,  'This  type-61  device  selects as output  one of the possibly  8  connected inputs',/, &
            5x, "depending on the value of another tacs variable called 'selector signal'. ")
       write (lunit6, 7316)
-7316  format (5x,  31hhowever, the user has neglected,
-     1             33h to identify the name of the tacs,
-     2             40h variable that is to serve this purpose.,
-     3   / 5x,     37hthe user should specify this selector,
-     4             33h signal in the  6-character field,
-     5             23h of columns  75 - 80  . )
+7316  format (5x,  'However, the user has neglected to identify the name of the tacs variable that is to serve this purpose.',/, &
+           5x, 'The user should specify this selector signal in the  6-character field of columns  75 - 80  . ' )
       go to 6550
  6217 write (lunit6, 7214)  bus1
       write (lunit6, 7217)  lstat( 17)
- 7217 format (5x, 11hthis  type-,    i2,
-     1            32h  min/max  device  will identify,
-     2            38h either maxima or minima, depending on,
-     3     / 5x,  35hthe numerical nalue read in columns,
-     4            28h  57 - 62  of the data card. )
+7217  format (5x, 'This  type-',    i2, '  min/max  device  will identify either maxima or minima, depending on',/, &
+           5x,'the numerical value read in columns 57 - 62  of the data card. ')
       write (lunit6, 7317)  flstat( 14)
  7317 format (5x,  34hthis value must be typed as either,
      1    / 10x,   35h   +1.0  to indicate that a maximum,
