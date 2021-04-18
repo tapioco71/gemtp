@@ -664,12 +664,12 @@ subroutine subr55
 4023 go to 4012
 4024 n9 = lcomp * lbus / ntot
   write (lunit6, 4124)  ncomp, n9
-4124 format (5x,  30hthe present data case involves,  i4, 36h   phase compensation, which exceeds, 31h the effective program limit of, i4, 2h .   ,/, &
-       5x,  34hthis latter figure is the limiting, 31h value of list 24 multiplied by, 30h  lbus/ntot  (the ratio of the     ,/, &
-       5x,  30hmaximum number of buses to the, 33h actual number for this problem).   )
+4124 format (5x,  'The present data case involves',  i4, '   phase compensation, which exceeds the effective program limit of', i4, ' . ',/, &
+          5x, 'This latter figure is the limiting value of list 24 multiplied by  lbus/ntot  (the ratio of the',/, &
+          5x, 'maximum number of buses to the, 33h actual number for this problem). '  )
   write (lunit6, 4224)
-4224 format (5x,  36hnote that the effective limit on the, 33h number of phases of compensation, 35h thus varies inversely with problem  ,/, &
-       5x,  38hsize.  cut the size in half, and twice, 38h as many phases are available, without, 38h redimensioning with a larger list 24.  )
+4224 format (5x, 'Note that the effective limit on the number of phases of compensation thus varies inversely with problem',/, &
+          5x, 'size.  Cut the size in half, and twice as many phases are available, without redimensioning with a larger list 24. ' )
   go to 4099
 4025 go to 4012
 4026 if ( lstat(13)  .eq.  0 )   go to 4226
@@ -677,55 +677,55 @@ subroutine subr55
 4126 format (5x,  "The user's data includes a coupled, 16h branch group of,  i5, 33h   phases.   squaring this number, 20h exceeds  list 26  (,  i5,  3h ). ")
   go to 4099
 4226 write (lunit6, 4326)
-4326 format (5x,  40hlist 26 working vectors "volt", "volti",, 38h "voltk", "vim", and "volta"  are used, 32h in various ways.   this is one.     ,/, &
-       5x,  36hif user does not request 50 or more,, 29h  and if he has trouble,  see, 33h program maintenance for details.    )
+4326 format (5x, 'List 26 working vectors "volt", "volti", "voltk", "vim", and "volta"  are used in various ways.   This is one.',/, &
+          5x, 'if user does not request 50 or more,  and if he has trouble,  see program maintenance for details. '   )
   go to 4099
 4027 go to 4012
 4028 go to 4012
 4029 go to 4012
 4499 write (lunit6, 4199)
-4199 format (5x, 109hboth network node-renumbering (transient and also steady-state) and the steady-state phasor solution make use   ,/, &
-       5x, 113hof three very large arrays which overlay most of the labeled-common storage space (the data of which is preserved    ,/, &
-       5x, 111hon logical 4 during these calculations).   this is a dynamically-dimensioned table, then, which is sized to use   ,/, &
-       5x, 107hall available space (perhaps 2/3 of labeled common).   in particular, this working area includes all of the    )
+4199 format (5x, 'Both network node-renumbering (transient and also steady-state) and the steady-state phasor solution make use',/, &
+          5x, 'of three very large arrays which overlay most of the labeled-common storage space (the data of which is preserved',/, &
+          5x, 'on logical 4 during these calculations).   This is a dynamically-dimensioned table, then, which is sized to use',/, &
+          5x, 'all available space (perhaps 2/3 of labeled common).   In particular, this working area includes all of the ' )
   write (lunit6, 4299)
-4299 format (5x, 113hgenerally-large storage for lists 5 and 8.   increasing the dimensions of either of these two lists will directly,/, &
-       5x, 105h(and without any loss) increase the size of list 99.   it might be mentioned that the steady-state phasor    ,/, &
-       5x, 107hmanipulations (renumbering, solution) will almost always provide the limiting difficulty.   this is because    ,/, &
-       5x, 110hsparsity of the steady-state phasor network is generally worse than for the time-step-loop network, due to the    )
+4299 format (5x, 'generally-large storage for lists 5 and 8.   Increasing the dimensions of either of these two lists will directly',/, &
+          5x, '(and without any loss) increase the size of list 99.   It might be mentioned that the steady-state phasor',/, &
+          5x, 'manipulations (renumbering, solution) will almost always provide the limiting difficulty.   This is because',/, &
+          5x, 'sparsity of the steady-state phasor network is generally worse than for the time-step-loop network, due to the '    )
   write (lunit6, 4399)
-4399 format (5x, 104hdifference in treatment of distributed-parameter lines.   for steady-state solution, equivalent branches   ,/, &
-       5x, "interconnect every terminal node of the line, while the two ends are disconnected by Bergeron's method for the" ,/, &
-       5x, 110htime-step-loop network.   double-circuit (6-conductor) lines are particularly nasty in the steady-state, then,    ,/, &
-       5x,  77hhaving 12 terminal nodes which are all interconnected by equivalent branches.    )
+4399 format (5x, 'difference in treatment of distributed-parameter lines.   For steady-state solution, equivalent branches',/, &
+          5x, "interconnect every terminal node of the line, while the two ends are disconnected by Bergeron's method for the" ,/, &
+          5x, 'time-step-loop network.   double-circuit (6-conductor) lines are particularly nasty in the steady-state, then,',/, &
+          5x, 'having 12 terminal nodes which are all interconnected by equivalent branches. '   )
 4099 write (lunit6, 4098)
-4098 format ( /, 107h in order to effectively trade memory space among the different tables, one must know how many arrays there   ,/, &
-       114h are in each table (effectively).   the following tabulation shows the effective multiplicity associated with each    ,/, &
-       113h independent list ----- those lists whose lengths are under user  control by means of EMTP variable dimensioning.   )
+4098 format (/, ' in order to effectively trade memory space among the different tables, one must know how many arrays there',/, &
+          ' are in each table (effectively).   The following tabulation shows the effective multiplicity associated with each',/, &
+          ' independent list ----- those lists whose lengths are under user  control by means of EMTP variable dimensioning. ' )
   write (lunit6, 4096)
-4096 format ( 5x,  30h-------------1----------------, 30h------------------------------, 30h------------------------------, 24h------------------------    )
+4096 format ( 5x, '-------------1----------------------------------------------------------------------------------------------------' )
   write (lunit6, 4095)  ( i, i=1, 25 )
 4095 format ( 5x, 14hlist number  1, 25i4 )
   write (lunit6, 4096)
   write (lunit6, 4093)
-4093 format ( 5x, 14hfloating pt. 1, 100h   6   5   3   6   1  12   2   2   8   3   1   4   8   1   2   2 0   6   1   1  24   2   1   #   *   1     )
+4093 format (5x, 'loating pt. 1   6   5   3   6   1  12   2   2   8   3   1   4   8   1   2   2   0   6   1   1  24   2   1   #   *   1 ' )
   write (lunit6, 4097)
-4097 format(5x, 14hinteger      1, 100h   4   7   0   2   1  10   0   0  11   0   3   0   4   0   0   1  10   2   0   0   0   0   0   0   0       ,/, &
-       5x,  14htotal        1, 100h  10  12   3   8   2  22   2   2  19   3   4   4  12   1   2   1  16   3   1  24   2   1   #   *   1       )
+4097 format(5x, 'Integer      1   4   7   0   2   1  10   0   0  11   0   3   0   4   0   0   1  10   2   0   0   0   0   0   0   0',/, &
+          5x,  'total        1  10  12   3   8   2  22   2   2  19   3   4   4  12   1   2   1  16   3   1  24   2   1   #   *   1 '      )
   write (lunit6, 4096)
   write (lunit6, 4091)
-4091 format ( 3x,  36h# --- used only for virtual machines, 38h (burroughs, prime, vax, apollo, etc.), 31h   others can ignore this list.   ,/, &
-       3x,  31h* --- rather than count list 24, 29h itself, add the value to the, 32h floating-point and total counts, 19h for lists 1 and 6.    )
+4091 format (3x,  '# --- used only for virtual machines (Burroughs, Prime, VAX, Apollo, etc.)   others can ignore this list.',/, &
+          3x, '* --- rather than count list 24 itself, add the value to the floating-point and total counts for lists 1 and 6. '   )
 4092 write(lunit6, 5315)
-5315 format( 1h  )
+5315 format(' ')
   write (lunit6, 5314)
-5314 format ( 25x,   97hcaution.   be skeptical of above  'present figure'  entries, due to abnormal termination of case.     )
+5314 format (25x, "Caution.   Be skeptical of above  'present figure'  entries, due to abnormal termination of case. " )
   write(lunit6, 5316)
-5316 format( 132h -----------------------------------------------------------------------------------------------------------------------------------     )
+5316 format( ' ----------------------------------------------------------------------------------------------------------------------------------- ')
   do  i=1, 2
 6512 write(lunit6, 5320)
   end do
-5320 format( 132h error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error     )
+5320 format(' error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error ')
   write(lunit6, 5316)
   if ( kilsav  .eq.  92 )    go to 6767
   !     lunit5 = mtape
