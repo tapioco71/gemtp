@@ -406,27 +406,19 @@ subroutine over54
 7189 format (5x, 'The EMTP data case now being processed makes use of the tacs modeling capability, all data cards for which',/, &
           5x, 'have now been read.   as the preceding printout shows, the vector of tacs variable names has repeated entries.',/, &
           5x, 'There are',  i4,   '   such conflicts.   The trouble can be traced back to the definition of tacs function blocks,',/, &
-6 5   x, 113htacs summers, and tacs supplemental variables and devices
-7     .   all names assigned to such outputs must be distinct.      )
-      write (lunit6, 7289)
-7289  format (5x, 106hfor example, if a tacs function block is given the
-1       name  'kontrl'  (read from columns 3-8 of the data card     ,/, &
-2 5     x, 108hdefining the block), then this same 6-character name had
-3       better not be used for a tacs supplemental variable          ,/, &
-4 5     x, 56h(read from columns 3-8 of the variable-definition card). )
-        go to 7421
-6190    write (lunit6, 7190)  lstat(14), bus6
-7190    format (5x, 109hthe EMTP has been reading data cards which define
-1       a dynamic synchronous machine (s.m.) component.   the last-    ,/, &
-2 5     x, 110hread card follows the s.m. output-request card, and prece
-3       des the  'finish'  card|   having columns 1-2 punched        ,/, &
-4 5     x,  7hwith  ',  i2,   98h' ,   this card represents a request th
-5       at the machine be controlled by tacs.    but either the a-6    ,/, &
-6 5     x,   7hname  ',  a6,  95h'  which was read from columns 3-8 is n
-7       ot a legal tacs-variable name for this purpose, since it      )
-        write (lunit6, 7290)
-7290    format (5x, 109hwas not also punched on a   'tacs outputs'   card
-1       which began the input of tacs data.   before tacs variables    ,/, &
+          5x, 'tacs summers, and tacs supplemental variables and devices.   All names assigned to such outputs must be distinct. '     )
+    write (lunit6, 7289)
+7289 format (5x, "For example, if a tacs function block is given the name  'kontrl'  (read from columns 3-8 of the data card",/, &
+          5x, 'defining the block), then this same 6-character name had better not be used for a tacs supplemental variable',/, &
+          5x, '(read from columns 3-8 of the variable-definition card). ' )
+    go to 7421
+6190 write (lunit6, 7190)  lstat(14), bus6
+7190 format (5x, 'The EMTP has been reading data cards which define a dynamic synchronous machine (s.m.) component.   The last-',/, &
+          5x, "read card follows the s.m. output-request card, and precedes the  'finish'  card|   having columns 1-2 punched",/, &
+          5x, 'with  ', "'", i2, "'",  ' ,   this card represents a request that the machine be controlled by tacs.    But either the a-6',/, &
+          5x, 'name  ', "'", a6,  "'", '  which was read from columns 3-8 is not a legal tacs-variable name for this purpose, since it ')
+    write (lunit6, 7290)
+7290 format (5x, "was not also punched on a   'tacs outputs'   card which began the input of tacs data.   Before tacs variables",/, &
 2 5     x, 113hcan be used within the electric network, they must be dec
 3       lared on a   'tacs outputs'   or a   'tacs EMTP sources'     ,/, &
 4 5     x,   5hcard.   )
