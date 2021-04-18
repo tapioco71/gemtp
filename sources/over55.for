@@ -309,104 +309,78 @@ subroutine subr55
 7217  format (5x, 'This  type-',    i2, '  min/max  device  will identify either maxima or minima, depending on',/, &
            5x,'the numerical value read in columns 57 - 62  of the data card. ')
       write (lunit6, 7317)  flstat( 14)
- 7317 format (5x,  34hthis value must be typed as either,
-     1    / 10x,   35h   +1.0  to indicate that a maximum,
-     2             21h is to be calculated,,
-     3    / 10x,   35hor -1.0   -     -      -    minimum,
-     4             21h    -     -     -   .,
-     5    // 5x,   30hthe present value was read as ,
-     6            f13.6 )
+7317  format (5x,  'this value must be typed as either',/, &
+           10x, '   +1.0  to indicate that a maximum is to be calculated,',/, &
+           10x, 'or -1.0   -     -      -    minimum    -     -     -   .',//, &
+           5x, 'The present value was read as ', f13.6 )
       go to 6550
- 6218 write (lunit6,7218)  bus1
- 7218 format (5x,  33hthe program was reading the user-,
-     1             38hdefined free-format fortran expression,
-     2       / 5x, 35hfor the tacs variable identified by,
-     3             24h the  6-character name ',  a6, 3h' ,,
-     4       / 5x, 36hwhen the following illegal situation,
-     5             14h was detected: )
+6218  write (lunit6,7218)  bus1
+7218  format (5x,  'The program was reading the user-defined free-format fortran expression',/, &
+           5x, 'for the tacs variable identified by the  6-character name ', "'", a6, "'", ' ,',/, &
+           5x, 'when the following illegal situation was detected: ')
       i1 = lstat( 17)
       if ( i1 .gt. 6 )  go to 62180
       go to ( 62181, 62182, 62183, 62184, 62185, 62186), i1
 62180 i1 = i1 - 6
       go to ( 62187, 62188, 62189, 62190, 62191, 62192, 62193), i1
 62181 write (lunit6, 72181)
-72181 format (10x, 42ha parenthesis was opened and never closed.)
+72181 format (10x, 'A parenthesis was opened and never closed. ')
       go to 6550
 62182 write (lunit6, 72182)
-72182 format (10x, 37hthis expression contains no argument.)
+72182 format (10x, 'This expression contains no argument. ')
       go to 6550
 62183 write (lunit6, 72183)
-72183 format (10x, 35hattempt to close a parenthesis that,
-     1             35h had not been opened.              )
+72183 format (10x, 'Attempt to close a parenthesis that had not been opened. ')
       go to 6550
 62184 write (lunit6, 72184)  bus2
-72184 format (10x, 14hthe operator ',  a6,
-     1             29h' is the last element of this,
-     2             29h fortran expression.         ,
-     3     / 10x,  35hisn't there an argument missing ...)
+72184 format (10x, 'The operator ', "'", a6, "'", ' is the last element of this fortran expression.',/, &
+           10x, "Isn't there an argument missing ... ")
       go to 6550
 62185 write (lunit6, 72185)  bus2, bus3
-72185 format (10x, 34hthe two following arguments cannot,
-     1             34h be adjacent:                     ,
-     2    /10x,     1h',  a6, 4h'  ',  a6, 1h' )
+72185 format (10x, 'The two following arguments cannot be adjacent:',/, &
+           10x, "'", a6, "'", '  ', a6, "'" )
       go to 6550
 62186 write (lunit6, 72186)  bus2
-72186 format (10x, 36hthe first element of this expression,
-     1             14h was read as ',  a6, 3h' .,
-     2    /10x,    36hcan it really be ...                )
+72186 format (10x, 'The first element of this expression was read as ', "'", a6, "'", ' . ', /, &
+           10x, 'Can it really be ... ')
       go to 6550
 62187 write (lunit6, 72187)  bus2
-72187 format (10x, 30hmissing  '('  after function ', a6,1h')
+72187 format (10x, "Missing  '('  after function ", "'", a6, "' ")
       go to 6550
 62188 write (lunit6, 72188)
-72188 format (10x, 36hplease break this monstruously large,
-     1             36h expression into smaller sections.  )
+72188 format (10x, 'Please break this monstruously large expression into smaller sections. ' )
       go to 6550
 62189 write (lunit6, 72189)  bus2, bus3
-72189 format (10x, 35hthis expression is not homogeneous.,
-     1       /10x, 34hthe two operators upon which this ,
-     2             34hcondition was detected are        ,
-     3       /15x,  1h', a6, 7h' and ', a6, 3h' . )
+72189 format (10x, 'This expression is not homogeneous.',/, &
+           10x, 'The two operators upon which this condition was detected are',/, &
+           15x, "'", a6, "'", ' and ', "'", a6, "'". ' . ')
       go to 6550
 62190 write (lunit6, 72190) lstat( 16)
-72190 format (10x, 32hthe numerical argument ending in,
-     1              9h column  ,  i2,
-     2     /10x,   34his more than  20  characters long. )
+72190 format (10x, 'The numerical argument ending in column  ',  i2,/, &
+           10x, 'is more than  20  characters long. ')
       go to 6550
 62191 write (lunit6, 72191)  lstat( 16)
-72191 format (10x, 32hthe alphanumeric argument ending,
-     1             12h in column  , i2,
-     2    /10x,    32his more than  6 characters long.)
+72191 format (10x, 'The alphanumeric argument ending in column  ', i2, /, &
+           10x, 'is more than  6 characters long. ')
       go to 6550
 62192 write (lunit6, 72192)  lstat( 16)
-72192 format (10x, 31hunrecognizable logical operator,
-     1             14h near column  , i2 )
+72192 format (10x, 'Unrecognizable logical operator near column  ', i2 )
       go to 6550
 62193 write( lunit6, 72193)  lstat( 16)
-72193 format( 10x, 32hthe numerical argument ending in,
-     1              8h column ,  i2,
-     2     /10x,   37hcontains more than one decimal point. )
+72193 format( 10x, 'The numerical argument ending in column ',  i2,/, &
+           10x, 'contains more than one decimal point. ')
       go to 6550
- 6219 write (lunit6, 7213)  lstat(16), lstat(15)
+6219  write (lunit6, 7213)  lstat(16), lstat(15)
       write (lunit6, 7219)  flstat(15)
- 7219 format (5x,  32ha non-positive reference voltage,
-     1              9h equal to,  e13.4,
-     2             29h   was specified by the user.   )
+7219  format (5x,  'A non-positive reference voltage equal to',  e13.4, '   was specified by the user. ')
       go to 6550
- 6220 write (lunit6, 7220) last, lstat(15), ibr
- 7220 format ( 5x, 38h overflow of steady-state table space.,
-     1             30h   list 23 tables are sized at,  i6,
-     2             37h   words,   which is insufficient for  ,/, &
-     3         5x, 36heven just the formation of  (y),  to,
-     4             40h say nothing of later triangularization.,
-     5             35h   overflow has occurred after only,  i5
-     6   ,/, &   5x, 38hbranches have been processed, out of a,
-     7              9h total of,  i5,   2h .   )
+6220  write (lunit6, 7220) last, lstat(15), ibr
+7220  format (5x, ' Overflow of steady-state table space.   List 23 tables are sized at',  i6, '   words,   which is insufficient for',/, &
+           5x, 'even just the formation of  (y),  to say nothing of later triangularization.   Overflow has occurred after only',  i5,/, &
+           5x, 'branches have been processed, out of a total of',  i5,   ' . '  )
       go to 6550
- 6221 write (lunit6, 7221)
- 7221 format ( 5x,  34h the number of phases in this line,
-     1              35h is larger than the temporary limit,
-     2              30h of 10 for k. c. lee modeling.       )
+6221  write (lunit6, 7221)
+7221  format (5x, ' The number of phases in this line is larger than the temporary limit of 10 for K. C. Lee modeling. ')
       go to 6550
  6222 write (lunit6, 7222)  lstat(14), bus1, bus2, lstat(15)
  7222 format ( 5x,  28hthe steady-state solution is,
