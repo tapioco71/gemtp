@@ -136,55 +136,36 @@ subroutine over54
           5x,  "the number of points 'npoint' as requested by the user = ", i4)
   go to 6220
 7956 write(lunit6,8056)
-8056 format( 5x,  93hthe newton-raphson algorithm, used to fit the line
-1   response with exponentials, is in trouble. ,/, & 5x, 101heither the
-2   jacobian matrix is singular, or the initial guess made by the pro
-3   gram is not close enough. ,/, & 5x,  84hafter carefully checking dat
-4   a, a consultation with program maintenance is indicated. )
-    go to 6220
+8056 format(5x, 'The Newton-Raphson algorithm, used to fit the line response with exponentials, is in trouble. ',/, &
+          5x, 'either the jacobian matrix is singular, or the initial guess made by the program is not close enough.',/, &
+          5x,  'after carefully checking data, a consultation with program maintenance is indicated. ')
+  go to 6220
 6157 write (lunit6, 7157)
-7157 format (5x, 108hthe 'semlyen setup'  data case now under considera
-1   tion requires that modal step responses be computed first,     ,/, &
-2 5x,  75hby inverse fourier transformation.   this procedure has n
-3   ow been completed.    )
-    if ( lstat(14)  .eq.  0 )   go to 7457
-    write (lunit6, 7257)  lstat(14), lstat(15),  flstat(14)
-7257 format (5x,  37hbut the step response for mode number,  i4,
-1 56h   is physically invalid.   in theory, this should begin   ,/, &
-2 5x, 104hat zero, and should rise monatonically to unity, as time
-3   goes to infinity.   but the value for the final              ,/, &
-4 5x,  12hpoint number,  i5,  5h   is,    e14.3,     66h ,   which
-5   is nowhere near unity.   in fact, this final value does      )
-    write (lunit6, 7357)  flstat(15)
-7357 format (5x,  54hnot even reach the threshold  'fit2z' ,   which eq
-1   uals,    e14.3,     31h .    the step response is thus       ,/, &
-2 5x,  55hinvalid, and execution will not be allowed to continue. )
-    go to 6220
-7457 write (lunit6, 7557)  lstat(16), lstat(15), lstat(17),
-1   flstat(14), flstat(15), flstat(16)
-7557 format (5x,  25hbut between points number,  i6,  6h   and,  i6,
-1  46 h ,   the rise to unity is not characterized by          ,/, &
-2 5x,  63hmonotone-decreasing slope (concave downward).   at point
-3   number,  i6,  37h ,   there is trouble,   let's denote       ,/, &
-4 5x,  70hthis point by  'k' .   values for points  k-1, k, % k+1
-5   then are  ...,     3e14.5,    3h  .        )
-    go to 6220
+7157 format (5x, "The 'Semlyen setup'  data case now under consideration requires that modal step responses be computed first,",/, &
+          5x, 'by inverse fourier transformation.   This procedure has now been completed. ')
+  if ( lstat(14)  .eq.  0 )   go to 7457
+  write (lunit6, 7257)  lstat(14), lstat(15),  flstat(14)
+7257 format (5x, 'But the step response for mode number',  i4, '   is physically invalid.   In theory, this should begin   ',/, &
+          5x, 'at zero, and should rise monatonically to unity, as time goes to infinity.   But the value for the final',/, &
+          5x, 'point number',  i5,  '   is',    e14.3,     ' ,   which is nowhere near unity.   In fact, this final value does ')
+  write (lunit6, 7357)  flstat(15)
+7357 format (5x, "not even reach the threshold  'fit2z' ,   which equals",    e14.3,     ' .    the step response is thus',/, &
+          5x, 'invalid, and execution will not be allowed to continue. ')
+  go to 6220
+7457 write (lunit6, 7557)  lstat(16), lstat(15), lstat(17), flstat(14), flstat(15), flstat(16)
+7557 format (5x, 'But between points number',  i6,  '   and',  i6, ' ,   the rise to unity is not characterized by',/, &
+          5x,  'monotone-decreasing slope (concave downward).   At point number',  i6,  " ,   there is trouble,   let's denote",/, &
+          5x,  "this point by  'k' .   Values for points  k-1, k, % k+1 then are  ...",     3e14.5,    '  .')
+  go to 6220
 6158 write (lunit6, 7158)
-7158 format (5x, 103hthe data case under study involves the conversion
-1   of EMTP data cards for a saturable  'transformer'  to       ,/, &
-2 5x, 107h(r), (l)  format (type-51, 52, ... ).   this is a feature
-3   of supporting routine  'xformer' .   but there is          ,/, &
-4 5x,  89htrouble with the user's  'transformer'  data which is now
-5   being read.   specifically, ...     )
-    n1 = lstat(14)
-    if ( n1  .eq.  1 )
-1   write (lunit6, 7258)  bus5
-7258 format (8x, 109hthe EMTP is just beginning a new conversion case,
-1   and it expects the last-read data card (since non-blank) to  ,/, &
-2 8 x,  88hhave key word  'transformer'  punched in columns  3-14 .
-3   but columns  3-8  contain   ',  a6,  3h' .                )
-    if ( n1  .eq.  2 )
-1   write (lunit6, 7358)
+7158 format (5x, "The data case under study involves the conversion of EMTP data cards for a saturable  'transformer'  to",/, &
+          5x, "(r), (l)  format (type-51, 52, ... ).   This is a feature of supporting routine  'xformer' .   But there is",/, &
+          5x, "trouble with the user's  'transformer'  data which is now being read.   Specifically, ... ")
+  n1 = lstat(14)
+  if ( n1  .eq.  1 ) write (lunit6, 7258)  bus5
+7258 format (8x, 'The EMTP is just beginning a new conversion case, and it expects the last-read data card (since non-blank) to',/, &
+          8x, "have key word  'transformer'  punched in columns  3-14 .   But columns  3-8  contain   ",  "'", a6,  "'", ' . ')
+  if ( n1  .eq.  2 ) write (lunit6, 7358)
 7358 format (8x, 108hthe data card for winding number one can not be lo
 1   cated.   column  2  must be punched with unity, of course,   ,/, &
 2 8 x, 114hand column  1  must be either blank or be punched with ze
