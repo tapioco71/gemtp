@@ -565,92 +565,92 @@ subroutine subr55
 4107 format (    8h unused    )
   go to 4099
 4008 write (lunit6, 4108)
-4108 format (5x, 108hpast-history points for distributed-parameter representation of transmission lines are stored in modal form,     ,/, &
-       5x, 115halways.   each mode requires storage, where there are as many modes as there are coupled conductors (e.g., a double   ,/, &
-       5x, 117hcircuit line has 6 modes.).   a constant-parameter (frequency-independent) mode contributes    tau/deltat    entries,   ,/, &
-       5x, 111hwhere  'tau'  is the modal travel-time of the line,  'deltat'  is the time-step size, and the division involves    )
+4108 format (5x, 'Past-history points for distributed-parameter representation of transmission lines are stored in modal form,',/, &
+          5x, 'always.   Each mode requires storage, where there are as many modes as there are coupled conductors (e.g., a double',/, &
+          5x, 'circuit line has 6 modes.).   A constant-parameter (frequency-independent) mode contributes    tau/deltat    entries,',/, &
+          5x, "where  'tau'  is the modal travel-time of the line,  'deltat'  is the time-step size, and the division involves " )
   write (lunit6, 4208)
-4208 format (5x, 105hinteger truncation followed by the addition of unity.   for a frequency-dependent mode, more past-history   ,/, &
-       5x, 114hthan this is needed, enough to perform the  a2(t)  convolution.   in the preceding formula, take  'tau'  to be the    ,/, &
-       5x,  93htime  't2'  at which the exponential tail on  a2(t)  begins (typically 3 travel-times or so).     )
+4208 format (5x, 'integer truncation followed by the addition of unity.   For a frequency-dependent mode, more past-history',/, &
+          5x, 'than this is needed, enough to perform the  a2(t)  convolution.   In the preceding formula, take  'tau'  to be the',/, &
+          5x,  "time  't2'  at which the exponential tail on  a2(t)  begins (typically 3 travel-times or so). "    )
   go to 4099
 4009 write (lunit6, 4109)
-4109 format ( 5x,  86hentries in the nonlinear-element table are created by the following element types ....    ,/, &
-       2 8x,  79h1.  piecewise-linear time-varying resistance elements  R(t) ,   branch-type 91.      ,/, &
-       8x,  56h2.  true nonlinear  v-i  characteristic, branch-type 92.,/, &
-       8x,  54h3.  true nonlinear inductance element, branch-type 93.,/, &
-       8x,  71h4.  staircase time-varying resistance element  r(t) ,   branch-type 97.         )
+4109 format ( 5x,  'Entries in the nonlinear-element table are created by the following element types .... ',/, &
+          8x,  '1.  Piecewise-linear time-varying resistance elements  R(t) ,   branch-type 91.',/, &
+          8x,  '2.  True nonlinear  v-i  characteristic, branch-type 92.',/, &
+          8x,  '3.  True nonlinear inductance element, branch-type 93.',/, &
+          8x,  '4.  Staircase time-varying resistance element  R(t) ,   branch-type 97. '        )
   write (lunit6, 4209)
-4209 format (8x,  56h5.  pseudo-nonlinear inductance element, branch-type 98.     ,/, &
-       8x,  58h6.  pseudo-nonlinear  v-i  characteristic, branch-type 99.   ,/, &
-       5x,  79hevery element falling into this classification contributes one entry to list 9.     )
+4209 format (8x,  '5.  Pseudo-nonlinear inductance element, branch-type 98.',/, &
+          8x, '6.  Pseudo-nonlinear  v-i  characteristic, branch-type 99.',/, &
+          5x, 'Every element falling into this classification contributes one entry to list 9. '    )
   go to 4099
 4010 write (lunit6, 4110)
-4110 format (5x, 108hthis list-10 storage applies to all characteristics which are defined as pairs of coordinates, terminated by    ,/, &
-       5x,    108ha  9999-card.   each pair of coordinates so seen on the input-data listing contributes one entry to list 10.   ,/, &
-       5x, 111hbut note carefully the wording of this rule.   it is only the ones which are actually seen visually on the data   ,/, &
-       5x, 113hlisting (use of the reference-branch procedure adds nothing to list 10, and will not be seen on the data listing.   )
+4110 format (5x, 'This list-10 storage applies to all characteristics which are defined as pairs of coordinates, terminated by',/, &
+          5x, 'a  9999-card.   Each pair of coordinates so seen on the input-data listing contributes one entry to list 10.',/, &
+          5x, 'but note carefully the wording of this rule.   it is only the ones which are actually seen visually on the data',/, &
+          5x, 'listing (use of the reference-branch procedure adds nothing to list 10, and will not be seen on the data listing. '  )
   write (lunit6, 4210)
-4210 format (/, 5x, 105ha second contributor to the list-10 storage requirement is the type-94 nonlinear element component (surge     ,/, &
-       5x, 110harrester with current limiting gap).   each such surge arrester which does not use the reference-branch option        ,/, &
-       5x, 115hadds  18  entries to the list-10 storage requirement.   for each surge arrester which does use the reference-branch     ,/, &
-       5x,  86hprocedure, there is a contribution of  11  entries to the list-10 storage requirement.              )
+4210 format (/, 5x, 'A second contributor to the list-10 storage requirement is the type-94 nonlinear element component (surge',/, &
+          5x, 'arrester with current limiting gap).   Each such surge arrester which does not use the reference-branch option',/, &
+          5x, 'adds  18  entries to the list-10 storage requirement.   for each surge arrester which does use the reference-branch',/, &
+          5x, 'procedure, there is a contribution of  11  entries to the list-10 storage requirement. ')
   write (lunit6, 4310)
-4310 format (/, 5x, 118hfinally, if you have zno surge arresters in the case, four addtional cells are required for each of the zno arresters.  )
+4310 format (/, 5x, 'Finally, if you have zno surge arresters in the case, four addtional cells are required for each of the zno arresters. ')
   go to 4099
 4011 write (lunit6, 4111)
-4111 format (5x, 109hbranch-output quantities are generated by column-80 punches on branch cards and on switch cards.   each punch    ,/, &
-       5x, 110hof  '1'  or  '2'  (branch current or branch voltage) contributes one entry to list 11.   punches of  '3'  (for   ,/, &
-       5x, 107hbranch current and voltage) or  '4'  (for branch power and energy) contribute two entries each, to list 11.     ,/, &
-       5x, 110hnode-voltage outputs which are specified individually, one at a time, ----- i.e., by punching 6-character node      )
+4111 format (5x, 'branch-output quantities are generated by column-80 punches on branch cards and on switch cards.   Each punch',/, &
+          5x, "of  '1'  or  '2'  (branch current or branch voltage) contributes one entry to list 11.   Punches of  '3'  (for",/, &
+          5x, "branch current and voltage) or  '4'  (for branch power and energy) contribute two entries each, to list 11.",/, &
+          5x, 'node-voltage outputs which are specified individually, one at a time, ----- i.e., by punching 6-character node ')
   write (lunit6, 4211)
-4211 format (5x, 110hnames in the  13a6  field of the node-voltage output-specification card ----- are likewise limited by list 11.   ,/, &
-       5x, 111hif the user has requested the automatic output of every node voltage instead of this selective output (by means      ,/, &
-       5x, 109hof a  '1'  punched in column 2 of the aforementioned card), this list-11 limit does not apply to node voltage  ,/, &
-       5x,   8houtputs.    )
+4211 format (5x, 'names in the  13a6  field of the node-voltage output-specification card ----- are likewise limited by list 11.',/, &
+          5x, 'If the user has requested the automatic output of every node voltage instead of this selective output (by means',/, &
+          5x, "of a  '1'  punched in column 2 of the aforementioned card), this list-11 limit does not apply to node voltage ",/, &
+          5x, 'outputs. ')
   go to 4099
 4012 write (lunit6, 4112)
-4112 format ( 5x,  35hsorry, no special advice available.     )
+4112 format (5x, 'Sorry, no special advice available. ')
   go to 4099
 4013 write (lunit6, 4113)
-4113 format (5x, 110hevery continuously-transposed distributed-parameter transmission-line component (branch type-code  'itype'  of   ,/, &
-       5x, 110hcolumns 1-2 equal to  -1,  -2,  etc.) represents a possible contribution to list 13.   each line mode which is   ,/, &
-       5x, 113hmodelled as being frequency-dependent (variable  'ipunch'  of columns 53-54 equal to  -1 )  contributes one entry   ,/, &
-       5x, 110hto list 13.   generally this will only be for the zero-sequence mode (the first card of the group), if at all.    )
+4113 format (5x, "Every continuously-transposed distributed-parameter transmission-line component (branch type-code  'itype'  of ",/, &
+          5x, 'columns 1-2 equal to  -1,  -2,  etc.) represents a possible contribution to list 13.   Each line mode which is',/, &
+          5x, "modelled as being frequency-dependent (variable  'ipunch'  of columns 53-54 equal to  -1 )  contributes one entry ",/, &
+          5x, 'to list 13.   Generally this will only be for the zero-sequence mode (the first card of the group), if at all. ')
   go to 4099
 4014 write (lunit6, 4114)
-4114 format (5x, 108hfrequency-dependent representation for a mode of a distributed-parameter transmission line is requested by a   ,/, &
-       5x, 108hvalue of  -1  punched in field  'ipunch'  (columns 53-54) of the associated branch card.   assuming that the    ,/, &
-       5x, 114hreference-branch procedure is not used, the input of weighting functions  a1(t)  and  a2(t)  follows.   the number    ,/, &
-       6 5x, 109hof points on these input cards is irrelevant, and is in no way related to the size of list 14.   instead, the     )
+4114 format (5x, 'Frequency-dependent representation for a mode of a distributed-parameter transmission line is requested by a',/, &
+          5x, "value of  -1  punched in field  'ipunch'  (columns 53-54) of the associated branch card.   Assuming that the",/, &
+          5x, 'reference-branch procedure is not used, the input of weighting functions  a1(t)  and  a2(t)  follows.   The number',/, &
+          5x, 'of points on these input cards is irrelevant, and is in no way related to the size of list 14.   Instead, the ' )
   write (lunit6, 4214)
-4214 format (5x, 108hlist-14 storage depends upon both the time-span of the weighting functions, and also upon the time-step size   ,/, &
-       5x, 112h'deltat' ,  as follows.   let  't1'  be the time span from the nonzero beginning of  a1(t)  (at about one travel    ,/, &
-       5x, 110htime) to where its exponential tail begins (typically about two travel times).   also, define  't2'  to be the    ,/, &
-       5x, 109htime at which the exponential tail of  a2(t)  begins (typically about three travel times).   then the storage     )
+4214 format (5x, 'list-14 storage depends upon both the time-span of the weighting functions, and also upon the time-step size',/, &
+          5x, "'deltat' ,  as follows.   Let  't1'  be the time span from the nonzero beginning of  a1(t)  (at about one travel",/, &
+          5x, "time) to where its exponential tail begins (typically about two travel times).   also, define  't2'  to be the",/, &
+          5x, 'time at which the exponential tail of  a2(t)  begins (typically about three travel times).   Then the storage' )
   write (lunit6, 4314)
-4314 format (5x, 102hrequirement in list 14 is given by the relation  np = (t1 + t2) / deltat  .     lines which use the     ,/, &
-       5x,  60hreference-branch procedure require no list-14 storage, note.    )
+4314 format (5x, 'requirement in list 14 is given by the relation  np = (t1 + t2) / deltat  .     Lines which use the',/, &
+          5x, 'reference-branch procedure require no list-14 storage, note. ')
   go to 4099
 4015 write (lunit6, 4115)
-4115 format (5x, 106hto perform the convolution associated with frequency-dependent modes of distributed-parameter transmission    ,/, &
-       5x, 112hlines, modal past-history must be stored for both ends of the line.   whether the reference-branch procedure was   ,/, &
-       5x, 109hused or not in no way modifies this requirement.   for every frequency-dependent mode, two cells are taken up    ,/, &
-       5x,  11hin list 15.    )
+4115 format (5x, 'To perform the convolution associated with frequency-dependent modes of distributed-parameter transmission',/, &
+          5x, 'lines, modal past-history must be stored for both ends of the line.   whether the reference-branch procedure was',/, &
+          5x, 'used or not in no way modifies this requirement.   For every frequency-dependent mode, two cells are taken up',/, &
+          5x,  'in list 15. '   )
   go to 4099
 4016 go to 4012
 4017 go to 4012
 4018 go to 4012
 4019 write (lunit6, 4119)
-4119 format (5x, 109hdo not dispair, all is not lost (yet).   what has happened is that list  19  is inadequate for the tacs table  ,/, &
-       5x, 112hsizes which were requested.   either the user specified these sizes explicitely himself using an  'absolute tacs     ,/, &
-       5x, 115hdimensions'  card, or the EMTP supplied its own default set.   in either case, these absolute tacs table sizes will  ,/, &
-       5x, 114hrequire a list-19 size as shown under the  'present figure' column in row  19 .   before simply redimensioning the   )
+4119 format (5x, 'Do not dispair, all is not lost (yet).   What has happened is that list  19  is inadequate for the tacs table',/, &
+          5x, "sizes which were requested.   Either the user specified these sizes explicitely himself using an  'absolute tacs",/, &
+          5x, "dimensions'  card, or the EMTP supplied its own default set.   In either case, these absolute tacs table sizes will",/, &
+          5x, "require a list-19 size as shown under the  'present figure' column in row  19 .   Before simply redimensioning the ")
   write (lunit6, 4219)
-4219 format (5x, 110hEMTP to provide such a list-19 figure, however, the user might try to more optimally divide the existing total ,/, &
-       5x, 115hamong the different tacs tables, using either an  'absolute tacs dimensions'  card or a  'relative tacs dimensions'  ,/, &
-       5x, 111hcard.   finally, because   kill = 122   provides much general information about tacs dimensioning, we shall now      ,/, &
-       5x,  20hprint it as well....    )
+4219 format (5x, 'EMTP to provide such a list-19 figure, however, the user might try to more optimally divide the existing total',/, &
+          5x, "among the different tacs tables, using either an  'absolute tacs dimensions'  card or a  'relative tacs dimensions'",/, &
+          5x, 'card.   Finally, because   kill = 122   provides much general information about tacs dimensioning, we shall now',/, &
+          5x, 'print it as well.... ')
   kill = 122
   lstat(17) = 0
   lstat(16) = 0
