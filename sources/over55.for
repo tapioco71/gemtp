@@ -266,30 +266,18 @@ subroutine subr55
 7612  format (5x,  'located in row',  i5,'   of the nonlinear element table,   while the last is in row number', i5,   ' .',/, &
            5x,   'a rank of',  i5, '   exists for  (zthev) ,   and the simulation time is',  e13.5,  ' sec. ')
       write (lunit6, 7712)
-7712  format (5x,  37hpossible ameliorative actions include,
-     1             39h a decrease in time-step size "deltat",,
-     2             32h or an increase in the iteration
-     3  ,/, &   5x,  34h limit "maxzno", or an increase in,
-     4             36h the divergence tolerance "epstop" . )
+7712  format (5x,  'Possible ameliorative actions include a decrease in time-step size "deltat", or an increase in the iteration',/, &
+           5x,  'limit "maxzno", or an increase in the divergence tolerance "epstop" . ')
       go to 6550
- 6213 write (lunit6, 7213)  lstat(15), lstat(16)
- 7213 format (5x,  33hwhile reading  zno  arrester data,
-     1             32h cards, a structural (numbering),
-     2             32h defect was found.   this is for   ,/, &
-     3        5x,  24hnonlinear element number,  i5,
-     4             32h   which corresponds to arrester,
-     5              7h number,  i5,  2h .    )
+6213  write (lunit6, 7213)  lstat(15), lstat(16)
+7213  format (5x,  'While reading  zno  arrester data cards, a structural (numbering) defect was found.   This is for',/, &
+           5x,  'nonlinear element number',  i5, '   which corresponds to arrester number',  i5, ' . ')
       write (lunit6, 8213)  lstat(17), lstat(16)
- 8213 format (5x,  34h the read-in identification number,
-     1  i8,   3x,  32hdoes not agree with the arrester,
-     2             16h number equal to,  i8,  2h .  )
+8213  format (5x,  ' The read-in identification number', i8,   3x,  'does not agree with the arrester number equal to',  i8,  ' . ' )
       go to 6550
- 6214 write (lunit6, 7214)  bus1
- 7214 format (5x,  29hthe EMTP is in the process of,
-     1             28h reading the data associated,
-     2             23h with the  tacs  device,
-     3     / 5x,   30h identified by the 6-character,
-     4             16h (output) name ', a6, 3h' . )
+6214  write (lunit6, 7214)  bus1
+7214  format (5x,  'The EMTP is in the process of reading the data associated with the  tacs  device',/, &
+           5x, ' identified by the 6-character (output) name ', "'", a6, "'", ' . ' )
       write (lunit6, 7314)
  7314 format (5x,  32hthis is a type-58 device defined,
      1             36h by the following transfer function:,
