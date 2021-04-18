@@ -404,10 +404,8 @@ subroutine over54
     go to 6220
 6189 write (lunit6, 7189)  lstat(15)
 7189 format (5x, 'The EMTP data case now being processed makes use of the tacs modeling capability, all data cards for which',/, &
-2 5x, 110hhave now been read.   as the preceding printout shows, th
-3   e vector of tacs variable names has repeated entries.         ,/, &
-4 5x,   9hthere are,  i4,   94h   such conflicts.   the trouble can
-5   be traced back to the definition of tacs function blocks,    ,/, &
+          5x, 'have now been read.   as the preceding printout shows, the vector of tacs variable names has repeated entries.',/, &
+          5x, 'There are',  i4,   '   such conflicts.   The trouble can be traced back to the definition of tacs function blocks,',/, &
 6 5   x, 113htacs summers, and tacs supplemental variables and devices
 7     .   all names assigned to such outputs must be distinct.      )
       write (lunit6, 7289)
