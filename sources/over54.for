@@ -282,29 +282,30 @@ subroutine over54
 7175 format (5x, "Subroutine  'eigen'  is used to calculate eigenvalues of the   (z)(y)   matrix product, within the  'cable",/, &
           5x,  "constants'  supporting program.   But within the iteration limit of",  i5,   ' ,   the iterative algorithm has',/, &
           5x,  'failed to satisfy the convergence tolerance of', e14.2,  ' .    The resulting eigenvalues must be',/, &
-          6 5x,  83hviewed with suspicion (at best), so the solution is being terminated at this point.    )
+          5x,  'viewed with suspicion (at best), so the solution is being terminated at this point. ')
     go to 6220
 6176 write(lunit6,7176)
-7176 format(5x,  49herror is in synchronous machine electrical data. ,/, 5x,      46hdata has one or more of the following errors  ,/, &
-          10x,     28h1. xl not smallest reactance ,/,10x,     28h2. xdpp not smaller than xdp ,/, &
-          10x,     27h3. xdp  not smaller than xd  ,/,10x,     28h4. xqpp not smaller than xqp ,/, &
-          10x,     27h5. xqp  not smaller than xq  ,/,10x,     44h6. one or more reactances or ra is negative ,/)
+7176 format(5x, 'Error is in synchronous machine electrical data.',/, &
+          5x,  'data has one or more of the following errors' ,/, &
+          10x, '1. xl not smallest reactance ',/, 10x, '2. xdpp not smaller than xdp ',/, &
+          10x, '3. xdp  not smaller than xd  ',/, 10x, '4. xqpp not smaller than xqp ',/, &
+          10x, '5. xqp  not smaller than xq  ',/, 10x, '6. one or more reactances or ra is negative ',/)
     go to 6220
 6177 write (lunit6, 7177)  numsm
-7177 format (5x, 102hthe EMTP is presently in the process of reading EMTP source cards, with the last-read card producing a         ,/, &
-2 5x, 104hviolation of the ordering restriction which is applicable when dynamic synchronous machine (s.m.) source              ,/, &
-4 5x, 111hcomponents are present.   recall that all non-s.m. source cards must precede any s.m. source cards, in order of       ,/, &
-6 5x,  37hdata input.   thusfar there have been, i4,   60h   s.m. source components inputted (with an sce dual machine          )
+7177 format (5x, 'The EMTP is presently in the process of reading EMTP source cards, with the last-read card producing a',/, &
+          5x, 'violation of the ordering restriction which is applicable when dynamic synchronous machine (s.m.) source',/, &
+          5x, 'components are present.   Recall that all non-s.m. source cards must precede any s.m. source cards, in order of',/, &
+          5x,  'data input.   Thusfar there have been', i4,   '   s.m. source components inputted (with an sce dual machine ')
     write (lunit6, 7277)  lstat(14)
-7277 format (5x, 109hcounting as just one source component), before the last-read data card.   but the last data card has the field    ,/, &
-          2 5x,  74hof source type-code  'itype'  (columns 1-2) punched with the integer value, i5,  25h ,   which is not a legal         ,/, &
-          4 5x, 110hcharacterization for a s.m. source component.   the last-read data card is thus either erroneous by itself, or        ,/, &
-6 5x,  63hout of order (it must precede the first s.m. source component).      )
+7277 format (5x, 'counting as just one source component), before the last-read data card.   But the last data card has the field',/, &
+          5x,  "of source type-code  'itype'  (columns 1-2) punched with the integer value", i5,  ' ,   which is not a legal',/, &
+          5x, 'characterization for a s.m. source component.   The last-read data card is thus either erroneous by itself, or',/, &
+          5x, 'out of order (it must precede the first s.m. source component). ')
     go to 6220
 6178 write (lunit6, 7178)  lstat(14)
-7178 format (5x, 109hthe EMTP is presently inputting source components, with the last-read data card serving to define the network    ,/, &
-2 5x, 109hconnection for the third and final phase of a 3-phase dynamic synchronous machine (s.m.) component.   but the         ,/, &
-4 5x, 108hsource type-code for this component is illegal (unrecognizable).   from the field  'itype'  (columns 1-2) of          ,/, &
+7178 format (5x, 'The EMTP is presently inputting source components, with the last-read data card serving to define the network',/, &
+          5x, 'connection for the third and final phase of a 3-phase dynamic synchronous machine (s.m.) component.   But the',/, &
+          5x, "source type-code for this component is illegal (unrecognizable).   From the field  'itype'  (columns 1-2) of",/, &
 6 5x, 108hthe first data card for this s.m. component --- two non-comment cards before the last-read data card --- was          ,/, &
 8 5x, 19hread a type code of,  i2,    83h .    but only s.m. model types  51  through  54  and  59  are presently available.     )
     write (lunit6, 7278)   numsm
