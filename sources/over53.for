@@ -328,49 +328,36 @@ subroutine over53
        5x, 'cascaded sub-blocks, each of which is of order  10  or less. ')
   go to 6220
 6116 write (lunit6, 7116)  bus1, lstat(14)
-7116 format (5x, 107hthe EMTP data case under consideration includes a
-1 tacs representation, the function blocks of which are now     ,/,
-2 5 x,  99hbeing inputted.   now, the last tacs function block which
-3     was read by the EMTP had (output) name  ', a6,   1h'        ,/,
-4 5   x,  83h(punched in columns 3-8), and was purported to be a dynam
-5     ic function block of order, i3,  21h  (punched in columns     ,/,
-6 5     x, 109h1-2).   the tacs function block is characterized by a lap
-7         lace transfer function  h(s) ,   which is a rational         )
-            if ( lstat( 17) .eq. 1 )  go to 16116
-            write (lunit6, 7216)  lstat(14)
-7216        format (5x, 106hfunction (ratio of polynomials) of the complex fre
-1           quency variable  's' .   by definition, the order of the     ,/,
-2 5         x, 111htacs block refers to the order of the highest polynomial
-3           involved (either numerator or denominator).   but both       ,/,
-4 5         x,  71hthe numerator and denominator coefficients of  's'  raise
-5           d to the power, i3,  31h  are zero.   the highest power      ,/,
-6 5         x, 110hof  's'  is thus missing, completely.   the block order i
-7           s inconsistent with the polynomial coefficients which      ,/,
-8 5         x,  78hare supposed to define the block's  h(s) ,   so execution
-9           is being terminated.       )
-            go to 6220
-16116       write (lunit6, 7316)
-7316        format (5x,  34hfunction (ratio of polynomials) of,
-1             37 h the complex frequency variable 's' .,
-2           / 5x,    33hhere, the order-zero coefficients,
-3             31 h (of the terms without 's')  in,
-4             31 h both numerator and denominator,
-5           / 5x,    31hwere read as  zero .           ,
-6           / 5x,    30hdid the user really mean this,,
-7             30 h the program wonders.   don't. )
-            go to 6220
-6117        n9 = 50
-            write (lunit6, 7117)   n9, ipunch
-7117        format (5x, 108hthe last-read data card is the first branch card f
-1           or a multi-phase line which is to be modeled using Semlyen     ,/,
-2 5         x, 108hor ametani recursive convolution for the frequency-depend
-3           ent representation.   such modeling is limited to a          ,/,
-4 5         x,  10hmaximum of, i4, 93h   modes (coupled phases).   but this
-5           limit is exceeded by the user's requested number, which      ,/,
-6 5         x,  14hwas punched as,  i5,  85h   (read from columns 77-78).
-7           a major programming effort (involving some unanswered        )
-            write (lunit6, 7217)
-7217        format (5x, 110htheoretical questions) would be required in order
+7116 format (5x, 'The EMTP data case under consideration includes a tacs representation, the function blocks of which are now',/, &
+          5x, 'being inputted.   Now, the last tacs function block which was read by the EMTP had (output) name  ', "'", a6, "'",/, &
+          5x,  '(punched in columns 3-8), and was purported to be a dynamic function block of order', i3, '  (punched in columns',/, &
+          5x, '1-2).   The tacs function block is characterized by a Laplace transfer function  h(s) ,   which is a rational ')
+  if ( lstat( 17) .eq. 1 )  go to 16116
+  write (lunit6, 7216)  lstat(14)
+7216 format (5x, "function (ratio of polynomials) of the complex frequency variable  's' .   By definition, the order of the",/, &
+          5x, 'tacs block refers to the order of the highest polynomial involved (either numerator or denominator).   But both',/, &
+          5x, "the numerator and denominator coefficients of  's'  raised to the power", i3,  '  are zero.   The highest power',/, &
+          5x, "of  's'  is thus missing, completely.   The block order is inconsistent with the polynomial coefficients which",/, &
+          5x,  "are supposed to define the block's  H(s) ,   so execution is being terminated. ")
+  go to 6220
+16116 write (lunit6, 7316)
+7316 format (5x,  "Function (ratio of polynomials) of the complex frequency variable 's' .,",/,&
+          5x, "here, the order-zero coefficients (of the terms without 's')  in both numerator and denominator", /, &
+          5x, 'were read as  zero .',/, &
+          5x, "did the user really mean this, the program wonders.   Don't. ")
+  go to 6220
+6117 n9 = 50
+  write (lunit6, 7117)   n9, ipunch
+7117 format (5x, 108hthe last-read data card is the first branch card f
+1 or a multi-phase line which is to be modeled using Semlyen     ,/,
+2 5 x, 108hor ametani recursive convolution for the frequency-depend
+3 ent representation.   such modeling is limited to a          ,/,
+4 5 x,  10hmaximum of, i4, 93h   modes (coupled phases).   but this
+5 limit is exceeded by the user's requested number, which      ,/,
+6 5 x,  14hwas punched as,  i5,  85h   (read from columns 77-78).
+7 a major programming effort (involving some unanswered        )
+  write (lunit6, 7217)
+7217 format (5x, 110htheoretical questions) would be required in order
 1           to extend this modeling limitation, so the user has no other   ,/,
 2 5         x, 104halternative than decreasing the number of coupled ametani
 3           or Semlyen phases in his coupled branch group.       )
