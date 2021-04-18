@@ -202,301 +202,269 @@ subroutine subr55
           5x, "only if the simulation begins as the continuation of a previously-halted run (with field  'tstart'  of the",/, &
           5x, 'floating-point miscellaneous data card punched positive).   The data case under consideration does not satisfy these',/, &
           5x, 'restrictions, so solution shall be stopped. ')
-      go to 6550
- 6204 write (lunit6, 7204)  flstat(14), flstat(15)
-7204  format (5x, 'The last-inputted EMTP component was a type-96 hysteretic inductor.   Columns  27-32  and  33-38  of the',/, &
-           5x, "branch card are to be punched with  'i-steady'  and   'psi-steady' ,   respectively.   But values",  e14.4,  '   and',/, &
-           5x,  e14.4, '   were read for these two variables, which represents a point in the current-flux plane that lies outside',/, &
-           5x, 'the user-defined major hysteresis loop.   the EMTP does not allow such sloppiness (even though the ratio may be',/, &
-           5x,  'correct).   Define a point within the loop, and try again. ')
-      go to 6550
-6205  write (lunit6, 7205)  flstat(16), flstat(17)
-7205  format (5x, 'The last-inputted EMTP component was a type-96 hysteretic inductor.   Columns  39-44  of the branch card are',/, &
-           5x, 'to be punched with a residual (remnant) flux value.   But a value of',  e14.4,   '   was read for this, which',/, &
-           5x, 'exceeds (in absolute value) the flux of the user-inputted major hysteresis loop at zero current.   This latter flux',/, &
-           6 5x,  'value is',  e14.4,   ' .   The result is a current-flux point which lies outside the major hysteresis loop, which',/, &
-           5x, 'is impossible.   Punch a legal residual flux value in columns  39-44 ,   and try again. '   )
-      go to 6550
-6206  write (lunit6, 7206)
-7206  format (5x, "The user is trying to combine  'statistics'  or  'systematic'  results using the   'tabulate energization results'",/, &
-           5x, 'feature.   But not all of the partial results are compatible.   Files previously attached and read have the',/, &
-           5x, 'following characteristic parameters ... ')
-      write (lunit6, 7306)  ( lstat(i), i=11, 13), bus2
-7306  format (10x,  i5, ' = ntot    (number of electric network nodes)',/, &
-           10x, i5, ' = nstat   (number of output variables) ',/, &
-           10x, i5, ' = kswtch  (number of switches)',/, &
-           9x, a6, ' = bus(ntot)  (name of last network node). ')
-      write (lunit6, 7406)  lstat(17)
-7406  format (5x, 'On the other hand, the most recently attached file, number',  i5,  '   in order of user specification, has',/, &
-           5x, 'the following different characteristics ... ')
-      write (lunit6, 7306)  ntot, lstat(14), kswtch, bus1
-      write (lunit6, 7506)
-7506  format (5x, 'never try to combine results which belong to differently-structured problems, as in this data case. ')
-      go to 6550
-6207  write (lunit6, 7207)  tmax, tenerg
-7207  format (5x, 'This data case has  'statistics'  switches, but it is highly improbable that any would ever close.   The',/, &
-           5x, "termination time  'tmax'  of the simulation equals", e14.4, ' ,   while all random switch-closing times',/, &
-           5x, 'exceed',  e14.4, '   seconds with  3*sigma  probability.   Such a waste of computer resources will not be tolerated.',/, &
-           5x,  "Either increase  'tmax'  beyond this latter figure, or appropriately decrease the closing times. ")
-      go to 6550
-6208  continue
-      go  to  6550
-6209  write (lunit6, 7209)  epsiln, lstat(17)
-7209  format (5x, 'The jacobian matrix for a Newton solution of zinc-oxide arresters has been found to be singular.',/, &
-           5x, "the tolerance  'epsiln'  equals", e12.3,  ' ,   while the iteration count is', i5,   ' . ')
-      go to 7412
-6210  write(lunit6,7210)  lstat(14)
-7210  format (5x, 'The initialization of a saturated synchronous machine has failed to converge. the machine in question',/, &
-           5x, 'had the following number', 2x, i6 )
-      go to 6550
-6211  write(lunit6,7211) lstat(14),flstat(13),flstat(14),flstat(15)
-7211  format (5x, 'The program was inputting data for synchronous machine no.', i8, 'a non-positive set of saturation data', /, &
-           5x, 'for one of the axis has been detected.   The read in data follow below this line ........',/, &
-           10x, 3e20.8, /, 5x, "in a case of an unsaturated s.m. this kill-code is caused by a nonspecified value of parameter 'agline' ".)
-      go to 6550
-6212  write (lunit6, 7212)  maxzno, epstop, flstat(14)
-7212  format (5x,  'a rigorous solution for one or more zinc-oxide arresters has failed.   up to',  i5, "   iterations (variable 'maxzno')",/, &
-           5x, 'were allowed to drive the current residuals below',   e12.4, "   amperes (tolerance 'epstop').",/, &
-           5x, 'but',   e13.4, '   amperes remain for a problem equation, so the Newton iteration has diverged. '    )
-7412  write (lunit6, 7512)  lstat(13), bus1, bus2
-7512  format (5x,  'by way of component identification,', &
-           ' there are',   i5, '   coupled elements which are being solved simultaneously, with',/, &
-           5x,  'the first of these (in order of data input) connecting node  ',  "'", a6, "'", '  to node  ',  "'", a6, "'", ' .   The first element is ')
-      write (lunit6, 7612)  lstat(15), lstat(14), lstat(16), t
-7612  format (5x,  'located in row',  i5,'   of the nonlinear element table,   while the last is in row number', i5,   ' .',/, &
-           5x,   'a rank of',  i5, '   exists for  (zthev) ,   and the simulation time is',  e13.5,  ' sec. ')
-      write (lunit6, 7712)
-7712  format (5x,  'Possible ameliorative actions include a decrease in time-step size "deltat", or an increase in the iteration',/, &
-           5x,  'limit "maxzno", or an increase in the divergence tolerance "epstop" . ')
-      go to 6550
-6213  write (lunit6, 7213)  lstat(15), lstat(16)
-7213  format (5x,  'While reading  zno  arrester data cards, a structural (numbering) defect was found.   This is for',/, &
-           5x,  'nonlinear element number',  i5, '   which corresponds to arrester number',  i5, ' . ')
-      write (lunit6, 8213)  lstat(17), lstat(16)
-8213  format (5x,  ' The read-in identification number', i8,   3x,  'does not agree with the arrester number equal to',  i8,  ' . ' )
-      go to 6550
-6214  write (lunit6, 7214)  bus1
-7214  format (5x,  'The EMTP is in the process of reading the data associated with the  tacs  device',/, &
-           5x, ' identified by the 6-character (output) name ', "'", a6, "'", ' . ' )
-      write (lunit6, 7314)
-7314  format (5x, 'This is a type-58 device defined by the following transfer function:',//, &
-           10x, 'gain / ( d0 +  d1 * s  )',//, &
-           5x, 'the denominator of this function is presently found to have a value of   0.0  ,  thus creating',/, &
-           5x, 'a singularity in the system.   In effect, this denominator is internally transformed ' )
-      write (lunit6, 7414)  deltat
-7414  format (5x, 'by the trapezoidal rule of implicit integration into the expression:',//, &
-           10x, '( d0  +  d1 * 2.0 / deltat  )',//, &
-           5x, 'with the value of deltat = ', e14.6 ,/, &
-           5x, 'correct this situation by changing either  d0,  d1,  or  deltat . ')
-      go to 6550
-6215  write (lunit6, 7214) bus1
-      write (lunit6, 7215)
-7215  format (5x,  'This  type-60  if-device  recognizes  3  and only  3  separate input signals.',//, &
-           5x,  'of the  5  fields available for defining the inputs',/, &
-           10x, 'each one of the first three must be non-blank  (columns 11 - 33 ),/, &
-           10x,  33hand the two remaining fields must be left blank  ( columns 35 - 49 ) ' )
-      go to 6550
-6216  write (lunit6, 7214) bus1
-      write (lunit6, 7216)
-7216  format (5x,  'This  type-61  device  selects as output  one of the possibly  8  connected inputs',/, &
-           5x, "depending on the value of another tacs variable called 'selector signal'. ")
-      write (lunit6, 7316)
-7316  format (5x,  'However, the user has neglected to identify the name of the tacs variable that is to serve this purpose.',/, &
-           5x, 'The user should specify this selector signal in the  6-character field of columns  75 - 80  . ' )
-      go to 6550
- 6217 write (lunit6, 7214)  bus1
-      write (lunit6, 7217)  lstat( 17)
-7217  format (5x, 'This  type-',    i2, '  min/max  device  will identify either maxima or minima, depending on',/, &
-           5x,'the numerical value read in columns 57 - 62  of the data card. ')
-      write (lunit6, 7317)  flstat( 14)
-7317  format (5x,  'this value must be typed as either',/, &
-           10x, '   +1.0  to indicate that a maximum is to be calculated,',/, &
-           10x, 'or -1.0   -     -      -    minimum    -     -     -   .',//, &
-           5x, 'The present value was read as ', f13.6 )
-      go to 6550
-6218  write (lunit6,7218)  bus1
-7218  format (5x,  'The program was reading the user-defined free-format fortran expression',/, &
-           5x, 'for the tacs variable identified by the  6-character name ', "'", a6, "'", ' ,',/, &
-           5x, 'when the following illegal situation was detected: ')
-      i1 = lstat( 17)
-      if ( i1 .gt. 6 )  go to 62180
-      go to ( 62181, 62182, 62183, 62184, 62185, 62186), i1
+  go to 6550
+6204 write (lunit6, 7204)  flstat(14), flstat(15)
+7204 format (5x, 'The last-inputted EMTP component was a type-96 hysteretic inductor.   Columns  27-32  and  33-38  of the',/, &
+          5x, "branch card are to be punched with  'i-steady'  and   'psi-steady' ,   respectively.   But values",  e14.4,  '   and',/, &
+          5x,  e14.4, '   were read for these two variables, which represents a point in the current-flux plane that lies outside',/, &
+          5x, 'the user-defined major hysteresis loop.   the EMTP does not allow such sloppiness (even though the ratio may be',/, &
+          5x,  'correct).   Define a point within the loop, and try again. ')
+  go to 6550
+6205 write (lunit6, 7205)  flstat(16), flstat(17)
+7205 format (5x, 'The last-inputted EMTP component was a type-96 hysteretic inductor.   Columns  39-44  of the branch card are',/, &
+          5x, 'to be punched with a residual (remnant) flux value.   But a value of',  e14.4,   '   was read for this, which',/, &
+          5x, 'exceeds (in absolute value) the flux of the user-inputted major hysteresis loop at zero current.   This latter flux',/, &
+          6 5x,  'value is',  e14.4,   ' .   The result is a current-flux point which lies outside the major hysteresis loop, which',/, &
+          5x, 'is impossible.   Punch a legal residual flux value in columns  39-44 ,   and try again. '   )
+  go to 6550
+6206 write (lunit6, 7206)
+7206 format (5x, "The user is trying to combine  'statistics'  or  'systematic'  results using the   'tabulate energization results'",/, &
+          5x, 'feature.   But not all of the partial results are compatible.   Files previously attached and read have the',/, &
+          5x, 'following characteristic parameters ... ')
+  write (lunit6, 7306)  ( lstat(i), i=11, 13), bus2
+7306 format (10x,  i5, ' = ntot    (number of electric network nodes)',/, &
+          10x, i5, ' = nstat   (number of output variables) ',/, &
+          10x, i5, ' = kswtch  (number of switches)',/, &
+          9x, a6, ' = bus(ntot)  (name of last network node). ')
+  write (lunit6, 7406)  lstat(17)
+7406 format (5x, 'On the other hand, the most recently attached file, number',  i5,  '   in order of user specification, has',/, &
+          5x, 'the following different characteristics ... ')
+  write (lunit6, 7306)  ntot, lstat(14), kswtch, bus1
+  write (lunit6, 7506)
+7506 format (5x, 'never try to combine results which belong to differently-structured problems, as in this data case. ')
+  go to 6550
+6207 write (lunit6, 7207)  tmax, tenerg
+7207 format (5x, 'This data case has  'statistics'  switches, but it is highly improbable that any would ever close.   The',/, &
+          5x, "termination time  'tmax'  of the simulation equals", e14.4, ' ,   while all random switch-closing times',/, &
+          5x, 'exceed',  e14.4, '   seconds with  3*sigma  probability.   Such a waste of computer resources will not be tolerated.',/, &
+          5x,  "Either increase  'tmax'  beyond this latter figure, or appropriately decrease the closing times. ")
+  go to 6550
+6208 continue
+  go  to  6550
+6209 write (lunit6, 7209)  epsiln, lstat(17)
+7209 format (5x, 'The jacobian matrix for a Newton solution of zinc-oxide arresters has been found to be singular.',/, &
+          5x, "the tolerance  'epsiln'  equals", e12.3,  ' ,   while the iteration count is', i5,   ' . ')
+  go to 7412
+6210 write(lunit6,7210)  lstat(14)
+7210 format (5x, 'The initialization of a saturated synchronous machine has failed to converge. the machine in question',/, &
+          5x, 'had the following number', 2x, i6 )
+  go to 6550
+6211 write(lunit6,7211) lstat(14),flstat(13),flstat(14),flstat(15)
+7211 format (5x, 'The program was inputting data for synchronous machine no.', i8, 'a non-positive set of saturation data', /, &
+          5x, 'for one of the axis has been detected.   The read in data follow below this line ........',/, &
+          10x, 3e20.8, /, 5x, "in a case of an unsaturated s.m. this kill-code is caused by a nonspecified value of parameter 'agline' ".)
+  go to 6550
+6212 write (lunit6, 7212)  maxzno, epstop, flstat(14)
+7212 format (5x,  'a rigorous solution for one or more zinc-oxide arresters has failed.   up to',  i5, "   iterations (variable 'maxzno')",/, &
+          5x, 'were allowed to drive the current residuals below',   e12.4, "   amperes (tolerance 'epstop').",/, &
+          5x, 'but',   e13.4, '   amperes remain for a problem equation, so the Newton iteration has diverged. '    )
+7412 write (lunit6, 7512)  lstat(13), bus1, bus2
+7512 format (5x,  'by way of component identification,', &
+          ' there are',   i5, '   coupled elements which are being solved simultaneously, with',/, &
+          5x,  'the first of these (in order of data input) connecting node  ',  "'", a6, "'", '  to node  ',  "'", a6, "'", ' .   The first element is ')
+  write (lunit6, 7612)  lstat(15), lstat(14), lstat(16), t
+7612 format (5x,  'located in row',  i5,'   of the nonlinear element table,   while the last is in row number', i5,   ' .',/, &
+          5x,   'a rank of',  i5, '   exists for  (zthev) ,   and the simulation time is',  e13.5,  ' sec. ')
+  write (lunit6, 7712)
+7712 format (5x,  'Possible ameliorative actions include a decrease in time-step size "deltat", or an increase in the iteration',/, &
+          5x,  'limit "maxzno", or an increase in the divergence tolerance "epstop" . ')
+  go to 6550
+6213 write (lunit6, 7213)  lstat(15), lstat(16)
+7213 format (5x,  'While reading  zno  arrester data cards, a structural (numbering) defect was found.   This is for',/, &
+          5x,  'nonlinear element number',  i5, '   which corresponds to arrester number',  i5, ' . ')
+  write (lunit6, 8213)  lstat(17), lstat(16)
+8213 format (5x,  ' The read-in identification number', i8,   3x,  'does not agree with the arrester number equal to',  i8,  ' . ' )
+  go to 6550
+6214 write (lunit6, 7214)  bus1
+7214 format (5x,  'The EMTP is in the process of reading the data associated with the  tacs  device',/, &
+          5x, ' identified by the 6-character (output) name ', "'", a6, "'", ' . ' )
+  write (lunit6, 7314)
+7314 format (5x, 'This is a type-58 device defined by the following transfer function:',//, &
+          10x, 'gain / ( d0 +  d1 * s  )',//, &
+          5x, 'the denominator of this function is presently found to have a value of   0.0  ,  thus creating',/, &
+          5x, 'a singularity in the system.   In effect, this denominator is internally transformed ' )
+  write (lunit6, 7414)  deltat
+7414 format (5x, 'by the trapezoidal rule of implicit integration into the expression:',//, &
+          10x, '( d0  +  d1 * 2.0 / deltat  )',//, &
+          5x, 'with the value of deltat = ', e14.6 ,/, &
+          5x, 'correct this situation by changing either  d0,  d1,  or  deltat . ')
+  go to 6550
+6215 write (lunit6, 7214) bus1
+  write (lunit6, 7215)
+7215 format (5x,  'This  type-60  if-device  recognizes  3  and only  3  separate input signals.',//, &
+          5x,  'of the  5  fields available for defining the inputs',/, &
+          10x, 'each one of the first three must be non-blank  (columns 11 - 33 ),/, &
+          10x,  33hand the two remaining fields must be left blank  ( columns 35 - 49 ) ' )
+  go to 6550
+6216 write (lunit6, 7214) bus1
+  write (lunit6, 7216)
+7216 format (5x,  'This  type-61  device  selects as output  one of the possibly  8  connected inputs',/, &
+          5x, "depending on the value of another tacs variable called 'selector signal'. ")
+  write (lunit6, 7316)
+7316 format (5x,  'However, the user has neglected to identify the name of the tacs variable that is to serve this purpose.',/, &
+          5x, 'The user should specify this selector signal in the  6-character field of columns  75 - 80  . ' )
+  go to 6550
+6217 write (lunit6, 7214)  bus1
+  write (lunit6, 7217)  lstat( 17)
+7217 format (5x, 'This  type-',    i2, '  min/max  device  will identify either maxima or minima, depending on',/, &
+          5x,'the numerical value read in columns 57 - 62  of the data card. ')
+  write (lunit6, 7317)  flstat( 14)
+7317 format (5x,  'this value must be typed as either',/, &
+          10x, '   +1.0  to indicate that a maximum is to be calculated,',/, &
+          10x, 'or -1.0   -     -      -    minimum    -     -     -   .',//, &
+          5x, 'The present value was read as ', f13.6 )
+  go to 6550
+6218 write (lunit6,7218)  bus1
+7218 format (5x,  'The program was reading the user-defined free-format fortran expression',/, &
+          5x, 'for the tacs variable identified by the  6-character name ', "'", a6, "'", ' ,',/, &
+          5x, 'when the following illegal situation was detected: ')
+  i1 = lstat( 17)
+  if ( i1 .gt. 6 )  go to 62180
+  go to ( 62181, 62182, 62183, 62184, 62185, 62186), i1
 62180 i1 = i1 - 6
-      go to ( 62187, 62188, 62189, 62190, 62191, 62192, 62193), i1
+  go to ( 62187, 62188, 62189, 62190, 62191, 62192, 62193), i1
 62181 write (lunit6, 72181)
 72181 format (10x, 'A parenthesis was opened and never closed. ')
-      go to 6550
+  go to 6550
 62182 write (lunit6, 72182)
 72182 format (10x, 'This expression contains no argument. ')
-      go to 6550
+  go to 6550
 62183 write (lunit6, 72183)
 72183 format (10x, 'Attempt to close a parenthesis that had not been opened. ')
-      go to 6550
+  go to 6550
 62184 write (lunit6, 72184)  bus2
 72184 format (10x, 'The operator ', "'", a6, "'", ' is the last element of this fortran expression.',/, &
            10x, "Isn't there an argument missing ... ")
-      go to 6550
+  go to 6550
 62185 write (lunit6, 72185)  bus2, bus3
 72185 format (10x, 'The two following arguments cannot be adjacent:',/, &
            10x, "'", a6, "'", '  ', a6, "'" )
-      go to 6550
+  go to 6550
 62186 write (lunit6, 72186)  bus2
 72186 format (10x, 'The first element of this expression was read as ', "'", a6, "'", ' . ', /, &
            10x, 'Can it really be ... ')
-      go to 6550
+  go to 6550
 62187 write (lunit6, 72187)  bus2
 72187 format (10x, "Missing  '('  after function ", "'", a6, "' ")
-      go to 6550
+  go to 6550
 62188 write (lunit6, 72188)
 72188 format (10x, 'Please break this monstruously large expression into smaller sections. ' )
-      go to 6550
+  go to 6550
 62189 write (lunit6, 72189)  bus2, bus3
 72189 format (10x, 'This expression is not homogeneous.',/, &
            10x, 'The two operators upon which this condition was detected are',/, &
            15x, "'", a6, "'", ' and ', "'", a6, "'". ' . ')
-      go to 6550
+  go to 6550
 62190 write (lunit6, 72190) lstat( 16)
 72190 format (10x, 'The numerical argument ending in column  ',  i2,/, &
            10x, 'is more than  20  characters long. ')
-      go to 6550
+  go to 6550
 62191 write (lunit6, 72191)  lstat( 16)
 72191 format (10x, 'The alphanumeric argument ending in column  ', i2, /, &
            10x, 'is more than  6 characters long. ')
-      go to 6550
+  go to 6550
 62192 write (lunit6, 72192)  lstat( 16)
 72192 format (10x, 'Unrecognizable logical operator near column  ', i2 )
-      go to 6550
+  go to 6550
 62193 write( lunit6, 72193)  lstat( 16)
 72193 format( 10x, 'The numerical argument ending in column ',  i2,/, &
            10x, 'contains more than one decimal point. ')
-      go to 6550
+  go to 6550
 6219  write (lunit6, 7213)  lstat(16), lstat(15)
-      write (lunit6, 7219)  flstat(15)
-7219  format (5x,  'A non-positive reference voltage equal to',  e13.4, '   was specified by the user. ')
-      go to 6550
-6220  write (lunit6, 7220) last, lstat(15), ibr
-7220  format (5x, ' Overflow of steady-state table space.   List 23 tables are sized at',  i6, '   words,   which is insufficient for',/, &
+  write (lunit6, 7219)  flstat(15)
+7219 format (5x,  'A non-positive reference voltage equal to',  e13.4, '   was specified by the user. ')
+  go to 6550
+6220 write (lunit6, 7220) last, lstat(15), ibr
+7220 format (5x, ' Overflow of steady-state table space.   List 23 tables are sized at',  i6, '   words,   which is insufficient for',/, &
            5x, 'even just the formation of  (y),  to say nothing of later triangularization.   Overflow has occurred after only',  i5,/, &
            5x, 'branches have been processed, out of a total of',  i5,   ' . '  )
-      go to 6550
-6221  write (lunit6, 7221)
-7221  format (5x, ' The number of phases in this line is larger than the temporary limit of 10 for K. C. Lee modeling. ')
-      go to 6550
- 6222 write (lunit6, 7222)  lstat(14), bus1, bus2, lstat(15)
- 7222 format ( 5x,  28hthe steady-state solution is,
-     1              34h for two or more frequencies which,
-     2              33h are not separated.   trouble was,
-     3              25h spotted at branch number,  i5   ,/, &
-     4         5x,  21hwhich connects bus  ",  a6,
-     5              14h"  with bus  ",  a6,  9h" .   one,
-     6              29h source of conflict is in row,  i5 )
-      go to 6550
- 6223 write (lunit6, 7223)  lstat(14), bus1, bus2, lstat(15),
-     1                      lstat(16)
- 7223 format ( 5x,  28hthe steady-state solution is,
-     1              34h for two or more frequencies which,
-     2              33h are not separated.   trouble was,
-     3              25h spotted at switch number,  i5   ,/, &
-     4         5x,  21hwhich connects bus  ",  a6,
-     5              14h"  with bus  ",  a6,  9h" .   the,
-     6              33h left is excited by source number,  i5
-     7    ,/, &  5x,  29hwhile the right is excited by,
-     8              14h source number,  i6,  2h .  )
-      go to 6550
- 6224 write (lunit6, 7224)
- 7224 format ( 5x,  34hthe last-read switch card has both,
-     1              33h names identical.   the switch is,
-     2              34h closed on itself, and has no use.   )
-      go to 6550
- 6225 write(lunit6, 7225)  lstat(14), lstat(15)
- 7225 format( 5x, 48hthe user has overflowed storage within the cable,
-     1 57h connstants supporting program.   for the current program   ,/
-     2 5x,  48hversion, one is limited to cases having not over, i4 ,
-     3 15h conductors or , i4,   32h cables( the storage for a three  ,/
-     4 5x, 58hphase transmission line is equal to 5 cables if it has 2 ,
-     3,54h ground wires.  storage for the arrays in question has   ,/, &
-     4 5x, 115hbeen optimally (and dynamically) allocated so as to use a
-     5s much of the EMTP core storage as is available.   it thus   ,/, &
-     6 5x, 58his not the fault of the cable-constants supporting program
-     7,58h itself, but rather of the overall EMTP dimensioning, that  ,/
-     8 5x, 106hthis data case must be rejected.   go procure or make ano
-     9ther program version which has more total tabular    )
-      write (lunit6, 7182)
- 7182 format ( 5x, 49hstorage space, and try the job over again.   reme,
-     1 58hmber, the cable constants calculation requires the storage ,/, &
-     2 5x, 103hof full matrices, so memory requirements go up approximat
-     3ely as the square of the number of conductors.   )
-      go to 6550
- 6226 continue
- 6227 continue
- 6228 continue
- 6229 continue
- 6230 continue
- 6231 continue
- 6232 continue
- 6233 continue
- 6234 continue
- 6235 continue
- 6236 continue
- 6237 continue
- 6238 continue
- 6239 continue
- 6240 continue
- 6241 continue
- 6540 write(lunit6,7540) kill, lastov
- 7540 format( / 19hinvalid  kill  code,  i5,  5x,
-     1           8hlastov =,  i4  ,/, &  1x  )
- 6550 if ( ipntv(1)  .ne.  -8888 )   go to 1429
-      kill = ipntv(3) + 1
-      if ( kill  .le.  ipntv(2) )   go to 1417
-      kill = 0
-      lastov = nchain
-      nchain = 1
-      if ( iprsup  .ge.  1 )
-     1 write ( lunit6, 4568 )   kill, ipntv(2)
- 4568 format ( 30h exit module  "subr55".  kill,,
-     1         11h ipntv(2) =,  2i6  )
-      go to 9000
- 1417 write (lunit6, 1424)  kill
- 1424 format ( /,  28h message of kill-code number,  i4,  1h.  )
-      lastov = nchain
-      nchain = 51
-      if ( iprsup  .ge.  1 )
-     1 write ( lunit6, 4568)  kill
-      go to 9000
- 1429 if ( jflsos  .eq.  0 )   go to 1430
-      if ( nenerg  .eq.  0 )   go to 1430
-c     write bounding records in the case of statistics salvage (sos).
-      d7 = -9999.
-      n15 = kswtch + 1
-      write (lunit3)  ( d7, j=1, n15 )
-      n15 = lstat(32)
-      write (lunit9)  ( d7, j=1, n15 )
-      call statsv
- 1430 if ( m4plot .ne. 1 )  go to 6645
-      call spying
- 6645 if( kill .gt. 1 )  go to 4092
-      write (lunit6, 3391)  lstat
- 3391 format ( /, 103h for   kill = 1   error stops, program maintenance
-     1 may sometimes wish to inspect the contents of error-        ,/, &
-     2  64h interface vectors  'lstat'  and  'flstat' .   these follow .
-     3...   ,//,  16h vector  'lstat'   ,/, &  ( 1x, 10i13 ) )
-      write (lunit6, 3392)  flstat
- 3392 format ( /,   17h vector  'flstat'   ,/, &  ( 1x, 10e13.4 ) )
-      n1 = lstat(16)
-      write(lunit6, 4000 )  n1
- 4000 format( /,  99h of course maybe the user would like some suggestio
-     1ns as to why the table in question (list number , i2, 1h),   /,
-     2 115h has overflowed.   if so, read on, good buddy.   the EMTP has
-     3 a long-established policy of meritorious and laudable   ,/, &
-     4   90h cooperation in the form of crystal-clear diagnostic message
-     5s, such as the following .....    )
-      if ( n1  .eq.  99 )   go to 4499
-      go to (4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009,
-     1 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019,
-     2 4020, 4021, 4022, 4023, 4024, 4025, 4026, 4027, 4028, 4029),  n1
- 4001 write(lunit6, 4101)
- 4101 format( 5x, 106hnetwork nodes are of course defined by the user's
+  go to 6550
+6221 write (lunit6, 7221)
+7221 format (5x, ' The number of phases in this line is larger than the temporary limit of 10 for K. C. Lee modeling. ')
+  go to 6550
+6222 write (lunit6, 7222)  lstat(14), bus1, bus2, lstat(15)
+7222 format (5x, 'The steady-state solution is for two or more frequencies which are not separated.   Trouble was spotted at branch number',  i5,/, &
+          5x, 'which connects bus  "',  a6, '"  with bus  "',  a6,  '" .   One source of conflict is in row',  i5 )
+  go to 6550
+6223 write (lunit6, 7223)  lstat(14), bus1, bus2, lstat(15), lstat(16)
+7223 format (5x, 'The steady-state solution is for two or more frequencies which are not separated.   Trouble was spotted at switch number',  i5   ,/, &
+          5x,  'which connects bus  "',  a6, '"  with bus  "',  a6,  '" .   The left is excited by source number',  i5,/, &
+          5x, 'while the right is excited by source number',  i6,  ' . ' )
+  go to 6550
+6224 write (lunit6, 7224)
+7224 format ( 5x,  'The last-read switch card has both names identical.   The switch is closed on itself, and has no use. ')
+  go to 6550
+6225 write(lunit6, 7225)  lstat(14), lstat(15)
+7225 format( 5x, 'The user has overflowed storage within the cable connstants supporting program.   For the current program',/, &
+          5x,  'version, one is limited to cases having not over', i4 , ' conductors or ', i4, ' cables( the storage for a three',/, &
+          5x, 'phase transmission line is equal to 5 cables if it has 2 ground wires.  Storage for the arrays in question has',/, &
+          5x, 'been optimally (and dynamically) allocated so as to use as much of the EMTP core storage as is available.   It thus',/, &
+          5x, 'is not the fault of the cable-constants supporting program itself, but rather of the overall EMTP dimensioning, that',/, &
+          5x, 'this data case must be rejected.   Go procure or make another program version which has more total tabular '   )
+  write (lunit6, 7182)
+7182 format ( 5x, 'storage space, and try the job over again.   Remember, the cable constants calculation requires the storage',/, &
+          5x, 'of full matrices, so memory requirements go up approximately as the square of the number of conductors. ')
+  go to 6550
+6226 continue
+6227 continue
+6228 continue
+6229 continue
+6230 continue
+6231 continue
+6232 continue
+6233 continue
+6234 continue
+6235 continue
+6236 continue
+6237 continue
+6238 continue
+6239 continue
+6240 continue
+6241 continue
+6540 write(lunit6,7540) kill, lastov
+7540 format(/, 'Invalid  kill  code', i5,  5x, 'lastov =', i4  ,/, 1x  )
+6550 if ( ipntv(1)  .ne.  -8888 )   go to 1429
+  kill = ipntv(3) + 1
+  if ( kill  .le.  ipntv(2) )   go to 1417
+  kill = 0
+  lastov = nchain
+  nchain = 1
+  if ( iprsup  .ge.  1 )write ( lunit6, 4568 )   kill, ipntv(2)
+4568 format (' Exit module  "subr55".  Kill, ipntv(2) =',  2i6  )
+  go to 9000
+1417 write (lunit6, 1424)  kill
+1424 format ( /,  28h message of kill-code number,  i4,  1h.  )
+  lastov = nchain
+  nchain = 51
+  if ( iprsup  .ge.  1 ) write ( lunit6, 4568)  kill
+  go to 9000
+1429 if ( jflsos  .eq.  0 )   go to 1430
+  if ( nenerg  .eq.  0 )   go to 1430
+  !     write bounding records in the case of statistics salvage (sos).
+  d7 = -9999.
+  n15 = kswtch + 1
+  write (lunit3)  ( d7, j=1, n15 )
+  n15 = lstat(32)
+  write (lunit9)  ( d7, j=1, n15 )
+  call statsv
+1430 if ( m4plot .ne. 1 )  go to 6645
+  call spying
+6645 if( kill .gt. 1 )  go to 4092
+  write (lunit6, 3391)  lstat
+3391 format (/, ' For   kill = 1   error stops, program maintenance may sometimes wish to inspect the contents of error-',/, &
+          " interface vectors  'lstat'  and  'flstat' .   These follow ....",//, "vector  'lstat'",/, ( 1x, 10i13 ) )
+  write (lunit6, 3392)  flstat
+3392 format ( /,   17h vector  'flstat'   ,/, &  ( 1x, 10e13.4 ) )
+  n1 = lstat(16)
+  write(lunit6, 4000 )  n1
+4000 format(/, ' of course maybe the user would like some suggestions as to why the table in question (list number , i2, 1h)', /, &
+          ' has overflowed.   If so, read on, good buddy.   the EMTP has a long-established policy of meritorious and laudable',/, &
+          ' cooperation in the form of crystal-clear diagnostic messages, such as the following ..... ')
+  if ( n1  .eq.  99 )   go to 4499
+  go to (4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019, &
+       4020, 4021, 4022, 4023, 4024, 4025, 4026, 4027, 4028, 4029),  n1
+4001 write(lunit6, 4101)
+4101 format( 5x, 106hnetwork nodes are of course defined by the user's
      1branch and switch cards, by the names which identify the  ,/, &
      2 5x, 111htwo ends of the element (fields  'bus1'  and  'bus2'  of
      3the data card, columns 3-14).   in addition, there are  ,/, &
