@@ -419,66 +419,43 @@ subroutine over54
           5x, 'name  ', "'", a6,  "'", '  which was read from columns 3-8 is not a legal tacs-variable name for this purpose, since it ')
     write (lunit6, 7290)
 7290 format (5x, "was not also punched on a   'tacs outputs'   card which began the input of tacs data.   Before tacs variables",/, &
-2 5     x, 113hcan be used within the electric network, they must be dec
-3       lared on a   'tacs outputs'   or a   'tacs EMTP sources'     ,/, &
-4 5     x,   5hcard.   )
-        write( lunit6, 7390 )  lstat( 15 )
-7390    format( 5x, 41hor... the number punched in columns 15-17,
-1 27    h has an incorrect value of,, i5 )
-        go to 6220
-6191    write (lunit6, 7191)
-7191    format (5x, 110hthe EMTP finds the user's data case to be obnoxiou
-1       sly degenerate, and refuses to continue with the simulation.   ,/, &
-2 5     x, 110hthe electric network has no sources and no dynamic synchr
-3       onous machines, so only a natural (unforced) solution        ,/, &
-4 5     x, 110his called for.   but the user has failed to input any non
-5       zero initial conditions.   hence the solution will be        ,/, &
-6 5     x,  86hidentically zero for all time.   there is no need to cont
-7       inue with the solution, then.      )
-        go to 6220
-6192    write (lunit6, 7192)
-7192    format (5x, 107hduring the list-building operation which is requir
-1       ed for connectivity output, the temporary working vectors     ,/, &
-2 5     x, 110hof list 99 which are used have overflowed.   the proper s
-3       olution is to redimension the EMTP, though removal of        ,/, &
-4 5     x, 110hthe '1'-punch in field  'idoubl'  of the integer miscella
-5       neous data card will bypass the present complication.        ,/, &
-6 5     x, 109hbut unless the user increases dimensions, he will probabl
-7       y just be stopped shortly hereafter, in renumbering.         )
-        write (lunit6, 7292)
-7292    format (5x, 109hboth computations use the same arrays, and have re
-1       lated storage requirements.   lists number 5 % 8 contribute    ,/, &
-2 5     x,  36htotally to dependent list number 99.       )
-        go to 6220
-6193    write (lunit6, 7193)  fminfs
-7193    format (5x, 108hthe last-read data card bears the key word   'freq
-1       uency scan'   in columns 1-14.   this is a request for the     ,/, &
-2 5     x, 109hautomatic looping over steady-state phasor solutions only
-3       , as the source frequency is methodically increased.         ,/, &
-4 5     x,  24ha beginning frequency of,    e15.4,      64h   was read f
-5       rom the  'fmin'  field of columns 25-32 using  e8.0          ,/, &
-6 5     x, 115hformat, and must be positive (to be legal data).   the fr
-7       equency increment  'delf'  of columns 33-40 was read using    )
-        write (lunit6, 7293)  delffs, fmaxfs, lstat(14)
-7293    format (5x,  15he8.0  format as,    e15.4,     71h .    this must
-1       be positive, unless data field  'log'  of columns 49-56      ,/, &
-2 5     x, 103h(see below) is punched positive.   the maximum (or end) f
-3       requency  'fmax'  of columns 41-48 was read as,  e15.4       ,/, &
-4 5     x, 109h ,   which must exceed  'fmin' .   finally, integer field
-5       'log'  of columns 49-56 was punched with the value         ,/, &
-6 5     x, i5, 107h ,   which must not be negative.   the user's data ca
-7       rd is illegal in that it violates one or more of these       ,/, &
-8 5     x,  22hjust-delineated rules.   )
-        go to 6220
-6194    write (lunit6, 7194)  kconst, lstat(13), lstat(14)
-7194    format (5x, 103hthe data case now being read in includes a request
-1       for the  'frequency scan'  feature.   but the source        ,/, &
-2 5     x, 108hdata is inconsistent with this intended usage.   to be le
-3       gal, there must be at least one type-14 EMTP source          ,/, &
-4 5     x, 112hcomponent which is present during the steady-state phasor
-5       network solutions (as requested by punching data field      ,/, &
-6 5     x, 57h 'tstart'  of columns 61-70 negative).   but the user has,
-7       i5,  35h   EMTP source components, of which,  i5,  6h   are   ,/, &
+          5x, "can be used within the electric network, they must be declared on a   'tacs outputs'   or a   'tacs EMTP sources'",/, &
+          5x,   'card. ')
+    write( lunit6, 7390 )  lstat( 15 )
+7390 format( 5x, 'or... The number punched in columns 15-17 has an incorrect value of,', i5 )
+    go to 6220
+6191 write (lunit6, 7191)
+7191 format (5x, "The EMTP finds the user's data case to be obnoxiously degenerate, and refuses to continue with the simulation.",/, &
+          5x, 'The electric network has no sources and no dynamic synchronous machines, so only a natural (unforced) solution',/, &
+          5x, 'is called for.   But the user has failed to input any non zero initial conditions.   Hence the solution will be',/, &
+          5x,  'identically zero for all time.   There is no need to continue with the solution, then. ')
+    go to 6220
+6192 write (lunit6, 7192)
+7192 format (5x, 'During the list-building operation which is required for connectivity output, the temporary working vectors',/, &
+          5x, 'of list 99 which are used have overflowed.   The proper solution is to redimension the EMTP, though removal of',/, &
+          5x, "the '1'-punch in field  'idoubl'  of the integer miscellaneous data card will bypass the present complication.",/, &
+          5x, 'but unless the user increases dimensions, he will probably just be stopped shortly hereafter, in renumbering. '        )
+    write (lunit6, 7292)
+7292 format (5x, 'both computations use the same arrays, and have related storage requirements.   Lists number 5 % 8 contribute',/, &
+          5x,  'totally to dependent list number 99. ')
+    go to 6220
+6193 write (lunit6, 7193)  fminfs
+7193 format (5x, "The last-read data card bears the key word   'frequency scan'   in columns 1-14.   This is a request for the",/, &
+          5x, 'automatic looping over steady-state phasor solutions only, as the source frequency is methodically increased.',/, &
+          5x, 'a beginning frequency of',    e15.4,      "   was read from the  'fmin'  field of columns 25-32 using  e8.0",/, &
+          5x, "format, and must be positive (to be legal data).   The frequency increment  'delf'  of columns 33-40 was read using ")
+    write (lunit6, 7293)  delffs, fmaxfs, lstat(14)
+7293 format (5x,  'e8.0  format as',    e15.4,     " .    This must be positive, unless data field  'log'  of columns 49-56",/, &
+          5x, "(see below) is punched positive.   The maximum (or end) frequency  'fmax'  of columns 41-48 was read as",  e15.4,/, &
+          5x, " ,   which must exceed  'fmin' .   Finally, integer field 'log'  of columns 49-56 was punched with the value",/, &
+          5x, i5, " ,   which must not be negative.   The user's data card is illegal in that it violates one or more of these ",/, &
+          5x,  'just-delineated rules. '  )
+    go to 6220
+6194 write (lunit6, 7194)  kconst, lstat(13), lstat(14)
+7194 format (5x, "The data case now being read in includes a request for the  'frequency scan'  feature.   but the source",/, &
+          5x, 'data is inconsistent with this intended usage.   To be legal, there must be at least one type-14 EMTP source',/, &
+          5x, 'component which is present during the steady-state phasor network solutions (as requested by punching data field',/, &
+          5x, " 'tstart'  of columns 61-70 negative).   But the user has", i5,  '   EMTP source components, of which',  i5,  '   are',/, &
 8 5     x,  30hof type 14, of which (in turn),  i5,
 9  28   h   have  'tstart'  negative.          )
         go to 6220
