@@ -216,260 +216,167 @@ subroutine over54
 7165 format(5x, 'During calculation of eigenvalues and eigenvectors by the power method, ',/, &
           5x, 'the iteration count has exceeded "nieig".  This limit and the corresponding tolerance "epseig"',/, &
           5x, 'may be changed by a "tolerances" card. ')
-    go to 6220
+  go to 6220
 6166 write (lunit6, 7166)  csepar, chcont
-7166 format (5x, 108hthe last-read data card is assumed by the EMTP to
-1   have free-format data on it, due to the presence of one or    ,/, &
-2 5x,  28hmore separator characters  ',  a1,
-3  38 h'  or  continuation-card characters  ',  a1,
-4  42 h' .   well, EMTP control was within module             ,/, &
-5 5x, 114h'frefld'  of utpf overlay  (main00, -1)  when the data ra
-6   n out.   that is, control was looking for more data items   )
-    write (lunit6, 7266)
-7266 format (5x, 110hthan have been punched on the card.   the user sho
-1   uld first verify that the data card in question was intended  ,/, &
-2 5x, 106hto be free-field data format.   then, he should check all
-3   data items, counting separator characters (which           ,/, &
-4 5x,  33hdefine the number of data items).                  )
-    go to 6220
+7166 format (5x, 'The last-read data card is assumed by the EMTP to have free-format data on it, due to the presence of one or',/, &
+          5x, 'more separator characters  ',  "'", a1, "'", '  or  continuation-card characters  ',  "'", a1, "'",  ' .   Well, EMTP control was within module',/, &
+          5x, "'frefld'  of utpf overlay  (main00, -1)  when the data ran out.   That is, control was looking for more data items ")
+  write (lunit6, 7266)
+7266 format (5x, 'than have been punched on the card.   The user should first verify that the data card in question was intended',/, &
+          5x, 'to be free-field data format.   Then, he should check all data items, counting separator characters (which',/, &
+          5x, 'define the number of data items). ')
+  go to 6220
 6167 n1 = iabs( lstat(14) )
-    write (lunit6, 7167)  branch, bus4, n1
-7167 format (5x,  82hthe last-read data card has the  'bus3'  field of
-1   columns  15-20  punched with   ',  a6,  17h' ,   so that the  ,/, &
-2 5x, 112h'bus4'  field of columns  21-26  is to be the name of the
-3   branch.   but the 6-character text used for this name,  ,/, & 5x,
-4 1 h',  a6,  99h' ,   is not new and unique as required by EMTP law
-5   .   90 days in jail or a $100 fine.   row number,  i6,
-6   9 h   of the   )
-    if ( lstat(14)  .gt.  0 )
-1   write (lunit6, 7267)
-7267 format (5x,  77hlinear branch table contains a linear branch which
-1   has already been so named.    )
-    if ( lstat(14)  .lt.  0 )
-1   write (lunit6, 7367)
-7367 format (5x, 103hnonlinear branch table contains a nonlinear or pse
-1   udo-nonlinear branch which has already been so named.    )
-    go to 6220
+  write (lunit6, 7167)  branch, bus4, n1
+7167 format (5x,  "The last-read data card has the  'bus3'  field of columns  15-20  punched with   ",  "'", a6,  "'", ' ,   so that the',/, &
+          5x, "'bus4'  field of columns  21-26  is to be the name of the branch.   But the 6-character text used for this name,",/, &
+          5x, "'",  a6,  "'", ' ,   is not new and unique as required by EMTP law.   90 days in jail or a $100 fine.   Row number',  i6, '   of the ')
+  if ( lstat(14)  .gt.  0 ) write (lunit6, 7267)
+7267 format (5x,  'Linear branch table contains a linear branch which has already been so named. ')
+  if ( lstat(14)  .lt.  0 ) write (lunit6, 7367)
+7367 format (5x, 'Nonlinear branch table contains a nonlinear or pseudo-nonlinear branch which has already been so named. ')
+  go to 6220
 6168 write (lunit6, 7168)
-7168 format ( 8h unused.  )
+7168 format (' Unused.')
 6169 write (lunit6, 7169)
-7169 format ( 8h unused.  )
+7169 format (' Unused.')
 6170 write (lunit6, 7170)  lstat(14)
-7170 format (5x, 108hthe last-read data card is a  'line constants'  fr
-1   equency card which belongs to the interior data of another     ,/, &
-2 5x, 114hEMTP supporting program (e.g.,  'semlyen setup' ).   but
-3   the EMTP limit on such individually-specified frequencies     ,/, &
-4 5x,   2his,  i5,  98h ,   which has been overflowed by the last-r
-5   ead data card.   dimensioning of the crucial arrays in       ,/, &
-6 5x, 111hquestion is not under user control.   a complete EMTP rec
-7   ompilation would be required in order to increase this    ,/, &
-8 5x,  48hlimit, should this prove to be really necessary.     )
+7170 format (5x, "The last-read data card is a  'line constants'  frequency card which belongs to the interior data of another",/, &
+          5x, "EMTP supporting program (e.g.,  'Semlyen setup' ).   But the EMTP limit on such individually-specified frequencies",/, &
+          5x, 'is',  i5,  ' ,   which has been overflowed by the last-read data card.   Dimensioning of the crucial arrays in',/, &
+          5x, 'question is not under user control.   A complete EMTP recompilation would be required in order to increase this',/, &
+          5x,  'limit, should this prove to be really necessary. ')
     go to 6220
 6171 write (lunit6, 7171)  xopt, copt
-7171 format (5x, 106hthe branch card now being processed represents a r
-1   equest for semlyen recursive convolution modeling.   but     ,/, &
-2 5x,  88hthe user specified floating-point miscellaneous data para
-3   meters  'xopt'  and  'copt'  as,    e13.4,  6h   and         ,/, &
-4 5x,    e13.4,  88h ,   respectively.   this is illegal.   both pa
-5   rameters must be equal, and also nonzero.     )
+7171 format (5x, 'The branch card now being processed represents a request for semlyen recursive convolution modeling.   But',/, &
+          5x, "the user specified floating-point miscellaneous data parameters  'xopt'  and  'copt'  as",    e13.4,  '   and',/, &
+          5x,    e13.4,  ' ,   respectively.   This is illegal.   Both parameters must be equal, and also nonzero. ')
     go to 6220
 6172 write (lunit6, 7172)
-7172 format (5x, 110hthe EMTP has been reading data within the  'cable
-1   constants'  supporting program, with the last-read data card   ,/, &
-2 5x, 117hbeing the miscellaneous data card of a new case.   but th
-3   e numbers punched hereupon are inconsistent.   specifically,    )
+7172 format (5x, "The EMTP has been reading data within the  'cable constants'  supporting program, with the last-read data card",/, &
+2 5x, 117hbeing the miscellaneous data card of a new case.   but the numbers punched hereupon are inconsistent.   specifically,    )
     write (lunit6, 7272)  lstat(14)
-7272 format (5x,  10ha value of, i5,  83h   was read from the field  'i
-1   typec'  of columns  1  through  5  of the card, using        ,/, &
-2 5x, 112h i5  format.   but only the values  1  (for overhead line
-3   constants) and  2  (for cable constants) are legal, if      ,/, &
-4 5x, 115hthe card in question is nonblank (recall that a blank car
-5   d marks the end of such cases within  'cable constants' ).     )
+7272 format (5x,  10ha value of, i5,  83h   was read from the field  'itypec'  of columns  1  through  5  of the card, using        ,/, &
+2 5x, 112h i5  format.   but only the values  1  (for overhead line constants) and  2  (for cable constants) are legal, if      ,/, &
+4 5x, 115hthe card in question is nonblank (recall that a blank card marks the end of such cases within  'cable constants' ).     )
     go to 6220
 6173 write (lunit6, 7172)
     write (lunit6, 7173)
-7173 format (5x, 108hfield  'isyst'  of columns  6  through  10  has be
-1   en punched with the integer value  -1 ,   which means that    ,/, &
-2 5x, 108han underground cable system is to be under consideration.
-3   but field  'iearth'  of columns  16  through  20          ,/, &
-4 5x, 110hhas been punched with the integer value  99 ,   which mea
-5   ns that the stratified-earth option is desired.   but        ,/, &
-6 5x, 107hthis combination of features is illegal (the EMTP is inca
-7   pable of finding the parameters for an underground           ,/, &
+7173 format (5x, 108hfield  'isyst'  of columns  6  through  10  has been punched with the integer value  -1 ,   which means that    ,/, &
+          2 5x, 108han underground cable system is to be under consideration.   but field  'iearth'  of columns  16  through  20          ,/, &
+4 5x, 110hhas been punched with the integer value  99 ,   which means that the stratified-earth option is desired.   but        ,/, &
+6 5x, 107hthis combination of features is illegal (the EMTP is incapable of finding the parameters for an underground           ,/, &
 8 5x,  53hcable when the earth is not homogeneous and uniform).   )
     go to 6220
 6174 write (lunit6, 7174)
-7174 format (5x, 108hall conductor cards of an overhead-line case withi
-1   n the  'cable constants'  supporting program have now been   ,/, &
-2 5x, 106hread.   but one or more of these cards has been punched w
-3   ith illegal or inconsistent data.   specifically,            )
+7174 format (5x, 108hall conductor cards of an overhead-line case within the  'cable constants'  supporting program have now been   ,/, &
+2 5x, 106hread.   but one or more of these cards has been punched with illegal or inconsistent data.   specifically,            )
     n1 = 3 * lstat(14) - 1
     write (lunit6, 7274)  n1, flstat(15), flstat(16)
-7274 format (5x,  23hnon-comment card number, i4,  74h  after the misce
-1   llaneous data card bears geometrical conductor data which     ,/, &
-2 5x,  78his physically impossible.   the inner radius of the condu
-3   ctor has been read as,    e16.4,        16h   meters, while   ,/, &
-4 5x,  19hthe outer radius is,    e16.4,     67h .    this violates
-5   the EMTP restriction that the tubular conductor             ,/, &
-6 5x,  72hthickness must be positive.   zero or negative thickness
-7   is not allowed.        )
+7274 format (5x,  23hnon-comment card number, i4,  74h  after the miscellaneous data card bears geometrical conductor data which     ,/, &
+2 5x,  78his physically impossible.   the inner radius of the conductor has been read as,    e16.4,        16h   meters, while   ,/, &
+4 5x,  19hthe outer radius is,    e16.4,     67h .    this violates the EMTP restriction that the tubular conductor             ,/, &
+6 5x,  72hthickness must be positive.   zero or negative thickness is not allowed.        )
     go to 6220
 6175 write (lunit6, 7175)  lstat(15), flstat(14)
-7175 format (5x, 106hsubroutine  'eigen'  is used to calculate eigenval
-1   ues of the   (z)(y)   matrix product, within the  'cable     ,/, &
-2 5x,  67hconstants'  supporting program.   but within the iteratio
-3   n limit of,  i5,   32h ,   the iterative algorithm has       ,/, &
-4 5x,  46hfailed to satisfy the convergence tolerance of,
-5   e14.2,  39h .    the resulting eigenvalues must be          ,/, &
-6 5x,  83hviewed with suspicion (at best), so the solution is being
-7   terminated at this point.    )
+7175 format (5x, 106hsubroutine  'eigen'  is used to calculate eigenvalues of the   (z)(y)   matrix product, within the  'cable     ,/, &
+          2 5x,  67hconstants'  supporting program.   but within the iteration limit of,  i5,   32h ,   the iterative algorithm has       ,/, &
+          4 5x,  46hfailed to satisfy the convergence tolerance of, e14.2,  39h .    the resulting eigenvalues must be          ,/, &
+          6 5x,  83hviewed with suspicion (at best), so the solution is being terminated at this point.    )
     go to 6220
 6176 write(lunit6,7176)
-7176 format(5x,  49herror is in synchronous machine electrical data. ,
-1   /,5x,      46hdata has one or more of the following errors  ,
-1   /,10x,     28h1. xl not smallest reactance ,
-1   /,10x,     28h2. xdpp not smaller than xdp ,
-1   /,10x,     27h3. xdp  not smaller than xd  ,
-1   /,10x,     28h4. xqpp not smaller than xqp ,
-1   /,10x,     27h5. xqp  not smaller than xq  ,
-1   /,10x,     44h6. one or more reactances or ra is negative ,/)
+7176 format(5x,  49herror is in synchronous machine electrical data. ,/, 5x,      46hdata has one or more of the following errors  ,/, &
+          10x,     28h1. xl not smallest reactance ,/,10x,     28h2. xdpp not smaller than xdp ,/, &
+          10x,     27h3. xdp  not smaller than xd  ,/,10x,     28h4. xqpp not smaller than xqp ,/, &
+          10x,     27h5. xqp  not smaller than xq  ,/,10x,     44h6. one or more reactances or ra is negative ,/)
     go to 6220
 6177 write (lunit6, 7177)  numsm
-7177 format (5x, 102hthe EMTP is presently in the process of reading em
-1   tp source cards, with the last-read card producing a         ,/, &
-2 5x, 104hviolation of the ordering restriction which is applicable
-3   when dynamic synchronous machine (s.m.) source              ,/, &
-4 5x, 111hcomponents are present.   recall that all non-s.m. source
-5   cards must precede any s.m. source cards, in order of       ,/, &
-6 5x,  37hdata input.   thusfar there have been, i4,   60h   s.m. s
-7   ource components inputted (with an sce dual machine          )
+7177 format (5x, 102hthe EMTP is presently in the process of reading EMTP source cards, with the last-read card producing a         ,/, &
+2 5x, 104hviolation of the ordering restriction which is applicable when dynamic synchronous machine (s.m.) source              ,/, &
+4 5x, 111hcomponents are present.   recall that all non-s.m. source cards must precede any s.m. source cards, in order of       ,/, &
+6 5x,  37hdata input.   thusfar there have been, i4,   60h   s.m. source components inputted (with an sce dual machine          )
     write (lunit6, 7277)  lstat(14)
-7277 format (5x, 109hcounting as just one source component), before the
-1   last-read data card.   but the last data card has the field    ,/, &
-2 5x,  74hof source type-code  'itype'  (columns 1-2) punched with
-3   the integer value, i5,  25h ,   which is not a legal         ,/, &
-4 5x, 110hcharacterization for a s.m. source component.   the last-
-5   read data card is thus either erroneous by itself, or        ,/, &
-6 5x,  63hout of order (it must precede the first s.m. source compo
-7   nent).      )
+7277 format (5x, 109hcounting as just one source component), before the last-read data card.   but the last data card has the field    ,/, &
+          2 5x,  74hof source type-code  'itype'  (columns 1-2) punched with the integer value, i5,  25h ,   which is not a legal         ,/, &
+          4 5x, 110hcharacterization for a s.m. source component.   the last-read data card is thus either erroneous by itself, or        ,/, &
+6 5x,  63hout of order (it must precede the first s.m. source component).      )
     go to 6220
 6178 write (lunit6, 7178)  lstat(14)
-7178 format (5x, 109hthe EMTP is presently inputting source components,
-1   with the last-read data card serving to define the network    ,/, &
-2 5x, 109hconnection for the third and final phase of a 3-phase dyn
-3   amic synchronous machine (s.m.) component.   but the         ,/, &
-4 5x, 108hsource type-code for this component is illegal (unrecogni
-5   zable).   from the field  'itype'  (columns 1-2) of          ,/, &
-6 5x, 108hthe first data card for this s.m. component --- two non-c
-7   omment cards before the last-read data card --- was          ,/, &
-8 5x, 19hread a type code of,  i2,    83h .    but only s.m. model
-9   types  51  through  54  and  59  are presently available.     )
+7178 format (5x, 109hthe EMTP is presently inputting source components, with the last-read data card serving to define the network    ,/, &
+2 5x, 109hconnection for the third and final phase of a 3-phase dynamic synchronous machine (s.m.) component.   but the         ,/, &
+4 5x, 108hsource type-code for this component is illegal (unrecognizable).   from the field  'itype'  (columns 1-2) of          ,/, &
+6 5x, 108hthe first data card for this s.m. component --- two non-comment cards before the last-read data card --- was          ,/, &
+8 5x, 19hread a type code of,  i2,    83h .    but only s.m. model types  51  through  54  and  59  are presently available.     )
     write (lunit6, 7278)   numsm
-7278 format (5x, 106hfurther, the user is allowed to use either machine
-1   types  51-54 ,   or type  59  ---- but not a mixture of     ,/, &
-2 5x, 108hthe two.   recall that these two classes of s.m.  are qui
-3   te different, utilizing different solution methods.          ,/, &
-4 5x,  62hthe just-read dynamic  s.m.  EMTP  source component was n
-5   umber,  i4,  21h   in order of input.                        )
+7278 format (5x, 106hfurther, the user is allowed to use either machine types  51-54 ,   or type  59  ---- but not a mixture of     ,/, &
+          2 5x, 108hthe two.   recall that these two classes of s.m.  are quite different, utilizing different solution methods.          ,/, &
+          4 5x,  62hthe just-read dynamic  s.m.  EMTP  source component was number,  i4,  21h   in order of input.                        )
     go to 6220
 6179 write (lunit6, 7179)
-7179 format (5x, 108hthe data case under consideration has too many out
-1   put quantities for the present EMTP table sizes.   this is    ,/, &
-2 5x, 109hreally an overflow of EMTP list number  11 ,   though not
-3   due to conventional EMTP electric-network branch or         ,/, &
-4 5x, 110hnode quantities.   rather, it is the added burden of dyna
-5   mic synchronous machine (s.m.) output variables, plus        ,/, &
-6 5x, 103hthe burden of tacs output variables, which has now led to
-7   the present list-11 overflow.   figures which               )
+7179 format (5x, 108hthe data case under consideration has too many output quantities for the present EMTP table sizes.   this is    ,/, &
+2 5x, 109hreally an overflow of EMTP list number  11 ,   though not due to conventional EMTP electric-network branch or         ,/, &
+4 5x, 110hnode quantities.   rather, it is the added burden of dynamic synchronous machine (s.m.) output variables, plus        ,/, &
+6 5x, 103hthe burden of tacs output variables, which has now led to the present list-11 overflow.   figures which               )
     write (lunit6, 7279) lsiz12, nc, lstat(15), lstat(16), lstat(14)
-7279 format (5x,  48hcharacterize this difficulty are as follows ....,/
-1   ,5x,  i5, 43h = present user-dimensioned size of list 11    ,/, &
-2 5x,  i5,  67h = number of conventional electric-network branch-ou
-3   tput quantities                                              ,/, &
-4 5x,  i5,  35h = number of s.m. output quantities            ,/, &
+7279 format (5x,  48hcharacterize this difficulty are as follows ....,/, &
+          5x,  i5, 43h = present user-dimensioned size of list 11    ,/, &
+          5x,  i5,  67h = number of conventional electric-network branch-output quantities                                              ,/, &
+          5x,  i5,  35h = number of s.m. output quantities            ,/, &
 5 5x,  i5,  35h = number of tacs output quantities            ,/, &
-6 5x,  34hthe last three figures above total,  i6,  70h ,   which i
-7   s therefore the minimum acceptable size of list number 11.    )
+6 5x,  34hthe last three figures above total,  i6,  70h ,   which is therefore the minimum acceptable size of list number 11.    )
     write (lunit6, 7379)
-7379 format (5x, 103heither increase the size of list 11 to at least th
-1   is size, or appropriately reduce the number of output        ,/, &
-2 5x,  72hquantities, before trying once again to solve the data ca
-3   se in question.              )
+7379 format (5x, 103heither increase the size of list 11 to at least this size, or appropriately reduce the number of output        ,/, &
+2 5x,  72hquantities, before trying once again to solve the data case in question.              )
     kill = 1
     lstat(16) = 11
     nchain = 51
-    if ( iprsup  .ge.  1 )
-1   write ( lunit6, 4568 )
+    if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
 4568 format ( 24h  "exit  module over54." )
     go to 99999
 6180 write(lunit6,7180) lstat(16), lstat(17)
-7180 format( 5x, 51hthe size of array 'voltbc', defined in blkcom to be
-2   , i6, 1h,, 3x, 48his not adequate for the use of that array in the
-3   , /, 5x,  64hprocessing of output requests for the type 59 s.m.  a
-4   minimum of, i5, 3x,18hcells is required.)
+7180 format( 5x, 51hthe size of array 'voltbc', defined in blkcom to be, i6, 1h,, 3x, 48his not adequate for the use of that array in the, /, &
+          5x,  64hprocessing of output requests for the type 59 s.m.  a minimum of, i5, 3x,18hcells is required.)
     go  to  6220
 6181 write(lunit6,7181) lstat(15),lstat(16), lstat(16)
-7181 format( 5x, 77hinconsistency discoverd on one of the mass cards .
-2   the specified mass no. was, i5, 1h., 3x, 15hfor a s.m. with, i5,
-3  8 h  masses, /, 5x,  38hallowable range is between     1   and,
-4   i5,  9h  masses.)
+7181 format( 5x, 77hinconsistency discoverd on one of the mass cards .   the specified mass no. was, i5, 1h., 3x, 15hfor a s.m. with, i5,8 h  masses, /, &
+          5x,  38hallowable range is between     1   and,   i5,  9h  masses.)
     go  to  6220
 6182 write (lunit6, 7154)
     write (lunit6, 7182)  lstat(14), lstat(15)
-7182 format (5x, 104hthe number of frequency cards which are present in
-1   the previously-read line-constants data is incorrect.       ,/, &
-2 5x,102hbefore the one which requests an automatic looping over lo
-3   garithmically-spaced frequencies, there were, i4,            /,
-4 5x,    108hfrequency cards, each of which requests the line-const
-5   ants calculation at an individual, discrete frequency.       ,/, &
-6 5x,  77hbut the transposition flag (miscellaneous data parameter
-7   'nss'  )  had value,  i4,   23h .   these two integers        )
+7182 format (5x, 104hthe number of frequency cards which are present in the previously-read line-constants data is incorrect.       ,/, &
+          2 5x,102hbefore the one which requests an automatic looping over logarithmically-spaced frequencies, there were, i4,            /,
+4 5x,    108hfrequency cards, each of which requests the line-constants calculation at an individual, discrete frequency.       ,/, &
+6 5x,  77hbut the transposition flag (miscellaneous data parameter 'nss'  )  had value,  i4,   23h .   these two integers        )
     write (lunit6, 7282)
-7282 format (5x, 108hshould add up to two.   but they do not.   remembe
-1   r, for an untransposed line, there are to be two discrete-    ,/, &
-2 5x,  62hfrequency cards, while a transposed line requires exactly
-3   one.    )
+7282 format (5x, 108hshould add up to two.   but they do not.   remember, for an untransposed line, there are to be two discrete-    ,/, &
+2 5x,  62hfrequency cards, while a transposed line requires exactly one.    )
     go to 6220
 6183 j = lstat(13)
     write (lunit6, 7154)
     write (lunit6, 7183)  volti(j), j, ci1
-7183 format (5x, 104hthe frequency cards which are present in the previ
-1   ously-read line-constants data are not all consistent.       ,/, &
-2 5x, 110hthe EMTP requires that all such cards apply to the same m
-3   odel of the transmission line.   but it will be noted        ,/, &
-4 5x,  28hthat an earth resistivity of,    e17.5,  49h   ohm-meters
-5   was read from frequency card number, i4,   10h ,   while     ,/, &
-6 5x,     e17.5,      94h   was read from the first such card.   th
-7   ese two resistivities are unequal, which is illegal.         )
+7183 format (5x, 104hthe frequency cards which are present in the previously-read line-constants data are not all consistent.       ,/, &
+          2 5x, 110hthe EMTP requires that all such cards apply to the same model of the transmission line.   but it will be noted        ,/, &
+4 5x,  28hthat an earth resistivity of,    e17.5,  49h   ohm-meters was read from frequency card number, i4,   10h ,   while     ,/, &
+6 5x,     e17.5,      94h   was read from the first such card.   these two resistivities are unequal, which is illegal.         )
     go to 6220
 6184 write (lunit6, 7154)
     write (lunit6, 7184)   lstat(13)
-7184 format (5x, 104hthe previously-read line-constants data cards are
-1   illegally-structured for usage with  'semlyen setup' .       ,/, &
-2 5x, 109hfirst, there should be the line-conductor cards, terminat
-3   ed by a blank card.   then come the frequency cards,         ,/, &
-4 5x, 104hwith only the last of these requesting the logarithmic fr
-5   equency-looping option.   finally, a blank card              ,/, &
-6 5x,  95hterminates the frequency cards, and a second blank card f
-7   inishes the line constants data cards., 10x, 4hn1 =, i2 )
+7184 format (5x, 104hthe previously-read line-constants data cards are illegally-structured for usage with  'semlyen setup' .       ,/, &
+          2 5x, 109hfirst, there should be the line-conductor cards, terminated by a blank card.   then come the frequency cards,         ,/, &
+          4 5x, 104hwith only the last of these requesting the logarithmic frequency-looping option.   finally, a blank card              ,/, &
+          6 5x,  95hterminates the frequency cards, and a second blank card finishes the line constants data cards., 10x, 4hn1 =, i2 )
     go to 6220
 6185 write (lunit6, 7154)
     write (lunit6, 7185)   lstat(13), lstat(14)
-7185 format (5x,  39hthe EMTP has previously read a value of,  i6,
-1  49 h   (decimal) for the miscellaneous data parameter       ,/, &
-2 5x,  82h 'iotx'  which controls printout.   but this exceeds the
-3   legal meaningful limit of,  i6,  12h  (decimal).     )
+7185 format (5x,  39hthe EMTP has previously read a value of,  i6, 49h   (decimal) for the miscellaneous data parameter       ,/, &
+          2 5x,  82h 'iotx'  which controls printout.   but this exceeds the legal meaningful limit of,  i6,  12h  (decimal).     )
     go to 6220
 6186 write (lunit6, 7154)
     write (lunit6, 7186)  voltbc(1), voltk(icheck)
-7186 format (5x, 107hfor purposes of  'semlyen setup'  usage, the frequ
-1   encies for which line constants have just been calculated     ,/, &
-2 5x, 112hare inappropriate.   recall that within the line-constant
-3   s data, the frequency card for logarithmic looping over      ,/, &
-4 5x, 112ha range of frequencies is to be preceeded by a frequency
-5   card for the steady-state frequency.   the semlyen code      ,/, &
-6 5x, 112hrequires that the beginning loop-frequency exceed the ste
-7   ady-state frequency.   but such is not the case for the       ,/, &
+7186 format (5x, 107hfor purposes of  'semlyen setup'  usage, the frequencies for which line constants have just been calculated     ,/, &
+2 5x, 112hare inappropriate.   recall that within the line-constants data, the frequency card for logarithmic looping over      ,/, &
+4 5x, 112ha range of frequencies is to be preceeded by a frequency card for the steady-state frequency.   the semlyen code      ,/, &
+6 5x, 112hrequires that the beginning loop-frequency exceed the steady-state frequency.   but such is not the case for the       ,/, &
 8 5x,  22huser's data (values of,   e16.4,    6h   and,    e16.4,
 9     41 h   were punched for these, respectively).        )
     go to 6220
