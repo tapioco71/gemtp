@@ -369,86 +369,52 @@ subroutine over53
 6119 write (lunit6, 7147)  bus6
   go to 7421
 6120 write (lunit6, 7120)  bus1, lstat(14)
-7120 format (5x, 108hthe EMTP is in the process of inputting the user's
-1 tacs supplemental-variable data cards, with the last-read     ,/,
-2 5 x, 109hsuch data card being in error.   specifically, the user h
-3 as attempted to define a supplemental variable named     ,/,
-4 5 x, 2h ', a6, 105h'  (data field of columns 3-8 of the card), for
-5 which the type code which has been punched in columns 1-2    ,/,
-6 5 x,  24his invalid.   a value of, i4,  64h  was read from columns
-7 1 -2, which is an unrecognized type code.     )
+7120 format (5x, "The EMTP is in the process of inputting the user's tacs supplemental-variable data cards, with the last-read",/, &
+          5x, 'such data card being in error.   Specifically, the user has attempted to define a supplemental variable named',/, &
+          5x, "'", a6, "'", '  (data field of columns 3-8 of the card), for which the type code which has been punched in columns 1-2',/, &
+          5x, 'is invalid.   A value of', i4,  '  was read from columns 1 -2, which is an unrecognized type code. ')
   go to 6220
 6121 write (lunit6, 7121)  bus2, bus1
-7121 format (5x, 109hthe tacs data which has now all been inputted is i
-1 ncomplete.   specifically, there is a difficulty associated    ,/,
-2 5 x,  65hwith the tacs function block which was given the (output)
-3   name  ', a6,  35h'  (as read from columns 3-8 of the     ,/,
-4 5 x, 111hleading card which defines this function block).   one of
-5     the five possible inputs to this block was given name   ,/,
-6 5   x,   2h ', a6, 104h'  (as read from one of the fields of columns
-7 12  -17, 20-25, 28-33, 36-41, and 44-49, using  a6  format).    )
-      write (lunit6, 7221)
-7221  format (5x, 110hbut this input variable is undefined.   it is neit
-1     her the output of another function block, nor a supplemental   ,/,
-2 5     x, 119hvariable, nor a tacs source of any type (1, 2, 90, 91, 92
-3       , or 93 type codes).   did the user make a spelling error, the ,/,
-4 5     x, 113hEMTP wonders.   the EMTP does not know what to do with th
-5       e aforementioned input, so execution will be terminated.      )
+7121 format (5x, 'The tacs data which has now all been inputted is incomplete.   Specifically, there is a difficulty associated',/, &
+          5x, 'with the tacs function block which was given the (output) name  ', "'", a6, "'", '  (as read from columns 3-8 of the',/, &
+          5x, 'leading card which defines this function block).   One of the five possible inputs to this block was given name',/, &
+          5x, "'", a6, "'", '  (as read from one of the fields of columns 12-17, 20-25, 28-33, 36-41, and 44-49, using  a6  format). ')
+  write (lunit6, 7221)
+7221 format (5x, 'But this input variable is undefined.   It is neither the output of another function block, nor a supplemental',/, &
+          5x, 'variable, nor a tacs source of any type (1, 2, 90, 91, 92, or 93 type codes).   Did the user make a spelling error, the ',/, &
+          5x, 'EMTP wonders.   The EMTP does not know what to do with the aforementioned input, so execution will be terminated. ')
 7421    write (lunit6, 7521)
-7521    format (/, 5x, 105hsince the user is having trouble with 6-charact
-2       er tacs variable names, it is perhaps worth qualifying the     ,/,
-3 5     x, 114hpreceding error text which complains about an unidentifia
-4       ble name that is associated with a certain tacs component    ,/,
-5 5     x, 113hor data class.   all that is really involved here is a sp
-6       elling comparison with other usages of the same variable     ,/,
-7 5     x, 108hname.   when for some particular tacs component a given n
-8       ame  'name1 '  can not be found in a table where it           )
-        write (lunit6, 7621)
-7621    format (5x, 103hbelongs, the EMTP says that the former is unrecogn
-1       izable.   yet, as used with the component explicitely      ,/,
-2 5     x, 113hmentioned in the message,   'name1 '   may in fact be spe
-3       lled exactly as the user intended.   it may be the table     ,/,
-4 5     x, 108hbeing searched which is in error, due to faulty spelling
-5       of the variable name on some other data card (which     ,/,
-6 5     x, 115hwas the usage that generated the table entry).   hence th
-7       e user should look at other data cards for mis-spelling of   )
-        write (lunit6, 7721)
-7721    format (5x, 107hthe name in question, if the spelling as printed i
-1       n the above error text is actually as the user wanted it.     )
-        write (lunit6, 7821)
-7821    format (/, 5x, 105hthen too, while talking about spelling, it migh
-1       t be a good idea to emphasize what is involved.   all six-    ,/,
-2 5     x, 113hcharacter variable names are  a6  fortran alphanumeric in
-3       formation.   when printed out within error messages, the       ,/,
-4 5     x, 110hsix characters in question are delineated by a leading an
-5       d a trailing quotation or apostrophe mark.   position        ,/,
-6 5     x, 111hof imbedded blanks is indeed crucial, then.   for example
-7       ,   'raver '  and  ' raver'  are completely different,        )
-        write (lunit6, 7921)
-7921    format (   5x,  99hdistinct 6-character names, as far as the EMTP
-1       is concerned.   EMTP names (including those of tacs)     ,/,
-2 5     x, 111hconsist of an ordered string of 6 characters, with 'blank
-3       ' being a character like any other one.   two variable       ,/,
-4 5     x, 109hnames are equal if and only if both characters of any cha
-5       racter position are equal for the two names, for all    ,/,
-6 5     x,  44hpossible character positions  1, 2, .... 6 .      )
-        go to 6220
-6122    write(lunit6,7122)  lstat( 17), lstat( 16)
-7122    format (5x, 110hthe tacs representation currently being processed
-1       has overflowed the dimensioned tacs storage.   specifically,    ,/
-2 5     x,  29hthe tables which are numbered, i4,  75h  (see explanatory
-3       directory of table numbers below) which have a length of      ,/,
-4 5     x, i4, 108h  entries are now full.   because there is not enough
-5       room to solve the problem, execution is being stopped.   ,/,1x)
-        write (lunit6, 7222)
-7222    format (5x,111hsince tacs can be partially redimensioned at execut
-1       ion time, the user can simply increase the appropriate table   ,/,
-2 5     x, 111hsizes on his  tacs-table-size cards , and try the data  c
-3       ase again.  yet such relative size changes can only be      ,/,
-4 5     x, 110hmade within the overall EMTP variable-dimensioning limita
-5       tion of EMTP list number 19, which constrains the sum    ,/,
-6 5     x, 109htotal space which is allowed for tacs arrays.   hence ove
-7       rall EMTP redimensioning with a larger size for list      )
+7521 format (/, 5x, 'Since the user is having trouble with 6-character tacs variable names, it is perhaps worth qualifying the',/, &
+          5x, 'preceding error text which complains about an unidentifiable name that is associated with a certain tacs component',/, &
+          5x, 'or data class.   All that is really involved here is a spelling comparison with other usages of the same variable',/, &
+          5x, "name.   When for some particular tacs component a given name  'name1 '  can not be found in a table where it ")
+  write (lunit6, 7621)
+7621 format (5x, 'belongs, the EMTP says that the former is unrecognizable.   Yet, as used with the component explicitely',/, &
+          5x, "mentioned in the message,   'name1 '   may in fact be spelled exactly as the user intended.   It may be the table",/, &
+          5x, 'being searched which is in error, due to faulty spelling of the variable name on some other data card (which',/, &
+          5x, 'was the usage that generated the table entry).   Hence the user should look at other data cards for mis-spelling of ')
+  write (lunit6, 7721)
+7721 format (5x, 'the name in question, if the spelling as printed in the above error text is actually as the user wanted it. ')
+  write (lunit6, 7821)
+7821 format (/, 5x, 'Then too, while talking about spelling, it might be a good idea to emphasize what is involved.   All six-',/, &
+          5x, 'character variable names are  a6  fortran alphanumeric information.   When printed out within error messages, the',/, &
+          5x, 'six characters in question are delineated by a leading and a trailing quotation or apostrophe mark.   Position',/, &
+          5x, "of imbedded blanks is indeed crucial, then.   For example,   'raver '  and  ' raver'  are completely different, ")
+  write (lunit6, 7921)
+7921 format (5x, 'distinct 6-character names, as far as the EMTP is concerned.   EMTP names (including those of tacs)',/, &
+          5x, "consist of an ordered string of 6 characters, with 'blank' being a character like any other one.   Two variable",/, &
+          5x, 'names are equal if and only if both characters of any character position are equal for the two names, for all',/, &
+          5x, 'possible character positions  1, 2, .... 6 . ')
+  go to 6220
+6122 write(lunit6,7122)  lstat( 17), lstat( 16)
+7122 format (5x, 'The tacs representation currently being processed has overflowed the dimensioned tacs storage.   Specifically,',/, &
+          5x, 'the tables which are numbered', i4,  '  (see explanatory directory of table numbers below) which have a length of',/, &
+          5x, i4, '  entries are now full.   Because there is not enough room to solve the problem, execution is being stopped.',/,1x)
+  write (lunit6, 7222)
+7222 format (5x, 'Since tacs can be partially redimensioned at execution time, the user can simply increase the appropriate table',/, &
+          5x, 'sizes on his  tacs-table-size cards , and try the data  case again.  Yet such relative size changes can only be',/, &
+          5x, 'made within the overall EMTP variable-dimensioning limitation of EMTP list number 19, which constrains the sum',/, &
+          5x, 'total space which is allowed for tacs arrays.   Hence overall EMTP redimensioning with a larger size for list ')
         write (lunit6, 7322)
 7322    format (5x, 105hnumber 19 may also be necessary.   see the EMTP ca
 1       se summary statistics for the current size of EMTP list     ,/,
