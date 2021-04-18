@@ -456,100 +456,81 @@ subroutine over54
           5x, 'data is inconsistent with this intended usage.   To be legal, there must be at least one type-14 EMTP source',/, &
           5x, 'component which is present during the steady-state phasor network solutions (as requested by punching data field',/, &
           5x, " 'tstart'  of columns 61-70 negative).   But the user has", i5,  '   EMTP source components, of which',  i5,  '   are',/, &
-8 5     x,  30hof type 14, of which (in turn),  i5,
-9  28   h   have  'tstart'  negative.          )
-        go to 6220
-6195    write (lunit6, 7195)  lstat(14), lstat(15)
-7195    format (5x, 102hthe EMTP is in the process of inputting branch car
-1       ds for a transmission circuit which is modeled using         ,/, &
-2 5     x,  89hametani linear convolution.   the last-read data card con
-3       tains parameters for mode number,  i5,   9h .    but         ,/, &
-4 5     x,  72hthe integer which was read from columns  73-74  using  i2
-5       format is   ',  i2,  28h' .    this is the number of       ,/, &
-6 5     x, 105hlinear segments which represent the response ---- which i
-7       s presently constrained to equal five.    re-run             ,/, &
-8 5     x,  94h 'ametani setup'   to get a valid new set of branch cards
-9       for the circuit, and then try again.      )
-        go to 6220
-6196    write (lunit6, 7196)
-7196    format (5x, 103hEMTP control is now in the   'ametani setup'   sup
-1       porting routine, ready to transfer to either   'cable        ,/, &
-2 5     x, 111hconstants'   or   'line constants' .    but the last-read
-3       data card does not bear one of these key words on it,       ,/, &
-4 5     x,  31hbeginning in column number  1 .        )
-        go to 6220
-6197    write (lunit6, 7197)   deltat, flstat(14)
-7197    format (5x,  49hthe EMTP is now inputting data for a transmission,
-1             36 h circuit that is being modeled using   ,/, &
-2 5     x,  96hfrequency dependent representation.  but for this data, t
-3       he present time-step size  'deltat'  of, e15.4, 10h sec    is  ,/, &
-4 5     x,  61htoo large.   the  travel time of the current mode is equa
-7       l to, e15.4,  45h sec ,    which must exceed  'deltat' .   the ,/, &
-8 5     x,  73htime-step size of the study must be decreased to satisfy
-9       this constraint.        )
-        go to 6220
-6198    write (lunit6, 7198)  lstat(16), lstat(15)
-7198    format (5x, 109hthe EMTP is in the middle of solving a    'semlyen
-1       setup'    data case, at which point it has been discovered    ,/, &
-2 5     x, 112hthat insufficient working space exists.    the   'line co
-3       nstants'   or   'cable constants'   calculation has now      ,/, &
-4 5     x,  59hbeen successfully completed, and a minimum working space
-5       of,  i7,   39h    floating-point cells is now a known        ,/, &
-6 5     x, 103hrequirement for the completion of   'semlyen setup'   pro
-7       cessing.   but module  'vdov45'  only contains,  i7          )
-        write (lunit6, 7298)
-7298    format (5x, 108hfloating-point cells of such working space.   the
-1       EMTP must be re-dimensioned by the user, so as to increase   ,/, &
-2 5     x, 113hthe size of   /label/   by the just-indicated shortfall.
-3       distribution of total storage among the different EMTP     ,/, &
-4 5     x, 103hlists is immaterial in this case (as with the dimensionin
-5       g of all primary-level non-solution overlays).      )
-        go to 6220
-6199    write (lunit6, 7199)  flstat(15), lstat(14), flstat(13), lstat(13)
-7199    format (5x, 107hthe present   'semlyen setup'   data case has brok
-1       en down in the middle of a matrix inversion operation for    ,/, &
-2 5     x,   9hfrequency,    e14.5,    67h    hertz.   the eigenvector (
-3       modal transformation) matrix of order,  i5,   7h    has      ,/, &
-4 5     x,   9hthe value,     e13.3,    56h    for the largest possible
-5       pivot element of row number,   i5,   19h .    but this does    )
-        write (lunit6, 7299)  flstat(14)
-7299    format ( 5x,  64hnot exceed the near-zero tolerance  'epspv2' ,
-1       which has value,    e13.3,     20h .    execution must       ,/, &
-2 5     x, 107hbe stopped immediately.   yet, the user is reminded that
-3       he can redefine  'epspv2'  by means of an optional           ,/, &
-4 5     x,  52h 'tolerances'   card (read by   'semlyen setup'  ) .  )
-        go to 6220
-6200    write (lunit6, 7200)
-7200    format (5x, 103hmemory-overflow problem, before entry into the ren
-1       umbering overlay (for transient network renumbering).        ,/, &
-2 5     x, 112hrecall that space for renumbering comes from a major port
-3       ion of   /label/ .    three vectors are used, with size      ,/, &
-4 5     x, 114hgiven by list number  99  of the case-summary statistics.
-5       this space is insufficient even for the simple storage    ,/, &
-6 5     x,  98hof the connectivity of  (y) --- to say nothing of the sim
-7       ulation of fillin upon triangularization.                    )
-        if ( lstat(14)  .gt.  0 )
-1       write (lunit6, 7300)  ibr, lstat(14)
-7300    format (5x,  6hof the,  i6,
-1  36   h   entries of the branch table, only,  i6,
-2  58   h   were inserted into the working storage before overflow. )
-        if ( lstat(14)  .eq.  0 )
-1       write (lunit6, 7400)
-7400    format (5x, 108hall branch-table entries were successfully inserte
-1       d into the working storage, but entries from the nonlinear   ,/, &
-2 5     x,
-3  58   helement table and the switch table then produced overflow. )
-        write (lunit6, 7500)
-7500    format (5x, 108has for redimensioning of the EMTP, lists  5  and
-18      contribute  100  per cent to the size of dependent list   ,/, &
-2 5     x,  68h99.   increase one of these list sizes substantially, and
-3       try again.         )
-6220    lastov = nchain
-        nchain = nfrfld + 50
-        if ( iprsup  .ge.  1 )
-1       write ( lunit6, 4568 )
-99999   return
-      end function block
-      c
-      c     end of file: over54.for
-      c
+          5x, 'of type 14, of which (in turn)',  i5, "   have  'tstart'  negative. ")
+    go to 6220
+6195 write (lunit6, 7195)  lstat(14), lstat(15)
+7195 format (5x, 'The EMTP is in the process of inputting branch cards for a transmission circuit which is modeled using',/, &
+          5x, 'Ametani linear convolution.   The last-read data card contains parameters for mode number',  i5,   ' .    but',/, &
+          5x, 'the integer which was read from columns  73-74  using  i2 format is   ',  "'", i2,  "'", ' .    This is the number of',/, &
+          5x, 'linear segments which represent the response ---- which is presently constrained to equal five.    Re-run',/, &
+          5x,  " 'Ametani setup'   to get a valid new set of branch cards for the circuit, and then try again. ")
+    go to 6220
+6196 write (lunit6, 7196)
+7196 format (5x, "EMTP control is now in the   'Ametani setup'   supporting routine, ready to transfer to either   'cable",/, &
+          5x, "constants'   or   'line constants' .    But the last-read data card does not bear one of these key words on it,",/, &
+          5x, 'beginning in column number  1 . ')
+    go to 6220
+6197 write (lunit6, 7197)   deltat, flstat(14)
+7197 format (5x, 'The EMTP is now inputting data for a transmission circuit that is being modeled using',/, &
+          5x, "frequency dependent representation.  But for this data, the present time-step size  'deltat'  of", e15.4, ' sec    is',/, &
+          5x,  'too large.   The  travel time of the current mode is equal to', e15.4,  " sec ,    which must exceed  'deltat' .   The",/, &
+          5x,  'time-step size of the study must be decreased to satisfy this constraint. ')
+    go to 6220
+6198 write (lunit6, 7198)  lstat(16), lstat(15)
+7198 format (5x, "The EMTP is in the middle of solving a    'Semlyen setup'    data case, at which point it has been discovered",/, &
+          5x, "that insufficient working space exists.    The   'line constants'   or   'cable constants'   calculation has now",/, &
+          5x,  'been successfully completed, and a minimum working space of',  i7, '    floating-point cells is now a known',/, &
+          5x, "requirement for the completion of   'Semlyen setup'   processing.   But module  'vdov45'  only contains",  i7)
+    write (lunit6, 7298)
+7298 format (5x, 'floating-point cells of such working space.   The EMTP must be re-dimensioned by the user, so as to increase',/, &
+          5x, 'the size of   /label/   by the just-indicated shortfall.   Distribution of total storage among the different EMTP',/, &
+          5x, 'lists is immaterial in this case (as with the dimensioning of all primary-level non-solution overlays). ')
+    go to 6220
+6199 write (lunit6, 7199)  flstat(15), lstat(14), flstat(13), lstat(13)
+7199 format (5x, 107hthe present   'semlyen setup'   data case has brok
+1   en down in the middle of a matrix inversion operation for    ,/, &
+         2 5     x,   9hfrequency,    e14.5,    67h    hertz.   the eigenvector (
+3   modal transformation) matrix of order,  i5,   7h    has      ,/, &
+         4 5     x,   9hthe value,     e13.3,    56h    for the largest possible
+5   pivot element of row number,   i5,   19h .    but this does    )
+    write (lunit6, 7299)  flstat(14)
+7299 format ( 5x,  64hnot exceed the near-zero tolerance  'epspv2' ,
+1   which has value,    e13.3,     20h .    execution must       ,/, &
+         2 5     x, 107hbe stopped immediately.   yet, the user is reminded that
+3   he can redefine  'epspv2'  by means of an optional           ,/, &
+         4 5     x,  52h 'tolerances'   card (read by   'semlyen setup'  ) .  )
+    go to 6220
+6200 write (lunit6, 7200)
+7200 format (5x, 103hmemory-overflow problem, before entry into the ren
+1   umbering overlay (for transient network renumbering).        ,/, &
+         2 5     x, 112hrecall that space for renumbering comes from a major port
+3   ion of   /label/ .    three vectors are used, with size      ,/, &
+         4 5     x, 114hgiven by list number  99  of the case-summary statistics.
+5   this space is insufficient even for the simple storage    ,/, &
+         6 5     x,  98hof the connectivity of  (y) --- to say nothing of the sim
+7   ulation of fillin upon triangularization.                    )
+    if ( lstat(14)  .gt.  0 )
+1   write (lunit6, 7300)  ibr, lstat(14)
+7300 format (5x,  6hof the,  i6,
+1  36 h   entries of the branch table, only,  i6,
+2  58 h   were inserted into the working storage before overflow. )
+    if ( lstat(14)  .eq.  0 )
+1   write (lunit6, 7400)
+7400 format (5x, 108hall branch-table entries were successfully inserte
+1   d into the working storage, but entries from the nonlinear   ,/, &
+         2 5     x,
+3  58 helement table and the switch table then produced overflow. )
+    write (lunit6, 7500)
+7500 format (5x, 108has for redimensioning of the EMTP, lists  5  and
+18  contribute  100  per cent to the size of dependent list   ,/, &
+         2 5     x,  68h99.   increase one of these list sizes substantially, and
+3   try again.         )
+6220 lastov = nchain
+    nchain = nfrfld + 50
+    if ( iprsup  .ge.  1 )
+1   write ( lunit6, 4568 )
+99999 return
+  end function block
+  c
+  c     end of file: over54.for
+  c
