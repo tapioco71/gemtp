@@ -630,34 +630,24 @@ subroutine over53
           5x, 'expecting any electrical network data to follow, as part of this data case.   Recall that one or more nonblank',/, &
           5x, "fields on either the  'tacs outputs'  or the  'tacs EMTP sources'  card is required for EMTP electrical network ")
   write (lunit6, 7240)
-7240 format (5x, 107hdata to follow the tacs data, as part of a hybrid
-1 data case.   there would thus be no output vector, and if     ,/,
-2 5 x, 112hthe simulation were allowed to continue, results would go
-3 unobserved.   possibly the user wanted this situation,      ,/,
-4 5 x, 113hbut the EMTP will not allow it.   for a data case to be a
-5 llowed to enter the time-step loop, there must have been      ,/,
-6 5 x,  99hrequested one or more output variables (either a tacs var
-7 iable, or an electrical-network variable).          )
+7240 format (5x, 'data to follow the tacs data, as part of a hybrid data case.   There would thus be no output vector, and if',/, &
+          5x, 'the simulation were allowed to continue, results would go unobserved.   Possibly the user wanted this situation,',/, &
+          5x, 'but the EMTP will not allow it.   For a data case to be allowed to enter the time-step loop, there must have been',/, &
+          5x, 'requested one or more output variables (either a tacs variable, or an electrical-network variable). ')
   go to 6220
 6141 write (lunit6, 7141)  nenerg
-7141 format (5x, 108hthe key word  'statistics'  or  'systematic'  can
-1 be punched in columns 55-64 of a switch card, as part of a     ,/,
-2 5 x, 104hdata case which has integer miscellaneous data parameter
-3 'nenerg'  punched nonzero.   but these must be             ,/,
-4 5 x,  28hcoordinated as follows .....                ,/,
-5 12 x,  51hpositive  'nenerg'  -------  use only  'statistics'  ,/,
-6 12 x,  51hnegative  'nenerg'  -------  use only  'systematic'  ,/,
-7 12 x,  45h    zero  'nenerg'  -------  use neither one.      ,/,
-8 5 x,  79hthe last-read data card is a switch card which violates t
-9 his rule.   a value of, i6,  27h   was read for  'nenerg' ,     )
+7141 format (5x, "The key word  'statistics'  or  'systematic'  can be punched in columns 55-64 of a switch card, as part of a",/, &
+          5x, "data case which has integer miscellaneous data parameter 'nenerg'  punched nonzero.   But these must be",/, &
+          5x,  'coordinated as follows .....',/, & 12x,  "positive  'nenerg'  -------  use only  'statistics'  ",/, &
+          12x, "negative  'nenerg'  -------  use only  'systematic'",/, &
+          12x, "    zero  'nenerg'  -------  use neither one.",/, &
+          5x, 'the last-read data card is a switch card which violates this rule.   a value of', i6,  "   was read for  'nenerg' , ")
   write (lunit6, 7241)
-7241 format (5x, 108hthe user is reminded.   hence this data case eithe
-1 r mixes the two key words of columns 55-64, or the sign on     ,/,
-2 5 x,  84hparameter  'nenerg'  does not correspond to the single ke
-3 y word which is being used.           )
+7241 format (5x, 'the user is reminded.   Hence this data case either mixes the two key words of columns 55-64, or the sign on',/, &
+          5x, "parameter  'nenerg'  does not correspond to the single key word which is being used. ")
   go to 6220
 6142 write( lunit6, 7142 )  kill
-7142 format( 5x, 27hunused kill code number...., i5 )
+7142 format( 5x, 'Unused kill code number....', i5)
   go to 6220
 6143 write (lunit6, 7143)   bus2
 7143 format (5x, 104hthe tacs data which has now all been inputted is i
