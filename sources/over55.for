@@ -470,179 +470,108 @@ subroutine subr55
           8x, '1.  Switched-r elements (type-92) and switched-l elements (type 93) each create one internal node for every',/, &
           12x,'such element. ')
       write(lunit6, 4201)
- 4201 format( 8x,  65h2.  ground (blank node name) always has an entry i
-     1n the bus list.   ,/, &
-     2 8x, 112h3.  each single-phase saturable transformer component add
-     3s one node (node name  'bustop' ,  columns 39-44 of the  ,/, &
-     4 12x,  62hcard bearing the request word 'transformer ' in columns
-     53-14).     ,/, &
-     6 8x, 111h4.  each three-phase saturable transformer component adds
-     7 one node (node name 'bus3ph', read from columns 27-32  ,/, &
-     8 12x, 107hof the card bearing the request word 'transformer three
-     9phase ' in columns 3-26).   this is a 4-th word, in   )
+4201  format( 8x,  '2.  Ground (blank node name) always has an entry in the bus list.',/, &
+           8x, "3.  Each single-phase saturable transformer component adds one node (node name  'bustop' ,  columns 39-44 of the",/, &
+           12x, "card bearing the request word 'transformer ' in columns 53-14).",/, &
+           8x, "4.  Each three-phase saturable transformer component adds one node (node name 'bus3ph', read from columns 27-32",/, &
+           12x, "of the card bearing the request word 'transformer three phase ' in columns 3-26).   This is a 4-th word, in " )
       write(lunit6, 4301)
- 4301 format( 12x,  75haddition to the 3 which are added under point 3,
-     1for a 3-phase transformer.   )
+4301  format( 12x,  75haddition to the 3 which are added under point 3, for a 3-phase transformer.   )
       go to 4099
- 4002 write(lunit6, 4102)
- 4102 format( 5x, 107hnetwork branches are of course defined directly by
-     1 the user as he inputs branch data.   yet the counting of   ,/, &
-     2 5x, 114hentries in this linear branch table has some subtle point
-     3s which are worthy of the following detailed comment ....   ,/, &
-     4 8x, 109h1.  true nonlinear elements (type codes 92 or 93) or the
-     5continuous time-varying resistance element (type 91)    ,/, &
-     6 12x, 112hnever contribute to the linear branch table.   these ele
-     7ments are pulled outside of the network, and are handled   ,/, &
-     8 12x,  16hby compensation.     )
+4002  write(lunit6, 4102)
+4102  format( 5x, 107hnetwork branches are of course defined directly by the user as he inputs branch data.   yet the counting of   ,/, &
+           5x, 114hentries in this linear branch table has some subtle points which are worthy of the following detailed comment ....   ,/, &
+           8x, 109h1.  true nonlinear elements (type codes 92 or 93) or the continuous time-varying resistance element (type 91)    ,/, &
+           12x, 112hnever contribute to the linear branch table.   these elements are pulled outside of the network, and are handled   ,/, &
+           12x,  16hby compensation.     )
       write(lunit6, 4202)
- 4202 format( 8x, 108h2.  switched-resistance elements (type-92) each co
-     1ntribute one entry to the linear branch table.   switched-    ,/, &
-     2 12x,  60hinductance elements (type 93) contribute two entries api
-     3ece.    ,/, &
-     4 8x, 109h3.  each type-99 pseudo-nonlinear resistance element cont
-     5ributes an entry, unless it is paralleled by another   ,/, &
-     6 12x, 107hlinear branch.   these added very-high-impedance branche
-     7s show up with a card image and data interpretation   ,/, &
-     8 12x,  60halmost as though the user had inputted the resistor hims
-     9elf.     )
+4202  format( 8x, 108h2.  switched-resistance elements (type-92) each contribute one entry to the linear branch table.   switched-    ,/, &
+           12x,  60hinductance elements (type 93) contribute two entries apiece.    ,/, &
+           8x, 109h3.  each type-99 pseudo-nonlinear resistance element contributes an entry, unless it is paralleled by another   ,/, &
+           12x, 107hlinear branch.   these added very-high-impedance branches show up with a card image and data interpretation   ,/, &
+           12x,  60halmost as though the user had inputted the resistor himself.     )
       write(lunit6, 4302)
- 4302 format( 8x, 113h4.  each n-winding single-phase saturable transfor
-     1mer component always internally sets up   2(n-1) + 1   branches,/, &
-     2 12x, 110hfor everything but the magnetizing branch.   for the lat
-     3ter, a nonzero magnetizing resistance (field  'rmag' ,     ,/, &
-     4 12x, 109hcolumns 45-50 of the transformer request card) will add
-     5an entry, as will a saturation characteristic defined   ,/, &
-     6 12x, 107hby exactly one point.   a 3-phase saturable-transformer
-     7component contributes only in that it consists of 3    ,/, &
+4302  format( 8x, 113h4.  each n-winding single-phase saturable transformer component always internally sets up   2(n-1) + 1   branches,/, &
+           12x, 110hfor everything but the magnetizing branch.   for the latter, a nonzero magnetizing resistance (field  'rmag' ,     ,/, &
+     4 12x, 109hcolumns 45-50 of the transformer request card) will add an entry, as will a saturation characteristic defined   ,/, &
+     6 12x, 107hby exactly one point.   a 3-phase saturable-transformer component contributes only in that it consists of 3    ,/, &
      8 12x,  36hsingle-phase units as just detailed.    )
       go to 4099
  4003 write(lunit6, 4103)
- 4103 format (5x, 107hthe r, l, c tables store floating-point resistance
-     1, inductance, and capacitance parameter values associated   ,/, &
-     2 5x, 113hwith lumped-parameter elements.   although such values ar
-     3e inputted on branch cards (mostly), the user should not   ,/, &
-     4 5x, 109hconfuse the present parameter storage with the branch-tab
-     5le storage of list 2.   contributions to the present        ,/, &
-     6 5x, 113hlist-3 table by different EMTP components are as follows,
-     7 assuming no usage of the reference-branch or reference-   ,/, &
-     8 5x,  20hcomponent idea .....        )
+ 4103 format (5x, 107hthe r, l, c tables store floating-point resistance, inductance, and capacitance parameter values associated   ,/, &
+           5x, 113hwith lumped-parameter elements.   although such values are inputted on branch cards (mostly), the user should not   ,/, &
+           5x, 109hconfuse the present parameter storage with the branch-table storage of list 2.   contributions to the present        ,/, &
+           5x, 113hlist-3 table by different EMTP components are as follows, assuming no usage of the reference-branch or reference-   ,/, &
+           5x,  20hcomponent idea .....        )
       write (lunit6, 4203)
- 4203 format (8x,  61h1.  each uncoupled series r-l-c branch contributes
-     1 one entry.     ,/, &
-     2 8x, 109h2.  each n-phase pi-circuit component, or each n-phase mu
-     3tually-coupled r-l component, contributes   n(n+1)/2       ,/, &
-     4 12x,   8hentries.     ,/, &
-     5 8x, 108h3.  each single-phase n-winding saturable-transformer com
-     6ponent contributes   3n-2   entries, at least.   if    ,/, &
-     7 12x, 113hmagnetizing resistance  'rmag'  is used, add another ent
-     8ry.   if the transformer is actually linear, with finite-   ,/, &
-     9 12x,  54hslope magnetization characteristic, add another entry. )
+4203  format (8x,  61h1.  each uncoupled series r-l-c branch contributes one entry.     ,/, &
+           2 8x, 109h2.  each n-phase pi-circuit component, or each n-phase mutually-coupled r-l component, contributes   n(n+1)/2       ,/, &
+           4 12x,   8hentries.     ,/, &
+           5 8x, 108h3.  each single-phase n-winding saturable-transformer component contributes   3n-2   entries, at least.   if    ,/, &
+           7 12x, 113hmagnetizing resistance  'rmag'  is used, add another entry.   if the transformer is actually linear, with finite-   ,/, &
+           9 12x,  54hslope magnetization characteristic, add another entry. )
       write (lunit6, 4303)
- 4303 format (8x, 106h4.  a 3-phase saturable transformer has the aforem
-     1entioned entries in the table for the three single-phase    ,/, &
-     2 12x,  97htransformers which are sub-components of it.   in additi
-     3on, there are always   3   extra entries.    ,/, &
-     4 8x, 113h5.  if a network uses one or more type-99 pseudo-nonlinea
-     5r resistance elements which is not paralleled by another   ,/, &
-     6 12x,  99hlumped-parameter branch, one entry is added to the table
-     7 (for all such elements, not for each one).     ,/, &
-     8 8x,  81h6.  each switched-resistance element (type-92 switch card
-     9) contributes one entry.      )
+4303  format (8x, 106h4.  a 3-phase saturable transformer has the aforementioned entries in the table for the three single-phase    ,/, &
+           2 12x,  97htransformers which are sub-components of it.   in addition, there are always   3   extra entries.    ,/, &
+           4 8x, 113h5.  if a network uses one or more type-99 pseudo-nonlinear resistance elements which is not paralleled by another   ,/, &
+     6 12x,  99hlumped-parameter branch, one entry is added to the table (for all such elements, not for each one).     ,/, &
+     8 8x,  81h6.  each switched-resistance element (type-92 switch card) contributes one entry.      )
       write (lunit6, 4403)
- 4403 format (8x,  83h7.  each switched-inductance element (type-93 swit
-     1ch card) contributes two entries.    ,/, &
-     2 8x, 104h8.  each  type-16  source element (simplified  ac/dc  con
-     3verter representation) contributes two entries.            ,/, &
-     4 8x, 108h9.  each distributed-parameter transmission circuit contr
-     5ibutes     n * (n+1) / 2    entries, where  'n'  is        )
+4403  format (8x,  83h7.  each switched-inductance element (type-93 switch card) contributes two entries.    ,/, &
+     2 8x, 104h8.  each  type-16  source element (simplified  ac/dc  converter representation) contributes two entries.            ,/, &
+     4 8x, 108h9.  each distributed-parameter transmission circuit contributes     n * (n+1) / 2    entries, where  'n'  is        )
       write (lunit6, 4503)
- 4503 format (12x, 109hthe number of phases of the line.   in case of su
-     1ch overflow, the  'present figure'   will not include these.  ,/, &
-     2 5x, 110hwhere reference-branch or reference-component ideas are u
-     3sed, there generally is no contribution at all to the   ,/, &
-     4 5x, 110hr, l, c tables.   in this case, the program simply makes
-     5reference to previously-stored (and hence previously-    ,/, &
+4503  format (12x, 109hthe number of phases of the line.   in case of such overflow, the  'present figure'   will not include these.  ,/, &
+     2 5x, 110hwhere reference-branch or reference-component ideas are used, there generally is no contribution at all to the   ,/, &
+     4 5x, 110hr, l, c tables.   in this case, the program simply makes reference to previously-stored (and hence previously-    ,/, &
      6 5x,  21hcounted) data values.     )
       go to 4099
- 4004 write(lunit6, 4104)
- 4104 format (5x, 105hcounting the number of entries in the source table
-     1 (size of list 4) is quite simple, as per the following   ,/, &
-     2 5x, 10hrules ....   ,/, &
-     3 8x, 106h1.  each conventional source component (type code 1 throu
-     4gh 14, punched in columns 1-2 of the source card)    ,/, &
-     5 12x,  22hcontributes one entry.    ,/, &
-     6 8x, 106h2.  each type-15 source component (the simplified ac/dc c
-     7onverter model, neglecting ripple on the dc side)    ,/, &
-     8 12x,  24hcontributes two entries.     )
+4004  write(lunit6, 4104)
+4104  format (5x, 105hcounting the number of entries in the source table (size of list 4) is quite simple, as per the following   ,/, &
+           5x, 10hrules ....   ,/, &
+           8x, 106h1.  each conventional source component (type code 1 through 14, punched in columns 1-2 of the source card)    ,/, &
+           12x,  22hcontributes one entry.    ,/, &
+           8x, 106h2.  each type-15 source component (the simplified ac/dc converter model, neglecting ripple on the dc side)    ,/, &
+           12x,  24hcontributes two entries.     )
       write (lunit6, 4204)
- 4204 format (8x, 103h3.  each 3-phase dynamic synchronous-machine compo
-     1nent (type codes 21, 22, 23 punched in columns 1-2 of    ,/, &
-     2 12x,  52hconsecutive source cards) contributes three entries. ,/, &
-     3 8x, 116h4.  each switched-resistance element (type code 92 punche
-     4d in columns 1-2 of the switch card) contributes 2 entries.    )
+4204  format (8x, 103h3.  each 3-phase dynamic synchronous-machine component (type codes 21, 22, 23 punched in columns 1-2 of    ,/, &
+           12x,  52hconsecutive source cards) contributes three entries. ,/, &
+           8x, 116h4.  each switched-resistance element (type code 92 punched in columns 1-2 of the switch card) contributes 2 entries.    )
       go to 4099
- 4005 write (lunit6, 4105)
- 4105 format (5x, 107hlist 5 ostensibly gives the size of the table-of-f
-     1actors storage (l-u decomposition) for the triangularized  ,/, &
-     2 5x, 115hreal equivalent nodal admittance matrix  (y)  of the time
-     3-step loop.   at each time-step, the real matrix equations   ,/, &
-     4 5x, 116h (y)v = i   are solved for real node-voltage vector  v ,
-     5  by means of a repeat solution using the table of factors.    ,/, &
-     6 5x, 114hbecause  (y)  is symmetric, only the upper-triangular fac
-     7tors (including the diagonal) are stored.   there is only    ,/, &
-     8 5x, 107hone integer word and one floating-point word for each fac
-     9tor, it will be noted (see below).   node ordering     )
-      if ( lstat(13)  .eq.  1 )
-     1 write (lunit6, 4805)  lstat(14), kpartb
- 4805 format (5x, 39hbeginning with "m32." versions,  list 7,
-     1            30h storage of (ybb/ybc) is being,
-     2            38h destroyed,  and the full (y) is added
-     3  ,/, &  5x,  39hto the bottom of list 5 (fills from the,
-     4            39h bottom up).   but space ran out before,
-     5            39h the storage of (y) is finished.   only
-     6  ,/, &  i8,  36h   rows are done,  out of a total of,
-     7       i4,  42h ,   and factoring has not yet even begun. )
-      if ( lstat(13)  .eq.  2 )
-     1 write (lunit6, 4905)  lstat(15), kpartb
- 4905 format (5x, 39hbeginning with "m32." versions,  list 7,
-     1            30h storage of (ybb/ybc) is being,
-     2            38h destroyed,  and the full (y) is added
-     3  ,/, &  5x,  39hto the bottom of list 5 (fills from the,
-     4            35h bottom up).   the downward-growing,
-     5            37h factors spilled over onto (y) at row
-     6  ,/, &  i8,  40h   of the triangularization,  whereas we,
-     7            24h must reach row kpartb =,  i4,
-     8            23h   to end successfully.     )
+4005  write (lunit6, 4105)
+4105  format (5x, 107hlist 5 ostensibly gives the size of the table-of-factors storage (l-u decomposition) for the triangularized  ,/, &
+           2 5x, 115hreal equivalent nodal admittance matrix  (y)  of the time-step loop.   at each time-step, the real matrix equations   ,/, &
+           4 5x, 116h (y)v = i   are solved for real node-voltage vector  v ,  by means of a repeat solution using the table of factors.    ,/, &
+           6 5x, 114hbecause  (y)  is symmetric, only the upper-triangular factors (including the diagonal) are stored.   there is only    ,/, &
+           8 5x, 107hone integer word and one floating-point word for each factor, it will be noted (see below).   node ordering     )
+      if ( lstat(13)  .eq.  1 ) write (lunit6, 4805)  lstat(14), kpartb
+4805  format (5x, 39hbeginning with "m32." versions,  list 7 storage of (ybb/ybc) is being destroyed,  and the full (y) is added,/, &
+           5x,  39hto the bottom of list 5 (fills from the,39h bottom up).   but space ran out before, 39h the storage of (y) is finished.   only,/, &
+           i8,  36h   rows are done,  out of a total of, i4,  42h ,   and factoring has not yet even begun. )
+      if ( lstat(13)  .eq.  2 ) write (lunit6, 4905)  lstat(15), kpartb
+4905  format (5x, 39hbeginning with "m32." versions,  list 7, 30h storage of (ybb/ybc) is being, 38h destroyed,  and the full (y) is added,/, &
+           5x,  39hto the bottom of list 5 (fills from the, 35h bottom up).   the downward-growing, 37h factors spilled over onto (y) at row,/, &
+           i8,  40h   of the triangularization,  whereas we, 24h must reach row kpartb =,  i4, 23h   to end successfully.     )
       write (lunit6, 4205)
- 4205 format (5x, 43hthe order of elimination (node renumbering),
-     1            37h is constrained only in that nodes of,
-     2            31h known voltage are forced last.   )
+4205  format (5x, 43hthe order of elimination (node renumbering), 37h is constrained only in that nodes of, 31h known voltage are forced last.   )
       go to 4099
- 4006 write (lunit6, 4106)
- 4106 format ( 5x, 108hswitches are completely straightforward, being de
-     1fined only by switch cards.   one entry in the switch table   ,/, &
-     2 5x, 112his created for every switch card, whether it is for an or
-     3dinary switch ( 'itype'  of columns 1-2 equal to zero),     ,/, &
-     4 5x,  96ha switched resistance element ( 'itype' = 92), or a switc
-     5hed-inductance element ( 'itype' = 93).    )
+4006  write (lunit6, 4106)
+4106  format ( 5x, 108hswitches are completely straightforward, being defined only by switch cards.   one entry in the switch table   ,/, &
+           5x, 112his created for every switch card, whether it is for an ordinary switch ( 'itype'  of columns 1-2 equal to zero),     ,/, &
+           5x,  96ha switched resistance element ( 'itype' = 92), or a switched-inductance element ( 'itype' = 93).    )
       go to 4099
-c       ???????????   list 7 is presently unused   ????????????????
- 4007 write (lunit6, 4107)
- 4107 format (    8h unused    )
+      !       ???????????   list 7 is presently unused   ????????????????
+4007  write (lunit6, 4107)
+4107  format (    8h unused    )
       go to 4099
- 4008 write (lunit6, 4108)
- 4108 format (5x, 108hpast-history points for distributed-parameter repr
-     1esentation of transmission lines are stored in modal form,     ,/, &
-     2 5x, 115halways.   each mode requires storage, where there are as
-     3many modes as there are coupled conductors (e.g., a double   ,/, &
-     4 5x, 117hcircuit line has 6 modes.).   a constant-parameter (frequ
-     5ency-independent) mode contributes    tau/deltat    entries,   ,/, &
-     6 5x, 111hwhere  'tau'  is the modal travel-time of the line,  'del
-     7tat'  is the time-step size, and the division involves    )
+4008  write (lunit6, 4108)
+4108  format (5x, 108hpast-history points for distributed-parameter representation of transmission lines are stored in modal form,     ,/, &
+           5x, 115halways.   each mode requires storage, where there are as many modes as there are coupled conductors (e.g., a double   ,/, &
+           5x, 117hcircuit line has 6 modes.).   a constant-parameter (frequency-independent) mode contributes    tau/deltat    entries,   ,/, &
+           5x, 111hwhere  'tau'  is the modal travel-time of the line,  'deltat'  is the time-step size, and the division involves    )
       write (lunit6, 4208)
- 4208 format (5x, 105hinteger truncation followed by the addition of uni
-     1ty.   for a frequency-dependent mode, more past-history   ,/, &
-     2 5x, 114hthan this is needed, enough to perform the  a2(t)  convol
+4208  format (5x, 105hinteger truncation followed by the addition of unity.   for a frequency-dependent mode, more past-history   ,/, &
+           2 5x, 114hthan this is needed, enough to perform the  a2(t)  convol
      3ution.   in the preceding formula, take  'tau'  to be the    ,/, &
      4 5x,  93htime  't2'  at which the exponential tail on  a2(t)  begi
      5ns (typically 3 travel-times or so).     )
