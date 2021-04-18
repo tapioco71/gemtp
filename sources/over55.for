@@ -1,231 +1,159 @@
-c-*- mode: fortran; syntax: ansi-fortran-77; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
-c
-c     file: over55.for
-c
-c
-c     subroutine over55.
-c
-      subroutine over55
-      implicit real*8 (a-h, o-z) ,
-     1      integer*4 (i-n)
-      include  'blkcom.ftn'
-      equivalence                       (moncar(4),  isw)
-      if ( iprsup  .ge.  1 )
-     1 write ( lunit6, 4567 )  kill
- 4567 format ( 24h begin "over55".  kill =,  i6  )
-      kilsav = kill
-      if ( kill  .le.  0 )   go to 6633
- 6624 call subr55
- 6633 if ( nchain .eq. 51 )       go to 99999
-      if ( nchain .eq. 31 )       go to 99999
-      kill = 0
-      if ( kol132  .eq.  132 )   go to 6639
-      write (lunit6, 6634)  ( lstat(i+20),  i=1, 26 )
- 6634 format ( /,  42h actual list sizes for preceding solution:
-     1  ,/,  14h   size  1-10:,  10i6
-     2  ,/,  14h   size 11-20:,  10i6
-     3  ,/,  14h   size 21-on:,  10i6   )
-      go to 6645
- 6639 write (lunit6, 6554)
- 6554 format( /, 101h core storage figures for preceding data case now c
-     1ompleted.  ---------------------------------------, 2x,
-     2 7hpresent, 3x, 7hprogram, /, 63h a value of  -9999 indicates defa
-     3ult, with no figure available.  ,  41x, 6hfigure, 5x,
-     4 12hlimit (name)    )
-      write(lunit6, 38021)  lstat(21), lbus
-38021 format( 5x,  39hsize list 1.   number of network nodes.  ,
-     1  56x, 2i10, 7h (lbus)   )
-      write(lunit6, 38022)  lstat(22), lbrnch
-38022 format( 5x, 42hsize list 2.   number of network branches.  ,
-     1 53x, 2i10, 9h (lbrnch)   )
-      write(lunit6, 38023)  lstat(23), ldata
-38023 format( 5x, 55hsize list 3.   number of data values in r, l, c tab
-     1les.  , 40x, 2i10, 8h (ldata)   )
-      write(lunit6, 38024)  lstat(24), lexct
-38024 format( 5x,  49hsize list 4.   number of entries in source table.,
-     1 46x, 2i10, 8h (lexct)   )
-      write (lunit6, 38025) ktrlsw(3), iprsov(36), lstat(25), lymat
-38025 format ( 5x,  34hsize list 5.   storage for (y) and,
-     1              20h triangularized (y).,   6x,
-     2     11hno. times =,  i5,  3x,   9hfactors =,  i5,
-     3     2x,  2i10,  8h (lymat)    )
-      write (lunit6, 38026)  ktrlsw(5),  lstat(26), lswtch
-38026 format( 5x,  35hsize list 6.   number of entries in,
-     1             14h switch table.,  15x,  11hno. flops =,
-     2              i6,   14x, 2i10, 9h (lswtch)   )
-      write (lunit6, 38027)  maxbus, lsize7
-38027 format ( 5x, 39hsize list 7.   number of total distinct,
-     1             32h alphanumeric (a6) program names,
-     2           24x, 2i10,  9h (lsize7)   )
-      write(lunit6, 38028)  lstat(28), lpast
-38028 format( 5x, 67hsize list 8.   number of past history points for di
-     1stributed lines.   , 28x, 2i10, 8h (lpast)    )
-      write(lunit6, 38029)  lstat(29), lnonl
-38029 format( 5x, 44hsize list 9.   number of nonlinear elements.   ,
-     1 51x, 2i10, 8h (lnonl)   )
-      write(lunit6, 38030)  lstat(30), lchar
-38030 format( 5x, 67hsize list 10.  number of points defining nonlinear
-     1characteristics.   , 28x, 2i10, 8h (lchar)   )
-      write (lunit6, 38031)  lstat(31), lsmout
-38031 format (5x,  66hsize list 11.  number of branch or selective-node-
-     1voltage outputs.   ,  29x,  2i10,  9h (lsmout)    )
-      write(lunit6, 38032)  lstat(32), lsiz12
-38032 format( 5x, 92hsize list 12.  number of output quantities (limited
-     1 only when printing max absolute values)., 3x, 2i10, 9h (lsiz12) )
-      write(lunit6, 38033)  lstat(33), lfdep
-38033 format ( 5x,  68hsize list 13.  number of 'weighting' frequency-de
-     1pendent line modes.,  27x,  2i10,  8h (lfdep)   )
-      write(lunit6, 38034)  lstat(34), lwt
-38034 format( 5x, 82hsize list 14.  number of cells used to store freq.-
-     1dependence weighting functions.   , 13x, 2i10, 6h (lwt)   )
-      write(lunit6, 38035)  lstat(35), ltails
-38035 format( 5x, 78hsize list 15.  number of cells used for exponential
-     1-tail line-history storage.   , 17x, 2i10, 9h (ltails)   )
-      write (lunit6, 38036)  lstat(36), limass
-38036 format( 5x, 38hsize list 16.  total number of type-59,
-     1            13h s.m. masses.,  44x, 2i10, 9h (limass)   )
-      write (lunit6, 38037)  lstat(37), lsyn
-38037 format (5x,  54hsize list 17.  number of dynamic synchronous machi
-     1nes.   ,  41x,   2i10,  7h (lsyn)     )
-      write (lunit6, 38038)  lstat(38), maxpe
-38038 format (5x,  57hsize list 18.  number of branch power-and-energy o
-     1utputs.     ,   38x,  2i10,  8h (maxpe)    )
-      write (lunit6, 38039)  lstat(39), ltacst
-38039 format (5x,  64hsize list 19.  floating-point working space for al
-     1l tacs arrays. ,   31x,  2i10,  9h (ltacst)    )
-c     ktab is in blkcom, so it can not be equivalenced to
-      if ( ktab .le. 0 )  go to 7272
-      lstat(53) = lstat(63) - lstat(60) + lstat(53)
-      lstat(56) = lstat(56) - lstat(58) + 3
-      lstat(58) = ktab
-      write (lunit6, 3632)  ( k,  k=1, 8 ),
-     1 ( lstat(k), k=51, 58),   ( lstat(k), k=61, 68 )
- 3632 format ( 7x,  14htacs table no.,   8i10     ,/,
-     1         7x,  14hpresent figure,   8i10     ,/,
-     2         7x,  14hprogram limit ,   8i10         )
- 7272 write (lunit6, 38040)  lstat(40), lfsem
-38040 format (5x,
-     1  46hsize list 20.  recursive convolution parameter,
-     2  42h storage for non-copied branch components.,
-     3  7x,  2i10,  8h (lfsem)   )
-      write (lunit6, 38041)  lstat(41), lfd
-38041 format (5x,  75hsize list 21.  total storage cells for modal-phase
-     1 transformation matrices. ,  20x ,  2i10,  6h (lfd)    )
-      write (lunit6, 38042)  lstat(42), lhist
-38042 format (5x,  34hsize list 22.  number of cells for,
-     1 21h convolution history.,  40x,  2i10,  8h (lhist)    )
-      write (lunit6, 38071)  lstat(43), lsiz23
-38071 format( 5x,  83hsize list 23.  giant arrays for renumbering and st
-     1eady-state solution calculations.,  12x,  2i10,  9h (lsiz23)  )
-      write (lunit6, 38044)  ncomp, lcomp
-38044 format (5x,  72hsize list 24.  number of phases of compensation, b
-     1ased on maximum nodes.,  23x,  2i10,  8h (ncomp)    )
-      write (lunit6, 38045)  lstat(45), lspcum
-38045 format (5x,  13hsize list 25.,
-     1  49h  floating-point working space for  u.m.  arrays.,
-     2  33x,  2i10,  9h (lspcum)     )
-      write (lunit6, 38046)  lstat(46), lsiz26
-38046 format (5x,  39hsize list 26.  square of maximum number,
-     1             19h of coupled phases., 37x, 2i10, 9h (lsiz26)  )
- 6645 if ( kol132  .eq.  132 )
-     1 write (lunit6, 38003)
-38003 format( 100h timing figures (decimal) characterizing case solution
-     1 speed.  -------------------------------------, 4x, 6hcp sec,
-     2 3x, 7hi/o sec, 3x, 7hsum sec  )
-      if ( flstat(7)  .ne.  -9999. )   go to 2601
-c     special timing code for supporting programs.
-      d6 = flstat(9) + flstat(1)
-      d7 = flstat(10) + flstat(2)
-      d1 = d6 + d7
-      if ( kol132  .eq.  132 )
-     1 write (lunit6, 38010)   d6, d7, d1
-      if ( kol132  .eq.  80 )
-     1 write (lunit6, 6651)  d6, d7, d1
- 6651 format (  39h total case timing (cp, i/o, tot), sec:,
-     1   1x,  3f10.3  )
-      lastov = nchain
-      nchain = 1
-      if ( iprsup  .ge.  1 )
-     1 write (lunit6, 4568)  kill
- 4568 format ( 23h exit "over55".  kill =,  i6  )
-      go to 99999
- 2601 d1 = flstat(1) + flstat(2)
-      d4 = d1
-      if ( kol132  .eq.  132 )
-     1 write(lunit6, 38004)  flstat(1), flstat(2), d1
-      if ( kol132  .eq.  80 )
-     1 write (lunit6, 6652)  flstat(1), flstat(2), d1
- 6652 format (  29h seconds for overlays  1-6  :,
-     1   3f9.3,   22h  --- (cp;  i/o;  tot)    )
-38004 format( 5x, 67hdata input, sorting, and renumbering (pre steady st
-     1ate stuff) .....   , 28x, 3f10.3 )
-      d1 = flstat(3) + flstat(4)
-      d4 = d4 + d1
-      if ( kol132  .eq.  132 )
-     1 write (lunit6, 38005)  flstat(3), flstat(4), d1
-38005 format( 5x, 47hsteady-state (s.s.) solution calculations ..... ,
-     1 48x, 3f10.3 )
-      if ( kol132  .eq.  80 )
-     1 write (lunit6, 6653)  flstat(3), flstat(4), d1
- 6653 format (  29h seconds for overlays  7-12 :,  3f9.3  )
-      d1 = flstat(5) + flstat(6)
-      d4 = d4 + d1
-      if ( kol132  .eq.  132 )
-     1 write(lunit6, 38006) flstat(5), flstat(6), d1
-38006 format( 5x, 53hpost-s.s. to pre-integration-setup calculations ...
-     1..  , 42x, 3f10.3 )
-      if ( kol132  .eq.  80 )
-     1 write (lunit6, 6654)  flstat(5), flstat(6), d1
- 6654 format (  29h seconds for overlays 13-15 :,  3f9.3  )
-      d1 = flstat(7) + flstat(8)
-      d4 = d4 + d1
-      if ( kol132  .eq.  132 )
-     1 write(lunit6, 38007)  flstat(7), flstat(8), d1
-38007 format( 5x, 54hintegration calculation (time in time-step loop) ..
-     1...  , 41x, 3f10.3   )
-      if ( kol132  .eq.  80 )
-     1 write (lunit6, 6655)  flstat(7), flstat(8), d1
- 6655 format (  29h seconds for time-step loop :,  3f9.3  )
-      hmin = flstat(9)  +  flstat(10)
-      d4 = d4 + hmin
-      if ( kol132  .eq.  132 )
-     1 write (lunit6, 38008)  flstat(9), flstat(10), hmin
-38008 format( 5x,   65hcomputer time in plotting or statistics terminati
-     1on overlay ..... ,30x,3f10.3)
-      if ( kol132  .eq.  80 )
-     1 write (lunit6, 6656)   flstat(9), flstat(10), hmin
- 6656 format (  29h seconds after deltat-loop  :,  3f9.3  )
-      d1 = flstat(11) + flstat(12)
-      d4 = d1 + d4
-      if ( kol132  .eq.  132 )
-     1 write (lunit6, 38009)  flstat(11), flstat(12), d1
-38009 format ( 5x,  37h'deltat'-change restart time  .......,  58x,
-     1 3f10.3  ,/,  101x,  29h-----------------------------        )
-      d2 = 0.0
-      d3 = 0.0
-      do 38011 i=1, 12, 2
-      d2 = d2 + flstat(i)
+!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!
+!     file: over55.for
+!
+!
+!     subroutine over55.
+!
+subroutine over55
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  include 'blkcom.ftn'
+  equivalence (moncar(4),  isw)
+  if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )  kill
+4567 format ( 24h begin "over55".  kill =,  i6  )
+  kilsav = kill
+  if ( kill  .le.  0 )   go to 6633
+6624 call subr55
+6633 if ( nchain .eq. 51 )       go to 99999
+  if ( nchain .eq. 31 )       go to 99999
+  kill = 0
+  if ( kol132  .eq.  132 )   go to 6639
+  write (lunit6, 6634)  ( lstat(i+20),  i=1, 26 )
+6634 format ( /,  42h actual list sizes for preceding solution: ,/,  14h   size  1-10:,  10i6 ,/,  14h   size 11-20:,  10i6 ,/,  14h   size 21-on:,  10i6   )
+  go to 6645
+6639 write (lunit6, 6554)
+6554 format( /, 101h core storage figures for preceding data case now completed.  ---------------------------------------, 2x,7hpresent, 3x, 7hprogram, /, &
+          63h a value of  -9999 indicates default, with no figure available.  ,  41x, 6hfigure, 5x, 12hlimit (name)    )
+  write(lunit6, 38021)  lstat(21), lbus
+38021 format( 5x,  39hsize list 1.   number of network nodes.  , 56x, 2i10, 7h (lbus)   )
+  write(lunit6, 38022)  lstat(22), lbrnch
+38022 format( 5x, 42hsize list 2.   number of network branches.  , 53x, 2i10, 9h (lbrnch)   )
+  write(lunit6, 38023)  lstat(23), ldata
+38023 format( 5x, 55hsize list 3.   number of data values in r, l, c tables.  , 40x, 2i10, 8h (ldata)   )
+  write(lunit6, 38024)  lstat(24), lexct
+38024 format( 5x,  49hsize list 4.   number of entries in source table., 46x, 2i10, 8h (lexct)   )
+  write (lunit6, 38025) ktrlsw(3), iprsov(36), lstat(25), lymat
+38025 format ( 5x,  34hsize list 5.   storage for (y) and, 20h triangularized (y).,   6x, 11hno. times =,  i5,  3x,   9hfactors =,  i5, 2x,  2i10,  8h (lymat)    )
+  write (lunit6, 38026)  ktrlsw(5),  lstat(26), lswtch
+38026 format( 5x,  35hsize list 6.   number of entries in, 14h switch table.,  15x,  11hno. flops =, i6,   14x, 2i10, 9h (lswtch)   )
+  write (lunit6, 38027)  maxbus, lsize7
+38027 format ( 5x, 39hsize list 7.   number of total distinct, 32h alphanumeric (a6) program names, 24x, 2i10,  9h (lsize7)   )
+  write(lunit6, 38028)  lstat(28), lpast
+38028 format( 5x, 67hsize list 8.   number of past history points for distributed lines.   , 28x, 2i10, 8h (lpast)    )
+  write(lunit6, 38029)  lstat(29), lnonl
+38029 format( 5x, 44hsize list 9.   number of nonlinear elements.   , 51x, 2i10, 8h (lnonl)   )
+  write(lunit6, 38030)  lstat(30), lchar
+38030 format( 5x, 67hsize list 10.  number of points defining nonlinear characteristics.   , 28x, 2i10, 8h (lchar)   )
+  write (lunit6, 38031)  lstat(31), lsmout
+38031 format (5x,  66hsize list 11.  number of branch or selective-node-voltage outputs.   ,  29x,  2i10,  9h (lsmout)    )
+  write(lunit6, 38032)  lstat(32), lsiz12
+38032 format( 5x, 92hsize list 12.  number of output quantities (limited only when printing max absolute values)., 3x, 2i10, 9h (lsiz12) )
+  write(lunit6, 38033)  lstat(33), lfdep
+38033 format ( 5x,  68hsize list 13.  number of 'weighting' frequency-dependent line modes.,  27x,  2i10,  8h (lfdep)   )
+  write(lunit6, 38034)  lstat(34), lwt
+38034 format( 5x, 82hsize list 14.  number of cells used to store freq.-dependence weighting functions.   , 13x, 2i10, 6h (lwt)   )
+  write(lunit6, 38035)  lstat(35), ltails
+38035 format( 5x, 78hsize list 15.  number of cells used for exponential-tail line-history storage.   , 17x, 2i10, 9h (ltails)   )
+  write (lunit6, 38036)  lstat(36), limass
+38036 format( 5x, 38hsize list 16.  total number of type-59, 13h s.m. masses.,  44x, 2i10, 9h (limass)   )
+  write (lunit6, 38037)  lstat(37), lsyn
+38037 format (5x,  54hsize list 17.  number of dynamic synchronous machines.   ,  41x,   2i10,  7h (lsyn)     )
+  write (lunit6, 38038)  lstat(38), maxpe
+38038 format (5x,  57hsize list 18.  number of branch power-and-energy outputs.     ,   38x,  2i10,  8h (maxpe)    )
+  write (lunit6, 38039)  lstat(39), ltacst
+38039 format (5x,  64hsize list 19.  floating-point working space for all tacs arrays. ,   31x,  2i10,  9h (ltacst)    )
+  !     ktab is in blkcom, so it can not be equivalenced to
+  if ( ktab .le. 0 )  go to 7272
+  lstat(53) = lstat(63) - lstat(60) + lstat(53)
+  lstat(56) = lstat(56) - lstat(58) + 3
+  lstat(58) = ktab
+  write (lunit6, 3632)  ( k,  k=1, 8 ), ( lstat(k), k=51, 58),   ( lstat(k), k=61, 68 )
+3632 format ( 7x,  14htacs table no.,   8i10     ,/, 7x,  14hpresent figure,   8i10     ,/, 7x,  14hprogram limit ,   8i10         )
+7272 write (lunit6, 38040)  lstat(40), lfsem
+38040 format (5x, 46hsize list 20.  recursive convolution parameter, 42h storage for non-copied branch components., 7x,  2i10,  8h (lfsem)   )
+  write (lunit6, 38041)  lstat(41), lfd
+38041 format (5x,  75hsize list 21.  total storage cells for modal-phase transformation matrices. ,  20x ,  2i10,  6h (lfd)    )
+  write (lunit6, 38042)  lstat(42), lhist
+38042 format (5x,  34hsize list 22.  number of cells for, 21h convolution history.,  40x,  2i10,  8h (lhist)    )
+  write (lunit6, 38071)  lstat(43), lsiz23
+38071 format( 5x,  83hsize list 23.  giant arrays for renumbering and steady-state solution calculations.,  12x,  2i10,  9h (lsiz23)  )
+  write (lunit6, 38044)  ncomp, lcomp
+38044 format (5x,  72hsize list 24.  number of phases of compensation, based on maximum nodes.,  23x,  2i10,  8h (ncomp)    )
+  write (lunit6, 38045)  lstat(45), lspcum
+38045 format (5x,  13hsize list 25., 49h  floating-point working space for  u.m.  arrays., 33x,  2i10,  9h (lspcum)     )
+  write (lunit6, 38046)  lstat(46), lsiz26
+38046 format (5x,  39hsize list 26.  square of maximum number, 19h of coupled phases., 37x, 2i10, 9h (lsiz26)  )
+6645 if ( kol132  .eq.  132 ) write (lunit6, 38003)
+38003 format( 100h timing figures (decimal) characterizing case solution speed.  -------------------------------------, 4x, 6hcp sec, 3x, 7hi/o sec, 3x, 7hsum sec  )
+  if ( flstat(7)  .ne.  -9999. )   go to 2601
+  !     special timing code for supporting programs.
+  d6 = flstat(9) + flstat(1)
+  d7 = flstat(10) + flstat(2)
+  d1 = d6 + d7
+  if ( kol132  .eq.  132 ) write (lunit6, 38010)   d6, d7, d1
+  if ( kol132  .eq.  80 ) write (lunit6, 6651)  d6, d7, d1
+6651 format (  39h total case timing (cp, i/o, tot), sec:, 1x,  3f10.3  )
+  lastov = nchain
+  nchain = 1
+  if ( iprsup  .ge.  1 ) write (lunit6, 4568)  kill
+4568 format ( 23h exit "over55".  kill =,  i6  )
+  go to 99999
+2601 d1 = flstat(1) + flstat(2)
+  d4 = d1
+  if ( kol132  .eq.  132 ) write(lunit6, 38004)  flstat(1), flstat(2), d1
+  if ( kol132  .eq.  80 ) write (lunit6, 6652)  flstat(1), flstat(2), d1
+6652 format (  29h seconds for overlays  1-6  :, 3f9.3,   22h  --- (cp;  i/o;  tot)    )
+38004 format( 5x, 67hdata input, sorting, and renumbering (pre steady state stuff) .....   , 28x, 3f10.3 )
+  d1 = flstat(3) + flstat(4)
+  d4 = d4 + d1
+  if ( kol132  .eq.  132 ) write (lunit6, 38005)  flstat(3), flstat(4), d1
+38005 format( 5x, 47hsteady-state (s.s.) solution calculations ..... , 48 x, 3f10.3 )
+  if ( kol132  .eq.  80 ) write (lunit6, 6653)  flstat(3), flstat(4), d1
+6653 format (  29h seconds for overlays  7-12 :,  3f9.3  )
+  d1 = flstat(5) + flstat(6)
+  d4 = d4 + d1
+  if ( kol132  .eq.  132 ) write(lunit6, 38006) flstat(5), flstat(6), d1
+38006 format( 5x, 53hpost-s.s. to pre-integration-setup calculations .....  , 42x, 3f10.3 )
+  if ( kol132  .eq.  80 ) write (lunit6, 6654)  flstat(5), flstat(6), d1
+6654 format (  29h seconds for overlays 13-15 :,  3f9.3  )
+  d1 = flstat(7) + flstat(8)
+  d4 = d4 + d1
+  if ( kol132  .eq.  132 ) write(lunit6, 38007)  flstat(7), flstat(8), d1
+38007 format( 5x, 54hintegration calculation (time in time-step loop) .....  , 41x, 3f10.3   )
+  if ( kol132  .eq.  80 ) write (lunit6, 6655)  flstat(7), flstat(8), d1
+6655 format (  29h seconds for time-step loop :,  3f9.3  )
+  hmin = flstat(9)  +  flstat(10)
+  d4 = d4 + hmin
+  if ( kol132  .eq.  132 ) write (lunit6, 38008)  flstat(9), flstat(10), hmin
+38008 format( 5x,   65hcomputer time in plotting or statistics termination overlay ..... ,30x,3f10.3)
+  if ( kol132  .eq.  80 ) write (lunit6, 6656)   flstat(9), flstat(10), hmin
+6656 format (  29h seconds after deltat-loop  :,  3f9.3  )
+  d1 = flstat(11) + flstat(12)
+  d4 = d1 + d4
+  if ( kol132  .eq.  132 ) write (lunit6, 38009)  flstat(11), flstat(12), d1
+38009 format ( 5x,  37h'deltat'-change restart time  .......,  58x, 3f10.3  ,/,  101x,  29h-----------------------------        )
+  d2 = 0.0
+  d3 = 0.0
+  do i=1, 12, 2
+     d2 = d2 + flstat(i)
 38011 d3 = d3 + flstat(i+1)
-      if ( kol132  .eq.  132 )
-     1 write (lunit6, 38010)  d2, d3, d4
+  end do
+  if ( kol132  .eq.  132 ) write (lunit6, 38010)  d2, d3, d4
 38010 format ( 93x, 7htotals , 3f10.3, //,1x)
-      if ( kol132  .eq.  80 )
-     1 write (lunit6, 6658)  d2, d3, d4
- 6658 format (  29x,  27h-------------------------   ,/,
-     1   20x,  9htotals  :,  3f9.3  )
-      if ( isw  .ne.  4444 )  go to 6673
-      isw = -3344
-      call subr55
- 6673 lastov = nchain
-      nchain = 1
-      kill = 0
-      if ( iprsup  .ge.  1 )
-     1 write ( lunit6, 4568 )  kill
+  if ( kol132  .eq.  80 ) write (lunit6, 6658)  d2, d3, d4
+6658 format (  29x,  27h-------------------------   ,/, 20x,  9htotals  :,  3f9.3  )
+  if ( isw  .ne.  4444 )  go to 6673
+  isw = -3344
+  call subr55
+6673 lastov = nchain
+  nchain = 1
+  kill = 0
+  if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )  kill
 99999 return
-      end
-c
-c     subroutine subr55.
-c
+end subroutine over55
+!
+!     subroutine subr55.
+!
       subroutine subr55
       implicit real*8 (a-h, o-z) ,
      1     integer*4 (i-n)
