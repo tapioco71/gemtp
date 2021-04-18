@@ -6,21 +6,16 @@
 !     subroutine over54.
 !
 subroutine over54
-  implicit real*8 (a-h, o-z) ,
-1 integer*4 (i-n)
-  include  'blkcom.ftn'
-  include  'volt45.ftn'
-  if ( iprsup  .ge.  1 )
-1 write ( lunit6, 4567 )
-4567 format ( 24h  "begin module over54." )
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  include 'blkcom.ftn'
+  include 'volt45.ftn'
+  if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
+4567 format ('  "begin module over54." ')
   if ( nchain  .ne.  54 )   go to 99999
   n1 = kill - 150
-  go to (
-1 6151 , 6152, 6153, 6154, 6155, 6156, 6157, 6158, 6159, 6160,
-2 6161 , 6162, 6163, 6164, 6165, 6166, 6167, 6168, 6169, 6170,
-3 6171 , 6172, 6173, 6174, 6175, 6176, 6177, 6178, 6179, 6180,
-4 6181 , 6182, 6183, 6184, 6185, 6186, 6187, 6188, 6189, 6190,
-5 6191 , 6192, 6193, 6194, 6195, 6196, 6197, 6198, 6199, 6200), n1
+  go to (6151 , 6152, 6153, 6154, 6155, 6156, 6157, 6158, 6159, 6160, 6161 , 6162, 6163, 6164, 6165, 6166, 6167, 6168, 6169, 6170, &
+       6171 , 6172, 6173, 6174, 6175, 6176, 6177, 6178, 6179, 6180, 6181 , 6182, 6183, 6184, 6185, 6186, 6187, 6188, 6189, 6190, &
+       6191 , 6192, 6193, 6194, 6195, 6196, 6197, 6198, 6199, 6200), n1
 6151 write (lunit6, 7151)
 7151 format (5x, 104hthe present data case has a positive parameter  'n
 1 energ'  (read from columns 65-72 of the floating-point        ,/,
