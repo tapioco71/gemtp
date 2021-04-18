@@ -543,17 +543,17 @@ subroutine over53
        5x, '6-character name  ', "'", a6,  "'", '  (read from cols. 3-8 of the card) ')
   write (lunit6, 7230)  bus1
 7230 format ('+', 68x, 'for which one of the algebraic operator codes',/, &
-          5x, 'is illegal according to tacs rules.   One of the  a1  fields in which specification of the algebraic operators',/, &
-          5x, 'is to be punched was read as  ', "'", a1,  "'", ' ,   which is an unrecognized character for this usage.   The user',/, &
-          5x, 'is advised to study the tacs rules related to the construction of supplemental-variable cards, and then look',/, &
-          5x, 'closely at the last-read data card, to see precisely what the EMTP objects to. ')
+       5x, 'is illegal according to tacs rules.   One of the  a1  fields in which specification of the algebraic operators',/, &
+       5x, 'is to be punched was read as  ', "'", a1,  "'", ' ,   which is an unrecognized character for this usage.   The user',/, &
+       5x, 'is advised to study the tacs rules related to the construction of supplemental-variable cards, and then look',/, &
+       5x, 'closely at the last-read data card, to see precisely what the EMTP objects to. ')
   go to 6220
 6131 n1 = lstat(14)
   write (lunit6, 7131)
 7131 format (5x, 'The problem under consideration includes tacs data, the tacs function blocks of which have already all been',/, &
-          5x, 'read by the EMTP.   Columns 69-80 of the leading data card for each function block are read using  2a6  format,',/, &
-          5x, 'in order to determine which tacs variables (if any....if the fields are nonblank) are to be used as variable',/, &
-          5x, 'limits for the block.   Now, on this basis the EMTP takes exception to the data card which defines the function ')
+       5x, 'read by the EMTP.   Columns 69-80 of the leading data card for each function block are read using  2a6  format,',/, &
+       5x, 'in order to determine which tacs variables (if any....if the fields are nonblank) are to be used as variable',/, &
+       5x, 'limits for the block.   Now, on this basis the EMTP takes exception to the data card which defines the function ')
   write (lunit6, 7231)  bus1
 7231 format (5x, 'block with name  ', "'", a6,  "'", '  (as read from columns 3-8).   Columns         are for the     -limit name, ')
   if ( n1  .eq.  1 )
@@ -563,188 +563,183 @@ subroutine over53
 7431 format ('+', 70x, '75-80', 14x, 'high')
   write (lunit6, 7531)  bus6
 7531 format (5x, 'with  ', "'", a6, "'", '  read therefrom by the EMTP.   This limit variable is unknown to the EMTP, not being',/, &
-          5x, 'recognized as any valid tacs variable name.   Did the user make a spelling error, the EMTP wonders.   Since the',/, &
-          5x, 'EMTP is uncertain as to what the user wants done with this limit, execution of this data case is being terminated. ')
+       5x, 'recognized as any valid tacs variable name.   Did the user make a spelling error, the EMTP wonders.   Since the',/, &
+       5x, 'EMTP is uncertain as to what the user wants done with this limit, execution of this data case is being terminated. ')
   go to 7421
 6132 write (lunit6, 7130)  bus2
   write (lunit6, 7132)  bus1
 7132 format ('+', 68x, 'for which one of the function codes is invalid.',/, &
-          5x,  'one of the  a5  fields in which the functions are to be specified was read as  ', "'", a5,  "'", ' ,   which is an',/, &
-          5x, 'unrecognizable name for a supplemental variable function.      Did the user make a spelling error, the EMTP wonders. ')
+       5x,  'one of the  a5  fields in which the functions are to be specified was read as  ', "'", a5,  "'", ' ,   which is an',/, &
+       5x, 'unrecognizable name for a supplemental variable function.      Did the user make a spelling error, the EMTP wonders. ')
   go to 6220
 6133 write (lunit6, 7130)   bus1
   write (lunit6, 7133)
 7133 format ('+', 68x, 'for which no operator, function, or argument has',/, &
-          5x, 'been defined.   The EMTP cannot calculate the output for a tacs block whose input is unknown. ')
+       5x, 'been defined.   The EMTP cannot calculate the output for a tacs block whose input is unknown. ')
   go to 6220
 6134 write (lunit6, 7130)  bus1
   write (lunit6, 7134)  lstat(14)
 7134 format ('+', 68x, 'for which the device code is invalid.   A value',/, &
-          5x, 'of',  i4, '  was read from columns 9-10 of the card, which is not a legal tacs supplemental device code number. ')
+       5x, 'of',  i4, '  was read from columns 9-10 of the card, which is not a legal tacs supplemental device code number. ')
   go to 6220
 6135 write (lunit6, 7130)   bus1
   write (lunit6, 7236)
   go to 6220
 6136 write (lunit6, 7136)   bus1
 7136 format (5x, 'The user has been inputting tacs data, with the last-read data card being a request for a function block.',/, &
-          5x,  'This was to be given (output) variable name  ', "'", a6, "'", ' ,   as read from columns 3-8 of the last-read data card. ')
+       5x,  'This was to be given (output) variable name  ', "'", a6, "'", ' ,   as read from columns 3-8 of the last-read data card. ')
   write (lunit6, 7236)
 7236 format (5x, 'Yet none of the five available data fields which define the inputs to this block have been used (all associated',/, &
-          5x, 'data fields are blank).   These are for alphanumeric names, read from columns 12-17, 20-25, 28-33, 36-41, and 44-49',/, &
-          5x, 'using  a6  formats.   The EMTP can not calculate the output of a block for which the input is a mystery. ')
+       5x, 'data fields are blank).   These are for alphanumeric names, read from columns 12-17, 20-25, 28-33, 36-41, and 44-49',/, &
+       5x, 'using  a6  formats.   The EMTP can not calculate the output of a block for which the input is a mystery. ')
   go to 6220
 6137 write (lunit6, 7137)  bus1, lstat(14), bus2, bus3
 7137 format ( 5x, 'The EMTP has been inputting tacs function blocks, with the last-read data card representing an illegal such',/, &
-          5x,  'request.   This was to have been the lead card of a function block having (output) name  ', "'", a6,  "'", '  (cols. 3-8).',/, &
-          5x,  'input field number', i3,  '  to this block has been punched with tacs name  ', "'", a6,  "'", ' ,   but is not immediately',/, &
-          5x, 'preceded by either a plus sign or a minus sign.   Rather, the character  ', "'", a1, "'", '  was read.   Remember, ')
+       5x,  'request.   This was to have been the lead card of a function block having (output) name  ', "'", a6,  "'", '  (cols. 3-8).',/, &
+       5x,  'input field number', i3,  '  to this block has been punched with tacs name  ', "'", a6,  "'", ' ,   but is not immediately',/, &
+       5x, 'preceded by either a plus sign or a minus sign.   Rather, the character  ', "'", a1, "'", '  was read.   Remember, ')
   write (lunit6, 7237)
 7237 format (5x, 'each non-blank tacs input-name field ( a6  information, columns 12-17, 20-25, 28-33, 36-41, 44-49)  must be',/, &
-          5x, 'immediately preceded by either a plus sign or a minus sign ( a1  information, columns 11, 19, 27, 35, 43), indicating',/, &
-          5x,  'the polarity to be applied to the associated input variable. ')
+       5x, 'immediately preceded by either a plus sign or a minus sign ( a1  information, columns 11, 19, 27, 35, 43), indicating',/, &
+       5x,  'the polarity to be applied to the associated input variable. ')
   go to 6220
 6138 write (lunit6, 7138)  lstat(14)
 7138 format (5x, 'The last-read data card has been taken by the EMTP to be a card specifying which tacs variables are to be',/, &
-          5x, 'placed in the EMTP output vector (and hence will be available for printing and/or plotting purposes).   Yet the  i2',/, &
-          5x, 'field of columns 1-2 contains an illegal integer value  ', "'", i2,  "'", ' .   Only values of zero (for selective output)',/, &
-          5x,  'or unity (for output of all tacs variables) are allowed by the EMTP. ')
+       5x, 'placed in the EMTP output vector (and hence will be available for printing and/or plotting purposes).   Yet the  i2',/, &
+       5x, 'field of columns 1-2 contains an illegal integer value  ', "'", i2,  "'", ' .   Only values of zero (for selective output)',/, &
+       5x,  'or unity (for output of all tacs variables) are allowed by the EMTP. ')
   go to 6220
 6139 write (lunit6, 7130)  bus3
   n1 = lstat(14)
   go to  (7139, 7239, 7339), n1
 7139 write (lunit6, 7439)  bus1
 7439 format (5x,  'One of the arguments has been read as  ', "'", a6, "'",  ' ,   for which the user has failed to define an',/, &
-          5x,  'algebraic or a logical operator. ')
+       5x,  'algebraic or a logical operator. ')
   go to 6220
 7239 write (lunit6, 7539)  flstat(16)
 7539 format (5x,  'One of the arguments has been read as the floating-point number',   e14.6,   ' ,   for which the user has',/, &
-          5x,  'failed to define an algebraic or a logical operator.')
+       5x,  'failed to define an algebraic or a logical operator.')
   go to 6220
 7339 write (lunit6, 7639)  bus2
 7639 format (5x,  'One of the operators has been read as the alphanumeric text  ', "'", a1, "'", ' ,   for which the user has failed',/, &
-          5x,  'to define a function and/or an argument. ')
+       5x,  'to define a function and/or an argument. ')
   go to 6220
 6140 write (lunit6, 7140)
 7140 format (5x, 'Were it not for the sharp eye and always helpful good common sense of the EMTP, this simulation might have',/, &
-          5x, 'continued.   But there are no requests for tacs variables to be placed in the output vector, nor is the EMTP',/, &
-          5x, 'expecting any electrical network data to follow, as part of this data case.   Recall that one or more nonblank',/, &
-          5x, "fields on either the  'tacs outputs'  or the  'tacs EMTP sources'  card is required for EMTP electrical network ")
+       5x, 'continued.   But there are no requests for tacs variables to be placed in the output vector, nor is the EMTP',/, &
+       5x, 'expecting any electrical network data to follow, as part of this data case.   Recall that one or more nonblank',/, &
+       5x, "fields on either the  'tacs outputs'  or the  'tacs EMTP sources'  card is required for EMTP electrical network ")
   write (lunit6, 7240)
 7240 format (5x, 'data to follow the tacs data, as part of a hybrid data case.   There would thus be no output vector, and if',/, &
-          5x, 'the simulation were allowed to continue, results would go unobserved.   Possibly the user wanted this situation,',/, &
-          5x, 'but the EMTP will not allow it.   For a data case to be allowed to enter the time-step loop, there must have been',/, &
-          5x, 'requested one or more output variables (either a tacs variable, or an electrical-network variable). ')
+       5x, 'the simulation were allowed to continue, results would go unobserved.   Possibly the user wanted this situation,',/, &
+       5x, 'but the EMTP will not allow it.   For a data case to be allowed to enter the time-step loop, there must have been',/, &
+       5x, 'requested one or more output variables (either a tacs variable, or an electrical-network variable). ')
   go to 6220
 6141 write (lunit6, 7141)  nenerg
 7141 format (5x, "The key word  'statistics'  or  'systematic'  can be punched in columns 55-64 of a switch card, as part of a",/, &
-          5x, "data case which has integer miscellaneous data parameter 'nenerg'  punched nonzero.   But these must be",/, &
-          5x,  'coordinated as follows .....',/, & 12x,  "positive  'nenerg'  -------  use only  'statistics'  ",/, &
-          12x, "negative  'nenerg'  -------  use only  'systematic'",/, &
-          12x, "    zero  'nenerg'  -------  use neither one.",/, &
-          5x, 'the last-read data card is a switch card which violates this rule.   a value of', i6,  "   was read for  'nenerg' , ")
+       5x, "data case which has integer miscellaneous data parameter 'nenerg'  punched nonzero.   But these must be",/, &
+       5x,  'coordinated as follows .....',/, & 12x,  "positive  'nenerg'  -------  use only  'statistics'  ",/, &
+       12x, "negative  'nenerg'  -------  use only  'systematic'",/, &
+       12x, "    zero  'nenerg'  -------  use neither one.",/, &
+       5x, 'the last-read data card is a switch card which violates this rule.   a value of', i6,  "   was read for  'nenerg' , ")
   write (lunit6, 7241)
 7241 format (5x, 'the user is reminded.   Hence this data case either mixes the two key words of columns 55-64, or the sign on',/, &
-          5x, "parameter  'nenerg'  does not correspond to the single key word which is being used. ")
+       5x, "parameter  'nenerg'  does not correspond to the single key word which is being used. ")
   go to 6220
 6142 write( lunit6, 7142 )  kill
 7142 format( 5x, 'Unused kill code number....', i5)
   go to 6220
 6143 write (lunit6, 7143)   bus2
 7143 format (5x, 'The tacs data which has now all been inputted is incomplete.   Specifically, there is a problem which is',/, &
-          5x, 'associated with the tacs supplemental variable or device which was given the (output) name  ', "'", a6, "'", '  (as',/, &
-          5x, 'read from columns 3-8 of the data card which defined this variable).   The difficulty here is associated with',/, &
-          5x, 'one of the arguments or inputs to this supplemental variable or device.   This problem argument or input, which ')
+       5x, 'associated with the tacs supplemental variable or device which was given the (output) name  ', "'", a6, "'", '  (as',/, &
+       5x, 'read from columns 3-8 of the data card which defined this variable).   The difficulty here is associated with',/, &
+       5x, 'one of the arguments or inputs to this supplemental variable or device.   This problem argument or input, which ')
   write (lunit6, 7243)  bus1
 7243 format (5x,  'was identified by the 6-character  a6  name  ', "'",  a6, "'", ' ,   is undefined.   This name is neither the',/, &
-          5x, 'output of a tacs dynamic or zero-th order function block, nor is it a tacs source name.   The name in question',/,&
-          5x, 'does not identify any other supplemental variable or device, either, at least not any which has been defined',/, &
-          5x, 'before the appearance of the problem supplemental variable or device (as required by tacs rules on ordering). ')
+       5x, 'output of a tacs dynamic or zero-th order function block, nor is it a tacs source name.   The name in question',/,&
+       5x, 'does not identify any other supplemental variable or device, either, at least not any which has been defined',/, &
+       5x, 'before the appearance of the problem supplemental variable or device (as required by tacs rules on ordering). ')
   write (lunit6, 7343)
 7343 format (5x,  'Did the user make a spelling error, the EMTP wonders. ')
-    go to 7421
+  go to 7421
 6144 n1 = 93
-    write (lunit6, 7125)  n1, bus1
-    write (lunit6, 7144)
+  write (lunit6, 7125)  n1, bus1
+  write (lunit6, 7144)
 7144 format ('+', 17x, 'Also, this EMTP electrical-network node must have a switch connected to it, since it is the',/, &
-          5x, 'status of the first (in order of EMTP data input) such switch which is to be controlled by this type-93 tacs',/, &
-          5x, 'source.   But no EMTP switch adjacent to the node in question can be found by the EMTP.   Since the EMTP does',/, &
-          5x, 'not know what variable of the electrical network should be used to control this type-93 tacs source, execution',/, &
-          5x, 'must be terminated at this point. ')
-    go to 7421
+       5x, 'status of the first (in order of EMTP data input) such switch which is to be controlled by this type-93 tacs',/, &
+       5x, 'source.   But no EMTP switch adjacent to the node in question can be found by the EMTP.   Since the EMTP does',/, &
+       5x, 'not know what variable of the electrical network should be used to control this type-93 tacs source, execution',/, &
+       5x, 'must be terminated at this point. ')
+  go to 7421
 6145 write (lunit6, 7145)
 7145 format (5x, 'The EMTP data case now being inputted involves one or more continuously-transposed distributed-parameter',/, &
-          5x, 'transmission lines, with frequency-dependent representation of resistance  r  and  inductance  l  in one or more',/, &
-          5x, 'of the modes.   In fact, the last-read data card is the miscellaneous data parameter card which precedes the point-',/, &
-          5x, 'by-point definition of a pair of weighting functions.   The first 16 columns of this card are read using  2i8 ')
-    write (lunit6, 7245)  lstat(14), lstat(15), lstat(16)
+       5x, 'transmission lines, with frequency-dependent representation of resistance  r  and  inductance  l  in one or more',/, &
+       5x, 'of the modes.   In fact, the last-read data card is the miscellaneous data parameter card which precedes the point-',/, &
+       5x, 'by-point definition of a pair of weighting functions.   The first 16 columns of this card are read using  2i8 ')
+  write (lunit6, 7245)  lstat(14), lstat(15), lstat(16)
 7245 format (5x, "format, to find parameters  'ntime1'  and  'ntime2' .   These give the number of points which are used to",/, &
-          5x, 'define the two weighting functions  a1(t)  and  a2(t) , and were read as values', i8, '   and', i8,  ' ,',/, &
-          5x, 'respectively.   The larger of these exceeds the available maximum working space, which is dimensioned', i8,  '   cells.')
-    if ( kburro .eq. 0 ) write (lunit6, 7445)
+       5x, 'define the two weighting functions  a1(t)  and  a2(t) , and were read as values', i8, '   and', i8,  ' ,',/, &
+       5x, 'respectively.   The larger of these exceeds the available maximum working space, which is dimensioned', i8,  '   cells.')
+  if ( kburro .eq. 0 ) write (lunit6, 7445)
 7445 format (5x, 'Concerning this latter figure, the user should be aware that the   /label/   storage of EMTP lists ' )
-    if ( kburro .eq. 0 ) write (lunit6, 7345)
+  if ( kburro .eq. 0 ) write (lunit6, 7345)
 7345 format (5x, 'number  5  and  7  only is involved.   This limited region of memory is divided into four equal-sized arrays,',/, &
-          5x, "each having the aforestated inadequate dimension.   In order to get the user's wieghting functions into the EMTP",/, &
-          4 5x, '(and compacted into their final storage in the array of EMTP list number 14), the sizes of EMTP list numbers  5',/, &
-          5x, 'and/or  7  must be increased.   Use the above explanation together with known list multiplicities in order to',/, &
-          5x, 'determine the required increase in size. ')
-    if ( kburro .ne. 0 ) write (lunit6, 7545)
+       5x, "each having the aforestated inadequate dimension.   In order to get the user's wieghting functions into the EMTP",/, &
+       4 5x, '(and compacted into their final storage in the array of EMTP list number 14), the sizes of EMTP list numbers  5',/, &
+       5x, 'and/or  7  must be increased.   Use the above explanation together with known list multiplicities in order to',/, &
+       5x, 'determine the required increase in size. ')
+  if ( kburro .ne. 0 ) write (lunit6, 7545)
 7545 format (5x, 'Concerning this latter figure, the user should remember that he is using a virtual computer, so list 23 of "vardim"',/,  &
-          5x, 'is used for storage.  Such a region of memory is divided into four equal-size arrays, with each of these having the',/,  &
-          5x,  'aforementioned inadequate size.  In order to successfully process the weighting functions, list 23 must grow. ')
-    go to 6220
+       5x, 'is used for storage.  Such a region of memory is divided into four equal-size arrays, with each of these having the',/,  &
+       5x,  'aforementioned inadequate size.  In order to successfully process the weighting functions, list 23 must grow. ')
+  go to 6220
 6146 write (lunit6, 7146)  bus1, bus2
 7146 format (5x, 'Switch cards are now being inputted, for the EMTP data case under consideration.   Specifically, the last-read',/, &
-          5x, 'data card represents a request for a type-11 switch (i.e. , a diode or a valve) which connects node  ', "'", a6,  "'",/, &
-          5x,  'with node  ', "'", a6, "'", ' . ')
-    n1 = kswtch - 1
-    write (lunit6, 7246)  n1
+       5x, 'data card represents a request for a type-11 switch (i.e. , a diode or a valve) which connects node  ', "'", a6,  "'",/, &
+       5x,  'with node  ', "'", a6, "'", ' . ')
+  n1 = kswtch - 1
+  write (lunit6, 7246)  n1
 7246 format ('+', 28x, "Now, columns 61-64 were punched with the key-word  'same' ,   which is understood to be",/, &
-          5x, 'a request that the physical characteristics of the present valve or diode be identical to those of the most-recent',/, &
-          5x, 'preceding type-11 switch element.   But of the preceding', i4,  '  switch cards, none were type-11 (punched in',/, &
-          5x, 'cols. 1-2).   Thus the reference switch does not exist, and the EMTP has no way of knowing what modeling',/, &
-          5x, 'parameters should be used to describe the present diode or valve. ')
-    go to 6220
+       5x, 'a request that the physical characteristics of the present valve or diode be identical to those of the most-recent',/, &
+       5x, 'preceding type-11 switch element.   But of the preceding', i4,  '  switch cards, none were type-11 (punched in',/, &
+       5x, 'cols. 1-2).   Thus the reference switch does not exist, and the EMTP has no way of knowing what modeling',/, &
+       5x, 'parameters should be used to describe the present diode or valve. ')
+  go to 6220
 6147 write (lunit6, 7147)  bus5
 7147 format (1x, 100( '-' ),  //, 5x,  'This switch makes reference to the non-existing control tacs variable  ', "'", a6, "'", //, 1x, 100('-'))
-    go to 7421
+  go to 7421
 6148 write (lunit6, 7148)  bus1, bus2, flstat(15), flstat(16)
 7148 format (5x, 'The last-read data card is for a switched-inductance element (type-93 switch card) which connects node',/, &
-          5x, " '", a6, "'", '  with node  ', "'", a6, "'", ' .   But the value for residual flux (punched in columns 15-24, and read',/, &
-          5x, 'using  e10.6  format) is illegal, for it exceeds the saturation flux (punched in columns 45-54, and read using',/, &
-          5x, 'e10.6  format).   The numerical values for these two numbers are',     e15.4  ,  '  and',    e15.4 , ' ,  respectively. ')
-    write (lunit6, 7248)
-7248 format (5x, 'Correct this violation of the EMTP rules, and try
-1   again.           )
-    go to 6220
+       5x, " '", a6, "'", '  with node  ', "'", a6, "'", ' .   But the value for residual flux (punched in columns 15-24, and read',/, &
+       5x, 'using  e10.6  format) is illegal, for it exceeds the saturation flux (punched in columns 45-54, and read using',/, &
+       5x, 'e10.6  format).   The numerical values for these two numbers are',     e15.4  ,  '  and',    e15.4 , ' ,  respectively. ')
+  write (lunit6, 7248)
+7248 format (5x, 'Correct this violation of the EMTP rules, and try again. ')
+  go to 6220
 6149 write (lunit6, 7149)  flstat(14)
-7149 format (5x, 105hthe last-read data card has been taken by the EMTP
-1   to be a source card of type 14 (sinusoidal generator).       ,/,
-2 5 x, 111hbut the frequency as read from columns 21-30 of this card
-3   is not positive, as required by EMTP rules.   a value       ,/,
-4 5 x, 2hof,     e13.4,   88h  was read.   sinusoids of other than p
-5   ositive frequency must be rejected by the EMTP on           ,/,
-6 5 x,  74haesthetic grounds.   the user should correct columns 21-3
-70  , and try again.         )
-    go to 6220
+7149 format (5x, 'The last-read data card has been taken by the EMTP to be a source card of type 14 (sinusoidal generator).',/, &
+       5x, 'But the frequency as read from columns 21-30 of this card is not positive, as required by EMTP rules.   A value',/, &
+       5x, 'of',     e13.4,   '  was read.   Sinusoids of other than positive frequency must be rejected by the EMTP on',/, &
+       5x, 'aesthetic grounds.   The user should correct columns 21-3 , and try again. ')
+  go to 6220
 6150 d1 = flstat(14) / deltat
-    write (lunit6, 7150)  deltat, bus1, bus2
+  write (lunit6, 7150)  deltat, bus1, bus2
 7150 format (5x, "The user has picked a time-step size  'deltat'  (read from columns 1-8 of the floating-point miscellaneous      ",/, &
-         5x, 'data card) which is too small for one of the distributed parameter transmission lines that is to be modeled using      ',/, &
-         5x, 'Semlyen recursive convolution.   A step-size of', e14.4,  '  seconds was requested, which is too large      ',/, &
-         5x, 'for the Semlyen line having phase number 1 that connects node  ', "'", a6,   "'", ' with node  ', "'", a6, "'", '.   The')
-    write (lunit6, 7250)  lstat(15), flstat(14), d1
+       5x, 'data card) which is too small for one of the distributed parameter transmission lines that is to be modeled using      ',/, &
+       5x, 'Semlyen recursive convolution.   A step-size of', e14.4,  '  seconds was requested, which is too large      ',/, &
+       5x, 'for the Semlyen line having phase number 1 that connects node  ', "'", a6,   "'", ' with node  ', "'", a6, "'", '.   The')
+  write (lunit6, 7250)  lstat(15), flstat(14), d1
 7250 format (5x, 'rule is that the travel time for all Semlyen modes must exceed  two  time steps.   but for mode number',  i4, /, &
-         5x,  "of the aforementioned line, the travel time  'tau'  is only",    e14.4,    '  seconds.   The ratio of these gives     ',/, &
-         5x,  'tau/deltat =',   e12.4,   " ,   which is too small (less than 2.0).   Decrease the time-step size  'deltat'          ",/, &
-         5x, 'accordingly, or alter the transmission line modeling, in order to make this data case solvable using the EMTP.          ')
-    go to 6220
+       5x,  "of the aforementioned line, the travel time  'tau'  is only",    e14.4,    '  seconds.   The ratio of these gives     ',/, &
+       5x,  'tau/deltat =',   e12.4,   " ,   which is too small (less than 2.0).   Decrease the time-step size  'deltat'          ",/, &
+       5x, 'accordingly, or alter the transmission line modeling, in order to make this data case solvable using the EMTP.          ')
+  go to 6220
 6220 lastov = nchain
-     nchain = nfrfld + 50
-     if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
+  nchain = nfrfld + 50
+  if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
 4568 format ( 24h "exit  module over53." )
 99999 return
-   end function block
-   c
-   c     end of file: over53.for
-   c
+end subroutine over53
+!
+!     end of file: over53.for
+!
