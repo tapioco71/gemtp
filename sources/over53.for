@@ -438,477 +438,460 @@ subroutine over53
 7622 format (8x,  '8.  Number of tacs supplemental devices proper (type codes 50, 51, ... 58).',/, &
           8x,  '9.  Total number of signed input variables to supplemental devices.',/, &
           7x, '10.  Total number of transport delay history terms, digitizer levels, and 2*points for nonlinear devices. ')
-               write (lunit6, 2222)
-2222           format (7x,  97h11.  the sum over all tacs dynamic function blocks
-1                of the block order + one --- the sum of (n+1).              ,/,
-2 7              x, 106h12.  total number of dynamic and zero-th order blocks (ma
-3                y be less than the sum of table numbers 1 and 2).            ,/,
-4 7              x,  72h13.  number of distinct  a6  names used in the tacs data
-5                representation.                                              )
-                 write (lunit6, 2322)
-2322             format (7x,  89h14.  number of nonzero factors of the triangulariz
-1                ed matrix (steady-state or transients).                      ,/,
-2 7              x, 100h15.  number of tacs output variables (as requested by the
-3                user before tacs initial condition cards).                 ,/,1x)
-                 if ( lstat(17)  .eq.  15 )
-1                write (lunit6, 2422)
-2422             format ( 12x,  97hactually, the limit for tacs table 15 is one les
-1                s than was indicated above, if the user's problem            ,/,
-2 12             x,      103hpossesses an electric network.   the extra output-i
-3                dentification name  'tacs  '  is internally added to         ,/,
-4 12             x,       44hthe output vector by the EMTP, in this case.,
-5            38  h   more importantly, if the user asked,
-6            38  h for the output of all tacs variables, ,/,
-7 12             x,       39hhe just shot himself in the foot.  this,
-8            37  h will never work, due to astronomical,
-9            40  h csp spy demands.  use selective output. )
-                 write (lunit6, 7822)   (i, i=1, 15)
-7822             format (5x, 109hok, so just as with overall EMTP variable dimensio
-1                ning, the user can intelligently allocate storage among the    ,/,
-2 5              x, 110hdifferent tacs tables only if he knows the multiplicity o
-3                f each.   for the tacs table numbers just delineated,         ,/,
-4 5              x,  41hone has the following multiplicities ....   ,/,
-5 10             x,   18htacs table number.,  10x,  15i5,  /,
-6 10             x,  26halphanumeric multiplicity.,  2x,  75h    5    3    1
-71    1    1    0    2    1    0    0    0    2    0    1 )
-                 write (lunit6, 7922)
-7922             format(10x, 28hfloating-point multiplicity., 75h    7    3    0
-1 5    0    0    1    3    0    1    5    3    6    2    5 ,/,
-2 10             x,  21hinteger multiplicity.,  7x,   75h    7    3    1    1
-3 3    2    0    3    1    0    0    3    0    1    1 ,/,
-4 10             x,   19htotal multiplicity.   ,  9x,   75h   19    9    2    7
-5   4    3    1    8    2    1    5    6    8    3    7 )
-                 write(lunit6,2122)  (i, i=1, 15),  (lstat( i), i=1, 15)
-2122             format (5x,  92hdimensioned sizes of the tacs tables which were us
-1                ed for the present run are as follows ....     ,/,
-2 10             x,    18htacs table number.,   10x,   15i5,  /,
-3 10             x, 18hpresent dimension.,   10x,   15i5    )
-                 go to 6220
-6123             write (lunit6, 7123)
-7123             format (  8h unused.  )
-6124             write (lunit6, 7124)
-7124             format (5x, 110hpreceding all tacs data cards, the user inputted a
-1                special request card which was punched with the text  'tacs   ,/,
-2 5              x, 113hEMTP sources'  in columns 1-17.   now, columns 21-80 of t
-3                his card are to be read by the EMTP using  10a6  format,     ,/,
-4 5              x, 109hin order to discover which type 1 through 10 EMTP sources
-5                the user wants to have controlled by specified tacs      ,/,
-6 5              x, 106hvariables.   recall that if the k-th field so-read contai
-7                ns the nonblank  a6  text  'name' ,   then on the        )
-                 write (lunit6, 7224)  lstat(14), bus1
-7224             format (5x, 109helectrical side it will be the EMTP source of type
-1                -code  'k'  which will be given the numerical value of tacs   ,/,
-2 5              x,  96hvariable  'name' .   now, the user's  'tacs EMTP sources'
-3                card is in error because field number, i3,  13h  was punched ,/,
-4 5              x,  16hwith the name  ', a6,  87h' ,   which does not correspond
-5                to any tacs variable.   maybe this name was misspelled,      ,/,
-6 5              x, 115hthe EMTP wonders.   in any case, since tacs cannot supply
-7                a necessary interface request, execution will be stopped.     )
-                 go to 7421
-6125             n1 = 90
-                 write (lunit6, 7125)  n1, bus1
-7125             format (5x,  97has part of the user's tacs data which has now been
-1                completely read by the EMTP, there was a type-, i2,  5h tacs  ,/,
-2 5              x,  59hsource card which bore the 6-character alphanumeric name
-3                ', a6,  45h'  in columns 3-8.   now, by definition, this      ,/,
-4 5              x, 114hfield must be punched with a node name (a6 format) of the
-5                EMTP electrical network which is a part of this 'hybrid'    ,/,
-6 5              x,  10hdata case.     )
-                 write (lunit6, 7225)
-7225             format (   1h+,   17x,  99hbut no branch or switch card of the sub
-1                sequently-inputted electrical network defined this  a6  node   ,/,
-2 5              x, 115hname.   since the EMTP does not know what variable of the
-3                electrical network should be used to control this type-90   ,/,
-4 5              x,  55hsource, execution of the data case will now be stopped. )
-                 go to 7421
-6126             n1 = 91
-                 write (lunit6, 7125)  n1, bus1
-                 write (lunit6, 7226)
-7226             format (   1h+,  17x,  91halso, this EMTP electrical-network node
-1                must have a switch connected to it, since it is the    ,/,
-2 5              x, 111hcurrent in the first (in order of data input) such adjace
-3                nt switch which is to control the type-91 tacs source.   ,/,
-4 5              x, 107hbut no such switch can be found by the EMTP.   since the
-5                EMTP does not know what variable of the electrical       ,/,
-6 5              x,  86hnetwork should be used to control this type-91 tacs sourc
+  write (lunit6, 2222)
+2222 format (7x,  '11.  The sum over all tacs dynamic function blocks of the block order + one --- the sum of (n+1).',/, &
+          7x, '12.  Total number of dynamic and zero-th order blocks (may be less than the sum of table numbers 1 and 2).',/, &
+          7x, '13.  Number of distinct  a6  names used in the tacs data representation. ')
+  write (lunit6, 2322)
+2322 format (7x,  '14.  Number of nonzero factors of the triangularized matrix (steady-state or transients).',/, &
+          7x, '15.  Number of tacs output variables (as requested by the user before tacs initial condition cards).',/,1x)
+  if ( lstat(17)  .eq.  15 )
+1 write (lunit6, 2422)
+2422 format (12x, "Actually, the limit for tacs table 15 is one less than was indicated above, if the user's problem",/, &
+          12x, "possesses an electric network.   The extra output-identification name  'tacs  '  is internally added to",/, &
+          12x, 'the output vector by the EMTP, in this case.   More importantly, if the user asked for the output of all tacs variables,',/, &
+          12x, 'he just shot himself in the foot.  This will never work, due to astronomical csp spy demands.  Use selective output. ')
+  write (lunit6, 7822)   (i, i=1, 15)
+7822 format (5x, 'Ok, so just as with overall EMTP variable dimensioning, the user can intelligently allocate storage among the',/, &
+          5x, 'different tacs tables only if he knows the multiplicity of each.   For the tacs table numbers just delineated,',/, &
+          5x, 'one has the following multiplicities ....',/, &
+          10x, 'Tacs table number.',  10x,  15i5, /, &
+          10x,  'alphanumeric multiplicity.',  2x,  '    5    3    1    1    1    1    0    2    1    0    0    0    2    0    1 ')
+  write (lunit6, 7922)
+7922 format(10x, 'floating-point multiplicity.', '    7    3    0    5    0    0    1    3    0    1    5    3    6    2    5 ',/, &
+          10x, 'integer multiplicity.',  7x,   '    7    3    1    1    3    2    0    3    1    0    0    3    0    1    1 ',/, &
+          10x, 'total multiplicity.   ',  9x,   '   19    9    2    7   4    3    1    8    2    1    5    6    8    3    7 ')
+  write(lunit6,2122)  (i, i=1, 15),  (lstat( i), i=1, 15)
+2122 format (5x,  92hdimensioned sizes of the tacs tables which were us
+1 ed for the present run are as follows ....     ,/,
+2 10 x,    18htacs table number.,   10x,   15i5,  /,
+3 10 x, 18hpresent dimension.,   10x,   15i5    )
+  go to 6220
+6123 write (lunit6, 7123)
+7123 format (  8h unused.  )
+6124 write (lunit6, 7124)
+7124 format (5x, 110hpreceding all tacs data cards, the user inputted a
+1 special request card which was punched with the text  'tacs   ,/,
+2 5 x, 113hEMTP sources'  in columns 1-17.   now, columns 21-80 of t
+3 his card are to be read by the EMTP using  10a6  format,     ,/,
+4 5 x, 109hin order to discover which type 1 through 10 EMTP sources
+5 the user wants to have controlled by specified tacs      ,/,
+6 5 x, 106hvariables.   recall that if the k-th field so-read contai
+7 ns the nonblank  a6  text  'name' ,   then on the        )
+  write (lunit6, 7224)  lstat(14), bus1
+7224 format (5x, 109helectrical side it will be the EMTP source of type
+1 -code  'k'  which will be given the numerical value of tacs   ,/,
+2 5 x,  96hvariable  'name' .   now, the user's  'tacs EMTP sources'
+3 card is in error because field number, i3,  13h  was punched ,/,
+4 5 x,  16hwith the name  ', a6,  87h' ,   which does not correspond
+5 to any tacs variable.   maybe this name was misspelled,      ,/,
+6 5 x, 115hthe EMTP wonders.   in any case, since tacs cannot supply
+7 a necessary interface request, execution will be stopped.     )
+  go to 7421
+6125 n1 = 90
+  write (lunit6, 7125)  n1, bus1
+7125 format (5x,  97has part of the user's tacs data which has now been
+1 completely read by the EMTP, there was a type-, i2,  5h tacs  ,/,
+2 5 x,  59hsource card which bore the 6-character alphanumeric name
+3 ', a6,  45h'  in columns 3-8.   now, by definition, this      ,/,
+4 5 x, 114hfield must be punched with a node name (a6 format) of the
+5 EMTP electrical network which is a part of this 'hybrid'    ,/,
+6 5 x,  10hdata case.     )
+  write (lunit6, 7225)
+7225 format (   1h+,   17x,  99hbut no branch or switch card of the sub
+1 sequently-inputted electrical network defined this  a6  node   ,/,
+2 5 x, 115hname.   since the EMTP does not know what variable of the
+3 electrical network should be used to control this type-90   ,/,
+4 5 x,  55hsource, execution of the data case will now be stopped. )
+  go to 7421
+6126 n1 = 91
+  write (lunit6, 7125)  n1, bus1
+  write (lunit6, 7226)
+7226 format (   1h+,  17x,  91halso, this EMTP electrical-network node
+1 must have a switch connected to it, since it is the    ,/,
+2 5 x, 111hcurrent in the first (in order of data input) such adjace
+3 nt switch which is to control the type-91 tacs source.   ,/,
+4 5 x, 107hbut no such switch can be found by the EMTP.   since the
+5 EMTP does not know what variable of the electrical       ,/,
+6 5 x,  86hnetwork should be used to control this type-91 tacs sourc
 7                e, execution must be stopped.    )
-                 go to 7421
-6127             write (lunit6, 7127)  lstat(14), bus1
-7127             format (5x, 104has part of the input of tacs data which is now com
+  go to 7421
+6127 write (lunit6, 7127)  lstat(14), bus1
+7127 format (5x, 104has part of the input of tacs data which is now com
 1                plete, the user has elected to manually define initial   ,/,
-2 5              x, 111hconditions for one or more tacs variables.   recall that
-3                such data follows the blank card which terminates tacs    ,/,
+2 5 x, 111hconditions for one or more tacs variables.   recall that
+3 such data follows the blank card which terminates tacs    ,/,
 4 5              x, 105houtput-variable specification cards, with one tacs variab
-5                le name and associated initial condition on each             ,/,
-6 5              x,  43hcard.   now, of such specifications, number, i4,
-7 51             h  in order of input is for a tacs variable which is       ,/,
+5 le name and associated initial condition on each             ,/,
+6 5 x,  43hcard.   now, of such specifications, number, i4,
+7 51 h  in order of input is for a tacs variable which is       ,/,
 8 5              x,  54hpurported to have the 6-character alphanumeric name  ',
-9                a6,  40h' .   but no such tacs variable has been         )
-                 write (lunit6, 7227)
-7227             format (5x, 107hpreviously defined.   rather than allow the soluti
-1                on to continue with initial conditions which are probably    ,/,
-2 5              x,  44hincorrect, execution will now be terminated.    )
-                 go to 7421
-6128             write (lunit6, 7128)
-7128             format (5x, 105hduring triangularization of the real coefficient m
-1                atrix  (a)  which is used by tacs either for dc initial   ,/,
-2 5              x, 113hconditions or for the repeat solution of the time-step lo
-3                op, an indication of singularity or near-singularity has     )
-                 write (lunit6, 7228)  lstat(14), bus1, flstat(14)
-7228             format (5x,  106hbeen observed.   specifically, the trouble has ar
-1                isen while eliminating to the left of the diagonal on row, i4, /,
-2 5              x, 107hof the matrix, which corresponds to the equation that was
-3                written for the tacs block which has the variable     ,/,
-4 5              x,   8hnamed  ', a6,  64h'  for an output.   now, the original d
-5                iagonal element value was,   e14.5      )
-                 write (lunit6, 7328)  flstat(15), epsiln
-7328             format (5x,  93h(sign included), while just prior to reciprocation
-1                this has diminished (in absolute value) to,  e14.5,  2h .    ,/,
-2 5              x, 109ha near-zero diagonal value has thus occurred, as measured
-3                by the ratio of these two values vis-a-vis the EMTP    ,/,
-4 5              x,  63hmiscellaneous data parameter  'epsiln' ,   which has a va
-5                lue of, e13.4, 31h .   most probably the user has    )
-                 write (lunit6, 7428)
-7428             format (5x, 108hmade an error in a feedback loop of the tacs contr
-1                ol circuitry which contains the aforementioned tacs block.    ,/,
-2 5              x, 108hthe physical meaning associated with this matrix singular
-3                ity is that the control system is unstable.   since    ,/,
-4 5              x, 115hthe problem as posed has no physically-meaningful solutio
-5                n in the steady-state, execution is being terminated here.     )
-                 go to 6220
-6129             d1 = sqrtz ( flstat(14) )
-                 d2 = sqrtz ( flstat(15) )
-                 d3 = sqrtz ( tolmat )
-                 write (lunit6, 7129)
-7129             format (5x, 108hduring triangularization of the complex coefficien
-1                t matrix  (c)  which is used by tacs to find ac sinusoidal     ,/,
-2 5              x, 112hsteady-state initial conditions, an indication of matrix
-3                singularity (non-invertibility) or near-singularity has      )
-                 write (lunit6, 7228)  lstat(14), bus1, d1
-                 write (lunit6, 7329)  d2, d3
-7329             format (5x,  86h(in magnitude), while just prior to reciprocation,
-1                this has diminished in magnitude to, e14.5,  2h .    ,/,
-2 5              x, 109ha near-zero diagonal value has thus occurred, as measured
-3                by the ratio of these two values vis-a-vis the EMTP    ,/,
-4 5              x,  63hmiscellaneous data parameter  'tolmat' ,   which has a va
-5                lue of, e13.4, 31h .   most probably the user has    )
-                 write (lunit6, 7428)
-                 go to 6220
-6130             write (lunit6, 7130)  bus2
-7130             format (5x, 108hthe EMTP is in the process of inputting the user's
-1                tacs supplemental-variable data cards, with the last-read     ,/,
-2 5              x, 110hsuch data card being in error.   specifically, the user h
-3                as attempted to define a supplemental variable having        ,/,
-4 5              x,  19h6-character name  ', a6,  36h'  (read from cols. 3-8 of t
-5                he card)                                                     )
-                 write (lunit6, 7230)  bus1
-7230             format (1h+,   68x,
-1      45        hfor which one of the algebraic operator codes         ,/,
-2 5              x, 110his illegal according to tacs rules.   one of the  a1  fie
-3                lds in which specification of the algebraic operators       ,/,
-4        5       x,  31his to be punched was read as  ', a1,  67h' ,   whi
-5                ch is an unrecognized character for this usage.   the user    ,/,
-6 5              x, 108his advised to study the tacs rules related to the constru
-7                ction of supplemental-variable cards, and then look          ,/,
-8 5              x,  78hclosely at the last-read data card, to see precisely what
-9                the EMTP objects to.                                      )
-                 go to 6220
-6131             n1 = lstat(14)
-                 write (lunit6, 7131)
-7131             format (5x, 107hthe problem under consideration includes tacs data
-1                , the tacs function blocks of which have already all been     ,/,
-2 5                x, 111hread by the EMTP.   columns 69-80 of the leading data car
-3                  d for each function block are read using  2a6  format,       ,/,
-4 5                  x, 108hin order to determine which tacs variables (if any....if
-5                    the fields are nonblank) are to be used as variable           ,/,
-6 5                  x, 111hlimits for the block.   now, on this basis the EMTP takes
-7                    exception to the data card which defines the function        )
-                     write (lunit6, 7231)  bus1
-7231                 format (5x,  18hblock with name  ', a6,  77h'  (as read from colum
-1                    ns 3-8).   columns         are for the     -limit name,       )
-                     if ( n1  .eq.  1 )
-1                    write (lunit6, 7331)
-7331                 format ( 1h+, 70x,  5h69-74,15x,  3hlow     )
-                     if ( n1  .eq.  2 )
-1                    write (lunit6, 7431)
-7431                 format ( 1h+, 70x,  5h75-80,14x,  4hhigh    )
-                     write (lunit6, 7531)  bus6
-7531                 format (5x,   7hwith  ', a6,  86h'  read therefrom by the EMTP.
-1                    this limit variable is unknown to the EMTP, not being     ,/,
-2 5                  x, 111hrecognized as any valid tacs variable name.   did the use
-3                    r make a spelling error, the EMTP wonders.   since the     ,/,
-4 5                  x, 114hEMTP is uncertain as to what the user wants done with thi
-5                    s limit, execution of this data case is being terminated.     )
-                     go to 7421
-6132                 write (lunit6, 7130)  bus2
-                     write (lunit6, 7132)  bus1
-7132                 format ( 1h+, 68x,
-1  47                hfor which one of the function codes is invalid.         ,/,
-2 5                    x,  80hone of the  a5  fields in which the functions are to be s
-3                      pecified was read as  ', a5,  17h' ,   which is an           ,/,
-4 5                    x, 113hunrecognizable name for a supplemental variable function.
-5                      did the user make a spelling error, the EMTP wonders.      )
-                       go to 6220
-6133                   write (lunit6, 7130)   bus1
-                       write (lunit6, 7133)
-7133                   format ( 1h+, 68x,
-1 48                   hfor which no operator, function, or argument has         ,/,
-2 5                    x,  93hbeen defined.   the EMTP cannot calculate the output for
-3                      a tacs block whose input is unknown.           )
-                       go to 6220
-6134                   write (lunit6, 7130)  bus1
-                       write (lunit6, 7134)  lstat(14)
-7134                   format ( 1h+, 68x,
-1 47                   hfor which the device code is invalid.   a value          ,/,
-2 5                    x,    2hof,  i4, 100h  was read from columns 9-10 of the card, w
-3                      hich is not a legal tacs supplemental device code number.      )
-                       go to 6220
-6135                   write (lunit6, 7130)   bus1
-                       write (lunit6, 7236)
-                       go to 6220
-6136                   write (lunit6, 7136)   bus1
-7136                   format (5x, 105hthe user has been inputting tacs data, with the la
-1                      st-read data card being a request for a function block.       ,/,
-2 5                      x,  46hthis was to be given (output) variable name  ', a6,
-3 58                     h' ,   as read from columns 3-8 of the last-read data card.   )
-                         write (lunit6, 7236)
-7236                     format (
-2 5                      x, 111hyet none of the five available data fields which define t
-3                        he inputs to this block have been used (all associated     ,/,
-4 5                      x, 115hdata fields are blank).   these are for alphanumeric name
-5                        s, read from columns 12-17, 20-25, 28-33, 36-41, and 44-49    ,/,
-6 5                      x, 104husing  a6  formats.   the EMTP can not calculate the outp
-7                        ut of a block for which the input is a mystery.      )
-                         go to 6220
-6137                     write (lunit6, 7137)  bus1, lstat(14), bus2, bus3
-7137                     format ( 5x, 107hthe EMTP has been inputting tacs function blocks,
-1                          with the last-read data card representing an illegal such     ,/,
-2 5                        x,  90hrequest.   this was to have been the lead card of a funct
-3                          ion block having (output) name  ', a6,  15h'  (cols. 3-8).    ,/,
-4 5                        x,  18hinput field number, i3,  50h  to this block has been punc
-5                          hed with tacs name  ', a6,  28h' ,   but is not immediately    ,/,
-6 5                        x,  74hpreceded by either a plus sign or a minus sign.   rather,
-7                          the character  ', a1,  24h'  was read.   remember,        )
-                           write (lunit6, 7237)
-7237                       format (5x, 107heach non-blank tacs input-name field ( a6  informa
-1                          tion, columns 12-17, 20-25, 28-33, 36-41, 44-49)  must be     ,/,
-2 5                        x, 117himmediately preceded by either a plus sign or a minus sig
-3                          n ( a1  information, columns 11, 19, 27, 35, 43), indicating   ,/,
-4 5                        x,  60hthe polarity to be applied to the associated input variab
-5                          le.   )
-                           go to 6220
-6138                       write (lunit6, 7138)  lstat(14)
-7138                       format (5x, 105hthe last-read data card has been taken by the EMTP
-1                          to be a card specifying which tacs variables are to be      ,/,
-2 5                        x, 115hplaced in the EMTP output vector (and hence will be avail
-3                          able for printing and/or plotting purposes).   yet the  i2     ,/,
-4 5                        x,  57hfield of columns 1-2 contains an illegal integer value  '
-5                          , i2,  48h' .   only values of zero (for selective output)    ,/,
-6 5                        x,  68hor unity (for output of all tacs variables) are allowed b
-7                          y the EMTP.      )
-                           go to 6220
-6139                       write (lunit6, 7130)  bus3
-                           n1 = lstat(14)
-                           go to  (7139, 7239, 7339), n1
-7139                       write (lunit6, 7439)  bus1
-7439                       format (5x,  40hone of the arguments has been read as  ', a6,
-1  48                      h' ,   for which the user has failed to define an         ,/,
-2 5                        x,  32halgebraic or a logical operator.       )
-                           go to 6220
-7239                       write (lunit6, 7539)  flstat(16)
-7539                       format (5x,  63hone of the arguments has been read as the floating
-1                          -point number,   e14.6,   27h ,   for which the user has      ,/,
-2 5                        x,  52hfailed to define an algebraic or a logical operator.   )
-                           go to 6220
-7339                       write (lunit6, 7639)  bus2
-7639                       format (5x,  62hone of the operators has been read as the alphanum
-1                          eric text  ', a1,  35h' ,   for which the user has failed      ,/,
-2 5                        x,  40hto define a function and/or an argument.    )
-                             go to 6220
-6140                         write (lunit6, 7140)
-7140                         format (5x, 106hwere it not for the sharp eye and always helpful g
-1                            ood common sense of the EMTP, this simulation might have     ,/,
-2 5                          x, 108hcontinued.   but there are no requests for tacs variables
-3                            to be placed in the output vector, nor is the EMTP        ,/,
-4 5                          x, 110hexpecting any electrical network data to follow, as part
-5                            of this data case.   recall that one or more nonblank       ,/,
-6 5                          x, 111hfields on either the  'tacs outputs'  or the  'tacs EMTP
-7                            sources'  card is required for EMTP electrical network         )
-                             write (lunit6, 7240)
-7240                         format (5x, 107hdata to follow the tacs data, as part of a hybrid
-1                            data case.   there would thus be no output vector, and if     ,/,
-2 5                          x, 112hthe simulation were allowed to continue, results would go
-3                            unobserved.   possibly the user wanted this situation,      ,/,
-4 5                          x, 113hbut the EMTP will not allow it.   for a data case to be a
-5                            llowed to enter the time-step loop, there must have been      ,/,
-6 5                          x,  99hrequested one or more output variables (either a tacs var
-7                            iable, or an electrical-network variable).          )
-                             go to 6220
-6141                         write (lunit6, 7141)  nenerg
-7141                         format (5x, 108hthe key word  'statistics'  or  'systematic'  can
-1                            be punched in columns 55-64 of a switch card, as part of a     ,/,
-2 5                          x, 104hdata case which has integer miscellaneous data parameter
-3                            'nenerg'  punched nonzero.   but these must be             ,/,
-4 5                          x,  28hcoordinated as follows .....                ,/,
-5 12                         x,  51hpositive  'nenerg'  -------  use only  'statistics'  ,/,
-6 12                         x,  51hnegative  'nenerg'  -------  use only  'systematic'  ,/,
-7 12                         x,  45h    zero  'nenerg'  -------  use neither one.      ,/,
-8 5                          x,  79hthe last-read data card is a switch card which violates t
-9                            his rule.   a value of, i6,  27h   was read for  'nenerg' ,     )
-                             write (lunit6, 7241)
-7241                         format (5x, 108hthe user is reminded.   hence this data case eithe
-1                            r mixes the two key words of columns 55-64, or the sign on     ,/,
-2 5                          x,  84hparameter  'nenerg'  does not correspond to the single ke
-3                            y word which is being used.           )
-                             go to 6220
-6142                         write( lunit6, 7142 )  kill
-7142                         format( 5x, 27hunused kill code number...., i5 )
-                             go to 6220
-6143                         write (lunit6, 7143)   bus2
-7143                         format (5x, 104hthe tacs data which has now all been inputted is i
-1                            ncomplete.   specifically, there is a problem which is       ,/,
-2 5                          x,  93hassociated with the tacs supplemental variable or device
-3                            which was given the (output) name  ', a6,  6h'  (as          ,/,
-4 5                          x, 109hread from columns 3-8 of the data card which defined this
-5                            variable).   the difficulty here is associated with         ,/,
-6 5                          x, 111hone of the arguments or inputs to this supplemental varia
-7                            ble or device.   this problem argument or input, which         )
-                             write (lunit6, 7243)  bus1
-7243                         format (5x,  46hwas identified by the 6-character  a6  name  ',
-1                            a6,  46h' ,   is undefined.   this name is neither the       ,/,
-2 5                          x, 110houtput of a tacs dynamic or zero-th order function block,
-3                              nor is it a tacs source name.   the name in question        ,/,
-4 5                            x, 108hdoes not identify any other supplemental variable or devi
-5                              ce, either, at least not any which has been defined          ,/,
-6 5                            x, 109hbefore the appearance of the problem supplemental variabl
-7                              e or device (as required by tacs rules on ordering).         )
-                               write (lunit6, 7343)
-7343                           format (5x,  53hdid the user make a spelling error, the EMTP wonde
-1                              rs.          )
-                               go to 7421
-6144                           n1 = 93
-                               write (lunit6, 7125)  n1, bus1
-                               write (lunit6, 7144)
-7144                           format ( 1h+,      17x,      91halso, this EMTP electrical-network
-1                              node must have a switch connected to it, since it is the      ,/,
-2 5                            x, 108hstatus of the first (in order of EMTP data input) such sw
-3                              itch which is to be controlled by this type-93 tacs          ,/,
-4 5                            x, 109hsource.   but no EMTP switch adjacent to the node in ques
-5                              tion can be found by the EMTP.   since the EMTP does         ,/,
-6 5                            x, 110hnot know what variable of the electrical network should b
-7                              e used to control this type-93 tacs source, execution        ,/,
-8 5                            x,  33hmust be terminated at this point.            )
-                               go to 7421
-6145                           write (lunit6, 7145)
-7145                           format (5x, 104hthe EMTP data case now being inputted involves one
-1                              or more continuously-transposed distributed-parameter       ,/,
-2 5                            x, 112htransmission lines, with frequency-dependent representati
-3                              on of resistance  r  and  inductance  l  in one or more       ,/,
-4 5                            x, 115hof the modes.   in fact, the last-read data card is the m
-5                              iscellaneous data parameter card which precedes the point-    ,/,
-6 5                            x, 109hby-point definition of a pair of weighting functions.   t
-7                              he first 16 columns of this card are read using  2i8         )
-                               write (lunit6, 7245)  lstat(14), lstat(15), lstat(16)
-7245                           format (5x, 105hformat, to find parameters  'ntime1'  and  'ntime2
-1                              ' .   these give the number of points which are used to      ,/,
-2 5                            x,  81hdefine the two weighting functions  a1(t)  and  a2(t) ,
-3                              and were read as values, i8, 6h   and, i8,  2h ,            ,/,
-4 5                            x, 101hrespectively.   the larger of these exceeds the available
-5                              maximum working space, which is dimensioned, i8,  9h   cells.  )
-                               if ( kburro .eq. 0 )
-1                              write (lunit6, 7445)
-7445                           format (
-1   5                          x,         98hconcerning this latter figure, the user should b
-7                              e aware that the   /label/   storage of EMTP lists            )
-                               if ( kburro .eq. 0 )
-1                              write (lunit6, 7345)
-7345                           format (5x, 109hnumber  5  and  7  only is involved.   this limite
-1                              d region of memory is divided into four equal-sized arrays,    ,/,
-2 5                            x, 112heach having the aforestated inadequate dimension.   in or
-3                              der to get the user's wieghting functions into the EMTP      ,/,
-4 5                            x, 111h(and compacted into their final storage in the array of e
-5                              mtp list number 14), the sizes of EMTP list numbers  5       ,/,
-6 5                            x, 109hand/or  7  must be increased.   use the above explanation
-7                              together with known list multiplicities in order to         ,/,
-8 5                            x,  40hdetermine the required increase in size.           )
-                               if ( kburro .ne. 0 )
-1                              write (lunit6, 7545)
-7545                           format ( 5x, 39hconcerning this latter figure, the user,
-1             35               h should remember that he is using a,
-2             41               h virtual computer, so list 23 of "vardim"
-3                              ,/,  5x,  38his used for storage.  such a region of,
-4             39               h memory is divided into four equal-size,
-5             38               h arrays, with each of these having the
-6                              ,/,  5x,  35haforementioned inadequate size.  in,
-7             34               h order to successfully process the,
-8             40               h weighting functions, list 23 must grow.   )
-                               go to 6220
-6146                           write (lunit6, 7146)  bus1, bus2
-7146                           format (5x, 110hswitch cards are now being inputted, for the EMTP
-1                              data case under consideration.   specifically, the last-read   ,/,
-2 5                            x, 101hdata card represents a request for a type-11 switch (i.e.
-3                              , a diode or a valve) which connects node  ', a6,  1h'       ,/,
-4 5                            x,  12hwith node  ', a6,  3h' .    )
-                               n1 = kswtch - 1
-                               write (lunit6, 7246)  n1
-7246                           format ( 1h+,    28x,             87hnow, columns 61-64 were punch
-1                              ed with the key-word  'same' ,   which is understood to be     ,/,
-2 5                            x, 114ha request that the physical characteristics of the presen
-3                              t valve or diode be identical to those of the most-recent      ,/,
-4 5                            x,  56hpreceding type-11 switch element.   but of the preceding,
-5                              i4,  45h  switch cards, none were type-11 (punched in       ,/,
-6 5                            x, 104hcols. 1-2).   thus the reference switch does not exist, a
-7                              nd the EMTP has no way of knowing what modeling              ,/,
-8 5                            x,  65hparameters should be used to describe the present diode o
-9                              r valve.       )
-                               go to 6220
-6147                           write (lunit6, 7147)  bus5
-7147                           format ( 1x, 100( 1h- ),  /,
-1                              / 5x,  39hthis switch makes reference to the non-,
-2           33                 hexisting control tacs variable  ',
-3                              a6,   1h'  , // 1x, 100(1h-)  )
-                               go to 7421
-6148                           write (lunit6, 7148)  bus1, bus2, flstat(15), flstat(16)
-7148                           format ( 5x, 102hthe last-read data card is for a switched-inducta
-1                              nce element (type-93 switch card) which connects node        ,/,
-2 5                            x,   2h ', a6,   15h'  with node  ', a6,  73h' .   but the value
-3                              for residual flux (punched in columns 15-24, and read       ,/,
-4 5                            x, 110husing  e10.6  format) is illegal, for it exceeds the satu
-5                              ration flux (punched in columns 45-54, and read using       ,/,
-6 5                            x,  64he10.6  format).   the numerical values for these two numb
-7                              ers are,     e15.4  ,  5h  and,    e15.4 , 17h ,  respectively.  )
-                               write (lunit6, 7248)
-7248                           format (5x,  56hcorrect this violation of the EMTP rules, and try
-1                              again.           )
-                               go to 6220
-6149                           write (lunit6, 7149)  flstat(14)
-7149                           format (5x, 105hthe last-read data card has been taken by the EMTP
-1                              to be a source card of type 14 (sinusoidal generator).       ,/,
-2 5                            x, 111hbut the frequency as read from columns 21-30 of this card
-3                              is not positive, as required by EMTP rules.   a value       ,/,
-4 5                            x, 2hof,     e13.4,   88h  was read.   sinusoids of other than p
-5                              ositive frequency must be rejected by the EMTP on           ,/,
-6 5                            x,  74haesthetic grounds.   the user should correct columns 21-3
-70                             , and try again.         )
-                               go to 6220
-6150                           d1 = flstat(14) / deltat
-                               write (lunit6, 7150)  deltat, bus1, bus2
-7150                           format (5x, "The user has picked a time-step size  'deltat'  (read from columns 1-8 of the floating-point miscellaneous      ",/, &
-                                    5x, 'data card) which is too small for one of the distributed parameter transmission lines that is to be modeled using      ',/, &
-                                    5x, 'Semlyen recursive convolution.   A step-size of', e14.4,  '  seconds was requested, which is too large      ',/, &
-                                    5x, 'for the Semlyen line having phase number 1 that connects node  ', "'", a6,   "'", ' with node  ', "'", a6, "'", '.   The')
-                               write (lunit6, 7250)  lstat(15), flstat(14), d1
-7250                           format (5x, 'rule is that the travel time for all Semlyen modes must exceed  two  time steps.   but for mode number',  i4, /, &
-                                    5x,  "of the aforementioned line, the travel time  'tau'  is only",    e14.4,    '  seconds.   The ratio of these gives     ',/, &
-                                    5x,  'tau/deltat =',   e12.4,   " ,   which is too small (less than 2.0).   Decrease the time-step size  'deltat'          ",/, &
-                                    5x, 'accordingly, or alter the transmission line modeling, in order to make this data case solvable using the EMTP.          ')
-                               go to 6220
-6220                           lastov = nchain
-                               nchain = nfrfld + 50
-                               if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
-4568                           format ( 24h "exit  module over53." )
-99999                          return
-                             end function block
-                             c
-                             c     end of file: over53.for
-                             c
+9 a6,  40h' .   but no such tacs variable has been         )
+  write (lunit6, 7227)
+7227 format (5x, 107hpreviously defined.   rather than allow the soluti
+1 on to continue with initial conditions which are probably    ,/,
+2 5 x,  44hincorrect, execution will now be terminated.    )
+  go to 7421
+6128 write (lunit6, 7128)
+7128 format (5x, 105hduring triangularization of the real coefficient m
+1 atrix  (a)  which is used by tacs either for dc initial   ,/,
+2 5 x, 113hconditions or for the repeat solution of the time-step lo
+3 op, an indication of singularity or near-singularity has     )
+  write (lunit6, 7228)  lstat(14), bus1, flstat(14)
+7228 format (5x,  106hbeen observed.   specifically, the trouble has ar
+1 isen while eliminating to the left of the diagonal on row, i4, /,
+2 5 x, 107hof the matrix, which corresponds to the equation that was
+3 written for the tacs block which has the variable     ,/,
+4 5 x,   8hnamed  ', a6,  64h'  for an output.   now, the original d
+5 iagonal element value was,   e14.5      )
+  write (lunit6, 7328)  flstat(15), epsiln
+7328 format (5x,  93h(sign included), while just prior to reciprocation
+1 this has diminished (in absolute value) to,  e14.5,  2h .    ,/,
+2 5 x, 109ha near-zero diagonal value has thus occurred, as measured
+3 by the ratio of these two values vis-a-vis the EMTP    ,/,
+4 5 x,  63hmiscellaneous data parameter  'epsiln' ,   which has a va
+5 lue of, e13.4, 31h .   most probably the user has    )
+  write (lunit6, 7428)
+7428 format (5x, 108hmade an error in a feedback loop of the tacs contr
+1 ol circuitry which contains the aforementioned tacs block.    ,/,
+2 5 x, 108hthe physical meaning associated with this matrix singular
+3 ity is that the control system is unstable.   since    ,/,
+4 5 x, 115hthe problem as posed has no physically-meaningful solutio
+5 n in the steady-state, execution is being terminated here.     )
+  go to 6220
+6129 d1 = sqrtz ( flstat(14) )
+  d2 = sqrtz ( flstat(15) )
+  d3 = sqrtz ( tolmat )
+  write (lunit6, 7129)
+7129 format (5x, 108hduring triangularization of the complex coefficien
+1 t matrix  (c)  which is used by tacs to find ac sinusoidal     ,/,
+2 5 x, 112hsteady-state initial conditions, an indication of matrix
+3 singularity (non-invertibility) or near-singularity has      )
+  write (lunit6, 7228)  lstat(14), bus1, d1
+  write (lunit6, 7329)  d2, d3
+7329 format (5x,  86h(in magnitude), while just prior to reciprocation,
+1 this has diminished in magnitude to, e14.5,  2h .    ,/,
+2 5 x, 109ha near-zero diagonal value has thus occurred, as measured
+3 by the ratio of these two values vis-a-vis the EMTP    ,/,
+4 5 x,  63hmiscellaneous data parameter  'tolmat' ,   which has a va
+5 lue of, e13.4, 31h .   most probably the user has    )
+  write (lunit6, 7428)
+  go to 6220
+6130 write (lunit6, 7130)  bus2
+7130 format (5x, 108hthe EMTP is in the process of inputting the user's
+1 tacs supplemental-variable data cards, with the last-read     ,/,
+2 5 x, 110hsuch data card being in error.   specifically, the user h
+3 as attempted to define a supplemental variable having        ,/,
+4 5 x,  19h6-character name  ', a6,  36h'  (read from cols. 3-8 of t
+5 he card)                                                     )
+  write (lunit6, 7230)  bus1
+7230 format (1h+,   68x,
+1      45 hfor which one of the algebraic operator codes         ,/,
+2 5 x, 110his illegal according to tacs rules.   one of the  a1  fie
+3 lds in which specification of the algebraic operators       ,/,
+4        5 x,  31his to be punched was read as  ', a1,  67h' ,   whi
+5 ch is an unrecognized character for this usage.   the user    ,/,
+6 5 x, 108his advised to study the tacs rules related to the constru
+7 ction of supplemental-variable cards, and then look          ,/,
+8 5 x,  78hclosely at the last-read data card, to see precisely what
+9 the EMTP objects to.                                      )
+  go to 6220
+6131 n1 = lstat(14)
+  write (lunit6, 7131)
+7131 format (5x, 107hthe problem under consideration includes tacs data
+1 , the tacs function blocks of which have already all been     ,/,
+2 5 x, 111hread by the EMTP.   columns 69-80 of the leading data car
+3   d for each function block are read using  2a6  format,       ,/,
+4 5   x, 108hin order to determine which tacs variables (if any....if
+5     the fields are nonblank) are to be used as variable           ,/,
+6 5   x, 111hlimits for the block.   now, on this basis the EMTP takes
+7     exception to the data card which defines the function        )
+      write (lunit6, 7231)  bus1
+7231  format (5x,  18hblock with name  ', a6,  77h'  (as read from colum
+1     ns 3-8).   columns         are for the     -limit name,       )
+      if ( n1  .eq.  1 )
+1     write (lunit6, 7331)
+7331  format ( 1h+, 70x,  5h69-74,15x,  3hlow     )
+      if ( n1  .eq.  2 )
+1     write (lunit6, 7431)
+7431  format ( 1h+, 70x,  5h75-80,14x,  4hhigh    )
+      write (lunit6, 7531)  bus6
+7531  format (5x,   7hwith  ', a6,  86h'  read therefrom by the EMTP.
+1     this limit variable is unknown to the EMTP, not being     ,/,
+2 5   x, 111hrecognized as any valid tacs variable name.   did the use
+3     r make a spelling error, the EMTP wonders.   since the     ,/,
+4 5   x, 114hEMTP is uncertain as to what the user wants done with thi
+5     s limit, execution of this data case is being terminated.     )
+      go to 7421
+6132  write (lunit6, 7130)  bus2
+      write (lunit6, 7132)  bus1
+7132  format ( 1h+, 68x,
+1  47 hfor which one of the function codes is invalid.         ,/,
+2 5     x,  80hone of the  a5  fields in which the functions are to be s
+3       pecified was read as  ', a5,  17h' ,   which is an           ,/,
+4 5     x, 113hunrecognizable name for a supplemental variable function.
+5       did the user make a spelling error, the EMTP wonders.      )
+        go to 6220
+6133    write (lunit6, 7130)   bus1
+        write (lunit6, 7133)
+7133    format ( 1h+, 68x,
+1 48    hfor which no operator, function, or argument has         ,/,
+2 5     x,  93hbeen defined.   the EMTP cannot calculate the output for
+3       a tacs block whose input is unknown.           )
+        go to 6220
+6134    write (lunit6, 7130)  bus1
+        write (lunit6, 7134)  lstat(14)
+7134    format ( 1h+, 68x,
+1 47    hfor which the device code is invalid.   a value          ,/,
+2 5     x,    2hof,  i4, 100h  was read from columns 9-10 of the card, w
+3       hich is not a legal tacs supplemental device code number.      )
+        go to 6220
+6135    write (lunit6, 7130)   bus1
+        write (lunit6, 7236)
+        go to 6220
+6136    write (lunit6, 7136)   bus1
+7136    format (5x, 105hthe user has been inputting tacs data, with the la
+1       st-read data card being a request for a function block.       ,/,
+2 5       x,  46hthis was to be given (output) variable name  ', a6,
+3 58      h' ,   as read from columns 3-8 of the last-read data card.   )
+          write (lunit6, 7236)
+7236      format (
+2 5       x, 111hyet none of the five available data fields which define t
+3         he inputs to this block have been used (all associated     ,/,
+4 5       x, 115hdata fields are blank).   these are for alphanumeric name
+5         s, read from columns 12-17, 20-25, 28-33, 36-41, and 44-49    ,/,
+6 5       x, 104husing  a6  formats.   the EMTP can not calculate the outp
+7         ut of a block for which the input is a mystery.      )
+          go to 6220
+6137      write (lunit6, 7137)  bus1, lstat(14), bus2, bus3
+7137      format ( 5x, 107hthe EMTP has been inputting tacs function blocks,
+1           with the last-read data card representing an illegal such     ,/,
+2 5       x,  90hrequest.   this was to have been the lead card of a funct
+3         ion block having (output) name  ', a6,  15h'  (cols. 3-8).    ,/,
+4 5       x,  18hinput field number, i3,  50h  to this block has been punc
+5         hed with tacs name  ', a6,  28h' ,   but is not immediately    ,/,
+6 5       x,  74hpreceded by either a plus sign or a minus sign.   rather,
+7         the character  ', a1,  24h'  was read.   remember,        )
+          write (lunit6, 7237)
+7237      format (5x, 107heach non-blank tacs input-name field ( a6  informa
+1         tion, columns 12-17, 20-25, 28-33, 36-41, 44-49)  must be     ,/,
+2 5       x, 117himmediately preceded by either a plus sign or a minus sig
+3         n ( a1  information, columns 11, 19, 27, 35, 43), indicating   ,/,
+4 5       x,  60hthe polarity to be applied to the associated input variab
+5         le.   )
+          go to 6220
+6138      write (lunit6, 7138)  lstat(14)
+7138      format (5x, 105hthe last-read data card has been taken by the EMTP
+1         to be a card specifying which tacs variables are to be      ,/,
+2 5       x, 115hplaced in the EMTP output vector (and hence will be avail
+3         able for printing and/or plotting purposes).   yet the  i2     ,/,
+4 5       x,  57hfield of columns 1-2 contains an illegal integer value  '
+5         , i2,  48h' .   only values of zero (for selective output)    ,/,
+6 5       x,  68hor unity (for output of all tacs variables) are allowed b
+7         y the EMTP.      )
+          go to 6220
+6139      write (lunit6, 7130)  bus3
+          n1 = lstat(14)
+          go to  (7139, 7239, 7339), n1
+7139      write (lunit6, 7439)  bus1
+7439      format (5x,  40hone of the arguments has been read as  ', a6,
+1  48     h' ,   for which the user has failed to define an         ,/,
+2 5       x,  32halgebraic or a logical operator.       )
+          go to 6220
+7239      write (lunit6, 7539)  flstat(16)
+7539      format (5x,  63hone of the arguments has been read as the floating
+1         -point number,   e14.6,   27h ,   for which the user has      ,/,
+2 5       x,  52hfailed to define an algebraic or a logical operator.   )
+          go to 6220
+7339      write (lunit6, 7639)  bus2
+7639      format (5x,  62hone of the operators has been read as the alphanum
+1         eric text  ', a1,  35h' ,   for which the user has failed      ,/,
+2 5       x,  40hto define a function and/or an argument.    )
+            go to 6220
+6140        write (lunit6, 7140)
+7140        format (5x, 106hwere it not for the sharp eye and always helpful g
+1           ood common sense of the EMTP, this simulation might have     ,/,
+2 5         x, 108hcontinued.   but there are no requests for tacs variables
+3           to be placed in the output vector, nor is the EMTP        ,/,
+4 5         x, 110hexpecting any electrical network data to follow, as part
+5           of this data case.   recall that one or more nonblank       ,/,
+6 5         x, 111hfields on either the  'tacs outputs'  or the  'tacs EMTP
+7           sources'  card is required for EMTP electrical network         )
+            write (lunit6, 7240)
+7240        format (5x, 107hdata to follow the tacs data, as part of a hybrid
+1           data case.   there would thus be no output vector, and if     ,/,
+2 5         x, 112hthe simulation were allowed to continue, results would go
+3           unobserved.   possibly the user wanted this situation,      ,/,
+4 5         x, 113hbut the EMTP will not allow it.   for a data case to be a
+5           llowed to enter the time-step loop, there must have been      ,/,
+6 5         x,  99hrequested one or more output variables (either a tacs var
+7           iable, or an electrical-network variable).          )
+            go to 6220
+6141        write (lunit6, 7141)  nenerg
+7141        format (5x, 108hthe key word  'statistics'  or  'systematic'  can
+1           be punched in columns 55-64 of a switch card, as part of a     ,/,
+2 5         x, 104hdata case which has integer miscellaneous data parameter
+3           'nenerg'  punched nonzero.   but these must be             ,/,
+4 5         x,  28hcoordinated as follows .....                ,/,
+5 12        x,  51hpositive  'nenerg'  -------  use only  'statistics'  ,/,
+6 12        x,  51hnegative  'nenerg'  -------  use only  'systematic'  ,/,
+7 12        x,  45h    zero  'nenerg'  -------  use neither one.      ,/,
+8 5         x,  79hthe last-read data card is a switch card which violates t
+9           his rule.   a value of, i6,  27h   was read for  'nenerg' ,     )
+            write (lunit6, 7241)
+7241        format (5x, 108hthe user is reminded.   hence this data case eithe
+1           r mixes the two key words of columns 55-64, or the sign on     ,/,
+2 5         x,  84hparameter  'nenerg'  does not correspond to the single ke
+3           y word which is being used.           )
+            go to 6220
+6142        write( lunit6, 7142 )  kill
+7142        format( 5x, 27hunused kill code number...., i5 )
+            go to 6220
+6143        write (lunit6, 7143)   bus2
+7143        format (5x, 104hthe tacs data which has now all been inputted is i
+1           ncomplete.   specifically, there is a problem which is       ,/,
+2 5         x,  93hassociated with the tacs supplemental variable or device
+3           which was given the (output) name  ', a6,  6h'  (as          ,/,
+4 5         x, 109hread from columns 3-8 of the data card which defined this
+5           variable).   the difficulty here is associated with         ,/,
+6 5         x, 111hone of the arguments or inputs to this supplemental varia
+7           ble or device.   this problem argument or input, which         )
+            write (lunit6, 7243)  bus1
+7243        format (5x,  46hwas identified by the 6-character  a6  name  ',
+1           a6,  46h' ,   is undefined.   this name is neither the       ,/,
+2 5         x, 110houtput of a tacs dynamic or zero-th order function block,
+3             nor is it a tacs source name.   the name in question        ,/,
+4 5           x, 108hdoes not identify any other supplemental variable or devi
+5             ce, either, at least not any which has been defined          ,/,
+6 5           x, 109hbefore the appearance of the problem supplemental variabl
+7             e or device (as required by tacs rules on ordering).         )
+              write (lunit6, 7343)
+7343          format (5x,  53hdid the user make a spelling error, the EMTP wonde
+1             rs.          )
+              go to 7421
+6144          n1 = 93
+              write (lunit6, 7125)  n1, bus1
+              write (lunit6, 7144)
+7144          format ( 1h+,      17x,      91halso, this EMTP electrical-network
+1             node must have a switch connected to it, since it is the      ,/,
+2 5           x, 108hstatus of the first (in order of EMTP data input) such sw
+3             itch which is to be controlled by this type-93 tacs          ,/,
+4 5           x, 109hsource.   but no EMTP switch adjacent to the node in ques
+5             tion can be found by the EMTP.   since the EMTP does         ,/,
+6 5           x, 110hnot know what variable of the electrical network should b
+7             e used to control this type-93 tacs source, execution        ,/,
+8 5           x,  33hmust be terminated at this point.            )
+              go to 7421
+6145          write (lunit6, 7145)
+7145          format (5x, 104hthe EMTP data case now being inputted involves one
+1             or more continuously-transposed distributed-parameter       ,/,
+2 5           x, 112htransmission lines, with frequency-dependent representati
+3             on of resistance  r  and  inductance  l  in one or more       ,/,
+4 5           x, 115hof the modes.   in fact, the last-read data card is the m
+5             iscellaneous data parameter card which precedes the point-    ,/,
+6 5           x, 109hby-point definition of a pair of weighting functions.   t
+7             he first 16 columns of this card are read using  2i8         )
+              write (lunit6, 7245)  lstat(14), lstat(15), lstat(16)
+7245          format (5x, 105hformat, to find parameters  'ntime1'  and  'ntime2
+1             ' .   these give the number of points which are used to      ,/,
+2 5           x,  81hdefine the two weighting functions  a1(t)  and  a2(t) ,
+3             and were read as values, i8, 6h   and, i8,  2h ,            ,/,
+4 5           x, 101hrespectively.   the larger of these exceeds the available
+5             maximum working space, which is dimensioned, i8,  9h   cells.  )
+              if ( kburro .eq. 0 )
+1             write (lunit6, 7445)
+7445          format (
+1   5         x,         98hconcerning this latter figure, the user should b
+7             e aware that the   /label/   storage of EMTP lists            )
+              if ( kburro .eq. 0 )
+1             write (lunit6, 7345)
+7345          format (5x, 109hnumber  5  and  7  only is involved.   this limite
+1             d region of memory is divided into four equal-sized arrays,    ,/,
+2 5           x, 112heach having the aforestated inadequate dimension.   in or
+3             der to get the user's wieghting functions into the EMTP      ,/,
+4 5           x, 111h(and compacted into their final storage in the array of e
+5             mtp list number 14), the sizes of EMTP list numbers  5       ,/,
+6 5           x, 109hand/or  7  must be increased.   use the above explanation
+7             together with known list multiplicities in order to         ,/,
+8 5           x,  40hdetermine the required increase in size.           )
+              if ( kburro .ne. 0 )
+1             write (lunit6, 7545)
+7545          format ( 5x, 39hconcerning this latter figure, the user,
+1             35 h should remember that he is using a,
+2             41 h virtual computer, so list 23 of "vardim"
+3             ,/,  5x,  38his used for storage.  such a region of,
+4             39 h memory is divided into four equal-size,
+5             38 h arrays, with each of these having the
+6             ,/,  5x,  35haforementioned inadequate size.  in,
+7             34 h order to successfully process the,
+8             40 h weighting functions, list 23 must grow.   )
+              go to 6220
+6146          write (lunit6, 7146)  bus1, bus2
+7146          format (5x, 110hswitch cards are now being inputted, for the EMTP
+1             data case under consideration.   specifically, the last-read   ,/,
+2 5           x, 101hdata card represents a request for a type-11 switch (i.e.
+3             , a diode or a valve) which connects node  ', a6,  1h'       ,/,
+4 5           x,  12hwith node  ', a6,  3h' .    )
+              n1 = kswtch - 1
+              write (lunit6, 7246)  n1
+7246          format ( 1h+,    28x,             87hnow, columns 61-64 were punch
+1             ed with the key-word  'same' ,   which is understood to be     ,/,
+2 5           x, 114ha request that the physical characteristics of the presen
+3             t valve or diode be identical to those of the most-recent      ,/,
+4 5           x,  56hpreceding type-11 switch element.   but of the preceding,
+5             i4,  45h  switch cards, none were type-11 (punched in       ,/,
+6 5           x, 104hcols. 1-2).   thus the reference switch does not exist, a
+7             nd the EMTP has no way of knowing what modeling              ,/,
+8 5           x,  65hparameters should be used to describe the present diode o
+9             r valve.       )
+              go to 6220
+6147          write (lunit6, 7147)  bus5
+7147          format ( 1x, 100( 1h- ),  /,
+1             / 5x,  39hthis switch makes reference to the non-,
+2           33 hexisting control tacs variable  ',
+3             a6,   1h'  , // 1x, 100(1h-)  )
+              go to 7421
+6148          write (lunit6, 7148)  bus1, bus2, flstat(15), flstat(16)
+7148          format ( 5x, 102hthe last-read data card is for a switched-inducta
+1             nce element (type-93 switch card) which connects node        ,/,
+2 5           x,   2h ', a6,   15h'  with node  ', a6,  73h' .   but the value
+3             for residual flux (punched in columns 15-24, and read       ,/,
+4 5           x, 110husing  e10.6  format) is illegal, for it exceeds the satu
+5             ration flux (punched in columns 45-54, and read using       ,/,
+6 5           x,  64he10.6  format).   the numerical values for these two numb
+7             ers are,     e15.4  ,  5h  and,    e15.4 , 17h ,  respectively.  )
+              write (lunit6, 7248)
+7248          format (5x,  56hcorrect this violation of the EMTP rules, and try
+1             again.           )
+              go to 6220
+6149          write (lunit6, 7149)  flstat(14)
+7149          format (5x, 105hthe last-read data card has been taken by the EMTP
+1             to be a source card of type 14 (sinusoidal generator).       ,/,
+2 5           x, 111hbut the frequency as read from columns 21-30 of this card
+3             is not positive, as required by EMTP rules.   a value       ,/,
+4 5           x, 2hof,     e13.4,   88h  was read.   sinusoids of other than p
+5             ositive frequency must be rejected by the EMTP on           ,/,
+6 5           x,  74haesthetic grounds.   the user should correct columns 21-3
+70            , and try again.         )
+              go to 6220
+6150          d1 = flstat(14) / deltat
+              write (lunit6, 7150)  deltat, bus1, bus2
+7150          format (5x, "The user has picked a time-step size  'deltat'  (read from columns 1-8 of the floating-point miscellaneous      ",/, &
+                   5x, 'data card) which is too small for one of the distributed parameter transmission lines that is to be modeled using      ',/, &
+                   5x, 'Semlyen recursive convolution.   A step-size of', e14.4,  '  seconds was requested, which is too large      ',/, &
+                   5x, 'for the Semlyen line having phase number 1 that connects node  ', "'", a6,   "'", ' with node  ', "'", a6, "'", '.   The')
+              write (lunit6, 7250)  lstat(15), flstat(14), d1
+7250          format (5x, 'rule is that the travel time for all Semlyen modes must exceed  two  time steps.   but for mode number',  i4, /, &
+                   5x,  "of the aforementioned line, the travel time  'tau'  is only",    e14.4,    '  seconds.   The ratio of these gives     ',/, &
+                   5x,  'tau/deltat =',   e12.4,   " ,   which is too small (less than 2.0).   Decrease the time-step size  'deltat'          ",/, &
+                   5x, 'accordingly, or alter the transmission line modeling, in order to make this data case solvable using the EMTP.          ')
+              go to 6220
+6220          lastov = nchain
+              nchain = nfrfld + 50
+              if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
+4568          format ( 24h "exit  module over53." )
+99999         return
+            end function block
+            c
+            c     end of file: over53.for
+            c
