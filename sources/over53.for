@@ -423,27 +423,21 @@ subroutine over53
           5x, "user-requested dimensions.   for the 'relative' case, the 'present figure' will simply equal the limit. ")
   write (lunit6, 3322)
 3322 format ( /, 5x, 'The aforementioned directory of tacs table numbers, indicating upon what the table lengths depend, reads as follows....',/, &
-          8x,  '1.  number of tacs dynamic function blocks, having Laplace transfer functions  H(s) . ')
+          8x,  '1.  Number of tacs dynamic function blocks, having Laplace transfer functions  H(s) . ')
   write (lunit6, 7422)
-7422 format (8x,  '2.  number of zero-th order tacs function blocks (type code 99 punched in cols. 1-2).',/, &
-          8x,  '3.  total number of input variables to tacs dynamic and zero-th order blocks.',/, &
-          8x,  '4.  number of signal sources to tacs (type codes 1, 2, 90, 91, 92, or 93).',/, &
+7422 format (8x,  '2.  Number of zero-th order tacs function blocks (type code 99 punched in cols. 1-2).',/, &
+          8x,  '3.  Total number of input variables to tacs dynamic and zero-th order blocks.',/, &
+          8x,  '4.  Number of signal sources to tacs (type codes 1, 2, 90, 91, 92, or 93).',/, &
           12x, "Remember that in addition to user-defined tacs sources, there are internally-defined ones ( 'timex'  and",/, &
           12x, "'unity' ,   as of january, 1977). ")
-               write (lunit6, 7522)
-7522           format (8x,  81h5.  number of tacs supplemental variables and devi
-1              ces (type codes 99, 98, or 88).                              ,/,
-2 8            x,  93h6.  total number of arguments describing the supplemental
-3              variables proper (not the devices).                         ,/,
-4 8            x,  99h7.  total number of numerical arguments (not alphanumeric
-5              ) of supplemental variables (not devices).                    )
-               write (lunit6, 7622)
-7622           format (8x,  75h8.  number of tacs supplemental devices proper (ty
-1              pe codes 50, 51, ... 58).                                    ,/,
-2 8            x,  67h9.  total number of signed input variables to supplementa
-3              l devices.                                                   ,/,
-4 7            x, 105h10.  total number of transport delay history terms, digit
-5              izer levels, and 2*points for nonlinear devices.             )
+  write (lunit6, 7522)
+7522 format (8x, '5.  Number of tacs supplemental variables and devices (type codes 99, 98, or 88).',/, &
+          8x,  '6.  Total number of arguments describing the supplemental variables proper (not the devices).',/, &
+          8x, '7.  Total number of numerical arguments (not alphanumeric) of supplemental variables (not devices). ')
+  write (lunit6, 7622)
+7622 format (8x,  '8.  Number of tacs supplemental devices proper (type codes 50, 51, ... 58).',/, &
+          8x,  '9.  Total number of signed input variables to supplemental devices.',/, &
+          7x, '10.  Total number of transport delay history terms, digitizer levels, and 2*points for nonlinear devices. ')
                write (lunit6, 2222)
 2222           format (7x,  97h11.  the sum over all tacs dynamic function blocks
 1                of the block order + one --- the sum of (n+1).              ,/,
