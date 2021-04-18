@@ -304,8 +304,8 @@ subroutine datain
   write (munit6, 4223)  l, n12, n13, n14, n26
   call window         ! output of character variable munit6
   call stoptp   ! installation-dependent program stop card
-4214 if ( n13 .gt. 0  .and.   ! if trailing blank, and if blank
-1 n13 .lt. n14 ) n14 = n13 ! precedes ",", blank bounds
+  ! if trailing blank, and if blank
+4214 if ( n13 .gt. 0  .and. n13 .lt. n14 ) n14 = n13 ! precedes ",", blank bounds
 4220 n15 = n14 - 1   ! number of columns making up the argument
   kolinc(n16) = n15     ! remember the width of argument n16
   n18 = l - 1 + n15  ! col. ending argument, based on col. 1
@@ -790,18 +790,17 @@ subroutine datain
         n20 = n20 + 1      ! another argument usage found; advance storage
         if ( n20 .le. 200 )  go to 2737     ! not overflow working vectors
         write (munit6, 2731)  n16
-2731    format ( '  ====   overflow error stop at card number',
-1       i6,      '    over 200 arguments.'  )
+2731    format ( '  ====   overflow error stop at card number', i6,      '    over 200 arguments.'  )
         call window         ! output of character variable munit6
         call stoptp   ! installation-dependent program stop card
 2737    karg(n20) = j           ! it is the j-th string which is used here
-        if ( j .gt. numarg )    ! if this is a dummy rather than real one,
-1       karg(n20) = -(j-numarg)    ! store dummy arg number with "-" flag
+        ! if this is a dummy rather than real one,
+        if ( j .gt. numarg ) karg(n20) = -(j-numarg)    ! store dummy arg number with "-" flag
         kard(n20) = n13                 ! active card count of this record
         kbeg(n20) = l - 1 + k   ! beginning card column number for string
         kend(n20) = kbeg(n20) + n15 - 1     ! ending column number
-        if ( j .le. numarg )       ! if this is a non-dummy argument, then
-1       ktex(n20) = modarg(j)        ! store right adjust flag (0=y, 1=n)
+        ! if this is a non-dummy argument, then
+        if ( j .le. numarg ) ktex(n20) = modarg(j)        ! store right adjust flag (0=y, 1=n)
         l = kend(n20) + 1  ! search continues one byte beyond string end
         if ( iprspy .lt. 6 )  go to 2749  ! jump around diagnostic
         write (munit6, 2748)  n16, j, l, k, n20
