@@ -254,29 +254,29 @@ subroutine over54
     go to 6220
 6172 write (lunit6, 7172)
 7172 format (5x, "The EMTP has been reading data within the  'cable constants'  supporting program, with the last-read data card",/, &
-2 5x, 117hbeing the miscellaneous data card of a new case.   but the numbers punched hereupon are inconsistent.   specifically,    )
+          5x, 'being the miscellaneous data card of a new case.   But the numbers punched hereupon are inconsistent.   Specifically, ')
     write (lunit6, 7272)  lstat(14)
-7272 format (5x,  10ha value of, i5,  83h   was read from the field  'itypec'  of columns  1  through  5  of the card, using        ,/, &
-2 5x, 112h i5  format.   but only the values  1  (for overhead line constants) and  2  (for cable constants) are legal, if      ,/, &
-4 5x, 115hthe card in question is nonblank (recall that a blank card marks the end of such cases within  'cable constants' ).     )
+7272 format (5x,  'a value of', i5,  "   was read from the field  'itypec'  of columns  1  through  5  of the card, using",/, &
+          5x, ' i5  format.   But only the values  1  (for overhead line constants) and  2  (for cable constants) are legal, if',/, &
+          5x, "the card in question is nonblank (recall that a blank card marks the end of such cases within  'cable constants' ). ")
     go to 6220
 6173 write (lunit6, 7172)
     write (lunit6, 7173)
-7173 format (5x, 108hfield  'isyst'  of columns  6  through  10  has been punched with the integer value  -1 ,   which means that    ,/, &
-          2 5x, 108han underground cable system is to be under consideration.   but field  'iearth'  of columns  16  through  20          ,/, &
-4 5x, 110hhas been punched with the integer value  99 ,   which means that the stratified-earth option is desired.   but        ,/, &
-6 5x, 107hthis combination of features is illegal (the EMTP is incapable of finding the parameters for an underground           ,/, &
-8 5x,  53hcable when the earth is not homogeneous and uniform).   )
+7173 format (5x, "field  'isyst'  of columns  6  through  10  has been punched with the integer value  -1 ,   which means that",/, &
+          5x, "an underground cable system is to be under consideration.   but field  'iearth'  of columns  16  through  20",/, &
+          5x, 'has been punched with the integer value  99 ,   which means that the stratified-earth option is desired.   But',/, &
+          5x, 'this combination of features is illegal (the EMTP is incapable of finding the parameters for an underground',/, &
+          5x, 'cable when the earth is not homogeneous and uniform). ')
     go to 6220
 6174 write (lunit6, 7174)
-7174 format (5x, 108hall conductor cards of an overhead-line case within the  'cable constants'  supporting program have now been   ,/, &
-2 5x, 106hread.   but one or more of these cards has been punched with illegal or inconsistent data.   specifically,            )
+7174 format (5x, "All conductor cards of an overhead-line case within the  'cable constants'  supporting program have now been",/, &
+          5x, 'read.   But one or more of these cards has been punched with illegal or inconsistent data.   Specifically, ')
     n1 = 3 * lstat(14) - 1
     write (lunit6, 7274)  n1, flstat(15), flstat(16)
-7274 format (5x,  23hnon-comment card number, i4,  74h  after the miscellaneous data card bears geometrical conductor data which     ,/, &
-2 5x,  78his physically impossible.   the inner radius of the conductor has been read as,    e16.4,        16h   meters, while   ,/, &
-4 5x,  19hthe outer radius is,    e16.4,     67h .    this violates the EMTP restriction that the tubular conductor             ,/, &
-6 5x,  72hthickness must be positive.   zero or negative thickness is not allowed.        )
+7274 format (5x, 'non-comment card number', i4,  '  after the miscellaneous data card bears geometrical conductor data which',/, &
+          5x,  'is physically impossible.   The inner radius of the conductor has been read as',    e16.4,        '   meters, while',/, &
+          5x,  'the outer radius is',    e16.4,     ' .    This violates the EMTP restriction that the tubular conductor',/, &
+          5x,  'thickness must be positive.   Zero or negative thickness is not allowed. ')
     go to 6220
 6175 write (lunit6, 7175)  lstat(15), flstat(14)
 7175 format (5x, 106hsubroutine  'eigen'  is used to calculate eigenvalues of the   (z)(y)   matrix product, within the  'cable     ,/, &
