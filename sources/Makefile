@@ -163,6 +163,8 @@ ${COMPILER}/${TARGET}: ${COMPILER}/over52.o
 ${COMPILER}/${TARGET}: ${COMPILER}/over53.o
 ${COMPILER}/${TARGET}: ${COMPILER}/over54.o
 ${COMPILER}/${TARGET}: ${COMPILER}/over55.o
+${COMPILER}/${TARGET}: ${COMPILER}/calcom.o
+${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
 ${COMPILER}/${TARGET}: ${COMPILER}/datain.o
 ${COMPILER}/${TARGET}: ${COMPILER}/inlmfs.o
 ${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
