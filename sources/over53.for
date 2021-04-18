@@ -650,26 +650,17 @@ subroutine over53
 7142 format( 5x, 'Unused kill code number....', i5)
   go to 6220
 6143 write (lunit6, 7143)   bus2
-7143 format (5x, 104hthe tacs data which has now all been inputted is i
-1 ncomplete.   specifically, there is a problem which is       ,/,
-2 5 x,  93hassociated with the tacs supplemental variable or device
-3 which was given the (output) name  ', a6,  6h'  (as          ,/,
-4 5 x, 109hread from columns 3-8 of the data card which defined this
-5 variable).   the difficulty here is associated with         ,/,
-6 5 x, 111hone of the arguments or inputs to this supplemental varia
-7 ble or device.   this problem argument or input, which         )
+7143 format (5x, 'The tacs data which has now all been inputted is incomplete.   Specifically, there is a problem which is',/, &
+          5x, 'associated with the tacs supplemental variable or device which was given the (output) name  ', "'", a6, "'", '  (as',/, &
+          5x, 'read from columns 3-8 of the data card which defined this variable).   The difficulty here is associated with',/, &
+          5x, 'one of the arguments or inputs to this supplemental variable or device.   This problem argument or input, which ')
   write (lunit6, 7243)  bus1
-7243 format (5x,  46hwas identified by the 6-character  a6  name  ',
-1 a6,  46h' ,   is undefined.   this name is neither the       ,/,
-2 5 x, 110houtput of a tacs dynamic or zero-th order function block,
-3   nor is it a tacs source name.   the name in question        ,/,
-4 5 x, 108hdoes not identify any other supplemental variable or devi
-5   ce, either, at least not any which has been defined          ,/,
-6 5 x, 109hbefore the appearance of the problem supplemental variabl
-7   e or device (as required by tacs rules on ordering).         )
-    write (lunit6, 7343)
-7343 format (5x,  53hdid the user make a spelling error, the EMTP wonde
-1   rs.          )
+7243 format (5x,  'was identified by the 6-character  a6  name  ', "'",  a6, "'", ' ,   is undefined.   This name is neither the',/, &
+          5x, 'output of a tacs dynamic or zero-th order function block, nor is it a tacs source name.   The name in question',/,&
+          5x, 'does not identify any other supplemental variable or device, either, at least not any which has been defined',/, &
+          5x, 'before the appearance of the problem supplemental variable or device (as required by tacs rules on ordering). ')
+  write (lunit6, 7343)
+7343 format (5x,  'Did the user make a spelling error, the EMTP wonders. ')
     go to 7421
 6144 n1 = 93
     write (lunit6, 7125)  n1, bus1
