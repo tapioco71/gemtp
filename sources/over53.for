@@ -706,22 +706,15 @@ subroutine over53
           5x, 'parameters should be used to describe the present diode or valve. ')
     go to 6220
 6147 write (lunit6, 7147)  bus5
-7147 format (1x, 100( '-' ),  /,
-1   / 5x,  39hthis switch makes reference to the non-,
-2           33 hexisting control tacs variable  ',
-3   a6,   1h'  , // 1x, 100(1h-)  )
+7147 format (1x, 100( '-' ),  //, 5x,  'This switch makes reference to the non-existing control tacs variable  ', "'", a6, "'", //, 1x, 100('-'))
     go to 7421
 6148 write (lunit6, 7148)  bus1, bus2, flstat(15), flstat(16)
-7148 format ( 5x, 102hthe last-read data card is for a switched-inducta
-1   nce element (type-93 switch card) which connects node        ,/,
-2 5 x,   2h ', a6,   15h'  with node  ', a6,  73h' .   but the value
-3   for residual flux (punched in columns 15-24, and read       ,/,
-4 5 x, 110husing  e10.6  format) is illegal, for it exceeds the satu
-5   ration flux (punched in columns 45-54, and read using       ,/,
-6 5 x,  64he10.6  format).   the numerical values for these two numb
-7   ers are,     e15.4  ,  5h  and,    e15.4 , 17h ,  respectively.  )
+7148 format (5x, 'The last-read data card is for a switched-inductance element (type-93 switch card) which connects node',/, &
+          5x, " '", a6, "'", '  with node  ', "'", a6, "'", ' .   But the value for residual flux (punched in columns 15-24, and read',/, &
+          5x, 'using  e10.6  format) is illegal, for it exceeds the saturation flux (punched in columns 45-54, and read using',/, &
+          5x, 'e10.6  format).   The numerical values for these two numbers are',     e15.4  ,  '  and',    e15.4 , ' ,  respectively. ')
     write (lunit6, 7248)
-7248 format (5x,  56hcorrect this violation of the EMTP rules, and try
+7248 format (5x, 'Correct this violation of the EMTP rules, and try
 1   again.           )
     go to 6220
 6149 write (lunit6, 7149)  flstat(14)
