@@ -279,44 +279,29 @@ subroutine subr55
 7214  format (5x,  'The EMTP is in the process of reading the data associated with the  tacs  device',/, &
            5x, ' identified by the 6-character (output) name ', "'", a6, "'", ' . ' )
       write (lunit6, 7314)
- 7314 format (5x,  32hthis is a type-58 device defined,
-     1             36h by the following transfer function:,
-     2   // 10x,   24hgain / ( d0 +  d1 * s  ),
-     3   //  5x,   35hthe denominator of this function is,
-     4             32h presently found to have a value,
-     5             27h of   0.0  ,  thus creating,
-     6    /  5x,   33ha singularity in the system.   in,
-     7             34h effect, this denominator is inter,
-     8             17hnally transformed )
+7314  format (5x, 'This is a type-58 device defined by the following transfer function:',//, &
+           10x, 'gain / ( d0 +  d1 * s  )',//, &
+           5x, 'the denominator of this function is presently found to have a value of   0.0  ,  thus creating',/, &
+           5x, 'a singularity in the system.   In effect, this denominator is internally transformed ' )
       write (lunit6, 7414)  deltat
- 7414 format (5x,  35hby the trapezoidal rule of implicit,
-     1             33h integration into the expression:,
-     2    // 10x,  29h( d0  +  d1 * 2.0 / deltat  ),
-     3    //  5x,  27hwith the value of deltat = ,
-     4             e14.6 ,
-     5     /  5x,  34hcorrect this situation by changing,
-     6             31h either  d0,  d1,  or  deltat . )
+7414  format (5x, 'by the trapezoidal rule of implicit integration into the expression:',//, &
+           10x, '( d0  +  d1 * 2.0 / deltat  )',//, &
+           5x, 'with the value of deltat = ', e14.6 ,/, &
+           5x, 'correct this situation by changing either  d0,  d1,  or  deltat . ')
       go to 6550
  6215 write (lunit6, 7214) bus1
       write (lunit6, 7215)
- 7215 format (5x,  36hthis  type-60  if-device  recognizes,
-     1             41h  3  and only  3  separate input signals.
-     2     // 5x,  40hof the  5  fields available for defining,
-     3             11h the inputs,
-     4     / 10x,  35heach one of the first three must be,
-     5             30h non-blank  (columns 11 - 33 ),
-     6     / 10x,  33hand the two remaining fields must,
-     7             35h be left blank  ( columns 35 - 49 ) )
+7215  format (5x,  'This  type-60  if-device  recognizes  3  and only  3  separate input signals.',//, &
+           5x,  'of the  5  fields available for defining the inputs',/, &
+           10x, 'each one of the first three must be non-blank  (columns 11 - 33 ),/, &
+           10x,  33hand the two remaining fields must be left blank  ( columns 35 - 49 ) ' )
       go to 6550
- 6216 write (lunit6, 7214) bus1
+6216  write (lunit6, 7214) bus1
       write (lunit6, 7216)
- 7216 format (5x,  33hthis  type-61  device  selects as,
-     1             33h output  one of the possibly  8  ,
-     2             33hconnected inputs                 ,
-     3   / 5x,     33hdepending on the value of another,
-     4             40h tacs variable called 'selector signal'.)
+7216  format (5x,  'This  type-61  device  selects as output  one of the possibly  8  connected inputs',/, &
+           5x, "depending on the value of another tacs variable called 'selector signal'. ")
       write (lunit6, 7316)
- 7316 format (5x,  31hhowever, the user has neglected,
+7316  format (5x,  31hhowever, the user has neglected,
      1             33h to identify the name of the tacs,
      2             40h variable that is to serve this purpose.,
      3   / 5x,     37hthe user should specify this selector,
