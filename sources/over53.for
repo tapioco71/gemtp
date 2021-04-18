@@ -231,87 +231,57 @@ subroutine over53
   go to 6220
 6108 write (lunit6, 7108)
 7108 format (5x, 'The last-read data card is taken by the EMTP to be a request for an auxiliary synchronous machine (s.m.) input',/, &
-2 5 x, 112hto tacs.   recall that such data cards (if any) complete
-3 the data input for a dynamic s.m., after being followed      ,/,
-4 5 x, 112hby a terminator record which bears the text  'finish'  in
-5 columns 3-8.   but the last-read data card is illegal,       )
+          5x, 'to tacs.   Recall that such data cards (if any) complete the data input for a dynamic s.m., after being followed',/, &
+          5x, "by a terminator record which bears the text  'finish'  in columns 3-8.   But the last-read data card is illegal, ")
   if ( lstat(16)  .le.  lstat(15) )   go to 7308
   write (lunit6, 7208)  lstat(15)
-7208 format (5x, 106hsince storage for such s.m.-tacs interface variabl
-1 es has been overflowed.   the existing program dimension      ,/,
-2 5 x,  2his,  i4,  100h ,   which is equal to the number of previou
-3 sly-defined interface variables in arrays  'etac  '  and     ,/,
-4 5 x,  10h'ismtac' .   )
+7208 format (5x, 'since storage for such s.m.-tacs interface variables has been overflowed.   The existing program dimension',/, &
+          5x,  'is',  i4,  " ,   which is equal to the number of previously-defined interface variables in arrays  'etac  '  and",/, &
+          5x,  "'ismtac' . ")
   go to 6220
 7308 if( lstat( 17 ) .gt. 0 )  go to 7508
   write (lunit6, 7408)   bus6
-7408 format (5x, 16hsince the name ', a6, 24h' of the interface varia,
-1 58 hble (as read from columns 3-8 using a6 format) is invalid., /,
-2 5 x, 56hall such names must be valid, for they serve as names of,
-3 43 h tacs variables (for type-92 tacs sources). )
+7408 format (5x, 'since the name ', "'", a6, "'", ' of the interface variable (as read from columns 3-8 using a6 format) is invalid.', /, &
+          5x, 'All such names must be valid, for they serve as names of tacs variables (for type-92 tacs sources). ')
   go to 6220
 7508 write (lunit6, 7608)  lstat( 14 ),  lstat( 13 )
-7608 format (5x, 46hsince the data read from columns 1-2 using  i2,
-1 59 h format and from columns 15-17 using i3 format is invalid .,
-2 /, 5x, 24hthe read values were...., i4, i5 )
+7608 format (5x, 'Since the data read from columns 1-2 using  i2 format and from columns 15-17 using i3 format is invalid .,', /, &
+          5x, 'the read values were....', i4, i5 )
   go to 6220
 6109 write( lunit6, 7109 )   kill
-7109 format( 5x, 27hunused kill code number...., i5  )
+7109 format ( 5x, 'Unused kill code number....', i5  )
   go to 6220
 6110 write (lunit6, 7110)  nenerg, bus5, bus6
-7110 format (5x,  86hparameter  'nenerg'  of the integer miscellaneous
-1 data card was punched nonzero (value, i5, 14h  )   for this    ,/,
-2 5 x, 112hdata case, representing a request for a  'statistics'  or
-3 a  'systematic'  simulation.   the last-read data card      ,/,
-4 5 x, 108his for an EMTP switch, and it bears one of the two just-m
-5 entioned key words in columns 55-64, which is fine.          ,/,
-6 5 x,  63hbut this is a dependent switch, with illegal reference na
-7 mes  ', a6,  9h'  and  ', a6,  19h'  punched for data        )
+7110 format (5x,  "Parameter  'nenerg'  of the integer miscellaneous data card was punched nonzero (value", i5, '  )   for this',/, &
+          5x, "data case, representing a request for a  'statistics'  or a  'systematic'  simulation.   The last-read data card",/, &
+          5x, 'his for an EMTP switch, and it bears one of the two just-mentioned key words in columns 55-64, which is fine.',/, &
+          5x, 'But this is a dependent switch, with illegal reference names  ', "'", a6,  "'", '  and  ', "'", a6,  "'", '  punched for data ')
   write (lunit6, 7210)  lstat(15), lstat(16)
-7210 format (5x, 108hfields  'bus5'  and  'bus6'  (columns 65-76).   th
-1 e ordered pair of reference names corresponds to EMTP node     ,/,
-2 5 x,   7hnumbers, i5,  5h  and,  i5, 77h ,   respectively, with a
-3 zero value meaning that the associated  a6  name is          ,/,
-4 5 x, 105hillegal (unrecognizable as a legitimate EMTP electrical n
-5 etwork node name).   if both of the just-printed             ,/,
-6 5 x, 112hintegers are positive, then both names are legitimate emt
-7 p network names, but do not correspond to a previously-        )
+7210 format (5x, "fields  'bus5'  and  'bus6'  (columns 65-76).   The ordered pair of reference names corresponds to EMTP node",/, &
+          5x, 'numbers', i5,  '  and',  i5, ' ,   respectively, with azero value meaning that the associated  a6  name is',/, &
+          5x, 'illegal (unrecognizable as a legitimate EMTP electrical network node name).   If both of the just-printed',/, &
+          5x, 'integers are positive, then both names are legitimate EMTP network names, but do not correspond to a previously-')
   write (lunit6, 7310)
-7310 format (5x, 108hinputted switch.   remember that ordering of the p
-1 air of reference names is crucial, with it being mandatory     ,/,
-2 5 x, 113hthat the first reference name  'bus5'  match a first swit
-3 ch name  'bus1' ,   etc. for  'bus6'  matching  'bus2' .      )
+7310 format (5x, 'inputted switch.   Remember that ordering of the pair of reference names is crucial, with it being mandatory',/, &
+          5x, "that the first reference name  'bus5'  match a first switch name  'bus1' ,   etc. for  'bus6'  matching  'bus2' . ")
   go to 6220
 6111 write (lunit6, 7111)   lstat(13), lstat(15), lstat(16), lstat(17)
-7111 format (5x, 107hone of the working vectors which are used to assem
-1 ble output quantities for all dynamic synchronous machine     ,/,
-2 5 x, 104hsource components has overflowed.   the dimensioned limit
-3 for the number of  a6  identification names is,  i6,  2h ,  ,/,
-4 5 x,  98has is the maximum allowable number of output quantities.
-5 but after finishing with machine number,  i5,  2h ,        ,/,
-6 5 x,  37hthe two corresponding table sizes are,  i6,  6h   and,
-7 i6,  47h ,   respectively.   one or both of these table      ,/,
-8 5 x, 116hsizes has now been exceeded.   execution will be stopped.
-9 either request fewer outputs, or redimension the tables.    )
+7111 format (5x, 'One of the working vectors which are used to assemble output quantities for all dynamic synchronous machine',/, &
+          5x, 'source components has overflowed.   The dimensioned limit for the number of  a6  identification names is',  i6,  ' ,  ',/, &
+          5x, 'as is the maximum allowable number of output quantities. But after finishing with machine number',  i5,  ' ,',/, &
+          5x, 'the two corresponding table sizes are',  i6,  '   and', i6,  ' ,   respectively.   One or both of these table',/, &
+          5x, 'sizes has now been exceeded.   Execution will be stopped.   Either request fewer outputs, or redimension the tables.')
   go to 6220
 6112 write (lunit6, 7112)  kswtch
-7112 format (5x, 108hwow.   double wow (wow, wow).   the EMTP has finis
-1 hed with the input of all switch cards for this data case.     ,/,
-2 5 x,   6hof the, i5,  96h  switches, over ten had the key word  's
-3 tatistics'  or  'systematic'  punched in columns 55-64.      ,/,
-4 5 x, 112hin fact, there are over ten independent  'statistics'  or
-5 'systematic'  switches  ----  distinguished by either       ,/,
-6 5 x, 107hfield  'bus5'  (cols. 65-70)  punched with  'target' ,
-7 or both fields  'bus5'  and  'bus6'  (cols. 65-76)           )
+7112 format (5x, 'Wow.   Double wow (wow, wow).   The EMTP has finished with the input of all switch cards for this data case.',/, &
+          5x, 'of the', i5,  "  switches, over ten had the key word  'statistics'  or  'systematic'  punched in columns 55-64.",/, &
+          5x, "in fact, there are over ten independent  'statistics'  or 'systematic'  switches  ----  distinguished by either",/, &
+          5x, "field  'bus5'  (cols. 65-70)  punched with  'target' , or both fields  'bus5'  and  'bus6'  (cols. 65-76) ")
   write (lunit6, 7212)  lstat(14), bus1, bus2
-7212 format (5x,  81hleft blank.   the EMTP limit is ten, however, whic
-1 h was exceeded by switch number, i5,  19h ,   which connects   ,/,
-2 5 x,   7hnode  ', a6,  15h'  with node  ', a6,  62h' .   the EMTP
-3 wonders whether the user really appreciates the              ,/,
-4 5 x, 106hsignificance of ten independent switches, or equivalently
-5 , the vastness of a ten-dimensional vector space.            ,/,
-6 5 x, 109hremember, even if one quantized each dimension into only
-7 two discrete values, ten independent variables would         )
+7212 format (5x,  'left blank.   The EMTP limit is ten, however, which was exceeded by switch number', i5,  ' ,   which connects',/, &
+          5x, "node  ', "'", a6,  "'", '  with node  ', "'", a6,  "'", ' .   The EMTP wonders whether the user really appreciates the",/, &
+          5x, 'significance of ten independent switches, or equivalently , the vastness of a ten-dimensional vector space.',/, &
+          5x, 'remember, even if one quantized each dimension into only two discrete values, ten independent variables would ')
   write (lunit6, 7312)
 7312 format (5x, 'yield   2**10 = 1024   compartments or cells.   With three discrete values, the figure becomes  59049.   and     ',/, &
        5x, "with four, it jumps to the staggering figure of  1048576. The user's computer system may be fast, but not swift     ",/, &
@@ -320,14 +290,10 @@ subroutine over53
   go to 6220
 6113 n2 = lstat(13)
   write (lunit6, 7113)  nenerg
-7113 format (5x, 107hthe data case now being processed is for a  'syste
-1 matic'  study, since integer miscellaneous data parameter     ,/,
-2 5 x,  76h 'nenerg'  was punched as a negative number.   using  i8
-3 format, a value of, i6,  25h   was read for  'nenerg'       ,/,
-4 5 x, 109hfrom columns 65-72.   by definition, this is supposed to
-5 be the negative of the number of energizations which         ,/,
-6 5 x, 108hare to be run.   of course this figure is determined by m
-7 ultiplying together the number of steps to be taken          )
+7113 format (5x, "The data case now being processed is for a  'systematic'  study, since integer miscellaneous data parameter",/, &
+          5x, " 'nenerg'  was punched as a negative number.   Using  i8 format, a value of", i6,  "   was read for  'nenerg'",/, &
+          5x, 'from columns 65-72.   By definition, this is supposed to be the negative of the number of energizations which',/, &
+          5x, 'are to be run.   Of course this figure is determined by multiplying together the number of steps to be taken ')
   write (lunit6, 7213)  lstat(12), kswtch
 7213 format (5x, 100hby each independent  'systematic'  switch.   but w
 1 hen the EMTP multiplies together all such integers    ,/,
