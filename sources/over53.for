@@ -415,33 +415,21 @@ subroutine over53
           5x, 'sizes on his  tacs-table-size cards , and try the data  case again.  Yet such relative size changes can only be',/, &
           5x, 'made within the overall EMTP variable-dimensioning limitation of EMTP list number 19, which constrains the sum',/, &
           5x, 'total space which is allowed for tacs arrays.   Hence overall EMTP redimensioning with a larger size for list ')
-        write (lunit6, 7322)
-7322    format (5x, 105hnumber 19 may also be necessary.   see the EMTP ca
-1       se summary statistics for the current size of EMTP list     ,/,
-2 5     x, 114hnumber 19.   the user is reminded that the existing list-
-319     space can be allocated either in absolute terms (using   ,/,
-4 5     x, 116hthe  'absolute tacs dimensions'  request) or in relative
-5       terms (using the  'relative tacs dimensions'  request).  in  ,/,
-6 5     x, 113hthe 'absolute' case, the 'present figure' for list 19 wil
-7       l show the total working space which is required for the    ,/,
-8 5     x, 103huser-requested dimensions.   for the 'relative' case, the
-9       'present figure' will simply equal the limit.              )
-        write (lunit6, 3322)
-3322    format ( /,
-3 5     x, 119hthe aforementioned directory of tacs table numbers, indic
-4       ating upon what the table lengths depend, reads as follows.... ,/,
-5 8     x,  85h1.  number of tacs dynamic function blocks, having laplac
-6         e transfer functions  h(s) .              )
-          write (lunit6, 7422)
-7422      format (8x,  85h2.  number of zero-th order tacs function blocks (
-1           type code 99 punched in cols. 1-2).                        ,/,
-2 8            x,  77h3.  total number of input variables to tacs dynamic and z
-3              ero-th order blocks.                                         ,/,
-4 8            x,  74h4.  number of signal sources to tacs (type codes 1, 2, 90
-5              , 91, 92, or 93).        ,/,
-6 12           x, 104hremember that in addition to user-defined tacs sources,
-7              there are internally-defined ones ( 'timex'  and             ,/,
-8 12           x,  33h'unity' ,   as of january, 1977).      )
+  write (lunit6, 7322)
+7322 format (5x, 'number 19 may also be necessary.   See the EMTP case summary statistics for the current size of EMTP list',/, &
+          5x, 'number 19.   The user is reminded that the existing list-space can be allocated either in absolute terms (using',/, &
+          5x, "the  'absolute tacs dimensions'  request) or in relative terms (using the  'relative tacs dimensions'  request).  In",/, &
+          5x, "the 'absolute' case, the 'present figure' for list 19 will show the total working space which is required for the",/, &
+          5x, "user-requested dimensions.   for the 'relative' case, the 'present figure' will simply equal the limit. ")
+  write (lunit6, 3322)
+3322 format ( /, 5x, 'The aforementioned directory of tacs table numbers, indicating upon what the table lengths depend, reads as follows....',/, &
+          8x,  '1.  number of tacs dynamic function blocks, having Laplace transfer functions  H(s) . ')
+  write (lunit6, 7422)
+7422 format (8x,  '2.  number of zero-th order tacs function blocks (type code 99 punched in cols. 1-2).',/, &
+          8x,  '3.  total number of input variables to tacs dynamic and zero-th order blocks.',/, &
+          8x,  '4.  number of signal sources to tacs (type codes 1, 2, 90, 91, 92, or 93).',/, &
+          12x, "Remember that in addition to user-defined tacs sources, there are internally-defined ones ( 'timex'  and",/, &
+          12x, "'unity' ,   as of january, 1977). ")
                write (lunit6, 7522)
 7522           format (8x,  81h5.  number of tacs supplemental variables and devi
 1              ces (type codes 99, 98, or 88).                              ,/,
