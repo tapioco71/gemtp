@@ -317,9 +317,9 @@ subroutine over53
 6114 write (lunit6, 7114)
 7114 format (  8h unused.  )
 6115 write (lunit6, 7115)  lstat(14), bus1
-7115 format (5x, '"he user has been inputting 'tacs' data, specifically cards which define tacs function blocks.   Yet the",/, &
+7115 format (5x, "The user has been inputting 'tacs' data, specifically cards which define tacs function blocks.   Yet the",/, &
        5x, "last-read data card has an illegal integer  'n'  punched in the field of columns 1-2.   A value of", i4,  '  was',/, &
-       5x, "read, for this block having (output) variable name  ', "'",  a6,  "'", ' .   since this integer does not equal one of',/, &
+       5x, "read, for this block having (output) variable name  ", "'",  a6,  "'", ' .   since this integer does not equal one of',/, &
        5x, 'the special code numbers which are used to indicate special block types (e.g., n=99 for a zero-th order block), it ')
   write (lunit6, 7215)
 7215 format (5x, 'is taken by the EMTP to be the order of the Laplace transfer function  h(s)  of the block.   But this must',/, &
@@ -445,8 +445,7 @@ subroutine over53
   write (lunit6, 2322)
 2322 format (7x,  '14.  Number of nonzero factors of the triangularized matrix (steady-state or transients).',/, &
        7x, '15.  Number of tacs output variables (as requested by the user before tacs initial condition cards).',/,1x)
-  if ( lstat(17)  .eq.  15 )
-1 write (lunit6, 2422)
+  if ( lstat(17)  .eq.  15 ) write (lunit6, 2422)
 2422 format (12x, "Actually, the limit for tacs table 15 is one less than was indicated above, if the user's problem",/, &
        12x, "possesses an electric network.   The extra output-identification name  'tacs  '  is internally added to",/, &
        12x, 'the output vector by the EMTP, in this case.   More importantly, if the user asked for the output of all tacs variables,',/, &
@@ -556,8 +555,7 @@ subroutine over53
        5x, 'limits for the block.   Now, on this basis the EMTP takes exception to the data card which defines the function ')
   write (lunit6, 7231)  bus1
 7231 format (5x, 'block with name  ', "'", a6,  "'", '  (as read from columns 3-8).   Columns         are for the     -limit name, ')
-  if ( n1  .eq.  1 )
-1 write (lunit6, 7331)
+  if ( n1  .eq.  1 ) write (lunit6, 7331)
 7331 format ('+', 70x,  '69-74',15x, 'low')
   if ( n1  .eq.  2 ) write (lunit6, 7431)
 7431 format ('+', 70x, '75-80', 14x, 'high')
@@ -638,7 +636,7 @@ subroutine over53
 6141 write (lunit6, 7141)  nenerg
 7141 format (5x, "The key word  'statistics'  or  'systematic'  can be punched in columns 55-64 of a switch card, as part of a",/, &
        5x, "data case which has integer miscellaneous data parameter 'nenerg'  punched nonzero.   But these must be",/, &
-       5x,  'coordinated as follows .....',/, & 12x,  "positive  'nenerg'  -------  use only  'statistics'  ",/, &
+       5x,  'coordinated as follows .....',/, 12x,  "positive  'nenerg'  -------  use only  'statistics'  ",/, &
        12x, "negative  'nenerg'  -------  use only  'systematic'",/, &
        12x, "    zero  'nenerg'  -------  use neither one.",/, &
        5x, 'the last-read data card is a switch card which violates this rule.   a value of', i6,  "   was read for  'nenerg' , ")
