@@ -457,22 +457,18 @@ subroutine subr55
 3392 format ( /,   17h vector  'flstat'   ,/, &  ( 1x, 10e13.4 ) )
   n1 = lstat(16)
   write(lunit6, 4000 )  n1
-4000 format(/, ' of course maybe the user would like some suggestions as to why the table in question (list number , i2, 1h)', /, &
+4000 format (/, ' of course maybe the user would like some suggestions as to why the table in question (list number , i2, 1h)', /, &
           ' has overflowed.   If so, read on, good buddy.   the EMTP has a long-established policy of meritorious and laudable',/, &
           ' cooperation in the form of crystal-clear diagnostic messages, such as the following ..... ')
   if ( n1  .eq.  99 )   go to 4499
   go to (4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019, &
        4020, 4021, 4022, 4023, 4024, 4025, 4026, 4027, 4028, 4029),  n1
 4001 write(lunit6, 4101)
-4101 format( 5x, 106hnetwork nodes are of course defined by the user's
-     1branch and switch cards, by the names which identify the  ,/, &
-     2 5x, 111htwo ends of the element (fields  'bus1'  and  'bus2'  of
-     3the data card, columns 3-14).   in addition, there are  ,/, &
-     4 5x,  72hseveral less-obvious ways in which nodes are added to the
-     5 bus table ....   ,/, &
-     6 8x, 107h1.  switched-r elements (type-92) and switched-l elements
-     7 (type 93) each create one internal node for every   ,/, &
-     8 12x,  13hsuch element.    )
+4101 format (5x, "Network nodes are of course defined by the user's branch and switch cards, by the names which identify the ",/, &
+          5x, "two ends of the element (fields  'bus1'  and  'bus2'  of the data card, columns 3-14).   In addition, there are  ",/, &
+          5x, 'several less-obvious ways in which nodes are added to the bus table ....',/, &
+          8x, '1.  Switched-r elements (type-92) and switched-l elements (type 93) each create one internal node for every',/, &
+          12x,'such element. ')
       write(lunit6, 4201)
  4201 format( 8x,  65h2.  ground (blank node name) always has an entry i
      1n the bus list.   ,/, &
