@@ -306,28 +306,28 @@ subroutine over54
 7178 format (5x, 'The EMTP is presently inputting source components, with the last-read data card serving to define the network',/, &
           5x, 'connection for the third and final phase of a 3-phase dynamic synchronous machine (s.m.) component.   But the',/, &
           5x, "source type-code for this component is illegal (unrecognizable).   From the field  'itype'  (columns 1-2) of",/, &
-6 5x, 108hthe first data card for this s.m. component --- two non-comment cards before the last-read data card --- was          ,/, &
-8 5x, 19hread a type code of,  i2,    83h .    but only s.m. model types  51  through  54  and  59  are presently available.     )
+          5x, 'the first data card for this s.m. component --- two non-comment cards before the last-read data card --- was',/, &
+          5x, 'read a type code of',  i2,    ' .    But only s.m. model types  51  through  54  and  59  are presently available. ')
     write (lunit6, 7278)   numsm
-7278 format (5x, 106hfurther, the user is allowed to use either machine types  51-54 ,   or type  59  ---- but not a mixture of     ,/, &
-          2 5x, 108hthe two.   recall that these two classes of s.m.  are quite different, utilizing different solution methods.          ,/, &
-          4 5x,  62hthe just-read dynamic  s.m.  EMTP  source component was number,  i4,  21h   in order of input.                        )
+7278 format (5x, 'Further, the user is allowed to use either machine types  51-54 ,   or type  59  ---- but not a mixture of',/, &
+          5x, 'the two.   Recall that these two classes of s.m.  are quite different, utilizing different solution methods.',/, &
+          5x,  'the just-read dynamic  s.m.  EMTP  source component was number',  i4, '   in order of input. ')
     go to 6220
 6179 write (lunit6, 7179)
-7179 format (5x, 108hthe data case under consideration has too many output quantities for the present EMTP table sizes.   this is    ,/, &
-2 5x, 109hreally an overflow of EMTP list number  11 ,   though not due to conventional EMTP electric-network branch or         ,/, &
-4 5x, 110hnode quantities.   rather, it is the added burden of dynamic synchronous machine (s.m.) output variables, plus        ,/, &
-6 5x, 103hthe burden of tacs output variables, which has now led to the present list-11 overflow.   figures which               )
+7179 format (5x, 'The data case under consideration has too many output quantities for the present EMTP table sizes.   This is',/, &
+          5x, 'really an overflow of EMTP list number  11 ,   though not due to conventional EMTP electric-network branch or',/, &
+          5x, 'node quantities.   Rather, it is the added burden of dynamic synchronous machine (s.m.) output variables, plus',/, &
+          5x, 'the burden of tacs output variables, which has now led to the present list-11 overflow.   Figures which ')
     write (lunit6, 7279) lsiz12, nc, lstat(15), lstat(16), lstat(14)
-7279 format (5x,  48hcharacterize this difficulty are as follows ....,/, &
-          5x,  i5, 43h = present user-dimensioned size of list 11    ,/, &
-          5x,  i5,  67h = number of conventional electric-network branch-output quantities                                              ,/, &
-          5x,  i5,  35h = number of s.m. output quantities            ,/, &
-5 5x,  i5,  35h = number of tacs output quantities            ,/, &
-6 5x,  34hthe last three figures above total,  i6,  70h ,   which is therefore the minimum acceptable size of list number 11.    )
+7279 format (5x, 'characterize this difficulty are as follows ....',/, &
+          5x,  i5, ' = present user-dimensioned size of list 11',/, &
+          5x,  i5, ' = number of conventional electric-network branch-output quantities',/, &
+          5x,  i5, ' = number of s.m. output quantities',/, &
+          5x,  i5, ' = number of tacs output quantities',/, &
+          5x,  'the last three figures above total',  i6,  ' ,   which is therefore the minimum acceptable size of list number 11. ')
     write (lunit6, 7379)
-7379 format (5x, 103heither increase the size of list 11 to at least this size, or appropriately reduce the number of output        ,/, &
-2 5x,  72hquantities, before trying once again to solve the data case in question.              )
+7379 format (5x, 'either increase the size of list 11 to at least this size, or appropriately reduce the number of output',/, &
+          5x,  'quantities, before trying once again to solve the data case in question. ')
     kill = 1
     lstat(16) = 11
     nchain = 51
