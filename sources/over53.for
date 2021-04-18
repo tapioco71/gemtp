@@ -125,31 +125,22 @@ subroutine over53
           5x, "Now it may well be that such usage is indeed legal fortran data-format input for the user's own particular     ",/, &
           5x, 'computer system, but it offends the keenly-honed sensibilities of the EMTP (at whose mercy the user now finds    ')
   write (lunit6, 7197)
-7197 format ( 5x, 106hhimself, it may be noted).   too often a user wil
-1 l erroneously wind up with an exponent of ten which is in    ,/,
-2 5x, 112herror by a power of ten itself, in such a case.   hence s
-3 uch data is not allowed by the EMTP   repunch this data    ,/,
-4 5x,  30hrecord, and try again, friend.       )
+7197 format ( 5x, 'himself, it may be noted).   Too often a user will erroneously wind up with an exponent of ten which is in    ',/, &
+          5x, 'error by a power of ten itself, in such a case.   Hence such data is not allowed by the EMTP   repunch this data    ',/, &
+          5x,  'record, and try again, friend.       ')
   write (lunit6, 7297 )
-7297 format ( 5x, 104halternatively, a card sequence error may have res
-1 ulted in an attempt to read data with the wrong format.  ,/, 5x,
-2  42 hcheck for missing or out-of-sequence data. )
+7297 format (5x, 'Alternatively, a card sequence error may have resulted in an attempt to read data with the wrong format.  ',/, 5x, &
+          'Check for missing or out-of-sequence data. ')
   go to 6220
 6098 write (lunit6, 7098)  lstat(14), bus1, lstat(15)
-7098 format ( 5x,  99hthe last-read data card has an =i=-field number w
-1 hich is not right-adjusted in its data field.   in    ,/,
-2 5x,  25hparticular, column number,  i4, 27h  contains the charact
-3 er  =,  a1,   17h= ,  while column,  i3, 14h, which is the   ,/,
-4 5x, 114hright-most column of the field in question, is blank.   n
-5 ow maybe such usage is legal fortran input for the user=s   ,/,
-6 5x, 109hcomputer system, but it offends the keenly-honed sensibil
-7 ities of the EMTP (at whose mercy the user now finds    )
+7098 format (5x,  'The last-read data card has an =i=-field number which is not right-adjusted in its data field.   In    ',/, &
+          5x,  'particular, column number',  i4, '  contains the character  =',  a1,   '= ,  while column',  i3, ', which is the   ',/, &
+          5x, 'right-most column of the field in question, is blank.   Now maybe such usage is legal fortran input for the user=s   ',/, &
+          5x, 'computer system, but it offends the keenly-honed sensibilities of the EMTP (at whose mercy the user now finds    ')
   write (lunit6, 7198)
-7198 format ( 5x, 104hhimself, it may be noted).   too often a user wil
-1 l erroneously wind up with a value which is in error by  ,/,
-2 5x, 103ha power of ten, in such a case.   hence such data is simp
-3 ly not allowed by the EMTP   repunch this data    ,/,
-4 5x,  30hrecord, and try again, friend.       )
+7198 format (5x, 'himself, it may be noted).   Too often a user will erroneously wind up with a value which is in error by  ',/, &
+          5x, 'a power of ten, in such a case.   Hence such data is simply not allowed by the EMTP   repunch this data    ',/, &
+          5x,  'record, and try again, friend.       ')
   go to 6220
 6099 write (lunit6, 7099)
 7099 format ( 5x, 106hthe EMTP has finished the calculation of weightin
