@@ -279,9 +279,9 @@ subroutine over54
           5x,  'thickness must be positive.   Zero or negative thickness is not allowed. ')
     go to 6220
 6175 write (lunit6, 7175)  lstat(15), flstat(14)
-7175 format (5x, 106hsubroutine  'eigen'  is used to calculate eigenvalues of the   (z)(y)   matrix product, within the  'cable     ,/, &
-          2 5x,  67hconstants'  supporting program.   but within the iteration limit of,  i5,   32h ,   the iterative algorithm has       ,/, &
-          4 5x,  46hfailed to satisfy the convergence tolerance of, e14.2,  39h .    the resulting eigenvalues must be          ,/, &
+7175 format (5x, "Subroutine  'eigen'  is used to calculate eigenvalues of the   (z)(y)   matrix product, within the  'cable",/, &
+          5x,  "constants'  supporting program.   But within the iteration limit of",  i5,   ' ,   the iterative algorithm has',/, &
+          5x,  'failed to satisfy the convergence tolerance of', e14.2,  ' .    The resulting eigenvalues must be',/, &
           6 5x,  83hviewed with suspicion (at best), so the solution is being terminated at this point.    )
     go to 6220
 6176 write(lunit6,7176)
