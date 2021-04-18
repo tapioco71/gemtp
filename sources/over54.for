@@ -381,26 +381,19 @@ subroutine over54
           5x, "user's data (values of",   e16.4,    '   and',    e16.4, '   were punched for these, respectively). ')
     go to 6220
 6187 write (lunit6, 7187)  bus3, bus4, bus5
-7187 format (5x, 105hthe last-read data card belongs to a  'semlyen set
-1   up'  data case, but is not what the EMTP was expecting.       ,/, &
-2 5x, 108hfollowing the first semlyen miscellaneous data card, the
-3   user must supply a card which bears either the text          ,/, &
-4 5x, 110h 'line constants'   or the text   'cable constants' ,   p
-5   unched in columns one onward.   not so for the user's        ,/, &
-6 5x,  56hcard, the column 1-18 contents of which were read as   ',
-7       3 a6 ,     33h' .    correct this card so as to     )
+7187 format (5x, "The last-read data card belongs to a  'Semlyen setup'  data case, but is not what the EMTP was expecting.",/, &
+          5x, 'Following the first semlyen miscellaneous data card, the user must supply a card which bears either the text',/, &
+          5x, " 'line constants'   or the text   'cable constants' ,   punched in columns one onward.   not so for the user's ",/, &
+          5x, 'card, the column 1-18 contents of which were read as   ', "'", 3a6 , "'", ' .    Correct this card so as to ')
     write (lunit6, 7287)
-7287 format ( 5x, 101hproperly inform the EMTP as to which supporting r
-1   outine program control is to be transferred to next.      )
+7287 format (5x, 'properly inform the EMTP as to which supporting routine program control is to be transferred to next. ')
     go to 6220
 6188 d1 = flstat(13) / twopi
     d2 = flstat(15) / twopi
     write (lunit6, 7154)
     write (lunit6, 7188)  d1, flstat(14)
-7188 format (5x, 104hafter having completed the  'line constants'  or
-1   'cable constants'  calculation, program control is now       ,/, &
-2 5x, 114hback in the  'semlyen setup'  overlay where matrices  (r)
-3   ,  (x),  (g),  and  (b)  are being read from input/output      ,/, &
+7188 format (5x, "After having completed the  'line constants'  or 'cable constants'  calculation, program control is now",/, &
+          5x, "back in the  'Semlyen setup'  overlay where matrices  (r),  (x),  (g),  and  (b)  are being read from input/output",/, &
 4 5x, 112hunit number  3 .   but the capacitance matrix is erroneou
 5   s.   it should be independent of frequency, but is not.      ,/, &
 6 5x,  49hin particular, the first diagonal entry  c(1,1) =,
