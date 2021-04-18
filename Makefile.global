@@ -68,18 +68,21 @@ CPP_FLAGS=	-Wall			\
 		-c
 
 # gfortran flags.
-FORTRAN_FLAGS=	-Os			\
-		-std=gnu		\
-		-c			\
-		-cpp			\
-		-ffree-form		\
-		-fdec			\
-		-fno-align-commons	\
-		-fdollar-ok		\
-		-fall-intrinsics	\
-		-fdollar-ok		\
-		-ffree-line-length-0	\
-		-fdefault-double-8
+FORTRAN_FLAGS=	-Os					\
+		-cpp					\
+		-std=gnu				\
+		-c					\
+		-cpp					\
+		-ffree-form				\
+		-fdec					\
+		-fno-align-commons			\
+		-fdollar-ok				\
+		-fall-intrinsics			\
+		-fdollar-ok				\
+		-ffree-line-length-0			\
+		-fdefault-double-8			\
+		-faggressive-function-elimination 	\
+		-static-libgfortran
 
 # objdump most common flags.
 OBJDUMP_FLAGS=	-h	\
@@ -163,7 +166,7 @@ ${COMPILER}/%.o: %.for
 	else								\
 		echo "${FORTRAN} ${FORTRAN_FLAGS}  ${<} -o ${@}";	\
 	fi
-	@${FORTRAN} ${FORTRAN_FLAGS} ${<} -o ${@}
+	@${CC} ${FORTRAN_FLAGS} ${<} -o ${@}
 
 # Rule for linking the final program file.
 ${COMPILER}/%:
@@ -179,7 +182,7 @@ ${COMPILER}/%:
 				'${LIBM}'					\
 				-Wl,--end-group;				\
 	fi
-	@${CC} 	-Wl,--start-group				\
+	@${FORTRAN} 	-Wl,--start-group				\
 		${LD_FLAGS} -o ${@} $(filter %.o %.a, ${^})	\
 		'${LIBGCC}'					\
 		'${LIBGFORTRAN}'				\

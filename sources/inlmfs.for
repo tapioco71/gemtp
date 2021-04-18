@@ -25,8 +25,7 @@ subroutine inlmfs
   write(*,*) ' invalid cont. card for $include argument list.'
   stop
 1788 n26 = 9
-1789 if ( buff77(n26:n26) .ne. ' '   .and.
-1 buff77(n26:n26) .ne. ',' )  go to 1797
+1789 if ( buff77(n26:n26) .ne. ' '   .and. buff77(n26:n26) .ne. ',' )  go to 1797
   n26 = n26 + 1
   if ( n26 .lt. 40 )  go to 1789
 1794 istep = j
