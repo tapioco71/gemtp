@@ -5578,12 +5578,12 @@ subroutine  arrest(a, b, srt, svt, carst)
   !    b(10)      fv       voltage division factor
   !    b(11)      fi       current division factor
   include 'blkcom.ftn'
-  dimension  a(1), b(1)
+  dimension  a(20), b(20)
   ll8 = 8
   if (iprsup .ge. 2) write (lunit6, 20)  (a(i), b(i), i=1, 20)
 20 format( (1x, 8e16.6) )
   if (b(6) .gt.0) go to 100
-  call mover0 ( b(2), ll8 )
+  call mover0(b(2), ll8)
   b(6)=1.0
 100 continue
   !  test polarity of arrester voltage
