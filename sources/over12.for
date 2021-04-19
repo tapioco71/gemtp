@@ -32,7 +32,7 @@ subroutine over12
        lmode, nqtw
   character*8 atim
   dimension atim(2)
-  common  /systematic/  linsys
+  common /systematic/  linsys
   if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
 4567 format ( 24h  "begin module over12." )
   nph = 0

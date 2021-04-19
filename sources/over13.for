@@ -179,7 +179,7 @@ subroutine over13
 773  format ( /,  10x,  35hNote  ---- nonlinear element number,  i4, 53h  is a type-96 hysteretic inductor which is connected    ,/, &
           21x,  17hbetween busses  ',  a6,  9h'  and  ',  a6, 52h' .   The initial flux-current point as found by the    ,/, &
           21x, 110hphasor steady-state solution has been observed to lie outside the user-defined major hysteresis loop, however.      ,/, &
-          21x,  19hThe initial flux is,  e14.4,  29h   and the initial current is,  e14.4,  35h .    The EMTP shall now alter this     ) 
+          21x,  19hThe initial flux is,  e14.4,  29h   and the initial current is,  e14.4,  35h .    The EMTP shall now alter this     )
      write (lunit6, 776)  d14, d13, d12
 776  format ( 21x, 108hjust-printed flux so as to make it legal, while holding the current constant.   the line of constant current  ,/, &
           21x,  105hintersects the user-supplied major hysteresis loop at two points (possibly equal, if the current is large          ,/, &

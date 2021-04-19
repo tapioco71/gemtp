@@ -832,9 +832,9 @@ subroutine over1
       equivalence (moncar(2), kbase),   (moncar(3), ltdelt)
       equivalence (iprsov(39), nmauto)
       character*8 textax, textay
-      common  /systematic/  linsys
+      common /systematic/  linsys
       dimension textax(300), jpntr(10000), textay(100)
-      common /linemodel/  kexact,nsolve, fminsv, numrun,nphlmt
+      common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
       common /linemodel/ char80, chlmfs(18)
       character*6 chlmfs        ! 9-phase as limit for lmfs test
       character*80 char80
@@ -1909,7 +1909,7 @@ subroutine over1
     subroutine sysdep
       implicit real*8 (a-h, o-z), integer*4 (i-n)
       include 'blkcom.ftn'
-      common  /komthl /  pekexp
+      common /komthl/ pekexp
       dimension  intbus(1)
       equivalence  (intbus(1), bus1 )
       include 'dekspy.ftn'

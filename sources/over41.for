@@ -800,7 +800,7 @@ end subroutine fltopt
 subroutine store(i,j,n,d2r,d2x,d1r,d1x)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   include 'blkcom.ftn'
-  common  /zprint/  zoutr(120),zoutx(120)
+  common /zprint/ zoutr(120),zoutx(120)
   if ( iprsup  .ge.  5 ) write (lunit6, 2472)  i, j, n, d2r, d2x, d1r, d1x
 2472 format ( 30h i, j, n, d2r, d2x, d1r, d1x =,  3i5, 4e18.8 )
   kij = j + i * ( i - 1 ) / 2

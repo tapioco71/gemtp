@@ -2599,7 +2599,7 @@ end subroutine sczy1
 subroutine  sczy2 ( s, ncpp, radi, usi, usr, bio, bi1,bi2, bi3, bi4, bi5, al1i, al2i, al3i, zc, ldm, ldn )
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   include 'labl47.ftn'
-  common  / komthl /  pekexp
+  common /komthl/  pekexp
   complex*16  s, ss, s1, s2, s3, s4, s5, s6, s8, su0
   complex*16  z11, z12, z2i, z2m, z2o, z23
   complex*16  cexpz, cmplxz, csqrtz
@@ -2838,7 +2838,7 @@ end subroutine ptzy1
 subroutine ptzy2(s,ncpp,dci,dr0,th0,al0,zp,zpc,ldm,ldn)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   include  'labl47.ftn'
-  common  / komthl /  pekexp
+  common /komthl/ pekexp
   complex*16  s, ss, s1, s2, s3, s4, s5, s6, su0
   complex*16  cexpz, cmplxz, csqrtz
   complex*16  se0, zm, zi, zzo, zzi
@@ -3208,7 +3208,7 @@ end subroutine transp
 subroutine skin47(b1,b2,ur,cjw,sjw,zcc)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   include 'labl47.ftn'
-  common  / komthl /  pekexp
+  common /komthl/ pekexp
   complex*16  cjw, sjw, x1, x2, x3, x4, zcc
   complex*16  cexpz, cmplxz
   complex*16  c1, c2
@@ -3257,7 +3257,7 @@ end subroutine skin47
 subroutine zegen(be1,be2,th,w,xe,isyst)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   include 'labl47.ftn'
-  common  / komthl /  pekexp
+  common /komthl/ pekexp
   complex*16  cj, cjw, x1, x2, xe
   complex*16  cexpz, cmplxz, csqrtz
   complex*16  c1

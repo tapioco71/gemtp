@@ -296,7 +296,7 @@ subroutine katalg
   include 'blkcom.ftn'
   include 'dekspy.ftn'
   character*132 ansi132
-  common  /comlock/  locker(2)   ! share with "over1" only
+  common /comlock/ locker(2)   ! share with "over1" only
   if ( iprsup  .ge.  1 ) write (lunit6, 2467)  icat, memsav, lunit2, ltlabl
 2467 format ( /,  18h enter  "katalg" ., 32h    icat  memsav  lunit2  ltlabl        ,/,  18x,  10i8  )
   if ( memsav .eq. 0 )  go to 9800  ! no table moving at all

@@ -62,11 +62,11 @@ subroutine subts1
   include 'tacsar.ftn'
   include 'umdeck.ftn'
   include 'dekspy.ftn'
-  common  /a8sw/ a8sw(400)
-  dimension         nsubkm(1), ispum(1), swcold(100)
-  equivalence  (spum(1),  ispum(1)),  (kknonl(1),  nsubkm(1))
-  equivalence  (moncar(1),    knt),       (moncar(2),  kbase)
-  equivalence    (iprsov(35), ipoint),  (iprsov(36), iupper)
+  common /a8sw/ a8sw(400)
+  dimension nsubkm(1), ispum(1), swcold(100)
+  equivalence (spum(1),  ispum(1)),  (kknonl(1),  nsubkm(1))
+  equivalence (moncar(1),    knt),       (moncar(2),  kbase)
+  equivalence (iprsov(35), ipoint),  (iprsov(36), iupper)
   character*8 text1, text2, text3, text4, text5, text6
   character*8 text7, text8, text9
   character*8 text10, text11, text12, text13

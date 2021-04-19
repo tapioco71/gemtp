@@ -1,4 +1,4 @@
-!-*- mode: fortran; syntax: ansi-fortran-90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 !
 !     file: ntacs2.for
 !
@@ -43,8 +43,8 @@ subroutine ntacs2
      call stoptp
 4012 if (i1 .ne. 91 .and. i1 .ne. 93 .and. i1 .ne. 95) goto 4010
      do 4030  j = 1, kswtch
-! c     k = namesw(j)
-! c     if (texvec(k) .eq. real8 ) goto 4018  ! wsm + thl manual modification for bpa emtp
+!!     k = namesw(j)
+!!     if (texvec(k) .eq. real8 ) goto 4018  ! wsm + thl manual modification for bpa emtp
         k = iabs (kmswit(j))
         m = iabs (kmswit(lswtch + j))
         ! wsm + thl manual modification for bpa emtp
