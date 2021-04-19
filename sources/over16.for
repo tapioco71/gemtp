@@ -7328,14 +7328,14 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
    include 'blkcom.ftn'
    include 'labcom.ftn'
    include 'umdeck.ftn'
-   dimension  xx(1)
-   dimension  nsubkm(1)
-   equivalence  ( kknonl(1), nsubkm(1) )
-   equivalence (  xk(1), xx(1) )
-   dimension  ispum(1)
-   equivalence  ( spum(1), ispum(1) )
-   equivalence  (moncar(1),    knt),   (moncar(2),  kbase)
-   equivalence  (moncar(9), kloaep)
+   dimension xx(1)
+   dimension nsubkm(1)
+   equivalence (kknonl(1), nsubkm(1))
+   equivalence (xk(1), xx(1))
+   dimension ispum(1)
+   equivalence (spum(1), ispum(1))
+   equivalence (moncar(1), knt), (moncar(2), kbase)
+   equivalence (moncar(9), kloaep)
    if ( iprsup.ge.6 ) write (lunit6, 1000) kswtch, inonl, num99, ncomp, ntot
 1000 format (  36h top "subts4". kswtch, inonl, num99,, 14h ncomp, ntot =,  10i8 )
 1553 if ( numum  .le.  0 )   go to 1742

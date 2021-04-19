@@ -92,7 +92,7 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   include 'labl44.ftn'
   include 'volt45.ftn'
   common /linemodel/ kexact, nsolve, fminsv, numrun,nphlmt
-  common / linemodel / char80, chlmfs(18)
+  common /linemodel/ char80, chlmfs(18)
   character*6 chlmfs        ! 9-phase as limit for lmfs test
   character*80 char80
   character*8 text1, text2, fmetrc, englis, bufsem
@@ -100,11 +100,11 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   character*8 text8, text9
   dimension bufsem(14), jprmat(16)
   dimension array(1)
-  dimension xwc(ntri),xwy(ntri),yzi(ndim,ndim),yzr(ndim,ndim)
-  dimension tii(ndim,ndim),tir(ndim,ndim)
-  dimension er(ndim),ei(ndim),theta2(ndim)
-  dimension xtir(ndim),xtii(ndim),zsurge(ndim),dummi(ndim)
-  dimension dummr(ndim),tixf(nsqr2),work1(nsqr2)
+  dimension xwc(ntri), xwy(ntri), yzi(ndim,ndim), yzr(ndim,ndim)
+  dimension tii(ndim, ndim), tir(ndim, ndim)
+  dimension er(ndim), ei(ndim), theta2(ndim)
+  dimension xtir(ndim), xtii(ndim), zsurge(ndim), dummi(ndim)
+  dimension dummr(ndim), tixf(nsqr2), work1(nsqr2)
   equivalence ( jprmat(1), j1 ),     ( jprmat(2), j2 )
   equivalence ( jprmat(3), j3 ),     ( jprmat(4), j4 )
   equivalence ( jprmat(5), j5 ),     ( jprmat(6), j6 )
@@ -1895,7 +1895,7 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   !     shunt admittance matrix for equivalent cond. is in p+j*z.
   call output ( ll0,  p(1),  z(1), unity, kcirct, ll8, ll2 )
 653 if(j14.eq.0) go to 654
-  call symm ( gd(1), bd(1), unity, kcirct, kk )
+  call symm(gd(1), bd(1), unity, kcirct, kk)
   !     transfer admittance matrix for symmetrical comp. is in gd+j*bd.
   call output ( ll0, gd(1), bd(1), unity, kk, ll7, ll3 )
   call symm ( p(1), z(1), unity, kcirct, kk )

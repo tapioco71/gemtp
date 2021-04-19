@@ -12,8 +12,8 @@ subroutine over2
   include 'dekspy.ftn'
   include 'labl02.ftn'
   !     %include  '//c/tsu/cables.ins.ftn'
-  common / linemodel / kexact, nsolve, fminsv, numrun,nphlmt
-  common / linemodel / char80, chlmfs(18)
+  common /linemodel/ kexact, nsolve, fminsv, numrun,nphlmt
+  common /linemodel/ char80, chlmfs(18)
   character*6 chlmfs        ! 9-phase as limit for lmfs test
   character*80 char80
   character*6 chrpad(18)

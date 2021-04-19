@@ -68,21 +68,14 @@ CPP_FLAGS=	-Wall			\
 		-c
 
 # gfortran flags.
-FORTRAN_FLAGS=	-Os					\
-		-cpp					\
+FORTRAN_FLAGS=	-cpp					\
 		-std=gnu				\
 		-c					\
-		-cpp					\
 		-ffree-form				\
 		-fdec					\
-		-fno-align-commons			\
 		-fdollar-ok				\
-		-fall-intrinsics			\
 		-fdollar-ok				\
-		-ffree-line-length-0			\
-		-fdefault-double-8			\
-		-faggressive-function-elimination 	\
-		-static-libgfortran
+		-ffree-line-length-0
 
 # objdump most common flags.
 OBJDUMP_FLAGS=	-h	\

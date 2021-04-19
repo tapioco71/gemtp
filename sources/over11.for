@@ -12,8 +12,8 @@ subroutine over11
   include 'space2.ftn'
   include 'dekspy.ftn'
   common /a8sw/ a8sw(400)
-  common / linemodel / kexact, nsolve, fminsv, numrun,nphlmt
-  common / linemodel / char80, chlmfs(18)
+  common /linemodel/ kexact, nsolve, fminsv, numrun,nphlmt
+  common /linemodel/ char80, chlmfs(18)
   character*6 chlmfs     ! 9-phase as limit for lmfs test
   character*80 char80
   character*6  chhold

@@ -14,8 +14,8 @@ subroutine datain
   include 'blkcom.ftn'
   include 'dekspy.ftn'
   include 'labcom.ftn'
-  common / linemodel / kexact, nsolve, fminsv, numrun, nphlmt
-  common / linemodel / char80, chlmfs(18)
+  common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
+  common /linemodel/ char80, chlmfs(18)
   character*6 chlmfs
   character*80 char80
   character*6  dumnam

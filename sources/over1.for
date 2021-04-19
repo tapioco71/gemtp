@@ -1,4 +1,4 @@
-!-*- Mode: Fortran; Syntax: ANSI-Fortran-90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!-*- Mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 !
 !     subroutine over1.
 !
@@ -834,8 +834,8 @@ subroutine over1
       character*8 textax, textay
       common  /systematic/  linsys
       dimension textax(300), jpntr(10000), textay(100)
-      common  /linemodel/  kexact,nsolve, fminsv, numrun,nphlmt
-      common / linemodel / char80, chlmfs(18)
+      common /linemodel/  kexact,nsolve, fminsv, numrun,nphlmt
+      common /linemodel/ char80, chlmfs(18)
       character*6 chlmfs        ! 9-phase as limit for lmfs test
       character*80 char80
       !     $$$$$    special-request word no. 1.   'xformer'           $$$$$
