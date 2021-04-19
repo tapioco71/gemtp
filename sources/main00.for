@@ -1,4 +1,4 @@
-  !-*- mode: fortran; syntax: ansi-fortran-90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+  !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
   !
   !     file: main00.for
   !
@@ -376,8 +376,8 @@ subroutine time44(a)
   !    This is just what the emtp needs, except that we want periods
   !    rather than colons, and of course we require  2a4  format.
   character a(2)
-  logical*1 char(8)
-  call time(char(1))
+  character char(8)
+  call date_and_time(char(1))
   write (unit=a(1), fmt=2741) char(1), char(2), char(4)
 2741 format ( 2a1,  1h.,  a1 )
   write(unit=a(2), fmt=2754) char(5), char(7), char(8)
@@ -702,7 +702,7 @@ subroutine cimage
   if ( n8 .eq. 5 ) call spying   ! process $spy command file
   go to 1000
   !               *****    request no. 6.    "$disable"     *****  *****
-4600 if ( noutpr  .eq.  0 ) write (lunit6, 4612) 
+4600 if ( noutpr  .eq.  0 ) write (lunit6, 4612)
 4612 format (  26h+begin data to be ignored.  )
   go to 1000
   !               *****    request no. 7.    "$enable"      *****  *****

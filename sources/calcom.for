@@ -17,7 +17,7 @@ subroutine calcom
   entry plots
   entry scale
   entry symbol
-  write (*,*) ' use of dummy calcomp in calcom.  halt.'
+  write (*,*) ' Use of dummy calcomp in calcom.  Halt.'
   stop
 end subroutine calcom
 !

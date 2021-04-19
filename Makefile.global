@@ -118,7 +118,9 @@ LIBC=${shell ${CC} -print-file-name=libc.a}
 LIBM=${shell ${CC} -print-file-name=libm.a}
 LIBGFORTRAN=${shell ${FORTRAN} -print-file-name=libgfortran.a}
 
-LIBRARIES=	quadmath
+LIBRARIES=	quadmath	\
+		m
+
 LD_FLAGS+=${patsubst %,-l%,${subst :, ,${LIBRARIES}}}
 
 ifdef DEBUG
@@ -166,7 +168,7 @@ ${COMPILER}/%.o: %.for
 	else								\
 		echo "${FORTRAN} ${FORTRAN_FLAGS}  ${<} -o ${@}";	\
 	fi
-	@${CC} ${FORTRAN_FLAGS} ${<} -o ${@}
+	@${FORTRAN} ${FORTRAN_FLAGS} ${<} -o ${@}
 
 # Rule for linking the final program file.
 ${COMPILER}/%:
