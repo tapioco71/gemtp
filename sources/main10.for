@@ -1,4 +1,4 @@
-!-*- Mode: Fortran; Syntax: ANSI-Fortran-90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!-*- Mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 !
 !     file: main10.for
 !
@@ -492,7 +492,7 @@ subroutine vecrsv(array, n13, n2)
   equivalence (karray(1), farray(1))
   !     block /veccom/ is shared by "vecrsv" and "vecisv".
   !     kofvec(kntvec) remembers index for kntvec-th dumping.
-  common  /veccom/  kntvec,  kofvec(20)
+  common /veccom/  kntvec,  kofvec(20)
   if ( iprsup  .ge.  1 ) write (lunit6, 1623) n13, n2, kntvec
 1623 format ( 27h begin "vecrsv".  n13, n2 =,  2i8, '     kntvec =',  i8 )
   if ( n2  .ne.  0 )  go to 1638
@@ -555,7 +555,7 @@ subroutine vecisv(karr, n13, n2)
   equivalence (karray(1), farray(1))
   dimension karr(2)
   !     block /VECCOM/ is shared with "VECRSV" (see for more info)
-  common  /veccom/  kntvec,  kofvec(20)
+  common /veccom/  kntvec,  kofvec(20)
   if (iprsup .ge. 1) write (lunit6, 1423) n13, n2
 1423 format (27h begin "vecisv".  n13, n2 =,  2i8)
   if (n2 .eq. 1) go to 1471
@@ -719,7 +719,7 @@ subroutine tables
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'syncom.ftn'
-  common  /comlock/  locker(2)
+  common /comlock/  locker(2)
   !     note about deck "synmac".   if emtp s.m. modeling
   !     Brandwajn (type-59), is to be deleted,
   !     then all s.m. subroutines ( smdat, smout, smpfit,
