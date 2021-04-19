@@ -2,10 +2,10 @@
   !
   !     file: space2.ftn
   !
-  common  /spac02/ norder(1)
+  common  /spac02/ norder(20)
   common  /spac03/ index(40)
   common  /spac04/ diag(1)
-  dimension ich2(5)
+  dimension ich2(15)
   equivalence (diag(1), ich2(1))
   common  /spac05/ diab(1)
   dimension loc(15)
@@ -14,7 +14,7 @@
   dimension kownt(15)
   equivalence (solr(1), kownt(1))
   common  /spac07/ soli(1)
-  common  /spac08/ ich1(5)
+  common  /spac08/ ich1(15)
   common  /spac01/ bnd (1)
   dimension korder(1)
   equivalence (bnd(1), korder(1))

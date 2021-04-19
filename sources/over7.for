@@ -10,7 +10,7 @@ subroutine over7
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'space2.ftn'
-  dimension lorder(1), ndex(1)
+  dimension lorder(1), ndex(15)
   equivalence (ich2(1), lorder(1)), (e(1), ndex(1))
   equivalence (iofkol, iofgnd), (iofkor, iofbnd)
   !     following carries "next" among over6, insert, over7, & over9:

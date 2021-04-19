@@ -3730,7 +3730,7 @@ end subroutine cxred2
 !
 subroutine symm(p,z,switch,kcirct,kk)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  dimension p(1), z(1)
+  dimension p(9), z(9)
   dimension ar(3,3),ai(3,3),fr(3),fi(3)
   include 'blkcom.ftn'
   include 'labl44.ftn'
@@ -4173,9 +4173,9 @@ end subroutine output
 !
 ! subroutine outspc.
 !
-subroutine outspc(p   , z   ,kmax  ,metrik,fmipkm)
+subroutine outspc(p, z, kmax, metrik, fmipkm)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  dimension p(1), z(1)
+  dimension p(9), z(9)
   include 'blkcom.ftn'
   include 'labl44.ftn'
   if(kmax.eq.4) go to 999

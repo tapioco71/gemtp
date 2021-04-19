@@ -3,8 +3,8 @@
 !     file: deck44.ftn
 !
   common  / c29b01 /   karray(3)
-  common  / c44b02 /   p     (1)
-  common  / c44b03 /   z     (1)
+  common  / c44b02 /   p     (9)
+  common  / c44b03 /   z     (9)
   common  / c44b04 /   ic    (1)
   common  / c44b05 /   r     (1)
   common  / c44b06 /   d     (1)

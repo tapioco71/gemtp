@@ -1,4 +1,4 @@
-!-*- mode: f90; syntax: fortran-90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 !
 !     file: over2.for
 !
@@ -4259,7 +4259,7 @@ subroutine distr2
 6116 call cimage
      read (unit = abuff, fmt = 6115) buffin
      do j = 1, 7, 2
-        tim2 (n4) = buffin(j)
+        tim2(n4) = buffin(j)
         a2p(n5) = buffin(j+1)
         n4 = n4 + 1
 26116   n5 = n5 + 1
