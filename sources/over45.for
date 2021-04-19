@@ -21,7 +21,7 @@ subroutine subr45
   include 'blkcom.ftn'
   include 'deck45.ftn'
   include 'labl45.ftn'
-  dimension stg(11)
+  dimension stg(11), si(2)
   dimension lltemp(20)
   double precision zift(11)
   equivalence (zift(1), karray(1))
@@ -102,10 +102,10 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   include 'blkcom.ftn'
   include 'labl45.ftn'
   include 'volt45.ftn'
-  dimension pbuf(1), cq(1), z(1), y(1), zy(1), zya(1), zyb(1)
-  dimension zyc(1), zyd(1), cqt(1), q(1), qi(1), g(1), g60(1)
-  dimension yo(1), xr(1), xl(1), xg(1), xc(1), um(1), si(1)
-  dimension vresp(1), ymin(1), fv(1), hhm(1), hhn(1)
+  dimension pbuf(11), cq(1), z(1), y(2), zy(1), zya(1), zyb(2)
+  dimension zyc(1), zyd(1), cqt(1), q(1), qi(1), g(2), g60(1)
+  dimension yo(1), xr(1), xl(1), xg(1), xc(1), um(1), si(5)
+  dimension vresp(1), ymin(2), fv(2), hhm(1), hhn(1)
   dimension ygr(6), ww(3), mfrecv(10), b(4), e(4), itemp(12)
   dimension russ(5)
   dimension amarti(5)
@@ -124,7 +124,7 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   character*8 text10, text11, text12
   character*8 text13, text14, text15, text16, text17
   double precision den1,den2,hssr,hssi,yssr,yssi,hamp,hang,alnh,w2
-  double precision dd11, zcos(1)
+  double precision dd11, zcos(11)
   data text1 / 6hbranch /
   data text2   /  6hnew rh  /
   data text3   /  6ho       /
@@ -1189,8 +1189,8 @@ subroutine frqdom(ioutp, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq,cqt, q, qi, g, g
   include 'labl45.ftn'
   include 'volt45.ftn'
   equivalence (vim(8),epseig),(ipntv(5),nieig),(indtv(2),nss)
-  dimension pbuf(1), z(1), y(1), zy(1), zya(1), zyb(1), zyc(1)
-  dimension zyd(1), cq(1), cqt(1), q(1), qi(1), g(1), g60(1)
+  dimension pbuf(1), z(1), y(2), zy(1), zya(1), zyb(2), zyc(1)
+  dimension zyd(1), cq(1), cqt(1), q(1), qi(1), g(2), g60(1)
   dimension yo(1), xr(1), xl(1), xg(1), xc(1)
   ll1 = 1
   ll2 = 2
@@ -1844,7 +1844,7 @@ end subroutine frqdom
 !
 ! subroutine xift.
 !
-function xift( tsp, omegas, funw, cosi )
+function xift(tsp, omegas, funw, cosi)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   include 'labl45.ftn'
   include 'blkcom.ftn'
@@ -1856,8 +1856,8 @@ function xift( tsp, omegas, funw, cosi )
   !     this value, of course, is not multiplied by (1/(j*w)) to convert
   !     from impulse to step response.  the limit of sin(w*t)/w for w = 0.
   !     being equal to t is used.
-  dimension omegas(1), funw(1)
-  double precision xtmp, ttft, time, dtemp, cosi(1)
+  dimension omegas(5), funw(5)
+  double precision xtmp, ttft, time, dtemp, cosi(3)
   equivalence (indtv(10), npan)
   data n1 / 3 /
   time = tsp
@@ -1923,7 +1923,7 @@ function xift( tsp, omegas, funw, cosi )
      d7 = onehaf * d7
      xift = xift + d4 * (d3 + d7)
      if (n1 .gt. 0) write (lunit6, 200) i, w, deltaw, omegas(i), funw(i), xift, d1, d2, d3, d4, d5, d6, d7
-200  format(/,52h inside ift loop.  i, w, deltaw, omegas(i), funw(i), , 36hxift, d1, d2, d3, d4, d5, d6, d7 =    ,/, &
+200  format(/, ' inside ift loop.  i, w, deltaw, omegas(i), funw(i), d1, d2, d3, d4, d5, d6, d7 =',/, &
           i10,6(1x,e20.10)/(6(1x,e20.10)))
      d4 = (omegas(i+2) - d1) / npan
      if (d4 .gt. deltaw) go to 40
@@ -1968,13 +1968,13 @@ subroutine rise(time, thr, t2, vresp, si, cosi)
   include 'blkcom.ftn'
   include 'labl45.ftn'
   include 'volt45.ftn'
-  dimension si(1), vresp(1)
-  double precision cosi(1)
+  dimension si(5), vresp(5)
+  double precision cosi(3)
   equivalence (ipntv(1), nfit),  (vim(5), epsrse)
   n1 = nfit
   temp = time
   mitt = 0
-7403 x1 = xift ( time, si, vresp, cosi )
+7403 x1 = xift(time, si, vresp, cosi)
   target = ffin * absz(thr)
   close = ffin * epsrse
 15 t1 = time + t2
@@ -2054,8 +2054,8 @@ subroutine tdfit(vresp, si, fv, hhm, hhn, cosi)
   equivalence (vim(1),eps),(vim(2),eps1),(vim(3),fit2z)
   equivalence (vim(4),pivthr),(vim(7),ft2emx),(vim(9),epspv2)
   equivalence (ipntv(2),niter1),(ipntv(3),niter),(indtv(1),npoint)
-  dimension vresp(1), si(1), fv(1), hhm(1), hhn(1)
-  double precision cosi(1)
+  dimension vresp(5), si(5), fv(2), hhm(1), hhn(1)
+  double precision cosi(3)
   dimension b(4), db(3,3), hac(3,3), e(4), eold(3), xold(3)
   character*8 text7, text8, text9
   data text7  / 6h.      /

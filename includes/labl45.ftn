@@ -7,8 +7,8 @@
   common /com45/ f, w, cold, xpan, conv5, ratio, pi2, sll, spdlt
   common /com45/ tt, tstrt, tretrd, tstep, ffin, shiftr, shifti
   common / com45 / d, x(3), dplu, dmin, ictrl, i1
-  common / com45 / iwork,nph,nph2,nphpi2,n22,nphsq,ntri
-  common / com45 /  iss,nfr,nfr1,ix, kreqab
+  common / com45 / iwork, nph, nph2, nphpi2, n22, nphsq, ntri
+  common / com45 / iss, nfr, nfr1, ix, kreqab
 !
 !     end of file: labl45.ftn
 !
