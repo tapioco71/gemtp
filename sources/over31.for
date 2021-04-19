@@ -26,7 +26,7 @@ subroutine subr31
   !               (integer-numeric usage only, with arrays
   !                preceding scalars).
   include 'deck31.ftn'
-  common   /ldec31/  kalcom
+  common /ldec31/  kalcom
   dimension array(1), evdoub(1)
   integer*4 j1, j2, mhoriz
   real*8 bxsing, flong1, tstep, xyplot, xin, bx, evdoub
