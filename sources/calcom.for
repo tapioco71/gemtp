@@ -8,7 +8,7 @@
 subroutine calcom
   entry dshabs
   entry movabs
-  entry axis
+!  entry axis
   entry factor
   entry line
   entry newpen
