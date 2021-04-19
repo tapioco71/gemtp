@@ -2,7 +2,7 @@
 !
 !     file: space1.ftn
 !
-  common  /spac01/   tp(1)
+  common /spac01/   tp(1)
   dimension tim1(1), tim2(1), ap(1), a1p(1), a2p(1)
   equivalence (tp(1), tim1(1), tim2(1), ap(1), a1p(1), a2p(1))
 !

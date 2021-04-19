@@ -98,11 +98,11 @@
   character*8   messag,    end, timesp,  label, timeun
   character*8   cursor, xyplot,  slope,   back, refile
   character*8   texblk, setdat, texfnt
-  common  /pltans/  abuf77(10),  ansi, ibuff(20), texfnt
-  common  /pltans/     sext(6), headl, vertl, buffin
-  common  /pltans/  slot1(20), horzl(8), date, time
-  common  /pltans/  textd1, textd2, curren, voltag, brclas
-  common  /pltans/  filnam, alpha, xytitl, anplt(60)
+  common /pltans/  abuf77(10),  ansi, ibuff(20), texfnt
+  common /pltans/     sext(6), headl, vertl, buffin
+  common /pltans/  slot1(20), horzl(8), date, time
+  common /pltans/  textd1, textd2, curren, voltag, brclas
+  common /pltans/  filnam, alpha, xytitl, anplt(60)
   equivalence ( anplt( 1), choice ),  ( anplt( 2),   stop )
   equivalence ( anplt( 3),  purge ),  ( anplt( 4),    out )
   equivalence ( anplt( 5),   help ),  ( anplt( 6), smooth )

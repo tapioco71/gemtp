@@ -1,10 +1,10 @@
-!-*- mode: fortran; syntax: ansi-fortran-90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 !
 !     file: labl02.ftn
 !
-  common   /com2 / n1, n2, n3, n4, lcount, model, l27dep, ibr1
-  common   /com2 / nrecur,  kgroup, nc4, nc5, ifq, n13, ida
-  common   /com2 / ifkc, idy, idm, idq, idu, idt, iq, nc6, nc3
+  common /com2/ n1, n2, n3, n4, lcount, model, l27dep, ibr1
+  common /com2/ nrecur,  kgroup, nc4, nc5, ifq, n13, ida
+  common /com2/ ifkc, idy, idm, idq, idu, idt, iq, nc6, nc3
 !
 !     end of file: labl02.ftn
 !
