@@ -7,7 +7,7 @@
 !
 subroutine ntacs1a        ! wsm + thl manual modification for bpa emtp
   include 'tacsto.ins'
-  open(unit09,file='tacs.tim',status='old')
+  open(unit09, file = 'tacs.tim', status = 'old')
   read(unit09,901) ndx0
 901 format(i1)
   close(unit09)
