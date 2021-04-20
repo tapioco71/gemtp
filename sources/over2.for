@@ -3453,7 +3453,7 @@ subroutine distr2
 54121 format ('+3rd or later unif.-transposed distributed cond.')
      go to 100
 5895 if ( noutpr  .eq.  0 ) write (kunit6, 5900)
-5900 format(47h+4th or later double ckt distributed conductor.)
+5900 format ('+4th or later double ckt distributed conductor.')
 100  lstat(18) = 100
      go to 9999
 141  lstat(18) = 141
@@ -3463,9 +3463,9 @@ subroutine distr2
 9000 lstat(16) = iprint
      kill = 1
 9999 if ( iprsup  .ge.  3 ) write (lunit6, 9998)  kill, nchain, lstat(18), ibr, ifsem
-9998 format ( /,  17h exit  "distr2" ., 40 h    kill  nchain lstat18     ibr   ifsem ,/,  17x,  10i8  )
+9998 format (/, ' exit  "distr2" .    kill  nchain lstat18     ibr   ifsem ', /, 17x, 10i8)
      if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
-4568 format ( 24h  "exit  module distr2." )
+4568 format ('  "Exit  module distr2."')
      return
    end subroutine distr2
 !
@@ -3495,7 +3495,7 @@ subroutine distr2
      data text4  / 4h     /
      locatn(i,j)=(j*j-j)/2+i
      if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
-4567 format ( 23h  "begin module over3." )
+4567 format ('  "Begin module over3."')
      ll0 = 0
      ll3 = 3
      iend=nphcas
@@ -3504,9 +3504,9 @@ subroutine distr2
      call cimage
      if(iend.gt.14)idumy=14
      read (unit = abuff, fmt = 76501) dsectj, multip, mser, mbr, msect, (mapcas(i), i = 1, idumy)
-76501 format(2x,e6.2,18i4)
+76501 format (2x, e6.2, 18i4)
      if ( noutpr  .eq.  0 ) write (kunit6, 76702)  dsectj,multip,mser,mbr,msect, ( mapcas(i), i=1, ll3 )
-76702 format ( 10h+line pos., 1x, e11.3, 7i4 )
+76702 format ('+Line pos.', 1x, e11.3, 7i4)
      if(dsectj.eq.0.0)dsectj=1.0
      if(multip.eq.0)multip=1
      if ( multip  .gt.  0 )   go to 7671
@@ -3522,10 +3522,10 @@ subroutine distr2
      idumy=istart+iend-1
      if(iend.gt.14)idumy=istart+13
      read (unit = abuff, fmt = 76502) (mapcas(i),i = istart, idumy)
-76502 format(24x,14i4)
+76502 format (24x, 14i4)
      if ( idumy  .gt.  istart+11 )   idumy = istart + 11
      if ( noutpr  .eq.  0 ) write (kunit6, 76703)  (mapcas(i),i=istart,idumy)
-76703 format ( 1h+, 12i4 )
+76703 format ('+', 12i4)
      istart=istart+14
      goto76504
 76503 npos2=2*nphcas
@@ -3581,7 +3581,7 @@ subroutine distr2
      call cimage
      if (iend .gt. 14) idumy = 14
      read (unit = abuff, fmt = 4012) text5, text6, text7
-4012 format( 2x, 3a4 )
+4012 format (2x, 3a4)
      if( text5 .ne. text1 )  go to 4013
      if( text6 .ne. text2 )  go to 4013
      if( text7 .eq. text3 )  go to 76600
@@ -3617,19 +3617,19 @@ subroutine distr2
      !     read input card using cimage.
 76511 call cimage
      read (unit = abuff(1), fmt = 7651) itype
-7651 format ( i2 )
+7651 format (i2)
      if(itype.ge.0.and.itype.le.nphcas)goto76714
      lstat(19)=7651
      kill=54
      lstat(12)=itype
      goto9200
 76714 if (itype .eq. 0 .and. noutpr .eq. 0) write (kunit6, 76705)
-76705 format(37h+blank card terminating series r-l-c.  )
+76705 format ('+Blank card terminating series R-L-C.')
      if(itype.eq.0)goto76510
      read (unit = abuff, fmt = 76530) trser(itype), txser(itype), cser(itype)
-76530 format ( 26x, 3e6.0 )
+76530 format (26x, 3e6.0)
      if ( noutpr  .eq.  0 ) write(kunit6,76704)trser(itype),txser(itype),cser(itype)
-76704 format ( 14h+series r-l-c.  , 2x, 3e11.3  )
+76704 format ('+series R-L-C.', 2x, 3e11.3)
      goto76511
 76510 if(mbr.le.0)goto 76513
      mbr1=0
@@ -3641,13 +3641,13 @@ subroutine distr2
      if( text6 .ne. text4 )  go to 4018
      if( text7 .ne. text4 )  go to 4018
      if ( noutpr  .eq.  0 ) write (kunit6, 4017)
-4017 format(  45h+blank card terminating shunt r-l-c branches.   )
+4017 format ('+Blank card terminating shunt R-L-C branches.')
      go to 76540
 4018 continue
      read (unit = abuff, fmt = 76515) node1(mbr1), node2(mbr1), trshun(mbr1), txshun(mbr1), cshun(mbr1)
-76515 format(2x,2i6,12x,3e6.2)
+76515 format (2x, 2i6, 12x, 3e6.2)
      if ( noutpr  .eq.  0 ) write(kunit6,76706)node1(mbr1),node2(mbr1 ),trshun(mbr1), txshun(mbr1),cshun(mbr1)
-76706 format ( 7h+shunt. ,  2x, 2i4, 3e11.3  )
+76706 format ('+Shunt.', 2x, 2i4, 3e11.3)
      goto 76516
 76540 mbr1=mbr1-1
 76513 if(msect.le.0)goto 76505
@@ -3659,14 +3659,14 @@ subroutine distr2
         !     read input card using cimage.
         call cimage
         read (unit = abuff, fmt = 76518) itype, (tr(j), tx(j), c(j), j = istart, iend)
-76518   format(i2,24x,9e6.2)
+76518   format (i2, 24x, 9e6.2)
         if ( i  .gt.  1 )   go to 5264
         if ( noutpr  .eq.  0 ) write (kunit6, 54777)  tr(istart), tx(istart), c(istart)
-54777   format ( 15h+1st of pi-ckt.  , 1x, 3e11.3  )
+54777   format ('+1st of pi-ckt.', 1x, 3e11.3)
         go to 5271
 5264    idumy = istart + 1
         if ( noutpr  .eq.  0 ) write (kunit6, 54104)  tr(idumy), tx(idumy), c(idumy), tr(idumy+1), tx(idumy+1)
-54104   format ( 1h+, 5e10.3 )
+54104   format ('+', 5e10.3)
 5271    istart = iend + 1
         idumy=i
 76520   idumy=idumy-3
@@ -3676,7 +3676,7 @@ subroutine distr2
         !     read input card using cimage.
         call cimage
         read (unit = abuff, fmt = 76519) (tr(j), tx(j), c(j), j = istart, iend)
-76519   format(26x,9e6.2)
+76519   format (26x, 9e6.2)
         iendd=iend
         if(idumy.gt.3)iendd=istart+1
         if ( noutpr  .eq.  0 ) write (kunit6, 54104)  tr(istart), tx(istart), c(istart), tr(istart+1), tx(istart+1)
@@ -3789,7 +3789,7 @@ subroutine distr2
      if (iprsup .lt. 9) go to 76630
      write(lunit6,76605)
      write(lunit6,76631)
-76631 format( 5x,41hy-matrix before series r-l-c elimination.     )
+76631 format (5x, 'Y-matrix before series R-L-C elimination.')
      do i = 1, npos3
         write(lunit6,76605)
         istart = locatn(i-1,i-1) +1
@@ -3807,7 +3807,7 @@ subroutine distr2
      if (iprsup .lt. 9) go to 76650
      write(lunit6,76605)
      write(lunit6,76653)
-76653 format( 5x,41hy-matrix after series r-l-c elimination.     )
+76653 format (5x, 'Y-matrix after series R-L-C elimination.')
      do i = 1,npos2
         write(lunit6,76605)
         istart = locatn(i-1,i-1) +1
@@ -3857,7 +3857,7 @@ subroutine distr2
         yshunx=(-freqcs*txshun(jbr)/freqx+1.0/(freqcs*cshun(jbr)/freqc )) /ymag2
         if( iprsup .ge. 6 ) write(lunit6, 76721)  jbr, mbr1, node1(jbr), node2(jbr), trshun(jbr), txshun(jbr), cshun(jbr), freqx, &
              freqc, freqcs, ymag2, yshunr, yshunx
-76721   format( /,  46h shunt branch admittance calculation at 76721.  , 4i10, /, ( 1x, 3e30.8 ) )
+76721   format (/, ' Shunt branch admittance calculation at 76721.', 4i10, /, (1x, 3e30.8))
         goto76453
 76452   ymag2= trshun(jbr)**2+(freqcs*txshun(jbr)/freqx)**2
         yshunr=trshun(jbr)/ymag2
@@ -3954,7 +3954,7 @@ subroutine distr2
      if (iprsup .lt. 9) go to 76640
      write(lunit6,76605)
      write(lunit6,76634)
-76634 format(5x,41hy-matrix before shunt r-l-c elimation.   )
+76634 format (5x, 'Y-matrix before shunt R-L-C elimation.')
      do i = 1,npos3
         write(lunit6,76605)
         istart = locatn(i-1,i-1) +1
@@ -3972,7 +3972,7 @@ subroutine distr2
      if (iprsup .lt. 9) go to 76651
      write(lunit6,76605)
      write(lunit6,76654)
-76654 format(5x,38hy-matrix after shunt r-l-c elimation.   )
+76654 format (5x, 'Y-matrix after shunt R-L-C elimation.')
      do i = 1, npos2
         write(lunit6,76605)
         istart = locatn(i-1,i-1) +1
@@ -4033,7 +4033,7 @@ subroutine distr2
      if (iprsup .lt. 9) go to 76641
      write(lunit6,76605)
      write(lunit6,76635)
-76635 format(5x,36hy-matrix before section elimination.    )
+76635 format (5x, 'Y-matrix before section elimination.')
      do i = 1, npos3
         write(lunit6,76605)
         istart = locatn(i-1,i-1) +1
@@ -4051,7 +4051,7 @@ subroutine distr2
      if (iprsup .lt. 9) go to 76652
      write(lunit6,76605)
      write(lunit6,76655)
-76655 format(5x,36hy-matrix after section elimination.    )
+76655 format (5x, 'Y-matrix after section elimination.')
      do i = 1, npos2
         write(lunit6,76605)
         istart = locatn(i-1,i-1) +1
@@ -4072,7 +4072,7 @@ subroutine distr2
      call mover0 ( caslnx(istart), i )
      go to 76521
 76600 if ( noutpr  .eq.  0 ) write (kunit6, 76620)
-76620 format(28h+termination of cascaded pi.)
+76620 format ('+Termination of cascaded pi.')
      locznn=locatn(npos2,npos2)+locz11-1
      it=locz11+locatn(npos2,npos2)
      tmax=-1.0
@@ -4088,10 +4088,10 @@ subroutine distr2
      end do
      if(iprsup.lt.2)goto100
      write(lunit6,76607)
-76607 format(5x,46hy-matrix for line represented by cascaded-pi.     )
+76607 format (5x, 'Y-matrix for line represented by cascaded-pi.')
      do i = 1, npos2
         write(lunit6,76605)
-76605   format(//,1x)
+76605   format (/, /, 1x)
         istart=locatn(i-1,i-1)+1
         idumy=i+9
 76603   idumy=idumy-9
@@ -4099,14 +4099,14 @@ subroutine distr2
         if(idumy.gt.9)iend=istart+8
         write(lunit6,76604)(caslnr(ii),ii=istart,iend)
         write(lunit6,76604)(caslnx(ii),ii=istart,iend)
-76604   format(1x,9e13.5)
+76604   format (1x, 9e13.5)
         istart=istart+9
         if(idumy.gt.9)goto76603
 76602 end do
 100  lastov = nchain
      nchain = 2
      if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
-4568 format ( 23h  "exit  module over3." )
+4568 format ('  "Exit  module over3."')
      go to 99999
 9200 lastov = nchain
      nchain = 51
@@ -4193,7 +4193,7 @@ subroutine distr2
      dimension  buffin (8)
      !     frequency dependent line. ********************************
      if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
-4567 format ( 23h  "begin module over4." )
+4567 format ('  "Begin module over4."')
      jfdep2 = 2 * lfdep + ifdep2
      kfdep2 = 4 * lfdep + ifdep2
      d1tttt = t
@@ -4218,12 +4218,12 @@ subroutine distr2
      !     read input card using cimage.
      call cimage
      read (unit = abuff, fmt = 6105) ntime1, ntime2, locmax, locmin, z1, cut1, cut2, n10, rtotal, nii
-6105 format ( 4i8, 3f8.0, i8, f8.0, i8 )
+6105 format (4i8, 3f8.0, i8, f8.0, i8)
      if( cut1  .le. 0.0 )  cut1  = 10. * tenm3
      if( cut2  .le. 0.0 )  cut2  = 100. * tenm3
      if ( nii  .le.  0 )    nii = 100
      if ( noutpr  .eq.  0 ) write (kunit6, 6110)
-6110 format( 40h+frequency-dependence misc. data values.   )
+6110 format ('+Frequency-dependence misc. Data values.')
      n9 = noutpr
      noutpr = n10
      n1 = ntime1
@@ -4249,7 +4249,7 @@ subroutine distr2
 26111   n3 = n3 + 1
      end do
      if ( noutpr  .eq.  0 ) write (kunit6, 6112)
-6112 format( '+   weighting function a1 points.')
+6112 format ('+   Weighting function a1 points.')
 5736 if ( n2  .le.  n12 )   go to 6111
      n4 = ioftm2 + 1
      n5 = 1
@@ -4263,9 +4263,9 @@ subroutine distr2
         n4 = n4 + 1
 26116   n5 = n5 + 1
      end do
-6115 format( 8f10.0 )
+6115 format (8f10.0)
      if ( noutpr  .eq.  0    .and. n12  .gt.  0 ) write (kunit6, 6117)
-6117 format( '+   weighting function a2 points.')
+6117 format ('+   Weighting function a2 points.')
 5741 n12 = ntime2 - n5
      if ( n12  .le.  7 ) noutpr = n9
      if ( n12  .ge.  0 )   go to 6116
@@ -4309,7 +4309,7 @@ subroutine distr2
      end do
      d3 = d3 * onehaf
      if ( noutpr  .eq.  0 ) write (kunit6, 6129)  d3
-6129 format( '+   weighting function a2 points.',  f16.8 )
+6129 format ('+   Weighting function a2 points.',  f16.8)
      if ( rtotal  .gt.  0.0 )   go to 7820
      d1 = 1.0 / d3
      do i = 1, ntime1
@@ -4339,8 +4339,7 @@ subroutine distr2
      kflop = 1
      mode  = 0
      if ( iprsup  .ge.  1 ) write (lunit6, 6213)  ifdep, ifdep2, jst, i, ioftm2, iend, dzero, deltat
-6213 format ( /,  25h begin  a(t)  processing., 48h   ifdep  ifdep2     jst       i  ioftm2    iend, &
-          11x,  5hdzero,  10x,  6hdeltat  ,/,  25x,  6i8,  2e16.7)
+6213 format (/, ' Begin  A(t)  processing.   ifdep  ifdep2     jst       i  ioftm2    iend', 11x, 'dzero', 10x, 'deltat',/, 25x, 6i8, 2e16.7)
      go to 6450
 6220 if( mode .gt. 0 )  go to 6240
      if( t .le. tend )  go to 6240
@@ -4353,12 +4352,9 @@ subroutine distr2
 6240 if( i .lt. iend )  go to 6250
      if ( iprsup  .le.  0 )   go to 6245
      write (lunit6, 6243)  i, iend, jst, mode, kflop, lwt, kfin, n, ifdep, ifdep2, ioftm2, locmin, locmax
-6243 format ( /,  21h end raw data points., 48h       i    iend     jst    mode   kflop     lwt, &
-          56h    kfin       n   ifdep  ifdep2  ioftm2  locmin  locmax  ,/, &
-          21x,  13i8  )
+6243 format (/, ' End raw data points.       i    iend     jst    mode   kflop     lwt,     kfin       n   ifdep  ifdep2  ioftm2  locmin  locmax  ',/, 21x,  13i8)
      write (lunit6, 6244)  t1, a1, t, a, d5, d6, tend, d3
-6244 format ( /,  15x,  2ht1,  14x,  2ha1,  15x,  1ht,  15x, 1ha,  14x,  2hd5,  14x,  2hd6,  12x,  4htend,  14x,  2hd3   ,/, &
-          1x,  8e16.7  )
+6244 format (/, 15x, 't1', 14x, 'a1',  15x, 't', 15x, 'a',  14x, 'd5', 14x, 'd6', 12x, 'tend', 14x, 'd3',/, 1x, 8e16.7)
 6245 i = -1
      kflop = 1
 6250 d1 = ( t - t1 ) * onehaf
@@ -4374,8 +4370,7 @@ subroutine distr2
      if( kflop .eq. 0 )  go to 6450
      d6 = d6 / deltat
      if ( iprsup  .ge.  4 ) write (lunit6, 6316)  i, jst, mode, n, t, a, d5, d6
-6316 format ( /,  17h done with panel., 32h       i     jst    mode       n,  15x,  1ht,  15x, &
-          1ha,  14x,  2hd5,  14x,  2hd6  ,/,  17x,  4i8,  4e16.7  )
+6316 format (/, ' Done with panel.       i     jst    mode       n', 15x, 't', 15x, 'a', 14x, 'd5', 14x, 'd6', /, 17x, 4i8, 4e16.7)
      if( dzero .ne. 0.0 )  go to 6320
      dzero = d5
      d3 = dzero - d6
@@ -4393,8 +4388,7 @@ subroutine distr2
      d1 = d1 * d3
      weight(jst) = weight(jst) + d2
      if( n .le. 5    .and.    iprsup .ge. 2 ) write(lunit6, 6323)  d1, d2, d3, weight(jst)
-6323 format ( /,  23h accumulate  'weight' .,  4x,  12hweight(jst1), 14x,  2hd2,  14x,  2hd3,  5x,  11hweight(jst)  ,/, &
-          23x,  4e16.7  )
+6323 format (/, " Accumulate  'weight' .", 4x, 'weight(jst1)', 14x, 'd2', 14x, 'd3', 5x, 'weight(jst)',/, 23x, 4e16.7)
      weight(jst1) = d1
      if( kfin .gt. 0 )  go to 6340
      if( i .le. locmin )  go to 6450
@@ -4427,15 +4421,13 @@ subroutine distr2
 6465 d1 = 1.0 / ( d6/d5 - tails )
      d2 = d1 * d5
      if( iprsup .ge. 2 ) write(lunit6, 6466)  ifdep2, d2, d1, tails, d5, d6
-6466 format ( /,  24h tail integral complete.,   8h  ifdep2, 14x,  2hd2,  14x,  2hd1,  11x,  5htails,  14x,  2hd5, &
-          14x,  2hd6  ,/,  24x,  i8,  5e16.7  )
+6466 format (/,  ' Tail integral complete.  ifdep2', 14x, 'd2', 14x, 'd1', 11x, 'tails', 14x, 'd5', 14x, 'd6',/, 24x, i8, 5e16.7)
      con1(ifdep2) = d2 * d3
      con1(jfdep2) = d1
      con1(kfdep2) = tails
      if( rtotal .le. 0.0 )   go to 6475
      if ( iprsup .ge. 1 ) write (lunit6, 7812) d3, aamp, aditn, con1(ifdep2), d1, tails, ifdep2
-7812 format (  25h  before tail adjustment.  ,/, 18x, 2hd3,  16x, 4haamp,  15x, 5haditn,  15x, 5htailp, &
-          15x, 5htailq,  15x, 5htails,  4x, 6hifdep2  ,/, x,  6e20.11,  i10 )
+7812 format ('  Before tail adjustment.', /, 18x, 'd3', 16x,'aamp', 15x, 'aditn', 15x, 'tailp', 15x, 'tailq', 15x, 'tails', 4x, 'ifdep2', /, x, 6e20.11, i10)
      tcor = atheo - aditn
      !     start newton raphson iterations on tailq * * * * * * * * * * * * *
      bct = absz ( tcor / aamp )
@@ -4453,7 +4445,7 @@ subroutine distr2
      fder = 1.0 / d1 + tails
      d18 = fstar / fder
      if ( iprsup  .ge.  1 ) write (lunit6, 7912) ik, fstar, fder, d18, d1, bct
-7912 format ( 1x, 16hon iteration no.,  i5  ,/,  5e22.12 )
+7912 format (1x, 'On iteration no.', i5, /, 5e22.12)
      do ikp = 1, 6
         if ( absz(d18)  .lt.  d1 )   go to 7843
 7914    d18 = d18 / 5.0
@@ -4468,7 +4460,7 @@ subroutine distr2
 7905 con1(jfdep2) = d1
      con1(ifdep2) = tcor * d1 * d3
      if ( iprsup  .ge.  1 ) write (lunit6, 7913) ifdep2, con1(ifdep2), con1(jfdep2)
-7913 format (  24h successful termination.,  8h  ifdep2, 15x, 5htailp,  15x, 5htailq  ,/,  24x,  i8,  2e20.12 )
+7913 format (' Successful termination.  ifdep2', 15x, 'tailp', 15x, 'tailq', /, 24x, i8, 2e20.12)
      go to 6475
 6470 con1(ifdep2) = 0.0
      con1(jfdep2) = 0.0
@@ -4494,8 +4486,7 @@ subroutine distr2
 6600 zinf(ifdep) = z1
      npoint = npoint   +   ( iskip(ifdep) - 1 )
      if( iprsup .ge. 1 ) write(lunit6, 6601)  ibr, jst, npoint, iskip(ifdep), nr(ibr), nhist(ifdep)
-6601 format ( /,  25h ready to exit  'over4' .,  12x,  3hibr, 12x,  3hjst,  9x,  6hnpoint,  3x,  12hiskip(ifdep), &
-          8x,  7hnr(ibr),  3x,  12hnhist(ifdep)  ,/,  25x,  6i15  )
+6601 format (/, " Ready to exit  'over4' .", 12x, 'ibr', 12x, 'jst', 9x, 'npoint', 3x, 'iskip(ifdep)', 8x, 'nr(ibr)', 3x, 'nhist(ifdep)', /, 25x, 6i15)
      if( npoint  .gt.  nhist(ifdep)  )   nhist(ifdep) = npoint
      nhist(ifdep) = nhist(ifdep) + 1
      icheck = 3
@@ -4503,7 +4494,7 @@ subroutine distr2
      nchain = 2
      t = d1tttt
      if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
-4568 format ( 23h  "exit  module over4." )
+4568 format ('  "Exit  module over4."')
      go to 99999
 9200 lastov = nchain
      nchain = 51
