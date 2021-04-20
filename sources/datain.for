@@ -80,7 +80,9 @@ subroutine datain
   call time44 ( tclock(1) )  ! time of day for documentation
   call initsp ! initialize spy common (digit needed to sort)
 1311 write (lunit6, 1324)    ! prompt user at "emtspy" keyboard
-1324 format (  ' emtp begins.  send (spy, $attach, debug,', ' help, module, junk, stop) :'  )
+1324 format (' EMTP begins.  Send (spy, $attach, debug, help, module, junk, stop) :'  )
+  write (lunit6, 1325)
+1325 format ('> ', $)
   read (munit5, 1329) buff77  ! read first card of emtp data
 1329 format ( a80 )
   if ( buff77(1:5) .eq. 'stop ' )  call stoptp
@@ -90,7 +92,7 @@ subroutine datain
 51329 if ( buff77(1:7) .eq. '$attach' ) go to 1347  ! batch mode
   if ( buff77(1:5) .ne. 'junk ' )  go to 1332
   write (lunit6, 1330)
-1330 format ( '   send root word to over-ride "junk" for', ' spy and plot windows :' )
+1330 format ('   Send root word to over-ride "junk" for spy and plot windows :' )
   read (munit5, 1331)  junker   ! read new window pad name
   buff77(1:8) = 'spy     '   ! implied command next serviced
 1331 format ( a8 )
@@ -101,16 +103,16 @@ subroutine datain
 41332 if ( buff77(1:6) .eq. 'module' )  go to 2613
   if ( buff77(1:5) .ne. 'help ' )  go to 1342
   write (munit6, 1333)
-1333 format ( '    greetings, greetings.  welcome to the', ' wonderful new world of interactive'     )
+1333 format ('    Greetings, greetings.  Welcome to the wonderful new world of interactive')
   call window         ! output of character variable munit6
   write (munit6, 1334)
-1334 format ( '    emtp execution, observation, and', ' control.  after sending  "spy",  send'   )
+1334 format ('    EMTP execution, observation, and control.  After sending  "spy",  send')
   call window         ! output of character variable munit6
   write (munit6, 1335)
-1335 format ( '    "help",  and then  "all"  to receive', ' some 500 lines of instruction.  also,'  )
+1335 format ('    "help",  and then  "all"  to receive some 500 lines of instruction.  Also,')
   call window         ! output of character variable munit6
   write (munit6, 1336)
-1336 format ( '    see section 9 of the rule book dated', ' june, 1984.  also see  "apollo".'       )
+1336 format ('    see section 9 of the rule book dated June, 1984.  Also see  "Apollo".')
   call window         ! output of character variable munit6
   go to 1311
 1342 if ( buff77(1:6) .ne. 'debug ' )  go to 1347
@@ -123,7 +125,7 @@ subroutine datain
   !     begin interactive control sequence, leading to "emtspy":
   m4plot = 1               ! set flag remembering use of spy
   write (prom80, 1357)          ! build very 1st spy prompt
-1357 format ( ' spy:' )
+1357 format (' spy:')
   call prompt     ! write prom80 with cursor control (no lf)
 1708 if ( m4plot .ne. 1 )  go to 2320   ! non-interactive case
   lockbr = 1              ! forced spy read within "flager"
@@ -145,7 +147,7 @@ subroutine datain
      if ( buff77(j:j) .eq. ',' )  go to 1746  ! 2nd comma found
 1732 end do
 1736 write (munit6, 1737)
-1737 format ( '  ----  illegal file name.  try again ....' )
+1737 format ('  ----  Illegal file name.  Try again ....' )
   call window         ! output of character variable munit6
   go to 1311      ! loop back to opening prompt (repeat it)
 1746 n14 = j - n16         ! number of characters in file name
@@ -153,7 +155,7 @@ subroutine datain
   ansi32(n14+1:32) = blan80(n14+1:32)  ! blank out remainder
   filsav = ansi32(1:32)
   if ( iprsup .ge. 1 ) write (lunit6, 1752)  ansi32
-1752 format ( ' extracted file name ansi32(1:32) =', a32 )
+1752 format (' Extracted file name ansi32(1:32) =', a32)
   inquire ( file=ansi32, exist=logvar ) ! ask if file exists
   if ( .not. logvar )  go to 1736   ! illegal file; reprompt
   spycd2(1:32) = ansi32  ! save file name for prime "erexit"
@@ -179,14 +181,14 @@ subroutine datain
      if ( kcut .eq. 0 ) numcrd = numcrd + 1     ! another input data card now read
 1758 end do
 1760 write (munit6, 1761)  limcrd
-1761 format ( '  & & & & &   input buffer overflow.  limit =', i6,   '.   reject this data, and reprompt ....'  )
+1761 format ('  & & & & &   Input buffer overflow.  limit =', i6,   '.   Reject this data, and reprompt ....'  )
   call window         ! output of character variable munit6
   ! if this was $attach usage, then
   if ( lunt13 .eq. 13 )  go to 1311    ! loop back to start anew the data input
   call stoptp   ! installation-dependent program stop card
 1766 numcrd = numcrd + 1
   write (munit6, 1767)  numcrd
-1767 format ( ' done reading disk file into emtp cache.', '   numcrd =',  i5,  '  cards.'  )
+1767 format (' Done reading disk file into EMTP cache.', '   numcrd =',  i5,  '  cards.'  )
   call window         ! output of character variable munit6
   ! if internally-connected file, then
   if ( lunt13 .ne. 5 )  close (unit=lunt13, status='keep')        ! disconnect it
@@ -199,7 +201,7 @@ subroutine datain
      buff77 = file6(j)     ! transfer to scalar working storage
      if ( iprspy .lt. 3 ) go to 41777  ! jump around diagnostic
      write (munit6, 31777)  j, buff77
-31777 format ( ' j =',  i4,  '   next $-card = ',  a80 )
+31777 format (' j =',  i4,  '   next $-card = ',  a80 )
      call window         ! output of character variable munit6
 41777 if ( buff77(1:8) .eq. '$include' ) go to 1787
      ! only processes ! these limited ! dollar cards
@@ -239,7 +241,7 @@ subroutine datain
      dumnam(1:3) = buff77(k:k+2)   ! store new 3-char root name
      ansi8(1:3) = buff77(k+3:k+5)   ! transfer digits to cell 1
      read (ansi8, 31784) kntdum   ! re-initialize serialization
-31784 format ( 3i1 )   ! 3-digit decimal serialization for dummy
+31784 format (3i1)   ! 3-digit decimal serialization for dummy
 1785 file6(j) = 'c '//buff77(1:78)    ! convert to comment card
 1786 end do    ! end  do 1786  check of data card j for $incl.
   go to 2320      ! done with input data; no $include remain
@@ -276,7 +278,7 @@ subroutine datain
   end do
   n19 = n19 + 1    ! remember 1st card of copy stored below
 1819 write (lunit6, 1820)  n22, j, answ80(1:n8)
-1820 format ( '   --- pass', i3,  ',  card =', i4,'.   ready to open $include =',  a  )
+1820 format ('   --- Pass', i3,  ',  card =', i4,'.   Ready to open $include =',  a  )
   inquire (file=answ80(1:n8), exist=logvar)   ! file exists?
   if ( .not. logvar )  go to 1794  ! illegal name correction
   prom80 = file6(j)          ! temp storage b4 2-byte shift
@@ -299,7 +301,7 @@ subroutine datain
   n14 = n13           ! assume there's a blank, in this col.
   if ( n13 .gt. 0 ) go to 4220    ! no ",", but there is " "
   write (munit6, 4211)
-4211 format ( ' no bounding symbol.  stop after display.' )
+4211 format (' No bounding symbol.  Stop after display.' )
   call window         ! output of character variable munit6
   write (munit6, 4223)  l, n12, n13, n14, n26
   call window         ! output of character variable munit6
@@ -314,7 +316,7 @@ subroutine datain
   n26 = n18 + 1   ! column to begin search for next argument
   if ( iprspy .lt. 5 )  go to 4224  ! jump around diagnostic
   write (munit6, 4223)  l, n12, n13, n14, n26
-4223 format ( ' done with argument.  l, n12, n13, n14, n26 =', 8i6 )
+4223 format (' Done with argument.  l, n12, n13, n14, n26 =', 8i6)
   call window         ! output of character variable munit6
 4224 go to 4203     ! loop back to process next argument if any
 4226 kard(1) = 999999     ! assume no arguments (this is bound)
@@ -336,14 +338,14 @@ subroutine datain
   read (lunt13, 4232) (kbeg(k), k=1, n6)    ! col. no. start
   read (lunt13, 4232) (kend(k), k=1, n6)   ! col. no. ending
   read (lunt13, 4232) (ktex(k), k=1, n6)    ! alphanum. flag
-4232 format ( 4x, 25i3 )
+4232 format (4x, 25i3)
   if ( iprspy .lt. 1 )  go to 4235  ! jump around diagnostic
   write (munit6, 4233)  n6
-4233 format ( ' done reading argument usage vectors.  n4 =', i5 )
+4233 format (' Done reading argument usage vectors.  n4 =', i5 )
   call window         ! output of character variable munit6
 4235 if ( iprspy .lt. 5 )  go to 4238  ! jump around diagnostic
   write (munit6, 4236)
-4236 format ( ' vectors kard, karg, kbeg, kend, ktext(1:25) ...' )
+4236 format (' Vectors kard, karg, kbeg, kend, ktext(1:25) ...' )
   call window         ! output of character variable munit6
   write (munit6, 4237)  ( kard(k), k=1, n5 )
   call window         ! output of character variable munit6
@@ -354,7 +356,7 @@ subroutine datain
   write (munit6, 4237)  ( kend(k), k=1, n5 )
   call window         ! output of character variable munit6
   write (munit6, 4237)  ( ktex(k), k=1, n5 )
-4237 format ( 4x, 25i3 )
+4237 format (4x, 25i3)
   call window         ! output of character variable munit6
 4238 kard(n6+1) = 999999       ! bound (no more argument usage)
 4239 n20 = 0        ! no records read from $include file so far
@@ -382,7 +384,7 @@ subroutine datain
      n20 = n20 + 1   ! no. of countable $include card just read
      if ( iprspy .lt. 3 )  go to 4249  ! jump around diagnostic
      write (munit6, 4248)  n20, n24, kard(n24)
-4248 format ( ' ready with next card.  n20, n24, kard(n24) =',  3i8  )
+4248 format (' Ready with next card.  n20, n24, kard(n24) =',  3i8  )
      call window         ! output of character variable munit6
 4249 if ( n20 .lt. kard(n24) ) go to 4273   ! no argument usage
      n1 = kbeg(n24)    ! beginning column number of replacement
@@ -391,13 +393,13 @@ subroutine datain
      n3 = kolinc(n4)     ! length of argument being substituted
      if ( n4 .le. n16 )  go to 34250   ! legal argument request
      write (lunit6, 4250)  n24, n4, n16
-4250 format ( '   ? ? ? ?   error stop at s.n. 4250 of "datain".', '   insufficient number of $include arguments.' ,/,   '             n24, n4, n16 =',  3i8  )
+4250 format ('   ? ? ? ?   Error stop at s.n. 4250 of "datain".   Insufficient number of $include arguments.', /, '             n24, n4, n16 =',  3i8)
      call stoptp   ! installation-dependent program stop card
 34250 if ( n4 .gt. 0 )  go to 4252    ! use argument of $include
      kntdum = kntold - n4  ! serialization for dummy name usage
      if ( -n4 .gt. kntmax )  kntmax = -n4    ! new larger dummy
      write (ansi8, 4251) kntdum  ! convert integer to character
-4251 format ( i3 )
+4251 format (i3)
      if ( kntdum .lt. 100 ) ansi8(1:1) = '0'  ! 1st of 3 digits
      if ( kntdum .lt. 10  ) ansi8(2:2) = '0'  ! 2nd of 3 digits
      ! if name is not 6 characters,
@@ -409,26 +411,26 @@ subroutine datain
 4252 if ( n2-n1 .ne. n3-1   .and.  ktex(n24) .eq. 1 )  go to 4253                    ! jump to correction chance
      if ( n2-n1 .ge. n3-1 ) go to 4261   ! arg. is short enough
 4253 write (munit6, 4254)  n4, n20
-4254 format ( '   +++ argument',  i4,  '   length-mismatch error.', '   used on card',  i4,  2h .    )
+4254 format ('   +++ Argument',  i4,  '   length-mismatch error.   Used on card', i4, ' .')
      call window         ! output of character variable munit6
      write (munit6, 4255)  n24, n1, n2, n3
-4255 format ( '       n24 =',  i4,  '    kbeg, kend =',  2i4, '    length from $include =',  i4,  2h .  )
+4255 format ('       n24 =',  i4,  '    kbeg, kend =',  2i4, '    length from $include =',  i4,  2h .  )
      call window         ! output of character variable munit6
      write (prom80, 4256)
-4256 format ( ' send corrected argument (stop) :'  )
+4256 format (' Send corrected argument (stop) :'  )
      call prompt     ! write prom80 with cursor control (no lf)
      if ( m4plot .eq. 1 )  go to 4259   ! spy usage allows recovery
      kill = 79  ! kill code indicating interactive hopelessness
      lstat(19) = 4259
      go to 9200   ! assign lstat(18), then nchain=51; then exit
 4259 read (munit5, 4260)  arginc(n4)    ! read revised argument
-4260 format ( a20 )
+4260 format (a20)
      ! if user surrenders,
      if ( arginc(n4)(1:5) .eq. 'stop ' ) call stoptp   ! installation-dependent program stop card
 4261 n = n2      ! initialize destination address at right edge
      if ( iprspy .lt. 4 ) go to 34261  ! jump around diagnostic
      write (munit6, 24261)  arginc(n4)
-24261 format ( ' argument now processed, arginc(n4) =',  a20 )
+24261 format (' Argument now processed, arginc(n4) =',  a20 )
      call window         ! output of character variable munit6
 34261 do ip=1, 20  ! process all 20 characters of argument
         m = 21 - ip    ! process from right to left (right-adjust)
@@ -436,7 +438,7 @@ subroutine datain
         if ( char1 .eq. ' ' )  go to 4263        ! skip over blank
         if ( iprspy .lt. 8 ) go to 54262  ! jump around diagnostic
         write (munit6, 4262)  ip, m, char1
-4262    format ( '  next non-blank digit.  ip, n, digit =', 2i6,  '   "',  a1,  '"'  )
+4262    format ('  Next non-blank digit.  ip, n, digit =', 2i6,  '   "',  a1,  '"'  )
         call window         ! output of character variable munit6
         ! pounds reserves blank space, so
 54262   if ( char1 .eq. '#' )  char1 = ' '            ! it is now blanked as it is used
@@ -455,7 +457,7 @@ subroutine datain
 1828 close (unit=lunt13,  status='keep')
   if ( iprspy .lt. 1 ) go to 1832   ! jump around diagnostic
   write (munit6, 1831)  j, n19
-1831 format ( ' done with disk file (close).  j, n19 =', 2i8 )
+1831 format (' Done with disk file (close).  j, n19 =', 2i8)
   call window         ! output of character variable munit6
 1832 kntold = kntold + kntmax  ! update dummy serializ. reference
   if ( n5 .eq. 1 )  go to 1833   ! "/" usage, so skip c-end
@@ -475,7 +477,7 @@ subroutine datain
 1841 n19 = m + 1     ! lower index 1 beyond $include considered
   if ( iprspy .lt. 1 )  go to 1847  ! jump around diagnostic
   write (munit6, 1846)  m
-1846 format ( ' next $include recognized in do 1835.  m =', i6 )
+1846 format (' Next $include recognized in do 1835.  m =', i6)
   call window         ! output of character variable munit6
 1847 buff77 = file6(j)  ! load working storage used at s.n.1788
   n17 = 1          ! signal to bypass do 1816 cards transfer
@@ -495,7 +497,7 @@ subroutine datain
   ansi32(8:8) = digit(n7)
   if ( iprsup .lt. 1 )  go to 2353  ! jump around diagnostic
   write (munit6, 2354)  ansi32
-2354 format ( ' prepare to open for $spy.  ansi32 =',  a32  )
+2354 format (' Prepare to open for $spy.  ansi32 =',  a32  )
   call window         ! output of character variable munit6
 2353 open (unit=lunt13, status='new', file=ansi32)
   do k=j+1, numcrd
@@ -507,7 +509,7 @@ subroutine datain
      end do
      numcrd = numcrd - n24
      write (munit6, 2358)   n24, j, numcrd
-2358 format ( ' done with upward shift.  n24, j, numcrd =', 3i8 )
+2358 format (' Done with upward shift.  n24, j, numcrd =', 3i8 )
      call window         ! output of character variable munit6
      go to 2378
 2361 write (lunt13, 1329)  file6(k)
@@ -525,7 +527,7 @@ subroutine datain
   n11 = 0     ! no class-11 ("initial")   usage found so far
   n12 = 0        ! initialize number of data class ("/") cards found
   if ( iprsup .ge. 9 ) write (lunit6, 2416)  ( j, file6(j), j=1, numcrd )
-2416 format ( ' entire input file as we start sorting ...' ,/,  ( i5, a80 ) )
+2416 format (' Entire input file as we start sorting ...', /, ( i5, a80 ))
   do 2436  j=1, numcrd   ! search each data card for "/" usage
 2418 if ( file6(j)(1:1) .ne. '/' ) go to 2431 ! skip non-"/" card
      n12 = n12 + 1         ! use next row in table storing "/" pointers
@@ -558,11 +560,11 @@ subroutine datain
   l = 0
   if ( iprspy .lt. 2 )  go to 12438  ! jump around diagnostic
   write (munit6, 2438)
-2438 format (  32h     row  kssfrq  kpsour    kode   )
+2438 format ('     row  kssfrq  kpsour    kode')
   call window         ! output of character variable munit6
   do j=1, n12
      write (munit6, 2442) j, kssfrq(j), kpsour(j), kode(j)
-2442 format ( 4i8 )
+2442 format (4i8)
      call window         ! output of character variable munit6
 2443 end do    ! end  do 2443  loop over
 12438 l = l + 1   ! beginning conversion of old tacs data format
@@ -636,7 +638,7 @@ subroutine datain
 2462 if ( file6(j)(1:6) .ne. 'blank ' ) go to 2493   ! not end of class
   if ( iprspy .lt. 2 )  go to 2465  ! jump around diagnostic
   write (munit6, 2464)  j
-2464 format (  ' blank card recognized.  j =',  i6 )
+2464 format (' Blank card recognized.  j =',  i6)
   call window         ! output of character variable munit6
 2465 do k=1, numtyp    ! search class table to identify data type
      n8 = lentyp(k)   ! number of characters in k-th key word
@@ -651,7 +653,7 @@ subroutine datain
   if ( k .eq. 2  .or. k .eq. 3  .or. k .eq. 4  .or. k .eq. 5  )    file6(j)(1:2) = 'c '
 2472 if ( iprspy .lt. 3 )  go to 2475  ! jump around diagnostic
   write (munit6, 2474)  n8
-2474 format ( ' data class needs consideration.  n8 =',  i6 )
+2474 format (' Data class needs consideration.  n8 =',  i6)
   call window         ! output of character variable munit6
 2475 do k=1, n12   ! search rows of "/" table for class number n8
      if ( kode(k) .ne. n8 )  go to 2484   ! not correct class for blank
@@ -664,7 +666,7 @@ subroutine datain
      end do
      if ( iprspy .lt. 3 )  go to 2484  ! jump around diagnostic
      write (munit6, 2479)  n5, n6, n24
-2479 format ( ' done with "/" copy below.  n5, n6, n24 =',  3i6 )
+2479 format (' Done with "/" copy below.  n5, n6, n24 =', 3i6)
      call window         ! output of character variable munit6
 2484 end do     ! end  do 2484  loop over all entries "k" in "/" table
   ! if just done with "/load flow" or
@@ -676,7 +678,7 @@ subroutine datain
   if ( j .lt. numcrd )  go to 2453   ! not finished; back for next j
 2497 if ( iprspy .lt. 2 )  go to 2500  ! jump around diagnostic
   write (munit6, 2499)  n24
-2499 format ( ' done with lower assembly.  n24 =',  i8 )
+2499 format (' Done with lower assembly.  n24 =',  i8)
   call window         ! output of character variable munit6
 2500 j = 0         ! initialize card destination index for upward shift
   do k=numcrd+1, n24    ! consider each lower-assembled card k
@@ -684,13 +686,13 @@ subroutine datain
      file6(j) = file6(k)    ! shift card image upward to final position
      if ( iprspy .lt. 9 )  go to 2505  ! jump around diagnostic
      write (munit6, 2501)  j, file6(j)
-2501 format ( ' card',  i3,  1h.,  a80 )
+2501 format (' Card',  i3,  '.',  a80)
      call window         ! output of character variable munit6
 2505 end do
   numcrd = j    ! final length of emtp input data, after "/" removal
   if ( iprspy .lt. 1 )  go to 2509  ! jump around diagnostic
   write (munit6, 2508)  numcrd
-2508 format (  ' done with all "/" processing.  numcrd =', i8 )
+2508 format (' Done with all "/" processing.  numcrd =', i8)
   call window         ! output of character variable munit6 ! ?????  if interactive use,
 2509 if ( m4plot .eq. 1 )  call spying    !  ????????   temporary diagnostic  ??????
   go to 9800         ! exit module after possible diagnostic
@@ -737,13 +739,13 @@ subroutine datain
      go to 2695          ! exit loop; on to next argument on "num" card
 2672 end do                ! end  do 2672  card searching for argument
   write (munit6, 2679) buff77(k:l)
-2679 format (  '   ???  illegal "num" declaration.  unrecognized', ' name = ',  a )
+2679 format ('   ???  Illegal "num" declaration.  Unrecognized name = ',  a)
   call window         ! output of character variable munit6
   call stoptp   ! installation-dependent program stop card
 2687 numarg = numarg + 1        ! index for this input argument storage
   if ( numarg .le. limarg )  go to 2692   ! no overflow yet
   write (munit6, 2689)  limarg
-2689 format ( ' overflow error stop.  argument usage is', ' limited in number to limarg =',  i5  )
+2689 format (' Overflow error stop.  Argument usage is limited in number to limarg =',  i5)
   call window         ! output of character variable munit6
   call stoptp   ! installation-dependent program stop card
 2692 arginc(numarg) = buff77(k:l)     ! store newly-identified argument
@@ -753,7 +755,7 @@ subroutine datain
   go to 2637        ! loop back to identify next argument of buff77
 2703 n11 = n11 - 1       ! next destination address for $eof we create
   write (ansi32, 2705)  date1, tclock
-2705 format ( 2a4, 2x, 2a4 )
+2705 format (2a4, 2x, 2a4)
   file6(n11) = '$eof   user-supplied header cards follow.  '
   file6(n11)(51:68) = ansi32(1:18)    ! add on date and time
   do j=1, n8   ! loop over all declaration, now stored at top
@@ -762,14 +764,14 @@ subroutine datain
   end do
   if ( iprspy .lt. 1 )  go to 2721  ! jump around diagnostic
   write (munit6, 2716)  n8, n11, limcrd
-2716 format ( ' done processing declarations.  n8, n11,', ' limcrd =',  3i5  )
+2716 format (' Done processing declarations.  n8, n11,', ' limcrd =',  3i5)
   call window         ! output of character variable munit6
   write (munit6, 2717)
-2717 format ( '     row  kolinc  kkkdum  modarg  arginc ....' )
+2717 format ('     row  kolinc  kkkdum  modarg  arginc ....')
   call window         ! output of character variable munit6
   do j=1, numarg  ! print each row j of argument table
      write (munit6, 2718)  j, kolinc(j), kkkdum(j), modarg(j), arginc(j)
-2718 format ( 4i8, a20 )
+2718 format (4i8, a20)
      call window         ! output of character variable munit6
 2719 end do    ! end  do 2719  loop over all rows "j" of table
 2721 n20 = 0        ! initialize number of argument usages found so far
@@ -790,7 +792,7 @@ subroutine datain
         n20 = n20 + 1      ! another argument usage found; advance storage
         if ( n20 .le. 200 )  go to 2737     ! not overflow working vectors
         write (munit6, 2731)  n16
-2731    format ( '  ====   overflow error stop at card number', i6,      '    over 200 arguments.'  )
+2731    format ('  ====   Overflow error stop at card number', i6,      '    over 200 arguments.')
         call window         ! output of character variable munit6
         call stoptp   ! installation-dependent program stop card
 2737    karg(n20) = j           ! it is the j-th string which is used here
@@ -804,18 +806,18 @@ subroutine datain
         l = kend(n20) + 1  ! search continues one byte beyond string end
         if ( iprspy .lt. 6 )  go to 2749  ! jump around diagnostic
         write (munit6, 2748)  n16, j, l, k, n20
-2748    format ( '    another string found.  n16, j, l, k, n20 =', 5i6 )
+2748    format ('    Another string found.  n16, j, l, k, n20 =', 5i6)
         call window         ! output of character variable munit6
 2749    go to 2724    ! loop back to check for another appearance to right
 2754 end do          ! end  do 2754  loop over each candidate string j
      if ( iprspy .lt. 2 )  go to 2766  ! jump around diagnostic
      write (munit6, 2759)  n16, n20, buff77
-2759 format ( ' done with this card.  n16, n20 =', 2i5, '   buff77=',  a80 )
+2759 format (' Done with this card.  n16, n20 =', 2i5, '   buff77=', a80)
      call window         ! output of character variable munit6
 2766 end do                ! end  do 2766  loop over card number n16
 2772 if ( iprspy .lt. 1 )  go to 2778  ! jump around diagnostic
   write (munit6, 2777)  n20
-2777 format ( ' done with identifying all arguments of all cards.', '   n20 =',  i4 )
+2777 format (' Done with identifying all arguments of all cards.   n20 =',  i4)
   call window         ! output of character variable munit6
 2778 if ( (n20/25)*25 .ne. n20 )  go to 2783   ! 25i3 cards not filled
   !     extra zero entry must be added, since otherwise card is full:
@@ -826,7 +828,7 @@ subroutine datain
   kend(n20) = 0      ! remove possible garbage, to avoid output mess
   ktex(n20) = 0      ! remove possible garbage, to avoid output mess
 2783 write (prom80, 2787)
-2787 format ( ' send output file name for final $include file :' )
+2787 format (' Send output file name for final $include file :')
   call prompt
   read (munit5, 1329)  buff77
   open ( unit=lunt13, status='new', file=buff77 )
@@ -841,11 +843,11 @@ subroutine datain
   write (lunt13, 2791)  ansi8(1:4),  ( kend(j), j=1, n20 )
   ansi8(1:4) = 'ktex'
   write (lunt13, 2791)  ansi8(1:4),  ( ktex(j), j=1, n20 )
-2791 format ( a4, 25i3 ,/, (4x, 25i3) )
+2791 format (a4, 25i3 ,/, (4x, 25i3))
   do j=n11, limcrd           ! next, dump all input data cards
 2795 write (lunt13, 2802)  file6 ( limcrd + n11 - j )
   end do
-2802 format ( a80 )
+2802 format (a80)
   close (unit=lunt13)
   go to 1311   ! back to original prompt at start of emtp execution
 9200 nchain = 51  ! head for error overlays, for "kill" message
@@ -879,7 +881,7 @@ subroutine datain
 3500 end do                  !for tacs initial condition cards
 9002 if ( iprsup .lt. 1 )  go to 9007  ! jump around diagnostic
   write (munit6, 9004)  numcrd, limcrd, kill
-9004 format ( ' exit "datain".   numcrd, limcrd, kill =', 3i8 )
+9004 format (' Exit "datain".   numcrd, limcrd, kill =', 3i8)
   call window         ! output of character variable munit6
 9007 return
 end subroutine datain

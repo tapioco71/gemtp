@@ -19,7 +19,7 @@ program gemtp
   !    The fortran comment-card text now being read represents a        *
   !    summary introduction and explanation which applies to a very     *
   !    large program development referred to by the title of            *
-  !    'electromagnetic transients program'  (abbreviated  'emtp' ,     *
+  !    'electromagnetic transients program'  (abbreviated  'EMTP' ,     *
   !    or   't.p.'  in the older notation).                             *
   !                                                                     *
   !    In general terms, the purpose of this work is to simulate        *
@@ -33,8 +33,8 @@ program gemtp
   !    techniques which are used, the reader is referred to the         *
   !    manual for this program (840 pages for the version dated         *
   !    march, 1983).  ).    while older issues were titled              *
-  !    "emtp user's manual",  beginning in september of 1980            *
-  !    this work is now called the  "emtp rule book" .                  *
+  !    "EMTP user's manual",  beginning in september of 1980            *
+  !    this work is now called the  "EMTP rule book" .                  *
   !                                                                     *
   !     The utpf is a large 80-column bcd card-image file, to be used    *
   !     as input to e/t programs.   E/t programs machine translate this  *
@@ -165,7 +165,7 @@ program gemtp
   !          after writing an end-of-information mark on the
   !          plot tape (whether or not the user has plotted anything).
   !
-  !     39.  supporting routine which generates emtp branch
+  !     39.  supporting routine which generates EMTP branch
   !          cards for the frequency-dependent representation of
   !          an untransposed transmission line.   this is the
   !          "marti setup"  code, named after dr. jose marti of
@@ -190,7 +190,7 @@ program gemtp
   !          program.
   !
   !     45.  supporting routine of  'semlyen setup'  code.   the output
-  !          is a group of punched cards, as are required for the emtp
+  !          is a group of punched cards, as are required for the EMTP
   !          simulation of a transmission circuit using  semlyen
   !          recursive convolution modeling.
   !
@@ -223,15 +223,14 @@ end program
 !
 subroutine stoptp
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     temporary stop statements of emtp have been converted to
+  !     Temporary stop statements of EMTP have been converted to
   !     "call stoptp", allowing installation-dependent clean up.
   include  "blkcom.ftn"
-  read (unit=abuff, fmt=5607) texcol
+  read (unit = abuff, fmt = 5607) texcol
 5607 format (80a1)
   if (nchain .eq. 31 .and. lastov .eq. 1 .and. kill .eq. 9999) go to 9000
   write (lunit6, 5623)  nchain, lastov, texcol
-5623 format (/, ' temporary error stop in "stoptp".', '   nchain, lastov =', 2i5, 5x, &
-          'last-read card image abuff follows ....', /, 80a1)
+5623 format (/, ' Temporary error stop in "stoptp".', '   nchain, lastov =', 2i5, 5x, 'Last-read card image abuff follows ....', /, 80a1)
 9000 stop
 end subroutine stoptp
 !
@@ -283,7 +282,7 @@ end subroutine copya
 !
 subroutine erexit
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     VAX-11   installation-dependent emtp module.   This is
+  !     VAX-11   installation-dependent EMTP module.   This is
   !     called by the top of "main00", before any emtp data input.
   include 'blkcom.ftn'
   !include 'dekspy.ftn'
@@ -372,17 +371,17 @@ subroutine time44(a)
   !    and finally seconds, separated by periods (hh.mm.ss) .
   !    Subroutine  time44  is of course installation dependent.
   !    Installation-dependent  EMTP  module written for the  DEC
-  !    VAX-11/780.    'time'  is a  dec  system subroutine which
+  !    VAX-11/780.    'time'  is a  DEC  system subroutine which
   !    returns the wall-clock time as an 8-byte character string.
   !    This is just what the emtp needs, except that we want periods
   !    rather than colons, and of course we require  2a4  format.
-  character a(2)
-  character char(8)
-  call date_and_time(char(1))
-  write (unit=a(1), fmt=2741) char(1), char(2), char(4)
-2741 format ( 2a1,  1h.,  a1 )
-  write(unit=a(2), fmt=2754) char(5), char(7), char(8)
-2754 format(a1, 1h., 2a1)
+  character(8) a
+  character(10) time
+  call date_and_time(time = time)
+  write (unit = a, fmt = 2741) time(1:2), time(3:4), time(4:6)
+2741 format (a2, '.',  a2, '.', a2)
+!  write (unit = a, fmt = 2754) char(5), char(7), char(8)
+!2754 format(a1, '.', 2a1)
   return
 end subroutine time44
 !
@@ -1211,7 +1210,7 @@ end subroutine mover
 !
 subroutine mover0 ( b, n )
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  dimension b(1)
+  dimension b(20)
   !    Subroutine  mover0  is a block-zeroing routine for floating-point
   !    arrays or variables.   Of the two arguments, the second,  'n' ,
   !    is the number of words of core to be zeroed.   The first argument
@@ -1249,7 +1248,7 @@ subroutine move0(intb, n)
   !    is for floating-point arrays.   There is a difference, on
   !    machines like IBM, where integer words may be shorter than
   !    floating-point words.
-  dimension intb(1)
+  dimension intb(34)
   do i = 1, n
      intb(i) = 0
   end do

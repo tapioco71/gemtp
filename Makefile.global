@@ -116,6 +116,7 @@ LIBM=${shell ${CC} -print-file-name=libm.a}
 LIBGFORTRAN=${shell ${FORTRAN} -print-file-name=libgfortran.a}
 
 LIBRARIES=	quadmath	\
+		c		\
 		m
 
 LD_FLAGS+=${patsubst %,-l%,${subst :, ,${LIBRARIES}}}

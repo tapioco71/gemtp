@@ -134,7 +134,7 @@ subroutine tapsav(narray, n1, n2, n3)
   n4 = locint(narray(1))
   write (lunit6, 5831) n1, n2, n3, kburro, n4
 5831 format ( /,   18h top of  'tapsav'., '      n1      n2      n3  kburro              n4', /, 18x, 4i8, i16)
-  !     following check normally sends vax emtp to 6327 (disk is
+  !     following check normally sends VAX EMTP to 6327 (disk is
   !     only wanted for table saving within a simulation for
   !     test purposes):
 5840 if (kburro .eq. 1) go to 6327
@@ -413,7 +413,7 @@ subroutine pltfil(k)
   n7 = 0
   if ( indbuf  .gt.  0 )   go to 7308 ! not very 1st step
   !     plot data storage begins after "tables" usage for "labcom"
-  !     plus 50 misc. cells, plus emtp data cards.  offset is:
+  !     plus 50 misc. cells, plus EMTP data cards.  offset is:
   mflush = 0                ! we have flushed pltbuf to disk zero times
   indbeg = ltlabl + 51      ! plot points offset by "labcom"
   !     7304 indbuf = indbeg           ! reset plot storage at beginning
@@ -690,7 +690,7 @@ subroutine namea6 ( text1, n24 )
   n24 = maxbus
   go to 9000
 3438 if ( iprsup .ge. 1 ) write (lunit6, 3442)  maxbus, text1, n24
-3442 format ('  +++++  search of emtp name vector bus' ,' through cell', i5, '   in  "namea6"  shows no match for', &
+3442 format ('  +++++  search of EMTP name vector bus' ,' through cell', i5, '   in  "namea6"  shows no match for', &
           /, '         "', a6, '".   return -intinf.', i10)
   n24 = -intinf
   go to 9000
@@ -708,7 +708,7 @@ end subroutine namea6
 !
 subroutine tables
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     Utility which is used to both dump and restore emtp
+  !     Utility which is used to both dump and restore EMTP
   !     tables (central memory vs. disk).  Usage is for both
   !     "statistics" (over12, over15, over20) and  "start again"
   !     (over1, over20).   Call to  "tapsav"  dumps  /label/ .
@@ -720,7 +720,7 @@ subroutine tables
   include 'labcom.ftn'
   include 'syncom.ftn'
   common /comlock/  locker(2)
-  !     note about deck "synmac".   if emtp s.m. modeling
+  !     Note about deck "synmac".   If EMTP s.m. modeling
   !     Brandwajn (type-59), is to be deleted,
   !     then all s.m. subroutines ( smdat, smout, smpfit,
   !     smint, uncor, premec, elec, past,
