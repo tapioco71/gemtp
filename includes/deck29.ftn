@@ -2,10 +2,7 @@
 !
 !     file: deck29.ftn
 !
-#ifndef DECK29_FTN
-#define DECK29_FTN
   common /c29b01/ karray(3)
-#endif
 !
 !     end of file: deck29.ftn
 !
