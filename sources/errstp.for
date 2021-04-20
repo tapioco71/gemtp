@@ -29,7 +29,7 @@ subroutine errstp
 1001 format(1x//, ' in: ',a// ' stop flag # ', i3// ' i1=',i10/ ' i2=',i10/ ' i3=',i10/ ' i4=',i10/ &
        ' i5=', i10// ' r1=', g13.6/ ' r2=',g13.6/ ' r3=',g13.6// ' name1=',a/ ' name2=',a//)
   write(unit06, 1002)
-1002 format(/, ' refer to file drd5:[tacslib]stop.msg for interpretation.')
+1002 format(/, ' Refer to file drd5:[tacslib]stop.msg for interpretation.')
   stop 'tacs stop in errstp.'
 end subroutine errstp
 !

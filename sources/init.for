@@ -13,13 +13,13 @@ subroutine init
   isto(sptr)=from
   from=0
   go to (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010), to-8999
-  stop 'invalid "to" reference in "init".'
+  stop 'Invalid "to" reference in "init".'
 9500 if(.not.(from.eq.0)) go to 0001
   from=isto(sptr)
   sptr=sptr+1
   return
 0001 go to (9501, 9502, 9503, 9504, 9505, 9506), from - 9500
-  stop 'invalid "from" reference in "init".'
+  stop 'Invalid "from" reference in "init".'
 910 stpflg=42
   stpi1=iptr
   stpi2=ilen-iptr

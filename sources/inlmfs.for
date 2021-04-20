@@ -20,16 +20,16 @@ subroutine inlmfs
   if (buff77(1:1) .eq. '$')  go to 1788  !1st time in for $include
   n16 = kard(200)
   n26 = 2
-  !     write(*,*) ' encoding "c " card, n16=', n16
+  !     write(*,*) ' Encoding "c " card, n16=', n16
   if ( buff77(1:2) .eq. 'c '  )  go to 4203  !2nd cont. card
-  write(*,*) ' invalid cont. card for $include argument list.'
+  write(*,*) ' Invalid cont. card for $include argument list.'
   stop
 1788 n26 = 9
 1789 if ( buff77(n26:n26) .ne. ' '   .and. buff77(n26:n26) .ne. ',' )  go to 1797
   n26 = n26 + 1
   if ( n26 .lt. 40 )  go to 1789
 1794 istep = j
-  write (*,*) ' halt with bad $include in inlmfs.'
+  write (*,*) ' Halt with bad $include in inlmfs.'
   stop
 1797 k = n26 + 1
 1801 if ( buff77(k:k) .eq. ','  .or. buff77(k:k) .eq. ' ' )  go to 1804
@@ -56,7 +56,7 @@ subroutine inlmfs
   inquire (file=answ80(1:n8), exist=logvar)
   if ( logvar )  go to 2294
   write (lunit6, 5823)  answ80(1:n8)
-5823 format ( /, ' trouble with special  $include that', ' is to service line model frequency scan.'    ,/, ' halt in  inlmfs  called by  over2.  bye, bye!' )
+5823 format ( /, ' Trouble with special  $include that', ' is to service line model frequency scan.', /, ' Halt in  inlmfs  called by  over2.  Bye, bye!' )
   stop
 2294 prom80 = file6(j)
   file6(j) = 'c '//prom80(1:78)
@@ -91,7 +91,7 @@ subroutine inlmfs
   n14 = n13
   if ( n13 .gt. 0 ) go to 4220
   write (munit6, 4211)
-4211 format ( ' no bounding symbol.  stop after display.' )
+4211 format (' No bounding symbol.  Stop after display.')
   call window
   write (munit6, 4223)  l, n12, n13, n14, n26
   call window
@@ -166,7 +166,7 @@ subroutine inlmfs
      n20 = n20 + 1
      if ( iprspy .lt. 3 )  go to 4249
      write (munit6, 4248)  n20, n24, kard(n24)
-4248 format ( ' ready with next card.  n20, n24, kard(n24) =',  3i8  )
+4248 format (' Ready with next card.  n20, n24, kard(n24) =',  3i8  )
      call window
 4249 if ( n20 .lt. kard(n24) ) go to 4273
      n1 = kbeg(n24)
@@ -175,7 +175,7 @@ subroutine inlmfs
      n3 = kolinc(n4)
      if ( n4 .le. n16 )  go to 34250
      write (lunit6, 4250)  n24, n4, n16
-4250 format ( '   ? ? ? ?   error stop at s.n. 4250 of "datain".', '   insufficient number of $include arguments.' ,/,   '             n24, n4, n16 =',  3i8  )
+4250 format ('   ? ? ? ?   Error stop at s.n. 4250 of "datain".', '   Insufficient number of $include arguments.', /, '             n24, n4, n16 =', 3i8)
      call stoptp
 34250 if ( n2-n1 .ne. n3-1   .and. ktex(n24) .eq. 1 ) go to 4253
      if ( n2-n1 .ge. n3-1 ) go to 4261
@@ -189,7 +189,7 @@ subroutine inlmfs
 4261 n = n2
      if ( iprspy .lt. 4 ) go to 34261
      write (munit6, 24261)  arginc(n4)
-24261 format ( ' argument now processed, arginc(n4) =',  a20 )
+24261 format (' Argument now processed, arginc(n4) =',  a20)
      call window
 34261 do ip=1, 20
         m = 21 - ip
@@ -197,7 +197,7 @@ subroutine inlmfs
         if ( char1 .eq. ' ' )  go to 4263
         if ( iprspy .lt. 8 ) go to 54262
         write (munit6, 4262)  ip, m, char1
-4262    format ( '  next non-blank digit.  ip, n, digit =',2i6,  '   "',  a1,  '"'  )
+4262    format ('  Next non-blank digit.  ip, n, digit =', 2i6, '   "',  a1,  '"')
         call window
 54262   if ( char1 .eq. '#' ) char1 = ' '
         if ( n .lt. n1 ) go to 4253
@@ -213,9 +213,9 @@ subroutine inlmfs
 1828 close (unit=lunt13,  status='keep')
   if ( iprspy .lt. 1 ) go to 1832
   write (munit6, 1831)  j, n19
-1831 format ( ' done with disk file (close).  j, n19 =', 2i8 )
+1831 format (' Done with disk file (close).  j, n19 =', 2i8)
   call window
-1832 buff77(1:32) = 'c end of $include.  file name = '
+1832 buff77(1:32) = 'c end of $include.  File name = '
   buff77(33:80) = answ80(1:48)
   j = j + 1
   file6(j) = buff77

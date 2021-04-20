@@ -17,13 +17,13 @@ subroutine elec
   isto(sptr) = from
   from = 0
   go to (9000, 9001, 9002, 9003, 9004, 9005, 9006), to-8999
-  stop 'invalid "to" reference in "elec".'
+  stop 'Invalid "to" reference in "elec".'
 9500 if (.not. (from .eq. 0)) go to 0001
   from = isto(sptr)
   sptr = sptr + 1
   return
 0001 go to (9501, 9502, 9503, 9504, 9505, 9506), from-9500
-  stop 'invalid "from" reference in "elec".'
+  stop 'Invalid "from" reference in "elec".'
 910 stpflg = 42
   stpi1 = iptr
   stpi2 = ilen - iptr

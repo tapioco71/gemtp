@@ -79,7 +79,7 @@ program gemtp
   if ( kill  .eq.  9999 )   go to 2001
   if ( kill .ne. 7733 )  go to 4372
   write (lunit6, 4367)
-4367 format ( 39h "main00" intercept of "begin" request.  )
+4367 format (' "main00" intercept of "begin" request.')
   kill = 0
   numdcd = 0
   nchain = 1
@@ -139,7 +139,7 @@ program gemtp
   call over55
   go to 2000
 2300 write (lunit6, 9236)  nchain
-9236 format ( /,  26h illegal nchain in main00., i8 )
+9236 format (/, ' Illegal nchain in main00.', i8)
   go to 2000
   !
   !    The present module  main00  is always in memory.   It is the
@@ -510,10 +510,10 @@ subroutine cimage
   data n13   /  99999  /
   n6 = 0
   if (iprsup .ge. 10) write (lunit6, 987) lunit5, lunit6, noutpr, numdcd
-987 format ( ' begin cimage.  lunit5, lunit6, noutpr,', ' numdcd =',  4i5  )
+987 format ( ' Begin cimage.  lunit5, lunit6, noutpr,', ' numdcd =',  4i5  )
 1000 if (m4plot .eq. 1) call emtspy ! interactive usage
   if (lunit5 .gt. 0) read (lunit5, 3000, end=4000) buff10
-3000 format(10a8)
+3000 format (10a8)
   if (lunit5 .le. 0) call nextcard
   if (kill .gt. 0) go to 4000 ! "nextcard" eof jump
   if (lunsav(5) .ne. -5) numdcd = numdcd + 1
@@ -524,18 +524,18 @@ subroutine cimage
 1036 if (noutpr .ne. 0) go to 1000
   if (n11 .ne. 0) go to 1000
   if (kol132 .eq. 132) write (lunit6, 3015) buff10
-3015 format (14h comment card., 37x, 1h1, 10a8)
+3015 format (' Comment card.', 37x, '1', 10a8)
   if (kol132 .ne. 132) write (lunit6, 3016) (abuff(j), j = 1, 4)
-3016 format ( 14h comment card.,  37x,  1h1,  3a8,  a5  )
+3016 format (' Comment card.', 37x, '1', 3a8, a5)
   go to 1000
 3034 if (noutpr .ne. 0) go to 3035
   if (kol132 .eq. 132) write (lunit6, 3006) buff10
-3006 format(51x, 1h1, 10a8)
+3006 format(51x, '1', 10a8)
   if (kol132 .ne. 132) write (lunit6, 3007) (abuff(j), j = 1, 4)
-3007 format (51x, 1h1, 3a8, a5)
+3007 format (51x, '1', 3a8, a5)
 3035 if (n13 .gt. 0) go to 3011
   print 3009, numdcd, (abuff(i), i = 1, 9)
-3009 format (1x, i5, 2h :, 9a8)
+3009 format (1x, i5, ' :', 9a8)
   n13 = n12
 3011 n13 = n13 - 1
   read (unit = abuff(1), fmt = 3037) text2
@@ -561,7 +561,7 @@ subroutine cimage
   if (texcol(1) .eq. chcont) go to 3246
   if (n8 .ne. 6) go to 1144
 3044 if (noutpr .eq. 0) write (lunit6, 3045)
-3045 format (25h+comment card (implicit).    )
+3045 format ('+Comment card (implicit).')
   go to 1000
 1144 do k = 1, 80
      if (texcol(k) .eq. csepar ) go to 3237
@@ -583,7 +583,7 @@ subroutine cimage
      n2 = jpntr(i + 1) - 1
      if ( n2  .lt.  0 )   go to 3319
      if ( iprsup  .ge.  35 ) write (lunit6, 3285) i, (textax(j), j = n1, n2)
-3285 format (21h special-request word,  i4,  2h ., 10a6)
+3285 format (' Special-request word',  i4,  ' .', 10a6)
      if (textax(n1) .eq. blank ) go to 3306
      l = 0
      n3 = n2 - n1 + 1
@@ -593,7 +593,7 @@ subroutine cimage
         if (texta6(l) .ne. textax(j)) go to 3306
 3291 end do
      if ( iprsup  .ge.  2 ) write (lunit6, 3292)  i, n8, texta6(1), textay(i)
-3292 format ( /,  ' key-word found.  i, n8 =',  2i5, 5x, 'texta6, textay =', 2a7)
+3292 format (/,  ' key-word found.  i, n8 =',  2i5, 5x, 'texta6, textay =', 2a7)
 3294 if ( n8  .ne.  6 )   go to 3301
      if ( i  .ne.  7 )    go to 1036
 3301 n8 = i
@@ -602,7 +602,7 @@ subroutine cimage
 3306 if (texta6(1) .eq. textay(i)) go to 3294
   end do
 3319 write (lunit6, 3230)
-3230 format ( ' illegal $-card.   stop at s.n. 3319 of "cimage" .')
+3230 format (' Illegal $-card.   Stop at s.n. 3319 of "cimage" .')
   call stoptp   ! installation-dependent program stop card
   !               *****    request no. 1.    "$attach"      *****  *****
 4100 text1 = 'attach'
@@ -617,7 +617,7 @@ subroutine cimage
   if ( n1 .le. 0 ) n1 = n2
   if ( n8 .eq. 8 ) go to 4817
   if (noutpr  .eq.  0) write (lunit6, 4231)  n1, text1
-4231 format ( 10h+copy file,  i4,  6h   to ,  a6,  2h .   )
+4231 format ('+Copy file',  i4,  '   to ',  a6,  ' .')
   !     segmented, 1, vax e/t can skip translation of rewind:
   rewind n1
   do k = 1, intinf
@@ -627,7 +627,7 @@ subroutine cimage
      !     thing.  wsm.  jan, 1980.
      if ( n8  .eq.  2 ) write (lunit7, 3000)  aupper
      if ( n8  .eq.  3 ) write (lunit6, 4238) k, aupper
-4238 format ( 20x,  6hrecord,  i5,  5h .  1,  10a8 )
+4238 format (20x,  'record',  i5,  ' .  1', 10a8)
   end do
   !     segmented, 1, vax e/t can skip translation of rewind:
 4249 rewind n1
@@ -660,7 +660,7 @@ subroutine cimage
 4506 n4 = 0
   !     encode (25, 4523, filen(1))
   write (unit=filen(1:24), fmt=4523)
-4523 format ( 25x )
+4523 format (25x)
   do 4532 k = kolbeg, 80
      if (texcol(k) .eq. blank) go to 4532
      if (texcol(k) .eq. csepar) go to 4536
@@ -685,36 +685,36 @@ subroutine cimage
      if ( lunsav(k)  .le.  0 )   go to 4568
   end do
   write (lunit6, 4565)
-4565 format ( /,  10( 7h error, )  )
+4565 format (/, 10(' error,'))
   write (lunit6, 4566)  lunsav
-4566 format ( 5x,  ' all i/o channels occupied.  kill run', ' at  s.n. 4566  of  "cimage" .'  ,/,  20i5)
+4566 format (5x,  ' All i/o channels occupied.  Kill run at  s.n. 4566  of  "cimage" .', /,  20i5)
   call stoptp   ! installation-dependent program stop card
 4568 n7 = k
 4570 if ( noutpr  .eq.  0 ) write (lunit6, 4572)  text1, filen,  n7
-4572 format ( 1h+,  a6,  6h file:,  25a1,  7h unit =,  i3  )
+4572 format ('+',  a6,  ' file:',  25a1,  ' unit =',  i3)
   if ( n8  .eq.  4 )   go to 4423
   if ( n8  .eq.  9 )   go to 4907
   if ( n8  .eq.  11 )  go to 5106
   if ( n8  .eq.  16 )  go to 5608
   close (unit=n7)
-  open (unit=n7, status='old', form='formatted', file=filen )
+  open (unit = n7, status = 'old', form = 'formatted', file = filen)
   rewind n7
   if ( n8 .eq. 5 ) call spying   ! process $spy command file
   go to 1000
   !               *****    request no. 6.    "$disable"     *****  *****
 4600 if ( noutpr  .eq.  0 ) write (lunit6, 4612)
-4612 format (  26h+begin data to be ignored.  )
+4612 format ('+Begin data to be ignored.')
   go to 1000
   !               *****    request no. 7.    "$enable"      *****  *****
 4700 if ( noutpr  .eq.  0 ) write (lunit6, 4714)
-4714 format (  27h+end of data to be ignored.  )
+4714 format ('+End of data to be ignored.')
   go to 1000
   !               *****    request no. 8.    "$return"      *****  *****
 4800 n2 = lunit4
   go to 4209
 4817 close (unit=n1)
   if ( noutpr  .eq.  0 ) write (lunit6, 4823)  n1
-4823 format (  19h+close file on unit,  i3,  2h .  )
+4823 format ('+Close file on unit', i3, ' .')
   if ( n1  .ne.  lunit5 )   go to 1000
   noutpr = 1
   go to 1000
@@ -723,14 +723,14 @@ subroutine cimage
   n2 = lunit4
   go to 4506
   !     4907 open (unit=n7, type='new', form='unformatted', name=filen )  69
-4907 open (unit=n7, status='new', form='unformatted', file=filen )
+4907 open (unit = n7, status = 'new', form = 'unformatted', file = filen)
   go to 1000
   !               *****    request no. 10.   "new epsiln"   *****  *****
 5000 nfrfld = 1
   d1 = epsiln
   call freone ( epsiln )
   if ( noutpr  .eq.  0 ) write (lunit6, 5017)  d1, epsiln
-5017 format ( 28h+ epsiln change.  old, new =,  2e11.2 )
+5017 format ('+ epsiln change.  old, new =', 2e11.2)
   go to 1000
   !               *****    request no. 11.   "delete"       *****  *****
 5100 text1 = 'delete'
@@ -744,27 +744,27 @@ subroutine cimage
 5200 if ( noutpr  .ne.  0 )   go to 5219
   print 3006,  buff10
   print 5214, numdcd
-5214 format (  '+crt monitor.  card number =',  i5  )
+5214 format ('+crt monitor.  card number =', i5)
 5219 go to 1000
   !               *****    request no. 13.   "listoff"      *****  *****
 5300 if ( noutpr  .ne.  0 )   go to 5324
   write (lunit6, 5307)  numdcd
-5307 format ( '+turn off input listing at card',  i5 )
+5307 format ('+turn off input listing at card', i5)
   noutpr = 1
 5324 go to 1000
   !               *****    request no. 14.   "liston"       *****  *****
 5400 write (lunit6, 5404)
-5404 format ( 51x,   '1$liston'  )
+5404 format (51x, '1$liston')
   noutpr = 0
   write (lunit6, 5412)  numdcd
-5412 format (  '+turn on input listing at card',  i5  )
+5412 format ('+turn on input listing at card', i5)
   go to 1000
   !               *****    request no. 15.   "vintage"      *****  *****
 5500 nfrfld = 1
   call freone(d11)
   moldat = int(d11)
   if ( noutpr  .eq.  0 ) write (lunit6, 5518)  moldat
-5518 format (  13h+new moldat =,  i4,  5x,  '(data vintage)'  )
+5518 format ('+new moldat =', i4, 5x, '(data vintage)')
   go to 1000
   !               *****    request no. 16.   "oldfile"      *****  *****
 5600 text1 = 'oldfil'
@@ -772,11 +772,11 @@ subroutine cimage
   go to 4506
 5608 close (unit=n7)
   !     open (unit=n7, type='old', form='unformatted', name=filen )
-  open (unit=n7, status='old', form='unformatted', file=filen)
+  open (unit = n7, status = 'old', form = 'unformatted', file = filen)
   go to 1000
   !               *****    request no. 17.   "stop"         *****  *****
 5700 write (lunit6, 5706)
-5706 format (  41h+stop execution immediately, in "cimage". )
+5706 format ('+Stop execution immediately, in "cimage".')
   call stoptp   ! installation-dependent program stop card
   !               *****    request no. 18.   "watch5"       *****  *****
 5800 nfrfld = 1
@@ -784,13 +784,13 @@ subroutine cimage
   n12 = int(d11)
   n13 = n12
   if ( noutpr  .eq.  0 ) write (lunit6, 5812)  n12
-5812 format (  28h+paint input data on screen.,  i8  )
+5812 format ('+Paint input data on screen.', i8)
   go to 1000
   !               *****    request no. 19.   "comment"      *****  *****
 5900 n11 = n11 + 1
   if ( n11  .ge.  2 )  n11 = 0
   if ( noutpr  .eq.  0 ) write (lunit6, 5917)  n11
-5917 format (  38h+toggle comment card destruction flag.,  i8  )
+5917 format ('+Toggle comment card destruction flag.', i8)
   go to 1000
 6000 call stoptp   ! installation-dependent program stop card
   !               *****    request no. 21.   "units"        *****  *****
@@ -798,14 +798,13 @@ subroutine cimage
   call frefld(xopt)
   call frefld(copt)
   if ( noutpr  .eq.  0 ) write (lunit6, 6114) xopt, copt
-6114 format (  18h+new  xopt, copt =,  2e14.4  )
+6114 format ('+New  xopt, copt =', 2e14.4)
   xunits = 1000.
   if(xopt(1) .gt. 0.0) xunits = twopi * xopt(1)
   go to 1000
   !     additional key-word code goes below.
 4000 write (lunit6, 4006)
-4006 format (/, 1x, 85( '=' ), /, ' end of file encounted in "cimage" while', ' attempting to read another data card.   Stop.' &
-          , /, 1x, 85('='))
+4006 format (/, 1x, 85('='), /, ' End of file encounted in "cimage" while attempting to read another data card.   Stop.', /, 1x, 85('='))
   call stoptp   ! installation-dependent program stop card
   !     unique exit of module, possibly after echoing card image:
 7014 if ( inecho  .eq.  0 )   return
@@ -910,7 +909,7 @@ function rfunl1(x)
   y = dsin(x)
   if ( dabs(y)*fltinf  .gt.  1.0 )   go to 4783
   write (lunit6, 4761)  x
-4761 format (/, " stop.   Too small argument at  'cotanz'  within 'rfunl1' .", e15.5)
+4761 format (/, " Stop.   Too small argument at  'cotanz'  within 'rfunl1' .", e15.5)
   call stoptp   ! installation-dependent program stop card
 4783 cotanz = dcos(x) / y
   return
@@ -947,7 +946,7 @@ subroutine trgwnd ( x, d17 )
   n13 = int(x / twopi)
   d17 = d17 - n13 * twopi
   if ( iprsup .ge. 1 ) write (*, 3456)  nchain, x, d17
-3456 format (' angle unwind in "trgwnd" called by "rfunl1".', '   nchain, x, d17 =',  i5, 2e25.16)
+3456 format (' Angle unwind in "trgwnd" called by "rfunl1".   nchain, x, d17 =', i5, 2e25.16)
 9000 return
 end subroutine trgwnd
 !
@@ -1318,7 +1317,7 @@ subroutine frefld(array)
   equivalence (texvec(1), text1)
   data  chtacs  /  6htacs     /
   if (iprsup .ge. 5) write (lunit6, 1016) nfrfld, nright, kolbeg
-1016 format (40h top "frefld".  nfrfld, nright, kolbeg =, 3i6  )
+1016 format (' Top "frefld".  nfrfld, nright, kolbeg =', 3i6)
   if (nright .lt. 0 ) go to 5913
   do 5851 jj = 1, nfrfld
      if (kolbeg .le. 80) go to 5600
@@ -1353,7 +1352,7 @@ subroutine frefld(array)
      go to 5831
 5829 call frenum (texbuf(1), n3, array(jj))
 5831 if (iprsup .ge. 5) write (lunit6, 5837)  jj, kolbeg, n3, array(jj)
-5837 format ( /,   ' "frefld" number.', '      jj  kolbeg      n3',  21x,  'array(jj)  ',/, 17x,  3i8,  e30.20  )
+5837 format (/, ' "frefld" number.      jj  kolbeg      n3',  21x,  'array(jj)  ', /, 17x, 3i8, e30.20)
 5851 end do
   go to 9900
 5913 if (nright .lt. -1) go to 6036
@@ -1411,14 +1410,14 @@ subroutine frefld(array)
 6072 nfrfld = jj
   kolbeg = kolbeg + 1
   if (iprsup .ge. 1) write (lunit6, 6083) jj, ll, kolbeg, texcol
-6083 format (/, ' keyword near "frefld" exit.', '      jj      ll  kolbeg   ,'/, 28x, 3i8, /, (9h texcol =,  30a4))
+6083 format (/, ' Keyword near "frefld" exit.      jj      ll  kolbeg   ', /, 28x, 3i8, /, (' texcol =', 30a4))
   go to 9900
 9200 kill = 166
   if (iprsup .ge. 0) write (lunit6, 9207)  lstat(19), nchain, lastov, kolbeg, nfrfld, nright
-9207 format (/,  30h error stop within  'frefld' .,  6i8,/, 1x)
+9207 format (/, " Error stop within  'frefld' .", 6i8, /, 1x)
   lstat(18) = -1
 9900 if (iprsup .ge. 2) write (lunit6, 9901)  kill, kolbeg, array(1)
-9901 format (' exit "frefld".  Kill, kolbeg, array(1) =', i6, e20.10)
+9901 format (' Exit "frefld".  Kill, kolbeg, array(1) =', i6, e20.10)
   return
 end subroutine frefld
 !
@@ -1439,8 +1438,8 @@ end subroutine freone
 !
 subroutine frenum(text1, n3, d1)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     vax-11/780  installation-dependent module called only by
-  !     the free-format data module  "frefld" .   purpose is to
+  !     VAX-11/780  installation-dependent module called only by
+  !     the free-format data module  "frefld" .  Purpose is to
   !     convert input characters  (text1(1) ... text1(n3))  into
   !     a floating point number.
   !     real*8        text1(1), blank
@@ -1456,18 +1455,18 @@ subroutine frenum(text1, n3, d1)
      if ( text1(n4)  .eq.  blank )   go to 4718
      if ( n9  .ge.  2 )   go to 4711
      write (6, 4706)
-4706 format (/, ' error stop in "frenum". There are', ' 33 or more characters in a free-', ' format number on last data card.')
+4706 format (/, ' Error stop in "frenum". There are 33 or more characters in a free- format number on last data card.')
      call stoptp   ! installation-dependent program stop card
      !     4711 encode (1, 4712, texta(n9))  text1(n4)
 4711 write (unit=texta(n9), fmt=4712) text1(n4)
-4712 format ( 80a1 )
+4712 format (80a1)
      n9 = n9 - 1
 4718 end do
   do i = 1, n9
      texta(i) = textb
   end do
   read (unit=texta(1), fmt=4732) d1
-4732 format ( e30.0 )
+4732 format (e30.0)
   return
 end subroutine frenum
 !
@@ -1475,10 +1474,10 @@ end subroutine frenum
 !
 subroutine packa1(from, to, kk)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     system-dependent emtp module  'packa1'  for  vax-11/780.
-  !     argument  'from'  contains  a1  information which is to be stored
+  !     System-dependent emtp module  'packa1'  for  VAX-11/780.
+  !     Argument  'from'  contains  a1  information which is to be stored
   !     in character position  kk  of argument  'to' .
-  !     for all emtp usage,  1st 2 arguments must be vectors.
+  !     For all emtp usage,  1st 2 arguments must be vectors.
   !     logical*1 from(1), to(6)
   character from(1), to(6)
   to(kk) = from(1)
@@ -1552,7 +1551,7 @@ function seedy(atim)
   character*8 atim
   dimension atim(2)
   read (unit=atim, fmt=4286) ihr, imin10, imin1, isec
-4286 format ( i2, 1x, i1, 4x, i1, 1x, i2 )
+4286 format (i2, 1x, i1, 4x, i1, 1x, i2)
   imin = imin10 * 10  +  imin1
   hour = ihr * 3600
   amin = imin * 60
@@ -1741,7 +1740,7 @@ function sandnm(x)
 2614 l = l + 1
 2632 n1 = (l-1) / 100
   if ( iprsup  .ge.  1 ) write (lunit6, 2645)  l, knt, kswtch, n1, x
-2645 format (/, " variables in  'sandnm' ,   the random-number generator with 100 built-in numbers.       &
+2645 format (/, " Variables in  'sandnm' ,   the random-number generator with 100 built-in numbers.       &
           l     knt  kswtch      n1 ", 14x, 'x', /, 82x, 4i8, e15.5)
   if ( n1  .gt.  0 ) l = l  -  100 * n1
   sandnm = a(l)
