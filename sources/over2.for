@@ -62,7 +62,7 @@ subroutine over2
      l = 2 * jk
      !     write (bus(l), 2689)  chlmfs(jk)(1:6)
      read(chlmfs(jk)(1:6), 2689) bus(l)
-2689 format ( a6 )
+2689 format (a6)
      !     write (bus(l+1), 2689)  chlmfs(m)(1:6)
      read(chlmfs(m)(1:6), 2689)  bus(l+1)
   end do
@@ -79,7 +79,7 @@ subroutine over2
   nycmp = 0
   isecti = 400
 1000 if (iprsup .ge. 1) write (lunit6, 4567)
-4567 format ( 23h begin module "over2".   )
+4567 format (' Begin module "over2".')
   l27dep = lbrnch * lsiz27 / 2
   ll2 = 2
   ll3 = 3
@@ -121,54 +121,54 @@ subroutine over2
 3988 call cimage
 3989 mread2 = 1
   read (unit = abuff, fmt = 2005) char80
-2005 format ( a )
+2005 format (a)
   if (char80(1:8) .ne. 'no. of p') go to 2100 ! not lmfs case
   do jk = 16, 80
      if ( char80(jk:jk) .ne. ' ' )  go to 2008
   end do
   write (lunit6, 2006)
-2006 format (' no integer value (format i1) was inputted for number', ' of phases in this lmfs case, run will be aborted. stop.')
+2006 format (' No integer value (format i1) was inputted for number of phases in this lmfs case, run will be aborted. Stop.')
   stop
 2008 read (char80(jk:jk), 2189 ) nphlmt
-2189 format ( i1)
+2189 format (i1)
   if (noutpr .eq. 0 ) write (kunit6, 2010 ) nphlmt
-2010 format ('+lmfs of a ',i1, '-phase circuit' )
+2010 format ('+lmfs of a ', i1, '-phase circuit' )
   call cimage
   read (unit = abuff, fmt = 2005) char80
   if (char80(1:7) .eq. 'sending') go to  2020
   write (lunit6, 2015)
-2015 format('  card of sending end nodes:  of this lmfs case is not', ' inputted, and case is to be aborted. stop.' )
+2015 format ('  Card of sending end nodes:  of this lmfs case is not inputted, and case is to be aborted. Stop.')
   stop
 2020 read (unit = abuff, fmt = 2025) (chlmfs(jk), jk = 1, nphlmt)
-2025 format ( 18x, 9a6 )
+2025 format (18x, 9a6)
   do jk = 1, nphlmt
      if ( chlmfs(jk)(1:6) .eq.  '      ' )  go to 2028
   end do
   go to 2030
 2028 write (lunit6, 2029) nphlmt
-2029 format (' program observed an invalid blank node name for sending' ' end of this ',i1, &
-          '-phase lmfs circuit. case is to be stopped.')
+2029 format (' Program observed an invalid blank node name for sending end of this ', i1, &
+          '-phase lmfs circuit. Case is to be stopped.')
   stop
 2030 if ( noutpr  .eq.  0 ) write (kunit6, 2035)
-2035 format('+sending end node names (9a6 format)' )
+2035 format ('+Sending end node names (9a6 format)')
   call cimage
   read (unit = abuff, fmt = 2005) char80
   if (char80(1:9) .eq. 'receiving') go to  2040
   write (lunit6, 2038)
-2038 format('  card of receiving end nodes: of this lmfs case is not', ' inputted, and case is to be aborted. stop.' )
+2038 format ('  Card of receiving end nodes: of this lmfs case is not inputted, and case is to be aborted. Stop.' )
   stop
 2040 read (unit = abuff, fmt = 2045) (chlmfs(jk), jk = nphlmt + 1, 2 * nphlmt)
-2045 format ( 20x, 9a6 )
+2045 format (20x, 9a6)
   do jk = 1, nphlmt
      if ( chlmfs(jk) (1:6) .eq.  '      ' )  go to 2048
   end do
   go to 2050
 2048 write (lunit6, 2049) nphlmt
-2049 format (' program observed an invalid blank name for receiving ', 'end of this ',i1, &
-          '-phase lmfs circuit. case is to be stopped.')
+2049 format (' Program observed an invalid blank name for receiving end of this ',i1, &
+          '-phase lmfs circuit. Case is to be stopped.')
   stop
 2050 if ( noutpr  .eq.  0 ) write (kunit6, 2055)
-2055 format('+receiving end node names (9a6 format)' )
+2055 format('+Receiving end node names (9a6 format)')
   go to 100                 ! end of three "/" cards for lmfs data case
 2100 if ( kolbeg  .gt.  0 )   go to 6618
   read (unit = abuff, fmt = 1) itype, bus1, bus2, bus3, bus4
@@ -186,7 +186,7 @@ subroutine over2
   bus4 = texta6(4)
   nright = 0
 6621 if (iprsup .ge. 3 .and. ibr1 .ge. 1) write (lunit6, 7621)  ibr1, ityold, kodsem(ibr1), itranm, itype, length(ibr1)
-7621 format ( 45h cont. transp.?,  ibr1, ityold, kodsem(ibr1),, 30h itranm, itype, length(ibr1) =,  6i7   )
+7621 format ( ' Cont. transp.?,  ibr1, ityold, kodsem(ibr1), itranm, itype, length(ibr1) =', 6i7)
   if (bus2 .ne. text12) go to 7682
   n24 = 0
   if (bus1 .ne. text11 ) go to 7677
@@ -194,7 +194,7 @@ subroutine over2
   call namea6 ( bus3, n24 )
   namebr(n1) = n24
   if ( noutpr  .eq.  0 ) write (kunit6, 7674)  bus3, n1
-7674 format ( 10h+moniker ",  a6,  23h" is for next branch  +, i6,  2h .  )
+7674 format ('+Moniker ', '"', a6, '"', ' is for next branch  +', i6, ' .')
 7675 ibrnam = ibrnam + 1
   if (ibrnam .gt. ibr) go to 7676
   namebr(ibrnam) = 1
@@ -210,7 +210,7 @@ subroutine over2
   call namea6 ( bus3, n24 )
   namesw(n1) = n24
   if (noutpr .eq. 0) write (kunit6, 7679)  bus3, n1
-7679 format ( 10h+moniker ",  a6, 26h" is for next nonlinear  +,   i6,  2h .   )
+7679 format ('+Moniker ', '"', a6, '"', ' is for next nonlinear  +', i6, ' .')
 7680 inonam = inonam + 1
   if ( inonam .gt. inonl ) go to 7681
   namebr(inonam) = 1
@@ -416,9 +416,9 @@ subroutine over2
   n1 = iaddrs
   n2 = n1 + n9sq -1
   write (lunit6, 15968)  n1, n2, (qfd(i), i=n1, n2), (sfd(i), i=n1, n2)
-15968 format ( 26h qfd(i) and sfd(i) for i =, i6, 4h to ,i6, 4h are,/, (1x, 8e15.7) )
+15968 format (' qfd(i) and sfd(i) for i =', i6, ' to ', i6, ' are', /, (1x, 8e15.7))
   write (lunit6, 25968) ibr1, iaddrs, litype(ibr1)
-25968 format ( 44h at 25968, ibr1, iaddrs and litype(ibr1) are, 3i10)
+25968 format (' at 25968, ibr1, iaddrs and litype(ibr1) are', 3i10)
 5971 iaddrs = iadd + 1
 36621 itranm = 0
   if (bus1 .ne. blank) go to 110
@@ -495,7 +495,7 @@ subroutine over2
   go to 3988
   !     =================  end line-model f-scan building of network
 5823 if ( noutpr  .eq.  0 ) write (kunit6, 4198)
-4198 format (  37h+blank card terminating branch cards.    )
+4198 format ('+Blank card terminating branch cards.')
   nfscan = 0                ! reset nfscan for 2nd and 3rd lmfs cases
   if ( ntot  .le.  lbus )   go to 4192
   iprint = 1
@@ -523,9 +523,9 @@ subroutine over2
   if( bus3 .ne. text9 )  go to 4003
   if( bus4 .ne. text10 )  go to 4003
   read (unit = abuff, fmt = 44002) bus6, yzero
-44002 format( 26x, a6, e6.2 )
+44002 format (26x, a6, e6.2)
   if ( noutpr  .eq.  0 ) write (kunit6, 3996 )  bus6, yzero
-3996 format ( 28h+3-phase xformer request.  ', a6, 3h'  , e12.4  )
+3996 format ('+3-phase xformer request.  ', "'", a6, "'", '  ', e12.4  )
   if( yzero .gt. 0.0 )  go to 3998
   kill = 52
   lstat(16) = 1
@@ -535,7 +535,7 @@ subroutine over2
   go to 100
 4003 continue
   read (unit = abuff, fmt = 4013) tr(it), tx(it), bus5, rmag, ioutmg
-4013 format( 26x, 2e6.2, a6, e6.2, 29x, i1 )
+4013 format (26x, 2e6.2, a6, e6.2, 29x, i1)
   if ( ioutmg  .lt.  2 )   go to 3400
   nv = nv + 1
   if ( nv  .le.  lsiz12 )   go to 3400
@@ -559,7 +559,7 @@ subroutine over2
   if( kph .gt. 0 )  kph = kph + 1
   if( n3 .ne. 1 )  go to 4002
   if ( noutpr  .eq.  0 ) write (kunit6, 4010)  tr(it), tx(it), rmag
-4010 format ( 14h+sat. xformer.  , 2x, 3e11.3 )
+4010 format ('+Sat. xformer.', 2x, 3e11.3 )
   ksat =-1
   inonl = inonl + 1
   if( inonl .le. lnonl )  go to 4011
@@ -575,11 +575,11 @@ subroutine over2
   nltype(inonl) = -98
   curr(inonl) = 1.0
   if( iprsup .ge. 2 ) write(lunit6, 4014)  ksat, it, ichar, ntot, it3, inonl
-4014 format( /, 9h at 4014   , 7i10 )
+4014 format(/, ' at 4014', 7i10)
   lstat(18) = 187
   go to 186
 4002 if ( noutpr  .eq.  0 ) write (kunit6, 74003)   bus3
-74003 format( 40h+transformer copy using reference name ', a6, 2h'.   )
+74003 format ('+Transformer copy using reference name ', "'", a6, "'", '. ')
   ktref = 1
 4006 if( ktref .le. kswtch )  go to 4007
   kill = 48
