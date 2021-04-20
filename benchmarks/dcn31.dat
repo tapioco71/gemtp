@@ -1,0 +1,55 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-28
+C    1st of ?? subcases illustrates creation of new C-like .PL4 file that was
+C    inspired by Massimo Ceraolo of the University of Pisa in Italy.  The date
+C    of addition is 11 March 1999,  and mention should be found in later issues 
+C    of the newsletter.  There are no dynamics.  The network is resistive, and
+C    all voltages and currents are sinusoidal.  An attempt has been made to
+C    involve different types of variables: 1 branch voltage first, then a power,
+C    then two node voltages,  then a branch current,  then energy,  and finally,     
+C    a TACS signal (also power).  The new C-like format should be better than 
+C    the old for concurrent, SPY-like plotting.
+$BEGIN PL4 COMMENTS
+C Massimo Ceraolo of the University                                                            
+C of Pisa in Italy can plot SPY-like.
+$END PL4 COMMENTS
+PRINTED NUMBER WIDTH, 9, 2,
+$DEPOSIT, NEWPL4=2  { Special value that characterizes new C-like .PL4 file type
+   .0005    .020
+       1       1       1       0       0       0       0       2
+TACS HYBRID
+90GEN                   { Electric network source voltage                                                        
+91SWIT                  { Electric network switch current
+99VOLT    = 0.5 * GEN   { Half the source voltage = branch voltage
+99POWER   = VOLT * SWIT { Branch power consumption = v(t) * i(t)  
+33POWER                 { Output branch power                                 
+BLANK card ending all TACS data
+  SWIT  SEND                 1.0                                               2
+  SEND                       1.0                                               4
+BLANK card ending branch cards
+  GEN   SWIT                                          MEASURING                1
+BLANK card ending switch cards
+14GEN           100.       50.
+BLANK card ending source cards
+  SWIT  SEND
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   1     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C Branch power  consumption (power  flow, if a switch) is treated like a branch voltage for this grouping (1  variables);
+C Branch energy consumption (energy flow, if a switch) is treated like a branch current for this grouping (1  variables).
+C  Step    Time    SWIT     SEND     SWIT     SEND     GEN      SEND     TACS
+C                  SEND     TERRA                      SWIT     TERRA    POWER
+C ***        Switch  "GEN   "  to  "SWIT  "  closed before  0.00000000E+00  sec.
+C    0     0.0       0.0      0.0      0.0      0.0      0.0      0.0      0.0
+C    1   .5E-3   49.3844  2438.82  98.7688  49.3844  49.3844  .609705  2438.82
+C    2   .1E-2   47.5528  2261.27  95.1057  47.5528  47.5528  1.78473  2261.27
+C    3   .0015   44.5503  1984.73  89.1007  44.5503  44.5503  2.84623  1984.73
+C .PL4 type code:      8        6        4        4        9        7        2
+C Variable class: V-bran    Power   V-node   V-node   I-bran   Energy     TACS
+BLANK card ending requests for node voltage output
+  PRINTER PLOT
+ 194 2. 0.0 20.         SEND        GEN   SWIT
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+ 

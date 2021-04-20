@@ -1,0 +1,153 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-50
+C       Test  of the installation-dependent random number generator that is used
+C       for Monte Carlo studies, ENTRY RANDNZ  of RFUNL1.  The  4444  means that
+C       no simulation is actually to occur.   Rather,  after the input of switch
+C       cards, there will be dice rolling and a statistical analysis of results.
+C       Answers are repeatable: use of standard random numbers (column-80 punch)
+ 100.E-6  20.E-3     60.
+                                  { NENERG = 100 imaginary shots }   100
+C    ISW   ITEST                   IDICE          KNTRPT                   NSEED
+    4444       2                       1               2                       1
+ 0GENA  A1                      7.                                             3
+ 0GENB  B1                      7.                                             3
+ 0GENC  C1                      7.
+ 0ENDA  A10                     7.
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.
+-1ASW1  A5                .3    2.1146 0.645 50.   0
+-2BSW1  B5                .0268 .5397  0.021 50.   0
+-3CSW1  C5
+ 0A5    A5F               1.
+ 0B5    B5F               1.
+ 0C5    C5F               1.
+-1A5F   ASW10 ASW1  A5
+-2B5F   BSW10
+-3C5F   CSW10
+BLANK card ending branch cards
+  A1    ASW1       2.E-3     .1E-3                    STATISTICS
+  B1    BSW1       4.E-3    1.0E-3                    STATISTICSTARGET
+  C1    CSW1       6.E-3     1.E-3                    STATISTICS
+  A10   ASW10      8.E-3     2.E-3                    STATISTICSA1    ASW1
+C      The  following  two switches will be missing from the statistical output.
+C      The first has a uniform distribution,  while the second is deterministic.
+76B10   BSW10     10.E-3     1.E-3                    STATISTICS
+  C10   CSW10     12.E-3     1.0
+C      Switch pair  1 :   "B1    "  to  "BSW1  "   and   "A1    "  to  "ASW1  ".
+C Sample: 0.0000  0.0000  0.0000  0.0400  0.0800  0.1700  0.3400  0.5500  0.7000
+C Sample: 0.9000  0.9400  0.9600  0.9900  1.0000  1.0000  1.0000
+BLANK card ending switch cards              { Data input stops here, effectively
+C      Switch pair  6 :   "A10   "  to  "ASW10 "   and   "C1    "  to  "CSW1  ".
+C Sample: 0.0000  0.0000  0.0100  0.0300  0.0700  0.1400  0.2600  0.4500  0.6700
+C Sample: 0.8400  0.9300  0.9600  1.0000  1.0000  1.0000  1.0000
+C To omit miniature character plots of switching times, omit the following card:
+C   Switch  "A1    "  to  "ASW1  "    ---- First mini printer plot that follows:
+C     4.45814013E-01   switch closings per column
+C              Columns
+C          5   10   15   20   25   30
+C     +----+----+----+----+----+----+
+C     X
+C     X
+C     X
+C     * A
+C     A*
+C     | X
+C     |   *    A
+C     |      A*
+C     A           *
+C     |                 *        A
+C     |                   A   *
+C     |                           *           A
+C     |  2.0000E-03                 *         A
+C     |                           *       A
+C     |            A          *
+C     |            A    *
+C     |        A  *
+C     |   A   *
+C     | A *
+C     A *
+C     A*
+C     X
+C     X
+C     X
+C     X
+C   Time (scale = 3.33333333E-05  Sec/line)
+BLANK card ending non-existent  overlay-20  requests for statistical tabulations
+BEGIN NEW DATA CASE
+C       2nd of 2 subcases is for random opening (1st was random closing only).
+C       All random closing switches of preceding subcase have been converted to
+C       random opening.  Also,  ITEST  is set to 3  (extra random offset is only
+C       for opening;  preceding case had 2,  which was only for closing).   The
+C       number of shots will be increased to 300 to illustrate better smoothness
+C       (but restoring to 100 should produce tabulations identical to preceding)
+ 100.E-6  20.E-3     60.
+                                  { NENERG = 300 imaginary shots }   300
+C    ISW   ITEST                   IDICE          KNTRPT                   NSEED
+    4444       3                       1               2                       1
+ 0GENA  A1                      7.                                             3
+ 0GENB  B1                      7.                                             3
+ 0GENC  C1                      7.
+ 0ENDA  A10                     7.
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.
+-1ASW1  A5                .3    2.1146 0.645 50.   0
+-2BSW1  B5                .0268 .5397  0.021 50.   0
+-3CSW1  C5
+ 0A5    A5F               1.
+ 0B5    B5F               1.
+ 0C5    C5F               1.
+-1A5F   ASW10 ASW1  A5
+-2B5F   BSW10
+-3C5F   CSW10
+BLANK card ending branch cards
+  A1    ASW1       2.E-3     .1E-3               3333.STATISTICS
+  B1    BSW1       4.E-3    1.0E-3               3333.STATISTICSTARGET
+  C1    CSW1       6.E-3     1.E-3               3333.STATISTICS
+  A10   ASW10      8.E-3     2.E-3               3333.STATISTICSA1    ASW1
+C      The  following  two switches will be missing from the statistical output.
+C      The first has a uniform distribution,  while the second is deterministic.
+76B10   BSW10     10.E-3     1.E-3               3333.STATISTICS
+  C10   CSW10     12.E-3     1.0
+C Switch pair  1 :   "B1    "  to  "BSW1  "   and   "A1    "  to  "ASW1  ".
+C Time   -3.5000 -3.0000 -2.5000 -2.0000 -1.5000 -1.0000 -0.5000  0.0000  0.5000
+C Sample  0.0000  0.0000  0.0000  0.0367  0.0667  0.1600  0.2933  0.5300  0.7000
+C Sample  0.8767  0.9367  0.9733  0.9933  1.0000  1.0000  1.0000
+BLANK card ending switch cards              { Data input stops here, effectively
+C Switch pair  6 :   "A10   "  to  "ASW10 "   and   "C1    "  to  "CSW1  ".
+C Time:  -3.5000 -3.0000 -2.5000 -2.0000 -1.5000 -1.0000 -0.5000  0.0000  0.5000
+C Sample: 0.0000  0.0000  0.0133  0.0367  0.0800  0.1467  0.2633  0.4367  0.6500
+C Sample: 0.8133  0.9200  0.9667  0.9967  1.0000  1.0000  1.0000
+C    Switch  "A1    "  to  "ASW1  "
+C      1.32420000E+00   switch closings per column
+C               Columns
+C           5   10   15   20   25   30
+C      +----+----+----+----+----+----+
+C     X
+C     X
+C     X
+C     *A
+C     |X
+C     | *A
+C     |   *   A
+C     |      A*
+C     |         A *
+C     |                 *    A
+C     |                   A   *
+C     |                           *    A
+C     |  4.0000E-03                 *     A
+C     |                           *  A
+C     |                A      *
+C     |                A*
+C     |          A*
+C     | A     *
+C     | A *
+C     |A*
+C     |*A
+C     X
+C     X
+C     X
+C     X
+C    Time (scale = 3.33333333E-05  Sec/line)
+BLANK card ending non-existent  overlay-20  requests for statistical tabulations
+BEGIN NEW DATA CASE
+BLANK

@@ -1,0 +1,711 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-33
+C      Type-96 hysteretic inductor with TACS logic to give flux by integrating v
+C      Batch-mode EMTP CalComp plotting, including  "X-Y PLOT",  is illustrated.
+C      For split version with TACS postponed until postprocessing, see DC-45 and
+C      DC-46.   As  for data ordering,  this is intentionally shuffled from what
+C      would be natural in order to illustrate the use of "/" cards for sorting.
+C      Initial condition & load flow classes were added during  November of 1991 
+C      after  Prof. Juan Martinez  complained from  Barcelona, Spain,  that such
+C      features were not working.   He was right.  One year later, he complained
+C      again (it still did not work right.   Somehow, work was lost;  DC-33  had 
+C      not been changed;  the optimistic report of the January, 1992, newsletter
+C      was incorrect).  So, sorting by class was repaired again on 28 Novemb 92.
+C      1st of 9 stacked subcases total.
+ .000050    .020
+       1       1       1       1       1      -1
+       5       5      20      20
+TACS HYBRID
+/SOURCE
+14GEN           377.       60.                                 -1.
+/TACS
+ 1FLUX    +GEN
+       1.0
+       0.0       1.0
+90GEN
+91GROUND
+99CURR          -1.0*     GROUND
+33FLUX  GEN   GROUNDCURR
+/OUTPUT
+  GEN
+/PLOT
+C Last step:  400      .02   116.4994069   2.765761424  -2.76576141  .9416257618
+C Last step continued .....:               116.4994069  2.765761424  -2.76576142
+C Final 5 max. : 3.499909256  .9905492104  376.9925583  3.499613141  3.499909256
+C Associated times :   .0125       .00415       .01665       .00415        .0125
+ 2Arbitrary 78-character case title text of which this is an example, I hope.
+  First of two lines of 78-byte graph subheading text.
+  Second and final such line of graph subheading text.
+ 194 2. 0.0 20.         TACS  CURR              ABCDEFGHIJKLMNOP1234567890123456
+  X-Y PLOT    Horizontal Axis label123
+     10.    -1.1     1.1
+      8.    -4.0     4.0
+ 194 4. 0.0 20.         TACS  FLUX  TACS  CURR  Graph heading---Vertical axis la
+  X-Y PLOT    Horizontal Axis label123
+   9999.    -1.1     1.1     "9999." returns to conventional (vs. time) plotting
+      8.    -4.0     4.0
+  PRINTER PLOT
+ 194 4. 0.0 20.         TACS  CURR                { Axis limits: (-3.500, 3.500)
+C    Now that all plotting is done with, let's illustrate the three declarations
+C    that will choose the destination  of  any  subsequent  "CALCOMP PLOT"  use:
+  SCREEN PLOT  { If a vector plot were to follow, it would go only to the screen
+  PEN PLOT     { If a vector plot were to follow, ... go only to CalComp plotter
+  SCREEN PEN   { If a vector plot were to follow, .. go to both screen & plotter
+C         The preceding 3 declarations really could only be tested by a user who
+C         had both a vector-graphic screen and a CalComp plotter.  Hence no use.
+/LOAD FLOW
+C   Comment of /LOAD FLOW.  Since  DC-33  does not really involve the load flow, 
+C   Comment of /LOAD FLOW.  we can not use real load flow data cards.   In their 
+C   Comment of /LOAD FLOW.  place,  we use these three comment cards.   End test 
+/BRANCH
+96GROUNDGEN                8888.       1.E-9                                   1
+             1.0            -0.7
+             2.0             0.9
+             3.5             1.0
+           9999.
+/REQUEST
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+/INITIAL
+ 2GROUND             0. { Node voltage initial condition in fact changes nothing
+C  Initial conditions really are not a part of this problem, although we do want
+C  to illustrate that they,  too,  can be sorted,  and inserted after  /LOADFLOW 
+C  The preceding redefinition of node voltage  at  GROUND  changes zero to zero.
+/SWITCH
+  GROUND                                              MEASURING                1
+BLANK card terminates all TACS data
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+C       Total network loss  P-loss  by summing injections =   7.106450000000E-06
+C Inject:  GEN       377.             377.             .377E-7   2.6786345332877
+C Inject:            0.0              0.0      -2.678634533288       -89.9999992
+C           ---- Initial flux of coil  "GROUND"  to  "GEN   "  =  1.00000000E-09
+C
+C  Step     Time        GEN          GROUND       GROUND       TACS         TACS
+C                                     TERRA        GEN          FLUX         GEN
+C ***      Phasor I(0) =  0.3770000E-07   Switch  "GROUND"  to  "      "  closed
+C   0      0.0          377.      .377E-7          0.0          0.0          0.0
+C   1    .5E-4   376.9330268  .5235646391  -.523564601  .0094233257  376.9330268
+C   2    .1E-3   376.7321312   1.04694322  -1.04694318  .0282649546  376.7321312
+BLANK card ends OUTPUT variable requests
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-33
+C      2nd  of  9  subcases  is the same as the first except that control system
+C      modeling is to be done using  MODELS  rather than the older  TACS.  Jerry
+C      Almos of BPA converted the data on 18 Nov 1991 after WSM changed the code
+C      to allow such sorting using the same  /TACS  declaration. 
+ .000050    .020
+       1       1       1       1       1      -1
+       5       5      20      20
+MODELS              { Note the change;  the 1st subcase had  "TACS HYBRID"  here
+/SOURCE
+14GEN           377.       60.                                 -1.
+/MODELS        { 9 July 1995,  the former  /TACS  was changed to this new class
+INPUT GEN {V(GEN)}, GROUND {I(GROUND)}
+MODEL DC33
+INPUT gen, ground
+VAR   flux, curr
+HISTORY gen {DFLT: 0}, flux {DFLT: 0}, ground {DFLT: 0} 
+INIT
+  curr:=0
+ENDINIT
+EXEC
+  COMBINE AS INTEGRATOR
+    LAPLACE(flux/gen):=(1.0|S0)/(1.0|S1)
+  ENDCOMBINE
+  curr:=-ground
+ENDEXEC
+ENDMODEL
+USE DC33 AS DC33
+  INPUT GEN:=GEN, GROUND:=GROUND
+ENDUSE
+RECORD
+  DC33.FLUX AS FLUX
+  DC33.GEN AS GEN
+  DC33.GROUND AS GROUND
+  DC33.CURR AS CURR
+ENDRECORD
+ENDMODELS 
+/OUTPUT
+  GEN
+/PLOT
+C Last step:  400      .02   116.4994069   2.765761424  -2.76576141  .9604757618  
+C Variable maxima :                 377.   3.499613141  3.499909256   1.00939921         
+C Times of maxima :                  0.0        .00415        .0125       .00415          
+C Variable minima :          -376.992558   -3.49990926  -3.49961314  -.990568949  
+C Times of minima :               .00835         .0125       .00415        .0125       
+ 2Arbitrary 78-character case title text of which this is an example, I hope.
+  First of two lines of 78-byte graph subheading text.
+  Second and final such line of graph subheading text.
+  CALCOMP PLOT
+  SCREEN PLOT
+ 194 2. 0.0 20.         MODELSCURR              ABCDEFGHIJKLMNOP1234567890123456
+  X-Y PLOT    Horizontal Axis label123
+     10.    -1.1     1.1
+      8.    -4.0     4.0
+ 194 4. 0.0 20.         MODELSFLUX  MODELSCURR  Graph heading---Vertical axis la
+  X-Y PLOT    Horizontal Axis label123
+   9999.    -1.1     1.1     "9999." returns to conventional (vs. time) plotting
+      8.    -4.0     4.0
+/BRANCH
+96GROUNDGEN                8888.       1.E-9                                   1
+             1.0            -0.7
+             2.0             0.9
+             3.5             1.0
+           9999.
+/REQUEST
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+/SWITCH
+  GROUND                                              MEASURING                1
+BLANK card terminates all MODELS data  { 9 July 1995,  MODELS  replaces old
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+C       Total network loss  P-loss  by summing injections =   7.106450000000E-06
+C Inject:  GEN       377.             377.             .377E-7   2.6786345332877
+C Inject:            0.0              0.0      -2.678634533288       -89.9999992
+C           ---- Initial flux of coil  "GROUND"  to  "GEN   "  =  1.00000000E-09
+C
+C  Step     Time        GEN          GROUND       GROUND       TACS         TACS
+C                                     TERRA        GEN          FLUX         GEN
+C ***      Phasor I(0) =  0.3770000E-07   Switch  "GROUND"  to  "      "  closed
+C   0      0.0          377.      .377E-7  -.25696E-16      .009425         377.      .377E-7     -.377E-7
+C   1    .5E-4   376.9330268  -1.42571976  1.425719797  .0282733257  376.9330268  -1.42571976  1.425719759
+C   2    .1E-3   376.7321312  -1.41394374  1.413943779  .0471149546  376.7321312  -1.41394374  1.413943741
+C   3   .15E-3   376.3973844  -1.40217609   1.40217613  .0659431925  376.3973844  -1.40217609  1.402176093
+BLANK card ends OUTPUT variable requests
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE
+C      3rd  of  9  subcases ends the original series.  4-9 added 5 March 2007
+C     Illustration of user-supplied residual flux of Type-96 hysteretic
+C     inductor was supplied by Prof. Mustafa Kizilcay of FH Osnabrueck in
+C     Germany (see E-mail dated 23 March 2001).  This data is added to show
+C     that non-zero (but very small) flux of the phasor solution now is
+C     tolerated.  Prior to the change several days ago,  it was not.  Prior
+C     to the change,  residual flux needed to be exactly zero for the user-
+C     supplied flux to be used.  No longer.  Phasor flux < EPSILN  is all that
+C     now is required.
+POWER FREQUENCY                      50.
+PRINTED NUMBER WIDTH, 13, 2,  { dT loop columns have width 13 including 2 blanks
+ZERO FLUX TOLERANCE                1.E-8 { Columns 33-40 carry Type-96 tolerance
+C     Note about preceding declaration, which was added  29 March 2001.  After
+C     reading later discussion about trouble with the  IDEAL TRANSFORMER  data,
+C     Prof. Kizilcay agreed that definition of the flux tolerance independent of
+C     EPSILN  would be a good idea.  The user can define whatever value he wants
+C     although here nothing will change (1.E-8 = value of EPSILN in STARTUP).
+ .000200    .200     50.
+      40       1       1       1       1
+C        Following TACS data is not required.  It is used only to integrate the
+C        inductor voltage, thereby indicating the change in inductor flux  ---
+C        change with respect to the user-supplied initial value of 0.2 volt-sec.
+TACS HYBRID
+ 1FLUSSA                          +MA                 1.
+        1.                   { Numerator   is :    1                                                   
+                  1.         { Denominator is :    0 + 1 * s                                                   
+90MA          { Type-96 voltage of electric network defines this TACS source                                                                1.
+33FLUSSA      { Output of integrator,  the change of flux,  is only TACS output
+BLANK card ending TACS data
+  QA    P1A                .0172 .1722                                         0
+  P3A                      .0172 .1722                                         0
+  MA                         1.8                                               0
+96MA                        8888       0.20                                    1
+         -0.1199         -0.3754  { Preceding 0.2 is residual flux in [volt-sec]
+        -0.06264         -0.3643  { 2nd of many current-flux pairs
+         -0.0353         -0.3536  { 3rd of many.  These define hysteresis loop.
+        -0.02025         -0.3428
+        -0.00732         -0.3214
+       -0.002869            -0.3
+       -0.000538         -0.2786
+         0.01345             0.0
+         0.02744          0.2786
+         0.02977             0.3
+         0.03422          0.3214
+         0.04715          0.3428
+          0.0622          0.3536
+         0.08954          0.3643
+          0.1468          0.3754
+          0.2254          0.3826
+          0.5494          0.3968
+            9999    { Terminate last point of Type-96 hysteresis element
+  P2A                      1.E10
+BLANK card ending all branch cards
+  P2A   P3A         .020       1.0     { Switch closes at 20 msec }            1
+BLANK card ending switches
+14QA           8165.       50.      -90.                           -1.
+11P1A          1E-10   { 1st half of ungrounded voltage source and ideal Xformer 
+18P2A          .0025MA { 2nd half of ungrounded voltage source and ideal Xformer        
+C   Note about preceding two source cards, which represent an ideal transformer.  
+C   Yes, there is the ungrounded voltage source,  but for engineering purposes,
+C   this has value zero (the  1.E-10  in columns 11-20 of the 1st source card).
+C   The second source card,  a Type-18 source, defines turns ratio and 4 names.
+C   In theory,  these two source cards could be replaced by the following three  
+C   branch cards,  which are more readable:
+C  IDEAL TRANSFORMER
+C 1P1A   P2A                            400.0    { Rated voltage of high side
+C 2MA                                     1.0    { Rated voltage of low  side 
+C   The resulting phasor solution would be nearly the same, too.  Nearly,  
+C   but not quite.  Prof. Kizilcay's Type-11 source value is small, note   
+C   ---  small enough to make the phasor flux at time zero < EPSILN.  If
+C   instead the  IDEAL TRANSFORMER  is used,  it would appear that the EPSILN
+C   threshold is exceeded.  In place of the user-desired residual flux of 0.2
+C   volt-seconds,  the .LIS file will show the noise from the phasor solution:
+C        ---- Initial flux of coil  "MA    "  to  "      "  =  -1.87122597E-06
+C   This then is carried into the dT loop.  Without meaningful residual flux, 
+C   there is no significant in-rush current.  Instead of Prof. Kizilcay's 
+C   30 amps, the  PRINTER PLOT  shows only about 1.243E-2 amps.  For engineering
+C   purposes,  the simulation will be completely different (and wrong).
+BLANK card ending sources
+C  MA                   .1797146122E-11  .36742498645E-8      -.998414547E-12  .9984146668E-12      .8600609455E-40  .8600609455E-40
+C                      -.3674249425E-8      -89.9719755      -.488343774E-15     -179.9719755      .1834212477E-20        0.0000000
+C       Total network loss  P-loss  by summing injections =   3.333364056743E-03
+C       ---- Initial flux of coil  "MA    "  to  "      "  =  2.00000000E-01
+C  The preceding result of phasor solution confirms correct operation.  The
+C  voltage across the Type-96 branch is not zero,  but it is small enough
+C  compared with floating-point miscellaneous data parameter EPSILN so no
+C  special precautions must be taken.  Understand what is happening.  The
+C  initial flux is equal to the imaginary part of the phasor voltage divided
+C  by the frequency,  and this is small:  .367E-8 / OMEGA < EPSILN 
+  QA    MA   { Names of nodes for node-voltage output
+C  First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   1     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C  Step    Time        QA           MA           P2A          MA           TACS
+C                                                P3A          TERRA        FLUSSA
+C     0     0.0   .499946E-12  .179715E-11          0.0  -.99841E-12          0.0
+C    40    .008   4799.266585  .2154661E-8          0.0  .278303E-11  .211415E-10
+C    80    .016   -7765.37646  -.349521E-8          0.0  .438944E-12  .803576E-11
+C   ***        Close switch  "P2A   "  to  "P3A   "  after  2.02000000E-02  sec.
+C   120    .024   7765.376456  70.13133651  15591.82659  .0177128714  .0990291974
+C   160    .032   -4799.26658  110.5331176  33643.29393  22.70094726  1.167639417
+BLANK card ending node voltage outputs
+C  1000     0.2   .9430083E-8  -105.223163  -23383.3158   -.97653E-3  .0484350031
+C Variable maxima :     8165.   159.787186  40889.62376  30.82522183  1.523703303
+C Times of maxima :      .005        .0288        .0294         .054         .054
+C Variable minima :    -8165.  -118.702745  -23490.9996   -.16538292  -.198576963
+C Times of minima :      .015        .0792        .1996        .1794        .1846
+  CALCOMP PLOT
+ 193.02 0.0 0.2 -10. 30.MA      { Plot Type-96 current over entire time span
+  PRINTER PLOT
+ 194 4. 20. 60.         MA                         { Axis limits: (0.000  3.083)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      4th  of  9  subcases begins a series using  /UM  on  DC-35 U.M. data
+C     1st of 6 subcases that have same solution but slightly different data.
+C     Begin with  /SOURCE  (not /UM for U.M.) and full Class-1 U.M. data.
+C     Output has been reduced from 2 lines per dT to one which consists of
+C     just the U.M. variables.  For the 10 dT that are taken,  signals agree
+C     exactly with  DC37.LIS  and are documented on comment cards of  /OUTPUT
+ .000400    .004   { Take only 10 time steps -- enough to begin motor rotation
+       5      -1   { No plotting (which has nothing special to do with /UM use)
+/OUTPUT
+C  The following shows dT-loop output for each of the subcases of the /UM set:
+C Step   Time     UM-1        UM-1        UM-1        UM-1        UM-1        UM-1        UM-1        UM-1        UM-1
+C                 TQGEN       OMEGM       THETAM      IPA         IPB         IPC         IE1         IE2         IE3
+C   0    0.0        0.0         0.0         0.0         0.0         0.0         0.0         0.0         0.0         0.0
+C   5   .002    -.6898285         0.0         0.0  -150.98163  16.0278591  134.953771  15.5970274    131.9385  -147.53553
+C  10   .004   -11.779008  -.21882419  -.42361E-3  -203.70113  -91.734138   295.43527  -90.126277  287.718333  -197.59206
+/SOURCE
+14BUS-A0  180.0      60.0     0.0
+14BUS-B0  180.0      60.0     -120.0
+14BUS-C0  180.0      60.0     +120.0
+11BUS-OM-1 -6.00
+/BRANCH
+ 0      BUS-A0            1.0
+ 0      BUS-B0            1.0
+ 0      BUS-C0            1.0
+ 0BUS-A1BUS-A0            0.005 1.0
+ 0BUS-B1BUS-B0BUS-A1BUS-A0
+ 0BUS-C1BUS-C0BUS-A1BUS-A0
+ 0BUSRA1                   1.E-5
+ 0BUSRB1                   1.E-5
+ 0BUSRC1                   1.E-5
+ 0BUS-OM                              6.00E4
+ 0      BUS-OM            33.333
+/REQUEST
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+/SOURCE
+19     { Data for U.M. begins with source type 19 keyed in columns 1-2
+ 0   { The zero does nothing.  In fact, a blank card would suffice for DC-35
+BLANK card ending U.M. header (3rd of 3 non-comment cards of Class-1 U.M. data)
+ 4 1 1111BUS-OM       2 0.06                       0.18850   { 1st machine table
+0.0           0.020291      0
+0.0           0.020291      0
+0.063         0.0001911     BUS-A1            1 0.0           { 1st winding card
+0.063         0.0003925     BUS-B1            1 0.0
+0.063         0.0003925     BUS-C1            1 0.0
+0.083         0.0003925     BUSRB1            1 0.0
+0.083         0.0003925     BUSRC1            1 0.0
+0.083         0.0003925     BUSRA1            1 0.0 { 6th and final winding card
+/PLOT
+ 2Arbitrary 78-character case title text of which this is an example, I hope.
+  First of two lines of 78-byte graph subheading text.
+  Second and final such line of graph subheading text.
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+BLANK card ends OUTPUT variable requests
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE
+C      5th  of  9  subcases continues series using  /UM  on  DC-35 U.M. data
+C     2nd of 6 examples that have the same solution but slightly different data
+C     Replace  /SOURCE  by  /UM  and omit all 3 non-comment header cards.  But
+C     then  U.M. HEADER CARD (UMHC)  must be added to define Class-1 data.
+ .000400    .004   { Take only 10 time steps -- enough to begin motor rotation
+       5      -1   { No plotting (which has nothing special to do with /UM use)
+/OUTPUT
+C BUS-A1BUS-B1BUS-C1BUS-A0BUS-OM   { Shorten output by eliminating node voltages
+/SOURCE
+14BUS-A0  180.0      60.0     0.0
+14BUS-B0  180.0      60.0     -120.0
+14BUS-C0  180.0      60.0     +120.0
+11BUS-OM-1 -6.00
+/BRANCH
+ 0      BUS-A0            1.0
+ 0      BUS-B0            1.0
+ 0      BUS-C0            1.0
+ 0BUS-A1BUS-A0            0.005 1.0
+ 0BUS-B1BUS-B0BUS-A1BUS-A0
+ 0BUS-C1BUS-C0BUS-A1BUS-A0
+ 0BUSRA1                   1.E-5
+ 0BUSRB1                   1.E-5
+ 0BUSRC1                   1.E-5
+ 0BUS-OM                              6.00E4
+ 0      BUS-OM            33.333
+/REQUEST
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+/UM
+C   Note that there is no Class-1 U.M. data;  ATP will supply the Type-19 card.
+ 4 1 1111BUS-OM       2 0.06                       0.18850   { 1st machine table
+0.0           0.020291      0
+0.0           0.020291      0
+0.063         0.0001911     BUS-A1            1 0.0           { 1st winding card
+0.063         0.0003925     BUS-B1            1 0.0
+0.063         0.0003925     BUS-C1            1 0.0
+0.083         0.0003925     BUSRB1            1 0.0
+0.083         0.0003925     BUSRC1            1 0.0
+0.083         0.0003925     BUSRA1            1 0.0 { 6th and final winding card
+C 14BUSRA1  180.0      60.0     0.0
+/PLOT
+  PRINTER PLOT  { Batch-mode plotting is for the line printer not vector-graphic
+/REQUEST
+U.M. HEADER CARD { To be followed by significant middle card of U.M. Class 1
+ 0                             { In fact, a blank card would suffice for DC-35
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+BLANK card ends OUTPUT variable requests
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE        ---  NEWSORT  ---
+C      6th  of  9  subcases continues series using  /UM  on  DC-35 U.M. data
+C     3rd of 6 examples that have the same solution but slightly different data
+C     Return to use of  /SOURCE  and full  Class-1  U.M. data as in 1st example.
+C     But add  U.M. HEADER CARD (UMHC)  which overrides the normal Class-1 data.
+C       See explanation of the preceding  NEWSORT  within  DCNEW-25.  There 
+C       is old (normal) data sorting logic and there is new data sorting 
+C       logic as summarized in the January, 1999, Can/Am newsletter.  Putting
+C       NEWSORT  on the case-separator card as shown has the effect of placing
+C       a minus sign on  SZBED  of  STARTUP,  and this selects the newer sorting
+C       alternative.  Either should handle  /UM  sorting.  The  NEWSORT  could
+C       be added to each subcase without significant change to the .LIS file.
+C       Text of  BLANK  cards will vary a little,  but that should be all.
+ .000400    .004   { Take only 10 time steps -- enough to begin motor rotation
+       5      -1   { No plotting (which has nothing special to do with /UM use)
+/OUTPUT
+C BUS-A1BUS-B1BUS-C1BUS-A0BUS-OM   { Shorten output by eliminating node voltages
+/SOURCE
+14BUS-A0  180.0      60.0     0.0
+14BUS-B0  180.0      60.0     -120.0
+14BUS-C0  180.0      60.0     +120.0
+11BUS-OM-1 -6.00
+/BRANCH
+ 0      BUS-A0            1.0
+ 0      BUS-B0            1.0
+ 0      BUS-C0            1.0
+ 0BUS-A1BUS-A0            0.005 1.0
+ 0BUS-B1BUS-B0BUS-A1BUS-A0
+ 0BUS-C1BUS-C0BUS-A1BUS-A0
+ 0BUSRA1                   1.E-5
+ 0BUSRB1                   1.E-5
+ 0BUSRC1                   1.E-5
+ 0BUS-OM                              6.00E4
+ 0      BUS-OM            33.333
+/REQUEST
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+U.M. HEADER CARD { To be followed by significant middle card of U.M. Class 1
+ 0                             { In fact, a blank card would suffice for DC-35
+/SOURCE
+C    Any number of comments should be legal anywhere within Class-1 U.M. data
+C    as now begins.  Because of UMHC (U.M. HEADER CARD) use,  only the first of
+C    the 3 non-comment lines of Class-1 U.M. data ever will be seen. The crucial
+C    2nd will be replaced by the card following the UMHC declaration,  and the
+C    blank 3rd card is read and discarded,  so will not been seen in the .LIS
+C    file.  Yet, it is required.  Even though not-used,  the 3rd is checked
+C    for being blank,  and execution will be halted if it is not so.  Add "XXX"
+C    at the start of the 2nd to emphasize that content is arbitrary: 
+19     { Data for U.M. begins with source type 19 keyed in columns 1-2
+XXX 0  { 2nd of 3 non-comment header lines for U.M. will be replaced by UMHC crd
+BLANK card ending U.M. header (3rd of 3 never will been seen in .LIS file)
+ 4 1 1111BUS-OM       2 0.06                       0.18850   { 1st machine table
+0.0           0.020291      0
+0.0           0.020291      0
+0.063         0.0001911     BUS-A1            1 0.0           { 1st winding card
+0.063         0.0003925     BUS-B1            1 0.0
+0.063         0.0003925     BUS-C1            1 0.0
+0.083         0.0003925     BUSRB1            1 0.0
+0.083         0.0003925     BUSRC1            1 0.0
+0.083         0.0003925     BUSRA1            1 0.0 { 6th and final winding card
+/PLOT
+ 2Arbitrary 78-character case title text of which this is an example, I hope.
+  First of two lines of 78-byte graph subheading text.
+  Second and final such line of graph subheading text.
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+BLANK card ends OUTPUT variable requests
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE
+C      7th  of  9  subcases continues series using  /UM  on  DC-35 U.M. data
+C     4th of 6 examples that have the same solution but slightly different data
+C     Data of the preceding 3rd example has been massaged.  First, "/" cards
+C     for sorting have been removed to demonstrate that UMHC use does not
+C     require sorting.  The full 3-card Class-1 U.M. data has been replaced
+C     by the special Type-19 summary line which will refer to UMHC for the
+C     missing 2nd nonblank card of Class-1 data.  Finally,  since no sorting
+C     to insert the blank card ending U.M. data,  this must be added manually.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+U.M. HEADER CARD { To be followed by significant middle card of U.M. Class 1
+ 0                             { In fact, a blank card would suffice for DC-35
+ .000400    .004   { Take only 10 time steps -- enough to begin motor rotation
+       5      -1   { No plotting (which has nothing special to do with /UM use)
+ 0      BUS-A0            1.0
+ 0      BUS-B0            1.0
+ 0      BUS-C0            1.0
+ 0BUS-A1BUS-A0            0.005 1.0
+ 0BUS-B1BUS-B0BUS-A1BUS-A0
+ 0BUS-C1BUS-C0BUS-A1BUS-A0
+ 0BUSRA1                   1.E-5
+ 0BUSRB1                   1.E-5
+ 0BUSRC1                   1.E-5
+ 0BUS-OM                              6.00E4
+ 0      BUS-OM            33.333
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+14BUS-A0  180.0      60.0     0.0
+14BUS-B0  180.0      60.0     -120.0
+14BUS-C0  180.0      60.0     +120.0
+11BUS-OM-1 -6.00
+19 { Class-1 U.M. data has been omitted WSM
+ 4 1 1111BUS-OM       2 0.06                       0.18850   { 1st machine table
+0.0           0.020291      0
+0.0           0.020291      0
+0.063         0.0001911     BUS-A1            1 0.0           { 1st winding card
+0.063         0.0003925     BUS-B1            1 0.0
+0.063         0.0003925     BUS-C1            1 0.0
+0.083         0.0003925     BUSRB1            1 0.0
+0.083         0.0003925     BUSRC1            1 0.0
+0.083         0.0003925     BUSRA1            1 0.0 { 6th and final winding card
+BLANK card ends U.M. data
+BLANK terminates the last SOURCE card
+C BUS-A1BUS-B1BUS-C1BUS-A0BUS-OM   { Shorten output by eliminating node voltages
+BLANK card ends OUTPUT variable requests
+ 2Arbitrary 78-character case title text of which this is an example, I hope.
+  First of two lines of 78-byte graph subheading text.
+  Second and final such line of graph subheading text.
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE
+C      8th  of  9  subcases continues series using  /UM  on  DC-35 U.M. data
+C     5th of 6 subcases that have the same solution but slightly different data
+C     Data is like the 2nd example except that a second and third disconnected
+C     machine has been added to illustrate multi-machine use for 3 machines.
+ .000400    .004   { Take only 10 time steps -- enough to begin motor rotation
+       5      -1   { No plotting (which has nothing special to do with /UM use)
+/OUTPUT
+C BUS-A1BUS-B1BUS-C1BUS-A0BUS-OM   { Shorten output by eliminating node voltages
+/SOURCE
+14BUS-A0  180.0      60.0     0.0
+14BUS-B0  180.0      60.0     -120.0
+14BUS-C0  180.0      60.0     +120.0
+11BUS-OM-1 -6.00
+/BRANCH
+ 0      BUS-A0            1.0
+ 0      BUS-B0            1.0
+ 0      BUS-C0            1.0
+ 0BUS-A1BUS-A0            0.005 1.0
+ 0BUS-B1BUS-B0BUS-A1BUS-A0
+ 0BUS-C1BUS-C0BUS-A1BUS-A0
+ 0BUSRA1                   1.E-5
+ 0BUSRB1                   1.E-5
+ 0BUSRC1                   1.E-5
+ 0BUS-OM                              6.00E4
+ 0      BUS-OM            33.333
+/REQUEST
+U.M. HEADER CARD { To be followed by significant middle card of U.M. Class 1
+ 0                             { In fact, a blank card would suffice for DC-35
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+/SOURCE
+19 { Class-1 U.M. data has been omitted (this card is needed because of /SOURCE)
+ 4 1 1111BUS-OM       2 0.06                       0.18850   { 1st machine table
+0.0           0.020291      0
+0.0           0.020291      0
+0.063         0.0001911     BUS-A1            1 0.0           { 1st winding card
+0.063         0.0003925     BUS-B1            1 0.0
+0.063         0.0003925     BUS-C1            1 0.0
+0.083         0.0003925     BUSRB1            1 0.0
+0.083         0.0003925     BUSRC1            1 0.0
+0.083         0.0003925     BUSRA1            1 0.0 { 6th and final winding card
+C 14BUSRA1  180.0      60.0     0.0
+/PLOT
+  PRINTER PLOT  { Batch-mode plotting is for the line printer not vector-graphic
+C  ----------------  Done with data of 1st (real) U.M.  Begin data of 2nd:
+C  2nd, unused U.M. has the same data as the 1st,  but it is disconnected,
+C  so should not affect the solution.  Outputs have been suppressed.  For
+C  variety,  this U.M. still uses  /UM  whereas the first has been converted
+C  to  /SOURCE  followed by the special Type-19 header card.  Note that the
+C  Type-19 card is mandatory because any source might follow  /SOURCE  whereas
+C  only U.M. data can follow  /UM  (i.e., the "19" is needed for recognition
+C  as U.M. data).  For the 2nd, disconnected machine,  note that the original
+C  A3  text  BUS  has become  GUS  everywhere.  To restore the 9 outputs of
+C  the 2nd machine,  add  "111"  to cols. 7-9 of the card immediately following
+C  the  /UM  declaaration,  and change  "0"  to  "1"  in column 47 of each of
+C  the 6 winding cards that end machine data.  If this is done,  output consists
+C  of 2 lines each time step,  and the two will be identical.
+/UM
+ 4 1 1   GUS-OM       2 0.06                       0.18850   { 1st machine table
+0.0           0.020291      0
+0.0           0.020291      0
+0.063         0.0001911     GUS-A1            0 0.0           { 1st winding card
+0.063         0.0003925     GUS-B1            0 0.0
+0.063         0.0003925     GUS-C1            0 0.0
+0.083         0.0003925     GUSRB1            0 0.0
+0.083         0.0003925     GUSRC1            0 0.0
+0.083         0.0003925     GUSRA1            0 0.0 { 6th and final winding card
+/BRANCH
+ 0      GUS-A0            1.0
+ 0      GUS-B0            1.0
+ 0      GUS-C0            1.0
+ 0GUS-A1GUS-A0            0.005 1.0
+ 0GUS-B1GUS-B0GUS-A1GUS-A0
+ 0GUS-C1GUS-C0GUS-A1GUS-A0
+ 0GUSRA1                   1.E-5
+ 0GUSRB1                   1.E-5
+ 0GUSRC1                   1.E-5
+ 0GUS-OM                              6.00E4
+ 0      GUS-OM            33.333
+/SOURCE
+14GUS-A0  180.0      60.0     0.0
+14GUS-B0  180.0      60.0     -120.0
+14GUS-C0  180.0      60.0     +120.0
+11GUS-OM-1 -6.00
+C  ----------------  Done with data of 2nd U.M.  Begin data of 3rd:
+C  3rd, unused U.M. has the same data as the 1st,  but it is disconnected,
+C  so should not affect the solution.  Outputs have been suppressed.  Etc.
+C  (like the 2nd except that the original  BUS  --->  MUS  here).
+/UM
+ 4 1 1   MUS-OM       2 0.06                       0.18850   { 1st machine table
+0.0           0.020291      0
+0.0           0.020291      0
+0.063         0.0001911     MUS-A1            0 0.0           { 1st winding card
+0.063         0.0003925     MUS-B1            0 0.0
+0.063         0.0003925     MUS-C1            0 0.0
+0.083         0.0003925     MUSRB1            0 0.0
+0.083         0.0003925     MUSRC1            0 0.0
+0.083         0.0003925     MUSRA1            0 0.0 { 6th and final winding card
+/BRANCH
+ 0      MUS-A0            1.0
+ 0      MUS-B0            1.0
+ 0      MUS-C0            1.0
+ 0MUS-A1MUS-A0            0.005 1.0
+ 0MUS-B1MUS-B0MUS-A1MUS-A0
+ 0MUS-C1MUS-C0MUS-A1MUS-A0
+ 0MUSRA1                   1.E-5
+ 0MUSRB1                   1.E-5
+ 0MUSRC1                   1.E-5
+ 0MUS-OM                              6.00E4
+ 0      MUS-OM            33.333
+/SOURCE
+14MUS-A0  180.0      60.0     0.0
+14MUS-B0  180.0      60.0     -120.0
+14MUS-C0  180.0      60.0     +120.0
+11MUS-OM-1 -6.00
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+BLANK card ends OUTPUT variable requests
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE
+C      9th  of  9  subcases ends the series using  /UM  on  DC-35 U.M. data
+C     6th of 6 examples that have the same solution but slightly different data
+C     Data is the same as the 2nd example except that  /UM  data has been moved
+C     to a  $INCLUDE  file.  Use or non-use of  $INCLUDE  should have no effect,
+C     and this demonstrates none for this simplest, first level of  $INCLUDE.
+C       Enhancement by Gabor Furst.  WSM's single  $INCLUDE  was replaced by
+C       two for more generality.  A second induction motor was added to show
+C       that this is possible.  Mr. Furst observed the following on  9 April
+C       2007:  "I thought we could have this sub case with two rather than
+C       one  $INCLUDE file.  I attach my version of this, which demonstrates
+C       how adding another machine is simply adding another $INCLUDE file."
+C       Mr. Furst simulated to  Tmax = 1.044 seconds  but program developers
+C       truncate this drastically (to 10 steps) to speed execution.  This is
+C       just enough to start the rotors and show approximate balance.  To see
+C       the entire settling into the steady state,  restore the longer T-max,
+C       remove the minus sign from  IPLOT  immediately below T-max,  and
+C       activate the batch-mode plot card (now omitted by $DISABLE).  Finally,
+C       control printout (every 5th step for IOUT is a lot, for realistic use).
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+ .000400    .004   { Take only 10 time steps -- enough to begin motor rotation
+       5      -1   { No plotting (which has nothing special to do with /UM use)
+/OUTPUT
+C BUS-A1BUS-B1BUS-C1BUS-A0BUS-OM   { Shorten output by eliminating node voltages
+/SOURCE
+14BUS-A0  180.0      60.0     0.0
+14BUS-B0  180.0      60.0     -120.0
+14BUS-C0  180.0      60.0     +120.0
+11BUS-OM-1 -6.00
+14BUS-A3  180.0      60.0     0.0
+14BUS-B3  180.0      60.0     -120.0
+14BUS-C3  180.0      60.0     +120.0
+11BUS-3M-1 -6.00
+/BRANCH
+C the following branch records are transferred to $INCLUDE  dc33inc1.dat
+C  0      BUS-A0            1.0    
+C  0      BUS-B0            1.0
+C 0      BUS-C0            1.0
+C 0BUS-A1BUS-A0            0.005 1.0C
+C 0BUS-B1BUS-B0BUS-A1BUS-A0
+C 0BUS-C1BUS-C0BUS-A1BUS-A0
+C 0BUSRA1                   1.E-5
+C 0BUSRB1                   1.E-5
+C 0BUSRC1                   1.E-5
+C 0BUS-OM                              6.00E4
+C 0      BUS-OM            33.33
+C
+ 0      BUS-A3            1.0
+ 0      BUS-B3            1.0
+ 0      BUS-C3            1.0
+ 0BUS-A4BUS-A3            0.005 1.0
+ 0BUS-B4BUS-B3BUS-A4BUS-A3
+ 0BUS-C4BUS-C0BUS-A4BUS-A3
+ 0BUSRA4                   1.E-5
+ 0BUSRB4                   1.E-5
+ 0BUSRC4                   1.E-5
+ 0BUS-3M                              6.00E4
+ 0      BUS-3M            33.333
+$INCLUDE,  dc33inc1.dat, { Separate file for /UM followed by all data for U.M. 1
+$INCLUDE,  dc33inc2.dat, { Separate file for /UM followed by all data for U.M. 2
+C   About the preceding data modularization,  there is lack of balance.  This
+C   is intentional.  Whereas  DC33INC1  has  /BRANCH  data,  DC33INC2  has none.
+C   Each also involves  /REQUEST  which precedes a  UMHC  request.  Since only
+C   one has meaning, expect rejection accompanied by a warning message for the
+C   2nd of the two.
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+BLANK card ends OUTPUT variable requests
+  CALCOMP PLOT
+$DISABLE    { The following plot card assumes use of Gabor Furst's longer T-max
+ 193 .1 0.0 1.0         UM-1  OMEGM UM-2  OMEGM Induction motor w in [rad/sec]
+$ENABLE
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE
+BLANK

@@ -1,0 +1,260 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-46
+C        This is the 2nd half of the DC-45/46 matched pair,  which together give
+C        an approximation to the total of  DC-33.   Postprocessing using TACS is
+C        involved.  But note that here we skip every other point.  Also,  we use
+C        DELTAT  is an independent,  predictable fashion,  as the named delay on
+C        a supplemental device that delays the  signal  GEN  by  one  time step.
+C        For answers that exactly agree with DC-33,  decrease  DELTAT  from  100
+C        to  50 microsec,  and convert  ",2,"  to  ",1,"  on  POSTPROCESS  card.
+C             26 June 1995,  modify as will be described in the July newsletter.
+C             Original data case will be copied below.    New 2nd subcase added.
+C  ---  template for next card.   MULPPF  LUNPPF  L63TYP
+POSTPROCESS PLOT FILE                  2      63       3
+$OPEN,  UNIT=63   FILE=[]dc45.pl4  !      { Expected to be C-like (L4BYTE = 1)
+ .000100    .050  { Note DELTAT is twice that of DC-45, since use every 2nd step
+       1       1       0       0       1      -1       0       2
+       5       5      20      20      50      50
+TACS STAND ALONE
+ 1FLUX    +GEN
+       1.0
+       0.0       1.0
+ 1NRG     +POWER
+       1.0
+       0.0       1.0
+11GEN            1.0
+11CURR           2.0
+99POWER   = GEN * ( -CURR )
+33GEN   CURR  POWER FLUX  GEN_1 NRG
+C  The following transport delay copies  GEN,  only delays the output by  DELTAT
+C     78901234567890123456789012345678901234567890123456789012345678901234567890
+99GEN_1 53+GEN { Type-53 supplemental device with named delay} .001 DELTAT
+C  Step     Time         GEN         CURR        POWER        FLUX         GEN_1
+C    0  0.00000E+00  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00
+C    1  1.00000E-04  3.76732E+02-1.04694E+00 3.94417E+02 1.88366E-02 0.00000E+00
+C    2  2.00000E-04  3.75929E+02-1.04552E+00 3.93040E+02 5.64697E-02 3.76732E+02
+C    3  3.00000E-04  3.74591E+02-1.08895E+00 4.07913E+02 9.39957E-02 3.75929E+02
+BLANK card ending all TACS data cards
+C  400  4.00000E-02 -3.04999E+02 1.07014E+00 3.26391E+02 5.68879E-01-2.96431E+02
+C  450  4.50000E-02 -1.16499E+02 2.76576E+00 3.22210E+02-9.69816E-01-1.29930E+02
+C  500  5.00000E-02  3.77000E+02-1.43750E+00 5.41938E+02-1.88500E-02 3.76732E+02
+C      Row   Name             Minimum            Maximum             Time of min
+C        1    GEN      -3.7700000000E+02    3.7700000000E+02            0.025000
+C        2    CURR     -3.4999091625E+00    3.4999091625E+00            0.037500
+C        3    POWER    -3.4019847371E+02    5.8499138215E+02            0.005200
+C        4    FLUX     -1.0187551143E+00    9.8105511427E-01            0.012500
+C        5    GEN_1    -3.7700000000E+02    3.7697024536E+02            0.025100
+C        6    NRG       0.0000000000E+00    1.3570878894E+01            0.000000
+  PRINTER PLOT
+ 144 2. 0.0 20.         POWER                    { Axis limits: (-3.402,  5.850)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-46
+C        2nd  of 5 subcases produces the same solution,  but illustrates the new
+C        Type-25 TACS sources within a  TACS HYBRID  framework.  Zero for LUNPPF
+C        switches the I/O unit from 22 (LUNIT2 of preceding case) to the default 
+C        number 63.  The  $OPEN  must follow the  PPF declaration that makes
+C        LUNPPF = 63  since for C-like files,  this is needed for  CIMAG2  to
+C        define the handle  LHTACS  as required by  POSTPF  (POSTP1  &  POSTP2). 
+$CLOSE,  UNIT=63  STATUS=KEEP     { Disconnect file of preceding subcase 
+C   Template for next card.       MULPPF  LUNPPF  L63TYP
+POSTPROCESS PLOT FILE                  2               3
+$OPEN,  UNIT=63   FILE=[]dc45.pl4  !      { Expected to be C-like (L4BYTE = 1)
+ .000100    .050  { Note DELTAT is twice that of DC-45, since use every 2nd step
+       1       1       0       0       1      -1       0       2
+       5       5      20      20      50      50
+TACS HYBRID
+ 1FLUX    +GEN
+       1.0
+       0.0       1.0
+ 1NRG     +POWER
+       1.0
+       0.0       1.0
+25GEN            1.0  { 1st of 2 sources is defined by 1st signal of .PL4 file
+25CURR           2.0  { 2nd of 2 sources is defined by 2nd signal of .PL4 file
+99POWER   = GEN * ( -CURR )
+33GEN   CURR  POWER FLUX  GEN_1 NRG
+C  The following transport delay copies  GEN,  only delays the output by  DELTAT
+C     78901234567890123456789012345678901234567890123456789012345678901234567890
+99GEN_1 53+GEN { Type-53 supplemental device with named delay} .001 DELTAT
+BLANK card ending all TACS data cards
+  BUS3                       1.0                                                
+BLANK card ending electric network branches
+BLANK card ending switches
+11BUS3           1.0                                                            
+BLANK card ending electric network source cards.
+BLANK card ending node voltage outputs
+  PRINTER PLOT
+ 194 2. 0.0 20.         TACS  POWER
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-46
+C        3rd  of 5 subcases produces the same solution,  but illustrates the new
+C        connection to a plot file from MODELS.  Just like with TACS, first line
+C        of plot data at time t=0  is ignored.  It is not required to use MODELS
+C        as STAND ALONE, but can also be mixed with solution of a circuit.
+C   Template for next card.       MULPPF  LUNPPF  L63TYP
+POSTPROCESS PLOT FILE                  2      63       3
+$OPEN,  UNIT=63   FILE=[]dc45.pl4  !      { Expected to be C-like (L4BYTE = 1)
+ .000100    .050  { Note DELTAT is twice that of DC-45, since use every 2nd step
+       1       1       0       0       1      -1       0       2
+       5       5      20      20      50      50
+MODELS STAND ALONE
+INPUT gen {PL4(1)}, curr {PL4(2)}
+MODEL postprocess_example
+  INPUT voltage, current
+  VAR flux, energy, power, gen_1
+  INIT
+    integral(voltage) := 0
+    integral(power)   := 0
+    histdef(voltage)  := 0  -- needed for the delay function at t=0
+  ENDINIT
+  EXEC
+    flux   := integral(voltage)
+    energy := integral(power)
+    power  := voltage * current
+    gen_1  := delay(voltage, timestep)
+  ENDEXEC
+ENDMODEL
+USE postprocess_example AS test
+  INPUT voltage := gen, current := -curr
+ENDUSE
+RECORD gen        AS gen       curr        AS curr
+       test.power AS power     test.flux   AS flux
+       test.gen_1 AS gen_1     test.energy AS nrg
+ENDMODELS
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        4th  of 5 subcases is the same as the first except that a Pisa-format
+C        .PL4  file is being used rather than a conventional, old, C-like .PL4
+C         12 March 2002,  PPF was made compatible with Pisa-format C-like .PL4
+C         files.  In case the unit-63 .PL4  file is missing, it can be created 
+C         easily enough by simulation of DC-45.  Make sure  NEWPL4 in  STARTUP
+C         has value 2 before the simulation begins,  however.   When complete,
+C         rename  DC45.PL4  to  DC45PISA.PL4.  For PPF use,  note that  L63TYP
+C         has been changed from value 3  (conventional C-like file) to value 4
+C         (Pisa-format C-like):
+C  ---  template for next card.   MULPPF  LUNPPF  L63TYP
+POSTPROCESS PLOT FILE                  2      63       4   { 4 ==> Pisa-format
+$OPEN,  UNIT=63   FILE=[]dc45pisa.pl4  !    { Expected to be C-like (L4BYTE = 1)
+C         Note about preceding:  Use of "[]" first became available for a $OPEN
+C         file name on  14 December 2002.  Following subcase also illustrates.
+ .000100    .050  { Note DELTAT is twice that of DC-45, since use every 2nd step
+       1       1       0       0       1      -1       0       2
+       5       5      20      20      50      50
+TACS STAND ALONE
+ 1FLUX    +GEN
+       1.0
+       0.0       1.0
+ 1NRG     +POWER
+       1.0
+       0.0       1.0
+11GEN            1.0
+11CURR           2.0
+99POWER   = GEN * ( -CURR )
+33GEN   CURR  POWER FLUX  GEN_1 NRG
+C  The following transport delay copies  GEN,  only delays the output by  DELTAT
+C     78901234567890123456789012345678901234567890123456789012345678901234567890
+99GEN_1 53+GEN { Type-53 supplemental device with named delay} .001 DELTAT
+BLANK card ending all TACS data cards
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        5th  of 5 subcases is the same as the first except that a widexx-format
+C        .PL4  file is being used rather than a conventional, old, C-like .PL4
+C        11 December 2002, PPF was made compatible with widexx-format .PL4 file.
+C        In case the unit-63 .PL4  file is missing, it can be created easily
+C        Make sure  FMTPL4 in  STARTUP  has value "wide11" before the simulation
+C        begins,  however.   When complete,  rename  DC45.PL4  to  DC45WIDE.011
+C        For PPF use,  note that  L63TYP  has been changed from value 3  (for
+C        conventional C-like file) to value 5 (widexx-format).  About the 11,
+C        it should be explained that this is the program limit for optimal
+C        encoding.  A better comparison requires 12, but if used, ATP will
+C        drop the optimal and switch to normal E-field encoding.  So, a column
+C        width of 11 is used to produce the maximum precision while retaining
+C        the desired optimal encoding.  Using Mike Albert's free FC then will
+C        show perfect agreement between this  .LIS  output and the  .LIS  output
+C        of the first subcase except for 2 columns,  which will differ in the
+C        final digit or two.  Look for newsletter writing on this subject in
+C        the April, 2003, issue or later.  Mustafa Kizilcay made the request
+C        for  widexx  compatibility,  and this data proves that it works.  WSM.
+C  ---  template for next card.   MULPPF  LUNPPF  L63TYP
+POSTPROCESS PLOT FILE                  2      63       5
+$OPEN,  UNIT=63   FILE=[]dc45wide.011  STATUS=OLD  FORM=FORMATTED !
+ .000100    .050  { Note DELTAT is twice that of DC-45, since use every 2nd step
+       1       1       0       0       1      -1       0       2
+       5       5      20      20      50      50
+TACS STAND ALONE
+ 1FLUX    +GEN
+       1.0
+       0.0       1.0
+ 1NRG     +POWER
+       1.0
+       0.0       1.0
+11GEN            1.0
+11CURR           2.0
+99POWER   = GEN * ( -CURR )
+33GEN   CURR  POWER FLUX  GEN_1 NRG
+C  The following transport delay copies  GEN,  only delays the output by  DELTAT
+C     78901234567890123456789012345678901234567890123456789012345678901234567890
+99GEN_1 53+GEN { Type-53 supplemental device with named delay} .001 DELTAT
+BLANK card ending all TACS data cards
+  PRINTER PLOT
+ 144 2. 0.0 20.         POWER                    { Axis limits: (-3.402,  5.850)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK 
+EOF
+
+
+
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-46
+C        This is the 2nd half of the DC-45/46 matched pair,  which together give
+C        an approximation to the total of  DC-33.   Postprocessing using TACS is
+C        involved.  But note that here we skip every other point.  Also,  we use
+C        DELTAT  is an independent,  predictable fashion,  as the named delay on
+C        a supplemental device that delays the  signal  GEN  by  one  time step.
+C        For answers that exactly agree with DC-33,  decrease  DELTAT  from  100
+C        to  50 microsec,  and convert  ",2,"  to  ",1,"  on  POSTPROCESS  card.
+$OPEN,  UNIT=22   FILE=dc45.pl4  !      { Expected to be C-like (L4BYTE = 1)
+POSTPROCESS PLOT FILE, 2,  { Use every other step from ".PL4" plot file of DC-45
+ .000100    .050  { Note DELTAT is twice that of DC-45, since use every 2nd step
+       1       1       0       0       1      -1       0       2
+       5       5      20      20      50      50
+TACS STAND ALONE
+ 1FLUX    +GEN
+       1.0
+       0.0       1.0
+ 1NRG     +POWER
+       1.0
+       0.0       1.0
+11GEN            1.0
+11CURR           2.0
+99POWER   = GEN * ( -CURR )
+33GEN   CURR  POWER FLUX  GEN_1 NRG
+C  The following transport delay copies  GEN,  only delays the output by  DELTAT
+C     78901234567890123456789012345678901234567890123456789012345678901234567890
+99GEN_1 53+GEN { Type-53 supplemental device with named delay} .001 DELTAT
+C  Step     Time         GEN         CURR        POWER        FLUX         GEN_1
+C    0  0.00000E+00  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00
+C    1  1.00000E-04  3.76732E+02-1.04694E+00 3.94417E+02 1.88366E-02 0.00000E+00
+C    2  2.00000E-04  3.75929E+02-1.04552E+00 3.93040E+02 5.64697E-02 3.76732E+02
+C    3  3.00000E-04  3.74591E+02-1.08895E+00 4.07913E+02 9.39957E-02 3.75929E+02
+BLANK card ending all TACS data cards
+C  400  4.00000E-02 -3.04999E+02 1.07014E+00 3.26391E+02 5.68879E-01-2.96431E+02
+C  450  4.50000E-02 -1.16499E+02 2.76576E+00 3.22210E+02-9.69816E-01-1.29930E+02
+C  500  5.00000E-02  3.77000E+02-1.43750E+00 5.41938E+02-1.88500E-02 3.76732E+02
+C      Row   Name             Minimum            Maximum             Time of min
+C        1    GEN      -3.7700000000E+02    3.7700000000E+02            0.025000
+C        2    CURR     -3.4999091625E+00    3.4999091625E+00            0.037500
+C        3    POWER    -3.4019847371E+02    5.8499138215E+02            0.005200
+C        4    FLUX     -1.0187551143E+00    9.8105511427E-01            0.012500
+C        5    GEN_1    -3.7700000000E+02    3.7697024536E+02            0.025100
+C        6    NRG       0.0000000000E+00    1.3570878894E+01            0.000000
+  PRINTER PLOT
+ 144 2. 0.0 20.         POWER                    { Axis limits: (-3.402,  5.850)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+ 
+

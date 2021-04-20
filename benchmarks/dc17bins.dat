@@ -1,0 +1,60 @@
+/SOURCE
+14GEN           377.       60.                                 -1.
+/TACS
+TACS HYBRID
+ 1FLUX    +GEN
+       1.0
+       0.0       1.0
+90GEN
+91GROUND
+99CURR          -1.0*     GROUND
+33FLUX  GEN   GROUNDCURR
+/OUTPUT
+  GEN
+/PLOT
+C Last step:  400      .02   116.4994069   2.765761424  -2.76576141  .9416257618
+C Last step continued .....:               116.4994069  2.765761424  -2.76576142
+C Final 5 max. : 3.499909256  .9905492104  376.9925583  3.499613141  3.499909256
+C Associated times :   .0125       .00415       .01665       .00415        .0125
+  CALCOMP PLOT
+ 2Arbitrary 78-character case title text of which this is an example, I hope.
+  First of two lines of 78-byte graph subheading text.
+  Second and final such line of graph subheading text.
+ 194 2. 0.0 20.         TACS  CURR              ABCDEFGHIJKLMNOP1234567890123456
+  X-Y PLOT    Horizontal Axis label123
+     10.    -1.1     1.1
+      8.    -4.0     4.0
+ 194 4. 0.0 20.         TACS  FLUX  TACS  CURR  Graph heading---Vertical axis la
+  X-Y PLOT    Horizontal Axis label123
+   9999.    -1.1     1.1     "9999." returns to conventional (vs. time) plotting
+      8.    -4.0     4.0
+  PRINTER PLOT
+ 194 4. 0.0 20.         TACS  CURR                { Axis limits: (-3.500, 3.500)
+C    Now that all plotting is done with, let's illustrate the three declarations
+C    that will choose the destination  of  any  subsequent  "CALCOMP PLOT"  use:
+  SCREEN PLOT  { If a vector plot were to follow, it would go only to the screen
+  PEN PLOT     { If a vector plot were to follow, ... go only to CalComp plotter
+  SCREEN PEN   { If a vector plot were to follow, .. go to both screen & plotter
+C         The preceding 3 declarations really could only be tested by a user who
+C         had both a vector-graphic screen and a CalComp plotter.  Hence no use.
+C    The following active card of DC-33 must be disabled for $INSERT use.  The
+C    problem is this.  For  $INCLUDE,  the  /LOAD FLOW  disappears during data
+C    assembly,  leaving just comment cards that have nothing to do with any load
+C    flow.  So,  they were tolerated.  But not so for  $INSERT  which retains
+C    the data for this non-existent feature.  So, remove entire block:
+C /LOAD FLOW
+/BRANCH
+96GROUNDGEN                8888.       1.E-9                                   1
+             1.0            -0.7
+             2.0             0.9
+             3.5             1.0
+           9999.
+/REQUEST
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+/INITIAL
+ 2GROUND             0. { Node voltage initial condition in fact changes nothing
+C  Initial conditions really are not a part of this problem, although we do want
+C  to illustrate that they,  too,  can be sorted,  and inserted after  /LOADFLOW 
+C  The preceding redefinition of node voltage  at  GROUND  changes zero to zero.
+/SWITCH
+  GROUND                                              MEASURING                1

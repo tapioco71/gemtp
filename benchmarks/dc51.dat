@@ -1,0 +1,753 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-51
+C      "FREQUENCY SCAN"  use,  with subsequent plotting of phasors vs. frequency
+C      This test cases uses uniform spacing;  See  DC-52  for geometric spacing.
+C      Because  IOUTLP = 2,  the solutions for step numbers 3 and 5 are omitted.
+C      1st of 3  data subcases (2 LINE MODEL FREQUENCY SCAN, LMFS, cases follow)
+FREQUENCY SCAN, 60., 20., 130., 0,       { 60 < f < 130 Hz  in  20-Hz increments
+     0.1     0.0
+       2       1       1     { IOUTLP (cols. 1-8) only prints every other point
+C      Note col-80 punch of "1" on following branch to output current.  This was
+C      added in March of 1998 when original limitation to node volt was removed.
+C      In  the output,  this current should be the same as node voltage at  CUR.
+C      The two quadruplets will be found side by side, ending the output vector.
+  LOAD  MID                  .99   1.0                                         1
+C         The following is a sampling resistor to produce a node voltage that is
+C         proportional to branch current.   Note   1.0 = .99 + .01  (next card):
+  MID                        .01
+C         The following is a measurement transformer.   It  is used to produce a
+C         node voltage  (node "CUR")  that is proportional to the branch current
+C         of interest.   For minimum error, leakage impedance should, of course,
+C         be small.   Magnetizing impedance is infinite.  The turns ratio equals
+C         the resistance of sampling resistor.   See end  Sec. 1.0G3  Rule Book.
+  TRANSFORMER                         TRAN
+            9999
+ 1MID                      .0005         1.0
+ 2CUR                             .001  100.
+BLANK card ending branches
+BLANK card ending (here, non-existent) switches
+C     The following request for complete output  (rather than the default choice
+C     of magnitude only) is read as part of source data, but it must precede the
+C     first source.  This is for FS use  (HFS allows it anywhere among sources).
+  BOTH POLAR AND RECTANGULAR  { Request for (in order): mag, angle, real, imag
+C     Preceding is one of 3 alternatives.  The other two are, after commented:
+C POLAR OUTPUT VARIABLES { 2nd of 3 alternatives for output gives mag, angle
+C RECTANGULAR OUTPUT VARIABLES { 3rd of 3 alternative outputs gives real, imag
+14LOAD          100.       60.                                     -1.
+BLANK card ending sources
+C Column headings for the  5   output variables follow.  These are divided ...
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   1     output variables are branch currents (flowing from the upper node to the lower node);
+C  For each variable, magnitude is 1st, angle is 2nd, real part is 3rd, and imaginary is 4th.  All 4 are labeled identically, note.
+C Step   F [Hz]       LOAD       LOAD       LOAD       LOAD       MID        MID        MID        MID        TRAN       TRAN
+C                     TERRA      TERRA      TERRA      TERRA
+C
+C                     TRAN       TRAN       CUR        CUR        CUR        CUR        LOAD       LOAD       LOAD       LOAD
+C                                           TERRA      TERRA      TERRA      TERRA      MID        MID        MID        MID
+C   1       60.        100.        0.0       100.        0.0  .93571522 -20.655997 .875562973 -.33007946  .93571522 -20.655997
+C                   .875562973 -.33007946  93.571522 -20.655997 87.5562973 -33.007946  93.571522 -20.655997 87.5562973 -33.007946
+C   The preceding agrees with what existed for many years prior to March of 1998:
+C     mag:LOAD        angle:LOAD      mag:MID         angle:MID       mag:TRAN        angle:TRAN      mag:CUR         angle:CUR
+C     real:LOAD        imag:LOAD      real:MID         imag:MID       real:TRAN        imag:TRAN      real:CUR         imag:CUR
+C  -----  Output vector for step number  1.   Frequency = 6.00000000E+01  Hz.
+C    1.0000000E+02   0.0000000E+00   9.3571522E-01  -2.0655997E+01   9.3571522E-01  -2.0655997E+01   9.3571522E+01  -2.0655997E+01
+C    1.0000000E+02   0.0000000E+00   8.7556297E-01  -3.3007946E-01   8.7556297E-01  -3.3007946E-01   8.7556297E+01  -3.3007946E+01
+-5LOAD              { -5 ==> 2A6 name pairs for voltage differences (branch V)
+  MID   TRAN        {  0 ==> Request for the output of these node voltages
+-5CUR               { -5 ==> 2A6 name pairs for voltage differences (branch V)
+BLANK card ending output requests
+C  Printout for remaining steps follows.  Note steps 2 and 4 are missing (IOUT=2)
+C   3      100.        100.        0.0       100.        0.0 .846733016 -32.141908   .7169568 -.45047724 .846733016 -32.141908
+C                  .7169568 -.45047724 84.6733016 -32.141908   71.69568 -45.047724 84.6733016 -32.141908   71.69568 -45.047724
+C   5      140.        100.        0.0       100.        0.0 .750845344 -41.336343 .563768731 -.49591688 .750845344 -41.336343
+C                .563768731 -.49591688 75.0845344 -41.336343 56.3768731 -49.591688 75.0845344 -41.336343 56.3768731 -49.591688
+  PRINTER PLOT
+  F-SCAN COMPONENTS     MAG   ANGLE     { Access "mag" and "angle" next
+C 19630. 60.150.         CUR   mag   CUR   angle  { Axis limits: (-4.134,  9.357)
+ 18630. 60.150.         CUR         CUR         { Node voltage at CUR is branch voltage to ground
+C    The following card involves a deliberate spelling error in order to
+C    show how this results in rejection of the card:
+  F-SCAN COMPONENTS     REAL  IMxx      { Access "real" and "imag" next
+  F-SCAN COMPONENTS     REAL  IMAG      { Access "real" and "imag" next
+C 19630. 60.150.         CUR   real  CUR   imag   { Axis limits: (-4.959,  8.756)
+ 18630. 60.150.         CUR         CUR         { Node voltage at CUR is branch voltage to ground
+BLANK card ending plot cards
+BEGIN NEW DATA CASE                                                             
+C  2nd  of  3  data subcases.
+C  Illustration of  LINE MODEL FREQUENCY SCAN (LMFS).  For background of this  
+C  feature that was first available in ATP at the end of March, 1992, see the 
+C  story that appeared in the April, 1992, issue of Can/Am EMTP News. This new
+C  feature is to compare any "line model" with the exact Pi-model of a single 
+C  segment of overhead line over an arbitrary range of frequencies.  The user
+C  instructions are attached at the end of this test case.
+C  In the current case a single-circuit line generated by  JMARTI SETUP  is to 
+C  be tested.   
+C DISK PLOT DATA   { Has no effect as explained in Can/Am EMTP News of April, 1992
+C      Warning!  This is degenerate use for initial testing only.
+C                Note following card will produce scan of 2 points only:
+C LINE MODEL FREQUENCY SCAN,   60, , 599.9, 1, , , { f-begin, f-end, points/decade
+LINE MODEL FREQUENCY SCAN,   60, , 599.9, 1, , ,                           First
+  40.E-6  -.0600    60.                                                         
+       1       1       0       0       0       0       0       2                
+C   IOUT                  KSSOUT                            ICAT                
+$INCLUDE, []dc51fs3.dat
+$INCLUDE, []dc51fs3z.dat, JDA###, LMA###, JDB###, LMB###, JDC###, LMC###,
+C []dc51fs3p.dat
+C Unused!  -----  2nd of 2 file names is not used for this single-circuit case                                                                       
+C     Observation about the following is added  21 November 2003.  Normally, a  
+C     LINE CONSTANTS  declaration would begin the data since it is this choice
+C     (not  CC  or  CP) that is desired.  But when LMFS began,  LC  was the 
+C     only choice.  It seems to be the default choice.  Lack of the declaration
+C     here no longer is recommended, but it does demonstrate the default choice:
+C LINE CONSTANTS { Activate this comment to prove that the solution is unchanged  
+  1.3636 .05215  4         1.602  -20.75   50.     50.                          
+  1.3636 .05215  4         1.602  -19.25   50.     50.                          
+  2.3636 .05215  4         1.602  - 0.75   77.5    77.5                         
+  2.3636 .05215  4         1.602    0.75   77.5    77.5                         
+  3.3636 .05215  4         1.602   19.25   50.     50.                          
+  3.3636 .05215  4         1.602   20.75   50.     50.                          
+  0.5    2.61    4         0.386  -12.9    98.5    98.5                         
+  0.5    2.61    4         0.386   12.9    98.5    98.5                         
+BLANK card ennds conductor cards of  "LINE CONSTANTS"  data                    
+100.         5000.         1                  138.       1           1          
+BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+BLANK card ending batch-mode plot cards                    
+BEGIN NEW DATA CASE
+C  3rd  of  3  data subcases illustrates  LINE MODEL FREQUENCY SCAN (LMFS) for 
+C  an untransposed double-circuit line generated by  JMARTI SETUP.   
+C DISK PLOT DATA   { Has no effect as explained in Can/Am EMTP News of April, 1992
+C LINE MODEL FREQUENCY SCAN,   6, , 60000, 10, , , { f-begin, f-end, points/decade
+C    Preceding free-format alternative was used successfully for more than a
+C    decade.  2 September 2003,  replace it by this fixed-format alternative:
+C                                f-begin   del-f   f-end   #/dec  FUNDFS                  
+LINE MODEL FREQUENCY SCAN            6.0     0.0    6.E4      10
+  40.E-6  -.0600     60.                  1.E-15
+       1       1       0       0       0       0       0       2           
+C   IOUT                  KSSOUT                            ICAT
+$INCLUDE, []dc51fs6.dat   { 1st of 2 $INCLUDE contains line section to be tested
+$INCLUDE, []dc51fs6z.dat,MR02A# ,MR04A# ,MR02B# ,MR04B# ,MR02C# ,MR04C#,      $$
+C    MR02D# ,MR04D# ,MR02E# ,MR04E# ,MR02F# ,MR04F#
+C []dc51fs6p.dat
+C []dc51fs6m.dat
+C Raw  LINE CONSTANTS  data for the overhead transmission line being considered:
+  1.4138 .0497   4        1.603   -15.    52.0                          A1-1    
+  1.4138 .0497   4        1.603   -16.06  53.06                         A1-2    
+  1.4138 .0497   4        1.603   -13.94  53.06                         A1-3    
+  2.4138 .0497   4        1.603   -25.    83.0                          B1-1    
+  2.4138 .0497   4        1.603   -26.06  84.06                         B1-2    
+  2.4138 .0497   4        1.603   -23.94  84.06                         B1-3    
+  3.4138 .0497   4        1.603   -15.    114.0                         C1-1    
+  3.4138 .0497   4        1.603   -16.06  115.06                        C1-2    
+  3.4138 .0497   4        1.603   -13.94  115.06                        C1-3    
+  4.4138 .0497   4        1.603   15.     114.0                         A2-1    
+  4.4138 .0497   4        1.603   13.94   115.06                        A2-2    
+  4.4138 .0497   4        1.603   16.06   115.06                        A2-3    
+  5.4138 .0497   4        1.603   25.     83.0                          B2-1    
+  5.4138 .0497   4        1.603   23.94   84.06                         B2-2    
+  5.4138 .0497   4        1.603   26.06   84.06                         B2-3    
+  6.4138 .0497   4        1.603   15.     52.0                          C2-1    
+  6.4138 .0497   4        1.603   13.94   53.06                         C2-2    
+  6.4138 .0497   4        1.603   16.06   53.06                         C2-3    
+  0.5   3.56     4        .495    -7.0    150.7                         OHGW-L  
+  0.5   3.56     4        .495     7.0    150.7                         OHGW-R  
+BLANK CARD ENDING CONDUCTOR CARDS OF "LINE CONSTANTS" CASE
+ 100.       .001           1                  53.00      1           1 
+C RHO  ]              [FCAR]                [ DIST ]     S           T
+BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+  PRINTER PLOT
+ 186 .5 0.0 5.0         GENIA MAG               Marti Section   Z in Ohms
+ 196 .5 0.0 5.0         GENIA MAG               Equivalent Pi   Z in Ohms
+ 196 .5 0.0 5.0         GENIB % MAG             Error           Percent
+BLANK card ending batch-mode (CalComp) plot cards
+BEGIN NEW DATA CASE
+BLANK
+BEGIN NEW DATA CASE
+BLANK 
+EOF     { Instruct EMTP input code to ignore all following records of disk file
+
+
+
+
+       INSTRUCTIONS FOR USING  "LINE MODEL FREQUENCY SCAN (LMFS)"      
+
+
+
+     This is a new feature in the EMTP to compare any "line model"  with 
+the exact Pi-model of a single segment of overhead line over an arbitrary 
+range of frequencies.  The "line model" that is being tested can be any 
+combination of linear branches, such as lumped elements, lines (constant 
+distributed parameters, frequency-dependent representation of any type), 
+coupled R-L elements, etc. 
+
+     Set up an EMTP simulation data case similar to that of a "FREQUENCY SCAN" 
+(ATP Rule Book, pp. II-18 to II-21 ) as follows:
+
+  (1) Use a new special request card: LINE MODEL FREQUENCY SCAN (or LMFS).
+      The data fields and their format on this card are the same as those for 
+      the regular  "FREQUENCY SCAN" case:  FMIMFS, DELFFS, FMAXFS, NPD.  Leave
+      the data field for DeltaF blank, and enter the number of points per 
+      decade for the logarithmic (geometric) spacing as  NPD.  FMIMFS and 
+      FMAXFS are the beginning and the ending frequencies respectively.
+
+  (2) Input the  misc. data cards. 
+
+  (3) Input the branch cards for "line model" to be tested.
+
+  (4) Input the appropriate generic data files which consist of the needed 
+      branch cards and source cards by using $INCLUDE.  Also required on 
+      this card are the names of sending end and receiving end of each
+      phase of the line being tested.  Eight generic data files for 3-,
+      6- and 9-phase lines are provided along with the EMTP.  They are 
+      called  "linescan#?.brn".  "#" is the number of phases of the test 
+      line.  "?"  is either z (zero-sequence), or p (positive-sequence), or
+      m (mutual-coupling).  E.g., linescan6z.brn consists of the needed
+      branch cards and source cards for a  "6"-phase  "Z"ero-sequence 
+      impedance test.  Following is an example of the data cards for the
+      generic files which are needed for a 6-phase line LMFS case:
+
+                                                                      Col. 79-80
+$INCLUDE,linescanz6.brn,MR02A# ,MR04A# ,MR02B# ,MR04B# ,MR02C# ,MR04C#,      $$
+C    MR02D# ,MR04D# ,MR02E# ,MR04E# ,MR02F# ,MR04F# 
+C linescanp6.brn
+C linescanm6.brn
+
+      Note that 12 node names are needed for a 6-phase line: MR02A  and
+      MR04A are names of sending end and receiving end of the first phase 
+      respectively, etc.  "$$" in columns 79-80 indicate there is a
+      continuation card following the current $INCLUDE card.  "C linescanp6.brn" 
+      card provides the name of the file that EMTP can generate the needed 
+      branch and source cards for the positive-sequence impedance test case; 
+      and  "C linescanm6.brn" provides information for generating mutual-
+      coupling impedance test case.  One does not need the latter data card if 
+      the test line is a single circuit.
+
+  (5) Input the geometry data of a single segment of overhead line.  Prepare 
+      this line geometry data just like one does for the standard "LINE CONSTANTS" 
+      data except only ONE frequency card is needed.  This frequency card needs 
+      the following data:  RHO (earth resistivity), FCAR (Carson accuracy), 
+      DIST (length of the line), ISEG (segmentation option), MODAL 
+      (transposition of the line).  End this group of cards with a BLANK 
+      card ending frequency card.
+
+  (6) Input optional plot card(s).  E. g., 
+
+  PRINTER PLOT
+ 186 .2 0.0 5.0         GENIA MAG
+ 196 .2 0.0 5.0         GENIB % MAG
+
+      Like the "FREQUENCY SCAN" cases, the plotting of the node voltage output
+      variables are given the type of branch quantities.  The results of the 
+      tested line model are treated as branch voltages ("8" in column 4), those 
+      of the exact Pi-model are treated as branch current, so are the percentage 
+      errors ("9" in column 4.)
+
+  (7) Input the following three cards to end the data:
+  
+          BLANK CARD ENDING PLOT REQUESTS 
+          BEGIN NEW DATA CASE
+          BLANK
+
+
+     
+     Three frequency scan cases are run and three output files are generated
+with this single set of data to give the zero-sequence, positive-sequence, 
+and mutual (if multiple circuits) impedance check for the tested line model.  
+
+     The line printer output includes  tabulation of results of the requested
+node voltage output variables for the tested line model,  for the exact Pi-
+model, and the percentage errors.  Using  IOUT (misc. data card) to control
+the frequency of this tabulation.   Tabulation after 100 entries will be
+truncated.  Be careful with input of KSSOUT on the misc. data card.
+ 
+     Like the "FREQUENCY SCAN" cases, the plotting of the node voltage output
+variables are given the type of branch quantities.  The results of the tested
+line model are treated as branch voltages, those of the exact Pi-model are
+treated as branch current, so are the percentage errors.
+
+     If one wants to plot all the output variables, simply enter "ALL" to 
+the prompt:
+
+       SEND NODE NAME & OPT. A24 DESCR.  OR END (      ) :ALL
+
+then, provide information of number of phases and kind of impedance test at
+the prompt: 
+
+       SEND A2 FILE SPECIFICATION:3P 
+ 
+where "3" means 3-phase circuit, "P" means ploting of the results of 
+Positive-sequence impedance test.  TPPLOT at this point will automatically 
+attach the appropriate pre-existing, user-controlled,  plot data file 
+LMPLT3P.DAT (i.e. one of the LMPLT##.DAT files),  and complete the whole 
+set of postscript output.   In other words, the nodes specified in the
+LMPLT##.DAT defines what user means by  "ALL".                                
+
+
+                                                     Tsu-huei Liu
+                                                     March 24, 1992
+
+
+Solution of  DC51.LIS :
+---------------------
+
+   --- Pass 1.   Card = 19.   Ready to open $INCLUDE = dc51fs3.dat
+   --- Pass 1.   Card = 121.   Ready to open $INCLUDE = dc51fs3z.dat
+Alternative Transients Program (ATP), Salford 80386 translation.  All rights reserved by Can/Am user group of Portland, Oregon, USA.
+ Date (dd-mth-yy) and time of day (hh.mm.ss) = 30-Jul-93  09.55.41    Name of disk plot file, if any, is  D:37300955.pl4
+Consult the 800-page ATP Rule Book of the Can/Am EMTP User Group in Portland,  Oregon, USA.   Program is no older than July, 1992.
+Total size of LABCOM tables =  227363   INTEGER words.   VARDIM  List Sizes follow :    752   900  1500   150  7500   120
+  2100   5250  225  480  150  150 15000    60 10800   120    12    15   4800   1980   300   450 12000    9  1200   252     4   9600
+--------------------------------------------------+--------------------------------------------------------------------------------
+Descriptive interpretation of input data cards.   |  Input data card images are shown below, all 80 columns, character by character
+                                                  0         1         2         3         4         5         6         7         8
+                                                  012345678901234567890123456789012345678901234567890123456789012345678901234567890
+--------------------------------------------------+--------------------------------------------------------------------------------
+Marker card preceding new EMTP data case.         |BEGIN NEW DATA CASE
+Comment card.   KOMPAR = 1.                       |C  2nd  of  3  data subcases.
+Comment card.   KOMPAR = 1.                       |C  Illustration of  LINE MODEL FREQUENCY SCAN (LMFS).  For background of this
+Comment card.   KOMPAR = 1.                       |C  feature that was first available in ATP at the end of March, 1992, see the
+    <  <  <  Etc. (section removed)  >  >  >
+Blank card terminating frequency cards.           |BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+    1)  Freq [Hz] = 6.0000000E+01   Total network loss =  7.284400782006E+01
+    2)  Freq [Hz] = 6.0000000E+02   Total network loss =  5.660068288220E+02
+ 
+********************************************************************************
+*                                                                              *
+*       LINE MODEL FREQUENCY SCAN COMPARISON TABLE            30-Jul-93        *
+*              ZERO-SEQUENCE IMPEDANCE TEST                                    *
+*                                                                              *
+*******************************************************************************************
+ 
+                               LINE  MODEL  BEING  TESTED                             EXACT-PI MODEL                       % ERROR
+ 
+  FREQUENCY  NODE      MAG        ANG        REAL        IMAG          MAG        ANG        REAL       IMAG         PCTMAG  PCTANG
+ 
+  6.000E+01 GENIA   3.258E+02  8.126E+01   4.950E+01  3.220E+02     3.240E+02  8.140E+01   4.845E+01  3.204E+02      .5405    -.173
+            GENIB   3.258E+02  8.126E+01   4.950E+01  3.220E+02     3.271E+02  8.142E+01   4.878E+01  3.235E+02      -.427    -.204
+            GENIC   3.258E+02  8.126E+01   4.950E+01  3.220E+02     3.240E+02  8.140E+01   4.845E+01  3.204E+02      .5405    -.173
+ 
+  6.000E+02 GENIA   6.545E+02  5.425E+01   3.824E+02  5.312E+02     6.499E+02  5.467E+01   3.758E+02  5.303E+02      .7028    -.773
+            GENIB   6.545E+02  5.425E+01   3.824E+02  5.312E+02     6.574E+02  5.464E+01   3.804E+02  5.361E+02       -.44    -.716
+            GENIC   6.545E+02  5.425E+01   3.824E+02  5.312E+02     6.499E+02  5.467E+01   3.758E+02  5.303E+02      .7028    -.773
+ 
+Blank card terminating all plot cards.            |BLANK card ending batch-mode plot cards
+Actual List Sizes for the preceding solution follow.       30-Jul-93  09.52.45
+   Size  1-10:    10    12    15     3 -9999     0 -9999 -9999     0     0
+   Size 11-20: -9999    30 -9999 -9999 -9999     0     0     0    23   470
+   Size 21-29:    18 -9999    27 -9999 -9999 -9999 -9999 -9999 -9999
+Seconds for overlays  1-5  :     1.207     0.000     1.207  --- (CP: I/O; tot)
+Seconds for overlays  6-11 :     1.430     0.000     1.430
+Seconds for overlays 12-15 :     0.000     0.000     0.000
+Seconds for time-step loop :     1.098     0.000     1.098
+Seconds after DELTAT-loop  :     0.055     0.000     0.055
+                               ---------------------------
+                   Totals  :     3.789     0.000     3.789
+ 
+EMTP begins.  Send (SPY, file_name, DISK, HELP, GO, KEY, STOP, BOTH, DIR) :
+   ---   35   cards of disk file read into card cache cells  1   onward.
+   --- Pass 1.   Card = 20.   Ready to open $INCLUDE = dc51fs3.dat
+   --- Pass 1.   Card = 122.   Ready to open $INCLUDE = dc51fs3p.dat
+Alternative Transients Program (ATP), Salford 80386 translation.  All rights reserved by Can/Am user group of Portland, Oregon, USA.
+ Date (dd-mth-yy) and time of day (hh.mm.ss) = 30-Jul-93  09.56.45    Name of disk plot file, if any, is  D:37300956.pl4
+Consult the 800-page ATP Rule Book of the Can/Am EMTP User Group in Portland,  Oregon, USA.   Program is no older than July, 1992.
+Total size of LABCOM tables =  227363   INTEGER words.   VARDIM  List Sizes follow :    752   900  1500   150  7500   120
+  2100   5250  225  480  150  150 15000    60 10800   120    12    15   4800   1980   300   450 12000    9  1200   252     4   9600
+--------------------------------------------------+--------------------------------------------------------------------------------
+Descriptive interpretation of input data cards.   |  Input data card images are shown below, all 80 columns, character by character
+                                                  0         1         2         3         4         5         6         7         8
+                                                  012345678901234567890123456789012345678901234567890123456789012345678901234567890
+--------------------------------------------------+--------------------------------------------------------------------------------
+Comment card.   KOMPAR = 1.                       |C data:GO
+Marker card preceding new EMTP data case.         |BEGIN NEW DATA CASE
+Comment card.   KOMPAR = 1.                       |C  2nd  of  3  data subcases.
+Comment card.   KOMPAR = 1.                       |C  Illustration of  LINE MODEL FREQUENCY SCAN (LMFS).  For background of this
+Comment card.   KOMPAR = 1.                       |C  feature that was first available in ATP at the end of March, 1992, see the
+    <  <  <  Etc. (section removed)  >  >  >
+Blank card terminating frequency cards.           |BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+    1)  Freq [Hz] = 6.0000000E+01   Total network loss =  6.240924861294E+00
+    2)  Freq [Hz] = 6.0000000E+02   Total network loss =  7.142960437129E+00
+ 
+********************************************************************************
+*                                                                              *
+*       LINE MODEL FREQUENCY SCAN COMPARISON TABLE            30-Jul-93        *
+*            POSITIVE-SEQUENCE IMPEDANCE TEST                                  *
+*                                                                              *
+********************************************************************************
+ 
+                               LINE  MODEL  BEING  TESTED                             EXACT-PI MODEL                       % ERROR
+ 
+  FREQUENCY  NODE      MAG        ANG        REAL        IMAG          MAG        ANG        REAL       IMAG         PCTMAG  PCTANG
+ 
+  6.000E+01 GENIA   8.329E+01  8.706E+01   4.276E+00  8.318E+01     8.381E+01  8.548E+01   6.605E+00  8.355E+01      -.624    1.845
+            GENIB   8.329E+01 -3.294E+01   6.990E+01 -4.529E+01     8.257E+01 -3.296E+01   6.927E+01 -4.492E+01      .8778    -.061
+            GENIC   8.329E+01 -1.529E+02  -7.417E+01 -3.789E+01     8.376E+01 -1.511E+02  -7.333E+01 -4.048E+01      -.561    1.219
+ 
+  6.000E+02 GENIA   8.819E+01 -8.678E+01   4.952E+00 -8.805E+01     9.319E+01 -8.908E+01   1.488E+00 -9.317E+01      -5.36    -2.59
+            GENIB   8.819E+01  1.532E+02  -7.873E+01  3.974E+01     8.182E+01  1.544E+02  -7.379E+01  3.536E+01      7.784    -.764
+            GENIC   8.819E+01  3.322E+01   7.378E+01  4.832E+01     9.071E+01  3.412E+01   7.509E+01  5.089E+01      -2.77    -2.65
+ 
+ 
+Blank card terminating all plot cards.            |BLANK card ending batch-mode plot cards
+Actual List Sizes for the preceding solution follow.       30-Jul-93  09.52.47
+   Size  1-10:    10    12    15     3 -9999     0 -9999 -9999     0     0
+   Size 11-20: -9999    30 -9999 -9999 -9999     0     0     0    23   470
+   Size 21-29:    18 -9999    27 -9999 -9999 -9999 -9999 -9999 -9999
+Seconds for overlays  1-5  :     1.262     0.000     1.262  --- (CP: I/O; tot)
+Seconds for overlays  6-11 :     0.496     0.000     0.496
+Seconds for overlays 12-15 :     0.000     0.000     0.000
+Seconds for time-step loop :     0.000     0.000     0.000
+Seconds after DELTAT-loop  :     0.055     0.000     0.055
+                               ---------------------------
+                   Totals  :     1.813     0.000     1.813
+ 
+   --- Pass 1.   Card = 9.   Ready to open $INCLUDE = dc51fs6.dat
+   --- Pass 1.   Card = 193.   Ready to open $INCLUDE = dc51fs6z.dat
+Alternative Transients Program (ATP), Salford 80386 translation.  All rights reserved by Can/Am user group of Portland, Oregon, USA.
+ Date (dd-mth-yy) and time of day (hh.mm.ss) = 30-Jul-93  09.57.47    Name of disk plot file, if any, is  D:37300957.pl4
+Consult the 800-page ATP Rule Book of the Can/Am EMTP User Group in Portland,  Oregon, USA.   Program is no older than July, 1992.
+Total size of LABCOM tables =  227363   INTEGER words.   VARDIM  List Sizes follow :    752   900  1500   150  7500   120
+  2100   5250  225  480  150  150 15000    60 10800   120    12    15   4800   1980   300   450 12000    9  1200   252     4   9600
+--------------------------------------------------+--------------------------------------------------------------------------------
+Descriptive interpretation of input data cards.   |  Input data card images are shown below, all 80 columns, character by character
+                                                  0         1         2         3         4         5         6         7         8
+                                                  012345678901234567890123456789012345678901234567890123456789012345678901234567890
+--------------------------------------------------+--------------------------------------------------------------------------------
+Marker card preceding new EMTP data case.         |BEGIN NEW DATA CASE
+Comment card.   KOMPAR = 1.                       |C  3rd  of  3  data subcases illustrates  LINE MODEL FREQUENCY SCAN (LMFS) for
+Comment card.   KOMPAR = 1.                       |C  an untransposed double-circuit line generated by  JMARTI SETUP.
+    <  <  <  Etc. (section removed)  >  >  >
+Blank card ending node names for voltage output.  |BLANK CARD ENDING NODE VOLTAGE OUTPUTS ====================================
+    2)  Freq [Hz] = 7.5535525E+00   Total network loss =  1.460350203292E+01
+    3)  Freq [Hz] = 9.5093592E+00   Total network loss =  1.740069938004E+01
+    <  <  <  Etc. (section removed)  >  >  >
+   40)  Freq [Hz] = 4.7659694E+04   Total network loss =  2.219525952980E+03
+   41)  Freq [Hz] = 6.0000000E+04   Total network loss =  2.202395130215E+03
+Compute overhead line constants.  Limit = 100     |
+Comment card.   KOMPAR = 1.                       |C End of $INCLUDE.  File name =                   30
+Comment card.   KOMPAR = 1.                       |C    MR02D# ,MR04D# ,MR02E# ,MR04E# ,MR02F# ,MR04F#
+Comment card.   KOMPAR = 1.                       |C dc51fs6p.dat
+Comment card.   KOMPAR = 1.                       |C dc51fs6m.dat
+Comment card.   KOMPAR = 1.                       |C Raw  LINE CONSTANTS  data for the overhead transmission line being considered:
+Line conductor card.  4.138E-01  4.970E-02     4  |  1.4138 .0497   4        1.603   -15.    52.0                          A1-1
+Line conductor card.  4.138E-01  4.970E-02     4  |  1.4138 .0497   4        1.603   -16.06  53.06                         A1-2
+    <  <  <  Etc. (section removed)  >  >  >
+Blank card terminating frequency cards.           |BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+    1)  Freq [Hz] = 6.0000000E+00   Total network loss =  1.163993843730E+01
+    2)  Freq [Hz] = 7.5535525E+00   Total network loss =  1.392642800817E+01
+    <  <  <  Etc. (section removed)  >  >  >
+   40)  Freq [Hz] = 4.7659694E+04   Total network loss =  2.223352249386E+03
+   41)  Freq [Hz] = 6.0000000E+04   Total network loss =  2.203817311869E+03
+ 
+********************************************************************************
+*                                                                              *
+*       LINE MODEL FREQUENCY SCAN COMPARISON TABLE            30-Jul-93        *
+*              ZERO-SEQUENCE IMPEDANCE TEST                                    *
+*                                                                              *
+********************************************************************************
+ 
+                               LINE  MODEL  BEING  TESTED                             EXACT-PI MODEL                       % ERROR
+ 
+  FREQUENCY  NODE      MAG        ANG        REAL        IMAG          MAG        ANG        REAL       IMAG         PCTMAG  PCTANG
+ 
+  6.000E+00 GENIA   2.366E+01  8.006E+01   4.083E+00  2.331E+01     2.351E+01  8.070E+01   3.797E+00  2.320E+01      .6696    -.791
+            GENIB   2.368E+01  7.984E+01   4.176E+00  2.331E+01     2.381E+01  8.038E+01   3.979E+00  2.347E+01      -.552    -.671
+            GENIC   2.347E+01  7.996E+01   4.092E+00  2.311E+01     2.352E+01  8.055E+01   3.864E+00  2.320E+01      -.221    -.728
+            GENID   2.347E+01  7.996E+01   4.092E+00  2.311E+01     2.352E+01  8.055E+01   3.864E+00  2.320E+01      -.221    -.728
+            GENIE   2.368E+01  7.984E+01   4.176E+00  2.331E+01     2.381E+01  8.038E+01   3.979E+00  2.347E+01      -.552    -.671
+            GENIF   2.366E+01  8.006E+01   4.083E+00  2.331E+01     2.351E+01  8.070E+01   3.797E+00  2.320E+01      .6696    -.791
+ 
+  7.554E+00 GENIA   2.914E+01  8.041E+01   4.857E+00  2.873E+01     2.901E+01  8.092E+01   4.577E+00  2.865E+01      .4326    -.641
+            GENIB   2.917E+01  8.030E+01   4.916E+00  2.876E+01     2.939E+01  8.073E+01   4.734E+00  2.900E+01      -.728    -.533
+            GENIC   2.892E+01  8.038E+01   4.831E+00  2.851E+01     2.904E+01  8.085E+01   4.616E+00  2.867E+01      -.408    -.581
+            GENID   2.892E+01  8.038E+01   4.831E+00  2.851E+01     2.904E+01  8.085E+01   4.616E+00  2.867E+01      -.408    -.581
+            GENIE   2.917E+01  8.030E+01   4.916E+00  2.876E+01     2.939E+01  8.073E+01   4.734E+00  2.900E+01      -.728    -.533
+            GENIF   2.914E+01  8.041E+01   4.857E+00  2.873E+01     2.901E+01  8.092E+01   4.577E+00  2.865E+01      .4326    -.641
+
+    <  <  <  Etc. (section removed)  >  >  >
+ 
+
+  6.000E+04 GENIA   7.446E+02 -5.713E+00   7.409E+02 -7.413E+01     7.156E+02 -3.941E+00   7.139E+02 -4.919E+01      4.062    44.95
+            GENIB   7.249E+02 -1.238E+00   7.247E+02 -1.566E+01     7.120E+02 -3.456E-01   7.120E+02 -4.295E+00      1.804    258.2
+            GENIC   7.372E+02 -2.027E+00   7.367E+02 -2.607E+01     7.801E+02 -4.349E+00   7.779E+02 -5.916E+01      -5.51    -53.4
+            GENID   7.372E+02 -2.027E+00   7.367E+02 -2.607E+01     7.801E+02 -4.349E+00   7.779E+02 -5.916E+01      -5.51    -53.4
+            GENIE   7.249E+02 -1.238E+00   7.247E+02 -1.566E+01     7.120E+02 -3.456E-01   7.120E+02 -4.295E+00      1.804    258.2
+            GENIF   7.446E+02 -5.713E+00   7.409E+02 -7.413E+01     7.156E+02 -3.941E+00   7.139E+02 -4.919E+01      4.062    44.95
+ 
+Request for character (line printer) plotting.    |  PRINTER PLOT
+>> Plot card.   5.000E-01  0.000E+00  5.000E+00   | 186 .5 0.0 5.0         GENIA MAG               MARTI SECTION   Z IN OHMS
+ 
+30-Jul-93  09.57.47       1
+Plot type  8
+Node names     GENIA    MAG
+Time-axis legend : Frequency  f  in  Hertz
+ 
+                                         Z IN OHMS         (  x 10**(  3)  )
+  0.000   0.515    1.030     1.545     2.059     2.574     3.089     3.604     4.119     4.634     5.149     5.663     6.178  6.693
++---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|
+|
+|
+|
+|
+|
+| 0.5
+|
+|
+A
+|
+|A
+|A
+|A
+|A
+|A
+|
+| A
+| A
+| A
+|  A
+|   A
+|
+|    A
+| 2.0 A
+|      A
+|        A
+|           A
+|
+|              A
+| 2.5                A
+|                              A
+|                                                         A
+|                                                                                                                                 A
+|
+|                                            A
+| 3.0    A
+|    A
+|              A
+|                                           A
+|
+|            A
+| 3.5                 A
+|            A
+|                    A
+|                 A
+|
+|                 A
+| 4.0          A
+|               A
+|               A
+|              A
+|
+|              A
+| 4.5          A
+|             A
+|              A
+|             A
+End of graph.
+ 
+    <  <  <  Etc. (section removed)  >  >  >
+ 
+Blank card terminating all plot cards.            |BLANK card ending batch-mode (CalComp) plot cards
+Actual List Sizes for the preceding solution follow.       30-Jul-93  09.52.59
+   Size  1-10:    19    24    39     6 -9999     0 -9999 -9999     0     0
+   Size 11-20: -9999    60    82 -9999 -9999     0     0     0    23  1073
+   Size 21-29:    72 -9999    90 -9999 -9999 -9999 -9999 -9999 -9999
+Seconds for overlays  1-5  :     1.703     0.000     1.703  --- (CP: I/O; tot)
+Seconds for overlays  6-11 :     8.461     0.000     8.461
+Seconds for overlays 12-15 :     0.000     0.000     0.000
+Seconds for time-step loop :     1.047     0.000     1.047
+Seconds after DELTAT-loop  :     0.879     0.000     0.879
+                               ---------------------------
+                   Totals  :    12.090     0.000    12.090
+ 
+EMTP begins.  Send (SPY, file_name, DISK, HELP, GO, KEY, STOP, BOTH, DIR) :
+   ---   44   cards of disk file read into card cache cells  1   onward.
+   --- Pass 1.   Card = 10.   Ready to open $INCLUDE = dc51fs6.dat
+   --- Pass 1.   Card = 194.   Ready to open $INCLUDE = dc51fs6p.dat
+Alternative Transients Program (ATP), Salford 80386 translation.  All rights reserved by Can/Am user group of Portland, Oregon, USA.
+ Date (dd-mth-yy) and time of day (hh.mm.ss) = 30-Jul-93  09.58.00    Name of disk plot file, if any, is  D:37300958.pl4
+Consult the 800-page ATP Rule Book of the Can/Am EMTP User Group in Portland,  Oregon, USA.   Program is no older than July, 1992.
+Total size of LABCOM tables =  227363   INTEGER words.   VARDIM  List Sizes follow :    752   900  1500   150  7500   120
+  2100   5250  225  480  150  150 15000    60 10800   120    12    15   4800   1980   300   450 12000    9  1200   252     4   9600
+--------------------------------------------------+--------------------------------------------------------------------------------
+Descriptive interpretation of input data cards.   |  Input data card images are shown below, all 80 columns, character by character
+                                                  0         1         2         3         4         5         6         7         8
+                                                  012345678901234567890123456789012345678901234567890123456789012345678901234567890
+--------------------------------------------------+--------------------------------------------------------------------------------
+Comment card.   KOMPAR = 1.                       |C data:GO
+Marker card preceding new EMTP data case.         |BEGIN NEW DATA CASE
+Comment card.   KOMPAR = 1.                       |C  3rd  of  3  data subcases illustrates  LINE MODEL FREQUENCY SCAN (LMFS) for
+Comment card.   KOMPAR = 1.                       |C  an untransposed double-circuit line generated by  JMARTI SETUP.
+    <  <  <  Etc. (section removed)  >  >  >
+Blank card ending node names for voltage output.  |BLANK CARD ENDING NODE VOLTAGE OUTPUTS ====================================
+    2)  Freq [Hz] = 7.5535525E+00   Total network loss =  2.186843544415E+00
+    3)  Freq [Hz] = 9.5093592E+00   Total network loss =  2.201132634968E+00
+    <  <  <  Etc. (section removed)  >  >  >
+   40)  Freq [Hz] = 4.7659694E+04   Total network loss =  5.301174275213E+01
+   41)  Freq [Hz] = 6.0000000E+04   Total network loss =  7.652463362163E+01
+Compute overhead line constants.  Limit = 100     |
+    <  <  <  Etc. (section removed)  >  >  >
+Line conductor card.  4.138E-01  4.970E-02     4  |  1.4138 .0497   4        1.603   -15.    52.0                          A1-1
+Line conductor card.  4.138E-01  4.970E-02     4  |  1.4138 .0497   4        1.603   -16.06  53.06                         A1-2
+    <  <  <  Etc. (section removed)  >  >  >
+Blank card terminating frequency cards.           |BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+    1)  Freq [Hz] = 6.0000000E+00   Total network loss =  2.644053558159E+00
+    2)  Freq [Hz] = 7.5535525E+00   Total network loss =  2.646292442603E+00
+    <  <  <  Etc. (section removed)  >  >  >
+   40)  Freq [Hz] = 4.7659694E+04   Total network loss =  6.165455521027E+01
+   41)  Freq [Hz] = 6.0000000E+04   Total network loss =  9.153350121473E+01
+ 
+********************************************************************************
+*                                                                              *
+*       LINE MODEL FREQUENCY SCAN COMPARISON TABLE            30-Jul-93        *
+*            POSITIVE-SEQUENCE IMPEDANCE TEST                                  *
+*                                                                              *
+********************************************************************************
+ 
+                               LINE  MODEL  BEING  TESTED                             EXACT-PI MODEL                       % ERROR
+ 
+ 
+  FREQUENCY  NODE      MAG        ANG        REAL        IMAG          MAG        ANG        REAL       IMAG         PCTMAG  PCTANG
+ 
+  6.000E+00 GENIA   2.626E+00  7.474E+01   6.912E-01  2.534E+00     2.604E+00  6.958E+01   9.085E-01  2.440E+00      .8639    7.416
+            GENIB   2.711E+00 -4.640E+01   1.869E+00 -1.963E+00     2.813E+00 -4.956E+01   1.825E+00 -2.141E+00      -3.65    -6.39
+            GENIC   2.663E+00 -1.655E+02  -2.578E+00 -6.683E-01     2.664E+00 -1.671E+02  -2.596E+00 -5.939E-01      -.008    -.987
+            GENID   2.608E+00  7.375E+01   7.299E-01  2.503E+00     2.625E+00  6.918E+01   9.329E-01  2.453E+00      -.653    6.599
+            GENIE   2.746E+00 -4.615E+01   1.902E+00 -1.980E+00     2.808E+00 -4.910E+01   1.839E+00 -2.123E+00      -2.21      -6.
+            GENIF   2.626E+00 -1.651E+02  -2.538E+00 -6.750E-01     2.644E+00 -1.677E+02  -2.583E+00 -5.654E-01      -.693    -1.52
+ 
+  7.554E+00 GENIA   3.268E+00  7.756E+01   7.038E-01  3.191E+00     3.218E+00  7.334E+01   9.228E-01  3.083E+00      1.542    5.761
+            GENIB   3.368E+00 -4.312E+01   2.458E+00 -2.302E+00     3.467E+00 -4.578E+01   2.418E+00 -2.485E+00      -2.87     -5.8
+            GENIC   3.291E+00 -1.625E+02  -3.139E+00 -9.906E-01     3.285E+00 -1.635E+02  -3.150E+00 -9.335E-01      .1779    -.618
+            GENID   3.246E+00  7.675E+01   7.439E-01  3.160E+00     3.249E+00  7.288E+01   9.567E-01  3.105E+00      -.094    5.321
+            GENIE   3.405E+00 -4.296E+01   2.492E+00 -2.321E+00     3.463E+00 -4.529E+01   2.437E+00 -2.461E+00      -1.69    -5.13
+            GENIF   3.255E+00 -1.622E+02  -3.098E+00 -9.965E-01     3.251E+00 -1.641E+02  -3.126E+00 -8.919E-01      .1212    -1.16
+
+    <  <  <  Etc. (section removed)  >  >  >
+ 
+  6.000E+04 GENIA   1.758E+02  5.490E+01   1.011E+02  1.438E+02     2.043E+02  5.199E+01   1.258E+02  1.610E+02       -14.    5.593
+            GENIB   2.032E+02 -1.852E+01   1.927E+02 -6.454E+01     2.288E+02 -1.702E+01   2.188E+02 -6.699E+01      -11.2    8.777
+            GENIC   8.011E+01 -1.524E+02  -7.101E+01 -3.709E+01     7.719E+01 -1.493E+02  -6.634E+01 -3.947E+01      3.787    2.124
+            GENID   1.186E+02  9.365E+01  -7.560E+00  1.184E+02     1.343E+02  8.904E+01   2.259E+00  1.343E+02      -11.7    5.186
+            GENIE   1.089E+02 -6.696E+01   4.262E+01 -1.002E+02     1.143E+02 -6.770E+01   4.338E+01 -1.058E+02      -4.72    -1.08
+            GENIF   1.970E+02 -1.591E+02  -1.841E+02 -7.034E+01     2.168E+02 -1.600E+02  -2.036E+02 -7.428E+01       -9.1    -.548
+ 
+Request for character (line printer) plotting.    |  PRINTER PLOT
+>> Plot card.   5.000E-01  0.000E+00  5.000E+00   | 186 .5 0.0 5.0         GENIA MAG               MARTI SECTION   Z IN OHMS
+ 
+30-Jul-93  09.58.00       1
+Plot type  8
+Node names     GENIA    MAG
+Time-axis legend : Frequency  f  in  Hertz
+ 
+                                         Z IN OHMS         (  x 10**(  3)  )
+  0.000   0.123    0.246     0.370     0.493     0.616     0.739     0.862     0.985     1.109     1.232     1.355     1.478  1.601
++---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+
+    <  <  <  Etc. (section removed)  >  >  >
+ 
+Blank card terminating all plot cards.            |BLANK card ending batch-mode (CalComp) plot cards
+Actual List Sizes for the preceding solution follow.       30-Jul-93  09.53.11
+   Size  1-10:    19    24    39     6 -9999     0 -9999 -9999     0     0
+   Size 11-20: -9999    60    82 -9999 -9999     0     0     0    23  1073
+   Size 21-29:    72 -9999    90 -9999 -9999 -9999 -9999 -9999 -9999
+Seconds for overlays  1-5  :     1.539     0.000     1.539  --- (CP: I/O; tot)
+Seconds for overlays  6-11 :     8.406     0.000     8.406
+Seconds for overlays 12-15 :     0.000     0.000     0.000
+Seconds for time-step loop :     0.934     0.000     0.934
+Seconds after DELTAT-loop  :     0.879     0.000     0.879
+                               ---------------------------
+                   Totals  :    11.758     0.000    11.758
+ 
+EMTP begins.  Send (SPY, file_name, DISK, HELP, GO, KEY, STOP, BOTH, DIR) :
+   ---   44   cards of disk file read into card cache cells  1   onward.
+   --- Pass 1.   Card = 10.   Ready to open $INCLUDE = dc51fs6.dat
+   --- Pass 1.   Card = 194.   Ready to open $INCLUDE = dc51fs6m.dat
+Alternative Transients Program (ATP), Salford 80386 translation.  All rights reserved by Can/Am user group of Portland, Oregon, USA.
+ Date (dd-mth-yy) and time of day (hh.mm.ss) = 30-Jul-93  09.59.12    Name of disk plot file, if any, is  D:37300959.pl4
+Consult the 800-page ATP Rule Book of the Can/Am EMTP User Group in Portland,  Oregon, USA.   Program is no older than July, 1992.
+Total size of LABCOM tables =  227363   INTEGER words.   VARDIM  List Sizes follow :    752   900  1500   150  7500   120
+  2100   5250  225  480  150  150 15000    60 10800   120    12    15   4800   1980   300   450 12000    9  1200   252     4   9600
+--------------------------------------------------+--------------------------------------------------------------------------------
+Descriptive interpretation of input data cards.   |  Input data card images are shown below, all 80 columns, character by character
+                                                  0         1         2         3         4         5         6         7         8
+                                                  012345678901234567890123456789012345678901234567890123456789012345678901234567890
+--------------------------------------------------+--------------------------------------------------------------------------------
+Comment card.   KOMPAR = 1.                       |C data:GO
+Marker card preceding new EMTP data case.         |BEGIN NEW DATA CASE
+Comment card.   KOMPAR = 1.                       |C  3rd  of  3  data subcases illustrates  LINE MODEL FREQUENCY SCAN (LMFS) for
+Comment card.   KOMPAR = 1.                       |C  an untransposed double-circuit line generated by  JMARTI SETUP.
+    <  <  <  Etc. (section removed)  >  >  >
+Blank card ending node names for voltage output.  |BLANK CARD ENDING NODE VOLTAGE OUTPUTS ====================================
+    2)  Freq [Hz] = 7.5535525E+00   Total network loss =  4.247788777322E+00
+    3)  Freq [Hz] = 9.5093592E+00   Total network loss =  4.950100153259E+00
+    <  <  <  Etc. (section removed)  >  >  >
+   40)  Freq [Hz] = 4.7659694E+04   Total network loss =  6.576631373437E+02
+   41)  Freq [Hz] = 6.0000000E+04   Total network loss =  7.406315999451E+02
+Compute overhead line constants.  Limit = 100     |
+    <  <  <  Etc. (section removed)  >  >  >
+Blank card terminating frequency cards.           |BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+    1)  Freq [Hz] = 6.0000000E+00   Total network loss =  3.573399585181E+00
+    2)  Freq [Hz] = 7.5535525E+00   Total network loss =  4.146632333116E+00
+    <  <  <  Etc. (section removed)  >  >  >
+   40)  Freq [Hz] = 4.7659694E+04   Total network loss =  6.610984397030E+02
+   41)  Freq [Hz] = 6.0000000E+04   Total network loss =  7.522122408557E+02
+ 
+********************************************************************************
+*                                                                              *
+*       LINE MODEL FREQUENCY SCAN COMPARISON TABLE            30-Jul-93        *
+*          MUTUAL IMPEDANCE TEST                                               *
+*                                                                              *
+********************************************************************************
+ 
+                               LINE  MODEL  BEING  TESTED                             EXACT-PI MODEL                       % ERROR
+ 
+  FREQUENCY  NODE      MAG        ANG        REAL        IMAG          MAG        ANG        REAL       IMAG         PCTMAG  PCTANG
+ 
+  6.000E+00 GENIA   1.335E+01  7.964E+01   2.401E+00  1.313E+01     1.327E+01  7.985E+01   2.339E+00  1.306E+01      .6346    -.259
+            GENIB   1.364E+01  7.935E+01   2.521E+00  1.341E+01     1.370E+01  7.978E+01   2.431E+00  1.348E+01      -.399    -.531
+            GENIC   1.326E+01  7.939E+01   2.442E+00  1.304E+01     1.330E+01  7.971E+01   2.377E+00  1.309E+01      -.261    -.395
+            GENID   1.021E+01  8.070E+01   1.650E+00  1.007E+01     1.023E+01  8.164E+01   1.487E+00  1.012E+01      -.187    -1.15
+            GENIE   1.004E+01  8.050E+01   1.656E+00  9.898E+00     1.011E+01  8.120E+01   1.547E+00  9.993E+00      -.765    -.855
+            GENIF   1.031E+01  8.062E+01   1.681E+00  1.017E+01     1.024E+01  8.181E+01   1.458E+00  1.014E+01      .6897    -1.46
+ 
+  7.554E+00 GENIA   1.647E+01  8.025E+01   2.790E+00  1.623E+01     1.639E+01  8.042E+01   2.729E+00  1.617E+01      .4408    -.215
+            GENIB   1.684E+01  8.011E+01   2.892E+00  1.659E+01     1.693E+01  8.045E+01   2.810E+00  1.670E+01      -.545     -.42
+            GENIC   1.637E+01  8.010E+01   2.813E+00  1.612E+01     1.644E+01  8.035E+01   2.755E+00  1.621E+01      -.454    -.314
+            GENID   1.256E+01  8.075E+01   2.018E+00  1.239E+01     1.260E+01  8.151E+01   1.861E+00  1.246E+01      -.356    -.924
+            GENIE   1.234E+01  8.056E+01   2.023E+00  1.217E+01     1.246E+01  8.111E+01   1.924E+00  1.231E+01      -.979    -.685
+            GENIF   1.267E+01  8.061E+01   2.067E+00  1.250E+01     1.262E+01  8.158E+01   1.848E+00  1.249E+01      .4114    -1.19
+
+    <  <  <  Etc. (section removed)  >  >  >
+ 
+  6.000E+04 GENIA   5.510E+02  1.845E+01   5.227E+02  1.744E+02     5.618E+02  2.101E+01   5.244E+02  2.015E+02      -1.91    -12.2
+            GENIB   5.619E+02  2.300E+01   5.173E+02  2.195E+02     5.683E+02  2.425E+01   5.182E+02  2.334E+02      -1.12    -5.17
+            GENIC   4.576E+02  1.536E+01   4.413E+02  1.212E+02     4.744E+02  1.321E+01   4.618E+02  1.084E+02      -3.53    16.24
+            GENID   3.301E+02 -2.650E+01   2.954E+02 -1.473E+02     3.577E+02 -2.794E+01   3.161E+02 -1.676E+02      -7.72    -5.15
+            GENIE   3.136E+02 -4.859E+01   2.075E+02 -2.352E+02     3.067E+02 -5.080E+01   1.939E+02 -2.377E+02      2.241    -4.36
+            GENIF   3.308E+02 -4.872E+01   2.182E+02 -2.486E+02     3.142E+02 -5.291E+01   1.895E+02 -2.506E+02      5.275    -7.93
+ 
+ 
+Request for character (line printer) plotting.    |  PRINTER PLOT
+>> Plot card.   5.000E-01  0.000E+00  5.000E+00   | 186 .5 0.0 5.0         GENIA MAG               MARTI SECTION   Z IN OHMS
+ 
+30-Jul-93  09.59.12       1
+Plot type  8
+Node names     GENIA    MAG
+Time-axis legend : Frequency  f  in  Hertz
+ 
+                                         Z IN OHMS         (  x 10**(  3)  )
+  0.000   0.254    0.507     0.761     1.015     1.268     1.522     1.776     2.029     2.283     2.537     2.790     3.044  3.298
++---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+    <  <  <  Etc. (section removed)  >  >  >
+Blank card terminating all plot cards.            |BLANK card ending batch-mode (CalComp) plot cards
+Actual List Sizes for the preceding solution follow.       30-Jul-93  09.53.22
+   Size  1-10:    19    24    39     3 -9999     0 -9999 -9999     0     0
+   Size 11-20: -9999    60    82 -9999 -9999     0     0     0    23  1073
+   Size 21-29:    72 -9999    90 -9999 -9999 -9999 -9999 -9999 -9999
+Seconds for overlays  1-5  :     1.703     0.000     1.703  --- (CP: I/O; tot)
+Seconds for overlays  6-11 :     8.133     0.000     8.133
+Seconds for overlays 12-15 :     0.000     0.000     0.000
+Seconds for time-step loop :     0.055     0.000     0.055
+Seconds after DELTAT-loop  :     0.879     0.000     0.879
+                               ---------------------------
+                   Totals  :    10.770     0.000    10.770
+

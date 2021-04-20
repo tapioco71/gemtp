@@ -1,0 +1,57 @@
+BEGIN NEW DATA CASE 
+C     BENCHMARK DC-64
+C     Example drawn from the dynamite EMTP Newsletter article by W. Scott Meyer,
+C     "EMTP Data Modularization and  Sorting ...,"   Volume 4,   No. 2,  Sec. V,
+C     November, 1983.   $PREFIX   and   $SUFFIX   may be installation-dependent.
+C     Miscellaneous  data  cards  and  TACS  have  been added to allow execution
+C     to  continue  through  the  reading of switch cards,  thereby  documenting
+C     the   $INCLUDE  evaluation and subsequent sorting.   The   $INCLUDE   file
+C     DC64INCL.DAT  was  created  by  2nd subcase of companion data case  DC-36. 
+C     For  nearly identical case  (except no use of dummy internal nodes,  which
+C     makes it less general), see DC-8 (associated with first subcase of DC-36).
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+$SUFFIX, .dat       { File name of  $INCLUDE  will be followed by this file type
+$DUMMY, DUM000   { Offset for name of dummy nodes explicitely reaffirms defaults
+    .005     4.0    { DELTAT and TMAX are in fact arbitrary, since no simulation
+       1      -1       1       1       1   { Arbitrary values, since no simulate  
+TACS HYBRID
+99 FIRE1  = TIMEX
+99 FIRE2  = TIMEX
+99 FIRE3  = TIMEX
+13FAKE                                                                          
+98 FIRE452+UNITY                                      1.    0.    0.      TIMEX 
+98 FIRE552+UNITY                                      1.    0.    0.      TIMEX 
+98 FIRE652+UNITY                                      1.    0.    0.      TIMEX 
+BLANK card ends all  TACS  data
+$INCLUDE, LIMARG = 20   { Reduce max # of arguments from default value of 1200
+$INCLUDE, dc64incl,  ACNOD, #MINUS, ##PLUS, #FIRE { Note "##MID" of DC-8 missing
+BLANK card ending  BRANCH  cards
+BLANK card ending  SWITCH  cards             
+$ABORT  { Abort this simulation;  restart ATP using next data set
+aaaaa bbbbb ccccc  ---  any data card such as this before BNDC should be ignored
+BEGIN NEW DATA CASE 
+C      2nd of 2 subcases will illustrate use of dependent variables within an
+C      INCLUDE  file.  The 5th subcase of DC36 involved 3,  and it created the
+C      punch file  DC36E.PCH  that now will be used.  Note the 2nd argument is
+C      the line-to-line RMS voltage,  which will be assumed to be 500 kV.  This
+C      is converted to line-to-neutral peak by dividing by the square root of 3
+C      and multiplying by the square root of 2:  500000 * root (2/3) = 408248
+    .005     4.0    { DELTAT and TMAX are in fact arbitrary, since no simulation
+       1      -1       0      { Arbitrary values, since no simulation will occur  
+  JDAYA                      1.0 { 1st of 3 nodes used to connect 3-phase source
+  JDAYB                      1.0 { 2nd of 3 ...
+  JDAYC                      1.0 { 3rd of 3 ...
+BLANK card ending  BRANCH  cards
+BLANK card ending  SWITCH  cards             
+C $PREFIX, []    { $INCLUDE files are located in same place as this main data file
+$SUFFIX, .pch       { File name of  $INCLUDE  will be followed by this file type
+C         File    Node   Amplitude  Hertz  Degrees  T-start
+$INCLUDE, dc36e,  JDAY,   500.E+3,   50.0,  -10.0,    0.0,  { Subcase 5 of DC-36
+C Source.   4.08E+05  5.00E+01 -1.00E+01  0.00E+00  |14JDAYA    408248.29      50.0     -10.0                           0.0
+C Source.   4.08E+05  5.00E+01 -1.30E+02  0.00E+00  |14JDAYB    408248.29      50.0     -130.                           0.0
+C Source.   4.08E+05  5.00E+01 -2.50E+02  0.00E+00  |14JDAYC    408248.29      50.0     -250.                           0.0
+BLANK card ending  SOURCE  cards
+$STOP   { Input data interpretation is all we want to see, so halt execution
+BEGIN NEW DATA CASE 
+BLANK
+EOF  ----  Needed so "OVER1" or "SPYING" ("DATA") ends input here during reading 

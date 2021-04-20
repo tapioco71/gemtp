@@ -1,0 +1,60 @@
+/SOURCE
+14GEN           377.       60.                                 -1.
+/MODELS        { 9 July 1995,  the former  /TACS  was changed to this new class
+MODELS              { Note the change;  the 1st subcase had  "TACS HYBRID"  here
+INPUT GEN {V(GEN)}, GROUND {I(GROUND)}
+MODEL DC33
+INPUT gen, ground
+VAR   flux, curr
+HISTORY gen {DFLT: 0}, flux {DFLT: 0}, ground {DFLT: 0} 
+INIT
+  curr:=0
+ENDINIT
+EXEC
+  COMBINE AS INTEGRATOR
+    LAPLACE(flux/gen):=(1.0|S0)/(1.0|S1)
+  ENDCOMBINE
+  curr:=-ground
+ENDEXEC
+ENDMODEL
+USE DC33 AS DC33
+  INPUT GEN:=GEN, GROUND:=GROUND
+ENDUSE
+RECORD
+  DC33.FLUX AS FLUX
+  DC33.GEN AS GEN
+  DC33.GROUND AS GROUND
+  DC33.CURR AS CURR
+ENDRECORD
+ENDMODELS 
+/OUTPUT
+  GEN
+/PLOT
+C Last step:  400      .02   116.4994069   2.765761424  -2.76576141  .9604757618  
+C Variable maxima :                 377.   3.499613141  3.499909256   1.00939921         
+C Times of maxima :                  0.0        .00415        .0125       .00415          
+C Variable minima :          -376.992558   -3.49990926  -3.49961314  -.990568949  
+C Times of minima :               .00835         .0125       .00415        .0125       
+ 2Arbitrary 78-character case title text of which this is an example, I hope.
+  First of two lines of 78-byte graph subheading text.
+  Second and final such line of graph subheading text.
+  CALCOMP PLOT
+  SCREEN PLOT
+ 194 2. 0.0 20.         MODELSCURR              ABCDEFGHIJKLMNOP1234567890123456
+  X-Y PLOT    Horizontal Axis label123
+     10.    -1.1     1.1
+      8.    -4.0     4.0
+ 194 4. 0.0 20.         MODELSFLUX  MODELSCURR  Graph heading---Vertical axis la
+  X-Y PLOT    Horizontal Axis label123
+   9999.    -1.1     1.1     "9999." returns to conventional (vs. time) plotting
+      8.    -4.0     4.0
+/BRANCH
+96GROUNDGEN                8888.       1.E-9                                   1
+             1.0            -0.7
+             2.0             0.9
+             3.5             1.0
+           9999.
+/REQUEST
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+/SWITCH
+  GROUND                                              MEASURING                1

@@ -1,0 +1,1713 @@
+BEGIN NEW DATA CASE                                                             
+C     BENCHMARK DC-22                                                           
+C     Illustration of basic TACS logic that can be used to control the firing of
+C     valves (thyristers) of an  ac/dc  converter bridge.   The electric network
+C     actually has no valves,  however (TACS output signals are not used).   The
+C     electric network passes balanced three-phase voltages to TACS via  Type-90
+C     sources.   Summers convert to line-to-line voltages.   A  constant  firing
+C     angle DELAY1 of 1.0 msec is used,  for simplicity.   TACS variables  FIRE1
+C     through  FIRE6  should go back to electric network to control valves (only
+C     FIRE1 is passed back, and for simplicity, just to a Type-60 source).
+C     After this 1st small subcase, there is a 2nd, followed by 2 large subcases
+C       11 November 1998,  add Type-10 source to illustrate saw-toothed waveform
+C       Note:  program created on this date, or later, is required for use.
+C       26 January 1999,  add Orlando Hevia's rectangular and positive-pulse
+C       waveforms.  One new vector plot at end should be studied to understand.
+PRINTED NUMBER WIDTH, 10, 2,
+ .000500    .040 { Double T-max on 26 Jan 99 to show repetition of Hevia signals
+       1       1       1       1       1      -1
+      40       5
+TACS HYBRID                                                                     
+  PHA-B   +GENA   -GENB                                                         
+  PHB-C   +GENB   -GENC                                                         
+  PHC-A   +GENC   -GENA                                                         
+90GENA                                                                          
+90GENB                                                                          
+90GENC                                                                          
+98ZA-B  52+UNITY                                      1.    0.    0.      PHA-B 
+98ZB-A  52+UNITY                                      1.    0.    1.      PHA-B 
+98ZB-C  52+UNITY                                      1.    0.    0.      PHB-C 
+98ZC-B  52+UNITY                                      1.    0.    1.      PHB-C 
+98ZC-A  52+UNITY                                      1.    0.    0.      PHC-A 
+98ZA-C  52+UNITY                                      1.    0.    1.      PHC-A 
+98DELAY1        .001                                                            
+98FIRE1 54+ZA-B                                           .001      DELAY1      
+98FIRE4 54+ZB-A                                           .001      DELAY1      
+98FIRE3 54+ZB-C                                           .001      DELAY1      
+98FIRE6 54+ZC-B                                           .001      DELAY1      
+98FIRE5 54+ZC-A                                           .001      DELAY1      
+98FIRE2 54+ZA-C                                           .001      DELAY1      
+33PHA-B PHB-C PHC-A ZA-B  ZB-A  ZB-C  ZC-B  ZC-A  ZA-C  GENA  GENB  GENC  FIRE1 
+33FIRE4 FIRE3 FIRE6 FIRE5                                                       
+BLANK card ending all TACS data
+ 0GENA                       1.0                                                
+ 0GENB                       1.0                                                
+ 0GENC                       1.0     
+  FIRE1                      1.0                                           
+  SAW                        1.0    { Load on sawtooth waveform }              1
+  RECT                       1.0    { Load on rectangular waveform }           1
+  PULSE                      1.0    { Load on positive pulse }                 1
+  SINE                       1.0    { Load on reference sine wave }            1
+BLANK card ending branch cards of the electric network
+BLANK card ending switch cards of the electric network
+14GENA           1.0       60.      -90.                                        
+14GENB           1.0       60.       30.                                        
+14GENC           1.0       60.      150.        
+60FIRE1                                
+C   Prior to  11 November 1998,  saw-toothed waveforms were not generated on the 
+C   electrical side.   If needed,  they were generated in TACS and passed to the
+C   electrical side just as the preceding Type-60 source illustrates.    Orlando
+C   Hevia contributed the following centered sawtooth waveform that is based  on 
+C   a Type-10 analytically-defined source.  Note that the signal is directly
+C   generated on the electrical side (no need for TACS):
+10SAW      100.0*(TIMEX-(TRUNC(TIMEX/0.010)*0.010))-0.5 { See Oct 98, newsletter
+C        Orlando Hevia contributes rectangular waveform and positive pulse on
+C        26 January 1999.  The rectangular waveform is trivial, so add it first:
+10RECT     0.50*SIGN(SIN(TIMEX*314.1592))
+C        The positive pulse is more involved.  More precisely,  documentation of
+C        the parameters is more involved.   The following comment cards are from
+C        Mr. Hevia (hope they are self-explanatory).
+C W= PULSE WIDTH (DEGREES)
+C X= ARCCOS(W/2)
+C X= ARCCOS(30/2)= 0.9659
+C P= PHASE IN DEGREES (THE START OF PULSE)
+C Y= PHASE IN RADIANS 
+C Y= (P+W/2)*3.141592/180.0
+C Y= (45+30/2)*3.141592/180.0= 1.0472
+C PULSE=   0.50*SIGN(COS(TIMEX*314.1592-Y     )-X     )+0.5
+10PULSE    0.50*SIGN(COS(TIMEX*314.1592-1.0472)-0.9659)+0.5
+C 10PULSE    -.25     { Offset the preceding downward by 1/4 to demonstrate superposition
+C Preceding demonstrated the superposition of two sources on the same node.  But
+C 3 were mistreated prior to correction 12 May 2001.  To prove that 3 now can
+C be handled properly,  split the preceding  .25  into  .10  and  .15:
+10PULSE    -.10     { Offset the preceding downward by .10 to demonstrate superposition
+10PULSE    -.15     { Offset the preceding downward by .15 to demonstrate superposition
+C        Finally, let's add Mr. Hevia's reference waveform.  This documents the
+C        sign and phase of the rectangular waveform.  Plot will be beautiful.
+10SINE     SIN(TIMEX*314.1592) { Reference signal (RECT is 1/2 the sign of this)
+BLANK card ending source cards of the electric network
+C  Next   4     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   17     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C Step    Time     SAW       RECT      PULSE     SINE      TACS      TACS      TACS      TACS      TACS      TACS      TACS
+C                  TERRA     TERRA     TERRA     TERRA     PHA-B     PHB-C     PHC-A     ZA-B      ZB-A      ZB-C      ZC-B
+C
+C                  TACS      TACS      TACS      TACS      TACS      TACS      TACS      TACS      TACS      TACS
+C                  ZC-A      ZA-C      GENA      GENB      GENC      FIRE1     FIRE4     FIRE3     FIRE6     FIRE5
+C   0     0.0        0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+C                    0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+C   1   .5E-3       -.45       0.5      -.25  .1564344  -.569614  1.701371  -1.13176       0.0       1.0       1.0       0.0
+C                    0.0       1.0  .1873813  .7569951  -.944376       0.0       0.0       0.0       0.0       0.0
+C   2   .1E-2        -.4       0.5      -.25  .3090169  -.253023   1.61042   -1.3574       0.0       1.0       1.0       0.0
+C                    0.0       1.0  .3681246  .6211478  -.989272       0.0       0.0       0.0       0.0       0.0
+BLANK card ending selective node voltage outputs (none)
+C  80     .04        -.5       -.5      -.25  -.261E-5  1.582307  -1.40126  -.181049       1.0       0.0       0.0       1.0
+C                    0.0       1.0  .5877853  -.994522  .4067366       1.0       0.0       0.0       1.0       0.0
+C Variable maxima :  .45       0.5       .75       1.0  1.731671  1.728633  1.730532       1.0       1.0       1.0       1.0
+C                    1.0       1.0       1.0  .9997807  .9991228       1.0       1.0       1.0       1.0       1.0
+C Times of maxima :.0395     .5E-3     .0025      .005     .0055     .0165      .011     .0015     .5E-3     .5E-3     .0045
+C                   .007     .5E-3     .0375      .032     .0265     .0035     .0025     .0025     .0065      .009
+C Variable minima :  -.5       -.5      -.25       -1.  -1.73167  -1.73205  -1.73167       0.0       0.0       0.0       0.0
+C                    0.0       0.0       -1.  -.999781  -.999781       0.0       0.0       0.0       0.0       0.0
+C Times of minima :  .01     .0105       0.0      .015     .0305      .025     .0195       0.0       0.0       0.0       0.0
+C                    0.0       0.0     .0125      .007      .018       0.0       0.0       0.0       0.0       0.0
+  CALCOMP PLOT
+ 194 4. 0.0 40. -1.0 1.0BRANCH    { Show 2 cycles of the 4 Type-10 Hevia signals
+                        SINE        RECT        PULSE       SAW
+  PRINTER PLOT
+ 194 2. 0.0 20.         TACS  PHA-B TACS  FIRE1  { Axis limits: (-1.731,  1.732)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C    2nd  of 5 subcases of DC-22 is a hybrid TACS example of the TACS-controlled
+C    resistance (Type-91 electric network branch type).   All-resistive electric
+C    network allows easy checking with a pocket calculator at any step: For each
+C    branch, verify that program node voltages and branch currents correspond to
+C    the branch constraint equations  v = R * i.  There actually are two discon-
+C    nected subnetworks,  with one having two TACS-controlled arcs (illustrating
+C    use of the multivariable solution code of "ZINCOX") and the other having 1.
+PRINTED NUMBER WIDTH, 11, 1,   { Reassert default choice (used before 25 Jan 99)
+CHANGE PRINTOUT FREQUENCY
+       5       5    
+     .02     2.0         { Step size is immaterial since network has no dynamics
+       1       1       1       1       1                                        
+TACS HYBRID   { In a real case, arcs are on electric side, and equations in TACS
+99RESIS   = 1.0 + SIN ( 3.0 * TIMEX )  { 1st R(t) signal -- constant + sine wave
+99RES     = 1.0 + COS ( 3.0 * TIMEX )     { 2nd R(t) signal -- constant + cosine
+33RESIS RES  { Output the only 2 TACS variables: the 2 R(t) resistance functions
+77RESIS          1.0        { Initial condition on 1st R(t) insures smooth start
+77RES            2.0        { Initial condition on 1st R(t) insures smooth start
+BLANK card ending all TACS data
+  BUS1  BUS2                 1.0   { Master copy of five 1-ohm resistors }     1
+  BUS2  BUS3  BUS1  BUS2            { 2nd of 3 linear branches in 1st subnetwork
+  BUS3        BUS1  BUS2            { 3rd of 3 linear branches in 1st subnetwork
+  BUS1  BUS4  BUS1  BUS2         { 1st of 2 linear branches in second subnetwork
+  BUS4        BUS1  BUS2         { 2nd of 2 linear branches in second subnetwork
+91BUS2        TACS  RESIS   { R(t) controlled by TACS variable "RESIS" }       1
+91BUS3        TACS  RES     { R(t) controlled by TACS  "RES" --- 2nd of 2 }    1
+91BUS4        TACS  RES     { R(t) within 2nd, isolated subnetwork }           1
+BLANK card ending electric network branches
+BLANK card ending switches
+11BUS1           1.0    { 1-volt battery excites ladder networks of both subnetw
+BLANK card ending electric network source cards.
+C  Step    Time     BUS4       BUS3       BUS2       BUS1       BUS2       BUS3 
+C                                                               TERRA      TERRA
+C     0     0.0       0.0        0.0        0.0        0.0        0.0        0.0
+C     1     .02       0.4 .153846154 .384615385        1.0 .384615385 .076923077
+C     2     .04 .39992797 .157235276 .393158988        1.0   .3709173 .078688436
+ 1                { Request all node voltage outputs.  Just 4: BUS1 through BUS4
+C Last step:  100     2.0    .3976118 .127869158 .321592965      1.0  .484683228
+C Last step cont.  .....  .065854649 .204776399 .678407035 .720584502 1.96017029
+C Variable max : 0.4  .175860563 .464962112 1.0 .999366283 .342009625 .999533993
+C Times of maxima :   .02        .28        .44        .02        1.6       1.02
+  PRINTER PLOT                                    { Axis limits: (0.000,  2.000)
+ 193 .4 0.0 2.0         TACS  RESIS TACS  RES  { 1st of 2 plots is two TACS R(t)
+ 193 .4 0.0 2.0         BRANCH                    { Axis limits: (0.000,  9.995)
+                        BUS2        BUS3        BUS4       { 3 R(t) arc currents
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     3rd  of  5  subcases illustrates the EMTP simulation of a rail gun or mass
+C     driver.   It was contributed by  Wendell Neugebauer  as  described  in his
+C     paper on the subject  (published in the Sept, 1990,  issue of  EMTP News).
+C AUGMENTED RAILGUN (Mass driver) Simulation
+C CAPACITOR BANK DRIVE 
+C 65 CANS OF 65 kJ, 22kV FOR EACH OF 8 STAGES, TOTAL INITIAL ENERGY = 33.8 MJ
+C  Wendell NEUGEBAUER
+C  586 Middle Line Rd.
+C  Ballston Spa, New York 12020
+C  
+C  March 20, 1990
+C  Tel. (518) 885-6050 (home) (evenings only)
+C
+C This is a simulation of a mass driver as energized from a bank of charged 
+C capacitors.  The individual switches are timed in synchronism with the
+C position of the mass along the rails.   The physics of the driver itself
+C are modelled under TACS using its pseudo FORTRAN equations to implement 
+C Newton's laws.  The individual TACS statements are commented to show the
+C particular variables being computed.  The storage capacitors and the 
+C associated electrical network are modelled using standard EMTP components.
+C      Note about time-step size.   Wendell Neugebauer's originally data
+C      case used  DELTAT = 1.E-6  and  TMAX = 5.5 msec  as shown below on
+C      comment cards.   But the simulation is slow.   By multiplying  DELTAT
+C      by 5,  the simulation is speeded without significantly affecting the
+C      PRINTER PLOT  of rail current. 
+NEW LIST SIZES
+       0       0      68       8     450      35     285       0       0       0
+C      0       0    4700       0       0       0       0       0   12000       0
+       0       0    4700       0       0       0       0      10    5000       0
+       0       0     220
+  240000  
+C    Preceding dimensions are the same as used by the 4th subcase except that
+C    List 18 is increased from 0 (default 5) to 10 and List 19 is reduced to
+C    5K from 12K.  This addition of NLS is necessitated by the modification
+C    of ATD immediately below.  In turn,  that change was necessitated by the
+C    a change to SSTACS (for many years, TACS Table 1 has been overflowing).
+ABSOLUTE TACS DIMENSIONS
+C        Expand TACS Table 1 from 60 to 90 on  29 March 2007.  Orlando Hevia,
+C        using F95 GNU,  discovered Table 1 need of  672 / 8  within  SSTACS:
+C     60     270     300      60      90    1250     550     180 
+      85     270     300      60      90    1250     550     180 
+UNIQUE TACS SWITCH   { Halt if Type-91 or 93 TACS source is not uniquely defined
+C    The preceding UTS is added during July of 2003.   The answer is unchanged.
+C    This data case was picked only because both Type-91 and 93 sources exist.
+C  1.E-6  5.5E-3      0.      0.                  ------  Orig. misc. data card
+C      1      11       1       0       1      -1  ------  Orig. misc. data card
+   5.E-6  5.0E-3      0.      0.              { Larger DELTAT speeds simulation                             
+       1       3       1       0       1      -1       
+       5       5      20      20     100     100     500     500                      
+TACS HYBRID
+C LIST OF INPUT CONSTANTS
+C RAIL RESISTANCE COEFFICIENT (R. Hawkes method for including skin effect)
+C with the units ohms/amperes**0.75
+11RRAIL0     5.53E-5                                               -1.
+C RAIL INDUCTANCE GRADIENT, H/m
+11LPRIME    .5765E-6                                               -1.
+C PROJECTILE MASS, kg
+11MASS         2.500                                               -1.
+C LENGTH OF RAIL, m
+11XRAIL          8.0                                               -1.
+C Muzzle discharge resistor, ohms
+11RDUMP        8.E-3                                               -1.
+C final rail inductance, H
+11LRAILF      4.6E-6                                               -1.
+C final rail resistance, ohms
+11RRAILF     2.63E-4                                               -1.
+C augmenting rail inductance, H
+11LAUG        4.2E-6                                               -1.
+C augmenting rail resistance, ohms
+11RAUG        1.0E-4                                               -1.
+C Mutual inductance gradient, augmenting to main rail, H/m
+11DMDX        .35E-6                                               -1.
+C Friction approximation coefficient, fraction of applied force
+11FMISC          0.2                                               -1.
+C Initial projectile position, m
+11XINIT           0.                                               -1.
+C Projectile initial velocity, m/s
+11VINIT        738.0                                               -1.
+C Rail mass ablation coefficient, kg/A/V/s
+11ALPHA       49.E-9                                               -1.
+C Threshold current for for computing effective arc drop
+11ITHRES     100000.                                               -1.         
+C Bore diameter, m
+11BORE          0.09                                               -1.
+C Velocity of sound in the medium within rails, m/s
+11VSOUND       346.0                                               -1.
+C Coefficient for computing shock force
+11GAMMA         1.40                                               -1.
+C Ambient pressure, N/m**2
+11PAMB       1.013E5                                               -1.
+C positions of mass along the rails where the various switches close
+11XA            0.25                                               -1.
+11X2             .50                                               -1.
+11X3            1.00                                               -1.
+11X4            1.70                                               -1.
+11X5            2.10                                               -1.
+11X6            2.70                                               -1.
+11X7            3.00                                               -1.
+C 
+C THIS CONCLUDES THE TACS SOURCES. 
+C 
+C LIST OF EMTP SOURCES
+C       VBREECH FROM EMTP
+90VBR   
+C        IRAIL FROM EMTP
+91IRAIL
+C 
+C
+C --- EMTP NODE VOLTAGES ON 8 CAPACITORS. USED TO TRIGGER CROWBAR DIODES.      
+90NODE01                                                                       
+90NODE02                                                                       
+90NODE03                                                                       
+90NODE04                                                                       
+90NODE05                                                                       
+90NODE06                                                                       
+90NODE07                                                                       
+90NODE08                                                                       
+C --- EMTP SWITCH STATUS  0 = OPEN  1 = CLOSED                                 
+C --- USED TO KEEP CROWBAR DIODES ON ONCE THEY ARE TRIGGERED.                  
+93NODE17                                                                       
+93NODE18                                                                       
+93NODE19                                                                       
+93NODE20                                                                       
+93NODE21                                                                       
+93NODE22                                                                       
+93NODE23                                                                       
+93NODE24                                                                       
+C ---                                                                          
+C --- SUPPLEMENTAL DEVICES                                                     
+C
+C --- COMPUTE GRID SIGNALS FOR CROWBAR DIODES
+C --- GRID SIGNALS (N1-N8) TURN ON  WHEN THE CAPACITOR VOLTAGE IS LESS THAN 0. 
+88N1      = - NODE01                                                           
+88N2      = - NODE02                                                           
+88N3      = - NODE03                                                           
+88N4      = - NODE04                                                           
+88N5      = - NODE05                                                           
+88N6      = - NODE06                                                           
+88N7      = - NODE07                                                           
+88N8      = - NODE08                                                           
+C 
+C
+C SUPPLEMENTAL DEVICES
+C SIMPLE RAILGUN MECHANICS
+C COMPUTE MECHANICAL FORCE ON THE PROJECTILE INCL. AUGMENTATION
+88FMECH   =.5*(1.0-FMISC)*(LPRIME+2.*DMDX)*ABS(IRAIL)**2-FSHOCK
+C USE LINEAR MODEL FOR SOLID ARMATURE ARC VOLTAGE DROP
+88GNARC   =45.+31.43*TIMEX*1000.
+C COMPUTE RATE OF MASS ABLATION FROM THE RAILS
+88MDOT    =(ALPHA*ABS(IRAIL)*ABS(GNVOLT))*FLAG1
+C COMPUTE VDOT = PROJECTILE ACCELERATION, INCLUDE TIME DELAY OF ONE
+C STEP FOR STABILITY
+  VEL1    +VEL
+88VDOT    =((FMECH-VEL1*MDOT)/MASS1)*FLAG1
+C COMPUTE MACH NUMBER, PRESSURE RATIO, AND SHOCK FORCE
+88MACH    =VEL1/VSOUND
+88PR      =GAMMA*(GAMMA+1.)/4.*ABS(MACH)**2+1
+88PRATIO  =PR+GAMMA*MACH*ABS(((ABS(MACH)**2*ABS((GAMMA+1.))**2/16.+1.)))**0.5
+88FSHOCK  =PI*BORE**2/4*PRATIO*PAMB
+C  
+C COMPUTE RESET SIGNAL FOR FIRST LAUNCH 
+C FLAG1 IS 1 AS LONG AS PROJECTILE IS IN BARREL
+C Introduce one time step delay for stability of computation
+  X1      +X
+88FLAG1   =(TIMEX .GT. (2.*DELTAT)).AND.(X1.LE.XRAIL)
+88FLAG4   =(TIMEX .GT. (2.*DELTAT))
+88FLAG5   =NOT(FLAG1)
+C  
+C COMPUTE MASS1, PROJECTILE PLUS ABLATED RAIL MASS
+88MASS1 58+MDOT                                      1.0   0.0   1.0FLAG4 MASS
+C INTEGRATE VDOT TO GET VELOCITY OF MASS
+88VEL   58+VDOT                                      1.0   0.0   1.0FLAG4 VINIT
+C INTEGRATE VELOCITY TO GET PROJECTILE POSITION
+88X     58+VEL                                       1.0   0.0   1.0FLAG4 XINIT
+C  COMPUTE THE INSTANTANEOUS RAIL INDUCTANCE
+88LRAIL   =LPRIME*ABS(X1)*FLAG1+FLAG5*LRAILF
+C  COMPUTE THE INSTANTANEOUS RAIL RESISTANCE
+88RRAIL   =FLAG1*RRAIL0*ABS(X1)**0.75+FLAG5*RRAILF                           
+C COMPUTE INSTANTANEOUS MUTUAL INDUCTANCE, AUGMENTING TO MAIN RAILS
+88M       =DMDX*(FLAG1*X1+FLAG5*XRAIL)
+C
+C CALCULATE THE POWER AND ENERGY DELIVERED TO THE RAILS
+88PBR     =VBR*IRAIL
+88EBR   58+PBR                                       1.0   0.0   1.0FLAG4 ZERO
+C CALCULATE SHOCK POWER AND ENERGY
+88PSHOCK  =FSHOCK*VEL*FLAG1
+88ESHOCK58+PSHOCK                                    1.0   0.0   1.0FLAG4 ZERO
+C CALCULATE ARC POWER AND ENERGY
+88PARC    =IRAIL*GNVOLT*FLAG1
+88EARC  58+PARC                                      1.0   0.0   1.0FLAG4 ZERO
+C CALCULATE MIXING POWER AND ENERGY
+88PMIX    =0.5*VEL**2*MDOT*FLAG1
+88EMIX  58+PMIX                                      1.0   0.0   1.0FLAG4 ZERO
+C CALCULATE THE DUMP RESISTOR POWER AND ENERGY
+88PMUZ    =RDUMP*(ABS(IRAIL-I3A)**2)
+88EMUZ  58+PMUZ                                      1.0   0.0   1.0FLAG5 ZERO
+C CALCULATE PROJECTILE CHANGE IN KINETIC ENERGY
+88DKE     =0.5*MASS*(VEL**2-VINIT**2)
+C CALCULATE ABLATED PLASMA CHANGE IN KINETIC ENERGY
+88PLSMKE  =0.5*(MASS1-MASS)*VEL**2
+C CALCULATE INSTANTANEOUS RAIL HEAT POWER AND ENERGY
+88HPOWR   =ABS(IRAIL)**2*RRAIL
+88HEAT  58+HPOWR                                     1.0   0.0   1.0FLAG4 ZERO
+C COMPUTE AUGMENTING RAIL LOSS
+88PAUG    =IRAIL*IRAIL*RAUG
+88EAUG  58+PAUG                                      1.0   0.0   1.0FLAG4 ZERO
+C CALCULATE FRICTION POWER AND ENERGY
+88PFRIC   =VEL*0.25*FMISC*(FMECH+FSHOCK)*FLAG1
+88EFRIC 58+PFRIC                                     1.0   0.0   1.0FLAG4 ZERO
+C CALCULATE TRAPPED MAGNETIC ENERGY WITHIN RAIL MATERIAL (ASSUMPTION)
+88ETRAP   =3.0*EFRIC
+C COMPUTE ENERGY STORED IN RAIL AND MUTUAL INDUCTANCE
+88ESTORE  =(.5*LRAIL+.5*LAUG+M)*IRAIL*IRAIL
+C COMPUTE ENERGY BALANCE DYNAMICALLY-should equal zero-conservation of energy
+88EBAL    =EBR-ETRAP-EFRIC-HEAT-PLSMKE-DKE-EMUZ-EMIX-EARC-ESHOCK-ESTORE-EAUG
+C  
+C COMPUTE INJECTION CURRENTS     I1,   I2,   I3
+C THESE CURRENTS EFFECTIVELY REPRESENT THE BACK EMF OF THE MOVING MASS
+88I1      =(IRAIL*(RRAIL-RRAILF)/RRAILF)*FLAG1
+88I2A     =(IRAIL*(LRAIL-LRAILF)/LRAILF)*FLAG1+M*IRAIL*FLAG4/LRAILF
+88I2      =I2A-I1
+C  Compute the effective arc voltage
+88GNVOLT  =SIGN(IRAIL)*GNARC*(1.-EXP(-ABS(IRAIL)/ITHRES))                      
+88I3A     =((IRAIL*(-RDUMP)+GNVOLT)/RDUMP)*FLAG1
+88I3      =I3A-I2A
+C COMPUTE INJECTION CURRENT DUE TO MUTUAL EFFECTS
+88I4I     =M*IRAIL/LAUG
+88I4O     =-I4I
+C
+C CAPACITOR SWITCHING FLAGS BASED UPON PROJECTILE POSITION
+88FLAG11  =X .GT. XA
+88FLAG12  =X .GT. X2
+88FLAG13  =X .GT. X3
+88FLAG14  =X .GT. X4
+88FLAG15  =X .GT. X5
+88FLAG16  =X .GT. X6
+88FLAG17  =X .GT. X7
+C  
+C TACS OUTPUTS
+C 111111222222333333444444555555666666777777888888999999AAAAAABBBBBBCCCCCCDDDDDD
+33VDOT  VEL   X     MASS1 IRAIL I1    I2    I3    FMECH MDOT  ESTOREVBR   EAUG
+33EBR   ESHOCKEARC  EMIX  EMUZ  DKE   PLSMKEHEAT  EFRIC ETRAP EBAL
+BLANK card that ends TACS data cards
+C EMTP CIRCUIT INPUT FOLLOWS
+C --- ELECTRIC NETWORK BRANCHES.                                               
+C --- SERIES R-L-C BRANCHES                                                     
+$VINTAGE, 1                                                                    
+C --- RC SNUBBER ACROSS RAIL GUN                                     
+C                         RRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLCCCCCCCCCCCCCCCC
+ 0I1                                 0.033                           4.5E2     4
+C --- RAIL FINAL RESISTANCE  R_RF                                              
+ 0I1    I2                         2.63E-4                                     
+C --- RAIL FINAL INDUCTANCE  L_LF                                              
+ 0I2    I3                                          4.6E-3                     
+C --- DUMP RESISTANCE  R_DUMP                                                  
+ 0I3                                8.0E-3                     
+C --- CAPACITORS C = 16116 MICRO FARADS , R_FUSE = 223 MICRO OHMS               
+C                         RRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLCCCCCCCCCCCCCCCC     
+ 0NODE01                           223.E-6                          17459.     4
+ 0NODE02      NODE01                                                           4
+ 0NODE03      NODE01                                                           4
+ 0NODE04      NODE01                                                           4
+ 0NODE05      NODE01                                                           4
+ 0NODE06      NODE01                                                           4
+ 0NODE07      NODE01                                                           4
+ 0NODE08      NODE01                                                           4
+C --- IGNITRON SWITCHES R_SWITCH = 30 MICRO OHMS, L_SWITCH = 0.35 MICRO HENRIES
+C                         RRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLCCCCCCCCCCCCCCCC     
+ 0NODE09NODE25                      30.E-6         0.35E-3                      
+ 0NODE10NODE26NODE09NODE25                                                      
+ 0NODE11NODE27NODE09NODE25                                                     
+ 0NODE12NODE28NODE09NODE25                                                     
+ 0NODE13NODE29NODE09NODE25                                                     
+ 0NODE14NODE30NODE09NODE25                                                     
+ 0NODE15NODE31NODE09NODE25                                                     
+ 0NODE16NODE32NODE09NODE25                                                     
+C --- INDUCTORS    R_IND = 250 MICRO OHMS,  L_IND = 20 MICRO HENRIES           
+C                         RRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLCCCCCCCCCCCCCCCC     
+ 0NODE33NODE41                      75.E-6          3.0E-3                     
+ 0NODE34NODE41NODE33NODE41                                                     
+ 0NODE35NODE41NODE33NODE41                                                     
+ 0NODE36NODE41NODE33NODE41                                                     
+ 0NODE37NODE41NODE33NODE41                                                     
+ 0NODE38NODE41NODE33NODE41                                                     
+ 0NODE39NODE41NODE33NODE41                                                     
+ 0NODE40NODE41NODE33NODE41                                                     
+C --- INTERNAL BUSWORK  R_INT = 25 MICRO OHMS  L_INT = 1 MICRO HENRY           
+C                         RRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLCCCCCCCCCCCCCCCC     
+ 0NODE25NODE33                      25.E-6          1.0E-3                     
+ 0NODE26NODE34NODE25NODE33                                                     
+ 0NODE27NODE35NODE25NODE33                                                     
+ 0NODE28NODE36NODE25NODE33                                                     
+ 0NODE29NODE37NODE25NODE33                                                     
+ 0NODE30NODE38NODE25NODE33                                                     
+ 0NODE31NODE39NODE25NODE33                                                     
+ 0NODE32NODE40NODE25NODE33                                                     
+C --- DIODE IMPEDANCE: R_DIODE = 73 MICRO OHMS , L_DIODE = 0.2 MICRO HENRIES   
+C                         RRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLCCCCCCCCCCCCCCCC     
+ 0      NODE17                      73.E-6          0.2E-3                    
+ 0      NODE18      NODE17                                                     
+ 0      NODE19      NODE17                                                     
+ 0      NODE20      NODE17                                                     
+ 0      NODE21      NODE17                                                     
+ 0      NODE22      NODE17                                                     
+ 0      NODE23      NODE17                                                     
+ 0      NODE24      NODE17                                                     
+C --- EXTERNAL BUSWORK:  R_BUS =  37.3 MICRO OHMS, L_BUS = 0.47 MICRO HENRIES  
+C                         RRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLCCCCCCCCCCCCCCCC     
+ 0NODE41VBR                        37.3E-6         0.47E-3
+ 0VBR   I4I                          1.E-4
+ 0I4I   I4O                                         4.2E-3                   
+ 0I4O   IRAIL                       1.0E-9
+$VINTAGE, 0                                                                    
+BLANK card after last electric network branch                                                      
+C INPUT SWITCH CARDS HERE
+  IRAIL I1          -1.0   1000.00                                             1
+C --- SWITCH DATA.                                                             
+C --- 8 IGNITRON SWITCHES                                                      
+C ---         <---TCLOSE<----TOPEN                                             
+  NODE01NODE09        0.    50.E-3                                             
+C ---              TACS CONTROLLED SWITCHES USING FLAGS
+13NODE02NODE10                                                        FLAG11  1
+13NODE03NODE11                                                        FLAG12  1 
+13NODE04NODE12                                                        FLAG13  1 
+13NODE05NODE13                                                        FLAG14  1 
+13NODE06NODE14                                                        FLAG15  1 
+13NODE07NODE15                                                        FLAG16  1 
+13NODE08NODE16                                                        FLAG17  1 
+C 
+C --- DIODE DATA: 8 CROWBAR DIODES. (TACS CONTROLLED)                          
+C --- GRID SIGNAL TURNS ON DIODE, TACS SIGNAL KEEPS THE DIODE ON REGARDLESS    
+C --- OF "RINGING VOLTAGE" ACROSS THE DIODE.  THIS HELPS TO SMOOTH THE SOLUTION 
+C --- ESPECIALLY WHEN THE BANKS ARE TRIGGERED AT DIFFERENT TIMES.              
+C <---N1<---N2<------VON<----IHOLD<---TEDION          CLOSED    <-GRID<-TACS  XX
+11NODE17NODE25        0.        0.        0.                    N1    NODE17  10
+11NODE18NODE26        0.        0.        0.                    N2    NODE18  10
+11NODE19NODE27        0.        0.        0.                    N3    NODE19  10
+11NODE20NODE28        0.        0.        0.                    N4    NODE20  10
+11NODE21NODE29        0.        0.        0.                    N5    NODE21  10
+11NODE22NODE30        0.        0.        0.                    N6    NODE22  10
+11NODE23NODE31        0.        0.        0.                    N7    NODE23  10
+11NODE24NODE32        0.        0.        0.                    N8    NODE24  10
+BLANK card ends all switch cards                                                   
+C SOURCE CARDS follow ....
+C MASS DRIVER EQUIVALENT CURRENT SOURCES
+60I1    -1
+60I2    -1
+60I3    -1                                                                      
+60I4I   -1
+60I4O   -1
+C        --------------+------------------------------
+C        From bus name |  Names of all adjacent busses.
+C        --------------+------------------------------
+C               I1     |TERRA *I2    *IRAIL *
+C               I2     |I1    *I3    *
+C               I3     |TERRA *I2    *
+C               NODE01 |TERRA *NODE09*
+C               NODE02 |TERRA *NODE10*
+C               NODE03 |TERRA *NODE11*
+C               NODE04 |TERRA *NODE12*
+C               NODE05 |TERRA *NODE13*
+C               NODE06 |TERRA *NODE14*
+C               NODE07 |TERRA *NODE15*
+BLANK card after last electric network source                                                                             
+C --- INITIAL CONDITIONS: INITIAL VOLTAGE ON THE 8 CAPACITORS                  
+ 2NODE01          22.E3                                                        
+ 2NODE02          22.E3                                                        
+ 2NODE03          22.E3                                                        
+ 2NODE04          22.E3                                                        
+ 2NODE05          22.E3                                                        
+ 2NODE06          22.E3                                                        
+ 2NODE07          22.E3                                                        
+ 2NODE08          22.E3                                                        
+C --- INITIAL CONDITIONS: LINEAR BRANCH CURRENTS                               
+ 3NODE01                   0.          22.E3                                   
+ 3NODE02                   0.          22.E3                                   
+ 3NODE03                   0.          22.E3                                   
+ 3NODE04                   0.          22.E3                                   
+ 3NODE05                   0.          22.E3                                   
+ 3NODE06                   0.          22.E3                                   
+ 3NODE07                   0.          22.E3                                   
+ 3NODE08                   0.          22.E3                                   
+C --- LIST OF NODE VOLTAGE OUTPUT REQUESTS
+  NODE01I1                                                                     
+C Step   Time      I1         NODE01     NODE02     NODE03     NODE04     NODE05
+C                  TERRA      TERRA      TERRA      TERRA      TERRA      TERRA 
+C      
+C                  I1         IRAIL      I1         NODE01     NODE02     NODE03
+C                              I1         TERRA      TERRA      TERRA      TERRA 
+C
+C                    NODE08     TACS       TACS       TACS       TACS       TACS  
+C                   TERRA      VDOT       VEL        X          MASS1      IRAIL 
+C 
+C                   TACS       TACS       TACS       TACS       TACS        TACS   
+C                   MDOT       ESTORE     VBR        EAUG       EBR       ESHOCK 
+C
+C                   TACS       TACS       TACS       TACS       TACS
+C                   PLSMKE     HEAT       EFRIC      ETRAP      EBAL
+C ***        Switch  "IRAIL "  to  "I1    "  closed before  0.00000000E+00  sec.
+C ***        Switch  "NODE01"  to  "NODE09"  closed  after  0.00000000E+00  sec.
+C  0      0.0         0.0        0.0        0.0        0.0        0.0        0.0 
+C                     0.0        0.0        0.0        0.0        0.0        0.0 
+C                     0.0        0.0        0.0        0.0        0.0        0.0 
+C                     0.0        0.0        0.0        0.0        0.0        0.0 
+C                     0.0        0.0        0.0        0.0        0.0
+C  1    .5E-5  .1346699E7  -.13272E9 .163913E-3 .163913E-3 .163913E-3 .163913E-3 
+C              227.865632 6033.34599 3.36674866  -331.8007 .409782E-9 .409782E-9 
+C              .409782E-9        0.0       738.        0.0        2.5 6033.34599 
+C                     0.0   262.0891 10364.4902        0.0        0.0        0.0 
+C                     0.0        0.0        0.0        0.0 -262.81712
+C  2    .1E-4  .1028069E8  -.35417E9        0.0        0.0        0.0        0.0 
+C              663.274543 16104.2329 32.4352182 -1549.0272 .819564E-9 .819564E-9 
+C              .819564E-9        0.0       738.        0.0        2.5 16104.2329 
+C                     0.0 1867.29349 14205.3015        0.0        0.0        0.0 
+C                     0.0        0.0        0.0        0.0 -1873.9365
+C   Warning.  The powers (NODE01, TERRA)  through  (NODE07, TERRA)  should be
+C   -------   zero initially.  But these are floating (near) zeros.  The problem
+C             comes from the current.  Turning the debugger on or off may change
+C             these from near zeros to exact zeros,  or vice versa.  The  SUBTS2
+C             computation involves the cancellation of 2 very large numbers to
+C             give the current.  If numbers such as 1.E-4 are seen,  this is the
+C             best that can be guaranteed using 64 bits.  WSM + THL, 8 August 96
+BLANK card ending node voltage outputs                                          
+C            Valve   "NODE22"  to  "NODE30"  closing after  2.56000000E-03  sec.
+C            Switch  "NODE08"  to  "NODE16"  closing after  2.61500000E-03  sec.
+C            Valve   "NODE23"  to  "NODE31"  closing after  2.93000000E-03  sec.
+C            Valve   "NODE24"  to  "NODE32"  closing after  3.10000000E-03  sec.
+C  1000  .005  .9701709E8 .1788576E8  .114869E8 .3849588E9 -.530779E9 -.327226E9 
+C              4394.39452 857904.981 5103.30646 -.415356E7 -.407104E7 -.389447E7 
+C              -.387852E7        0.0 2415.92363 8.18382873 2.53769379 857904.981 
+C                     0.0 .5299207E7 -4437.3114 872163.762 .1706545E8 272689.202 
+C              110003.436 .1023366E7 353147.438 .1059442E7 181783.733
+C Variable max: .102486E9 .3091743E9 .141619E10 .316849E10  .38723E10  .31399E10 
+C              4394.39452 .1634357E7 5103.30646        0.0 .286847E-7 .553206E-7 
+C              .214316E-6 534570.044 2415.92363 8.18382873 2.53769379 .1634357E7 
+C              10.1502923 .9999568E7 22826.1693 872163.762  .170705E8 272689.202 
+C              110003.436 .1023366E7 353147.438 .1059442E7 297386.202
+C Times of max:    .00499    .001105     .00109      .0013     .00178     .00235 
+C                    .005     .00152       .005        0.0     .35E-3    .675E-3 
+C                 .002615    .001515     .00493       .005     .00493     .00152 
+C                 .002975      .0029     .45E-4       .005    .004895     .00493 
+C                  .00493       .005     .00493     .00493    .004925
+  PRINTER PLOT  
+ 194 1. 0.0 5.5         TACS  IRAIL               { Axis limits: (0.000,  1.634)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        4th of 5 subcases illustrates the modeling of Static Var Control (SVC).
+C        Contributed to ATP materials of the Can/Am user group February 1992 by:
+C          Gabor B. Furst Consultants            Kurt G. Fehrle, Consultant     
+C          #203 - 1745 Martin Drive              705 Westtown Circle
+C          White Rock/ South Surrey B.C.         West Chester, PA 19382
+C          CANADA  V4A 6Z1                       USA
+C          Phone: 604-535-6540                   Phone: 610-344-0432 
+C          FAX:   604-535-6548
+C        In July of 1993,  Mr. Furst revised it again in preparation for his use
+C        of it at Prof. Ned Mohan's University of Minnesota short course there.
+C   Size  1-10:    43    63    56     3   230    18   167     0     0     0
+C   Size 11-20:     0    15  3602 -9999 -9999     0     0     0110679     0
+C   Size 21-29:     0     0   105     0 -9999 -9999 -9999 -9999 -9999
+NEW LIST SIZES
+       0       0      68       8     450      35     285       0       0       0
+       0       0    4700       0       0       0       0       0   12000       0
+       0       0     220
+  240000  
+C  *********** A GENERIC 6 PULSE SVC MODEL ************************************
+C
+C     This is a conceptual model only, it must be refined
+C     for any specific system; the control algorithm can be greatly improved.
+C
+C    6 pulse 100 MVAR TCR-SVC connected to a 230/34.5 kV Y/D transformer;
+C    TCR's connected in delta.
+C
+C    Thyristor gating pulses are phase locked to the current zero transition
+C    in an auxiliary reactor (RMAB,RMBC,RMCA), which could be an oversized PT;
+C    individual phase open loop VAR control is used, with a superimposed.
+C    slow voltage control.
+C
+C    The disturbance is the on/off switching of a 52.3 MVA, 0.7 p.f., 34.5 kV
+C    load (XLA/B/C). The SVC response can be obtained by plotting the r.m.s
+C    value of the 34.5 kV phase to phase voltages, which are the TACS variables
+C    TXNAB/BC/CA.  To obtain the response on the 34.5 kV bus without the SVC,
+C    the thyristors have to be blocked.  One way of doing this is to punch
+C    1000000. in col. 17-24 of the thyristor switches 11.
+C
+C    To get the SVC overall response plot the transformer ph-ph r.m.s secondary
+C    voltage  TXNA (TACS), or VILLAVG (TACS) for the av. value of the three
+C    ph-ph r.m.s. voltages
+C
+C    To get the VAR import/phase through the transformer secondary
+C    plot QINA (TACS)
+C
+C    To get the transformer secondary voltage (instant.) plot TRSA
+C
+C    TRSA-XLA shows the switching of the phase to phase load
+C
+C    RXAB-TRSB plots the current through one AB arm of the thyristor bridge
+C
+C    For sake of simplicity, some of the TACS variables have not been
+C    initialized, so ignore the first 25 ms of the plots.
+C
+C    If in the "Superimposed Voltage Control Section the gain
+C    of DVQ is set to zero, the model reverts to open loop VAR control
+PRINTED NUMBER WIDTH, 13, 2,
+ALLOW EVEN PLOT FREQUENCY { See April, 1998, newsletter (to allow IPLOT = 2 below)
+C      For best results,  do  not  use a time step more than 1/2 Degree  (23.148
+C      microsec for 60 Hz).  Here, to speed the illustration, we use twice that,
+C      & only simulate for half as long (extend to 0.5 sec for more transients).
+C      Free-format  data  input  is used in order to specify  DELTAT  precisely:
+C               DELTAT   TMAX  XOPT  COPT  EPSILN  TOLMAT
+C .0000462962962962963,  0.25,  60.,     ,       ,       ,               , , , , ,
+C      That was the old, brute-force way.  Alternative finesse first was made
+C      available on 19 August 1998.  As long as columns 1-16 involve no decimal
+C      point,  dT and T-max are replaced by points/cycle & end time in cycles:
+     360      15     60.   { Points per cycle,  simulation time in cycles,  XOPT
+       1       4       1       2       1      -1
+       5       5      20      20     100     100     500     500
+TACS HYBRID
+C
+C   Firing pulses are derived from the current through the measuring inductances
+C   RMAB, RMBC and RMCA as explained above.  Device 91 imports the current into
+C   TACS from the  measuring switches connecting the RM's in delta,
+C   corresponding to the delta connected thyristor valves.
+C
+C   The current lags the voltage 90 deg. and its zero transition produces
+C   the firing signal at an alpha of 90 deg.
+C   This is done by TACS level triggered switches Device 52.
+C   The firing pulse delay is calculated by the variables DELAB/BC/CA
+C   and implemented by TACS transport device Device 54;
+C
+C   For convenience, the firing angle is initialized to alpha = 180 deg.
+C   by the constant of DELIN, where DELA is 4.167 ms for a 60 Hz system.
+C   The required firing angle is then calculated backwards from the
+C   180 deg. point, by using the variable DELYA(B,C).
+C   The actual firing angle is then DELAB = DELIN -DELYA etc.
+C   for the other phases. The minimum firing  angle is limited by DELYA = 4.167 ms.
+C   Then DELAB= DELIN - DELYA =0.0 (90 deg.)
+C   DELIN = 4.167 ms.; DELAB =0.0 corresponds to minimum alpha 90 degrees.
+C   For 50 Hz,  DELIN = 5.0 ms.
+C
+C       *********** VOLTAGE AND REACTIVE REFERENCE *************
+11VREFD          1.0
+C   VAR reference
+C   the TCR rating is 100 MVA 3ph; the per phase is 33.3 MVAR or 1.00 p.u.;
+C   initial load through the 230/34.5 kV tranformer is 45 MVAR or 15 MVAR/phase;
+C   equal to 0.45 p.u. giving approx. 90% bus voltage at 34.5 kV;
+C   this is taken as reference; Q divided by QTCR =33.3 MVAR will be Q p.u.
+88QTCR    = 33.3*10**6
+C    The VAR reference QREF should be determined so that the superimposed
+C    voltage control changes the VAR flow as little as possible
+88QREF    = 0.30
+C
+C    ***********  VOLTAGES TRANSFERRED FROM NETWORK  *************
+C
+C ******* Import 34.5 kV phase voltages, get phase to phase and normalize *****
+C  TRSA/B/C are the transformer secondary ph-g voltages
+C  90 - TACS voltage source driven by an EMTP network node voltage
+C   (Rule Book p. 3-15)
+90TRSA
+90TRSB
+90TRSC
+C     the phase to phase voltages
+99TRAB    =  TRSA - TRSB
+99TRBC    =  TRSB - TRSC
+99TRCA    =  TRSC - TRSA
+C      normalize to get one p.u. for the phase to phase rms value
+99TABX    =  TRAB/34500
+99TBCX    =  TRBC/34500
+99TCAX    =  TRCA/34500
+C      get the rms value of the A-B phase to phase voltage
+C      Device 66 (Rule Book p. 3-32)
+99TXNAB 66+TABX                                      60.
+99TXNBC 66+TBCX                                      60.
+99TXNCA 66+TCAX                                      60.
+C
+C **************  PHASE A  FIRING PULSES **************************************
+C
+C  91 - TACS;  current source driven by an EMTP network current (Rule B.p 3-15)
+91RMAB
+C    send square impulse at current zero Device 52 (Rule B. p. 3-21)
+88FAB1  52+UNITY                                      1.    0.     0      RMAB
+88FAB2  52+UNITY                                      1.    0.    -1      RMAB
+C        to shift impulse by DELAB delay required Type 54 (Rule B. p. 3-23)
+98FIAB1 54+FAB1                                          .0000      DELAB
+98FIAB2 54+FAB2                                          .0000      DELAB
+C     for a 50 Hz system the constant .004167 below should be changed to 0.005
+88DELIN   = .004167  {  to initialize alpha to 180 deg.
+C
+C *************  PHASE B  FIRING PULSES  *************************************
+C
+91RMBC
+88FBC1  52+UNITY                                      1.    0.     0      RMBC
+88FBC2  52+UNITY                                      1.    0.    -1      RMBC
+98FIBC1 54+FBC1                                          .0000      DELBC
+98FIBC2 54+FBC2                                          .0000      DELBC
+C
+C ************  PHASE C  FIRING PULSES   *************************************
+C
+91RMCA
+88FCA1  52+UNITY                                      1.    0.     0      RMCA
+88FCA2  52+UNITY                                      1.    0.    -1      RMCA
+98FICA1 54+FCA1                                          .0000      DELCA
+98FICA2 54+FCA2                                          .0000      DELCA
+C
+C *************  OPEN LOOP VAR CONTROL **************************
+C     ****  WITH SUPERIMPOSED VOLTAGE CONTROL ***********
+C
+C    the following will be repeated for all three phases as the SVC
+C
+C      ************  RACTIVE POWER FLOWS  *********
+C
+C  calclate VAR transfer at transf. secondary
+91TRXA              { 34.5 kV side current through transformer
+C     Device 53 is transpoert delay or signal phase shifting (Rule Book p. 3-22)
+88TRIA  53+TRXA                                         .00417 .0043
+88TRVA  53+TRSA                                         .00417 .0043
+C    the following equation for calculating VAR flow is from
+C    Miller: Reactive power Control etc. (text book)   p. 321
+88QINA    =( -TRSA * TRIA * 0.5  +  TRXA * TRVA * 0.5 ) / QTCR
+C
+91TRXB
+88TRIB  53+TRXB                                         .00417 .0043
+88TRVB  53+TRSB                                         .00417 .0043
+88QINB    =( -TRSB * TRIB * 0.5  +  TRXB * TRVB * 0.5 ) / QTCR
+C
+91TRXC
+88TRIC  53+TRXC                                         .00417 .0043
+88TRVC  53+TRSC                                         .00417 .0043
+88QINC    =( -TRSC * TRIC * 0.5  +  TRXC * TRVC * 0.5 ) / QTCR
+C
+C  ********************  SUPERIMPOSED VOLTAGE CONTROL ********************
+C
+C     ********   DELTA Q  TO ADJUST VOLTAGE ************
+C    the average value of phase to phase voltage is
+ 0VLLAVG  +TXNAB  +TXNBC  +TXNCA                   .3333   .85  1.15
+C   the difference between ref. and actual voltage is
+C   slow down the response by a (1/1+st) block
+ 1DVQ     +VLLAVG -VREFD                           50.0   -1.0   1.0
+       1.0
+       1.0     0.500
+C   the required VAR import taking voltage correction into account
+ 0QRNEW   +QREF   +DVQ
+C *****************  PHASE A  ERROR ******************************************
+C
+C  error in VAR import
+ 0ERRQA   +QRNEW  -QINA
+ 0QINCRA  +ERRQA
+C       the new reactor output is then given by the Steinmetz Algorithm as
+C       the output at T-delT  + QINCRA + QINCRB - QINCRC;
+C       as shown below in calculating the new SVC VAR's
+C ******************  PHASE B  ERROR  ****************************************
+C
+ 0ERRQB   +QRNEW  -QINB
+ 0QINCRB  +ERRQB
+C
+C ******************  PHASE C  ERROR *****************************************
+C
+ 0ERRQC   +QRNEW  -QINC
+C
+ 0QINCRC  +ERRQC
+C
+C
+C ****************  PHASE A  PULSE DELAY CONTROL  ****************************
+C       the current firing angle is DELAB, this corresponds to an old reactor
+C       p.u. current given by the following non linear relation corresponding
+C       to the x = sigma-sin(sigma) function
+99DLA1    =  1 - DELAB/.004167
+C  where DLA1 is the normalized conduction angle sigma between firing
+C  angle alpha 90 and 180 degrees.
+C
+99REOAB 56+DLA1
+             0.0             0.0
+           0.111          0.0022
+           0.222          0.0176
+           0.333          0.0575
+           0.444          0.1306
+           0.555          0.2414
+           0.666          0.3900
+           0.777          0.5718
+           0.888          0.7783
+           1.000          1.0000
+           9999.
+C         the new reactor current demanded is  the increment plus the old
+C         which is QINCRA + QINCRB - QINCRC + REOAB  and is min. 0.0 max. 1.0
+C         this is applying the Steinmetz algorithm
+ 0INREAB  +QINCRA +REOAB  +QINCRB -QINCRC                 0.00  1.00
+C         this is now reconverted into an angle, using the inverse of the
+C         above relation, and becomes the new DELAB; (Rule Book p. 3-25 )
+99DELYAA56+INREAB
+             0.0             0.0
+          0.0022           0.111
+          0.0176           0.222
+          0.0575           0.333
+          0.1306           0.444
+          0.2414           0.555
+          0.3900           0.666
+          0.5718           0.777
+          0.7783           0.888
+          1.0000           1.000
+           9999.
+99DELYA   =DELYAA * 0.004167
+C        now smooth it out a bit
+ 1DELAB   +DELIN  -DELYA                             1.0       .0040
+       1.0
+       1.0     0.015
+C
+C ******************  PHASE B  PULSE DELAY CONTROL **************************
+C
+99DLB1    =  1 - DELBC/.004167
+C
+99REOBC 56+DLB1
+             0.0             0.0
+           0.111          0.0022
+           0.222          0.0176
+           0.333          0.0575
+           0.444          0.1306
+           0.555          0.2414
+           0.666          0.3900
+           0.777          0.5718
+           0.888          0.7783
+           1.000           1.000
+           9999.
+C
+ 0INREBC  +QINCRB +REOBC  +QINCRC -QINCRA                 0.00  1.00
+C
+99DELYBB56+INREBC
+             0.0             0.0
+          0.0022           0.111
+          0.0176           0.222
+          0.0575           0.333
+          0.1306           0.444
+          0.2414           0.555
+          0.3900           0.666
+          0.5718           0.777
+          0.7783           0.888
+           1.000           1.000
+           9999.
+99DELYB   =DELYBB * 0.004167
+C
+ 1DELBC   +DELIN  -DELYB                             1.0      0.0040
+       1.0
+       1.0     0.015
+C
+C ***************  PHASE C  PULSE DELAY CONTROL ******************************
+C
+99DLC1    =  1 - DELCA/.004167
+C
+99REOCA 56+DLC1
+             0.0             0.0
+           0.111          0.0022
+           0.222          0.0176
+           0.333          0.0575
+           0.444          0.1306
+           0.555          0.2414
+           0.666          0.3900
+           0.777          0.5718
+           0.888          0.7783
+           1.000           1.000
+           9999.
+C
+ 0INRECA  +QINCRC +REOCA  +QINCRA -QINCRB                 0.00  1.00
+C
+99DELYCC56+INRECA
+             0.0             0.0
+          0.0022           0.111
+          0.0176           0.222
+          0.0575           0.333
+          0.1306           0.444
+          0.2414           0.555
+          0.3900           0.666
+          0.5718           0.777
+          0.7783           0.888
+           1.000           1.000
+           9999.
+99DELYC   =DELYCC * 0.004167
+C
+ 1DELCA   +DELIN  -DELYC                             1.0      0.0040
+       1.0
+       1.0     0.015
+C
+C *****************  REACTOR SWITCHING ***************************************
+C
+C   control signals to switch reactive load 'XLA/B/C' on and off
+C   see TYPE 12 switches in power network.
+C     TACS source (Rule Book p. 3-14)
+23FRLA         1000.     0.200     0.100                           0.2
+23FRLB         1000.     0.200     0.100                           0.2
+23FRLC         1000.     0.200     0.100                          10.0
+C
+C    initializations
+77VLLAVG         1.0
+77TXNAB          1.0
+77QRNEW          .30
+77QINA           .30
+77QINB           .30
+77QINC           .30
+C
+C        *********  TACS OUTPUTS ************
+C
+33TXNAB TXNBC TXNCA ERRQA VLLAVG
+33QRNEW DVQ   QINA
+BLANK   end of TACS
+C
+C    **************   NETWORK DATA  *********************
+C
+C         *********  LINE TO SOURCE ***********
+C
+C          transmission line (equivalent) from GEN source to transformer
+  GENA  TRFA                 4.5  25.0
+  GENB  TRFB                 4.5  25.0
+  GENC  TRFC                 4.5  25.0
+C     fault level at trsf. 230 kV approx. 2083 MVA
+C
+C      **************   MAIN TRANSFORMER  **************
+C
+C         transformer capacitance to ground 10000pF
+C       a very simple model, can be replaced with any more complex model
+C            transformer  230000/34500 Y/D 100 MVA; In=250 A
+C             x = 7.0% on 100 MVA
+C       230^2/100* 0.07 = 37.0 ohms trsf. leakage reactance
+C TRANSFORMER busref      imag  flux  busin rmag          empty
+C ------------______------______------______------_____________________________-
+C
+C      no saturation
+  TRANSFORMER                0.7 700.0     X
+             0.7           700.0        {   100%
+            9999
+ 1TRPA                      0.80  36.0  1330
+ 2TRXA  TRXB                      1.00   385      {372
+  TRANSFORMER      X                       Y
+ 1TRPB
+ 2TRXB  TRXC
+  TRANSFORMER      X                       Z
+ 1TRPC
+ 2TRXC  TRXA
+C
+C         transformer capacitance to ground and ph - ph 10000pF
+  TRXA                                 0.01
+  TRXB                                 0.01
+  TRXC                                 0.01
+C         capacitance between phases
+  TRXA  TRXB                           0.01
+  TRXB  TRXC                           0.01
+  TRXC  TRXA                           0.01
+C
+C      ***********  HARMONIC FILTERS  ***************
+C
+C       5th harmonic filter  20 MVAR
+  TRSA  TF5                       2.38 44.5
+  TRSB  TF5                       2.38 44.5
+  TRSC  TF5                       2.38 44.5
+C       7th harmonic filter  20 MVAR
+  TRSA  TF7                       1.21 44.5
+  TRSB  TF7                       1.21 44.5
+  TRUC  TF7                       1.21 44.5
+C
+C      ********  TRANSFORMER SECONDARY LOAD ***************
+C                       75 MW, 30 MVAR
+  TRSA  ND                 13.67  5.47
+  TRSB  ND                 13.67  5.47
+  TRSC  ND                 13.67  5.47
+C
+C         shunt capacitor    20 MVAR
+  TRSA                                 44.5
+  TRSB                                 44.5
+  TRSC                                 44.5
+C       **********  SWITCHED REACTOR FOR SVC RESPONSE TEST *********
+C
+C        switched reactor .1 sec. on .1 sec. off
+C           see switch type 13 below and type 23 source in TACS
+C           24.7 MVA, 0.7 p.f.,17.5 MW, 17.5 MVAR load
+  XLA   NSR                34.00 34.00
+  XLB   NSR                34.00 34.00
+  XLC   NSR                34.00 34.00
+C
+C
+C         **************  SNUBBERS  **************
+C
+C         the snubber parameters shown below are not necessarily the
+C         values a manufacturer would choose for a 34.5 kV valve.
+C         The parameters were selected so that only a small currrent flows
+C         through the control reactor with the valves non conducting,
+C         and overvoltages and spikes interfering with the firing control
+C         are prevented.  It is quite possible that a better combination
+C         than that shown exists.
+C
+C       in series with valves
+C
+  CATAB RXAB                 .1
+  ANOAB RXAB                 .1
+  CATAB RXAB                       4.0
+  ANOAB RXAB                       4.0
+C
+  CATBC RXBC                 .1
+  ANOBC RXBC                 .1
+  CATBC RXBC                       4.0
+  ANOBC RXBC                       4.0
+C
+  CATCA RXCA                 .1
+  ANOCA RXCA                 .1
+  CATCA RECA                       4.0
+  ANOCA RXCA                       4.0
+C
+C   across valves
+C
+  CATAB TRSA               2000.         .1
+  ANOAB TRSA               2000.         .1
+C
+  CATBC TRSB               2000.         .1
+  ANOBC TRSB               2000.         .1
+C
+  CATCA TRSC               2000.         .1
+  ANOCA TRSC               2000.         .1
+C
+C      *************   SVC CONTROLLED REACTOR   *************
+C
+C     reactor in  TCR  appr. 100.0 MVA   Xr = 3 * 34.5^2/100 =35.71 ohm
+  RXAB  TRSB                 0.1 35.71                                         1
+  RXBC  TRSC                 0.1 35.71
+  RXCA  TRSA                 0.1 35.71
+C
+C       ***************   REACTOR FOR FIRING PULSE GENERATION ******
+C
+C      Fire angle reference measurement using delta connected reactors
+C       TRSA - RMXA is just a dummy separation from the main 34.5 kV bus
+  TRSA  RMXA                0.01                                               1
+  TRSB  RMXB                0.01
+  TRSC  RMXC                0.01
+C    The reactors are delta connected through measuring switches below
+  RMAB  RMXB               200. 20000.
+  RMBC  RMXC               200. 20000.
+  RMCA  RMXA               200. 20000.
+C
+BLANK    end of branch data
+C      ***************   SWITCH  DATA ***************8
+C
+C  current measurement in the auxiliary reactor for firing pulse generation
+C   these switches complete the delta connection of the reactors
+C   (Rule Book p.6A-9)
+  RMXA  RMAB                                          MEASURING
+  RMXB  RMBC                                          MEASURING
+  RMXC  RMCA                                          MEASURING
+C
+C       current measurement in the main transformer secondary
+  TRXA  TRSA                                          MEASURING                1
+  TRXB  TRSB                                          MEASURING                0
+  TRXC  TRSC                                          MEASURING                0
+C       current measurement in the main transformer primary
+  TRFA  TRPA                                          MEASURING                1
+  TRFB  TRPB                                          MEASURING                0
+  TRFC  TRPC                                          MEASURING                0
+C
+C    switch for on/off switching the 17.5 MVAR resistive-reactive load
+C   (Rule Book p. 6C-1)
+12TRSA  XLA                                                     FRLA          11
+12TRSB  XLB                                                     FRLB          10
+12TRSC  XLC                                                     FRLC          10
+C
+C   VALVES
+C     6 valves, 2 per phase, 3ph. 6 pulse supply to TCR
+C    Rule Book p. 6B-1
+11TRSA  CATAB        00.   15.0                                 FIAB1         1
+11ANOAB TRSA         00.   15.0                                 FIAB2         1
+11TRSB  CATBC      0000.   15.0                                 FIBC1         1
+11ANOBC TRSB        000.   15.0                                 FIBC2         1
+11TRSC  CATCA      0000.   15.0                                 FICA1         1
+11ANOCA TRSC        000.   15.0                                 FICA2         1
+C
+BLANK    end of switch data
+C
+C    AC sources
+C    230 kV  supply
+14GENA       187794.       60.        0.                           -1.
+14GENB       187794.       60.      240.                           -1.
+14GENC       187794.       60.      120.                           -1.
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        GENA   |TRFA  *
+C        TRFA   |GENA  *TRPA  *
+C        GENB   |TRFB  *
+C        TRFB   |GENB  *TRPB  *
+C        GENC   |TRFC  *
+C        TRFC   |GENC  *TRPC  *
+C             X |TERRA *TERRA *TRPA  *
+C        TRPA   |TRFA  *     X*
+C        TRXA   |TERRA *TRXB  *TRXB  *TRXC  *TRXC  *TRSA  *
+C        TRXB   |TERRA *TRXA  *TRXA  *TRXC  *TRXC  *TRSB  *
+BLANK   end of source cards
+C     Total network loss  P-loss  by summing injections =   9.766831747973E+07
+C  Output for steady-state phasor switch currents.
+C      Node-K    Node-M            I-real            I-imag            I-magn          Degrees        Power            Reactive
+C      RMXA      RMAB         -3.58276847E-01   -2.79310857E+00    2.81599321E+00     -97.3095    2.25048004E+04    3.95893953E+04
+C      RMXB      RMBC         -2.15903199E+00    1.67914276E+00    2.73513063E+00     142.1267    2.24866103E+04    3.77703877E+04
+C      RMXC      RMCA          2.51730884E+00    1.11396581E+00    2.75277380E+00      23.8705    2.24781027E+04    3.69196208E+04
+C      TRXA      TRSA          1.87366412E+03   -5.12826995E+02    1.94257787E+03     -15.3071    2.92045856E+07   -1.15739798E+07
+C      TRXB      TRSB         -1.84783216E+03   -1.48829687E+03    2.37265911E+03    -141.1510    3.63691255E+07   -1.14600036E+07
+C      TRXC      TRSC         -2.58319590E+01    2.00112387E+03    2.00129059E+03      90.7396    3.11027262E+07   -4.48411843E+06
+C      TRFA      TRPA          3.59043573E+02    9.36972121E+01    3.71067992E+02      14.6259    3.34033086E+07   -1.05190303E+07
+C      TRFB      TRPB         -1.76142866E+02   -3.36446952E+02    3.79766851E+02    -117.6338    3.53040617E+07   -3.27502311E+06
+C      TRFC      TRPC         -1.82900707E+02    2.42749740E+02    3.03940957E+02     126.9963    2.81187847E+07   -4.63098619E+06
+C 1st gen:   GENA    187794.     187794.      359.04357262628  371.06799188975      .337131143389E8  .348421712345E8
+C 1st gen:              0.0          0.0      93.697212129556       14.6259048      -.87978871273E7        0.9675951
+  TRSA  TRFA               { Names of nodes for which voltage is to be outputted
+C   Step      Time        TRSA         TRFA         TRXA         TRFA         TRSA         RXAB         TRSA         TACS
+C                                                   TRSA         TRPA         XLA          TRSB         RMXA         TXNAB
+C
+C                         TACS         TACS         TACS         TACS         TACS         TACS         TACS
+C                         TXNBC        TXNCA        ERRQA        VLLAVG       QRNEW        DVQ          QINA
+C ***      Phasor I(0) = -3.5827685E-01                     Switch  "RMXA  "  to  "RMAB  "  closed in the steady-state.
+C ***      Phasor I(0) = -2.1590320E+00                     Switch  "RMXB  "  to  "RMBC  "  closed in the steady-state.
+C ***      Phasor I(0) =  2.5173088E+00                     Switch  "RMXC  "  to  "RMCA  "  closed in the steady-state.
+C ***      Phasor I(0) =  1.8736641E+03                     Switch  "TRXA  "  to  "TRSA  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.8478322E+03                     Switch  "TRXB  "  to  "TRSB  "  closed in the steady-state.
+C ***      Phasor I(0) = -2.5831959E+01                     Switch  "TRXC  "  to  "TRSC  "  closed in the steady-state.
+C ***      Phasor I(0) =  3.5904357E+02                     Switch  "TRFA  "  to  "TRPA  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.7614287E+02                     Switch  "TRFB  "  to  "TRPB  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.8290071E+02                     Switch  "TRFC  "  to  "TRPC  "  closed in the steady-state.
+C      %%%%%   Floating subnetwork found!   %%%%%%  %%%%%%  %%%%%%  %%%%%%
+C      %%%%%  The elimination of row  "NSR   "  of nodal admittance matrix [Y] has produced a near-zero diagonal value  Ykk =
+C             0.00000000E+00   just prior to reciprocation.  The acceptable minimum is  ACHECK = 7.63336829E-12   (equal to EPSILN
+C             times the starting Ykk).   This node shall now to shorted to ground with  1/Ykk = FLTINF.
+C      0       0.0     25855.428  188520.7342  1873.664121  359.0435726          0.0  .8977594404  -2.87558569          0.0
+C                            0.0          0.0          0.0          1.0          0.3          0.0          0.3
+C      1 .46296E-4   26190.60084  188656.0309  1882.328634  357.3536908          0.0  .8251974241  -2.80696162  .0854224562
+C                     .050813098  .0346093582  .3019675015          .85  .3019675015  .0019675015          0.0
+C  Valve   "ANOBC "  to  "TRSB  "  closing after  9.25925926E-05  sec.
+C      2 .92593E-4   26517.79623  188733.8621  1890.419856  355.5549605          0.0   .752384056  -2.73748258  .1209236949
+C                    .0710411015   .049896216   .301272907          .85   .301272907   .001272907          0.0
+BLANK  end of output requests
+C  Valve   "TRSB  "  to  "CATBC "  closing after  2.40231481E-01  sec.
+C  Valve   "TRSA  "  to  "CATAB "  opening after  2.41388889E-01  sec.
+C  Valve   "ANOAB "  to  "TRSA  "  closing after  2.42638889E-01  sec.
+C  Valve   "ANOCA "  to  "TRSC  "  opening after  2.44351852E-01  sec.
+C  Valve   "TRSC  "  to  "CATCA "  closing after  2.45138889E-01  sec.
+C  Valve   "TRSB  "  to  "CATBC "  opening after  2.46574074E-01  sec.
+C  Valve   "ANOBC "  to  "TRSB  "  closing after  2.48611111E-01  sec.
+C  Valve   "ANOAB "  to  "TRSA  "  opening after  2.49675926E-01  sec.
+C   5400       .25   24620.31357  180704.5964  887.7133221  311.5182977  310.0730625  18.04597752  -2.55047538   .999668036
+C                    1.002620895   1.00418338   -.05590233  1.002057221  .5408201644  .2408201644  .5967224946
+C Variable maxima :  30965.63617  188749.4575  2719.683362  461.7713374  506.9005859  1315.892083  4.520536227  1.084424099
+C                    1.091008223   1.08827864  .3019675015  1.085619064  .5823416906  .2823416906  .8205355066
+C Times of maxima :  .0344444444  .1388889E-3  .2030092593        .2025   .235787037  .0044907407  .0224537037  .0396759259
+C                    .0401851852  .0358796296   .462963E-4  .0400925926  .1684722222  .1684722222  .2031481481
+C Variable minima :  -31985.2128  -187338.374  -2784.38662  -483.591685   -508.17585  -1284.74425  -4.58557455          0.0
+C                            0.0          0.0  -.564929157          .85  .1001935452  -.199806455          0.0
+C Times of minima :  .0266666667  .0252314815  .2112962963  .2103703704  .2441203704       .19625  .0309259259          0.0
+C                            0.0          0.0  .0118981481   .462963E-4  .0158333333  .0158333333   .462963E-4
+  PRINTER PLOT
+ 193.02 0.0 .25  .94 1.0TACS  TXNAB    { Limits [.94, 1.0] amplify the transient
+BLANK   end of plot requests
+BEGIN NEW DATA CASE
+C        5th of 5 subcases illustrates the modeling of Static Var Control (SVC).
+C        This is very similar to the preceding 4th case except that here newer
+C        MODELS  replaces  TACS  for the control system modeling.   The same
+C        Gabor Furst of suburban Vancouver, British Columbia, Canada contributed
+C        this during February of 1995 (see January and April newsletters).  To
+C        speed the simulation,  TMAX = 0.6  has been reduced to  0.10 sec.
+NEW LIST SIZES
+       0       0      68       8     450      35     285       0       0       0
+       0       0    4700       0   64800       0       0       0       0       0
+C      0       0     220                                  126000
+       0       0     220                              30  126000 { 16 March 2007
+C   About the preceding 2 lines, List 27 default = 26 resulted in TACS1 overflow 
+C   Since year 1 (1995),  this went undetected until Orlando Hevia's G95 testing
+  240000     742
+PRINTED NUMBER WIDTH, 11, 1,   { Restore defaults after preceding aberations
+C DELTAT    TMAX    XOPT    COPT  EPSILN  TOLMAT
+C 46.296-6   0.600     60.  ----  Gabor Furst's original data card
+.0000462962962962963,  0.100,  60.,     ,       ,       ,              , , , , ,
+C   the time step is the cycle time 1/60 sec. divided by 360 degrees
+C   IOUT   IPLOT  IDOUBL  KSSOUT  MAXOUT    IPUN  MEMSAV    ICAT  NENERG  IPRSUP
+C   9999       1       0       1       1                       
+       1       3       1       2       1      -1
+       5       5      20      20     100     100     500     500
+C    The running of this MODELS file requires the latest version of TPbig
+C    with the increased list sizes for MODELS
+C
+C    The example demonstrates a generic SVC connected to  a 230/34.5 kV
+C    step-down transformer, with an SVC reactor rating of 100 MVA.
+C    The SVC is tested by switching on and off a 25 MVA 0.7 p.f.
+C    load on the 34.5 kV bus
+C           plot vatiable 'vllavg' for SVC response
+C ==============================================================================
+MODELS
+  INPUT trma {v(TRSA)}  -- transf. sec. voltage
+        trmb {v(TRSB)}
+        trmc {v(TRSC)}
+--
+        irab {i(RMAB)} --  aux. reactor delata current
+        irbc {i(RMBC)}
+        irca {i(RMCA)}
+--
+        itra {i(TRXA)}  -- transf. sec. current
+        itrb {i(TRXB)}
+        itrc {i(TRXC)}
+--
+        rxab {i(TRXA)}  -- main reactor current
+        rxbc {i(TRXB)}
+        rxca {i(TRXC)}
+--
+   OUTPUT             --  firing signals
+        FIAB1, FIAB2,  FIBC1,  FIBC2,  FICA1, FICA2   -- firing signals
+        FRLA,   FRLB,  FRLC  --  reactor switching
+--
+MODEL svcmod    -- MODELS version of DC 22 subcase 4
+--
+--
+DATA  omega {dflt: 2*pi*freq}
+      dt {dflt :0.25/freq}
+--
+CONST freq {val: 60}
+      tper {val: 1/freq}
+      qtcr {val: 33.3*1E+6}       -- p.u. SVC reactor rating/phase
+      qref {val: 0.00}            -- set 0 for this example
+      delin {val: 0.25/freq}      -- initialization for firing delay (60Hz)
+      tpimp {val: 0.200}          --  test reactor switching cycle
+       ton  {val: 0.100}           -- reactor on time
+       tstart {val: 0.3}           -- start of switching reactors
+--
+VAR
+  tt, vllavg, vllmax, vll12p , qrnew, ttt1, ttt2, ttt3
+   dvq, error, fdb,  vref, verr, inreact, delyi
+   vtrsec[1..3], vtrff[1..3]
+   f1[1..3], f2[1..3], ficat[1..3], fian[1..3],del[1..3],i,k,l,ir[1..3]
+   vrms[1..3], itr[1..3], tri[1..3], trv[1..3], qin[1..3]
+   errq[1..3], qincr[1..3]
+--
+  HISTORY    vtrsec[1..3] {dflt:[0,0,0]}   -- transf. ph-g voltages
+             vtrff[1..3] {dflt:[0,0,0]}    -- transf. ph-ph voltages
+--
+             dvq {dflt: 0}      -- forward block output
+             error {dflt: 0}    -- error signal
+             fdb {dflt: 0}      -- feedback
+--
+             ir[1..3] {dflt :[0,0,0]}   -- aux. reactor delata current
+            itr[1..3] {dflt :[0,0,0]}   -- trsf. sec. current
+            del[1..3] {dflt :[0,0,0]}   --  firing pulse delay angles
+--
+   INPUT  trma  {dflt: trma}   -- trsf sec. voltage ph-g
+          trmb  {dflt: trmb}
+          trmc  {dflt: trmc}
+--
+          irab {dflt: irab}    --  svc reactor currents
+          irbc {dflt: irbc}
+          irca {dflt: irca}
+--
+          itra {dflt: itra}    -- transf. sec. current
+          itrb {dflt: itrb}
+          itrc {dflt: itrc}
+--
+          rxab {dflt: 0}        --  main reactor delta current
+          rxbc {dflt: 0}
+          rxca {dflt: 0}
+--
+   OUTPUT
+       ficat[1..3], fian[1..3]  -- firing signals to thyristors
+       ttt1, ttt2, ttt3         -- control signal to switch reactors
+--
+   INIT
+          vref:= 1.0             -- reference voltage
+          verr:= 0               -- voltage error
+          tt   := timestep/tper  --  integration multiplier
+          vrms[1..3] := 0
+          ficat[1..3]:= 0        -- firing pulse to cathode
+          fian[1..3]:= 0         --  firing pulse to anode
+          qin[1..3]:= 0.3        --  rective power
+          ttt1:= 0               --  test rector breaker control
+--
+  ENDINIT
+--
+DELAY CELLS DFLT: 100
+      CELLS(vtrsec[1..3]):500
+      CELLS(vtrff[1..3]):500
+--
+--    liearization of angel versus p.u. current through thyristors
+  FUNCTION dely POINTLIST
+--          angle          current
+         (    0.0,          0.0)
+         ( 0.0022,        0.111)
+         ( 0.0176,        0.222)
+         ( 0.0575,        0.333)
+         ( 0.1306,        0.444)
+         ( 0.2414,        0.555)
+         ( 0.3900,        0.666)
+         ( 0.5718,        0.777)
+         ( 0.7783,        0.888)
+         ( 1.0000         1.000)
+--
+--          **************   EXEC ****************
+EXEC
+--       convert to arrays
+       ir[1..3] := [irab, irbc, irca]
+       vtrsec[1..3] := [trma, trmb, trmc]
+--
+--       control signals for the type 12 switches in EMTP
+--       to switch test reactors
+--        the following is a pulse train  0.1/0.1 on/off  starts at 0.2 s
+     ttt1:=  AND((t-tstart) MOD  tpimp < ton , t-tstart)
+       ttt2 := ttt1
+       ttt3 := ttt1
+--
+--      form phase to phase voltages and normalize
+       vtrff[1] :=(trma - trmb)/34500
+       vtrff[2] :=(trmb - trmc)/34500
+       vtrff[3] :=(trmc - trma)/34500
+--
+--      calculation of voltage rms values
+   FOR i := 1 TO 3 DO
+  vrms[i]:= sqrt(vrms[i]**2 + tt*(vtrff[i]**2 - delay(vtrff[i], tper)**2))
+  ENDFOR
+--
+--      calculate reactive through transformer
+--                qina, qinb, qinc
+--     see DC22-3 for explanation
+      itr[1..3]  := [itra, itrb, itrc]
+      FOR i:= 1 TO 3 DO
+      tri[i]:= delay(itr[i],tper/4)
+      trv[i]:= delay(vtrsec[i],tper/4)
+      qin[i] := (-vtrsec[i]*tri[i] * 0.5 + itr[i]* trv[i] * 0.5)/ qtcr
+      ENDFOR
+--
+--      generate firing pulses  500 microsec wide
+--
+       if t> timestep then
+--
+       FOR i := 1 TO 3 DO
+          f1[i]:= AND(ir[i] >= 0, delay(ir[i],0.0005) < 0 )
+          f2[i]:= AND(ir[i] <= 0, delay(ir[i],0.0005) > 0 )
+       ENDFOR
+--       delayed pulses caclulated
+--       by var and voltage control
+      FOR i:= 1 TO 3 DO
+      ficat[i] := delay(f1[i],del[i]) -- cathode
+      fian[i]  := delay(f2[i],del[i]) -- anode
+      ENDFOR
+      endif
+--          average  ph-ph voltage normalized
+    vllavg := 0.3333 * (vrms[1] + vrms[2] + vrms[3]) {max: 1.15 min : 0.85}
+--
+--      alternative to above but not used in this model
+--      12 pulse rectfication with output smoothed  alternative to rms signal
+--      smoothing rough, should be done with 120 c/s filter, not used here
+--      shown as possible alternative only
+--   vllmax := (max(abs(vtrff[1]), abs(vtrff[2]), abs(vtrff[3])))/1.41
+--   laplace(vll12p/vllmax) := 1.0|s0 / ( 1|s0 + 0.030|s1 )
+--
+--     voltage error forward and feedback loop
+      verr:= vllavg - vref
+--     combine endcombine used because forward - feedback loop
+    COMBINE  AS first_group
+       error   := sum( 1|vllavg - 1|vref - 1|fdb)
+--                     forward gain . 1/1+stdelay
+       laplace(dvq/error)  :=  400.0|s0/(1.0|s0 + 0.003|s1)
+--                      derivative feedback
+       claplace(fdb/dvq ) :=  0.005|s1 / (1.0|s0 + 0.012|s1 )
+    ENDCOMBINE
+--
+     FOR i := 1 TO 3 DO
+--    total error   the qref - qin[i] component may be omitted
+--                  it is usefull for unbalanced loads
+       errq[i]  := (dvq + qref - qin[i]){ min:0 max:1.0}
+     ENDFOR
+--           calculate new firing angles
+--          phase A
+      FOR  i:= 1 TO 3 DO
+      k:= (i+4) mod 3   if k=0 then k:=3  endif   -- k is phase B
+      l := (i+5) mod 3  if l=0 then l:= 3  endif  -- l is phase C
+--    apply phase unbalance correction
+      inreact:=  errq[i]  + errq[k] -errq[l] {max: 1.0  min: 0.0}
+--    linearize and convert from firing angle to time delay
+      delyi  := delin - dely(inreact ) * dt
+      claplace(del[i]/delyi){dmax: (dt-0.0001) dmin: 0.0}:=
+             1.0|s0/(1.0|s0 + 0.005|s1)
+      ENDFOR
+--
+ENDEXEC
+ENDMODEL
+USE svcmod AS test
+  INPUT trma:= trma   trmb:= trmb    trmc:= trmc
+        irab:= irab   irbc:= irbc    irca:= irca
+        itra:= itra   itrb:= itrb    itrc:= itrc
+--
+  OUTPUT  FIAB1 := ficat[1]  FIAB2 := fian[1]   FIBC1 := ficat[2]
+          FIBC2 := fian[2]   FICA1 := ficat[3]  FICA2 := fian[3]
+          FRLA  := ttt1      FRLB  := ttt2      FRLC  := ttt3
+ENDUSE
+C
+RECORD test.vrms[1] AS vrmsab
+       test.vrms[2] AS vrmsbc
+       test.vrms[3] AS vrmsca
+       test.vllavg AS vllavg
+       test.error  AS error
+       test.dvq    AS dvq
+       test.fdb    AS fdb
+       test.verr   AS verr
+ENDMODELS
+C    **************   NETWORK DATA  *********************
+C
+C         *********  LINE TO SOURCE ***********
+C
+C          transmission line (equivalent) from GEN source to transformer
+  GENA  TRFA                 4.5  25.0
+  GENB  TRFB                 4.5  25.0
+  GENC  TRFC                 4.5  25.0
+C     fault level at trsf. 230 kV approx. 2083 MVA
+C
+C      **************   MAIN TRANSFORMER  **************
+C
+C         transformer capacitance to ground 10000pF
+C       a very simple model, can be replaced with any more complex model
+C            transformer  230000/34500 Y/D 100 MVA; In=250 A
+C             x = 7.2% on 100 MVA
+C       230^2/100* 0.07 = 37.0 ohms trsf. leakage reactance
+C TRANSFORMER busref      imag  flux  busin rmag          empty
+C ------------______------______------______------_____________________________-
+C
+C      no saturation
+  TRANSFORMER                0.7 700.0     X
+             0.7           700.0        {   100%
+            9999
+ 1TRPA                      0.80  36.0  1330
+ 2TRXA  TRXB                      1.00   375      {385
+  TRANSFORMER      X                       Y
+ 1TRPB
+ 2TRXB  TRXC
+  TRANSFORMER      X                       Z
+ 1TRPC
+ 2TRXC  TRXA
+C
+C         transformer capacitance to ground and ph - ph 10000pF
+  TRXA                                 0.01
+  TRXB                                 0.01
+  TRXC                                 0.01
+C         capacitance between phases
+  TRXA  TRXB                           0.01
+  TRXB  TRXC                           0.01
+  TRXC  TRXA                           0.01
+C
+C      ***********  HARMONIC FILTERS  ***************
+C
+C       5th harmonic filter  20 MVAR
+  TRSA  TF5                       2.38 44.6                                    1
+  TRSB  TF5                       2.38 44.6
+  TRSC  TF5                       2.38 44.6
+C       7th harmonic filter  10 MVAR
+  TRSA  TF7                       2.43 22.3                                    1
+  TRSB  TF7                       2.43 22.3
+  TRUC  TF7                       2.43 22.3
+C
+C      ********  TRANSFORMER SECONDARY LOAD ***************
+C                       70 MW, 30 MVAR
+  TRSA  ND                 13.67  5.47
+  TRSB  ND                 13.67  5.47
+  TRSC  ND                 13.67  5.47
+C
+C         shunt capacitor    20 MVAR
+  TRSA                                 44.5
+  TRSB                                 44.5
+  TRSC                                 44.5
+C       **********  SWITCHED REACTOR FOR SVC RESPONSE TEST *********
+C
+C        switched .1 sec. on .1 sec. off
+C           see switch type 13 below and type 23 source in TACS
+C           25.0 MVA, 0.7 p.f.,17.5 MW, 17.5 MVAR load
+C
+  XLA   NSR                 34.0  34.0
+  XLB   NSR                 34.0  34.0
+  XLC   NSR                 34.0  34.0
+C
+C         **************  SNUBBERS  **************
+C
+C         the snubber parameters shown below are not necessarily the
+C         values a manufacturer would choose for a 34.5 kV valve.
+C         The parameters were selected so that only a small currrent flows
+C         through the control reactor with the valves non conducting,
+C         and overvoltages and spikes interfering with the firing control
+C         are prevented.  It is quite possible that a better combination
+C         than that shown exists.
+C
+C       in series with valves
+C
+  CATAB RXAB                 .1
+  ANOAB RXAB                 .1
+  CATAB RXAB                       4.0
+  ANOAB RXAB                       4.0
+C
+  CATBC RXBC                 .1
+  ANOBC RXBC                 .1
+  CATBC RXBC                       4.0
+  ANOBC RXBC                       4.0
+C
+  CATCA RXCA                 .1
+  ANOCA RXCA                 .1
+  CATCA RECA                       4.0
+  ANOCA RXCA                       4.0
+C
+C   across valves
+C
+  CATAB TRSA               2000.         .1
+  ANOAB TRSA               2000.         .1
+C
+  CATBC TRSB               2000.         .1
+  ANOBC TRSB               2000.         .1
+C
+  CATCA TRSC               2000.         .1
+  ANOCA TRSC               2000.         .1
+C
+C      *************   SVC CONTROLLED REACTOR   *************
+C
+C     reactor in  TCR  appr. 100.0 MVA   Xr = 3 * 34.5^2/100 =35.71 ohm
+  RXAB  TRSB                 0.1 35.71                                         1
+  RXBC  TRSC                 0.1 35.71
+  RXCA  TRSA                 0.1 35.71
+C
+C       ***************   REACTOR FOR FIRING PULSE GENERATION ******
+C
+C      Fire angle reference measurement using delta connected reactors
+C       TRSA - RMXA is just a dummy separation from the main 34.5 kV bus
+  TRSA  RMXA                0.01                                               1
+  TRSB  RMXB                0.01
+  TRSC  RMXC                0.01
+C    The reactors are delta connected through measuring switches below
+  RMAB  RMXB               200. 20000.
+  RMBC  RMXC               200. 20000.
+  RMCA  RMXA               200. 20000.
+C
+BLANK    end of branch data
+C      ***************   SWITCH  DATA ***************8
+C
+C  current measurement in the auxiliary reactor for firing pulse generation
+C   these switches complete the delta connection of the reactors
+C   (Rule Book p.6A-9)
+  RMXA  RMAB                                          MEASURING                1
+  RMXB  RMBC                                          MEASURING                1
+  RMXC  RMCA                                          MEASURING                1
+C
+C       current measurement in the main transformer secondary
+  TRXA  TRSA                                          MEASURING
+  TRXB  TRSB                                          MEASURING
+  TRXC  TRSC                                          MEASURING
+C       current measurement in the main transformer prinmary
+  TRFA  TRPA                                          MEASURING
+  TRFB  TRPB                                          MEASURING
+  TRFC  TRPC                                          MEASURING
+C
+C    switch for on/off switching the 36.6 MVAR resistive-reactive load
+C   (Rule Book p. 6C-1)
+12TRSA  XLA                                                     FRLA           1
+12TRSB  XLB                                                     FRLB           1
+12TRSC  XLC                                                     FRLC           1
+C
+C   VALVES
+C     6 valves, 2 per phase, 3ph. 6 pulse supply to TCR
+C    Rule Book p. 6B-1
+11TRSA  CATAB       100.   35.0                                 FIAB1          1
+11ANOAB TRSA        100.   35.0                                 FIAB2          1
+11TRSB  CATBC       100.   35.0                                 FIBC1          1
+11ANOBC TRSB        100.   35.0                                 FIBC2          1
+11TRSC  CATCA       100.   35.0                                 FICA1          1
+11ANOCA TRSC        100.   35.0                                 FICA2          1
+C
+BLANK    end of switch data
+C
+C    AC sources
+C    230 kV  supply
+14GENA       187794.       60.        0.                           -1.
+14GENB       187794.       60.      240.                           -1.
+14GENC       187794.       60.      120.                           -1.
+C --------------+------------------------------
+BLANK   end of source cards
+C Output for steady-state phasor switch currents.
+C      Node-K    Node-M            I-real            I-imag            I-magn          Degrees        Power            Reactive
+C      RMXA      RMAB         -3.17345114E-01   -2.67576742E+00    2.69452022E+00     -96.7637    2.09775607E+04    3.61648260E+04
+C      RMXB      RMBC         -2.12134217E+00    1.60058257E+00    2.65743432E+00     142.9649    2.09695693E+04    3.53656824E+04
+C      RMXC      RMCA          2.43868728E+00    1.07518486E+00    2.66518633E+00      23.7920    2.09657040E+04    3.49791488E+04
+C      TRXA      TRSA          1.76533509E+03   -7.18577071E+02    1.90598032E+03     -22.1487    2.86013546E+07   -7.52002129E+06
+C      TRXB      TRSB         -1.72807188E+03   -1.23147874E+03    2.12197369E+03    -144.5251    3.19664433E+07   -7.48308730E+06
+C      TRXC      TRSC         -3.72632074E+01    1.95005582E+03    1.95041181E+03      91.0947    2.95359580E+07   -4.27738942E+06
+C      TRFA      TRPA          3.28283686E+02    4.77795448E+01    3.31742465E+02       8.2809    3.05772339E+07   -5.86201921E+06
+C      TRFB      TRPB         -1.59252346E+02   -2.98767203E+02    3.38560410E+02    -118.0590    3.15136653E+07   -2.50950856E+06
+C      TRFC      TRPC         -1.69031340E+02    2.50987658E+02    3.02599402E+02     123.9589    2.81393539E+07   -3.10623904E+06
+C      TRSA      XLA               Open              Open   ....  Etc.  (all remaining switches)
+C
+C 1st gen:    GENA            187794.          187794.      328.28368576688  331.74246523436      .308248532425E8  .311496222581E8
+C                                 0.0              0.0      47.779544776826        8.2808819      -.44863559159E7        0.9895739
+  TRSA  TRFA  { Node voltage output requests
+C   Step      Time      TRSA       TRFA       RMXA       RMXB       RMXC       TRSA       TRSB       TRSC       TRSA       ANOAB
+C                                             RMAB       RMBC       RMCA       XLA        XLB        XLC        CATAB      TRSA
+C
+C                       TRSB       ANOBC      TRSC       ANOCA      TRSA       TRSA       RXAB       TRSA       MODELS     MODELS
+C                       CATBC      TRSB       CATCA      TRSC       TF5        TF7        TRSB       RMXA       VRMSAB     VRMSBC
+C
+C                       MODELS     MODELS     MODELS     MODELS     MODELS     MODELS
+C                       VRMSCA     VLLAVG     ERROR      DVQ        FDB        VERR
+C ***      Phasor I(0) = -3.1734511E-01                     Switch  "RMXA  "  to  "RMAB  "  closed in the steady-state.
+C ***      Phasor I(0) = -2.1213422E+00                     Switch  "RMXB  "  to  "RMBC  "  closed in the steady-state.
+C ***      Phasor I(0) =  2.4386873E+00                     Switch  "RMXC  "  to  "RMCA  "  closed in the steady-state.
+C ***      Phasor I(0) =  1.7653351E+03                     Switch  "TRXA  "  to  "TRSA  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.7280719E+03                     Switch  "TRXB  "  to  "TRSB  "  closed in the steady-state.
+C ***      Phasor I(0) = -3.7263207E+01                     Switch  "TRXC  "  to  "TRSC  "  closed in the steady-state.
+C ***      Phasor I(0) =  3.2828369E+02                     Switch  "TRFA  "  to  "TRPA  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.5925235E+02                     Switch  "TRFB  "  to  "TRPB  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.6903134E+02                     Switch  "TRFC  "  to  "TRPC  "  closed in the steady-state.
+C      %%%%%   Floating subnetwork found!   %%%%%%  %%%%%%  %%%%%%  %%%%%%
+C      %%%%%  The elimination of row  "NSR   "  of nodal admittance matrix [Y] has produced a near-zero diagonal value  Ykk =
+C             0.00000000E+00   just prior to reciprocation.  The acceptable minimum is  ACHECK = 7.63336829E-12   (equal to EPSILN
+C             times the starting Ykk).   This node shall now to shorted to ground with  1/Ykk = FLTINF.
+C      0       0.0  24822.5855 187511.212 -.31734511 -2.1213422 2.43868728        0.0        0.0        0.0        0.0        0.0
+C                          0.0        0.0        0.0        0.0 326.187397 29.5320244 .821163836 -2.7560324 .081656838 .049551491
+C                   .032105347        .85 -.06597164 -.20205709 -.08402836       -.15
+C      1 .46296E-4  25143.8244 187629.636 -.27059939 -2.1489524 2.41955179        0.0        0.0        0.0        0.0        0.0
+C                          0.0        0.0        0.0        0.0 318.550308 25.5246044 .751598004 -2.6901512  .11560122 .069281865
+C                   .046333037        .85 .007233288 -.37886586 -.15723329       -.15
+C      2 .92593E-4  25457.4046 187690.907 -.22377124 -2.1759081 2.39967932        0.0        0.0        0.0        0.0        0.0
+C                          0.0        0.0        0.0        0.0  310.81619 21.5094097 .681803238 -2.6234506 .141715842 .083875142
+C                    .05788498        .85 -.00219819 -.35764251 -.14780181       -.15
+BLANK  end of output requests
+C   2160     0.1  25442.1108 187482.902 -.29572787 -2.0263455 2.32207338        0.0        0.0        0.0        0.0        0.0
+C                        0.0 446.298599 628.655556        0.0 345.907577 19.1485236 1.55331048 -2.6178013 1.04264625 1.03011633
+C                 1.03191977 1.03479063 .001835206 .694094165 .032955423 .034790629
+C Variable max :  32517.4234 188770.564 2.64330646 2.62732109 2.77231282        0.0        0.0        0.0 1348.22398 803.124119
+C                 642.762722 650.617284 745.361533 2455.49747 704.329689 384.313276 1348.22403  4.4384447 1.11468111 1.09242273
+C                 1.09954303 1.10117116 .007233288 .694094165 .100809554 .101171165
+C Times of max :  .018842593 .033425926 .021018519 .026759259 .032268519        0.0        0.0        0.0 .004490741     .09625
+C                 .093333333       .085 .099027778 .007083333 .097222222 .013101852 .004490741 .022453704 .034768519 .037407407
+C                 .035046296 .034861111 .462963E-4        0.1 .034907407 .034861111
+  PRINTER PLOT
+ 193.01 0.0 .10         MODELSDVQ                    { Limits:  (-7.141,  6.930)
+BLANK   end of plot requests
+BEGIN NEW DATA CASE
+BLANK 
+EOF
+
+     10 June 2002,  WSM adds output to the screen in case of  DISK  use.
+Without any  EATS,  this is simple as should be illustrated in the October
+(or later) newsletter.  But with EATS, there are variations depending upon:
+1) the subcase number;  and  2) whether  NEW LIST SIZES (NLS)  is being
+used.  The subject is mentioned here because the preceding data _does_
+involve NLS.  So,  if  EATS  is requested from STARTUP (FLZERO < 0),
+expect the following new output to the screen:
+  ----  Begin EATS for subcase number  KNTSUB = 1
+  ----  Begin EATS for subcase number  KNTSUB = 2
+  ----  Begin EATS for subcase number  KNTSUB = 3
+  ----  Begin next subcase number  KNTSUB = 4
+  ----  Begin next subcase number  KNTSUB = 5
+The  NLS  requests in the 4th and 5th subcases conflict with EATS,
+and  NLS  takes precedence.

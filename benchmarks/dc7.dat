@@ -1,0 +1,300 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-7                                                            
+C         Test of 200-km line energization example from proposed 1975  IEEE  PES      
+C         Winter Meeting paper by Tripathy et al.   The far end of the line  has     
+C         an open-circuited transformer, which the Indians modeled as a parallel    
+C         connection of a saturable reactor and a capacitor.  For the reactor, a    
+C         true nonlinearity (Type-93) has been placed in phase "a",  and pseudo-
+C         nonlinear ones (Type-98 modeling)  are used for phases  "b"  and  "c".                                      
+C         The  reactor  of  phase "a"  is actually driven onto the final segment
+C         above the point  (i=55.572, PSI=624)  on step number 185 at t= .004625
+C         seconds, so this represents a real stress test for the Type-93 element 
+C            23 July 1983  ----  remove Type-98 modeling (replace with Type-93). 
+PEAK VOLTAGE MONITOR
+PRINTED NUMBER WIDTH, 13, 2,   { Full precision on each of 8 columns of printout
+ .000025    .020     60.     60.                                                
+       1       1       1               1      -1                                
+       5       5      10      10     100      20        
+C              The following series capacitors represent 20% compensation of the    
+C              positive-sequence series line reactance at 60 Hz,  at  each  end:        
+  GENA  SWA                           89352.                                    
+  GENB  SWB   GENA  SWA                                                         
+  GENC  SWC   GENA  SWA                                                         
+  RECA  TRANA GENA  SWA                                                        1
+  RECB  TRANB GENA  SWA                                                         
+  RECC  TRANC GENA  SWA                                                         
+  TRANA GNDA                          7.5398                                   1
+  GNDA                     .0001                                                
+  TRANB                               7.5398                                    
+  TRANC                               7.5398                                    
+C        The following  piecewise-linear  magnetization  curve  was  constructed        
+C        from Tripathy's arc-tangent function (evaluation at regular intervals): 
+93TRANA       NAME  1st NL  .559  300.                                         1
+     0.0             0.0
+   .5590            300.                                                        
+   .9344            400.                                                        
+  1.2555            450.                                                        
+  1.8057            500.                                                        
+  3.0251            550.                                                        
+  4.9429            580.                                                        
+  8.4609            600.                                                          
+  13.092            610.                                                        
+  28.847            620.                                                        
+  55.572            624.                                                        
+  753.46            628.                                                       
+            9999                                                                
+C    -------------   Following original, pseudo-nonlinear modeling upgraded:
+C 98TRANB       NAME  2nd NL  .559  300.                                       1
+C    .5590            300.                                                        
+C    .9344            400.                                                        
+C   1.2555            450.                                                        
+C   1.8057            500.                                                        
+C   3.0251            550.                                                        
+C   4.9429            580.                                                        
+C   8.4609            600.                                                          
+C   13.092            610.                                                        
+C   28.847            620.                                                        
+C   55.572            624.                                                        
+C   753.46            628.                                                       
+C             9999          
+C   BRANCH NAME:3rd NL                                                      
+C 98TRANC       TRANB         .559  300.                                       1
+C    -------------   Preceding, original modeling was improved by replacement
+C                    on  23 July 1986  when multi-phase, Type-93, nonlinear
+C                    inductor logic was finally perfected.  Instead of Type-98
+C                    modeling in phases "b" and "c",  we copy the original,
+C                    true nonlinear modeling.  Replacement cards follow:
+  BRANCH NAME:2nd NL      ! { Hold lower case of this 2nd, but not following 3rd                                           
+93TRANB       TRANA         .559  300.                                         1
+  BRANCH NAME:3rd NL                                                      
+93TRANC       TRANA         .559  300.                                         1
+C           Although Tripathy's line was untransposed, we make the continuously-
+C           transposed assumption here for simplicity, it will be noted:
+-1SENDA RECA              .137681.07755.6806124.27                              
+-2SENDB RECB              .03009.450289.5000124.27                              
+-3SENDC RECC                                                                    
+BLANK card ends all branch cards
+  SWA   SENDA                  1.0                                              
+  SWB   SENDB                  1.0                                              
+  SWC   SENDC                  1.0                                              
+BLANK card ends all switch cards
+14GENA       188000.       60.       0.0                         -1.            
+14GENB       188000.       60.      120.                         -1.            
+14GENC       188000.       60.     -120.                         -1.            
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   0.000000000000E+00
+C  Step    Time        GENA         TRANA        RECA         TRANA        TRANB
+C                                                             TERRA        TERRA
+C ***        Switch  "SWA   "  to  "SENDA "  closed  after  0.00000000E+00  sec.
+C ***        Switch  "SWB   "  to  "SENDB "  closed  after  0.00000000E+00  sec.
+C ***        Switch  "SWC   "  to  "SENDC "  closed  after  0.00000000E+00  sec.
+C    0     0.0       188000.          0.0          0.0          0.0          0.0
+C    1  .25E-4   187991.6504  .930228E-37  .930004E-37  -.57418E-39          0.0
+C    2   .5E-4   187966.6022  .482578E-37  .482013E-37  .545732E-44  -.24529E-53
+C    3  .75E-4   187924.8578          0.0          0.0          0.0          0.0
+C    4   .1E-3   187866.4209          0.0          0.0          0.0          0.0
+C    5 .125E-3   187791.2965          0.0          0.0          0.0          0.0
+C   10  .25E-3   187165.6493          0.0          0.0          0.0          0.0
+C   20   .5E-3   184670.0031          0.0          0.0          0.0          0.0
+C   30  .75E-3   180535.2129  368529.9098  368561.0118  .0356766432  -.018316651
+  GENA  TRANA RECA                                                              
+BLANK card ending output variable requests (just node voltages, here)
+C Last step begins: 800  .02  58095.19494  -59199.4152  -58796.2914  1.081609222
+C Last step continued:         .299848177  -.932282601   17.5862178  16.50460858
+C Variable max :     188000.  513558.5344  514002.0191  749.9628668  3.237548678 
+C Times of max :         0.0        .0184        .0184       .00465       .01645
+C Variable min : -187999.072  -498079.391  -497500.143  -513.064439  -2505.93213
+C Times of min :     .008325        .0077        .0077      .011675        .0073
+C      -------------------------------------------------------------------------
+C      To see how much improvement the 3-phase nonlinearity gives, compare these 
+C      values with the original solution with pseudo-nonlinear L(i) in "b", "c":
+C      -------------------------------------------------------------------------
+C Last step begins: 800  .02  58095.19494  -50098.9838  -49701.5785  1.086096522
+C Last step continued:        .3006006893  -.931914393  19.37948907  18.29339255
+C Variable max :     188000.  520082.5127  520520.0418  749.9593109  3.304226242
+C Times of max :         0.0        .0184        .0184       .00465       .01645 
+C Variable min : -187999.072  -498611.424  -498032.337  -516.239708  -2590.47657
+C Times of min :     .008325        .0077        .0077      .011675        .0073
+C Plots:    { Axis limits: (-5.107,  7.760)      { Axis limits: (-0.443,  7.760) 
+  PRINTER PLOT                                   { Axis limits: (-5.177,  7.760)                                            
+ 194 2. 0.0 20.         RECA  TRANA                             CURRENT
+ 1                      SMOOTH                   { Axis limits: (-0.439,  7.760)
+ 194 .1 4.5 5.0         RECA  TRANA                             CURRENT IN AMPS 
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C      2nd of 4 subcases illustrates user-supplied FORTRAN to provide for smooth
+C      modeling of magnetic saturation.   Special logic presently is built  into
+C      only 2 modules:  "INNONL" to bypass normal error checks on characteristic
+C      (since parameters for hyperbolic tangent curve are inputted this way) and
+C      to store these parameters in raw form in List-10 vectors CCHAR and VCHAR,
+C      and second,  "SOLVNL"  to calculate  "i"  and  di/dv  for Newton's method
+C      (as part of coupled nonlinear solution mixed with any other elements).  A
+C      single block of some 6 lines is involved in "INNONL"  (see  the check for
+C      input text:  ABUFF(33:39) .NE. 'FORTRAN').   A  type-93  branch  is being
+C      used,  although others pass through the same logic,  so there is no magic
+C      about  this.   Remembrance of this special component by  "SOLVNL"  is due
+C      to numerical flag  -333777  of first point of characteristic.   Different
+C      models could have different values in  "SOLVNL",  note  --- no other code
+C      is affected.   The  hyperbolic tangent saturation curve actually requires
+C      only 2 cards of (x, y) characteristic,  but  a 3rd is required because of
+C      existing Type-93 logic that extends the final segment by a factor of 1000
+C      (this would overlay the 2nd point, otherwise).  There are 2 reactors, and
+C      these are coupled via the network, resulting in a  2 x 2  Netwon solution
+C      within  "SOLVNL".   But  there is a 2nd Newton solution that might not be
+C      noticed --- to find the current given the flux (or voltage).  This is one
+C      dimensional.   As for changes to  "SOLVNL"  for user-supplied FORTRAN,  a
+C      single block is involved,  below  the check for flag  -333777.   Finally,
+C      data for the conventional Type-93 element was copied from DC-4.
+C        25 August 2001, add the following test of table dumping and restoring
+C        half way through the simulation.  Answers are not affected.  Note the
+C        definition precedes the last miscellaneous data card (a requirement if
+C        TSTALL  is being used, as here):
+$DEPOSIT, TSTALL=-0.5 { Negative TSTALL ===> experimental dump/restore of tables
+PEAK VOLTAGE MONITOR, 3, { Request network extrema of both node & branch voltage
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .020     4.0
+       1       1       1       1       1      -1
+       5       5      20      20     
+  GEN   NODE                100.    { Create unknown-voltage "NODE" for coupling                                        
+  NODE  TRAN                 5.0  5.E4                                         1
+93TRAN                      .005   30.                                         1
+             0.0             0.0
+            .005             30.
+             .01             40.
+             .02             45.
+             .10             50.
+             5.0            100.
+            9999
+  TRAN                     1000.  { Need to damp hash within previous NL element                                             
+  NODE  XXXX                500.     { Current-limiting, phase-shifting resistor                                     
+C   User-supplied fortran follows.  This  is a regular Type-93 NL inductor until
+C   the time-step loop.  Note 3-card characteristic,  followed by "9999"  bound. 
+C   The characteristic parameter  usage  is:   PSI = a * tanh ( b * i ) + c * i. 
+93XXXX                       .08  35.0                                         3
+        -333777.             35.FORTRAN  { -333777 = flag;    a = peak iron flux
+             20.             5.0FORTRAN { b = current mult;  c = linear series L
+             1.0             1.0FORTRAN FLUX  { Dummy 3rd card to protect card 2 
+            9999     { End of user-supplied fortran (see request in cols. 33-39)
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70.  .1591549                                     -1.  
+BLANK card terminating program source cards.
+C       Total network loss  P-loss  by summing injections =   4.465360492400E+00
+C   GEN     70.    70.     .12758172835428  .13968171687261         4.4653604924
+C           0.0    0.0     -.0568672543615      -24.0240608      1.9903539026515 
+C           ---- Initial flux of coil  "TRAN  "  to  "      "  =  2.86434431E+00
+C           ---- Initial flux of coil  "XXXX  "  to  "      "  =  3.08335629E+01
+  XXXX  TRAN       { Selective node voltage outputs: voltages across NL reactors
+C  Step     Time        XXXX         TRAN         TRAN         XXXX         NODE 
+C                                                 TERRA        TERRA        TRAN  
+C    0     0.0   22.00346954  56.62762238  .4773907E-3  .0704767153  .0571050131
+C    1     .02    22.4849728  56.58915579  .6660853E-3  .0696258393  .0572552411
+C    2     .04   20.71249379  56.51611741  .8545941E-3  .0724907376  .0573707115
+BLANK card ending output requests
+C  200     4.0   8.696586066  -17.9578249  -.058915918  -.077940538  -.076873743
+C Variable max :  22.4849728  56.62762238  .0944331073  .1005485993  .0955171556                                             
+C Times of max :         .02          0.0          1.4          .34         1.32                                             
+C Variable min : -40.5895565  -56.4586274  -.058915918  -.103607476  -.076873743                                             
+C Times of min :        2.48          3.0          4.0          3.4          4.0                                             
+  PRINTER PLOT
+ 143 .5 0.0 4.0         XXXX  TRAN               { Axis limits: (-5.646,  5.663)
+ 193 .5 0.0 4.0         XXXX        TRAN         { Axis limits: (-1.036,  1.005)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C      3rd of 4 subcases is modification of 2nd as 1st described in January,
+C      1998,  newsletter story.  Orlando Hevia of Sante Fe, Argentina, suggests
+C      use of  SINH  rather than  TANH  for modeling of some magnetic saturation.
+C      The numerical flag  -333777  of  TANH  becomes  -444777  for  SINH  use.
+PEAK VOLTAGE MONITOR, 3, { Request network extrema of both node & branch voltage 
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .020     4.0
+       1       1       1       1       1      -1
+       5       5      20      20     
+  GEN   NODE                100.    { Create unknown-voltage "NODE" for coupling                                        
+  NODE  TRAN                 5.0  5.E4                                         1
+93TRAN                      .005   30.                                         1
+             0.0             0.0
+            .005             30.
+             .01             40.
+             .02             45.
+             .10             50.
+             5.0            100.
+            9999
+  TRAN                     1000.  { Need to damp hash within previous NL element                                             
+  NODE  XXXX                500.     { Current-limiting, phase-shifting resistor                                     
+C   User-supplied fortran follows.  This  is a regular Type-93 NL inductor until
+C   the time-step loop.  Note 3-card characteristic,  followed by "9999"  bound. 
+C   The characteristic parameter  usage  is:  i = a * sinh ( b * psi ) + c * psi 
+93XXXX                       .08  35.0                                         1
+        -444777.           4.E-5FORTRAN  { -444777 = flag;    a = 1st param
+             .16           6.E-5FORTRAN  { b = 2nd of 3;  c = 3rd of 3 params
+             1.0             1.0FORTRAN     { Dummy third card to protect card 2 
+            9999     { End of user-supplied fortran (see request in cols. 33-39)
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70.  .1591549                                     -1.  
+BLANK card terminating program source cards.
+  XXXX  TRAN       { Selective node voltage outputs: voltages across NL reactors
+C        25 August 2001, add the following test of table dumping and restoring
+C        on step number .  Answers are not affected.  Note the preceding subcase
+C        used  TSTALL,  so had to be defined early.  Not so if integer ISTDMP is
+C        directly defined.  This can be done at anwhere that will be read prior
+C        to entry into the dT loop:
+$DEPOSIT, ISTDMP=80        { Time step # for experimental dump/restore of tables
+BLANK card ending output requests
+  PRINTER PLOT
+ 143 .5 0.0 4.0         XXXX  TRAN               { Axis limits: (-5.646,  5.663)
+ 193 .5 0.0 4.0         XXXX        TRAN         { Axis limits: (-1.036,  1.005)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C      4th of 4 subcases is modification of 3rd as 1st described in January,
+C      1998,  newsletter story.  Orlando Hevia of Sante Fe, Argentina,  suggests
+C      use of  PSI = A * i**B + C * i  for modeling of some magnetic saturation.
+C      The  numerical flag  -333777  of  TANH  becomes  -555777  for  i**B  use.
+C      Parameters are picked so solution to this 4th subcase approximates the
+C      the solution to the 3rd.  Printer plots have similar shapes and numbers.
+C        25 August 2001, cancel tests of table dumping and restoring (see two
+C        preceding subcases).  Note only TSTALL need be cancelled since ISTDMP
+C        is cancelled automatically after each use.  But TSTALL is not.  TSTALL
+C        will remain in effect for all later subcases, if not cancelled.
+$DEPOSIT, TSTALL=0.0       { Cancel experimental dumping and restoring of tables
+AUTO NAME   { Toggle binary NMAUTO of STARTUP that controls branch/switch naming
+C   The preceding is added 25 October 2002.  It decreases List 7 from 9 to 3 as
+C   the 6 network branches (there are no switches) no longer are being named.
+PEAK VOLTAGE MONITOR, 3, { Request network extrema of both node & branch voltage
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .020     4.0
+       1       1       1       1       1      -1
+       5       5      20      20     
+  GEN   NODE                100.    { Create unknown-voltage "NODE" for coupling                                        
+  NODE  TRAN                 5.0  5.E4                                         1
+93TRAN                      .005   30.                                         1
+             0.0             0.0
+            .005             30.
+             .01             40.
+             .02             45.
+             .10             50.
+             5.0            100.
+            9999
+  TRAN                     1000.  { Need to damp hash within previous NL element                                             
+  NODE  XXXX                500.     { Current-limiting, phase-shifting resistor                                     
+C   User-supplied fortran follows.  This  is a regular Type-93 NL inductor until
+C   the time-step loop.  Note 3-card characteristic,  followed by "9999"  bound. 
+C   The characteristic parameter  usage  is:  psi = a * i**B + c * i 
+93XXXX                       .08  35.0                                         1
+        -555777.            100.FORTRAN  { -555777 = flag;    a = 1st param
+             .22             0.0FORTRAN  { b = 2nd of 3;  c = 3rd of 3 params
+             1.0             1.0FORTRAN     { Dummy third card to protect card 2 
+            9999     { End of user-supplied fortran (see request in cols. 33-39)
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70.  .1591549                                     -1.  
+BLANK card terminating program source cards.
+  XXXX  TRAN       { Selective node voltage outputs: voltages across NL reactors
+BLANK card ending output requests
+  PRINTER PLOT
+ 143 .5 0.0 4.0         XXXX  TRAN               { Axis limits: (-5.646,  5.663)
+ 193 .5 0.0 4.0         XXXX        TRAN         { Axis limits: (-1.036,  1.005)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+BLANK

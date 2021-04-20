@@ -1,0 +1,12 @@
+93TRAN        NAME  Magnet  .000   30.                                         3
+            -5.0           -100.    { Unlike 1st subcase of DC-4,  we here input
+             -.1            -50.    { the 3rd quadrant of the characteristic  as
+            -.02            -45.    { explicit data points.  This is required in
+            -.01            -40.    { order latr to apply a 3rd-quadrant initial
+           -.000            -30.    { condition and  avoid  "OVER13"  KILL = 34.
+            .000             30.
+             .01             40.
+             .02             45.
+             .10             50.
+             5.0            100.
+            9999

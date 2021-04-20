@@ -1,0 +1,62 @@
+KARD  1  2  3  4  5  6 10 11 12 13 14 15
+KARG  1  3  5  2  4  6  7  9 11  8 10 12
+KBEG  9  9  9  3  3  3  9  9  9  3  3  3
+KEND 14 14 14  8  8  8 14 14 14  8  8  8
+KTEX  1  1  1  1  1  1  1  1  1  1  1  1
+C ----- CCT 1 -------------- Impedance MEASUREMENT ------------------------
+C ** Jumpers TO LINE MODEL SEGMENT FOR CURRENT INJECTION
+  GENIA SEND_A             .001                                                0
+  GENIB SEND_B             .001                                                0
+  GENIC SEND_C             .001                                                0
+C
+C ** Jumpers TO SHORT CIRCUIT OTHER END OF LINE MODEL SEGMENT
+  RECV_A                   .001                                                0
+  RECV_B                   .001                                                0
+  RECV_C                   .001                                                0
+C
+C ** Shunt RESISTANCE TO LIMIT RESONANT IMPEDANCE TO 100K OHMS
+  GENIA                   100.E3                                               0
+  GENIB                   100.E3                                               0
+  GENIC                   100.E3                                               0
+C
+C
+C ----- CCT 2 -------------- Impedance MEASUREMENT ------------------------
+C ** Jumpers TO LINE MODEL SEGMENT FOR CURRENT INJECTION
+  GENID SEND_D             .001                                                0
+  GENIE SEND_E             .001                                                0
+  GENIF SEND_F             .001                                                0
+C
+C ** Jumpers TO SHORT CIRCUIT OTHER END OF LINE MODEL SEGMENT
+  RECV_D                   .001                                                0
+  RECV_E                   .001                                                0
+  RECV_F                   .001                                                0
+C
+C ** Shunt RESISTANCE TO LIMIT RESONANT IMPEDANCE TO 100K OHMS
+  GENID                   100.E3                                               0
+  GENIE                   100.E3                                               0
+  GENIF                   100.E3                                               0
+C -------------------------------------------------------------------------
+C
+BLANK card ending branch cards (within dc51fs6m.dat)
+BLANK card ending switch and value cards (within dc51fs6m.dat)
+C
+C
+C ** Current sources FOR IMPEDANCE MEASUREMENT 
+14GENIA -1   1.00     60.0         0.                          -1.0
+14GENIB -1   1.00     60.0      -  0.                          -1.0
+14GENIC -1   1.00     60.0         0.                          -1.0
+C
+$DISABLE
+14GENID -1   1.00     60.0         0.                          -1.0
+14GENIE -1   1.00     60.0      -  0.                          -1.0
+14GENIF -1   1.00     60.0         0.                          -1.0
+$ENABLE
+C
+C
+BLANK card ending source cards (within dc51fs6m.dat
+C
+C ** Outputs for IMPEDANCE TEST
+  GENIA GENIB GENIC 
+  GENID GENIE GENIF
+C
+BLANK card ending node voltage output (within dc51fs6m.dat)

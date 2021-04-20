@@ -1,0 +1,26 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-4
+C     Like preceding case, except that former voltage source is a current source
+C     and  DIAGNOSTIC  printout is turned on everywhere.   Tmax set for 2 steps.
+     .05     0.1     1.0     1.0
+       1       1       1       1       1                                       9
+  REC                       .001        { Near short at receiving end, to ground
+ 1GEN   REC                  1.0   1.0  1.E4
+  GEN                        1.0
+BLANK card ending branch cards
+BLANK card ending non-existent switch cards
+14GEN   -1      100.       1.0                                     -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   3.006578192636E+03
+C  REC    .03996745245359  .04474798787099      39.967452453595  44.747987870993
+C        TERRA        0.0              0.0      -39.96745245359  44.747987870993
+C   Step      Time      GEN        REC
+C      0       0.0  60.1315639 .039967452
+C      1       .05  51.0907788 .044203499
+C      2       0.1  37.0111013 .044150144
+ 1
+  PRINTER PLOT                                { Limits of axis : (0.000,  4.420)
+ 143 .1 0.0 1.0         REC         { Plot card goes through motions of graphing
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

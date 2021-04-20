@@ -1,0 +1,1694 @@
+BEGIN NEW DATA CASE
+C    1st of 18 subcases illustrates Robert Meredith's Type-68 TACS device as
+C    first described in the April, 1998, newsletter.  This is AUT5 data case.
+C test120a.dat    (1 HERTZ AT 120% VOLTAGE)
+C without resistances
+C ENERGIZED AT ZERO TIME VIA 0.100 OHM RESISTORS -steady state
+C FREE FORMAT TIME STEP- 1000/CYCLE  FOR 1.5 SECOND+
+C .000016666666, 1.500  , 60.000  , 0.,,,,,,,  { Meredith's original params
+  .000066666667,  .100  , 60.000  , 0.,,,,,,,  { Much reduced burden on computer
+C   PRN>    PLT>    NET>     SS>    MAX>                   SAVE> NENERG>       >
+       1       5       0       0       1      -1               0
+       5       5      20      20     100     100     500     500
+C $NEW EPSILN, 1.E-10, { Add  24 July 2008  to compensate for protection in REDUCT
+$NEW EPSILN, 1.E-11, { Add 31 July 2008 to allow solution with MATFUL = 1, too.
+C   Note about preceding line.  The default 1.E-8 is too big,  and so is 1.E-9.
+C   This change to DCNEW-25 is made at the same time as that to the 2nd subcase
+C   of DC-31.  See that file for what happens without a small enough EPSILN.
+TACS HYBRID
+C $INCLUDE aut5-tac.inc
+C $INCLUDE   aut5-tck.inc   { Uses new Type-68 TACS device, so much smaller file
+C TACS STEADY-STATE CORE NFLUX INITIALIZATION FOR TRANSFORMER AUT5
+C NFLUX IS PROPORTIONAL TO THE INDUCTIVE CURRENT IN THESE SWITCHES:
+C TYPE 91 TACS SOURCES DERIVED FROM NETWORK SWITCH CURRENTS:
+C <NAME>  <----A---><----A---><----A--->                    <T START ><T STOP  >
+91AUT5D1                                                       -1.0     999.
+91AUT5D2                                                       -1.0     999.
+91AUT5D3                                                       -1.0     999.
+91AUT5D4                                                       -1.0     999.
+91AUT5D5                                                       -1.0     999.
+C ZERO-ORDER BLOCKS TO SCALE ABOVE TO NFLUX LINKED (NREF*PHI) WITHIN CORE VOLUME
+C GAIN IS BASED ON 10000-HENRY FLUX-MONITORING INDUCTANCES.
+C <NAME>  +<NAME> +<NAME> +<NAME> +<NAME> +<NAME> <GAIN><FXLO><FXHI><NMLO><NMHI>
+ 0AUT5E1  +AUT5D1                                  1.E4
+ 0AUT5E2  +AUT5D2                                  1.E4
+ 0AUT5E3  +AUT5D3                                  1.E4
+ 0AUT5E4  +AUT5D4                                  1.E4
+ 0AUT5E5  +AUT5D5                                  1.E4
+C   Correction of Type-68 TACS device lines on 6 April 2000.  VAX ATP  error was
+C   traced to the following data cards (one line for each Type-68 device) having
+C   E-field numbers that were not right-adjusted.  The first two show how data
+C   columns were misalligned prior to correction:
+C AUT5T168AUT5E1     13.821          27.642         2.91727E-3      8.44316E-4
+C AUT5T268AUT5E1     27.642          62.194         2.43012E-3      2.53199E-4
+C   The associated data format for  4E16.0  read in GUTS2A was not properly
+C   protected by the addition of BN,  so exponents were scaled by a factor of
+C   100.  For example,  the first value on the first card was 2.91E-300 instead
+C   of E-3 as intended.  After proper allignment,  here is the data:
+C NEW TACS DEVICE 68 MODELS HYSTERETIC LOSS/RESIDUAL MMF COMPONENTS.
+C <IRES>68<FLUX><LOWER FLUX VAL><HIGHR FLUX VAL><LINEAR COEFF. ><SQUARED COEFF.>
+99AUT5T168AUT5E1          13.821          27.642      2.91727E-3      8.44316E-4
+99AUT5T268AUT5E1          27.642          62.194      2.43012E-3      2.53199E-4
+99AUT5T368AUT5E1          62.194          82.925      1.23361E-3      4.76044E-4
+99AUT5T468AUT5E1          82.925          103.66      1.22440E-3      5.90543E-4
+99AUT5T568AUT5E1          103.66          120.25      1.79633E-3      1.56980E-3
+99AUT5T668AUT5E1          120.25          131.34      1.44373E-3      3.08189E-3
+99AUT5T768AUT5E1          131.34          139.51      4.95355E-3      2.07092E-2
+99AUT5U168AUT5E2          13.821          27.642      2.91727E-3      8.44316E-4
+99AUT5U268AUT5E2          27.642          62.194      2.43012E-3      2.53199E-4
+99AUT5U368AUT5E2          62.194          82.925      1.23361E-3      4.76044E-4
+99AUT5U468AUT5E2          82.925          103.66      1.22440E-3      5.90543E-4
+99AUT5U568AUT5E2          103.66          120.25      1.79633E-3      1.56980E-3
+99AUT5U668AUT5E2          120.25          131.34      1.44373E-3      3.08189E-3
+99AUT5U768AUT5E2          131.34          139.51      4.95355E-3      2.07092E-2
+99AUT5V168AUT5E3          13.821          27.642      2.91727E-3      8.44316E-4
+99AUT5V268AUT5E3          27.642          62.194      2.43012E-3      2.53199E-4
+99AUT5V368AUT5E3          62.194          82.925      1.23361E-3      4.76044E-4
+99AUT5V468AUT5E3          82.925          103.66      1.22440E-3      5.90543E-4
+99AUT5V568AUT5E3          103.66          120.25      1.79633E-3      1.56980E-3
+99AUT5V668AUT5E3          120.25          131.34      1.44373E-3      3.08189E-3
+99AUT5V768AUT5E3          131.34          139.51      4.95355E-3      2.07092E-2
+99AUT5W168AUT5E4          14.120          28.239      2.69692E-3      7.64028E-4
+99AUT5W268AUT5E4          28.239          63.538      2.24656E-3      2.29122E-4
+99AUT5W368AUT5E4          63.538          84.717      1.14043E-3      4.30775E-4
+99AUT5W468AUT5E4          84.717          105.90      1.13191E-3      5.34391E-4
+99AUT5W568AUT5E4          105.90          122.84      1.66066E-3      1.42058E-3
+99AUT5W668AUT5E4          122.84          134.17      1.33473E-3      2.79024E-3
+99AUT5W768AUT5E4          134.17          142.42      4.58432E-3      1.91911E-2
+99AUT5X168AUT5E5          14.120          28.239      2.69692E-3      7.64028E-4
+99AUT5X268AUT5E5          28.239          63.538      2.24656E-3      2.29122E-4
+99AUT5X368AUT5E5          63.538          84.717      1.14043E-3      4.30775E-4
+99AUT5X468AUT5E5          84.717          105.90      1.13191E-3      5.34391E-4
+99AUT5X568AUT5E5          105.90          122.84      1.66066E-3      1.42058E-3
+99AUT5X668AUT5E5          122.84          134.17      1.33473E-3      2.79024E-3
+99AUT5X768AUT5E5          134.17          142.42      4.58432E-3      1.91911E-2
+C CURRENTS INJECTED INTO NETWORK FOR HYSTERESIS MODELING AND OTHER COMPENSATION.
+C PHASE LEGS HAVE CURRENTS INJECTED TO COMPENSATE COUPLING XFMR. MAGNET. AMPS.,
+C FLUX-MONITORING INDUCTANCE CURRENT AND SMALL CORE GAPS:
+99AUT5TP  =+AUT5D1/( 1.30893E-2)+ 1*(+AUT5T1+AUT5T2+AUT5T3+AUT5T4+AUT5T5)
+99AUT5A5  =+AUT5TP+ 1*(+AUT5T6+AUT5T7)
+99AUT5TQ  =+AUT5D2/( 1.30893E-2)+ 1*(+AUT5U1+AUT5U2+AUT5U3+AUT5U4+AUT5U5)
+99AUT5B5  =+AUT5TQ+ 1*(+AUT5U6+AUT5U7)
+99AUT5TR  =+AUT5D3/( 1.30893E-2)+ 1*(+AUT5V1+AUT5V2+AUT5V3+AUT5V4+AUT5V5)
+99AUT5C5  =+AUT5TR+ 1*(+AUT5V6+AUT5V7)
+C YOKES ARE COMPENSATED FOR MONITORING INDUCTANCE CURRENTS:
+99AUT5TS  =+AUT5D4+ 1*(+AUT5W1+AUT5W2+AUT5W3+AUT5W4+AUT5W5)
+99AUT501  =+AUT5TS+ 1*(+AUT5W6+AUT5W7)
+99AUT5TT  =+AUT5D5+ 1*(+AUT5X1+AUT5X2+AUT5X3+AUT5X4+AUT5X5)
+99AUT502  =+AUT5TT+ 1*(+AUT5X6+AUT5X7)
+C YOKE & PHASE HYSTERETIC CURRENTS ARE EXTRACTED, EXCEPT AT GROUND:
+99AUT5B0  =-AUT501-AUT5B5
+99AUT5C0  =-AUT502-AUT5C5
+C End of $INCLUDE.  File name = aut5-tck.inc
+C PARTS OF HYSTERESIS COMPONENTS FOR PLOTTING
+C FORTRAN STATEMENTS; 99= INPUT; 98= OUTPUT; 88= INSIDE
+C <NAME>  =< FREE FORMAT FORTRAN TO COL 80                                ----->
+C TOTAL OF ALL HYSTER INJECTIONS FOR LEGS A,B,C
+99ALLINA  =+AUT5T1+AUT5T2+AUT5T3+AUT5T4+AUT5T5+AUT5T6+AUT5T7
+99ALLINB  =+AUT5U1+AUT5U2+AUT5U3+AUT5U4+AUT5U5+AUT5U6+AUT5U7
+99ALLINC  =+AUT5V1+AUT5V2+AUT5V3+AUT5V4+AUT5V5+AUT5V6+AUT5V7
+C
+C TYPE 90 TACS SOURCES DERIVED FROM NETWORK VOLTAGES:
+C <NAME>  <----A---><----A---><----A--->                    <T START ><T STOP  >
+C TYPE 91 TACS SOURCES DERIVED FROM NETWORK SWITCH CURRENTS (1ST NODE)
+C <NAME>  <----A---><----A---><----A--->                    <T START ><T STOP  >
+91AUT5AM                                                       0.        999.
+91AUT5BM                                                       0.        999.
+91AUT5CM                                                       0.        999.
+C FORTRAN STATEMENTS; 99= INPUT; 98= OUTPUT; 88= INSIDE
+C <NAME>  =< FREE FORMAT FORTRAN TO COL 80                                ----->
+C NEXT IS SUM OF COUPLING OUTPUT AND ALL INJECTED AMPS - USED BY CORE MODELS
+98LEGAMP  = AUT5AM + AUT5A5
+98LEGBMP  = AUT5BM + AUT5B5
+98LEGCMP  = AUT5CM + AUT5C5
+C NEXT IS APPARENT LEG AMPS FOR HYSTER PLOTTING
+98NETAMP  = LEGAMP - ALLINA
+98NETBMP  = LEGBMP - ALLINB
+98NETCMP  = LEGCMP - ALLINC
+C S-BLOCKS OF ORDER 1 IN COL 2 INTEGRATE VOLTAGES TO GET FLUXES (TIMES  250.0).
+C <NAME>  +<NAME> +<NAME> +<NAME> +<NAME> +<NAME> <GAIN><FXLO><FXHI><NMLO><NMHI>
+C N0 & D0><N1 & D1 ><N2 & D2 ><N3 & D3 ><N4 & D4 ><N5 & D5 ><N6 & D6 ><N7 & D7 >
+C <NAME>CD+< IN1> +< IN2> +< IN3> +< IN4> +< IN5> <  A ><  B ><  C ><  D ><  E >
+C TACS OUTPUT REQUESTS - TYPE 33
+C <NAME><NAME><NAME><NAME><NAME><NAME><NAME><NAME><NAME><NAME><NAME><NAME><TY33>
+33AUT5E1      ALLINA      LEGAMP      NETAMP
+33AUT5E2      ALLINB      LEGBMP      NETBMP
+33AUT5E3      ALLINC      LEGCMP      NETCMP
+C 33AUT5T1      AUT5T2      AUT5T3      AUT5T4      AUT5T5      AUT5T6      AUT5
+33AUT5U1      AUT5U2      AUT5U3      AUT5U4      AUT5U5      AUT5U6      AUT5U7
+BLANK CARD ENDING ALL ATP-SORTED TACS   CARDS (from blank.inc)
+C THIS MUST BE EDITED TO ADD AUT5A5 >> AUT5AM, ETC METERING
+C $INCLUDE aut5-brn.inc
+C WSM makes non-Unix by adding a card using DOS editor.
+C 3-PHASE, 3-LEG SATURABLE XFMR. MODEL FROM MODELAD.FTN - 60. HZ IMPEDANCES
+C CHANGED AUT5A5, B5, C5 TO AUT5AM, BM, CM ; NOW REQUIRES METERING SWITCHES
+C AUT5 = IDENTIFYING BUS CODE PREFIX OF INTERNAL NODES.
+C AUT5AM = NAME OF A METERING NODE ADDED AT AUT5A5
+C EACH PHASE LEG HAS 3 WINDINGS WHOSE RATED VOLTAGES AND TURNS ARE:
+C WINDING 1 (INNERMOST) =   13.130 KV.  TURNS =   44.998
+C WINDING 1 INCLUDES THE EFFECT OF  0.5670 OHMS/PHASE INTERNAL (DELTA) REACTORS.
+C REACTOR RESISTANCE/PHASE MUST BE INCLUDED WITH ENTERED WINDING RESISTANCES.
+C WINDING 2             =   79.674 KV.  TURNS =  273.052
+C WINDING 3             =  119.655 KV.  TURNS =  410.072
+C INTERNAL REFERENCE    =   29.179 KV.  TURNS =  100.000
+C *********BEGIN USER COMMENTS ************
+C EAST GARDEN CITY AUTOTRANSFORMER*** one *** AT 345/138 KV TAP
+C ABBREVIATED HYSTERESIS MODEL; SEVEN OF POSSIBLE 11 COMPONENTS
+C .95 * .7274 SQUARE METER LEG; .97 * .7274 SQUARE METER YOKE
+C ACTUAL DELTA IS GROUNDED BETWEEN OUTER PHASES AT Y1.
+C EACH DELTA REACTOR X =.82;OR .5467 WHEN EQUALIZED; REACTOR R = .00427 EACH
+C ACTUAL DELTA WINDING R = .00510; + .002847 TO EQUALIZE = .0079467 ENTERED
+C AIR-CORE COUPLINGS FROM COUPCOIL, BASED ON SMIT DIMENSIONS.
+C B-H CURVE BASED ON ARMCO TRAN-COR H-0 from smit
+C B-H SHIFTED TO HIGHER CURRENTS IN 1.5 - 1.85 T RANGE
+C MILD OPEN HEARTH STEEL FOR TANK
+C TANK HAS 21.65 M CIRCUM; FLUX SHIELD = 3.15 M HIGH
+C 64-36 EDDY-HYST LOSS RATIO AT RATED;
+C ********** END USER COMMENTS ************
+C COUPLING, LEAKAGE IMPEDANCE & WINDING LOSS MODEL FOR TRANSFORMER AUT5:
+C <NAME><NAME><NAME><NAME>< R  ><  X       >< R  ><  X       ><  R ><  X       >
+51Y1    Y2                .01016 10124.87377
+52EGCT1A                   0.000 61435.16312.04458372798.88582
+53EGCHEAEGCT1A             0.000 92263.79188 0.000559873.90936.12388840864.72923
+54AUT5A1                   0.000 22499.42979 0.000136528.47263 0.000205039.49115
+                           0.000 50000.88921
+55AUT5A2                   0.000 22499.42071 0.000136530.26291 0.000205042.81249
+                           0.000 50000.86902 0.000 50001.52468
+56AUT5A3                   0.000 22499.42350 0.000136530.70112 0.000205053.04695
+                           0.000 50000.87522 0.000 50001.68516 0.000 50004.18094
+57AUT5A4                   0.000 22499.25174 0.000136528.91954 0.000205046.26382
+                           0.000 50000.49352 0.000 50001.03270 0.000 50002.52680
+                           0.000 50002.52680
+58AUT5AM                   0.000 22499.02967 0.000136526.09974 0.000205035.90210
+                           0.000 50000.00000 0.000 50000.00000 0.000 50000.00000
+                           0.000 50000.00000 0.000 50000.00000
+51Y2    Y3                .01016 10124.87377
+52EGCT1B                   0.000 61435.16312.04458372798.88582
+53EGCHEBEGCT1B             0.000 92263.79188 0.000559873.90936.12388840864.72923
+54AUT5B1AUT5B0             0.000 22499.42979 0.000136528.47263 0.000205039.49115
+                           0.000 50000.88921
+55AUT5B2AUT5B0             0.000 22499.42071 0.000136530.26291 0.000205042.81249
+                           0.000 50000.86902 0.000 50001.52468
+56AUT5B3AUT5B0             0.000 22499.42350 0.000136530.70112 0.000205053.04695
+                           0.000 50000.87522 0.000 50001.68516 0.000 50004.18094
+57AUT5B4AUT5B0             0.000 22499.25174 0.000136528.91954 0.000205046.26382
+                           0.000 50000.49352 0.000 50001.03270 0.000 50002.52680
+                           0.000 50002.52680
+58AUT5BMAUT5B0             0.000 22499.02967 0.000136526.09974 0.000205035.90210
+                           0.000 50000.00000 0.000 50000.00000 0.000 50000.00000
+                           0.000 50000.00000 0.000 50000.00000
+51Y3    Y1                .01016 10124.87377
+52EGCT1C                   0.000 61435.16312.04458372798.88582
+53EGCHECEGCT1C             0.000 92263.79188 0.000559873.90936.12388840864.72923
+54AUT5C1AUT5C0             0.000 22499.42979 0.000136528.47263 0.000205039.49115
+                           0.000 50000.88921
+55AUT5C2AUT5C0             0.000 22499.42071 0.000136530.26291 0.000205042.81249
+                           0.000 50000.86902 0.000 50001.52468
+56AUT5C3AUT5C0             0.000 22499.42350 0.000136530.70112 0.000205053.04695
+                           0.000 50000.87522 0.000 50001.68516 0.000 50004.18094
+57AUT5C4AUT5C0             0.000 22499.25174 0.000136528.91954 0.000205046.26382
+                           0.000 50000.49352 0.000 50001.03270 0.000 50002.52680
+                           0.000 50002.52680
+58AUT5CMAUT5C0             0.000 22499.02967 0.000136526.09974 0.000205035.90210
+                           0.000 50000.00000 0.000 50000.00000 0.000 50000.00000
+                           0.000 50000.00000 0.000 50000.00000
+C PHASE LEG N-L MODELS FOR TRANSFORMER: AUT5
+C PHASE LEG CORES ARE 3.60 METERS LONG WITH AREAS OF 0.6910 SQUARE METERS
+C THE B-H CURVE USED PASSES THROUGH THE FOLLOWING (TESLA, AMP/METER) POINTS:
+C LINEAR:(0.20,      4.00) AND FULLY SATURATED:(2.00,  15000.00)
+C FOR SS CALCS EACH LEG HAS REACT. OF       15740. OHMS (AT  100.0 TURNS)
+C BASED ON SLOPE OF POINT  8 BELOW, HAVING A FLUX DENSITY OF 1.7400 TESLA.
+C HYSTERESIS CURRENT OFFSET OF    3.115 AMPS IS MODELED AT SATURATION.
+C LAMINATIONS ARE MODELED BY 8 LAYERS; EDDY LOSSES USE ENTERED CORE RESISTIVITY.
+C <NAME><NAME><NAME><NAME><I SS><P SS>  (--FOR TYPE 98 N/L REACTOR--)          P
+C CURRENT -----><NFLUX -------->
+98AUT5A5AUT5A6            4.912234.877
+         0.14400         3.45524
+         0.39528         6.91044
+         0.81635        15.54839
+         1.12175        20.73117
+         1.41336        24.18640
+         2.00198        25.91428
+         3.13598        28.16067
+         4.23399        30.06154
+         8.81421        31.96448
+        19.73322        32.83478
+        56.33246        33.72028
+       543.11535        34.87714
+      1083.11535        35.20278
+            9999
+98AUT5A6AUT5A7AUT5A5AUT5A64.912234.877
+98AUT5A7AUT5A8AUT5A5AUT5A64.912234.877
+98AUT5A8      AUT5A5AUT5A64.912234.877
+98AUT5B5AUT5B6AUT5A5AUT5A64.912234.877
+98AUT5B6AUT5B7AUT5A5AUT5A64.912234.877
+98AUT5B7AUT5B8AUT5A5AUT5A64.912234.877
+98AUT5B8AUT5B0AUT5A5AUT5A64.912234.877
+98AUT5C5AUT5C6AUT5A5AUT5A64.912234.877
+98AUT5C6AUT5C7AUT5A5AUT5A64.912234.877
+98AUT5C7AUT5C8AUT5A5AUT5A64.912234.877
+98AUT5C8AUT5C0AUT5A5AUT5A64.912234.877
+C HIGH RESISTANCE ACROSS EACH UNPARALLELED TYPE 98 ELEMENT ABOVE:
+C <NAME><NAME><----><---->RRRRRRXXXXXXCCCCCC
+  AUT5A6AUT5A5            .1E+11
+  AUT5A7AUT5A6AUT5A6AUT5A5
+  AUT5A8AUT5A7AUT5A6AUT5A5
+  AUT5B6AUT5B5AUT5A6AUT5A5
+  AUT5B7AUT5B6AUT5A6AUT5A5
+  AUT5B8AUT5B7AUT5A6AUT5A5
+  AUT5C6AUT5C5AUT5A6AUT5A5
+  AUT5C7AUT5C6AUT5A6AUT5A5
+  AUT5C8AUT5C7AUT5A6AUT5A5
+C YOKE MODELS FOR TRANSFORMER: AUT5
+C EACH TOP+BOTTOM YOKE LENGTH IS 3.40 METERS WITH AREA OF 0.7060 SQUARE METERS
+C THE B-H CURVE USED PASSES THROUGH THE FOLLOWING (TESLA, AMP/METER) POINTS:
+C LINEAR:(0.20,      4.00) AND FULLY SATURATED:(2.00,  15000.00)
+C FOR SS CALCS EACH YOKE HAS REACT. OF       17026. OHMS (AT  100.0 TURNS)
+C BASED ON SLOPE OF POINT  8 BELOW, HAVING A FLUX DENSITY OF 1.7400 TESLA.
+C HYSTERESIS CURRENT OFFSET OF    2.943 AMPS IS MODELED AT SATURATION.
+C LAMINATIONS ARE MODELED BY 8 LAYERS; EDDY LOSSES USE ENTERED CORE RESISTIVITY.
+C <NAME><NAME><NAME><NAME><I SS><P SS>  (--FOR TYPE 98 N/L REACTOR--)          P
+C CURRENT -----><NFLUX -------->
+98AUT501AUT50A            4.636135.606
+         0.13600         3.52991
+         0.37332         7.05979
+         0.77100        15.88444
+         1.05943        21.17924
+         1.33484        24.70914
+         1.89076        26.47434
+         2.96176        28.76924
+         3.99877        30.71116
+         8.32457        32.65503
+        18.63694        33.54364
+        53.20871        34.44660
+       512.94277        35.60585
+      1022.94277        35.91340
+            9999
+98AUT50AAUT50BAUT501AUT50A4.636135.606
+98AUT50BAUT50CAUT501AUT50A4.636135.606
+98AUT50CAUT5B0AUT501AUT50A4.636135.606
+98AUT502AUT50FAUT501AUT50A4.636135.606
+98AUT50FAUT50GAUT501AUT50A4.636135.606
+98AUT50GAUT50HAUT501AUT50A4.636135.606
+98AUT50HAUT5C0AUT501AUT50A4.636135.606
+C HIGH RESISTANCE ACROSS EACH UNPARALLELED TYPE 98 ELEMENT ABOVE
+C <NAME><NAME><----><---->RRRRRRXXXXXXCCCCCC
+  AUT50AAUT501AUT5A6AUT5A5
+  AUT50BAUT50AAUT5A6AUT5A5
+  AUT50CAUT50BAUT5A6AUT5A5
+  AUT50FAUT502AUT5A6AUT5A5
+  AUT50GAUT50FAUT5A6AUT5A5
+  AUT50HAUT50GAUT5A6AUT5A5
+$VINTAGE, 1
+C <NAME><NAME><----><---->RRRRRRRRRRRRRRRRXXXXXXXXXXXXXXXXCCCCCCCCCCCCCCCC     P
+C SHUNT RESISTANCES FOR EDDY LOSS MODELING OF 1/8 LAMINATION THICKNESS LAYERS.
+C CROSS-FLUX CORE RESISTIVITY IS  12.00 E-8 OHM-METERS.
+C LAMINATIONS ARE 0.2286 MM THICK; MODELED LAYERS ARE 0.0286 MM THICK.
+  AUT5A5                      141050.02696
+  AUT5A6                       70525.01348
+  AUT5A7                       70525.01348
+  AUT5A8                       70525.01348
+  AUT5B5AUT5B0                141050.02696
+  AUT5B6AUT5B0                 70525.01348
+  AUT5B7AUT5B0                 70525.01348
+  AUT5B8AUT5B0                 70525.01348
+  AUT5C5AUT5C0                141050.02696
+  AUT5C6AUT5C0                 70525.01348
+  AUT5C7AUT5C0                 70525.01348
+  AUT5C8AUT5C0                 70525.01348
+  AUT501AUT5B0                152575.09208
+  AUT50AAUT5B0                 76287.54604
+  AUT50BAUT5B0                 76287.54604
+  AUT50CAUT5B0                 76287.54604
+  AUT502AUT5C0                152575.09208
+  AUT50FAUT5C0                 76287.54604
+  AUT50GAUT5C0                 76287.54604
+  AUT50HAUT5C0                 76287.54604
+C COMBINED WINDING 1-2 AND WINDING 2-3 STRAY (EDDY CUR.) LOSS MODEL:
+C 3-PHASE W1-W2 STRAY LOSSES AT RATED MVA =    636.953 KW.
+C WITH W1-W2 REF.VOLTS =    2.085 KV.; AND W2-W3 REF.VOLTS =    0.359 KV.
+  AUT5A1AUT5A2                    20.47385
+  AUT5B1AUT5B2                    20.47385
+  AUT5C1AUT5C2                    20.47385
+C 3-PHASE W2-W3 STRAY LOSSES AT RATED MVA =    127.094 KW.
+C WITH W1-W2 REF.VOLTS =   -0.495 KV.; AND W2-W3 REF.VOLTS =    7.203 KV.
+  AUT5A2AUT5A3                  1706.84712
+  AUT5B2AUT5B3                  1706.84712
+  AUT5C2AUT5C3                  1706.84712
+C TANK WALL MULTIPLE CHAINED PI MODEL RESISTANCES REFERRED TO  100.000 TURNS:
+C MODELED SURFACE LAYERS ARE 0.1279 MM THICK; RHOTANK =  15.00 E-8 O-M.
+C <NAME><NAME><----><---->RRRRRRRRRRRRRRRRXXXXXXXXXXXXXXXXCCCCCCCCCCCCCCCC     P
+  AUT581                        1.67957937
+  AUT582                        3.35915874
+  AUT583                        6.71831748
+  AUT584                       13.43663496
+  AUT585                       26.87326992
+  AUT586                       53.74653984
+  AUT587                       80.61980976
+  AUT504                      161.23961952
+$VINTAGE, 0
+C TRANSFORMER TANK WALL MODEL FOR TRANSFORMER AUT5
+C TANK WALL AND VERTICAL BRACING HAS A CROSS-SECTIONAL AREA OF 0.354 SQ. METERS.
+C ITS INSIDE PERIMETER IS 21.65 METERS. ITS AVERAGE THICKNESS IS 0.016 METERS.
+C EQUIVALENT HEIGHT AFFECTED BY ZERO SEQUENCE FLUX IS ASSUMED AT  3.15 METERS.
+C THE B-H CURVE USED PASSES THROUGH THE FOLLOWING (TESLA, AMP/METER) POINTS:
+C LINEAR:(0.20,     70.00) AND FULLY SATURATED:(2.05,    75000.)
+C STEADY-STATE CALCS USE THE SLOPES AT POINTS  3 BELOW. (1.0000 TESLA)
+C <NAME><NAME><NAME><NAME><I SS><P SS>  (--FOR TYPE 98 N/L REACTOR--)          P
+C CURRENT ----->< FLUX -------->
+98AUT581                  21.31036.333
+         2.20500         3.54468
+         5.04000        10.63404
+        10.39500        17.72340
+        22.05000        23.04042
+        50.40000        26.58510
+       110.25000        28.35744
+       226.80000        30.12978
+       441.00000        31.90212
+      1134.00000        35.44680
+      2362.50000        36.33297
+      4725.00000        38.03714
+            9999
+98AUT582AUT581            21.31018.166
+         2.20500         1.77234
+         5.04000         5.31702
+        10.39500         8.86170
+        22.05000        11.52021
+        50.40000        13.29255
+       110.25000        14.17872
+       226.80000        15.06489
+       441.00000        15.95106
+      1134.00000        17.72340
+      2362.50000        18.16648
+      4725.00000        19.01857
+            9999
+98AUT583AUT582            21.3109.0832
+         2.20500         0.88617
+         5.04000         2.65851
+        10.39500         4.43085
+        22.05000         5.76011
+        50.40000         6.64628
+       110.25000         7.08936
+       226.80000         7.53245
+       441.00000         7.97553
+      1134.00000         8.86170
+      2362.50000         9.08324
+      4725.00000         9.50929
+            9999
+98AUT584AUT583            21.3104.5416
+         2.20500         0.44309
+         5.04000         1.32926
+        10.39500         2.21543
+        22.05000         2.88005
+        50.40000         3.32314
+       110.25000         3.54468
+       226.80000         3.76622
+       441.00000         3.98777
+      1134.00000         4.43085
+      2362.50000         4.54162
+      4725.00000         4.75464
+            9999
+98AUT585AUT584            21.3102.2708
+         2.20500         0.22154
+         5.04000         0.66463
+        10.39500         1.10771
+        22.05000         1.44003
+        50.40000         1.66157
+       110.25000         1.77234
+       226.80000         1.88311
+       441.00000         1.99388
+      1134.00000         2.21543
+      2362.50000         2.27081
+      4725.00000         2.37732
+            9999
+98AUT586AUT585            21.3101.1354
+         2.20500         0.11077
+         5.04000         0.33231
+        10.39500         0.55386
+        22.05000         0.72001
+        50.40000         0.83078
+       110.25000         0.88617
+       226.80000         0.94156
+       441.00000         0.99694
+      1134.00000         1.10771
+      2362.50000         1.13541
+      4725.00000         1.18866
+            9999
+98AUT587AUT586            21.310.56770
+         2.20500         0.05539
+         5.04000         0.16616
+        10.39500         0.27693
+        22.05000         0.36001
+        50.40000         0.41539
+       110.25000         0.44309
+       226.80000         0.47078
+       441.00000         0.49847
+      1134.00000         0.55386
+      2362.50000         0.56770
+      4725.00000         0.59433
+            9999
+98AUT504AUT587            21.310.56770
+         2.20500         0.05539
+         5.04000         0.16616
+        10.39500         0.27693
+        22.05000         0.36001
+        50.40000         0.41539
+       110.25000         0.44309
+       226.80000         0.47078
+       441.00000         0.49847
+      1134.00000         0.55386
+      2362.50000         0.56770
+      4725.00000         0.59433
+            9999
+C FLUX SHIELD N-L MODEL FOR TRANSFORMER: AUT5
+C FLUX SHIELDS ARE 3.15 METERS LONG WITH AREA OF 0.3652 SQUARE METERS.
+C THE B-H CURVE USED PASSES THROUGH THE FOLLOWING (TESLA, AMP/METER) POINTS:
+C LINEAR:(0.20,      4.00) AND FULLY SATURATED:(2.00,  15000.00)
+C FOR SS CALCS EACH F.S. HAS REACT. OF        9505. OHMS (AT  100.0 TURNS)
+C BASED ON SLOPE OF POINT  8 BELOW, HAVING A FLUX DENSITY OF 1.7400 TESLA.
+C <NAME><NAME><NAME><NAME><I SS><P SS>  (--FOR TYPE 98 N/L REACTOR--)          P
+C CURRENT -----><NFLUX -------->
+98AUT503AUT504            2.896673.034
+         0.12600         7.30340
+         0.20475        14.60680
+         0.30870        32.86530
+         0.39690        43.82040
+         0.50400        51.12380
+         0.94500        54.77550
+         1.73250        59.52271
+         2.52000        63.53958
+         6.30000        67.55645
+        15.75000        69.38230
+        47.25000        71.20815
+       472.50000        73.03400
+       945.00000        75.06272
+            9999
+C RESISTANCE UNDERESTIMATING FLUX SHIELD LOSSES, EQUAL TO LINEAR REACTANCE.
+C <NAME><NAME><----><---->RRRRRRXXXXXXCCCCCC                                   P
+  AUT503AUT504            9505.5
+C TANK TOP MULTIPLE CHAINED PI MODEL RESISTANCES REFERRED TO  100.000 TURNS:
+C MODELED SURFACE LAYERS ARE 0.1172 MM THICK; RHOTANK =  15.00 E-8 O-M.
+$VINTAGE, 1
+C <NAME><NAME><----><---->RRRRRRRRRRRRRRRRXXXXXXXXXXXXXXXXCCCCCCCCCCCCCCCC     P
+  AUT591                        2.00000000
+  AUT592                        4.00000000
+  AUT593                        8.00000000
+  AUT594                       16.00000000
+  AUT595                       32.00000000
+  AUT596                       64.00000000
+  AUT597                       96.00000000
+  AUT509                      192.00000000
+$VINTAGE, 0
+C TRANSFORMER TANK TOP MODEL FOR TRANSFORMER AUT5
+C TANK TOP EDDY CURRENT PATH IS MODELED WITH A CIRCUMFERENCE OF 15.00 METERS.
+C AND A WIDTH OF  2.00 METERS; THICKNESS IS 0.015 METERS.
+C THE B-H CURVE USED PASSES THROUGH THE FOLLOWING (TESLA, AMP/METER) POINTS:
+C LINEAR:(0.20,     70.00) AND FULLY SATURATED:(2.05,    75000.)
+C STEADY-STATE CALCS USE THE SLOPES AT POINTS  3 BELOW.
+C <NAME><NAME><NAME><NAME><I SS><P SS>  (--FOR TYPE 98 N/L REACTOR--)          P
+C CURRENT ----->< FLUX -------->
+98AUT591                  13.53023.062
+         1.40000         2.25000
+         3.20000         6.75000
+         6.60000        11.25000
+        14.00000        14.62500
+        32.00000        16.87500
+        70.00000        18.00000
+       144.00000        19.12500
+       280.00000        20.25000
+       720.00000        22.50000
+      1500.00000        23.06250
+      3000.00000        24.14423
+            9999
+98AUT592AUT591            13.53011.531
+         1.40000         1.12500
+         3.20000         3.37500
+         6.60000         5.62500
+        14.00000         7.31250
+        32.00000         8.43750
+        70.00000         9.00000
+       144.00000         9.56250
+       280.00000        10.12500
+       720.00000        11.25000
+      1500.00000        11.53125
+      3000.00000        12.07212
+            9999
+98AUT593AUT592            13.5305.7656
+         1.40000         0.56250
+         3.20000         1.68750
+         6.60000         2.81250
+        14.00000         3.65625
+        32.00000         4.21875
+        70.00000         4.50000
+       144.00000         4.78125
+       280.00000         5.06250
+       720.00000         5.62500
+      1500.00000         5.76562
+      3000.00000         6.03606
+            9999
+98AUT594AUT593            13.5302.8828
+         1.40000         0.28125
+         3.20000         0.84375
+         6.60000         1.40625
+        14.00000         1.82812
+        32.00000         2.10938
+        70.00000         2.25000
+       144.00000         2.39062
+       280.00000         2.53125
+       720.00000         2.81250
+      1500.00000         2.88281
+      3000.00000         3.01803
+            9999
+98AUT595AUT594            13.5301.4414
+         1.40000         0.14063
+         3.20000         0.42187
+         6.60000         0.70312
+        14.00000         0.91406
+        32.00000         1.05469
+        70.00000         1.12500
+       144.00000         1.19531
+       280.00000         1.26563
+       720.00000         1.40625
+      1500.00000         1.44141
+      3000.00000         1.50901
+            9999
+98AUT596AUT595            13.530.72070
+         1.40000         0.07031
+         3.20000         0.21094
+         6.60000         0.35156
+        14.00000         0.45703
+        32.00000         0.52734
+        70.00000         0.56250
+       144.00000         0.59766
+       280.00000         0.63281
+       720.00000         0.70312
+      1500.00000         0.72070
+      3000.00000         0.75451
+            9999
+98AUT597AUT596            13.530.36035
+         1.40000         0.03516
+         3.20000         0.10547
+         6.60000         0.17578
+        14.00000         0.22852
+        32.00000         0.26367
+        70.00000         0.28125
+       144.00000         0.29883
+       280.00000         0.31641
+       720.00000         0.35156
+      1500.00000         0.36035
+      3000.00000         0.37725
+            9999
+98AUT509AUT597            13.530.36035
+         1.40000         0.03516
+         3.20000         0.10547
+         6.60000         0.17578
+        14.00000         0.22852
+        32.00000         0.26367
+        70.00000         0.28125
+       144.00000         0.29883
+       280.00000         0.31641
+       720.00000         0.35156
+      1500.00000         0.36035
+      3000.00000         0.37725
+            9999
+C ZERO SEQUENCE MODELS ARE BASED ON AIR-CORE MODELS, PLUS DERIVED VALUE FOR
+C X100T OF    3.29690 OHMS/PHASE TANK EFFECT, REFERRED TO 100 TURNS.
+C THE (UNSHIELDED) TANK TOP IS MODELED AND HAS STRAY LOSSES.
+C THE TANK WALL IS SATURABLE; BUT ANY STRAY LOSSES ARE NOT MEASURABLE.
+C THE FLUX SHIELD IS SATURABLE AND LACKS SIGNIFICANT DISTRIBUTED GAPS.
+C COUPLING REPRESENTING TOP AND SIDE GAP REACTANCES:
+C PER-PHASE SIDE GAPS =     1.846 OHMS; TOP GAPS =     1.814 OHMS AT 100 TURNS.
+51AUT503                  0.000    10.978117
+52AUT509                  0.000     5.4405450.000     5.440545
+C SHUNT FLUX PATHS BYPASSING LEGS AND COILS OF EACH PHASE FOLLOW:
+C <NAME><NAME><----><---->RRRRRRXXXXXXXXXXXX
+51AUT5A4AUT5B0             0.000    7.463166
+51AUT5B4AUT5C0             0.000    7.463166
+51AUT5C4AUT503             0.000    7.463166
+C ZERO-SEQUENCE FLUXES FROM EACH PHASE TO TANK ARE EQUALIZED BY THE FOLLOWING:
+C <NAME><NAME><----><---->RRRRRRXXXXXXXXXXXXRRRRRRXXXXXXXXXXXXRRRRRRXXXXXXXXXXXX
+51AUT503AUT502            0.000  3296.896640
+52AUT502AUT501            0.000  3296.8933430.000  3296.896640
+53AUT501                  0.000  3296.8933430.000  3296.8933430.000  3296.896640
+C NEXT COUPLING SUMS ZERO-SEQUENCE VOLTAGES OF OUTER WINDINGS AT NODE (0,8):
+C <NAME><NAME><----><---->RRRRRRXXXXXXXXXXXXRRRRRRXXXXXXXXXXXXRRRRRRXXXXXXXXXXXX
+51AUT5A3                  0.000 354922.42080
+52AUT506                  0.000 354922.065870.000 354922.42080
+51AUT5B3AUT5B0            0.000 354922.42080
+52AUT507AUT506            0.000 354922.065870.000 354922.42080
+51AUT5C3AUT5C0            0.000 354922.42080
+52AUT508AUT507            0.000 354922.065870.000 354922.42080
+C NON-DEDICATED STRAY ZERO-SEQUENCE LOSS RESISTANCE:
+C PRODUCES  158.213 KW LOSS FOR ENTERED TEST CONDITIONS.
+$VINTAGE, 1
+C <NAME><NAME><----><---->RRRRRRRRRRRRRRRRXXXXXXXXXXXXXXXXCCCCCCCCCCCCCCCC     P
+  AUT508                      354.92242080
+$VINTAGE, 0
+C TIME-STEP-DAMPING BRANCHES ACROSS MAJOR AIR GAPS FOR HARMONIC ORDER:  500.0
+C <NAME><NAME><----><---->RRRRRRXXXXXXCCCCCC
+  AUT5A4AUT5B0            373.16      .00142
+  AUT5B4AUT5C0            373.16      .00142
+  AUT5C4AUT503            373.16      .00142
+        AUT501            164.84      .00322
+  AUT501AUT502            164.84      .00322
+  AUT502AUT503            164.84      .00322
+C 10000-HENRY FLUX MONITORING INDUCTANCES TO INITIALIZE TACS.
+C <NAME><NAME><----><---->RRRRRRXXXXXXXXXXXXRRRRRRXXXXXXXXXXXXRRRRRRXXXXXXXXXXXX
+51AUT5A5AUT5D1                   3769911.185
+51AUT5B5AUT5D2                   3769911.185
+51AUT5C5AUT5D3                   3769911.185
+51AUT501AUT5D4                   3769911.185
+51AUT502AUT5D5                   3769911.185
+C End of $INCLUDE.  File name = aut5-brn.inc
+$VINTAGE, 1
+C <NAME><NAME><----><---->RRRRRRRRRRRRRRRRXXXXXXXXXXXXXXXXCCCCCCCCCCCCCCCC     P
+C CORNER GROUND DELTA
+  Y1                            1000.
+C ENERGIZE VIA 100 OHM RESISTANCES FOR DAMPING
+C 0.1 ohm is now essential; 100 is too large relative to xl
+  SRC2A EGCT1A                 .1
+  SRC2B EGCT1B                 .1
+  SRC2C EGCT1C                 .1
+$VINTAGE, 0
+BLANK CARD ENDING ALL ATP-SORTED BRANCH CARDS (from blank.inc)
+C $INCLUDE aut5-swx.inc
+C   WSM touches using DOS editor to make readable.
+C MEAS. SWITCHES TO MONITOR CURRENT IN 10000-HENRY CORE FLUX-MONITORING INDUCTS.
+C <NAME><NAME><T CLOSE ><T. OPEN ><AMP MARG> 67890123 MEASURING 56789012345678 P
+  AUT5D1                                              MEASURING
+  AUT5D2AUT5B0                                        MEASURING
+  AUT5D3AUT5C0                                        MEASURING
+  AUT5D4AUT5B0                                        MEASURING
+  AUT5D5AUT5C0                                        MEASURING
+C End of $INCLUDE.  File name = aut5-swx.inc
+C ********************************************* STUDY-DEPENDENT CABLE SWITCHING:
+C SWITCH CARD: COL 1-2 IS 0 FOR ORDINARY & GAUSS. STATISTICS SWITCHES, NOT TACS.
+C CLOSING, OPENING TIMES AND STATISTICS PARAMETERS BELOW ARE IN SECONDS.
+C <NAME><NAME><T CLOSE ><T. OPEN ><AMP MARG> 67890123 MEASURING 56789012345678 P
+C <NAME><NAME><GAUS AVG><GAUS SIG><AMP MARG>          STATISTICS               P
+C METERS INTERNAL CURRENT OF PHASE LEG A,B,C
+  AUT5AMAUT5A5                                        MEASURING                1
+  AUT5BMAUT5B5                                        MEASURING                1
+  AUT5CMAUT5C5                                        MEASURING                1
+C ENERGIZED AT ZERO
+  SRCA  SRC2A                                         MEASURING                1
+  SRCB  SRC2B                                         MEASURING                1
+  SRCC  SRC2C                                         MEASURING                1
+C ENERGIZED AT ZERO PLUS
+C  SRCA  SRC2A  .0001     999.        1.
+C  SRCB  SRC2B  .0001     999.        1.
+C  SRCC  SRC2C  .0001     999.        1.
+BLANK CARD ENDING ALL ATP-SORTED SWITCH CARDS (from blank.inc)
+$LISTON
+C $INCLUDE aut5-src.inc
+C WSM touches file with DOS editor to make it into a DOS file
+C TACS-CONTROLLED SOURCES FOR HYSTERESIS/RESIDUAL MMF IN TRANSFORMER AUT5
+C <NAME> *= VOLTAGE IF POSITIVE; CURRENT IF NEGATIVE
+60AUT5A5-1
+60AUT5B5-1
+60AUT5C5-1
+60AUT5B0-1
+60AUT5C0-1
+60AUT501-1
+60AUT502-1
+C End of $INCLUDE.  File name = aut5-src.inc
+C        *= VOLTAGE IF POSITIVE; CURRENT IF NEGATIVE
+C <NAME>  <CRESTVAL><FREQ    ><ANGLE   >                    <T START ><T STOP  >
+C 138 KV L-L = 112676.5 V CREST or 1877.94 at 1 hertz
+C 40 percent = 751.17
+C 60 percent = 1126.76
+C 80 percent = 1502.35
+C 100 percent = 1877.94
+C 120 percent = 2253.53
+14SRCA   1  2253.53    1.            0.                       -1.0      999.
+14SRCB   1  2253.53    1.         -120.                       -1.0      999.
+14SRCC   1  2253.53    1.         -240.                       -1.0      999.
+BLANK CARD ENDING ALL ATP-SORTED SOURCE CARDS (from blank.inc)
+C <BUS ><VOLT><MON.><FOR ><NODE><    ><    ><    ><    ><    ><    ><    ><    >
+  EGCT1A      EGCT1B      EGCT1C
+BLANK CARD ENDING ALL ATP-SORTED OUTPUT CARDS (from blank.inc)
+ 193.01 0.0 0.1         BRANCH
+                        TACS  ALLINATACS  ALLINBTACS  ALLINC
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C    2nd of 18 subcases.
+C      "FREQUENCY SCAN"  use, with subsequent plotting of phasors vs. frequency.
+C      This test case uses uniform frequency spacing.  It basically like DC-51,
+C      but involves some variations of output and batch-mode plotting.
+PRINTED NUMBER WIDTH, 8, 2,   { Each column of width 8 includes 2 blank bytes
+FREQUENCY SCAN, 60., 10., 280., 0,       { 60 < f < 280 Hz  in  10-Hz increments
+CHANGE PLOT FREQUENCY   { Request to vary frequency of plot points and .PL4 file
+       5       5      10       3      20       1  { On step 5, change to 5, etc.
+     0.1     0.0    { dT of col 1-8 is not used;  TMAX of 9-16 ==> no simulation
+       1       1       1       0       1      -1 
+       5       5      10       3      20       1
+C   Note: 1-punch in col. 80 of the following card was replaced by LIN002 below.
+C         This illustrates a second way to order current output: by branch name.
+C         When the user does not name branches himself,  NMAUTO = 1  means the
+C         program will provide default names.  The first branch is LIN001,  so
+C         this should be used to replace the column-80 punch.  But this branch
+C         is in series with the 2nd branch,  and has no shunt leakage,  so the
+C         same current can be found from the second branch (name LIN002).  This
+C         alternative is more interesting since it shows current output seems to
+C         be possible for the 1-phase, constant-parameter distributed model.
+  GEN   SEND                 3.0   40.
+-1SEND  MID                 .306  5.82  .012   20. { 20 miles of line from DC-37
+ 1MID   REC               34.372457.68.15781       { 10 miles of Pi   from  DC-3   
+  EARTH                     200.                                               1
+C   The preceding branch has a 1-punch in column 80 for current output.  If a 3
+C   had instead been used,  branch voltage would have been produced, too.  Note
+C   it would be equal to the node voltage of node  EARTH.  No choice of polarity
+C   is possible,  this way.  More interesting is the  "-5"  request below, which
+C   allows polarity reversal (a minus sign will be added).
+BLANK card ending branches
+C   Note: 1-punch in col. 80 of the following card was replaced by SWT001 below.
+C         This illustrates a second way to order current output: by switch name.
+  REC   EARTH                                         MEASURING                
+BLANK card ending (here, non-existent) switches
+14GEN           100.       60.                                     -1.
+BLANK card ending sources
+C    Requests for output variables follow.  About currents,  there is no control
+C    over location in the output vector.   Switch currents always precede branch
+C    currents, and both are in natural order (of component number). But order of
+C    voltages is controlled by the user.  Note requests for node voltages have
+C    been split,  and in between there is a request for a voltage difference.
+C    This is the order in the output vector, note.  Yet,  all voltage requests
+C    made here (after the blank card ending source cards) follow all that might
+C    have been made with column-80 punches on branch or switch cards.
+  GEN   SEND  MID   REC
+-5      EARTH     { -5 ==> 2A6 name pairs for voltage differences (branch V)
+-1SWT001LIN002    { -1 ==> Branch/switch current out;  use A6 component names
+  EARTH { Node voltage.  Note branch voltage 2 lines above has opposite polarity
+BLANK card ending node voltage outputs
+  PRINTER PLOT
+C      Note the peculiar 60 units/inch on the following plot cards.  This is not
+C      a mistake.  With 6 lines/inch of the printer plot, & the F-scan frequency 
+C      increment of 10 Hz,  there will be exactly one line for each freq step:
+ 14660. 60.280.         GEN   SEND  MID   REC
+ 19660. 60.280.         SEND  MID   EARTH REC
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C    3rd of 18 subcases illustrates  IF-THEN-ENDIF  for conditional data
+C    assembly as described in the July, 1998, newsletter.  Environment
+C    variable  RESISTOR  must be set prior to use, in order.  to avoid
+C    an error stop.  This can not be set internally,  unfortunately.
+PRINTED NUMBER WIDTH, 9, 2,
+POWER FREQUENCY, 50.,
+   .0001    .020     50.
+       1       1       1       1       1      -1
+       5       5      20      20
+C    1st of 2 identical, disconnected networks uses manually-defined branches:
+C IF ( RESISTOR .EQ. 'ONEHALF' ) SET VARIABLE { Execute OS command SET RESISTOR=ONEHALF
+IF ( RESISTOR .EQ. 'ONEHALF' ) THEN  { If user wants to use resistive alternative:
+  GEN   TRAN                 0.5     { 1st of 3 alternatives is resistor
+ELSEIF ( RESISTOR .EQ. 'ZERO' ) THEN  { If user wants to use resistive alternative:
+  GEN   TRAN                 0.0     { 2nd of 3 alternatives is illegal resistor
+ELSE           { Alternatively (if environment variable RESISTOR is not YES):
+  GEN   TRAN                       0.5   { 3rd of 3 alternatives is inductor
+ENDIF  { Terminate 5-line IF statement that uses RESISTOR to choose the model
+  TRAN                       0.5
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN          1.414       50.       0.0                           -1.
+BLANK card terminating program source cards.
+  GEN   TRAN
+BLANK card ending program output-variable requests.
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE        ---  NEWSORT  ---
+C    4th of 18 subcases illustrates new /-card sorting as described in a story of
+C    the January, 1999, newsletter.  Correction of trouble sorting /INITIAL  was
+C    involved as explained by Prof. Juan A. Martinez Velasco  of the Polytechnic
+C    University of Catalunya in Barcelona, Spain.  This is a modification of his
+C    FILE4.DAT    DELTAT is increased and # of steps is reduced.  Blank cards no
+C    longer are required,  so have been removed.  A requirement of the new logic
+C    is  that  all data after miscellaneous data cards must be sorted.  This was
+C    not true of the old logic (see DC-8).   Note that some data classes are not
+C    being used (no problem).   Note the  NEWSORT  declaration on line 1,  which
+C    was patterned after the use of  NOSORT  in  DC-36.  In effect,  the NEWSORT
+C    request will make sure  SZBED  carries a minus sign.   Not  illustrated  is
+C    parallel  OLDSORT  to make sure  SZBED  does _not_ carry a minus sign (this
+C    would force use of the old sorting logic).  It is assumed  STARTUP  remains
+C    as it was (no minus sign applied to SZBED) in order to handle DC-8.
+ .000100    .010
+       1       1                              -1
+       5       5      20      20
+/OUTPUT
+  BUS-0 BUS-1 BUS-2
+/SOURCE
+14BUS-0          1.0      50.0       0.0                          -1.0       1.0
+/BRANCH
+  BUS-0 BUS-1               10.0 10.0
+  BUS-1                                10.0  { Illustrate an in-line comment
+C   Comment cards are allowed anywhere, of course.  Add one here after
+C   the first two branches just to show there is no problem.
+/SWITCH
+  BUS-1 BUS-2     .00035       1.0       1.0                                   1
+/BRANCH
+  BUS-2                     10.0
+/INITIAL
+ 2BUS-2             0.5
+BEGIN NEW DATA CASE
+C       5th of 18 subcases is an improvement over DC4AT5.DAT of SPY @5.  But that
+C       required SPY.  Beginning  23 August 1998,  parametric studies can be run
+C       using higher-level batch-mode commands.  See October, 1998, newsletter.
+C       Following request carries params  MAXKNT  IOPCVP  NOSTAT 
+POCKET CALCULATOR VARIES PARAMETERS            5       1       0 { Loop five times
+PRINTED NUMBER WIDTH, 11, 2,  { Request maximum precision (for 8 output columns)
+   .0001    .020
+       1      -1       1       1       1      -1               2
+       5       5      20      20
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would be
+C __MILLIHENRIES__ = 1000. - ( KNT - 1.0 ) * 100.   { L =1000, 900, 800, 700, & 600 mHenry
+C MILLIH = 1000. - ( KNT - 1.0 ) * 100.   { L =1000, 900, 800, 700, & 600 mHenry
+VALUE = 1000. - ( KNT - 1.0 ) * 100.  $$  { L =1000, 900, 800, 700, & 600 mHenry
+__MILLIHENRIES__ = VALUE { 1st of 2 uses of preceding intermediate variable
+MILLIH = VALUE           { 2nd of 2 uses of preceding intermediate variable
+C  Note about preceding.  There are two uses of the same inductance value.  The
+C  2nd is 6 columns wide for use with narrow-format series R-L-C data.  The 1st
+C  is for wide-format,  which allows 16 columns.  The underscore is required as
+C  the first character if it is not a letter.  Note that the second symbol is
+C  contained in the first,  so order is mandatory.  If order were switched, an
+C  error message would terminate execution following a warning message:
+C          ++++  Notice.  Symbol  1  is contained within symbol  2.
+C                Swap these two and try again.
+C     Intermediate variable  VALUE  was introduced 29 Dec 98.  Before that, each
+C     of the two symbols had the right hand side of VALUE.  For this trivial
+C     case,  the difference is unimportant.  But for other cases, the formula is
+C     much too long to be contained on a single line.  So,  it is broken down
+C     into components,  with an intermediate variable used for each.  Note the
+C     $$  on the right of the intermediate variable.  By definition,  such a
+C     variable is used within the pocket calculator only.  The name is not to be
+C     searched for and replaced in later data cards outside of the  $PARAMETER
+C     block (terminated by the following blank card).  For industrial-strength 
+C     use of intermediate variables,  see Orlando Hevia's induction motor model
+C     in Rule Book documentation of  $PARAMETER.
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch cards
+C Series R-L-C, narrow:   RRRRRRLLLLLLCCCCCC
+  TRAN                      10.0                                               3
+  GEN   TRAN6                5.0MILLIH  { $PARAMETER will define this inductance
+$VINTAGE, 1,    { The preceding used old, normal, narrow format.  Switch to wide
+C Series R-L-C, wide:     RRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLCCCCCCCCCCCCCCCC
+  TRAN6                               10.0                                     3
+  GEN   TRAN                           5.0__MILLIHENRIES__  { $PARAMETER will define this inductance
+$VINTAGE, 0,    { Return to old, normal, narrow format
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70.       50.                                     -1.
+BLANK card terminating program source cards.
+  GEN   TRAN  TRAN6
+BLANK card ending program output-variable requests.
+  CALCOMP PLOT  { Needed to cancel  PRINTER PLOT  of preceding subcase
+ 194 2. 0.0 20. -.40 .40TRAN
+BLANK card ending batch-mode plot cards
+-1         10.TRAN      { Statistical tabulation of branch voltage (TRAN, TERRA)
+BLANK card ending all statistical tabulation request cards
+BEGIN NEW DATA CASE
+C       6th of 18 subcases illustrates data that created the compiled  TACS  code
+C       that is built into the  UTPF.   As used in  RUN.BAT  the  output will be
+C       CODETACS.INC  and  DECKTAC*.INC  ---  files put in the  UTPF.  The logic
+C       shown below was reproduced 9 times to produce the 60 variables mentioned
+C       in the January, 1998, newsletter  (see TAL explanation).   Below will be
+C       found the basic pocket calculator formulas that were used to  illustrate
+C       how slow Dube's  MODELS  and  TACS  are for such basic mathematics.
+C          BENCHMARK DC-18b  ---  original source of formulas to be found below.
+COMPILED TACS MAKE { Alternative to SET COMPTACS=MAKE used because later subcase
+SINGLE STEP IF MAKE   { Program will reduce TMAX to DELTAT if  SET COMPTACS=MAKE
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+ABSOLUTE TACS DIMENSIONS
+      10      90     100      20      30     400     350      60
+  .00002     2.0 
+       1     -11       0       0       1      -1
+       5       5      20      20     100     100    1000    1000   10000   10000
+TACS STAND ALONE
+99TEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50. 
+99TEST2   = 1.E2 * COS ( 2.0 * 3.14159 * TEST1 / 100. )
+99TEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( TEST2 ) )
+99TEST5   =  2.0 * PI * TEST1 / 100.
+99TEST6   =  2.0 * SIN ( TEST5 )
+99TWOX    = 2.E-4 * ( TEST2 * TEST2  + 2500. * TEST6 * TEST6 )
+C 99TEST1   = 10. ----  This line is replacement for preceding to approximate removal of math
+33TEST1 TEST2 TEST3 TEST5 TEST6 TWOX
+BLANK card ending all TACS data cards
+  CALCOMP PLOT       { Negative IPLOT = -11 will ignore the following plot cards
+ 143 .2 0.0 2.0         TEST1 TEST2 TEST3
+ 143 .2 0.0 2.0         TEST5 TEST6 TWOX
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C  7th of 18 subcases  illustrates use of pocket calculator to vary the frequency
+C  of a distributed-parameter transmission line within the  FREQUENCY SCAN  loop
+C  by means of  TO SUPPORTING PROGRAM  to provide  LINE CONSTANTS  rederivation.
+C  This use of  LINE CONSTANTS  for each frequency of the F-scan will not be
+C  seen in the  .LIS  file as proof of use unless  /OUTPUT  is added to the
+C  request that declares  "TO SUPPORTING PROGRAM" (see illustration on comment).
+C  This subcase added 9 November 1999.  This does work. Prior to adding the data
+C  here,  there was an attempt to add it to end of DC-52,  but that failed.  It
+C  seems there is some conflict with LMFS (complicated).  The  $PUNCH statement
+C  was not being executed right.  Ignore that problem by moving data here.
+C                       FMIMFS--DELFFS--FMAXFS--NPD-----
+C                       11111111222222223333333344444444
+FREQUENCY SCAN               2.0            200.       8
+C       Following request carries params  MAXKNT  IOPCVP  NOSTAT 
+POCKET CALCULATOR VARIES PARAMETER             1       1       0
+C       Preceding MAXKNT is not used since FREQUENCY SCAN is involved.  ATP will
+C       internally calculate the correct # of steps from FMINFS, FMAXFS, etc.
+C       Note we scan from 2 Hz to 200 Hz  ---  2 decades, with 8 points/decade
+C       for a total of 16 plus the starting point,  so 17 total.  The output 
+C       looks like exponential explosion as resonance around 300 Hz (would the
+C       138 miles be 1/4 of a wavelength at 300 Hz?  Probably)  is approached.
+C       The 8 points/decade are needed to see the right edge accurately.
+C          30 July 2001, preceding  NOSTAT  is added.  This is a binary switch
+C          to suppress statistical tabulation ("no statistics") if value is 1.
+C          But for F-scan,  there is no statistical tabulation,  so value is
+C          immaterial.
+$PARAMETER
+C FRECU_____  = 0.01* ( EXP( LOG(10.0) /10.0 ) ) ** (KNT-1.0)
+C   The preceding was Tsu-huei's original, single desired line.  But when first
+C   tried,  there was an error (see April, 2000 newsletter).  For about half
+C   a year,  the following lower-order equivalent was required:
+C EXPON     =  KNT - 1.0               $$
+C BASE      = EXP( LOG(10.0) / 10.0 )  $$
+C FRECU_____= .01 * BASE  ** EXPON
+C   Preceding was not nice for plotting.  Switch to 8 points/decade beginning
+C   at 2 Hz (below which nothing much happens):
+C EXPON     =  KNT - 1.0              $$
+C   The preceding line worked fine.  But it was not as demanding of pocket
+C   calculator logic as the following.  As mentioned in the newsletter, the
+C   leading "-" on the leading constant was mishandled prior to 13 June 2000:
+C EXPON     =  -1.0 + KNT             $$
+C BASE      = EXP( LOG(10.0) / 8.0 )  $$
+C FRECU_____= 2.0 * BASE  ** EXPON
+C    The preceding 3 lines were used successfully until 13 October 2007.  Then,
+C    new logic to handle extraneous parens was added to POCKET,  and it seemed
+C    that this also should handle the original problem.  To prove it,  comment
+C    out the preceding 3 cards and replace by the equivalent original.  The .LIS
+C    file is esstentially unchanged.  WSM,  13 Oct 2007 :
+FRECU_____  = 2.0 * ( EXP( LOG(10.0) /8.0 ) ) ** (KNT-1.0)
+BLANK card terminates $PARAMETER definitions
+EXACT PHASOR EQUIVALENT { Switch from lumped-R to exact Pi-equiv. of distributed
+C  The preceding is not really necessary. It should make the representation more
+C  accurate, of course.  At the highest frequency,  if we are approaching 1/4 of
+C  a wavelength,  there should be a difference. But that difference seems small.
+C  Consider the output vector at the ending frequency, with and without EPE:
+C  With EPE:  17   200.   303000.  0.0   371408.7751  -8.40003412  583671.5409  -30.2933187  1684.552878  49.89669008
+C  Without :  17   200.   303000.  0.0   371386.1316  -8.41590291  583780.5064  -30.3165151  1685.249616  49.82908871
+PRINTED NUMBER WIDTH, 13, 2,   { Request maximum precision (if 8 output columns)
+     -1.     -1.     60.     60.    { Note dT and Tmax are ignored for FREQ SCAN                              
+       1      -1       1       0                               1
+  SSSS1AAAAA1A                     15.                                         1
+  SSSS1BBBBB1B                     15.                                      
+  SSSS1CCCCC1C                     15.  
+C      Add  /OUTPUT  anywhere on right of following request to produce output of
+C      the supporting program.  Without this,  all output will be suppressed.
+C < TO SUPPORTING PROGRAM (NEXT) >  /OUTPUT   { Add to see LINE CONSTANTS output  
+< TO SUPPORTING PROGRAM (NEXT) >    { Request for a jump to a supporting program
+C    The following data, through the blank card, is from 2nd subcase of DCNEW-3.
+LINE CONSTANTS   { This is the supporting program that is to be executed in-line
+BRANCH  AAAA1AAAAA2ABBBB1BBBBB2BCCCC1CCCCC2C                                    
+UNTRANSPOSED            { Request for the line to be represented as untransposed
+C   LINE CONSTANTS DATA FOR JOHN DAY TO LOWER MONUMENTAL 500-KV LINE.           
+  1.3636 .05215  4         1.602  -20.75   50.     50.                          
+  1.3636 .05215  4         1.602  -19.25   50.     50.                          
+  2.3636 .05215  4         1.602  - 0.75   77.5    77.5                         
+  2.3636 .05215  4         1.602    0.75   77.5    77.5                         
+  3.3636 .05215  4         1.602   19.25   50.     50.                          
+  3.3636 .05215  4         1.602   20.75   50.     50.                          
+  0.5    2.61    4         0.386  -12.9    98.5    98.5                         
+  0.5    2.61    4         0.386   12.9    98.5    98.5                         
+BLANK CARD ENDING CONDUCTOR CARDS OF  "LINE CONSTANTS"  CASE                    
+100.     FRECU_____        1     11  1        138.       1        
+BLANK CARD ENDING FREQUENCY CARDS OF  "LINE CONSTANTS"  CASE 
+$PUNCH, sup.pch        ! { Output the just-created branch cards to a disk file
+BLANK card ending  LINE CONSTANTS  data cases  { Last of supporting program data
+C  End of data for supporting program.  Branch data input now resumes:
+$CLOSE,  UNIT=7  STATUS=KEEP    { Disconnect file containing KC Lee branch cards
+$OPEN,  UNIT=7  STATUS=UNKNOWN  FILE=dumpch.lis  FORM=FORMATTED
+$INSERT, sup.pch,      { Dynamic connection of disk file created by $PUNCH above
+  AAAA2A                   1000.  { Resistive load at far end of 1st of 3 phases
+  BBBB2B      AAAA2A              { 2nd of 3 phases  is terminated by the same R
+  CCCC2C      AAAA2A
+BLANK card ending branch cards
+BLANK card ending switch cards
+  POLAR OUTPUT VARIABLES     { 1st of 3 alternatives for output gives mag, angle
+C     Preceding is one of 3 alternatives.  The other two are,  after commenting:
+C BOTH POLAR AND RECTANGULAR  { Request for (in order): mag, angle, real, imag
+C RECTANGULAR OUTPUT VARIABLES { 3rd of 3 alternative outputs gives real, imag
+14SSSS1A     303000.FRECU_____       0.                            -1.      
+14SSSS1B     303000.FRECU_____     -120.                           -1.
+14SSSS1C     303000.FRECU_____      120.                           -1.
+BLANK card ending source cards
+  SSSS1AAAAA1AAAAA2A { Names of 3 nodes (all a-phase, note) for V-node output
+C Column headings for the  4   output variables follow.  These are divided among the 3 possible FS variable classes as follows ....
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   1     output variables are branch currents (flowing from the upper node to the lower node);
+C For each variable, magnitude is followed immediately by angle.  Both halves of the pair are labeled identically, note.
+C   Step   F [Hz]         SSSS1A       SSSS1A       AAAA1A       AAAA1A       AAAA2A       AAAA2A       SSSS1A       SSSS1A
+C                                                                                                       AAAA1A       AAAA1A
+C      1       2.0       303000.          0.0  303004.5676  -.028517799  301911.4209  -.185323276  301.7646507  1.720504686
+C New parameter values follow:  1) 2.6670429
+C      2 2.6670429       303000.          0.0   303008.121  -.038018478  301917.2789  -.247632726  301.7897693  2.294000532
+C New parameter values follow:  1) 3.5565588
+C      3 3.5565588       303000.          0.0  303014.4401  -.050681287  301931.0223  -.330715516  301.8820814  3.058524978
+BLANK card ending output variable requests (here, only node voltages)  
+C New parameter values follow:  1) 84.339301
+C     14 84.339301       303000.          0.0  311692.5772  -1.38233484  333737.5916  -8.33491659  541.8603856  48.84191334
+C New parameter values follow:  1) 112.46827
+C     15 112.46827       303000.          0.0  319327.0284  -2.11141826  362848.3744  -11.7652408  709.4891996  53.86022223
+C New parameter values follow:  1) 149.97884
+C     16 149.97884       303000.          0.0  335125.0318   -3.6799135  425532.3722  -17.6205065  1015.840142  55.61763042
+C New parameter values follow:  1)      200.
+C     17      200.       303000.          0.0  371408.7751  -8.40003412  583671.5409  -30.2933187  1684.552878  49.89669008
+  F-SCAN COMPONENTS     MAG   MAG     { Access "mag" and "mag" next (only 1st used)
+ 197.25 0.0 2.5  0.02000SSSS1AAAAA1A            Magnitude of i-aAmperes            
+  F-SCAN COMPONENTS     ANGLE ANGLE   { Access "angle" and "angle" next
+ 147.25 0.0 2.5 -40. 0.0AAAA1AAAAA2A            Angles of v-nodeDegrees
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C    8th of 18 subcases illustrates two separate $PARAMETER blocks within a 
+C    PCVP (POCKET CALCULATOR VARIES PARAMETERS) loop over time simulation.
+C    The data comes from Prof. Juan Martinez as should be explained in the
+C    April, 2001, newsletter.  Prior to correction on 19 December 2000, symbol
+C    RESIST was not being correctly handled on the 2nd pass.  It should have
+C    value 5 ohms on the first pass and 15 ohms on the second pass.  Note that
+C    it is in the 1st of two blocks.  Prior to correction, memory of this was
+C    being overlaid by memory for the 2nd block.  Now, there is no overlaying.
+C         25 December 2000, add variable HOLD01 to verify the new non-volatile
+C         storage (any variable HOLDxx that begins with the 4 letters HOLD).
+C         Gabor Furst asked for this extension as should be explained in the
+C         April, 2001 (or newer), newsletter.  HOLD01  begins with value zero,
+C         so has value 1 on first pass and 3 on 2nd pass of loop over KNT.  The
+C         variable is not really being used for anything in this illustration,
+C         but it certainly could be.  Except for its non-volatile nature, it is
+C         a normal variable in every other respect.
+C       Following request carries params  MAXKNT  IOPCVP  NOSTAT
+POCKET CALCULATOR VARIES PARAMETERS            2       0       1
+ .000100    .030                
+      20      -1
+$PARAMETER
+RESIST =  5.0 + (KNT-1.0)*10.0
+HOLD01 = HOLD01 + KNT    { Non-volatile variable because 1st 4 letters "HOLD"
+BLANK card ending 1st of 2 $PARAMETER blocks
+$PARAMETER
+AB_TON = 0.01
+ABTOFF = 0.01 + ( KNT - 1.0 ) * 0.01
+GND__K = KNT SERIALIZE 'GND___'
+BLANK card ending 2nd of 2 $PARAMETER blocks
+  GND__2                    100.                                               0
+  GND__1                  RESIST                                               0
+  SOURCAMIDD_A            RESIST                                               0
+BLANK card ending branch cards
+  MIDD_AGND__K    AB_TON    ABTOFF  
+BLANK card ending switch cards
+14SOURCA 0     1.5E5       50.                                     -1.        1.
+BLANK card ending source cards
+  MIDD_A
+BLANK card ending names of nodes for voltage output
+BLANK card ending batch-mode plot cards
+BLANK card ending all statistical tabulation request cards
+BEGIN NEW DATA CASE
+C       9th of 18 subcases is copied from 5th,  but MODELS data has been added
+C       to process and display extrema.  This service begins  1 January 2001.
+C       Optional col. 32:  MEXTR  0 or 1 ==> minimum extrema;  2 ==) all extrema
+MODELS PROCESSES EXTREMA       0 { Use MODELS in simulation but only for extrema
+C       Following request carries params  MAXKNT  IOPCVP  NOSTAT 
+POCKET CALCULATOR VARIES PARAMETERS            5       1       1 { Loop five times
+PRINTED NUMBER WIDTH, 11, 2,  { Request maximum precision (for 8 output columns)
+   .0001    .020
+       1      -1       1       1       0      -1 
+       5       5      20      20
+C   Note integer miscellaneous data card has extrema flag  MAXOUT = 0  as proof
+C   that the user does not need to remember to set it.  PCVP  automatically will
+C   set this to unity.  After that,  MEXTR  will suppress such output for passes
+C   2 onward unless  MEXTR = 2  (which will show all extrema).  MODELS  output
+C   will always be seen,  although note that such output will disappear if all 
+C   write(  statements are removed from the  MODELS  data.  In the following
+C   data,  INPUT  variables are special.  In place of the usual variable types,
+C   one of 4 new ones must be used:  Xmax, Tmax, Xmin, and Tmin corresponding to
+C   the 4 rows of extrema output.  The name within parentheses ("dummy") is not
+C   used,  so can be any character string beginning with a letter.  It can not
+C   be omitted, however (unfortunately).  Next comes the fixed in-line comment,
+C   which can begin in any column.  But,  to the right of the colon, format is
+C   fixed.  It is assumed  I2, 1X, 2A6  information is involved.  The integer is
+C   the same one used on a batch-mode plot card: 4 if node voltage, 8 if branch
+C   voltage,  and 9 if branch current (or an S.M., a U.M., or a TACS variable). 
+C   The two names that follow correspond to the printed heading.  One minor
+C   enhancement is use of symbolic BLANK,  which ATP interprets as real blanks.
+C   Each  INPUT  variable must be on its own line (see the 4 lines just below).
+C     2 January 2001,  WRITE(  statements are left-adjusted to column 1 to take  
+C     advantage of new logic that will hold the user's case within text (as
+C     delineated by apostrophes).
+C   3 January 2001,  add an initial $PARAMETER block that has no use.  This is
+C   inspirated by Prof. Martinez's data  TESTA1.DAT  which inspired correction
+C   to allow such practice. 
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would be
+UNUSED = 5.0  { Following data does not involved character string "unused". 
+BLANK card ends  $PARAMETER  definitions that are processed before MODELS data
+MODELS
+INPUT tran1  {Xmax(dummy)} -- Plot type and variable names: 8 TRAN6 BLANK
+INPUT tran2  {Tmax(dummy)} -- Plot type and variable names: 8 TRAN6 BLANK
+INPUT tran3  {Xmin(dummy)} -- Plot type and variable names: 8 TRAN6 BLANK
+INPUT tran4  {Tmin(dummy)} -- Plot type and variable names: 8 TRAN6 BLANK
+MODEL m1                 -- Begin definition of a model named m1
+ VAR pass, sum           -- Verify that values are kept between passes
+ INPUT row1 {dflt: 0}    -- Connects with  Xmax, the 1st of 4 extrema rows
+ INPUT row2 {dflt: 0}    -- Connects with  Tmax, the 2nd of 4 extrema rows
+ INPUT row3 {dflt: 0}    -- Connects with  Xmin, the 3rd of 4 extrema rows
+ INPUT row4 {dflt: 0}    -- Connects with  Tmin, the 4th of 4 extrema rows
+ INIT  pass:=0           -- Begin with the pass number equal to zero
+       sum:= 0  ENDINIT  -- Begin with the sum of Xmax equal to zero
+ EXEC                    -- For each new set of extrema, we want to do this:
+  pass:=pass+1           -- Count the pass number of the loop over simulations
+  sum := sum + row1      -- Sum all Xmax as trivial demonstration of math
+write('   ************ In MODELS, pass = ', pass, 'sum =', sum )
+write( '   Four rows Xmax, Tmax, Xmin, Tmin = ',  row1, row2, row3, row4 )
+write( ' ' )           -- Blank line separates this pass from following one
+C   3 March 2001, to satisfy need of Prof. Juan Martinez in Barcelona, add the
+C   following copy of the preceding 3 lines.  This produces a 2nd copy of the
+C   preceding output in disk file  MODELS.1  that is connected to I/O unit 37
+C   as used by  $CLOSE,  $OS,  and  $OPEN  commands immediately before plotting.
+write1('   ************ In MODELS, pass = ', pass, 'sum =', sum )
+write1( '   Four rows Xmax, Tmax, Xmin, Tmin = ',  row1, row2, row3, row4 )
+write1( ' ' )           -- Blank line separates this pass from following one
+ ENDEXEC                 -- End of operations for each new set of extrema
+ENDMODEL                 -- End of the model named m1
+USE m1 as m1
+ INPUT row1 := tran1
+ INPUT row2 := tran2
+ INPUT row3 := tran3
+ INPUT row4 := tran4
+ENDUSE
+ENDMODELS
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would be
+C __MILLIHENRIES__ = 1000. - ( KNT - 1.0 ) * 100.   { L =1000, 900, 800, 700, & 600 mHenry
+C MILLIH = 1000. - ( KNT - 1.0 ) * 100.   { L =1000, 900, 800, 700, & 600 mHenry
+VALUE = 1000. - ( KNT - 1.0 ) * 100.  $$  { L =1000, 900, 800, 700, & 600 mHenry
+__MILLIHENRIES__ = VALUE { 1st of 2 uses of preceding intermediate variable
+MILLIH = VALUE           { 2nd of 2 uses of preceding intermediate variable
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch cards
+C Series R-L-C, narrow:   RRRRRRLLLLLLCCCCCC
+  TRAN                      10.0                                               3
+  GEN   TRAN6                5.0MILLIH  { $PARAMETER will define this inductance
+$VINTAGE, 1,    { The preceding used old, normal, narrow format.  Switch to wide
+C Series R-L-C, wide:     RRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLCCCCCCCCCCCCCCCC
+  TRAN6                               10.0                                     3
+  GEN   TRAN                           5.0__MILLIHENRIES__  { $PARAMETER will define this inductance
+$VINTAGE, 0,    { Return to old, normal, narrow format
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70.       50.                                     -1.
+BLANK card terminating program source cards.
+  GEN   TRAN  TRAN6
+BLANK card ending program output-variable requests.
+C   3 March 2001, to satisfy need of Prof. Juan Martinez in Barcelona, add the
+C   following 6 $-cards.  Together with preceding  WRITE1  of  MODELS,  this
+C   demonstrates the needed ability for MODELS to create a disk file that will
+C   be disconnected and renamed at the end of a PCVP pass.  When execution is
+C   complete,  TEMPFILE.LIS  will contain the 5th and last of 5 successive
+C   contents,  of course.  Result of the  TYPE  command will not be detected in
+C   the  .LIS  file,  unfortunately,  but it can be seen on the screen during
+C   execution,  if there is any question about content of the preceding 4.  Of
+C   course,  the  WRITE1  statements are the same as  WRITE,  so in fact the
+C   output of  TYPE  is indirectly documented in the  .LIS  file.
+$CLOSE,  UNIT=37  STATUS=KEEP     { Disconnect file connected to MODELS  WRITE1( 
+$OS,  DEL  TEMPFILE.LIS  { Make sure this file does not exist so RENAME is legal
+$OS,  RENAME  MODELS.1  TEMPFILE.LIS  { Save  MODELS WRITE1(  file to a new name
+$OS,  TYPE  TEMPFILE.LIS  { Display on screen the  MODELS WRITE1(  file contents
+C $OS,  PAUSE    { For interactive use on a fast computer, allow time to inspect
+C                  the output produced by the preceding  TYPE  command.
+$OPEN,  UNIT=37  FILE=models.1  FORM=FORMATTED  STATUS=NEW ! { Connect new file for WRITE1(
+BLANK card ending batch-mode plot cards
+C  The following request for statistical tabulation should work fine.  But it
+C  was demonstrated in the 5th subcase,  so why repeat the burden here?
+C -1         10.TRAN      { Statistical tabulation of branch voltage (TRAN, TERRA)
+C    30 July 2001, add preceding  NOSTAT = 1.  Since there is not going to be
+C    any statistical tabulation, why burden associated storage unnecessarily?
+C    Because  NOSTAT = 1,  in fact the following card will not be read.
+BLANK card ending all statistical tabulation request cards
+BEGIN NEW DATA CASE
+C       10th of 18 subcases is related to 8th.  It illustrates the use of
+C       character string substitution as well as numeric substitution within
+C       an IF block.  This need, too, comes from Prof. Martinez.  Since the
+C       network is purely resistive,  there are no real dynamics other than
+C       the switching.  Note the first pass involves the switch to  NAME2
+C       whereas the 2nd involves the switch to  NAME1.  On the first of 2
+C       passes,  RESIST = 5  whereas on the second  RESIST = 10.   Increase
+C       step size from 100 usec to 2 msec to speed simulation.  Normally,
+C       node names of character strings will be a full 6 bytes long.  But
+C       just to illustrate that shorter names are handled correctly, 5-byte
+C       NAMEK  is used in this subcase.  WSM,  6 Jan 2001.
+C          26 January 2001,  switch the order of the two parameters within the
+C          IF block.  Of course,  the answer should not be affected.  But that
+C          error first reported by Prof. Juan Martinez would mistreat data of
+C          which the first assignment was character rather than numeric.  Switch
+C          the order to demonstrate that the problem has been cured.
+C       Following request carries params  MAXKNT  IOPCVP  NOSTAT
+POCKET CALCULATOR VARIES PARAMETERS            2       0       1
+    .002    .030                
+       1      -1
+$PARAMETER  { Begin block that defines numeric RESIST and character NAMEK
+C IF( KNT .EQ. 1.0 )  THEN      This standard form involves THEN on right, note.
+IF( KNT .EQ. 1.0 )  { This is equivalent (THEN on right is not required)
+NAMEK = 'NAME2'      { Beginning  26 January 2001,  character line appears first
+RESIST =  5.0 + ( KNT - 1.0 ) * 10.0   { Previously, this numeric line was first
+ELSE     { Alternatively (if not the first pass, so for KNT = 2 onward):
+NAMEK = 'NAME1'
+RESIST = ( KNT - 1.0 ) * 10.0
+ENDIF    { Terminate 7-line block that defines symbols RESIST and NAMEK
+BLANK card ending 1st of 2 $PARAMETER blocks
+  NAME2                     100. 
+  NAME1                   RESIST
+  SOURC MID               RESIST
+BLANK card ending program branch cards.
+  MID   NAMEK      0.009     0.020  
+BLANK card terminating program switch cards
+14SOURC  0      100.       50.                                     -1.
+BLANK card terminating program source cards
+  MID   
+BLANK card ending program output-variable requests.
+BLANK card ending batch-mode plot cards
+BLANK card ending all statistical tabulation request cards
+BEGIN NEW DATA CASE
+C       11th of 18 subcases illustrates a PCVP loop over time simulations, with
+C       MODELS  used as a part of the simulation.  This is unlike the preceding
+C       9th subcase,  which involved  MODELS PROCESSES EXTREMA.  The 9th subcase
+C       uses MODELS not within the dT loop, but rather only upon completion of
+C       the simulation.  The present use within the dT loop became operational
+C       17 May 2001  when  SUBR1, TACS1, and TACS2  were corrected to properly
+C       handle  MAGVOLT.DAT  from Orlando Hevia in Santa Fe, Argentina.
+C       Following request carries params  MAXKNT  IOPCVP  NOSTAT
+POCKET CALCULATOR VARIES PARAMETERS            3       1       0 { 3 passes, minim print
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would be
+VOLTAG = 25.0                 $$
+REACTV = 0.5 + 0.5*KNT - 0.5  $$
+ADMITC = (REACTV/VOLTAG**2)*1000000.
+POWERR = REACTV
+BLANK card ends  $PARAMETER  definitions that are processed before MODELS data
+C  2.E-5  40.E-3    60.0    60.0
+C    100       1       1       1                               1
+C     Preceding miscellaneous data cards of MAGVOLT are modified to simplify and
+C     speed this illustration.   The PCVP card involves 3 passes whereas MAGVOLT
+C     had 61.  Reduce the number of time steps from 2000 to 50,  and do not save
+C     the  .PL4  files  (ICAT = 1 in column 64 creates  .001, .002, etc. files).
+   .0002    .010    60.0    60.0
+       1       1       1       1       0      -1               0
+       5       5
+MODELS HYBRID   { Begin MODELS data that is to participate in the simulation
+INPUT    voltage {v(bus2a)}
+         node0   {v(busx)}
+         tmax    {atp(tmax)}
+C  Comment added 18 September 2001.  The preceding line illustrates the  ATP(
+C  function of MODELS.  In this case,  it is used to read the value of variable
+C  TMAX,  which is the ending time of the study.  Beware of loop counter KNT
+C  of PCVP use.  Inside the  $PARAMETER  block,  KNT  is used,  note.  But if
+C  accessed using the  ATP(  function,  a bad value will be obtained.  This is
+C  because  KNT  is not the name of the variable used to count the PCVP loops
+C  within the program.  Rather,  MNT is.  So, what the user might guess would be
+C  ATP(KNT)  instead must be  ATP(MNT).  The need for this warning was inspired
+C  by a report of trouble by Marta Val Escudero of ESB International in Dublin,
+C  Ireland.  As should be reported in a future newsletter,  "PCVP loop index KNT
+C  conflicted with the energization number of STATISTICS prior to separation of
+C  the two as summarized in the July, 2000, issue."
+MODEL maxim
+INPUT   voltage  parame  tmax
+VAR     maxim    kvoltage
+INIT 
+  maxim:=0 
+ENDINIT
+EXEC
+   kvoltage:=ABS(voltage)
+   IF (kvoltage > maxim)  THEN  maxim:=kvoltage
+   ENDIF
+   IF (t > tmax) THEN
+C       Only on the final time step,  one line is written to the
+C       MODELS.1  file.  This is a little inconvenient for test cases.
+C       We would like to redirect this output to the  .LIS  file by changing
+C       WRITE1  to  WRITE.  But,  since we are minimizing out (see the PCVP
+C       declaration,  output within the dT loop of the 2nd or later pass is
+C       being suppressed,  and only a single such output (for pass 1) would
+C       be seen.  So,  we leave  WRITE1.  For the record,  content should be:
+C          DCN25, 11th subcase.  PARAME =  0.5       MAXIM =  1.04828954
+C          DCN25, 11th subcase.  PARAME =  1.0       MAXIM =  1.22325171
+C          DCN25, 11th subcase.  PARAME =  1.5       MAXIM =  1.41404906
+C       Note we have added labeling and preserved lower case
+C       by left-adjusting the  WRITE1  command:
+C       write1(parame, '       ', maxim)
+write1( ' DCN25, 11th subcase.  PARAME = ', parame,
+        'MAXIM = ', maxim )
+   ENDIF
+ENDEXEC
+ENDMODEL
+USE maxim AS sensit
+INPUT   voltage:=voltage    parame:=node0     tmax:=tmax
+ENDUSE
+ENDMODELS
+BLANK card ending MODELS data.  Next come branch data:
+  BUSX                    POWERR
+  BUS0A BUS1A             .4948 1.979 
+  BUS1A BUS2A             5.562 22.25 
+  BUS2A                                800.0
+  BUS3A                               ADMITC
+BLANK card ending program branch cards.
+C BUS1A BUS3A      5.E-3       1.0   Switch card of MAGVOLT used multiple of dT
+  BUS1A BUS3A   5.001E-3       1.0   { Perturb T-close so problem with roundoff
+BLANK card terminating program switch cards (none, for this case)
+11BUSX  -1       1.0                                               0.0       1.0
+14BUS0A          1.0      50.0     -90.0                        -1.0       1.0
+BLANK card terminating program source cards.
+  BUS0A BUS1A BUS2A BUS3A
+BLANK card ending program output-variable requests.
+BLANK card ending plot cards (none for this data)
+BLANK card ending statistical tabulations (none illustrated here)
+BEGIN NEW DATA CASE
+C       12th of 18 subcases illustrates lack of difference in the first 6 bytes
+C       of two variable names of  $PARAMETER  usage.  This originally was disk
+C       file  DISABLE0.DAT  from Prof. Juan Martinez in Barcelona, Spain.  It
+C       was sent to BPA on  14 September 2001.   Because  BLOCK_A1  &  BLOCK_A2
+C       are the same through byte 6, execution fails.  The first sign of trouble
+C       is incorrect evaluation of  BLOCK_A2  (note  BLOCK_A1  is correct):
+C   Parameter  2  defined.  Value = "$ENABLE "    -----  result of evaluation of the preceding  IF-THEN-ELSE-ENDIF  block.
+C   Parameter  3  defined.  Value =  1.500000E+00 -----  result of evaluation of the preceding  IF-THEN-ELSE-ENDIF  block.
+C       Of course,  parameter 3 should be character just as parameter 2 is.  It
+C       as not numeric as this indicates.  As a result of this error, later data
+C       is bad,  and execution should end with  "KILL = 4.  The last card is a
+C       series R-L-C branch having zero impedance.  ..."
+$PARAMETER
+OPTI_1=1.0
+BLANK
+$PARAMETER
+IF(OPTI_1.EQ.1.0)
+BLOCK_A1='$ENABLE '
+BLOCK_A2='C       '
+ENDIF
+BLANK
+   .1e-6   .2e-4                
+      50       1
+BLOCK_A1
+  BUS_10BUS__1               1.0                                               0
+BLOCK_A2
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14BUS_10       1.5E5       50.                                     -1.        1.
+BLANK card terminating program source cards.
+  BUS__1
+BLANK card ending program output-variable requests.
+BLANK card ending plot cards (none for this data)
+BEGIN NEW DATA CASE
+C       13th of 18 subcases is a correction of the preceding subcase.  The only
+C       change is replacement of  BLOCK_A2  by  A2_BLOCK  (2 places).  Then the
+C       two symbols are different through the first 6 bytes.   The subcase now
+C       is handled properly.  Note that it represents a variation of the 10th
+C       subcase,  which had a note dated  26 January 2001.  If the 10th subcase
+C       no longer ends its  $PARAMETER  block with a character variable,  this
+C       present subcase does.  Also,  it illustrates the use of 2 of them within
+C       a single block.
+$PARAMETER
+OPTI_1=1.0
+BLANK
+$PARAMETER
+IF(OPTI_1.EQ.1.0)
+BLOCK_A1='$ENABLE '
+A2_BLOCK='C       '
+ENDIF
+BLANK
+   .1e-6   .2e-4                
+      50       1
+BLOCK_A1
+  BUS_10BUS__1               1.0                                               0
+A2_BLOCK
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14BUS_10       1.5E5       50.                                     -1.        1.
+BLANK card terminating program source cards.
+  BUS__1
+BLANK card ending program output-variable requests.
+BLANK card ending plot cards (none for this data)
+BEGIN NEW DATA CASE
+C       14th of 18 subcases illustrates dynamic as opposed to static  $DISABLE
+C       use.  This originally was disk file  DISABLE3.DAT  from Prof. Juan
+C       Martinez in Barcelona, Spain.  It was sent to BPA on  14 September 2001.
+C       Prior to a change to CIMAGE on 17 Sept 01,  execution failed.
+$PARAMETER
+OPTI_1=1.0
+BLANK
+$PARAMETER
+C IF(OPTI_1.EQ.1.0)
+BLOCK_A1='$ENABLE '
+BLOCK_A2='C       '
+C ENDIF
+BLANK card ending $PARAMETER block
+$PARAMETER
+C IF(OPTI_1.EQ.1.0)
+BLOCK_B1='$DISABLE'
+BLOCK_B2='$ENABLE '
+C ENDIF
+BLANK card ending $PARAMETER block
+   .1e-6   .2e-4                
+      50       1
+BLOCK_A1
+  BUS_10BUS__1               1.0                                               0
+BLOCK_A2
+BLOCK_B1
+  BUS_10BUS__1                     1.0                                         0
+BLOCK_B2
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14BUS_10       1.5E5       50.                                     -1.        1.
+BLANK card terminating program source cards.
+  BUS__1
+BLANK card ending program output-variable requests.
+BLANK card ending plot cards (none for this data)
+BEGIN NEW DATA CASE
+C       15th of 18 subcases shows that a  FREQUENCY SCAN  with multi-part output
+C       is possible with no output voltage.  This addition is made  16 June 2002
+C       to demonstrate that a problem, first observed by Orlando Hevia, has been
+C       corrected.  The change to HEADL4 was simple:  (N2 .EQ. NV)  was replaced
+C       by  (N3 .EQ. NC).  Before this correction, execution died in plotting as
+C       ATP attempted to read too much of the .PL4 file.  Now, everything is OK,
+C       as the following shows.  The plot illustrates a mixture of magnitude and
+C       real part on the same plot.  At the peak,  which occurs at 160 Hz,  both
+C       have the same value, of course.  160 Hz is the resonant frequency of the
+C       series R-L-C branch.  The variation is nice and smooth and simple using
+C       10 Hz steps.  Here, using 20 Hz, the curves are slightly lumpy.
+PRINTED NUMBER WIDTH, 10, 2,    { Each column of width 10 includes 2 blank bytes
+FREQUENCY SCAN               20.     20.    200.     { F in Hz = 20, 40, ... 200
+   1.E-6    .001                
+       1      -1                       1                       1
+  XX                          1.   1.0  1.E3                                   1
+BLANK card ending branch cards (just this one)
+BLANK card ending switch cards (none)
+  BOTH POLAR AND RECTANGULAR    { Any of the 3 possible multi-part outputs works
+14XX            100.       60.                                     -1.
+BLANK card ends source cards
+C XX    { Prior to correction of HEADL4 on 16 June 2002, node voltage was needed
+BLANK card ending names of nodes for node-voltage output
+  F-SCAN COMPONENTS     MAG   REAL        { Access magnitude and real parts next
+ 19620. 0. 200. -40.120.XX          XX    { Plot the magnitude and the real part 
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       16th  of 18 subcases is added  18 February 2003  to demonstrate that the
+C       complaint by Prof. Juan Martinez has been corrected.  The preceding day,
+C       he had sent  REPLACE.DAT  to demonstrate that a  $PARAMETER block within
+C       a dynamic  $DISABLE  block was being mishandled. The 3rd pass, execution
+C       was being stopped by an error message within TACS (which is not even
+C       being used).
+C       Following request carries params  MAXKNT  IOPCVP  NOSTAT 
+POCKET CALCULATOR VARIES PARAMETERS            3       0
+$PARAMETER
+C IF(MNT.GT.1.0)  --  Original line until 16 April 2009 involved erroneous MNT
+IF( KNT .GT. 1.0 )  { Correct MNT --> KNT to agree with all other DC*.DAT
+KNT1____='$DISABLE'
+ELSE
+KNT1____='$ENABLE '
+ENDIF
+BLANK card ends 1st $PARAM block
+   .0002     .02
+      50      -1
+$PARAMETER      { SIMPLE PARAMETER DEFINITION, JUST TO ILLUSTRATE THE CASE
+PARAM2=1.0
+BLANK card ends 2nd $PARAM block
+KNT1____   { This will be replaced by $ENABLE on 1st pass, & $DISABLE thereafter
+$PARAMETER      { THIS BLOCK IS CAUSING CERTAIN DAMAGE WITHIN PCVP ROUTINE
+PARAM3=100.0
+BLANK card ends 3rd $PARAM block
+  VOLTSA                  PARAM3
+$ENABLE   { End of either $DISABLE or $ENABLE block that begins with KNT1____
+$PARAMETER      { THIS COULD BE ANY MATHEMATICAL COMPUTATION TO OBTAIN THE CONDI
+TIPO_F=MNT
+BLANK card ends 4th $PARAM block
+$PARAMETER      { $PARAMETER BLOCK TO COMMENT OR UNCOMMENT NEXT BRANCH CARD
+IF(TIPO_F.LT.1.0)
+OPTION='  VOLT'
+ELSE
+OPTION='C VOLT'
+ENDIF
+BLANK card ends 5th $PARAM block
+OPTIONSA                  PARAM2     { BRANCH CARD RELATED TO PREVIOUS PARAMETER
+  VOLTSA                     1.0
+BLANK card ends branch cards
+  VOLT_AVOLTSA                                        MEASURING                1
+BLANK card ends switch cards
+14VOLT_A 0        1.       50.                                     -1.        1.
+BLANK card ends source cards
+  VOLTSA
+BLANK card ends names for node voltage output
+BLANK card ends batch-mode plot cards
+BLANK card ends requests for statistical tabulation
+BEGIN NEW DATA CASE
+C       17th  of 18 subcases is added 11 May 2003.  This data comes from Ricardo
+C       Tenorio of ABB in Vasteras, Sweden.  The 2 symbol names are not distinct
+C       through 6 bytes.  Unlike the 12th subcase, ATP did not automatically
+C       shut itself off with an unrelated error message.  Mr. Tenorio found that
+C       execution continued,  and results were wrong.  In E-mail dated May 5th,
+C       he explained:  I've tried to simplify the case as far as I could. The
+C       case involves an EDM module designed to apply generic faults, i.e 1-ph,
+C       2-ph & 3-ph, to a named bus."  Data interpretation provided the first
+C       sign of trouble:  "Only the first variable  BLOCk_11  is correctly
+C       interpreted as a string! The others are interpreted as number  ...
+C  Line 22  ends this  IF-THEN-ELSE-ENDIF  block.    |ENDIF
+C  Parameter  1  defined.  Value = "$DISABLE"    -----  result of evaluation ...
+C  Parameter  2  defined.  Value =  0.000000E+00 -----  result of evaluation ...
+C       Yes, clearly wrong.  Most serious was continued execution. So, a special
+C       error trap was designed for  MATDAT.  Beginning May 11th,  it halts this
+C       case as well as the 12th subcase (which now is stopped sooner, and with
+C       a relevant message for the user).  What is needed (in addition to the
+C       ambiguous names)?  An  IF(  block and text (as opposed to just math).
+C       This uses the pocket calculator, which in turn requires distinct names.
+C       The first 6 bytes of each is  BLOCK_  so data must be rejected.
+C          EATS testing of  RUNEATS.BAT  required a modification.  Immediately
+C          below the  $PARAMETER  block will be found the two uses.  Note that
+C          these two cards have been commented out.  The problem of EATS is
+C          simple:  switch cards must be read for counting, yet  $PARAMETER  is
+C          skipped during counting.  So, if not commented out,  execution would
+C          die in OVER4 with an illegal decode (BLOCK...  is not a switch card).
+C          So, we modify to avoid death at the hands of EATS.  For normal (non-
+C          EATS) use, the change makes no difference.  Execution will be halted
+C          before any data below the  $PARAMETER  loop is read.  It makes no
+C          difference what data is down there.
+  50.E-6  10.E-3     50.     50.
+       1      -1       1       1       1      -1
+       5       5      20      20
+51SOUR1AEQUIVA             1.003      9.5900
+52SOUR1BEQUIVB             0.319      6.9810
+53SOUR1CEQUIVC
+BLANK card ends branch data
+$PARAMETER
+IF( 3.0 .EQ. 1.0 )
+BLOCK_11='C       '
+BLOCK_12='C       '
+ELSEIF( 3.0 .EQ. 3.0 )
+BLOCK_11='$DISABLE'
+BLOCK_12='C       '
+ENDIF
+BLANK card ends  $PARAMETER  block
+C BLOCK_11    { This symbol is to be replaced by either $DISABLE or a comment card
+C Note: the preceding card was commented to prevent death in OVER4 using EATS
+  EQUIVA          0.0100     9999.
+C BLOCK_12    { This symbol is to be replaced by a comment card (either condition)
+C Note: the preceding card was commented to prevent death in OVER4 using EATS
+  EQUIVAEQUIVB    0.0100     9999.
+  EQUIVA          0.0100     9999.
+  EQUIVB          0.0100     9999.
+  EQUIVC          0.0100     9999.
+$ENABLE   { End possible preceding $DISABLE after last switch card
+BLANK card ends switch data
+14SOUR1A  428660.705       60.      0.00                           -1.        1.
+14SOUR1B  428660.705       60.   -120.00                           -1.        1.
+14SOUR1C  428660.705       60.    120.00                           -1.        1.
+BLANK card ending source cards
+C   Since there will be an error message, remaining data is immaterial;  it
+C   will not be used, anyway.  So let's avoid waste by eliminating remaining
+C   data through the end of the subcase.
+BEGIN NEW DATA CASE
+C       18th  of 18 subcases is added 8 October 2006.  This data involves a PCVP
+C    loop that produces 5 time-simulations with appended power and energy output
+C    due to column-80 punches > 4.  Original complaint was from Orlando Hevia of
+C    Santa Fe, Argentina on 18 Aug 2006. Prior to correction in October of 2006,
+C    column-80 punches above "4" were unusable with  "FIND"  code of statistical
+C    tabulations.  Punches 5-16 (use hex if above 9)  serve to append power P or
+C    energy "E" or both.  The printed dT-loop output was believed to be correct.
+C    But the subsequent "FIND" command offered no class for power & no class for
+C    energy.  Now it does.   As for UTPF changes,  look for  WSM06AUG  since the
+C    work began in August.  For uniformity,  no  SEP  or  OCT  were used.  The
+C    vast majority of changes are confined to  DICTAB.  WSM,  6 October 2006
+C   Controls of following request card:   MAXKNT  IOPCVP  NOSTAT { Loop 5 times with
+POCKET CALCULATOR VARIES PARAMETERS            5       1       0 { reduced printout
+$PARAMETER   { Each loop KNT=1, 2, ... MAXKNT will involve different  TIMECLOSEX
+TIMECLOSEX = (KNT)*0.0004
+C    13 October 2007,  the preceding line is modified by the addition of
+C    extraneous parentheses around the KNT.  Orlando Hevia had sent data to
+C    show that  RTR6__= 0.684+0.054*(KNT)**1.75  is wrong (Salford ATP dies)
+C    whereas    RTR6__= 0.684+0.054*KNT**1.75    works fine.  This resulted
+C    in a correction to POCKET.  To build verification into a test cases,  WSM
+C    now simply adds unused parens () to this 18th subcase. Answer is unchanged.
+C    However,  this did _not_ stress the new logic as intended.  Well,  keep the
+C    preceding addition but add a second,  unused variable by copying Orlando :
+RTR6__= 0.684+0.054*(KNT)**1.75 { Orlando's formula that was fatal b4 Oct. 2007
+BLANK card ending parameter block
+C DELTAT    TMAX
+   1.E-4    .200     { Orlando Hevia had had 20 usec and .25 sec here
+C   IOUT   IPLOT  IDOUBL  KSSOUT  MAXOUT
+     200      11                       1
+C    Replace Orlando's J. Marti line by 42 constant-parameter miles from DC-38:
+-1FASEA1FASEA2            .305515.8187.01210   42.  0      { 42-mile,  constant-
+-2FASEB1FASEB2            .031991.5559.01937   42.  0      { parameter,  3-phase
+-3FASEC1FASEC2                                              { transmission line.
+C   For list of all column-80 punches for power or energy, see DC-37, subcase 6.
+C   In the following,  "4" is old whereas  "G"  and  "D"  date to 1999.  Outputs 
+C   will be as shown farther below:
+  FASEA2                  1.0E01                                               G
+  FASEB2                  1.0E01                                               D
+  FASEC2                  1.0E01                                               4
+  GENEA OPENXX            RTR6__  { Do-nothing branch will confirm value of RTR6
+BLANK card ending branches
+  GENEA FASEA1TIMECLOSEX   0.05                                                3
+  GENEB FASEB1TIMECLOSEX   0.05                                                0
+  GENEC FASEC1TIMECLOSEX   0.05                                                0
+BLANK card ending switches
+14GENEA      100000.       50.       0.0                      -1.0
+14GENEB      100000.       50.     -120.                      -1.0
+14GENEC      100000.       50.      120.                      -1.0
+BLANK card ending sources
+  FASEA1
+C Column headings for the  9   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   2     output variables are either power or energy or both as a pair (column 80 punches > 4).
+C               Remember that   1  of the voltages really are powers, and currents are energies; the 4-punches will overlay.
+C   Step      Time      FASEB2     FASEC2     GENEA      FASEA1     GENEA      FASEB2     FASEC2     FASEA2     FASEB2
+C                       TERRA      TERRA      FASEA1                FASEA1     TERRA      TERRA      TERRA      TERRA
+C     End actual dT-loop output.  For clarity, let's label each of the preceding
+C     output variables,  showing the variable class and how it was requested:
+C   Variable class      bran V     power      bran V     node V     bran I     bran I     energy     energy     energy
+C   Produced by:         "D"        "4"         "3"      A6 name      "3"        "D"        "4"        "G"        "D"
+C   Summary class        <-----  4 voltages appear first  ----->     <---  3 currents next  --->     <--  appended P,E
+C     Note that power and energy of the 4-punch are counted among voltages and
+C     currents whereas any due to punches 4-16 are appended on the right in a
+C     separate, final variable class that here has 2 entries.  9 = 4 + 3 + 2
+BLANK card ending node voltage outputs
+C    The user who does not want to see any batch-mode plotting can preserve the
+C    following 3 lines (no need to remove)  while setting misc. data IPLOT < 0.
+  PRINTER PLOT { Character mode always works.  CALCOMP PLOT might not (unknown)
+ 193.01 0.0 .06         BRANCH    { Show the 3 energy signals on a printer plot
+                        FASEA2      FASEB2      FASEC2
+BLANK blank card ending plot cards
+C  BASE-------BUS1--BUS2--  ...
+-4  1.E6      FASEA2   { Compartments 93-95 will be used for base energy = 1.E6
+-4  1.E6      FASEB2   { Compartments 103-105 will be used for  ... 
+-4  2.E6      FASEC2   { Compartments 44-49 will be used for base energy = 2.E6
+-3  2.E8      FASEC2   { Compartments 18-24 will be used for base power  = 2.E8
+C    Note about preceding.  Three of the 4 tabulations lost a compartment when
+C    the number of shots was reduced from 10 to 5.  If the user wants to see a
+C    smoother tabulation,  he can increase shots to 10 or even 20.  Of course,
+C    TIMECLOSEX = KNT*0.0004  then would have its final factor correspondingly
+C    reduced to  .0002  or  .0001,  respectively.  Orlando used 20.
+-1  1.E4      FASEB2 { Compartments 101-104 will be used for base voltage = 1.E4
+-2  1.E3      GENEA FASEA1    { Boxes 90-97 will be used for base current = 1.E3
+FIND     { Search all extrema vectors to find the worst of some set of variables
+ALL     { Rather than list variables separately, search a set of "all something"
+ 6           { In response to  "all what?"  this answers:  "all energy"  outputs
+EXCLUDE   { Repeat the search after excluding the worst shot,  which is shot # 4
+DISK /LIST { Create deterministic data file for last excluded shot, which is # 4
+C    Note about preceding.  If no  EXCLUDE,  shot #4 still would be punched.  If
+C    EXCLUDE  use,  it is data for the worst excluded shot that will be created.
+BLANK card ending statistical tabulations
+BEGIN NEW DATA CASE
+BLANK

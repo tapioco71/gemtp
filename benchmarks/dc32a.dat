@@ -1,0 +1,87 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-32  ---  modified
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+ .000020  .01006
+       1       1       1       1       0      -1    
+       5       5      10      10      50      50     500       1
+C           Three 2-winding saturable transformers having unity turns ratios are
+C           delta-connected on the source side,  and grounded-Y on the rectifier
+C           side.  The magnetizing branch is both nonlinear and lossy:
+  TRANSFORMER                .01   .05TRANA   1.E5                             1
+             .01             .05
+             .02             .06
+             .05             .07
+             .15             .08
+            9999
+ 1GENA  GENB                 .06   .01  115.
+ 2SECA                       .06   .01  115.
+  TRANSFORMER TRANA                   TRANB                                    1
+ 1GENB  GENC
+ 2SECB
+  TRANSFORMER TRANA                   TRANC                                    1
+ 1GENC  GENA
+ 2SECC
+C          Small impedance branches are used (prior to "M34." generalized switch
+C          logic) to isolate switches from each other at  "POLEA".   R = 5 ohms.
+C          Although in theory such isolation is no longer required,  do  not try
+C          to remove these 9 resistors,  since  they  provide necessary damping.
+C          Note that these resistors are not of negligible value:
+  CATH1 POLEA                5.0
+  CATH2 POLEA CATH1 POLEA
+  CATH3 POLEA CATH1 POLEA
+C          More small impedances used for switch isolation at node  "POLEB", and
+C          also at the transformer secondary. Half the value of "POLEA" is used,
+C          for balance:
+  CATH4 SECC                 2.5
+  CATH5 SECA  CATH4 SECC
+  CATH6 SECB  CATH4 SECC
+  AN4   POLEB CATH4 SECC
+  AN5   POLEB CATH4 SECC
+  AN6   POLEB CATH4 SECC
+C      2-conductor distributed line connects  "POLE"  with  "LOAD".   Inductance
+C      parameters  are  5.8  and  1.6 millihenries for the ground and sky modes,
+C      respectively.  Length is five miles.  Values are typical for 500 kV line:
+-1POLEA LOADA                0.3   5.8  .012   5.0
+-2POLEB LOADB                .03   1.6  .019   5.0
+C                            Large stray capacitance ties the dc side to ground:
+  POLEA                                 100.
+  POLEB       POLEA
+C          Load on dc side is parallel 200 ohm R and 100 microfarad capacitance:
+  LOADA LOADB               200.
+  LOADA LOADB                           100.
+C        One-ohm grounding resistance, for later fault (see DC-49 continuation).
+  LOADA FAULT                1.0
+C    20 August 1998, discovery that Pi-circuits are mishandled leads to addition 
+C    of the following radial branch off the generator (does not change answers): 
+ 1GENA  1-A               34.372457.68.15781                                    
+ 2GENB  1-B               35.735164.43-.031538.002451.79.16587                  
+ 3GENC  1-C               35.735164.43-.031537.455151.72-.021938.002451.79.16587
+BLANK card ending all branch cards
+C       First switch is to be the fault switch (open here, and closed in DC-49):
+  FAULT              1.0       2.0
+C     Bridge circuit consisting of 6 uncontrolled valves  (i.e., diodes).  Those
+C     numbered  1, 2, and 3  feed  "POLEA",   making it positive with respect to
+C     ground.   Diodes  4, 5, and 6  feed  "POLEB",  making it negative.
+11SECB  CATH1                                                                 13
+11SECA  CATH2                                         CLOSED                  13
+C       The following card serves  to  name the switch following it.  To see the
+C       results of this activity,  interactively execute the "SWITCH" command of 
+C       SPY,  sending  "EXTRA"  for the alternative table.   Another point: note
+C       the exclamation point, which is needed to hold lower case within A6 name
+C       (assuming  KINSEN = 1  within STARTUP).   No such control for valve six.
+  NAME: Valve3 !  { Request "NAME: " of cols. 3-8 precedes A6 valve name in 9-14
+11SECC  CATH3                                                                 13
+11AN4   CATH4                                         CLOSED                  13
+11AN5   CATH5                                                                 13
+  NAME: Valve6  { Request "NAME: " of columns 3-8 precedes A6 valve name in 9-14
+11AN6   CATH6                                         CLOSED                  13
+BLANK card terminating the last switch card
+C      Balanced 3-phase source of 400 Hz is connected to transformer delta side:
+14GENA        93.897      400.      -30.                           -1.
+14GENB        93.897      400.     -150.                           -1.
+14GENC        93.897      400.       90.                           -1.
+BLANK card ending all source cards
+ 1                                        { Request for all node voltage outputs
+BLANK card ending the last plot cards
+BEGIN NEW DATA CASE
+BLANK

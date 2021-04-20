@@ -1,0 +1,63 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-65
+C        The  beginning case-marker card and the present comment cards represent
+C        an exception that must be carefully remembered.  They  are an exception
+C        to the rule that nothing must precede the definitions of argum. vectors
+C        KARD, KARG, KBEG, KEND, and KTEX.  Well, only here, in and around  KARD
+C        lines is such exceptional input allowed.  Beginning with the very first
+C        KARG  card and ending with the last  KTEX  card,  there must be nothing
+C        but numbers.   Now, about the data case, which was produced (except for
+C        these exceptional cards at the top!) by the 3rd subcase of DC-36, which
+C        uses  "DATA BASE MODULE".   There is a single argument, which is  TMAX,
+C        the end-time of the study.  The  basic problem is that of  DC-4,  which
+C        has  been  modified by the removal of connectivity and phasor printout.
+C        To see 42 steps, key  "file_name"   as follows: "dc65.   , 0.42"  (note
+C        3 or more blanks preceding the comma are required for automatic  "dat".
+KARD  2
+KARG  1
+KBEG 13
+KEND 16
+KTEX  0
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .010    TMAX
+       1       1       0       3       1      -1
+       5       5      20      20
+  BRANCH NAME:First   { Even though name could go on next card, use this instead
+  GEN   TRAN                 5.0  5.E4                                         3
+  TRAN        NAME  R-mag   1.E4
+93TRAN        NAME  Magnet  .005   30.                                         3
+             0.0             0.0  { 1st point being origin is request to reflect
+            .005             30.
+             .01             40.
+             .02             45.
+             .10             50.
+             5.0            100.
+            9999
+  TRAN  LOADG               255.  5.E4                                         3
+C   Note: original fixed-format card (next comment) converted to free-format:
+C LOADG                    1.E-6
+0,LOADG, , , ,             1.E-6,  0.0, 0.0, , , , , ,
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70.  .1591549                                     -1.
+BLANK card terminating program source cards.
+C       Total network loss  P-loss  by summing injections =   8.286714400785E+00
+C Inject:  GEN     70.    70.  .23676326859385  .25769284993889  8.2867144007848
+C Inject:          0.0    0.0  -.1017288531066      -23.2514964  3.5605098587304
+C          ---- Initial flux of coil  "TRAN  "  to  "      "  =  -1.13295190E+01
+C Step    Time        GEN          TRAN         TRAN         GEN          TRAN
+C                     TRAN         TERRA        LOADG
+C    0     0.0   6.270257621  63.72974238  63.72974215          70.  63.72974238
+C    1     .01   6.156651781  63.83984825  63.83984802  69.99650003  63.83984825
+  GEN   TRAN
+BLANK card ending program output-variable requests.
+C      42       .42  1.105583309 62.81064576 62.81064551 63.91622907 62.81064576
+C Variable maxima :  6.270257621 64.72841365  64.7284134         70. 64.72841365
+C Times of maxima :          0.0         .18         .18         0.0         .18
+C Variable minima :  1.105583309 62.81064576 62.81064551 63.91622907 62.81064576
+C Times of minima :          .42         .42         .42         .42         .42
+  PRINTER PLOT
+$WIDTH, 79, { Switch to narrow output to minimiz output (rest is of no interest)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+BLANK

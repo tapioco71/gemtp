@@ -1,0 +1,69 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-3
+C    Same as preceding case, except for removal of the permanently closed switch
+POWER FREQUENCY, 1.0
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+DIAGNOSTIC           0 9 9 9 9 9 0 9 9 9 9 9 9 9 9 9 9 9 9
+    .005     1.0     1.0     1.0
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+  REC                       .001        { Near short at receiving end, to ground
+ 1SEND  REC                  1.0   1.0  1.E4
+  GEN   SEND                 1.0
+BLANK card ending branch cards
+BLANK card ending non-existent switch cards
+14GEN           100.       1.0                                     -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   1.993421807364E+03
+C       GEN          100.             100.       39.86843614728  44.524811215286
+C                     0.0              0.0      -19.82338550619      -26.4374857
+C    Step      Time        REC          SEND         GEN
+C       0       0.0   .0399674525  60.13156385         100.
+C       1      .005   .0405797999  59.47927495  99.95065604
+C       2       .01   .0411521061  58.76828192  99.80267284
+ 1
+C     200       1.0   .0399661325  60.13289683         100.
+C Variable maxima :    .044747265  63.31584536         100.
+C Times of maxima :          .075          .95          0.0
+C Variable minima :   -.044746753  -63.3158499        -100.
+C Times of minima :          .575          .45          0.5
+  PRINTER PLOT                                   { Plot limits: (-4.475,  4.475)
+ 143 .1 0.0 1.0         REC        { Plot card should show nice sinusoidal curve
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C    2nd of 2 subcases uses  $UNITS  and $VINTAGE on same problem (same answers)
+POWER FREQUENCY, 1.0
+DIAGNOSTIC           0 9 9 9 9 9 0 9 9 9 0 0 0 0 0 0 0 0 0
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .005     1.0     1.0     1.0      { Note that we start with  XOPT = COPT = 1
+       1       1       1       1       1      -1
+       2       1       5       5      20      20
+  REC                       .001        { Near short at receiving end, to ground
+$UNITS, 0.0, 0.0, { The 1-phase Pi-circuit to follow has millihenries, micromhos
+$VINTAGE, 1,  { Switch from narrow data formats (default choice) to wide formats
+ 1SEND  REC                            1.0   159.154943092   1591.54943092
+$VINTAGE, 0,
+$UNITS, 1.0, 1.0,
+  GEN   SEND                 1.0
+BLANK card ending branch cards
+BLANK card ending non-existent switch cards
+14GEN           100.       1.0                                     -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   1.993421807363E+03
+C       GEN          100.             100.      39.868436147269   44.52481121528
+C                     0.0              0.0       -19.8233855062      -26.4374857
+C    Step      Time        REC          SEND         GEN
+C       0       0.0   .0399674525  60.13156385         100.
+C       1      .005   .0405797999  59.47927495  99.95065604
+C       2       .01   .0411521061  58.76828192  99.80267284
+ 1
+C     200       1.0   .0399661325  60.13289683         100.
+C Variable maxima :    .044747265  63.31584536         100.
+C Times of maxima :          .075          .95          0.0
+C Variable minima :   -.044746753  -63.3158499        -100.
+C Times of minima :          .575          .45          0.5
+  PRINTER PLOT                                   { Plot limits: (-4.475,  4.475)
+ 143 .1 0.0 1.0         REC        { Plot card should show nice sinusoidal curve
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

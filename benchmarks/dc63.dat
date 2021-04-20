@@ -1,0 +1,1135 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-63
+C   Third of 4 hvdc simulations follows  DC-1  and  DC-2,  only is much smaller.
+C   The 2-pole representation of  dc-2 is here reduced to one end only.   It was
+C   produced from  DC-2  by using two batteries to represent the California end.
+C   To compare with BPA's EMTP, this would be the 3rd of 4 subcases within DC-1.
+C   Answers agree with BPA EMTP exactly until there is one time-step  difference
+C   on value closings between step 700 and 800.   These should be equally valid:
+C            Valve   "II-2  "  to  "IICC  "  closing after  3.82000000E-02  sec.
+C            Valve   "III-2 "  to  "IIICC "  closing after  3.82000000E-02  sec.
+C  The original BPA VAX EMTP closing times for these were  one  time step later.
+C   Appended as a subcase is the 4th hvdc simulation ---- a single-pole version.
+USE TPPLOT BEGIN   { The first such declaration precedes the data for TPPLOT
+SET JULES=0  { Request no lines of labeling from .PL4 file comments (none)
+SET MWINDO=0  { Disable automatic windows (here, we define them manually)
+SET JULOFF=0  { Zero the Y-pixel offset to allow space for case title (none)
+SET NCHSUP=0  { Zero the bytes of super title labeling (no such line wanted)
+SET NUMTIT=0  { Zero the # of lines of case title (none wanted)
+PL4      { Access to plot of ongoing simulation is via this basic command
+RAM       { Special new (September, 1994) option to apply TPPLOT to EMTP
+# 1  2  3     4    6    8    12   13   14   { Name 9 curves to be plotted, by #
+WINDOW          { The gateway to window plotting is the window command
+W1         { Begin the specification of window number 1 (top of 3 windows)
+Voltages somewhere
+kV 
+-200 200  { <CR> is the same as a pair of zeros for Y-min and Y-max: auto scale
+2 .5    { Window height and separation in inches, respectively
+8 8    { Color numbers of outer and inner grids for window, respectively
+2 3   { Number of units on Y-axis and number of Y-axis numbers, respectively
+3    { Number of curves to be plotted in this window
+1 2 3    { Numbers of curves to be plotted (in order of selection by # command)
+W2         { Begin the definition of window number 2 (the middle of 3 windows)
+Voltages somewhere else
+kV
+-500  500   { Non-blank means these are manually-specified Y-axis limits
+2 .5         { Window height and separation in inches, respectively
+0 0  { Zero grid colors will suppress outer and inner grids, respectively
+4 2   { Number of units on Y-axis and number of Y-axis numbers, respectively
+3    { Number of curves to be plotted in this window
+4 5 6  { Numbers of the curves to be plotted (in order of selection by # command)
+W4         { Begin the specification of window number 4 (bottom of 3 windows)
+Currents in thyristors
+amps
+-1 1  { Non-blank means these are manually-specified Y-axis limits
+2  0.2     { Window height and separation in inches, respectively
+2 0    { Color numbers of outer and inner grids for window, respectively
+2 1   { Number of units on Y-axis and number of Y-axis numbers, respectively
+3      { Number of curves to be plotted in this window number 3
+7 8 9   { Numbers of curves to be plotted (in order of selection by # command)
+SHOW W     { Display parameters associated with the 3 windows just defined
+END         { Exit the  WINDOW  command;  return to the basic plot prompt
+COLOR  { Request to change pen colors to avoid weak ones for pens 7, 8, 9
+1 9   { Beginning index and length of color vector to be redefined
+14 10 15 12 13 11 14 10 15  { Vector of color numbers (1st 6 are default)
+      { <CR> bypasses radii of marking disks (use default values of zero)
+      { <CR> bypasses pixel widths of curves (use default values of unity)
+ROLL      { After next plot is complete, curves will be extended automatically
+TIME 0 .020   { Define the page size to cover just over 1 cycle of time
+USE TPPLOT END  { The 2nd such declaration ends the data for TPPLOT 
+C     For good demo of preceding ROLLing plot,  Tmax really should be increased.
+C     For a second use of ROLLing (real-time) plotting,  see windowless DC-1.
+ .000050    .050    { Note Tmax here is only 2-1/2 pages of the ROLLing plot.
+       1       1       1       3       1      -1
+       5       5      20      20     100     100
+C     DC LINE WITH 12-PULSE RECTIFIER/INVERTER OPERATION USING TACS ------------
+TACS HYBRID CASE                                      FOR DC TERMINAL SIMULATION
+C             * * * * * * *  GRID TIMING VOLTAGES    * * * * * * * * * * * * * *
+  PHA-BS  +GENAS  -GENBS
+  PHB-AS  +GENBS  -GENAS
+  PHB-CS  +GENBS  -GENCS
+  PHC-BS  +GENCS  -GENBS
+  PHC-AS  +GENCS  -GENAS
+  PHA-CS  +GENAS  -GENCS
+  4       +NOT13
+  9       +NOT18
+  14      +NOT23
+  19      +NOT28
+  24      +NOT3
+  29      +NOT8
+C   *********   ZERO-ORDER BLOCK ON "TIMEX" FOR LIMIT OF 2 CYCLES   *******
+C
+  TIMER   +TIMEX                                        0.0   33.3-3
+90GENAS
+90GENBS
+90GENCS
+C    $$$$$$   DECREASING RAMP FUNCTION FOR IGNITION ANGLE DELAY   $$$$$$$$$$$$
+88ALPHAR  -.1045045 *     TIMER             +     4.17-3
+C
+C   --------------   RECTIFIER CONTROL LOGIC FOLLOWS    --------------------
+88SA-B  52        +UNITY                                         0.0      PHA-BS
+88F1S   54        +SA-B                                 0.0         ALPHAR
+88F1SII                   4     .AND. F1S
+88NOT3                          .NOT. F1SII
+88F1SI  54        +F1SII                                1.4E-3
+88SB-A  52        +UNITY                                         0.0      PHB-AS
+88F4S   54        +SB-A                                 0.0         ALPHAR
+88F4SII                   9     .AND. F4S
+88NOT8                          .NOT. F4SII
+88F4SI  54        +F4SII                                1.4E-3
+88SB-C  52        +UNITY                                         0.0      PHB-CS
+88F3S   54        +SB-C                                 0.0         ALPHAR
+88F3SII                   14    .AND. F3S
+88NOT13                         .NOT. F3SII
+88F3SI  54        +F3SII                                1.4E-3
+88SC-B  52        +UNITY                                         0.0      PHC-BS
+88F6S   54        +SC-B                                 0.0         ALPHAR
+88F6SII                   19    .AND. F6S
+88NOT18                         .NOT. F6SII
+88F6SI  54        +F6SII                                1.4E-3
+88SC-A  52        +UNITY                                         0.0      PHC-AS
+88F5S   54        +SC-A                                 0.0         ALPHAR
+88F5SII                   24    .AND. F5S
+88NOT23                         .NOT. F5SII
+88F5SI  54        +F5SII                                1.4E-3
+88SA-C  52        +UNITY                                         0.0      PHA-CS
+88F2S   54        +SA-C                                 0.0         ALPHAR
+88F2SII                   29    .AND. F2S
+88NOT28                         .NOT. F2SII
+88F2SI  54        +F2SII                                1.4E-3
+C    $$$$$$   INCREASING RAMP FUNCTION FOR IGNITION ANGLE DELAY   $$$$$$$$$$$$
+C
+88ALPHAI  +.076276  *     TIMER             +     4.17-3
+C
+C       DELAY FIRING FOR BYPASS VALVES
+C
+88FIRE              -     UNITY
+77PHA-BS  +166.1710
+77PHB-AS  -166.1710
+77PHB-CS  -332.3420
+77PHC-BS  +332.3420
+77PHC-AS  +166.1710
+77PHA-CS  -166.1710
+77FIRE    -1.0
+C                AC CIRCUIT OF POLE 4, CELILO
+C       CONSISTS OF 5TH,7TH,11TH,13TH, AND HIGH-PASS FILTERS,
+C       CCT BREAKERS FOR EACH 3-PHASE BRIDGE AND 1 MILE (1.6 KM) OF 230 KV LINE.
+BLANK  card ending TACS initial conditions (and also all TACS data)
+ 0GENAS BIGEA4            .01
+ 0GENBS BIGEB4GENAS BIGEA4
+ 0GENCS BIGEC4GENAS BIGEA4
+ 0BIGEA4                  .86   114.  2.46
+ 0BIGEB4      BIGEA4
+ 0BIGEC4      BIGEA4
+ 0      BIGEA4            1.18  114.  1.28
+ 0      BIGEB4      BIGEA4
+ 0      BIGEC4      BIGEA4
+ 0BIGEA413AC4             .02   1.56
+ 0BIGEB413BC4 BIGEA413AC4
+ 0BIGEC413CC4 BIGEA413AC4
+ 013AC4 HPAC4             40.
+ 0HPAC4 13AC4                   5.5
+ 013BC4 HPBC4 13AC4 HPAC4
+ 0HPBC4 13BC4 HPAC4 13AC4
+ 013CC4 HPCC4 13AC4 HPAC4
+ 0HPCC4 13CC4 HPAC4 13AC4
+ 0HPAC4                               3.9
+ 0HPBC4       HPAC4
+ 0HPCC4       HPAC4
+ 0      13AC4             .93   44.   .95
+ 0      13BC4       13AC4
+ 0      13CC4       13AC4
+ 013AC4 11AC4 GENAS BIGEA4
+ 013BC4 11BC4 GENAS BIGEA4
+ 013CC4 11CC4 GENAS BIGEA4
+ 011AC4                   .82   44.   1.33
+ 011BC4       11AC4
+ 011CC4       11AC4
+ 011AC4 AC6   GENAS BIGEA4
+ 011BC4 BC6   GENAS BIGEA4
+ 011CC4 CC6   GENAS BIGEA4
+ 011AC4 AC2   GENAS BIGEA4
+ 011BC4 BC2   GENAS BIGEA4
+ 011CC4 CC2   GENAS BIGEA4
+C
+C   --------------------------------  GROUP 6, CELILO   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0VI-1  VICA              3000.
+ 0VICA  VI-1                    1.0
+ 0VI-3  VICB  VI-1  VICA
+ 0VICB  VI-3  VICA  VI-1
+ 0VI-5  VICC  VI-1  VICA
+ 0VICC  VI-5  VICA  VI-1
+ 0VI-4  AN6C  VI-1  VICA
+ 0AN6C  VI-4  VICA  VI-1
+ 0VI-6  AN6C  VI-1  VICA
+ 0AN6C  VI-6  VICA  VI-1
+ 0VI-2  AN6C  VI-1  VICA
+ 0AN6C  VI-2  VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0CEL4  VDA6              1200.       .1
+ 0CEL4  VDB6  CEL4  VDA6
+ 0CEL4  VDC6  CEL4  VDA6
+ 0AN6C  VDA6  CEL4  VDA6
+ 0AN6C  VDB6  CEL4  VDA6
+ 0AN6C  VDC6  CEL4  VDA6
+C   $$$$$$$$$             BUSHING REACTORS     $$$$$$$$$$$$$$$
+ 0VDA6  VICA              1000.
+ 0VICA  VDA6                    .25
+ 0VDB6  VICB  VDA6  VICA
+ 0VICB  VDB6  VICA  VDA6
+ 0VDC6  VICC  VDA6  VICA
+ 0VICC  VDC6  VICA  VDA6
+ 0CEL4  CTH6C VDA6  VICA
+ 0CTH6C CEL4  VICA  VDA6
+C
+C    *  *  *  *  *   Y-DELTA XFMR LEAKAGE IMPEDANCE   *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AC6Y  TXA6              .203  .7
+ 0BC6Y  TXB6  AC6Y  TXA6
+ 0CC6Y  TXC6  AC6Y  TXA6
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXA6C VDA6              .202  .717
+ 0TXB6C VDB6  TXA6C VDA6
+ 0TXC6C VDC6  TXA6C VDA6
+C
+C   <<<<<<<<<<<<<<<    Y-DELTA TRANSFORMER    >>>>>>>>>>>>>>>>>>>>>
+51TXA6                          99300.
+52TXA6C TXB6C                   82715.            68946.
+51TXB6        TXA6
+52TXB6C TXC6C
+51TXC6        TXA6
+52TXC6C TXA6C
+C
+C      -------------------------------------------------------------------------
+C   --------------------------------  GROUP 2, CELILO   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0II-1  IICA  VI-1  VICA
+ 0IICA  II-1  VICA  VI-1
+ 0II-3  IICB  VI-1  VICA
+ 0IICB  II-3  VICA  VI-1
+ 0II-5  IICC  VI-1  VICA
+ 0IICC  II-5  VICA  VI-1
+ 0II-4  AN2C  VI-1  VICA
+ 0AN2C  II-4  VICA  VI-1
+ 0II-6  AN2C  VI-1  VICA
+ 0AN2C  II-6  VICA  VI-1
+ 0II-2  AN2C  VI-1  VICA
+ 0AN2C  II-2  VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN6C  VDA2  CEL4  VDA6
+ 0AN6C  VDB2  CEL4  VDA6
+ 0AN6C  VDC2  CEL4  VDA6
+ 0AN2C  VDA2  CEL4  VDA6
+ 0AN2C  VDB2  CEL4  VDA6
+ 0AN2C  VDC2  CEL4  VDA6
+C   $$$$$$$$$             BUSHING REACTORS     $$$$$$$$$$$$$$$
+ 0VDA2  IICA  VDA6  VICA
+ 0IICA  VDA2  VICA  VDA6
+ 0VDB2  IICB  VDA6  VICA
+ 0IICB  VDB2  VICA  VDA6
+ 0VDC2  IICC  VDA6  VICA
+ 0IICC  VDC2  VICA  VDA6
+ 0AN6C  CTH2C VDA6  VICA
+ 0CTH2C AN6C  VICA  VDA6
+C
+C    *  *  *  *  *   Y-Y XFMR LEAKAGE IMPEDANCE       *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AC2Y  TXA2              .22   2.07
+ 0BC2Y  TXB2  AC2Y  TXA2
+ 0CC2Y  TXC2  AC2Y  TXA2
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXA2C VDA2              .07   .8343
+ 0TXB2C VDB2  TXA2C VDA2
+ 0TXC2C VDC2  TXA2C VDA2
+C
+C   <<<<<<<<<<<<<<<    Y-Y TRANSFORMER        >>>>>>>>>>>>>>>>>>>>>
+51TXA2                          99300.
+52TXA2C NS2                     47951.            23174.
+51TXB2        TXA2
+52TXB2C NS2
+51TXC2        TXA2
+52TXC2C NS2
+C      -------------------------    ISOLATING Y-Y XFMR FROM GROUND   -----------
+ 0NS2                     1.E+10
+C
+C      -------------------------------------------------------------------------
+C                              GROUND ELECTRODE CIRCUIT, CELILO
+ 0AN2C  GR1C                    1.0
+ 0GR1C  ELEC1 AN2C  GR1C
+ 0GR1C                                .06
+ 0ELEC1 GR2C  AN2C  GR1C
+ 0GR2C  CELGR AN2C  GR1C
+ 0GR2C        GR1C
+ 0ELEC1                   .43   22.
+C      -------------------------------------------------------------------------
+C                AC CIRCUIT OF POLE 3, CELILO
+C       CONSISTS OF 5TH,7TH,11TH,13TH, AND HIGH-PASS FILTERS,
+C       CCT BREAKERS FOR EACH 3-PHASE BRIDGE AND 1 MILE (1.6 KM) OF 230 KV LINE.
+C
+ 0GENAS BIGEA3GENAS BIGEA4
+ 0GENBS BIGEB3GENAS BIGEA4
+ 0GENCS BIGEC3GENAS BIGEA4
+ 0BIGEA3      BIGEA4
+ 0BIGEB3      BIGEA4
+ 0BIGEC3      BIGEA4
+ 0      BIGEA3      BIGEA4
+ 0      BIGEB3      BIGEA4
+ 0      BIGEC3      BIGEA4
+ 0BIGEA313AC3 BIGEA413AC4
+ 0BIGEB313BC3 BIGEA413AC4
+ 0BIGEC313CC3 BIGEA413AC4
+ 013AC3 HPAC3 13AC4 HPAC4
+ 0HPAC3 13AC3 HPAC4 13AC4
+ 013BC3 HPBC3 13AC4 HPAC4
+ 0HPBC3 13BC3 HPAC4 13AC4
+ 013CC3 HPCC3 13AC4 HPAC4
+ 0HPCC3 13CC3 HPAC4 13AC4
+ 0HPAC3       HPAC4
+ 0HPBC3       HPAC4
+ 0HPCC3       HPAC4
+ 0      13AC3       13AC4
+ 0      13BC3       13AC4
+ 0      13CC3       13AC4
+ 013AC3 11AC3 GENAS BIGEA4
+ 013BC3 11BC3 GENAS BIGEA4
+ 013CC3 11CC3 GENAS BIGEA4
+ 011AC3       11AC4
+ 011BC3       11AC4
+ 011CC3       11AC4
+ 011AC3 AC3   GENAS BIGEA4
+ 011BC3 BC3   GENAS BIGEA4
+ 011CC3 CC3   GENAS BIGEA4
+ 011AC3 AC5   GENAS BIGEA4
+ 011BC3 BC5   GENAS BIGEA4
+ 011CC3 CC5   GENAS BIGEA4
+C
+C   --------------------------------  GROUP 1, CELILO   ----------------------
+C       !!!!!!!!!!!!!!!!!!!!!     SYMMETRY     !!!!!!!!!!!!!!!!
+ 0AN5C  CEL3              .01
+C       !!!!!!!!!!!!!!!!!!!!!                  !!!!!!!!!!!!!!!!
+C   --------------------------------  GROUP 3, CELILO   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0III-1 IIICA VI-1  VICA
+ 0IIICA III-1 VICA  VI-1
+ 0III-3 IIICB VI-1  VICA
+ 0IIICB III-3 VICA  VI-1
+ 0III-5 IIICC VI-1  VICA
+ 0IIICC III-5 VICA  VI-1
+ 0III-4 AN3C  VI-1  VICA
+ 0AN3C  III-4 VICA  VI-1
+ 0III-6 AN3C  VI-1  VICA
+ 0AN3C  III-6 VICA  VI-1
+ 0III-2 AN3C  VI-1  VICA
+ 0AN3C  III-2 VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0CELGR VDA3  CEL4  VDA6
+ 0CELGR VDB3  CEL4  VDA6
+ 0CELGR VDC3  CEL4  VDA6
+ 0AN3C  VDA3  CEL4  VDA6
+ 0AN3C  VDB3  CEL4  VDA6
+ 0AN3C  VDC3  CEL4  VDA6
+C   $$$$$$$$$             BUSHING REACTORS     $$$$$$$$$$$$$$$
+ 0VDA3  IIICA VDA6  VICA
+ 0IIICA VDA3  VICA  VDA6
+ 0VDB3  IIICB VDA6  VICA
+ 0IIICB VDB3  VICA  VDA6
+ 0VDC3  IIICC VDA6  VICA
+ 0IIICC VDC3  VICA  VDA6
+ 0CELGR CTH3C VDA6  VICA
+ 0CTH3C CELGR VICA  VDA6
+C
+C    *  *  *  *  *   Y-Y XFMR LEAKAGE IMPEDANCE       *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AC3Y  TXA3  AC2Y  TXA2
+ 0BC3Y  TXB3  AC2Y  TXA2
+ 0CC3Y  TXC3  AC2Y  TXA2
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXA3C VDA3  TXA2C VDA2
+ 0TXB3C VDB3  TXA2C VDA2
+ 0TXC3C VDC3  TXA2C VDA2
+C
+C   <<<<<<<<<<<<<<<    Y-Y TRANSFORMER        >>>>>>>>>>>>>>>>>>>>>
+51TXA3        TXA2
+52TXA3C NS3
+51TXB3        TXA2
+52TXB3C NS3
+51TXC3        TXA2
+52TXC3C NS3
+C      -------------------------    ISOLATING Y-Y XFMR FROM GROUND   -----------
+ 0NS3         NS2
+C      -------------------------------------------------------------------------
+C   --------------------------------  GROUP 5, CELILO   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0V-1   VCA   VI-1  VICA
+ 0VCA   V-1   VICA  VI-1
+ 0V-3   VCB   VI-1  VICA
+ 0VCB   V-3   VICA  VI-1
+ 0V-5   VCC   VI-1  VICA
+ 0VCC   V-5   VICA  VI-1
+ 0V-4   AN5C  VI-1  VICA
+ 0AN5C  V-4   VICA  VI-1
+ 0V-6   AN5C  VI-1  VICA
+ 0AN5C  V-6   VICA  VI-1
+ 0V-2   AN5C  VI-1  VICA
+ 0AN5C  V-2   VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN3C  VDA5  CEL4  VDA6
+ 0AN3C  VDB5  CEL4  VDA6
+ 0AN3C  VDC5  CEL4  VDA6
+ 0AN5C  VDA5  CEL4  VDA6
+ 0AN5C  VDB5  CEL4  VDA6
+ 0AN5C  VDC5  CEL4  VDA6
+C   $$$$$$$$$             BUSHING REACTORS     $$$$$$$$$$$$$$$
+ 0VDA5  VCA   VDA6  VICA
+ 0VCA   VDA5  VICA  VDA6
+ 0VDB5  VCB   VDA6  VICA
+ 0VCB   VDB5  VICA  VDA6
+ 0VDC5  VCC   VDA6  VICA
+ 0VCC   VDC5  VICA  VDA6
+ 0AN3C  CTH5C VDA6  VICA
+ 0CTH5C AN3C  VICA  VDA6
+C
+C    *  *  *  *  *   Y-DELTA XFMR LEAKAGE IMPEDANCE   *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AC5Y  TXA5  AC6Y  TXA6
+ 0BC5Y  TXB5  AC6Y  TXA6
+ 0CC5Y  TXC5  AC6Y  TXA6
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXA5C VDA5  TXA6C VDA6
+ 0TXB5C VDB5  TXA6C VDA6
+ 0TXC5C VDC5  TXA6C VDA6
+C
+C   <<<<<<<<<<<<<<<    Y-DELTA TRANSFORMER    >>>>>>>>>>>>>>>>>>>>>
+51TXA5        TXA6
+52TXA5C TXB5C
+51TXB5        TXA6
+52TXB5C TXC5C
+51TXC5        TXA6
+52TXC5C TXA5C
+C
+C
+C                     SMOOTHING REACTOR, CELILO, POLE 4      ===================
+ 0CEL4  S4-                     500.                                           1
+C                                                ============================
+C            DC FILTERS, CELILO, POLE 4
+C            CONSISTING OF 6TH AND HIGH-PASS FILTERS
+C
+ 0S4-   ELEC1             6.3   280.  .7
+ 0S4-   HP4C                          2.5
+ 0HP4C  ELEC1             100.
+ 0ELEC1 HP4C                    7.0
+C                                 ===========================================
+C              SURGE CAPACITOR, CELILO, POLE 4
+ 0S4-   SURC4                         .7
+ 0SURC4                               5.
+ 0SURC4 ELEC1 GENAS BIGEA4
+C            ============================================================
+C                     SMOOTHING REACTOR, CELILO, POLE 3      ===================
+ 0CEL3  A3+   CEL4  S4-
+C                                                ============================
+C            DC FILTERS, CELILO, POLE 3
+C            CONSISTING OF 6TH AND HIGH-PASS FILTERS
+ 0A3+   ELEC1 S4-   ELEC1
+ 0A3+   HP3C  S4-   HP4C
+ 0HP3C  ELEC1 HP4C  ELEC1
+ 0ELEC1 HP3C  ELEC1 HP4C
+C                                 ===========================================
+C              SURGE CAPACITOR, CELILO, POLE 3
+ 0A3+   SURC3 S4-   SURC4
+ 0SURC3       SURC4
+ 0SURC3 ELEC1 GENAS BIGEA4
+C            ============================================================
+C
+C   *************************************************************************
+C                    CELILO - SYLMAR LINE, 846 MILES (1362 KM)
+C   *************************************************************************
+C
+-1S4-   4-282             .02   6.56  .0142 282.
+-2A3+   3-282             .02   1.56  .0192 282.
+-14-282 4-564 S4-   4-282
+-23-282 3-564
+-14-564 R4-   S4-   4-282
+-23-564 R3+
+C
+C
+C                     SMOOTHING REACTOR, SYLMAR, POLE 4      ===================
+ 0AN6S  SYL4  CEL4  S4-
+C                                                ============================
+C            DC FILTERS, SYLMAR, POLE 4
+C            CONSISTING OF 6TH AND HIGH-PASS FILTERS
+C
+ 0R4-   ELEC2 S4-   ELEC1
+ 0R4-   HP4   S4-   HP4C
+ 0HP4   ELEC2 HP4C  ELEC1
+ 0ELEC2 HP4   ELEC1 HP4C
+C                                 ===========================================
+C              SURGE CAPACITOR, SYLMAR, POLE 4
+ 0R4-   SURS4 S4-   SURC4
+ 0SURS4       SURC4
+ 0SURS4 ELEC2 GENAS BIGEA4
+C            ============================================================
+C                     SMOOTHING REACTOR, SYLMAR, POLE 3      ===================
+ 0CTH5S SYL3  CEL4  S4-
+C                                                ============================
+C            DC FILTERS, SYLMAR, POLE 3
+C            CONSISTING OF 6TH AND HIGH-PASS FILTERS
+C
+ 0R3+   ELEC2 S4-   ELEC1
+ 0R3+   HP3   S4-   HP4C
+ 0HP3   ELEC2 HP4C  ELEC1
+ 0ELEC2 HP3   ELEC1 HP4C
+C                                 ===========================================
+C              SURGE CAPACITOR, SYLMAR, POLE 3
+ 0R3+   SURS3 S4-   SURC4
+ 0SURS3       SURC4
+ 0SURS3 ELEC2 GENAS BIGEA4
+C            ============================================================
+C
+C   LC CIRCUIT NEAR SMOOTHING REACTOR ON LINE AT SYLMAR ONLY    ..........
+C
+ 0R4-   CAP4  GENAS BIGEA4
+ 0CAP4                                .06
+ 0CAP4  SYL4                    1.0
+ 0R3+   CAP3  GENAS BIGEA4
+ 0CAP3        CAP4
+ 0CAP3  SYL3  CAP4  SYL4
+C                AC CIRCUIT OF POLE 4, SYLMAR
+C       CONSISTS OF 5TH,7TH,11TH,13TH, AND HIGH-PASS FILTERS AND
+C       CCT BREAKERS FOR EACH 3-PHASE BRIDGE.
+ 0ELEC2       ELEC1
+C      -------------------------------------------------------------------------
+C
+C                AC CIRCUIT OF POLE 3, SYLMAR
+C       CONSISTS OF 5TH,7TH,11TH,13TH, AND HIGH-PASS FILTERS AND
+C       CCT BREAKERS FOR EACH 3-PHASE BRIDGE.
+C   $$$$$$$$$$$$$$$$$$$$$$$$$  LEAKAGE CAPACITANCE ACROSS VALVES
+C
+ 0VICA  CTH6C                         .001
+ 0VICB  CTH6C VICA  CTH6C
+ 0VICC  CTH6C VICA  CTH6C
+ 0AN6C  VICA  VICA  CTH6C
+ 0AN6C  VICB  VICA  CTH6C
+ 0AN6C  VICC  VICA  CTH6C
+ 0IICA  CTH2C VICA  CTH6C
+ 0IICB  CTH2C VICA  CTH6C
+ 0IICC  CTH2C VICA  CTH6C
+ 0AN2C  IICA  VICA  CTH6C
+ 0AN2C  IICB  VICA  CTH6C
+ 0AN2C  IICC  VICA  CTH6C
+ 0IIICA CTH3C VICA  CTH6C
+ 0IIICB CTH3C VICA  CTH6C
+ 0IIICC CTH3C VICA  CTH6C
+ 0AN3C  IIICA VICA  CTH6C
+ 0AN3C  IIICB VICA  CTH6C
+ 0AN3C  IIICC VICA  CTH6C
+ 0VCA   CTH5C VICA  CTH6C
+ 0VCB   CTH5C VICA  CTH6C
+ 0VCC   CTH5C VICA  CTH6C
+ 0AN5C  VCA   VICA  CTH6C
+ 0AN5C  VCB   VICA  CTH6C
+ 0AN5C  VCC   VICA  CTH6C
+BLANK  card ending electric network branch cards
+C        (((((((((((   BRIDGE CIRCUIT BREAKERS, CELILO   ))))))))))))))))))))
+  AC6   AC6Y     -10.E-3    10.E+3
+  BC6   BC6Y     -10.E-3    10.E+3
+  CC6   CC6Y     -10.E-3    10.E+3
+  AC2   AC2Y     -10.E-3    10.E+3
+  BC2   BC2Y     -10.E-3    10.E+3
+  CC2   CC2Y     -10.E-3    10.E+3
+  AC3   AC3Y     -10.E-3    10.E+3
+  BC3   BC3Y     -10.E-3    10.E+3
+  CC3   CC3Y     -10.E-3    10.E+3
+  AC5   AC5Y     -10.E-3    10.E+3
+  BC5   BC5Y     -10.E-3    10.E+3
+  CC5   CC5Y     -10.E-3    10.E+3
+C
+C                     VALVES AT CELILO
+C    [[[[[[[[[[[[[                           ]]]]]]]]]]]]]]]]]]]]]]]]]]
+11VI-1  CTH6C                                                   F2SI          1
+11VI-3  CTH6C                                                   F4SI          1
+11VI-5  CTH6C                                                   F6SI          13
+11VI-4  VICA                                                    F5SI          1
+11VI-6  VICB                                                    F1SI          1
+11VI-2  VICC                                                    F3SI          1
+11II-1  CTH2C                                                   F2SII         1
+11II-3  CTH2C                                                   F4SII         13
+11II-5  CTH2C                                                   F6SII         1
+11II-4  IICA                                                    F5SII         1
+11II-6  IICB                                                    F1SII         1
+11II-2  IICC                                                    F3SII         1
+11III-1 CTH3C                                                   F2SII         1
+11III-3 CTH3C                                                   F4SII         1
+11III-5 CTH3C                                                   F6SII         1
+11III-4 IIICA                                                   F5SII         1
+11III-6 IIICB                                                   F1SII         1
+11III-2 IIICC                                                   F3SII         1
+11V-1   CTH5C                                                   F2SI          13
+11V-3   CTH5C                                                   F4SI          1
+11V-5   CTH5C                                                   F6SI          1
+11V-4   VCA                                                     F5SI          1
+11V-6   VCB                                                     F1SI          1
+11V-2   VCC                                                     F3SI          1
+BLANK  card ending switch and valve cards
+C    [[[[[[[[[[[[[                           ]]]]]]]]]]]]]]]]]]]]]]]]]]
+14GENAS    191.88     60.     - 90.                         -1.
+14GENBS    191.88     60.      150.                         -1.
+14GENCS    191.88     60.       30.                         -1.
+11R4-      260.00
+11R3+     -260.00
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        GENAS  | BIGEA4*BIGEA3*
+C        BIGEA4 | TERRA *TERRA *GENAS *13AC4 *
+C        GENBS  | BIGEB4*BIGEB3*
+C        BIGEB4 | TERRA *TERRA *GENBS *13BC4 *
+C        GENCS  | BIGEC4*BIGEC3*
+BLANK  card ending electric network source cards
+  S4-   4-282 4-564 R4-   A3+   3-282 3-564 R3+
+C       Total network loss  P-loss  by summing injections =   3.860395580278E-01
+C                                Output for steady-state phasor switch currents.
+C       Node-K    Node-M              I-real            I-imag            I-magn
+C        AC6       AC6Y      -0.17537829E-02   -0.15130661E-03    0.17602977E-02
+C        BC6       BC6Y       0.74585609E-03    0.15944738E-02    0.17602977E-02
+C        CC6       CC6Y       0.10079268E-02   -0.14431672E-02    0.17602977E-02
+C                                          < <  Etc. for many more switches  > >
+C Step    Time      VI-5       II-3       V-1        S4-        4-282      4-564
+C                   CTH6C      CTH2C      CTH5C
+C
+C                    R3+        VI-5       II-3       V-1        CEL4
+C                               CTH6C      CTH2C      CTH5C      S4-
+C ***      Phasor I(0) = -1.7537829E-03   Switch  "AC6   "  to  "AC6Y  "  closed
+C ***      Phasor I(0) =  7.4585609E-04   Switch  "BC6   "  to  "BC6Y  "  closed
+C ***      Phasor I(0) =  1.0079268E-03   Switch  "CC6   "  to  "CC6Y  "  closed
+C ***      Phasor I(0) = -1.7256922E-03   Switch  "AC2   "  to  "AC2Y  "  closed
+C ***      Phasor I(0) =  7.3073497E-04   Switch  "BC2   "  to  "BC2Y  "  closed
+C ***      Phasor I(0) =  9.9495722E-04   Switch  "CC2   "  to  "CC2Y  "  closed
+C ***      Phasor I(0) = -1.7256922E-03   Switch  "AC3   "  to  "AC3Y  "  closed
+C ***      Phasor I(0) =  7.3073497E-04   Switch  "BC3   "  to  "BC3Y  "  closed
+C ***      Phasor I(0) =  9.9495722E-04   Switch  "CC3   "  to  "CC3Y  "  closed
+C ***      Phasor I(0) = -1.7537829E-03   Switch  "AC5   "  to  "AC5Y  "  closed
+C ***      Phasor I(0) =  7.4585609E-04   Switch  "BC5   "  to  "BC5Y  "  closed
+C ***      Phasor I(0) =  1.0079268E-03   Switch  "CC5   "  to  "CC5Y  "  closed
+C   0     0.0  92.4476735 -80.392419 -46.233822 -.6059E-12 -.5031E-12 .87008E-13
+C              .12071E-13        0.0        0.0        0.0 -.7846E-15
+C   1   .5E-4  92.4314685 -81.253201  -44.71671 -.6103E-12 -.5175E-12 .87672E-13
+C                   -260.        0.0        0.0        0.0 -.7135E-15
+C  60    .003  39.3727405 -76.238222 52.7516794 -.7005E-12 -.8214E-12 257.446725
+C                   -260.        0.0        0.0        0.0 .53435E-17
+C            Valve   "II-6  "  to  "IICB  "  closing after  3.85000000E-03  sec.
+C            Valve   "III-6 "  to  "IIICB "  closing after  3.85000000E-03  sec.
+C  80    .004  10.9218031 -49.021132 82.2441262 .351391677 254.918524   257.4592
+C                   -260.        0.0        0.0        0.0 .008847337
+C            Valve   "II-6  "  to  "IICB  "  opening after  4.40000000E-03  sec.
+C            Valve   "III-6 "  to  "IIICB "  opening after  4.40000000E-03  sec.
+C 100    .005  -45.494471 -36.386851 73.4856334 135.946744 254.943229 257.471553
+C                   -260.        0.0        0.0        0.0 -.03160187
+BLANK  card ending output variable requests (just node voltages, here)
+C            Valve   "V-5   "  to  "CTH5C "  closing after  4.79500000E-02  sec.
+C            Valve   "VI-3  "  to  "CTH6C "  opening after  4.83000000E-02  sec.
+C            Valve   "V-3   "  to  "CTH5C "  opening after  4.83000000E-02  sec.
+C            Valve   "II-6  "  to  "IICB  "  closing after  4.93500000E-02  sec.
+C            Valve   "III-6 "  to  "IIICB "  closing after  4.93500000E-02  sec.
+C            Valve   "II-4  "  to  "IICA  "  opening after  4.98000000E-02  sec.
+C            Valve   "III-4 "  to  "IIICA "  opening after  4.98000000E-02  sec.
+C 1000    .05         0.0 -167.46575  -134.7388 251.510661  139.93783 117.983336
+C                   -260. .526265477        0.0        0.0 .527808483
+C Variable max:92.4476735 92.1922669 116.425574 579.298066 663.305228 663.489503
+C              .12071E-13 .554084524 .929282825 .867170568 .872209101
+C Times of max :      0.0      .0252      .0216     .01455     .01245      .0109
+C                     0.0     .04835     .02565      .0404     .02635
+C Variable min: -198.8722 -193.07964 -223.00837 -.9678E-12 -.1033E-11 .87008E-13
+C                   -260. -.10328566 -.02134205 -.07594113  -.0319449
+C Times of min :   .00785      .0148     .01455       .002      .0025        0.0
+C                   .5E-4      .0218      .0468     .02695     .00505
+  PRINTER PLOT
+ 194 5. 0.0 50.         VI-5  CTH6C            { Axis limits : (-1.033,   5.541)
+ 144 5. 0.0 50.         S4-                     { Axis limits : (0.000,   5.793)
+BLANK  card terminating batch-mode plot cards
+BEGIN NEW DATA CASE
+C   2nd  of  2 subcases is for a  1-terminal,  1-pole  simplified representation
+C   with only two bridges total.   It  was produced from the preceding data case
+C   by  omitting the negative pole  (reduction from two poles to a single pole).
+C   To compare with BPA's EMTP, this would be the 4th of 4 subcases within DC-1.
+C   Answers agree with BPA EMTP exactly until there is one time-step  difference
+C   on a value closing between step 700 and 800.   This should be equally valid:
+C            Valve   "II-2  "  to  "IICC  "  closing after  3.82000000E-02  sec.
+C     4 September 2011,  we illustrate new logic of SUBR14 which will use all of
+C     available space of  NBHDSW if declared space (LISTSIZE.DAT) is inadequate.
+C     Rather than a real case,  it is easier to force this use artificially.  To
+C     do this,  we input a special set of  LISTSIZE.DAT  data  with the optional
+C     NDHDSW  declaration having an empty factor of zero.  This  is the multiple
+C     of List 6 for sizing  NBHDSW,  so  ATP thinks  NBHDSW  has no space.  This
+C     will trigger the  "try harder"  logic of SUBR14 which will go get the real
+C     limits as declared in  LISTSIZE.BPA : List 6 is 1200 and the factor is 15,
+C     so in fact the vector  NBHDSW is dimensioned 18K.  This will be documented
+C     by two exceptional lines of output to the  .LIS  file:
+C  ===  SUBR14.  Switch connectivity of NBHDSW needs more space.  From  LISTSIZE.DAT,  List 56 =       0
+C       Expand this to use all of  NBHDSW.  J, KSWTCH, LSWTCH, List 56 =   7    18    40   18000
+C     The 1st line documents the artificial List 56 (real data will not have 0).
+C     2nd line: valu 40 for LSWTCH is simply the default (not real) List-6 limit
+C     as ordered immediately below.  All  list sizes can be default sizes except
+C     for List 19 of TACS,  which requires a little more space (we use 5K).  The
+C     data involves  18  switches (that is KSWTCH),  and need for more space was
+C     first detected on switch 7.  Why not switch 1?  Because the 1st 6 switches
+C     are simple circuit breakers which touch no other switches.  Switch 7  is a
+C     valve connecting  VI-1  with  CTH6C, and this touches the 8th switch which
+C     connects  VI-3  to the  same  CTH6C. That triggered the new, better logic.
+NEW LIST SIZES
+NBHDSW      0.0   { Vector NBHDSW of LABCOM has size List 6 * this factor FNBHD
+       0       0       0       0       0       0       0       0       0       0
+       0       0       0       0       0       0       0       0    5000       0
+       0       0       0
+  240000     742
+ .000050    .060
+       1       1       1       3       1      -1
+       5       5      20      20     100     100
+TACS HYBRID CASE                                      FOR DC TERMINAL SIMULATION
+C             * * * * * * *  GRID TIMING VOLTAGES    * * * * * * * * * * * * * *
+  PHA-BS  +GENAS  -GENBS
+  PHB-AS  +GENBS  -GENAS
+  PHB-CS  +GENBS  -GENCS
+  PHC-BS  +GENCS  -GENBS
+  PHC-AS  +GENCS  -GENAS
+  PHA-CS  +GENAS  -GENCS
+  4       +NOT13
+  9       +NOT18
+  14      +NOT23
+  19      +NOT28
+  24      +NOT3
+  29      +NOT8
+C       *********   ZERO-ORDER BLOCK ON "TIMEX" FOR LIMIT OF 2 CYCLES    *******
+C
+  TIMER   +TIMEX                                        0.0   33.3-3
+90GENAS
+90GENBS
+90GENCS
+C      $$$$$$   DECREASING RAMP FUNCTION FOR IGNITION ANGLE DELAY   $$$$$$$$$$$$
+88ALPHAR  -.1045045 *     TIMER             +     4.17-3
+C
+C   --------------   RECTIFIER CONTROL LOGIC FOLLOWS    --------------------
+88SA-B  52        +UNITY                                         0.0      PHA-BS
+88F1S   54        +SA-B                                 0.0         ALPHAR
+88F1SII                   4     .AND. F1S
+88NOT3                          .NOT. F1SII
+88F1SI  54        +F1SII                                1.4E-3
+88SB-A  52        +UNITY                                         0.0      PHB-AS
+88F4S   54        +SB-A                                 0.0         ALPHAR
+88F4SII                   9     .AND. F4S
+88NOT8                          .NOT. F4SII
+88F4SI  54        +F4SII                                1.4E-3
+88SB-C  52        +UNITY                                         0.0      PHB-CS
+88F3S   54        +SB-C                                 0.0         ALPHAR
+88F3SII                   14    .AND. F3S
+88NOT13                         .NOT. F3SII
+88F3SI  54        +F3SII                                1.4E-3
+88SC-B  52        +UNITY                                         0.0      PHC-BS
+88F6S   54        +SC-B                                 0.0         ALPHAR
+88F6SII                   19    .AND. F6S
+88NOT18                         .NOT. F6SII
+88F6SI  54        +F6SII                                1.4E-3
+88SC-A  52        +UNITY                                         0.0      PHC-AS
+88F5S   54        +SC-A                                 0.0         ALPHAR
+88F5SII                   24    .AND. F5S
+88NOT23                         .NOT. F5SII
+88F5SI  54        +F5SII                                1.4E-3
+88SA-C  52        +UNITY                                         0.0      PHA-CS
+88F2S   54        +SA-C                                 0.0         ALPHAR
+88F2SII                   29    .AND. F2S
+88NOT28                         .NOT. F2SII
+88F2SI  54        +F2SII                                1.4E-3
+C    $$$$$$   INCREASING RAMP FUNCTION FOR IGNITION ANGLE DELAY   $$$$$$$$$$$$
+C
+88ALPHAI  +.076276  *     TIMER             +     4.17-3
+C
+C       DELAY FIRING FOR BYPASS VALVES
+C
+88FIRE              -     UNITY
+77PHA-BS  +166.1710
+77PHB-AS  -166.1710
+77PHB-CS  -332.3420
+77PHC-BS  +332.3420
+77PHC-AS  +166.1710
+77PHA-CS  -166.1710
+77FIRE    -1.0
+C                AC CIRCUIT OF POLE 4, CELILO
+C       CONSISTS OF 5TH,7TH,11TH,13TH, AND HIGH-PASS FILTERS,
+C       CCT BREAKERS FOR EACH 3-PHASE BRIDGE AND 1 MILE (1.6 KM) OF 230 KV LINE.
+BLANK  card ending TACS initial conditions (and also all TACS data)
+ 0GENAS BIGEA4            .01
+ 0GENBS BIGEB4GENAS BIGEA4
+ 0GENCS BIGEC4GENAS BIGEA4
+ 0BIGEA4                  .86   114.  2.46
+ 0BIGEB4      BIGEA4
+ 0BIGEC4      BIGEA4
+ 0      BIGEA4            1.18  114.  1.28
+ 0      BIGEB4      BIGEA4
+ 0      BIGEC4      BIGEA4
+ 0BIGEA413AC4             .02   1.56
+ 0BIGEB413BC4 BIGEA413AC4
+ 0BIGEC413CC4 BIGEA413AC4
+ 013AC4 HPAC4             40.
+ 0HPAC4 13AC4                   5.5
+ 013BC4 HPBC4 13AC4 HPAC4
+ 0HPBC4 13BC4 HPAC4 13AC4
+ 013CC4 HPCC4 13AC4 HPAC4
+ 0HPCC4 13CC4 HPAC4 13AC4
+ 0HPAC4                               3.9
+ 0HPBC4       HPAC4
+ 0HPCC4       HPAC4
+ 0      13AC4             .93   44.   .95
+ 0      13BC4       13AC4
+ 0      13CC4       13AC4
+ 013AC4 11AC4 GENAS BIGEA4
+ 013BC4 11BC4 GENAS BIGEA4
+ 013CC4 11CC4 GENAS BIGEA4
+ 011AC4                   .82   44.   1.33
+ 011BC4       11AC4
+ 011CC4       11AC4
+ 011AC4 AC6   GENAS BIGEA4
+ 011BC4 BC6   GENAS BIGEA4
+ 011CC4 CC6   GENAS BIGEA4
+ 011AC4 AC2   GENAS BIGEA4
+ 011BC4 BC2   GENAS BIGEA4
+ 011CC4 CC2   GENAS BIGEA4
+C
+C   --------------------------------  GROUP 6, CELILO   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0VI-1  VICA              3000.
+ 0VICA  VI-1                    1.0
+ 0VI-3  VICB  VI-1  VICA
+ 0VICB  VI-3  VICA  VI-1
+ 0VI-5  VICC  VI-1  VICA
+ 0VICC  VI-5  VICA  VI-1
+ 0VI-4  AN6C  VI-1  VICA
+ 0AN6C  VI-4  VICA  VI-1
+ 0VI-6  AN6C  VI-1  VICA
+ 0AN6C  VI-6  VICA  VI-1
+ 0VI-2  AN6C  VI-1  VICA
+ 0AN6C  VI-2  VICA  VI-1
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0CEL4  VDA6              1200.       .1
+ 0CEL4  VDB6  CEL4  VDA6
+ 0CEL4  VDC6  CEL4  VDA6
+ 0AN6C  VDA6  CEL4  VDA6
+ 0AN6C  VDB6  CEL4  VDA6
+ 0AN6C  VDC6  CEL4  VDA6
+C   $$$$$$$$$             BUSHING REACTORS     $$$$$$$$$$$$$$$
+ 0VDA6  VICA              1000.
+ 0VICA  VDA6                    .25
+ 0VDB6  VICB  VDA6  VICA
+ 0VICB  VDB6  VICA  VDA6
+ 0VDC6  VICC  VDA6  VICA
+ 0VICC  VDC6  VICA  VDA6
+ 0CEL4  CTH6C VDA6  VICA
+ 0CTH6C CEL4  VICA  VDA6
+C
+C    *  *  *  *  *   Y-DELTA XFMR LEAKAGE IMPEDANCE   *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AC6Y  TXA6              .203  .7
+ 0BC6Y  TXB6  AC6Y  TXA6
+ 0CC6Y  TXC6  AC6Y  TXA6
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXA6C VDA6              .202  .717
+ 0TXB6C VDB6  TXA6C VDA6
+ 0TXC6C VDC6  TXA6C VDA6
+C
+C   <<<<<<<<<<<<<<<    Y-DELTA TRANSFORMER    >>>>>>>>>>>>>>>>>>>>>
+51TXA6                          99300.
+52TXA6C TXB6C                   82715.            68946.
+51TXB6        TXA6
+52TXB6C TXC6C
+51TXC6        TXA6
+52TXC6C TXA6C
+C
+C      -------------------------------------------------------------------------
+C   --------------------------------  GROUP 2, CELILO   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0II-1  IICA  VI-1  VICA
+ 0IICA  II-1  VICA  VI-1
+ 0II-3  IICB  VI-1  VICA
+ 0IICB  II-3  VICA  VI-1
+ 0II-5  IICC  VI-1  VICA
+ 0IICC  II-5  VICA  VI-1
+ 0II-4  AN2C  VI-1  VICA
+ 0AN2C  II-4  VICA  VI-1
+ 0II-6  AN2C  VI-1  VICA
+ 0AN2C  II-6  VICA  VI-1
+ 0II-2  AN2C  VI-1  VICA
+ 0AN2C  II-2  VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN6C  VDA2  CEL4  VDA6
+ 0AN6C  VDB2  CEL4  VDA6
+ 0AN6C  VDC2  CEL4  VDA6
+ 0AN2C  VDA2  CEL4  VDA6
+ 0AN2C  VDB2  CEL4  VDA6
+ 0AN2C  VDC2  CEL4  VDA6
+C   $$$$$$$$$             BUSHING REACTORS     $$$$$$$$$$$$$$$
+ 0VDA2  IICA  VDA6  VICA
+ 0IICA  VDA2  VICA  VDA6
+ 0VDB2  IICB  VDA6  VICA
+ 0IICB  VDB2  VICA  VDA6
+ 0VDC2  IICC  VDA6  VICA
+ 0IICC  VDC2  VICA  VDA6
+ 0AN6C  CTH2C VDA6  VICA
+ 0CTH2C AN6C  VICA  VDA6
+C
+C    *  *  *  *  *   Y-Y XFMR LEAKAGE IMPEDANCE       *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AC2Y  TXA2              .22   2.07
+ 0BC2Y  TXB2  AC2Y  TXA2
+ 0CC2Y  TXC2  AC2Y  TXA2
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXA2C VDA2              .07   .8343
+ 0TXB2C VDB2  TXA2C VDA2
+ 0TXC2C VDC2  TXA2C VDA2
+C
+C   <<<<<<<<<<<<<<<    Y-Y TRANSFORMER        >>>>>>>>>>>>>>>>>>>>>
+51TXA2                          99300.
+52TXA2C NS2                     47951.            23174.
+51TXB2        TXA2
+52TXB2C NS2
+51TXC2        TXA2
+52TXC2C NS2
+C      -------------------------    ISOLATING Y-Y XFMR FROM GROUND   -----------
+ 0NS2                     1.E+10
+C
+C      -------------------------------------------------------------------------
+C                              GROUND ELECTRODE CIRCUIT, CELILO
+ 0AN2C  GR1C                    1.0
+ 0GR1C  ELEC1 AN2C  GR1C
+ 0GR1C                                .06
+ 0ELEC1                   .43   22.
+C      -------------------------------------------------------------------------
+C                AC CIRCUIT OF POLE 3, CELILO
+C       CONSISTS OF 5TH,7TH,11TH,13TH, AND HIGH-PASS FILTERS,
+C       CCT BREAKERS FOR EACH 3-PHASE BRIDGE AND 1 MILE (1.6 KM) OF 230 KV LINE.
+C                     SMOOTHING REACTOR, CELILO, POLE 4      ===================
+ 0CEL4  S4-                     500.                                           1
+C                                                ============================
+C            DC FILTERS, CELILO, POLE 4
+C            CONSISTING OF 6TH AND HIGH-PASS FILTERS
+C
+ 0S4-   ELEC1             6.3   280.  .7
+ 0S4-   HP4C                          2.5
+ 0HP4C  ELEC1             100.
+ 0ELEC1 HP4C                    7.0
+C                                 ===========================================
+C              SURGE CAPACITOR, CELILO, POLE 4
+ 0S4-   SURC4                         .7
+ 0SURC4                               5.
+ 0SURC4 ELEC1 GENAS BIGEA4
+C            ============================================================
+C   *************************************************************************
+C                    CELILO - SYLMAR LINE, 846 MILES (1362 KM)
+C   *************************************************************************
+C
+-1S4-   4-282             .02   6.56  .0142 282.
+-2A3+   3-282             .02   1.56  .0192 282.
+-14-282 4-564 S4-   4-282
+-23-282 3-564
+-14-564 R4-   S4-   4-282
+-23-564 R3+
+C
+C
+C                     SMOOTHING REACTOR, SYLMAR, POLE 4      ===================
+ 0AN6S  SYL4  CEL4  S4-
+C                                                ============================
+C            DC FILTERS, SYLMAR, POLE 4
+C            CONSISTING OF 6TH AND HIGH-PASS FILTERS
+C
+ 0R4-   ELEC2 S4-   ELEC1
+ 0R4-   HP4   S4-   HP4C
+ 0HP4   ELEC2 HP4C  ELEC1
+ 0ELEC2 HP4   ELEC1 HP4C
+C                                 ===========================================
+C              SURGE CAPACITOR, SYLMAR, POLE 4
+ 0R4-   SURS4 S4-   SURC4
+ 0SURS4       SURC4
+ 0SURS4 ELEC2 GENAS BIGEA4
+C            ============================================================
+C                     SMOOTHING REACTOR, SYLMAR, POLE 3      ===================
+ 0CTH5S SYL3  CEL4  S4-
+C                                                ============================
+C            DC FILTERS, SYLMAR, POLE 3
+C            CONSISTING OF 6TH AND HIGH-PASS FILTERS
+C
+ 0R3+   ELEC2 S4-   ELEC1
+ 0R3+   HP3   S4-   HP4C
+ 0HP3   ELEC2 HP4C  ELEC1
+ 0ELEC2 HP3   ELEC1 HP4C
+C                                 ===========================================
+C              SURGE CAPACITOR, SYLMAR, POLE 3
+ 0R3+   SURS3 S4-   SURC4
+ 0SURS3       SURC4
+ 0SURS3 ELEC2 GENAS BIGEA4
+C            ============================================================
+C
+C   LC CIRCUIT NEAR SMOOTHING REACTOR ON LINE AT SYLMAR ONLY    ..........
+C
+ 0R4-   CAP4  GENAS BIGEA4
+ 0CAP4                                .06
+ 0CAP4  SYL4                    1.0
+ 0R3+   CAP3  GENAS BIGEA4
+ 0CAP3        CAP4
+ 0CAP3  SYL3  CAP4  SYL4
+C                AC CIRCUIT OF POLE 4, SYLMAR
+C       CONSISTS OF 5TH,7TH,11TH,13TH, AND HIGH-PASS FILTERS AND
+C       CCT BREAKERS FOR EACH 3-PHASE BRIDGE.
+ 0ELEC2       ELEC1
+C      -------------------------------------------------------------------------
+C
+C                AC CIRCUIT OF POLE 3, SYLMAR
+C       CONSISTS OF 5TH,7TH,11TH,13TH, AND HIGH-PASS FILTERS AND
+C       CCT BREAKERS FOR EACH 3-PHASE BRIDGE.
+C   $$$$$$$$$$$$$$$$$$$$$$$$$  LEAKAGE CAPACITANCE ACROSS VALVES
+C
+ 0VICA  CTH6C                         .001
+ 0VICB  CTH6C VICA  CTH6C
+ 0VICC  CTH6C VICA  CTH6C
+ 0AN6C  VICA  VICA  CTH6C
+ 0AN6C  VICB  VICA  CTH6C
+ 0AN6C  VICC  VICA  CTH6C
+ 0IICA  CTH2C VICA  CTH6C
+ 0IICB  CTH2C VICA  CTH6C
+ 0IICC  CTH2C VICA  CTH6C
+ 0AN2C  IICA  VICA  CTH6C
+ 0AN2C  IICB  VICA  CTH6C
+ 0AN2C  IICC  VICA  CTH6C
+BLANK  card ending electric network branch cards
+C        (((((((((((   BRIDGE CIRCUIT BREAKERS, CELILO   ))))))))))))))))))))
+  AC6   AC6Y     -10.E-3    10.E+3
+  BC6   BC6Y     -10.E-3    10.E+3
+  CC6   CC6Y     -10.E-3    10.E+3
+  AC2   AC2Y     -10.E-3    10.E+3
+  BC2   BC2Y     -10.E-3    10.E+3
+  CC2   CC2Y     -10.E-3    10.E+3
+C
+C                     VALVES AT CELILO
+C    [[[[[[[[[[[[[                           ]]]]]]]]]]]]]]]]]]]]]]]]]]
+11VI-1  CTH6C                                                   F2SI          1
+11VI-3  CTH6C                                                   F4SI          1
+11VI-5  CTH6C                                                   F6SI          13
+11VI-4  VICA                                                    F5SI          1
+11VI-6  VICB                                                    F1SI          1
+11VI-2  VICC                                                    F3SI          1
+11II-1  CTH2C                                                   F2SII         1
+11II-3  CTH2C                                                   F4SII         13
+11II-5  CTH2C                                                   F6SII         1
+11II-4  IICA                                                    F5SII         1
+11II-6  IICB                                                    F1SII         1
+11II-2  IICC                                                    F3SII         1
+BLANK  card ending switch and valve cards
+C    [[[[[[[[[[[[[                           ]]]]]]]]]]]]]]]]]]]]]]]]]]
+14GENAS    191.88     60.     - 90.                         -1.
+14GENBS    191.88     60.      150.                         -1.
+14GENCS    191.88     60.       30.                         -1.
+11R4-      260.00
+11R3+     -260.00
+BLANK  card ending electric network source cards
+C       Total network loss  P-loss  by summing injections =   1.930197805538E-01
+C                                Output for steady-state phasor switch currents.
+C       Node-K    Node-M              I-real            I-imag            I-magn
+C        AC6       AC6Y      -0.17537829E-02   -0.15130661E-03    0.17602977E-02
+C        BC6       BC6Y       0.74585608E-03    0.15944738E-02    0.17602977E-02
+C        CC6       CC6Y       0.10079268E-02   -0.14431672E-02    0.17602977E-02
+C        AC2       AC2Y      -0.17256922E-02   -0.15254879E-03    0.17324216E-02
+C        BC2       BC2Y       0.73073496E-03    0.15707677E-02    0.17324216E-02
+C        CC2       CC2Y       0.99495722E-03   -0.14182189E-02    0.17324216E-02
+C        VI-1      CTH6C             Open              Open              Open
+C
+C  GENCS   166.17295447816          191.88      -.3624911331317  .72614413549163
+C                    95.94      30.0000000      .62919431331648      119.9470848
+  S4-   4-282 4-564 R4-   A3+   3-282 3-564 R3+
+C  Step    Time       VI-5       II-3       S4-        4-282      4-564      R4-
+C                     CTH6C      CTH2C
+C
+C                     VI-5       II-3       CEL4
+C                     CTH6C      CTH2C      S4-
+C ***      Phasor I(0) = -1.7537829E-03   Switch  "AC6   "  to  "AC6Y  "  closed
+C ***      Phasor I(0) =  7.4585609E-04   Switch  "BC6   "  to  "BC6Y  "  closed
+C ***      Phasor I(0) =  1.0079268E-03   Switch  "CC6   "  to  "CC6Y  "  closed
+C ***      Phasor I(0) = -1.7256922E-03   Switch  "AC2   "  to  "AC2Y  "  closed
+C ***      Phasor I(0) =  7.3073497E-04   Switch  "BC2   "  to  "BC2Y  "  closed
+C ***      Phasor I(0) =  9.9495722E-04   Switch  "CC2   "  to  "CC2Y  "  closed
+C   0     0.0  92.4476735 -80.392419 -.7733E-13  -.106E-12 -.4033E-13 .51245E-13
+C                     0.0        0.0 -.1763E-14
+C   1   .5E-4  92.4314685 -81.253201 -.6891E-13 -.1173E-12 -.4559E-13       260.
+C                     0.0        0.0 -.1605E-14
+C
+C  60    .003  39.3727405 -76.238222 .10266E-12 -.3965E-12 257.446725       260.
+C                     0.0        0.0 .25576E-16
+C            Valve   "II-6  "  to  "IICB  "  closing after  3.85000000E-03  sec.
+C  80    .004  10.9210123 -49.022147 .363630979 254.918524   257.4592       260.
+C                     0.0        0.0 .008845798
+C            Valve   "II-6  "  to  "IICB  "  opening after  4.40000000E-03  sec.
+C 100    .005  -33.737956 -24.630028 130.519221 254.943229 257.471553       260.
+C                     0.0        0.0 -.02057533
+C            Valve   "II-1  "  to  "CTH2C "  closing after  5.05000000E-03  sec.
+C            Valve   "VI-6  "  to  "VICB  "  closing after  5.30000000E-03  sec.
+C            Valve   "VI-6  "  to  "VICB  "  opening after  5.75000000E-03  sec.
+C            Valve   "II-1  "  to  "CTH2C "  opening after  5.80000000E-03  sec.
+C            Valve   "VI-1  "  to  "CTH6C "  closing after  6.50000000E-03  sec.
+C            Valve   "VI-1  "  to  "CTH6C "  opening after  7.05000000E-03  sec.
+C
+C  700   .035         0.0 -123.32011 181.490229 155.439416  268.34801       260.
+C              .250964556        0.0 .256905072
+C            Valve   "II-1  "  to  "CTH2C "  closing after  3.54500000E-02  sec.
+C            Valve   "II-5  "  to  "CTH2C "  opening after  3.57500000E-02  sec.
+C            Valve   "VI-1  "  to  "CTH6C "  closing after  3.68500000E-02  sec.
+C            Valve   "VI-5  "  to  "CTH6C "  opening after  3.72000000E-02  sec.
+C            Valve   "II-2  "  to  "IICC  "  closing after  3.82000000E-02  sec.
+C            Valve   "II-6  "  to  "IICB  "  opening after  3.87000000E-02  sec.
+C            Valve   "VI-2  "  to  "VICC  "  closing after  3.96000000E-02  sec.
+C  800    .04  -120.72051 -12.665015 138.181338 238.820605 227.470808       260.
+C                     0.0        0.0 .822537008
+BLANK  card ending output variable requests (just node voltages, here)
+C            Valve   "II-6  "  to  "IICB  "  opening after  5.54000000E-02  sec.
+C            Valve   "VI-2  "  to  "VICC  "  closing after  5.63000000E-02  sec.
+C            Valve   "VI-6  "  to  "VICB  "  opening after  5.68500000E-02  sec.
+C            Valve   "II-3  "  to  "CTH2C "  closing after  5.76500000E-02  sec.
+C            Valve   "II-1  "  to  "CTH2C "  opening after  5.83500000E-02  sec.
+C            Valve   "VI-3  "  to  "CTH6C "  closing after  5.90500000E-02  sec.
+C            Valve   "VI-1  "  to  "CTH6C "  opening after  5.96000000E-02  sec.
+C 1200    .06   -160.8791        0.0 282.172623 256.182494  395.98766       260.
+C                     0.0 .840036806 .840753821
+C Variable max:92.4476735 46.4552844 544.762078 580.755428 541.946569       260.
+C               .44972865 1.16857933 1.10230727
+C Times of max :      0.0       .041      .0444       .044     .02855      .5E-4
+C                  .03685     .04185      .0416
+C Variable min:-211.70165 -165.79475 -.1027E-12  -35.63939 -.1839E-12 .51245E-13
+C              -.03932269 -.00819858  -.0265962
+C Times of min :   .02335      .0508     .00385     .05325      .0015        0.0
+C                   .0372     .04575      .0231
+  PRINTER PLOT
+ 194 5. 0.0 60.         VI-5  CTH6C            { Axis limits : (-0.393,   4.497)
+ 144 5. 0.0 60.         S4-                     { Axis limits : (0.000,   5.448)
+BLANK  card terminating batch-mode plot cards
+BEGIN NEW DATA CASE
+BLANK

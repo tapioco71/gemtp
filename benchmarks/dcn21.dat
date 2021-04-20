@@ -1,0 +1,1300 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-21
+C       James Randall of BPA suggested the linear scaling of angles during a
+C       FREQUENCY SCAN  as explained in the July, 1997, newsletter.  First (this
+C       subcase),  we show his old solution (note blank columns 57-64 of the
+C       FREQUENCY SCAN  card).  This,  he says,  is wrong for engineering.  The
+C       angles of the sources remain fixed at the values specified on the Type-
+C       14 source cards.  At each frequency,  the source is balanced, 3-phase:
+C       1st of 21 subcases (only 2nd is related to this first one).
+C         21 March 2001,  expand to illustrate Pisa-format .PL4 file for normal,
+C         old  FREQUENCY SCAN.  This is the 3rd of 3 Pisa-format illustrations.
+C         The 4th subcase of  DCNEW-22  is for time simulation,  and the 15th
+C         subcase of this same disk file is for verification of HFS.  While HFS
+C         and FS should be structurally comparable,  in fact the illustrations
+C         are quite different because this present example involves 2 output
+C         parts (magnitude and angle) for each variable.  The 15th subcase only
+C         involved a single output part.  This was the default,  and the most
+C         common choice.  But polar output is not rare,  so had better be shown
+C         to work for Pisa-format files.  To confirm that Pisa-format .PL4 file
+C         really is being used,  turn on diagnostic printout for overlay 28 and
+C         search the  .DBG  file for  LU4BEG.  Pisa will be mentioned.
+$DEPOSIT, NEWPL4=2 { Use SPY DEPOSIT to change .PL4 file type from STARTUP value
+C    To prove that Pisa-format code is being used,  it  is easy to turn on debug
+C    printout.  Use here is like that pioneered in subcase 15,  which did HFS.
+C    But diagnostic here requires more care because the network is bigger and
+C    there are more harmonics (overlay 11 would produce a lot).  It is easiest
+C    just to turn on diagnostic for plotting (see following card).  In the
+C    .DBG file,  look for the name  LU4BEG  to see Pisa-related data values. 
+C DIAGNOSTIC                                                                 9
+PRINTED NUMBER WIDTH, 11, 2,   { Each column of width 11 includes 2 blank bytes
+FREQUENCY SCAN              30.0    30.0   500.0
+ 10.0E-6  -.1000    60.0     0.0
+       1       1
+  TRANSFORMER             0.001 100.0 TX01A
+            9999
+ 1WYEA                    0.500 5.000 139.43
+ 2DELTA DELTB             0.050 0.500 13.800
+  TRANSFORMER TX01A                   TX01B
+ 1WYEB
+ 2DELTB DELTC
+  TRANSFORMER TX01A                   TX01C
+ 1WYEC
+ 2DELTC DELTA
+  DELTA                               0.10
+  DELTB                               0.10
+  DELTC                               0.10
+  WYEA                    0.001
+  WYEB                    0.001
+  WYEC                    0.001
+  SRC1A DELTA             0.001
+  SRC1B DELTB             0.001
+  SRC1C DELTC             0.001
+BLANK card ending branch cards
+BLANK card ending non-existent switch cards
+  POLAR OUTPUT VARIABLES { 2nd of 3 alternatives gives mag, angle (not mag only)
+C   The preceding is 2nd of 3 alternatives.  The other 2 are,  after commenting:
+C BOTH POLAR AND RECTANGULAR    { Request for (in order): mag, angle, real, imag
+C RECTANGULAR OUTPUT VARIABLES   { 3rd of 3 alternative outputs gives real, imag
+14SRC1A -1   1.00        60.0       0.0                       -1.0
+14SRC1B -1   1.00        60.0    -120.0                       -1.0
+14SRC1C -1   1.00        60.0     120.0                       -1.0
+BLANK card ending all electric source cards
+C    Note: following branch output replaces node voltage for SRC1A.  Because
+C          no polarity reversal here,  this is, in fact, the node voltage.
+C          But original plot was the negative of the node voltage because it
+C          was requested as (MAG, SRC1A).  We do likewise here (below).
+-5SRC1A          { -5 ==> 2A6 name pairs for voltage differences (branch V)
+  SRC1B SRC1C
+C Column headings for the  3   output variables follow.  These are divided among the 3 possible FS variable classes as follows ....
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  For each variable, magnitude is followed immediately by angle.  Both halves of the pair are labeled identically, note.
+C Step   F [Hz]     SRC1A      SRC1A      SRC1B      SRC1B      SRC1C      SRC1C
+C                   TERRA      TERRA
+C   1     30.   .09351069  78.087254  .09351069  -41.91275  .09351069  -161.9127
+C   2     60.   .18400971  83.978526  .18400971  -36.02147  .18400971  -156.0215
+C   3     90.   .27517196   85.97743  .27517196  -34.02257  .27517196  -154.0226
+BLANK card ending node voltage outputs
+C  15    450.   1.3731177  89.193946  1.3731177  -30.80605  1.3731177  -150.8061
+C  16    480.   1.4647197  89.244282  1.4647197  -30.75572  1.4647197  -150.7557
+C  17    510.   1.5563378  89.288695  1.5563378  -30.71131  1.5563378  -150.7113
+  PRINTER PLOT
+C 183 5.     -1.               SRC1A
+C     The preceding plot card was used until 21 March 2001 when this test case
+C     was switched from normal C-like .PL4 file to Pisa-format C-like .PL4 file
+C     by means of the assignment  NEWPL4 = 2  near the start.  It turns out this
+C     changed the plot a little because the preceding plot request is to plot
+C     all available points.  Whereas the nominal ending frequency F-max is 500,
+C     ATP did produce a solution for 510 after completing 480.  This happens for
+C     either type of .PL4 file.  But plotting is different.  The Pisa-format
+C     file knows that the user-declared  F-max = 500,  and this will be read
+C     from the disk file at the start of plotting,  thereby erasing the 510 that
+C     was stored in memory.  The preceding plot card then would plot to 500, not
+C     to 510.  To produce an identical plot,  we must specify  102 seconds (Hz)
+C     per inch,  F-min = 0.0  and  F-max = 510  as follows:
+ 183102 0.0510.               SRC1A
+C     Of course,  since these are nice round numbers,  the plot is so labeled.
+C     Not so for the original,  which involved roundoff.  Remember, the plot
+C     file is only single precision,  so 7 or 8 digits is the limit of math.
+C     Look at the labeling after 1 inch:  102.000001     By switching to a Pisa-
+C     format file,  such roundoff disappears.  The value is just 102.                                                                                                                  |
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-21
+C       2nd of 21 subcases shows the "corrected" solution that James Randall  
+C       says makes engineering sense:  the linear scaling of angles during
+C       the  FREQUENCY SCAN.  Here the source is balanced 3-phase at the given
+C       frequency (60 Hz),  but will be zero-sequence at the 3rd harmonic
+C       (3 * 120 degrees = 360 degrees).  Since current is being injected,
+C       the resulting voltage is a measure of the zero-sequence impedance.
+C       A delta-connected transformer winding represents a high impedance
+C       to such currents,  and this will produce high voltage at 180 Hz.
+C   Columns 57-64 of following card define the James Randall Memorial Frequency:                       
+$DEPOSIT, NEWPL4=0 { Use SPY DEPOSIT to cancel the value set in preceding subcas
+FREQUENCY SCAN              30.0    30.0   500.0            60.0
+ 10.0E-6  -.1000    60.0     0.0
+       1       1       0       0       1
+  TRANSFORMER             0.001 100.0 TX01A
+            9999
+ 1WYEA                    0.500 5.000 139.43
+ 2DELTA DELTB             0.050 0.500 13.800
+  TRANSFORMER TX01A                   TX01B
+ 1WYEB
+ 2DELTB DELTC
+  TRANSFORMER TX01A                   TX01C
+ 1WYEC
+ 2DELTC DELTA
+  DELTA                               0.10
+  DELTB                               0.10
+  DELTC                               0.10
+  WYEA                    0.001                                                3
+  WYEB                    0.001
+  WYEC                    0.001
+  SRC1A DELTA             0.001
+  SRC1B DELTB             0.001
+  SRC1C DELTC             0.001
+C    Preceding data subcase used no column-80 punches.  We had one branch
+C    voltage,  but it was requested by  "-5"  along with node voltages.  Here,
+C    we illustrate the equivalent output, only using column 80:
+  SRC1A                    1.E18                                               2
+BLANK card ending branch cards
+BLANK card ending non-existent switch cards
+14SRC1A -1   1.00        60.0       0.0                       -1.0
+14SRC1B -1   1.00        60.0    -120.0                       -1.0
+14SRC1C -1   1.00        60.0     120.0                       -1.0
+BLANK card ending all electric source cards
+  SRC1B SRC1C
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   1     output variables are branch currents (flowing from the upper node to the lower node);
+C  Only the magnitude of each variable is outputted.  This is the default choice,  which was not superseded by any request.
+C   Step   F [Hz]       WYEA       SRC1A      SRC1B      SRC1C      WYEA
+C                       TERRA      TERRA                            TERRA
+C      1       30.   .32992E-4  35367.735  35367.797  35367.764  .03299152
+C      2       60.   .57143E-4  .18400971  .18400971  .18400971  .05714329
+C      3       90.   .65984E-4  5894.9935  5894.4445  5894.4445  .06598395
+BLANK card ending node voltage outputs
+C     15      450.   .66009E-4  1180.7561  1178.0102  1178.0102  .06600855
+C     16      480.   .57168E-4  1.4647197  1.4647197  1.4647197  .05716813
+C     17      510.   .33008E-4   2079.938  2080.6998  2080.7333  .03300792
+C Variable maxima :  .66009E-4  35367.735  35367.797  35367.764  .06600855
+C F [Hz] of maxima:       450.        30.        30.        30.       450.
+C Variable minima :  .3118E-17  .18400971  .18400971  .18400971  .3118E-14
+C F [Hz] of minima:       360.        60.        60.        60.       360.
+  PRINTER PLOT
+ 183 5.     -1.               SRC1A
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C         3rd of 21 subcases is unrelated to the preceding two.   Instead,  it
+C         introduces  HARMONIC FREQUENCY SCAN  by Gabor Furst.  Added around the
+C         end of 1997,  it will not be described before the April, 1998, issue
+C         of the newsletter.  This example involves 1 source and 6 harmonics.
+C         Cols. 21-30 of the source cards carry frequency in Hz because minimum
+C         is equal to the power frequency (50).  For more sources, harmonics, 
+C         and the use of harmonic numbers rather than frequency, see 4th subcase
+C            3 November 1998, add branch from  NONE  to earth to illustrate  the
+C            correct handling of unexcited branches.  See Jan, 1999, newsletter.
+PRINTED NUMBER WIDTH, 11, 2,    { Each column of width 11 includes 2 blank bytes
+POWER FREQUENCY, 50., ! Needed so mimimum frequency is recognized as fundamental
+C HARMONIC FREQUENCY SCAN     -1.0     DELFFS < 0 ==> log F (not F) in .PL4 file
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F) 
+     1.0     0.0
+       1       1       1       0       1  { Note request for phasor branch flows
+  SWIT  LOAD                 10.                                               3
+  NONE                       2.0                                               1
+  LOAD                           1000.
+-1SWIT  OPEN               .3055  5.82  .012   1.0   { One mile of DC-37 line
+BLANK card ending all branches
+  GEN   SWIT         -1.                                                       1
+BLANK card ending all switch cards
+14GEN            1.0       50.       0.0  { Note comment and no negative T-start
+14GEN            1.3      100.       0.0  { Note comment and no negative T-start
+14GEN            1.5      200.       0.0  { Note cols. 21-30 is frequency in Hz
+14GEN            1.4      300.       0.0
+BLANK card ending source cards
+BLANK card ending F-dependent series R-L-C branches (none, for this subcase)
+  GEN   LOAD   { Names of nodes for voltage output
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step  F [Hz]       SWIT      GEN       LOAD       GEN        SWIT     SWIT
+C                     LOAD                           SWIT       LOAD     NONE
+C    1     50.   .03181488      1.0  .99949378  .00317772  .00318149      0.0
+C    2    100.   .02068752      1.3  1.2998354  .00205895  .00206875      0.0
+C    3    200.   .01193624      1.5  1.4999525    .001171  .00119362      0.0
+C    4    300.   .00742713      1.4  1.3999803  .71104E-3  .74271E-3      0.0
+C Variable max:  .03181488      1.5  1.4999525  .00317772  .00318149      0.0
+C F [Hz] of maxima:     50.    200.       200.        50.         50.     50.
+C Variable min:  .00742713      1.0  .99949378  .71104E-3  .74271E-3      0.0
+C F [Hz] of minima:   300.      50.        50.       300.       300.      50.
+C  Note currents of the final 2 columns agree less as frequency rises.  The
+C  difference is charging current of that 1-mile distributed line section.  As
+C  frequency goes to zero,  agreement is perfect due to no capacitive current.
+BLANK card ends output requests (just node voltages, for FREQUENCY SCAN)
+  CALCOMP PLOT  { Needed to cancel preceding PRINTER PLOT of 2nd subcase
+C 19690. 0. 300.   0. 2. LOAD  mag
+ 14690. 0. 300.   0. 2. LOAD
+C Derived from F-scan:  1) RMS value = 1.85719715E+00   2) THD = 2.43009301E+02%
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         4th of 21 subcases is related to the preceding one.  It illustrates
+C         HARMONIC FREQUENCY SCAN (HFS) by Gabor Furst.  This example involves
+C         more sources (2) and harmonics (14).  Cols. 21-30 of the source cards
+C         carries harmonic numbers rather than frequencies in Hz because minimum
+C         is unity rather than equal to the power frequency 50.
+PRINTED NUMBER WIDTH, 11, 2,   { Each column of width 11 includes 2 blank bytes
+POWER FREQUENCY, 50., ! Needed so mimimum frequency is recognized as fundamental
+C HARMONIC FREQUENCY SCAN     -1.0   DELFFS < 0 ==> log F (not F) in .PL4 file
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F) 
+     1.0     0.0
+       1       1       1       0          { Note request for phasor branch flows
+  SWIT  LOAD                 10.                                               1
+  LOAD  EARTH                    1000.
+-1SWIT  OPEN               .3055  5.82  .012  138.
+BLANK card ending all branches
+  GEN   SWIT         -1.                                                       2
+BLANK card ending all switch cards
+14GEN            1.0        1.       0.0  { Note comment and no negative T-start
+14GEN            1.3        2.       0.0  { Note comment and no negative T-start
+14GEN            1.5        4.       0.0  { Note cols. 21-30 is harmonic number
+14GEN            1.4        6.       0.0
+14GEN            1.1        8.       0.0
+14GEN            0.7       10.       0.0
+14GEN            0.5       12.       0.0
+14GEN            0.3       14.       0.0
+14EARTH       1.E-19        1.       0.0  { 2nd source has amplitude almost zero
+14EARTH       1.E-19        4.       0.0  { 2nd source involves fewer harmonics
+BLANK card ending source cards
+BLANK card ending F-dependent series R-L-C branches (none, for this subcase)
+C   Following is added after col.-80 punch on switch was changed to 2 from 3.
+C   Here the default name SWT001 is used to access the first switch.
+-1SWT001    { -1 ==> Branch/switch current out;  use A6 component names
+  GEN   LOAD   { Names of nodes for voltage output
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step   F [Hz]       GEN        GEN        LOAD       GEN        SWIT
+C                       SWIT                             SWIT       LOAD
+C      1       50.         0.0        1.0  .99949378  .00263778  .00318149
+C      2      100.         0.0        1.3  1.2998354  .42222E-3  .00206875
+C      3      200.         0.0        1.5  1.4999525  .01598538  .00119362
+BLANK card ends output requests (just node voltages, for FREQUENCY SCAN)
+C      4      300.         0.0        1.4  1.3999803  .00365709  .74271E-3
+C      5      400.         0.0        1.1  1.0999913  .83054E-3  .43767E-3
+C      6      500.         0.0        0.7  .69999645  .30433E-3  .22282E-3
+C      7      600.         0.0        0.5  .49999824  .00174186  .13263E-3
+C      8      700.         0.0        0.3  .29999922  .00120951  .68209E-4
+  CALCOMP PLOT  { Needed to cancel preceding PRINTER PLOT of 2nd subcase
+C 19690. 0. 900.   0. 2. LOAD  mag
+ 14690. 0. 900.   0. 2. LOAD
+C Derived from F-scan:  1) RMS value = 2.11404071E+00   2) THD = 2.81911204E+02%
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         5th of 21 subcases illustrate  HARMONIC FREQUENCY SCAN  by Gabor Furst
+C         using one of the new frequency-depend resistors.   The concept is more
+C         general than just R in that it applies to R, L, and C  of series R-L-C
+C         branch.  There are two points for each parameter,  allowing a straight
+C         line to be drawn thru them for linear interpolation at each frequency.
+C         Note values (R, F) = (5, 50) and (50, 500)  ===>  R(F) = F / 10.   The
+C         inductance gives  X = wL = 6.28 * .01 * F = .0628 * F.  So, looding at
+C         V-node of LOAD, impedance division ==> V = jX / ( R + jX ).  Dividing
+C         out the jX,  1/V = 1 + 0.1 / j.0628 ) = 1 - j /.0628 ==> V = .28 +j.45
+C         = .53 /__ 57.9 degrees.  So, V is a constant, independent of frequency 
+C         because R is proportional to frequency.  This makes verification easy.
+POWER FREQUENCY, 50., ! Needed so mimimum frequency is recognized as fundamental
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F) 
+     1.0     0.0
+       1       1       1       1       1  { Note request for phasor branch flows
+  GEN   LOAD                  5.  { F-dependent resistance gives R at power freq
+  LOAD                             10.  { Constant inductance (nothing new here)
+BLANK card ending all branches
+BLANK card ending all switch cards
+  POLAR OUTPUT VARIABLES { 2nd of 3 alternatives gives mag, angle (not mag only)
+14GEN            1.0       50.       0.0  { Note comment and no negative T-start
+14GEN            1.0      100.       0.0  { Note comment and no negative T-start
+14GEN            1.0      200.       0.0  { Note cols. 21-30 is frequency in Hz
+14GEN            1.0      300.       0.0
+BLANK card ending source cards
+NEXT FREQUENCY FOR SERIES RLC       500.  { Elevated frequency for interpolation
+  GEN   LOAD                 50.   { R of F-dependent resistance at higher freq.
+BLANK card ending F-dependent series R-L-C branches
+-1LIN001    { -1 ==> Branch/switch current out;  use A6 component names
+-4LIN002    { -4 ==> Branch/switch power & energy;  use A6 component names
+  GEN   LOAD   { Names of nodes for voltage output
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C  For each variable, magnitude is followed immediately by angle.  Both halves of the pair are labeled identically, note.
+C Step   F [Hz]       LOAD       LOAD       GEN        GEN        LOAD       LOAD       GEN        GEN        LOAD       LOAD
+C                     TERRA      TERRA                                                  LOAD       LOAD       TERRA      TERRA
+C   1       50.   .53201804  57.858092        1.0        0.0  .53201804  57.858092   .1693466  -32.14191   .1693466  -32.14191
+C   2      100.   .53201804  57.858092        1.0        0.0  .53201804  57.858092   .0846733  -32.14191   .0846733  -32.14191
+C   3      200.   .53201804  57.858092        1.0        0.0  .53201804  57.858092  .04233665  -32.14191  .04233665  -32.14191
+C   4      300.   .53201804  57.858092        1.0        0.0  .53201804  57.858092  .02822443  -32.14191  .02822443  -32.14191
+BLANK card ends output requests
+C Variable max :  .53201804  57.858092        1.0        0.0  .53201804  57.858092   .1693466  -32.14191   .1693466  -32.14191
+C F [Hz] of max:        50.        50.        50.        50.        50.        50.        50.        50.        50.       300.
+C Variable min :  .53201804  57.858092        1.0        0.0  .53201804  57.858092  .02822443  -32.14191  .02822443  -32.14191
+C F [Hz] of min:        50.       300.        50.        50.        50.       300.       300.        50.       300.        50.
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         6th of 21 subcases illustrate  HARMONIC FREQUENCY SCAN  by Gabor Furst
+C         is related to preceding.  R(F)  --->  L(F).  Basic network is the same
+C         as preceding subcase.  But here,  R = 5 ohms is constant.  There is an
+C         effort to keep  X  constant by having L vary inversely with frequency.
+C         There are 3 points,  and  wL  of 1st is the same as the last.  In  the
+C         middle,  there is discrepancy, of course, because  1/w  is not linear.
+POWER FREQUENCY, 50., ! Needed so mimimum frequency is recognized as fundamental
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F) 
+     1.0     0.0
+       1       1       1       0 
+  GEN   LOAD                  5.
+  LOAD                             10. { L at lower of two frequencies (power F)
+BLANK card ending all branches
+BLANK card ending all switch cards
+14GEN            1.0       50.       0.0  { Note comment and no negative T-start
+14GEN            1.0      100.       0.0  { Note comment and no negative T-start
+14GEN            1.0      200.       0.0  { Note cols. 21-30 is frequency in Hz
+BLANK card ending source cards
+NEXT FREQUENCY FOR SERIES RLC       200.  { Elevated frequency for interpolation
+  LOAD                             2.5 { L of F-dependent resistance at higher F
+BLANK card ending F-dependent series R-L-C branches
+-5LOAD  GEN    { -5 ==> 2A6 name pairs for voltage differences (branch V)
+  GEN   LOAD   { Names of nodes for voltage output
+-1LIN002    { -1 ==> Branch/switch current out;  use A6 component names
+C   First  3     output variables are electric-network voltage differences ...
+C   Next   1     output variables are branch currents (flowing from the upper ..
+C    Step   F [Hz]       LOAD       GEN        LOAD       LOAD
+C                        GEN                              TERRA
+C      1       50.   .84673302        1.0  .53201804   .1693466
+C      2      100.   .72772718        1.0  .68586671  .14554544
+C      3      200.   .84673302        1.0  .53201804   .1693466
+BLANK card ends output requests (just node voltages, for FREQUENCY SCAN)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         7th of 21 subcases illustrate  HARMONIC FREQUENCY SCAN  by Gabor Furst
+C         is related to preceding.  L(F)  --->  C(F).  Basic network is the same
+C         as preceding subcase but with inductance L  replaced by capacitance C.
+C         Try to keep  Xc  constant by having C vary inversely with frequency F.
+C         There are 3 points,  and  wC  of 1st is the same as the last.  In  the
+C         middle,  there is discrepancy, of course, because  1/w  is not linear.
+POWER FREQUENCY, 50., ! Needed so mimimum frequency is recognized as fundamental
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F) 
+     1.0     0.0
+       1       1       1       0 
+  GEN   LOAD                  5.
+  LOAD                                  400. { C at lower of two freq (power F)
+BLANK card ending all branches
+BLANK card ending all switch cards
+14GEN            1.0       50.       0.0  { Note comment and no negative T-start
+14GEN            1.0      100.       0.0  { Note comment and no negative T-start
+14GEN            1.0      200.       0.0  { Note cols. 21-30 is frequency in Hz
+BLANK card ending source cards
+NEXT FREQUENCY FOR SERIES RLC       200.  { Elevated frequency for interpolation
+  LOAD                                  100. { C of F-dep capacitanc at higher F
+BLANK card ending F-dependent series R-L-C branches
+-5GEN   LOAD    { -5 ==> 2A6 name pairs for voltage differences (branch V)
+  GEN   LOAD    { Names of nodes for voltage output
+-1LIN001LIN002  { -1 ==> Branch/switch current out;  use A6 component names
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step   F [Hz]       GEN        GEN        LOAD       GEN        LOAD
+C                       LOAD                             LOAD       TERRA
+C      1       50.   .53201804        1.0  .84673302  .10640361  .10640361
+C      2      100.   .68586671        1.0  .72772718  .13717334  .13717334
+C      3      200.   .53201804        1.0  .84673302  .10640361  .10640361
+BLANK card ends output requests (just node voltages, for FREQUENCY SCAN)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         8th of 21 subcases illustrate  HARMONIC FREQUENCY SCAN  by Gabor Furst
+C         illustrates new F-dependent R, L, and C.  Basic network is the same
+C         as preceding subcase but here all 3 parameters R, L, and C are varied.
+C         Solutions at lowest and highest frequencies are verified by the two
+C         following subcases,  which do not involve  HFS  at all.
+POWER FREQUENCY, 50., ! Needed so mimimum frequency is recognized as fundamental
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F) 
+     1.0     0.0
+       1       1       1       0 
+  GEN   LOAD                 5.0             { Constant half of series circuit
+  LOAD                       0.0   10.  400. { F-dependent (all 3 R, L, and C)
+BLANK card ending all branches
+BLANK card ending all switch cards
+14GEN            1.0       50.       0.0  { Note comment and no negative T-start
+14GEN            1.0      100.       0.0  { Note comment and no negative T-start
+14GEN            1.0      500.       0.0  { Note cols. 21-30 is frequency in Hz
+BLANK card ending source cards
+NEXT FREQUENCY FOR SERIES RLC       500.  { Elevated frequency for interpolation
+  LOAD                       45.   2.5  100.  { R, L, C at higher freq (500 Hz)
+BLANK card ending F-dependent series R-L-C branches
+-5      LOAD    { -5 ==> 2A6 name pairs for voltage differences (branch V)
+  LOAD  GEN    { Names of nodes for voltage output
+-1      LIN002  { -1 ==> Branch/switch current out;  use A6 component names
+C  First  3     output variables are electric-network voltage differences  ...
+C  Next   1     output variables are branch currents (flowing from the upper ...
+C   Step   F [Hz]       TERRA      LOAD       GEN        LOAD
+C                       LOAD                             TERRA
+C      1       50.   .69374181  .69374181        1.0  .14404476
+C      2      100.   .51459068  .51459068        1.0  .09900818
+C      3      500.   .90091274  .90091274        1.0   .0199133
+BLANK card ends output requests (just node voltages, for FREQUENCY SCAN)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         9th of 21 subcases demonstrates correctness of the lowest of all (the
+C         power-frequency) solutions of the preceding subcase.   Note  HARMONIC
+C         FREQUENCY SCAN  is not used at all.  We just have a phasor solution.         
+POWER FREQUENCY, 50., ! Needed so mimimum frequency is recognized as fundamental
+     1.0     0.0
+       1       1       1       0
+  GEN   LOAD                 5.0             { Constant half of series circuit
+  LOAD                       0.0   10.  400. { F-dependent (all 3 R, L, and C)
+BLANK card ending all branches
+BLANK card ending all switch cards
+14GEN            1.0       50.       0.0                           -1.
+BLANK card ending source cards
+  GEN   LOAD   { Names of nodes for voltage output
+C     Total network loss  P-loss  by summing injections =   5.187223045425E-02
+C Begin steady-state printout of EMTP output variables.  Node voltage outputs ..
+C      Bus            Phasor     Angle in                Real         Imaginary
+C     name         magnitude      degrees                part              part
+C   GEN       0.10000000E+01     0.000000      0.10000000E+01    0.00000000E+00
+C   LOAD      0.69374181E+00   -46.072960      0.48127770E+00   -0.49964935E+00
+BLANK card ends output requests (just node voltages for this data)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         10th of 21 subcases is related to the preceding.  But rather than the
+C         lowest-frequency,  here we verify the highest-frequency solution of
+C         the  HFS  use of subcase number 8.
+POWER FREQUENCY, 50., ! Needed so mimimum frequency is recognized as fundamental
+     1.0     0.0
+       1       1       1       0 
+  GEN   LOAD                 5.0             { Constant half of series circuit
+  LOAD                       45.   2.5  100.  { R, L, C at higher freq (500 Hz)
+BLANK card ending all branches
+BLANK card ending all switch cards
+14GEN            1.0      500.       0.0                           -1.
+BLANK card ending source cards
+-5      LOAD    { -5 ==> 2A6 name pairs for voltage differences (branch V)
+  GEN   LOAD    { Names of nodes for voltage output
+-1LIN001LIN002  { -1 ==> Branch/switch current out;  use A6 component names
+C     Total network loss  P-loss  by summing injections =   9.913486408375E-03
+C Begin steady-state printout of EMTP output variables.   Node voltage outputs follow.
+C       Bus              Phasor       Angle in                Real           Imaginary
+C      name           magnitude        degrees                part                part
+C    GEN         0.10000000E+01       0.000000      0.10000000E+01      0.00000000E+00
+C    LOAD        0.90091274E+00       0.588983      0.90086514E+00      0.92609466E-02
+C Selective branch outputs follow (for column-80 keyed branches only).   Any ...
+C From    To      (========   Branch voltage  Vkm  =  Vk - Vm   =========)      (======   Branch current  Ikm  from  K to M   ======)
+C bus K   bus M    Magnitude      Degrees       Real part      Imag part      Magnitude      Degrees       Real part      Imag part
+C GEN    LOAD    9.9566492E-02   -5.336948   9.9134864E-02 -9.2609466E-03    1.9913298E-02   -5.336948   1.9826973E-02 -1.8521893E-03
+C LOAD           9.0091274E-01    0.588983   9.0086514E-01  9.2609466E-03    1.9913298E-02   -5.336948   1.9826973E-02 -1.8521893E-03
+BLANK card ends output requests (just node voltages, for FREQUENCY SCAN)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        11th of 21 subcases illustrates load modeling requested by Gabor Furst
+C        This data illustrates the use of CIGRE-recommended harmonic loads.
+C     Although usually used with HARMONIC FREQUENCY SCAN,  there is no such need
+C     as this data case illustrates.  See April, 1998, newsletter for background
+PRINTED NUMBER WIDTH, 9, 1,
+POWER FREQUENCY, 50.,
+   .0001    .020     50.
+       1       1       1       1       1      -1
+       5       5      20      20
+C    1st of 2 identical, disconnected networks uses manually-defined branches:
+  GEN   TRAN                 0.5
+  TRAN                       0.5   2.0                                         1
+  TRAN                             2.0                                         1
+C    2nd of 2 identical, disconnected networks uses internally-defined branches:
+C   E-mail from Gabor Furst having date: Wed, 17 Dec 1997 09:12:00 -0800
+C   The CIGRE recommendation for frequency dependent load representation
+C   is reactance Xp in parallel with an impedance Rs +jXs. With P active
+C   and Q reactive, and h the harmonic order (where . ==> *,  V2 = V**2)
+C   Rs = V2/P     Xs = A.h.Rs    Xp =  h.Rs / [(B.Q/P)-C]
+C   To match preceding 2 branches,  Rs = 0.5 = 1**2 / P  ==>  P = 2.0
+C   because source voltage is 1 volt rms.  Then  Xs = 2 = A * 1 * Rs
+C   ===>  A = 4.  Finally,  Xp = 2 = 1 * 0.5 / [ B * Q / 2 - C ]  so to
+C   keep this simple,  choose  Q = P = 2.  Then  B - C = 1/4  so choose
+C   B = 0.5  and  C = .25
+  GEN   TEST                 0.5
+        <LOAD> CIGRE A,B,C             4.0             0.5             .25     
+  TEST  <LOAD>                         1.0             2.0             2.0     1
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN          1.414       50.       0.0                           -1.
+BLANK card terminating program source cards.
+  GEN   TRAN  TEST
+C     Total network loss  P-loss  by summing injections =   8.777836097561E-01
+C  GEN   1.414    1.414    1.2415609756098  2.3738479390939     .8777836097561  1.6783104929394
+C          0.0      0.0    -2.023284552846      -58.4652081    1.4304621788618        0.5230162
+C Step    Time    GEN      TRAN     TEST     TRAN     TRAN     TEST     TEST
+C                                            TERRA    TERRA    TERRA    TERRA
+C    0     0.0     1.414  1.10361  1.10361 .3678699 .2529106 .3678699 .2529106
+C    1   .1E-3  1.413302 1.087178 1.087178 .3821311  .270117 .3821311  .270117
+C    2   .2E-3   1.41121 1.069674 1.069674 .3960152 .2870569 .3960152 .2870569
+BLANK card ending program output-variable requests.
+C  200     .02     1.414 1.103645 1.103645 .3678278 .2528827 .3678278 .2528827
+C Variable max :   1.414 1.213968 1.213968 .5888022 .6069501 .5888022 .6069501
+C Times of max :     0.0    .0186    .0186    .0029    .0036    .0029    .0036
+C Variable min :  -1.414 -1.21398 -1.21398 -.588778 -.606931 -.588778 -.606931
+C Times of min :     .01    .0086    .0086    .0129    .0136    .0129    .0136
+  PRINTER PLOT
+ 144 5. 0.0 20.         TRAN  TEST             { Axis limits: (-1.214,  1.214)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C        12th of 21 subcases illustrates load modeling requested by Gabor Furst
+C        This data illustrates the use of CIGRE-recommended harmonic loads in a
+C        3-phase usage environment.  The answer here is the same as that of the
+C        preceding single-phase case because each phase here is excited by  the
+C        same single-phase excitation (all 3 load phases actualy are parallel).
+C        Rather than  BUS2 = <LOAD>  for a single phase, note  <LOAD3  is used:
+PRINTED NUMBER WIDTH, 9, 1,
+POWER FREQUENCY, 50.,
+   .0001    .020     50.
+       1       1       1       1       1      -1
+       5       5      20      20
+C    1st of 2 identical, disconnected networks uses manually-defined branches:
+  GEN   TESTA                0.5
+  GEN   TESTB                0.5
+  GEN   TESTC                0.5
+        <LOAD> CIGRE A,B,C             4.0             0.5             .25     
+  TESTA <LOAD3TESTB TESTC              1.0             2.0             2.0     1
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN          1.414       50.       0.0                           -1.
+BLANK card terminating program source cards.
+  GEN   TESTA TESTB TESTC
+BLANK card ending program output-variable requests.
+  PRINTER PLOT
+ 144 5. 0.0 20.         TESTA TESTB TESTC      { Axis limits: (-1.214,  1.214)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C        13th of 21 subcases illustrates load modeling requested by Stu Cook of
+C        JUST Services in suburban Montreal, Quebec, Canada.  Note the request
+C        <JUST>  in  BUS2  field replaces  <LOAD>  of Gabor Furst's CIGRE load.
+PRINTED NUMBER WIDTH, 9, 1,
+POWER FREQUENCY, 50.,
+   .0001    .020     50.
+       1       1       1       1       1      -1
+       5       5      20      20
+C    1st of 2 identical, disconnected networks uses manually-defined branches:
+  GEN   TRAN                 0.5                                               1
+  INTER                      0.5         { Rp  ----  parallel resistance
+  INTER                            1.0   { Lp  ----  parallel inductance
+  TRAN  INTER                      1.0   { Ls  ----  series   inductance
+C    2nd of 2 identical, disconnected networks uses Stu Cook's load:
+  GEN   TEST                 0.5                                               1
+  TEST  <JUST>                         0.5             1.0             1.0
+C      For Stu Cook of Just Services:   Rp              Lp              Ls
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN          1.414       50.       0.0                           -1.
+BLANK card terminating program source cards.
+  GEN   TRAN  TEST  INTER TEST_
+C  Step   Time    GEN      TRAN     TEST     INTER    TEST_    GEN      GEN
+C                                                              TRAN     TEST
+C    0    0.0     1.414   1.1312   1.1312 .3770667 .3770667    .5656    .5656
+C    1  .1E-3  1.413302 1.118799 1.118799 .3828021 .3828021 .5890069 .5890069
+C    2  .2E-3   1.41121 1.105293 1.105293 .3881599 .3881599 .6118326 .6118326
+BLANK card ending program output-variable requests.
+C  200    .02     1.414 1.131219 1.131219 .3770449 .3770449 .5655621 .5655621
+C Variable max :  1.414  1.19237  1.19237 .4215597 .4215597 .9425352 .9425352
+C Times of max :    0.0     .019     .019    .0015    .0015     .003     .003
+C Variable min : -1.414 -1.19238 -1.19238 -.421551 -.421551 -.942512 -.942512
+C Times of min :    .01     .009     .009    .0115    .0115     .013     .013
+  PRINTER PLOT
+ 144 5. 0.0 20.         TRAN  TEST             { Axis limits: ( -1.192,  1.192 )
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C        14th of 21 subcases illustrates load modeling requested by Stu Cook for
+C        a 3-phase usage environment. The answer here is the same as that of the
+C        preceding single-phase case because each phase here is excited by  the
+C        same single-phase excitation (all 3 load phases actualy are parallel).
+C        Rather than  BUS2 = <JUST>  for a single phase, note  <JUST3  is used:
+PRINTED NUMBER WIDTH, 9, 1,
+POWER FREQUENCY, 50.,
+   .0001    .020     50.
+       1       1       1       1       1      -1
+       5       5      20      20
+C    1st,  define a 3-phase bus  TEST  by connecting to a single-phase source:
+  GEN   TESTA                0.5
+  GEN   TESTB                0.5
+  GEN   TESTC                0.5
+  TESTA <JUST3TESTB TESTC              0.5             1.0             1.0
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN          1.414       50.       0.0                           -1.
+BLANK card terminating program source cards.
+  GEN   TESTA TESTB TESTC TESTA_TESTB_TESTC_
+C Step   Time    GEN      TESTA    TESTB    TESTC    TESTA_   TESTB_   TESTC_
+C   0     0.0     1.414   1.1312   1.1312   1.1312 .3770667 .3770667 .3770667
+C   1   .1E-3  1.413302 1.118799 1.118799 1.118799 .3828021 .3828021 .3828021
+C   2   .2E-3   1.41121 1.105293 1.105293 1.105293 .3881599 .3881599 .3881599
+BLANK card ending program output-variable requests.
+  PRINTER PLOT
+ 144 5. 0.0 20.         TESTA TESTB TESTC      { Axis limits: ( -1.192,  1.192 )
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C        15th of 21 subcases is the same as the third,  and should produce the
+C        same nice 5-harmonic bar chart on the screen.  But internally it is
+C        different in that the newer Pisa-format .PL4 file of  NEWPL4 = 2  will
+C        be demonstrated for the first time on  18 March 2001.  On this date,
+C        what formerly was the 15th and last subcase has been moved downward to
+C        become the 16th and last.  Use of  $STOP  requires that it be last.
+$DEPOSIT, NEWPL4=2 { Use SPY DEPOSIT to change .PL4 file type from STARTUP value
+C    To prove that Pisa-format code is being used, it is easy to turn on debug
+C    printout for HEADPI (called by overlay 11) and LU4BEG (part of overlay 28).
+C    Look for these names in the  .DBG  file to see associated pointers during
+C    creation (overlay 11) and use (batch-mode plotting) of Pisa-format .PL4
+C    As expected,  phasor printout of branch flows will result,  so the .LIS
+C    file will be substantially larger as long as overlay-11 diagnostic is on.
+C      Turn off diagnostic 22 April 2007 as it disfigures .LIS of Mingw32 ATP:
+C DIAGNOSTIC                               9                                 9
+PRINTED NUMBER WIDTH, 11, 2,   { Each column of width 11 includes 2 blank bytes
+POWER FREQUENCY, 50., ! Needed so mimimum frequency is recognized as fundamental
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F) 
+     1.0     0.0
+       1       1       1       1       1   { Note request for phasor branch flows
+  SWIT  LOAD                 10.                                               3
+  LOAD                           1000.
+-1SWIT  OPEN               .3055  5.82  .012   1.0   { One mile of DC-37 line
+BLANK card ending all branches
+  GEN   SWIT         -1.                                                       1
+BLANK card ending all switch cards
+14GEN            1.0       50.       0.0  { Note comment and no negative T-start
+14GEN            1.3      100.       0.0  { Note comment and no negative T-start
+14GEN            1.5      200.       0.0  { Note cols. 21-30 is frequency in Hz
+14GEN            1.4      300.       0.0
+BLANK card ending source cards
+BLANK card ending F-dependent series R-L-C branches (none, for this subcase)
+  GEN   LOAD   { Names of nodes for voltage output
+BLANK card ends output requests (just node voltages, for FREQUENCY SCAN)
+  CALCOMP PLOT  { Needed to cancel preceding PRINTER PLOT of 2nd subcase
+C 19690. 0. 300.   0. 2. LOAD  mag
+ 14690. 0. 300.   0. 2. LOAD
+C Derived from F-scan:  1) RMS value = 1.85719715E+00   2) THD = 2.43009301E+02%
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         16th of 21 subcases is related to the 3rd.  Added 19 November 2001,
+C         this illustrates  HARMONIC FREQUENCY SCAN  with a subharmonic.  The
+C         power frequency is 50 Hz,  and we have added a 25-Hz source that
+C         corresponds to harmonic number  h = 0.5      Also illustrated are
+C         shuffled source cards.  Whereas the 3rd subcase had sources ordered
+C         with frequency monotone increasing,  this data does not.  Yet the
+C         source power frequency for the power frequency will be seen in the
+C         interpreted data.
+DIAGNOSTIC         { Cancel diagnostic printout ordered by the preceding subcase
+PRINTED NUMBER WIDTH, 11, 2,    { Each column of width 11 includes 2 blank bytes
+POWER FREQUENCY, 50.,  { Make sure data behavior is independent of STARTUP value
+C HARMONIC FREQUENCY SCAN     -1.0     DELFFS < 0 ==> log F (not F) in .PL4 file
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F) 
+     1.0     0.0
+       1       1       1       0       1  
+  SWIT  LOAD                 10.                                               3
+  NONE                       2.0                                               1
+  LOAD                           1000.
+-1SWIT  OPEN               .3055  5.82  .012   1.0   { One mile of DC-37 line
+BLANK card ending all branches
+  GEN   SWIT         -1.                                                       1
+BLANK card ending all switch cards
+C USE HARMONIC NUMBERS
+C FREQUENCY IN HERTZ
+C An explicit declaration such as preceding (one or the other) is optional.  If
+C present, it rules.  If missing, ATP will check for a source having frequency
+C equal to either 1.0 or the power frequency.  Note we do have a 50-Hz entry:
+14GEN            1.3      100.       0.0  { Note comment and no negative T-start
+14GEN            1.5      200.       0.0  { Note cols. 21-30 is frequency in Hz
+14GEN            1.4      300.       0.0
+14GEN            1.0       50.       0.0  { Note comment and no negative T-start
+14GEN            1.0       25.       0.0  { This is subharmonic not present in 3rd subcase
+C    Normally, frequencies will be in order.  But this is not required, as the
+C    preceding shows.  Neither the smallest frequency (25 Hz) nor the power
+C    frequency (50 Hz) must come first,  as this shows.
+BLANK card ending source cards
+BLANK card ending F-dependent series R-L-C branches (none, for this subcase)
+  GEN   LOAD   { Names of nodes for voltage output
+BLANK card ends output requests (just node voltages, for FREQUENCY SCAN)
+  CALCOMP PLOT  { Needed to cancel preceding PRINTER PLOT of 2nd subcase
+C 19690. 0. 300.   0. 2. LOAD  mag
+ 14690. 0. 300.   0. 2. LOAD
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         17th of 21 subcases is related to the 4th.  Added 19 November 2001,
+C         this illustrates  HARMONIC FREQUENCY SCAN  with a subharmonic when
+C         there are 2 or more sources,  and the lowest frequency (now the
+C         subharmonic having frequency 25 Hz) is not supplied by all sources.
+PRINTED NUMBER WIDTH, 11, 2,   { Each column of width 11 includes 2 blank bytes
+POWER FREQUENCY, 50.,  { Make sure data behavior is independent of STARTUP value
+C HARMONIC FREQUENCY SCAN     -1.0   DELFFS < 0 ==> log F (not F) in .PL4 file
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F) 
+     1.0     0.0
+       1       1       1       0       1  
+  SWIT  LOAD                 10.                                               1
+  LOAD  EARTH                    1000.
+-1SWIT  OPEN               .3055  5.82  .012  138.
+BLANK card ending all branches
+  GEN   SWIT         -1.                                                       2
+BLANK card ending all switch cards
+14GEN            1.0        1.       0.0  { Note comment and no negative T-start
+14GEN            1.3        2.       0.0  { Note comment and no negative T-start
+14GEN            1.5        4.       0.0  { Note cols. 21-30 is harmonic number
+14GEN            1.4        6.       0.0
+14GEN            1.1        8.       0.0
+14GEN            0.7       10.       0.0
+14GEN            0.5       12.       0.0
+14GEN            0.3       14.       0.0
+14GEN            0.5       0.5       0.0  { Add 25-Hz subharmonic (1/2 power F)
+14EARTH       1.E-19        1.       0.0  { 2nd source has amplitude almost zero
+14EARTH       2.E-19        4.       0.0  { 2nd source involves fewer harmonics
+BLANK card ending source cards
+BLANK card ending F-dependent series R-L-C branches (none, for this subcase)
+C   Following is added after col.-80 punch on switch was changed to 2 from 3.
+C   Here the default name SWT001 is used to access the first switch.
+-1SWT001    { -1 ==> Branch/switch current out;  use A6 component names
+  GEN   LOAD  EARTH   { Names of nodes for voltage output
+BLANK card ends output requests (just node voltages, for FREQUENCY SCAN)
+  CALCOMP PLOT  { Needed to cancel preceding PRINTER PLOT of 2nd subcase
+C 19690. 0. 900.   0. 2. LOAD  mag
+ 14690. 0. 900.   0. 2. LOAD
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         18th of 21 subcases is added  21 November 2001  following corrections
+C         to handle subharmonic data from Gabor Furst (see DC-22).  This is more
+C         realistic data,  which was supplied as disk file  hfsnew1.dat    There
+C         are  _several_  sources,  and several subharmonics.  In E-mail earlier
+C         in the day, author Furst explained:  "The file I sent to you is an old 
+C         file, the only modification done to it was the additions of the  sub-
+C         harmonics. If you delete them the case runs correctly with the current
+C         TPBIG.  I checked this."
+POWER FREQUENCY, 50.0
+HARMONIC FREQUENCY SCAN
+C POCKET CALCULATOR VARIES PARAMETERS            0       0   { Loop five times
+C deltat    tmax    xopt    copt  epsiln  tolmat  tstart
+       1       1     50.          1.E-10
+C   iout   iplot  idoubl  kssout  maxout    ipun  memsav    icat  nenerg  iprsup
+       1       1               0                               1
+C   *************************************
+C     Source bus 10.0 kV   95 MVA
+C   *************************************
+C ------______------______------____________
+51SRCA  BSA               .30000      3.1000
+52SRCB  BSB               .01100      1.0528
+53SRCC  BSC
+C   *********************************
+C   BSA to BSMA is a measuring switch
+C   10.0 kV cable equivalent to plant bus   2.0 km
+C ------______------______------______------______
+-1BSMA  B10A                0.38 0.410  0.30   2.0
+-2BSMB  B10B                0.38 0.410  0.30   2.0
+-3BSMC  B10C
+C
+C  ************************************
+C    Harmonic filters
+C  ************************************
+C      100 m cable to 5th harmonic filter
+c                         r0/km  x0/km c0/km  dist
+C ------______------______------______------______
+-1B10A  FIMT5A             1.280 0.152 0.408   0.1
+-2B10B  FIMT5B             0.164 .0987 0.408   0.1
+-3B10C  FIMT5C
+C    5th harmonic filter   intentinally detuned
+  FILT5A                    0.00 11.47  11.1
+  FILT5B                    0.00 11.47  11.1
+  FILT5C                    0.00 11.47  11.1
+C   cable to 7th filter
+c ------______------______------______------______
+-1B10A  FIMT7A             1.280 0.152 0.408   0.1
+-2B10B  FIMT7B             0.164 .0987 0.408   0.1
+-3B10C  FIMT7C
+C    7th harmonic filter
+  FILT7A                    0.00 11.66  5.57                                   1
+  FILT7B                    0.00 11.66  5.57
+  FILT7C                    0.00 11.66  5.57
+C
+C      100 m cable to transformers
+C ------______------______------______------______
+-1B10A  TR10A              1.280 0.152 0.408   .10
+-2B10B  TR10B              0.164.09877 0.408   .10
+-3B10C  TR10C
+C
+C   ***********************************************
+C     frequency dependent  R-L load 4.8 MW, 2.4 MVAR
+C     using NEXT FREQUENY FOR SERIES RLC
+C   ***********************************************
+  TR10A LOD1A             .00001
+  TR10B LOD1B             .00001
+  TR10C LOD1C             .00001
+  LOD1A                    16.66  8.33                                         1
+  LOD1B                    16.66  8.33
+  LOD1C                    16.66  8.33
+C   3 February 2002,  true dynamic dimensions begin for F95 Lahey ATP.  Four
+C   integers are read from a single, extra, isolated  $PARAMETER  card if that
+C   card carries the request  <TABLE LIMITS:  to the left of column 33.  Then
+C   4 integers are read using  FORMAT ( 32X, 4I8 )  and have meaning as follows:
+C      LIMBLK  ---  limit on the number of  $PARAMETER  blocks;
+C      LIMSYM  ---  limit on the number of  $PARAMETER  symbols (names);
+C      LIMBLK  ---  Average number of references of each symbol;
+C      LIMBLK  ---  Average length of symbols, in bytes.
+C   F77 versions of ATP will process the card as F95 ATP would, but then will
+C   ignore the 4 integers since tables are fixed.  Data thus remains universal.
+C   F95 dimensions on next card   LIMBLK  LIMSYM  MULUSE  LENAVG
+C $PARAMETER     <TABLE LIMITS:       20      80       2      15
+C      Used as above until 24 October 2006.  Then add 5th integer  MINBYT  which
+C      is a little different and has meaning whether F95 or F77:
+C      MINBYT  ---  Minimum length of symbols to avoid warning text. Default = 6
+C   F95 dimensions on next card   LIMBLK  LIMSYM  MULUSE  LENAVG  MINBYT
+$PARAMETER     <TABLE LIMITS:         20      80       2      15       5
+C
+C  *****************************************
+C   Converter transformer
+C  *****************************************
+C connect a D/Y  3.75 MVA transformer
+C     x = 6.5%   x = 10**2/3.75 = 26.67 ohm  * 0.065 = 1.7336 ohm
+C     current 3750/10/sqrt(3)  =  216.8 A  imag = 5 A
+C   !!!! delta has three times the reactancee
+$PARAMETER
+C R50= 0.133 ohm
+RTRNSF = 0.133 * (1.0 + 0.2 * (KNT -1.0 )** 1.5))
+C L50= X50 /2.pi.f= 0.016555H= 16.555 mH
+LTRNSF = 16.555 * KNT**(-0.03)
+BLANK card ends  $PARAMETER  block
+$UNITS, 0.0,0.0
+  TRANSFORMER                5.0  40.0     X
+            9999
+ 1TC10A TC10B             RTRNSFLTRNSF  10.0
+ 2LV6A  GRV                 .000 .0001  .360
+  TRANSFORMER      X                       Y
+ 1TC10B TC10C
+ 2LV6B  GRV
+  TRANSFORMER      X                       Z
+ 1TC10C TC10A
+ 2LV6C  GRV
+$UNITS, -1.0,-1.0
+  GRV                       5.0
+C
+  LV6A  CONVA              .0001
+  LV6B  CONVB              .0001
+  LV6C  CONVC              .0001
+C         transformer HV capacitance phase to tank
+  TC10A                               .0010
+  TC10B                               .0010
+  TC10C                               .0010
+C         transformer LV capacitance phase to tank
+  TC10A                               .0023
+  TC10B                               .0023
+  TC10C                               .0023
+C         transformer LV capacitance phase to phase
+  TC10A TC10B                         .0015
+  TC10B TC10C                         .0015
+  TC10C TC10A                         .0015
+C
+C ***********************************************
+C   PWM drive transformer
+C ******************************************
+C connect a Y/D  1.00 MVA transformer
+C     x = 6.5%   x = 10**2/1.00 = 100.0 ohm  * 0.065 = 6.50 ohm
+C     imag = 1.5 A , r = 0.5 ohm/ph
+  TRANSFORMER                5.0  40.0    XX
+            9999
+ 1TR10A                     .400 6.500  5.78
+ 2LW6A  LW6B                .001 .0001  .660
+  TRANSFORMER     XX                      YY
+ 1TR10B
+ 2LW6B  LW6C
+  TRANSFORMER     XX                      ZZ
+ 1TR10C
+ 2LW6C  LW6A
+C
+  LW6A                    1.0E4               { to eliminate delta wdg. problem
+C
+C  *****************************************
+C     PWM drive source  PWMS
+C  *****************************************
+  LP6A  PWMSA             .10010  {  to injection bus }
+  LP6B  PWMSB             .10010
+  LP6C  PWMSC             .10010
+C  *****************************************
+C   Services Transformer
+C  *****************************************
+C     x = 6.5%   x = 10**2/1.00 = 100.0 ohm  * 0.065 = 6.50 ohm
+C     imag = 1.5 A , r = 0.5 ohm/ph
+C
+  TRANSFORMER                3.0  40.0    AX
+            9999
+ 1TR10A TR10B               .800 19.00  10.0
+ 2LS3A  GRS                 .001 .0001  .220
+  TRANSFORMER     AX                      AY
+ 1TR10B TR10C
+ 2LS3B  GRS
+  TRANSFORMER     AX                      AZ
+ 1TR10C TR10A
+ 2LS3C  GRS
+  GRS                       1.0
+C   ******************************
+C     Induction motor    500 kW
+C   ******************************
+$PARAMETER
+C   frequency dependence of locked rotor impedance
+C   locked rotor impedance.   Only the R component is frequency dependent
+C   Motor : 3ph, 0.38 kV, 550 kVA, slip = 0.8%, locked rotor reactance = 27%
+C   rrotor   =  slip *   V(kV)**2 /  MVA
+C      rrmot = 0.008 * (0.38**2 / .5 5) = 0.0021 ohm/ph
+C   the locked rotor inductance assuming xd' = 27%
+C   Xlmot  = 0.27 * (0.38**2 / .5 5) = 0.00709 ohm/ph
+C   note the underscores making up the 6 char. names, only for those variables
+C   which are passed to the network data
+C   the constant KNT is made equal to h in ATP
+C   note that that the source anle MOTSA is adjusted to obtain approx 550 KVA
+XMOT__= 0.27 * 0.38**2/0.55
+SLIP  = 0.008                                   $$
+RMOTS = 0.008 * 0.38**2/0.55                    $$
+C    the following expression is MOD(h,3)
+HMOD  = ( KNT - 3.0 * TRUNC (KNT/3.0))          $$
+C     test for the sequence number
+Z     = (-1.0) ** HMOD                          $$
+HS1   = (KNT + Z)                               $$
+C     HS is the "harmonic slip"
+HS    = (HS1 + SLIP)/KNT                        $$
+RMOT__= RMOTS/HS
+BLANK card ends  $PARAMETER  definitions
+C ------______------______------______------______
+  LS3A  MOTA              RMOT__XMOT__                                         1
+  LS3B  MOTB              RMOT__XMOT__
+  LS3C  MOTC              RMOT__XMOT__
+  MOTA  MOTSA             .00001    { source separation
+  MOTB  MOTSB             .00001
+  MOTC  MOTSC             .00001
+C
+C   ******************************
+C     load  380 V,  400 kW, 0.9 p.f.
+C   ******************************
+C  Frequency dependent load (C.I.G.R.E. #3 model) on bus LOAD
+  LS3A  LODA              .00001
+  LS3B  LODB              .00001
+  LS3C  LODC              .00001
+C
+        <LOAD> CIGRE A,B,C           0.073             2.0            0.74
+  LODA  <LOAD3LODB  LODC             200.0         133000.          66500.
+C
+BLANK end of BRANCH data ------------------------------------------------------|
+C
+C  SWITCHES
+C _____^_____^_________^_________^_________^
+C  nod1  nod2    measure current in 10 kV feeder
+  BSA   BSMA        -1.0      10.0                                             1
+  BSB   BSMB        -1.0      10.0
+  BSC   BSMC        -1.0      10.0
+C ------------__________----------__________-----------------------------------+
+C  switch to the 5th filter
+  FIMT5AFILT5A      -1.0      10.0
+  FIMT5BFILT5B      -1.0      10.0
+  FIMT5CFILT5C      -1.0      10.0
+C
+C  switch to the 7th filter
+  FIMT7AFILT7A       1.0      10.0
+  FIMT7BFILT7B       1.0      10.0
+  FIMT7CFILT7C       1.0      10.0
+C
+C  switch to the PWM drive
+  LW6A  LP6A        -1.0      10.0
+  LW6B  LP6B        -1.0      10.0
+  LW6C  LP6C        -1.0      10.0
+C
+BLANK card ending switch cards
+  POLAR OUTPUT VARIABLES { 2nd of 3 alternatives gives mag, angle (not mag only)
+C  all frequencies in terms of harmonic order
+14SRCA       8150.00        1.        0.
+14SRCB       8150.00        1.      240.
+14SRCC       8150.00        1.      120.
+C
+C    Voltage source for the induction motor
+14MOTSA       307.50        1.      -40.
+14MOTSB       307.50        1.      200.
+14MOTSC       307.50        1.       80
+C    current injection at converter bus  CONVA,B,C
+C    3000 kVA  fundamental 2890 r.m.s. 4075 A peak
+C       s/c at converter 600 V bus approx 30 MVA
+C     the fundamental
+14CONVA -1   727.321      0.33   -310.00
+14CONVB -1   727.321      0.33   -190.00
+14CONVC -1   727.321      0.33    -70.00
+C
+14CONVA -1   727.321       0.5   -310.00
+14CONVB -1   727.321       0.5   -190.00
+14CONVC -1   727.321       0.5    -70.00
+C
+14CONVA -1  4075.000       1.0   -170.00
+14CONVB -1  4075.000       1.0     70.00
+14CONVC -1  4075.000       1.0    -50.00
+C    harmonic sources      h       angle
+14CONVA -1   727.321       5.0   -310.00
+14CONVB -1   727.321       5.0   -190.00
+14CONVC -1   727.321       5.0    -70.00
+C
+14CONVA -1   463.262       7.0   -110.00
+14CONVB -1   463.262       7.0   -230.00
+14CONVC -1   463.262       7.0   -350.00
+C
+14CONVA -1   206.488      11.0   -250.00
+14CONVB -1   206.488      11.0   -130.00
+14CONVC -1   206.488      11.0    -10.00
+C
+14CONVA -1   137.259      13.0    -50.00
+14CONVB -1   137.259      13.0   -170.00
+14CONVC -1   137.259      13.0    190.00
+C
+14CONVA -1    62.675      17.0   -190.00
+14CONVB -1    62.675      17.0    -70.00
+14CONVC -1    62.675      17.0   -310.00
+C
+14CONVA -1    48.096      19.0   -350.00
+14CONVB -1    48.096      19.0   -110.00
+14CONVC -1    48.096      19.0   -230.00
+C    current injections for the PWM drive on 600 V bus PWMSA,B,C
+C     750 kVA        722.5 A, 1019 A peak
+14PWMSA -1  1019.000       0.5    145.00
+14PWMSB -1  1019.000       0.5    385.00
+14PWMSC -1  1019.000       0.5    265.00
+C
+14PWMSA -1  1019.000      0.75    145.00
+14PWMSB -1  1019.000      0.75    385.00
+14PWMSC -1  1019.000      0.75    265.00
+C
+14PWMSA -1  1019.000       1.0    145.00
+14PWMSB -1  1019.000       1.0    385.00
+14PWMSC -1  1019.000       1.0    265.00
+C
+C    harmonic sources      h       angle
+C    61%
+14PWMSA -1   621.600       5.0    185.00
+14PWMSB -1   621.600       5.0    305.00
+14PWMSC -1   621.600       5.0     65.00
+C    34%
+14PWMSA -1   346.500       7.0    295.00
+14PWMSB -1   346.500       7.0    175.00
+14PWMSC -1   346.500       7.0     55.00
+C     4%
+14PWMSA -1    40.800      11.0    335.00
+14PWMSB -1    40.800      11.0     95.00
+14PWMSC -1    40.800      11.0    215.00
+C     7.8%
+14PWMSA -1    79.500      13.0     85.00
+14PWMSB -1    79.500      13.0    325.00
+14PWMSC -1    79.500      13.0    205.00
+C     1.2%
+14PWMSA -1    12.300      17.0    125.00
+14PWMSB -1    12.300      17.0    245.00
+14PWMSC -1    12.300      17.0      5.00
+C     1.5%
+14PWMSA -1    15.300      19.0    235.00
+14PWMSB -1    15.300      19.0    115.00
+14PWMSC -1    15.300      19.0    355.00
+BLANK  card ending all source cards
+NEXT FREQUENCY FOR SERIES RLC       500.  { Elevated frequency for interpolation
+  LOD1A                    16.33  0.83
+  LOD1B                    16.33  0.83
+  LOD1C                    16.33  0.83
+BLANK card ending frequency-dependent data
+  TR10A LS3A  LOD1A
+BLANK card ends requests for node voltage output
+ 14690. 0. 400.         LOD1A
+BLANK card ends batch-mode plot requests
+BEGIN NEW DATA CASE
+C         19th of 21 subcases is added  25 November 2001  following corrections
+C         to handle subharmonic data from Gabor Furst (see DC-22).  This subcase
+C         began as separate disk file  PARATEST.DAT    Like the preceding subcase
+C         this one involves HFS and subharmonics.  But it was fundamentally more
+C         difficult because  POCKET CALCULATOR VARIES PARAMETERS (PCVP) also is
+C         involved,  and harmonic number h is used within a  $PARAMETER  block
+C         to define branches as a function of frequency.  Because of the use of
+C         "h" within  $PARAMETER,  the initial harmonic number  HARNUM  must be
+C         defined manually using the new  MINIMUM HARMONIC NUMBER  declaration.
+POWER FREQUENCY, 50.0
+HARMONIC FREQUENCY SCAN
+POCKET CALCULATOR VARIES PARAMETERS            0       1
+C                                 HARNUM    
+MINIMUM HARMONIC NUMBER             .333    { E8.0 value in columns 33-40
+    .001     0.0     50.   { Note non-positive Tmax is required for batch-mode plotting
+       1       1       0       0       1
+C     Source bus 10.0 kV   95 MVA
+  SRCA  BSA               .0001
+  SRCB  BSB               .0001
+  SRCC  BSC               .0001
+$PARAMETER
+C RVARIS = KNT * 1.0  ---  Gabor Furst's original definition
+RVARIS = H * 1.0         { WSM's replacement uses new harmonic number "h"
+BLANK card ends $PARAMETER definitions (here, just one)
+  BSA                     RVARIS                                               1
+  BSB                     RVARIS                                               1
+  BSC                     RVARIS                                               1
+BLANK card ends branches
+BLANK card ends all switches (none here)
+  POLAR OUTPUT VARIABLES   { Both phasor magnitude and angle will be outputted
+C    harmonic sources      h       angle
+C  WSM adds 1st of 2 subharmonics at 50/3 Hz (harmonic number 1/3):
+14SRCA        100.00      .333        0.
+14SRCB        100.00      .333      240.
+14SRCC        100.00      .333      120.
+C  WSM adds 2nd of 2 subharmonics at 100/3 Hz (harmonic number 2/3):
+14SRCA        100.00     .6667        0.
+14SRCB        100.00     .6667      240.
+14SRCC        100.00     .6667      120.
+C  The following are Gabor Furst's original sources:
+14SRCA        100.00        1.        0.
+14SRCB        100.00        1.      240.
+14SRCC        100.00        1.      120.
+C
+14SRCA        100.00       2.0        0.
+14SRCB        100.00       2.0      240.
+14SRCC        100.00       2.0      120.
+C
+14SRCA        100.00       5.0        0.
+14SRCB        100.00       5.0      240.
+14SRCC        100.00       5.0      120.
+C
+14SRCA        100.00      10.0        0.
+14SRCB        100.00      10.0      240.
+14SRCC        100.00      10.0      120.
+BLANK card ending frequency dependent cards (none for this data)
+BLANK  card ending all source cards
+  SRCA  { Names of nodes for node voltage output (just one, here)
+C  First  1     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C For each variable, magnitude is followed immediately by angle.  Both halves of the pair are labeled identically, note.
+C   Step   F [Hz]       SRCA       SRCA       BSA        BSA        BSB        BSB        BSC        BSC
+C                                             TERRA      TERRA      TERRA      TERRA      TERRA      TERRA
+C   .333     16.65        100.        0.0  300.21015        0.0  300.21015      -120.  300.21015       120.
+C New parameter values follow:  1) .6667
+C  .6667    33.335        100.        0.0  149.97001        0.0  149.97001      -120.  149.97001       120.
+C New parameter values follow:  1)   1.0
+C      1       50.        100.        0.0  99.990001        0.0  99.990001      -120.  99.990001       120.
+BLANK card ends node names for node voltage output
+C New parameter values follow:  1)   2.0
+C      2      100.        100.        0.0    49.9975        0.0    49.9975      -120.    49.9975       120.
+C New parameter values follow:  1)   5.0
+C      5      250.        100.        0.0    19.9996        0.0    19.9996      -120.    19.9996       120.
+C New parameter values follow:  1)   10.
+C     10      500.        100.        0.0     9.9999        0.0     9.9999      -120.     9.9999       120.
+C Variable maxima :        100.        0.0  300.21015        0.0  300.21015      -120.  300.21015       120.
+C F [Hz] of maxima:       16.65      16.65      16.65      16.65      16.65        50.      16.65      16.65
+C Variable minima :        100.        0.0     9.9999        0.0     9.9999      -120.     9.9999       120.
+C F [Hz] of minima:       16.65      16.65       500.      16.65       500.      16.65       500.      16.65
+  CALCOMP PLOT  { It never hurts to declare the graphic plot mode explicitly
+ 19650. 0. 500.         BSA           { Produce bar chart of a current magnitude
+BLANK card ends batch-mode plot cards
+BEGIN NEW DATA CASE
+C         20th of 21 subcases is related to the 3rd.  Voltage sources are
+C         converted to current sources in order to illustrate a generalization
+C         that became effective  20 January 2002.  Luciano Tonelli of CESI in
+C         Milano, Italy, had requested more than one current source at a given
+C         node.  This was in E-mail of the EEUG list server two days earlier.
+C         Prior to the change,  ATP should have halted on the 2nd source,  but
+C         instead it continued with the scan to produce the wrong answer (it
+C         would appear that only the final source at a node was being honored).
+C         Well, the power-frequency source is split in two, each having half the
+C         amplitude.  This should change nothing.  The same goes for the 200-Hz
+C         contribution.  The answer should be unaffect by this splitting.
+C         two or more sources at the same node,  for any given frequency.
+PRINTED NUMBER WIDTH, 11, 2,    { Each column of width 11 includes 2 blank bytes
+POWER FREQUENCY, 50., ! Needed so mimimum frequency is recognized as fundamental
+C HARMONIC FREQUENCY SCAN     -1.0     DELFFS < 0 ==> log F (not F) in .PL4 file
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F) 
+     1.0     0.0
+       1       1       1       0       1  { Note request for phasor branch flows
+  SWIT  LOAD                 10.                                               3
+  NONE                       2.0                                               1
+  LOAD                           1000.
+-1SWIT  OPEN               .3055  5.82  .012   1.0   { One mile of DC-37 line
+BLANK card ending all branches
+  GEN   SWIT         -1.                                                       1
+BLANK card ending all switch cards
+C 14GEN   -1       1.0       50.       0.0  { Note comment and no negative T-start
+C    The preceding power-frequency source is being split into two halves that
+C    have the same total (amplitude 1.0 = 0.4 + 0.6):
+14GEN   -1       0.4       50.       0.0  { Note comment and no negative T-start
+14GEN   -1       0.6       50.       0.0  { Note comment and no negative T-start
+14GEN   -1       1.3      100.       0.0  { Note comment and no negative T-start
+C 14GEN   -1       1.5      200.       0.0  
+C    The preceding 200-Hz source is being split into two halves that
+C    have the same total (amplitude 1.5 = 1.0 + 0.5):
+14GEN   -1       1.0      200.       0.0  
+14GEN   -1       .50      200.       0.0  
+C    If the following 3rd source at 200 Hz were activated, the result should
+C    be an error stop (code is protected beginning 20 Jan 2002):
+C 14GEN   -1       0.5      200.       0.0  
+14GEN   -1       1.4      300.       0.0
+BLANK card ending source cards
+BLANK card ending F-dependent series R-L-C branches (none, for this subcase)
+  GEN   LOAD   { Names of nodes for voltage output
+BLANK card ends output requests (just node voltages, for FREQUENCY SCAN)
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C Only the magnitude of each variable is outputted.  This is the default choice,  which was not superseded by any request.
+C   Step   F [Hz]       SWIT       GEN        LOAD       GEN        SWIT       NONE
+C                       LOAD                             SWIT       LOAD       TERRA
+C      1       50.   10.011858  314.69109  314.53178        1.0  1.0011858        0.0
+C      2      100.    13.06188  820.80606  820.70213        1.3   1.306188        0.0
+C      3      200.   15.289746  1921.4269  1921.3661        1.5  1.5289746        0.0
+C      4      300.   14.623551  2756.5132  2756.4744        1.4  1.4623551        0.0
+C Variable maxima :  15.289746  2756.5132  2756.4744        1.5  1.5289746        0.0
+C F [Hz] of maxima:       200.       300.       300.       200.       200.        50.
+C Variable minima :  10.011858  314.69109  314.53178        1.0  1.0011858        0.0
+C F [Hz] of minima:        50.        50.        50.        50.        50.        50.
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         21st of 21 subcases is unrelated to the preceding 16.   Instead,  it
+C         is similar to DC-8,  and it uses a copy of the punched cards created 
+C         by the 3rd subcase of DC-36.  Answers of the present subcase are same
+C         as  DC8.LIS  because of the degenerate nature of the dependency that
+C         is being used.   Other than the name of the disk file in the  $INCLUDE 
+C         usage below,  following non-comment data is the same as that of DC-8.
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+$SUFFIX, .dat       { File name of  $INCLUDE  will be followed by this file type
+    .005     4.0    { DELTAT and TMAX are in fact arbitrary, since no simulation
+       1      -1       1       1       1      
+TACS HYBRID
+99 FIRE1  = TIMEX
+99 FIRE2  = TIMEX
+99 FIRE3  = TIMEX
+13FAKE                                                                          
+98 FIRE452+UNITY                                      1.    0.    0.      TIMEX 
+98 FIRE552+UNITY                                      1.    0.    0.      TIMEX 
+98 FIRE652+UNITY                                      1.    0.    0.      TIMEX 
+BLANK card ends all  TACS  data
+C   The following two cards easily could be combined into a single one.  But  we
+C   want to illustrate continuation cards.  Note no "C" in col. 1 (the old way):
+$INCLUDE,  dcn21inc,  ACNOD,  #MINUS,   ##PLUS,      $$  { Branch & switch cards
+           #FIRE,  ##MID    { use continuation (request "$$") as an illustration
+BLANK card ending  BRANCH  cards    { Key word "BRANCH" needed for sorting, note
+BLANK card ending  SWITCH  cards    { Key word "SWITCH" needed for sorting, note         
+$STOP     { After switches read, modularization & sorting are confirmed, so halt
+EOF  ----  Needed so "OVER1" or "SPYING" ("DATA") ends input here during reading 
+======================================================================
+C     The following is a view of  DCN21INC.DAT,  as created by the 3rd
+C     subcase of DC-36.  Note 1st KBEG has minus sign due to "DEP" use
+======================================================================
+KARD  1  3  3  4  4  5  5  6  6  7  7  8  8  9  9 10 10 11 11 12 12 13 13 14 14
+     15 15 15 16 16 16 17 17 17 18 18 18 19 19 19 20 20 20 22 22 22 23 23 23 24
+     24 24 25 25 25 26 26 26 27 27 27
+KARG  6  1  5  1  5  1  5  1  5  1  5  1  5  3  5  3  5  3  5  3  5  3  5  3  5
+      1  2  6  1  2  6  1  2  6  1  3  6  1  3  6  1  3  6  2  4  5  2  4  5  2
+      4  5  1  4  5  1  4  5  1  4  5
+KBEG -7  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9
+      3  9 39  3  9 39  3  9 39  3  9 39  3  9 39  3  9 39  9 65  3  9 65  3  9
+     65  3  9 65  3  9 65  3  9 65  3
+KEND 12  7 13  7 13  7 13  7 13  7 13  7 13  8 13  8 13  8 13  8 13  8 13  8 13
+      7 14 44  7 14 44  7 14 44  7 14 44  7 14 44  7 14 44 14 69  7 14 69  7 14
+     69  7 13 69  7 13 69  7 13 69  7
+KTEX  0  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
+      1  1  0  1  1  0  1  1  0  1  1  0  1  1  0  1  1  0  1  1  1  1  1  1  1
+      1  1  1  1  1  1  1  1  1  1  1
+      CAP_44 = 1000. * 1.E-4 { Associated formula for evaluation during $INCLUDE
+/BRANCH
+C3  Begin with anode reactors and parallel resistors (6 pairs):
+  _NODEA__MID1             3000.
+  _NODEA__MID1                     1.0
+  _NODEB__MID3             3000.
+  _NODEB__MID3                     1.0
+  _NODEC__MID5             3000.
+  _NODEC__MID5                     1.0
+  __PLUS__MID4             3000.
+  __PLUS__MID4                     1.0
+  __PLUS__MID6             3000.
+  __PLUS__MID6                     1.0
+  __PLUS__MID2             3000.
+  __PLUS__MID2                     1.0
+C3  Next come the snubber circuits, across valves and anode reactors:
+  _NODEA_MINUS             1200.      CAP_44    { 1st of 6 replaces 0.1 in 39-44
+  _NODEB_MINUS             1200.      CAP_44    { 2nd of 6 ....
+  _NODEC_MINUS             1200.      CAP_44
+  _NODEA__PLUS             1200.      CAP_44
+  _NODEB__PLUS             1200.      CAP_44
+  _NODEC__PLUS             1200.      CAP_44
+C3  Next come the valves:
+/SWITCH
+11__MID1_MINUS                                                  _FIRE2
+11__MID3_MINUS                                                  _FIRE4
+11__MID5_MINUS                                                  _FIRE6
+11__MID4_NODEA                                                  _FIRE5
+11__MID6_NODEB                                                  _FIRE1
+11__MID2_NODEC                                                  _FIRE3
+$EOF   User-supplied header cards follow.         11-Nov-18  11.00.00
+ARG, _NODE, _MINUS, __PLUS,
+ARG, _FIRE, __MID
+DEP, CAP_44
+BEGIN NEW DATA CASE
+BLANK

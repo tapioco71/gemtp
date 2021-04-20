@@ -1,0 +1,17 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-23
+C       Beginning of DC-17,  designed to illustrate input data sorting by class.
+C       It  should be executed with  IPRSUP = IPRSPY = 9  in the  STARTUP  file.
+C       There also will be program initialization diagnostic as well (valuable).
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+$PREFIX, \WSM/   { Warning!  Different computers will have different prefixes
+$SUFFIX, .DAT       {           preceding the name on $INCLUDE below, generally.
+$LEVEL, 4
+    .020     4.0
+       1       1       1       1       1      -1
+       5       5      20      20
+$INCLUDE  DC17INCL1,  9    .005  TRAN##
+BLANK card ending  BRANCH  cards
+BLANK card ending  SWITCH  cards (none exists, for this case)
+C       Since all we want to illustrate is sorting and initial input, stop next:
+$STOP

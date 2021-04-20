@@ -1,0 +1,478 @@
+BEGIN NEW DATA CASE
+C        5th of 5 subcases illustrates the modeling of Static Var Control (SVC).
+C        This is very similar to the preceding 4th case except that here newer
+C        MODELS  replaces  TACS  for the control system modeling.   The same
+C        Gabor Furst of suburban Vancouver, British Columbia, Canada contributed
+C        this during February of 1995 (see January and April newsletters).  To
+C        speed the simulation,  TMAX = 0.6  has been reduced to  0.10 sec.
+NEW LIST SIZES
+       0       0      68       8     450      35     285       0       0       0
+       0       0    4700       0   64800       0       0       0       0       0
+       0       0     220                                  126000
+  240000     742
+PRINTED NUMBER WIDTH, 11, 1,   { Restore defaults after preceding aberations
+C DELTAT    TMAX    XOPT    COPT  EPSILN  TOLMAT
+C 46.296-6   0.600     60.  ----  Gabor Furst's original data card
+.0000462962962962963,  0.250,  60.,     ,       ,       ,              , , , , ,
+C   the time step is the cycle time 1/60 sec. divided by 360 degrees
+C   IOUT   IPLOT  IDOUBL  KSSOUT  MAXOUT    IPUN  MEMSAV    ICAT  NENERG  IPRSUP
+C   9999       1       0       1       1                       
+       1      -3       1       2       1      -1
+       5       5      20      20     100     100     500     500
+C    The running of this MODELS file requires the latest version of TPbig
+C    with the increased list sizes for MODELS
+C
+C    The example demonstrates a generic SVC connected to  a 230/34.5 kV
+C    step-down transformer, with an SVC reactor rating of 100 MVA.
+C    The SVC is tested by switching on and off a 25 MVA 0.7 p.f.
+C    load on the 34.5 kV bus
+C           plot vatiable 'vllavg' for SVC response
+C ==============================================================================
+MODELS
+  INPUT trma {v(TRSA)}  -- transf. sec. voltage
+        trmb {v(TRSB)}
+        trmc {v(TRSC)}
+--
+        irab {i(RMAB)} --  aux. reactor delata current
+        irbc {i(RMBC)}
+        irca {i(RMCA)}
+--
+        itra {i(TRXA)}  -- transf. sec. current
+        itrb {i(TRXB)}
+        itrc {i(TRXC)}
+--
+        rxab {i(TRXA)}  -- main reactor current
+        rxbc {i(TRXB)}
+        rxca {i(TRXC)}
+--
+   OUTPUT             --  firing signals
+        FIAB1, FIAB2,  FIBC1,  FIBC2,  FICA1, FICA2   -- firing signals
+        FRLA,   FRLB,  FRLC  --  reactor switching
+--
+MODEL svcmod    -- MODELS version of DC 22 subcase 4
+--
+--
+DATA  omega {dflt: 2*pi*freq}
+      dt {dflt :0.25/freq}
+--
+CONST freq {val: 60}
+      tper {val: 1/freq}
+      qtcr {val: 33.3*1E+6}       -- p.u. SVC reactor rating/phase
+      qref {val: 0.00}            -- set 0 for this example
+      delin {val: 0.25/freq}      -- initialization for firing delay (60Hz)
+      tpimp {val: 0.200}          --  test reactor switching cycle
+       ton  {val: 0.100}           -- reactor on time
+       tstart {val: 0.3}           -- start of switching reactors
+--
+VAR
+  tt, vllavg, vllmax, vll12p , qrnew, ttt1, ttt2, ttt3
+   dvq, error, fdb,  vref, verr, inreact, delyi
+   vtrsec[1..3], vtrff[1..3]
+   f1[1..3], f2[1..3], ficat[1..3], fian[1..3],del[1..3],i,k,l,ir[1..3]
+   vrms[1..3], itr[1..3], tri[1..3], trv[1..3], qin[1..3]
+   errq[1..3], qincr[1..3]
+--
+  HISTORY    vtrsec[1..3] {dflt:[0,0,0]}   -- transf. ph-g voltages
+             vtrff[1..3] {dflt:[0,0,0]}    -- transf. ph-ph voltages
+--
+             dvq {dflt: 0}      -- forward block output
+             error {dflt: 0}    -- error signal
+             fdb {dflt: 0}      -- feedback
+--
+             ir[1..3] {dflt :[0,0,0]}   -- aux. reactor delata current
+            itr[1..3] {dflt :[0,0,0]}   -- trsf. sec. current
+            del[1..3] {dflt :[0,0,0]}   --  firing pulse delay angles
+--
+   INPUT  trma  {dflt: trma}   -- trsf sec. voltage ph-g
+          trmb  {dflt: trmb}
+          trmc  {dflt: trmc}
+--
+          irab {dflt: irab}    --  svc reactor currents
+          irbc {dflt: irbc}
+          irca {dflt: irca}
+--
+          itra {dflt: itra}    -- transf. sec. current
+          itrb {dflt: itrb}
+          itrc {dflt: itrc}
+--
+          rxab {dflt: 0}        --  main reactor delta current
+          rxbc {dflt: 0}
+          rxca {dflt: 0}
+--
+   OUTPUT
+       ficat[1..3], fian[1..3]  -- firing signals to thyristors
+       ttt1, ttt2, ttt3         -- control signal to switch reactors
+--
+   INIT
+          vref:= 1.0             -- reference voltage
+          verr:= 0               -- voltage error
+          tt   := timestep/tper  --  integration multiplier
+          vrms[1..3] := 0
+          ficat[1..3]:= 0        -- firing pulse to cathode
+          fian[1..3]:= 0         --  firing pulse to anode
+          qin[1..3]:= 0.3        --  rective power
+          ttt1:= 0               --  test rector breaker control
+--
+  ENDINIT
+--
+DELAY CELLS DFLT: 100
+      CELLS(vtrsec[1..3]):500
+      CELLS(vtrff[1..3]):500
+--
+--    liearization of angel versus p.u. current through thyristors
+  FUNCTION dely POINTLIST
+--          angle          current
+         (    0.0,          0.0)
+         ( 0.0022,        0.111)
+         ( 0.0176,        0.222)
+         ( 0.0575,        0.333)
+         ( 0.1306,        0.444)
+         ( 0.2414,        0.555)
+         ( 0.3900,        0.666)
+         ( 0.5718,        0.777)
+         ( 0.7783,        0.888)
+         ( 1.0000         1.000)
+--
+--          **************   EXEC ****************
+EXEC
+--       convert to arrays
+       ir[1..3] := [irab, irbc, irca]
+       vtrsec[1..3] := [trma, trmb, trmc]
+--
+--       control signals for the type 12 switches in EMTP
+--       to switch test reactors
+--        the following is a pulse train  0.1/0.1 on/off  starts at 0.2 s
+     ttt1:=  AND((t-tstart) MOD  tpimp < ton , t-tstart)
+       ttt2 := ttt1
+       ttt3 := ttt1
+--
+--      form phase to phase voltages and normalize
+       vtrff[1] :=(trma - trmb)/34500
+       vtrff[2] :=(trmb - trmc)/34500
+       vtrff[3] :=(trmc - trma)/34500
+--
+--      calculation of voltage rms values
+   FOR i := 1 TO 3 DO
+  vrms[i]:= sqrt(vrms[i]**2 + tt*(vtrff[i]**2 - delay(vtrff[i], tper)**2))
+  ENDFOR
+--
+--      calculate reactive through transformer
+--                qina, qinb, qinc
+--     see DC22-3 for explanation
+      itr[1..3]  := [itra, itrb, itrc]
+      FOR i:= 1 TO 3 DO
+      tri[i]:= delay(itr[i],tper/4)
+      trv[i]:= delay(vtrsec[i],tper/4)
+      qin[i] := (-vtrsec[i]*tri[i] * 0.5 + itr[i]* trv[i] * 0.5)/ qtcr
+      ENDFOR
+--
+--      generate firing pulses  500 microsec wide
+--
+       if t> timestep then
+--
+       FOR i := 1 TO 3 DO
+          f1[i]:= AND(ir[i] >= 0, delay(ir[i],0.0005) < 0 )
+          f2[i]:= AND(ir[i] <= 0, delay(ir[i],0.0005) > 0 )
+       ENDFOR
+--       delayed pulses caclulated
+--       by var and voltage control
+      FOR i:= 1 TO 3 DO
+      ficat[i] := delay(f1[i],del[i]) -- cathode
+      fian[i]  := delay(f2[i],del[i]) -- anode
+      ENDFOR
+      endif
+--          average  ph-ph voltage normalized
+    vllavg := 0.3333 * (vrms[1] + vrms[2] + vrms[3]) {max: 1.15 min : 0.85}
+--
+--      alternative to above but not used in this model
+--      12 pulse rectfication with output smoothed  alternative to rms signal
+--      smoothing rough, should be done with 120 c/s filter, not used here
+--      shown as possible alternative only
+--   vllmax := (max(abs(vtrff[1]), abs(vtrff[2]), abs(vtrff[3])))/1.41
+--   laplace(vll12p/vllmax) := 1.0|s0 / ( 1|s0 + 0.030|s1 )
+--
+--     voltage error forward and feedback loop
+      verr:= vllavg - vref
+--     combine endcombine used because forward - feedback loop
+    COMBINE  AS first_group
+       error   := sum( 1|vllavg - 1|vref - 1|fdb)
+--                     forward gain . 1/1+stdelay
+       laplace(dvq/error)  :=  400.0|s0/(1.0|s0 + 0.003|s1)
+--                      derivative feedback
+       claplace(fdb/dvq ) :=  0.005|s1 / (1.0|s0 + 0.012|s1 )
+    ENDCOMBINE
+--
+     FOR i := 1 TO 3 DO
+--    total error   the qref - qin[i] component may be omitted
+--                  it is usefull for unbalanced loads
+       errq[i]  := (dvq + qref - qin[i]){ min:0 max:1.0}
+     ENDFOR
+--           calculate new firing angles
+--          phase A
+      FOR  i:= 1 TO 3 DO
+      k:= (i+4) mod 3   if k=0 then k:=3  endif   -- k is phase B
+      l := (i+5) mod 3  if l=0 then l:= 3  endif  -- l is phase C
+--    apply phase unbalance correction
+      inreact:=  errq[i]  + errq[k] -errq[l] {max: 1.0  min: 0.0}
+--    linearize and convert from firing angle to time delay
+      delyi  := delin - dely(inreact ) * dt
+      claplace(del[i]/delyi){dmax: (dt-0.0001) dmin: 0.0}:=
+             1.0|s0/(1.0|s0 + 0.005|s1)
+      ENDFOR
+--
+ENDEXEC
+ENDMODEL
+USE svcmod AS test
+  INPUT trma:= trma   trmb:= trmb    trmc:= trmc
+        irab:= irab   irbc:= irbc    irca:= irca
+        itra:= itra   itrb:= itrb    itrc:= itrc
+--
+  OUTPUT  FIAB1 := ficat[1]  FIAB2 := fian[1]   FIBC1 := ficat[2]
+          FIBC2 := fian[2]   FICA1 := ficat[3]  FICA2 := fian[3]
+          FRLA  := ttt1      FRLB  := ttt2      FRLC  := ttt3
+ENDUSE
+C
+RECORD test.vrms[1] AS vrmsab
+       test.vrms[2] AS vrmsbc
+       test.vrms[3] AS vrmsca
+       test.vllavg AS vllavg
+       test.error  AS error
+       test.dvq    AS dvq
+       test.fdb    AS fdb
+       test.verr   AS verr
+ENDMODELS
+C    **************   NETWORK DATA  *********************
+C
+C         *********  LINE TO SOURCE ***********
+C
+C          transmission line (equivalent) from GEN source to transformer
+  GENA  TRFA                 4.5  25.0
+  GENB  TRFB                 4.5  25.0
+  GENC  TRFC                 4.5  25.0
+C     fault level at trsf. 230 kV approx. 2083 MVA
+C
+C      **************   MAIN TRANSFORMER  **************
+C
+C         transformer capacitance to ground 10000pF
+C       a very simple model, can be replaced with any more complex model
+C            transformer  230000/34500 Y/D 100 MVA; In=250 A
+C             x = 7.2% on 100 MVA
+C       230^2/100* 0.07 = 37.0 ohms trsf. leakage reactance
+C TRANSFORMER busref      imag  flux  busin rmag          empty
+C ------------______------______------______------_____________________________-
+C
+C      no saturation
+  TRANSFORMER                0.7 700.0     X
+             0.7           700.0        {   100%
+            9999
+ 1TRPA                      0.80  36.0  1330
+ 2TRXA  TRXB                      1.00   375      {385
+  TRANSFORMER      X                       Y
+ 1TRPB
+ 2TRXB  TRXC
+  TRANSFORMER      X                       Z
+ 1TRPC
+ 2TRXC  TRXA
+C
+C         transformer capacitance to ground and ph - ph 10000pF
+  TRXA                                 0.01
+  TRXB                                 0.01
+  TRXC                                 0.01
+C         capacitance between phases
+  TRXA  TRXB                           0.01
+  TRXB  TRXC                           0.01
+  TRXC  TRXA                           0.01
+C
+C      ***********  HARMONIC FILTERS  ***************
+C
+C       5th harmonic filter  20 MVAR
+  TRSA  TF5                       2.38 44.6                                    1
+  TRSB  TF5                       2.38 44.6
+  TRSC  TF5                       2.38 44.6
+C       7th harmonic filter  10 MVAR
+  TRSA  TF7                       2.43 22.3                                    1
+  TRSB  TF7                       2.43 22.3
+  TRUC  TF7                       2.43 22.3
+C
+C      ********  TRANSFORMER SECONDARY LOAD ***************
+C                       70 MW, 30 MVAR
+  TRSA  ND                 13.67  5.47
+  TRSB  ND                 13.67  5.47
+  TRSC  ND                 13.67  5.47
+C
+C         shunt capacitor    20 MVAR
+  TRSA                                 44.5
+  TRSB                                 44.5
+  TRSC                                 44.5
+C       **********  SWITCHED REACTOR FOR SVC RESPONSE TEST *********
+C
+C        switched .1 sec. on .1 sec. off
+C           see switch type 13 below and type 23 source in TACS
+C           25.0 MVA, 0.7 p.f.,17.5 MW, 17.5 MVAR load
+C
+  XLA   NSR                 34.0  34.0
+  XLB   NSR                 34.0  34.0
+  XLC   NSR                 34.0  34.0
+C
+C         **************  SNUBBERS  **************
+C
+C         the snubber parameters shown below are not necessarily the
+C         values a manufacturer would choose for a 34.5 kV valve.
+C         The parameters were selected so that only a small currrent flows
+C         through the control reactor with the valves non conducting,
+C         and overvoltages and spikes interfering with the firing control
+C         are prevented.  It is quite possible that a better combination
+C         than that shown exists.
+C
+C       in series with valves
+C
+  CATAB RXAB                 .1
+  ANOAB RXAB                 .1
+  CATAB RXAB                       4.0
+  ANOAB RXAB                       4.0
+C
+  CATBC RXBC                 .1
+  ANOBC RXBC                 .1
+  CATBC RXBC                       4.0
+  ANOBC RXBC                       4.0
+C
+  CATCA RXCA                 .1
+  ANOCA RXCA                 .1
+  CATCA RECA                       4.0
+  ANOCA RXCA                       4.0
+C
+C   across valves
+C
+  CATAB TRSA               2000.         .1
+  ANOAB TRSA               2000.         .1
+C
+  CATBC TRSB               2000.         .1
+  ANOBC TRSB               2000.         .1
+C
+  CATCA TRSC               2000.         .1
+  ANOCA TRSC               2000.         .1
+C
+C      *************   SVC CONTROLLED REACTOR   *************
+C
+C     reactor in  TCR  appr. 100.0 MVA   Xr = 3 * 34.5^2/100 =35.71 ohm
+  RXAB  TRSB                 0.1 35.71                                         1
+  RXBC  TRSC                 0.1 35.71
+  RXCA  TRSA                 0.1 35.71
+C
+C       ***************   REACTOR FOR FIRING PULSE GENERATION ******
+C
+C      Fire angle reference measurement using delta connected reactors
+C       TRSA - RMXA is just a dummy separation from the main 34.5 kV bus
+  TRSA  RMXA                0.01                                               1
+  TRSB  RMXB                0.01
+  TRSC  RMXC                0.01
+C    The reactors are delta connected through measuring switches below
+  RMAB  RMXB               200. 20000.
+  RMBC  RMXC               200. 20000.
+  RMCA  RMXA               200. 20000.
+C
+BLANK    end of branch data
+C      ***************   SWITCH  DATA ***************8
+C
+C  current measurement in the auxiliary reactor for firing pulse generation
+C   these switches complete the delta connection of the reactors
+C   (Rule Book p.6A-9)
+  RMXA  RMAB                                          MEASURING                1
+  RMXB  RMBC                                          MEASURING                1
+  RMXC  RMCA                                          MEASURING                1
+C
+C       current measurement in the main transformer secondary
+  TRXA  TRSA                                          MEASURING
+  TRXB  TRSB                                          MEASURING
+  TRXC  TRSC                                          MEASURING
+C       current measurement in the main transformer prinmary
+  TRFA  TRPA                                          MEASURING
+  TRFB  TRPB                                          MEASURING
+  TRFC  TRPC                                          MEASURING
+C
+C    switch for on/off switching the 36.6 MVAR resistive-reactive load
+C   (Rule Book p. 6C-1)
+12TRSA  XLA                                                     FRLA           1
+12TRSB  XLB                                                     FRLB           1
+12TRSC  XLC                                                     FRLC           1
+C
+C   VALVES
+C     6 valves, 2 per phase, 3ph. 6 pulse supply to TCR
+C    Rule Book p. 6B-1
+11TRSA  CATAB       100.   35.0                                 FIAB1          1
+11ANOAB TRSA        100.   35.0                                 FIAB2          1
+11TRSB  CATBC       100.   35.0                                 FIBC1          1
+11ANOBC TRSB        100.   35.0                                 FIBC2          1
+11TRSC  CATCA       100.   35.0                                 FICA1          1
+11ANOCA TRSC        100.   35.0                                 FICA2          1
+C
+BLANK    end of switch data
+C
+C    AC sources
+C    230 kV  supply
+14GENA       187794.       60.        0.                           -1.
+14GENB       187794.       60.      240.                           -1.
+14GENC       187794.       60.      120.                           -1.
+C --------------+------------------------------
+BLANK   end of source cards
+C Output for steady-state phasor switch currents.
+C      Node-K    Node-M            I-real            I-imag            I-magn          Degrees        Power            Reactive
+C      RMXA      RMAB         -3.17345114E-01   -2.67576742E+00    2.69452022E+00     -96.7637    2.09775607E+04    3.61648260E+04
+C      RMXB      RMBC         -2.12134217E+00    1.60058257E+00    2.65743432E+00     142.9649    2.09695693E+04    3.53656824E+04
+C      RMXC      RMCA          2.43868728E+00    1.07518486E+00    2.66518633E+00      23.7920    2.09657040E+04    3.49791488E+04
+C      TRXA      TRSA          1.76533509E+03   -7.18577071E+02    1.90598032E+03     -22.1487    2.86013546E+07   -7.52002129E+06
+C      TRXB      TRSB         -1.72807188E+03   -1.23147874E+03    2.12197369E+03    -144.5251    3.19664433E+07   -7.48308730E+06
+C      TRXC      TRSC         -3.72632074E+01    1.95005582E+03    1.95041181E+03      91.0947    2.95359580E+07   -4.27738942E+06
+C      TRFA      TRPA          3.28283686E+02    4.77795448E+01    3.31742465E+02       8.2809    3.05772339E+07   -5.86201921E+06
+C      TRFB      TRPB         -1.59252346E+02   -2.98767203E+02    3.38560410E+02    -118.0590    3.15136653E+07   -2.50950856E+06
+C      TRFC      TRPC         -1.69031340E+02    2.50987658E+02    3.02599402E+02     123.9589    2.81393539E+07   -3.10623904E+06
+C      TRSA      XLA               Open              Open   ....  Etc.  (all remaining switches)
+C
+C 1st gen:    GENA            187794.          187794.      328.28368576688  331.74246523436      .308248532425E8  .311496222581E8
+C                                 0.0              0.0      47.779544776826        8.2808819      -.44863559159E7        0.9895739
+  TRSA  TRFA  { Node voltage output requests
+C   Step      Time      TRSA       TRFA       RMXA       RMXB       RMXC       TRSA       TRSB       TRSC       TRSA       ANOAB
+C                                             RMAB       RMBC       RMCA       XLA        XLB        XLC        CATAB      TRSA
+C
+C                       TRSB       ANOBC      TRSC       ANOCA      TRSA       TRSA       RXAB       TRSA       MODELS     MODELS
+C                       CATBC      TRSB       CATCA      TRSC       TF5        TF7        TRSB       RMXA       VRMSAB     VRMSBC
+C
+C                       MODELS     MODELS     MODELS     MODELS     MODELS     MODELS
+C                       VRMSCA     VLLAVG     ERROR      DVQ        FDB        VERR
+C ***      Phasor I(0) = -3.1734511E-01                     Switch  "RMXA  "  to  "RMAB  "  closed in the steady-state.
+C ***      Phasor I(0) = -2.1213422E+00                     Switch  "RMXB  "  to  "RMBC  "  closed in the steady-state.
+C ***      Phasor I(0) =  2.4386873E+00                     Switch  "RMXC  "  to  "RMCA  "  closed in the steady-state.
+C ***      Phasor I(0) =  1.7653351E+03                     Switch  "TRXA  "  to  "TRSA  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.7280719E+03                     Switch  "TRXB  "  to  "TRSB  "  closed in the steady-state.
+C ***      Phasor I(0) = -3.7263207E+01                     Switch  "TRXC  "  to  "TRSC  "  closed in the steady-state.
+C ***      Phasor I(0) =  3.2828369E+02                     Switch  "TRFA  "  to  "TRPA  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.5925235E+02                     Switch  "TRFB  "  to  "TRPB  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.6903134E+02                     Switch  "TRFC  "  to  "TRPC  "  closed in the steady-state.
+C      %%%%%   Floating subnetwork found!   %%%%%%  %%%%%%  %%%%%%  %%%%%%
+C      %%%%%  The elimination of row  "NSR   "  of nodal admittance matrix [Y] has produced a near-zero diagonal value  Ykk =
+C             0.00000000E+00   just prior to reciprocation.  The acceptable minimum is  ACHECK = 7.63336829E-12   (equal to EPSILN
+C             times the starting Ykk).   This node shall now to shorted to ground with  1/Ykk = FLTINF.
+C      0       0.0  24822.5855 187511.212 -.31734511 -2.1213422 2.43868728        0.0        0.0        0.0        0.0        0.0
+C                          0.0        0.0        0.0        0.0 326.187397 29.5320244 .821163836 -2.7560324 .081656838 .049551491
+C                   .032105347        .85 -.06597164 -.20205709 -.08402836       -.15
+C      1 .46296E-4  25143.8244 187629.636 -.27059939 -2.1489524 2.41955179        0.0        0.0        0.0        0.0        0.0
+C                          0.0        0.0        0.0        0.0 318.550308 25.5246044 .751598004 -2.6901512  .11560122 .069281865
+C                   .046333037        .85 .007233288 -.37886586 -.15723329       -.15
+C      2 .92593E-4  25457.4046 187690.907 -.22377124 -2.1759081 2.39967932        0.0        0.0        0.0        0.0        0.0
+C                          0.0        0.0        0.0        0.0  310.81619 21.5094097 .681803238 -2.6234506 .141715842 .083875142
+C                    .05788498        .85 -.00219819 -.35764251 -.14780181       -.15
+BLANK  end of output requests
+C   2160     0.1  25442.1108 187482.902 -.29572787 -2.0263455 2.32207338        0.0        0.0        0.0        0.0        0.0
+C                        0.0 446.298599 628.655556        0.0 345.907577 19.1485236 1.55331048 -2.6178013 1.04264625 1.03011633
+C                 1.03191977 1.03479063 .001835206 .694094165 .032955423 .034790629
+C Variable max :  32517.4234 188770.564 2.64330646 2.62732109 2.77231282        0.0        0.0        0.0 1348.22398 803.124119
+C                 642.762722 650.617284 745.361533 2455.49747 704.329689 384.313276 1348.22403  4.4384447 1.11468111 1.09242273
+C                 1.09954303 1.10117116 .007233288 .694094165 .100809554 .101171165
+C Times of max :  .018842593 .033425926 .021018519 .026759259 .032268519        0.0        0.0        0.0 .004490741     .09625
+C                 .093333333       .085 .099027778 .007083333 .097222222 .013101852 .004490741 .022453704 .034768519 .037407407
+C                 .035046296 .034861111 .462963E-4        0.1 .034907407 .034861111
+  PRINTER PLOT
+ 193.01 0.0 .10         MODELSDVQ                    { Limits:  (-7.141,  6.930)
+BLANK   end of plot requests
+BEGIN NEW DATA CASE
+BLANK 

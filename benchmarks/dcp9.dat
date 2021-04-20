@@ -1,0 +1,60 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-9
+C       Like preceding case number 7, only with balanced 3-phase excitation here
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+DIAGNOSTIC           0 9 9 9 9 9 0 9 9 9 9 9 9 3 9 9 9 9 9
+     .05     1.0     60.     60.
+       1       1       1       1       1      -1
+       2      -1
+  RECA                      .001      { Short the receiving end through  R=1.E-3
+  RECB                      .001      { ohm resistors,  so  that lots of current
+  RECC                      .001      { will flow (no subtle effects here!).
+ 1SENDA RECA                 1.0   1.0  1.E4
+ 2SENDB RECB                 0.7   0.3 -2.E3   1.0   1.0  1.E4
+ 3SENDC RECC                 0.7   0.3 -2.E3   0.7   0.3 -2.E3   1.0   1.0  1.E4
+BLANK card ending branch cards
+  GENA  SENDA       -1.0       9.0
+  GENB  SENDB       -1.0       9.0
+  GENC  SENDC       -1.0       9.0
+BLANK card ending switch cards
+14GENA          100.       1.0       0.0                           -1.
+14GENB          100.       1.0     -120.                           -1.
+14GENC          100.       1.0     +120.                           -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   4.975913322375E+04
+C                                Output for steady-state phasor switch currents.
+C         Node-K    Node-M            I-real            I-imag            I-magn
+C         GENA      SENDA     0.33172755E+03   -0.12847657E+02    0.33197625E+03
+C         GENB      SENDB    -0.17699017E+03   -0.28086066E+03    0.33197625E+03
+C         GENC      SENDC    -0.15473738E+03    0.29370832E+03    0.33197625E+03
+C Last inject:     GENC
+C Last inject:     SENDC     -50.     100.       -154.737380025  331.97625355128
+C Last inject:    86.602540378444   120.000000  293.70831814053      117.7820691
+C  Step    Time        RECC         RECB         RECA         SENDC        SENDB
+C
+C                      GENC
+C ***     Phasor I(0) =  0.3317276E+03    Switch  "GENA  "  to  "SENDA "  closed
+C ***     Phasor I(0) = -0.1769902E+03    Switch  "GENB  "  to  "SENDB "  closed
+C ***     Phasor I(0) = -0.1547374E+03    Switch  "GENC  "  to  "SENDC "  closed
+C    0     0.0    -.15472869  -.176998863  .3317275535         -50.         -50.
+C                       -50.
+C    1     .05   -.237782502  -.081702388  .3194848903  -74.3144825  -20.7911691
+C                -74.3144825
+ 1
+C    2     0.1   -.297802788  .0218130975  .2759896908  -91.3545458  10.45284633
+C                -91.3545458
+C   20     1.0   -.154632329  -.177086923  .3317192528         -50.         -50.
+C                       -50.
+C Variable max : .3285470726  .3312545968  .3317275535  99.45218954  99.45218954
+C                99.45218954
+C Times of max :         .65          .35          0.0          .65          .35
+C                        .65
+C Variable min : -.328525683  -.331257201  -.331719199  -99.4521895  -99.4521895
+C                -99.4521895
+C Times of min :         .15          .85          0.5          .15          .85
+C                        .15
+  PRINTER PLOT                                  { Axis limits : (-3.317,  3.317)
+ 143 .1 0.0 1.0         RECA   { This receiving end voltage is nice & sinusoidal
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

@@ -1,0 +1,15 @@
+/REQUEST
+U.M. HEADER CARD { To be followed by significant middle card of U.M. Class 1
+ 0                             { In fact, a blank card would suf
+/UM
+C   Note that there is no Class-1 U.M. data;  ATP will supply the Type-19 card.
+ 4 1 1111BUS-3M       2 0.06                       0.18850   { 1st machine table
+0.0           0.020291      0
+0.0           0.020291      0
+0.063         0.0001911     BUS-A4            1 0.0           { 1st winding card
+0.063         0.0003925     BUS-B4            1 0.0
+0.063         0.0003925     BUS-C4            1 0.0
+0.083         0.0003925     BUSRB4            1 0.0
+0.083         0.0003925     BUSRC4            1 0.0
+0.083         0.0003925     BUSRA4            1 0.0 { 6th and final winding card
+C 14BUSRA1  180.0      60.0     0.0

@@ -1,0 +1,12 @@
+C constant-param. distributed line model:
+C single-phase 110-kV overhead line, l=50 km.
+C  <++++++>  Cards punched by support routine on  26-Oct-97  23.05.12  <++++++>
+C    **** TRANSPOSED  Line calculated at   5.000E+01 HZ. ****
+C LINE CONSTANTS
+C METRIC
+C   10.311 0.116   4          2.19    4.9      16.4    16.4
+C BLANK CARDS ENDING CONDUCTOR CARDS WITHIN "LINE CONSTANTS" DATA
+C   100.       50.00         1      1   1    0  50.                    0
+$VINTAGE, 1
+-1BEG1__END1__             1.63917E-01 5.77155E+02 2.49305E+05LENGTH______ 1
+$VINTAGE, 0

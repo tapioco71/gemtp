@@ -1,0 +1,165 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-32
+C     Artificial  6-pulse  dc  power supply  that  illustrates the simulation of
+C     diodes.  It was concocted in July of 1977  to  instruct Hughes Aircraft in
+C     Fullerton, California (Emory Johnson, Gene Perusse, and assoc.).   Use  of
+C     MEMSAV = 1 dumps tables for later restarting and modification (see DC-49).
+C     It is assumed that  STARTUP  has  KTRPL4 < 0  and  L4BYTE = 1  so  that  a
+C     C-like ".PL4" file having name  DC32.PL4  will be created (used by DC-49).
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+ .000020    .010
+       1       1       1       1       1      -1       1       2
+       5       5      10      10      50      50
+C           Three 2-winding saturable transformers having unity turns ratios are
+C           delta-connected on the source side,  and grounded-Y on the rectifier
+C           side.  The magnetizing branch is both nonlinear and lossy:
+  TRANSFORMER                .01   .05TRANA   1.E5                             1
+             .01             .05
+             .02             .06
+             .05             .07
+             .15             .08
+            9999
+ 1GENA  GENB                 .06   .01  115.
+ 2SECA                       .06   .01  115.
+  TRANSFORMER TRANA                   TRANB                                    1
+ 1GENB  GENC
+ 2SECB
+  TRANSFORMER TRANA                   TRANC                                    1
+ 1GENC  GENA
+ 2SECC
+C          Small impedance branches are used (prior to "M34." generalized switch
+C          logic) to isolate switches from each other at  "POLEA".   R = 5 ohms.
+C          Although in theory such isolation is no longer required,  do  not try
+C          to remove these 9 resistors,  since  they  provide necessary damping.
+C          Note that these resistors are not of negligible value:
+  CATH1 POLEA                5.0
+  CATH2 POLEA CATH1 POLEA
+  CATH3 POLEA CATH1 POLEA
+C          More small impedances used for switch isolation at node  "POLEB", and
+C          also at the transformer secondary. Half the value of "POLEA" is used,
+C          for balance:
+  CATH4 SECC                 2.5
+  CATH5 SECA  CATH4 SECC
+  CATH6 SECB  CATH4 SECC
+  AN4   POLEB CATH4 SECC
+  AN5   POLEB CATH4 SECC
+  AN6   POLEB CATH4 SECC
+C      2-conductor distributed line connects  "POLE"  with  "LOAD".   Inductance
+C      parameters  are  5.8  and  1.6 millihenries for the ground and sky modes,
+C      respectively.  Length is five miles.  Values are typical for 500 kV line:
+-1POLEA LOADA                0.3   5.8  .012   5.0
+-2POLEB LOADB                .03   1.6  .019   5.0
+C                            Large stray capacitance ties the dc side to ground:
+  POLEA                                 100.
+  POLEB       POLEA
+C          Load on dc side is parallel 200 ohm R and 100 microfarad capacitance:
+  LOADA LOADB               200.
+  LOADA LOADB                           100.
+C        One-ohm grounding resistance, for later fault (see DC-49 continuation).
+  LOADA FAULT                1.0
+BLANK card ending all branch cards
+C       First switch is to be the fault switch (open here, and closed in DC-49):
+  FAULT              1.0       2.0
+C     Bridge circuit consisting of 6 uncontrolled valves  (i.e., diodes).  Those
+C     numbered  1, 2, and 3  feed  "POLEA",   making it positive with respect to
+C     ground.   Diodes  4, 5, and 6  feed  "POLEB",  making it negative.
+11SECB  CATH1                                                                 13
+11SECA  CATH2                                         CLOSED                  13
+C       The following card serves  to  name the switch following it.  To see the
+C       results of this activity,  interactively execute the "SWITCH" command of 
+C       SPY,  sending  "EXTRA"  for the alternative table.   Another point: note
+C       the exclamation point, which is needed to hold lower case within A6 name
+C       (assuming  KINSEN = 1  within STARTUP).   No such control for valve six.
+  NAME: Valve3 !  { Request "NAME: " of cols. 3-8 precedes A6 valve name in 9-14
+11SECC  CATH3                                                                 13
+11AN4   CATH4                                         CLOSED                  13
+11AN5   CATH5                                                                 13
+  NAME: Valve6  { Request "NAME: " of columns 3-8 precedes A6 valve name in 9-14
+11AN6   CATH6                                         CLOSED                  13
+BLANK card terminating the last switch card
+C      Balanced 3-phase source of 400 Hz is connected to transformer delta side:
+14GENA        93.897      400.      -30.                           -1.
+14GENB        93.897      400.     -150.                           -1.
+14GENC        93.897      400.       90.                           -1.
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        TRANA  |GENA  *GENB  *GENB  *GENB  *
+C        GENA   |TRANA *TRANC *TRANC *TRANC *
+C        GENB   |TRANA *TRANA *TRANA *TRANB *
+C        SECA   |TERRA *CATH2 *CATH5 *
+C        TRANB  |GENB  *GENC  *GENC  *GENC  *
+C        GENC   |TRANB *TRANB *TRANB *TRANC *
+C        SECB   |TERRA *CATH1 *CATH6 *
+C        TRANC  |GENA  *GENA  *GENA  *GENC  *
+C        SECC   |TERRA *CATH3 *CATH4 *
+C        CATH1  |SECB  *POLEA *
+BLANK card ending all source cards
+C       Total network loss  P-loss  by summing injections =   5.464331532263E+03
+C Last inject: GENC  .5749502208E-14    93.897  .56200164704342  55.017880322583
+C Last inject:                93.897  90.00000  55.015009854937       89.4147197
+C          ---- Initial flux in coil  "TRANA "  to  "GENB  "  =  -5.34394317E-04
+C          ---- Initial flux of coil  "TRANB "  to  "GENC  "  =  -5.51987844E-02
+C          ---- Initial flux of coil  "TRANC "  to  "GENA  "  =   5.55634966E-02
+C    Step      Time       SECB        SECA        SECC        AN4            AN5
+C                         CATH1       CATH2       CATH3       CATH4        CATH5
+C
+C                         AN6         AN5         AN4         CATH6        CATH5
+C
+C                         TRANC       TRANB       TRANA       POLEB        POLEA
+C
+C                         GENB        GENC        SECB        SECA          SECC
+C                                                 CATH1       CATH2        CATH3
+C                         TRANB       TRANC
+C                         GENC        GENA
+C  ***      Phasor I(0) =  1.6873295E+01  Switch  "SECA  "  to  "CATH2 "  closed
+C  ***      Phasor I(0) =  2.4078446E+00  Switch  "AN4   "  to  "CATH4 "  closed
+C  ***      Phasor I(0) =  2.9476803E+00  Switch  "AN6   "  to  "CATH6 "  closed
+C       0       0.0   -159.68633         0.0  -156.98715         0.0   -229.3144
+C                     -75.303917  -67.934716  -73.954328  -75.303917  161.379687
+C                     .671413046  -81.994732  80.6896357  -67.934716  77.0132094
+C                     -81.317187  .57495E-14         0.0  16.8732954         0.0
+C                     -.01344725  .013015515
+C       1     .2E-4   -156.60201         0.0  -167.73205         0.0  -230.84408
+C                     -72.617115  -69.533258  -78.182135  -72.617115  161.310826
+C                      -3.989552  -79.633884  83.0140826  -69.533258  80.9010357
+C                     -78.855585  -4.7177907         0.0  16.0819581         0.0
+C                     -.01676789   .01388141
+C            Diode   "AN6   "  to  "CATH6 "  opening after  4.00000000E-05  sec.
+C   Note: LUNIT2 = 22  and lower-case  ".bin"  (maintained by exclamation point)
+C         are  critical details  of the following connection of file for tables:
+C $OPEN, UNIT=22  FILE=dc32to49.bin    ! { All we need for C-like usage by Salford
+$OPEN, UNIT=22  FILE=dc32to49.bin  STATUS=NEW  FORM=UNFORMATTED !
+ 1                                        { Request for all node voltage outputs
+C Last step: 501  .01002   -214.9097     0.0  -230.24759  -54.516468  -303.96907
+C Last step: -141.81435 -141.81435 -141.81435 -71.959981  162.154725  -87.297878
+C Last step: -4.2249272 -77.760947 83.4315479 -141.81435  142.949714  -87.297878
+C Last step: -78.855585 -4.7177907       0.0  3.84100209         0.0         0.0
+C Last step: -.01674763 .013984083
+C Variable maxima :   6.75796709  10.2225472  7.99663598   5.4523958  4.41773517
+C                     -55.736451  -57.621411   -60.99918  162.583272  162.349471
+C                     94.2715412  94.2204174  94.5734275  -57.621411  157.838356
+C                     93.8961762  93.8895863  15.8739724  19.1582929  16.8070015
+C                     .036546956  .033001353
+C Times of maxima :        .0081      .00206      .00894      .00526      .00334
+C                         .00258      .00262      .00186      .00584        .005
+C                         .00938      .00854      .00522      .00262        .006
+C                         .00354      .00938      .00326      .00244      .00166
+C                         .00646       .0098
+C Variable minima :   -307.90065  -319.51502  -314.74562  -314.64493   -305.0677
+C                     -157.13852  -159.69143   -157.2627  -154.31324  -159.94136
+C                     -94.501887  -94.313812  -94.506969  -157.13852   55.660011
+C                     -93.876407  -93.889586  -.89624956  -.45248549  -.74181951
+C                     -.03163582  -.03508457
+C Times of minima :       .00706      .00624      .00544      .00666      .00502
+C                           .006      .00624      .00546       .0071      .00616
+C                         .00564       .0048      .00646        .006      .00224
+C                          .0098      .00312      .00372      .34E-3      .00216
+C                          .2E-3      .00604
+  PRINTER PLOT
+ 144 1. 0.0 10.         LOADA LOADB              { Axis limits: (-1.637,  1.618)
+$WIDTH, 79,   { Narrow output width will save paper from here on (summary stats)
+BLANK card ending the last plot cards
+BEGIN NEW DATA CASE
+BLANK
+ 

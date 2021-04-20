@@ -1,0 +1,118 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-28
+C   Verify correct operation of all of Laurent Dube's own 78 test cases.  Since
+C   these date to 1995,  and already exist as separate disk files in a separate
+C   directory,  we will continue to use that storage by means of the following
+C   request (a comment card, note) which serves to concatenate one data subcase
+C   from each of the  $INCLUDE  files named.
+C CONCATENATE INCLUDE FILES
+C $PREFIX, []    { $INCLUDE files are located in same place as this main data file
+$PREFIX, \ld\testmodl\  { $INCLUDE files are located in same place as this main data file
+$SUFFIX, .dat       { All files used with  $INCLUDE  end with  .dat  file type
+C   Data file  ERRSTP  tests the MODELS error stop in the subroutine of this
+C   same name.  At first,  this was placed last,  in case recovery would fail
+C   because of the recursive  CALL MAIN10  that Dube used.  But after both
+C   Salford and GNU Mingw32 ATP successfully handled 10 such consecutive
+C   recoveries in succession,  it was decided that this is the way the standard
+C   test case would be left:
+$INCLUDE, ERRSTP  ,    { Number 75 of Laurent Dube's own test cases,   1 of 10
+$INCLUDE, ERRSTP  ,    { Number 75 of Laurent Dube's own test cases,   2 of 10
+$INCLUDE, ERRSTP  ,    { Number 75 of Laurent Dube's own test cases,   3 of 10
+$INCLUDE, ERRSTP  ,    { Number 75 of Laurent Dube's own test cases,   4 of 10
+$INCLUDE, ERRSTP  ,    { Number 75 of Laurent Dube's own test cases,   5 of 10
+$INCLUDE, ERRSTP  ,    { Number 75 of Laurent Dube's own test cases,   6 of 10
+$INCLUDE, ERRSTP  ,    { Number 75 of Laurent Dube's own test cases,   7 of 10
+$INCLUDE, ERRSTP  ,    { Number 75 of Laurent Dube's own test cases,   8 of 10
+$INCLUDE, ERRSTP  ,    { Number 75 of Laurent Dube's own test cases,   9 of 10
+$INCLUDE, ERRSTP  ,    { Number 75 of Laurent Dube's own test cases,  10 of 10
+C     Warning.  If all the preceding can not be handled by some program version,
+C     try deleting 9 of the 10 tries,  and restoring the remaining line to the
+C     end,  where it first had been placed.  23 April 2001.  WSM.
+$INCLUDE, TYP94-T1,    { Number  1 of Laurent Dube's own test cases
+$INCLUDE, TYP94-T2,    { Number  2 of Laurent Dube's own test cases
+$INCLUDE, TYP94-T3,    { Number  3 of Laurent Dube's own test cases
+$INCLUDE, TYP94-T4,    { Number  4 of Laurent Dube's own test cases
+$INCLUDE, TYP94-T5,    { Number  5 of Laurent Dube's own test cases
+$INCLUDE, TYP94-T6,    { Number    of Laurent Dube's own test cases
+$INCLUDE, TYP94-T7,    { Number    of Laurent Dube's own test cases
+$INCLUDE, NONEXIST,    { Demonstrate rejection of a non-existant file
+$INCLUDE, ARVAL   ,    { Number  6 of Laurent Dube's own test cases
+$INCLUDE, ATAN2   ,    { Number  7 of Laurent Dube's own test cases
+$INCLUDE, LAP2Z   ,    { Number  8 of Laurent Dube's own test cases
+$INCLUDE, COMB1I  ,    { Number  9 of Laurent Dube's own test cases
+$INCLUDE, TYP94-N1,    { Number 10 of Laurent Dube's own test cases
+$INCLUDE, TYP94-N2,    { Number 11 of Laurent Dube's own test cases
+$INCLUDE, TYP94-N3,    { Number 12 of Laurent Dube's own test cases
+$INCLUDE, TYP94-N4,    { Number 13 of Laurent Dube's own test cases
+$INCLUDE, TYP94-N5,    { Number 14 of Laurent Dube's own test cases
+$INCLUDE, TYP94-N6,    { Number 15 of Laurent Dube's own test cases
+$INCLUDE, TYP94-N7,    { Number 16 of Laurent Dube's own test cases
+$INCLUDE, TYP94-N8,    { Number    of Laurent Dube's own test cases
+$INCLUDE, TYP94-N9,    { Number    of Laurent Dube's own test cases
+$INCLUDE, COMB1   ,    { Number 17 of Laurent Dube's own test cases
+$INCLUDE, COMB2   ,    { Number 18 of Laurent Dube's own test cases
+$INCLUDE, COMB3   ,    { Number 19 of Laurent Dube's own test cases
+$INCLUDE, COMB4   ,    { Number 20 of Laurent Dube's own test cases
+$INCLUDE, FOR     ,    { Number 21 of Laurent Dube's own test cases
+$INCLUDE, DO      ,    { Number 22 of Laurent Dube's own test cases
+$INCLUDE, IF      ,    { Number 23 of Laurent Dube's own test cases
+$INCLUDE, TYP94-I1,    { Number 24 of Laurent Dube's own test cases
+$INCLUDE, TYP94-I2,    { Number 25 of Laurent Dube's own test cases
+$INCLUDE, TYP94-I3,    { Number 26 of Laurent Dube's own test cases
+$INCLUDE, TYP94-I4,    { Number 27 of Laurent Dube's own test cases
+$INCLUDE, TYP94-I5,    { Number 28 of Laurent Dube's own test cases
+$INCLUDE, TYP94-I6,    { Number    of Laurent Dube's own test cases
+$INCLUDE, TYP94-I7,    { Number    of Laurent Dube's own test cases
+$INCLUDE, LAP1    ,    { Number 29 of Laurent Dube's own test cases
+$INCLUDE, LAP2    ,    { Number 30 of Laurent Dube's own test cases
+$INCLUDE, LAP3    ,    { Number 31 of Laurent Dube's own test cases
+$INCLUDE, LAP1Z   ,    { Number 32 of Laurent Dube's own test cases
+$INCLUDE, LAPDIF  ,    { Number 33 of Laurent Dube's own test cases
+$INCLUDE, COMM    ,    { Number 34 of Laurent Dube's own test cases
+$INCLUDE, CURRTEST,    { Number 35 of Laurent Dube's own test cases
+$INCLUDE, DELAY1  ,    { Number 36 of Laurent Dube's own test cases
+$INCLUDE, DELAY2  ,    { Number 37 of Laurent Dube's own test cases
+$INCLUDE, DERIVLIM,    { Number 38 of Laurent Dube's own test cases
+$INCLUDE, DLIM    ,    { Number 39 of Laurent Dube's own test cases
+$INCLUDE, DPOL    ,    { Number 40 of Laurent Dube's own test cases
+$INCLUDE, EXPR    ,    { Number 41 of Laurent Dube's own test cases
+$INCLUDE, SINLIM2 ,    { Number 42 of Laurent Dube's own test cases
+$INCLUDE, FTNFUN  ,    { Number 43 of Laurent Dube's own test cases
+$INCLUDE, FTNMODEL,    { Number 44 of Laurent Dube's own test cases
+$INCLUDE, GLOCST  ,    { Number 45 of Laurent Dube's own test cases
+$INCLUDE, ILIM    ,    { Number 46 of Laurent Dube's own test cases
+$INCLUDE, INIVAL  ,    { Number 47 of Laurent Dube's own test cases
+$INCLUDE, INPUTPOL,    { Number 48 of Laurent Dube's own test cases
+$INCLUDE, ITERUSE ,    { Number 49 of Laurent Dube's own test cases
+$INCLUDE, NUMFUN  ,    { Number 50 of Laurent Dube's own test cases
+$INCLUDE, NUMVAL  ,    { Number 51 of Laurent Dube's own test cases
+$INCLUDE, PEAKTEST,    { Number 52 of Laurent Dube's own test cases
+$INCLUDE, PTLST1  ,    { Number 53 of Laurent Dube's own test cases
+$INCLUDE, PTLST2  ,    { Number 54 of Laurent Dube's own test cases
+$INCLUDE, RANDOM  ,    { Number 55 of Laurent Dube's own test cases
+$INCLUDE, SIMFUN  ,    { Number 56 of Laurent Dube's own test cases
+$INCLUDE, SIMVAR  ,    { Number 57 of Laurent Dube's own test cases
+$INCLUDE, SINLIM  ,    { Number 58 of Laurent Dube's own test cases
+$INCLUDE, STEPMAX ,    { Number 59 of Laurent Dube's own test cases
+$INCLUDE, STEPMIN ,    { Number 60 of Laurent Dube's own test cases
+$INCLUDE, SUM     ,    { Number 61 of Laurent Dube's own test cases
+$INCLUDE, SINLIM3 ,    { Number 62 of Laurent Dube's own test cases
+$INCLUDE, STMTFUN ,    { Number 63 of Laurent Dube's own test cases
+$INCLUDE, TESTALL ,    { Number 64 of Laurent Dube's own test cases
+$INCLUDE, TEST_HST,    { Number 65 of Laurent Dube's own test cases
+$INCLUDE, TOPVAR  ,    { Number 66 of Laurent Dube's own test cases
+$INCLUDE, WHILE   ,    { Number 67 of Laurent Dube's own test cases
+$INCLUDE, WRITE   ,    { Number 68 of Laurent Dube's own test cases
+$INCLUDE, WRITE1  ,    { Number 69 of Laurent Dube's own test cases
+$INCLUDE, ATPVAR  ,    { Number 70 of Laurent Dube's own test cases
+$INCLUDE, BOOLFUN ,    { Number 71 of Laurent Dube's own test cases
+$INCLUDE, CURSW   ,    { Number 72 of Laurent Dube's own test cases
+$INCLUDE, HISTORY ,    { Number 73 of Laurent Dube's own test cases
+$INCLUDE, PTLSTE  ,    { Number 74 of Laurent Dube's own test cases
+C    Following 3 illustrations of user-supplied C language were activated
+C    17 November 2001 following Dr. Tsu-huei Liu's successful linking:
+$INCLUDE, CFUN    ,    { Number 75 of Laurent Dube's own test cases
+$INCLUDE, CMODEL  ,    { Number 76 of Laurent Dube's own test cases
+$INCLUDE, RANDOMC ,    { Number 77 of Laurent Dube's own test cases
+BEGIN NEW DATA CASE
+BLANK

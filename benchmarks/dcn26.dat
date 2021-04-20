@@ -1,0 +1,1334 @@
+BEGIN NEW DATA CASE
+C   1st of 19 subcases that illustrate  POCKET CALCULATOR VARIES PARAMETERS  (the
+C   same as introduced at the end of DCNEW-25) without simulation.  The previous
+C   illustration involved simulation.  Here,  TMAX < 0  ===>  none.  Although
+C   one could save the  .PL4  file,  there is nothing new to illustrate in this
+C   usage,  so it will not be done.  Variable  IOPCVP  controls output for the
+C   2nd or later pass of loop.  The zero illustrated here minimizes output.  If
+C   it is toggled to value 1,  all output of the 1st subcase should be repeated
+C   during the 2nd or later pass.  This is useful for debugging.
+C   Controls of following request card:   MAXKNT  IOPCVP   { Loop 8 times with
+POCKET CALCULATOR VARIES PARAMETERS            8       1   { minimum printout
+PRINTED NUMBER WIDTH, 11, 2,  { Request maximum precision (for 8 output columns)
+   .0001     -1.     50.     50.
+       1       1       1       0       1                       2
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would b
+MHENRY = 1.2 - ( KNT - 1.0 ) * .05    { L =1.2, 1.15, 1.1, etc.
+FREQUENCY = 25. * KNT  { Here we vary the frequency for use on source card
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch card
+  TRAN                       1.0       1.E+5                                   3
+  GEN   TRAN                 1.0MHENRY
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70. FREQUENCY                                     -1.
+BLANK card terminating program source cards.
+  GEN   TRAN
+BLANK card ending program output-variable requests.
+  PRINTER PLOT
+ 19660. 0.0200.         TRAN
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   2nd of 19 subcases that illustrate  PCVP  will superimpose the PCVP loop on
+C   top of a normal  FREQUENCY SCAN  loop.  In fact,  the latter controls the
+C   loop,  so  MAXKNT  is arbitrary and can be ignored.   By design, the
+C   solution to this 2nd subcase is the same as the first.  As for subcase one,
+C   the .PL4 file will not be saved,  although it could be.
+FREQUENCY SCAN, 25., 25., 200., 0,     { 25 < f < 200 Hz  in  25-Hz increments
+C   Controls of following request card:   MAXKNT  IOPCVP   { Ignore MAXKNT value
+POCKET CALCULATOR VARIES PARAMETERS            0       1    { since also FS loop
+PRINTED NUMBER WIDTH, 11, 2,  { Request maximum precision (for 8 output columns)
+   .0001     -1.     50.     50.
+       1       1       1       0       1
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would b
+MHENRY = 1.2 - ( KNT - 1.0 ) * .05    { L =1.2, 1.15, 1.1,  ....
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch card
+  TRAN                       1.0       1.E+5                                   3
+  GEN   TRAN                 1.0MHENRY
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70.       25.                                     -1.
+BLANK card terminating program source cards.
+  GEN   TRAN
+BLANK card ending program output-variable requests.
+  PRINTER PLOT
+ 19660. 0.0200.         TRAN
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   3rd of 19 subcases that illustrate  PCVP  will superimpose the PCVP loop on
+C   top of a normal  HARMONIC FREQUENCY SCAN loop.  In fact, the latter controls
+C   the loop,  so  MAXKNT  is arbitrary and can be ignored.   By design,
+C   solution to this 3rd subcase is the same as the preceding two.  This is an
+C   abnormal, special case (normally, HFS data will skip harmonics, and source
+C   amplitudes will be varied).
+C      27 December 2000,  MODELS  data is added.  Nothing else is changed.  This
+C      use of  MODELS  is imagined as an alternative to  $POCKET  as illustrated
+C      in the following (4th) subcase.  Automatically,  MODELS  is called at the
+C      end of the phasor solution so the user need do nothing more than add his
+C      MODELS data in the usual place.  28 December 2000,  add a switch, too, to
+C      prove that phasor switch current also can be viewed using MODELS.
+POWER FREQUENCY, 25., ! Needed so minimum frequency is recognized as fundamental
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F) 
+C   Controls of following request card:   MAXKNT  IOPCVP   { Ignore MAXKNT value
+POCKET CALCULATOR VARIES PARAMETERS            0       1   { since also HFS loop
+PRINTED NUMBER WIDTH, 11, 2,  { Request maximum precision (for 8 output columns)
+   .0001     -1.     50.     50.
+       1       1       1       0       1
+MODELS
+INPUT v_Re_tran  {v(tran)}        -- real part of voltage at node TRAN
+      v_Im_tran  {imssv(tran)}    -- imag part of voltage at node TRAN
+      i_Re_swit  {i(swit)}        -- real part of current at switch SWIT    
+      i_Im_swit  {imssi(swit)}    -- imag part of current at switch SWIT 
+MODEL m1 -----------------------------------------------------------------------
+ VAR pass, ampl, angle, sum  --  list of all local variables
+ INPUT v_Re_1 {dflt: 0}    -- to verify that real part of node voltage and the
+       v_Im_1 {dflt: 0}    -- imaginary part of node voltage are accessed correctly
+       i_Re_1 {dflt: 0}    -- to verify the    real   part of switch current
+       i_Im_1 {dflt: 0}    -- to verify the imaginary part of switch current
+ INIT  pass:=0
+       sum:=0  ENDINIT
+ EXEC
+  pass:=pass+1
+  ampl:=  sqrt( v_Re_1 **2 +  v_Im_1 ** 2 )  -- Magnitude of the node voltage
+  angle:=  atan2( v_Im_1 , v_Re_1  )  -- Angle in radians of the node voltage
+  sum:= sum + ampl -- Sum the voltage amplitudes for different harmonics
+write('  ************** In MODELS, pass = ', pass, '   freq = ', t )  
+write('  Re{i1}, Im{i1} = ', i_Re_1, ', ', i_Im_1 )
+write('  Re{v1}, Im{v1} = ', v_Re_1, ', ', v_Im_1 )
+write('          Polar  =', ampl, angle )
+write('          Sum of amplitudes =', sum )
+ ENDEXEC
+ENDMODEL
+USE m1 as m1
+ INPUT v_Re_1 := v_Re_tran
+       v_Im_1 := v_Im_tran
+       i_Re_1 := i_Re_swit
+       i_Im_1 := i_Im_swit
+ENDUSE
+ENDMODELS
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would b
+MHENRY = 1.2 - ( KNT - 1.0 ) * .05    { L =1.2, 1.15, 1.1,  ....
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch card
+  TRAN  SWIT                 1.0       1.E+5                                   3
+  GEN   TRAN                 1.0MHENRY
+BLANK card ending program branch cards.
+  SWIT               -1.       1.0                                             1
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70.       25.       0.0  { Note comment and no negative T-start
+14GEN            70.       50.       0.0  { This is normal HFS source data.  It
+14GEN            70.       75.       0.0  { is unusual, however,  because of our
+14GEN            70.      100.       0.0  { match preceding subases.   Unusual
+14GEN            70.      125.       0.0  { for HFS usage,  the amplitude is not
+14GEN            70.      150.       0.0  { varied and all harmonics are present
+14GEN            70.      175.       0.0 
+14GEN            70.      200.       0.0 
+BLANK card ending source cards
+BLANK card ending F-dependent series R-L-C branches (none, for this subcase)
+  GEN   TRAN
+BLANK card ending program output-variable requests.
+  CALCOMP PLOT       { Use BOTH rather than DISK to see a bar chart of harmonics 
+ 19680. 0.0200.         TRAN  SWIT { Units/inch of 5-7 are ingored since bar chart
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   4th of 19 subcases that illustrate  PCVP  comes from Gabor Furst.   As can be
+C   read in the January, 1999, newsletter,  this  is  "a semi-realistic HFS file
+C   ....  This resistance is varied by the Funk-Hantel formula."   Note harmonic
+C   source amplitudes vary (unlike 3rd subcase), and some harmonics are missing.
+C      27 December 2000, modify existing case by addition of  SAVE  and  $POCKET
+C      to illustrate operation of these new features.  Included is  WRITE(  for
+C      output that is part of regular ATP output.
+POWER FREQUENCY, 50., ! Needed so minimum frequency is recognized as fundamental
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F)
+C   Controls of following request card:   MAXKNT  IOPCVP   { Ignore MAXKNT value
+POCKET CALCULATOR VARIES PARAMETERS            0       1   { since also HFS loop
+PRINTED NUMBER WIDTH, 11, 2,  { Request maximum precision (for 8 output columns)
+   .0001     -1.     50.
+       1       1       1       0       1
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would be
+C SAVE ALL   { Until selective SAVEs work better, make all variables non-volatile
+C              The preceding should be necessary.  Instead, it results in KILL
+C              code because following resistance is not encoded right.  So,
+C              remove temporarily.  Amazingly,  variable  SUM  seems believable.
+RESISTANCE = 2.0 * (1.0 + 0.2 * (KNT - 1.0) ** 1.5))  { Funk-Hantel freq. dependence
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch cards
+$VINTAGE, 1,     { Wide:  RRRRRRRRRRRRRRRRLLL ....
+  TRAN                    RESISTANCE                                           3
+$VINTAGE, 0,   { Narrow:  RRRRRRLLLLLLCCCCCC
+  GEN   TRAN              2.0      6.1
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+  POLAR OUTPUT VARIABLES { 2nd of 3 alternatives gives mag, angle (not mag only)
+14GEN         10200.        1.       0.0    { Power freq source has harmonic # 1
+14GEN           500.        3.       0.0  { 3rd harmonic source has harmonic # 3
+14GEN          3000.        5.       0.0
+14GEN          2000.        7.       0.0
+14GEN           600.       11.       0.0
+BLANK card ending source cards
+BLANK card ending F-dependent series R-L-C branches (none, for this subcase)
+  GEN   TRAN
+$POCKET      { This will be serviced by CIMAGE just as any other $-card would be
+C  This is a comment within $POCKET.  It shows they are ignored.  Note placement
+C  of this block as part of node-voltage outputs,  which ensures that it will be
+C  processed after each phasor solution.  If one wanted to perform mathematics
+C  on the solution,  this would be the appropriate location.  About summation,
+C  values should be as follows:  Harmonic # KNT:  1   3   5   7   11
+C                                Summation:       1   4   9  16   27
+STEP = KNT   { Output is allowed only for local variables,  so copy KNT to local
+SUM = SUM + KNT   { Preceding SAVE is for SUM, to accumulate sum of loop numbers
+WRITE( '      -----------------------' ) { Statement can not go beyond column 40
+WRITE( '  >>  Step KNT =', STEP )     $$ { The double dollar => continue on next
+WRITE( '  Value of SUM =', SUM )         { No double dollar ===> end of out line
+WRITE( '      =======================' ) { This separator line  goes on new line
+C         There is a limit on the $$ concatensation.   ATP output line length is
+C         132 bytes maximum.  It is the user's responsibility not to exceed this.
+BLANK card ends  $POCKET  definitions to be processed after each phasor solution
+BLANK card ending program output-variable requests.
+  CALCOMP PLOT       { Use BOTH rather than DISK to see a bar chart of harmonics
+ 19680. 0.0600.         TRAN     { Units/inch of 5-7 are ingored since bar chart
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   5th of 19 subcases is unrelated to the preceding.  Rather, it illustrates the
+C   first use of superposition of phasor solutions.  Success occurred  8 Nov 98.
+C   This is a brand new type of frequency scan.  It is fundamentally different
+C   because of the superposition and continuation into the time-step loop.  In
+C   the following, only the minimum of 2 phasor solutions are superimposed.  The 
+C   more general case will involve repeated sets of excitation.  Each such set
+C   begins with the request word  SUPERIMPOSE MORE SOURCES:  and ends with the       
+C   blank card ending sources.  The final set of excitation is the one actually
+C   used in the time-step loop,  so must include all sources of the preceding
+C   sets,  if this is what the user wants.  Note  T-start  is not negative for
+C   such additions, however.  Initial restriction: series R-L-C branches only.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+     .01     2.0
+       1       1       1       1       1      -1
+       5       5      20      20
+  GEN   TRAN                 1.0   10.                                         3
+  TRAN                                0.20E6                                   1
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            1.0       1.0                                     -1.
+BLANK card terminating source cards for 1st phasor solution.
+  SUPERIMPOSE MORE SOURCES:        { Request for superposition produced by more:
+14GEN            1.0       1.0   { Source of 1st solution represented in dT-loop                                      
+14GEN           -1.0       2.0   { 2nd harmonic source }           -1.
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+  GEN   TRAN
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step    Time        GEN          GEN          TRAN         GEN          TRAN
+C                       TRAN                                   TRAN         TERRA
+C     0     0.0   -.278585723          0.0  .2785857231  -.280475835  -.280475835
+C     1     .01   -.258845905  .0059120271  .2647579317  -.272635821  -.272635821
+C     2     .02   -.228080808  .0235315402  .2516123484  -.253187511  -.253187511
+C     3     .03   -.187201315  .0525107648  .2397120803  -.222823212  -.222823212
+BLANK card ending program output-variable requests.
+C   100     1.0   -.278768592          0.0  .2787685919  -.280624596  -.280624596
+C   120     1.2   .6447560418  1.118033989   .473277947  .6497741745  .6497741745
+C   140     1.4    -1.4363837  -1.11803399  .3183497136  -1.33496603  -1.33496603
+C   160     1.6   -.123925906  -1.11803399  -.994108083  -.293493889  -.293493889
+C   180     1.8   1.194323606  1.118033989  -.076289617  1.259311865  1.259311865
+C   200     2.0   -.278769536          0.0  .2787695359  -.280625592  -.280625592
+C Variable max:   1.417160223  1.124996567  .6739357604  1.408960752  1.408960752
+C Times of max:           .75          .79          1.3          .76          .76
+C Variable min:   -1.69650701          -2.  -1.00648406  -1.68753921  -1.68753921
+C Times of min:          1.46          0.5          .62         1.47         1.47
+  CALCOMP PLOT
+ 143 .2 0.0 2.0         GEN   TRAN  { Screen plot is perfectly smooth & periodic
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C   6th  of 19 subcases extends uncoupled R-L-C elements of the 5th to multiphase 
+C   lumped elements.  Take a real 10-mile, 3-phase Pi-circuit from DC-3.  But we 
+C   want a longer line, so increase frequency to 400 Hz. Of course, single phase
+C   becomes 3-phase.  Line section is terminated by balanced R-L load to ground.
+C   This solution was verified by comparing with one that omitted the second
+C   harmonic during the phasor solution,  and extended T-max to 20 msec.  The
+C   final 5 msec of voltages at  TRANA, TRANB, and TRANC  are very close to the
+C   solution about to be demonstrated.  Also, in output below, compare step 0 
+C   with step 100.  They are very close.  But step 200 is even closer to 100 (a
+C   little settling has occurred;  this is discretization error).
+PRINTED NUMBER WIDTH, 10, 2,
+.0000250    .005   3000.
+       1       1       1       1       1      -1
+       5       5      20      20
+ 1GENA  TRANA             34.372457.68.15781                                    
+ 2GENB  TRANB             35.735164.43-.031538.002451.79.16587                  
+ 3GENC  TRANC             35.735164.43-.031537.455151.72-.021938.002451.79.16587
+  TRANA                      20.  100.                                         1
+  TRANB       TRANA                                                            1
+  TRANC       TRANA                                                            1
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GENA           1.0      400.       0.0                           -1.
+14GENB           1.0      400.     -120.                           -1.
+14GENC           1.0      400.     +120.                           -1.
+BLANK card terminating source cards for 1st phasor solution.
+C       ....  or  "Q".   The first solution frequency  =  4.00000000E+02  Hertz.
+C GENA   1.0   1.0  .00651879225127  .01786478870371  .00325939612564  -.3270376674E-4
+C        0.0   0.0  -.0166329799799      -68.5988095  .00831648998997        0.0061218
+C       Total network loss  P-loss  by summing injections =   9.742991063317E-03
+  SUPERIMPOSE MORE SOURCES:        { Request for superposition produced by more:
+14GENA           1.0      400.       0.0   
+14GENB           1.0      400.     -120.   
+14GENC           1.0      400.     +120.   
+14GENA           1.0      800.       0.0                           -1.
+14GENB           1.0      800.     -120.                           -1.
+14GENC           1.0      800.     +120.                           -1.
+C       ....  or  "Q".   The first solution frequency  =  8.00000000E+02  Hertz.
+C GENA   1.0   1.0  .00179922688615  .00899257899614  .89961344308E-3  -.1832029691E-4
+C        0.0   0.0   -.008810746825      -78.4584168  .00440537341249        0.0031815
+C       Total network loss  P-loss  by summing injections =   2.746542759765E-03
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+  GENA  TRANA GENB  TRANB GENC  TRANC
+C First  6     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C Step      Time     GENA      TRANA     GENB      TRANB     GENC      TRANC     TRANA     TRANB     TRANC
+C                                                                                TERRA     TERRA     TERRA
+C    0       0.0        2.0  .6411782       -1.  -.655262       -1.  .0054071  .0081912  -.026551  .0176749
+C    1    .25E-4   1.990141  .6719155  -.832151  -.619565  -1.15799  -.059291  .0104086   -.02703  .0159628
+C    2     .5E-4   1.960698  .6964416  -.656435  -.578549  -1.30426  -.123014  .0125508  -.027293  .0141158
+C    3    .75E-4   1.912064  .7145235   -.47495  -.532698  -1.43711   -.18506   .014596  -.027337  .0121521
+C    4     .1E-3    1.84489  .7260175  -.289862  -.482595  -1.55503  -.244721  .0165237  -.027161  .0100912
+C    5   .125E-3   1.760074  .7308739  -.103383  -.428865  -1.65669  -.301342  .0183147  -.026767  .0079542
+C   10    .25E-3   1.118034  .6596136  .7736591  -.128596  -1.89169  -.520814  .0246777  -.021779  -.003099
+C   15   .375E-3   .2787683  .4603086  1.384884  .1607557  -1.66365  -.603533  .0259314  -.013004  -.012782
+C   20     .5E-3        -.5  .2026547  1.582676  .3644382  -1.08268  -.546164  .0222562  -.002864  -.018931
+BLANK card ending program output-variable requests.
+C   40     1.E-3        -.5  -.185466  -.064602  .1746455  .5646021  .0137459  -.003673  .0129232  -.008711
+C   60     .0015        -.5  -.212516  .5646021  .2936534  -.064602  -.082817  -.005699  .0101002  -.004403
+C   80      .002        -.5  -.445559  -1.08268  -.178062  1.582676  .6101375  -.021055  .0063503  .0143909
+C  100     .0025        2.0  .6410699       -1.  -.655039       -1.  .0052891  .0081836  -.026535  .0176671
+C  120      .003        -.5  .2025812  1.582676  .3645686  -1.08268  -.546224  .0222515  -.002854  -.018936
+C  140     .0035        -.5  -.185508  -.064602  .1747437  .5646021  .0136866  -.003676  .0129291  -.008714
+C  160      .004        -.5  -.212542  .5646021  .2937035  -.064602  -.082843  -.005701  .0101038  -.004405
+C  180     .0045        -.5  -.445576  -1.08268   -.17803  1.582676  .6101221  -.021056  .0063525  .0143897
+C  200      .005        2.0  .6410606       -1.  -.655017       -1.   .005275   .008183  -.026534  .0176664
+C Variable maxima :     2.0  .7308739  1.582676   .443335  1.582676   .660407  .0261033   .013903  .0249648
+C Times of maxima :     0.0   .125E-3      .003    .00315      .002     .0021    .35E-3     .0034   .002275
+C Variable minima :  -1.125  -.540524  -1.89169  -.742149  -1.89169  -.603595  -.021087  -.027337  -.020627
+C Times of minima : .004275    .00435    .00225   .002375    .25E-3   .002875   .004525    .75E-4     .0031
+  CALCOMP PLOT
+ 144 .5 0.0 5.0         GENA  GENB  GENC  
+ 144 .5 0.0 5.0         TRANA TRANB TRANC
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C   7th  of 19 subcases  demonstrates proper working of superposition of phasor
+C   solutions for a constant-parameter, distributed line.   This  first was made
+C   to work around sunset on  15 Nov 1998.  Two hours later, the switch was made
+C   to work.   It had a bug of its own.   The switch is permanently closed,  and
+C   does not change the answer.   Its addition merely demonstrates that switches
+C   now are tolerated.   Still no frequency-dependent line, however.   That will
+C   be left for the expert (BPA's Dr. Tsu-huei Liu), if she thinks it is doable.
+POWER FREQUENCY, 50.,    { Unnecessary.  This merely avoids warning about 50 Hz.
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .040     50.     50.    { Note L in ohms and C in micromhos at 50 Hz
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+-1SEND  REC                  0.3   0.4  12.6   80.    { 1-phase distributed line
+  REC                              68. 1.2E4  { Series L-C load on line }      1
+  GEN                        10.   40.  { Series R-L at source has no effect } 1
+BLANK card ending branch cards
+  GEN   SEND        -1.0       1.0 { Permanently close switch at sending end } 1
+BLANK card ending switch cards
+14GEN            1.0       50.    { 60-Hz phasor solution }        -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   1.702540183859E-02
+C Output for steady-state phasor switch currents.
+C  Node-K    Node-M       I-real            I-imag            I-magn         Degrees        Power            Reactive
+C  GEN       SEND     2.81684507E-02   -1.93583035E-02    3.41790218E-02    -34.4982    1.40842254E-02    9.67915173E-03
+  SUPERIMPOSE MORE SOURCES:        { Request for superposition produced by more:
+14GEN            1.0      100.    { 60-Hz phasor solution }        -1.
+14GEN            1.0       50.  
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+C       Total network loss  P-loss  by summing injections =   1.174643954145E-03
+C Output for steady-state phasor switch currents.
+C  Node-K    Node-M        I-real            I-imag            I-magn        Degrees        Power            Reactive
+C  GEN       SEND     8.10826370E-04   -4.85126124E-03    4.91855416E-03    -80.5114    4.05413185E-04    2.42563062E-03
+C Add these 2 I-real parts: i(0) = .0810826370E-02 + 2.81684507E-02 = 2.89792770
+  GEN   SEND  REC     { Names of nodes for voltage output
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time     GEN       SEND      REC       GEN       REC       GEN
+C                                                    SEND      TERRA     TERRA
+C ***      Phasor I(0) =  2.8979277E-02      Switch  "GEN   "  to  "SEND  "  closed in the steady-state.
+C      0       0.0        2.0       2.0  .3104733  .0289793  .0288367  .0074208
+C      1     .1E-3   1.997533  1.997533  .3168525  .0298758  .0298478  .0089264
+C      2     .2E-3   1.990141  1.990141   .321957    .03074  .0308254  .0104164
+C      3     .3E-3   1.977849  1.977849  .3249705  .0315697  .0317676  .0118871
+C      4     .4E-3   1.960698  1.960698  .3259235  .0323632  .0326723  .0133347
+BLANK card ending node voltage output requests
+C    200       .02        2.0       2.0   .310624  .0289646  .0288207  .0074193
+C    220      .022   1.118034  1.118034  .1167098  .0390118  .0406289  .0307644
+C    240      .024        -.5       -.5  -.231522  .0292955  .0304699  .0301821
+C    260      .026   -1.11803  -1.11803  .0536218  .0061988  .0055751  .0120831
+C    280      .028        -.5       -.5  .7647646  -.015757  -.016915  -.002155
+C    300       .03        0.0       0.0  .9147476  -.027333  -.027043  -.004344
+C    320      .032        -.5       -.5  .1025405  -.029283  -.027728  -.006411
+C    340      .034   -1.11803  -1.11803  -.858517   -.02491   -.02427  -.018205
+C    360      .036        -.5       -.5  -.946641  -.013213  -.014641  -.029034
+C    380      .038   1.118034  1.118034  -.226641  .0070384  .0051148  -.020297
+C    400       .04        2.0       2.0   .310915  .0289599  .0288158   .007419
+C Variable maxima :        2.0       2.0  .9786535  .0390245  .0406716  .0337317
+C Times of maxima :        0.0       0.0     .0093      .002     .0021     .0029
+C Variable minima :     -1.125    -1.125  -1.04338  -.029475  -.028141  -.029278
+C Times of minima :      .0342     .0342     .0151     .0115     .0111     .0363
+  CALCOMP PLOT
+ 144 4. 0.0 40.         SEND  REC          { Show node   voltages
+ 194 4. 0.0 40.         GEN   SEND  REC    { Show branch currents
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   8th  of 19 subcases is like the preceding, only for 3-phase distributed line
+C   modeling rather than single phase.  For simplicity,  the line is taken to be
+C   continuously transposed.   So,  to make the solution interesting,  the  load
+C   is unbalanced slightly.  The effect is substantial (must be near resonance).
+C   As phasor output is becoming substantial,  illustrate lack of phasor output.
+C   About receiving end voltages (1st plot), phase b is dominated by fundamental
+C   whereas phase c is dominated by the harmonic.  On the other hand,  phase a
+C   is a nice mixture of the two.  Done.  WSM,  15 November 1998  19:52
+POWER FREQUENCY, 50.,    { Unnecessary.  This merely avoids warning about 50 Hz.
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .040     50.     50.    { Note L in ohms and C in micromhos at 50 Hz
+       1       1       1       0       1      -1
+       2      -1       5       5      20      20
+-1SENDA RECA                 0.3   0.4  12.6   80.    { 3-phase distributed line
+-2SENDB RECB                 .03   0.1   6.0   80.
+-3SENDC RECC
+  RECA                             68. 1.2E4  { Series L-C load on line }      1
+  RECB                             68. 1.3E4  { Series L-C: note imbalance }   1
+  RECC                             68. 1.4E4  { Series L-C: note imbalance }   1
+BLANK card ending branch cards
+  GENA  SENDA       -1.0       1.0    { Permanently closed switch at sending end
+  GENB  SENDB       -1.0       1.0   { Output 1 of 3 switch currents as demo } 1
+  GENC  SENDC       -1.0       1.0
+BLANK card ending switch cards
+14GENA           1.0       50.       0.0                           -1.
+14GENB           1.0       50.     -120.                           -1.
+14GENC           1.0       50.     +120.                           -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   2.454594157981E-01
+  SUPERIMPOSE MORE SOURCES:        { Request for superposition produced by more:
+14GENA           1.0      100.       0.0                           -1.
+14GENB           1.0      100.     -120.                           -1.
+14GENC           1.0      100.     +120.                           -1.
+14GENA           1.0       50.       0.0
+14GENB           1.0       50.     -120.
+14GENC           1.0       50.     +120.
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+C       Total network loss  P-loss  by summing injections =   2.573693449262E-04
+  SENDA SENDB SENDC RECA  RECB  RECC     { Names of nodes for voltage output
+C  First  6     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C Step   Time     SENDA     SENDB     SENDC     RECA      RECB      RECC     RECA      RECB      RECC
+C                                                                            TERRA     TERRA     TERRA
+C ***   Phasor I(0) =  2.0781091E-04     Switch  "GENA  "  to  "SENDA "  closed in the steady-state.
+C ***   Phasor I(0) = -6.9613077E-03     Switch  "GENB  "  to  "SENDB "  closed in the steady-state.
+C ***   Phasor I(0) =  6.6629631E-03     Switch  "GENC  "  to  "SENDC "  closed in the steady-state.
+C   0    0.0        2.0       -1.       -1.  2.598233  -3.43615  .2464431  .0129326  -.145918  .1293339
+C   1  .1E-3   1.997533  -.917186  -1.08035   2.60044  -3.42472  .2130051  .0099301  -.135491  .1225758
+C   2  .2E-3   1.990141  -.832151  -1.15799  2.597607  -3.40919  .1810295  .0069154  -.124907  .1156755
+C   3  .3E-3   1.977849  -.745147   -1.2327  2.589741  -3.38914  .1502293  .0038899  -.114174  .1086408
+BLANK card ending node voltage output requests
+C 200    .02        2.0       -1.       -1.   2.59818  -3.43448  .2454012  .0129912  -.146066  .1294166
+C 220   .022   1.118034  .7736591  -1.89169  1.768526  -2.57608  -.038877  -.047694  .0801733  -.023028
+C 240   .024        -.5  1.582676  -1.08268  .0182262  -1.32164  .5410584  -.098873  .2822797  -.164686
+C 260   .026   -1.11803  .8736191  .2444149  -1.03326  -.346505  .9871438  -.117453  .3728534  -.234779
+C 280   .028        -.5  -.064602  .5646021  -1.00872  .8642096  .2517987   -.08566  .3122374  -.211838
+C 300    .03        0.0  -.34E-13  .343E-13  -.883622    2.5928  -1.14969   -.01258  .1306647  -.114579
+C 320   .032        -.5  .5646021  -.064602  -1.27837  3.751705  -1.65974  .0650869  -.093075  .0189995
+C 340   .034   -1.11803  .2444149  .8736191  -1.43002  2.889824  -.686481  .1091923  -.274776  .1473061
+C 360   .036        -.5  -1.08268  1.582676  -.329683  .1403614  .6215637  .1064364  -.355258  .2280163
+C 380   .038   1.118034  -1.89169  .7736591   1.57799  -2.55929  .8876828  .0685474  -.308851  .2250084
+C 400    .04        2.0       -1.       -1.  2.598318  -3.43353  .2448074  .0130473  -.146197  .1294821
+  CALCOMP PLOT
+ 144 4. 0.0 40.         RECA  RECB  RECC              { Show node   voltages
+ 194 4. 0.0 40.         BRANCH
+                        RECA        RECB        RECC  { Show branch currents
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   9th  of 19 subcases is like 7th,  but with a frequency-dependent JMarti line
+C   replacing the constant-parameter, distributed line.  BPA's Dr. Tsu-huei Liu
+C   and yours truly (WSM) force this through together on December 2, 1998.  The
+C   switch has nothing to do with JMarti, but was corrected at this time (before
+C   the printed switch current before step 0 was wrong, not being superimposed).
+POWER FREQUENCY, 50.,    { Unnecessary.  This merely avoids warning about 50 Hz.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .040     50.     50.    { Note L in ohms and C in micromhos at 50 Hz
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+-1SEND  REC                   1.  0.00              -2 1
+      25       4.6006674814379022100E+02
+  -3.53674337977459482E+03   4.74463047336912496E+03   4.19877687667209159E+02
+   1.20883875640704401E+03   1.37235832926770309E+03   1.76629378124055439E+03
+   2.57098916005431466E+03   3.78828017768501514E+03   1.42803850501766374E+03
+   2.65038870126655566E+04   5.80549633718908008E+04   2.89862514502709019E+04
+   6.76266799893490243E+04   1.75748067781355756E+05   1.15921506756057055E+06
+   5.68321189666407090E+06   9.19433740923774988E+06   1.70951407206966021E+07
+   1.81624149219296910E+07   1.63578536348816883E+07   2.07902744942919687E+07
+   1.63600113702911996E+07   3.05274574257793949E+07   2.82210286690547951E+07
+   3.72990420164290220E+07
+   2.77486902230361210E-01   2.68023805044265262E-01   4.15219939750085032E-01
+   1.00965215217368676E+00   2.08586147641298370E+00   4.31742025828644139E+00
+   9.38105998645288964E+00   2.16289190303449140E+01   4.71679444226597938E+01
+   5.00972850164923444E+02   2.19667801322956757E+03   2.86760537318643128E+03
+   1.14040516604910099E+04   2.97247489619667322E+04   9.91819942418309948E+04
+   4.96352587435292895E+05   1.62826284096999770E+06   3.10812825436382648E+06
+   6.60681297691485007E+06   1.23076395640831069E+07   1.54718126469801944E+07
+   1.14181900748053603E+07   2.33626050734163225E+07   2.05401226659539938E+07
+   2.89354778735701405E+07
+      14       3.8038812947515656600E-04
+   1.91758353605922701E-02   2.66649324474153904E-01   2.54923849247581425E+00
+   9.46636313120961682E+00   2.85381149799323453E+01   7.38766350382716724E+01
+   2.49452844472431571E+03   7.01441951080157833E+03   6.88095829884308187E+04
+  -3.34847951818855899E+06   3.31843503484260664E+06   3.96467674493048249E+10
+  -7.93497908986478425E+10   3.97029750605793992E+10
+   3.35859634392794338E+00   4.68146974610416323E+01   4.33602484888353672E+02
+   1.24257407602821491E+03   1.74575005233975117E+03   1.47765127586259360E+03
+   1.69531663286821313E+04   2.85574137491229049E+04   7.36636621071784758E+04
+   5.22749591784824327E+05   5.23272341376608878E+05   1.82407055706939399E+05
+   1.82589462762646523E+05   1.82772052225409076E+05
+  0.58951119
+  0.00000000
+  REC                              68. 1.2E4  { Series L-C load on line }      1
+BLANK card ending branch cards
+  GEN   SEND        -1.0       1.0  { Permanent closed switch at sending end } 1
+BLANK card ending switch cards
+14GEN            1.0       50.    { 50-Hz phasor solution }        -1.
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        SEND   |REC   *GEN   *
+C        REC    |TERRA *SEND  *
+C        GEN    |SEND  *
+C        TERRA  |REC   *
+C --------------+------------------------------
+C 1st phasor flow:  SEND   1.0    1.0      .00104886622776  .00412295654806      .52443311388E-3  .52443311388E-3
+C                          0.0    0.0      -.0039873111659      -75.2621647      .00199365558294        0.0021265
+C     Total network loss  P-loss  by summing injections =   5.244331138815E-04
+BLANK card ending source cards
+  SUPERIMPOSE MORE SOURCES:        { Request for superposition produced by more:
+14GEN            1.0      100.    { 100-Hz phasor solution }       -1.
+14GEN            1.0       50.    {  50-Hz but without phasor }
+C 2nd phasor flow:  SEND   1.0    1.0      .28023824311E-3  .00167781755608      .14011912156E-3  .14011912156E-3
+C                          0.0    0.0       -.001654248554      -80.3850824      .82712427702E-3        0.0006777
+C     Total network loss  P-loss  by summing injections =   1.401191215566E-04
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C Step   Time       GEN         SEND        REC         GEN         REC
+C                                                       SEND        TERRA
+C ***    Phasor I(0) =  1.3291045E-03    Switch  "GEN   "  to  "SEND  "  closed in the steady-state.
+C   0     0.0          2.0         2.0  .103985185  .001329104  .001331291
+C   1   .1E-3   1.99753329  1.99753329  .102188523  .001557337  .001566943
+C   2   .2E-3   1.99014143  1.99014143  .100246634  .001782631  .001799837
+C   3   .3E-3   1.97784922  1.97784922  .097684893  .002004723  .002029515
+C   4   .4E-3   1.96069786  1.96069786   .09455166  .002223115  .002255424
+C   5   .5E-3   1.93874486  1.93874486  .090914028  .002437299  .002477041
+C  10   .1E-2   1.76007351  1.76007351  .064262337  .003427592  .003502327
+C  15   .0015   1.47879178  1.47879178  .027694976   .00424585  .004348298
+C  20    .002   1.11803399  1.11803399  -.01526506  .004848781  .004971008
+C  40    .004          -.5         -.5  -.15428049  .004854478  .004951474
+  GEN   SEND  REC     { Names of nodes for voltage output
+BLANK card ending node voltage output requests
+C 360    .036          -.5         -.5  -.15242702  -.00466918  -.00477064
+C 380    .038   1.11803399  1.11803399  .017604346  -.00297868  -.00310013
+C 400     .04          2.0         2.0  .104051169  .001333593  .001335541
+C Variable max:        2.0         2.0  .231329745  .005331241  .005460826
+C Times of max:        0.0         0.0       .0297        .023        .023
+C Variable min: -1.1249966  -1.1249966   -.1823352  -.00466918  -.00477457
+C Times of min:      .0342       .0342        .015        .036       .0361
+  CALCOMP PLOT
+ 144 4. 0.0 40.         SEND  REC               { Show node   voltages
+ 194 4. 0.0 40.         REC         GEN   SEND  { Show branch currents
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   10th  of 19 subcases is like 8th, but with a frequency-dependent JMarti line
+C   replacing the constant-parameter, distributed line.  Without difficulty, 
+C   this was demonstrated to be believable early in the morning of 4 Dec 1998.
+C   The JMarti branch cards are copied from DCNEW-27 (in turn, from DCNEW-4).
+POWER FREQUENCY, 50.,    { Unnecessary.  This merely avoids warning about 50 Hz.
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .040     50.     50.    { Note L in ohms and C in micromhos at 50 Hz
+C .000100   .0002     50.     50.    { Note L in ohms and C in micromhos at 50 Hz
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+C    PUNCHED CARD OUTPUT OF "JMARTI SETUP" WHICH BEGAN AT  14.32.51  09/14/82
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   3.3636 .05215  4         1.602   19.25   50.     50.
+C   3.3636 .05215  4         1.602   20.75   50.     50.
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C
+C 100.         5000.         1                  138.       1           3-2
+C 100.         60.00         1                  138.       1           3
+C 100.           .01         1                  138.       1   9 10    3
+C
+-1SENDA RECA                  1.                    -2 3                       1
+      18      0.47487144790587633736E+03
+ -0.117967342612603676E+01 -0.316671345021416945E+01  0.255662317832426673E+02
+ -0.601654631032706213E+02 -0.118825306534453652E+03  0.128169142098635430E+04
+  0.589610442538186533E+04  0.292891488173549769E+05  0.115665757459954655E+06
+  0.456394278488149546E+06  0.153681652821077613E+07  0.681848054466802243E+07
+  0.155477562610202006E+08  0.231789897204889809E+08  0.143827766961221036E+08
+  0.241524708800130989E+08  0.245049034784953832E+08  0.476808364145524129E+08
+  0.321645453133055891E+00  0.897616891499021768E+00  0.165632367032913183E+01
+  0.166669419493737986E+01  0.253073682990780913E+01  0.200014655383098283E+02
+  0.124257951002701473E+03  0.657345842950598183E+03  0.278623017775457413E+04
+  0.117145310573639467E+05  0.427410884649070877E+05  0.202553264108715757E+06
+  0.968789502295299084E+06  0.296908522006270138E+07  0.737968316276072920E+07
+  0.121009167337626640E+08  0.132891445947112725E+08  0.252097199908134253E+08
+      14      0.86849922355034181931E-03
+  0.580543547692016874E-01  0.269744993210885436E+00  0.358646519088149721E+00
+  0.775351125410302933E+00  0.512138885239557462E+01  0.838265420474258915E+01
+  0.700229782114550385E+02  0.393084113996385128E+03  0.138208543918962840E+04
+  0.706160326497018531E+03  0.527246586822120662E+04  0.528343251309079615E+05
+  0.178307801042203880E+08 -0.178914532139174500E+08
+  0.228360173022402533E+02  0.102750699821169636E+03  0.139222638455845377E+03
+  0.269608322018776320E+03  0.389220463867018722E+03  0.427793721751318500E+03
+  0.132148883486994549E+04  0.277178340638843952E+04  0.449341296469570784E+04
+  0.596603161966094024E+04  0.114714152641659587E+05  0.268314807408425590E+05
+  0.204027813729699328E+05  0.204231841543429041E+05
+-2SENDB RECB                  1.                    -2 3                       1
+      13      0.28580875773089406522E+03
+  0.381761604345214016E+04 -0.269529222495194318E+04  0.445018224900628539E+03
+  0.214658130219351907E+03  0.897325461203551775E+02  0.130480129629523390E+03
+  0.683037485206990933E+02  0.746626715384045969E+02  0.133938729387751110E+04
+  0.249954495902361043E+04  0.187764116219525090E+05  0.391031620802855759E+06
+  0.562668431190421223E+07
+  0.358668999787749571E+01  0.376679186833120605E+01  0.706439034439901437E+01
+  0.109721634064781350E+02  0.140506334140286961E+02  0.234292596911152251E+02
+  0.407686998675834982E+02  0.797598814775078289E+02  0.129106739969348078E+04
+  0.242138030939135859E+04  0.182362646041542116E+05  0.379814243183306855E+06
+  0.548808385606378759E+07
+      13      0.74123751236187229426E-03
+  0.192189595814863363E+02  0.210970481418782463E+01  0.383406546226866283E+02
+  0.307999912886148377E+02  0.634013410317139090E+03 -0.253243195247046863E+03
+  0.210540381301789816E+05  0.755533947306502050E+05  0.229576557459444489E+07
+  0.607777584135737231E+13 -0.156620677810598129E+13  0.153143851607186420E+13
+ -0.604300997216751013E+13
+  0.325736126030671755E+04  0.366694913707514260E+03  0.675727697588602189E+04
+  0.516024976370228876E+04  0.249456113770459378E+05  0.115067772934717399E+06
+  0.105205466546493019E+06  0.240930799961836921E+06  0.633276538663731131E+06
+  0.975820481990592802E+06  0.976796302472583498E+06  0.974176721795814519E+06
+  0.975150898517610403E+06
+-3SENDC RECC                  1.                    -2 3                       1
+      13      0.27248404992352924125E+03
+  0.928429573805075023E+03  0.205756155237142632E+03  0.538106630554037608E+03
+  0.105199818376817531E+03  0.821382476778671116E+02  0.133356875032521778E+03
+  0.654774478488469374E+02  0.612546121562179922E+02  0.905544916173387175E+02
+  0.973244316091135204E+03  0.267481871266201051E+04  0.138566411938941123E+05
+  0.646075558955914967E+06
+  0.297277477955690506E+01  0.413177069940672514E+01  0.739410817322770197E+01
+  0.103072536754267949E+02  0.135874091964585515E+02  0.234792992956042887E+02
+  0.384075708508238121E+02  0.692539345057236435E+02  0.997101922255402791E+02
+  0.941460937860312015E+03  0.259295974388396348E+04  0.134538093446956691E+05
+  0.628668738677182439E+06
+      20      0.74871165651714274120E-03
+  0.249456855794677017E-01  0.516637614002139312E+01  0.435227595525510835E+01
+  0.696293545843379624E+01  0.113102519337405665E+02  0.107077756312168120E+02
+  0.136526319661978881E+02  0.103057494642840792E+03  0.647491597081196815E+03
+  0.221213037293261823E+04  0.164010494681972204E+05  0.517776934139508076E+05
+  0.393233870054795443E+06 -0.101893253559274247E+05 -0.173413454816459129E+06
+  0.524218185885897590E+06  0.711044562955687729E+12 -0.559640645251973480E+12
+  0.582892127161358521E+12 -0.734296849907947113E+12
+  0.887741958857318814E+01  0.183177145564733675E+04  0.151655674045953921E+04
+  0.245910936284398730E+04  0.383273362703089043E+04  0.399285585783856465E+04
+  0.496339281485561617E+04  0.253464455063045348E+05  0.272156609769823021E+05
+  0.475215596432249440E+05  0.149791320991727040E+06  0.333884409922466803E+06
+  0.541583000670874084E+06  0.670984155731562481E+06  0.569769858667429973E+06
+  0.132622344670840449E+07  0.440534234233555838E+07  0.440974768467789434E+07
+  0.436787151891064062E+07  0.437223939042955148E+07
+  0.57154434  0.70710678 -0.41761362
+  0.00000000  0.00000000  0.00000000
+  0.58879039  0.00000000  0.80696823
+  0.00000000  0.00000000  0.00000000
+  0.57154434 -0.70710678 -0.41761362
+  0.00000000  0.00000000  0.00000000
+  RECA                             68. 1.2E4  { Series L-C load on line }
+  RECB                             68. 1.3E4  { Series L-C: note imbalance }
+  RECC                             68. 1.4E4  { Series L-C: note imbalance }
+BLANK card ending branch cards
+  GENA  SENDA       -1.0       1.0    { Permanently closed switch at sending end
+  GENB  SENDB       -1.0       1.0   { Output 1 of 3 switch currents as demo } 1
+  GENC  SENDC       -1.0       1.0
+BLANK card ending switch cards
+14GENA           1.0       50.       0.0                           -1.
+14GENB           1.0       50.     -120.                           -1.
+14GENC           1.0       50.     +120.                           -1.
+BLANK card ending source cards
+  SUPERIMPOSE MORE SOURCES:        { Request for superposition produced by more:
+14GENA           1.0      100.       0.0                           -1.
+14GENB           1.0      100.     -120.                           -1.
+14GENC           1.0      100.     +120.                           -1.
+14GENA           1.0       50.       0.0
+14GENB           1.0       50.     -120.
+14GENC           1.0       50.     +120.
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+  SENDA SENDB SENDC RECA  RECB  RECC     { Names of nodes for voltage output
+BLANK card ending node voltage output requests
+  CALCOMP PLOT
+ 144 4. 0.0 40.         RECA  RECB  RECC              { Show node   voltages
+ 194 4. 0.0 40.         BRANCH
+                        SENDA RECA  SENDB RECB  SENDC RECC  { Show branch currents
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      11th of 19 subcases is like 9th,  only with the single-phase JMarti line
+C      replaced by a Semlyen line.  BPA's Dr. Tsu-huei Liu and WSM force this
+C      through together on December 8, 1998.  The same line data was used to
+C      produce the Semlyen branch cards as was used to produce the Marti branch
+C      cards,  according to Dr. Liu.
+POWER FREQUENCY, 50.,    { Unnecessary.  This merely avoids warning about 50 Hz.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .040     50.     50.    { Note L in ohms and C in micromhos at 50 Hz
+       1       1       1       1       1      -1
+       5       5      20      20
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C SEMLYEN SETUP
+C $ERASE
+C TOLERANCES  10      5000.  { Illustration only; value of FMED actually unchang
+C           200  150  10 230   1     7  7777     0    { Semlyen miscellaneous da
+C LINE CONSTANTS
+C METRIC
+C   1.3161 .1151   4         2.355    -6.5   22.      8.0
+C   0.5    4.189   4         0.914     4.5   27.3    15.7
+C BLANK card ending conductor cards within  "LINE CONSTANTS"  data
+C  1500.       5000.                            108.7
+C  1500.       60.00                            108.7  { Phasor solution frequen
+C  1500.        6.00                            108.7          6 20  { log loopi
+C BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+C BLANK card ending  "LINE CONSTANTS"  data
+C L=   67.5 miles, rho=  1500.0, ss freq=   60.00, NSS=0, KFIT=10, KPS=2, KYC=30
+-1SEND  REC                2.16583E-03 3.86702E-04              1  1  2  2   1
+   1.58360657E+01 9.71198911E+01-4.13400101E-05 2.87567721E-04 6.00000000E+01
+   0.00000E+00 4.76151E+04 8.46981E-01 0.00000E+00 3.44533E+03 1.53019E-01
+   0.00000E+00 5.15658E+04-3.35305E-04 0.00000E+00 1.93051E+02-6.36116E-04
+   1.00000E+00 0.00000E+00
+   1.00000E+00 0.00000E+00
+  REC                              68. 1.2E4  { Series L-C load on line }      1
+BLANK card ending branch cards
+  GEN   SEND        -1.0       1.0  { Permanent closed switch at sending end } 1
+BLANK card ending switch cards
+14GEN            1.0       50.    { 50-Hz phasor solution }        -1.
+BLANK card ending source cards
+C   Total network loss  P-loss  by summing injections =   1.734151791008E-03
+C  Node-K   Node-M      I-real            I-imag            I-magn       Degrees        Power            Reactive
+C    GEN      SEND   3.46830358E-03   -1.43381118E-02   1.47516298E-02   -76.4017    1.73415179E-03    7.16905591E-03
+  SUPERIMPOSE MORE SOURCES:        { Request for superposition produced by more:
+C 14GEN            1.0      100.    { 100-Hz phasor solution }       -1.
+14GEN            1.0      100.    {  50-Hz but without phasor }    -1.
+14GEN            1.0       50.  
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+C     Total network loss  P-loss  by summing injections =   1.065011729272E-04
+C  Node-K   Node-M      I-real            I-imag            I-magn       Degrees        Power            Reactive
+C    GEN      SEND   2.13002346E-04   -3.64646410E-03   3.65267990E-03   -86.6570    1.06501173E-04    1.82323205E-03
+  GEN   SEND  REC     { Names of nodes for voltage output
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time       GEN         SEND        REC         GEN         REC
+C                                                            SEND        TERRA
+C ***      Phasor I(0) =  3.6813059E-03     Switch  "GEN   "  to  "SEND  "  closed in the steady-state.
+C      0       0.0          2.0         2.0  .153929313  .003681306  .003725237
+C      1     .1E-3   1.99753329  1.99753329    .1522527   .00435802  .004425728
+C      2     .2E-3   1.99014143  1.99014143  .149645253  .005027418  .005119878
+C      3     .3E-3   1.97784922  1.97784922  .145951055   .00568938  .005806382
+C      4     .4E-3   1.96069786  1.96069786  .141287156   .00634313  .006483935
+C      5     .5E-3   1.93874486  1.93874486  .136275468  .006989792  .007151414
+BLANK card ending node voltage output requests
+C     10     .1E-2   1.76007351  1.76007351  .092891975  .010026854  .010291731
+C     15     .0015   1.47879178  1.47879178  .023317891  .012640295  .012991794
+C     20      .002   1.11803399  1.11803399  -.06174101  .014720636  .015118963
+C     40      .004          -.5         -.5  -.34443045  .016575341  .016838847
+C     60      .006    -1.118034   -1.118034  -.17058748  .010182945  .010031014
+C     80      .008          -.5         -.5  .362487911  .002326162  .002053321
+C    100       .01          0.0         0.0  .612908752  -.00296002  -.00293285
+C    120      .012          -.5         -.5  .248154876  -.00738972  -.00710881
+C    140      .014    -1.118034   -1.118034  -.30076592  -.01262818  -.01254386
+C    160      .016          -.5         -.5  -.40730556  -.01503915  -.01535767
+C    180      .018   1.11803399  1.11803399  -.06530854  -.00934344  -.00970902
+C    200       .02          2.0         2.0  .154986325   .00333684  .003383348
+C    220      .022   1.11803399  1.11803399  -.06853358   .01445717  .014861049
+C    240      .024          -.5         -.5  -.35906038  .016441167  .016706006
+C    260      .026    -1.118034   -1.118034  -.18786425  .010191471  .010041491
+C    280      .028          -.5         -.5  .346320129  .002467142  .002193761
+C    300       .03          0.0         0.0  .601636815    -.002726  -.00269921
+C    320      .032          -.5         -.5  .244116524  -.00711585  -.00683621
+C    340      .034    -1.118034   -1.118034  -.29695787  -.01237389  -.01229047
+C    360      .036          -.5         -.5  -.39659111  -.01485549  -.01517475
+C    380      .038   1.11803399  1.11803399  -.05015223  -.00926464  -.00963034
+C    400       .04          2.0         2.0  .171432693  .003300084     .003347
+C Variable maxima :         2.0         2.0  .616129386  .017112417  .017478995
+C Times of maxima :         0.0         0.0       .0098       .0033       .0033
+C Variable minima :  -1.1249966  -1.1249966  -.43847067  -.01510408  -.01538971
+C Times of minima :       .0342       .0342       .0153       .0157       .0158
+  CALCOMP PLOT
+ 144 4. 0.0 40.         SEND  REC               { Show node   voltages
+ 194 4. 0.0 40.         REC         GEN   SEND  { Show branch currents
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      12th  of 19 subcases is like 10th,  only with the three-phase JMarti line
+C      replaced by a 3-phase Semlyen line.   The Semlyen branch cards are copied
+C      from  DC-31.  Note  XOPT and COPT have been set to 60 Hz to match the
+C      branch cards at the 1st of 2 frequencies.  Unlike the high-order JMarti
+C      model, 2nd-order Semlyen involves substantial error, & is more biased
+C      toward a match at power frequency.  So,  the switch to 60 favors smoother
+C      Semlyen operation at the dominant frequency.  Of course, the second freq
+C      of 120 Hz is not well fitted,  but it does not dominate,  so error is of
+C      less importance.  The resulting plots are reasonably smooth.  If really
+C      smooth plots are wanted,  change the 2nd frequency to the 1st,  so that
+C      the superposition has the effect of doubling power-frequency excitation.
+C      This is an independent, separate way to verify the superposition while
+C      avoiding error that is associated with the constant-inductance phasor
+C      representation of Semlyen modeling.
+POWER FREQUENCY, 60., { Ensure that 60. two cards below does not produce warning
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+C Steps/cycle Cycles  ---  Alternate to DELTAT and TMAX ensures full accuracy
+     200       2     60.     60.    { Note L in ohms and C in micromhos at 60 Hz
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+C L=   138.0MILES, RHO=    27.0, SS FREQ=   60.00, NSS=0, KFIT= 0, KPS=2, KYC=10
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   3.3636 .05215  4         1.602   19.25   50.     50.
+C   3.3636 .05215  4         1.602   20.75   50.     50.
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C
+C  27.         5000.         1                  138.
+C  27.         60.00         1                  138.
+C  27.          6.00         1                  138.           6 20
+C
+-1SENDA RECA               0.55456E-02 0.77998E-03              1  1  2  2   3 1
+   0.14938602E+02 0.90516313E+02-0.16261865E-03 0.14500324E-02 0.60000000E+02
+   0.00000E+00 0.15161E+05 0.75119E+00 0.00000E+00 0.17105E+04 0.24881E+00
+   0.00000E+00 0.59584E+03-0.11954E-02 0.00000E+00 0.39933E+05-0.74162E-03
+-1SENDB RECB               0.74392E-02 0.74149E-03              2  2  2  2   3 1
+   0.83801231E+00 0.38634735E+02-0.44536501E-04 0.20637999E-02 0.60000000E+02
+   0.00000E+00 0.26608E+06 0.83767E+00 0.00000E+00 0.35627E+05 0.16233E+00
+   0.00000E+00 0.13630E+03-0.49171E-03 0.00000E+00 0.32940E+05-0.75349E-04
+-1SENDC RECC               0.42823E-02 0.74017E-03              3  3  2  2   3 1
+   0.26535168E+01 0.67894100E+02-0.45225808E-04 0.11682248E-02 0.60000000E+02
+   0.00000E+00 0.61698E+06 0.90903E+00 0.00000E+00 0.15239E+05 0.90969E-01
+   0.00000E+00 0.25667E+03-0.34465E-03 0.00000E+00 0.11831E+05-0.28233E-04
+   0.10000E+01 0.00000E+00 0.10000E+01 0.00000E+00-0.26698E+00 0.00000E+00
+   0.71114E+00 0.00000E+00-0.41983E-15 0.00000E+00 0.10000E+01 0.00000E+00
+   0.10000E+01 0.00000E+00-0.10000E+01 0.00000E+00-0.26698E+00 0.00000E+00
+   0.42027E+00 0.00000E+00 0.50000E+00 0.00000E+00-0.29908E+00 0.00000E+00
+   0.22471E+00 0.00000E+00-0.27373E-15 0.00000E+00 0.84054E+00 0.00000E+00
+   0.42027E+00 0.00000E+00-0.50000E+00 0.00000E+00-0.29908E+00 0.00000E+00
+  RECA                             68. 1.2E4  { Series L-C load on line }
+  RECB                             68. 1.3E4  { Series L-C: note imbalance }
+  RECC                             68. 1.4E4  { Series L-C: note imbalance }
+BLANK card ending branch cards
+  GENA  SENDA       -1.0       1.0    { Permanently closed switch at sending end
+  GENB  SENDB       -1.0       1.0   { Output 1 of 3 switch currents as demo } 1
+  GENC  SENDC       -1.0       1.0
+BLANK card ending switch cards
+14GENA           1.0       60.       0.0                           -1.
+14GENB           1.0       60.     -120.                           -1.
+14GENC           1.0       60.     +120.                           -1.
+C     Total network loss  P-loss  by summing injections =   7.920824547881E-04
+C  Node-K   Node-M      I-real           I-imag           I-magn        Degrees        Power            Reactive
+C   GENA     SENDA   2.13684848E-04  -1.46728245E-02   1.46743804E-02   -89.1656    1.06842424E-04    7.33641223E-03
+C   GENB     SENDB  -1.32003123E-02   7.47886007E-03   1.51717367E-02   150.4655    6.16366730E-05    7.58561792E-03
+C   GENC     SENDC   1.11079349E-02   7.85331948E-03   1.36037070E-02    35.2603    6.23603358E-04    6.77320678E-03
+BLANK card ending source cards
+  SUPERIMPOSE MORE SOURCES:        { Request for superposition produced by more:
+14GENA           1.0      120.       0.0                           -1.
+14GENB           1.0      120.     -120.                           -1.
+14GENC           1.0      120.     +120.                           -1.
+14GENA           1.0       60.       0.0
+14GENB           1.0       60.     -120.
+14GENC           1.0       60.     +120.
+C     Total network loss  P-loss  by summing injections =   2.436936258789E-05
+C  Node-K   Node-M       I-real           I-imag            I-magn        Degrees        Power            Reactive
+C   GENA     SENDA   -9.06090319E-05  -2.82087453E-03   2.82232937E-03   -91.8398   -4.53045160E-05    1.41043726E-03
+C   GENB     SENDB   -2.57770624E-03   1.49235343E-03   2.97853794E-03   149.9315   -1.78143046E-06    1.48926790E-03
+C   GENC     SENDC    2.32482625E-03   1.50725803E-03   2.77067570E-03    32.9566    7.14553090E-05    1.38349380E-03
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+  RECA  RECB  RECC     { Names of nodes for voltage output
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   4     output variables are branch currents (flowing from the upper node to the lower node);
+C Step      Time     RECA      RECB      RECC      GENB      SENDA     SENDB     SENDC
+C                                                  SENDB     RECA      RECB      RECC
+C ***      Phasor I(0) =  1.2307582E-04    Switch  "GENA  "  to  "SENDA "  closed in the steady-state.
+C ***      Phasor I(0) = -1.5778019E-02    Switch  "GENB  "  to  "SENDB "  closed in the steady-state.
+C ***      Phasor I(0) =  1.3432761E-02    Switch  "GENC  "  to  "SENDC "  closed in the steady-state.
+C   0       0.0   .1754598  -.149967  -.202628  -.015778   .128E-3  -.015779  .0134377
+C   1 .83333E-4     .19681  -.130782   -.20007  -.016119  .7992E-3  -.016119  .0131218
+C   2 .16667E-3   .1936652  -.115517  -.222603  -.016425  .0014416  -.016425  .0127552
+C   3    .25E-3   .1874392  -.096275  -.245921  -.016699  .0020782  -.016699  .0123656
+C   4 .33333E-3   .1801201  -.074648  -.267768  -.016946  .0027102  -.016946  .0119566
+C   5 .41667E-3   .1719231  -.051722  -.287869  -.017166  .0033372  -.017166  .0115298
+C  10 .83333E-3    .117421  .0693951  -.362436  -.017776  .0063154  -.017776  .0090996
+C  15    .00125   .0387023   .185327  -.393131  -.017831  .0090412  -.017831  .0064327
+C  20 .00166667   -.070868  .3086067  -.396284  -.017281  .0114347  -.017281  .0036444
+C  40 .00333333   -.388621  .3051482  .0228398  -.009941  .0156904  -.009941  -.006866
+C  60      .005   -.253038  -.204985  .4417365  -.778E-4  .0122998  -.778E-4   -.01189
+C  80 .00666667   .3044138  -.552418   .274188  .0068829  .0057587  .0068829  -.011409
+C 100 .00833333   .6360443  -.274231  -.265214  .0106411    -.3E-3  .0106411  -.008773
+BLANK card ending node voltage output requests
+C 120       .01   .3181122  .3033606  -.463545  .0128573  -.006125  .0128573  -.005087
+C 140 .01166667   -.263527  .4887753  -.075016  .0123479  -.012279  .0123479  .0012662
+C 160 .01333333   -.410804  .1013287  .3706173  .0059884  -.015486  .0059884  .0098943
+C 180      .015   -.059755   -.30237  .2804666  -.005615  -.011145  -.005615  .0157608
+C 200 .01666667   .1817737  -.168327   -.19918  -.015787  .1853E-3  -.015787  .0134703
+C 220 .01833333   -.060762  .2780688  -.379241  -.017345  .0114781  -.017345  .0036718
+C 240       .02   -.398657    .32646  .0125865  -.009966  .0157061  -.009966  -.006836
+C 260 .02166667   -.250486  -.182702   .436643  -.129E-5  .0122619  -.129E-5  -.011919
+C 280 .02333333   .3159701  -.576173  .2854261  .0069158  .0057519  .0069158  -.011419
+C 300      .025   .6347384  -.288042  -.260816  .0105952  -.293E-3  .0105952  -.008748
+C 320 .02666667     .31108  .3297626  -.471975  .0128834  -.006175  .0128834  -.005106
+C 340 .02833333   -.257672  .4991878  -.073957  .0124327  -.012327  .0124327  .0012257
+C 360       .03   -.405636  .0768886  .3794062  .0059618  -.015473  .0059618  .0098998
+C 380 .03166667     -.0677  -.305613  .2785391  -.005706  -.011136  -.005706  .0157771
+C 400 .03333333   .1769868  -.142296  -.206482  -.015773  .1537E-3  -.015773  .0134395
+C variable max:   .6370846  .5329181   .467254  .0132316  .0157061  .0132316   .016083
+C Times of max:     .00825  .0111667  .0054167  .0105833       .02  .0105833  .0320833
+C Variable min:   -.431775  -.577185  -.481248  -.017965  -.015486  -.017965  -.012246
+C Times of min:      .0295  .0234167  .0264167    .01775  .0133333    .01775  .0056667
+  CALCOMP PLOT
+ 142 .2 0.0 2.0         RECA  RECB  RECC              { Show node   voltages
+ 192 .2 0.0 2.0         BRANCH
+                        SENDA RECA  SENDB RECB  SENDC RECC  { Show branch currents
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   13th of 19 subcases is a generalization of the 5th.  Superposition of phasor
+C   solutions is illustrated for simple series R-L-C elements.  But here, we
+C   add a 3rd harmonic.  Use 1, 2, and 3 Hz.  The resulting solution has period
+C   1 Hz,  of course,  so simulating and plotting to 2 sec shows 2 cycles.  The
+C   periodicity is seen by comparing step 0 with 100 with 200 (very close).
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+     .01     2.0
+       1       1       1       1       1      -1
+       5       5      20      20
+  GEN   TRAN                 1.0   10.                                         3
+  TRAN                                0.20E6                                   1
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            1.0       1.0                                     -1.
+C TRAN    .37942714659548  .64183619997635      .65053122009197  .80655515626147      -.752165257E-17  -.752165257E-17
+C         -.5176762965662      -53.7607135      .47680221452676       36.2392865      -.2588381482831       -0.2588381
+C     Total network loss  P-loss  by summing injections =   3.252656100460E-01
+BLANK card terminating source cards for 1st phasor solution.
+  SUPERIMPOSE MORE SOURCES:        { Request for superposition produced by more:
+14GEN           -1.0       2.0   { 2nd harmonic source }           -1.
+C TRAN    -.1008414235014  .38391636622821       -.931007055129  .96488706858836      -.545150405E-17  -.545150405E-17
+C         .37043593719304      105.2282576      -.2534421401997     -164.7717424      -.1852179685965       -0.1852180
+C     Total network loss  P-loss  by summing injections =   4.655035275645E-01
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+  SUPERIMPOSE MORE SOURCES:        { Request for superposition produced by more:
+14GEN           -1.0       3.0   { 2nd harmonic source }           -1.
+14GEN            1.0       1.0   { Source of 1st solution represented in dT-loop                                      
+14GEN           -1.0       2.0   { Source of 2nd solution represented in dT-loop                                      
+C TRAN     -.020242653071  .26448015717188      -.9941420093334  .99706670254975      -.575982404E-19  -.575982404E-19
+C         .26370435820121       94.3895692      -.0763130042124     -175.6104308      -.1318521791006       -0.1318522
+C     Total network loss  P-loss  by summing injections =   4.970710046667E-01
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+  GEN   TRAN
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step   Time        GEN          GEN          TRAN         GEN          TRAN
+C                     TRAN                                   TRAN         TERRA
+C    0    0.0   -1.25834307          -1.    .25834307  -1.27461784  -1.27461784
+C    1    .01   -1.17197835  -.976375224    .19560313  -1.23497976  -1.23497976
+C    2    .02   -1.04223034  -.906244946   .135985399  -1.14972948  -1.14972948
+C    3    .03    -.87351371  -.791817161   .081696549  -1.02182451  -1.02182451
+C    4    .04   -.671453154  -.636692146  .0347610081  -.855597126  -.855597126
+C    5    .05   -.442702206   -.44574573  -.003043524  -.656584162  -.656584162
+C   10    0.1   .8252797519  .8090169944  -.016262758  .5778901701  .5778901701
+C   15    .15   1.589742247  1.847858763  .2581165163  1.494230406  1.494230406
+C   20    0.2   1.283365647  1.927050983  .6436853361  1.410360926  1.410360926
+C   40    0.4   -1.48909279  -1.42705098  .0620418032  -1.57083779  -1.57083779
+C   60    0.6   -.676894279  -1.42705098  -.750156704  -.672056125  -.672056125
+C   80    0.8   2.141878198  1.927050983  -.214827215   2.10784098   2.10784098
+C  100    1.0    -1.2589336          -1.  .2589336049  -1.27496681  -1.27496681
+BLANK card ending program output-variable requests.
+C  120    1.2    1.28315489  1.927050983  .6438960933  1.410138424  1.410138424
+C  140    1.4    -1.4891661  -1.42705098  .0621151159  -1.57091519  -1.57091519
+C  160    1.6   -.676919781  -1.42705098  -.750131202  -.672083048  -.672083048
+C  180    1.8   2.141869327  1.927050983  -.214818344  2.107831615  2.107831615
+C  200    2.0   -1.25893669          -1.  .2589366907  -1.27497007  -1.27497007
+C Variable max: 2.141878198  2.031786442  .8934909897  2.120254744  2.120254744
+C Times of max:         0.8         1.82         1.26          .81          .81
+C Variable min:  -1.7217357  -1.43964823  -.935581739  -1.70523806  -1.70523806
+C Times of min:        1.36         1.61          .68         1.37         1.37
+  CALCOMP PLOT
+ 143 .2 0.0 2.0         GEN   TRAN  { Screen plot is perfectly smooth & periodic
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C   14th  of 19 subcases is a combination of the preceding.  Use three single-
+C   phase lines:  1) Constant-parameter from 7th subcase;  2) JMARTI from 9th
+C   subcase;  and  3) Semlyen from the 11th.  Connect all 3 in series to verify
+C   that they all can coexist.  Also, use 3 harmonics: 50, 75, and 100 Hz.  The
+C   result is seen to be perfectly smooth.  Terminal nodes  SEND  and  REC  are
+C   driven by voltage sources,  so voltage here indicates nothing. But interior
+C   nodes  SEM  and  REC  provide a good measure of smoothness.  The period is
+C   equal to 40 msec, note, because 75 Hz has a period of 13.3333 msec.  Two
+C   cycles at 50 Hz, 3 cycles at 75 Hz, and 4 cycles at 100 Hz  ---  all are
+C   equal to 40 msec.  So, step 400 agrees closely with step 0.  Consider the
+C   two node voltages and 3 line currents:
+C       Step   Time    MARTI     SEM        GEN       MARTI     CAP
+C                                           SEND      CAP       SEM
+C         0    0.0   2.746223  .7338817  -.004095  -.004261  -.006559
+C       400    .04   2.745004  .7255618  -.004087  -.004257  -.006555
+POWER FREQUENCY, 50.,    { Unnecessary.  This merely avoids warning about 50 Hz.
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .040     50.     50.    { Note L in ohms and C in micromhos at 50 Hz
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+-1SEND  MARTI                0.3   0.4  12.6   80.    { 1-phase distributed line
+  MARTI                      2.0  7.E2   { Shunt compensation at end of 1st line
+-1MARTI CAP                   1.  0.00              -2 1                       1
+      25       4.6006674814379022100E+02
+  -3.53674337977459482E+03   4.74463047336912496E+03   4.19877687667209159E+02
+   1.20883875640704401E+03   1.37235832926770309E+03   1.76629378124055439E+03
+   2.57098916005431466E+03   3.78828017768501514E+03   1.42803850501766374E+03
+   2.65038870126655566E+04   5.80549633718908008E+04   2.89862514502709019E+04
+   6.76266799893490243E+04   1.75748067781355756E+05   1.15921506756057055E+06
+   5.68321189666407090E+06   9.19433740923774988E+06   1.70951407206966021E+07
+   1.81624149219296910E+07   1.63578536348816883E+07   2.07902744942919687E+07
+   1.63600113702911996E+07   3.05274574257793949E+07   2.82210286690547951E+07
+   3.72990420164290220E+07
+   2.77486902230361210E-01   2.68023805044265262E-01   4.15219939750085032E-01
+   1.00965215217368676E+00   2.08586147641298370E+00   4.31742025828644139E+00
+   9.38105998645288964E+00   2.16289190303449140E+01   4.71679444226597938E+01
+   5.00972850164923444E+02   2.19667801322956757E+03   2.86760537318643128E+03
+   1.14040516604910099E+04   2.97247489619667322E+04   9.91819942418309948E+04
+   4.96352587435292895E+05   1.62826284096999770E+06   3.10812825436382648E+06
+   6.60681297691485007E+06   1.23076395640831069E+07   1.54718126469801944E+07
+   1.14181900748053603E+07   2.33626050734163225E+07   2.05401226659539938E+07
+   2.89354778735701405E+07
+      14       3.8038812947515656600E-04
+   1.91758353605922701E-02   2.66649324474153904E-01   2.54923849247581425E+00
+   9.46636313120961682E+00   2.85381149799323453E+01   7.38766350382716724E+01
+   2.49452844472431571E+03   7.01441951080157833E+03   6.88095829884308187E+04
+  -3.34847951818855899E+06   3.31843503484260664E+06   3.96467674493048249E+10
+  -7.93497908986478425E+10   3.97029750605793992E+10
+   3.35859634392794338E+00   4.68146974610416323E+01   4.33602484888353672E+02
+   1.24257407602821491E+03   1.74575005233975117E+03   1.47765127586259360E+03
+   1.69531663286821313E+04   2.85574137491229049E+04   7.36636621071784758E+04
+   5.22749591784824327E+05   5.23272341376608878E+05   1.82407055706939399E+05
+   1.82589462762646523E+05   1.82772052225409076E+05
+  0.58951119
+  0.00000000
+  CAP                        2.0  7.E2   { Shunt compensation at end of 2nd line
+  CAP   SEM                  3.5       2.4E4  { Series capacitor after Marti } 1 
+-1SEM   REC                2.16583E-03 3.86702E-04              1  1  2  2   1
+   1.58360657E+01 9.71198911E+01-4.13400101E-05 2.87567721E-04 6.00000000E+01
+   0.00000E+00 4.76151E+04 8.46981E-01 0.00000E+00 3.44533E+03 1.53019E-01
+   0.00000E+00 5.15658E+04-3.35305E-04 0.00000E+00 1.93051E+02-6.36116E-04
+   1.00000E+00 0.00000E+00
+   1.00000E+00 0.00000E+00
+BLANK card ending branch cards
+  GEN   SEND        -1.0       1.0 { Permanently close switch at sending end } 1
+BLANK card ending switch cards
+14GEN            1.0       50.       0.0   { 50-Hz phasor }        -1.
+14REC            1.0       50.       90.                           -1.
+C     Total network loss  P-loss  by summing injections =   9.724220340709E-04
+C  Node-K   Node-M     I-real           I-imag            I-magn         Degrees        Power            Reactive
+C   GEN      SEND  -1.63570226E-03  -3.98415669E-03    4.30685807E-03   -112.3207   -8.17851130E-04    1.99207835E-03
+BLANK card ending source cards for 1st phasor solution
+  SUPERIMPOSE MORE SOURCES:      { Following are sources for 2nd phasor solution
+14GEN            1.0       75.       0.0   { 75-Hz phasor }        -1.
+14REC            1.0       75.       90.                           -1.
+C     Total network loss  P-loss  by summing injections =   4.417836206255E-04
+C  Node-K   Node-M      I-real           I-imag           I-magn         Degrees        Power            Reactive
+C   GEN      SEND   -1.32752292E-03  -1.70816724E-03   2.16336599E-03   -127.8530   -6.63761459E-04    8.54083619E-04
+BLANK card ending source cards for 2nd phasor solution
+  SUPERIMPOSE MORE SOURCES:      { Following are sources for 3rd phasor solution
+14GEN            1.0      100.       0.0   { 100-Hz phasor }       -1.
+14REC            1.0      100.       90.                           -1.
+$DISABLE       { Begin block of data cards to be ignored
+C   Note about preceding, third, excitation set.  Because there is no source
+C   having T-start zero or positive,  ATP logic that began 15 December 1998
+C   will internally copy all sources of all preceding excitation sets, changing
+C   T-start to zero in order that these sources become effective on the first
+C   time step.  In effect,  the following sources are added internally:
+14GEN            1.0       50.       0.0   { 50-Hz phasor }        0.0
+14REC            1.0       50.       90.                           0.0
+14GEN            1.0       75.       0.0   { 75-Hz phasor }        0.0
+14REC            1.0       75.       90.                           0.0
+C   But note carefully that this helpful feature relies upon lack of any source
+C   other than phasor excitation.  If any source of the final data set has zero
+C   or positive T-start,  there will be no such internal addition.  If the user
+C   specifies one,  he must specify all sources having T-start non-negative.
+$ENABLE       { End block of data cards to be ignored
+C     Total network loss  P-loss  by summing injections =   2.720584624880E-04
+C  Node-K   Node-M      I-real           I-imag           I-magn         Degrees        Power            Reactive
+C   GEN      SEND   -1.13140476E-03  -3.94389795E-04   1.19817363E-03   -160.7823   -5.65702382E-04    1.97194897E-04
+BLANK card terminating source cards for 3rd (and final) phasor solution.
+  SEND  MARTI SEM   REC     { Names of nodes for voltage output
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C Step   Time     SEND      MARTI     SEM       REC       GEN       MARTI     CAP
+C                                                         SEND      CAP       SEM
+C ***   Phasor I(0) = -4.0946299E-03                     Switch  "GEN   "  to  "SEND  "  closed in the steady-state.
+C   0    0.0        3.0  2.746223  .7338817  .184E-15  -.004095  -.004261  -.006559
+C   1  .1E-3   2.996423    2.7249  .6273332  -.141308  -.003855  -.003925   -.00623
+C   2  .2E-3   2.985703  2.697847  .5194808  -.282232  -.003612  -.003582  -.005889
+C   3  .3E-3   2.967873  2.664322   .410436  -.422391   -.00336  -.003232  -.005536
+C   4  .4E-3   2.942985  2.624337  .3004596  -.561404  -.003101  -.002874  -.005171
+C   5  .5E-3   2.911115   2.57779  .1894443  -.698897  -.002834  -.002509  -.004796
+BLANK card ending node voltage output requests
+C 400    .04        3.0  2.745004  .7255618  -.17E-12  -.004087  -.004257  -.006555
+C Variable max:     3.0  2.766848  2.205032  2.750818  .0072415   .007581  .0081707
+C Times of max:     0.0     .0397     .0375     .0369     .0051     .0044     .0049
+C Variable min:-2.07381  -2.03357  -2.03363  -2.75082  -.006569  -.008275  -.009585
+C Times of min:   .0339     .0059     .0037     .0031     .0379     .0378     .0382
+  CALCOMP PLOT
+ 144 4. 0.0 40. -3.0 3.0SEND  MARTI SEM   REC   { Show node voltages
+ 194 4. 0.0 40.         BRANCH
+                        GEN   SEND  MARTI CAP   CAP   SEM  { Show branch currents
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      15th of 19 subcases has the same solution as the 5th, which has one series
+C      R-L-C circuit.  Here,  the  L  remains linear,  but is represented in the
+C      form of a Type-93 nonlinear reactor.  Since the solution is identical to
+C      that already shown,  only 3 time steps will be taken.
+C         18 Nov 98, expand by the addition of Type-98 pseudo-nonlinear element.
+C         Add a second, independent circuit in parallel with the first.  Node
+C         name  TRAN93  will be used for the first and  TRAN98  for the second.
+C         The solutions are identical,  of course.
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+     .01     .03
+       1       1       1       1 
+C GEN   TRAN                       10.                                         3
+C  The preceding 10-mHenry inductor can be replaced by the following equivalent
+C  nonlinear element.  The phasor solution will be identical.  Inductance 10 mH
+C  means that when the current is one amp, the flux is .01 volt-sec,  so:
+93GEN   TRAN93               1.0   .01                                         3
+             0.0             0.0  { 1st point being origin is request to reflect
+             1.0             .01  { i = 1 amp corresponds to flux = .01 volt-sec
+             2.0             .02  { 2nd segment is, in fact, an extension of 1st
+            9999
+  TRAN93                     1.0      0.20E6                                   1
+93GEN   TRAN98               1.0   .01                                         3
+             1.0             .01  { i = 1 amp corresponds to flux = .01 volt-sec
+             2.0             .02  { 2nd segment is, in fact, an extension of 1st
+            9999
+  TRAN98                     1.0      0.20E6                                   1
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            1.0       1.0                                     -1.
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        GEN    |TRAN93*TRAN98*
+C        TRAN93 |TERRA *GEN   *
+C        TRAN98 |TERRA *GEN   *
+C        TERRA  |TRAN93*TRAN98*
+C --------------+------------------------------
+BLANK card terminating source cards for 1st phasor solution.
+C TRAN93   1.0299583666875  1.0307690952352    .65053122009197  .80655515626147      .32526561004599  .32526561004599
+C          -.0408740820394       -2.2726007    .47680221452676       36.2392865      -.2588381482831       -0.2588381
+C     Total network loss  P-loss  by summing injections =   6.505312200920E-01
+C  ---- Initial flux of coil  "GEN   "  to  "TRAN93"  =  6.50531220E-03
+C  ---- Initial flux of coil  "GEN   "  to  "TRAN98"  =  6.50531220E-03
+  SUPERIMPOSE MORE SOURCES:        { Request for superposition produced by more:
+14GEN           -1.0       2.0   { 2nd harmonic source }           -1.
+14GEN            1.0       1.0   { Source of 1st solution represented in dT-loop                                      
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+C TRAN93   -1.03184847863  1.0384598361934     -.931007055129  .96488706858836      .46550352756452  .46550352756452
+C         .11699379699335      173.5312736    -.2534421401997     -164.7717424      -.1852179685965       -0.1852180
+C     Total network loss  P-loss  by summing injections =   9.310070551290E-01
+C  ---- Initial flux of coil  "GEN   "  to  "TRAN93"  =  -9.31007055E-03
+C  ---- Initial flux of coil  "GEN   "  to  "TRAN98"  =  -9.31007055E-03
+  GEN   TRAN93TRAN98  { Request for voltage output of these nodes
+C First  5     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C Next   4     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step  Time    GEN       GEN       GEN       TRAN93    TRAN98    GEN       GEN       TRAN93    TRAN98
+C                TRAN93    TRAN98                                  TRAN93    TRAN98    TERRA     TERRA
+C   0    0.0   .0018901  .0018901       0.0   -.00189   -.00189  -.280476  -.280476  -.280476  -.280476
+C   1    .01   .0137899  .0137899   .005912  -.007878  -.007878  -.272636  -.272636  -.272636  -.272636
+C   2    .02   .0251067  .0251067  .0235315  -.001575  -.001575  -.253188  -.253188  -.253188  -.253188
+C   3    .03   .0356219  .0356219  .0525108  .0168889  .0168889  -.222823  -.222823  -.222823  -.222823
+BLANK card ending program output-variable requests.
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C      16th of 19 subcases illustrates  KILL = 222  as mentioned in the January,
+C      1999, newsletter.   The  R-L-C  connection of the preceding subcase is
+C      modified to connect to a second generator rather than ground.  The 2nd
+C      generator,  GEN2,  has a different frequency than the 1st.  Prior to
+C      correction on November 17th,  execution continued in spite of the mixing
+C      of frequencies through a nonlinear element.  Now, the error is trapped.
+C      Note no use of superposition,  which is an extraneous complication.  A
+C      single frequency is all that is required to demonstrate the phenomenon.
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+     .01     .03
+       1       1       1       1 
+93GEN   TRAN                 1.0   .01                                         3
+             0.0             0.0  { 1st point being origin is request to reflect
+             1.0             .01  { i = 1 amp corresponds to flux = .01 volt-sec
+             2.0             .02  { 2nd segment is, in fact, an extension of 1st
+            9999
+  TRAN  GEN2                 1.0      0.20E6                                   1
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            1.0       1.0                                     -1.
+14GEN2           1.0       2.0                                     -1.
+BLANK card terminating source cards for 1st phasor solution.
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+  GEN   TRAN
+BLANK card ending program output-variable requests.
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C      17th of 19 subcases illustrates  IF-THEN-ELSE-ENDIF  within HFS data that
+C      is the same as 3rd subcase.  There are 8 frequency steps,  and for the
+C      first five, the solution is identical to that of 3rd subcase.  But for
+C      steps 6 onward,  the formula is changed (the ELSE alternative).  This
+C      data is being added by WSM on  3 December 2000.
+POWER FREQUENCY, 25., ! Needed so minimum frequency is recognized as fundamental
+HARMONIC FREQUENCY SCAN { Non-negative DELFFS in 25-32 means F in Hz (not log F) 
+C   Controls of following request card:   MAXKNT  IOPCVP   { Ignore MAXKNT value
+POCKET CALCULATOR VARIES PARAMETERS            0       1   { since also HFS loop
+PRINTED NUMBER WIDTH, 11, 2,  { Request maximum precision (for 8 output columns)
+   .0001     -1.     50.     50.
+       1       1       1       0       1                       2
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would b
+IF( KNT .LT. 6.0 ) THEN { If frequency (pass number) is low, use one formula:     
+C  Note: the following formula is identical to that used in the 3rd subcase.
+C        The present comment card illustrates that these are tolerated within
+C        an  IF-THEN-ELSE-ENDIF  block.
+MHENRY = 1.2 - ( KNT - 1.0 ) * .05    { L = 1.2,  1.15,  1.1,  1.05,  and  1.0
+ELSE  { Alternatively (if frequency is higher, use another formula:                          
+C  Note: the following formula is different from that used in the 3rd subcase.
+C        As a result,  the solution to steps 6, 7, and 8 differ slightly.  We
+C        use the ELSE alternative to illustrate saturation of the previously-
+C        linear inductance.  Slope of L vs. f changes by a factor of 5:
+MHENRY = 1.0 - ( KNT - 5.0 ) * .01    { L =.99, .98, .97
+ENDIF { Terminate 5-line block that provides two alternatives for MHENRY                           
+C   The following variable is not actually used,  but it is added to illustrate
+C   that other variables can follow an  IF-THEN-ELSE-ENDIF  block.  As for the
+C   formula,  it can be found in the 1st subcase.  In fact, this addition makes
+C   the solution comparable to that of the 1st subcase.  They are identical
+C   through step 5.
+FREQUENCY = 25. * KNT  { This computes the frequency in Hz of the scan
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch card
+  TRAN                       1.0       1.E+5                                   3
+  GEN   TRAN                 1.0MHENRY
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70.       25.       0.0  { Note comment and no negative T-start
+14GEN            70.       50.       0.0  { This is normal HFS source data.  It
+14GEN            70.       75.       0.0  { is unusual, however,  because of our
+14GEN            70.      100.       0.0  { match preceding subases.   Unusual
+14GEN            70.      125.       0.0  { for HFS usage,  the amplitude is not
+14GEN            70.      150.       0.0  { varied and all harmonics are present
+14GEN            70.      175.       0.0 
+14GEN            70.      200.       0.0 
+BLANK card ending source cards
+BLANK card ending F-dependent series R-L-C branches (none, for this subcase)
+  GEN   TRAN
+BLANK card ending program output-variable requests.
+  CALCOMP PLOT       { Use BOTH rather than DISK to see a bar chart of harmonics 
+ 19680. 0.0200.         TRAN     { Units/inch of 5-7 are ingored since bar chart
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      18th of 19 subcases illustrates  ELSEIF  use within an IF-THEN-ELSE-ENDIF
+C      block.  It is related to the preceding,  but for variety has replaced
+C      the HFS control of looping by simpler pocket calculator control as was
+C      seen in the 1st subcase.  The first condition,  giving 5 steps,  has
+C      been left unchanged.  But then the remaining 3 steps would need to be
+C      split among two formulas.  Rather than 8 frequency steps,  9 steps will
+C      be taken in order that each formula is used at least twice.  From top to
+C      bottom:    a) below IF        b) below ELSEIF    c) below ELSE
+C      KNT  =     1, 2, 3, 4, 5      steps 6 and 7      steps 8 and 9.
+C      This data is added by WSM on  5 December 2000.
+C   Controls of following request card:   MAXKNT  IOPCVP   { Loop 9 times with
+POCKET CALCULATOR VARIES PARAMETERS            9       1   { minimum printout
+PRINTED NUMBER WIDTH, 11, 2,  { Request maximum precision (for 8 output columns)
+   .0001     -1.     50.     50.
+       1       1       1       0       1                       2
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would b
+IF( KNT .LT. 6.0 ) THEN { If frequency (pass number) is low, use one formula:     
+C  Note: the following formula is identical to that used in the 3rd subcase.
+C        It is used for  KNT < 6,  so for values  KNT = 1, 2, ... through 5:
+MHENRY = 1.2 - ( KNT - 1.0 ) * .05    { L = 1.2,  1.15,  1.1,  1.05,  and  1.0
+C        Having evaluated this or any other formula of the block, control
+C        passes to the end of the block,  of course.  Control reaches the
+C        following statement if and only if the previous condition ( KNT < 6 )
+C        was not satisfied.
+ELSEIF( KNT .LT. 8.0 ) THEN { If frequency (pass number) satisfies  KNT < 8 :
+C        Control reaches this point only for 5 < KNT < 8,  so for KNT = 6 and 7.
+C        The slope has been reduced from  .05  to  .02  and the offset has been
+C        reduced to ensure continuity of the piecewise-linear segments:
+MHENRY = 1.0 - ( KNT - 5.0 ) * .02    { Produces values  L = .98  and  .96
+C        Having evaluated this formula, control passes to end of block (ENDIF)
+C        Etc.  The preceding  ELSEIF  could be repeated an arbitrary number of
+C        times,  providing different formulas for an arbitrary number of ranges
+C        of KNT.  If the condition of the first  ELSEIF  was not satisfied, the
+C        second would be checked, etc. in order from top to bottom.  If none is
+C        satisfied when  ELSE  finally was reached,  the formula below  ELSE
+C        would be used.
+ELSE { Alternatively (if none of preceding conditions were satisfied), use this:
+C        Control reaches this point only if no preceding condition is satisfied.
+C        I.e.,  for 7 < KNT.  The slope and offset will be changed once again,
+C        to provide a 3rd segment of the piecewise-linear curve:
+MHENRY = .96 - ( KNT - 7.0 ) * .01    { L =.95, .94
+ENDIF { Terminate 26-line block that provides three alternatives for MHENRY                           
+C   Unlike preceding subcase, the following variable is required because HFS
+C   is not being used.  Instead, the pocket calculator must itself provide
+C   the frequency for any source card (node GEN in this case).
+FREQUENCY = 25. * KNT  { This computes the frequency in Hz of the scan
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch card
+  TRAN                       1.0       1.E+5                                   3
+  GEN   TRAN                 1.0MHENRY
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70. FREQUENCY                                     -1.
+BLANK card ending source cards
+  GEN   TRAN
+C   Step   F [Hz]       TRAN       GEN        TRAN       TRAN
+C                       TERRA                            TERRA
+C       1       25.   71.874164        70.  71.874164  3.5892245
+C New parameter values follow:  1)  1.15  2)      50.
+C       2       50.   77.535296        70.  77.535296  7.7150503
+C New parameter values follow:  1)   1.1  2)      75.
+C       3       75.   87.376164        70.  87.376164   12.96142
+C New parameter values follow:  1)  1.05  2)     100.
+C       4      100.   101.32085        70.  101.32085  19.870653
+BLANK card ending program output-variable requests.
+C New parameter values follow:  1)   1.0  2)     125.
+C       5      125.   115.44696        70.  115.44696        28.
+C New parameter values follow:  1)   .98  2)     150.
+C       6      150.   119.51423        70.  119.51423  34.342161
+C New parameter values follow:  1)   .96  2)     175.
+C       7      175.   102.75012        70.  102.75012  33.943547
+C New parameter values follow:  1)   .95  2)     200.
+C       8      200.   79.015248        70.  79.015248  29.345527
+C New parameter values follow:  1)   .94  2)     225.
+C       9      225.   60.191978        70.  60.191978  24.700662
+  PRINTER PLOT
+ 19650. 0.0250.         TRAN                      Plot limits: ( 0.000,  3.434 )
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   19th  of 19 subcases is same as the 5th except that the voltage source used
+C   previously becomes a current source.  Also, as first illustrated by the 14th
+C   subcase,  the final excitation set will involve no preceding harmonics so it
+C   will be the job of ATP to add these automatically.  Prior to correction on
+C   13 March 2001, there was an enormous oscillation in dT loop as seen on plot.
+C   That is,  the automatic addition of all preceding harmonics (here, just one)
+C   did not work properly for a current source.  Orlando Hevia in Santa Fe,
+C   Argentina,  first made WSM aware of the problem by E-mail.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+     .01     2.0
+       1       1       1       1       1      -1
+       5       5      20      20
+  GEN   TRAN                 1.0   10.                                         3
+  TRAN                                0.20E6                                   1
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN   -1       1.0       1.0                                     -1.
+BLANK card terminating source cards for 1st phasor solution.
+  SUPERIMPOSE MORE SOURCES:        { Request for superposition produced by more:
+14GEN   -1      -1.0       2.0   { 2nd harmonic source }           -1.
+BLANK card terminating source cards for 2nd (and final) phasor solution.
+  GEN   TRAN
+BLANK card ending program output-variable requests.
+  CALCOMP PLOT
+ 143 .2 0.0 2.0         GEN   TRAN  { Screen plot is perfectly smooth & periodic
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+BLANK

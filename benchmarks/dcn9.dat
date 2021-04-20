@@ -1,0 +1,370 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-9
+C       Test of  U.M.  for the option of data that is nearly compatible with the 
+C       Type-59 S.M.   Compare with DC-53 (source of the original data).  Mass 6
+C       is  no longer an exciter  (the U.M. has no such feature).   Compensation     
+C       will be used for armature currents. See DCNEW-10 for solution without it
+C        Note: WSM and Yin change comment cards in Leuven, October 22, 1990,
+C              following modifications of code that change answers in 3rd or 4th
+C              decimal place (peak values of PRINTER PLOTs are barely affected).
+PRINTED NUMBER WIDTH, 13, 2,   { Request maximum precision (if 8 output columns)
+ .000200    .150     60.     60.
+       1       1       1       1       1      -1             
+       5       5      20      20     100     100     500     500
+51NAVH AMCC1 A            162.67   507.51
+52NAVH BMCC1 B            6.51    162.97
+53NAVH CMCC1 C
+  MCC1 AMCC2 A                        8285.
+  MCC1 BMCC2 B                        8285.
+  MCC1 CMCC2 C                        8285.
+  MCC2 AEQV  A                  19.52
+  MCC2 BEQV  B                  19.52
+  MCC2 CEQV  C                  19.52
+  TRANSFORMER                         TRAN A
+            9999
+ 1NAVL ANAVL C                  .1    26.
+ 2NAVH A                        31.23 311.09
+  TRANSFORMER TRAN A                  TRAN B
+ 1NAVL BNAVL A
+ 2NAVH B
+  TRANSFORMER TRAN A                  TRAN C
+ 1NAVL CNAVL B
+ 2NAVH C
+  NAVL A                  2500.       1.13
+  NAVL B                  2500.       1.13
+  NAVL C                  2500.       1.13
+  SWT  AMCC2 A            4830.
+  SWT  BMCC2 B            4830.
+  SWT  CMCC2 C            4830.
+  MCC2 ASWT  A                  13.01
+  MCC2 BSWT  B                  13.01
+  MCC2 CSWT  C                  13.01      
+$UNITS, 0.0, 0.0          { Turn off XOPT = COPT = 60 of miscellaneous data card
+BLANK card ending branch cards                                                 
+  SWT  A       .01661667 .09161667
+  SWT  B       .01661667 .09161667
+  SWT  C       .01661667 .09161667
+BLANK card ending switch cards
+14EQV  A  389997.    60.      -93.81293                           -1.
+14EQV  B  389997.    60.      -213.81293                          -1.
+14EQV  C  389997.    60.       26.18707                           -1.
+19  UM
+  SMDATA      0       { Column-15 zero is a request for compensation of armature
+BLANK card ending  Class-1  U.M.  data cards
+59NAVL A  21229.     60.      -44.896562
+  NAVL B
+  NAVL C
+PARAMETER FITTING           1.
+ 6 5     2 1.        1.        892.4      26.     +1800.    1907.     3050.
+          .13       1.79       1.71       .169      .228      .13504  .20029
+ 4.3      .85       .032      .05       .13
+ 1        .3        .027691                       33.68813            BUSM1
+ 2        .26       .046379                       60.9591             BUSM2
+ 3        .22       .255958                       90.81823            BUSM3
+ 4        .22       .263573                       123.6634            BUSM4
+ 5                  .258887                       4.925036            BUSM5
+ 6                  .0101995                                          BUSM6
+   11111111 333333
+  FINISH
+BLANK card ending all U.M. data cards
+C --------------+------------------------------ 
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        NAVH A |TERRA *MCC1 A*                                                                                           
+C        MCC1 A |NAVH A*MCC2 A*                                                                                           
+C        NAVH B |TERRA *MCC1 B*                                                                                           
+C        MCC1 B |NAVH B*MCC2 B*                                                                                           
+C        NAVH C |TERRA *MCC1 C*                                                                                           
+C        MCC1 C |NAVH C*MCC2 C*                                                                                           
+C        MCC2 A |MCC1 A*EQV  A*SWT  A*SWT  A*                                                                             
+C        MCC2 B |MCC1 B*EQV  B*SWT  B*SWT  B*                                                                             
+C        MCC2 C |MCC1 C*EQV  C*SWT  C*SWT  C*                                                                             
+C        EQV  A |MCC2 A*                                                                                                  
+C        EQV  B |MCC2 B*                                                                                                  
+C        EQV  C |MCC2 C*                                                                                                  
+C            < <  Etc. (many more not shown)  > >
+BLANK card ending all source cards (including the U.M.)
+C       Total network loss  P-loss  by summing injections =   1.775797462495E+07
+C       Total network loss  P-loss  by summing injections =   7.638165973267E+16
+C       Total network loss  P-loss  by summing injections =   7.637910322914E+16
+C       Total network loss  P-loss  by summing injections =   7.638932292935E+16
+C                                Output for steady-state phasor switch currents.
+C     Node-K    Node-M            I-real            I-imag            I-magn     
+C     SWT  A                      Open              Open              Open       
+C     SWT  B                      Open              Open              Open       
+C     SWT  C                      Open              Open              Open       
+C     BUSM2     BUSM1        -6.37300009E+05    2.76386719E+01    6.37300009E+05 
+C     BUSM3     BUSM2        -1.18962668E+06    7.40189819E+01    1.18962668E+06 
+C     BUSM4     BUSM3        -1.65698002E+06    3.29398010E+02    1.65698005E+06 
+C     BUSM5     BUSM4        -2.12433336E+06    5.92635864E+02    2.12433344E+06 
+C     BUSM6     BUSM5         0.00000000E+00   -1.01809349E+01    1.01809349E+01 
+C
+C  EQV  C   349966.92087687        389997.      -1273.107108882  1348.5187481048 
+C           172106.98504408     26.1870700      -444.6359221929     -160.7481140 
+  NAVH ANAVH BNAVH C
+C  Step   Time        BUSM1        BUSM2        BUSM3        BUSM4        BUSM5        BUSM6        NAVH A       NAVH B
+C                     TERRA        TERRA        TERRA        TERRA        TERRA        TERRA
+C       
+C                     NAVH C       BUSM2        BUSM3        BUSM4        BUSM5        BUSM6        UM-1         UM-1
+C                                  BUSM1        BUSM2        BUSM3        BUSM4        BUSM5        TQGEN        IPA
+C
+C                     UM-1         UM-1         UM-1         UM-1         UM-1         UM-1
+C                     IPB          IPC          IE1          IE2          IE3          IE4
+C  ***      Phasor I(0) = -6.3730001E+05  Switch  "BUSM2 "  to  "BUSM1 "  closed 
+C  ***      Phasor I(0) = -1.1896267E+06  Switch  "BUSM3 "  to  "BUSM2 "  closed 
+C  ***      Phasor I(0) = -1.6569800E+06  Switch  "BUSM4 "  to  "BUSM3 "  closed 
+C  ***      Phasor I(0) = -2.1243334E+06  Switch  "BUSM5 "  to  "BUSM4 "  closed 
+C  ***      Phasor I(0) =  0.0000000E+00  Switch  "BUSM6 "  to  "BUSM5 "  closed 
+C     0    0.0   376.9911184  376.9911184  376.9911184  376.9911184  376.9911184  376.9911184  54291.46171  -385072.283
+C                330780.8214  -637300.009  -.1189627E7   -.165698E7  -.2124333E7          0.0  .21243334E7  9214.545301
+C                -27456.1144  18241.56909  4313.224999          0.0          0.0          0.0
+C     1  .2E-3   376.9911184  376.9911184  376.9911184  376.9911184  376.9911186  376.9911184  85318.78796  -396024.762
+C                310705.9745  -637300.009  -.1189627E7   -.165698E7  -.2124333E7  -.138837E-3  .21243107E7  11175.13477
+C                -27770.8437  16595.70895  4313.232183   .556544506  .5177532216  .2174144099
+C     2  .4E-3   376.9911184  376.9911184  376.9911184  376.9911184  376.9911194  376.9911184  115764.6332  -404689.207
+C                288924.5743  -637300.009  -.1189627E7   -.165698E7  -.2124333E7  -.952727E-3  .21242684E7  13072.19218
+C                -27927.6403  14855.44814  4313.236387  .8570545884  1.111579264  .4663873197
+BLANK card ending output requests (here, just node voltages)
+C ***          Open  switch  "SWT  C"  to  "      "  after  1.00200000E-01  sec.
+C   750    .15   378.9802147  378.8066705  378.5631922  378.0587633  377.9216436  362.5597378  153822.7526  -282349.318
+C                178476.3341  -.1750083E7  -.3711689E7  -.8145995E7  -.3608856E7  -369190.836  -429002.914   -21330.627
+C                -16304.4988  37635.12584  5406.705235   -7773.4811  26655.00106  10976.10311
+C     maxima :   387.5919106  384.6511841  381.1764335  380.9022734  381.7530779  390.8917952  688961.4857  512761.0191
+C                483186.0844  661792.7005  .13554233E7  .28091795E7  .10610433E7  767578.4255  .72538035E7  75502.19563
+C                 60315.4182  76573.63775  6524.504755  46325.70396  40735.63276  15991.19325
+C Times of max :        .136        .1368        .1382         .116        .1126          .12        .1202        .1092
+C                      .1152        .1228        .1234        .1258        .0582        .1342        .1276         .137
+C                      .0444        .1298        .0908        .1384        .0436        .0434
+C     minima :   370.1557803  373.9716939   376.015633  375.3288512  375.0977997  361.0545505  -514378.088  -653956.984
+C                -620927.877  -.1831477E7  -.3711689E7  -.8145995E7  -.4021296E7  -501320.871   -.183589E7  -76972.3829
+C                -68080.9903  -74122.2189  3582.557198  -55611.1978  -44273.1329  -18983.9688
+C Times of min :        .111        .1108        .0518        .1402        .1382        .1466         .112        .1174
+C                       .123          0.1          .15          .15        .1406        .1078        .1026         .127
+C                      .0356        .1396        .1156        .1132        .1262         .126
+  PRINTER PLOT
+ 19415.    150.         UM-1  TQGEN             { Axis limits : (-1.836,  7.254)
+ 18415.    150.         BUSM6                   { Axis limits : (0.000,   3.909)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-9
+C       2nd  of  2  subcases is identical to the first.  Prior to its correction 
+C       in mid-May, 1993,  this was incorrect as demonstrated by  Juan Martinez.
+C       WSM  added 0 initialization at the top of  SMDATA  to solve the problem.
+PRINTED NUMBER WIDTH, 13, 2,   { Request maximum precision (if 8 output columns)
+ .000200   .0002     60.     60.  { We only need look at step 1 (previously bad)
+       1       1  
+51NAVH AMCC1 A            162.67   507.51
+52NAVH BMCC1 B            6.51    162.97
+53NAVH CMCC1 C
+  MCC1 AMCC2 A                        8285.
+  MCC1 BMCC2 B                        8285.
+  MCC1 CMCC2 C                        8285.
+  MCC2 AEQV  A                  19.52
+  MCC2 BEQV  B                  19.52
+  MCC2 CEQV  C                  19.52
+  TRANSFORMER                         TRAN A
+            9999
+ 1NAVL ANAVL C                  .1    26.
+ 2NAVH A                        31.23 311.09
+  TRANSFORMER TRAN A                  TRAN B
+ 1NAVL BNAVL A
+ 2NAVH B
+  TRANSFORMER TRAN A                  TRAN C
+ 1NAVL CNAVL B
+ 2NAVH C
+  NAVL A                  2500.       1.13
+  NAVL B                  2500.       1.13
+  NAVL C                  2500.       1.13
+  SWT  AMCC2 A            4830.
+  SWT  BMCC2 B            4830.
+  SWT  CMCC2 C            4830.
+  MCC2 ASWT  A                  13.01
+  MCC2 BSWT  B                  13.01
+  MCC2 CSWT  C                  13.01      
+$UNITS, 0.0, 0.0          { Turn off XOPT = COPT = 60 of miscellaneous data card
+BLANK card ending branch cards                                                 
+  SWT  A       .01661667 .09161667
+  SWT  B       .01661667 .09161667
+  SWT  C       .01661667 .09161667
+BLANK card ending switch cards
+14EQV  A  389997.    60.      -93.81293                           -1.
+14EQV  B  389997.    60.      -213.81293                          -1.
+14EQV  C  389997.    60.       26.18707                           -1.
+19  UM
+  SMDATA      0       { Column-15 zero is a request for compensation of armature
+BLANK card ending  Class-1  U.M.  data cards
+59NAVL A  21229.     60.      -44.896562
+  NAVL B
+  NAVL C
+PARAMETER FITTING           1.
+ 6 5     2 1.        1.        892.4      26.     +1800.    1907.     3050.
+          .13       1.79       1.71       .169      .228      .13504  .20029
+ 4.3      .85       .032      .05       .13
+ 1        .3        .027691                       33.68813            BUSM1
+ 2        .26       .046379                       60.9591             BUSM2
+ 3        .22       .255958                       90.81823            BUSM3
+ 4        .22       .263573                       123.6634            BUSM4
+ 5                  .258887                       4.925036            BUSM5
+ 6                  .0101995                                          BUSM6
+   11111111 333333
+  FINISH
+BLANK card ending all U.M. data cards
+BLANK card ending all source cards (including the U.M.)
+  NAVH ANAVH BNAVH C
+C   Step      Time        BUSM1        BUSM2        BUSM3        BUSM4        BUSM5        BUSM6        NAVH A       NAVH B
+C                         TERRA        TERRA        TERRA        TERRA        TERRA        TERRA
+C
+C                         NAVH C       BUSM2        BUSM3        BUSM4        BUSM5        BUSM6        UM-1         UM-1
+C                                      BUSM1        BUSM2        BUSM3        BUSM4        BUSM5        TQGEN        IPA
+C
+C                         UM-1         UM-1         UM-1         UM-1         UM-1         UM-1
+C                         IPB          IPC          IE1          IE2          IE3          IE4
+C ***      Phasor I(0) = -6.3730001E+05                     Switch  "BUSM2 "  to  "BUSM1 "  closed in the steady-state.
+C ***      Phasor I(0) = -1.1896267E+06                     Switch  "BUSM3 "  to  "BUSM2 "  closed in the steady-state.
+C ***      Phasor I(0) = -1.6569800E+06                     Switch  "BUSM4 "  to  "BUSM3 "  closed in the steady-state.
+C ***      Phasor I(0) = -2.1243334E+06                     Switch  "BUSM5 "  to  "BUSM4 "  closed in the steady-state.
+C ***      Phasor I(0) =  0.0000000E+00                     Switch  "BUSM6 "  to  "BUSM5 "  closed in the steady-state.
+BLANK card ending output requests (here, just node voltages)
+C    0     0.0   376.9911184  376.9911184  376.9911184  376.9911184  376.9911184  376.9911184  54291.46171  -385072.283
+C                330780.8214  -637300.009  -.1189627E7   -.165698E7  -.2124333E7          0.0  .21243334E7  9214.545301
+C                -27456.1144  18241.56909  4313.224999          0.0          0.0          0.0
+C    1   .2E-3   376.9911184  376.9911184  376.9911184  376.9911184  376.9911186  376.9911184  85318.78796  -396024.762
+C                310705.9745  -637300.009  -.1189627E7   -.165698E7  -.2124333E7  -.138837E-3  .21243107E7  11175.13477
+C                -27770.8437  16595.70895  4313.232183  .5565441297  .5177532617
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C     3rd of 3 subcases.
+C     Test of U.M. as used for servo motor (2-phase induction motor).  See Vol.
+C     XI EMTP Memoranda,  17 July 1981,  page IEEO-21.  For simplicity,  SPY 
+C     is not used here.  Instead, we just consider the startup transients as
+C     documented in the memorandum (plots shown on pages 22 and 23).  Shorten
+C     the simulation to 250 msec (1981 simulation went to 400 msec), which is
+C     plenty to show decay of angular error.  Increase dT from half a msec to 
+C     1 msec to speed the simulation.  Yes, this does introduce some error, but  
+C     overall shapes of curves are surprisingly similar.  The general principle
+C     is as follows.  Actual rotor angle is computed in TACS by integrating the
+C     rotor speed.  This is subtracted from the desired rotor angle (1/10 of a
+C     radian) to generate an error signal that is used to scale the sinusoidal
+C     excitation of one coil of the motor.  Of course, the two coils are excited
+C     by sinusoidal signals that are 90 degrees apart in phase  (a 2-phase motor
+C     really is just half of a 4-phase motor).
+C       If one wants a normal, 2-phase induction motor instead of a servo motor,
+C       the problem can be simplified considerably.   Begin by removing all TACS
+C       data.   Also remove the Type-60 source,  and replace  VCTACS  by  BUSCON
+C       in the U.M. data.  In words, drive the control coil by a balanced signal
+C       rather than the control signal,  & the starting transient of a balanced, 
+C       2-phase induction motor will be seen.  This will be like DC-35, but with
+C       the normal 3 phases converted to two.  
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+    .001    .250
+       1       1       1       0       1      -1
+       5       5      20      20
+TACS HYBRID
+ 1POS     +BUSOM  { Integrate input rotor speed BUSOM to produce rotor angle POS
+       1.0       0.0      { Numerator   of transfer function is 1 + 0 * s
+       0.0       1.0      { Denominator of transfer function is 0 + 1 * s
+C  The following two TACS sources had T-start < 0 ("-1." in cols. 68-70).  But
+C  this has no effect on the answer,  so remove such extra, gratuitous work:
+11GAIN           80.                                             { -1.
+11POSREF         0.1                                             { -1.
+C 90BUSREF { 1981 data involved this variable.  But since unused, delete it here
+90BUSCON    { Bring into TACS unscaled value of voltage of control coil of motor
+90BUSOM    { Bring into TACS the speed of rotor (voltage across the capacitance)
+98AMPERR  = GAIN * ( POSREF - POS )  { Error signal = gain * (error in position)
+98VCTACS  = BUSCON * AMPERR { Sinusoidal valu: voltage for control coil of motor
+33POS   AMPERR { TACS outputs will be rotor angle & signal proportional to error
+BLANK card ending TACS data
+  BUSRD                   1.E-10      { 1st of 2 rotor coils is shorted (almost)
+  BUSRQ                   1.E-10      { 2nd of 2 rotor coils  ...
+  BUSREF                     1.0   { Dummy branch connects electric network node
+  BUSCON                     1.0   { Dummy branch connects electric network node
+  VCTACS                     1.0   { Dummy branch connects electric network node
+  BUSOM                               6.0E+5   { Capacitor represents rotor mass
+        BUSOM                .03               { Parallel resistance adds losses
+BLANK card terminating branch cards
+BLANK card ends non-existent switch cards
+C   Note about following 2 source cards.  The 1981 data shows  T-start < 0,
+C   which will involve at least one phasor solution.  But since this affects
+C   the solution only at the roundoff level,  it here is being omitted.  Note
+C   the lack of influence is believable since  VCTACS  is the amplitude of the
+C   signal applied to the control coil,  and this,  as a Type-60 source, is
+C   ignored during the phasor solution.  So,  only one of the two power coils
+C   is excited,  and this has negligible effect on the subsequent transients.
+C Name       Amplitude     Hz      Degrees                     T-start
+14BUSREF       100.0      60.0     -90.0                           -0.
+14BUSCON       100.0      60.0       0.0                           -0.
+60VCTACS { Signal for control coil must be electric network node, so use Type 60
+C   The preceding Type-60 source was not involved in the 1981 data.  It seems
+C   that earlier,  rules allowed the direct connection of a TACS signal to a
+C   power coil.  But,  as tested 2 Nov 2000,  such direct connection resulted
+C   in an error message that suggested indirect connection.  Well, this is it.
+C   TACS passes the signal to an electric network node (VCTACS),  and the power
+C   coil of the U.M. is connected to this.  The effect should be the same.
+19 UM                 { U.M. data cards begin with declaration of Type-19 source
+0                     { Use compensation (not prediction)
+BLANK card ending Class-1 U.M. data
+ 5 1 1111BUSOM        2                            0.01
+C   E14 -----><---- E14 --->1<---- E14  
+0.0           0.020292      0
+0.0           0.020292      0
+BLANK card begins coil data (reserve space for missing coil of 3-phase storage)
+C   E14 -----><---- E14 ---><BUS1><BUS2>  
+0.063         0.0003926     BUSREF            1 0.0 { 1st power coil has fixed V
+0.063         0.0003926     VCTACS            1 0.0 { 2nd power coil uses TACS V
+0.83          0.0003926     BUSRD             1 0.0  { 1st rotor coil is shorted
+0.83          0.0003926     BUSRQ             1 0.0  { 2nd rotor coil is shorted
+BLANK card ending all U.M. data
+C    The preceding data cards are tricky.  Document the interpretation, which
+C    is quite unusual (note coil card 1):
+C U.M. data begins.   List-25 allocation = 347.     |19 UM                 { U.M. data cards begin with declaration of Type-19 source
+C Compensation is used by the U.M. power coils.     |0                     { Use compensation (not prediction)
+C Blank card terminating Class-1 U.M. data cards.   |BLANK card ending Class-1 U.M. data
+C U.M. 1, machine card 1.  Type = 5.                | 5 1 1111BUSOM        2                            0.01
+C U.M. 1, machine card 2.   0.000E+00   2.029E-02   |0.0           0.020292      0
+C U.M. 1, machine card 3.   0.000E+00   2.029E-02   |0.0           0.020292      0
+C U.M. 1, coil card 1.    0.000E+00   0.000E+00     |BLANK card begins coil data (reserve space for missing coil of 3-phase storage)
+C U.M. 1, coil card 2.    6.300E-02   3.926E-04     |0.063         0.0003926     BUSREF            1 0.0           { 1st winding card
+C U.M. 1, coil card 3.    6.300E-02   3.926E-04     |0.063         0.0003926     VCTACS            1 0.0
+C U.M. 1, coil card 4.    8.300E-01   3.926E-04     |0.83          0.0003926     BUSRD             1 0.0
+C U.M. 1, coil card 5.    8.300E-01   3.926E-04     |0.83          0.0003926     BUSRQ             1 0.0
+C Blank card terminating all U.M. data.             |BLANK card ending all U.M. data
+BLANK card ending electric network source cards
+C  Note that the following comment cards document the solution using the 1981
+C  dT = 1/2 msec.  By comparing these with the solution using dT = 1 msec,  it
+C  is easy to see that the solution has not changed much.  For example,  take 
+C  the peak torque.  THETAM = .1359  is the old value and .1324 is the new. 
+C  Next   2     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C  Final  7     output variables pertain to Type-19 U.M. components (names are generated internally);
+C   Step      Time       TACS        TACS        UM-1        UM-1        UM-1        UM-1        UM-1        UM-1        UM-1
+C                        POS         AMPERR      TQGEN       OMEGM       THETAM      IPB         IPC         IE1         IE2
+C      0       0.0          0.0         0.0         0.0         0.0         0.0         0.0         0.0         0.0         0.0
+C      1     .5E-3          0.0         8.0         0.0         0.0         0.0  -4.7260614         0.0  -4.5903111         0.0
+C      2     .1E-2   -.75353E-7  8.00000603  .733439918         0.0         0.0  -16.719968  -198.19905  -16.148526  -192.50603
+C      3     .0015   -.64027E-6  8.00005122  3.31829481         0.0         0.0  -32.420897  -499.42028  -31.077691  -481.25111
+C      4      .002   -.19544E-5  8.00015635  .073317462         0.0         0.0  -49.532565  -645.81451  -47.080521  -613.88079
+C      5     .0025   -.21756E-5  8.00017405  -13.753032         0.0         0.0   -66.48314  -693.10732  -62.609005  -647.62106
+C     10      .005   .386893E-3  7.96904856  -260.62871  .465868681  .388535E-3  -116.85358  -231.93464  -102.90808  -149.60859
+C     15     .0075   .003387352  7.72901186  -609.56002  2.13312674  .003389103  -78.090821   517.50938   -59.76177  562.701656
+C     20       .01   .011749416  7.06004672  -725.13071   4.5810072  .011751262  12.2543295  801.605716  15.9654148  769.441724
+BLANK card ends requests for program output (none here)
+C    500       .25   .099742144  .020628514  -9.4006317  .124190097  .099757723  38.1853818  3.29866531  32.3978989  3.21713744
+C Variable maxima :   .135902117  8.00017405  267.526078  6.72779235  .135917916  101.917228  803.241795  139.090132  786.335864
+C Times of maxima :        .0415       .0025       .0415       .0145       .0415        .247       .0095        .045       .0095
+C Variable minima :   -.21756E-5  -2.8721694  -735.50088  -2.0425339         0.0  -120.32142  -693.10732   -128.8745  -647.62106
+C Times of minima :        .0025       .0415       .0095         .06         0.0       .0385       .0025        .037       .0025
+  PRINTER PLOT
+ 19450. 0.0250.         UM-1  THETAM             { Axis limits : (0.000,  1.324)
+C   5 of the 6 vector plots shown on pages IEEO-22 and 23 will be produced by 
+C   the following batch-mode plot requests.  Activate if interested.
+$DISABLE    { To speed execution, ignore the 5 batch-mode plot cards that follow  
+  CALCOMP PLOT
+ 19425. 0.0250. 0.0  .2 UM-1  THETAM
+ 19425. 0.0250.         UM-1  TQGEN 
+ 19425. 0.0250.         UM-1  IPC 
+ 19425. 0.0250.         UM-1  IE2 
+ 19425. 0.0250.         TACS  AMPERR 
+C $ENABLE    { End block of plot cards being ignored.
+$EnabLE      { 3 May 2003, add some lower case to demonstrate case insensitivity
+BLANK card ends the last plot card
+BEGIN NEW DATA CASE
+BLANK

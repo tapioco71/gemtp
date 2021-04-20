@@ -1,0 +1,602 @@
+BEGIN NEW DATA CASE
+C        4th of 5 subcases illustrates the modeling of Static Var Control (SVC).
+C        Contributed to ATP materials of the Can/Am user group February 1992 by:
+C          Gabor B. Furst Consultants            Kurt G. Fehrle, Consultant     
+C          #203 - 1745 Martin Drive              705 Westtown Circle
+C          White Rock/ South Surrey B.C.         West Chester, PA 19382
+C          CANADA  V4A 6Z1                       USA
+C          Phone: 604-535-6540                   Phone: 610-344-0432 
+C          FAX:   604-535-6548
+C        In July of 1993,  Mr. Furst revised it again in preparation for his use
+C        of it at Prof. Ned Mohan's University of Minnesota short course there.
+C   Size  1-10:    43    63    56     3   230    18   167     0     0     0
+C   Size 11-20:     0    15  3602 -9999 -9999     0     0     0110679     0
+C   Size 21-29:     0     0   105     0 -9999 -9999 -9999 -9999 -9999
+NEW LIST SIZES
+       0       0      68       8     450      35     285       0       0       0
+       0       0    4700       0       0       0       0       0   12000       0
+       0       0     220
+  240000  
+C  *********** A GENERIC 6 PULSE SVC MODEL ************************************
+C
+C     This is a conceptual model only, it must be refined
+C     for any specific system; the control algorithm can be greatly improved.
+C
+C    6 pulse 100 MVAR TCR-SVC connected to a 230/34.5 kV Y/D transformer;
+C    TCR's connected in delta.
+C
+C    Thyristor gating pulses are phase locked to the current zero transition
+C    in an auxiliary reactor (RMAB,RMBC,RMCA), which could be an oversized PT;
+C    individual phase open loop VAR control is used, with a superimposed.
+C    slow voltage control.
+C
+C    The disturbance is the on/off switching of a 52.3 MVA, 0.7 p.f., 34.5 kV
+C    load (XLA/B/C). The SVC response can be obtained by plotting the r.m.s
+C    value of the 34.5 kV phase to phase voltages, which are the TACS variables
+C    TXNAB/BC/CA.  To obtain the response on the 34.5 kV bus without the SVC,
+C    the thyristors have to be blocked.  One way of doing this is to punch
+C    1000000. in col. 17-24 of the thyristor switches 11.
+C
+C    To get the SVC overall response plot the transformer ph-ph r.m.s secondary
+C    voltage  TXNA (TACS), or VILLAVG (TACS) for the av. value of the three
+C    ph-ph r.m.s. voltages
+C
+C    To get the VAR import/phase through the transformer secondary
+C    plot QINA (TACS)
+C
+C    To get the transformer secondary voltage (instant.) plot TRSA
+C
+C    TRSA-XLA shows the switching of the phase to phase load
+C
+C    RXAB-TRSB plots the current through one AB arm of the thyristor bridge
+C
+C    For sake of simplicity, some of the TACS variables have not been
+C    initialized, so ignore the first 25 ms of the plots.
+C
+C    If in the "Superimposed Voltage Control Section the gain
+C    of DVQ is set to zero, the model reverts to open loop VAR control
+PRINTED NUMBER WIDTH, 13, 2,
+C      For best results,  do  not  use a time step more than 1/2 Degree  (23.148
+C      microsec for 60 Hz).  Here, to speed the illustration, we use twice that,
+C      & only simulate for half as long (extend to 0.5 sec for more transients).
+C      Free-format  data  input  is used in order to specify  DELTAT  precisely:
+C             DELTAT   TMAX  XOPT  COPT  EPSILN  TOLMAT
+.0000462962962962963,  0.25,  60.,     ,       ,       ,               , , , , ,
+       1      -3       1       2       1      -1          
+       5       5      20      20     100     100     500     500
+TACS HYBRID
+C
+C   Firing pulses are derived from the current through the measuring inductances
+C   RMAB, RMBC and RMCA as explained above.  Device 91 imports the current into
+C   TACS from the  measuring switches connecting the RM's in delta,
+C   corresponding to the delta connected thyristor valves.
+C
+C   The current lags the voltage 90 deg. and its zero transition produces
+C   the firing signal at an alpha of 90 deg.
+C   This is done by TACS level triggered switches Device 52.
+C   The firing pulse delay is calculated by the variables DELAB/BC/CA
+C   and implemented by TACS transport device Device 54;
+C
+C   For convenience, the firing angle is initialized to alpha = 180 deg.
+C   by the constant of DELIN, where DELA is 4.167 ms for a 60 Hz system.
+C   The required firing angle is then calculated backwards from the
+C   180 deg. point, by using the variable DELYA(B,C).
+C   The actual firing angle is then DELAB = DELIN -DELYA etc.
+C   for the other phases. The minimum firing  angle is limited by DELYA = 4.167 ms.
+C   Then DELAB= DELIN - DELYA =0.0 (90 deg.)
+C   DELIN = 4.167 ms.; DELAB =0.0 corresponds to minimum alpha 90 degrees.
+C   For 50 Hz,  DELIN = 5.0 ms.
+C
+C       *********** VOLTAGE AND REACTIVE REFERENCE *************
+11VREFD          1.0
+C   VAR reference
+C   the TCR rating is 100 MVA 3ph; the per phase is 33.3 MVAR or 1.00 p.u.;
+C   initial load through the 230/34.5 kV tranformer is 45 MVAR or 15 MVAR/phase;
+C   equal to 0.45 p.u. giving approx. 90% bus voltage at 34.5 kV;
+C   this is taken as reference; Q divided by QTCR =33.3 MVAR will be Q p.u.
+88QTCR    = 33.3*10**6
+C    The VAR reference QREF should be determined so that the superimposed
+C    voltage control changes the VAR flow as little as possible
+88QREF    = 0.30
+C
+C    ***********  VOLTAGES TRANSFERRED FROM NETWORK  *************
+C
+C ******* Import 34.5 kV phase voltages, get phase to phase and normalize *****
+C  TRSA/B/C are the transformer secondary ph-g voltages
+C  90 - TACS voltage source driven by an EMTP network node voltage
+C   (Rule Book p. 3-15)
+90TRSA
+90TRSB
+90TRSC
+C     the phase to phase voltages
+99TRAB    =  TRSA - TRSB
+99TRBC    =  TRSB - TRSC
+99TRCA    =  TRSC - TRSA
+C      normalize to get one p.u. for the phase to phase rms value
+99TABX    =  TRAB/34500
+99TBCX    =  TRBC/34500
+99TCAX    =  TRCA/34500
+C      get the rms value of the A-B phase to phase voltage
+C      Device 66 (Rule Book p. 3-32)
+99TXNAB 66+TABX                                      60.
+99TXNBC 66+TBCX                                      60.
+99TXNCA 66+TCAX                                      60.
+C
+C **************  PHASE A  FIRING PULSES **************************************
+C
+C  91 - TACS;  current source driven by an EMTP network current (Rule B.p 3-15)
+91RMAB
+C    send square impulse at current zero Device 52 (Rule B. p. 3-21)
+88FAB1  52+UNITY                                      1.    0.     0      RMAB
+88FAB2  52+UNITY                                      1.    0.    -1      RMAB
+C        to shift impulse by DELAB delay required Type 54 (Rule B. p. 3-23)
+98FIAB1 54+FAB1                                          .0000      DELAB
+98FIAB2 54+FAB2                                          .0000      DELAB
+C     for a 50 Hz system the constant .004167 below should be changed to 0.005
+88DELIN   = .004167  {  to initialize alpha to 180 deg.
+C
+C *************  PHASE B  FIRING PULSES  *************************************
+C
+91RMBC
+88FBC1  52+UNITY                                      1.    0.     0      RMBC
+88FBC2  52+UNITY                                      1.    0.    -1      RMBC
+98FIBC1 54+FBC1                                          .0000      DELBC
+98FIBC2 54+FBC2                                          .0000      DELBC
+C
+C ************  PHASE C  FIRING PULSES   *************************************
+C
+91RMCA
+88FCA1  52+UNITY                                      1.    0.     0      RMCA
+88FCA2  52+UNITY                                      1.    0.    -1      RMCA
+98FICA1 54+FCA1                                          .0000      DELCA
+98FICA2 54+FCA2                                          .0000      DELCA
+C
+C *************  OPEN LOOP VAR CONTROL **************************
+C     ****  WITH SUPERIMPOSED VOLTAGE CONTROL ***********
+C
+C    the following will be repeated for all three phases as the SVC
+C
+C      ************  RACTIVE POWER FLOWS  *********
+C
+C  calclate VAR transfer at transf. secondary
+91TRXA              { 34.5 kV side current through transformer
+C     Device 53 is transpoert delay or signal phase shifting (Rule Book p. 3-22)
+88TRIA  53+TRXA                                         .00417 .0043
+88TRVA  53+TRSA                                         .00417 .0043
+C    the following equation for calculating VAR flow is from
+C    Miller: Reactive power Control etc. (text book)   p. 321
+88QINA    =( -TRSA * TRIA * 0.5  +  TRXA * TRVA * 0.5 ) / QTCR
+C
+91TRXB
+88TRIB  53+TRXB                                         .00417 .0043
+88TRVB  53+TRSB                                         .00417 .0043
+88QINB    =( -TRSB * TRIB * 0.5  +  TRXB * TRVB * 0.5 ) / QTCR
+C
+91TRXC
+88TRIC  53+TRXC                                         .00417 .0043
+88TRVC  53+TRSC                                         .00417 .0043
+88QINC    =( -TRSC * TRIC * 0.5  +  TRXC * TRVC * 0.5 ) / QTCR
+C
+C  ********************  SUPERIMPOSED VOLTAGE CONTROL ********************
+C
+C     ********   DELTA Q  TO ADJUST VOLTAGE ************
+C    the average value of phase to phase voltage is
+ 0VLLAVG  +TXNAB  +TXNBC  +TXNCA                   .3333   .85  1.15
+C   the difference between ref. and actual voltage is
+C   slow down the response by a (1/1+st) block
+ 1DVQ     +VLLAVG -VREFD                           50.0   -1.0   1.0
+       1.0
+       1.0     0.500
+C   the required VAR import taking voltage correction into account
+ 0QRNEW   +QREF   +DVQ
+C *****************  PHASE A  ERROR ******************************************
+C
+C  error in VAR import
+ 0ERRQA   +QRNEW  -QINA
+ 0QINCRA  +ERRQA
+C       the new reactor output is then given by the Steinmetz Algorithm as
+C       the output at T-delT  + QINCRA + QINCRB - QINCRC;
+C       as shown below in calculating the new SVC VAR's
+C ******************  PHASE B  ERROR  ****************************************
+C
+ 0ERRQB   +QRNEW  -QINB
+ 0QINCRB  +ERRQB
+C
+C ******************  PHASE C  ERROR *****************************************
+C
+ 0ERRQC   +QRNEW  -QINC
+C
+ 0QINCRC  +ERRQC
+C
+C
+C ****************  PHASE A  PULSE DELAY CONTROL  ****************************
+C       the current firing angle is DELAB, this corresponds to an old reactor
+C       p.u. current given by the following non linear relation corresponding
+C       to the x = sigma-sin(sigma) function
+99DLA1    =  1 - DELAB/.004167
+C  where DLA1 is the normalized conduction angle sigma between firing
+C  angle alpha 90 and 180 degrees.
+C
+99REOAB 56+DLA1
+             0.0             0.0
+           0.111          0.0022
+           0.222          0.0176
+           0.333          0.0575
+           0.444          0.1306
+           0.555          0.2414
+           0.666          0.3900
+           0.777          0.5718
+           0.888          0.7783
+           1.000          1.0000
+           9999.
+C         the new reactor current demanded is  the increment plus the old
+C         which is QINCRA + QINCRB - QINCRC + REOAB  and is min. 0.0 max. 1.0
+C         this is applying the Steinmetz algorithm
+ 0INREAB  +QINCRA +REOAB  +QINCRB -QINCRC                 0.00  1.00
+C         this is now reconverted into an angle, using the inverse of the
+C         above relation, and becomes the new DELAB; (Rule Book p. 3-25 )
+99DELYAA56+INREAB
+             0.0             0.0
+          0.0022           0.111
+          0.0176           0.222
+          0.0575           0.333
+          0.1306           0.444
+          0.2414           0.555
+          0.3900           0.666
+          0.5718           0.777
+          0.7783           0.888
+          1.0000           1.000
+           9999.
+99DELYA   =DELYAA * 0.004167
+C        now smooth it out a bit
+ 1DELAB   +DELIN  -DELYA                             1.0       .0040
+       1.0
+       1.0     0.015
+C
+C ******************  PHASE B  PULSE DELAY CONTROL **************************
+C
+99DLB1    =  1 - DELBC/.004167
+C
+99REOBC 56+DLB1
+             0.0             0.0
+           0.111          0.0022
+           0.222          0.0176
+           0.333          0.0575
+           0.444          0.1306
+           0.555          0.2414
+           0.666          0.3900
+           0.777          0.5718
+           0.888          0.7783
+           1.000           1.000
+           9999.
+C
+ 0INREBC  +QINCRB +REOBC  +QINCRC -QINCRA                 0.00  1.00
+C
+99DELYBB56+INREBC
+             0.0             0.0
+          0.0022           0.111
+          0.0176           0.222
+          0.0575           0.333
+          0.1306           0.444
+          0.2414           0.555
+          0.3900           0.666
+          0.5718           0.777
+          0.7783           0.888
+           1.000           1.000
+           9999.
+99DELYB   =DELYBB * 0.004167
+C
+ 1DELBC   +DELIN  -DELYB                             1.0      0.0040
+       1.0
+       1.0     0.015
+C
+C ***************  PHASE C  PULSE DELAY CONTROL ******************************
+C
+99DLC1    =  1 - DELCA/.004167
+C
+99REOCA 56+DLC1
+             0.0             0.0
+           0.111          0.0022
+           0.222          0.0176
+           0.333          0.0575
+           0.444          0.1306
+           0.555          0.2414
+           0.666          0.3900
+           0.777          0.5718
+           0.888          0.7783
+           1.000           1.000
+           9999.
+C
+ 0INRECA  +QINCRC +REOCA  +QINCRA -QINCRB                 0.00  1.00
+C
+99DELYCC56+INRECA
+             0.0             0.0
+          0.0022           0.111
+          0.0176           0.222
+          0.0575           0.333
+          0.1306           0.444
+          0.2414           0.555
+          0.3900           0.666
+          0.5718           0.777
+          0.7783           0.888
+           1.000           1.000
+           9999.
+99DELYC   =DELYCC * 0.004167
+C
+ 1DELCA   +DELIN  -DELYC                             1.0      0.0040
+       1.0
+       1.0     0.015
+C
+C *****************  REACTOR SWITCHING ***************************************
+C
+C   control signals to switch reactive load 'XLA/B/C' on and off
+C   see TYPE 12 switches in power network.
+C     TACS source (Rule Book p. 3-14)
+23FRLA         1000.     0.200     0.100                           0.2
+23FRLB         1000.     0.200     0.100                           0.2
+23FRLC         1000.     0.200     0.100                          10.0
+C
+C    initializations
+77VLLAVG         1.0
+77TXNAB          1.0
+77QRNEW          .30
+77QINA           .30
+77QINB           .30
+77QINC           .30
+C
+C        *********  TACS OUTPUTS ************
+C
+33TXNAB TXNBC TXNCA ERRQA VLLAVG
+33QRNEW DVQ   QINA
+BLANK   end of TACS
+C
+C    **************   NETWORK DATA  *********************
+C
+C         *********  LINE TO SOURCE ***********
+C
+C          transmission line (equivalent) from GEN source to transformer
+  GENA  TRFA                 4.5  25.0
+  GENB  TRFB                 4.5  25.0
+  GENC  TRFC                 4.5  25.0
+C     fault level at trsf. 230 kV approx. 2083 MVA
+C
+C      **************   MAIN TRANSFORMER  **************
+C
+C         transformer capacitance to ground 10000pF
+C       a very simple model, can be replaced with any more complex model
+C            transformer  230000/34500 Y/D 100 MVA; In=250 A
+C             x = 7.0% on 100 MVA
+C       230^2/100* 0.07 = 37.0 ohms trsf. leakage reactance
+C TRANSFORMER busref      imag  flux  busin rmag          empty
+C ------------______------______------______------_____________________________-
+C
+C      no saturation
+  TRANSFORMER                0.7 700.0     X
+             0.7           700.0        {   100%
+            9999
+ 1TRPA                      0.80  36.0  1330
+ 2TRXA  TRXB                      1.00   385      {372
+  TRANSFORMER      X                       Y
+ 1TRPB
+ 2TRXB  TRXC
+  TRANSFORMER      X                       Z
+ 1TRPC
+ 2TRXC  TRXA
+C
+C         transformer capacitance to ground and ph - ph 10000pF
+  TRXA                                 0.01
+  TRXB                                 0.01
+  TRXC                                 0.01
+C         capacitance between phases
+  TRXA  TRXB                           0.01
+  TRXB  TRXC                           0.01
+  TRXC  TRXA                           0.01
+C
+C      ***********  HARMONIC FILTERS  ***************
+C
+C       5th harmonic filter  20 MVAR
+  TRSA  TF5                       2.38 44.5
+  TRSB  TF5                       2.38 44.5
+  TRSC  TF5                       2.38 44.5
+C       7th harmonic filter  20 MVAR
+  TRSA  TF7                       1.21 44.5
+  TRSB  TF7                       1.21 44.5
+  TRUC  TF7                       1.21 44.5
+C
+C      ********  TRANSFORMER SECONDARY LOAD ***************
+C                       75 MW, 30 MVAR
+  TRSA  ND                 13.67  5.47
+  TRSB  ND                 13.67  5.47
+  TRSC  ND                 13.67  5.47
+C
+C         shunt capacitor    20 MVAR
+  TRSA                                 44.5
+  TRSB                                 44.5
+  TRSC                                 44.5
+C       **********  SWITCHED REACTOR FOR SVC RESPONSE TEST *********
+C
+C        switched reactor .1 sec. on .1 sec. off
+C           see switch type 13 below and type 23 source in TACS
+C           24.7 MVA, 0.7 p.f.,17.5 MW, 17.5 MVAR load
+  XLA   NSR                34.00 34.00
+  XLB   NSR                34.00 34.00
+  XLC   NSR                34.00 34.00
+C
+C
+C         **************  SNUBBERS  **************
+C
+C         the snubber parameters shown below are not necessarily the
+C         values a manufacturer would choose for a 34.5 kV valve.
+C         The parameters were selected so that only a small currrent flows
+C         through the control reactor with the valves non conducting,
+C         and overvoltages and spikes interfering with the firing control
+C         are prevented.  It is quite possible that a better combination
+C         than that shown exists.
+C
+C       in series with valves
+C
+  CATAB RXAB                 .1
+  ANOAB RXAB                 .1
+  CATAB RXAB                       4.0
+  ANOAB RXAB                       4.0
+C
+  CATBC RXBC                 .1
+  ANOBC RXBC                 .1
+  CATBC RXBC                       4.0
+  ANOBC RXBC                       4.0
+C
+  CATCA RXCA                 .1
+  ANOCA RXCA                 .1
+  CATCA RECA                       4.0
+  ANOCA RXCA                       4.0
+C
+C   across valves
+C
+  CATAB TRSA               2000.         .1
+  ANOAB TRSA               2000.         .1
+C
+  CATBC TRSB               2000.         .1
+  ANOBC TRSB               2000.         .1
+C
+  CATCA TRSC               2000.         .1
+  ANOCA TRSC               2000.         .1
+C
+C      *************   SVC CONTROLLED REACTOR   *************
+C
+C     reactor in  TCR  appr. 100.0 MVA   Xr = 3 * 34.5^2/100 =35.71 ohm
+  RXAB  TRSB                 0.1 35.71                                         1
+  RXBC  TRSC                 0.1 35.71
+  RXCA  TRSA                 0.1 35.71
+C
+C       ***************   REACTOR FOR FIRING PULSE GENERATION ******
+C
+C      Fire angle reference measurement using delta connected reactors
+C       TRSA - RMXA is just a dummy separation from the main 34.5 kV bus
+  TRSA  RMXA                0.01                                               1
+  TRSB  RMXB                0.01
+  TRSC  RMXC                0.01
+C    The reactors are delta connected through measuring switches below
+  RMAB  RMXB               200. 20000.
+  RMBC  RMXC               200. 20000.
+  RMCA  RMXA               200. 20000.
+C
+BLANK    end of branch data
+C      ***************   SWITCH  DATA ***************8
+C
+C  current measurement in the auxiliary reactor for firing pulse generation
+C   these switches complete the delta connection of the reactors
+C   (Rule Book p.6A-9)
+  RMXA  RMAB                                          MEASURING
+  RMXB  RMBC                                          MEASURING
+  RMXC  RMCA                                          MEASURING
+C
+C       current measurement in the main transformer secondary
+  TRXA  TRSA                                          MEASURING                1
+  TRXB  TRSB                                          MEASURING                0
+  TRXC  TRSC                                          MEASURING                0
+C       current measurement in the main transformer primary
+  TRFA  TRPA                                          MEASURING                1
+  TRFB  TRPB                                          MEASURING                0
+  TRFC  TRPC                                          MEASURING                0
+C
+C    switch for on/off switching the 17.5 MVAR resistive-reactive load
+C   (Rule Book p. 6C-1)
+12TRSA  XLA                                                     FRLA          11
+12TRSB  XLB                                                     FRLB          10
+12TRSC  XLC                                                     FRLC          10
+C
+C   VALVES
+C     6 valves, 2 per phase, 3ph. 6 pulse supply to TCR
+C    Rule Book p. 6B-1
+11TRSA  CATAB        00.   15.0                                 FIAB1         1
+11ANOAB TRSA         00.   15.0                                 FIAB2         1
+11TRSB  CATBC      0000.   15.0                                 FIBC1         1
+11ANOBC TRSB        000.   15.0                                 FIBC2         1
+11TRSC  CATCA      0000.   15.0                                 FICA1         1
+11ANOCA TRSC        000.   15.0                                 FICA2         1
+C
+BLANK    end of switch data
+C
+C    AC sources
+C    230 kV  supply
+14GENA       187794.       60.        0.                           -1.
+14GENB       187794.       60.      240.                           -1.
+14GENC       187794.       60.      120.                           -1.
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        GENA   |TRFA  *
+C        TRFA   |GENA  *TRPA  *
+C        GENB   |TRFB  *
+C        TRFB   |GENB  *TRPB  *
+C        GENC   |TRFC  *
+C        TRFC   |GENC  *TRPC  *
+C             X |TERRA *TERRA *TRPA  *
+C        TRPA   |TRFA  *     X*
+C        TRXA   |TERRA *TRXB  *TRXB  *TRXC  *TRXC  *TRSA  *
+C        TRXB   |TERRA *TRXA  *TRXA  *TRXC  *TRXC  *TRSB  *
+BLANK   end of source cards
+C     Total network loss  P-loss  by summing injections =   9.766831747973E+07
+C  Output for steady-state phasor switch currents.
+C      Node-K    Node-M            I-real            I-imag            I-magn          Degrees        Power            Reactive
+C      RMXA      RMAB         -3.58276847E-01   -2.79310857E+00    2.81599321E+00     -97.3095    2.25048004E+04    3.95893953E+04
+C      RMXB      RMBC         -2.15903199E+00    1.67914276E+00    2.73513063E+00     142.1267    2.24866103E+04    3.77703877E+04
+C      RMXC      RMCA          2.51730884E+00    1.11396581E+00    2.75277380E+00      23.8705    2.24781027E+04    3.69196208E+04
+C      TRXA      TRSA          1.87366412E+03   -5.12826995E+02    1.94257787E+03     -15.3071    2.92045856E+07   -1.15739798E+07
+C      TRXB      TRSB         -1.84783216E+03   -1.48829687E+03    2.37265911E+03    -141.1510    3.63691255E+07   -1.14600036E+07
+C      TRXC      TRSC         -2.58319590E+01    2.00112387E+03    2.00129059E+03      90.7396    3.11027262E+07   -4.48411843E+06
+C      TRFA      TRPA          3.59043573E+02    9.36972121E+01    3.71067992E+02      14.6259    3.34033086E+07   -1.05190303E+07
+C      TRFB      TRPB         -1.76142866E+02   -3.36446952E+02    3.79766851E+02    -117.6338    3.53040617E+07   -3.27502311E+06
+C      TRFC      TRPC         -1.82900707E+02    2.42749740E+02    3.03940957E+02     126.9963    2.81187847E+07   -4.63098619E+06
+C 1st gen:   GENA    187794.     187794.      359.04357262628  371.06799188975      .337131143389E8  .348421712345E8
+C 1st gen:              0.0          0.0      93.697212129556       14.6259048      -.87978871273E7        0.9675951
+  TRSA  TRFA               { Names of nodes for which voltage is to be outputted
+C   Step      Time        TRSA         TRFA         TRXA         TRFA         TRSA         RXAB         TRSA         TACS
+C                                                   TRSA         TRPA         XLA          TRSB         RMXA         TXNAB
+C
+C                         TACS         TACS         TACS         TACS         TACS         TACS         TACS
+C                         TXNBC        TXNCA        ERRQA        VLLAVG       QRNEW        DVQ          QINA
+C ***      Phasor I(0) = -3.5827685E-01                     Switch  "RMXA  "  to  "RMAB  "  closed in the steady-state.
+C ***      Phasor I(0) = -2.1590320E+00                     Switch  "RMXB  "  to  "RMBC  "  closed in the steady-state.
+C ***      Phasor I(0) =  2.5173088E+00                     Switch  "RMXC  "  to  "RMCA  "  closed in the steady-state.
+C ***      Phasor I(0) =  1.8736641E+03                     Switch  "TRXA  "  to  "TRSA  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.8478322E+03                     Switch  "TRXB  "  to  "TRSB  "  closed in the steady-state.
+C ***      Phasor I(0) = -2.5831959E+01                     Switch  "TRXC  "  to  "TRSC  "  closed in the steady-state.
+C ***      Phasor I(0) =  3.5904357E+02                     Switch  "TRFA  "  to  "TRPA  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.7614287E+02                     Switch  "TRFB  "  to  "TRPB  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.8290071E+02                     Switch  "TRFC  "  to  "TRPC  "  closed in the steady-state.
+C      %%%%%   Floating subnetwork found!   %%%%%%  %%%%%%  %%%%%%  %%%%%%
+C      %%%%%  The elimination of row  "NSR   "  of nodal admittance matrix [Y] has produced a near-zero diagonal value  Ykk =
+C             0.00000000E+00   just prior to reciprocation.  The acceptable minimum is  ACHECK = 7.63336829E-12   (equal to EPSILN
+C             times the starting Ykk).   This node shall now to shorted to ground with  1/Ykk = FLTINF.
+C      0       0.0     25855.428  188520.7342  1873.664121  359.0435726          0.0  .8977594404  -2.87558569          0.0
+C                            0.0          0.0          0.0          1.0          0.3          0.0          0.3
+C      1 .46296E-4   26190.60084  188656.0309  1882.328634  357.3536908          0.0  .8251974241  -2.80696162  .0854224562
+C                     .050813098  .0346093582  .3019675015          .85  .3019675015  .0019675015          0.0
+C  Valve   "ANOBC "  to  "TRSB  "  closing after  9.25925926E-05  sec.
+C      2 .92593E-4   26517.79623  188733.8621  1890.419856  355.5549605          0.0   .752384056  -2.73748258  .1209236949
+C                    .0710411015   .049896216   .301272907          .85   .301272907   .001272907          0.0
+BLANK  end of output requests
+C  Valve   "TRSB  "  to  "CATBC "  closing after  2.40231481E-01  sec.
+C  Valve   "TRSA  "  to  "CATAB "  opening after  2.41388889E-01  sec.
+C  Valve   "ANOAB "  to  "TRSA  "  closing after  2.42638889E-01  sec.
+C  Valve   "ANOCA "  to  "TRSC  "  opening after  2.44351852E-01  sec.
+C  Valve   "TRSC  "  to  "CATCA "  closing after  2.45138889E-01  sec.
+C  Valve   "TRSB  "  to  "CATBC "  opening after  2.46574074E-01  sec.
+C  Valve   "ANOBC "  to  "TRSB  "  closing after  2.48611111E-01  sec.
+C  Valve   "ANOAB "  to  "TRSA  "  opening after  2.49675926E-01  sec.
+C   5400       .25   24620.31357  180704.5964  887.7133221  311.5182977  310.0730625  18.04597752  -2.55047538   .999668036
+C                    1.002620895   1.00418338   -.05590233  1.002057221  .5408201644  .2408201644  .5967224946
+C Variable maxima :  30965.63617  188749.4575  2719.683362  461.7713374  506.9005859  1315.892083  4.520536227  1.084424099
+C                    1.091008223   1.08827864  .3019675015  1.085619064  .5823416906  .2823416906  .8205355066
+C Times of maxima :  .0344444444  .1388889E-3  .2030092593        .2025   .235787037  .0044907407  .0224537037  .0396759259
+C                    .0401851852  .0358796296   .462963E-4  .0400925926  .1684722222  .1684722222  .2031481481
+C Variable minima :  -31985.2128  -187338.374  -2784.38662  -483.591685   -508.17585  -1284.74425  -4.58557455          0.0
+C                            0.0          0.0  -.564929157          .85  .1001935452  -.199806455          0.0
+C Times of minima :  .0266666667  .0252314815  .2112962963  .2103703704  .2441203704       .19625  .0309259259          0.0
+C                            0.0          0.0  .0118981481   .462963E-4  .0158333333  .0158333333   .462963E-4
+  PRINTER PLOT
+ 193.02 0.0 .25  .94 1.0TACS  TXNAB    { Limits [.94, 1.0] amplify the transient
+BLANK   end of plot requests
+BEGIN NEW DATA CASE
+BLANK 

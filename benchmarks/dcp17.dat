@@ -1,0 +1,124 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-17
+C            Copied from  DCNEW-2,  only with critical debug printout turned on.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+C DIAGNOSTIC           0 0 0 0 9 9 0 9 9 9 0 9 9 3 9 9 0 9 9
+ABSOLUTE U.M. DIMENSIONS, 20, 2, 50, 100
+ .000200    .070
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20     100     100
+TACS HYBRID
+  STEP1   +BAT1   -TFAULT
+  STEP2   +BAT2   -TCLEAR
+  FIRE    -STEP0  +STEP1  -STEP2
+C  --------- TACS UNITY SIGNAL SOURCE
+11STEP0   1.0                                               -1.0
+C  --------- EMTP OUTPUT TO TACS
+90BAT1
+90BAT2
+90TFAULT
+90TCLEAR
+BLANK card ends all TACS data cards
+C  --------- EMTP CONNECTIVITY
+        BUSA0             1.0E+8
+        BUSB0             1.0E+8
+        BUSC0             1.0E+8
+  BUSA5 BUSA1             0.001                                                1
+  BUSB5 BUSB1             0.001                                                1
+  BUSC5 BUSC1             0.001                                                1
+C  --------- TRANSMISSION LINES (0.001 OHMS AND 1.0 MILLI HENRY)
+  BUSA1 BUSA0             1.0E-2 1.0                                           1
+  BUSB1 BUSB0 BUSA1 BUSA0                                                      1
+  BUSC1 BUSC0 BUSA1 BUSA0                                                      1
+C  --------- RESISTANCES FROM BUS1 TO SWITCH (BUS2 TO GROUND)
+  BUSA1 BUSA2             0.0001                                               1
+  BUSB1 BUSB2             0.0001
+  BUSC1 BUSC2             0.0001
+C  ---------  EMTP CONNECTIVITY REQUIREMENT
+        BUSFS             1.0E+6
+  BUSFS BUSF0             1.0E-5
+C  --------- RESISTANCES IN PARALLEL TO SWITCHES (BUS2 TO GROUND)
+  BUSA2                   1.0E+9
+  BUSB2                   1.0E+9
+  BUSC2                   1.0E+9
+C  --------- CIRCUIT FOR SWITCH CONTROL
+        BAT1              1.0
+        BAT2              1.0
+  BAT1  TFAULT            1.0
+  BAT2  TCLEAR            1.0
+C  --------- MECH NETWORK
+  BUSMSM                              1.E+09                                   1
+  BUSMS BUSMSM            1.0E-3                                               1
+BLANK card bounds the last branch card
+C  --------- TIME OF FAULT AND TIME OF CLEARING
+  TFAULT          .05001             { Fault is applied 1/2 DELTAT after 50 msec
+  TCLEAR          3600.0
+C  --------- TACS CONTROLLED SWITCHES
+11BUSA2                                                               FIRE
+11BUSB2                                                               FIRE
+11BUSC2                                                               FIRE
+  BUSA9 BUSA5    -1.0      1.0                                                 1
+  BUSB9 BUSB5    -1.0      1.0                                                 1
+  BUSC9 BUSC5    -1.0      1.0                                                 1
+BLANK card ends the last electric network switch card
+C  --------- EXCITATION SOURCE VOLTAGE (ACTUAL VALUE SET BY SS)
+14BUSFS   0.001      0.00001                                -1.0
+C  --------- INFINITE BUS SOURCE VOLTAGES
+14BUSA0   3000.0     60.0      0.0                          -1.0
+14BUSB0   3000.0     60.0     -120.0                        -1.0
+14BUSC0   3000.0     60.0     +120.0                        -1.0
+C  --------- BATTERIES FOR SWITCH CONTROL
+14BAT1    2.0        0.00001                                -1.0
+14BAT2    3.0        0.00001                                -1.0
+C  --------- MECH INPUT TORQUE (ACTUAL VALUE SET BY SS) :
+14BUSMS -1 0.0000001 0.00001                                -1.0
+C  --------- SYNCHRONOUS MACHINE SPECIFICATIONS
+C  --------- UM DATA
+19 UM
+ 1
+BLANK CARD ENDING CLASS 1 UM DATA
+C  --------- UM-1 MACH-TABLE
+ 1 2 1111BUSMSM       1                            0.0373
+              0.0057815
+              0.0055850
+3030.0        15.0          BUSFS BUSMS
+C  ---------  UM-1 COIL-TABLE
+                            BUSA9             1
+0.001542      0.0005595     BUSB9             1
+0.001542      0.0005595     BUSC9             1
+0.0010        0.0003767     BUSF0             1
+0.01834       0.0002075                       1
+0.07560       0.0001335                       1
+BLANK card ends all U.M. data cards
+BLANK card ending all electric network sources
+C  --------- REQUEST FOR NODE VOLTAGE OUTPUT
+  BUSA1 BUSA0       BUSMSM
+C  Step    Time        BUSA1        BUSA0        BUSMSM       BUSA9        BUSB9
+C                                                             BUSA5        BUSB5
+C
+C                      BUSC5        BUSA1        BUSB1        BUSC1        BUSA1
+C                      BUSC1        BUSA0        BUSB0        BUSC0        BUSA2
+C
+C                      UM-1         UM-1         UM-1         UM-1         UM-1
+C                      OMEGM        THETAM       IPA          IPB          IPC
+C ***      Phasor I(0) =  0.2072773E+04   Switch  "BUSA9 "  to  "BUSA5 "  closed
+C ***      Phasor I(0) = -0.8157515E+03   Switch  "BUSB9 "  to  "BUSB5 "  closed
+C ***      Phasor I(0) = -0.1257021E+04   Switch  "BUSC9 "  to  "BUSC5 "  closed
+C    0     0.0   2924.682776        3000.  376.9911184  2072.772625  -815.751494
+C                -1257.02113  2072.772622  -815.751493  -1257.02113  .2924025E-5
+C                376.9911184  1.174129749  2072.761251  -815.747018  -1257.01423
+C    1   .2E-3   2857.300587  2991.476701  376.9911184  2047.702816  -668.685067
+C                -1379.01775  2047.702813  -668.685066  -1379.01775  .2837623E-5
+C                376.9911184  1.174129749  2047.702816  -668.685067  -1379.01775
+BLANK card ending selective variable output request (node voltages, here)
+C  350     .07   .7035049802  927.0509831  376.7447835   2436.93984  10869.29497
+C Last step:     -13306.2348  -4598.10996   -807.56516  5405.675122  7035.049802
+C Last step:      376.774892  1.169600292   2436.93984  10869.29497  -13306.2348
+  PRINTER PLOT
+ 194 8. 0.0 96.         UM-1  TQGEN              { Plot limits: (-0.913,  1.467)
+  CALCOMP PLOT
+ 194 9. 0.0 90.         UM-1  IPA
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+BLANK
+ 

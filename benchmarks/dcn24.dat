@@ -1,0 +1,1359 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-24
+C     A collection of 19 simple cases for testing the usage of distributed line 
+C     modeling.  Most deal with constant-parameter (K. C. Lee) modeling. Several 
+C     frequency-dependent test cases can be found elsewhere, such as DC-31, 41, 
+C     61, DCN4, DCN7, etc.
+C       1st of 19 subcases is a test of 1-phase constant-parameter line.  
+C       One switch is permanently closed.  No transients.  Plot of 
+C       receiving end voltage is sinusoid.
+C  DIAGNOSTIC           0 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .020     60.     60.
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+  REC                       .001   { Near short at receiving end to ground }   3
+-1SEND  REC                  0.3   0.4  12.6  100.    { 1-phase distributed line
+BLANK card ending branch cards
+  GEN   SEND        -1.0       1.0    { Permanently closed switch at sending end
+BLANK card ending switch cards
+14GEN           100.       60.    { 60-Hz phasor solution }        -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   5.992836086590E+01
+C     GEN
+C    SEND            100.             100.      1.1985672173179  1.9672525544427
+C                     0.0              0.0      -1.559974114699      -52.4640241
+C   Step     Time        REC          REC         SEND         GEN           REC
+C                      TERRA                                               TERRA
+C    0      0.0   .001198266   .001198266         100.         100.     1.198266
+C    1    .1E-3  .0012585558  .0012585558  99.92894726  99.92894726  1.258555833
+ 1
+C  200     .02   .0019138946  .0019138946  30.90169944  30.90169944  1.913894577
+C Variable max : .0020173699  .0020173699         100.         100.  2.017369917
+C Times of max :       .0025        .0025          0.0          0.0        .0025
+C Variable min : -.002017453  -.002017453  -99.9921044  -99.9921044  -2.01745286
+C Times of min :       .0108        .0108        .0083        .0083        .0108
+  PRINTER PLOT
+ 194 4. 0.0 20.         REC                     { Axis limits : (-2.017,  2.017)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     2nd of 19 subcases involves use of trapped-charge source to initialize
+C              an initially-disconnected single-phase line.  Later, energize the
+C              line by switch closure at 3 msec.  The data was supplied by Dipl.
+C              Ing. Bernd Stein of FGH (Mannheim, Germany) during April of 1986.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .020                { Unlike 1st of 2 subcases, here XOPT = COPT = 0
+       1       1       0       1       1      -1
+       2      -1       5       5      20      20 { Switch to alternate on step 2
+  GEN   SWITCH                  39.8
+  SWITCH                   1000.
+-1SEND  REC                .3055 5.819 .0121 138.
+BLANK card ending branch cards
+  SEND  SWITCH      .003       1.0     { Transient begins at 3 msec with closure
+BLANK card ending switch cards
+C        1         2         3         4         5         6         7         8
+C     78901234567890123456789012345678901234567890123456789012345678901234567890
+14GEN           100.       60.                                    -1.0
+14SEND  -1     -100.      .001   { Trapped-charge source }       5432.
+C    End multiple-frequency phasor solution data.  The first source is a regular
+C    60-Hertz generator, whereas the second has f = 1/1000 Hz for trapped charge
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   4.998874616296E+00
+C Last gen: SEND   -100.  100.  -.17408297E-12  .10491662826E-5  .8704148513E-11
+C Last gen:       0.0   180.0   -.1049166283E-5    -90.0000095   -.5245831413E-4
+C              Step     Time         REC          SEND       SWITCH          GEN
+C               0       0.0         -100.        -100.  99.97749233         100.
+C               1     .1E-3         -100.        -100.  99.96299489  99.92894726
+C               2     .2E-3         -100.        -100.  99.80645119  99.71589003
+ 1                            { Request for the output of all four node voltages
+C             200       .02   138.2909745  45.09406184  45.09406184  30.90169944
+ 144 2. 0.0 20.         SEND  REC              { Axis limits :  (-2.510,  2.052)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C    3rd of 19 subcases to test a three-phase transposed constant-parameter
+C    distributed line.  Narrow format was used (also in the next sub-case) 
+C    initially.  On May 28, 1998, Orlando Havia reported problem of a case
+C    which included a transposed line with wide format.   After making code 
+C    corrections in INDIST, we changed the current sub-case data from 
+C    "narrow format" to "wide format".  Same results were obtained, of course.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .020     60.     60.
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+  RECA                      .001
+  RECB                      .001
+  RECC                      .001
+C  -1SENDA RECA                 0.3   0.4  12.6  100.
+C  -2SENDB RECB                 .03   0.1   6.0  100.
+C  -3SENDC RECC
+$VINTAGE, 1
+-1SENDA RECA                       0.3         0.4        12.6        100.    
+-2SENDB RECB                       .03         0.1         6.0        100.    
+-3SENDC RECC                                                                  
+$VINTAGE, 0
+BLANK card ending branch cards
+  GENA  SENDA       -1.0       1.0
+  GENB  SENDB       -1.0       1.0
+  GENC  SENDC       -1.0       1.0
+BLANK card ending switch cards
+14GENA          100.       1.0                                     -1.
+14GENB          100.       1.0                                     -1.
+14GENC          100.       1.0                                     -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   4.997365737714E+02
+C                                Output for steady-state phasor switch currents.
+C         Node-K    Node-M            I-real            I-imag            I-magn
+C         GENA      SENDA     0.33315772E+01   -0.73376324E-01    0.33323851E+01
+C         GENB      SENDB     0.33315772E+01   -0.73376324E-01    0.33323851E+01
+C         GENC      SENDC     0.33315772E+01   -0.73376324E-01    0.33323851E+01
+C Last gen:    GENC
+C Last gen:    SENDC      100.        100.      3.3315771584762  3.3323850989622
+C Last gen:                0.0         0.0      -.0733763238755       -1.2617070
+C  Step   Time      RECC       RECB       RECA       SENDC      SENDB      SENDA
+C ***      Phasor I(0) =  0.3331577E+01   Switch  "GENA  "  to  "SENDA "  closed
+C ***      Phasor I(0) =  0.3331577E+01   Switch  "GENB  "  to  "SENDB "  closed
+C ***      Phasor I(0) =  0.3331577E+01   Switch  "GENC  "  to  "SENDC "  closed
+C    0    0.0  .003331577 .003331577 .003331577       100.       100.       100.
+C    1  .1E-3  .003331623 .003331623 .003331623 99.9999803 99.9999803 99.9999803
+ 1
+C  200    .02  .003314635 .003314635 .003314635 99.2114701 99.2114701 99.2114701
+C Variable max:.003332408 .003332408 .003332408       100.       100.       100.
+C Times of max :    .0036      .0036      .0036        0.0        0.0        0.0
+C Variable min:.003314635 .003314635 .003314635 99.2114701 99.2114701 99.2114701
+C Times of min :      .02        .02        .02        .02        .02        .02
+  PRINTER PLOT
+C 144 2. 0.0 20.         RECA                     { Axis limits : (0.000,  3.332)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     4th of 19 subcases 
+C     Modified and simplied from BENCHMARK DCPR-13 to test the usage of
+C     transposed distributed line and its reference branches
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ 100.E-6  13.E-3     60.
+       1       1       1       2       1      -1
+       5       5      20      20
+-1ASW1  A5                .3    2.1146 0.645 50.   0
+-2BSW1  B5                .0268 .5397  0.021 50.   0
+-3CSW1  C5
+-1ASW1  A6    ASW1  A5
+-2BSW1  B6   
+-3CSW1  C6   
+ 0A5                      1.
+ 0B5                      1.
+ 0C5                      1.
+ 0A6                      1.
+ 0B6                      1.
+ 0C6                      1.
+BLANK card ending branch cards
+BLANK card ending switch cards
+14ASW1     303.       60.         0.0                        -1.
+14BSW1     303.       60.      -120.0                        -1.
+14CSW1     303.       60.       120.0                        -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   8.795928756794E+02
+C  Node       Source  node  voltage      Injected  source  current              Injected  source  power
+C  name   Rectangular     Polar       Rectangular            Polar            P  and  Q    MVA and P.F.
+C  ASW1      303.         303.      1.9352978562803  22.293386285746      293.19762522646  3377.4480222904
+C                                  0.0              0.0      -22.20922543208      -85.0198618      3364.6976529601        0.0868104
+  A5    B5    C5    A6    B6    C6
+C Step   Time        A5           B5           C5           A6           B6           C6
+C   0     0.0   .9654332167  -10.1517405  9.186307306  .9654332167  -10.1517405  9.186307306
+C   1   .1E-3   1.385353722  -10.3220076    8.9366539  1.385353722  -10.3220076    8.9366539
+C   2   .2E-3   1.803446283  -10.4789931  8.675546863  1.803446283  -10.4789931  8.675546863
+C   3   .3E-3   2.218965817  -10.6207468  8.401781028  2.218965817  -10.6207468  8.401781028
+BLANK card ending the specification of program outputs (node voltages, here)
+C 130    .013   -10.7903488  2.749051379  8.041297426  -10.7903488  2.749051379  8.041297426
+C Variable max: 11.19141912  11.20899525  9.186307306  11.19141912  11.20899525  9.186307306
+C Times of max:       .0039        .0095          0.0        .0039        .0095          0.0
+C Variable min: -11.2139841  -11.1984112   -11.197694  -11.2139841  -11.1984112   -11.197694
+C Times of min:       .0123        .0012        .0067        .0123        .0012        .0067
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     5th of 19 subcases to test the usage of untransposed constant-
+C     parameter distributed line 
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .020     60.     60.
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+  RECA                      .001
+  RECB                      .001
+  RECC                      .001
+$VINTAGE, 1
+-1SENDA RECA               3.01532E-01 6.91748E+02 1.19375E+05-1.38000E+02 1  3
+-2SENDB RECB               2.80361E-02 2.90916E+02 1.82804E+05-1.38000E+02 1  3
+-3SENDC RECC               2.80251E-02 2.76507E+02 1.81679E+05-1.38000E+02 1  3
+$VINTAGE, 0
+  0.58094800  0.70710678 -0.40960438
+  0.00000000  0.00000000  0.00000000
+  0.57008669  0.00000000  0.81513711
+  0.00000000  0.00000000  0.00000000
+  0.58094800 -0.70710678 -0.40960438
+  0.00000000  0.00000000  0.00000000
+BLANK card ending branch cards
+  GENA  SENDA       -1.0       1.0
+  GENB  SENDB       -1.0       1.0
+  GENC  SENDC       -1.0       1.0
+BLANK card ending switch cards
+14GENA          100.       1.0                                     -1.
+14GENB          100.       1.0                                     -1.
+14GENC          100.       1.0                                     -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   3.552806493326E+02
+C Output for steady-state phasor switch currents.
+C  Node-K   Node-M        I-real           I-imag           I-magn       Degrees        Power            Reactive
+C  GENA     SENDA     2.42187574E+00  -3.00608892E-01   2.44046057E+00   -7.0755    1.21093787E+02    1.50304446E+01
+C  GENB     SENDB     2.26186151E+00  -2.55853363E-01   2.27628611E+00   -6.4537    1.13093076E+02    1.27926682E+01
+C  GENC     SENDC     2.42187574E+00  -3.00608892E-01   2.44046057E+00   -7.0755    1.21093787E+02    1.50304446E+01
+C  First  9     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Step      Time       RECC        RECB        RECA        SENDC       SENDB       SENDA       GENA        GENB        GENC
+C ***  Phasor I(0) =  2.4218757E+00  Switch  "GENA  "  to  "SENDA "  closed in the steady-state.
+C ***  Phasor I(0) =  2.2618615E+00  Switch  "GENB  "  to  "SENDB "  closed in the steady-state.
+C ***  Phasor I(0) =  2.4218757E+00  Switch  "GENC  "  to  "SENDC "  closed in the steady-state.
+C    0       0.0   .002421876  .002261861  .002421876        100.        100.        100.        100.        100.        100.
+C    1     .1E-3   .002422064  .002262022  .002422064  99.9999803  99.9999803  99.9999803  99.9999803  99.9999803  99.9999803
+C    2     .2E-3   .002422252  .002262182  .002422252   99.999921   99.999921   99.999921   99.999921   99.999921   99.999921
+C    3     .3E-3   .002422439  .002262341  .002422439  99.9998223  99.9998223  99.9998223  99.9998223  99.9998223  99.9998223
+ 1  { Request for output of all node voltages
+C  200       .02    .00244052  .002276156   .00244052  99.2114701  99.2114701  99.2114701  99.2114701  99.2114701  99.2114701
+C Variable max :   .002440525  .002276343  .002440525        100.        100.        100.        100.        100.        100.
+C Times of max :        .0197        .018       .0197         0.0         0.0         0.0         0.0         0.0         0.0
+C Variable min :   .002421876  .002261861  .002421876  99.2114701  99.2114701  99.2114701  99.2114701  99.2114701  99.2114701
+C Times of min :          0.0         0.0         0.0         .02         .02         .02         .02         .02         .02
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     6th of 19 subcases to test the usage of untransposed distributed 
+C     line and its reference branches
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ 100.E-6 500.E-6     60.
+       1       1       1       2      
+$VINTAGE, 1
+-1ASW1  A5                 3.01532E-01 6.91748E+02 1.19375E+05 1.38000E+02 1  3
+-2BSW1  B5                 2.80361E-02 2.90916E+02 1.82804E+05 1.38000E+02 1  3
+-3CSW1  C5                 2.80251E-02 2.76507E+02 1.81679E+05 1.38000E+02 1  3
+$VINTAGE, 0
+C   Note about preceding K.C. Lee branch cards.  As punched by LINE CONSTANTS,  
+C   the length of 138 miles (4th number of each phase card) has an appended  
+C   minus sign.  But as explained in the April, 2001, newsletter,  this serves
+C   no useful purpose.  To illustrate that it no longer is necessary (following
+C   branch data restructuring around 1997),  the minus signs will be erased from
+C   columns 63 here and in all following subcases.  To see the original that
+C   includes minus signs,  see preceding subcase (unchanged).  14 December 2000
+  0.58094800  0.70710678 -0.40960438
+  0.00000000  0.00000000  0.00000000
+  0.57008669  0.00000000  0.81513711
+  0.00000000  0.00000000  0.00000000
+  0.58094800 -0.70710678 -0.40960438
+  0.00000000  0.00000000  0.00000000
+-1ASW1  A6    ASW1  A5
+-2BSW1  B6   
+-3CSW1  C6   
+ 0A5                      1.
+ 0B5                      1.
+ 0C5                      1.
+ 0A6                      1.
+ 0B6                      1.
+ 0C6                      1.
+BLANK card ending branch cards
+BLANK card ending switch cards
+14ASW1     303.       60.         0.0                        -1.
+14BSW1     303.       60.      -120.0                        -1.
+14CSW1     303.       60.       120.0                        -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   2.046556158911E+02
+C    Node    Source  node  voltage     Injected  source  current          Injected  source  power
+C    name   Rectangular   Polar        Rectangular          Polar        P  and  Q    MVA and P.F.
+C    ASW1         303.     303.     .60039311915995  7.1926653847594   90.959557552733   1089.688805791
+C                       0.0                 0.0      -7.167563284658   -85.2117798      1085.8858376257        0.0834730
+  A5    B5    C5    A6    B6    C6
+C  First  6     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C Step  Time        A5           B5           C5           A6           B6           C6
+C   0    0.0   .3028039653  -3.45224148  3.184683842  .3028039653  -3.45224148  3.184683842
+C   1  .1E-3   .4433227265  -3.51422565  3.106709385  .4433227265  -3.51422565  3.106709385
+C   2  .2E-3   .5832573875  -3.57180736  3.024871794  .5832573875  -3.57180736  3.024871794
+C   3  .3E-3   .7223632078  -3.62431333  2.938735696  .7223632078  -3.62431333  2.938735696
+C   4  .4E-3   .8604425105  -3.67166896  2.848423493  .8604425105  -3.67166896  2.848423493
+C   5  .5E-3   .9972990773  -3.71380695  2.754063524  .9972990773  -3.71380695  2.754063524
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     7th of 19 subcases.
+C     Illustration of usage of J. Marti's freq-depent line and its reference branches
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ 100.E-6 300.E-6     60.
+       1       1       1       2      
+C    PUNCHED CARD OUTPUT OF "JMARTI SETUP" WHICH BEGAN AT  14.32.51  09/14/82
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   3.3636 .05215  4         1.602   19.25   50.     50.
+C   3.3636 .05215  4         1.602   20.75   50.     50.
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C
+C 100.         5000.         1                  138.       1           3-2
+C 100.         60.00         1                  138.       1           3
+C 100.           .01         1                  138.       1   9 10    3
+C
+-1ASW1  A5                    2.                    -2 3                       1
+      18      0.47487144790587633736E+03
+ -0.117967342612603676E+01 -0.316671345021416945E+01  0.255662317832426673E+02
+ -0.601654631032706213E+02 -0.118825306534453652E+03  0.128169142098635430E+04
+  0.589610442538186533E+04  0.292891488173549769E+05  0.115665757459954655E+06
+  0.456394278488149546E+06  0.153681652821077613E+07  0.681848054466802243E+07
+  0.155477562610202006E+08  0.231789897204889809E+08  0.143827766961221036E+08
+  0.241524708800130989E+08  0.245049034784953832E+08  0.476808364145524129E+08
+  0.321645453133055891E+00  0.897616891499021768E+00  0.165632367032913183E+01
+  0.166669419493737986E+01  0.253073682990780913E+01  0.200014655383098283E+02
+  0.124257951002701473E+03  0.657345842950598183E+03  0.278623017775457413E+04
+  0.117145310573639467E+05  0.427410884649070877E+05  0.202553264108715757E+06
+  0.968789502295299084E+06  0.296908522006270138E+07  0.737968316276072920E+07
+  0.121009167337626640E+08  0.132891445947112725E+08  0.252097199908134253E+08
+      14      0.86849922355034181931E-03
+  0.580543547692016874E-01  0.269744993210885436E+00  0.358646519088149721E+00
+  0.775351125410302933E+00  0.512138885239557462E+01  0.838265420474258915E+01
+  0.700229782114550385E+02  0.393084113996385128E+03  0.138208543918962840E+04
+  0.706160326497018531E+03  0.527246586822120662E+04  0.528343251309079615E+05
+  0.178307801042203880E+08 -0.178914532139174500E+08
+  0.228360173022402533E+02  0.102750699821169636E+03  0.139222638455845377E+03
+  0.269608322018776320E+03  0.389220463867018722E+03  0.427793721751318500E+03
+  0.132148883486994549E+04  0.277178340638843952E+04  0.449341296469570784E+04
+  0.596603161966094024E+04  0.114714152641659587E+05  0.268314807408425590E+05
+  0.204027813729699328E+05  0.204231841543429041E+05
+-2BSW1  B5                    2.                    -2 3                       1
+      13      0.28580875773089406522E+03
+  0.381761604345214016E+04 -0.269529222495194318E+04  0.445018224900628539E+03
+  0.214658130219351907E+03  0.897325461203551775E+02  0.130480129629523390E+03
+  0.683037485206990933E+02  0.746626715384045969E+02  0.133938729387751110E+04
+  0.249954495902361043E+04  0.187764116219525090E+05  0.391031620802855759E+06
+  0.562668431190421223E+07
+  0.358668999787749571E+01  0.376679186833120605E+01  0.706439034439901437E+01
+  0.109721634064781350E+02  0.140506334140286961E+02  0.234292596911152251E+02
+  0.407686998675834982E+02  0.797598814775078289E+02  0.129106739969348078E+04
+  0.242138030939135859E+04  0.182362646041542116E+05  0.379814243183306855E+06
+  0.548808385606378759E+07
+      13      0.74123751236187229426E-03
+  0.192189595814863363E+02  0.210970481418782463E+01  0.383406546226866283E+02
+  0.307999912886148377E+02  0.634013410317139090E+03 -0.253243195247046863E+03
+  0.210540381301789816E+05  0.755533947306502050E+05  0.229576557459444489E+07
+  0.607777584135737231E+13 -0.156620677810598129E+13  0.153143851607186420E+13
+ -0.604300997216751013E+13
+  0.325736126030671755E+04  0.366694913707514260E+03  0.675727697588602189E+04
+  0.516024976370228876E+04  0.249456113770459378E+05  0.115067772934717399E+06
+  0.105205466546493019E+06  0.240930799961836921E+06  0.633276538663731131E+06
+  0.975820481990592802E+06  0.976796302472583498E+06  0.974176721795814519E+06
+  0.975150898517610403E+06
+-3CSW1  C5                    2.                    -2 3                       1
+      13      0.27248404992352924125E+03
+  0.928429573805075023E+03  0.205756155237142632E+03  0.538106630554037608E+03
+  0.105199818376817531E+03  0.821382476778671116E+02  0.133356875032521778E+03
+  0.654774478488469374E+02  0.612546121562179922E+02  0.905544916173387175E+02
+  0.973244316091135204E+03  0.267481871266201051E+04  0.138566411938941123E+05
+  0.646075558955914967E+06
+  0.297277477955690506E+01  0.413177069940672514E+01  0.739410817322770197E+01
+  0.103072536754267949E+02  0.135874091964585515E+02  0.234792992956042887E+02
+  0.384075708508238121E+02  0.692539345057236435E+02  0.997101922255402791E+02
+  0.941460937860312015E+03  0.259295974388396348E+04  0.134538093446956691E+05
+  0.628668738677182439E+06
+      20      0.74871165651714274120E-03
+  0.249456855794677017E-01  0.516637614002139312E+01  0.435227595525510835E+01
+  0.696293545843379624E+01  0.113102519337405665E+02  0.107077756312168120E+02
+  0.136526319661978881E+02  0.103057494642840792E+03  0.647491597081196815E+03
+  0.221213037293261823E+04  0.164010494681972204E+05  0.517776934139508076E+05
+  0.393233870054795443E+06 -0.101893253559274247E+05 -0.173413454816459129E+06
+  0.524218185885897590E+06  0.711044562955687729E+12 -0.559640645251973480E+12
+  0.582892127161358521E+12 -0.734296849907947113E+12
+  0.887741958857318814E+01  0.183177145564733675E+04  0.151655674045953921E+04
+  0.245910936284398730E+04  0.383273362703089043E+04  0.399285585783856465E+04
+  0.496339281485561617E+04  0.253464455063045348E+05  0.272156609769823021E+05
+  0.475215596432249440E+05  0.149791320991727040E+06  0.333884409922466803E+06
+  0.541583000670874084E+06  0.670984155731562481E+06  0.569769858667429973E+06
+  0.132622344670840449E+07  0.440534234233555838E+07  0.440974768467789434E+07
+  0.436787151891064062E+07  0.437223939042955148E+07
+  0.57154434  0.70710678 -0.41761362
+  0.00000000  0.00000000  0.00000000
+  0.58879039  0.00000000  0.80696823
+  0.00000000  0.00000000  0.00000000
+  0.57154434 -0.70710678 -0.41761362
+  0.00000000  0.00000000  0.00000000
+-1ASW1  A6    ASW1  A5                                                         1
+-2BSW1  B6                                                                     1
+-3CSW1  C6                                                                     1
+ 0A5                      1.
+ 0B5                      1.
+ 0C5                      1.
+ 0A6                      1.
+ 0B6                      1.
+ 0C6                      1.
+BLANK card ending branch cards
+BLANK card ending switch cards
+14ASW1     303.       60.         0.0                        -1.
+14BSW1     303.       60.      -120.0                        -1.
+14CSW1     303.       60.       120.0                        -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   2.133855256689E+02
+C  Node     Source  node  voltage   Injected  source  current         Injected  source  power
+C  name    Rectangular   Polar     Rectangular           Polar        P  and  Q    MVA and P.F.
+C  ASW1      303.        303.      .67037929574644  7.1896162837701    101.56246330559  1089.2268669912
+C            0.0         0.0       -7.158294064069      -84.6498145    1084.4815507065        0.0932427
+  A5    B5    C5    A6    B6    C6
+C  First  6     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   6     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step    Time        A5           B5           C5           A6           B6           C6           ASW1         BSW1
+C                                                                                                    A5           B5
+C                      CSW1         ASW1         BSW1         CSW1
+C                      C5           A6           B6           C6
+C   0     0.0   .3364801616  -3.43708937  3.192249668  .3364801616  -3.43708937  3.192249668  .3351896479  -3.30243673
+C               3.056683557  .3351896479  -3.30243673  3.056683557
+C   1   .1E-3   .4768147829  -3.49823033  3.114777824  .4768147829  -3.49823033  3.114777824  .4699942576  -3.36074443
+C                 2.9818637  .4699942576  -3.36074443    2.9818637
+C   2   .2E-3   .6165162541  -3.55507115  3.033529893  .6165162541  -3.55507115  3.033529893  .6039611281  -3.41481401
+C               2.903532996  .6039611281  -3.41481401  2.903532996
+C   3   .3E-3   .7553410187  -3.60686214  2.947972502  .7553410187  -3.60686214  2.947972502  .7370685919  -3.46403253
+C               2.821077973  .7370685919  -3.46403253  2.821077973
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     8th of 19 subcases.
+C     Modified BENCHMARK DC-12
+C     One copy of the special double-circuit is added to this subcase to 
+C     demonstrate the skipping of calculation of the transformation matrix 
+C     for continuously transposed lines once the needed matrix has already
+C     been calculated before.  Note that List 21 usage is shown to be 45
+C     for this subcase:  6x6 + 3x3 = 45.   However, before December, 1997,
+C     List 21 from ATP or BPA's EMTP would be 162 = 2 x ( 6x6 + 3x3 + 6x6 )
+$NEW EPSILN, 1.E-9,    { Not needed;  Just added to prove the card is recognized
+C  $WATCH, 25, { Illustrate extra echoing of cards to CRT periodically (every 25th)
+PRINTED NUMBER WIDTH, 12, 2,   { Full precision on each of 9 columns of printout
+ .000050    .025     60.
+       1       1       1       3       1      -1
+       5       5      20      20     100     100
+ 0CJA   X32A                    .01                                            1
+ 0CJB   X32B                    .01                                            1
+ 0RAA   XA                      .01
+ 0RAB   XB                      .01
+ 0RAGA  RAA                     26.                                            1
+ 0RAGB  RAB                     26.                                            1
+ 0RAGC  RAC                     26.                                            1
+ 0CJGA  CJA                     28.
+ 0CJGB  CJB                     28.
+ 0CJGC  CJC                     28.
+ 0VC    Y17C                     26.
+ 0VB    Y17B                     26.
+ 0VA    Y17A                     26.
+ 0RAA   YA                       .01                                           1
+ 0RAB   YB                       .01                                           1
+ 0RAC   YC                       .01                                           1
+ 0XC                            1680.
+ 0X16B  T                 1.0E18                                               2
+ 0X16C  T                 1.0E18                                               2
+ 0X16A  T                 1.0E18                                               2
+ 0T                       65.                                                  1
+ 1XA    X1A               .3545 3.2009.0476
+ 2XB    X1B               .2599  1.543-.0088.349  3.2067.0449
+ 3XC    X1C               .2624  1.484-.006 .2599 1.543 -.0087.3545 3.2009.0479
+ 4YA    Y1A               .2619  1.128-.0008.2595 1.1848-.0018.2622 1.2824-.0025
+                          .3657 3.6724 .0363
+ 5YB    Y1B               .2615 1.0374-.0004.2592 1.0834-.001 .2619 1.1492-.0011
+                          .2624 1.5455-.0052.3656 3.6724.0361
+ 6YC    Y1C               .261  .9663 -.0003.2588 1.005 -.0007.2616 1.054 -.0006
+                          .2623 1.3076-.002 .2624 1.551 -.0053.3656 3.6724 .036
+ 1X1A   X2A               1.05749.547 .1421
+ 2X1B   X2B               .7752 4.602 -.026 1.042 9.564 .1353
+ 3X1C   X2C               .7826 4.426 -.018 .7752 4.602 -.02561.057 9.547 .1428
+ 4Y1B   Y2B               .7811 3.366 -.0023.7741 3.534 -.0055.7822 3.825 -.0074
+                          1.091 10.95 .1084
+ 5Y1A   Y2A               .7799 3.094 -.0013.7732 3.231 -.0031.7813 3.427 -.0032
+                          .7827 4.609 -.01541.091 10.95 .1076
+ 6Y1C   Y2C               .7785 2.882 -.0009.772  2.998 -.0022.7802 3.145 -.0018
+                          .7822 3.9   -.0059.7827 4.625 -.01591.091 10.95 .0357
+-1X2A   X16A              0.58213.4008.00912   70.
+-2X2B   X16B              .034160.6790.01663   70.
+-3X2C   X16C              .034941.0952.01163   70.
+-4Y2A   Y16A
+-5Y2B   Y16B
+-6Y2C   Y16C
+ 1X16C  X17C              .6198 5.596 .08325
+ 2X16A  X17A              .4545 2.698 -.0156.6110 5.606 .079
+ 3X16B  X17B              .459  2.5945-.0107.4545 2.6975-.0156.6198 5.596 .08325
+ 1X17C  X18C  X16C  X17C
+ 2X17A  X18A
+ 3X17B  X18B
+ 1X18C  X19C  X16C  X17C
+ 2X18A  X19A
+ 3X18B  X19B
+ 1X19A  X20A  X16C  X17C
+ 2X19B  X20B
+ 3X19C  X20C
+ 1X20A  X21A  X16C  X17C
+ 2X20B  X21B
+ 3X20C  X21C
+ 1X21A  X22A  X16C  X17C
+ 2X21B  X22B
+ 3X21C  X22C
+ 1X22A  X23A  X16C  X17C
+ 2X22B  X23B
+ 3X22C  X23C
+ 1X23A  X24A  X16C  X17C
+ 2X23B  X24B
+ 3X23C  X24C
+ 1X24A  X25A  X16C  X17C
+ 2X24B  X25B
+ 3X24C  X25C
+ 1X25A  X26A  X16C  X17C
+ 2X25B  X26B
+ 3X25C  X26C
+ 1X26A  X27A  X16C  X17C
+ 2X26B  X27B
+ 3X26C  X27C
+ 1X27A  X28A  X16C  X17C
+ 2X27B  X28B
+ 3X27C  X28C
+ 1X28A  X29A  X16C  X17C
+ 2X28B  X29B
+ 3X28C  X29C
+ 1X29A  X30A  X16C  X17C
+ 2X29B  X30B
+ 3X29C  X30C
+ 1X30A  X31A  X16C  X17C
+ 2X30B  X31B
+ 3X30C  X31C
+ 1X31A  X32A  X16C  X17C
+ 2X31B  X32B
+ 3X31C  X32C
+C     3 July 1987.  Change 3 column-80 "1"-punches  to "2"-punches that do work:
+-1Y16C  Y17C               .316  752. 123.E3  31.  1                           2
+-2Y16B  Y17B               .03   370. 179.E3  31.  1                           2
+-3Y16A  Y17A                                                                   2
+-1Z2A   Z16A              0.58213.4008.00912   70.
+-2Z2B   Z16B              .034160.6790.01663   70.
+-3Z2C   Z16C              .034941.0952.01163   70.
+-4W2A   W16A
+-5W2B   W16B
+-6W2C   W16C
+BLANK card ending branch cards
+  CJC   X32C   -1.       .016        0.1
+  RAC   XC     -1.       .016        0.1                                       2
+  X16C  T      -1.       .2          0.
+BLANK card ending switch cards
+14VA      305418.   60.          -1.5                           -1.
+14VB      305418.   60.        -121.5                           -1.
+14VC      305418.   60.         118.5                           -1.
+14RAGA    301954.   60.           0.0                           -1.
+14RAGB    301954.   60.        -120.0                           -1.
+14RAGC    301954.   60.         120.0                           -1.
+14CJGA    303109.   60.          12.0                           -1.
+14CJGB    303109.   60.        -108.0                           -1.
+14CJGC    303109.   60.         132.0                           -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   4.180325863363E+08
+C Output for steady-state phasor switch currents.
+C   Node-K    Node-M        I-real          I-imag           I-magn       Degrees        Power            Reactive
+C   CJC       X32C     -3.03835446E+02  1.96678065E+03   1.99011108E+03   98.7818    2.52324369E+08    1.09783096E+08
+C   RAC       XC        3.89924585E+02  1.48620772E+03   1.53650726E+03   75.2991    1.67214580E+08    1.41728176E+08
+C   X16C      T         2.01571906E+02  3.47025479E+03   3.47610408E+03   86.6757    3.92707235E+08    5.40318069E-07
+  X16C                                 { Request this single node-voltage output
+C  First  8     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   9     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time       X16B        X16C        X16A        Y16C        Y16B        Y16A        RAC         X16C        CJA
+C                        T           T           T           Y17C        Y17B        Y17A        XC                      X32A
+C
+C                        CJB         RAGA        RAGB        RAGC        RAA         RAB         RAC         T
+C                        X32B        RAA         RAB         RAC         YA          YB          YC          TERRA
+C ***      Phasor I(0) = -3.0383545E+02                     Switch  "CJC   "  to  "X32C  "  closed in the steady-state.
+C ***      Phasor I(0) =  3.8992458E+02                     Switch  "RAC   "  to  "XC    "  closed in the steady-state.
+C ***      Phasor I(0) =  2.0157191E+02                     Switch  "X16C  "  to  "T     "  closed in the steady-state.
+C      0       0.0   -78763.148         0.0  356989.678  20286.0902  17732.2707  17066.6167         0.0  13102.1739  380.757922
+C                    -18.016564  -303.41193  324.866491  159.741413  116.579991  -2.6766895  -230.18317  201.571906
+C      1     .5E-4   -68915.376         0.0  360816.716  20407.8874  17886.2544  17096.3562         0.0  8847.92818   377.20114
+C                    -7.6834907  -305.95716   323.27785   139.58148  116.957369  3.56749107  -222.26151  136.121972
+C      2     .1E-3   -59044.256         0.0  364517.492  20524.3074  18037.9341  17115.5471         0.0  4590.95371  373.510323
+C                    2.65240363  -308.39143  321.573081  119.370765  117.291738  9.81114053  -214.25988  70.6300571
+BLANK card ending output variable requests (here, just one node voltage)
+  PRINTER PLOT                                   { Axis limits: (-3.870,  2.119)
+  Voltage across switch (RAC,XC), which opens at 16 milliseconds.
+ 184 1. 15. 30.         RAC   XC                Recovery voltage
+C  $WATCH, 9999, { Turn off echoing of cards to CRT, in case other solutions follow
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C     9th of 19 subcases was added 15 October 1998,  forcing the former 9th down
+C     one slot to become 10th.  This data is from Mrvic in Belgrade, Yugoslavia,
+C     an did not have the correct number of output variables prior to Oct. 15.
+C     The problem was the 4-punch in column 80 of the Type-92 nonlinear element,
+C     which immediately followed a distributed line.
+  .00001  .00002
+       1       1
+$VINTAGE, 1
+-1IN_A  NG1A               3.82540E-01 8.09455E+02 2.03339E+05         50. 1
+-2IN_B  NG1B               1.19938E-01 3.99423E+02 2.92989E+05         50. 1
+-3IN_C  NG1C                                                           50. 1
+$VINTAGE, 0
+92NG1A  NG1AZ                          4444.                                   4
+  0.0                    0.0
+  0.0001                  71000.
+  0.001                  118000.
+  1000.                  165000.
+  3000.                  175000.
+  9999.
+  NG1AZ                   .1                                                   1
+BLANK card ending branches
+BLANK card ending switches
+14IN_A   0 89814.62        50.                                     -1.        1.
+BLANK card ending sources
+C     Total network loss  P-loss  by summing injections =   2.199411143818E+02
+  NG1A
+C   Step      Time      NG1A       NG1A       NG1A       NG1AZ
+C                       NG1AZ                 NG1AZ      TERRA
+C      0       0.0         0.0  90001.353        0.0        0.0
+C      1     .1E-4  41.7463699 90000.7723 .208732E-3 .463845E-3
+C      2     .2E-4  41.7438354 89999.6135 .626183E-3 .463822E-3
+BLANK card ending node names for voltage output
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     10th of 19 subcases.
+C     Modified BENCHMARK DC-12
+C        J. Marti representation of a 12-phase, continuously-tranposed line,
+C        and a copy of it (via the usage of the reference branch feature) are
+C        used to replace the original special double-circuit representation.
+$NEW EPSILN, 1.E-9,    { Not needed;  Just added to prove the card is recognized
+C  $WATCH, 25, { Illustrate extra echoing of cards to CRT periodically (every 25th)
+PRINTED NUMBER WIDTH, 12, 2,   { Full precision on each of 9 columns of printout
+ .000050    .025     60.
+       1       1       1       3       1      -1
+       5       5      20      20     100     100
+ 0CJA   X32A                    .01                                            1
+ 0CJB   X32B                    .01                                            1
+ 0RAA   XA                      .01
+ 0RAB   XB                      .01
+ 0RAGA  RAA                     26.                                            1
+ 0RAGB  RAB                     26.                                            1
+ 0RAGC  RAC                     26.                                            1
+ 0CJGA  CJA                     28.
+ 0CJGB  CJB                     28.
+ 0CJGC  CJC                     28.
+ 0VC    Y17C                     26.
+ 0VB    Y17B                     26.
+ 0VA    Y17A                     26.
+ 0RAA   YA                       .01                                           1
+ 0RAB   YB                       .01                                           1
+ 0RAC   YC                       .01                                           1
+ 0XC                            1680.
+ 0X16B  T                 1.0E18                                               2
+ 0X16C  T                 1.0E18                                               2
+ 0X16A  T                 1.0E18                                               2
+ 0T                       65.                                                  1
+ 1XA    X1A               .3545 3.2009.0476
+ 2XB    X1B               .2599  1.543-.0088.349  3.2067.0449
+ 3XC    X1C               .2624  1.484-.006 .2599 1.543 -.0087.3545 3.2009.0479
+ 4YA    Y1A               .2619  1.128-.0008.2595 1.1848-.0018.2622 1.2824-.0025
+                          .3657 3.6724 .0363
+ 5YB    Y1B               .2615 1.0374-.0004.2592 1.0834-.001 .2619 1.1492-.0011
+                          .2624 1.5455-.0052.3656 3.6724.0361
+ 6YC    Y1C               .261  .9663 -.0003.2588 1.005 -.0007.2616 1.054 -.0006
+                          .2623 1.3076-.002 .2624 1.551 -.0053.3656 3.6724 .036
+ 1X1A   X2A               1.05749.547 .1421
+ 2X1B   X2B               .7752 4.602 -.026 1.042 9.564 .1353
+ 3X1C   X2C               .7826 4.426 -.018 .7752 4.602 -.02561.057 9.547 .1428
+ 4Y1B   Y2B               .7811 3.366 -.0023.7741 3.534 -.0055.7822 3.825 -.0074
+                          1.091 10.95 .1084
+ 5Y1A   Y2A               .7799 3.094 -.0013.7732 3.231 -.0031.7813 3.427 -.0032
+                          .7827 4.609 -.01541.091 10.95 .1076
+ 6Y1C   Y2C               .7785 2.882 -.0009.772  2.998 -.0022.7802 3.145 -.0018
+                          .7822 3.9   -.0059.7827 4.625 -.01591.091 10.95 .0357
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C    **** UNTRANSPOSED K.C. Lee line calculated at   6.000E+01 HZ. ****
+C LINE CONSTANTS
+C UNTRANSPOSED
+C BRANCH  SENDA RECA  SENDB RECB  SENDC RECC  SENDD RECD  SENDE RECE  SENDF RECF
+C   1.3636 .0561   4 0.0     1.602  -20.75    48.9      48.9
+C   2.3636 .0561   4 0.0     1.602  -19.25    48.9      48.9
+C   3.3636 .0561   4 0.0     1.602  - 0.75    76.4      76.4
+C   4.3636 .0561   4 0.0     1.602    0.75    76.4      76.4
+C   5.3636 .0561   4 0.0     1.602   19.25    48.9      48.9
+C   6.3636 .0561   4 0.0     1.602   20.75    48.9      48.9
+C   7.3636 .0561   4 0.0     1.602  129.25    48.9      48.9
+C   8.3636 .0561   4 0.0     1.602  130.75    48.9      48.9
+C   9.3636 .0561   4 0.0     1.602  149.25    76.4      76.4
+C  10.3636 .0561   4 0.0     1.602  150.75    76.4      76.4
+C  11.3636 .0561   4 0.0     1.602  169.25    48.9      48.9
+C  12.3636 .0561   4 0.0     1.602  170.75    48.9      48.9
+C   0.5    2.61    4 0.0      .386  -12.9    113.3     113.3
+C   0.5    2.61    4 0.0      .386   12.9    113.3     113.3
+C   0.5    2.61    4 0.0      .386  137.1    113.3     113.3
+C   0.5    2.61    4 0.0      .386  162.9    113.3     113.3
+C BLANK card ending conductors
+C   100.         60.         1     1   1     0  1.00       1
+C    The transformation matrix was calculated at  6.00000000E+01 Hz.
+$VINTAGE, 1
+-1X2A   X16A               1.14912E+00 1.75215E+03 1.01525E+05 1.00000E+01 1  C
+-2X2B   X16B               6.19497E-02 9.62871E+02 1.65713E+05 1.00000E+01 1  C
+-3X2C   X16C               5.97262E-02 5.78284E+02 1.83535E+05 1.00000E+01 1  C
+-4Y2A   Y16A               5.97524E-02 5.59985E+02 1.82228E+05 1.00000E+01 1  C
+-5Y2B   Y16B               5.98876E-02 5.82992E+02 1.82687E+05 1.00000E+01 1  C
+-6Y2C   Y16C               5.96998E-02 5.56016E+02 1.82902E+05 1.00000E+01 1  C
+-7Z2A   Z16A               5.97012E-02 1.92804E+02 1.80238E+05 1.00000E+01 1  C
+-8Z2B   Z16B               5.97049E-02 1.92894E+02 1.80244E+05 1.00000E+01 1  C
+-9Z2C   Z16C               5.94864E-02 1.92175E+02 1.80244E+05 1.00000E+01 1  C
+10W2A   W16A               5.95010E-02 1.92143E+02 1.80241E+05 1.00000E+01 1  C
+11W2B   W16B               5.97067E-02 1.92840E+02 1.80242E+05 1.00000E+01 1  C
+12W2C   W16C               5.95997E-02 1.92503E+02 1.80243E+05 1.00000E+01 1  C
+$VINTAGE, 0
+  0.30335730 -0.37506487  0.29831824 -0.10365425 -0.39860454  0.20962178
+  0.36034135  0.33997765  0.35680566  0.32758780  0.04763939 -0.05265715
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.29470036 -0.36058522  0.29625909 -0.10364356 -0.39806545  0.20770839
+ -0.36375595 -0.34011075 -0.35574761 -0.33324900 -0.04580113  0.05838452
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.26415953 -0.25096956 -0.01124173  0.39829551  0.10536839 -0.41956493
+  0.08491003 -0.02280779  0.02810499 -0.07847495 -0.49238512 -0.49092616
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.26401132 -0.24090177 -0.01560789  0.39665770  0.10887745 -0.42016964
+ -0.08456459  0.02411961 -0.02519738  0.07618869  0.49208187  0.49249548
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.29682413 -0.23791081 -0.40079088 -0.28385641  0.28231063  0.17321915
+  0.33616659 -0.36633112 -0.34919591  0.36745215  0.07335095 -0.07279138
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.30584186 -0.22734050 -0.40278216 -0.28629129  0.28284666  0.17416603
+ -0.33236556  0.36529364  0.35038662 -0.36694306 -0.07526426  0.07042439
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.30584186  0.22734050  0.40278216 -0.28629129  0.28284666 -0.17416603
+ -0.33236556  0.36529364 -0.35038662  0.36694306 -0.07526426 -0.07042439
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.29682413  0.23791081  0.40079088 -0.28385641  0.28231063 -0.17321915
+  0.33616659 -0.36633112  0.34919591 -0.36745215  0.07335095  0.07279138
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.26401132  0.24090177  0.01560789  0.39665770  0.10887745  0.42016964
+ -0.08456459  0.02411961  0.02519738 -0.07618869  0.49208187 -0.49249548
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.26415953  0.25096956  0.01124173  0.39829551  0.10536839  0.41956493
+  0.08491003 -0.02280779 -0.02810499  0.07847495 -0.49238512  0.49092616
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.29470036  0.36058522 -0.29625909 -0.10364356 -0.39806545 -0.20770839
+ -0.36375595 -0.34011075  0.35574761  0.33324900 -0.04580113 -0.05838452
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.30335730  0.37506487 -0.29831824 -0.10365425 -0.39860454 -0.20962178
+  0.36034135  0.33997765 -0.35680566 -0.32758780  0.04763939  0.05265715
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000
+ 1X16C  X17C              .6198 5.596 .08325
+ 2X16A  X17A              .4545 2.698 -.0156.6110 5.606 .079
+ 3X16B  X17B              .459  2.5945-.0107.4545 2.6975-.0156.6198 5.596 .08325
+ 1X17C  X18C  X16C  X17C
+ 2X17A  X18A
+ 3X17B  X18B
+ 1X18C  X19C  X16C  X17C
+ 2X18A  X19A
+ 3X18B  X19B
+ 1X19A  X20A  X16C  X17C
+ 2X19B  X20B
+ 3X19C  X20C
+ 1X20A  X21A  X16C  X17C
+ 2X20B  X21B
+ 3X20C  X21C
+ 1X21A  X22A  X16C  X17C
+ 2X21B  X22B
+ 3X21C  X22C
+ 1X22A  X23A  X16C  X17C
+ 2X22B  X23B
+ 3X22C  X23C
+ 1X23A  X24A  X16C  X17C
+ 2X23B  X24B
+ 3X23C  X24C
+ 1X24A  X25A  X16C  X17C
+ 2X24B  X25B
+ 3X24C  X25C
+ 1X25A  X26A  X16C  X17C
+ 2X25B  X26B
+ 3X25C  X26C
+ 1X26A  X27A  X16C  X17C
+ 2X26B  X27B
+ 3X26C  X27C
+ 1X27A  X28A  X16C  X17C
+ 2X27B  X28B
+ 3X27C  X28C
+ 1X28A  X29A  X16C  X17C
+ 2X28B  X29B
+ 3X28C  X29C
+ 1X29A  X30A  X16C  X17C
+ 2X29B  X30B
+ 3X29C  X30C
+ 1X30A  X31A  X16C  X17C
+ 2X30B  X31B
+ 3X30C  X31C
+ 1X31A  X32A  X16C  X17C
+ 2X31B  X32B
+ 3X31C  X32C
+C     3 July 1987.  Change 3 column-80 "1"-punches  to "2"-punches that do work:
+-1Y16C  Y17C               .316  752. 123.E3  31.  1                           2
+-2Y16B  Y17B               .03   370. 179.E3  31.  1                           2
+-3Y16A  Y17A                                                                   2
+-1g2a   h16a  x2a   X16A
+-2G2B   H16B            
+-3G2C   H16C            
+-4I2A   J16A             
+-5I2B   J16B            
+-6I2C   J16C            
+-7K2A   L16A            
+-8K2B   L16B            
+-9K2C   L16C            
+10M2A   N16A            
+11M2B   N16B            
+12M2C   N16C            
+BLANK card ending branch cards
+  CJC   X32C   -1.       .016        0.1
+  RAC   XC     -1.       .016        0.1                                       2
+  X16C  T      -1.       .2          0.
+BLANK card ending switch cards
+14VA      305418.   60.          -1.5                           -1.
+14VB      305418.   60.        -121.5                           -1.
+14VC      305418.   60.         118.5                           -1.
+14RAGA    301954.   60.           0.0                           -1.
+14RAGB    301954.   60.        -120.0                           -1.
+14RAGC    301954.   60.         120.0                           -1.
+14CJGA    303109.   60.          12.0                           -1.
+14CJGB    303109.   60.        -108.0                           -1.
+14CJGC    303109.   60.         132.0                           -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   5.708080191840E+08
+C Output for steady-state phasor switch currents.
+C  Node-K   Node-M        I-real           I-imag            I-magn       Degrees        Power            Reactive
+C  CJC      X32C     -6.21065330E+02   1.57458110E+03    1.69263930E+03   111.5259    2.40322338E+08    4.96188048E+07
+C  RAC      XC       -6.06503594E+01   2.47344060E+03    2.47418408E+03    91.4046    3.31199214E+08    1.20268815E+08
+C  X16C     T        -6.46661404E+02   4.07264272E+03    4.12366217E+03    99.0222    5.52649166E+08    1.89871207E-06
+  X16C                                 { Request this single node-voltage output
+C  First  8     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   9     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time       X16B        X16C        X16A        Y16C        Y16B        Y16A        RAC         X16C        CJA
+C                        T           T           T           Y17C        Y17B        Y17A        XC                      X32A
+C
+C                        CJB         RAGA        RAGB        RAGC        RAA         RAB         RAC         T
+C                        X32B        RAA         RAB         RAC         YA          YB          YC          TERRA
+C ***      Phasor I(0) = -6.2106533E+02                     Switch  "CJC   "  to  "X32C  "  closed in the steady-state.
+C ***      Phasor I(0) = -6.0650359E+01                     Switch  "RAC   "  to  "XC    "  closed in the steady-state.
+C ***      Phasor I(0) = -6.4666140E+02                     Switch  "X16C  "  to  "T     "  closed in the steady-state.
+C      0       0.0    -63837.09         0.0  377260.007  32764.4014  24017.9784  21291.3218         0.0  -42032.991  598.323353
+C                    -145.40932  -352.27263  295.489606  -144.63644   283.14372  -51.233037  -83.986082   -646.6614
+C      1     .5E-4   -53711.224         0.0  381855.471  32798.4874  24089.8935  21193.2909         0.0  -47014.919  596.678913
+C                    -131.63008  -353.37225  289.515678  -178.84475  284.649951  -45.380437  -71.585788  -723.30645
+C      2     .1E-3   -43566.965         0.0   386316.48  32824.0043  24159.2461  21076.3336         0.0  -51980.139  594.822465
+C                    -117.80398  -354.34516  283.438317  -212.99004  286.055173  -39.511164   -59.16047  -799.69444
+BLANK card terminating output variables
+C    500      .025   149624.777         0.0  -298261.85  4374.68263  -18173.961  -13033.335  185947.331  -35731.867  -361.54769
+C                    388.671649  166.782434  -493.57721  134.850181  -195.89164  122.275295  134.850181  -549.72103
+C Variable maxima :  540343.158         0.0  451172.573   32841.895  36778.8088  26530.3773  193304.481  268020.042  603.893663
+C                    1148.19813  357.764813   431.20547  1821.97555  297.752821  465.041684  662.283206  4123.38527
+C Times of maxima :       .0045         0.0      .00155       .2E-3       .0187      .01765       .0249       .0121       .0163
+C                         .0221       .0088       .0145       .0123      .01675       .0216       .0045       .0121
+C Variable minima :  -540349.47         0.0  -451154.75  -32840.801  -24394.349  -21958.885  -184991.56  -268026.03  -603.79512
+C                    -744.05263  -505.82794  -730.21734  -1821.9838  -294.72028  -314.26652  -662.51315  -4123.4773
+C Times of minima :       .0128         0.0      .00985       .0085       .0088       .0077       .0195      .00375      .00795
+C                          .013      .01895       .0223      .00395       .0091      .01295      .01285      .00375
+  PRINTER PLOT                                   { Axis limits: (-3.870,  2.119)
+  Voltage across switch (RAC,XC), which opens at 16 milliseconds.
+ 184 1. 15. 30.         RAC   XC                Recovery voltage
+C  $WATCH, 9999, { Turn off echoing of cards to CRT, in case other solutions follow
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C     11th of 19 subcases illustration use of Semlyen freq-dependent line with
+C     the reference branch.  This may never have worked prior to correction by
+C     BPA's Dr. Tsu-huei Liu on February 10, 1998.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ 100.E-6  20.E-3     60.
+       1       1       1       1       1      -1
+       5       5      20      20
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C SEMLYEN SETUP
+C $ERASE
+C BRANCH  SENDA RECA  SENDB RECB  SENDC RECC
+C TOLERANCES  10      5000.  { Illustration only; value of FMED actually unchang
+C           200  150  10 230   1     7  7777     0    { Semlyen miscellaneous da
+C LINE CONSTANTS
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   3.3636 .05215  4         1.602   19.25   50.     50.
+C   3.3636 .05215  4         1.602   20.75   50.     50.
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C BLANK card ending conductor cards within  "LINE CONSTANTS"  data
+C 100.         5000.                            100.         { Transient frequen
+C 100.         60.00                            100.   { Phasor solution frequen
+C 100.          6.00                            100.           6 20  { log loopi
+C BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+C BLANK card ending  "LINE CONSTANTS"  data cases
+C L=  100.0 miles, rho=   100.0, ss freq=   60.00, NSS=0, KFIT=10, KPS=2, KYC=30
+-1ASW1  A5A001             5.73657E-03 5.80501E-04              1  1  2  2   3
+   1.29532159E+01 6.90147263E+01-1.54971081E-04 1.00826561E-03 6.00000000E+01
+   0.00000E+00 1.99246E+04 7.80012E-01 0.00000E+00 2.39630E+03 2.19988E-01
+   0.00000E+00 2.93896E+05-8.84697E-04 0.00000E+00 6.44826E+02-1.46889E-03
+-1BSW1  B5B001             6.99857E-03 5.37300E-04              2  2  2  2   3
+   3.65631810E-01 3.01288921E+01-1.20641047E-05 1.41887940E-03 6.00000000E+01
+   0.00000E+00 2.54663E+05 9.79674E-01 0.00000E+00 2.72320E+03 2.03258E-02
+   0.00000E+00 9.43770E+03-1.26448E-04 0.00000E+00 5.92472E+01-4.28807E-04
+-1CSW1  C5C001             4.15601E-03 5.36306E-04              3  3  2  2   3
+   1.50114817E+00 5.16927471E+01-1.74676422E-05 8.35146102E-04 6.00000000E+01
+   0.00000E+00 6.39606E+05 9.69072E-01 0.00000E+00 2.23039E+03 3.09277E-02
+   0.00000E+00 2.10503E+03-1.22603E-04 0.00000E+00 9.26329E+01-3.41262E-04
+   1.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00-2.75271E-01 0.00000E+00
+   7.22689E-01 0.00000E+00 4.43389E-13 0.00000E+00 1.00000E+00 0.00000E+00
+   1.00000E+00 0.00000E+00-1.00000E+00 0.00000E+00-2.75271E-01 0.00000E+00
+   4.17084E-01 0.00000E+00 5.00000E-01 0.00000E+00-3.01620E-01 0.00000E+00
+   2.29906E-01 0.00000E+00 3.55101E-13 0.00000E+00 8.34169E-01 0.00000E+00
+   4.17084E-01 0.00000E+00-5.00000E-01 0.00000E+00-3.01620E-01 0.00000E+00
+C      Following 3 lines represent a request to copy the preceding Semlyen line:
+-1A5A001A5A   ASW1  A5A001
+-1B5B001B5B                                                                    
+-1C5C001C5C                                                                    
+ 0A5A                     1.                                                   1
+ 0B5B                     1.                                                   1
+ 0C5C                     1.                                                   1
+ 0A5A001                               1.E-3
+ 0B5B001                               1.E-3
+ 0C5C001                               1.E-3
+BLANK card ending branch cards
+BLANK card ending switch cards
+14ASW1     303.       60.         0.0                        -1.
+14BSW1     303.       60.      -120.0                        -1.
+14CSW1     303.       60.       120.0                        -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   3.478547602183E+01
+C   Node     Source  node  voltage  Injected  source  current          Injected  source  power
+C   name    Rectangular    Polar    Rectangular            Polar       P  and  Q    MVA and P.F.
+C   ASW1      303.         303.    -.007672733214  2.2866979764936    -1.162419081925  346.43474343878
+C              0.0         0.0    -2.286685104002      -90.1922493    346.43279325631       -0.0033554
+  A5A   B5B   C5C    
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step    Time        A5A          B5B          C5C          A5A          B5B          C5C
+C                                                               TERRA        TERRA        TERRA
+C    0     0.0   -.002405895    -2.431628  2.160402643  -.002405895    -2.431628  2.160402643
+C    1   .1E-3   .0926479698  -2.47879177  2.105633323  .0926479698  -2.47879177  2.105633323
+C    2   .2E-3   .1868259501  -2.52268804  2.047550504  .1868259501  -2.52268804  2.047550504
+C    3   .3E-3   .2807444168  -2.56299298  1.986561992  .2807444168  -2.56299298  1.986561992
+BLANK card ending the specification of program outputs (node voltages, here)
+C  200     .02   2.378651095  -1.98862739  -.684703165  2.378651095  -1.98862739  -.684703165
+C Variable max : 2.500671273  2.761895332  2.587232808  2.500671273  2.761895332  2.587232808
+C Times of max :       .0042        .0096        .0151        .0042        .0096        .0151
+C Variable min : -2.50519884  -2.75808205  -2.58528784  -2.50519884  -2.75808205  -2.58528784
+C Times of min :       .0125         .018        .0068        .0125         .018        .0068
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   12th of 19 subcases is added 11 December 2000 as first of many to illustrate
+C   the current output that results from column-80 punches.  This begins with 
+C   wide-format for a 1-phase K.C. Lee (constant-parameter) representation.  For
+C   all cases,  line length typically is 138 miles,  corresponding to BPA's
+C   famous 500-kV line from John Day to Lower Monumental.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ 100.E-6 100.E-6     60.
+       1       1       1       1       
+$VINTAGE, 1
+-1SEND  REC                3.01533E-01 6.91823E+02 1.19371E+05 1.38000E+02 1   1
+$VINTAGE, 0
+  REC                     1.
+BLANK card ending branch cards
+  GEN   SEND         -1.       1.0                                             1
+BLANK card ending switch cards
+14GEN      303.       60.         0.0                        -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   2.099556401229E+01
+C Output for steady-state phasor switch currents.
+C  Node-K   Node-M       I-real           I-imag           I-magn       Degrees        Power            Reactive
+C  GEN      SEND     1.38584581E-01  -9.21004378E-01   9.31372509E-01  -81.4428    2.09955640E+01    1.39532163E+02
+C               GEN
+C              SEND               303.             303.      .13858458093924  .93137250869232      20.995564012295  141.10293506689
+C                                  0.0              0.0      -.9210043777712      -81.4428358      139.53216323234        0.1487961
+  REC    
+C  First  1     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time        REC          GEN          SEND
+C                                      SEND         REC
+C ***  Phasor I(0) =  1.3858458E-01  Switch  "GEN   "  to  "SEND  "  closed in the steady-state.
+C      0       0.0   .1379357038  .1385845809  .1385845809
+C      1     .1E-3   .1761761692   .173243844   .173243844
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   13th of 19 subcases is like preceding,  but for 3 phases rather than 1.
+C   Wide format continues to be used for the K.C. branch cards.  Current
+C   outputs are requested for all 3 phases.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ 100.E-6 500.E-6     60.
+       1       1       1       1       
+$VINTAGE, 1
+-1ASW1  A5                 3.01533E-01 6.91823E+02 1.19371E+05 1.38000E+02 1   1
+-2BSW1  B5                 2.80266E-02 2.83599E+02 1.82176E+05 1.38000E+02 1   1
+-3CSW1  C5                                                                     1
+$VINTAGE, 0
+ 0A5                      1.
+ 0B5                      1.
+ 0C5                      1.
+BLANK card ending branch cards
+  GENA  ASW1                                          MEASURING                1
+  GENB  BSW1                                          MEASURING                1  
+  GENC  CSW1                                          MEASURING                1
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.
+14GENB     303.       60.      -120.0                        -1.
+14GENC     303.       60.       120.0                        -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   1.021565901142E+02
+C Output for steady-state phasor switch currents.
+C   Node-K   Node-M       I-real           I-imag            I-magn       Degrees        Power            Reactive
+C   GENA     ASW1     2.24766975E-01  -3.62554051E+00    3.63250109E+00  -86.4525    3.40521967E+01    5.49269387E+02
+C   GENB     BSW1    -3.25219367E+00   1.61811634E+00    3.63250109E+00  153.5475    3.40521967E+01    5.49269387E+02
+C   GENC     CSW1     3.02742669E+00   2.00742416E+00    3.63250109E+00   33.5475    3.40521967E+01    5.49269387E+02
+  A5    B5 
+C  First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   6     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step   Time        A5           B5           GENA         GENB         GENC         ASW1         BSW1         CSW1
+C                                               ASW1         BSW1         CSW1         A5           B5           C5
+C ***      Phasor I(0) =  2.2476697E-01                     Switch  "GENA  "  to  "ASW1  "  closed in the steady-state.
+C ***      Phasor I(0) = -3.2521937E+00                     Switch  "GENB  "  to  "BSW1  "  closed in the steady-state.
+C ***      Phasor I(0) =  3.0274267E+00                     Switch  "GENC  "  to  "CSW1  "  closed in the steady-state.
+C   0       0.0   .2227758056  -3.38431697  .2247669749  -3.25219367  3.027426695  .2247669749  -3.25219367  3.027426695
+C   1     .1E-3   .3649936277  -3.44526228  .3613753872  -3.31038064  2.949005255  .3613753872  -3.31038064  2.949005255
+C   2     .2E-3   .5067326952   -3.5018999  .4973255933  -3.36433648   2.86701089  .4973255933  -3.36433648   2.86701089
+C   3     .3E-3   .6477516678  -3.55356113  .6325690725  -3.41351142  2.780942346  .6325690725  -3.41351142  2.780942346
+C   4     .4E-3   .7878501498  -3.60017255  .7669136365  -3.45783557   2.69092193  .7669136365  -3.45783557   2.69092193
+C   5     .5E-3   .9268290537  -3.64166793  .9001683742  -3.49724594  2.597077567  .9001683742  -3.49724594  2.597077567
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   14th of 19 subcases is like preceding,  but it uses the old, narrow-format
+C   branch cards for the K.C. Lee circuit.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ 100.E-6 500.E-6     60.
+       1       1       1       1       
+-1ASW1  A5                .30153691.821.19E5 138.0 1                           1
+-2BSW1  B5                .02803283.601.82E5 138.0 1                           1  
+-3CSW1  C5                                                                     1
+ 0A5                      1.
+ 0B5                      1.
+ 0C5                      1.
+BLANK card ending branch cards
+  GENA  ASW1         -1.       1.0                                             1
+  GENB  BSW1         -1.       1.0                                             1
+  GENC  CSW1         -1.       1.0                                             1
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.
+14GENB     303.       60.      -120.0                        -1.
+14GENC     303.       60.       120.0                        -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   1.019696658302E+02
+C Output for steady-state phasor switch currents.
+C  Node-K   Node-M       I-real          I-imag           I-magn       Degrees        Power            Reactive
+C   GENA     ASW1     2.24355700E-01 -3.62184975E+00   3.62879196E+00  -86.4553    3.39898886E+01    5.48710237E+02
+C   GENB     BSW1    -3.24879174E+00  1.61662714E+00   3.62879196E+00  153.5447    3.39898886E+01    5.48710237E+02
+C   GENC     CSW1     3.02443604E+00  2.00522261E+00   3.62879196E+00   33.5447    3.39898886E+01    5.48710237E+02
+  A5    B5 
+C  First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   6     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step   Time        A5           B5           GENA         GENB         GENC         ASW1         BSW1         CSW1
+C                                               ASW1         BSW1         CSW1         A5           B5           C5
+C ***  Phasor I(0) =  2.2435570E-01  Switch  "GENA  "  to  "ASW1  "  closed in the steady-state.
+C ***  Phasor I(0) = -3.2487917E+00  Switch  "GENB  "  to  "BSW1  "  closed in the steady-state.
+C ***  Phasor I(0) =  3.0244360E+00  Switch  "GENC  "  to  "CSW1  "  closed in the steady-state.
+C   0    0.0   .2223643001  -3.38104477  .2243557004  -3.24879174  3.024436039  .2243557004  -3.24879174  3.024436039
+C   1  .1E-3   .3644492408  -3.44194246  .3608247082  -3.30692783  2.946103123  .3608247082  -3.30692783  2.946103123
+C   2  .2E-3     .50605606  -3.49853389  .4966370192  -3.36083496  2.864197938  .4966370192  -3.36083496  2.864197938
+C   3  .3E-3   .6469437457  -3.55015371  .6317435818  -3.40996615   2.77822257  .6317435818  -3.40996615   2.77822257
+C   4  .4E-3   .7869120891  -3.59672857  .7659524022   -3.4542516  2.688299197  .7659524022   -3.4542516  2.688299197
+C   5  .5E-3   .9257621872  -3.63819228  .8990727624  -3.49362837  2.594555603  .8990727624  -3.49362837  2.594555603
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   15th of 19 subcases is like preceding 13th in that it is wide format and it
+C   has current output of all 3 K.C. Lee phases.  But the 13th was transposed
+C   whereas this is untransposed (note the minus sign on the length of 138 miles
+C   and the number of phases in column 79 ---  two characteristic differences).
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ 100.E-6 500.E-6     60.
+       1       1       1       1       
+$VINTAGE, 1
+-1ASW1  A5                 3.01532E-01 6.91748E+02 1.19375E+05 1.38000E+02 1  31
+-2BSW1  B5                 2.80361E-02 2.90916E+02 1.82804E+05 1.38000E+02 1  31
+-3CSW1  C5                 2.80251E-02 2.76507E+02 1.81679E+05 1.38000E+02 1  31
+$VINTAGE, 0
+  0.58094800  0.70710678 -0.40960438
+  0.00000000  0.00000000  0.00000000
+  0.57008669  0.00000000  0.81513711
+  0.00000000  0.00000000  0.00000000
+  0.58094800 -0.70710678 -0.40960438
+  0.00000000  0.00000000  0.00000000
+ 0A5                      1.
+ 0B5                      1.
+ 0C5                      1.
+BLANK card ending branch cards
+  GENA  ASW1         -1.       1.0                                             1
+  GENB  BSW1         -1.       1.0                                             1
+  GENC  CSW1         -1.       1.0                                             1
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.
+14GENB     303.       60.      -120.0                        -1.
+14GENC     303.       60.       120.0                        -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   1.023278079456E+02
+C Output for steady-state phasor switch currents.
+C  Node-K   Node-M       I-real           I-imag            I-magn       Degrees        Power            Reactive
+C  GENA     ASW1     3.00196560E-01  -3.58378164E+00    3.59633269E+00  -85.2118    4.54797788E+01    5.42942919E+02
+C  GENB     BSW1    -3.31711311E+00   1.64521103E+00    3.70269614E+00  153.6197    3.54149452E+01    5.59839425E+02
+C  GENC     CSW1     3.04992391E+00   1.92423276E+00    3.60620404E+00   32.2483    2.14330840E+01    5.45919337E+02
+  A5    B5 
+C  First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   6     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step   Time        A5           B5           GENA         GENB         GENC         ASW1         BSW1         CSW1
+C                                               ASW1         BSW1         CSW1         A5           B5           C5
+C ***      Phasor I(0) =  3.0019656E-01                     Switch  "GENA  "  to  "ASW1  "  closed in the steady-state.
+C ***      Phasor I(0) = -3.3171131E+00                     Switch  "GENB  "  to  "BSW1  "  closed in the steady-state.
+C ***      Phasor I(0) =  3.0499239E+00                     Switch  "GENC  "  to  "CSW1  "  closed in the steady-state.
+C   0    0.0   .3028039653  -3.45224148  .3001965596  -3.31711311  3.049923907  .3001965596  -3.31711311  3.049923907
+C   1  .1E-3   .4433227265  -3.51422565  .4351711184  -3.37627258  2.974621043  .4351711184  -3.37627258  2.974621043
+C   2  .2E-3   .5832573875  -3.57180736  .5693890004  -3.43110981  2.895709537  .5693890004  -3.43110981  2.895709537
+C   3  .3E-3   .7223632078  -3.62431333  .7027977494  -3.48107125   2.81268307  .7027977494  -3.48107125   2.81268307
+C   4  .4E-3   .8604425105  -3.67166896  .8352077844  -3.52608589  2.725659627  .8352077844  -3.52608589  2.725659627
+C   5  .5E-3   .9972990773  -3.71380695  .9664309434  -3.56608978  2.634762871  .9664309434  -3.56608978  2.634762871
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   16th of 19 subcases is like preceding subcase, but narrow-format rather
+C   than wide format.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ 100.E-6 500.E-6     60.
+       1       1       1       1       
+-1ASW1  A5                .30153691.751.19E5138.0 1   3                        1
+-2BSW1  B5                .02804290.921.83E5138.0 1   3                        1 
+-3CSW1  C5                .02803276.511.82E5138.0 1   3                        1 
+  0.58094800  0.70710678 -0.40960438
+  0.00000000  0.00000000  0.00000000
+  0.57008669  0.00000000  0.81513711
+  0.00000000  0.00000000  0.00000000
+  0.58094800 -0.70710678 -0.40960438
+  0.00000000  0.00000000  0.00000000
+ 0A5                      1.
+ 0B5                      1.
+ 0C5                      1.
+BLANK card ending branch cards
+  GENA  ASW1         -1.       1.0                                             1
+  GENB  BSW1         -1.       1.0                                             1
+  GENC  CSW1         -1.       1.0                                             1
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.
+14GENB     303.       60.      -120.0                        -1.
+14GENC     303.       60.       120.0                        -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   1.026297675962E+02
+C Output for steady-state phasor switch currents.
+C  Node-K   Node-M       I-real           I-imag           I-magn       Degrees        Power            Reactive
+C  GENA     ASW1     3.02008125E-01  -3.58827965E+00   3.60096650E+00  -85.1890    4.57542310E+01    5.43624367E+02
+C  GENB     BSW1    -3.32346237E+00   1.64788748E+00   3.70957346E+00  153.6262    3.55447426E+01    5.60875207E+02
+C  GENC     CSW1     3.05443322E+00   1.92605659E+00   3.61099104E+00   32.2346    2.13307940E+01    5.46649127E+02
+  A5    B5 
+C  First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   6     output variables are branch currents (flowing from the upper node to the lower node);
+C Step    Time        A5           B5           GENA         GENB         GENC         ASW1         BSW1         CSW1
+C                                               ASW1         BSW1         CSW1         A5           B5           C5
+C ***  Phasor I(0) =  3.0200813E-01  Switch  "GENA  "  to  "ASW1  "  closed in the steady-state.
+C ***  Phasor I(0) = -3.3234624E+00  Switch  "GENB  "  to  "BSW1  "  closed in the steady-state.
+C ***  Phasor I(0) =  3.0544332E+00  Switch  "GENC  "  to  "CSW1  "  closed in the steady-state.
+C   0     0.0   .3045651846  -3.45834382  .3020081254  -3.32346237  3.054433225  .3020081254  -3.32346237  3.054433225
+C   1   .1E-3   .4452424723  -3.52041215  .4371493736  -3.38271232  2.979054128  .4371493736  -3.38271232  2.979054128
+C   2   .2E-3   .5853352634  -3.57807608  .5715325316  -3.43763659  2.900064351  .5715325316  -3.43763659  2.900064351
+C   3   .3E-3    .724596261  -3.63065537  .7051035107  -3.48767578  2.816953424  .7051035107  -3.48767578  2.816953424
+C   4   .4E-3   .8628275678   -3.6780753   .837672499  -3.53275879  2.729839452   .837672499  -3.53275879  2.729839452
+C   5   .5E-3   .9998327493  -3.72026849  .9690511089  -3.57282156  2.638846228  .9690511089  -3.57282156  2.638846228
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   17th of 19 subcases is the same basic 3-phase configuration, but with
+C   the K.C. Lee modeling replaced by  JMARTI  modeling.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ 100.E-6 500.E-6     60.
+       1       1       1       1       
+C    PUNCHED CARD OUTPUT OF "JMARTI SETUP" WHICH BEGAN AT  14.32.51  09/14/82
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   3.3636 .05215  4         1.602   19.25   50.     50.
+C   3.3636 .05215  4         1.602   20.75   50.     50.
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C
+C 100.         5000.         1                  138.       1           3-2
+C 100.         60.00         1                  138.       1           3
+C 100.           .01         1                  138.       1   9 10    3
+C
+-1ASW1  A5                    2.                    -2 3                       1
+      18      0.47487144790587633736E+03
+ -0.117967342612603676E+01 -0.316671345021416945E+01  0.255662317832426673E+02
+ -0.601654631032706213E+02 -0.118825306534453652E+03  0.128169142098635430E+04
+  0.589610442538186533E+04  0.292891488173549769E+05  0.115665757459954655E+06
+  0.456394278488149546E+06  0.153681652821077613E+07  0.681848054466802243E+07
+  0.155477562610202006E+08  0.231789897204889809E+08  0.143827766961221036E+08
+  0.241524708800130989E+08  0.245049034784953832E+08  0.476808364145524129E+08
+  0.321645453133055891E+00  0.897616891499021768E+00  0.165632367032913183E+01
+  0.166669419493737986E+01  0.253073682990780913E+01  0.200014655383098283E+02
+  0.124257951002701473E+03  0.657345842950598183E+03  0.278623017775457413E+04
+  0.117145310573639467E+05  0.427410884649070877E+05  0.202553264108715757E+06
+  0.968789502295299084E+06  0.296908522006270138E+07  0.737968316276072920E+07
+  0.121009167337626640E+08  0.132891445947112725E+08  0.252097199908134253E+08
+      14      0.86849922355034181931E-03
+  0.580543547692016874E-01  0.269744993210885436E+00  0.358646519088149721E+00
+  0.775351125410302933E+00  0.512138885239557462E+01  0.838265420474258915E+01
+  0.700229782114550385E+02  0.393084113996385128E+03  0.138208543918962840E+04
+  0.706160326497018531E+03  0.527246586822120662E+04  0.528343251309079615E+05
+  0.178307801042203880E+08 -0.178914532139174500E+08
+  0.228360173022402533E+02  0.102750699821169636E+03  0.139222638455845377E+03
+  0.269608322018776320E+03  0.389220463867018722E+03  0.427793721751318500E+03
+  0.132148883486994549E+04  0.277178340638843952E+04  0.449341296469570784E+04
+  0.596603161966094024E+04  0.114714152641659587E+05  0.268314807408425590E+05
+  0.204027813729699328E+05  0.204231841543429041E+05
+-2BSW1  B5                    2.                    -2 3                       1
+      13      0.28580875773089406522E+03
+  0.381761604345214016E+04 -0.269529222495194318E+04  0.445018224900628539E+03
+  0.214658130219351907E+03  0.897325461203551775E+02  0.130480129629523390E+03
+  0.683037485206990933E+02  0.746626715384045969E+02  0.133938729387751110E+04
+  0.249954495902361043E+04  0.187764116219525090E+05  0.391031620802855759E+06
+  0.562668431190421223E+07
+  0.358668999787749571E+01  0.376679186833120605E+01  0.706439034439901437E+01
+  0.109721634064781350E+02  0.140506334140286961E+02  0.234292596911152251E+02
+  0.407686998675834982E+02  0.797598814775078289E+02  0.129106739969348078E+04
+  0.242138030939135859E+04  0.182362646041542116E+05  0.379814243183306855E+06
+  0.548808385606378759E+07
+      13      0.74123751236187229426E-03
+  0.192189595814863363E+02  0.210970481418782463E+01  0.383406546226866283E+02
+  0.307999912886148377E+02  0.634013410317139090E+03 -0.253243195247046863E+03
+  0.210540381301789816E+05  0.755533947306502050E+05  0.229576557459444489E+07
+  0.607777584135737231E+13 -0.156620677810598129E+13  0.153143851607186420E+13
+ -0.604300997216751013E+13
+  0.325736126030671755E+04  0.366694913707514260E+03  0.675727697588602189E+04
+  0.516024976370228876E+04  0.249456113770459378E+05  0.115067772934717399E+06
+  0.105205466546493019E+06  0.240930799961836921E+06  0.633276538663731131E+06
+  0.975820481990592802E+06  0.976796302472583498E+06  0.974176721795814519E+06
+  0.975150898517610403E+06
+-3CSW1  C5                    2.                    -2 3                       1
+      13      0.27248404992352924125E+03
+  0.928429573805075023E+03  0.205756155237142632E+03  0.538106630554037608E+03
+  0.105199818376817531E+03  0.821382476778671116E+02  0.133356875032521778E+03
+  0.654774478488469374E+02  0.612546121562179922E+02  0.905544916173387175E+02
+  0.973244316091135204E+03  0.267481871266201051E+04  0.138566411938941123E+05
+  0.646075558955914967E+06
+  0.297277477955690506E+01  0.413177069940672514E+01  0.739410817322770197E+01
+  0.103072536754267949E+02  0.135874091964585515E+02  0.234792992956042887E+02
+  0.384075708508238121E+02  0.692539345057236435E+02  0.997101922255402791E+02
+  0.941460937860312015E+03  0.259295974388396348E+04  0.134538093446956691E+05
+  0.628668738677182439E+06
+      20      0.74871165651714274120E-03
+  0.249456855794677017E-01  0.516637614002139312E+01  0.435227595525510835E+01
+  0.696293545843379624E+01  0.113102519337405665E+02  0.107077756312168120E+02
+  0.136526319661978881E+02  0.103057494642840792E+03  0.647491597081196815E+03
+  0.221213037293261823E+04  0.164010494681972204E+05  0.517776934139508076E+05
+  0.393233870054795443E+06 -0.101893253559274247E+05 -0.173413454816459129E+06
+  0.524218185885897590E+06  0.711044562955687729E+12 -0.559640645251973480E+12
+  0.582892127161358521E+12 -0.734296849907947113E+12
+  0.887741958857318814E+01  0.183177145564733675E+04  0.151655674045953921E+04
+  0.245910936284398730E+04  0.383273362703089043E+04  0.399285585783856465E+04
+  0.496339281485561617E+04  0.253464455063045348E+05  0.272156609769823021E+05
+  0.475215596432249440E+05  0.149791320991727040E+06  0.333884409922466803E+06
+  0.541583000670874084E+06  0.670984155731562481E+06  0.569769858667429973E+06
+  0.132622344670840449E+07  0.440534234233555838E+07  0.440974768467789434E+07
+  0.436787151891064062E+07  0.437223939042955148E+07
+  0.57154434  0.70710678 -0.41761362
+  0.00000000  0.00000000  0.00000000
+  0.58879039  0.00000000  0.80696823
+  0.00000000  0.00000000  0.00000000
+  0.57154434 -0.70710678 -0.41761362
+  0.00000000  0.00000000  0.00000000
+ 0A5                      1.
+ 0B5                      1.
+ 0C5                      1.
+BLANK card ending branch cards
+  GENA  ASW1         -1.       1.0                                             1
+  GENB  BSW1         -1.       1.0                                             1
+  GENC  CSW1         -1.       1.0                                             1
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.
+14GENB     303.       60.      -120.0                        -1.
+14GENC     303.       60.       120.0                        -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   1.066927628344E+02
+C Output for steady-state phasor switch currents.
+C  Node-K   Node-M        I-real           I-imag            I-magn       Degrees        Power            Reactive
+C  GENA     ASW1      3.35189648E-01  -3.57914703E+00    3.59480814E+00  -84.6498    5.07812317E+01    5.42240775E+02
+C  GENB     BSW1     -3.30243673E+00   1.62411674E+00    3.68019613E+00  153.8123    3.70708395E+01    5.56315950E+02
+C  GENC     CSW1      3.05668356E+00   1.90837679E+00    3.60350057E+00   31.9777    1.88406917E+01    5.45605132E+02
+  A5    B5 
+C  First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   6     output variables are branch currents (flowing from the upper node to the lower node);
+C Step   Time        A5           B5           GENA         GENB         GENC         ASW1         BSW1         CSW1
+C                                              ASW1         BSW1         CSW1         A5           B5           C5
+C ***  Phasor I(0) =  3.3518965E-01  Switch  "GENA  "  to  "ASW1  "  closed in the steady-state.
+C ***  Phasor I(0) = -3.3024367E+00  Switch  "GENB  "  to  "BSW1  "  closed in the steady-state.
+C ***  Phasor I(0) =  3.0566836E+00  Switch  "GENC  "  to  "CSW1  "  closed in the steady-state.
+C   0    0.0   .3364801616  -3.43708937  .3351896479  -3.30243673  3.056683557  .3351896479  -3.30243673  3.056683557
+C   1  .1E-3   .4768147829  -3.49823033  .4699942576  -3.36074443    2.9818637  .4699942576  -3.36074443    2.9818637
+C   2  .2E-3   .6165162541  -3.55507115  .6039611281  -3.41481401  2.903532996  .6039611281  -3.41481401  2.903532996
+C   3  .3E-3   .7553410187  -3.60686214  .7370685919  -3.46403253  2.821077973  .7370685919  -3.46403253  2.821077973
+C   4  .4E-3   .8930920166  -3.65352808  .8691280945  -3.50832883  2.734614537  .8691280945  -3.50832883  2.734614537
+C   5  .5E-3   1.029573754  -3.69500248  .9999522851  -3.54763983  2.644265375  .9999522851  -3.54763983  2.644265375
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   19th of 19 subcases is like preceding 14th subcase.  But that had normal
+C   K. C. Lee modeling whereas this is distortionless (note "1" in column 54).
+C   End of subcases that were added  11 December 2000  to illustrate selective
+C   current output as should be explained in the April, 2001, newsletter.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ 100.E-6 500.E-6     60.
+       1       1       1       1       
+-1ASW1  A5                .30153691.821.19E5 138.0 1 1                         1
+-2BSW1  B5                .02803283.601.82E5 138.0 1 1                         1  
+-3CSW1  C5                                           1                         1
+ 0A5                      1.
+ 0B5                      1.
+ 0C5                      1.
+BLANK card ending branch cards
+  GENA  ASW1         -1.       1.0                                             1
+  GENB  BSW1         -1.       1.0                                             1
+  GENC  CSW1         -1.       1.0                                             1
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.
+14GENB     303.       60.      -120.0                        -1.
+14GENC     303.       60.       120.0                        -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =   6.310523799541E+01
+C Output for steady-state phasor switch currents.
+C  Node-K   Node-M       I-real           I-imag           I-magn        Degrees        Power            Reactive
+C  GENA     ASW1     1.38845408E-01  -3.63039320E+00   3.63304732E+00   -87.8098    2.10350793E+01    5.50004569E+02
+C  GENB     BSW1    -3.21343544E+00   1.69495295E+00   3.63304732E+00   152.1902    2.10350793E+01    5.50004569E+02
+C  GENC     CSW1     3.07459003E+00   1.93544025E+00   3.63304732E+00    32.1902    2.10350793E+01    5.50004569E+02
+  A5    B5 
+C  First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   6     output variables are branch currents (flowing from the upper node to the lower node);
+C Step    Time        A5           B5           GENA         GENB         GENC         ASW1         BSW1         CSW1
+C                                               ASW1         BSW1         CSW1         A5           B5           C5
+C ***  Phasor I(0) =  1.3884541E-01                     Switch  "GENA  "  to  "ASW1  "  closed in the steady-state.
+C ***  Phasor I(0) = -3.2134354E+00                     Switch  "GENB  "  to  "BSW1  "  closed in the steady-state.
+C ***  Phasor I(0) =  3.0745900E+00                     Switch  "GENC  "  to  "CSW1  "  closed in the steady-state.
+C   0    0.0   .1332050671  -3.34378386  .1388454081  -3.21343544  3.074590029  .1388454081  -3.21343544  3.074590029
+C   1  .1E-3   .2756872129  -3.40778338  .2757125121  -3.27455462  2.998842112  .2757125121  -3.27455462  2.998842112
+C   2  .2E-3   .4178019673  -3.46751877  .4120284659  -3.33148445  2.919455988  .4120284659  -3.33148445  2.919455988
+C   3  .3E-3   .5593230022  -3.52232662  .5477589048  -3.38368006  2.835921157  .5477589048  -3.38368006  2.835921157
+C   4  .4E-3   .7000492086  -3.57212905  .6827109483  -3.43106728  2.748356327  .6827109483  -3.43106728  2.748356327
+C   5  .5E-3   .8397806067  -3.61685529  .8166928222  -3.47357875  2.656885933  .8166928222  -3.47357875  2.656885933
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

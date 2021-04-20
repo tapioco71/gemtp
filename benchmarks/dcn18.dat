@@ -1,0 +1,128 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-18
+C        1st of ? subcases that confirm additional aspects of U.M. usage.
+C      U.M. illustration of SHARE.  From Dr. Yin Yuexin by E-mail on 30 Jan 1996
+C   SIMULATION OF A THREE-PHASE SYNCHRONOUS MOTOR - GENERATOR SET USING THE 
+C   U.M. MODULE  ---  believed to be originally from Prof. Juan Martinez
+C   The machines have different number of poles: motor = 3 pole pairs, generator
+C   is 6 pole pairs.  Steady State is calculated using Automatic Initialization.
+C   Terminal voltages of motor and generator have been adjusted so that 
+C   mechanical torques are equal.  * Sudden change in the generator load.
+C   The simulation is made using  SHARE  to connect the two shafts mechanically
+C   EPSILN = 1.E-12  was removed (default 1.E-8 gives nearly identcal answers).
+C      Dynamics shown here,  over the first 10 msec,  are just the tip of the 
+C      iceberg.  Extend TMAX to 5 sec to see much more.  The motor torque is not
+C      at all constant as the  PRINTER PLOT  shows over 10 msec.  Instead,  it
+C      involves an oscillation having a period of about 1.2 sec.  The same
+C      is true for the envelope of the armature current.  For such longer runs,
+C      double  DELTAT  to .2 msec (curves will not change significantly). 
+POWER FREQUENCY, 50
+  0.0001    .010                                               
+       1       1       1       1       1      -1               1
+      20      20     100     100    1000    1000
+C ----- Power network equivalent impedance
+ 0BUS-AMBUS-A0             .250  3.50
+ 0BUS-BMBUS-B0BUS-AMBUS-A0
+ 0BUS-CMBUS-C0BUS-AMBUS-A0
+C ----- Generator load
+ 0BUS-AG                   5.0    4.5
+ 0BUS-BG                   5.0    4.5
+ 0BUS-CG                   5.0    4.5
+C ----- Generator load change (connect these by switch closure at 1 msec):
+ 0BUSAG1                   4.8    4.0
+ 0BUSBG1                   4.8    4.0
+ 0BUSCG1                   4.8    4.0
+C - Field circuits of motor:
+ 0BUSFM1                    1.0
+ 0BUSFM1BUSFM0            1.E-10
+C - Field circuits for generator:
+ 0BUSFG1                    1.0
+ 0BUSFG1BUSFG0            1.E-10
+C ----- Mechanical network data
+ 0BUSMM1BUSMM0            1.E-10
+ 0BUSMM0                              10.0E9
+ 0BUSMM0BUSMG0            1.E-10
+ 0BUSMG0                              39.4E9
+ 0BUSMG1BUSMG0            1.E-10                                    
+BLANK CARD ENDING BRANCH CARDS.
+  BUS-AGBUSAG1    .001      99.0 { 1st of 3 switches close at 1 msec to add load
+  BUS-BGBUSBG1    .001      99.0
+  BUS-CGBUSCG1    .001      99.0
+C  BUS-AGBUSAG1    -1.0      99.0 { 1st of 3 switches close at 1 msec to add load
+C  BUS-BGBUSBG1    -1.0      99.0
+C  BUS-CGBUSCG1    -1.0      99.0
+BLANK CARD ENDING SWITCH CARDS.
+C ----- Infinite bus source voltages
+14BUS-A0    9800.0   50.0      0.0                          -1.0
+14BUS-B0    9800.0   50.0     -120.0                        -1.0
+14BUS-C0    9800.0   50.0      120.0                        -1.0
+C ----- Excitation source voltages
+C -     (Actual value set by Steady State Initialization)
+C - Motor
+14BUSFM1      0.01  .00001     0.0                          -1.0
+C - Generator
+14BUSFG1      0.01  .00001     0.0                          -1.0
+C ----- Current sources simulating mechanical torques under steady state
+C -     (Actual value should be zero)
+14BUSMM1-1    0.01  .00001     0.0                          -1.0
+14BUSMG1-1    0.01  .00001     0.0                          -1.0
+C ----- Two synchronous machine specifications (using U.M.) follow:
+19  UM        { Universal Machine of Prof. Hian Lauw is Type-19 source component
+ 1  { This gives prediction for armature coils ("0" in col. 2 for compensation)
+BLANK card ending Class 1 UM data,  which is not repeated
+C ============= Motor data is for 1st of 2 conventional synchronous machines:
+ 1 2 1111BUSMM0       3                             .001          50.
+              .0082506
+              .0059588
+SHARE      2         { Shaft of this UM-1 is to be connected to shaft of UM-2
+9444.02         -9.4        BUSFM1BUSMM1
+C - UM Coil-Table
+0.014400      0.0005500     BUS-AM            1
+0.014400      0.0013751     BUS-BM            
+0.014400      0.0013751     BUS-CM            
+0.001450      0.0010313     BUSFM0            
+0.020372      0.0001019                       
+0.133560      0.0007192                       
+C ============ Generator data is for 2nd of 2 conventional synchronous machines
+ 1 2 111 BUSMG0       6                             .001         100.
+              .0095748
+              .0073339
+SHARE      1          { Shaft of this UM-2 is to be connected to shaft of UM-1
+9400.0           0.0        BUSFG1
+C - UM Coil-Table
+0.0256000     0.0009167     BUS-AG            1
+0.0256000     0.0018335     BUS-BG            
+0.0256000     0.0018335     BUS-CG            
+0.0012913     0.0014012     BUSFG0            
+0.0271620     0.0002445                       
+0.1333400     0.0006667                       
+BLANK CARD ENDING UM DATA.
+BLANK CARD ENDING SOURCE CARDS.
+C     Total network loss  P-loss  by summing injections =   2.085588779750E+07
+C     Total network loss  P-loss  by summing injections =   2.998766670851E+16
+C     Total network loss  P-loss  by summing injections =   2.998766672952E+16
+C     Total network loss  P-loss  by summing injections =   2.998766672952E+16
+C 1st gen:     UM2MCC  104.71975511966  104.71975511966      -.1628101692E-3   .1211292268344      -.0085247205233  6.3423114859661
+C                                  0.0              0.0      .12112911741752       90.0770115      -6.342305756912       -0.0013441
+C
+C 2nd gen:     BUSMM0  104.71975511966  104.71975511966      192780.21968365  192780.49349675      .100939486986E8  .100939630354E8
+C                                  0.0              0.0      324.91779476689        0.0965680        -17012.655951        0.9999986
+  BUS-AMBUS-AG  { Request for output of node voltages
+C  Step  Time      BUS-AM     BUS-AG     UM-1       UM-1       UM-1       UM-1       UM-2       UM-2       UM-2
+C                                        TQGEN      OMEGM      THETAM     IPA        TQGEN      OMEGM      IPA
+C   0     0.0  9317.20779 9400.00222 -192780.22 104.719755 -.49123491 -1428.7533 192782.988 104.719755  1424.4929
+C   1   .1E-3  9361.30121 9382.16106  -192781.1 104.719755 -.49123491 -1431.6422 192780.108 104.719755 1472.24713
+C   2   .2E-3   9395.4359 9325.62226 -192781.13 104.719755 -.49123491 -1433.1122  192777.93 104.719755 1514.19778
+C   3   .3E-3  9421.26214 9234.08498 -192781.15 104.719755 -.49123491 -1433.1679 192775.738 104.719755 1550.17388
+C 100     .01  -9315.4209  8085.5945 -192956.77 104.696694 -.49153195 1430.08855 307671.343 104.696652 2304.75957
+BLANK card ending node voltage output requests
+C    maxima :  9444.04202 9400.00222 -192780.22 104.719755 -.49123491 1430.08855 349434.719 104.719755 2304.75957
+C Times of max :    .5E-3        0.0        0.0        0.0      .0016        .01      .0034        0.0        .01
+C    minima :  -9315.4209 -8421.5743 -192956.77 104.696694 -.49153195 -1433.1679 192762.301 104.696652 -3028.4258
+C Times of min :      .01      .0052        .01        .01        .01      .3E-3      .1E-2        .01       .006
+  PRINTER PLOT
+ 194 2. 0.0 10.         UM-1  TQGEN UM-2  TQGEN    { Limits:  (-1.930,  3.494)
+ 144 2. 0.0 10.         BUS-AMBUS-AG               { Limits:  (-9.315,  9.444)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

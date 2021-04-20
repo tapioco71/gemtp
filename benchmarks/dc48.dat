@@ -1,0 +1,498 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-48
+C     Demonstration of random switch opening: A Monte Carlo ("STATISTICS") study
+C     only with random opening rather than the more common closing.  The network
+C     is  purely  resistive by design,  in order that switch current is known to
+C     have a current zero at  0.625 seconds.   There are 3 parallel, independent
+C     networks radially branched off of  generator  GEN  to nodes  LOAD,  LOAD1,
+C     and  LOAD2.   All 3 involve statistical opening.  If  a switch opens early
+C     (before .625 sec), then negative peak of  -100  at  t = 3/4  will be kept
+C     for extrema.  If not (nearly half the time, since the mean of the switches
+C     shorting  LOAD,  LOAD1,  and  LOAD2  to ground is  t = 0.6,  which is very
+C     close to the current zero),   the opening is delayed until  t = .875,  and
+C     then the peak is  +30.9  at the end time  t = 0.9 seconds.   Why?  This is
+C     because frequency equal to  2 Hz  and use of  BEGIN PEAK VALUE SEARCH   at
+C     0.525  means  that we ignore the positive peak at  0.5 sec,  and  we never
+C     make  the next one at  1.0 sec  since  TMAX = 0.9 sec.   The negative peak
+C     at 0.750 sec is seen only for the early opening at 0.625 sec.   As for the
+C     randomness,  we  have  mixed random closing and opening as an illustration
+C     of this new capability that first worked on  9 July 1987.   All the actual
+C     switchings of  interest (three) use opening,  whereas the reference switch
+C     (one of two components of the opening time) uses random closing.   Because
+C     of use of built-in random numbers  (data value  XMAXMX  is negative),  all
+C     computers  should  produce identical results.   Confirmation of the actual
+C     opening times can be deduced from the resultant peak voltage:
+C        1) For opening at 0.63 sec, source voltage appears at this time, and it
+C           lasts through the end of the simulation.  The negative  peak  occurs
+C           at time  0.75 sec,  and this shows up in the printout  (the  extrema
+C           will have a value of  -100.0  volts).
+C        2) For opening at  0.875 sec,  source voltage appears at this time, and
+C           only last through the positive rise toward the peak at 1.0 sec.  But
+C           this  rise is prematurely ended at time  TMAX = 0.90 sec,  when  the
+C           voltage is  30.901699 volts,  and this will be the extrema.
+C     Not all computers require that variable  NSEED  of  columns 73-80  of  the
+C     STATISTICS miscellaneous data card be punched,  meaning  use  of the fixed
+C     seed.  But Apollo does require this,  since built-in random numbers are no
+C     different than installation-dependent ones:  the VAX-11 algorithm is used.
+PRINTED NUMBER WIDTH, 18, 3,    { Extra precision and separation for 3 variables
+CHANGE PRINTOUT FREQUENCY
+       5       5
+BEGIN PEAK VALUE SEARCH, 0.525, { Ignore 1st cycle, which has time less than 1/2
+     .01     .90
+       1       1       0       0       1                       1       5
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED
+       1       1       0       0       1                                       1
+  GEN   LOAD                 1.0 { 1st of 3 identical resistors hung from source
+  GEN   LOAD1                1.0 { 2nd of 3 identical resistors hung from source
+  GEN   LOAD2                1.0 { 3rd of 3 identical resistors hung from source
+  DUMY                       1.0   { Connect independent Monte Carlo switch node
+BLANK card ending branch cards
+  DUMY               .40       .06                    STATISTICS     { Reference
+C    Preceding switch does nothing for network;  but it is referenced by the two
+C    dependent switches of  LOAD1  and  LOAD2.  Following  LOAD  is independent:
+  LOAD               .60      0.10               3333.STATISTICS   { Independent
+  LOAD1              .20      0.08               3333.STATISTICSDUMY { Dependent
+C   Mustafa's  STAT*.DAT  within  \TEPCO  introduces current margin Ie to open:
+C < n 1>< n 2>< Tclose ><Top/Tde ><   Ie   ><Vf/CLOP ><  type  >
+C GEN   LOAD       .0051  .0028868        3.     3333.STATISTICS               1
+C   Make a comparable addition here,  to the  LOAD2  switch:
+C LOAD2              .20      0.08               3333.STATISTICSDUMY { Dependent
+C LOAD2              .20      0.08       40.     3333.STATISTICSDUMY { Dependent
+  LOAD2              .20      0.08       45.     3333.STATISTICSDUMY { Dependent
+C   The preceding  Ie = 40  advanced the LOAD2 switch-opening time slightly:
+C   With zero or blank:  Open switch  "LOAD2 "  to  "      "  after  6.30000000E-01  sec.
+C   With Ie = 40 amps :  Open switch  "LOAD2 "  to  "      "  after  6.00000000E-01  sec.
+C   But this was just base case output.  Extrema were not affected.  Adding five
+C   amps (40 becomes 45) affected the extrema,  so data is left this way.
+BLANK card terminating switch cards
+14GEN           100.       2.0                                     -1.
+BLANK card terminating sources
+  LOAD  LOAD1 LOAD2 GEN
+C  Step    Time        LOAD              LOAD1             LOAD2             GEN
+C
+C  ***      Phasor I(0) =  1.0000000E+02  Switch  "LOAD  "  to  "      "  closed
+C  ***      Phasor I(0) =  1.0000000E+02  Switch  "LOAD1 "  to  "      "  closed
+C  ***      Phasor I(0) =  1.0000000E+02  Switch  "LOAD2 "  to  "      "  closed
+C    0    0.0       0.0               0.0               0.0              100.
+C    1    .01       0.0               0.0               0.0   99.211470131448
+C    2    .02       0.0               0.0               0.0   96.858316112863
+BLANK card ending requests for program outputs (just node voltages, here)
+C ***         Open  switch  "LOAD2 "  to  "      "  after  6.00000000E-01  sec.
+C   60    0.6             0.0               0.0               0.0   30.901699437494
+C ***         Open  switch  "LOAD  "  to  "      "  after  6.30000000E-01  sec.
+C ***         Open  switch  "LOAD1 "  to  "      "  after  6.30000000E-01  sec.
+C   65    .65  -30.9016994375    -30.9016994375    -30.9016994375    -30.9016994375
+C   70    0.7  -80.9016994375    -80.9016994375    -80.9016994375    -80.9016994375
+C   75    .75           -100.             -100.             -100.             -100.
+C   80    0.8  -80.90169943749   -80.90169943749   -80.90169943749   -80.90169943749
+C   85    .85  -30.90169943749   -30.90169943749   -30.90169943749   -30.90169943749
+C   90    0.9  30.901699437495   30.901699437495   30.901699437495   30.901699437495
+C Variable maxima: 30.901699437495   30.901699437495   30.901699437495   92.977648588825
+C Times of maxima:             0.9               0.9               0.9               .53
+C Variable minima:           -100.             -100.             -100.             -100.
+C Times of minima:             .75               .75               .75               .75
+  PRINTER PLOT
+BLANK card ending non-existent plot cards for the base case
+C    The following documents extrema for the 3rd shot as found on 22 March 2007:
+C      Random switching times for energization number  3  :
+C 1  3.3795450E-01    2  4.3170384E-01    3  6.2506590E-01    4  6.5220506E-01
+C                       -100.         -100.         -100.         -100.
+C Times of maxima :       .75           .75           .75           .75
+C    This is using  Ie = 45 amps.  Using an older version of ATP with this new
+C    data should produce the following different and wrong answer:
+C                        -100.         -100.   30.901699437495    -100.
+C Times of maxima :       .75           .75           0.9           .75
+C    How old?  A month or more.  The wrong answer corresponds to use of the
+C    current margin  Ie = 0  with either the old or the new program.  As
+C    pointed out by Prof. Mustafa Kizilcay about a month ago using other data,
+C    ATP seemed to be ignoring current margin for the 2nd and later shots.  In
+C    response,  WSM proposed avoidance by making  TENERG  of  STARTUP  negative
+C    (simply append a minus sign).  This was prior to correction of code, of
+C    course.  That 3rd output variable is the voltage at node  LOAD2  ---
+C    the node of the switch that has current chopping.  
+STATISTICS DATA                1.0500001     0.0
+              LOAD
+              LOAD1
+              LOAD2
+C      Note about change to preceding.  The LOAD2 tabulation continues to span
+C      compartments 7-20.  However,  compartment 7 used to have 2 but now it has
+C      only one energization.  Where did one of them move?  To final compartment
+C      20 which increased from 3 to 4.  The change of summary statistics is big:
+C        Old solution :  Mean = 7.15001430E-01 ...   Variance = 1.26750507E-01
+C        New solution :  Mean = 8.45001690E-01 ...   Variance = 8.45003380E-02
+C      This is for  "Grouped data."  The  "Ungrouped data"  are comparable.
+C   Add "FIND" usage with  "DISK"  output to demonstrate that  Ie  of the  LOAD2
+C   switch is not erased on 17 March 2007.  Prior to correction of DICTAB,
+C   this was the case according to a trouble report from Orlando Hevia.
+FIND  { Enter interactive search for which shot and which variable gave extremum
+              LOAD  LOAD1            { Search these 3 node voltages for extremum
+EXCLUDE    { Repeat the preceding search after 1st excluding the just-found shot
+DISK  /LIST /FULL  { Create disk file of data for deterministic simulation of EXCLUDEd shot
+QUIT                     { Done locating extrema, so exit the "FIND" alternative
+C   Historical note.  Upon learning that we had corrected Ie treatment for Prof.
+C   Mustafa Kizilcay, Orlando Hevia reminded the workers in Portland that he had
+C   submitted a comparable complaint earlier.  In his mail archive,  he found a
+C   message to BPA having time stamp   Fri, 28 Jan 2005 17:37:39 -0300.  Without
+C   doubt,  Orlando's complaint was the same,  fundamentally.  Why it was not
+C   handled at the time remains unclear.  In that an additional problem with
+C   DISK  output was noted,  Orlando's complaint was more complete.  How did
+C   Orlando first note the phenomenon?  He explained :  "The first users that
+C   discovered a problem with Ie and 3333 switches are a couple from Uruguay .."
+BLANK card ending requests for statistical tabulation
+BEGIN NEW DATA CASE
+C       2nd of 5 subcases verify that STATISTICS (Monte Carlo) can involve TACS.
+C       The data comes from BPA's  Dan Goldsworthy.   Between August of 1993 and
+C       May ?? of 1994 (see the July, 1994, newsletter), this was not  possible.
+C       Data is not at all realistic.   TMAX  is artificially small,  etc..
+LINEAR BIAS USAGE      { Reference angle will vary linearly rather than randomly
+PRINTED NUMBER WIDTH, 11, 1,     { Restore default precision for dt-loop columns
+C $STARTUP, dc37star.dat       { Use disk file for re-initialization at this point
+C          This is a Monte Carlo case, for which  TENERG  is critical.  But this
+C          parameter is initialized only in the  STARTUP  file.  For this 2nd or
+C          later data case, we reinitialize via the preceding  $STARTUP  request
+CHANGE PRINTOUT FREQUENCY
+       5       5      20      20
+ .000100    .020     60.     0.0
+       1       1       0       0       1       0       0       0       3
+       1       2       1                                                       1
+TACS HYBRID CASE
+90PCBA
+90A1
+88PS5A    = ABS(PCBA - A1)
+93STATA 
+88PS2A  58+PLUS1                                  1000.   0.0   1.0 STATA
+88PS4A  56+PS2A                                      1.
+        -1.0       480. 
+         0.0       480.
+         8.0        0.0
+      1000.0        0.0
+           9999.
+88PS6A    = (PS5A - PS4A) .AND. STATA
+88CLSA  62+PLUS1                                                          PS6A
+33PS5A  PS2A  PS4A  PS6A  
+33STATA 
+33CLSA  
+BLANK CARD ENDING TACS DATA CASE
+  SENDA PCBA                10.0   5.0      
+  A1                        10.0   15.
+  DUMMY                    1.
+  STATA                    1.
+BLANK CARD ENDING BRANCH CARDS
+  DUMMY             .001   .000001                    STATISTICS               0
+76STATA             .005     .0015                    STATISTICSDUMMY          0
+13PCBA  A1                                                            CLSA    13
+BLANK CARD ENDING SWITCH CARDS
+14SENDA    188.0      60.        0.0                          -1.
+BLANK CARD ENDING SOURCES
+  PCBA  A1 
+C   Step      Time      PCBA       PCBA       A1         PCBA       TACS
+C                       A1                               A1         PS5A
+C      0       0.0        188.       188.        0.0        0.0        0.0
+C      1     .1E-3  187.866421 187.866421        0.0        0.0 187.866421
+C      2     .2E-3  187.465873 187.465873        0.0        0.0 187.465873
+C      3     .3E-3  186.798926 186.798926        0.0        0.0 186.798926
+BLANK CARD ENDs NODE VOLTAGE OUTPUTS
+C    120      .012  -35.227687 -35.227687        0.0        0.0 35.2276871
+C  Switch  "PCBA  "  to  "A1    "  closing after  1.32000000E-02  sec.
+C    140      .014          0.0 70.7309673 70.7309673 .964122164        0.0
+C    160      .016          0.0 113.976248 113.976248 4.51879549        0.0
+C    180      .018          0.0 88.9755078 88.9755078 6.91674682        0.0
+C    200       .02          0.0 12.7036093 12.7036093 6.17355737        0.0
+C Variable maxima :        188.       188. 114.548243 7.06193095 187.985156
+C Times of maxima :         0.0        0.0      .0163      .0186      .0083
+C Variable minima :  -187.98516 -187.98516        0.0        0.0        0.0
+C Times of minima :       .0083      .0083        0.0        0.0        0.0
+BLANK CARD ending plot 
+C             Random switching times for energization number  1  :
+C                                   1  6.5564603E-03    2  9.7966634E-03
+C ==== Table dumping for all subsequent restorations.  Time [sec] = 9.0000000E-4
+C     Switch  "PCBA  "  to  "A1    "  closing after  1.52000000E-02  sec.
+C    120.        188.       188. 125.885042 6.21833213 187.985156   10.25   480.
+C Times of maxima :    0.0      0.0    .016    .0189    .0083     .02      .1E-3
+C
+C      MAIN20 dumps OVER12 dice seed  SEEDSV =   5.7295779513082323E+01
+C Statistical distribution of peak voltage at node  "A1    ".   The base voltag
+C  Interval             voltage         voltage  in     Frequency    Cumulative
+C    number         in per unit      physical units     (density)     frequency
+C         1           0.0500000      0.94165000E+01             2             2
+C         2           0.1000000      0.18833000E+02             0             2
+C            < <  Etc.  (omit the zero rows)  > >
+C        14           0.7000000      0.13183100E+03             1             3
+C Summary of preceding table follows:       Grouped data     Ungrouped data
+C                                 Mean = 2.41666667E-01     2.22809327E-01
+C                             Variance = 1.40833333E-01     1.48931988E-01
+C                   Standard deviation = 3.75277675E-01     3.85917075E-01
+0 188.33      A1     { One and only request for statistical tabulation, of A1 
+C    Column positioning of  "NO SWITCH PLOTS"  on blank terminator is arbitrary:
+BLANK card ending statistical tabulation requests    ---   NO SWITCH PLOTS  ---
+BEGIN NEW DATA CASE
+C       3rd of 5 subcases verify that STATISTICS (Monte Carlo) works with MODELS
+C       The case is similar to subcase 2, with TACS section converted to a model
+C       Data is not at all realistic.   TMAX  is artificially small,  etc..
+LINEAR BIAS USAGE      { Reference angle will vary linearly rather than randomly
+PRINTED NUMBER WIDTH, 11, 1,     { Restore default precision for dt-loop columns
+CHANGE PRINTOUT FREQUENCY
+       5       5      20      20
+ .000100    .020     60.     0.0
+       1       1       0       0       1       0       0       0       3
+       1       2       1                                                       1
+MODELS
+INPUT pcba { v(PCBA) }   -- voltage at node PCBA
+      a1   { v(A1)   }   -- voltage at node A1
+      stata { switch(STATA) }  -- switch status at node STATA
+OUTPUT clsa           -- used to contol switch PCBA-A1
+MODEL subcase3
+ INPUT dv           -- voltage across controlled switch
+       sw_status    -- switch status of type-76 switch
+ OUTPUT sw_control
+ VAR sw_control, dvi, ps2, ps4, ps6, ps2x, ps2i
+ FUNCTION ptlst POINTLIST (-1E6,480),(0,480),(8,0),(1E6,0)
+ INIT
+  sw_control  :=0
+  histdef(ps6):=0
+  integral(ps2x):=0
+  histdef(ps2x) :=0
+ ENDINIT
+ EXEC
+  ps2x := sw_status * 1000
+  ps2 := integral(ps2x)                  -- corresponds to TACS type-58
+  ps4 := ptlst(ps2)                      -- corresponds to TACS type-56
+  ps6 := (dv-ps4) AND sw_status
+  IF ps6>0 AND prevval(ps6)<=0 THEN      -- corresponds to TACS type-62
+    sw_control := 1
+  ENDIF
+ ENDEXEC
+ENDMODEL
+USE subcase3 AS sub
+ INPUT dv:=abs(pcba-a1)     -- voltage across controlled switch
+       sw_status:=stata     -- status of type-76 switch
+ OUTPUT clsa:=sw_control    -- control signal to controlled switch
+ENDUSE
+RECORD sub.dv  AS dv
+       sub.ps2 AS ps2
+       sub.ps4 AS ps4
+       sub.ps6 AS ps6
+       stata   AS stata
+       clsa    AS clsa
+ENDMODELS
+  SENDA PCBA                10.0   5.0      
+  A1                        10.0   15.
+  DUMMY                    1.
+  STATA                    1.
+BLANK CARD ENDING BRANCH CARDS
+  DUMMY             .001   .000001                    STATISTICS               0
+76STATA             .005     .0015                    STATISTICSDUMMY          0
+13PCBA  A1                                                            CLSA    13
+BLANK CARD ENDING SWITCH CARDS
+14SENDA    188.0      60.        0.0                          -1.
+BLANK CARD ENDING SOURCES
+  PCBA  A1 
+C  Step      Time      PCBA       PCBA       A1         PCBA       TACS       TACS       TACS       TACS       TACS       TACS
+C                      A1                               A1         DV         PS2        PS4        PS6        STATA      CLSA
+C     0       0.0        188.       188.        0.0        0.0       188.        0.0       480.        0.0        0.0        0.0
+C     1     .1E-3  187.866421 187.866421        0.0        0.0 187.866421        0.0       480.        0.0        0.0        0.0
+C     2     .2E-3  187.465873 187.465873        0.0        0.0 187.465873        0.0       480.        0.0        0.0        0.0
+C     3     .3E-3  186.798926 186.798926        0.0        0.0 186.798926        0.0       480.        0.0        0.0        0.0
+BLANK CARD ENDs NODE VOLTAGE OUTPUTS
+C   120      .012  -35.227687 -35.227687        0.0        0.0 35.2276871       6.05       117.        0.0        1.0        0.0
+C Switch  "PCBA  "  to  "A1    "  closing after  1.32000000E-02  sec.
+C   140      .014         0.0 70.7309673 70.7309673 .964122164        0.0       8.05        0.0        0.0        1.0        1.0
+C   160      .016         0.0 113.976248 113.976248 4.51879549        0.0      10.05        0.0        0.0        1.0        1.0
+C   180      .018         0.0 88.9755078 88.9755078 6.91674682        0.0      12.05        0.0        0.0        1.0        1.0
+C   200       .02         0.0 12.7036093 12.7036093 6.17355737        0.0      14.05        0.0        0.0        1.0        1.0
+C Variable maxima :        188.       188. 114.548243 7.06193095       188.      14.05       480.        1.0        1.0        1.0
+C Times of maxima :         0.0        0.0      .0163      .0186        0.0        .02        0.0      .0132       .006      .0132
+C Variable minima :  -187.98516 -187.98516        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C Times of minima :       .0083      .0083        0.0        0.0      .0133        0.0       .014        0.0        0.0        0.0
+BLANK CARD ending plot 
+C            Random switching times for energization number  1  :
+C                                  1  6.5564603E-03    2  9.7966634E-03
+C ==== Table dumping for all subsequent restorations.  Time [sec] = 9.00000000E-04
+C Switch  "PCBA  "  to  "A1    "  closing after  1.52000000E-02  sec.
+C   120.                 188.       188. 125.885042 6.21833213       188.      10.25       480.        1.0        1.0        1.0
+C Times of maxima :         0.0        0.0       .016      .0189        0.0        .02        0.0      .0152      .0098      .0152
+C 
+C  MAIN20 dumps OVER12 dice seed  SEEDSV =   5.7295779513082323E+01
+C Statistical distribution of peak voltage at node  "A1    ".   The base voltage for per unit printout is  V-base = 1.88330000E+02
+C Interval             voltage         voltage  in     Frequency    Cumulative               Per cent
+C   number         in per unit      physical units     (density)     frequency     .GE. current value
+C        1           0.0500000      0.94165000E+01             2             2           33.333333
+C        2           0.1000000      0.18833000E+02             0             2           33.333333
+C            < <  Etc.  (omit the zero rows)  > >
+C       14           0.7000000      0.13183100E+03             1             3            0.000000
+C Summary of preceding table follows:       Grouped data     Ungrouped data
+C                                Mean = 2.41666667E-01     2.22809327E-01
+C                            Variance = 1.40833333E-01     1.48931988E-01
+C                  Standard deviation = 3.75277675E-01     3.85917075E-01
+C 
+0 188.33      A1     { One and only request for statistical tabulation, of A1 
+BLANK card ending statistical tabulation requests    ---   NO SWITCH PLOTS  ---
+BEGIN NEW DATA CASE
+C       4th of 5 subcases is unrelated to other subcases other than that it
+C       involves Monte Carlo simulation.  It is added  27 November 2002  to
+C       demonstrate that  KIZILCAY F-DEPENDENT (KFD)  modeling is compatible
+C       with  STATISTICS  (and/or  SYSTEMATIC  or  START AGAIN,  although only
+C       STATISTICS  is demonstrated).  As first reported by Ricardo Tenorio of
+C       ABB in Vasteras, Sweden,  there was incompatibility (execution would
+C       hang after the 1st energization had begun) prior to correction on
+C       16 November 2002.  Ricardo's initial complaint was about minimum dT (see
+C       the January, 2003, newsletter),  but shortly thereafter, privately, he
+C       reported inability to use STATISTICS switches with KFD data.  The data
+C       used here is the same as will be found in the 7th subcase of DC-23.
+C       Step size  dT  is plenty big,  so there is no question of instability
+C       caused by roundoff error.  A switch has been added in series with the
+C       voltage source,  and the associated mean and standard deviation are
+C       arbitrarily chosen to give a nice distribution of 4 energizations.
+C       Finally,  the sinusoidal source has been restored to 60 Hz (in DC-23,
+C       50 Hz was used in order that the period be a rounder number),  and the
+C       angle has been rotated so the voltage upon closure is small.  I.e.,
+C       the closures are artificially soft, intentionally, so the base case
+C       plot has no big spike at 4 msec.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .040              
+       5       1       1       0       1      -1                       4
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED 
+       1       1       0       0       1         { KSTOUT is blank, not 0! }   0  
+      60      20     100     100
+  ELEM                       99.                                               1
+C  PUNCH-OUT FILE GENERATED BY ARMAFIT (NODA SETUP)
+KIZILCAY F-DEPENDENT           6          1.00000E+000          S
+ 2.55564999999999990E-002 1.00000000000000000E+000
+ 2.58174256593059220E-006 1.26190169827623520E-003
+ 3.44528114161255420E-008 6.56757488674167030E-007
+ 2.16578732571550020E-012 6.22037676357393080E-010
+ 7.77318622992575270E-015 1.10717058895704090E-013
+ 2.25856143523397890E-019 5.18376352266273340E-017
+ 3.19918022205034290E-022 4.41171918010679540E-021
+BLANK card ending branch cards
+  GEN   ELEM        .004      .001                    STATISTICS               1
+C   Preceding column-80 punch really is not needed.  It was added simply to
+C   demonstrate that current output of the KFD branches agrees with it.
+BLANK card ending switch cards (none)
+14GEN     187794.214       60.       20.                           -1.
+BLANK card ending source cards
+  GEN 
+C  First  1     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time        GEN          GEN          ELEM
+C                                      ELEM         TERRA
+C      0       0.0   176468.8371          0.0          0.0
+C      5     .5E-3   161307.6987          0.0          0.0
+C     10     .1E-2   140432.1546          0.0          0.0
+C     15     .0015   114581.7315          0.0          0.0
+C     20      .002   84672.19336          0.0          0.0
+C     25     .0025   51763.10058          0.0          0.0
+C     30      .003   17020.27416          0.0          0.0
+C     35     .0035    -18325.504          0.0          0.0
+C     40      .004    -53022.092          0.0          0.0
+C ***                                                             Close switch  "GEN   "  to  "ELEM  "  after  4.10000000E-03  sec.
+C     45     .0045   -85840.3459  -1534.79533  -1534.79533
+C     50      .005   -115617.663  -2541.85468  -2541.85468
+BLANK card ending node voltage output requests
+  CALCOMP PLOT
+C    400       .04   -180519.385  -3271.23717  -3271.23717
+C Variable maxima :   187793.4818  4132.085734  4132.085734
+C Times of maxima :         .0324        .0344        .0344
+C Variable minima :   -187793.482  -5009.38242  -5009.38242
+C Times of minima :         .0074        .0089        .0089
+C      <Beg<End<Min>Max>Name1 Name2 Name3 Name4 16-byte title   Y-axis label
+ 194 4. 0.0 40.-6.E34.E3ELEM                    dT = 100 usec   H(s) current
+BLANK card ending base-case plot cards
+-2 4000.      ELEM              { -2 ==> tatistical tabulation of branch current
+C   The preceding base current of 4K amps is close to the peak value of the
+C   base-case (no-variance) solution.  It results in per unit values of a
+C   little more than 1.  Using default compartment size of .05, this results
+C   in reasonable compartment numbers,  and a pleasing dispersion of results:
+C Statistical distribution of peak current  for branch  "ELEM  "  to  "      ".   Base current  for per unit output = 4.00000000E+03
+C  Interval         current         current  in     Frequency    Cumulative               Per cent
+C    number     in per unit      physical units     (density)     frequency     .GE. current value
+C       22        1.1000000      4.40000000E+03             0             0          100.000000
+C       23        1.1500000      4.60000000E+03             1             1           75.000000
+C       24        1.2000000      4.80000000E+03             0             1           75.000000
+C       25        1.2500000      5.00000000E+03             1             2           50.000000
+C       26        1.3000000      5.20000000E+03             0             2           50.000000
+C       27        1.3500000      5.40000000E+03             1             3           25.000000
+C       28        1.4000000      5.60000000E+03             1             4             .000000
+C Summary of preceding table follows:        Grouped data     Ungrouped data
+C                                   Mean = 1.26250000E+00     1.26057789E+00
+C                               Variance = 1.22916667E-02     1.35490825E-02
+C                     Standard deviation = 1.10867789E-01     1.16400526E-01
+BLANK card ending statistical tabulation requests
+BEGIN NEW DATA CASE
+C       5th of 5 subcases is a modified version of the 1st.  The  FIND  command
+C       is added as earlier illustrated in DC-24.  That already illustrates the
+C       use of  DISK  to create deterministic data  SHOT*.DAT  corresponding to
+C       an  EXCLUDE-d  shot.  But what DC-24 does not illustrate is  RESIMULATE
+C       to simulate the just-created data.  Also missing was random opening and
+C       use of the optional  /MEMSAV  switch.  So, provide these here.  This
+C       data subset is added  6 October 2002.  Until 27 November 2002,  it was
+C       the 4th subcase.  Note it always must be last.
+PRINTED NUMBER WIDTH, 18, 3,    { Extra precision and separation for 3 variables
+CHANGE PRINTOUT FREQUENCY
+       5       5
+BEGIN PEAK VALUE SEARCH, 0.525, { Ignore 1st cycle, which has time less than 1/2
+     .01     .90
+C                                                 MEMSAV   Note value 0 is keyed
+       1       1       0       0       1               0       1       2
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED
+       1       1       0       0       1                                       1
+  GEN   LOAD                 1.0 { 1st of 3 identical resistors hung from source
+  GEN   LOAD1                1.0 { 2nd of 3 identical resistors hung from source
+  GEN   LOAD2                1.0 { 3rd of 3 identical resistors hung from source
+  DUMY                       1.0   { Connect independent Monte Carlo switch node
+BLANK card ending branch cards
+  DUMY               .40       .06                    STATISTICS     { Reference
+C    Preceding switch does nothing for network;  but it is referenced by the two
+C    dependent switches of  LOAD1  and  LOAD2.  Following  LOAD  is independent:
+  LOAD               .60      0.10               3333.STATISTICS   { Independent
+  LOAD1              .20      0.08               3333.STATISTICSDUMY { Dependent
+  LOAD2              .20      0.08               3333.STATISTICSDUMY { Dependent
+BLANK card terminating switch cards
+14GEN           100.       2.0                                     -1.
+BLANK card terminating sources
+  LOAD  LOAD1 LOAD2 GEN
+BLANK card ending requests for program outputs (just node voltages, here)
+  PRINTER PLOT
+$CLOSE,  UNIT=4  STATUS=KEEP  { Disconnect base-case .PL4 file for TPPLOT use  
+$OPEN,  UNIT=4   STATUS=C-like   FILE=dummy.pl4 !  { Connect C-like scratch file
+BLANK card ending non-existent plot cards for the base case
+STATISTICS DATA                1.0500001     0.0
+              LOAD
+FIND  { Enter interactive search for which shot and which variable gave extremum
+C   Normally the user does not know which shot he wants,  so he first will use
+C   EXCLUDE  to find the worst transients,  and then he wants data for this.
+C   See DC-24 for this technique.  But it also is possible for the user manually
+C   to name the shot of interest.  This is what is done here:
+C EXCLUDE  { Repeat the preceding search after 1st excluding the just-found shot
+C                       < Shot #   Cols 25-32 are I8 data for shot # of interest
+DISK  /LIST /MEMSAV            1    { Create determinstic disk file for shot # 1
+RESIMULATE { Abort this data case.  Begin with SHOT0001.DAT just created by DISK
+C   Any data card following RESIMULATE should be ignored.  So, this is a good
+C   place to add miscellaneous comments.  Begin these with mention of  /OPEN
+C   ---  another flag of the  DISK  subcommand that is not being illustrated.
+C   Because there is no  /OPEN  qualifier,  $OPEN  and  $CLOSE  cards will be
+C   converted to comment cards.  If  /OPEN  were added,  they would be passed
+C   through without modification.   Another unused feature is  /FULL  (see DC-24
+C   for an illustration).  Lack of  /FULL  means that switch times will be
+C   optimally encoded but with a leading blank byte.  This provides separation
+C   from what precedes the number.  Yes, one digit is being given up, but it is
+C   highly unlikely that this will make any difference, considering the DELTAT
+C   discretization of use.  Use of  /MEMSAV  has no practical effect in this
+C   case because the value keyed on the integer miscellaneous data card is zero.
+C   This is deliberate.  Normally,  the field would be left blank,  but if this
+C   were the case,  one could not be sure that the  /MEMSAV  flag was working.
+C   The user will note that the zero is passed through, demonstrating opeation.
+C   A final item:  For the record, request cards that always are destroyed
+C   (missing in the DISK output) are:
+C               OMIT BASE CASE             LINEAR BIAS USAGE
+C               TRULY RANDOM NUMBERS       MODELS PROCESSES EXTREMA
+C               REPEATABLE RANDOM NUMBERS  USER SUPPLIED SWITCH TIMES
+C               RANDOM NUMBER GENERATOR SEED
+C   30 December 2003,  add  /CYCLE  qualifier to continue to have T-open = 0.0
+C   As Orlando Hevia observed in E-mail of that day, this normally is not the
+C   engineering choice.  Normally, a switch that closes should remain closed,
+C   and DICTAB is being modified to do this.  T-close = 1.E+9  will be seen on
+C   the modified switch card.  To restore 0.0,  add  /CYCLE  (which will allow
+C   the switch to cycle open again (the status at time zero).
+BEGIN NEW DATA CASE
+BLANK

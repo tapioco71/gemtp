@@ -1,0 +1,230 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-16
+C     Test of  "SYSTEMATIC"  option which allows the user to have switch closing
+C     times varied regularly.   There  are  3 independent, systematically-varied
+C     switches taking 2, 4, and 3 steps,  respectively.  In addition to the base
+C     case,  then,  there  are to be   2 * 4 * 3 = -NENERG = 24   energizations.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+99.03E-6    .025     60.
+       1       1       1       2       1      -1                     -24
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED
+       1       1      { ISW=1 ==> Printed switching times;   ITEST=1 ==> no bias
+       5       5      20      20      { Printout frequency changes for base case
+ 0GENA  A1                      7.                                             4
+ 0GENB  B1                      7.                                             3
+ 0GENC  C1                      7.
+ 0ENDA  A10                     7.
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.
+-1ASW1  A5                .3    2.1146 0.645 50.   0
+-2BSW1  B5                .0268 .5397  0.021 50.   0
+-3CSW1  C5
+ 0A5    A5F               1.
+ 0B5    B5F               1.
+ 0C5    C5F               1.
+-1A5F   ASW10 ASW1  A5
+-2B5F   BSW10
+-3C5F   CSW10
+BLANK card ending branch cards
+  B10   BSW10     10.E-3     1.0
+  B1    BSW1       4.E-3     .2E-3         2          SYSTEMATIC
+  C1    CSW1       6.E-3     .3E-3         4          SYSTEMATICTARGET
+  A10   ASW10      2.E-3     .4E-3         3          SYSTEMATIC
+  A1    ASW1       1.E-3                              SYSTEMATICB1    BSW1
+  C10   CSW10     12.E-3     1.0
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.
+14GENB     303.       60.      -120.0                        -1.
+14GENC     303.       60.       120.0                        -1.
+14ENDA     303.       60.      - 10.0                        -1.
+14ENDB     303.       60.      -130.0                        -1.
+14ENDC     303.       60.       110.0                        -1.
+BLANK card ending source cards
+  ASW1  BSW1
+BLANK card ending output variable requests (node voltages only, here)
+C ***          Close switch  "B1    "  to  "BSW1  "  after  6.04083000E-03  sec.
+C ***          Close switch  "C1    "  to  "CSW1  "  after  6.04083000E-03  sec.
+C ***          Close switch  "A10   "  to  "ASW10 "  after  6.04083000E-03  sec.
+C ***          Close switch  "A1    "  to  "ASW1  "  after  7.03113000E-03  sec.
+C  80 .0079224   3.639449214   12.5053685  -283.627168  177.6693051  .5124656E-3
+C 100  .009903   1.299612647  -58.9506992  -271.930029  38.31674092  .6510477E-4
+C ***          Close switch  "B10   "  to  "BSW10 "  after  1.00020300E-02  sec.
+C 120 .0118836   -13.4793168  7.386747874  -54.0094052   -227.85024  .0068001249
+C ***          Close switch  "C10   "  to  "CSW10 "  after  1.20816600E-02  sec.
+C
+C Last step:  252 .02495556   -2.83666996  -5.98940516  -327.625802  161.8641485
+C Last step continued  .......                          .1629402E-3  .3686585491
+  PRINTER PLOT
+ 144 4. 0.0 50.         ASW1                     { Axis limits: (-3.276,  3.176)
+C                       GENA         GENB         ASW1         BSW1         GENA
+C                         A1           B1                                     A1
+C First shot:               Random switching times for energization number  1  :
+C   2  5.9000000E-03    3  6.0000000E-03    4  5.6000000E-03    5  6.9000000E-03
+C                58.93128751  192.0984488  -326.075521  336.1486991  .0315970504
+C Times of maxima : .0138642    .00604083    .02495556    .00722919    .01554771
+C
+C 2nd   shot:               Random switching times for energization number  2  :
+C   2  6.1000000E-03    3  6.0000000E-03    4  5.6000000E-03    5  7.1000000E-03
+C                56.04192203  165.7654174  -322.282369  -326.291206  .0329276386
+C Times of maxima : .01267584   .00623889    .02495556    .01346808    .01574577
+BLANK card ending plot cards (for base case only)
+C 23rd shot:               Random switching times for energization number  23  :
+C 23rd shot:  2  6.8000000E-3  3  6.9000000E-3  4  7.3000000E-3  5  7.8000000E-3
+C 23rd shot:     -39.0656922  169.6381869  -379.444302  -311.343589  .0253668269
+C Times of maxima: .01742928     .0069321    .00812046    .01346808    .01673607
+C
+C Last shot:               Random switching times for energization number  24  :
+C Last shot:  2  7.0000000E-3  3  6.9000000E-3  4  7.3000000E-3  5  8.0000000E-3
+C Last shot:     49.82358949  165.4706377  -382.803147  310.7780459  .0299093498
+C Last shot:       .01356711    .00713016    .00812046    .02188563    .01673607
+C
+C 1 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENB  "  to   "B1    ".
+C Interval             voltage         voltage  in      Frequency     Cumulative
+C   number         in per unit      physical units      (density)      frequency
+C       57           2.8500000      0.14250000E+03              0              0
+C       58           2.9000000      0.14500000E+03              1              1
+C          <  <  Etc.  (rows 59 through 75 omitted to save space)   >  >
+C       76           3.8000000      0.19000000E+03              0             21
+C       77           3.8500000      0.19250000E+03              3             24
+C Summary for following request:        Mean = 3.48750000E+00     3.49384237E+00
+C                                   Variance = 5.61413043E-02     5.91771084E-02
+C                         Standard deviation = 2.36941563E-01     2.43263455E-01
+-1  50.       GENB  B1
+C 2 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage at node  "ASW1  ".   The base voltage
+C Interval             voltage         voltage  in      Frequency     Cumulative
+C   number         in per unit      physical units      (density)      frequency
+C       21           1.0500000      0.31815000E+03              0              0
+C       22           1.1000000      0.33330000E+03              5              5
+C       23           1.1500000      0.34845000E+03              5             10
+C       24           1.2000000      0.36360000E+03              3             13
+C       25           1.2500000      0.37875000E+03              5             18
+C       26           1.3000000      0.39390000E+03              3             21
+C       27           1.3500000      0.40905000E+03              3             24
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data
+C                                       Mean = 1.18541667E+00     1.18028303E+00
+C                                   Variance = 7.38677536E-03     6.74976204E-03
+C                         Standard deviation = 8.59463517E-02     8.21569354E-02
+ 0            ASW1  BSW1   { See preceding comments for 1st of 3 tables produced
+C                         MODTAB   AINCR  XMAXMX
+STATISTICS DATA                0    -15.     0.0   ----  Fixed 15 boxes used now
+C 5 ) --------------------------------------------------------------------------
+C Statistical distribution of peak current  for branch  "GENB  "  to   "B1    ".
+C Interval             current         current  in      Frequency     Cumulative
+C   number         in per unit      physical units      (density)      frequency
+C       19           0.9976152      0.95970790E+00              0              0
+C       20           1.0501213      0.10102188E+01              2              2
+C       21           1.1026274      0.10607298E+01              0              2
+C          <  <  Etc.  (rows 22 through 32 omitted to save space)   >  >
+C       33           1.7327002      0.16668611E+01              0             22
+C       34           1.7852062      0.17173720E+01              2             24
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data
+C                                       Mean = 1.40672501E+00     1.39937500E+00
+C                                   Variance = 3.96702046E-02     3.93384525E-02
+C                         Standard deviation = 1.99173805E-01     1.98339236E-01
+-2            GENB  B1  { See preceding comment cards for resulting single table
+-3            GENA  A1 { Ungrouped: Mean= 1.63806617E0, Variance = 1.01307955E-1
+-4            GENA  A1 { Ungrouped: Mean= 1.30997561E0, Variance = 1.73383337E-2
+C                         MODTAB   AINCR  XMAXMX     15 Aug 03, add Sturges use:
+STATISTICS DATA                0 Sturges     0.0  ----  Sturges gives # of boxes
+-4            GENA  A1 { Ungrouped: 
+C 8 ) -------------------------------------------------------------------------------------------------------------------------------
+C Statistical distribution of peak energy   for branch  "GENA  "  to  "A1    ".   Base energy   for per unit output = 2.33417187E-02
+C  Interval           energy          energy   in     Frequency    Cumulative               Per cent
+C    number       in per unit      physical units     (density)     frequency     .GE. current value
+C         9          .9050250      2.11248398E-02             0             0          100.000000
+C        10         1.0055834      2.34720442E-02             1             1           95.833333
+C        11         1.1061417      2.58192486E-02             2             3           87.500000
+C        12         1.2067000      2.81664531E-02             2             5           79.166667
+C        13         1.3072584      3.05136575E-02             5            10           58.333333
+C        14         1.4078167      3.28608619E-02             9            19           20.833333
+C        15         1.5083751      3.52080663E-02             5            24             .000000
+C Summary of preceding table follows:       Grouped data     Ungrouped data
+C                                 Mean = 1.29887852E+00     1.30997561E+00
+C                             Variance = 1.92713806E-02     1.73383337E-02
+C                   Standard deviation = 1.38821398E-01     1.31675107E-01
+BLANK card ending  "SYSTEMATIC"  output-variable requests
+BEGIN NEW DATA CASE
+C   2nd of 3 subcases is related to 1st in that it demonstrates SYSTEMATIC use.
+C   But network is single phase and much simpler.  Basically, a 50-Hz generator
+C   will charge a capacitor upon switch closure.  Illustrate different options:
+C     a) Misc. data KSSOUT of column 32 is 3 whereas in DC-16 it was 2.  The
+C        difference is a phasor branch flow (now seen) for the base case.
+C     b) Misc. data MAXOUT of column 40 is zero whereas in DC-16 it was 1.  But
+C        this makes no difference.  The base case show extrema either way.
+C     c) Misc. data  MEMSAV of column 56 is 2 meaning that program tables will  
+C        be partially dumped, as 3rd subcase of DC-24 (STATISTICS).  For ease of
+C        documentation, this will be  FORMATTED  rather than  UNFORMATTED  (note
+C        FORM=  of the  $OPEN  statement).
+C     d) IMAX, read from cols. 25-32 of the  STATISTICS/SYSTEMATIC  misc. data
+C        card,  has value 1 to request the addition of normal, non-statistic
+C        extrema.
+C     e) There is a single  SYSTEMATIC  switch.  NENERG of the misc. data card
+C        can be found without the minus sign in column 44 of the switch card.
+C     f) Illustrate  PARTIAL TABLE DUMPING  for faster table dumping.  This
+C        illustration is added  5 October 2001.
+PARTIAL TABLE DUMPING { Faster table dumping (dump only what is used, not limit)
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+ .000500    .010  { Take 20 steps over half a cycle of the 50-Hz power frequency
+C   IOUT   IPLOT  IDOUBL  KSSOUT  MAXOUT                          NENERG
+       1       1       1       3       0      -1                      -4
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED
+       1       1       0       1       1                                       1
+       5       1    { Printout frequency remains unchanged; print each time step
+  GEN   SWIT                 1.0                                               1
+  SWIT                       1.0                                             
+  CAP                        0.0   0.0 1.0E3                                   3
+BLANK card ending branch cards
+  SWIT  CAP        5.E-3     1.E-3         4          SYSTEMATIC
+BLANK card ending switch cards
+14GEN      400.       50.         0.0                        -1.
+BLANK card ending source cards
+$OPEN,  UNIT=LUNIT9  FILE=systemat.lu9  STATUS=UNKNOWN  FORM=FORMATTED !
+  GEN   SWIT  CAP 
+BLANK card ending output variable requests (node voltages only, here)
+  PRINTER PLOT
+ 184 2. 4.0 10.         CAP         GEN   SWIT
+BLANK card ending plot cards (for base case only)
+$CLOSE,  UNIT=LUNIT9  STATUS=KEEP      { Disconnect to prevent damage by stray  WRITE 
+$OPEN,  UNIT=LUNIT9  FILE=dum.lu9  STATUS=UNKNOWN  FORM=FORMATTED !
+-2    500.    CAP  { Tabulate branch current of (CAP, TERRA) using I-base = 500.
+BLANK card ending statistical tabulate (none possible, since no output variable)
+BEGIN NEW DATA CASE
+C   3rd of 3 subcases is same as 2nd except for the following changes:
+C     a) Add  OMIT BASE CASE  to drop the base case (no normal dT-loop output
+C        preceding the 4 energizations indicated by NENERG.
+C     b) IMAX, read from cols. 25-32 of the  STATISTICS/SYSTEMATIC  misc. data
+C        card,  has value 2 to request the replacement of statistical extrema
+C        by normal, non-statistic extrema.
+C     c) Misc. data MAXOUT of column 40 is 1.  But this makes no difference.
+C     d) Misc. data KSSOUT of column 32 is 2 as in DC-16.  This omits the
+C        phasor branch flow of the preceding subcase.
+OMIT BASE CASE   { Energizations will not be preceded by normal dT-loop output
+ .000500    .010
+C   IOUT   IPLOT  IDOUBL  KSSOUT  MAXOUT                          NENERG
+       1       1       1       3       1      -1                      -4
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED
+       1       1       0       2       1                                       1
+       5       5           { Less dT-loop output after time step number 5
+  GEN   SWIT                 1.0                                               1
+  SWIT                       1.0                                             
+  CAP                        0.0   0.0 1.0E3                                   3
+BLANK card ending branch cards
+  SWIT  CAP        5.E-3     1.E-3         4          SYSTEMATIC
+BLANK card ending switch cards
+14GEN      400.       50.         0.0                        -1.
+BLANK card ending source cards
+C $OPEN,  UNIT=LUNIT9  FILE=systemat.lu9  STATUS=UNKNOWN  FORM=FORMATTED !
+  GEN   SWIT  CAP 
+BLANK card ending output variable requests (node voltages only, here)
+$DISABLE         { Comment out this card, if a base case solution is to be added
+  PRINTER PLOT
+BLANK card ending plot cards (for base case only)
+$ENABLE          { Comment out this card, if a base case solution is to be added
+C $CLOSE,  UNIT=LUNIT9  STATUS=KEEP      { Disconnect to prevent damage by stray  WRITE 
+-2    500.    CAP  { Tabulate branch current of (CAP, TERRA) using I-base = 500.
+BLANK card ending statistical tabulate (none possible, since no output variable)
+BEGIN NEW DATA CASE
+BLANK  
+EOF

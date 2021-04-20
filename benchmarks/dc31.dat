@@ -1,0 +1,486 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-31
+C     Simulation of single-line-to-ground-fault on the open receiving end of the
+C     single-circuit,  138-mile,  500-kV overhead line that connects  "John Day"
+C     with  "lower monumental"  (BPA substations).   Semlyen representation from
+C     DC-29  is  used for the line.   See  DCNEW-4  for  the corresponding Marti
+C     simulation.   See Rule Book Ref. 3  for further description.   Yet observe
+C     that source angles and the instant of fault initiation do  not correspond.
+C         There are a total of 3 subcases,  with two following unrelated to this
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000050    .050     60.     60.
+       1       1       1       1       1      -1
+       5       5      20      20     100     100
+  JDGA  JDA                        14.                                         1
+  JDGB  JDB                        14.
+  JDGC  JDC                        14.
+C L=   138.0MILES, RHO=    27.0, SS FREQ=   60.00, NSS=0, KFIT= 0, KPS=2, KYC=10
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   3.3636 .05215  4         1.602   19.25   50.     50.
+C   3.3636 .05215  4         1.602   20.75   50.     50.
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C
+C  27.         5000.         1                  138.
+C  27.         60.00         1                  138.
+C  27.          6.00         1                  138.           6 20
+C
+-1JDA   LMA                0.55456E-02 0.77998E-03              1  1  2  2   3
+   0.14938602E+02 0.90516313E+02-0.16261865E-03 0.14500324E-02 0.60000000E+02
+   0.00000E+00 0.15161E+05 0.75119E+00 0.00000E+00 0.17105E+04 0.24881E+00
+   0.00000E+00 0.59584E+03-0.11954E-02 0.00000E+00 0.39933E+05-0.74162E-03
+-1JDB   LMB                0.74392E-02 0.74149E-03              2  2  2  2   3
+   0.83801231E+00 0.38634735E+02-0.44536501E-04 0.20637999E-02 0.60000000E+02
+   0.00000E+00 0.26608E+06 0.83767E+00 0.00000E+00 0.35627E+05 0.16233E+00
+   0.00000E+00 0.13630E+03-0.49171E-03 0.00000E+00 0.32940E+05-0.75349E-04
+-1JDC   LMC                0.42823E-02 0.74017E-03              3  3  2  2   3
+   0.26535168E+01 0.67894100E+02-0.45225808E-04 0.11682248E-02 0.60000000E+02
+   0.00000E+00 0.61698E+06 0.90903E+00 0.00000E+00 0.15239E+05 0.90969E-01
+   0.00000E+00 0.25667E+03-0.34465E-03 0.00000E+00 0.11831E+05-0.28233E-04
+   0.10000E+01 0.00000E+00 0.10000E+01 0.00000E+00-0.26698E+00 0.00000E+00
+   0.71114E+00 0.00000E+00-0.41983E-15 0.00000E+00 0.10000E+01 0.00000E+00
+   0.10000E+01 0.00000E+00-0.10000E+01 0.00000E+00-0.26698E+00 0.00000E+00
+   0.42027E+00 0.00000E+00 0.50000E+00 0.00000E+00-0.29908E+00 0.00000E+00
+   0.22471E+00 0.00000E+00-0.27373E-15 0.00000E+00 0.84054E+00 0.00000E+00
+   0.42027E+00 0.00000E+00-0.50000E+00 0.00000E+00-0.29908E+00 0.00000E+00
+C       Note:  the preceding branch cards are old.  If produced by SEMLYEN SETUP
+C       on or after  27 November 2000,  the low precision [Tv] and [Ti] would
+C       be replaced by high precision for the real parts only.  This can be
+C       seen from current output of DC-29.  6E12.5  --->  3E26.18   We retain
+C       the old branch cards in this subcase to demonstrate that such old data
+C       continues to remain compatible.  See  NO IMAGINARY PART  as is being
+C       written about for the April, 2001, newsletter.  To see use of the new
+C       wide format for [Tv] and [Ti],  see  DC-62.
+  TOWER                      2.0
+BLANK card ending branch cards
+  LMA   TOWER     .00433       1.0                                             1
+BLANK card terminating all switch cards
+14JDGA       303000.       60.      -90.                           -1.
+14JDGB       303000.       60.     -210.                           -1.
+14JDGC       303000.       60.       30.                           -1.
+BLANK card ending all source cards
+C       Total network loss  P-loss  by summing injections =  -4.779046825640E+06
+C Last inject:  JDGC  262405.69734669   303000. -173.5167762169  331.67972792735
+C Last inject:           151500.       30.0000  282.67184205232      121.5434868
+  LMA   LMB   LMC   JDA   JDC
+C  Step      Time        LMA          LMB          LMC          JDA          JDC
+C
+C    0     0.0   1571.475581  -276456.932  278765.7622  153.7361338  266363.1031
+C    1   .5E-4   7630.423588  -279401.215  275709.5695  5941.026761  263392.9685
+C    2   .1E-3   13684.53899  -282253.973  272563.1515  11741.29345  260360.8975
+C    3  .15E-3   19733.66162   -285005.65  269320.0035  17534.50579  257232.6923
+BLANK card ending output variable requests
+C Last step begins:    1000    .05     -4383.86263    -267262.886    294635.7149
+C Last step continue ..... :  -3765.02773  266358.2578  -2191.93132  -2002.40336
+C Variable max : 321290.8039  382325.3516  420199.3815  307502.4578  313056.9229
+C Times of max :      .00415        .0271         .015       .00415       .01555
+C Variable min : -4633.97345  -375865.379  -529913.225  -303202.542  -357915.083
+C Times of min :      .01665       .01825        .0061       .01245       .00685
+  PRINTER PLOT                                   { Axis limits: (-5.299,  4.202)
+ 2Simulation of fault at Lower Monumental end of 138-mile line to John Day.
+ 1                      SMOOTH
+  PRINT HEAD OFF
+  Voltage at Lower Monumental, where "a"-phase is faulted at  4.33 msec.
+ 144 2. 0.0 20.         LMA   LMB   LMC         Lower Mon. Fault voltage in volt
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C   2nd of 3 data subcases is unrelated to the 1st. 3rd will be compared with it
+C   1973 GPU Stolle Road to Homer City line energization without surge arresters
+C   These extra two cases are added to document Prof. Xusheng Chen's transformer
+C   as described in January, 1993, newsletter.
+ .000050    .050     60.     60.     { Increase deltat from 25 microsecs of '70s
+     100       1       0       0       1 
+  SORA  GARA                      3.06
+  SORB  GARB                      3.06
+  SORC  GARC                      3.06
+-1GARA  ST1A              .6109 2.3280  3.02 12.44
+-2GARB  ST1B              .1278 .79260  5.36 12.44
+-3GARC  ST1C
+ 1GARA  ERIA                    6.2245
+ 2GARB  ERIB                    2.4289            6.2245
+ 3GARC  ERIC                    2.4289            2.4289            6.2245
+ 1GARA  DAVA                    21.905
+ 2GARB  DAVB                    10.465            21.905
+ 3GARC  DAVC                    10.465            10.465            21.905
+-1ERIA  ST1A              .6701 2.3608  3.02 10.70
+-2ERIB  ST1B              .1000 .71960  5.36 10.70
+-3ERIC  ST1C
+-1ROLA  ST1A              .6342 2.3507  3.02 20.27
+-2ROLB  ST1B              .1005 .72150  5.36 20.27
+-3ROLC  ST1C
+-1DAVA  ST1A              .6641 2.3641  3.02 14.53
+-2DAVB  ST1B              .0998 .71990  5.36 14.53
+-3DAVC  ST1C
+  TRANSFORMER               21.3 249.1TRANA                                    1
+            21.3           249.1
+            99.8           274.0
+           236.9           288.9
+           1602.           326.3
+           9999.
+ 1SWPA                       0.0 -1.11  115.
+ 2ST3A                       0.0  39.4  345.
+ 3T-A   T-B                  0.0  1.24 59.75
+  TRANSFORMER TRANA                   TRANB                                    1
+ 1SWPB
+ 2ST3B
+ 3T-B
+  TRANSFORMER TRANA                   TRANC                                    1
+ 1SWPC
+ 2ST3C
+ 3      T-A
+-1ST3A  HOMA              .6129 1.9245  4.50 214.0
+-2ST3B  HOMB              .0502 .59410  7.05 214.0
+-3ST3C  HOMC
+  ST3A                    96514. 1930.
+  ST3B                    96514. 1930.
+  ST3C                    96514. 1930.
+  ST3A                                 12.82
+  ST3B                                 12.82
+  ST3C                                 12.82
+  SWPA                                 37.70
+  SWPB                                 37.70
+  SWPC                                 37.70
+C   24 July 2008,  add a disconnected Type-51, 52 branch that has very low
+C   impedance.  The [R] and [L] matrices are perfectly invertible;  in fact, for
+C   simplicity,  we make them diagonal.  Prior to improvement of  REDUCT,  the
+C   ATP response was to halt execution.  The small numbers made ATP think that
+C   the matrix was singular.  A 40-year-old weakness was just noticed (amazing):
+C ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ ...
+C    KILL code number      Overlay number       Nearby statement number
+C              86                  13                      4233
+C KILL = 86.   Singularity has been detected within  SUBROUTINE REDUCT  ...
+51SORA                    1.E-19      1.E-19          { R(1,1) = L(1,1) = 1.E-19 
+52EXTRA                      0.0         0.01.E-19      1.E-19 { R(2,1) = L(2,1) = 0
+  EXTRA                      1.0      { Let the secondary drive a 1-ohm resistor
+BLANK card ending all branch cards
+  ST1A  SWPA     .007940       1.0
+  ST1B  SWPB     .007940       1.0
+  ST1C  SWPC     .007940       1.0
+BLANK card ending all switch cards
+14SORA        93800.       60.      185.                          -1.0
+14SORB        93800.       60.       65.                          -1.0
+14SORC        93800.       60.      -55.                          -1.0
+C       Total network loss  P-loss  by summing injections =   2.199610000000E+28
+C       This extraordinary phasor loss is due to that extra  Type-51, 52 branch,
+C       which is nearly a short circuit.  Without it, loss is 4.805637702155E+02
+BLANK card ending all source cards
+  SWPA  SWPB  SWPC  ST3A  ST3B  ST3C  HOMA  HOMB  HOMC  SWPA  SWPB  SWPC
+C  Step   Time          SWPA         SWPB         SWPC         ST3A         ST3B
+C
+C                       HOMC         SWPA         SWPB         SWPC        TRANA
+C                                                                          TERRA
+C     0    0.0           0.0          0.0          0.0          0.0          0.0
+C                        0.0          0.0          0.0          0.0          0.0
+C   100   .005           0.0          0.0          0.0          0.0          0.0
+C                        0.0          0.0          0.0          0.0          0.0
+C  ***         Close switch  "ST1A  "  to  "SWPA  "  after  7.95000000E-03  sec.
+C  ***         Close switch  "ST1B  "  to  "SWPB  "  after  7.95000000E-03  sec.
+C  ***         Close switch  "ST1C  "  to  "SWPC  "  after  7.95000000E-03  sec.
+C   200    .01   74055.64255  1496.684511  -75552.3271  217501.3182  -11199.8796
+C                -202295.843  74055.64255  1496.684511  -75552.3271  11.60842824
+BLANK card ending selective node voltage output requests
+C  1000    .05   -41438.1417  14616.52552  4941.023887  -74849.3547   24242.7193
+C                -300362.665  -41438.1417  14616.52552  4941.023887  -.003640141
+C Variable max :  169590.981  140542.9342  130439.2455  610291.9724  509791.1645
+C                761896.4358   169590.981  140542.9342  130439.2455  1615.403803
+C Times of max :      .04255       .02965       .03775        .0425       .02945
+C                     .03865       .04255       .02965       .03775       .02875
+C Variable min : -156192.014  -132716.009  -161788.345  -534753.351  -467406.362
+C                -777439.086  -156192.014  -132716.009  -161788.345  -43.1002572
+C Times of min :        .016       .04015       .04285        .0161       .04065
+C                      .0427         .016       .04015       .04285       .03875
+  PRINTER PLOT
+ 144 5. 0.0 50.         HOMA                    { Axis limits:  (-7.642,  8.522)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   3rd of 3 data subcases is the same as the 2nd except for 3-phase transformer
+C   1973 GPU Stolle Road to Homer City line energization without surge arresters
+C   These extra two cases are added to document Prof. Xusheng Chen's transformer
+C   as described in the January and April, 1993,  issues of the newsletter.  The 
+C   case came from  Prof. Chen as disk file  MDD6A.DAT  on a floppy dated May 20,
+C   1993  (this replaces the original 3rd subcase that was created  31 Mar 1993)
+C      July, 1995,  Prof. Chen replaces his  XFCHEN,  and answers change.  The
+C      old data case will be copied below as comments of this one are updated.
+PRINTED NUMBER WIDTH, 11, 1,  { Request default precision (cancel [13,2] of 1st)
+C         4 May 2007,  add following  $PREFIX  to allow remote execution.
+C         Without this,  the following  DC31CHEN.DAT  would not be found.
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+USE SEATTLE XFORMER, dc31chen.dat ! { (hold lower case)
+C      1973 GPU Stolle Road to Homer City line energization with surge arresters
+ .000050    .050     60.     60.    { Decrease Tmax from .200 to .050 for speed
+     100       1       1       1       1 
+$VINTAGE, 1
+ 1SWPA                                        5171.1723633
+ 2SWPB                                          -1.2218941
+                                              5171.4155273
+ 3SWPC                                          -0.0011917
+                                                -1.2218941
+                                              5171.1723633
+ 4ST3A                                       15511.6093750
+                                                -3.6675410
+                                                -0.0035769
+                                             46558.4257813
+ 5ST3B                                          -3.6675410
+                                             15512.3398438
+                                                -3.6675410
+                                               -11.0082035
+                                             46560.6210938
+ 6ST3C                                          -0.0035769
+                                                -3.6675410
+                                             15511.6093750
+                                                -0.0107361
+                                               -11.0082035
+                                             46558.4296875
+$VINTAGE, 0
+  SORA  GARA                      3.06
+  SORB  GARB                      3.06
+  SORC  GARC                      3.06
+-1GARA  ST1A              .6109 2.3280  3.02 12.44
+-2GARB  ST1B              .1278 .79260  5.36 12.44
+-3GARC  ST1C
+ 1GARA  ERIA                    6.2245
+ 2GARB  ERIB                    2.4289            6.2245
+ 3GARC  ERIC                    2.4289            2.4289            6.2245
+ 1GARA  DAVA                    21.905
+ 2GARB  DAVB                    10.465            21.905
+ 3GARC  DAVC                    10.465            10.465            21.905
+-1ERIA  ST1A              .6701 2.3608  3.02 10.70
+-2ERIB  ST1B              .1000 .71960  5.36 10.70
+-3ERIC  ST1C
+-1ROLA  ST1A              .6342 2.3507  3.02 20.27
+-2ROLB  ST1B              .1005 .72150  5.36 20.27
+-3ROLC  ST1C
+-1DAVA  ST1A              .6641 2.3641  3.02 14.53
+-2DAVB  ST1B              .0998 .71990  5.36 14.53
+-3DAVC  ST1C
+-1STTA  HOMA              .6129 1.9245  4.50 214.0
+-2STTB  HOMB              .0502 .59410  7.05 214.0
+-3STTC  HOMC
+  ST3A  STTA              .3737
+  ST3B  STTB              .3737
+  ST3C  STTC              .3737
+  ST1A  SWIA              .0415
+  ST1B  SWIB              .0415
+  ST1C  SWIC              .0415
+  ST3A                    96514. 1930.
+  ST3B                    96514. 1930.
+  ST3C                    96514. 1930.
+C ST3A                                 12.82
+C ST3B                                 12.82
+C ST3C                                 12.82
+C SWPA                                 37.70
+C SWPB                                 37.70
+C SWPC                                 37.70
+BLANK card ending all branch cards
+  SWIA  SWPA     .007940       1.0                                             1
+  SWIB  SWPB     .007940       1.0                                             1
+  SWIC  SWPC     .007940       1.0                                             1
+BLANK card ending all switch cards
+14SORA        93800.       60.      185.                          -1.0
+14SORB        93800.       60.       65.                          -1.0
+14SORC        93800.       60.      -55.                          -1.0
+C       SWPA   |TERRA *SWIA  *
+C       SWPB   |TERRA *SWIB  *
+C       SWPC   |TERRA *SWIC  *
+C       ST3A   |TERRA *TERRA *STTA  *
+C       ST3B   |TERRA *TERRA *STTB  *
+C       ST3C   |TERRA *TERRA *STTC  *
+C          < <  Etc.  (many more rows)  > >
+BLANK card ending all source cards
+  ST3A  ST3B  ST3C  HOMA  HOMB  HOMC  SWPA  SWPB  SWPC
+C       Total network loss  P-loss  by summing injections =   4.805638098099E+02
+C
+C Last gen: SORC  53801.469729728      93800.   23.911871905618  29.188614218823
+C                 -76836.46175431 -55.0000000   16.739103380547       34.9932955
+C 
+C Step   Time        ST3A       ST3B       ST3C       HOMA       HOMB       HOMC
+C                                                                                                                     SWPA
+C                    SWIB       SWIC       CHEN       CHEN       CHEN       CHEN
+C                    SWPB       SWPC      CURR1      FLUX1      CURR2      FLUX2
+C 
+C                    CHEN       CHEN       CHEN       CHEN
+C                   CURR5      FLUX5      CURR6      FLUX6
+C
+C    0    0.0         0.0        0.0        0.0        0.0        0.0        0.0
+C                     0.0        0.0        0.0        0.0        0.0        0.0
+C                     0.0        0.0        0.0        0.0
+C  100   .005         0.0        0.0        0.0        0.0        0.0        0.0
+C                     0.0        0.0        0.0        0.0        0.0        0.0
+C                     0.0        0.0        0.0        0.0
+C ***          Close switch  "SWIA  "  to  "SWPA  "  after  7.95000000E-03  sec.
+C ***          Close switch  "SWIB  "  to  "SWPB  "  after  7.95000000E-03  sec.
+C ***          Close switch  "SWIC  "  to  "SWPC  "  after  7.95000000E-03  sec.
+C  200    .01  217332.128 -10970.216 -206361.84 310904.168 -111381.16 -199522.71
+C              -104.3596 -2103.8643 2208.14107 .734567091 -104.35883 -.18046553 
+C               34.0316806 -.17536706 699.245277 -.45094228
+BLANK card ending selective node voltage output requests
+C 1000    .05  -211428.33 122613.646 43085.5698 51552.1935 258779.757 51350.5473
+C              2076.8918 -1044.8039 -3514.8485 .441798215 2076.84637 2.27394289 
+C              137.474393 2.17231652 -246.32711 -2.0030124
+C     maxima : 791162.883 546834.494 590200.117 .1071971E7 702018.441 729565.112          
+C              3811.90247 3682.98877  5102.5908 1.80215502 3811.88565 2.50132928
+C              1378.6839  2.50169355 1701.78362 1.00436763
+C Times of max :   .04105     .02885      .0376      .0411      .0302      .0383
+C                   .0269     .03635      .0392     .01325      .0269      .0168
+C                  .01645     .01675     .02525     .03995
+C     minima : -551969.66 -479168.62 -639520.52 -763493.9 -536730.14 -925214.16 
+C              -2538.3534 -5096.1259 -5475.4983 -1.8608421 -2538.2686  -.6020437
+C              -1273.8113 -.78766225 -1930.5746 -2.5080431
+C Times of min :   .01535     .03985      .0277      .0372     .01835      .0277
+C                  .02305     .02525      .0428     .03765     .02305      .0267
+C                   .0269     .02675      .0291     .01415
+  PRINTER PLOT
+C    For a CALCOMP (vector) plot like Fig. MVI-1 on page 20 of the Ammendment to
+C    the final report (Ammendment dated 23 May 1993),  use this plot card:
+C 144 5. 0.0 50.         ST3A  ST3B  ST3C        High voltages   Voltages, V
+ 144 2. 0.0 20.         ST3A                  {  Axis limits: (-5.520,  3.941)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+EOF
+
+
+
+C   3rd of 3 data subcases is the same as the 2nd except for 3-phase transformer
+C   1973 GPU Stolle Road to Homer City line energization without surge arresters
+C   These extra two cases are added to document Prof. Xusheng Chen's transformer
+C   as described in the January and April, 1993,  issues of the newsletter.  The 
+C   case came from  Prof. Chen as disk file  MDD6A.DAT  on a floppy dated May 20,
+C   1993  (this replaces the original 3rd subcase that was created  31 Mar 1993)
+PRINTED NUMBER WIDTH, 11, 1,  { Request default precision (cancel [13,2] of 1st)
+USE SEATTLE XFORMER, DC31CHEN.DAT
+C      1973 GPU Stolle Road to Homer City line energization with surge arresters
+ .000050    .050     60.     60.    { Decrease Tmax from .200 to .050 for speed
+     100       1       1       1       1 
+$VINTAGE, 1
+ 1SWPA                                        5171.1723633
+ 2SWPB                                          -1.2218941
+                                              5171.4155273
+ 3SWPC                                          -0.0011917
+                                                -1.2218941
+                                              5171.1723633
+ 4ST3A                                       15511.6093750
+                                                -3.6675410
+                                                -0.0035769
+                                             46558.4257813
+ 5ST3B                                          -3.6675410
+                                             15512.3398438
+                                                -3.6675410
+                                               -11.0082035
+                                             46560.6210938
+ 6ST3C                                          -0.0035769
+                                                -3.6675410
+                                             15511.6093750
+                                                -0.0107361
+                                               -11.0082035
+                                             46558.4296875
+$VINTAGE, 0
+  SORA  GARA                      3.06
+  SORB  GARB                      3.06
+  SORC  GARC                      3.06
+-1GARA  ST1A              .6109 2.3280  3.02 12.44
+-2GARB  ST1B              .1278 .79260  5.36 12.44
+-3GARC  ST1C
+ 1GARA  ERIA                    6.2245
+ 2GARB  ERIB                    2.4289            6.2245
+ 3GARC  ERIC                    2.4289            2.4289            6.2245
+ 1GARA  DAVA                    21.905
+ 2GARB  DAVB                    10.465            21.905
+ 3GARC  DAVC                    10.465            10.465            21.905
+-1ERIA  ST1A              .6701 2.3608  3.02 10.70
+-2ERIB  ST1B              .1000 .71960  5.36 10.70
+-3ERIC  ST1C
+-1ROLA  ST1A              .6342 2.3507  3.02 20.27
+-2ROLB  ST1B              .1005 .72150  5.36 20.27
+-3ROLC  ST1C
+-1DAVA  ST1A              .6641 2.3641  3.02 14.53
+-2DAVB  ST1B              .0998 .71990  5.36 14.53
+-3DAVC  ST1C
+-1STTA  HOMA              .6129 1.9245  4.50 214.0
+-2STTB  HOMB              .0502 .59410  7.05 214.0
+-3STTC  HOMC
+  ST3A  STTA              .3737
+  ST3B  STTB              .3737
+  ST3C  STTC              .3737
+  ST1A  SWIA              .0415
+  ST1B  SWIB              .0415
+  ST1C  SWIC              .0415
+  ST3A                    96514. 1930.
+  ST3B                    96514. 1930.
+  ST3C                    96514. 1930.
+C ST3A                                 12.82
+C ST3B                                 12.82
+C ST3C                                 12.82
+C SWPA                                 37.70
+C SWPB                                 37.70
+C SWPC                                 37.70
+BLANK card ending all branch cards
+  SWIA  SWPA     .007940       1.0                                             1
+  SWIB  SWPB     .007940       1.0                                             1
+  SWIC  SWPC     .007940       1.0                                             1
+BLANK card ending all switch cards
+14SORA        93800.       60.      185.                          -1.0
+14SORB        93800.       60.       65.                          -1.0
+14SORC        93800.       60.      -55.                          -1.0
+C       SWPA   |TERRA *SWIA  *
+C       SWPB   |TERRA *SWIB  *
+C       SWPC   |TERRA *SWIC  *
+C       ST3A   |TERRA *TERRA *STTA  *
+C       ST3B   |TERRA *TERRA *STTB  *
+C       ST3C   |TERRA *TERRA *STTC  *
+C          < <  Etc.  (many more rows)  > >
+BLANK card ending all source cards
+  ST3A  ST3B  ST3C  HOMA  HOMB  HOMC  SWPA  SWPB  SWPC
+C       Total network loss  P-loss  by summing injections =   4.805638098099E+02
+C
+C Last gen: SORC  53801.469729728      93800.   23.911871905618  29.188614218823
+C                 -76836.46175431 -55.0000000   16.739103380547       34.9932955
+C 
+C Step   Time        ST3A       ST3B       ST3C       HOMA       HOMB       HOMC
+C                                                                                                                     SWPA
+C                    SWIB       SWIC       CHEN       CHEN       CHEN       CHEN
+C                    SWPB       SWPC      CURR1      FLUX1      CURR2      FLUX2
+C 
+C                    CHEN       CHEN       CHEN       CHEN
+C                   CURR5      FLUX5      CURR6      FLUX6
+C
+C    0    0.0         0.0        0.0        0.0        0.0        0.0        0.0
+C                     0.0        0.0        0.0        0.0        0.0        0.0
+C                     0.0        0.0        0.0        0.0
+C  100   .005         0.0        0.0        0.0        0.0        0.0        0.0
+C                     0.0        0.0        0.0        0.0        0.0        0.0
+C                     0.0        0.0        0.0        0.0
+C ***          Close switch  "SWIA  "  to  "SWPA  "  after  7.95000000E-03  sec.
+C ***          Close switch  "SWIB  "  to  "SWPB  "  after  7.95000000E-03  sec.
+C ***          Close switch  "SWIC  "  to  "SWPC  "  after  7.95000000E-03  sec.
+C  200    .01   217387.84  -10992.36  -206395.4 310888.096 -111376.98 -199510.83
+C              -104.63191 -2105.0079 2209.64051 .734405004 -104.63005 -.18043359
+C               34.108862 -.17539116 699.385843 -.45096469
+BLANK card ending selective node voltage output requests
+C 1000    .05  -155842.05 47154.6268 -24422.789 258598.902  172156.84 -81252.716
+C              2571.94767 -2427.6366 -1947.2216 .242401327 2597.62728 2.19565639
+C              1.17575901 2.19555992 325.890333 -1.8799098
+C     maxima : 669374.836 515148.465 484746.844 .1044677E7 660808.946 731972.517
+C              3607.09709 3846.82291 5375.85965 1.84806576 3607.09698 2.51948617
+C              1360.93644 2.71806614 1676.35273  1.0164742
+C Times of max :    .0413     .01425     .03845     .04145     .03025      .0386
+C                   .0428      .0369     .03965      .0133      .0428     .01685
+C                   .0165     .01685      .0408     .04075
+C     minima : -571739.71 -410695.52 -617164.56 -648371.12  -532251.9 -900333.66
+C              -1991.6408 -5018.5588 -5328.1211 -1.7469988 -1991.6406 -.60320685
+C              -1205.0922 -.78031949 -1766.5889 -2.6833277
+C Times of min :   .01605     .04025     .02785      .0454      .0185     .02775
+C                   .0232      .0408      .0433     .03805      .0232     .04275
+C                   .0428     .04275     .02955        .03
+  PRINTER PLOT
+C    For a CALCOMP (vector) plot like Fig. MVI-1 on page 20 of the Ammendment to
+C    the final report (Ammendment dated 23 May 1993),  use this plot card:
+C 144 5. 0.0 50.         ST3A  ST3B  ST3C        High voltages   Voltages, V
+ 144 2. 0.0 20.         ST3A                  {  Axis limits: (-5.717,  3.942)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+

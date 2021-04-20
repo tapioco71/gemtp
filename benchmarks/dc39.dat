@@ -1,0 +1,197 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-39
+C      Test of supporting routine "ARRDAT" which reads ZnO data, and punches the
+C      associated Type-92 EMTP branch cards.  See Rule Book, end of Sect. XIX-I.
+C      1st of 3 subcases has manual selection of a single exponential: NEXP = 1.
+C      As for the (i, v) data points,  these come from the evaluation of the ZnO
+C      function   i = 2500 * ( v / 778000 ) ** 26   as used by 1st case of DC-37
+C      Note that paralleling (D4 = number of columns) is used, although the more
+C      modern and flexible approach would be to delay this until usage (variable
+C      COL  of columns 76-80  of the first Type-92 ZnO miscellaneous data card).
+C         Sept, 1997,  double the size by adding a second subcase that processes
+C         the same 3 data subsets only using kilo scaling (KV and KA input data)
+ZNO FITTER    { Special-request to transfer to  SUBROUTINE ARRDAT  of overlay 40
+$ERASE
+BRANCH  RECA        RECB        RECC    { Name the 3 terminal pairs for punching
+C       NEXP      IPHASE      ERRLIM      IPRZNO        VREF      VFLASH
+           1           3           2           0     412500.     380000.
+C         A1          A2          A3          A4          A5        AMIN
+     707.107     192000.        .962         3.0     .892857        .001
+         1.0     1164.8            { First point of (I,V) characteristic for ZnO
+         2.0     1181.6            { Except for rounding,  these define a  nice,
+         5.0     1198.4            { smooth,  exponential function with exponent
+         10.     1209.6            { equal to  26.  Scaling is set to draw  2500
+         20.     1232.0            { amperes at 778 kV. How?  Consult Vladimir's
+         50.     1260.0            { explanation, Rule Book p. 103k, Section 3.0
+        100.     1288.0
+        200.     1323.84
+        500.     1388.8
+       1000.     1442.56
+       2000.     1512.0
+       3000.     1556.8             { last point of (I,V) characteristic for ZnO
+BLANK card bounds points of the ZnO characteristic
+$PUNCH
+C C  Rating = 192000.0   V-mult =  9.62000E-01   I-mult =  3.00000E+00   Gapless
+C 92RECA                                 5555.
+C C             V-reference              V-flashover
+C    4.1250000000000000E+05   9.2121212121212130E-01
+C C              Multiplier                 Exponent                    V-min
+C    2.9479544296115170E+04   2.6530262418533470E+01   5.4505063612285050E-01
+C                      9999
+C    5.9605957177725360E+05   2.6530262418533470E+01   4.8665227581674000E-01
+C                      9999
+C 92RECB        RECA                     5555.
+C 92RECC        RECA                     5555.
+C       2nd of 3 subsets has manual selection of the 2 exponentials (NEXP = 2).
+C       Otherwise, the configuration of interest is the same as for 1st subset.
+C       Specifically, the i-v characteristic is the same (segmented i-v of 1st).
+BRANCH  RECA        RECB        RECC        { 2nd subcase of 3 begins with names
+C       NEXP      IPHASE      ERRLIM      IPRZNO        VREF      VFLASH
+           2           3                       1     412500.     380000.
+C         A1          A2          A3          A4          A5        AMIN
+     707.107     192000.        .962         3.0     .892857        .001
+         1.0     1164.8
+         2.0     1181.6
+         5.0     1198.4
+         10.     1209.6
+         20.     1232.0
+         50.     1260.0
+        100.     1288.0
+BLANK card bounds points of the ZnO characteristic - end of 1st segment, begin 2
+        200.     1323.84
+        500.     1388.8
+       1000.     1442.56
+       2000.     1512.0
+       3000.     1556.8
+BLANK card bounds points of the ZnO characteristic --- end 2nd and final segment
+$PUNCH
+C C  Rating = 192000.0   V-mult =  9.62000E-01   I-mult =  3.00000E+00   Gapless
+C 92RECA                                 5555.
+C C             V-reference              V-flashover
+C    4.1250000000000000E+05   9.2121212121212130E-01
+C C              Multiplier                 Exponent                    V-min
+C    5.0558478867726780E+06   4.6419997332462390E+01   6.3275408479727320E-01
+C    1.2276715303900460E+04   1.6677590344522540E+01   8.1674801890784120E-01
+C                      9999
+C    9.7386264053136350E+08   4.6419997332462390E+01   5.6495891388983900E-01
+C    8.1268335203236510E+04   1.6677590344522540E+01   7.2923918591799820E-01
+C                      9999
+C 92RECB        RECA                     5555.
+C 92RECC        RECA                     5555.
+C                  3rd of 3 subsets illustrate automatic ZnO segment selection.
+C                  For the tolerance chosen (ERRLIM=.05), 5 exponentials result.
+BRANCH  RECA        RECB        RECC        { 3rd subcase of 3 beings with names
+C       NEXP      IPHASE      ERRLIM      IPRZNO        VREF      VFLASH
+          -1           3         .05           1     412500.     380000.
+C         A1          A2          A3          A4          A5        AMIN
+     707.107     192000.        .962         3.0     .892857        .001
+         1.0     1164.8
+         2.0     1181.6
+         5.0     1198.4
+         10.     1209.6
+         20.     1232.0
+         50.     1260.0
+        100.     1288.0
+        200.     1323.84
+        500.     1388.8
+       1000.     1442.56
+       2000.     1512.0
+       3000.     1556.8
+BLANK card bounds points of the ZnO characteristic
+$PUNCH
+C C  Rating = 192000.0   V-mult =  9.62000E-01   I-mult =  3.00000E+00   Gapless
+C 92RECA                                 5555.
+C C             V-reference              V-flashover
+C    4.1250000000000000E+05   9.2121212121212130E-01
+C C              Multiplier                 Exponent                    V-min
+C    7.5028204133564620E+06   4.8403950953194400E+01   6.3949942977557550E-01
+C    2.4489276643997050E+09   6.8408843374214610E+01   7.4876091788815410E-01
+C    1.1046477599319610E+06   3.9475540404878120E+01   7.6623729035951440E-01
+C    8.4663437752101640E+04   2.7934580347853540E+01   8.0046407236184350E-01
+C    1.6489996944083740E+04   1.8756547209277270E+01   8.3673818423150000E-01
+C    1.1130526844643490E+04   1.4446009330513530E+01   9.1284753595740940E-01
+C                      9999
+C    1.8095670102550080E+09   4.8403950953194400E+01   5.7098154237113100E-01
+C    5.7007069310942390E+12   6.8408843374214610E+01   6.6853642686286360E-01
+C    9.6857800318865540E+07   3.9475540404878120E+01   6.8414032835852490E-01
+C    2.0071630292080190E+06   2.7934580347853540E+01   7.1469995025677850E-01
+C    1.3815991082985590E+05   1.8756547209277270E+01   7.4708754495838430E-01
+C    5.7216427799055640E+04   1.4446009330513530E+01   8.1504231241232490E-01
+C                      9999
+C 92RECB        RECA                     5555.
+C 92RECC        RECA                     5555.
+BLANK card ends data subcases within "ARRDAT"
+BEGIN NEW DATA CASE
+C      The preceding subase of this disk file involved 3 data sets using units
+C      of volts and amps.  Now we repeat these three,  only using kilovolts and
+C      kiloamps.  Output (including punched cards) is changed only by roundoff.
+ZNO FITTER    { Special-request to transfer to  SUBROUTINE ARRDAT  of overlay 40
+$ERASE
+INPUT KV AND KA  { Input is to be in kilovolts and kiloamps (not volts and amps)
+BRANCH  RECA        RECB        RECC    { Name the 3 terminal pairs for punching
+C       NEXP      IPHASE      ERRLIM      IPRZNO        VREF      VFLASH
+           1           3           2           0       412.5        380.
+C         A1          A2          A3          A4          A5        AMIN
+     707.107        192.        .962         3.0     .892857        .001
+        .001     1.1648
+        .002     1.1816
+        .005     1.1984
+         .01     1.2096
+         .02     1.2320
+         .05     1.2600
+         .10     1.2880
+         .20     1.32384
+         .50     1.3888
+        1.00     1.44256
+        2.00     1.5120
+        3.00     1.5568
+BLANK card bounds points of the ZnO characteristic
+$PUNCH
+C       2nd of 3 data subsets.  We do not need another  INPUT KV AND KA  declaration
+C       as long as control remains within  ZNO FITTER.
+BRANCH  RECA        RECB        RECC        { 2nd subcase of 3 begins with names
+C       NEXP      IPHASE      ERRLIM      IPRZNO        VREF      VFLASH
+           2           3                       1       412.5        380.
+C         A1          A2          A3          A4          A5        AMIN
+     707.107        192.        .962         3.0     .892857        .001
+        .001     1.1648
+        .002     1.1816 
+        .005     1.1984
+         .01     1.2096
+         .02     1.2320
+         .05     1.2600
+         .10     1.2880
+BLANK card bounds points of the ZnO characteristic - end of 1st segment, begin 2
+         .20     1.32384
+         .50     1.3888
+        1.00     1.44256
+        2.00     1.5120
+        3.00     1.5568
+BLANK card bounds points of the ZnO characteristic --- end 2nd and final segment
+$PUNCH
+C       3rd of 3 data subsets of 2nd subcase.  The  INPUT KV AND KA  of the
+C       first of the 3 data subsets remains in effect.  Answers should be
+C       identical to the corresponding ones of the preceding subcase (which
+C       involves no such kilo scaling).
+BRANCH  RECA        RECB        RECC        { 3rd subcase of 3 beings with names
+C       NEXP      IPHASE      ERRLIM      IPRZNO        VREF      VFLASH
+          -1           3         .05           1       412.5        380.
+C         A1          A2          A3          A4          A5        AMIN
+     707.107        192.        .962         3.0     .892857        .001
+        .001     1.1648
+        .002     1.1816 
+        .005     1.1984
+         .01     1.2096
+         .02     1.2320
+         .05     1.2600
+         .10     1.2880
+         .20     1.32384
+         .50     1.3888
+        1.00     1.44256
+        2.00     1.5120
+        3.00     1.5568
+BLANK card bounds points of the ZnO characteristic
+$PUNCH
+BLANK card ends data subcases within "ARRDAT"
+BEGIN NEW DATA CASE
+BLANK

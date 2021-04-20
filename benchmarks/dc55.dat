@@ -1,0 +1,298 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-55
+C     Illustration of  "AVERAGE OUTPUT"  usage,  as applied to Hermann's example
+C     "Remarks on opening action"  that  is to be found in the Rule Book section 
+C     on switches (page 28a for June, 1984 version).  Because of averaging,  the
+C     "hash"  that  Hermann's  photograph documents  can  no longer be detected.  
+C     Later (2nd and 3rd) subcases are unrelated:  simple  Type-18 source usage.
+C     4th subcase shows an alternative to the first, using damping resistors.
+C     The 5th of 6 subcases has  IDEAL TRANSFORMER  (internally,  this uses
+C     the Type-18 source).  Solution was wrong prior to correction on 25 Feb 01.
+C     Finally,  the 6th subcase illustrates the  RECLOSE  feature of switches.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+CHANGE PRINTOUT FREQUENCY
+       5       5      10      10      90       1     100      10
+AVERAGE OUTPUT
+ .000100    .020
+       1       1       1       1       1     
+  BUS1  BUS2                 .18   0.8                                         1
+  BUS3                                22100.
+BLANK card ending branch cards
+  BUS2  BUS3        -1.0       0.0   { Will open on current zero at T = 9.4 msec
+BLANK card ending switch cards
+14BUS1           1.0       60.      -90.
+BLANK card ending source cards
+C              Step      Time        BUS3         BUS2         BUS1         BUS1
+C                                                                           BUS2  
+C ***        Switch  "BUS2  "  to  "BUS3  "  closed before  0.00000000E+00  sec.
+C               0       0.0           0.0          0.0          0.0          0.0
+C               1     .1E-3   .2634734E-5  .2634734E-5  .0188450913  .0011645523
+C               2     .2E-3    .183793E-4   .183793E-4  .0565084941  .0057945482
+C
+C              93     .0093   .6380267563  .6380267563  -.338677744  .1867579604
+C ***          Open  switch  "BUS2  "  to  "BUS3  "  after  9.40000000E-03  sec.
+C              94     .0094   .6385842673  .6385842673  -.373892773  .0596618907
+C              95     .0095    .638714397  -.442503423  -.408576479   -.00214456
+ 1
+C Final step:   200     .02   .6387095451   .944895187   .944895187  .693889E-17
+C Variable maxima :            .638714397   .944895187  .9998026167  2.665085529
+C Times of maxima :                 .0095          .02        .0042        .0058
+C Variable minima :                   0.0  -.999644736  -.999644736   -.00214456
+C Times of minima :                   0.0        .0126        .0126        .0095
+  PRINTER PLOT
+ 144 3. 0.0 20.         BUS1  BUS2               { Axis limits: (-9.996,  9.998)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE                                     
+C      Second  of  5  subcases is unrelated to the preceding first data subcase.
+C      Test of Type-18 source (ideal transformer plus ungrounded source).  There
+C      are 3 disconnected subnetworks,  each of which contains a single, trivial 
+C      Type-18 source usage.  In order of use:  1) Ideal transformer alone (near
+C      zero source);    2) Ideal transformer with a voltage source shifted by 90 
+C      degrees  (so when added to external generator,  the total phasor is 1.414
+C      at an angle of -45 degrees;   3) Ungrounded voltage source alone.   There
+C      is no phasor solution for initial conditions in this 2nd subcase of DC-55
+PRINTED NUMBER WIDTH, 12, 2, { Tailor width so easy documentation within 80 cols
+CHANGE PRINTOUT FREQUENCY
+       5       5      20      20   
+ .000100    .024                  1.E-12
+       1       1       1       1       1     
+  PRIM1 GEN                1.E-8        { Create node PRIM1 of unknown voltage }   
+  PRIM2 GEN                1.E-8        { Create node PRIM2 of unknown voltage }   
+  SEC1                       0.5    { 1-ohm resistive load on primary trans. 1 }   
+  SEC2                       .25    { 1-ohm resistive load on primary trans. 2 }   
+  PRIBOT                     1.0       { 1/2 of resistor for ungrounded source }   
+  PRITOPGEN                  1.0       { other 1/2 of R  for ungrounded source }   
+BLANK card ending branch cards
+BLANK card ending switch cards
+14GEN            1.0       60.      -90.    { Network's real source is sine wave
+C     Type-18 ideal transformer has both windings grounded.  Primary goes to the
+C     generator  "GEN",  while the secondary "SEC" drives a 1-ohm resistive load
+11PRIM1       1.E-12 { 1st primary terminal of ideal transformer;  near-0 source
+18      00     1.414SEC1         { Ratio**2 = 2: step down, primary to secondary
+C    End 1st transformer.  Begin 2nd by adding 1-volt sinusoidal voltage source:
+14PRIM2          1.0       60.       0.0      { Add vectors: 1.414 /_-45 degrees
+18      00       2.0SEC2              { Ratio=2: step down, primary to secondary
+C    End 2nd transformer.  Begin 3rd device:  effectively no transformer  (since
+C    both secondary nodes are grounded);  ungrounded voltage source is a battery 
+C    that becomes nonzero only after  TSTART = 6.0 msec  --- in series with  GEN
+11PRITOP         1.0                                              .006
+18PRIBOT         1.0 { Ratio is arbitrary since secondary nodes shorted to earth
+BLANK card ending source cards                          
+C  Step    Time    18TYP1     18TYP2     18TYP3        GEN       SEC1       SEC2      
+C   0     0.0         0.0        0.0        0.0        0.0        0.0        0.0 
+C   1   .1E-3  .037701568 -.96159928 .018845091 .037690183 .026655009 -.48079964 
+C   2   .2E-3  .07534956  -.92183209 .037663403 .075326806 .053272139 -.46091604 
+C   3   .3E-3  .112890477 -.88075492 .056428192 .112856385 .079813567 -.44037746 
+  18TYP118TYP218TYP3GEN   SEC1  SEC2  PRIBOTPRITOP
+BLANK card ending selective node voltage output requests
+C 240    .024  .368235756 1.29790103 -.31593772 .368124553  .26034268 .648950513
+C    maxima :   1.0002231 1.41418563 .499960522 .999921044 .707157733 .707092816
+C Times max :       .0042      .0229      .0042      .0042      .0042      .0229
+C    minima :  -1.0003021 -1.4141856        -1.        -1. -.70721357 -.70709282
+C Times min :       .0125      .0146      .0125      .0125      .0125      .0146 
+  PRINTER PLOT  
+C   Both of the following curves are sinusoids.  Curve "A" is pure  SIN ( 377t )
+C   whereas curve  "B"  is   1.414 * SIN ( 377t - 45 degrees )  for time  t > 0.
+ 144 3. 0.0 18.         18TYP118TYP2             { Axis limits: (-1.414,  1.414)
+C   The following plot drops vertically by  0.5  at 6 msec.  Before the drop, it
+C   is  y = 0.5 * SIN ( 377t );  after 6 msec,  y = 0.5 * ( SIN ( 377t ) - 1.0 )
+ 144 3. 0.0 24.         18TYP3                   { Axis limits: (-1.000,  0.500)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE                                     
+C        3rd of 6 subcases repeats preceding 2nd case only with phasor solution.
+C        Since transients are identical to preceding subcase (since no dynamics, 
+C        no energy storage), stop after the phasor solution in this subcase.  It
+C        will be noted that the only sinusoidal internal source of Type-18 usage
+C        (the  "14PRIM2"  card) has  TSTART = -1.0  so present for steady state.
+ .000100    -1.0                  1.E-12           { TMAX < 0 ===> no transients
+       1       1       1       1       1     
+  PRIM1 GEN                1.E-8        { Create node PRIM1 of unknown voltage }   
+  PRIM2 GEN                1.E-8        { Create node PRIM2 of unknown voltage }   
+  SEC1                       0.5    { 1-ohm resistive load on primary trans. 1 }   
+  SEC2                       .25    { 1-ohm resistive load on primary trans. 2 }   
+  PRIBOT                     1.0       { 1/2 of resistor for ungrounded source }   
+  PRITOPGEN                  1.0       { other 1/2 of R  for ungrounded source }   
+BLANK card ending branch cards
+BLANK card ending switch cards
+14GEN            1.0       60.      -90.   { Tstart = -1.0 ---> } -1.0
+C     Type-18 ideal transformer has both windings grounded.  Primary goes to the
+C     generator  "GEN",  while the secondary "SEC" drives a 1-ohm resistive load
+11PRIM1       1.E-12 { 1st primary terminal of ideal transformer;  near-0 source
+18      00     1.414SEC1         { Ratio**2 = 2: step down, primary to secondary
+C    End 1st transformer.  Begin  2nd by adding 1-volt sinusoidal voltage source
+C    that is present in steady state, and which leads GEN by 90 degrees.  Adding
+C    these around the loop (KVL) gives  1.414 at an angle of -135 degrees, note:
+14PRIM2          1.0       60.       0.0                          -1.0
+18      00       2.0SEC2              { Ratio=2: step down, primary to secondary
+C    End 2nd transformer.  Begin 3rd device:  effectively no transformer  (since
+C    both secondary nodes are grounded);  ungrounded voltage source is a battery 
+C    that becomes nonzero only after  TSTART = 6.0 msec  --- in series with  GEN
+11PRITOP         1.0                                              .006
+18PRIBOT         1.0 { Ratio is arbitrary since secondary nodes shorted to earth
+C
+C Node-K Node-M    Vk-magnitude     Vm-magnitude    Ikm-magnitude     Pk (watts)
+C  name   name      Vk-degrees       Vm-degrees      Ikm-degrees       Qk (vars)
+C
+C PRIM1        .99999998999698           1.0   1.0003020856075   -.5001510378007
+C   GEN          -90.0000000      -90.0000000       90.0000000   .2879679111E-24
+C
+C PRIM2              .99999999           1.0   1.4142135431541   -.4999999814101
+C   GEN          -89.9999994      -90.0000000       44.9999998       -.499999995
+C
+$WIDTH, 79,    { Request narrow output for phasor branch flows: easy to document
+BLANK card ending source cards                          
+C PRITOP                  0.5              0.0              0.5             .125
+C    TERRA        -90.0000000              0.0      -90.0000000              0.0
+C       Total network loss  P-loss  by summing injections =   7.501510357193E-01
+C
+C node           Vk-magnitude     Ik-magnitude       Pk (watts)      MVA (watts)
+C name           Vk-degrees       Ik-degrees         Qk (vars)      Power factor
+C
+C GEN                     1.0   2.692862873031  1.2501510381699  1.3464314365155
+C                 -90.0000000     -111.7990223       .499999995        0.9284922
+C
+BLANK card ending selective node voltage output requests
+  PRINTER PLOT
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+$WIDTH, 132,      { Back to wide output after injections but before outputs read
+C     4th of 6 subcases is modification of first.  Rather than  "AVERAGE OUTPUT"
+C     to dampen oscillations of the series inductor, a parallel damping resistor
+C     is  used.  The  resistance value is automatically a function of the  time-
+C     step size thanks to use of the  "DELTAT"  request  (BUS4  field of columns
+C     21-26).   A theoretical formula for determining nominal damping resistance
+C     is  R = 16 * L [Henry] / dt,  and here  16*L = 16 * .8 [mH] = .0128 [Henry].
+C     The  "DIVIDEDELTAT"  request of columns 15-26 provides just such  scaling.
+C     Enter the value  16 * L [Henry]  in the R-field of columns 27-32.
+C     Only to produce a nicer (denser) character plot,  the time step is halved.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+CHANGE PRINTOUT FREQUENCY
+       5       5      20      20     185       1     205       5     220      20
+ .000050    .020
+       1       1       1       1       1
+  BUS1  BUS2                 .18   0.8   { Series R-L oscillates when opened}  1
+  BUS3                                22100.  { Capacitor disconnected by switch
+C         Damping resistor is extra, placed in parallel with hanging R-L branch:
+  BUS1  BUS2  DIVIDEDELTAT .0128 { Nominal parallel R-damping is R = 16 * L / dt
+C BUS1  BUS4                128. { Equivalent branch would have  R = .0128/1.E-4
+BLANK card ending branch cards
+  BUS2  BUS3        -1.0       0.0   { Will open on current zero at T = 9.4 msec
+BLANK card ending switch cards
+14BUS1           1.0       60.      -90.
+BLANK card ending source cards
+C              Step      Time        BUS3         BUS2         BUS1         BUS1
+C                                                                           BUS2  
+C  ***       Switch  "BUS2  "  to  "BUS3  "  closed before  0.00000000E+00  sec.
+C               0       0.0           0.0          0.0          0.0          0.0
+C               1     .5E-4   .7458368E-6  .7458368E-6  .0188484397  .5856959E-3
+C               2     .1E-3   .4300663E-5  .4300663E-5  .0376901827   .002335936
+C               3    .15E-3   .1328333E-4  .1328333E-4  .0565185345  .0052368122
+C
+C             186     .0093   .6386376275  .6386376275  -.356411879  .1216511334
+C             187    .00935    .638831863   .638831863  -.373959206  .0578961619
+C  ***         Open  switch  "BUS2  "  to  "BUS3  "  after  9.40000000E-03  sec.
+C             188     .0094   .6388812702  .6388812702  -.391373667  -.006239594
+C             189    .00945   .6388696593  -1.50023245  -.408649075  -.004263998
+C             190     .0095   .6388696593  .4233815153  -.425779292  .0033170344
+C             191    .00955   .6388696593   -1.1033345  -.442758231  -.002580376
+C             192     .0096   .6388696593  .0542933726  -.459579861  .0020073173
+C             193    .00965   .6388696593  -.875988712  -.476238204  -.001561525
+C             194     .0097   .6388696593  -.181754793  -.492727342  .0012147365
+ 1
+C             400       .02   .6388696593  .9510565163  .9510565163  .208083E-17
+C         Variable maxima :   .6388812702  .9510565163  .9999802609   2.66459913
+C         Times of maxima :         .0094          .02       .00415       .00575
+C         Variable minima :           0.0  -1.50023245          -1.  -.006239594
+C         Times of minima :           0.0       .00945        .0125        .0094
+  PRINTER PLOT   { Following plot is of region of oscillation following 9.4 msec
+ 144 .4 9.0 11.         BUS1  BUS2               { Axis limits: (-1.500,  0.639)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     5th of 6 subcases demonstrates a simple Type-18 source that required
+C     correction on  25 February 2001.  The key structure is this: one or more
+C     (in this case, two) terminal nodes of the Type-18 source that is used to
+C     represent  IDEAL TRANSFORMER  has known voltage.
+   .0001  .0001  { One dT is all it takes to verify voltages now are continuous
+       1       1       1       1       
+  GENA                      1.E7  { High resist. to ground provides connectivity
+  GENB        GENA                { 2nd of 3 is the same.  Avoid KILL code
+  LOAD        GENA                { 3rd of 3 satisfies need for connectivity
+  IDEAL TRANSFORMER    { Internally, ideal transformer is represented as Type-18
+ 1GENA  GENB                             1.0  { Winding 1 has rated voltage = 1.
+ 2LOAD                                   1.0  { Winding 2 has same rated voltage 
+BLANK card ending branches
+BLANK card ending switches
+14GENA           10.      1.0        0.0                          -1.0      10.0
+14GENB           10.      1.0     -120.0                          -1.0      10.0
+BLANK card ending sources
+  GENA  GENB  LOAD
+C   Step     Time          GENA         GENB         LOAD
+C    0        0.0           10.          -5.          15.
+C    1      .1E-3   9.999998026  -4.99455762  14.99455564
+BLANK card ending node voltage outputs
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     6th of 6 subcases illustrates the  RECLOSE  feature of time-controlled
+C     switches,  which became available  24 December 2001  as should be
+C     described in some future newsletter story (July, 2002 or later).  Data
+C     comes from the 4th subcase,  which provides half of the network.  Time
+C     is extended (doubled, in fact) to allow reclosing of the switch.  Using
+C     old modeling,  this is done by means of a second time-controlled switch
+C     in parallel with the first.  Of course, only one switch or the other is
+C     closed at any one time  ---  a requirement of switch logic.  The same
+C     solution is obtained using new modeling by a  RECLOSE  switch.  Although
+C     only two pairs of  (T-close  and  T-open)  are illustrated,  in fact an
+C     arbitrary number are allowed.  When ATP is done with one (upon opening),
+C     the next pair will replace the preceding pair.  Storage is in List 10, so
+C     is variably-dimensioned.  Time-step size  DELTAT  has been doubled simply
+C     to speed simulation.  Finally, the source has been rotated 90 degrees to
+C     speed the action (no need to waste time waiting for the first opening).
+PRINTED NUMBER WIDTH, 11, 2,  { Request maximum precision (for 8 output columns)
+CHANGE PRINTOUT FREQUENCY
+       5       5      55       1     155       5
+ .000100    .020
+       1       1       1       1       1
+C   Naming is as follows.  Keep the original  "BUS"  names for the original
+C   data.  For the new alternative,  replace  BUS  by  GUS.  This is for nodes
+C   numbered 2 and 3.  For Node 1 (the voltage source), no copy is required:
+  BUS1  BUS2                 .18   0.8   { Series R-L oscillates when opened}  1
+  BUS1  GUS2                 .18   0.8   { Series R-L oscillates when opened}  1
+  BUS3                                22100.  { Capacitor disconnected by switch
+  GUS3                                22100.  { Capacitor disconnected by switch
+C         Damping resistor is extra, placed in parallel with hanging R-L branch:
+  BUS1  BUS2  DIVIDEDELTAT .0128 { Nominal parallel R-damping is R = 16 * L / dt
+  BUS1  GUS2  DIVIDEDELTAT .0128 { Nominal parallel R-damping is R = 16 * L / dt
+BLANK card ending branch cards
+C  Switches:  < T-close>< T-open >                    < Request>               I
+C ______------__________----------                    __________               _
+  BUS2  BUS3        -1.0       0.0 { Will open on current 0 at T =  5.8 msec } 1
+  BUS2  BUS3        .011       0.0 { Will open on current 0 at T = 14.9 msec }
+  GUS2  GUS3        -1.0       0.0                    RECLOSE                  3
+                    .011       0.0   { 2nd pair of T-close and T-open follow 1st
+                   9999.             { Bound to terminate last pair of switch T
+BLANK card ending switch cards
+14BUS1           1.0       60.       0.0
+BLANK card ending source cards
+  BUS1  BUS2  GUS2  { Request for the output of node voltages at these nodes
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   4     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time      GUS2       BUS1       BUS2       GUS2       BUS2       GUS2       BUS1       BUS1
+C                       GUS3                                        BUS3       GUS3       BUS2       GUS2
+C ***                    Switch  "BUS2  "  to  "BUS3  "  closed before  0.00000000E+00  sec.
+C ***                    Switch  "GUS2  "  to  "GUS3  "  closed before  0.00000000E+00  sec.
+C      0       0.0         0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C      1     .1E-3         0.0  .99928947  .15737E-3  .15737E-3  .06955678  .06955678  .06175106  .06175106
+C      2     .2E-3         0.0   .9971589  .74798E-3  .74798E-3  .19149551  .19149551  .18371105  .18371105
+C      3     .3E-3         0.0  .99361131  .00188315  .00188315  .31024774  .31024774  .30249987  .30249987
+BLANK card ending node voltage outputs
+C    200       .02   .08475006  .30901699  .30902085  .30902085        0.0        0.0  .30129E-7  .30129E-7
+C Variable maxima :   1.6703679  .99992104  1.8946387  1.8946387  1.8705409  1.8705409  1.8678888  1.8678888
+C Times of maxima :        .015      .0167       .015       .015      .0028      .0028      .0028      .0028
+C Variable minima :   -2.667432   -.999921  -2.354268  -2.354268        0.0  -.8127145  -.8114678  -.8114678
+C Times of minima :       .0059      .0083      .0059      .0059        0.0      .0128      .0128      .0128
+  CALCOMP PLOT
+ 144 2. 0.0 20.         BUS2  GUS2       { These 2 node voltages should coincide
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+

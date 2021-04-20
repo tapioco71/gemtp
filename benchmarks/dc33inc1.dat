@@ -1,0 +1,27 @@
+/BRANCH
+ 0      BUS-A0            1.0
+ 0      BUS-B0            1.0
+ 0      BUS-C0            1.0
+ 0BUS-A1BUS-A0            0.005 1.0
+ 0BUS-B1BUS-B0BUS-A1BUS-A0
+ 0BUS-C1BUS-C0BUS-A1BUS-A0
+ 0BUSRA1                   1.E-5
+ 0BUSRB1                   1.E-5
+ 0BUSRC1                   1.E-5
+ 0BUS-OM                              6.00E4
+ 0      BUS-OM            33.33
+/REQUEST
+U.M. HEADER CARD { To be followed by significant middle card of U.M. Class 1
+ 0                             { In fact, a blank card would suffice for DC-35
+/UM
+C   Note that there is no Class-1 U.M. data;  ATP will supply the Type-19 card.
+ 4 1 1111BUS-OM       2 0.06                       0.18850   { 1st machine table
+0.0           0.020291      0
+0.0           0.020291      0
+0.063         0.0001911     BUS-A1            1 0.0           { 1st winding card
+0.063         0.0003925     BUS-B1            1 0.0
+0.063         0.0003925     BUS-C1            1 0.0
+0.083         0.0003925     BUSRB1            1 0.0
+0.083         0.0003925     BUSRC1            1 0.0
+0.083         0.0003925     BUSRA1            1 0.0 { 6th and final winding card
+C 14BUSRA1  180.0      60.0     0.0

@@ -1,0 +1,519 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-41
+C        Test of Semlyen frequency-dependent simulation  code  using  high-order
+C        data from John Hauer  (former "HAUER SETUP").   This is the John Day to
+C        Lower Monumental fault test,  just like DC-31  (2nd order Semlyen)  and
+C        DCNEW-4  (high-order Marti).  Here, continuous transposition is assumed
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 9 output columns)
+  20.E-6  20.E-3  60.     60.
+       1       8               1       1      -1
+       5       5      20      20     100     100
+ 0GENA  BEGINA                  14.
+ 0GENB  BEGINBGENA  BEGINA
+ 0GENC  BEGINCGENA  BEGINA
+C                The following branch cards are from  "HAUER SETUP"  punch file:
+C #DATA FOR LINE SECTION  1: LENGTH =  0.1380000E+03
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602   -0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   3.3636 .05215  4         1.602   19.25   50.     50.
+C   3.3636 .05215  4         1.602   20.75   50.     50.
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C
+C   27.        60.           1                  138.
+C   27.        6.0           1                  138.           7 20
+C
+-1BEGINAENDA               0.22547E-02 0.74884E-03              1  1 14  6   3
+   0.67519497E+02 0.22868008E+03 0.00000000E+00 0.62996694E-03 0.60000000E+02  0
+  0., 0.232728400E+03, 0.505695185E-01,  0., 0.618279420E+03, 0.748306243E-01
+  0., 0.460330237E+04, 0.227732022E+00,  0., 0.873771583E+04,-0.587245219E-01
+  0., 0.900430932E+04, 0.249999225E-01,  0., 0.159407707E+05, 0.975160389E+00
+  0., 0.194752175E+05, 0.117242152E+00,  0., 0.366005345E+05, 0.548528443E+00
+  0., 0.654818466E+05,-0.150033701E+01,  0., 0.212800153E+06, 0.120734101E+02
+  0., 0.271680247E+06,-0.185580738E+05,  0., 0.273142633E+06, 0.342711488E+05
+  0., 0.275102479E+06,-0.160808604E+05,  0., 0.287226841E+06, 0.356251978E+03
+  0., 0.464830983E+03,-0.469956828E-03,  0., 0.243280470E+05, 0.123116414E-03
+  0., 0.135508543E+05,-0.279583141E-03,  0., 0.166820988E+06, 0.206387276E-03
+  0., 0.151012880E+06,-0.350762015E-03,  0., 0.304998812E+07,-0.622090423E-04
+-1BEGINBENDB               0.35258E-02 0.74313E-03              2  2 14  2   3
+   0.40944359E+01 0.80845419E+02 0.00000000E+00 0.10069636E-02 0.60000000E+02  0
+  0., 0.827674470E+03, 0.398806056E-01,  0., 0.130501996E+06, 0.508365787E+00
+  0., 0.252780509E+06,-0.280985689E+00,  0., 0.260749831E+06, 0.360866589E+00
+  0., 0.544371051E+06,-0.152645223E+01,  0., 0.696229069E+06, 0.773993647E+01
+  0., 0.768161125E+06,-0.566855648E+01,  0., 0.415043368E+07,-0.224486177E+00
+  0., 0.860106666E+07,-0.180297330E+02,  0., 0.104572655E+08, 0.286577225E+03
+  0., 0.118008018E+08,-0.243527045E+05,  0., 0.119761142E+08, 0.200319291E+06
+  0., 0.120018677E+08,-0.177347835E+06,  0., 0.125804003E+08, 0.111275201E+04
+  0., 0.000000000E+00, 0.000000000E+00,  0., 0.000000000E+00, 0.000000000E+00
+-1BEGINCENDC               0.35258E-02 0.74313E-03              3  3 14  2   3
+   0.40944359E+01 0.80845419E+02 0.00000000E+00 0.10069636E-02 0.60000000E+02  0
+  0., 0.827674470E+03, 0.398806056E-01,  0., 0.130501996E+06, 0.508365787E+00
+  0., 0.252780509E+06,-0.280985689E+00,  0., 0.260749831E+06, 0.360866589E+00
+  0., 0.544371051E+06,-0.152645223E+01,  0., 0.696229069E+06, 0.773993647E+01
+  0., 0.768161125E+06,-0.566855648E+01,  0., 0.415043368E+07,-0.224486177E+00
+  0., 0.860106666E+07,-0.180297330E+02,  0., 0.104572655E+08, 0.286577225E+03
+  0., 0.118008018E+08,-0.243527045E+05,  0., 0.119761142E+08, 0.200319291E+06
+  0., 0.120018677E+08,-0.177347835E+06,  0., 0.125804003E+08, 0.111275201E+04
+  0., 0.000000000E+00, 0.000000000E+00,  0., 0.000000000E+00, 0.000000000E+00
+C ** TX MATRICES: FTX= 0.00000E+00
+   0.57735026919E+00, 0., 0.70710678119E+00, 0., 0.40824829046E+00, 0.
+   0.57735026919E+00, 0.,-0.70710678119E+00, 0., 0.40824829046E+00, 0.
+   0.57735026919E+00, 0., 0.00000000000E+00, 0.,-0.81649658093E+00, 0.
+   0.57735026919E+00, 0., 0.70710678119E+00, 0., 0.40824829046E+00, 0.
+   0.57735026919E+00, 0.,-0.70710678119E+00, 0., 0.40824829046E+00, 0.
+   0.57735026919E+00, 0., 0.00000000000E+00, 0.,-0.81649658093E+00, 0.
+C                           End of branch cards from  "HAUER SETUP"  punch file.
+C    Modification on 15 February 1999: "1" punch was added to column 80 of the
+C    3rd and final phase of preceding Semlyen line.  Output is identical.
+  RRR                        10.   { Resistor connects ANALYTIC source to ground
+BLANK card ending branch cards
+  ENDA         .00413     1.0
+BLANK card ending switch cards (just the fault switch, here)
+14GENA     428.       60.      -90.0                         -1.
+14GENB     428.       60.     -210.0                         -1.
+14GENC     428.       60.       30.0                         -1.
+C   27 October 2003, add the same new user-supplied source as featured in 7th
+C   subcase of BENCHMARK DC-5.  But here there is continuation into dT loop.
+C   Show that phasor solution is as expected and no special problem results.
+C   The only peculiarity is the need to key the frequency in columns 21-30.  If
+C   this is not done, the default value of 1 Hz will result.  A final change is
+C   the request for node voltage outputs.  This was "1",  which if left, would
+C   add an output column that is identically zero for step 1 onward.  This is
+C   not interesting,  so suppress this output by a switch to selective outputs.
+C Node  V?                                Request> -Name-
+14RRR   -1            60.                 ANALYTIC HYPERB
+C  Preceding is defined as follows:  Real part = 100. * Pi / Omega 
+C                                    Imaginary part =  ( Real part + 1.0 ) / 2
+C                                    So at 60 Hz, phasor = 5/6 + j 11/12
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   4.183407681766E-01
+C Last inject:  GENC   370.65887281974   428.   -.2242277044615  .44958452206004
+C Last inject:         214.       30.0000000    .38967701886034      119.9169563
+C    Step      Time       ENDC        ENDB        ENDA        BEGINC      BEGINB
+C
+C       0       0.0   392.438957  -391.47028  -.96868127  376.114351  -376.10523
+C       1     .2E-4   393.416785  -390.51658  -2.9002095  373.022592  -371.61198
+C       2     .4E-4   391.718167  -392.23056  .512394524  371.605264  -374.09974
+  ENDC  ENDB  ENDA  BEGINCBEGINBBEGINAGENA  GENB  GENC
+BLANK card ending request for node voltage outputs
+C Final step begins:  1000    .02   -224.41449  -471.83274      0.0   -91.175647
+C Final step ..... :   -323.88611 368.601969  407.052189  -318.06599  -88.986204
+C Variable maxima :   586.693087  525.250186  448.452866  438.684658  447.869952
+C Times of maxima :       .01492      .01068      .00414       .0154      .00984
+  PRINTER PLOT
+ 144 2. 0.0 20.         ENDB  ENDA               { Axis limits: (-5.167,  5.239)
+ 144 1. 0.0 6.0         ENDB  ENDA               { Axis limits: (-4.555,  4.485)
+  CALCOMP PLOT
+ 144 2. 0.0 20.         ENDB  ENDA
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      2nd of 7 subcases is related to preceeding.  The same 138-mile section of
+C      500-kV line is involved, but without frequency dependence for simplicity.
+C      Rather than a fault to ground, the source of phase "a" is ended at 1 msec
+C      (same effect,  only at sending end rather than receiving end).  Nice
+C      transients are documented by a printer plot.  This establishes the
+C      reference for the radical new solution of the following 3rd subcase.
+PRINTED NUMBER WIDTH, 13, 2,   { Request maximum precision (if 8 output columns)
+ .000050    .005     60.     60. 
+       1       1       1       3       1      -1               2
+       5       5      20      20     100     100
+  JDGA  JDA                        15.    { 1st of 3 branches in series with one
+  JDGB  JDB                        15.    { section of  K.C. Lee line.   This is
+  JDGC  JDC                        15.    { an approximation to source impedance
+C    The following 3-phase, constant-parameter branch cards are produced by the
+C    2nd subcase of DC-59.  For simplicity, the cards are inserted inside this
+C    data file.  Equally well,  $INCLUDE  or  $INSERT  on disk file  dc59b.pch
+C    could be used:
+$VINTAGE, 1   { Beginning of cards punched by DC-59b
+-1JDA   LMA                3.01533E-01 6.91823E+02 1.19371E+05 1.38000E+02 1
+-2JDB   LMB { See col 80 } 2.80266E-02 2.83599E+02 1.82176E+05 1.38000E+02 1   0
+-3JDC   LMC                                                          
+$VINTAGE, 0        { last of cards punched by DC-59b
+C    Modification on 15 February 1999: "3" punch was added to column 80 of the
+C    2nd phase of preceding distributed line.  Output is identical except for
+C    the interpreted data line itself.  Because of the otherwise-unused in-line
+C    comment,  the "3" will be seen (unlike preceding subcase or DCNEW-4).
+  LMA                      1000.  { Resistive load at far end of 1st of 6 phases
+  LMB         LMA                 { 2nd of 6 phases  is terminated by the same R
+  LMC         LMA                 { Etc. for phases 3 through 6.  It is balanced
+BLANK card ending branch cards
+BLANK card ending switch cards
+14JDGA       303000.       60.        0.                           -1.      .001
+14JDGB       303000.       60.     -120.                           -1.
+14JDGC       303000.       60.      120.                           -1.
+BLANK card ending source cards
+  JDGA  LMA   JDGB  LMB   JDGC  LMC 
+BLANK card ending node names for selective voltage output
+  PRINTER PLOT
+ 144 1. 0.0 5.0         LMA   LMB   LMC 
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      3rd of 7 subcases should produce identically the same solution as the
+C      preceding subcase.  Added  29 January 1999,  this illustrates the new
+C      "TO SUPPORTING PROGRAM"  to derive line constants of the 138-mile line
+C      section as were used in the 2nd subcase of DC-59.  As should be explained
+C      in the April, 1999, newsletter,  this new in-line execution of supporting
+C      programs first was envisioned by Prof. Juan A. Martinez Velasco of the
+C      University of Catalunya in Barcelona, Spain.
+PRINTED NUMBER WIDTH, 13, 2,   { Request maximum precision (if 8 output columns)
+ .000050    .005     60.     60.
+       1       1       1       3       1      -1               2
+       5       5      20      20     100     100
+  JDGA  JDA                        15.    { 1st of 3 branches in series with one
+  JDGB  JDB                        15.    { section of  K.C. Lee line.   This is
+  JDGC  JDC                        15.    { an approximation to source impedance
+C      Add  /OUTPUT  anywhere on right of following request to produce output of
+C      the supporting program.  Without this,  all output will be suppressed.
+< TO SUPPORTING PROGRAM (NEXT) >    { Request for a jump to a supporting program
+C    The following data, through the blank card, is from 2nd subcase of DCNEW-3.
+LINE CONSTANTS
+BRANCH  JDA   LMA   JDB   LMB   JDC   LMC                                       
+C   LINE CONSTANTS DATA FOR JOHN DAY TO LOWER MONUMENTAL 500-KV LINE.           
+  1.3636 .05215  4         1.602  -20.75   50.     50.                          
+  1.3636 .05215  4         1.602  -19.25   50.     50.                          
+  2.3636 .05215  4         1.602  - 0.75   77.5    77.5                         
+  2.3636 .05215  4         1.602    0.75   77.5    77.5                         
+  3.3636 .05215  4         1.602   19.25   50.     50.                          
+  3.3636 .05215  4         1.602   20.75   50.     50.                          
+  0.5    2.61    4         0.386  -12.9    98.5    98.5                         
+  0.5    2.61    4         0.386   12.9    98.5    98.5                         
+BLANK CARD ENDING CONDUCTOR CARDS OF  "LINE CONSTANTS"  CASE                    
+100.         60.00         1     11  1        138.       1        
+BLANK CARD ENDING FREQUENCY CARDS OF  "LINE CONSTANTS"  CASE 
+$PUNCH, dc41c.pch        ! { Output the just-created branch cards to a disk file
+BLANK card ending  LINE CONSTANTS  data cases  { Last of supporting program data
+$CLOSE,  UNIT=7  STATUS=KEEP    { Disconnect file containing KC Lee branch cards
+$INSERT, dc41c.pch,      { Dynamic connection of disk file created 3 lines above
+  LMA                      1000.  { Resistive load at far end of 1st of 3 phases
+  LMB         LMA                 { 2nd of 3 phases  is terminated by the same R
+  LMC         LMA
+BLANK card ending branch cards
+BLANK card ending switch cards
+14JDGA       303000.       60.        0.                           -1.      .001
+14JDGB       303000.       60.     -120.                           -1.
+14JDGC       303000.       60.      120.                           -1.
+BLANK card ending source cards
+  JDGA  LMA   JDGB  LMB   JDGC  LMC 
+BLANK card ending node names for selective voltage output
+  PRINTER PLOT
+ 144 1. 0.0 5.0         LMA   LMB   LMC 
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      4th of 7 subcases illustrates selective branch current output for 2-phase
+C      Semlyen line.  This was added  11 December 2000.  Branch cards for the
+C      2-phase line are as created by the 3rd subcase of DC-29.  The network is
+C      totally artificial since it represents 2 of the 3 phases of a 500-kV line
+C      The new  "Derive [Ti] from [Tv]"  request also is illustrated (see the
+C      April, 2001, newsletter).  Only a single time step is taken  ---  enough
+C      to verify correct and consistent output.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 9 output columns)
+  20.E-6  20.E-6  60.     60.
+       1       8       0       1       0      
+ 0GENA  BEGINA                  14.                                            1
+ 0GENB  BEGINBGENA  BEGINA                                                     1
+C 0GENC  BEGINCGENA  BEGINA                                                     1
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C SEMLYEN SETUP
+C $ERASE
+C BRANCH  JDA   LMA   JDB   LMB
+C TOLERANCES  10      5000.  { Illustration only; value of FMED actually unchang
+C           200  150  10 230   1     7  7777     0    { Semlyen miscellaneous da
+C LINE CONSTANTS
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C BLANK card ending conductor cards within  "LINE CONSTANTS"  data
+C  27.         5000.                            138.         { Transient frequen
+C  27.         60.00                            138.   { Phasor solution frequen
+C  27.          6.00                            138.           6 20  { log loopi
+C BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+C BLANK card ending  "LINE CONSTANTS"  data cases
+C L=  138.0 miles, rho=    27.0, ss freq=   60.00, NSS=0, KFIT=10, KPS=2, KYC=30
+-1BEGINAENDA               3.81668E-03 7.63488E-04              1  1  2  2   2 0
+   1.90862630E+01 1.15862674E+02-1.30872176E-04 9.74276128E-04 6.00000000E+01
+   0.00000E+00 2.24216E+04 7.46515E-01 0.00000E+00 2.38744E+03 2.53485E-01
+   0.00000E+00 1.23894E+05-4.11230E-04 0.00000E+00 4.80703E+02-8.78400E-04
+-1BEGINBENDB               4.86411E-03 7.40372E-04              2  2  2  2   2 1
+   1.59520125E+00 6.09143723E+01-2.53812008E-05 1.35128690E-03 6.00000000E+01
+   0.00000E+00 4.07374E+05 9.54406E-01 0.00000E+00 2.40730E+03 4.55945E-02
+   0.00000E+00 2.43743E+03-1.39286E-04 0.00000E+00 8.77099E+01-3.84337E-04
+NO IMAGINARY PART:
+    1.0000000000000002E+00   -5.9460940886557245E-01
+    6.9285574025886665E-01    1.0000000000000000E+00
+    7.0805987238797719E-01   -4.9148565643201919E-01
+    4.2216590194629711E-01    7.0805987238797719E-01
+YES, IMAGINARY PART:  { Do-nothing request for return to default mode of complex
+Derive [Ti] from [Tv] { Do it.  I.e., preceding [Ti] is not used.
+C      Relative order of the preceding two declarations is arbitrary.  Either is
+C      voluntary,  and either can come first,  immediately after the matrix.
+BLANK card ending branch cards
+  ENDA         .00413     1.0
+BLANK card ending switch cards (just the fault switch, here)
+14GENA     428.       60.      -90.0                         -1.
+14GENB     428.       60.     -210.0                         -1.
+C 14GENC     428.       60.       30.0                         -1.
+BLANK card ending source cards
+  BEGINAENDA
+C First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step   Time       BEGINA      ENDA        GENA        GENB        BEGINB
+C                                             BEGINA      BEGINB      ENDB
+C     0     0.0   1.31770789  -1.9263914  .416683394  -.25532666  -.25532666
+C     1   .2E-4   4.58886445  1.51135697  .415961844   -.2528793   -.2528793
+BLANK card ending node voltage outputs
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      5th of 7 subcases illustrates selective branch current output for 2-phase
+C      Semlyen line.  This was added  11 December 2000.  It is identical to the
+C      preceding subcase except that  "Derive [Ti] from [Tv]"  is not being used
+C      to illustrate how the answer changes.  Note inconsistent current at time
+C      zero but consistent current for step 1.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 9 output columns)
+  20.E-6  20.E-6  60.     60.
+       1       8       0       1       0      
+ 0GENA  BEGINA                  14.                                            1
+ 0GENB  BEGINBGENA  BEGINA                                                     1
+C 0GENC  BEGINCGENA  BEGINA                                                     1
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C SEMLYEN SETUP
+C $ERASE
+C BRANCH  JDA   LMA   JDB   LMB
+C TOLERANCES  10      5000.  { Illustration only; value of FMED actually unchang
+C           200  150  10 230   1     7  7777     0    { Semlyen miscellaneous da
+C LINE CONSTANTS
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C BLANK card ending conductor cards within  "LINE CONSTANTS"  data
+C  27.         5000.                            138.         { Transient frequen
+C  27.         60.00                            138.   { Phasor solution frequen
+C  27.          6.00                            138.           6 20  { log loopi
+C BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+C BLANK card ending  "LINE CONSTANTS"  data cases
+C L=  138.0 miles, rho=    27.0, ss freq=   60.00, NSS=0, KFIT=10, KPS=2, KYC=30
+-1BEGINAENDA               3.81668E-03 7.63488E-04              1  1  2  2   2 0
+   1.90862630E+01 1.15862674E+02-1.30872176E-04 9.74276128E-04 6.00000000E+01
+   0.00000E+00 2.24216E+04 7.46515E-01 0.00000E+00 2.38744E+03 2.53485E-01
+   0.00000E+00 1.23894E+05-4.11230E-04 0.00000E+00 4.80703E+02-8.78400E-04
+-1BEGINBENDB               4.86411E-03 7.40372E-04              2  2  2  2   2 1
+   1.59520125E+00 6.09143723E+01-2.53812008E-05 1.35128690E-03 6.00000000E+01
+   0.00000E+00 4.07374E+05 9.54406E-01 0.00000E+00 2.40730E+03 4.55945E-02
+   0.00000E+00 2.43743E+03-1.39286E-04 0.00000E+00 8.77099E+01-3.84337E-04
+NO IMAGINARY PART:
+    1.0000000000000002E+00   -5.9460940886557245E-01
+    6.9285574025886665E-01    1.0000000000000000E+00
+    7.0805987238797719E-01   -4.9148565643201919E-01
+    4.2216590194629711E-01    7.0805987238797719E-01
+YES, IMAGINARY PART:
+C Derive [Ti] from [Tv]  ----  disable this declaration of preceding subcase
+BLANK card ending branch cards
+  ENDA         .00413     1.0
+BLANK card ending switch cards (just the fault switch, here)
+14GENA     428.       60.      -90.0                         -1.
+14GENB     428.       60.     -210.0                         -1.
+BLANK card ending source cards
+  BEGINAENDA
+C First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step      Time       BEGINA      ENDA        GENA        GENB        BEGINB
+C                                               BEGINA      BEGINB      ENDB
+C     0       0.0    1.3173033    -1.93736  .417090545  -.25540157  -.25506625
+C     1     .2E-4   4.46159339  1.51090777  .416403376  -.25292062  -.25292062
+BLANK card ending node voltage outputs
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      6th of 7 subcases illustrates selective branch current output for 3-phase
+C      Semlyen line.  This was added  11 December 2000.  There is no current 
+C      output for phase "a" whereas there is output for phases "b" and "c".
+C      Also, the new  "Derive [Ti] from [Tv]"  is being used.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 9 output columns)
+  20.E-6  20.E-6  60.     60.
+       1       8       0       1       0      
+ 0GENA  BEGINA                  14.                                            1
+ 0GENB  BEGINBGENA  BEGINA                                                     1
+ 0GENC  BEGINCGENA  BEGINA                                                     1
+C L=   138.0MILES, RHO=    27.0, SS FREQ=   60.00, NSS=0, KFIT= 0, KPS=2, KYC=10
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   3.3636 .05215  4         1.602   19.25   50.     50.
+C   3.3636 .05215  4         1.602   20.75   50.     50.
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C
+C  27.         5000.         1                  138.
+C  27.         60.00         1                  138.
+C  27.          6.00         1                  138.           6 20
+C
+-1BEGINAENDA               0.55456E-02 0.77998E-03              1  1  2  2   3 0
+   0.14938602E+02 0.90516313E+02-0.16261865E-03 0.14500324E-02 0.60000000E+02
+   0.00000E+00 0.15161E+05 0.75119E+00 0.00000E+00 0.17105E+04 0.24881E+00
+   0.00000E+00 0.59584E+03-0.11954E-02 0.00000E+00 0.39933E+05-0.74162E-03
+-1BEGINBENDB               0.74392E-02 0.74149E-03              2  2  2  2   3 1
+   0.83801231E+00 0.38634735E+02-0.44536501E-04 0.20637999E-02 0.60000000E+02
+   0.00000E+00 0.26608E+06 0.83767E+00 0.00000E+00 0.35627E+05 0.16233E+00
+   0.00000E+00 0.13630E+03-0.49171E-03 0.00000E+00 0.32940E+05-0.75349E-04
+-1BEGINCENDC               0.42823E-02 0.74017E-03              3  3  2  2   3 1
+   0.26535168E+01 0.67894100E+02-0.45225808E-04 0.11682248E-02 0.60000000E+02
+   0.00000E+00 0.61698E+06 0.90903E+00 0.00000E+00 0.15239E+05 0.90969E-01
+   0.00000E+00 0.25667E+03-0.34465E-03 0.00000E+00 0.11831E+05-0.28233E-04
+   0.10000E+01 0.00000E+00 0.10000E+01 0.00000E+00-0.26698E+00 0.00000E+00
+   0.71114E+00 0.00000E+00-0.41983E-15 0.00000E+00 0.10000E+01 0.00000E+00
+   0.10000E+01 0.00000E+00-0.10000E+01 0.00000E+00-0.26698E+00 0.00000E+00
+   0.42027E+00 0.00000E+00 0.50000E+00 0.00000E+00-0.29908E+00 0.00000E+00
+   0.22471E+00 0.00000E+00-0.27373E-15 0.00000E+00 0.84054E+00 0.00000E+00
+   0.42027E+00 0.00000E+00-0.50000E+00 0.00000E+00-0.29908E+00 0.00000E+00
+Derive [Ti] from [Tv]
+BLANK card ending branch cards
+  ENDA         .00413     1.0
+C ENDA           -1.0     1.0
+BLANK card ending switch cards (just the fault switch, here)
+14GENA     428.       60.      -90.0                         -1.
+14GENB     428.       60.      -90.0                         -1.
+14GENC     428.       60.      -90.0                         -1.
+BLANK card ending source cards
+  BEGINAENDA
+C First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C Next   5     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step      Time       BEGINA      ENDA        GENA        GENB        GENC        BEGINB      BEGINC
+C                                               BEGINA      BEGINB      BEGINC      ENDB        ENDC
+C     0       0.0   .433757964  -1.3235974  .255657761  .262352453  .255657761  .262352453  .255657761
+C     1     .2E-4   3.68776594  2.16693321  .255416888  .262183584  .255416888  .262183584  .255416888
+BLANK card ending node voltage outputs
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      7th of 7 subcases illustrates selective branch current output for 3-phase
+C      Semlyen line.  This was added  11 December 2000.  It is identical to the
+C      preceding subcase except that  "Derive [Ti] from [Tv]"  is not being used
+C      to illustrate how the answer changes.  Note inconsistent current at time
+C      zero but correct current for step 1.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 9 output columns)
+  20.E-6  20.E-6  60.     60.
+       1       8       0       1       0
+ 0GENA  BEGINA                  14.                                            1
+ 0GENB  BEGINBGENA  BEGINA                                                     1
+ 0GENC  BEGINCGENA  BEGINA                                                     1
+C L=   138.0MILES, RHO=    27.0, SS FREQ=   60.00, NSS=0, KFIT= 0, KPS=2, KYC=10
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   3.3636 .05215  4         1.602   19.25   50.     50.
+C   3.3636 .05215  4         1.602   20.75   50.     50.
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C
+C  27.         5000.         1                  138.
+C  27.         60.00         1                  138.
+C  27.          6.00         1                  138.           6 20
+C
+-1BEGINAENDA               0.55456E-02 0.77998E-03              1  1  2  2   3 0
+   0.14938602E+02 0.90516313E+02-0.16261865E-03 0.14500324E-02 0.60000000E+02
+   0.00000E+00 0.15161E+05 0.75119E+00 0.00000E+00 0.17105E+04 0.24881E+00
+   0.00000E+00 0.59584E+03-0.11954E-02 0.00000E+00 0.39933E+05-0.74162E-03
+-1BEGINBENDB               0.74392E-02 0.74149E-03              2  2  2  2   3 1
+   0.83801231E+00 0.38634735E+02-0.44536501E-04 0.20637999E-02 0.60000000E+02
+   0.00000E+00 0.26608E+06 0.83767E+00 0.00000E+00 0.35627E+05 0.16233E+00
+   0.00000E+00 0.13630E+03-0.49171E-03 0.00000E+00 0.32940E+05-0.75349E-04
+-1BEGINCENDC               0.42823E-02 0.74017E-03              3  3  2  2   3 1
+   0.26535168E+01 0.67894100E+02-0.45225808E-04 0.11682248E-02 0.60000000E+02
+   0.00000E+00 0.61698E+06 0.90903E+00 0.00000E+00 0.15239E+05 0.90969E-01
+   0.00000E+00 0.25667E+03-0.34465E-03 0.00000E+00 0.11831E+05-0.28233E-04
+   0.10000E+01 0.00000E+00 0.10000E+01 0.00000E+00-0.26698E+00 0.00000E+00
+   0.71114E+00 0.00000E+00-0.41983E-15 0.00000E+00 0.10000E+01 0.00000E+00
+   0.10000E+01 0.00000E+00-0.10000E+01 0.00000E+00-0.26698E+00 0.00000E+00
+   0.42027E+00 0.00000E+00 0.50000E+00 0.00000E+00-0.29908E+00 0.00000E+00
+   0.22471E+00 0.00000E+00-0.27373E-15 0.00000E+00 0.84054E+00 0.00000E+00
+   0.42027E+00 0.00000E+00-0.50000E+00 0.00000E+00-0.29908E+00 0.00000E+00
+C Derive [Ti] from [Tv]  ----  disable this declaration of preceding subcase
+BLANK card ending branch cards
+  ENDA         .00413     1.0
+BLANK card ending switch cards (just the fault switch, here)
+14GENA     428.       60.      -90.0                         -1.
+14GENB     428.       60.      -90.0                         -1.
+14GENC     428.       60.      -90.0                         -1.
+BLANK card ending source cards
+  BEGINAENDA
+C First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C Next   5     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step      Time       BEGINA      ENDA        GENA        GENB        GENC        BEGINB      BEGINC
+C                                               BEGINA      BEGINB      BEGINC      ENDB        ENDC
+C     0       0.0   .434025265  -1.3246378  .255853054  .262494222  .255853054  .262738399  .255858717
+C     1     .2E-4   3.66889251  2.16376453  .255617191  .262340836  .255617191  .262340836  .255617191
+BLANK card ending node voltage outputs
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+$DISABLE      { Begin discard of 4th subcase, which takes too long to execute
+C      8th of 7 subcases will produce a solution comparable to the 3rd, but
+C      here constant-parameter K.C. Lee modeling of the line is replaced by
+C      frequency-dependent JMarti modeling.  This illustrates a more complex
+C      in-line execution.  On the other hand,  JMARTI SETUP  is relatively slow
+C      to execute.  That is why this 8th subcase will not be executed each time
+C      the set of standard test cases is verified.
+PRINTED NUMBER WIDTH, 13, 2,   { Request maximum precision (if 8 output columns)
+ .000050    .005     60.     60.
+       1       1       1       3       1      -1               2
+       5       5      20      20     100     100
+  JDGA  JDA                        15.    { 1st of 3 branches in series with one
+  JDGB  JDB                        15.    { circuit of the Marti line.   This is
+  JDGC  JDC                        15.    { an approximation to source impedance
+C      Add  /OUTPUT  anywhere on right of following request to produce output of
+C      the supporting program.  Without this,  all output will be suppressed.
+< TO SUPPORTING PROGRAM (NEXT) >       { Request for jump to supporting programs
+C    The following data, through the blank card, is from 2nd subcase of DCNEW-3.
+JMARTI SETUP, 1.0,          { Note use of  PDT0 = 1  to allow reduction of order
+$ERASE
+BRANCH  JDA   LMA   JDB   LMB   JDC   LMC
+LINE CONSTANTS
+C   LINE CONSTANTS DATA FOR JOHN DAY TO LOWER MONUMENTAL 500-KV LINE.
+TRANSPOSED
+  1.3636 .05215  4         1.602  -20.75   50.     50.
+  1.3636 .05215  4         1.602  -19.25   50.     50.
+  2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+  2.3636 .05215  4         1.602    0.75   77.5    77.5
+  3.3636 .05215  4         1.602   19.25   50.     50.
+  3.3636 .05215  4         1.602   20.75   50.     50.
+  0.5    2.61    4         0.386  -12.9    98.5    98.5
+  0.5    2.61    4         0.386   12.9    98.5    98.5
+BLANK CARD ENDING CONDUCTOR CARDS OF  &LINE CONSTANTS&  CASE
+100.        5000.0         1                  138.       1           1
+100.         60.00         1                  138.       1           1
+100.           .01         1                  138.       1   9 10    1
+BLANK CARD ENDING FREQUENCY CARDS OF  "LINE CONSTANTS"  CASE
+BLANK CARD ENDING  "LINE CONSTANTS"  CASES
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+C  SELECT        +3        -3
+               1                  .48D-7
+             .30      30       0       1       1       1       0
+             .30      30       0       1       1       1       0      .0
+$PUNCH, dc41d.pch !
+BLANK card ending  JMARTI SETUP  data cases    { Last of supporting program data
+$CLOSE,  UNIT=7  STATUS=KEEP    { Disconnect file containing JMarti branch cards
+$INSERT, dc41d.pch,     { Dynamic connection of disk file created 3 lines above
+  LMA                      1000.  { Resistive load at far end of 1st of 3 phases
+  LMB         LMA                 { 2nd of 3 phases  is terminated by the same R
+  LMC         LMA
+BLANK card ending branch cards
+BLANK card ending switch cards
+14JDGA       303000.       60.        0.                           -1.      .001
+14JDGB       303000.       60.     -120.                           -1.
+14JDGC       303000.       60.      120.                           -1.
+BLANK card ending source cards
+  JDGA  LMA   JDGB  LMB   JDGC  LMC 
+BLANK card ending node names for selective voltage output
+  PRINTER PLOT
+ 144 1. 0.0 5.0         LMA   LMB   LMC 
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+$ENABLE      { End discard of 4th subcase, which takes too long to execute
+BLANK
+ 

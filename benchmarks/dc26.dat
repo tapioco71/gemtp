@@ -1,0 +1,551 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-26
+C     Test of  Type-59  S.M.  dynamics,  with load flow  ("FIX SOURCE"  request)
+C     determination of initial conditions  that observe given power constraints.  
+C     1st of 5 subcases involving load flow solutions;   1st of 2 machine cases.
+C       Answers change slightly on  10 February 1999  following the massive 
+C       changes from TEPCO (Tokyo Electric Power Company) in Japan.  See April 
+C       newsletter.  Most extrema agree to 5 or 6 decimal digits.
+PRINTED NUMBER WIDTH, 13, 2,    { Request maximum precision for 8 output columns
+FIX SOURCE   { An EMTP load flow will satisfy requested phasor power injections.
+POWER FREQUENCY, 50.0,      { Avoid warning message about suspicious XOPT, COPT.
+ .000200   .500      50.     50.
+       1       1       0  { test }     1      -1
+       5       5      20      20     100     100
+  A1    A2                   0.1                                               1
+  B1    B2                   0.1                                               1
+  C1    C2                   0.1                                               1
+51A2    B2                .00528    571.5428
+52A3                       -.029    3125.811 .1582    17115.12
+51B2    C2    A2    B2
+52B3
+51C2    A2    A2    B2
+52C3
+  A2                                  31.416
+  B2                                  31.416
+  C2                                  31.416
+ 1A3    A4                      43.342
+ 2B3    B4                      12.546            43.342
+ 3C3    C4                      12.546            12.546            43.342
+BLANK card ending branch cards.
+C       The next card has  T-open = 80 msec  minus  DELTAT/2  in  order to avoid
+C       delayed opening (1/2 cycle) for PRIME and Burroughs.  WSM.  27 FEB 1982.
+  A3              .01990     .0799                                             1
+BLANK card ending switch cards.
+14A4         112.059       50.      -20.                           -1.
+14B4         112.059       50.     -140.                           -1.
+14C4         112.059       50.      100.                           -1.
+C             59A1        11.3901      50.0    - 30.0    (before FIX SOURCE use)
+$DEPOSIT, NOSM59=-1 { Special value will change Type-58 S.M. to Type-59 S.M.
+C     Note about preceding and following.  Beginning 27 March 2000, this new
+C     variable  NOSM59  of  STARTUP  can be used either to convert or to trap
+C     Type-58 or Type-59 S.M. type codes.  Five values are recognized:
+C     NOSM59 = 0  ===>  no change.  Preserve the original meaning.
+C              1        convert any Type-59 S.M. to Type-58 S.M.
+C              2        trap    any Type-59 S.M. (halt after all are counted).
+C             -1        convert any Type-58 S.M. to Type-59 S.M.
+C             -2        trap    any Type-58 S.M. (halt after all are counted).
+C     So,  the following machine really is Type-59.  But 58 is used because ATP
+C     automatically will convert this to 59 as a result of preceding NOSM59 = -1
+C     This preserves the old answers,  which will remain unchanged.
+58A1         11.0         50.0     -40.0
+58B1
+58C1
+C TOLERANCES      200. { Columns 11-20 EPSUPA = 200 }       20  { 51-60: NIOMAX=20
+C  14 October 2001, define NIOMIN of columns 41-50 so Watcom agrees with Mingw32
+C  and Salford.  This _does_ help.  Value 8 provides better FC agreement than 5.
+C  Previously, Watcom was iterating a different number of times, & was producing
+C  a slightly different answer.  So, we slow execution artificially:
+TOLERANCES      200.                             8        20  { 51-60: NIOMAX=20
+PARAMETER FITTING            1.0                          
+ 1 1     2       1.0       1.0     150.0      13.8     600.0     600.0     720.0
+BLANK card for quadrature axis of machine.
+    0.0014     0.175      1.85      1.76    0.2575      1.76      0.18     0.18
+   5.74757            0.051142  0.382609  0.197985
+ 1               1.0      50.0                                     1.0
+BLANK card ending all (here, just one) mass cards.
+  12
+  21
+  3          1
+BLANK card terminating all (here, three) S.M. output requests.
+  FINISH
+BLANK card terminating all EMTP source cards.
+  A1                  39.98755        -4.507399      10.0    12.0     -60. 
+  B1                  39.98755        -4.507399      10.0    12.0    -180. -120. 
+  C1                  39.98755        -4.507399      10.0    12.0     60.0  120.
+C         NNNOUT  NITERA  NFLOUT  NPRINT  RALCHK  CFITEV  CFITEA  VSCALE  KTAPER
+               1    1000      20       1 0.00001     0.1    2.0                2
+C  Max del-V:  .7E-5 .7E-5 .6E-5 .6E-5 .5E-5 .5E-5 .5E-5 .4E-5 .4E-5 .4E-5 .3E-5
+C  Source No.     -3    -3    -3    -3    -3    -3    -3    -3    -3    -3    -3
+C  Exit the load flow iteration loop with counter  NEKITE = 133.   If no warning
+C Row  Node  Name    Voltage magnit    Degrees     Real power P   Reactive power
+C  4     8  A1      1.13901111E+01   -30.00022   3.99871502E+01  -4.50736252E+00
+C  5     9  B1      1.13901111E+01  -150.00022   3.99871502E+01  -4.50736252E+00
+C  6    10  C1      1.13901111E+01    89.99978   3.99871502E+01  -4.50736252E+00
+C       Total network loss  P-loss  by summing injections =   8.018000511887E+00
+C   Step      Time        C2           B2           A2           A3           C3 
+C
+C                         C1           A4           B4           C4           A3 
+C                                                                          TERRA 
+C
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1 
+C                        ID           IQ           I0           IF           IKD  
+C
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1 
+C                       IB           IC           EFD          MFORCE       MANG 
+C  0       0.0   .0791881332  -9.29565074  9.216462609  102.5472108  -37.8516127 
+C                .4577064E-4  105.3010154  -85.8421743  -19.4588411          0.0 
+C                -6.82107489  5.325616419  .391002E-14  1.014337449  -.76501E-15 
+C                -5.68498411  -.791423626  -.176005017    .60792369   .887825386 
+C  1     .2E-3   -.592823298   -8.9455915  9.538414794  103.3173764  -43.8432677 
+C                -.715886965  107.4997647  -81.1499746  -26.3497901          0.0 
+C                -6.82114583  5.325512789   -.4718E-14  1.014337757  .6231167E-5 
+C                -5.41035524  -1.23063667  -.176005017  .6079236529  .8878253793 
+ 1                                 { Request for the output of all node voltages
+C Last step begin:  2500  0.5  .1013093411 -9.26844034  9.167130999  16.94173877  
+C Last step begin: .0149766932  105.3010154 -85.8421743 -19.4588411          0.0 
+C Last step begin: -6.73361875  5.375255555 -.34086E-14 1.004763786  -.001205227
+C Last step begin: -5.61469909  -.863326479 -.176005017 .6045428409   .889016932
+C Variable max :    11.6152661  11.51967968  12.3018062 204.4814649  119.2607541
+C                  12.40458274  112.0153099 112.0562692 112.0480769    6.3761474 
+C                  -2.00131682  9.101894661  .13086E-13 1.315246828  1.316347492
+C                  12.08207638  7.893166343 -.176005017   .60792369  .8935781536 
+C Times of max :         .0938        .1282       .0806       .0802        .0934 
+C                        .0938        .4812       .4878       .2344        .0252 
+C                        .0782        .0708       .1114        .074        .0332 
+C                         .033        .0938         0.0         0.0        .0226 
+  PRINTER PLOT
+ 19410. 0. 120.         MACH 1ID    MACH 1IQ     { Plot limits: (-2.301,  0.910)
+C     Note:  Former  IG  (next plot) now (after Prof. Juan Martinez's changes of
+C            October, 1989) becomes  IKQ.   The  eddy-current coil of the Q axis
+C            formerly was coil  "KQ",  now is  "G".   WSM and JM,  13 October 90
+ 19410. 0. 120.         MACH 1IF    MACH 1IKQ    { Plot limits: (-0.425,  1.636)
+ 19410. 0. 120.         BRANCH                   { Plot limits: (-1.874,  1.755)
+                        A1    A2    B1    B2    C1    C2
+$DEPOSIT, NOSM59=0   { Cancel special value that was set earlier in this subcase
+BLANK card terminating all plot cards.
+BEGIN NEW DATA CASE
+C          2nd  of  6  data subcases.
+C          Same as preceding case, only with significant imbalance in the steady
+C          state due to change of generator at  "A4"  from  -20  to -10 degrees.
+C          The load flow does not converge, and case is only run  5 steps.   The
+C          idea is to force use of negative-sequence correction logic of  SMINIT
+C          of overlay 11.  No other test cases do this.  Eventually,  replace by
+C          a meaningful case.   2nd of 4 subcases (2nd of two machine cases).
+PRINTED NUMBER WIDTH, 13, 2,    { Request maximum precision for 8 output columns
+FIX SOURCE   { An EMTP load flow will satisfy requested phasor power injections.
+POWER FREQUENCY, 50.0,      { Avoid warning message about suspicious XOPT, COPT.
+ .000200    .001     50.     50.
+       1       1       0  { test }     0      -1
+       5       5      20      20     100     100
+  A1    A2                   0.1                                               1
+  B1    B2                   0.1                                               1
+  C1    C2                   0.1                                               1
+51A2    B2                .00528    571.5428
+52A3                       -.029    3125.811 .1582    17115.12
+51B2    C2    A2    B2
+52B3
+51C2    A2    A2    B2
+52C3
+  A2                                  31.416
+  B2                                  31.416
+  C2                                  31.416
+ 1A3    A4                      43.342
+ 2B3    B4                      12.546            43.342
+ 3C3    C4                      12.546            12.546            43.342
+BLANK card ending branch cards.
+C       The next card has  T-open = 80 msec  minus  DELTAT/2  in  order to avoid
+C       delayed opening (1/2 cycle) for PRIME and Burroughs.  WSM.  27 FEB 1982.
+  A3              .01990     .0799                                             1
+BLANK card ending switch cards.
+14A4         112.059       50.      -10.  { Change -20 to -10 }    -1.
+14B4         112.059       50.     -140.                           -1.
+14C4         112.059       50.      100.                           -1.
+C             59A1        11.3901      50.0    - 30.0    (before FIX SOURCE use)
+59A1         11.0         50.0     -40.0
+59B1
+59C1
+TOLERANCES      200. { Columns 11-20 EPSUPA = 200 }       20  { 51-60: NIOMAX=20
+PARAMETER FITTING            1.0                          
+ 1 1     2       1.0       1.0     150.0      13.8     600.0     600.0     720.0
+BLANK card for quadrature axis of machine.
+    0.0014     0.175      1.85      1.76    0.2575      1.76      0.18     0.18
+   5.74757            0.051142  0.382609  0.197985
+ 1               1.0      50.0                                     1.0
+BLANK card ending all (here, just one) mass cards.
+  12
+  21
+  3          1
+BLANK card terminating all (here, three) S.M. output requests.
+  FINISH
+BLANK card terminating all EMTP source cards.
+  A1                  39.98755        -4.507399      10.0    12.0     -60. 
+  B1                  39.98755        -4.507399      10.0    12.0    -180. -120. 
+  C1                  39.98755        -4.507399      10.0    12.0     60.0  120.
+C         NNNOUT  NITERA  NFLOUT  NPRINT  RALCHK  CFITEV  CFITEA  VSCALE  KTAPER
+               1     100      20       1 0.00001     0.1    2.0                2
+C  Max del-V:  .0016 .0015 .0013 .0011  .001 .9E-3 .8E-3 .6E-3 .5E-3 .4E-3 .4E-3
+C     //.  Warning!  Divergence of the EMTP load flow has occurred.  In the hope
+C                   initialization continues, however.
+C  Exit the load flow iteration loop with counter  NEKITE = 100.   If no warning
+C Row  Node  Name    Voltage magnit    Degrees     Real power P   Reactive power
+C  4     8  A1      1.00000000E+01   -20.91363   3.45426843E+01  -2.24391750E+00
+C  5     9  B1      1.20000000E+01  -150.14225   4.22174603E+01  -6.71602291E+00
+C  6    10  C1      1.20000000E+01    90.73965   3.92028723E+01  -5.90634496E+00
+C       Total network loss  P-loss  by summing injections =   7.625614104022E+00
+ 1                                 { Request for the output of all node voltages
+C  Step       Time        C2           B2           A2           A3           C3
+C 
+C                         C1           A4           B4           C4           A3 
+C                                                                          TERRA  
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1 
+C                         ID           IQ           I0           IF          IKD
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1 
+C                         IB           IC          EFD       MFORCE         MANG
+C    0     0.0   -.048041917  -9.85266713  8.679836062  104.3486527  -36.7261188 
+C                -.154907255   110.356572  -85.8421743  -19.4588411          0.0 
+C                -6.92581041  5.259477223  -.445329E-4  .9859361614  .0320876279 
+C                -5.54502117  -1.06865338  -.170793823  .5995965889  .8894202603 
+C    1   .2E-3   -1.16677225  -7.85747584  10.21232132  103.2738496  -48.1646884 
+C                -1.32143162  111.3606393  -81.1499746  -26.3497901          0.0 
+C                -6.87231021  5.289979997  .0014353419  .9858026654  .0272832017 
+C                -5.20835729  -1.54659375  -.170793823  .5996092398  .8894186749 
+C Last step follows:
+C    5    .001   -3.69592471   -6.2063594  10.61819433  99.27645368  -67.8903465 
+C                -4.03363622  110.9684495  -59.3822228  -52.6085139          0.0 
+C                -6.76271705  5.471445353  .0060095523  .9856033893   .017362355 
+C                -3.71587997  -3.37711507  -.170793823  .5996729546  .8894772231 
+  PRINTER PLOT
+BLANK card terminating all plot cards.
+BEGIN NEW DATA CASE
+C       5-bus, 1-phase loadflow example from "Elements of Power System Analysis"  
+C       by William D. Stevenson.   McGraw-Hill Book Company, 2nd Edition (1962).
+C       The Gauss-Seidel solution is contained in Example 10.1, page 219 onward.
+C       Data is given in per unit,  and  we  can use this directly (pretend that
+C       the base voltage, current, and power are all unity).  We need  XOPT = 60
+C       since impedances are in ohms.  Voltages could be multiplied by 1.414  to
+C       give the peak values required by the EMTP, but instead we use the VSCALE
+C       option that takes RMS  (the square root of 2 is supplied internally)  as
+C       input and produces RMS output (at least for the load flow solution table
+C       if not for EMTP branch flows).  Bus number one,  WHITE,  is taken as the
+C       slack bus (the only bus without a power constraint).  This is the 3rd of
+C       5 subcases.  It has no machine dynamics at all (unlike the preceding 2).
+C       This data case was 1st considered by Profs. Saul Goldberg &  Bill Horton
+C       of Cal Poly in San Luis Obispo, California, for June, 1988, EMTP course.
+C         Answers change  10 February 1999  following the massive changes from 
+C         TEPCO (Tokyo Electric Power Company) in Japan.  See April newsletter.
+C         Convergence has been slowed substantially (when time, consider this).
+PRINTED NUMBER WIDTH, 13, 2,    { Request maximum precision for 8 output columns
+FIX SOURCE   { An EMTP load flow will satisfy requested phasor power injections.
+$ERASE   { Erase punched cards, created by preceding subcases, from punch buffer
+ .000200    .000     60.   { T-max = 0  means that no transient solution follows
+       1       1       1       0       1     
+  WHITE RED                  .10   .40  
+C       Stevenson's line between  WHITE  and  BLUE  appears on the final comment
+C       card of this comment block.   For more generality,  I have introduced an
+C       intermediate node  DUMMY  that is unconstrained.   The  solution  of the 
+C       network should be unchanged, of course.  It is (original is ok, too).
+C WHITE BLUE                 .15   .60 
+  WHITE DUMMY                .15   .30  { 1st of 2 halves: all of R and 1/2 of X
+  DUMMY BLUE                       .30  { 2nd of 2 halves: zero  R  and 1/2 of X
+  WHITE YELLOW               .05   .20 
+  RED   GREEN                .05   .20 
+  RED   BLUE                 .10   .40  
+  GREEN YELLOW               .05   .20  
+BLANK card ending branch cards.
+BLANK card ending switch cards.
+C        The following 2 cards would be used if peak rather than RMS input data:
+C 14WHITE       1.4425       60.       0.0                           -1.
+C 14GREEN       1.4708       60.       2.0                           -1.
+14WHITE         1.02       60.       0.0                           -1.
+14GREEN         1.04       60.       2.0                           -1.
+C             --------------+------------------------------
+C             From bus name |  Names of all adjacent busses.
+C             --------------+------------------------------
+C                    WHITE  |RED   *DUMMY *YELLOW*
+C                    RED    |WHITE *BLUE  *GREEN *
+C                    DUMMY  |WHITE *BLUE  *
+C                    BLUE   |RED   *DUMMY *
+C                    YELLOW |WHITE *GREEN *
+C                    GREEN  |RED   *YELLOW*
+C             --------------+------------------------------
+BLANK card terminating all EMTP source cards.
+C              Next come power constraints of the load flow.   There will be one 
+C              for each non-slack generator.   So, 3 of them will apply to nodes
+C              that have no  Type-14  source as required by the algorithm.   The
+C              program will define these internally.  Yet, this is only possible
+C              for  TMAX  non-positive (no transient continuation).   If data is
+C              modified to make  TMAX > 0,  a  KILL = 40  error termination will
+C              will result.   Yet,  the  transient simulation is possible  as  a
+C              2nd simulation that replaces the power constraints  at load nodes
+C              by constant-impedance loads.   Branch cards  for  these  will  be
+C              punched by the present subcase,  and  the  transient continuation
+C              will be illustrated by the following (4th of 4) subcase.
+C        The following 4 cards would be used if peak rather than RMS input data.
+C        Note that average of  Vmin  &  Vmax = 0.5 ( 1.0 + 1.828428 ) = 1.414212
+C        (power constraints  RED, BLUE, and YELLOW),  and  1.4708 = 1.414 * 1.02 
+C  RED                           -0.6            -0.3     1.01.828428 
+C 1GREEN                          1.0          1.4708                  -20.  20. 
+C  BLUE                          -0.4            -0.1     1.01.828428
+C  YELLOW                        -0.6            -0.2     1.01.828428 
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+  RED                           -0.6            -0.3     .85    1.15     
+ 1GREEN                          1.0            1.02                  -20.   20. 
+  BLUE                          -0.4            -0.1     .85    1.15    
+  YELLOW                        -0.6            -0.2     .85    1.15    
+C  Max del-V:  .0293 .0153 .0141 .0138 .0118 .0096 .0085 .0076 .0068 .0061 .0055
+C  Source No.     -2    -3    -4    -1    -3    -3    -3    -3    -3    -3    -3
+C  Max del-V:  .0023 .0021  .002 .0018 .0017 .0016 .0015 .0014 .0013 .0012 .0011
+C  Source No.     -3    -3    -3    -3    -3    -3    -3    -3    -3    -3    -3
+C  Max del-V:  .6E-3 .5E-3 .5E-3 .5E-3 .4E-3 .4E-3 .4E-3 .4E-3 .4E-3 .3E-3 .3E-3
+C  Source No.     -3    -3    -3    -3    -3    -3    -3    -3    -3    -3    -3
+C    The following load-flow miscellaneous data card has two peculiarities.  The
+C    use of  VSCALE = 1.414  is the special flag requesting RMS rather than peak
+C    voltages.   The use of   KTAPER = 0   ensures constant acceleration factors
+C    (this  works  well  for  this problem whether RMS or peak values are used).
+C         NNNOUT  NITERA  NFLOUT  NPRINT  RALCHK  CFITEV  CFITEA  VSCALE  KTAPER
+               1     500      20       1  .00001     0.0     0.0   1.414       0
+C Max del-V:  .6E-6 .6E-6 .6E-6 .5E-6                                                                                                
+C Source No.     -3    -3    -3    -3                                                                                                
+C  Exit the load flow iteration loop with counter  NEKITE = 164.   If no warning
+C Row  Node  Name    Voltage magnit    Degrees     Real power P   Reactive power
+C   3     3  RED     9.41780959E-01   -3.81708  -5.99988408E-01  -2.99999500E-01
+C   2     7  GREEN   1.02000000E+00    2.43465   1.00001182E+00   3.82676335E-01
+C   4     5  BLUE    9.15105791E-01   -8.02053  -3.99985812E-01  -9.99988825E-02
+C   5     6  YELLOW  9.82613423E-01   -1.92907  -5.99992780E-01  -1.99999933E-01
+C       Total network loss  P-loss  by summing injections =   5.282912652566E-02
+C            Next, show the punched cards that $PUNCH (next) will display:
+C  $UNITS card should give X, C units  XUNITS, CUNITS =  2.6526E-03  1.0000E-06
+C   Following are branch cards for either loads or generator impedances:
+C $VINTAGE, 1,
+C   Polar V, P, Q =  9.41780959E-01   -3.81708  -5.99988408E-01  -2.99999500E-01
+C RED                           .591308166      .295659302
+C   Polar V, P, Q =  1.02000000E+00    2.43465   1.00001182E+00   3.82676335E-01
+C GREEN                         -.45374803                      15276.6334
+C   Polar V, P, Q =  9.15105791E-01   -8.02053  -3.99985812E-01  -9.99988825E-02
+C BLUE                          .985230493      .246313607
+C   Polar V, P, Q =  9.82613423E-01   -1.92907  -5.99992780E-01  -1.99999933E-01
+C YELLOW                        .724153874      .241387449
+C $VINTAGE, -1,  { Last of punched cardss that the following $PUNCH will display
+$PUNCH        { Flush punched cards: R-L branches for equivalent impedance loads
+C   Note about preceding card.  Since no images anyway, remove.  WSM.  15 Mar 98
+BLANK card ending requests for output variables
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       4th  of  6 data subcases is a continuation of the 3rd into the time-step  
+C       loop.   The  network differs in that constant-impedance loads (using the
+C       branch cards that were punched by execution of the 3rd subcase)  replace
+C       the original power constraints at nodes without  Type-14  sources.   The
+C       time-step  size  DELTAT  and  end-time  TMAX  have  been arbitrarily  to
+C       selected to show that the transient continuation is smooth for just over
+C       a cycle.   Note that this continuation involves a load flow,  too, since
+C       otherwise angles of the Type-14 generators would not correspond  to  the
+C       network solution.   The  load flow  could  be  omitted  if the user were
+C       willing to re-key generator angles,  but  it  generally is easier to let
+C       the computer solve the load flow a second time (this time with constant-
+C       impedance loads).      
+C          Branch voltage output of the time-step loop, if declared by a 2-punch
+C          in column 80,  was incompatible with load flow prior to 21 July 2002.
+C          So, to prove it now works, add 2-punch to 1st branch on this date. An
+C          older version of the program will simply ignore the column-80 punch.
+PRINTED NUMBER WIDTH, 13, 2,    { Request maximum precision for 8 output columns
+FIX SOURCE   { An EMTP load flow will satisfy requested phasor power injections.
+ .000200    .020     60.   { T-max = 0  means that no transient solution follows
+       1       1       1       0       1      -1
+       5       5      20      20     
+  WHITE RED                  .10   .40                                         2
+  WHITE DUMMY                .15   .30  { 1st of 2 halves: all of R and 1/2 of X
+  DUMMY BLUE                       .30  { 2nd of 2 halves: zero  R  and 1/2 of X
+  WHITE YELLOW               .05   .20 
+  RED   GREEN                .05   .20 
+  RED   BLUE                 .10   .40  
+  GREEN YELLOW               .05   .20  
+C  <++++++>  Cards punched by support routine on  20-Oct-90  05.01.52  <++++++>
+$UNITS, 0.0, 0.0 { 1st of cards punched by preceding 3rd subcase: mHenry, microF
+$VINTAGE, 1,     { 2nd of cards punched by preceding 3rd subcase: use wide formt
+C   Polar V, P, Q =  9.41780959E-01   -3.81708  -5.99988408E-01  -2.99999500E-01
+  RED                       1.18261633E+00  1.56852131E+00
+C   Polar V, P, Q =  9.15105791E-01   -8.02053  -3.99985812E-01  -9.99988825E-02
+  BLUE                      1.97046099E+00  1.30673427E+00
+C   Polar V, P, Q =  9.82613423E-01   -1.92907  -5.99992780E-01  -1.99999933E-01
+  YELLOW                    1.44830775E+00  1.28060019E+00
+$UNITS, -1, -1  { Restore whatever XOPT and COPT existed before preceding $UNITS
+$VINTAGE, 0,                    { Last of cards punched by preceding 3rd subcase
+BLANK card ending branch cards.
+BLANK card ending switch cards.
+14WHITE         1.02       60.       0.0                           -1.
+14GREEN         1.04       60.       2.0                           -1.
+C         --------------+------------------------------
+C         From bus name |  Names of all adjacent busses.
+C         --------------+------------------------------
+C                WHITE  |RED   *DUMMY *YELLOW*
+C                RED    |TERRA *WHITE *BLUE  *GREEN *
+C                DUMMY  |WHITE *BLUE  *
+C                BLUE   |TERRA *RED   *DUMMY *
+C                YELLOW |TERRA *WHITE *GREEN *
+C                GREEN  |RED   *YELLOW*
+C                TERRA  |RED   *BLUE  *YELLOW*
+C         --------------+------------------------------
+BLANK card terminating all EMTP source cards.
+C  Max del-V:  .0282 .0015 .0013 .0011 1.E-3 .9E-3 .8E-3 .7E-3 .6E-3 .5E-3 .4E-3 
+C  Source No.     -1     1     1     1     1     1     1     1     1     1     1 
+C  Max del-V:  .1E-3 .9E-4 .8E-4 .7E-4 .6E-4 .5E-4 .5E-4 .4E-4 .4E-4 .3E-4 .3E-4 
+C  Source No.      1     1     1     1     1     1     1     1     1     1     1 
+C  Max del-V:  .7E-5 .6E-5 .5E-5 .4E-5 .4E-5 .3E-5 .3E-5 .3E-5 .2E-5 .2E-5 .2E-5 
+C  Source No.      1     1     1     1     1     1     1     1     1     1     1 
+C Exit the load flow iteration loop with counter  NEKITE = 58.   If no warning o
+C Row  Node  Name    Voltage magnit    Degrees     Real power P   Reactive power
+C   2     7  GREEN   1.02000000E+00    2.43435   9.99985664E-01   3.82679671E-01
+C       Total network loss  P-loss  by summing injections =   1.652795946964E+00
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+ 1GREEN                          1.0            1.02                  -20.   20. 
+C         NNNOUT  NITERA  NFLOUT  NPRINT  RALCHK  CFITEV  CFITEA  VSCALE  KTAPER
+               1     500      20       1  .00001     0.0     0.0   1.414       0
+C  Step    Time        YELLOW       BLUE         DUMMY        RED          WHITE
+C
+C    0     0.0    1.38883765   1.28149564  1.336017508  1.328924768  1.442497834
+C    1   .2E-3   1.388413609  1.291450977  1.337993527  1.331824678  1.438399553
+C    2   .4E-3   1.380101179  1.294070033  1.332367678   1.32715794     1.426128
+C    3   .6E-3   1.363947438  1.289337599  1.319171785  1.314950922  1.405752903
+ 1                                 { Request for the output of all node voltages
+C  100     .02   .4736844387   .567774976   .485772514  .4950043848  .4457563449
+C Variable max:  1.389411211  1.294070033   1.33815194  1.331824678  1.442497834
+C Times of max:        .0168        .4E-3        .0168        .2E-3          0.0
+C Variable min:  -1.38955118  -1.29326058  -1.33749084  -1.33106894  -1.44204228
+C Times of min:        .0084        .0088        .0084        .0086        .0084
+  PRINTER PLOT
+ 144 2. 0.0 20.         RED                      { Axis limits: (-1.331,  1.332)  
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       5th  of  6 data subcases is a variation of the 3rd and 4th.  One line
+C       was omitted from the 5-bus network in order to make a radial system.
+C       Specifically,  the connection  (WHITE, BLUE)  was removed,  leaving just
+C       4 lines connecting the 5 busses.  I.e.,  there is no loop.  The solution
+C       should not be much changed since loads of the two connecting nodes were
+C       increased or decreased by the known amount of the branch flow.  Yet, a
+C       2nd change must be mentioned: conversion of bus  GREEN  from a generator
+C       to a load.  This was to make the present case more like  NINEBUS  from
+C       Jian Jiang of Clemson University in South Carolina. See EEUG list server
+C       mail dated October 7th.  WSM, 10 October 2001.
+FIX SOURCE   { An EMTP load flow will satisfy requested phasor power injections.
+ .000200    .000     60.   { T-max = 0  means that no transient solution follows
+       1       1       1       0       1     
+  WHITE YELLOW               .05   .20 
+  YELLOWGREEN                .05   .20  
+  GREEN RED                  .05   .20 
+  RED   BLUE                 .10   .40  
+BLANK card ending branch cards.
+BLANK card ending switch cards.
+14WHITE         1.02       60.       0.0                           -1.
+BLANK card terminating EMTP source cards.
+C              Next come power constraints of the load flow.   There will be one 
+C              for each non-slack generator:
+  RED                           -0.4            -.14     .85    1.15     
+  GREEN                          1.0             0.3     .85    1.15
+  BLUE                          -.15            .025     .85    1.15    
+  YELLOW                        -0.6            -0.2     .85    1.15    
+C    The following load-flow miscellaneous data card has two peculiarities.  The
+C    use of  VSCALE = 1.414  is the special flag requesting RMS rather than peak
+C    voltages.   The use of   KTAPER = 0   ensures constant acceleration factors
+C    (this works for this data).
+C         NNNOUT  NITERA  NFLOUT  NPRINT  RALCHK  CFITEV  CFITEA  VSCALE  KTAPER
+               1     500      20       1  .00001     0.1     7.0   1.414       0
+C Max del-V:  .0249 .0254 .0259 .0216 .0158 .0092 .0059  .006 .0039  .004 .0059 .0038 .0037 .0031  .002 .0025 .0022 .0028 .0018 .0015
+C Source No.      2     2     2    -3     2    -3     4     2    -2    -1    -2    -1    -2    -2    -1    -2    -1    -2    -1    -1
+C Max del-V:  .0016 .0012 .0013 .0011 .0012  .001 1.E-3 .9E-3 .9E-3 .9E-3 .8E-3 .8E-3 .8E-3 .7E-3 .7E-3 .7E-3 .7E-3 .6E-3 .6E-3 .6E-3
+C Source No.     -2    -1    -2    -1    -2    -3    -1    -3    -3    -3    -3    -3    -3    -3    -3    -3    -3    -3    -3    -3  ... (etc.)
+C Max del-V:  .2E-5 .2E-5 .2E-5 .2E-5 .2E-5 .1E-5 .1E-5 .1E-5 .1E-5
+C Source No.     -3    -3    -3    -3    -3    -3    -3    -3    -3
+C Exit the load flow iteration loop with counter  NEKITE = 169.   If no warning on the preceding line,  convergence was attained.
+C Row  Node  Name    Voltage magnit    Degrees     Real power P   Reactive power
+C   2     5  RED     9.61553517E-01   -3.15303  -4.00001772E-01  -1.39992436E-01
+C   3     4  GREEN   1.02208195E+00    2.93622   9.99997725E-01   3.00004959E-01
+C   4     6  BLUE    9.54082493E-01   -7.05955  -1.50001447E-01   2.50097905E-02
+C   5     3  YELLOW  9.83589266E-01   -1.67083  -6.00000908E-01  -1.99997137E-01
+BLANK card ending requests for output variables
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       6th  of  6 data subcases is a variation of the 3rd.  The solution is
+C       identical.  But punched cards differ because  T-stop  of Type-14 source
+C       GREEN  is nonzero.  Previously, this data field was left blank.  Nonzero
+C       T-stop  is a flag that affects only the punched output.  A nonzero value
+C       in columns 71-80 is taken to be internal source reactance. Instead of an
+C       equivalent impedance load, ATP will create an equivalent Type-14 voltage
+C       source behind this reactance.  The A6  bus name will have  "G"  appended
+C       to it on the right to produce the name of the internal node.  Thus GREEN
+C       yields  GREENG  as the internal node.  Should  the original name involve
+C       all 6 bytes,  the last will be overlaid  (e.g.,  PURPLE would be changed
+C       to  PURPLG).  This is for every Type-14 source except the one that will
+C       be used as the slack bus.  The slack bus (here, WHITE) is the exception,
+C       and no output is created for it.  This is why  T-stop  of  WHITE  has
+C       been left blank.  Adding reactance to WHITE will not change the output.
+C       Let's summarize the change.  Using  X = 0.5  will change the following
+C       two 2 punched cards that follow the ruler:
+C 12345678901234567890123456789012345678901234567890123456789012345678901234
+C   Polar V, P, Q =  1.02000000E+00    2.43465   1.00001182E+00   3.82676335E-01
+C   GREEN                         -.45374803                      15276.6334
+C       (one comment card followed by one wide-format R-C branch card) to:
+C 14GREENG  1.84312934       60.24.5286405                          -1.0
+C   GREENGGREEN                          0.0             0.5
+C       (one Type-14 source card followed by one R-L branch card).
+C       Note that reactance  X  normally will be positive,  and the R-L branch
+C       card carries this positive value in columns 43-58.  This differs from
+C       the preceding equivalent impedance which might be either R-L or R-C
+C       depending on the power factor.  Finally,  note the raised voltage.  Most
+C       of the increase from  1.02  to  1.84  is due to the need for peak rather
+C       than RMS on the Type-14 source card.  As the reactance approaches zero,
+C       the voltage should approach  1.02 * 1.414  (square root of 2).  This 6th
+C       subcase is being added  8 August 2007  following an inquiry by Prof.
+C       Mustafa Kizilcay of the University of Siegen in Germany.  The use of
+C       T-stop > 0  was never documented in the ATP Rule Book.  Neither was it
+C       illustrated in standard test case.  That is why this subcase now is
+C       being added.  WSM.
+C    Previous comment about the slack bus being missing is correct for normal
+C    data.  But another undocumented option allows the user to name his slack
+C    bus manually at the end of power constraints.  If this is done,  there will
+C    be output for the slack generator, too.  This option depends on the request
+C    "last is slack bus"  which can appear in any case and any location to the
+C    right of the name field in columns 3-8.  WSM.  9 August 2007
+C       The preceding continues to be honored,  but is believed to be clumsy.
+C       The more modern way to name the slack bus omits one of the 2 associated
+C       data cards by use of a special, in-line comment.  The interpretation is
+C       improved at the same time.  WSM.  15 August 2007
+C    Final improvement was suggested by Prof. Kizilcay,  who wondered why the
+C    user should be forced to sort the punched output manually.  Prof. Kizilcay
+C    suggested that  /SOURCE  might precede each Type-14 source card &  /BRANCH
+C    might follow it.  Done.  WSM.  15 August 2007.
+PRINTED NUMBER WIDTH, 13, 2,    { Request maximum precision for 8 output columns
+FIX SOURCE   { An EMTP load flow will satisfy requested phasor power injections.
+$ERASE   { Erase punched cards, created by preceding subcases, from punch buffer
+ .000200    .000     60.   { T-max = 0  means that no transient solution follows
+       1       1       1       0       1     
+  WHITE RED                  .10   .40  
+  WHITE DUMMY                .15   .30  { 1st of 2 halves: all of R and 1/2 of X
+  DUMMY BLUE                       .30  { 2nd of 2 halves: zero  R  and 1/2 of X
+  WHITE YELLOW               .05   .20 
+  RED   GREEN                .05   .20 
+  RED   BLUE                 .10   .40  
+  GREEN YELLOW               .05   .20  
+BLANK card ending branch cards.
+BLANK card ending switch cards.
+14WHITE         1.02       60.       0.0                           -1.       0.4
+14GREEN         1.04       60.       2.0                           -1.       0.5
+BLANK card terminating all EMTP source cards.
+  RED                           -0.6            -0.3     .85    1.15     
+ 1GREEN                          1.0            1.02                  -20.   20. 
+  BLUE                          -0.4            -0.1     .85    1.15    
+  YELLOW                        -0.6            -0.2     .85    1.15    
+  WHITE   { Slack bus for punched output
+C  The preceding special in-line comment identifies the name of the slack bus.
+C  The older way, which continues to be honored, is to follow the slack bus name
+C by a 2nd card which carries the special text (any case)  "last is slack bus"
+C         NNNOUT  NITERA  NFLOUT  NPRINT  RALCHK  CFITEV  CFITEA  VSCALE  KTAPER
+               1     500      20       1  .00001     0.0     0.0   1.414       0
+$PUNCH        { Flush punched cards: R-L branches for equivalent impedance loads
+BLANK card ending requests for output variables
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+EOF

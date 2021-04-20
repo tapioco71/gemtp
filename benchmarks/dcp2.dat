@@ -1,0 +1,31 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-2
+C         Same as preceding, only with 1-phase Pi-circuit instead of distributed
+DIAGNOSTIC           0 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .005     1.0     1.0     1.0
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+  REC                       .001                                               3
+ 1SEND  REC                  1.0   1.0  1.E4                { 1-phase Pi-circuit
+BLANK card ending branch cards
+  GEN   SEND        -1.0       1.0     { Perman.-closed switch, including phasor
+BLANK card ending switch cards
+14GEN           100.       1.0                                     -1.
+BLANK card ending source cards
+C       GEN
+C      SEND          100.             100.      49.999975274738    70.3228447942
+C                    0.0              0.0      -49.45002499974       -44.6831623
+ 1
+C                        REC          REC          SEND         GEN          REC
+C                      TERRA                                               TERRA
+C     0    0.0   .0499997255  .0499997255         100.         100.  49.99972552
+C     1   .005   .0515439047  .0515439047  99.95065604  99.95065604  51.54390468
+C     2    .01   .0530372241  .0530372241  99.80267284  99.80267284   53.0372241
+C     3   .015   .0544782098  .0544782098  99.55619646  99.55619646   54.4782098
+C   200    1.0   .0499956247  .0499956247         100.         100.  49.99562466
+  PRINTER PLOT                                  { Plot limits : (-7.067,  7.067)
+ 143 .1 0.0 1.0         REC        { Plot card should show nice sinusoidal curve
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

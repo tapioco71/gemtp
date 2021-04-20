@@ -1,0 +1,7 @@
+-1_BUS1__BUS2_              .306  5.82  .012  100. { Half the length of original
+92_BUS2_ { Type 92 is for v-i curve }  5555.  { 5555 flag is for exponentials } 1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)

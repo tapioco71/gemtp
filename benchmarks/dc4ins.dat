@@ -1,0 +1,22 @@
+/SOURCE
+14WHITE         1.02       60.       0.0                           -1.
+/BRANCH
+  WHITE YELLOW               .05   .20 
+  YELLOWGREEN                .05   .20  
+  GREEN RED                  .05   .20 
+  RED   BLUE                 .10   .40  
+/LOAD FLOW
+C              Next come power constraints of the load flow.   There will be one 
+C              for each non-slack generator:
+  RED                           -0.4            -.14     .85    1.15     
+  GREEN                          1.0             0.3     .85    1.15
+  BLUE                          -.15            .025     .85    1.15    
+  YELLOW                        -0.6            -0.2     .85    1.15    
+C    The following load-flow miscellaneous data card has two peculiarities.  The
+C    use of  VSCALE = 1.414  is the special flag requesting RMS rather than peak
+C    voltages.   The use of   KTAPER = 0   ensures constant acceleration factors
+C    (this works for this data).
+C         NNNOUT  NITERA  NFLOUT  NPRINT  RALCHK  CFITEV  CFITEA  VSCALE  KTAPER
+               1     500      20       1  .00001     0.1     7.0   1.414       0
+/REQUEST
+FIX SOURCE   { An EMTP load flow will satisfy requested phasor power injections.

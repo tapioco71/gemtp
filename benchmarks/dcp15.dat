@@ -1,0 +1,116 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-15
+C       Same a preceding debug case PR-11, only with Type-93 not Type-98 element
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+DIAGNOSTIC           0 9 9 9 9 9 0 9 9 9 9 9 9 9 9 9 9 9 9
+    .005     1.0
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+  LOAD                     1.0E3                                               3
+  TRANSFORMER                         TRAN
+            9999
+ 1GENT                       5.0  5.E4   50.                                   1
+ 2LOAD                       20.  2.E5  100.
+93TRAN                      .005   30.                                         3
+            -5.0           -100.
+            -0.1            -50.
+            -.02            -45.
+            -.01            -40.
+           -.005            -30.
+            .005             30.
+             .01             40.
+             .02             45.
+             0.1             50.
+             5.0            100.
+            9999
+        TRAN                1.E4
+  GEN   GENT               1.E-3                                               3
+BLANK card finishing all branch cards
+BLANK card ending non-existent switch cards
+14GEN            70.  .1591549                                     -1.
+BLANK card terminating program source cards
+C       Total network loss  P-loss  by summing injections =   8.286691569592E+00
+C      GEN            70.              70.      .23676261627406  .25769197917313
+C                     0.0              0.0      -.1017281655454      -23.2514132
+C  Step     Time        LOAD         TRAN         GEN          LOAD         TRAN
+C                       TERRA        TERRA        GENT
+C
+C                       LOAD         GENT         GEN
+C                       TERRA        TRAN         GENT
+C    0     0.0   116.1389467  63.72954326  .2367626E-3  116.1389467  63.72954326
+C                .1161389467  .2367626163  .2367626163
+C    1    .005   116.3624275   63.7853932  .2372683E-3  116.3624275   63.7853932
+C                .1163624275  .2372682943  .2372682943
+C    2     .01   116.5829994  63.83964851   .237768E-3  116.5829994  63.83964851
+C                .1165829994  .2377680406  .2377680406
+ 1
+C  200     1.0   93.07392906  30.13811553  .2333111E-3  93.07392906  30.13811553
+C                .0930739291  .2333110743  .2333110743
+C Variable max : 124.5474337  64.72870825  .2576919E-3  124.5474337  64.72870825
+C                .1245474337  .2576918677  .2576918677
+C Times of max :         .37         .175         .405          .37         .175
+C                        .37         .405         .405
+C Variable min : 93.07392906  30.13811553  .2275063E-3  93.07392906  30.13811553
+C                .0930739291  .2275063309  .2275063309
+C Times of min :         1.0          1.0         .955          1.0          1.0
+C                        1.0         .955         .955
+  PRINTER PLOT
+ 143 .2 0.0 1.0         LOAD                    { Axis limits : (0.000,   1.245)
+ 193 .1 0.0 1.0         TRAN                    { Axis limits : (-0.189,  4.415)
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C                2nd of 2 subcases replaces the Type-93 reactor by a Type-98 one
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+DIAGNOSTIC           0 9 9 9 9 9 0 9 9 9 9 9 9 9 9 9 9 9 9
+ALTERNATE DIAGNOSTIC PRINTOUT, 0, 0, 0, 0, { Required for 2nd or later case only
+    .005     1.0
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+  LOAD                     1.0E3                                               3
+  TRANSFORMER                         TRAN
+            9999
+ 1GENT                       5.0  5.E4   50.                                   1
+ 2LOAD                       20.  2.E5  100.
+98TRAN                      .005   30.                                         3
+            .005             30.
+             .01             40.
+             .02             45.
+             0.1             50.
+             5.0            100.
+            9999
+        TRAN                1.E4
+  GEN   GENT               1.E-3                                               3
+BLANK card finishing all branch cards
+BLANK card ending non-existent switch cards
+14GEN            70.  .1591549                                     -1.
+BLANK card terminating program source cards
+C       Total network loss  P-loss  by summing injections =   8.286691569592E+00
+C       GEN           70.              70.      .23676261627406  .25769197917313
+C                     0.0              0.0      -.1017281655454      -23.2514132
+C  Step     Time        LOAD         TRAN         GEN          LOAD         TRAN
+C                       TERRA        TERRA        GENT
+C
+C                       LOAD         GENT         GEN
+C                       TERRA        TRAN         GENT
+C    0     0.0   116.1389467  63.72954326  .2367626E-3  116.1389467  63.72954326
+C                .1161389467  .2367626163  .2367626163
+C    1    .005   116.3624275   63.7853932  .2372683E-3  116.3624275   63.7853932
+C                .1163624275  .2372682943  .2372682943
+C    2     .01   116.5829994  63.83964851   .237768E-3  116.5829994  63.83964851
+C                .1165829994  .2377680406  .2377680406
+ 1
+C  200     1.0   93.06998099  30.13739524  .2333068E-3  93.06998099  30.13739524
+C                 .093069981  .2333067899  .2333067899
+C Variable max : 124.5474337  64.72870825  .2576919E-3  124.5474337  64.72870825
+C                .1245474337  .2576918677  .2576918677
+C Times of max :         .37         .175         .405          .37         .175
+C                        .37         .405         .405
+C Variable min : 93.06998099  24.33372134  .2271963E-3  93.06998099  24.33372134
+C                 .093069981  .2271963038  .2271963038
+C Times of min :         1.0          .96         .955          1.0          .96
+C                        1.0         .955         .955
+  PRINTER PLOT
+ 193 .1 0.0 1.0         TRAN                   { Axis limits : (-0.189,   4.415)
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+BLANK

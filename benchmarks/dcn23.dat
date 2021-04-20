@@ -1,0 +1,484 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-23
+C       Illustrate modeling of Type-51,52 elements to model unsymmetric  series
+C       connection of [R] and [L] as described in the October, 1997, newsletter
+C       Begin with uncoupled branches of 1 ohm resistance and just 2 phases (no
+C       Type-53).   The answer is obvious by inspection:  the sinusoidal source
+C       voltage is exactly split in half.   Very  low  frequency and small time
+C       step means that this varies very slowly  ---  in the 7th decimal place.
+  .00001  .00005    { Note just 5 very small time steps T-max = 5 * DELTAT
+       1      -1       1       0
+  SENDA RECA                 1.0                                               1
+  SENDB RECB  SENDA RECA                                                       1
+51RECA        MODEL [R][L]    { Note special request in cols. 15-26       
+52RECB                        { Cols. 27-44 of preceding card is blank                              
+         1.0         0.0
+         0.0         0.0
+         0.0         1.0
+         0.0         0.0
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0     0.001       0.0    { 1st of 2 sources.   Note balanced,
+14SENDB          2.0     0.001     -120.    { three-phase, sinusoidal excitation
+BLANK card follows the last source card
+  SENDA RECA  SENDB RECB
+BLANK card ending node voltage outputs
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       2nd of 15.  Identical to preceding except that more compact alternative
+C       for 2-phase (Type-51,52 with no 53) is illustrated.  Nonblank col 27-44
+C       distinguishes this case, which has no following, separate cards for the
+C       [R] and [L] matrices.
+  .00001  .00005
+       1      -1       1       0
+  SENDA RECA                 1.0                                               1
+  SENDB RECB  SENDA RECA                                                       1
+C                         789012345678901234   890123456789012     
+51RECA        MODEL [R][L]   1.0         0.0   0.0         0.0
+52RECB                       0.0         0.0   1.0         0.0                            
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0     0.001       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0     0.001     -120.    { three-phase, sinusoidal excitation
+BLANK card follows the last source card
+  SENDA RECA  SENDB RECB
+BLANK card ending node voltage outputs
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       3rd of 15.  Identical to 1st except that here the Type-51,52 branch is
+C       inputted before rather than after the two series R-L-C branches.   Also,
+C       current output using column-80 punches is illustrated.  This replaces
+C       the current output of the Type-0 branches in series
+  .00001  .00005
+       1      -1       1       0
+51RECA        MODEL [R][L]                                                     1
+52RECB                                                                         1
+         1.0         0.0
+         0.0         0.0
+         0.0         1.0
+         0.0         0.0
+  SENDA RECA                 1.0                                               0
+  SENDB RECB  SENDA RECA                                                       0
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0     0.001       0.0    { 1st of 2 sources.   Note balanced,
+14SENDB          2.0     0.001     -120.    { three-phase, sinusoidal excitation
+BLANK card follows the last source card
+  SENDA RECA  SENDB RECB
+BLANK card ending node voltage outputs
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       4th of 15 subcases progresses from preceding 2-phase to 3-phase.  Begin
+C       with special  Z0Z1Z2  model that assumes decoupled symmetrical component
+C       impedances  Zo  for  the  zero sequence,  Z1  for the positive sequence,
+C       and finally  Z2  for the negative sequence.   Otherwise, the  problem is
+C       the same:  5 very small steps of uncoupled,  resistive voltage dividers.
+C       About current outputs,  this subcases introduces selective use of col.
+C       80 punches.  Note phase C output of the series R-L-C is missing,  and
+C       that this is supplied by the punch on the Type-53 card.  Switching the
+C       zero and the 1 of these two phase-C cards does not change the numbers
+C       (it only changes the heading names).  That was for the 3rd of 3.  One
+C       can change the 2nd (phase B) in comparable fashion without changing
+C       numbers of the time-step loop output.  This illustrates selective
+C       branch current output.
+C diagnostic           0 0 9 9 9 9
+  .00001  .00005
+       1      -1       1       0
+  SENDA ENDA                 1.0                                               1
+  SENDB ENDB  SENDA ENDA                                                       1
+  SENDC ENDC  SENDA ENDA                                                       0
+51ENDA        MODEL Z0Z1Z2   1.0   { Ro, Lo right-adjusted in cols. 32 & 44                                      
+52ENDB                       1.0   { R1 and L1  .... }                                                 
+53ENDC                       1.0   { R2 and L2  .... }                         1                         
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0     0.001       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0     0.001     -120.    { three-phase, sinusoidal excitation
+14SENDC          2.0     0.001      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA ENDA  SENDB ENDB  SENDC ENDC
+BLANK card ending node voltage outputs
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       5th of 15.  Identical to 1st except that here the Type-51,52,53 branch
+C       is inputted before rather than after the three series R-L-C branches.
+  .00001  .00005
+       1      -1       1       0
+51ENDA        MODEL Z0Z1Z2   1.0                                         
+52ENDB                       1.0                                                      
+53ENDC                       1.0                                                      
+  SENDA ENDA                 1.0                                               0
+  SENDB ENDB  SENDA ENDA                                                       0
+  SENDC ENDC  SENDA ENDA                                                       0
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0     0.001       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0     0.001     -120.    { three-phase, sinusoidal excitation
+14SENDC          2.0     0.001      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA RECA  ENDA  SENDB RECB  ENDB  SENDC RECC  ENDC
+BLANK card ending node voltage outputs
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       6th of 15.  Identical to case before preceding subcase except that here  
+C       MODEL [R][L]  is used in place of  MODEL Z0Z1Z2  for the Type-51,52,53.
+C       Also, column-80 requests for branch current output have been added.
+  .00001  .00005
+       1      -1       1       0
+  SENDA RECA                 1.0                                               0
+  SENDB RECB  SENDA RECA                                                       0
+  SENDC RECC  SENDA RECA                                                       0
+51RECA        MODEL [R][L]    { Cols. 27-44 of this card is blank  }           1               
+52RECB                        { This is signal for separate, later }           1                
+53RECC                        { matrices [R] and [L].              }           1   
+         1.0         0.0         0.0    { R(1,1), R(1,2), R(1,3)
+         0.0         0.0         0.0    { L(1,1), L(1,2), L(1,3)
+         0.0         1.0         0.0    { Etc. row 2
+         0.0         0.0         0.0
+         0.0         0.0         1.0    { Etc. row 3
+         0.0         0.0         0.0
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0     0.001       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0     0.001     -120.    { three-phase, sinusoidal excitation
+14SENDC          2.0     0.001      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA RECA  ENDA  SENDB RECB  ENDB  SENDC RECC  ENDC
+BLANK card ending node voltage outputs
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       7th of 15.  Identical to 1st except that here the Type-51,52,53 branch
+C       is inputted before rather than after the three series R-L-C branches.
+  .00001  .00005
+       1      -1       1       0
+51RECA        MODEL [R][L]         
+52RECB                                                      
+53RECC                                                      
+         1.0         0.0         0.0
+         0.0         0.0         0.0
+         0.0         1.0         0.0
+         0.0         0.0         0.0
+         0.0         0.0         1.0
+         0.0         0.0         0.0
+  SENDA RECA                 1.0                                               0
+  SENDB RECB  SENDA RECA                                                       0
+  SENDC RECC  SENDA RECA                                                       0
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0     0.001       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0     0.001     -120.    { three-phase, sinusoidal excitation
+14SENDC          2.0     0.001      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA RECA  ENDA  SENDB RECB  ENDB  SENDC RECC  ENDC
+BLANK card ending node voltage outputs
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       8th of 15.  Combination of preceding subcases involves Type-51,52,53
+C       branch specified with both  MODEL [R][L]  and  MODEL Z0Z1Z2.   This is
+C       a double-size problem;  each half has the same solution as previously.
+  .00001  .00005
+       1      -1       1       0
+  SENDA ENDA                 1.0                                               0
+  SENDB ENDB  SENDA ENDA                                                       0
+  SENDC ENDC  SENDA ENDA                                                       0
+51ENDA        MODEL Z0Z1Z2   1.0                                         
+52ENDB                       1.0                                                      
+53ENDC                       1.0                                                      
+  SENDA RECA                 1.0                                               0
+  SENDB RECB  SENDA RECA                                                       0
+  SENDC RECC  SENDA RECA                                                       0
+51RECA        MODEL [R][L]         
+52RECB                                                      
+53RECC                                                      
+         1.0         0.0         0.0
+         0.0         0.0         0.0
+         0.0         1.0         0.0
+         0.0         0.0         0.0
+         0.0         0.0         1.0
+         0.0         0.0         0.0
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0     0.001       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0     0.001     -120.    { three-phase, sinusoidal excitation
+14SENDC          2.0     0.001      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA RECA  ENDA  SENDB RECB  ENDB  SENDC RECC  ENDC
+BLANK card ending node voltage outputs
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       9th of 15.  Mix new Type-51,52,53 with the old.  With diagonal matrices,
+C       the data can be represented either way,  of course (it is symmetric).
+C       Z1 = Zo (actually, Z1 = Z0) so the answer can be shown to be
+C       identical to that using Type-51,52,53 modeling with sequence impedances.
+C       In fact,  there are 2 identical, uncoupled networks driven from the same
+C       balanced 3-phase sources at  SENDA, SENDB, and SENDC.  Another first:
+C       switch from resistance to inductance.
+   .0001   .0005
+       1       1       1       0       1      -1
+       5       5      20      20     100     100
+51ENDA        MODEL Z0Z1Z2   0.0   1.0    { Sequence Ro, Lo  in  [ohms, mHenry]                                    
+52ENDB                       0.0   1.0    { Sequence R1, L1  in  [ohms, mHenry]                                    
+53ENDC                       0.0   1.0    { Note Z2 = Z1 so [Z] is symmetric                  
+  SENDA ENDA                 0.0   1.0                                         0
+  SENDB ENDB  SENDA ENDA                                                       0
+  SENDC ENDC  SENDA ENDA                                                       0
+C      Next, build a copy of this, but using the old (Type-51,52,53) modeling:
+51RECA                       0.0         1.0    { Ro, Lo  in  [ohms, mHenry]                                    
+52RECB                       0.0         1.0    { Ro, Lo  in  [ohms, mHenry]                                    
+53RECC                       { Blank 27-44 on this 3rd card ==> sequence data                                         
+  SENDA RECA                 0.0   1.0                                         0
+  SENDB RECB  SENDA RECA                                                       0
+  SENDC RECC  SENDA RECA                                                       0
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0       50.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0       50.     -120.    { three-phase, sinusoidal excitation
+14SENDC          2.0       50.      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA RECA  ENDA  SENDB RECB  ENDB  SENDC RECC  ENDC
+BLANK card ending node voltage outputs
+  CALCOMP PLOT
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C diagnostic           0 0 9 9 9 9 0 9 0 0 0 9 9 9 9 9 9 9 9
+C       10th of 15 subcases.  Generalize preceding by changing from R only to
+C       both R and L.  Also, the data order has been shuffled,  to illustrate
+C       that the answer is unaffected.
+   .0001   .0005
+       1       1       1       0       1      -1
+       5       5      20      20     100     100
+C   22 Feb 2000, switch the following 3 data cards from narrow to wide format to
+C   illustrate that this works following correction a few days earlier:
+C 51RECA                       0.3         1.0    { Ro, Lo  in  [ohms, mHenry]
+C 52RECB                       0.3         1.0    { R1, L1  in  [ohms, mHenry]                                    
+C 53RECC                                                      
+$VINTAGE, 1,
+C 34567890123456789012345678901234567890123456789012345678
+51RECA                                 0.3             1.0    { Ro, Lo  in  [ohms, mHenry]
+52RECB                                 0.3             1.0    { R1, L1  in  [ohms, mHenry]
+                                       0.0             0.0    { Unused cell 2,2
+53RECC                                 0.0             0.0    { Unused cell 3,1
+                                       0.0             0.0    { Unused cell 3,2
+                                       0.0             0.0    { Unused cell 3,3
+$VINTAGE, 0,       { Done with wide format for 51, 52, 53, so return to narrow
+51ENDA        MODEL Z0Z1Z2   0.3   1.0    { Sequence Ro, Lo  in  [ohms, mHenry]                                    
+52ENDB                       0.3   1.0    { Sequence R1, L1  in  [ohms, mHenry]                                    
+53ENDC                       0.3   1.0    { Note Z2 = Z1 so [Z] is symmetric                  
+  SENDA ENDA                 0.3   1.0                                         0
+  SENDB ENDB  SENDA ENDA                                                       0
+  SENDC ENDC  SENDA ENDA                                                       0
+C      Next, build a copy of this, but using the old (Type-51,52,53) modeling:
+  SENDA RECA                 0.3   1.0                                         0
+  SENDB RECB  SENDA RECA                                                       0
+  SENDC RECC  SENDA RECA                                                       0
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0       50.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0       50.     -120.    { three-phase, sinusoidal excitation
+14SENDC          2.0       50.      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA RECA  ENDA  SENDB RECB  ENDB  SENDC RECC  ENDC
+BLANK card ending node voltage outputs
+  CALCOMP PLOT
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       11th of 15 subcases.  Generalize preceding by adding inter-phase coupling
+C       for the first time.  The negative-sequence impedance still is equal to
+C       the positive,  so both old and new Type-51,52,53 branches can be used.
+C       But  Zo  not equal to  Z1  means that phase-domain matrices no longer
+C       are diagonal.
+   .0001   .0005
+       1       1       1       0       1      -1
+       5       5      20      20     100     100
+  SENDA ENDA                 0.3   1.0                                         0
+  SENDB ENDB  SENDA ENDA                                                       0
+  SENDC ENDC  SENDA ENDA                                                       0
+51ENDA        MODEL Z0Z1Z2   0.3   1.0    { Sequence Ro, Lo  in  [ohms, mHenry]                                    
+52ENDB                       0.1   0.5    { Sequence R1, L1  in  [ohms, mHenry]                                    
+53ENDC                       0.1   0.5    { Note Z2 = Z1 so [Z] is symmetric                  
+C      Next, build a copy of this, but using the old (Type-51,52,53) modeling:
+  SENDA RECA                 0.3   1.0                                         0
+  SENDB RECB  SENDA RECA                                                       0
+  SENDC RECC  SENDA RECA                                                       0
+51RECA                       0.3         1.0    { Ro, Lo  in  [ohms, mHenry]                                    
+52RECB                       0.1         0.5    { Ro, Lo  in  [ohms, mHenry]                                    
+53RECC                                                      
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0       50.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0       50.     -120.    { three-phase, sinusoidal excitation
+14SENDC          2.0       50.      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA RECA  ENDA  SENDB RECB  ENDB  SENDC RECC  ENDC
+BLANK card ending node voltage outputs
+  CALCOMP PLOT
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       12th of 15 subcases.  Generalize preceding by making the negative-sequenc
+C       impedance different from the positive,  so the old Type-51,52,53 branch
+C       no longer can be used.   Instead,  both  MODEL [R][L]  and  MODEL Z0Z1Z2
+C       are illustrated.  There are two identical halves with two identical
+C       solutions.   As for the phase-domain matrix data,  it was copied from
+C       near the end of  DCN22.DBG  with enough precision to make the effect of
+C       truncation unobservable in the printed output.
+   .0001   .0005
+       1       1       1       0       1      -1
+       5       5      20      20     100     100
+  SENDA ENDA                 0.3   1.0                                         1
+  SENDB ENDB  SENDA ENDA                                                       1
+  SENDC ENDC  SENDA ENDA                                                       1
+  ENDA  ENDB                1.E7
+  ENDB  ENDC  ENDA  ENDB
+  ENDC  ENDA  ENDA  ENDB
+51ENDA        MODEL Z0Z1Z2   0.3   1.0    { Sequence Ro, Lo  in  [ohms, mHenry]                                    
+52ENDB                       0.1   0.5    { Sequence R1, L1  in  [ohms, mHenry]                                    
+53ENDC                      .101   0.8                                                      
+  SENDA RECA                 0.3   1.0                                         1
+  SENDB RECB  SENDA RECA                                                       1
+  SENDC RECC  SENDA RECA                                                       1
+  RECA  RECB                1.E7
+  RECB  RECC  RECA  RECB
+  RECC  RECA  RECA  RECB
+51RECA        MODEL [R][L]         
+52RECB        MODEL [R][L]                                                      
+53RECC        MODEL [R][L]                                                      
+$DISABLE
+ .1670000000 .0665866025 .0664133975     { R(1,1),  R(1,2),  R(1,3)
+ .7666666667-.1720084679 .4053418013     { L(1,1),  L(1,2),  L(1,3)
+ .0664133975 .1670000000 .0665866025     { Row 2 of [R]
+ .4053418013 .7666666667-.1720084679     { Row 2 of [L]
+ .0665866025 .0664133975 .1670000000     { Row 3 of [R]
+-.1720084679 .4053418013 .7666666667     { Row 3 of [L]
+$ENABLE
+C    Preceding disabled data was from years past.  Correct this 2 April 2002.
+C    The following is copied from DCN22c (the compensation alternative):
+$UNITS, 60.0, 60.0,
+C USERNL begins with Lo, L1, L2 [H] =  1.00000E-03  5.00000E-04  8.00000E-04
+C           Converted to Xo, X1, X2 =  3.76991E-01  1.88496E-01  3.01593E-01
+C 3x3 phase-domain impedance matrix in ohms follow.  For each row I,  X(I,J)  is below  R(I,J).  w =  3.769911E+02 rad/sec.
+ .1670000000 .0991483886 .0338516114     { R(1,1),  R(1,2),  R(1,3)  in ohms
+ .2890265241 .0436936220 .0442709723     { X(1,1),  X(1,2),  X(1,3)  in ohms
+ .0338516114 .1670000000 .0991483886     { Row 2 of [R]
+ .0442709723 .2890265241 .0436936220     { Row 2 of [X]
+ .0991483886 .0338516114 .1670000000     { Row 3 of [R]
+ .0436936220 .0442709723 .2890265241     { Row 3 of [X]
+$UNITS, -1.0, -1.0, { Done with ohms and micromhos at 60 Hz, so restore original
+C       Whereas the preceding could not be used in DCN22c,  it can be used here
+C       because the conversion is not delayed until the dT loop.  For Type-51,
+C       52, 53 branches,  the conversion is perfomed at data-input time.
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0       50.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0       50.     -120.    { three-phase, sinusoidal excitation
+14SENDC          2.0       50.      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA RECA  ENDA         {  SENDB RECB  ENDB  SENDC RECC  ENDC
+BLANK card ending node voltage outputs
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C diagnostic           0 0 9 9 9 9 0 9 9 9
+C       13th of 15.  1st use of  USE AR  for  [A]  and  [R]  input rather than
+C       the original  [R]  and  [L].   The 2 phases in fact are uncoupled for
+C       simplicity.  Series L of each phase divide the voltage.  Series R-L-C
+C       is 1 mHenry,  and  A(1,1) = A(2,2)  correspond to the inverse of this.
+C       So,  L(1,1) = L(2,2) = 1.E-3  ===>  A(1,1) = A(2,2) = 1000.   This is
+C       entered instead of resistance.  Instead of inductance,  enter R = 0
+C       (the  [R]  matrix is zero;  no resistance in this problem)
+   .0001   .0005
+       1       1       1       0       1      -1
+       5       5      20      20     100     100
+  USE AR
+51RECA        MODEL [R][L]
+52RECB                                          
+       1000.         0.0
+         0.0         0.0
+         0.0       1000.
+         0.0         0.0
+  USE RL
+  SENDA RECA                 0.0   1.0                                         0
+  SENDB RECB  SENDA RECA                                                       1
+C      Next, build a copy of this, but using the old (Type-51,52,53) modeling:
+  USE AR
+51ENDA                     1000.         0.0
+52ENDB                       0.0         0.0 1000.         0.0
+  USE RL
+  SENDA ENDA                 0.0   1.0                                         0
+  SENDB ENDB  SENDA ENDA                                                       1
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0       0.1       0.0    { 1st of 2 sources.   Note balanced,
+14SENDB          2.0       0.1     -120.    { three-phase, sinusoidal excitation
+BLANK card follows the last source card
+  SENDA RECA  ENDA  SENDB RECB  ENDB
+BLANK card ending node voltage outputs
+  CALCOMP PLOT
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       14th of 15.  Like preceding,  except resistance of 1 ohm is added to
+C       each series, uncoupled inductance.   There still is a voltage divider.
+C       Another change is use of col-80 output for 2nd phase (Type-52).
+   .0001   .0005
+       1       1       1       0       1      -1
+       5       5      20      20     100     100
+  USE AR
+51RECA        MODEL [R][L]
+52RECB                                                                         1
+       1000.         0.0
+         1.0         0.0
+         0.0       1000.
+         0.0         1.0
+  USE RL
+  SENDA RECA                 1.0   1.0                                         0
+  SENDB RECB  SENDA RECA                                                       1
+C      Next, build a copy of this, but using the old (Type-51,52,53) modeling:
+  USE AR
+51ENDA                     1000.         1.0
+52ENDB                       0.0         0.0 1000.         1.0
+  USE RL
+  SENDA ENDA                 1.0   1.0                                         0
+  SENDB ENDB  SENDA ENDA                                                       1
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0       0.1       0.0    { 1st of 2 sources.   Note balanced,
+14SENDB          2.0       0.1     -120.    { three-phase, sinusoidal excitation
+BLANK card follows the last source card
+  SENDA RECA  ENDA  SENDB RECB  ENDB
+BLANK card ending node voltage outputs
+  CALCOMP PLOT
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       15th of 15.  Like preceding,  except coupling is added to [R] and [L]
+C       matrices.  Both halves of problem still should have the same answer
+C       (note matrices remain symmetric),  although voltage division now
+C       longer will be exactly half and half.
+   .0001   .0005
+       1       1       1       0       1      -1
+       5       5      20      20     100     100
+  USE AR
+51RECA        MODEL [R][L]
+52RECB                                          
+       1000.        200.
+         1.0         0.2
+        200.       1000.
+         0.2         1.0
+  USE RL
+  SENDA RECA                 1.0   1.0                                         0
+  SENDB RECB  SENDA RECA                                                       1
+C      Next, build a copy of this, but using the old (Type-51,52,53) modeling:
+  USE AR
+51ENDA                     1000.         1.0
+52ENDB                      200.         0.2 1000.         1.0
+  USE RL
+  SENDA ENDA                 1.0   1.0                                         0
+  SENDB ENDB  SENDA ENDA                                                       1
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0       0.1       0.0    { 1st of 2 sources.   Note balanced,
+14SENDB          2.0       0.1     -120.    { three-phase, sinusoidal excitation
+BLANK card follows the last source card
+  SENDA RECA  ENDA  SENDB RECB  ENDB
+BLANK card ending node voltage outputs
+  CALCOMP PLOT
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+BLANK

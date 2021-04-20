@@ -1,0 +1,44 @@
+KARD 14 14
+KARG  2  3
+KBEG 27  3
+KEND 32  8
+KTEX  0  1
+/SOURCE
+14GEN            70.  .1591549                                     -1.
+/SWITCH
+C1 The following extraneous switch is permanently open:
+  TRAN            99999.      1.E6
+/REQUEST
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+/PLOT
+  PRINTER PLOT   { Avoid vector plot which would leave no trace in the .LIS file
+ 1931.0 0.0 7.0         TRAN                     { Axis limits: (-0.140,  3.031)
+ 193 1. 0.0 7.0         GEN   TRAN               { Axis limits: (-2.544,  3.289)
+/BRANCH
+  GEN   TRAN                 5.0  5.E4                                         3
+  TRAN                      1.E4
+C Ordinary comment card  ...
+93??????                  ??????   30.                                         3
+            -5.0           -100.
+             -.1            -50.
+            -.02            -45.
+            -.01            -40.
+           -.005            -30.
+C    Begin illustration of  $DISABLE  usage within an  INCLUDE  file  (in  fact,
+C    this is two levels down,  since this  INCLUDE  is called by  dc17inc1.dat).
+C    The comments now being read are not part of the test,  so they will be seen
+C    (even though they have nothing to do with the data of the network).  All of
+C    the remaining cards except the last one  ($ENABLE)  will be omitted as data
+C    is first read, so there will be no trace in the interpretation of EMTP data
+C    cards except for the  final card,  which will document the number involved.
+$DISABLE
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+$ENABLE
+            .005             30.
+             .01             40.
+             .02             45.
+             .10             50.
+             5.0            100.
+            9999

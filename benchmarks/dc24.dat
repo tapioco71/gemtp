@@ -1,0 +1,878 @@
+BEGIN NEW DATA CASE   
+C     BENCHMARK DC-24                                                            
+C            Monte Carlo simulation that is run in two parts.   The original six 
+C            energizations of "M39." stand-alone case have been reduced to 3,  &
+C            the remaining 3 are performed in companion case  DC-40,  which is a                                                        
+C            "START AGAIN"  continuation of this  MEMSAV = 1  case.   The use of
+C            standard random numbers and fixed seed gives results that should be
+C            repeatable & same for all computers of interest.   But M39 differs!
+C            Note that this data case has no base case.   However,  if  the user
+C            wants to add this, he need merely comment out the  "OMIT BASE CASE"
+C            request card, and do likewise for the  $DISABLE/ENABLE  cards  that
+C            precede statistics tabulation requests.   Save the resulting binary 
+C            disk file  TPTABLES.BIN  under the name  dc24at40.bin  for  use  by
+C            DC-40.  For a  "STATISTICS"  random-opening data case,  see  DC-48.
+C     Beware of  PARALLEL.LIS  entry for same  USERID  that might modify NENERG!
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+C TRULY RANDOM NUMBERS  { Same as NSEED=0 (this overrides stat misc. data card)
+REPEATABLE RANDOM NUMBERS  { Same as NSEED=1 (this overrides zero value below)
+C CENTRAL STATISTICS FILE          { Request word that precedes the disk file name
+C %/wsm/parallel.atp  !  { Leading percent sign avoids confusion of "/" in column 1
+C USER IDENTIFICATION       Warsaw  !   { Overrides A6 USERID of STARTUP for plots
+C DIAGNOSTIC           0 0 0 0 0 0 0 0 0 0 0 9 9 9 9
+OMIT BASE CASE   { Comment out this card, if a base case solution is to be added
+C  Request special output for MS Excel.  EOFE service begins  20 July 2007.  The
+C  output file name will be parallel to the input data,  with distinctive type :
+C                           Type  ---  Ruler for file type of Excel output file:
+EXTREMA OUTPUT FOR EXCEL    .exc        { Columns 29-32 carry optional file type
+C EXTREMA OUTPUT FOR EXCEL         { Blank 29-32 will use default file type .xcl
+ 100.E-6  20.E-3     60.                                                        
+       1       1       1       2       1      -1       1       0       3
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED 
+       1       1       0       0       1         { KSTOUT is blank, not 0! }   0  
+       2       2      10      10   { Printout frequency change only if base case
+ 0GENA  A1                      7.                                             2
+ 0GENB  B1                      7.                                             1
+ 0GENC  C1                      7.                                             2
+ 0ENDA  A10                     7.                                             3
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.                                              
+-1ASW1  A5                .3    2.1146 0.645 50.   0                            
+-2BSW1  B5                .0268 .5397  0.021 50.   0                            
+-3CSW1  C5                                                                      
+ 0A5    A5F               1.                                                    
+ 0B5    B5F               1.                                                    
+ 0C5    C5F               1.                                                    
+-1A5F   ASW10 ASW1  A5                                                          
+-2B5F   BSW10                                                                   
+-3C5F   CSW10                                                                   
+BLANK card ending branch cards
+C     Next come 3 switches whose closing times are to be varied by rolling dice.
+C     The 1st of the 3  STATISTICS  switches has type code "76" which means that
+C     the distribution is uniform with mean of 2 msec  and standard deviation of
+C     0.1 msec (columns 15 through 34).  The 2nd and 3rd switches have type code
+C     zero,  so use Gaussian distribution.  The means are 4 and 6 msec,  and the
+C     standard deviations are 1/2 and 1 msec,  respectively.
+76A1    ASW1       2.E-3     .1E-3                    STATISTICS
+  B1    BSW1       4.E-3    0.5E-3                    STATISTICS               4
+  C1    CSW1       6.E-3     1.E-3                    STATISTICS                
+  A10   ASW10    7.95E-3     1.0                                                
+  B10   BSW10    9.95E-3     1.0                                                
+  C10   CSW10   11.95E-3     1.0                                                
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.                
+14GENB     303.       60.      -120.0                        -1.                
+14GENC     303.       60.       120.0                        -1.                
+14ENDA     303.       60.      - 10.0                        -1.                
+14ENDB     303.       60.      -130.0                        -1.                
+14ENDC     303.       60.       110.0                        -1.                
+BLANK card ending source cards
+C      The following is  DIAGNOSTIC  from  "RANDNZ"  usage of overlay 12.  Not a
+C      normal case output, this is useful in case switching times are incorrect:
+C      "RFUNL1/RANDNZ".   KNT =   1.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.439822971502571000E+02   0.296996800000000000E+07   
+C                                   0.296996800000000000E+07   0.000691499561071
+C      "RFUNL1/RANDNZ".   KNT =   1.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.205132719793000000E+12   
+C                                   0.326925688100000000E+10   0.761183183873072
+C      "RFUNL1/RANDNZ".   KNT =   1.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.225804303513790000E+15   
+C                                   0.692893886000000000E+09   0.161326929461211
+C      "RFUNL1/RANDNZ".   KNT =   1.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.478574878121350000E+14   
+C                                   0.296220010300000000E+10   0.689690956613049
+C      "RFUNL1/RANDNZ".   KNT =   1.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.204596198914108000E+15   
+C                                   0.113680185200000000E+10   0.264682306908071
+C Last gen:  ENDC   -103.6321034277     303.    -.710542736E-14  .7324106878E-14
+C Last gen:         284.72686409813   110.000   -.177635684E-14     -165.9637565
+C    The following unit-9 connection could come earlier on  this  first  subcase
+C    because of  FORM=UNFORMATTED,  which is compatible  with  VECRSV/VECISV  of
+C    MS-DOS (which uses unit 9 for scratch storage).   But  the present location 
+C    is always safe, so its use is good practice.  It is mandatory for 3rd case.  
+$OPEN,  UNIT=LUNIT9  FILE=dc24at40.ext  STATUS=UNKNOWN  FORM=UNFORMATTED  RECL=1000 !  
+  ASW10 BSW10 CSW10                     { Request for these node voltage outputs
+C                      GENA         GENC         ENDA         B1           ASW10
+C Reference angle      A1           C1           A10          BSW1  
+C
+C                         GENB         ENDA  
+C                         B1           A10   
+C                           Random switching times for energization number  1  :
+C                       1  1.8826802E-03    2  4.2472809E-03    3  5.3713577E-03             
+C          0.0   141.9164096  -72.1873524  -35.0598126  372.1266197   -429.52043
+C                1.257471517  -1.85970093
+C Times of maxima :     .002        .0141        .0127        .0051        .0075 
+C                        .02         .017
+C       "RFUNL1/RANDNZ".   KNT =   2.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                             0.439822971502571000E+02   0.785177671157890000E+14
+C                                    0.146997761300000000E+10   0.342255833791569
+C       "RFUNL1/RANDNZ".   KNT =   2.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                             0.000000000000000000E+00   0.101529883752298000E+15
+C                                    0.115184215400000000E+10   0.268184150103480
+C       "RFUNL1/RANDNZ".   KNT =   2.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                             0.000000000000000000E+00   0.795565857346270000E+14 
+C                                    0.906510819000000000E+09   0.211063497466967
+C       "RFUNL1/RANDNZ".   KNT =   2.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                             0.000000000000000000E+00   0.626117957575120000E+14 
+C                                    0.405748372000000000E+10   0.944706546142697
+C       "RFUNL1/RANDNZ".   KNT =   2.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                             0.000000000000000000E+00   0.280246343056681000E+15
+C                                    0.402195997700000000E+10   0.936435530195013
+C                            Random switching times for energization number  2  :
+C                        1  1.8999095E-03    2  4.7979502E-03    3  7.5258324E-03  
+C           0.0   141.9164096  61.55446116  -41.9189588  371.6253603  334.5616569
+C                 1.207725131  -1.83695142
+C Times of maxima :      .002        .0154        .0139        .0059        .0028
+C                       .0058         .017
+BLANK card ending the specification of program outputs (node voltages, here)
+C       "RFUNL1/RANDNZ".   KNT =   3.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                             0.439822971502571000E+02   0.277792753651414000E+15 
+C                                    0.285888072600000000E+10   0.665635039564222
+C       "RFUNL1/RANDNZ".   KNT =   3.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                             0.000000000000000000E+00   0.197460032864095000E+15 
+C                                    0.320639779100000000E+10   0.746547661488876
+C       "RFUNL1/RANDNZ".   KNT =   3.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                             0.000000000000000000E+00   0.221462689026580000E+15
+C                                    0.129034293200000000E+10   0.300431375391781
+C       "RFUNL1/RANDNZ".   KNT =   3.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                             0.000000000000000000E+00   0.891226959703090000E+14
+C                                    0.212457830900000000E+10   0.494666935177520
+C       "RFUNL1/RANDNZ".   KNT =   3.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                             0.000000000000000000E+00   0.146742499224322000E+15 
+C                                    0.646589186000000000E+09   0.150545776356012
+C                            Random switching times for energization number  3  :
+C                        1  1.9308674E-03    2  3.9933351E-03    3  4.9659084E-03
+C           0.0   136.7926646  -89.6601448  -53.6359842  437.6032257  -510.753735
+C                 1.532437698  -1.74295212
+C Times of maxima :     .0021        .0051        .0083        .0045        .0074
+C                       .0044        .0169
+C              Cards associated with the base-case solution must not be present:
+$DISABLE         { Comment out this card, if a base case solution is to be added
+  PRINTER PLOT                                                                  
+ 144 3. 0.0 20.         ASW10                                                    
+BLANK card ending base-case plot cards
+$ENABLE          { Comment out this card, if a base case solution is to be added
+C 1 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENA  "  to   "A1    ".  
+C Interval             voltage         voltage  in      Frequency     Cumulative  
+C   number         in per unit      physical units      (density)      frequency 
+C       27           1.3500000      0.13500000E+03              0              0 
+C       28           1.4000000      0.14000000E+03              1              1 
+C       29           1.4500000      0.14500000E+03              2              3 
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data 
+C                                       Mean = 1.40833333E+00     1.40208495E+00    
+C                                   Variance = 8.33333333E-04     8.75092111E-04   
+C                         Standard deviation = 2.88675135E-02     2.95819558E-02
+C  The following disconnects DC24.BIN to protect; automatic result of reopening:
+$OPEN,  UNIT=LUNIT2   STATUS=SCRATCH  FORM=UNFORMATTED  { Disconnect *.BIN on LUNIT2
+-1  100.      GENA  A1  
+$CLOSE,  UNIT=LUNIT9  STATUS=KEEP      { Disconnect to prevent damage by stray  WRITE 
+$OPEN,  UNIT=LUNIT9  FILE=dc24dum.dum  STATUS=SCRATCH !  
+FIND  { Enter interactive search for which shot and which variable gave extremum
+HELP       { Show the user that there is a summary explanation of "FIND" on-line
+C      Peak extremum of subset has value 5.62169583E+02     This occurred during
+C      energization 2  for the variable having names  "CSW10 "  and  "      ".
+C      This was variable 3  of 3  in the subset;  3  shots were searched.
+              ASW10 BSW10 CSW10      { Search these 3 node voltages for extremum
+EXCLUDE    { Repeat the preceding search after 1st excluding the just-found shot
+C      Peak extremum of subset has value 5.59424445E+02     This occurred during
+C      energization 1  for the variable having names  "CSW10 "  and  "      ".
+C      This was variable 3  of 3  in the subset;  2  shots were searched.
+C      Remember excluded shots are numbered   2
+C   Add the following  DISK  command on 29 September 2002.  Look in the January,
+C   2003  or later newsletter for a summary.   Only the framework of the feature
+C   now exists in DICTAB,  but it is being illustrated here in order that it not
+C   be forgotten.  The idea is this.  Each EXCLUDE command excludes another shot
+C   (number 2 for the preceding).   Deterministic simulation of this often is of
+C   interest,  and  DISK  is designed to create such a data file.  The name will
+C   be  SHOT0002.DAT  and  this file will be located along with the  .LIS  file,
+C   assuming parallel naming.
+C DISK  { Create a disk file of data for deterministic simulation of EXCLUDEd shot
+C     6 October 2002,  the RESIMULATE command is working at home as illustrated
+C     by  f:\data\DUM24.DAT    First, the preceding  DISK  is enhanced by /LIST:
+C     8 October 2002,  /FULL  is created to use full 10 bytes of T-close or open
+C     as opposed to the default 9, with one blank on the left as separator.
+DISK  /LIST /FULL  { Create disk file of data for deterministic simulation of EXCLUDEd shot
+C RESIMULATE { Abort this data case.  Begin with SHOT0002.DAT just created by DISK
+C     If the preceding line is activated, all following data will be ignored as
+C     the present data is aborted in favor of the DISK-created SHOT0002.DAT  But
+C     we do not want to lose all the following output.  So, comment this line
+C     here and note that a new 4th subcase of DC-48 illustrates RESIMULATE use.
+EXCLUDE   { Excluding the shot of previous output means only one is left for use
+C      Peak extremum of subset has value 5.53096221E+02     This occurred during
+C      energization 3  for the variable having names  "BSW10 "  and  "      ".
+C      This was variable 2  of 3  in the subset;  1  shots were searched.
+C      Remember excluded shots are numbered   1   2
+RESET                   { Reinitialize by erasing history of previous selections
+ALL                { Next, consider searching all output variables of some class
+8      { As with batch-mode plotting, "8" indicates branch voltages (search ALL)
+C      Peak extremum of subset has value 1.41916410E+02     This occurred during
+C      energization 1  for the variable having names  "GENA  "  and  "A1    ".
+C      This was variable 1  of 3  in the subset;  3  shots were searched.
+EXCLUDE    { Repeat the preceding search after 1st excluding the just-found shot
+EXCLUDE   { Excluding the shot of previous output means only one is left for use
+EXCLUDE { Final attempt to exclude should lead to error message: nothing is left
+ALL                { Next, consider searching all output variables of some class
+9      { As with batch-mode plotting, "9" indicates branch currents (search ALL)
+EXCLUDE    { Repeat the preceding search after 1st excluding the just-found shot
+C $KEY          { Un-comment to allow keyboard input (until "END") at this point
+QUIT                     { Done locating extrema, so exit the "FIND" alternative
+C   &&&&&&&&&&&&&  End request and documentation.   Begin 3 coupled cards ......
+C 2 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENA  "  to   "A1    ". 
+C Interval             voltage         voltage  in      Frequency     Cumulative  
+C   number         in per unit      physical units      (density)      frequency 
+C        9           0.4500000      0.13635000E+03              0              0 
+C       10           0.5000000      0.15150000E+03              3              3 
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data  
+C                                       Mean = 4.75000000E-01     4.62734306E-01    
+C                                   Variance = 0.00000000E+00     9.53165933E-05   
+C                         Standard deviation = 0.00000000E+00     9.76302173E-03
+-1            GENA  A1                                                     CONT.                                                             
+C 3 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENC  "  to   "C1    ".   
+C Interval             voltage         voltage  in      Frequency     Cumulative  
+C   number         in per unit      physical units      (density)      frequency 
+C        4           0.2000000      0.60600000E+02              0              0 
+C        5           0.2500000      0.75750000E+02              2              2
+C        6           0.3000000      0.90900000E+02              1              3
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data  
+C                                       Mean = 2.41666667E-01     2.45766731E-01    
+C                                   Variance = 8.33333333E-04     2.19347831E-03   
+C                         Standard deviation = 2.88675135E-02     4.68345845E-02
+-1                        GENC  C1                                         CONT.                                                                             
+C 4 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "ENDA  "  to   "A10   ". 
+C Interval             voltage         voltage  in      Frequency     Cumulative  
+C   number         in per unit      physical units      (density)      frequency 
+C        2           0.1000000      0.30300000E+02              0              0 
+C        3           0.1500000      0.45450000E+02              2              2 
+C        4           0.2000000      0.60600000E+02              1              3 
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data  
+C                                       Mean = 1.41666667E-01     1.43690600E-01    
+C                                   Variance = 8.33333333E-04     9.61072666E-04   
+C                         Standard deviation = 2.88675135E-02     3.10011720E-02
+-1                                    ENDA  A10                  
+C 5 ) --------------------------------------------------------------------------
+C   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMAR
+C 5 ) --------------------------------------------------------------------------
+C A distribution of peak values among all output branches of the last data card 
+C statistical distribution is for the maximum of the peaks at all of these outpu
+C Interval             voltage         voltage  in      Frequency     Cumulative 
+C   number         in per unit      physical units      (density)      frequency
+C        9           0.4500000      0.13635000E+03              0              0
+C       10           0.5000000      0.15150000E+03              3              3
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data  
+C                                       Mean = 4.75000000E-01     4.62734306E-01    
+C                                   Variance = 0.00000000E+00     9.53165933E-05   
+C                         Standard deviation = 0.00000000E+00     9.76302173E-03
+C 3456789012345678901234567890123456789012345678
+C                         MODTAB   AINCR  XMAXMX
+STATISTICS DATA                1     0.0     0.0   ----  Only individual
+-1                        GENC  C1  { =.245766731, Variance=2.19347831E-3} CONT.                                                                             
+-1                                    ENDA  A10 { 1.43690600E-01, 9.61072666E-04                                                                                                       
+C 8 ) --------------------------------------------------------------------------
+C   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMAR
+C 8 ) --------------------------------------------------------------------------
+C A distribution of peak values among all output branches of the last data  card 
+C statistical distribution is for the maximum of the peaks at all of these outpu
+C Interval             voltage         voltage  in      Frequency     Cumulative 
+C   number         in per unit      physical units      (density)      frequency 
+C        4           0.2000000      0.60600000E+02              0              0 
+C        5           0.2500000      0.75750000E+02              2              2 
+C        6           0.3000000      0.90900000E+02              1              3 
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data  
+C                                       Mean = 2.41666667E-01     2.45766731E-01    
+C                                   Variance = 8.33333333E-04     2.19347831E-03   
+C                         Standard deviation = 2.88675135E-02     4.68345845E-02
+STATISTICS DATA                2     0.0     0.0  ------  Only union of 2 curves
+-1                        GENC  C1                                         CONT.                                                                             
+-1                                    ENDA  A10      { See comments for solution                                                                                                     
+STATISTICS DATA                3     0.0     0.0   ----  Both individual & union
+-1                        GENC  C1  { =.245766731, Variance=2.19347831E-3} CONT.                                                                             
+-1                                    ENDA  A10 { 1.43690600E-01, 9.61072666E-04                                                                                                       
+C 12 ) -------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENC  "  to   "C1    ". 
+C Interval             voltage         voltage  in      Frequency     Cumulative  
+C   number         in per unit      physical units      (density)      frequency 
+C        8           0.9131973      0.56211367E+02              0              0 
+C        9           1.0273470      0.63237788E+02              1              1 
+C       10           1.1414966      0.70264209E+02              0              1 
+C       11           1.2556463      0.77290630E+02              1              2 
+C       12           1.3697959      0.84317051E+02              0              2 
+C       13           1.4839456      0.91343472E+02              1              3 
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data  
+C                                       Mean = 1.19857145E+00     1.20977941E+00    
+C                                   Variance = 5.21205808E-02     5.31495428E-02   
+C                         Standard deviation = 2.28299323E-01     2.30541846E-01
+STATISTICS DATA                3    -5.0     0.0    ---- Fixed number of 5 boxes
+-1                        GENC  C1  { See preceding comments for 1st of 3} CONT.                                                                             
+-1                                    ENDA  A10                                                                                                          
+STATISTICS DATA                3     .05     0.0    ----  Restore STARTUP values
+-1            GENC  C1    ENDA  A10   { =2.45766731E-1, Variance = 2.19347831E-3                                                                                                                  
+ 0            ASW10 BSW10 CSW10   { Mean=1.40245965E+0, Variance = 8.47042357E-2                                              
+C     1st of 4 tables is documented on preceding request;  the 4th of 4 follows:
+C 21 ) -------------------------------------------------------------------------
+C   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMAR
+C 21 ) -------------------------------------------------------------------------
+C The following is a distribution of peak overvoltages among all output nodes of  
+C This distribution is for the maximum of the peaks at all output nodes with  V-
+C Interval             voltage         voltage  in      Frequency     Cumulative 
+C   number         in per unit      physical units      (density)      frequency
+C       36           1.8000000      0.54540000E+03              0              0
+C       37           1.8500000      0.56055000E+03              2              2
+C       38           1.9000000      0.57570000E+03              1              3
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data  
+C                                       Mean = 1.84166667E+00     1.84234351E+00    
+C                                   Variance = 8.33333333E-04     2.35830395E-04   
+C                         Standard deviation = 2.88675135E-02     1.53567703E-02
+C     &&&&&&&&&  End documentation of node voltage tabulations (4th of 4 tables)
+STATISTICS DATA                3    -4.0     0.0    ---- Fixed number of 4 boxes
+C 22 ) -------------------------------------------------------------------------
+C Statistical distribution of peak  power   for branch  "B1    "  to   "BSW1  ". 
+C Interval              power           power   in      Frequency     Cumulative  
+C   number         in per unit      physical units      (density)      frequency 
+C       16           0.9468728      0.35188195E+03              0              0 
+C       17           1.0060524      0.37387457E+03              2              2 
+C       18           1.0652319      0.39586719E+03              0              2 
+C       19           1.1244115      0.41785981E+03              0              2 
+C       20           1.1835910      0.43985244E+03              1              3 
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data  
+C                                       Mean = 1.03564214E+00     1.05962916E+00    
+C                                   Variance = 1.05066576E-02     1.04274409E-02   
+C                         Standard deviation = 1.02501988E-01     1.02114842E-01
+-3            B1    BSW1    { See preceding comments for this branch power table 
+-2    0.      GENB  B1    ENDA  A10   { =1.10335104E+0, Variance = 2.09698061E-2
+-4    0.      B1    BSW1 { Ungroup: Mean=1.16595031E+0, Variance = 3.80542557E-2 
+BLANK card ending statistical tabulation requests
+BEGIN NEW DATA CASE   
+C          2nd of 6 subcases repeats the preceding problem exactly, only instead
+C          of rolling dice to find the switch closing times,  such times will be
+C          read  from  a user-supplied disk file  dc24lun8.dat  (see $OPEN use).
+C          The solution of this 2nd subcase should exactly agree with the first.
+C          However , for variety ,  a base case solution (missing from the first
+C          subcase)  and  a  character plot have been added to this 2nd subcase.
+C          Also,  the  ".PL4"  plot file  (actually,  just the header)  is saved 
+C          permanently for later re-connection using the 4th subcase  of  DC-40. 
+PRINTED NUMBER WIDTH, 11, 1,    { Set dT-loop column width as done b4 by STARTUP
+C $STARTUP, dc37star.dat       { Use disk file for re-initialization at this point
+C          This is a Monte Carlo case, for which  TENERG  is critical.  But this
+C          parameter is initialized only in the  STARTUP  file.  For this 2nd or
+C          later data case, we reinitialize via the preceding  $STARTUP  request
+USER SUPPLIED SWITCH TIMES { Bypass the dice, reading TCLOSE & TOPEN from LUNIT8  
+C      The following connection of unit 2 is required only because this  is  the
+C      2nd subcase.   It follows a case in which  MEMSAV=1  dumps tables via I/O
+C      unit  LUNIT2=2,  and then this file is disconnected.   Without the manual
+C      connection that follows, nothing would be connected,  and execution would
+C      die for Apollo in "SUBR5" where  REWIND LUNIT2  is found.  So connect it:
+$OPEN,  UNIT=LUNIT8  FILE=dc24lun8.dat  FORM=FORMATTED  STATUS=OLD  RECL=80 !  { Case
+$OPEN,  UNIT=LUNIT2   FORM=UNFORMATTED   STATUS=SCRATCH   RECL=16000
+C $STARTUP, dc37star.dat  { Re-initialize is required to set TENERG for table dump
+C                       { This is a peculiarity of having  "STATISTICS"  as  the 
+C                       { 2nd  or  later data subcase within a single disk file.
+C DISK PLOT DATA     { Toggle the Apollo default of LUNIT4 = -4  to  +4 (use disk)        
+$CLOSE,  UNIT=LUNIT4  STATUS=DELETE   { Destroy empty date/time plot file of "SYSDEP" 
+$OPEN,  UNIT=LUNIT4  FILE=dc24b40d.pl4  !  { All we need for C-like case
+C  Before continuing with case, let's document the contents of that unit-8 file:              
+C  Marker preceding TCLOSE(1:6) and TOPEN(1:6) for energization 1:
+C  1.882680E-03   4.247281E-03   5.371358E-03        7.95E-3        9.95E-3 
+C      11.95E-3                  { End of TCLOSE;  TOPEN begin on the next line:
+C         .1E-3         0.5E-3          1.E-3            1.0            1.0 
+C           1.0  
+C  Marker preceding TCLOSE(1:6) and TOPEN(1:6) for energization 2:
+C  1.899909E-03   4.797950E-03   7.525832E-03        7.95E-3        9.95E-3 
+C      11.95E-3                  { End of TCLOSE;  TOPEN begin on the next line:
+C         .1E-3         0.5E-3          1.E-3            1.0            1.0 
+C           1.0  
+C  Marker preceding TCLOSE(1:6) and TOPEN(1:6) for energization 3:
+C  1.930867E-03   3.993335E-03   4.965908E-03        7.95E-3        9.95E-3 
+C      11.95E-3                  { End of TCLOSE;  TOPEN begin on the next line:
+C         .1E-3         0.5E-3          1.E-3            1.0            1.0 
+C           1.0  
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890 
+C  Cancel special output for MS Excel of 1st subcase.  Addition on 20 July 2007:
+C                           Type  ---  Ruler for file type of Excel output file:
+EXTREMA OUTPUT FOR EXCEL    .off        { Columns 29-32 carry optional file type
+ 100.E-6  20.E-3     60.                                                        
+       1       1       1       2       1      -1       0       2       3
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED 
+       1       1       0       0       1         { KSTOUT is blank, not 0! }   1  
+       2       2      10      10   { Printout frequency change only if base case
+ 0GENA  A1                      7.                                             2
+ 0GENB  B1                      7.                                             1
+ 0GENC  C1                      7.                                             2
+ 0ENDA  A10                     7.                                             3
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.                                              
+-1ASW1  A5                .3    2.1146 0.645 50.   0                            
+-2BSW1  B5                .0268 .5397  0.021 50.   0                            
+-3CSW1  C5                                                                      
+ 0A5    A5F               1.                                                    
+ 0B5    B5F               1.                                                    
+ 0C5    C5F               1.                                                    
+-1A5F   ASW10 ASW1  A5                                                          
+-2B5F   BSW10                                                                   
+-3C5F   CSW10                                                                   
+BLANK card ending branch cards
+76A1    ASW1     1.95E-3     .1E-3                    STATISTICS                
+  B1    BSW1     3.95E-3    0.5E-3                    STATISTICS               4
+  C1    CSW1     5.95E-3     1.E-3                    STATISTICS                
+  A10   ASW10    7.95E-3     1.0                                                
+  B10   BSW10    9.95E-3     1.0                                                
+  C10   CSW10   11.95E-3     1.0                                                
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.                
+14GENB     303.       60.      -120.0                        -1.                
+14GENC     303.       60.       120.0                        -1.                
+14ENDA     303.       60.      - 10.0                        -1.                
+14ENDB     303.       60.      -130.0                        -1.                
+14ENDC     303.       60.       110.0                        -1.                
+BLANK card ending source cards
+C Last gen:  ENDC   -103.6321034277     303.    -.710542736E-14  .7324106878E-14
+C Last gen:         284.72686409813   110.000   -.177635684E-14     -165.9637565
+  ASW10 BSW10 CSW10
+C   Step      Time      GENA       GENC       ENDA       B1       ASW10    BSW10     
+C                       A1         C1         A10        BSW1                       
+C     0       0.0  -.5684E-13 .28422E-13 -.5684E-13     -151.5      0.0      0.0 
+C     1     .1E-3  .56843E-13 .29559E-11 -.2842E-12        0.0      0.0      0.0 
+C     2     .2E-3         0.0 -.2927E-11 .28422E-12        0.0      0.0      0.0 
+BLANK card ending the specification of program outputs (node voltages, here)
+C Last step:  200    .02  1.60684633 5.46144739 15.5569682 209.921255 126.692915
+C Variable max:136.792665 67.5308064 48.9224823 437.603226 320.835627 553.096221
+C Times of max:     .0021      .0061      .0093      .0045      .0029      .0049 
+C Variable min:-100.37615 -85.515782 -58.824356 -292.03358 -548.79093 -353.02344 
+C Times of min:     .0033      .0127      .0084      .0056      .0074      .0141 
+  PRINTER PLOT                                                                  
+ 144 1. 0.0 10.         ASW10                    { Plot limits: (-5.488,  3.208)                            
+$CLOSE,  UNIT=LUNIT4  STATUS=KEEP
+$OPEN,  UNIT=LUNIT4  FILE=dc24bdum.pl4  !  { All we need for C-like case
+BLANK card ending base-case plot cards
+C                        GENA       GENC       ENDA       B1         ASW10        
+C   Reference angle      A1         C1         A10        BSW1                       
+C                           Random switching times for energization number  1  :
+C                       1  1.8826800E-03    2  4.2472810E-03    3  5.3713580E-03
+C         0.0   141.91641 -72.187352 -35.059813  372.12662 -429.52043 422.745884
+C Times of maxima :  .002      .0141      .0127      .0051      .0075      .0051
+C
+C                           Random switching times for energization number  2  :
+C                       1  1.8999090E-03    2  4.7979500E-03    3  7.5258320E-03
+C         0.0   141.91641 61.5544612 -41.918959  371.62536 334.561657 497.525193
+C Times of maxima :  .002      .0154      .0139      .0059      .0028      .0065
+C
+C                           Random switching times for energization number  3  :
+C                       1  1.9308670E-03    2  3.9933350E-03    3  4.9659080E-03
+C   0.0    136.792665     -89.660145    -53.635984     437.603226     -510.75374 
+C     cont.     553.096221    513.648909   .96346791    1.5324377     -1.7429521
+C                .0021          .0051         .0083          .0045         .0074
+C     cont.          .0049          .011         .02        .0044          .0169
+C              Cards associated with the base-case solution must not be present:
+C 1 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENA  "  to   "A1    ".
+C Interval             voltage         voltage  in      Frequency     Cumulative 
+C   number         in per unit      physical units      (density)      frequency
+C       27           1.3500000      0.13500000E+03              0              0
+C       28           1.4000000      0.14000000E+03              1              1
+C       29           1.4500000      0.14500000E+03              2              3
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data  
+C                                       Mean = 1.40833333E+00     1.40208495E+00    
+C                                   Variance = 8.33333333E-04     8.75092111E-04   
+C                         Standard deviation = 2.88675135E-02     2.95819558E-02
+-1  100.      GENA  A1    { See preceding comments that document this tabulation                                                                                                              
+BLANK card ending statistical tabulation requests
+BEGIN NEW DATA CASE   
+C          3rd of 6 subcases repeats the first subcase exactly,  only instead of
+C          dumping full tables,  MEMSAV = 2  (columns 49-56)  means  that  only  
+C          the extrema  and switching times are to be dumped,  and  
+C          this will be  FORMATTED  rather than  UNFORMATTED  (for
+C          this change, only  $OPEN  is changed).  The resulting card-image file  
+C          named  dc24ct40.lis  is used by the 2nd and later subcases of  DC-40.
+C          Also, as an illustration,  time-step loop output of all energizations 
+C          will be shown (because column-48 variable KSTOUT  is zero not blank),
+C          and the miniature character plots of switch times will be suppressed.  
+PRINTED NUMBER WIDTH, 11, 1,    { Set dT-loop column width as done b4 by STARTUP
+C $STARTUP, dc37star.dat       { Use disk file for re-initialization at this point
+C          This is a Monte Carlo case, for which  TENERG  is critical.  But this
+C          parameter is initialized only in the  STARTUP  file.  For this 2nd or
+C          later data case, we reinitialize via the preceding  $STARTUP  request
+OMIT BASE CASE   { Comment out this card, if a base case solution is to be added
+ 100.E-6  20.E-3     60.                                                        
+       1       1       1       2       1      -1       2       0       3
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED 
+C      1       1       0       0       1       0 { STATIST. misc. data card }  1  
+       1       1       0       0    2309       0 { STATIST. misc. data card }  1  
+       2       2      10      10    { Printout frequency change for all soutions
+C  Preceding STATISTICS miscellaneous data card is handled differently beginning
+C  23 September 2005 as new reserved value  IDICE = 2309  is introduced as a
+C  request for alternative, computer-dependent dice.  This is to satisfy Apple
+C  Macintosh G5 as used by Stu Cook of JUST Services in Ontario, Canada.  As of
+C  this date,  Mac G5 ATP is the only version to honor the 2309 alternative.
+C  For all versions,  any other IDICE value (including the value unity shown)
+C  is treated the same as zero or blank.  I.e.,  any other value does nothing.
+C  Henceforth,  IDICE = 2309  is a request for alternative,  computer-dependent
+C  random numbers (dice) of the operating system's library.  So,  we illustrate
+C  use here to document the two associated warning lines immediately before the
+C  input of branch data begins.  If Stu Cook wants to compare his results with
+C  everybody else's,  he should restore the value  IDICE = 1  (alternatively,
+C  zero or blank would be equivalent).  Salford ATP output follows:
+C    Statistics data.      1    1    0    0 2309    1  |       1       1   ...
+C    Printout :      2     2    10    10     0     0   |       2       2   ...
+C       Computer-dependent (not universal) dice have been requested for this
+C                          Monte Carlo study by reserved value  IDICE = 2309.
+C       Sorry, no alternative computer-dependent dice are available.  ATP will
+C                          ignore this request.  Universal dice will be used.
+C    Series R-L-C.   0.000E+00  1.857E-02  0.000E+00   | 0GENA  A1         ...
+ 0GENA  A1                      7.                                             2
+ 0GENB  B1                      7.                                             1
+ 0GENC  C1                      7.                                             2
+ 0ENDA  A10                     7.                                             3
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.                                              
+-1ASW1  A5                .3    2.1146 0.645 50.   0                            
+-2BSW1  B5                .0268 .5397  0.021 50.   0                            
+-3CSW1  C5                                                                      
+ 0A5    A5F               1.                                                    
+ 0B5    B5F               1.                                                    
+ 0C5    C5F               1.                                                    
+-1A5F   ASW10 ASW1  A5                                                          
+-2B5F   BSW10                                                                   
+-3C5F   CSW10                                                                   
+BLANK card ending branch cards
+76A1    ASW1       2.E-3     .1E-3                    STATISTICS                
+  B1    BSW1       4.E-3    0.5E-3                    STATISTICS               4
+  C1    CSW1       6.E-3     1.E-3                    STATISTICS                
+  A10   ASW10    7.95E-3     1.0                                                
+  B10   BSW10    9.95E-3     1.0                                                
+  C10   CSW10   11.95E-3     1.0                                                
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.                
+14GENB     303.       60.      -120.0                        -1.                
+14GENC     303.       60.       120.0                        -1.                
+14ENDA     303.       60.      - 10.0                        -1.                
+14ENDB     303.       60.      -130.0                        -1.                
+14ENDC     303.       60.       110.0                        -1.                
+BLANK card ending source cards
+C Last gen:  ENDC   -103.6321034277     303.    -.710542736E-14  .7324106878E-14
+C Last gen:         284.72686409813   110.000   -.177635684E-14     -165.9637565
+C    The following unit-9 connection must not be made earlier,  since  the  same 
+C    I/O channel is used as  UNFORMATTED  by  VECRSV/VECISV  of MS-DOS.  This is
+C    different than the first subcase (read those comments), note:    
+$OPEN,  UNIT=LUNIT9  FILE=dc24ct40.lis  STATUS=UNKNOWN  FORM=FORMATTED !
+  ASW10 BSW10 CSW10                     { Request for these node voltage outputs
+C                    GENA       GENC       ENDA         B1      ASW10      BSW10      
+C   Reference angle    A1         C1        A10       BSW1                             
+C                           Random switching times for energization number  1  :
+C                       1  1.8826802E-03    2  4.2472809E-03    3  5.3713577E-03
+C   0     0.0         0.0        0.0        0.0        0.0        0.0        0.0    
+C   1   .1E-3         0.0        0.0        0.0        0.0        0.0        0.0    
+C   2   .2E-3         0.0        0.0        0.0        0.0        0.0        0.0    
+C   4   .4E-3         0.0        0.0        0.0        0.0        0.0        0.0    
+C   6   .6E-3         0.0        0.0        0.0        0.0        0.0        0.0    
+C   8   .8E-3         0.0        0.0        0.0        0.0        0.0        0.0    
+C  10    .001         0.0        0.0        0.0        0.0        0.0        0.0    
+C   ==== Table dumping for all subsequent restorations.  Time [sec] = 1.8000E-03
+C  ***         Close switch  "A1    "  to  "ASW1  "  after  1.90000000E-03  sec.
+C  20    .002   141.91641        0.0        0.0        0.0        0.0        0.0    
+C  30    .003   -34.73764        0.0        0.0        0.0 318.450266 -159.22513    
+BLANK card ending the specification of program outputs (node voltages, here)
+C 190    .019  -8.1503339 19.8420817 .549065534 24.9565797 230.197042 85.0661304 
+C 200     .02  .352725683 14.1822201 13.4881293 207.346558 128.761754 181.144509 
+C 201   .0201  -.23343325 23.5035485 8.73828958 199.126365 123.327149  204.30575 
+C Extrema of output variables follow.   Order and column positioning are the sam  
+C Variable max:136.792665 56.3388361 40.5581876 437.603226 320.835627 553.096221
+C Times of max:     .0021      .0053      .0092      .0045      .0029      .0049
+C Variable min:-100.37615 -89.660145 -53.635984 -272.03803 -510.75374  -342.9791
+C Times of min:     .0033      .0051      .0083      .0055      .0074       .014
+C      Warning!  No statistical tabulations are allowed here because of our use
+C      -------   of output file  LUNIT9 = 9  being  "FORMATTED".   Any attempted
+C                tabulation will die in "MCBANK" called by  "DICTAB".   7 Dec 88
+C -1  100.      GENA  A1  
+$CLOSE,  UNIT=LUNIT9  STATUS=KEEP      { Disconnect to prevent damage by stray  WRITE 
+$OPEN, UNIT=LUNIT9  FILE=dc24dum.dum  STATUS=UNKNOWN  FORM=FORMATTED RECL=1000 !  
+C  The preceding  $OPEN  is added 11 October 2010 as required by new 4th subcase
+C 1 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENA  "  to   "A1    ".
+C Interval             voltage         voltage  in      Frequency     Cumulative 
+C   number         in per unit      physical units      (density)      frequency
+C       27           1.3500000      0.13500000E+03              0              0
+C       28           1.4000000      0.14000000E+03              1              1
+C       29           1.4500000      0.14500000E+03              2              3
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data  
+C                                       Mean = 1.40833333E+00     1.40208495E+00    
+C                                   Variance = 8.33333333E-04     8.75092111E-04   
+C                         Standard deviation = 2.88675135E-02     2.95819558E-02
+C    Column positioning of  "NO SWITCH PLOTS"  on blank terminator is arbitrary:
+BLANK card ending statistical tabulation requests    ---   NO SWITCH PLOTS  ---
+BEGIN NEW DATA CASE   
+C          4th of 6 subcases produces simulations that are identical to the 2nd.
+C          However,  output looks substantially different because  STATISTICS
+C          switches are not used.  Instead of  USER SUPPLIED SWITCH TIMES  to
+C          define the closing times of switches,  the  SELECT  function of the
+C          pocket calculator will be used.  Structural differences include lack
+C          of a base case (the 2nd subcase had 1) preceding the 3 energizations
+C          Output of connectivity and the phasor solution will be suppressed so
+C          as not to be repeated 3 times (boring).  Batch-mode plotting will be
+C          omitted for the same reason.  Finally, output of the dT-loop will be
+C          be made less frequent.  Data is added  10 October 2010.  WSM.
+PRINTED NUMBER WIDTH, 11, 1,    { Set dT-loop column width as done b4 by STARTUP
+C   Controls of following request card:   MAXKNT  IOPCVP  NOSTAT { Loop 3 times with
+POCKET CALCULATOR VARIES PARAMETERS            3       0       0 { full printout
+ 100.E-6  20.E-3     60.                                                        
+      20       1       0       0       1         
+ 0GENA  A1                      7.                                             2
+ 0GENB  B1                      7.                                             1
+ 0GENC  C1                      7.                                             2
+ 0ENDA  A10                     7.                                             3
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.                                              
+-1ASW1  A5                .3    2.1146 0.645 50.   0                            
+-2BSW1  B5                .0268 .5397  0.021 50.   0                            
+-3CSW1  C5                                                                      
+ 0A5    A5F               1.                                                    
+ 0B5    B5F               1.                                                    
+ 0C5    C5F               1.                                                    
+-1A5F   ASW10 ASW1  A5                                                          
+-2B5F   BSW10                                                                   
+-3C5F   CSW10                                                                   
+BLANK card ending branch cards
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would b
+TCLOSE_AAA = SELECT ( KNT ) { Closing time of phase "a" is taken from following:
+ .00188268.001899909.001930867  { Data is 3E10.0  for 3 energizations of phase a
+C  Pass 1>< Pass 2 >< Pass 3 >   Ruler for preceding 3 T-close values of phase a
+TCLOSE_BBB = SELECT ( KNT ) { Closing time of phase "b" is taken from following:
+.004247281 .00479795.003993335  { Data is 3E10.0  for 3 energizations of phase b
+C  Pass 1>< Pass 2 >< Pass 3 >   Ruler for preceding 3 T-close values of phase b
+TCLOSE_CCC = SELECT ( KNT ) { Closing time of phase "c" is taken from following:
+.005371358.007525832.004965908  { Data is 3E10.0  for 3 energizations of phase c
+C  Pass 1>< Pass 2 >< Pass 3 >   Ruler for preceding 3 T-close values of phase c
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch card
+C    Switch cards begin with the 3 STATISTICS switches of the 2nd subcase, which 
+C    are being converted to deterministic switches with  T-close  of columns 15-
+C    24 defined by the preceding  $PARAMETER  block.  T-open  has been set to 99
+C    seconds (never reached) to ensure that the switches never open:
+C 76A1    ASW1     1.95E-3     .1E-3                    STATISTICS
+  A1    ASW1  TCLOSE_AAA      99.0                      
+C   B1    BSW1     3.95E-3    0.5E-3                    STATISTICS               4
+  B1    BSW1  TCLOSE_BBB      99.0                                             4
+C   C1    CSW1     5.95E-3     1.E-3                    STATISTICS                
+  C1    CSW1  TCLOSE_CCC      99.0                   
+  A10   ASW10    7.95E-3     1.0                                                
+  B10   BSW10    9.95E-3     1.0                                                
+  C10   CSW10   11.95E-3     1.0                                                
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.                
+14GENB     303.       60.      -120.0                        -1.                
+14GENC     303.       60.       120.0                        -1.                
+14ENDA     303.       60.      - 10.0                        -1.                
+14ENDB     303.       60.      -130.0                        -1.                
+14ENDC     303.       60.       110.0                        -1.                
+BLANK card ending source cards
+C   The following start of the dT-loop output is for the 1st of the 3 passes:
+C Column headings for the  10   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  First  7     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C Branch power  consumption (power  flow, if a switch) is treated like a branch voltage for this grouping (1  variables);
+C Branch energy consumption (energy flow, if a switch) is treated like a branch current for this grouping (1  variables).
+C   Step      Time      GENA       GENC       ENDA       B1         ASW10      BSW10      CSW10      B1         GENB       ENDA
+C                       A1         C1         A10        BSW1                                        BSW1       B1         A10
+C      0       0.0         0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C ***          Close switch  "A1    "  to  "ASW1  "  after  1.90000000E-03  sec.
+C     20      .002   141.91641        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C     40      .004  2.37028418        0.0        0.0        0.0 -46.220806 23.1104031 23.1104031        0.0        0.0        0.0
+C ***          Close switch  "B1    "  to  "BSW1  "  after  4.30000000E-03  sec.
+C ***          Close switch  "C1    "  to  "CSW1  "  after  5.40000000E-03  sec.
+C     60      .006  -15.795936  10.618273        0.0 -123.04522 -168.96416  422.15175 -253.18759 .357709401 -.40883323        0.0
+  ASW10 BSW10 CSW10
+BLANK card ending the specification of program outputs (node voltages, here)
+C    180      .018  7.07846743 32.9539555 -12.904568 -.92594731 299.739293 -60.943514 -240.37687  .62556771 .018267223  -1.498213
+C    200       .02  5.74620332  -11.67979 16.6256782 248.357719 125.624205 168.195467 -283.39188 .769701668 1.25747152 -1.2455527
+C Variable maxima :  141.91641  56.029476 33.4968354  372.12662 334.561657 422.745884 559.424445 .769701668 1.25747152 .049072408
+C Times of maxima :       .002      .0122      .0092      .0051      .0028      .0051      .0114        .02        .02      .0095
+C Variable minima : -103.91401 -72.187352 -35.059813 -191.64938 -429.52043   -351.293 -316.83918        0.0 -1.0806309 -1.8597009
+C Times of minima :      .0032      .0141      .0127      .0159      .0075      .0142      .0191        0.0      .0109       .017
+BLANK card ending batch-mode plot cards
+C Following statistical tabulation is identical to that of 2nd subcase of DC-24:
+C 1 ) -------------------------------------------------------------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENA  "  to  "A1    ".   Base voltage  for per unit output = 1.00000000E+02
+C  Interval          voltage         voltage  in     Frequency    Cumulative               Per cent
+C    number      in per unit      physical units     (density)     frequency     .GE. current value
+C        27        1.3500000      1.35000000E+02             0             0          100.000000
+C        28        1.4000000      1.40000000E+02             1             1           66.666667
+C        29        1.4500000      1.45000000E+02             2             3             .000000
+C Summary of preceding table follows:       Grouped data     Ungrouped data
+C                                 Mean = 1.40833333E+00     1.40208495E+00
+C                             Variance = 8.33333333E-04     8.75092111E-04
+C                   Standard deviation = 2.88675135E-02     2.95819558E-02
+-1  100.      GENA  A1    { See preceding comments that document this tabulation                                                                                                              
+BLANK card ending statistical tabulation requests
+BEGIN NEW DATA CASE   
+C          5th of 6 subcases produces simulations that are identical to the 4th.
+C          However, instead of the  SELECT  function  (which is a generalization
+C          of  USER SUPPLIED SWITCH TIMES),  dice will be rolled just as was the
+C          case for the 1st subcase.  Yes, the same dice,  with the RAN function
+C          and the  GAUSS  function  of the pocket calculator replacing internal
+C          rolling that ATP performs in support of  STATISTICS switches.  Within
+C          the PCVP loop,  the user must roll his own dice after first ensuring
+C          that seeding of the random number generator is identical to what ATP
+C          does for the 1st subcase.  Data is added  16 October 2010.  WSM.
+PRINTED NUMBER WIDTH, 11, 1,    { Set dT-loop column width as done b4 by STARTUP
+REPEATABLE RANDOM NUMBERS  { Needed since no NSEED of STATISTICS misc. data card
+C    Note about preceding line. Without it, dice no longer will be deterministic
+C    and the resulting  .LIS  file  should  change every time data is simulated.
+C    That assumes  KOMPAR of STARTUP is small enough (e.g., value unity) so that
+C    the program date and time are real.  But  for  KOMPAR = 4,  all simulations
+C    will be identical because seeding of the number generator  then will depend
+C    on a fixed time (the WW I Armistice time)  and zero elapsed CP time.  I.e.,
+C    program output will be deterministic although different from the output for
+C    the data as shown.  That  is because the fixed seed of RRN differs from the
+C    fixed seed that results from the WW I time.  Complicated, eh?
+C   Controls of following request card:   MAXKNT  IOPCVP  NOSTAT { Loop 3 times with
+POCKET CALCULATOR VARIES PARAMETERS            3       0       0 { full printout
+ 100.E-6  20.E-3     60.                                                        
+      20       1       0       0       1         
+ 0GENA  A1                      7.                                             2
+ 0GENB  B1                      7.                                             1
+ 0GENC  C1                      7.                                             2
+ 0ENDA  A10                     7.                                             3
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.                                              
+-1ASW1  A5                .3    2.1146 0.645 50.   0                            
+-2BSW1  B5                .0268 .5397  0.021 50.   0                            
+-3CSW1  C5                                                                      
+ 0A5    A5F               1.                                                    
+ 0B5    B5F               1.                                                    
+ 0C5    C5F               1.                                                    
+-1A5F   ASW10 ASW1  A5                                                          
+-2B5F   BSW10                                                                   
+-3C5F   CSW10                                                                   
+BLANK card ending branch cards
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would b
+C   Diagnostic printout of the 1st subcase reveals that dice are rolled 5 times
+C   prior to each energization.  There are 3 STATISTICS switches, so 3 of the 5
+C   are used for them.  But prior to these, there are 2 more.  First,  there is
+C   a wasted roll that is used for nothing.  This has been known for many years
+C   but was not removed for reasons of historical continuity.  Second, there is
+C   a roll that is used for the uniform bias that might,  if the user wants it,
+C   be added to the closing times of all switches.  So,  here are the 5 rolls :
+UNUSE1of2 = GAUSS ( 0.0 ) { OVER12 wastes 1 use for no good reason if STATISTIC
+UNUSE2of2 = GAUSS ( 0.0 ) { OVER12 rolls a 2nd time for bias if STATISTICS case
+C   Now we are ready for the 3 switches.  The 1st has type code 76, which means
+C   a uniform distribution.  This is a little involved because it is low level.
+C   The 1st subcase uses a mean of 2 msec and a standard deviation of 0.1 msec.
+C   But the  RAN  function produces a uniform distribution over (0, 1).  To map
+C   the RAN  output  RNG  into the desired closing time, OVER12 uses this code:
+C      RNG = TIMEV + BIAS + SQRT3 *  ABSZ ( TOPEN(NDXI) ) * ( 2.0 * RNG - 1.0 )
+C   For this case,  there is no bias  BIAS,  TIMEV is the mean equal to 2 msec,
+C   SQRT3  is the square root of 3, and  TOPEN  is the standard deviation.  So:
+TCLOSE_AAA = 2.0E-3 + 0.17320508E-3 * ( 2.0 * RAN ( 0.0 ) - 1.0 )  { Uniform closing time of phase "a"
+C   This is slightly more efficient,  using the constant  0.17320508E-3  rather
+C   than scaling an ATP variable.  But the answers should be identical.  ATP is
+C   smart enough to recognize  SQRT3  as a program variable,  and use the full,
+C   internal precision associated with it.  Program output will be unchanged if
+C   the preceding were replaced by:
+C TCLOSE_AAA = 2.0E-3 + SQRT3 * 1.E-4 * ( 2.0 * RAN ( 0.0 ) - 1.0 )  { Uniform closing time of phase "a"
+C   Switches 2 and 3 (phases b and c) are easier since they are Gaussian: 
+TCLOSE_BBB = 4.0E-3 + 0.5E-3 * GAUSS ( 0.0 )   { Gauss closing time of phase "b"
+TCLOSE_CCC = 6.0E-3 + 1.0E-3 * GAUSS ( 0.0 )   { Gauss closing time of phase "c" 
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch card
+C 76A1    ASW1       2.E-3     .1E-3                    STATISTICS                
+  A1    ASW1  TCLOSE_AAA      99.0                      
+C   B1    BSW1       4.E-3    0.5E-3                    STATISTICS               4
+  B1    BSW1  TCLOSE_BBB      99.0                                             4
+C   C1    CSW1       6.E-3     1.E-3                    STATISTICS                
+  C1    CSW1  TCLOSE_CCC      99.0                   
+  A10   ASW10    7.95E-3     1.0                                                
+  B10   BSW10    9.95E-3     1.0                                                
+  C10   CSW10   11.95E-3     1.0                                                
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.                
+14GENB     303.       60.      -120.0                        -1.                
+14GENC     303.       60.       120.0                        -1.                
+14ENDA     303.       60.      - 10.0                        -1.                
+14ENDB     303.       60.      -130.0                        -1.                
+14ENDC     303.       60.       110.0                        -1.                
+BLANK card ending source cards
+  ASW10 BSW10 CSW10
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending batch-mode plot cards
+C Following statistical tabulation is identical to that of 4th subcase of DC-24:
+C 1 ) -------------------------------------------------------------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENA  "  to  "A1    ".   Base voltage  for per unit output = 1.00000000E+02
+C  Interval             voltage         voltage  in     Frequency    Cumulative               Per cent
+C    number         in per unit      physical units     (density)     frequency     .GE. current value
+C        27           1.3500000      1.35000000E+02             0             0          100.000000
+C        28           1.4000000      1.40000000E+02             1             1           66.666667
+C        29           1.4500000      1.45000000E+02             2             3             .000000
+C Summary of preceding table follows:       Grouped data     Ungrouped data
+C                                 Mean = 1.40833333E+00     1.40208495E+00
+C                             Variance = 8.33333333E-04     8.75092111E-04
+C                   Standard deviation = 2.88675135E-02     2.95819558E-02
+-1  100.      GENA  A1    { See preceding comments that document this tabulation                                                                                                              
+BLANK card ending statistical tabulation requests
+BEGIN NEW DATA CASE   
+C          6th of 6 subcases is added  24 July 2011  to illustrate the new
+C          protection against overflow of List 23.  Data is the same as for
+C          subcase 1 although the base case has been activated to prove that
+C          omission is not a requirement.  Note the  NENERG = 90K  shots of
+C          the integer misc. data card.  For other translations,  this is a
+C          case of overkill.  But for Salford ATP,  ordered COMMON blocks
+C          result in an enormous List 23 in excess of a million words.  For
+C          Salford ATP,  such huge  NENERG  is necessary.  WSM.
+ 100.E-6  20.E-3     60.                                                        
+   50000   20001       0       2       1      -1       1       0   90000
+C      Interpretation of the preceding integer misc. data card is improved on
+C      7 August 2011 when alternative variable-width encoding and the use of "K"
+C      allow the handling of much larger integers. The old format was (2I5, 8I3)
+C      which resulted in overflow for  NENERG >  999.  The new is not troubled :
+C      Misc. data.     1.000E-04   2.000E-02   6.000E+01 | 100.E-6  20.E-3     60.
+C      Misc. data.  50K  20K  0  2  1  -1  1  0  90K  0  |   50000   20001  ...
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED
+       1       1       0       0       1         { KSTOUT is blank, not 0! }   0  
+       2       2      10      10   { Printout frequency change only if base case
+ 0GENA  A1                      7.                                             2
+ 0GENB  B1                      7.                                             1
+ 0GENC  C1                      7.                                             2
+ 0ENDA  A10                     7.                                             3
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.                                              
+-1ASW1  A5                .3    2.1146 0.645 50.   0                            
+-2BSW1  B5                .0268 .5397  0.021 50.   0                            
+-3CSW1  C5                                                                      
+ 0A5    A5F               1.                                                    
+ 0B5    B5F               1.                                                    
+ 0C5    C5F               1.                                                    
+-1A5F   ASW10 ASW1  A5                                                          
+-2B5F   BSW10                                                                   
+-3C5F   CSW10                                                                   
+BLANK card ending branch cards
+76A1    ASW1       2.E-3     .1E-3                    STATISTICS
+  B1    BSW1       4.E-3    0.5E-3                    STATISTICS               4
+  C1    CSW1       6.E-3     1.E-3                    STATISTICS                
+  A10   ASW10    7.95E-3     1.0                                                
+  B10   BSW10    9.95E-3     1.0                                                
+  C10   CSW10   11.95E-3     1.0                                                
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.                
+14GENB     303.       60.      -120.0                        -1.                
+14GENC     303.       60.       120.0                        -1.                
+14ENDA     303.       60.      - 10.0                        -1.                
+14ENDB     303.       60.      -130.0                        -1.                
+14ENDC     303.       60.       110.0                        -1.                
+BLANK card ending source cards
+  ASW10 BSW10 CSW10                     { Request for these node voltage outputs
+BLANK card ending the specification of program outputs (node voltages, here)
+C Overflow of List 23.  General information follows.  Specifically, here in SUBR15 prior to entry into the time-step loop,  the demand
+C for storage that is required for a Monte Carlo (or a SYSTEMATIC) study has been computed,  and has been found to be inadequate.
+C Total working space is L23TOT = 1502629  cells whereas each shot requires  NDX1 = 24  cells.  For all  NENERG = 90000  shots
+C requested, at least 2160000  will be needed for List 23.  But recall that a Monte Carlo study can be simulated in pieces using two
+C or more separate ATP executions.  It is safer not to place all eggs in one basket.  Also,  simulation should be faster if two or
+C more central processors are used simultaneously.  CENTRAL STATISTICS FILE  is the request word for such operation as illustrated by
+C BENCHMARK DC-66.
+C ------------------------------------------------------------------------------------------------------------------------------------
+C ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/
+C Etc. (the familiar KILL = 1 error termination).
+BLANK card ending base-case plot cards
+-1            GENA  A1
+BLANK card ending statistical tabulation requests
+BEGIN NEW DATA CASE
+BLANK
+

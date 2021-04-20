@@ -1,0 +1,19 @@
+KARD  2  8  8                                                                   
+KARG  1  2  3                                                                   
+KBEG 24 27  3                                                                   
+KEND 24 32  8                                                                   
+KTEX  0  0  1                                                                   
+/REQUEST                                                                        
+C0 Level-zero comment that precedes the  "DIAGNOSTIC"  card                     
+DIAGNOSTIC           0 ? 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0                          
+C5 Level-five comment that follows  the  "DIAGNOSTIC"  card                     
+/BRANCH                                                                         
+$LISTOFF,   ----- Preceding invisible  (GEN, TRAN)  and  (TRAN, TERRA)  branches
+  GEN   TRAN                 5.0  5.E4                                         3
+  TRAN                      1.E4                                                
+$LISTON                                                                         
+C Ordinary comment card within  "INCLDUM"  (Blank col. 2)                       
+93??????                  ??????   30.                                         3
+$INCLUDE  dc17inc2                                                              
+  TRAN  LOADG               255.  5.E4                                         3
+  LOADG                    1.E-6

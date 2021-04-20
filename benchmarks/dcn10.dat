@@ -1,0 +1,212 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-10
+C       Test of  U.M.  for the option of data that is nearly compatible with the
+C       Type-59 S.M.   Like DCNEW-9, only here compensation will NOT be employed
+C       Also,  the general interface to send any U.M. variables to TACS will  be
+C       illustrated, even though TACS does nothing with those variables.
+UM TO TACS  { Declaration for special connection of Type-92 TACS sources to U.M.
+PRINTED NUMBER WIDTH, 13, 2,   { Request maximum precision (if 8 output columns)
+NAMES ARE LEFT ADJUSTED       { ATP will halt if any A6 name begins with a blank 
+C NAMES ARE RIGHT ADJUSTED      { ATP will halt if any A6 name ends with a blank 
+C  Left-adjusted names are the most common, but right-adjusted names also are
+C  possible as the preceding comment demonstrates.  Protection against failure
+C  to do either begins 11 January 2001.  Once turned on,  either service remains
+C  in effect unless and/or until the other is declared, or execution ends.  That
+C  is why declaration here in the first subcase is sufficient for illustration
+C  of  KILL = 81  in the 2nd subcase.
+ .000200    .150     60.     60.
+       1       1       1       1       1      -1
+       5       5      20      20     100     100     500     500
+TACS HYBRID    { We use TACS only to illustrate the definition by U.M. variables
+92TQGEN  { Name of Type-92 TACS source must be the same as 1st of 2 U.M. variabl
+C        Note that the preceding connection was especially simple because  there
+C        is no need to be concerned about the number of the U.M. (here, only 1).
+C        More generally,  the otherwise unused columns 41-52  have been reserved
+C        for the machine variable as  2A6  information.   E.g.,  "UM-1  OMEGM ".  
+C        In this case,  note that the name of columns 3-8 is arbitrary.  But for
+C        the simple case (here) where columns 41-52 are blank,  the  1st machine
+C        that has an output variable matching the name of  columns  3-8  will be
+C        accepted for the connection.  The 2nd of 2 connections will follow.  On
+C        a comment card, first, will the the simplied form.  It will be followed
+C        by the real connection in general form.   Note that  within  TACS,  the
+C        U.M. variable  IE1  has been given the name  FIELD:
+C 92IE1     { 2nd of 2 Type-92 TACS sources would be this way if simplified form
+92FIELD                                 UM-1  IE1 { Connect IE1 of UM-1 to FIELD
+33TQGEN FIELD    { Output the just-defined variables (should equal U.M. outputs)
+BLANK card ending all TACS data
+$BLANK HALT  { Halt execution if any truly blank card is found (see 2nd subcase)
+51NAVH AMCC1 A            162.67   507.51
+52NAVH BMCC1 B            6.51    162.97
+53NAVH CMCC1 C
+  MCC1 AMCC2 A                        8285.
+  MCC1 BMCC2 B                        8285.
+  MCC1 CMCC2 C                        8285.
+  MCC2 AEQV  A                  19.52
+  MCC2 BEQV  B                  19.52
+  MCC2 CEQV  C                  19.52
+  TRANSFORMER                         TRAN A
+            9999
+ 1NAVL ANAVL C                  .1    26.
+ 2NAVH A                        31.23 311.09
+  TRANSFORMER TRAN A                  TRAN B
+ 1NAVL BNAVL A
+ 2NAVH B
+  TRANSFORMER TRAN A                  TRAN C
+ 1NAVL CNAVL B
+ 2NAVH C
+  NAVL A                  2500.       1.13
+  NAVL B                  2500.       1.13
+  NAVL C                  2500.       1.13
+  SWT  AMCC2 A            4830.
+  SWT  BMCC2 B            4830.
+  SWT  CMCC2 C            4830.
+  MCC2 ASWT  A                  13.01
+  MCC2 BSWT  B                  13.01
+  MCC2 CSWT  C                  13.01
+BLANK card ending branch cards
+  SWT  A       .01661667 .09161667
+  SWT  B       .01661667 .09161667
+  SWT  C       .01661667 .09161667
+BLANK card ending switch cards
+14EQV  A  389997.    60.      -93.81293                           -1.
+14EQV  B  389997.    60.      -213.81293                          -1.
+14EQV  C  389997.    60.       26.18707                           -1.
+19  UM
+  SMDATA      1    { The "1" in column 15 requests prediction (not compensation)
+BLANK card ending  Class-1  U.M.  data cards
+59NAVL A  21229.     60.      -44.896562
+  NAVL B
+  NAVL C
+C TOLERANCES     10.   .0001    .00001
+PARAMETER FITTING           1.
+ 6 5     2 1.        1.        892.4      26.     +1800.    1907.     3050.
+C                                                 -1.
+          .13       1.79       1.71       .169      .228      .13504  .20029
+ 4.3      .85       .032      .05       .13
+ 1        .3        .027691                       33.68813            BUSM1
+ 2        .26       .046379                       60.9591             
+ 3        .22       .255958                       90.81823            BUSM3
+ 4        .22       .263573                       123.6634            BUSM4
+ 5                  .258887                       4.925036            BUSM5
+ 6                  .0101995                                          BUSM6
+C     Note about the preceding 6 mass cards of Type-59 S.M.  data.   The name of   
+C     columns 71-76 of any one is for the associated mechanical node  that  EMTP
+C     will create (needed for capacitor to ground).   Beginning  24 August 1993,
+C     this can be left blank if the user is willing to accept a default name  of
+C     the form  "MASSXX"  where the last 2 bytes will be serialized  01, 02, ...
+C     By erasing the name  BUSM2  on the second card, name  MASS02  will replace
+C     this for output identification of the speed or angle of mass 2.
+   11111111 333333
+  FINISH
+BLANK card ending all U.M. data cards
+BLANK card ending all source cards (including the U.M.)
+C       Total network loss  P-loss  by summing injections =   1.775796786600E+07
+C       Total network loss  P-loss  by summing injections =   7.638165971780E+16
+C       Total network loss  P-loss  by summing injections =   7.637910321429E+16
+C       Total network loss  P-loss  by summing injections =   7.638932291442E+16
+C                                Output for steady-state phasor switch currents.
+C       Node-K    Node-M            I-real            I-imag            I-magn
+C       SWT  A                      Open              Open              Open
+C       SWT  B                      Open              Open              Open
+C       SWT  C                      Open              Open              Open
+C     BUSM2     BUSM1        -6.37300003E+05    2.75937500E+01    6.37300004E+05
+C     BUSM3     BUSM2        -1.18962667E+06    7.40000000E+01    1.18962667E+06
+C     BUSM4     BUSM3        -1.65698001E+06    3.29125000E+02    1.65698004E+06
+C     BUSM5     BUSM4        -2.12433334E+06    5.92375000E+02    2.12433343E+06
+C     BUSM6     BUSM5         0.00000000E+00   -1.01718750E+01    1.01718750E+01
+C
+C  EQV  C   349966.92087687        389997.      -1273.107108884  1348.5187481005
+C           172106.98504408     26.1870700      -444.6359221728     -160.7481140
+  NAVH ANAVH BNAVH C
+C Step    Time        BUSM1        MASS02       BUSM3        BUSM4        BUSM5        BUSM6        NAVH A       NAVH B
+C                      TERRA        TERRA        TERRA        TERRA        TERRA        TERRA
+C
+C                     NAVH C       MASS02       BUSM3        BUSM4        BUSM5        BUSM6        TACS         TACS
+C                                   BUSM1        MASS02       BUSM3        BUSM4        BUSM5        TQGEN        FIELD
+C
+C                       UM-1         UM-1         UM-1         UM-1         UM-1         UM-1         UM-1         UM-1
+C                      TQGEN         IPA          IPB          IPC          IE1          IE2          IE3          IE4
+C  ***      Phasor I(0) = -6.3730000E+05  Switch  "BUSM2 "  to  "BUSM1 "  closed
+C  ***      Phasor I(0) = -1.1896267E+06  Switch  "BUSM3 "  to  "BUSM2 "  closed
+C  ***      Phasor I(0) = -1.6569800E+06  Switch  "BUSM4 "  to  "BUSM3 "  closed
+C  ***      Phasor I(0) = -2.1243333E+06  Switch  "BUSM5 "  to  "BUSM4 "  closed
+C  ***      Phasor I(0) =  0.0000000E+00  Switch  "BUSM6 "  to  "BUSM5 "  closed
+C    0     0.0   376.9911184  376.9911184  376.9911184  376.9911184  376.9911184  376.9911184  54291.46171  -385072.283
+C                330780.8214  -637300.003  -.1189627E7   -.165698E7  -.2124333E7          0.0          0.0          0.0
+C                .21243333E7   9214.54515  -27456.1142  18241.56904  4313.224983          0.0          0.0          0.0
+C    1   .2E-3   376.9911184  376.9911184  376.9911184  376.9911184  376.9911187  376.9911184  85269.74103  -396001.181
+C                  310731.44  -637300.003  -.1189627E7   -.165698E7  -.2124333E7  -.192711E-3  .21243018E7  4313.233628
+C                .21243018E7  11174.95518  -27770.8483  16595.89276  4313.233628  .6697334554  .6667285885  .2799719954
+C    2   .4E-3   376.9911184  376.9911184  376.9911184  376.9911184  376.9911198  376.9911184  115771.1286  -404685.302
+C                 288914.173  -637300.003  -.1189627E7   -.165698E7  -.2124333E7  -.001299907  .21242469E7   4313.23836
+C                .21242469E7  13071.84176  -27927.6144  14855.77263   4313.23836  1.005987367  1.411747548  .5923226394
+BLANK card ending output requests (here, just node voltages)
+C ***          Open  switch  "SWT  C"  to  "      "  after  1.00200000E-01  sec.
+C  750     .15   378.9579362  378.7971923  378.5677025  378.0740682  377.9402794  362.6550115  65967.40283  -252359.489
+C                236314.7086  -.1741593E7  -.3694241E7  -.8111971E7  -.3604052E7  -368811.077  -460638.075  5379.270269
+C                -460638.075  -21046.2714  -15182.1684  36228.43977  5379.270269  -9232.64421  26381.86541  10855.49107
+C     maxima :    387.546885  384.6217924  381.1685641  380.8913616  381.7465385  390.8419992  669322.4023   586897.097
+C                532948.8001  656967.1906  .13443971E7  .27857511E7  .10534159E7  763826.7801  .71276709E7  6509.720036
+C                .71276709E7  75438.29546  60328.31828  75306.29416  6509.720036  45317.49759   40466.3349  15877.68389
+C Times of max :       .1358        .1368        .1382         .116        .1124          .12        .1202        .1264
+C                      .1148        .1226        .1234        .1258        .0582        .1342        .1276        .0908
+C                      .1276        .1368        .0444        .1298        .0908        .1382        .0434        .0434
+C     minima :   370.1878672  373.9938537  376.0186341  375.3497638  375.1213723  361.1452453  -592541.345  -633283.817
+C                -571219.198  -.1828159E7  -.3694241E7  -.8111971E7  -.4003952E7  -499216.781  -.1775882E7          0.0
+C                -.1775882E7  -76280.1719  -68226.6079  -73182.9387  3602.587589  -55011.5332  -43534.6089  -18695.7515
+C Times of min :        .111        .1106        .0518        .1402         .138        .1464        .1116        .1178
+C                      .1234          0.1          .15          .15        .1406        .1078        .1024          0.0
+C                      .1024         .127        .0356        .0414        .1156        .1132         .126        .1258
+  PRINTER PLOT
+ 19415.    150.         UM-1  TQGEN             { Axis limits : (-1.776,  7.128)
+ 18415.    150.         BUSM6                   { Axis limits : (0.000,  3.908)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C        2nd subcase illustrates halt due to  NAMES ARE LEFT ADJUSTED (NALA)  as
+C        left over from the 1st subcase.  Data is from 3rd subcase of DC-20 as 
+C        added  11 January 2001.  All TACS variables except 1 have been deleted,
+C        and this one (OUT1) has been shifted right by one byte to create an
+C        error.  Also,  on the electrical side,  NOD2  has been shifted right 
+C        by one byte.  So,  there are two errors.  Either one would be enough
+C        to halt execution.
+   .0001    0.02
+       1       1       1       1       1      -1
+      10      10     100     100
+TACS HYBRID
+ 1 OUT1   +GEN1
+       1.0
+       1.0       1.0
+14GEN1       100000.     400.0                                    -1.0
+33 OUT1
+BLANK card ends final TACS data
+  NOD1   NOD2               1.00
+BLANK card after last electric network branch
+   NOD2             -1.0       1.0
+BLANK card ends switches
+14NOD1  -1     100.0      50.0                                    -1.0
+BLANK card after last electric network source
+C Auxiliary name " OUT1 " is not properly left-adjusted or right-adjusted.  This is for TEXVEC cell 15  out of a total of 18.
+C Bus name " NOD2 " is not properly left-adjusted or right-adjusted.  This is for node number 3  out of a total of 3.
+C ------------------------------------------------------------------------------------------------------------------------------------
+C ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/
+C ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ ...  Etc. (boiler plate until we come to following)
+C              KILL code number                Overlay number               Nearby statement number
+C                         81                          4                               8299
+C KILL = 81.   A 6-character data name is not properly left-adjusted or right-adjusted as the preceding warning message documents.  Of
+  NOD1   NOD2
+BLANK card ends selective node voltage outputs
+BLANK card terminating plotting
+BEGIN NEW DATA CASE
+C      Non-existent 3rd data subcase is used only to illustrate termination
+C      on a truly blank card.  This will happen because  $BLANK HALT  appears
+C      earlier (in fact,  in a preceding data subcase).  As explained in the 
+C      October, 1993,  newsletter,  STARTUP  variable  NOBRAN  could be used
+C      instead of this  $-card,  which is restricted to just this disk file.
+
+BLANK     { 14 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK     { 14 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK     { 14 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK     { 14 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK     { 14 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BEGIN NEW DATA CASE
+BLANK

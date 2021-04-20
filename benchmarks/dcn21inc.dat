@@ -1,0 +1,49 @@
+KARD  1  3  3  4  4  5  5  6  6  7  7  8  8  9  9 10 10 11 11 12 12 13 13 14 14
+     15 15 15 16 16 16 17 17 17 18 18 18 19 19 19 20 20 20 22 22 22 23 23 23 24
+     24 24 25 25 25 26 26 26 27 27 27
+KARG  6  1  5  1  5  1  5  1  5  1  5  1  5  3  5  3  5  3  5  3  5  3  5  3  5
+      1  2  6  1  2  6  1  2  6  1  3  6  1  3  6  1  3  6  2  4  5  2  4  5  2
+      4  5  1  4  5  1  4  5  1  4  5
+KBEG -7  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9
+      3  9 39  3  9 39  3  9 39  3  9 39  3  9 39  3  9 39  9 65  3  9 65  3  9
+     65  3  9 65  3  9 65  3  9 65  3
+KEND 12  7 13  7 13  7 13  7 13  7 13  7 13  8 13  8 13  8 13  8 13  8 13  8 13
+      7 14 44  7 14 44  7 14 44  7 14 44  7 14 44  7 14 44 14 69  7 14 69  7 14
+     69  7 13 69  7 13 69  7 13 69  7
+KTEX  0  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
+      1  1  0  1  1  0  1  1  0  1  1  0  1  1  0  1  1  0  1  1  1  1  1  1  1
+      1  1  1  1  1  1  1  1  1  1  1
+      CAP_44 = 1000. * 1.E-4 { Associated formula for evaluation during $INCLUDE
+/BRANCH
+C3  Begin with anode reactors and parallel resistors (6 pairs):
+  _NODEA__MID1             3000.
+  _NODEA__MID1                     1.0
+  _NODEB__MID3             3000.
+  _NODEB__MID3                     1.0
+  _NODEC__MID5             3000.
+  _NODEC__MID5                     1.0
+  __PLUS__MID4             3000.
+  __PLUS__MID4                     1.0
+  __PLUS__MID6             3000.
+  __PLUS__MID6                     1.0
+  __PLUS__MID2             3000.
+  __PLUS__MID2                     1.0
+C3  Next come the snubber circuits, across valves and anode reactors:
+  _NODEA_MINUS             1200.      CAP_44    { 1st of 6 replaces 0.1 in 39-44
+  _NODEB_MINUS             1200.      CAP_44    { 2nd of 6 ....
+  _NODEC_MINUS             1200.      CAP_44
+  _NODEA__PLUS             1200.      CAP_44
+  _NODEB__PLUS             1200.      CAP_44
+  _NODEC__PLUS             1200.      CAP_44
+C3  Next come the valves:
+/SWITCH
+11__MID1_MINUS                                                  _FIRE2
+11__MID3_MINUS                                                  _FIRE4
+11__MID5_MINUS                                                  _FIRE6
+11__MID4_NODEA                                                  _FIRE5
+11__MID6_NODEB                                                  _FIRE1
+11__MID2_NODEC                                                  _FIRE3
+$EOF   User-supplied header cards follow.         11-Nov-18  11.00.00
+ARG, _NODE, _MINUS, __PLUS,
+ARG, _FIRE, __MID
+DEP, CAP_44

@@ -1,0 +1,40 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-5
+C          Test of Type-97 staircase, pseudo-nonlinear, time-varying resistance.
+DIAGNOSTIC           0 9 9 9 9 9 0 9 9 9 9 9 9 9 9 9 9 9 9
+   .0011    .010
+       1       1       1       1       1      -1
+       2      -1
+  GEN   LOAD                 1.0         { One ohm resistor in series with  R(t)
+$DEBUG, 8,  { Illustrative usage of no practical importance (reduce from 9 to 8)
+97LOAD                             -1.                                         1
+            .000             1.0   { Begin 1st-quadrant (time, R) characteristic
+            .003             0.5
+            .006             2.0
+            .008           1.E35   { Final point switches to infinite resistance
+            9999
+BLANK card ending branch cards
+BLANK card ending non-existent switch cards
+14GEN           100.       60.                                     -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   2.500000000125E+03
+C   GEN              100.             100.        50.0000000025    50.0000000025
+C                     0.0              0.0                  0.0              0.0
+C    Step      Time      LOAD       GEN        LOAD
+C                                              TERRA
+C      0       0.0         50.       100.        50.
+C      1     .0011  45.7620586 91.5241173 45.7620586
+ 1
+C      2     .0022  33.7666404 67.5332808 33.7666404
+C      3     .0033  16.0471805  32.094361 16.0471805
+C      4     .0044  -2.9283732 -8.7851197 -5.8567464
+C      5     .0055  -16.058456 -48.175367 -32.116912
+C      6     .0066  -26.466347  -79.39904 -52.932693
+C      7     .0077  -64.775449 -97.163173 -32.387724
+C      8     .0088  -65.637622 -98.456433 -32.818811
+C      9     .0099   -83.05959  -83.05959 -.8306E-33
+  PRINTER PLOT
+ 194 2. 0.0 10.         LOAD                    { Axis limits : (-5.293,  5.000)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

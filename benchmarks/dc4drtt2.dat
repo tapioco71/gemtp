@@ -1,0 +1,12 @@
+KARD  1
+KARG  1
+KBEG 53
+KEND 58
+KTEX  0
+  DUMMY                      1.0                 { "      "
+C 2nd of two cards of  DRTT2.LIB  is just a fixed comment card.
+$EOF
+Note that argument AAAAAA is to fill the 6 blanks between the quotation marks.
+Because of the preceding "{",  this is just a comment field,  so will be
+ignored by ATP.  As for the data,  this is a 1-ohm resistor from new
+node  DUMMY  to ground.  This should not modify the simulation at all.

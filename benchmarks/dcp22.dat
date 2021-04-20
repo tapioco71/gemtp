@@ -1,0 +1,114 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-22      (Same as DC-56,  only DIAGNOSTIC)
+C     First of a pair of cases providing batch-mode documentation of interactive
+C     (SPY) capability.   The basic data is from  DC-4,   to which  $SPY   cards
+C     have  been  added.   Included is all-enclusive SPY  "HELP"  output.   Note
+C     that SPY commands are preceded by  "$SPY",  and are followed by  "$SPYEND"
+C     (in this case,  only one such group of SPY commands exists, although up to
+C     9 are allowed).   The  reserved disk file name  "SPYFILE1.DAT"  is created
+C     by  "DATAIN",  and is connected to unit  MUNIT5  of SPY  by  "CIMAGE",  as
+C     the  "$SPY, SPYFILE1.DAT"   command is processed.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .020     6.0     { Tmax = 6.0 will never be reached due to a SPY stop at 5.0
+       1       1       1       0       1      -1
+       5       5      20      20     160      10
+  GEN   TRAN                 5.0  5.E4                                         3
+  TRAN                      1.E4
+93TRAN                      .005   30.                                         3
+            -5.0           -100.
+             -.1            -50.
+            -.02            -45.
+            -.01            -40.
+           -.005            -30.
+            .005             30.
+             .01             40.
+             .02             45.
+             .10             50.
+             5.0            100.
+            9999
+  TRAN  LOADG               255.  5.E4                                         3
+  LOADG                    1.E-6
+BLANK card ending branch cards
+BLANK card ending switch cards
+14GEN            70.  .1591549                                     -1.
+$SPY           { Request of "CIMAGE" ($-card) to begin batch-mode SPY connection
+TIME          { Trivial 1st command to demonstrate we are in fact talking to SPY
+TIME          { Redundant 2nd  "TIME"  command in a row
+DEBUG               { 1st SPY command is a request to control SPY debug printout
+9                                     { Turn loose all normal SPY debug printout
+EXAMINE   { 2nd SPY command is this involved and powerful memory display command
+CUT 0        { Begin with initialization (so far, EXAMINE SPY table has no rows)
+ADD                     { Desired EXAMINE symbols are added to zero-length table
+ISTEP       { 1st  of an arbitrarily long list of memory locations to be defined
+TMAX        { 2nd  of an arbitrarily long list of memory locations to be defined
+MEMSAV      { 3rd  of an arbitrarily long list of memory locations to be defined
+T           { 4th  of an arbitrarily long list of memory locations to be defined
+NCHAIN      { Last of an arbitrarily long list of memory locations to be defined
+END         { Exit the symbol-input loop;  all EXAMINE symbols have been defined
+TABLE                  { Display all EXAMINE symbols and pointers defined so far
+FORM             { Enter EXAMINE loop that allows the changing of output spacing
+1 6            { Symbol number 1,  ISTEP,  is to be allowed six columns of width
+2 8            { Symbol number 2,  TMAX,   is to be allowed  8  columns of width
+3 7 -5         { Symbols 3 onward (the next 5) are to be allowed 7  columns each
+SHOW     { Display EXAMINE symbols and pointers defined so far (confirm changes)
+END             { Exit the  "FORM"  loop,  moving back to basic "EXAMINE" prompt
+SPY                           { Exit "EXAMINE" and return to the  "SPY:"  prompt
+NAMES  { Display the "EXAMINE" headings and output (just one line for this case)
+BUS { SPY request for a display of the program bus table (a simple illustration)
+ALL                                          { Display all rows of the bus table
+2,3              { Display a range of rows (just 2 and 3, here) of the bus table
+TOP                          { Display the first row (number 1) of the bus table
+BOT                           { Display the last row (number 4) of the bus table
+SPY           { Exit the loop of the bus table display;  back to  "SPY:"  prompt
+BRANCH
+ALL
+SPY
+SOURCE
+ALL
+SPY
+HELP                { Enter loop that provides information about any SPY command
+GO              { First, request information about this single names SPY command
+TOP   { Next, request information about the first SPY command (which is "NAMES")
+       { <CR> is key word number 28 --- the request for another "EXAMINE" output
+BOT         { Next, request information about the last SPY command  ("OVERVIEW")
+C ALL           { Remove "C " before "ALL" to see all "HELP" text of the program
+SPY                    { Exit the "HELP" command;  back to basic  "SPY:"  prompt
+BREAK     { Request a pause in the simulation that will soon resume (after "GO")
+-105                      { simulation will next be interrupted on time step 105
+DEBUG               { 1st SPY command is a request to control SPY debug printout
+0                              { Cancel diagnostic printout until next SPY break
+GO   { Out of SPY, and back to simulation --- uninterrupted until step-105 break
+DEBUG               { 1st SPY command is a request to control SPY debug printout
+9                                     { Turn loose all normal SPY debug printout
+PLOT                        { Having just broken at step 105, enter SPY plotting
+MODE         { Toggle from vector (Apollo default) to character mode of plotting
+SET COLUMN                 { Request a change in the width of the character plot
+132          { A full-width (as opposed to 80-column), 132-column plot is wanted
+CHOICE          { Request a list of the output variables, available for plotting
+NAME                        { Plot command to begin inputting the variable names
+TRAN       { The first and only variable to be plotted will be this node voltage
+LAST      { Exit the loop over plot input variables;  back to basic plot command
+TIME              { Request for actual plotting (in this case, a character plot)
+0, 2.0            { Time span of the character plot that is to begin immediately
+SPY                                   { Exit plotting;  back to  "SPY:"  command
+BREAK     { Request a pause in the simulation that will soon resume (after "GO")
+-162                 { Next SPY activity will recommence at time step number 162
+DEBUG               { 1st SPY command is a request to control SPY debug printout
+0                              { Cancel diagnostic printout until next SPY break
+GO          { Out of SPY, and back to simulation until the next (step-162) break
+PLOT                        { Having just broken at step 162, enter SPY plotting
+FRONT 1.0     { The time scale will be chosen to provide only the latest 1.0 sec
+ROLLC          { Toggle flag for rolling printer plot;  rolling is now to begin.
+SPY                                   { Exit plotting;  back to  "SPY:"  command
+BREAK     { Request a pause in the simulation that will soon resume (after "GO")
+-251                 { Next SPY activity will recommence at time step number 251
+GO          { Out of SPY, and back to simulation until the next (step-251) break
+TIME      { Trivial SPY command just to demonstrate that we have  "SPY:"  prompt
+STOP                { This SPY command will terminate execution of the data case
+$SPYEND        { Bound on in-line SPY commands;  back to batch-mode program data
+BLANK card ending all electric sources
+  GEN   TRAN
+BLANK card ending requests for program output (here, just node voltages)
+C        Note that no plot cards are placed here, since execution won't make it!
+BEGIN NEW DATA CASE
+BLANK

@@ -1,0 +1,639 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-20
+C    This data was received from Dr. Hiroshi Okamoto of Tokyo Electric Power Co.
+C    (TEPCO) in Japan.  This was by E-mail from  <okamoto@rd.tepco.co.jp>  on
+C    25 March 1997  as described in a story of the April, 1997, newsletter.
+C    This data serves to compare the old Type-59 S.M. with the new Type-58 as
+C    provided to ATP by TEPCO.
+C           INF  1-GEN  SYSTEM   FOR  SYNCHRONOUS MACHINE MODEL                         
+C                    DATA SET   'L0000530.SOU.EMTP2(GE2GC1)'                            
+C     The time step size of 95 usec is especially chosen to illustrate stability
+C     problems of the Type-59 S.M. (MACH 1 of the plot).  The new  Type-58  S.M.
+C     (MACH 2 of the plot)  is perfectly stable through the 100 msec shown,  but
+C     the old Type-59 clearly is beginning to diverge at the end of the plot. If
+C     dT is increased from 95 to just 100 usec,  the old Type-59 becomes a bomb.
+C     On the other hand, if dT is decreased from 95 to 90 usec, the old Type-59
+C     becomes almost indistinguishable from the new Type-58 over the short time
+C     span considered.  But increase T-max to find later trouble.  The original
+C     data had  dT = 10 usec  and  T-max = 1.0 sec.  Consider increasing IPLOT
+C     in such a case,  and maybe using  TPPLOT  on a saved  .PL4  file.  If
+C     IPLOT  is not increased,  the result is a 20.401-Mbyte disk file.
+C          Answers change  10 February 1999  following the massive changes from 
+C          TEPCO (Tokyo Electric Power Company) in Japan.  See April newsletter.
+ .000095    .100     60.     60.
+       1       1               1       1      -1
+       5       5      20      20     100     100 
+ 1GA    IA                 8.707 197.6 3.308                                    
+ 2GB    IB                 5.704 65.29 -.061 8.591 196.8 3.384                  
+ 3GC    IC                 5.466 47.29 -.171 5.704 65.29 -.061 8.707 197.6 3.308
+ 1GAA   IAA                8.707 197.6 3.308                                    
+ 2GBB   IBB                5.704 65.29 -.061 8.591 196.8 3.384                  
+ 3GCC   ICC                5.466 47.29 -.171 5.704 65.29 -.061 8.707 197.6 3.308
+BLANK ENDING OF BRANCH CARDS                                                    
+BLANK ENDING SWITCH CARD                                                        
+14IA       408241.76      60.0       0.0                          -1.0          
+14IB       408241.76      60.0    -120.0                          -1.0          
+14IC       408241.76      60.0    +120.0                          -1.0          
+14IAA      408241.76      60.0       0.0                          -1.0          
+14IBB      408241.76      60.0    -120.0                          -1.0          
+14ICC      408241.76      60.0    +120.0                          -1.0          
+59GA       408248.29      60.0       1.0                          -1.0          
+59GB                                                                            
+59GC                                                                            
+ 2 2    10                         1000.     500.0     800.0                    
+BLANK CARD                                                                      
+    1.097    0.847     0.847     1.        0.847    1.007                       
+    0.767    0.507       0.0     0.66        0.0      1.0                       
+             0.005  0.000392     0.027     0.034      0.0                       
+ 1           1.0       10.3677                     1101.16            EU_MG     
+ 2           0.0       17.2795                                        EU_MS     
+BLANK CARD                                                                      
+  11                                                                            
+  21                                                                            
+  31                                                                            
+  41                                                                            
+  51                                                                            
+BLANK CARD                                                                      
+  FINISH                                                                        
+C   ---------  End old Type-59 S.M. data;  begin new Type-58 S.M. data:                                                                            
+58GAA      408248.29      60.0       1.0                          -1.0          
+58GBB                                                                           
+58GCC                                                                           
+ 2 2    10                         1000.     500.0     800.0                    
+BLANK CARD                                                                      
+    1.097    0.847     0.847     1.        0.847    1.007                       
+    0.767    0.507       0.0     0.66        0.0      1.0                       
+             0.005  0.000392     0.027     0.034      0.0                                 
+ 1           1.0       10.3677                     1101.16                      
+ 2           0.0       17.2795                                                  
+BLANK CARD                                                                      
+  11                                                                            
+  21                                                                            
+  31                                                                            
+  41                                                                            
+  51                                                                            
+BLANK CARD                                                                      
+  FINISH
+BLANK card ending source cards                                                                      
+C GCC     -210263.4133669        408248.29      -22.86029096659  50.481419449425      .102784436273E8  -21472.85033321
+C         349937.08475555      121.0000000      45.008674792217      116.9264047      732007.00771024  -105731.5844176
+C     ICC      -204120.88        408241.76      21.675662657966  50.626515259414      -.10299916478E8
+C         353547.73504567      120.0000000      -45.75160866734      -64.6498883      -837738.5921279
+C       Total network loss  P-loss  by summing injections =   2.470730685868E+04
+  GA    GB    GC    IA    IB    IC   { Old Type-59 S.M.                                          
+  GAA   GBB   GCC   IAA   IBB   ICC  { New Type-58 S.M.                                           
+C  First  12     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   38     output variables pertain to Type-59 S.M. components (names are generated internally);
+C  Step   Time      GA         GB         GC         IA         IB         IC         GAA        GBB        GCC        IAA
+C
+C                   IBB        ICC        MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1
+C                                           ID         IQ         I0         IF         IKD        IG         IKQ        IA
+C                   MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1
+C                    IB         IC         EFD        MFORCE     MANG       TQ GEN     ANG 1      ANG 2      VEL 1      VEL 2
+C
+C                   MACH 1     MACH 2     MACH 2     MACH 2     MACH 2     MACH 2     MACH 2     MACH 2     MACH 2     MACH 2
+C                   TOR 1      ID         IQ         I0         IF         IKD        IG         IKQ        IA         IB
+C
+C                   MACH 2     MACH 2     MACH 2     MACH 2     MACH 2     MACH 2     MACH 2     MACH 2     MACH 2     MACH 2
+C                   IC         EFD        MFORCE     MANG       TQ GEN     ANG 1      ANG 2      VEL 1      VEL 2      TOR 1
+C   0     0.0  408186.112  -197922.7 -210263.41  408241.76 -204120.88 -204120.88 408186.112  -197922.7 -210263.41  408241.76
+C              -204120.88 -204120.88 -4.4130942 60.5639838 .772660912 800.402708 .852074217 .742801855        0.0 49.9984321
+C              -25.799853 -22.860291 -682.86299 799.860885 .015912194 .401972289 18.4574189 18.4411968        0.0 .14211E-13
+C              .422856651 49.9984321 -25.799853 -22.860291 800.402835 .852298612 .742428139        0.0 -4.4130942 60.5639838
+C              .772660912 -682.86299 799.861233 .015911908 .401972457 18.4574189 18.4411968        0.0        0.0 .422856651
+C   1  .95E-4  407893.672 -185217.11 -222679.75 407979.972 -191330.68 -216649.29 408111.529 -185307.24 -222807.51 407979.972
+C              -191330.68 -216649.29 -4.2041412 60.3879406 .714862646 800.379672 .811106299 .781017269        0.0 49.7613998
+C              -24.063847 -24.459374 -682.86299  799.86747 .015896025 .400786124 18.4574189 18.4411968   .216E-10   .2802E-5
+C              .422856453 49.8095208 -24.085131 -24.485985 800.380399 .812262842 .788588762        0.0 -4.2091863 60.3524392
+C              .714993055 -682.86299 799.867602 .015892687 .400551293 18.4574189 18.4411968 .21714E-10 .281731E-5 .422856451
+C   2  .19E-3  406867.982 -172041.84 -234825.96 407194.942 -178295.09 -228899.85 406998.315 -172084.21 -234913.87 407194.942
+C              -178295.09 -228899.85 -3.9507996 60.1570077 .659527672  800.35128 .762038113 .831454902        0.0 49.4294498
+C              -22.260505 -26.026609 -682.86299 799.875576 .015875056  .39923208 18.4574189 18.4411968 .131024E-9  .57827E-5
+C              .422855844 49.4707826 -22.278391 -26.047605 800.352354 .763726476 .854919597        0.0   -3.95874 60.0504313
+C              .660942841 -682.86299 799.875528 .015865594 .398526145 18.4574189 18.4411968 .132076E-9 .585937E-5 .422855836
+BLANK card ending output requests                                            
+C 1053 .100035 415280.068 -197293.88 -217987.68 408206.223 -199438.29 -208767.93 408235.937 -193516.73 -214722.13 408206.223
+C              -199438.29 -208767.93 -4.1350245 61.3028263 .690403958 800.370438 .799733436  .56388449        0.0 50.7259147
+C              -25.427344 -24.102756 -682.86299 799.871164 .015965431 .406847425  18.457757 18.4415815 .573744E-4 .395066E-4
+C              .421640989 50.3438664  -25.04608 -24.297981 800.350146 .676467979  .59869684        0.0 -3.6952162 61.1409442
+C              .577238085 -682.86299 799.876422 .015950332 .405730061 18.4577388 18.4415591 .556036E-4 .380861E-4 .421750163
+C Variabl max: 415280.068 412229.576 411850.366  408241.76 408240.005 408241.321 408635.133 408471.267 408253.524  408241.76
+C              408240.005 408241.321 5.12456969 68.4279518 1.78316215  800.48001 1.02182904 1.18160057        0.0 51.7606628
+C              54.6088512 52.6553712 -682.86299 800.203141 .016566167 .453784705  18.457757 18.4415815 .108985E-3 .154242E-3
+C              .424309833 50.8562508 53.8835515 52.2481039 800.498224 1.00871794 1.15996876        0.0  4.8599028 67.7090154
+C              1.87680621 -682.86299  800.19173  .01650918  .44903137 18.4577388 18.4415591 .101535E-3 .149203E-3 .424182575
+C Times of max:   .100035    .088635     .09424        0.0     .02223    .011115    .083315    .038855    .044365        0.0
+C                  .02223    .011115     .08702    .097185     .09709     .01577     .01577    .001425        0.0     .09975
+C                 .088825     .09443        0.0     .08702    .097185    .097185    .100035    .100035    .046265     .08702
+C                  .06783     .09975     .08873     .01121     .01577     .01577     .00133        0.0     .00361    .013585
+C                   .0969        0.0     .00361    .013585    .013585    .100035    .100035    .046455    .086925     .06783
+ 193.01 0.0  .1  .30 .50MACH 1TQ GENMACH 2TQ GEN                                            
+BLANK card ending plot cards                                                                           
+BEGIN NEW DATA CASE
+C     2nd of 3 subcases was added  18 February 1999.  The data came from TEPCO,
+C     but has been modified to minimize the computational burden.  As should be
+C     described in the April, 1999, newsletter,  NEW LOAD FLOW  is illustrated.
+C   INF  1-GEN  SYSTEM   FOR  SYNCHRONOUS MACHINE MODEL
+C            DATA SET   'L0000530.SOU.EMTP2(GE2GC1)'                            
+NEW LOAD FLOW      { Request for new TEPCO load flow, used if unbalanced
+C      The preceding old form of the request is being reactivated 3 June 2001
+C      to demonstrate the new warning message.  It also reminds developers that
+C      the old form continues to be honored (and eventually should be removed).
+C      It is recommended that others use  CAO  instead of  NEW  as follows:
+C CAO LOAD FLOW      { Alternate, preferred form of request beginning  21 March 99
+C 10.E-6      1.     60.     60.  ----  original simulation is demanding
+  40.E-6    .100     60.     60.  { Shorter, faster simulation for this use
+       1       1       1       1       1      -1               
+       5       5      20      20     100     100     500     500
+ 1GA    IA                 8.707 197.6 3.308                                    
+ 2GB    IB                 5.704 65.29 -.061 8.591 196.8 3.384                  
+ 3GC    IC                 5.466 47.29 -.171 5.704 65.29 -.061 8.707 197.6 3.308
+BLANK ENDING OF BRANCH CARDS                                                    
+BLANK ENDING SWITCH CARD                                                        
+14IA       408241.76      60.0       0.0                          -1.0
+14IB       408241.76      60.0    -120.0                          -1.0
+14IC       408241.76      60.0    +120.0                          -1.0
+58GA       408248.29      60.0       1.0                          -1.0
+58GB
+58GC
+ 2 2    10                         1000.     500.0     800.0
+BLANK CARD for Q axis
+    1.097    0.847     0.847     1.        0.847    1.007
+    0.767    0.507       0.0     0.66        0.0      1.0
+             0.005  0.000392     0.027     0.034      0.0
+ 1           1.0       10.3677                     1101.16            EU_MG
+ 2           0.0       17.2795                                        EU_MS
+BLANK CARD
+  11
+  21
+  31
+  41
+  51
+BLANK CARD ending S.M. output requests
+  FINISH
+BLANK CARD ending sources
+  GA    GB    GC           10000000.              0.
+               1                            0.01
+  GA    GB    GC    IA    IB    IC    
+BLANK CARD FOR ENDING OUTPUT REQUEST
+  PRINTER PLOT
+ 144 2. 0.0 20.         GA    GB    GC
+ 194 2. 0.0 20.         MACH 1TQ GENMACH 1I0                                            
+BLANK card ending plot cards                                                                           
+BEGIN NEW DATA CASE
+C    3rd of 3 subcases involving modeling from TEPCO (Tokyo Electric Power Co.)
+C    ---  data that demonstrated trouble with the Type-58 S.M. model prior to
+C    correction of the UTPF on  22 January 2003.  Data is from Dr. Eiichi
+C    Haginomori of Kyushu Institute of Technology in Kita-Kyushu, Japan.
+C    Ending time T-max has been shortened to  5 * dT  because the switching
+C    that caused trouble has been advanced to the 3rd time step.  Following
+C    correction, execution no longer hangs during the step following switching.
+NEW LIST SIZES     { Overflow of 3 times default without expanded List 19 below:
+     350       0
+       0      80                                                    4000
+BLANK 
+  240000     742
+ABSOLUTE TACS DIMENSIONS
+C    Expand TACS Table 1 from 57 to 120 on 1 April 2007.  Force the data thru.
+C    Reduce preceding 8000 of List 19 to 4000 since TACS is not very demanding
+C    The effect on case-summary statistics is to reduce  7644  to  3271.
+C     57     256     285      36      85     713     998     171  ---  default
+     120      30      50      40      70    1200     120     115 
+C USING TPBIG-96/7 --- DIRECT CONNECTION OF UM AND INVERTER
+C CALCULATED THETAE FROM EL. INFORMATIONS ACTURALLY --- 3*THETAM=THETAE FOR 6P
+C <<< ONE-GEN --- INF BUS SYSTEM WITH FLYWHEEL COMPENSATOR>>>
+C SYNCH. GENERATOR 1200MVA 6P / FLYWHEEL COMPENSATOR 200MVA 6P DOUBLY FED MACH.
+C <<Inc.-SATUR. CHARACTERISTICS IS INTRODUCED>> SYNC. GEN. FIX FLOW CAN NOT
+C A-SYMMETRICAL FAULT CURRENT, UNDER UPPER LIMIT POWER FLOW
+C <<Both PP & QQ OF UM ARE CONTROLLED, Max output, Gen output = 115%>> 
+POWER FREQUENCY, 50.
+UM TO TACS
+ .000200    .001    { Just 5 steps.  Original data had Tmax = 3.0 and IPLOT = 10 
+       1       1       1       3
+TACS HYBRID
+C INPUTTING VALUES
+92IE3  {UM SECONDARY CURRENT PHASE A --- UM TO TACS PARAMETERS
+92IE1  {DITTO B
+92IE2  {DITTO C
+92IPA  {UM PRIMARY CURRENT PHASE A
+92IPB  {DITTO B
+92IPC  {DITTO C
+90G1RX  {UM PRIMARY SIDE TERMINAL VOLTAGE PHASE R
+90G1SX  {DITTO S
+90G1TX  {DITTO T
+C MEASURING DELTA F OF THE HIGH-VOLTAGE BUS
+90B271R  {HIGH VOLTAGE BUS VOLTAGE
+90B271S  {HIGH VOLTAGE BUS VOLTAGE
+90B271T  {HIGH VOLTAGE BUS VOLTAGE
+C INVERTER CONTROLLING
+91VAP  { phase-A current }
+91VBP  { phase-B current }
+91VCP  { phase-C current }
+93VDA  { Leg-A top switch status }
+93VDB  { Leg-B top switch status }
+93VDC  { Leg-C top switch status }
+C CONSTANTS
+11X0      1.6642                                            -1.  {UM PARAMETER
+11X1      .08635                                            -1.  {DITTO
+11PP1     -600000.                                          -1.  {OUTPUT CONST.
+11PP2     -2.5E08                                           .44  {DITTO  
+11QQ1     -1000000.                                         -1.  {DITTO
+11QQ2     -2.5E08                                           .44  {DITTO
+C BUS VOLTAGE FREQUENCY METER
+98BUSV    = B271R - .5 *(B271S + B271T)
+ 1VOLT    +BUSV 
+1.
+1.        .005                 
+98FREQ  50+VOLT                                   50.   500. 
+88DELFR1  = (FREQ - 50.)/ .5 
+  DELFR   +DELFR1                                       -1.   1.
+ 2DELFZ   +DELFR
+1.
+1.        .06       .0009
+C COMMAND CALCULATION --- FIRSTLY UM PRIMARY SIDE VECTORS
+  VRSQ    +G1RX                                         -1.   1.
+98SIG   59+VRSQ
+99IN1     = 100 * PI * DELTAT
+98TH0   65+IN1                                                      SIG
+98PP      = PP1 + (PP2 * DELFZ)     {ACTIVE POWER CONTROLLING
+98QQ      = QQ1 + (QQ2 * DELFZ)     {REACTIVE POWER CONTROLLING
+99V1PS    =SQRT((G1RX * G1RX) + ((G1SX - G1TX) * (G1SX - G1TX)/3.))
+ 1V1P     +V1PS
+1.
+1.        .002
+98I1P     =2 * SQRT((PP * PP) + (QQ * QQ)) / V1P
+98TH11    =ATAN(QQ / PP)
+98TH12    =TH11 + PI
+98TH1   60+TH12   +TH11   +TH11                   0.0               PP
+98I1      =I1P * SIN(TH0 + TH1)
+98XXX     =COS(TH1) / (V1P/(X1*I1P) - SIN(TH1))
+98TH2     =ATAN(XXX)
+98E1P     =X1 * I1P * COS(TH1)/SIN(TH2)
+98I0P     =E1P / X0
+98I0      =I0P * SIN(TH0 + TH2 - (PI/2))
+98I21     =I1 + I0
+C CALCULATION CORRESPONDING TO POSITION SENCER
+C PRIMARY SIDE VIEW OF THE SECONDARY CURRENT
+98V1      = 0.5 * (G1RX - G1SX - G1TX) 
+98JV1     = (G1TX - G1SX) / 1.7320508
+98I11     = 0.5 * (IPA - IPB - IPC)
+98JI11    = (IPC - IPB) / 1.7320508
+98I21A    = (I11 * (1. + (X1/X0))) - (JV1/X0)
+98JI21A   = (V1/X0) + (JI11 * (1. + X1/X0))
+98THI210  = -(ATAN(JI21A/I21A))
+98THI211  = THI210 + PI
+98THI21A60+THI211 +THI210 +THI210                 0.0               I21A
+C SECONDARY SIDE VIEW OF THE SECONDARY INJECTING CURRENT
+C IN UM, IE3, IE1, IE2 ARE Ia, Ib, Ic OF RESPECTIVE OUTGOING CURRENT, THEN:
+98I22     = 0.5 * (IE1 + IE2 - IE3)
+98JI22    = (IE1 - IE2) / 1.7320508
+98THI220  = -(ATAN(JI22/I22))
+98THI221  = THI220 + PI
+98THI22 60+THI221 +THI220 +THI220                 0.0               I22
+C CALCULATION OF THETAE
+98THETAE  = THI21A- THI22 {BASED ON UM POSITION IN EMTP}
+C SECONDARY SIDE CURRENTS --- FOR COMMANDING
+98I2A1    =I1P * SIN(TH0 + TH1 - THETAE)
+98I2A0    =I0P * SIN(TH0 + TH2 - (0.5*PI) - THETAE)
+88S2AS    =I2A1 + I2A0
+98I2B1    =I1P * SIN(TH0 + TH1 - (0.66667*PI) - THETAE)
+98I2B0    =I0P * SIN(TH0 + TH2 - (1.16667*PI) - THETAE)
+88S2BS    =I2B1 + I2B0
+98I2C1    =I1P * SIN(TH0 + TH1 + (0.66667*PI) - THETAE)
+98I2C0    =I0P * SIN(TH0 + TH2 + (0.16667*PI) - THETAE)
+88S2CS    =I2C1 + I2C0
+ 1S2AIN   +S2AS
+1.
+1.        .005 
+ 1S2BIN   +S2BS
+1.
+1.        .005 
+ 1S2CIN   +S2CS
+1.
+1.        .005 
+C --------- SINUSOIDAL REFERENCE CURRENTS 
+98IREFA   = S2AIN                              
+98IREFB   = S2BIN                              
+98IREFC   = S2CIN
+98DELTAI  = 200.  { one-half of the difference between the upper and the lower
+C                   tolerance bands }
+C 98REFPOS  = IREFA + DELTAI  { POSITIVE REFERENCE BAND FOR PHASE-A }
+C 98REFNEG  = IREFA - DELTAI  { NEGATIVE REFERENCE BAND FOR PHASE-B }
+C --------- ERROR BETWEEN THE MEASURED AND THE REFERENCE CURRENTS
+98ERRORA  = VAP - IREFA
+98ERRORB  = VBP - IREFB
+98ERRORC  = VCP - IREFC        
+C --------- SIGNL = 0 IF THE CURRENT IS WITHIN THE TOLERANCE BANDS
+C                 = 1 IF THE CURRENT EXCEEDS THE UPPER TOLERANCE BAND
+C                 =-1 IF THE CURRENT FALLS BELOW THE LOWER TOLERANCE BAND
+98SIGNLA  = SIGN( ERRORA ) * ( ABS( ERRORA ) .GT. DELTAI )
+98SIGNLB  = SIGN( ERRORB ) * ( ABS( ERRORB ) .GT. DELTAI )
+98SIGNLC  = SIGN( ERRORC ) * ( ABS( ERRORC ) .GT. DELTAI )
+C --------- SIGA AND SIGAP CONTROL LEG-A SWITCHES; SIGB AND SIGBP CONTROL LEG-B
+C           SIGC AND SIGCP CONTROL LEG-C
+C --------- SIG = NO CHANGE, IF SIGNL = 0
+C               = 0        , IF SIGNL = 1
+C               = 1        , IF SIGNL =-1
+98SIGA  60+UNITY  +VDA    +ZERO                                     SIGNLA
+98SIGB  60+UNITY  +VDB    +ZERO                                     SIGNLB
+98SIGC  60+UNITY  +VDC    +ZERO                                     SIGNLC
+98SIGAP   = .NOT. SIGA
+98SIGBP   = .NOT. SIGB
+98SIGCP   = .NOT. SIGC
+33THI210THI22 THETAEDELFZ IREFA
+BLANK card ending TACS data
+C POWER SYSTEM CIRCUITS
+C TRANSFORMER FOR UM
+  TRANSFORMER                         TR1RX 5.00E3
+1.5             205.
+7.              232.
+333.            271.
+3333.           386.
+            9999
+ 1G1RX  G1SX              .0001 .01   11.
+ 2B271R NNX               .5    90.   158.8
+  TRANSFORMER TR1RX                   TR1SX
+ 1G1SX  G1TX
+ 2B271S NNX
+  TRANSFORMER TR1RX                   TR1TX
+ 1G1TX  G1RX
+ 2B271T NNX
+C AROUND TRANSFORMER PARAMETERS
+  G1RX                    100.        .5  
+  G1SX        G1RX  
+  G1TX        G1RX  
+  B271R                   .2          .02
+  B271S       B271R
+  B271T       B271R
+  NNX                     1.
+C MACHANICAL NETWORK COMPONENTS
+  MG                      .00366  {1.5%}
+  MG                                  1.8E11
+  MS    MG                .10E-3                                               1
+C UM SECONDARY SIDE PARAMETERS
+  S2A   CL2A              .001                                                 1
+  S2B   CL2B  S2A   CL2A                                                       1
+  S2C   CL2C  S2A   CL2A                                                       1
+  CL2A                    100.
+  CL2B        CL2A    
+  CL2C        CL2A
+C GENERATOR STEP-UP TRANSFORMER
+  TRANSFORMER             1.    747.6 TR1R  60.0E3
+1.              747.6
+4.              971.
+16.             1196.
+1000.           1300.
+            9999
+ 1B271R 27N1              .2    33.   166.
+ 2G1R   G1S               .001  .076  24.  
+  TRANSFORMER TR1R                    TR1S
+ 1B271S 27N1
+ 2G1S   G1T
+  TRANSFORMER TR1R                    TR1T
+ 1B271T 27N1
+ 2G1T   G1R
+C AROUND TRANSFORMER PARAMETERS
+  27N1                    .5    .005
+  G1R                     .01         .05
+  G1S         G1R
+  G1T         G1R
+  B271R       G1R
+  B271S       G1R
+  B271T       G1R
+C LONG TRANSMISSION LINE parameters in English due to bug in TP20
+$VINTAGE, 1
+-1B271R B272R              2.26285E+00 9.55548E+02 1.26663E+05 4.25000E+01 1
+-2B271S B272S              3.10872E-02 2.76280E+02 1.81024E+05 4.25000E+01 1
+-3B271T B272T
+-4L271S L272S
+-5L271T L272T
+-6L271R L272R
+-1B272R B273R              2.26285E+00 9.55548E+02 1.26663E+05 4.50000E+01 1
+-2B272S B273S              3.10872E-02 2.76280E+02 1.81024E+05 4.50000E+01 1
+-3B272T B273T
+-4B272S B273S
+-5B272T B273T
+-6B272R B273R
+$VINTAGE, 0
+  B273R                   .01         .05
+  B273S       B273R
+  B273T       B273R
+  B273R SWGR              .1    17.5                                           1
+  B273S SWGS  B273R SWGR                                                       1
+  B273T SWGT  B273R SWGR                                                       1
+C INVERTER CIRCUITS, WITH 1.5MH 
+  VA    VAP               .001  1.5                                            3
+  VB    VBP   VA    VAP                                                        3
+  VC    VCP   VA    VAP                                                        3
+C --------- SMALL RESISTANCES ARE ADDED 
+  VD    VDA               0.001
+  VD    VDB   VD    VDA
+  VD    VDC   VD    VDA
+  VDN   VDNA  VD    VDA
+  VDN   VDNB  VD    VDA
+  VDN   VDNC  VD    VDA
+C ANOTHER HIGH OHMIC RESISTORS
+  VD                      90000.
+  VDN         VD
+  VAPG        VD
+  VBPG        VD
+  VCPG        VD
+  VA          VD
+  VB          VD
+  VC          VD
+C SNUBBER
+  VDA   VA                5.          10.
+  VDB   VB    VDA   VA
+  VDC   VC    VDA   VA
+  VA    VDNA  VDA   VA
+  VB    VDNB  VDA   VA
+  VC    VDNC  VDA   VA
+C INVERTER INITIAL DUMMY LOAD
+  VAPGL                   .003
+  VBPGL       VAPGL
+  VCPGL       VAPGL
+BLANK card ending branch cards
+C FAULT INITIATION AND CLEARING SWITCHES
+C    ----------------  Begin modification for use with  T-max = 5 * dT.
+C                      First, omit the 3 original fault switches to ground:
+C L271R       .303      10.                                                    1
+C L271S       .299      10.                                                    1
+C L271T       .2965     10.                                                    1
+C                      Only the phase "a" switch is needed.  This was the one
+C                      that caused trouble (a tight loop 1 step after closure).
+C                      Advance closing time to 2.5 * dT  ==> closure on step 3.
+C                      Without correction to OVER16, execution would hang with
+C                      the last output on the screen being that for step 3:
+  L271R          .000500      10.0                                             1
+C    ----------------  End of modification made  22 January 2003
+  B271R L271R -1.       .4
+  B271S L271S -1.       .4
+  B271T L271T -1.       .4
+  L272R B272R -1.       .4 
+  L272S B272S -1.       .4 
+  L272T B272T -1.       .4 
+C SWITCHES TURN OVER THE INVERTER OUTPUT FROM DUMMY TO UM SECONDARY
+  VAPG  VAPGL -1.       .201           9.E10 {SHALL BE BEFORE MEASURING SW
+  VBPG  VBPGL -1.       .201           9.E10
+  VCPG  VCPGL -1.       .201           9.E10
+  VAPG  CL2A  .20       10.
+  VBPG  CL2B  .20       10.
+  VCPG  CL2C  .20       10.
+C SWITCHES IN THE INVERTER AND AC SIDE CIRCUITS
+  VAP   VAPG                                          MEASURING
+  VBP   VBPG                                          MEASURING
+  VCP   VCPG                                          MEASURING
+C           CONNECTED DIODE
+13VDA   VA                                                            SIGA     1
+13VDB   VB                                                            SIGB     1
+13VDC   VC                                                            SIGC     1
+13VDNA  VA                                                            SIGAP    1
+13VDNB  VB                                                            SIGBP    1
+13VDNC  VC                                                            SIGCP    1
+BLANK card ending switch cards
+14SWGR    225000.   50.       0.                            -1.
+14SWGS    225000.   50.       -120.                         -1.
+14SWGT    225000.   50.       120.                          -1.
+C <CLASS 1 CARDS>
+14S2A   -15600.     .005      5.                            -1.       .201 
+14S2B   -15600.     .005      -115.                         -1.       .201 
+14S2C   -15600.     .005      125.                          -1.       .201 
+C DC VOLTAGE CAN BE REDUCED TO +/- 700 VOLTS WITHOUT CHANGING OTHERS
+14VD      750.      .00001                                  -1.
+14VDN     -750.     .00001                                  -1.
+C MECHANICAL TORQUE (ACTUAL VALUE WILL BE SET BY INITIAL CONDITION)
+14MS    -1.0001     .000001                                 -1.
+C ------ UNIVERSAL MACHINE PARAMETERS
+19 UM
+ 1 {COMPENSATION, SLIP INITIALIZATION IS INTRODUCED}
+BLANK RECORD ENDING GENERAL UNIVERSAL MACHINE SPECIFICATION
+C UM MACHINE-TABLE
+C UM TYPE 4 (DOUBLY FED INDUCTION MACHINE)
+ 4    311MG           3                            .1047
+              .0053
+              .0053
+C INITIAL CONDITION ---- ONLY SLIP IS SPECIFIED AS .01%
+.01                               MS
+C MOTOR COIL PARAMETERS
+C THE POWER (ARMATURE/STATOR) COILS
+                            G1RX              1
+.003          .000275       G1SX              1
+.003          .000275       G1TX              1
+C THE ROTOR COILS
+.003          .000275       CL2B              1
+.003          .000275       CL2C              1
+                            CL2A              1
+BLANK ENDING ALL WINDING ROTOR INDUCTION MOTOR DATA
+58G1R     20000.    50.        4.3 
+58G1S
+58G1T
+C <CLASS 2 CARDS>
+TOLERANCES      {DEFAULT}
+PARAMETER FITTING       1.0
+C <CLASS 3 CARDS>
+ 1 1     61.0       1.0       1200.     24.0      -500.     550.      900.
+                                                  -1.
+.003      .2033     1.048     .640      .299      .640      .214      .278
+6.4       0.0       .033      .04       .214      .01       .1
+C <CLASS 4 CARD FOR MECHANICAL PARAMETERS>
+ 1        1.0       25.       5.
+BLANK {FOR END OF CLASS 4 CARDS}
+  11
+  21
+  31
+  51
+BLANK {FOR END OF OUTPUT REQUEST}
+C 71VFG1
+C 73TEG1         14
+  FINISH
+BLANK card ending electric network source cards
+C - -  INITIAL CONDITIONS
+C 03VA    VAP   16200.
+C 03VB    VBP   -12000.
+C 03VC    VCP   -4400.
+  B271R B271S B271T G1R   G1S   G1T   G1RX  G1SX  G1TX  CL2A  CL2B  CL2C
+C  First  15     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   17     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   16     output variables pertain to Type-59 S.M. components (names are generated internally);
+C  Next   5     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C  Final  11     output variables pertain to Type-19 U.M. components (names are generated internally);
+C   Step      Time      VA         VB         VC         B271R      B271S      B271T      G1R        G1S        G1T        G1RX
+C                       VAP        VBP        VCP
+C
+C                       G1SX       G1TX       CL2A       CL2B       CL2C       L271R      VDA        VDB        VDC        VDNA
+C                                                                              TERRA      VA         VB         VC         VA
+C
+C                       VDNB       VDNC       MS         S2A        S2B        S2C        B273R      B273S      B273T      VA
+C                       VB         VC         MG         CL2A       CL2B       CL2C       SWGR       SWGS       SWGT       VAP
+C
+C                       VB         VC         MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1
+C                       VBP        VCP        IA         IB         IC         IF         IKD        IG         IKQ        ID
+C
+C                       MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     MACH 1     TACS       TACS
+C                       IQ         I0         EFD        MFORCE     MANG       TQ GEN     ANG 1      VEL 1      THI210     THI22
+C
+C                       TACS       TACS       TACS       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1
+C                       THETAE     DELFZ      IREFA      TQGEN      FLUXMD     IMD        OMEGM      THETAM     IPA        IPB
+C
+C                       UM-1       UM-1       UM-1       UM-1
+C                       IPC        IE1        IE2        IE3
+C ***      Phasor I(0) =  1.7481189E+03                     Switch  "B271R "  to  "L271R "  closed in the steady-state.
+C ***      Phasor I(0) = -4.5243456E+02                     Switch  "B271S "  to  "L271S "  closed in the steady-state.
+C ***      Phasor I(0) = -1.2956844E+03                     Switch  "B271T "  to  "L271T "  closed in the steady-state.
+C ***      Phasor I(0) =  1.7686094E+03                     Switch  "L272R "  to  "B272R "  closed in the steady-state.
+C ***      Phasor I(0) = -5.1164059E+02                     Switch  "L272S "  to  "B272S "  closed in the steady-state.
+C ***      Phasor I(0) = -1.2569688E+03                     Switch  "L272T "  to  "B272T "  closed in the steady-state.
+C ***      Phasor I(0) =  7.8597942E-28                     Switch  "VAPG  "  to  "VAPGL "  closed in the steady-state.
+C ***      Phasor I(0) =  7.8597942E-28                     Switch  "VBPG  "  to  "VBPGL "  closed in the steady-state.
+C ***      Phasor I(0) =  7.8597942E-28                     Switch  "VCPG  "  to  "VCPGL "  closed in the steady-state.
+C ***      Phasor I(0) =  7.8597944E-28                     Switch  "VAP   "  to  "VAPG  "  closed in the steady-state.
+C ***      Phasor I(0) =  7.8597944E-28                     Switch  "VBP   "  to  "VBPG  "  closed in the steady-state.
+C ***      Phasor I(0) =  7.8597944E-28                     Switch  "VCP   "  to  "VCPG  "  closed in the steady-state.
+C      0       0.0  -.2259E-29 -.2259E-29 -.2259E-29  208158.64 -21846.037  -186312.6 19943.7027 -8673.1817 -11270.521 9113.64098
+C                   -5276.1428 -3837.4982 16.8063328 -6.3031915 -10.503141        0.0        0.0        0.0        0.0        0.0
+C                          0.0        0.0 152316.004 5578.69031 -2366.6623  -3212.028 3559.62137  -1144.404 -2415.2173 .78598E-27
+C                   .78598E-27 .78598E-27 41715.1084   -30191.8 -11523.308 1001.80789 .487618E-5        0.0  .20218E-5 -35892.416
+C                   38680.9534 .170478E-9 -3332.2787 718.756062 .237235816 11.7236335 39.4571339 .46896E-12        0.0        0.0
+C                          0.0        0.0        0.0  123706.91 35.5738008 6712.03789 104.709283 .523598776 938.381553 -554.20525
+C                    -384.1763 2366.59923 3211.92301 -5578.5222
+C      1     .2E-3  -.1339E-13 -.1339E-13 -.1339E-13 201977.519 -7722.5921 -194254.03 19823.8315 -7579.7442 -12244.087 9151.45131
+C                   -4804.5629 -4346.8884  23.814177 -7.6609777 -16.153199        0.0        0.0        0.0        0.0        0.0
+C                          0.0        0.0 152316.004 5578.68724 -2366.6304 -3212.0569  3505.7501 -925.34683 -2580.4033 -.8926E-15
+C                   -.8926E-15 -.8926E-15 42307.6898 -28187.048 -14120.641 1001.59093 -2.0122485        0.0  -.8358523 -35874.126
+C                   38689.6613 -.1969E-11 -3332.2787 716.646844 .237381679 11.7267018 39.4571339 -.29124E-6 -1.4215961 .087267731
+C                   -1.5088638        0.0 -62.836554 123698.108 35.5747011 6712.20775 104.709283 .544540632 942.608173 -504.94928
+C                    -437.6589 2366.55377 3211.89533 -5578.4491
+C      2     .4E-3  -749.75008 -749.75008 -749.75008  194885.42 6602.83234 -201489.52 19598.7968 -6330.0077 -13268.789 9151.94877
+C                   -4310.2982 -4841.6506 28.6859178 -9.1396133 -19.546304        0.0        0.0        0.0        0.0 -149.97834
+C                   -149.97834 -149.97834 152316.004 5578.68418 -2366.5985 -3212.0857 3437.41314 -702.48667 -2734.9265 -49.980007
+C                   -49.980007 -49.980007 42730.2018 -26082.723 -16647.479 1001.36092 -4.0385211        0.0 -1.6446481 -35870.068
+C                   38686.6306 -.3212E-11 -3332.2787 714.385728 .237526201 11.7277418 39.4571339 -.97244E-6 -1.3592587 .087272806
+C                   -1.4465315        0.0 -145.63073 123685.026 35.5770492 6712.65079 104.709283 .565482489 943.011488 -453.49067
+C                   -489.52082 2366.50709 3211.89023 -5578.3973
+C ***                                                             Close switch  "L271R "  to  "      "  after  6.00000000E-04  sec.
+C      3     .6E-3  -749.41701 -749.41701 750.083142 186906.226 20907.6164 -207813.87 19310.7466 -5217.9361  -14092.81   9111.193
+C                   -3792.8021 -5318.3909 27.9503294 -12.236022 -15.714307        0.0        0.0        0.0  183.36497 -116.59171
+C                   -116.59171        0.0 152316.004 5578.68111 -2366.5666 -3212.1145 3356.73113 -477.93728 -2878.7937 -149.91115
+C                   -149.91115 -49.951141 42979.6997 -23882.395 -19097.305 1001.16741  -5.618633        0.0  -2.210096 -35872.276
+C                   38671.8269 .52551E-11 -3332.2787 712.559772  .23763113 11.7257636 39.4571339 -.15646E-5 -1.2963263 .087286091
+C                   -1.3836124        0.0 -177.30291 123687.716  35.579885 6713.18584 104.709283 .586424345 939.747207 -400.25471
+C                    -539.4925 2366.44424 3211.95737 -5578.4016
+BLANK card ending names of nodes for node voltage
+  PRINTER PLOT
+C      4     .8E-3  -748.99533 -748.99533 749.838688        0.0 13506.5876 -233952.01 14577.5321 277.974209 -14855.506 5550.20833
+C                   194.206101 -5744.4144 -2556.0075 -910.96566 3466.97318 1441.53156        0.0        0.0 -27.703214 -260.88663
+C                   -260.88663        0.0 152316.004 5578.67804 -2366.5347 -3212.1433  3263.9781 -252.44548 -3011.5318 -249.77866
+C                   -249.77866 50.0436418 44314.9041 -22892.215 -21422.689  1001.6319 -1.0119264        0.0 -8.8523256 -37619.202
+C                   39135.5529  -.705E-11 -3332.2787 702.815796 .238926785 11.9567249 39.4571338 -.23891E-4  -.8024862 .091369899
+C                    -.8938561        0.0 -215.55492 133220.775 35.2574518  6652.3494 104.709283 .607366202 1023.64204 -438.56934
+C                    -585.0727 2357.42505 3246.81306 -5604.2381
+C      5     .1E-2  -748.60353 -748.60353 749.387134        0.0 81277.3789 -183207.78 12900.5692 2610.61804 -15511.187 4283.41475
+C                   1858.75941 -6142.1742 -4023.6743 -783.70104 4807.37529 2017.68499        0.0        0.0 175.891852 -345.88141
+C                   -345.88141        0.0 152316.004 5578.67497 -2366.5028 -3212.1722 3157.97507 -25.604427 -3132.3703 -349.57863
+C                   -349.57863 149.978695 47142.2759 -23517.378 -23624.897 1004.52269 25.8533897        0.0 -15.562683 -41739.361
+C                   39892.6407 .51464E-11 -3332.2787 697.874488 .240411365 12.3998762  39.457133  -.1102E-3 -.56146341 .092374845
+C                   -.65383825        0.0 -274.01893 147358.665 34.4425429   6498.593 104.709283 .628308059  1170.0168 -540.67448
+C                   -629.34232 2358.66581 3260.24591 -5618.9117
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+BLANK

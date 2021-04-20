@@ -1,0 +1,301 @@
+BEGIN NEW DATA CASE
+C     1st of 3 subcases is added  18 October 2001.  It is unrelated to following
+C     2nd.  Since a  DO KNT  loop is involved,  data must be in 1st subcase.
+C       1st of 2 subcases illustrates  "simultaneous usage of  $PARAMETER
+C       blocks and  DO  loops, which are used to serialize power network
+C       branches."  This is the way Prof. Juan Martinez of UPC in Barcelona,
+C       Spain, described his latest observation of inadequacy of the new ATP
+C       tools, in an E-mail message dated 16 October 2001.  The attached small
+C       example  NEWDIS2.DAT  served as the model for the present addition.
+C       Among other changes,  /-card data sorting was removed for simplicity.
+C       It had nothing to do with the program error,  which was corrected the
+C       following day.  Before correction, execution died early in branch input.
+$PARAMETER
+AAAAAAAA='$ENABLE '
+BBBBBBBB='$DISABLE'
+BLANK card ends block of parameter definitions
+ .000100    .010      { dT and T-max will result in 100 steps (Martinez had 400)
+      20      -1      { Minimal printout  and no plotting demonstrate simulation
+DO KNT=1, 5 /OUTPUT
+$PARAMETER
+BU1___ = KNT - 1.  SERIALIZE 'BUS000'
+BU2___ = KNT       SERIALIZE 'BUS000'
+BLANK card ending symbols definitions
+  BU1___BU2___            0.075 0.5570
+  BU2___                  1000. 2387.3
+ENDDO KNT
+C   The following 3 data cards will be ignored since  BBBBBBBB  will be replaced
+C   by  $DISABLE  (see the first  $PARAMETER  block).  Yet, these 3 lines
+C   produce substantial output in the  .LIS  file because the  $DISABLE  is
+C   dynamic.  Each line of the disk file must be read since ATP has no way of
+C   knowing that one of them does not end the discarding.
+BBBBBBBB
+$INCLUDE dofile.dat
+$ENABLE
+BLANK card ending BRANCH cards
+  SOURCEBUS000                                        MEASURING                1
+C     The following data card will be ignored since  AAAAAAAA  will be
+C     replaced by  $ENABLE  by the first  $PARAMETER  block:
+AAAAAAAA
+BLANK card ending SWITCH cards
+14SOURCE     20412.4      50.0       0.0                        -1.0
+BLANK card ending SOURCE cards
+  BUS000BUS001BUS004BUS005
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   1     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step    Time      BUS000     BUS001     BUS004     BUS005     SOURCE
+C                                                                 BUS000
+C ***      Phasor I(0) =  6.5184598E+01                     Switch  "SOURCE"  to  "BUS000"  closed in the steady-state.
+C      0     0.0     20412.4 20398.9415 20374.7213 20372.0305 65.1845978
+C     20    .002  16513.9785 16507.6359 16496.2181 16494.9494 81.5202569
+C     40    .004   6307.7785 6310.97466 6316.72113  6317.3591 66.7198316
+C     60    .006  -6307.7785 -6296.2642 -6275.5483 -6273.2473 26.4355142
+C     80    .008  -16513.978 -16498.544 -16470.771 -16467.686 -23.945918
+C    100     .01    -20412.4 -20398.941  -20374.72 -20372.029  -65.18067
+BLANK card ending OUTPUT cards
+BLANK card ending PLOT cards
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-2
+C        2nd of  2  subcases was the 1st prior to  18 October 2001.
+C        Test of automatic U.M. initialization using 3-phase synchronous mode of
+C        operation.  The steady-state lasts 50 msec until a TACS "fault" occurs.
+C        The machine data comes from the text by Fouad and Anderson (real units)
+C        Note: WSM and Yin change comment cards in Leuven, October 22, 1990,
+C              following modifications of code that change answers in 3rd or 4th
+C              decimal place (peak values of PRINTER PLOTs are barely affected).
+C          In response to a request for specifics, G. Papagiannis of Aristotle
+C          University of Thessaloniki in Greece posted the following on February
+C          18, 1998 (public E-mail from Fargo):  A. A. Fouad and P. M. Anderson;
+C          "Power System Control and Stability,"  Iowa State University Press in
+C          Ames, Iowa, USA, 1982.  "An excellent treatment of synhronous machine
+C          modelling"  was the recommendation.  Neil Fitzgerald of Electrowatt
+C          Engineering (UK) Ltd concurred later that same day, adding that the
+C          book "was reprinted in 1993 by the IEEE Press and I think it costs
+C          around $39.00 from the IEEE."   He agreed on the recommendation.  As
+C          for the  "P. M.",  this is Dr. Paul M. of PMA (Power Math Associates)
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ABSOLUTE U.M. DIMENSIONS, 20, 2, 50, 100
+POWER FREQUENCY, 60,   { Corrects possible 50-Hz declaration of European STARTUP
+ .000200    .070
+       1       1       1       1       1      -1 
+       5       5      20      20     100     100
+TACS HYBRID
+  STEP1   +BAT1   -TFAULT
+  STEP2   +BAT2   -TCLEAR
+  FIRE    -STEP0  +STEP1  -STEP2
+C  --------- TACS UNITY SIGNAL SOURCE
+11STEP0   1.0                                               -1.0
+C  --------- EMTP OUTPUT TO TACS
+90BAT1
+90BAT2
+90TFAULT
+90TCLEAR
+BLANK card ends all TACS data cards
+C  --------- EMTP CONNECTIVITY
+        BUSA0             1.0E+8
+        BUSB0             1.0E+8
+        BUSC0             1.0E+8
+  BUSA5 BUSA1             0.001                                                1
+  BUSB5 BUSB1             0.001                                                1
+  BUSC5 BUSC1             0.001                                                1
+C  --------- TRANSMISSION LINES (0.001 OHMS AND 1.0 MILLI HENRY)
+  BUSA1 BUSA0             1.0E-2 1.0                                           1    
+  BUSB1 BUSB0 BUSA1 BUSA0                                                      1
+  BUSC1 BUSC0 BUSA1 BUSA0                                                      1
+C  --------- RESISTANCES FROM BUS1 TO SWITCH (BUS2 TO GROUND)
+  BUSA1 BUSA2             0.0001                                               1 
+  BUSB1 BUSB2             0.0001
+  BUSC1 BUSC2             0.0001
+C  ---------  EMTP CONNECTIVITY REQUIREMENT
+        BUSFS             1.0E+6
+  BUSFS BUSF0             1.0E-5
+C  --------- RESISTANCES IN PARALLEL TO SWITCHES (BUS2 TO GROUND)
+  BUSA2                   1.0E+9
+  BUSB2                   1.0E+9
+  BUSC2                   1.0E+9
+C  --------- CIRCUIT FOR SWITCH CONTROL
+        BAT1              1.0
+        BAT2              1.0
+  BAT1  TFAULT            1.0
+  BAT2  TCLEAR            1.0
+C  --------- MECH NETWORK
+  BUSMSM                              1.E+09                                   1
+  BUSMS BUSMSM            1.0E-3                                               1
+BLANK card bounds the last branch card
+C  --------- TIME OF FAULT AND TIME OF CLEARING
+  TFAULT          .05001             { Fault is applied 1/2 DELTAT after 50 msec
+  TCLEAR          3600.0            
+C  --------- TACS CONTROLLED SWITCHES
+11BUSA2                                                               FIRE
+11BUSB2                                                               FIRE
+11BUSC2                                                               FIRE
+  BUSA9 BUSA5    -1.0      1.0                                                 1
+  BUSB9 BUSB5    -1.0      1.0                                                 1
+  BUSC9 BUSC5    -1.0      1.0                                                 1
+BLANK card ends the last electric network switch card
+C  --------- EXCITATION SOURCE VOLTAGE (ACTUAL VALUE SET BY SS)
+14BUSFS   0.001      0.00001                                -1.0
+C  --------- INFINITE BUS SOURCE VOLTAGES
+14BUSA0   3000.0     60.0      0.0                          -1.0
+14BUSB0   3000.0     60.0     -120.0                        -1.0
+14BUSC0   3000.0     60.0     +120.0                        -1.0
+C  --------- BATTERIES FOR SWITCH CONTROL
+14BAT1    2.0        0.00001                                -1.0
+14BAT2    3.0        0.00001                                -1.0
+C  --------- MECH INPUT TORQUE (ACTUAL VALUE SET BY SS) :
+14BUSMS -1 0.0000001 0.00001                                -1.0
+C  --------- SYNCHRONOUS MACHINE SPECIFICATIONS
+C  --------- UM DATA
+19 UM
+ 1
+BLANK CARD ENDING CLASS 1 UM DATA
+C  --------- UM-1 MACH-TABLE
+ 1 2 1111BUSMSM       1                            0.0373
+              0.0057815
+              0.0055850
+3030.0        15.0          BUSFS BUSMS
+C  ---------  UM-1 COIL-TABLE
+                            BUSA9             1 
+0.001542      0.0005595     BUSB9             1
+0.001542      0.0005595     BUSC9             1
+0.0010        0.0003767     BUSF0             1
+0.01834       0.0002075                       1
+0.07560       0.0001335                       1
+BLANK card ends all U.M. data cards
+C --------------+------------------------------ 
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        BUSA0  |TERRA *BUSA1 *                                                                                           
+C        BUSB0  |TERRA *BUSB1 *                                                                                           
+C        BUSC0  |TERRA *BUSC1 *                                                                                           
+C        BUSA5  |BUSA1 *BUSA9 *                                                                                           
+C        BUSA1  |BUSA0 *BUSA5 *BUSA2 *                                                                                    
+C        BUSB5  |BUSB1 *BUSB9 *                                                                                           
+C        BUSB1  |BUSB0 *BUSB5 *BUSB2 *                                                                                    
+C        BUSC5  |BUSC1 *BUSC9 *                                                                                           
+C        BUSC1  |BUSC0 *BUSC5 *BUSC2 *                                                                                    
+C        BUSA2  |TERRA *TERRA *BUSA1 *                                                                                    
+C        BUSB2  |TERRA *TERRA *BUSB1 *                                                                                    
+C        BUSC2  |TERRA *TERRA *BUSC1 *                                                                                    
+C        BUSFS  |TERRA *BUSF0 *                                                                                           
+C        BUSF0  |BUSFS *                                                                                                  
+C            < <  Etc. (many more not shown)  > >
+BLANK card ending all electric network sources
+C       Total network loss  P-loss  by summing injections =   7.248075223468E+04
+C       Total network loss  P-loss  by summing injections =   1.461915999075E+15
+C       Total network loss  P-loss  by summing injections =   1.461915980400E+15
+C       Total network loss  P-loss  by summing injections =   1.461915980711E+15
+C Gen 1: BUSMSM  376.99111843078 376.99111843078 -24959.40530999 24959.416549762 
+C Gen 1:              0.0              0.0       23.687050562614     179.9456250 
+  BUSA1 BUSA0       BUSMSM
+C  Step    Time        BUSA1        BUSA0        BUSMSM       BUSA9        BUSB9
+C                                                             BUSA5        BUSB5
+C
+C                      BUSC5        BUSA1        BUSB1        BUSC1        BUSA1
+C                      BUSC1        BUSA0        BUSB0        BUSC0        BUSA2
+C
+C                      UM-1         UM-1         UM-1         UM-1         UM-1 
+C                      OMEGM        THETAM       IPA          IPB          IPC 
+C  ***      Phasor I(0) =  2.0727726E+03  Switch  "BUSA9 "  to  "BUSA5 "  closed
+C  ***      Phasor I(0) = -8.1575149E+02  Switch  "BUSB9 "  to  "BUSB5 "  closed 
+C  ***      Phasor I(0) = -1.2570211E+03  Switch  "BUSC9 "  to  "BUSC5 "  closed
+C   0      0.0   2924.682776        3000.  376.9911184  2072.772625  -815.751494
+C                -1257.02113  2072.772622  -815.751493  -1257.02113  .2928573E-5
+C                376.9911184  1.174129748  2072.761251  -815.747018  -1257.01423
+C   1    .2E-3   2857.218771  2991.476701  376.9911184  2047.694642  -668.660479 
+C                -1379.03416   2047.69464  -668.660478  -1379.03416  .2833076E-5 
+C                376.9911184  1.174129748  2047.694642  -668.660479  -1379.03416 
+C   2    .4E-3    2773.75849  2965.955234  376.9911185   2010.99049  -517.772984 
+C                -1493.21751  2010.990487  -517.772984   -1493.2175  .2755769E-5 
+C                376.9911184  1.174129748   2010.99049  -517.772984  -1493.21751 
+BLANK card ending selective variable output request (node voltages, here)
+C 350      .07   .7006894039  927.0509831  376.7455301  2408.782669  10873.00302 
+C                -13281.7857  -4598.11137  -807.600679  5405.712048  7006.894039 
+C                376.7757426  1.169603437  2408.782669  10873.00302  -13281.7857 
+C Variable max:   3027.62917        3000.  376.9914104  7182.444042  21231.90574 
+C                2087.531085  11218.73045  2087.574976  12006.72539  11206.93469 
+C                377.0003725  1.174129748  7182.444042  21231.90574  2087.531085 
+C Times of max:         .016          0.0        .0504        .0532        .0578 
+C                      .0108        .0624        .0386        .0568        .0534  
+C                      .0652        .0352        .0532        .0578        .0108  
+  PRINTER PLOT
+ 194 8. 0.0 96.         UM-1  TQGEN              { Plot limits: (-0.913,  1.466)
+ 19415. 0.0 75.         UM-1  OMEGM               { Plot limits: (0.000,  3.770)
+ 194 8. 0.0 96.         UM-1  IPA                { Plot limits: (-1.335,  0.718)
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+C     3rd of 3 subcases is added 12 November 2001. It is unrelated to preceding.
+C   Data to be used to test counting of actual (minimal) table sizes.  This is
+C   ESTIMATE ACTUAL TABLE SIZES (EATS)  which entered the UTPF 12 November 2001. 
+C   Data is simple, and was obtained from DC-7 by canibalization.  Prior to
+C   addition here,  data was stored separately as  COUNT.DAT    This is just the
+C   first illustration of  EATS  so keep it simple by omission of batch-mode
+C   plot requests and other unrelated features.  
+PRINTED NUMBER WIDTH, 9, 2,   { Full precision on each of 8 columns of printout
+ .000025   .0007     60.     60.                                                
+       1       1       1               1      -1                                
+       5       5      10      10      20       1        
+ESTIMATE ACTUAL TABLE SIZES { New request must follow immediately the misc. data
+     2.0     2.0     2.0     2.0     2.0     2.0     2.0     2.0     2.0     2.0
+     2.0     2.0     2.0     2.0     2.0     2.0     2.0     2.0     2.0     2.0
+     2.0     2.0     2.0     2.0     2.0     2.0     2.0     2.0     2.0     2.0
+      10      10                              10              10
+       0       0                                                              10
+      10      10
+C   The preceding data is similar to  NEW LIST SIZES  in that there is one entry
+C   for each of 30 lists,  with 10 per card.  There are two such sets:  first
+C   the multiplication factors,  and second the additive constants.
+  GENA  SWA                           89352.                                   3
+  BRANCH NAME:2nd LIN                                                     
+  GENB  SWB   GENA  SWA                                                        1
+  GENC  SWC   GENA  SWA                           
+93RECA        NAME  1st NL  .559  300.                                         3
+     0.0             0.0
+   .5590            300.                                                        
+   .9344            400.                                                        
+            9999                                                                
+  BRANCH NAME:2nd NL      ! { Hold lower case of this 2nd, but not following 3rd                                           
+93RECB        RECA          .559  300.                                         4
+-1SENDA RECA              .137681.07755.6806124.27                              
+-2SENDB RECB              .03009.450289.5000124.27                              
+-3SENDC RECC                                                                    
+-1RECA  ENDA  SENDA RECA                              
+-2RECB  ENDB                            
+-3RECC  ENDC                                                                  
+BLANK card ends all branch cards
+  SWA   SENDA        -1.       1.0
+  SWB   SENDB        0.0       1.0
+  SWC   SENDC        0.0       1.0
+BLANK card ends all switch cards
+14GENA       188000.       60.       0.0                         -1.            
+14GENB       188000.       60.      120.                         -1.            
+14GENC       188000.       60.     -120.                         -1.            
+BLANK card ending source cards
+  RECA  RECB  RECC                                                              
+BLANK card ending output variable requests (just node voltages, here)
+  PRINTER PLOT                                            
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+BLANK
+EOF
+
+     10 June 2002,  WSM adds output to the screen in case of  DISK  use.
+Without any  EATS,  this is simple as should be illustrated in the October
+(or later) newsletter.  But with EATS, there are variations depending upon:
+1) the subcase number;  and  2) whether the order for EATS comes from
+STARTUP,  or is buried in data,  or both.  Consider first the case of no
+STARTUP  request.  I..e.,  assume  FLZERO > 0.  Then the screen will show:
+  ----  Begin next subcase number  KNTSUB = 2
+  ----  Begin next subcase number  KNTSUB = 3
+        Explicit EATS request now is being processed.
+I.e., the exceptional 3rd subcase will have two lines rather than
+the usual one.  On the other hand, if  FLZERO < 0,  the screen
+should show:
+  ----  Begin EATS for subcase number  KNTSUB = 1
+  ----  Begin EATS for subcase number  KNTSUB = 2
+  ----  Both implied and explicit EATS.  KNTSUB = 3
+
+     There is yet another variation.  Suppose  FLZERO > 0  with
+EATS data embedded in the 1st subcase.  Output will differ from the
+preceding as follows:
+  ----  Explicit EATS request in subcase KNTSUB = 1

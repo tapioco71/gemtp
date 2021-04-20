@@ -1,0 +1,677 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-37
+C       Trivial test of ZnO modeling.  Single phase, single exponential, no gap.
+C       For documentation,  see the EMTP Newsletter,  Vol. 1,  No. 2, pages 6-9.
+C       i = 2500 * ( v / V-ref ) ** 26    where   2500 = COEF  and   26 = EXPON.
+C       The lack of a gap follows from V-flash being an arbitary negative value.
+C       Note 2-column arrester (COL=2.0),  and twice  COEF = 1250 is 2500 total.
+C       The idea of using  COL  came from Dan Durbak of PTI  (Schenectady,  New
+C       York)  at the end of an unrelated telephone call to BPA on July 3, 1986.
+C       Finally,  a 2nd ZnO arrester is applied right across the voltage source.
+C       Of a total of 12 subcases, several illustrate power and energy output.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+C                 MAXZNO  EPSZNO  EPWARN  EPSTOP ZNOLIM1 ZNOLIM2
+ZINC OXIDE            20   1.D-8   1.D-3     0.1     0.6     1.5   default values
+C ZO, , , , .9, , { To improve ZnO convergence, restrict the Newton ZnO correction
+ .000050    .020
+       1       1       1       0       1      -1       0
+       2      10      33       1      40      10     100      50
+-1SEND  REC                 .306  5.82  .012  200.
+92REC  { Type 92 is for v-i curve }   5555.  { 5555 flag is for exponentials } 1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+C    The following arrester is applied right across the voltage source, so it is
+C    disconnected, and requires no iteration.  Newton iteration is 1-dimensional
+C    (the matrix is 1 x 1 only).   The second arrester involves  "table lookup."
+C    Note that  V-ref  is equal to the peak source voltage,  so the peak current
+C    is  equal  to  the coefficient:  COL * COEF = 2500 amps.   The plot agrees.
+92SEND { Type 92 is for v-i curve }   5555.  { 5555 flag is for exponentials } 1
+C                    VREF                   VFLASH                    VZERO  COL
+                  408000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14SEND       408000.       60.
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        SEND   |TERRA *REC   *
+C        REC    |TERRA *SEND  *
+C        TERRA  |SEND  *REC   *
+C --------------+------------------------------
+BLANK card ending source data
+C              Step      Time        REC          SEND         REC          SEND
+C                                                             TERRA        TERRA
+C               0       0.0           0.0          0.0          0.0          0.0
+C               1     .5E-4           0.0  407927.5198          0.0   2488.47851
+C               2     .1E-3           0.0  407710.1048          0.0  2454.223589
+C              12     .6E-3           0.0  397606.9641          0.0  1278.142608
+C              22     .0011           0.0  373418.3984          0.0  249.9564103
+C              32     .0016           0.0  336001.2998          0.0  16.05612212
+C              33    .00165           0.0  331579.2191          0.0  11.37746957
+C              34     .0017   446716.5798  327039.3298  .0013592657  7.950150616
+ 1        { Request for all node voltage outputs
+C Final step :  400     .02   53295.59263  126078.9337  .5103896E-5  .2302356E-4
+C         Variable maxima :   693010.7427  407991.9464  123.5121341  2498.717272
+C         Times of maxima :        .00175       .01665       .00175       .01665
+C         Variable minima :   -711052.757  -407991.946  -240.945005  -2498.71727
+C         Times of minima :        .00765       .00835       .00765       .00835
+  PRINTER PLOT
+ 144 3. 0.0 20.         REC                      { Axis limits: (-7.111,  6.930)
+ 194 2. 0.0 20.         SEND                     { Axis limits: (-2.499,  2.499)
+  CALCOMP PLOT
+C       The following plot card illustrates automatic plotting from zero through
+C       the end time  TMAX  of the study.  Columns 5-7 give the t-axis length in
+C       inches,  and  columns 12-15 being negative is the flag to plot all time.
+C       With a 10-inch axis and a time span of 20 msec, the result is 2 msec/in.
+C       For  such all-time character plotting in units of [seconds],  see  DC-6.
+C     78901234567890123456789012345678901234567890123456789012345678901234567890
+ 19410.     -1.         REC                     16-Char. HeadingVertical axis Y:
+$STARTUP, dc37star.dat !       { Use disk file for re-initialization immediately
+C        This will halve the number of pixels/inch (PIXPUN) for an Apollo screen
+C        plot.  Also,  it will set the smoothing tolerance squared,  TOLRCE,  to
+C        1/10.   The result will be a half-size and very bumpy screen plot:
+ 194 1. 0.0 10.         REC                     16-byte Heading Y-axis labeling.
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      2nd of 12 subcases. Same basic network as just solved, only with modified
+C      ZnO characteristic as derived by  DC-39.  One exponential with flashover.
+C      The first  (pre-flash) characteristic has near-infinite resistance,  with
+C      exponent equal to unity.  Leakage current (about 1.E-20 amps)  will occur
+C      prior to flashover at v = VREF = 778 kV.   The operational characteristic
+C      is   i = 29479.54 * ( v / V-ref ) ** 26.53,   which is very close to  the
+C      original characteristic of 1st subcase.  Change on 23 Jul 1984 ("M39.+").
+C          Enhancement beginning 30 July 1986.   Series voltage sources for  all
+C          nonlinear elements are allowed,  so  let's take the simplest possible
+C          case of a  10-KVolt battery  (variable "BATTER" defined within TACS).
+C          Before the pulse arrives,  this  only  draws leakage current from the
+C          linear representation of the surge arrester  (R-leakage).   But  when
+C          the  10 kV  are added to the surge, the answer changes significantly.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000050    .020
+       1       1       1       0       1      -1       0
+       2      10      33       1      40      10     100      50
+TACS HYBRID         { We use TACS only to produce series voltage "BATTER" of ZnO
+99BATTER  = 10000.    { Small battery (dc source) is inserted in series with ZnO
+33BATTER       { Output the only this one TACS variable that controls ZnO source
+77BATTER      10000.   { Initial condition required for smooth electrical step 1
+BLANK card ending all TACS data
+-1SEND  REC                 .306  5.82  .012  200.                             1
+92REC                                 5555.                                    1
+C  =============================================================================
+C 92REC   TYP11                         5555.                                  1
+C      The preceding comment card is just for verification of solution.  See the
+C      explanation on comment cards  below  the  blank card ending switch cards.
+C  =============================================================================
+C                    VREF                   VFLASH                    VZERO  COL
+    0.778000000000000E+06                      1.0
+C                    COEF                    EXPON                     VMIN
+    0.294795442961157E-20                      1.0              .900000E+01
+                     9999    { Bound on exponentials of 1st, pre-flash v-i curve
+    0.294795442961157E+05    0.265302624185338E+02    0.545050636122854E+00
+                     9999   { Bound on exponentials of 2nd, post-flash v-i curve
+  TACS CONTROLBATTER   { Only 1st of three A6 names, for series voltage, is used
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+C  =============================================================================
+C      The easiest way to verify correct operation of the series voltage  BATTER
+C      of the Type-92 element  is  to  cancel it out using an electrical network
+C      battery.   The  following Type-11 source will do the job.  But  then  the
+C      nonlinear element  must have the second name changed  to  "TYP11",  note.
+C 11TYP11      -10000.     { This battery cancels series voltage of ZnO "BATTER"
+C  =============================================================================
+14SEND       408000.       60.
+BLANK card ending source data
+C      The following beginning shows leakage current between steps 1 and 33 when
+C      only the TACS voltage "BATTER" is exciting the arrester.  Since  the line
+C      impedance (Z-thev) is so much smaller than the ZnO, the receiving voltage
+C      REC  is very, very small.  But  it is nonzero, note --- and correctly so:
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   1     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   1     output variables belong to TACS (with "TACS" an internally-added upper name of pair).  Updated 2 Nov 00
+C  Step      Time        SEND         REC          SEND         REC        TACS
+C                        REC                                    TERRA      BATTER
+C     0       0.0           0.0          0.0          0.0          0.0     10000.
+C     1     .5E-4   407927.5198  .269681E-19  407927.5198  -.37891E-22     10000.
+C     2     .1E-3   407710.1048  .269681E-19  407710.1048  -.37891E-22     10000.
+C    12     .6E-3   397606.9641  .269681E-19  397606.9641  -.37891E-22     10000.
+C    22     .0011   373418.3984  .269681E-19  373418.3984  -.37891E-22     10000.
+C    32     .0016   336001.2998  .269681E-19  336001.2998  -.37891E-22     10000.
+C    33    .00165   331579.2191  .269681E-19  331579.2191  -.37891E-22     10000.
+C    34     .0017   -119678.217  446717.5472  327039.3298  .165479E-20     10000.
+ 1        { Request for all node voltage outputs
+C   400       .02   8093.382341  117985.5514  126078.9337  .7639597E-3     10000.
+C Variable maxima : 474201.1091  793085.1587  407991.9464  225.9075813     10000.
+C Times of maxima :       .0063        .0159       .01665        .0162        0.0
+C Variable minima : -511598.378  -768087.191  -407991.946  -333.924608     10000.
+C Times of minima :      .00295        .0063       .00835       .00765        0.0
+  PRINTER PLOT
+ 194 3. 0.0 20.         REC                      { Axis limits: (-3.339,  2.259)
+  CALCOMP PLOT
+ 194 2. 0.0 20.         REC                     16-Char  HeadingVertical axis Y.
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      3rd of 12 subcases. Same basic network as just solved, only with modified
+C      ZnO characteristic as derived by  DC-39.  There is a 2-exponential curve,
+C      the pre-flashover curve of 2nd subcase.   V-flash < 0  means no gap here.
+$STARTUP, (ATPDIR)startup !       { Re-initialize with original disk file of 1st subcase
+C        This will restore the default parameters,  after illustrating  (see the
+C        2nd subcase)  what happens in the absence of such restoration for later
+C        stacked subcases.   The  second subcase continued with the mini CalComp
+C        plots  that  began  at the end of the 1st  subcase  with  dc37star.dat.
+C          Note about "(ATPDIR)" as used on preceding $STARTUP.  This is
+C          optional.  If it appears, ATP will replace these 8 bytes by the
+C          content of symbol ATPDIR (as used at BPA, "C:\ATP").
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ZINC OXIDE            20
+ .000050  .02000
+       1       1       1       0       1      -1       0
+       2      10      33       1      40      10     100      50
+-1SEND  REC                 .306  5.82  .012  200.
+92REC                                  5555.                                   1
+C                    VREF                   VFLASH                    VZERO  COL
+    0.778000000000000E+06                     -1.0                           1.0
+C                    COEF                    EXPON                     VMIN
+    0.505584788677197E+07    0.464199973324622E+02    0.632754084797274E+00
+    0.122767153039007E+05    0.166775903445228E+02    0.816748018907843E+00
+                     9999        { Bound on two exponentials of single v-i curve
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14SEND       408000.       60.
+BLANK card ending source data
+C                            Step      Time        REC          SEND         REC
+C                                                                          TERRA
+C                            0       0.0           0.0          0.0          0.0
+C                            1     .5E-4           0.0  407927.5198          0.0
+C                            2     .1E-3           0.0  407710.1048          0.0
+C                           12     .6E-3           0.0  397606.9641          0.0
+C                           22     .0011           0.0  373418.3984          0.0
+C                           32     .0016           0.0  336001.2998          0.0
+C                           33    .00165           0.0  331579.2191          0.0
+C                           34     .0017   446715.6097  327039.3298  .0027223116
+ 1        { Request for all node voltage outputs
+C Final step printout:     400       .02   104698.8727  126078.9337  .6380412E-3
+C Variable maxima :                        626465.3591  407991.9464  217.0115979
+C Times of maxima :                             .00175       .01665       .00175
+  PRINTER PLOT
+ 144 3. 0.0 20.         REC                      { Axis limits: (-6.329,  6.265)
+  CALCOMP PLOT
+ 194 2. 0.0 20.         REC
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       4th of 12 subcases
+C       Modify 1st subcase of DC-37 to illustrate scaling of voltage and current
+C       by 1000 for ZnO surge arrester.
+C          1 October 2000,  add illustrations of 3-digit exponents:  numbers
+C          larger than  1.E+100  and smaller than  1.E-100.  It was necessary
+C          to find a subcase without plotting,  since otherwise the limit of
+C          FLTINF  (set in STARTUP to 1.E19)  would be imposed.  To avoid this
+C          limit,  we set  IPLOT = -1  below (columns 9-16).  Node  OVER  is to
+C          demonstrate near overflow of the Intel limit of around 1.E+308,  and
+C          node  UNDER  is to demonstrate near underflow of the limit 1.E-308
+C          Each involves series R-L with  R = 12.7  and  L = .45 mH  (or the
+C          negative of this for overflow),  which implies a time constant of
+C          Tau = L / R = .45E-3 / 12.7 = 3.54E-5 sec.  The simulation lasts for
+C          20 msec,  so  EXP ( T-max / Tau )  =  EXP ( .020 / 3.54E-5 )  =
+C          EXP ( 564.44 ) = 1.365E+245.  This 245 is close to the 303 observed
+C          (close enough for engineers to understand the physics involved).
+C             A final detail concerns the  .DBG  file.  For Salford EMTP, this
+C             is a separate file as long as output is buffered (typically LU6VRT
+C             has value 32768 for an output buffer of size 32 Kbytes).  As a
+C             separate file,  the user might never look to see the message that
+C             is produced for each optimal encoding that requires a 3-digit
+C             exponent.  For example, the first two occur to produce the output
+C             of step 150.  The associated diagnostic becomes highly visible if
+C             output is not buffered (if LU6VRT = 0).  Then,  from  DC37.LIS :
+C  100    .005   .316184E-12     0.0     0.0  .577391E-22  -.887674E75  .267212E-74
+C  FLTOPT.  Wierd number  D9 = 1.234180423134E+0113   SPYCD2(1:35) = 0.1234180423133828610000+114
+C  FLTOPT.  Wierd number  D9 = 1.921900653658E-0113   SPYCD2(1:35) = 0.1921900653658086780000-112
+C  150   .0075   -288.499567     0.0     0.0  -.305176E-3  -.12342E114  .19219E-112
+C             There is nothing wrong.  The number is wierd only in the sense
+C             that Salford omitted the "E" during encoding,  so ATP logic was
+C             forced to restore the "E" manually.
+C          14 January 2011,  add illustration of the new protection against
+C          overflow of node voltage.  DC-61 illustrated use of the new optional
+C          second parameter  LOGB10  on the  PEAK VOLTAGE MONITOR  declaration.
+C          But the protection there was invisible since there never was any need
+C          for it.  Here,  there is need.  With a node voltage limit of 1.E+304,
+C          execution will be terminated with the  KILL = 264  error message:
+C            KILL = 264.   ATP halts execution because some node voltage has
+C            exceeded the bound of  1.00000000+304   as defined by the optional
+C            second parameter of the user`s NODE VOLTAGE MONITOR  request.  This
+C            is at node  "MIDO  "  on step number 399.  WSM.
+C          Ruler for next card:   MAXVLT  HALTNV  { Format is: ( 32X, I8, E8.0 )
+PEAK VOLTAGE MONITOR                   1  1.E304   { Peak node voltage = 1.E+304
+VOLTAGE SOURCES IN KV
+PRINTED NUMBER WIDTH, 10, 2,    { Request minimum precision, since explosive
+ .000050    .020
+       1      -1       1       0       1      -1       0
+       5      10      33       1      40      10     100      50     395       1
+92VOLT                                5555.                                    1
+C                    VREF                   VFLASH                    VZERO  COL
+                  408000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+  VOLT                      1.E8  { Avoid warning to weak connection to ground
+C    Network modification.  We must split the unstable series R-L into two
+C    separate, series branches.  This is to add a node at which the voltage
+C    will increase without bound (exponential growth).  The old data escaped our
+C    new protection because terminal node voltages were identically zero (it was
+C    only the branch current that grew uncontrolled):
+C OVER                      12.7  -.45       { Series R-L with negative L }    1
+  OVER  MIDO                12.7             { Series R with positive R }
+  MIDO                            -.45       { Series L with negative L }      1
+  UNDER                     12.7   .45       { Series R-L with positive L }    1
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14VOLT          408.       50.
+14OVER           1.0       50.   { Voltage source is shorted at .2 ms }    2.E-4
+14UNDER          1.0       50.   { Voltage source is shorted at .2 ms }    2.E-4
+BLANK card ending source data
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step    Time     MIDO      VOLT      OVER      UNDER     VOLT      MIDO      UNDER
+C                                                            TERRA     TERRA     TERRA
+C      0     0.0        0.0       0.0       0.0       0.0       0.0       0.0       0.0
+C      1   .5E-4   3.395807  407.9497  .9998766  .9998766  2.491993  -.188656  .0325693
+C      2   .1E-3    19.6688  407.7987  .9995066  .9995066  2.468123  -1.47002  .0707492
+C      3  .15E-3   113.9285  407.5471  .9988899  .9988899  2.428834  -8.89209  .0773084
+C      4   .2E-3   656.5329  407.1949       0.0       0.0  2.374852  -51.6955  .0458835
+C      5  .25E-3   3802.936  406.7423       0.0       0.0  2.307161  -299.444  .0079213
+ 1 { Request for output of all node voltages
+C    395  .01975   .125E302  406.7423       0.0       0.0  2.307161  -.98E300  .24E-299
+C    396   .0198   .723E302  407.1949       0.0       0.0  2.374852  -.57E301  .42E-300
+C    397  .01985   .419E303  407.5471       0.0       0.0  2.428834  -.33E302  .72E-301
+C    398   .0199   .243E304  407.7987       0.0       0.0  2.468123  -.19E303  .12E-301
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       5th of 12 subcases
+C       Modify 2nd subcase of DC-37 to illustrate scaling of voltage and current
+C       by 1000 for ZnO surge arrester.   Note that  VOLTAGE SOURCES IN KV  is
+C       not needed because the declaration of the preceding subcase remains in
+C       effect for this one.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000050    .020
+       1       1       1       0       1      -1       0
+       2      10      33       1      40      10     100      50
+-1GEN   VOLT                .306  5.82  .012  200.
+92VOLT                                5555.                                    1
+C                    VREF                   VFLASH                    VZERO  COL
+    0.778000000000000E+06                      1.0
+C                    COEF                    EXPON                     VMIN
+    0.294795442961157E-20                      1.0              .900000E+01
+                     9999    { Bound on exponentials of 1st, pre-flash v-i curve
+    0.294795442961157E+05    0.265302624185338E+02    0.545050636122854E+00
+                     9999   { Bound on exponentials of 2nd, post-flash v-i curve
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14GEN           408.       50.
+BLANK card ending source data
+ 1        { Request for all node voltage outputs
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       6th of 12 subcases
+C       Modify 4th subcase of DC-37 to illustrate scaling of voltage and current
+C       by 1000.  Note data (specifically, source voltage) is unscaled.  Instead
+C       of  VOLTAGE SOURCES IN KV,  we here use output scaling of  BVIV  and
+C       BCIA  (following two declarations).  Output of the time-step loop is
+C       identical to that of 4th subcase.   See October, 1997, newsletter.
+C          28 December 1998,  add first column-80 punch in excess of 4.  A story
+C          in the April, 1999, newsletter should introduce use of 0 plus the 16 
+C          choices that are summarized immediately before the blank card that 
+C          ends branch cards.  Details of this mapping remain an ATP secret.
+C 34567890123456789012345678901234567890    V-base is read from cols. 33-40:
+BASE VOLTAGE IN VOLTS              1000.
+BASE CURRENT IN AMPERES            1000.  { I-base is read from cols. 33-40
+VOLTAGE SOURCES IN KV                 -1.0  { Cancel usage of preceding subcases
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000050    .020
+       1       1       1       0       1      -1       0
+       2      10      33       1      40      10     100      50
+C    28 Dec 98,  original col-80 punch of 1 is changed to B to add power output:
+92VOLT                                5555.                                    B
+C                    VREF                   VFLASH                    VZERO  COL
+                  408000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+C   Documentation of new column-80 choices that begin 28 December 1998:
+C    5  ==>  Append power & energy while leaving voltage & current
+C    6  ==>  Append power & energy while omitting current (but not the voltage) 
+C    7  ==>  Append power & energy while omitting voltage (but not the current)
+C    8  ==>  Append power & energy while omitting both voltage and current
+C    9  ==>  Append power          while leaving voltage & current
+C    A  ==>  Append power          while omitting current (but not the voltage) 
+C    B  ==>  Append power          while omitting voltage (but not the current)
+C    C  ==>  Append power          while omitting both voltage and current
+C    D  ==>  Append         energy while leaving voltage & current
+C    E  ==>  Append         energy while omitting current (but not the voltage) 
+C    F  ==>  Append         energy while omitting voltage (but not the current)
+C    G  ==>  Append         energy while omitting both voltage and current
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14VOLT       408000.       50.
+BLANK card ending source data
+C Column headings for the  3   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  First  1     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   1     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   1     output variables are either power or energy or both as a pair (column 80 punches > 4).
+C   Step      Time        VOLT         VOLT         VOLT
+C                                      TERRA        TERRA
+C      0       0.0           0.0          0.0          0.0
+C      1     .5E-4   407.9496661  2.491993465  1016.607902
+C      2     .1E-3   407.7986766  2.468123475  1006.497487
+ 1        { Request for all node voltage outputs
+C    200       .01         -408.         -2.5        1020.
+C    250     .0125   -288.499567  -.305176E-3  .0880430807
+C    300      .015   -.80639E-11  -.14726E-20  .118745E-31
+C    350     .0175   288.4995667  .3051758E-3  .0880430807
+C    400       .02          408.          2.5        1020.
+C Variable maxima :         408.          2.5        1020.
+C Times of maxima :          .02          .02          .01
+C Variable minima :        -408.         -2.5          0.0
+C Times of minima :          .01          .01          0.0
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      7th of 12 subcases illustrates power & energy output of nonlinear element.
+C      Apparently this was never documented as Orlando Hevia found it to  be  in
+C      error during late May of 1998,  following  overhaul of branch data input.
+C      KISS:  2 volts across R = 2 gives 1 amp.  Then, nonlinear has 1 ohm and
+C      one volt,  so power is 1 on 1st step.  Trapezoidal rule then gives the
+C      energy as  dT ( E(0) + E(1) ) / 2 = .001 * 1 / 2 = .0005  (about).
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .001    .001
+       1       1       1       0       0       0       0       0
+  SEND  REC                  1.0  { Half of 2 ohms total is this linear branch
+92REC                                 4444.  { ZnO is piecewise-linear }       4
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                      1.0  { First point of i-v curve.
+                      10.                      10.
+                    9999.       { Terminator for piecewise-linear characteristic
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14SEND           2.0       1.0    { 1 Hz is close enough to dc for this test
+BLANK card ending source data
+C   Step      Time        REC          REC          SEND         REC
+C                         TERRA                                  TERRA
+C      0       0.0           0.0          0.0          0.0          0.0
+C      1     .1E-2   .9999605221  .9999802609  1.999960522  .4999803E-3
+ 1        { Request for all node voltage outputs
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       8th of 12 subcases is added  13 October 2006 to demonstrate operation of
+C       extended power and energy output (punches 5-16) for switches.  Of course
+C       the same meanings apply to switches as to branches -- with the exception
+C       that power & energy are flow  _through_ a switch rather than consumption
+C       within a branch.   Data for this illustration of extended switch outputs
+C       is copied from the 6th subcase.   One switch is added in series with the
+C       N.L. element.  This is  (GEN, VOLT).  The current, power and energy flow
+C       through it obviously should be identical to those of the branch.   Since
+C       the branch has  "B"  in column 80, only current and power will be shown.
+C       The switch has  "7"  to add energy to these two.  Since the 2 columns of
+C       current are side by side,  and  the 2 columns of power are side by side,
+C       it is possible to see by casual inspection that they agree.   As for the
+C       energy,  it seems believable;  printed values are monotone increasing. 
+C 34567890123456789012345678901234567890    V-base is read from cols. 33-40:
+BASE VOLTAGE IN VOLTS              1000.
+BASE CURRENT IN AMPERES            1000.  { I-base is read from cols. 33-40
+VOLTAGE SOURCES IN KV                 -1.0  { Cancel usage of preceding subcases
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000050    .020
+       1       1       1       0       1      -1       0
+       2      10      33       1      40      10     100      50
+92VOLT                                5555.                                    B
+C                    VREF                   VFLASH                    VZERO  COL
+                  408000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+BLANK card terminating branch data
+  GEN   VOLT                                          MEASURING                7
+BLANK card terminating all switches
+14GEN        408000.       50.
+BLANK card ending source data
+  GEN        { List of bus names for node voltage output
+C Column headings for the  6   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  First  1  output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2  output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   3  output variables are either power or energy or both as a pair (column 80 punches > 4).
+C   Step    Time        GEN          GEN          VOLT         VOLT         GEN          GEN
+C                                    VOLT         TERRA        TERRA        VOLT         VOLT
+C ***        Switch  "GEN   "  to  "VOLT  "  closed before  0.00000000E+00  sec.
+C     0     0.0           0.0          0.0          0.0          0.0          0.0          0.0
+C     1   .5E-4   407.9496661  2.491993465  2.491993465  1016.607902  1016.607902  .0254151975
+C     2   .1E-3   407.7986766  2.468123475  2.468123475  1006.497487  1006.497487  .0759928323
+BLANK card ending node voltage outputs
+C   400     .02          408.          2.5          2.5        1020.        1020.  3.078116283
+C Variable maxima :      408.          2.5          2.5        1020.        1020.  3.078116283
+C Times of maxima :       .02          .02          .02          .01          .01          .02
+C Variable minima :     -408.         -2.5         -2.5          0.0          0.0          0.0
+C Times of minima :       .01          .01          .01          0.0          0.0          0.0
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       9th of 12 subcases will illustrate power and energy output  along with a
+C       phasor solution.  Since  previous  subcases  all  involved one nonlinear
+C       element,  make this linear and easy to verify by hand.  Add  a switch as
+C       was done for the preceding subcase.  Illustrate 3 column-80 punches > 4.
+C       Note that the  8-punch results in the same outputs that a 4-punch would,
+C       but they are located differently :  power and energy are appended rather
+C       than overlay the corresponding voltage and current outputs.   As for the
+C       switch,  it is permanently closed in spite of  T-open = 19 msec < T-max.
+C       Finally,  turn off V and I scaling.  Date of addition:  13 October 2006
+BASE VOLTAGE IN VOLTS                1.0     { Cancel usage of preceding subcase
+BASE CURRENT IN AMPERES              1.0     { Cancel usage of preceding subcase
+ .000500    .020
+       1       1       1       2       1      -1 
+       5       5
+  GEN   MID                  0.5      { power and energy output }              8
+  LOAD                       0.5    { power, energy, and voltage output }      6
+BLANK card terminating branch data
+  MID   LOAD         -1.      .019          { current and energy output }      F
+BLANK card terminating all switches
+14GEN            1.0       50.                                     -1.
+BLANK card ending source data
+C       Total network loss  P-loss  by summing injections =   5.000000000000E-01
+C Solution at nodes with known voltage.  ...
+C  Node      Source node voltage      Injected source current       Injected  source  power
+C  name    Rectangular     Polar     Rectangular        Polar      P  and  Q    MVA and P.F.
+C  GEN           1.0         1.0           1.0            1.0            0.5             0.5
+C                0.0         0.0           0.0            0.0            0.0       1.0000000
+C Column headings for the  7   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  First  1   output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   1   output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   5   output variables are either power or energy or both as a pair (column 80 punches > 4).
+C   Step   Time        LOAD         MID          GEN          GEN          LOAD         LOAD         MID
+C                      TERRA        LOAD         MID          MID          TERRA        TERRA        LOAD
+C ***      Phasor I(0) =  1.0000000E+00                     Switch  "MID   "  to  "LOAD  "  closed in the steady-state.
+C      0    0.0           0.5          1.0          0.5          0.0          0.5          0.0          0.0
+C      1  .5E-3   .4938441703  .9876883406  .4877641291   .246941E-3  .4877641291   .246941E-3   .246941E-3
+C      2  .1E-2   .4755282581  .9510565163  .4522542486  .4819456E-3  .4522542486  .4819456E-3  .4819456E-3
+BLANK card ending node voltage outputs (none for this subcase)
+C     40    .02           0.5          1.0          0.5         .005          0.5         .005         .005
+C Variable maxima :       0.5          1.0          0.5         .005          0.5         .005         .005
+C Times of maxima :       0.0          0.0          0.0          .02          0.0          .02          .02
+C Variable minima :       -.5          -1.  .496087E-31          0.0  .496087E-31          0.0          0.0
+C Times of minima :       .01          .01         .005          0.0         .005          0.0          0.0
+  PRINTER PLOT
+ 184 2. 0.0 10.         GEN   MID  { Axis limits on branch power: (0.000, 5.000)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       10th of 12 subcases  will illustrate passing of switch power and energy 
+C       to TACS.  New (as of 31 October 2006) TACS sources are Type-94 for power
+C       and Type-95 for energy.  Otherwise,  they are like Type-91 for current.
+C       There are no dynamics,  so dT is immaterial except that we want smooth
+C       curves,  so take 100 steps over one cycle.  Pass one sinusoidal ampere
+C       through a 1-ohm resistor.  Note the column-80 punch  "8"  on the switch
+C       to append both switch power flow and energy flow.  Of course, the TACS
+C       sources should be identical.  Output shows this.  Numbers are simple
+C       enough to be verified with a pocket calculator.  WSM, 3 November 2006
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 9 output columns)
+ .000200    .020
+       1       1       1       1       1      -1
+       5       5 
+TACS HYBRID
+94GEN          { Power  flow through the switch having A6 terminal node "GEN   "
+95SWIT         { Energy flow through the switch having A6 terminal node "SWIT  "
+77GEN          1.0   { Initial condition on the Type-94 power source avoids zero
+33GEN   SWIT     { Output the values (power and energy) of these two new sources
+BLANK card terminates all TACS data
+  SWIT                       1.0  { 1-ohm resistor connects the switch to ground
+BLANK card ending all BRANCH cards
+  GEN   SWIT                                          MEASURING                8
+BLANK card ending all SWITCH cards
+14GEN            1.0       50.                                 -1.
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C       SWIT   |TERRA *GEN   *
+C       GEN    |SWIT  *
+C       TERRA  |SWIT  *
+C --------------+------------------------------
+BLANK terminates the last SOURCE card
+C       Total network loss  P-loss  by summing injections =   5.000000000000E-01
+C  Output for steady-state phasor switch currents.
+C   Node-K    Node-M    I-real           I-imag           I-magn          Degrees        Power            Reactive
+C     GEN       SWIT  1.00000000E+00  0.00000000E+00   1.00000000E+00       0.0000    5.00000000E-01    0.00000000E+00
+  GEN  { Just one node voltage output
+C Column headings for the  5   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  First  1     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are either power or energy or both as a pair (column 80 punches > 4).
+C  Next   2     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C   Step      Time       GEN         GEN         GEN         TACS        TACS
+C                                    SWIT        SWIT        GEN         SWIT
+C ***  Phasor I(0) =  1.0000000E+00   Switch  "GEN   "  to  "SWIT  "  closed in the steady-state.
+C     0       0.0          1.0         1.0         0.0         1.0         0.0
+C     1     .2E-3   .998026728  .996057351  .199606E-3  .996057351  .199606E-3
+C     2     .4E-3   .992114701  .984291581  .397641E-3  .984291581  .397641E-3
+C     3     .6E-3   .982287251  .964888243  .592559E-3  .964888243  .592559E-3
+C Column headings for the  5   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+BLANK card ends OUTPUT variable requests
+C   100       .02          1.0         1.0         .01         1.0         .01
+C  Variable maxima :       1.0         1.0         .01         1.0         .01
+C  Times of maxima :       0.0         0.0         .02         0.0         .02
+C  Variable minima :       -1.  .80245E-31         0.0  .80245E-31         0.0
+C  Times of minima :       .01        .005         0.0        .005         0.0
+  PRINTER PLOT
+ 194 4. 0.0 20.         TACS  GEN               Axis limits: (0.000,  1.000)
+ 194 4. 0.0 20.         TACS  SWIT              Axis limits: (0.000, 10.000)
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE
+C       11th of 12 subcases  will illustrate alternative [Z]-based iteration
+C       that first is being made available to others in January of 2007.  Data
+C       is identical to the 1st subcase,  and so is the solution,  in spite of
+C       the large number of output digits (typically 10).  The Newton iteration
+C       is that accurate (this proves it for 1 arrester with 1 exponential).
+C       Note the new declaration immediately after the opening Type-92 branch
+C       card.  This is new.  Column position and case of the request words are
+C       critical,  so to avoid mistakes, paste this to other data of interest.
+C       The declaration is required only for the 1st NL element of a subnetwork
+C       that is to be solved with impedance rather than admittance formulation.
+C       Beware of reference branch use,  however,  as the flag goes with data.
+C       I.e.,  a different subnetwork that requests a copy of this element for
+C       its first will automatically be solved using [Z] rather than [Y] whether
+C       or not this is the user's desire.  The choice of solution method follows
+C       the original data.  Finally,  only use [Z] with Type-92 exponentials as
+C       service begins  8 January 2007.  WSM.  
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+NO Y-BASED NEWTON   { Every subnetwork is to be solved using [Z] rather than [Y]
+ .000050    .020
+       1       1       1       0       1      -1       0
+       2      10      33       1      40      10     100      50
+-1SEND  REC                 .306  5.82  .012  200.
+92REC  { Type 92 is for v-i curve }   5555.  { 5555 flag is for exponentials } 1
+  [Z]-based Newton iteration { Column and case matter.  Declare not use of [Y]
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14SEND       408000.       60.
+BLANK card ending source data
+C              Step      Time        REC          SEND         REC          SEND
+C                                                             TERRA        TERRA
+C              33    .00165           0.0  331579.2191          0.0  11.37746957
+C              34     .0017   446716.5798  327039.3298  .0013592657  7.950150616
+ 1        { Request for all node voltage outputs
+  PRINTER PLOT
+ 144 3. 0.0 20.         REC                      { Axis limits: (-7.111,  6.930)
+ 194 2. 0.0 20.         REC                      { Axis limits: (-2.499,  2.499)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       12th of 12 subcases  is appended  5 February 2009  to illustrate two new
+C       request words that prevent  reverse current flow.  Until now,  the third
+C       quadrant  (having negative voltage and current)  is assumed to be a copy
+C       of the 1st quadrant (having positive voltage and current) except for the
+C       reversal of signs. But Prof. Hans Kr. Hoidalen in Trondheim, Norway, had
+C       a desire to prevent reverse current flow.  He wanted to model a physical
+C       diode as an ideal diode  in series with an exponential characteristic to
+C       account for the forward drop.  All of this is contained within the Type-
+C       92 exponential ZnO element provided one of two new special request words
+C       is used.  Either  1) Diode model allows reverse leakage   or
+C                         2) Diode prohibits reverse current
+C       To illustrate,  copy that single exponential of the 1st subcase.  First,
+C       in its original form,  2nd with a leaky diode,  and 3rd with an ideal
+C       diode.  These are nodes  1) ZNO,  2) LEAKY,  &  3) IDEAL,  respectively.
+C       The leakage branch is a linear resistor that draws the same current as
+C       the exponential at voltage  V-min = 0.5 per unit = 778 kV / 2 = 389 kV.
+C       Drive all 3 alternatives from the same sinusoidal voltage source and
+C       compare the resulting currents.  For positive voltage,  all 3 currents
+C       will agree.  But for negative voltage,  all 3 never will agree.  For
+C       negative voltage,  IDEAL  will carry no current,  of course.  The other
+C       two will carry current,  and for voltage less than 389 kV the currents
+C       will agree.  This is for  ZNO  and  LEAKY.  But for negative voltages
+C       higher than 389 kV,  the current of  ZNO  will be larger.  The source
+C       amplitude of 400 kV is purposely reduced to make both the linear and
+C       the exponential portions easily visible on a resulting plot.  WSM.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+C                 MAXZNO  EPSZNO  EPWARN  EPSTOP ZNOLIM1 ZNOLIM2
+ZINC OXIDE            20   1.D-8   1.D-3     0.1     0.6     1.5   default values
+   .0002    .010   { Half a 50-Hz cycle will vary voltage from max + to max -
+       1       1
+C   Let's connect resistors of 10K ohms in series with the 3 arrestors:
+  SEND  ZNO               10000.
+  SEND  LEAKY             10000.
+  SEND  IDEAL             10000.
+92ZNO   { Type 92 is for v-i curve }  5555.  { 5555 flag is for exponentials } 1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+92LEAKY { Type 92 is for v-i curve }  5555.  { 5555 flag is for exponentials } 1
+  Diode model allows reverse leakage   { 3rd quadrant consists of leakage-R only
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+C  This V-min = 0.5 was per unit voltage for end of linear segment.  Reduce it:
+C                   1250.                      26.                      0.1
+                    9999.    { Bound on exponential segments (only one precedes)
+92IDEAL { Type 92 is for v-i curve }  5555.  { 5555 flag is for exponentials } 1
+  Diode prohibits reverse current
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14SEND       400000.       50.
+BLANK card ending source data
+  SEND  IDEAL ZNO   LEAKY   { Output source voltage followed by 3 arrester volt
+BLANK card ends node names for selective voltage output
+  PRINTER PLOT
+ 194 1. 0.0 10.         BRANCH                  Compare leakage Arrester current
+                        ZNO         LEAKY       IDEAL
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

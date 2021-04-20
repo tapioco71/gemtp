@@ -1,0 +1,4 @@
+C     Comment card is 1st of 2 cards in DC58INCL2.DAT.   The second is $INCLUDE:
+C        Destroy the 2nd level of $INCLUDE.  Insert 3rd file content here:
+C     Contents of  DC58INC3.DAT  are  just 2 comment cards,  with this being 1st
+C                                                and this is the second and last

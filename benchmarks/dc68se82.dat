@@ -1,0 +1,15 @@
+0, 69
+2, 50
+4, 142
+4.3, 142,
+4.7, 142,
+5, 142,
+6, 188
+8, 73
+10, 100
+-9999., 0,
+The preceding software end-of-file requires only that X = -9999.
+Nothing following this will be read by ATP,  so comments can be
+placed here without difficulty.  About the (X,Y) characteristic,
+note that points 4 and 5 have been added compared with subcase 11.
+They are redundant,  and will be discarded upon input.

@@ -1,0 +1,35 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-12
+C            Continued phasor solution for 1 source, 1 resistor, 1 closed switch
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+DIAGNOSTIC           0 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+    .005     1.0
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+  LOAD                     1000.                                               1
+BLANK card ending branch cards
+  GEN   LOAD        -1.0       1.0                                             1
+BLANK card ending switch cards
+14GEN            70.  .1591549                                     -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   2.450000000000E+00
+C                                Output for steady-state phasor switch currents.
+C         Node-K    Node-M            I-real            I-imag            I-magn
+C         GEN       LOAD      0.70000000E-01    0.00000000E+00    0.70000000E-01
+C              Step      Time        LOAD         GEN          GEN          LOAD
+C                                                             LOAD         TERRA
+C ***      Phasor I(0) =  0.7000000E-01   Switch  "GEN   "  to  "LOAD  "  closed
+C               0       0.0           70.          70.          .07          .07
+C               1      .005     69.999125    69.999125   .069999125   .069999125
+C               2       .01   69.99650003  69.99650003     .0699965     .0699965
+ 1
+C             200       1.0   37.82117736  37.82117736  .0378211774  .0378211774
+C         Variable maxima :           70.          70.          .07          .07
+C         Times of maxima :           0.0          0.0          0.0          0.0
+C         Variable minima :   37.82117736  37.82117736  .0378211774  .0378211774
+C         Times of minima :           1.0          1.0          1.0          1.0
+  PRINTER PLOT
+ 143 .2 0.0 1.0         LOAD                    { Axis limits : (0.000,   7.000)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

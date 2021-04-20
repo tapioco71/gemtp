@@ -1,0 +1,51 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-44
+C     Test of  Type-16  controlled  dc  voltage source constructed and carefully
+C     validated by Prof. Dommel.  To compare,  punch a value for  the  isolation
+C     resistance  R-epsiln  (cols. 51-60 of 2nd Type-16 source card) equal to as
+C     small  a resistor as can be tolerated  (1.E-8 is fine for 60-bit numbers).
+PRINTED NUMBER WIDTH, 13, 3, { Request 13-column output, with 3 separator blanks
+ .000050    .300
+       1       5               1       1      -1
+      10      10     100     100
+  VR    A                    0.5
+  GR                         0.5
+BLANK card ending all branches
+BLANK card ending (here non-existent) switches
+11A     -1    -1000.
+13A     -1      250.       0.0       0.1       0.0       0.2       .01
+16VR     1      1.39     7380.       4.4      .040     .0103     1000.
+16GR        -148000.    14800.   -70000.    70000.     1.E-8       0.0         3
+14A     -1    -1000.      .001       0.0       0.0       0.0       -1.     1.E-6
+C             The following forward and reverse flows are for 1st phasor branch:
+C  VR    6879.99999     6879.99999         1000.         1000.     .3439999995E7
+C          0.0              0.0             0.0           0.0                0.0
+C
+C     A   6379.99999     6379.99999       -1000.         1000.    -.3189999995E7
+C                0.0            0.0          0.0     180.0000                0.0
+BLANK card ending sources
+C       Total network loss  P-loss  by summing injections =   6.060077433932E+07
+C
+C Output for steady-state phasor switch currents.
+C     Node-K    Node-M            I-real            I-imag            I-magn
+C     ......    TYP-16       -1.00000000E+03    0.00000000E+00    1.00000000E+03
+C
+C   Step      Time        GR          GR        TYP-16       ......           VR
+C                         VR
+C  ***      Phasor I(0) = -1.0000000E+03  Switch  "......"  to  "TYP-16"  closed
+C     0       0.0      -7380.       -500.   -500.00001   -500.00001   6879.99999
+C     1     .5E-4      -7380.       -500.   -500.00001   -500.00001   6879.99999
+C     2     .1E-3      -7380.       -500.   -500.00001   -500.00001   6879.99999
+ 1
+C Final step:             6000       0.3    15276.8738       -612.5   -612.50001
+C Final step (cont.):          -612.50001   -15889.374   -16501.874   1224.99999
+C Variable maxima :  15276.8738     -375.   -375.00001   -375.00001   69628.6607
+C Times of maxima :         0.3       .11          .11          .11       .09115
+C Variable minima :  -70027.223    -612.5   -612.50001   -612.50001   -15889.374
+C Times of minima :      .09115       0.3          0.3          0.3          0.3
+  PRINTER PLOT                                   { Axis limits: (-1.493,  7.000)
+ 18430. 0.0300.         VR    GR                Source Voltage  Voltage in volts
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+ 

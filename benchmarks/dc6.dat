@@ -1,0 +1,96 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-6
+C         Test degenerate  SUBROUTINE ANALYT  of UTPF:  "ANALYTIC SOURCES USAGE"
+C         Also,  two disconnected subnetworks have been added to illustrate  the
+C         use of trapped charge.  Node  "TRAP"  has nothing  but  a capacitor to
+C         ground and excitation by a trapped-charge source.  This node does hold
+C         its charge.   The 2nd subnetwork once was required  (but no longer is)
+C         because  of  the need to have at least one regular phasor source (with
+C         TCLOSE < 0.0),  so this regular phasor source  "EXTRA"  excites an R-C
+C         circuit.  First there is the continuation of the phasor solution, then
+C         relaxation as the source is shorted (TSTOP=.45 sec), finally transient
+C         charging when  the  Type-12 ramp begins  (TSTART = 1.55 sec).   If the
+C         user wants to demonstrate that no regular phasor source  is  required,
+C         after  8 May 1987,  erase  TSTART  (columns 61-70) of source  "EXTRA".
+C PRINTED NUMBER WIDTH, 14, 2,   ---  Replace by following 2 lines on  23 Aug 95
+$DEPOSIT, KOLWID=14  { Use SPY DEPOSIT to change column width from STARTUP value
+$DEPOSIT, KOLSEP=2 { Use SPY DEPOSIT to change col separation from STARTUP value
+$BLANK COMMENT   { Set switch so any truly blank line will be ignored
+ANALYTIC SOURCES USAGE
+     0.1     2.0
+       1       1       1       1       1
+  NODE1 NODE2                1.0                                               1
+  NODE3 NODE4 NODE1 NODE2
+  NODE2                                1.0E6
+  NODE4       NODE2
+C   1 November 2001,  add the following extraneous  $UNITS  request.  It has no
+C   effect since there is no preceding  $UNITS  to undo.  There will be a new
+C   warning message about the irrelevance of the declaration, however:
+$UNITS, -1, -1  { Restore whatever XOPT and COPT existed before preceding $UNITS
+  TRAP                       0.0   0.0 3.0E6  { Capacitor to hold trapped charge
+  CAP                                  2.8E6       { Capacitor of R-C subnetwork
+  EXTRA CAP                  0.4 { Resistor of R-C connects source and capacitor
+BLANK card ending branch cards
+BLANK card ending non-existent switch cards
+13NODE3         100.                 .25       50.       .75                 .75
+ 2NODE1    { Type-1 source.  In fact, any number 1-9 can be used, as this proves
+14TRAP  -1       1.0     1.E-4    { Trapped charge source }      5432.
+C    ===========================================================================
+C    Following  "-1.0"  of columns 61-70 is no longer required after 8 May 1987:
+C    ===========================================================================
+C                                                           --TSTART--
+14EXTRA          1.2       0.5    { Need 1 regular phasor }       -1.0       .45
+12EXTRA          1.0                 1.0                          1.55
+BLANK card ending all electric source cards
+C       Total network loss  P-loss  by summing injections =   1.665475193014E+00
+C     TRAP     1.0      1.0     0.0  .00188495559215       0.0   .94247779608E-3
+C            0.0     0.0  .00188495559215     90.000   -.9424777961E-3       0.0
+C
+C     EXTRA    1.2      1.2    2.7757919883568  2.8857193150184  1.6654751930141
+C              0.0      0.0    .78889467132476       15.8654284  -.4733368027949
+ 2NODE2            -50.
+ 2NODE4            -50.
+ 3NODE2                                 -50.
+ 3NODE4                                 -50.
+C    Step      Time           TRAP          CAP           NODE4            NODE2
+C
+C       0       0.0            1.0  .08968320466            -50.            -50.
+C More Type-1 sources, numbers 1  onward.           |     40.  { Type-1 source c
+C       1       0.1            1.0  .18207215381    -45.71428571    -45.71428571
+C More Type-1 sources, numbers 1  onward.           |     80.  { Type-1 source c
+C       2       0.2            1.0   .2567706113     -35.6462585     -35.6462585
+C End last input card for Type-1 sources.           |    9999
+C       3       0.3            1.0  .30645528965    -23.91804341    -23.91804341
+ 1                             { Request the output of all network node voltages
+     40.  { Type-1 source card for  1st  time step (formerly cols. 9-16 for "2")
+     80.  { Type-1 source card for  2nd  time step (formerly cols. 9-16 for "2")
+    9999                                { Terminate such Type 1-10 source  input
+C Last step:    20     2.0      1.0    .1622276802   3.0486553363   3.0486553363
+C Last step cont ... :             0.0           0.0           .45  -3.048655336
+C maxima: 1.0  .32625238865  10.132034354  10.132034354  95. 95. 1.2  118.918043
+C Times of max. :  0.1  0.4           0.8           0.8  0.3 0.3 0.0         0.0
+C Variable min. :  1.0  .08968320466  -50.    -50.  0.0    0.0   0.0  -10.132034
+C Times of min. :  0.6  0.0           0.0           0.0  0.0 0.0 0.5           0
+C    Addition of  31 March 2011  follows.  $DEPOSIT  is illustrated in many test
+C    cases,  but only for numeric parameters.  Upon the discovery that there was
+C    no illustration for A6 character variables,  the following was added.  Note
+C    that  CHVBAR  is the  "CHaracter Vertical BAR"  of  STARTUP  which normally
+C    will be the vertical bar of a standard keyboard.  Change  it to "1" for the
+C    initial print plot only.  I.e., restore the  "|"  after the 1st plot.  WSM.
+$DEPOSIT, CHVBAR=1   { Use SPY DEPOSIT to change separator character from | to 1
+  PRINTER PLOT
+C       The following plot card illustrates automatic plotting from zero through
+C       the end time  TMAX  of the study.  Columns 5-7 give the t-axis length in
+C       inches,  and  columns 12-15 being negative is the flag to plot all time.
+C       With a 5-inch axis and a time span of 0 through 2, result is 0.4 sec/in.
+C       For vector-graphic use and units of [msec],  see first subcase of DC-37.
+ 193 5.     -1.         NODE1 NODE2              { Axis limits: (-0.101,  1.189)
+$DEPOSIT, CHVBAR=|   { Use SPY DEPOSIT to restore separator character of STARTUP
+ 143 .4 0.0 2.0         CAP                       { Axis limits: (0.000,  3.263)
+C   The following truly blank line is added 20 February 1999 to illustrate use
+C   of  $BLANK COMMENT  near the top.  The next line is extraneous:
+
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+BLANK
+ 

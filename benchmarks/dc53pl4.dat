@@ -1,0 +1,74 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-53
+C       Omit 2nd subcase,  add .PL4 output to 1st (here), and delete comments
+PRINTED NUMBER WIDTH, 13, 2,   { Full precision on each of 8 columns of printout
+ALTERNATE DIAGNOSTIC PRINTOUT, 9, 9, 9, 9,
+ .000100    .150    60.0    60.0
+       1       1       1       1       1      -1               1
+       5       5      20      20     100     100     500     500  
+51NAVH AMCC1 A            162.67   507.51
+52NAVH BMCC1 B            6.51    162.97
+53NAVH CMCC1 C
+  MCC1 AMCC2 A                        8285.
+  MCC1 BMCC2 B                        8285.
+  MCC1 CMCC2 C                        8285.
+  MCC2 AEQV  A                  19.52
+  MCC2 BEQV  B                  19.52
+  MCC2 CEQV  C                  19.52
+  TRANSFORMER                         TRAN A
+            9999
+ 1NAVL ANAVL C                  .1    26.
+ 2NAVH A                        31.23 311.09
+  TRANSFORMER TRAN A                  TRAN B
+ 1NAVL BNAVL A
+ 2NAVH B
+  TRANSFORMER TRAN A                  TRAN C
+ 1NAVL CNAVL B
+ 2NAVH C
+  NAVL A                  2500.       1.13
+  NAVL B                  2500.       1.13
+  NAVL C                  2500.       1.13
+  SWT  AMCC2 A            4830.
+  SWT  BMCC2 B            4830.
+  SWT  CMCC2 C            4830.
+  MCC2 ASWT  A                  13.01
+  MCC2 BSWT  B                  13.01
+  MCC2 CSWT  C                  13.01
+BLANK card terminating branch cards
+  SWT  A       .01661667 .09161667
+  SWT  B       .01661667 .09161667
+  SWT  C       .01661667 .09161667
+BLANK card terminating switch cards
+14EQV  A  389997.    60.      -93.81293                           -1.
+14EQV  B  389997.    60.      -213.81293                          -1.
+14EQV  C  389997.    60.       26.18707                           -1.
+59NAVL A  21229.     60.      -44.896562
+  NAVL B
+  NAVL C                         
+TOLERANCES    { Only change columns 51-60: NIOMAX = 20 }  20 
+PARAMETER FITTING           1.
+ 6 5 6   2 1.        1.        892.4      26.     -1800.    1907.     3050.
+                                                  -1.
+          .13       1.79       1.71       .169      .228      .13504  .20029
+ 4.3      .85       .032      .05       .13
+ 1        .3        .027691                       33.68813 { 1st rotor mass card
+ 2        .26       .046379                       60.9591
+ 3        .22       .255958                       90.81823
+ 4        .22       .263573                       123.6634
+ 5                  .258887                       4.925036
+ 6                  .0101995                                { 6th and final mass
+BLANK
+  51
+  11
+  21
+  31
+BLANK
+  FINISH
+BLANK card terminating source cards
+  NAVH ANAVH BNAVH C
+BLANK card terminating output specifications (node voltages only, here)
+  PRINTER PLOT
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+BLANK
+

@@ -1,0 +1,417 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-40
+C     This present data case restarts the  "STATISTICS" (Monte Carlo) simulation
+C     of  DC-24,  which ran only  3 energizations.  When this 2nd half finishes,
+C     6 will have been completed, to be compared with  "M39."  answers of DC-24.
+C     Yet answers differ due to different random number generator and use of the
+C     seed (now, initialization only occurs once).  As for the disk file that is
+C     connected to  UNIT=2  immediately below,  note  that  it is disconnected 3
+C     lines later,  and  DUM.BIN  is reconnected.   This is to protect  DC24.BIN
+C     from a stray write.  But beware!  The replacement file  DUM.BIN  must be a
+C     perfect copy of the original DC24TO40.BIN to ensure correct answers, since
+C     it  is  DUM.BIN  from which restoration will actually occur for the second
+C     and later simulations of this restarted case.  Finally, be careful of OPMC
+C     Beware of  PARALLEL.LIS  entry for same  USERID  that might modify NENERG!
+$OPEN,  UNIT=LUNIT2  FILE=dc24.bin  STATUS=OLD  FORM=UNFORMATTED ! { Hold case
+START AGAIN                      { Request for awakening of hibernating solution
+    9999               { Terminate modifications (none, here) to switching times
+C Cancel special output for MS Excel of DC-24 tables.  Addition on 21 July 2007:
+C                           Type  ---  Ruler for file type of Excel output file:
+EXTREMA OUTPUT FOR EXCEL    .off        { Columns 29-32 carry optional file type
+$OPEN, UNIT=LUNIT2  FILE=dc24at40.ext  STATUS=OLD  FORM=UNFORMATTED  RECL=16000  !
+LOAD MORE SHOTS    { Load the separate extrema produced by 3 shots made in DC-24
+MISCELLANEOUS DATA CARDS
+ 100.E-6  20.E-3     60.
+       1       1       1       1       1               0       0       6
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT  KNTRPT                   NSEED
+       1       1       0       0       1         { KSTOUT is blank, not 0! }   1
+C                     GENA         GENC          ENDA         B1           ASW10
+C Reference angle       A1           C1           A10        BSW1
+C
+C                     GENB         ENDA
+C                      B1           A10
+C      The following is  DIAGNOSTIC  from  "RANDNZ"  usage of overlay 12.  Not a
+C      normal case output, this is useful in case switching times are incorrect:
+C      "RFUNL1/RANDNZ".   KNT =   4.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.439822971502571000E+02   0.446592684878350000E+14
+C                                   0.198544027000000000E+09   0.046227133600041
+C      "RFUNL1/RANDNZ".   KNT =   4.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.137132374008640000E+14
+C                                   0.370179203200000000E+10   0.861890621483326
+C      "RFUNL1/RANDNZ".   KNT =   4.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.255679073858209000E+15
+C                                   0.396569462500000000E+10   0.923335232073441
+C      "RFUNL1/RANDNZ".   KNT =   4.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.273906562054126000E+15
+C                                   0.361268631800000000E+10   0.841144080739468
+C      "RFUNL1/RANDNZ".   KNT =   4.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.249524631297943000E+15
+C                                   0.421126952700000000E+10   0.980512594571337
+C                           Random switching times for energization number  4  :
+C                       1  2.1466476E-03    2  4.4995694E-03    3  8.0648931E-03
+C          0.0   125.9695623   -58.920794  52.58141134  370.8688937  -424.516718
+C                1.249136867  -1.87200012
+C Times of maxima :    .0023        .0114        .0094        .0049        .0078
+C                      .0049        .0171
+TIME STEP LOOP   { Transfer control to overlay 16 for a resumption of simulation
+C      "RFUNL1/RANDNZ".   KNT =   5.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.439822971502571000E+02   0.290868174960364000E+15
+C                                   0.104773356000000000E+09   0.024394447915256
+C      "RFUNL1/RANDNZ".   KNT =   5.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.723659092556500000E+13
+C                                   0.386599910100000000E+10   0.900123059051111
+C      "RFUNL1/RANDNZ".   KNT =   5.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.267020691906970000E+15
+C                                   0.257511465000000000E+10   0.599565601442009
+C      "RFUNL1/RANDNZ".   KNT =   5.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.177860593760851000E+15
+C                                   0.170306619500000000E+10   0.396525998366997
+C      "RFUNL1/RANDNZ".   KNT =   5.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.117629079022456000E+15
+C                                   0.280968690400000000E+10   0.654181210324168
+C                           Random switching times for energization number  5  :
+C                       1  2.0344905E-03    2  3.8690347E-03    3  6.3961916E-03
+C          0.0   131.4745297  -76.1213478  -90.4743742  472.0143285  -556.117151
+C                1.594127662  -1.83850686
+C Times of maxima :    .0022        .0127        .0083        .0139        .0074
+C                      .0044        .0172
+C      "RFUNL1/RANDNZ".   KNT =   6.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.439822971502571000E+02   0.194062264772377000E+15
+C                                   0.275743720900000000E+10   0.642015880206600
+C      "RFUNL1/RANDNZ".   KNT =   6.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.190453430588422000E+15
+C                                   0.169578189400000000E+10   0.394829989876598
+C      "RFUNL1/RANDNZ".   KNT =   6.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.117125959636687000E+15
+C                                   0.220147476700000000E+10   0.512570786988363
+C      "RFUNL1/RANDNZ".   KNT =   6.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.152053660681924000E+15
+C                                   0.322846893200000000E+10   0.751686499454081
+C      "RFUNL1/RANDNZ".   KNT =   6.   SY, D6, SEEDRN, D18 (result)  follow ....
+C                            0.000000000000000000E+00   0.222987120664309000E+15
+C                                   0.100859058100000000E+10   0.234830794157460
+C                           Random switching times for energization number  6  :
+C                       1  2.0043546E-03    2  4.3397550E-03    3  5.2772330E-03
+C          0.0   131.4745297  -102.270651   45.1085527  370.2365789  -461.601966
+C                 1.25947653  -1.88310377
+C Times of maxima :    .0022        .0054        .0094        .0052        .0076
+C                        .02         .017
+C 1 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENA  "  to  "A1    ".
+C   Interval             voltage         voltage  in     Frequency    Cumulative
+C     number         in per unit      physical units     (density)     frequency
+C         25           1.2500000      0.12500000E+03             0             0
+C         26           1.3000000      0.13000000E+03             1             1
+C         27           1.3500000      0.13500000E+03             2             3
+C         28           1.4000000      0.14000000E+03             1             4
+C         29           1.4500000      0.14500000E+03             2             6
+C Summary for following request:        Mean = 1.35833333E+00     1.34924018E+00
+C                                   Variance = 3.66666667E-03     4.10518277E-03
+C                         Standard deviation = 6.05530071E-02     6.40717002E-02
+-1  100.      GENA  A1
+-1            GENC  C1    ENDA  A10   { =2.53418455E-1, Variance = 3.02359400E-3
+              ASW10 BSW10 CSW10   { Mean=1.49453887E+0, Variance = 6.41172862E-2
+C                         MODTAB   AINCR  XMAXMX
+STATISTICS DATA                1    -10.     0.0   ---- Fixed number of 10 boxes
+-3            B1    BSW1 { Ungroup: Mean=1.07790313E+0, Variance = 1.44614228E-2
+STATISTICS DATA                1     .05     0.0  --- Return to p.u. box of 1/20
+-2    0.      GENB  B1    ENDA  A10   { =1.11785582E+0, Variance = 1.92038029E-2
+STATISTICS DATA                1    -5.0     0.0   ---- Fixed number of  5 boxes
+-4    0.      B1    BSW1 { Ungroup: Mean=1.27016791E+0, Variance = 8.50686724E-2
+C 12 ) -------------------------------------------------------------------------
+C Statistical distribution of peak energy   for branch  "B1    "  to   "BSW1  ".
+C   Interval           energy          energy   in      Frequency     Cumulative
+C     number      in per unit      physical units       (density)      frequency
+C          5        0.9692791      0.66169358E+00               0              0
+C          6        1.1631349      0.79403229E+00               2              2
+C          7        1.3569907      0.92637101E+00               2              4
+C          8        1.5508465      0.10587097E+01               1              5
+C          9        1.7447023      0.11910484E+01               0              5
+C         10        1.9385582      0.13233872E+01               1              6
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data
+C                                       Mean = 1.32468140E+00     1.27016791E+00
+C                                   Variance = 8.51815081E-02     8.50686724E-02
+C                         Standard deviation = 2.91858713E-01     2.91665343E-01
+C   Switch  "A1    "  to  "ASW1  "
+C     8.33333377E-03   switch closings per column
+C              Columns
+C          5   10   15   20   25   30
+C     +----+----+----+----+----+----+            (Note: all "A" below did line
+C     A                             *                   up before left shift,
+C     A                             *                   in about column 127).
+C     A                             *
+C     A                             *
+C     |                             *             Pull in to col 80  ---->     A
+C     |                             *             Pull in to col 80  ---->     A
+C     A                             *
+C     |                             *             Pull in to col 80  ---->     A
+C     A                             *
+C     A                             *
+C     A                             *
+C     A                             *
+C     |  2.0000E-03                 *             Pull in to col 80  ---->     A
+C     A                             *
+C     |                             *             Pull in to col 80  ---->     A
+C     A                             *
+C     A                             *
+C     A                             *
+C     A                             *
+C     A                             *
+C     A                             *
+C     A                             *
+C     |                             *             Pull in to col 80  ---->     A
+C     A                             *
+C     A                             *
+C   Time (scale = 1.44337567E-05  Sec/line)
+BLANK card ending statistical output variable requests
+BEGIN NEW DATA CASE
+C         ======================================================================
+C         2nd of 4 subcases will follow an explanation of how to produce  vector
+C         plots of statistical distributions in Apollo window using input of the
+C         preceding solution.  See   "STATPLOT"  as described in Section I-F-1-g
+C         of the rule book.   Execute the following in a 2/3-height window  with
+C         font  F7x13.B  and nearly full width:
+C                $ STATPLOT.EXE
+C                Y 5  .9  1.9
+C                HELP
+C                GO
+C                  <<<  Pasted data beginning with 1st row of the
+C                  <<<  statistical tabulation of peak energy for
+C                  <<<  branch  "B1    "  to  "BSW1  ".   This begins
+C                  <<<  in row 10 and extends through row 20,  followed
+C                  <<<  4 lines of summary statistics.   See Rule Book.
+C                LINE  1.4  0.1
+C                LINE  1.8  0.1
+C                LINE  1.0  1.0
+C         ======================================================================
+C         On  to  the 2nd subcase,  which will illustrate statistical tabulation
+C         of previously-generated energizations without the addition of any  new
+C         solutions.   It also illustrates the combination of 2 sets of extrema,
+C         with the 1st coming from the 1st subcase  of  DC-24  (just as with the
+C         preceding data subcase)  and  the  2nd  coming from the 3rd subcase of
+C         DC-24.   This illustrates the use of  "LOAD NEXT PART"  that announces
+C         or requests concatenation of the 2nd set of extrema.   Finally,  there
+C         is illustration of the erasure of energizations from each set.   Since
+C         both sets of data are really identical,  killing one extrema in 1 file
+C         and the remaining 2 in the other,  in any combination,  will result in
+C         3 remaining extrema that should tabulate identically to the 3 of DC-24
+$OPEN,  UNIT=LUNIT2  FILE=dc24.bin  STATUS=OLD  FORM=UNFORMATTED ! { Hold case
+START AGAIN            { Load hibernating solution (except for separate extrema)
+    9999               { Terminate modifications (none, here) to switching times
+C Cancel special output for MS Excel of DC-24 tables.  Addition on 21 July 2007:
+C                           Type  ---  Ruler for file type of Excel output file:
+EXTREMA OUTPUT FOR EXCEL    .off        { Columns 29-32 carry optional file type
+$OPEN, UNIT=LUNIT2  FILE=dc24at40.ext  STATUS=OLD  FORM=UNFORMATTED  RECL=16000  !
+C 345678901234567890 KIL KIL KIL KIL  ---  Ruler for  (20X, 15I4)  of next card:
+LOAD MORE SHOTS        2             { Load extrema of DC-24 minus shot number 2
+TOGGLE EXTREMA MODE        { Change from default UNFORMATTED mode to card images
+$OPEN, UNIT=LUNIT2  FILE=dc24ct40.lis  STATUS=OLD  FORM=FORMATTED !
+LOAD MORE SHOTS        1   3        { Load additional history, minus shots 1 & 3
+C         Following card means next case will have  L2FORM = 0  within  "REQUES"
+C         whether code is overlaid or not.   Otherwise,  virtual computers would
+C         have  kept  L2FORM = 1  whereas overlaid would have reset  L2FORM = 0.
+TOGGLE EXTREMA MODE  { Restore the default UNFORMATTED mode of "LOAD MORE SHOTS"
+MISCELLANEOUS DATA CARDS
+ 100.E-6  20.E-3     60.
+       1       1       1       1       1               0       0       3
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT  KNTRPT                   NSEED
+       1       1       0       0       1         { KSTOUT is blank, not 0! }   1
+TIME STEP LOOP   { Transfer control to overlay 16 for a resumption of simulation
+C 1 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENA  "  to   "A1    ".
+C Interval             voltage         voltage  in      Frequency     Cumulative
+C   number         in per unit      physical units      (density)      frequency
+C       27           1.3500000      0.13500000E+03              0              0
+C       28           1.4000000      0.14000000E+03              1              1
+C       29           1.4500000      0.14500000E+03              2              3
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data
+C                                       Mean = 1.40833333E+00     1.40208495E+00
+C                                   Variance = 8.33333333E-04     8.75092111E-04
+C                         Standard deviation = 2.88675135E-02     2.95819558E-02
+-1  100.      GENA  A1
+C   &&&&&&&&&&&&&  End request and documentation.   Begin 3 coupled cards ......
+C 2 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENA  "  to   "A1    ".
+C Interval             voltage         voltage  in      Frequency     Cumulative
+C   number         in per unit      physical units      (density)      frequency
+C        9           0.4500000      0.13635000E+03              0              0
+C       10           0.5000000      0.15150000E+03              3              3
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data
+C                                       Mean = 4.75000000E-01     4.62734306E-01
+C                                   Variance = 0.00000000E+00     9.53165933E-05
+C                         Standard deviation = 0.00000000E+00     9.76302173E-03
+-1            GENA  A1                                                     CONT.
+C 3 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENC  "  to   "C1    ".
+C Interval             voltage         voltage  in      Frequency     Cumulative
+C   number         in per unit      physical units      (density)      frequency
+C        4           0.2000000      0.60600000E+02              0              0
+C        5           0.2500000      0.75750000E+02              2              2
+C        6           0.3000000      0.90900000E+02              1              3
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data
+C                                       Mean = 2.41666667E-01     2.45766731E-01
+C                                   Variance = 8.33333333E-04     2.19347831E-03
+C                         Standard deviation = 2.88675135E-02     4.68345845E-02
+-1                        GENC  C1                                         CONT.
+C 4 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "ENDA  "  to   "A10   ".
+C Interval             voltage         voltage  in      Frequency     Cumulative
+C   number         in per unit      physical units      (density)      frequency
+C        2           0.1000000      0.30300000E+02              0              0
+C        3           0.1500000      0.45450000E+02              2              2
+C        4           0.2000000      0.60600000E+02              1              3
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data
+C                                       Mean = 1.41666667E-01     1.43690600E-01
+C                                   Variance = 8.33333333E-04     9.61072666E-04
+C                         Standard deviation = 2.88675135E-02     3.10011720E-02
+-1                                    ENDA  A10
+C 5 ) --------------------------------------------------------------------------
+C   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMARY   SUMMAR
+C 5 ) --------------------------------------------------------------------------
+C A distribution of peak values among all output branches of the last data card
+C statistical distribution is for the maximum of the peaks at all of these outpu
+C Interval             voltage         voltage  in      Frequency     Cumulative
+C   number         in per unit      physical units      (density)      frequency
+C        9           0.4500000      0.13635000E+03              0              0
+C       10           0.5000000      0.15150000E+03              3              3
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data
+C                                       Mean = 4.75000000E-01     4.62734306E-01
+C                                   Variance = 0.00000000E+00     9.53165933E-05
+C                         Standard deviation = 0.00000000E+00     9.76302173E-03
+C 3456789012345678901234567890123456789012345678
+C                         MODTAB   AINCR  XMAXMX
+STATISTICS DATA                1     0.0     0.0   ----  Only individual
+-1                        GENC  C1  { =.245766731, Variance=2.19347831E-3}
+C    -----------  Following is 2nd mini-switch plot, which is the 1st Gaussian :
+C   Switch  "B1    "  to  "BSW1  "
+C     1.32420007E-02   switch closings per column
+C              Columns
+C          5   10   15   20   25   30
+C     +----+----+----+----+----+----+
+C     X
+C     X
+C     X
+C     X
+C     A*
+C     A *
+C     A   *
+C     A       *
+C     A           *
+C     A                 *
+C     A                       *
+C     A                           *
+C     |  4.0000E-03                 *              Pulled 3 columns left --->  A
+C     |                           *                Pulled 3 columns left --->  A
+C     A                       *
+C     A                 *
+C     A           *
+C     |       *                                    Pulled 3 columns left --->  A
+C     A   *
+BLANK card ending statistical tabulation requests
+BEGIN NEW DATA CASE
+C         3rd  of 4 total subcases, which will illustrate statistical tabulation
+C         of previously-generated energizations without the addition of any  new
+C         solutions.   It is like 2nd, only with a different erasure of 3 shots.
+C         Tabulations are the same.  Finally, it illustrates the omission of the
+C         miniature character plots of switch closing times via NO SWITCH PLOTS.
+$OPEN,  UNIT=LUNIT2  FILE=dc24.bin  STATUS=OLD  FORM=UNFORMATTED ! { Hold case
+START AGAIN            { Load hibernating solution (except for separate extrema)
+    9999               { Terminate modifications (none, here) to switching times
+C Cancel special output for MS Excel of DC-24 tables.  Addition on 21 July 2007:
+C                           Type  ---  Ruler for file type of Excel output file:
+EXTREMA OUTPUT FOR EXCEL    .off        { Columns 29-32 carry optional file type
+$OPEN, UNIT=LUNIT2  FILE=dc24at40.ext  STATUS=OLD  FORM=UNFORMATTED  RECL=16000  !
+C 345678901234567890 KIL KIL KIL KIL  ---  Ruler for  (20X, 15I4)  of next card:
+LOAD MORE SHOTS        3             { Load extrema of DC-24 minus shot number 3
+TOGGLE EXTREMA MODE        { Change from default UNFORMATTED mode to card images
+$OPEN, UNIT=LUNIT2  FILE=dc24ct40.lis  STATUS=OLD  FORM=FORMATTED  !
+LOAD MORE SHOTS        1   2        { Load additional history, minus shots 1 & 2
+C         Following card means next case will have  L2FORM = 0  within  "REQUES"
+C         whether code is overlaid or not.   Otherwise,  virtual computers would
+C         have  kept  L2FORM = 1  whereas overlaid would have reset  L2FORM = 0.
+TOGGLE EXTREMA MODE  { Restore the default UNFORMATTED mode of "LOAD MORE SHOTS"
+MISCELLANEOUS DATA CARDS
+ 100.E-6  20.E-3     60.
+       1       1       1       1       1               0       0       3
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT  KNTRPT                   NSEED
+       1       1       0       0       1         { KSTOUT is blank, not 0! }   1
+TIME STEP LOOP   { Transfer control to overlay 16 for a resumption of simulation
+C 1 ) --------------------------------------------------------------------------
+C Statistical distribution of peak voltage  for branch  "GENA  "  to   "A1    ".
+C Interval             voltage         voltage  in      Frequency     Cumulative
+C   number         in per unit      physical units      (density)      frequency
+C       27           1.3500000      0.13500000E+03              0              0
+C       28           1.4000000      0.14000000E+03              1              1
+C       29           1.4500000      0.14500000E+03              2              3
+C Distribution parameters for .. data follow.    Grouped data     Ungrouped data
+C                                       Mean = 1.40833333E+00     1.40208495E+00
+C                                   Variance = 8.33333333E-04     8.75092111E-04
+C                         Standard deviation = 2.88675135E-02     2.95819558E-02
+-1  100.      GENA  A1
+C    Column positioning of  "NO SWITCH PLOTS"  on blank terminator is arbitrary:
+BLANK card ending statistical tabulation requests    ---   NO SWITCH PLOTS  ---
+BEGIN NEW DATA CASE
+C         4th of 4 total subcases will illustrate the repeated simulation of the
+C         already-solved 2nd energization.   By definition,  only  a single shot
+C         will occur, and by means of  KSTOUT = 0  we can look at time-step loop
+C         output just as though there were no  "STATISTICS".   Such  output  now
+C         can be followed by plotting (activated on  30 March 1989).   Note that
+C         the plot file header was created by the 2nd subcase of  DC-24.   It is
+C         necessary to connect this since only time-step-loop output is produced
+C         by  "START AGAIN"  usage such as here.   Miscellaneous  data parameter
+C         ICAT = 2  will save the ".PL4" plot file,  so subsequent,  independent
+C         plotting is possible  (and is illustrated by the 2nd plot of the first
+C         subcase of DC-54).  There is no statistical tabulation for the present
+C         subcase, of course.  Variable  KNTRPT = 2  repeats the 2nd shot of the
+C         previously-solved 1st subcase of DC-24.  The zero (not blank!)  KSTOUT
+C         provides desired time-step loop output.
+$OPEN,  UNIT=LUNIT2  FILE=dc24.bin  STATUS=OLD  FORM=UNFORMATTED ! { Hold case
+START AGAIN                      { Request for awakening of hibernating solution
+    9999               { Terminate modifications (none, here) to switching times
+C Cancel special output for MS Excel of DC-24 tables.  Addition on 21 July 2007:
+C                           Type  ---  Ruler for file type of Excel output file:
+EXTREMA OUTPUT FOR EXCEL    .off        { Columns 29-32 carry optional file type
+$OPEN, UNIT=LUNIT2  FILE=dc24at40.ext  STATUS=OLD  FORM=UNFORMATTED  RECL=16000  !
+C 345678901234567890 KIL KIL KIL KIL  ---  Ruler for  (20X, 15I4)  of next card:
+LOAD MORE SHOTS                  { Load extrema produced by 1st subcase of DC-24
+MISCELLANEOUS DATA CARDS
+ 100.E-6  20.E-3     60.
+       1       1       1       1       1               0       2       3
+C               Preceding KNTRPT = 3 was changed from former 6 on 23 Sept 1998.
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT  KNTRPT                   NSEED
+       1       1       0       0       1       0       2                       1
+CHANGE PRINTOUT FREQUENCY
+       1       1      20      10
+$CLOSE,  UNIT=LUNIT4  STATUS=DELETE   { Destroy empty date/time plot file of "SYSDEP"
+$OPEN,  UNIT=LUNIT4  FILE=dc24b40d.pl4  STATUS=OVERLAY  ! { C-like uses only header
+C  READ PL4 HEADER     { Messes up C-like usage of PL4
+C Transfer control to the time-step loop.           |TIME STEP LOOP   { Transfer
+C                    GENA         GENC          ENDA          B1           ASW10
+C Reference angle      A1           C1           A10          BSW1
+C
+C                    GENB         ENDA
+C                      B1          A10
+C                           Random switching times for energization number  2  :
+C                       1  1.8999095E-03    2  4.7979502E-03    3  7.5258324E-03
+C   18   .0018   .284217E-13  -.26148E-11  .284217E-12          0.0          0.0
+C                .192639E-17  .966554E-16
+C  ***         Close switch  "A1    "  to  "ASW1  "  after  1.90000000E-03  sec.
+C   19   .0019   -.28422E-13   .26148E-11  -.28422E-12          0.0          0.0
+C                .210598E-16  .966554E-16
+TIME STEP LOOP   { Transfer control to overlay 16 for a resumption of simulation
+C  200     .02   18.40117142   -5.2655535  13.97952075  79.19748583  128.2703628
+C                .4457755752  -1.28521406
+C Variable max : 141.9164096  61.55446116  25.22399908  371.6253603  334.5616569
+C                1.207725131  .5125980517
+C Times of max :        .002        .0154        .0132        .0059        .0028
+C                      .0058        .0105
+C Variable min : -103.914014  -46.8051457  -41.9189588  -288.448852  -318.274018
+C                -1.09393135  -1.83695142
+C Times of min :       .0032        .0144        .0139        .0071        .0088
+C                      .0071         .017
+  PRINTER PLOT
+ 144 1. 0.0 10.         ASW10                    { Plot limits: (-3.183,  3.346)
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+BLANK
+

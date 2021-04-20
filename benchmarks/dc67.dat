@@ -1,0 +1,78 @@
+BEGIN NEW DATA CASE                                                             
+C     BENCHMARK DC-67
+C       Conversion of saturable TRANSFORMER component to equivalent (but linear)
+C       [R], [L].   Data comes from  DC-5.   Nonlinear characteristic is ignored
+C       (it is the phasor  I-steady  and  PSI-steady  that are used for matrix).
+CHANGE TRANSFORMER   { Special-request word transfers to special conversion code
+$ERASE      { Rewind (erase) buffer of punched cards as we prepare to punch more
+  TRANSFORMER               .005   30.TRANFF  1.E4                             3
+            .005             30.  { 1st point of (current, flux): characteristic
+             .01             40.  { 2nd point of (current, flux): characteristic
+             .02             45.  { 3rd point ...               
+             0.1             50.  { 4th point ...                     
+             5.0            100.  { 5th and final point of (current, flux) char.
+            9999     { Special terminator bounds characteristic (current = 9999)
+ 1GENT  OPEN                 5.0  5.E4   50.            { 1st of 2 winding cards 
+ 2LOADFF                     20.  2.E5  100.        { 2nd and final winding card
+C       The second of two subcases is very similar to the first.   I-steady  and
+C       PSI-steady are different, to change the matrix values.  Also,  the names 
+C       of the nodes have been altered.
+  TRANSFORMER               .100   50.TRANFF  1.E4                             3
+            .005             30.  { 1st point of (current, flux): characteristic
+             .01             40.  { 2nd point of (current, flux): characteristic
+             .02             45.  { 3rd point ...         
+             0.1             50.  { 4th point ...   
+             5.0            100.  { 5th and final point of (current, flux) char.
+            9999     { Special terminator bounds characteristic (current = 9999)
+ 1TOP1  BOT1                 5.0  5.E4   50.            { 1st of 2 winding cards
+ 2TOP2  BOT2                 20.  2.E5  100.        { 2nd and final winding card
+BLANK card ends saturable TRANSFORMER components to be converted to [R], [L].
+C  <++++++>  Cards punched by support routine on  04-MAY-91  02:30:31  <++++++>
+C 51GENT  OPEN               5906.6393442623 .127950819672E7
+C 52LOADFF                   11803.278688525 .245901639344E7
+C                            23626.557377049 .511803278689E7
+C  <++++++>  Cards punched by support routine on  04-MAY-91  02:30:31  <++++++> 
+C 51TOP1  BOT1                104.0099009901 297524.75247525
+C 52TOP2  BOT2                198.0198019802  495049.5049505
+C                             416.0396039604  .11900990099E7
+$PUNCH          { Flush the punched-card output of just-created Type-51, 52, ...
+BEGIN NEW DATA CASE 
+C     Artificial  illustration  of  the  conversion  of  pre- "M39."  TACS  data
+C     to post-"M39." TACS data.   Rather than being a coherent,  consistent data
+C     case,  this is simply the random collection of many old components.   Note
+C     that all EMTP data cards preceding the TACS data itself is missing  (there
+C     is no provision for processing it).   Data cards after the blank card that
+C     ends TACS data have no effect,  since they never will be processed.
+OLD TO NEW TACS         { Transfer to utility that converts old TACS data to new
+ 1OUT1    +GEN                                                                  
+       1.0                                                                      
+       1.0       1.0                                                            
+99BREAK   =  1.5E+8 * TIMEX + 1.0E+5                                         
+98GRID  51+UNITY                                                    BREAK DRIVE 
+BLANK card ending TACS function blocks 
+ 1DC             1.0                                               -1.          
+ 2GEN           100.       1.0                                     -1.          
+BLANK card ending TACS source cards
+C           A comment card will be added to demonstrate that these are preserved
+88DEV50I50+SOURCE                                    0.8                        
+88DEV51C51+UNITY                                                  1.MIDDLESOURCE
+88DEV54V54+DEV52O                                   -0.2   0.3      QUART       
+88DEV55 55+SOURCE                                                               
+            -1.0                                                                
+            -0.5                                                                
+             0.0                                                                
+             0.5                                                                
+             1.0                                                                
+           9999.      
+BLANK card ending TACS supplemental variables and devices
+  OUT1  GEN
+BLANK card ending TACS output requests  
+  EQUIVR       2775.        { Initial condition matches R during phasor solution
+BLANK card ending TACS initial conditions (and also all TACS data)
+$PUNCH,  dc67b.pch ! { Hold lower case 
+  PRINTER PLOT       { Beginning of data following TACS data --- will be ignored
+ 143 .2 0.0 1.0         OUT1 
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK 
+

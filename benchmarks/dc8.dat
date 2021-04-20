@@ -1,0 +1,153 @@
+BEGIN NEW DATA CASE
+C     1st of 2 subcases is added 24 Sept 2001  to illustrate $INCLUDE use within
+C     the  DO KNT  loop.  This subcase is related to the 1st subcase of DC-58.
+C     It really should have been added as a new 2nd subcase there,  but this was
+C     not possible since  DO KNT  is not handled properly if the 2nd or later.
+C     This request for $INCLUDE, too, came from Prof. Juan Martinez of UPC in
+C     Barcelona, Spain.  The  $INCLUDE  file does not change the answer.  I.e.,
+C     part of the data of DC-58 simply has been removed and placed in a separate
+C     file.  Other changes:  TMAX  has been shortened to speed execution,  and
+C     there are no extrema.  But the resulting  DC8.LIS  file still compares
+C     easily with  DC58.LIS  using Mike Albert's freeware FC.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000050    .005
+       1       1       1       0       0      -1
+      33       1      40      10     100      50
+DO KNT=1, 5  /OUTPUT  { Loop twice using PCVP index KNT (seen inside $PARAMETER)
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would be
+_BUS1_ = KNT       SERIALIZE 'NODE00'
+_BUS2_ = KNT + 1.  SERIALIZE 'NODE00'
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch cards
+$INCLUDE, dc8incl0.dat  { Disk file containts the following without "C " in 1-2:
+C -1_BUS1__BUS2_              .306  5.82  .012  100. { Half the length of original
+C 92_BUS2_ { Type 92 is for v-i curve }  5555.  { 5555 flag is for exponentials } 1
+C C                    VREF                   VFLASH                    VZERO  COL
+C                   778000.                     -1.0                      0.0  2.0
+C C                    COEF                    EXPON                     VMIN
+C                     1250.                      26.                      0.5
+C                     9999.    { Bound on exponential segments (only one precedes)
+ENDDO KNT     { Termination of  DO KNT  loop.  Note a comment on it is tolerable
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14NODE01     408000.       60.
+BLANK card ending source data
+ 1
+BLANK card ending plot cards
+BEGIN NEW DATA CASE 
+C     BENCHMARK DC-8
+C     Example drawn from the dynamite EMTP Newsletter article by W. Scott Meyer,
+C     "EMTP Data Modularization and  Sorting ...,"   Volume 4,   No. 2,  Sec. V,
+C     November, 1983.   $PREFIX   and   $SUFFIX   may be installation-dependent.
+C     Miscellaneous  data  cards  and  TACS  have  been added to allow execution
+C     to  continue  through  the  reading of switch cards,  thereby  documenting
+C     the   $INCLUDE  evaluation and subsequent sorting.   The   $INCLUDE   file
+C     DC8INCL1.DAT  was  created by first subcase of companion data case  DC-36. 
+C     For nearly identical case  (except for use of dummy internal nodes,  which
+C     makes it more general),  see DC-64 (associated with 2nd subcase of DC-36).
+C     For the use of arguments without any  $INCLUDE,  see DC-65.
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+$SUFFIX, .dat       { File name of  $INCLUDE  will be followed by this file type
+    .005     4.0    { DELTAT and TMAX are in fact arbitrary, since no simulation
+       1      -1       1       1       1      
+TACS HYBRID
+99 FIRE1  = TIMEX
+99 FIRE2  = TIMEX
+99 FIRE3  = TIMEX
+13FAKE                                                                          
+98 FIRE452+UNITY                                      1.    0.    0.      TIMEX 
+98 FIRE552+UNITY                                      1.    0.    0.      TIMEX 
+98 FIRE652+UNITY                                      1.    0.    0.      TIMEX 
+BLANK card ends all  TACS  data
+C   The following two cards easily could be combined into a single one.  But  we
+C   want to illustrate continuation cards.  Note the "C" in column 1.  Well,
+C   there once was.  Such a C still is permitted on a continuation card,  but
+C   it no longer is required,  as the following illustrates:
+$INCLUDE,  dc8incl1,  ACNOD,  #MINUS,   ##PLUS,      $$  { Branch & switch cards
+           #FIRE,  ##MID    { use continuation (request "$$") as an illustration
+BLANK card ending  BRANCH  cards    { Key word "BRANCH" needed for sorting, note
+BLANK card ending  SWITCH  cards    { Key word "SWITCH" needed for sorting, note         
+$STOP     { After switches read, modularization & sorting are confirmed, so halt
+EOF  ----  Needed so "OVER1" or "SPYING" ("DATA") ends input here during reading 
+========================================================================
+C     The following is a view of  DC8INCL1.DAT,  which must be made
+C     into a separate, supporting disk file if the companion test
+C     case  DC-36  has not already created it:
+========================================================================
+KARD  2  2  3  3  4  4  5  5  6  6  7  7  8  8  9  9 10 10 11 11 12 12 13 13 14
+     14 15 15 16 16 17 17 18 18 19 19 21 21 21 22 22 22 23 23 23 24 24 24 25 25
+     25 26 26 26
+KARG  1  5  1  5  1  5  1  5  1  5  1  5  3  5  3  5  3  5  3  5  3  5  3  5  1
+      2  1  2  1  2  1  3  1  3  1  3  2  4  5  2  4  5  2  4  5  1  4  5  1  4
+      5  1  4  5
+KBEG  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3
+      9  3  9  3  9  3  9  3  9  3  9  9 65  3  9 65  3  9 65  3  9 65  3  9 65
+      3  9 65  3
+KEND  7 13  7 13  7 13  7 13  7 13  7 13  8 13  8 13  8 13  8 13  8 13  8 13  7
+     14  7 14  7 14  7 14  7 14  7 14 14 69  7 14 69  7 14 69  7 13 69  7 13 69
+      7 13 69  7
+KTEX  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
+      1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
+      1  1  1  1
+/BRANCH                                                                         
+C3  BEGIN WITH ANODE REACTORS AND PARALLEL RESISTORS (6 PAIRS):                 
+  ?????A?????1             3000.                                                
+  ?????A?????1                     1.0                                          
+  ?????B?????3             3000.                                                
+  ?????B?????3                     1.0                                          
+  ?????C?????5             3000.                                                
+  ?????C?????5                     1.0                                          
+  ???????????4             3000.                                                
+  ???????????4                     1.0                                          
+  ???????????6             3000.                                                
+  ???????????6                     1.0                                          
+  ???????????2             3000.                                                
+  ???????????2                     1.0                                          
+C3  NEXT COME THE SNUBBER CIRCUITS, ACROSS VALVES AND ANODE REACTORS:           
+  ?????A??????             1200.         0.1                                    
+  ?????B??????             1200.         0.1                                    
+  ?????C??????             1200.         0.1                                    
+  ?????A??????             1200.         0.1                                    
+  ?????B??????             1200.         0.1                                    
+  ?????C??????             1200.         0.1                                    
+C3  NEXT COME THE VALVES:                                                       
+/SWITCH                                                                         
+11?????1??????                                                  ?????2          
+11?????3??????                                                  ?????4          
+11?????5??????                                                  ?????6          
+11?????4?????A                                                  ?????5          
+11?????6?????B                                                  ?????1          
+11?????2?????C                                                  ?????3          
+==========================================================================
+C     End of  DC8INCL1.DAT  disk file;  Begin documentation of final cards:
+==========================================================================
+C $INCLUDE, dc8incl1,  ACNOD, #MINUS, ##PLUS, #FIRE, ##MID                      
+C   ACNODA  MID1             3000.                                                
+C   ACNODA  MID1                     1.0                                          
+C   ACNODB  MID3             3000.                                                
+C   ACNODB  MID3                     1.0                                          
+C   ACNODC  MID5             3000.                                                
+C   ACNODC  MID5                     1.0                                          
+C     PLUS  MID4             3000.                                                
+C     PLUS  MID4                     1.0                                          
+C     PLUS  MID6             3000.                                                
+C     PLUS  MID6                     1.0                                          
+C     PLUS  MID2             3000.                                                
+C     PLUS  MID2                     1.0                                          
+C   ACNODA MINUS             1200.         0.1                                    
+C   ACNODB MINUS             1200.         0.1                                    
+C   ACNODC MINUS             1200.         0.1                                    
+C   ACNODA  PLUS             1200.         0.1                                    
+C   ACNODB  PLUS             1200.         0.1                                    
+C   ACNODC  PLUS             1200.         0.1                                    
+C BLANK card ending  BRANCH  cards                                                
+C 11  MID1 MINUS                                                   FIRE2          
+C 11  MID3 MINUS                                                   FIRE4          
+C 11  MID5 MINUS                                                   FIRE6          
+C 11  MID4ACNODA                                                   FIRE5          
+C 11  MID6ACNODB                                                   FIRE1          
+C 11  MID2ACNODC                                                   FIRE3          
+C BLANK card ending  SWITCH  cards                                                
+C $STOP                                                                           
+====================================================================
+C     End of documentation of data cards after  $INCLUDE  processing
+====================================================================

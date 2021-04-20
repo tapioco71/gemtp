@@ -1,0 +1,539 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-7
+C      Simulation of 400-kV Portuguese network, supplied by J. Allen Lima of EDP
+C      during 1981.   Two of the 3-phase overhead lines used Semlyen modeling as
+C      data was received;  BPA replaced these with Marti modeling  (see  DCNEW-5
+C      and  DCNEW-6  derivations).   Final results were approved by  Allen Lima.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000020    .020    50.0    50.0
+       1       1       1       1       1      -1
+       5       5      20      20     100      50     500     250
+  CEDIL1G CD1                     60.
+  CEDIL2G CD2 CEDIL1G CD1
+  CEDIL3G CD3 CEDIL1G CD1
+  CEDIL1                   40.+4
+  CEDIL2                   40.+4
+  CEDIL3                   40.+4
+  CEDIL0                   20.+3
+  CEDIL4                   20.+3
+  CEDIL8                   20.+3
+  ORIOL1                   1100.
+  ORIOL2                   1100.
+  ORIOL3                   1100.
+  MORAT1                     50.
+  MORAT2                     50.
+  MORAT3                     50.
+  ORIOL1G OR1                    30.0
+  ORIOL2G OR2 ORIOL1G OR1
+  ORIOL3G OR3 ORIOL1G OR1
+  MORAT1G MO1                       5.
+  MORAT2G MO2 MORAT1G MO1
+  MORAT3G MO3 MORAT1G MO1
+C    PUNCHED CARD OUTPUT OF "MARTI SETUP" WHICH BEGAN AT  16.26.05  09/14/82
+C   10.231  0.0840 4            1.25   -39.4   70.97   32.25    15.8   0.0
+C   20.231  0.0840 4            1.25     0.0   70.97   32.25    15.8   0.0
+C   30.231  0.0840 4            1.25    39.4   70.97   32.25    15.8   0.0
+C   00.5    0.58   4            .575  -25.76  100.07   76.12
+C   00.5    0.58   4            .575   25.76  100.07   76.12
+C
+C    250.0    5000.0         1                   39.77                 3-2
+C    250.0      50.0         1                   39.77                 3
+C    250.0       .01         1                   39.77         9 10    3
+C
+-1CEDIL1ORIOL1                2.                    -2 3
+      13      0.41325032809958360502E+03
+  0.116666620877633503E+04  0.109183957565632813E+05  0.565519812069975512E+04
+  0.484147546792281423E+04  0.699348167433700146E+05  0.680639173314410029E+06
+  0.353546552880208456E+07  0.158558163852067168E+08  0.343936220208104504E+08
+  0.402986429528001565E+08  0.333051002996165333E+08  0.192239903452177197E+08
+  0.591785179162642127E+08
+  0.655848255002151437E+01  0.689529809570500767E+02  0.124018603340865507E+03
+  0.222448265068884186E+03  0.267002619247242444E+04  0.267774956803651194E+05
+  0.146874016084362785E+06  0.699595068734068467E+06  0.314988590167556150E+07
+  0.762879500332942314E+07  0.261916079974016361E+08  0.146966593032308880E+08
+  0.224237565390403033E+08
+      14      0.22722057907479428678E-03
+  0.325119221084764556E+00  0.955995667593461287E+00  0.107719811818587452E+02
+  0.162737617955725353E+02  0.846601995851995301E+02  0.194153514297787868E+04
+  0.205304796633652506E+04  0.812078556800162823E+04  0.759893103397168725E+05
+ -0.131817421725105715E+07  0.130673311067578869E+07  0.261283821816253591E+11
+ -0.523061935848645258E+11  0.261777346266795864E+11
+  0.578031724500470299E+02  0.170883883142724009E+03  0.175593437554162219E+04
+  0.253310312724618564E+04  0.344448023385708018E+04  0.156781846805402304E+05
+  0.179682694235832146E+05  0.291972405775985299E+05  0.660344632631146815E+05
+  0.506367097239857656E+06  0.506873464337097532E+06  0.144341197509027377E+06
+  0.144485538706536350E+06  0.144630024245242897E+06
+-2CEDIL2ORIOL2                2.                    -2 3
+      14      0.32434436644879587419E+03
+  0.252272221493054599E+04 -0.783260653540386542E+03  0.843607760307379550E+03
+  0.405537446805879938E+03  0.172880473437180306E+03  0.230195610382516389E+03
+  0.660733376851340495E+02  0.356064973429108875E+04  0.360876600484606379E+05
+  0.458067308721460002E+06  0.155426951919779993E+07  0.349466741634031897E+07
+  0.831361356808341283E+07  0.267191748194192564E+08
+  0.395606796435879227E+01  0.463636540679738307E+01  0.937357763832612023E+01
+  0.153396557146475114E+02  0.203063670799589469E+02  0.331878663859556227E+02
+  0.611409934802227237E+02  0.268325289732902854E+04  0.271015097222558029E+05
+  0.344182439511372744E+06  0.117037498667027464E+07  0.264512776776326954E+07
+  0.633446917806370230E+07  0.205787510722909323E+08
+      13      0.21477374477205599327E-03
+  0.129889193232538838E+02  0.884021541188871076E+02  0.565737181820981561E+03
+  0.292322581236811533E+04  0.117637318595143149E+05  0.532889556330723863E+05
+  0.389320617216179162E+06  0.168009156675308198E+07 -0.473625905585169559E+06
+  0.469598132803068736E+06  0.116075504186246309E+12 -0.233011870092233574E+12
+  0.116934231878534660E+12
+  0.257364843571493833E+04  0.165926100504714855E+05  0.470409178542860072E+05
+  0.986656059415058608E+05  0.163110622809428558E+06  0.273916823715255116E+06
+  0.492292176871687661E+06  0.752969879268023331E+06  0.140712450145074795E+08
+  0.140853162595219880E+08  0.122661137580659351E+07  0.122783798718239996E+07
+  0.122906582516958241E+07
+-3CEDIL3ORIOL3                2.                    -2 3
+      12      0.28586948340215191422E+03
+  0.469121681241953631E+03  0.233638265938181458E+03  0.133089817080063798E+04
+  0.659219169881776438E+03  0.384148976526417606E+03  0.648556151743692784E+02
+  0.212354841898140151E+03  0.201520145927393379E+03  0.890049222317856223E+02
+  0.180946149365585608E+03  0.727286056036915124E+04  0.756593323883183097E+06
+  0.233427180849573052E+01  0.652587200425930314E+01  0.445927138536190470E+01
+  0.929408799817113418E+01  0.153081605724076526E+02  0.187127301227206799E+02
+  0.320734227377979915E+02  0.513577120970671270E+02  0.825854535255917739E+02
+  0.154597265896880312E+03  0.564775236979137617E+04  0.589019465642374998E+06
+      12      0.21409749381714141754E-03
+  0.959446494661205063E+01  0.211543139931322084E+03  0.330320356215007322E+03
+  0.105674138126367028E+03  0.281000481977902956E+04  0.853906428242118945E+05
+  0.130879839444872479E+06  0.473130286723824225E+06  0.431889082744958054E+07
+  0.548392810817254744E+08  0.872278959796870160E+10 -0.878264063778379226E+10
+  0.190426713123812291E+04  0.410418711907143561E+05  0.640194813422894686E+05
+  0.206469677846042105E+05  0.134114222734196795E+06  0.966708188017849156E+06
+  0.116403676985993166E+07  0.191216163992797025E+07  0.426427480259321292E+07
+  0.945486102079298859E+07  0.810191819888780010E+07  0.811002011708668852E+07
+  0.58951259 -0.70710678 -0.41265623
+  0.00000000  0.00000000  0.00000000
+  0.55222261  0.00000000  0.81205275
+  0.00000000  0.00000000  0.00000000
+  0.58951259  0.70710678 -0.41265623
+  0.00000000  0.00000000  0.00000000
+C    PUNCHED CARD OUTPUT OF "MARTI SETUP" WHICH BEGAN AT  15.49.05  09/14/82
+C   10.231  0.0840 4            1.25   -39.4   70.97   32.25    15.8   0.0
+C   20.231  0.0840 4            1.25     0.0   70.97   32.25    15.8   0.0
+C   30.231  0.0840 4            1.25    39.4   70.97   32.25    15.8   0.0
+C   00.5    0.58   4            .575  -25.76  100.07   76.12
+C   00.5    0.58   4            .575   25.76  100.07   76.12
+C
+C    250.0    5000.0         1                   85.75                 3-2
+C    250.0      50.0         1                   85.75                 3
+C    250.0       .01         1                   85.75         9 10    3
+C
+-1CEDIL0RIO M0                2.                    -2 3
+      13      0.41325032809958360502E+03
+  0.116666620877633503E+04  0.109183957565632813E+05  0.565519812069975512E+04
+  0.484147546792281423E+04  0.699348167433700146E+05  0.680639173314410029E+06
+  0.353546552880208456E+07  0.158558163852067168E+08  0.343936220208104504E+08
+  0.402986429528001565E+08  0.333051002996165333E+08  0.192239903452177197E+08
+  0.591785179162642127E+08
+  0.655848255002151437E+01  0.689529809570500767E+02  0.124018603340865507E+03
+  0.222448265068884186E+03  0.267002619247242444E+04  0.267774956803651194E+05
+  0.146874016084362785E+06  0.699595068734068467E+06  0.314988590167556150E+07
+  0.762879500332942314E+07  0.261916079974016361E+08  0.146966593032308880E+08
+  0.224237565390403033E+08
+      14      0.50892744818303846681E-03
+  0.314840158156735182E+00  0.397096644312787919E+00  0.286274567822626953E+00
+  0.986918901234386373E+00  0.108177960738237841E+01  0.224534253968394787E+01
+  0.293916542436028667E+02  0.197434926128950927E+03  0.567436479903287875E+03
+  0.101953865622683602E+05  0.199276102757670906E+06  0.108851476277486117E+04
+ -0.162775077303748969E+08  0.160661481509794740E+08
+  0.654800415945925707E+02  0.838628213020787978E+02  0.563058277026596965E+02
+  0.198401491796740430E+03  0.231783659335135329E+03  0.461320658168496436E+03
+  0.243671543948517166E+04  0.605460236717123485E+04  0.493217162507794524E+04
+  0.198986212506673669E+05  0.369393457784018183E+05  0.521930791205834947E+06
+  0.445740570557629226E+05  0.446186311128186899E+05
+-2CEDIL8RIO M8                2.                    -2 3
+      14      0.32434436644879587419E+03
+  0.252272221493054599E+04 -0.783260653540386542E+03  0.843607760307379550E+03
+  0.405537446805879938E+03  0.172880473437180306E+03  0.230195610382516389E+03
+  0.660733376851340495E+02  0.356064973429108875E+04  0.360876600484606379E+05
+  0.458067308721460002E+06  0.155426951919779993E+07  0.349466741634031897E+07
+  0.831361356808341283E+07  0.267191748194192564E+08
+  0.395606796435879227E+01  0.463636540679738307E+01  0.937357763832612023E+01
+  0.153396557146475114E+02  0.203063670799589469E+02  0.331878663859556227E+02
+  0.611409934802227237E+02  0.268325289732902854E+04  0.271015097222558029E+05
+  0.344182439511372744E+06  0.117037498667027464E+07  0.264512776776326954E+07
+  0.633446917806370230E+07  0.205787510722909323E+08
+      17      0.46499677048825204163E-03
+  0.288523113835480495E-01  0.725379351796078098E+01  0.999151579386080013E+01
+  0.153033961315346581E+02  0.244487129361870124E+02  0.400123366058129859E+02
+  0.122879770961722842E+03  0.820872346904431552E+03  0.879503098994575475E+04
+  0.441523136528868445E+05  0.248759594823932697E+06  0.990833174894565047E+06
+ -0.264425086594143118E+06  0.262175769209715756E+06  0.502017406096569996E+11
+ -0.100919277533544712E+12  0.507162455923000841E+11
+  0.115636078970388239E+02  0.282211309700825944E+04  0.392830370094222508E+04
+  0.586261399698861044E+04  0.960221176710653435E+04  0.143387936744862945E+05
+  0.206931535817511244E+05  0.334707043265707816E+05  0.103328046449408099E+06
+  0.171203326682069473E+06  0.273017856262755893E+06  0.403226751519098158E+06
+  0.703740771205447835E+07  0.704444511976653314E+07  0.635083346533305579E+06
+  0.635718429879838688E+06  0.636354148309718716E+06
+-3CEDIL4RIO M4                2.                    -2 3
+      12      0.28586948340215191422E+03
+  0.469121681241953631E+03  0.233638265938181458E+03  0.133089817080063798E+04
+  0.659219169881776438E+03  0.384148976526417606E+03  0.648556151743692784E+02
+  0.212354841898140151E+03  0.201520145927393379E+03  0.890049222317856223E+02
+  0.180946149365585608E+03  0.727286056036915124E+04  0.756593323883183097E+06
+  0.233427180849573052E+01  0.652587200425930314E+01  0.445927138536190470E+01
+  0.929408799817113418E+01  0.153081605724076526E+02  0.187127301227206799E+02
+  0.320734227377979915E+02  0.513577120970671270E+02  0.825854535255917739E+02
+  0.154597265896880312E+03  0.564775236979137617E+04  0.589019465642374998E+06
+      14      0.46171157996028366660E-03
+  0.531412884677653463E+00  0.739743047831739649E+02  0.539474322670691464E+02
+  0.541766001138744473E+02  0.582432744659269724E+04  0.476456197516415682E+04
+  0.141536207623307037E+06  0.379552266384417358E+06  0.470350428764120839E+07
+ -0.762551194200545531E+08  0.755820149403780811E+08  0.654786423708226410E+12
+ -0.131260008356328448E+13  0.657809097595257614E+12
+  0.925277436009539418E+02  0.131730936032098034E+05  0.972178959767960259E+04
+  0.877083358217585715E+04  0.218411866736842734E+06  0.955781154778434138E+05
+  0.711025510144528787E+06  0.110226114446630745E+07  0.244920704323492135E+07
+  0.133576023000276599E+08  0.133709599023276884E+08  0.457964623585481581E+07
+  0.458422588209066994E+07  0.458881010797276092E+07
+  0.58951259 -0.70710678 -0.41265623
+  0.00000000  0.00000000  0.00000000
+  0.55222261  0.00000000  0.81205275
+  0.00000000  0.00000000  0.00000000
+  0.58951259  0.70710678 -0.41265623
+  0.00000000  0.00000000  0.00000000
+-1ORIOL1MORAT1                .9   1.21.4885 310.
+-2ORIOL2MORAT2            .02709.307743.7338 310.
+-3ORIOL3MORAT3            .02722.4224 2.716  310.
+-4ORIOL1MORAT1
+-5ORIOL2MORAT2
+-6ORIOL3MORAT3
+99CEDIL1CEDIL0             5.2+5           1                                   1
+            7.+5            7.+5
+           10.+5           14.+5
+            9999
+  TT44                     5.3+6
+  TT0                      5.3+6
+  TT00                     5.3+6
+  TT4                      5.3+6
+  TT8                      5.3+6
+  TT88                     5.3+6
+  RIO M0TT0                6670.
+  CEDIL0TT00               6670.
+  RIO M8TT8                6670.
+  CEDIL8TT88               6670.
+  RIO M4TT4                6670.
+  CEDIL4TT44               6670.
+98TT0                     .02011 1600.                                         1
+       .02010619  1600.
+      1.02010619       1766.9153
+            9999
+98TT00        TT0
+98TT4         TT0
+98TT44        TT0
+98TT8         TT0
+98TT88        TT0
+BLANK card ends all branch cards
+  CEDIL1CEDIL0       -.1  0.0                                                  3
+  CEDIL2CEDIL8       -.1  0.
+  CEDIL3CEDIL4       -.1  0.
+BLANK card ends all switch cards
+14G MO1     310.00+3      50.0     165.0                           -1.
+14G MO3      310.0+3      50.0      55.0                           -1.
+14G MO2      310.0+3      50.0     295.0                           -1.
+14G OR1      310.0+3      50.0     165.0                           -1.
+14G OR3      310.0+3      50.0      45.0                           -1.
+14G OR2      310.0+3      50.0     285.0                           -1.
+14G CD1      310.0+3      50.0     155.0                           -1.
+14G CD3      310.0+3      50.0      35.0                           -1.
+14G CD2      310.0+3      50.0     275.0                           -1.
+BLANK card terminating program source cards.
+C       Total network loss  P-loss  by summing injections =   3.047737027558E+09
+C                                Output for steady-state phasor switch currents.
+C         Node-K    Node-M            I-real            I-imag            I-magn
+C         CEDIL1    CEDIL0   -0.80284512E+02   -0.12995398E+03    0.15275353E+03
+C         CEDIL2    CEDIL8    0.16222036E+03    0.11540175E+02    0.16263032E+03
+C         CEDIL3    CEDIL4   -0.93117224E+02    0.11629906E+03    0.14898419E+03
+C
+C  G MO3   177808.69526882         310000.      3962.4928132035  6810.5497167867
+C          253937.13372959      55.0000000      5539.1550032594       54.4215657
+C
+C           ---- Initial flux of coil  "TT0   "  to  "      "  =  3.59368692E+02
+C           ---- Initial flux of coil  "TT00  "  to  "      "  =  3.54323276E+02
+C           ---- Initial flux of coil  "TT4   "  to  "      "  =  6.59577293E+02
+C           ---- Initial flux of coil  "TT44  "  to  "      "  =  6.52855676E+02
+C           ---- Initial flux of coil  "TT8   "  to  "      "  = -1.00845302E+03
+C           ---- Initial flux of coil  "TT88  "  to  "      "  = -9.97486060E+02
+  CEDIL0CEDIL1RIO M0RIO M4RIO M8
+C  Step   Time        CEDIL1       CEDIL0       CEDIL1       RIO M0       RIO M4
+C                     CEDIL0
+C ***      Phasor I(0) = -0.8028451E+02   Switch  "CEDIL1"  to  "CEDIL0"  closed
+C ***      Phasor I(0) =  0.1622204E+03   Switch  "CEDIL2"  to  "CEDIL8"  closed
+C ***      Phasor I(0) = -0.9311722E+02   Switch  "CEDIL3"  to  "CEDIL4"  closed
+C   0      0.0           0.0  -298652.444  -298652.444  -301807.939  239354.2831
+C   1    .2E-4           0.0  -299345.099  -299345.099    -302510.8  238044.5995
+C   2    .4E-4           0.0  -300028.167  -300028.167  -303203.597  236727.2484
+BLANK card ending program output-variable requests (node voltages only, here).
+C  &&&   "CEDIL1"  to  "CEDIL0"   segment  1   at time  T = 1.03000000E-02  sec.
+C  &&&   "CEDIL1"  to  "CEDIL0"   segment  0   at time  T = 1.17600000E-02  sec.
+C  &&&   "CEDIL1"  to  "CEDIL0"   segment -1   at time  T = 1.22000000E-02  sec.
+C  &&&   "CEDIL1"  to  "CEDIL0"   segment  0   at time  T = 1.36200000E-02  sec.
+C  750    .015   54917.35879  22729.26565  77646.62444  36591.75202  -240811.052
+C                -.015069991
+C 1000     .02   -292245.731  -30041.6674  -322287.398  32117.86752  -188577.744
+C                -.015141205
+C Variable max : 520026.4244   795246.371  538123.5782  865611.5988  239354.2831
+C                .0045159595
+C Times of max :       .0103        .0122       .01224       .01176          0.0
+C                        0.0
+C Variable min : -547714.329  -318797.586  -322287.398  -322309.548  -445931.745
+C                -5.25795341
+C Times of min :       .0122       .00114          .02       .00114       .01082
+C                     .01078
+  PRINTER PLOT                                 { Axis limits : (-3.223,   8.656)
+ 1441.0 0.0 20.         RIO M0                                     TENSAO  V
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C       2nd  of  2  subcases is unrelated to the 1st.  It was added  9 May 1993.
+C       Demonstration that double-circuit Marti frequency-dependent line punched
+C       by the 3rd subcase of  DCNEW-3   will  smoothly  continue  from a phasor
+C       solution.   All 6 phases are continuously transposed.  This trivial case
+C       was in error prior to correction on March 21, 1993,  as described in the
+C       April, 1993, newsletter.   Our thanks to Alan Myers of Black and Veatch. 
+PRINTED NUMBER WIDTH, 13, 2,   { Request maximum precision (if 8 output columns)
+ .000005    .005     60.     60.    { Small DELTAT is necessitated by short line
+       1       1       1       3       1      -1
+       5       5      20      20     100     100
+  JDGA  SENDA                      15.    { 1st of 3 branches in series with one
+  JDGB  SENDB                      15.    { circuit of the Marti line.   This is
+  JDGC  SENDC                      15.    { an approximation to source impedance
+  JDGA  SENDD                      15.    
+  JDGB  SENDE                      15.    
+  JDGC  SENDF                      15.    
+$INCLUDE, dcn3b.pch, { 6-phase branch cards were punched by  DCN3.DAT  execution
+  RECA                     1000.  { Resistive load at far end of 1st of 6 phases
+  RECB        RECA                { 2nd of 6 phases  is terminated by the same R
+  RECC        RECA                { Etc. for phases 3 through 6.  It is balanced
+  RECD        RECA
+  RECE        RECA
+  RECF        RECA
+BLANK card ending branch cards
+BLANK card ending switch cards
+14JDGA       303000.       60.        0.                           -1.
+14JDGB       303000.       60.     -120.                           -1.
+14JDGC       303000.       60.      120.                           -1.
+C       JDGA   |SENDA *SENDD *
+C       SENDA  |JDGA  *RECA  *
+C       JDGB   |SENDB *SENDE *
+C       SENDB  |JDGB  *RECB  *
+C       JDGC   |SENDC *SENDF *
+C       SENDC  |JDGC  *RECC  *
+C       SENDD  |JDGA  *RECD  *
+C       SENDE  |JDGB  *RECE  *
+C       SENDF  |JDGC  *RECF  *
+C          < <  Etc.  for rest of connectivity table  > >
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   2.754071719021E+08
+C Last gen: JDGC      -151500.       303000.    -298.2665798274  605.98079669561
+C Last gen:    262405.69734668   120.0000000    527.49386093289      119.4855916
+C Step    Time          RECA         RECB         RECC         RECD         RECE
+C    0     0.0   302949.3018  -155589.513  -147359.789  302949.3018  -155589.513
+C    1   .5E-5   302957.6584  -155099.143  -147858.516  302957.6584  -155099.143
+C    2   .1E-4   302964.9725   -154608.24  -148356.733  302964.9725   -154608.24
+  RECA  RECB  RECC  RECD  RECE  RECF        { Look at voltages at far end, all 6
+BLANK card ending node names for selective voltage output
+C 1000    .005   -89097.5917   295341.234  -206243.642  -89097.5917   295341.234
+C Variable max :  302986.376   295341.234  -147359.789   302986.376   295341.234
+C Times of max :       .4E-4         .005          0.0        .4E-4         .005
+C Variable min : -89097.5917  -155589.513  -302986.532  -89097.5917  -155589.513
+C Times of min :        .005          0.0       .00282         .005          0.0
+  PRINTER PLOT
+ 144 1. 0.0 5.0         RECA  RECB  RECF         { Axis limits: (-3.030,  3.030)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       3rd  of  4  subcases is unrelated to the preceding two.  Instead, it
+C       demonstrates use of Type-98 (pseudo-nonlinear inductance) and Type-99
+C       (pseudo-nonlinear resistance) elements to model magnetic saturation
+C       that includes losses.  Data is added  7 December 2001  beginning with
+C       ELOSTY.DAT  from the  LOSSY SATURATION  author, Orlando Hevia in Santa
+C       Fe, Argentina.  This is data used to produce plots of his recent paper
+C       on the subject in  EEUG News.  The key word here is  triplen harmonics.
+C       This 1st of 2 subcases is for the simpler Y-connected coils.
+ .000200    .040          { Double Hevia's dT = 100 usec to speed the simulation
+       1       1       1       1       1      -1
+       5       5      10      10
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C LOSSY SATURATION
+C      50.  0.001   1.0E-6       0       0       1       1DOMAR STARR DOMAL STARL
+C 3.01            29107.0          50640.0
+C 4.39            31000.0          60640.0
+C 7.51            33200.0          75760.0
+C 14.45           35387.0          94960.0
+C 26.09           37280.0          114000.0
+C 53.73           39213.0          135360.0
+C            9999.
+99DOMAR STARR                                                                  1
+  1.42053069E+00  2.37657660E+04
+  1.78742496E+00  2.53113940E+04
+  2.16124023E+00  2.71076865E+04
+  2.63247274E+00  2.88933645E+04
+  2.99836604E+00  3.04389925E+04
+  3.37097937E+00  3.20172804E+04
+           9999.
+98DOMAL STARL              4.013 75.65                                         1
+  4.01276620E+00  7.56487826E+01
+  9.11336416E+00  8.05686695E+01
+  1.63508154E+01  8.62864460E+01
+  3.39419940E+01  9.19704357E+01
+  6.29293554E+01  9.68903225E+01
+  1.36530279E+02  1.01914169E+02
+           9999.
+99DOMBR STARR DOMAR STARR                                                      0
+99DOMCR STARR DOMAR STARR                                                      0
+98DOMBL STARL DOMAL STARL  4.013 75.65                                         0
+98DOMCL STARL DOMAL STARL  4.013 75.65                                         0
+BLANK card ending branch cards
+C AAAAAABBBBBB
+  DOMA  DOMAR                                         MEASURING                0
+  DOMB  DOMBR                                         MEASURING                0
+  DOMC  DOMCR                                         MEASURING                0
+  DOMA  DOMAL                                         MEASURING                0
+  DOMB  DOMBL                                         MEASURING                0
+  DOMC  DOMCL                                         MEASURING                0
+C AAAAAABBBBBB         
+  GENA  DOMA                                          MEASURING                1
+  GENB  DOMB                                          MEASURING                0
+  GENC  DOMC                                          MEASURING                0
+  STARR                                               MEASURING                1
+  STARL                                               MEASURING                1
+BLANK card ending switch cards
+14GENA   1 32017.280 50.0       0.0                            -1.000
+14GENB   1 32017.280 50.0     -120.                            -1.000
+14GENC   1 32017.280 50.0      120.                            -1.000
+BLANK card ending sources
+C  Next   5     output variables are branch currents (flowing from the upper node to the lower node);
+C    Step      Time      GENA       STARR      STARL      DOMAR      DOMAL
+C                        DOMA       TERRA      TERRA      STARR      STARL
+C ***      Phasor I(0) =  3.2017280E-06                     Switch  "DOMA  "  to  "DOMAR "  closed in the steady-state.
+C ***      Phasor I(0) = -1.6008640E-06                     Switch  "DOMB  "  to  "DOMBR "  closed in the steady-state.
+C ***      Phasor I(0) = -1.6008640E-06                     Switch  "DOMC  "  to  "DOMCR "  closed in the steady-state.
+C ***      Phasor I(0) =  3.2017280E-06                     Switch  "DOMA  "  to  "DOMAL "  closed in the steady-state.
+C ***      Phasor I(0) = -4.6819370E+00                     Switch  "DOMB  "  to  "DOMBL "  closed in the steady-state.
+C ***      Phasor I(0) =  4.6819338E+00                     Switch  "DOMC  "  to  "DOMCL "  closed in the steady-state.
+C ***      Phasor I(0) =  6.4034560E-06                     Switch  "GENA  "  to  "DOMA  "  closed in the steady-state.
+C ***      Phasor I(0) = -4.6819386E+00                     Switch  "GENB  "  to  "DOMB  "  closed in the steady-state.
+C ***      Phasor I(0) =  4.6819322E+00                     Switch  "GENC  "  to  "DOMC  "  closed in the steady-state.
+C ***      Phasor I(0) =  1.5737111E-21                     Switch  "STARR "  to  "      "  closed in the steady-state.
+C ***      Phasor I(0) = -8.0342889E-17                     Switch  "STARL "  to  "      "  closed in the steady-state.
+C  &&& Type-99 v-i from  "DOMAR "  to  "STARR "  begins operation on segment  1   at time  T = 0.00000000E+00  sec.
+C  &&& Type-99 v-i from  "DOMBR "  to  "STARR "  begins operation on segment  -1   at time  T = 0.00000000E+00  sec.
+C  &&& Type-99 v-i from  "DOMCR "  to  "STARR "  begins operation on segment  -1   at time  T = 0.00000000E+00  sec.
+C       0       0.0  .640346E-5 .15737E-20 -.8034E-16        0.0        0.0
+C       1     .2E-3  2.24962515 .74311E-15 -6.2927755 1.90996501 .339334207
+C       2     .4E-3  3.99696223  1.4206581 -15.485462 3.31930901 .677329216
+C       3     .6E-3  4.07789855 1.18508292 -41.362603 3.06492664 1.01265112
+C       4     .8E-3  4.53570533 1.33779483 -67.966398 3.19141247 1.34397655
+C       5     .1E-2   4.6713378 1.18095312 -98.560248 3.00102929 1.66999791
+BLANK card ending output requests (none here)
+C     180      .036  -62.395321 -1.3338784 -57.847076 .591378597 -62.986801
+C     190      .038  -1.2485159 -.58893346 122.911755 1.92774467 -3.1765248
+C  &&& Type-99 v-i from  "DOMCR "  to  "STARR "  begins operation on segment  0   at time  T = 3.84000000E-02  sec.
+C  &&& Type-99 v-i from  "DOMCR "  to  "STARR "  begins operation on segment  -1   at time  T = 3.86000000E-02  sec.
+C     200       .04  3.37130585 1.45723794  3.6102679 3.37097928 -.1727E-12
+C Variable maxima :  136.039023 1.52221675 130.732514 3.37097928 136.039023
+C Times of maxima :        .025      .0192      .0384        .02       .025
+C Variable minima :  -136.03902 -1.5222168 -130.73251 -3.3709793 -136.03902
+C Times of minima :        .035      .0092      .0216        .01       .035
+  CALCOMP PLOT
+ 194 4. 0.0 40.         DOMAR STARR STARR
+ 194 4. 0.0 40.         DOMAL STARL GENA  DOMA
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+C       4th  of  4 subcases is related to the preceding.  Instead of Y-connected
+C       coils,  this demonstrates delta-connected coils, which involve more
+C       interesting and complicated coil currents.  Read Orlando Hevia's paper
+C       to understand why.  Line currents are missing the  "triplen harmonics"
+C       (numbers 3, 9, 15, etc.).   Data is added  7 December 2001. 
+ .000200    .040          { Double Hevia's dT = 100 usec to speed the simulation
+       1       1       1       1       1      -1
+       5       5      10      10
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C LOSSY SATURATION
+C      50.  0.001   1.0E-6       0       0       3       1DOMAR DOMBR DOMAL DOMBL
+C 3.01            29107.00         50640.0
+C 4.39            31000.00         60640.0
+C 7.51            33200.00         75760.0
+C 14.45           35387.0          94960.0
+C 26.09           37280.00         114000.0
+C 53.73           39213.00         135360.0
+C            9999.
+99DOMAR DOMBR                                                                  1
+  8.20143778E-01  4.11635142E+04
+  1.03616124E+00  4.38406204E+04
+  1.26192415E+00  4.69518903E+04
+  1.55242139E+00  5.00447753E+04
+  1.77581972E+00  5.27218816E+04
+  1.99952258E+00  5.54555564E+04
+           9999.
+98DOMAL DOMBL              2.317  131.                                         1
+  2.31677164E+00  1.31027535E+02
+  5.52313551E+00  1.39549029E+02
+  1.04634896E+01  1.49452508E+02
+  2.26722126E+01  1.59297467E+02
+  4.28985523E+01  1.67818961E+02
+  9.45609677E+01  1.76520519E+02
+           9999.
+C 
+99DOMBR DOMCR DOMAR DOMBR                                                      0
+99DOMCR DOMAR DOMAR DOMBR                                                      0
+98DOMBL DOMCL DOMAL DOMBL  2.317  131.                                         0
+98DOMCL DOMAL DOMAL DOMBL  2.317  131.                                         0
+BLANK card ending branch cards
+C AAAAAABBBBBB
+  DOMA  DOMAR                                         MEASURING                1
+  DOMB  DOMBR                                         MEASURING                0
+  DOMC  DOMCR                                         MEASURING                0
+  DOMA  DOMAL                                         MEASURING                1
+  DOMB  DOMBL                                         MEASURING                0
+  DOMC  DOMCL                                         MEASURING                0
+C AAAAAABBBBBB         
+  GENA  DOMA                                          MEASURING                1
+  GENB  DOMB                                          MEASURING                0
+  GENC  DOMC                                          MEASURING                0
+BLANK card ending switch cards
+14GENA   1 32017.280 50.0       0.0                            -1.000
+14GENB   1 32017.280 50.0     -120.                            -1.000
+14GENC   1 32017.280 50.0      120.                            -1.000
+BLANK card ending sources
+C  Next   5     output variables are branch currents (flowing from the upper node to the lower node);
+C    Step      Time      DOMA       DOMA       GENA       DOMAR      DOMAL
+C                        DOMAR      DOMAL      DOMA       DOMBR      DOMBL
+C ***      Phasor I(0) =  9.6051840E-06                     Switch  "DOMA  "  to  "DOMAR "  closed in the steady-state.
+C ***      Phasor I(0) = -4.8025920E-06                     Switch  "DOMB  "  to  "DOMBR "  closed in the steady-state.
+C ***      Phasor I(0) = -4.8025920E-06                     Switch  "DOMC  "  to  "DOMCR "  closed in the steady-state.
+C ***      Phasor I(0) =  9.6051840E-06                     Switch  "DOMA  "  to  "DOMAL "  closed in the steady-state.
+C ***      Phasor I(0) = -4.6831884E+00                     Switch  "DOMB  "  to  "DOMBL "  closed in the steady-state.
+C ***      Phasor I(0) =  4.6831788E+00                     Switch  "DOMC  "  to  "DOMCL "  closed in the steady-state.
+C ***      Phasor I(0) =  1.9210368E-05                     Switch  "GENA  "  to  "DOMA  "  closed in the steady-state.
+C ***      Phasor I(0) = -4.6831932E+00                     Switch  "GENB  "  to  "DOMB  "  closed in the steady-state.
+C ***      Phasor I(0) =  4.6831740E+00                     Switch  "GENC  "  to  "DOMC  "  closed in the steady-state.
+C  &&& Type-99 v-i from  "DOMAR "  to  "DOMBR "  begins operation on segment  1   at time  T = 0.00000000E+00  sec.
+C  &&& Type-99 v-i from  "DOMCR "  to  "DOMAR "  begins operation on segment  -1   at time  T = 0.00000000E+00  sec.
+C       0       0.0  .960518E-5 .960518E-5 .192104E-4        0.0 1.56057933
+C  &&& Type-99 v-i from  "DOMBR "  to  "DOMCR "  begins operation on segment  1   at time  T = 2.00000000E-04  sec.
+C       1     .2E-3   1.9099746 .339343792 2.24963793 .920293912   1.727168
+C       2     .4E-3  2.68664627 .677338744 3.36430266 1.06290122 1.88694235
+C       3     .6E-3  2.55627285 1.01266055 3.56924791 .901118772 2.03927183
+C       4     .8E-3  2.56447828 1.34398585 3.90877424  .69571598 2.18355526
+C       5     .1E-2  2.64214444 1.67000704 4.31245598 .739321791 3.00938576
+BLANK card ending output requests (none here)
+C     170      .034  -.59429806 -73.237637 -73.832034 .229721436 -71.149345
+C     180      .036  .591381566 -73.581414 -72.989934 .821100034 -2.0872622
+C  &&& Type-99 v-i from  "DOMCR "  to  "DOMAR "  begins operation on segment  0   at time  T = 3.68000000E-02  sec.
+C  &&& Type-99 v-i from  "DOMCR "  to  "DOMAR "  begins operation on segment  -1   at time  T = 3.70000000E-02  sec.
+C     190      .038  2.42407329 -27.597882  -25.17355 1.97466258 -.32562914
+C     200       .04  2.70267022 .960518E-5 2.70299999  1.3628017 1.56057933
+C Variable maxima :  2.72798702 95.7745753 97.0588667 1.99852725 94.1587716
+C Times of maxima :       .0198      .0234      .0234      .0384      .0234
+C Variable minima :   -2.727987 -95.774566 -96.715084 -1.9985273 -93.813962
+C Times of minima :       .0098      .0166      .0334      .0284      .0334
+ 194 4. 0.0 40.         DOMA  DOMAR DOMAR DOMBR 
+ 194 4. 0.0 40.-100.100.DOMA  DOMAL DOMAL DOMBL
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+BLANK

@@ -1,0 +1,646 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-17
+C      1st  of  9  subcases that illustrate  GIFU  switch usage as described in 
+C      a story in the April, 1996, newsletter.  A switch opens at peak current!
+C      The general configuration is similar to Prof. Ned Mohan's Exercise 10. It
+C      differs, however, in that there are 2 loads having two different voltages
+C      (150 and 200 volts dc, respectively).  The source is 100 volts dc.  The
+C      two high-voltage batteries are being charged by the low-voltage battery.
+C      Unlike Exercise 10,  this problem has only one TACS-controlled  (here, 
+C      MODELS-controlled) switch.  This carries the  GIFU  declaration in cols.
+C      61-64.   The diodes are real, independent diodes that will be adjusted
+C      experimentally on the same step that the  GIFU  switch changes status.
+C        GIFU4.DAT  ---  As set up from data supplied by Prof. Yoshihiro Murai 
+ .010E-6  10.E-6                   1.E-5
+     100       1       1       1       1      -1
+     399       1     405       5     425      25     500     100
+MODELS
+OUTPUT SIG
+MODEL ONOFF
+VAR SIG
+OUTPUT SIG
+EXEC
+  IF (t MOD 1.E-5) < 0.4 * 1.E-5 THEN
+    SIG := 1.
+  ELSE
+    SIG := 0.
+  ENDIF
+ENDEXEC
+ENDMODEL
+USE ONOFF AS SW
+ OUTPUT SIG := SIG
+ENDUSE
+RECORD
+ SW.SIG AS SIG
+ENDRECORD
+ENDMODELS
+00N1    N2                      1.0E-2                                         3
+00N3    N5                1.
+00N4    N6                1.
+00N1    N2                 1.E+4
+  N2    N3                 1.E+3       0.01                                    1
+BLANK RECORD ENDING BRANCHES
+13N2                                                        GIFU      SIG     13
+11N2    N4                                                                    13
+11N2    N3                                                                    13
+BLANK RECORD ENDING SWITCHES
+11N1      100.                                              0.0000000
+11N5      150.                                              0.0000000
+11N6      200.                                              0.0000000
+BLANK RECORD ENDING SOURCES
+C  Step     Time      N1         N2         N2         N2         N2         N2         N2         N1         N2         MODELS
+C                     N2         TERRA      N4         N3         TERRA      N4         N3         N2         N3         SIG
+C    0      0.0         0.0        0.0        0.0        0.0        0.0      0.0        0.0        0.0        0.0        1.0
+C            Switch  "N2    "  to  "      "  closing after  1.00000000E-08  sec.
+C  100     .1E-5        100.        0.0      -200. -149.86421 9.96455754        0.0        0.0 9.81876757 -.13578997        1.0
+C  200     .2E-5        100.        0.0      -200. -149.87712 19.9516477        0.0        0.0 19.8187676 -.12288012        1.0
+C  300     .3E-5        100.        0.0      -200.  -149.8888 29.9399652        0.0        0.0 29.8187676 -.11119764        1.0
+BLANK RECORD ENDING NODE VOLTAGE OUTPUT
+C  399   .399E-5        100.        0.0      -200. -149.89927  39.829494        0.0        0.0 39.7187676 -.10072641        1.0
+C            Switch  "N2    "  to  "      "  opening after  4.00000000E-06  sec.
+C  400     .4E-5        100.        0.0      -200. -149.89937 39.9293934        0.0        0.0 39.8187676 -.10062584        0.0
+C            Diode   "N2    "  to  "N3    "  closing after  4.00000000E-06  sec.
+C  401   .401E-5  -89.814879 189.814879 -10.185121        0.0        0.0        0.0 39.7655794 39.8238601 .049299201        0.0
+C  402   .402E-5  -89.725118 189.725118 -10.274882        0.0        0.0        0.0 39.6758677 39.7340901 .049249926        0.0
+C  900     .9E-5  -54.532699 154.532699 -45.467301        0.0        0.0        0.0  4.5027675 4.53815216 .029931392        0.0
+C            Diode   "N2    "  to  "N3    "  opening after  9.87000000E-06  sec.
+C            Switch  "N2    "  to  "      "  closing after  1.00000000E-05  sec.
+C 1000     1.E-5   .02232934 99.9776707 -100.02233 -50.000041        0.0        0.0        0.0 -.02229011 -.02228788        1.0
+C        maxima :       100. 189.814879        0.0        0.0 39.9293934        0.0 39.7655794 39.8238601 .049299201        1.0
+C  Times of max :      .2E-7    .401E-5        0.0        0.0      .4E-5        0.0    .401E-5    .401E-5    .401E-5        0.0
+C        minima : -89.814879        0.0      -200. -149.89937        0.0        0.0 -.03812688 -.02813821 -.14975663        0.0
+C  Times of min :    .401E-5        0.0      .2E-7      .4E-5        0.0        0.0    .987E-5    .988E-5      .2E-7      .4E-5
+  PRINTER PLOT 
+ 185 1. 0.0 10.         BRANCH                     { Limits:  (-2.000,  1.898)
+                        N2          N2    N3    N2    N4        
+ 195 1. 0.0 10.         BRANCH                     { Limits:  (-0.004,  3.993)
+                        N2          N2    N3    N2    N4        
+BLANK end of plot cards
+BEGIN NEW DATA CASE
+C      2nd  of  9  subcases that illustrate  GIFU  switch usage. 
+C        GIFU5.DAT  ---  As set up from data supplied by Prof. Yoshihiro Murai 
+PRINTED NUMBER WIDTH, 10, 2,   { 10-digit col width including 2 blank separators
+ 0.05E-6  5.0E-6                   1.E-8
+      10       1       1               1      -1
+      79       1      85       5      90      10
+MODELS
+OUTPUT SIG
+MODEL ONOFF
+VAR SIG
+OUTPUT SIG
+EXEC
+ IF (T MOD 1.E-5) <  0.4*1.E-5 THEN
+  SIG := -1.
+ ELSE
+  SIG := 1.
+ ENDIF
+ENDEXEC
+ ENDMODEL
+ USE ONOFF AS SW
+   OUTPUT SIG := SIG
+ ENDUSE
+ RECORD
+  SW.SIG AS SIG
+ ENDRECORD
+ ENDMODELS
+C - -  BRANCH DATA
+C --------- LOAD RESISTANCE AND INDUCTANCE
+00N1    N2                10.0                                                 3
+00N3    N6                1.0                                                  3
+00N2    N3                 1.E+3        0.01                                   3
+BLANK RECORD ENDING BRANCHES
+C --------- SWITCHES BELOW REPRESENT COMBINATION OF SWITCH AND ITS ANTIPARALLEL
+C           CONNECTED DIODE
+13N2    N4                                                  GIFU      SIG     13
+11N2    N3                                            CLOSED                  13
+BLANK RECORD ENDING SWITCHES
+11N1      200.00
+11N4      100.00
+11N6      120.00
+BLANK RECORD ENDING SOURCES
+C   Step      Time     N1        N3        N2        N2        N2        N2        N2        N1        N3        N2        MODELS
+C                      N2        N6        N3        N4        N3        N4        N3        N2        N6        N3        SIG
+C ***        Switch  "N2    "  to  "N3    "  closed before  0.00000000E+00  sec.
+C      0       0.0        0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       -1.
+C     10     .5E-6   72.72727  7.272727       0.0  27.27273       0.0       0.0  7.272727  7.272727  7.272727       0.0       -1.
+BLANK RECORD ENDING NODE VOLTAGE OUTPUT
+C     79   .395E-5   72.72727  7.272727       0.0  27.27273       0.0       0.0  7.272727  7.272727  7.272727       0.0       -1.
+C            Switch  "N2    "  to  "N4    "  closing after  4.00000000E-06  sec.
+C     80     .4E-5   72.72727  7.272727       0.0  27.27273       0.0       0.0  7.272727  7.272727  7.272727       0.0       1.0
+C            Diode   "N2    "  to  "N3    "  opening after  4.00000000E-06  sec.
+C     81   .405E-5       100.   -.01993  -19.9801       0.0  -19.9801  10.01993       0.0       10.   -.01993   -.01993       1.0
+C    100     .5E-5       100.  -.018126  -19.9819       0.0  -19.9819  10.01813       0.0       10.  -.018126  -.018126       1.0
+C         maxima :       100.  7.272727       0.0  27.27273       0.0  10.01993  7.272727       10.  7.272727       0.0       1.0
+C   Times of max :    .405E-5     .5E-7       0.0     .5E-7       0.0   .405E-5     .5E-7   .405E-5     .5E-7       0.0     .4E-5
+C         minima :        0.0   -.01993  -19.9819       0.0  -19.9819       0.0       0.0       0.0   -.01993   -.01993       -1.
+C   Times of min :        0.0   .405E-5     .5E-5       0.0     .5E-5       0.0       0.0       0.0   .405E-5   .405E-5       0.0
+  PRINTER PLOT 
+ 185 1. 0.0  5.         BRANCH                     { Limits:  (-1.998,  2.727)
+                        N2    N3    N2    N4        
+ 195 1. 0.0  5.         BRANCH                     { Limits:  (0.000,  1.002)
+                        N2    N3    N2    N4        
+BLANK end of plot cards
+BEGIN NEW DATA CASE
+C     3rd of  9  subcases that illustrate GIFU switch usage.  This differs from
+C     the preceding subcase in that the MODELS-controlled switch used there has 
+C     been replaced by a thyristor (which is only simi-MODELS-controlled;  yes
+C     the closing is controlled,  but opening is natural,  on a current zero).
+C        GIFU6.DAT  ---  As set up from data supplied by Prof. Yoshihiro Murai 
+PRINTED NUMBER WIDTH, 10, 2,   { 10-digit col width including 2 blank separators
+ 0.05E-6  5.0E-6                        
+      10       1       1       1       1      -1
+      79       1      85       5      90      10
+MODELS
+OUTPUT SIG
+MODEL ONOFF
+VAR SIG
+OUTPUT SIG
+EXEC
+ IF (T MOD 1.E-5) <  0.4*1.E-5 THEN
+  SIG := -1.
+ ELSE
+  SIG := 1.
+ ENDIF
+ENDEXEC
+ ENDMODEL
+ USE ONOFF AS SW
+   OUTPUT SIG := SIG
+ ENDUSE
+ RECORD
+  SW.SIG AS SIG
+ ENDRECORD
+ ENDMODELS
+C --------- LOAD RESISTANCE AND INDUCTANCE
+00N1    N2                10.0                                                 3
+00N3    N6                1.0                                                  3
+00N2    N3                 1.E+3        0.01                                   3
+BLANK RECORD ENDING BRANCHES
+C --------- SWITCHES BELOW REPRESENT COMBINATION OF SWITCH AND ITS ANTIPARALLEL
+C           CONNECTED DIODE
+11N2    N4                                                  GIFUSIG           13
+11N2    N3                                            CLOSED                  13
+BLANK RECORD ENDING SWITCHES
+11N1      200.00
+11N4      100.00
+11N6      120.00
+BLANK RECORD ENDING SOURCES
+C   Step      Time     N1        N3        N2        N2        N2        N2        N2        N1        N3        N2        MODELS
+C                      N2        N6        N3        N4        N3        N4        N3        N2        N6        N3        SIG
+C ***                    Switch  "N2    "  to  "N3    "  closed before  0.00000000E+00  sec.
+C      0       0.0        0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       -1.
+C     10     .5E-6   72.72727  7.272727       0.0  27.27273       0.0       0.0  7.272727  7.272727  7.272727       0.0       -1.
+BLANK RECORD ENDING NODE VOLTAGE OUTPUT
+C     79   .395E-5   72.72727  7.272727       0.0  27.27273       0.0       0.0  7.272727  7.272727  7.272727       0.0       -1.
+C  Valve   "N2    "  to  "N4    "  closing after  4.00000000E-06  sec.
+C     80     .4E-5   72.72727  7.272727       0.0  27.27273       0.0       0.0  7.272727  7.272727  7.272727       0.0       1.0
+C                                                Diode   "N2    "  to  "N3    "  opening after  4.00000000E-06  sec.
+C     81   .405E-5       100.   -.01993  -19.9801       0.0  -19.9801  10.01993       0.0       10.   -.01993   -.01993       1.0
+C    100     .5E-5       100.  -.018126  -19.9819       0.0  -19.9819  10.01813       0.0       10.  -.018126  -.018126       1.0
+C         maxima :       100.  7.272727       0.0  27.27273       0.0  10.01993  7.272727       10.  7.272727       0.0       1.0
+C   Times of max :    .405E-5     .5E-7       0.0     .5E-7       0.0   .405E-5     .5E-7   .405E-5     .5E-7       0.0     .4E-5
+C         minima :        0.0   -.01993  -19.9819       0.0  -19.9819       0.0       0.0       0.0   -.01993   -.01993       -1.
+C   Times of min :        0.0   .405E-5     .5E-5       0.0     .5E-5       0.0       0.0       0.0   .405E-5   .405E-5       0.0
+  PRINTER PLOT 
+ 185 1. 0.0  5.         BRANCH                     { Limits:  (-1.998,  2.727)
+                        N2    N3    N2    N4        
+ 195 1. 0.0  5.         BRANCH                     { Limits:  (0.000,  1.002)
+                        N2    N3    N2    N4        
+BLANK end of plot cards
+BEGIN NEW DATA CASE
+C     4th  of  9  subcases that illustrate GIFU switch usage.  This differs from
+C     the preceding subcase in that there is no diode;  there are two thyristors 
+C     and both are declared to be  GIFU  switches.
+C        GIFU7.DAT  ---  As set up from data supplied by Prof. Yoshihiro Murai 
+PRINTED NUMBER WIDTH, 9, 2,   { 9-digit col width including 2 blank separators
+ 1.00E-6 40.0E-6                        
+       1       1       1       1       1      -1
+       5       5      30       1      35       5
+MODELS
+OUTPUT SIG, SIGM, SIGN, SIGO, 
+MODEL ONOFF
+VAR SIG, SIGM, SIGN, SIGO,
+OUTPUT SIG, SIGM, SIGN, SIGO,
+EXEC
+ IF (T MOD 1.0E-4) >  1.0*1.E-5 THEN
+  SIG := -1.
+ ELSE
+  SIG := 1.
+ ENDIF
+ IF (T MOD 1.0E-4) >  3.0*1.E-5 THEN
+  SIGM := 1.
+ ELSE
+  SIGM := -1.
+ ENDIF
+ IF (T MOD 1.0E-4) >  4.0*1.E-5 THEN
+  SIGN := 1.
+ ELSE
+  SIGN := -1.
+ ENDIF
+  SIGO := -1.+(SIGM - SIGN)
+ENDEXEC
+ ENDMODEL
+ USE ONOFF AS SW
+   OUTPUT SIG := SIG
+   OUTPUT SIGM := SIGM
+   OUTPUT SIGN := SIGN
+   OUTPUT SIGO := SIGO
+   ENDUSE
+    RECORD
+  SW.SIG AS SIG
+  SW.SIGM AS SIGM
+  SW.SIGN AS SIGN
+  SW.SIGO AS SIGO
+   ENDRECORD
+ ENDMODELS
+C --------- LOAD RESISTANCE AND INDUCTANCE
+00N1    N2                10.0                                                 3
+00N3    N6                1.0                                                  3
+BLANK RECORD ENDING BRANCHES
+C --------- SWITCHES BELOW REPRESENT COMBINATION OF SWITCH AND ITS ANTIPARALLEL
+C           CONNECTED DIODE
+11N2    N4                                                  GIFUSIGM          13
+11N2    N3                                            CLOSEDGIFUSIG           13
+BLANK RECORD ENDING SWITCHES
+11N1      200.00
+11N4      100.00
+11N6      120.00
+BLANK RECORD ENDING SOURCES
+C   Step      Time    N1       N3       N2       N2       N2       N2       N1       N3       MODELS   MODELS   MODELS   MODELS
+C                     N2       N6       N4       N3       N4       N3       N2       N6       SIG      SIGM     SIGN     SIGO
+C ***        Switch  "N2    "  to  "N3    "  closed before  0.00000000E+00  sec.
+C      0       0.0       0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      1.0      -1.      -1.      -1.
+C      1     1.E-6   72.7273  7.27273  27.2727      0.0      0.0  7.27273  7.27273  7.27273      1.0      -1.      -1.      -1.
+C      2     .2E-5   72.7273  7.27273  27.2727      0.0      0.0  7.27273  7.27273  7.27273      1.0      -1.      -1.      -1.
+BLANK RECORD ENDING NODE VOLTAGE OUTPUT
+C     30     .3E-4   72.7273  7.27273  27.2727      0.0      0.0  7.27273  7.27273  7.27273      -1.      -1.      -1.      -1.
+C            Valve   "N2    "  to  "N4    "  closing after  3.10000000E-05  sec.
+C     31    .31E-4   72.7273  7.27273  27.2727      0.0      0.0  7.27273  7.27273  7.27273      -1.      1.0      -1.      1.0
+C            Valve   "N2    "  to  "N3    "  opening after  3.10000000E-05  sec.
+C     32    .32E-4      100.      0.0      0.0     -20.      10.      0.0      10.      0.0      -1.      1.0      -1.      1.0
+C     40     .4E-4      100.      0.0      0.0     -20.      10.      0.0      10.      0.0      -1.      1.0      -1.      1.0
+C         maxima :      100.  7.27273  27.2727      0.0      10.  7.27273      10.  7.27273      1.0      1.0      -1.      1.0
+C   Times of max :    .32E-4    1.E-6    1.E-6      0.0   .32E-4    1.E-6   .32E-4    1.E-6      0.0   .31E-4      0.0   .31E-4
+C         minima :       0.0      0.0      0.0     -20.      0.0      0.0      0.0      0.0      -1.      -1.      -1.      -1.
+C   Times of min :       0.0      0.0      0.0   .32E-4      0.0      0.0      0.0      0.0   .11E-4      0.0      0.0      0.0
+  PRINTER PLOT 
+ 185 8. 0.0 40.         BRANCH                    {  Limits:  (-2.000,  2.727)
+                        N2    N3    N2    N4        
+ 195 8. 0.0 40.         BRANCH                    {  Limits:  (0.000,  1.000)
+                        N2    N3    N2    N4        
+BLANK end of plot cards
+BEGIN NEW DATA CASE
+C     5th  of  9  subcases that illustrate  GIFU  switch usage.  This came from
+C     Rajendra Naik,  a graduate student of Prof. Ned Mohan in Minneapolis.  It
+C     stacks two identical power supplies in series.  This is more demanding 
+C     than preceding cases in that a second experimental step is required for
+C     to switch the second half.  So,  on the screen,  after table dumping will
+C     be seen two  "table restoration"  lines.
+C        NAIK1.DAT  ---  As set up using data from grad student Rajendra Naik 
+PRINTED NUMBER WIDTH, 11, 1,   { 11-digit col width including 1 blank separators
+0.025E-6  6.0E-6
+       1       1       1       1       1      -1
+       5       5      20      20     100      50     199       1     205       5     
+TACS HYBRID
+C --------- VCONTL IS THE CONTROL VOLTAGE WHICH DETERMINES THE DUTY RATIO
+C --------- RAMP VOLTAGE REACHES 1.0 IN ONE TIME-PERIOD OF 10 MICROSECONDS
+11VCONTL  0.5
+24RAMP    1.0          10.0E-6
+98SIG1    =  VCONTL .GE. RAMP
+98SIG2    =  SIG1
+C --------- TACS VARIABLES TO BE OUTPUTTED
+33SIG1  
+BLANK RECORD ENDING TACS
+C - -  BRANCH DATA FOR TOP BUCK
+00VD    SWITCP            1.0E-3
+00VOI   VO                      5.0E-3                                         3
+00VO    VOI               3000.0
+00VN    DIODEU            1.0E-3                                               1
+00VO    VOUTM                         1000.0                                   1
+00VOUTM VO                0.1                                                  1
+C - -  BRANCH DATA FOR LOWER BUCK
+00SWITCNVNEG              1.0E-3
+00VLI   DIODEL            1.0E-3
+00VN                      1.0E-3
+00VLI   VNEG1             3000.0
+00VNEG1 VLI                     5.0E-3                                         1
+00VNEG1 VOUTM                         1000.0
+00VOUTM VNEG1             0.1
+00VOI                     10.0        5.E-02   
+00VLI                     10.0        5.E-02
+BLANK RECORD ENDING BRANCHES
+13SWITCPVOI                                           CLOSEDGIFU      SIG1    11
+11DIODEUVOI                                                                   11      
+13VLI   SWITCN                                        CLOSEDGIFU      SIG2    11
+11DIODELVN                                                                    11
+BLANK RECORD ENDING SWITCHES
+11VD      10.0                                                                 
+11VNEG    -10.
+BLANK RECORD ENDING SOURCES
+C - -  INITIAL CONDITIONS
+ 2VO      5.0
+ 2VOI     10.0
+ 3VO    VOUTM                 5.0
+ 3VOI   VO    0.0
+ 2VNEG1   -5.0
+ 2VLI     -10. 
+C - -  NODE VOLTAGES TO BE OUTPUTTED
+  VO    VOI   VNEG1 VOUTM VLI
+C   Step      Time      VOI        VO         VOI        VNEG1      VOUTM      VLI        SWITCP     DIODEU     VLI        DIODEL
+C                       VO                                                                VOI        VOI        SWITCN     VN
+C
+C                       VOI        VN         VO         VOUTM      VNEG1      TACS
+C                       VO         DIODEU     VOUTM      VO         VLI        SIG1
+C ***        Switch  "SWITCP"  to  "VOI   "  closed before  0.00000000E+00  sec.
+C ***        Switch  "VLI   "  to  "SWITCN"  closed before  0.00000000E+00  sec.
+C      0       0.0         5.0        5.0        10.        -5.        0.0       -10.        0.0        0.0        0.0        0.0
+C                   .86736E-18        0.0        0.0       -50.      .0125        0.0
+C      1    .25E-7  4.70586567 5.29318057 9.99904624 -9.7049453 .293805171 -9.9990462 .953759273        0.0 .953759273        0.0
+C                   .024264664        0.0 -49.967921 -49.993754 .025735252        1.0
+C      2     .5E-7  .815038563 9.18404043   9.999079  -5.810338 4.18591392  -9.999079 .921003104        0.0 .921003104        0.0
+C                   .038066925        0.0 -49.942927 -49.981265 .036942357        1.0
+BLANK RECORD ENDING NODE VOLTAGE OUTPUT
+C    199  .4975E-5  2.85398023 7.14334065 9.99732089 -7.1433406 2.37896557 -9.9973209 2.67911339        0.0 2.67911339        0.0
+C                   2.67814375        0.0 -44.964656 -47.643751 2.67814375        1.0
+C            Switch  "SWITCP"  to  "VOI   "  opening after  5.00000000E-06  sec.
+C            Switch  "VLI   "  to  "SWITCN"  opening after  5.00000000E-06  sec.
+C    200     .5E-5  2.85568452 7.14162209 9.99730661 -7.1416222 2.37837081 -9.9973066 2.69338583        0.0 2.69338583        0.0
+C                   2.69241791        0.0 -44.939143 -47.632513 2.69241791        0.0
+C            Diode   "DIODEU"  to  "VOI   "  closing after  5.00000000E-06  sec.
+C            Diode   "DIODEL"  to  "VN    "  closing after  5.00000000E-06  sec.
+C    201  .5025E-5   -7.141608 7.13990415 -.00170382 -7.1399041 2.37777637 .001703825        0.0  1.7038246        0.0  1.7038246
+C                    2.6817031  1.7038246 -44.941955 -47.621278  2.6817031        0.0
+C    240     .6E-5   -7.073708 7.07255339 -.00115462 -7.0725534 2.35470566 .001154618        0.0   1.154618        0.0   1.154618
+C                   1.29567377   1.154618 -45.885161 -47.178477 1.29567377        0.0
+C         maxima :         5.0 9.18404043        10.        -5. 4.18591392 .001742607 2.69338583 1.74260701 2.69338583 1.74260701
+C                   2.69241791 1.74260701        0.0 -47.178477 2.69241791        1.0
+C Times of maxima:         0.0      .5E-7        0.0        0.0      .5E-7   .5175E-5      .5E-5   .5175E-5      .5E-5   .5175E-5
+C                        .5E-5   .5175E-5        0.0      .6E-5      .5E-5     .25E-7
+C         minima :   -7.141608        5.0 -.00174261 -9.7049453        0.0       -10.        0.0        0.0        0.0        0.0
+C                   .86736E-18        0.0 -49.967921       -50.      .0125        0.0
+C Times of minima:    .5025E-5        0.0   .5175E-5     .25E-7        0.0        0.0        0.0        0.0        0.0        0.0
+C                          0.0        0.0     .25E-7        0.0        0.0        0.0
+  PRINTER PLOT 
+ 185 1. 0.0 6.0         VOI   VO    VOI   DIODEU   { Limits:  (-7.142,  5.000)
+  CALCOMP PLOT  { Switch to vector plotting to illustrate superposition of plots
+  SUPERIMPOSE                  3    { Superimpose plots of the following 3 cards
+ 2Next,  illustrate the overlay of 3 plots
+ 145 .6 0.0 6.0-10. 10. VO                      Superimpose 3   V-node in volts 
+ 185 .6 0.0 6.0         VOI   VO               { 2nd of 3 in overlay is V-branch
+ 195 .6 0.0 6.0         VOI   SWITCP           { 3rd of 3 in overlay is I-branch
+C       Ok,  done with SUPERIMPOSE.  Next,  prove the return to normal plotting:
+ 2Return to normal plotting
+ 195 .6 0.0 6.0         VOI   SWITCPDIODEUVOI
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      6th of  9  subcases.  This illustrates switch dependence as 1st described
+C      in the January, 1997, newsletter.   This is modification of 1st subcase.
+C      It is more efficient that using a GIFU switch because no table dumping
+C      and restoring is involved.   The solution is identical.
+ .010E-6  10.E-6                   1.E-5
+     100       1       1       1       1      -1
+     399       1     405       5     425      25     500     100
+MODELS
+OUTPUT SIG
+MODEL ONOFF
+VAR SIG
+OUTPUT SIG
+EXEC
+  IF (t MOD 1.E-5) < 0.4 * 1.E-5 THEN
+    SIG := 1.
+  ELSE
+    SIG := 0.
+  ENDIF
+ENDEXEC
+ENDMODEL
+USE ONOFF AS SW
+ OUTPUT SIG := SIG
+ENDUSE
+RECORD
+ SW.SIG AS SIG
+ENDRECORD
+ENDMODELS
+00N1    N2                      1.0E-2                                         3
+00N3    N5                1.
+00N4    N6                1.
+00N1    N2                 1.E+4
+  N2    N3                 1.E+3       0.01                                    1
+BLANK RECORD ENDING BRANCHES
+13N2                                                      { GIFU }    SIG     13
+11N2    N4                                                                    13
+11N2    N3                                                                    13
+  N2          N2    N3      < Master/slave switch dependency >  ONLY OPEN,CLOSE
+BLANK RECORD ENDING SWITCHES
+11N1      100.                                              0.0000000
+11N5      150.                                              0.0000000
+11N6      200.                                              0.0000000
+BLANK RECORD ENDING SOURCES
+C  Step     Time      N1         N2         N2         N2         N2         N2         N2         N1         N2         MODELS
+C                     N2         TERRA      N4         N3         TERRA      N4         N3         N2         N3         SIG
+C    0      0.0         0.0        0.0        0.0        0.0        0.0      0.0        0.0        0.0        0.0        1.0
+C            Switch  "N2    "  to  "      "  closing after  1.00000000E-08  sec.
+C  100     .1E-5        100.        0.0      -200. -149.86421 9.96455754        0.0        0.0 9.81876757 -.13578997        1.0
+C  200     .2E-5        100.        0.0      -200. -149.87712 19.9516477        0.0        0.0 19.8187676 -.12288012        1.0
+C  300     .3E-5        100.        0.0      -200.  -149.8888 29.9399652        0.0        0.0 29.8187676 -.11119764        1.0
+BLANK RECORD ENDING NODE VOLTAGE OUTPUT
+C  399   .399E-5        100.        0.0      -200. -149.89927  39.829494        0.0        0.0 39.7187676 -.10072641        1.0
+C            Switch  "N2    "  to  "      "  opening after  4.00000000E-06  sec.
+C  400     .4E-5        100.        0.0      -200. -149.89937 39.9293934        0.0        0.0 39.8187676 -.10062584        0.0
+C            Diode   "N2    "  to  "N3    "  closing after  4.00000000E-06  sec.
+C  401   .401E-5  -89.814879 189.814879 -10.185121        0.0        0.0        0.0 39.7655794 39.8238601 .049299201        0.0
+C  402   .402E-5  -89.725118 189.725118 -10.274882        0.0        0.0        0.0 39.6758677 39.7340901 .049249926        0.0
+C  900     .9E-5  -54.532699 154.532699 -45.467301        0.0        0.0        0.0  4.5027675 4.53815216 .029931392        0.0
+C            Diode   "N2    "  to  "N3    "  opening after  9.87000000E-06  sec.
+C            Switch  "N2    "  to  "      "  closing after  1.00000000E-05  sec.
+C 1000     1.E-5   .02232934 99.9776707 -100.02233 -50.000041        0.0        0.0        0.0 -.02229011 -.02228788        1.0
+C        maxima :       100. 189.814879        0.0        0.0 39.9293934        0.0 39.7655794 39.8238601 .049299201        1.0
+C  Times of max :      .2E-7    .401E-5        0.0        0.0      .4E-5        0.0    .401E-5    .401E-5    .401E-5        0.0
+C        minima : -89.814879        0.0      -200. -149.89937        0.0        0.0 -.03812688 -.02813821 -.14975663        0.0
+C  Times of min :    .401E-5        0.0      .2E-7      .4E-5        0.0        0.0    .987E-5    .988E-5      .2E-7      .4E-5
+ 185 1. 0.0 10.         BRANCH                     { Limits:  (-2.000,  1.898)
+                        N2          N2    N3    N2    N4        
+ 195 1. 0.0 10.         BRANCH                     { Limits:  (-0.004,  3.993)
+                        N2          N2    N3    N2    N4        
+BLANK end of plot cards
+BEGIN NEW DATA CASE
+C      7th  of  9 subcases.  This illustrates a Type-13 TACS-controlled switch
+C      as supplied by Dr. Tsuyoshi Funaki of Osaka University.  Original data
+C      was attached to E-mail dated May 30, 2001.  The TACS-controlled switch
+C      (BB, CC) will open at 3.25 msec while it still carries substantial
+C      current.  Of course,  diode  (EE, CC)  must close simultaneously.  This
+C      is the  "dynamic current redirection."   But it was not happening with
+C      the original data because the diode was declared to be a  GIFU  switch.
+C      Removing this,  operation passes through  3.25 msec  correctly.  But
+C      a subsequent challenge then occurs at  3.33 msec,  when the diode has
+C      a current zero.  This is not handled properly.  The diode would flop open
+C      and closed repeatedly (3 dT is the period) if  T-max  were extended.  The
+C      screen plots document this.  About time step size dT, it is largely
+C      arbitrary.   Dr. Funaki's data used 2 usec,  which WSM increased to 10 to
+C      reduce the printout while documenting each step.  Unfinished business:
+C      the diode oscillation that begins at 3.33 msec could be eliminated by the
+C      addition of a normal snubber circuit.  This is because opening is at a
+C      current zero.  It is quite unlike opening of the TACS-controlled switch
+C      in this respect.  Final observation:  CLOSED  was added to the Type-13
+C      TACS-controlled switch simply to save one experimental GIFU step, which
+C      requires that tables be dumped once.  If removed,  the simulation will
+C      not change substantially.      
+PRINTED NUMBER WIDTH, 10, 2,      { Column width is 10, including 2 blank spaces
+ .000010 .003380 { T-max is chosen to end the simulation once oscillation begins
+      10       1       1       1       0      -1
+     320       1 { Begin printing every step shortly before Type-13 switch opens
+C $DEPOSIT, D4FACT=-1.      { Use SPY DEPOSIT to change STARTUP value to hold plot
+TACS HYBRID
+14CTL             1.       60.       20.                                      1.
+BLANK card ending all TACS data
+  AA    BB                   10.                                               0
+  CC    GG                          1.                                         3
+  DD    EE                   10.                                               0
+  GG                          1.                                               0
+BLANK card ending BRANCH cards
+13BB    CC   { switch controlled by TACS CTL }        CLOSEDGIFU      CTL     13
+11EE    CC                                                                    13
+BLANK card ending SWITCH cards
+14AA             10.       60.                                     -1.        1.
+14DD             10.       60.     -180.                           -1.        1.
+BLANK card ends SOURCE cards
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step      Time     CC        BB        EE        AA        BB        EE        CC
+C                     GG        CC        CC                  CC        CC        GG
+C ***      Phasor I(0) =  9.0802438E-01                     Switch  "BB    "  to  "CC    "  closed in the steady-state.
+C    0       0.0   .0117319       0.0  -10.9198       10.  .9080244       0.0  .9080244
+C   10     .1E-3   -.001178       0.0  -10.9003  9.992895  .9085521       0.0  .9085521
+  AA
+BLANK card ending node voltage outputs
+C  323    .00323   -.317139       0.0   -3.4843  3.458223  .3432148       0.0  .3432148
+C  324    .00324   -.317625       0.0  -3.44524  3.422825  .3400409       0.0  .3400409
+C            Switch  "BB    "  to  "CC    "  opening after  3.25000000E-03  sec.
+C  325    .00325   -.318106       0.0  -3.40614  3.387379  .3368623       0.0  .3368623
+C Diode   "EE    "  to  "CC    "  closing after  3.25000000E-03  sec.
+C  326    .00326   -6.67287  9.722844       0.0  3.351885       0.0  .3019074  .3019074
+C  327    .00327   -5.94343  9.020945       0.0  3.316343       0.0  .2388259  .2388259
+C  328    .00328      -5.29  8.388096       0.0  3.280754       0.0  .1826588  .1826588
+C  329    .00329   -4.70466  7.817091       0.0  3.245118       0.0  .1326855  .1326855
+C  330     .0033    -4.1803  7.301479       0.0  3.209436       0.0  .0882607  .0882607
+C  331    .00331   -3.71058   6.83548       0.0  3.173709       0.0  .0488063  .0488063
+C  332    .00332   -3.28979  6.413917       0.0  3.137936       0.0  .0138045  .0138045
+C            Diode   "EE    "  to  "CC    "  opening after  3.33000000E-03  sec.
+C  333    .00333   -2.91282  6.032152       0.0  3.102119       0.0  -.017209  -.017209
+C  334    .00334   6.354539  -3.28828   -9.4208  3.066258       0.0       0.0   .34E-17
+C Diode   "EE    "  to  "CC    "  closing after  3.35000000E-03  sec.
+C  335    .00335   -6.35454  9.384892  3.324187  3.030353       0.0       0.0  -.34E-17
+C            Diode   "EE    "  to  "CC    "  opening after  3.36000000E-03  sec.
+C  336    .00336   -2.50702  5.545732       0.0  2.994405       0.0  -.044308  -.044308
+C  337    .00337   11.36858  -8.41016   -14.327  2.958414       0.0       0.0  .272E-17
+C Diode   "EE    "  to  "CC    "  closing after  3.38000000E-03  sec.
+C  338    .00338   -11.3686  14.29096  8.446196  2.922382       0.0       0.0  -.27E-17
+ 184.023.163.36 -10. 10.BB    CC    CC    GG
+ 194.023.163.36         BB    CC    CC    GG
+BLANK card ending PLOT cards
+BEGIN NEW DATA CASE
+C      8th  of  9  subcases that illustrate  GIFU  switch usage.  This is the 
+C      same as the 1st subcase,  but the switch cards have been reordered.  The
+C      GIFU  switch has been placed last rather than first.  New USE GIFU SWITCH  
+C      declaration at the start of switch cards avoids an error stop.  Reduce
+C      T-max by a factor of 2 so save computer time.  Of course,  order of the
+C      output vector is changed since column-80 punches of the switch cards
+C      produced 6 of the output variables (some output variables depend on the
+C      order of branch and switch data.  Finally, there will be no connectivity
+C      output or plotting (why bother?).
+PRINTED NUMBER WIDTH, 11, 1, { Restore width, separation of 1st subcase (STARTUP)
+ .010E-6   5.E-6                   1.E-5
+     100      -1      
+MODELS
+OUTPUT SIG
+MODEL ONOFF
+VAR SIG
+OUTPUT SIG
+EXEC
+  IF (t MOD 1.E-5) < 0.4 * 1.E-5 THEN
+    SIG := 1.
+  ELSE
+    SIG := 0.
+  ENDIF
+ENDEXEC
+ENDMODEL
+USE ONOFF AS SW
+ OUTPUT SIG := SIG
+ENDUSE
+RECORD
+ SW.SIG AS SIG
+ENDRECORD
+ENDMODELS
+00N1    N2                      1.0E-2                                         3
+00N3    N5                1.
+00N4    N6                1.
+00N1    N2                 1.E+4
+  N2    N3                 1.E+3       0.01                                    1
+BLANK RECORD ENDING BRANCHES
+  USE GIFU SWITCH            { Needed because no diode follows the GIFU switch
+C Without the preceding request which was added 23 June 2001, this would result:  
+C Halt in  OVER4.  1st GIFU switch is not followed by a 2nd or a diode (needed for the experimental step).
+11N2    N4                                                                    13
+11N2    N3                                                                    13
+13N2                                                        GIFU      SIG     13
+BLANK RECORD ENDING SWITCHES
+11N1      100.                                              0.0000000
+11N5      150.                                              0.0000000
+11N6      200.                                              0.0000000
+BLANK RECORD ENDING SOURCES
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   5     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   1     output variables belong to MODELS (with "MODELS" an internally-added upper name of pair).
+C   Step      Time      N1         N2         N2         N2         N2         N2         N2         N1         N2         MODELS
+C                       N2         N4         N3         TERRA      N4         N3         TERRA      N2         N3         SIG
+C      0       0.0         0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        1.0
+C  Switch  "N2    "  to  "      "  closing after  1.00000000E-08  sec.
+C    100     .1E-5        100.      -200. -149.86421        0.0        0.0        0.0 9.96455754 9.81876757 -.13578997        1.0
+C    200     .2E-5        100.      -200. -149.87712        0.0        0.0        0.0 19.9516477 19.8187676 -.12288012        1.0
+C    300     .3E-5        100.      -200.  -149.8888        0.0        0.0        0.0 29.9399652 29.8187676 -.11119764        1.0
+C          Switch  "N2    "  to  "      "  opening after  4.00000000E-06  sec.
+C    400     .4E-5        100.      -200. -149.89937        0.0        0.0        0.0 39.9293934 39.8187676 -.10062584        0.0
+C  Diode   "N2    "  to  "N3    "  closing after  4.00000000E-06  sec.
+C    500     .5E-5  -81.349976 -18.650024        0.0 181.349976        0.0 31.3053236        0.0  31.358111 .044652391        0.0
+BLANK RECORD ENDING NODE VOLTAGE OUTPUT
+BLANK end of plot cards
+BEGIN NEW DATA CASE
+C      9th  of  9 subcases.  This illustrates a Type-13 TACS-controlled switch
+C      as supplied by Dr. Tsuyoshi Funaki of Osaka University.  Original data
+C      was attached to E-mail dated 31 October 2002.  The TACS-controlled switch
+C      was erroneously controlled as part of the GIFU experimental step.  But
+C      by definition, TACS controls this,  so such action was not reasonable.
+C      A 3-line addition to OVER16 makes this solution right.  Only 752 steps
+C      need be taken because step 752 was the first of many that were wrong.
+C      One does not need to go any farther than 752 to observe the correction.
+C      But, for plotting (now disabled), we want nice scaling, so use 800.
+C adp, 9, 0, 0, 0, { To see GIFU switch diagnostic, enable this comment card.
+   1.E-7 800.E-7                   1.E-8   { Restore default EPSILN on 14 Jan 03
+     100       1       1       1       0      -1       0       0       0
+     749      -1
+TACS HYBRID
+11N3             50.                                                          1.
+11N1            100.                                                          1.
+14CTL             1.      1.E4                                                1.
+33CTL   
+BLANK card ending TACS data
+  N2    ND                  .001                                               3
+  N2    N3                    1.   2.5                                         3
+BLANK card ending branches
+13N2    N1                                            CLOSEDGIFU      CTL     13
+11      ND                                                                    13
+C    Note about the GIFU switch.  With this orientation, the answer became bad
+C    on step 752.  But the answer was correct if the two ends of the GIFU switch
+C    were reversed.  I.e.,  (N2, N1)  was bad but  (N1, N2)  was correct.  This
+C    is what was traced to OVER16 where 3 added lines now exempt Type-13 switch
+C    from the GIFU experimentation.  Before, it was not being excluded.  Dr.
+C    Funaki's 2 data cases were named  CHOPD.DAT  and  CHOPD2.DAT  with the
+C    later having a different solution beginning on step 752.
+BLANK card ending switches
+60N3     0                                                                   10.
+60N1     0                                                                   10.
+BLANK card ending source cards
+BLANK card ending node voltage outputs
+C 185.8  48. 56.         BRANCH
+C                        N2    N1    N2    N3    ND
+BLANK card ending batch-mode plot cards 
+BEGIN NEW DATA CASE
+BLANK

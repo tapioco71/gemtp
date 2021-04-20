@@ -1,0 +1,378 @@
+BEGIN NEW DATA CASE                                                             
+C     BENCHMARK DC-10                                                           
+C        Companion to  "CASCADED PI"  test of preceding data case.   Same answer
+C        Use batch-mode solution only,  since  SPY sets TMAX to nearly infinity,
+C        and then the 0 DELTAT will result in an error stop.   6 subcases total.
+C           20 June 2007,  add the following comment merely to satisfy a new 6th
+C           subcase which will illustrate CONCATENATE MONTE CARLO PL4 ( CMCP ) .
+C           Since subcases 1 through 5 do not use .PL4 files significantly,  the
+C           switch from C-like to  widexx  format should go unnoticed :
+C               FMTPL4  L4BYTE  NEWPL4     Next card FORMAT ( 16X, A6, 2X, 2I8 )
+C CONCATENATE.  wide08       0       0     <Force .PL4 type>   key text anywhere 
+C The preceding overrides .PL4 choices of STARTUP.  Service begins 17 June 2007
+C A second illustration of just this declaration can be found in  DCNEW-22.
+     0.0     0.0     60.
+                       1       1                                                
+  USE OLD   { Extraneous request to undo preceding USE RL or AB will be rejected
+C             Note about preceding, which was added 5 November 2001.  This first
+C             occurence will illustrate the warning message.  For a legal use of
+C             USE OLD,  see the 2nd subcase.
+ 1RA1   1A1                 .877  8.40 .1628
+ 2RB1   1B1                 .747  4.14-.0252  .852  8.43 .1559                  
+ 3RC1   1C1                 .735  3.47-.0067  .723  4.17-.0277  .829  8.46 .1571
+ 11A1   2A1   RA1   1A1                                                         
+ 21B1   2B1                                                                     
+ 31C1   2C1                                                                     
+ 02B1   3B1                      13.1449.071                                   3
+ 12C1   4C1   RA1   1A1                                                         
+ 23A1   4A1                                                                     
+ 33B1   4B1                                                                     
+ 04C1   5C1                      13.14                                         1
+ 04A1   5A1                      13.1449.071                                   2
+ 04B1   5B1   4C1   5C1                                                         
+ 05C1   5G1   2B1   3B1                                                         
+ 05A1   5G1   2B1   3B1                                                         
+ 05B1   5G1   2B1   3B1                                                         
+        5G1                  5.0 13.14                                          
+ 15B1   6B1   RA1   1A1                                                         
+ 25C1   6C1                                                                     
+ 35A1   6A1                                                                     
+  6A1   7A1   4B1   5B1                                                         
+  6B1   7B1   4C1   5C1                                                         
+  6C1   7C1   4A1   5A1                                                         
+  7A1   7G1   2B1   3B1                                                         
+  7B1   7G1   2B1   3B1                                                         
+  7C1   7G1   2B1   3B1                                                         
+        7G1         5G1                                                         
+ 17A1   GA1                1.658 16.92 .3142                                    
+ 27B1   GB1                1.446  8.34-.0554 1.704 16.86 .3118                  
+ 37C1   GC1                1.470  6.94-.0134 1.494  8.28-.0504 1.754 16.80 .3256
+BLANK card ending branch cards
+BLANK card ending switch cards (none, for this problem)
+14GA1      424.35     60.         0.0                        -.1                
+14RA1      424.35     60.        10.0                        -.1                
+14GB1      424.35     60.      -120.0                        -.1                
+14RB1      424.35     60.      -110.0                        -.1                
+14GC1      424.35     60.       120.0                        -.1                
+14RC1      424.35     60.       130.0                        -.1                
+C --------------+------------------------------ 
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        RA1    |1A1   *                                                        
+C        1A1    |RA1   *2A1   *                                                 
+C        RB1    |1B1   *                                                        
+C        1B1    |RB1   *2B1   *                                                 
+C        RC1    |1C1   *                                                        
+C        1C1    |RC1   *2C1   *                 
+C        2A1    |1A1   *                      
+C        2B1    |1B1   *3B1   *                  
+C        2C1    |1C1   *4C1   *                     
+C        3B1    |2B1   *4B1   *                   
+C        4C1    |2C1   *5C1   *                  
+C        3A1    |4A1   *                              
+C     Etc.  (many more connections!)  .....          
+BLANK card ending all source cards
+C       Total network loss  P-loss  by summing injections =   9.311041032866E+03
+C End injection: -12.95674346101 44.419110587004 -6432.468410934 9424.6247887975
+C End injection: -42.48741206788    -106.9593405 -6888.171205186      -0.6825172
+C Selective branch outputs follow (for column-80 keyed branches only).   Any req
+C augmented to include branch voltage.  But the converse is not true (a request 
+C From    To     (========   Branch voltage  Vkm  =  Vk - Vm   =========)    (==
+C bus K   bus M   Magnitude      Degrees       Real part      Imag part    Magni
+C 2B1    3B1    1.6180264E+03 -139.359766  -1.2277813E+03 -1.0538323E+03  3.9545
+C 4C1    5C1    3.9925372E+02 -138.975087  -3.0120669E+02 -2.6206500E+02  3.0384
+C 4A1    5A1    2.9415954E+00   92.386571  -1.2249239E-01  2.9390439E+00    
+BLANK card ending output variable requests
+  PRINTER PLOT            
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C           2 of 6 subcases is unrelated to the first.  It shows "BCTRAN" usage.
+C           Illustration  of  9x9  matrix representation of  3-phase,  3-winding
+C           transformer as punched by the 2nd subcase of  DCNEW-8.  Note the use
+C           of  "USE AR"  for  better  representation  via [A] and [R] matrices.
+C           To validate, compare with the same solution in 3rd subcase which has
+C           no  "USE AR"  (it  uses  the  more common  "USE RL"  for  [R], [X]).
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000200    .010
+       1       1       1       1       1      -1
+       5       5    
+  USE AR                                                                        
+$VINTAGE, 1,                                                                    
+ 1H-1                      26.512692374898        .2054666                      
+ 2L-1                      -59.57848438329             0.0                      
+                           180.85474339841        .0742333                      
+ 3T-1   T-2                5.1245421614045             0.0                      
+                           -71.06950226953             0.0                      
+                           76.560711306734           .0822                      
+ 4H-2                       1.317410104146             0.0                      
+                           -1.044760156768             0.0                      
+                           -2.174181664407             0.0                      
+                           26.512692374898        .2054666                      
+ 5L-2                      -1.044760156768             0.0                      
+                           .10024670965949             0.0                      
+                           2.6475868140585             0.0                      
+                           -59.57848438329             0.0                      
+                           180.85474339841        .0742333                      
+ 6T-2                      -2.174181664407             0.0                      
+                           2.6475868140585             0.0                      
+                           2.4174362478358             0.0                      
+                           5.1245421614045             0.0                      
+                           -71.06950226953             0.0                      
+                           76.560711306734           .0822                      
+ 7H-3                       1.317410104146             0.0                      
+                           -1.044760156768             0.0                      
+                           -2.174181664407             0.0                      
+                            1.317410104146             0.0                      
+                           -1.044760156768             0.0                      
+                           -2.174181664407             0.0                      
+                           26.512692374898        .2054666                      
+ 8L-3                      -1.044760156768             0.0                      
+                           .10024670965949             0.0                      
+                           2.6475868140585             0.0                      
+                           -1.044760156768             0.0                      
+                           .10024670965949             0.0                      
+                           2.6475868140585             0.0                      
+                           -59.57848438329             0.0                      
+                           180.85474339841        .0742333                      
+ 9      T-1                -2.174181664407             0.0                      
+                           2.6475868140585             0.0                      
+                           2.4174362478358             0.0                      
+                           -2.174181664407             0.0                      
+                           2.6475868140585             0.0                      
+                           2.4174362478358             0.0                      
+                           5.1245421614045             0.0                      
+                           -71.06950226953             0.0                      
+                           76.560711306734           .0822                      
+C USE RL    This old, absolute form is replaced by the following universal form:                                                                    
+  USE OLD   { Beginning  5 November 2001,  this will undo preceding USE AB or RL
+  GENA  H-1                  5.0                                                
+  GENB  H-2                  5.0                                                
+  GENC  H-3                  5.0    
+  L-1                        1.0                                          
+BLANK card ending all branch cards
+BLANK card terminating the last switch card
+C      Balanced 3-phase source of 400 Hz is connected to transformer delta side:
+14GENA          100.       60.      -30.                           -1.          
+14GENB          100.       60.     -150.                           -1.          
+14GENC          100.       60.       90.                           -1.          
+BLANK card ending all source cards
+C       Total network loss  P-loss  by summing injections =   1.731473944895E+02
+C Last gen:  GENC    .6123031769E-14   100.    .11363284501067   .62844772817969
+C Last gen:            100.      90.0000000     .61808909033326       79.5827588
+  H-1   L-1   H-2   L-2   H-3   L-3
+C   Step  Time         H-1          L-1          H-2          L-2            H-3
+C    0     0.0   83.84032026  .9255817033  -87.1526014  -35.2685815  -.568164225
+C    1   .2E-3   85.28151988  1.894879197  -82.9051812  -33.2151021  -7.86654662
+C    2   .4E-3   86.23807533  2.853434433  -78.1866756  -30.9728926  -15.1202281
+C    3   .6E-3    86.7045542  3.795799431  -73.0238961  -28.5546937  -22.2879919
+BLANK card ending program output-variable requests.
+C   50     .01   -80.9365963  -8.33136565  39.29673143  13.29079634   57.4223614
+C Variable max :  86.7045542  12.93833086  102.0061131  43.76610174   57.4223614
+C Times of max :       .6E-3         .004        .0068        .0066          .01
+C Variable min :  -86.757459  -8.33136565  -87.1526014  -35.2685815  -96.8960673
+C Times of min :        .009          .01          0.0          0.0        .0042
+  PRINTER PLOT
+ 144 2. 0.0 10.         L-1   L-2   L-3         { Axis limits:  (-4.603,  4.377)
+BLANK card ending all plot cards 
+BEGIN NEW DATA CASE
+C           3rd of 6 subcases has the same solution as the 2nd,  but it is to be
+C           obtained using  [R], [L]  branch cards  (punched  by the 1st subcase
+C           of  DCNEW-8)  rather than  [A], [R]  branch cards of preceding case.
+C           Note  XOPT = 60,  so we use not L but rather  wL  in ohms at  60 Hz.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000200    .010     60.  { Note  XOPT = 60  to agree with DCNEW-8 punched cards
+       1       1       1       1       1      -1
+       5       5    
+  USE RL  { Should not be needed, since RL units are the default starting choice
+$VINTAGE, 1,
+ 1H-1                             .2054666 41432.097487177
+ 2L-1                                  0.0 19771.027634356
+                                  .0742333 9437.8794714269
+ 3T-1   T-2                            0.0 15579.567888173
+                                       0.0 7437.5502771391
+                                     .0822 5866.2181589463
+ 4H-2                                  0.0 -.0533106335013
+                                       0.0 .95599943703728
+                                       0.0 1.7517639180077
+                                  .2054666 41432.097487177
+ 5L-2                                  0.0 .95599943703728
+                                       0.0 .73764739804435
+                                       0.0 .83627686643027
+                                       0.0 19771.027634356
+                                  .0742333 9437.8794714269
+ 6T-2                                  0.0 1.7517639180077
+                                       0.0 .83627686643027
+                                       0.0 .65959655490825
+                                       0.0 15579.567888173
+                                       0.0 7437.5502771391
+                                     .0822 5866.2181589463
+ 7H-3                                  0.0 -.0533106335013
+                                       0.0 .95599943703728
+                                       0.0 1.7517639180077
+                                       0.0 -.0533106335013
+                                       0.0 .95599943703728
+                                       0.0 1.7517639180077
+                                  .2054666 41432.097487177
+ 8L-3                                  0.0 .95599943703728
+                                       0.0 .73764739804435
+                                       0.0 .83627686643027
+                                       0.0 .95599943703728
+                                       0.0 .73764739804435
+                                       0.0 .83627686643027
+                                       0.0 19771.027634356
+                                  .0742333 9437.8794714269
+ 9      T-1                            0.0 1.7517639180077
+                                       0.0 .83627686643027
+                                       0.0 .65959655490825
+                                       0.0 1.7517639180077
+                                       0.0 .83627686643027
+                                       0.0 .65959655490825
+                                       0.0 15579.567888173
+                                       0.0 7437.5502771391
+                                     .0822 5866.2181589463
+  GENA  H-1                  5.0                                                
+  GENB  H-2                  5.0                                                
+  GENC  H-3                  5.0    
+  L-1                        1.0                                          
+BLANK card ending all branch cards
+BLANK card terminating the last switch card
+C      Balanced 3-phase source of 400 Hz is connected to transformer delta side:
+14GENA          100.       60.      -30.                           -1.          
+14GENB          100.       60.     -150.                           -1.          
+14GENC          100.       60.       90.                           -1.          
+BLANK card ending all source cards
+C       Total network loss  P-loss  by summing injections =   1.731473944910E+02C   100.    .11363284500541   .6284477281075    30.904454513041  31.422386405375
+C   90.0000000   .61808909026083    79.5827588   5.6816422502705       0.9835171
+C  Step    Time          H-1          L-1          H-2          L-2          H-3
+C    0     0.0   83.84032026  .9255817034  -87.1526014  -35.2685815  -.568164225
+C    1   .2E-3   85.28151988  1.894879197  -82.9051812  -33.2151021  -7.86654662
+C    2   .4E-3   86.23807533  2.853434433  -78.1866756  -30.9728926  -15.1202281
+C    3   .6E-3   86.7045542   3.795799431  -73.0238961  -28.5546937  -22.2879919
+  H-1   L-1   H-2   L-2   H-3   L-3
+BLANK card ending program output-variable requests.
+C   50     .01   -80.9365963  -8.33136565  39.29673143  13.29079634   57.4223614
+C Variable max :  86.7045542  12.93833086  102.0061131  43.76610174   57.4223614
+C Times of max :       .6E-3         .004        .0068        .0066          .01
+C Variable min :  -86.757459  -8.33136565  -87.1526014  -35.2685815  -96.8960673
+C Times of min :        .009          .01          0.0          0.0        .0042
+  PRINTER PLOT
+ 144 2. 0.0 10.         L-1   L-2   L-3         { Axis limits:  (-4.603,  4.377)
+$WIDTH, 79,
+BLANK card ending all plot cards 
+BEGIN NEW DATA CASE
+C           4th  of 6 subcases is unrelated to the preceding.  It shows "SSOMIT"
+C           usage as introduced 7 November 1998.  More precisely,  this 4th case
+C           does  _not_  involve  SSOMIT  to omit a linear branch during the
+C           phasor solution.  The switch (LEFT, RIGHT) is open,  isolating 50 Hz
+C           on the left from 60 Hz on the right.  But,  because this switch is
+C           paralleled by a leakage branch (snubber circuits in case of hvdc),
+C           phasor solution logic will reject the mixing of frequencies.  Use of
+C           an all-resistive network allows a large time step for illustration.
+$WIDTH, 132,   { Back to full width to make new 4th and 5th subcases look better
+PRINTED NUMBER WIDTH, 9, 2,
+    .001    .020
+       1       1       1       1       1     
+  GEN1  LEFT                 0.5                                               1
+  RIGHT GEN2                 0.5                                               1
+  LEFT  RIGHT               1.E4
+BLANK card ending branch cards
+  LEFT  RIGHT       .010       1.0                                             1
+BLANK card ending switch cards
+14GEN1           1.0       50.        0.                           -1.
+14GEN2           1.0       60.        0.                           -1.
+BLANK card ending source cards
+ 1
+C PRINTER PLOT
+ 194 2. 0.0 20.         LEFT  RIGHT 
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C           5th  of 6 subcases is the same as the preceding except for the name
+C           of the snubber branch that parallels the switch.  It shows "SSOMIT"
+C           has  the effect of omitting this branch during the phasor solution,
+C           thereby avoiding the illegal mixing of 50- and 60-Hz excitation  (a
+C           problem of the preceding data subset).  See January, 1999, newsletter.
+PRINTED NUMBER WIDTH, 9, 2,
+    .001    .020
+       1       1       1       1       1     
+  GEN1  LEFT                 0.5                                               1
+  RIGHT GEN2                 0.5                                               1
+  LEFT  RIGHT NAME  SSOMIT  1.E4  { Snubber to be ignored during phasor solution
+BLANK card ending branch cards
+  LEFT  RIGHT       .010       1.0  { Switch is open during phasor solution }  1
+BLANK card ending switch cards
+14GEN1           1.0       50.        0.                           -1.
+14GEN2           1.0       60.        0.                           -1.
+BLANK card ending source cards
+C First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step      Time    RIGHT    LEFT     GEN1     GEN2     LEFT     GEN1     RIGHT
+C                                                        RIGHT    LEFT     GEN2
+C    0       0.0       1.0      1.0      1.0      1.0      0.0      0.0      0.0
+C    1     .1E-2   .929778  .951055  .951057  .929776      0.0  .213E-5  .213E-5
+C    2      .002   .728973  .809013  .809017  .728969      0.0    .8E-5    .8E-5
+C    3      .003   .425787  .587777  .587785  .425779      0.0  .162E-4  .162E-4
+ 1     { Output all node voltages
+C   19      .019    .79424   .79424  .951057  .637424  .313633  .313633  .313633
+C   20       .02   .654508  .654508      1.0  .309017  .690983  .690983  .690983
+C Variable max :       1.0      1.0      1.0      1.0  .690983  .690983  .690983
+C Times of max :       0.0      0.0      0.0      0.0      .02      .02      .02
+C Variable min :   -.99211  -.99999      -1.  -.99211  -.84484  -.84484  -.84484
+C Times of min :      .008      .01      .01     .008     .014     .014     .014
+  PRINTER PLOT
+ 194 3. 0.0 20.         LEFT  RIGHT              { Axis limits: (-8.448,  6.910)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE   
+C           6th  of 6 subcases is unrelated to preceding.  It illustrates use of
+C           CONCATENATE MONTE CARLO PL4 ( CMCP )  which becme available with the
+C           UTPF update of 20 June 2007.  Data is copied from  DC-24,  so the
+C           solution is well known.  What is new is the  .PL4  file,  which will
+C           contain all 3 signal sets, for the 3 energizations,  in 1 disk file.
+C           For illustration, use formatted  .PL4  as per the  <Force .PL4 type> 
+C           declaration of the 1st subcase (mandatory location if present).
+CONCATENATE MONTE CARLO PL4 { New form of IPLOT= 54321 frees IPLOT for frequency
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+REPEATABLE RANDOM NUMBERS  { Same as NSEED=1 (this overrides zero value below)
+OMIT BASE CASE   { Comment out this card, if a base case solution is to be added
+ 100.E-6  20.E-3     60.                                                        
+       1       1       1       2       1      -1       1       1       3
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED 
+       1       1       0       0       1         { KSTOUT is blank, not 0! }   0  
+       2       2      10      10   { Printout frequency change only if base case
+ 0GENA  A1                      7.                                             2
+ 0GENB  B1                      7.                                             1
+ 0GENC  C1                      7.                                             2
+ 0ENDA  A10                     7.                                             3
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.                                              
+-1ASW1  A5                .3    2.1146 0.645 50.   0                            
+-2BSW1  B5                .0268 .5397  0.021 50.   0                            
+-3CSW1  C5                                                                      
+ 0A5    A5F               1.                                                    
+ 0B5    B5F               1.                                                    
+ 0C5    C5F               1.                                                    
+-1A5F   ASW10 ASW1  A5                                                          
+-2B5F   BSW10                                                                   
+-3C5F   CSW10                                                                   
+BLANK card ending branch cards
+76A1    ASW1       2.E-3     .1E-3                    STATISTICS                
+  B1    BSW1       4.E-3    0.5E-3                    STATISTICS               4
+  C1    CSW1       6.E-3     1.E-3                    STATISTICS                
+  A10   ASW10    7.95E-3     1.0                                                
+  B10   BSW10    9.95E-3     1.0                                                
+  C10   CSW10   11.95E-3     1.0                                                
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.                
+14GENB     303.       60.      -120.0                        -1.                
+14GENC     303.       60.       120.0                        -1.                
+14ENDA     303.       60.      - 10.0                        -1.                
+14ENDB     303.       60.      -130.0                        -1.                
+14ENDC     303.       60.       110.0                        -1.                
+BLANK card ending source cards
+$OPEN,  UNIT=LUNIT9  FILE=dc24at40.ext  STATUS=UNKNOWN  FORM=UNFORMATTED  RECL=1000 !  
+  ASW10 BSW10 CSW10                     { Request for these node voltage outputs
+BLANK card ending the specification of program outputs (node voltages, here)
+$OPEN,  UNIT=LUNIT2   STATUS=SCRATCH  FORM=UNFORMATTED  { Disconnect *.BIN on LUNIT2
+-1  100.      GENA  A1  
+BLANK card ending statistical tabulation requests
+BEGIN NEW DATA CASE
+BLANK

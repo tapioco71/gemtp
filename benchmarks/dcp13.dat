@@ -1,0 +1,54 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-13
+C          Simplified Monte Carlo study of DC-24.  Use  NENERG = 2,  TMAX = .013
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+OMIT BASE CASE
+DIAGNOSTIC           9 0 0 0 9 0 0 0 0 0 0 9 0 0 9 0 0 0 0 9
+ 100.E-6  13.E-3     60.
+       1       1       1       2       1      -1       0       0       2
+C    ISW   ITEST   IDIST    IMAX   IDICE                                   NSEED
+       1       1       0       0       1                                       1
+       1      -1       5       5      20      20
+ 0GENA  A1                      7.                                             2
+ 0GENB  B1                      7.                                             1
+ 0GENC  C1                      7.                                             2
+ 0ENDA  A10                     7.                                             3
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.
+-1ASW1  A5                .3    2.1146 0.645 50.   0
+-2BSW1  B5                .0268 .5397  0.021 50.   0
+-3CSW1  C5
+ 0A5    A5F               1.
+ 0B5    B5F               1.
+ 0C5    C5F               1.
+-1A5F   ASW10 ASW1  A5
+-2B5F   BSW10
+-3C5F   CSW10
+BLANK card ending branch cards
+76A1    ASW1       2.E-3     .1E-3                    STATISTICS
+  B1    BSW1       4.E-3    0.5E-3                    STATISTICS               4
+  C1    CSW1       6.E-3     1.E-3                    STATISTICS
+  A10   ASW10    7.95E-3     1.0
+  B10   BSW10    9.95E-3     1.0
+  C10   CSW10   11.95E-3     1.0
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.
+14GENB     303.       60.      -120.0                        -1.
+14GENC     303.       60.       120.0                        -1.
+14ENDA     303.       60.      - 10.0                        -1.
+14ENDB     303.       60.      -130.0                        -1.
+14ENDC     303.       60.       110.0                        -1.
+BLANK card ending source cards
+  ASW10 BSW10 CSW10
+BLANK card ending the specification of program outputs (node voltages, here)
+-1  100.      GENA  A1
+$DEBUG, 0,   { Cancel overlay-20 DIAGNOSTIC value that otherwise would apply
+-1            GENC  C1    ENDA  A10
+              ASW10 BSW10 CSW10
+                            -20.        MISC. STATISTICS DATA
+-3            B1    BSW1
+-2    0.      GENB  B1    ENDA  A10
+-4    0.      B1    BSW1
+BLANK card ending statistical output variable requests
+BEGIN NEW DATA CASE
+BLANK

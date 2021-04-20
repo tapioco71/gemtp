@@ -1,0 +1,25 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-59        (DC-69  of "M39." vintage)          
+C        7th  of  7  data subcases within  "LINE CONSTANTS"  demonstrates that
+C        metric data for constant parameter distributed transposed line can be
+C        handled properly.  Prior to October1, 1993, punched branch cards for 
+C        this case were correct but were in English units.
+LINE CONSTANTS
+METRIC
+BRANCH  AM-28 AM-29 BM-28 BM-29 CM-28 CM-29
+  1.3636 .0324   4         4.069  -6.936   15.245                               
+  1.3636 .0324   4         4.069  -6.479   15.245                               
+  2.3636 .0324   4         4.069  -.2287   23.63                                
+  2.3636 .0324   4         4.069   .2287   23.63                                
+  3.3636 .0324   4         4.069   6.479   15.245                               
+  3.3636 .0324   4         4.069   6.936   15.245                               
+  0.5    1.621   4          .980  -4.574   36.314                               
+  0.5    1.621   4          .980  +4.574   36.314                               
+BLANK                                                                           
+C 100.   60.                      11  11    1 32.195      1        44   
+ 100.   60.                      11  11    1 32.195      1          1   
+$PUNCH
+BLANK CARD ENDING FREQUENCY CARDS OF  "LINE CONSTANTS"  CASE 
+BLANK card ends this 7th of 7  "LINE CONSTANTS"  data subcases
+BEGIN NEW DATA CASE
+BLANK

@@ -1,0 +1,720 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-22
+C       Illustrate modeling of unsymmetric  series-RL  that uses compensation as
+C       described in the  July, 1997,  newsletter story.  Begin with uncoupled
+C       branches of 1 ohm resistance.  The answer is obvious by inspection.  The
+C       [R] matrix is diagonal matrix equal to the unit matrix, and [X] is zero.
+C       In terms of symmetrical components,  Zo = Z1 = Z2  (a second half of the
+C       data this identical but alternative representation to produce the same
+C       known answer).  With each phase having 2 ohms resistance split in half,
+C       and with balanced, sinusoidal sources having 2 volts,  the currents are
+C       equal to half the source voltage: sinusoidal of amplitude 1.   Frequency
+C       of the 3-phase sources at  SENDA, SENDB, and SENDC  have been reduced to
+C       nearly zero so the 1st step of phase "a" is very close to the peak. Step
+C       1 is very close to answer at time zero: Va = 1 volt,  Vb = Vc = 1/2 volt
+C       A total of 7 subcases are involved.
+C         UTPF update of 20 June 2007 allows ATP data to override .PL4 file type
+C         choices that normally are made within  STARTUP.  Illustrate use here :
+C               FMTPL4  L4BYTE  NEWPL4     Next card FORMAT ( 16X, A6, 2X, 2I8 )
+C CONCATENATE.               1       0     <Force .PL4 type>   key text anywhere 
+C         For 2 or more stacked subcases,  this declaration must be in the first
+C         and must be in the original data file.  Here,  the C-like choice is
+C         mandatory in order that it be in place for subcase 4,  which will use
+C         $DEPOSIT  to change  NEWPL4  again,  to 2 (for Pisa).  That only works
+C         if a C-like or Pisa file then is in effect.  One can not use  $DEPOSIT
+C         to change a formatted .PL4 file to Pisa format in this way.  So, the
+C         preceding ensures that the 4th will work;  it ensures that some user
+C         will not rely upon values in STARTUP that might be incompatible.
+   .0001   .0005
+       1      -1       1       0       1      -1
+       5       5      20      20     100     100
+  SENDA ENDA                 1.0                                               1
+  SENDB ENDB  SENDA ENDA                                                       1
+  SENDC ENDC  SENDA ENDA                                                       1
+  ENDA  ENDB                1.E7
+  ENDB  ENDC  ENDA  ENDB
+  ENDC  ENDA  ENDA  ENDB
+91ENDA        MODEL Z0Z1Z2   1.0                                         
+91ENDB        MODEL Z0Z1Z2   1.0                                                      
+91ENDC        MODEL Z0Z1Z2   1.0                                                      
+  SENDA RECA                 1.0                                               1
+  SENDB RECB  SENDA RECA                                                       1
+  SENDC RECC  SENDA RECA                                                       1
+  RECA  RECB                1.E7
+  RECB  RECC  RECA  RECB
+  RECC  RECA  RECA  RECB
+91RECA        MODEL [R][L]         
+91RECB        MODEL [R][L]                                                      
+91RECC        MODEL [R][L]                                                      
+         1.0         0.0         0.0
+         0.0         0.0         0.0
+         0.0         1.0         0.0
+         0.0         0.0         0.0
+         0.0         0.0         1.0
+         0.0         0.0         0.0
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0       0.1       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0       0.1     -120.    { three-phase, sinusoidal excitation
+14SENDC          2.0       0.1      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA RECA  ENDA  SENDB RECB  ENDB  SENDC RECC  ENDC
+C Step   Time      SENDA      RECA       ENDA       SENDB      RECB       ENDB       SENDC      RECC       ENDC       SENDA
+C                                                                                                                     ENDA
+C                  SENDB      SENDC      SENDA      SENDB      SENDC
+C                  ENDB       ENDC       RECA       RECB       RECC
+C  0      0.0         0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C                     0.0        0.0        0.0        0.0        0.0
+C  1    .1E-3         2.0 .999999848 .999999848 -.99989117 -.49994551 -.49994551 -1.0001088 -.50005434 -.50005434 1.00000015
+C              -.49994566 -.50005449 1.00000015 -.49994566 -.50005449
+C  2    .2E-3  1.99999998 .999999842 .999999842 -.99978234 -.49989109 -.49989109 -1.0002176 -.50010875 -.50010875 1.00000014
+C              -.49989124  -.5001089 1.00000014 -.49989124  -.5001089
+BLANK card ending node voltage outputs
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       2nd of 7 subcases.  Progress to symmetrical components having
+C       Z1 = Z2  so the answer can be shown to be identical to that
+C       using Type-51,52,53 modeling with sequence impedances.  In
+C       fact,  there are 2 identical, uncoupled networks driven from
+C       the same balanced 3-phase sources at  SENDA, SENDB, and SENDC.
+   .0001    .050
+       1       1       1       0       1      -1
+       5       5      20      20     100     100
+  SENDA ENDA                 0.3   1.0                                         1
+  SENDB ENDB  SENDA ENDA                                                       1
+  SENDC ENDC  SENDA ENDA                                                       1
+  ENDA  ENDB                1.E7    { Balanced, interphase leakage gives 3-phase
+  ENDB  ENDC  ENDA  ENDB            { (rather than 3, single-phase)  Z-thevenin.
+  ENDC  ENDA  ENDA  ENDB            { 3 coupled phases are required by  "Z0Z1Z2"
+91ENDA        MODEL Z0Z1Z2   0.3   1.0    { Sequence Ro, Lo  in  [ohms, mHenry]                                    
+91ENDB        MODEL Z0Z1Z2   0.1   0.5    { Sequence R1, L1  in  [ohms, mHenry]                                    
+91ENDC        MODEL Z0Z1Z2   0.1   0.5        { Note Z2 = Z1 so [Z] is symmetric                  
+C      Next, build a copy of this, but using the old (Type-51,52,53) modeling:
+  SENDA RECA                 0.3   1.0                                         1
+  SENDB RECB  SENDA RECA                                                       1
+  SENDC RECC  SENDA RECA                                                       1
+  RECA  RECB                1.E7
+  RECB  RECC  RECA  RECB
+  RECC  RECA  RECA  RECB
+51RECA                       0.3         1.0    { Ro, Lo  in  [ohms, mHenry]                                    
+52RECB                       0.1         0.5    { R1, L1  in  [ohms, mHenry]                                    
+53RECC                                                      
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0       50.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0       50.     -120.    { three-phase, sinusoidal excitation
+14SENDC          2.0       50.      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA RECA  ENDA
+C Step    Time      SENDA      RECA       ENDA       SENDA      SENDB      SENDC      SENDA      SENDB      SENDC
+C                                                     ENDA       ENDB       ENDC       RECA       RECB       RECC
+C   0     0.0         0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C   1   .1E-3  1.99901312 .664144463 .664144463 .065757077  -.0310889 -.03466818 .065757077  -.0310889 -.03466818
+C   2   .2E-3  1.99605346 .658837702 .658837702 .195443292 -.09061195 -.10483134 .195443292 -.09061195 -.10483134
+C   3   .3E-3  1.99112393 .652991396 .652991396 .321457199 -.14486663 -.17659057 .321457199 -.14486663 -.17659057
+BLANK card ending node voltage outputs
+C 500     .05         -2. -.59687593 -.59687593 -2.0936819 3.18312082 -1.0894389 -2.0936819 3.18312082 -1.0894389
+C Variable maxima :   2.0 .664144463 .664144463 3.23520786 3.50393608 3.23541237 3.23520786 3.50393608 3.23541237
+C Times of maxima :   .02      .1E-3      .1E-3      .0428      .0092      .0361      .0428      .0092      .0361
+C Variable minima :   -2. -.60247492 -.60247492 -3.3079993 -3.2352894 -3.4484065 -3.3079993 -3.2352894 -3.4484065
+C Times of minima :   .01      .0496      .0496      .0127      .0394      .0059      .0127      .0394      .0059
+  CALCOMP PLOT
+ 144 5. 0.0 50. -1.0 1. RECA  ENDA   { These 2 phase-a voltages should be equal
+ 194 5. 0.0 50. -4.0 4.0BRANCH     { Following phase-a currents should be equal
+                        SENDA RECA  SENDA ENDA
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C      3rd of 7 subcases generalizes the preceding.  For the  Z0Z1Z2  model,
+C      Z2  is changed so it no longer is equal to  Z1.   Since Type-51,52,53
+C      modeling no longer can provide a comparison,  this half is replaced by
+C      the more general  [R][L]  alternative that requires the user to supply
+C      full matrices.   Although input precision is limited to 8 digits to the
+C      right of the fixed decimal point,  agreement is close (6 or more digits)
+   .0001    .050
+       1       1       1       0       1      -1
+       5       5      20      20     100     100
+  SENDA ENDA                 0.3   1.0                                         1
+  SENDB ENDB  SENDA ENDA                                                       1
+  SENDC ENDC  SENDA ENDA                                                       1
+  ENDA  ENDB                1.E7
+  ENDB  ENDC  ENDA  ENDB
+  ENDC  ENDA  ENDA  ENDB
+91ENDA        MODEL Z0Z1Z2   0.3   1.0                                         
+91ENDB        MODEL Z0Z1Z2   0.1   0.5                                                      
+91ENDC        MODEL Z0Z1Z2  .101   0.8                                                      
+  SENDA RECA                 0.3   1.0                                         1
+  SENDB RECB  SENDA RECA                                                       1
+  SENDC RECC  SENDA RECA                                                       1
+  RECA  RECB                1.E7
+  RECB  RECC  RECA  RECB
+  RECC  RECA  RECA  RECB
+91RECA        MODEL [R][L]         
+91RECB        MODEL [R][L]                                                      
+91RECC        MODEL [R][L]                                                      
+C          Correct the data  1 April 2002.   Following a change to USERNL, the
+C          phase-domain X or L has changed.  Previously,  we were using units
+C          of mH,  which relied on  STATFR  of  STARTUP  for the conversion.
+C          This is improved by the definition of  XOPT = 60 Hz  (see below),
+C          which frees the computation from dependence of STARTUP.  Also, we
+C          switch to input of X in ohms (rather than L in mH):
+$DISABLE       { For the hysterical record, retain the old matrix on comments:
+ .1670000000 .0665866025 .0664133975     { R(1,1),  R(1,2),  R(1,3)
+ .7666666667-.1720084679 .4053418013     { L(1,1),  L(1,2),  L(1,3)
+ .0664133975 .1670000000 .0665866025     { Row 2 of [R]
+ .4053418013 .7666666667-.1720084679     { Row 2 of [L]
+ .0665866025 .0664133975 .1670000000     { Row 3 of [R]
+-.1720084679 .4053418013 .7666666667     { Row 3 of [L]
+$ENABLE      { Done showing old (and wrong) matrix [L] in mHenry.  Begin new:
+C    Preceding disabled data was from years past.  Correct this 1 April 2002.
+$UNITS, 60.0, 60.0, { Define frequency XOPT = 60 for the impedance computation
+C The .DBG will includes the following information.  We use full precision of
+C the matrix values,  although blanks and leading zeros have been removed:
+C USERNL begins with Lo, L1, L2 [H] =  1.00000E-03  5.00000E-04  8.00000E-04
+C           Converted to Xo, X1, X2 =  3.76991E-01  1.88496E-01  3.01593E-01
+C 3x3 phase-domain impedance matrix in ohms follow.  For each row I,  X(I,J)  is below  R(I,J).  w =  3.769911E+02 rad/sec.
+ .1670000000 .0991483886 .0338516114     { R(1,1),  R(1,2),  R(1,3)  in ohms
+ .2890265241 .0436936220 .0442709723     { X(1,1),  X(1,2),  X(1,3)  in ohms
+ .0338516114 .1670000000 .0991483886     { Row 2 of [R]
+ .0442709723 .2890265241 .0436936220     { Row 2 of [X]
+ .0991483886 .0338516114 .1670000000     { Row 3 of [R]
+ .0436936220 .0442709723 .2890265241     { Row 3 of [X]
+C $UNITS, -1.0, -1.0, { Done with ohms and micromhos at 60 Hz, so restore original
+C         The preceding line is not tolerated because the associated warning
+C         message is issued during the first time step.  If we cancel the XOPT
+C         definition,  there will be no trace during the first time step.  So,
+C         without changing the answer,  we leave  XOPT = 60  to suppress the
+C         warning message that will be seen in output of preceding 2 subcases.
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA          2.0       50.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB          2.0       50.     -120.    { three-phase, sinusoidal excitation
+14SENDC          2.0       50.      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA RECA  ENDA
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   6     output variables are branch currents (flowing from the upper node to the lower node);
+C Step    Time      SENDA      RECA       ENDA       SENDA      SENDB      SENDC      SENDA      SENDB      SENDC
+C                                                    ENDA       ENDB       ENDC       RECA       RECB       RECC
+C   0     0.0         0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C   1   .1E-3  1.99901312 .784095685 .784095685  .05984815 -.02824862 -.03159953  .05984815 -.02824862 -.03159953
+C   2   .2E-3  1.99605346 .776335531 .776335531 .178012015 -.08221824 -.09579377 .178012015 -.08221824 -.09579377
+C   3   .3E-3  1.99112393 .768107458 .768107458  .29308232 -.13116828 -.16191404  .29308232 -.13116828 -.16191404
+BLANK card ending node voltage outputs
+C 500     .05         -2. -.57981099 -.57981099 -2.1430566  3.2140066   -1.07095 -2.1430566  3.2140066   -1.07095
+C Variable maxima :   2.0 .784095685 .784095685  3.2728624 3.57534262 3.28836555  3.2728624 3.57534261 3.28836555
+C Times of maxima :   .02      .1E-3      .1E-3      .0427      .0091      .0161      .0427      .0091      .0161
+C Variable minima :   -2. -.58387034 -.58387034 -3.4132778 -3.2730642 -3.3604773 -3.4132778 -3.2730642 -3.3604773 
+C Times of minima :   .01      .0496      .0496      .0126      .0394      .0059      .0126      .0394      .0059
+  CALCOMP PLOT
+ 144 5. 0.0 50. -1.0 1. RECA  ENDA
+ 194 5. 0.0 50. -4.0 4.0BRANCH
+                        SENDA RECA  SENDA ENDA
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C      4th of 7 subcases is unrelated to the preceding three.  Instead,  it
+C      illustrates op amp (operational amplifier) modeling as first requested
+C      by Masahiro Kan of Toshiba Corp. in Japan.  See October, 1997, newsletter
+C      As of 30 Aug 97,  the op amp (Type-20 source) is ignored during the
+C      phasor solution.
+C         19 March 2001,  expand to illustrate Pisa-format .PL4 file for time
+C         simulation.  Use began with  HARMONIC FREQUENCY SCAN  in the new 15th 
+C         subcase of DCNEW-21.  But correct operation for normal time simulation 
+C         also should be confirmed, so modify this existing 4th subcase for such
+C         a test.   Expand dT and T-max so screen plot is half of a recognizable 
+C         sinusoid:
+$DEPOSIT, NEWPL4=2 { Use SPY DEPOSIT to override .PL4 file type given in STARTUP
+$DEPOSIT, LUNIT4=4 { Use SPY DEPOSIT to override minus sign specified in STARTUP
+$DEPOSIT, NOPOST=1 { Use SPY DEPOSIT to override  PostScript  choice  in STARTUP
+$DEPOSIT, NOHPGL=1 { Use SPY DEPOSIT to override  the  HP-GL  choice  in STARTUP
+$DEPOSIT, NOGNU=1  { Use SPY DEPOSIT to override  the GNUPLOT  choice in STARTUP
+C    To prove that Pisa-format code is being used,  it  is easy to turn on debug
+C    printout.  Use here is like that pioneered in DCNEW-21 for HFS.   But there
+C    are differences.  Whereas  HFS  automatically used  LUNIT4 = +4  regardless
+C    of what  STARTUP  indicated (usually value -4),  this  is not true for time
+C    simulation,  so the preceding definition of  LUNIT4  is  necessary in order
+C    to force ATP to read from the disk-stored .PL4 file during plotting.  About
+C    overlay number, the .PL4 header is created in overlay 15 rather than 11. In
+C    the .DBG file, look for the names  HEADPI  and  LU4BEG  to see Pisa-related
+C    data values.  To minimize size of the .DBG file,  PostScript, HP-GL, and
+C    GNUPLOT  output are turned off (the final 3 $DEPOSIT lines above).
+C      Turn off diagnostic 22 April 2007 as it disfigures .LIS of Mingw32 ATP:
+C DIAGNOSTIC                     { HEADPI in 15 }  9       { LU4BEG in 28 }  9
+PRINTED NUMBER WIDTH, 13, 2,    { Request maximum precision for 8 output columns
+C .000200   .0005               { Original simulation only advanced 3 time steps
+    .001    .010  { 10 time steps.  Large dT is legal since network is resistive
+       1       1       1       1
+  GEN   SEND                 1.0
+  SEND                       1.0         0.0
+  OPAMP                      1.0                                               1
+BLANK card ending branch cards.
+BLANK card ending switch cards.
+14GEN            2.0       50.       0.0                          -1.
+C <____>            <____><____>   Gain occupies columns 11-20
+C   BUS1        Gain  BUSK  BUSM   By definition,  V-1 = Gain * ( V-k - V-m)
+20OPAMP          10.GEN   SEND     { If V-k or V-m is zero, leave name blank)
+BLANK card terminating all EMTP source cards.
+  GEN   SEND  OPAMP
+BLANK card terminating all output requests.
+  CALCOMP PLOT    { To demonstrate use of Pisa-format .PL4 file, try screen plot
+ 144 1. 0.0 10.         SEND  OPAMP   { 2 sinusoidal signals differ by factor 10
+BLANK card terminating all plot cards.
+BEGIN NEW DATA CASE
+C      5th of 7 subcases really should be an extension of the following DCNEW-23
+C      since these further support the 12th subcase of  DCN23.DAT    But the
+C      following disk file already has 15 subcases as the addition is made on
+C      5 April 2000.  Symmetrical component data of Type-51, 52, 53 branches is
+C      the subject.  Compensation is not being used.  Consider a single, lumped,
+C      3-phase, series R-L branch having this imbalanced data:
+C         Zo  =  3.5 * Z1 = 10.5 + j 14.0 Ohm
+C         Z1  =              3.0 + j  4.0 Ohm
+C         Z2  =  0.5 * Z1 =  1.5 + j  2.0 Ohm
+C     The far end will be terminated this way: phase "a" will be open whereas
+C     phases "b" and "c" will be connected together.  I.e., this is a normal
+C     line-to-line fault.  Data comes from Orlando Hevia in Santa Fe, Argentina 
+C     as copied by WSM on 3 April 2002.  Mr. Hevia drove the line section using
+C     a balanced, 3-phase voltage source.  Although he included a phasor soution
+C     for initial conditions,  WSM drops this because it might be confusing (ATP
+C     does not yet correctly represent unsymmetric [R] or [L] during the phasor
+C     solution).  Starting from zero is no problem,  however,  as the solution
+C     settles into the steady state smoothly within a cycle or two.  Just to be
+C     sure, 5 cycles are simulated, and extrema are limited to the final 1.25 of
+C     these.  This is necessary to ignore the transient of energization.  There 
+C     will be 3 identical tests.  Each has different data, but gives identically 
+C     the same answers to the 8 or 9 digits of dT-loop output.  Orlando Hevia
+C     wrote a FORTRAN program to produce the solution exactly, in closed form.
+C     This produced the following results:  POLAR    Magnitude     Degrees
+C                                              IB     230.9401   -143.1301
+C                                              IC     230.9401     36.8699
+C     ATP now will confirm this magnitude using simulation. 
+DIAGNOSTIC                     { Cancel diagnostic printout of preceding subcase
+PRINTED NUMBER WIDTH, 11, 2,  { Request maximum precision (for 8 output columns)
+BEGIN PEAK VALUE SEARCH, 0.075,  { Ignore 1st 3.75 cycles, until in steady state
+ .000100    .100   { dT is relatively large to speed simulation.  Only 1K steps
+       1      -1       1       0       1      -1
+       5       5      20      20     100     100
+$UNITS, 50.0, 0.0              { Begin inductance data in ohms at XOPT = 50 Hz
+C   1st of 3 line sections follows.  SEQ at sending end indicates sequence data:
+51GENA  OPEN1 MODEL Z0Z1Z2  10.5 14.00   { Ro and Xo,  both in ohms
+52SEQB  FLT1                 3.0  4.00   { R1 and X1,  both in ohms
+53SEQC  FLT1                 1.5  2.00   { R2 and X2,  both in ohms
+$UNITS, 0.0, 0.0               { Return to inductance data in mHenry;  XOPT = 0
+C 3x3 phase-domain [R] in ohms and [L] in mHenries follow.  For each row I,  L(I,J)  is below  R(I,J).  w = 3.14159265E+02 rad/sec.
+C  5.0000000000  2.1726497308  3.3273502692
+C 21.2206590789 13.0496847320 10.2930402549
+C  3.3273502692  5.0000000000  2.1726497308
+C 10.2930402549 21.2206590789 13.0496847320
+C  2.1726497308  3.3273502692  5.0000000000
+C 13.0496847320 10.2930402549 21.2206590789
+C  The present comments are diagnostic output from use of  MODEL Z0Z1Z2.  Such
+C  output always will be found in the .DBG file.  From it, produce the following
+C  equivalent representation of [R] in ohms and [L] in mHenries:
+C   2nd of 3 line sections follows.  PHS  at sending end indicates phase domain:
+51GENA  OPEN2 MODEL [R][L]
+52PHSB  FLT2             
+53PHSC  FLT2             
+ 5.000000000 2.172649731 3.327350269    { R(1,1), R(1,2), and R(1,3) in ohms
+ 21.22065908 13.04968473 10.29304025    { L(1,1), L(1,2), and L(1,3) in mHenries
+ 3.327350269 5.000000000 2.172649731    { Row 2 of [R]
+ 10.29304025 21.22065908 13.04968473    { Row 2 of [L]
+ 2.172649731 3.327350269 5.000000000    { Row 3 of [R]
+ 13.04968473 10.29304025 21.22065908    { Row 3 of [L]
+C    Finally, data for 3rd of 3 line sections comes from Orlando.  This is _not_
+C    the same circuit, note, since  [R]  &  [L]  are not the same.  The diagonal
+C    elements are the same, but off-diagonals are not.  This 3rd circuit differs
+C    from the preceding 2,  but it gives identically the same fault current.  It
+C    was constructed by Mr. Hevia by transferring impedance between  Z1  and  Z2
+C    while maintaining the sum fixed.  For either a L-L fault of this subcase or
+C    a  1-L-G  fault of the following one,  fault current  depends on the sum of
+C    Z1  and  Z2  but not on either  Z1  or  Z2  independently.   Consider these
+C    parameters,  which seem exact to the limits of single precision:
+C                         Z of SEQ branch          Z of OPH branch
+C       Z0 parameter       10.5 + j 14.00          10.500 + j 14.0
+C       Z1 parameter        3.0 + j  4.00           2.325 + j 13.0
+C       Z2 parameter        1.5 + j  2.00           2.175 - j  7.0
+C    But voltage of the faulted node will be different. Note the huge difference
+C    between  X1  and  X2.  Yet, they sum equally:  4 + 2 = 13 - 7.
+51GENA  OPEN3 MODEL [R][L]
+52OPHB  FLT3             
+53OPHC  FLT3             
+   5.0000000  -3.0235027   8.5235027
+  21.2206591  11.8091947  11.5335303
+   8.5235027   5.0000000  -3.0235027
+  11.5335303  21.2206591  11.8091947
+  -3.0235027   8.5235027   5.0000000
+  11.8091947  11.5335303  21.2206591
+BLANK card ending branches
+C  Following switches measure line currents in the 3 circuits.  Since phase "a"
+C  is open,  this is not of enough interest to warrant output.  For the record,
+C  let's document how close to zero such currents are, however.  Salford EMTP
+C  shows (prior to removal of the 3 switches from phase "a":
+C        Step   Time      GENA       GENA       GENA
+C                         SEQA       PHSA       OPHA
+C         0    0.0         0.0        0.0        0.0
+C         1  .1E-3   -.367E-15  .3632E-15  .1798E-15
+C         2  .2E-3   -.284E-16  .1234E-15  -.271E-15
+C      Variable max: .1121E-14  .1246E-14  .1845E-14
+C      Times of max:      .098      .0894      .0764
+C      Variable min: -.122E-14  -.107E-14  -.229E-14
+C      Times of min:       .09      .0789      .0879
+C  To conclude, no switches for phase "a".   There remain 3 switches for phase
+C  "b" (these 3 are  ordered first,  followed by the 3 for phase "c".  This
+C  way,  corresponding outputs of the dT loop are contiguous, which encourages
+C  easy comparison.
+  GENB  SEQB                                          MEASURING                1
+  GENB  PHSB                                          MEASURING                1
+  GENB  OPHB                                          MEASURING                1
+  GENC  SEQC                                          MEASURING                1
+  GENC  PHSC                                          MEASURING                1
+  GENC  OPHC                                          MEASURING                1
+BLANK card ending switches
+14GENA         1000.       50.     -0.00   { Balanced,  3-phase  excitation that
+14GENB         1000.       50.     -120.   { is  _not_ present during the steady
+14GENC         1000.       50.     -240.   { state. There is no phasor solution.
+BLANK card follows the last source card
+C Column headings for the  9   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   6     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step  Time        FLT1       FLT2       FLT3       GENB       GENB       GENB       GENC       GENC       GENC
+C                                                     SEQB       PHSB       OPHB       SEQC       PHSC       OPHC
+C    0    0.0         0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C    1  .1E-3   -495.9539  -495.9539   -500.178  .14077359  .14077359  .14077359  -.1407736  -.1407736  -.1407736
+C    2  .2E-3   -491.6694  -491.6694   -501.478  .55967714  .55967714  .55967714  -.5596771  -.5596771  -.5596771
+C    3  .3E-3   -487.1449  -487.1449   -503.861  1.2498171  1.2498171   1.249817  -1.249817  -1.249817  -1.249817
+  FLT1  FLT2  FLT3 { Show that the fault voltage of OPH (FLT3; 3rd of 3) differs 
+BLANK card ending node voltage outputs
+C  500    .05    333.3359   333.3359  -572.6502  184.74924  184.74924  184.74924  -184.7492  -184.7492  -184.7492
+C  600    .06   -333.3373  -333.3373  572.64118  -184.7477  -184.7477  -184.7477   184.7477   184.7477   184.7477
+C  700    .07   333.33716  333.33716   -572.642  184.74784  184.74784  184.74784  -184.7478  -184.7478  -184.7478
+C  800    .08   -333.3372  -333.3372  572.64195  -184.7478  -184.7478  -184.7478  184.74783  184.74783  184.74783
+C  900    .09   333.33717  333.33717   -572.642  184.74783  184.74783  184.74783  -184.7478  -184.7478  -184.7478
+C 1000    0.1   -333.3372  -333.3372  572.64196  -184.7478  -184.7478  -184.7478  184.74783  184.74783  184.74783
+C Variable max: 333.33717  333.33717  977.26344  230.90147  230.90147  230.90147  230.90147  230.90147  230.90147
+C Times of max:       .09        .09       .097       .088       .088       .088       .098       .098       .098
+C Variable min: -333.3372  -333.3372  -977.2634  -230.9015  -230.9015  -230.9015  -230.9015  -230.9015  -230.9015
+C Times of min:       .08        .08       .087       .098       .098       .098       .088       .088       .088
+C     Note about preceding currents.  The maximum of 230.90147 and minimum of 
+C     -230.9015  are nearly negatives of each other.  This is a sign that the                                  
+C     steady state is really steady (equality in the 7th decimal digit).  But
+C     Orlando Hevia's exact solution of  230.9401  implies some error?  Why? The
+C     substantial dT (discretization error).  As dT is decreased,  the ATP
+C     answer approaches Orlando Hevia's.  Using  dT = 2 microseconds,  one can
+C     produce exact agreement to all 7 printed digits.
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C     6th of 7 subcases is a modification of the preceding 5th.  Repeat
+C     the preceding subcase, except for a different fault at the far end.
+C     Termination will be as follows:  phase "a" will be grounded whereas
+C     phases "b" and "c" are left open.  I.e., this is a normal single-line-
+C     to-ground fault.  Data comes from Orlando Hevia in Santa Fe, Argentina
+C     Another change is this:  since only a single phase carries current,
+C     there is no shortage of space in the output vector.  So, add a 4th
+C     alternative:  MODEL Z0Z1Z2  with inductance in mHenries.  About the
+C     correct answer, Orlando Hevia wrote a FORTRAN program to produce
+C     the solution exactly, in closed form.  This produced the following
+C     results:  POLAR    Magnitude     Degrees
+C                  IA     120.0000    -53.1301
+C     Using ATP simulation,  we now will confirm the 120-amp peak current.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+POWER FREQUENCY                     50.0    { Remove dependence on STARTUP value 
+BEGIN PEAK VALUE SEARCH, 0.075,  { Ignore 1st 3.75 cycles, until in steady state
+ .000100    .100   { dT is relatively large to speed simulation.  Only 1K steps
+       1      -1       1       0       1      -1
+       5       5      20      20     100     100
+$UNITS, 50.0, 0.0              { Begin inductance data in ohms at XOPT = 50 Hz
+C   1st of 4 line sections follows.  SEQ at sending end indicates sequence data:
+51SEQA        MODEL Z0Z1Z2  10.5 14.00   { Ro and Xo,  both in ohms
+52GENB  OPEN1                3.0  4.00   { R1 and X1,  both in ohms
+53GENC  OPEN2                1.5  2.00   { R2 and X2,  both in ohms
+$UNITS, 0.0, 0.0               { Return to inductance data in mHenry;  XOPT = 0
+C 3x3 phase-domain [R] in ohms and [L] in mHenries follow.  For each row I,  L(I,J)  is below  R(I,J).  w = 3.14159265E+02 rad/sec.
+C  5.0000000000  2.1726497308  3.3273502692
+C 21.2206590789 13.0496847320 10.2930402549
+C  3.3273502692  5.0000000000  2.1726497308
+C 10.2930402549 21.2206590789 13.0496847320
+C  2.1726497308  3.3273502692  5.0000000000
+C 13.0496847320 10.2930402549 21.2206590789
+C  The present comments are diagnostic output from use of  MODEL Z0Z1Z2.  Such
+C  output always will be found in the .DBG file.  From it, produce the following
+C  equivalent representation of [R] in ohms and [L] in mHenries:
+C   2nd of 3 line sections follows.  PHS  at sending end indicates phase domain:
+51PHSA        MODEL [R][L]
+52GENB  OPEN3            
+53GENC  OPEN4            
+ 5.000000000 2.172649731 3.327350269    { R(1,1), R(1,2), and R(1,3) in ohms
+ 21.22065908 13.04968473 10.29304025    { L(1,1), L(1,2), and L(1,3) in mHenries
+ 3.327350269 5.000000000 2.172649731    { Row 2 of [R]
+ 10.29304025 21.22065908 13.04968473    { Row 2 of [L]
+ 2.172649731 3.327350269 5.000000000    { Row 3 of [R]
+ 13.04968473 10.29304025 21.22065908    { Row 3 of [L]
+C    Finally, data for 3rd of 3 line sections comes from Orlando.  See preceding
+C    subcase for comments about it.  Z1  and  Z2  differ while the sum is fixed.
+C    So,  the fault current will be the same,  but  not the fault voltage, note.
+51OPHA        MODEL [R][L]
+52GENB  OPEN5            
+53GENC  OPEN6            
+   5.0000000  -3.0235027   8.5235027
+  21.2206591  11.8091947  11.5335303
+   8.5235027   5.0000000  -3.0235027
+  11.5335303  21.2206591  11.8091947
+  -3.0235027   8.5235027   5.0000000
+  11.8091947  11.5335303  21.2206591
+C   4th of 4 line sections follows.  MH at sending end indicates L in mHenries.
+C   This 4th alternative is the same as the first except X in ohms has been
+C   converted to L in mHenries by multiplying by  10 / Pi = 3.18309886184   This
+C   gives  Lo, L1, L2 =  44.5633840657   12.7323954474   6.36619772368
+$VINTAGE, 1,  { Switch to wide format, with R and L read as 2E16.0
+C 3456789012345678901234567890123456789012345678901234567890
+C                         RRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLL
+51MHA         MODEL Z0Z1Z2            10.5   44.5633840657 { Ro in ohms and Lo in mH
+52GENB  OPEN7                          3.0   12.7323954474 { R1 in ohms and L1 in mH
+53GENC  OPEN8                          1.5   6.36619772368 { R2 in ohms and L2 in mH
+$VINTAGE, 0,  { Done with wide format;  return to old (narrow) format
+BLANK card ending branches
+C  Following switches measure line currents in the 3 lines.  Since phase "a"
+C  is the only one connected,  ignore switches for phases "b" and "c":
+  GENA  SEQA                                          MEASURING                1
+  GENA  PHSA                                          MEASURING                1
+  GENA  OPHA                                          MEASURING                1
+  GENA  MHA                                           MEASURING                1
+BLANK card ending switches
+14GENA         1000.       50.     -0.00   { Balanced,  3-phase  excitation that
+14GENB         1000.       50.     -120.   { is  _not_ present during the steady
+14GENC         1000.       50.     -240.   { state. There is no phasor solution.
+BLANK card follows the last source card
+C OPEN1 OPEN3 OPEN5 OPEN7    { Output fault voltages (unfaulted phase b, anyway) 
+C    Note.  Activate the preceding comment card to demonstrate that the solution
+C    of the OPH circuit really is different from the other 3.  I.e., the voltage
+C    at  OPEN5  will differ from the voltages at  OPEN1,  OPEN3,  and  OPEN7.
+C    The fault currents are identical,  but fault voltages will differ.  This is
+C    because the sum of  Z1  and  Z2  agrees,  but neither  Z1  nor  Z2  does.
+C   Next   4     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time       GENA        GENA        GENA        GENA
+C                        SEQA        PHSA        OPHA        MHA
+C      0       0.0          0.0         0.0         0.0         0.0
+C      1     .1E-3   2.32761034  2.32761034  2.32761033  2.32761034
+C      2     .2E-3   6.92518039  6.92518039  6.92518039  6.92518039
+C      3     .3E-3   11.4064981  11.4064981  11.4064981  11.4064981
+BLANK card ending node voltage outputs
+C    600       .06    71.992366   71.992366  71.9923659   71.992366
+C    700       .07   -71.992425  -71.992425  -71.992425  -71.992425
+C    800       .08   71.9924194  71.9924194  71.9924193  71.9924194
+C    900       .09    -71.99242   -71.99242   -71.99242   -71.99242
+C   1000       0.1   71.9924199  71.9924199  71.9924198  71.9924199
+C Variable maxima:   119.979925  119.979925  119.979925  119.979925
+C Times of maxima:         .083        .083        .083        .083
+C Variable minima:   -119.97993  -119.97993  -119.97993  -119.97993
+C Times of minima:         .093        .093        .093        .093
+C     Note about preceding extema.  The maximum of 119.979925 and minimum of 
+C     -119.97993  are nearly negatives of each other.  This is a sign that the                                  
+C     steady state is really steady (equality in the 8th decimal digit).  But
+C     Orlando Hevia's exact solution of  120.0000   indicates some error.  Why?
+C     The substantial dT (discretization error).  As dT is decreased,  the ATP
+C     answer approaches Orlando Hevia's.  For all dT, all 4 maxima agree.  Thus
+C     only a single value need be shown, as a function time-step size dT:
+C         100 usec  ===>  119.979925 
+C          50 usec  ===>  119.998403
+C          20 usec  ===>  119.999337
+C          10 usec  ===>  119.999920
+C           5 usec  ===>  119.999967
+C           2 usec  ===>  119.999997
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C      7th of 7 subcases is the same as the 5th except that the sources have
+C      been activated during the steady state.  This subcase has a phasor
+C      solution  ---  now possible as this subcase is added on 5 August 2008.
+C      Note that the final time steps of the two subcases are identical.
+C      BEGIN PEAK VALUE SEARCH  has been removed since there no longer is any
+C      need for allowing the solution to "settle" into the steady-state.  In
+C      place of 5 cycles, simulate just 2  ---  plenty to demonstrate sinusoidal
+C      signals (see addition of 2 plot cards after CALCOMP PLOT).
+PRINTED NUMBER WIDTH, 11, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .040   { dT is relatively large to speed simulation.  Only 400 steps
+       1       1       1       1       1      -1
+       5       5      20      20     100     100
+$UNITS, 50.0, 0.0              { Begin inductance data in ohms at XOPT = 50 Hz
+C   1st of 3 line sections follows.  SEQ at sending end indicates sequence data:
+51GENA  OPEN1 MODEL Z0Z1Z2  10.5 14.00   { Ro and Xo,  both in ohms
+52SEQB  FLT1                 3.0  4.00   { R1 and X1,  both in ohms
+53SEQC  FLT1                 1.5  2.00   { R2 and X2,  both in ohms
+$UNITS, 0.0, 0.0               { Return to inductance data in mHenry;  XOPT = 0
+51GENA  OPEN2 MODEL [R][L]
+52PHSB  FLT2             
+53PHSC  FLT2             
+ 5.000000000 2.172649731 3.327350269    { R(1,1), R(1,2), and R(1,3) in ohms
+ 21.22065908 13.04968473 10.29304025    { L(1,1), L(1,2), and L(1,3) in mHenries
+ 3.327350269 5.000000000 2.172649731    { Row 2 of [R]
+ 10.29304025 21.22065908 13.04968473    { Row 2 of [L]
+ 2.172649731 3.327350269 5.000000000    { Row 3 of [R]
+ 13.04968473 10.29304025 21.22065908    { Row 3 of [L]
+51GENA  OPEN3 MODEL [R][L]
+52OPHB  FLT3             
+53OPHC  FLT3             
+   5.0000000  -3.0235027   8.5235027
+  21.2206591  11.8091947  11.5335303
+   8.5235027   5.0000000  -3.0235027
+  11.5335303  21.2206591  11.8091947
+  -3.0235027   8.5235027   5.0000000
+  11.8091947  11.5335303  21.2206591
+BLANK card ending branches
+  GENB  SEQB                                          MEASURING                1
+  GENB  PHSB                                          MEASURING                1
+  GENB  OPHB                                          MEASURING                1
+  GENC  SEQC                                          MEASURING                1
+  GENC  PHSC                                          MEASURING                1
+  GENC  OPHC                                          MEASURING                1
+BLANK card ending switches
+14GENA         1000.       50.     -0.00                           -1.
+14GENB         1000.       50.     -120.                           -1. 
+14GENC         1000.       50.     -240.                           -1.
+BLANK card follows the last source card
+  FLT1  FLT2  FLT3 { Show that the fault voltage of OPH (FLT3; 3rd of 3) differs 
+C Column headings for the  9   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   6     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time      FLT1       FLT2       FLT3       GENB       GENB       GENB       GENC       GENC       GENC
+C                                                        SEQB       PHSB       OPHB       SEQC       PHSC       OPHC
+C ***      Phasor I(0) = -1.8475209E+02                     Switch  "GENB  "  to  "SEQB  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.8475209E+02                     Switch  "GENB  "  to  "PHSB  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.8475209E+02                     Switch  "GENB  "  to  "OPHB  "  closed in the steady-state.
+C ***      Phasor I(0) =  1.8475209E+02                     Switch  "GENC  "  to  "SEQC  "  closed in the steady-state.
+C ***      Phasor I(0) =  1.8475209E+02                     Switch  "GENC  "  to  "PHSC  "  closed in the steady-state.
+C ***      Phasor I(0) =  1.8475209E+02                     Switch  "GENC  "  to  "OPHC  "  closed in the steady-state.
+C      0       0.0   -333.3333  -333.3333  572.66667  -184.7521  -184.7521  -184.7521  184.75209  184.75209  184.75209
+C      1     .1E-3   -333.1685  -333.1685  547.50887  -180.3089  -180.3089  -180.3089  180.30888  180.30888  180.30888
+C      2     .2E-3   -332.6749  -332.6749  521.81078  -175.6877  -175.6877  -175.6877  175.68774  175.68774  175.68774
+C      3     .3E-3    -331.853   -331.853  495.59776  -170.8932  -170.8932  -170.8932  170.89322  170.89322  170.89322
+BLANK card ending node voltage outputs
+C    400       .04   -333.3372  -333.3372  572.64196  -184.7478  -184.7478  -184.7478  184.74783  184.74783  184.74783
+C Variable maxima :   333.33754  333.33754  977.26389  230.90147  230.90147  230.90147  230.90154  230.90153  230.90153
+C Times of maxima :         .01        .01       .017       .028       .028       .028       .018       .018       .018
+C Variable minima :   -333.3372  -333.3372  -977.2634  -230.9015  -230.9015  -230.9015  -230.9015  -230.9015  -230.9015
+C Times of minima :         .04        .04       .027       .018       .018       .018       .028       .028       .028
+  CALCOMP PLOT  { Display some waveforms to show that all is smooth & sinusoidal
+ 144 4. 0.0 40.-1.E31.E3FLT1  FLT2  FLT3
+ 194 4. 0.0 40.-250.250.GENB  SEQB  GENC  PHSC
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+BLANK
+$EOF
+
+
+     In order that it not be lost, let's append Orlando Hevia's FORTRAN
+program.  This confirms the preceding 5th and 6th subcases as well as
+other fault types not illustrated by preceding ATP data:
+      COMPLEX A,A2,Z0,Z1,Z2,AIR,AIS,AIT,E,J
+      PI=4.0*ATAN(1.0)
+      A= CMPLX(-0.5,SQRT(3.0)/2.0)
+      A2=CMPLX(-0.5,-SQRT(3.0)/2.0)
+      J=CSQRT(CMPLX(-1.0,0.0))
+      Z0=CMPLX(10.5,14.0)
+      Z1=CMPLX(3.0,4.0)
+      Z2=CMPLX(1.5,2.0)
+      E=CMPLX(1000.0,0.0)
+      AIS= -J*SQRT(3.0)*E*(((1.0,0.0)+A2)*Z2+Z0)/
+     1       (Z1*Z2+Z2*Z0+Z0*Z1)
+      AIT=  J*SQRT(3.0)*E*(((1.0,0.0)+A )*Z2+Z0)/
+     1       (Z1*Z2+Z2*Z0+Z0*Z1)
+      AIR=AIS+AIT
+      AS=CABS(AIS)
+      AT=CABS(AIT)
+      AR=CABS(AIR)
+      FS=ATAN2(AIMAG(AIS),REAL(AIS))*180.0/PI
+      FT=ATAN2(AIMAG(AIT),REAL(AIT))*180.0/PI
+      FR=ATAN2(AIMAG(AIR),REAL(AIR))*180.0/PI
+C      WRITE(*,*)Z0
+C      WRITE(*,*)Z1
+C      WRITE(*,*)Z2
+C      WRITE(*,*)A,A2,J
+      WRITE(*,*)'PHASE-PHASE-GROUND FAULT'
+100   FORMAT('IB   ',2F12.4)
+101   FORMAT('IC   ',2F12.4)
+102   FORMAT('IRES ',2F12.4)
+      WRITE(*,*)'RECTANGULAR'
+      WRITE(*,100)AIS
+      WRITE(*,101)AIT
+      WRITE(*,102)AIR
+      WRITE(*,*)'POLAR'
+      WRITE(*,100)AS,FS
+      WRITE(*,101)AT,FT
+      WRITE(*,102)AR,FR
+C
+      AIS= -J*SQRT(3.0)*E/(Z1+Z2)
+      AIT=  J*SQRT(3.0)*E/(Z1+Z2)
+      AIR=AIS+AIT
+      AS=CABS(AIS)
+      AR=CABS(AIR)
+      AT=CABS(AIT)
+      FS=ATAN2(AIMAG(AIS),REAL(AIS))*180.0/PI
+      FT=ATAN2(AIMAG(AIT),REAL(AIT))*180.0/PI
+      FR=ATAN2(AIMAG(AIR),REAL(AIR))*180.0/PI
+      WRITE(*,*)' '
+      WRITE(*,*)'PHASE-PHASE FAULT'
+      WRITE(*,*)'RECTANGULAR'
+      WRITE(*,100)AIS
+      WRITE(*,101)AIT
+      WRITE(*,102)AIR
+      WRITE(*,*)'POLAR'
+      WRITE(*,100)AS,FS
+      WRITE(*,101)AT,FT
+      WRITE(*,102)AR,FR
+C
+      AIR=  E/Z1
+      AR=CABS(AIR)
+      FR=ATAN2(AIMAG(AIR),REAL(AIR))*180.0/PI
+C
+      WRITE(*,*)' '
+      WRITE(*,*)'PHASE-PHASE-PHASE-GROUND FAULT'
+      WRITE(*,*)'RECTANGULAR'
+      WRITE(*,202)AIR
+      WRITE(*,*)'POLAR'
+      WRITE(*,202)AR,FR
+202   FORMAT('IA   ',2F12.4)
+C
+      AIR=3.0*E/(Z0+Z1+Z2)
+      AR=CABS(AIR)
+      FR=ATAN2(AIMAG(AIR),REAL(AIR))*180.0/PI
+C
+      WRITE(*,*)' '
+      WRITE(*,*)'PHASE-GROUND FAULT'
+      WRITE(*,*)'RECTANGULAR'
+      WRITE(*,302)AIR
+302   FORMAT('IA   ',2F12.4)
+      WRITE(*,*)'POLAR'
+      WRITE(*,302)AR,FR
+      STOP
+      END
+
+Output, as produced using GNU FORTRAN compilation, linking, and execution,
+is as follows:
+
+ PHASE-PHASE-GROUND FAULT
+ RECTANGULAR
+IB      -196.3879   -114.6822
+IC       165.0836    156.4214
+IRES     -31.3043     41.7391
+ POLAR
+IB       227.4208   -149.7169
+IC       227.4208     43.4567
+IRES      52.1739    126.8699
+  
+ PHASE-PHASE FAULT
+ RECTANGULAR
+IB      -184.7521   -138.5641
+IC       184.7521    138.5641
+IRES       0.0000      0.0000
+ POLAR
+IB       230.9401   -143.1301
+IC       230.9401     36.8699
+IRES       0.0000     36.8699
+  
+ PHASE-PHASE-PHASE-GROUND FAULT
+ RECTANGULAR
+IA       120.0000   -160.0000
+ POLAR
+IA       200.0000    -53.1301
+  
+ PHASE-GROUND FAULT
+ RECTANGULAR
+IA        72.0000    -96.0000
+ POLAR
+IA       120.0000    -53.1301

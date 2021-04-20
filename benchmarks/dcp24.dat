@@ -1,0 +1,75 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-24
+C     Same as  DC-18,  only with  T-max  shortened to 4 steps,  and  DIAGNOSTIC.
+DIAGNOSTIC           0 9 0 0 0 0 0 0 0 0 0 9
+     0.1     0.4
+       1       1                       1
+TACS STAND ALONE
+  DUMMY   +UNITY
+11LGCL1           1.                                              0.25
+11FST             1.                                              0.05      0.15
+11SCND            1.                                              0.25      0.35
+99LGCL4                   FST   +     SCND
+99LGCL2             .NOT. LGCL4
+98NAND                    LGCL1 .NAND.LGCL2
+98RESL1             .NOT. LGCL1 .OR.  LGCL4             -     NAND
+98NOR                     LGCL1 .NOR. LGCL2
+98RESL2             .NOT. LGCL1 .AND. LGCL4             -     NOR
+33LGCL1 LGCL2 LGCL4 NAND  NOR   RESL1 RESL2
+C   Step    Time        LGCL1       LGCL2        LGCL4        NAND           NOR
+C     0  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00
+C     1  1.00000E-01 0.00000E+00 0.00000E+00 1.00000E+00 1.00000E+00 1.00000E+00
+C     2  2.00000E-01 0.00000E+00 1.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00
+BLANK card ending all TACS data cards
+C  Row   Name          Minimum            Maximum     Time of min    Time of max
+C    1    LGCL1  0.0000000000E+00  1.0000000000E+00      0.000000       0.300000
+C    2    LGCL2  0.0000000000E+00  1.0000000000E+00      0.000000       0.200000
+C    3    LGCL4  0.0000000000E+00  1.0000000000E+00      0.000000       0.100000
+C Final step begins :    20   2.00000E+00  1.00000E+00  1.00000E+00  0.00000E+00
+C completion of this :        0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
+  PRINTER PLOT
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         Same as 2nd subcase of DC-18, on with  T-max shortened to 2 steps only
+ABSOLUTE TACS DIMENSIONS
+      10      90     100      20      30     400     350      60
+     .02     .04     { Even though no dynamics, vary time to produce nice plots!
+       1       1       0       0       1      -1
+       5       5
+TACS STAND ALONE
+99TEST1   = 10.0 * ( UNITY + TIMEX ) ** 2 + 50. { High-level, single-card result
+99X1      = 1.0 + TIMEX        { Expression within parentheses on preceding card
+99X2      = X1 * X1            { Mimic exponentiation for special case of square
+99X3      = 10 * X2 + 50         { 3rd of low-level, 3-card equivalent to  TEST1
+99TEST2   = 1.E2 * COS ( 2.0 * PI * TEST1 / 100. )   { High-level d1-card result
+99X4      = PI * TEST1               { Beginning terms of trigonometric argument
+99X5      = X4 * .02       { Complete trig argument using modified form of 2/100
+99X6      = COS ( X5 )
+99X7      = X6 * 100.   { 4th and final line of low-level equivalent gives TEST2
+99TEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( TEST2 ) )
+99X8      = ABS ( X7 )
+99X9      = SQRT ( X8 )
+99X10     = X9 * 5.5 * TIMEX
+99X11     = X10 + 10    { 4th and final line of low-level equivalent gives TEST3
+99RESID   = ABS ( TEST1 - X3 ) + ABS ( TEST2 - X7 ) + ABS ( TEST3 - X11 )
+ 1TEST4   +TEST3
+       1.0
+       0.0       1.0
+99TEST5   =  2.0 * PI * TEST1 / 100.
+99TEST6   =  SIN ( TEST5 )
+99UNITY?  = 1.E-4 * ( TEST2 * TEST2  + 1.E4 * TEST6 * TEST6 )
+33TEST1 X3    TEST2 X7    TEST3 X11   TEST4 UNITY?RESID
+C   Step     Time        TEST1       X3          TEST2        X7           TEST3
+C     0  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00
+C     1  2.00000E-02 6.04040E+01 6.04040E+01-7.93838E+01-7.93838E+01 1.09801E+01
+C     2  4.00000E-02 6.08160E+01 6.08160E+01-7.77831E+01-7.77831E+01 1.19403E+01
+BLANK card ending all TACS data cards
+C Final step begins : 100  2.00000 1.40000E+2 1.40000E+2 -8.09017E+1 -8.09017E+1
+C completion of this :  1.08940E+2 1.08940E+2 9.85281E+1 1.00000E+00 0.00000E+00
+ 143 .2 0.0 2.0         TEST1 TEST2 TEST3 TEST4
+  PRINTER PLOT
+ 143 .4 0.0 2.0         TEST1 TEST2       TEST4
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+ 

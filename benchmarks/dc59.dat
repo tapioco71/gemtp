@@ -1,0 +1,557 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-59        (DC-69  of "M39." vintage)          
+C        Use  "LINE CONSTANTS" to punch on LUNIT7 the K.C. Lee EMTP branch cards
+C        that represent a double-circuit BPA line.   This 500-kV line is seventy
+C        miles long,  and it connects BPA substations "Raver" and "Chief Joseph"
+C        1st of 14 subcases illustrating different  LINE CONSTANTS  computations.
+C        The 1st 7 are stacked to maintain control within  LINE CONSTANTS whereas
+C        later subcases are separated by BNDC (the more modern concept).
+C DIAGNOSTIC           0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 9
+LINE CONSTANTS
+$ERASE   { Flush the punched card buffer (in case 2nd or later subcase of usage)
+ENGLISH     { Redundant request is unnecessary: English units are default choice
+BRANCH  X2A   X16A  X2B   X16B  X2C   X16C  Y2A   Y16A  Y2B   Y16B  Y2C   Y16C  
+  1 .375  .0776  4      .0  1.302   -21.17   51.04
+  1 .375  .0776  4      .0  1.302   -22.00   50.00
+  1 .375  .0776  4      .0  1.302   -22.83   51.04
+  2 .375  .0776  4      .0  1.302      .83   79.14
+  2 .375  .0776  4      .0  1.302     0.00   78.10
+  2 .375  .0776  4      .0  1.302     -.83   79.14
+  3 .375  .0776  4      .0  1.302    22.83   51.04
+  3 .375  .0776  4      .0  1.302    22.00   50.00
+  3 .375  .0776  4      .0  1.302    21.17   51.04
+  4 .375  .0776  4      .0  1.302   103.83   51.04
+  4 .375  .0776  4      .0  1.302   103.00   50.00
+  4 .375  .0776  4      .0  1.302   102.17   51.04
+  5 .375  .0776  4      .0  1.302   125.83   79.14
+  5 .375  .0776  4      .0  1.302   125.00   78.10
+  5 .375  .0776  4      .0  1.302   124.17   79.14
+  6 .375  .0776  4      .0  1.302   147.83   51.04
+  6 .375  .0776  4      .0  1.302   147.00   50.00
+  6 .375  .0776  4      .0  1.302   146.17   51.04
+  0 .500 2.6100  4      .0   .386    12.90  101.40
+  0 .500 2.6100  4      .0   .386   -12.90  101.40
+  0 .500 2.6100  4      .0   .386   137.90  101.40
+  0 .500 2.6100  4      .0   .386   112.10  101.40
+BLANK card concludes conductor cards
+C     Following is old format with "1" in column 28.  Newer blank is equivalent:
+  100.0       60.0         1         1          70.                  1
+C 100.0       60.0                   1          70.                  1
+C 34567890123456789012345678
+BLANK card ends the one and only frequency card
+C [Z] begins:   1  1.894681E-01 
+C [Z] begins:      8.966087E-01 
+C [Z] begins:   2  1.784947E-01  2.253729E-01 
+C [Z] begins:      3.444996E-01  8.518222E-01 
+C Row 4 of [Z]: 4  1.585986E-01  1.711108E-01  1.643664E-01  1.958309E-01
+C Row 4 of [Z]:    2.109824E-01  2.106541E-01  2.563596E-01  8.847836E-01
+C Last modal row:      6  2.993735E-02  5.200153E-01  8.194303E-06  2.520181E+02
+C Last modal row:        -7.248357E+00  2.519139E+02  1.825523E+05  5.939524E-05
+C  Eigenvector matrix  [Ti]  for current transformation:  I-phase = [Ti]*I-mode.
+C Row 1:   4.252163704717307E-01  -5.177320964654548E-01  -3.352440256724861E-01
+C Row 2:   3.825268921039306E-01  -3.979585318772536E-01  -4.744214714424082E-02
+C Last Z-surge row: 3.332489880161737E1 3.738497001800407E1 4.323487789067054E+1
+C Last Z-surge row: 9.030558505299203E1 1.029930778488600E2 3.620689931272090E+2
+C $VINTAGE, 1   --- Beginning of punched cards                                  
+C -1X2A   X16A              1.03897E+00 6.87061E+02 1.16853E+05-7.00000E+01 1  6 
+C -2X2B   X16B              6.04380E-02 4.22507E+02 1.67695E+05-7.00000E+01 1  6 
+C -3X2C   X16C              2.69166E-02 2.64252E+02 1.84104E+05-7.00000E+01 1  6 
+C -4Y2A   Y16A              2.72285E-02 2.73315E+02 1.82849E+05-7.00000E+01 1  6 
+C -5Y2B   Y16B              3.17288E-02 2.53688E+02 1.81665E+05-7.00000E+01 1  6 
+C -6Y2C   Y16C              2.99374E-02 2.51914E+02 1.82552E+05-7.00000E+01 1  6 
+C $VINTAGE, 0                                                                     
+C  0.42521637 -0.51773210 -0.33524403 -0.51955526 -0.26282070  0.37241506        
+C  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000        
+C  0.38252689 -0.39795853 -0.04744215  0.02064266  0.58206662 -0.57594225        
+C  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000        
+C  0.41576943 -0.27126091  0.62077426  0.47920372 -0.30351891  0.17203938        
+C  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000        
+C  0.41576943  0.27126091 -0.62077426  0.47920372 -0.30351891 -0.17203938        
+C  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000        
+C  0.38252689  0.39795853  0.04744215  0.02064266  0.58206662  0.57594225        
+C  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000        
+C  0.42521637  0.51773210  0.33524403 -0.51955526 -0.26282070 -0.37241506        
+C  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000  0.00000000        
+$PUNCH
+C       2nd of 9  data subcases within  "LINE CONSTANTS"  serves to demonstrate
+C       the modeling of a continuously transposed 3-phase overhead line (col. 70
+C       on the freq. card is left blank), output branch cards will be punched.
+C       Solution of this and the following 3 subcases are taken from Sun 3/140
+C       in August, 1991.                                                        
+BRANCH  JDA   LMA   JDB   LMB   JDC   LMC                                       
+C   LINE CONSTANTS DATA FOR JOHN DAY TO LOWER MONUMENTAL 500-KV LINE.           
+  1.3636 .05215  4         1.602  -20.75   50.     50.                          
+  1.3636 .05215  4         1.602  -19.25   50.     50.                          
+  2.3636 .05215  4         1.602  - 0.75   77.5    77.5                         
+  2.3636 .05215  4         1.602    0.75   77.5    77.5                         
+  3.3636 .05215  4         1.602   19.25   50.     50.                          
+  3.3636 .05215  4         1.602   20.75   50.     50.                          
+  0.5    2.61    4         0.386  -12.9    98.5    98.5                         
+  0.5    2.61    4         0.386   12.9    98.5    98.5                         
+BLANK CARD ENDING CONDUCTOR CARDS OF  "LINE CONSTANTS"  CASE                    
+100.         60.00         1     11  1        138.       1        
+BLANK CARD ENDING FREQUENCY CARDS OF  "LINE CONSTANTS"  CASE 
+C [Z] begins:   1  1.197867E-01                                                 
+C [Z] begins:      1.118869E+00                                                 
+C [Z] begins:   2  9.087789E-02  1.180123E-01                                   
+C [Z] begins:      5.395449E-01  1.120899E+00                                  
+C [Z] begins:   3  9.175069E-02  9.087789E-02  1.197867E-01                     
+C [Z] begins:      5.189221E-01  5.395449E-01  1.118869E+00
+C $VINTAGE, 1   --- Beginning of punched cards                                  
+C -1JDA   LMA                0.30153E+00 0.69182E+03 0.11937E+06 0.13800E+03 1  
+C -2JDB   LMB                0.28026E-01 0.28360E+03 0.18218E+06 0.13800E+03 1  
+C -3JDC   LMC                                                          
+C $VINTAGE, 0    
+$PUNCH, dc59b.pch !                   
+C        3rd of 9 subcases:  continuously-transposed,  constant-parameter, 
+C        double-circuit line.   This is unrealistic, physically.  See the
+C        following 4-th subcase for a better approximation of common use.
+BRANCH  SENDA RECA  SENDB RECB  SENDC RECC  SENDD RECD  SENDE RECE  SENDF RECF 
+  1.3636 .0561   4 0.0     1.602  -20.75    48.9      48.9                      
+  1.3636 .0561   4 0.0     1.602  -19.25    48.9      48.9      
+  2.3636 .0561   4 0.0     1.602  - 0.75    76.4      76.4                      
+  2.3636 .0561   4 0.0     1.602    0.75    76.4      76.4                      
+  3.3636 .0561   4 0.0     1.602   19.25    48.9      48.9                      
+  3.3636 .0561   4 0.0     1.602   20.75    48.9      48.9                      
+  4.3636 .0561   4 0.0     1.602  129.25    48.9      48.9                      
+  4.3636 .0561   4 0.0     1.602  130.75    48.9      48.9                      
+  5.3636 .0561   4 0.0     1.602  149.25    76.4      76.4                      
+  5.3636 .0561   4 0.0     1.602  150.75    76.4      76.4                      
+  6.3636 .0561   4 0.0     1.602  169.25    48.9      48.9                      
+  6.3636 .0561   4 0.0     1.602  170.75    48.9      48.9                      
+  0.5    2.61    4 0.0      .386  -12.9    113.3     113.3                      
+  0.5    2.61    4 0.0      .386   12.9    113.3     113.3                      
+  0.5    2.61    4 0.0      .386  137.1    113.3     113.3                      
+  0.5    2.61    4 0.0      .386  162.9    113.3     113.3                      
+BLANK card ending conductors
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+  100.         60.         1     1   1     0  1.00       1     
+BLANK card ending frequency cards
+C [Z] begins:   1  1.217123E-01
+C [Z] begins:      1.118839E+00
+C [Z] begins:   2  9.094958E-02  1.199341E-01
+C [Z] begins:      5.394596E-01  1.120869E+00
+C Row 4 of [Z]: 4  9.147597E-02  9.069011E-02  9.164961E-02  1.217127E-01
+C Row 4 of [Z]:    3.585129E-01  3.741915E-01  3.960704E-01  1.118836E+00
+C $VINTAGE, 1   --- Beginning of punched cards                                  
+C -1SENDA RECA               0.57627E+00 0.87897E+03 0.10152E+06 0.10000E+01 1  
+C -2SENDB RECB               0.30089E-01 0.31999E+03 0.17467E+06 0.10000E+01 1  
+C -3SENDC RECC                                                                  
+C -4SENDD RECD                                                                  
+C -5SENDE RECE                                                                  
+C -6SENDF RECF                                          
+C $VINTAGE, 0       
+$PUNCH, dc59c.pch !
+C        4th of 9 subcases will illustrate  usage  of the  special  request word
+C        SPECIAL DOUBLE CIRCUIT TRANSPOSED.   This is to represent a double- 
+C        circuit line in which each circuit is itself transposed,  and which has 
+C        only zero-sequence coupling between the two circuits.  There are two 
+C        idential 3-phase circuits.
+C        Columns 69-70 on the frequency cards are left blank or integer zero.
+SPECIAL DOUBLE CIRCUIT TRANSPOSED
+BRANCH  SENDA RECA  SENDB RECB  SENDC RECC  SENDD RECD  SENDE RECE  SENDF RECF 
+C  Special transposed double circuit, constant parameter modeling
+  1.3636 .0561   4 0.0     1.602  -20.75    48.9      48.9                     
+  1.3636 .0561   4 0.0     1.602  -19.25    48.9      48.9      
+  2.3636 .0561   4 0.0     1.602  - 0.75    76.4      76.4                     
+  2.3636 .0561   4 0.0     1.602    0.75    76.4      76.4                     
+  3.3636 .0561   4 0.0     1.602   19.25    48.9      48.9                     
+  3.3636 .0561   4 0.0     1.602   20.75    48.9      48.9                      
+  4.3636 .0561   4 0.0     1.602  129.25    48.9      48.9                      
+  4.3636 .0561   4 0.0     1.602  130.75    48.9      48.9                      
+  5.3636 .0561   4 0.0     1.602  149.25    76.4      76.4                      
+  5.3636 .0561   4 0.0     1.602  150.75    76.4      76.4                      
+  6.3636 .0561   4 0.0     1.602  169.25    48.9      48.9                      
+  6.3636 .0561   4 0.0     1.602  170.75    48.9      48.9                      
+  0.5    2.61    4 0.0      .386  -12.9    113.3     113.3                      
+  0.5    2.61    4 0.0      .386   12.9    113.3     113.3                      
+  0.5    2.61    4 0.0      .386  137.1    113.3     113.3                      
+  0.5    2.61    4 0.0      .386  162.9    113.3     113.3                       
+BLANK card ending conductors
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+  100.         60.         1     1   1     0  1.00       1     
+BLANK card ending frequency cards
+C [Z] begins:   1  1.217123E-01                                                 
+C [Z] begins:      1.118839E+00                                                 
+C [Z] begins:   2  9.094958E-02  1.199341E-01
+C [Z] begins:      5.394596E-01  1.120869E+00                                   
+C Row 4 of [Z]: 4  9.147597E-02  9.069011E-02  9.164961E-02  1.217127E-01       
+C Row 4 of [Z]:    3.585129E-01  3.741915E-01  3.960704E-01  1.118836E+00       
+C $VINTAGE, 1   --- Beginning of punched cards
+C -1SENDA RECA               0.57627E+00 0.87897E+03 0.10152E+06 0.10000E+01 1  
+C -2SENDB RECB               0.29879E-01 0.28421E+03 0.18255E+06 0.10000E+01 1  
+C -3SENDC RECC               0.30932E-01 0.48704E+03 0.16609E+06 0.10000E+01 1  
+C -4SENDD RECD                                                                  
+C -5SENDE RECE                                                                  
+C -6SENDF RECF                                                                 
+C $VINTAGE, 0    
+$PUNCH, dc59d.pch !
+C       5th of 9 subcases: Another case of  "SPECIAL DOUBLE CIRCUIT TRANSPOSED", 
+C        the two single circuits here are not identical.
+SPECIAL DOUBLE CIRCUIT TRANSPOSED
+BRANCH  SENDA RECA  SENDB RECB  SENDC RECC  SENDD RECD  SENDE RECE  SENDF RECF 
+  1.3636 .05215  4         1.602  -20.75   50.     50.                          
+  1.3636 .05215  4         1.602  -19.25   50.     50.                          
+  2.3636 .05215  4         1.602  - 0.75   77.5    77.5                         
+  2.3636 .05215  4         1.602    0.75   77.5    77.5                         
+  3.3636 .05215  4         1.602   19.25   50.     50.                          
+  3.3636 .05215  4         1.602   20.75   50.     50.                          
+  4.3636 .0561   4 0.0     1.602  129.25    48.9      48.9                       
+  4.3636 .0561   4 0.0     1.602  130.75    48.9      48.9                       
+  5.3636 .0561   4 0.0     1.602  149.25    76.4      76.4                       
+  5.3636 .0561   4 0.0     1.602  150.75    76.4      76.4                       
+  6.3636 .0561   4 0.0     1.602  169.25    48.9      48.9                       
+  6.3636 .0561   4 0.0     1.602  170.75    48.9      48.9                       
+  0.5    2.61    4 0.0      .386  -12.9    113.3     113.3                       
+  0.5    2.61    4 0.0      .386   12.9    113.3     113.3                       
+  0.5    2.61    4 0.0      .386  137.1    113.3     113.3                       
+  0.5    2.61    4 0.0      .386  162.9    113.3     113.3                       
+BLANK card ending conductors
+C        1         2         3         4         5         6         7         8
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+100.         60.00         1     1   1        1.00       1           
+BLANK card ending frequency cards of  LINE CONSTANTS  data subcase  
+C [Z] begins:   1  1.197873E-01 
+C [Z] begins:      1.118865E+00 
+C [Z] begins:   2  9.087852E-02  1.180131E-01
+C [Z] begins:      5.395402E-01  1.120893E+00 
+C Row 4 of [Z]: 4  9.144082E-02  9.065542E-02  9.161373E-02  1.217127E-01
+C Row 4 of [Z]:    3.585503E-01  3.740201E-01  3.961049E-01  1.118836E+00
+C $VINTAGE, 1   --- Beginning of punched cards                            
+C -1SENDA RECA               0.57513E+00 0.87993E+03 0.10163E+06 0.10000E+01 1  
+C -2SENDB RECB               0.28952E-01 0.28422E+03 0.18257E+06 0.10000E+01 1  
+C -3SENDC RECC               0.30003E-01 0.48732E+03 0.16618E+06 0.10000E+01 1  
+C -4SENDD RECD                                                                  
+C -5SENDE RECE                                                                  
+C -6SENDF RECF                                                                  
+C $VINTAGE, 0   
+$PUNCH, dc59e.pch ! 
+C        6th  of  9  data subcases within  "LINE CONSTANTS"  demonstrates that a
+C        single conductor can be handled properly.  Prior to 26 June 1992, there
+C        were no punched branch cards for this case.   Now, there are!
+BRANCH  JDA   LMA                                        
+C   LINE CONSTANTS DATA FOR JOHN DAY TO LOWER MONUMENTAL 500-KV LINE.           
+  1.3636 .05215  4         1.602  -20.75   50.     50.                          
+  1.3636 .05215  4         1.602  -19.25   50.     50.                                  
+BLANK card ending conductor cards of  "LINE CONSTANTS"  case   
+C 34567890123456789012345678901234567890123456789012345678901234567890                 
+100.         60.00         1     1   1        138.       1  
+C 100.         60.00         1                  138.    1 1   
+$PUNCH, dc59f.pch !
+C   $VINTAGE, 1
+C   -1JDA   LMA                0.11978E+00 0.56250E+01 0.18952E+04 0.13800E+03 1
+C   $VINTAGE, 0
+BLANK CARD ENDING FREQUENCY CARDS OF  "LINE CONSTANTS"  CASE 
+C        7th  of  9  data subcases within  "LINE CONSTANTS"  demonstrates that
+C        metric data for constant parameter distributed transposed line can be
+C        handled properly.  Prior to October 1, 1993, punched branch cards for 
+C        this case were correct but were in English units.
+METRIC
+BRANCH  AM-28 AM-29 BM-28 BM-29 CM-28 CM-29
+C 
+C             **********  2-CHUKAR, TOWER TYPE M1  ************
+C
+  1.3636 .0324   4         4.069  -6.936   15.245                               
+  1.3636 .0324   4         4.069  -6.479   15.245                               
+  2.3636 .0324   4         4.069  -.2287   23.63                                
+  2.3636 .0324   4         4.069   .2287   23.63                                
+  3.3636 .0324   4         4.069   6.479   15.245                               
+  3.3636 .0324   4         4.069   6.936   15.245                               
+  0.5    1.621   4          .980  -4.574   36.314                               
+  0.5    1.621   4          .980  +4.574   36.314                               
+BLANK                                                                           
+ 100.   60.                      11  11    1 32.195      1        44   
+$PUNCH, dc59g.pch !
+BLANK CARD ENDING FREQUENCY CARDS OF  "LINE CONSTANTS"  CASE 
+BLANK card ends this 7th of 7  "LINE CONSTANTS"  data subcases
+C $VINTAGE, 1
+C $UNITS,  60., 0.0,
+C 1AM-28 AM-29               2.39624092E+00  2.23836748E+01  3.33648686E-01
+C 2BM-28 BM-29               1.81795847E+00  1.07078886E+01 -5.56044928E-02
+C                            2.36074723E+00  2.24231290E+01  3.28969259E-01
+C 3CM-28 CM-29               1.83533629E+00  1.01489328E+01 -3.60285322E-02
+C                            1.81795847E+00  1.07078886E+01 -5.56044928E-02
+C                            2.39624092E+00  2.23836748E+01  3.33648686E-01
+C $VINTAGE, -1,
+C $UNITS, -1., -1., { Restore values that existed b4 preceding $UNITS
+C    Note about preceding output.  Both  XOPT  and  COPT  (the parameters of
+C    the  $UNITS  card are under user control.  XOPT = 60  means reactance in
+C    ohms.  This was produced by the  "44"  in columns 67-68 of the frequency
+C    card.  This is variable  IPUN.  Precede this by a minus sign to produce
+C    alternative L in millihenries.  Capacitance is similarly controlled by
+C    variable  ICAP  in column 44.  Value  "1"  as used above results in
+C    microfarads whereas  "0"  would have produced the alternate micromhos.
+C    This came from Michelis of KEMA as documented on comment cards in SUBR25.
+BEGIN NEW DATA CASE
+C        8th  of  14  subcases using  "LINE CONSTANTS"  is the same as the
+C        preceding except it punches distributed (K.C. Lee) branch cards rather
+C        than a Pi-circuit.  See explanation in April, 1998, newsletter.  This
+C        subcase is added  24 December 1997  as former 8th is shoved downward.
+LINE CONSTANTS
+METRIC
+BRANCH  AM-28 AM-29 BM-28 BM-29 CM-28 CM-29
+  1.3636 .0324   4         4.069  -6.936   15.245                               
+  1.3636 .0324   4         4.069  -6.479   15.245                               
+  2.3636 .0324   4         4.069  -.2287   23.63                                
+  2.3636 .0324   4         4.069   .2287   23.63                                
+  3.3636 .0324   4         4.069   6.479   15.245                               
+  3.3636 .0324   4         4.069   6.936   15.245                               
+  0.5    1.621   4          .980  -4.574   36.314                               
+  0.5    1.621   4          .980  +4.574   36.314                               
+BLANK card ending conductor cards                                                                          
+ 100.   60.                      11  11    1 32.195      1          1   
+$PUNCH, dc59h.pch !
+BLANK card ending frequency cards of  "LINE CONSTANTS"  case 
+BLANK card ends stacked  "LINE CONSTANTS"  data subcases
+BEGIN NEW DATA CASE
+C    9-th  subcase illustrates NODA SETUP with LINE rather than  CABLE CONSTANTS
+C    (see  DC-27).   The frequency scan deliberately has been reduced to make
+C    the output small and execution quick.   See January, 1995, newsletter.
+C NODA SETUP, 1, { Request Taku Noda's ARMA model fitter.  1 ==> F-scan printout
+NODA SETUP     { Request Taku Noda's ARMA model fitter.  No printout of F-scan
+               { Output file name (blank requests use of default  TAKUNODA.CCC)
+2nd of 2 such lines (any number are allowed).
+NODA SETUP END    { Bound of fitter data;  begin CABLE PARAMETERS data
+LINE CONSTANTS
+C   LINE CONSTANTS DATA FOR JOHN DAY TO LOWER MONUMENTAL 500-KV LINE.
+  1.3636 .05215  4         1.602  -20.75   50.     50.
+  1.3636 .05215  4         1.602  -19.25   50.     50.
+  2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+  2.3636 .05215  4         1.602    0.75   77.5    77.5
+  3.3636 .05215  4         1.602   19.25   50.     50.
+  3.3636 .05215  4         1.602   20.75   50.     50.
+  0.5    2.61    4         0.386  -12.9    98.5    98.5
+  0.5    2.61    4         0.386   12.9    98.5    98.5
+BLANK card ending conductor cards of imbedded  "LINE CONSTANTS"  data
+C 100.           .01                            138.       1   9 10    1
+100.           10.                            138.       1   3  2    1
+100.          1.E6                            138.       1           1
+BLANK card ending frequency cards of inbedded  "LINE CONSTANTS"  data
+BLANK card ending  "LINE CONSTANTS"  cases
+BNDC   { Illustrate use of the abbreviated form of  BEGIN NEW DATA CASE
+C    10-th subcase illustrates parameter variation by means of PCVP.  Here a
+C    supporting program (LINE CONSTANTS) is involved rather than simulation
+C    (see  DCNEW-25)  or frequency scan of some form  (see  DCNEW-26).  The
+C    height of the transmission line will be raised during each of 3 passes.
+C    This is a batch-mode variation of the old interactive SPY @5 demonstration.
+C    For clarity,  there is full printout (IOPCVP = 0).  But for practical use,
+C    the production user probably would toggle this switch to  IOPCVP = 1  which
+C    will have the effect of eliminating printout preceding LINE CONSTANTS for
+C    the 2nd and later pass of the PCVP loop.  See January, 1999, newsletter.
+C   Controls of following request card:   MAXKNT  IOPCVP  NOSTAT { Loop 3 times with
+POCKET CALCULATOR VARIES PARAMETERS            3       0       0 { full printout
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would b
+_HEIGHT1 = 22. + KNT * 10.0    { Conductor height  h1 = 32, 42, 52  feet
+_HEIGHT2 = 35. + KNT * 10.0    { Conductor height  h2 = 45, 55, 65  feet
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch card
+$ERASE   { Flush the punched card buffer (in case 2nd or later subcase of usage)
+LINE CONSTANTS
+BRANCH  JDA   LMA   JDB   LMB   JDC   LMC                                       
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+  1 .375   .0776 4           1.302   -15.3_HEIGHT1              { <1st of 3>                   
+  2 .375   .0776 4           1.302     0.0_HEIGHT2                                 
+  3 .375   .0776 4           1.302   +15.3_HEIGHT1                                 
+BLANK card ending conductor cards                    
+ 100.        60.00         1      2   1
+BLANK card ending frequency cards                    
+$PUNCH, dc59j.pch !
+BLANK card ending LINE CONSTANTS data cases                    
+BEGIN NEW DATA CASE
+C    11-th subcase illustrates 2-dimensional parameter variation.  The pocket
+C    calculator (PCVP) provides the outer loop whereas F-scan provides the inner
+C    loop.  The same basic  LINE CONSTANTS  as preceding subcase is involved.
+C    Printout is minimized by  IOPCVP = 1 (no printout outside of LINE CONSTANTS
+C    for the 2nd & later pass of the PCVP loop).  See January, 1999, newsletter.
+C      Change  24 February 1999:   Make the number of decades of the F-scan loop
+C      a variable to illustrate  INTEGER  encoding.   The use is artificial, but
+C      useful.  Before the introduction of data symbol  DCD  (the # of decades),
+C      constant value  1  was used.  So, originally  F=60,  129, 278,  and  600.
+C      That was 1 decade and 3 points/decade.   Following the change,  note that
+C      DCD = 1. + 1.0001 / KNT   has values  2.0001  and  1.5  for  KNT = 1 & 2.
+C      Integer truncation then gives  2  and  1,  respectively.   So,  the first
+C      pass steps through 2 decades:  F=60, 129, 278, 600, 1292, 2784, and 6000.
+C      The second pass steps through just one decade.  Acknowledgement: As noted
+C      in the newsletter,  it was Prof. Juan Martinez in Barcelona,  Spain,  who
+C      first requested integer encoding of data symbols as illustrated here.  He
+C      was not dealing with  LINE CONSTANTS,  but the need was comparable.
+C   Controls of following request card:   MAXKNT  IOPCVP  NOSTAT { Loop 2 times with
+POCKET CALCULATOR VARIES PARAMETERS            2       1       0 { minimum printout
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would be
+_HEIGHT1 = 22. + KNT * 10.0    { Conductor height  h1 = 32, 42, 52  feet
+_HEIGHT2 = 35. + KNT * 10.0    { Conductor height  h2 = 45, 55, 65  feet
+DCD      = 1. + 1.0001 / KNT  INTEGER     { # of decades of F-scan is an integer
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch cards
+$ERASE   { Flush the punched card buffer (in case 2nd or later subcase of usage)
+LINE CONSTANTS
+BRANCH  JDA   LMA   JDB   LMB   JDC   LMC                                       
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+  1 .375   .0776 4           1.302   -15.3_HEIGHT1              { <1st of 3>                   
+  2 .375   .0776 4           1.302     0.0_HEIGHT2                                 
+  3 .375   .0776 4           1.302   +15.3_HEIGHT1                                 
+BLANK card ending conductor cards                    
+C  Number of decades is I3 integer in columns 60 thru 62:  XXX
+ 100.        60.00         0      0   0       138.       1 DCD  3    1
+BLANK card ending frequency cards                    
+$PUNCH, dc59k.pch !
+C  Preceding output is a function of the file name, peculiarly.  Here in a later
+C  subcase,  a distinct file name must be used to separate this output from that
+C  of preceding subcases.   Unfortunately,  this results in preservation of just
+C  the 2nd of 2 passes (KNT=2).  If  the data is copied to a separate disk file,
+C  and if the name (dc59l.pch) is erased,  output of the 1st pass,  KNT=1,  also
+C  will be seen.  That is the peculiarity of Salford EMTP operation.  The  .LIS
+C  file is unaffected, however.  It should always be complete.  And,  of course,
+C  the listing of punched cards within this always will be complete.
+BLANK card ending LINE CONSTANTS data cases
+BEGIN NEW DATA CASE
+C    12th of 14 subcases illustrates correction to METRIC for X at 1 meter
+C    spacing.  Also,  within the the same subcase,  illustrate the new option
+C    of metric with X at 1 foot spacing.  Data added 28 May 1999.
+LINE CONSTANTS
+METRIC   { 1st of 2 uses is for real metric, meaning X at 1 meter separation
+C                 X at 1 m  ----  Number below is ohm/km at 1 meter separation    
+  1 0.0   0.0727 1 .337507  2.8143    0.00   0.500    0.50                     1
+BLANK END of conductor data ... start of frequency data
+   100.0      60.0         0    11  11     0 160.934 1 1             1
+BLANK END of frequency data
+METRIC WITH X AT 1 FOOT SPACING { Bastardized metric uses X at 1 foot separation
+C                 X @ 1 ft  ----  Number below is ohm/km at 1 foot separation    
+  1 0.0   0.0727 1   .2479  2.8143    0.00   0.500    0.50                     1
+BLANK END of conductor data ... start of frequency data
+   100.0      60.0         0    11  11     0 160.934 1 1             1
+BLANK card ending frequency cards                    
+BLANK card ending LINE CONSTANTS data cases
+BEGIN NEW DATA CASE
+C    13th of 14 subcases illustrates modal speed in excess of the speed of
+C    light.  Data was sent by Orlando Hevia to Tsu-huei Liu,  and then by the
+C    latter to W. Scott Meyer around 15 December 2007.  The excess speed was
+C    traced to lack of skin effect  ---  modeling that makes no sense in this
+C    day and age.  So, while the skin effect remains discretionary, a warning
+C    message will note any such lack :  "***  Warning.  Not all conductors
+C    involve the skin effect.  This is dangerous if frequency is not low."
+C    A 2nd warning message will warn of impossible speed,  should the speed of
+C    light be exceeded:  "****  Warning.  The following velocity of propagation
+C    for the positive sequence exceeds the speed of light.  Does the user`s data
+C    possibly ignore the skin effect (dangerous if frequency is not low)?"
+C    Original data involved 4-conductor bundles,  but the  "4"  on the right
+C    was erased from column 80 of the conductor cards to speed execution and
+C    simplify the illustration at the same time.  10 KHz is the frequency used,
+C    and it is indeed too high to ignore the skin effect. 
+LINE CONSTANTS
+METRIC
+  1  0.0  0.0565 0   0.238    3.34    -15.     22.      7.     45.   45.
+  2  0.0  0.0565 0   0.238    3.34     0.0     22.      7.     45.   45.
+  3  0.0  0.0565 0   0.238    3.34     15.     22.      7.     45.   45.
+BLANK card ending conductor cards                    
+    1.E3    10000.           000001 000000 0  0.0702              44
+C   Sequence       Surge impedance       Attenuation   velocity    ...
+C            magnitude(ohm) angle(degr.)    db/km        km/sec    ...
+C      Zero :  5.93085E+02 -5.10741E+00  1.93681E-01  2.51847E+05  ...
+C   Positive:  3.16873E+02 -7.68631E-02  1.91130E-03  3.83055E+05  ...
+C   This 383055 km/sec > 3 * 10**8 meters/sec = speed of light 
+BLANK card ending frequency cards
+BLANK card ending LINE CONSTANTS data cases
+BEGIN NEW DATA CASE
+C    14th of 14 subcases illustrates punched cards for 10 or more phases.
+C    This case of 12 phases comes from Prof. Michael Igel in Germany.  It
+C    originally was named  IGELT.DAT  with the  T  indicating transposed.
+C    As received early during January of 2008,  punched cards were wrong.
+C    For phases 10 and later,  -9  of the 9th phase was repeated rather
+C    than being replaced by  10,  11,  etc. (through 99 maximum).  Of
+C    course,  Dr. Tsu-huei Liu rapidly corrected such output, as this
+C    data subcase demonstrates.  For the record,  Prof. Igel is with:
+C      Power Engineering Saar
+C      Institute of Electrical Power Engineering
+C      HTW - Hochschule für Technik und Wirtschaft
+C      University of Applied Science, Saarbrücken, Germany
+C      www.powerengs.de
+C    Data was created using Prof. Igel's ATP Designer?  It began:
+C      ATPDesigner - Design and Simulation of Power Networks
+C      Version 1.12.21 - 04.01.2008
+C    Numeous comment cards (boiler plate of ATP Designer?) have been removed for
+C    brevity,  and the "4" in column 80 of each conductor card has been erased.
+C    This has the effect of reducing each phase from a 4-conductor bundle to 1.
+C    Most output has been suppressed by changing 1-flags to 0-flags on the
+C    frequency card (the original has been preserved as a comment, note).  About
+C    geometry,  Prof. Igel warns:  "you should consider that the geometric data
+C    of the lines 7, ... 12 are not taken from a existing tower. These data are
+C    only grown in my head."  This subcase was added by WSM 13 January 2008.
+LINE CONSTANTS
+METRIC
+$ERASE
+BRANCH  A00025A00024B00025B00024C00025C00024A00002A00013B00002B00013C00002C00013
+BRANCH  A00026A00027B00026B00027C00026C00027A00028A00029B00028B00029C00028C00029
+C I     Resis___  React___        Horiz___        Vmid____        Alpha_      NB
+C  Skin_        IX        Diam____        Vtower__        Separ___      Name__
+  15.E-18.509E-2 4        5.0000001.9000E13.4299E1        4.0000E14.50E1
+  25.E-18.509E-2 4        5.0000001.6500E12.3800E1        4.0000E14.50E1
+  35.E-18.509E-2 4        5.0000001.0000E12.3800E1        4.0000E14.50E1
+  45.E-18.509E-2 4        5.000000-1.000E12.3800E1        4.0000E14.50E1
+  55.E-18.509E-2 4        5.000000-1.650E12.3800E1        4.0000E14.50E1
+  65.E-18.509E-2 4        5.000000-1.900E13.4299E1        4.0000E14.50E1
+  75.E-18.509E-2 4        5.0000001.9000E15.000000        4.0000E14.50E1
+  85.E-18.509E-2 4        5.0000001.6500E15.000000        4.0000E14.50E1
+  95.E-18.509E-2 4        5.0000001.0000E15.000000        4.0000E14.50E1
+ 105.E-18.509E-2 4        5.000000-1.000E15.000000        4.0000E14.50E1
+ 115.E-18.509E-2 4        5.000000-1.650E15.000000        4.0000E14.50E1
+ 125.E-18.509E-2 4        5.000000-1.900E15.000000        4.0000E14.50E1
+BLANK card ending conductor cards
+C Rho___          Fcar______#      #IZPR__# Dist____#    S DEC   PUN  IT
+C       Freq______           ICPR__        I         IPIP M   PNT   MO
+C Original frequency card: 1 000001 011000 02.0000E1 11110          00
+1.0000E25.000000E1         1 000000 000000 02.0000E1 00000          00
+BLANK card ending frequency cards
+$PUNCH
+BLANK card ending LINE CONSTANTS data cases
+BEGIN NEW DATA CASE
+BLANK
+EOF
+
+
+
+
+BEGIN NEW DATA CASE
+C       old.  This was what existed for 11th subcase prior to 25 Feb 99.
+C    11-th subcase illustrates 2-dimensional parameter variation.  The pocket
+C    calculator (PCVP) provides the outer loop whereas F-scan provides the inner
+C    loop.  The same basic  LINE CONSTANTS  as preceding subcase is involved.
+C    Printout is minimized by  IOPCVP = 1 (no printout outside of LINE CONSTANTS
+C    for the 2nd and later pass of the PCVP loop).  See January, 1999, newsletter.
+C   Controls of following request card:   MAXKNT  IOPCVP  NOSTAT { Loop 2 times with
+POCKET CALCULATOR VARIES PARAMETERS            2       1       0 { reduced printout
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would b
+_HEIGHT1 = 22. + KNT * 10.0    { Conductor height  h1 = 32, 42, 52  feet
+_HEIGHT2 = 35. + KNT * 10.0    { Conductor height  h2 = 45, 55, 65  feet
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch card
+$ERASE   { Flush the punched card buffer (in case 2nd or later subcase of usage)
+LINE CONSTANTS
+BRANCH  JDA   LMA   JDB   LMB   JDC   LMC                                       
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+  1 .375   .0776 4           1.302   -15.3_HEIGHT1              { <1st of 3>                   
+  2 .375   .0776 4           1.302     0.0_HEIGHT2                                 
+  3 .375   .0776 4           1.302   +15.3_HEIGHT1                                 
+BLANK card ending conductor cards                    
+ 100.        60.00         0      0   0       138.       1   1  3    1
+BLANK card ending frequency cards                    
+$PUNCH, dc59k.pch !
+BLANK card ending LINE CONSTANTS data cases                    
+
+
+
+
+C       7th  of  7  data subcases within  "LINE CONSTANTS"  serves only to test
+C       special features of the program.   First,  this second subcase is itself
+C       unusual  (more commonly,  each  will be solved as a separate data case). 
+C       Second,  for illustration of the Rule Book,  we  include three remaining 
+C       special-request  cards  that  were not illustrated by the first subcase.   
+METRIC  { This switch to metric units will illustrate  cm/meter/kilometer  units
+FREQUENCY   { Request for
+  1 .375  .0776  4      .0  1.302   -21.17   51.04
+  2 .375  .0776  4      .0  1.302      .83   79.14
+  3 .375  .0776  4      .0  1.302    22.83   51.04
+BLANK card concludes conductor cards
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890                                              
+100.0       .600                              70.          2  3    1
+BLANK card ends the one and only frequency card
+BLANK card ends this 6th of 6  "LINE CONSTANTS"  data subcases
+BEGIN NEW DATA CASE
+BLANK

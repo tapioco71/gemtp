@@ -1,0 +1,127 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-21
+C     Copied from  DCNEW-9  except that  DIAGNOSTIC  printout has been turned on
+C       Test of  U.M.  for the option of data that is nearly compatible with the
+C       Type-59 S.M.   Compare with DC-53 (source of the original data).  Mass 6
+C       is  no longer an exciter  (the U.M. has no such feature).   Compensation
+C       will be used for armature currents. See DCNEW-10 for solution without it
+DIAGNOSTIC           0 9 9 9 9 9 0 9 9 9 9 9 9 2 9 9 9 9 9
+ .000200    .150     60.     60.
+       1       1       1       1       1      -1               1
+       2      -2      20      20     100     100     500     500
+51NAVH AMCC1 A            162.67   507.51
+52NAVH BMCC1 B            6.51    162.97
+53NAVH CMCC1 C
+  MCC1 AMCC2 A                        8285.
+  MCC1 BMCC2 B                        8285.
+  MCC1 CMCC2 C                        8285.
+  MCC2 AEQV  A                  19.52
+  MCC2 BEQV  B                  19.52
+  MCC2 CEQV  C                  19.52
+  TRANSFORMER                         TRAN A
+            9999
+ 1NAVL ANAVL C                  .1    26.
+ 2NAVH A                        31.23 311.09
+  TRANSFORMER TRAN A                  TRAN B
+ 1NAVL BNAVL A
+ 2NAVH B
+  TRANSFORMER TRAN A                  TRAN C
+ 1NAVL CNAVL B
+ 2NAVH C
+  NAVL A                  2500.       1.13
+  NAVL B                  2500.       1.13
+  NAVL C                  2500.       1.13
+  SWT  AMCC2 A            4830.
+  SWT  BMCC2 B            4830.
+  SWT  CMCC2 C            4830.
+  MCC2 ASWT  A                  13.01
+  MCC2 BSWT  B                  13.01
+  MCC2 CSWT  C                  13.01
+$UNITS, 0.0, 0.0          { Turn off XOPT = COPT = 60 of miscellaneous data card
+BLANK card ending branch cards
+  SWT  A       .01661667 .09161667
+  SWT  B       .01661667 .09161667
+  SWT  C       .01661667 .09161667
+BLANK card ending switch cards
+14EQV  A  389997.    60.      -93.81293                           -1.
+14EQV  B  389997.    60.      -213.81293                          -1.
+14EQV  C  389997.    60.       26.18707                           -1.
+19  UM
+  SMDATA      0       { Column-15 zero is a request for compensation of armature
+BLANK card ending  Class-1  U.M.  data cards
+59NAVL A  21229.     60.      -44.896562
+  NAVL B
+  NAVL C
+PARAMETER FITTING           1.
+ 6 5     2 1.        1.        892.4      26.     +1800.    1907.     3050.
+          .13       1.79       1.71       .169      .228      .13504  .20029
+ 4.3      .85       .032      .05       .13
+ 1        .3        .027691                       33.68813            BUSM1
+ 2        .26       .046379                       60.9591             BUSM2
+ 3        .22       .255958                       90.81823            BUSM3
+ 4        .22       .263573                       123.6634            BUSM4
+ 5                  .258887                       4.925036            BUSM5
+ 6                  .0101995                                          BUSM6
+   11111111 333333
+  FINISH
+BLANK card ending all U.M. data cards
+BLANK card ending all source cards (including the U.M.)
+C       Total network loss  P-loss  by summing injections =   7.638165973292E+16
+C       Total network loss  P-loss  by summing injections =   7.637910322939E+16
+C                                Output for steady-state phasor switch currents.
+C     Node-K    Node-M            I-real            I-imag            I-magn
+C     SWT  A                      Open              Open              Open
+C     SWT  B                      Open              Open              Open
+C     SWT  C                      Open              Open              Open
+C     BUSM2     BUSM1        -0.63730001E+06    0.27593750E+02    0.63730001E+06
+C     BUSM3     BUSM2        -0.11896267E+07    0.74000000E+02    0.11896267E+07
+C     BUSM4     BUSM3        -0.16569800E+07    0.32912500E+03    0.16569801E+07
+C     BUSM5     BUSM4        -0.21243334E+07    0.59237500E+03    0.21243334E+07
+C     BUSM6     BUSM5         0.00000000E+00   -0.10171875E+02    0.10171875E+02
+C
+C  EQV  C   349966.92087687        389997.      -1273.107108876   1348.518748094
+C           172106.98504408     26.1870700      -444.6359221765     -160.7481140
+  NAVH ANAVH BNAVH C
+C Step    Time      BUSM1      BUSM2      BUSM3      BUSM4      BUSM5      BUSM6
+C                   TERRA      TERRA      TERRA      TERRA      TERRA      TERRA
+C
+C                    BUSM3      BUSM4      BUSM5      BUSM6      UM-1       UM-1
+C                    BUSM2      BUSM3      BUSM4      BUSM5      TQGEN      IPA
+C
+C                   UM-1       UM-1
+C                   IE3        IE4
+C ***      Phasor I(0) = -0.6373000E+06   Switch  "BUSM2 "  to  "BUSM1 "  closed
+C ***      Phasor I(0) = -0.1189627E+07   Switch  "BUSM3 "  to  "BUSM2 "  closed
+C ***      Phasor I(0) = -0.1656980E+07   Switch  "BUSM4 "  to  "BUSM3 "  closed
+C ***      Phasor I(0) = -0.2124333E+07   Switch  "BUSM5 "  to  "BUSM4 "  closed
+C ***      Phasor I(0) =  0.0000000E+00   Switch  "BUSM6 "  to  "BUSM5 "  closed
+C   0     0.0  376.991118 376.991118 376.991118 376.991118 376.991118 376.991118
+C              -.118963E7 -.165698E7 -.212433E7        0.0 .2124333E7  9214.5453
+C                     0.0        0.0
+C   1   .2E-3  376.991118 376.991118 376.991118 376.991121 377.010587 376.991121
+C              -.118963E7 -.165698E7 -.212401E7 -12.998264 .2124302E7 11174.9553
+C              .666759816 .279985108
+BLANK card ending output requests (here, just node voltages)
+  PRINTER PLOT
+C ***          Open  switch  "SWT  C"  to  "      "  after  1.00200000E-01  sec.
+C  750    .15  384.126402 384.651932 385.325319 386.279569 385.945928 387.184338
+C              -747405.67 -204574.87 -555435.76 101161.947 841110.502 12136.4814
+C               15476.078  6425.4336
+C Variable max:385.474659 384.840384 385.325319 386.279569 385.945928 388.150809
+C              -473636.66 454873.318 274970.279 106130.573 .8166678E7 85278.5299
+C              40101.8292 15747.4839
+C Times of max :    .1228      .1242        .15        .15        .15      .1426
+C                   .0376      .0306      .1032      .0966      .1268       .136
+C                   .0432      .0432
+C Variable min:376.991118 376.991118 376.991118 376.991118 376.991118 376.991118
+C              -.166481E7 -.165698E7 -.212433E7  -151573.1 -.114998E7 -92288.773
+C              -42088.266 -17619.892
+C Times of min :     .001        0.0        0.0        0.0        0.0        0.0
+C                   .0604        0.0        0.0      .1276      .0528      .1268
+C                   .1252      .1252
+ 19415.    150.         UM-1  TQGEN             { Axis limits : (-1.150,  8.167)
+ 18415.    150.         BUSM6                   { Axis limits : (0.000,   3.882)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+BLANK
+ 

@@ -1,0 +1,203 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-61        (DC-64  of "M39." vintage)
+C     South African simulation uses Semlyen line representation punched by DC-60
+C     Compare this 2-exponential simulation with high-order Hauer one of  DC-62.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 9 output columns)
+POWER FREQUENCY, 50.,
+C PEAK VOLTAGE MONITOR   { Original request is replaced by following 10 lines:
+C   Columns 41-48 is taken to be a limit on node voltage.  If this is exceeded,
+C   ATP will halt.  Note that keying "1" for MAXVLT in columns 33-40 is the same
+C   as leaving the field blank.  The default is "1",  meaning a request for peak
+C   node voltage.  The alternate value  "2"  would  be a request for peak branch
+C   voltage.  For HALTNV  use,  peak node voltage is required.  As for the value
+C   1.E+300,  this is close to the 32-bit Intel limit for floating-point math.
+C   The limit is about 1.E+308.  For more,  see the 4th subcase of DC-37.  WSM.
+C 3456789012345678901234567890123456789012345678
+C   Ruler for following card:     MAXVLT  HALTNV  { Format is: ( 32X, I8, E8.0 )
+PEAK VOLTAGE MONITOR                   1  1.E300  { HALTNV use begins 9 Jan 2011
+ .000010    .020     50.     50.
+       1       5       1       1       1      -1
+       5       5      20      20     100     100    1000    1000
+  SA-3  BUSA-3                .1260.75
+  SA-4  BUSA-4                .1260.75
+  BUSA-1                      2.   .03
+  BUSA-2                      2.   .03
+  BUSA-3  FIL1                .1       47.12
+    FIL1                      .1       90.76
+    FIL1                      3. 74.24
+    FIL1                      6.166.94 94.25
+    FIL1                     12.314.16 11.06
+    FIL1                     12.314.16  5.87
+    FIL2                     .01       1021.
+    FIL2                      .1 14.14
+  BUSA-4  FIL3                .1       47.12
+    FIL3  FIL4                .1       90.76
+    FIL3  FIL4                3. 74.24
+    FIL3  FIL4                6.166.94 94.25
+    FIL3  FIL4               12.314.16 11.06
+    FIL3  FIL4               12.314.16  5.87
+    FIL4                     .01       1021.
+    FIL4                     .01 14.14
+C     &&&&&&&&&&&&&&&&&  BEGIN  LUNIT7  CARDS PUNCHED BY  DC-63 (AUG. 1983) &&&&
+C L=   233.0MILES, RHO=   100.0, SS FREQ=   50.00, NSS=0, KFIT= 2, KPS=0, KYC= 1
+C METRIC
+C   1   .2    .273 4          1.7653      0.     39.     20.
+C   2   .2    .273 4          1.7653     30.     39.     20.
+C   3 .392  .0585  4          3.1750     2.3    27.5     8.5    50.8  45.
+C   4 .392  .0585  4          3.1750    32.3    27.5     8.5    50.8  45.
+C
+C     100.     5000.         1                    375.
+C     100.       50.         1                    375.
+C     100.        5.         1                    375.         6 13
+C
+C -1BUSA-1BUSB-1             0.46613E-02 0.15134E-02              1  1  2  2   4
+C    0.12406072E+02 0.13647619E+03 0.26956084E-03 0.29653736E-02 0.50000000E+02
+C    0.00000E+00 0.27895E+04 0.89682E+00 0.00000E+00 0.28213E+03 0.10318E+00
+C    0.00000E+00 0.10000E+01 0.00000E+00 0.00000E+00 0.10000E+01 0.00000E+00
+C -1BUSA-2BUSB-2             0.75387E-02 0.12835E-02              2  2  2  2   4
+C    0.52771188E+00 0.55766835E+02 0.29991264E-04 0.31693770E-02 0.50000000E+02
+C    0.00000E+00 0.43289E+05 0.97097E+00 0.00000E+00 0.77845E+03 0.29034E-01
+C    0.00000E+00 0.10000E+01 0.00000E+00 0.00000E+00 0.10000E+01 0.00000E+00
+C -1BUSA-3BUSB-3             0.30274E-02 0.12573E-02              3  3  2  2   4
+C    0.13205030E+00 0.13401800E+03 0.12102672E-05 0.12283015E-02 0.50000000E+02
+C    0.00000E+00 0.15517E+06 0.81796E+00 0.00000E+00 0.62830E+04 0.18204E+00
+C    0.00000E+00 0.10000E+01 0.00000E+00 0.00000E+00 0.10000E+01 0.00000E+00
+C -1BUSA-4BUSB-4             0.27802E-02 0.12569E-02              4  4  2  2   4
+C    0.13237081E+00 0.14586679E+03 0.10231724E-05 0.11274909E-02 0.50000000E+02
+C    0.00000E+00 0.16860E+06 0.80035E+00 0.00000E+00 0.68259E+04 0.19965E+00
+C    0.00000E+00 0.10000E+01 0.00000E+00 0.00000E+00 0.10000E+01 0.00000E+00
+C    0.87120E+00 0.00000E+00-0.68291E+00 0.00000E+00 0.10000E+01 0.00000E+00
+C   -0.41750E+00 0.00000E+00
+C    0.88389E+00 0.00000E+00 0.55491E+00 0.00000E+00 0.40829E+00 0.00000E+00
+C    0.10000E+01 0.00000E+00
+C    0.10000E+01 0.00000E+00-0.95444E+00 0.00000E+00-0.36612E+00 0.00000E+00
+C    0.81230E-01 0.00000E+00
+C    0.99538E+00 0.00000E+00 0.10000E+01 0.00000E+00-0.14418E+00 0.00000E+00
+C   -0.28779E+00 0.00000E+00
+C    0.13754E+00 0.00000E+00-0.13506E+00 0.00000E+00 0.66301E+00 0.00000E+00
+C   -0.32285E+00 0.00000E+00
+C    0.13718E+00 0.00000E+00 0.10517E+00 0.00000E+00 0.25843E+00 0.00000E+00
+C    0.72350E+00 0.00000E+00
+C    0.38034E+00 0.00000E+00-0.42191E+00 0.00000E+00-0.56809E+00 0.00000E+00
+C    0.13687E+00 0.00000E+00
+C    0.38061E+00 0.00000E+00 0.44851E+00 0.00000E+00-0.23947E+00 0.00000E+00
+C   -0.49432E+00 0.00000E+00
+C     &&&&&&&&&&&&&&&&&   END   LUNIT7  CARDS PUNCHED BY  DC-63  &&&&&&&&
+C        Preceding branch cards exist as non-comment data until 27 November 2000
+C        when they are being replaced by more modern  $INCLUDE  use that makes
+C        reference to cards punched by preceding DC-60:
+$INCLUDE, dc60a.pch,   ! { Exclamation point to hold lower case is tolerated
+C                          In fact, it does nothing beginning 28 January 2001
+C        At the same time,  output of SEMLYEN SETUP is changing so [Tv] and [Ti]
+C        use wide rather than preceding narrow format.  But that newer data is
+C        documented by output of  DC-60,  so need not be documented here.
+  TOWER                       2.
+  BUSB-1                      2.   .03
+  BUSB-2                      2.   .03
+BLANK card ends all branch cards
+  BUSB-3TOWER    .000995      1.                                               3
+BLANK cards ends all switch cards (here, just one, representing the fault)
+14SA-3       533000.       50.       0.0                           -1.
+14SA-4       533000.       50.      180.                           -1.
+BLANK card ends source cards
+C       Total network loss  P-loss  by summing injections =   1.227475331932E+07
+C 1st inject:   SA-3     533000.      533000.   22.124947951506  1512.2473010922
+C 1st inject:                0.0          0.0   1512.0854428037       89.1617037
+C Last inject:  SA-4     -533000.     533000.   -23.93416394087  1518.1059386521
+C Last inject:      .6527332453E-10  180.00000  -1517.917256232      -90.9033516
+C
+C    Step      Time       BUSB-3        FIL2      TOWER         FIL4        FIL3
+C                         TOWER
+C
+C                         BUSB-1      BUSA-2      BUSA-1      BUSA-4      BUSA-3
+C
+C       0       0.0    .101427E7         0.0         0.0  630.561229  3942.45992
+C                     -4.6091835  1.25763103  -3.3035273  -928794.53  927274.067
+C       1     .1E-4   .1014316E7         0.0         0.0  630.452909  3941.48093
+C                     -5.7370041  5.05435474  -4.8499099  -928814.11  927285.865
+ 1
+C Last step begins:  2000   .02   0.0    0.0  -4129.0322  3721.27842  -19338.153
+C Last step begins:   1060.61608  -481.80296  -509.22959  -915751.91  163602.568
+C Variable maxima :   .1014355E7         0.0  5946.09635  40005.6129  123962.984
+C Variable maxima :   9268.51692  4258.29012  14305.2037  .1049562E7  927287.754
+C Times of maxima :        .4E-4         0.0      .00723      .00952      .00505
+C Times of maxima :       .00102      .00227      .00227      .01071       .2E-4
+  PRINTER PLOT
+ 2One section of 375 km.
+ 144 .6 0.0 7.0         BUSA-2                   { Plot limits: (-0.647,  2.660)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C     2nd of two subcases is the same as the preceding subcase except for one
+C     change:  the addition of  "Derive [Ti] from [Tv]"  immediately following
+C     the Semlyen branch cards.  The answers change a little.  Even the limits
+C     on the  PRINTER PLOT  are different.  Date of addition:  11 December 2000.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 9 output columns)
+POWER FREQUENCY, 50.,
+PEAK VOLTAGE MONITOR
+ .000010    .020     50.     50.
+       1       5       1       1       1      -1
+       5       5      20      20     100     100    1000    1000
+  SA-3  BUSA-3                .1260.75
+  SA-4  BUSA-4                .1260.75
+  BUSA-1                      2.   .03
+  BUSA-2                      2.   .03
+  BUSA-3  FIL1                .1       47.12
+    FIL1                      .1       90.76
+    FIL1                      3. 74.24
+    FIL1                      6.166.94 94.25
+    FIL1                     12.314.16 11.06
+    FIL1                     12.314.16  5.87
+    FIL2                     .01       1021.
+    FIL2                      .1 14.14
+  BUSA-4  FIL3                .1       47.12
+    FIL3  FIL4                .1       90.76
+    FIL3  FIL4                3. 74.24
+    FIL3  FIL4                6.166.94 94.25
+    FIL3  FIL4               12.314.16 11.06
+    FIL3  FIL4               12.314.16  5.87
+    FIL4                     .01       1021.
+    FIL4                     .01 14.14
+$INCLUDE, dc60a.pch,   { This is normal use,  without any "!" (see subcase 2)
+Derive [Ti] from [Tv]
+  TOWER                       2.
+  BUSB-1                      2.   .03
+  BUSB-2                      2.   .03
+BLANK card ends all branch cards
+  BUSB-3TOWER    .000995      1.                                               3
+BLANK cards ends all switch cards (here, just one, representing the fault)
+14SA-3       533000.       50.       0.0                           -1.
+14SA-4       533000.       50.      180.                           -1.
+BLANK card ends source cards
+C  First  16     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   1     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time       BUSB-3        FIL2      TOWER         FIL4        FIL3        FIL1      BUSB-3      BUSB-4      BUSB-2
+C                        TOWER
+C
+C                        BUSB-1      BUSA-2      BUSA-1      BUSA-4      BUSA-3      SA-3        SA-4        BUSB-3
+C                                                                                                            TOWER
+C      0       0.0   .1009903E7         0.0         0.0  625.729384  3912.27257  -3290.8384  .1009903E7  -.100856E7  4.71090545
+C                    -4.7315816  1.50363292   -3.019058  -921677.25  923494.094     533000.    -533000.         0.0
+C      1     .1E-4   .1009922E7         0.0         0.0  625.744428  3912.80237  -3291.3514  .1009922E7  -.100858E7  4.60636774
+C                    -4.6168248  2.20907585  -3.8531833  -921692.03   923507.81   532997.37  -532997.37         0.0
+C      2     .2E-4   .1009931E7         0.0         0.0  625.757165  3913.34087  -3291.8771  .1009931E7  -.100859E7  4.53586824
+C                    -4.5389958    2.951526    -4.73104  -921697.57  923512.279  532989.479  -532989.48         0.0
+ 1
+C   2000       .02          0.0         0.0  -4082.6074  3506.39056  -19843.969  33487.4084  -4082.6074  -994315.82  667.210123
+C                     1019.1604  -477.59394  -495.04968   -910823.4   166982.83     533000.    -533000.  -2041.3037
+C
+C    Overall simulation peak  node  voltage = 1.27438708E+06   occurred at bus  "BUSB-4"  at time [sec] = 9.42000000E-03
+C Extrema of output variables follow.   Order and column positioning are the same as for the preceding time-step loop output.
+C Variable maxima :  .1009931E7         0.0  5887.54564  39979.7091   122521.51  252007.816  .1009931E7  .1274387E7  5514.37962
+C                    8875.03104     4249.33  13984.8846  .1041678E7  923512.279     533000.     533000.  2943.77282
+C Times of maxima :       .2E-4         0.0      .00723      .00952      .00505      .00848       .2E-4      .00942      .00102
+C                        .00102      .00227      .00227      .01071       .2E-4         0.0         .01      .00723
+C Variable minima :         0.0         0.0  -7105.8822  -35654.766  -134500.78  -375615.01  -7105.8822  -.113035E7  -7267.3484
+C                    -11822.652   -1785.594  -1816.5115  -921697.57  -997977.99    -533000.    -533000.  -3552.9411
+C Times of minima :      .00101         0.0      .01463      .01069      .00608      .00575      .01463      .00101      .00101
+C                        .00101      .01494       .0147       .2E-4       .0087         .01         0.0      .01463
+  PRINTER PLOT
+ 2One section of 375 km.
+ 144 .6 0.0 7.0         BUSA-2                   { Plot limits: (-0.650,  2.600)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+BLANK

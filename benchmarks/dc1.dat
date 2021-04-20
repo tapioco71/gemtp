@@ -1,0 +1,1364 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-1
+C     Full-size, hvdc simulation of the Pacific Northwest  to  Pacific Southwest
+C     (Oregon to California) intertie as first done by BPA during the late '70s.
+C     There are two ends of the line,  two poles,  3 bridges/pole,  and 7 values
+C     (6 plus bypass) per bridge.   For some description of the simulation,  see
+C     the EMTP Newsletter article by W. Scott Meyer and  Ma Ren-ming,  Volume 3,
+C     No. 1, the last paragraph of Section I.   For simplified, smaller versions
+C     of this same basic problem,  see DC-2.   The  USE TPPLOT  that follows was
+C     added at the end of September, 1994 (see October newsletter).
+USE TPPLOT BEGIN   { The first such declaration precedes the data for TPPLOT
+PL4      { Access to plot of ongoing simulation is via this basic command
+RAM       { Special new (September, 1994) option to apply TPPLOT to EMTP
+LABEL         { Define labeling for plots,  beginning with super title (next):
+Super Title Line
+Vertical Axis
+Horizontal Axis of X-Y
+FLUSH         { Erase any multi-line case title now being stored
+END           { Bound the case title (none);  this ends  LABEL  command
+# 1  2  3     5    7    9    13   14   15   { Select 9 curves to plot by number
+LIMITS        { Request to manually set the Y-axis limits
+-500 500  { Curves will be small (maybe 1/4 height) to allow many using offsets
+FACTOR      { Different units for currents (variables 7, 8, 9) require this
+  1  1  1   0.3  0.3  0.3   180  180  180  { Multiply curves by these factors
+OFFSET      { Vertical displacement (constant to be added to each curve)
+  0  0  0  -325 -325 -325   200  200  200  { Then add these offsets to curves
+COLOR  { Request to change pen colors to avoid weak ones for pens 7, 8, 9
+1 9   { Beginning index and length of color vector to be redefined
+14 10 15 12 13 11 14 10 15  { Vector of color numbers (1st 6 are default)
+      { <CR> bypasses radii of marking disks (use default values of zero)
+      { <CR> bypasses pixel widths of curves (use default values of unity)
+ROLL      { After next plot is complete, curves will be extended automatically
+TIME 0 .02   { The first frame will cover 10% of the total range of 200 msec
+USE TPPLOT END  { The 2nd such declaration ends the data for TPPLOT 
+C     The preceding uses  FACTOR  and  OFFSET  to separate curves.  This was
+C     done before  WINDOW  plotting was allowed.  For a second use of ROLLing 
+C     (real-time) plotting,  see DC-63,  which uses 3 windows for same 9 curves.
+ABSOLUTE TACS DIMENSIONS
+C        Expand TACS Table 1 from 60 to 140 on  1 April 2007.  The overflow
+C        check of  SSTACS  requires this.  But to keep the total within List 19
+C        we must decrease some other tables.  Here, it is easy.  In fact, other
+C        TACS tables easily are reduced so burden on List 19 is well under the
+C        total 4800 for 3 * default.  Note 3194 bytes,  less than 2 * default!
+C Size List 19.  Total floating-point TACS table space.  3194   4800  (LTACST)
+C Tacs table number   1     2     3     4     5     6     7     8
+C Present figure    111    62    73    17    63   309   112   108
+C Program limit     140    75    95    20    80   350   130   125
+C     60     270     300      60      90    1250     550     180  ---  default
+     140      75      95      20      80     350     130     125 
+ .000100    .200
+       1       1               3       1      -1
+       5       5      20      20
+C     DC LINE WITH 12-PULSE RECTIFIER/INVERTER OPERATION USING TACS ------------
+TACS HYBRID CASE                                      FOR DC TERMINAL SIMULATION
+C     DC LINE WITH 12-PULSE RECTIFIER/INVERTER OPERATION USING TACS ------------
+C             * * * * * * *  GRID TIMING VOLTAGES    * * * * * * * * * * * * * *
+  PHA-BS  +GENAS  -GENBS
+  PHB-AS  +GENBS  -GENAS
+  PHB-CS  +GENBS  -GENCS
+  PHC-BS  +GENCS  -GENBS
+  PHC-AS  +GENCS  -GENAS
+  PHA-CS  +GENAS  -GENCS
+  PHA-BR  +GENAR  -GENBR
+  PHB-AR  +GENBR  -GENAR
+  PHB-CR  +GENBR  -GENCR
+  PHC-BR  +GENCR  -GENBR
+  PHC-AR  +GENCR  -GENAR
+  PHA-CR  +GENAR  -GENCR
+  4       +NOT13
+  9       +NOT18
+  14      +NOT23
+  19      +NOT28
+  24      +NOT3
+  29      +NOT8
+  4R      +NOT13R
+  9R      +NOT18R
+  14R     +NOT23R
+  19R     +NOT28R
+  24R     +NOT3R
+  29R     +NOT8R
+C   *********   ZERO-ORDER BLOCK ON "TIMEX" FOR LIMIT OF 2 CYCLES   *******
+C
+  TIMER   +TIMEX                                        0.0   33.3-3
+90GENAS
+90GENBS
+90GENCS
+90GENAR
+90GENBR
+90GENCR
+C    $$$$$$   DECREASING RAMP FUNCTION FOR IGNITION ANGLE DELAY   $$$$$$$$$$$$
+C
+88ALPHAR  -.1045045 *     TIMER             +     4.17-3
+C
+C   --------------   RECTIFIER CONTROL LOGIC FOLLOWS    --------------------
+88SA-B  52        +UNITY                                         0.0      PHA-BS
+88F1S   54        +SA-B                                 0.0         ALPHAR
+88F1SII                   4     .AND. F1S
+88NOT3                          .NOT. F1SII
+88F1SI  54        +F1SII                                1.4E-3
+88SB-A  52        +UNITY                                         0.0      PHB-AS
+88F4S   54        +SB-A                                 0.0         ALPHAR
+88F4SII                   9     .AND. F4S
+88NOT8                          .NOT. F4SII
+88F4SI  54        +F4SII                                1.4E-3
+88SB-C  52        +UNITY                                         0.0      PHB-CS
+88F3S   54        +SB-C                                 0.0         ALPHAR
+88F3SII                   14    .AND. F3S
+88NOT13                         .NOT. F3SII
+88F3SI  54        +F3SII                                1.4E-3
+88SC-B  52        +UNITY                                         0.0      PHC-BS
+88F6S   54        +SC-B                                 0.0         ALPHAR
+88F6SII                   19    .AND. F6S
+88NOT18                         .NOT. F6SII
+88F6SI  54        +F6SII                                1.4E-3
+88SC-A  52        +UNITY                                         0.0      PHC-AS
+88F5S   54        +SC-A                                 0.0         ALPHAR
+88F5SII                   24    .AND. F5S
+88NOT23                         .NOT. F5SII
+88F5SI  54        +F5SII                                1.4E-3
+88SA-C  52        +UNITY                                         0.0      PHA-CS
+88F2S   54        +SA-C                                 0.0         ALPHAR
+88F2SII                   29    .AND. F2S
+88NOT28                         .NOT. F2SII
+88F2SI  54        +F2SII                                1.4E-3
+C    $$$$$$   INCREASING RAMP FUNCTION FOR IGNITION ANGLE DELAY   $$$$$$$$$$$$
+C
+88ALPHAI  +.076276  *     TIMER             +     4.17-3
+C
+C  -----------------    INVERTER CONTROL LOGIC FOLLOWS     -----------------
+88RA-B  52        +UNITY                                         0.0      PHA-BR
+88F1R   54        +RA-B                                 0.0         ALPHAI
+88F1RIV                   4R    .AND. F1R
+88NOT3R                         .NOT. F1RIV
+88F1RIII54        +F1RIV                                1.4E-3
+88RB-A  52        +UNITY                                         0.0      PHB-AR
+88F4R   54        +RB-A                                 0.0         ALPHAI
+88F4RIV                   9R    .AND. F4R
+88NOT8R                         .NOT. F4RIV
+88F4RIII54        +F4RIV                                1.4E-3
+88RB-C  52        +UNITY                                         0.0      PHB-CR
+88F3R   54        +RB-C                                 0.0         ALPHAI
+88F3RIV                   14R   .AND. F3R
+88NOT13R                        .NOT. F3RIV
+88F3RIII54        +F3RIV                                1.4E-3
+88RC-B  52        +UNITY                                         0.0      PHC-BR
+88F6R   54        +RC-B                                 0.0         ALPHAI
+88F6RIV                   19R   .AND. F6R
+88NOT18R                        .NOT. F6RIV
+88F6RIII54        +F6RIV                                1.4E-3
+88RC-A  52        +UNITY                                         0.0      PHC-AR
+88F5R   54        +RC-A                                 0.0         ALPHAI
+88F5RIV                   24R   .AND. F5R
+88NOT23R                        .NOT. F5RIV
+88F5RIII54        +F5RIV                                1.4E-3
+88RA-C  52        +UNITY                                         0.0      PHA-CR
+88F2R   54        +RA-C                                 0.0         ALPHAI
+88F2RIV                   29R   .AND. F2R
+88NOT28R                        .NOT. F2RIV
+88F2RIII54        +F2RIV                                1.4E-3
+C
+C       DELAY FIRING FOR BYPASS VALVES
+C
+88FIRE              -     UNITY
+77PHA-BS  +166.1710
+77PHB-AS  -166.1710
+77PHB-CS  -332.3420
+77PHC-BS  +332.3420
+77PHC-AS  +166.1710
+77PHA-CS  -166.1710
+77PHA-BR  +153.2873
+77PHB-AR  -153.2873
+77PHB-CR  -306.5746
+77PHC-BR  +306.5746
+77PHC-AR  +153.2873
+77PHA-CR  -153.2873
+77FIRE    -1.0
+BLANK  card ending TACS initial conditions (and also all TACS data)
+C
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+C                AC CIRCUIT OF POLE 4, CELILO
+C       CONSISTS OF 5TH,7TH,11TH,13TH, AND HIGH-PASS FILTERS,
+C       CCT BREAKERS FOR EACH 3-PHASE BRIDGE AND 1 MILE (1.6 KM) OF 230 KV LINE.
+C
+ 0GENAS BIGEA4            .01
+ 0GENBS BIGEB4GENAS BIGEA4
+ 0GENCS BIGEC4GENAS BIGEA4
+ 0BIGEA4                  .86   114.  2.46
+ 0BIGEB4      BIGEA4
+ 0BIGEC4      BIGEA4
+ 0      BIGEA4            1.18  114.  1.28
+ 0      BIGEB4      BIGEA4
+ 0      BIGEC4      BIGEA4
+ 0BIGEA413AC4             .02   1.56
+ 0BIGEB413BC4 BIGEA413AC4
+ 0BIGEC413CC4 BIGEA413AC4
+ 013AC4 HPAC4             40.
+ 0HPAC4 13AC4                   5.5
+ 013BC4 HPBC4 13AC4 HPAC4
+ 0HPBC4 13BC4 HPAC4 13AC4
+ 013CC4 HPCC4 13AC4 HPAC4
+ 0HPCC4 13CC4 HPAC4 13AC4
+ 0HPAC4                               3.9
+ 0HPBC4       HPAC4
+ 0HPCC4       HPAC4
+ 0      13AC4             .93   44.   .95
+ 0      13BC4       13AC4
+ 0      13CC4       13AC4
+ 013AC4 11AC4 GENAS BIGEA4
+ 013BC4 11BC4 GENAS BIGEA4
+ 013CC4 11CC4 GENAS BIGEA4
+ 011AC4                   .82   44.   1.33
+ 011BC4       11AC4
+ 011CC4       11AC4
+ 011AC4 AC6   GENAS BIGEA4
+ 011BC4 BC6   GENAS BIGEA4
+ 011CC4 CC6   GENAS BIGEA4
+ 011AC4 AC4   GENAS BIGEA4
+ 011BC4 BC4   GENAS BIGEA4
+ 011CC4 CC4   GENAS BIGEA4
+ 011AC4 AC2   GENAS BIGEA4
+ 011BC4 BC2   GENAS BIGEA4
+ 011CC4 CC2   GENAS BIGEA4
+C
+C   --------------------------------  GROUP 6, CELILO   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0VI-1  VICA              3000.
+ 0VICA  VI-1                    1.0
+ 0VI-3  VICB  VI-1  VICA
+ 0VICB  VI-3  VICA  VI-1
+ 0VI-5  VICC  VI-1  VICA
+ 0VICC  VI-5  VICA  VI-1
+ 0VI-4  AN6C  VI-1  VICA
+ 0AN6C  VI-4  VICA  VI-1
+ 0VI-6  AN6C  VI-1  VICA
+ 0AN6C  VI-6  VICA  VI-1
+ 0VI-2  AN6C  VI-1  VICA
+ 0AN6C  VI-2  VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+ 0AN6C  BYP6C             300.
+ 0BYP6C AN6C                    1.0
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0CEL4  VDA6              1200.       .1
+ 0CEL4  VDB6  CEL4  VDA6
+ 0CEL4  VDC6  CEL4  VDA6
+ 0AN6C  VDA6  CEL4  VDA6
+ 0AN6C  VDB6  CEL4  VDA6
+ 0AN6C  VDC6  CEL4  VDA6
+C   $$$$$$$$$             BUSHING REACTORS     $$$$$$$$$$$$$$$
+ 0VDA6  VICA              1000.
+ 0VICA  VDA6                    .25
+ 0VDB6  VICB  VDA6  VICA
+ 0VICB  VDB6  VICA  VDA6
+ 0VDC6  VICC  VDA6  VICA
+ 0VICC  VDC6  VICA  VDA6
+ 0CEL4  CTH6C VDA6  VICA
+ 0CTH6C CEL4  VICA  VDA6
+C
+C    *  *  *  *  *   Y-DELTA XFMR LEAKAGE IMPEDANCE   *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AC6Y  TXA6              .203  .7
+ 0BC6Y  TXB6  AC6Y  TXA6
+ 0CC6Y  TXC6  AC6Y  TXA6
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXA6C VDA6              .202  .717
+ 0TXB6C VDB6  TXA6C VDA6
+ 0TXC6C VDC6  TXA6C VDA6
+C
+C   <<<<<<<<<<<<<<<    Y-DELTA TRANSFORMER    >>>>>>>>>>>>>>>>>>>>>
+51TXA6                          99300.
+52TXA6C TXB6C                   82715.            68946.
+51TXB6        TXA6
+52TXB6C TXC6C
+51TXC6        TXA6
+52TXC6C TXA6C
+C
+C
+C   --------------------------------  GROUP 4, CELILO   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0IV-1  IVCA  VI-1  VICA
+ 0IVCA  IV-1  VICA  VI-1
+ 0IV-3  IVCB  VI-1  VICA
+ 0IVCB  IV-3  VICA  VI-1
+ 0IV-5  IVCC  VI-1  VICA
+ 0IVCC  IV-5  VICA  VI-1
+ 0IV-4  AN4C  VI-1  VICA
+ 0AN4C  IV-4  VICA  VI-1
+ 0IV-6  AN4C  VI-1  VICA
+ 0AN4C  IV-6  VICA  VI-1
+ 0IV-2  AN4C  VI-1  VICA
+ 0AN4C  IV-2  VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+ 0AN4C  BYP4C AN6C  BYP6C
+ 0BYP4C AN4C  BYP6C AN6C
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN6C  VDA4  CEL4  VDA6
+ 0AN6C  VDB4  CEL4  VDA6
+ 0AN6C  VDC4  CEL4  VDA6
+ 0AN4C  VDA4  CEL4  VDA6
+ 0AN4C  VDB4  CEL4  VDA6
+ 0AN4C  VDC4  CEL4  VDA6
+C   $$$$$$$$$             BUSHING REACTORS     $$$$$$$$$$$$$$$
+ 0VDA4  IVCA  VDA6  VICA
+ 0IVCA  VDA4  VICA  VDA6
+ 0VDB4  IVCB  VDA6  VICA
+ 0IVCB  VDB4  VICA  VDA6
+ 0VDC4  IVCC  VDA6  VICA
+ 0IVCC  VDC4  VICA  VDA6
+ 0AN6C  CTH4C VDA6  VICA
+ 0CTH4C AN6C  VICA  VDA6
+C
+C    *  *  *  *  *   Y-Y XFMR LEAKAGE IMPEDANCE       *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AC4Y  TXA4              .22   2.07
+ 0BC4Y  TXB4  AC4Y  TXA4
+ 0CC4Y  TXC4  AC4Y  TXA4
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXA4C VDA4              .07   .8343
+ 0TXB4C VDB4  TXA4C VDA4
+ 0TXC4C VDC4  TXA4C VDA4
+C
+C   <<<<<<<<<<<<<<<    Y-Y TRANSFORMER        >>>>>>>>>>>>>>>>>>>>>
+51TXA4                          99300.
+52TXA4C NS1                     47951.            23174.
+51TXB4        TXA4
+52TXB4C NS1
+51TXC4        TXA4
+52TXC4C NS1
+C      -------------------------    ISOLATING Y-Y XFMR FROM GROUND   -----------
+ 0NS1                     1.E+10
+C      -------------------------------------------------------------------------
+C   --------------------------------  GROUP 2, CELILO   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0II-1  IICA  VI-1  VICA
+ 0IICA  II-1  VICA  VI-1
+ 0II-3  IICB  VI-1  VICA
+ 0IICB  II-3  VICA  VI-1
+ 0II-5  IICC  VI-1  VICA
+ 0IICC  II-5  VICA  VI-1
+ 0II-4  AN2C  VI-1  VICA
+ 0AN2C  II-4  VICA  VI-1
+ 0II-6  AN2C  VI-1  VICA
+ 0AN2C  II-6  VICA  VI-1
+ 0II-2  AN2C  VI-1  VICA
+ 0AN2C  II-2  VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+ 0AN2C  BYP2C AN6C  BYP6C
+ 0BYP2C AN2C  BYP6C AN6C
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN4C  VDA2  CEL4  VDA6
+ 0AN4C  VDB2  CEL4  VDA6
+ 0AN4C  VDC2  CEL4  VDA6
+ 0AN2C  VDA2  CEL4  VDA6
+ 0AN2C  VDB2  CEL4  VDA6
+ 0AN2C  VDC2  CEL4  VDA6
+C   $$$$$$$$$             BUSHING REACTORS     $$$$$$$$$$$$$$$
+ 0VDA2  IICA  VDA6  VICA
+ 0IICA  VDA2  VICA  VDA6
+ 0VDB2  IICB  VDA6  VICA
+ 0IICB  VDB2  VICA  VDA6
+ 0VDC2  IICC  VDA6  VICA
+ 0IICC  VDC2  VICA  VDA6
+ 0AN4C  CTH2C VDA6  VICA
+ 0CTH2C AN4C  VICA  VDA6
+C
+C    *  *  *  *  *   Y-Y XFMR LEAKAGE IMPEDANCE       *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AC2Y  TXA2  AC4Y  TXA4
+ 0BC2Y  TXB2  AC4Y  TXA4
+ 0CC2Y  TXC2  AC4Y  TXA4
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXA2C VDA2  TXA4C VDA4
+ 0TXB2C VDB2  TXA4C VDA4
+ 0TXC2C VDC2  TXA4C VDA4
+C
+C   <<<<<<<<<<<<<<<    Y-Y TRANSFORMER        >>>>>>>>>>>>>>>>>>>>>
+51TXA2        TXA4
+52TXA2C NS2
+51TXB2        TXA4
+52TXB2C NS2
+51TXC2        TXA4
+52TXC2C NS2
+C      -------------------------    ISOLATING Y-Y XFMR FROM GROUND   -----------
+ 0NS2         NS1
+C
+C      -------------------------------------------------------------------------
+C                              GROUND ELECTRODE CIRCUIT, CELILO
+ 0AN2C  GR1C                    1.0
+ 0GR1C  ELEC1 AN2C  GR1C
+ 0GR1C                                .06
+ 0ELEC1 GR2C  AN2C  GR1C
+ 0GR2C  CELGR AN2C  GR1C
+ 0GR2C        GR1C
+ 0ELEC1                   .43   22.
+C      -------------------------------------------------------------------------
+C                AC CIRCUIT OF POLE 3, CELILO
+C       CONSISTS OF 5TH,7TH,11TH,13TH, AND HIGH-PASS FILTERS,
+C       CCT BREAKERS FOR EACH 3-PHASE BRIDGE AND 1 MILE (1.6 KM) OF 230 KV LINE.
+C
+ 0GENAS BIGEA3GENAS BIGEA4
+ 0GENBS BIGEB3GENAS BIGEA4
+ 0GENCS BIGEC3GENAS BIGEA4
+ 0BIGEA3      BIGEA4
+ 0BIGEB3      BIGEA4
+ 0BIGEC3      BIGEA4
+ 0      BIGEA3      BIGEA4
+ 0      BIGEB3      BIGEA4
+ 0      BIGEC3      BIGEA4
+ 0BIGEA313AC3 BIGEA413AC4
+ 0BIGEB313BC3 BIGEA413AC4
+ 0BIGEC313CC3 BIGEA413AC4
+ 013AC3 HPAC3 13AC4 HPAC4
+ 0HPAC3 13AC3 HPAC4 13AC4
+ 013BC3 HPBC3 13AC4 HPAC4
+ 0HPBC3 13BC3 HPAC4 13AC4
+ 013CC3 HPCC3 13AC4 HPAC4
+ 0HPCC3 13CC3 HPAC4 13AC4
+ 0HPAC3       HPAC4
+ 0HPBC3       HPAC4
+ 0HPCC3       HPAC4
+ 0      13AC3       13AC4
+ 0      13BC3       13AC4
+ 0      13CC3       13AC4
+ 013AC3 11AC3 GENAS BIGEA4
+ 013BC3 11BC3 GENAS BIGEA4
+ 013CC3 11CC3 GENAS BIGEA4
+ 011AC3       11AC4
+ 011BC3       11AC4
+ 011CC3       11AC4
+ 011AC3 AC1   GENAS BIGEA4
+ 011BC3 BC1   GENAS BIGEA4
+ 011CC3 CC1   GENAS BIGEA4
+ 011AC3 AC3   GENAS BIGEA4
+ 011BC3 BC3   GENAS BIGEA4
+ 011CC3 CC3   GENAS BIGEA4
+ 011AC3 AC5   GENAS BIGEA4
+ 011BC3 BC5   GENAS BIGEA4
+ 011CC3 CC5   GENAS BIGEA4
+C
+C   --------------------------------  GROUP 1, CELILO   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0I-1   ICA   VI-1  VICA
+ 0ICA   I-1   VICA  VI-1
+ 0I-3   ICB   VI-1  VICA
+ 0ICB   I-3   VICA  VI-1
+ 0I-5   ICC   VI-1  VICA
+ 0ICC   I-5   VICA  VI-1
+ 0I-4   AN1C  VI-1  VICA
+ 0AN1C  I-4   VICA  VI-1
+ 0I-6   AN1C  VI-1  VICA
+ 0AN1C  I-6   VICA  VI-1
+ 0I-2   AN1C  VI-1  VICA
+ 0AN1C  I-2   VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+ 0AN1C  BYP1C AN6C  BYP6C
+ 0BYP1C AN1C  BYP6C AN6C
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0CELGR VDA1  CEL4  VDA6
+ 0CELGR VDB1  CEL4  VDA6
+ 0CELGR VDC1  CEL4  VDA6
+ 0AN1C  VDA1  CEL4  VDA6
+ 0AN1C  VDB1  CEL4  VDA6
+ 0AN1C  VDC1  CEL4  VDA6
+C   $$$$$$$$$             BUSHING REACTORS     $$$$$$$$$$$$$$$
+ 0VDA1  ICA   VDA6  VICA
+ 0ICA   VDA1  VICA  VDA6
+ 0VDB1  ICB   VDA6  VICA
+ 0ICB   VDB1  VICA  VDA6
+ 0VDC1  ICC   VDA6  VICA
+ 0ICC   VDC1  VICA  VDA6
+ 0CELGR CTH1C VDA6  VICA
+ 0CTH1C CELGR VICA  VDA6
+C
+C       !!!!!!!!!!!!!!!!!!!!!     SYMMETRY     !!!!!!!!!!!!!!!!
+ 0AN5C  CEL3              .01
+C       !!!!!!!!!!!!!!!!!!!!!                  !!!!!!!!!!!!!!!!
+C    *  *  *  *  *   Y-DELTA XFMR LEAKAGE IMPEDANCE   *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AC1Y  TXA1  AC6Y  TXA6
+ 0BC1Y  TXB1  AC6Y  TXA6
+ 0CC1Y  TXC1  AC6Y  TXA6
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXA1C VDA1  TXA6C VDA6
+ 0TXB1C VDB1  TXA6C VDA6
+ 0TXC1C VDC1  TXA6C VDA6
+C
+C   <<<<<<<<<<<<<<<    Y-DELTA TRANSFORMER    >>>>>>>>>>>>>>>>>>>>>
+51TXA1        TXA6
+52TXA1C TXB1C
+51TXB1        TXA6
+52TXB1C TXC1C
+51TXC1        TXA6
+52TXC1C TXA1C
+C   --------------------------------  GROUP 3, CELILO   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0III-1 IIICA VI-1  VICA
+ 0IIICA III-1 VICA  VI-1
+ 0III-3 IIICB VI-1  VICA
+ 0IIICB III-3 VICA  VI-1
+ 0III-5 IIICC VI-1  VICA
+ 0IIICC III-5 VICA  VI-1
+ 0III-4 AN3C  VI-1  VICA
+ 0AN3C  III-4 VICA  VI-1
+ 0III-6 AN3C  VI-1  VICA
+ 0AN3C  III-6 VICA  VI-1
+ 0III-2 AN3C  VI-1  VICA
+ 0AN3C  III-2 VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+ 0AN3C  BYP3C AN6C  BYP6C
+ 0BYP3C AN3C  BYP6C AN6C
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN1C  VDA3  CEL4  VDA6
+ 0AN1C  VDB3  CEL4  VDA6
+ 0AN1C  VDC3  CEL4  VDA6
+ 0AN3C  VDA3  CEL4  VDA6
+ 0AN3C  VDB3  CEL4  VDA6
+ 0AN3C  VDC3  CEL4  VDA6
+C   $$$$$$$$$             BUSHING REACTORS     $$$$$$$$$$$$$$$
+ 0VDA3  IIICA VDA6  VICA
+ 0IIICA VDA3  VICA  VDA6
+ 0VDB3  IIICB VDA6  VICA
+ 0IIICB VDB3  VICA  VDA6
+ 0VDC3  IIICC VDA6  VICA
+ 0IIICC VDC3  VICA  VDA6
+ 0AN1C  CTH3C VDA6  VICA
+ 0CTH3C AN1C  VICA  VDA6
+C
+C    *  *  *  *  *   Y-Y XFMR LEAKAGE IMPEDANCE       *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AC3Y  TXA3  AC4Y  TXA4
+ 0BC3Y  TXB3  AC4Y  TXA4
+ 0CC3Y  TXC3  AC4Y  TXA4
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXA3C VDA3  TXA4C VDA4
+ 0TXB3C VDB3  TXA4C VDA4
+ 0TXC3C VDC3  TXA4C VDA4
+C
+C   <<<<<<<<<<<<<<<    Y-Y TRANSFORMER        >>>>>>>>>>>>>>>>>>>>>
+51TXA3        TXA4
+52TXA3C NS3
+51TXB3        TXA4
+52TXB3C NS3
+51TXC3        TXA4
+52TXC3C NS3
+C      -------------------------    ISOLATING Y-Y XFMR FROM GROUND   -----------
+ 0NS3         NS1
+C      -------------------------------------------------------------------------
+C   --------------------------------  GROUP 5, CELILO   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0V-1   VCA   VI-1  VICA
+ 0VCA   V-1   VICA  VI-1
+ 0V-3   VCB   VI-1  VICA
+ 0VCB   V-3   VICA  VI-1
+ 0V-5   VCC   VI-1  VICA
+ 0VCC   V-5   VICA  VI-1
+ 0V-4   AN5C  VI-1  VICA
+ 0AN5C  V-4   VICA  VI-1
+ 0V-6   AN5C  VI-1  VICA
+ 0AN5C  V-6   VICA  VI-1
+ 0V-2   AN5C  VI-1  VICA
+ 0AN5C  V-2   VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+ 0AN5C  BYP5C AN6C  BYP6C
+ 0BYP5C AN5C  BYP6C AN6C
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN3C  VDA5  CEL4  VDA6
+ 0AN3C  VDB5  CEL4  VDA6
+ 0AN3C  VDC5  CEL4  VDA6
+ 0AN5C  VDA5  CEL4  VDA6
+ 0AN5C  VDB5  CEL4  VDA6
+ 0AN5C  VDC5  CEL4  VDA6
+C   $$$$$$$$$             BUSHING REACTORS     $$$$$$$$$$$$$$$
+ 0VDA5  VCA   VDA6  VICA
+ 0VCA   VDA5  VICA  VDA6
+ 0VDB5  VCB   VDA6  VICA
+ 0VCB   VDB5  VICA  VDA6
+ 0VDC5  VCC   VDA6  VICA
+ 0VCC   VDC5  VICA  VDA6
+ 0AN3C  CTH5C VDA6  VICA
+ 0CTH5C AN3C  VICA  VDA6
+C
+C    *  *  *  *  *   Y-DELTA XFMR LEAKAGE IMPEDANCE   *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AC5Y  TXA5  AC6Y  TXA6
+ 0BC5Y  TXB5  AC6Y  TXA6
+ 0CC5Y  TXC5  AC6Y  TXA6
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXA5C VDA5  TXA6C VDA6
+ 0TXB5C VDB5  TXA6C VDA6
+ 0TXC5C VDC5  TXA6C VDA6
+C
+C   <<<<<<<<<<<<<<<    Y-DELTA TRANSFORMER    >>>>>>>>>>>>>>>>>>>>>
+51TXA5        TXA6
+52TXA5C TXB5C
+51TXB5        TXA6
+52TXB5C TXC5C
+51TXC5        TXA6
+52TXC5C TXA5C
+C
+C
+C                     SMOOTHING REACTOR, CELILO, POLE 4      ===================
+ 0CEL4  S4-                     500.                                           1
+C                                                ============================
+C            DC FILTERS, CELILO, POLE 4
+C            CONSISTING OF 6TH AND HIGH-PASS FILTERS
+C
+ 0S4-   ELEC1             6.3   280.  .7
+ 0S4-   HP4C                          2.5
+ 0HP4C  ELEC1             100.
+ 0ELEC1 HP4C                    7.0
+C                                 ===========================================
+C              SURGE CAPACITOR, CELILO, POLE 4
+ 0S4-   SURC4                         .7
+ 0SURC4                               5.
+ 0SURC4 ELEC1 GENAS BIGEA4
+C            ============================================================
+C                     SMOOTHING REACTOR, CELILO, POLE 3      ===================
+ 0CEL3  A3+   CEL4  S4-
+C                                                ============================
+C            DC FILTERS, CELILO, POLE 3
+C            CONSISTING OF 6TH AND HIGH-PASS FILTERS
+ 0A3+   ELEC1 S4-   ELEC1
+ 0A3+   HP3C  S4-   HP4C
+ 0HP3C  ELEC1 HP4C  ELEC1
+ 0ELEC1 HP3C  ELEC1 HP4C
+C                                 ===========================================
+C              SURGE CAPACITOR, CELILO, POLE 3
+ 0A3+   SURC3 S4-   SURC4
+ 0SURC3       SURC4
+ 0SURC3 ELEC1 GENAS BIGEA4
+C            ============================================================
+C
+C   *************************************************************************
+C                    CELILO - SYLMAR LINE, 846 MILES (1362 KM)
+C   *************************************************************************
+C
+-1S4-   4-282             .02   6.56  .0142 282.
+-2A3+   3-282             .02   1.56  .0192 282.
+-14-282 4-564 S4-   4-282
+-23-282 3-564
+-14-564 R4-   S4-   4-282
+-23-564 R3+
+C
+C
+C                     SMOOTHING REACTOR, SYLMAR, POLE 4      ===================
+ 0AN6S  SYL4  CEL4  S4-
+C                                                ============================
+C            DC FILTERS, SYLMAR, POLE 4
+C            CONSISTING OF 6TH AND HIGH-PASS FILTERS
+C
+ 0R4-   ELEC2 S4-   ELEC1
+ 0R4-   HP4   S4-   HP4C
+ 0HP4   ELEC2 HP4C  ELEC1
+ 0ELEC2 HP4   ELEC1 HP4C
+C                                 ===========================================
+C              SURGE CAPACITOR, SYLMAR, POLE 4
+ 0R4-   SURS4 S4-   SURC4
+ 0SURS4       SURC4
+ 0SURS4 ELEC2 GENAS BIGEA4
+C            ============================================================
+C                     SMOOTHING REACTOR, SYLMAR, POLE 3      ===================
+ 0CTH5S SYL3  CEL4  S4-
+C                                                ============================
+C            DC FILTERS, SYLMAR, POLE 3
+C            CONSISTING OF 6TH AND HIGH-PASS FILTERS
+C
+ 0R3+   ELEC2 S4-   ELEC1
+ 0R3+   HP3   S4-   HP4C
+ 0HP3   ELEC2 HP4C  ELEC1
+ 0ELEC2 HP3   ELEC1 HP4C
+C                                 ===========================================
+C              SURGE CAPACITOR, SYLMAR, POLE 3
+ 0R3+   SURS3 S4-   SURC4
+ 0SURS3       SURC4
+ 0SURS3 ELEC2 GENAS BIGEA4
+C            ============================================================
+C
+C   LC CIRCUIT NEAR SMOOTHING REACTOR ON LINE AT SYLMAR ONLY    ..........
+C
+ 0R4-   CAP4  GENAS BIGEA4
+ 0CAP4                                .06
+ 0CAP4  SYL4                    1.0
+ 0R3+   CAP3  GENAS BIGEA4
+ 0CAP3        CAP4
+ 0CAP3  SYL3  CAP4  SYL4
+C
+C
+C                AC CIRCUIT OF POLE 4, SYLMAR
+C       CONSISTS OF 5TH,7TH,11TH,13TH, AND HIGH-PASS FILTERS AND
+C       CCT BREAKERS FOR EACH 3-PHASE BRIDGE.
+C
+ 0AS6   11AS4 GENAS BIGEA4
+ 0BS6   11BS4 GENAS BIGEA4
+ 0CS6   11CS4 GENAS BIGEA4
+ 0AS4   11AS4 GENAS BIGEA4
+ 0BS4   11BS4 GENAS BIGEA4
+ 0CS4   11CS4 GENAS BIGEA4
+ 0AS2   11AS4 GENAS BIGEA4
+ 0BS2   11BS4 GENAS BIGEA4
+ 0CS2   11CS4 GENAS BIGEA4
+ 011AS4 L1A                     1.
+ 011BS4 L1B   11AS4 L1A
+ 011CS4 L1C   11AS4 L1A
+ 0L1A   A57-4 GENAS BIGEA4
+ 0L1B   B57-4 GENAS BIGEA4
+ 0L1C   C57-4 GENAS BIGEA4
+ 0A57-4                   4.    214.  1.32
+ 0B57-4       A57-4
+ 0C57-4       A57-4
+ 0      A57-4             5.7   214.  .67
+ 0      B57-4       A57-4
+ 0      C57-4       A57-4
+ 0A57-4 A13-4 GENAS BIGEA4
+ 0B57-4 B13-4 GENAS BIGEA4
+ 0C57-4 C13-4 GENAS BIGEA4
+ 0A13-4                   1.8   44.   1.33
+ 0B13-4       A13-4
+ 0C13-4       A13-4
+ 0      A13-4             2.2   44.   .95
+ 0      B13-4       A13-4
+ 0      C13-4       A13-4
+ 0A13-4 A4                34.5
+ 0A4    A13-4                   4.8
+ 0A4                                  4.5
+ 0B13-4 B4    A13-4 A4
+ 0B4    B13-4 A4    A13-4
+ 0B4          A4
+ 0C13-4 C4    A13-4 A4
+ 0C4    C13-4 A4    A13-4
+ 0C4          A4
+ 0A13-4 GENAR GENAS BIGEA4
+ 0B13-4 GENBR GENAS BIGEA4
+ 0C13-4 GENCR GENAS BIGEA4
+C
+C   ----------------------------------   GROUP 6, SYLMAR   --------------------
+C   #######   ANODE REACTORS  ###############
+ 0AN6S  6-1   VI-1  VICA
+ 06-1   AN6S  VICA  VI-1
+ 0AN6S  6-3   VI-1  VICA
+ 06-3   AN6S  VICA  VI-1
+ 0AN6S  6-5   VI-1  VICA
+ 06-5   AN6S  VICA  VI-1
+ 06SA   6-4   VI-1  VICA
+ 06-4   6SA   VICA  VI-1
+ 06SB   6-6   VI-1  VICA
+ 06-6   6SB   VICA  VI-1
+ 06SC   6-2   VI-1  VICA
+ 06-2   6SC   VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+ 0AN6S  BYP6S AN6C  BYP6C
+ 0BYP6S AN6S  BYP6C AN6C
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN6S  6SA   CEL4  VDA6
+ 0AN6S  6SB   CEL4  VDA6
+ 0AN6S  6SC   CEL4  VDA6
+ 0CTH6S 6SA   CEL4  VDA6
+ 0CTH6S 6SB   CEL4  VDA6
+ 0CTH6S 6SC   CEL4  VDA6
+C   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   NO BUSHING REACTORS AT SYLMAR
+C
+C    *  *  *  *  *   Y-DELTA XFMR LEAKAGE IMPEDANCE   *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AS6Y  TXS6A AC6Y  TXA6
+ 0BS6Y  TXS6B AC6Y  TXA6
+ 0CS6Y  TXS6C AC6Y  TXA6
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXSA6 6SA   TXA6C VDA6
+ 0TXSB6 6SB   TXA6C VDA6
+ 0TXSC6 6SC   TXA6C VDA6
+C
+C   <<<<<<<<<<<<<<<    Y-DELTA TRANSFORMER    >>>>>>>>>>>>>>>>>>>>>
+51TXS6A       TXA6
+52TXSA6 TXSB6
+51TXS6B       TXA6
+52TXSB6 TXSC6
+51TXS6C       TXA6
+52TXSC6 TXSA6
+C
+C
+C                              RESISTOR SEPARATING VALVE GROUPS AT SYLMAR ONLY!
+ 0CTH6S AN4S               .01
+C
+C   --------------------------------  GROUP 4, SYLMAR   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0AN4S  4-1   VI-1  VICA
+ 04-1   AN4S  VICA  VI-1
+ 0AN4S  4-3   VI-1  VICA
+ 04-3   AN4S  VICA  VI-1
+ 0AN4S  4-5   VI-1  VICA
+ 04-5   AN4S  VICA  VI-1
+ 04SA   4-4   VI-1  VICA
+ 04-4   4SA   VICA  VI-1
+ 04SB   4-6   VI-1  VICA
+ 04-6   4SB   VICA  VI-1
+ 04SC   4-2   VI-1  VICA
+ 04-2   4SC   VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+ 0AN4S  BYP4S AN6C  BYP6C
+ 0BYP4S AN4S  BYP6C AN6C
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN4S  4SA   CEL4  VDA6
+ 0AN4S  4SB   CEL4  VDA6
+ 0AN4S  4SC   CEL4  VDA6
+ 0CTH4S 4SA   CEL4  VDA6
+ 0CTH4S 4SB   CEL4  VDA6
+ 0CTH4S 4SC   CEL4  VDA6
+C   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   NO BUSHING REACTORS AT SYLMAR
+C
+C    *  *  *  *  *   Y-Y XFMR LEAKAGE IMPEDANCE       *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AS4Y  TXS4A AC4Y  TXA4
+ 0BS4Y  TXS4B AC4Y  TXA4
+ 0CS4Y  TXS4C AC4Y  TXA4
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXSA4 4SA   TXA4C VDA4
+ 0TXSB4 4SB   TXA4C VDA4
+ 0TXSC4 4SC   TXA4C VDA4
+C
+C   <<<<<<<<<<<<<<<    Y-Y TRANSFORMER        >>>>>>>>>>>>>>>>>>>>>
+51TXS4A       TXA4
+52TXSA4 NR1
+51TXS4B       TXA4
+52TXSB4 NR1
+51TXS4C       TXA4
+52TXSC4 NR1
+C      -------------------------    ISOLATING Y-Y XFMR FROM GROUND   -----------
+ 0NR1         NS1
+C      -------------------------------------------------------------------------
+C
+C                              RESISTOR SEPARATING VALVE GROUPS AT SYLMAR ONLY!
+ 0CTH4S AN2S               .01
+C
+C   --------------------------------  GROUP 2, SYLMAR   ----------------------
+C   #######   ANODE REACTORS  ###############
+ 0AN2S  2-1   VI-1  VICA
+ 02-1   AN2S  VICA  VI-1
+ 0AN2S  2-3   VI-1  VICA
+ 02-3   AN2S  VICA  VI-1
+ 0AN2S  2-5   VI-1  VICA
+ 02-5   AN2S  VICA  VI-1
+ 02SA   2-4   VI-1  VICA
+ 02-4   2SA   VICA  VI-1
+ 02SB   2-6   VI-1  VICA
+ 02-6   2SB   VICA  VI-1
+ 02SC   2-2   VI-1  VICA
+ 02-2   2SC   VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+ 0AN2S  BYP2S AN6C  BYP6C
+ 0BYP2S AN2S  BYP6C AN6C
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN2S  2SA   CEL4  VDA6
+ 0AN2S  2SB   CEL4  VDA6
+ 0AN2S  2SC   CEL4  VDA6
+ 0CTH2S 2SA   CEL4  VDA6
+ 0CTH2S 2SB   CEL4  VDA6
+ 0CTH2S 2SC   CEL4  VDA6
+C   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   NO BUSHING REACTORS AT SYLMAR
+C
+C    *  *  *  *  *   Y-Y XFMR LEAKAGE IMPEDANCE       *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AS2Y  TXS2A AC4Y  TXA4
+ 0BS2Y  TXS2B AC4Y  TXA4
+ 0CS2Y  TXS2C AC4Y  TXA4
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXSA2 2SA   TXA4C VDA4
+ 0TXSB2 2SB   TXA4C VDA4
+ 0TXSC2 2SC   TXA4C VDA4
+C
+C   <<<<<<<<<<<<<<<    Y-Y TRANSFORMER        >>>>>>>>>>>>>>>>>>>>>
+51TXS2A       TXA4
+52TXSA2 NR2
+51TXS2B       TXA4
+52TXSB2 NR2
+51TXS2C       TXA4
+52TXSC2 NR2
+C      -------------------------    ISOLATING Y-Y XFMR FROM GROUND   -----------
+ 0NR2         NS1
+C      -------------------------------------------------------------------------
+C
+C      -------------------------------------------------------------------------
+C                              GROUND ELECTRODE CIRCUIT, SYLMAR
+ 0CTH2S GR1S  AN2C  GR1C
+ 0GR1S  ELEC2 AN2C  GR1C
+ 0GR1S        GR1C
+ 0ELEC2 GR2S  AN2C  GR1C
+ 0GR2S  AN1S  AN2C  GR1C
+ 0GR2S        GR1C
+ 0ELEC2       ELEC1
+C      -------------------------------------------------------------------------
+C
+C                AC CIRCUIT OF POLE 3, SYLMAR
+C       CONSISTS OF 5TH,7TH,11TH,13TH, AND HIGH-PASS FILTERS AND
+C       CCT BREAKERS FOR EACH 3-PHASE BRIDGE.
+C
+ 0AS1   11AS3 GENAS BIGEA4
+ 0BS1   11BS3 GENAS BIGEA4
+ 0CS1   11CS3 GENAS BIGEA4
+ 0AS3   11AS3 GENAS BIGEA4
+ 0BS3   11BS3 GENAS BIGEA4
+ 0CS3   11CS3 GENAS BIGEA4
+ 0AS5   11AS3 GENAS BIGEA4
+ 0BS5   11BS3 GENAS BIGEA4
+ 0CS5   11CS3 GENAS BIGEA4
+ 011AS3 L2A   11AS4 L1A
+ 011BS3 L2B   11AS4 L1A
+ 011CS3 L2C   11AS4 L1A
+ 0L2A   A57-3 GENAS BIGEA4
+ 0L2B   B57-3 GENAS BIGEA4
+ 0L2C   C57-3 GENAS BIGEA4
+ 0A57-3       A57-4
+ 0B57-3       A57-4
+ 0C57-3       A57-4
+ 0      A57-3       A57-4
+ 0      B57-3       A57-4
+ 0      C57-3       A57-4
+ 0A57-3 A13-3 GENAS BIGEA4
+ 0B57-3 B13-3 GENAS BIGEA4
+ 0C57-3 C13-3 GENAS BIGEA4
+ 0A13-3       A13-4
+ 0B13-3       A13-4
+ 0C13-3       A13-4
+ 0      A13-3       A13-4
+ 0      B13-3       A13-4
+ 0      C13-3       A13-4
+ 0A13-3 A3    A13-4 A4
+ 0A3    A13-3 A4    A13-4
+ 0A3          A4
+ 0B13-3 B3    A13-4 A4
+ 0B3    B13-3 A4    A13-4
+ 0B3          A4
+ 0C13-3 C3    A13-4 A4
+ 0C3    C13-3 A4    A13-4
+ 0C3          A4
+ 0A13-3 GENAR GENAS BIGEA4
+ 0B13-3 GENBR GENAS BIGEA4
+ 0C13-3 GENCR GENAS BIGEA4
+C
+C   ----------------------------------   GROUP 1, SYLMAR   --------------------
+C   #######   ANODE REACTORS  ###############
+ 0AN1S  1-1   VI-1  VICA
+ 01-1   AN1S  VICA  VI-1
+ 0AN1S  1-3   VI-1  VICA
+ 01-3   AN1S  VICA  VI-1
+ 0AN1S  1-5   VI-1  VICA
+ 01-5   AN1S  VICA  VI-1
+ 01SA   1-4   VI-1  VICA
+ 01-4   1SA   VICA  VI-1
+ 01SB   1-6   VI-1  VICA
+ 01-6   1SB   VICA  VI-1
+ 01SC   1-2   VI-1  VICA
+ 01-2   1SC   VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+ 0AN1S  BYP1S AN6C  BYP6C
+ 0BYP1S AN1S  BYP6C AN6C
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN1S  1SA   CEL4  VDA6
+ 0AN1S  1SB   CEL4  VDA6
+ 0AN1S  1SC   CEL4  VDA6
+ 0CTH1S 1SA   CEL4  VDA6
+ 0CTH1S 1SB   CEL4  VDA6
+ 0CTH1S 1SC   CEL4  VDA6
+C   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   NO BUSHING REACTORS AT SYLMAR
+C
+C    *  *  *  *  *   Y-DELTA XFMR LEAKAGE IMPEDANCE   *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AS1Y  TXS1A AC6Y  TXA6
+ 0BS1Y  TXS1B AC6Y  TXA6
+ 0CS1Y  TXS1C AC6Y  TXA6
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXSA1 1SA   TXA6C VDA6
+ 0TXSB1 1SB   TXA6C VDA6
+ 0TXSC1 1SC   TXA6C VDA6
+C
+C   <<<<<<<<<<<<<<<    Y-DELTA TRANSFORMER    >>>>>>>>>>>>>>>>>>>>>
+51TXS1A       TXA6
+52TXSA1 TXSB1
+51TXS1B       TXA6
+52TXSB1 TXSC1
+51TXS1C       TXA6
+52TXSC1 TXSA1
+C
+C
+C                              RESISTOR SEPARATING VALVE GROUPS AT SYLMAR ONLY!
+ 0CTH1S AN3S               .01
+C
+C   --------------------------------  GROUP 3, SYLMAR   ----------------------
+C   #######   ANODE REACTORS  ## 0AN3S  3-1   VI-1  VICA
+ 03-1   AN3S  VICA  VI-1
+ 0AN3S  3-3   VI-1  VICA
+ 03-3   AN3S  VICA  VI-1
+ 0AN3S  3-5   VI-1  VICA
+ 03-5   AN3S  VICA  VI-1
+ 03SA   3-4   VI-1  VICA
+ 03-4   3SA   VICA  VI-1
+ 03SB   3-6   VI-1  VICA
+ 03-6   3SB   VICA  VI-1
+ 03SC   3-2   VI-1  VICA
+ 03-2   3SC   VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+ 0AN3S  BYP3S AN6C  BYP6C
+ 0BYP3S AN3S  BYP6C AN6C
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN3S  3SA   CEL4  VDA6
+ 0AN3S  3SB   CEL4  VDA6
+ 0AN3S  3SC   CEL4  VDA6
+ 0CTH3S 3SA   CEL4  VDA6
+ 0CTH3S 3SB   CEL4  VDA6
+ 0CTH3S 3SC   CEL4  VDA6
+C   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   NO BUSHING REACTORS AT SYLMAR
+C
+C    *  *  *  *  *   Y-Y XFMR LEAKAGE IMPEDANCE       *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AS3Y  TXS3A AC4Y  TXA4
+ 0BS3Y  TXS3B AC4Y  TXA4
+ 0CS3Y  TXS3C AC4Y  TXA4
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXSA3 3SA   TXA4C VDA4
+ 0TXSB3 3SB   TXA4C VDA4
+ 0TXSC3 3SC   TXA4C VDA4
+C
+C   <<<<<<<<<<<<<<<    Y-Y TRANSFORMER        >>>>>>>>>>>>>>>>>>>>>
+51TXS3A       TXA4
+52TXSA3 NR3
+51TXS3B       TXA4
+52TXSB3 NR3
+51TXS3C       TXA4
+52TXSC3 NR3
+C      -------------------------    ISOLATING Y-Y XFMR FROM GROUND   -----------
+ 0NR3         NS1
+C      -------------------------------------------------------------------------
+C
+C                              RESISTOR SEPARATING VALVE GROUPS AT SYLMAR ONLY!
+ 0CTH3S AN5S               .01
+C   ----------------------------------   GROUP 5, SYLMAR   --------------------
+C   #######   ANODE REACTORS  ###############
+ 0AN5S  5-1   VI-1  VICA
+ 05-1   AN5S  VICA  VI-1
+ 0AN5S  5-3   VI-1  VICA
+ 05-3   AN5S  VICA  VI-1
+ 0AN5S  5-5   VI-1  VICA
+ 05-5   AN5S  VICA  VI-1
+ 05SA   5-4   VI-1  VICA
+ 05-4   5SA   VICA  VI-1
+ 05SB   5-6   VI-1  VICA
+ 05-6   5SB   VICA  VI-1
+ 05SC   5-2   VI-1  VICA
+ 05-2   5SC   VICA  VI-1
+C   ######################   BYPASS ANODE REACTOR   ##############
+ 0AN5S  BYP5S AN6C  BYP6C
+ 0BYP5S AN5S  BYP6C AN6C
+C   ////////////////////////    VALVE DAMPERS    /////////////////////
+ 0AN5S  5SA   CEL4  VDA6
+ 0AN5S  5SB   CEL4  VDA6
+ 0AN5S  5SC   CEL4  VDA6
+ 0CTH5S 5SA   CEL4  VDA6
+ 0CTH5S 5SB   CEL4  VDA6
+ 0CTH5S 5SC   CEL4  VDA6
+C   $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$   NO BUSHING REACTORS AT SYLMAR
+C
+C    *  *  *  *  *   Y-DELTA XFMR LEAKAGE IMPEDANCE   *  *  *  *  *  *  *  *
+C   +++++++++++   A.C. SOURCE SIDE    +++++++++++
+ 0AS5Y  TXS5A AC6Y  TXA6
+ 0BS5Y  TXS5B AC6Y  TXA6
+ 0CS5Y  TXS5C AC6Y  TXA6
+C   +++++++++++   D.C. CONVERTER SIDE    +++++++++
+ 0TXSA5 5SA   TXA6C VDA6
+ 0TXSB5 5SB   TXA6C VDA6
+ 0TXSC5 5SC   TXA6C VDA6
+C
+C   <<<<<<<<<<<<<<<    Y-DELTA TRANSFORMER    >>>>>>>>>>>>>>>>>>>>>
+51TXS5A       TXA6
+52TXSA5 TXSB5
+51TXS5B       TXA6
+52TXSB5 TXSC5
+51TXS5C       TXA6
+52TXSC5 TXSA5
+C
+C   $$$$$$$$$$$$$$$$$$$$$$$$$  LEAKAGE CAPACITANCE ACROSS VALVES
+C
+ 0VICA  CTH6C                         .001
+ 0VICB  CTH6C VICA  CTH6C
+ 0VICC  CTH6C VICA  CTH6C
+ 0AN6C  VICA  VICA  CTH6C
+ 0AN6C  VICB  VICA  CTH6C
+ 0AN6C  VICC  VICA  CTH6C
+ 0IVCA  CTH4C VICA  CTH6C
+ 0IVCB  CTH4C VICA  CTH6C
+ 0IVCC  CTH4C VICA  CTH6C
+ 0AN4C  IVCA  VICA  CTH6C
+ 0AN4C  IVCB  VICA  CTH6C
+ 0AN4C  IVCC  VICA  CTH6C
+ 0IICA  CTH2C VICA  CTH6C
+ 0IICB  CTH2C VICA  CTH6C
+ 0IICC  CTH2C VICA  CTH6C
+ 0AN2C  IICA  VICA  CTH6C
+ 0AN2C  IICB  VICA  CTH6C
+ 0AN2C  IICC  VICA  CTH6C
+ 0ICA   CTH1C VICA  CTH6C
+ 0ICB   CTH1C VICA  CTH6C
+ 0ICC   CTH1C VICA  CTH6C
+ 0AN1C  ICA   VICA  CTH6C
+ 0AN1C  ICB   VICA  CTH6C
+ 0AN1C  ICC   VICA  CTH6C
+ 0IIICA CTH3C VICA  CTH6C
+ 0IIICB CTH3C VICA  CTH6C
+ 0IIICC CTH3C VICA  CTH6C
+ 0AN3C  IIICA VICA  CTH6C
+ 0AN3C  IIICB VICA  CTH6C
+ 0AN3C  IIICC VICA  CTH6C
+ 0VCA   CTH5C VICA  CTH6C
+ 0VCB   CTH5C VICA  CTH6C
+ 0VCC   CTH5C VICA  CTH6C
+ 0AN5C  VCA   VICA  CTH6C
+ 0AN5C  VCB   VICA  CTH6C
+ 0AN5C  VCC   VICA  CTH6C
+ 06SA   CTH6S VICA  CTH6C
+ 06SB   CTH6S VICA  CTH6C
+ 06SC   CTH6S VICA  CTH6C
+ 0AN6S  6SA   VICA  CTH6C
+ 0AN6S  6SB   VICA  CTH6C
+ 0AN6S  6SC   VICA  CTH6C
+ 04SA   CTH4S VICA  CTH6C
+ 04SB   CTH4S VICA  CTH6C
+ 04SC   CTH4S VICA  CTH6C
+ 0AN4S  4SA   VICA  CTH6C
+ 0AN4S  4SB   VICA  CTH6C
+ 0AN4S  4SC   VICA  CTH6C
+ 02SA   CTH2S VICA  CTH6C
+ 02SB   CTH2S VICA  CTH6C
+ 02SC   CTH2S VICA  CTH6C
+ 0AN2S  2SA   VICA  CTH6C
+ 0AN2S  2SB   VICA  CTH6C
+ 0AN2S  2SC   VICA  CTH6C
+ 01SA   CTH1S VICA  CTH6C
+ 01SB   CTH1S VICA  CTH6C
+ 01SC   CTH1S VICA  CTH6C
+ 0AN1S  1SA   VICA  CTH6C
+ 0AN1S  1SB   VICA  CTH6C
+ 0AN1S  1SC   VICA  CTH6C
+ 03SA   CTH3S VICA  CTH6C
+ 03SB   CTH3S VICA  CTH6C
+ 03SC   CTH3S VICA  CTH6C
+ 0AN3S  3SA   VICA  CTH6C
+ 0AN3S  3SB   VICA  CTH6C
+ 0AN3S  3SC   VICA  CTH6C
+ 05SA   CTH5S VICA  CTH6C
+ 05SB   CTH5S VICA  CTH6C
+ 05SC   CTH5S VICA  CTH6C
+ 0AN5S  5SA   VICA  CTH6C
+ 0AN5S  5SB   VICA  CTH6C
+ 0AN5S  5SC   VICA  CTH6C
+BLANK  card ending electric network branch cards
+C        (((((((((((   BRIDGE CIRCUIT BREAKERS, CELILO   ))))))))))))))))))))
+  AC6   AC6Y     -10.E-3    10.E+3
+  BC6   BC6Y     -10.E-3    10.E+3
+  CC6   CC6Y     -10.E-3    10.E+3
+  AC4   AC4Y     -10.E-3    10.E+3
+  BC4   BC4Y     -10.E-3    10.E+3
+  CC4   CC4Y     -10.E-3    10.E+3
+  AC2   AC2Y     -10.E-3    10.E+3
+  BC2   BC2Y     -10.E-3    10.E+3
+  CC2   CC2Y     -10.E-3    10.E+3
+  AC1   AC1Y     -10.E-3    10.E+3
+  BC1   BC1Y     -10.E-3    10.E+3
+  CC1   CC1Y     -10.E-3    10.E+3
+  AC3   AC3Y     -10.E-3    10.E+3
+  BC3   BC3Y     -10.E-3    10.E+3
+  CC3   CC3Y     -10.E-3    10.E+3
+  AC5   AC5Y     -10.E-3    10.E+3
+  BC5   BC5Y     -10.E-3    10.E+3
+  CC5   CC5Y     -10.E-3    10.E+3
+C
+C        (((((((((((   BRIDGE CIRCUIT BREAKERS, SYLMAR   ))))))))))))))))))))
+  AS6   AS6Y     -10.E-3    10.E+3
+  BS6   BS6Y     -10.E-3    10.E+3
+  CS6   CS6Y     -10.E-3    10.E+3
+  AS4   AS4Y     -10.E-3    10.E+3
+  BS4   BS4Y     -10.E-3    10.E+3
+  CS4   CS4Y     -10.E-3    10.E+3
+  AS2   AS2Y     -10.E-3    10.E+3
+  BS2   BS2Y     -10.E-3    10.E+3
+  CS2   CS2Y     -10.E-3    10.E+3
+  AS1   AS1Y     -10.E-3    10.E+3
+  BS1   BS1Y     -10.E-3    10.E+3
+  CS1   CS1Y     -10.E-3    10.E+3
+  AS3   AS3Y     -10.E-3    10.E+3
+  BS3   BS3Y     -10.E-3    10.E+3
+  CS3   CS3Y     -10.E-3    10.E+3
+  AS5   AS5Y     -10.E-3    10.E+3
+  BS5   BS5Y     -10.E-3    10.E+3
+  CS5   CS5Y     -10.E-3    10.E+3
+C    [[[[[[[[[[[[[                           ]]]]]]]]]]]]]]]]]]]]]]]]]]
+C                     VALVES AT CELILO
+C    [[[[[[[[[[[[[                           ]]]]]]]]]]]]]]]]]]]]]]]]]]
+11VI-1  CTH6C                                                   F2SI          1
+11VI-3  CTH6C                                                   F4SI          1
+11VI-5  CTH6C                                                   F6SI          13
+11VI-4  VICA                                                    F5SI          1
+11VI-6  VICB                                                    F1SI          1
+11VI-2  VICC                                                    F3SI          1
+11IV-1  CTH4C                                                   F2SII         1
+11IV-3  CTH4C                                                   F4SII         1
+11IV-5  CTH4C                                                   F6SII         1
+11IV-4  IVCA                                                    F5SII         1
+11IV-6  IVCB                                                    F1SII         1
+11IV-2  IVCC                                                    F3SII         1
+11II-1  CTH2C                                                   F2SII         1
+11II-3  CTH2C                                                   F4SII         13
+11II-5  CTH2C                                                   F6SII         1
+11II-4  IICA                                                    F5SII         1
+11II-6  IICB                                                    F1SII         1
+11II-2  IICC                                                    F3SII         1
+11I-1   CTH1C                                                   F2SI          1
+11I-3   CTH1C                                                   F4SI          1
+11I-5   CTH1C                                                   F6SI          1
+11I-4   ICA                                                     F5SI          1
+11I-6   ICB                                                     F1SI          1
+11I-2   ICC                                                     F3SI          1
+11III-1 CTH3C                                                   F2SII         1
+11III-3 CTH3C                                                   F4SII         1
+11III-5 CTH3C                                                   F6SII         1
+11III-4 IIICA                                                   F5SII         1
+11III-6 IIICB                                                   F1SII         1
+11III-2 IIICC                                                   F3SII         1
+11V-1   CTH5C                                                   F2SI          13
+11V-3   CTH5C                                                   F4SI          1
+11V-5   CTH5C                                                   F6SI          1
+11V-4   VCA                                                     F5SI          1
+11V-6   VCB                                                     F1SI          1
+11V-2   VCC                                                     F3SI          1
+C    [[[[[[[[[[[[[                           ]]]]]]]]]]]]]]]]]]]]]]]]]]
+C                      BYPASS VALVES
+C    [[[[[[[[[[[[[                           ]]]]]]]]]]]]]]]]]]]]]]]]]]
+11BYP6C CTH6C                                                         FIRE    1
+11BYP4C CTH4C                                                         FIRE    1
+11BYP2C CTH2C                                                         FIRE    1
+11BYP1C CTH1C                                                         FIRE    1
+11BYP3C CTH3C                                                         FIRE    1
+11BYP5C CTH5C                                                         FIRE    1
+C    [[[[[[[[[[[[[                           ]]]]]]]]]]]]]]]]]]]]]]]]]]
+C                     VALVES AT SYLMAR
+C    [[[[[[[[[[[[[                           ]]]]]]]]]]]]]]]]]]]]]]]]]]
+116-1   6SA                                                     F5RIII        1
+116-3   6SB                                                     F1RIII        1
+116-5   6SC                                                     F3RIII        1
+116-4   CTH6S                                                   F2RIII        1
+116-6   CTH6S                                                   F4RIII        1
+116-2   CTH6S                                                   F6RIII        1
+114-1   4SA                                                     F5RIV         1
+114-3   4SB                                                     F1RIV         1
+114-5   4SC                                                     F3RIV         1
+114-4   CTH4S                                                   F2RIV         13
+114-6   CTH4S                                                   F4RIV         1
+114-2   CTH4S                                                   F6RIV         1
+112-1   2SA                                                     F5RIV         1
+112-3   2SB                                                     F1RIV         1
+112-5   2SC                                                     F3RIV         1
+112-4   CTH2S                                                   F2RIV         1
+112-6   CTH2S                                                   F4RIV         1
+112-2   CTH2S                                                   F6RIV         1
+111-1   1SA                                                     F5RIII        1
+111-3   1SB                                                     F1RIII        1
+111-5   1SC                                                     F3RIII        1
+111-4   CTH1S                                                   F2RIII        1
+111-6   CTH1S                                                   F4RIII        1
+111-2   CTH1S                                                   F6RIII        1
+113-1   3SA                                                     F5RIV         1
+113-3   3SB                                                     F1RIV         1
+113-5   3SC                                                     F3RIV         1
+113-4   CTH3S                                                   F2RIV         1
+113-6   CTH3S                                                   F4RIV         1
+113-2   CTH3S                                                   F6RIV         1
+115-1   5SA                                                     F5RIII        1
+115-3   5SB                                                     F1RIII        1
+115-5   5SC                                                     F3RIII        1
+115-4   CTH5S                                                   F2RIII        1
+115-6   CTH5S                                                   F4RIII        1
+115-2   CTH5S                                                   F6RIII        1
+C    [[[[[[[[[[[[[                           ]]]]]]]]]]]]]]]]]]]]]]]]]]
+C                      BYPASS VALVES
+C    [[[[[[[[[[[[[                           ]]]]]]]]]]]]]]]]]]]]]]]]]]
+11BYP6S CTH6S                                                         FIRE    1
+11BYP4S CTH4S                                                         FIRE    1
+11BYP2S CTH2S                                                         FIRE    1
+11BYP1S CTH1S                                                         FIRE    1
+11BYP3S CTH3S                                                         FIRE    1
+11BYP5S CTH5S                                                         FIRE    1
+BLANK  card ending switch and valve cards
+14GENAS    191.88     60.     - 90.                         -1.
+14GENBS    191.88     60.      150.                         -1.
+14GENCS    191.88     60.       30.                         -1.
+14GENAR    177.00     60.     - 90.                         -1.
+14GENBR    177.00     60.      150.                         -1.
+14GENCR    177.00     60.       30.                         -1.
+BLANK  card ending electric network source cards
+C               5SC        85.161135603237  85.161135845967      .24239772743E-8
+C                          -.0064297994253       -0.0043259      .32104991758E-4
+C       Total network loss  P-loss  by summing injections =   9.400745644988E-01
+C                                Output for steady-state phasor switch currents.
+C      Node-K    Node-M               I-real            I-imag            I-magn
+C       AC6       AC6Y       -0.17537736E-02   -0.15130560E-03    0.17602884E-02
+C       BC6       BC6Y        0.74585229E-03    0.15944653E-02    0.17602884E-02
+C       CC6       CC6Y        0.10079213E-02   -0.14431597E-02    0.17602884E-02
+C       AC4       AC4Y       -0.17256830E-02   -0.15254779E-03    0.17324124E-02
+  S4-   4-282 4-564 R4-   A3+   3-282 3-564 R3+
+C Step    Time      VI-5       II-3       V-1        4-4        S4-        4-282
+C                  CTH6C      CTH2C      CTH5C      CTH4S
+C
+C                   3-564      R3+        VI-5       II-3       V-1          4-4
+C                                         CTH6C      CTH2C      CTH5C      CTH4S
+C ***      Phasor I(0) = -1.7537736E-03   Switch  "AC6   "  to  "AC6Y  "  closed
+C ***      Phasor I(0) =  7.4585229E-04   Switch  "BC6   "  to  "BC6Y  "  closed
+C ***      Phasor I(0) =  1.0079213E-03   Switch  "CC6   "  to  "CC6Y  "  closed
+C                < <  Etc.  for all closed switches (many)  > >
+C   0     0.0  92.4471816 -80.391986  -46.23358 -.00603248  .3504E-12 .51982E-12
+C              .11844E-12 -.4208E-12        0.0        0.0        0.0        0.0
+C   1   .1E-3  92.3819397 -82.084592 -43.183633 3.21704985 .38869E-12 .49439E-12
+C              .13314E-12  -.391E-12        0.0        0.0        0.0        0.0
+C  20    .002  67.3990315 -90.384846 21.0991082 58.5370378 .22041E-12 -.2248E-13
+C              .36015E-12 .29277E-12        0.0        0.0        0.0        0.0
+C            Valve   "IV-6  "  to  "IVCB  "  closing after  3.90000000E-03  sec.
+C            Valve   "II-6  "  to  "IICB  "  closing after  3.90000000E-03  sec.
+C            Valve   "III-6 "  to  "IIICB "  closing after  3.90000000E-03  sec.
+C  40    .004  8.90509663 -34.543231 78.5718629 85.3493624 .197975812 .14269E-12
+C              .89101E-13 .85369E-12        0.0        0.0        0.0        0.0
+C            Valve   "III-6 "  to  "IIICB "  opening after  4.40000000E-03  sec.
+C            Valve   "IV-6  "  to  "IVCB  "  opening after  4.50000000E-03  sec.
+C            Valve   "II-6  "  to  "IICB  "  opening after  4.50000000E-03  sec.
+C            Valve   "4-3   "  to  "4SB   "  closing after  4.70000000E-03  sec.
+BLANK  card ending output variable requests (just node voltages, here)
+C 1980   .198  46.1602391 -113.62943 -110.38699        0.0 414.910346 406.384239
+C              -397.18723 -365.84617        0.0        0.0        0.0  .08752568
+C            Valve   "4-4   "  to  "CTH4S "  opening after  1.98200000E-01  sec.
+C            Valve   "2-4   "  to  "CTH2S "  opening after  1.98200000E-01  sec.
+C            Valve   "3-4   "  to  "CTH3S "  opening after  1.98200000E-01  sec.
+C            Valve   "6-6   "  to  "CTH6S "  closing after  1.98500000E-01  sec.
+C            Valve   "1-6   "  to  "CTH1S "  closing after  1.98500000E-01  sec.
+C            Valve   "5-6   "  to  "CTH5S "  closing after  1.98500000E-01  sec.
+C            Valve   "VI-3  "  to  "CTH6C "  opening after  1.98700000E-01  sec.
+C            Valve   "I-3   "  to  "CTH1C "  opening after  1.98700000E-01  sec.
+C            Valve   "V-3   "  to  "CTH5C "  opening after  1.98700000E-01  sec.
+C            Valve   "6-4   "  to  "CTH6S "  opening after  1.99300000E-01  sec.
+C            Valve   "IV-6  "  to  "IVCB  "  closing after  1.99400000E-01  sec.
+C            Valve   "II-6  "  to  "IICB  "  closing after  1.99400000E-01  sec.
+C            Valve   "III-6 "  to  "IIICB "  closing after  1.99400000E-01  sec.
+C            Valve   "1-4   "  to  "CTH1S "  opening after  1.99800000E-01  sec.
+C            Valve   "5-4   "  to  "CTH5S "  opening after  1.99800000E-01  sec.
+C            Valve   "4-1   "  to  "4SA   "  closing after  1.99900000E-01  sec.
+C            Valve   "2-1   "  to  "2SA   "  closing after  1.99900000E-01  sec.
+C 2000    0.2         0.0 -122.65729 -136.34202 116.985575 412.121881 399.669877
+C              -375.18165 -284.40015 1.16803681        0.0        0.0        0.0
+C Variable max:135.843884 147.506119 154.898333 219.556654 460.297853 464.200612
+C              2.68656079 5.38510251 1.44399474 1.33625405 1.42211178 1.24791434
+C Times of max :    .0166      .0101      .0064      .0214      .0419      .0399
+C                   .0082      .0083      .1321      .1919       .171      .1761
+C Variable min:-240.63646 -239.41651 -276.74318 -148.88559 .18263E-12 -.2867E-12
+C              -448.03483 -427.31588 -.19958675 -.20362309  -.2353591 -.06790456
+C Times of min :     .022      .0156      .0119      .0124      .0022      .0049
+C                   .0592      .0413      .0219      .1808      .0118      .0306
+  PRINTER PLOT
+ 194 2. 0.0 20.         VI-5  CTH6C            { Axis limits : (-0.052,   1.022)
+ 144 2. 0.0 20.         S4-                     { Axis limits : (0.000,   3.051)
+BLANK  card terminating batch-mode plot cards
+BEGIN NEW DATA CASE
+BLANK

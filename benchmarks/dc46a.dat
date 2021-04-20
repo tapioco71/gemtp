@@ -1,0 +1,22 @@
+BEGIN NEW DATA CASE
+POSTPROCESS PLOT FILE                  2      63       3
+$OPEN,  UNIT=63   FILE=\data\dc45.pl4  !      { Expected to be C-like (L4BYTE = 1)
+ .000100    .002  { Note DELTAT is twice that of DC-45, since use every 2nd step
+       1       1       0       0       1      -1       0       2
+      20      20      50      50
+TACS STAND ALONE
+ 1FLUX    +GEN
+       1.0
+       0.0       1.0
+ 1NRG     +POWER
+       1.0
+       0.0       1.0
+11GEN            1.0
+11CURR           2.0
+99POWER   = GEN * ( -CURR )
+33GEN   CURR  POWER FLUX  GEN_1 NRG
+99GEN_1 53+GEN { Type-53 supplemental device with named delay} .001 DELTAT
+BLANK card ending all TACS data cards
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK 

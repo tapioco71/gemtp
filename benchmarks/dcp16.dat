@@ -1,0 +1,78 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-16
+C     Copy of DCNEW-1,  only with DIAGNOSTIC printout turned on.  This  was  not
+C     true for "M39." VAX solution and  microfiche,  since  10 mh  inductance of
+C     1st three R-L branches was there missing, leading to a different solution.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+DIAGNOSTIC           0 0 9 9 9 9 0 9 9 9 0 9 9 3 9 9 9 9 9
+ABSOLUTE U.M. DIMENSIONS, 20, 2, 50, 60
+ .000200    .100
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20     100     100
+C  --------- ROTOR EXTERNAL RESISTANCES
+  BUSA2 BUSAS2            1.0E-4 10.0                                          1
+  BUSB2 BUSBS2BUSA2 BUSAS2
+  BUSC2 BUSCS2BUSA2 BUSAS2
+C  --------- CONNECTIVITY OF EMTP FOR ELECTRIC NETWORK
+  BUSAS2                  1.0E+6
+  BUSBS2      BUSAS2
+  BUSCS2      BUSAS2
+C  --------- MECHANICAL NETWORK COMPONENTS
+  BUSMG BUSMGR            .4548                                                1
+  BUSMGR      BUSMG BUSMGR
+  BUSMG                               9.8E+7                                   1
+C  -------- FOR MEASUREMENT OF ELECTROMECHANICAL TORQUE
+  BUSMS BUSMG             1.0E-6                                               1
+BLANK card ending branch cards
+BLANK card ending nonexistent switch cards
+C  --------- SOURCES FOR INFINITE BUS
+14BUSAS2  3000.0     60.0     0.0                           -1.0
+14BUSBS2  3000.0     60.0     -120.0                        -1.0
+14BUSCS2  3000.0     60.0     +120.0                        -1.0
+C  --------- 3-PHASE SOURCES AT ROTOR SIDE (ACTUAL FREQ SET BY SS):
+C  --------- MECHANICAL INPUT TORQUE (ACTUAL VALUE SET BY SS):
+14BUSMS -1 0.000001  0.00001                                -1.0
+19 UM                                                   { Beginning of U.M. data
+ 1
+BLANK CARD ENDING CLASS 1 UM DATA CARDS
+C  UM-1 MACHINE TABLE :
+ 4    111BUSMG        2                            0.1885
+              0.02358
+              0.02358
+2.0           0.0                 BUSMS
+C  UM-1 COIL TABLE
+                            BUSA2             1
+0.412         0.0012        BUSB2             1
+0.412         0.0012        BUSC2             1
+0.110         0.0012                          1
+0.110         0.0012                          1
+                                              1
+BLANK card terminating all U.M. data
+BLANK card ending all electric-network sources
+  BUSAS2BUSA2 BUSMG                             { Selective node voltage outputs
+C  Step    Time        BUSAS2       BUSA2        BUSMG        BUSA2        BUSMG
+C                                                            BUSAS2       BUSMGR
+C
+C                       UM-1         UM-1         UM-1         UM-1         UM-1
+C                       OMEGM        THETAM       IPA          IPB           IPC
+C    0     0.0         3000.  1784.374675   184.725648  -194.050415  203.0844855
+C                 184.725648  .7853981634  -194.050415  376.2746528  -182.224238
+C    1   .2E-3   2991.476701  1834.302202  184.7256479  -217.778001  203.0844854
+C                 184.725648   .822343293  -217.778001  374.6919354  -156.913934
+BLANK card terminating output variable requests
+C  500     0.1         3000.  1783.984613  184.7241591  -193.987564  203.0828486
+C                 184.725648  19.25796297  -193.987564  376.1921117  -182.204548
+C Variable maxima :    3000.   1928.26504   184.725648  376.2415171  203.0844855
+C                   184.725648 19.25796297  376.2415171 376.2781467  376.2139786
+C Times of maxima :        0.0        .001          0.0       .0944          0.0
+C                          0.0         0.1        .0944       .0166        .0722
+C Variable minima :   -3000.  -1928.26734  184.7241591  -376.246896  203.0828486
+C                 184.725648  .7853981634  -376.246896  -376.228394  -376.231626
+C Times of minima :     .075         .026          0.1        .0194          0.1
+C                        0.0          0.0        .0194        .0916        .0972
+  PRINTER PLOT
+ 194 10 0.0 100         UM-1  OMEGM UM-1  THETAM  { Axis limits : (0.000, 1.847)
+ 194 10 0.0 100         BUSMG BUSMGRUM-1  TQGEN  { Axis limits : (-4.168, 0.203)
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+BLANK

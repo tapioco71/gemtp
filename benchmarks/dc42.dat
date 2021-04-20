@@ -1,0 +1,240 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-42
+C       Test of batch-mode Fourier series and  "X-Y PLOT" capability.   Also,  a
+C       Type-97 staircase time-varying resistance element,  and Type 1-10 source
+C       is present.   A Type-91 compensation-based nonlinear resistor was added.
+C       For answer to Fourier series, see EMTP Rule Book, page 43-m, HWD example
+C       1st of 3 data subcases, of which only two are real (3rd is a near-dummy)
+CHANGE PRINTOUT FREQUENCY
+      10       5
+     1.0     60.
+       1       1
+  VALUE                      1.0
+  COS                        1.0                                               1
+  SIN                        1.0                                               1
+  GEN   LOAD                 1.0
+97LOAD                             -1.                                         1
+             0.0             1.0
+            2.01             0.5
+            6.01             2.0
+            7.01           1.E35
+            9999
+  A1    A2                 5.E+3                                               1
+  A2                       5.E+3
+91A2                                   3333.                                   1
+    300000.
+    300.                  0.0
+    200.                  3.0
+    150.                  6.0
+    150.                  1000.
+               9999.
+BLANK card ends branch cards
+BLANK card ends switch cards (none, for this case)
+ 1VALUE
+14COS            4.0       .02       0.0
+14SIN            5.0       .02      -90.
+14GEN           100.       60.                                     -1.
+14A1         620000.       .06      -50.                           -1.
+BLANK card ends source cards
+C       Total network loss  P-loss  by summing injections =   1.922250000000E+07
+C   Step     Time      LOAD       VALUE      COS        SIN      GEN          A2
+C      0      0.0        50.       0.0       0.0        0.0      100. 199264.159
+C Comment card.   NUMDCD = 5527.                    |C     Next come the data ca
+C Another input card  for Type 1-10 sources.        |     3.4
+C      1      1.0        50.      3.4 3.96845881 .626666168      100. 272691.058
+C Another input card  for Type 1-10 sources.        |.8485282
+C      2      2.0        50. .8485282 3.87433264 1.24344944      100. 307819.308
+C Another input card  for Type 1-10 sources.        |     0.0
+C      3      3.0        50.      0.0 3.71910594 1.84062276      100. 32112.3483
+  LOAD  VALUE COS   SIN   GEN   A2
+BLANK card ends requests for program outputs (here, just node voltages)
+C     Next come the data cards for user-defined Type-1  source on node  "VALUE":
+     3.4
+.8485282
+     0.0
+-.434314
+     -.2
+-.848528
+     -.4
+-1.56569
+    3.41
+.8500000
+     0.0
+-.430000
+     -.2
+    9999
+C Last step:      60      60.      100.     0.0  1.23606798  4.75528258     100.
+C Last step continued ..... :      -17025.944     1.E-33  -113.50629  -116.91148
+  PRINTER PLOT
+  FOURIER ON                  10
+C     Note  HPI=7.6  is a special request for reduction of end-time  HMAX  until
+C     a match with the  HMIN  point (for periodicity) is found.
+ 1437.6 1.5 12.         VALUE
+C    --- Back up the ending time from point number  11   to point number  8   in
+C 8.4852820634841920E-1  0.0E+00  -1.5656900405883790E0   3.4100000858306880E+00
+C Harmonic      Cosine                Sine             Complex       Fraction of
+C   number   coefficient         coefficient           amplitude     fundamental
+C    0   1.01249525324E-01   0.00000000000E+00   1.01249525324E-01   0.086661418
+C    1   1.13313862336E+00  -2.84609199533E-01   1.16833451383E+00   1.000000000
+C    2   5.00001057982E-01  -9.02500022203E-01   1.03174965377E+00   0.883094389
+C    3  -2.84610506422E-01  -8.50297213563E-01   8.96665206061E-01   0.767473010
+C    4  -6.01250493899E-01   0.00000000000E+00   6.01250493899E-01   0.514621871
+ 143 5. 0.5 8.0         VALUE
+C Begin the Fourier series computation using  8   equidistant points.  The first
+C 3.40000009536743  8.48528206348419E-1  -4.00000005960464E-1 -1.565690040588379
+C Harmonic      Cosine                Sine             Complex       Fraction of
+C   number   coefficient         coefficient           amplitude     fundamental
+C    0   9.99995265156E-02   0.00000000000E+00   9.99995265156E-02   0.085748909
+C    1   9.99999101967E-01   6.00000909627E-01   1.16619007691E+00   1.000000000
+C    2   9.00000024587E-01   5.00001057982E-01   1.02956354939E+00   0.882843689
+C    3   8.00000947207E-01   4.00000906647E-01   8.94428443672E-01   0.766966262
+C    4   6.00000495091E-01   0.00000000000E+00   6.00000495091E-01   0.514496313
+  FOURIER OFF
+ 143 8. 0.0 50.         COS                      { Axis limits: (-4.000,  4.000)
+  X-Y PLOT
+     10.    -5.     5.0
+     13.   -6.5     6.5
+ 2Arbitrary 78-character case title text of which this is an example, I hope.
+  First and only line of multi-line, 78-byte, graph subheading text.
+ 193 5. 0.0 55.         COS         SIN          { Axis limits: (-6.500,  6.500)
+  CALCOMP PLOT  { Preceding was a line printer plot;  switch to vector graphics
+  X-Y PLOT    Horizontal Axis label123
+     10.    -5.     5.0
+      8.   -6.0     6.0
+ 2Arbitrary 78-character case title text of which this is an example, I hope.
+ 143 5. 0.0 55.         COS         SIN         16-byte Heading Y-axis label
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     2nd of 4 subcases modifies preceding data for nice bar charts.  As built
+C     in this standard test case,  both 5 (the original) and 13 vertical bars
+C     result.  Screen plotting of Salford is slowed slightly by HP-GL output
+C     due to shading of hollow rectangular shells of bars by interior vertical
+C     lines.  This progress is made  25 December 1997  as this case is added,
+C     forcing later cases down.  See mention in January, 1998, newsletter.
+CHANGE PRINTOUT FREQUENCY
+       5       5      20      20
+     1.0     60.
+       1       1
+  VALUE                      1.0
+BLANK card ends branch cards
+BLANK card ends switch cards (none, for this case)
+ 1VALUE
+BLANK card ends source cards (here, just user-defined Type-1  ---  inline below)
+ 1  { Request for all node voltages outputs (here, just one)
+C     Next come the data cards for user-defined Type-1  source on node  "VALUE":
+     3.4
+.8485282
+     0.0
+-.434314
+     -.2
+-.848528
+     -.4
+-1.56569
+    3.41
+.8500000
+     0.0
+-.430000
+     -.2
+    9999
+  FOURIER ON                  10  { For  5 vertical bars
+ 1437.6 1.5 12.         VALUE     { For  5 vertical bars
+C   The preceding produces bars so wide that internal filling by 8 vertical
+C   lines (drawn after the outline of a bar is drawn) still leaves lots of
+C   empty space.  Nonetheless,  the effect in  MS Word 7  for  Win95 is good.
+C   The following 15 bars look great in Word 7:
+  FOURIER ON                  15  { For 13 vertical bars
+ 1433.0 1.5 25.         VALUE     { For 13 vertical bars
+  PRINTER PLOT  { Toggle to line printer plotting for next subcase as b4 Jan, 97
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       3rd of 4 subcases tests the use of the branch  name  "SSNAME"  (variable
+C       SSONLY  of the  STARTUP  file).   The  Type-91  true-nonlinear  R(t)  of
+C       the first subcase is repeated twice.  The first copy is unchanged, so it
+C       provides a reference: no nonlinear element current in the phasor soution
+C       and flashover so it is present only beginning on step 5.  This  is  node
+C       A2.   The second copy,  on node  B2,  has low phasor voltage because  of
+C       an extra  300-ohm  resistor added just for the phasor solution.  Voltage
+C       on step 0 thus is small (21 kV).  But the  300-ohm resistor  is  removed
+C       after  the phasor solution,  so voltage immediately rises to  240 kV  on
+C       step 1.   Then,  since the flashover voltage was reduced to  100 kV,  we
+C       have a flashover, and for step 2 onward of the 2nd copy,  the Type-91  R
+C       is connected.   With both NL elements flashed over,  the 2 solutions are
+C       close, but not identical.  This is because of the time shift of 3  steps
+C       (remember,  R vs. t  characteristics begin at the instant of flashover).
+C       Note  that  the  following data puts the  "PHASOR"  resistor as the last
+C       branch,  so  that the EMTP will erase it completely before the time-step
+C       loop,  which is most efficient.  Identical answers have been obtained by
+C       replacing the single 300-ohm branch by two 600-ohm branches which can be
+C       mixed anywhere among the branch cards.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+     0.5     3.0                                { Floating-point misc. data card
+       1       1       1       1
+  GEN   A2                 5.E+3                                               1
+  A2                       5.E+3
+91A2                                   3333.                                   1
+    300000.    { Original element will be felt on step 5 (step 4 exceeds 300 kV)
+    300.                  0.0
+    200.                  3.0
+    150.                  6.0
+    150.                  1000.
+               9999.
+  GEN   B2                 5.E+3                                               1
+  B2                       5.E+3
+  B2          NAME  PHASOR  300.
+91B2                                   3333.                                   1
+    100000.    { Reduced flashover voltage means R(t) will be present for step 2
+    300.                  0.0
+    200.                  3.0
+    150.                  6.0
+    150.                  1000.
+               9999.
+BLANK card ends branch cards
+BLANK card ends switch cards (none, for this case)
+14GEN        620000.       .06      -50.                           -1.
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        GEN    |A2    *B2    *
+C        A2     |TERRA *TERRA *GEN   *
+C        B2     |TERRA *TERRA *TERRA *GEN   *
+C        TERRA  |A2    *A2    *B2    *B2    *B2    *
+C --------------+------------------------------
+BLANK card ends source cards
+C       Total network loss  P-loss  by summing injections =   5.560071428571E+07
+C    GEN     398528.31800565        620000.     115.28854913735  179.35714285714
+C            -474947.5547338    -50.0000000     -137.3955426194      -50.0000000
+ 1                                     { Request the output of all node voltages
+C  Step    Time           B2           A2           GEN          A2           B2
+C                                                             TERRA        TERRA
+C     0    0.0   21349.73132   199264.159   398528.318          0.0          0.0
+C     1    0.5   240232.7915  240232.7915   480465.583          0.0          0.0
+C     2    1.0   29216.89903  272691.0576  545382.1152          0.0  97.38966342
+C     3    1.5   30079.72946   295489.107   590978.214          0.0   106.163751
+C     4    2.0   29669.33084  307819.3075   615638.615          0.0  111.2599907
+C     5    2.5   28113.16869  33133.37738  618489.7112  110.4445913  112.4526748
+C     6    3.0   25585.44821  30509.93568  599430.5009  107.6821259  109.6519209
+  CALCOMP PLOT
+ 2Plot of both Type-91 voltages
+C     78901234567890123456789012345678901234567890123456789012345678901234567890
+ 143 .3 0.0 3.0         A2    B2                Type-91 nodes   Voltages in [v]
+  PRINTER PLOT
+ 143 .6 0.0 3.0         A2    B2                  { Axis limits: (0.000,  3.078)
+$ABORT    { Illustration of request to abort this subcase but continue with next
+BLANK card ending plot cards  ---  needed to exit plotting where KILL is checked
+C   This and any later cards of data subcase should not be executed due to abort
+$WIDTH, 79  { Switch to narrow output so case summary statistics will be compact
+XXXXX XXXXX XXXXX  { 1st of several dummy data cards that should be skipped over
+YYYYY YYYYY YYYYY  { 2nd of several dummy data cards that should be skipped over
+ZZZZZ ZZZZZ ZZZZZ  { 3rd of several dummy data cards that should be skipped over
+AAAAA aaaaa AAAAA  { 4th of several dummy data cards that should be skipped over
+bbbbb BBBBB bbbbb  { 5th of several dummy data cards that should be skipped over
+CCCCC ccccc CCCCC  { 6th of several dummy data cards that should be skipped over
+BEGIN NEW DATA CASE
+C      4th of 4 subcases is here just to service preceding  $ABORT.  Next, halt.
+$STOP        { Illustrate user-requested termination of execution via input card
+CHANGE PRINTOUT FREQUENCY    { 1st of otherwise-legal card that will not be used
+      10       5             { 2nd of otherwise-legal card that will not be used
+PRINTED NUMBER WIDTH, 13, 2, { 3rd of otherwise-legal card that will not be used
+$MONITOR                     { 4th of otherwise-legal card that will not be used
+DISK PLOT DATA               { 5th of otherwise-legal card that will not be used
+ 

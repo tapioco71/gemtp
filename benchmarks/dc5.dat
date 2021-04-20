@@ -1,0 +1,387 @@
+BEGIN NEW DATA CASE                                                             
+C     BENCHMARK DC-5                                                            
+C         Saturable  TRANSFORMER  problem with the same basic solution as  DC-4.
+C         1st of 7 subcases illustrates narrow (79-column) output. 
+$WIDTH, 79,         { Request narrow, 80-column LUNIT6 output as an illustration
+BEGIN PEAK VALUE SEARCH, -1,      { Time of -1 is request to read following card 
+     0.5     1.5     2.5     3.5            { Limit extrema to these 2 subranges                                                
+PRINTED NUMBER WIDTH, 10, 2,    { Request max precision of 6 numbers in 80 bytes
+    .010     6.0                                                                
+       1       1       1       1       1      -1                                
+       5       5      20      20     100     100                                
+C  The following  $VINTAGE  restoration is added 3 November 2001 to illustrate
+C  the associated rejection message.  The request is meaningless since there is
+C  no preceding  $VINTAGE  request.  For correct use, see later subcase.
+$VINTAGE, -1   { Cancel preceding $VINTAGE request,  returning the value to zero
+  GEN   GENT               1.E-3                                               3
+  LOAD                     1.0E3                                               3
+  TRANSFORMER               .005   30.TRANFF  1.E4                             3
+            .005             30.                                                
+             .01             40.                                                
+             .02             45.                                                
+             0.1             50.                                                
+             5.0            100.                                                
+            9999                                                                
+ 1GENT  OPEN                 5.0  5.E4   50.                                    
+ 2LOADFF                     20.  2.E5  100.                                    
+  OPEN                      1.E7              
+  TRANSFORMER TRANFF                  TRAN                                     3
+ 1GENT                                                                          
+ 2LOAD                                                                          
+BLANK card finishing all branch cards
+BLANK card ending non-existent switch cards
+14GEN            70.  .1591549                                     -1.          
+C --------------+------------------------------ 
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        GEN    |GENT  *                                                          
+C        GENT   |GEN   *TRANFF*TRAN  *                                            
+C        LOAD   |TERRA *TERRA *                                                   
+C        TRANFF |GENT  *OPEN  *OPEN  *OPEN  *                                     
+C        OPEN   |TERRA *TRANFF*TRANFF*TRANFF*                                     
+C        LOADFF |TERRA *                                                          
+C        TRAN   |TERRA *TERRA *TERRA *GENT  *                                     
+C        TERRA  |LOAD  *LOAD  *OPEN  *LOADFF*TRAN  *TRAN  *TRAN  *                
+C               |                                                                 
+C --------------+------------------------------
+BLANK card terminating program source cards
+C       Total network loss  P-loss  by summing injections =   8.286936503209E+00
+C Inject:   GEN     70.    .25769841013987    8.2869365032093    9.0194443548954
+C Inject:           0.0        -23.2507996    3.5604859026308          0.9187857
+C           ---- Initial flux of coil  "TRANFF"  to  "OPEN  "  =  3.08658228E-02
+C          ---- Initial flux of coil  "TRAN  "  to  "      "  =  -1.13293881E+01
+C    Step      Time     GEN       LOAD      TRANFF     TRAN       LOAD      TRAN  
+C                       GENT      TERRA     OPEN      TERRA                       
+C  
+C                       GENT      LOADFF    OPEN      TRANFF     GEN      TRANFF  
+C                                                                           OPEN  
+C  
+C                       TRAN      GEN       LOAD                                  
+C                       TERRA     GENT      TERRA                                 
+C       0       0.0   .2368E-3  116.1389  .0185382  63.72954  116.1389  63.72954
+C                     69.99976  .0370763  69.98119  69.99973       70.  .5144E-5
+C                     -.001888  .2367696  .1161389
+C       1       .01   .2378E-3   116.583  .0182286  63.83965   116.583  63.83965
+C                     69.99626  .0364571    69.978  69.99623   69.9965  .5175E-5
+C                     -.001782   .237775   .116583
+ 1                                        { Request for all node voltage outputs  
+C     600      6.0   .1743E-3  86.66574  .0264244  54.92308  86.66574   54.92308
+C                    67.21171  .0528488  67.18516  67.21158  67.21189   .4076E-5
+C                    -.004558  .1742727  .0866657
+C Variable maxima :  .3281E-3  123.4893  .0360051  61.35953  123.4893   61.35953  
+C                    67.21171  .0720101  67.18516  67.21158  67.21189   .6001E-5  
+C                    .2904095  .3281234  .1234893                                
+C Times of maxima :      1.49       0.5      5.25       0.5       0.5        0.5  
+C                         6.0      5.25       6.0       6.0       6.0        .54  
+C                        1.49      1.49       0.5                                
+C Variable minima :  -.349E-3  -122.626  -.033186  -63.9283  -122.626   -63.9283  
+C                    -69.9997  -.066372  -69.9811  -69.9996  -69.9999     -.6E-5  
+C                     -.32526  -.349375  -.122626                                
+C Times of minima :      4.67      3.56      2.51      3.35      3.56       3.35  
+C                        3.14      2.51      3.14      3.14      3.14       3.68  
+C                        4.76      4.67      3.56                                
+  PRINTER PLOT  
+C Axis limits: (-2.544, 2.624)
+ 193 .5 0.0 4.0         LOAD        GEN   GENT   
+BLANK card terminating plot cards
+$WIDTH, 132, { Done with 80 columns, so return to wide, 132-column LUNIT6 output
+BEGIN NEW DATA CASE
+C         2nd of 7 subcases.   This is the former (before January, 1987)  DC-43.
+C         Test of [A], [R] usage  ("USE AR").  For  DIAGNOSTIC,  see DCPRINT-14. 
+C         [A],[R]  data  cards used here were punched by 3rd subcase of DCNEW-8.
+C         Solution can be checked by hand,  since it is really just 1 big series
+C         circuit, with an ideal transformer separating the primary & secondary.
+C         The turns ratio is 2:1,  with the primary being the high-voltage side.
+C         Transformer has bottoms of primary and secondary grounded. The primary
+C         has a 1-volt, 1-[rad/sec] sinusoidal voltage source, that is connected
+C         to the transformer through a reactance  X = j0.1.  Values  X = 0.1 ohm
+C         and  R = 0.2 ohm  are next,  coming from the  [A], [R]  matrices  when
+C         reflected entirely to the primary of the ideal transformer.   Finally,
+C         the secondary is closed through a 1-ohm resistor.  Reflecting  all  to
+C         the primary,  R = 4.2 ohm,  X = j0.2,  or  Z-tot = 4.2047592083257  at 
+C         an angle of  2.726226 degrees.   Reciprocating  gives  phasor  current
+C         I-source = .23782576065627  at  an angle of  -2.726226 degrees.   This
+C         can  be  checked exactly.  Then, correctness of the time-step solution
+C         follows by smoothness  (there  is no discontinuity on the first step).
+PRINTED NUMBER WIDTH, 25, 2,  { Request 25-column precision for 4 output columns
+C             Apollo will not deliver more than about 16 digits of output, since 
+C             this is the precision limit of REAL*8.   Hence the preceding width
+C             request will  in  fact have more than two blank separator columns.
+    .100     6.0.1591549   { Note  XOPT = 1 / (2 * Pi ),  and  w = 1.0 [rad/sec] 
+       1       1       1       1       1      -1
+       5       5    
+  GEN   PRIM  NAME  Excite         0.1   { Branch named for later current output
+  USE AR                         { Col. 3-8 request switches to  [A], [R]  usage
+ 1SEC                        40.  .025
+ 2PRIM                      -20.               10.   0.1
+  USE RL                          { Col. 3-8 request returns to  [R], [L]  usage
+  SEC                        1.0
+BLANK card ending branches
+BLANK card ending non-existent switches
+14GEN            1.0    .15915       0.0                           -1.  
+C             The following forward and reverse flows are for 1st phasor branch:
+C GEN                 1.0              1.0      .23755659127612  .23782576065627
+C                     0.0              0.0      -.0113118686787       -2.7262268
+C                   
+C      PRIM   .99886884795867  .99915127584094  -.2375565912761  .23782576065627
+C              -.0237549277475      -1.3623416  .01131186867874      177.2737732
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   1.187782956381E-01
+C Inject:  GEN   1.0   1.0   .23755659127612  .23782576065627    .11877829563806 
+C Inject:        0.0   0.0   -.0113118686787       -2.7262268    .00565593433937 
+C
+C Step Time          SEC                PRIM                GEN              GEN  
+C                                                                           PRIM
+C  0 0.0 .4751131825522436 .9988688479586737              1.0  .2375565912761218
+C  1 0.1 .4749983247294277 .9962504852347109 .9950044753394702 .2374991623647137
+C  2 0.2 .470139617191015  .9836805108498354 .9800678118911468 .2350698085955073
+C  3 0.3 .460583675647767  .961282487768105  .9553392425962317 .2302918378238831
+ 1  XXXX  { Cols. 1-2 requests all node voltage outputs; A6 nonblank ==> another
+-1Excite       { Cols 1-2 type code "-1" ===> request for branch current outputs
+BLANK card terminating selective (and all node voltages) output requests
+C                 The secondary current need not be monitored, since it is twice 
+C                 the primary current, and is equal to the voltage of node  SEC.
+C 55 5.5 .3206618611460799 .690969577591206  .708549242853354  .1603309305730407
+C 60 6.0 .4498323687101901 .9523830926143848 .9601182008522722 .2249161843550953
+C Max :   .4751131825522436  .9988688479586737      1.0        .2375565912761218  
+C Times of max:         0.0                0.0      0.0                      0.0  
+C Min -.4756234626742181 -.9985549285218509 -.999131142217714 -.2378117313371089  
+C T-min 3.200000000000002  3.200000000000002 3.100000000000001 3.200000000000002  
+  PRINTER PLOT
+C   Following plot shows in-phase  V-prim  and  V-sec,  with ratio about 2 to 1:
+ 143 1. 0.0 6.0         PRIM  SEC                { Axis limits: (-9.986,  9.989)
+C   Following plot shows gen current,  I = .23782576065627 /__ -2.726226 degrees
+ 193 1. 0.0 6.0         GEN   PRIM               { Axis limits: (-2.378,  2.376)
+BLANK card ending non-existent plot cards
+BEGIN NEW DATA CASE                              
+C         3rd of 7 subcases.   Test  of  [A], [R]  usage  ("USE AR"),  with  the
+C         branch cards punched by the 3rd subcase of  DCNEW-8.  Trivial  1-phase
+C         problem.   For identical network using  [R], [L],  see the 4th subcase
+PRINTED NUMBER WIDTH, 15, 2,  { Request more than enough precision for 3 outputs
+   .0005    .050     50.                           
+       1       1       1       1       2      -1 
+       5       5      
+  S1                      25.782                                               1
+$VINTAGE, 1       
+$UNITS, 0., 0.                            {XOPT, COPT
+  USE AR
+ 1P1                       609.14725451514 .05780196523054                      
+ 2S1                       -355.0194488376             0.0                      
+                           207.17315316786 .16973833711262                      
+C $VINTAGE, 0
+C    3 November 2001,  replace the preceding by just-added cancellation of
+C    the preceding  $VINTAGE,1.  Of course,  the starting value is zero:
+$VINTAGE, -1   { Cancel preceding $VINTAGE request,  returning the value to zero
+BLANK card ending branches
+BLANK card ending non-existent switches
+14P1      311.      50.       000.0     0.                  -1.          
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   5.418483002156E+03
+C    P1     311.     311.    34.845549853093  34.95612473617      5418.483002156  
+C           0.0      0.0     -2.77818502017      -4.5584667       432.0077706365  
+C                   Step      Time          S1             P1                 S1  
+C                                                                          TERRA 
+C                      0       0.0   524.252284827           311.  20.3340425424
+C                      1     .5E-3   522.548672234  307.171073925  20.2679649458
+C                      2     .1E-2   507.987759921  295.778576568  19.7031944737
+C                      3     .0015   480.917065702  277.103029023  18.6532102126
+ 1
+C                     95     .0475   -349.18551236  -219.91020895  -13.543771327
+C                    100       .05   -524.24501851          -311.  -20.333760706
+C Variable maxima :                  524.252284827           311.  20.3340425424
+C Times of maxima :                            0.0            0.0            0.0  
+C Variable minima :                  -524.24501851          -311.  -20.333760706
+C Times of minima :                            .01            .01            .01  
+  PRINTER PLOT
+ 144 4. 0.0 20.         S1                       { Axis limits: (-5.242,  5.243)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE                              
+C         4th of 7 subcases.   Test  of  [R], [wL]  usage  ("USE RL"),  with the
+C         branch cards punched by the 3rd subcase of  DCNEW-8.  This is the same
+C         simulation as the preceding subcase,  only  [R],[L]  replaces  [A],[R]
+PRINTED NUMBER WIDTH, 15, 2,  { Request more than enough precision for 3 outputs
+   .0005    .050     50.                           
+       1       1       1       1       2      -1 
+       5       5      
+  S1                      25.782                                               1
+$VINTAGE, 1,         
+$UNITS, 50., 0.,                        {XOPT, COPT
+  USE RL
+ 1P1                       .05780196523054 406.40657142442                      
+ 2S1                                   0.0 696.43307921366                      
+                           .16973833711262  1194.949458531                      
+$VINTAGE, 0
+BLANK card ending branches
+BLANK card ending non-existent switches
+14P1      311.      50.       000.0     0.                  -1.          
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   5.418483002158E+03
+C   P1     311.     311.     34.845549853106  34.956124736168     5418.483002158  
+C           0.0      0.0     -2.778185019985       -4.5584667    432.00777060763  
+C                    Step     Time          S1             P1                 S1  
+C                                                                          TERRA 
+C                      0       0.0   524.252284827           311.  20.3340425424
+C                      1     .5E-3   522.548672234  307.171073925  20.2679649458
+C                      2      .001   507.987759921  295.778576568  19.7031944737
+C                      3     .0015   480.917065702  277.103029023  18.6532102126
+ 1
+C                     95     .0475   -349.18551236  -219.91020895  -13.543771327
+C                    100       .05   -524.24501851          -311.  -20.333760706
+C Variable maxima :                  524.252284827           311.  20.3340425424  
+C Times of maxima :                            0.0            0.0            0.0  
+C Variable minima :                  -524.24501851          -311.  -20.333760706  
+C Times of minima :                            .03            .01            .03  
+  PRINTER PLOT
+ 144 4. 0.0 20.         S1                       { Axis limits: (-5.242,  5.243)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE                                                             
+C         5th of 7 subcases is used to illustrate  RENUMBER WITHOUT COUPLING
+C   Same data as 1st subcase,  but with two important changes.  First, output is
+C   wide (not 80-column).  Second and critically important, the transient node
+C   renumbering is different because of the following request that is introduced
+C   in the January, 1999, newsletter.   Output variables are the same,  but the
+C   "1" request for all node voltage outputs will change the order of occurance
+C   of these variables in the output vector.
+RENUMBER WITHOUT COUPLING  { Upset node renumbering; change output of all V-node
+PRINTED NUMBER WIDTH, 10, 2,    { Request max precision of 6 numbers in 80 bytes
+    .010    .030           { Take only 3 steps (plenty to illustrate the effect)                                                              
+       1       1           { Note no extrema (values would not agree, anyway)
+  GEN   GENT               1.E-3                                               3
+  LOAD                     1.0E3                                               3
+  TRANSFORMER               .005   30.TRANFF  1.E4                             3
+            .005             30.                                                
+             .01             40.                                                
+             .02             45.                                                
+             0.1             50.                                                
+             5.0            100.                                                
+            9999                                                                
+ 1GENT  OPEN                 5.0  5.E4   50.                                    
+ 2LOADFF                     20.  2.E5  100.                                    
+  OPEN                      1.E7              
+  TRANSFORMER TRANFF                  TRAN                                     3
+ 1GENT                                                                          
+ 2LOAD                                                                          
+BLANK card finishing all branch cards
+BLANK card ending non-existent switch cards
+14GEN            70.  .1591549                                     -1.          
+BLANK card terminating program source cards
+ 1                                        { Request for all node voltage outputs  
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C         6th of 7 subcases is identical to the 2nd.  But because  KOMPAR > 4
+C         (see the  $DEPOSIT  use immediately below),  KOMPAR  is interpreted 
+C         to be the output width of phasor and dT-loop numbers.  It works.  Not
+C         only are the numbers reduced in precision, the dT-loop headings also
+C         are adjusted to match.  I.e., the  25  of the  PRINTED NUMBER WIDTH
+C         declaration below is overridden.  Although operation was described in
+C         the April, 1998, newsletter,  an illustration (this data) did not
+C         exist prior to  5 December 2001.
+C           Add  Type-15 USRFUN source on  28 July 2002  to illustrate this new
+C           feature from Orlando Hevia.  The  USRFUN  source provides a higher-
+C           level replacement for  ANALYTIC SOURCES USAGE  that  is illustrated
+C           in DC-6.  The same node name  NODE1  will be used.  The same signal
+C           is generated.
+$DEPOSIT, KOMPAR=11,  { Illustrate reduced field width of phasor & dT-loop #-s
+PRINTED NUMBER WIDTH, 25, 2,  { Request 25-column precision for 4 output columns
+C             Apollo will not deliver more than about 16 digits of output, since 
+C             this is the precision limit of REAL*8.   Hence the preceding width
+C             request will  in  fact have more than two blank separator columns.
+    .100     6.0.1591549   { Note  XOPT = 1 / (2 * Pi ),  and  w = 1.0 [rad/sec] 
+       1       1       0       1       0      -1
+      10       5    
+  GEN   PRIM  NAME  Excite         0.1   { Branch named for later current output
+  USE AR                         { Col. 3-8 request switches to  [A], [R]  usage
+ 1SEC                        40.  .025
+ 2PRIM                      -20.               10.   0.1
+  USE RL                          { Col. 3-8 request returns to  [R], [L]  usage
+  SEC                        1.0
+  NODE1                      1.0 { Dummy resistor serves to anchor USRFUN source
+BLANK card ending branches
+BLANK card ending non-existent switches
+14GEN            1.0    .15915       0.0                           -1.  
+C   Each Type-15 USRFUN source must be provided by the user in the user-supplied
+C   FUNCTION USRFUN.  Here, illustrate type code 5 (CREST in columns 11-20) that
+C   is identical to the ANALYT function of DC-6.  There is a difference, however
+C   Whereas ANALYT internally zeroed the function after T = .75 seconds, here
+C   no such logic has been built into USRFUN.  Instead, use T-stop of 71-80 to
+C   zero the function beginning on time step number 8.  Speaking of time steps,
+C   modify the printout frequency to show the first 10 steps.  About columns,
+C   the request word  "USRFUN  "  (note 2 trailing blanks) must occupy 43-50.
+C < BUS>  <  Index >                     Request               T-start    T-stop
+15NODE1          5.0                      USRFUN                   0.0      0.75
+BLANK card ending source cards
+C SEC                       .475113189       .475651527           .475113189       .475651527           .113122188       .113122188
+C                           -.02262374       -2.7262268           -.02262374       -2.7262268                  0.0              0.0
+C
+C            TERRA                 0.0              0.0           -.47511319       .475651527                  0.0
+C                                  0.0              0.0           .022623738      177.2737732                  0.0
+C     Total network loss  P-loss  by summing injections =   1.187782971625E-01
+C            Note all of the white space surrounding the preceding phasor valus.
+C            The precision is reduced but column positioning and headings are
+C            unchanged.  This is unlike dT-loop output,  for which the headings,
+C            too, are modified so as to maintain the same inter-# separation.
+ 1  XXXX  { Cols. 1-2 requests all node voltage outputs; A6 nonblank ==> another
+-1Excite       { Cols 1-2 type code "-1" ===> request for branch current outputs
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   1     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time      SEC        PRIM       GEN        NODE1      GEN
+C                                                                   PRIM
+C      0       0.0   .47511319  .99886885        1.0        0.0  .23755659
+C      1       0.1   .47499833  .99625049  .99500448        40.  .23749917
+C      2       0.2   .47013962  .98368051  .98006781        80.  .23506981
+C      3       0.3   .46058368  .96128249  .95533924        95.  .23029184
+C      4       0.4   .44642603  .92928025  .92106583        85.  .22321301
+C      5       0.5   .42780811  .88799352  .87759001        75.  .21390405
+C      6       0.6   .40491594   .8378348  .82534614        65.  .20245797
+C      7       0.7   .37797823  .77930524  .76485619        55.  .18898912
+C      8       0.8   .34726412   .7129896  .69672453        0.0  .17363206
+BLANK card terminating selective (and all node voltages) output requests
+C     60       6.0   .44983237  .95238309   .9601182        0.0  .22491619
+  PRINTER PLOT
+C   Following plot shows in-phase  V-prim  and  V-sec,  with ratio about 2 to 1:
+ 143 1. 0.0 6.0         PRIM  SEC                { Axis limits: (-9.986,  9.989)
+BLANK card ending non-existent plot cards
+BEGIN NEW DATA CASE
+C         7th of 7 subcases is fundamentally different from preceding subcases
+C         in that it involves a frequency scan rather than time simulation.  But
+C         there is similarity to the preceding subcase in the user-supplied
+C         source code is involved.  This tests  USER10  as built into the UTPF
+C         beginning  26 October 2003.
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+C                       FMIMFS--DELFFS--FMAXFS--NPD-----
+C                       11111111222222223333333344444444
+FREQUENCY SCAN              25.0    25.0   200.0       0  { F = 25, 50, ... 200
+ 0.00010     0.0                  
+       1       1               
+  RRR                        10. { 10 ohm resistor so V = 10 * source curr }   1                                   
+BLANK card ending branches
+BLANK card ending switches (none)
+  BOTH POLAR AND RECTANGULAR  { Request for (in order): mag, angle, real, imag
+C     Preceding is one of 3 alternatives.  The other two are, after commented:
+C POLAR OUTPUT VARIABLES { 2nd of 3 alternatives for output gives mag, angle
+C RECTANGULAR OUTPUT VARIABLES { 3rd of 3 alternative outputs gives real, imag
+C  Following ANALYTIC source is user-defined.  The function name HYPERB must
+C  be defined in USER10.  Note T-start of cols. 61-70 is left blank as an
+C  illustration that ATP automatically will set this to value -1.0   Amplitude
+C  (columns 11-20) and frequency (columns 21-30) likewise will be defined
+C  internally.  Only columns 1-10,  plus the text in 43-57,  is required:
+C Node  V?                                Request> -Name-
+14RRR   -1                                ANALYTIC HYPERB
+C  Preceding is defined as follows:  Real part = 100. * Pi / Omega 
+C                                    Imaginary part =  ( Real part + 1.0 ) / 2
+BLANK card ending source cards
+  RRR   { Node voltage will be 10 times the source current, note.
+BLANK card ending requests for node voltage output
+C   Step   F [Hz]      RRR       RRR       RRR       RRR       RRR       RRR       RRR       RRR
+C                                                              TERRA     TERRA     TERRA     TERRA
+C      1       25.        25.   36.8699       20.       15.       2.5   36.8699       2.0       1.5
+C      2       50.   14.14214       45.       10.       10.  1.414214       45.       1.0       1.0
+C      3       75.   10.67187  51.34019  6.666667  8.333333  1.067187  51.34019  .6666667  .8333333
+C      4      100.   9.013878  56.30993       5.0       7.5  .9013878  56.30993       0.5       .75
+C      5      125.   8.062258  60.25512       4.0       7.0  .8062258  60.25512       0.4       0.7
+C      6      150.    7.45356  63.43495  3.333333  6.666667   .745356  63.43495  .3333333  .6666667
+C      7      175.   7.034898  66.03751  2.857143  6.428571  .7034898  66.03751  .2857143  .6428571
+C      8      200.   6.731456  68.19859       2.5      6.25  .6731456  68.19859       .25      .625
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

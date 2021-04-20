@@ -1,0 +1,885 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-38
+C         ZnO simulation similar to DC-37,  only here a 3-phase network is used.
+C         The same arrester having characteristic i = 2500 * ( v / V-ref ) ** 26
+C         is used, only here the coefficient has been cut in four (to COEF =625)
+C         so that the column multiplier  COL = 4.0  can be used: 4 * 625 = 2500.
+C         Also, the usual,  recommended (and more accurate) exponential modeling
+C         (Type-92 nonlinear R(i) requested by "5555.")  is only used for two of
+C         the three phases.   In order to illustrate the piecewise-linear alter-
+C         native (requested by "4444."),  such less-accurate modeling  (for  the
+C         highly-nonlinear ZnO, anyway) has been placed in the 3rd phase  ("c").
+C         There are a total of 11 subcases.
+ZO, 20, , , , 0.9,    ,{ To improve ZnO convergence,control Newton ZnO iteration
+ .000050 .020000
+       1       1       1       0       1      -1
+       5       5      20       1      30       5      50      50
+-1SENDA RECA              .305515.8187.01210  200.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937  200.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+92RECA                                5555. { 1st card of 1st of 3 ZnO arresters
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB        RECA                    5555.       { Phase "b" ZnO is copy of "a"
+92RECC                                4444.  { Phase "c" ZnO is piecewise-linear
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        SENDA  |RECA  *
+C        RECA   |TERRA *SENDA *
+C        SENDB  |RECB  *
+C        RECB   |TERRA *SENDB *
+C        SENDC  |RECC  *
+C        RECC   |TERRA *SENDC *
+C        TERRA  |RECA  *RECB  *RECC  *
+C --------------+------------------------------
+BLANK card follows the last source card
+C Step   Time       RECC       RECB       RECA       SENDA      SENDB      SENDC
+C   0     0.0         0.0        0.0        0.0        0.0        0.0        0.0
+C   1   .5E-4  .47358E-13 .15692E-13 .15692E-13  407927.52 -197303.88 -210623.64
+C   2   .1E-3  -.4736E-13 -.1569E-13 -.1569E-13 407710.105 -190537.66 -217172.44
+C   3  .15E-3  .47358E-13 .15692E-13 .15692E-13 407347.832 -183703.75 -223644.08
+ 1
+C Last step: 400  .02  -601371.07 152342.824  295692.924  126078.934  273005.287
+C Variable maxima :    651691.033 676288.521  709562.656  407991.946  407999.105
+C Times of maxima :        .00985     .00455      .00115      .01665      .00555
+C Variable minima :    -669507.52   -663771.  -717417.08  -407991.95  -407996.42
+C Times of minima :        .00325     .01435       .0085      .00835       .0139
+C   To appreciate the distortion that is involved in the use of piecewise-linear
+C   representation for phase "c",  I also show the result for  exponential  "c".
+C   The following are derived from a simulation where  RECC  is a copy of  RECA:
+C Last step: 400  .02  -600972.73   179505.6  299541.296  126078.934  273005.287
+C Variable maxima :    680201.783 671644.425  709538.839  407991.946  407999.105
+C Times of maxima :         .0098     .00455      .00115      .01665      .00555
+C Variable minima :    -704350.77 -664092.88  -718634.71  -407991.95  -407996.42
+C Times of minima :        .00325     .01435      .00855      .00835       .0139
+  PRINTER PLOT
+ 144 3. 0.0 20.         RECA                     { Axis limits: (-7.174,  7.096)
+  CALCOMP PLOT
+ 144 2. 0.0 20.         RECB
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       2nd of 11 subcases.  This one uses the same ZnO arrester  as  the second
+C       of DC-37, only here the gap has been omitted by  V-flash < 0.  The  line
+C       is  the  same as the 1st subcase,  too,  although here we illustrate the
+C       specialized request for modal output.  The  first six branches are  very
+C       large resistors that have been added to reserve outputs for this  usage.
+STEP ZERO COUPLE    { No reason for this, other than illustration of the feature
+MODE VOLTAGE OUTPUT
+ZO          { Needed to restore default values that were upset by first subcase?
+ .000050 .020000
+       1       1       1       0       1      -1
+       5       5      20       1      30       5      50      50
+  SENDA                    1.E18   { 1st of 6 high-R branches that serve }     1
+  SENDB                    1.E18   { only to reserve output variables in }     1
+  SENDC                    1.E18   { the output vector for modal voltages }    1
+  RECA                     1.E18                                               1
+  RECB                     1.E18                                               1
+  RECC                     1.E18   { 6th of 6 high-R branches            }     1
+92RECA                                5555.                                    1
+C                    VREF                   VFLASH                    VZERO  COL
+    0.778000000000000E+06   -0.100000000000000E+03
+C                    COEF                    EXPON                     VMIN
+    0.294795442961157E+05    0.265302624185338E+02    0.545050636122854E+00
+                     9999
+92RECB        RECA                    5555.       { Phase "b" ZnO is copy of "a"
+92RECC        RECA                    5555.       { Phase "c" ZnO is copy of "a"
+-1SENDA RECA              .305515.8187.01210  200.  0
+-2SENDB RECB              .031991.5559.01937  200.  0
+-3SENDC RECC
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0
+14SENDB      408000.       60.     -120.
+14SENDC      408000.       60.      120.
+BLANK card follows the last source card
+C  Step    Time     RECC       RECB       RECA       SENDA      SENDB      SENDC
+C
+C                   RECA       RECB       RECC
+C                   TERRA      TERRA      TERRA
+C    0     0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C                     0.0        0.0        0.0
+C    1   .5E-4        0.0        0.0        0.0  407927.52 -197303.88 -210623.64
+C                     0.0        0.0        0.0
+ 1
+C Last step: 400  .02  -592984.99  209476.019  234551.89  126078.934  273005.287
+C Last step:           -86000.409 17731.3181  665443.85
+C Maxima: 639771.795  647447.415  658163.048  407991.946  407999.105  407996.421
+C Maxima: 181518.845  784118.005  883946.319
+C Associated times:     .00985    .00455    .00115    .01665    .00555     .0111
+C Associated times:     .00995    .01435    .00325
+  PRINTER PLOT
+ 194 1. 0.0 10.         RECA                     { Axis limits: (-3.030,  3.485)
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       3rd of 11 subcases. This one uses the same ZnO arrester as subcase three
+C       of DC-37  --  a single characteristic (no gap, since  V-flash < 0)  that
+C       consists of two exponentials.    3-phase line, sources remain unchanged.
+C       An important addition is a 4th nonlinear element, a TACS-controlled R(t)
+C       that is practically disconnected from the 3 ZnO surge arresters and  the
+C       line that they terminate.   But to test the logic,  we  couple the TACS-
+C       controlled R(t) with the ZnO by means of the high resistance   R = 1.E8.
+C       The TACS control and electrical use is copied from the second subcase of
+C       DC-22.  Note the small  EPSILN  to ensure all 4 NL elements are coupled.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 9 output columns)
+ .000050 .020000                  1.E-10  { Small EPSILN to couple 2 subnetworks
+       1       1       1       0       1      -1
+       5       5      21      -1      30      -5      50      50
+TACS HYBRID   { In a real case, arcs are on electric side, and equations in TACS
+99RESIS   = 1.0 + SIN ( 300 * TIMEX )  { 1st R(t) signal -- constant + sine wave
+33RESIS           { Output the only TACS variable:  the resistance function R(t)
+77RESIS          1.0        { Initial condition on 1st R(t) insures smooth start
+BLANK card ending all TACS data
+  BUS1  BUS2                 1.0   { Master copy of two 1-ohm resistors }      1
+  BUS2        BUS1  BUS2         { 2nd of 2 linear branches in second subnetwork
+91BUS2        TACS  RESIS   { R(t) controlled by TACS variable "RESIS" }       1
+  RECA  BUS1               1.E+8     { Near-infinite R couples ZnO and TACS R(t)
+-1SENDA RECA              .305515.8187.01210  200.  0
+-2SENDB RECB              .031991.5559.01937  200.  0
+-3SENDC RECC
+92RECA                                5555.                                    1
+C                    VREF                   VFLASH                    VZERO  COL
+    0.778000000000000E+06                     -1.0
+C                    COEF                    EXPON                     VMIN
+    0.505584788677197E+07    0.464199973324622E+02    0.632754084797274E+00
+    0.122767153039007E+05    0.166775903445228E+02    0.816748018907843E+00
+                     9999
+92RECB        RECA                    5555.       { Phase "b" ZnO is copy of "a"
+92RECC        RECA                    5555.       { Phase "c" ZnO is copy of "a"
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st  of 3 sources for transmission
+14SENDB      408000.       60.     -120.    { line that is terminated by the ZnO
+14SENDC      408000.       60.      120.
+11BUS1           1.0        { 1-volt battery excites ladder network of TACS R(t)
+BLANK card follows the last source card
+  RECC  RECB  RECA  SENDA BUS2
+C   Note immediate voltage at RECC, RECB, RECA, due to near-infinite R coupling:
+C   Step      Time       RECC        RECB        RECA        SENDA         BUS2
+C      0       0.0          0.0         0.0         0.0         0.0          0.0
+C      1     .5E-4   .141238E-5  .141238E-5  .426252E-5   407927.52   .333333333
+C      2     .1E-3   .141238E-5  .141238E-5  .426252E-5  407710.105   .334983437
+BLANK card terminating selective output variables
+C Last step: 400  .02  -600366.6  218884.325  220028.774  126078.934  .292739915
+C Variable maxima :   625666.843  631501.662  634878.442  407991.946  .399999647
+C Times of maxima :       .00985      .00455      .00115      .01665       .0053
+C Variable minima :   -633451.49  -613164.81  -630265.01  -407991.95         0.0
+C Times of minima :        .0032      .01435       .0088      .00835         0.0
+  PRINTER PLOT
+ 144 3. 0.0 20.         RECA                     { Axis limits: (-6.303,  6.349)
+ 194 3. 0.0 20.         BUS2        TACS  RESIS   { Axis limits: (0.000,  2.000)
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       4th of 11 subcases is unrelated to the preceding,  although it does use
+C       a Type-91 TACS-defined R(t) as the preceding subcase does.  But the
+C       subject is quite different as should be explained in the April, 2003,
+C       newsletter:  corona modeling by TACS control of series R-L-C branches.
+C    27 December 2002,  combine 3 separate, disconnected demonstrations of
+C    TACS CONTROL  of series R-L-C branches. The 3 disconnected subnetworks are:
+C      1) Series R-L with L fixed;  R is ramped to a limiting value;
+C      2) Series R-L with R fixed;  L is ramped to a limiting value;
+C      3) Series R-C with R fixed;  C is is stepped (cut in half);
+C    In each case,  unit current at radian frequency 1.0 will be forced through
+C    the branch,  and voltage will be measured.  There are 3 disconnected
+C    networks,  and there will be 3 screen plots to demonstrate reasonableness
+C    of the answers.
+PRINTED NUMBER WIDTH, 10, 2,  { Limited precision (not needed) & good separation
+TACS POCKET CALCULATOR          { Required for use of  IF-THEN-ELSE-ENDIF  below
+     .10    20.0    { 200 steps over 3 cycles at radian frequency equal to unity
+       1       1       1       1       1      -1
+       5       5   
+TACS HYBRID              { TACS is required to define R of the series R-L branch
+C     The first 2 of 3 problems each can use a discontinuity at T = 15 seconds:
+IF( TIMEX .LE. 15.0 )  THEN       { If simulation time T does not exceed 15 sec:
+88OHMS    =  0.5 + TIMEX / 2.5     { R is ramped linearly from 0.5 to 6.5 at end
+88HENRY   =  0.5 + TIMEX / 10.0    { L increases linearly from 0.5 through 2.0
+ELSE                  { Alternatively (if simulation time T does exceed 15 sec):
+88OHMS    =  6.5                 { Limiting R in  ohms   for 15 or more seconds.
+88HENRY   =  2.0                 { Limiting L in Henries for 15 or more seconds.
+ENDIF { Terminate 5-line block that chooses among 2 formula for inductance HENRY  
+C     The 3rd of 3 problems requires discontinuity at T = 11 seconds:
+IF( TIMEX .LE. 11.05 )  THEN      { If simulation time  T  is 11 sec or less:
+88FARAD   =  2.0       { C is fixed for first 11 of 20 seconds of simulation
+ELSE                   { Alternatively  (if simulation time  T  is 11 or more):
+88FARAD   =  1.0         { Half the capacitance corresponds to switch being open
+ENDIF { Terminate 5-line block that chooses among 2 formulas for supplemental X1      
+33HENRY    { Bring out just 1 of 3 TACS signals to show it is not necessary
+77HENRY         0.5     { Initial condition on L(t) avoids jump from 0 on step 1
+77OHMS          0.5     { Initial condition on R(t) avoids jump from 0 on step 1
+77FARAD         2.0     { Initial condition on C(t) avoids jump from 0 on step 1
+BLANK card ending all TACS data
+C     First comes the R-L test where R is varied and L is held fixed.  We have
+C     3 signals of interest:  a) old Type-91 model;  b) new TACS CONTROL;
+C     and  c) limiting value (for large times, this agrees with a and b):
+  TYP91 COMP                     1000.     { Inductance of 1 Henry is fixed half
+91COMP        TACS  OHMS                { TACS-defined R(t) is the variable half
+  COMP                     1.E+7       { Leakage path avoids floating subnetwork
+  RAMPR                      0.5 1000.     { New modeling begins with R-L branch
+  TACS CONTROL            OHMS  { TACS signal "OHMS" will define R of series R-L
+C        A  TOLERANCE=  tag could be added to any  TACS CONTROL  card such as
+C        the preceding if the tolerance EPSRLC for the application of parameter
+C        changes should be different from EPSILN of the miscellaneous data card.
+C        Location is arbitrary,  so typically will be to the right of column 44
+C        (end of the 3rd of 3 TACS names).  For example,  TOLERANCE=1.E-5  will
+C        serve to define  EPSRLC = 1.E-5    In that case, any relative parameter
+C        change in excess of this value will order re-triangularization whereas
+C        any smaller change will not.  For this data, there would be no change,
+C        however, since all changes are large.  dT is artificially large.
+C   The phasor solution of the Type-91 branch is wrong because Type-91 content
+C   is ignored prior the the dT loop.  Using  SSONLY  of  STARTUP,  we can add
+C   a branch that will correct this problem.  The following branch will be
+C   present only during the phasor solution;  it will draw the current that
+C   really should be going through the Type-91 branch.  This will avoid a very
+C   high voltage spike (e.g., 1.E7) at time zero.  It also demonstrates that
+C   use of  SSONLY  is compatible with  TACS CONTROL  of a series R-L-C:
+  COMP        NAME  PHASOR   0.5  { Branch that will be erased as dT loop begins
+  LIMIT                      6.5 1000. 
+C     Next comes R-L test where L is varied and R is held fixed.  We have 2
+C     signals of interest:  a) assumptote (for large T):  b) new TACS CONTROL:
+  ASSYM                      0.5 2000.   { Assymptote (where variation will end)
+  RAMPL                      0.5  500. { Branch to be varied begins at 1/2 Henry
+  TACS CONTROL                  HENRY  { TACS signal will define L of series R-L
+C     Finally (3rd of 3), we have an R-C test where R fixed and C is is stepped
+C     to correspond exactly to electric network switching (breaker opening). The
+C     answer seems believable;  it agrees by eyeball with switching.
+  GEN   CAP                  1.0           { Inductance of 1 Henry is fixed half
+  CAP                                  1.0E6   { This capacitance always is used
+  CAP2                                 1.0E6   { This capacitance is switched
+  NEWRC                      1.0       2.0E6   { For comparison,  begin with R-C                                        1
+  TACS CONTROL                        FARAD      { TACS defines C of series R-C
+BLANK card ending electric network branches
+  CAP   CAP2         -1.       8.0  { Switch will open on current 0 at T = 11.0
+BLANK card ending switches
+C   Each of the branches is to be driven by the same current source having
+C   radian frequency equal to unity.  I.e.,  1 / frequency = 2 * Pi.  Excite
+C   the three networks in order:
+C      1) Series R-L with L fixed;  R is ramped to a limiting value;
+14TYP91 -1       1.0  .1591549                                     -1.
+14RAMPR -1       1.0  .1591549                                     -1.
+14LIMIT -1       1.0  .1591549                                     -1.
+C      2) Series R-L with R fixed;  L is ramped to a limiting value;
+14ASSYM -1       1.0  .1591549                                     -1.
+14RAMPL -1       1.0  .1591549                                     -1.
+C      3) Series R-C with R fixed;  C is is stepped (cut in half);
+14GEN   -1       1.0  .1591549                                     -1.
+14NEWRC -1       1.0  .1591549                                     -1.
+BLANK card ending electric network source cards.
+C     Total network loss  P-loss  by summing injections =   5.249999987500E+00
+C  Output for steady-state phasor switch currents.
+C  Node-K   Node-M       I-real           I-imag            I-magn        Degrees        Power            Reactive
+C  CAP      CAP2      5.00000000E-01   0.00000000E+00    5.00000000E-01     0.0000    0.00000000E+00   -1.25000034E-01
+C  Node voltage outputs will be grouped by network for easy visual comparison: 
+C <----    Test a    ----><  Test b  ><----    Test c    ---->
+  TYP91 RAMPR LIMIT COMP  RAMPL ASSYM GEN   NEWRC CAP   CAP2
+C  First  10     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   1     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C  Step     Time     TYP91     RAMPR     LIMIT     COMP      RAMPL     ASSYM     GEN       NEWRC     CAP       CAP2      TACS
+C                                                                                                                          HENRY
+C ***  Phasor I(0) = 5.0000000E-01   Switch  "CAP   "  to  "CAP2  "  closed in the steady-state.
+C    0       0.0        0.5       0.5       6.5       0.5       0.5       0.5       1.0       1.0       0.0       0.0       0.5
+C    1       0.1   .3975854  .3975854   6.36761  .4975021  .4475438  .2976688  1.044879  1.044879  .0498751  .0498751       .51
+C    2       0.2    .330401  .3709362  6.171598  .5292359  .3953563  .0923634  1.079318  1.079318  .0992519  .0992519       .52
+C    3       0.3   .2583286  .2576778  5.913921  .5540951  .3218644  -.113865  1.102973  1.102973   .147637   .147637       .53
+C ***           Open  switch  "CAP   "  to  "CAP2  "  after  1.10000000E+01  sec.
+BLANK card ending names of nodes for node voltage output
+C  200       20.   1.738859  1.773888  1.738861  2.652564   -1.6153  -1.62337  1.819737  1.833053   1.41165  -.499468       2.0
+C Variable maxima: 6.576562  6.580848  6.576566  6.492014  2.065211  2.062599  1.912249  1.925565  1.497945  .4993704       2.0
+C Times of maxima:     18.7      18.6      18.7      18.8      17.6      17.5      19.6      19.6      14.1       1.6      15.1
+C Variable minima:    -6.57  -6.60161  -6.57619  -6.49979  -2.00396  -2.06317  -1.11783  -1.11783  -.499579  -.499579       0.5
+C Times of minima:     15.6      15.5       3.0      15.7      14.4       8.1       3.6       3.6       11.       11.       0.0
+  CALCOMP PLOT  { Switch to screen plot from printer plot of preceding subcase
+C      1) Series R-L with L fixed;  R is ramped to a limiting value;
+C   Plot the 3 branch voltages that result from 1 amp of current being driven
+C   through each branch.  Note  TYP91  should lie on top of with  RAMPR,  and
+C   this common signal should be close to the limiting value  LIMIT  for times
+C   in excess of 12 seconds :
+ 143 2. 0.0 20.         TYP91 RAMPR LIMIT       Ramp R of R-L
+C      2) Series R-L with R fixed;  L is ramped to a limiting value;
+C   Plot the 2 branch voltages that result from 1 amp of current being driven
+C   through each branch.  Note  RAMPL  should be close to the limiting value
+C   ASSYM  for times in excess of 12 seconds :
+ 143 2. 0.0 20.         RAMPL ASSYM             Ramp L of R-L
+C      3) Series R-C with R fixed;  C is is stepped (cut in half);
+C   Plot the 2 branch voltages that result from 1 amp of current being driven
+C   through each branch.  Note  NEWRC  should agree with  GEN  for all time.
+C   Following removal of capacitance, the curves are offset significantly:
+ 143 2. 0.0 20.         NEWRC GEN               Step C of R-C
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       5th of 11 subcases illustrates a practical (although oversimplied)
+C       application of the preceding.  Data comes from Orlando Hevia of UTN
+C       in Santa Fe, Argentina, as originally named  TACSCAPA.DAT    Data is
+C       being added to this test case on  30 December 2002.  Whereas the first
+C       such example from Mr. Hevia involved 200 cascaded line sections, this
+C       more manageable illustration involves just 2.  TACS is used to vary the
+C       shunt capacitance of the line as an approximation to corona.  Note that
+C       comment cards below are machine-produced (Mr. Hevia seems to have a
+C       separate program to create such cascaded data automatically).  Numerical
+C       burden of the simulation has been reduced by a factor of 20 without much
+C       loss to the plot or extrema.  A factor of 2 was gained by shortening
+C       the simulation from 20 to 10 usec,  and a factor of 10 was gained by
+C       increasing the time step from the original 5 nanoseconds (5.E-9 sec).
+C       The surge (lightning) is fast, so very high frequencies are involved.
+C       Note Mr. Hevia's use of JMARTI frequency-dependent line modeling.
+C         Warning.  7 September 2003, the answer changes substantially following
+C         the correction of an error in OVER12 (introduce new variable N7).
+PRINTED NUMBER WIDTH, 10, 2,  { Limited precision (not needed) & good separation
+TACS POCKET CALCULATOR OFF    { End use of pocket calculator (preceding subcase)
+C    The preceding probably is necessary because of complex definition of VAR002
+ 5.0E-08 20.E-06      { Hevia's dT increased by a factor of 10; cut Tmax in half
+       1       1       1       0       1      -1
+       5       5      10      10     134       1     170      10
+C $INCLUDE, CORONA1.PCH
+C FIRST STEP CAPACITY          3.000000E-06 uF/KM
+C SLOPE                        3.000000E-12 uF/KVKM
+C CORONA INCEPTION VOLTAGE     3.600000E+05 V
+C LENGTH OF LINE SEGMENT       1.000000E+00 KM
+C NUMBER OF SEGMENTS           2.000000E+00
+TACS HYBRID
+90BUS002
+88DER00259+BUS002
+C                             DV/DT MUST BE POSITIVE, BUT THIS TEST PRODUCES
+C                                  OSCILLATIONS ON CAPACITANCE
+88VAR002  = BUS002 .GT. 360000.00 { .AND. DER002 .GT. 0.0
+88CAP002  = 1.0E-08+VAR002*((BUS002- 360000.00)*0.3000E-11+0.3000E-05)
+33CAP002DER002BUS002VAR002    { Output all TACS signals including control C(t)
+BLANK card ending TACS data
+-1BUS000BUS001                2.  0.00              -2 1
+      14       3.9461680140762559000E+02
+   7.68954468040036890E+02   1.09493340867763940E+03   2.77331232270879630E+03
+   1.24494695098279860E+04   4.87585677225587210E+04   1.94958822722845510E+05
+   7.82012894548635460E+05   3.09109899381158690E+06   1.48401963798197680E+07
+   3.34339104652340860E+07   1.56456366517231150E+07   4.10038300055303800E+07
+   2.60359793110293930E+07   4.14639643816612140E+07
+   6.61711924983759210E+00   1.43260235003813180E+01   1.39885566693366850E+02
+   6.43953575180861780E+02   2.62156097340268890E+03   1.08866830412747530E+04
+   4.53734562567173710E+04   1.87083684125800150E+05   9.33229189322630060E+05
+   4.32016631012824080E+06   8.22729460640732390E+06   2.11696813048871940E+07
+   1.36911740150641220E+07   2.35107210671712680E+07
+      15       3.3528019962850977000E-06
+   1.48107642189314750E+01   8.18386897856797330E+01   1.07718234528722760E+02
+   1.39846901178167800E+02   1.72162896702735680E+02   2.28340646958654700E+02
+   3.44414362842715720E+02   1.63690212466734790E+04   8.08859081632825200E+03
+   5.81880629665730960E+04   8.57432646874608240E+05   5.25522742751047830E+05
+   3.86658063350409460E+06  -1.10174538112164120E+07   1.31615353212200510E+07
+   7.09885572628100910E+03   3.82889067640842040E+04   5.07666709936286210E+04
+   6.42506894830861860E+04   7.75796172424984980E+04   1.09484865717845850E+05
+   8.28324070221879670E+04   4.32415798449636150E+05   4.46749849274677110E+05
+   8.54778751513758670E+05   3.29015425966867800E+06   4.21774707623910620E+06
+   1.25365993856300990E+07   2.57506236853497770E+07   2.21885826483384670E+07
+  1.00000000
+  0.00000000
+-1BUS001BUS002BUS000BUS001
+C
+C THE OLD FILE HAD THE CAPACITANCE IN AN ISOLATED BUS!
+C
+  BUS002CAP002            0.1    { Capacitance is to be made voltage-dependent
+  TACS CONTROL                        CAP002   TOLERANCE=1.E-2
+C    Note preceding card includes optional definition of the tolerance for use
+C    of the TACS signal CAP002.  Without this declaration,  EPSRLC = EPSILN =
+C    1.E-8,  and this results in 159 triangularizations to [Y] as seen in case-
+C    summary statistics when  KOMPAR = 0  (see STARTUP):
+C    Size List 5.  Storage for [Y] and triangularized [Y].   No. times =  159 ...
+C    Using 1.E-3,  this is reduced slightly to 148.  This is the effect of not
+C    making a change if the change to C is less than 1/10 of 1%. This ignores 11
+C    of the 159 changes.  Using 1.E-2,  the  "No. times"  drops to 29; and using
+C    1/10,  it drops to 6.  So 1.E-2 is practical. Using 29 steps to approximate
+C    C(t) should be plenty good (see plot of C).  Yet 29 of 159 is only 18%, so
+C    simulation is a lot faster (82% of triangularization is avoided).
+  BUSXXXBUS000             0.0001
+  BUSXXX                   394.61
+  BUS002                   394.61
+BLANK
+C TACS CONTROLLED SWITCH TO CONNECT/DISCONNECT THE SOURCE
+13CAP002CP1002                                                        VAR002
+BLANK
+C DC SOURCE
+11CP1002    360000.0
+15BUSXXX      9.0                         USRFUN  { Hevia's own user-supplied so
+C    Recall  USRFUN  sources are a family of user-supplied sources as first
+C    described in the October, 2002, newsletter.  Alternative sources that might
+C    interest the reader include the following:
+C 15BUSXXX      8.0                         usrfun
+C 15BUSXXX 1  0.3E-6 7.00E-6    10.01.000E06Heidler  in-line 5
+C 15BUSXXX-1  0.3E-6  7.0E-6    30.05.000E03Heidler  in-line 5
+C 15BUSXXX 1  1.2E-6 10.0E-6    10.01.000E06TWO EXP  in-line
+BLANK card ending electric-network source cards
+  BUSXXXBUS000BUS001BUS002     { List of nodes for node-voltage output
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   4     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C   Step      Time     BUSXXX    BUS000    BUS001    BUS002    TACS      TACS      TACS      TACS
+C                                                              CAP002    DER002    BUS002    VAR002
+C      0       0.0        0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+C      1     .5E-7   144899.2  72286.18       0.0       0.0     .1E-7       0.0       0.0       0.0
+C      2     .1E-6   523890.1  334255.7       0.0       0.0     .1E-7       0.0       0.0       0.0
+C      3    .15E-6    922280.  724128.3       0.0       0.0     .1E-7       0.0       0.0       0.0
+C      4     .2E-6    .1199E7  .10635E7       0.0       0.0     .1E-7       0.0       0.0       0.0
+C      5    .25E-6   .13008E7   .1254E7       0.0       0.0     .1E-7       0.0       0.0       0.0
+BLANK card ending output variable requests
+C    400     .2E-4   83987.68  85044.93  222821.1  191231.3     .1E-7  -.237E11  191231.3       0.0
+C Extrema of output variables follow.   Order and column positioning are the same as for the preceding time-step loop output.
+C Variable maxima :   .13008E7    .128E7  839549.4  588280.4  .3695E-5  .2214E13  588280.4       1.0
+C Times of maxima :     .25E-6     .3E-6   .375E-5   .815E-5   .815E-5     .7E-5   .815E-5   .705E-5
+C Variable minima :        0.0       0.0       0.0       0.0       0.0  -.567E11       0.0       0.0
+C Times of minima :        0.0       0.0       0.0       0.0       0.0   .149E-4       0.0       0.0
+C 145 2. 0.0 20.         BUS000BUS001BUS002    { Not enough space for Y-max
+C   Replace the preceding normal plot card by following alternative wide format:
+ 145                    BUS000BUS001BUS002      Voltage on line Volts
+C    Zero units/inch in columns 5-7 means that another card carries the info:
+C     Units/inch    Minimum time    Maximum time   Bottom Y-axis   Top of Y-axis
+             2.0             0.0            20.0             0.0           1.4E6
+ 195 2. 0.0 20.         TACS  CAP002            Capacitance C(t)Farads
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       6th of 11 subcases illustrates a practical (although oversimplied)
+C       application of the preceding.  Data comes from Orlando Hevia of UTN
+C       in Santa Fe, Argentina, as originally named  TIDDHHC.DAT    Data is
+C       being added to this test case on  10 September 2003.
+C A SAMPLE OF CORONA WITH TACS CONTROLLED CAPACITORS
+C THE OUTPUT LOOKS BELIEVABLE
+C AN AVERAGE CAPACITANCE IS CALCULATED BETWEEN TIME STEPS
+PRINTED NUMBER WIDTH, 11, 1,  { Restore default settings as if no declaration
+ 2.0E-08 40.E-06   { Orlando used dT = 1.E-8 for more realistic looking plots
+       1       1       0       0       1      -1
+       5       5      20      20     100     100     500     500
+TACS HYBRID
+90BUS001
+90BUS002
+88DER00159+BUS001
+88DER00259+BUS002
+88VOLTA1  = BUS001.GT.270000.0
+88VOLTA2  = BUS002.GT.270000.0
+88DELTA1  = (BUS001-270000.0)*1.0E-5
+88DELTA2  = (BUS002-270000.0)*1.0E-5
+88CAP011  = 1.0E-08+(DER001.GT.0.0)*1.0E-8*VOLTA1*DELTA1
+88CAP02153+CAP011                                       1.0E-8
+88CAP001  =(CAP021+CAP011)/2.0
+88CAP012  = 1.0E-08+(DER002.GT.0.0)*1.0E-8*VOLTA2*DELTA2
+88CAP02253+CAP012                                       1.0E-8
+88CAP002  =(CAP022+CAP012)/2.0
+33CAP001CAP002
+BLANK
+$VINTAGE, 1
+-1BUS000BUS001             7.88076E+01 4.80104E+02 2.93720E+05 1.00000E+00 1
+$VINTAGE, -1,
+-1BUS001BUS002BUS000BUS001
+-1BUS002BUS003BUS000BUS001
+C TACS CONTROLLED CAPACITANCES
+  BUS001                  10.0                                                 1
+  TACS CONTROL                        CAP001
+  BUS002                  10.0                                                 1
+  TACS CONTROL                        CAP002
+  BUSXXXBUS000             1.0                                                 1
+  BUS003                   468.82
+C
+C CONSTANT CAPACITANCES
+C
+-1VUS000VUS001BUS000BUS001
+-1VUS001VUS002BUS000BUS001
+-1VUS002VUS003BUS000BUS001
+  VUS003                   468.82
+C 
+  BUSXXXVUS000             1.0                                                 1
+C CONSTANT CAPACITANCES
+  VUS001                  10.0        1.0E-2                                   1
+  VUS002                  10.0        1.0E-2                                   1
+C
+C NO CAPACITANCES
+C
+C CONSTANT CAPACITANCES
+C
+-1XUS000XUS001BUS000BUS001
+-1XUS001XUS002BUS000BUS001
+-1XUS002XUS003BUS000BUS001
+  XUS003                   468.82
+C 
+  BUSXXXXUS000             1.0                                                 1
+C
+BLANK
+BLANK
+C ------==--------========--------========
+15BUSXXX 1  1.0E-6  7.0E-6     0.01.770E06TWO EXP  in-line
+C ------==----------==========----------
+BLANK
+  BUS000
+  BUS001
+  BUS002
+  BUS003
+  VUS000
+  VUS001
+  VUS002
+  VUS003
+  XUS000
+  XUS001
+  XUS002
+  XUS003
+C   Step      Time      BUS000     BUS001     BUS002     BUS003     VUS000     VUS001     VUS002     VUS003     XUS000     XUS001
+C 
+C
+C                       XUS002     XUS003     BUS001     BUS002     BUSXXX     BUSXXX     VUS001     VUS002     BUSXXX     TACS
+C                                             TERRA      TERRA      BUS000     VUS000     TERRA      TERRA      XUS000     CAP001
+C
+C                       TACS
+C                       CAP002
+C      0       0.0         0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C                          0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C                          0.0
+C      1     .2E-7  133766.113        0.0        0.0        0.0 133766.113        0.0        0.0        0.0 133766.113        0.0
+C                          0.0        0.0        0.0        0.0 267.636123 267.636123        0.0        0.0 267.636123     .75E-8
+C                       .75E-8
+C      2     .4E-7  258225.657        0.0        0.0        0.0 258225.657        0.0        0.0        0.0 258225.657        0.0
+C                          0.0        0.0        0.0        0.0 516.651878 516.651878        0.0        0.0 516.651878      .1E-7
+C                        .1E-7
+BLANK card ending nodes for node-voltage outputs
+C    2000     .4E-4  17081.5133 -23694.238 -37514.031 75051.7774 16473.2675 -93546.663 -101202.23 51712.6484 16072.4173 18461.1635
+C                    21456.0213 25168.3439 -430.45364 -154.33355  -1000.651 -392.40513  507.97555 -115.34624 8.44498556      .1E-7
+C                         .1E-7
+C Variable maxima :  .1766463E7 814156.947 655233.802 577911.165 .1766463E7 .1131763E7 .1118349E7 967992.864 .1766463E7 .1629911E7
+C                      .15039E7 .1343678E7 6074.55465 4854.86191 5930.26754 5930.26754 5072.07156 1967.01281 3534.29804 .640067E-7
+C                    .479668E-7
+C Times of maxima :       .1E-5   .1322E-4   .2316E-4   .2692E-4      .1E-5   .1142E-4   .1676E-4   .2012E-4      .1E-5     .44E-5
+C                        .78E-5   .1118E-4    .132E-4   .1668E-4    .742E-5    .742E-5    .404E-5    .908E-5      .1E-5   .1322E-4
+C                      .2304E-4
+C Variable minima :         0.0 -23694.238 -38329.779        0.0        0.0 -166322.75 -101202.23        0.0        0.0        0.0
+C                           0.0        0.0 -3733.6936 -2735.0324 -1337.4272 -1647.1189 -2170.2496 -1613.5916 -331.24485        0.0
+C                           0.0
+C Times of minima :         0.0      .4E-4   .3998E-4        0.0        0.0   .3744E-4      .4E-4        0.0        0.0        0.0
+C                           0.0        0.0     .14E-4   .2642E-4   .3788E-4   .3112E-4   .1392E-4   .2462E-4    .205E-4        0.0
+C                           0.0
+ 145 2. 0.0 40.  0.02.E6VUS000VUS001VUS002VUS003 Constant C
+ 145 2. 0.0 40.  0.02.E6BUS000BUS001BUS002BUS003 TACS CONTROL
+ 145 2. 0.0 40.  0.02.E6BUS001BUS002VUS001VUS002 Both
+ 145 2. 0.0 40.  0.02.E6XUS000XUS001XUS002XUS003 No capacitors
+ 195 2. 0.0 40.-2.E36.E3BUSXXXBUS000BUSXXXVUS000 Currents
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       7th of 11 subcases illustrates a true delta connection of nonlinear
+C       elements that use compensation.  Prior to November of 2006,  ATP would
+C       have halted with a complaint that the Thevenin impedance matrix [Z-thev]
+C       was singular as follows:
+C          KILL code number      Overlay number     Nearby statement number
+C                   209                 18                      3471
+C          KILL = 209.   ZnO solution by Newton`s method of  3   coupled ...
+C       Order is critical.  For the delta to be recognized,  the 3 N.L. elements
+C       must be contiguous and must have triplets of  (BUS1, BUS2) names ordered
+C       as  NAMEA  to  NAMEB  first,  then  NAMEB  to  NAMEC  2nd,  and finally
+C       NAMEC to NAMEA.  Data appended  15 December 2006.  WSM.
+PRINTED NUMBER WIDTH, 11, 2,   { Deliberately reduce 9 output columns by 1 digit
+ZO, 20, , , , 0.9,    ,{ To improve ZnO convergence,control Newton ZnO iteration
+ .000050 .020000
+       1       1       1       0       1      -1
+       5       5      20       1      30       5      50      50
+-1SENDA RECA              .305515.8187.01210  200.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937  200.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+92RECA  RECB                          5555. { 1st card of 1st of 3 ZnO arrest} 3
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB  RECC  RECA  RECB              5555. { Phase "bc" ZnO is copy of "ab" } 3
+92RECC  RECA  RECA  RECB              5555. { Phase "ca" ZnO is copy of "ab" } 3
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      236000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      236000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      236000.       60.      120.    { with no phasor solution.
+BLANK card follows the last source card
+BLANK card ending node voltage outputs
+  PRINTER PLOT
+ 194 2. 0.0 20.         BRANCH                     { Axis limits (-1.829, 0.525)
+                        RECA  RECB  RECB  RECC  RECC  RECA
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       8th of 11 subcases unites the 1st with the 7th.  Both the Y & the delta
+C       connections are present with the Y of the 1st subcase  having node names
+C       as follows:  SEND ---> LINE     REC ---> END         The two subnetworks
+C       are physically disconnected  but mathematically coupled by one very high
+C       resistance branch (see comment cards)  that makes the difference between
+C       two 3x3 matrices [Z-thev] and one 6x6 matrix.  See  (RECA, ENDA).  Data
+C       is added  15 December 2006.  WSM.
+PRINTED NUMBER WIDTH, 11, 2,   { Deliberately reduce 9 output columns by 1 digit
+ZO, 20, , , , 0.9,    ,{ To improve ZnO convergence,control Newton ZnO iteration
+ .000050 .020000
+       1       1       1       0       1      -1
+       5       5      20       1      30       5      50      50
+C   Begin with branches of the 1st subcase:
+-1LINEA ENDA              .305515.8187.01210  200.  0      { 200-mile, constant-
+-2LINEB ENDB              .031991.5559.01937  200.  0      { parameter,  3-phase
+-3LINEC ENDC                                                { transmission line.
+92ENDA                                5555. { 1st card of 1st of 3 ZnO arresters
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92ENDB        ENDA                    5555.       { Phase "b" ZnO is copy of "a"
+92ENDC                                4444.  { Phase "c" ZnO is piecewise-linear
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+C   Done with branches of the 1st subcase;  follow by branches of 7th subcase:
+-1SENDA RECA              .305515.8187.01210  200.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937  200.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+92RECA  RECB                          5555. { 1st card of 1st of 3 ZnO arrest} 3
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB  RECC  RECA  RECB              5555. { Phase "bc" ZnO is copy of "ab" } 3
+92RECC  RECA  RECA  RECB              5555. { Phase "ca" ZnO is copy of "ab" } 3
+C      Remove the following large resistance to solve each 3-phase bank of surge
+C      arresters separately.  With this branch present,  the 6 N.L. elements all
+C      are in the same subnetwork,  so 6 N.L. equations in 6 unknowns are solved
+C      by Newton's method at each time step.  Without the branch,  there will be
+C      two sequential solutions of 3 N.L. equations each.  The difference can be
+C      seen in Lists 24 and 26 of the case-summary statistics:
+C        With R :  Size 21-30:     9     0    13     6 -9999    36 -9999  ...
+C        Without:  Size 21-30:     9     0    12     3 -9999     9 -9999  ...
+C      Of course, the latter should simulate faster than the former.  Resistance
+C      is high enough so the solution changes little.  For example, the two
+C      printer plots are identical.
+  RECA  ENDA               1.E+8 { Leakage resistanc ties 2 subnetworks together
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+C   Begin with sources of the 1st subcase:
+14LINEA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14LINEB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14LINEC      408000.       60.      120.    { with no phasor solution.
+C   Done with sources of the 1st subcase;  follow by sources of 7 subcase:
+14SENDA      236000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      236000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      236000.       60.      120.    { with no phasor solution.
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        LINEA  |ENDA  *
+C        ENDA   |TERRA *LINEA *RECA  *
+C        LINEB  |ENDB  *
+C        ENDB   |TERRA *LINEB *
+C        LINEC  |ENDC  *
+C        ENDC   |TERRA *LINEC *
+C        SENDA  |RECA  *
+C        RECA   |ENDA  *SENDA *RECB  *RECC  *
+C        SENDB  |RECB  *
+C        RECB   |RECA  *SENDB *RECC  *
+C        SENDC  |RECC  *
+C        RECC   |RECA  *RECB  *SENDC *
+C        TERRA  |ENDA  *ENDB  *ENDC  *
+C --------------+------------------------------
+BLANK card terminates the last source card
+  ENDA  ENDB  ENDC  { Arrester voltages of Y-connected 1st subcase
+C Column headings for the  9   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C First  6     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step      Time      RECA       RECB       RECC       ENDA       ENDB       ENDC       RECA       RECB       RECC
+C                      RECB       RECC       RECA                                        RECB       RECC       RECA
+C     0       0.0         0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C     1     .5E-4   .3494E-21   -.47E-37  -.349E-21  .1226E-15  .1226E-15    .37E-15  -.334E-31  .9006E-47  .3341E-31
+C     2     .1E-3   -.349E-21  .4702E-37  .3494E-21  -.123E-15  -.123E-15   -.37E-15  .3341E-31  -.135E-46  -.334E-31
+C    22     .0011   28277.756  622.32762  -28900.08  32953.961   -15932.9  -17000.47   .2708E-5  .59598E-7  -.2768E-5
+C    23    .00115   658750.92  10864.876  -669615.8  709562.41  -421760.1  -448957.3  33.053897  .10405E-5   -50.5753
+C   400       .02   94123.287  379306.97  -473430.3  295693.53  152343.78  -601370.3  .90138E-5  .36325E-4  -.0061536
+C Variable maxima : 667041.09  609376.16  670599.37  709562.41  676288.65   651690.5  45.754917  4.3600592   52.54267
+C Times of maxima :     .0152      .0036     .00985     .00115     .00455     .00985      .0152      .0036     .00985
+C Variable minima : -694529.7  -467073.7  -703549.2  -717416.9  -663770.9  -669507.6  -130.7469    -.00433  -182.8636
+C Times of minima :    .00775      .0143      .0025      .0085     .01435     .00325     .00775      .0143      .0025
+BLANK card ending node voltage outputs
+  PRINTER PLOT
+ 144 2. 0.0 20.         ENDA                     { Axis limits:  (-7.174, 7.096)                                  
+ 194 2. 0.0 20.         BRANCH                   { Axis limits:  (-1.829, 0.525)
+                        RECA  RECB  RECB  RECC  RECC  RECA
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       9th of 11 subcases is like the 1st except that exponential ZnO modeling
+C       is used for all 3 surge arresters.  The piecewise-linear 3rd arrester of
+C       the 1st subcase has been replaced by a copy of the 1st arrester.  Also,
+C       the alternative [Z]-based Newton iteration replaces the default choice
+C       of [Y]-based iteration.  The request for [Z] is made by the line that
+C       immediately follows the first line of the first arrester.  Unlike the
+C       11th subcase of  DC-37,  here the request for [Z] is active.  Because
+C       of a lack of  NO Y-BASED NEWTON  declaration,  that request that has
+C       been added to the first arrester is active and necessary (to obtain Z).
+PRINTED NUMBER WIDTH, 11, 2,   { Deliberately reduce 9 output columns by 1 digit
+ .000050 .020000
+       1       1       1       0       1      -1
+       5       5      20       1      30       5      50      50
+-1SENDA RECA              .305515.8187.01210  200.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937  200.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+92RECA                                5555. { 1st card of 1st of 3 ZnO arrest} 3
+  [Z]-based Newton iteration { Column and case matter.  Declare not use of [Y]
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB        RECA                    5555. { Phase "b" ZnO is copy of "a" }   3
+92RECC        RECA                    5555. { Phase "c" ZnO is copy of "a" }   3
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+C SENDA      208000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+BLANK card follows the last source card
+  SENDA SENDB SENDC
+BLANK card ending node voltage outputs
+  PRINTER PLOT
+ 194 2. 0.0 20.         BRANCH
+                        RECA        RECB        RECC      
+  CALCOMP PLOT
+ 184 2. 0.0 20.         BRANCH
+                        RECA        RECB        RECC      
+ 194 2. 0.0 20.         BRANCH
+                        RECA        RECB        RECC      
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       10th of 11 subcases is like the 1st except that exponential ZnO modeling
+C       is replaced by piecewise-linear modeling for all 3 surge arresters. Such
+C       modeling became available 2 February 2007 for [Z]-based Newton iteration
+C       which continues to be used in place of the default [Y]-based iteration.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+C   Demonstrate that the following request for [Z]-based Newton iteration is a
+C   binary toggle.  Note that 3 uses has the same effect as a single use:
+NO Y-BASED NEWTON   { Every subnetwork is to be solved using [Z] rather than [Y]
+NO Y-BASED NEWTON   { 2nd use cancels the 1st.  At this point,  use [Y] not [Z]
+NO Y-BASED NEWTON   { Every subnetwork is to be solved using [Z] rather than [Y]
+C ZINC OXIDE STARTUP  20   1.D-8   1.D-3     0.1     1.0     1.5 
+ .000050    .020
+       1       1       1       0       1      -1
+       5       5      20       1      30       5      50      50
+-1SENDA RECA              .305515.8187.01210  200.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937  200.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+92RECA                                4444. { 1st card of 1st of 3 ZnO arres } 1
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      0.0                      0.0   { Origin. 3rd quadrant copy
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+92RECB        RECA                    4444.   { Phase "b" ZnO is copy of "a" } 1
+92RECC        RECA                    4444.   { Phase "c" ZnO is copy of "a" } 1
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+BLANK card follows the last source card
+  RECA  RECB  RECC   { Names of nodes for voltage output
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time        RECA         RECB         RECC         RECA         RECB         RECC
+C                                                                TERRA        TERRA        TERRA
+C      0       0.0           0.0          0.0          0.0          0.0          0.0          0.0
+C      1     .5E-4   .615267E-15  .615327E-15  .615387E-15    -.868E-18  -.86821E-18  -.86842E-18
+C      2     .1E-3   -.61527E-15  -.61533E-15  -.61539E-15  .867995E-18  .868206E-18  .868416E-18
+C     21    .00105   .615267E-15  .615327E-15  .615387E-15    -.868E-18  -.86821E-18  -.86842E-18
+C     22     .0011   32933.78136  -15929.2096  -17004.5718  .0565483883  -.027350978   -.02919741
+C     23    .00115   674022.6244   -433252.07  -460655.512  311.7853238  -.743908087  -.790960701
+BLANK card ending requests for node voltage output
+C    400       .02   248862.4504  197049.3444   -599097.73  .4273050316  .3383402205  -4.96347489
+C Variable maxima :   674022.6244  656282.6288  651788.8183  311.7853238  168.5414551  143.4643879
+C Times of maxima :        .00115       .00455        .0098       .00115       .00455        .0098
+C Variable minima :   -675779.414  -635023.773  -669662.422  -328.011827  -67.9420472   -271.51252
+C Times of minima :        .00865       .01435       .00325       .00865       .01435       .00325
+  PRINTER PLOT
+ 194 3. 0.0 20.         BRANCH                 { Axis limits: ( -3.280,  3.118 )
+                        RECA        RECB        RECC
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+C       11th of 11 subcases is like the 1st. But the 1st was solved by [Y]-based
+C       Newton iteration.  Here, use [Z]-based iteration.  Answer is the same.
+C       Note that there is no  NO Y-BASED NEWTON  request because the one used
+C       by the preceding subcase remains in effect.  The choice was set to [Z].
+C NO Y-BASED NEWTON { If data is removed as separate subcase, activate this card
+ .000050 .020000
+       1       1       1       0       1      -1
+       5       5      20       1      30       5      50      50
+-1SENDA RECA              .305515.8187.01210  200.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937  200.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+92RECA                                5555. { 1st card of 1st of 3 ZnO arresters
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB        RECA                    5555.       { Phase "b" ZnO is copy of "a"
+92RECC                                4444.  { Phase "c" ZnO is piecewise-linear
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+BLANK card follows the last source card
+ 1
+  PRINTER PLOT
+ 144 3. 0.0 20.         RECA                     { Axis limits: (-7.174,  7.096)
+BLANK termination to plot cards
+BEGIN NEW DATA CASE
+BLANK

@@ -1,0 +1,30 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-49
+C     Companion case to DC-32, which had  MEMSAV=1  use.   Development was first
+C     documented  in  Volume X  EMTP Memoranda,  3 July 1980,  Pagination  MSDO.
+C     Node  LOADA  has a one-ohm resistor connected to  FAULT,  and this in turn
+C     is connected to ground via switch number one.  This fault switch was  open
+C     during  DC-32,  but will here be closed at  12 msec  (the  1st step beyond
+C     the backed-off switching time of  11.99 msec).
+C $OPEN,  UNIT=22  FILE=dc32to49.bin  STATUS=OLD  FORM=UNFORMATTED ! { (hold case)
+$OPEN,  UNIT=LUNIT2  FILE=dc32.bin  STATUS=OLD  FORM=UNFORMATTED ! { (hold case)
+START AGAIN
+       1         .011990
+    9999
+$CLOSE,  UNIT=LUNIT2   STATUS=KEEP
+$OPEN,  UNIT=LUNIT2  STATUS=SCRATCH  FORM=UNFORMATTED
+MISCELLANEOUS DATA CARDS
+ .000020    .018                                    .010
+       1       1       0       0       1       0       0       2
+$OPEN, UNIT=LUNIT4  FILE=dc32.pl4   STATUS=APPEND !  { C-like usage adds at end 
+C       The following step numbers are a continuation of DC-32,  which simulated
+C       500 steps (DELTAT = 20 microseconds, TMAX = 10 milliseconds).
+CHANGE PRINTOUT FREQUENCY
+     500       1     502       2     510      10     550      50
+TIME STEP LOOP
+  PRINTER PLOT
+ 144 1. 10. 18.         LOADA LOADB              { Axis limits: (-2.784,  1.443)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+ 

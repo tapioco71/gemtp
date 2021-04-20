@@ -1,0 +1,90 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-15
+C             Derive  [R], [L]  representations of 2- or 3-winding transformers.
+XFORMER
+$ERASE          { Erase any remnant card images that might exist in punch buffer
+22.        700.
+139.4      13.6     2100.     12.       700.
+$PUNCH     { Flush contents of punch buffer (LUNIT7 punched output of preceding)
+C 2nd punch : 52,  ,   ,  ,  ,    -0.2028822586562E-02 ,   0.1353359666262E+03 $
+C      Frequency was added explicitly on  18 July 2002.  Prior to this date,  it
+C      merely was implied.   But  now it will be declared on a new  $UNITS  card
+C      is to precede punched cards.  However, there is ambiguity. Since the user
+C      does not declare frequency as part of  XFORMER  data,  for freq. of X the
+C      $UNITS  card will display  STATFR  ---  the power frequency from STARTUP.
+C      That is if data is old.   But a user can define his own frequency F as he
+C      goes using  $DEPOSIT  as follows (switch to a power frequency of 400 Hz):
+$DEPOSIT, STATFR=400. { SPY DEPOSIT command puts valu 400 in ATP variable STATFR
+22.        600.
+139.4      13.6     1800.     12.       600.
+$PUNCH
+C 1st punch : 51,  ,  ,  ,  ,  0.2426133676335E-01 ,  0.1620334065762E+04 , ,,,,
+$DEPOSIT, STATFR=60.  { Return to a more common power frequency (cancel the 400)
+22.        280.
+139.4      13.2     840.      13.       280.
+$PUNCH
+C 3rd punch :                 0.4661083093112E-03 ,   0.3113449149085E+02 , ,,,,
+22.        305.
+139.4      13.2     915.      13.       305.
+$PUNCH
+C 1st punch : 51,  ,  ,  ,  , 0.4772244898150E-01 ,   0.3187701553139E+04 , ,,,,
+22.        400.
+139.4       13.2    1200.     13.       400.
+$PUNCH
+C 2nd punch : 52,  ,  ,  ,  ,     -0.3445670365668E-02 ,   0.2298606303275E+03 $
+BRANCH  NAME1 NAME2 NAME3 NAME4 NAME5 NAME6        { 3 pairs of names for phases
+3.3        83.3
+132.8      250.     6.7       83.3
+66.4       56.8     5.1       18.96
+13.2       56.8     3.2       18.96
+$PUNCH
+C 4th punch: 53,NAME5 ,NAME6 , , , -0.5802607141885E-01 ,  0.7013580357111E+04 $
+C 5th punch:                      -0.2901590479727E-01 ,   0.3507083721397E+04 $
+C 6th punch:                  0.1153587338779E-01 ,   0.6973923571743E+03 , ,,,,
+3.3       80.
+177.      400.      3.37      80.
+132.8     22.       3.57      7.35
+13.2      22.       3.42      7.35
+$PUNCH
+C Last LUNIT7:                0.3031150665151E-01 ,   0.7263587283765E+03 , ,,,,
+BLANK carding ending  "XFORMER"  cases.
+BEGIN NEW DATA CASE
+C     2nd of 3 data subcases tests Gabor Furst's supporting routine that
+C     will punch data cards to represent a Type-3 U.M. (induction motor).
+C     This was added  4 February 1997  as described in April, 97, newsletter.
+INDUCTION MOTOR DATA
+  SINGLE  { 1st of 2 for default motor parameters must be nonblank, so key 1st 8
+BLANK     { 2nd of 2 for default motor parameters
+BLANK carding ending data subcases within  SUBROUTINE INDUCT  by Gabor Furst
+BEGIN NEW DATA CASE
+C     3rd of 3 data subcases tests Orlando Hevia's supporting routine that
+C     calculates Type-14 harmonic sources for an HFS frequency scan.  This
+C     is added  16 December 2001  as should be documented in a newsletter.
+C     Orlando Hevia's subroutine has been renamed  HSOURC  ("harmonic source").
+C ITYPE    :  1- 2 RESERVED
+C BUS      :  3- 8 BUS NAME
+C VOLT     :  9-16 VOLTAGE OF BRIDGE IN VOLT
+C FREQ     : 17-24 FREQUENCY IN HZ
+C AMPER    : 25-32 CURRENT IN AMPER
+C PHASE    : 33-40 PHASE IN DEGREES
+C SCCMVA   : 41-48 SHORT-CIRCUIT POWER IN MVA
+C PERCEN   : 49-56 PERCENT OF LOAD
+C ALFA     : 57-64 DELAY ANGLE IN DEGREES
+C MU       : 65-72 OVERLAP ANGLE IN DEGREES
+C NPU      : 73-75 NUMBER OF PULSES
+C IMF      : 76-78 MAXIMUM HARMONIC TO CALCULATE
+C KY       : 79-80 RESERVED
+C BUS      VOLT    FREQ   AMPER   PHASE   SCCMVA  PERCEN ALFA    MU     NPUIMFKY
+C                              
+$ERASE          { Erase any remnant card images that might exist in punch buffer
+CREATE HARMONIC SOURCES  { Request transfer to Orlando Hevia's SUBROUTINE HSOURC 
+C ------________--------________--------________--------________--------___---__
+  BUS6     600.0    50.0  1000.0     0.0    75.0     0.0     0.0          6 55 
+$PUNCH     { Flush the Type-14 source cards, which are output of the computation
+  BUS12    600.0    50.0  1000.0     0.0    75.0     0.0     0.0         12 55 
+$PUNCH     { Flush the Type-14 source cards, which are output of the computation
+  BUS18    600.0    50.0  1000.0     0.0    75.0     0.0     0.0         18 55 
+$PUNCH     { Flush the Type-14 source cards, which are output of the computation
+BLANK card ending requests of CHS
+BEGIN NEW DATA CASE
+BLANK

@@ -1,0 +1,409 @@
+BEGIN NEW DATA CASE                                                             
+C     BENCHMARK DC-11                                                           
+C          Illustration of data input using  [Y].   Matrix comes from  DC-9  (or
+C          more precisely,  DCPRINT-25,  since  DIAGNOSTIC is needed to see it).        
+C          Solution is close to  DC-9  (remember limited input  [Y]  precision).
+C          Note two  $UNITS  cards.   The 2nd,  returning to original  XOPT  and 
+C          COPT,  does nothing,  since all data input is completed.  But the 1st
+C          is mandatory whenever [Y] input is used,  so input [Y] in mhos will
+C          be loaded into List-3 tables TR and TX without any scaling.  COPT  is
+C          not used, so it can be anything (zero is used below).  But  XOPT must
+C          equal the reciprocal of  2 * Pi,  since the scaling factor for [L] is 
+C          2 * Pi  times this frequency (.1591549431) in Hz  --- which is unity.
+C          There are 5 stacked subcases.  The 4th & 5th are related to this 1st.
+     0.0     0.0     60.       { Note  XOPT = 60  here  ---  never actually used                                                     
+                       1       1                                                
+C New  XOPT, COPT = 1.59154943E-01  0.00000000E+00  |$UNITS, .1591549431,  0.0,  
+C 1st of coupled R-L.   4.80000E-09  1.22811E-04    |51RA1   GA1               4                                   
+C -1.000E-07-2.242E-05 9.440E-03-2.574E-02 9.440E-03|52RB1   GB1               -                  
+C  4.300E-08-1.463E-05-8.500E-03 1.673E-02 1.660E-02|53RC1   GC1               4
+C -1.000E-07-9.426E-06 1.871E-02-5.030E-02-1.450E-02|54                        -
+C  4.631E-02-1.156E-02 3.250E-03-8.199E-02 4.631E-02|                          .                                    
+C  1.500E-06 6.459E-06-1.680E-02 5.972E-02 1.897E-02|55                        1
+C -3.270E-02 3.048E-02 3.607E-02-6.062E-02 3.607E-02|                          -                  
+C  1.200E-06 4.486E-06 2.090E-03-2.063E-02-2.200E-03|56                        1
+C  3.660E-03-6.532E-02-2.000E-05 2.742E-02 4.850E-03|                          .
+C New  XOPT, COPT = 6.00000000E+01  0.00000000E+00  |$UNITS, 60., 0.0, { Restore
+$UNITS, .1591549431,  0.0, { Ensures no scaling of [Y] in mhos.  XOPT = 1/(2*Pi)
+51RA1   GA1               4.8E-9 1.22811E-04        { 1st row of 6x6 [Y] in mhos                                  
+52RB1   GB1               -1.E-7-2.24227E-05.00944-2.57399E-02                  
+53RC1   GC1               4.3E-8-1.46254E-05-.0085 1.67291E-02.01660-4.74760E-02
+54                        -1.E-7-9.42642E-06.01871-5.03015E-02-.0145 2.40976E-02
+                          .04631-1.15612E-02                                    
+55                        1.5E-6 6.45897E-06-.0168 5.97172E-02.01897-4.24556E-02
+                          -.0327 3.04757E-02.03607-6.06204E-02                  
+56                        1.2E-6 4.48565E-06.00209-2.06269E-02-.0022 3.68953E-02
+                          .00366-6.53239E-02-2.E-5 2.74250E-02.00485 9.93931E-03
+$UNITS, 60., 0.0, { Restore original values;  "CIMAGE" ends scaling  XUNITS = 1. 
+BLANK card ending branch cards
+BLANK card ending non-existent switch cards
+14GA1      424.35     60.         0.0                        -.1                
+14RA1      424.35     60.        10.0                        -.1                
+14GB1      424.35     60.      -120.0                        -.1                
+14RB1      424.35     60.      -110.0                        -.1                
+14GC1      424.35     60.       120.0                        -.1                
+14RC1      424.35     60.       130.0                        -.1                
+C --------------+------------------------------ 
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        RA1    |GA1   *                                                                                                  
+C        GA1    |RA1   *                                                                                                  
+C        RB1    |GB1   *                                                                                                  
+C        GB1    |RB1   *                                                                                                  
+C        RC1    |GC1   *                                                                                                  
+C        GC1    |RC1   *                                                                                                  
+C --------------+------------------------------
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   9.326316227367E+03
+C End injection: -12.96755041034 44.410354381177 -6429.033843309 9422.7669408263
+C End injection: -42.47495983067    -106.9773628 -6888.835943954      -0.6822873
+-5RA1   GA1   RB1   GB1    { Mar, 95.  Illustrate 2 phasor branch voltage outputs               
+BLANK card ending output requests
+  PRINTER PLOT                                                                  
+BLANK card ending non-existent plot cards
+BEGIN NEW DATA CASE
+C     2nd of  5  subcases will illustrate the request for an exact Pi-equivalent
+C     to  represent constant-parameter distributed lines in the phasor solution.
+C     Data is from BENCHMARK DCPRINT-1, from which the permanently-closed switch
+C     was removed to simplify.  The solution is just a little different.  To see
+C     this, look at generator inject (compare with following lumped-R solution): 
+C       SEND         100.             100.      1.1985672173179  1.9672525544427
+C                    0.0              0.0      -1.559974114699       -52.4640241   
+C     Acknowledgement: Bob Meredith  of  New York Power Authority  inspired  the 
+C                      work  of  this  feature  by  his studies involving phasor
+C                      solutions at high frequencies (200 KHz)  for power system
+C                      carrier relaying.  Bob found that using lumped R modeling
+C                      gave quite erroneous results.       WSM.   March 25, 1989
+EXACT PHASOR EQUIVALENT { Switch from lumped-R to exact Pi-equiv. of distributed
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .020     60.     60.
+       1       1       1       1       1      -1
+       2       1       5       5      20      20
+  REC                       .001   { Near short at receiving end to ground }   3
+-1SEND  REC                  0.3   0.4  12.6  100.    { 1-phase distributed line
+BLANK card ending branch cards
+BLANK card ending switch cards
+14SEND          100.       60.    { 60-Hz phasor solution }        -1.  
+BLANK card ending source cards
+C  SEND                   100.           100.    1.2001187442482  1.966491078825
+C                          0.0            0.0    -1.557819682377     -52.3899333  
+C       REC   .00119991725341  .00201685894214  -1.199917253405  2.0168589421448
+C              -.001621085617      -53.4913908  1.6210856169526      126.5086092
+C       Total network loss  P-loss  by summing injections =   6.000593721241E+01
+C Solution at nodes with known voltage.   Nodes that are shorted together by swi
+C       SEND            100.          100.      1.2001187442482   1.966491078825  
+C                        0.0           0.0      -1.557819682377      -52.3899333 
+C             Step      Time        REC          REC          SEND           REC                                                               
+C                                  TERRA                                   TERRA                                                             
+C               0       0.0   .0011999173  .0011999173         100.  1.199917253                                                             
+C               1     .1E-3   .0012601784  .0012601784  99.92894726  1.260178379                                                             
+C               2     .2E-3   .0013186574  .0013186574  99.71589003  1.318657447                                                             
+C               3     .3E-3   .0013752626  .0013752626  99.36113105  1.375262631                                                             
+ 1                    { Request the output of all (here, only two) node voltages
+C             200       .02   .0019139029  .0019139029  30.90169944  1.913902913                                                             
+C         Variable maxima :   .0020181823  .0020181823         100.  2.018182282                                                          
+C         Times of maxima :         .0025        .0025          0.0        .0025                                                          
+C         Variable minima :   -.002017382  -.002017382  -99.9921044  -2.01738187                                                          
+C         Times of minima :         .0108        .0108        .0083        .0108                                                          
+  PRINTER PLOT
+C                If lumped R, the extrema change just a little: (-2.017,  2.017) 
+ 194 4. 0.0 20.         REC                     { Axis limits : (-2.017,  2.018)
+$WIDTH, 80,        { To compact the case-summary tables, switch to narrow output
+BLANK card ending plot cards
+BEGIN NEW DATA CASE                                                             
+C     3rd  of  5 subcases is unrelated to the preceding two.  It will illustrate
+C     the use of EMTP to perform both single-phase and 3-phase faults to ground.
+C     The network is copied from  DC-3. Usage began the 1st week of March, 1993.
+$WIDTH, 132,    { More than 80 columns are needed to see the 3-phase fault table
+FAULTS TO GROUND          { Declaration of intention to run a phasor fault study
+  M-A   M-B   M-C   { 1st fault is 3-phase;  we will short these nodes to ground
+  1-A   1-B   1-C   { 2nd fault is 3-phase.  Etc.    FORMAT is  (2X, 13A6)  with
+  2-A   2-B   2-C   { blank field ignored (names are on left only to look nice).
+  4-A   4-B   4-C   { There is one line per  fault,  which can involve a maximum
+  7-A   7-B   7-C   { of 13 nodes.
+  11-A  11-B  11-C  2-A     { 6th fault is 4-phase,  to illustrate no limit < 14
+C    Keep the 7th fault 3-phase.  However, spread it over 2 data cards as an
+C    illustration of  CONT.  on the right edge.  The former limit of 13 nodes
+C    per fault thus is expanded to 25 on 18 August 2005.  The number of faults
+C    becomes unlimited at this time as  SUBROUTINE FAULT  is reprogrammed.  WSM.
+C 18-A  18-B  18-C  { 7th fault is 3-phase
+  18-A  18-B                                                               CONT.
+        18-C     { 7th fault is spread over 2 data cards by continuation request
+  18-A              { 8th fault is single-line-to-ground (node 18-A is shorted).
+        18-B        { 9th fault is single-line-to-ground (node 18-B is shorted).
+              18-C  { 10  fault is single-line-to-ground (node 18-A is shorted).
+C  For 1, 2,  ... 6 phases,  it is possible to pack the fault names on input
+C  data cards.  So,  for example,  there can be up to 13 single-phase faults,
+C  up to six 2-phase faults,  up to four 3-phase faults, up to two 5- or 6-phase
+C  faults.  For any one card, the 2 or more faults must be for the same number
+C  of phases  ---  the number that is declared on a  ?-phase faults follow  card
+C  that precedes it.  The declared number of phases remains in effect until
+C  altered by another such declaration or  End packing of 2 or more faults  (to
+C  return to original, unpacked format).  On any packed fault card,  any one of
+C  the 2 or more data fields can be left blank.  But not all can be left blank
+C  as this would serve to terminate the list of faults.  So, an illustration.
+C  Let's repeat the 8th, 9th, and 10th faults immediately above.  The preceding
+C  3  separate cards can be replaced by the following packed, higher-level
+C  equivalent which is added by WSM on  19 August 2005 :
+6-phase faults follow  { Declare packing of 6-phase fault names, 2 per card
+C  In fact, no 6-phase fault will be illustrated, however.  Think smaller:
+1-phase faults follow  { Declare packing of 1-phase fault names, 13 per card
+  18-A  18-B        18-C  { 11th, 12th, and 13th faults each are single-phase
+C 7-phase faults follow  { Illegal declaration of packing of 7-phase fault names
+C The preceding halts execution, unfortunately,  so it must be commented out.
+End packing of 2 or more faults  { Declare end of such card packing
+  7-A   7-B   7-C   { 14th  fault is 3-phase to ground, identical to the 5th.
+C    Finally, illustrate the limit of 25 phases.  This 15th fault is legal:
+  18-A  18-B  17-A  17-B  16-A  16-B  15-A  15-B  14-A  14-B  13-A  13-B   CONT.
+  12-A  12-B  11-A  11-B  10-A  10-B  9-A   9-B   8-A   8-B   7-A   7-B   6-A
+BLANK card ends list of faults (more accurately, nodes to be faulted to ground)
+ .000050    .010   3000.       { DELTAT  and  TMAX  of this card will be ignored
+       1       1       1       1       1    { All these integers will be ignored
+ 1M-A   1-A               34.372457.68.15781                                    
+ 2M-B   1-B               35.735164.43-.031538.002451.79.16587                  
+ 3M-C   1-C               35.735164.43-.031537.455151.72-.021938.002451.79.16587
+ 11-A   2-A   M-A   1-A          { Sections 2 through 18 are copies of the first
+ 21-B   2-B                      { which has just been inputted.                
+ 31-C   2-C                                                                     
+C     The following  $LISTOFF  and  $LISTON  are used to illustrate operation of 
+C     this valuable feature within fault studies.   One 3-phase Pi-circuit, from 
+C     node 2 to node 3,  will be missing in the output.
+$LISTOFF
+ 12-A   3-A   M-A   1-A                                                         
+ 22-B   3-B                                                                     
+ 32-C   3-C                                                                     
+$LISTON 
+ 13-A   4-A   M-A   1-A                                                         
+ 23-B   4-B                                                                     
+ 33-C   4-C                                                                     
+ 14-A   5-A   M-A   1-A                                                         
+ 24-B   5-B                                                                     
+ 34-C   5-C                                                                     
+ 15-A   6-A   M-A   1-A                                                         
+ 25-B   6-B                                                                     
+ 35-C   6-C                                                                     
+ 16-C   7-C   M-A   1-A      { Note transposition:  /C/A/B/  rather than  /A/B/C
+ 26-A   7-A                                                                     
+ 36-B   7-B                                                                     
+ 17-C   8-C   M-A   1-A                                                         
+ 27-A   8-A                                                                     
+ 37-B   8-B                                                                     
+ 18-C   9-C   M-A   1-A                                                         
+ 28-A   9-A                                                                     
+ 38-B   9-B                                                                     
+ 19-C   10-C  M-A   1-A                                                         
+ 29-A   10-A                                                                    
+ 39-B   10-B                                                                    
+ 110-C  11-C  M-A   1-A                                                         
+ 210-A  11-A                                                                    
+ 310-B  11-B                                                                    
+ 111-C  12-C  M-A   1-A                                                         
+ 211-A  12-A                                                                    
+ 311-B  12-B                                                                    
+ 112-B  13-B  M-A   1-A  { Note 2nd transposition:  /B/C/A/  rather than  /C/A/B
+ 212-C  13-C                                                                    
+ 312-A  13-A                                                                    
+ 113-B  14-B  M-A   1-A                                                         
+ 213-C  14-C                                                                    
+ 313-A  14-A                                                                    
+ 114-B  15-B  M-A   1-A                                                         
+ 214-C  15-C                                                                    
+ 314-A  15-A                                                                    
+ 115-B  16-B  M-A   1-A                                                         
+ 215-C  16-C                                                                    
+ 315-A  16-A                                                                    
+ 116-B  17-B  M-A   1-A                                                         
+ 216-C  17-C                                                                    
+ 316-A  17-A                                                                    
+ 117-B  18-B  M-A   1-A                                                         
+ 217-C  18-C                                                                    
+ 317-A  18-A                                                                    
+$BEGIN PL4 COMMENTS
+C    Copy the structure as illustrated in DC-3.  Prior to 10 June 2004,  this
+C    data would produce an error halt because FTG required 2 cells in CIMAGE
+C    for each fault.  This is for fixed   KRDPL4(10).  After 5 faults,  the 10
+C    cells would be filled.  The complaint came from Anders Johnson,  working
+C    with Dan Goldsworthy at BPA.  Data was received  4 June 2004.  Anders put
+C    his comment in the middle of his branch data.  Curiously,  if location was
+C    moved to the top (immediately after BNDC),  the problem disappears.  But it
+C    is simpler to protect against all locations by having FTP code of SUBR1 set
+C    KOMPL4 = 0  as each new fault begins.  This standard test case is modified
+C    on 11 June 2004 to illustrate the problem for any executable version that
+C    was created prior to  10 June 2004.  Note that  ICAT  of the integer misc.
+C    data card remains zero (unchanged).  It is the use of PL4 comments that
+C    caused the problem,  whether or not the user requested a  .PL4  file to
+C    receive them.  Except for this new data block in this one location,  data
+C    is unchanged from the old  DC-11,  which had MS-DOS date  3-24-95.
+$END PL4 COMMENTS
+ 0POLE-AM-A                15.0                                                 
+ 0POLE-BM-B                15.0                                                 
+ 0POLE-CM-C                15.0                                                 
+BLANK card ending branch cards
+  E-A   POLE-A      -1.   20.0      { 1st of 3 closed switches merely illustrate
+  E-B   POLE-B      -1.   20.0      { that such switches can  coexist  with this
+  E-C   POLE-C      -1.   20.0      { special usage of  FAULTS TO GROUND.  
+  17-A          0.00998   20.0         { 1st of 3 open switches could be omitted
+  17-B          0.013998  20.0         { without any change to  solution.  These
+  17-C          0.013998  20.0         { illustrate a 2nd type of coexistance.
+BLANK card ending switches
+14E-A        -1.0      60.0    -90.0  { Note we make T-start < 0 } -1.   
+14E-B        -1.0      60.0   -210.0  { The fault study is driven} -1.   
+14E-C        -1.0      60.0    30.0   { by such phasor sources.  } -1.   
+BLANK card ending sources
+
+    Note:  The blank card ending sources is the last that actually will
+           be read and used.   When the fault study is complete,  the program
+           will skip to the  BEGIN NEW DATA CASE  card below for any possible
+           following subcase (none for this illustration).   So, we can show
+           output here with no need for  "C "  in columns 1-2.  There are two
+           blocks of special output beginning with the interpretation of
+           input data cards:
+
+Request preceding list of nodes to be faulted.    |FAULTS TO GROUND          { Declaration of intention to run a phasor fault study
+Names of nodes for fault number  1.               |  M-A   M-B   M-C   { 1st fault is 3-phase;  we will short these nodes to ground
+Names of nodes for fault number  2.               |  1-A   1-B   1-C   { 2nd fault is 3-phase.  Etc.    FORMAT is  (2X, 13A6)  with
+Names of nodes for fault number  3.               |  2-A   2-B   2-C   { blank field ignored (names are on left only to look nice).
+Names of nodes for fault number  4.               |  4-A   4-B   4-C   { There is one line per  fault,  which can involve a maximum
+Names of nodes for fault number  5.               |  7-A   7-B   7-C   { of 13 nodes.
+Names of nodes for fault number  6.               |  11-A  11-B  11-C  2-A     { 6th fault is 4-phase,  to illustrate no limit < 14
+Names of nodes for fault number  7.               |  18-A  18-B                                                               CONT.
+Names of nodes for fault number  7.               |        18-C     { 7th fault is spread over 2 data cards by continuation request
+Names of nodes for fault number  8.               |  18-A              { 8th fault is single-line-to-ground (node 18-A is shorted).
+Names of nodes for fault number  9.               |        18-B        { 9th fault is single-line-to-ground (node 18-B is shorted).
+Names of nodes for fault number  10.              |              18-C  { 10  fault is single-line-to-ground (node 18-A is shorted).
+Pack multiple faults on a single input card.      |6-phase faults follow  { Declare packing of 6-phase fault names, 2 per card
+Pack multiple faults on a single input card.      |1-phase faults follow  { Declare packing of 1-phase fault names, 13 per card
+Names of nodes for fault number  11.              |  18-A  18-B        18-C  { 11th, 12th, and 13th faults each are single-phase
+End packing of multiple faults on input cards.    |End packing of 2 or more faults  { Declare end of such card packing
+Names of nodes for fault number  14.              |  7-A   7-B   7-C   { 14th  fault is 3-phase to ground, identical to the 5th.
+Blank card ending list of nodes to be faulted.    |BLANK card ends list of faults (more accurately, nodes to be faulted to ground)
+
+           The second of two blocks of output is the table of fault currents:
+
+           << Current in 1st Phase of Fault >>     << Current in 2nd Phase of Fault >>     << Current in 3rd Phase of Fault >>
+Fault      Node    Fault current      Angle in     Node    Fault current      Angle in     Node    Fault current      Angle in
+number     name        magnitude       degrees     name        magnitude       degrees     name        magnitude       degrees
+   1       M-A      .06666666667           90.     M-B      .06666666667          -30.     M-C      .06666666667         -150.
+   2       1-A      .06179153389   69.31714304     1-B      .06022731205   -50.5641964     1-C      .05941275365   -171.215847
+   3       2-A      .05208219619   53.62523447     2-B      .05015996695   -66.4921925     2-C      .04949163745   173.4660183
+   4       4-A      .03592866388   35.32657231     4-B      .03411100322   -84.6521844     4-C      .03393334197    155.903119
+   5       7-A      .02302145842   23.41165559     7-B      .02187391516   -96.3255496     7-C      .02206682532   144.3138124
+   6       11-A     .01341566059   8.497993142     11-B     .01437596994   -100.647409     11-C     .01485290881   136.1686199
+           2-A      .01121324483   88.26381507
+   7       18-A     .00946790732   12.03744642     18-B     .00947195967   -107.725894     18-C     .00943977544   132.1805708
+   8       18-A     .00176246418   99.26050076
+   9       18-B     .00178093781   -19.2144677
+  10       18-C     .00174761465   -140.302677
+  11       18-A     .00176246418   99.26050076
+  12       18-B     .00178093781   -19.2144677
+  13       18-C     .00174761465   -140.302677
+  14       7-A      .02302145842   23.41165559     7-B      .02187391516   -96.3255496     7-C      .02206682532   144.3138124
+BEGIN NEW DATA CASE                                                             
+C     4th  of  5 subcases has the same solution as the 1st.  It differs in that
+C     the phasor [Y] is contained on branch cards that were punched by DC-9.
+C     Note that  $VINTAGE, 1  is required here. Of the 3 alternative precisions,
+C     this is the middle;  this is the default on punched cards (of DC-9) now as
+C     the 4th and 5th subcases are being added 10 August 2009.  The 1st subcase
+C     continues to use the old narrow format  ($VINTAGE, 0)  as constructed by
+C     hand many years ago.  It is a part of history.  For the 3rd alternative,
+C     which is maximum precision,  see the following 5th subcase.  WSM.
+     0.0     0.0     60.       { Note  XOPT = 60  here  ---  never actually used                                                     
+                       1       1                                                
+$UNITS, .1591549431,  0.0, { Ensures no scaling of [Y] in mhos.  XOPT = 1/(2*Pi)
+$VINTAGE, 1,  { Of 3 widths, this is intermediate, requiring FORMAT ( 2E16.0 )
+51RA1   GA1                .48444770295E-8 .12281121515E-3
+52RB1   GB1                -.1296675794E-6 -.2242269696E-4
+                           .00944175322745 -.0257399002302
+53RC1   GC1                .43614506152E-7 -.1462537283E-4
+                           -.0084632380894 .01672909357449
+                           .01659497249359 -.0474759779044
+54                         -.1496688542E-6 -.9426424776E-5
+                            .0187136308212 -.0503014889342
+                            -.014459054142  .0240975756066
+                           .04631483359448 -.0115611698646
+55                         .14960460152E-5 .64589654581E-5
+                           -.0168059853862 .05971717826772
+                           .01897469864841 -.0424555556429
+                           -.0327145752086 .03047566556754
+                           .03607139971436 -.0606204446839
+56                         .11898901751E-5 .44856452772E-5
+                           .00209415334953 -.0206268928201
+                           -.0022406862695  .0368952787805
+                           .00366143779662 -.0653239407336
+                           -.2258503629E-4 .02742503620834
+                           .00485408284636 .00993930807034
+$UNITS, 60., 0.0, { Restore original values;  "CIMAGE" ends scaling  XUNITS = 1. 
+BLANK card ending branch cards
+BLANK card ending non-existent switch cards
+14GA1      424.35     60.         0.0                        -.1                
+14RA1      424.35     60.        10.0                        -.1                
+14GB1      424.35     60.      -120.0                        -.1                
+14RB1      424.35     60.      -110.0                        -.1                
+14GC1      424.35     60.       120.0                        -.1                
+14RC1      424.35     60.       130.0                        -.1                
+BLANK card ending source cards
+-5RA1   GA1   RB1   GB1    { Mar, 95.  Illustrate 2 phasor branch voltage outputs               
+C 1st branch:  RA1  417.90316999073      424.35  -.0131358847789  .05382578725921  -.8215796220638  7289.7633561218
+C 1st branch:       73.687604192962  10.0000000  .05219831324046      104.1253709  -11.39089622483     -948.6137732
+C Last injection:  GC1     -212.175       424.35  -12.95674346031  44.41911058471  -6432.468410608  9424.6247883109
+C Last injection:   367.49788009593  120.0000000   -42.4874120657    -106.9593405  -6888.171204825       -0.6825172
+BLANK card ending output requests
+  PRINTER PLOT                                                                  
+BLANK card ending non-existent plot cards
+BEGIN NEW DATA CASE                                                             
+C     5th  of  5 subcases has the same solution as the 4th.  It differs in that
+C     the phasor [Y] is what would be produced by  DC-9  if that  $VINTAGE, 2,
+C     data card were uncommented.  For 64-bit computation, precision is full.
+C     Note that the same  $VINTAGE, 2  request of DC-9 is required here, too. 
+     0.0     0.0     60.       { Note  XOPT = 60  here  ---  never actually used                                                     
+                       1       1                                                
+$UNITS, .1591549431,  0.0, { Ensures no scaling of [Y] in mhos.  XOPT = 1/(2*Pi)
+$VINTAGE, 2, { Of 3 alternatives, this is widest, requiring FORMAT ( 2E27.0 )
+51RA1   GA1                 4.8444770277573491700E-09  1.2281121515163583300E-04
+52RB1   GB1                -1.2966757938532132400E-07 -2.2422696957929919700E-05
+                            9.4417532274453028200E-03 -2.5739900230249322700E-02
+53RC1   GC1                 4.3614506153007997000E-08 -1.4625372832163987600E-05
+                           -8.4632380893781746600E-03  1.6729093574486542100E-02
+                            1.6594972493589866400E-02 -4.7475977904406906100E-02
+54                         -1.4966885422339314900E-07 -9.4264247756427733400E-06
+                            1.8713630821201195800E-02 -5.0301488934157152800E-02
+                           -1.4459054141970184600E-02  2.4097575606600894100E-02
+                            4.6314833594475780800E-02 -1.1561169864637796700E-02
+55                          1.4960460151833065100E-06  6.4589654580511652000E-06
+                           -1.6805985386192243800E-02  5.9717178267722430300E-02
+                            1.8974698648408130900E-02 -4.2455555642932338300E-02
+                           -3.2714575208587087800E-02  3.0475665567539195200E-02
+                            3.6071399714361830600E-02 -6.0620444683943348900E-02
+56                          1.1898901751368022500E-06  4.4856452772413896800E-06
+                            2.0941533495336460200E-03 -2.0626892820102635900E-02
+                           -2.2406862694774026100E-03  3.6895278780495553700E-02
+                            3.6614377966236264600E-03 -6.5323940733637467200E-02
+                           -2.2585036293308193800E-05  2.7425036208339411600E-02
+                            4.8540828463550763200E-03  9.9393080703350303300E-03
+$UNITS, 60., 0.0, { Restore original values;  "CIMAGE" ends scaling  XUNITS = 1. 
+BLANK card ending branch cards
+C  To show the effect of precision, consider  P-loss  for the 3 subcases.  There
+C  is little difference between 2E16.0 data (subcase 4) and  2E27.0 (subcase 5).
+C  But for subcase 1,  with [R] limited to E6.2,  loss differs in the 3rd digit:
+C 1: Total network loss  P-loss  by summing injections =   9.326316227367E+03
+C 4: Total network loss  P-loss  by summing injections =   9.311041032869E+03
+C 5: Total network loss  P-loss  by summing injections =   9.311041032866E+03
+C  This is using Salford ATP.  WSM.  10 August 2009
+BLANK card ending non-existent switch cards
+14GA1      424.35     60.         0.0                        -.1                
+14RA1      424.35     60.        10.0                        -.1                
+14GB1      424.35     60.      -120.0                        -.1                
+14RB1      424.35     60.      -110.0                        -.1                
+14GC1      424.35     60.       120.0                        -.1                
+14RC1      424.35     60.       130.0                        -.1                
+BLANK card ending source cards
+-5RA1   GA1   RB1   GB1    { Mar, 95.  Illustrate 2 phasor branch voltage outputs               
+C 1st branch: RA1   417.90316999073      424.35  -.0131358847775  .05382578725998   -.821579621738  7289.7633561257
+C 1st branch:       73.687604192962  10.0000000   .0521983132416      104.1253709  -11.39089622502     -948.6137732
+C Last injection:  GC1        -212.175       424.35  -12.95674346031  44.419110584718  -6432.468410609  9424.6247883126
+C Last injection:      367.49788009593  120.0000000  -42.48741206571     -106.9593405  -6888.171204826       -0.6825172
+BLANK card ending output requests
+  PRINTER PLOT                                                                  
+BLANK card ending non-existent plot cards
+BEGIN NEW DATA CASE
+BLANK 

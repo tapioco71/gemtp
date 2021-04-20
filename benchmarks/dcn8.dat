@@ -1,0 +1,231 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-8
+C       Test  "BCTRAN",  the data generator for N-phase transformers.  This code
+C       came from Prof. Hermann Dommel of UBC.  See the Rule Book,  Sect. XIX-C.
+C       The device is a 3-phase transformer with 3 windings/phase, so  9x9  [Z].
+C       The first two of three subcases each have the same data.  The first will
+C       punch branch cards using  [R], [L] format,  whereas  2nd uses  [A], [R].
+C       Both could be combined in a single subcase with the output request IP of
+C       columns 79-80 being negative, but this is more confusing. Separate them.
+ACCESS MODULE BCTRAN        { New form of old request on following comment card:
+C XFORMER, 44.,  ----- Old request that is no longer valid beginning 10 Oct 1987
+$ERASE    { Empty punch buffer, in case other data is solved before this by EMTP
+C           1st of two "BCTRAN" data subcases requests [R], [wL] punched output.
+C           This is done by variable  IP (columns 79-80)  of the next data card:
+ 360.       .428      300.      135.73    .428      300.      135.73       1 3 1
+  1132.79056 .2054666   H-1         H-2         H-3
+  263.393059 .0742333   L-1         L-2         L-3
+  350.       .0822      T-1   T-2   T-2               T-1
+ 1 20.        8.74      300.      7.3431941 300.       3 1
+ 1 30.        8.68      76.       26.258183 300.
+ 2 30.        5.31      76.       18.552824 300.
+BLANK card that terminates short-circuit test data of "BCTRAN"
+$PUNCH         { Display punched cards of Pi-circuit using wide [R], [L] format:
+C $VINTAGE, 1,
+C 1T-1   T-2                55098.277352343
+C 2T-2                      0.0
+C                           55098.277352343
+C 3      T-1                0.0
+C                           0.0
+C                           55098.277352343
+C  USE RL
+C $UNITS, 0.60E+02 , 0.
+C 1H-1                             .2054666 41432.097487193
+C 2L-1                                  0.0 19771.027634364
+C                                  .0742333 9437.8794714306
+C 3T-1   T-2                            0.0 15579.567888179
+C                                       0.0  7437.550277142
+C                                     .0822 5866.2181589486
+C 4H-2                                  0.0 -.0533106395901
+C                                       0.0 .95599943413096
+C                                       0.0 1.7517639157174
+C                                  .2054666 41432.097487193
+C 5L-2                                  0.0 .95599943413096
+C                                       0.0  .7376473966571
+C                                       0.0 .83627686533707
+C                                       0.0 19771.027634364
+C                                  .0742333 9437.8794714306
+C 6T-2                                  0.0 1.7517639157174
+C                                       0.0 .83627686533707
+C                                       0.0 .65959655404677
+C                                       0.0 15579.567888179
+C                                       0.0  7437.550277142
+C                                     .0822 5866.2181589486
+C 7H-3                                  0.0 -.0533106395901
+C                                       0.0 .95599943413096
+C                                       0.0 1.7517639157174
+C                                       0.0 -.0533106395901
+C                                       0.0 .95599943413096
+C                                       0.0 1.7517639157174
+C                                  .2054666 41432.097487193
+C 8L-3                                  0.0 .95599943413096
+C                                       0.0  .7376473966571
+C                                       0.0 .83627686533707
+C                                       0.0 .95599943413096
+C                                       0.0  .7376473966571
+C                                       0.0 .83627686533707
+C                                       0.0 19771.027634364
+C                                  .0742333 9437.8794714306
+C 9      T-1                            0.0 1.7517639157174
+C                                       0.0 .83627686533707
+C                                       0.0 .65959655404677
+C                                       0.0 1.7517639157174
+C                                       0.0 .83627686533707
+C                                       0.0 .65959655404677
+C                                       0.0 15579.567888179
+C                                       0.0  7437.550277142
+C                                     .0822 5866.2181589486
+C $VINTAGE, 0,
+C $UNITS, -1.,-1.
+C  USE RL
+C        2nd of 2 "BCTRAN" data subcases is identical to 1st except for [A], [R]
+C        output.   Note  IP  of columns  79-80  has  changed from unity to zero:
+ 360.       .428      300.      135.73    .428      300.      135.73       1 3 0
+  1132.79056 .2054666   H-1         H-2         H-3
+  263.393059 .0742333   L-1         L-2         L-3
+  350.       .0822      T-1   T-2   T-2               T-1
+ 1 20.        8.74      300.      7.3431941 300.       3 1
+ 1 30.        8.68      76.       26.258183 300.
+ 2 30.        5.31      76.       18.552824 300.
+BLANK card that terminates short-circuit test data of "BCTRAN"
+$PUNCH         { Display punched cards of Pi-circuit using wide [A], [R] format:
+C $VINTAGE, 1,
+C 1T-1   T-2                55098.277352343
+C 2T-2                      0.0
+C                           55098.277352343
+C 3      T-1                0.0
+C                           0.0
+C                           55098.277352343
+C  USE AR
+C 1H-1                      26.512692374898        .2054666
+C 2L-1                      -59.57848438329             0.0
+C                           180.85474339841        .0742333
+C 3T-1   T-2                5.1245421614044             0.0
+C                           -71.06950226953             0.0
+C                           76.560711306734           .0822
+C 4H-2                       1.317410104146             0.0
+C                           -1.044760156768             0.0
+C                           -2.174181664407             0.0
+C                           26.512692374898        .2054666
+C 5L-2                      -1.044760156768             0.0
+C                           .10024670965949             0.0
+C                           2.6475868140584             0.0
+C                           -59.57848438329             0.0
+C                           180.85474339841        .0742333
+C 6T-2                      -2.174181664407             0.0
+C                           2.6475868140584             0.0
+C                           2.4174362478358             0.0
+C                           5.1245421614044             0.0
+C                           -71.06950226953             0.0
+C                           76.560711306734           .0822
+C 7H-3                       1.317410104146             0.0
+C                           -1.044760156768             0.0
+C                           -2.174181664407             0.0
+C                            1.317410104146             0.0
+C                           -1.044760156768             0.0
+C                           -2.174181664407             0.0
+C                           26.512692374898        .2054666
+C 8L-3                      -1.044760156768             0.0
+C                           .10024670965949             0.0
+C                           2.6475868140584             0.0
+C                           -1.044760156768             0.0
+C                           .10024670965949             0.0
+C                           2.6475868140584             0.0
+C                           -59.57848438329             0.0
+C                           180.85474339841        .0742333
+C 9      T-1                -2.174181664407             0.0
+C                           2.6475868140584             0.0
+C                           2.4174362478358             0.0
+C                           -2.174181664407             0.0
+C                           2.6475868140584             0.0
+C                           2.4174362478358             0.0
+C                           5.1245421614044             0.0
+C                           -71.06950226953             0.0
+C                           76.560711306734           .0822
+C $VINTAGE, 0,
+C $UNITS, -1.,-1.
+C  USE RL
+C          3rd of 3 data subcases for  "BCTRAN"  has a input data correspond  to
+C          excitation and short-circuit tests performed on a 1-phase transformer
+C          in the laboratory of K.U. Leuven on  13/02/84.   From Guido Empereur.
+C          Punched output of  both  [R], [L]  and  [A], [R]  are used  by  DC-5.
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+C        1         2         3         4         5         6         7         8
+C -----------------------------------------------------------------------------
+C Excitation power loss = measured value x 3 !!!   ????  Why  ?????  WSM, Oct 87
+C -----------------------------------------------------------------------------
+ 2 50.      6.460     0.0063    0.195                                    1 1 1-1
+  1.220      0.061      PA1   PA2   PB1   PB2   PC1   PC2
+  2.377      0.188      SA1   SA2   SB1   SB2   SC1   SC2
+C -----------------------------------------------------------------------------
+C Load loss = measured value x 1/3 !!!            ????  Why  ?????  WSM, Oct 87
+C -----------------------------------------------------------------------------
+ 1 2 .0316    2.296     0.0063                          1
+BLANK card that terminates short-circuit test data of "BCTRAN"
+$PUNCH         { Display punched cards of Pi-circuit using wide [A], [R] format:
+C $VINTAGE, 1,
+C 1P1                       744.75162530425
+C  USE AR
+C 1P1                       609.14725451514 .05780196523054
+C 2S1                       -355.0194488376             0.0
+C                           207.17315316786 .16973833711262
+C $VINTAGE, 0,
+C $UNITS, -1.,-1.
+C  USE RL
+C C ----------------- << case separator >>> -----------
+C $VINTAGE, 1,
+C 1P1                       744.75162530425
+C  USE AR
+C 1                         609.14725451514 .05780196523054
+C 2                         -355.0194488376             0.0
+C                           207.17315316786 .16973833711262
+C $VINTAGE, 0,
+C $UNITS, -1.,-1.
+C  USE RL
+C C ----------------- << case separator >>> -----------
+C $VINTAGE, 1,
+C 1P1                       744.75162530425
+C  USE AR
+C 1                         609.14725451514 .05780196523054
+C 2                         -355.0194488376             0.0
+C                           207.17315316786 .16973833711262
+C $VINTAGE, 0,
+C $UNITS, -1.,-1.
+C  USE RL
+C C ----------------- << case separator >>> -----------
+C $VINTAGE, 1,
+C 1P1                       744.75162530425
+C  USE RL
+C $UNITS, 0.50E+02 , 0.
+C 1P1                       .05780196523054 406.40657142444
+C 2S1                                   0.0  696.4330792137
+C                           .16973833711262 1194.9494585311
+C $VINTAGE, 0,
+C $UNITS, -1.,-1.
+C  USE RL
+C C ----------------- << case separator >>> -----------
+C $VINTAGE, 1,
+C 1P1                       744.75162530425
+C  USE RL
+C $UNITS, 0.50E+02 , 0.
+C 1                         .05780196523054 406.40657142444
+C 2                                     0.0  696.4330792137
+C                           .16973833711262 1194.9494585311
+C $VINTAGE, 0,
+C $UNITS, -1.,-1.
+C  USE RL
+C C ----------------- << case separator >>> -----------
+C $VINTAGE, 1,
+C 1P1                       744.75162530425
+C  USE RL
+C $UNITS, 0.50E+02 , 0.
+C 1                         .05780196523054 406.40657142444
+C 2                                     0.0  696.4330792137
+C                           .16973833711262 1194.9494585311
+C $VINTAGE, 0,
+C $UNITS, -1.,-1.
+C  USE RL
+BLANK card to terminate the 3rd and last of  "BCTRAN"  data cases
+BEGIN NEW DATA CASE
+BLANK
+ 

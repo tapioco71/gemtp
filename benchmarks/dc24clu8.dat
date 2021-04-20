@@ -1,0 +1,16 @@
+C  Marker preceding TCLOSE(1:6) and TOPEN(1:6) for energization 4:              
+  2.1466476E-03  4.4995694E-03  8.0648931E-03        7.95E-3        9.95E-3     
+       11.95E-3                  { End of TCLOSE;  TOPEN begin on the next line:
+          .1E-3         0.5E-3          1.E-3            1.0            1.0     
+            1.0                                                                 
+C  Marker preceding TCLOSE(1:6) and TOPEN(1:6) for energization 5:              
+  2.0344905E-03  3.8690347E-03  6.3961916E-03        7.95E-3        9.95E-3     
+       11.95E-3                  { End of TCLOSE;  TOPEN begin on the next line:
+          .1E-3         0.5E-3          1.E-3            1.0            1.0     
+            1.0                                                                 
+C  Marker preceding TCLOSE(1:6) and TOPEN(1:6) for energization 6:              
+  2.0043546E-03 4.3397550E-03   5.2772330E-03        7.95E-3        9.95E-3     
+       11.95E-3                  { End of TCLOSE;  TOPEN begin on the next line:
+          .1E-3         0.5E-3          1.E-3            1.0            1.0     
+            1.0                                                                 
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890

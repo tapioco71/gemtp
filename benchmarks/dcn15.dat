@@ -1,0 +1,484 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-15
+C       Exhaustive test of PostScript output as received from Robert Meredith 
+C       of NYPA (the New York Power Authority) in White Plains.  Prior to
+C       being copied to a new DCN15 on  15 November 1995,  this was separate
+C       disk file  PLOTTEST.DAT  that creates 158-Kbyte  .PS  file as output
+C       when  NYMAX = 1024  and  NXMAX = 1280  (the NYPA choices) are used.  
+C       January, 1996, newsletter should summarize associated changes.
+BEGIN NEW DATA CASE  {using blank_card_skeleton and atp "/KEYWORD" sorting
+C RUN 4.75 CYCLES PAST ENERGIZATION AT .5 CY; ATTEMPT CLEAR 2.5 LATER AT 3
+C UNUSED OPTIONS DELETED/SUPPRESSED - SEE EENERG-40.DAT FOR MORE COMPLETE LIST
+C FREE FORMAT TIME STEP- 1000/CYCLE  FOR 5.25 CYCLES = .0875 SEC
+C SHORTEN TO 1.65 CYCLES = .0275 SEC
+  .000016666666, .0875  , 60.000  , 0.,,,,,,,
+C   PRN>    PLT>    NET>     SS>    MAX>                   SAVE> NENERG>       >
+       1       5       0       0       1      -1
+       5       5      20      20     100     100     500     500
+TACS HYBRID                                  {(from blank_card_skeleton.incs)
+C ANALYZE LISC CAPACITIVE INRUSH DURING E. GARDEN CITY A-GROUND FAULT
+C BY SUBTRACTING FAULT AND REACTOR CURRENTS FROM INRUSH IN TACS
+C TYPE 90 TACS SOURCES DERIVED FROM NETWORK VOLTAGES:
+C <NAME>  <----A---><----A---><----A--->                    <T START ><T STOP  >
+90BUSBV                                                        0.       999.
+C TYPE 91 TACS SOURCES DERIVED FROM NETWORK SWITCH CURRENTS (1ST NODE)
+C <NAME>  <----A---><----A---><----A--->                    <T START ><T STOP  >
+C 4 SHUNT REACTOR CURRENTS (OUT OF LISC)
+91EGCHWX                                                       0.       999.
+91EGCHWY                                                       0.       999.
+91EGCHWZ                                                       0.       999.
+91ISLNDX                                                       0.       999.
+91ISLNDY                                                       0.       999.
+91ISLNDZ                                                       0.       999.
+91SPRB1X                                                       0.       999.
+91SPRB1Y                                                       0.       999.
+91SPRB1Z                                                       0.       999.
+C FAULT CURRENT AT E. GARDEN CITY  (USE CAUTION-LINE SWITCHES EXIST IF XFMRS)
+C ALSO OUT OF LISC
+91EGCHWA                                                       0.       999.
+C INRUSH TO LISC AT SPRAIN BROOK (ENERGIZATION SWITCHES MUST COME FIRST)
+C THESE CURRENTS ARE INTO LISC
+91SPRBRA                                                       0.       999.
+91SPRBRB                                                       0.       999.
+91SPRBRC                                                       0.       999.
+C FORTRAN STATEMENTS; 99= INPUT; 98= OUTPUT; 88= INSIDE
+C <NAME>  =< FREE FORMAT FORTRAN TO COL 80                                ----->
+C REACTOR TOTAL AMPS
+99REACTA  = EGCHWX +ISLNDX +SPRB1X
+99REACTB  = EGCHWY +ISLNDY +SPRB1Y
+99REACTC  = EGCHWZ +ISLNDZ +SPRB1Z
+C CAPACITIVE CURRENT INTO LISC IS NET OF ABOVE; BY PHASE
+99CAPINA  = SPRBRA -REACTA -EGCHWA
+99CAPINB  = SPRBRB -REACTB
+99CAPINC  = SPRBRC -REACTC
+C S-BLOCKS OF ORDER 1 IN COL 2 INTEGRATE VOLTAGES TO GET FLUXES (TIMES  250.0).
+C <NAME>  +<NAME> +<NAME> +<NAME> +<NAME> +<NAME> <GAIN><FXLO><FXHI><NMLO><NMHI>
+C N0 & D0><N1 & D1 ><N2 & D2 ><N3 & D3 ><N4 & D4 ><N5 & D5 ><N6 & D6 ><N7 & D7 >
+C <NAME>CD+< IN1> +< IN2> +< IN3> +< IN4> +< IN5> <  A ><  B ><  C ><  D ><  E >
+C TACS OUTPUT REQUESTS - TYPE 33
+C <NAME><NAME><NAME><NAME><NAME><NAME><NAME><NAME><NAME><NAME><NAME><NAME><TY33>
+33REACTA      REACTB      REACTC      CAPINA      CAPINB      CAPINC      BUSBV
+BLANK CARD ENDING ALL ATP-SORTED TACS   CARDS (from blank_card_skeleton.incs)
+C SIMPLE LISC SHUNT REACTORS:
+$VINTAGE, 1
+C <NAME><NAME><----><---->RRRRRRRRRRRRRRRRXXXXXXXXXXXXXXXXCCCCCCCCCCCCCCCC     P
+  EGCHWX                    15.8                 793.5
+  EGCHWY                    15.8                 793.5
+  EGCHWZ                    15.8                 793.5
+  ISLNDX                    15.8                 793.5
+  ISLNDY                    15.8                 793.5
+  ISLNDZ                    15.8                 793.5
+  SPRB1X                    7.93                 396.7
+  SPRB1Y                    7.93                 396.7
+  SPRB1Z                    7.93                 396.7
+$VINTAGE, 0
+C SIMPLE LISC MODEL
+$VINTAGE, 1
+C <NAME><NAME><----><---->RRRRRRRRRRRRRRRRXXXXXXXXXXXXXXXXCCCCCCCCCCCCCCCC     P
+  SPRB1AMAINLA               .4                 2.
+  SPRB1BMAINLB               .4                 2.
+  SPRB1CMAINLC               .4                 2.
+  MAINLAISLNDA               .3                 1.
+  MAINLBISLNDB               .3                 1.
+  MAINLCISLNDC               .3                 1.
+  ISLNDAEGCHWA               .4                 2.
+  ISLNDBEGCHWB               .4                 2.
+  ISLNDCEGCHWC               .4                 2.
+C 200 MVAR AT MAINL FOR PIPE; 300 MVAR SPLIT FOR SCFF; 200 MVAR AT ISLND
+  MAINLA                                                       4.45
+  MAINLA                                                       3.34
+  ISLNDA                                                       3.34
+  EGCHWA                                                       4.45
+  MAINLB                                                       4.45
+  MAINLB                                                       3.34
+  ISLNDB                                                       3.34
+  EGCHWB                                                       4.45
+  MAINLC                                                       4.45
+  MAINLC                                                       3.34
+  ISLNDC                                                       3.34
+  EGCHWC                                                       4.45
+$VINTAGE, 0
+C OTHER CIRCUITS:
+C 10000 MVA DUNWOOD; 5000 MVA EASTVIEW; 5000 MVA W 49TH
+$VINTAGE, 1
+C <NAME><NAME><----><---->RRRRRRRRRRRRRRRRXXXXXXXXXXXXXXXXCCCCCCCCCCCCCCCC     P
+  SRCDUASPRDUA                .6               11.9
+  SRCDUBSPRDUB                .6               11.9
+  SRCDUCSPRDUC                .6               11.9
+  SRCEAASPREAA               1.2               23.8
+  SRCEABSPREAB               1.2               23.8
+  SRCEACSPREAC               1.2               23.8
+  SRCW4ASPRW4A               1.2               23.8
+  SRCW4BSPRW4B               1.2               23.8
+  SRCW4CSPRW4C               1.2               23.8
+$VINTAGE, 0
+C SIMPLE SPRAIN REACTORS:
+$VINTAGE, 1
+C <NAME><NAME><----><---->RRRRRRRRRRRRRRRRXXXXXXXXXXXXXXXXCCCCCCCCCCCCCCCC     P
+  SPX5SA                     3.17                158.7
+  SPX5SB                     3.17                158.7
+  SPX5SC                     3.17                158.7
+C DUMMY BUS TO DERIVE A UNIQUE SPRAIN BROOK PHASE B VOLTAGE FOR TACS
+  SPRBRABUSBV                1.0
+$VINTAGE, 0
+BLANK CARD ENDING ALL ATP-SORTED BRANCH CARDS (from blank_card_skeleton.incs)
+C ********************************************* STUDY-DEPENDENT CABLE SWITCHING:
+C SWITCH CARD: COL 1-2 IS 0 FOR ORDINARY & GAUSS. STATISTICS SWITCHES, NOT TACS.
+C CLOSING, OPENING TIMES AND STATISTICS PARAMETERS BELOW ARE IN SECONDS.
+C <NAME><NAME><T CLOSE ><T. OPEN ><AMP MARG> 67890123 MEASURING 56789012345678 P
+C <NAME><NAME><GAUS AVG><GAUS SIG><AMP MARG>          STATISTICS               P
+C THREE PHASE ENERGIZATION FROM SPRAIN BROOK AT 180 DEGREES
+C ATTEMPT OPEN AT 3 CY
+  SPRBRASPRB1A  .0083333 .05          1.                                       1
+  SPRBRBSPRB1B  .0083333 .05          1.                                       1
+  SPRBRCSPRB1C  .0083333 .05          1.                                       1
+C <NAME><NAME><T CLOSE ><T. OPEN ><AMP MARG> 67890123 MEASURING 56789012345678 P
+C A PHASE FAULT AT E. GARDEN CITY CABLE
+  EGCHWA                                              MEASURING                1
+C *************************************************** CABLE CROSSING COMPONENTS:
+C ANALYSIS OF LISC INRUSH COMPONENTS:
+C MONITORING SIMPLE LISC SHUNT REACTORS:
+C <NAME><NAME><T CLOSE ><T. OPEN ><AMP MARG> 67890123 MEASURING 56789012345678 P
+  EGCHWAEGCHWX                                        MEASURING                1
+  EGCHWBEGCHWY                                        MEASURING                1
+  EGCHWCEGCHWZ                                        MEASURING                1
+  ISLNDAISLNDX                                        MEASURING                1
+  ISLNDBISLNDY                                        MEASURING                1
+  ISLNDCISLNDZ                                        MEASURING                1
+  SPRB1ASPRB1X                                        MEASURING                1
+  SPRB1BSPRB1Y                                        MEASURING                1
+  SPRB1CSPRB1Z                                        MEASURING                1
+C MONITORING OTHER CIRCUITS:
+C <NAME><NAME><T CLOSE ><T. OPEN ><AMP MARG> 67890123 MEASURING 56789012345678 P
+  SPRDUASPRBRA                                        MEASURING                1
+  SPRDUBSPRBRB                                        MEASURING                1
+  SPRDUCSPRBRC                                        MEASURING                1
+  SPREAASPRBRA                                        MEASURING                1
+  SPREABSPRBRB                                        MEASURING                1
+  SPREACSPRBRC                                        MEASURING                1
+  SPRW4ASPRBRA                                        MEASURING                1
+  SPRW4BSPRBRB                                        MEASURING                1
+  SPRW4CSPRBRC                                        MEASURING                1
+C MONITORING SIMPLE SPRAIN REACTORS:
+C <NAME><NAME><T CLOSE ><T. OPEN ><AMP MARG> 67890123 MEASURING 56789012345678 P
+  SPRBRASPX5SA                                        MEASURING                1
+  SPRBRBSPX5SB                                        MEASURING                1
+  SPRBRCSPX5SC                                        MEASURING                1
+BLANK CARD ENDING ALL ATP-SORTED SWITCH CARDS (from blank_card_skeleton.incs)
+C VOLTAGE SOURCES BEHIND SIMPLE LINES:
+C        *= VOLTAGE IF POSITIVE; CURRENT IF NEGATIVE
+C <NAME>  <CRESTVAL><FREQ    ><ANGLE   >                    <T START ><T STOP  >
+14SRCDUA 1 281691.    60.            0.                       -1.0
+14SRCDUB 1 281691.    60.         -120.                       -1.0
+14SRCDUC 1 281691.    60.         - 70.                       -1.0
+14SRCEAA 1 281691.    60.            0.                       -1.0
+14SRCEAB 1 281691.    60.         -120.                       -1.0
+14SRCEAC 1 281691.    60.         - 70.                       -1.0
+14SRCW4A 1 281691.    60.            0.                       -1.0
+14SRCW4B 1 281691.    60.         -120.                       -1.0
+14SRCW4C 1 281691.    60.         - 70.                       -1.0
+BLANK CARD ENDING ALL ATP-SORTED SOURCE CARDS (from blank_card_skeleton.incs)
+C <BUS ><VOLT><MON.><FOR ><NODE><    ><    ><    ><    ><    ><    ><    ><    >
+  SPRBRA      SPRBRB      SPRBRC      EGCHWA      EGCHWB      EGCHWC
+C First  6     output variables are electric-network voltage differences (upper
+C Next   25     output variables are branch currents (flowing from the upper nod
+C Next   7     output variables belong to TACS (with "TACS" an internally-added
+C Step   Time      SPRBRA     SPRBRB     SPRBRC     EGCHWA     EGCHWB     EGCHWC
+C
+C
+C                  EGCHWA     EGCHWB     EGCHWC     ISLNDA     ISLNDB     ISLNDC
+C                  EGCHWX     EGCHWY     EGCHWZ     ISLNDX     ISLNDY     ISLNDZ
+C
+C                  SPRDUB     SPRDUC     SPREAA     SPREAB     SPREAC     SPRW4A
+C                  SPRBRB     SPRBRC     SPRBRA     SPRBRB     SPRBRC     SPRBRA
+C
+C                  SPRBRC     TACS       TACS       TACS       TACS       TACS
+C                  SPX5SC     REACTA     REACTB     REACTC     CAPINA     CAPINB
+C   Phasor I(0) =  0.0000000E+00  Switch  "EGCHWA"  to  "      "  closed in the
+C   Phasor I(0) =  0.0000000E+00  Switch  "EGCHWA"  to  "EGCHWX"  closed in the
+C   Phasor I(0) =  0.0000000E+00  Switch  "EGCHWB"  to  "EGCHWY"  closed in the
+C   Phasor I(0) =  0.0000000E+00  Switch  "EGCHWC"  to  "EGCHWZ"  closed in the
+C   Phasor I(0) =  0.0000000E+00  Switch  "ISLNDA"  to  "ISLNDX"  closed in the
+C   Phasor I(0) =  0.0000000E+00  Switch  "ISLNDB"  to  "ISLNDY"  closed in the
+C   Phasor I(0) =  0.0000000E+00  Switch  "ISLNDC"  to  "ISLNDZ"  closed in the
+C   Phasor I(0) =  0.0000000E+00  Switch  "SPRB1A"  to  "SPRB1X"  closed in the
+C   Phasor I(0) =  0.0000000E+00  Switch  "SPRB1B"  to  "SPRB1Y"  closed in the
+C   Phasor I(0) =  0.0000000E+00  Switch  "SPRB1C"  to  "SPRB1Z"  closed in the
+C   Phasor I(0) =  1.8020056E+01  Switch  "SPRDUA"  to  "SPRBRA"  closed in the
+C   Phasor I(0) = -7.4949973E+02  Switch  "SPRDUB"  to  "SPRBRB"  closed in the
+C   Phasor I(0) = -7.9731518E+02  Switch  "SPRDUC"  to  "SPRBRC"  closed in the
+C   Phasor I(0) =  9.0100278E+00  Switch  "SPREAA"  to  "SPRBRA"  closed in the
+C   Phasor I(0) = -3.7474986E+02  Switch  "SPREAB"  to  "SPRBRB"  closed in the
+C   Phasor I(0) = -3.9865759E+02  Switch  "SPREAC"  to  "SPRBRC"  closed in the
+C   Phasor I(0) =  9.0100278E+00  Switch  "SPRW4A"  to  "SPRBRA"  closed in the
+C   Phasor I(0) = -3.7474986E+02  Switch  "SPRW4B"  to  "SPRBRB"  closed in the
+C   Phasor I(0) = -3.9865759E+02  Switch  "SPRW4C"  to  "SPRBRC"  closed in the
+C   Phasor I(0) =  3.6040111E+01  Switch  "SPRBRA"  to  "SPX5SA"  closed in the
+C   Phasor I(0) = -1.4989995E+03  Switch  "SPRBRB"  to  "SPX5SB"  closed in the
+C   Phasor I(0) = -1.5946304E+03  Switch  "SPRBRC"  to  "SPX5SC"  closed in the
+C    0    0.0  271505.166   -135494. 93140.8164        0.0        0.0        0.0
+C                     0.0        0.0        0.0        0.0        0.0        0.0
+C              -749.49973 -797.31518 9.01002785 -374.74986 -398.65759 9.01002785
+C              -1594.6304        0.0        0.0        0.0        0.0        0.0
+C 1 .16667E-4  271497.931 -134010.58 94739.6338        0.0        0.0        0.0
+C                     0.0        0.0        0.0        0.0        0.0        0.0
+C               -752.0737 -795.35514 11.6960229 -376.03685 -397.67757 11.6960229
+C              -1590.7112        0.0        0.0        0.0        0.0        0.0
+BLANK CARD ending output requests
+C 5250  .0875  344649.527 191299.527 323640.302        0.0 -47145.895 198177.748
+C                     0.0 -481.43288 -381.56041 7.33790777 -482.30918 -382.59923
+C              -406.62434 315.059242 422.024548 -203.31217 157.529621 422.024548
+C              630.115247 53.1490298 -1931.3137 -1533.2089 667.309594 1931.31368
+C Var maxima:  616453.613 329566.742 345463.852        0.0 406069.593 394188.344
+C                     0.0 543.895482 530.803784 67.0966974 542.272824 529.035963
+C              1967.10962 1126.57279 6928.95568 983.554811 563.286397 6928.95568
+C              1842.77914 396.264811 2155.88852 2102.39918  3263.3985 4668.06408
+C Times max :  .066666664 .038716665 .053233331        0.0 .056549998 .054416664
+C                     0.0 .060783331 .058666664 .037849998 .060799998 .058683331
+C                  .00905 .022149999 .020933332     .00905 .022149999 .020933332
+C              .023983332 .054149998 .060799998 .058666664 .009433333 .016233333
+C Var minima:  -616441.36 -328926.65 -344125.86        0.0 -391677.76 -380868.54
+C                     0.0 -601.24473 -655.23512 -71.518615  -601.0409 -654.05062
+C              -2812.3738 -2427.7615 -6394.8627 -1406.1869 -1213.8807 -6394.8627
+C              -1728.9227 -417.04027 -2395.2787 -2605.0808 -3285.1431 -5318.9546
+C Times min :   .07498333 .029766665 .061583331        0.0 .065483331 .063366664
+C                     0.0 .034366665 .015183333 .012383333 .034366665 .015216666
+C              .018033333 .016716666 .045366665 .018033333 .016716666 .045366665
+C              .015316666      .0124 .034383332 .015233333      .0087 .010816666
+ 2 Fault Current to Ground
+  Sprain Brook Energization of Lisc at 180 Degrees; 4 SHUNT REACTORS ON
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  CASE PLOTTEST.DAT
+C 
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS,TACS,FREQ SCAN
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC; 6 FOR HERTZ; 7 FOR LOG HERTZ
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4><BR3A><BR3B><BR4A><BR4B>        
+ 192           -.4E6.4E6BRANCH                  LISC STUDY      AMPERES--------+
+                        EGCHWA
+C SCALE PER INCH<TIME UNIT START<TIME UNIT END ><VERT MIN      ><VERT MAX      >
+  0.5                .25               5.25      
+C *****************************************************************************
+ 2SPRAIN BROOK REACTOR CURRENT VS VOLTAGE - PHASE B
+  SPRAIN BROOK ENERGIZATION OF LISC AT 180 DEGREES; 4 SHUNT REACTORS ON
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  CASE PLOTTEST.DAT    0.5 -1.5 CYCLE TIME PLOTTED
+C 
+C X-Y PLOT    <-X AXIS     LABEL----->
+  X-Y PLOT    Phase B bus voltage(!!!)
+C LENX >< XMIN >< XMAX >
+  10.    -250.E3  250.E3
+C LENY >< YMIN >< YMAX ><DIV/IN> last defaults to 10 if zero
+   8.   -2000.   2000.     0.
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS AND TACS
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC.
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C FOR X-Y BRANCHES USE 12 COL(25-36) FOR X VAR; NEXT 12 FOR Y VARIABLE
+C FOR X-Y NODE VOLTS USE 6 COL(25-30) FOR X VAR; NEXT 6 FOR Y VARIABLE
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4>
+ 192   0.5 1.5 -.4E6.4E6TACS  BUSBV SPRB1BSPRB1YLISC STUDY      REACT CURRENT--+
+C *******************************************************************************
+ 2 CURRENTS INTO LISC AT SPRAIN BROOK 345 KV
+  SPRAIN BROOK ENERGIZATION OF (LISC) AT 180 DEGREES; 4 SHUNT REACTORS ON
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  Last word ends in 2 slashes\\
+C 
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS,TACS,FREQ SCAN
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC; 6 FOR HERTZ; 7 FOR LOG HERTZ
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4><BR3A><BR3B><BR4A><BR4B>        
+ 192           -.4E6.4E6BRANCH                  LISC STUDY      AMPERES123 
+                        SPRBRASPRB1ASPRBRBSPRB1BSPRBRCSPRB1C
+C SCALE PER INCH<TIME UNIT START<TIME UNIT END ><VERT MIN      ><VERT MAX      >
+  0.5                .25               5.25      
+C *****************************************************************************
+ 2 VOLTAGES AT SPRAIN BROOK 345 KV BUS
+  SPRAIN BROOK ENERGIZATION OF LISC AT 180 DEGREES; 4 SHUNT REACTORS ON
+  new border=(\/(\/(\/(\/(\/\/\/\/\/\/\/\/\/\/)\/)\/)\/)\/)
+  new border =(\/(\/(\/(\/(\/\/\/\/\/\/\/\/\/\/)\/)\/)\/)\/)
+C 
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS,TACS,FREQ SCAN
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC; 6 FOR HERTZ; 7 FOR LOG HERTZ
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4><BR3A><BR3B><BR4A><BR4B>        
+ 145           -.4E6.4E6BRANCH                  Lisc Study      Volts
+                        SPRBRASPRBRBSPRBRC
+C SCALE PER INCH<TIME UNIT START<TIME UNIT END ><VERT MIN      ><VERT MAX      >
+     5000.               5000.         55000.      
+C *****************************************************************************
+ 2 VOLTAGES AT E. GARDEN CITY 345 KV CABLE
+            new border=)/\)/\)/\)/\)/\/\/\/\/\/\/\(/\(/\(/\(/\(
+            new border =)/\)/\)/\)/\)/\/\/\/\/\/\/\(/\(/\(/\(/\(
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  CASE PLOTTEST.DAT )SECONDS SCALE ///\\\ <3 EACH
+C 
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS,TACS,FREQ SCAN
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC; 6 FOR HERTZ; 7 FOR LOG HERTZ
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4><BR3A><BR3B><BR4A><BR4B>        
+ 143           -.4E6.4E6BRANCH                  LISC STUDY      VOLTS
+                        EGCHWAEGCHWBEGCHWC
+C SCALE PER INCH<TIME UNIT START<TIME UNIT END ><VERT MIN      ><VERT MAX      >
+  0.01               .01               .11      
+C *****************************************************************************
+ 2 PHASE A CURRENTS INTO LISC: REACT INRUSH, CAP INRUSH, FAULT, TOTAL
+  SPRAIN BROOK ENERGIZATION OF LISC AT 180 DEGREES; 4 SHUNT REACTORS ON
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  CASE PLOTTEST.DAT
+C 
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS,TACS,FREQ SCAN
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC; 6 FOR HERTZ; 7 FOR LOG HERTZ
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4><BR3A><BR3B><BR4A><BR4B>        
+ 192           -.4E6.4E6BRANCH                  LISC STUDY      AMPS ((((OK?)))) 
+                        TACS  REACTATACS  CAPINAEGCHWA      SPRBRASPRB1A
+C SCALE PER INCH<TIME UNIT START<TIME UNIT END ><VERT MIN      ><VERT MAX      >
+  0.5                .25               5.25      
+C *****************************************************************************
+ 2 PHASE B CURRENTS INTO LISC: REACT INRUSH, CAP INRUSH, TOTAL
+  SPRAIN BROOK ENERGIZATION OF LISC AT 180 DEGREES; 4 SHUNT REACTORS ON
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  CASE PLOTTEST.DAT
+C 
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS,TACS,FREQ SCAN
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC; 6 FOR HERTZ; 7 FOR LOG HERTZ
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4><BR3A><BR3B><BR4A><BR4B>        
+ 192           -.4E6.4E6BRANCH                  LISC STUDY      AMPERES  
+                        TACS  REACTBTACS  CAPINBSPRBRBSPRB1B
+C SCALE PER INCH<TIME UNIT START<TIME UNIT END ><VERT MIN      ><VERT MAX      >
+  0.5                .25               5.25      
+C *****************************************************************************
+ 2 PHASE C CURRENTS INTO LISC: REACT INRUSH, CAP INRUSH, TOTAL
+  SPRAIN BROOK ENERGIZATION OF LISC AT 180 DEGREES; 4 SHUNT REACTORS ON
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  CASE PLOTTEST.DAT
+C 
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS,TACS,FREQ SCAN
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC; 6 FOR HERTZ; 7 FOR LOG HERTZ
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4><BR3A><BR3B><BR4A><BR4B>        
+ 192           -.4E6.4E6BRANCH                  LISC STUDY      AMPERES  
+                        TACS  REACTCTACS  CAPINCSPRBRCSPRB1C
+C SCALE PER INCH<TIME UNIT START<TIME UNIT END ><VERT MIN      ><VERT MAX      >
+  0.5                .25               5.25      
+C *****************************************************************************
+ 2 CURRENTS INTO SPRAIN BROOK FROM 4 EASTVIEW CKTS
+  SPRAIN BROOK ENERGIZATION OF LISC AT 180 DEGREES; 4 SHUNT REACTORS ON
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  CASE PLOTTEST.DAT
+C 
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS,TACS,FREQ SCAN
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC; 6 FOR HERTZ; 7 FOR LOG HERTZ
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4><BR3A><BR3B><BR4A><BR4B>        
+ 192           -.4E6.4E6BRANCH                  LISC STUDY      AMPERES  
+                        SPREAASPRBRASPREABSPRBRBSPREACSPRBRC
+C SCALE PER INCH<TIME UNIT START<TIME UNIT END ><VERT MIN      ><VERT MAX      >
+  0.5                .25               5.25      
+C *****************************************************************************
+ 2 CURRENTS INTO SPRAIN BROOK FROM W 49TH CKTS
+  SPRAIN BROOK ENERGIZATION OF LISC AT 180 DEGREES; 4 SHUNT REACTORS ON
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  CASE PLOTTEST.DAT
+C 
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS,TACS,FREQ SCAN
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC; 6 FOR HERTZ; 7 FOR LOG HERTZ
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4><BR3A><BR3B><BR4A><BR4B>        
+ 192           -.4E6.4E6BRANCH                  LISC STUDY      AMPERES  
+                        SPRW4ASPRBRASPRW4BSPRBRBSPRW4CSPRBRC
+C SCALE PER INCH<TIME UNIT START<TIME UNIT END ><VERT MIN      ><VERT MAX      >
+  0.5                .25               5.25      
+C *****************************************************************************
+ 2 CURRENTS INTO SPRAIN BROOK FROM DUNWOODIE 345 KV CKT
+  SPRAIN BROOK ENERGIZATION OF LISC AT 180 DEGREES; 4 SHUNT REACTORS ON
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  CASE PLOTTEST.DAT
+C 
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS,TACS,FREQ SCAN
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC; 6 FOR HERTZ; 7 FOR LOG HERTZ
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4><BR3A><BR3B><BR4A><BR4B>        
+ 192           -.4E6.4E6BRANCH                   
+                        SPRDUASPRBRASPRDUBSPRBRBSPRDUCSPRBRC
+C SCALE PER INCH<TIME UNIT START<TIME UNIT END ><VERT MIN      ><VERT MAX      >
+  0.5                .25               5.25      
+C *****************************************************************************
+ 2 CURRENTS INTO SPRAIN BROOK FROM 750 MVA OF NON-LINEAR SHUNT REACTORS
+  SPRAIN BROOK ENERGIZATION OF LISC AT 180 DEGREES; 4 SHUNT REACTORS ON
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  CASE PLOTTEST.DAT
+C 
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS,TACS,FREQ SCAN
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC; 6 FOR HERTZ; 7 FOR LOG HERTZ
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4><BR3A><BR3B><BR4A><BR4B>        
+ 192           -.4E6.4E6BRANCH                   
+                        SPX5SASPRBRASPX5SBSPRBRBSPX5SCSPRBRC
+C SCALE PER INCH<TIME UNIT START<TIME UNIT END ><VERT MIN      ><VERT MAX      >
+  0.5                .25               5.25      
+C *****************************************************************************
+ 2 PHASE A CURRENTS INTO SPRAIN BR.: EASTV, W49TH, DUNWD, SHUNT REACT
+  SPRAIN BROOK ENERGIZATION OF LISC AT 180 DEGREES; 4 SHUNT REACTORS ON
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  CASE PLOTTEST.DAT
+C 
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS,TACS,FREQ SCAN
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC; 6 FOR HERTZ; 7 FOR LOG HERTZ
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4><BR3A><BR3B><BR4A><BR4B>        
+ 192           -.4E6.4E6BRANCH                   
+                        SPREAASPRBRASPRW4ASPRBRASPRDUASPRBRASPX5SASPRBRA
+C SCALE PER INCH<TIME UNIT START<TIME UNIT END ><VERT MIN      ><VERT MAX      >
+  0.5                .25               5.25      
+C *****************************************************************************
+ 2SPRAIN BROOK REACTOR CURRENT VS VOLTAGE - PHASE B
+  SPRAIN BROOK ENERGIZATION OF LISC AT 180 DEGREES; 4 SHUNT REACTORS ON
+  INTO A-PHASE-TO-GROUND FAULT AT E. GARDEN CITY CABLE; CBS OPEN 2.5 CY LATER
+  CASE PLOTTEST.DAT    0.5 -1.5 CYCLE TIME PLOTTED
+C 
+C X-Y PLOT    <-X AXIS     LABEL----->
+  X-Y PLOT    PHASE B BUS VOLTAGE
+C LENX >< XMIN >< XMAX >
+  10.    -250.E3  250.E3
+C LENY >< YMIN >< YMAX ><DIV/IN> last defaults to 10 if zero
+   8.   -2000.   2000.     0.
+C COL 3 IS 4 FOR NODE VOLTS;8 FOR BRANCH VOLTS;9 FOR AMPS AND TACS
+C COL 4 IS 2 FOR CYCLES; 5 FOR MICROSEC.
+C COL 5-7 ARE BLANK TO INDICATE EXTENDED PRECISION OF PLOT SCALES, ETC.
+C WRITE "BRANCH" STARTING IN FIRST NODE COL FOR PLOTTING OF UP TO 4 BRANCHES
+C FOR X-Y BRANCHES USE 12 COL(25-36) FOR X VAR; NEXT 12 FOR Y VARIABLE
+C FOR X-Y NODE VOLTS USE 6 COL(25-30) FOR X VAR; NEXT 6 FOR Y VARIABLE
+C CAN ALSO LABEL ON 4-NODE OR 'BRANCH' CARD:    <GRAPH HEADING ><VERT AX. LABEL>
+C 34S/"<TST<TSP<LLMT<ULT<NOD1><NOD2><NOD3><NOD4>
+ 192   0.5 1.5 -.4E6.4E6TACS  BUSBV SPRB1BSPRB1YLISC STUDY))))))REACT CURRENT\\\
+BLANK CARD ENDING plot cards
+BEGIN NEW DATA CASE
+BLANK

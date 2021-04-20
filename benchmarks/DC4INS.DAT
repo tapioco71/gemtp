@@ -1,0 +1,46 @@
+KARD 10 10
+KARG  2  3
+KBEG 27  3
+KEND 32  8
+KTEX  0  1
+C0 Level-zero comment will be retained because STARTUP sets KOMLEV = 4
+C5 Level-five comment will be omitted because STARTUP sets KOMLEV = 4
+/SOURCE
+14GEN            70.  .1591549                                     -1.
+/REQUEST
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+/SWITCH
+C1 The following extraneous switch is permanently open,  so has no effect:
+  TRAN            99999.      1.E6
+/BRANCH
+  GEN   TRAN                 5.0  5.E4                                         3
+  TRAN                      1.E4
+C Ordinary comment card within  "INCLDUM"  (Blank col. 2)
+93??????                  ??????   30.                                         3
+            -5.0           -100.
+             -.1            -50.
+            -.02            -45.
+            -.01            -40.
+           -.005            -30.
+C    Begin illustration of  $DISABLE  usage within an  INSERT  file.
+C    The comments now being read are not part of the test,  so they will be seen
+C    (even though they have nothing to do with the data of the network).  All of
+C    the remaining cards except the last one  ($ENABLE)  will be omitted as data
+C    is first read, so there will be no trace in the interpretation of EMTP data
+C    cards except for the  final card,  which will document the number involved.
+$DISABLE
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+$ENABLE
+            .005             30.
+             .01             40.
+             .02             45.
+             .10             50.
+             5.0            100.
+            9999
+/STATISTICS
+Statistical tabulation card will never be used,  of course.
+/PLOT
+  PRINTER PLOT
+ 1931.0 0.0 7.0         TRAN                     { Axis limits: (-0.140,  3.031)

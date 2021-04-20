@@ -1,0 +1,148 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-56     (former  DC-71  of "M39.")
+C     First of a pair of cases providing batch-mode documentation of interactive
+C     (SPY) capability.   The basic data is from  DC-4,   to which  $SPY   cards
+C     have  been  added.   Included is all-enclusive SPY  "HELP"  output.   Note
+C     that SPY commands are preceded by  "$SPY",  and are followed by  "$SPYEND"
+C     (in this case,  only one such group of SPY commands exists, although up to
+C     9 are allowed).   The  reserved disk file name  "SPYFILE1.DAT"  is created
+C     by  "MAIN00",  and is connected to unit  MUNIT6  of SPY  by  "CIMAGE",  as
+C     the  "$SPY, SPYFILE1.DAT"   command is processed.   If run as a batch-mode
+C     simulation, it will terminate at the nominal end-time  TMAX = 8.    But if
+C     interactive execution (SPY) is used, remember that the case will terminate
+C     only at the user's request  (e.g., usage of the SPY command "STOP").   For
+C     SPY use, other changes may also be desired,  such  as  the conversion from
+C     universal character plotting to computer-dependent vector-graphic plotting
+C     (usually in a separate, third window).   Applicable  to  Apollo for such a
+C     change  are the comment cards beginning with  "C ---."  (see 3 locations).
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .020     8.0
+       1       1       1       0       1      -1
+       5       5      20      20     160      10
+  GEN   TRAN                 5.0  5.E4                                         3
+  TRAN                      1.E4
+93TRAN                      .005   30.                                         3
+            -5.0           -100.
+             -.1            -50.
+            -.02            -45.
+            -.01            -40.
+           -.005            -30.
+            .005             30.
+             .01             40.
+             .02             45.
+             .10             50.
+             5.0            100.
+            9999
+  TRAN  LOADG               255.  5.E4                                         3
+  LOADG                    1.E-6
+BLANK card ending branch cards
+BLANK card ending switch cards
+14GEN            70.  .1591549                                     -1.
+$SPY           { Request of "CIMAGE" ($-card) to begin batch-mode SPY connection
+$DEBUG, 0,       { 1st SPY command is trivial, ineffective change of  DIAGNOSTIC
+ExamINE  { Next SPY command is this involved and powerful memory display command
+CUT 0        { Begin with initialization (so far, EXAMINE SPY table has no rows)
+ADD                     { Desired EXAMINE symbols are added to zero-length table
+ISTEP       { 1st  of an arbitrarily long list of memory locations to be defined
+TMAX        { 2nd  of an arbitrarily long list of memory locations to be defined
+MEMSAV      { 3rd  of an arbitrarily long list of memory locations to be defined
+T           { 4th  of an arbitrarily long list of memory locations to be defined
+NCHAIN      { Last of an arbitrarily long list of memory locations to be defined
+END         { Exit the symbol-input loop;  all EXAMINE symbols have been defined
+TABLE                  { Display all EXAMINE symbols and pointers defined so far
+FORM             { Enter EXAMINE loop that allows the changing of output spacing
+1 6            { Symbol number 1,  ISTEP,  is to be allowed six columns of width
+2 8            { Symbol number 2,  TMAX,   is to be allowed  8  columns of width
+3 7 -5         { Symbols 3 onward (the next 5) are to be allowed 7  columns each
+SHOW     { Display EXAMINE symbols and pointers defined so far (confirm changes)
+END             { Exit the  "FORM"  loop,  moving back to basic "EXAMINE" prompt
+SPY                           { Exit "EXAMINE" and return to the  "SPY:"  prompt
+names  { Display the "EXAMINE" headings and output (just one line for this case)
+BRANCH  { SPY request for display of the program branch table (a simple example)
+ALL                                       { Display all rows of the branch table
+2,3           { Display a range of rows (just 2 and 3, here) of the branch table
+TOP                       { Display the first row (number 1) of the branch table
+BOT                        { Display the last row (number 4) of the branch table
+SPY        { Exit the loop of the branch table display;  back to  "SPY:"  prompt
+MENU        { Show command menu (after 11 July 96,  this no longer is in HELP)
+C    27 September 2010,  add service for  DICE  where something nonblank follows
+C    the familiar old request word.  This is an extension to verify ATP's random
+C    number generator independent of switches  (e.g., STATISTICS use).  ATP data
+C    is not even needed,  and in no way affects the result.  The dice simply are
+C    to be rolled a user-specified number of times and the result will be ploted
+C    in the SPY window  as a mini printer plot.  The random number generator can 
+C    be either: 1) uniformly distributed over [0, 1] or  2) normally distributed
+C    with mean zero and standard deviation of unity.  Here we go, 2 trial runs :
+DICE BARS=51        { The width of printer plot will be this many columns (bars)
+DICE Uniform    { Switch from Gaussian (normal) distribution to uniform distrib.
+DICE 5000         { Roll the dice 5K times and show the bell-shaped distribution
+C    More about the preceding.  Numbers can end with letter K, so  DICE 5000  is
+C    the same as  DICE 5K  (useful for much larger numbers such as 200K ).   The
+C    initial request for uniform distribution was necessary because  the default
+C    is Gaussian.  The request for  BARS=51  corresponds to a zero bar on the
+C    left followed by 50 positive values as the the variable steps to unity on
+C    the right.  I.e., each bar represents  1/50  which is a nice round number.
+DICE BARS=81        { The width of printer plot will be this many columns (bars)
+DICE Gauss 5K { Switch back to the default normal distribution for 5K more rolls
+C    More about the preceding.  The 81 is one to many for an 80-column display
+C    of the SPY window,  so the first (value -4.0) will be omitted.
+HELP                { Enter loop that provides information about any SPY command
+GO              { First, request information about this single names SPY command
+TOP   { Next, request information about the first SPY command (which is "NAMES")
+       { <CR> is key word number 28 --- the request for another "EXAMINE" output
+BOT         { Next, request information about the last SPY command  ("OVERVIEW")
+C ALL      { Remove "C " before "ALL" to see all "HELP" text of the program
+SPY                    { Exit the "HELP" command;  back to basic  "SPY:"  prompt
+BREAK     { Request a pause in the simulation that will soon resume (after "GO")
+16, -101      { Illustration of interactive plotting will begin on time step 101
+GO             { Begin EMTP execution;  no "@" read until break point is reached
+PLOT                        { Having just broken at step 101, enter SPY plotting
+C ---.    For 3-window SPY usage and vector plotting,  comment out the MODE card
+C ---.    that follows (assuming LTEK=1 for vector plots is set by STARTUP file)
+MODE         { Toggle from vector (Apollo default) to character mode of plotting
+CHOICE          { Request a list of the output variables, available for plotting
+NAME                        { Plot command to begin inputting the variable names
+TRAN       { The first and only variable to be plotted will be this node voltage
+LAST      { Exit the loop over plot input variables;  back to basic plot command
+TIME              { Request for actual plotting (in this case, a character plot)
+0, 2.0            { Time span of the character plot that is to begin immediately
+SPY                                   { Exit plotting;  back to  "SPY:"  command
+NAMES  { Display the "EXAMINE" headings and output (just one line for this case)
+C   Note: the preceding "NAMES" line is added 27 April 2010 to show 48-bit ISTEP
+C         The previous display of  step 0  is inadequate to verify use because a
+C         zero REAL*8 corresponds to a zero  INTEGER*4.  The  DC56.LIS  file was
+C         perfect even though  MODELS  DCN28.LIS showed ISTEP = 0 for all steps.
+C         With this addition, if the address/type of ISTEP is bad, DC56.LIS will
+C         confirm the situation along with  DCN28.LIS    It should be safer to
+C         have such confirmation of 48-bit counting outside of MODELS as well as
+C         within  MODELS.  If memory addresses of extended integer counting are
+C         bad,  the problem really is not due to  MODELS.  
+BREAK     { Request a pause in the simulation that will soon resume (after "GO")
+16, -162             { Next SPY activity will recommence at time step number 162
+GO             { Begin EMTP execution;  no "@" read until break point is reached
+PLOT                        { Having just broken at step 162, enter SPY plotting
+FRONT 1.0     { The time scale will be chosen to provide only the latest 1.0 sec
+C ---.    For 3-window SPY usage and vector plotting,  change  ROLLC  to  ROLLV:
+ROLLC          { Toggle flag for rolling printer plot;  rolling is now to begin.
+SPY                                   { Exit plotting;  back to  "SPY:"  command
+BREAK     { Request a pause in the simulation that will soon resume (after "GO")
+16, -251             { Next SPY activity will recommence at time step number 251
+GO             { Begin EMTP execution;  no "@" read until break point is reached
+TIME      { Trivial SPY command just to demonstrate that we have  "SPY:"  prompt
+NOROLL          { End the rolling character plot as last SPY command before exit
+$SPYEND        { Bound on in-line SPY commands;  back to batch-mode program data
+BLANK card ending all electric sources
+C       Total network loss  P-loss  by summing injections =   8.286714400785E+00
+C          ---- Initial flux of coil  "TRAN  "  to  "      "  =  -1.13295190E+01
+C   60     1.2   18.29171134  7.073352669  7.073352556  25.36506401  7.073352669
+C   80     1.6   -2.34791112  .3039748672   .303974844  -2.04393625  .3039748672
+C  100     2.0    -24.493162  -4.63708207  -4.63708206  -29.1302441  -4.63708207
+C  // Service "BREAK".   T = 0.20200E+01   16 = NCHAIN
+  GEN   TRAN
+BLANK card ending requests for program output (here, just node voltages)
+C ---.        All following cards will only be read for single-window execution:
+  PRINTER PLOT
+ 193 .5 0.0 5.0         TRAN  LOADG GEN   TRAN   { Axis limits: (-3.493,  3.288)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+BLANK

@@ -1,0 +1,1362 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-68                                                           
+C         Illustration of MODELS using six of Laurent Dube's simple test cases           
+C         1st of 16 data subcases.  This was taken from Laurent's file  TC1.DAT.  
+C         July of 1995,  this is converted to the new  MODELS STAND ALONE  by
+C         adding  STAND ALONE  to the  MODELS  declaration.  Also,  all data
+C         between  ENDMODELS  & batch-mode plot cards (just BLANK) was deleted.
+     0.1    1.00
+       1       1       1       1       1      
+MODELS STAND ALONE
+STORAGE integer pages:0 real pages:0 ENDSTORAGE
+MODEL tc1
+ VAR a
+ INPUT i
+ EXEC
+  a:=t
+ ENDEXEC
+ENDMODEL
+USE tc1 AS tc1a
+ INPUT i:=0
+ENDUSE
+RECORD tc1a.a AS a
+ENDMODELS
+C   Step      Time      MODELS
+C                       A
+C      0       0.0         0.0
+C      1       0.1         0.1
+C      2       0.2         0.2
+C      3       0.3         0.3
+C      4       0.4         0.4
+C      5       0.5         0.5
+C      6       0.6         0.6
+C      7       0.7         0.7
+C      8       0.8         0.8
+C      9       0.9         0.9
+C     10       1.0         1.0
+C  Variable maxima :       1.0
+C  Times of maxima :       1.0
+C  Variable minima :       0.0
+C  Times of minima :       0.0
+BLANK card terminating plotting
+BEGIN NEW DATA CASE
+C         Illustration of MODELS using six of Laurent Dube's simple test cases           
+C         2nd of 16 data subcases.  This was taken from Laurent's file  TC2.DAT.  
+   0.001    0.01
+       1       1       1       1       1      
+MODELS
+INPUT elec90 {v(NOD1)}
+      elec91 {i(NOD2)}
+      elec93 {switch(NOD2)}
+      elec94 {imssv(NOD1)}
+      elec95 {imssi(NOD2)}
+MODEL TC2
+ INPUT i[90..95]
+ VAR a[90..95]
+ EXEC a[90..95]:=i[90..95] ENDEXEC
+ENDMODEL
+USE tc2 AS tc2
+ INPUT i[90]:=elec90
+       i[91]:=elec91
+       i[92]:=0
+       i[93]:=elec93
+       i[94]:=elec94
+       i[95]:=elec95
+ENDUSE
+RECORD tc2.a[90] AS a90
+       tc2.a[91] AS a91
+       tc2.a[92] AS a92
+       tc2.a[93] AS a93
+       tc2.a[94] AS a94
+       tc2.a[95] AS a95
+ENDMODELS
+  NOD1  NOD2               1.00
+BLANK card after last electric network branch
+  NOD2                                                MEASURING
+BLANK card ends switches
+14NOD1        100.0       50.0      -30.                         -1.0
+BLANK card after last electric network source
+  NOD1
+C    Step      Time      NOD1       MODELS     MODELS     MODELS     MODELS     MODELS     MODELS
+C                                   A90        A91        A92        A93        A94        A95
+C ***  Phasor I(0) =  8.6602540E+01    Switch  "NOD2  "  to  "      "  closed in the steady-state.
+C       0       0.0  86.6025404 86.6025404 86.6025404        0.0        1.0       -50.       -50.
+C       1     .1E-2  97.8147601 97.8147601 97.8147601        0.0        1.0        0.0        0.0
+C       2      .002  99.4521895 99.4521895 99.4521895        0.0        1.0        0.0        0.0
+C       3      .003  91.3545458 91.3545458 91.3545458        0.0        1.0        0.0        0.0
+BLANK card ends selective node voltage outputs
+C       8      .008  -40.673664 -40.673664 -40.673664        0.0        1.0        0.0        0.0
+C       9      .009  -66.913061 -66.913061 -66.913061        0.0        1.0        0.0        0.0
+C      10       .01   -86.60254  -86.60254  -86.60254        0.0        1.0        0.0        0.0
+C Variable maxima :  99.4521895 99.4521895 99.4521895        0.0        1.0        0.0        0.0
+C Times of maxima :        .002       .002       .002        0.0        0.0      .1E-2      .1E-2
+C Variable minima :   -86.60254  -86.60254  -86.60254        0.0        1.0       -50.       -50.
+C Times of minima :         .01        .01        .01        0.0        0.0        0.0        0.0
+BLANK card terminating plotting
+BEGIN NEW DATA CASE
+PRINTED NUMBER WIDTH, 12, 2, { Keep dT loop precision the same, but 2 blank separators
+C         Illustration of MODELS using six of Laurent Dube's simple test cases           
+C         3rd of 16 data subcases.  This was taken from Laurent's file  TC9.DAT.  
+   0.001    0.01
+       1       1       1       1       0      
+MODELS
+OUTPUT tacs1, tacs2, arcsh, arcch, arcth
+MODEL tc9
+ INPUT i {dflt:0}
+ VAR tacs[1..2]
+ OUTPUT tacs[1..2]
+ EXEC
+  tacs[1]:=cos(2*pi*1000/6*t)
+  tacs[2]:=sin(2*pi*1000/6*(t+startstep))
+ ENDEXEC
+ENDMODEL
+USE tc9 AS tc9
+ OUTPUT tacs1:=tacs[1]
+        tacs2:=tacs[2]
+ENDUSE
+C  21 September 2002,  add HYPER to demonstrate corrected hyperbolic functions.
+C  Previously, the inverse sinh, cosh, and tanh were missing.  Dube did not halt
+C  execution, however.  Instead, he returned impossible function valu 88888.88..
+C  as first reported by Orlando Hevia of Santa Fe, Argentina.  WSM corrects XPR2
+C  Note the internal names such as  arcsinhyperbolic  are impractically long.
+C  This is done on purpose to demonstrate Dube's flexibility in this regard.
+MODEL HYPER  --  module that serves only to verify 3 inverse hyperbolic function
+ VAR    arcsinhyperbolic, arccoshyperbolic, arctanhyperbolic, arg
+ OUTPUT arcsinhyperbolic, arccoshyperbolic, arctanhyperbolic
+EXEC
+  arg := 200 * T  --  argument of 3 function usages to follow
+  arcsinhyperbolic := ASINH( arg )  --  test hyperbolic arc sine over [0, 2]
+    IF  arg >= 1.0    -- if arg of arc cosh is possible & arc tanh is impossible
+    THEN
+  arccoshyperbolic := ACOSH( arg )  --  test hyperbolic arc cosine over ...
+  arctanhyperbolic := -9999.  
+    ELSE  -- Alternate, if arg of arc cosh is impossible & arc tanh is possible:
+  arccoshyperbolic := -9999.  
+  arctanhyperbolic := ATANH( arg )  --  test hyperbolic arc tangent over ...
+    ENDIF
+ENDEXEC
+ENDMODEL
+USE HYPER AS HYPER
+ OUTPUT ARCSH:=arcsinhyperbolic  --  ATP output name ARCSH is connected to internal model name
+ OUTPUT ARCCH:=arccoshyperbolic  --  ATP output name ARCCH is connected  ...
+ OUTPUT ARCTH:=arctanhyperbolic  --  ATP output name ARCTH is connected  ...
+ENDUSE
+RECORD tacs1 AS tacs1
+       tacs2 AS tacs2
+       arcsh AS arcsh
+       arcch AS arcch
+       arcth AS arcth
+ENDMODELS
+  NOD1  NOD2               1.00
+  TACS2 NOD2               1.00
+  NOD2  NOD3               1.00
+BLANK card after last electric network branch
+  NOD2                                                MEASURING
+13NOD3                                                                TACS1   1
+BLANK card ends switches
+17TACS2
+14NOD1        100.0       50.0                                   -1.0
+60TACS2
+BLANK card after last electric network source
+  TACS2
+C  First  1     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   5     output variables belong to MODELS (with "MODELS" an internally-added upper name of pair).
+C   Step      Time       TACS2       MODELS      MODELS      MODELS      MODELS      MODELS
+C                                    TACS1       TACS2       ARCSH       ARCCH       ARCTH
+C ***      Phasor I(0) =  1.0000000E+02                     Switch  "NOD2  "  to  "      "  closed in the steady-state.
+C      0       0.0          0.0         1.0  .866025404         0.0      -9999.         0.0
+C  Switch  "NOD3  "  to  "      "  closing after  1.00000000E-03  sec.
+C      1     .1E-2   .866025404         0.5  .866025404   .19869011      -9999.  .202732554
+C                                                Switch  "NOD3  "  to  "      "  opening after  2.00000000E-03  sec.
+C      2      .002   .866025404         -.5  .56655E-15   .39003532      -9999.   .42364893
+C      3      .003   .56655E-15         -1.   -.8660254  .568824899      -9999.  .693147181
+BLANK card ends selective node voltage outputs
+C      4      .004    -.8660254         -.5   -.8660254  .732668256      -9999.  1.09861229
+C  Switch  "NOD3  "  to  "      "  closing after  5.00000000E-03  sec.
+C      5      .005    -.8660254         0.5  -.1133E-14  .881373587         0.0      -9999.
+C      6      .006   -.1133E-14         1.0  .866025404  1.01597313  .622362504      -9999.
+C      7      .007   .866025404         0.5  .866025404  1.13798205  .867014726      -9999.
+C                                                Switch  "NOD3  "  to  "      "  opening after  8.00000000E-03  sec.
+C      8      .008   .866025404         -.5  .36738E-15  1.24898333  1.04696792      -9999.
+C      9      .009   .36738E-15         -1.   -.8660254  1.35044074  1.19291073      -9999.
+C     10       .01    -.8660254         -.5   -.8660254  1.44363548   1.3169579      -9999.
+BLANK card terminating plotting
+BEGIN NEW DATA CASE
+PRINTED NUMBER WIDTH, 11, 1,        { Cancel preceding declaration (extra blank)
+C         Illustration of MODELS using six of Laurent Dube's simple test cases
+C         4th of 16 data subcases.  This was taken from Laurent's file  TC10.DAT  
+     1.0     1.0
+       1       1       1       1       1      
+MODELS
+MODEL test
+COMMENT
+ Provides a quick check on the use of nested pointlist functions
+ for the representation of parametric curves.
+ Here the parameter is the variable 'r',
+ and the main functin is used as y=f(x,r)
+ using a=mainfun(x) at various values of r.
+ENDCOMMENT
+ FUNCTION fun1 POINTLIST (-inf,inf), (0,0), (inf,-inf)
+ FUNCTION fun2 POINTLIST (-inf,2*inf), (0,0), (inf,-2*inf)
+ FUNCTION fun3 POINTLIST (-inf,3*inf), (0,0), (inf,-3*inf)
+ FUNCTION fun4 POINTLIST (-inf,4*inf), (0,0), (inf,-4*inf)
+ FUNCTION mainfun POINTLIST 
+  (0,0),(1,fun1(r)),(2,fun2(r)),(3,fun3(r)),(4,fun4(r))
+ FUNCTION ref(x,r):=-r*x  --Same function in its analytic form
+ INPUT i
+ VAR a,r
+ INIT
+  r:=-1
+  WHILE r<5 DO
+   r:=r+1
+   write(' ')
+   write('r:',r)
+   FOR k:=0 to 3.5 by 0.5 DO
+    a:=mainfun(k)
+    write('  ',k,': ',a, '   ', ref(r,k))
+   ENDFOR
+  ENDWHILE
+ ENDINIT
+ EXEC
+ ENDEXEC
+ENDMODEL
+USE test AS test
+ INPUT i:=0
+ENDUSE
+ENDMODELS
+  NOD1                     1.00
+BLANK card after last electric network branch
+BLANK card ends switches
+14NOD1        100.0       50.0                                   -1.0
+BLANK card after last electric network source
+  NOD1 
+BLANK card ends selective node voltage outputs
+C       Step      Time       NOD1                                                                                                       
+C          0       0.0        100.                                                                                                      
+C          1       1.0        100.                                                                                                      
+C    Variable maxima :        100.                                                                                                   
+C    Times of maxima :         0.0                                                                                                   
+C    Variable minima :        100.                                                                                                   
+C    Times of minima :         0.0                                                                                                   
+BLANK card terminating plotting
+BEGIN NEW DATA CASE
+C         Illustration of MODELS using six of Laurent Dube's simple test cases           
+C         5th of 16 data subcases.  This was taken from Laurent's file  TC11.DAT  
+     0.1    1.00
+       1       1       1       1       1      
+MODELS
+MODEL tc11
+ VAR a
+ INPUT i
+ EXEC
+  a:=t
+  write ( 'Writing a line...' )
+ ENDEXEC
+ENDMODEL
+USE tc11 AS tc11
+ INPUT i:=0
+ENDUSE
+RECORD tc11.a AS a
+ENDMODELS
+  NOD1                     1.00
+BLANK card after last electric network branch
+BLANK card ends switches
+14NOD1        100.0       50.0                                   -1.0
+BLANK card after last electric network source
+  NOD1
+C          Step      Time      NOD1        TACS                                                                                            
+C                                            A                                                                                               
+C            0       0.0        100.        0.0                                                                                           
+C            1       0.1        100.        0.1                                                                                           
+C            2       0.2        100.        0.2                                                                                           
+C            3       0.3        100.        0.3                                                                                           
+BLANK card ends selective node voltage outputs
+C            9       0.9        100.        0.9                                                                                           
+C           10       1.0        100.        1.0                                                                                           
+C      Variable maxima :        100.        1.0                                                                                        
+C      Times of maxima :         0.0        1.0                                                                                        
+C      Variable minima :        100.        0.0                                                                                        
+C      Times of minima :         0.0        0.0                                                                                        
+BLANK card terminating plotting
+BEGIN NEW DATA CASE
+C         Illustration of MODELS using six of Laurent Dube's simple test cases           
+C         6th of 16 data subcases.  This was taken from Laurent's file  TC13.DAT  
+     0.1    1.00
+       1       1       1       1       1      
+MODELS
+MODEL test
+ INPUT i
+ VAR a, b
+ HISTORY b
+ EXEC
+  a:=b {MAX:0.7}
+  b:=t
+ ENDEXEC
+ENDMODEL
+USE test AS test
+ INPUT i:=t
+ HISTORY b:=t
+ENDUSE
+RECORD test.a AS a
+ENDMODELS
+  NOD1                     1.00
+BLANK card after last electric network branch
+BLANK card ends switches
+14NOD1        100.0       50.0                                    0.0
+BLANK card after last electric network source
+  NOD1
+C        Step      Time        NOD1       TACS                                                                                            
+C                                           A                                                                                               
+C           0       0.0         0.0        -.1                                                                                           
+C           1       0.1        100.        0.0                                                                                           
+C           2       0.2        100.        0.1                                                                                           
+C           3       0.3        100.        0.2                                                                                           
+C           4       0.4        100.        0.3                                                                                           
+BLANK card ends selective node voltage outputs
+C           9       0.9        100.        0.7                                                                                           
+C          10       1.0        100.        0.7                                                                                           
+C     Variable maxima :        100.        0.7                                                                                        
+C     Times of maxima :         0.1        0.9                                                                                        
+C     Variable minima :         0.0        -.1                                                                                        
+C     Times of minima :         0.0        0.0                                                                                        
+BLANK card terminating plotting
+BEGIN NEW DATA CASE
+C    7th of 16 subcases was added 22 August 1998 to illustrate a supplemental
+C    variable that extends through column 80.  Furthermore, it is unusual in
+C    that it has no blank byte to the right of the equal sign in column 11.
+C    The result is easily checked since, by inspection, it has value  9 + T.
+C    For background text, see the July, 1998, newsletter.  Dr. Yuan Bin called
+C    our attention to this problem.  But that was not the end.  It was about a
+C    year later that Carlos Mata pointed to the weakness of the correction: it
+C    failed if column 80 contained a closed parenthesis.  The correction was
+C    fortified March 18, 1998,  and new variable  CARLOS  confirms correct
+C    operation.  Note that the values of  I1FG50  and  CARLOS  are equal.
+ABSOLUTE TACS DIMENSIONS
+      10      90     100      20      30     400     350      60
+     .02     .10
+       1       1       0       0       
+TACS STAND ALONE
+99I1FG00  = 1.
+99I1FG02  = TIMEX
+99I1FG04  = 1.
+99I1FG06  = 1.
+99I1FG08  = 1.
+99I1FG10  = 1.
+99I1FG12  = 1.
+99I1FG14  = 1.
+99I1FG16  = 1.
+99I1FG18  = 1.
+98YUAN    =I1FG00+I1FG02+I1FG04+I1FG06+I1FG08+I1FG10+I1FG12+I1FG14+I1FG16+I1FG18
+98CARLOS  =I1FG00+I1FG02+I1FG04+I1FG06+I1FG08+I1FG10+I1FG12+ 1.5*(I1FG14+I1FG16)
+33YUAN  CARLOS
+BLANK card ending all TACS data cards
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C    8th of 16 subcases was added 18 August 1998 to illustrate new request words
+C    that are related to repeatability of random numbers,  or lack of it.  Here
+C    we illustrate repeatability, but the non-repeatable case really is the more
+C    important.  If the  REPEATABLE  card below is replaced by the comment card
+C    that immediately precedes it,  the new initialization of OVER8 (see the
+C    October newsletter) is demonstrated.  Previously,  ATP GNU answers differed
+C    from Salford and Watcom answers.  Also illustrated is no output variable,
+C    with  MODELS  doing all output.  Of course,  with only 2 energizations and
+C    a dummy electric network,  this is just a demonstrative shadow of the real
+C    data case of interest (Gabor Furst's BACKFL.DAT).  The dominant structural
+C    feature is use of  MODELS  for all output of a SYSTEMATIC data case.  There
+C    _is_  a base case,  although the engineering significance is not known.
+TRULY RANDOM NUMBERS     { Alternative to following card removes repeatability
+REPEATABLE RANDOM NUMBERS     { English-language override of NSEED 5 lines below
+C    Note about preceding:  Since the TRULY declaration is overridden by the
+C    REPEATABLE  declaration,  in fact the  TRULY declaration does nothing.  But
+C    it does illustrate acceptance by ATP.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .060    .300   { Time step is artificially large (5 steps to completion)
+       1       1       1       2       1      -1                      -2
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED
+       0       1       0       0       1                                       1
+       5       5      20      20      { Printout frequency changes for base case
+MODELS HYBRID
+STORAGE integer pages:0 real pages:0 ENDSTORAGE
+MODEL tc1
+ VAR angle
+ INPUT i
+   INIT angle:=0
+   ENDINIT
+ EXEC
+    angle:= random()
+C   write('   T =',  t,  '  MODELS random() yields =', angle )  
+--- Only program output within dT loop is preceding output of variable ANGLE ---
+C     To preceding output,  add the energization number  KNT  to demonstrate
+C     that a 4-byte integer is handled properly by XPR1 for  WRITE(.  GNU ATP
+C     uses different code of IEIGHT for this than for ISTEP.  WSM, 28 Aug 2010
+    write('   T =',  t,  'KNT =', atp(knt),  'MODELS random() ==>', angle )
+ ENDEXEC
+ENDMODEL
+USE tc1 AS tc1a
+ INPUT i:=0
+ENDUSE
+C RECORD tc1a.angle AS angle  { If activates,  variable angle becomes ATP output
+ENDMODELS
+  GENA  A1                    1. 
+  A1                          1.                                             
+  ASW1                        1.                                             
+BLANK card ending branch cards
+  A1    ASW1       4.E-3     .2E-3         2          SYSTEMATIC
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.
+BLANK card ending source cards
+BLANK card ending output variable requests (node voltages only, here)
+  PRINTER PLOT
+BLANK card ending plot cards (for base case only)
+BLANK card ending statistical tabulate (none possible, since no output variable)
+BEGIN NEW DATA CASE
+C   9th of 16 subcases is a meaningful case from Trainee Rod Price of BPA, who
+C   assembled and tested the data during the summer  and  fall  of 1989.  The 
+C   study  involves  the  500-kV Coulee-Raver overhead line,  and  the  model
+C   includes series capacitors at Columbia.  These  capacitors  are protected 
+C   by  nonlinear resistors  (ZnO modeling) that are monitored  and  bypassed 
+C   using  MODELS.   To see more interesting simulation,  the  end-time  TMAX
+C   should be increased to 100 msec.   Reformulated by Laurent Dube  8 Aug 91
+C   following his correction of a MODELS bug for Bob Wilson at Univ. of Idaho
+C   in Moscow.   It was observed that the answer of this 7-th subcase changed,
+C   too (i.e., before it was wrong,  although perhaps not by much)!       
+C   14 Sept 1993,  WSM  adds  $BLANK DATA  below to protect the user who has 
+C   NOBLAN  of  STARTUP  equal to unity (equivalent to  $BLANK HALT  to halt if
+C   a true blank card is found.   This  MODELS  data does use blank lines as 
+C   comments,  and  MODELS  ignores the blanks.   The important thing is to
+C   prevent EMTP data input from halting before  MODELS  receives the blanks!
+C      14 October 2000,  the addition of one IF-statement to OVER16 (see 8th
+C      subcase of DCNEW-16 and January, 2001, newsletter) changes the answers
+C      of this subcase slightly.  To document this,  output variables are have
+C      been made more relevant.  Differences follow the fault to ground.  From
+C      the  .DBG  file,  the new logic is used 3 times:
+C          OVER16 bypasses compensation.  J, T =  43   2.000000000000E-02
+C          OVER16 bypasses compensation.  J, T =  43   3.150000000000E-02
+C          OVER16 bypasses compensation.  J, T =  43   4.990000000000E-02
+C      It is not surprising that the difference shows up after step 400, which
+C      corresponds to that switch closure at T = 20 msec (1st of 3 uses).
+C      The following comparison shows how extrema are affected only slightly:
+C      Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C      Next   5     output variables belong to MODELS (with "MODELS" an internally-added upper name of pair).
+C      Step    Time       CR25A       CR20A       CRZ1A       MODELS      MODELS      MODELS      MODELS      MODELS
+C                         CR30A       TERRA       CR20A       VCAPA       IZNA        PZNA        EZNA        GAPA
+C      Old maxima :   27237.7816  15421.0962  .445513E-4  39549.6402  .445515E-4  .139454E10  .500879 E7         1.0
+C      New maxima :   26931.1785  15312.52    .445513E-4  39549.6402  .445515E-4  .135464E10  .4929451E7         1.0
+C      Times of both :    .03175       .0375       .0125       .0125       .0125        .028         .05       .0315
+C      Old minima :   -7552.2441  -28033.65   -7291.149   -191594.73  -7291.149   .432745E-9         0.0         0.0
+C      New minima :   -7466.2202  -28099.511  -7350.3614  -184341.43  -7350.3614  .432745E-9         0.0         0.0
+C      Times of old :      .0378      .02865      .02815      .02815      .02815         0.0         0.0         0.0
+C      Times of new :      .0378      .02865      .02805      .02805      .02805         0.0         0.0         0.0
+C      About switching times, both have: Gap "CR25A "  to  "CR30A "  closing
+C      after  3.15000000E-02  sec.  But openings differ by one time step:
+C      Old:  Gap  "CR25A "  to  "CR30A "  opening after  4.98500000E-02  sec.
+C      New:  Gap  "CR25A "  to  "CR30A "  opening after  4.99000000E-02  sec.
+PRINTED NUMBER WIDTH, 12, 2,   { Cancel wider output of preceding subcase
+$BLANK DATA       { Request old treatment of true blanks (not 
+ .000050    .050     60.  
+       1       9       1       3       1      -1
+       5       5      20      20     100     100
+C
+MODELS HYBRID
+
+INPUT -- declare names and function of all MODELS inputs from EMTP
+
+        vc3a {v(CR30A)}   --   vc3a = voltage at node CR30A
+        vc2a {v(CR20A)}   --   vc2a = voltage at node CR20A
+        vc3b {v(CR30B)}   --   vc3b = voltage at node CR30B
+        vc2b {v(CR20B)}   --   vc2b = voltage at node CR20B
+        vc3c {v(CR30C)}   --   vc3c = voltage at node CR30C
+        vc2c {v(CR20C)}   --   vc2c = voltage at node CR20C
+        iznoa {i(CRZ2A)}  --  iznoa = current through switch at node CRZ2A
+        iznob {i(CRZ2B)}  --  iznob = current through switch at node CRZ2B
+        iznoc {i(CRZ2C)}  --  iznoc = current through switch at node CRZ2C
+
+OUTPUT -- declare names of MODELS outputs to EMTP
+
+        gapa, gapb, gapc  -- switch control signals
+
+MODEL flash
+
+comment ****************************************************************
+*                                                                      *
+*    Function: set or cancel the gap firing control signal             *
+*    Inputs  : voltage and current across ZnO resistor                 *
+*    Output  : the firing signal to the electrical ZnO component       *
+*                                                                      *
+************************************************************* endcomment
+
+  INPUT  vcap   --  voltage difference across series caps  [Volts]
+         iczn   --  ZNO current                            [Amps]
+
+  DATA   Pset   --  power setting                          [Megajoules/msec]
+         Eset   --  energy setting                         [Megajoules]
+         fdel   --  firing delay                           [msec]
+         fdur   --  firing duration                        [msec]
+ 
+  VAR  power    --  power into ZnO resistor                [Watts]
+       trip     --  gap firing control signal              [0 or 1]
+       energy   --  energy into ZnO resistor               [Joules]
+       tfire    --  time at which the gap was last fired   [sec]
+ 
+  OUTPUT  trip
+
+  HISTORY  INTEGRAL(power) {DFLT:0}
+
+  INIT trip:=0
+       tfire:=0
+  ENDINIT
+
+  EXEC
+    ------------------------------------------------------------------
+    power:=vcap*iczn
+    energy:=INTEGRAL(power)
+    ------------------------------------------------------------------
+    IF  trip>0              -- is already firing
+    AND t-tfire>fdur*1.e-3  -- has exceeded firing duration
+    THEN
+      trip:=0     -- cancel the firing signal
+      tfire:=0    -- null the firing time
+    ENDIF
+    ------------------------------------------------------------------
+    IF trip=0                        -- is not signaling to fire
+    AND tfire=0                      -- firing condition not yet detected
+    AND (    power  >= Pset * 1.e9   -- power setting exceeded
+          OR energy >= Eset * 1.e6 ) -- energy setting exceeded
+    THEN
+      tfire:=t    -- set the firing detection time
+    ENDIF
+    ------------------------------------------------------------------
+    IF trip=0                 -- is not signaling to fire
+    AND tfire>0               -- firing condition has been detected
+    AND t-tfire>=fdel*1.e-3   -- firing delay exceeded
+    THEN
+      trip:=1     -- set the firing signal
+    ENDIF
+    ------------------------------------------------------------------
+  ENDEXEC
+
+ENDMODEL  
+
+USE flash AS flasha   ----------------------------------- PHASE A ------
+
+  TIMESTEP MIN: 0.0005
+
+  INPUT  vcap:=vc3a-vc2a   -- voltage across caps
+         iczn:=iznoa       -- current through ZnO resistor
+
+  DATA   Pset:= 1   -- power setting    [MJ/mS]
+         Eset:= 9   -- energy setting   [MJ]
+         fdel:= 4   -- firing delay     [msec]
+         fdur:=20   -- firing duration  [msec]
+
+  OUTPUT  gapa:=trip  -- passes value of 'trip' to MODELS variable 'GAPA'
+
+ENDUSE -----------------------------------------------------------------
+
+USE flash AS flashb   ----------------------------------- PHASE B ------
+
+  TIMESTEP MIN: 0.0005
+
+  INPUT  vcap:=vc3b-vc2b   -- voltage across caps
+         iczn:=iznob       -- current through ZnO resistor
+
+  DATA   Pset:= 1   -- power setting    [MJ/mS]
+         Eset:= 9   -- energy setting   [MJ]
+         fdel:= 4   -- firing delay     [msec]
+         fdur:=20   -- firing duration  [msec]
+
+  OUTPUT  gapb:=trip  -- passes value of 'trip' to MODELS variable 'GAPB'
+
+ENDUSE -----------------------------------------------------------------
+
+USE flash AS flashc   ----------------------------------- PHASE C ------
+
+  TIMESTEP MIN: 0.0005
+
+  INPUT  vcap:=vc3c-vc2c   -- voltage across caps
+         iczn:=iznoc       -- current through ZnO resistor
+
+  DATA   Pset:= 1   -- power setting    [MJ/mS]
+         Eset:= 9   -- energy setting   [MJ]
+         fdel:= 4   -- firing delay     [msec]
+         fdur:=20   -- firing duration  [msec]
+
+  OUTPUT  gapc:=trip  -- passes value of 'trip' to MODELS variable 'GAPC'
+
+ENDUSE -----------------------------------------------------------------
+
+RECORD  flasha.vcap   AS VCAPA       
+        flasha.iczn   AS IZNA
+        flasha.power  AS PZNA       
+        flasha.energy AS EZNA
+        flasha.trip   AS GAPA
+
+ENDMODELS      
+C  ---------------------   End  MODELS  data,  begin electric network:  
+C   **** Series Capacitors, Xc = 28.4 ohms
+C
+  CR20A CR30A                         93.40                                     
+  CR20B CR30B                         93.40                                     
+  CR20C CR30C                         93.40                                     
+C
+  CR20D CR30D                         93.40                                    
+  CR20E CR30E                         93.40                                    
+  CR20F CR30F                         93.40                                    
+C
+C   **** Jumpers to help EMTP convergence with ZNO
+C
+  CRZ1A CRZ2A              0.01                                                 
+  CRZ1B CRZ2B              0.01                                                 
+  CRZ1C CRZ2C              0.01                                                 
+C
+  CRZ1D CRZ2D              0.01                                                 
+  CRZ1E CRZ2E              0.01                                                 
+  CRZ1F CRZ2F              0.01                                                 
+C
+C   **** ZNO protection for Caps, I=1.8KA, 2.2 PU, alpha = 40, Vref =147.5
+C
+92CRZ1A CR20A                          5555.                                   1
+                  147500.                      -1.                             
+                      1.0                      40.                      .80
+                    9999.
+92CRZ1B CR20B CRZ1A CR20A              5555.                                  
+92CRZ1C CR20C CRZ1A CR20A              5555.                                  
+C
+92CRZ1D CR20D CRZ1A CR20A              5555.                                   
+92CRZ1E CR20E CRZ1A CR20A              5555.                                   
+92CRZ1F CR20F CRZ1A CR20A              5555.                                   
+C
+C   **** Source Impedances
+C
+51SRC1A RAVBA               0.1  20.0
+52SRC1B RAVBB               0.1  18.5
+53SRC1C RAVBC
+C
+51SRC1A RAVBA              300.0
+52SRC1B RAVBB              150.0
+53SRC1C RAVBC
+C
+C
+51SRC2A GRCBA               0.1  7.00
+52SRC2B GRCBB               0.1  10.7
+53SRC2C GRCBC
+C
+51SRC2A GRCBA              350.0
+52SRC2B GRCBB              150.0
+53SRC2C GRCBC
+C
+C  *** LINE IMPEDANCES  Values have been 1/4 to get high fault MVA ****
+C
+51CR50A CR30A               0.5  14.0                                          
+52CR50B CR30B                8.  52.0                                          
+53CR50C CR30C                                                                  
+C
+51CR50D CR30D               0.5  14.0                                          
+52CR50E CR30E                8.  52.0
+53CR50F CR30F
+C
+51CR01A CR20A               0.4   9.0
+52CR01B CR20B                5.  36.0
+53CR01C CR20C
+C
+51CR01D CR20D               0.4   9.0                                       
+52CR01E CR20E                5.   36.
+53CR01F CR20F
+C
+C  *****  BYPASS IMPEDANCE ****
+  CR20A CR25A              5.    0.23                                           
+  CR20B CR25B              5.    0.23                                           
+  CR20C CR25C              5.    0.23                                           
+  CR20D CR25D              5.    0.23                                          
+  CR20E CR25E              5.    0.23                                         
+  CR20F CR25F              5.    0.23                                         
+C   ****  PARALLEL RESISTOR
+  CR20A CR25A              200.                                                
+  CR20B CR25B              200.                                                 
+  CR20C CR25C              200.                                                 
+  CR20D CR25D              200.                                                
+  CR20E CR25E              200.                                               
+  CR20F CR25F              200.                                               
+BLANK card ending program branch cards.
+C  **** TACS CONTROLLED CAP BYPASS SWITCHES *******
+C  ** SWITCH 1
+12CR25A CR30A                                                   GAPA          11
+12CR25B CR30B                                                   GAPB          1 
+12CR25C CR30C                                                   GAPC          1 
+C 12CR25D CR30D                                                   GAPD           1
+C 12CR25E CR30E                                                   GAPE            
+C 12CR25F CR30F                                                   GAPF            
+  CR25D CR30D  -1.0        10.
+  CR25E CR30E  -1.         10.
+  CR25F CR30F  -1.         10.      
+C
+C   **** Main Breaker Switches
+C
+  RAVBA CR50A  -1.0      10.0                                                   
+  RAVBB CR50B  -1.0      10.0                                                   
+  RAVBC CR50C  -1.0      10.0                                                 
+C
+  RAVBA CR50D  -1.0      10.0                                                   
+  RAVBB CR50E  -1.0      10.0
+  RAVBC CR50F  -1.0      10.0
+C
+  GRCBA CR01A  -.006     10.0                                                 
+  GRCBB CR01B  -.006     10.0                                                 
+  GRCBC CR01C  -.006     10.0                                                 
+C
+  GRCBA CR01D  -1.0      10.0
+  GRCBB CR01E  -1.0      10.0
+  GRCBC CR01F  -1.0      10.0
+C
+C  *** ZNO current measuring switches  ***
+C
+  CR30A CRZ2A        -1.        1.
+  CR30B CRZ2B        -1.        1.
+  CR30C CRZ2C        -1.        1.
+  CR30D CRZ2D        -1.        1.
+  CR30E CRZ2E        -1.        1.
+  CR30F CRZ2F        -1.        1.
+  CR20A          0.01998       10.   { Fault switch, phase "a" to ground }     1
+BLANK card terminating program switch cards
+14SRC1A    440000.   60.       -20.0                          -1.      10.
+14SRC1B    440000.   60.       100.0                          -1.      10.
+14SRC1C    440000.   60.       220.0                          -1.      10.
+14SRC2A    440000.   60.         0.0                          -1.      10.
+14SRC2B    440000.   60.       120.0                          -1.      10.
+14SRC2C    440000.   60.       240.0                          -1.      10.
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        CR20A  |TERRA *CR30A *CRZ1A *CR01A *CR25A *CR25A *
+C        CR30A  |CR20A *CRZ2A *CR50A *CR25A *
+C        CR20B  |CR30B *CRZ1B *CR01B *CR25B *CR25B *
+C        CR30B  |CR20B *CRZ2B *CR50B *CR25B *
+C        CR20C  |CR30C *CRZ1C *CR01C *CR25C *CR25C *
+C        CR30C  |CR20C *CRZ2C *CR50C *CR25C *
+C        CR20D  |CR30D *CRZ1D *CR01D *CR25D *CR25D *
+C        CR30D  |CR20D *CRZ2D *CR50D *CR25D *
+C       Total network loss  P-loss  by summing injections =   8.848099600964E+07
+C Output for steady-state phasor switch currents.
+C      Node-K    Node-M           I-real            I-imag            I-magn  
+C      CR25A     CR30A            Open              Open              Open   
+C      CR25B     CR30B            Open              Open              Open   
+C      CR25C     CR30C            Open              Open              Open      
+C      CR25D     CR30D        9.29172435E+02   -1.77481409E+02    9.45970963E+02
+C      CR25E     CR30E       -3.10882808E+02    8.93427637E+02    9.45970963E+02
+C      CR25F     CR30F       -6.18289626E+02   -7.15946228E+02    9.45970963E+02
+BLANK card terminating program source cards.
+C End inject:  SRC2C   -220000.       440000.   -1191.301327068  2345.3572211208
+C End inject:   -381051.1776652  -120.0000000   -2020.272665456     -120.5267278
+C Step   Time       CR25A      CR25A      TACS       TACS       TACS        TACS
+C                   CR30A      CR30A      VCAPA      IZNA       PZNA        EZNA
+C ***      Phasor I(0) =  9.2917243E+02   Switch  "CR25D "  to  "CR30D "  closed
+C ***      Phasor I(0) = -3.1088281E+02   Switch  "CR25E "  to  "CR30E "  closed
+C ***      Phasor I(0) = -6.1828963E+02   Switch  "CR25F "  to  "CR30F "  closed
+C            < <  Etc.  (many switch currents)  > >
+C   0     0.0  -143.44999        0.0 143.449993 .28697E-11 .411659E-9        0.0
+C   1   .5E-4  602.099261        0.0 -602.09926 -.68002E-6 .411659E-9        0.0
+C   2   .1E-3  1347.43459        0.0 -1347.4346 -.15198E-5 .411659E-9        0.0
+C   3  .15E-3   2092.2912        0.0 -2092.2912 -.23592E-5 .411659E-9        0.0
+BLANK card ending output variables requests (none here, since all column 80)
+C   300  .015  -23363.319        0.0 23363.3193 .263161E-4 .614832009 .014309206
+C ***          Close switch  "CR20A "  to  "      "  after  2.00000000E-02  sec.
+C   400   .02  37570.0647        0.0 -37570.065 -.42322E-4 1.59004745 .016928315
+C   500  .025  56444.8022        0.0 -56444.802 -.63583E-4 3.58891722 .022232887
+C   600   .03  183226.734        0.0 -183226.73 -5786.1028 .106017E10 .3650637E7
+C            Gap     "CR25A "  to  "CR30A "  closing after  3.15000000E-02  sec.
+C   700  .035         0.0 -4433.8226 22742.1728 .256182E-4 .582612436 .4929451E7
+C   800   .04         0.0 -5450.0316 25576.0355 .288104E-4 .736855415 .4929451E7
+C   900  .045         0.0 4627.82167  -23165.41 -.26095E-4 .604499203 .4929451E7
+C            Gap     "CR25A "  to  "CR30A "  opening after  4.99000000E-02  sec.
+C  1000   .05   -816.5929        0.0 3143.46664 .354099E-5 .011130982 .4929451E7
+C Variable max:184341.425 26931.1785 39549.6402 .445516E-4 .135464E10 .4929451E7
+C Times of max:    .02805     .03175      .0125      .0125       .028        .05
+C Variable min: -39549.64 -7466.2202 -184341.43 -7350.3614 .411659E-9        0.0
+C Times of min:     .0125      .0378     .02805     .02805        0.0        0.0
+  PRINTER PLOT                                                                  
+ 194 5. 0.0 40.         CR25A CR30A             { Axis limits: (-0.747,   2.220)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+PRINTED NUMBER WIDTH, 12, 2, { Keep dT loop precision the same, but 2 blank separators
+C     10th of 16 subcases was added 10 April 2011  to illustrate very simple use
+C     of  POINTLIST  within  MODELS.  Data comes from Orlando Hevia of Santa Fe,
+C     Argentina.  It  establishes the standard of comparison for his alternative
+C     SEEK  function (see 11th subcase,  which produces the same answer).  Here
+C     the (X,Y) points of  POINTLIST  number only 7.  For much larger numbers of
+C     points (e.g., 20200 for Orlando's TFGNMOD.DAT), Dube's  POINTLIST  is much
+C     too slow.  For much larger numbers of points,  use Orlando's new  SEEK  as
+C     will be illustrated by the following subcase.  WSM.
+     1.0   10.00     { Take ten steps, from 1 second to 10 seconds.  This is "T"
+       1      -1   { Print every step;  do not bother saving points for plotting
+MODELS STAND ALONE
+MODEL SAMPLE
+VAR
+   X,Y,Z
+FUNCTION R POINTLIST
+(0, 69)
+(2, 50)
+(4, 142)
+(5, 142)
+(6, 188)
+(8, 73)
+(10, 100)
+INIT
+        X:=0
+ENDINIT
+EXEC
+X:=R(T)
+Y:=SQRT(X)*0.3
+Z:=R(SQRT(X)*0.3)
+ENDEXEC
+ENDMODEL
+USE SAMPLE AS SAMPLE
+ENDUSE
+RECORD
+  SAMPLE.X AS X
+  SAMPLE.Y AS Y
+  SAMPLE.Z AS Z
+ENDRECORD
+ENDMODELS
+C Column headings for the  3   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  Next   3     output variables belong to MODELS (with "MODELS" an internally-added upper name of pair).
+C   Step      Time       MODELS      MODELS      MODELS
+C                        X           Y           Z
+C      0       0.0          69.  2.49198716  72.6314093
+C      1       1.0         59.5  2.31408729  64.4480155
+C      2       2.0          50.  2.12132034  55.5807358
+C      3       3.0          96.  2.93938769  93.2118338
+C      4       4.0         142.  3.57491259  122.445979
+C      5       5.0         142.  3.57491259  122.445979
+C      6       6.0         188.  4.11339276  144.608033
+C      7       7.0        130.5   3.4270979  115.646503
+C      8       8.0          73.  2.56320112  75.9072517
+C      9       9.0         86.5  2.79016129  86.3474191
+C     10       10.         100.         3.0         96.
+BLANK CARD ENDING PLOT CARDS
+BEGIN NEW DATA CASE
+$DEPOSIT, JSEEDR=0      { Reinitialize random # generator as if no preceding use
+C        Note: the preceding $DEPOSIT  is required because random # use here is
+C              not the 1st of data case.  Preceding subcases roll dice.  Memory
+C              of this is erased by setting JSEEDR to zero.   WSM.  29 July 2011
+C              This is for addition of GAUSS.  Variable  NORMAL  below should be
+C              identical in value to what is produced by TACS within subcase 2
+C              of BENCHMARK DC-18.  This works well for this subcase,  but later
+C              subcases then would have different random numbers.  In order not
+C              to change the random numbers of following subcases,  we want to
+C              restore at the end the JSEEDR value that exists at the beginning.
+C              New logic of DEPOSI makes this possible.  See 2nd $DEPOSIT below.
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+C     Preceding line allows the SEEK file to be remote if this main data file is
+PRINTED NUMBER WIDTH, 12, 2, { Keep dT loop precision the same, but 2 blank separators
+C     11th of 16 subcases was added  10 April 2011  to illustrate that Orlando
+C     Hevia's new  SEEK  function of  MODELS  will produce the same answer as
+C     the preceding 10th subcase,  which uses  POINTLIST.  Data is too small for
+C     there to be a reason to use  SEEK  instead of  POINTLIST,  of course.  For
+C     a more realistic illustration of the advantage of  SEEK,  see explanation 
+C     of the EEUG list server dated 11 June 2011.  This includes the following 
+C     paragraph:
+C   The inadequacy of  MODELS  POINTLIST  for large data (many points of the 
+C   piecewise-linear X-Y function) was documented in detail in a paper that 
+C   was presented at the year-2006 EEUG conference.  See  "Determination of 
+C   an optimized energy storage size for a wind farm based on wind forecasts"  
+C   by Steve Völler,  Christian Müller, and Johannes Verstege of the 
+C   University of Wuppertal in Germany.  In this case,  POINTLIST  functioned 
+C   correctly, but was too slow to be practical.  Those German users give new 
+C   meaning to the term industrial-strength.  Would a reader believe 105K 
+C   pairs of (X, Y)?  Yes, letter K as in one thousand.  Mr. Dube obviously 
+C   did not imagine such use when he programmed his original logic.  But 
+C   Orlando Hevia's new  SEEK  now provides an efficient alternative without 
+C   the need for compilation and linking of user-supplied source code.
+C     This data too comes from Orlando Hevia of Santa Fe, Argentina.  WSM.
+     1.0   10.00     { Take ten steps, from 1 second to 10 seconds.  This is "T"
+       1      -1   { Print every step;  do not bother saving points for plotting
+MODELS STAND ALONE
+C 3456789012345678901234567890123456789012345678 -- Ruler for following optional 
+C                 < File Name>    IPRMDL  KOMPAC    miscellaneous data card :
+MODELS MISC. DATA dc68seek.            0       0
+C               Note about preceding.  Special value  KOMPAC = 8765  is required
+C               to bypass the check on (X,Y) points of the function.  Logic will
+C               ensure that X never decreases (a fatal error).  It also discards
+C               all but the end points of each string of three or more identical
+C               Y values.  That is the 3rd of 3 params shown.  As for the first,
+C               see the substantial note below.  Finally,  the middle parameter,
+C               IPRMDL,  is just  IPRSUP  for the new  MODELS  code.   I.e.,  it
+C               provides diagnostic printout control.   All 3 values will remain
+C               in force unless redefined.  So,  for stacked subcases,  there is
+C               no need for repeated definition unless values are to be changed.
+MODEL SAMPLE
+VAR X,Y,Z, NORMAL
+FUNCTION seek FOREIGN seek {ixarg: 2}
+FUNCTION gauss FOREIGN gauss {ixarg: 2}
+EXEC
+C    Of the three following  EXEC  lines,  the first and the third use Orlando's
+C    new  SEEK  function which is defined by the  (X, Y)  pairs of  DC68SE37.DAT
+C    where the root name  "DC68SEEK."  was read from the MODELS misc. data card.
+C    The  "37"  that overwrites the  "EK"  of DC68SEEK corresponds to the second
+C    argument of  SEEK.  If another function were involved,  it would correspond
+C    to a different subscript (any # < 100 million is legal).  An arbitrary # of
+C    such functions is allowed,  and  each can involve an arbitrary # of  (X, Y)
+C    as long as List 20 has adequate unused space.  As for  .DAT  being the file
+C    type,  this follows from  DATTYP  of  STARTUP  because the user's file name
+C    ended with a period.  If there is no MODELS miscellaneous data, the default
+C    disk file name  SEEKDATA.DAT  will be assumed by ATP.  WSM.
+X:=SEEK(T, 37 )
+Y:=SQRT(X)*0.3
+Z:=SEEK(SQRT(X)*0.3, 37 )
+C    In order that all data be seen,  let's document the content of DC68SE37.DAT
+C    which contains just the following 7 formatted lines:
+C 0, 69
+C 2, 50
+C 4, 142
+C 5, 142
+C 6, 188
+C 8, 73        
+C 10, 100
+C    This is just usual free-format data.  Each line begins in column 1, and
+C    the final line is known as ATP encounters an end-of-file mark.  Neither
+C    comment lines nor $-cards nor inline comments are allowed.  This is not
+C    an oversight.  Rather,  it is a way to speed execution for large files.
+C    If the user wants to terminate his function prematurely,  however,  he
+C    is allowed to add a line such as  "-9999., 0"  where the  -9999  is
+C    interpreted as a software EOF.  For an illustration,  see subcase # 15.
+C       For some reason, Dube does not accept an in-line comment on the
+C       following function.  Perhaps not on any function?  So, strip it off:
+C NORMAL:=gauss( T )  { Argument "T" in fact is unused, so is arbitrary
+NORMAL:=gauss( T )
+ENDEXEC
+ENDMODEL
+USE SAMPLE AS SAMPLE
+ENDUSE
+RECORD
+SAMPLE.X AS X
+SAMPLE.Y AS Y
+SAMPLE.Z AS Z
+SAMPLE.NORMAL AS NORMAL
+ENDRECORD
+ENDMODELS
+C   MODELS "SEEK" function # 37 involves 7 pairs of (X,Y).  These are stored in List-20 SCONST cells 3 through 16.
+C Column headings for the  4   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  Next   4     output variables belong to MODELS (with "MODELS" an internally-added upper name of pair).
+C   Step      Time       MODELS      MODELS      MODELS      MODELS
+C                        X           Y           Z           NORMAL
+C      0       0.0          69.  2.49198716  72.6314093  .890624441
+C      1       1.0         59.5  2.31408729  64.4480155  -.26382016
+C      2       2.0          50.  2.12132034  55.5807358  -.41782888
+C      3       3.0          96.  2.93938769  93.2118338   .66418476
+C      4       4.0         142.  3.57491259  122.445979  .242122394
+C      5       5.0         142.  3.57491259  122.445979  -.38464212
+C      6       6.0         188.  4.11339276        142.   -.9889959
+C      7       7.0        130.5   3.4270979  115.646503  -.26589058
+C      8       8.0          73.  2.56320112  75.9072517  -.73063403
+C      9       9.0         86.5  2.79016129  86.3474191  -.75107385
+C     10       10.         100.         3.0         96.  .288485151
+C   Size 11-20:     0     3 -9999 -9999  1744     0     0     0    23    15
+C   The preceding line from 80-column case-summary statistics confirms that
+C   15 cells of List 20 storage are being used by  SEEK.  There are 6 points
+C   for a total of 12 values.  But for each function,  there are two extra
+C   cells.  Finally,  the last function must be bounded by a blank,  so the
+C   total is  2 * 6 + 2 + 1 = 15  as shown.
+C       That was before adding  GAUSS  use.  After the addition, this becomes:
+C   Size 11-20:     0     4 -9999 -9999  1838     0     0     0    23    17
+$DEPOSIT, JSEEDR= -98789  { Flag for DEPOSI to restore value before previous use
+C   Note about preceding line:  As this use begins on  31 July 2011,  service is
+C   limited to a single variable (in this case,  JSEEDR).  For use here,  JSEEDR
+C   is a random variable.  The user wants to restore whatever value  JSEEDR  had
+C   at the instant it was zeroed by the preceding $DEPOSIT.  The user can not do
+C   this manually (old logic)  because he does not know what the value was.  But    
+C   ATP remembers the value within  DEPOSI,  and can do it.   WSM.  31 July 2011
+BLANK CARD ENDING PLOT CARDS
+BEGIN NEW DATA CASE
+C     12th of 16 subcases  was  added  13 April 2011  to illustrate that Orlando
+C     Hevia's new  EGAUSS  function of MODELS will perform Gaussian elimination.
+C     This was the 1st of 4 stacked subcases within Orlando's  file  TFGNMOD.DAT
+C     Solve the following 3 linear equations in 3 unknowns:
+C        X1 + 4*X2 +   X3 = 7
+C        X1 + 6*X2 -   X3 = 13
+C      2*X1 -   X2 + 2*X3 = 5
+C     THE INITIAL SOLUTION IS X1= 5, X2= 1, X3= -2,  x4=18
+C     THE ELEMENT N+1 OF SOLUTION IS THE DETERMINANT OF the coefficient matrix
+     0.2     1.0   { Take 5 time steps, changing the matrix at each new step
+       1      -1   { Suppress accumulation of plot points,  which are unused
+MODELS STAND ALONE
+C 3456789012345678901234567890123456789012345678 -- Ruler for following optional 
+C                 < File Name>    IPRMDL  KOMPAC    miscellaneous data card :
+MODELS MISC. DATA dc68seek.            0       0
+C THE FUNCTION CAN BE USED AS FOLLOW:
+C
+C SOLUTION[1..N+1]:= EGAUSS(N,MATRIX[1..N*N+N])
+C
+C EGAUSS FROM GAUSSIAN ELIMINATION
+C
+MODEL solve
+FUNCTION egauss FOREIGN egauss {ixarg:100}
+ VAR arg[1..12]
+ VAR x[1..4]
+EXEC
+if t=0 then
+ arg[1]:=1.0
+ arg[2]:=4.0
+ arg[3]:=1.0
+ arg[4]:=1.0
+ arg[5]:=6.0
+ arg[6]:=-1.0
+ arg[7]:=2.0
+ arg[8]:=-1.0
+ arg[9]:=2.0
+ arg[10]:=7.0
+ arg[11]:=13.0
+ arg[12]:=5.0
+endif
+x[1..4]:=egauss(3,arg[1..12])
+write( 'Solution vector X =',  x[1], x[2], x[3],  '  Determinant =', x[4] )
+arg[1]:= arg[1]*2.0
+arg[12]:= arg[12]+1.0
+C   Warning about the following use of RANDOM,  which is the  MODELS  connection
+C   to ATP's random number generator.  For  KOMPAR = 0  or 1  (set in  STARTUP),
+C   answers will be different  every time  the data is simulated,  and different
+C   program versions can not be compared  (e.g., GNU vs. Salford).  For purposes
+C   of a test case, we want repeatability and comparability, so set  KOMPAR = 3.
+C   Also, position within the data case (here, the 12th subcase) may be critical
+C   since future random numbers depend on past random numbers.
+arg[2]:=random()
+C arg[2]:= arg[1] * arg[12] --- a deterministic alternative to preceding line
+write('arg(1,12,2) =', arg[1], arg[12], arg[2] )
+ENDEXEC
+ENDMODEL
+USE solve AS solve
+ENDUSE
+ENDMODELS
+C    Because there is no electric network,  there is no usual output of the
+C    time-step loop.  Once the dT loop begins,  the only output is from MODELS:
+C  Blank card ends electric sources.  KCONST = 1     |BLANK  card ending dummy source that ATP added to  TACS  or  MODELS STAND ALONE
+C  X vector = 5.0         1.0         -2.          Determinant = 18.
+C  arg(1,12,2) = 2.0         6.0         .2328306E-9
+C  Blank card ending requests for output variables.  |BLANK  card ending output requests (none) that ATP added to this  STAND ALONE
+C  Column headings for the  0   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  X vector = 3.111111111 1.777777778 .7777777784  Determinant = 8.999999999
+C  arg(1,12,2) = 4.0         7.0         .1608161E-4
+C  X vector = .7096617728 2.741941174 4.161308814  Determinant = 30.99993567
+C  arg(1,12,2) = 8.0         8.0         .1107408979
+C  X vector = .1640999973 3.031236365 5.351518185  Determinant = 74.55703641
+C  arg(1,12,2) = 16.         9.0         .763080108
+C  X vector = -.104457932 3.219802884 6.214359374  Determinant = 159.9476796
+C  arg(1,12,2) = 32.         10.         .1799780347
+C  X vector = -.007328865 3.275392315 6.645025023  Determinant = 338.2800879
+C  arg(1,12,2) = 64.         11.         .902878134
+BLANK card ending plot requests
+BEGIN NEW DATA CASE
+C     13th of 16 subcases  has the same solution as the preceding.  It was added
+C     30 April 2011 to illustrate the  LINSOL  alternative to  EGAUSS.  The data
+C     is compatible except that no value for the determinant  of the coefficient
+C     matrix is available.  About history,  SUBROUTINE LINSOL  was provided by
+C     MODELS author Laurent Dube,  paid by BPA,  as part of the original user-
+C     supplied source code of MODELS.  This dates to 1995 or 1996 (not part of
+C     the original MODELS).  Comment cards document the source and use:
+C        Solves [a]*x=b using Crout's method with partial pivoting
+C        Reference: Numerical Recipes chapter 2.
+C        Modifies [a] and b, and returns b=x
+C        Returns ierr=1 if [a] is singular, else returns ierr=0
+C        Uses divzro as the smallest possible divisor value
+     0.2     1.0   { Take 5 time steps, changing the matrix at each new step
+       1      -1   { Suppress accumulation of plot points,  which are unused
+MODELS STAND ALONE
+MODEL solve
+FUNCTION linsol FOREIGN linsol {ixarg:100}
+ VAR arg[1..12]
+ VAR x[1..4]
+EXEC
+if t=0 then
+C     As written,  LINSOL  has been connected using the interface of Orlando's
+C     EGAUSS.  There is a complication, however.  EGAUSS  stored the matrix by
+C     rows whereas  LINSOL  assumes storage by columns.  Note the difference:
+C        1    2    3     4    5     6     7    8    9   --  Index of  MODELS
+C       1,1  1,2  1,3   2,1  2,2,  2,3   3,1  3,2  3,3  --  Content for EGAUSS
+C       1,1  2,1  3,1   1,2  2,2,  3,2   1,3  2,3  3,3  --  Content for LINSOL
+C     I.e.,  one is the transpose of the other.  Of the 9 elements that must
+C     be assigned,  only the 3 diagonal elements are unchanged.  One at a time:
+  arg[1]:=1.0 -- Element (1,1) of EGAUSS is a diagonal, so remains unchanged
+C arg[2]:=4.0  { Element (1,2) of EGAUSS had index 2,  so index 4 of LINSOL:
+  arg[4]:=4.0
+C arg[3]:=1.0   { Element (1,3) of EGAUSS had index 3,  so index 7 of LINSOL
+  arg[7]:=1.0
+C arg[4]:=1.0   { Element (2,1) of EGAUSS had index 4,  so index 2 of LINSOL
+  arg[2]:=1.0
+  arg[5]:=6.0 -- Element (2,2) of EGAUSS is a diagonal, so remains unchanged
+C arg[6]:=-1.0  { Element (2,3) of EGAUSS had index 6,  so index 8 of LINSOL
+  arg[8]:=-1.0
+C arg[7]:=2.0   { Element (3,1) of EGAUSS had index 7,  so index 3 of LINSOL
+  arg[3]:=2.0
+C arg[8]:=-1.0  { Element (2,3) of EGAUSS had index 8,  so index 6 of LINSOL
+  arg[6]:=-1.0
+  arg[9]:=2.0 -- Element (3,3) of EGAUSS is a diagonal, so remains unchanged
+C   That was for the 3x3 square matrix. The right-hand-side vector is unchanged:
+ arg[10]:=7.0
+ arg[11]:=13.0
+ arg[12]:=5.0
+endif
+x[1..4]:=linsol(3,arg[1..12])
+write( 'Solution vector X =',  x[1], x[2], x[3] )
+arg[1]:= arg[1]*2.0
+arg[12]:= arg[12]+1.0
+C arg[2]:=random()  { Element (1,2) of EGAUSS had index 2,  so index 4 of LINSOL
+  arg[4]:=random()
+C write('arg(1,12,2) =', arg[1], arg[12], arg[2] )
+write(  'arg(1,12,4) =', arg[1], arg[12], arg[4] )
+ENDEXEC
+ENDMODEL
+USE solve AS solve
+ENDUSE
+ENDMODELS
+C    Because there is no electric network,  there is no usual output of the
+C    time-step loop.  Once the dT loop begins,  the only output is from MODELS:
+C  Blank card ends electric sources.  KCONST = 1     |BLANK  card ending dummy source that ATP added to  TACS  or  MODELS STAND ALONE
+C  X vector = 5.0         1.0         -2.
+C  arg(1,12,4) = 2.0         6.0         .2328306E-9
+C  Blank card ending requests for output variables.  |BLANK  card ending output requests (none) that ATP added to this  STAND ALONE
+C  Column headings for the  0   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  X vector = 3.111111111 1.777777778 .7777777784
+C  arg(1,12,4) = 4.0         7.0         .1608161E-4
+C  X vector = .7096617728 2.741941174 4.161308814
+C  arg(1,12,4) = 8.0         8.0         .1107408979
+C  X vector = .1640999973 3.031236365 5.351518185
+C  arg(1,12,4) = 16.         9.0         .763080108
+C  X vector = -.104457932 3.219802884 6.214359374
+C  arg(1,12,4) = 32.         10.         .1799780347
+C  X vector = -.007328865 3.275392315 6.645025023
+C  arg(1,12,4) = 64.         11.         .902878134
+BLANK card ending plot requests
+BEGIN NEW DATA CASE
+C     14th of 16 subcases  was  added  17 April 2011  to illustrate that Orlando
+C     Hevia's new  INVERT  function of  MODELS  will indeed invert a matrix.
+C     Data comes from Orlando Hevia of Santa Fe, Argentina.
+     1.0     5.0   { Take 5 time steps, changing the matrix at each new step
+       1      -1   { Suppress accumulation of plot points,  which are unused
+MODELS STAND ALONE
+C    The input matrix is on the left,  its inverse is on the right:
+C   ORIGINAL matrix           INVERSE CALCULATED WITH QPRO
+C  1        2        3        -0.33333  0.151515  0.121212
+C  4        2        5        0.666667  -0.48485  0.212121
+C  6        3        2          -2E-17  0.272727  -0.18182
+C
+C DEFINE ALL THE VARIABLES TO BE PASSED TO INVERT AS OUTPUT
+C    Since the matrix to be inverted is 3x3,  9 scalar variables are used :
+VAR a1, a2, a3, a4, a5, a6, a7, a8, a9
+C    Next come 4 scalar dimensions of the call to inversion routine INVERT:
+C IXDATA: NUMBER ELEMENTS IN AN ARRAY XDATA OR ARGUMENTS, FOR EXAMPLE, THE
+C         NUMBER OF EQUATIONS, A KEY TO INVERT OR TO CALCULATE DETERMINANT
+C
+C IXIN:   NUMBER OF ELEMENTS IN THE INPUT ARRAY XIN. SQUARE OF NUMBER OF
+C         EQUATIONS IN THIS CASE
+C
+C IXOUT:  NUMBER OF ELEMENTS IN THE OUTPUT ARRAY XOUT. SQUARE OF NUMBER OF
+C         EQUATIONS IN THIS CASE, 1 FOR DETERMINANT (NOt IMPLEMENTED)
+C
+C IXVAR:  NUMBER OF ELEMENTS IN HISTORY ARRAY, NOt USED IN THIS CASE
+C
+C    The following is the call to invert the matrix.  IXIN  is # of elements (9)
+C    of the input matrix,  IXOUT  is the # of elements (9) of the output matrix.
+C    The 1st and the 4th parameters  (IXDATA and IXVAR, respectively)  do not
+C    depend on the matrix order (3 in this case).
+MODEL invert FOREIGN invert {ixdata:1, ixin:9, ixout:9, ixvar:0}
+USE invert AS invert
+ DATA xdata[1]:=3   -- Order of the matrices involved (here, 3)
+C    The following defines the 9 cells of the input matrix XIN.  Storage is by
+C    rows. Note the trailing "t" which adds simulation time to each element of
+C    the matrix at each time step :
+ INPUT xin[1..9] := [ 1.0, 2.0, 3.0,
+                      4.0, 2.0, 5.0,
+                      6.0, 3.0, 2.0 ] + t
+C    The following connects the 9 elements of the output matrix (the inverse)
+C    with variable names  A1  through  A9.  This is done to interface with the
+C    ATP output vector (the preceding subcase had no such connection, note) :
+ OUTPUT a1:=xout[1],a2:=xout[2],a3:=xout[3],
+        a4:=xout[4],a5:=xout[5],a6:=xout[6],
+        a7:=xout[7],a8:=xout[8],a9:=xout[9]
+ENDUSE
+RECORD
+       a1 AS a11
+       a2 AS a12
+       a3 AS a13
+       a4 AS a21
+       a5 AS a22
+       a6 AS a23
+       a7 AS a31
+       a8 AS a32
+       a9 as a33
+ENDMODELS
+C Column headings for the  9   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  Next   9     output variables belong to MODELS (with "MODELS" an internally-added upper name of pair).
+C   Step    Time       MODELS      MODELS      MODELS      MODELS      MODELS      MODELS      MODELS      MODELS      MODELS
+C                      A11         A12         A13         A21         A22         A23         A31         A32         A33
+C      0     0.0   -.33333333  .151515152  .121212121  .666666667  -.48484848  .212121212         0.0  .272727273  -.18181818
+C      1     1.0   -.31914894   .14893617  .127659574  .574468085  -.46808511  .170212766   -.0212766  .276595745  -.19148936
+C      2     2.0   -.31147541  .147540984  .131147541  .524590164  -.45901639  .147540984  -.03278689  .278688525  -.19672131
+C      3     3.0   -.30666667  .146666667  .133333333  .493333333  -.45333333  .133333333        -.04         .28         -.2
+C      4     4.0   -.30337079  .146067416  .134831461  .471910112   -.4494382  .123595506  -.04494382  .280898876  -.20224719
+C      5     5.0   -.30097087  .145631068   .13592233   .45631068  -.44660194  .116504854  -.04854369  .281553398   -.2038835
+BLANK card ending plot requests
+BEGIN NEW DATA CASE
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+C     Preceding line allows the SEEK file to be remote if this main data file is
+PRINTED NUMBER WIDTH, 12, 2, { Keep dT loop precision the same, but 2 blank separators
+C     15th of 16 subcases  was added  21 April 2011  to illustrate extensions to
+C     Orlando Hevia's  SEEK  function that were not tested by the preceding 11th
+C     subcase.  Data is similar.  That is, function # 82 began as a copy of # 32  
+C     but is more general in that two redundant (X, Y) points have been added
+C     (to be omitted by ATP) and the software EOF is used, permitting arbitrary
+C     comment information at the bottom of  DC68SE82.DAT  Erasure of a no longer
+C     used  SEEK  function also is illustrated.
+     1.0   10.00     { Take ten steps, from 1 second to 10 seconds.  This is "T"
+       1      -1   { Print every step;  do not bother saving points for plotting
+MODELS STAND ALONE
+C 3456789012345678901234567890123456789012345678 -- Ruler for following optional 
+C                 < File Name>    IPRMDL  KOMPAC    miscellaneous data card :
+C MODELS MISC. DATA dc68seek.            9       0
+MODEL SAMPLE
+C   Of the 6 following variables,  the last is a dummy variable that is used for
+C   SEEK function erasure only.  The returned funct value must be put somewhere.
+VAR X,Y,Z, X37, X49, XDUM
+FUNCTION seek FOREIGN seek {ixarg: 2}
+EXEC
+C    Before using function # 82,  let's use a second function, the old # 37:
+  IF t<4.0 THEN   -- Execute only at the first 3 time steps
+C          About the following  WRITE(  statement,  note lack of indentation and
+C          use of apostrophes (not quotation marks)  to delimit the text.  These
+C          two details are required to maintain any lower case within the text :
+write( '    Use SEEK model # 37 for T < 4 only.' )
+  X37:=SEEK(T, 37 )
+  ENDIF           -- Terminate 4-line IF block  
+  IF t=6.0 THEN   -- execute only on the 6th time step
+write( '    Erase SEEK function # 37 at T =6.' )
+  XDUM:=SEEK(T, -37 )
+  ENDIF           -- Terminate 4-line IF block 
+C    The following 3 lines use SEEK function # 82,  which is the same as # 37:
+X  :=SEEK(T, 82 )
+Y:=SQRT(X)*0.3
+Z:=SEEK(SQRT(X)*0.3, 82 )
+C    The following nested IF loop results in action only for steps 8 and 9:
+  IF t>7.0 THEN   -- Execute only for time steps 8 or later
+  IF t<10.0 THEN   -- Execute only for time steps 9 or earlier
+write( '    Use SEEK model # 49 for T = 7 or 8 only.' )
+  X49:=SEEK(T, 49 )
+  ENDIF           -- Terminate inner 4-line IF block
+  ENDIF           -- Terminate outer 6-line IF block
+C    The following IF loop disconnects SEEK function # 49 on step 10:
+  IF t=10.0 THEN   -- execute only on the 10th time step
+write( '    Erase SEEK function # 49 at T =10.' )
+  XDUM:=SEEK(T, -49 )
+  ENDIF           -- Terminate 4-line IF block 
+C    In order that all data be seen,  let's document the content of DC68SE82.DAT
+C    which contains the following formatted lines.  Note the 4 consecutive
+C    Y values 142 (points 3 through 6 inclusive).  Thus points 4 and 5 will be
+C    omitted.  ATP will store only 7 (X,Y) pairs.  Note also the software EOF
+C    (value X = -9999.) which allows arbitrary comment information to follow.
+C 0, 69
+C 2, 50
+C 4, 142
+C 4.3, 142,
+C 4.7, 142,
+C 5, 142
+C 6, 188
+C 8, 73        
+C 10, 100
+C -9999., 0,
+ENDEXEC
+ENDMODEL
+USE SAMPLE AS SAMPLE
+ENDUSE
+RECORD
+SAMPLE.X AS X
+SAMPLE.Y AS Y
+SAMPLE.Z AS Z
+SAMPLE.X37 AS X37
+SAMPLE.X49 AS X49
+ENDRECORD
+ENDMODELS
+C    Use SEEK model # 37 for T < 4 only.
+C    MODELS "SEEK" function # 37 involves 7 pairs of (X,Y).  These are stored in List-20 SCONST cells 3 through 16.
+C    3 or more consecutive, identical Y has allowed the omission of     2  incoming (X,Y) points.  The next line reflects this fact.
+C    MODELS "SEEK" function # 82 involves 7 pairs of (X,Y).  These are stored in List-20 SCONST cells 19 through 32.
+C Blank card ending requests for output variables.  |BLANK  card ending output requests (none) that ATP added to this  STAND ALONE
+C Column headings for the  5   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  Next   5     output variables belong to MODELS (with "MODELS" an internally-added upper name of pair).
+C  Step      Time       MODELS      MODELS      MODELS      MODELS      MODELS
+C                       X           Y           Z           X37         X49
+C     0       0.0          69.  2.49198716  72.6314093         69.  88888.8889
+C   Use SEEK model # 37 for T < 4 only.
+C     1       1.0         59.5  2.31408729  64.4480155        59.5  88888.8889
+C   Use SEEK model # 37 for T < 4 only.
+C     2       2.0          50.  2.12132034  55.5807358         50.  88888.8889
+C   Use SEEK model # 37 for T < 4 only.
+C     3       3.0          96.  2.93938769  93.2118338         96.  88888.8889
+C     4       4.0         142.  3.57491259  122.445979         96.  88888.8889
+C     5       5.0         142.  3.57491259  122.445979         96.  88888.8889
+C   Erase SEEK function # 37 at T =6.
+C MODELS erasure of SEEK function # 37  at time  T = 6.00000E+00 sec has gained   16  cells of List 20.  IFSEM =   16
+C     6       6.0         188.  4.11339276        142.         96.  88888.8889
+C     7       7.0        130.5   3.4270979  115.646503         96.  88888.8889
+C   Use SEEK model # 49 for T = 7 or 8 only.
+C   MODELS "SEEK" function # 49 involves 4 pairs of (X,Y).  These are stored in List-20 SCONST cells 19 through 26.
+C     8       8.0          73.  2.56320112  75.9072517         96.         73.
+C   Use SEEK model # 49 for T = 7 or 8 only.
+C     9       9.0         86.5  2.79016129  86.3474191         96.        86.5
+C   Erase SEEK function # 49 at T =10.
+C MODELS erasure of SEEK function # 49  at time  T = 1.00000E+01 sec has gained   10  cells of List 20.  IFSEM =   16
+C    10       10.         100.         3.0         96.         96.        86.5
+BLANK CARD ENDING PLOT CARDS
+BEGIN NEW DATA CASE
+C     16th of 16 subcases  was  added  29 April 2011  to  illustrate  high-order
+C     comparison between  EGAUSS  (see subcase 12)  and LINSOL (see subcase 13).
+C     The testing is ordered by using EGAUSS for order two (two equations in two
+C     unknows).  Normally the data would consist of 4 cells for the 2x2 matrix 
+C     [A] followed by 2 cells for the right hand side.  Instead,  cell 1 of the
+C     6 must be the special reserved key 23456.  This is to be followed by five
+C     parameters that dedicated code uses to generate the equation set.  Matrix
+C     order N  is in cell 2.  The matrix will be symmetrical,  so transposition
+C     (a difference between data of EGAUSS and data of LINSOL)  is not an issue.
+C     An offidiagonal in cell (I,J) will be given value  -COEFF / SEPAR ** POWER
+C     where  SEPAR = IABS ( I - J )  is the distance from the diagonal.  Each of
+C     the diagonals  A(I,I)  will be the negative of the sum of all offidagonals
+C     plus constant  DIAG.  The right hand side  B(I)  will equal  RHS.  So this
+C     is the matrix of a set of resistors connecting each node with every other
+C     node.  Ground is a node,  with  DIAG  being the admittance to ground.  RHS
+C     is the injected current at each node.
+C NEW LIST SIZES
+C        0       0       0       0       0       0       0       0       0       0
+C        0       0       0       0       0       0       0       0       0  100000
+C        0       0       0       0       0   10000       0  126000       0       0
+C   240000     742
+C   About the preceding program dimensions, two are critical for high order use.
+C   These are List 20 and  List 28.  Both are set to the limits of  LISTSIZE.BPA
+C   A third,  List 26, must be twice the order of the equation set being solved.
+C   In order to simplify things,  the limiting value for this too has been used.
+C   If order 31 below is changed to order 310  (this is  arg[2]),  uncomment the
+C   preceding five  NEW LIST SIZES  data cards by removing  "C "  from the left.
+C   Expect execution to take about 1000 times as long, of course.  Note that 310
+C   is close to the limit for List 20 equal to 100K since 3.1**2 is close to 10.
+     0.2     1.0   { Take 5 time steps, changing the matrix at each new step
+       1      -1   { Suppress accumulation of plot points,  which are unused
+MODELS STAND ALONE
+MODEL solve
+FUNCTION egauss FOREIGN egauss {ixarg:100}
+ VAR arg[1..6]
+ VAR x[1..3]
+EXEC
+if t=0 then
+ arg[1]:=23456.0 -- Reserved key to request test of LINSOL and EGAUSS
+C arg[2]:=310.0  -- Matrix order of the equations being solved.  This is N
+  arg[2]:= 31.0  -- Matrix order of the equations being solved.  This is N
+ arg[3]:=2.0     -- Exponent to apply to separation.  This is POWER
+ arg[4]:=1.0     -- Coefficient of matrix elements.   This is COEFF
+ arg[5]:=1.0     -- Right hand side of each equation. This is RHS
+ arg[6]:=31.0    -- Constant term of each diagonal.   This is DIAG
+endif
+x[1..2]:=egauss(2,arg[1..6]) -- The 1st arg, 2, is required for this test
+ENDEXEC
+ENDMODEL
+USE solve AS solve
+ENDUSE
+ENDMODELS
+BLANK card ending plot requests
+BEGIN NEW DATA CASE
+BLANK

@@ -1,0 +1,276 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-29                                                           
+C     Test of  "SEMLYEN SETUP"   for 138-mile,  single-circuit,  500-kV overhead
+C     line that connects "John Day"  with "Lower Monumental"  (BPA substations).
+C     There are 2 ground wires (both eliminated),  and  each phase consists of a
+C     bundle of 2 conductors.  Punched LUNIT7 branch cards contribute to  DC-31.
+C     1st of 3 subcases.   2nd is for Pi-equiv. output (fast).  3rd is bypassed.
+C      Solution changed on  23 Oct 1990  due to Mustafa Kizilcay's modifications
+C      (preceding commented data has been copied to bottom for preservation).
+SEMLYEN SETUP                                                                   
+$ERASE
+BRANCH  JDA   LMA   JDB   LMB   JDC   LMC                                       
+TOLERANCES  10      5000.  { Illustration only; value of FMED actually unchanged
+C 345678901234567890123456789012345678901234567890
+C          60   80     230   1     7  7777     0    { Semlyen miscellaneous data
+C          60   80  1  230   1     7  7777     0    { Semlyen miscellaneous data
+C  Guido: whenever n4=0(col 26), n1 (col 21) should be 1 !! avoid kill=152
+          200  150  10 230   1     7  7777     0    { Semlyen miscellaneous data
+C  Guido: overhead lines; rule of thumb: NOO=100-300, NPOINT=150
+C   Note:  Guido modifies Semlyen misc. data card above on 23 Oct 1990 following
+C          the addition of Mustafa Kizilcay's latest changes.   The old one gave
+C          an early  KILL  code.   Later (November 7th), WSM and THL convert the
+C          "1 "  of columns 21-22 to  "10"  to make it universal.   Although the
+C          VAX had no trouble reading  10  from the original as  I2 information,
+C          Sun  (which agreed with Apollo, so Apollo most likely also was wrong)
+C          erroneously read unity!   Sun seems to ignore blanks in  "I" FORMATs.
+LINE CONSTANTS                                                                  
+  1.3636 .05215  4         1.602  -20.75   50.     50.                          
+  1.3636 .05215  4         1.602  -19.25   50.     50.                          
+  2.3636 .05215  4         1.602  - 0.75   77.5    77.5                         
+  2.3636 .05215  4         1.602    0.75   77.5    77.5                         
+  3.3636 .05215  4         1.602   19.25   50.     50.                          
+  3.3636 .05215  4         1.602   20.75   50.     50.                          
+  0.5    2.61    4         0.386  -12.9    98.5    98.5                         
+  0.5    2.61    4         0.386   12.9    98.5    98.5                         
+BLANK card ending conductor cards within  "LINE CONSTANTS"  data         
+C 27.         5000.         1                  138.         { Transient frequency                            
+C 27.         60.00         1                  138.   { Phasor solution frequency                     
+C 27.          6.00         1                  138.           6 20  { log looping           
+ 27.         5000.                            138.         { Transient frequency                            
+ 27.         60.00                            138.   { Phasor solution frequency                     
+ 27.          6.00                            138.           6 20  { log looping           
+BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+C                                Frequency = 5.00000000E+03  
+C                                -------------------------- 
+C            Impedance matrix                          Admittance matrix 
+C               (ohm/mile)                                (mho/mile)
+C 
+C   3.2463317E+00                  0.0000000E+00   0.0000000E+00   0.0000000E+00
+C   6.3079678E+01                  5.2869139E-04  -8.2803449E-05  -6.2048083E-05
+C 
+C   2.3065452E+00   2.0246396E+00                  0.0000000E+00   0.0000000E+00
+C   1.4273670E+01   5.9110509E+01                  5.3917160E-04  -8.2803449E-05
+C 
+C   2.9595110E+00   2.3065452E+00   3.2463317E+00                  0.0000000E+00
+C   1.4114577E+01   1.4273670E+01   6.3079678E+01                  5.2869139E-04
+BLANK card ending  "LINE CONSTANTS"  data cases                                       
+C The following values are computed on the basis of exact diagonalization of the
+C        Mode to phase voltage                         Mode to phase current 
+C        transformation matrix                         transformation matrix
+C 
+C   1.000000 -1.000000 -0.266985                    0.420272 -0.500000 -0.299082
+C   0.000000  0.000000  0.019744                    0.007566  0.000000  0.006219
+C 
+C   0.711142  0.000000  1.000000                    0.224711  0.000000  0.840545
+C  -0.027600  0.000000  0.000000                   -0.012556  0.000000  0.015131
+C 
+C   1.000000  1.000000 -0.266985                    0.420272  0.500000 -0.299082
+C   0.000000  0.000000  0.019744                    0.007566  0.000000  0.006219
+C 
+C                        Alpha                     Beta              Attenuation
+C  Mode             (neper/mi)             (radians/mi)                  (db/mi)
+C   1   0.8245225702687424E-02   0.1861008889722703E+00   0.7161712049448019E-01
+C   2   0.4981192766022477E-03   0.1700760589248700E+00   0.4326609063159914E-02
+C   3   0.4573686287515477E-03   0.1691150685564419E+00   0.3972653433249082E-02
+C Number of frequencies = 121     Starting and ending Hz = 6.0000E+00  6.000E+06
+C           Fitting of the propagation step response for mode number  1 :
+C Iteration   Amplitude        X(1)          X(2)          X(3)         Error
+C   1  7.26461134E-1  1.32035374E+1  1.17295449E+0  2.21313604E-2 7.35218983E-04
+C   1  7.13648369E-1  1.45238912E+1  1.17295449E+0  2.21313604E-2 1.23450128E-03
+C   1  7.02961062E-1  1.58442449E01  1.17295449E+0  2.21313604E-2 1.78841949E-03
+C      < <  Etc. until final (23-rd) such entries,  which is:
+C   3  7.67204181E-1  1.05695813E+1  1.17465822E+0  2.53215686E-2 3.72675596E-05
+C Successful convergence ....  SUBROUTINE TDFIT.  Tolerance EPS = 5.00000000E-05
+C  ++++ Warning!  TDFIT  can not adjust time-domain step response to fit exactly
+C                 Instead, the initial fitting will be used.
+C    Amplitude 1   Time const. 1     Amplitude 2   Time const. 2      Delay time
+C  7.6720418E-01   7.0400012E-05   2.3279582E-01   6.3345970E-04   7.7782236E-04
+C Mode 1,  time step = 3.72049322E-06     Symbols :  "." = Semlyen approximation
+C        Error           Time    0.0                              8.93193367E-01
+C                              .1........1........1........1........1........1..
+C      0.00000E+00    7.62701E-04 .*                                        
+C      0.00000E+00    7.66422E-04 ..0                                           
+C      0.00000E+00    7.70142E-04 ..0                                           
+C      0.00000E+00    7.73863E-04 .. 0                                          
+C      0.00000E+00    7.77583E-04 ..   0                                       
+C     -2.07761E-02    7.81304E-04 .    . 0                                      
+C     -4.84345E-03    7.85024E-04 .        *                                    
+C      6.50870E-03    7.88745E-04 .           0.                                
+C      1.41364E-02    7.92465E-04 .              0. 
+C      1.88276E-02    7.96186E-04 .                 0.                          
+C      2.12721E-02    7.99906E-04 .                   0  .                      
+C      2.20463E-02    8.03627E-04 .                      0  .                   
+C      2.16177E-02    8.07347E-04 .                         0  .                
+C      2.03607E-02    8.11068E-04 .                            0 .              
+C      1.85647E-02    8.14788E-04 .                               0 .           
+C      1.64473E-02    8.18509E-04 .                                  0.        
+C      1.41747E-02    8.22229E-04 .                                    0 .      
+C      1.18700E-02    8.25949E-04 .                                       0.    C      9.61526E-03    8.29670E-04 .                                         0.  
+C      7.46654E-03    8.33390E-04 .                                           0.
+$PUNCH
+C -1JDA   LMA                5.72862E-03 7.77822E-04              1  1  2  2   3
+C   1.76406006E+01 9.04231135E+01-1.97906661E-04 1.44978522E-03 6.00000000E+01  
+C   0.00000E+00 1.42045E+04 7.67204E-01 0.00000E+00 1.57863E+03 2.32796E-01     
+C   0.00000E+00 1.70053E+05-7.75536E-04 0.00000E+00 5.92740E+02-1.43454E-03     
+C -1JDB   LMB                7.00175E-03 7.40982E-04              2  2  2  2   3
+C   5.19844042E-01 4.16341654E+01-1.59314154E-05 1.96071950E-03 6.00000000E+01  
+C   0.00000E+00 1.82512E+05 9.69335E-01 0.00000E+00 2.58428E+03 3.06652E-02     
+C   0.00000E+00 9.60136E+03-1.29672E-04 0.00000E+00 5.91248E+01-4.28783E-04     
+C -1JDC   LMC                4.11495E-03 7.40975E-04              3  3  2  2   3
+C   2.42272029E+00 7.27673245E+01-1.71561794E-05 1.15316857E-03 6.00000000E+01  
+C   0.00000E+00 4.30709E+05 9.63717E-01 0.00000E+00 1.32518E+03 3.62828E-02     
+C   0.00000E+00 2.12922E+03-1.21998E-04 0.00000E+00 8.97571E+01-3.32339E-04   
+C       Prior to improvement on 27 November 2000, zero imaginary parts were
+C       included,  and this forced low precision of 6E12.5:
+C    1.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00-2.66985E-01 0.00000E+00
+C    7.11142E-01 0.00000E+00-1.02636E-14 0.00000E+00 1.00000E+00 0.00000E+00
+C    1.00000E+00 0.00000E+00-1.00000E+00 0.00000E+00-2.66985E-01 0.00000E+00
+C    4.20272E-01 0.00000E+00 5.00000E-01 0.00000E+00-2.99082E-01 0.00000E+00
+C    2.24711E-01 0.00000E+00-5.36721E-15 0.00000E+00 8.40545E-01 0.00000E+00
+C    4.20272E-01 0.00000E+00-5.00000E-01 0.00000E+00-2.99082E-01 0.00000E+00
+C       Beginning  27 November 2000,  the zero imaginary parts are implied,
+C       giving the following  3E26.18  output following a new request word.  A
+C       big paragraph about this is planned for the April, 2001, newsletter:
+C NO IMAGINARY PART
+C   1.0000000000000000E+00    1.0000000000000000E+00   -2.6698449851193501E-01
+C   7.1114175640039812E-01   -1.1764114701044076E-14    1.0000000000000000E+00
+C   9.9999999999999945E-01   -9.9999999999999467E-01   -2.6698449851194972E-01
+C   4.2027250134843613E-01    5.0000000000000333E-01   -2.9908213367540470E-01
+C   2.2471123211965521E-01   -6.1556662545037000E-15    8.4054500269687149E-01
+C   4.2027250134843563E-01   -4.9999999999999922E-01   -2.9908213367541620E-01
+BLANK card ending  "SEMLYEN SETUP"  data cases                                  
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-29                                                           
+C           2nd of 3 subcases illustrates punching of Pi-equivalents on  LUNIT8.
+C           Feature added by Mustafa Kizilcay of University of Hannover, Oct 88.
+C           There is no rational function fitting, so execution is fast.   Also,
+C           the time spent in  LINE CONSTANTS  is minimal: 2 decades,  1 pt/dec.
+C            { Running interactively ("SPY DC29.") gave debug on second subcase:
+DIAGNOSTIC   { Somehow needed to erase overlay-25 diagnostic.  ????  9 July 1989
+SEMLYEN SETUP                                                                   
+$OPEN,  UNIT=8  FILE=dc29out.lis  STATUS=UNKNOWN  FORM=FORMATTED ! { Pi-equivalents will go here
+C 345678901234567890123456789012345678901234567890
+           60   80     230 3 1     7  4100  4100    { Semlyen miscellaneous data
+LINE CONSTANTS                                                                  
+  1.3636 .05215  4         1.602  -20.75   50.     50.                          
+  1.3636 .05215  4         1.602  -19.25   50.     50.                          
+  2.3636 .05215  4         1.602  - 0.75   77.5    77.5                         
+  2.3636 .05215  4         1.602    0.75   77.5    77.5                         
+  3.3636 .05215  4         1.602   19.25   50.     50.                          
+  3.3636 .05215  4         1.602   20.75   50.     50.                          
+  0.5    2.61    4         0.386  -12.9    98.5    98.5                         
+  0.5    2.61    4         0.386   12.9    98.5    98.5                         
+BLANK card ending conductor cards within  "LINE CONSTANTS"  data                
+ 27.         5000.                            138.         { Transient frequency
+ 27.         50.00                            138.   { Phasor solution frequency
+ 27.          6.00                            138.           2  1  { log looping
+BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+BLANK card ending  "LINE CONSTANTS"  data cases                                 
+$CLOSE,  UNIT=8  STATUS=KEEP     { Disconnect file now containing Pi-equivalents
+BLANK card ending  "SEMLYEN SETUP"  data cases                                  
+C  Transfer [Y] of equivalent Pi for F =  5.0000E+01 Hz.  23-Oct-90  19.45.28
+C  1.151519555275E-3 -1.137441619542E-02 -1.060634758717E-04  3.491463556430E-03
+C  3.537076770591E-4  3.210624087768E-03 -1.060634758717E-04  3.491463556430E-03
+C  2.050900981651E-3 -1.162860843144E-02 -1.060634758717E-04  3.491463556430E-03
+C  3.537076770591E-4  3.210624087768E-03 -1.060634758717E-04  3.491463556430E-03
+C  1.151519555275E-3 -1.137441619542E-02
+C     Shunt [Y] of equivalent Pi for F =  5.0000E+01 Hz.  
+C -8.541869714622E-6  3.665747845891E-04  6.607667284137E-06 -5.660142619185E-05
+C -8.648581530269E-6 -4.295696271522E-05  6.607667284137E-06 -5.660142619185E-05
+C -2.342599469890E-5  3.722080025785E-04  6.607667284137E-06 -5.660142619185E-05
+C -8.648581530269E-6 -4.295696271522E-05  6.607667284137E-06 -5.660142619185E-05
+C -8.541869714623E-6  3.665747845891E-04
+C  Transfer [Y] of equivalent Pi for F =  6.0000E+00 Hz.  23-Oct-90  19.45.28
+C  3.262709023195E-2 -7.809118174262E-02 -1.341276675346E-02  2.522775392732E-02
+C -1.150007192882E-2  2.343312809664E-02 -1.341276675346E-02  2.522775392732E-02
+C  3.436831351543E-2 -7.888248987903E-02 -1.341276675347E-02  2.522775392732E-02
+C -1.150007192882E-2  2.343312809664E-02 -1.341276675347E-02  2.522775392732E-02
+C  3.262709023195E-2 -7.809118174262E-02
+C     Shunt [Y] of equivalent Pi for F =  6.0000E+00 Hz.  
+C -3.427096070385E-8  4.377964661972E-05  2.594787689802E-08 -6.855484667815E-06
+C -3.570745329639E-8 -5.136885722574E-06  2.594787689802E-08 -6.855484667815E-06
+C -9.461439943596E-8  4.464722732424E-05  2.594787689809E-08 -6.855484667815E-06
+C -3.570745329639E-8 -5.136885722574E-06  2.594787689809E-08 -6.855484667815E-06
+C -3.427096070393E-8  4.377964661972E-05
+C  Transfer [Y] of equivalent Pi for F =  6.0000E+01 Hz.  23-Oct-90  19.45.28
+C  9.441668531285E-4 -9.566451344743E-03 -7.083376044220E-05  2.864853469711E-03
+C  3.766916044259E-4  2.651337447173E-03 -7.083376044220E-05  2.864853469711E-03
+C  1.809395347023E-3 -9.800403930488E-03 -7.083376044219E-05  2.864853469711E-03
+C  3.766916044259E-4  2.651337447173E-03 -7.083376044219E-05  2.864853469711E-03
+C  9.441668531284E-4 -9.566451344743E-03
+C     Shunt [Y] of equivalent Pi for F =  6.0000E+01 Hz.  
+C -1.202671448681E-5  4.408181056666E-04  9.416194169739E-06 -6.772347154278E-05
+C -1.218469464166E-5 -5.164200772177E-05  9.416194169739E-06 -6.772347154278E-05
+C -3.311677630903E-5  4.467905957272E-04  9.416194169739E-06 -6.772347154278E-05
+C -1.218469464166E-5 -5.164200772177E-05  9.416194169739E-06 -6.772347154278E-05
+C -1.202671448681E-5  4.408181056666E-04
+C  Transfer [Y] of equivalent Pi for F =  6.0000E+02 Hz.  23-Oct-90  19.45.28
+C -3.712845487162E-3 -5.603787237254E-03 -1.561079196979E-03  4.482090715102E-03
+C -3.184914860379E-3  5.584231439014E-03 -1.561079196979E-03  4.482090715102E-03
+C -4.822417739649E-4 -7.822757815584E-03 -1.561079196979E-03  4.482090715102E-03
+C -3.184914860379E-3  5.584231439014E-03 -1.561079196979E-03  4.482090715102E-03
+C -3.712845487162E-3 -5.603787237254E-03
+C     Shunt [Y] of equivalent Pi for F =  6.0000E+02 Hz.  
+C  7.516929477229E-3  1.093259393216E-02  3.157367799464E-03 -8.756571161718E-03
+C  6.427094062687E-3 -1.089709886987E-02  3.157367799464E-03 -8.756571161718E-03
+C  1.100477005468E-3  1.520008342172E-02  3.157367799464E-03 -8.756571161718E-03
+C  6.427094062687E-3 -1.089709886987E-02  3.157367799464E-03 -8.756571161718E-03
+C  7.516929477229E-3  1.093259393216E-02
+BEGIN NEW DATA CASE
+C           3rd of 3 subcases illustrates  SEMLYEN SETUP  for two of the actual
+C           3 phases of the 500-kV line data of the 1st subcase.  Results will  
+C           be used in the 4th subcase of DC-41 to illustrate selective branch
+C           current output.  This addition is made 11 December 2000.
+SEMLYEN SETUP                                                                   
+$ERASE
+BRANCH  JDA   LMA   JDB   LMB  { Note only 2 of the actual 3 phases are used
+TOLERANCES  10      5000.  { Illustration only; value of FMED actually unchanged
+          200  150  10 230   1     7  7777     0    { Semlyen miscellaneous data
+LINE CONSTANTS                                                                  
+  1.3636 .05215  4         1.602  -20.75   50.     50.                          
+  1.3636 .05215  4         1.602  -19.25   50.     50.                          
+  2.3636 .05215  4         1.602  - 0.75   77.5    77.5                         
+  2.3636 .05215  4         1.602    0.75   77.5    77.5                         
+C Following two conductor cards for phase "c" are omitted to create 2-phase line
+C 3.3636 .05215  4         1.602   19.25   50.     50.  ----  omit phase "c"                        
+C 3.3636 .05215  4         1.602   20.75   50.     50.  ----  omit phase "c"                        
+  0.5    2.61    4         0.386  -12.9    98.5    98.5                         
+  0.5    2.61    4         0.386   12.9    98.5    98.5                         
+BLANK card ending conductor cards within  "LINE CONSTANTS"  data         
+ 27.         5000.                            138.         { Transient frequency                            
+ 27.         60.00                            138.   { Phasor solution frequency                     
+ 27.          6.00                            138.           6 20  { log looping           
+BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+BLANK card ending  "LINE CONSTANTS"  data cases                                       
+$PUNCH
+BLANK card ending  "SEMLYEN SETUP"  data cases                                  
+BLANK     { Note this extra blank will terminate execution, to avoid 3rd subcase
+BLANK     { 14 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK     { 14 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK     { 14 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK     { 14 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK     { 14 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BEGIN NEW DATA CASE                                                             
+C      4th of 4 subcases, not normally executed, is Rule Book example of XXII-D.
+C      This was 3rd of 3 until 11 December 2000 when preceding subcase was added
+SEMLYEN SETUP                                                                   
+$ERASE
+BRANCH  SORCA LINEA SORCB LINEB SORCC LINEC                                     
+           60   80     2     1     7  7777  1637                                
+LINE CONSTANTS                                                                  
+  1.3159 .192    4          .858  -10.67   31.5    31.5                         
+  2.3159 .192    4          .858    0.00   31.5    31.5                         
+  3.3159 .192    4          .858   10.67   31.5    31.5                         
+  0.5    9.48    4         0.313   -5.33   40.5    40.5                         
+  0.5    9.48    4         0.313    5.33   40.5    40.5                         
+BLANK card ending conductor cards within  "LINE CONSTANTS"  data                    
+ 1000.       5000.                           18.65         { Transient frequency                            
+ 1000.       60.00                           18.65   { Phasor solution frequency                     
+ 1000.       60.00                           18.65           4 21  { log looping           
+BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+BLANK card ending  "LINE CONSTANTS"  data cases                                       
+$PUNCH
+BLANK card ending  "SEMLYEN SETUP"  data cases                                       
+BEGIN NEW DATA CASE
+BLANK

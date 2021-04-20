@@ -1,0 +1,137 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-58         (DC-70  of  "M39.")
+C       1st of 3 subcases illustrates  DO KNT  loop that entered the UTPF on
+C       February 6, 1999.  As initially implemented,  only one loop is allowed,
+C       and it creates an output data file having the fixed name  DOFILE.DAT
+C       (to be used with  $INCLUDE  as will be built internally;  see .LIS).
+C       Second important restruction: use must be in 1st subcase only, if two
+C       or more subcases are to be stacked in 1 file for sequential execution.
+C       That is why this addition to an old data file is made at the top rather
+C       than at the bottom (common practice).   As should be explained in the
+C       April, 1999, newsletter,  DO  loops in data were inspired by Prof. Juan
+C       A. Martinez Velasco of the University of Catalunya in Barcelona, Spain. 
+C            New 1st subcase of DC-8 is added  25 September 2001.  Ideally, it
+C            would be a new 2nd subcase here,  but since each  DO KNT  loop must
+C            be in the 1st subcase,  placement here was impossible.  Data is the
+C            same,  although part has been offloaded to a  $INCLUDE  file.  This
+C            proves that  DO KNT  loop can involve a  $INCLUDE  statement.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000050    .020
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+C   The  /OUTPUT  on the right of the following DO loop is optional.  It will
+C   result in output that documents progress of the loop.  For small numbers of
+C   passes (e.g., this illustration),  such extra output is recommended.  If no
+C   such request is present,  output will be suppressed during the DO loop.
+DO KNT=1, 5  /OUTPUT  { Loop twice using PCVP index KNT (seen inside $PARAMETER)
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would be
+_BUS1_ = KNT       SERIALIZE 'NODE00'
+_BUS2_ = KNT + 1.  SERIALIZE 'NODE00'
+C    Note about  SERIALIZE  on the preceding 2 lines.  This is optional.  If
+C    not present,  there will be floating-point encoding of the right hand side.
+C    What the  SERIALIZE  request does is request integer truncation of the
+C    floating-point result followed by right-adjusted encoding of the following
+C    root word using the integer value.  The character string following the
+C    key word is enclosed in apostrophes, and should have the same width as
+C    the symbol on the left hand side.
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch cards
+-1_BUS1__BUS2_              .306  5.82  .012  100. { Half the length of original
+92_BUS2_ { Type 92 is for v-i curve }  5555.  { 5555 flag is for exponentials } 1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+ENDDO KNT
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14NODE01     408000.       60.
+BLANK card ending source data
+ 1
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     2nd of 3 subcases was 1st before  6 February 99,  and  was DC-70 of "M39."
+C     Illustration of nested $INCLUDE (2 levels, in this example), using data of
+C     DC-4 as an example.  The first  $INCLUDE  file contains the characteristic
+C     (must be established as disk file  "dc58inc1.dat",  note)  of  the Type-93
+C     saturable reactor,  while files 2 and 3 in fact just add comment cards, so
+C     they do not actually affect the solution.  But to execute, these must have
+C     disk file names  "dc58inc2.dat"  and  "dc58inc3.dat",  respectively.   The
+C     contents of these files follow,  as documentation:
+C     < < < < < <       dc58incl1.dat :
+C           -5.0           -100.
+C            -.1            -50.
+C           -.02            -45.
+C           -.01            -40.
+C          -.005            -30.
+C           .005             30.
+C            .01             40.
+C            .02             45.
+C            .10             50.
+C            5.0            100.
+C           9999
+C     < < < < < <       dc58incl2.dat :
+C     Comment card is 1st of 2 cards in dc58inc2.dat.   The second is $INCLUDE:
+C $INCLUDE, dc58inc3.dat,
+C     < < < < < <       dc58inc3.dat :
+C      Contents of  dc58inc3.dat  are just 2 comment cards,  with this being 1st
+C                                                and this is the second and last
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .020     4.0
+       1       1       1       0       1      -1
+       5       5      20      20
+  GEN   TRAN                 5.0  5.E4                                         3
+  TRAN                      1.E4
+93TRAN                      .005   30.                                         3
+$INCLUDE, dc58inc1.dat,
+  TRAN  LOADG               255.  5.E4                                         3
+  LOADG                    1.E-6
+BLANK card ending branches
+BLANK card ending switch cards (none, for this example)
+14GEN            70.  .1591549                                     -1.
+$INCLUDE, dc58inc2.dat,     { This 2nd INCLUDE has a 3rd one nested inside of it
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   8.286714400785E+00
+C               Initial flux in coil  "TRAN  "  to  "      "  =  -1.13295190E+01
+  GEN   TRAN
+C  Step   Time        GEN          TRAN         TRAN         GEN            TRAN
+C                     TRAN         TERRA        LOADG
+C     0    0.0   6.270257621  63.72974238  63.72974215          70.  63.72974238
+C     1    .02   6.042435541  63.94356493   63.9435647  69.98600047  63.94356493
+C     2    .04   5.812195789  64.13181171  64.13181147   69.9440075  64.13181171
+BLANK card ending output variables (only node voltages, for this example)
+C Final step begins:        200     4.0    2.441169053  -48.1962799  -48.1962797
+C        cont. ..  -45.7551108 -48.1962799 -.013963808  -.234726349  -.215942913
+C Variable maxima :  20.01585083  64.72838406  64.72838381      70.  64.72838406
+C Times of maxima :         1.16          .18          .18      0.0          .18
+  PRINTER PLOT
+ 1931.0 0.0 7.0         TRAN                     { Axis limits: (-0.140,  3.031)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     3rd of 3 subcases is the same as the second except that  $PREFIX  is not
+C     being used.  Instead,  the  []  are being buried in the  $INCLUDE  lines
+C     themselves to demonstrate that this form, also, is accepted.  The ending
+C     time  T-max  is shortened,  and plotting has been removed.  Also remove
+C     the request for extrema, which no longer are significant.  29 January 2004
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .020     0.1    { Shorten T-max to 1/40 of preceding to speed the simulation
+       1       1       1       0       0      -1
+       5       5      20      20
+  GEN   TRAN                 5.0  5.E4                                         3
+  TRAN                      1.E4
+93TRAN                      .005   30.                                         3
+$INCLUDE, []dc58inc1.dat,
+  TRAN  LOADG               255.  5.E4                                         3
+  LOADG                    1.E-6
+BLANK card ending branches
+BLANK card ending switch cards (none, for this example)
+14GEN            70.  .1591549                                     -1.
+$INCLUDE, []dc58inc4.dat,  { This 4th INCLUDE is combination of previous 2 and 3
+BLANK card ending source cards
+  GEN   TRAN
+BLANK card ending output variables (only node voltages, for this example)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK 
+

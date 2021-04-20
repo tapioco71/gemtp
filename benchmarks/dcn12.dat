@@ -1,0 +1,2334 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-12
+C     Automatic steady-state initialization for Type-4 U.M. (a 3-phase induction
+C     machine).   Power coils are non-compensated.   Rotor  coils  have external
+C     resistances.   Apply  a step to the input torque at  0.02 sec  (step 100).
+C                Rating: 720 KVA, 4.2 KV, 4-pole ( 85.67% efficiency at 0.846 pf
+C                      and 14.0E+3 NM.;  Kipp torque = 45.09E+2 NM, slip = 2.5%)
+C       4 May 2006, append the 8 subcases of  IM.DAT  making a total of 9.  This
+C       is to document use of the new Type-56 Induction Machine from TEPCO.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ABSOLUTE U.M. DIMENSIONS, 20, 2, 50, 60
+0.0002     0.900
+       1       2       0       0       1      -1
+       5       5      20      20     100       1     110      10     200     200
+C  --------- ROTOR EXTERNAL RESISTANCES
+  BUSA1                   1.E-10                                               1
+  BUSB1       BUSA1                                                            1
+  BUSC1       BUSA1                                                            1
+C  -------- TRANSMISSION LINES
+  BUSA2 BUSAS2            1.0E-4 10.0                                          1
+  BUSB2 BUSBS2BUSA2 BUSAS2                                                     1
+  BUSC2 BUSCS2BUSA2 BUSAS2                                                     1
+C  --------- CONNECTIVITY OF EMTP FOR ELECTRIC NETWORK
+  BUSAS2                  1.0E+6
+  BUSBS2      BUSAS2
+  BUSCS2      BUSAS2
+C  --------- MECHANICAL NETWORK COMPONENTS
+  BUSMG BUSMGR            .4548                                                1
+  BUSMGR      BUSMG BUSMGR
+  BUSMG                               9.8E+7  { Rotor mass = capacitance }     1
+C  ------- Near-zero resistance to measure electromechanical torque (a current):
+  BUSMS BUSMG             1.0E-6                                               1
+BLANK card ending all branch cards
+BLANK card ending all (here, nonexistent) switch cards
+C  --------- SOURCES FOR INFINITE BUS
+14BUSAS2  3000.0     60.0     0.0                           -1.0
+14BUSBS2  3000.0     60.0     -120.0                        -1.0
+14BUSCS2  3000.0     60.0     +120.0                        -1.0
+C  ----------- Mechanical input torque, with value set by steady-state solution:
+14BUSMS -1 0.000001  0.00001                                -1.0
+C  --------  Step change to input torque occurs at time .020 seconds (Step 100):
+14BUSMS -1 3900.0    0.00001                                +0.02
+C  ----------------------- Type-4 U.M. (3-phase induction machine) data follows:
+19 UM
+ 1            1
+BLANK card ending Class-1 U.M. data
+C  UM-1 MACH TABLE
+ 4    111BUSMG        2                            0.0188
+              0.02358
+              0.02358
+2.0                               BUSMS
+C  UM-1  COIL TABLE
+                            BUSA2             1
+0.412         0.0012        BUSB2             1
+0.412         0.0012        BUSC2             1
+0.110         0.0012        BUSB1             1
+0.110         0.0012        BUSC1             1
+                            BUSA1             1
+BLANK card ending all U.M. data cards
+BLANK card ending all source cards
+C       Total network loss  P-loss  by summing injections =   7.171020819312E+05
+C       Total network loss  P-loss  by summing injections =   8.732408663441E+05
+C       Total network loss  P-loss  by summing injections =   1.223706646064E+07
+C       Total network loss  P-loss  by summing injections =   1.223706596064E+07
+C       Total network loss  P-loss  by summing injections =   1.223707382155E+07
+C             Zero-th time step documents initial conditions, cut on right edge:
+  BUSAS2BUSA2 BUSA1 BUSMG
+C  Step    Time        BUSAS2       BUSA2        BUSA1        BUSMG        BUSA1
+C                                                                          TERRA
+C
+C                      BUSB2        BUSC2        BUSMG        BUSMG        BUSMS
+C                      BUSBS2       BUSCS2       BUSMGR       TERRA        BUSMG
+C
+C                       UM-1         UM-1         UM-1         UM-1         UM-1
+C                        IPA          IPB          IPC          IE1          IE2
+C    0     0.0         3000.  1784.374676  .1471233E-7   184.725648  147.1233291
+C                376.2746526  -182.224238  203.0844855          0.0  -3965.07077
+C                -194.050415  376.2746526  -182.224238          0.0          0.0
+C    1   .2E-3   2991.476701  1834.404076  .1467203E-7  184.7256479  146.7202619
+C                374.6920464  -156.915064  203.0844854  -.092695802  -3965.07077
+C                -217.776982  374.6920464  -156.915064  161.7505543  -308.470816
+BLANK card ending output requests (node voltages only, here)
+C    For some unknown reason, these agree with VAX to only 4 or 5 digits, often:
+C  4500     0.9        3000.  2139.363254  -.929034E-9  188.3186232  -9.29033753
+C                206.6043639  -188.546337  207.0345461  -12.7407524  -65.0707659
+C                -18.0580266  206.6043639  -188.546337  15.99476461  -6.70442708
+C Variable max :       3000.  2142.192646  .1471233E-7   189.143889  147.1233291
+C                376.2746526  376.1164039  207.9418304  3898.215212  -65.0707659
+C                376.0215626  376.2746526  376.1164039  228.3663773  6.204481463
+C Times of max :         0.0        .5668          0.0        .2202          0.0
+C                        0.0        .0222        .2202        .0202        .8786
+C                       .011          0.0        .0222        .0544        .3316
+C Variable min :      -3000.  -2142.13595  -.123856E-8  184.7253125   -12.385633
+C                -375.871946  -376.188889  203.0841166  -661.121518  -3965.07077
+C                -376.241942  -375.871946  -376.188889  -24.9469672   -362.34101
+C Times of min :        .075        .5418         .564          .02         .564
+C                      .0082        .0138          .02        .3084          0.0
+C                      .0194        .0082        .0138        .3076          0.0
+  PRINTER PLOT
+ 193 .1 0.0 0.9         UM-1  TQGEN               { Axis limits: (-4.168, 0.389)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     2nd of 9 subcases of  BENCHMARK DCNEW-12  is added  4 May 2006.
+C  1st of  8 data subcases that illustrate Type-56 TEPCO IM (induction machine).
+C  Begin several illustrations of TEPCO (Tokyo Electric Power Company in Japan)
+C  IM  (Induction Machine)  model that entered the UTPF on  7 April 2006.  The
+C  coding is by Cao Xinglin of TEPCO Systems Corp,  as communicated to BPA via
+C  Atsushi Kurita of TEPCO.  Number 56 is the new ATP source type code that is
+C  to appear in columns 1-2 at the beginning of IM data.  First,  ATPIG56.DAT
+C  The TEPCO data had 21 permanently-closed switches of which only 6 have been
+C  retained.  The remainder were removed without any confusion or difficulty
+C  in order to drop nonessenttial and unrelated complexity.  The six switches
+C  that have been retained serve to pass armature currents of the two parallel
+C  machines to TACS.  The phasor solution output of the switches clearly shows
+C  opposite directions for the power flow:  positive (out) of the generator IG1
+C  and negative (into) the motor IM1.  The phasor solution  provides very good
+C  initialization,  and simulation of this continues for 1.25 cycles in the dT
+C  loop to demonstrate stability of the steady state.  Most machine variables
+C  are nearly constant as extrema clearly demonstrate.  The original TEPCO data
+C  simulated to 10 seconds (5000 cycles) to demonstrate longer-term stability,
+C  but this has been drastically shortened to save computer time.
+C     G400   PG=500kW,QG=-232kVar
+C     L300   PL=250kW
+C     L400   PL=200kW,QL=-259kVar
+C     M400   PL=50kW,QL=27kVar
+C     MODE   G400:LV
+PRINTED NUMBER WIDTH, 11, 1,    { Restore values that are common within STARTUP
+POWER FREQUENCY, 50.,    { So one cycle is 20 msec, note
+C 0.00025     10.     0.0     0.0   ---  TEPCO's T-max was 10 seconds, note
+ 0.00025    .025     0.0     0.0  { 1.25 cycles is enough to verify steady state
+       1       1       1       1       1      -1
+       5       5      20      20     100     100
+TACS HYBRID
+33VIG   PIGEN QIGEN PIM   QIM 
+C
+C /// G1 BRANCH VOLTAGE MONITOR ///
+  VAB     +N400A  -N400B                             1.0
+90N400A                                                      -1.0
+90N400B                                                      -1.0
+90N400C                                                      -1.0
+91IG1A                                                       -1.0
+91IG1B                                                       -1.0
+91IG1C                                                       -1.0
+91IM1A                                                       -1.0
+91IM1B                                                       -1.0
+91IM1C                                                       -1.0
+C ///  VOLTAGE FEED BACK ///
+99VIG     = SQRT(N400A*N400A+N400B*N400B+N400C*N400C)/6600.0
+C ///  POWER MONITOR(I.G.) ///
+99QIG1    = IG1A*(N400B-N400C)
+99QIG2    = IG1B*(N400C-N400A)
+99QIG3    = IG1C*(N400A-N400B)
+99QIGEN   = (QIG1+QIG2+QIG3)/SQRT(3.0)
+99PIGEN   = N400A*IG1A+N400B*IG1B+N400C*IG1C
+99PPIG    = PIGEN/1000000.
+99QQIG    = QIGEN/1000000.
+99QIM1    = IM1A*(N400B-N400C)
+99QIM2    = IM1B*(N400C-N400A)
+99QIM3    = IM1C*(N400A-N400B)
+99QIM     = (QIM1+QIM2+QIM3)/SQRT(3.0)
+99PIM     = N400A*IM1A+N400B*IM1B+N400C*IM1C
+99PPIM    = PIM/1000000.
+99QQIM    = QIM/1000000.
+C
+C /// TACS OUTPUT VARIABLES ///
+C 33PPIG  QQIG  PPIM  QQIM
+C /// TACS INITIAL CONDITIONS ///
+77VIG         1.00478
+77PPIG       .5000
+77QQIG       -.232
+77PIGEN      500000.
+77QIGEN      -232000.
+77PIM        -50000.
+77QIM        -27600.
+C
+C --*----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+BLANK card ends TACS data
+C /// NETWORK DATA ///
+$VINTAGE, 1
+C Bus1->Bus2->Bus3->Bus4-><---------R(ohm)<----------L(mH)<---------C(mmF)
+C *** XS *** ( j0.012(pu) : 0.1663869437mH )
+  N100A N200A                             .1663869437                          
+  N100B N200B N100A N200A 
+  N100C N200C N100A N200A          
+C *** XT *** ( j0.075(pu) : 1.039918398mH )
+  N200A N300A                             1.039918398
+  N200B N300B N200A N300A   
+  N200C N300C N200A N300A
+C *** ZL *** ( 0.2+j0.312(pu) : 0.8712ohm,4.326060536mH )
+  N300A N400A             0.871200000     4.326060536
+  N300B N400B N300A N400A 
+  N300C N400C N300A N400A 
+C ***OUTSIDE LOAD*** ACCB POWER FLOW P=250W 
+  N300A                   174.2211826
+  N300B       N300A
+  N300C       N300A
+C ***INSIDE LOAD*** ( 1.00478)
+  N400A                   221.1645148                   
+  N400B       N400A                   
+  N400C       N400A              
+        N400A                                             18.56624062
+        N400B       N400A       
+        N400C       N400A
+$VINTAGE, 0
+C
+BLANK card ends electric network branches
+C --*----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+C /// SWITCH DATA ///
+C    Only 6 of the 21 original switches are retained.  This allows separate
+C    names for the two IM busses even though the two are in parallel.  In
+C    fact,  IG1A  is the same as  IM1A,  etc. for B and C:
+  IG1A  N400A                                         MEASURING
+  IG1B  N400B                                         MEASURING
+  IG1C  N400C                                         MEASURING
+  IM1A  N400A                                         MEASURING
+  IM1B  N400B                                         MEASURING
+  IM1C  N400C                                         MEASURING
+BLANK card ends switches
+C /// SOURCE DATA ///
+C <BUS----<VOLT-----<FREQ-----<ANGLE----(1.0pu:5388.87743v)
+14N100A   5388.87743   50.0      0.0                         -1.0
+14N100B   5388.87743   50.0   -120.0                         -1.0
+14N100C   5388.87743   50.0   -240.0                         -1.0
+C 
+C |BUS |  |  SLIP  ||  TM0   |
+C | A6 |  |  E10.6 ||  E10.6 |
+56IG1A    -0.785129 0.0          
+56IG1B
+56IG1C
+C CLASS2
+C TY  <NP><  RMVA  ><  RSKV  ><  FREQ  >
+ 0       1  0.625    6.6      50.0
+C   Rs   ||   Lsl  ||   Rr   ||   Lrl  ||  Msru  ||  Msrs  ||  Flxs  |
+C  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 |
+0.0113     0.0903    0.0093    0.114     4.3                                    
+C CLASS3
+C         |    M   ||    D   ||  EMSOM | |NM|P|E|M|
+C         |  E10.6 ||  E10.6 ||  E10.6 | |I4|I2I2I2
+           1.12        0.0                    1 1 1
+C CLASS4
+C   T    ||   TM   |    |TBUS|
+C  E10.6 ||  E10.6 |    | A6 |
+C 0.02    .000264555
+            9999   { Special terminator for any Class-4 data of Type-56 IM
+C CLASS5
+C | BUS|N|
+C | A4 |I2
+  FINISH      { Key word that ends data for this particular (the 1st of 2) IM
+C |BUS |  |  SLIP  ||  TM0   |
+C | A6 |  |  E10.6 ||  E10.6 |
+56IM1A    2.736296   0.0         
+56IM1B
+56IM1C
+C CLASS2
+C TY  <NP><  RMVA  ><  RSKV  ><  FREQ  >
+ 0       1  0.0625   6.6      50.0
+C   Rs   ||   Lsl  ||   Rr   ||   Lrl  ||  Msru  ||  Msrs  ||  Flxs  |
+C  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 |
+0.062      0.075     0.031     0.075     2.58                                   
+C CLASS3
+C         |    M   ||    D   ||  EMSOM | |NM|P|E|M|
+C         |  E10.6 ||  E10.6 ||  E10.6 | |I4|I2I2I2
+           1.97        0.0                    1 1 1
+C CLASS4
+C   T    ||   TM   |    |TBUS|
+C  E10.6 ||  E10.6 |    | A6 |
+C 0.02    .000264555
+            9999  { Special terminator for any Class-4 data of Type-56 IM
+C CLASS5
+C | BUS|N|
+C | A4 |I2
+  FINISH      { Key word that ends data for this particular (the 2nd of 2) IM
+BLANK card terminating ATP source cards
+C       Total network loss  P-loss  by summing injections =   8.693842500266E+01
+C Output for steady-state phasor switch currents.
+C  Node-K  Node-M      I-real          I-imag           I-magn      Degrees       Power          Reactive
+C  IG1A    N400A   6.13352336E+01  2.91346671E+01   6.79031642E+01  25.4080   1.66673295E+05 -7.75683916E+04
+C  IG1B    N400B  -5.43625497E+00 -6.76852040E+01   6.79031642E+01 -94.5920   1.66673295E+05 -7.75683916E+04
+C  IG1C    N400C  -5.58989787E+01  3.85505369E+01   6.79031642E+01 145.4080   1.66673295E+05 -7.75683916E+04
+C  IM1A    N400A  -6.18285824E+00  3.35138837E+00   7.03274769E+00 151.5403  -1.66673368E+04 -9.20498467E+03
+C  IM1B    N400B   5.99381659E+00  3.67881812E+00   7.03274769E+00  31.5403  -1.66673368E+04 -9.20498467E+03
+C  IM1C    N400C   1.89041650E-01 -7.03020649E+00   7.03274769E+00 -88.4597  -1.66673368E+04 -9.20498467E+03
+C
+C Column headings for the  29   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  Next   24     output variables belong to IM  (with "IM"  an internally-added upper name of pair).
+C  Next   5     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C Step    Time      IM-1       IM-1       IM-1       IM-1       IM-1       IM-1       IM-1       IM-1       IM-1       IM-1
+C                   P          Q          ISA        ISB        ISC        IRA        IRB        IRC        WR         ANG
+C
+C                   IM-1       IM-1       IM-2       IM-2       IM-2       IM-2       IM-2       IM-2       IM-2       IM-2
+C                   TQ         TM         P          Q          ISA        ISB        ISC        IRA        IRB        IRC
+C
+C                   IM-2       IM-2       IM-2       IM-2       TACS       TACS       TACS       TACS       TACS
+C                   WR         ANG        TQ         TM         VIG        PIGEN      QIGEN      PIM        QIM
+C ***      Phasor I(0) =  6.1335234E+01                     Switch  "IG1A  "  to  "N400A "  closed in the steady-state.
+C ***      Phasor I(0) = -5.4362550E+00                     Switch  "IG1B  "  to  "N400B "  closed in the steady-state.
+C ***      Phasor I(0) = -5.5898979E+01                     Switch  "IG1C  "  to  "N400C "  closed in the steady-state.
+C ***      Phasor I(0) = -6.1828582E+00                     Switch  "IM1A  "  to  "N400A "  closed in the steady-state.
+C ***      Phasor I(0) =  5.9938166E+00                     Switch  "IM1B  "  to  "N400B "  closed in the steady-state.
+C ***      Phasor I(0) =  1.8904165E-01                     Switch  "IM1C  "  to  "N400C "  closed in the steady-state.
+C    0     0.0  500019.886 -232705.17 61.3352336  -5.436255 -55.898979 -11.518219 60.1819687  -48.66375 316.625821 1.57079633
+C               1608.95108 1608.95108 -50002.011 -27614.954 -6.1828582 5.99381659  .18904165 -.58621064 -5.1267795 5.71299012
+C               305.562938 1.57079633 -148.95686 -148.95686     1.0047    500000.   -232000.    -50000.    -27600.
+C    1  .25E-3  500145.619 -232725.27 58.8756131 -.11553737 -58.760076 -11.479526 60.1817443 -48.702218 316.625814 1.64995278
+C               1609.32268 1608.95108 -49988.051 -27614.135 -6.4248212 5.68592478 .738896446 -.57282271 -5.1329244 5.70574715
+C               305.562934 1.64718706 -148.91265 -148.95686 1.00481726 500145.619 -232725.27 -49988.051 -27614.135
+C    2   .5E-3  500279.634 -232738.55 56.0518759 5.20801006 -61.259886 -11.440363 60.1804072 -48.740044 316.625795 1.72910923
+C                1609.6677 1608.95108 -49976.514 -27614.492 -6.6274021 5.34328199 1.28412013 -.55938995 -5.1392418 5.69863173
+C               305.562921 1.72357779 -148.87311 -148.95686 1.00485913 500279.634 -232738.55 -49976.514 -27614.492
+BLANK card ending names of ATP output variables (none for this case)
+C  100    .025  500666.577 -231710.46 -29.009861  67.689943 -38.680082 -7.5010766 58.7427696 -51.241693 316.626251 9.48642268
+C               1610.05009 1608.95108 -50027.397 -27567.289 -3.3454225 -3.6840913 7.02951382 .767497344 -5.7887829 5.02128552
+C               305.560218 9.20981993 -148.95965 -148.95686 1.00485987 500666.577 -231710.46 -50027.397 -27567.289
+C Variable max: 501351.888 -230444.64 67.8036384 67.9774295 67.7273265 -7.5010766 60.1819687  -48.66375  316.62671 9.48642268
+C               1612.20306 1608.95108  -49882.18 -27466.013 7.01961078 7.02912135 7.02951382 .767497344 -5.1267795 5.71299012
+C               305.562938 9.20981993 -148.58255 -148.95686  1.0049302 501351.888 -230444.64  -49882.18 -27466.013
+C Times of max:       .005        .01      .0185     .00525       .012       .025        0.0        0.0       .021       .025
+C                    .0045        0.0      .0045       .009      .0115     .01825       .025       .025        0.0        0.0
+C                      0.0       .025     .00475        0.0      .1E-2       .005        .01      .0045       .009
+C Variable min: 499173.557 -232738.55 -67.822794 -67.743906 -67.960287 -11.518219 58.7427696 -51.241693 316.623142 1.57079633
+C               1605.49808 1608.95108 -50027.634 -27615.163 -7.0288686 -7.0157093 -7.0236834 -.58621064 -5.7887829 5.02128552
+C               305.560211 1.57079633 -148.96079 -148.95686     1.0047 499173.557 -232738.55 -50027.634 -27615.163
+C Times of min:       .015      .5E-3      .0085     .01525       .002        0.0       .025       .025       .009        0.0
+C                    .0145        0.0       .024     .75E-3      .0215     .00825       .015        0.0       .025       .025
+C                   .02175        0.0     .02375        0.0        0.0       .015      .5E-3       .024     .75E-3
+  PRINTER PLOT  { No need for vector plotting as all variables are smooth
+ 1942.5 0.  25.         BRANCH                   { Plot limits: (-7.029,  7.029)
+                        IM-2  ISA   IM-2  ISB   IM-2  ISC
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+C     3rd of 9 subcases of  BENCHMARK DCNEW-12  is added  4 May 2006.
+C  2nd of  8 data subcases that illustrate Type-56 TEPCO IM (induction machine).
+C  For background of the model,  see top of 1st subcase.  This second case is a
+C  simplification of  ATPIGT56.DAT  which has just a single  IM.  Like the first
+C  subcase,  this second one involves no transient.  The phasor solution merely
+C  is continued for one cycle to confirm the sinusoidal steady state.  Of the
+C  original 19 permanently-closed switches,  only 10 could be eliminated without
+C  tampering with TACS control system logic.  The 9 switches that remain are
+C  used to pass currents to TACS.  As for outputs,  these have been reduced
+C  drastically by elimination of the request for every node voltage (a 1-punch
+C  in column 2).  This reduces the voltage outputs from 31 to 0.
+POWER FREQUENCY, 50
+C 0.00025    1.0      0.0     0.0 { TEPCO simulation extended to Tmax = 1 sec
+ 0.00025    .020     0.0     0.0
+       1       1       1       1       1      -1
+       5       5      20      20  
+TACS HYBRID
+C OUTPUT
+33VIG   PPIG  QQIG  TM
+C
+88FLG1    = TIMEX .GE. 0.1
+88FLG2    = TIMEX .GE. 0.5
+88TM      = 1.0+FLG1*0.2+FLG2*0.3
+77TM        1.0
+C /// G1 BRANCH VOLTAGE MONITOR ///
+  VAB     +N400A  -N400B                             1.0
+90N400A                                                      -1.0
+90N400B                                                      -1.0
+90N400C                                                      -1.0
+91IG1A                                                       -1.0
+91IG1B                                                       -1.0
+91IG1C                                                       -1.0
+C ///  VOLTAGE FEED BACK ///
+99VIG     = SQRT(N400A*N400A+N400B*N400B+N400C*N400C)/6600.0
+C ///  POWER MONITOR(I.G.) ///
+99QIG1    = IG1A*(N400B-N400C)
+99QIG2    = IG1B*(N400C-N400A)
+99QIG3    = IG1C*(N400A-N400B)
+99QIGEN   = (QIG1+QIG2+QIG3)/SQRT(3.0)
+99PIGEN   = N400A*IG1A+N400B*IG1B+N400C*IG1C
+99PPIG    = PIGEN/1000000.
+99QQIG    = QIGEN/1000000.
+C
+C ***************  CONTROLL MODEL BLOCK **************
+C
+90N300A                                                      -1.0
+90N300B                                                      -1.0
+90N300C                                                      -1.0
+91N250A                                                      -1.0
+91N250B                                                      -1.0
+91N250C                                                      -1.0
+C /// POWER MONITOR ACCB(BETWEEN N250 AND N300) ///
+99QCB1    = N250A*(N300B-N300C)
+99QCB2    = N250B*(N300C-N300A)
+99QCB3    = N250C*(N300A-N300B)
+99QACCB   = ((QCB1+QCB2+QCB3)/SQRT(3.0))/1000.
+99PACCB   = (N300A*N250A+N300B*N250B+N300C*N250C)/1000.
+C 33PACCB
+C 33QACCB
+C /// L300 P & Q ///
+91N400AD                                                     -1.0
+91N400BD                                                     -1.0
+91N400CD                                                     -1.0
+99QCB5    = N400AD*(N400B-N400C)
+99QCB6    = N400BD*(N400C-N400A)
+99QCB7    = N400CD*(N400A-N400B)
+99QACCB1  = ((QCB5+QCB6+QCB7)/SQRT(3.0))/1000000.
+99PACCB1  = (N400A*N400AD+N400B*N400BD+N400C*N400CD)/1000000.
+C 33PACCB1
+C 33QACCB1
+C
+C /// TACS OUTPUT VARIABLES ///
+C 33PPIG  QQIG  VIG
+C /// TACS INITIAL CONDITIONS ///
+77VIG         1.00478
+77PPIG       .5000
+77QQIG       -.232
+77PIGEN      500000.
+77QIGEN      -232000.
+77PACCB      0.0
+77QACCB      6.25
+BLANK card ends TACS data
+$VINTAGE, 1
+C Bus1->Bus2->Bus3->Bus4-><---------R(ohm)<----------L(mH)<---------C(mmF)
+C *** XS *** ( j0.012(pu) : 0.1663869437mH )
+  N100A N200A                             .1663869437                          
+  N100B N200B N100A N200A 
+  N100C N200C N100A N200A          
+C *** XT *** ( j0.075(pu) : 1.039918398mH )
+  N200A N250A                             1.039918398
+  N200B N250B N200A N250A   
+  N200C N250C N200A N250A
+C *** ZL *** ( 0.2+j0.312(pu) : 0.8712ohm,4.326060536mH )
+  N300A N400A             0.871200000     4.326060536
+  N300B N400B N300A N400A
+  N300C N400C N300A N400A
+C ***OUTSIDE LOAD*** ACCB POWER FLOW P=250W 
+  N300A                   174.2211826
+  N300B       N300A 
+  N300C       N300A 
+C ***INSIDE LOAD*** 
+  N400A N400AD            176.7332792                   
+  N400B N400BDN400A N400AD                   
+  N400C N400CDN400A N400AD              
+  N400ADN400A                                             16.56943663
+  N400BDN400B N400ADN400A       
+  N400CDN400C N400ADN400A
+$VINTAGE, 0
+BLANK card terminating branch cards
+  N250A N300A       -1.0   8.10
+  N250B N300B       -1.0   8.10
+  N250C N300C       -1.0   8.10
+  IG1A  N400A                                         MEASURING                1
+  IG1B  N400B                                         MEASURING                1
+  IG1C  N400C                                         MEASURING                1
+  N400AD                                              MEASURING
+  N400BD                                              MEASURING
+  N400CD                                              MEASURING
+BLANK card ending switch cards
+C <BUS----<VOLT-----<FREQ-----<ANGLE----(1.0pu:5388.87743v)
+14N100A   5388.87743   50.0      0.0                         -1.0
+14N100B   5388.87743   50.0   -120.0                         -1.0
+14N100C   5388.87743   50.0   -240.0                         -1.0
+C CLASS1
+C |BUS |  |  SLIP  ||   TM0  |
+C | A6 |  |  E10.6 ||  E10.6 |
+56IG1A    -0.785129
+56IG1B
+56IG1C
+C CLASS2
+C TY  <NP><  RMVA  ><  RSKV  ><  FREQ  >
+ 0       1  0.625    6.6       50.0
+C   Rs   ||   Lsl  ||   Rr   ||   Lrl  ||  Msru  ||  Msrs  ||  Flxs  |
+C  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 |
+0.0113     0.0903    0.0093    0.114     4.3                                    
+C CLASS3
+C         |    M   ||    D   ||  EMSOM | |NM|P|E|M|
+C         |  E10.6 ||  E10.6 ||  E10.6 | |I4|I2I2I2
+           1.12        0.0                    1 1 1
+C CLASS4
+C   T    ||   TM   |    |TBUS|
+C  E10.6 ||  E10.6 |    | A6 |
+C 0.1      1.1          TM
+  0.1      1.2          
+  0.5      1.5
+            9999  { Special terminator for any Class-4 data (here, 2 cards)
+C CLASS5
+C | BUS|N|
+C | A4 |I2
+C 73PGEN   1
+  FINISH     { Key word that ends data for this particular (the one and only) IM
+BLANK card ending all source cards
+C     Total network loss  P-loss  by summing injections =   7.668433002012E+01
+C Output for steady-state phasor switch currents.
+C  Node-K   Node-M        I-real            I-imag           I-magn        Degrees        Power            Reactive
+C  N250A    N300A     9.48674141E-03  -7.08165989E-01   7.08229529E-01   -89.2325    2.55614433E+01    1.90801481E+03
+C  N250B    N300B    -6.18033107E-01   3.45867235E-01   7.08229529E-01   150.7675    2.55614433E+01    1.90801481E+03
+C  N250C    N300C     6.08546366E-01   3.62298754E-01   7.08229529E-01    30.7675    2.55614433E+01    1.90801481E+03
+C  IG1A     N400A     6.13353129E+01   2.91346959E+01   6.79032482E+01    25.4080    1.66673707E+05   -7.75685834E+04
+C  IG1B     N400B    -5.43626967E+00  -6.76852871E+01   6.79032482E+01   -94.5920    1.66673707E+05   -7.75685834E+04
+C  IG1C     N400C    -5.58990432E+01   3.85505912E+01   6.79032482E+01   145.4080    1.66673707E+05   -7.75685834E+04
+C  N400AD             3.04150988E+01   2.84265505E+01   4.16310823E+01    43.0644    0.00000000E+00    0.00000000E+00
+C  N400BD             9.41056550E+00  -4.05535235E+01   4.16310823E+01   -76.9356    0.00000000E+00    0.00000000E+00
+C  N400CD            -3.98256643E+01   1.21269730E+01   4.16310823E+01   163.0644    0.00000000E+00    0.00000000E+00
+C
+C Column headings for the  19   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   12     output variables belong to IM  (with "IM"  an internally-added upper name of pair).
+C  Next   4     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C   Step      Time      IG1A       IG1B       IG1C       IM-1       IM-1       IM-1       IM-1       IM-1       IM-1       IM-1
+C                       N400A      N400B      N400C      P          Q          ISA        ISB        ISC        IRA        IRB
+C
+C                       IM-1       IM-1       IM-1       IM-1       IM-1       TACS       TACS       TACS       TACS
+C                       IRC        WR         ANG        TQ         TM         VIG        PPIG       QQIG       TM
+C ***      Phasor I(0) =  9.4867414E-03                     Switch  "N250A "  to  "N300A "  closed in the steady-state.
+C ***      Phasor I(0) = -6.1803311E-01                     Switch  "N250B "  to  "N300B "  closed in the steady-state.
+C ***      Phasor I(0) =  6.0854637E-01                     Switch  "N250C "  to  "N300C "  closed in the steady-state.
+C ***      Phasor I(0) =  6.1335313E+01                     Switch  "IG1A  "  to  "N400A "  closed in the steady-state.
+C ***      Phasor I(0) = -5.4362697E+00                     Switch  "IG1B  "  to  "N400B "  closed in the steady-state.
+C ***      Phasor I(0) = -5.5899043E+01                     Switch  "IG1C  "  to  "N400C "  closed in the steady-state.
+C ***      Phasor I(0) =  3.0415099E+01                     Switch  "N400AD"  to  "      "  closed in the steady-state.
+C ***      Phasor I(0) =  9.4105655E+00                     Switch  "N400BD"  to  "      "  closed in the steady-state.
+C ***      Phasor I(0) = -3.9825664E+01                     Switch  "N400CD"  to  "      "  closed in the steady-state.
+C      0       0.0  61.3353129 -5.4362697 -55.899043 500021.122 -232705.75 61.3353129 -5.4362697 -55.899043 -11.518226 60.1820406
+C                   -48.663815 316.625821 1.57079633 1608.95506 1608.95506     1.0047        0.5      -.232        1.0
+C      1    .25E-3  58.8756985 -.11556078 -58.760138 500146.874 -232725.18 58.8756985 -.11556078 -58.760138  -11.47952 60.1818161
+C                   -48.702296 316.625814 1.64995278 1609.32678 1608.95506   1.004818 .500146874 -.23272518        1.0
+C      2     .5E-3  56.0520126 5.20791534 -61.259928 500280.855 -232736.13 56.0520126 5.20791534 -61.259928 -11.440292 60.1804828
+C                   -48.740191 316.625795 1.72910923 1609.67255 1608.95506 1.00485787 .500280855 -.23273613        1.0
+BLANK card ending output variables (none specified here)
+C     80       .02  61.3263774 -5.4750126 -55.851365 499968.129 -232316.99 61.3263774 -5.4750126 -55.851365 -8.3606667  59.018657
+C                    -50.65799 316.626716 7.90328979 1608.32331 1608.95506 1.00485137 .499968129 -.23231699        1.0
+C Variable maxima:  67.8022815 67.9777456 67.7244575 501371.216 -230406.62 67.8022815 67.9777456 67.7244575 -8.3606667 60.1820406
+C                   -48.663815 316.626716 7.90328979 1612.25579 1608.95506 1.00491917 .501371216 -.23040662        1.0
+C Times of maxima:       .0185     .00525       .012       .005        .01      .0185     .00525       .012        .02        0.0
+C                          0.0        .02        .02      .0045        0.0      .1E-2       .005        .01        0.0
+C Variable minima:  -67.822135  -67.74161 -67.961789   499154.6 -232736.13 -67.822135  -67.74161 -67.961789 -11.518226  59.018657
+C                    -50.65799 316.623113 1.57079633 1605.43816 1608.95506     1.0047   .4991546 -.23273613        1.0
+C Times of minima:       .0085     .01525       .002       .015      .5E-3      .0085     .01525       .002        0.0        .02
+C                          .02       .009        0.0      .0145        0.0        0.0       .015      .5E-3        0.0
+ 1942.5 0.  25.         BRANCH                   { Plot limits: (-6.796,  6.798)
+                        IG1A  N400A IG1B  N400B IG1C  N400C
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+C     4th of 9 subcases of  BENCHMARK DCNEW-12  is added  4 May 2006.
+C  3rd of  8 data subcases that illustrate Type-56 TEPCO IM (induction machine).
+C  For background of the model,  see top of 1st subcase.  This third case is a
+C  simplification of  IGTMT56.DAT  which has just a single  IM.  Like the first
+C  two,  this third subcase involves no transient.  The phasor solution merely
+C  is continued for one cycle to confirm the sinusoidal steady state.  Of the
+C  original 19 permanently-closed switches,  only 10 could be eliminated without
+C  tampering with TACS control system logic.  6 of the 9 switches that remain
+C  are used to pass currents to TACS.  As for outputs,  these have been reduced
+C  drastically by elimination of the request for every node voltage (a 1-punch
+C  in column 2).  This reduces the voltage outputs from 31 to 0.
+POWER FREQUENCY, 50
+C
+C 0.00025    1.0      0.0     0.0   ---  TEPCO's T-max was 1.0 seconds, note
+ 0.00025    .020     0.0     0.0  { 1 cycle is enough to verify steady state
+       1       1       1       1       1      -1
+       5       5      20      20
+TACS HYBRID
+C OUTPUT
+33VIG   PPIG  QQIG  TM
+C
+88FLG1    = TIMEX .GE. 0.1
+88FLG2    = TIMEX .GE. 0.5
+C 88TM      = 1.0+FLG1*0.2+FLG2*0.3
+88TM      = 1.0+FLG1*0.4838+FLG2*0.3709
+77TM        1.0
+C /// G1 BRANCH VOLTAGE MONITOR ///
+  VAB     +N400A  -N400B                             1.0
+90N400A                                                      -1.0
+90N400B                                                      -1.0
+90N400C                                                      -1.0
+91IG1A                                                       -1.0
+91IG1B                                                       -1.0
+91IG1C                                                       -1.0
+C ///  VOLTAGE FEED BACK ///
+99VIG     = SQRT(N400A*N400A+N400B*N400B+N400C*N400C)/6600.0
+C ///  POWER MONITOR(I.G.) ///
+99QIG1    = IG1A*(N400B-N400C)
+99QIG2    = IG1B*(N400C-N400A)
+99QIG3    = IG1C*(N400A-N400B)
+99QIGEN   = (QIG1+QIG2+QIG3)/SQRT(3.0)
+99PIGEN   = N400A*IG1A+N400B*IG1B+N400C*IG1C
+99PPIG    = PIGEN/1000000.
+99QQIG    = QIGEN/1000000.
+C
+C ***************  CONTROLL MODEL BLOCK **************
+C
+90N300A                                                      -1.0
+90N300B                                                      -1.0
+90N300C                                                      -1.0
+91N250A                                                      -1.0
+91N250B                                                      -1.0
+91N250C                                                      -1.0
+C /// POWER MONITOR ACCB(BETWEEN N250 AND N300) ///
+99QCB1    = N250A*(N300B-N300C)
+99QCB2    = N250B*(N300C-N300A)
+99QCB3    = N250C*(N300A-N300B)
+99QACCB   = ((QCB1+QCB2+QCB3)/SQRT(3.0))/1000.
+99PACCB   = (N300A*N250A+N300B*N250B+N300C*N250C)/1000.
+C 33PACCB
+C 33QACCB
+C /// L300 P & Q ///
+91N400AD                                                     -1.0
+91N400BD                                                     -1.0
+91N400CD                                                     -1.0
+99QCB5    = N400AD*(N400B-N400C)
+99QCB6    = N400BD*(N400C-N400A)
+99QCB7    = N400CD*(N400A-N400B)
+99QACCB1  = ((QCB5+QCB6+QCB7)/SQRT(3.0))/1000000.
+99PACCB1  = (N400A*N400AD+N400B*N400BD+N400C*N400CD)/1000000.
+C 33PACCB1
+C 33QACCB1
+C
+C /// TACS OUTPUT VARIABLES ///
+C 33PPIG  QQIG  VIG
+C /// TACS INITIAL CONDITIONS ///
+77VIG         1.00478
+77PPIG       .5000
+77QQIG       -.232
+77PIGEN      500000.
+77QIGEN      -232000.
+77PACCB      0.0
+77QACCB      6.25
+C IM TORQUE
+C 99TM      =TIMEX
+C 88TM      =TIMEX .GE. 0.1
+$DISABLE
+C ---FOR.IG.No1(1/4)---
+C  ====== TIME OF MOTOR TO GEN MODE =====
+77MSLIP     -0.785129
+11MOTGEN     0.0                                             -1.0
+90BUSMG                                                      -1.0
+99MSLIP   = (1.0-BUSMG/(2.*PI*50.))*100.
+33MSLIP
+99BUSMS   =(TIMEX.GE.MOTGEN)*1592
+$ENABLE
+BLANK card ending TACS data
+C /// NETWORK DATA ///
+$VINTAGE, 1
+C Bus1->Bus2->Bus3->Bus4-><---------R(ohm)<----------L(mH)<---------C(mmF)
+C *** XS *** ( j0.012(pu) : 0.1663869437mH )
+  N100A N200A                             .1663869437                          
+  N100B N200B N100A N200A 
+  N100C N200C N100A N200A          
+C *** XT *** ( j0.075(pu) : 1.039918398mH )
+  N200A N250A                             1.039918398
+  N200B N250B N200A N250A   
+  N200C N250C N200A N250A
+C *** ZL *** ( 0.2+j0.312(pu) : 0.8712ohm,4.326060536mH )
+  N300A N400A             0.871200000     4.326060536
+  N300B N400B N300A N400A
+  N300C N400C N300A N400A
+C ***OUTSIDE LOAD*** ACCB POWER FLOW P=250W 
+  N300A                   174.2211826
+  N300B       N300A 
+  N300C       N300A 
+C ***INSIDE LOAD*** 
+  N400A N400AD            176.7332792                   
+  N400B N400BDN400A N400AD                   
+  N400C N400CDN400A N400AD              
+  N400ADN400A                                             16.56943663
+  N400BDN400B N400ADN400A       
+  N400CDN400C N400ADN400A
+$VINTAGE, 0
+C
+$DISABLE
+C ---FOR.IG.No1(2/4)---
+C  --------- MECHANICAL NETWORK COMPONENTS
+C Tm=1.12  :M :2H ==> 7.09E+6 pole:1
+C --+----1----+----2----+----3----+----4----+----5----+----6----+----7----+----8
+  BUSMG                               7.09E6                                   
+C  -------- FOR MEASUREMENT OF ELECTROMECHANICAL TORQUE
+  BUSMS BUSMG             1.0E-8                                               
+$ENABLE
+BLANK card ending branch cards
+C --*----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+C /// SWITCH DATA ///
+  N250A N300A       -1.0   8.10
+  N250B N300B       -1.0   8.10
+  N250C N300C       -1.0   8.10
+  IG1A  N400A                                         MEASURING                1
+  IG1B  N400B                                         MEASURING                1
+  IG1C  N400C                                         MEASURING                1
+  N400AD                                              MEASURING
+  N400BD                                              MEASURING
+  N400CD                                              MEASURING
+BLANK card ending switch cards
+C --*----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+$DISABLE
+C ---FOR.IG.No1(3/4)---
+14BUSMS -1 0.0001      0.0001     .0                         -1.0
+$ENABLE
+C /// SOURCE DATA ///
+C <BUS----<VOLT-----<FREQ-----<ANGLE----(1.0pu:5388.87743v)
+14N100A   5388.87743   50.0      0.0                         -1.0
+14N100B   5388.87743   50.0   -120.0                         -1.0
+14N100C   5388.87743   50.0   -240.0                         -1.0
+C CLASS1
+C |BUS |  |  SLIP  ||   TM0  |
+C | A6 |  |  E10.6 ||  E10.6 |
+56IG1A    -0.785129  0.0       
+56IG1B
+56IG1C
+C CLASS2
+C TY  <NP><  RMVA  ><  RSKV  ><  FREQ  >
+ 0       1  0.625    6.6       50.0
+C   Rs   ||   Lsl  ||   Rr   ||   Lrl  ||  Msru  ||  Msrs  ||  Flxs  |
+C  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 |
+0.0113     0.0903    0.0093    0.114     4.3                                    
+C CLASS3
+C         |    M   ||    D   ||  EMSOM | |NM|P|E|M|
+C         |  E10.6 ||  E10.6 ||  E10.6 | |I4|I2I2I2
+           1.12        0.0                    1 1 1
+C CLASS4
+C   T    ||   TM   |    |TBUS|
+C  E10.6 ||  E10.6 |    | A6 |
+                        TM
+            9999  { Special terminator for any Class-4 data of Type-56 IM
+C CLASS5
+C | BUS|N|
+C | A4 |I2
+C 73PGEN   1
+  FINISH
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   7.668433002012E+01
+C Output for steady-state phasor switch currents.
+C  Node-K  Node-M        I-real           I-imag            I-magn       Degrees        Power            Reactive
+C  N250A   N300A     9.48674141E-03  -7.08165989E-01    7.08229529E-01  -89.2325    2.55614433E+01    1.90801481E+03
+C  N250B   N300B    -6.18033107E-01   3.45867235E-01    7.08229529E-01  150.7675    2.55614433E+01    1.90801481E+03
+C  N250C   N300C     6.08546366E-01   3.62298754E-01    7.08229529E-01   30.7675    2.55614433E+01    1.90801481E+03
+C  IG1A    N400A     6.13353129E+01   2.91346959E+01    6.79032482E+01   25.4080    1.66673707E+05   -7.75685834E+04
+C  IG1B    N400B    -5.43626967E+00  -6.76852871E+01    6.79032482E+01  -94.5920    1.66673707E+05   -7.75685834E+04
+C  IG1C    N400C    -5.58990432E+01   3.85505912E+01    6.79032482E+01  145.4080    1.66673707E+05   -7.75685834E+04
+C  N400AD            3.04150988E+01   2.84265505E+01    4.16310823E+01   43.0644    0.00000000E+00    0.00000000E+00
+C  N400BD            9.41056550E+00  -4.05535235E+01    4.16310823E+01  -76.9356    0.00000000E+00    0.00000000E+00
+C  N400CD           -3.98256643E+01   1.21269730E+01    4.16310823E+01  163.0644    0.00000000E+00    0.00000000E+00
+C
+C Column headings for the  19   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   12     output variables belong to IM  (with "IM"  an internally-added upper name of pair).
+C  Next   4     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C   Step      Time      IG1A       IG1B       IG1C       IM-1       IM-1       IM-1       IM-1       IM-1       IM-1       IM-1
+C                       N400A      N400B      N400C      P          Q          ISA        ISB        ISC        IRA        IRB
+C
+C                       IM-1       IM-1       IM-1       IM-1       IM-1       TACS       TACS       TACS       TACS
+C                       IRC        WR         ANG        TQ         TM         VIG        PPIG       QQIG       TM
+C ***      Phasor I(0) =  9.4867414E-03                     Switch  "N250A "  to  "N300A "  closed in the steady-state.
+C ***      Phasor I(0) = -6.1803311E-01                     Switch  "N250B "  to  "N300B "  closed in the steady-state.
+C ***      Phasor I(0) =  6.0854637E-01                     Switch  "N250C "  to  "N300C "  closed in the steady-state.
+C ***      Phasor I(0) =  6.1335313E+01                     Switch  "IG1A  "  to  "N400A "  closed in the steady-state.
+C ***      Phasor I(0) = -5.4362697E+00                     Switch  "IG1B  "  to  "N400B "  closed in the steady-state.
+C ***      Phasor I(0) = -5.5899043E+01                     Switch  "IG1C  "  to  "N400C "  closed in the steady-state.
+C ***      Phasor I(0) =  3.0415099E+01                     Switch  "N400AD"  to  "      "  closed in the steady-state.
+C ***      Phasor I(0) =  9.4105655E+00                     Switch  "N400BD"  to  "      "  closed in the steady-state.
+C ***      Phasor I(0) = -3.9825664E+01                     Switch  "N400CD"  to  "      "  closed in the steady-state.
+C      0       0.0  61.3353129 -5.4362697 -55.899043 500021.122 -232705.75 61.3353129 -5.4362697 -55.899043 -11.518226 60.1820406
+C                   -48.663815 316.625821 1.57079633 1608.95506 1608.95506     1.0047        0.5      -.232        1.0
+C      1    .25E-3  58.8756985 -.11556078 -58.760138 500146.874 -232725.18 58.8756985 -.11556078 -58.760138  -11.47952 60.1818161
+C                   -48.702296 316.625814 1.64995278 1609.32678 1608.95506   1.004818 .500146874 -.23272518        1.0
+C      2     .5E-3  56.0520126 5.20791534 -61.259928 500280.855 -232736.13 56.0520126 5.20791534 -61.259928 -11.440292 60.1804828
+C                   -48.740191 316.625795 1.72910923 1609.67255 1608.95506 1.00485787 .500280855 -.23273613        1.0
+BLANK card ending names for output purposes (none here)
+C     80       .02  61.3263774 -5.4750126 -55.851365 499968.129 -232316.99 61.3263774 -5.4750126 -55.851365 -8.3606667  59.018657
+C                    -50.65799 316.626716 7.90328979 1608.32331 1608.95506 1.00485137 .499968129 -.23231699        1.0
+C Variable maxima:  67.8022815 67.9777456 67.7244575 501371.216 -230406.62 67.8022815 67.9777456 67.7244575 -8.3606667 60.1820406
+C                   -48.663815 316.626716 7.90328979 1612.25579 1608.95506 1.00491917 .501371216 -.23040662        1.0
+C Times of maxima:       .0185     .00525       .012       .005        .01      .0185     .00525       .012        .02        0.0
+C                          0.0        .02        .02      .0045        0.0      .1E-2       .005        .01        0.0
+C Variable minima:  -67.822135  -67.74161 -67.961789   499154.6 -232736.13 -67.822135  -67.74161 -67.961789 -11.518226  59.018657
+C                    -50.65799 316.623113 1.57079633 1605.43816 1608.95506     1.0047   .4991546 -.23273613        1.0
+C Times of minima:       .0085     .01525       .002       .015      .5E-3      .0085     .01525       .002        0.0        .02
+C                          .02       .009        0.0      .0145        0.0        0.0       .015      .5E-3        0.0
+  PRINTER PLOT         { No need for vector plotting as all variables are smooth
+C  For variety,  let's not repeat the 50-Hz ac sinusoids of the preceding two
+C  subcases.  Instead,  let's plot the rotor angle  ANG  which should be a
+C  perfect ramp if rotor speed is constant.
+ 1942.5 0.  25.         BRANCH                   { Plot limits: ( 0.000, 7.903 )
+                        IM-1  ANG
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+C     5th of 9 subcases of  BENCHMARK DCNEW-12  is added  4 May 2006.
+C  4th of  8 data subcases that illustrate Type-56 TEPCO IM (induction machine).
+C  For background of the model,  see top of 1st subcase.  This fourth case is a
+C  simplification of  DCN12T56.DAT,  so named because it is like DCN12 (in long
+C  form,  DCNEW-12) except that the U.M. of that old standard test case has been
+C  replaced by a Type-56 IM.  Unlike the preceding 3 IM illustrations, this one
+C  _does_  involve transients.  A comment card of that old data states:  "Apply
+C  a step to the input torque at  0.02 sec  (step 100).  Unlike the preceding
+C  illustrations,  there is no TACS (control system modeling).  Also, 1 phasor
+C  solution for initial conditions suffices (compare with the five of DCNEW-12,
+C  each indicated by 1 line of output that begins "Total network loss  P-loss
+C  by summing injections =  ...").  Of course,  the compensation of DCNEW-12 is
+C  nowhere to be seen.  The TEPCO IM does not use compensation.  Also gone is
+C  the external rotor inertia that Prof. Hian Lauw modeled using a capacitor
+C  (that unforgetable electrical analog used with the U.M.).  Machine variable
+C  names are are a little different, but are easily recognizable.  For example,
+C  the  PRINTER PLOT  of shaft torque  (UM-1, TQGEN)  has become  (IM-1, TQ).
+C  But the shape is the same: a slightly underdamped rise to a constant.  In
+C  fact,  the plot limits are nearly the same.  DCNEW-12 has ( -4.168  0.389 )
+C  whereas this new IM simulation produces                   ( -4.168  0.388 ).
+C  About solution speed,  WSM's old 133-MHz Pentium PC running real MS-DOS to
+C  support DBOS reports the following:  DCNEW-12   TEPCO 56
+C      Seconds for overlays  1-5  :     2.088      2.033  
+C      Seconds for overlays  6-11 :     0.220      0.220   
+C      Seconds for overlays 12-15 :     0.165      0.165 
+C      Seconds for time-step loop :     2.637      1.484  
+C      Seconds after DELTAT-loop  :     0.330      0.385  
+C                                     --------------------
+C                         Totals  :     5.440      4.286   
+C  Bob Schultz reported:                 7.80       6.59      
+C  (this final row is the total job time,  written only on the screen).  So,
+C  at least for the default tolerances used,  there would seem to be no worry
+C  that the Type-56 TEPCO IM simulates substantially slower.  The surprising
+C  preceding result shows faster simulation even though compensation is not
+C  being used.  Who would have predicted this?  WSM's congratulations to Mr.
+C  Cao for a job well done.  WSM.  10 April 2006
+PRINTED NUMBER WIDTH, 12, 2,    { 1 fewer digit than DCN12 so 2 rows are enough
+0.0002   0.900
+       1       1       1       1       1      -1               
+       5       5      20      20     100       1     110      10     200     200
+C  -------- TRANSMISSION LINES
+  BUSA2 BUSAS2            1.0E-4 10.0                                          1
+  BUSB2 BUSBS2BUSA2 BUSAS2                                                     1
+  BUSC2 BUSCS2BUSA2 BUSAS2                                                     1
+C  --------- CONNECTIVITY OF EMTP FOR ELECTRIC NETWORK
+  BUSAS2                  1.0E+6
+  BUSBS2      BUSAS2
+  BUSCS2      BUSAS2
+BLANK card ending all branch cards
+BLANK card ending all (here, nonexistent) switch cards
+C  --------- SOURCES FOR INFINITE BUS
+14BUSAS2  3000.0     60.0     0.0                           -1.0
+14BUSBS2  3000.0     60.0     -120.0                        -1.0
+14BUSCS2  3000.0     60.0     +120.0                        -1.0
+C  ----------- Mechanical input torque, with value set by steady-state solution:
+C |BUS |  |  SLIP  ||  TM0   |
+C | A6 |  |  E10.6 ||  E10.6 |
+56BUSA2    2.0
+56BUSB2
+56BUSC2
+C CLASS2
+C TY  <NP><  RMVA  ><  RSKV  ><  FREQ  >
+ 0       2  0.72     4.2       60.0
+C   Rs   ||   Lsl  ||   Rr   ||   Lrl  ||  Msru  ||  Msrs  ||  Flxs  |
+C  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 |
+0.0168163 0.0184649 0.0044898 0.0184649 0.3628347      
+C CLASS3
+C         |    M   ||    D   ||  EMSOM | |NM|P|E|M|
+C         |  E10.6 ||  E10.6 ||  E10.6 | |I4|I2I2I2
+          4.8361824 0.05425244                1 1 1
+C CLASS4
+C   T    ||   TM   |    |TBUS|
+C  E10.6 ||  E10.6 |    | A6 |
+  0.02    -0.070204
+            9999  { Special terminator for any Class-4 data of Type-56 IM
+C CLASS5
+C | BUS|N|
+C | A4 |I2
+  FINISH
+BLANK card ending all source cards
+C  Bus K                        Phasor  node  voltage              Phasor  branch  current               Power flow       Power loss
+C             Bus M         Rectangular            Polar          Rectangular            Polar            P  and  Q        P  and  Q
+C
+C BUSA2                1784.3750743312  1928.5009532126       -194.050261711  376.33642682066      -291068.3111111  7.0814553076206
+C                      -731.5200070041      -22.2916012      322.44937910011      121.0395584      -216709.4929969   266964.5756532
+C
+C            BUSAS2              3000.            3000.      194.05026171096  376.33642682066      291075.39256644
+C                                  0.0              0.0      -322.4493791001      -58.9604416      483674.06865017
+C
+C     Total network loss  P-loss  by summing injections =   8.732396776993E+05
+C              Node                Source  node  voltage             Injected  source  current              Injected  source  power
+C              name         Rectangular            Polar          Rectangular            Polar            P  and  Q    MVA and P.F.
+C
+C              BUSAS2            3000.            3000.      194.05326171096  376.33797371872      291079.89256644  564506.96057808
+C                                  0.0              0.0      -322.4493791001      -58.9600503      483674.06865017        0.5156356
+C
+C Column headings for the  17   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   12     output variables belong to IM  (with "IM"  an internally-added upper name of pair).
+C Step   Time       BUSAS2      BUSA2       BUSA2       BUSB2       BUSC2       IM-1        IM-1        IM-1        IM-1
+C                                           BUSAS2      BUSBS2      BUSCS2      P           Q           ISA         ISB
+C
+C                   IM-1        IM-1        IM-1        IM-1        IM-1        IM-1        IM-1        IM-1
+C                   ISC         IRA         IRB         IRC         WR          ANG         TQ          TM
+C    0    0.0        3000.  1784.37507  -194.05026  376.274485  -182.22422  -873204.93  -650128.48  -194.05026  376.274485
+C               -182.22422  -147.12317  -161.36673    308.4899  184.725648  1.57079633  -4168.1528  -3965.0683
+C    1  .2E-3    2991.4767  1835.51059  -217.76576  374.681612  -156.91585  -873758.65  -650481.06  -217.76576  374.681612
+C               -156.91585  -146.71413  -161.74471  308.458843  184.725648  1.64468659  -4167.9016  -3965.0683
+C    2  .4E-3   2965.95523  1874.03852  -240.24413  370.961295  -130.71716  -873055.73  -650212.21  -240.24413  370.961295
+C               -130.71716  -146.30323  -162.12329  308.426525  184.725647  1.71857685  -4167.6433  -3965.0683
+  BUSAS2BUSA2
+BLANK card ending output requests (node voltages only, here)
+C 4500    0.9        3000.  2139.14561   -18.05955  206.541811  -188.48226   -81144.03  -729966.82   -18.05955  206.541811
+C               -188.48226   9.2806015  -16.003198  6.72259646  188.318532  340.252637  -259.39252  -65.075052
+C Variable maxima :   3000.   2142.5602  375.961666  376.274485  375.920036  38275.6628  -648850.48  375.961666  376.274485
+C               375.920036  12.3551834  24.9125877    308.4899  189.143066  340.252637   387.73688  -65.075052
+C Times of maxima :     0.0       .5834        .011         0.0       .0222       .3106       .0082        .011         0.0
+C                     .0222        .564       .3076         0.0         .22         0.9       .3086         .02
+C Variable minima :  -3000.  -2142.6793  -376.12582  -375.68519  -376.20297  -873758.65  -769663.96  -376.12582  -375.68519
+C                -376.20297  -147.12317  -228.11722  -6.2184031    184.7252  1.57079633  -4168.4668  -3965.0683
+C Times of minima :    .025       .5584       .0194       .0082       .0138       .2E-3       .1896       .0194       .0082
+C                     .0138         0.0       .0546       .3312       .0198         0.0       .0138         0.0
+  PRINTER PLOT
+ 193 .1 0.0 1.0         IM-1  TQ                 { Axis limits: (-4.168, 0.388)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     6th of 9 subcases of  BENCHMARK DCNEW-12  is added  4 May 2006.
+C  5th of  8 data subcases that illustrate Type-56 TEPCO IM (induction machine).
+C  For background of the model,  see top of 1st subcase.  This fifth case is a
+C  simplification of  WSMATPIG.DAT  which has just a single  IM.  Like the first
+C  three, this second subcase involves no transient.  The phasor solution merely
+C  is continued for one cycle to confirm the sinusoidal steady state.  Of the
+C  original 19 permanently-closed switches,  only 10 could be eliminated without
+C  tampering with TACS control system logic.  The 9 switches that remain are
+C  used to pass 6 currents and 3 voltages to TACS.  As for outputs,  these have
+C  been reduced drastically by elimination of the request for every node voltage
+C  (a 1-punch in column 2).  This reduces the voltage outputs from 31 to 0.  New
+C  is illustration of the declaration to size IM tables within the working space
+C  of List 25.  This is immediately below.  The Type-56 TEPCO IM and Prof. Hian
+C  Lauw's Type-19 U.M. share the same working space,  so what is not used by one
+C  model is available for the other.  There should be protection against any
+C  attempt to use more space than exists.
+C                                  LIM56   LIMTM  { 32X, 2I8 data
+ABSOLUTE I.M. DIMENSIONS               3      12  { 2 and 10 are the defaults 
+POWER FREQUENCY, 50
+PRINTED NUMBER WIDTH, 11, 1,    { This is the default choice;  return to its use
+C 0.00025     1.0     0.0     0.0  { Original TEPCO simulation was to 1.0 second
+ 0.00025    .020     0.0     0.0
+       1       1       1       1       1      -1
+       5       5      20      20 
+TACS HYBRID
+C OUTPUT
+33VIG   PPIG  QQIG
+C
+C /// G1 BRANCH VOLTAGE MONITOR ///
+  VAB     +N400A  -N400B                             1.0
+90N400A                                                      -1.0
+90N400B                                                      -1.0
+90N400C                                                      -1.0
+91IG1A                                                       -1.0
+91IG1B                                                       -1.0
+91IG1C                                                       -1.0
+C ///  VOLTAGE FEED BACK ///
+99VIG     = SQRT(N400A*N400A+N400B*N400B+N400C*N400C)/6600.0
+C ///  POWER MONITOR(I.G.) ///
+99QIG1    = IG1A*(N400B-N400C)
+99QIG2    = IG1B*(N400C-N400A)
+99QIG3    = IG1C*(N400A-N400B)
+99QIGEN   = (QIG1+QIG2+QIG3)/SQRT(3.0)
+99PIGEN   = N400A*IG1A+N400B*IG1B+N400C*IG1C
+99PPIG    = PIGEN/1000000.
+99QQIG    = QIGEN/1000000.
+C
+C ***************  CONTROLL MODEL BLOCK **************
+C
+90N300A                                                      -1.0
+90N300B                                                      -1.0
+90N300C                                                      -1.0
+91N250A                                                      -1.0
+91N250B                                                      -1.0
+91N250C                                                      -1.0
+C /// POWER MONITOR ACCB(BETWEEN N250 AND N300) ///
+99QCB1    = N250A*(N300B-N300C)
+99QCB2    = N250B*(N300C-N300A)
+99QCB3    = N250C*(N300A-N300B)
+99QACCB   = ((QCB1+QCB2+QCB3)/SQRT(3.0))/1000.
+99PACCB   = (N300A*N250A+N300B*N250B+N300C*N250C)/1000.
+C 33PACCB
+C 33QACCB
+C /// L300 P & Q ///
+91N400AD                                                     -1.0
+91N400BD                                                     -1.0
+91N400CD                                                     -1.0
+99QCB5    = N400AD*(N400B-N400C)
+99QCB6    = N400BD*(N400C-N400A)
+99QCB7    = N400CD*(N400A-N400B)
+99QACCB1  = ((QCB5+QCB6+QCB7)/SQRT(3.0))/1000000.
+99PACCB1  = (N400A*N400AD+N400B*N400BD+N400C*N400CD)/1000000.
+C 33PACCB1
+C 33QACCB1
+C
+C /// TACS OUTPUT VARIABLES ///
+C 33PPIG  QQIG  VIG
+C /// TACS INITIAL CONDITIONS ///
+77VIG         1.00478
+77PPIG       .5000
+77QQIG       -.232
+77PIGEN      500000.
+77QIGEN      -232000.
+77PACCB      0.0
+77QACCB      6.25
+$DISABLE
+C ---FOR.IG.No1(1/4)---
+C  ====== TIME OF MOTOR TO GEN MODE =====
+77MSLIP     -0.785129
+11MOTGEN     0.0                                             -1.0
+90BUSMG                                                      -1.0
+99MSLIP   = (1.0-BUSMG/(2.*PI*50.))*100.
+33MSLIP
+99BUSMS   =(TIMEX.GE.MOTGEN)*1592
+$ENABLE
+BLANK card ending TACS data
+C /// NETWORK DATA ///
+$VINTAGE, 1
+C Bus1->Bus2->Bus3->Bus4-><---------R(ohm)<----------L(mH)<---------C(mmF)
+C *** XS *** ( j0.012(pu) : 0.1663869437mH )
+  N100A N200A                             .1663869437                          
+  N100B N200B N100A N200A 
+  N100C N200C N100A N200A          
+C *** XT *** ( j0.075(pu) : 1.039918398mH )
+  N200A N250A                             1.039918398
+  N200B N250B N200A N250A   
+  N200C N250C N200A N250A
+C *** ZL *** ( 0.2+j0.312(pu) : 0.8712ohm,4.326060536mH )
+  N300A N400A             0.871200000     4.326060536
+  N300B N400B N300A N400A
+  N300C N400C N300A N400A
+C ***OUTSIDE LOAD*** ACCB POWER FLOW P=250W 
+  N300A                   174.2211826
+  N300B       N300A 
+  N300C       N300A 
+C ***INSIDE LOAD*** 
+  N400A N400AD            176.7332792                   
+  N400B N400BDN400A N400AD                   
+  N400C N400CDN400A N400AD              
+  N400ADN400A                                             16.56943663
+  N400BDN400B N400ADN400A       
+  N400CDN400C N400ADN400A
+$VINTAGE, 0
+C
+$DISABLE
+C ---FOR.IG.No1(2/4)---
+C  --------- MECHANICAL NETWORK COMPONENTS
+C Tm=1.12  :M :2H ==> 7.09E+6 pole:1
+C --+----1----+----2----+----3----+----4----+----5----+----6----+----7----+----8
+  BUSMG                               7.09E6                                   
+C  -------- FOR MEASUREMENT OF ELECTROMECHANICAL TORQUE
+  BUSMS BUSMG             1.0E-8                                               
+$ENABLE
+BLANK card ending branch cards
+C --*----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+C /// SWITCH DATA ///
+  N250A N300A       -1.0   8.10
+  N250B N300B       -1.0   8.10
+  N250C N300C       -1.0   8.10
+  IG1A  N400A                                         MEASURING                1
+  IG1B  N400B                                         MEASURING                1
+  IG1C  N400C                                         MEASURING                1
+  N400AD                                              MEASURING
+  N400BD                                              MEASURING
+  N400CD                                              MEASURING
+BLANK card ending switch cards
+C /// SOURCE DATA ///
+C <BUS----<VOLT-----<FREQ-----<ANGLE----(1.0pu:5388.87743v)
+14N100A   5388.87743   50.0      0.0                         -1.0
+14N100B   5388.87743   50.0   -120.0                         -1.0
+14N100C   5388.87743   50.0   -240.0                         -1.0
+C CLASS1
+C |BUS |  |  SLIP  ||  TM0   |
+C | A6 |  |  E10.6 ||  E10.6 |
+56IG1A     -0.785129 0.0       
+56IG1B
+56IG1C
+C CLASS2
+C TY  <NP><  RMVA  ><  RSKV  ><  FREQ  >
+ 0       1  0.625    6.6      50.0
+C   Rs   ||   Lsl  ||   Rr   ||   Lrl  ||  Msru  ||  Msrs  ||  Flxs  |
+C  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 |
+0.0113     0.0903    0.0093    0.114     4.3                                    
+C CLASS3
+C         |    M   ||    D   ||  EMSOM | |NM|P|E|M|
+C         |  E10.6 ||  E10.6 ||  E10.6 | |I4|I2I2I2
+           1.12        0.0                    1 1 1
+C CLASS4
+C   T    ||   TM   |    |TBUS|
+C  E10.6 ||  E10.6 |    | A6 |
+C 0.02    .000264555
+            9999  { Special terminator for any Class-4 data of Type-56 IM
+C CLASS5
+C | BUS|N|
+C | A4 |I2
+C 73PGEN   1
+  FINISH     { Key word that ends data for this particular (the one and only) IM
+BLANK CARD ending source cards
+C     Total network loss  P-loss  by summing injections =   7.668433002012E+01
+C Output for steady-state phasor switch currents.
+C   Node-K   Node-M         I-real           I-imag            I-magn       Degrees        Power            Reactive
+C   N250A    N300A      9.48674141E-03  -7.08165989E-01    7.08229529E-01  -89.2325    2.55614433E+01    1.90801481E+03
+C   N250B    N300B     -6.18033107E-01   3.45867235E-01    7.08229529E-01  150.7675    2.55614433E+01    1.90801481E+03
+C   N250C    N300C      6.08546366E-01   3.62298754E-01    7.08229529E-01   30.7675    2.55614433E+01    1.90801481E+03
+C   IG1A     N400A      6.13353129E+01   2.91346959E+01    6.79032482E+01   25.4080    1.66673707E+05   -7.75685834E+04
+C   IG1B     N400B     -5.43626967E+00  -6.76852871E+01    6.79032482E+01  -94.5920    1.66673707E+05   -7.75685834E+04
+C   IG1C     N400C     -5.58990432E+01   3.85505912E+01    6.79032482E+01  145.4080    1.66673707E+05   -7.75685834E+04
+C   N400AD              3.04150988E+01   2.84265505E+01    4.16310823E+01   43.0644    0.00000000E+00    0.00000000E+00
+C   N400BD              9.41056550E+00  -4.05535235E+01    4.16310823E+01  -76.9356    0.00000000E+00    0.00000000E+00
+C   N400CD             -3.98256643E+01   1.21269730E+01    4.16310823E+01  163.0644    0.00000000E+00    0.00000000E+00
+C Column headings for the  18   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   12     output variables belong to IM  (with "IM"  an internally-added upper name of pair).
+C  Next   3     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C Step   Time      IG1A       IG1B       IG1C       IM-1       IM-1       IM-1       IM-1       IM-1       IM-1       IM-1
+C                  N400A      N400B      N400C      P          Q          ISA        ISB        ISC        IRA        IRB
+C
+C                  IM-1       IM-1       IM-1       IM-1       IM-1       TACS       TACS       TACS
+C                  IRC        WR         ANG        TQ         TM         VIG        PPIG       QQIG
+C    0    0.0  61.3353129 -5.4362697 -55.899043 500021.122 -232705.75 61.3353129 -5.4362697 -55.899043 -11.518226 60.1820406
+C              -48.663815 316.625821 1.57079633 1608.95506 1608.95506     1.0047        0.5      -.232
+C    1 .25E-3  58.8756985 -.11556078 -58.760138 500146.874 -232725.18 58.8756985 -.11556078 -58.760138  -11.47952 60.1818161
+C              -48.702296 316.625814 1.64995278 1609.32678 1608.95506   1.004818 .500146874 -.23272518
+C    2  .5E-3  56.0520126 5.20791534 -61.259928 500280.855 -232736.13 56.0520126 5.20791534 -61.259928 -11.440292 60.1804828
+C              -48.740191 316.625795 1.72910923 1609.67255 1608.95506 1.00485787 .500280855 -.23273613
+BLANK CARD ending names for output (none here)
+C   80    .02  61.3263774 -5.4750126 -55.851365 499968.129 -232316.99 61.3263774 -5.4750126 -55.851365 -8.3606667  59.018657
+C               -50.65799 316.626716 7.90328979 1608.32331 1608.95506 1.00485137 .499968129 -.23231699
+C Variable max:67.8022815 67.9777456 67.7244575 501371.216 -230406.62 67.8022815 67.9777456 67.7244575 -8.3606667 60.1820406
+C              -48.663815 316.626716 7.90328979 1612.25579 1608.95506 1.00491917 .501371216 -.23040662
+C Times of max:     .0185     .00525       .012       .005        .01      .0185     .00525       .012        .02        0.0
+C                     0.0        .02        .02      .0045        0.0      .1E-2       .005        .01
+C Variable min:-67.822135  -67.74161 -67.961789   499154.6 -232736.13 -67.822135  -67.74161 -67.961789 -11.518226  59.018657
+C               -50.65799 316.623113 1.57079633 1605.43816 1608.95506     1.0047   .4991546 -.23273613
+C Times of min:     .0085     .01525       .002       .015      .5E-3      .0085     .01525       .002        0.0        .02
+C                     .02       .009        0.0      .0145        0.0        0.0       .015      .5E-3
+  PRINTER PLOT  { No need for vector plotting as all variables are smooth
+ 194 2. 0.  20.         BRANCH                   { Plot limits: (-6.796,  6.798)
+                        IM-1  ISA   IM-1  ISB   IM-1  ISC
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     7th of 9 subcases of  BENCHMARK DCNEW-12  is added  4 May 2006.
+C  6th of  8 data subcases that illustrate Type-56 TEPCO IM (induction machine).
+C  For background of the model,  see top of 1st subcase.  This sixth subcase
+C  is a simplification of  WSM12TAC.DAT  which is like  DCN12  (in long form,
+C  DCNEW-12)  except that the U.M. of that old standard test case has been
+C  replaced by a Type-56 IM.  The solution here seems to be the same as the 4th
+C  subcase except that TACS is involved, and is used to initiate the transient
+C  rather than such special capability within the Type-56 IM model itself.
+PRINTED NUMBER WIDTH, 12, 2,    { 1 fewer digit than DCN12 so 2 rows are enough
+C ABSOLUTE U.M. DIMENSIONS, 20, 2, 50, 60
+0.0002     0.900
+       1       3       1       1       1      -1               
+       5       5      20      20     100     100     500     500
+TACS HYBRID
+33TM   { The only TACS output variable will be this torque TM, which is a step
+88FLG1    = TIMEX .GE. 0.02
+88TM      = 1.0-FLG1*0.98358791
+77TM        1.0
+BLANK
+C  -------- TRANSMISSION LINES
+  BUSA2 BUSAS2            1.0E-4 10.0                                          1
+  BUSB2 BUSBS2BUSA2 BUSAS2                                                     1
+  BUSC2 BUSCS2BUSA2 BUSAS2                                                     1
+C  --------- CONNECTIVITY OF EMTP FOR ELECTRIC NETWORK
+  BUSAS2                  1.0E+6
+  BUSBS2      BUSAS2
+  BUSCS2      BUSAS2
+BLANK card ending all branch cards
+BLANK card ending all (here, nonexistent) switch cards
+C  --------- SOURCES FOR INFINITE BUS
+14BUSAS2  3000.0     60.0     0.0                           -1.0
+14BUSBS2  3000.0     60.0     -120.0                        -1.0
+14BUSCS2  3000.0     60.0     +120.0                        -1.0
+C |BUS |  |  SLIP  ||  TM0   |
+C | A6 |  |  E10.6 ||  E10.6 |
+56BUSA2    2.0
+56BUSB2
+56BUSC2
+C CLASS2
+C TY  <NP><  RMVA  ><  RSKV  ><  FREQ  >
+ 0       2  0.72     4.2       60.0
+C   Rs   ||   Lsl  ||   Rr   ||   Lrl  ||  Msru  ||  Msrs  ||  Flxs  |
+C  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 |
+0.0168163 0.0184649 0.0044898 0.0184649 0.3628347      
+C CLASS3
+C         |    M   ||    D   ||  EMSOM | |NM|P|E|M|
+C         |  E10.6 ||  E10.6 ||  E10.6 | |I4|I2I2I2
+          4.8361824 0.05425244                1 1 1
+C CLASS4
+C   T    ||   TM   |    |TBUS|
+C  E10.6 ||  E10.6 |    | A6 |
+   0.02    -0.0702041   TM
+            9999
+C CLASS5
+C | BUS|N|
+C | A4 |I2
+  FINISH     { Key word that ends data for this particular (the one and only) IM
+BLANK card ending all source cards
+C     Total network loss  P-loss  by summing injections =   8.732396776993E+05
+C   Node            Source  node  voltage             Injected  source  current              Injected  source  power
+C   name     Rectangular            Polar          Rectangular            Polar            P  and  Q    MVA and P.F.
+C   BUSAS2        3000.            3000.      194.05326171096  376.33797371872      291079.89256644  564506.96057808
+C                   0.0              0.0      -322.4493791001      -58.9600503      483674.06865017        0.5156356
+  BUSAS2BUSA2             { Names of nodes for voltage output
+C Column headings for the  18   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   12     output variables belong to IM  (with "IM"  an internally-added upper name of pair).
+C  Next   1     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C Step   Time       BUSAS2      BUSA2       BUSA2       BUSB2       BUSC2       IM-1        IM-1        IM-1        IM-1
+C                                           BUSAS2      BUSBS2      BUSCS2      P           Q           ISA         ISB
+C
+C                   IM-1        IM-1        IM-1        IM-1        IM-1        IM-1        IM-1        IM-1        TACS
+C                   ISC         IRA         IRB         IRC         WR          ANG         TQ          TM          TM
+C    0    0.0        3000.  1784.37507  -194.05026  376.274485  -182.22422  -873204.93  -650128.48  -194.05026  376.274485
+C               -182.22422  -147.12317  -161.36673    308.4899  184.725648  1.57079633  -4168.1528  -3965.0683         1.0
+C    1  .2E-3    2991.4767  1835.51059  -217.76576  374.681612  -156.91585  -873758.65  -650481.06  -217.76576  374.681612
+C               -156.91585  -146.71413  -161.74471  308.458843  184.725648  1.64468659  -4167.9016  -3965.0683         1.0
+C    2  .4E-3   2965.95523  1874.03852  -240.24413  370.961295  -130.71716  -873055.73  -650212.21  -240.24413  370.961295
+C               -130.71716  -146.30323  -162.12329  308.426525  184.725647  1.71857685  -4167.6433  -3965.0683         1.0
+BLANK card ending output requests (node voltages only, here)
+C 4500    0.9        3000.  2139.14389  -18.055352   206.54004  -188.48469  -81125.234  -729968.29  -18.055352   206.54004
+C               -188.48469  9.31443983  -15.992732  6.67829219  188.318584   340.24976   -259.2923  -65.075057   .01641209
+C Variable maxima :  3000.  2142.56391  375.961666  376.274485  375.939009   38282.079  -648850.48  375.961666  376.274485
+C               375.939009  12.4231891   24.885902    308.4899  189.143064   340.24976  387.735739  -65.075057         1.0
+C Times of maxima :    0.0       .5834        .011         0.0       .0222       .3106       .0082        .011         0.0
+C                    .0222       .5642        .308         0.0       .2204         0.9        .309       .0204         0.0
+C Variable minima : -3000.  -2142.6794  -376.12582  -375.69165  -376.20297  -873758.65  -769666.51  -376.12582  -375.69165
+C               -376.20297  -147.12317  -228.64774  -6.1496539  184.725187  1.57079633  -4168.4668  -3965.0683   .01641209
+C Times of minima :   .025       .5584       .0194        .025       .0138       .2E-3       .1896       .0194        .025
+C                    .0138         0.0       .0548       .3318       .0202         0.0       .0138         0.0       .0202
+  PRINTER PLOT
+ 193 .1 0.0 1.0         IM-1  TQ    IM-1  TM      { Axis limits: (-4.168, 0.388)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     8th of 9 subcases of  BENCHMARK DCNEW-12  is added  4 May 2006.
+C  7th of  8 data subcases that illustrate Type-56 TEPCO IM (induction machine).
+C  For background of the model,  see top of 1st subcase.  This seventh case is a
+C  simplification of  ATPSGIUM.DAT  which has no Type-56 IM.  Instead, it uses
+C  the U.M. to model an induction machine.  It establishes the standard of
+C  comparison for the following subset which replaces the U.M. by a Type-56 IM.
+C  Like the first three subcases,  this seventh one involves no transient.  The
+C  phasor solution merely is continued for one cycle to confirm the sinusoidal
+C  steady state.  Of the original 33 permanently-closed switches,  only 12 could
+C  be eliminated without tampering with TACS control system logic, leaving 21.
+C  There is a lot of TACS modeling,  and this required more storage than the
+C  usual 3 * default of List 19.  So,  NEW LIST SIZES  has been added to expand
+C  the space for TACS while at the same time reducing a lot of other sizes.
+C  Different from previous illustrations, Type-58 S.M. modeling is used.
+NEW LIST SIZES
+      70      60      50      20     250      50     300       0       0       0
+       0      20       0       0       0       0       0       0   12500       0
+       0       0       0
+  240000  
+ABSOLUTE TACS DIMENSIONS 
+C     40     170     200      50     120    2500     350     180 
+C        Expand various TACS Tables on 1 April 2007.  Force acceptance
+C        without worrying about probable waste that might be involved:
+C     57     256     285      36      85     713     998     171  ---  default
+C Tacs table number   1     2     3     4         5         6         7         8
+C Present figure    145    64    32    50        91      2229       212       165
+C Program limit     230    65    80    50       170      8000       420       300
+     230      65      80      50     170    8000     420     300 
+PRINTED NUMBER WIDTH, 12, 2,    { 1 fewer digit than DCN12 so 2 rows are enough
+POWER FREQUENCY, 50              
+C 0.00025     10.     0.0     0.0 { Note TEPCO Tmax was 10 seconds
+ 0.00025    .020     0.0     0.0   { 1 cycle is enough to verify steady state
+       1       1       1       1       1      -1
+       5       5      20      20     100     100     500     500
+TACS HYBRID
+C OUTPUT
+33VT4   PPG4  QQG4
+33VT5   PPG5  QQG5
+C
+C /// G1 S.G. GOVERNOR MODEL G400///
+00WGREF4  +PLUS1                                     1.0
+99GOVNR4  = -WGREF4+WGFBK4
+C
+99GOV014  = GOVNR4*(1/0.04/0.1)
+99GOV3R4  = GOV034*(1.0/0.1)
+00GOV024  +GOV014 -GOV3R4                            1.0
+01GOV034  +GOV024                                    1.0
+       1.0
+               1.0
+99GOV044  = PLUS1-GOV034
+99GOV054  = GOV044*(1.0/0.6)
+99TQTR4   = TQT4*(1.0/0.6)
+00GOV064  +GOV054 -TQTR4                             1.0
+01TQT4    +GOV064                                    1.0 -0.02  1.1
+       1.0
+               1.0
+C /// G1 S.G. GOVERNOR MODEL G500///
+00WGREF5  +PLUS1                                     1.0
+99GOVNR5  = -WGREF5+WGFBK5
+C
+99GOV015  = GOVNR5*(1/0.04/0.1)
+99GOV3R5  = GOV035*(1.0/0.1)
+00GOV025  +GOV015 -GOV3R5                            1.0
+01GOV035  +GOV025                                    1.0
+       1.0
+               1.0
+99GOV045  = PLUS1-GOV035
+99GOV055  = GOV045*(1.0/0.6)
+99TQTR5   = TQT5*(1.0/0.6)
+00GOV065  +GOV055 -TQTR5                             1.0
+01TQT5    +GOV065                                    1.0 -0.02  1.1
+       1.0
+               1.0
+C
+C /// G1 S.G. AVR MODEL G400///
+C
+77DROOP4   0.0
+77DROP14   0.0
+77DROP24   0.0
+99DROP24  = DROP14*0.04
+99PUFB14  = (PUFBK4+DROP24)*(1.0/0.035)
+99VGFBR4  = VGFBK4*(1.0/0.035)
+00PUFB24  +PUFB14 -VGFBR4                            1.0
+99LLIM24  = (TIMEX.LT.0.001)*VGREF4+(TIMEX.GE.0.001)*(-9999.)
+99ULIM24  = (TIMEX.LT.0.001)*VGREF4+(TIMEX.GE.0.001)*9999.
+01VGFBK4  +PUFB24                                    1.0            LLIM24ULIM24
+       1.0
+                 1.0
+C
+99AVR014  = VGREF4-VGFBK4
+99LLIM14  = (TIMEX.LT.0.001)*0.0+(TIMEX.GE.0.001)*(-10.0)
+99ULIM14  = (TIMEX.LT.0.001)*0.0+(TIMEX.GE.0.001)*(10.0)
+01AVR024  +AVR014                                    1.0            LLIM14ULIM14
+      10.0
+                1.56
+99AVR034  = AVR014*(10.0*1.56/1.56)
+C
+99AVR044  = AVR024+AVR034+GAIN4
+99AVR054  = AVR044*(1.0/0.2)
+99AVR7R4  = AVR074*(1.0/0.2)
+99AVR064  = AVR054-AVR7R4
+99LLIM34  = (TIMEX.LT.0.001)*GAIN4+(TIMEX.GE.0.001)*(-9999.)
+99ULIM34  = (TIMEX.LT.0.001)*GAIN4+(TIMEX.GE.0.001)*9999.
+01AVR074  +AVR064                                    1.0            LLIM34ULIM34
+       1.0
+                 1.0
+99EF4     = AVR074/GAIN4
+C
+C /// G1 S.G. AVR MODEL G500///
+C
+77DROOP5   0.0
+77DROP15   0.0
+77DROP25   0.0
+99DROP25  = DROP15*0.04
+99PUFB15  = (PUFBK5+DROP25)*(1.0/0.035)
+99VGFBR5  = VGFBK5*(1.0/0.035)
+00PUFB25  +PUFB15 -VGFBR5                            1.0
+99LLIM25  = (TIMEX.LT.0.001)*VGREF5+(TIMEX.GE.0.001)*(-9999.)
+99ULIM25  = (TIMEX.LT.0.001)*VGREF5+(TIMEX.GE.0.001)*9999.
+01VGFBK5  +PUFB25                                    1.0            LLIM25ULIM25
+       1.0
+                 1.0
+C
+99AVR015  = VGREF5-VGFBK5
+99LLIM15  = (TIMEX.LT.0.001)*0.0+(TIMEX.GE.0.001)*(-10.0)
+99ULIM15  = (TIMEX.LT.0.001)*0.0+(TIMEX.GE.0.001)*(10.0)
+01AVR025  +AVR015                                    1.0            LLIM15ULIM15
+      10.0
+                1.56
+99AVR035  = AVR015*(10.0*1.56/1.56)
+C
+99AVR045  = AVR025+AVR035+GAIN5
+99AVR055  = AVR045*(1.0/0.2)
+99AVR7R5  = AVR075*(1.0/0.2)
+99AVR065  = AVR055-AVR7R5
+99LLIM35  = (TIMEX.LT.0.001)*GAIN5+(TIMEX.GE.0.001)*(-9999.)
+99ULIM35  = (TIMEX.LT.0.001)*GAIN5+(TIMEX.GE.0.001)*9999.
+01AVR075  +AVR065                                    1.0            LLIM35ULIM35
+       1.0
+                 1.0
+99EF5     = AVR075/GAIN5
+C
+C /// SG BRANCH VOLTAGE MONITOR ///
+  VAB4    +N400A  -N400B                             1.0
+  VAB5    +N500A  -N500B                             1.0
+90N400A                                                      -1.0
+90N400B                                                      -1.0
+90N400C                                                      -1.0
+91GSG4A                                                      -1.0
+91GSG4B                                                      -1.0
+91GSG4C                                                      -1.0
+91IM4A                                                       -1.0
+91IM4B                                                       -1.0
+91IM4C                                                       -1.0
+90N500A                                                      -1.0
+90N500B                                                      -1.0
+90N500C                                                      -1.0
+91GSG5A                                                      -1.0
+91GSG5B                                                      -1.0
+91GSG5C                                                      -1.0
+92SGOMG4                                                     -1.0
+92SGOMG5                                                     -1.0
+C ///  VOLTAGE FEED BACK G400///
+99PUFBK4  = SQRT(N400A*N400A + N400B*N400B + N400C*N400C)/6600.0
+00VT4     +PUFBK4                                    1.0
+C ///  POWER MONITOR(S.G.) ///
+99QSG4A   = GSG4A*(N400B-N400C)
+99QSG4B   = GSG4B*(N400C-N400A)
+99QSG4C   = GSG4C*(N400A-N400B)
+99QSGEN4  = (QSG4A+QSG4B+QSG4C)/SQRT(3.0)
+99PSGEN4  = N400A*GSG4A+N400B*GSG4B+N400C*GSG4C
+99PPG4    = PSGEN4/1000000.
+99QQG4    = QSGEN4/1000000.
+C ///  VOLTAGE FEED BACK G500///  
+99PUFBK5  = SQRT(N500A*N500A + N500B*N500B + N500C*N500C)/6600.0
+00VT5     +PUFBK5                                    1.0
+C ///  POWER MONITOR(S.G.) ///
+99QSG5A   = GSG5A*(N500B-N500C)
+99QSG5B   = GSG5B*(N500C-N500A)
+99QSG5C   = GSG5C*(N500A-N500B)
+99QSGEN5  = (QSG5A+QSG5B+QSG5C)/SQRT(3.0)
+99PSGEN5  = N500A*GSG5A+N500B*GSG5B+N500C*GSG5C
+99PPG5    = PSGEN5/1000000.
+99QQG5    = QSGEN5/1000000.
+C
+99QIM1    = IM4A*(N400B-N400C)
+99QIM2    = IM4B*(N400C-N400A)
+99QIM3    = IM4C*(N400A-N400B)
+99QIM     = (QIM1+QIM2+QIM3)/SQRT(3.0)
+99PIM     = N400A*IM4A+N400B*IM4B+N400C*IM4C
+99PPIM    = PIM
+99QQIM    = QIM
+33PPG4  PPG5  QQG4  QQG5  PPIM  QQIM
+C ***************  CONTROLL MODEL BLOCK **************
+C ///  G400  ///
+99DROOP4  = (QSGEN4-QSGI4)/625000./VT4
+00DROP14  +DROOP4
+99WGFBK4  = SGOMG4/314.159265
+99RPMSG4  = 30.0*SGOMG4/PI
+C ///  G500  ///
+99DROOP5  = (QSGEN5-QSGI5)/625000./VT5
+00DROP15  +DROOP5
+99WGFBK5  = SGOMG5/314.159265
+99RPMSG5  = 30.0*SGOMG5/PI
+C
+90N300A                                                      -1.0
+90N300B                                                      -1.0
+90N300C                                                      -1.0
+91N250A                                                      -1.0
+91N250B                                                      -1.0
+91N250C                                                      -1.0
+C /// POWER MONITOR ACCB(BETWEEN N250 AND N300) ///
+99QCB1    = N250A*(N300B-N300C)
+99QCB2    = N250B*(N300C-N300A)
+99QCB3    = N250C*(N300A-N300B)
+99QACCB   = ((QCB1+QCB2+QCB3)/SQRT(3.0))/1000.
+99PACCB   = (N300A*N250A+N300B*N250B+N300C*N250C)/1000.
+C 33PACCB
+C 33QACCB
+C /// L300 P & Q ///
+91N300AD                                                     -1.0
+91N300BD                                                     -1.0
+91N300CD                                                     -1.0
+99PACCB3  = (N300A*N300AD+N300B*N300BD+N300C*N300CD)/1000.
+C 33PACCB3
+C /// L400 P & Q ///
+91N400AD                                                     -1.0
+91N400BD                                                     -1.0
+91N400CD                                                     -1.0
+99QCB4    = N400AD*(N400B-N400C)
+99QCB5    = N400BD*(N400C-N400A)
+99QCB6    = N400CD*(N400A-N400B)
+99QACCB4  = ((QCB4+QCB5+QCB6)/SQRT(3.0))/1000.
+99PACCB4  = (N400A*N400AD+N400B*N400BD+N400C*N400CD)/1000.
+C 33PACCB4
+C 33QACCB4
+C /// L500 P & Q ///
+91N500AD                                                     -1.0
+91N500BD                                                     -1.0
+91N500CD                                                     -1.0
+99QCB7    = N500AD*(N500B-N500C)
+99QCB8    = N500BD*(N500C-N500A)
+99QCB9    = N500CD*(N500A-N500B)
+99QACCB5  = ((QCB7+QCB8+QCB9)/SQRT(3.0))/1000000.
+99PACCB5  = (N500A*N500AD+N500B*N500BD+N500C*N500CD)/1000000.
+C 33PACCB5
+C 33QACCB5
+C
+C 33EF4   EF5
+C /// TACS GOV,AVR REF ///
+11VGREF4  1.00758                                            -1.0
+11VGREF5  1.01249                                            -1.0
+C IF/AGLINE
+11GAIN4   2.661027                                           -1.0
+11GAIN5   2.655261                                           -1.0
+11QSGI4   242000.0                                           -1.0
+11QSGI5   242000.0                                           -1.0
+C /// TACS INITIAL CONDITIONS ///
+77PPIM       -300000.
+77QQIM       -167000.
+77PPG4       .500000
+77QQG4       .242000
+77VGREF4     1.00758
+77VGFBK4     1.00758
+77PUFBK4     1.00758
+77VT4        1.00758
+77VGREF5     1.01249
+77PUFBK5     1.01249
+77VGFBK5     1.01249
+77VT5        1.01249
+77PPG5       .500000
+77QQG5       .242000
+C Vini/0.035
+77VGFBR4    28.78800
+77PUFB14    28.78800
+C GAIN4/0.2:2.661027
+77AVR7R4  13.3051350
+77AVR054  13.3051350
+C GAIN4:
+77AVR044    2.661027
+77AVR074    2.661027
+C G500
+C Vini/0.035
+77VGFBR5  28.9282857
+77PUFB15  28.9282857
+C GAIN5/0.2:2.655261
+77AVR055  13.2763050
+77AVR7R5  13.2763050
+C GAIN5
+77AVR045    2.655261
+77AVR075    2.655261
+C
+77PUFB24         0.0
+77AVR065         0.0
+77RPMSG4      3000.0
+77WGREF4         1.0
+77WGFBK4         1.0
+77SGOMG4  314.159265
+77TQT4           1.0
+77GOVNR4         0.0
+77GOV014         0.0
+77GOV024         0.0
+77GOV034         0.0
+77GOV3R4         0.0
+77GOV044         1.0
+77GOV054  1.66666667
+77GOV064         0.0
+77TQTR4   1.66666667
+77AVR014         0.0
+77AVR024         0.0
+77AVR034         0.0
+77AVR064         0.0
+77EF4            1.0
+77WGREF5         1.0
+77WGFBK5         1.0
+77SGOMG5  314.159265
+77TQT5           1.0
+77PUFB25         0.0
+77RPMSG5      3000.0
+77GOVNR5         0.0
+77GOV015         0.0
+77GOV025         0.0
+77GOV035         0.0
+77GOV3R5         0.0
+77GOV045         1.0
+77GOV055  1.66666667
+77GOV065         0.0
+77TQTR5   1.66666667
+77AVR015         0.0
+77AVR025         0.0
+77AVR035         0.0
+77EF5            1.0
+C
+C ---FOR.IM.No1(1/4)---
+C  ====== TIME OF MOTOR TO GEN MODE =====
+77MSLIPM     2.719739
+90BUSMGM                                                     -1.0
+99MSLIPM  = (1.0-BUSMGM/(2.*PI*50.))*100.
+C 300kW/2*PI*F
+99BUSMSM  =954.9
+C --*----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+BLANK CARD
+C /// NETWORK DATA ///
+$VINTAGE, 1
+C Bus1->Bus2->Bus3->Bus4-><---------R(ohm)<----------L(mH)<---------C(mmF)
+C *** XS *** ( j0.012(pu) : 0.1663869437mH )
+  N100A N200A                             .1663869437                          
+  N100B N200B N100A N200A        
+  N100C N200C N100A N200A        
+C *** XT *** ( j0.075(pu) : 1.039918398mH )
+  N200A N250A                             1.039918398
+  N200B N250B N200A N250A
+  N200C N250C N200A N250A
+C *** ZL *** ( 0.2+j0.312(pu) : 0.8712ohm,4.326060536mH )
+  N300A N400A             0.871200000     4.326060536
+  N300B N400B N300A N400A
+  N300C N400C N300A N400A
+C ***OUTSIDE LOAD*** ACCB POWER FLOW P=400KW
+  N300A N300AD            108.8762611 
+  N300B N300BDN300A N300AD 
+  N300C N300CDN300A N300AD 
+C ***INSIDE LOAD*** 
+  N400A N400AD            986.5321930
+  N400B N400BDN400A N400AD
+  N400C N400CDN400A N400AD
+  N400ADN400A                             1727.590765
+  N400BDN400B N400ADN400A
+  N400CDN400C N400ADN400A
+C *** ZL *** ( 0.2+j0.312(pu) : 0.8712ohm,4.326060536mH )
+  N400A N500A             0.871200000     4.326060536
+  N400B N500B N400A N500A
+  N400C N500C N400A N500A
+C ***INSIDE LOAD*** (                                            )
+  N500A N500AD            177.9930622 
+  N500B N500BDN500A N500AD
+  N500C N500CDN500A N500AD
+  N500ADN500A                             588.6919231
+  N500BDN500B N500ADN500A
+  N500CDN500C N500ADN500A
+$VINTAGE, 0
+C ---FOR.IM.No1(2/4)---
+C Tm=1.97  :M :2H ==> 7.49E+6 pole:1  1.97*0.375MVA/(2*PI*F)**2
+  BUSMGM                              7.49E6                                   
+C  -------- FOR MEASUREMENT OF ELECTROMECHANICAL TORQUE
+  BUSMSMBUSMGM            1.0E-8                                               
+BLANK CARD
+C --*----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+C /// SWITCH DATA ///
+  N250A N300A       -1.0   10.0
+  N250B N300B       -1.0   10.0
+  N250C N300C       -1.0   10.0
+  GSG4A N400A                                         MEASURING
+  GSG4B N400B                                         MEASURING
+  GSG4C N400C                                         MEASURING
+  IM4A  N400A                                         MEASURING                1
+  IM4B  N400B                                         MEASURING                1
+  IM4C  N400C                                         MEASURING                1
+  GSG5A N500A                                         MEASURING
+  GSG5B N500B                                         MEASURING
+  GSG5C N500C                                         MEASURING
+  N300AD                                              MEASURING
+  N300BD                                              MEASURING
+  N300CD                                              MEASURING
+  N400AD                                              MEASURING
+  N400BD                                              MEASURING
+  N400CD                                              MEASURING
+  N500AD                                              MEASURING
+  N500BD                                              MEASURING
+  N500CD                                              MEASURING
+BLANK CARD
+C --*----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+C /// SOURCE DATA ///
+C ---FOR.IM.No1(3/4)---
+14BUSMSM-1 0.0001      0.0001     .0                         -1.0
+C <BUS----<VOLT-----<FREQ-----<ANGLE----(1.0pu:5388.87743v)
+14N100A   5388.87743   50.0      0.0                         -1.0
+14N100B   5388.87743   50.0   -120.0                         -1.0
+14N100C   5388.87743   50.0   -240.0                         -1.0
+C ***  59 TYPE S.G. G400 ***
+C <BUS----<VOLT-----<FREQ-----<ANGLE----(1.00758pu)
+58GSG4A   5429.72512   50.0   0.724
+58GSG4B
+58GSG4C
+TOLERANCES 50.0          1.E-4     1.E-5                                      10
+PARAMETER FITTING         1.0
+C 1-2:NM NUMBER OF MASS ON THE SHAFT
+C 3-4:KM MASS (OF MOTOR OR GENERATOR) NUMBER
+C 5-6:KE EXCITER MASS NUMBER
+C     RMVA:VOLT-AMPERE RATING UNIT IS MVA
+C     RKV :RATED LINE-TO-LINE VOLTAGE UNIT IS KV
+C     AGLINE:VALUE OF THE FIELD CURRENT IN AMPERES WHICH WILL PRODUCE RATED ARMATURE VOLTAGE.
+C     S1,S2:SATURATION CURVE
+C ....<--- :NP NUMBER OF POLES<RMVA-----<RKV------<AGLINE---<S1-------<S2-------
+ 1 1     2                    0.625     6.6       +2000.
+BLANK CARD Q-AXIS SATURATION DATA IS ZERO SETTING
+C Ra----->XL------->Xd------->Xq------->Xd'------>Xq'------>Xd''----->Xq''----->
+0.0235    0.098     2.33      2.22      0.215     2.22      0.161     0.21
+C Td0'--->Tq0'----->Td0''---->Tq0''---->X0------->Rn------->Xn------->
+1.55      0.0       0.032     0.295     0.1032
+C 1-2:ML MASS NUMBER
+C HICO:The moment of intertia of mass number "ML". Unit is (million pound-feet)/(rad/sec**2))....
+C         <EXTRS----<HICO-----<DSR------<DSM------<HSP------<DSD------<BUS--
+ 1        1.0       5.91314E-4
+BLANK CARD TERMINATING MASS CARDS
+$DISABLE
+  1         14
+  21
+  31
+  51
+$ENABLE
+BLANK CARD
+71EF4
+72TQT4          1
+74SGOMG4        2
+  FINISH
+C ***  59 TYPE S.G. G500 ***
+C <BUS----<VOLT-----<FREQ-----<ANGLE----(1.01249p.u.)
+58GSG5A   5456.18451   50.0   1.16
+58GSG5B
+58GSG5C
+TOLERANCES 50.0          1.E-4     1.E-5                                      10
+PARAMETER FITTING         1.0
+C 1-2:NM NUMBER OF MASS ON THE SHAFT
+C 3-4:KM MASS (OF MOTOR OR GENERATOR) NUMBER
+C 5-6:KE EXCITER MASS NUMBER
+C     RMVA:VOLT-AMPERE RATING UNIT IS MVA
+C     RKV :RATED LINE-TO-LINE VOLTAGE UNIT IS KV
+C     AGLINE:VALUE OF THE FIELD CURRENT IN AMPERES WHICH WILL PRODUCE RATED ARMATURE VOLTAGE.
+C     S1,S2:SATURATION CURVE
+C ....<--- :NP NUMBER OF POLES<RMVA-----<RKV------<AGLINE---<S1-------<S2-------
+ 1 1     2                    0.625     6.6       +2000.
+BLANK CARD Q-AXIS SATURATION DATA IS ZERO SETTING
+C Ra----->XL------->Xd------->Xq------->Xd'------>Xq'------>Xd''----->Xq''----->
+0.0235    0.098     2.33      2.22      0.215     2.22      0.161     0.21
+C Td0'--->Tq0'----->Td0''---->Tq0''---->X0------->Rn------->Xn------->
+1.55      0.0       0.032     0.295     0.1032
+C 1-2:ML MASS NUMBER
+C HICO:The moment of intertia of mass number "ML". Unit is (million pound-feet)/(rad/sec**2))....
+C         <EXTRS----<HICO-----<DSR------<DSM------<HSP------<DSD------<BUS--
+ 1        1.0       5.91314E-4
+BLANK CARD TERMINATING MASS CARDS
+$DISABLE
+  1         14
+  21
+  31
+  51
+$ENABLE
+BLANK CARD
+71EF5
+72TQT5          1
+74SGOMG5        2
+  FINISH
+C  --------- UM TYPE 4 (IND.MACH) DATA
+19             
+ 1            1
+BLANK CARD ENDING CLASS 1 UM DATA CARDS
+C  UM-1 MACHINE TABLE :
+C --I----1----I----2----I----3----I----4----I----5----I----6
+ 4       BUSMGM       1                            0.0001
+0.            0.95
+              0.95
+C slip=2.719739 v=1.00758pu
+ 2.719739     0.0                 BUSMSM
+C  UM-1 COIL TABLE
+7.202         0.0277        IM4A             
+7.202         0.0277        IM4B             
+7.202         0.0277        IM4C             
+3.601         0.0277                          
+3.601         0.0277                      
+3.601         0.0277                       
+BLANK CARD ending U.M. data
+BLANK CARD ending sources
+C     Total network loss  P-loss  by summing injections =   6.465526932823E+06
+C Output for steady-state phasor switch currents.
+C  Node-K   Node-M         I-real           I-imag            I-magn        Degrees        Power            Reactive
+C  N250A    N300A      2.51255296E-03  -1.55308344E+00    1.55308548E+00   -89.9073    6.76991997E+00    4.18423111E+03
+C  N250B    N300B     -1.34626599E+00   7.74365788E-01    1.55308548E+00   150.0927    6.76991997E+00    4.18423111E+03
+C  N250C    N300C      1.34375344E+00   7.78717657E-01    1.55308548E+00    30.0927    6.76991997E+00    4.18423111E+03
+C  GSG4A    N400A      6.17654057E+01  -2.89353708E+01    6.82071918E+01   -25.1018    1.66678584E+05    8.06681202E+04
+C  GSG4B    N400B     -5.59414690E+01  -3.90227250E+01    6.82071918E+01  -145.1018    1.66678584E+05    8.06681202E+04
+C  GSG4C    N400C     -5.82393666E+00   6.79580958E+01    6.82071918E+01    94.8982    1.66678584E+05    8.06681202E+04
+C  IM4A     N400A     -3.70884429E+01   2.00063377E+01    4.21403149E+01   151.6566   -9.99956771E+04   -5.55824247E+04
+C  IM4B     N400B      3.58702181E+01   2.21163649E+01    4.21403149E+01    31.6566   -9.99956771E+04   -5.55824247E+04
+C  IM4C     N400C      1.21822477E+00  -4.21227026E+01    4.21403149E+01   -88.3434   -9.99956771E+04   -5.55824247E+04
+C  GSG5A    N500A      6.16852582E+01  -2.83272148E+01    6.78785841E+01   -24.6656    1.66684112E+05    8.06702138E+04
+C  GSG5B    N500B     -5.53747168E+01  -3.92573933E+01    6.78785841E+01  -144.6656    1.66684112E+05    8.06702138E+04
+C  GSG5C    N500C     -6.31054146E+00   6.75846081E+01    6.78785841E+01    95.3344    1.66684112E+05    8.06702138E+04
+C  N300AD              4.94900247E+01  -8.74559074E-06    4.94900247E+01     0.0000    0.00000000E+00    0.00000000E+00
+C  N300BD             -2.47450199E+01  -4.28596143E+01    4.94900247E+01  -120.0000    0.00000000E+00    0.00000000E+00
+C  N300CD             -2.47450048E+01   4.28596230E+01    4.94900247E+01   120.0000    0.00000000E+00    0.00000000E+00
+C  N400AD              5.62982343E+00  -9.93396450E+00    1.14183432E+01   -60.4587    0.00000000E+00    0.00000000E+00
+C  N400BD             -1.14179773E+01   9.14121415E-02    1.14183432E+01   179.5413    0.00000000E+00    0.00000000E+00
+C  N400CD              5.78815390E+00   9.84255236E+00    1.14183432E+01    59.5413    0.00000000E+00    0.00000000E+00
+C  N500AD              3.12448854E+01  -2.88753581E+01    4.25444376E+01   -42.7430    0.00000000E+00    0.00000000E+00
+C  N500BD             -4.06292364E+01  -1.26211854E+01    4.25444376E+01  -162.7430    0.00000000E+00    0.00000000E+00
+C  N500CD              9.38435098E+00   4.14965436E+01    4.25444376E+01    77.2570    0.00000000E+00    0.00000000E+00
+  IM4A           { Name just one node for voltage output.  This provides variety
+C Column headings for the  16   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  First  1     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   12     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C   Step      Time       IM4A        IM4A        IM4B        IM4C        TACS        TACS        TACS        TACS        TACS
+C                                    N400A       N400B       N400C       VT4         PPG4        QQG4        VT5         PPG5
+C
+C                        TACS        TACS        TACS        TACS        TACS        TACS        TACS
+C                        QQG5        PPG4        PPG5        QQG4        QQG5        PPIM        QQIM
+C      0       0.0   5429.29164  -37.088443  35.8702181  1.21822477     1.00758         0.5        .242     1.01249         0.5
+C                          .242         0.5         0.5        .242        .242    -300000.    -167000.
+C      1    .25E-3   5408.04051  -38.546862  34.0271397  4.51972263  1.00774091  .497417362  .242085856  1.01270569  .497427839
+C                    .242085941  .497417362  .497427839  .242085856  .242085941  -300060.54  -166784.28
+C      2     .5E-3   5352.10311  -39.767667   31.973725  7.79394194  1.00765329  .497480094  .242098254  1.01261362  .497474823
+C                    .242095109  .497480094  .497474823  .242098254  .242095109  -300055.21   -166785.1
+BLANK CARD ending node voltage outputs
+C     80       .02   5429.77262   -37.07804  35.8620845  1.21595556  1.00766919  .497422726  .242679222  1.01261812  .497466894
+C                    .242802626  .497422726  .497466894  .242679222  .242802626   -299930.2  -166731.59
+C Variable maxima :  5429.77262  42.1298428  42.1257726  42.1525059  1.00774091         0.5  .244128008  1.01270569         0.5
+C                    .243805907         0.5         0.5  .244128008  .243805907  -299835.77  -166731.59
+C Times of maxima :         .02       .0115      .01825        .005      .25E-3         0.0        .009      .25E-3         0.0
+C                        .00925         0.0         0.0        .009      .00925      .01475         .02
+C Variable minima :  -5429.9429  -42.142689  -42.161443  -42.109874     1.00758  .496996734        .242     1.01249  .497205573
+C                          .242  .496996734  .497205573        .242        .242  -300179.44   -167081.7
+C Times of minima :         .01       .0015      .00825        .015         0.0      .01525         0.0         0.0      .01525
+C                           0.0      .01525      .01525         0.0         0.0      .00375        .008
+  PRINTER PLOT  { No need for vector plotting as all variables are smooth
+ 194 2. 0.  20.         BRANCH                   { Plot limits: (-4.216,  4.215)
+                        IM4A  N400A IM4B  N400B IM4C  N400C
+BLANK CARD ending plot cards
+BEGIN NEW DATA CASE
+C     9th of 9 subcases of  BENCHMARK DCNEW-12  is added  4 May 2006.
+C  8th of  8 data subcases that illustrate Type-56 TEPCO IM (induction machine).
+C  For background of the model,  see top of 1st subcase.  This eighth case is a
+C  simplification of  ATPSGI58.DAT  which replaces the U.M. of the 7th subcase
+C  by a Type-56 IM.  Like the 7th subcase, this one involves no transient.  The
+C  phasor solution merely is continued for one cycle to confirm the sinusoidal
+C  steady state.  Of the original 33 permanently-closed switches,  only 12 could
+C  be eliminated without tampering with TACS control system logic, leaving 21.
+C  There is a lot of TACS modeling,  and this required more storage than the
+C  usual 3 * default of List 19.  So,  NEW LIST SIZES  has been added to expand
+C  the space for TACS while at the same time reducing a lot of other sizes.
+NEW LIST SIZES
+      70      60      50      20     250      50     300       0       0       0
+       0      30       0       0       0       0       0       0   12500       0
+       0       0       0
+  240000  
+ABSOLUTE TACS DIMENSIONS 
+C     40     170     200      50     120    2500     350     180 
+C        Expand various TACS Tables on 1 April 2007.  Force acceptance
+C        without worrying about probable waste that might be involved:
+C     57     256     285      36      85     713     998     171  ---  default
+C Tacs table number   1     2     3     4         5         6         7         8
+C Present figure    145    64    32    49        89      2190       207       163
+C Program limit     230    65    80    50       170      8000       420       300
+     230      65      80      50     170    8000     420     300 
+PRINTED NUMBER WIDTH, 12, 2,    { 1 fewer digit than DCN12 so 2 rows are enough
+POWER FREQUENCY, 50
+C 0.00025     10.     0.0     0.0 { Note TEPCO Tmax was 10 seconds
+ 0.00025    .020     0.0     0.0   { 1 cycle is enough to verify steady state
+       1       1       1       1       1      -1
+       5       5      20      20
+TACS HYBRID
+C OUTPUT
+33VT4   PPG4  QQG4
+33VT5   PPG5  QQG5
+C
+C /// G1 S.G. GOVERNOR MODEL G400///
+00WGREF4  +PLUS1                                     1.0
+99GOVNR4  = -WGREF4+WGFBK4
+C
+99GOV014  = GOVNR4*(1/0.04/0.1)
+99GOV3R4  = GOV034*(1.0/0.1)
+00GOV024  +GOV014 -GOV3R4                            1.0
+01GOV034  +GOV024                                    1.0
+       1.0
+               1.0
+99GOV044  = PLUS1-GOV034
+99GOV054  = GOV044*(1.0/0.6)
+99TQTR4   = TQT4*(1.0/0.6)
+00GOV064  +GOV054 -TQTR4                             1.0
+01TQT4    +GOV064                                    1.0 -0.02  1.1
+       1.0
+               1.0
+C /// G1 S.G. GOVERNOR MODEL G500///
+00WGREF5  +PLUS1                                     1.0
+99GOVNR5  = -WGREF5+WGFBK5
+C
+99GOV015  = GOVNR5*(1/0.04/0.1)
+99GOV3R5  = GOV035*(1.0/0.1)
+00GOV025  +GOV015 -GOV3R5                            1.0
+01GOV035  +GOV025                                    1.0
+       1.0
+               1.0
+99GOV045  = PLUS1-GOV035
+99GOV055  = GOV045*(1.0/0.6)
+99TQTR5   = TQT5*(1.0/0.6)
+00GOV065  +GOV055 -TQTR5                             1.0
+01TQT5    +GOV065                                    1.0 -0.02  1.1
+       1.0
+               1.0
+C
+C /// G1 S.G. AVR MODEL G400///
+C
+77DROOP4   0.0
+77DROP14   0.0
+77DROP24   0.0
+99DROP24  = DROP14*0.04
+99PUFB14  = (PUFBK4+DROP24)*(1.0/0.035)
+99VGFBR4  = VGFBK4*(1.0/0.035)
+00PUFB24  +PUFB14 -VGFBR4                            1.0
+99LLIM24  = (TIMEX.LT.0.001)*VGREF4+(TIMEX.GE.0.001)*(-9999.)
+99ULIM24  = (TIMEX.LT.0.001)*VGREF4+(TIMEX.GE.0.001)*9999.
+01VGFBK4  +PUFB24                                    1.0            LLIM24ULIM24
+       1.0
+                 1.0
+C
+99AVR014  = VGREF4-VGFBK4
+99LLIM14  = (TIMEX.LT.0.001)*0.0+(TIMEX.GE.0.001)*(-10.0)
+99ULIM14  = (TIMEX.LT.0.001)*0.0+(TIMEX.GE.0.001)*(10.0)
+01AVR024  +AVR014                                    1.0            LLIM14ULIM14
+      10.0
+                1.56
+99AVR034  = AVR014*(10.0*1.56/1.56)
+C
+99AVR044  = AVR024+AVR034+GAIN4
+99AVR054  = AVR044*(1.0/0.2)
+99AVR7R4  = AVR074*(1.0/0.2)
+99AVR064  = AVR054-AVR7R4
+99LLIM34  = (TIMEX.LT.0.001)*GAIN4+(TIMEX.GE.0.001)*(-9999.)
+99ULIM34  = (TIMEX.LT.0.001)*GAIN4+(TIMEX.GE.0.001)*9999.
+01AVR074  +AVR064                                    1.0            LLIM34ULIM34
+       1.0
+                 1.0
+99EF4     = AVR074/GAIN4
+C
+C /// G1 S.G. AVR MODEL G500///
+C
+77DROOP5   0.0
+77DROP15   0.0
+77DROP25   0.0
+99DROP25  = DROP15*0.04
+99PUFB15  = (PUFBK5+DROP25)*(1.0/0.035)
+99VGFBR5  = VGFBK5*(1.0/0.035)
+00PUFB25  +PUFB15 -VGFBR5                            1.0
+99LLIM25  = (TIMEX.LT.0.001)*VGREF5+(TIMEX.GE.0.001)*(-9999.)
+99ULIM25  = (TIMEX.LT.0.001)*VGREF5+(TIMEX.GE.0.001)*9999.
+01VGFBK5  +PUFB25                                    1.0            LLIM25ULIM25
+       1.0
+                 1.0
+C
+99AVR015  = VGREF5-VGFBK5
+99LLIM15  = (TIMEX.LT.0.001)*0.0+(TIMEX.GE.0.001)*(-10.0)
+99ULIM15  = (TIMEX.LT.0.001)*0.0+(TIMEX.GE.0.001)*(10.0)
+01AVR025  +AVR015                                    1.0            LLIM15ULIM15
+      10.0
+                1.56
+99AVR035  = AVR015*(10.0*1.56/1.56)
+C
+99AVR045  = AVR025+AVR035+GAIN5
+99AVR055  = AVR045*(1.0/0.2)
+99AVR7R5  = AVR075*(1.0/0.2)
+99AVR065  = AVR055-AVR7R5
+99LLIM35  = (TIMEX.LT.0.001)*GAIN5+(TIMEX.GE.0.001)*(-9999.)
+99ULIM35  = (TIMEX.LT.0.001)*GAIN5+(TIMEX.GE.0.001)*9999.
+01AVR075  +AVR065                                    1.0            LLIM35ULIM35
+       1.0
+                 1.0
+99EF5     = AVR075/GAIN5
+C
+C /// SG BRANCH VOLTAGE MONITOR ///
+  VAB4    +N400A  -N400B                             1.0
+  VAB5    +N500A  -N500B                             1.0
+90N400A                                                      -1.0
+90N400B                                                      -1.0
+90N400C                                                      -1.0
+91GSG4A                                                      -1.0
+91GSG4B                                                      -1.0
+91GSG4C                                                      -1.0
+91IM4A                                                       -1.0
+91IM4B                                                       -1.0
+91IM4C                                                       -1.0
+90N500A                                                      -1.0
+90N500B                                                      -1.0
+90N500C                                                      -1.0
+91GSG5A                                                      -1.0
+91GSG5B                                                      -1.0
+91GSG5C                                                      -1.0
+92SGOMG4                                                     -1.0
+92SGOMG5                                                     -1.0
+C ///  VOLTAGE FEED BACK G400///
+99PUFBK4  = SQRT(N400A*N400A + N400B*N400B + N400C*N400C)/6600.0
+00VT4     +PUFBK4                                    1.0
+C ///  POWER MONITOR(S.G.) ///
+99QSG4A   = GSG4A*(N400B-N400C)
+99QSG4B   = GSG4B*(N400C-N400A)
+99QSG4C   = GSG4C*(N400A-N400B)
+99QSGEN4  = (QSG4A+QSG4B+QSG4C)/SQRT(3.0)
+99PSGEN4  = N400A*GSG4A+N400B*GSG4B+N400C*GSG4C
+99PPG4    = PSGEN4/1000000.
+99QQG4    = QSGEN4/1000000.
+C ///  VOLTAGE FEED BACK G500///  
+99PUFBK5  = SQRT(N500A*N500A + N500B*N500B + N500C*N500C)/6600.0
+00VT5     +PUFBK5                                    1.0
+C ///  POWER MONITOR(S.G.) ///
+99QSG5A   = GSG5A*(N500B-N500C)
+99QSG5B   = GSG5B*(N500C-N500A)
+99QSG5C   = GSG5C*(N500A-N500B)
+99QSGEN5  = (QSG5A+QSG5B+QSG5C)/SQRT(3.0)
+99PSGEN5  = N500A*GSG5A+N500B*GSG5B+N500C*GSG5C
+99PPG5    = PSGEN5/1000000.
+99QQG5    = QSGEN5/1000000.
+C
+99QIM1    = IM4A*(N400B-N400C)
+99QIM2    = IM4B*(N400C-N400A)
+99QIM3    = IM4C*(N400A-N400B)
+99QIM     = (QIM1+QIM2+QIM3)/SQRT(3.0)
+99PIM     = N400A*IM4A+N400B*IM4B+N400C*IM4C
+99PPIM    = PIM
+99QQIM    = QIM
+33PPG4  PPG5  QQG4  QQG5  PPIM  QQIM
+C ***************  CONTROLL MODEL BLOCK **************
+C ///  G400  ///
+99DROOP4  = (QSGEN4-QSGI4)/625000./VT4
+00DROP14  +DROOP4
+99WGFBK4  = SGOMG4/314.159265
+99RPMSG4  = 30.0*SGOMG4/PI
+C ///  G500  ///
+99DROOP5  = (QSGEN5-QSGI5)/625000./VT5
+00DROP15  +DROOP5
+99WGFBK5  = SGOMG5/314.159265
+99RPMSG5  = 30.0*SGOMG5/PI
+C
+90N300A                                                      -1.0
+90N300B                                                      -1.0
+90N300C                                                      -1.0
+91N250A                                                      -1.0
+91N250B                                                      -1.0
+91N250C                                                      -1.0
+C /// POWER MONITOR ACCB(BETWEEN N250 AND N300) ///
+99QCB1    = N250A*(N300B-N300C)
+99QCB2    = N250B*(N300C-N300A)
+99QCB3    = N250C*(N300A-N300B)
+99QACCB   = ((QCB1+QCB2+QCB3)/SQRT(3.0))/1000.
+99PACCB   = (N300A*N250A+N300B*N250B+N300C*N250C)/1000.
+C 33PACCB
+C 33QACCB
+C /// L300 P & Q ///
+91N300AD                                                     -1.0
+91N300BD                                                     -1.0
+91N300CD                                                     -1.0
+99PACCB3  = (N300A*N300AD+N300B*N300BD+N300C*N300CD)/1000.
+C 33PACCB3
+C /// L400 P & Q ///
+91N400AD                                                     -1.0
+91N400BD                                                     -1.0
+91N400CD                                                     -1.0
+99QCB4    = N400AD*(N400B-N400C)
+99QCB5    = N400BD*(N400C-N400A)
+99QCB6    = N400CD*(N400A-N400B)
+99QACCB4  = ((QCB4+QCB5+QCB6)/SQRT(3.0))/1000.
+99PACCB4  = (N400A*N400AD+N400B*N400BD+N400C*N400CD)/1000.
+C 33PACCB4
+C 33QACCB4
+C /// L500 P & Q ///
+91N500AD                                                     -1.0
+91N500BD                                                     -1.0
+91N500CD                                                     -1.0
+99QCB7    = N500AD*(N500B-N500C)
+99QCB8    = N500BD*(N500C-N500A)
+99QCB9    = N500CD*(N500A-N500B)
+99QACCB5  = ((QCB7+QCB8+QCB9)/SQRT(3.0))/1000000.
+99PACCB5  = (N500A*N500AD+N500B*N500BD+N500C*N500CD)/1000000.
+C 33PACCB5
+C 33QACCB5
+C
+C 33EF4   EF5
+C /// TACS GOV,AVR REF ///
+11VGREF4  1.00758                                            -1.0
+11VGREF5  1.01249                                            -1.0
+C IF/AGLINE
+11GAIN4   2.661027                                           -1.0
+11GAIN5   2.655261                                           -1.0
+11QSGI4   242000.0                                           -1.0
+11QSGI5   242000.0                                           -1.0
+C /// TACS INITIAL CONDITIONS ///
+77PPIM       -300000.
+77QQIM       -167000.
+77PPG4       .500000
+77QQG4       .242000
+77VGREF4     1.00758
+77VGFBK4     1.00758
+77PUFBK4     1.00758
+77VT4        1.00758
+77VGREF5     1.01249
+77PUFBK5     1.01249
+77VGFBK5     1.01249
+77VT5        1.01249
+77PPG5       .500000
+77QQG5       .242000
+C Vini/0.035
+77VGFBR4    28.78800
+77PUFB14    28.78800
+C GAIN4/0.2:2.661027
+77AVR7R4  13.3051350
+77AVR054  13.3051350
+C GAIN4:
+77AVR044    2.661027
+77AVR074    2.661027
+C G500
+C Vini/0.035
+77VGFBR5  28.9282857
+77PUFB15  28.9282857
+C GAIN5/0.2:2.655261
+77AVR055  13.2763050
+77AVR7R5  13.2763050
+C GAIN5
+77AVR045    2.655261
+77AVR075    2.655261
+C
+77PUFB24         0.0
+77AVR065         0.0
+77RPMSG4      3000.0
+77WGREF4         1.0
+77WGFBK4         1.0
+77SGOMG4  314.159265
+77TQT4           1.0
+77GOVNR4         0.0
+77GOV014         0.0
+77GOV024         0.0
+77GOV034         0.0
+77GOV3R4         0.0
+77GOV044         1.0
+77GOV054  1.66666667
+77GOV064         0.0
+77TQTR4   1.66666667
+77AVR014         0.0
+77AVR024         0.0
+77AVR034         0.0
+77AVR064         0.0
+77EF4            1.0
+77WGREF5         1.0
+77WGFBK5         1.0
+77SGOMG5  314.159265
+77TQT5           1.0
+77PUFB25         0.0
+77RPMSG5      3000.0
+77GOVNR5         0.0
+77GOV015         0.0
+77GOV025         0.0
+77GOV035         0.0
+77GOV3R5         0.0
+77GOV045         1.0
+77GOV055  1.66666667
+77GOV065         0.0
+77TQTR5   1.66666667
+77AVR015         0.0
+77AVR025         0.0
+77AVR035         0.0
+77EF5            1.0
+C
+C --*----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+BLANK CARD
+C /// NETWORK DATA ///
+$VINTAGE, 1
+C Bus1->Bus2->Bus3->Bus4-><---------R(ohm)<----------L(mH)<---------C(mmF)
+C *** XS *** ( j0.012(pu) : 0.1663869437mH )
+  N100A N200A                             .1663869437                          
+  N100B N200B N100A N200A        
+  N100C N200C N100A N200A        
+C *** XT *** ( j0.075(pu) : 1.039918398mH )
+  N200A N250A                             1.039918398
+  N200B N250B N200A N250A
+  N200C N250C N200A N250A
+C *** ZL *** ( 0.2+j0.312(pu) : 0.8712ohm,4.326060536mH )
+  N300A N400A             0.871200000     4.326060536
+  N300B N400B N300A N400A
+  N300C N400C N300A N400A
+C ***OUTSIDE LOAD*** ACCB POWER FLOW P=400KW
+  N300A N300AD            108.8762611 
+  N300B N300BDN300A N300AD 
+  N300C N300CDN300A N300AD 
+C ***INSIDE LOAD*** 
+  N400A N400AD            986.5321930
+  N400B N400BDN400A N400AD
+  N400C N400CDN400A N400AD
+  N400ADN400A                             1727.590765
+  N400BDN400B N400ADN400A
+  N400CDN400C N400ADN400A
+C *** ZL *** ( 0.2+j0.312(pu) : 0.8712ohm,4.326060536mH )
+  N400A N500A             0.871200000     4.326060536
+  N400B N500B N400A N500A
+  N400C N500C N400A N500A
+C ***INSIDE LOAD*** (                                            )
+  N500A N500AD            177.9930622 
+  N500B N500BDN500A N500AD
+  N500C N500CDN500A N500AD
+  N500ADN500A                             588.6919231
+  N500BDN500B N500ADN500A
+  N500CDN500C N500ADN500A
+$VINTAGE, 0
+BLANK CARD
+C --*----1----*----2----*----3----*----4----*----5----*----6----*----7----*----8
+C /// SWITCH DATA ///
+  N250A N300A       -1.0   10.0
+  N250B N300B       -1.0   10.0
+  N250C N300C       -1.0   10.0
+  GSG4A N400A                                         MEASURING
+  GSG4B N400B                                         MEASURING
+  GSG4C N400C                                         MEASURING
+  IM4A  N400A                                         MEASURING                1
+  IM4B  N400B                                         MEASURING                1
+  IM4C  N400C                                         MEASURING                0
+  GSG5A N500A                                         MEASURING
+  GSG5B N500B                                         MEASURING
+  GSG5C N500C                                         MEASURING
+  N300AD                                              MEASURING
+  N300BD                                              MEASURING
+  N300CD                                              MEASURING
+  N400AD                                              MEASURING
+  N400BD                                              MEASURING
+  N400CD                                              MEASURING
+  N500AD                                              MEASURING
+  N500BD                                              MEASURING
+  N500CD                                              MEASURING
+BLANK CARD
+C <BUS----<VOLT-----<FREQ-----<ANGLE----(1.0pu:5388.87743v)
+14N100A   5388.87743   50.0      0.0                         -1.0
+14N100B   5388.87743   50.0   -120.0                         -1.0
+14N100C   5388.87743   50.0   -240.0                         -1.0
+C ***  59 TYPE S.G. G400 ***
+C <BUS----<VOLT-----<FREQ-----<ANGLE----(1.00758pu)
+58GSG4A   5429.72512   50.0   0.724
+58GSG4B   5429.72512   50.0   -119.276
+58GSG4C   5429.72512   50.0   -239.276
+TOLERANCES 50.0          1.E-4     1.E-5                                      10
+PARAMETER FITTING         1.0
+C ....<--- :NP NUMBER OF POLES<RMVA-----<RKV------<AGLINE---<S1-------<S2-------
+ 1 1     2                    0.625     6.6       +2000.
+BLANK CARD Q-AXIS SATURATION DATA IS ZERO SETTING
+C Ra----->XL------->Xd------->Xq------->Xd'------>Xq'------>Xd''----->Xq''----->
+0.0235    0.098     2.33      2.22      0.215     2.22      0.161     0.21
+C Td0'--->Tq0'----->Td0''---->Tq0''---->X0------->Rn------->Xn------->
+1.55      0.0       0.032     0.295     0.1032
+C 1-2:ML MASS NUMBER
+C HICO:The moment of intertia of mass number "ML". Unit is (million pound-feet)/(rad/sec**2))....
+C         <EXTRS----<HICO-----<DSR------<DSM------<HSP------<DSD------<BUS--
+ 1        1.0       5.91314E-4
+BLANK CARD TERMINATING MASS CARDS
+BLANK CARD
+71EF4
+72TQT4          1
+74SGOMG4        2
+  FINISH
+C ***  59 TYPE S.G. G500 ***
+C <BUS----<VOLT-----<FREQ-----<ANGLE----(1.01249p.u.)
+58GSG5A   5456.18451   50.0   1.16
+58GSG5B   5456.18451   50.0   -118.84
+58GSG5C   5456.18451   50.0   -238.84
+TOLERANCES 50.0          1.E-4     1.E-5                                      10
+PARAMETER FITTING         1.0
+C ....<--- :NP NUMBER OF POLES<RMVA-----<RKV------<AGLINE---<S1-------<S2-------
+ 1 1     2                    0.625     6.6       +2000.
+BLANK CARD Q-AXIS SATURATION DATA IS ZERO SETTING
+C Ra----->XL------->Xd------->Xq------->Xd'------>Xq'------>Xd''----->Xq''----->
+0.0235    0.098     2.33      2.22      0.215     2.22      0.161     0.21
+C Td0'--->Tq0'----->Td0''---->Tq0''---->X0------->Rn------->Xn------->
+1.55      0.0       0.032     0.295     0.1032
+C 1-2:ML MASS NUMBER
+C HICO:The moment of intertia of mass number "ML". Unit is (million pound-feet)/(rad/sec**2))....
+C         <EXTRS----<HICO-----<DSR------<DSM------<HSP------<DSD------<BUS--
+ 1        1.0       5.91314E-4
+BLANK CARD TERMINATING MASS CARDS
+BLANK CARD
+71EF5
+72TQT5          1
+74SGOMG5        2
+  FINISH
+C |BUS |  |  SLIP  ||   TM0  |
+C | A6 |  |  E10.6 ||  E10.6 |
+56IM4A     2.719739  0.0
+56IM4B
+56IM4C
+C CLASS2
+C TY  <NP><  RMVA  ><  RSKV  ><  FREQ  >
+ 0       1  0.375    6.6      50.0
+C   Rs   ||   Lsl  ||   Rr   ||   Lrl  ||  Msru  ||  Msrs  ||  Flxs  |
+C  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 ||  E10.6 |
+0.062      0.075     0.031     0.075     2.58                                   
+C CLASS3
+C         |    M   ||    D   ||  EMSOM | |NM|P|E|M|
+C         |  E10.6 ||  E10.6 ||  E10.6 | |I4|I2I2I2
+           1.97        0.0                    1 1 1
+C CLASS4
+C   T    ||   TM   |    |TBUS|
+C  E10.6 ||  E10.6 |    | A6 |
+C 0.02    .000264555
+            9999
+C CLASS5
+C | BUS|N|
+C | A4 |I2
+  FINISH
+BLANK CARD ending source cards
+C     Total network loss  P-loss  by summing injections =   1.000121334411E+06
+C Output for steady-state phasor switch currents.
+C      Node-K    Node-M            I-real            I-imag            I-magn          Degrees        Power            Reactive
+C      N250A     N300A         2.51255296E-03   -1.55308344E+00    1.55308548E+00     -89.9073    6.76991997E+00    4.18423111E+03
+C      N250B     N300B        -1.34626599E+00    7.74365788E-01    1.55308548E+00     150.0927    6.76991997E+00    4.18423111E+03
+C      N250C     N300C         1.34375344E+00    7.78717657E-01    1.55308548E+00      30.0927    6.76991997E+00    4.18423111E+03
+C      GSG4A     N400A         6.17662457E+01   -2.88761587E+01    6.81828545E+01     -25.0564    1.66682896E+05    8.05074090E+04
+C      GSG4B     N400B        -5.58906098E+01   -3.90530585E+01    6.81828545E+01    -145.0564    1.66682896E+05    8.05074090E+04
+C      GSG4C     N400C        -5.87563589E+00    6.79292172E+01    6.81828545E+01      94.9436    1.66682896E+05    8.05074090E+04
+C      IM4A      N400A        -3.70892829E+01    1.99471256E+01    4.21129757E+01     151.7280   -9.99999888E+04   -5.54217136E+04
+C      IM4B      N400B         3.58193589E+01    2.21466984E+01    4.21129757E+01      31.7280   -9.99999888E+04   -5.54217136E+04
+C      IM4C      N400C         1.26992399E+00   -4.20938240E+01    4.21129757E+01     -88.2720   -9.99999888E+04   -5.54217136E+04
+C      GSG5A     N500A         6.16852582E+01   -2.83272148E+01    6.78785841E+01     -24.6656    1.66684112E+05    8.06702138E+04
+C      GSG5B     N500B        -5.53747168E+01   -3.92573933E+01    6.78785841E+01    -144.6656    1.66684112E+05    8.06702138E+04
+C      GSG5C     N500C        -6.31054146E+00    6.75846081E+01    6.78785841E+01      95.3344    1.66684112E+05    8.06702138E+04
+C      N300AD                  4.94900247E+01   -8.74559074E-06    4.94900247E+01       0.0000    0.00000000E+00    0.00000000E+00
+C      N300BD                 -2.47450199E+01   -4.28596143E+01    4.94900247E+01    -120.0000    0.00000000E+00    0.00000000E+00
+C      N300CD                 -2.47450048E+01    4.28596230E+01    4.94900247E+01     120.0000    0.00000000E+00    0.00000000E+00
+C      N400AD                  5.62982343E+00   -9.93396450E+00    1.14183432E+01     -60.4587    0.00000000E+00    0.00000000E+00
+C      N400BD                 -1.14179773E+01    9.14121415E-02    1.14183432E+01     179.5413    0.00000000E+00    0.00000000E+00
+C      N400CD                  5.78815390E+00    9.84255236E+00    1.14183432E+01      59.5413    0.00000000E+00    0.00000000E+00
+C      N500AD                  3.12448854E+01   -2.88753581E+01    4.25444376E+01     -42.7430    0.00000000E+00    0.00000000E+00
+C      N500BD                 -4.06292364E+01   -1.26211854E+01    4.25444376E+01    -162.7430    0.00000000E+00    0.00000000E+00
+C      N500CD                  9.38435098E+00    4.14965436E+01    4.25444376E+01      77.2570    0.00000000E+00    0.00000000E+00
+C Column headings for the  26   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   12     output variables belong to IM  (with "IM"  an internally-added upper name of pair).
+C  Next   12     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C   Step      Time       IM4A        IM4B        IM-1        IM-1        IM-1        IM-1        IM-1        IM-1        IM-1
+C                        N400A       N400B       P           Q           ISA         ISB         ISC         IRA         IRB
+C
+C                        IM-1        IM-1        IM-1        IM-1        IM-1        TACS        TACS        TACS        TACS
+C                        IRC         WR          ANG         TQ          TM          VT4         PPG4        QQG4        VT5
+C
+C                        TACS        TACS        TACS        TACS        TACS        TACS        TACS        TACS
+C                        PPG5        QQG5        PPG4        PPG5        QQG4        QQG5        PPIM        QQIM
+C      0       0.0   -37.089283  35.8193589  -299999.97  -166265.14  -37.089283  35.8193589  1.26992399  -3.3020869  -30.789557
+C                    34.0916437  305.614953  1.57079633  -893.94476  -893.94476     1.00758         0.5        .242     1.01249
+C                           0.5        .242         0.5         0.5        .242        .242    -300000.    -167000.
+C      1    .25E-3   -38.530914  33.9675872  -299996.42  -166298.13  -38.530914  33.9675872  4.56332653  -3.2222768  -30.827832
+C                    34.0501083   305.61495  1.64720007  -893.73559  -893.94476  1.00780767  .497455836  .241616478  1.01275637
+C                    .497447005  .242093747  .497455836  .497447005  .241616478  .242093747  -299996.42  -166298.13
+C      2     .5E-3    -39.73648  31.9076793  -299887.98  -166278.12   -39.73648  31.9076793  7.82880046  -3.1419208  -30.867462
+C                    34.0093826   305.61494   1.7236038  -893.55897  -893.94476  1.00766614   .49747865  .241619001  1.01263793
+C                    .497469507  .242096958   .49747865  .497469507  .241619001  .242096958  -299887.98  -166278.12
+BLANK card ending names for output variables (none here)
+C     80       .02   -37.095485  35.7780641   -300088.5  -165860.96  -37.095485  35.7780641  1.31742052  3.16334023  -34.036289
+C                    30.8729489  305.612633  7.68306549   -893.8068  -893.94476  1.00768225   .49747812  .242225269  1.01263226
+C                     .49750592  .242807717   .49747812   .49750592  .242225269  .242807717   -300088.5  -165860.96
+C Variable maxima :   42.0472768   42.088666  -299449.52  -165559.49  42.0472768   42.088666  42.0016152  3.16334023  -30.789557
+C                    34.0916437  305.614953  7.68306549  -892.13839  -893.94476  1.00780767         0.5  .243498409  1.01275637
+C                           0.5  .243680337         0.5         0.5  .243498409  .243680337  -299449.52  -165559.49
+C Times of maxima :        .0115      .01825       .0045      .00975       .0115      .01825        .005         .02         0.0
+C                           0.0         0.0         .02      .00475         0.0      .25E-3         0.0        .009      .25E-3
+C                           0.0      .00925         0.0         0.0        .009      .00925       .0045      .00975
+C Variable minima :   -42.060504  -42.029619   -300088.5  -166298.13  -42.060504  -42.029619  -42.056444  -3.3020869  -34.036289
+C                    30.8729489  305.612633  1.57079633  -893.94476  -893.94476     1.00758  .497098096  .241616478     1.01249
+C                    .497272118        .242  .497098096  .497272118  .241616478        .242   -300088.5    -167000.
+C Times of minima :        .0015      .00825         .02      .25E-3       .0015      .00825        .015         0.0         .02
+C                           .02         .02         0.0         0.0         0.0         0.0      .01525      .25E-3         0.0
+C                        .01525         0.0      .01525      .01525      .25E-3         0.0         .02         0.0
+  PRINTER PLOT  { No need for vector plotting as all variables are smooth
+ 194 2. 0.  20.         BRANCH                   { Plot limits: (-4.206,  4.209)
+                        IM4A  N400A IM4B  N400B IM-1  ISC
+C  Note the replacement of the 3rd switch current by the 3rd stator current in
+C  the preceding plot.  They should be the same.  Compare with the preceding
+C  subcase for which the plot of switch currents had limits  (-4.216,  4.215).
+BLANK CARD ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+EOF
+Note:  ATPIGUM.DAT  is being ignored because it does not involve any
+       Type-56 IM modeling.
+
+       IGIMUM.DAT   is being ignored for the same reason.  This accounts
+       for all 10 of the data cases tested by  RUNIM.BAT;  8 have been
+       retained and massaged whereas 2 have been ignored.

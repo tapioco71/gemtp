@@ -1,0 +1,207 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-60      (DC-63  of "M39." vintage)
+C       Generate Semlyen frequency-dependent branch cards for  DC-61 simulation.
+C       This is for an overhead transmission line of 4 phases from South Africa.
+C       There are 2 ground wires that are not eliminated,  followed by two phase
+C       wire bundles of 4 individual conductors each (automatic bundling option)
+C       Solution changes beginning  15 Oct 1988  due to Mustafa Kizilcay changes 
+C      Solution changed on  23 Oct 1990  due to Mustafa Kizilcay's modifications
+C      (preceding commented data has been copied to bottom for preservation).
+SEMLYEN SETUP                                                                  
+$ERASE
+BRANCH  BUSA-1BUSB-1BUSA-2BUSB-2BUSA-3BUSB-3BUSA-4BUSB-4
+C 345678901234567890123456
+C          50  100   2  31 0 1  ????  WSMWSM.  SPY PLOT dies in TDFIT.  See TODO
+           50  100   2   1 0 1               { 27 Sept 1987 abandon SPY PLOT try
+C         150  150   2   1 0 1               { Modify preceding for Oct, 1990 (Mustafa)
+LINE CONSTANTS
+METRIC
+  1   .2    .273 4          1.7653      0.     39.     20.
+  2   .2    .273 4          1.7653     30.     39.     20.
+  3 .392  .0585  4          3.1750     2.3    27.5     8.5    50.8  45.        4
+  4 .392  .0585  4          3.1750    32.3    27.5     8.5    50.8  45.        4
+BLANK card ending all conductor cards of embedded  "LINE CONSTANTS"  data case
+    100.     5000.   { Transient frequency }    375.
+    100.       50.   { Power frequency }        375.
+    100.        5.   { Logarithmic looping }    375.         6 13
+BLANK card ending frequency cards of embedded  "LINE CONSTANTS"  data case
+BLANK card ending  "LINE CONSTANTS"  data cases
+$PUNCH, dc60a.pch !  { Create file of branch cards that is used by DC-61                  
+C -1BUSA-1BUSB-1             4.66135E-03 1.51343E-03              1  1  2  2   4
+C    1.24062832E+01 1.36478386E+02 2.69566232E-04 2.96542998E-03 5.00000000E+01
+C    0.00000E+00 2.78943E+03 8.96815E-01 0.00000E+00 2.82127E+02 1.03185E-01
+C    0.00000E+00 1.00000E+00 0.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00
+C -1BUSA-2BUSB-2             7.53874E-03 1.28352E-03              2  2  2  2   4
+C    5.24979345E-01 5.57653032E+01 2.98359630E-05 3.16928949E-03 5.00000000E+01
+C    0.00000E+00 4.32886E+04 9.70952E-01 0.00000E+00 7.80994E+02 2.90477E-02
+C    0.00000E+00 1.00000E+00 0.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00
+C -1BUSA-3BUSB-3             3.02741E-03 1.25731E-03              3  3  2  2   4
+C    1.32033703E-01 1.34020415E+02 1.21011536E-06 1.22832398E-03 5.00000000E+01
+C    0.00000E+00 1.55166E+05 8.17954E-01 0.00000E+00 6.28350E+03 1.82046E-01
+C    0.00000E+00 1.00000E+00 0.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00
+C -1BUSA-4BUSB-4             2.78022E-03 1.25695E-03              4  4  2  2   4
+C    1.32366981E-01 1.45869410E+02 1.02314498E-06 1.12751348E-03 5.00000000E+01
+C    0.00000E+00 1.68593E+05 8.00343E-01 0.00000E+00 6.82607E+03 1.99657E-01
+C    0.00000E+00 1.00000E+00 0.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00
+C    8.71196E-01 0.00000E+00-6.82907E-01 0.00000E+00 1.00000E+00 0.00000E+00
+C   -4.17499E-01 0.00000E+00
+C    8.83886E-01 0.00000E+00 5.54912E-01 0.00000E+00 4.08289E-01 0.00000E+00
+C    1.00000E+00 0.00000E+00
+C    1.00000E+00 0.00000E+00-9.54437E-01 0.00000E+00-3.66121E-01 0.00000E+00
+C    8.12296E-02 0.00000E+00
+C    9.95383E-01 0.00000E+00 1.00000E+00 0.00000E+00-1.44179E-01 0.00000E+00
+C   -2.87785E-01 0.00000E+00
+C    1.37541E-01 0.00000E+00-1.35060E-01 0.00000E+00 6.63012E-01 0.00000E+00
+C   -3.22845E-01 0.00000E+00
+C    1.37175E-01 0.00000E+00 1.05171E-01 0.00000E+00 2.58426E-01 0.00000E+00
+C    7.23501E-01 0.00000E+00
+C    3.80344E-01 0.00000E+00-4.21913E-01 0.00000E+00-5.68095E-01 0.00000E+00
+C    1.36871E-01 0.00000E+00
+C    3.80607E-01 0.00000E+00 4.48514E-01 0.00000E+00-2.39474E-01 0.00000E+00
+C   -4.94318E-01 0.00000E+00
+C       The preceding [Tv] and [Ti] became dated 27 November 2000 when wide
+C       format  3E26.18  replaced the preceding narrow  6E12.5  as follows:
+C NO IMAGINARY PART   { Read big paragraph about this in April, 2001, newsletter
+C   8.7119547363418204E-01   -6.8290399916049649E-01    1.0000000000000000E+00
+C  -4.1751471137169216E-01
+C   8.8388614757606232E-01    5.5490882086169024E-01    4.0830470329277252E-01
+C   1.0000000000000000E+00
+C   1.0000000000000000E+00   -9.5443745577162542E-01   -3.6612132519723661E-01
+C   8.1233987662551091E-02
+C   9.9538310340828784E-01    1.0000000000000000E+00   -1.4418465250059978E-01
+C  -2.8778382559374205E-01
+C   1.3754116813200981E-01   -1.3505887318129409E-01    6.6300444003574899E-01
+C  -3.2285375114835768E-01
+C   1.3717544529936490E-01    1.0517024919034780E-01    2.5843487930520492E-01
+C   7.2349433296321430E-01
+C   3.8034372781882003E-01   -4.2191352219870149E-01   -5.6808980138853893E-01
+C   1.3687783149931779E-01
+C   3.8060712761124860E-01    4.4851503525080577E-01   -2.3948114907845639E-01
+C  -4.9431125919891056E-01
+BLANK card ending  "SEMLYEN SETUP"  data cases
+BEGIN NEW DATA CASE
+C     2nd of 3  SEMLYEN SETUP  data cases illustrates use for cables.  First,
+C     use the old, original  CABLE CONSTANTS.  The cable is 3-phase, so a total
+C     of 6 conductors.  Added 27 January 2001
+SEMLYEN SETUP                                                                   
+$ERASE
+BRANCH  SEND1 REC1  SEND2 REC2  SEND3 REC3  SEND4 REC4  SEND5 REC5  SEND6 REC6                                   
+TOLERANCES  10      5000.  { Illustration only; value of FMED actually unchanged
+          200  150  10 230   1     7  7777     0    { Semlyen miscellaneous data
+CABLE CONSTANTS
+    2   -1    3    0    0    0    0    0    0    0    0    0
+    2    2    2
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+     2.500       0.0     2.730       0.0     2.960       0.0
+           100.         50.E02              90.1
+           100.         60.000              90.1
+           100.            10.    6   10    90.1
+BLANK card ending frequency cards of  "CABLE CONSTANTS"  data
+BLANK card ending  CABLE CONSTANTS  data cases                                       
+C $PUNCH  { Display the Semlyen branch cards that have been created
+C           The preceding was bad because cards of this 2nd subcase ended up
+C           in the disk file of the 1st,  which then caused trouble (KILL
+C           termination) during use of DC-61.  Solve this problem by naming
+C           the output of this 2nd subcase,  even though it is not used by
+C           subsequent data case
+$PUNCH, dc60b.pch !   { Create file of branch cards separate from 1st subcase
+BLANK card ending  SEMLYEN SETUP  data cases                                  
+BEGIN NEW DATA CASE
+C     3rd of 3  SEMLYEN SETUP  data cases illustrates use for cables.  This is
+C     identical to the preceding subcase except  CABLE CONSTANTS  has been
+C     replaced by newer  CABLE PARAMETERS.  Added 27 January 2001
+SEMLYEN SETUP                                                                   
+$ERASE
+BRANCH  SEND1 REC1  SEND2 REC2  SEND3 REC3  SEND4 REC4  SEND5 REC5  SEND6 REC6                                   
+TOLERANCES  10      5000.  { Illustration only; value of FMED actually unchanged
+          200  150  10 230   1     7  7777     0    { Semlyen miscellaneous data
+CABLE PARAMETERS  { This 1 line is the only difference from preceding data case
+    2   -1    3    0    0    0    0    0    0    0    0    0
+    2    2    2
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+     2.500       0.0     2.730       0.0     2.960       0.0
+           100.         50.E02              90.1
+           100.         60.000              90.1
+           100.            10.    6   10    90.1
+BLANK card ending frequency cards of  CABLE PARAMETERS  data
+BLANK card ending  "CABLE PARAMETERS"  data cases
+$PUNCH  { Display the Semlyen branch cards that have been created
+BLANK card ending  SEMLYEN SETUP  data cases                                  
+BEGIN NEW DATA CASE
+BLANK
+EOF
+
+
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-60      (DC-63  of "M39." vintage)
+C       Generate Semlyen frequency-dependent branch cards for  DC-61 simulation.
+C       This is for an overhead transmission line of 4 phases from South Africa.
+C       There are 2 ground wires that are not eliminated,  followed by two phase
+C       wire bundles of 4 individual conductors each (automatic bundling option)
+C       Solution changes beginning  15 Oct 1988  due to Mustafa Kizilcay changes 
+C          This is file prior to 23 Oct 1990 when Mustafa changed answers again.
+SEMLYEN SETUP                                                                  
+$ERASE
+BRANCH  BUSA-1BUSB-1BUSA-2BUSB-2BUSA-3BUSB-3BUSA-4BUSB-4
+C 345678901234567890123456
+C          50  100   2  31 0 1  ????  WSMWSM.  SPY PLOT dies in TDFIT.  See TODO
+           50  100   2   1 0 1               { 27 Sept 1987 abandon SPY PLOT try
+C         150  150   2   1 0 1               { Modify preceding for Oct, 1990 (Mustafa)
+LINE CONSTANTS
+METRIC
+  1   .2    .273 4          1.7653      0.     39.     20.
+  2   .2    .273 4          1.7653     30.     39.     20.
+  3 .392  .0585  4          3.1750     2.3    27.5     8.5    50.8  45.        4
+  4 .392  .0585  4          3.1750    32.3    27.5     8.5    50.8  45.        4
+BLANK card ending all conductor cards of embedded  "LINE CONSTANTS"  data case
+    100.     5000.   { Transient frequency }    375.
+    100.       50.   { Power frequency }        375.
+    100.        5.   { Logarithmic looping }    375.         6 13
+BLANK card ending frequency cards of embedded  "LINE CONSTANTS"  data case
+BLANK card ending  "LINE CONSTANTS"  data cases
+$PUNCH
+C -1BUSA-1BUSB-1             4.66135E-03 1.51343E-03              1  1  2  2   4  
+C    2.48913100E+01 1.34761598E+02 0.00000000E+00 2.97765695E-03 5.00000000E+01   
+C    0.00000E+00 2.78943E+03 8.96815E-01 0.00000E+00 2.82127E+02 1.03185E-01      
+C    0.00000E+00 1.00000E+00 0.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00      
+C -1BUSA-2BUSB-2             7.53874E-03 1.28352E-03              2  2  2  2   4  
+C    5.22828256E+00 5.55221551E+01 0.00000000E+00 3.16942993E-03 5.00000000E+01   
+C    0.00000E+00 4.32886E+04 9.70952E-01 0.00000E+00 7.80994E+02 2.90477E-02      
+C    0.00000E+00 1.00000E+00 0.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00      
+C -1BUSA-3BUSB-3             3.02741E-03 1.25731E-03              3  3  2  2   4  
+C    5.31735791E+01 1.23020566E+02 0.00000000E+00 1.22832457E-03 5.00000000E+01   
+C    0.00000E+00 1.55166E+05 8.17954E-01 0.00000E+00 6.28350E+03 1.82046E-01      
+C    0.00000E+00 1.00000E+00 0.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00      
+C -1BUSA-4BUSB-4             2.78022E-03 1.25695E-03              4  4  2  2   4  
+C    6.42684771E+01 1.30948331E+02 0.00000000E+00 1.12751395E-03 5.00000000E+01   
+C    0.00000E+00 1.68593E+05 8.00343E-01 0.00000E+00 6.82607E+03 1.99657E-01      
+C    0.00000E+00 1.00000E+00 0.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00      
+C    8.71196E-01 0.00000E+00-6.82907E-01 0.00000E+00 1.00000E+00 0.00000E+00      
+C   -4.17499E-01 0.00000E+00                                                      
+C    8.83886E-01 0.00000E+00 5.54912E-01 0.00000E+00 4.08289E-01 0.00000E+00      
+C    1.00000E+00 0.00000E+00                                                      
+C    1.00000E+00 0.00000E+00-9.54437E-01 0.00000E+00-3.66121E-01 0.00000E+00      
+C     8.12296E-02 0.00000E+00                                                      
+C    9.95383E-01 0.00000E+00 1.00000E+00 0.00000E+00-1.44179E-01 0.00000E+00      
+C   -2.87785E-01 0.00000E+00                                                      
+C    1.37541E-01 0.00000E+00-1.35060E-01 0.00000E+00 6.63012E-01 0.00000E+00      
+C   -3.22845E-01 0.00000E+00                                                      
+C    1.37175E-01 0.00000E+00 1.05171E-01 0.00000E+00 2.58426E-01 0.00000E+00      
+C    7.23501E-01 0.00000E+00                                                      
+C    3.80344E-01 0.00000E+00-4.21913E-01 0.00000E+00-5.68095E-01 0.00000E+00      
+C    1.36871E-01 0.00000E+00                                                      
+C    3.80607E-01 0.00000E+00 4.48514E-01 0.00000E+00-2.39474E-01 0.00000E+00      
+C   -4.94318E-01 0.00000E+00                                                      
+BLANK card ending  "SEMLYEN SETUP"  data cases
+BEGIN NEW DATA CASE
+BLANK

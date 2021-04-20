@@ -1,0 +1,194 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-34
+C     Test  of  U.M.  operating as a 3-phase synchronous machine.   Data  is  in 
+C     per unit.   Although there is a phasor solution, manual initial conditions
+C     in fact define all state variables,  so the answers would be identical  if
+C     the negative (-1.0) starting times of the sources (T-start of cols. 61-70)
+C     were  erased (made blank --- or zero).   For  automatic initialization  of
+C     the same problem,  see the second subcase (not normally executed).   For a 
+C     case of automatic initialization using data in physical units, see DCNEW-2   
+POWER FREQUENCY, 60.0, { Europeans need this (LEC letter dated 6 Jan 89, page 2)
+    .001    .500
+       1       1       0      00       1      -1       
+       5       5      20      20     100     100
+ 0      BUS-F0            1.0 
+ 0      BUS-A0            1.0 
+ 0      BUS-B0            1.0 
+ 0      BUS-C0            1.0 
+ 0BUS-A1BUS-A0            0.02  1.0610                                         1
+ 0BUS-B1BUS-B0BUS-A1BUS-A0                                                     1
+ 0BUS-C1BUS-C0BUS-A1BUS-A0                                                     1
+ 0BUS-M1                              2.00E6                                   1
+ 0BUS-M0                              2.00E6                                   1
+ 0BUS-M0BUS-M1                      1.                                         1
+BLANK card ends the last branch card
+BLANK card ends (in this case nonexistent) switch cards
+11BUS-F0  0.002091      { 18 Oct 90, remove ineffective T-start = -1.0 from card        
+11BUS-M0-1      1.02                                        
+11BUS-M0-1       -.4                                           .019500
+14BUS-A0  1.41421356 60.0      0.0                          -1.0
+14BUS-B0  1.41421356 60.0     -120.0                        -1.0
+14BUS-C0  1.41421356 60.0      120.0                        -1.0
+C    Note, the 3 following alternatives to the 3 preceding source cards would be
+C          used if the user wanted to omit the unnecessary  phasor solution: 
+C 14BUS-A0  1.41421356 60.0      0.0                        
+C 14BUS-B0  1.41421356 60.0     -120.0                      
+C 14BUS-C0  1.41421356 60.0      120.0                      
+19 UM                                  { Beginning of U.M. data (Type-19 source)
+1
+BLANK card ending class-1 U.M. data
+ 1 2 1111BUS-M1       1 1786.98                 { 1st card of U.M. machine table
+1.0           1.550         0 0.3          1.5           1.0
+0.93787       1.490         0
+0.0           0.0           BUS-A1            1  1.3860 { 1st card of coil table
+0.001096      0.150         BUS-B1            1 -0.95877
+0.001096      0.150         BUS-C1            1 -0.42721
+0.00074       0.101         BUS-F0            1 -2.826
+0.0131        0.055                           1
+0.0540        0.036                           1   
+BLANK card ending all U.M. data
+BLANK card ending EMTP source cards
+C       Total network loss  P-loss  by summing injections =   2.999999989932E+00
+ 2BUS-A1 1.56413                 { First of many initial condition cards for the
+ 2BUS-B1 -0.30745                { electric network.  Since  the  U.M.  is not a
+ 2BUS-C1 -1.25677                { part of the phasor solution (see DCNEW-1  for
+ 2BUS-A0 1.41421356              { such  a  more  modern  problem),  synchronous      
+ 2BUS-B0 -0.70710678             { operation  can  begin  smoothly  only  if the 
+ 2BUS-C0 -0.70710678             { initially conditions are manually applied.
+ 2BUS-F0 0.002091                 
+ 2BUS-M0 1.0
+ 2BUS-M1 1.0                     { Final card of node voltage initial conditions
+ 3BUS-A1BUS-A0 1.38494           { 1st card of branch current initial conditions
+ 3BUS-B1BUS-B0 -0.95793
+ 3BUS-C1BUS-C0 -0.42701
+ 3      BUS-A0 -1.41421356
+ 3      BUS-B0 +0.70710678
+ 3      BUS-C0 +0.70710678
+ 3      BUS-F0 -0.002091
+ 3BUS-M0BUS-M1 +1.01
+ 3BUS-M0                       +1.0
+ 3BUS-M1                       +1.0  { Last card of branch current init. condit.
+  BUS-A1BUS-B1BUS-C1BUS-M1BUS-M0     { Request for selective node voltage output
+C  Step   Time     BUS-A1     BUS-B1     BUS-C1     BUS-M1     BUS-M0     BUS-A1
+C                                                                         BUS-A0 
+C
+C                  BUS-M0       UM-1       UM-1       UM-1       UM-1       UM-1
+C                  BUS-M1      TQGEN      OMEGM      THETAM       IPA        IPB
+C    0     0.0    1.56413    -.30745   -1.25677        1.0        1.0    1.38494
+C                    1.01 1.00124132        1.0     .93787      1.386    -.95877
+C    1    .001 1.25370608 .317284401 -1.5709433 1.00000302  1.0000025 1.40049668
+C              1.00999974 .997905631        1.0     .93787 1.40049668 -.50888659
+BLANK card ending the specification of output variables
+C Last step:  500    0.5  1.62762984 -.45832224 -1.1269996 1.00472639 1.00854631
+C Last step:   .570740608 .701421892 1.00469204 .660491474 .974954484 -.86183035
+C    maxima :  1.65791637 1.66126439 1.66752483 1.00779145 1.00854631 1.41537866
+C    maxima :        1.01  1.0019948 1.00877611     .93787 1.41537866 1.40559809
+C Times of max :     .466       .038       .494       .442        0.5       .034
+C Times of max :      0.0       .015       .439       .063       .034       .056
+C    minima :  -1.6665177 -1.6618744  -1.662372 .989230544 .990404468 -1.4043962
+C              .322011281  .29918812 .988252614 .361026487 -1.4043962 -1.4122326
+C Times of min :     .491       .063       .469       .158       .217       .059
+C                    .296       .346       .159       .358       .059       .031
+  PRINTER PLOT
+ 193 .1 0.0 1.0         BUS-M1BUS-M0             { Plot limits: (-1.010,  0.000)
+ 193 .1 0.0 1.0         UM-1  THETAM              { Plot limits: (0.000,  9.379)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+BLANK     { Note this extra blank will terminate execution, to avoid 2nd subcase
+C     2nd of 2  data subcases  is  a  modification of the first that illustrates
+C     correction of a  U.M.  bug  by  Yin Yuexin  as explained in his September,
+C     1990,  article in  EMTP News.   Automatic initialization of this data case 
+C     gave the wrong answers  (although it did run) prior to correction  of  the
+C     UTPF around  23 October 1990.   Now,  answers  are close  (most  variables 
+C     differ by about 1% on the final time step).   Printout of the final phasor
+C     solution has deliberately been omitted,  so  those  wanting to verify this
+C     computation  can observe only the total network loss (see comments below).
+POWER FREQUENCY, 60.                                  
+  0.0010   0.500  
+       1       1       1       0       1      -1
+       5       5      20      20     100     100
+C  --------- EMTP CONNECTIVITY
+ 0      BUS-A0            1.0 
+ 0      BUS-B0            1.0 
+ 0      BUS-C0            1.0
+C  --------- TRANSMISSION LINES                                        
+ 0BUS-A1BUS-A0            0.02  1.0610                                         1
+ 0BUS-B1BUS-B0BUS-A1BUS-A0                                                     1
+ 0BUS-C1BUS-C0BUS-A1BUS-A0                                                     1
+C  ---------  EMTP CONNECTIVITY REQUIREMENT
+ 0      BUS-F0            1.0 
+ 0BUS-F0BUS-FS            1.0E-5                       
+C  --------- MECH NETWORK 
+ 0BUS-M1                              2.00E6                                   1
+ 0BUS-M0                              2.00E6                                   1
+ 0BUS-M0BUS-M1                      1.                                         1
+BLANK card ends the last branch card
+BLANK card ends (in this case nonexistent) switch cards
+14BUS-A0  1.41421356 60        0.0                          -1.0
+14BUS-B0  1.41421356 60       -120.0                        -1.0
+14BUS-C0  1.41421356 60        120.0                        -1.0
+14BUS-M0-1      1.020.00001                                 -1.0                    
+11BUS-M0-1       -.4                                           .019500
+14BUS-FS  0.002091  0.00001                                 -1.0                  
+19 UM                                  { Beginning of U.M. data (Type-19 source)
+11                   
+BLANK card ending class-1 U.M. data
+ 1 2 1111BUS-M1       1 1786.98                 { 1st card of U.M. machine table
+C 1 2 1111BUS-M1       1 1786.98                 0.0         1.E-2 
+C Note about preceding card:  The one on comments, with speed tolerance  EPSOM =
+C                             1.E-2  really is preferable.  However,  it results
+C                             in  a significantly different (20-30% ?) transient
+C                             than the 1st subcase.   To  ease  the  comparison,  
+C                             we repeat the sloppy solution using default EPSOM. 
+              1.550         0 0.3          1.5           1.0
+              1.490         0
+1.657962127   19.31         BUS-FSBUS-M0
+0.0           0.0           BUS-A1            1         { 1st card of coil table
+0.001096      0.150         BUS-B1            1 
+0.001096      0.150         BUS-C1            1 
+0.00074       0.101         BUS-F0            1 
+0.0131        0.055                           1
+0.0540        0.036                           1   
+BLANK card ending all U.M. data
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        BUS-A0 |TERRA *BUS-A1*
+C        BUS-B0 |TERRA *BUS-B1*
+C        BUS-C0 |TERRA *BUS-C1*
+C        BUS-A1 |BUS-A0*UM1TLA*
+BLANK card ending EMTP source cards
+C       Total network loss  P-loss  by summing injections =   3.060462493760E+00
+C       Total network loss  P-loss  by summing injections =   4.749309543189E+08
+C       Total network loss  P-loss  by summing injections =   4.749309483781E+08
+C       Total network loss  P-loss  by summing injections =   4.749309483781E+08
+C Step   Time      BUS-A1     BUS-B1     BUS-C1     BUS-M1     BUS-M0     BUS-A1 
+C                                                                         BUS-A0 
+C
+C                  BUS-M0       UM-1       UM-1       UM-1       UM-1       UM-1   
+C                  BUS-M1      TQGEN      OMEGM     THETAM        IPA        IPB    
+C   0     0.0  1.56469025 -.30754481 -1.2571454        1.0        1.0 1.38601852 
+C              1.00131382  1.0013138        1.0 .937861106  1.3860101 -.95878667
+C   1    .001  1.25258147 .317818099 -1.5703996 1.00000077        1.0 1.40129158
+C              1.00131344 .998244785        1.0 .937861106 1.40129158 -.50952832
+C   2    .002  .764711905  .89137497 -1.6560869 1.00000314        1.0 1.22174997
+C              1.00131148 .994893975        1.0 .937861106 1.22174997 .010186855
+  BUS-A1BUS-B1BUS-C1BUS-M1BUS-M0     { Request for selective node voltage output
+BLANK card ending the specification of output variables
+C 500     0.5   1.6149836 -.48296496 -1.1320186 1.00511758 1.00883159 .944795926 
+C              .552751698 .679538565  1.0051174 .638940337 .944795926 -.85191135 
+C Maxima :     1.65785372 1.66075108 1.65580126 1.00797985 1.00883159  1.4158664 
+C              1.00131382 1.00252272 1.00882158 .937861106  1.4158664 1.40560972
+C Times of max :     .049       .038       .077       .444        0.5       .034 
+C                     0.0       .015       .433        .06       .034       .056 
+C Minima :     -1.6581898 -1.6603141 -1.6560869  .98886644 .990030962 -1.4042214 
+C               .29939589 .270787035 .987919779 .329902805 -1.4042214 -1.4126707 
+C Times of min :     .024       .013       .002       .158       .215       .059 
+C                    .296       .344       .159       .356       .059       .031 
+  PRINTER PLOT
+ 193 .1 0.0 1.0         BUS-M1BUS-M0             { Plot limits: (-1.001,  0.000)
+ 193 .1 0.0 1.0         UM-1  THETAM              { Plot limits: (0.000,  9.379)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+BLANK 
+

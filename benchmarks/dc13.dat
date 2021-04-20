@@ -1,0 +1,589 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-13                                                           
+C         Illustration  of  SUBROUTINE SATURA,  the  magnetic saturation routine           
+C         that converts an RMS saturation curve of voltage vs.  current into the 
+C         corresponding locus of instantaneous flux  vs.  current.   Also  shown
+C         are  B-H  hysteresis generation  and  ZnO conversion from old formats. 
+C         12 data subcases are present, so many other features are tested, too
+SATURATION                                                                      
+$ERASE
+     -1.     10.    .001       1                                                
+             0.0             5.0                                                
+             2.0             5.0                                                
+             3.0             3.5                                                
+             4.0             2.0                                                
+             5.0             1.0                                                
+            10.0             1.0                                                
+            9999                                                                
+C Final row of resulting printout:       6      100.0000000000      0.2350000000
+     60.    .664     .01       1                                                
+             1.0            100.                                                
+             1.6            105.                                                
+            2.75            110.                                                
+             4.0            113.                                                
+             6.0            116.                                                
+             10.            119.                                                
+             44.            131.                                                
+            9999                                                                
+C Final row of resulting printout:       8     1601.6892070492    326.3046435192 
+$PUNCH, dc13a.pch                               ! { Exclamation holds lower case
+     -1.     10.    .001       1                                                
+             2.0             5.0                                                
+            9999                                                                
+     60.  303.11    300.       1       1                                        
+         .000306             0.7                                                
+         .000415             0.8                                                
+          .00076             0.9                                                
+          .00198             1.0                                                
+           .0108             1.1                                                
+            9999                                                                
+C Final row of resulting printout:       6       26.6610642630   1250.7681935392
+$PUNCH 
+     60.    34.5   300.0       1                                                
+         .000306             0.7                                                
+         .000415             0.8                                                
+          .00076             0.9                                                
+          .00198             1.0                                                
+           .0108             1.1                                                
+            9999                                                                
+C Final row of resulting printout:       6      234.2387011236    142.3625174923
+$PUNCH, dc13b.pch                               ! { Exclamation holds lower case
+C  3.76303783E+00  9.05943293E+01                                                
+C  6.10062069E+00  1.03536376E+02                                                
+C  1.33222222E+01  1.16478423E+02                                                
+C  3.87652515E+01  1.29420470E+02                                                
+C  2.34238701E+02  1.42362517E+02                                                
+BLANK card ending all  "SATURATION"  data cases
+BEGIN NEW DATA CASE
+C           2nd of 12 subcases will illustrate use of another supporting program:  
+OLD TO NEW ZNO      { Special request card to convert old ZnO data to new format
+ .000050 .020000                { Note: this data case once was numbered DC-38B.
+       1       1       1       0       1      -1  
+       5       5      20       1      30       5      50      50
+-1SENDA RECA              .305515.8187.01210  200.  0
+-2SENDB RECB              .031991.5559.01937  200.  0
+-3SENDC RECC
+C 34567890123456789012345678901234567890
+92RECA                     5555.       
+ -1.              -1.                    { Old ZnO data formats involved a dummy 
+  1.               1.                    { characteristic (these two data cards)
+   9999.
+92RECB        RECA         5555.  { 2nd arrester of 3-phase group is copy of 1st
+92RECC        RECA         5555.  { 3rd arrester of 3-phase group is copy of 1st
+BLANK card ending branch data
+BLANK card terminating nonexistent switches
+14SENDA      408000.       60.       0.0
+14SENDB      408000.       60.     -120.
+14SENDC      408000.       60.      120.
+BLANK card ending source cards
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+C          The following 3 cards are ZnO characteristics, using the old formats:
+      -1    2500.          26.           0.5                            778000.
+      -1    2500.          26.           0.5                            778000.
+      -1    2500.          26.           0.5                            778000.
+ 1    { 1st of remaining cards to be discarded searching for next case beginning
+  PRINTER PLOT
+ 144 3. 0.0 20.         RECA
+BLANK card ending plot cards     { Final card to be discarded b4 new case starts
+BEGIN NEW DATA CASE
+$PUNCH
+C 92RECA                                 5555.                                    
+C     0.778000000000000E+06   -0.100000000000000E+03    0.000000000000000E+00     
+C     0.250000000000000E+04    0.260000000000000E+02    0.500000000000000E+00     
+C                      9999                                                       
+C 92RECB                                 5555.                                    
+C     0.778000000000000E+06   -0.100000000000000E+03    0.000000000000000E+00     
+C     0.250000000000000E+04    0.260000000000000E+02    0.500000000000000E+00     
+C                      9999                                                       
+C 92RECC                                 5555.                                    
+C     0.778000000000000E+06   -0.100000000000000E+03    0.000000000000000E+00     
+C     0.250000000000000E+04    0.260000000000000E+02    0.500000000000000E+00     
+C                      9999                                                       
+C           3rd of 12 subcases will illustrate use of another supporting program.
+C           This came from Prof. Ned Mohan and graduate student Jim Frame at the
+C           University of Minnesota in Minneapolis around 1981.
+HYSTERESIS
+C  ITYPE   LEVEL   { Request Armco M4 oriented silicon steel -- only 1 available
+       1       2   { That was ITYPE=1.  As for LEVEL=2, moderate accuracy output
+    500.     1.0     { Current and flux coordinates of positive saturation point
+$PUNCH
+C                                                -1.25000000E+02 -9.70588235E-01                                                
+C                                                -1.56250000E+01 -9.19411765E-01                                                
+C                                                 9.37500000E+00 -8.47058824E-01                                                
+C                                                 2.18750000E+01 -6.58823529E-01                                                
+C                                                 4.21875000E+01  5.70588235E-01                                                
+C                                                 6.56250000E+01  7.52941176E-01                                                
+C                                                 1.12500000E+02  8.64705882E-01                                                
+C                                                 2.07812500E+02  9.41176471E-01                                                
+C                                                 5.00000000E+02  1.00000000E+00                                                
+C                                                 6.87500000E+02  1.00588235E+00                                                
+C                                                          9999.                                                                
+C   A quarter of a century late, Orlando Hevia in Santa Fe, Argentina, enhances
+C   both the code and the illustrations.  He adds to the original  ITYPE = 1  a
+C   new  ITYPE = 2  alternative,  which is for Armco M4 oriented silicon steel.
+C   Next,  illustrate the remaining 3 levels for ITYPE = 1 (these are 1, 3, and
+C   4)  followed by the 4 levels for  ITYPE = 2.  Orlando had  $PUNCH  requests
+C   after each,  although WSM removes them to minimize such redundant output.
+C   In E-mail to BPA's Dr. Tsu-huei Liu on February 21, 2006,  Orlando wrote:
+C   "I received a curve of the B-H characteristics of ARMCO M-6 steel. It is
+C   for 0.014-inch thickness (0.35 mm), with a bit more losses than ARMCO M-4."
+C  ITYPE   LEVEL   { Request Armco M4 oriented silicon steel
+       1       1   { That was ITYPE=1 and LEVEL=2.  1st of 4 levels is LEVEL = 1
+    500.     1.0     { Current and flux coordinates of positive saturation point
+C  ITYPE   LEVEL   { Request Armco M4 oriented silicon steel
+       1       3   { That was ITYPE=1 and LEVEL=2.  3rd of 4 levels is LEVEL = 3
+    500.     1.0     { Current and flux coordinates of positive saturation point
+C  ITYPE   LEVEL   { Request Armco M4 oriented silicon steel
+       1       4   { That was ITYPE=1 and LEVEL=2.  4th of 4 levels is LEVEL = 4
+    500.     1.0     { Current and flux coordinates of positive saturation point
+C  ITYPE   LEVEL   { Request Armco M6 oriented silicon steel 
+       2       1   { 1st of 4 illustrations of M6 steel is for LEVEL = 1
+    500.     1.0     { Current and flux coordinates of positive saturation point
+C  ITYPE   LEVEL   { Request Armco M6 oriented silicon steel
+       2       2   { 2nd of 4 illustrations of M6 steel is for LEVEL = 2
+    500.     1.0     { Current and flux coordinates of positive saturation point
+C  ITYPE   LEVEL   { Request Armco M6 oriented silicon steel
+       2       3   { 3rd of 4 illustrations of M6 steel is for LEVEL = 3
+    500.     1.0     { Current and flux coordinates of positive saturation point
+C  ITYPE   LEVEL   { Request Armco M6 oriented silicon steel
+       2       4   { 4th of 4 illustrations of M6 steel is for LEVEL = 4
+    500.     1.0     { Current and flux coordinates of positive saturation point
+BLANK card ending stacked  "HYSTERESIS"  data subcases
+BEGIN NEW DATA CASE
+C           4th of 12 subcases will illustrate the printing of error messages.  
+C           Were there not at least five data cards remaining at this point, the
+C               data subcase would not even be read.  The  program would instead 
+C               discard remaining cards and jump out to issue the initial prompt 
+C               once again.   But the present set of comment cards prevent this.
+KILL CODES, 13, 14,  { Just look at two very short error messages: KILL = 13, 14 
+C    The following  3  lines will never be executed because of the nature of the
+C    preceding  KILL CODES.   However,  they are legal non-comment cards.   Once
+C    we switch to the destruction of comment cards using  NOCOMM= 1  in STARTUP,
+C    the 5th subcase was missing because it was not separated from the 4th by at
+C    least 5 data cards (variable  KASEND = 5  in  STARTUP).   So, 14 Dec 94, we 
+C    add 3 noncomments:
+PRINTED NUMBER WIDTH, 15, 2,       { 1st of  3  never-processed noncomment lines
+PRINTED NUMBER WIDTH, 15, 2,       { 2nd of  3  never-processed noncomment lines
+PRINTED NUMBER WIDTH, 15, 2,       { 3rd of  3  never-processed noncomment lines
+BEGIN NEW DATA CASE
+C                5th  of 12 subcases is like the 4th except that output will be 
+C                truncated to 125 columns  ---  short of the 132 columns needed.
+TRUNCATE OUTPUT LINES, 125,  { 132-column lines are formed, but then chopped off
+KILL CODES, 13, 14,     { The same two error messages as preceding subcase, note 
+C    The following  3  lines will never be executed because of the nature of the
+C    preceding  KILL CODES.   However,  they are legal non-comment cards.   Once
+C    we switch to the destruction of comment cards using  NOCOMM= 1  in STARTUP,
+C    this 5th subcase was missing because it did not have  5  or more data cards
+C    (variable  KASEND = 5  in  STARTUP).   So, 14 Dec 94, we add 2 noncomments:
+PRINTED NUMBER WIDTH, 15, 2,       { 1st of  3  never-processed noncomment lines
+PRINTED NUMBER WIDTH, 15, 2,       { 2nd of  3  never-processed noncomment lines
+PRINTED NUMBER WIDTH, 15, 2,       { 3rd of  3  never-processed noncomment lines
+BEGIN NEW DATA CASE
+C                6th  of 12 subcases illustrates batch-mode usage of Orlando 
+C                Hevia's fitter to approximate piecewise-line  (I, Psi) points
+C                of an ordinary, old, Type-93 nonlinear reactor by a smooth,
+C                hyperbolic tangent.  See story in January, 1998, newsletter.
+TRUNCATE OUTPUT LINES, 132,  { Cancel preceding truncation; return to normal 132
+$ERASE
+C                               345678901234567890123456         
+C 345678901234567890123456789012   ITMAX     KPL    DXL2
+SMOOTH SATURATION USING TANH         600      40     .08
+C Preceding parameters to the right of col. 32 are optional changes to defaults:
+C  ITMAX = the maximum number of iterations of parameter fitter (default = 3000)
+C  KPL   = the number of uniform current steps for curve plotting (default = 50)
+C  DXL2 = radius in inches of marking circle to show data points (default = .05)
+Arbitrary line will not be seen (illustrate how program ignores all but Type 93)
+Arbitrary line will not be seen (illustrate how program ignores all but Type 93)
+C AAAAAABBBBBBCCCCCCDDDDDDCURR  FLUX                                           I
+93BUS1  BUS2              0.005 30.0                                           1
+           -.005            30.0   { Illegal point illustrates rejection
+             0.0             0.0   { 2nd illegal point (special case of origin)
+            .005            30.0
+            .010            40.0
+            .020            45.0
+            .030            47.0
+           9999.
+Arbitrary line will not be seen (illustrate how program ignores all but Type 93)
+Arbitrary line will not be seen (illustrate how program ignores all but Type 93)
+93BUS1  BUS2              0.005 30.0
+            .002            11.0
+            .005            30.0
+            .010            40.0
+            .020            43.0
+            .030            45.0
+            .040            46.0
+           9999.
+Arbitrary line will not be seen (illustrate how program ignores all but Type 93)
+Arbitrary line will not be seen (illustrate how program ignores all but Type 93)
+93BUS1  BUS2              0.005 30.0
+            .002            11.0
+            .005            30.0
+           9999.
+Arbitrary line will not be seen (illustrate how program ignores all but Type 93)
+Arbitrary line will not be seen (illustrate how program ignores all but Type 93)
+$PUNCH  { Create .PCH file as well as show contents in the printed output
+BLANK card ending last  SSUT  data case
+BEGIN NEW DATA CASE
+C                7th  of 12 subcases illustrates batch-mode usage of Orlando 
+C                Hevia's supporting program HYSTER.  This serves to convert
+C                a Type-98 element into a Type-96 element.  For background,
+C                see the story in the July, 2000, newsletter.
+C 345678901234567890123456789012345678901234567890123456
+C                                 NOZOOM  FSCALE    DXL2 
+HYSTERESIS HEVIA                       1     1.1     .04
+C  The 3 parameters on the preceding request card govern the screen plot
+C  that automatically will document hysteresis of the result:
+C    NOZOOM  is a binary switch that indicates whether the entire
+C            curve or just the hysteresis loop itself is to be plotted.
+C            Value 1 will plot everything (no zoom) whereas value zero
+C            will drop the final point,  which is outside the loop proper.
+C    FSCALE  is a scaling factor to waste space above and to the right
+C            of the 1st and 2nd-quadrant plot.  For example,  value 1.1
+C            will waste 10%,  providing this much margin.
+C    DXL2    is the "radius" in screen inches of the squares that mark data
+C            points.  Value zero means that there will be no such marking.
+C  So much for the special-request card.  On to reactor.  Everything about
+C  the following is normal Type 98 except for columns 27-74,  from which 3
+C  new floating-point parameters are read.  Of course,  if currents are in
+C  amperes and voltage is in volts,  power will be in watts and residual
+C  flux will be in volt-seconds:
+C                         <--Losses in W-><--Freq in Hz--><-Residual flux>     I
+98NODE1 NODE2                     40774.59            50.0           400.0     3
+ 0.122419130E-01 0.563980835E+03
+ 0.628200099E-01 0.782295959E+03
+ 0.215062916E+00 0.100061115E+04
+ 0.576934814E+00 0.121892639E+04
+ 0.791255713E+00 0.129949500E+04
+ 0.131488657E+01 0.143724146E+04
+ 0.266661191E+01 0.165555664E+04
+ 0.386263156E+01 0.178290710E+04
+ 0.550489426E+01 0.192845056E+04
+            9999
+$PUNCH, dc13c.pch                               ! { Exclamation holds lower case
+C                                 NOZOOM  FSCALE    DXL2 
+  REPLOT                               0     1.0     .07
+C  The following subcase illustrates generalization of the preceding hysteresis
+C  derivation by Orlando Hevia.  WSM adds  26 May 2001.
+C The following case produces Type-96 hysteretic branch cards that will result
+C in automatic initialization.  There will be  8888.  for  I-steady  and blank
+C fields for flux and remanent flux.  Note negative losses on the following
+C Type-98 card (this is the way the user requests this option):
+C                         <--Losses in W-><--Freq in Hz--><-Residual flux>     I
+98NODE1 NODE2                    -40774.59            50.0           400.0     3
+ 0.122419130E-01 0.563980835E+03
+ 0.628200099E-01 0.782295959E+03
+ 0.215062916E+00 0.100061115E+04
+ 0.576934814E+00 0.121892639E+04
+ 0.791255713E+00 0.129949500E+04
+ 0.131488657E+01 0.143724146E+04
+ 0.266661191E+01 0.165555664E+04
+ 0.386263156E+01 0.178290710E+04
+ 0.550489426E+01 0.192845056E+04
+            9999
+$PUNCH
+C                                 NOZOOM  FSCALE    DXL2 
+  REPLOT                               0     1.0     .07
+BLANK card terminates stacked Type-98 elements within  HYSTERESIS HEVIA
+BEGIN NEW DATA CASE
+C             8th  of 12 subcases illustrates in-line usage of Orlando Hevia's
+C             hysteresis-creating program.  The effect should be identical to
+C             replacement of the Type-98 branch by the Type-96 branch that was
+C             punched by the preceding subcase.  The basic network was created
+C             by taking one phase of DC-7,  and replacing the reactor using data
+C             of the preceding subcase.  Simulation continues only long enough
+C             for the first pulse of current inrush of the reactor.
+ .000025    .001     60.     60.                                                
+       1       1       1       0       0      -1
+       5       5      30       1
+  GENA  SWA                           89352.                                    
+-1SENDA RECA              .137681.07755.6806124.27                              
+  RECA  TRANA GENA  SWA                                                        1
+  TRANA GNDA                          7.5398                                   1
+  GNDA                     .0001
+C  Note special request in 15:26 of the following branch card.  This is
+C  what provides the in-line connection to Orlando Hevia's fitter,
+C  replacing the Type-98 branch by an equivalent (better) Type-96 branch:
+C                         <--Losses in W-><--Freq in Hz--><-Residual flux>     I
+98TRANA       HEVIA HYSTER        40774.59            50.0           400.0     3
+ 0.122419130E-01 0.563980835E+03
+ 0.628200099E-01 0.782295959E+03
+ 0.215062916E+00 0.100061115E+04
+ 0.576934814E+00 0.121892639E+04
+ 0.791255713E+00 0.129949500E+04
+ 0.131488657E+01 0.143724146E+04
+ 0.266661191E+01 0.165555664E+04
+ 0.386263156E+01 0.178290710E+04
+ 0.550489426E+01 0.192845056E+04
+            9999
+BLANK card ends all branch cards
+  SWA   SENDA                  1.0                                              
+BLANK card ends all switch cards
+14GENA       188000.       60.       0.0                         -1.            
+BLANK card ending source cards
+  GENA  TRANA RECA                                                              
+C   Step      Time      TRANA      GENA       TRANA      RECA       TRANA      RECA       TRANA
+C                       TERRA                                       TERRA      TRANA      GNDA
+C ***                    Switch  "SWA   "  to  "SENDA "  closed  after  0.00000000E+00  sec.
+C      0       0.0         0.0    188000.        0.0        0.0        0.0        0.0        0.0
+C      1    .25E-4  .52901E-14  187991.65 .52901E-14 .52894E-14 -.2049E-16 -.1203E-16 .84641E-17
+C      2     .5E-4  .96607E-14 187966.602 .96607E-14 .96583E-14 -.2049E-16 -.2196E-16 -.1471E-17
+BLANK card ending output variable requests (just node voltages, here)
+C     32     .8E-3  .90572E-14 179514.534 .90572E-14 .89899E-14 -.2044E-16 -.2044E-16 .11666E-20
+C     33   .825E-3  81947.1269 178980.254 81947.1269 81954.0422 .007179619 131.122181 131.114993
+C     34    .85E-3  284030.522 178430.075 284030.522 284054.493 .039243952 192.256743 192.217471
+C     35   .875E-3  383163.494 177864.047 383163.494 383195.837 .097698701 -33.507413  -33.60515
+C     36     .9E-3  365690.044 177282.221 365690.044 365720.926  .16330787 5.81105035 5.64770591
+C     37   .925E-3  368481.981 176684.647 368481.981 368513.116 .153316524 -1.0272643 -1.1806177
+C     38    .95E-3  367719.904 176071.379 367719.904 367750.991  .18045259 .141786623 -.03870274
+C     39   .975E-3  367528.209 175442.471 367528.209 367559.301   .2075535 -.06041831 -.26800857
+C     40     1.E-3  367198.987 174797.979 367198.987 367230.074 .234635209 -.02407335 -.25874528
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C             9th  of 12 subcases illustrates batch-mode use of Orlando Hevia's
+C             supporting program to find parameters A, B, and C of the Type-15
+C             Standler surge function.  See the January, 2000, newsletter.  The
+C             alternative of in-line fitting rather than batch-mode fitting can
+C             be found in the 3rd subcase of DC-19.
+STANDLER SURGE FUNCTION
+    10.0    50.0     0.0   1000.  S10500      -1
+$PUNCH, dc13d.pch                               ! { Exclamation holds lower case
+C     C STANDLER SURGE FUNCTION
+C     C     10.0    50.0     0.0   1000.  S10500      -1
+C     C Surge peak               : 1.0000E+03
+C     C Time to peak             : 1.0000E+01 us
+C     C Time to half value       : 5.0000E+01 us
+C     15S10500-1   1913.48 .34489E-4 .28995155  Standler
+    10.0    50.0    10.0   1000.  S10501       0
+$PUNCH
+C     C     10.0    50.0    10.0   1000.  S10501       0
+C     C Surge peak               : 1.0000E+03
+C     C Virtual front time       : 1.0000E+01 us
+C     C Virtual half time        : 5.0000E+01 us
+C     C Virtual front defined by 10.0 and 90.0 %
+C     15S10501   2543.7879 .23168E-4 .65859353  Standler
+    10.0    50.0    30.0   1000.  S10503       1
+    10.0    50.0    50.0   1000.  S10505 Voltage
+     8.0    20.0     0.0   1000.  S82000 Current
+     8.0    20.0    10.0   1000.  S82010 voltage
+     8.0    20.0    30.0   1000.  S82030 current
+     8.0    20.0    50.0   1000.  S82050 VOLTAGE
+$PUNCH
+C     C     10.0    50.0    30.0   1000.  S10503       1
+C     C Surge peak               : 1.0000E+03
+C     C Virtual front time       : 1.0000E+01 us
+C     C Virtual half time        : 5.0000E+01 us
+C     C Virtual front defined by 30.0 and 90.0 %
+C     15S10503   2372.9809 .25096E-4 .52633653  Standler
+C     This is 1st of 6.  Etc. for 2nd through 6th illustrations.
+BLANK card ending Standler surges
+BEGIN NEW DATA CASE
+C             10th of 12 subcases illustrates use of  LOSSY SATURATION  from
+C             Orlando Hevia.  This is added 11 May 2001 as feature becomes
+C             available.  In general terms,  this supporting program is similar
+C             to  SATURATION  (see 1st subcase),  but losses are taken into
+C             account.
+LOSSY SATURATION                                                                      
+$ERASE
+C
+C FREQ:  AS SATURATION
+C
+C VBASE: AS SATURATION
+C
+C PBASE: AS SATURATION
+C
+C KCON : CONNECTION
+C       -1, BLANK OR 0: SINGLE PHASE (THE SAME AS SATURATION)
+C           VOLTAGE, FLUX AND CURRENT WITHOUT SCALING.
+C
+C        1  STAR  (Y, WYE) CONNECTION NEUTRAL GROUNDED
+C           VOLTAGE AND FLUX SCALED DIVIDING BY SQRT(3)
+C
+C        3  DELTA  (TRIANGLE) CONNECTION
+C           CURRENT SCALED DIVIDING BY SQRT(3)
+C           TRIPLEN HARMONICS REMOVED
+C
+C KTHIRD : AS SATURATION     
+C
+C IOUT : TO BE PASSED TO .PCH FILE IN COLUMN 80
+C
+C BUS1, BUS2 : TO BE PASSED TO .PCH FILE FOR NON-LINEAR RESISTOR
+C BUS3, BUS4 : TO BE PASSED TO .PCH FILE FOR NON-LINEAR INDUCTOR
+C              IF BUS3=BUS4='      ', BUS1 AND BUS2 WILL BE USED
+C
+C FREQ  VBASE    PBASE    IPUNCH  KTHIRD   KCON  IOUT   BUS1  BUS2  BUS3  BUS4
+C ------________--------________--------________--------______------______------
+C
+     -1.     10.    .001       0       0                                     
+C I             V
+C --------------________________
+             0.0             5.0                                                
+             2.0             5.0                                                
+             3.0             3.5                                                
+             4.0             2.0                                                
+             5.0             1.0                                                
+            10.0             1.0                                                
+            9999                                                                
+     -1.     10.    .001       0       1                                         
+             0.0             5.0                                                
+             2.0             5.0                                                
+             3.0             3.5                                                
+             4.0             2.0                                                
+             5.0             1.0                                                
+            10.0             1.0                                                
+            9999                                                                
+     -1.     10.    .001       1       0                                         
+             0.0             5.0                                                
+             2.0             5.0                                                
+             3.0             3.5                                                
+             4.0             2.0                                                
+             5.0             1.0                                                
+            10.0             1.0                                                
+            9999                                                                
+     -1.     10.    .001       1       1                                         
+             0.0             5.0                                                
+             2.0             5.0                                                
+             3.0             3.5                                                
+             4.0             2.0                                                
+             5.0             1.0                                                
+            10.0             1.0                                                
+            9999                        
+C 
+     60.    .664     .01       0       0                                        
+             1.0            100.                                                
+             1.6            105.                                                
+            2.75            110.                                                
+             4.0            113.                                                
+             6.0            116.                                                
+             10.            119.                                                
+             44.            131.                                                
+            9999                                                                
+C 
+$PUNCH, dc13e.pch                               ! { Exclamation holds lower case
+     -1.     10.    .001       1                                                
+             2.0             5.0                                                
+            9999                                                                
+     60.  303.11    300.       1       1                                        
+         .000306             0.7                                                
+         .000415             0.8                                                
+          .00076             0.9                                                
+          .00198             1.0                                                
+           .0108             1.1                                                
+            9999                                                                
+C 
+$PUNCH 
+     60.    34.5   300.0       1                                                
+         .000306             0.7                                                
+         .000415             0.8                                                
+          .00076             0.9                                                
+          .00198             1.0                                                
+           .0108             1.1                                                
+            9999                                                                
+C 
+$PUNCH, dc13f.pch                               ! { Exclamation holds lower case
+C            INI   EPSIR
+CONTROLS    1024   1.E-8 { # of points per quarter cycle;  convergence tolerance
+C
+C THE FOLLOWING IS A REAL LIFE CASE
+C
+C
+C FREQ  VBASE    PBASE    IPUNCH  KTHIRD   KCON  IOUT   BUS1  BUS2  BUS3  BUS4
+C ------________--------________--------________--------______------______------
+     50.  0.001   1.0E-6               0       3       1DOMAR DOMBR DOMAL DOMBL
+C
+C IRMS----------VRMS------------P---------------
+3.01            29107.00         50640.0          
+4.39            31000.00         60640.0
+7.51            33200.00         75760.0
+14.45           35387.0          94960.0
+26.09           37280.00         114000.0
+53.73           39213.00         135360.0    
+           9999.
+$PUNCH
+C
+C SAMPLES OF EACH CONNECTION
+C CURRENT, VOLTAGE AND POWER TO OBTAIN RESISTANCE=REACTANCE
+C
+C CURRENT, VOLTAGE AND LOSSES SCALED ACCORDINGLY
+C
+C SINGLE PHASE
+C
+C FREQ  VBASE    PBASE    IPUNCH  KTHIRD   KCON  IOUT   BUS1  BUS2  BUS3  BUS4
+C ------________--------________--------________--------______------______------
+     50.  0.001   1.0E-6               0      -1       1 
+C
+C IRMS----------VRMS------------P---------------
+1.414213562     10000.0               10000.000
+3.39411255      12000.0               28800.000
+7.071067812     14000.0               70000.000
+           9999.
+C
+C Y NEUTRAL CONNECTED TO GROUND
+C
+C FREQ  VBASE    PBASE    IPUNCH  KTHIRD   KCON  IOUT BUS1  BUS2  BUS3  BUS4
+C ------________--------________--------_______------______------______------
+     50.  0.001   1.0E-6       0       0       1    1
+C
+C IRMS----------VRMS------------P---------------
+1.414213562     17320.50808      30000.000
+3.39411255      20784.60969      86400.000
+7.071067812     24248.71131      210000.000
+           9999.
+C
+C DELTA CONNECTED
+C
+C FREQ  VBASE    PBASE    IPUNCH  KTHIRD   KCON  IOUT   BUS1  BUS2  BUS3  BUS4
+C ------________--------________--------________--------______------______------
+     50.  0.001   1.0E-6       0       0       3
+C
+C IRMS----------VRMS------------P---------------
+2.449489743     10000.0          30000.000
+5.878775383     12000.0          86400.000
+12.24744871     14000.0          210000.000 
+           9999.
+$PUNCH
+BLANK  card ends stacked subcases of  LOSSY SATURATION  data
+BEGIN NEW DATA CASE
+C             11th  of 12 subcases illustrates batch-mode use of Orlando Hevia's
+C             supporting program to find parameters A, B, and C of the Type-15
+C             Heidler surge function.  See the January, 2001, newsletter.  The
+C             alternative of in-line fitting rather than batch-mode fitting can
+C             be found in the ?? subcase of DC-??.   Add this subcase 16 Nov 02
+HEIDLER SURGE FUNCTION
+C FRONT TAIL     PERC    AMPLIT    BUS   IV       N       
+C ------========--------========XX------========--
+  1.0E-6 50.0E-6  10.0   100.0    BUS          1 5
+  1.0E-6 50.0E-6   0.0   100.0    BUS         -1 5
+  1.0E-6 50.0E-6  30.0   100.0    BUS    Voltage 5
+  1.0E-6 50.0E-6  50.0   100.0    BUS    current 5
+C    The preceding data was within  HEIDLER.DAT  as supplied by Orlando Hevia
+$PUNCH
+C     Essence of Orlando Hevia's HEIDSLOP.DAT is inserted here 17 August 2003.
+C     This verifies a new fitting option that allows the user to specify his
+C     desired peak value and slope.
+C         NEW OPTION FOR HEIDLER SURGE SOURCE
+C         IF PERC IS .LT. 0.0, THE SOURCE WILL HAVE THE
+C         SLOPE AS REQUIRED IN FIRST FIELD (NOT T1)
+C SLOPE><TTAIL-><PERC--><PEAK-->  <BUS->      IV N
+ 1.0E+10 50.0E-6    -1.0   1.0E4  OFFLIN      -1 4
+$PUNCH
+BLANK card ending input for Heidler fitter
+BEGIN NEW DATA CASE
+C             12th  of 12 subcases illustrates batch-mode use of Orlando Hevia's
+C             supporting program TWOEXP to find parameters of Dommel's Type-15
+C             exponential surge funct.  See the January, 2001, newsletter (end
+C             of the Standler story mentions "other alternatives").  This does
+C             not imply more complicated (even Dommel's original 2-exponential
+C             surge is benefitted).  Final note:  the alternative of in-line
+C             fitting rather than batch-mode fitting can
+C             be found in the ?? subcase of DC-??.   Add this subcase 16 Nov 02
+TWO EXP SURGE FUNCTION
+C FRONT TAIL     PERC    AMPLIT    BUS   IV       N       
+C ------========--------========XX------========--
+  1.0E-6 50.0E-6  10.0   100.0    BUS          1 5
+  1.0E-6 50.0E-6   0.0   100.0    BUS         -1 5
+  1.0E-6 50.0E-6  30.0   100.0    BUS    Voltage 5
+  1.0E-6 50.0E-6  50.0   100.0    BUS    current 5
+$PUNCH
+BLANK card ending input for 2-exponential fitter
+BEGIN NEW DATA CASE
+BLANK 

@@ -1,0 +1,49 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-25                             Diagnostic version of  DC-9.
+DIAGNOSTIC           0 0 9 9 9 9 0 9 9 9 9
+     0.0     0.0     60.
+       0       0       1       1
+  CASCADED PI                  3 60.0
+ 1RA1   GA1                 .877  8.40 .1628
+ 2RB1   GB1                 .747  4.14-.0252  .852  8.43 .1559
+ 3RC1   GC1                 .735  3.47-.0067  .723  4.17-.0277  .829  8.46 .1571
+     1.0   2   0   0   1   1   2   3
+     1.0   1   1   0   0   2   3   1
+ 2                        999999
+ 3                               13.1449.071
+BLANK card ending first Class-5 (Series R-L-C) set of data
+     1.0   1   1   1   0   3   1   2
+ 1                               13.14
+ 2                               13.14
+ 3                               13.1449.071
+BLANK card ending 2nd   Class-5 (Series R-L-C) set of data
+       1    -1                   13.1449.071
+       2    -1                   13.1449.071
+       3    -1                   13.1449.071
+            -1               5.0 13.14
+BLANK card ending first Class-6 (Shunt R-L-C) set of data
+     2.0   1  -1  -1   1   1   2   3
+ 1                          .829  8.46 .1571
+ 2                          .723  4.17-.0277  .852  8.43 .1559
+ 3                          .735  3.47-.0067  .747  4.14-.0252  .877  8.40 .1628
+  STOP CASCADE
+BLANK card ending branch cards
+BLANK card ending switch cards (none for this problem)
+14GA1      424.35     60.         0.0                        -.1
+14RA1      424.35     60.        10.0                        -.1
+14GB1      424.35     60.      -120.0                        -.1
+14RB1      424.35     60.      -110.0                        -.1
+14GC1      424.35     60.       120.0                        -.1
+14RC1      424.35     60.       130.0                        -.1
+BLANK card ending source cards
+BLANK card ending selective node voltage outputs (none for this problem)
+C       Total network loss  P-loss  by summing injections =   9.311041032866E+03
+C 1st gen:  RA1   417.90316999073    424.35     -.0131358847782  .05382578726276
+C 1st gen:        73.687604192962  10.00000     .05219831324431      104.1253709
+C End last gen:  -12.95674346101 44.419110587004 -6432.468410934 9424.6247887975
+C End last gen:  -42.48741206788    -106.9593405 -6888.171205186      -0.6825172
+  PRINTER PLOT
+BLANK card ending plot cards (none allowed for CASCADED PI use, actuall)
+BEGIN NEW DATA CASE
+BLANK
+ 

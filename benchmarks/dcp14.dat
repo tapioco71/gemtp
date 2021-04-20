@@ -1,0 +1,65 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-14
+C       Same as  DC-5b,  only with debug printout.  Illustration of [A], [R] use
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+DIAGNOSTIC           0 9 9 9 9 9 0 9 9 9 0 9 9 9 9 9 9 9 9
+     0.1     7.0.1591549
+       1       1       1       1       1      -1
+       2      -1       5       5
+  GEN   PRIM                       0.1
+  USE AR
+ 1SEC                        40.  .025
+ 2PRIM                      -20.               10.   0.1
+  USE RL
+  SEC                        1.0
+BLANK card ending branch cards
+BLANK card ending switch cards
+14GEN            1.0    .15915                                     -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   1.187782956381E-01
+C      GEN            1.0              1.0      .23755659127612  .23782576065627
+C                     0.0              0.0      -.0113118686787       -2.7262268
+C                           Step       Time        SEC          PRIM         GEN
+C                            0       0.0   .4751131826   .998868848          1.0
+C                            1       0.1   .4749983247  .9962504852  .9950044753
+C                            2       0.2   .4701396172  .9836805108  .9800678119
+ 1
+C                           70       7.0   .3731275232   .768806442   .754045071
+C                      Variable maxima :   .4754220586  .9991241214          1.0
+C                      Times of maxima :           6.3          6.3          0.0
+C                      Variable minima :   -.475623463  -.998554929  -.999131142
+C                      Times of minima :           3.2          3.2          3.1
+  PRINTER PLOT                                 { Axis limits : (-4.756,   4.754)
+ 143 .6 0.0 7.1         SEC      { Plot is perfectly sinusoidal, since no surges
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     2nd half of test case should have the same solution, only no [A], [R] use.
+C     Note no debug printout;  we  only want to confirm time-step loop equality.
+DIAGNOSTIC           0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+     0.1     7.0.1591549
+       1       1       1       1       1      -1
+       5       5
+  GEN   PRIM                       0.1
+  PRIM                       4.2   0.1
+BLANK card ending branch cards
+BLANK card ending switch cards
+14GEN            1.0    .15915                                     -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   1.187782970898E-01
+C      GEN            1.0              1.0      .23755659417959   .2378257636428
+C                     0.0              0.0      -.0113118704942       -2.7262272
+C                                         Step      Time        PRIM         GEN
+C                                         0       0.0   .9988688478          1.0
+C                                         1       0.1   .9962504851  .9950044753
+C                                         2       0.2   .9836805107  .9800678119
+ 1
+C                                        70       7.0    .768806442   .754045071
+C                                   Variable maxima :   .9991241213          1.0
+C                                   Times of maxima :           6.3          0.0
+C                                   Variable minima :   -.998554928  -.999131142
+C                                   Times of minima :           3.2          3.1
+  PRINTER PLOT
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

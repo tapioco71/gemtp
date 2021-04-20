@@ -1,0 +1,466 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-14
+C      1st of 7 simulations using Taku Noda frequency dependence
+C   Test of Taku Noda's frequency dependence for 500-Kv line energization
+C   that was adapted from  BENCHMARK DC-37.  There is only one phase,  so  
+C   this is a zero-sequence energization.  The external Noda file  DCN14A.DAT  
+C   was produced by Taku's fitter as it processed  DCN14A.CCC  (see  DCN13.DAT).
+C  DIAGNOSTIC           9 9 9
+PRINTED NUMBER WIDTH, 13, 2,
+ .000050    .020
+       1       1       1       1       1      -1
+       5       5      20      20
+-1SEND  REC                 Noda line DCN14A.DAT   SHOW 5 {
+  REC                       100.  { R = 100 ohms at receiving end                       
+  PHASOR                    1.0   { Extra node for sinusoidal value                      
+-1SENDOPRECOP               Noda line DCN14A.DAT   SHOW 5 { 
+-1SENDOPREC37               .306  5.82  .012  200.
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14SEND       408000.       60.                                     -1.
+14SENDOP     408000.       60.                                     
+C 14PHASOR     171783.       60. -63.03864                           -1.  Sept, 95
+C 14PHASOR     167553.       60. -63.92034                           -1. { 24 Oct 95
+14PHASOR     161945.       60. -65.23648                           -1. { 15 Dec 95
+BLANK card ending source data
+C SEND                         408000.          408000.      828.88239617701  1454.6091982437       .16909200882E9  .287215850537E8
+C                                  0.0              0.0      -1195.341747336      -55.2615112      .243849716456E9 43849716.4564481
+C
+C            REC       73659.800560567  167553.22961161      -736.5980056057  1675.5322961161      -.14037042377E9
+C                      -150493.5830348      -63.9203429      1504.9358303482      116.0796571      .19681465346E-8
+C     Total network loss  P-loss  by summing injections =   1.420609591332E+10
+C   Step      Time        RECOP        REC          REC37        SEND         PHASOR       SENDOP
+C      0       0.0           0.0  73659.80056          0.0      408000.  73659.70723          0.0
+C      1     .5E-4           0.0  76407.32341  1689.017016  407927.5198  76483.18702  407927.5198
+C      2     .1E-3           0.0  79203.65163  1710.134462  407710.1048  79279.49271  407710.1048
+C      3    .15E-3           0.0  81971.46352  1730.644305  407347.8324  82047.63077  407347.8324
+ 1
+C    400       .02   346718.6299  165886.2597  -124994.318  126078.9337  165889.8045  126078.9337
+C Variable maxima :   735330.9757  167562.0623   829744.565      408000.  167551.9757  407991.9464
+C Times of maxima :        .00205        .0196        .0168          0.0       .00295       .01665
+C Variable minima :   -736625.335  -167610.097  -883109.582  -407991.946  -167552.349  -407991.946
+C Times of minima :        .00625        .0113       .00765       .00835        .0113       .00835
+ 144 2. 0.0 20.         PHASOR      REC       
+ 144 2. 0.0 20.         RECOP REC37
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      2nd of 7 simulations using Taku Noda frequency dependence
+C   Test of Taku Noda's frequency dependence for all 3 phases (uncoupled) of 
+C   600 meters of 2-wire (core, sheath) cable that feed a GIS substation.  This
+C   data came from Dr. Ivano Bonfanti of CESI in the summer of 1994.  Using
+C   JMARTI  modeling,  the natural oscillation after deenergization is
+C   underdamped,  and is unstable.  Taku Noda stabilized this!   The original
+C   simulation had  dT = 1 usec  and  Tmax = 60 msec.  To speed the simulation
+C   we increased the step size and decreased the end-time.  See story in the
+C   January, 1995, newsletter.
+  3.E-06 15.E-03     50.
+     500       3       1       1       1
+C NO LOAD OPENING
+C FEEDING SYSTEM MODEL Xo/Xd = 1.5 IEC OSCILLATIONS
+C
+51SORGERRETEIR             7.697 11.56
+52SORGESRETEIS             0.465  7.70
+53SORGETRETEIT
+  RETEIRCELLAR              33.0        2.27
+  CELLAR                    8.55         1.9
+  CELLAR                         .9425
+  RETEISCELLAS              33.0        2.27
+  CELLAS                    8.55         1.9
+  CELLAS                         .9425
+  RETEITCELLAT              33.0        2.27
+  CELLAT                    8.55         1.9
+  CELLAT                         .9425
+C
+C AUTOTRANSFORMER MODEL (3 WINDs, SINGLE PHASE)
+C 
+  TRANSFORMER               .554 1560.INTERR6.6E+5
+            9999
+ 1T1000RTR400R              .855  130.3464.1
+ 2TR400R                         1.E-62309.4
+ 3TERZIR                  1.1E-3 .0803  122.
+  T1000R                    109.      4.6E-3
+  T1000RTR400R              513.      5.7E-3
+  TR400R                    230.      4.9E-3
+  TR400RTERZIR              324.      2.1E-3
+  TERZIR                     88.      5.7E-3
+  TRANSFORMER               .554 1560.INTERR6.6E+5
+            9999
+ 1T1000STR400S              .855  130.3464.1
+ 2TR400S                         1.E-62309.4
+ 3TERZISTERZFS            1.1E-3 .0803  122.
+  T1000S                    109.      4.6E-3
+  T1000STR400S              513.      5.7E-3
+  TR400S                    230.      4.9E-3
+  TR400STERZIS              324.      2.1E-3
+  TERZIS                     88.      5.7E-3
+  TRANSFORMER               .554 1560.INTERR6.6E+5
+            9999
+ 1T1000TTR400T              .855  130.3464.1
+ 2TR400T                         1.E-62309.4
+ 3TERZITTERZFT            1.1E-3 .0803  122.
+  T1000T                    109.      4.6E-3
+  T1000TTR400T              513.      5.7E-3
+  TR400T                    230.      4.9E-3
+  TR400TTERZIT              324.      2.1E-3
+  TERZIT                     88.      5.7E-3
+C
+C CONNECTIONS AMONG TERTIARIES
+C
+  TERZIS                  .59E-3                         
+  TERZIS                     15.      30.E-3
+  TERZFSTERZIT            .59E-3                          
+  TERZIT                     15.      30.E-3
+  TERZFTTERZIR            1.3E-3
+  TERZIR                     15.      66.E-3
+C --------------------------------------------------------------------
+C
+C 600 m CABLE - SINGLE PIECE
+C
+C PHASE  R 
+C
+-1T1000RLINEIR             Noda line DCN14B.DAT    SHOW 5         { 1 of 2
+-2      GUAI2R                
+C
+C PHASE  S - 
+C
+-1T1000SLINEIS             Noda line DCN14B.DAT    SHOW 5         { 1 of 2
+-2      GUAI2S
+C
+C PHASE  T - 
+C
+-1T1000TLINEIT             Noda line DCN14B.DAT    SHOW 5         { 1 of 2
+-2      GUAI2T
+C --------------------------------------------------------------------
+C
+C Overhead line (JMARTI modeling) connected to cable;  it is open ended
+C
+-1LINEIRLINEFR                2.  0.00              -2 3
+       6      0.41594447322080191000E+03
+ -0.670999919281493567E+04  0.115596661243669278E+05  0.993927202053121437E+04
+  0.437799474890913553E+05  0.615071877212520224E+06  0.484919159975218028E+07
+  0.126247917999855034E+03  0.125541194952814835E+03  0.131618421672545515E+04
+  0.303558850109017385E+04  0.221727916316544798E+05  0.187747576728828368E+06
+       6      0.94711343051337508200E-05
+  0.627144078924490600E+02  0.380804893328911476E+03  0.174977451831839358E+04
+  0.348074471363108660E+04  0.113940782723808953E+05  0.101795194165061461E+07
+  0.870408197488144106E+04  0.491231452549212191E+05  0.122949026800477048E+06
+  0.101854126642379532E+06  0.193028023946739763E+06  0.116009868370252406E+07
+-2LINEISLINEFS                2.  0.00              -2 3
+       2      0.23495426137547622100E+03
+  0.145541128869323956E+03  0.317230857963757554E+05
+  0.769613905473121634E+02  0.169101759187606077E+05
+       2      0.94676914504312110400E-05
+ -0.565298558630553235E+05  0.348690682154812385E+07
+  0.613123991654509772E+07  0.345523296629063972E+07
+-3LINEITLINEFT                2.  0.00              -2 3
+       2      0.18990790696897147400E+03
+  0.715297322023219522E+02  0.126259964321454504E+04
+  0.643449751540205739E+02  0.114317717964364147E+04
+       1      0.95267726581649492100E-05
+  0.625041670201623627E+07
+  0.625078786252403353E+07
+  0.55923422 -0.70710678  0.44272643
+  0.00000000  0.00000000  0.00000000
+  0.61197564  0.00000000 -0.77973496
+  0.00000000  0.00000000  0.00000000
+  0.55923422  0.70710678  0.44272643
+  0.00000000  0.00000000  0.00000000
+C 600 m CABLE SHEAT GROUNDING
+  GUAI2R                  1.E-03
+  GUAI2S                  1.E-03
+  GUAI2T                  1.E-03
+C --------------------------------------------------------------------
+BLANK CARD ENDING BRANCHES
+C SWITCH CARDS
+  RETEIRTR400R       -1.    1.E-06                                             3
+  RETEISTR400S       -1.    1.E-06                                             3
+  RETEITTR400T       -1.    1.E-06                                             3
+BLANK CARD ENDING SWITCHES
+C SOURCE CARDS
+14SORGER     326600.       50.      -10.                           -1.        1.  
+14SORGES     326600.       50.     -130.                           -1.        1.  
+14SORGET     326600.       50.     -250.                           -1.        1.
+BLANK CARD ENDING SOURCES
+  TR400RTR400STR400TT1000RT1000ST1000TLINEIRLINEISLINEIT
+BLANK CARD ENDING NODE VOLTAGE REQUEST
+ 1441.5 0.0 15.         TR400RTR400STR400T
+BLANK CARD ENDING PLOT REQUEST
+BEGIN NEW DATA CASE                                                             
+C     BENCHMARK DCNEW-14
+C      3rd of 7 simulations using Taku Noda frequency dependence
+C   Test of Taku Noda's frequency dependence for 500-Kv line energization
+C   The 18 old (around 1970), cascaded Pi-circuits in  DC-3  have been
+C   replaced by reference to the external Nodal file  DCN14C.DAT  (see below).
+PRINTED NUMBER WIDTH, 13, 2,
+ .000050    .100   3000.    { XOPT = 3 KHz means reactance in ohms at this freq.
+       1       1       1       1       1      -1               2 
+       5       5      10      10      20      20     100     100  { Printout 
+-1GEN-A 18-A            Noda line DCN14C.DAT  SHOW 2        { 1 of 3 }         
+-2GEN-B 18-B                                                { 2 of 3 }         
+-3GEN-C 18-C                                                { 1 of 3 }         
+ 0M-A   GEN-A              400.0   { 400 Ohm closing resistors, to be shorted by
+ 0M-B   GEN-B              400.0   { breaker poles at times  9.98,  14,  and  14
+ 0M-C   GEN-C              400.0   { msec, respectively.}                      1
+ 0POLE-AM-A                15.0                                                 
+ 0POLE-BM-B                15.0                                                 
+ 0POLE-CM-C                15.0                                                 
+BLANK card ending branch cards
+  E-A   POLE-A    0.      20.0                                                 1
+  E-B   POLE-B  0.00398   20.0  { Closing will be at 4.0 msec, all computer }  3
+  E-C   POLE-C  0.00398   20.0  { This backoff from 4.0 was needed by PRIME }  1
+  M-A   GEN-A   0.00998   20.0            { Breaker poles across 400 Ohm closing
+  M-B   GEN-B   0.013998  20.0            { resistors.   Note artificial opening
+  M-C   GEN-C   0.013998  20.0            { time (in fact, there is no opening).
+BLANK card ending switches
+14E-A        -1.0      60.0    -90.0                                            
+14E-B        -1.0      60.0   -210.0                                            
+14E-C        -1.0      60.0    30.0                                             
+BLANK card ending sources
+  18-C  18-B  18-A                                                              
+C   Step      Time                     18-C         18-B         18-A         E-A          E-B          E-C          M-C
+C                                                                             POLE-A       POLE-B       POLE-C       GEN-C
+C ***                    Switch  "E-A   "  to  "POLE-A"  closed  after  0.00000000E+00  sec.
+C      0       0.0           0.0          0.0          0.0          0.0          0.0          0.0          0.0          0.0
+C      1     .5E-4           0.0          0.0          0.0          0.0  -.298225E-4          0.0          0.0  .433681E-20
+C      2     .1E-3           0.0          0.0          0.0          0.0  -.596344E-4          0.0          0.0  .867362E-20
+C      3    .15E-3           0.0          0.0          0.0          0.0  -.892467E-4          0.0          0.0  .130104E-19
+C      4     .2E-3           0.0          0.0          0.0          0.0  -.118807E-3          0.0          0.0  .173472E-19
+C      5    .25E-3           0.0          0.0          0.0          0.0  -.148281E-3          0.0          0.0   .21684E-19
+C     10     .5E-3           0.0          0.0          0.0          0.0   -.29411E-3          0.0          0.0  .433681E-19
+C     20     .1E-2           0.0   -.1156E-19  -.26977E-19  -.26977E-19  -.574156E-3          0.0          0.0  .867362E-19
+C     40      .002           0.0  -.042648677  -.042653832  -.192009171  -.001055655          0.0          0.0  .173472E-18
+BLANK card ending output variables requests (node voltages, here)
+C   2000       0.1           0.0  -.951949629  .9242773228  .0636028753    -.0031009  .0016317758  .0014052925          0.0
+C Variable maxima :           0.0  1.414644389  1.532499021  1.725016394  .0053208621  .0068965948  .0062319486  .0017896749
+C Times of maxima :           0.0         .023         .017        .0131       .01055       .01595        .0179         .006
+C Variable minima :           0.0  -1.96464238  -1.21489183  -1.30405718  -.004371267  -.004528488  -.006055026  -.002037552
+C Times of minima :           0.0        .0156        .0264       .02125        .0161         .022       .01425         .012
+ 144 2. 0.0 20.         18-A  18-B  18-C
+ 14410. 0.0100.         18-A  18-B  18-C
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      4th of 7 simulations using Taku Noda frequency dependence
+C   Test of Taku Noda's frequency dependence for a fault on a 3-phase line.
+C   The old (around 1980) Hauer frequency dependence in  DC-41  has been
+C   replaced by reference to the external Nodal file  DCN14D.DAT  (see below).
+C   IPLOT  has been decreased to unity (DC-41 had 8) so all details can be seen.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 9 output columns)
+  20.E-6  20.E-3  60.     60.
+       1       1       1       1       1      -1
+       5       5      20      20     100     100
+ 0GENA  BEGINA                  14.
+ 0GENB  BEGINBGENA  BEGINA
+ 0GENC  BEGINCGENA  BEGINA
+C   Taku Noda's 3_phase line follows.  See DCNEW-13  for creation of the data:
+C $LISTOFF
+-1BEGINAENDA            Noda line DCN14D.DAT    SHOW 5         { 1 of 3
+-2BEGINBENDB                                          
+-3BEGINCENDC    
+  ENDC                     1.E18
+C $LISTON
+BLANK card ending branch cards
+  ENDA         .00413     1.0
+BLANK card ending switch cards (just the fault switch, here)
+14GENA     428.       60.      -90.0                         -1.
+14GENB     428.       60.     -210.0                         -1.
+14GENC     428.       60.       30.0                         -1.
+BLANK card ending source cards
+C     Total network loss  P-loss  by summing injections =  -1.013945364547E+01
+C          GENC    370.65887281974             428.      -.4805293859127  .93518318711039       -3.21188654066  200.12920204162
+C                              214.       30.0000000      .80228367970955      120.9195832      -200.1034264941       -0.0160491
+C   Step      Time       ENDC        ENDB        ENDA        BEGINC      BEGINB      BEGINA      GENA        GENB        GENC
+C 
+C      0       0.0   398.546371  -399.93767  -1.9823321  381.890844   -382.3653   .22786864  .26207E-13  -370.65887  370.658873
+C      1     .2E-4   396.229497  -401.60165  1.39573871   379.97479  -384.04649   3.4865286   3.2270134  -372.26184   369.03483
+C      2     .4E-4    394.45906  -403.31911  4.87008728  378.294669  -385.67355  6.81831965  6.45384335  -373.84365  367.389809
+C      3     .6E-4   392.661642  -405.02177  8.33699876  376.588353  -387.28347  10.1450332   9.6803064  -375.40421  365.723902
+ 1
+C   1000       .02   -297.12285  -545.53844         0.0  -90.750721  -331.99965  367.631455  407.052189  -318.06599  -88.986204
+C Variable maxima :   627.936494  580.071468  461.651958  440.730397  458.783591  441.364716  427.998648   427.99985   427.99985
+C Times of maxima :        .0145      .00948      .00414      .01532      .01014      .00416      .00416      .00972      .01528
+C Variable minima :   -686.76985  -589.84135  -1.9823321  -492.71846  -441.34178  -413.11665       -428.   -427.9994   -427.9994
+C Times of minima :       .00602      .01928         0.0      .00676       .0014      .01306       .0125      .01806      .00694
+  CALCOMP PLOT
+ 144 2. 0.0 20.         ENDC  ENDB  ENDA
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      5th of 7 simulations using Taku Noda frequency dependence is 6-phase
+C      (double circuit) simulation from Robert Hasibar of BPA.  Trivial example.
+C      *          TRANSIENT  STUDY - TEST OF MARTI VS NODA     *
+C      *     LINE MODELS, DOUBLE CCT LINE, 500 KV, 50 MILES    *
+C      *  LINE ENERGIZING TRANSIENT  * 
+  10.E-6  50.E-3  60.     0.0
+       1       3       0       0       1      -1        
+       5       5      20      20     100     100
+51SENDA BUSA              2.    23.
+52SENDB BUSB              3.    60.
+53SENDC BUSC  
+C          -------  CONNECTION TO ENERGIZED CCT, OPEN AT END
+ 0BUSA  A'1               .001
+ 0BUSB  B'1               .001
+ 0BUSC  C'1               .001
+-1A1    A2                Noda line DCN14E.DAT SHOW 5       { 1 of 6 }                  
+-2B1    B2                                  
+-3C1    C2                                  
+-4A'1   A'2                                 
+-5B'1   B'2                                 
+-6C'1   C'2                                 
+BLANK
+C            ------  SWITCHES CLOSING ON ONE CCT, OPEN ENDED
+  BUSA  A1       4.00E-3   10.00                                               1
+  BUSB  B1       4.00E-3   10.00                                               1
+  BUSC  C1       5.00E-3   10.00                                               1
+BLANK  card ending switch cards
+14SENDA    449.0      60.        0.0                          -1.
+14SENDB    449.0      60.     -120.0                          -1.
+14SENDC    449.0      60.      120.0                          -1.
+BLANK  card ending source cards
+  A1    B1    C1    A'1   B'1   C'1
+  A2    B2    C2    A'2   B'2   C'2
+C  First  12     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time       A1          B1          C1          A'1         B'1         C'1         A2          B2          C2
+C 
+C
+C                        A'2         B'2         C'2         BUSA        BUSB        BUSC
+C                                                            A1          B1          C1
+C      0       0.0   -47.555111  13.2189276  97.5574018  466.992437  -236.49344  -229.76061  -47.534179  13.5543977  98.3705012
+C                      469.7859  -237.50992  -230.23688         0.0         0.0         0.0
+C      1     .1E-4    -47.55419  14.3348568  98.5451711  468.117239  -232.73895  -230.38265  -47.199522  14.3042986  98.9495346
+C                    470.213646  -235.11275  -231.02914         0.0         0.0         0.0
+BLANK  card ending node voltage outputs   
+C   5000       .05   480.786349  -277.80271  -196.03887  480.786311  -277.80253  -196.03878  455.975175  -288.37514  -224.15388
+C                    509.351281    -277.122  -165.19716  .120430376  .254870926  -.16641182
+C Variable maxima :   539.744875  695.834292  649.312458  539.744347  695.834921  649.310907  681.214671  952.100849  858.770718
+C                    679.373497  910.604531  800.998841  1.41622866  1.95524118  2.20395638
+C Times of maxima :        .0163      .00734      .00958       .0163      .00734      .00958      .01596      .00702      .00929
+C                        .01647      .00728      .00985      .01343      .01656       .0079
+C Variable minima :   -592.97516  -677.85138  -538.36103  -592.97451  -677.85157  -538.36051  -707.88181  -817.48709  -616.73697
+C                     -749.2678  -901.75017  -598.57197  -1.0836199  -2.2438628  -1.6491224
+C Times of minima :       .00789      .01463      .01798      .00789      .01463      .01798       .0087      .01518      .01794
+C                        .00808      .01464      .01739      .02072      .00831      .00622
+ 144 .5 3.0 8.0         A2    B2    C2
+ 144 .5 3.0 8.0         A'2   B'2   C'2
+ 144 5. 0.0 50.         A2    B2    C2
+ 144 5. 0.0 50.         A'2   B'2   C'2
+BLANK  ....  PLOTS
+BLANK  ----  CASE
+BEGIN NEW DATA CASE                                                             
+C     BENCHMARK DCNEW-14
+C      6th of 7 simulations using Taku Noda frequency dependence
+C   Test of Taku Noda's frequency dependence for 500-Kv line energization
+C   The 18 old (around 1970), cascaded Pi-circuits in  DC-3  have been
+C   replaced by reference to the external Nodal file  DCN14F.DAT  (see below).
+C   This is untransposed.  For corresponding transposed,  see 3rd subcase
+PRINTED NUMBER WIDTH, 13, 2,
+ .000050    .100   3000.    { XOPT = 3 KHz means reactance in ohms at this freq.
+       1       1       1       1       1      -1 
+       5       5      10      10      20      20     100     100  { Printout 
+-1GEN-A 18-A            Noda line DCN14F.DAT  SHOW 2        { 1 of 3 }         
+-2GEN-B 18-B                                                { 2 of 3 }         
+-3GEN-C 18-C                                                { 1 of 3 }         
+ 0M-A   GEN-A              400.0   { 400 Ohm closing resistors, to be shorted by
+ 0M-B   GEN-B              400.0   { breaker poles at times  9.98,  14,  and  14
+ 0M-C   GEN-C              400.0   { msec, respectively.}                      1
+ 0POLE-AM-A                15.0                                                 
+ 0POLE-BM-B                15.0                                                 
+ 0POLE-CM-C                15.0                                                 
+BLANK card ending branch cards
+  E-A   POLE-A    0.      20.0                                                 1
+  E-B   POLE-B  0.00398   20.0  { Closing will be at 4.0 msec, all computer }  3
+  E-C   POLE-C  0.00398   20.0  { This backoff from 4.0 was needed by PRIME }  1
+  M-A   GEN-A   0.00998   20.0            { Breaker poles across 400 Ohm closing
+  M-B   GEN-B   0.013998  20.0            { resistors.   Note artificial opening
+  M-C   GEN-C   0.013998  20.0            { time (in fact, there is no opening).
+BLANK card ending switches
+14E-A        -1.0      60.0    -90.0                                            
+14E-B        -1.0      60.0   -210.0                                            
+14E-C        -1.0      60.0    30.0                                             
+BLANK card ending sources
+  18-C  18-B  18-A                                                              
+BLANK card ending output variables requests (node voltages, here)
+ 144 2. 0.0 20.         18-A  18-B  18-C
+ 144 2. 10. 30.         18-A  18-B  18-C
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-14
+C      7th of 7 simulations uses the 180-mile line of preceding data,  but with
+C      15 ohms of source impedance.  Illustrate  FREQUENCY SCAN  as mentioned
+C      in the October, 1999, newsletter.  Add this data  30 Aug 1999.
+FREQUENCY SCAN, 150., 2., 300., 0,       { 160 < f < 300 Hz  in  2-Hz increments
+PRINTED NUMBER WIDTH, 13, 2,
+ .000050    -1.0     60.    { XOPT = 60 Hz means reactance in ohms at this freq.
+       1       1       1       0       1
+  E-A   GEN-A                      15.
+  E-B   GEN-B                      15.
+  E-C   GEN-C                      15.
+-1GEN-A 18-A            Noda line DCN14F.DAT  SHOW 2        { 1 of 3 }         
+-2GEN-B 18-B                                                { 2 of 3 }         
+-3GEN-C 18-C                                                { 1 of 3 }         
+BLANK card ending branch cards
+BLANK card ending switches
+  POLAR OUTPUT VARIABLES { 1st of 3 alternatives for output gives mag, angle
+C     Preceding is one of 3 alternatives.  The other two are, after commented:
+C BOTH POLAR AND RECTANGULAR  { Request for (in order): mag, angle, real, imag
+C RECTANGULAR OUTPUT VARIABLES { 3rd of 3 alternative outputs gives real, imag
+14E-A        -4.0      60.0    -90.0                               -1.             
+14E-B        -4.0      60.0   -210.0                               -1.             
+14E-C        -4.0      60.0    30.0                                -1.             
+BLANK card ending sources
+  18-C  18-B  18-A                                                              
+BLANK card ending output variables requests (node voltages, here)
+  F-SCAN COMPONENTS     MAG   ANGLE     { Access "mag" and "angle" next
+ 14614.160.300.         18-A        18-A
+C 18630. 60.150.         CUR         CUR         { Node voltage at CUR is branch voltage to ground
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+EOF
+
+C     BENCHMARK DCNEW-14
+C      31 Aug 99.  Is preceding 7th subcase correct?  Curves are nice and
+C      smooth,  so it might be.  But there are trouble signs as the following
+C      data will demonstrate.  One does not even need  FREQUENCY SCAN  to
+C      show the trouble.  Return to  14F  and add phasor solution.  It will
+C      be found that the total network loss is negative.  Also, sinusoidal
+C      continuation in the dT loop indicates discontinuity on 1st step.  It
+C      is not large,  but it is there.  The graph clearly shows error in
+C      the initialization.  Why?
+C     Total network loss  P-loss  by summing injections =  -1.011651505719E-03
+C              Node                Source  node  voltage             Injected  source  current              Injected  source  power
+C              name         Rectangular            Polar          Rectangular            Polar            P  and  Q    MVA and P.F.
+C
+C              E-A     -.244921271E-15              4.0      -.0062090388311  .00621276289868      -.4301610373E-3  .01242552579737
+C                                  4.0       90.0000000      -.2150805186E-3     -178.0160729      -.0124180776621       -0.0346191
+C
+C              E-B     3.4641016151378              4.0      .00279398778041   .0061561611401      -.6462844164E-3   .0123123222802
+C                                  -2.      -30.0000000      .00548561320782       63.0088877       -.012295348567       -0.0524909
+C
+C              E-C     -3.464101615138              4.0      .00312691699591  .00631003036364      .64793947977E-4  .01262006072728
+C                                  -2.     -150.0000000      -.0054807730559      -60.2941694      -.0126198943936        0.0051342
+PRINTED NUMBER WIDTH, 13, 2,
+ .000050    .020     60.    { XOPT = 60 Hz means reactance in ohms at this freq.
+       1       1       1       1       1
+  E-A   GEN-A                      15.
+  E-B   GEN-B                      15.
+  E-C   GEN-C                      15.
+-1GEN-A 18-A            Noda line \data\DCN14F.DAT  SHOW 2        { 1 of 3 }         
+-2GEN-B 18-B                                                { 2 of 3 }         
+-3GEN-C 18-C                                                { 1 of 3 }         
+BLANK card ending branch cards
+BLANK card ending switches
+C  POLAR OUTPUT VARIABLES { 1st of 3 alternatives for output gives mag, angle
+C     Preceding is one of 3 alternatives.  The other two are, after commented:
+C BOTH POLAR AND RECTANGULAR  { Request for (in order): mag, angle, real, imag
+C RECTANGULAR OUTPUT VARIABLES { 3rd of 3 alternative outputs gives real, imag
+14E-A        -4.0      60.0    -90.0                               -1.             
+14E-B        -4.0      60.0   -210.0                               -1.             
+14E-C        -4.0      60.0    30.0                                -1.             
+BLANK card ending sources
+  18-C  18-B  18-A                                                              
+BLANK card ending output variables requests (node voltages, here)
+ 144 2. 0.0 20.         18-A  18-B  18-C
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+

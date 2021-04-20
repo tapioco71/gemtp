@@ -1,0 +1,73 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-49
+C     Companion case to DC-32, which had  MEMSAV=1  use.   Development was first
+C     documented  in  Volume X  EMTP Memoranda,  3 July 1980,  Pagination  MSDO.
+C     Node  LOADA  has a one-ohm resistor connected to  FAULT,  and this in turn
+C     is connected to ground via switch number one.  This fault switch was  open
+C     during  DC-32,  but will here be closed at  12 msec  (the  1st step beyond
+C     the backed-off switching time of  11.99 msec).
+$OPEN,  UNIT=22  FILE=dc32to49.bin  STATUS=OLD  FORM=UNFORMATTED ! { (hold case)
+C $OPEN,  UNIT=22  FILE=dc32.bin  STATUS=OLD  FORM=UNFORMATTED ! { (hold case)
+START AGAIN
+       1         .011990
+    9999
+$CLOSE,  UNIT=22   STATUS=KEEP
+$OPEN,  UNIT=22  STATUS=SCRATCH  FORM=UNFORMATTED
+MISCELLANEOUS DATA CARDS
+ .000020    .018                                    .010
+       1       1       0       0       1       0       0       2
+$OPEN, UNIT=4   FILE=dc32.pl4   STATUS=APPEND !  { C-like usage adds at end 
+C       The following step numbers are a continuation of DC-32,  which simulated
+C       500 steps (DELTAT = 20 microseconds, TMAX = 10 milliseconds).
+CHANGE PRINTOUT FREQUENCY
+     500       1     502       2     510      10     550      50
+C    Step      Time       SECB        SECA        SECC        AN4            AN5
+C                         CATH1       CATH2       CATH3       CATH4        CATH5
+C
+C                         AN6         AN5         AN4         CATH6        CATH5
+C
+C                         TRANC       TRANB       TRANA       POLEB        POLEA
+C
+C                         GENB        GENC        SECB        SECA          SECC
+C                                                 CATH1       CATH2        CATH3
+C                         TRANB       TRANC
+C                         GENC        GENA
+C     502    .01004    -211.3618         0.0   -239.0341  -46.136559   -300.6658
+C                     -141.67108  -141.67108  -141.67108  -67.862224  158.994718
+C                     -9.9160749  -77.285888  86.0849016  -141.67108  143.499575
+C                     -76.194786  -9.4236639         0.0  3.09902854         0.0
+C                     -.01815669  .012150754
+C             Etc. (skip to next interesting event, which is the 1st switching):
+C            Diode   "SECA  "  to  "CATH2 "  opening after  1.02000000E-02  sec.
+C     510     .0102    -150.8714         0.0  -285.45775  -.45751033  -283.77559
+C                     -140.50318  -140.50318  -140.50318  -5.4593198  143.272405
+C                     -45.725494  -49.733993  97.8757247  -140.50318  145.412079
+C                     -48.641182  -45.235225         0.0  -.42793493         0.0
+C                     -.03153852  .006633174
+C            Diode   "AN4   "  to  "CATH4 "  closing after  1.02200000E-02  sec.
+TIME STEP LOOP
+C            Diode   "SECC  "  to  "CATH3 "  opening after  1.72000000E-02  sec.
+C            Diode   "AN6   "  to  "CATH6 "  opening after  1.72200000E-02  sec.
+C            Diode   "AN4   "  to  "CATH4 "  closing after  1.77800000E-02  sec.
+C            Diode   "SECB  "  to  "CATH1 "  closing after  1.78400000E-02  sec.
+C     900      .018          0.0         0.0  -200.80168         0.0  -207.67249
+C                     -156.26361  -156.26361  -157.81916  105.964948   51.408884
+C                     -89.469147  18.0212454  73.9589646  -156.26361  41.4269674
+C                      19.522284  -89.301354  12.9075961  1.99638332         0.0
+C                     -.00951582  -.00302247
+C Variable minima :   -307.90065  -319.51502  -314.74562  -347.33303  -354.13903
+C                     -193.81352  -193.81352  -193.81352  -165.05691  -166.43183
+C                     -94.926015  -95.222122  -99.426568  -193.81352  38.4109479
+C                     -93.876407  -93.889586  -.89624956  -1.2792333  -.74181951
+C                      -.0346548  -.03640764
+C Times of minima :       .00706      .00624      .00544       .0142        .015
+C                         .01488      .01488      .01488       .0146      .01626
+C                         .01564       .0148      .01646      .01488      .01726
+C                          .0173      .00312      .00372      .01552      .00216
+C                          .0177      .01604
+  PRINTER PLOT
+ 144 1. 10. 18.         LOADA LOADB              { Axis limits: (-2.784,  1.443)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+ 

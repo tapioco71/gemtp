@@ -1,0 +1,1376 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCN-29                                                           
+C     The first 11 subcases were provided by Prof. Aki Ametani on 
+C     Feb. 28, 2000 for testing of "CABLE PARAMETERS" on 400 KV 
+C     XLPE cables using  IYG  to represent the semi-conducting layer.  
+C     The second 4 subcases were provided by Prof. Aki Ametani in May,
+C     2000 for testing of impedance and admittance calculation for
+C     pipe type SC cables using "CABLE PARAMETERS".
+C     The last 3 subcases were provided by Prof. Mustafa Kizilcay: each
+C     is a case of Pipe type cable with a core semiconducting layer.
+C     Prof. Akihiro Ametani had to modify the code of CP to handle data
+C     with core admittance only (i.e., no input for sheath admittance).
+C     The code changes were sent to BPA on November 21, 2001
+C       1st of 32 subcases of dcn29.dat
+CABLE PARAMETERS
+C                  P  Pt  Ze  ZC  Zs  ??  Zt  Yt Zph  Ti  Tv Tot  Re  Im Mag Ang
+MATRIX OUTPUTS     1   1   1   3   1   1   1   1   1   1   1   1   0   0   1   1
+C      22 December 2003,  optional preceding definition of KZFL27(16) is added.
+C      This integer vector controls which matrices are to be outputed (to either
+C      LUNIT6 or separate disk files, or both),  and what coordinates are to be
+C      used (e.g., a COMPLEX matrix, a matrix of real parts, a matrix of
+C      imaginary parts, a matrix of magnitudes, or a matrix of angles). 
+C  Index   Cols.  Symbol   Labeling of matrix in the LUNIT6 file
+C   ---------------------------------------------------------------------- 
+C     1    17-20    P      Complex potential coefficient
+C     2    21-24    Pt     Transposed potential coefficient
+C     3    25-28    Ze     Earth impedance ZE, in ohm/m
+C     4    29-32    Zc     Conductor internal impedance ZC, in ohm/m
+C     5    33-36    Zs     Space impedance ZS, in ohm/m
+C     6    37-40           Presently unused (reserved for later use)
+C     7    41-44    Zt     Total impedance [Zc], in ohm/m
+C     8    45-48    Yt     Total admittance [Yc], in mho/m
+C     9    49-52   Zph     Characteristic impedance matrix [Zc] in phase variables, in [ohm]
+C    10    53-56    Ti     The current transformation matrix [Ti] follows.  ...
+C    11    57-60    Tv     Voltage transformation matrix [Tv].  ...
+C        Value 0 requests neither output 
+C        Value 1 requests output just to LUNIT6 
+C        Value 2 requests output just to the dedicated disk file 
+C        Value 3 requests both 
+C   ----------------------------------------------------------------------
+C    12    61-64   Comp    Complex matrix, with each cell a complex pair
+C    13    65-68   Real    Only the real part of the complex matrix
+C    14    69-72   Imag    Only the imaginary part of the complex matrix
+C    15    73-76   Mag     Only the magnitudes of the complex elements
+C    16    77-80   Angle   Only the angles in degrees of the complex elements
+C        Note: blank cols. 26-30 below is needed to preserve preceding requests.
+C              If not blank KZFLAG, MATRIX OUTPUTS requests will be over-written
+C CASE 1 : NPP=0 for Mustafa 400kV XLPE cable
+    3    0    1    0    1         0    0    0    0    2
+C   1    0    0 1000.     .0000    A
+ 1.500     1.800     1.810     .6000E-06 1.000     1.000     1.000    
+ 1.227     209.3    
+    2
+ .0000     .2550E-01 .6050E-01 .6200E-01 .6700E-01
+ .2300E-07 1.000     1.000     2.400     .3300E-07 1.000     1.000     2.400    
+ .1000E-11 .0000     .0000     .0000    
+    50.0000        7000.00                1000.          2
+C            Conductor internal impedance ZC, in ohm/m
+C 2.19370E-04  2.93876E-05
+C 8.63256E-03  7.78018E-04  Core 1
+C           Total impedance [Zc], in ohm/m
+C 2.87787E-04  9.78052E-05
+C 2.63165E-02  1.84620E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-12 -1.00000E-12
+C 6.79707E-06 -6.79707E-06  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 157.8968  123.8861
+C -.745143  -.354381
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0  .9988989
+C -.52E-18  -.001736
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)  
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.  
+C   1  2.98701E-02    190.70  8.18980E-05  7.92568E-03  1.30794E-07  6.71127E-06
+C   2  5.03023E-03    295.43  1.42268E-04  1.84320E-02  7.40114E-11  1.20247E-06
+BLANK CARD ENDING FREQUENCY CARD
+C BLANK CARD ENDING CABLE PARAMETERS
+C BEGIN NEW DATA CASE
+C     2nd of 32 subcases of dcn29.dat
+C CABLE CONSTANTS  -- Remove this extra request, which is old & no longer needed
+C CABLE PARAMETERS
+C    12 January, 2004,  note about preceding.  Remove exit and re-entry into CP  
+C    to test stacked data subcases within CP.  But we also must be able to read
+C    optional request cards (English text) at this point, so add copy of what
+C    was used in the preceding subcase.  Also, add a BRANCH request:
+C                  P  Pt  Ze  ZC  Zs  ??  Zt  Yt Zph  Ti  Tv Tot  Re  Im Mag Ang
+MATRIX OUTPUTS     1   1   1   3   1   1   1   1   1   1   1   1   0   0   1   1
+BRANCH    { No names are needed, since no branch cards are to be punched
+    3    0    1    0    1    1    0    0    0    0    2    
+ 1.500     1.800     1.810     .6000E-06 1.000     1.000     1.000    
+ 1.227     209.3    
+    2
+ .0000     .2550E-01 .6050E-01 .6200E-01 .6700E-01
+ .2300E-07 1.000     1.000     2.400     .3300E-07 1.000     1.000     2.400    
+ .1000E-11 .0000     .1000E-14 .0000    
+    50.0000        7000.00        
+C           Total impedance [Zc], in ohm/m
+C 2.87787E-04  9.78052E-05
+C 2.63165E-02  1.84620E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-12 -1.00000E-12
+C 6.79707E-06 -6.79707E-06  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 157.8968  123.8861
+C -.747624  -.356858
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0  .9988992
+C .112E-17  -.001736
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)   
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.   
+C   1  2.98701E-02    190.70  8.18923E-05  7.92567E-03  1.30799E-07  6.71128E-06 
+C   2  4.97646E-03    295.43  1.41869E-04  1.84320E-02  0.00000E+00  1.20247E-06 
+BLANK CARD ENDING FREQUENCY CARD
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C     3rd of 32 subcases of dcn29.dat
+C CABLE CONSTANTS  -- Remove this extra request, which is old & no longer needed
+CABLE PARAMETERS
+C CASE 2 : NPP=1, NG=1 in CASE 1 gives the same result as CASE 1
+    3   -1    1    0    1    1    0    1    1    0    2    
+ 1.500     1.800     1.810     .6000E-06 1.000     1.000     1.000    
+ 1.227     209.3    
+    2
+ .0000     .2550E-01 .6050E-01 .6200E-01 .6700E-01
+ .2300E-07 1.000     1.000     2.400     .3300E-07 1.000     1.000     2.400    
+ .1000E-11 .0000     .0000     .0000    
+ .0000     .0000    
+ 5.000     .0000    
+    50.0000        7000.00        
+C            Earth impedance ZE, in ohm/m
+C 6.34866E-03  6.34866E-03  6.34866E-03
+C 3.12516E-02  3.12516E-02  3.12516E-02  Core 1
+C            Conductor internal impedance ZC, in ohm/m
+C 2.19370E-04  2.93876E-05  0.00000E+00
+C 8.63256E-03  7.78018E-04  0.00000E+00  Core 1
+C           Total impedance [Zc], in ohm/m
+C 2.87787E-04  9.78052E-05
+C 2.63165E-02  1.84620E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-12 -1.00000E-12
+C 6.79707E-06 -6.79707E-06  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 157.8968  123.8861
+C -.745143  -.354381
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0  .9988989
+C .667E-18  -.001736
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)  
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.  
+C   1  2.98701E-02    190.70  8.18980E-05  7.92568E-03  1.30794E-07  6.71127E-06
+C   2  5.03023E-03    295.43  1.42268E-04  1.84320E-02  7.40114E-11  1.20247E-06
+BLANK CARD ENDING FREQUENCY CARD
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C     4th of 32 subcases of dcn29.dat
+C CABLE CONSTANTS  -- Remove this extra request, which is old & no longer needed
+CABLE PARAMETERS
+C CASE 3 : G for sheath and pipe added to CASE 2, no difference
+    3   -1    1    0    1    1    0    1    1    0    2    
+ 1.500     1.800     1.810     .6000E-06 1.000     1.000     1.000    
+ 1.227     209.3    
+    2
+ .0000     .2550E-01 .6050E-01 .6200E-01 .6700E-01
+ .2300E-07 1.000     1.000     2.400     .3300E-07 1.000     1.000     2.400    
+ .1000E-11 .0000     .1000E-14 .0000    
+ .1000E-09 .0000    
+ 5.000     .0000    
+    50.0000        7000.00     
+C           Total impedance [Zc], in ohm/m
+C 2.87787E-04  9.78052E-05
+C 2.63165E-02  1.84620E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-12 -1.00000E-12
+C 6.79707E-06 -6.79707E-06  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 157.8968  123.8861
+C -.747624  -.356858
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0  .9988992
+C .869E-18  -.001736
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)    Charact. imp. (Ohm)     Charact. Admit. (S)
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.       Real      Imag.          Real        Imag.
+C   1  2.98701E-02    190.70  8.18923E-05  7.92567E-03  1.30799E-07  6.71128E-06     34.362      .157  2.91011E-02 -1.33208E-04
+C   2  4.97646E-03    295.43  1.41869E-04  1.84320E-02  0.00000E+00  1.20247E-06    123.809     -.476  8.07684E-03  3.10829E-05
+BLANK CARD ENDING FREQUENCY CARD
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C     5th of 32 subcases of dcn29.dat
+C CABLE CONSTANTS  -- Remove this extra request, which is old & no longer needed
+CABLE PARAMETERS
+C CASE 4 : NG=0 in CASE 3, modes 2 and 3 same as modes1 and 2 in CASE 3
+    3   -1    1    0    1    1    0    1    0    0    2    
+ 1.500     1.800     1.810     .6000E-06 1.000     1.000     1.000    
+ 1.227     209.3    
+    2
+ .0000     .2550E-01 .6050E-01 .6200E-01 .6700E-01
+ .2300E-07 1.000     1.000     2.400     .3300E-07 1.000     1.000     2.400    
+ .1000E-11 .0000     .1000E-14 .0000    
+ .1000E-09 .0000    
+ 5.000     .0000    
+    50.0000        7000.00     
+C           Total impedance [Zc], in ohm/m
+C 6.64784E-03  6.45786E-03  6.36006E-03
+C 5.76283E-02  4.97737E-02  3.13118E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-12 -1.00000E-12 -7.82293E-29
+C 6.79707E-06 -6.79707E-06  0.00000E+00  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 166.3597   132.349  8.462883
+C -1.59843  -1.20766  -.850804
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0       1.0  .9988992
+C -.33E-16  .485E-18  -.001736
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)    
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.    
+C   1  3.26383E+00     11.77  6.36006E-03  3.13118E-02  1.00000E-10  4.41654E-04  
+C   2  2.98701E-02    190.70  8.18923E-05  7.92567E-03  1.30799E-07  6.71128E-06  
+BLANK CARD ENDING FREQUENCY CARD
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C     6th of 32 subcases of dcn29.dat
+C CABLE CONSTANTS  -- Remove this extra request, which is old & no longer needed
+CABLE PARAMETERS
+C CASE 4' : SC cable (pipe deleted in CASE 4), same mode 2 (coaxial mode)
+    2   -1    1    0    1    1    0    0    0    0    2  
+    2
+ .0000     .2550E-01 .6050E-01 .6200E-01 .6700E-01
+ .2300E-07 1.000     1.000     2.400     .3300E-07 1.000     1.000     2.400    
+ .1000E-11 .0000     .1000E-14 .0000    
+ 5.000     .0000    
+    50.0000        7000.00        
+C           Total impedance [Zc], in ohm/m
+C 6.59922E-03  6.40924E-03
+C 6.88745E-02  6.10200E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-12 -1.00000E-12
+C 6.79707E-06 -6.79707E-06  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 62.37636  28.43276
+C -1.96318  -1.48045
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C 1.000423       1.0
+C .7666E-3       0.0
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)   
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.   
+C   1  9.86029E-01     20.44  6.45273E-03  6.09895E-02  0.00000E+00  7.57164E-05 
+C   2  2.98882E-02    190.70  2.33501E-04  7.82353E-03  0.00000E+00  6.79758E-06 
+BLANK CARD ENDING FREQUENCY CARD
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C     7th of 32 subcases of dcn29.dat
+C CABLE CONSTANTS  -- Remove this extra request, which is old & no longer needed
+CABLE PARAMETERS
+C CASE 4'' : Armor added to CASE 4', modes 1 and 3 nearly same as modes 1 and 2 inCASE 4'
+C  Results of this case changed on March 2, 2001 after implementing the 
+C  correction that Prof. Ametani made on February 17, 2001.
+C  This correction only affects cables having 3 layers of conductors: core,  
+C  sheath and armor.  
+    2   -1    1    0    1    1    0    0    0    0    2    
+    3
+ .0000     .2550E-01 .6050E-01 .6200E-01 .6700E-01 .6800E-01 .7300E-01
+ .2300E-07 1.000     1.000     2.400     .3300E-07 1.000     1.000     2.400    
+ .3300E-07 1.000     1.000     2.400    
+ .1000E-11 .0000     .1000E-14 .0000     .1000E-09 .0000    
+ 5.000     .0000    
+    50.0000        7000.00      
+C            Earth impedance ZE, in ohm/m
+C 6.37984E-03  6.37984E-03  6.37984E-03
+C 5.94875E-02  5.94875E-02  5.94875E-02  Core 1
+C            Conductor internal impedance ZC, in ohm/m
+C 2.37056E-04  4.70742E-05  8.80821E-06
+C 9.38405E-03  1.52950E-03  6.87487E-04  Core 1
+C           Total impedance [Zc], in ohm/m
+C 6.61689E-03  6.42691E-03  6.38864E-03
+C 6.88716E-02  6.10170E-02  6.01750E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-12 -1.00000E-12 -7.82293E-29
+C 6.79707E-06 -6.79707E-06 -2.52554E-21  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 64.41276  30.36306  27.00465
+C -.353587  -1.59075  -1.41604
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C 1.000218  .8744759       1.0
+C .0012639  .3076899       0.0
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)   
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.   
+C   1  1.03955E+00     19.68  6.46233E-03  6.01540E-02  5.81320E-11  8.27664E-05 
+C   2  2.07711E-01    179.08  1.52485E-04  7.95151E-04  3.49904E-07  7.52099E-05 
+BLANK CARD ENDING FREQUENCY CARD
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C     8th of 32 subcases of dcn29.dat
+C CABLE CONSTANTS  -- Remove this extra request, which is old & no longer needed
+CABLE PARAMETERS
+C CASE 5 : Sheath deleted in CASE 4, same mode 1
+    3   -1    1    1    1    0    0    1    0    0    2    
+ 1.500     1.800     1.810     .6000E-06 1.000     1.000     1.000    
+ 1.227     209.3    
+    1
+ .0000     .2550E-01 .6050E-01
+ .2300E-07 1.000     1.000     2.400    
+ .1000E-11 .0000    
+ .1000E-09 .0000    
+ 5.000     .0000    
+    50.0000        7000.00        
+C           Total impedance [Zc], in ohm/m
+C 6.58868E-03  6.36006E-03
+C 5.76505E-02  3.13118E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-12 -1.00000E-12
+C 9.92816E-07 -9.92816E-07  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 171.3428  8.462883
+C -1.55761  -.850804
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0       1.0
+C -.15E-16       0.0
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)  
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.  
+C   1  3.26383E+00     11.77  6.36006E-03  3.13118E-02  1.00000E-10  4.41654E-04
+C   2  6.09657E-03    271.98  2.28622E-04  2.63388E-02  1.00000E-12  9.92816E-07
+BLANK CARD ENDING FREQUENCY CARD
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C     9th of 32 subcases of dcn29.dat
+C CABLE CONSTANTS  -- Remove this extra request, which is old & no longer needed
+CABLE PARAMETERS
+    2    1    1    1    1    0    0    0    0    0    2    0
+    2
+ .8000E-02 .1000E-01 .2700E-01 .3000E-01 .3100E-01
+ .3000E-07 1.000     1.000     1.063     .3000E-07 1.000     1.000     1.100    
+ .1000E-14 .0000     .5000E-04 .0000    
+ .9000     .0000    
+    .100000E-07    .100000E+08    
+C           Total impedance [Zc], in ohm/m
+C 2.96434E-02  5.88727E-03
+C 6.39622E+01  5.14569E+01  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-15 -1.00000E-15
+C 3.74095E-03 -3.74095E-03  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 302.9185  245.1014
+C 7.097006  7.151923
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0       1.0
+C      0.0  -.97E-15
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)  
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.  
+C   1  1.78445E+00    290.50  2.37561E-02  1.25053E+01  0.00000E+00  3.74095E-03
+C   2  5.33727E+01    299.54  5.88727E-03  5.14569E+01  5.00000E-05  8.54359E-04
+BLANK CARD ENDING FREQUENCY CARD
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C    10th of 32 subcases of dcn29.dat
+C CABLE CONSTANTS  -- Remove this extra request, which is old & no longer needed
+CABLE PARAMETERS
+C  Sheath deleted from the previous case
+    2    1    1    0    1    1    0    0    0    0    2 
+    1
+ .8000E-02 .1000E-01 .2700E-01
+ .3000E-07 1.000     1.000     1.063    
+ .1000E-14 .0000    
+ .9000     .0000    
+    .100000E-07    .100000E+08  
+C           Total impedance [Zc], in ohm/m
+C 1.74555E-02
+C 6.52741E+01  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-15
+C 6.80840E-04  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 309.6335
+C -.041401
+C ..The transpose of this is the inverse of the voltage transformation matrix.
+C      1.0
+C      0.0
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0
+C      0.0
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)  
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.  
+C   1  2.44832E-01    298.05  1.74555E-02  6.52741E+01  0.00000E+00  6.80840E-04
+BLANK CARD ENDING FREQUENCY CARD
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C    11th of 32 subcases of dcn29.dat
+C CABLE CONSTANTS  -- Remove this extra request, which is old & no longer needed
+CABLE PARAMETERS
+    2    1    1    0    1    1    0    0    0    0    1 
+C   1    0    0 2.000     .0000    A
+    2
+ .8000E-02 .1000E-01 .2700E-01 .3000E-01 .3100E-01
+ .3000E-07 1.000     1.000     1.063     .3000E-07 1.000     1.000     1.100    
+ .0000     .1000E-14 .0000     .5500E-10
+ .9000     .0000    
+    .100000E-07    .100000E+08              2.0          2
+C           Total impedance [Zc], in ohm/m
+C 2.96434E-02  5.88727E-03
+C 6.39622E+01  5.14569E+01  Core 1
+C           Total admittance [Yc], in mho/m
+C 0.00000E+00  0.00000E+00
+C 3.74102E-03 -3.74102E-03  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 167.0808  109.2642
+C -.061167  -.006251
+C ... The transpose of this is the inverse of the voltage transformation matrix.
+C      0.0       1.0
+C      0.0  -.67E-17
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0       1.0
+C -.13E-18       0.0
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)  
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.  
+C   1  2.34002E-01    133.42  5.88727E-03  5.14569E+01  0.00000E+00  4.31011E-03
+C   2  1.78446E+00    290.49  2.37561E-02  1.25053E+01  0.00000E+00  3.74102E-03
+BLANK CARD ENDING FREQUENCY CARD
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C    12th of 32 subcases of dcn29.dat
+C  1st of four new test cases provided by Prof. Aki Ametani in May, 2000
+C  for testing of Z and Y calculation for pipe type SC cables.
+C  Results of this case changed on March 2, 2001 after implementing the 
+C  correction that Prof. Ametani made on February 17, 2001.
+C  This correction only affects cables having 3 layers of conductors: core,  
+C  sheath and armor.  
+CABLE PARAMETERS
+C   3    0    1    0    0    0    0    0    0    0    0    0
+C                   KMODE  --- 18 October 2002, Tsu-huei Liu activates modal out  
+    3    0    1    0    1    0    0    0    0    0    0    0
+C                   Note about KMODE.  DC-27 and 28 were changed comparably. 
+ 1.500     1.510     1.800     .6000E-06 1.000     1.000     1.000    
+ 1.227     209.3    
+    3
+ .0000     .2550E-01 .2650E-01 .2850E-01 .6050E-01 .6200E-01 .6700E-01
+ .2300E-07 1.000     1.000     2.400     .5000E-04 1.000     1.000     2.400    
+ .3300E-07 1.000     1.000     2.400    
+    50.0000        7000.00        0    0    0
+C           Total impedance [Zc], in ohm/m
+C 2.87997E-04  1.27681E-04  9.78052E-05
+C 2.63165E-02  2.54931E-02  1.84620E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 0.00000E+00  0.00000E+00  0.00000E+00
+C 1.52664E-04 -1.52664E-04  0.00000E+00  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 156.4303  154.7627   123.884
+C  -.73725  -.757094  -.362581
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C  -.00105  .9999578  .9990462
+C  -.00305  .0091876  -.001508
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)  
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.  
+C   1  2.95420E+01     12.87  1.44544E-01  6.53992E-04  0.00000E+00  1.60785E-04
+C   2  3.14054E-02    182.51  2.37593E-04  7.91624E-03  0.00000E+00  7.33482E-06
+BLANK card ending frequency cards within  CABLE PARAMETERS
+BLANK card ending  CABLE CONSTANTS  data subcases
+BEGIN NEW DATA CASE
+C    13th of 32 subcases of dcn29.dat
+C  2nd of four new test cases provided by Prof. Aki Ametani in May, 2000
+C  for testing of Z and Y calculation for pipe type SC cables.
+C  Results of this case changed on March 2, 2001 after implementing the 
+C  correction that Prof. Ametani made on February 17, 2001.
+C  This correction only affects cables having 3 layers of conductors: core,  
+C  sheath and armor.  
+CABLE PARAMETERS
+C   3   -1    1    0    0    1    1    0    0    0    0    0
+    3   -1    1    0    1    1    1    0    0    0    0    0
+ 1.500     1.650     1.780     .2000E-02 1.000     1.000     1.000    
+ 1.145    -30.15    
+    3
+ .0000     .2000E-01 .4200E-01 .4403E-01 .4503E-01 .4583E-01 .4983E-01
+ .3746E-07 1.000     1.000     2.500     .2803E-07 1.000     1.000     2.500    
+ .7265E-06 1.000     1.000     8.000    
+    100.000        50.0000        0    0    0
+C            Conductor internal impedance ZC, in ohm/m
+C 3.23928E-05  4.62469E-09  0.00000E+00
+C 7.23915E-05  9.23450E-06  5.80721E-06  Core 1
+C           Total impedance [Zc], in ohm/m
+C 6.88851E-05  3.64969E-05  3.64923E-05
+C 3.34994E-04  2.71837E-04  2.68410E-04  Core 1
+C           Total admittance [Yc], in mho/m
+C 0.00000E+00  0.00000E+00  0.00000E+00
+C 5.88913E-08 -5.88913E-08 -2.50068E-22  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 233.0843  199.6486  198.9199
+C -22.5078  -16.4384   -16.401
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C .4278E-4  -.688049  .9999471
+C -.772E-3   -.38441   -.01029
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)  
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.  
+C   1  4.87705E-01      5.59  3.13169E-03  2.65190E-06  0.00000E+00  2.01513E-06
+C   2  9.92211E-03    141.71  3.17026E-05  2.25959E-05  0.00000E+00  1.59766E-07
+BLANK card ending frequency cards within  CABLE PARAMETERS
+BLANK card ending  CABLE CONSTANTS  data subcases
+BEGIN NEW DATA CASE
+C    14th of 32 subcases of dcn29.dat
+C  3rd of four new test cases provided by Prof. Aki Ametani in May, 2000
+C  for testing of Z and Y calculation for pipe type SC cables.
+C  Results of this case changed on March 2, 2001 after implementing the 
+C  correction that Prof. Ametani made on February 17, 2001.
+C  This correction only affects cables having 3 layers of conductors: core,  
+C  sheath and armor.  
+CABLE PARAMETERS
+C   3    0    2    0    0    0    0    0    0    0    0    0
+    3    0    2    0    1    0    0    0    0    0    0    0
+ 1.500     1.510     1.800     .6000E-06 1.000     1.000     1.000    
+ 1.227     209.3     1.470     85.00    
+    3    1
+ .0000     .2550E-01 .2650E-01 .2850E-01 .6050E-01 .6200E-01 .6700E-01
+ .2300E-07 1.000     1.000     2.400     .5000E-04 1.000     1.000     2.400    
+ .3300E-07 1.000     1.000     2.400    
+ .0000     .1010E-01 .1020E-01
+ .2400E-07 1.000     1.000     1.000    
+    50.0000        7000.00        0    0    0
+C           Total impedance [Zc], in ohm/m
+C 2.87997E-04  1.94860E-06  1.27681E-04  9.78052E-05
+C 2.63165E-02  2.46787E-05  2.54931E-02  1.84620E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
+C 1.52664E-04 -1.42472E-23 -1.52664E-04 -6.28731E-22  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 156.4303  .1616253  154.7627   123.884
+C  -.73725  -.006732  -.757093  -.362581
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C  -.00105  .9999578  -.296E-3  .9990462
+C  -.00305  .0091876  .6651E-3  -.001507
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m) 
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag. 
+C   1  2.95420E+01     12.87  1.44544E-01  6.53992E-04  0.00000E+00  1.60785E-04
+C   2  3.14054E-02    182.51  2.37593E-04  7.91624E-03  0.00000E+00  7.33482E-06
+BLANK card ending frequency cards within  CABLE PARAMETERS
+BLANK card ending  CABLE CONSTANTS  data subcases
+BEGIN NEW DATA CASE
+C    15th of 32 subcases of dcn29.dat
+C  4th of four new test cases provided by Prof. Aki Ametani in May, 2000
+C  for testing of Z and Y calculation for pipe type SC cables.
+C  Results of this case changed on March 2, 2001 after implementing the 
+C  correction that Prof. Ametani made on February 17, 2001.
+C  This correction only affects cables having 3 layers of conductors: core,  
+C  sheath and armor.  
+CABLE PARAMETERS
+C   3   -1    1    0    0    1    1    1    0    0    0    0
+    3   -1    1    0    1    1    1    1    0    0    0    0
+ 1.500     1.650     1.780     .2000E-02 1.000     1.000     1.000    
+ 1.145    -30.15    
+    3
+ .0000     .2000E-01 .4200E-01 .4403E-01 .4503E-01 .4583E-01 .4983E-01
+ .3746E-07 1.000     1.000     2.500     .2803E-07 1.000     1.000     2.500    
+ .7265E-06 1.000     1.000     8.000    
+ 40.00     .0000    
+    100.000        50.0000        0    0    0
+C            Earth impedance ZE, in ohm/m
+C 4.64557E-05  4.64557E-05  4.64557E-05  4.64557E-05
+C 3.97608E-04  3.97608E-04  3.97608E-04  3.97608E-04  Core 1
+C            Conductor internal impedance ZC, in ohm/m
+C 3.23928E-05  4.62469E-09  0.00000E+00  0.00000E+00
+C 7.23915E-05  9.23450E-06  5.80721E-06  0.00000E+00  Core 1
+C           Total impedance [Zc], in ohm/m
+C 8.46452E-05  5.22570E-05  5.22524E-05  4.64567E-05
+C 6.90129E-04  6.26972E-04  6.23545E-04  4.05272E-04  Core 1
+C           Total admittance [Yc], in mho/m
+C 0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
+C 5.88913E-08 -5.88913E-08  0.00000E+00 -5.49524E-26  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 329.9094  295.7853  294.8116  25.57555
+C -39.8168  -32.0912    -31.97  8.072659
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C .6929E-5  .0989196  -.286086       1.0
+C -.849E-3  .2522515  .0341845  -.711E-4
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)   
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.   
+C   1  4.87706E-01      5.59  3.13145E-03  2.65107E-06  0.00000E+00  2.01530E-06 
+C   2  9.73010E-02     21.36  1.39867E-03  3.85548E-04  0.00000E+00  2.35598E-07 
+BLANK card ending frequency cards within  CABLE PARAMETERS
+BLANK card ending  CABLE CONSTANTS  data subcases
+BEGIN NEW DATA CASE    
+C    16th of 32 subcases of dcn29.dat
+C     The 1st of 3 subcases provided by Prof. Mustafa Kizilcay: each
+C     is a case of Pipe type cable with a core semiconducting layer.
+C     Different IYG options are used in representing the distributed
+C     admittance for the core and sheath.
+C     This subcase uses input option of IYG =1, i.e., capacitance
+CABLE PARAMETERS
+    3    0    1              0         0    0    0    1    0
+       1.5       1.8      1.51     6.E-7        1.        1.        1.
+    1.2267     209.3
+    2
+       0.0    0.0255    0.0605     0.062     0.067
+    2.3E-8        1.        1.       2.4    3.3E-8        1.        1.       2.4
+     0.0       1.E-9
+            50.           7.E3                              
+C           Total impedance [Zc], in ohm/m
+C 2.87707E-04  9.77249E-05
+C 2.63251E-02  1.84706E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 0.00000E+00  0.00000E+00
+C 5.07794E-05 -5.07794E-05  Core 1
+BLANK CARD ENDING FREQUENCY CARDS
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C    17th of 32 subcases of dcn29.dat
+C     The 2nd of 3 subcases provided by Prof. Mustafa Kizilcay: each
+C     is a case of Pipe type cable with a core semiconducting layer.
+C     This subcase uses input option of IYG =2, i.e., conductance
+CABLE PARAMETERS
+C   3    0    1                        0    0    0    2    0
+    3    0    1         1    0         0    0    0    2    0
+       1.5       1.8      1.51     6.E-7        1.        1.        1.
+    1.2267     209.3
+    2
+       0.0    0.0255    0.0605     0.062     0.067
+    2.3E-8        1.        1.       2.4    3.3E-8        1.        1.       2.4
+    .1E-07        0.
+            50.           7.E3                              
+C           Total impedance [Zc], in ohm/m
+C 2.87707E-04  9.77249E-05
+C 2.63251E-02  1.84706E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-08 -1.00000E-08
+C 6.79707E-06 -6.79707E-06  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C  157.956  123.9451
+C -.719843  -.354075
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0  .9989039
+C .165E-18  -.001738
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m) 
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.     
+C   1  3.13436E-02    190.70  8.17996E-05  7.92551E-03  1.40752E-07  6.71122E-06   
+C   2  5.02506E-03    295.43  1.42186E-04  1.84406E-02  7.40835E-11  1.20188E-06   
+BLANK CARD ENDING FREQUENCY CARDS
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C    18th of 32 subcases of dcn29.dat    
+C     The 3rd of 3 subcases provided by Prof. Mustafa Kizilcay: each
+C     is a case of Pipe type cable with a core semiconducting layer.
+C     This subcase uses input option of IYG =3, i.e., capacitance and 
+C     conductance
+CABLE PARAMETERS
+C   3    0    1                        0    0    0    3    0
+    3    0    1         1    0         0    0    0    3    0
+       1.5       1.8      1.51     6.E-7        1.        1.        1.
+    1.2267     209.3
+    2
+       0.0    0.0255    0.0605     0.062     0.067
+    2.3E-8        1.        1.       2.4    3.3E-8        1.        1.       2.4
+    .1E-09     .1E-8
+            50.           7.E3                              
+C           Total impedance [Zc], in ohm/m
+C 2.87707E-04  9.77249E-05
+C 2.63251E-02  1.84706E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-10 -1.00000E-10
+C 5.07794E-05 -5.07794E-05  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 134.1509  121.6984
+C -.534633  -.405567
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0  .9999033
+C .106E-19  -.148E-3
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)   
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.   
+C   1  8.16801E-02     69.77  1.40691E-04  7.88844E-03  6.04510E-07  5.03760E-05 
+C   2  5.10661E-03    290.17  1.41595E-04  1.84403E-02  9.85486E-11  1.24588E-06 
+BLANK CARD ENDING FREQUENCY CARDS
+BLANK CARD ENDING CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C    19th of 32 subcases of dcn29.dat    
+C    From Steve Nurse of British Short-Circuit Testing Station Limited
+C    in Hebburn, Tyne & Wear, UK.  This data was mentioned in EEUG list
+C    server mail dated 15 October 2003.  Add it here October 28th.
+C    The problem has been solved as this data demonstrates.  Mr. Nurse
+C    had complained:  "The PI model gave almost exactly the R and X
+C    values supplied by the manufacturer for both sheath earthing conditions.
+C    However, the distributed parameter model gave an inductive reactance
+C    value about 55% greater than the PI model!"  No longer.
+C 3 SEPARATE CABLES,EACH CABLE SCREENED; 150sqmm, SOLID ALUMINUIM, SINGLE CORE,
+C CABLE CONSTANTS  -- Remove this extra request, which is old & no longer needed
+CABLE PARAMETERS
+C       <BUS1><BUS1><BUS1><BUS1><BUS1><BUS1><BUS1><BUS1><BUS1><BUS1><BUS1><BUS1>
+BRANCH  C1PHSRC2PHSRC1PHSYC2PHSYC1PHSBC2PHSBC1SCNRC2SCNRC1SCNYC2SCNYC1SCNBC2SCNB
+$ERASE
+C ITPISYST<NPC>IEARTKMODEIZFLAIYFLA<NPP>NGRNDIDATA<IYG>
+    2   -1    3         1    0              3    0    0
+C NCP<NCP2<NCP3<NCP3
+    2    2    2
+C **** CABLE CONDUCTOR RADII ****
+C --R1---><---R2---><---R3---><---R4---><---R5---><---R6---><---R7--->
+       0.0    6.5E-3 1.2619E-2  1.275E-2  1.485E-2
+C **** CABLE PERMEABILITY & PERMITTIVITY ****
+C --pc---><---uc---><--uil---><--Eil---><---ps---><---us---><--ui2---><--Ei2--->
+   2.73E-8       1.0       1.0      3.92    1.7E-8       1.0       1.0  2.5
+C **** CABLE ARMOUR DATA : ONLY REQURED IF ARMOUR IS INCLUDED ****
+       0.0    6.5E-3 1.2619E-2  1.275E-2  1.485E-2
+   2.73E-8       1.0       1.0      3.92    1.7E-8       1.0       1.0  2.5
+       0.0    6.5E-3 1.2619E-2  1.275E-2  1.485E-2
+   2.73E-8       1.0       1.0      3.92    1.7E-8       1.0       1.0  2.5
+C -VERT--><-HORIZ--><--VERT--><-HORIZ--><--VERT--><-HORIZ--><--VERT--><-HORIZ-->
+     1.035     0.015     1.035     0.045     1.009     0.030
+C ----ROE-----><------FREQ--->IDEC>IPNT><-DIST-><-IPUNCH->
+           100.            50.               1.0         2
+C           Total impedance [Zc], in ohm/m
+C 5.31157E-04  3.23297E-04  3.23290E-04
+C 3.40759E-04  2.28987E-04  2.28958E-04  Core 1
+C           Total admittance [Yc], in mho/m
+C 0.00000E+00  0.00000E+00  0.00000E+00
+C 1.03273E-07  0.00000E+00  0.00000E+00  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C  61.9281  20.89422  20.89167
+C  -34.676   -10.151  -10.1519
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0   -.49999       1.0
+C .1257E-5  .1257E-5   .12E-15
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)    Charact. imp. (Ohm)     Charact. Admit. (S)
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.       Real      Imag.          Real        Imag.
+C   1  4.93171E-02     29.33  3.92585E-04  2.66236E-04  0.00000E+00  3.09816E-07     34.572   -18.327  2.25802E-02  1.19698E-02
+C   2  2.19975E-02     74.13  1.38577E-04  7.45471E-05  0.00000E+00  1.54908E-07     27.359   -16.349  2.69334E-02  1.60945E-02
+           100.            50.               1.0         1
+BLANK card ending frequency cards
+$PUNCH
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C CABLE PARAMETERS
+C BRANCH  C1PHSRC2PHSRC1PHSYC2PHSYC1PHSBC2PHSBC1SCNRC2SCNRC1SCNYC2SCNYC1SCNBC2SC
+C $ERASE
+C     2   -1    3         1    0              3    0    0
+C     2    2    2
+C        0.0    6.5E-3 1.2619E-2  1.275E-2  1.485E-2
+C    2.73E-8       1.0       1.0      3.92    1.7E-8       1.0       1.0  2.5
+C        0.0    6.5E-3 1.2619E-2  1.275E-2  1.485E-2
+C    2.73E-8       1.0       1.0      3.92    1.7E-8       1.0       1.0  2.5
+C        0.0    6.5E-3 1.2619E-2  1.275E-2  1.485E-2
+C    2.73E-8       1.0       1.0      3.92    1.7E-8       1.0       1.0  2.5
+C      1.035     0.015     1.035     0.045     1.009     0.030
+C            100.            50.               1.0         2
+C $VINTAGE, 1
+C   Branch cards for constant-parameter distributed:
+C -1C1PHSRC2PHSR             3.92585E-04 2.93145E+01 2.93310E+07-1.00000E+00 1  3
+C -2C1PHSYC2PHSY             1.38577E-04 2.19371E+01 7.41268E+07-1.00000E+00 1  3
+C -3C1PHSBC2PHSB             1.03930E-04 1.64492E+01 7.41343E+07-1.00000E+00 1  3
+C  .33333777  -.33333112   .50000000
+C  .00000042   .00000084   .00000000
+C  .33333777  -.33333112  -.50000000
+C  .00000042   .00000084   .00000000
+C  .33333112   .66667553   .00000000
+C -.00000084   .00000084   .00000000
+C $VINTAGE, -1,
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C            100.            50.               1.0         1
+C $UNITS, 0.0, 0.0
+C $VINTAGE, 1
+C  Pi-equivalent model with length =  1.0000E+00 (meter)
+C 1C1PHSRC2PHSR              5.31156894E-04  1.08467088E-03  3.28729088E-04
+C 2C1PHSYC2PHSY              3.23297149E-04  7.28887046E-04  0.00000000E+00
+C                            5.31156894E-04  1.08467088E-03  3.28729088E-04
+C 3C1PHSBC2PHSB              3.23290019E-04  7.28794841E-04  0.00000000E+00
+C                            3.23290019E-04  7.28794841E-04  0.00000000E+00
+C                            5.31147266E-04  1.08470783E-03  3.28729088E-04
+C $VINTAGE, -1,
+C $UNITS, -1., -1.,
+C =========<  End of LUNIT7 punched cards as flushed by  $PUNCH  request  >=======
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+C    20th of 32 subcases of dcn29.dat    
+C  From Andrea Mansoldo of Pirelli Cavi e Sistemi in Italy.  This data
+C  is added  28 October 2003  following correction of  NEWCBL.SPL
+$ERASE
+C CABLE CONSTANTS  -- Remove this extra request, which is old & no longer needed
+CABLE PARAMETERS
+BRANCH  PIC111PIC112PIC121PIC122PIC131PIC132ABC151ABC152ABC161ABC162ABC171ABC172
+BRANCH  PIS111PIS112PIS121PIS122PIS131PIS132ABS151ABS152ABS161ABS162ABS171ABS172
+BRANCH  PIE141PIE142ABE161ABE162PIP111PIP112
+C
+C 4 kilohertz, PI-EQ 2067 metri
+C        1         2         3         4         5         6         7
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+    3   -1    8         0    2    2    1    0    0    3
+C Begin pipe parameter card
+       1.2      1.45      1.551.50000E-7      100.        1.        1.
+C Begin cross section location cards
+      .725      180.      .725      142.      .725      218.      .725         0
+      .725       38.      .725      322.      1.16      239.      1.16      301.
+C Begin card indicating number of conductors
+    2    2    2    2    2    2    1    1
+C Begin geometrical & physical data cards
+      .004     .0317    .06395    .06525    .07085
+2.73600E-8        1.        1.     2.8421.25600E-7        1.        1.       2.5
+     1.E-6     1.E-8     1.E-6     1.E-8
+      .004     .0317    .06395    .06525    .07085
+2.73600E-8        1.        1.     2.8421.25600E-7        1.        1.       2.5
+     1.E-6     1.E-8     1.E-6     1.E-8
+      .004     .0317    .06395    .06525    .07085
+2.73600E-8        1.        1.     2.8421.25600E-7        1.        1.       2.5
+     1.E-6     1.E-8     1.E-6     1.E-8
+      .004     .0317    .06395    .06525    .07085
+2.73600E-8        1.        1.     2.8421.25600E-7        1.        1.       2.5
+     1.E-6     1.E-8     1.E-6     1.E-8
+      .004     .0317    .06395    .06525    .07085
+2.73600E-8        1.        1.     2.8421.25600E-7        1.        1.       2.5
+     1.E-6     1.E-8     1.E-6     1.E-8
+      .004     .0317    .06395    .06525    .07085
+2.73600E-8        1.        1.     2.8421.25600E-7        1.        1.       2.5
+     1.E-6     1.E-8     1.E-6     1.E-8
+        0.     .0065     .0085
+2.38900E-8        1.        1.       2.2
+    10.E-3     1.E-8
+        0.     .0065     .0085
+2.38900E-8        1.        1.       2.2
+    10.E-3     1.E-8
+C
+c pipe
+     2.E-3     1.E-8 
+C conductances from core to sheath (low) 
+C
+C        1         2         3         4         5         6         7
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+c
+C Pipe location card
+     3.325
+C Begin frequency & earth resistivty cards
+           100.            50.           825.         1
+C            Earth impedance ZE, in ohm/m
+C 4.89784E-05  4.89784E-05  4.89784E-05  4.89784E-05  4.89784E-05  4.89784E-05 ..
+C 4.02440E-04  4.02440E-04  4.02440E-04  4.02440E-04  4.02440E-04  4.02440E-04 ..
+C            Conductor internal impedance ZC, in ohm/m
+C 1.38786E-05  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00 ..
+C 6.18566E-05  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00 ..
+C           Total impedance [Zc], in ohm/m
+C 8.19882E-05  6.54811E-05  6.54811E-05  5.89287E-05  5.92396E-05  5.92396E-05 ..
+C 6.38810E-04  4.64085E-04  4.64085E-04  4.23660E-04  4.24767E-04  4.24767E-04 ..
+C           Total admittance [Yc], in mho/m
+C 1.00000E-06  4.01383E-26 -2.20019E-26  3.65290E-26 -7.67948E-27 -3.09459E-26 ..
+C 3.21237E-06 -7.81241E-23 -7.17333E-23 -1.33579E-22 -7.16710E-23 -8.17287E-23 ..
+BLANK CARD ending frequency card
+$PUNCH
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C CABLE PARAMETERS
+C BRANCH  PIC111PIC112PIC121PIC122PIC131PIC132ABC151ABC152ABC161ABC162ABC171ABC1
+C BRANCH  PIS111PIS112PIS121PIS122PIS131PIS132ABS151ABS152ABS161ABS162ABS171ABS1
+C BRANCH  PIE141PIE142ABE161ABE162PIP111PIP112
+C     3   -1    8         0    2    2    1    0    0    3
+C        1.2      1.45      1.551.50000E-7      100.        1.        1.
+C       .725      180.      .725      142.      .725      218.      .725
+C       .725       38.      .725      322.      1.16      239.      1.16      30
+C     2    2    2    2    2    2    1    1
+C       .004     .0317    .06395    .06525    .07085
+C 2.73600E-8        1.        1.     2.8421.25600E-7        1.        1.       2
+C      1.E-6     1.E-8     1.E-6     1.E-8
+C       .004     .0317    .06395    .06525    .07085
+C 2.73600E-8        1.        1.     2.8421.25600E-7        1.        1.       2
+C      1.E-6     1.E-8     1.E-6     1.E-8
+C       .004     .0317    .06395    .06525    .07085
+C 2.73600E-8        1.        1.     2.8421.25600E-7        1.        1.       2
+C      1.E-6     1.E-8     1.E-6     1.E-8
+C       .004     .0317    .06395    .06525    .07085
+C 2.73600E-8        1.        1.     2.8421.25600E-7        1.        1.       2
+C      1.E-6     1.E-8     1.E-6     1.E-8
+C       .004     .0317    .06395    .06525    .07085
+C 2.73600E-8        1.        1.     2.8421.25600E-7        1.        1.       2
+C      1.E-6     1.E-8     1.E-6     1.E-8
+C       .004     .0317    .06395    .06525    .07085
+C 2.73600E-8        1.        1.     2.8421.25600E-7        1.        1.       2
+C      1.E-6     1.E-8     1.E-6     1.E-8
+C         0.     .0065     .0085
+C 2.38900E-8        1.        1.       2.2
+C     10.E-3     1.E-8
+C         0.     .0065     .0085
+C 2.38900E-8        1.        1.       2.2
+C     10.E-3     1.E-8
+C      2.E-3     1.E-8
+C      3.325
+C            100.            50.           825.         1
+C $UNITS, 0.0, 0.0
+C $VINTAGE, 1
+C  Pi-equivalent model with length =  8.2500E+02 (meter)
+C 1PIC111PIC112              6.76402865E-02  1.67755129E+00  8.43586710E+00
+C 2PIC121PIC122              5.40219112E-02  1.21871468E+00 -2.05158250E-16
+C                            6.76402865E-02  1.67755129E+00  8.43586710E+00
+C 3PIC131PIC132              5.40219112E-02  1.21871468E+00 -1.88375719E-16
+C                            5.10964825E-02  1.14611087E+00  5.34047879E-18
+C                            6.76402865E-02  1.67755129E+00  8.43586710E+00
+C  ...............
+C 15PIP111PIP112             4.53392266E-02  1.08351780E+00 -4.08654688E-15
+C                            4.53392266E-02  1.08351780E+00 -1.39520765E-15
+C                            4.53392266E-02  1.08351780E+00  1.90309156E-15
+C  ...................
+C                            4.53392266E-02  1.08351780E+00  7.50414939E+01
+C $VINTAGE, -1,
+C $UNITS, -1., -1.,
+C =========<  End of LUNIT7 punched cards as flushed by  $PUNCH  request  >=======
+BLANK CARD ending CABLE PARAMETERS
+BEGIN NEW DATA CASE
+C    21st of 32 subcases of dcn29.dat    
+C        1st of 11 cases received from Prof. Ametani on October 28, 2003
+CABLE PARAMETERS
+C ********************Case 11-0********************
+C 1     PROGRAM CP7-2000.5 : CABLE PARAMETERS MODE-2  BY A.AMETANI
+C       ACCURATE FORMULAS VERSION (INDEPENDENT CABLE CONSTANTS)
+C Case 11-0 ; PT cable with one SC cable of core/sheath; IYG=0 
+    3   -1    1    0    1    1    0    1    0    0    0    0
+1.500     1.800     1.810    0.6000E-06 1.000     1.000     1.000    
+1.227     209.3    
+    2
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+ 5.000     0.000    
+    50.0000        7000.00        0    0    0
+C           Total impedance [Zc], in ohm/m
+C 6.64784E-03  6.45786E-03  6.36006E-03
+C 5.76283E-02  4.97737E-02  3.13118E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 0.00000E+00  0.00000E+00  0.00000E+00
+C 6.79707E-06 -6.79707E-06  0.00000E+00  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 166.3596   132.349  8.462883
+C  -1.6011  -1.21034  -.850805
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to phase variables: v-phase = [Tv] * v-mode
+C      1.0  .9999525  .9988992
+C -.59E-16  .0097432  -.001747
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)   
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.   
+C   1  3.26383E+00     11.77  6.36006E-03  3.13118E-02  0.00000E+00  4.41654E-04 
+C   2  2.98699E-02    190.70  2.36313E-04  7.92257E-03  0.00000E+00  6.71255E-06 
+BLANK card ending frequency cards
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+C    22nd of 32 subcases of dcn29.dat    
+C        2nd of 11 cases received from Prof. Ametani on October 28, 2003
+CABLE PARAMETERS
+C ********************Case 11-1********************
+C Case 11-1; PT cable with one SC cable of core/sheath; IYG=3  
+    3   -1    1    0    1    1    0    1    0    0    3    0
+1.500     1.800     1.810    0.6000E-06 1.000     1.000     1.000    
+1.227     209.3    
+    2
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.1500E-040.1000E-080.5000E-050.1000E-10
+0.2500E-040.1000E-09
+ 5.000     0.000    
+    50.0000        7000.00        0    0    0
+C           Total impedance [Zc], in ohm/m
+C 6.64784E-03  6.45786E-03  6.36006E-03
+C 5.76283E-02  4.97737E-02  3.13118E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.50000E-05 -1.50000E-05  1.22836E-22
+C 5.07794E-05 -5.07794E-05 -6.16963E-22  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 68.59313  56.51818  8.434837
+C 35.58395  33.96906  -.610079
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0       1.0  .9992509
+C  .67E-16  .359E-18   .146E-3
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)    
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.    
+C   1  4.19527E+00     11.74  6.36006E-03  3.13118E-02  2.50000E-05  4.46053E-04  
+C   2  8.82755E-01     69.19  1.51619E-04  7.91257E-03  1.53712E-05  5.00638E-05  
+BLANK card ending frequency cards
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+C    23rd of 32 subcases of dcn29.dat    
+C        3rd of 11 cases received from Prof. Ametani on October 28, 2003
+CABLE PARAMETERS
+C ********************Case 12-0********************
+C Case 12-0; PT cable with one SC cable of core/sheath/armor; IYG=0
+    3   -1    1    0    1    1    0    1    0    0    0    0
+ 1.500     1.800     1.810    0.6000E-06 1.000     1.000     1.000    
+ 1.227     209.3    
+    3
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-010.6900E-010.7400E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.2000E-07 1.000     1.000     3.000    
+ 5.000     0.000    
+    50.0000        7000.00        0    0    0
+C            Earth impedance ZE, in ohm/m
+C 6.34866E-03  6.34866E-03  6.34866E-03  6.34866E-03
+C 3.12516E-02  3.12516E-02  3.12516E-02  3.12516E-02  Core 1
+C            Conductor internal impedance ZC, in ohm/m
+C 3.26963E-04  1.36981E-04  5.33464E-05  0.00000E+00
+C 9.38963E-03  1.53508E-03  6.85403E-04  0.00000E+00  Core 1
+C           Total impedance [Zc], in ohm/m
+C 6.75544E-03  6.56546E-03  6.48182E-03  6.36006E-03
+C 5.75112E-02  4.96567E-02  4.88070E-02  3.13118E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
+C 6.79707E-06 -6.79707E-06 -3.01702E-20  0.00000E+00  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 163.1724   129.181   125.815  8.462883
+C  -1.8345   -1.4196  -1.25847  -.850805
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0  .9287082  .9995322  .9995617
+C -.11E-13  .3563902  -.030584  -.644E-4
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)  
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.  
+C   1  3.26383E+00     11.77  6.36006E-03  3.13118E-02  0.00000E+00  4.41654E-04
+C   2  1.68391E-01    177.84  1.35154E-04  8.56765E-04  0.00000E+00  7.09500E-05
+BLANK card ending frequency cards
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+C    24th of 32 subcases of dcn29.dat    
+C        4th of 11 cases received from Prof. Ametani on October 28, 2003
+CABLE PARAMETERS
+C ********************Case 12-1********************
+C Case 12-1; PT cable with one SC cable of core/sheath/armor; IYG=3
+    3   -1    1    0    1    1    0    1    0    0    3    0
+ 1.500     1.800     1.810    0.6000E-06 1.000     1.000     1.000    
+ 1.227     209.3    
+    3
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-010.6900E-010.7400E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.2000E-07 1.000     1.000     3.000    
+0.1500E-040.1000E-080.5000E-050.1000E-100.1000E-040.1000E-10
+0.2500E-040.1000E-09
+ 5.000     0.000    
+    50.0000        7000.00        0    0    0
+C           Total impedance [Zc], in ohm/m
+C 6.75544E-03  6.56546E-03  6.48182E-03  6.36006E-03
+C 5.75112E-02  4.96567E-02  4.88070E-02  3.13118E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.50000E-05 -1.50000E-05 -2.37535E-21  3.41626E-22
+C 5.07794E-05 -5.07794E-05 -2.43949E-20 -1.92016E-21  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 55.67291  43.58791  40.27757  8.434837
+C 27.58217  25.96881  26.05425  -.610079
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0       1.0  1.000846  .9962176
+C .746E-16  .548E-18  .3296E-3  -.010838
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)   
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.   
+C   1  4.19527E+00     11.74  6.36006E-03  3.13118E-02  2.50000E-05  4.46053E-04 
+C   2  8.82571E-01     69.19  1.29405E-04  7.89410E-03  1.55431E-05  5.01389E-05 
+BLANK card ending frequency cards
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+C    25th of 32 subcases of dcn29.dat    
+C        5th of 11 cases received from Prof. Ametani on October 28, 2003
+CABLE PARAMETERS
+C ********************Case 21-0********************
+C Case 21-0; PT cable with 3-phase SC cable of core/sheath; IYG=0
+    3   -1    3    0    1    1    0    1    0    0    0    0
+ 1.500     1.800     1.810    0.6000E-06 1.000     1.000     1.000    
+ 1.227     209.3     1.227     89.30     1.227     329.3    
+    2    2    2
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+ 5.000     0.000    
+    50.0000        7000.00        0    0    0
+C           Total impedance [Zc], in ohm/m
+C 6.64784E-03  6.36360E-03  6.36360E-03  6.45786E-03  6.36360E-03  6.36360E-03  6.36006E-03
+C 5.76283E-02  3.15489E-02  3.15489E-02  4.97737E-02  3.15489E-02  3.15489E-02  3.13118E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
+C 6.79707E-06 -7.40107E-24  0.00000E+00 -6.79707E-06 -1.06799E-23 -9.08817E-24  0.00000E+00  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 166.3596  10.06705  10.06705   132.349  10.06704  10.06704  8.462883
+C  -1.6011  -.862671  -.862671  -1.21034  -.862727  -.862727  -.850805
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0  .1929E-5  .1929E-5  .9999525  -.499442  -.998885  .9989272
+C -.51E-17  -.575E-5  -.575E-5  .0097433  .8853E-3  .0017706  -.001702
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)    
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.    
+C   1  3.26383E+00     11.77  6.36006E-03  3.13118E-02  0.00000E+00  4.41654E-04  
+C   2  2.98699E-02    190.70  2.36313E-04  7.92257E-03  0.00000E+00  6.71255E-06  
+BLANK card ending frequency cards
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+C    26th of 32 subcases of dcn29.dat    
+C        6th of 11 cases received from Prof. Ametani on October 28, 2003
+CABLE PARAMETERS
+C ********************Case 21-1********************
+C Case 21-1; PT cable with 3-phase SC cable of core/sheath; IYG=3
+    3   -1    3    0    1    1    0    1    0    0    3    0
+ 1.500     1.800     1.810    0.6000E-06 1.000     1.000     1.000    
+ 1.227     209.3     1.227     89.30     1.227     329.3    
+    2    2    2
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.1500E-040.1000E-080.5000E-050.1000E-10
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.1500E-040.1000E-080.5000E-050.1000E-10
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.1500E-040.1000E-080.5000E-050.1000E-10
+0.2500E-040.1000E-09
+ 5.000     0.000    
+    50.0000        7000.00        0    0    0
+C            Earth impedance ZE, in ohm/m
+C 6.34866E-03  6.34866E-03  6.34866E-03  6.34866E-03  6.34866E-03  6.34866E-03  6.34866E-03
+C 3.12516E-02  3.12516E-02  3.12516E-02  3.12516E-02  3.12516E-02  3.12516E-02  3.12516E-02  Core 1
+C            Conductor internal impedance ZC, in ohm/m
+C 2.19370E-04  0.00000E+00  0.00000E+00  2.93876E-05  0.00000E+00  0.00000E+00  0.00000E+00
+C 8.63256E-03  0.00000E+00  0.00000E+00  7.78018E-04  0.00000E+00  0.00000E+00  0.00000E+00  Core 1
+C           Total impedance [Zc], in ohm/m
+C 6.64784E-03  6.36360E-03  6.36360E-03  6.45786E-03  6.36360E-03  6.36360E-03  6.36006E-03
+C 5.76283E-02  3.15489E-02  3.15489E-02  4.97737E-02  3.15489E-02  3.15489E-02  3.13118E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.50000E-05  1.26321E-22 -8.19740E-23 -1.50000E-05  3.31906E-23 -1.87770E-22 -1.55096E-22
+C 5.07794E-05  1.98652E-22 -2.40558E-22 -5.07794E-05 -6.61404E-22 -7.82202E-22 -5.78034E-22  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 68.59111  8.717669  8.717669  56.51615  8.718023  8.718023  8.434837
+C 35.58146  -.307326  -.307326  33.96657  -.307396  -.307396  -.610079
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to ph..
+C      1.0       1.0  -.693E-6  -.693E-6  .9992533  -.499625   -.99925
+C .237E-15  .257E-18  .7433E-6  .7432E-6  .1549E-3  -.708E-4  -.142E-3
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)  
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.  
+C   1  4.19527E+00     11.74  6.36006E-03  3.13118E-02  2.50000E-05  4.46053E-04
+C   2  8.82755E-01     69.19  1.51621E-04  7.91257E-03  1.53712E-05  5.00638E-05
+BLANK card ending frequency cards
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+C    27th of 32 subcases of dcn29.dat    
+C        7th of 11 cases received from Prof. Ametani on October 28, 2003
+CABLE PARAMETERS
+C ********************Case 22-0********************
+C Case 22-0; PT cable with 3-phase SC cable of core/sheath/armor; IYG=0
+    3   -1    3    0    1    1    0    1    0    0    0    0
+ 1.500     1.800     1.810    0.6000E-06 1.000     1.000     1.000    
+ 1.227     209.3     1.227     89.30     1.227     329.3    
+    3    3    3
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-010.6900E-010.7400E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.2000E-07 1.000     1.000     3.000    
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-010.6900E-010.7400E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.2000E-07 1.000     1.000     3.000    
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-010.6900E-010.7400E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.2000E-07 1.000     1.000     3.000    
+ 5.000     0.000    
+    50.0000        7000.00        0    0    0
+C           Total impedance [Zc], in ohm/m
+C 6.75544E-03  6.36360E-03  6.36360E-03  6.56546E-03  6.36360E-03  6.36360E-03  6.48182E-03  6.36360E-03  6.36360E-03  6.36006E-03
+C 5.75112E-02  3.15489E-02  3.15489E-02  4.96567E-02  3.15489E-02  3.15489E-02  4.88070E-02  3.15489E-02  3.15489E-02  3.13118E-02
+C           Total admittance [Yc], in mho/m
+C 0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
+C 6.79707E-06 -1.56470E-24 -1.58170E-24 -6.79707E-06 -3.60078E-23 -2.75936E-23 -1.91530E-20  0.00000E+00  0.00000E+00 -2.82146E-23
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 163.1724  10.06705  10.06705   129.181  10.06705  10.06705   125.815  10.06705  10.06705  8.462883
+C -1.83451  -.862715  -.862715   -1.4196  -.862711  -.862711  -1.25847  -.862723  -.862723  -.850805
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to phase variables: v-phase = [Tv] * v-mode
+C      1.0  -.316E-4  -.316E-4  .9287082  .9995322  -.216E-7  -.216E-7  -.499778  .9995556  .9995735
+C -.11E-13  -.387E-4  -.387E-4  .3563903  -.030584   -.12E-7   -.12E-7  .3265E-4  -.653E-4  -.626E-4
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)    Charact. imp. (Ohm)     Charact. Admit. (S)
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.       Real      Imag.          Real        Imag.
+C   1  3.26383E+00     11.77  6.36006E-03  3.13118E-02  0.00000E+00  4.41654E-04      8.463     -.851  1.16981E-01  1.17605E-02
+C   2  1.68391E-01    177.84  1.35154E-04  8.56765E-04  0.00000E+00  7.09500E-05      3.486     -.273  2.85132E-01  2.23515E-02
+BLANK card ending frequency cards
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+C    28th of 32 subcases of dcn29.dat    
+C        8th of 11 cases received from Prof. Ametani on October 28, 2003
+CABLE PARAMETERS
+C ********************Case 22-1********************
+C Case 22-1; PT cable with 3-phase SC cable of core/sheath/armor; IYG=3
+    3   -1    3    0    1    1    0    1    0    0    3    0
+ 1.500     1.800     1.810    0.6000E-06 1.000     1.000     1.000    
+ 1.227     209.3     1.227     89.30     1.227     329.3    
+    3    3    3
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-010.6900E-010.7400E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.2000E-07 1.000     1.000     3.000    
+0.1500E-040.1000E-080.5000E-050.1000E-100.1000E-040.1000E-10
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-010.6900E-010.7400E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.2000E-07 1.000     1.000     3.000    
+0.1500E-040.1000E-080.5000E-050.1000E-100.1000E-040.1000E-10
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-010.6900E-010.7400E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.2000E-07 1.000     1.000     3.000    
+0.1500E-040.1000E-080.5000E-050.1000E-100.1000E-040.1000E-10
+0.2500E-040.1000E-09
+ 5.000     0.000    
+    50.0000        7000.00        0    0    0
+C           Total impedance [Zc], in ohm/m
+C 6.75544E-03  6.36360E-03  6.36360E-03  6.56546E-03  6.36360E-03  6.36360E-03  6.48182E-03  6.36360E-03  6.36360E-03  6.36006E-03
+C 5.75112E-02  3.15489E-02  3.15489E-02  4.96567E-02  3.15489E-02  3.15489E-02  4.88070E-02  3.15489E-02  3.15489E-02  3.13118E-02
+C                                                      End row for Core 1
+C           Total admittance [Yc], in mho/m
+C 1.50000E-05 -2.99182E-23  3.68773E-23 -1.50000E-05  2.46384E-22 -1.51477E-22 -1.31656E-21  1.65746E-22 -4.60119E-23  4.33856E-22
+C 5.07794E-05 -1.07249E-22 -1.21508E-22 -5.07794E-05 -4.26327E-22  1.67257E-22 -1.33777E-20  1.88659E-24 -1.48108E-24 -1.92794E-21
+C                                                      End row for Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C  55.6716  8.633329  8.633329  43.58661  8.633334  8.633334  40.27627  8.633336  8.633336  8.434837
+C 27.58052  -.401215  -.401215  25.96715  -.401217  -.401217  26.05259  -.400898  -.400898  -.610079
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)    Charact. imp. (Ohm)     Charact. Admit. (S)
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.       Real      Imag.          Real        Imag.
+C   1  4.19527E+00     11.74  6.36006E-03  3.13118E-02  2.50000E-05  4.46053E-04      8.435     -.610  1.17939E-01  8.53035E-03
+C   2  8.82571E-01     69.19  1.29405E-04  7.89410E-03  1.55431E-05  5.01389E-05     12.140     1.737  8.07178E-02 -1.15484E-02
+BLANK card ending frequency cards
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+C    29th of 32 subcases of dcn29.dat    
+C        9th of 11 cases received from Prof. Ametani on October 28, 2003
+CABLE PARAMETERS
+C ********************Case 3-0********************
+C Case 3-0; 3-phase SC cable; IYG=0
+    2   -1    3    0    1    1    0    0    0    0    0    0
+    2    2    2
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+ 1.500    -.5000     2.500     0.000     1.500    0.5000    
+    50.0000        7000.00        0    0    0
+C           Total impedance [Zc], in ohm/m
+C 6.82970E-03  6.53320E-03  6.60374E-03  6.63972E-03  6.53320E-03  6.60374E-03
+C 6.81573E-02  3.48863E-02  3.57482E-02  6.03027E-02  3.48863E-02  3.57482E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00
+C 6.79707E-06  0.00000E+00  0.00000E+00 -6.79707E-06  0.00000E+00  0.00000E+00  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C  59.9583  7.709226  7.991493  26.01134  7.712748  7.995252
+C -1.53267  -1.03753  -1.05192  -1.04899  -1.03313   -1.0472
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to phase variables: v-phase = [Tv] * v-mode
+C 1.000179  -.497538  -1.00127       -1.  -.496939       1.0
+C  .151E-3  -.001074  -.001829  .1644E-3  -.135E-3  -.243E-3
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)    Charact. imp. (Ohm)     Charact. Admit. (S)
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.       Real      Imag.          Real        Imag.
+C   1  2.05949E+00     13.94  6.61292E-03  4.37438E-02  0.00000E+00  2.26225E-04     13.945    -1.048  7.13075E-02  5.35948E-03
+C   2  2.24102E-02     31.45  6.37941E-05  1.72881E-02  0.00000E+00  1.13112E-04     12.363     -.023  8.08872E-02  1.49239E-04
+BLANK card BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+C    30th of 32 subcases of dcn29.dat    
+C       10th of 11 cases received from Prof. Ametani on October 28, 2003
+CABLE PARAMETERS
+C ********************Case 3-1********************
+C Case 3-1; 3-phase SC cable; IYG=3
+    2   -1    3    0    1    1    0    0    0    0    3    0
+    2    2    2
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.1500E-040.1000E-080.5000E-050.1000E-10
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.1500E-040.1000E-080.5000E-050.1000E-10
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.1500E-040.1000E-080.5000E-050.1000E-10
+ 1.500    -.5000     2.500     0.000     1.500    0.5000    
+    50.0000        7000.00        0    0    0
+C           Total impedance [Zc], in ohm/m
+C 6.82970E-03  6.53320E-03  6.60374E-03  6.63972E-03  6.53320E-03  6.60374E-03
+C 6.81573E-02  3.48863E-02  3.57482E-02  6.03027E-02  3.48863E-02  3.57482E-02  Core 1
+C           Total admittance [Yc], in mho/m
+C 1.50000E-05  0.00000E+00  0.00000E+00 -1.50000E-05  0.00000E+00  0.00000E+00
+C 5.07794E-05  0.00000E+00  0.00000E+00 -5.07794E-05  0.00000E+00  0.00000E+00  Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C  37.9946  7.710669  7.992328  25.92527    7.7129  7.994687
+C  1.38059  -.778858  -.783756  -.199009  -.775514   -.78019
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to phase variables: v-phase = [Tv] * v-mode
+C 1.000188  -.497735  1.001722       -1.  -.496939       1.0
+C .3743E-3   -.00132   .002144  .581E-11  -.317E-3       0.0
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)    Charact. imp. (Ohm)     Charact. Admit. (S)
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.       Real      Imag.          Real        Imag.
+C   1  2.96821E+00     13.93  6.63137E-03  4.37410E-02  1.48430E-05  2.27545E-04     13.916     -.594  7.17279E-02  3.06180E-03
+C   2  4.22138E-01     31.35  7.11047E-05  1.72880E-02  7.42100E-06  1.13773E-04     12.308      .376  8.11714E-02 -2.47736E-03
+BLANK card ending frequency cards
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+C    31st of 32 subcases of dcn29.dat    
+C       11th of 11 cases received from Prof. Ametani on October 28, 2003
+CABLE PARAMETERS
+C ********************Case 4********************
+C Case 4; same as 22-1  (default G,C are used if user does not provide input)
+    3   -1    3    0    1    1    0    1    0    0    3    0
+ 1.500     1.800     1.810    0.6000E-06 1.000     1.000     1.000    
+ 1.227     209.3     1.227     89.30     1.227     329.3    
+    3    3    3
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-010.6900E-010.7400E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.2000E-07 1.000     1.000     3.000    
+ 0.000     0.000     0.000     0.000     0.000     0.000    
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-010.6900E-010.7400E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.2000E-07 1.000     1.000     3.000    
+ 0.000     0.000     0.000     0.000     0.000     0.000    
+ 0.000    0.2550E-010.6050E-010.6200E-010.6700E-010.6900E-010.7400E-01
+0.2300E-07 1.000     1.000     2.400    0.3300E-07 1.000     1.000     2.400    
+0.2000E-07 1.000     1.000     3.000    
+ 0.000     0.000     0.000     0.000     0.000     0.000    
+ 0.000     0.000    
+ 5.000     0.000    
+    50.0000        7000.00        0    0    0
+C            Earth impedance ZE, in ohm/m
+C 6.34866E-03  6.34866E-03  6.34866E-03  6.34866E-03  6.34866E-03  6.34866E-03  6.34866E-03  6.34866E-03  6.34866E-03  6.34866E-03
+C 3.12516E-02  3.12516E-02  3.12516E-02  3.12516E-02  3.12516E-02  3.12516E-02  3.12516E-02  3.12516E-02  3.12516E-02  3.12516E-02
+C                                                      End row for Core 1
+C            Conductor internal impedance ZC, in ohm/m
+C 3.26963E-04  0.00000E+00  0.00000E+00  1.36981E-04  0.00000E+00  0.00000E+00  5.33464E-05  0.00000E+00  0.00000E+00  0.00000E+00
+C 9.38963E-03  0.00000E+00  0.00000E+00  1.53508E-03  0.00000E+00  0.00000E+00  6.85403E-04  0.00000E+00  0.00000E+00  0.00000E+00
+C                                                      End row for Core 1
+C           Total impedance [Zc], in ohm/m
+C 6.75544E-03  6.36360E-03  6.36360E-03  6.56546E-03  6.36360E-03  6.36360E-03  6.48182E-03  6.36360E-03  6.36360E-03  6.36006E-03
+C 5.75112E-02  3.15489E-02  3.15489E-02  4.96567E-02  3.15489E-02  3.15489E-02  4.88070E-02  3.15489E-02  3.15489E-02  3.13118E-02
+C                                                      End row for Core 1
+C           Total admittance [Yc], in mho/m
+C 1.00000E-10  1.18990E-27 -1.45189E-27 -1.00000E-10 -1.39444E-27  3.23117E-27 -6.46235E-27  3.23117E-27  0.00000E+00  0.00000E+00
+C 6.84105E-06 -2.97689E-24 -1.38659E-25 -6.84105E-06 -3.75253E-23 -2.73485E-23 -1.91530E-20  0.00000E+00  0.00000E+00 -2.82146E-23
+C                                                      End row for Core 1
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C 161.2469  10.01258  10.01258  127.2717  10.01258  10.01258  123.8362  10.01259  10.01259  8.462462
+C .3295742  -.862266  -.862266   -1.3951  -.862271  -.862271  -1.24651  -.862266  -.862266  -.850762
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to phase variables: v-phase = [Tv] * v-mode
+C      1.0  -.249E-4  .9233616  .2931E-4       1.0  -.454E-7  -.454E-7  .9995507  .9995327  -.22E-12
+C .211E-17  -.351E-4  .3532771  .3409E-4  -.26E-17  -.298E-7  -.298E-7  -.638E-4  -.664E-4  -.29E-13
+C            Modal components
+C Mode  Attenuation  Velocity      Impedance (Ohm/m)          Admittance (S/m)    Charact. imp. (Ohm)     Charact. Admit. (S)
+C No.       (db/km) (m/mic.s)       Real      Imag.          Real        Imag.       Real      Imag.          Real        Imag.
+C   1  3.26399E+00     11.77  6.36006E-03  3.13118E-02  1.00000E-10  4.41698E-04      8.462     -.851  1.16987E-01  1.17611E-02
+C   2  1.68468E-01    177.80  1.18406E-04  8.60287E-04  1.39772E-06  7.08880E-05      3.494     -.205  2.85250E-01  1.67149E-02
+BLANK card ending frequency cards
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE                                                             
+C    32nd of 32 subcases of dcn29.dat    
+C      15 January 2004,  add simple data that illustrates output of Potential   
+C      coefficient matrix and its transpose.  This is done by using the snaking
+C      option  (for SC cable, put -99 in cols. 36-40, which is CP variable NPP). 
+C      Also,  illustrate the single-line output that informs a user about matrix    
+C      reduction:  variable  NGRND of 41-45 is set to 3, which is a request that 
+C      three conductors (of the outer-most layer) will be grounded.  IZFLAG of    
+C      columns 26-30 had to be set ("1" is a request for intermediate printout),
+C      also,  since the matrices in question are intermediate matrices, by CP
+C      defintion.  Potential coefficient matrices are 6 x 6.  After eliminating
+C      one,  this gives 5 x 5 matrices.  Tsu-huei Liu.
+CABLE PARAMETERS
+    2   -1    3    0    1    1    0  -99    3    0    0    0
+    2    2    2  
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+     2.500       0.0     2.730       0.0     2.960       0.0     
+           100.         50.E03
+BLANK card ending frequency cards within  CABLE PARAMETERS
+BLANK card ending  CABLE CONSTANTS  data subcases
+BEGIN NEW DATA CASE
+BLANK
+

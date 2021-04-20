@@ -1,0 +1,48 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-8
+C       Like the preceding case, only with distributed line replacing Pi-circuit
+DIAGNOSTIC           0 9 9 9 9 9 0 9 9 9 9 9 9 3 9 9 9 9 9
+ .000100    .020     60.     60.
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+  RECA                      .001
+  RECB                      .001
+  RECC                      .001
+-1SENDA RECA                 0.3   0.4  12.6  100.
+-2SENDB RECB                 .03   0.1   6.0  100.
+-3SENDC RECC
+BLANK card ending branch cards
+  GENA  SENDA       -1.0       1.0
+  GENB  SENDB       -1.0       1.0
+  GENC  SENDC       -1.0       1.0
+BLANK card ending switch cards
+14GENA          100.       1.0                                     -1.
+14GENB          100.       1.0                                     -1.
+14GENC          100.       1.0                                     -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   4.997365737714E+02
+C                                Output for steady-state phasor switch currents.
+C         Node-K    Node-M            I-real            I-imag            I-magn
+C         GENA      SENDA     0.33315772E+01   -0.73376324E-01    0.33323851E+01
+C         GENB      SENDB     0.33315772E+01   -0.73376324E-01    0.33323851E+01
+C         GENC      SENDC     0.33315772E+01   -0.73376324E-01    0.33323851E+01
+C Last gen:    GENC
+C Last gen:    SENDC      100.        100.      3.3315771584762  3.3323850989622
+C Last gen:                0.0         0.0      -.0733763238755       -1.2617070
+C  Step   Time      RECC       RECB       RECA       SENDC      SENDB      SENDA
+C ***      Phasor I(0) =  0.3331577E+01   Switch  "GENA  "  to  "SENDA "  closed
+C ***      Phasor I(0) =  0.3331577E+01   Switch  "GENB  "  to  "SENDB "  closed
+C ***      Phasor I(0) =  0.3331577E+01   Switch  "GENC  "  to  "SENDC "  closed
+C    0    0.0  .003331577 .003331577 .003331577       100.       100.       100.
+C    1  .1E-3  .003331623 .003331623 .003331623 99.9999803 99.9999803 99.9999803
+ 1
+C  200    .02  .003314635 .003314635 .003314635 99.2114701 99.2114701 99.2114701
+C Variable max:.003332408 .003332408 .003332408       100.       100.       100.
+C Times of max :    .0036      .0036      .0036        0.0        0.0        0.0
+C Variable min:.003314635 .003314635 .003314635 99.2114701 99.2114701 99.2114701
+C Times of min :      .02        .02        .02        .02        .02        .02
+  PRINTER PLOT
+ 144 2. 0.0 20.         RECA                     { Axis limits : (0.000,  3.332)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

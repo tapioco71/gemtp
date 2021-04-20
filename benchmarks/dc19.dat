@@ -1,0 +1,355 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-19                                                           
+C      Test  of the control of TACS sources by node voltages and switch currents  
+C      of the electric network.  The electric network has no dynamics, with both
+C      the  node voltage and switch current equal  to  one  half,  always.  TACS
+C      supplemental variable  GENT  adds these to give unity.  The output signal
+C      is  then  passed through a function block  1/(1+S)  to  give  ELEMT,  and  
+C      through a  S/(1+S)  block to give  GT/ELT.   There also is a disconnected
+C      validation of the  Type-17  electric network source,  which provides  for
+C      modulation of the following source function by a TACS variable.   For use
+C      here,  the TACS variable is the constant  TWO = 2.0  ---  easy to verify.       
+     .05     2.0                                                               
+       1       1       1       1       1                                        
+TACS HYBRID
+ 1ELEMT   +GENT                                                                 
+       1.0                                                                      
+       1.0       1.0                                                            
+ 1GT/ELT  +GENT                                                                 
+                 1.0                                                            
+       1.0       1.0                                                            
+90BUS2                                                                          
+91BUS1 
+11TWO            2.0       { Constant for modulation of electric network  COSINE                                                                       
+99GENT    = BUS1 + BUS2
+33ELEMT GENT  GT/ELTBUS1  BUS2                                                  
+BLANK card ending all TACS data
+  BUS3  BUS2                 1.0                                                
+  BUS2  BUS1                 1.0                                                
+  COSINE                     1.0      { Dummy branch connects source of interest
+  SURGE                      1.0  { Dummy branch connects Type-15 surge function
+  TAKUSG                     1.0    { Dummy branch for Taku Noda's Type-15 surge
+BLANK card ending electric network branches
+  BUS1                                                MEASURING                1
+BLANK card ending switches
+11BUS3           1.0                                                            
+17TWO         { The constant 2.0 of TACS multiplies following 1/2 to give unity:
+14COSINE         0.5       0.5  { Cosine starts at peak 0.5, and also ends there
+15SURGE          2.0      -1.0      -3.0  { Surge function is a smooth pulse > 0
+15TAKUSG         2.0      -1.0      -3.0    -6666. { Same except 2.0 = peak valu
+BLANK card ending electric network source cards.
+C  Step    Time      BUS1       BUS2       BUS3       COSINE     SURGE      TAKUSG     BUS1       TACS       TACS       TACS
+C                                                                                     TERRA      ELEMT      GENT       GT/ELT
+C ***        Switch  "BUS1  "  to  "      "  closed before  0.00000000E+00  sec.
+C     0     0.0       0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C     1     .05       0.0        0.5        1.0        0.0 .181042896 .470363242        0.5 .024390244        1.0 .975609756
+ 1                                                                              
+C    39      1.95         0.0        0.5        1.0 .987688341 .278788345 .724313367        0.5 .854137166        1.0 .145862834
+C    40       2.0         0.0        0.5        1.0        1.0 .265713062 .690342786        0.5 .861252427        1.0 .138747573
+C maxima :    0.0         0.5        1.0        1.0 .769799804 1.99999856        0.5 .861252427        1.0 .975609756
+C maxima :    0.0         .05        .05        2.0        .55        .55        .05        2.0        .05        .05
+  PRINTER PLOT
+ 143 .4 0.0 2.0         SURGE COSINE              { Axis limits: (-1.000, 1.000)
+ 193 .4 0.0 2.0         TACS  GT/ELTTACS  ELEMT    { Axis limits: (0.000, 9.756)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE         
+C     2nd of 5 subcases of DC-19 tests important supplemental variable functions
+C     Unlike 1st,  there is no electric network (in theory).  In practice, ATP
+C     will automatically supply a dummy electric network.  This is since around
+C     1993 when  TACS STAND ALONE  was internally converted to  TACS HYBRID.
+    .100     6.0
+       1       1       0       1       0       0       0       0                
+TACS STAND ALONE                                                        
+  X2      -X3     +TQ                             6.6667 -100. 0.2                
+ 1X3      +X2                                             0.0   1.05                       
+       1.0                                                    
+       0.0   1.                                              
+11TQ        1.0                                                    0.0          
+98SUPVAR  = 0.4 * ( ABS(X3) + 1.E-6 ) ** 3.0 * 2.0
+26T            { Type-26 is given value equal to ATP variable in columns 3-8
+33X2    X3    T     SUPVAR
+C   Step      Time      TACS       TACS       TACS       TACS
+C                       X2         X3         T          SUPVAR
+C      0       0.0         0.0        0.0        0.0        0.0
+C      1       0.1         0.2        .01        0.1  .80024E-6
+C      2       0.2         0.2        .03        0.2 .216022E-4
+BLANK card ending all TACS data cards          
+C     58       5.8  .203206E-4 .999997968        5.8 .799997523
+C     59       5.9  .677346E-5 .999999323        5.9 .800000774
+C     60       6.0   .22578E-5 .999999774        6.0 .800001858
+  PRINTER PLOT                                                                  
+ 143 1. 0.0 6.0         X2    SUPVAR              { Axis limits: (0.000,  8.000)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE         
+C      3rd of 5 subcases consists only of Type-15 lightning functions, including
+C      both old (the 2-exponential surge function)  and new (Bernd Stein of FGH)
+C      models.  Bernd's FGH improvement is documented in a letter dated  30.7.86
+C      Smoothing of plot data points after 50 ups and downs is also illustrated.
+  1.0E-8   3.E-6
+       1       1       1       1       1      -1               1
+       5       5      20      20                                            
+  LIGHTN                     1.0                                                
+  ALGHTN                     1.0                                                
+  LIGHT1                           1.0 
+  ALGHT1                           1.0 
+  ALGHT2                     1.0                                                
+  ALGHT3                           1.0 
+  STAN1                      1.0  { Resistor for Standler surge added 29 Sept 00 
+  STAN2                      1.0  { Resistor for 2nd Standler surge added 27 Oct 00 
+  TWOE1                      1.0  { Resistor for TWO EXP surge added 19 Jan 01 
+  TWOE2                      1.0  { Resistor for 2nd TWO EXP surge added 19 Jan 01 
+  HEID1                      1.0  { Resistor for Heidler surge added 19 Jan 01 
+  HEID2                      1.0  { Resistor for 2nd Heidler surge added 19 Jan 01 
+C      Orlando Hevia mentions legality and danger of negative L of series R-L-C.
+C      Add a branch to illustrate as mentioned in newsletter dated January, 2001
+  HEVIA                    10.E3  -3.0       { Series R-L with negative L }    1
+BLANK card ending electric network branches
+BLANK card ending switches
+15ALGHTN-1       1.0     2.E-6    50.E-6       5.0
+15LIGHTN-1       1.0   -20000.  -500000.  
+15ALGHT2-1       1.0     2.E-6    50.E-6      10.0 
+15ALGHT1-1       1.0     2.E-6    50.E-6       5.0
+15LIGHT1-1       1.0   -20000.  -500000.  
+15ALGHT3-1       1.0     2.E-6    50.E-6      10.0 
+C 345678901234567890123456789012345678901234567890
+C         <--- Off-line Standler 3F10.0 ->
+15STAN1 -1       0.6    20.E-6      0.04  Standler { "Standler" is same as -7777
+C                 C        A          B      { Identify of 3 Standler parameters
+C         <--- In-line Standler 4F8.0 ---><-Request word->  <T-start >< T-stop >
+C          T1      T2         Perc  peak
+15STAN2 -1  1.0E-6 20.0E-6     0.0  1.000 Standler in-line         0.0       1.0
+C
+C         <--- Off-line Two exp  3F10.0 ->
+15TWOE1 -1    1.20   -36000.0    -5.0E+6          { it is an old two exp source
+C                 C        A          B      { Identify of 3 Two exp parameters
+C         <--- In-line Two exp  4F8.0 ---><-Request word->  <T-start >< T-stop >
+C          T1      T2         Perc  peak
+15TWOE2 -1  1.0E-6 20.0E-6     0.0  1.0   Two exp  in-line         0.0       1.0
+C
+C         <--- Off-line Heidler 3F10.0 -->
+15HEID1 -1       0.6   1.0E-06    3.0E-5       5.0  { it is an old Heidler source
+C                 C        A          B        N   { Identify of 4 Heidler parameters
+C         <-Heidler in line     4F8.0 ---><-key----------><><T-start >< T-stop >
+C          T1      T2         Perc  peak                   N
+15HEID2 -1  1.0E-6 20.0E-6     0.0  1.000 Heidler  in-line 5       0.0       1.0
+C
+14HEVIA          1.0       60.    { Voltage source is shorted at 1 us }    1.E-6
+BLANK card ending electric network source cards.
+  STAN1 STAN2 ALGHT2ALGHT1LIGHT1ALGHTNLIGHTNALGHT3HEID1 HEID2 TWOE1 TWOE2  
+C  First  12     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   1     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time      STAN1      STAN2      ALGHT2     ALGHT1     LIGHT1     ALGHTN     LIGHTN     ALGHT3     HEID1      HEID2
+C 
+C 
+C                       TWOE1      TWOE2      HEVIA
+C                                             TERRA
+C      0       0.0         0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C                          0.0        0.0        0.0
+C      1     .1E-7  .442479244 .855069065 .25405E-20 .812971E-4 957.508161 .406485E-9 .004787541 .50811E-15 .930195E-8 .140651E-7
+C                   .058092768  .04993186 -.16949E-5
+C      2     .2E-7  .454691626  .88074615  .2601E-17 .002438392 -4.9670744 .130049E-7 .009550246 .51918E-12 .297563E-6 .449919E-6
+C                   .113331409 .097441938 -.51422E-5
+C      3     .3E-7  .461895211 .895961187 .14996E-15  .01470791 952.565899 .987364E-7  .01428824 .28952E-10 .225886E-5  .34153E-5
+C                   .165855128 .142646809 -.87063E-5
+C      4     .4E-7  .467007506 .906801471 .26623E-14 .048743046 -9.8846491 .415991E-6 .019001647 .473526E-9 .951554E-5 .143866E-4
+C                    .21579634 .185657436 -.12391E-4
+C      5     .5E-7  .470959015  .91521116  .2479E-13 .121908619 947.672889 .126925E-5 .023690588 .395202E-8 .290285E-4  .43887E-4
+C                   .263281003 .226579442 -.16201E-4
+BLANK card ending output requests                                                                              
+C    260    .26E-5   .48556872 .972472279 .991750958 -15.735499 -362.71992 .993881314 .676797074 -18.724315 .572623725 .949657569
+C                   1.09277363  .94980214 -.55047746
+C    280    .28E-5  .482164403 .967184298 .987942471 -17.163302 -375.61152 .990578487 .698942172 -19.269102 .568828878 .942698718
+C                   1.08493561 .942824605 -1.0722499
+C    300     .3E-5  .478686003 .961711993 .984066679 -17.995991  -387.2694 .987055255 .718634373 -19.452928 .565055727 .935784527
+C                   1.07715275 .935897248 -2.0885866
+C Variable maxima :  .506829483 1.00000002        1.0 1757.33053 957.508161        1.0 .718634373 2231.07839        0.6        1.0
+C                    1.14948506 .999999945        0.0
+C Times of maxima :       .8E-6      .1E-5      .2E-5      .7E-6      .1E-7      .2E-5      .3E-5    .113E-5      .1E-5      .1E-5
+C                        .99E-6      .1E-5        0.0
+C Variable minima :         0.0        0.0        0.0 -17.995991  -387.2694        0.0        0.0 -19.452928        0.0        0.0
+C                           0.0        0.0 -2.0885866
+C Times of minima :         0.0        0.0        0.0      .3E-5      .3E-5        0.0        0.0      .3E-5        0.0        0.0
+C                           0.0        0.0      .3E-5
+  PRINTER PLOT
+ 145 .4 0.0 3.0         LIGHTNALGHTNALGHT2       { Plot limits: (0.000,   1.000)
+ 145 .4 0.0 3.0         LIGHT1ALGHT1ALGHT3       { Plot limits: (-0.110,  2.231)
+C 145 .4 0.0 3.0         STAN1 STAN2       
+C 145 .4 0.0 3.0         HEID1 HEID2       
+C 145 .4 0.0 3.0         TWOE1 TWOE2        
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      4th of 5 subcases was added  17 September 1999  to illustrate delayed
+C      opening of a Type-13 TACS-controlled switch.  There are two parallel,
+C      identical circuits on the electrical side.  A sinusoidal source drives
+C      current through a series R-L branch.  The old logic is illustrated by
+C      the  QUICK  alternative whereas the new is the  DELAY  alternative.
+C      The new optional  DO NOT OPEN UNTIL CURRENT 0  is illustrated by the
+C      latter of these two:  opening will be delayed until current passes
+C      through zero.  Both circuits oscillate following opening because both
+C      have a hanging inductor.  But  QUICK  opens first,  and it oscillates
+C      more.  The graph is distinctive.
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+   .0004    .010                   
+       1       1    
+TACS HYBRID
+14CLAMP         100.       50.       30.        0.                 -1.
+33CLAMP 
+BLANK card ending TACS
+  GEN   QUICK                10.    4.   { Series R-L will oscillate when opened                                   
+  GEN   DELAY                10.    4.                                     
+BLANK card ending branches
+13DELAY                 Do not open until current 0   CLOSED          CLAMP   11
+$DISABLE
+C     The preceding involves a high-level, English-language declaration.  It
+C     is equivalent to the following low-level, numeric declation.
+13RESIS                    -77333.                    CLOSED          CLAMP   11
+C     I.e., the data field of otherwise-unused columns 25-34 can be used to
+C     hold the special numeric value.  About the English,  this must begin
+C     to the right of column 24.  If 55-60 are used as here for CLOSED, the
+C     beginning of  "do not open until current 0"  can be delayed at most 3
+C     columns (note 3 blanks between ending 0 and start of CLOSED).  Case is
+C     arbitrary (note 1st letter has been made upper case on switch card).
+$ENABLE
+13QUICK                                               CLOSED          CLAMP   11
+BLANK card ending switches
+14GEN           100.       50.       0.0        0.                 -1.
+BLANK card ending sources
+  GEN   QUICK DELAY
+BLANK card ending voltage printout
+  CALCOMP PLOT  { Needed to cancel  PRINTER PLOT  of preceding subcase
+  SUPERIMPOSE                  2    { Superimpose plots of the following 2 cards
+ 144 1. 0.0 10.         GEN   DELAY QUICK      { First, three node voltages
+ 194 1. 0.0 10.-200.200.TACS  CLAMP            { 2nd of 2 in overlay is I-branch
+BLANK card ending plot
+BEGIN NEW DATA CASE         
+C      5th of 5 subcases was added  28 July 2002  to illustrate 3 new source
+C      types:  CIGRE,  CESI,  and  USRFUN.   These are all special sub-types
+C      within the Type-15 source.  The supporting code comes from Orlando P.
+C      Hevia of UTN in  Santa Fe, Argentina.  For an alternate and different
+C      illustration of the  USRFUN  alternative,  see  DC-5.   For comments
+C      about required precision, see note following this subcase.
+  .05E-6  10.E-6     { Hevia used dT = 1.0E-9, but such detail is not needed
+       1       1       1               1      -1
+       5       5      20      20
+  CESI1                      1.0
+  CESI2                      1.0
+  CIGRE1                     1.0
+  CIGRE4                     1.0
+  USER2                      1.0
+  USER8                      1.0   { Add another USRFUN test on 10 December 2002 
+BLANK card ending branch cards
+BLANK card ending switch cards (none for this data)
+C CORRENTE DI CRESTA -0.001 [kA]
+C TEMPO DI CRESTA 1 [us]
+C TEMPO EMIVALORE 10 [us]
+C GENERATORI EQUIVALENTI FRONTE
+15CESI1 -1       1.5    1.0E-6    10.0-6  CESI
+15CESI2 -1      -1.2    1.0E-6    10.0-6  CESI        
+15CIGRE1   1.0          1.0E-6   10.0E-6  CIGRE      20.0E+5    0.5E-6    9.5E-6
+15CIGRE4   1.0          1.0E-6   10.0E-6  CIGRE      50.0E+5    0.5E-6    9.5E-6
+15USER2    2.0                            USRFUN 
+15USER8    8.0                            USRFUN 
+BLANK card ending electric network sources
+ 1 { Request for all possible node voltage outputs (here, just 4)
+  CALCOMP PLOT
+ 145 .5 0.0 5.0         CESI1 CESI2 USER2 CIGRE1
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+EOF
+
+Warning about the preceding.  The CIGRE1 output depends greatly on arithmetic
+precision.  Even 64 bits seems inadequate since turning the Salford debugger
+on and off (minor update using SUBR5) results in the following differences.
+Note that the 3rd row is what will be published in a future newsletter.  The
+CIGRE1 value on  step 40  rises from  .661  to  .668  when the debugger is
+turned on.
+
+FC version 2.0 - Copyright (c) 1990 Mike Albert        Wed Aug 21 14:08:13 2002
+Options are: -c1 -ds5 -t8 
+
+Compare files:
+   dc19.lis          71885   8-21-102   2:07p
+   dc19.sal          71885   8-21-102   1:48p
+
+Changed lines 859-868
+  >     15    .75E-6   1.000594  -.800475  .0648095  .0662431  .0783034
+  >     20     .1E-5   1.477403  -1.18192  .1299899  .1324862  .1044063
+  >     40     .2E-5   1.338601  -1.07088   .668485  .4280678  .2093254
+  >     60     .3E-5    1.23813  -.990504  .9529333  .9505637  .3267037
+  >     80     .4E-5   1.167656  -.934125  .8811803  .8800206  .5541328
+  >    100     .5E-5   1.104946  -.883957  .8148301  .8147126  .9983771
+  >    120     .6E-5   1.044245  -.835396  .7534758  .7542513  .9931261
+  >    140     .7E-5   .9840634  -.787251  .6967413  .6982769  .9835613
+  >    160     .8E-5   .9240164  -.739213  .6442788  .6464564  .9740871
+  >    180     .9E-5   .8640042  -.691203  .5957665  .5984817  .9647042
+To
+  >     15    .75E-6   1.000594  -.800475  .0644145  .0662431  .0783034
+  >     20     .1E-5   1.477403  -1.18192  .1291901  .1324862  .1044063
+  >     40     .2E-5   1.338601  -1.07088   .661331  .4280678  .2093254
+  >     60     .3E-5    1.23813  -.990504  .9533223  .9505637  .3267037
+  >     80     .4E-5   1.167656  -.934125    .88154  .8800206  .5541328
+  >    100     .5E-5   1.104946  -.883957  .8151627  .8147126  .9983771
+  >    120     .6E-5   1.044245  -.835396  .7537834  .7542513  .9931261
+  >    140     .7E-5   .9840634  -.787251  .6970257  .6982769  .9835613
+  >    160     .8E-5   .9240164  -.739213  .6445418  .6464564  .9740871
+  >    180     .9E-5   .8640042  -.691203  .5960097  .5984817  .9647042
+
+Changed line 872
+  >Variable maxima :   1.497392       0.0   .999673  .9989941  .9999945
+To
+  >Variable maxima :   1.497392       0.0  .9997968  .9989941  .9999945
+
+Comparison complete
+
+21 August 2002, remove from before the 5th, which was not being executed:
+BLANK        -----------------    Protect following 4th data subcase from execution 
+C          Note:  Following is copy of 3rd subcase between October, 1990,  and
+C                 July, 1991.   It was wrong during 9 months.   The solution
+C                 prior to October, 1990,  was kept below here,  and discovered
+C                 to be correct once again on July 22, 1991.   So,  it would 
+C                 seem that Guido's "correction" of Oct, 1990, was wrong,  and
+C                 during the spring or summer of 1991 he merely corrected the
+C                 correction.   Well,  as history,  we keep the wrong data:
+C      3rd of 3 subcases consists only of Type-15 lightning functions, including
+C      both old (the 2-exponential surge function)  and new (Bernd Stein of FGH)
+C      models.  Bernd's FGH improvement is documented in a letter dated  30.7.86
+C      Smoothing of plot data points after 50 ups and downs is also illustrated.
+C         Comment cards altered 23 Oct 1990.   Original contents preserved below
+C         as 4th data subcase until Bernd Stein approves of changes.
+   1.E-8 300.E-8
+       1       1       1       1       1      -1
+       5       5      20      20                                            
+  LIGHTN                     1.0                                                
+  ALGHTN                     1.0                                                
+  LIGHT1                           1.0                                                
+  ALGHT1                           1.0                                                
+  ALGHT2                     1.0                                                
+  ALGHT3                           1.0                                                
+BLANK card ending electric network branches
+BLANK card ending switches
+15ALGHTN-1       1.0     2.E-6    50.E-6       5.0
+15LIGHTN-1       1.0   -20000.  -500000.  
+15ALGHT2-1       1.0     2.E-6    50.E-6      10.0 
+15ALGHT1-1       1.0     2.E-6    50.E-6       5.0
+15LIGHT1-1       1.0   -20000.  -500000.  
+15ALGHT3-1       1.0     2.E-6    50.E-6      10.0 
+BLANK card ending electric network source cards.
+C  Step   Time     ALGHT2     ALGHT1     LIGHT1     ALGHTN     LIGHTN     ALGHT3                                            
+C   0     0.0         0.0        0.0        0.0        0.0        0.0        0.0
+C   1   .1E-7  .26503E-20 .853443E-4 957.508161 .426722E-9 .004787541 .53005E-15
+C   2   .2E-7  .27133E-17 .002559784 -4.9670744 .136524E-7 .009550246 .54161E-12
+C   3   .3E-7  .15643E-15 .015440124 952.565899 .103652E-6  .01428824 .30202E-10
+C   4   .4E-7  .27773E-14 .051169655 -9.8846491 .436701E-6 .019001647 .493979E-9
+ 1                                                                              
+C 300   .3E-5  1.02657121 -18.891898  -387.2694 1.03619451 .718634373 -20.293153
+C  maxima :    1.04319273 1844.81694 957.508161  1.0497837 .718634373 2327.44477
+C Times of max :    .2E-5      .7E-6      .1E-7      .2E-5      .3E-5    .113E-5
+C  minima :           0.0 -18.891898  -387.2694        0.0        0.0 -20.293153
+C Times of min :      0.0      .3E-5      .3E-5        0.0        0.0      .3E-5
+  PRINTER PLOT
+ 145 .4 0.0 3.0         LIGHTNALGHTNALGHT2       { Plot limits: (0.000,   1.050)
+ 145 .4 0.0 3.0         LIGHT1ALGHT1ALGHT3       { Plot limits: (-0.110,  2.327)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+

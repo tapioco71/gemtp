@@ -1,0 +1,101 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-17
+C        Problem identical to  DC-4,  only  here  the data is modularized to two
+C        levels using  $INCLUDE  with arguments (both numeric and alphanumeric).
+C     March of 2006,  modify to illustrate  $INSERT  with arguments and "/"-card
+C     sorting.  In addition to the original data case,  4 more will be appended
+C     and each of these will have its own  $INSERT  disk file.  As for the
+C     original first,  it remains the same except that  $INSERT  has replaced
+C     the  $INCLUDE  use of years past.  Arguments are unchanged,  however.
+C         4 May 2007,  add following  $PREFIX  after modification of  OVER1  and
+C         CIMAGE  that moves  CHAR*80 PREFIX  into  BLKCOM  for use by  $INSERT.
+C         This allows remote execution, from \UNFORM, without data modification.
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+$INSERT,  dc17ins.dat,   9,   .005,   TRAN##,
+    .005     4.0
+       1       1       1       1       1      -1
+       5       5      20      20
+  TRAN  LOADG               255.  5.E4                                         3
+  LOADG                    1.E-6
+BLANK card ending  BRANCH  cards
+BLANK card ending  SWITCH  cards (none exists, for this case)
+BLANK card ending  SOURCE  cards
+  GEN   TRAN
+BLANK card ending  OUTPUT  variable requests
+BLANK card ending  PLOT  cards
+BEGIN NEW DATA CASE
+C     2nd of 5 subcases of DC-17 that illustrate  $INSERT  use.
+C     DC-26, 5th  of  5 data subcases,  modified.  This is former  DC17A.DAT
+$INSERT, DC17AINS.DAT, { Move all data except misc. data into this file
+ .000200    .000     60.   { T-max = 0  means that no transient solution follows
+       1       1       1       0       1     
+BLANK card ending branch cards.
+BLANK card ending switch cards.
+BLANK card terminating EMTP source cards.
+BLANK card ending requests for output variables
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     3rd of 5 subcases of DC-17 that illustrate  $INSERT  use.
+C     BENCHMARK DC-33,  modified.   This is former  DC17B.DAT
+$INSERT, DC17BINS.DAT, { All data except misc. data has been moved to here
+ .000050    .020
+       1       1       1       1       1      -1
+       5       5      20      20
+BLANK card terminates all TACS data
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+C       Total network loss  P-loss  by summing injections =   7.106450000000E-06
+C Inject:  GEN       377.             377.             .377E-7   2.6786345332877
+C Inject:            0.0              0.0      -2.678634533288       -89.9999992
+C           ---- Initial flux of coil  "GROUND"  to  "GEN   "  =  1.00000000E-09
+C
+C  Step     Time        GEN          GROUND       GROUND       TACS         TACS
+C                                     TERRA        GEN          FLUX         GEN
+C ***      Phasor I(0) =  0.3770000E-07   Switch  "GROUND"  to  "      "  closed
+C   0      0.0          377.      .377E-7          0.0          0.0          0.0
+C   1    .5E-4   376.9330268  .5235646391  -.523564601  .0094233257  376.9330268
+C   2    .1E-3   376.7321312   1.04694322  -1.04694318  .0282649546  376.7321312
+BLANK card ends OUTPUT variable requests
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE
+C     4th of 5 subcases of DC-17 that illustrate  $INSERT  use.
+C     BENCHMARK DC-33, 2nd of 3 subcases, modified.  This is former DC17C.DAT
+$INSERT, DC17CINS.DAT, { All data except misc. data has been moved to here
+ .000050    .020
+       1       1       1       1       1      -1
+       5       5      20      20
+BLANK card terminates all MODELS data  { 9 July 1995,  MODELS  replaces old
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+C       Total network loss  P-loss  by summing injections =   7.106450000000E-06
+BLANK card ends OUTPUT variable requests
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE                                                             
+C     5th of 5 subcases of DC-17 that illustrate  $INSERT  use.
+C     DC-30,  6th of 6 subcases,  modified.   This is former DC17D.DAT
+$INSERT, DC17DINS.DAT,
+   1.E-6   5.E-6         { Only take 5 steps;  these are plenty for illustration
+       1      -1
+BLANK card terminates all TACS data
+BLANK card ends all MODELS data
+ENDMODELS
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+BLANK card ends OUTPUT variable requests
+BLANK card ending all batch-mode PLOT cards
+C   Comment about 6 lines above.  Note  ENDMODELS  has like the initiation
+C   word MODELS:  there is only one of them,  and has nothing to do with
+C   the actual modeling.  It is part of the structure in which actual data
+C   is carried.  Normally,  ENDMODELS  would precede the blank card ending
+C   MODELS,  but with sorting that is not possible.  /-card sorting will
+C   put the actual data there.  If we raise  ENDMODELS  line by one row,
+C   it would precede all real  MODELS  data,  and that would be completely
+C   wrong.  So,  we put it after the blank.  Recall  MODELS  ignores blank
+C   lines,  so the blank card ending MODELS is ignored.  It is essential
+C   to the sorting,  but then is ignored by MODELS itself.  Since it was
+C   optional, anyway, this works well.
+BEGIN NEW DATA CASE
+BLANK

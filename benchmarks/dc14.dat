@@ -1,0 +1,196 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-14
+C         1st of 4 subcases will calculate constant-parameter equivalent network
+C AGNOSTIC           0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 { Ov 26
+C   Add re-dimensioning request  1 April 2007  in order to regain those sparsity
+C   diagrams showing non-zero structure.  Until this past year,  these were
+C   missing for 3 * default dimensioning of Salford EMTP and also other versions
+C   I suppose.  Then,  working to support Orlando Hevia and GNU F95 testing, a
+C   change to  NETEQV  was made in January.  Storage in KSPARS was changed from
+C   INTEGER  (1 character per 4/byte word) to  CHARACTER*1.  But, as Tsu-huei
+C   discovered only toward the end of March (apparently testing was delayed),
+C   Watcom died at the first attempted storage in  KSPARS(1,1).  Suspecting that
+C   Watcom did not like the  INTEGER  vs.  CHARACTER*1  mismatch of the final
+C   argument,  WSM retains the  NETEQV  code and simply replaces  KARRAY  within
+C   SUBR26  by List 15  CSTO  of  MODELS.  But,  using 3 * default dimensioning,
+C   LSPARS = 225  and this requires  225 ** 2 = 50625  cells  which is more than
+C   3 * default will provide.  So,  as first tested,  the two sparsity diagrams
+C   were correctly missing from the output.  But they were nice, and there is no
+C   need to lose them.  The dimensioned size of List 15 is substantially bigger,
+C   so why not simply expand List 15 to 51K at the same time much more storage
+C   is saved by reducing other list sizes (possible since they are not used,
+C   anyway, for supporting programs only).  "LABCOM tables =  234090  INTEGER
+C   words"  of the heading will shrink from  234090  to  84270.  This is a novel
+C   use of NLS for non-simulation,  so has educational value in its own right.
+NEW LIST SIZES
+       0       0       0       0       0       0       0       0       0       0
+       0       0       0       0   51000       0       0       0       0       0
+       0       0       0     { Note only List 15 = 51K differs from default size
+  240000  
+NETWORK EQUIVALENT       { Request transfer to supporting program "NETEQV"
+C NITMAX  IPRSUP  EPSILN  PERCEN  IPNCOM    NAME   ----  Begin next sub-sub-case
+      10       0   1.E-9     0.5       0    ABC?
+C      K       M   X-OHMS
+       1       2     0.5          { Branch node K,  node M,  reactance of branch
+BLANK card terminates branch cards (all branches to be excluded from equivalent)
+C BUS1  BUS2         X/R    X-THEV  NEGATE
+ 1DUMMY DUMMY        10.       0.1     0
+ 2DUMMY DUMMY        20.       .05     0
+C $PUNCH             { Flush punched cards pertaining to just-completed 2-bus case
+BLANK card ending data cases within  "NETWORK EQUIVALENT".      Exit to  "OVER1"
+BEGIN NEW DATA CASE
+C         2nd of 4 subcases will calculate constant-parameter equivalent network
+NETWORK EQUIVALENT       { Request transfer to supporting program "NETEQV"
+C NITMAX  IPRSUP  EPSILN  PERCEN  IPNCOM    NAME   ----  Begin next sub-sub-case
+      10       0   1.E-9     1.0
+C      K       M   X-OHMS
+       1       2    278.          { Branch node K,  node M,  reactance of branch
+       1       3     87.          { Branch node K,  node M,  reactance of branch
+       1       4    145.          { Branch node K,  node M,  reactance of branch
+       1       5    145.          { Branch node K,  node M,  reactance of branch
+       1       6    5.16          { Branch node K,  node M,  reactance of branch
+       1       7    467.          { Branch node K,  node M,  reactance of branch
+       1       8    316.          { Branch node K,  node M,  reactance of branch
+BLANK card terminates branch cards (all branches to be excluded from equivalent)
+C BUS1  BUS2         X/R    X-THEV  NEGATE
+ 1DUMMY DUMMY        50.       .09
+ 2DUMMY DUMMY        33.       .15
+ 3DUMMY DUMMY        50.       .09
+ 4DUMMY DUMMY        33.       .15
+ 5DUMMY DUMMY        50.       .09
+ 6DUMMY DUMMY        33.       .15
+ 7DUMMY DUMMY        50.       .09
+ 8DUMMY DUMMY        33.       .15
+C $PUNCH        { Flush the punched-card output of just-created equivalent network
+BLANK card ending data cases within  "NETWORK EQUIVALENT".      Exit to  "OVER1"
+BEGIN NEW DATA CASE
+C   3rd  of  4  data subcases was appended to illustrate realistic usage at BPA.
+C   Data for BPA's EMTP  was converted for solution using ATP by Eugene Davis of
+C   of BPA during August of 1992.  ATP advice from WSM.  See Oct, 92, newsletter
+C  **  HOT SPRINGS - TAFT - DWORSHAK  EQUIVALENTS
+NETWORK EQUIVALENT, 9,    { Max number of generators is reduced to yield diagram
+C NITMAX  IPRSUP  EPSILN  PERCEN  IPNCOM    NAME  ---  1st of 2 halves: zero seq
+      10       0   1.E-9     1.0       0    ABC?
+C      K       M  X-OHMS
+       1       2   113.2           (K, M, REACTANCE OF BRANCH)
+       2       3   194.0           (K, M, REACTANCE OF BRANCH)
+BLANK card ends branches that are to be excluded from the equivalent
+C BUS1  BUS2         X/R    X-THEV  NEGATE  ----  Short circuit impedance at bus
+ 1DUMMY HOTS          9.     70.84     0          (zero-sequence values)
+ 2DUMMY TAFT          6.     48.51     0
+ 3DUMMY DWOR          9.     39.41     0
+C   -- Done with Newton iteration # 1.   Largest correction  D4 = 3.84916323E-01
+C   -- Done with Newton iteration # 1.   Largest correction  D4 = 1.33373074E-01
+C   -- Done with Newton iteration # 1.   Largest correction  D4 = 5.54850941E-03
+C   -- Done with Newton iteration # 1.   Largest correction  D4 = 1.96795976E-05
+C   -- Done with Newton iteration # 1.   Largest correction  D4 = 1.14179987E-10
+C reactance computed after removal of user-flagged generators.  ....   LOOP = 2.
+C Gen             X-new             R-new      X-fault       X-thev     X/R-thev
+C   1 1.19249599709E+02 1.32499555232E+01  7.08400E+01  7.08400E+01     9.000000
+C   2 8.22611517150E+01 1.37101919525E+01  4.85100E+01  4.85100E+01     6.000000
+C   3 4.66222308277E+01 5.18024786975E+00  3.94100E+01  3.94100E+01     9.000000
+C NITMAX  IPRSUP  EPSILN  PERCEN  IPNCOM    NAME  -----  End 0-sequence, begin +
+      10       0   1.E-9     1.0       0    ABC?
+C      K       M  X-OHMS         K = "from" node number;   M = "to" node number;
+       1       2   30.33         X is reactance of branch not included in equiv.
+       2       3   55.73         (branches represented explicitely in EMTP data)
+BLANK card ends branches that are to be excluded from the equivalent
+C BUS1  BUS2         X/R    X-THEV  NEGATE  ----  Short circuit impedance at bus
+ 1DUMMY HOTS         16.     52.37     0          (positive-sequence values)
+ 2DUMMY TAFT         17.     38.59     0
+ 3DUMMY DWOR         19.     30.59     0
+C   -- Done with Newton iteration # 1.   Largest correction  D4 = 6.33252721E-01
+C   -- Done with Newton iteration # 2.   Largest correction  D4 = 3.90146597E-01
+C   -- Done with Newton iteration # 3.   Largest correction  D4 = 1.39754125E-01
+C   -- Done with Newton iteration # 4.   Largest correction  D4 = 5.79939902E-03
+C   -- Done with Newton iteration # 5.   Largest correction  D4 = 2.06058080E-06
+C   -- Done with Newton iteration # 6.   Largest correction  D4 = 1.96349525E-12
+C Final generator equivalent impedances, plus confirmation of original generator
+C    parameters.  Resistance is ignored during the internal computation,  and is
+C    added as a fixed percentage only at the end.   X-fault is the short circuit
+C reactance computed after removal of user-flagged generators.  ....   LOOP = 1.
+C Gen             X-new             R-new      X-fault       X-thev     X/R-thev
+C   1 1.55130207469E+02 9.69563796684E+00  5.23700E+01  5.23700E+01    16.000000
+C   2 9.81300314308E+01 5.77235479005E+00  3.85900E+01  3.85900E+01    17.000000
+C   3 4.10670198789E+01 2.16142209889E+00  3.05900E+01  3.05900E+01    19.000000
+C       Note about order.  Preceding data has two halves, with the zero sequence
+C       sequence preceding the positive.   This order is needed only for punched
+C       cards  that follow to be correct (zero sequence first).  Otherwise,  the
+C       order is immaterial.  In fact, the same solution is performed twice.  It
+C       is only data values that distinguish the two solutions.
+$PUNCH, dc14b.pch !
+C  <++++++>  Cards punched by support routine on  24-Aug-92  09.27.44  <++++++>
+C 51,DUMMYA,HOTS A,      ,,,  1.324995552323771E+01, 1.192495997091393E+02,,,,,,
+C 52,DUMMYB,HOTS B,      ,,,  9.695637966841947E+00, 1.551302074694711E+02,,,,,,
+C 53,DUMMYC,HOTS C,      ,,,,,,,,,,
+C 51,DUMMYA,TAFT A,      ,,,  1.371019195249209E+01, 8.226115171495253E+01,,,,,,
+C 52,DUMMYB,TAFT B,      ,,,  5.772354790047830E+00, 9.813003143081311E+01,,,,,,
+C 53,DUMMYC,TAFT C,      ,,,,,,,,,,
+C 51,DUMMYA,DWOR A,      ,,,  5.180247869745662E+00, 4.662223082771096E+01,,,,,,
+C 52,DUMMYB,DWOR B,      ,,,  2.161422098891424E+00, 4.106701987893705E+01,,,,,,
+C 53,DUMMYC,DWOR C,      ,,,,,,,,,,
+BLANK card ending data subcases within  NETWORK EQUIVALENT. 
+BEGIN NEW DATA CASE
+C         4th of 4 subcases has nothing to do with the preceding 3.  Instead,
+C         it converts old Type-91, 92, or 93 switched elements to newer
+C         pseudo-nonlinear branches.
+CHANGE SWITCH
+C       Cards preceding  the blank card ending branch cards  are  all  discarded
+C       except  for  the  Type-91 time-dependent resistance.   So,  following  a
+C       dummy series R-L-C branch,  let's  insert one of these Type-91 branches:
+  NODE1 NODE2                1.0     { Series R-L-C will be discarded, of course
+91LEFT  RIGHT              0.3E6   { From p. 20 example of 1980 Rule Book }    1
+             0.0            300.
+             0.3            200.
+             0.6            150.
+           1000.            150.
+            9999
+91 NODE1 NODE2 COPYL COPYR .25E6       { Final card from p. 20 of 1980 Rule Book
+BLANK card ending program branch cards.       This is flag that switches follow.
+C                          Type-92 switched-R element follows (to be converted):
+C 3456789012345678901234567890123456789012345678901234567890
+92JDAYA LMONA        8.5                3.E5     3.5E5                         3
+C                          Type-93 switched-L element follows (to be converted):
+93SENDA NEUTRL       4.2       2.5       0.7       3.3                         1
+BLANK card terminating program switch cards
+C        Since all cards between the blank card ending switch cards (immediately
+C        above) and the start of a new case ("BNDC" in unabbreviated, long form)
+C        are to be discarded,  we  will not show anything here.  No intelligence
+C        is involved in the  "CHANGE SWITCH"  logic,   so nothing can be tested.
+BEGIN NEW DATA CASE
+$PUNCH   { Flush the punched-card output of equivalent pseudo-nonlinear elements
+C 91LEFT  RIGHT                          3333.
+C                     0.3E6
+C                       0.0                     300.
+C                       0.3                     200.
+C                       0.6                     150.
+C                     1000.                     150.
+C                      9999
+C 91 NODE1 NODE2 COPYL COPYR             3333.
+C 99JDAYA LMONA                0 3           2   035
+C        0.0000001            3.E5
+C              1.0 0.300008500E+06
+C             9999
+C 98SENDA NEUTRL               1.0   3.3
+C    0.1320000E+04             3.3
+C    0.2640000E+04   0.4224000E+01
+C             9999
+C           Because this was not the first subcase of the disk file that punched
+C           cards ($PUNCH usage),  note that the usual  $ERASE  was not required
+C           at the start.  The  $PUNCH  at the end of the preceding subcase left
+C           the punch buffer empty.   But the final  $PUNCH  (immediately before
+C           these comment cards) requires special attention.  Were  there not at
+C           least five data cards remaining  at  the end of the final meaningful
+C           data case,  the  blank terminating case would not even be read  (the
+C           program would instead discard remaining cards and jump out to  issue
+C           the initial prompt once again.   The present set of comment cards do
+C           number more than 5,  so they should protect against this possibility
+C           provided comment cards were not being destroyed by  NOCOMM = 1  as
+C           set in  STARTUP.  But we can not be sure of this,  so it is safer to
+C           have 5 or more non-blank data cards.  By adding 2 unused blank cards
+C           below,  BNDC + $PUNCH + original blank  + these 2 new ones  total 5.
+C           The  blank bounding case, including the imbedded  $PUNCH  (which  we
+C           need to flush the final punched cards) will be read.
+BLANK
+BLANK  { 1st of 2 unused lines can have any content.  This is line 4 of 5.
+BLANK  { 2nd of 2 unused lines can have any content   This is line 5 of 5.

@@ -1,0 +1,288 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-45
+C     1st half  of split version of  DC-33 .   Rather than use TACS to integrate
+C     flux during the simulation, that operation is now posponed until the post-
+C     processing of compansion case  DC-46.  Connection is via LUNIT4 plot file.
+C     Total of 4 subcases.
+C  DISK PLOT DATA     { Toggle the Apollo default of LUNIT4 = -4  to  +4 (use disk)
+C $CLOSE,  UNIT=4  STATUS=DELETE   { Destroy empty date/time plot file of "SYSDEP"
+C $OPEN,  UNIT=4  FILE=DC45TO46.pl4    ! { Expected to be C-like (for L4BYTE = 1 )
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000050    .050
+       1       1       1       1       1      -1       0       2
+       5       5      20      20     100     100
+96      GEN                8888.       1.E-9                                   1
+             1.0            -0.7
+             2.0             0.9
+             3.5             1.0
+           9999.
+BLANK card ending branch cards
+BLANK card ending (here non-existent) switch cards
+14GEN           377.       60.                                 -1.
+C                                  --------------+------------------------------
+C                                  From bus name |  Names of all adjacent busses
+C                                  --------------+------------------------------
+C                                         GEN    |TERRA *TERRA *
+C                                         TERRA  |GEN   *GEN   *
+C                                  --------------+------------------------------
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   7.106450000000E-06
+C           ---- Initial flux of coil  "      "  to  "GEN   "  =  1.00000000E-09
+C Inject:  GEN    377.    377.   .377E-16     2.6786345332877        .710645E-14
+C Inject:         0.0     0.0  -2.678634533288    -90.0000000    504.92260952473
+C                                      Step      Time         GEN          TERRA
+C                                                                            GEN
+C                                         0       0.0          377.          0.0
+C                                         1     .5E-4   376.9330268  -.523564601
+C                                         2     .1E-3   376.7321312  -1.04694318
+C                                         3    .15E-3   376.3973844  -1.02374791
+C                                         4     .2E-3   375.9289054  -1.04551661
+C                                         5    .25E-3   375.3268607  -1.06725433
+C                                        10     .5E-3   370.3222935  -1.17520854
+ 1
+C                                       800       .04   -304.999407  1.070136441
+C                                       900      .045   -116.499407  2.765761443
+C                                      1000       .05          377.      -1.4375
+C                                   Variable maxima :          377.  3.499909256
+C                                   Times of maxima :           0.0        .0125
+C                                   Variable minima :         -377.  -3.49990923
+C                                   Times of minima :          .025        .0375
+  PRINTER PLOT
+ 194 4. 0.0 20.         GEN                      { Axis limits: (-3.500,  3.500)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         2nd of 4 subcases is unrelated to 1st (no hysteresis).  But there is a
+C         nonlinear inductor  (Type-93,  true-nonlinear element).  This  example
+C         illustrates TACS control of the optional shunt current source that  is
+C         declared by the second data field (columns 21-26) of the  TACS CONTROL
+C         declaration.   Since the controlling TACS signal is identically unity,
+C         this injects  an extra amp of current into node  "TRAN"  beginning  on
+C         the first time step.  This would produce a discontinuity in the branch
+C         current  (GEN, TRAN)  at time zero, were it not for exact cancellation
+C         by a one-amp Type-11 current source that is connected to node  "TRAN".
+C         It will be noted that the current  (GEN, TRAN)  continues smoothly out
+C         of the phasor solution.  The  current of the NL reactor  (TRAN, TERRA)
+C         shows a one-amp jump beginning on the first step, due to the internal,
+C         TACS-controlled source (remember, the inductor current is continuous).
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000200    .020
+       1       1       1       1       1      -1       0       2
+       5       5      10      10
+TACS HYBRID     { We use TACS only to produce signal that controls shunt current
+99SHUNT   = 1.0      { Unit current (dc source) is inserted in parallel with ZnO
+33SHUNT      { Output only this one TACS variable that controls NL shunt current
+77SHUNT          1.0   { Initial condition required for smooth electrical step 1
+BLANK card ending all TACS data
+  GEN   TRAN                 2.0                                               1
+93TRAN                       1.0   1.0                                         1
+             0.0             0.0
+             0.9             0.9
+             2.0             1.1
+             10.             1.2
+            9999
+  TACS CONTROL      SHUNT { Use 2nd of 3 names: for TACS-controled shunt current
+BLANK card ending branch cards
+BLANK card ending (here non-existent) switch cards
+14GEN           377.       60.                                 -1.
+11TRAN  -1      -1.0      { 1-amp external dc current cancels internal NL source
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   1.000018973436E+00
+C
+C    GEN    377.    377.    .00530514044263   1.000009486673     1.0000189734357
+C           0.0      0.0    -.9999954144499      -89.6960393     188.49913562381
+C
+C           ---- Initial flux of coil  "TRAN  "  to  "      "  =  5.30514044E-03
+C
+C   Step      Time        TRAN         GEN          TRAN         GEN        TACS
+C                                                   TERRA        TRAN      SHUNT
+C      0       0.0   376.9893897         377.  .0053051404  .0053051404      1.0
+C      1     .2E-3   375.7677437  375.9289054  -.919419146  .0805808538      1.0
+ 1
+C    100       .02   114.1251632  116.4994069  .1871218422  1.187121842      1.0
+C Variable max :   376.9893897         377.  .4424771753  1.442477175        1.0
+C Times of max :           0.0          0.0        .0042        .0042        0.0
+C Variable min :   -376.817325  -376.880939  -2.44858983  -1.44858983        1.0
+C Times of min :         .0084        .0084        .0124        .0124        0.0
+  PRINTER PLOT
+C     -0.653    -0.353    -0.054     0.245     0.545     0.844     1.143   1.442
+C ------+---------+---------+---------+---------+---------+---------+---------+
+C BBBBBBBBBBBBBBBBBBBBBBBBBBBB*AA
+C BBBBB                       |    AAAAAA
+C        BBBBBBB              |           AAAAAAAA
+C                BBBBB        |                    AAAAA
+C                      BBBB   |                         AAAA
+C                           BBBBBBBBBBBBBB                   AAAAAAAAAAAAAA
+C                             |            BBB                              AAA
+C                             |    BBBBBBBBBB                        AAAAAAAAA
+C                        BBBBBB                           AAAAAAA
+C                   BBBBB     |                       AAAA
+C             BBBBB           |                 AAAAA
+C    BBBBBBBB                 |        AAAAAAAA
+C BB                          |AAAAAA
+ 194 4. 0.0 20.         GEN   TRAN  TRAN         { Axis limits: (-2.449,  1.442)
+ 144 4. 0.0 20.         TRAN                     { Axis limits: (-3.768,  3.770)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         3rd of 4 subcases is related to 2nd.  There is the same nonlinear L(i)
+C         inductor  (Type-93, true-nonlinear element).  This example illustrates
+C         optional TACS control of the (i, PSI) characteristic by multiplicative
+C         scaling.  The  TACS  multiplier  of  "i" is declared by the third data
+C         field (columns 27-32) of the "TACS CONTROL" card.   For  this example,
+C         the TACS variable is  FACTOR,  which varies smoothly  (via  one half a
+C         cosine cycle) from 2.0 to 1.0,  thereby reducing the current  that  is
+C         drawn by approximately a factor of two.  The series resistor is small,
+C         to it does not drop much voltage.  As a result, the voltage, and hence
+C         the peak flux of the inductor, are nearly constant.   Only the current
+C         increases by about a factor of two over the 10 msec "ramp" time.   The
+C         presence of resistance merely reduces this ideal result: the factor is
+C         less than two --- maybe 1.5 or so.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000200    .030
+       1       1       1       1       1      -1       0       2
+       5       5      49       1      55       5
+TACS HYBRID     { We use TACS only to produce signal that controls shunt current
+99FACTOR  = 1.5 + COSINE + STEP { Scaling factor changes from 3 to 1 over 0-10ms
+14COSINE         0.5       50.   { Smooth transition over 1st 10 msec }     .010
+11STEP          -0.5       50.  { Hold COSINE value after 10 ms}  .010
+33FACTORSTEP  COSINE             { Output only the 3 user-defined TACS variables
+77FACTOR         2.0   { Initial condition required for smooth electrical step 1
+BLANK card ending all TACS data
+  GEN   TRAN                 20.                                               1
+93TRAN                       2.0   1.0                                         1
+             0.0             0.0
+             0.9             0.9
+             2.0             1.1 { Execution does reach this 2nd seg of (i, PSI)
+            9999
+  TACS CONTROL            FACTOR   { Use 3rd of 3 names: TACS-scaled curve (x,y)
+BLANK card ending branch cards
+BLANK card ending (here non-existent) switch cards
+14GEN           350.       50.                                    -1.0
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   4.885536661314E+01
+C           ---- Initial flux of coil  "TRAN  "  to  "      "  =  1.39586762E-01
+C    GEN    350.   350.     .27917352350367  2.2103250125975     48.855366613143
+C           0.0    0.0       -2.19262372629      -82.7439171      383.7091521007
+C
+C  Step   Time        TRAN         GEN          TRAN         GEN            TACS
+C                                               TERRA        TRAN         FACTOR
+C
+C    0     0.0   344.4165295         350.  .2791735235  .2791735235          2.0
+C    1   .2E-3   340.9842812  349.3093549  .4162536857  .4162536857  1.999013364
+C    2   .4E-3   336.2117309  347.2401455  .5514207281  .5514207281  1.996057351
+C
+C   49   .0098   -347.838306  -349.309355  -.073552423  -.073552423  1.000986636
+C   50     .01   -347.141951        -350.   -.14290245   -.14290245          1.0
+C   51   .0102     -345.0697  -349.309355  -.211982761  -.211982761          1.0
+ 1
+C  150     .03   -347.789928        -350.  -.110503595  -.110503595          1.0
+C Variable maxima :   349.3458152       350.  3.110373844  3.110373844       2.0
+C Times of maxima :         .0198        0.0        .0042        .0042       0.0
+C Variable minima :   -348.491847      -350.  -2.24512833  -2.24512833       1.0
+C Times of minima :         .0298        .01        .0146        .0146       .01
+  PRINTER PLOT
+ 194 3. 0.0 30.         GEN   TRAN  TACS  FACTOR { Axis limits: (-2.245,  3.110)
+C  CALCOMP PLOT            { Repeat this same plot, only in high-resolution mode
+C 194 3. 0.0 30.         GEN   TRAN  TACS  FACTOR
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         4th of 4 subcases is related to 3rd.  That nonlinear inductor L(i)
+C         (Type-93, true-nonlinear element) has been made linear by reduction of
+C         the flux-current characteristic to a single point.  The result is a
+C         TACS-controlled linear inductor L(t).  Except that here dynamics are
+C         involved (because L stores energy, and has history), this is the
+C         inductive equivalent of commonly-used TACS-controlled resistance R(t).
+C         Between time 0 and 100 msec,  inductance is to be varied sinusoidally
+C         between 125 mH and 500 mH.  Disconnected branches  BEGIN  and  END
+C         correspond to these two limiting values,  and they define assymptotes
+C         of the transition between the two.  The graph is smooth,  and it shows
+C         a smooth transition between the two steady-state assymptotes.
+PRINTED NUMBER WIDTH, 11, 2,  { Request maximum precision (for 8 output columns)
+ .000400    .120
+       1       1       1       1       1      -1
+       5       5
+TACS HYBRID     { We use TACS only to produce signal that controls shunt current
+99FACTOR  = 2.5 + COSINE + STEP { Scale factor changes from 4 to 1 over 0-100 ms
+14COSINE         1.5       5.0   { Smooth transition over 1st 100 msec }    .100
+11STEP          -1.5            { Hold COSINE valu after 100 ms}  .100
+33FACTORSTEP  COSINE             { Output only the 3 user-defined TACS variables
+77FACTOR         4.0   { Initial condition to make output signal smooth at t = 0
+77COSINE         1.5   { Initial condition to make output signal smooth at t = 0
+BLANK card ending all TACS data
+  GEN   TRAN                 35.      { R of series R-L branch to ground }     1
+93TRAN                       8.0   1.0     { i-steady and PSI-steady for phasors
+             0.0             0.0   { Symmetric curve always begins at origin 0,0
+             2.0             1.0   { Single  (i, PSI)  point defines L b4 FACTOR
+            9999         { Terminate the characteristic after just the one point
+  TACS CONTROL            FACTOR   { Use 3rd of 3 names: TACS-scaled curve (x,y)
+C     That is all we need for the TACS-controlled L of series R-L circuit.  But
+C     for a nice plot, we want assymptotic curves.  The first in in the steady
+C     state,  corresponding to  i-steady  and  PSI-steady  of the Type-93 branch
+C     card.  This is  L = PSI / i = 1.0 / 8.0 = 125 mH.  Note that this matches
+C     the initial signal.  Initial  FACTOR = 4.0  and the characteristic gives
+C     L = PSI / i = 1.0 / 2.0 = 500 mH.  Dividing by FACTOR gives 125 mH as the
+C     initial inductance within the dT loop.  So, show phasor flow:
+  GEN   BEGIN                35.  125. { Branch flow is phasor solution
+C     That was for the start.  Next, we want the termination,  which corresponds
+C     to  FACTOR = 1.0  so no scaling.  I.e.,  L = 500 mH  (the characteristic):
+  GEN   END                  35.  500. { Branch flo is assymptote for infinite t
+BLANK card ending branch cards
+C       Switches are used only to measure the currents through the preceding two
+C       branches.  These are the two assymptotic signals of following plot:
+  BEGIN                                               MEASURING                1
+  END                                                 MEASURING                1
+BLANK card ending switch cards
+C   --------------+------------------------------
+C   From bus name |  Names of all adjacent busses.
+C   --------------+------------------------------
+C          GEN    |TRAN  *BEGIN *END   *
+C          TRAN   |TERRA *GEN   *
+C          BEGIN  |TERRA *GEN   *
+C          END    |TERRA *GEN   *
+C          TERRA  |TRAN  *BEGIN *END   *
+C   --------------+------------------------------
+14GEN           420.       50.                                    -1.0
+C TRAN  234.06699294777  313.5412844237    5.3123716300638  7.9842632447061      -.677791157E-13  -.677791157E-13
+C       208.61634607684      41.7095865    -5.960467030767      -48.2904135       1251.698076461     1251.6980765
+C
+C       TERRA       0.0             0.0    -5.312371630064  7.9842632447061                  0.0
+C                   0.0             0.0    5.9604670307669      131.7095865                  0.0
+C     Total network loss  P-loss  by summing injections =   2.350389825256E+03
+C Output for steady-state phasor switch currents.
+C   Node-K    Node-M            I-real            I-imag            I-magn          Degrees        Power            Reactive
+C   BEGIN                  5.31237163E+00   -5.96046703E+00    7.98426324E+00     -48.2904    0.00000000E+00    0.00000000E+00
+C   END                    5.67589241E-01   -2.54733456E+00    2.60980285E+00     -77.4387    0.00000000E+00    0.00000000E+00
+BLANK card ending source cards
+  GEN   TRAN          { Output node voltages for the controlled branch L(t) only
+C  First  2     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Next   3     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C   Step      Time      GEN        TRAN       BEGIN      END        GEN        TACS       TACS       TACS
+C                                             TERRA      TERRA      TRAN       FACTOR     STEP       COSINE
+C ***      Phasor I(0) =  5.3123716E+00                     Switch  "BEGIN "  to  "      "  closed in the steady-state.
+C ***      Phasor I(0) =  5.6758924E-01                     Switch  "END   "  to  "      "  closed in the steady-state.
+C      0       0.0        420.  234.06699  5.3123716  .56758924  5.3123716        4.0        0.0        1.5
+C      1     .4E-3   416.68817  206.10551  6.0166476  .88197067  6.0166476  3.9998816        0.0  1.4998816
+C      2     .8E-3   406.80493   174.8932  6.6262352  1.1824658  6.6260494  3.9995263        0.0  1.4995263
+C      3     .0012   390.50612  140.93094  7.1314997   1.464335  7.1307196  3.9989342        0.0  1.4989342
+BLANK card ending node voltage outputs
+C    290      .116   129.78714  208.41029  -4.028677  -2.244816  -2.246376        1.0       -1.5        0.0
+C    295      .118   339.78714  376.14579  .78854743  -1.037462  -1.038819        1.0       -1.5        0.0
+C    300       .12        420.  400.22543  5.3045736  .56616677   .5649877        1.0       -1.5        0.0
+C Variable maxima :        420.  409.93775  7.9767416  2.6063662  7.9698488        4.0        0.0        1.5
+C Times of maxima :         0.0      .0992      .0028      .0044      .0028        0.0        0.0        0.0
+C Variable minima :       -420.  -409.6697  -7.973184   -2.60532  -7.845698        1.0       -1.5  -1.499882
+C Times of minima :         .01      .1092      .1128      .1144      .0128        0.1        0.1      .0996
+  CALCOMP PLOT
+C Orlando Hevia in Santa Fe, Argentina, supplied the following one-line
+C correction in E-mail dated 10 January 2007.  He learned of the bad ATP data
+C during experimentation with the new GNU F95 compiler,  which choked on this:
+C NOTE A MISTAKE IN DATA 120. IS ONE COLUMN TOO TO THE RIGHT
+C      DATA FM1180 / '( I2, 2I1, E3.0, 2E4.0, E5.0, E4.0, 4A6, 2A16 )' /
+C -=---====----=====----
+C 19412. 0.0 120.         BRANCH                  Vary linear L   Inductor current
+ 19412. 0.0120.         BRANCH                  Vary linear L   Inductor current
+                        BEGIN       END         GEN   TRAN  TACS  FACTOR
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+

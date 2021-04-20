@@ -1,0 +1,763 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-19
+C    18 February 1997,  two new features enter the UTPF.  These will be verified
+C    by the following data.   See April newsletter for details about:  1) Walter
+C    Powell's analytical type-10 source;   2) $PARAMETER  for both simple string
+C    substitution and also mathematics at data-input time (Walter Powell pocket
+C    calculator).  The Type-10 function can be put in cols. 11-60 if it fits, or
+C    can be continued onto cols. 11-40 of the following card ordered by CONT. in
+C    columns 61-61 of the first.  T-start and T-stop are always from ending card
+C       August of 1998: replace Walter Powell's pocket calculator by one written
+C       in Vancouver, USA.  Story is scheduled for the October newsletter.
+$PARAMETER START ONLY   { This block of 3 cards is used only before any $INCLUDE
+FIVEK= '5.E+3' { Within apostrophe ==> there is no math, just string replacement
+BLANK card ends  $PARAMETER  definitions
+     1.0     21.
+       1       1
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would be
+C ONEOHM = 0.5 * ( 1.0 + "DELTAT" ) { Within quotes ==> value of this ATP variable
+ONEOHM = 0.5 * ( 1.0 + DELTAT ) { Beginning 28 Nov 98, quotes are no longer needed
+C OMEGA = "TWOPI" * .05  ---  original frequency,  equal to that of Type-14 COS
+C OMEGA_ = "TWOPI" * 0.1   { Speed the modulation of the ramp for visual effect
+OMEGA_ = TWOPI * 0.1  { Beginning 28 November 98, quotes no longer are necessary
+C ANGLE_ = .25 * "TWOPI"
+ANGLE_ = .25 * TWOPI  { Beginning 28 November 98, quotes no longer are necessary
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch cards
+  COS                     ONEOHM                                               1
+  SIN                     ONEOHM                                               1
+  SIN2                       1.0
+  SIN3                       1.0
+  A1    A2                 5.E+3                                               1
+  A2                       FIVEK
+BLANK card ends branch cards
+BLANK card ends switch cards (none, for this case)
+14COS            1.0       .05       0.0
+C 14SIN            3.0       .05      -90.     ----  old form of following card:
+C 10SIN     3.0 * COS ( OMEGA * TIMEX - ANGLE )  { Walter Powell analytical source
+10SIN     .1 * TIMEX + .8 * COS ( OMEGA_ * TIMEX - ANGLE_ )  { Walter Powell analytical source
+10SIN2    .1 * TIMEX + .8 * COS ( OMEGA_ * TIMEX - ANGLE_ ) CONT.   { Note 61-65
+          + 0.2 { continuation carries T-start, T-stop in 61-80 }  1.5      18.5
+C    Note the preceding  SIN2  repeats SIN but with extra vertical offset of 0.2
+C    on a continuation card.   Also,  SIN2 uses T-start (61-70) & T-stop (71-80)
+10SIN3    IF( TIMEX .LE. 15. ) THEN     { If simulation time < 16 sec:
+          SIN3 = TIMEX * 0.10           { Linear ramp up with slope matching SIN
+          ELSE                          { Alternatively (if 16 or more seconds):
+          SIN3 = ( 23.5 - TIMEX ) * .20 { Linear ramp down,  double the slope up
+          ENDIF                       { Terminate 5-line block of Type-10 source
+C    Note the preceding  SIN3  creates a saw tooth with the peak broken off to
+C    create a flat top.  The value at 16 is equal to the value at 15.  Note that
+C    the name of the bus in columns 3-8 of the Type-10 source card is repeated
+C    within the IF-block (left of equal signs).  Control words  IF(  and  ELSE
+C    and  ENDIF  must begin in column 10 exactly as illustrated.  As added on
+C    11 December 2000,  ELSEIF(  also should be legal,  but is not being
+C    illustrated in this data.
+14A1         620000.       .06      -50.
+BLANK card ends source cards
+  SIN3  SIN   SIN2  COS   A2
+C  First  5     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   3     output variables are branch currents (flowing from the upper node to the lower node);
+C  Step    Time  SIN3       SIN        SIN2       COS        A2         COS        SIN        A1
+C                                                                       TERRA      TERRA      A2
+C    0     0.0     0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C    1     1.0     0.1 .570084377        0.0 .951056516 272691.058 .951056516 .570084377 54.5382115
+C    2     2.0     0.2 .960785678 1.16078568 .809016994 307819.308 .809016994 .960785678 61.5638615
+C    3     3.0     0.3 1.06090928 1.26090928 .587785252  299715.25 .587785252 1.06090928 59.9430501
+C    4     4.0     0.4 .870407977 1.07040798 .309016994 249517.077 .309016994 .870407977 49.9034154
+C    5     5.0     0.5 .500237061 .700237061  .6123E-16 164274.972  .6123E-16 .500237061 32.8549944
+C    6     6.0     0.6 .129975602 .329975602 -.30901699  55960.935 -.30901699 .129975602  11.192187
+C    7     7.0     0.7 -.06076275 .139237247 -.58778525 -60212.649 -.58778525 -.06076275  -12.04253
+C    8     8.0     0.8 .039067835 .239067835 -.80901699 -167929.55 -.80901699 .039067835 -33.585909
+C    9     9.0     0.9  .42953207  .62953207 -.95105652 -252061.24 -.95105652  .42953207 -50.412247
+BLANK card ends requests for program outputs (here, just node voltages)
+C   10     10.     1.0 .999688816 1.19968882        -1. -300791.68        -1. .999688816 -60.158335
+C   11     11.     1.1 1.56996442 1.76996442 -.95105652 -307276.82 -.95105652 1.56996442 -61.455363
+C   12     12.     1.2 1.96073982 2.16073982 -.80901699 -270605.84 -.80901699 1.96073982 -54.121169
+C   13     13.     1.3 2.06095504 2.26095504 -.58778525 -195929.08 -.58778525 2.06095504 -39.185817
+C   14     14.     1.4 1.87052788 2.07052788 -.30901699 -93734.666 -.30901699 1.87052788 -18.746933
+C   15     15.     1.5 1.50038531 1.70038531 -.1837E-15 21624.5069 -.1837E-15 1.50038531 4.32490137
+C   16     16.     1.5 1.13009557 1.33009557 .309016994 133946.582 .309016994 1.13009557 26.7893164
+C   17     17.     1.3 .939283118 1.13928312 .587785252 227456.258 .587785252 .939283118 45.4912516
+C   18     18.     1.1 1.03902209 1.23902209 .809016994 289020.378 .809016994 1.03902209 57.8040757
+C   19     19.     0.9 1.42941218        0.0 .951056516 309992.446 .951056516 1.42941218 61.9984891
+C   20     20.     0.7 1.99954057        0.0        1.0 287426.995        1.0 1.99954057  57.485399
+C   21     21.     0.5 2.56984444        0.0 .951056516 224493.277 .951056516 2.56984444 44.8986554
+  CALCOMP PLOT
+ 143 2. 0.0 20. -1. 3.0 COS   SIN   SIN2  SIN3
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-19
+C      2nd of 6 subcases is related to preceding.  Analytical function is too
+C      long,  spilling over into T-start of columns 61-70.  Demonstrate special
+C      handling to reject such data in civilized fashion.   28 October 1998
+     1.0     21.
+       1       1
+C  19 March 2009,  WSM adds 2 unrelated symbol definitions  HANSOK and  HANSBAD.
+C  But first,  add  a request to prohibit optimization by the pocket calculator.
+C  Addition here is mandatory  until an error in optimization of the compilation
+C  is corrected.  The troubled data are  formulas  for  HANSOK  and  HANSBAD  as
+C  first reported by  Prof. Hans Kr. Hoidalen in Trondheim, Norway.  Without the
+C  change making  NOOPT = 1,  execution would end on the HANSBAD input card with
+C  an extraneous complaint about TACS (not being used).  With use of  NOOPT = 1,
+C  the computation proceeds normally.  Although this is not  HFS data,  the loop
+C  counter should have default value  KNT = 1  so  the right hand side correctly
+C  evaluates to  10**1 = 10.   Execution still will end prematurely with that
+C  complaint about too long an analytical function for  SIN,  but at least Prof.
+C  Hoidalen's data is handled correctly.  WSM.
+C  $PARAMETER   NOOPT=1 { Set optimization of pocket calculator compilation to none 
+C    Comment out preceding line  1 October 2011 after correction was made to the
+C    code that handles  TEMPx  variables within  POCKET.SPL  and nowhere else.  
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would be
+OMEGA_ = "TWOPI" * 0.1   { Speed the modulation of the ramp for visual effect
+ANGLE_ = .25 * "TWOPI"
+C  Note about preceding quotation marks on  24 December 2000.  Whereas the first 
+C  subcase demonstrated removal long ago,  this use is retained in its original, 
+C  inefficient form as a demonstration of a new property.  With the introduction 
+C  of non-volatile variables,  the quoted  TWOPI  continues to work as expected,
+C  but it now demonstrates a new power.  The way MATDAT handle quotes,  they are
+C  erased, and the line is preceded by a temporary definition TWOPI = 6.2832 ...  
+C  which is taken as a SPY symbol (a variable in COMMON, recognized by SPY).  In
+C  fact the answer is correct,  but  COMMON is being modified without the user's
+C  knowledge or intention.  Old inefficiency (requiring a intermediate variable)
+C  suddenly has been increased by unnecessary redefinition of a COMMON variable.
+HANSOK  =10.**((KNT-1.)/20.+1.)     { works.  1st of 2 formulas from HKH
+HANSBAD =10.**((KNT-1.)*0.05+1.)    { fails   2nd of 2 formulas from HKH
+BLANK card ends  $PARAMETER  definitions that are processed just b4 branch cards
+  COS                        1.0                                               1
+  SIN                        1.0                                               1
+BLANK card ends branch cards
+C  2 April 2009,  WSM adds unrelated IF-THEN block that includes an intermediate
+C  variable only.  Trouble using IF without a permanent variable was reported by
+C  Prof. Hans Kr. Hoidalen in Trondheim, Norway. Although this is not  HFS data,
+C  the loop counter should have default value KNT = 1 making the  IF-THEN  block
+C  legal.  Add a dummy  switch card  to illustrate use of the permanent variable
+C  CAP___ which depends on intermediate variable CAPI.  Execution still will end
+C  prematurely with that complaint about too long an analytical function for the
+C  variable SIN, but at least Prof. Hoidalen's IF-THEN will be handled properly.
+C     Note about the following  IF(.  The use of  "equals one"
+C     is arbitrary.  Changing  .EQ.  to  .NE.  will force control
+C     through the  ELSE  alternative,  resulting in  CAPI = 5.0  rather
+C     than  2.3,  and as a result,  CAP___ = 10  (see next line) :
+C       Parameter 1  defined.  Value =  1.000000E+01    |CAP___ = 2.0 * CAPI
+$PARAMETER   { This will be serviced by CIMAGE just as any other $-card would be
+IF( KNT .EQ. 1.0 ) THEN { This is equivalent (THEN on right is not required)
+CAPI = 2.3  $$     { The double dollar sign flags an intermediate variable, note
+ELSE     { Alternatively (if not the first pass, so for KNT = 2 onward):
+CAPI = 5.   $$     { The double dollar sign flags an intermediate variable, note
+ENDIF   { Terminate 5-line block that defines intermediate symbol CAPI
+CAP___ = 2.0 * CAPI { Define A6 permanent variable to be used in later data
+BLANK card ending $PARAMETER block
+C   Note about multiple intermediate variables within the  IF-THEN  block:
+C   the logic probably would fail.  As now constituted,  one intermediate
+C   variable is the limit within an  IF-THEN  block.  But more than one  IF-THEN
+C   block is possible.  To illustrate,  let the desired second intermediate
+C   variable  CAPJ  be defined within its own  IF-THEN  block as follows.  Also
+C   for variety,  we will change  ".EQ. 1.0"  to  ".NE. 1.0"  to force the use
+C   of the  ELSE   alternative: 
+$PARAMETER { Separate $PARAM block ==> correct interpret line count within block
+C   Added explanation of preceding line.  Without it and preceding BLANK line,
+C   the answer would be correct except for line # of interpretation, which would
+C   not return to value 1 for the IF( statement. Restarting this at 1 is clearer
+C   is clearer for the user who looks closely at such details.  Numbering of the
+C   interpretation then will be  1, 3, 4, and 5  instead of  3, 5, 6, and 7.
+IF( KNT .NE. 1.0 )
+CAPJ = ( KNT + 0.5 ) ** 2 $$     { For KNT equal to 1, this gives CAPJ = 2.25
+ELSE     { Alternatively (if not the first pass, so for KNT = 2 onward):
+CAPJ = ( KNT - 0.5 ) ** 2 $$     { If KNT were equal to 1, this would give 0.25
+ENDIF    { Terminate 7-line block that defines symbols CAPI and CAPJ
+IND___ = CAPJ / 2.0        { Inductance in cols. 33-38 of following series R-L-C
+BLANK card ending $PARAMETER block
+C  The following meaningless switch illustrates use of CAP___ & IND___ variables
+  COS   SIN       CAP___    IND___
+BLANK card ends switch cards
+14COS            4.0       .05       0.0
+C                              Ruler for T-start in 61:70:  1234567890
+10SIN     0.1 * TIMEX + 0.8 * COS ( OMEGA_ * TIMEX - ANGLE_ ) { Too long function
+BLANK card ends source cards
+  SIN   SIN2  COS   A2
+BLANK card ends requests for program outputs (here, just node voltages)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C    3rd of 6 subcases illustrates Type-10 sources only.  dT-loop output will be
+C    identical to that produced by famous TACS and MODELS simulations  (learning
+C    how slow code from Laurent Dube really is).  With extension to 100K steps
+C    and proper control of output,  this becomes  MATHTY10  as first used to
+C    time operation of  POCKET  (WSM's new pocket calculator).
+C      That might have been 1998. Twelve years later, the inefficiency of MODELS
+C      is widely known. So distorting the data a little is permissible. Addition
+C      of the GAUSS function to both TACS and the pocket calculator will require
+C      verification.  DC-18 does the work for TACS.  Here,  on  10 October 2010,
+C      we add such disconnected, unrelated output to the pocket calculator. WSM.
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+     .02     2.0 
+       1       1       0       0       1      -1
+       5       5
+  TEST1                      1.0
+  TEST2                      1.0
+  TEST3                      1.0
+  TEST5                      1.0
+  TEST6                      1.0
+  TWO?                       1.0
+  NORMAL                     1.0   { A Gaussian random # will be applied to this
+BLANK card ends branch cards
+BLANK card ends switch cards (none, for this case)
+10TEST1    10.0 * ( 1.0 + TIMEX ) ** 2 + 50. 
+10TEST2    1.E2 * COS ( 2.0 * 3.14159 * TEST1 / 100. )
+10TEST3    10.0  +  5.5 * TIMEX * SQRT ( ABS ( TEST2 ) )
+10TEST5    2.0 * 3.14159 * TEST1 / 100.
+10TEST6    2.0 * SIN ( TEST5 )
+C 10TWO?     2.E-4 * ( TEST2 ** 2 + 2500. * TEST6 ** 2 )
+10TWO?     2.000E-4 * ( TEST2 ** 2 +                        CONT.
+           2500. *  { Remember that T-start and T-stop are on right of this card
+     1     TEST6 ** 2 ) { Illustrate conventional continuation line (1 in column
+C                         6 preceded by 5 blanks).  With  or without CONT.,  any
+C                         number of continuation cards can follow the original 1
+C                         or two  (two if CONT. is used).  This is like FORTRAN.
+10NORMAL   GAUSS ( 0.0 )  { Random function has zero mean and stand. deviation 1
+BLANK card ending all sources
+  TEST1 TEST2 TEST3 TEST5 TEST6 TWO?  NORMAL
+C  Step     Time     TEST1     TEST2     TEST3     TEST5     TEST6     TWO?      NORMAL
+C     0      0.0        0.0       0.0       0.0       0.0       0.0       0.0       0.0
+C     1      .02     60.404   -79.384  10.98007  3.795292  -1.21625       2.0   -.26382
+C     2      .04     60.816  -77.7833  11.94029  3.821179  -1.25694       2.0  .6641848
+C     3      .06     61.236  -76.0979  12.87873  3.847568  -1.29755       2.0  -.384642
+BLANK card ending node voltage outputs
+C    90      1.8      128.4     -21.2  55.58307  8.067603  1.954539       2.0  1.195179
+C    95      1.9      134.1  -54.1115  86.87076  8.425744  1.681897       2.0   .146522
+C   100      2.0       140.  -80.9013  108.9396  8.796452  1.175583       2.0  .9643848
+C Variable maxima :    140.  99.99389  108.9396  8.796452  1.999977       2.0  3.103447
+C Times of maxima :     2.0      1.24       2.0       2.0      1.74       .04      1.68
+C Variable minima :     0.0  -80.9013       0.0       0.0  -1.99999       0.0  -2.77845
+C Times of minima :     0.0       2.0       0.0       0.0       .58       0.0       .82
+  CALCOMP PLOT  
+ 143 .2 0.0 2.0         TEST1 TEST2 TEST3
+ 143 .2 0.0 2.0         TEST5 TEST6 TWO?
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C    4th of 6 subcases documents pocket calculator applied to many different
+C    expressions.  Use Type-10 sources,  and take just 1 time step.  Prior to
+C    16 November 2000,  this was separate disk file  POCKET.DAT     Following
+C    diagnostic line should be activated to see all assembler (precedes "EOF").
+C    For philosophy of this data,  see the April, 2001, newsletter.
+C DIAGNOSTIC           0 0 0 0 9 0 0 0 0 0 0 0 0 0 0 9 9 9 9 9
+C    The following illustrates the ability to change dimensions (offset
+C    subscripts for VOLTI storage) of the pocket calculator.  Prior to
+C    12 November 2000,  dimensions were 10 and 20,  so the following example
+C    shows what resulted: an error stop do to inadequate INDOFF.  That was
+C    prior to expansion of the default values of 60 and 120,  which handle
+C    the present data subcase without difficulty.
+C $PARAMETER   INDOFF=10  KONST=20   { Fixed limits prior to improvement 12 Nov 00
+C Halt in  POCKET.  Overflow JTOKEN into INDOFF.   INDOFF, KCONST =   10   36
+C  Temporary error stop in  ENTRY STOPTP of "WINDOW".     NCHAIN, LASTOV =      5     4
+C $PARAMETER   INDOFF=60  KONST=120  { Do-nothing reassignment of default values
+$PARAMETER   INDOFF=90  KONST=180  { Do-nothing reassignment of default values
+C      Overhaul of storage for pocket calculator requires more List 4 space than
+C      previously.  Add  NEW LIST SIZES  on 6 August 2010.  List 4 = 140 fails :
+NEW LIST SIZES      { Request for a change to program table sizes (VARDIM input)
+DEFAULT      3.0    { Any blank field will be converted to 3 times default value
+       0       0       0     240      { List 4 < 840 of LISTSIZE.BPA is adequate
+BLANK card for lists 11-20.
+BLANK card for lists 21-30.
+     390     300     { Optional card for Lists 31, etc. --- as LISTSIZE.BPA
+  240000     742     { Offsets for supporting programs (non-simulation overlays)
+PRINTED NUMBER WIDTH, 11, 1,  { Request maximum precision (for 8 output columns)
+    .001    .001
+       1     -11       0       0
+C      Each analytical function will define a Type-10 source.  In turn, this
+C      must be connected to a node of the electric network.  So, for each,
+C      connect a 1-ohm resistor to ground:
+C   1st set of 10 variables ANG* is for 1st row of 132-column output vector:
+  ANG1                       1.0
+  ANG2                       1.0
+  ANG3                       1.0
+  ANG4                       1.0
+  ANG5                       1.0
+  ANG6                       1.0
+  ANG7                       1.0
+  ANG8                       1.0
+  ANG9                       1.0
+  ANG10                      1.0
+C   Next set of 10 variables BAL* is for 2nd row of 132-column output vector:
+  CC                         1.0
+  DD                         1.0
+  THETA                      1.0
+  OMEGA                      1.0
+  BAL1                       1.0
+  BAL2                       1.0
+  BAL3                       1.0
+  BAL4                       1.0
+  BAL5                       1.0
+  BAL6                       1.0
+  BAL7                       1.0
+  BAL8                       1.0
+  BAL9                       1.0
+  BAL10                      1.0
+C   Next set of 10 variables CAT* is for 3rd row of 132-column output vector:
+  UNITY                      1.0
+  ZERO                       1.0
+  CAT1                       1.0
+  CAT2                       1.0
+  CAT3                       1.0
+  CAT4                       1.0
+  CAT5                       1.0
+  CAT6                       1.0
+  CAT7                       1.0
+  CAT8                       1.0
+  CAT9                       1.0
+  CAT10                      1.0
+C   Next set of 10 variables DUM* is for 4th row of 132-column output vector:
+  DUM1                       1.0
+  DUM2                       1.0
+  DUM3                       1.0
+  DUM4                       1.0
+  DUM5                       1.0
+  DUM6                       1.0
+  DUM7                       1.0
+  DUM8                       1.0
+  DUM9                       1.0
+  DUM10                      1.0
+C   Next set of 10 variables EAT* is for 5th row of 132-column output vector:
+  EAT1                       1.0
+  EAT2                       1.0
+  EAT3                       1.0
+  EAT4                       1.0
+  EAT5                       1.0
+  EAT6                       1.0
+  EAT7                       1.0
+  EAT8                       1.0
+  EAT9                       1.0
+  EAT10                      1.0
+C   Next set of 10 variables FAT* is for 6th row of 132-column output vector:
+  FAT1                       1.0
+  FAT2                       1.0
+  FAT3                       1.0
+  FAT4                       1.0
+  FAT5                       1.0
+  FAT6                       1.0
+  FAT7                       1.0
+  FAT8                       1.0
+  FAT9                       1.0
+  FAT10                      1.0
+C   Next set of 10 variables GAS* is for 7th row of 132-column output vector:
+  GAS1                       1.0
+  GAS2                       1.0
+  GAS3                       1.0
+  GAS4                       1.0
+  GAS5                       1.0
+  GAS6                       1.0
+  GAS7                       1.0
+  GAS8                       1.0
+  GAS9                       1.0
+  GAS10                      1.0
+BLANK card ends branch cards
+BLANK card ends switch cards (none, for this case)
+C   1st set of 10 variables ANG* is for 1st row of 132-column output vector:
+10ANG1     1.0
+10ANG2     -1.0
+10ANG3     ANG1
+10ANG4     +ANG1
+10ANG5     COS ( 1.0 )
+10ANG6     SIN ( ANG3 )
+10ANG7     SIN ( -ANG3 )
+10ANG8     - SIN ( - ANG3 )
+10ANG9     - ANG3 * ANG6 
+10ANG10    - SIN ( ANG3 )
+C   Next set of 10 variables BAL* is for 2nd row of 132-column output vector:
+10CC       3.14159
+10DD       2.71828
+10THETA    CC
+10OMEGA    DD
+10BAL1     ( -CC + DD ) / ( -CC - DD )
+10BAL2     ( -CC - DD ) / 3.1415
+10BAL3     ( -CC + DD ) / ( CC - DD )
+10BAL4     -( -CC + DD ) / ( CC - DD )
+10BAL5     THETA * OMEGA
+10BAL6     THETA + OMEGA
+10BAL7     THETA - OMEGA
+10BAL8     THETA / OMEGA
+10BAL9     THETA + OMEGA + ANG5
+10BAL10    THETA + OMEGA + ANG5 - TIMEX
+C   Next set of 10 variables CAT* is for 3rd row of 132-column output vector:
+10UNITY    1.0
+10ZERO     0.0  { In addition to these, remember CC = 3.14159 and DD = 2.71828
+10CAT1     CC .EQ. DD       { This is false, so CAT1 = 0.0
+10CAT2     CC .NE. DD       { This is true,  so CAT2 = 1.0
+10CAT3     CC .GT. DD       { This is true,  so CAT3 = 1.0
+10CAT4     CC .LT. DD       { This is false, so CAT4 = 0.0
+10CAT5     CC .GE. DD       { This is true,  so CAT5 = 1.0
+10CAT6     CC .LE. DD       { This is false, so CAT6 = 0.0
+10CAT7     .NOT. UNITY      { UNITY is true, so toggle it to false: CAT7 = 0.0
+10CAT8     UNITY .OR. ZERO  { CAT8 = 1 since UNITY is true, & OR with anything is true
+10CAT9     UNITY .AND. ZERO { CAT9 = 0 since ZERO is false, & AND with anything is false
+10CAT10    UNITY .NOR. ZERO { CAT10 = 0 since OR first, then negate, so toggle CAT8
+C   4th set of 10 variables DUM* is for 4th row of 132-column output vector:
+10DUM1     UNITY .NAND. ZERO { DUM1 = 1 since AND first, then negate, so toggle CAT9
+10DUM2     THETA / OMEGA + DD { DUM2 = 3.87400715 = 3.1416 / 2.718 + 2.718
+10DUM3     THETA / OMEGA - DD { DUM3 = -1.562 = 3.1416 / 2.718 - 2.718
+10DUM4     CC**DD             { DUM4 = 22.459 = 3.1416 ** 2.718
+10DUM5     50.0 + CC**DD      { DUM5 = 72.459 = DUM4 + 50
+10DUM6     TRUNC ( CC ) + INVRS ( CC ) { DUM6 = 3.318 = 3 (integer in 3.14) + 1 / 3.14
+10DUM7     DEG ( CC )         { DUM7 = 180 (close) = 3.1416 converted to degrees
+10DUM8     RAD ( DUM7 )     { DUM8 = 3.1416 = DUM7 deg converted back to radians
+10DUM9     SIGN ( -CC ) - 3.0  { DUM9 = -4 = -1 - 3 = sign of ( -3.14 ) - 3
+10DUM10    MINUS ( CC )      { DUM10 = -3.1416 = minus sign applied to Pi
+C   5th set of 10 variables EAT* is for 5th row of 132-column output vector:
+10EAT1     SEQ6 ( DUM4 )  { EAT1 = 4 since DUM4 = 22.4590591 / 6 ==> 4.459 remainder
+10EAT2     - LOG ( DD )   { EAT2 = -1 (close) since DD = 2.71828 is close to e
+10EAT3     LOG10 ( 200. ) { EAT3 = 2.3010 since log(10) of 2 = .3010
+10EAT4     ATAN ( UNITY ) { EAT4 = .785398 = atan ( 1.0 ) = pi / 4 = 3.1416 / 4
+10EAT5     EXP ( 2.0 * UNITY ) { EAT5 = 7.389 = 2.71828 ** 2
+10EAT6     ASIN ( -ONEHAF )    { EAT6 = -.5236 = -30 degrees / 57.29578
+10EAT7     ACOS (  ONEHAF )    { EAT7 = 1.0471 =  60 degrees / 57.29578
+10EAT8     RAN ( ZERO )        { EAT8 = .813467631 (arg = 0 ==> next random #)
+10EAT9     TANH ( UNITY )      { EAT9 = .761594156 
+10EAT10    SINH ( UNITY ) / COSH ( UNITY ) { EAT10 = EAT9 by trig definition
+C   6th set of 10 variables FAT* is for 6th row of 132-column output vector:
+10FAT1     TAN ( CC / 6.0 )  { FAT1 = .5773 since arg CC / 6 = Pi/6 = 30 degrees
+10FAT2     2.0 * COTAN ( 60. / 57.29578 ) { FAT2 = 1.1547 = 2 * FAT1 
+10FAT3     1.0 / ABS ( UNITY * CC * DD )  { FAT3 = .1171 = 1 / ( 3.14 * 2.718 )  
+10FAT4     - SQRT ( 2.0 ) * 0.5  { FAT4 = -.707 = sqrt ( 2 ) * 1/2  
+10FAT5     - 2.0 ** 2 + UNITY    { FAT5 = -3 = -4 + 1  
+10FAT6     (-2.0) ** 2 + UNITY   { FAT6 = 5 = 4 + 1  
+10FAT7     - EXP ( UNITY * CC / DD ) - 0.1  { FAT7 = -3.276 = -EXP ( 3.14 / 2.718 ) - 0.1
+10FAT8     ( UNITY / DD * CC ) * 2.0 - UNITY { FAT8 = 1.311 = ( 3.1416 / 2.718 ) * 2 - 1
+10FAT9     UNITY - ( UNITY * DD + CC ) { FAT9 = -4.860 = 1 - ( 3.14 + 2.718 )
+10FAT10    UNITY * DD - CC { FAT10 = -.4233 = 2.718 - 3.14 = 1 * 2.718 - 3.1416
+C   7th set of 10 variables GAS* is for 7th row of 132-column output vector:
+10GAS1     UNITY * ( CC / DD / UNITY ) { GAS1 = 1.156 = 3.14 / 2.718 = Pi / e / 1
+10GAS2     CC ** 2 + DD ** 2           { GAS2 = 17.26 = 3.14 ** 2 + 2.718 ** 2
+10GAS3     CC ** 2 - DD ** 2           { GAS3 =  2.48 = 3.14 ** 2 - 2.718 ** 2
+C              3 December 2001, add variables to confirm correction of the error
+C              first reported by Orlando Hevia using data EXP.DAT    Note GAS4
+C              through GAS9 all have same value  EXP(-T) = 1 / EXP(.001) = .999
+10GAS4     1.0 / EXP ( TIMEX ) { This establishes the right answer (no bug here)
+10GAS5     EXP(-(TIMEX*1.0))   { Hevia showed that this, too, always was correct
+10GAS6     EXP ( -TIMEX )      { Hevia showed that this, too, always was correct
+10GAS7     EXP( -TIMEX * 1.0 )   { Prior to correction on 3 December, error stop
+10GAS8     EXP( -TIMEX / 1.0 )   { Prior to correction on 3 December, error stop
+10GAS9     EXP( -TIMEX * UNITY ) { Prior to correction on 3 December, error stop
+10GAS10    28.0 - 25.0 - ( TIMEX - 1.0 )  { Verify correction on  9 January 2002
+BLANK card ending all sources
+  ANG1  ANG2  ANG3  ANG4  ANG5  ANG6  ANG7  ANG8  ANG9  ANG10
+  BAL1  BAL2  BAL3  BAL4  BAL5  BAL6  BAL7  BAL8  BAL9  BAL10
+  CAT1  CAT2  CAT3  CAT4  CAT5  CAT6  CAT7  CAT8  CAT9  CAT10
+  DUM1  DUM2  DUM3  DUM4  DUM5  DUM6  DUM7  DUM8  DUM9  DUM10
+  EAT1  EAT2  EAT3  EAT4  EAT5  EAT6  EAT7  EAT8  EAT9  EAT10
+  FAT1  FAT2  FAT3  FAT4  FAT5  FAT6  FAT7  FAT8  FAT9  FAT10
+  GAS1  GAS2  GAS3  GAS4  GAS5  GAS6  GAS7  GAS8  GAS9  GAS10
+C Step   Time  ANG1  ANG2  ANG3  ANG4    ANG5       ANG6       ANG7      ANG8        ANG9       ANG10
+C   1   .1E-2  1.0   -1.   1.0   1.0 .540302306 .841470985 -.84147098 .841470985 -.84147098 -.84147098
+C        BAL1       BAL2    BAL3   BAL4       BAL5    BAL6     BAL7      BAL8      BAL9       BAL10
+C    .072238804 -1.8653096   -1.    1.0  8.53972127  5.85987  .42331 1.15572715 6.40017231 6.39917231
+C   CAT1    CAT2    CAT3    CAT4   CAT5    CAT6    CAT7    CAT8   CAT9   CAT10
+C    0.0     1.0     1.0     0.0    1.0     0.0     0.0     1.0    0.0     0.0
+BLANK card ending node voltage outputs
+C  DUM1     DUM2       DUM3       DUM4       DUM5       DUM6       DUM7     DUM8  DUM9     DUM10
+C   1.0 3.87400715 -1.5625528 22.4590591 72.4590591 3.31831016 179.999848  3.14159   -4.  -3.14159
+C  EAT1       EAT2       EAT3       EAT4       EAT5       EAT6       EAT7       EAT8       EAT9       EAT10
+C   4.0 -.99999933    2.30103 .785398163  7.3890561 -.52359878 1.04719755 .813467631 .761594156 .761594156
+C    FAT1       FAT2       FAT3       FAT4   FAT5 FAT6       FAT7      FAT8     FAT9   FAT10
+C .57734968 1.15470056 .117099841 -.70710678  -3.  5.0 -3.2763323 1.3114543 -4.85987 -.42331
+C     GAS1       GAS2       GAS3      GAS4      GAS5    GAS6     GAS7     GAS8     GAS9    GAS10
+C  1.15572715 17.2586339 2.48054157 .9990005 .9990005 .9990005 .9990005 .9990005 .9990005  3.999
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     5th of 6 subcases documents pocket calculator applied to many intermediate
+C     variables.  This was the beginning of  Orlando Hevia's  R7U.DAT  which was
+C     added  6 August 2010.  Exceptional Lists 4 & 26 are close to their minima.
+C     The electrical network was substantial,  but is of no interest here so has
+C     been omitted.  The  $PARAMETER  data seemed plenty creative to WSM. Volume  
+C     is unlimited as  KNT  is unlimited.  But who deserves credit for imagining
+C     such use?  Perhaps Prof. Hans Kr. Hoidalen, the author of ATPDraw!  E-mail
+C     from Mr. Hevia  dated  Sunday, August 15, 2010  explained:  "The lines are
+C     generated by an ATPDraw  option,  @FILE.  It is a sort of pointlist,  with
+C     the possibility of one or more columns.  Just before ATPDraw runs ATP,  it
+C     generates the lines as you see in r7u.dat. I know the @FILE option because
+C     the user sent the question with his problem."   In any case, with such use
+C     as this,  the pocket calculator suddenly must handle more voluminous data,
+C     particularly intermediate variables.  List 4 (sources) storage of the load
+C     flow is being used for the first time as previously-fixed dimensions of
+C     the pocket calculator are made variable.  Not all,  but an important part.
+C     8 previously-fixed vectors have been made variable.  WSM,  19 August 2010.
+NEW LIST SIZES      { Request for a change to program table sizes (VARDIM input)
+DEFAULT      3.0    { Any blank field will be converted to 3 times default value
+       0       0       0     840      { List 4 = 840 of LISTSIZE.BPA is adequate
+BLANK card for lists 11-20.
+       0       0       0       0       0     950 { KONST use below requires this   
+     390     300     { Optional card for Lists 31, etc. --- as LISTSIZE.BPA
+  240000     742     { Offsets for supporting programs (non-simulation overlays)
+C   Controls of following request card:   MAXKNT  IOPCVP  NOSTAT { Loop 50 times
+POCKET CALCULATOR VARIES PARAMETERS           50       0
+C $DEBUG, 9, { For diagnostic output of pocket calculator, activate this request 
+C    Following use of tags continues to work,  but is being augmented by the
+C    more powerful definition of all such indices at once (see below).
+C $PARAMETER   INDOFF=121  KONST=242
+C  As long as List 4 is limited to 840 (in LISTSIZE.BPA as of 7 August 2010), it
+C  is necessary to optimize the compilation by the  pocket calculator.  This can
+C  be seen from the end of diagnostic output,  which shows a need for 913 cells:
+C       ----  Assembler after replace any SN= ----
+C    117  IP________=IP
+C           COPY    IP  IP____      913
+C    New input:EOF
+C  Without this many cells for List 4, the following line is necessary.  It will
+C  reduce the preceding 913 to 789 which is well within the 840 cells available:
+C $PARAMETER   NOOPT=0    { Restore compiler optimization that 2nd subcase ended
+C $PARAMETER   MAXASS=990  NOOPT=0
+C $PARAMETER   MAXLHS=170  ---  For a week or so this was honored, but no longer
+C  Having disabled all of the old definitions,  consider the new, better way:
+C        1         2         3         4         5         6
+C 34567890123456789012345678901234567890123456789012345678901234
+C                         INDOFF   KONST   NOOPT  MAXASS  MAXLHS
+$PARAMETER LIMITS :          121     242       0     990     170
+$PARAMETER
+F01001=(KNT.EQ.1.)*229.6111+(KNT.EQ.2.)*233.69775 $$
+F01002=(KNT.EQ.3.)*158.12631+(KNT.EQ.4.)*108.91404 $$
+F01003=(KNT.EQ.5.)*278.28978+(KNT.EQ.6.)*96.295541 $$
+F01004=(KNT.EQ.7.)*239.16153+(KNT.EQ.8.)*187.79161 $$
+F01005=(KNT.EQ.9.)*93.658151+(KNT.EQ.10.)*192.55105 $$
+F01006=(KNT.EQ.11.)*165.51983+(KNT.EQ.12.)*171.78016 $$
+F01007=(KNT.EQ.13.)*269.06742+(KNT.EQ.14.)*256.13115 $$
+F01008=(KNT.EQ.15.)*276.15484+(KNT.EQ.16.)*214.35659 $$
+F01009=(KNT.EQ.17.)*171.24842+(KNT.EQ.18.)*332.23904 $$
+F01010=(KNT.EQ.19.)*341.62624+(KNT.EQ.20.)*72.282156 $$
+F01011=(KNT.EQ.21.)*206.20294+(KNT.EQ.22.)*292.75362 $$
+F01012=(KNT.EQ.23.)*190.11552+(KNT.EQ.24.)*271.59629 $$
+F01013=(KNT.EQ.25.)*278.79531+(KNT.EQ.26.)*312.74695 $$
+F01014=(KNT.EQ.27.)*338.04959+(KNT.EQ.28.)*79.377109 $$
+F01015=(KNT.EQ.29.)*291.07469+(KNT.EQ.30.)*52.334939 $$
+F01016=(KNT.EQ.31.)*113.32174+(KNT.EQ.32.)*198.40889 $$
+F01017=(KNT.EQ.33.)*338.27422+(KNT.EQ.34.)*254.87681 $$
+F01018=(KNT.EQ.35.)*74.500633+(KNT.EQ.36.)*52.138059 $$
+F01019=(KNT.EQ.37.)*44.356605+(KNT.EQ.38.)*301.45684 $$
+F01020=(KNT.EQ.39.)*305.09034+(KNT.EQ.40.)*173.39597 $$
+F01021=(KNT.EQ.41.)*66.13517+(KNT.EQ.42.)*213.79447 $$
+F01022=(KNT.EQ.43.)*83.636753+(KNT.EQ.44.)*242.91365 $$
+F01023=(KNT.EQ.45.)*249.7637+(KNT.EQ.46.)*178.4586 $$
+F01024=(KNT.EQ.47.)*193.61877+(KNT.EQ.48.)*110.70991 $$
+F01025=(KNT.EQ.49.)*221.4351+(KNT.GE.50.)*339.68186 $$
+P01001=F01001+F01002+F01003+F01004+F01005+F01006+F01007+F01008+F01009 $$
+P01002=P01001+F01010+F01011+F01012+F01013+F01014+F01015+F01016+F01017 $$
+P01003=P01002+F01018+F01019+F01020+F01021+F01022+F01023+F01024+F01025 $$
+ANGAI=P01003 $$
+F02001=+(KNT.EQ.1.)*349.6111+(KNT.EQ.2.)*353.69775 $$
+F02002=(KNT.EQ.3.)*278.12631+(KNT.EQ.4.)*228.91404 $$
+F02003=(KNT.EQ.5.)*398.28978+(KNT.EQ.6.)*216.29554 $$
+F02004=(KNT.EQ.7.)*359.16153+(KNT.EQ.8.)*307.79161 $$
+F02005=(KNT.EQ.9.)*213.65815+(KNT.EQ.10.)*312.55105 $$
+F02006=(KNT.EQ.11.)*285.51983+(KNT.EQ.12.)*291.78016 $$
+F02007=(KNT.EQ.13.)*389.06742+(KNT.EQ.14.)*376.13115 $$
+F02008=(KNT.EQ.15.)*396.15484+(KNT.EQ.16.)*334.35659 $$
+F02009=(KNT.EQ.17.)*291.24842+(KNT.EQ.18.)*452.23904 $$
+F02010=(KNT.EQ.19.)*461.62624+(KNT.EQ.20.)*192.28216 $$
+F02011=(KNT.EQ.21.)*326.20294+(KNT.EQ.22.)*412.75362 $$
+F02012=(KNT.EQ.23.)*310.11552+(KNT.EQ.24.)*391.59629 $$
+F02013=(KNT.EQ.25.)*398.79531+(KNT.EQ.26.)*432.74695 $$
+F02014=(KNT.EQ.27.)*458.04959+(KNT.EQ.28.)*199.37711 $$
+F02015=(KNT.EQ.29.)*411.07469+(KNT.EQ.30.)*172.33494 $$
+F02016=(KNT.EQ.31.)*233.32174+(KNT.EQ.32.)*318.40889 $$
+F02017=(KNT.EQ.33.)*458.27422+(KNT.EQ.34.)*374.87681 $$
+F02018=(KNT.EQ.35.)*194.50063+(KNT.EQ.36.)*172.13806 $$
+F02019=(KNT.EQ.37.)*164.3566+(KNT.EQ.38.)*421.45684 $$
+F02020=(KNT.EQ.39.)*425.09034+(KNT.EQ.40.)*293.39597 $$
+F02021=(KNT.EQ.41.)*186.13517+(KNT.EQ.42.)*333.79447 $$
+F02022=(KNT.EQ.43.)*203.63675+(KNT.EQ.44.)*362.91365 $$
+F02023=(KNT.EQ.45.)*369.7637+(KNT.EQ.46.)*298.4586 $$
+F02024=(KNT.EQ.47.)*313.61877+(KNT.EQ.48.)*230.70991 $$
+F02025=(KNT.EQ.49.)*341.4351+(KNT.GE.50.)*459.68186 $$
+P02001=F02001+F02002+F02003+F02004+F02005+F02006+F02007+F02008+F02009 $$
+P02002=P02001+F02010+F02011+F02012+F02013+F02014+F02015+F02016+F02017 $$
+P02003=P02002+F02018+F02019+F02020+F02021+F02022+F02023+F02024+F02025 $$
+ANGBI=P02003 $$
+F03001=+(KNT.EQ.1.)*109.6111+(KNT.EQ.2.)*113.69775 $$
+F03002=(KNT.EQ.3.)*38.126311+(KNT.EQ.4.)*-11.085959 $$
+F03003=(KNT.EQ.5.)*158.28978+(KNT.EQ.6.)*-23.704459 $$
+F03004=(KNT.EQ.7.)*119.16153+(KNT.EQ.8.)*67.791614 $$
+F03005=(KNT.EQ.9.)*-26.341849+(KNT.EQ.10.)*72.551051 $$
+F03006=(KNT.EQ.11.)*45.51983+(KNT.EQ.12.)*51.780155 $$
+F03007=(KNT.EQ.13.)*149.06742+(KNT.EQ.14.)*136.13115 $$
+F03008=(KNT.EQ.15.)*156.15484+(KNT.EQ.16.)*94.356592 $$
+F03009=(KNT.EQ.17.)*51.248423+(KNT.EQ.18.)*212.23904 $$
+F03010=(KNT.EQ.19.)*221.62624+(KNT.EQ.20.)*-47.717844 $$
+F03011=(KNT.EQ.21.)*86.202936+(KNT.EQ.22.)*172.75362 $$
+F03012=(KNT.EQ.23.)*70.115523+(KNT.EQ.24.)*151.59629 $$
+F03013=(KNT.EQ.25.)*158.79531+(KNT.EQ.26.)*192.74695 $$
+F03014=(KNT.EQ.27.)*218.04959+(KNT.EQ.28.)*-40.622891 $$
+F03015=(KNT.EQ.29.)*171.07469+(KNT.EQ.30.)*-67.665061 $$
+F03016=(KNT.EQ.31.)*-6.6782645+(KNT.EQ.32.)*78.408894 $$
+F03017=(KNT.EQ.33.)*218.27422+(KNT.EQ.34.)*134.87681 $$
+F03018=(KNT.EQ.35.)*-45.499367+(KNT.EQ.36.)*-67.861941 $$
+F03019=(KNT.EQ.37.)*-75.643395+(KNT.EQ.38.)*181.45684 $$
+F03020=(KNT.EQ.39.)*185.09034+(KNT.EQ.40.)*53.395974 $$
+F03021=(KNT.EQ.41.)*-53.86483+(KNT.EQ.42.)*93.794469 $$
+F03022=(KNT.EQ.43.)*-36.363247+(KNT.EQ.44.)*122.91365 $$
+F03023=(KNT.EQ.45.)*129.7637+(KNT.EQ.46.)*58.458596 $$
+F03024=(KNT.EQ.47.)*73.618773+(KNT.EQ.48.)*-9.2900913 $$
+F03025=(KNT.EQ.49.)*101.4351+(KNT.GE.50.)*219.68186 $$
+P03001=F03001+F03002+F03003+F03004+F03005+F03006+F03007+F03008+F03009 $$
+P03002=P03001+F03010+F03011+F03012+F03013+F03014+F03015+F03016+F03017 $$
+P03003=P03002+F03018+F03019+F03020+F03021+F03022+F03023+F03024+F03025 $$
+ANGCI=P03003 $$
+F04001=+(KNT.EQ.1.)*65300.+(KNT.EQ.2.)*30667.412 $$
+F04002=(KNT.EQ.3.)*31979.935+(KNT.EQ.4.)*81276.349 $$
+F04003=(KNT.EQ.5.)*18906.501+(KNT.EQ.6.)*21719.44 $$
+F04004=(KNT.EQ.7.)*7124.8541+(KNT.EQ.8.)*4846.9281 $$
+F04005=(KNT.EQ.9.)*12418.612+(KNT.EQ.10.)*32587.942 $$
+F04006=(KNT.EQ.11.)*14560.237+(KNT.EQ.12.)*6698.0694 $$
+F04007=(KNT.EQ.13.)*70803.752+(KNT.EQ.14.)*12315.218 $$
+F04008=(KNT.EQ.15.)*24474.203+(KNT.EQ.16.)*24726.58 $$
+F04009=(KNT.EQ.17.)*19379.812+(KNT.EQ.18.)*36500.402 $$
+F04010=(KNT.EQ.19.)*19104.929+(KNT.EQ.20.)*4845.0075 $$
+F04011=(KNT.EQ.21.)*9027.5757+(KNT.EQ.22.)*31403.277 $$
+F04012=(KNT.EQ.23.)*7222.6444+(KNT.EQ.24.)*17609.525 $$
+F04013=(KNT.EQ.25.)*9836.8418+(KNT.EQ.26.)*7827.2433 $$
+F04014=(KNT.EQ.27.)*9097.1448+(KNT.EQ.28.)*16693.945 $$
+F04015=(KNT.EQ.29.)*29337.654+(KNT.EQ.30.)*22084.662 $$
+F04016=(KNT.EQ.31.)*70211.788+(KNT.EQ.32.)*19456.883 $$
+F04017=(KNT.EQ.33.)*5592.8618+(KNT.EQ.34.)*24983.583 $$
+F04018=(KNT.EQ.35.)*26539.252+(KNT.EQ.36.)*33746.765 $$
+F04019=(KNT.EQ.37.)*40387.027+(KNT.EQ.38.)*86591.522 $$
+F04020=(KNT.EQ.39.)*14466.269+(KNT.EQ.40.)*31953.179 $$
+F04021=(KNT.EQ.41.)*24428.887+(KNT.EQ.42.)*14013.494 $$
+F04022=(KNT.EQ.43.)*200790.43+(KNT.EQ.44.)*19225.061 $$
+F04023=(KNT.EQ.45.)*6217.3361+(KNT.EQ.46.)*140243.24 $$
+F04024=(KNT.EQ.47.)*34046.067+(KNT.EQ.48.)*8264.9251 $$
+F04025=(KNT.EQ.49.)*45450.444+(KNT.GE.50.)*85889.85 $$
+P04001=F04001+F04002+F04003+F04004+F04005+F04006+F04007+F04008+F04009 $$
+P04002=P04001+F04010+F04011+F04012+F04013+F04014+F04015+F04016+F04017 $$
+P04003=P04002+F04018+F04019+F04020+F04021+F04022+F04023+F04024+F04025 $$
+IP=P04003 $$
+IP________=IP
+IQ______=IP
+ANGC______=ANGCI
+ANGB______=ANGBI
+ANGA______=ANGAI
+C  Intermediate variable before parameter itself.  |IP=P04003 $$
+C  Parameter 1  defined.  Value =  6.530000E+04    |IP________=IP
+C  Parameter 2  defined.  Value =  6.530000E+04    |IQ______=IP
+C  Parameter 3  defined.  Value =  1.096111E+02    |ANGC______=ANGCI
+C  Parameter 4  defined.  Value =  3.496111E+02    |ANGB______=ANGBI
+C  Parameter 5  defined.  Value =  2.296111E+02    |ANGA______=ANGAI
+BLANK card ends input to $PARAMETER
+   5.E-9   6.E-6
+     500       1       1       1       1       0       0       1       0
+C  The rest of R7U.DAT is of no particular interest, so terminate execution:
+$ABORT
+BEGIN NEW DATA CASE
+C     6th of 6 subcases illustrates a much more efficient representation of
+C     the preceding 5th subcase using the new  SELECT  function of the pocket
+C     calculator.  The answer is unchanged.  Variable names have been lengthened
+C     to avoid warnings,  however.   For the 3 angles,  "ANG"  has become "ANGL"
+C     in order that names reach the minimum of 6 bytes.  Finally (the 4th of 4),
+C     "IP"  has become  "IPNAME".  Warnings were avoided in the 5th subcase only
+C     because the names were internal to the pocket calculator (marked by a "$$"
+C     on the right edge).  Using  SELECT,  there is no need for any such special
+C     treatment (note that all "$$" have been removed).  WSM.  14 September 2010
+C   Controls of following request card:   MAXKNT  IOPCVP  NOSTAT { Loop 50 times
+POCKET CALCULATOR VARIES PARAMETERS           50       0
+C 34567890123456789012345678901234567890123456789012345678901234
+C                         INDOFF   KONST   NOOPT  MAXASS  MAXLHS
+C $PARAMETER LIMITS :        121     242       0     990     170
+C     Note that the preceding expansion of calculator tables has been removed.
+C     Thanks to  SELECT,  storage is minimal.  The numbers themselves do not
+C     count as they are stored in available numerical storage.  Rather than 
+C     990 lines of assembly language (to which limit  MAXASS  applies),  this
+C     data never exceeds 2.  The  SELECT  function itself requires a single
+C     line and storage of the value that was selected requires a second.  To
+C     prove that default dimensions work,  we reset them:
+C 34567890123456789012345678901234567890123456789012345678901234
+C                         INDOFF   KONST   NOOPT  MAXASS  MAXLHS
+$PARAMETER LIMITS :           60     120       0     270     170
+C    First, let's show how simple the use of  SELECT  makes the preceding 5th
+C    data subcase.  The same values for  ANGLAI,  ANGLBI,  ANGLCI,  and  IPNAME
+C    are produced with great economy of both data and computation as follows:
+$PARAMETER
+ANGLAI = SELECT ( KNT )
+  229.6111 233.69775 158.12631 108.91404 278.28978 96.295541 239.16153 187.79161
+ 93.658151 192.55105 165.51983 171.78016 269.06742 256.13115 276.15484 214.35659
+ 171.24842 332.23904 341.62624 72.282156 206.20294 292.75362 190.11552 271.59629
+ 278.79531 312.74695 338.04959 79.377109 291.07469 52.334939 113.32174 198.40889
+ 338.27422 254.87681 74.500633 52.138059 44.356605 301.45684 305.09034 173.39597
+  66.13517 213.79447 83.636753 242.91365  249.7637  178.4586 193.61877 110.70991
+  221.4351 339.68186
+ANGLBI = SELECT ( KNT )
+  349.6111 353.69775 278.12631 228.91404 398.28978 216.29554 359.16153 307.79161
+ 213.65815 312.55105 285.51983 291.78016 389.06742 376.13115 396.15484 334.35659
+ 291.24842 452.23904 461.62624 192.28216 326.20294 412.75362 310.11552 391.59629
+ 398.79531 432.74695 458.04959 199.37711 411.07469 172.33494 233.32174 318.40889
+ 458.27422 374.87681 194.50063 172.13806 164.3566  421.45684 425.09034 293.39597
+ 186.13517 333.79447 203.63675 362.91365 369.7637  298.4586  313.61877 230.70991
+ 341.4351  459.68186
+ANGLCI = SELECT ( KNT )
+ 109.6111  113.69775 38.126311-11.085959 158.28978-23.704459 119.16153 67.791614
+-26.341849 72.551051  45.51983 51.780155 149.06742 136.13115 156.15484 94.356592
+ 51.248423 212.23904 221.62624-47.717844 86.202936 172.75362 70.115523 151.59629
+ 158.79531 192.74695 218.04959-40.622891 171.07469-67.665061-6.6782645 78.408894
+ 218.27422 134.87681-45.499367-67.861941-75.643395 181.45684 185.09034 53.395974
+ -53.86483 93.794469-36.363247 122.91365  129.7637 58.458596 73.618773-9.2900913
+  101.4351 219.68186
+IPNAME = SELECT ( KNT )
+    65300. 30667.412 31979.935 81276.349 18906.501  21719.44 7124.8541 4846.9281
+ 12418.612 32587.942 14560.237 6698.0694 70803.752 12315.218 24474.203  24726.58
+ 19379.812 36500.402 19104.929 4845.0075 9027.5757 31403.277 7222.6444 17609.525
+ 9836.8418 7827.2433 9097.1448 16693.945 29337.654 22084.662 70211.788 19456.883
+ 5592.8618 24983.583 26539.252 33746.765 40387.027 86591.522 14466.269 31953.179
+ 24428.887 14013.494 200790.43 19225.061 6217.3361 140243.24 34046.067 8264.9251
+ 45450.444 85889.85
+C   Parameter 1  defined.  Value =  2.296111E+02    |ANGLAI = SELECT ( KNT )
+C   Parameter 2  defined.  Value =  3.496111E+02    |ANGLBI = SELECT ( KNT )
+C   Parameter 3  defined.  Value =  1.096111E+02    |ANGLCI = SELECT ( KNT )
+C   Parameter 4  defined.  Value =  6.530000E+04    |IPNAME = SELECT ( KNT )
+BLANK card ends input to $PARAMETER
+C    That takes care of the 5th data subcase.  Before leaving this 6th subcase,
+C    however,  we will illustrate several variations.  First,  the argument of
+C    the  SELECT  function,  which is not necessarily  KNT.  Yes, the PCVP loop
+C    counter  KNT  is the natural one,  but not the only one.  The argument of
+C    SELECT  can involve pocket calculator math as shown by this modification
+C    which uses subscript  VALUE4 = LL3 + 1 = 3 + 1 = 4.  The 4th number of the
+C    following set is  -11.085959  so this is the value that will be loaded into
+C    the left hand side  ANGLCI.  Final detail:  LL3  is an ATP symbol which has
+C    integer value 3.  Similarly  LL4  (used later) has value 4.
+$PARAMETER
+VALUE4 = LL3 + 1.0  $$ { VALUE4 is an intermediate variable so a double dollar
+PARAM5 = SELECT ( VALUE4 )    { This param #5 should have value -11.085959
+ 109.6111  113.69775 38.126311-11.085959 { Truncate points at last one used (4)
+C   Also illustrate that comment lines are tolerated within data of SELECT.  The
+C   following  PARAM6  for parameter #6  should give a result that is identical
+C   to  ANGLAI  when  KNT = 1  (all that is being used):
+PARAM6 = SELECT ( KNT )
+  229.6111 233.69775 158.12631 108.91404 278.28978 96.295541 239.16153 187.79161
+C 93.658151 192.55105 165.51983 171.78016 269.06742 256.13115 276.15484 214.35659
+C 171.24842 332.23904 341.62624 72.282156 206.20294 292.75362 190.11552 271.59629
+C 278.79531 312.74695 338.04959 79.377109 291.07469 52.334939 113.32174 198.40889
+C 338.27422 254.87681 74.500633 52.138059 44.356605 301.45684 305.09034 173.39597
+C  66.13517 213.79447 83.636753 242.91365  249.7637  178.4586 193.61877 110.70991
+  221.4351 339.68186        {  An in-line comment is legal on partial final card
+C   Also illustrate that non-integer subscripts will result in a warning, but
+C   not a fatal error.  Integer truncation will be used as in Fortran.  Thus
+C   the value of  PARAM7  should be identical to that of  PARAM5.  Once again
+C   only 4 data points are required,  but the full first card of 10 will be
+C   used to illustrate the following blank card for termination.
+VALUE5 = LL4 + 0.5  $$ 
+PARAM7 = SELECT ( VALUE5 )    { This param #7 should have value -11.085959
+ 109.6111  113.69775 38.126311-11.085959 158.28978-23.704459 119.16153 67.791614
+BLANK card is needed to terminate SELECT since preceding card was full
+C   Finally illustrate that an excessive subscript will result in a warning, but
+C   not a fatal error.  Just as for Prof. Hoidalen's data of the 5th subcase,
+C   the last data point will be used if a subscript is excessive.  In this
+C   case,  the subscript has value 5 whereas only 4 data points are defined.
+PARAM8 = SELECT ( LL5 )    { This param #8 should have value -11.085959
+ 109.6111  113.69775 38.126311-11.085959 
+C  Intermediate variable before parameter itself.  |VALUE4 = LL3 + 1.0  $$ { VALUE4 is an intermediate variable so a double dollar
+C  Parameter 5  defined.  Value = -1.108596E+01    |PARAM5 = SELECT ( VALUE4 )    { This param #5 should have value -11.085959
+C  Parameter 6  defined.  Value =  2.296111E+02    |PARAM6 = SELECT ( KNT )
+C  Intermediate variable before parameter itself.  |VALUE5 = LL4 + 0.5  $$
+C   ###  Warning.  The argument of  SELECT  is not an integer.  POCKE4  truncates to integer from  4.5000000E+00
+C  Parameter 7  defined.  Value = -1.108596E+01    |PARAM7 = SELECT ( VALUE5 )    { This param #7 should have value -11.085959
+C   ###  Warning.  SELECT  argument   5  is too large for data.  POCKE4  uses last entry, number   4
+C  Parameter 8  defined.  Value = -1.108596E+01    |PARAM8 = SELECT ( LL5 )    { This param #8 should have value -11.085959
+BLANK card ends input to $PARAMETER
+   5.E-9   6.E-6
+     500       1       1       1
+C  The rest of R7U.DAT is of no particular interest, so terminate execution:
+$ABORT
+BEGIN NEW DATA CASE
+BLANK

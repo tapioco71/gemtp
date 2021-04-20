@@ -1,0 +1,70 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-1
+C            Test of 1-phase constant-parameter line.  One switch is permanently
+C            closed.  No transients.  Plot of receiving end voltage is sinusoid.
+DIAGNOSTIC           0 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000100    .020     60.     60.
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+  REC                       .001   { Near short at receiving end to ground }   3
+-1SEND  REC                  0.3   0.4  12.6  100.    { 1-phase distributed line
+BLANK card ending branch cards
+  GEN   SEND        -1.0       1.0    { Permanently closed switch at sending end
+BLANK card ending switch cards
+14GEN           100.       60.    { 60-Hz phasor solution }        -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   5.992836086590E+01
+C     GEN
+C    SEND            100.             100.      1.1985672173179  1.9672525544427
+C                     0.0              0.0      -1.559974114699      -52.4640241
+C   Step     Time        REC          REC         SEND         GEN           REC
+C                      TERRA                                               TERRA
+C    0      0.0   .001198266   .001198266         100.         100.     1.198266
+C    1    .1E-3  .0012585558  .0012585558  99.92894726  99.92894726  1.258555833
+ 1
+C  200     .02   .0019138946  .0019138946  30.90169944  30.90169944  1.913894577
+C Variable max : .0020173699  .0020173699         100.         100.  2.017369917
+C Times of max :       .0025        .0025          0.0          0.0        .0025
+C Variable min : -.002017453  -.002017453  -99.9921044  -99.9921044  -2.01745286
+C Times of min :       .0108        .0108        .0083        .0083        .0108
+  PRINTER PLOT
+ 194 4. 0.0 20.         REC                     { Axis limits : (-2.017,  2.017)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C              2nd  subcase  involves use of trapped-charge source to initialize
+C              an initially-disconnected single-phase line.  Later, energize the
+C              line by switch closure at 3 msec.  The data was supplied by Dipl.
+C              Ing. Bernd Stein of FGH (Mannheim, Germany) during April of 1986.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+DIAGNOSTIC           0 9 0 9 9 9 0 9 9 9 0 9 9 9 9 9 9 9 9
+ALTERNATE DIAGNOSTIC PRINTOUT, 0, 0, 0, 0,  { Need for 2nd or later subcase only
+ .000100    .020                { Unlike 1st of 2 subcases, here XOPT = COPT = 0
+       1       1       0       1       1      -1
+       2      -1       5       5      20      20 { Switch to alternate on step 2
+  GEN   SWITCH                  39.8
+  SWITCH                   1000.
+-1SEND  REC                .3055 5.819 .0121 138.
+BLANK card ending branch cards
+  SEND  SWITCH      .003       1.0     { Transient begins at 3 msec with closure
+BLANK card ending switch cards
+C        1         2         3         4         5         6         7         8
+C     78901234567890123456789012345678901234567890123456789012345678901234567890
+14GEN           100.       60.                                    -1.0
+14SEND  -1     -100.      .001   { Trapped-charge source }       5432.
+C    End multiple-frequency phasor solution data.  The first source is a regular
+C    60-Hertz generator, whereas the second has f = 1/1000 Hz for trapped charge
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   4.998874616296E+00
+C Last gen: SEND   -100.  100.  -.17408297E-12  .10491662826E-5  .8704148513E-11
+C Last gen:       0.0   180.0   -.1049166283E-5    -90.0000095   -.5245831413E-4
+C              Step     Time         REC          SEND       SWITCH          GEN
+C               0       0.0         -100.        -100.  99.97749233         100.
+C               1     .1E-3         -100.        -100.  99.96299489  99.92894726
+C               2     .2E-3         -100.        -100.  99.80645119  99.71589003
+ 1                            { Request for the output of all four node voltages
+C             200       .02   138.2909745  45.09406184  45.09406184  30.90169944
+ 144 2. 0.0 20.         SEND  REC              { Axis limits :  (-2.510,  2.052)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

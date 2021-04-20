@@ -1,0 +1,844 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-16
+C        1st of 12 subcases that confirm various aspects of switches that
+C        touch compensation-based elements (bugs removed 17 December 1995).
+C  E-mail from Laurent Dube on  Date: Sat, 15 Jul 1995 13:14:55 -0700 (PDT)
+C  "Here is a trimmed-down version of Janko Kosmac's data case showing
+C  wrong switch current values (which in his case were picked up by
+C  MODELS to drive some other logic)."  Test here is even more simplified:
+C                             
+C         SRCE          N1    Type-91    N2    1.0     
+C          o------_------o----/\/\/\----o----/\/\/\-----------
+C                 ^       |              |                   |
+C              closed     |              |<-- switch         |
+C              switch     |              |    closed         |
+C                         |----/\/\/\----o                   |
+C                               1.E-6     N12                |
+C                                                           ___
+C                                                            _
+   1.E-5   1.E-5                   
+       1       1       1       1 
+TACS HYBRID
+99RESIS   =  1.E-6
+77RESIS        1.E-6
+33RESIS
+BLANK card ending TACS
+91N1    N2    TACS  RESIS                                                      1
+  N1    N12                1.E-6                                               
+  N2                          1.                                        
+BLANK card ending branches
+  N12   N2                                            MEASURING
+  SRCE  N1                                            MEASURING                1
+BLANK card ending switches
+14SRCE          100.       60.       0.0        0.                 -1.
+BLANK card ending sources
+C Output for steady-state phasor switch currents.
+C  Node-K   Node-M     I-real            I-imag            I-magn        Degrees
+C  N12      N2     9.99999000E+01    0.00000000E+00    9.99999000E+01     0.0000
+C  SRCE     N1     9.99999000E+01    0.00000000E+00    9.99999000E+01     0.0000
+  N1    N12   N2
+C  Step    Time      N1         N12        N2         SRCE       N1         TACS
+C                                                     N1         N2        RESIS
+C  Phasor I(0) = 9.999990E1  Switch  "N12   "  to  "N2    "  closed in steady-st
+C  Phasor I(0) = 9.999990E1  Switch  "SRCE  "  to  "N1    "  closed in steady-st
+C    0     0.0        100.    99.9999    99.9999    99.9999        0.0     1.E-6
+C    1   .1E-4  99.9992894 99.9992394 99.9992394 99.9992394 49.9996197     1.E-6
+BLANK card ending voltage printout
+BLANK card ending plot
+BEGIN NEW DATA CASE
+C    2nd of 12 subcases began as the big, 7th subcase of DC-16.  Eventually,
+C    nearly everything could be thrown away.  After closing,  the switch
+C    voltage had better be zero (one of the improvements of 17 Dec 95).  This
+C    was not a problem 2 or more days earlier,  however.  This problem resulted  
+C    after making just the single  OVER16  correction.  Correction of it 
+C    resulted in the two changes of  SUBTS3  (see  WSM95DEC  idents).
+ .000100   .0004     60.  
+       1      -1       1       1
+  CR20A CR30A                         93.40                                    1 
+92CR30A CR20A                          5555.                                   3
+                  147500.                      -1.                             
+                      1.0                      40.                      .80
+                    9999.
+  RAVBA CR30A               0.5  14.0                                          
+  GRCBA CR20A               0.4   9.0                                          1
+BLANK card ending program branch cards.
+  CR20A          0.00015       10.   { Fault switch, phase "a" to ground }     3
+BLANK card terminating program switch cards
+14RAVBA    440000.   60.       -20.0                               -1.
+14GRCBA    440000.   60.         0.0                               -1.
+BLANK card terminating program source cards.
+C       Total network loss  P-loss  by summing injections =   3.505855948763E+08
+C   Node             Source  node  voltage             Injected  source  current
+C   name       Rectangular           Polar          Rectangular            Polar
+C  RAVBA    413464.7531458         440000.      26317.186674075  27911.988458816
+C          -150488.8630633     -20.0000000      -9299.719634859      -19.4619099
+BLANK card ending output variables requests (none here, since all column 80)
+C  First  2     output variables are electric-network voltage differences (upper
+C  Next   4     output variables are branch currents (flowing from the upper nod
+C Step    Time      CR30A      CR20A      CR20A      CR30A      CR20A      GRCBA
+C                   CR20A      TERRA      TERRA      CR20A      CR30A      CR20A
+C   0     0.0  -264114.27 534224.351        0.0        0.0 -26317.187 -26317.187
+C   1   .1E-3  -195321.89 509234.084        0.0  -75571.13 -102186.97 -26615.843
+C ***          Close switch  "CR20A "  to  "      "  after  2.00000000E-04  sec.
+C   2   .2E-3  -126265.42 483522.274        0.0 -.00199387 -26810.516 -26810.514
+C   3   .3E-3  -97153.756        0.0 1625.62684 -.10944E-3 -27570.069 -25944.443
+C   4   .4E-3  -66918.302        0.0  4833.9446 -.75381E-4  -28909.76 -24075.815
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        3rd of 12 subcases that confirm various aspects of switches that
+C        touch compensation-based elements.
+C     IMTESTA3.DAT  ---  Name used by Prof. Juan Martinez of Barcelona, Spain
+C     Based on I. Bonfanti's case : EMTP News, Vol. 2, no. 3, September 1989
+C     Steady State Initialization
+C     Wye-connected ungrounded armature - Resistor between neutral and ground
+C     Switches permanently closed are connected to the armature terminals
+C     Until correction on  26 Jan 96,  TQGEN  was completely wrong on step 2.
+POWER FREQUENCY, 50
+   1.E-4   .0002                  1.E-15
+       1       1       1       1
+C ----- Network description
+  FEMR  CBR               .37024 1.196                                         1
+  FEMS  CBS               .37024 1.196                                         1
+  FEMT  CBT               .37024 1.196                                         1
+C ----- Grounding resistor
+  CSMT                    1000.
+C ----- Motor parasitic capacitances
+  M1.R                                .02                                      1
+  M1.S                                .02                                      1
+  M1.T                                .02                                      1
+C ----- Mechanical network
+  ROTORD                  1.E-08            
+  ROTORQ                  1.E-08
+  COPPIA                              9.16E6                                   2
+  COPPI2COPPIA            1.0E-6
+BLANK ENDING BRANCHES
+  CBR   M1.R         -1.     15.00                                             1
+  CBS   M1.S         -1.     15.00                                             1
+  CBT   M1.T         -1.     15.00                                             1
+BLANK ENDING SWITCHES
+14FEMR        4899.        50.        0.                         -1.0    9999.
+14FEMS        4899.        50.     -120.                         -1.0    9999.
+14FEMT        4899.        50.      120.                         -1.0    9999.
+14COPPI2-1      -1.      1.E-9        0.                         -1.0    9999.
+C ----- UM specification
+19 UM
+01            0   - Compensation;  change 0 to 1 if prediction is wanted
+BLANK
+ 3 1 1111COPPIA       1                            
+           0.0       0.3964
+           0.0       0.3964
+            4.                    COPPI2
+         .1674       .001   M1.R  CSMT        1
+         .1674       .01    M1.S  CSMT        1
+         .1674       .01    M1.T  CSMT        1
+         .7819       .00453 ROTORD            1
+         .7819       .00453 ROTORQ            1
+BLANK card ending U.M. data
+BLANK card ending sources
+C     Total network loss  P-loss  by summing injections =   5.005262005074E-01
+C     Total network loss  P-loss  by summing injections =   2.721172542328E+04
+C     Total network loss  P-loss  by summing injections =   3.083034016021E+04
+C     Total network loss  P-loss  by summing injections =   3.209218252624E+04
+C Output for steady-state phasor switch currents.
+C      Node-K    Node-M            I-real            I-imag            I-magn          Degrees        Power            Reactive
+C      CBR       M1.R          2.18879785E+02   -8.91358682E+01    2.36333585E+02     -22.1580    5.25806422E+05    2.07845254E+05
+C      CBS       M1.S         -1.86633819E+02   -1.44987520E+02    2.36333585E+02    -142.1580    5.25806422E+05    2.07845254E+05
+C      CBT       M1.T         -3.22459663E+01    2.34123388E+02    2.36333585E+02      97.8420    5.25806422E+05    2.07845254E+05
+C 1st gen:  COPPIA  301.59289474462  301.59289474462          4868.1875        4868.1875      734105.38014229  734105.38014229
+C                               0.0              0.0    .17357870652E-4        0.0000002      -.0026175052283        1.0000000
+C
+C 2nd gen:    FEMR            4899.            4899.    218.87978507236  236.33358480802      536146.03353474  578899.11598725
+C                              0.0              0.0     -89.13586817262      -22.1579539      218338.30908884        0.9261476
+BLANK card ending node voltage output requests (none here)
+C   Step      Time      COPPIA     CBR        CBS        CBT        FEMR       FEMS       FEMT       M1.R       M1.S       M1.T
+C                       TERRA      M1.R       M1.S       M1.T       CBR        CBS        CBT        TERRA      TERRA      TERRA
+C
+C                       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1
+C                       TQGEN      OMEGM      THETAM     IPA        IPB        IPC        IE1        IE2
+C ***      Phasor I(0) =  2.1887979E+02                     Switch  "CBR   "  to  "M1.R  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.8663382E+02                     Switch  "CBS   "  to  "M1.S  "  closed in the steady-state.
+C ***      Phasor I(0) = -3.2245966E+01                     Switch  "CBT   "  to  "M1.T  "  closed in the steady-state.
+C      0       0.0  301.592895 218.879785 -186.63382 -32.245966 218.879785 -186.63382 -32.245966 .309378E-3  .02587952  -.0261889
+C                   -4976.4349 301.592895 1.57079633 -218.87948 186.659698 32.2197774  65.266856 -275.17162
+C      1     .1E-3  301.593554 221.571447 -181.98783 -39.583621 221.571447 -181.98783 -39.583621 -.63563E-3 .026350533 -.02571491
+C                   -4976.4333 301.592895 1.60095562 -221.57208 182.014176 39.5579061 64.9214972 -275.25321
+C      2     .2E-3  301.594872 224.044463 -177.16225 -46.882216 224.044463 -177.16225 -46.882216 -.00157782 .026791347 -.02521353
+C                   -4976.4315 301.592895 1.63111491 -224.04604 177.189039 46.8570021 64.5760272 -275.33436
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        4th of 12 subcases that confirm various aspects of switches that
+C        touch compensation-based elements.
+C     Ivano Bonfanti  of CESI in Milano, Italy,  published this troublesome data
+C     in LEC's  EMTP News,  Vol. 2, no. 3, September, 1989.  Although the answer
+C     here is slightly different than the published "M39." EMTP  answer shown by
+C     Bonfanti,  either is believed to be correct for engineering purposes.  The
+C     machine obviously is in the steady state as it should we.  WSM, 28 Jan 96.
+C     Note  EPSILN = 1.E-8  a few lines below is needed to restore default value 
+C     of  STARTUP following distortion of the 3rd subcase.  Without restoration, 
+C     the answer will be quite different because U.M. uses this to build network
+C     during the 4 phasor solutions.
+PRINTED NUMBER WIDTH, 10, 1,   { 10-digit col width including 1 blank separators
+POWER FREQUENCY, 50
+   2.E-4    .020     50.     0.0   1.E-8 
+       1       1       1       1       1      -1
+       5       5      20      20     100     100
+TACS HYBRID  
+11CARICO      -4797.                                               -1.        1.   
+91COPPI1                                                           -1.        1.   
+99COPPIA  =CARICO+COPPI1  
+33COPPIA  
+BLANK card ending TACS
+  FEMR  CBR               .37024 1.196                                         1
+  FEMS  CBS               .37024 1.196                                         1
+  FEMT  CBT               .37024 1.196                                         1
+C ----- Motor parasitic capacitances
+  M1.R                                .02                                      1
+  M1.S                                .02                                      1
+  M1.T                                .02                                      1
+  CSMT                     1000.  { Motor neutral grounding resistance
+C ----- Mechanical network
+  ROTORD                  1.E-08            
+  ROTORQ                  1.E-08
+  COPPIA                              9.16E6                                   2
+  COPPI1COPPIA            1.0E-6
+BLANK ENDING BRANCHES
+  COPPI1COPPI2                                        MEASURING                1
+  CBR   M1.R         -1.     15.00                                             1
+  CBS   M1.S         -1.     15.00                                             1
+  CBT   M1.T         -1.     15.00                                             1
+BLANK ENDING SWITCHES
+14FEMR   1   4898.98       50.        0.                          -1.0        1.
+14FEMS   1   4898.98       50.     -120.                          -1.0        1.
+14FEMT   1   4898.98       50.      120.                          -1.0        1.
+14COPPI2-1       -1.     1.E-9        0.                          -1.0        1.
+60COPPIA-1
+19 UM
+01            0   { Compensation;  use  "1"  rather than  "0"  for prediction
+BLANK card ends Class-1 cards
+ 3 1 1111COPPIA       1                            
+           0.0       0.3964
+           0.0       0.3964
+            4.                    COPPI2
+         .1674       .001   M1.R  CSMT        1
+         .1674       .01    M1.S  CSMT        1
+         .1674       .01    M1.T  CSMT        1
+        .78187       .00453 ROTORD            1
+        .78187       .00453 ROTORQ            1
+BLANK card ending  U.M. coils
+BLANK ENDING SOURCES
+C     Total network loss  P-loss  by summing injections =   5.005262016348E-01
+C     Total network loss  P-loss  by summing injections =   3.007635104268E+04
+C     Total network loss  P-loss  by summing injections =   3.007585104268E+04
+C     Total network loss  P-loss  by summing injections =   3.008749127839E+04
+C      Node-K    Node-M            I-real            I-imag            I-magn          Degrees        Power            Reactive
+C      COPPI1    COPPI2        4.82497291E+03    0.00000000E+00    4.82497291E+03       0.0000    7.27577133E+05    0.00000000E+00
+C      CBR       M1.R          2.12219079E+02   -9.54916543E+01    2.32713544E+02     -24.2262    5.09803228E+05    2.01520807E+05
+C      CBS       M1.S         -1.88807738E+02   -1.36041286E+02    2.32713544E+02    -144.2262    5.09803228E+05    2.01520807E+05
+C      CBT       M1.T         -2.34113411E+01    2.31532941E+02    2.32713544E+02      95.7738    5.09803228E+05    2.01520807E+05
+C 1 of 4 gen: COPPIA  301.59289474462  301.59289474462      4824.9729075506  4824.9729075506      727588.77312628  727588.77312628
+C                                 0.0              0.0      .17357870652E-4        0.0000002      -.0026175052283        1.0000000
+C
+C 2 of 4 gen: FEMR            4898.98          4898.98      212.21907905668  232.71354399216      519828.51195855  570029.49887335
+C                                 0.0              0.0      -95.49165430404      -24.2261891      233905.85230121        0.9119327
+C
+C             FEMS           -2449.49          4898.98       -188.807738005  232.71354399216      519828.51195855  570029.49887335
+C                     -4242.641132632     -120.0000000      -136.0412864788     -144.2261891      233905.85230121        0.9119327
+C
+C             FEMT           -2449.49          4898.98      -23.41134105164  232.71354399216      519828.51195855  570029.49887335
+C                     4242.6411326319      120.0000000      231.53294078285       95.7738109      233905.85230121        0.9119327
+C
+C   Step      Time     COPPIA    COPPI1    CBR       CBS       CBT       FEMR      FEMS      FEMT      M1.R      M1.S      M1.T
+C                      TERRA     COPPI2    M1.R      M1.S      M1.T      CBR       CBS       CBT       TERRA     TERRA     TERRA
+C
+C                      TACS      UM-1      UM-1      UM-1      UM-1      UM-1      UM-1      UM-1      UM-1
+C                      COPPIA    TQGEN     OMEGM     THETAM    IPA       IPB       IPC       IE1       IE2
+C ***      Phasor I(0) =  4.8249729E+03                     Switch  "COPPI1"  to  "COPPI2"  closed in the steady-state.
+C ***      Phasor I(0) =  2.1221908E+02                     Switch  "CBR   "  to  "M1.R  "  closed in the steady-state.
+C ***      Phasor I(0) = -1.8880774E+02                     Switch  "CBS   "  to  "M1.S  "  closed in the steady-state.
+C ***      Phasor I(0) = -2.3411341E+01                     Switch  "CBT   "  to  "M1.T  "  closed in the steady-state.
+C      0       0.0  301.59289 4824.9729 212.21908 -188.8077 -23.41134 212.21908 -188.8077 -23.41134 .00137262   .024922 -.0262946
+C                         0.0 -4824.973 301.59289 1.5707963 -212.2177 188.83266 23.385046 74.005629 -268.4606
+C      1     .2E-3  301.59289 4824.9729 217.79488 -179.8952 -37.89965 217.79488 -179.8952 -37.89965 -.4897E-3 .02588688 -.0253972
+C                   27.972911 -4824.959 301.59289 1.6311149 -217.7954 179.92112 37.874249 73.334597 -268.6438
+C      2     .4E-3   301.5932 4824.9729 222.51143  -170.273 -52.23846 222.51143  -170.273 -52.23846  -.002339 .02673945 -.0244004
+C                   27.972911 -4824.941 301.59289 1.6914335 -222.5138 170.29971  52.21406 72.662955 -268.8252
+BLANK ENDING OUTPUT REQUEST
+C    100       .02  301.64888 4824.9729 211.99353 -188.6458 -23.34774 211.99353 -188.6458 -23.34774 .00136234 .02495568  -.026318
+C                   27.972911 -4819.913 301.64979 7.6030487 -211.9922 188.67075 23.321418 5.0277011 -278.1347
+C Variable maxima :  301.64888 4824.9729 232.67504 232.63158 232.51922 232.67504 232.63158 232.51922 .02962796 .02960618 .02960763
+C                   27.972911 -4819.913 301.65916 7.6030487  232.6071 232.54547 232.60707 74.005629 -268.4606
+C Times of maxima :        .02     .0118     .0014      .008     .0146     .0014      .008     .0146     .0152      .002     .0084
+C                       .0118       .02     .0122       .02     .0114      .018     .0046       0.0       0.0
+C Variable minima :  301.59289 4824.9729 -232.5957 -232.5347 -232.5969 -232.5957 -232.5347 -232.5969  -.029647 -.0296246 -.0296779
+C                         0.0 -4824.973 301.59289 1.5707963 -232.6864 -232.6424 -232.5295 5.0277011 -278.1347
+C Times of minima :      .2E-3       0.0     .0114      .018     .0046     .0114      .018     .0046     .0052     .0118     .0184
+C                         0.0       0.0       0.0       0.0     .0014      .008     .0146       .02       .02
+  PRINTER PLOT
+ 194 5. 0.0 20.         UM-1  TQGEN COPPI2COPPI1    { Limits:  (-4.825,  0.000)
+ 194 5. 0.0 20.         TACS  COPPIAUM-1  THETAM    { Limits:  (0.000,  2.797)
+ 194 4. 0.0 20.         BRANCH                      { Limits:  (-2.327,  3.017)
+                        M1.R  CBR   M1.S  CBS   M1.T  CBT   UM-1  OMEGM
+ 194 4. 0.0 20.         BRANCH                      { Limits:  (-2.327,  2.326)
+                        UM-1  IPA   UM-1  IPB   UM-1  IPC
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        5th of 12 subcases that confirm various aspects of switches that
+C        touch compensation-based elements.  This is like the 1st except
+C        that here we have 3 phases.  As explained in the July, 1996,
+C        newsletter,  Marjan Popov in Macedonia first complained of trouble.
+C        Prior to  1 June 1996,  step 2 would never be reached because the
+C        error occurred following opening on step 1.  Here, we go 3 steps:
+ .000050 .000150     50.     50.   1.E-9
+       1       1
+TACS HYBRID
+C      Note.  Mr. Popov used MODELS,  and he had complicated dynamics.  But
+C             none of that complexity was required to demonstrate the trouble
+C             (KILL = 209).  So, instead use simpler TACS model of 1st subcase:
+99RESIS   =  1.E-6
+77RESIS        1.E-6
+33RESIS
+BLANK card ending TACS
+$DEPOSIT, MATFUL=1 { Internal conversion of Type-51, 52, ... to unsymmetric data
+C  Add preceding definition of MATFUL  on  6 August 2008  as the update to allow
+C  unsymmetric branch [R], [L] is being packaged. Of course, the following three
+C  coupled branches are symmetric,  so by pretending that they are not we merely
+C  waste both storage (the size of List 3 will increase by 3 cells) and computer
+C  time (the unsymmetric phasor solution requires more work).   As for location,
+C  there is no magic.  If  MATFUL has value unity at the start of a Type-51, 52,
+C  ... branch group,  ATP will convert the R-L data to unsymmetric (full matrix)
+C  storage.  To turn off this "service,"  use  $DEPOSIT, MATFUL=0  which will be
+C  found near the start of the following subcase (it could be moved to this one,
+C  to any point below the Type-53 branch card, just as well).  WSM.
+51SRCR  BUSR                           21.07       { ZERO SEQUENCE
+52SRCS  BUSS                            2.39       { POSITIVE SEQUENCE
+53SRCT  BUST 
+$VINTAGE, 1
+ 1LINBR LINER               3.98507949E+00  1.16971333E+01  5.00880327E+01
+ 2LINBS LINES               1.64595110E+00  3.84463816E+00 -7.10131829E+00
+                            3.81191239E+00  1.21114617E+01  4.86330090E+01
+ 3LINBT LINET               1.57601253E+00  4.21324332E+00 -8.66201631E+00
+                            1.50186508E+00  4.04356685E+00 -6.51737363E+00
+                            3.69294935E+00  1.24065061E+01  4.91034827E+01
+$VINTAGE, 0
+91ARCR  LINBR TACS  RESIS                                                     2
+91ARCS  LINBS TACS  RESIS                                                     2
+91ARCT  LINBT TACS  RESIS                                                     2
+C NAME  NAME  REFERENCE   R(OHM)X(OHM)C(miF)
+  BUSR                                0.314 { Bus bar capacitances
+  BUSS                                0.314
+  BUST                                0.314 
+C    Provide linear elements connected to  ARCR, ARCS, ARCT (leakage to ground):
+  ARCR                      1.E8
+  ARCS                      1.E8
+  ARCT                      1.E8
+BLANK Card ending branch cards
+  BUSR  ARCR        -0.1     2.60                                              1
+  BUSS  ARCS        -0.1     2.60                                              1
+  BUST  ARCT        -0.1     2.60                                              1
+  ARCR  LINBR       -0.1    0.000      50.E3                                         
+  ARCS  LINBS       -0.1    0.001      50.E3                                         
+  ARCT  LINBT       -0.1    0.001      50.E3                                        
+BLANK  Card ending switch cards
+14SRCR        89814.       50.        0.        0.                 -1.
+14SRCS        89814.       50.      120.        0.                 -1.
+14SRCT        89814.       50.     -120.        0.                 -1.
+BLANK Card ending source cards
+  LINER LINES LINET BUSR  BUSS  BUST
+BLANK  Card ending output cards 
+C   Step    Time      LINER      LINES      LINET      BUSR       BUSS       BUST       BUSR       BUSS       BUST       TACS
+C                                                                                         ARCR       ARCS       ARCT       RESIS
+C ***    Phasor I(0) = -1.2037996E-01    Switch  "BUSR  "  to  "ARCR  "  closed in the steady-state.
+C ***    Phasor I(0) = -4.2912571E+00    Switch  "BUSS  "  to  "ARCS  "  closed in the steady-state.
+C ***    Phasor I(0) =  4.3267803E+00    Switch  "BUST  "  to  "ARCT  "  closed in the steady-state.
+C ***    Phasor I(0) = -1.2127823E-01    Switch  "ARCR  "  to  "LINBR "  closed in the steady-state.
+C ***    Phasor I(0) = -4.2908080E+00    Switch  "ARCS  "  to  "LINBS "  closed in the steady-state.
+C ***    Phasor I(0) =  4.3272295E+00    Switch  "ARCT  "  to  "LINBT "  closed in the steady-state.
+C      0     0.0  89846.7243 -44918.879 -44929.061 89826.4331 -44913.159 -44913.549 -.12037996 -4.2912571 4.32678032      1.E-6
+C ***      Open  switch  "ARCR  "  to  "LINBR "  after  5.00000000E-05  sec.
+C      1   .5E-4  89835.7272 -46135.534 -43701.414 89815.3391 -46129.508 -43686.133 -.20216547 -4.2510535 4.36857684      1.E-6
+C      2   .1E-3  89802.5653 -47340.817 -42462.973  89782.085 -47334.497 -42447.917 -.28390448 -4.2098234 4.40932077      1.E-6
+C      3  .15E-3  89747.2461 -48534.443 -41214.032 89726.6777 -48527.808 -41199.225  -.3655754 -4.1675019 4.44892539      1.E-6
+BLANK CARD ending plot
+BEGIN NEW DATA CASE
+C        6th of 12 subcases illustrates trouble with compensation-based elements
+C        even though no switch is involved.  The data came from Gabor Furst on
+C        14 Sept 2000 as mentioned in the January, 2001, newsletter.  Execution
+C        should be stopped in overlay 16 because the Type-91 element R(t) is not
+C        isolated in a separate subnetwork from the U.M. Case-summary statistics
+C        show  List 24 = 4  as the number of phases of compensation.  This is
+C        entirely wrong:  Size 21-30:     0     0     9     4   337  ...
+C STEP ZERO COUPLE    { If activated, the correct KILL = 9 of overlay 15 results
+C          20 May 2001, the answer changes following correction to SOLVUM to
+C          solve a problem from Dr. Michael Steurer of CAPS at Florida State.
+C          No, answer is not right.  It remains wrong,  but is a different wrong
+C          because compensation logic has been modified.
+C        23 May 2001,  introduce request for special verification of possible
+C        overlap between U.M. compensation and that of List-9 elements.  This is
+C        in OVER16 (to find the code, search for KOMPUM).  Add new request:
+VERIFY U.M. COMPENSATION { If removed, KILL = 9 error termination will disappear
+$DEPOSIT, MATFUL=0   { Cancel conversion of Type-51, 52, ... to unsymmetric data
+UM TO TACS
+  5.0E-4   5.E-4    50.0  { Only 1 time step is needed to demonstrate the error
+       1       1 
+TACS { The Rule Book recommends TACS HYBRID or TACS STAND ALONE, but this works
+92TQGEN
+98TPER    =  1/FREQHZ
+ 1TAVG1   +TQGEN 1
+       1.0
+       1.0     0.020
+ 1TAVG    +TAVG1                                    1.0
+       1.0
+       1.0     0.020
+98ROTRES  = 1000.0*(1.0 - TIMEX/8.0)
+33IM    TAVG  TQGEN ROTRES
+BLANK card ending TACS data
+  SRA   MOTA                      1.00   {  source impedance  ohm         }    1
+  SRB   MOTB                      1.00                                         1
+  SRC   MOTC                      1.00                                         1
+C    Tops of 3 rotor coils are grounded through 1/2-ohm resistors:
+  XOTA                      0.50  { Fixed resistance for rotor phase a }       1
+  XOTB                      0.50  { Fixed resistance for rotor phase b }       1
+  XOTC                      0.50  { Fixed resistance for rotor phase c }       1
+C    Bottoms of 3 rotor coils are connected to neutral NEUT, which then is
+C    grounded by the following TACS-defined, time-varying resistor:
+91NEUT        TACS  ROTRES   { Variable resistance in rotor circuit }          1
+C    But node NEUT is connected to no linear branch.  To avoid a warning
+C    message,  parallel the preceding R(t) by fixed high reistance:
+  NEUT                      1.E6
+C  the anlogue network records follow
+C  the separator from the 14 source
+  INERS INER               1.E-6
+  INER                                 3.3E7          {inertia  uF}
+C   the damping term in ohms
+        INER                2.26                        {damping  1/mho}
+BLANK ending BRANCHes
+BLANK ending SWITCHes
+14SRA        3400.00      50.0       0.0                            -1
+14SRB        3400.00      50.0     240.0                            -1
+14SRC        3400.00      50.0     120.0                            -1
+C  the source for the analogue network
+14INERS -1  0.000001  .0000001                                      -1
+C   the source of any additional load applied
+14INERS -1 -0.000001 0.0000001                                    5.00
+19         { Begin U.M. data for single 3-phase induction motor with wound rotor
+ 0            0     { Note no auto-initialization (no multiple phasor solutions)
+BLANK
+ 4    111INER         2                             0.15700
+                  0.465131
+                  0.465131
+C   armature coils
+                            MOTA              1
+    0.3393571     0.0109180 MOTB              1
+    0.3393571     0.0109180 MOTC              1
+C    rotor coils
+    0.5785651     0.0109180 XOTB  NEUT        1
+    0.5785651     0.0109180 XOTC  NEUT        1
+                            XOTA  NEUT        1
+BLANK card ending U.M. data
+BLANK card ending sources
+BLANK card ending output variables requests (none here, since all column 80)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        7th of 12 subcases illustrates new  TACS R-thev  option on rotor coil
+C        cards to define connected resistance using a TACS variable.  It does
+C        not solve the preceding problem,  but it avoids it,  and is superior
+C        for cases of common interest.  See January, 2000, newsletter.  Data is
+C        from preceding subcase,  although here we energize the motor.  To speed
+C        the simulation, double Gabor Furst's dT and shorten his T-max (was 8):
+    .001     2.0    50.0
+       1       3       1       0       1      -1
+       5       5      20      20     100     100     200     200
+TACS HYBRID
+98ROTRES  = 10. * ( 1.0 - TIMEX / 2.0 )  { Linear ramp of R from 10 ohms to zero
+33ROTRES              { Output this one and only TACS variable of interest
+77ROTRES         10.  { Initial condition is needed for smooth start (not R=0)
+BLANK card ending TACS cards
+  SRA   MOTA                      1.00     { Source impedance =  1 ohm reactive. 
+  SRB   MOTB                      1.00     { This separates the machine armature
+  SRC   MOTC                      1.00     { MOT from the infinite bus SR.
+  XOTA                      100.      { Resistance across each rotor coil is
+  XOTB                      100.      { arbitrary since it will be replaced 
+  XOTC                      100.      { by value of TACS signal ROTRES, anyway
+C  the anlogue network records follow
+C  the separator from the 14 source
+  INERS INER               1.E-6
+  INER                                 3.3E7          {inertia  uF}
+C   the damping term in ohms
+        INER                2.26                        {damping  1/mho}
+BLANK card ending BRANCH cards
+BLANK card ending SWITCH cards
+14SRA        3400.00      50.0       0.0                           -1.
+14SRB        3400.00      50.0     240.0                           -1.
+14SRC        3400.00      50.0     120.0                           -1.
+C  the source for the analogue network
+14INERS -1  0.000001  .0000001                                     -1.
+C   the source of any additional load applied
+14INERS -1 -0.000001 0.0000001                                    5.00
+19  { Begin U.M. data, which will consist of a single 3-phase induction motor
+C  No autoinitialization.  Also, this data does use compensation on both sides.
+ 0            0
+BLANK
+ 4    111INER         2                             0.15700
+                  0.465131
+                  0.465131
+C     3 armature coils come first:
+                            MOTA              1
+    0.3393571     0.0109180 MOTB              1
+    0.3393571     0.0109180 MOTC              1
+C     3 rotor coils follow:
+    0.5785651     0.0109180 XOTB              1               TACS R-thev ROTRES
+    0.5785651     0.0109180 XOTC              1               TACS R-thev ROTRES
+                            XOTA              1               TACS R-thev ROTRES
+C      Note about preceding.  The request word is  "TACS R-thev "  in columns 63
+C      through 74.  It is to be followed by the A6 name of a TACS variable in
+C      columns 75-80.  Each coil can have a different TACS variable (the three
+C      being the same means that the 3-phase resistance is balanced.
+BLANK card ending U.M. data cards
+BLANK card ending source cards
+BLANK card ending output specifications (none here)
+ 193 .4 0.0 2.0 0.0 200.UM-1  OMEGM
+C 193 .2 0.0 2.0         UM-1  IE1  { A vector plot really is needed for this
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        8th of 12 subcases is similar to 1st (Janko's data),  but is slightly
+C        different.  Prior to correction on  14 October 2000,  the solution was
+C        wrong following closure of the switch to ground.  Data was contributed
+C        by Steve Nurse of Reyrolle in England on  11 Oct 2000.  The following
+C        data is a smaller, simpler illustration of the problem: 
+C
+C         GEN           SEND      Type-91     LOAD       1.0
+C          o------_-------||------/\/\/\-------||------/\/\/\-------|| E
+C                 ^       ||       R = 1       ||       R = 1       || a
+C             MEASURING   ||                   ||                   || r
+C              switch     ||                   ||                   || t
+C             (always     ||--------/----------||--------/----------|| h
+C              closed)          1st, switch           2nd, switch            
+C                               will open             will close             
+C
+C        There are 3 switches,  with one permanently closed.  All 3 touch the
+C        compensation-based Type-91 element.  Simulation begins with the Type-91
+C        element shorted,  so the source  GEN  feeds the 1-ohm resistor from
+C        LOAD  to ground.  The current is 6 volts / 1 ohm = 6 amps.  But then
+C        the switch from  SEND  to  LOAD  opens,  inserting the Type-91, adding
+C        another ohm.  This drops the current to 3 amps.  Finally, the ordinary
+C        1-ohm resistor from  LOAD  to ground is shorted,  restoring the current
+C        to 6 amps.  Prior to correction, the final change did not happen.  See
+C        also the 8th (final) subcase of DC-68, for which answers changed
+C        slightly as a result of this change to OVER16.
+PRINTED NUMBER WIDTH, 10, 1,  { Request maximum precision (for 8 output columns)
+    .001    .009
+       1      -1       1  
+91SEND  LOAD                           3333.                                   1
+C  -------R(tr)---------><-----tr---------------->
+                    0.001     { V of flashover gap
+                      1.0                      0.0
+                      1.0                     .020
+                     9999
+  SEND                     10.E8  { Avoid ATP warning and such internal addition
+  LOAD                       1.0                                               1
+BLANK card ending branch cards
+C Switch data:    T-close   T-open  I-epsiln
+  LOAD  SEND        -1.0     .0025      1.E8                                   1
+  LOAD             .0065       1.0                                             1
+  GEN   SEND                                          MEASURING                1
+BLANK card ending switch cards
+11GEN         6.0 
+BLANK card ending source cards
+  GEN   SEND  LOAD
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   5     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time     GEN       SEND      LOAD      LOAD      LOAD      GEN       SEND      LOAD
+C                                                    SEND      TERRA     SEND      LOAD      TERRA
+C ***                    Switch  "LOAD  "  to  "SEND  "  closed before  0.00000000E+00  sec.
+C ***                    Switch  "GEN   "  to  "SEND  "  closed before  0.00000000E+00  sec.
+C      0       0.0        0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+C      1     .1E-2        6.0       6.0       6.0       -6.       0.0       6.0       0.0       6.0
+C      2      .002        6.0       6.0       6.0       -6.       0.0       6.0       0.0       6.0
+C ***                                                             Open  switch  "LOAD  "  to  "SEND  "  after  3.00000000E-03  sec.
+C      3      .003        6.0       6.0       6.0       0.0       0.0       6.0       0.0       6.0
+C      4      .004        6.0       6.0       0.0       0.0       0.0     .6E-8       0.0       0.0
+C      5      .005        6.0       6.0       3.0       0.0       0.0       3.0       3.0       3.0
+C      6      .006        6.0       6.0       3.0       0.0       0.0       3.0       3.0       3.0
+C ***                                                             Close switch  "LOAD  "  to  "      "  after  7.00000000E-03  sec.
+C      7      .007        6.0       6.0       3.0       0.0       0.0       3.0       3.0       3.0
+C      8      .008        6.0       6.0       0.0       0.0       6.0       6.0       6.0       0.0
+C      9      .009        6.0       6.0       0.0       0.0       6.0       6.0       6.0       0.0
+BLANK card ending output variables requests (just node voltages, here)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      9th of 12 subcases is unrelated to preceding subcases. 
+C     Illustrate that the 3-phase compensation of DC-34 can coexist with single-
+C     phase compensation of a disconnected Type-93 nonlinear reactor.  Prior to
+C     correction to  SOLVUM  on  20 May 2001,  the solution was obviously wrong.
+C     The first report of such trouble came from Dr. Michael Steurer of CAPS at
+C     Florida State University  in  Tallahassee.   His data involved a  Type-91
+C     TACS-controlled resistor,  but in fact TACS had nothing to do with the
+C     trouble,  so is not being involved in the present illustration.
+C       Comment about 6th subcase:  It, too, involves both 3-phase compensation
+C       of the U.M. and 1-phase compensation of a separate element.  But that
+C       data was illegal because the two were not isolated in disconnected
+C       subnetworks.
+POWER FREQUENCY, 60.0, { Europeans need this (LEC letter dated 6 Jan 89, page 2)
+PRINTED NUMBER WIDTH, 11, 1,  { Restore default STARTUP column width, separation
+    .001    .500
+       1       1       1       1       1      -1       
+       5       5      20      20     100     100
+ 0      BUS-F0            1.0 
+ 0      BUS-A0            1.0 
+ 0      BUS-B0            1.0 
+ 0      BUS-C0            1.0 
+ 0BUS-A1BUS-A0            0.02  1.0610                                          
+ 0BUS-B1BUS-B0BUS-A1BUS-A0                                                      
+ 0BUS-C1BUS-C0BUS-A1BUS-A0                                                      
+ 0BUS-M1                              2.00E6                                   1
+ 0BUS-M0                              2.00E6                                   1
+ 0BUS-M0BUS-M1                      1.                                         1
+C   End of  DC-34  branches;  begin branches from  DC-45b.  Note that these
+C   involve different names,  so are completely disconnected from the machine.
+C   This single-phase subnetwork will illustrate an energization transient:
+  GEN   TRAN                 2.0                                               1
+93TRAN                       1.0   1.0                                         1
+             0.0             0.0
+             0.9             0.9
+             2.0             1.1
+             10.             1.2
+            9999
+BLANK card ends the last branch card
+BLANK card ends (in this case nonexistent) switch cards
+11BUS-F0  0.002091      { 18 Oct 90, remove ineffective T-start = -1.0 from card        
+11BUS-M0-1      1.02                                        
+11BUS-M0-1       -.4                                           .019500
+14BUS-A0  1.41421356 60.0      0.0                        
+14BUS-B0  1.41421356 60.0     -120.0                      
+14BUS-C0  1.41421356 60.0      120.0                      
+C   End of DC-34 static sources.  B4 the U.M., insert the source from DC-45b:
+14GEN           377.       60.
+19 UM                                  { Beginning of U.M. data (Type-19 source)
+1
+BLANK card ending class-1 U.M. data
+ 1 2 1111BUS-M1       1 1786.98                 { 1st card of U.M. machine table
+1.0           1.550         0 0.3          1.5           1.0
+0.93787       1.490         0
+0.0           0.0           BUS-A1            1  1.3860 { 1st card of coil table
+0.001096      0.150         BUS-B1            1 -0.95877
+0.001096      0.150         BUS-C1            1 -0.42721
+0.00074       0.101         BUS-F0            1 -2.826
+0.0131        0.055                           1
+0.0540        0.036                           1   
+BLANK card ending all U.M. data
+BLANK card ending EMTP source cards
+C       Total network loss  P-loss  by summing injections =   2.999999989932E+00
+ 2BUS-A1 1.56413                 { First of many initial condition cards for the
+ 2BUS-B1 -0.30745                { electric network.  Since  the  U.M.  is not a
+ 2BUS-C1 -1.25677                { part of the phasor solution (see DCNEW-1  for
+ 2BUS-A0 1.41421356              { such  a  more  modern  problem),  synchronous      
+ 2BUS-B0 -0.70710678             { operation  can  begin  smoothly  only  if the 
+ 2BUS-C0 -0.70710678             { initially conditions are manually applied.
+ 2BUS-F0 0.002091                 
+ 2BUS-M0 1.0
+ 2BUS-M1 1.0                     { Final card of node voltage initial conditions
+ 3BUS-A1BUS-A0 1.38494           { 1st card of branch current initial conditions
+ 3BUS-B1BUS-B0 -0.95793
+ 3BUS-C1BUS-C0 -0.42701
+ 3      BUS-A0 -1.41421356
+ 3      BUS-B0 +0.70710678
+ 3      BUS-C0 +0.70710678
+ 3      BUS-F0 -0.002091
+ 3BUS-M0BUS-M1 +1.01
+ 3BUS-M0                       +1.0
+ 3BUS-M1                       +1.0  { Last card of branch current init. condit.
+  TRAN  BUS-M1BUS-M0     { Request for selective node voltage output
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   5     output variables are branch currents (flowing from the upper node to the lower node);
+C  Final  9     output variables pertain to Type-19 U.M. components (names are generated internally);
+C Step    Time       TRAN       BUS-M1     BUS-M0     TRAN       BUS-M1     BUS-M0     BUS-M0     GEN        UM-1       UM-1
+C                                                     TERRA      TERRA      TERRA      BUS-M1     TRAN       TQGEN      OMEGM
+C                    UM-1       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1
+C                    THETAM     IPA        IPB        IPC        IE1        IE2        IE3
+C    0    0.0          0.0        1.0        1.0        0.0        0.0        0.0       1.01        0.0 1.00124132        1.0
+C                   .93787      1.386    -.95877    -.42721     -2.826        0.0        0.0
+C    1  .1E-2    350.17556 1.00000302  1.0000025  .17508778 .012094107 .010000262 1.00999974  .17508778 .997905631        1.0
+C                   .93787 1.40049668 -.50888659 -.89163009 -2.8259503  .85956E-4 -.00481942
+C    2   .002   273.846974 1.00000988  1.0000075 .487099047 .015338089 .010001714 1.00999829 .487099047 .994660197        1.0
+C                   .93787 1.22097729 .010653511 -1.2316108 -2.8258183 .309395E-3  -.0092568
+C    3   .003   159.111636 1.00001841  1.0000125 .703578352 .018762645 .010005857 1.00999414 .703578352 .991231498        1.0
+C                   .93787 .870655506 .528248848 -1.3989244 -2.8248425 .001999525 -.01265851
+BLANK card ending the specification of output variables
+C  500    0.5   377.026496 1.00472639 1.00854631 -.01324809 -.13068128 .049259392 .570740608 -.01324809 .701421892 1.00469204
+C               .660491474 .974954484 -.86183035 -.11310413 -2.4109229 -.04254056 .118833141
+C Variable max: 377.260976 1.00779145 1.00854631 1.25309712 .260847165 .297988719       1.01 1.25309712  1.0019948 1.00877611
+C                   .93787 1.41537866 1.40559809 1.40738077 -2.0788757 .133544596 .152562874
+C Times of max:        .05       .442        0.5       .471       .378       .296        0.0       .471       .015       .439
+C                     .064       .034       .056       .045       .358       .176       .471
+C Variable min: -376.94611 .989230544 .990404468 -6.3622515 -.29505746  -.3892114 .322011281 -6.3622515  .29918812 .988252614
+C               .361026488 -1.4043962 -1.4122326  -1.411928     -2.826 -.04419925 -.18596365
+C Times of min:       .475       .158       .217       .012       .102        .02       .296       .012       .346       .159
+C                     .358       .059       .031        .02        0.0       .485       .188
+  PRINTER PLOT  
+ 193 .1 0.0 1.0         UM-1  THETAM              { Plot limits: (0.000,  9.379)
+C   The preceding plot is identical to DC-34, so provides the simplest way to
+C   validate the solution of the U.M.   As for the Type-93 reactor, inrush
+C   current is shown by the following vector plot.  It seems believable, and
+C   is unchanged by deletion of all data related to DC-34.
+  CALCOMP PLOT
+ 193.05 0.0 0.5 -7.0 1.0TRAN
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C        10th of 12 subcases is derived from 1st to demonstrate that the TACS dc
+C        solution in fact represents the superposition of the network solution
+C        within TACS (driven by Type-11 sources, which are batteries) and the
+C        user-supplied initial conditions.
+   1.E-5   1.E-5 
+       1       1       1       2 
+TACS HYBRID
+C 99RESIS   =  1.E-6
+C 77RESIS        1.E-6
+C    Replace the preceding 2 lines (see 1st subcase) in attempt to demonstrate 
+C    that the TACS dc solution printout is the sum of the TACS network solution 
+C    value and the initial condition value: -37.E-6 + 38.E-6 = 1.E-6 (same as 
+C    the 1st subcase).  Unfortunately,  this has not yet been accomplished.  But
+C    different treatment of the initial condition is easily demonstrated.  The
+C    following shows 4 different ways to define a TACS variable.  All will be
+C    given the same initial condition value 38.E-6.  But two of the four will
+C    have one value for dc printout,  and the remaining two will have another.
+11SOURCE     -37.E-6   { Note T-start < 0 so TACS phasor solve }   -1.        1.
+C   Following RESA and RESB will show source value (-37.E-6) in dc printout: 
+ 0RESA            +SOURCE                   
+ 1RESB            +SOURCE                  
+        1.                                                                      
+        1.        1.                                                            
+C   Following RESC & RESD will show initial condition valu (+38) in dc printout: 
+ 1RESC            +SOURCE                  
+        1.                                                                      
+                  1.                                                            
+88RESD    =  1.E-6
+77RESA        38.E-6
+77RESB        38.E-6
+77RESC        38.E-6
+77RESD        38.E-6
+33RESA  RESB  RESC  RESD
+BLANK card ending TACS
+91N1    N2    TACS  RESA                                                       1
+  N1    N12                1.E-6                                               
+  N2                          1.                                        
+BLANK card ending branches
+  N12   N2                                            MEASURING
+  SRCE  N1                                            MEASURING                1
+BLANK card ending switches
+14SRCE          100.       60.       0.0        0.                 -1.
+BLANK card ending sources
+C Zero-frequency (dc) steady-state solution for TACS follows.
+C   (Name)      TACS value   (Name)    TACS value     (Name)    TACS value     (Name)    TACS value     (Name)    TACS value
+C   RESA   -3.70000000E-05   RESB   -3.70000000E-05   RESC    3.80000000E-05   RESD    3.80000000E-05
+BLANK card ending output variables (none)
+BLANK card ending plot
+BEGIN NEW DATA CASE
+C        11th of 12 subcases always should be last since it demonstrates a halt
+C        to execution using  CALL STOPTP.  This is added  29 August 2002  to
+C        illustrate what previously was a tight loop within Z-thev computation
+C        of OVER16.  There is similarity to the 6th subcase.  But whereas that
+C        data would simulate (giving the wrong answer), this data would die.
+C        The original complaint was in E-mail of the EEUG list server dated
+C        22 August 2002.  In this, Alejandro Montenegro at the University of
+C        Florida asked: "The problem appears when I combine TACS-controlled
+C        Type 13 switches, Type 94 components and UM type 3."   But the present
+C        data is much simpler.  Only the Type-3 U.M. is used.  No TACS, no
+C        MODELS, and no switches at all.  The fundamental problem was an overlap
+C        of compensation,  and it led to an unbounded index prior to the trap
+C        that this subcase illustrates.
+ .000100     .15
+       1      -1       1
+C    Begin with 3 single-phase nonlinear reactors in the same subnetwork as the
+C    U.M.   It is not clear why all 3, rather than just 1, is required for
+C    the tight loop.  But this seems to be the case.
+93VPA   VA                  .559  300.                                         1
+     0.0             0.0
+   .5590            300.                                                        
+   .9344            400.                                                        
+            9999                                                                
+93VPB   VB    VPA   VA      .559  300.                                         1
+93VPC   VC    VPA   VA      .559  300.                                         1
+C   Nodes VA, VB, and VC have no connected linear branch.  To prevent warning
+C   messages about floating subnetwork, & automatic additions to ground, add C:
+  VA                                     1.0 { Shunt capacitance avoids floating
+  VB                                     1.0 { Shunt capacitance avoids floating
+  VC                                     1.0 { Shunt capacitance avoids floating
+C    The following 2 lines are rotor mass and damping from Bonfanti's motor:
+  COPPIA                              9.16E6                                   2
+  COPPI2COPPIA            1.0E-6
+BLANK card ending branch cards
+BLANK card ending switches
+14VPA       10777.75       60.                                     -1.       10.
+14VPB       10777.75       60.     -120.                           -1.       10.
+14VPC       10777.75       60.      120.                           -1.       10.
+C    The following is Bonfanti's motor from the 3rd subcase.
+14COPPI2-1      -1.      1.E-9        0.                         -1.0    9999.
+19 UM
+01            0   - Compensation;  change 0 to 1 if prediction is wanted
+BLANK general UM specification
+ 3 1 1111COPPIA       1                            
+           0.0       0.3964
+           0.0       0.3964
+            4.                    COPPI2
+         .1674       .001   VA                1
+         .1674       .01    VB                1
+         .1674       .01    VC                1
+         .7819       .00453                   1
+         .7819       .00453                   1
+BLANK card ending U.M. data
+BLANK card ending sources
+  VA    VB    VC    VPA   VPB   VPC  { Names of nodes for node voltage output
+BLANK card ending output variables
+BLANK card ending plot
+C  Document the end of output of this 11th data subcase.  This begins
+C  exactly as in years past.  An error is recognized after the dT-loop heading:
+C                       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1
+C                       TQGEN      OMEGM      THETAM     IPA        IPB        IPC        IE1        IE2
+C Error.  Halt execution above S.N. 2322 in  OVER16.  Compensation is in error.  Bad subscript N1.  If U.M. is involved,  try adding
+C VERIFY U.M.  COMPENSATION  or  STEP ZERO COUPLE  as illustrated in DCN16.
+C Temporary error stop in  ENTRY STOPTP of "WINDOW".     NCHAIN, LASTOV =     16    15
+C               12345678901234567890123456789012345678901234567890123456789012345678901234567890
+C ABUFF(1:80) =
+C
+C    So much for the old.  The new adds explanation of the recovery.
+C    Before output of the 12th subcase begins,  there is this:
+C
+C ------------------------------------------------------------------------------------------------------------------------------------
+C ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/
+C ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/
+C ------------------------------------------------------------------------------------------------------------------------------------
+C
+C This is not actually a  KILL  error termination.  But ATP now will try to continue as if it were.  A recursive  CALL  is involved.
+C
+C ------------------------------------------------------------------------------------------------------------------------------------
+C ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/
+C ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/
+C ------------------------------------------------------------------------------------------------------------------------------------
+BEGIN NEW DATA CASE
+C        12th of 12 subcases demonstrates that the STOPTP termination of the
+C        preceding subcase is not fatal.  By means of a recursive  CALL,  ATP
+C        can be restarted to continue processing following data subcases such
+C        as this one, which is a copy of the 1st subcase.  Output is identical.
+C        For brevity,  connectivity and the phasor output have been omitted.
+C        This modification is made  23 January 2011.  WSM.
+   1.E-5   1.E-5                   
+       1       1   
+TACS HYBRID
+99RESIS   =  1.E-6
+77RESIS        1.E-6
+33RESIS
+BLANK card ending TACS
+91N1    N2    TACS  RESIS                                                      1
+  N1    N12                1.E-6                                               
+  N2                          1.                                        
+BLANK card ending branches
+  N12   N2                                            MEASURING
+  SRCE  N1                                            MEASURING                1
+BLANK card ending switches
+14SRCE          100.       60.       0.0        0.                 -1.
+BLANK card ending sources
+  N1    N12   N2
+BLANK card ending voltage printout
+BLANK card ending plot
+BEGIN NEW DATA CASE
+BLANK

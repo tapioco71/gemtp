@@ -1,0 +1,166 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-20
+C     TACS  test  having  no  electric network.   Three  transfer functions  are
+C     involved,  with  two  being  cascaded together  (note  OUT1  feeds  OUT2).
+C     The  third,  OUT3,  is  of  second order.  Both  sinusoidal (Type-14)  and
+C     constant  (Type-11)  sources  are  involved,  and  both are present during
+C     the steady-state solution,  although they are mathematically disconnected.
+C         11 February 2001, add the following line to demonstrate that the
+C         answer does not change if Dube's logic for supplemental variables
+C         is replaced by the pocket calculator.  On the other hand,  this is
+C         no great feat since the data involves no supplemental variables!
+C TACS ASSEMBLY LANGUAGE     { Temporary request for use of pocket calculator
+TACS POCKET CALCULATOR       { 12 January 2001, this new line replaces preceding
+     .05     1.0
+       1       1       1       1       1
+TACS STAND ALONE
+ 1OUT1    +GEN
+       1.0
+       1.0       1.0
+ 1OUT2    +OUT1
+                 1.0
+       1.0
+ 1DC*10   +DC                                        10.
+       1.0       1.0
+       1.0
+ 2OUT3    +GEN
+       1.0
+       1.0       2.0       1.0
+11DC             1.0                                               -1.
+14GEN           100.       1.0                                     -1.
+33OUT1  OUT2  DC*10 OUT3  TIMEX ISTEP DELTATFREQHZOMEGARZERO  PLUS1 MINUS1UNITY
+33INFNTYPI    DC    GEN
+C The TACS ac steady-state phasor solution for frequency  1.00000000E+00   follo
+C   Name       Real part      Imaginary part          Magnitude        Degrees
+C   OUT3  -2.3483896115E+00  -7.6694251071E-01    2.4704523032E+00   -161.913878
+C   DC*10  0.0000000000E+00   0.0000000000E+00    0.0000000000E+00      0.000000
+C   OUT2   9.7529547697E+01   1.5522309613E+01    9.8757049215E+01      9.043061
+C   OUT1   2.4704523032E+00  -1.5522309613E+01    1.5717672548E+01    -80.956939
+C Zero-frequency (dc) steady-state solution for TACS follows.
+C       (Name)      TACS value   (Name)    TACS value     (Name)    TACS value
+C       OUT3    0.00000000E+00   DC*10   1.00000000E+01   OUT2    0.00000000E+00
+C       ISTEP   0.00000000E+00   DELTAT  5.00000000E-02   FREQHZ  1.00000000E+00
+C       PLUS1   1.00000000E+00   MINUS1 -1.00000000E+00   UNITY   1.00000000E+00
+C       DC      1.00000000E+00   GEN     0.00000000E+00
+BLANK card ending all TACS data cards
+  PRINTER PLOT
+C  20    1.0  2.44544812 97.5545519    10. -2.2965486        1.0    20.      .05  
+C                    1.0        -1.    1.0      .1E20 3.14159265    1.0     100.
+C   maxima :  15.4314771 97.5545519    10. 2.43100116        1.0    20.      .05
+C                    1.0        -1.    1.0      .1E20 3.14159265    1.0     100.
+C Times of maxima :  .25        1.0    0.0        .45        1.0    1.0      0.0
+C                    0.0        0.0    0.0        0.0        0.0    0.0      0.0
+C   minima :  -15.381996 -97.593085    10. -2.4154432        0.0    0.0      .05
+C                    1.0        -1.    1.0      .1E20 3.14159265    1.0    -100.
+C Times of minima :  .75        0.5    0.0        .95        0.0    0.0      0.0
+C                    0.0        0.0    0.0        0.0        0.0    0.0      0.5
+ 143 .2 0.0 1.0         OUT1  OUT2  OUT3         { Axis limits: (-9.759,  9.755)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C       2nd of 3 parts of DC-20.   TACS-only, with multiple-frequency sinusoidal
+C       steady-state solution (400 and 10 Hz),  plus constant (dc) solution.
+C       1 February 2002,  previously-neglected need to cancel TPC is satisfied
+C       by the following  TPC OFF  declaration.  Of course, this has no effect
+C       since no supplemental variables are being used here, anyway.  There is
+C       no pocket calculator use,  so nothing to turn off, in fact.  But we go
+C       through the motions, anyway, as an illustration of the new declaration:
+TACS POCKET CALCULATOR OFF   { 1 February 2002, illustrate this new cancellation
+   .0001    0.02
+       1       1       1       1       1      -1
+      10      10     100     100
+TACS STAND ALONE
+ 1OUT1    +GEN1
+       1.0
+       1.0       1.0
+ 1OUT2    +GEN2
+       1.0
+       1.0       1.0
+ 1OUT3    +DC
+       1.0
+       1.0       1.0
+ 1OUT4    +GEN1   +GEN2   +DC
+       1.0
+       1.0       1.0
+11DC             1.0                                               -1.
+14GEN1        10000.     400.0                                     -1.
+14GEN2         1000.      10.0                                     -1.
+33OUT1  OUT2  OUT3  OUT4
+C     Step       Time      TACS       TACS       TACS       TACS
+C                          OUT1       OUT2       OUT3       OUT4
+C      0        0.0  .001583143 .253238813        1.0 1.25482196
+C      1      .1E-3  .985825353 .353207504        1.0 2.33903286
+BLANK card terminates the last TACS data card.
+  PRINTER PLOT
+C    200        .02  .001582814 15.2109079        1.0 16.2124907
+C Variable maxima :  3.95021189 15.2109079        1.0 19.4959527
+C Times of maxima :       .6E-3        .02        0.0      .0181
+C Variable minima :  -3.9499822 .253238813        1.0 -.84075309
+C Times of minima :       .0194        0.0        0.0      .0018
+ 144 1. 0.0 10.         OUT4                     { Axis limits: (-0.084,  1.295)
+BLANK card terminates all plot cards.
+BEGIN NEW DATA CASE
+C        3rd of 3 parts of DC-20.  Continued test of multiple-frequency solution
+C        capability, only with the addition of an electric network.  To the TACS
+C        generators of 400 and 10 Hz is added the 50 Hz of the electric network.
+   .0001    0.02
+       1       1       1       1       1      -1
+      10      10     100     100
+TACS HYBRID
+ 1OUT1    +GEN1
+       1.0
+       1.0       1.0
+ 1OUT2    +GEN2
+       1.0
+       1.0       1.0
+ 1OUT3    +DC
+       1.0
+       1.0       1.0
+ 1OUT4    +NOD1
+       1.0
+       1.0       1.0
+ 1OUT5    +NOD2
+       1.0
+       1.0       1.0
+ 1OUT6    +GEN1   +GEN2   +DC
+       1.0
+       1.0       1.0
+ 1OUT7    +DC     +GEN1   +NOD1   +NOD2   +GEN2
+       1.0
+       1.0       1.0
+11DC             1.0                                               -1.
+14GEN1       100000.     400.0                                     -1.
+14GEN2         1000.      10.0                                     -1.
+90NOD1                    50.0                                     -1.
+91NOD2                    50.0                                     -1.
+33OUT1  OUT2  OUT3  OUT4  OUT5  OUT6  OUT7
+BLANK card ends final TACS data
+  NOD1  NOD2               1.00
+BLANK card after last electric network branch
+  NOD2           -1.0     1.0
+BLANK card ends switches
+14NOD1  -1    100.0       50.0                                   -1.0
+BLANK card after last electric network source
+  NOD1
+C                    Zero-frequency (dc) steady-state solution for TACS follows.
+C       (Name)      TACS value   (Name)    TACS value     (Name)      TACS value
+C       OUT7    1.00000000E+00   OUT6    1.00000000E+00   OUT5    0.00000000E+00
+C       OUT2    0.00000000E+00   OUT1    0.00000000E+00   TIMEX   0.00000000E+00
+C       FREQHZ  4.00000000E+02   OMEGAR  2.51327412E+03   ZERO    0.00000000E+00
+C       UNITY   1.00000000E+00   INFNTY  1.00000000E+19   PI      3.14159265E+00
+C       GEN2    0.00000000E+00   NOD1    0.00000000E+00   NOD2    0.00000000E+00
+C  Step    Time      NOD1       TACS       TACS       TACS       TACS       TACS
+C                               OUT1       OUT2       OUT3       OUT4       OUT5
+C ***     Phasor I(0) =  0.1000000E+03    Switch  "NOD2  "  to  "      "  closed
+C    0     0.0       100. .015831432 .253238813        1.0 .001013202 .001013202
+C    1   .1E-3  99.950656 9.85825353 .353207504        1.0 .011010133 .011010133
+BLANK card ends selective node voltage outputs
+C Last step:  200    .02      100.  .015828137  15.2109079       1.0  .001013198
+C Last step continued:                         .001013198  16.226736  16.2287624
+C Final 6 maxima :  15.2109079   1.0 .318280647 .318280647 55.0478571 54.6917329
+C Associated times :       .02   0.0       .005       .005      .0181      .0181
+  PRINTER PLOT
+ 194 1. 0.0 10.         TACS  OUT7               { Axis limits: (-3.599,  4.883)
+BLANK card terminating plotting
+BEGIN NEW DATA CASE
+BLANK
+ 

@@ -1,0 +1,751 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-47
+C     Realistic large case with  Type-59  S.M. and TACS modeling,  as set up and
+C     studied  by  Prof. Alfonso Capasso of the University of Rome during a 1980
+C     visit  to  BPA.  There  are  many  cascaded, 25-mile, frequency-dependent,  
+C     3-phase  line  sections  that  originally were represented using weighting
+C     functions.  But  such  code was removed from ATP around 1986, so for years
+C     this case lay unused.  It was resurrected during November of 1989 when Dan
+C     Goldsworthy of BPA supplied replacement Marti branch cards.   Dimensioning
+C     of EMTP tables is tricky.   Except for list sizes 20 and 22, twice default
+C     dimensioning is adequate.   On the other hand 3 times default dimensioning
+C     of all lists fails quickly.   For testing on Apollo, use:  DEFAULT = 2.00,
+C     and the following 3 cards blank except for  list 20 = 13000  and list 22 =
+C     1750.   Default sizes of these two are only  660  and  150,  respectively.
+C       20 Oct 93,  the new dynamic dimensioning of Salford EMTP  saves the day.
+C       The following five lines apply this old 1989 Apollo recommendation:
+C     Answers change slightly on 10 February 1999 following the massive changes 
+C     from TEPCO (Tokyo Electric Power Company) in Japan.  See April newsletter.  
+C     Most extrema agree to 6 decimal digits or more.  All printer plots are 
+C     identical.
+C        16 February 2002, add the optional NBHDSW line to the following NLS
+C        data structure.  In fact, this does nothing since value  5.0  is the
+C        default.  But such a declaration is critically important for some data
+C        that is overloaded with switches.  For example, Hong Xiao's data NAVSYS
+C        at Texas A&M had 894 switches.  If the List 6 switch limit was 2500,
+C        slightly more than a factor of 5.0 was required.  Of course, the user
+C        can only expand what exists (i.e., make sure VARDIM created the same or
+C        greater NBHDSW space when the program was linked).  Although use with
+C        NLS is being illustrated here,  the declaration applies to  LISTSIZE,
+C        too  ---  either as used prior to linking ATP,  or as used at the start
+C        of ATP execution.  The total size of NBHDSW is equal to this factor
+C        times the limit on switches (List 6).  So, here, default List 6 is 40,
+C        and 5 times this ==> 200 cells of NBHDSW are available for use.  Much
+C        more typically was created at linking time,  of course.
+NEW LIST SIZES
+NBHDSW      5.0  { Five is the default factor for sizing switch vector NBHDSW
+DEFAULT      2.0
+BLANK
+C      0       0       0       0       0       0       0       0    3400   13000
+       0       0       0       0       0       0       0       0    3540   13000
+       0    1750
+  240000     742
+ABSOLUTE TACS DIMENSIONS
+C        Expand TACS Table 1 from 57 to 130 on 1 April 2007.  Copy use from DC-2
+C        without worrying about probably waste that might be involved:
+C     57     256     285      36      85     713     998     171  ---  default
+     130      65      80      20      70     325     120     115 
+PRINTED NUMBER WIDTH, 13, 2,   { Full precision on each of 8 columns of printout
+ .000100    .100     60.
+       1       3       1       0       1      -1
+       5      15      50      50     200     100
+TACS HYBRID
+C EXCITATION SYSTEM FOR THE COALSTRIP STEAM TURBINES.
+C CONVERSION TO MACHINE PER UNIT SYSTEM,  SQRT(3)*RF/LAF.
+ 0VF      +EFO                                    .01862
+C FEED FORWARD PATH
+ 1EF1     -VT     +UNITY  -EFFBL1                  195.6
+1.
+1.        1.3
+ 1EFO     +EF1                                           -4.13  4.13
+1.
+1.        .02
+C FEEDBACK PATH
+ 1EFFBL   +EFO                                      .164
+0.        1.
+1.        1.
+C  SPEED GOVERNOR SYSTEM FOR COLSTRIP GENERATOR
+C  CONVERSION OMEGA PER UNIT SYSTEM
+ 0DIFOME  -UNITY  +TACOME
+ 0PS1     +UNITY  -KDIFOM -PGV
+ 0PS2     +PS1                                    10.    -.4   .4
+ 0KDIFOM  +DIFOME                                 20.
+ 1PGV     +PS21                                   1.0     0.   1.1
+        1.
+                  1.
+ 1PGV1    +PGV                                    1.
+        1.
+        1.       .25
+ 1PGV2    +PGV1                                   1.
+        1.
+        1.       10.
+ 1PGV3    +PGV2                                   1.
+        1.
+        1.        .5
+ 0PMT     +PM1    +PM2    +PM3
+C POWER SYSTEM STABLIZER  (PSS)
+C ADD SQUARED TERMINAL VOLTAGES
+ 0VMS     +VSQA   +VSQB   +VSQC
+C FILTER TERMINAL VOLTAGE
+ 1VT      +VRMS
+1.
+1.        .0133
+C EMTP PARAMETERS PASSED TO TACS
+C TERMINAL VOLTAGE INPUTS
+90CSGENA
+90CSGENB
+90CSGENC
+C SHAFT SPEED INPUT
+C SPEED SOURCE FOR TACS
+92VEL1
+C COMPUTATIONS
+C SQUARE ROOT OF SUM OF SQUARED TERMINAL VOLTAGES.
+88VRMS               SQRT VMS               /     26000.
+C SQUARE INSTANTANEOUS TERMINAL VOLTAGES.
+99VSQA                    CSGENA*     CSGENA
+99VSQB                    CSGENB*     CSGENB
+99VSQC                    CSGENC*     CSGENC
+C UNITY INITIAL INPUT TO S.M.,  DIVIDE BY INITIAL VF.
+98EFDPP    36.4528  *     VF
+88PM1     .274      *     PGV1
+88EFFBL1  =  EFFBL
+88PS21    =  PS2
+88PM2     .243      *     PGV2
+88PM3     .483      *     PGV3
+98FACTOR    1.      *     PMT
+C    SWITCH FOR FREE-FORMAT.
+99TACOME  =   .002651* VEL1
+C FAST VALVING
+33EFO   VT    VF    EFDPP EFFBL UNITY EF1
+33DIFOMEPGV   PS1   PMT   VEL1  TACOMEKDIFOM
+C INITIAL CONDITIONS
+77EF1     1.4730
+77EFO     1.4730
+77VT       1.0
+77VRMS     1.0
+77EFDPP    1.0
+77EFFBL    0.0
+77PS1       0.
+77PGV       1.
+77PGV1      1.
+77PGV2      1.
+77PGV3      1.
+77PMT       1.
+77TACOME    1.
+77VEL1    376.99
+BLANK card ending all TACS data
+C   **  SOURCE IMPEDANCE CARDS  ****
+ 0SOA   BEGINA                   .001                                          1
+ 0SOB   BEGINB                   .001                                          1
+ 0SOC   BEGINC                   .001                                          1
+ 0V2A   HSA                       36.                                          1
+ 0V2B   HSB                       36.                                          1
+ 0V2C   HSC                       36.                                          1
+C   LOAD AT THE RECEIVING END
+C   **  SOURCE IMPEDANCE CARDS  ****
+C     SOURCE IMPEDANCE CARDS
+C     SWITCH SHUNTS
+ 0GA    G1A                      .001
+ 0GB    G1B                      .001
+ 0GC    G1C                      .001
+ 0GA    G5A                      .001
+ 0GB    G5B                      .001
+ 0GC    G5C                      .001
+C      100MVAR SHUNT REACTORS
+ 0BEGINA                    7.0  3025.
+ 0BEGINB                    7.0  3025.
+ 0BEGINC                    7.0  3025.
+ 0BVA                       7.0  3025.
+ 0BVB                       7.0  3025.
+ 0BVC                       7.0  3025.
+ 014A                       7.0  3025.
+ 014B                       7.0  3025.
+ 014C                       7.0  3025.
+ 0HSA                       7.0  3025.
+ 0HSB                       7.0  3025.
+ 0HSC                       7.0  3025.
+C     225 MVAR SHUNT REACTORS
+ 05A                        3.0  1344.
+ 05B                        3.0  1344.
+ 05C                        3.0  1344.
+ 0G4A                       3.0  1344.
+ 0G4B                       3.0  1344.
+ 0G4C                       3.0  1344.
+C     SHUNT REACTORS     100 MVAR
+ 0BEGINA                    7.0  3025.
+ 0BEGINB                    7.0  3025.
+ 0BEGINC                    7.0  3025.
+ 0BVA                       7.0  3025.
+ 0BVB                       7.0  3025.
+ 0BVC                       7.0  3025.
+C     *       225 MVAR
+ 05AA                       3.0  1344.
+ 05BB                       3.0  1344.
+ 05CC                       3.0  1344.
+ 0G8A                       3.0  1344.
+ 0G8B                       3.0  1344.
+ 0G8C                       3.0  1344.
+C     *     100 MVAR
+ 014AA                      7.0  3025.
+ 014BB                      7.0  3025.
+ 014CC                      7.0  3025.
+ 0HSA                       7.0  3025.
+ 0HSB                       7.0  3025.
+ 0HSC                       7.0  3025.
+C    25- MILE SECTION CARDS.   For data, see normally unused bottom on  DCNEW-5.
+C  <++++++>  Cards punched by support routine on  25-Nov-89  01.41.53  <++++++> 
+C JMARTI SETUP, 1.0,          { Note use of  PDT0 = 1  to allow reduction of ord
+C BRANCH  BEGINA1A    BEGINB1B    BEGINC1C                                      
+C LINE CONSTANTS                                                                
+C   1.375  .0776   4         1.302  - 15.3   47.8    47.8                       
+C   1.375  .0776   4         1.302  - 16.2   48.8    48.8                       
+C   1.375  .0776   4         1.302  - 14.5   48.8    48.8                       
+C   2.375  .0776   4         1.302     0.0   76.8    76.8                       
+C   2.375  .0776   4         1.302  -  0.8   77.8    77.8                       
+C   2.375  .0776   4         1.302  +  0.8   77.8    77.8                       
+C   3.375  .0776   4         1.302  + 15.3   47.8    47.8                       
+C   3.375  .0776   4         1.302  + 14.5   48.8    48.8                       
+C   3.375  .0776   4         1.302  + 16.2   48.8    48.8                       
+C   0.5    3.56    4         0.495  - 12.0  109.3   109.3                       
+C   0.5    3.56    4         0.495    12.0  109.3   109.3                       
+C BLANK card ending conductor cards of imbedded  "LINE CONSTANTS"  data         
+C  100.      1000.           1                  25.00      1           1        
+C  100.       60.            1                  25.00      1           1        
+C  100.       .001           1                  25.00      1   9 10    1        
+C BLANK card ending frequency cards of inbedded  "LINE CONSTANTS"  data         
+C BLANK card ending  "LINE CONSTANTS"  cases (back to "JMARTI SETUP")           
+C C 3456789012345678901234567890123456789012345678901234567890123456789012345678
+C C LECT        +0      -3                                                      
+C                1                                                              
+C C            .30      30       0       1       1       0       0              
+C C            .30      30       0       1       1       0       0      .0      
+C              .30      30       0       1       3       0       0              
+-1BEGINA1A                    2.  1.00              -2 3                        
+      14      0.47293192457610910000E+03                                        
+ -0.692872546664471400E+00 -0.289997290946665200E+01 -0.642465234009757800E+01  
+ -0.263126866758512600E+02 -0.112197664116317600E+03  0.120003724331559200E+04  
+  0.534855106416246700E+04  0.265735664895556200E+05  0.102299437025596100E+06  
+  0.378064088036946100E+06  0.132921127921708400E+07  0.513934786170517100E+07  
+  0.925674681170112800E+07  0.288450507277665100E+08                            
+  0.193740761292982800E+00  0.845745890606555900E+00  0.158002669592290500E+01  
+  0.166026211278831900E+01  0.245330041260623900E+01  0.189362602308108900E+02  
+  0.114161260221103000E+03  0.603227605191941700E+03  0.248970479870548400E+04  
+  0.984189709230105300E+04  0.371843313566798500E+05  0.154256975765183100E+06  
+  0.584765486140849700E+06  0.189661890222411100E+07                            
+      16      0.14611089425809670000E-03                                        
+  0.321843918913226800E+00  0.162311293633336900E+01  0.215973805406543600E+01  
+  0.469951431259633000E+01  0.327308002733053700E+02  0.452437760931982100E+02  
+  0.328756421277238100E+03  0.200177420834287000E+04 -0.354515696612718900E+04  
+  0.155705219977707800E+05  0.151221170895251900E+05  0.106915368104621200E+06  
+ -0.344719217999650700E+08  0.341080435346218900E+08  0.184594442012013500E+08  
+ -0.182320460954986800E+08                                                      
+  0.120261736819556900E+03  0.586377706864171600E+03  0.785729396647819200E+03  
+  0.153582968615116900E+04  0.292216408325832800E+04  0.197211684817117800E+04  
+  0.646946699809216000E+04  0.153758728646538300E+05  0.336431053557711100E+05  
+  0.298806156726226600E+05  0.626456551850810500E+05  0.108192223183447900E+06  
+  0.203944809477644400E+06  0.204148754287121900E+06  0.227695290201973200E+06  
+  0.227922985492175000E+06                                                      
+-2BEGINB1B                    2.  1.00              -2 3                        
+      11      0.24662476420370340000E+03                                        
+  0.768995655381981900E+03  0.357946515159924200E+03  0.605800489377626000E+03  
+  0.115846813162034100E+03  0.601598942354618800E+02  0.129603353249450600E+03  
+  0.124322546275003900E+03  0.590000752707421200E+02  0.220555895798305100E+04  
+  0.157374743868763000E+05  0.852520795579153100E+06                            
+  0.260905187905774000E+01  0.411855521834657500E+01  0.771404316437598300E+01  
+  0.110187727317372200E+02  0.139680485049492400E+02  0.240091291541332100E+02  
+  0.394513496124981500E+02  0.678919942549256600E+02  0.217073311495445300E+04  
+  0.155198039317144100E+05  0.843266115513732800E+06                            
+      10      0.13423855276504470000E-03                                        
+  0.156109695496983100E+02  0.207664299896075400E+03  0.253250298139870400E+03  
+  0.182704839566228600E+03  0.247234491946191700E+04  0.330281306977220200E+05  
+  0.979732483249094900E+05  0.551807975650099700E+05  0.155746415195975200E+07  
+  0.651738564168535400E+06                                                      
+  0.379023174699368500E+04  0.493260943720562800E+05  0.620894169605181600E+05  
+  0.411709275865929300E+05  0.140741388619576300E+06  0.563969432263966900E+06  
+  0.731398783309924900E+06  0.828090639159713400E+06  0.285651731185617700E+07  
+  0.406516792268231300E+07                                                      
+-3BEGINC1C                    2.  1.00              -2 3                        
+      11      0.25189000703436050000E+03                                        
+  0.705625882215074600E+03  0.480037666605113300E+03  0.523476975958925000E+03  
+  0.101303478940912900E+03  0.730107254632987800E+02  0.135394935113372000E+03  
+  0.117137840471522300E+03  0.558311320674074200E+02  0.124472273810087900E+03  
+  0.627682104800954300E+04  0.240980689874141800E+06                            
+  0.256960827808081800E+01  0.435244353197636700E+01  0.749429585075439400E+01  
+  0.106024369367294000E+02  0.138594221660724100E+02  0.239678957610427000E+02  
+  0.375429307533879400E+02  0.639863500328914500E+02  0.130791036571128600E+03  
+  0.615083978087696500E+04  0.237064293040221300E+06                            
+      14      0.13539861053437450000E-03                                        
+  0.269179702767214200E+01  0.210140414716693800E+02  0.764589314809415700E+02  
+  0.110678295975407300E+03  0.129037590729584400E+03  0.154905865724887900E+03  
+  0.973468183688154800E+02  0.125397291104907200E+03  0.946997596373924000E+04  
+  0.324310548935950100E+05  0.405933736771673600E+05  0.230683862157762600E+06  
+ -0.173236283555902400E+07  0.619672413081824600E+07                            
+  0.127520846547645700E+04  0.991859082931559900E+04  0.352599882601353600E+05  
+  0.470219434319579600E+05  0.598736861767069000E+05  0.738954426067940100E+05  
+  0.481920080235604800E+05  0.616738461673569000E+05  0.420313332159116900E+06  
+  0.921318128971279800E+06  0.557714717553727900E+06  0.169631694566225400E+07  
+  0.116008957300778400E+08  0.716479108546823500E+07                            
+  0.59100946  0.70710678 -0.40296093                                            
+  0.00000000  0.00000000  0.00000000                                            
+  0.54901333  0.00000000  0.82173291                                            
+  0.00000000  0.00000000  0.00000000                                            
+  0.59100946 -0.70710678 -0.40296093                                            
+  0.00000000  0.00000000  0.00000000                                            
+-11A    2A    BEGINA1A
+-21B    2B
+-31C    2C
+-12A    3A    BEGINA1A
+-22B    3B
+-32C    3C
+-13A    4A    BEGINA1A
+-23B    4B
+-33C    4C
+-14A    C1A   BEGINA1A
+-24B    C1B
+-34C    C1C
+ 0C1A   BVA                      .001  138.
+ 0C1B   BVB                      .001  138.
+ 0C1C   BVC                      .001  138.
+ 0C2A   G4A                      .001   70.
+ 0C2B   G4B                      .001   70.
+ 0C2C   G4C                      .001   70.
+ 0C3A   14A                             128.
+ 0C3B   14B                             128.
+ 0C3C   14C                             128.
+ 0C4A   BVA   C1A   BVA
+ 0C4B   BVB   C1A   BVA
+ 0C4C   BVC   C1A   BVA
+ 0C5A   G8A   C2A   G4A
+ 0C5B   G8B   C2A   G4A
+ 0C5C   G8C   C2A   G4A
+-15A    6A    BEGINA1A
+-25B    6B
+-35C    6C
+-16A    7A    BEGINA1A
+-26B    7B
+-36C    7C
+-17A    8A    BEGINA1A
+-27B    8B
+-37C    8C
+-18A    9A    BEGINA1A
+-28B    9B
+-38C    9C
+-19A    10A   BEGINA1A
+-29B    10B
+-39C    10C
+-110A   11A   BEGINA1A
+-210B   11B
+-310C   11C
+-111A   12A   BEGINA1A
+-211B   12B
+-311C   12C
+-112A   13A   BEGINA1A
+-212B   13B
+-312C   13C
+-113A   C2A   BEGINA1A
+-213B   C2B
+-313C   C2C
+-1C3A   15A   BEGINA1A
+-2C3B   15B
+-3C3C   15C
+-115A   16A   BEGINA1A
+-215B   16B
+-315C   16C
+-116A   17A   BEGINA1A
+-216B   17B
+-316C   17C
+-117A   18A   BEGINA1A
+-217B   18B
+-317C   18C
+-118A   HSA   BEGINA1A
+-218B   HSB
+-318C   HSC
+C     SECOND CIRCUIT
+-1BEGINA1AA   BEGINA1A
+-2BEGINB1BB
+-3BEGINC1CC
+-11AA   2AA   BEGINA1A
+-21BB   2BB
+-31CC   2CC
+-12AA   3AA   BEGINA1A
+-22BB   3BB
+-32CC   3CC
+-13AA   4AA   BEGINA1A
+-23BB   4BB
+-33CC   4CC
+-14AA   C4A   BEGINA1A
+-24BB   C4B
+-34CC   C4C
+-15AA   6AA   BEGINA1A
+-25BB   6BB
+-35CC   6CC
+-16AA   7AA   BEGINA1A
+-26BB   7BB
+-36CC   7CC
+-17AA   8AA   BEGINA1A
+-27BB   8BB
+-37CC   8CC
+-18AA   9AA   BEGINA1A
+-28BB   9BB
+-38CC   9CC
+-19AA   10AA  BEGINA1A
+-29BB   10BB
+-39CC   10CC
+-110AA  11AA  BEGINA1A
+-210BB  11BB
+-310CC  11CC
+-111AA  12AA  BEGINA1A
+-211BB  12BB
+-311CC  12CC
+-112AA  13AA  BEGINA1A
+-212BB  13BB
+-312CC  13CC
+-113AA  C5A   BEGINA1A
+-213BB  C5B
+-313CC  C5C
+C    NO SERIES CAPS ON THE SECOND CKT OF GARRISON-HS LINE
+-114AA  15AA  BEGINA1A
+-214BB  15BB
+-314CC  15CC
+-115AA  16AA  BEGINA1A
+-215BB  16BB
+-315CC  16CC
+-116AA  17AA  BEGINA1A
+-216BB  17BB
+-316CC  17CC
+-117AA  18AA  BEGINA1A
+-217BB  18BB
+-317CC  18CC
+-118AA  HSA   BEGINA1A
+-218BB  HSB
+-318CC  HSC
+C     LINE SHUNTS
+ 0BVA   5AA                      .001                                          1
+ 0BVB   5BB                      .001                                          1
+ 0BVC   5CC                      .001                                          1
+C     1 CKT GAR-HS LINE OUT
+ 0SA    5A                 600.
+ 0SB    5B                 600.
+ 0SC    5C                 600.
+ 0SA    S1A                      .001
+ 0SB    S1B                      .001
+ 0SC    S1C                      .001
+ 0S2A   14A                600.
+ 0S2B   14B                600.
+ 0S2C   14C                600.
+ 0S2A   S3A                      .001
+ 0S2B   S3B                      .001
+ 0S2C   S3C                      .001
+ 0G2A   G4A                600.
+ 0G2B   G4B                600.
+ 0G2C   G4C                600.
+ 0G2A   G3A                      .001
+ 0G2B   G3B                      .001
+ 0G2C   G3C                      .001
+ 0G6A   G8A                600.
+ 0G6B   G8B                600.
+ 0G6C   G8C                600.
+ 0G6A   G7A                      .001
+ 0G6B   G7B                      .001
+ 0G6C   G7C                      .001
+  TRANSFORMER              2.0  1140. T1A     1.E5
+.188             912.
+.6               1026.
+1.5              1106.
+3.0              1163.
+6.0              1208.
+11.4             1244.
+21.              1277.
+50.              1300.
+250.             1350.
+            9999
+ 1BVA                        .1   35.6  429.
+ 2BVS2A                      .1   .001  188.
+ 3TER1A TER1B                .1   .071  13.8
+  TRANSFORMER T1A                     T1B
+ 1BVB
+ 2BVS2B
+ 3TER1B TER1C
+  TRANSFORMER T1A                     T1C
+ 1BVC
+ 2BVS2C
+ 3TER1C TER1A
+  TRANSFORMER T1A                     T2A
+ 1GAA
+ 2GAS2A
+ 3TER2A TER2B
+  TRANSFORMER T1A                     T2B
+ 1GAB
+ 2GAS2B
+ 3TER2B TER2C
+  TRANSFORMER T1A                     T2C
+ 1GAC
+ 2GAS2C
+ 3TER2C TER2A
+C *****GENERATOR TRANSFORMER*********************
+  TRANSFORMER              236.9  97.5T3A    1.E+5
+ 67.8             87.8
+236.9             97.5
+504.5            107.3
+            9999
+ 1CSIA  CSIB               .0001  .001   26.
+ 2SOA                      .0001 34.57  317.
+  TRANSFORMER T3A                     T3B
+ 1CSIB  CSIC
+ 2SOB
+  TRANSFORMER T3A                     T3C
+ 1CSIC  CSIA
+ 2SOC
+  TRANSFORMER T3A                     T3D
+ 1CSGN1ACSGN1B
+ 2SOA
+  TRANSFORMER T3A                     T3E
+ 1CSGN1BCSGN1C
+ 2SOB
+  TRANSFORMER T3A                     T3F
+ 1CSGN1CCSGN1A
+ 2SOC
+C ***********************************************
+ 0CSIA                                    .1
+ 0CSIB                                    .1
+ 0CSIC                                    .1
+ 0CSGN1A                                  .1
+ 0CSGN1B                                  .1
+ 0CSGN1C                                  .1
+C ***********************************************
+ 0      BVS2A              529.
+ 0      BVS2B              529.
+ 0      BVS2C              529.
+ 0TER1A                    9500.
+ 0TER1B                    9500.
+ 0TER1C                    9500.
+ 0      GAS2A              400.
+ 0      GAS2B              400.
+ 0      GAS2C              400.
+ 0TER2A                    9500.
+ 0TER2B                    9500.
+ 0TER2C                    9500.
+BLANK card ending branch cards
+  BVA   SA     -1.        1.
+  BVB   SB     -1.        1.
+  BVC   SC     -1.        1.
+  S1A   5A     -1.        1.
+  S1B   5B     -1.        1.
+  S1C   5C     -1.        1.
+  GA    S2A    -1.        1.0
+  GB    S2B    -1.        1.0
+  GC    S2C    -1.        1.0
+  S3A   14A    -1.        .085
+  S3B   14B    -1.        .085
+  S3C   14C    -1.        .085
+  G1A   G2A    -1.        1.30
+  G1B   G2B    -1.        1.030
+  G1C   G2C    -1.        1.030
+  G3A   G4A    -1.        1.010
+  G3B   G4B    -1.        1.010
+  G3C   G4C    -1.        1.010
+  G5A   G6A    -1.        1.34
+  G5B   G6B    -1.        1.034
+  G5C   G6C    -1.        1.034
+  G7A   G8A    -1.        1.014
+  G7B   G8B    -1.        1.014
+  G7C   G8C    -1.        1.014
+  C3A          .01695     1.
+C *******MEASURING COALSTRIP GENERATOR ARMATURE CURRENT*******
+  CSGENACSIA                                          MEASURING                1
+  CSGENBCSIB                                          MEASURING                1
+  CSGENCCSIC                                          MEASURING                1
+C ************************************************************
+BLANK card ending switch cards
+C     *
+C     *
+14V2A      452000.    60.       -10.                         -1.
+14V2B      452000.    60.       -130.                        -1.
+14V2C      452000.    60.        110.                        -1.
+59CSGENA      21229.      60.        .0
+  CSGENB
+  CSGENC  
+TOLERANCES                                                20
+PARAMETER FITTING          2.+00
+ 1 1     2                         819.0      26.0     1600.
+BLANK CARD INDICATING NO SATURATION OF Q-AXIS OF MACHINE
+     .0013     .1284     1.236     1.222     .2197     .3482     .1776     .1742
+      4.78       .53      .041      .067     .0861
+ 1              1.0      1.070      0.0       0.0
+BLANK card
+  51
+  1          1     2     3     4    11    14
+  1          8     9    10
+  21
+  31
+BLANK CARD
+71EFDPP
+72FACTOR        1
+74VEL1          2
+  FINISH
+59CSGN1A      21229.      60.       0.0
+  CSGN1B
+  CSGN1C
+PARAMETER FITTING          2.+00
+ 1 1     2                         819.0      26.0     1600.
+BLANK CARD INDICATING NO SATURATION OF Q-AXIS OF MACHINE
+     .0013     .1284     1.236     1.222     .2197     .3482     .1776     .1742
+      4.78       .53      .041      .067     .0861
+ 1              1.0      1.070      0.0       0.0
+BLANK
+  51
+  1          1     2     3     4    11    14
+  1          8     9    10
+  21
+  31
+BLANK CARD
+71EFDPP
+72FACTOR        1
+C     BECAUSE THE TWO GENERATORS HAVE THE SAME SPEED IT IS NOT
+C     NECESSARY TO USE THE SPEED OF THE SECOND GENERATOR AS TACS SOURC
+  FINISH
+C --------------+------------------------------ 
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        SOA    |TERRA *TERRA *BEGINA*                                                                                    
+C        BEGINA |TERRA *TERRA *SOA   *1A    *1AA   *                                                                      
+C        SOB    |TERRA *TERRA *BEGINB*                                                                                    
+C        BEGINB |TERRA *TERRA *SOB   *1B    *1BB   *                                                                      
+C        SOC    |TERRA *TERRA *BEGINC*                                                                                    
+C        BEGINC |TERRA *TERRA *SOC   *1C    *1CC   *                                                                      
+C        V2A    |HSA   *                                                                                                  
+C            ....  Etc.  (many more rows)
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   1.435490932846E+08
+C MACH 1            Data parameters and initial conditions of next machine .....
+C "CSGENA"   Unit 1  
+C                    Id                  Iq                  Io 
+C          -2.09832081140E+04   1.82690972572E+04   8.06549008735E-10
+C Field current of the generator in units  ...     Total          dc component 
+C                                           2.4585598153E+03    2.4539876356E+03
+C Electromechanical torque of the generator ...    total         dc component 
+C                                           1.9154270026E+00    1.8933493498E+00
+C          ---- Initial flux of coil  "T1A   "  to  "      "  =   3.74851587E+02
+C          ---- Initial flux of coil  "T1B   "  to  "      "  =  -1.16312212E+03
+C   Warning.  Preceding flux exceeds the 1st segment.  This means that the stead
+C          ---- Initial flux of coil  "T1C   "  to  "      "  =   7.91924375E+02
+C          ---- Initial flux of coil  "T3A   "  to  "CSIB  "  =   4.87345928E+01
+C          ---- Initial flux of coil  "T3B   "  to  "CSIC  "  =  -9.75282819E+01
+C   Warning.  Preceding flux exceeds the 1st segment.  This means that the stead
+C          ---- Initial flux of coil  "T3C   "  to  "CSIA  "  =   4.87941256E+01
+C          ---- Initial flux of coil  "T3D   "  to  "CSGN1B"  =   4.87345928E+01
+C          ---- Initial flux of coil  "T3E   "  to  "CSGN1C"  =  -9.75282819E+01
+C   Warning.  Preceding flux exceeds the 1st segment.  This means that the stead
+C          ---- Initial flux of coil  "T3F   "  to  "CSGN1A"  =   4.87941256E+01
+  BEGINABEGINBBEGINC
+  BVA   BVB   BVC   GA    GB    GC
+  G4A   G4B   G4C   G8A   G8B   G8C
+  C2A   C2B   C2C   10A   10B   10C   6A    6B    6C
+  C5A   C5B   C5C   10AA  10BB  10CC  6AA   6BB   6CC
+  CSIA  CSIB  CSIC  CSGN1ACSGN1BCSGN1CSOA   SOB   SOC
+C  Step      Time        BEGINA       BEGINB       BEGINC       BVA          BVB             
+C                                                                                                                                 
+C 
+C                        GC           G4A          G4B          G4C          G8A            
+C                                                                                                                                  
+C 
+C                        C2B          C2C          10A          10B          10C             
+C                                                                                                                                  
+C 
+C                       C5A          C5B          C5C          10AA         10BB            
+C                                                                                                                                  
+C 
+C                     6CC          CSIA         CSIB         CSIC         CSGN1A            
+C                                                                                                                                  
+C 
+C                     SOB          SOC          CSGENA       CSGENB       CSGENC            
+C                                                 CSIA         CSIB         CSIC         
+C 
+C                        V2A          V2B          V2C          BVA          BVB         
+C                        HSA          HSB          HSC          5AA          5BB             
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1               
+C                         I0           IF           IA           IB           IC           
+C 
+C                     MACH 1       MACH 2       MACH 2       MACH 2       MACH 2          
+C                         VEL 1        ID           IQ           I0           IF              
+C 
+C                       MACH 2       MACH 2       MACH 2       MACH 2       TACS            
+C                        EFD          TQ GEN       ANG 1        VEL 1        EFO          
+C 
+C                       TACS         TACS         TACS         TACS         TACS            
+C                        EFFBL        UNITY        EF1          DIFOME       PGV            
+C 
+C                         TACS         TACS                                                                                        
+C                         TACOME       KDIFOM                                                                                      
+C ***      Phasor I(0) =  9.3141980E+02   Switch  "BVA   "  to  "SA    "  closed 
+C ***      Phasor I(0) = -2.1484379E+02   Switch  "BVB   "  to  "SB    "  closed 
+C ***      Phasor I(0) = -7.3079055E+02   Switch  "BVC   "  to  "SC    "  closed 
+C ***      Phasor I(0) =  9.3142027E+02   Switch  "S1A   "  to  "5A    "  closed 
+C ***      Phasor I(0) = -2.1484535E+02   Switch  "S1B   "  to  "5B    "  closed 
+C ***      Phasor I(0) = -7.3078946E+02   Switch  "S1C   "  to  "5C    "  closed 
+C ***      Phasor I(0) =  1.8917593E+03   Switch  "GA    "  to  "S2A   "  closed 
+C ***      Phasor I(0) = -7.0729311E+02   Switch  "GB    "  to  "S2B   "  closed 
+C ***      Phasor I(0) = -1.1803057E+03   Switch  "GC    "  to  "S2C   "  closed 
+C ***      Phasor I(0) =  1.8917596E+03   Switch  "S3A   "  to  "14A   "  closed 
+C ***      Phasor I(0) = -7.0729599E+02   Switch  "S3B   "  to  "14B   "  closed 
+C ***      Phasor I(0) = -1.1803032E+03   Switch  "S3C   "  to  "14C   "  closed 
+C ***      Phasor I(0) = -9.4587964E+02   Switch  "G1A   "  to  "G2A   "  closed 
+C ***      Phasor I(0) =  3.5364656E+02   Switch  "G1B   "  to  "G2B   "  closed 
+C ***      Phasor I(0) =  5.9015285E+02   Switch  "G1C   "  to  "G2C   "  closed 
+C ***      Phasor I(0) = -9.4587982E+02   Switch  "G3A   "  to  "G4A   "  closed 
+C ***      Phasor I(0) =  3.5364800E+02   Switch  "G3B   "  to  "G4B   "  closed 
+C ***      Phasor I(0) =  5.9015160E+02   Switch  "G3C   "  to  "G4C   "  closed 
+C ***      Phasor I(0) = -9.4587964E+02   Switch  "G5A   "  to  "G6A   "  closed 
+C ***      Phasor I(0) =  3.5364656E+02   Switch  "G5B   "  to  "G6B   "  closed 
+C ***      Phasor I(0) =  5.9015285E+02   Switch  "G5C   "  to  "G6C   "  closed 
+C ***      Phasor I(0) = -9.4587982E+02   Switch  "G7A   "  to  "G8A   "  closed 
+C ***      Phasor I(0) =  3.5364800E+02   Switch  "G7B   "  to  "G8B   "  closed 
+C ***      Phasor I(0) =  5.9015160E+02   Switch  "G7C   "  to  "G8C   "  closed 
+C ***      Phasor I(0) =  2.2639721E+04   Switch  "CSGENA"  to  "CSIA  "  closed 
+C ***      Phasor I(0) = -1.2935334E+04   Switch  "CSGENB"  to  "CSIB  "  closed 
+C ***      Phasor I(0) = -9.7043863E+03   Switch  "CSGENC"  to  "CSIC  "  closed 
+C    0     0.0   404269.4395  -36345.7247  -367765.459  424359.4611  -84333.1188          
+C                -289436.093  451772.5587  -159713.498  -289437.588  451772.5587          
+C                -187973.815  -252930.485  447042.9429   -145948.56   -298112.48          
+C                443329.9408  -187973.815  -252930.485  447042.9429   -145948.56          
+C                 -331794.91       21229.     -10614.5     -10614.5       21229.          
+C                 -36343.631  -367766.638  22639.72062  -12935.3343  -9704.38629          
+C                -1927.84839  998.3131661   907.993979  931.4197995  -214.843795         
+C                 .806549E-9  2458.559762  22639.72062  -12935.3343  -9704.38629          
+C                -.002099483  -20983.2062  18269.09946  -.134425E-8  2458.559762          
+C                -428.682116   1.91542705  134.2452118  -.002099483        1.473          
+C                        0.0          1.0        1.473          0.0          1.0          
+C                        1.0          0.0                                                                                       
+C    1   .1E-3   397129.7612    -20133.32  -376846.599  418465.6003  -67710.5661         
+C                -302506.957  448484.4919  -143505.185  -302508.399  448484.4919          
+C                -172703.477  -266495.267  443279.2437  -129655.083  -310805.237          
+C                441481.0763  -172703.477  -266495.267  443279.2437  -129655.083          
+C                -343039.501  21237.96722  -10136.0111  -11101.9561  21237.96722          
+C                -20131.4818  -376847.601  22692.68415  -12202.5948  -10490.0893          
+C                -1930.51013   937.527959  970.8510997  920.1216638  -179.573848          
+C                -.31225E-10  2458.019684  22692.68415  -12202.5948  -10490.0893          
+C                -.006347691  -20963.4593  18287.60729  -.45505E-10  2458.019684          
+C                -428.682116  1.915678723  134.2451876  -.006347691  1.472999717          
+C                -.463451E-7          1.0  1.472886675  -.613373E-3          1.0          
+C                .9993866272  -.012267455                                                                                       
+BLANK card ending program output variables (just node voltages, here)
+C ***          Open  switch  "S3B   "  to  "14B   "  after  9.23000000E-02  sec.
+C 1000     0.1   456587.9539  72810.69446  -528451.693  518738.6488  36108.45381         
+C                -580084.928  558077.5006  -89099.3773  -580088.607  558077.5006         
+C                -82089.0245  -595679.834  559039.9578  -24740.4007   -590969.55         
+C                554457.9176  -82089.0245  -595679.834  559039.9578  -24740.4007         
+C                -563417.016   24790.5224   -9299.2942  -15491.2282   24790.5224         
+C                72810.84876  -528449.542  4177.258464  9977.667495   -14154.926         
+C                -899.895095   -123.78439  364.4939864  -20.5855009  671.1300102         
+C                -.325876E-9  1692.849684  4177.258464  9977.667495   -14154.926         
+C                .5571416296  8388.658546    15716.096  -.325264E-9  1692.849684         
+C                -541.656604  .5784421055  135.2190602  .5571416296  1.862272185          
+C                .0620160273          1.0  1.931667198  .8804374E-3  1.000154281          
+C                1.000880437  .0176087484                                                                                       
+  PRINTER PLOT
+ 194 4. 12. 50.         MACH 1TQ GEN             { Axis limits: (-0.316,  3.238)
+ 194 4. 12. 50.         MACH 2VEL 1              { Axis limits: (-0.835,  2.206)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

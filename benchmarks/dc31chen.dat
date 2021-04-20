@@ -1,0 +1,49 @@
+C
+C
+C     MDD6AT.DAT    ( TWO-WINDING TRANSFORMER DATA FILE FOR MDD6A.DAT )
+C
+C (1)   SPOS, VR1, VR2
+C     500.    345.00    115.00
+      500.    115.00    345.00
+C (2)   IEXPOS, LEXPOS, XPOS12
+     .0060     .0030    .12317
+C (3)   FREQ, FREQPU, V1PU
+    60.000     1.000     1.000
+C (4)   EPSPY, EPSZC, R1, R4
+   .000010   .000100   .001290   .001290
+C (5)   FIEXP, RFIEXP, R7, CXMER, PAP
+C  INITIAL VALUES:
+C  1000.00    900.00    333.14    .00000        0.
+C  FIVE-SLOPE REPRESENTATION:
+   1457.32    900.00    333.14    .00000        0.
+C  1457.32    900.00    333.14    .00000        5.
+C  SMOOTH-CURVE REPRESENTATION:
+C   721.60    900.00    333.14    .00000        0.
+C (6)   Y0(I), I=1,6
+C  -1.41421  .707107   .707107  -1.414214   .707107   .707107
+  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000
+C  1.13137  -.565690  -.565690   1.13137  -.565690  -.565690
+C (7)   S1, S4, S6, S7
+C    1.000      .850      .500      .500
+     1.000        5.        4.        4.
+C (8)   LEN1, LEN4, LEN6, LEN7
+C    1.000     1.000     2.000     2.000
+     1.000     1000.     1000.     1000.
+C (9)   P8, P9, P10, DT
+C   1.8622    1.8622    1.8622     .0100
+     1000.     1000.     1000.     .0100
+C (10)  KT, KP, KW
+      2000        10         1
+C (11)  BB0, BB1, BB2, BB3, BB4
+C  FIVE-SLOPE REPRESENTATION:
+    1.4142    1.5558    1.6404    1.8527    2.2000
+C  SMOOTH-CURVE REPRESENTATION:
+C  -1.4142 .14934105 .02826188 16.387657    1.7508
+C   1.4142    1.6404    1.8527     9999.
+C (12)  HH0, HH1, HH2, HH3, HH4
+    8.4853   39.7575   94.3742    638.19   1530.00
+C   8.4853   94.3742    638.19
+C (13) Binary flags to request flux outputs:
+         1         1         1         1         1         1
+C (14) Binary flags to request coil current outputs:
+         1         1         1         1         1         1

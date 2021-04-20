@@ -1,0 +1,545 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-21
+C     Test of various TACS devices, types 50-56.   There is no electric network,
+C     and  no physical or other coherent meaning.   Components are disconnected.
+C     1st of 9 subcases begins.  Change 12 Jan 98: In STARTUP, TIMTAC is reduced
+C                                from 1.0 to 0.99 in order to ensure the warning
+C                          message of Type-50 device "DEV50I".  It is on step 10
+C                    that the zero crossing is noted,  and 10 * 0.1  may be less
+C               than  TIMTAC = 1.0   (sometimes roundoff produced a message,  at
+C          other times it did not).  Reduce TIMTAC to eliminate the uncertainty.
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+C     Preceding line allows the SEEK file to be remote if this main data file is
+     0.1     1.2
+       1       1       0       0       1
+TACS STAND ALONE
+C    8 May 2011,  add illustration of new "SEEK" option of Type-56 device.  This
+C    uses the logic of Orlando Hevia's new MODELS "SEEK" function (which is just
+C    improved  MODELS  POINTLIST)  instead of the usual TACS logic for nonlinear
+C    (X, Y) interpolation.  Begin with the new optional TACS miscell. data card:
+C 3456789012345678901234567890123456789012345678 -- Ruler for following optional
+C                 < File Name>    IPRMDL  KOMPAC    miscellaneous data card :
+TACS MISC. DATA   dc21seek.            0       0
+  QUART   +MIDDLE                                    0.5
+  MIDDLE  +UNITY                                     0.6
+14SOURCE         1.0.833333333
+88DEV50I50+SOURCE                                    0.8   3.0  { Apr 97, add 3%
+88DEV50N50+SOURCE
+88DEV51O51+UNITY                                           0.6            SOURCE
+88DEV51C51+UNITY                                                  1.MIDDLESOURCE
+88DEV52C52+UNITY                                           0.6    1.      SOURCE
+88DEV52O52+UNITY                                                    MIDDLESOURCE
+88DEV53F53+SOURCE                                          0.3
+88DEV53V53+SOURCE                                                0.6MIDDLE
+88DEV54F54+DEV52C                                          0.3
+88DEV54V54+DEV52O                                   -0.2   0.3      QUART
+88DEV55 55+SOURCE
+            -1.0
+            -0.5
+             0.0
+             0.5
+             1.0
+           9999.
+88DEV56 56+SOURCE
+            -1.0             0.0
+            -0.5             0.5
+             0.0             0.0
+             0.5             0.5
+             1.0             0.0
+           9999.
+C  8 May 2011 WSM adds a second Type-56 device that is identical to the one just
+C  inputted. But this second is different in that it has no inline (X,Y) points.
+C  Instead, it uses Orlando Hevia's new "SEEK" function of MODELS to produce the
+C  identically-same answer.  The characteristic of (X, Y) points  has been moved
+C  to the separate disk file  DC21SE45.DAT  where root name  DC21SEEK is defined
+C  by the optional TACS misc. data card.  Integer 45 is the function number that 
+C  is defined by device parameter "B" of columns  57-62.  Finally, columns 69-80
+C  are to be keyed with the special request word  "MODELS SEEK "  as shown : 
+C  Type-56 device allows MODELS "SEEK" :       SEEK function #      Key word--->
+88SEE56 56+SOURCE                                           45      MODELS SEEK
+33QUART MIDDLETIMEX UNITY SOURCEDEV50IDEV50NDEV51ODEV51C
+33DEV52CDEV52ODEV53FDEV53VDEV54FDEV54VDEV55 DEV56 SEE56
+77DEV52O         1.0
+77QUART          0.3
+77MIDDLE         0.6
+C Column headings for the  18   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  Next   18     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C   Step      Time      TACS       TACS       TACS       TACS       TACS       TACS       TACS       TACS       TACS       TACS
+C                       QUART      MIDDLE     TIMEX      UNITY      SOURCE     DEV50I     DEV50N     DEV51O     DEV51C     DEV52C
+C
+C                       TACS       TACS       TACS       TACS       TACS       TACS       TACS       TACS
+C                       DEV52O     DEV53F     DEV53V     DEV54F     DEV54V     DEV55      DEV56      SEE56
+C      0       0.0         0.3        0.6        0.0        1.0        0.0        0.8        0.0        0.0        0.0        0.0
+C                          1.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C    MODELS "SEEK" function # 45 involves 5 pairs of (X,Y).  These are stored in List-20 SCONST cells 3 through 12.
+C      1       0.1         0.3        0.6        0.1        1.0 .866025404        0.8        0.0        1.0        0.0        0.0
+C                          1.0        0.0        0.0        0.0        0.0        0.5 .133974596 .133974596
+C      2       0.2         0.3        0.6        0.2        1.0        0.5        0.8        0.0        0.0        1.0        1.0
+C                          0.0        0.0        0.0        0.0        0.0        0.5        0.5        0.5
+BLANK card that ends TACS data cards
+C     12       1.2         0.3        0.6        1.2        1.0        1.0        0.8 .833333333        1.0        0.0        0.0
+C                          1.0  -.1885E-8        -1.        1.0        0.0        1.0        0.0        0.0
+C Extrema of output variables follow.   Order and column positioning are the same as for the preceding time-step loop output.
+C Variable maxima :         0.3        0.6        1.2        1.0        1.0        0.8 .833333333        1.0        1.0        1.0
+C                           1.0 .866025404 .866025404        1.0        1.0        1.0        0.5        0.5
+C Times of maxima :         0.0        0.0        1.2        0.0        1.2        0.0        1.0        0.1        0.2        0.2
+C                           0.0        0.4        0.7        0.5        0.4        1.2        0.2        0.2
+C Variable minima :         0.3        0.6        0.0        1.0        -1.        0.8        0.0        0.0        0.0        0.0
+C                           0.0        -1.        -1.        0.0        0.0        -1.        0.0        0.0
+C Times of minima :         0.0        0.0        0.0        0.0        0.6        0.0        0.0        0.0        0.0        0.0
+C                           0.2        0.9        1.2        0.0        0.0        0.5        0.0        0.0
+  PRINTER PLOT
+ 143 .4 0.0 1.2         DEV50IDEV53F             { Axis limits: (-1.000,  0.866)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+PRINTED NUMBER WIDTH, 10, 1,  { Request maximum precision (for 9 output columns)
+C   2nd of 9 subcases of DC-21.   Test TACS supplemental device types 57 and 58.
+C   Printout explanation is as follows:
+C         DEV1 = 1/S ON PLS1  UNTIL 0.010, THEN ZERO
+C         DEV2 = 1/S ON PLS1  UNTIL 0.010, THEN RESET TO MINUS1, INIT=3.0
+C         DEV3 =  1.0 ON PLS2  UNTIL 0.010, THEN ZERO
+C         DEV4 =  5.0 ON PLS1  UNTIL 0.010, THEN ZERO
+C         DEV5 =  COUNTER  ON PLUS1,   == ISTEP
+   0.001   0.016
+       1       1       0       0       1
+TACS STAND ALONE
+  DUMMY   +ZERO
+23PLS1           1.0     0.004     0.002
+23PLS2           1.0     0.008     0.004
+11CTRL           1.0                                                       0.010
+98SW1   57+PLUS1
+           0.002
+           0.004
+           0.005
+            9999
+98SW2   57+PLUS1
+           0.000
+           0.003
+            9999
+98DEV1  58+PLS1                                        0     0   1.0CTRL
+98DEV2  58+PLS1                                        0     0   1.0CTRL  MINUS1
+98DEV3  58+PLS2                                      1.0   1.0 0.001CTRL
+98DEV4  58+PLS1                                      5.0   1.0      CTRL
+98DEV5  58+PLUS1                                                    COUNTR
+C     26 August 2002,  add a line from Orlando Hevia's  EJEM58.DAT  which had
+C     illustrated an error using compiled TACS.  This exercises  S.N. 7323  in
+C     TACSUP,  which previously was in error yet was not being tested:
+98S_INTE58+SOURCE                                     1.          1.
+14SOURCE 0        1.       50.                                     -1.        1.
+C     End addition on  26 August 2002.  The preceding source card was an
+C     electric network source in Orlando's data, but then was passed to TACS
+C     via a Type-90 source.  Here, directly make it a TACS source.
+33SW1   SW2   PLS1  PLS2  CTRL  DEV1  DEV2  DEV3  DEV4  DEV5  S_INTE
+77SW2            1.0
+77DEV2           3.0
+C  Next   11     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C  Step      Time     TACS      TACS      TACS      TACS      TACS      TACS      TACS      TACS      TACS      TACS      TACS
+C                     SW1       SW2       PLS1      PLS2      CTRL      DEV1      DEV2      DEV3      DEV4      DEV5      S_INTE
+C    0       0.0        0.0       1.0       0.0       0.0       0.0       0.0       3.0       0.0       0.0       0.0       0.0
+C    1     .1E-2        0.0       1.0       1.0       1.0       1.0     .5E-3    3.0005 .33333333       5.0       1.0 .47553E-3
+C    2      .002        1.0       1.0       0.0       1.0       1.0     .1E-2     3.001 .77777778 -.278E-15       2.0 .00135557
+C    3      .003        1.0       0.0       0.0       1.0       1.0     .1E-2     3.001 .92592593 .2776E-15       3.0 .00205397
+C    4      .004        0.0       0.0       1.0       0.0       1.0     .0015    3.0015 .64197531       5.0       4.0 .00250237
+BLANK card ending TACS data
+  PRINTER PLOT
+C   16      .016        1.0       0.0       1.0       1.0       0.0       0.0       -1.       0.0       0.0       16. -.0035024
+C Variable maxima :     1.0       1.0       1.0       1.0       1.0     .0045    3.0045 .92592593       5.0       16. .00265688
+C Times of maxima :    .002       0.0     .1E-2     .1E-2     .1E-2      .009      .009      .003     .1E-2      .016      .005
+C Variable minima :     0.0       0.0       0.0       0.0       0.0       0.0       -1.       0.0 -.278E-15       0.0 -.0036569
+C Times of minima :     0.0      .003       0.0       0.0       0.0       0.0       .01       0.0      .002       0.0      .015
+ 144 3. 0.0 20.         DEV2  DEV4               { Axis limits: (-1.000,  5.000)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   3rd of 9 parts of DC-21.  Test TACS supplemental device type 59 (derivative)
+C     27 March 2010, the following  LARGEST PRINTED STEP NUMBER  (LPSN) is being
+C     added to illustrate suppression of the I7 step number after a while  (step
+C     number 38 in this case).  Steps 39 and 40 will have no step number.  The 7
+C     columns thereby gained allow 17 columns for time (encode using F17.3)
+C 123456789012345678901234567890123456789012345678
+C                                   NOTIME  FMTIME
+C                                 < E8.0 >  < A6 >
+C LARGEST PRINTED STEP NUMBER           38  F17.3
+C   The rules of preceding LPSN are unusual.  Columns 33-40 give a step number
+C   either in normal  I8  format or alternative  E8.0  format.  Zero or blank
+C   imply no  LPSN  use (to cancel preceding use).  Minus one will suppress all
+C   printing of step number including step zero.  Columns 41 and 42 are unused
+C   while 43-48 are reserved for an optional user-supplied format which might
+C   be either E-field or F-field.  Use of  FORMAT ( F17.3 )  this way serves to
+C   retain column alignment.  Steps 39 and 40 will be encoded as 0.039 and 0.040
+C   respectively.  If columns 41-48 had been left blank,  optimal encoding would
+C   have been used,  with the result being  .039  and  .04  respectively.  Note
+C   that in this case the decimal points would not be alligned.  As for E-field,
+C   a preceding implied  1P  will make the leading digit significant.  About the
+C   new use of either E-format or I-format data,  see also  BENCHMARK DC-3.  WSM
+C     A free-format alternative also is available.  Switch to this 14 July 2010:
+LARGEST PRINTED STEP NUMBER, 38, F17.3   { Same effect as preceding fixed-format
+PRINTED NUMBER WIDTH, 11, 1,     { Restore default after exceptional 2nd subcase
+   0.001    0.04
+       1       1       0       0       1
+TACS STAND ALONE
+  DUMMY   +ZERO
+14SIN1           1.0       25.      -90.
+14COS1           1.0       25.        0.
+14SIN2           1.0       25.      -90.                           -1.
+14COS2           1.0       25.        0.                           -1.
+23PLSE           1.0      0.02      0.01
+24RAMP          10.0      0.01                                              0.03
+98DEV1  59+SIN1
+98DEV2  59+SIN1
+98DEV3  59+PLSE
+98DEV4  59+RAMP
+98DEVA  59+SIN1
+98DEVB  59+SIN2
+98DEVC  59+SIN1
+98DEVD  59+SIN2
+98DEVE  59+COS1
+98DEVF  59+COS2
+33SIN1  COS2  PLSE  RAMP  DEV1  DEV2  DEV3  DEV4
+33DEVA  DEVB  DEVC  DEVD  DEVE  DEVF
+77DEV2           1.0
+77DEVC           1.0
+77DEVD           1.0
+C  Next   14     output variables belong to TACS (with "TACS" an internally
+C   Step      Time      TACS       TACS       TACS       TACS       TACS   
+C                       SIN1       COS2       PLSE       RAMP       DEV1   
+C
+C                       TACS       TACS       TACS       TACS              
+C                       DEVC       DEVD       DEVE       DEVF
+C      0       0.0         0.0        1.0        0.0        0.0        0.0
+C                          1.0        1.0        0.0        0.0
+C      1     .1E-2  .156434465 .987688341        1.0        1.0 156.434465
+C                   156.434465 156.434465 987.688341 -12.311659
+C      2      .002  .309016994 .951056516        1.0        2.0 152.582529
+C                   152.582529 152.582529 -36.631824 -36.631824
+BLANK card ending TACS data
+  PRINTER PLOT
+C            0.039  -.15643447 .987688341        0.0        0.0 152.582529 152.582529        0.0        0.0 152.582529 152.582529
+C                   152.582529 152.582529 36.6318243 36.6318243
+C            0.040  .43071E-14        1.0        1.0        0.0 156.434465 156.434465      1000.        0.0 156.434465 156.434465
+C                   156.434465 156.434465 12.3116594 12.3116594
+C Variable maxima :        1.0        1.0        1.0        9.0 156.434465
+C                   156.434465 156.434465 987.688341 156.434465
+C Times of maxima :        .01        0.0      .1E-2       .029        .04
+C                          .04        .04      .1E-2        .03
+C Variable minima :        -1.        -1.        0.0        0.0 -156.43447
+C                   -156.43447 -156.43447 -156.43447 -156.43447
+C Times of minima :        .03        .02        0.0        0.0        .02
+C                          .02        .02        .01        .01
+ 144 8. 0.0 40.         DEVF  DEV3               { Axis limits: (-1.000,  1.000)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C    4th of 9 in DC-21.  Test TACS supplemental device types 60, 61, 62, and 63.
+LARGEST PRINTED STEP NUMBER            0       { Cancel use of preceding subcase
+   0.001    0.08
+       2       1       0       0       1
+TACS STAND ALONE
+  DUMMY   +ZERO
+14SIN            1.0       25.      -90.
+14COS            1.0       25.        0.
+14SIN0           8.0       25.      -90.
+14SIN1           1.0       8.0      -90.
+14SIN2           0.5      24.0      -90.
+23PLS1           1.0     0.050     0.025                                   0.050
+23PLS2           1.0     0.025     0.015                         0.050     0.075
+23PLS3           1.0     0.005     0.001                         0.075
+98DEV1  60+MINUS1 +ZERO   +PLUS1                    -1.0            SIN   PLUS1
+98DEV2  60+MINUS1 +ZERO   +PLUS1                                    SIN
+98DEV3  60+ZERO   +ZERO   +PI                        20.            ISTEP
+98DEV4  61+MINUS1 +ZERO   +PLUS1          +DELTAT          -3.   222PI    SIN0
+98CTRL    = PLS1 + PLS2 + PLS3
+98TRCK  62+SIN1   +SIN2                                             CTRL
+98SMPL  62+SIN1   +SIN2                                                   CTRL
+98PLOT    = SIN1 + SIN2
+98MIN   63+SIN            +COS                             -1.
+98MAX   63+SIN    +COS                                     +1.
+33SIN   COS   SIN0  DEV1  DEV2  DEV3  DEV4  MIN   MAX
+33CTRL  PLOT  TRCK  SMPL  SIN1  SIN2  PLS1  PLS2  PLS3
+C Step     Time      TACS       TACS       TACS       TACS       TACS       TACS
+C                    SIN        COS        SIN0       DEV1       DEV2       DEV3
+C
+C                    TACS       TACS       TACS       TACS       TACS       TACS
+C                    PLOT       TRCK       SMPL       SIN1       SIN2       PLS1
+C   0     0.0         0.0        0.0        0.0        0.0        0.0        0.0
+C                     0.0        0.0        0.0        0.0        0.0        0.0
+C   2    .002  .309016994 .951056516 2.47213595        1.0        1.0        0.0
+C              .248882506 .248882506 .125357113 .100361715 .148520791        1.0
+BLANK card ending TACS data
+C  80     .08  .85529E-14        1.0 .68423E-13        0.0        0.0 3.14159265
+C              -1.0113901 -1.0113901 -1.0113901 -.77051324 -.24087684        0.0
+C Variable maxima :   1.0        1.0        8.0        1.0        1.0 3.14159265
+C              1.07581929 1.07581929 1.06331351 .999921044 .499960522        1.0
+C Times of maxima :   .01        .04        .01      .1E-2      .1E-2       .021
+C                    .014       .014        .05       .031       .052      .1E-2
+C Variable minima :   -1.        -1.        -8.        -1.        -1.        0.0
+C              -1.0746121 -1.0633135 -1.0633135 -.77051324 -.49996052        0.0
+C Times of minima :   .03        .02        .03       .021       .021        0.0
+C                    .076       .075       .075        .08       .073        0.0
+  PRINTER PLOT
+ 144 8. 0.0 80.         PLOT  TRCK               { Axis limits: (-1.075,  1.076)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C   5th of 9 in DC-21.  Test TACS supplemental device type 64 (min/max tracking)
+   0.001    0.06
+       2       1       0       0       1
+TACS STAND ALONE
+  DUMMY   +ZERO
+14SIN1           1.0       50.      -90.
+23PLS            1.0      0.02     0.001                         -0.01
+24RMP            8.0      0.08
+11HLD            1.0                                              0.03
+98MXTR1 64+RMP    +SIN1                                    +1.
+98MNTR2 64-RMP    -SIN1                                    -1.
+98MNTR3 64+RMP    +SIN1                                    -1.  100.PLS
+98MXTR4 64+RMP    +SIN1                                    +1.            HLD
+98PLOT    = RMP + SIN1
+33PLOT  PLS   HLD   MXTR1 MNTR2 MNTR3 MXTR4
+77MNTR3         100.
+C  Next  7   output variables belong to TACS (with "TACS" an internally-added u
+C Step    Time      TACS       TACS       TACS       TACS       TACS       TACS
+C                   PLOT       PLS        HLD        MXTR1      MNTR2      MNTR3
+C   0     0.0         0.0        0.0        0.0        0.0        0.0       100.
+C   2    .002  .787785252        0.0        0.0 .787785252 -.78778525 .409016994
+BLANK card ending TACS data
+C  60     .06         6.0        0.0        1.0        6.0        -6. 4.44894348
+C Variable maxima :   6.0        1.0        1.0        6.0        0.0       100.
+C Times of maxima :   .06        .01        .03        .06        0.0        0.0
+C Variable minima :   0.0        0.0        0.0        0.0        -6. .409016994
+C Times of minima :   0.0        0.0        0.0        0.0        .06      .1E-2
+  PRINTER PLOT
+ 144 6. 0.0 60.         PLOT  MXTR4               { Axis limits: (0.000,  6.000)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        6th of 9 subcases of DC-21.   Test the TACS supplemental device type 65
+C        (accumulator/counter).  Also,  beginning  10 November 2002,  add a
+C        request for relative table sizing.  This may not be very practical,
+C        but it deserves to be illustrated.  The proportions shown roughtly
+C        correspond to default dimensioning, so the effect should be neglible:
+RELATIVE TACS DIMENSIONS
+      11      15       7       7       3       8      21      28       1
+   0.001    0.04
+       2       1       0       0       1
+TACS STAND ALONE
+  DUMMY   +ZERO
+14SIN1           1.0       25.      -90.
+23PLS            1.0      0.02      0.01
+98ACC1  65+SIN1
+98ACC2  65+PLS
+98DEL1  54+PLS                                                      DELTAT
+98DRV     = PLS - DEL1
+98RISE  60+ZERO   +ZERO   +PLUS1                                    DRV
+98ACC3  65+RISE
+98AVRG1   = ACC1 / ISTEP
+98AVRG2   = ACC2 / ISTEP
+33SIN1  PLS   ACC1  ACC2  DEL1  DRV   RISE  ACC3  AVRG1 AVRG2
+C  Next   10     output variables belong to TACS (with "TACS" an internally-adde
+C  Step    Time      TACS       TACS       TACS       TACS       TACS       TACS
+C                    SIN1       PLS        ACC1       ACC2       DEL1       DRV
+C    0     0.0         0.0       0.0        0.0        0.0        0.0        0.0
+C    2    .002  .309016994       1.0 .465451459        2.0        1.0        0.0
+C    4    .004  .587785252       1.0 1.50722721        4.0        1.0        0.0
+BLANK card ending TACS data
+C   38    .038  -.30901699       0.0 .156434465        19.        0.0        0.0
+C   40     .04  .43071E-14       1.0 .43071E-14        20.        0.0        1.0
+C Variable maxima :    1.0       1.0 12.7062047        20.        1.0        1.0
+C Times of maxima :    .01     .1E-2       .019        .04       .002      .1E-2
+C Variable minima :    -1.       0.0        0.0        0.0        0.0        -1.
+C Times of minima :    .03       0.0        0.0        0.0        0.0        .01
+  PRINTER PLOT
+ 144 4. 0.0 40.         AVRG1 AVRG2 RISE          { Axis limits: (0.000,  1.000)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        7th of 9 subcases of DC-21.   Test the TACS supplemental device type 69
+C        which became available on  8 January 2003.  The Type-68 TACS device is
+C        not being illustrated here because DCNEW-25 shows realistic use.  Type
+C        69 is for user-supplied source code as defined in  SUBROUTINE DEVT69.
+C        The illustration here corresponds to logic of the UTPF, which defines
+C        just 2 simple functions:  DEV69A = twice arg 1 plus arg 2
+C                                  DEV69B = the square of arg 1
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 9 output columns)
+   0.001   0.020
+       1       1       0       0       1
+TACS STAND ALONE
+14SOURCE         1.0      50.0                                     -1.
+88ARG2    = -0.5 * SOURCE
+C  The following 3 data cards are for Type-69 TACS devices,  which first became
+C  available on 8 January 2003.  Columns 1-10 are fixed format with the same
+C  rules as all other devices.  Thereafter, data is free-format with one or
+C  more blanks separating each input.  First comes the A6 function name (here
+C  we illustrate the 2 that are provided in SUBROUTINE DEVT69 of the UTPF).
+C  Note that constant arguments are allowed:
+88USERA 69 DEV69A SOURCE ARG2    { Device type 69 is named USERA; 2 args follow
+88USERB 69 DEV69A SOURCE 0.1     { Device type 69 is named USERB; 2 args follow
+88USERC 69 DEV69B SOURCE    { Device type 69 is named USERC; single arg follows
+88USERD   = 2.0 * USERC
+88VALUE   = 2.0 * SOURCE
+C        Should a single data card not provide enough space for all inputs of a
+C        Type-69 device, the addition of  $$ anywhere on the right represents a
+C        request for continuation on the following data card.  Let's illustrate
+C        this artificially.  Note the following USERE should equal USERA.  Also
+C        note that more than a single blank is used to separate names on the
+C        initial data card,  and that the function name begins in column 11 (the
+C        previous illustrations did not have this):
+88USERE 69DEV69A   SOURCE     $$    { Continuation mark can be anywhere on right
+          ARG2   { Inputs of a continuation line can begin as early as column 11
+C        27 January 2003,  add 3rd function having 5 args and diagnostic print:
+88THREE   = 3.0
+88USERF 69 DEV69C UNITY 2.0 THREE 4.0 5.0
+88USERG 69 DEV69C 1.0 2.0 THREE 4.0 5.0
+88USERH 69 DEV69C    .1E1     2.E0     30.E-1    .4E+1  0.05E+2     
+33VALUE USERB ARG2  USERA USERE USERC USERD SOURCEUSERF USERG USERH
+77USERA          1.5 { Initial condition on 1st of 2 function uses
+77VALUE          2.0 { Initial condition on signal that is close to 2nd function
+BLANK card ending TACS data
+  CALCOMP PLOT  { Toggle plot mode to vector graphic (preceding was printer)
+ 144 2. 0.0 20.         USERA USERD VALUE SOURCE
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+PRINTED NUMBER WIDTH, 12, 2, { Keep dT loop precision the same, but 2 blank separators
+C        8th of 9 subcases of  DC-21.   The first subcase illustrated the use of
+C        Type-56 TACS devices, including the new  MODELS SEEK  option.  But that
+C        was without any MODELS.  Now,  10 April 2011,  we will demonstrate that
+C        such use is possible when MODELS  is present.  So,  take the source and
+C        Type-56 device of the 1st subcase  and add to them the matrix inversion
+C        using  MODELS  of the 14th subcase of  DC-68.  There  is no interaction
+C        between the two types of modeling,  of course.  Because  the  time step
+C        and ending time are as used for the  Type-56  device,  matrix inversion
+C        will differ for all but the first use.  Remember, the matrix depends on
+C        using simulation time T,  and this will differ.  But the 10th step here
+C        will be for 1 sec, so will coincide with the first step of DC-68.  Thus
+C        the 10th step here will have the same inverse as the 1st step of DC-68.
+C        Rather than only one matrix inversion coinciding,  two will.  WSM.
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+C     Preceding line allows the SEEK file to be remote if this main data file is
+     0.1     1.2    { Take 12 time steps exactly as was the case with subcase 1
+       1      -1    { Suppress accumulation of plot points,  which are unused
+TACS HYBRID     { There will be a dummy electric network, too, as well as MODELS
+C 3456789012345678901234567890123456789012345678 -- Ruler for following optional 
+C                 < File Name>    IPRMDL  KOMPAC    miscellaneous data card :
+C TACS MISC. DATA   dc21seek.            0       0
+C    Omit TACS misc. data since MODELS will follow, and can define the same data
+14SOURCE         1.0.833333333
+88SEE56 56+SOURCE                                           45      MODELS SEEK
+33SOURCESEE56
+BLANK card that ends TACS data cards
+MODELS       { Data for MODELS follows the preceding TACS data.  Copy from DC-68
+C 3456789012345678901234567890123456789012345678 -- Ruler for following optional 
+C                 < File Name>    IPRMDL  KOMPAC    miscellaneous data card :
+MODELS MISC. DATA dc21seek.            0       0
+VAR a1, a2, a3, a4, a5, a6, a7, a8, a9
+MODEL invert FOREIGN invert {ixdata:1, ixin:9, ixout:9, ixvar:0}
+USE invert AS invert
+ DATA xdata[1]:=3   -- Order of the matrices involved (here, 3)
+ INPUT xin[1..9] := [ 1.0, 2.0, 3.0,
+                      4.0, 2.0, 5.0,
+                      6.0, 3.0, 2.0 ] + t
+ OUTPUT a1:=xout[1],a2:=xout[2],a3:=xout[3],
+        a4:=xout[4],a5:=xout[5],a6:=xout[6],
+        a7:=xout[7],a8:=xout[8],a9:=xout[9]
+ENDUSE
+RECORD
+       a1 AS a11
+       a2 AS a12
+C      a3 AS a13 { DC-68 had more outputs, which we will not bother to show here
+C      a4 AS a21 { DC-68 had more outputs, which we will not bother to show here
+C      a5 AS a22 { DC-68 had more outputs, which we will not bother to show here
+C      a6 AS a23 { DC-68 had more outputs, which we will not bother to show here
+C      a7 AS a31 { DC-68 had more outputs, which we will not bother to show here
+       a8 AS a32
+       a9 as a33
+ENDMODELS
+C  Electric network really is not used for anything.  Define two series R-L-C:
+  GEN   BUS1                       15.
+  BUS1                                   2.9                                    
+BLANK card terminates electric network branches
+BLANK card ends all switches
+C  Finally, add a sinusoidal source to drive those dummy branches:
+14GEN           100.       50.       0.0                           -1.
+BLANK card terminates electric network sources
+BLANK card ending node voltage request
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        9th of 9 subcases of  DC-21.   This is a variation of the preceding 8th
+C        subcase.  The  Type-56 TACS data is similar but the matrix inversion of
+C        MODELS will be replaced by the SEEK function of subcase # 15 of  DC-68.
+C        Thus both TACS and MODELS  use  SEEK.  Both will load memory of List 20
+C        from disk files DC68SExx.DAT  where  xx = 37  for TACS & 82 for MODELS.
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+C    Preceding line allows the SEEK files to be remote if this main data file is
+     1.0    3.00                    { Take 3 steps,  from 1 second to 3 seconds.
+       1      -1   { Print every step;  do not bother saving points for plotting
+TACS HYBRID
+C 3456789012345678901234567890123456789012345678 -- Ruler for following optional 
+C                 < File Name>    IPRMDL  KOMPAC    miscellaneous data card :
+TACS MISC. DATA   dc68seek.            0       0
+C    About the preceding, note that here TACS will define the misc. data whereas
+C    the preceding subcase did this using MODELS.  Either has the same effect.
+C    The user who wants to see diagnostic printout of SEEK can set IPRMDL = 9.
+C    This would be no problem for Salford ATP,  as the extra output would merely
+C    be sent to the  .DBG  file.  But for some other compilers,  this would go
+C    to the  .LIS  file,  and would be unsightly (beware).  With just 3 time
+C    steps, however,  the volume is easily tolerated.
+14SOURCE         1.0.833333333
+C  Type-56 device allows MODELS "SEEK" :       SEEK function #      Key word--->
+88SEE37 56+TIMEX                                            37      MODELS SEEK
+33SEE37
+BLANK card that ends TACS data cards
+MODELS       { Data for MODELS follows the preceding TACS data.  Copy from DC-68
+MODEL SAMPLE
+VAR X,Y,Z
+FUNCTION seek FOREIGN seek {ixarg: 2}
+EXEC
+C    The following three lines use SEEK function # 82, which is the same as #37.
+C    82 does have a couple of redundant interior points to be discarded, though:
+X:=SEEK(T, 82 )
+Y:=SQRT(X)*0.3
+Z:=SEEK(SQRT(X)*0.3, 82 )
+ENDEXEC
+ENDMODEL
+USE SAMPLE AS SAMPLE
+ENDUSE
+RECORD
+SAMPLE.X AS SEE82  -- This will send X to LUNIT6 output of ATP as variable SEE82
+SAMPLE.Y AS Y
+SAMPLE.Z AS Z
+ENDRECORD
+ENDMODELS
+C  Electric network really is not used for anything.  Define two series R-L-C:
+  GEN   BUS1                       15.
+  BUS1                                   2.9                                    
+BLANK card terminates electric network branches
+BLANK card ends all switches
+C  Finally, add a sinusoidal source to drive those dummy branches:
+14GEN           100.       50.       0.0                           -1.
+BLANK card terminates electric network sources
+C     Total network loss  P-loss  by summing injections =   0.000000000000E+00
+C    3 or more consecutive, identical Y has allowed the omission of 2 incoming (X,Y) points.  The next line reflects this fact.
+C    MODELS "SEEK" function # 82 involves 7 pairs of (X,Y).  These are stored in List-20 SCONST cells 3 through 16.
+C Blank card ending requests for output variables.  |BLANK card ending node voltage request
+C Column headings for the  4   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  Next   1     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C  Next   3     output variables belong to MODELS (with "MODELS" an internally-added upper name of pair).
+C Column headings for the  4   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C  Next   1     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C  Next   3     output variables belong to MODELS (with "MODELS" an internally-added upper name of pair).
+C   Step      Time       TACS        MODELS      MODELS      MODELS
+C                        SEE37       SEE82       Y           Z
+C      0       0.0          0.0         69.  2.49198716  72.6314093
+C    TACS "SEEK" function # 37 involves 7 pairs of (X,Y).  These are stored in List-20 SCONST cells 19 through 32.
+C      1       1.0         59.5        59.5  2.31408729  64.4480155
+C      2       2.0          50.         50.  2.12132034  55.5807358
+C      3       3.0          96.         96.  2.93938769  93.2118338
+BLANK card ending node voltage request
+C   Note the preceding messages that report loading of SEEK functions # 82 & 37:
+C MODELS "SEEK" function # 82 involves 7 pairs of (X,Y). ... cells 3 through 16.
+C TACS   "SEEK" function # 37 involves 7 pairs of (X,Y). .. cells 19 through 32.
+C   Each requires 14 cells for the 7 pairs of (X, Y) plus two extras (constant
+C   overhead) for a total of 16.  Because initialization of MODELS occurs before
+C   the dT loop is entered,  the message for MODELS appears first and it is the
+C   use of MODELS that grabs the first 16 cells.  TACS use of SEEK first occurs
+C   on time step 1,  so it follows.  TACS loads the following 16 cells of List
+C   20 (cells 17 thru 32).  Were the TACS use to be changed from # 37 to # 82,
+C   there would be no second message (for TACS).  In this case,  TACS would be
+C   sharing the List-20 storage that was established by MODELS.
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

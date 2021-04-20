@@ -1,0 +1,74 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-26     (Same as DC-26,  only with DIAGNOSTIC, shorter TMAX)
+C     Test of  Type-59  S.M.  dynamics,  with load flow  ("FIX SOURCE"  request)
+C     determination of initial conditions that observe power constraints.
+DIAGNOSTIC           0 9 9 9 9 9 0 9 9 0 0 9 9 3 9 9 9 9 9
+FIX SOURCE   { An EMTP load flow will satisfy requested phasor power injections.
+POWER FREQUENCY, 50.0,      { Avoid warning message about suspicious XOPT, COPT.
+ .000200   .100      50.     50.
+       1       1       0  { test }     1      -1
+       2      -1       5       5      20      20
+  A1    A2                   0.1                                               1
+  B1    B2                   0.1                                               1
+  C1    C2                   0.1                                               1
+51A2    B2                .00528    571.5428
+52A3                       -.029    3125.811 .1582    17115.12
+51B2    C2    A2    B2
+52B3
+51C2    A2    A2    B2
+52C3
+  A2                                  31.416
+  B2                                  31.416
+  C2                                  31.416
+ 1A3    A4                      43.342
+ 2B3    B4                      12.546            43.342
+ 3C3    C4                      12.546            12.546            43.342
+BLANK card ending branch cards.
+C       The next card has  T-open = 80 msec  minus  DELTAT/2  in  order to avoid
+C       delayed opening (1/2 cycle) for PRIME and Burroughs.  WSM.  27 FEB 1982.
+  A3              .01990     .0799                                             1
+BLANK card ending switch cards.
+14A4         112.059       50.      -20.                           -1.
+14B4         112.059       50.     -140.                           -1.
+14C4         112.059       50.      100.                           -1.
+C             59A1        11.3901      50.0    - 30.0    (before FIX SOURCE use)
+59A1         11.0         50.0     -40.0
+59B1
+59C1
+TOLERANCES  0200.                                         20
+PARAMETER FITTING            1.0
+ 1 1     2       1.0       1.0     150.0      13.8     600.0     600.0     720.0
+BLANK card for quadrature axis of machine.
+    0.0014     0.175      1.85      1.76    0.2575      1.76      0.18     0.18
+   5.74757            0.051142  0.382609  0.197985
+ 1               1.0      50.0                                     1.0
+BLANK card ending all (here, just one) mass cards.
+  12
+  21
+  3          1
+BLANK card terminating all (here, three) S.M. output requests.
+  FINISH
+BLANK card terminating all EMTP source cards.
+  A1                  39.98755        -4.507399      10.0    12.0     -60.
+  B1                  39.98755        -4.507399      10.0    12.0    -180. -120.
+  C1                  39.98755        -4.507399      10.0    12.0     60.0  120.
+               1    1000      20       1 0.00001     0.1    2.0
+C  Exit the load flow iteration loop with counter  NEKITE = 133.   If no warning
+C  Row  Node  Name      Voltage mag    Degrees       Real power   Reactive power
+C    4     8  A1       0.113901E+02   -30.0002     0.399872E+02    -0.450736E+01
+C    5     9  B1       0.113901E+02  -150.0002     0.399872E+02    -0.450736E+01
+C    6    10  C1       0.113901E+02    89.9998     0.399872E+02    -0.450736E+01
+C       Total network loss  P-loss  by summing injections =   8.018000511887E+00
+ 1
+C  500    0.1  -1.4337941 -7.4122476 8.84604165 2.92973492 -49.293242 -61.148924
+C              -85.842174 -19.458841        0.0   8.024093 -5.6349461 -2.3891469
+C              -.15257793 -.27951372        0.0   8.024093 -5.6349461 -2.3891469
+C              118.449756 .133792E-8
+  PRINTER PLOT
+ 19410. 0. 120.         MACH 1ID    MACH 1IQ    { Plot limits : (-2.314,  0.917)
+ 19410. 0. 120.         MACH 1IF    MACH 1IG    { Plot limits : (-0.431,  1.641)
+ 19410. 0. 120.         BRANCH                  { Plot limits : (-1.885,  1.767)
+                        A1    A2    B1    B2    C1    C2
+BLANK card terminating all plot cards.
+BEGIN NEW DATA CASE
+BLANK

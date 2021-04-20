@@ -1,0 +1,295 @@
+BEGIN NEW DATA CASE             -- NOSORT ---
+C     BENCHMARK DC-36             (DC-74  of "M39." vintage)
+C     Example drawn from the dynamite EMTP Newsletter article by W. Scott Meyer,
+C     "EMTP Data Modularization and  Sorting ...,"   Volume 4,   No. 2,  Sec. V,
+C     November, 1983.   This  case  produces  branch cards for companion problem
+C     DC-8,  which  illustrates  $INCLUDE  usage  with  arguments.   Since  that
+C     NEWSLETTER  use,  the feature has been changed to conventional batch-mode.
+C     Note required addition of  "NOSORT"  somewhere on the very 1st input card.
+C     This is checked in  "OVER1"  at the beginning of execution,  so  that data
+C     card sorting by class ("/" cards) is bypassed,  as  required for use here.
+C     The  punched  card  output (produced by the  $PUNCH  request) should agree
+C     with  Figure 2,  except for the addition of  $EOF  and  ARG  cards  at the
+C     end,  and the fact that question marks (?????)  have not replaced the real
+C     character strings that have meaning to the user.   The file   DC8INCL1.DAT
+C     for use by  DC-8  should agree exactly with Fig. 2  (except for the switch
+C     to lower case lettering for comment cards),  and it was derived by editing
+C     the punch file.   6 subcases exist, with the 2nd the same as the first
+C     except that it is more general because it uses a  "DUM"  declaration.  The
+C     4th applies  to  an entire data case rather than just a  $INCLUDE  file.
+C     The 3rd and the 5th illustrate math within a $INCLUDE file  ---  dependent
+C     variables that involve new  DEP,  declaration.  The 6th subcase shows that
+C     $INCLUDE  can be used within  DBM  along with "/" cards and NOSORT.
+DATA BASE MODULE
+C $ERASE
+C $DEBUG, 9,
+ARG, _NODE, _MINUS, __PLUS, { Before 1994, this 1st ARG card had all 5 arguments
+ARG, _FIRE, __MID     { This 2nd ARG card illustrates procedure for continuation
+/BRANCH
+C3  Begin with anode reactors and parallel resistors (6 pairs):
+  _NODEA__MID1             3000.
+  _NODEA__MID1                     1.0
+  _NODEB__MID3             3000.
+  _NODEB__MID3                     1.0
+  _NODEC__MID5             3000.
+  _NODEC__MID5                     1.0
+  __PLUS__MID4             3000.
+  __PLUS__MID4                     1.0
+  __PLUS__MID6             3000.
+  __PLUS__MID6                     1.0
+  __PLUS__MID2             3000.
+  __PLUS__MID2                     1.0
+C3  Next come the snubber circuits, across valves and anode reactors:
+  _NODEA_MINUS             1200.         0.1
+  _NODEB_MINUS             1200.         0.1
+  _NODEC_MINUS             1200.         0.1
+  _NODEA__PLUS             1200.         0.1
+  _NODEB__PLUS             1200.         0.1
+  _NODEC__PLUS             1200.         0.1
+C3  Next come the valves:
+/SWITCH
+11__MID1_MINUS                                                  _FIRE2
+11__MID3_MINUS                                                  _FIRE4
+11__MID5_MINUS                                                  _FIRE6
+11__MID4_NODEA                                                  _FIRE5
+11__MID6_NODEB                                                  _FIRE1
+11__MID2_NODEC                                                  _FIRE3
+BEGIN NEW DATA CASE                ----  NOSORT  ----
+C        Note:  Preceding case marker is required where it now is positioned, so
+C               that data card input for the modularization be terminated here (
+C               since this is what is checked  for).  If  the  following  $PUNCH
+C               were to precede  BNDC,  it  would be read before any card images
+C               would have been created, & the result would be an empty listing.
+C               The same goes for the following comment cards that document  the
+C               answer:  if  these cards preceded  BNDC,  they would not be read
+C               by  "CIMAGE"  as intended  (the  data base  logic reads directly
+C               from the input card buffer of  LUNIT10).  So, do not tamper with
+C               the present positioning that documents the results of the  first
+C               subcase at the beginning of the second (where we now are).
+C KARD 2  2  3  3  4  4  5  5  6  6  7  7  8  8  9  9 10 10 11 11 12 12 13 13 14
+C     14 15 15 16 16 17 17 18 18 19 19 21 21 21 22 22 22 23 23 23 24 24 24 25 25
+C     25 26 26 26
+C KARG 1  5  1  5  1  5  1  5  1  5  1  5  3  5  3  5  3  5  3  5  3  5  3  5  1
+C      2  1  2  1  2  1  3  1  3  1  3  2  4  5  2  4  5  2  4  5  1  4  5  1  4
+C      5  1  4  5
+C KBEG 3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3
+C      9  3  9  3  9  3  9  3  9  3  9  9 65  3  9 65  3  9 65  3  9 65  3  9 65
+C      3  9 65  3
+C KEND 7 13  7 13  7 13  7 13  7 13  7 13  8 13  8 13  8 13  8 13  8 13  8 13  7
+C     14  7 14  7 14  7 14  7 14  7 14 14 69  7 14 69  7 14 69  7 13 69  7 13 69
+C      7 13 69  7
+C KTEX 1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
+C      1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
+C      1  1  1  1
+$PUNCH          { Flush critical portion of answers from preceding first subcase
+C       2nd of 6 subcases will illustrate the use of the  "DUM"  declaration for
+C       internal nodes about which the names might not matter.  To illustate it,
+C       remove  "MID?"  from the  "ARG"  declaration,  and  list in all of their
+C       variations (there are six) in a  "DUM"  declaration.   Remember that the
+C       "DUM"  declarations  must  come  last  (a restriction on present logic).
+DATA BASE MODULE
+ARG, _NODE, _MINUS, __PLUS, _FIRE                  { Must precede any "DUM" card
+DUM, __MID1, __MID2, __MID3, __MID4, __MID5, __MID6     { Must follow last "ARG"
+/BRANCH
+C3  Begin with anode reactors and parallel resistors (6 pairs):
+  _NODEA__MID1             3000.
+  _NODEA__MID1                     1.0
+  _NODEB__MID3             3000.
+  _NODEB__MID3                     1.0
+  _NODEC__MID5             3000.
+  _NODEC__MID5                     1.0
+  __PLUS__MID4             3000.
+  __PLUS__MID4                     1.0
+  __PLUS__MID6             3000.
+  __PLUS__MID6                     1.0
+  __PLUS__MID2             3000.
+  __PLUS__MID2                     1.0
+C3  Next come the snubber circuits, across valves and anode reactors:
+  _NODEA_MINUS             1200.         0.1
+  _NODEB_MINUS             1200.         0.1
+  _NODEC_MINUS             1200.         0.1
+  _NODEA__PLUS             1200.         0.1
+  _NODEB__PLUS             1200.         0.1
+  _NODEC__PLUS             1200.         0.1
+C3  Next come the valves:
+/SWITCH
+11__MID1_MINUS                                                  _FIRE2
+11__MID3_MINUS                                                  _FIRE4
+11__MID5_MINUS                                                  _FIRE6
+11__MID4_NODEA                                                  _FIRE5
+11__MID6_NODEB                                                  _FIRE1
+11__MID2_NODEC                                                  _FIRE3
+BEGIN NEW DATA CASE             -- NOSORT ---
+C        Note:  Preceding case marker is required where it now is positioned, so
+C               that data card input for the modularization be terminated here (
+C               since this is what is checked  for).  If  the  following  $PUNCH
+C               were to precede  BNDC,  it  would be read before any card images
+C               would have been created, & the result would be an empty listing.
+C               The same goes for the following comment cards that document  the
+C               answer:  if  these cards preceded  BNDC,  they would not be read
+C               by  "CIMAGE"  as intended  (the  data base  logic reads directly
+C               from the input card buffer of  LUNIT10).  So, do not tamper with
+C               the present positioning that documents the results of the  first
+C               subcase at the beginning of the second (where we now are).
+C KARD 2  2  3  3  4  4  5  5  6  6  7  7  8  8  9  9 10 10 11 11 12 12 13 13 14
+C     14 15 15 16 16 17 17 18 18 19 19 21 21 21 22 22 22 23 23 23 24 24 24 25 25
+C     25 26 26 26
+C KARG 1 -1  1 -1  1 -3  1 -3  1 -5  1 -5  3 -4  3 -4  3 -6  3 -6  3 -2  3 -2  1
+C      2  1  2  1  2  1  3  1  3  1  3  2  4 -1  2  4 -3  2  4 -5  1  4 -4  1  4
+C     -6  1  4 -2
+C KBEG 3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3  9  3
+C      9  3  9  3  9  3  9  3  9  3  9  9 65  3  9 65  3  9 65  3  9 65  3  9 65
+C      3  9 65  3
+C KEND 7 14  7 14  7 14  7 14  7 14  7 14  8 14  8 14  8 14  8 14  8 14  8 14  7
+C     14  7 14  7 14  7 14  7 14  7 14 14 69  8 14 69  8 14 69  8 13 69  8 13 69
+C      8 13 69  8
+C KTEX 1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
+C      1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
+C      1  1  1  1
+$PUNCH              { Flush critical portion of answers from preceding data case
+C       3rd of 6 subcases will illustrate the use of the  "DEP"  declaration for
+C       dependent variables of  $INCLUDE  usage  as provided for Jeff Peggs of
+C       Virginia Power in Richmond.   For details,  see stories in the April
+C       and July, 1997,  newsletters.   Whereas the 2nd subcase had constant
+C       capacitance  C = 0.1  in columns 39-44, here a dependent variable CAP_44
+C       is used.  For simplicity, trivial math  (1000 * 1.E-4)  is used in order
+C       that the answer remain unchanged.  More generally,  one or more variable
+C       would be involved in the right hand side of the CAP_44 definition below.
+C       Here,  there is a single dependent variable, but in general there can be
+C       any number.  For each,  the name must be declared first on a  DEP  line,
+C       where the first  DEP  follows the last of all other  (ARG,  NUM, or TEX)
+C       declarations.   The associated dependence is to follow as a line of low-
+C       level FORTRAN,  which must be compatible with the pocket calculator code
+C       of Walter Powell.  Before any real lines of data for $INCLUDE use should
+C       come all such  DEP  lines, followed by all FORTRAN lines associated with
+C       these new variables.  In this illustration,  there is just one (CAP_44).
+DATA BASE MODULE
+ARG, _NODE, _MINUS, __PLUS, { Before 1994, this 1st ARG card had all 5 arguments
+ARG, _FIRE, __MID     { This 2nd ARG card illustrates procedure for continuation
+DEP, CAP_44    { This "DEP" declaration is new.  Each dependent variable needs 1
+      CAP_44 = 1000. * 1.E-4 { Associated formula for evaluation during $INCLUDE
+/BRANCH
+C3  Begin with anode reactors and parallel resistors (6 pairs):
+  _NODEA__MID1             3000.
+  _NODEA__MID1                     1.0
+  _NODEB__MID3             3000.
+  _NODEB__MID3                     1.0
+  _NODEC__MID5             3000.
+  _NODEC__MID5                     1.0
+  __PLUS__MID4             3000.
+  __PLUS__MID4                     1.0
+  __PLUS__MID6             3000.
+  __PLUS__MID6                     1.0
+  __PLUS__MID2             3000.
+  __PLUS__MID2                     1.0
+C3  Next come the snubber circuits, across valves and anode reactors:
+  _NODEA_MINUS             1200.      CAP_44    { 1st of 6 replaces 0.1 in 39-44
+  _NODEB_MINUS             1200.      CAP_44    { 2nd of 6 ....
+  _NODEC_MINUS             1200.      CAP_44
+  _NODEA__PLUS             1200.      CAP_44
+  _NODEB__PLUS             1200.      CAP_44
+  _NODEC__PLUS             1200.      CAP_44
+C3  Next come the valves:
+/SWITCH
+11__MID1_MINUS                                                  _FIRE2
+11__MID3_MINUS                                                  _FIRE4
+11__MID5_MINUS                                                  _FIRE6
+11__MID4_NODEA                                                  _FIRE5
+11__MID6_NODEB                                                  _FIRE1
+11__MID2_NODEC                                                  _FIRE3
+BEGIN NEW DATA CASE
+$PUNCH   { Flush cards of $INCLUDE created by 1st subcase.  Rename  DCN22INC.DAT
+C       4th  of  6 subcases will illustrate the use of data modularization for a
+C       complete data case  (not  a  $INCLUDE  file).  The output becomes  DC-65
+C       after the addition of a few cards at the top and the bottom.  A single
+C       argument, for the end-time  TMAX  of the study, is desired.
+DATA BASE MODULE
+ARG, TMAX  { The end time of the study, misc. data parameter T-max, is  argument
+NUM, TMAX  { The end time of the study, misc. data parameter T-max, is numerical
+C     The following data is from  DC-4, with the only changes being less output.
+C     Suppress the connectivity display and the phasor solution.  End time=TMAX.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .010    TMAX
+       1       1       0       0       1      -1
+       5       5      20      20
+  BRANCH NAME:First   { Even though name could go on next card, use this instead
+  GEN   TRAN                 5.0  5.E4                                         3
+  TRAN        NAME  R-mag   1.E4
+93TRAN        NAME  Magnet  .005   30.                                         3
+             0.0             0.0  { 1st point being origin is request to reflect
+            .005             30.
+             .01             40.
+             .02             45.
+             .10             50.
+             5.0            100.
+            9999
+  TRAN  LOADG               255.  5.E4                                         3
+C   Note: original fixed-format card (next comment) converted to free-format:
+C LOADG                    1.E-6
+0,LOADG, , , ,             1.E-6,  0.0, 0.0, , , , , ,
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70.  .1591549                                     -1.
+BLANK card terminating program source cards.
+C       Total network loss  P-loss  by summing injections =   8.286714400785E+00
+C Inject:  GEN     70.    70.  .23676326859385  .25769284993889  8.2867144007848
+C Inject:          0.0    0.0  -.1017288531066      -23.2514964  3.5605098587304
+C          ---- Initial flux of coil  "TRAN  "  to  "      "  =  -1.13295190E+01
+C Step    Time        GEN          TRAN         TRAN         GEN          TRAN
+C                     TRAN         TERRA        LOADG
+C    0     0.0   6.270257621  63.72974238  63.72974215          70.  63.72974238
+C    1     .01   6.156651781  63.83984825  63.83984802  69.99650003  63.83984825
+  GEN   TRAN
+BLANK card ending program output-variable requests.
+  PRINTER PLOT
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+$PUNCH   { Flush cards of $INCLUDE created by 1st subcase.  Rename  DCN22INC.DAT
+C       5th  of  6 subcases will illustrate dependent variables as explained to
+C       others in the January, 1997, newsletter (see mention of Jeff Peggs of
+C       Virginia Power in Richmond).  The 3rd subcase provided an illustration,
+C       but was artificial in that only constants (no variables) were involved.
+C       Here,  a balanced 3-phase sinusoidal source is modularized,  with the
+C       angles of phases "b" and "c" dependent on the user-specified angle of
+C       phase "a".  Also,  the user specifies line-to-line RMS voltage, which
+C       is converted to peak phase-to-ground voltage as required by ATP.
+DATA BASE MODULE
+ARG, NAME, _RATEDRMSV, _____HERTZ, ____ANGLEA, ____TSTART 
+NUM,       _RATEDRMSV, _____HERTZ, ____ANGLEA, ____TSTART 
+DEP, _PEAKVALUE, ____ANGLEB, ____ANGLEC 
+      _PEAKVALUE =  _RATEDRMSV * SQRT ( 2.0 / 3.0 ) { Convert L-L RMS to peak L-N
+      ____ANGLEB =  ____ANGLEA - 120. { Angle of phase "b" lags "a" by 120 degrees
+      ____ANGLEC =  ____ANGLEA - 240. { Angle of phase "b" lags "a" by 240 degrees
+C3  Type-14 source cards follow:
+14NAMEA   _PEAKVALUE_____HERTZ____ANGLEA                    ____TSTART
+14NAMEB   _PEAKVALUE_____HERTZ____ANGLEB                    ____TSTART
+14NAMEC   _PEAKVALUE_____HERTZ____ANGLEC                    ____TSTART
+BEGIN NEW DATA CASE         -- NOSORT --
+$PUNCH, dc36e.pch  ! { Disk file name assumed by ??
+C       6th  of  6 subcases will illustrate use of both  $INCLUDE  and  /-cards
+C       within  DATA BASE MODULE.  Prior to correction on  16 July 2001,  this
+C       was not possible as first complained about by Prof. Mustafa Kizilcay.
+C       The following is his illustrative data.
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+DATA BASE MODULE
+ARG, BEG1__, END1__, LENGTH______
+NUM, LENGTH______
+/BRANCH
+$INCLUDE,  dc36incl.dat        ! { 1-phase, constant-parameter distributed line
+C  The 3 important non-comment cards of the preceding  $INCLUDE  file are:
+C  $VINTAGE, 1
+C  -1BEG1__END1__             1.63917E-01 5.77155E+02 2.49305E+05LENGTH______ 1
+C  $VINTAGE, 0
+BEGIN NEW DATA CASE
+$PUNCH
+C                     Comment cards in this location serve another purpose, too.
+C                     Without them,  STARTUP  variable  KASEND = 5  (as commonly
+C                     used for workstations)  means  that fewer than the minimum
+C                     cards would remain, so the  $PUNCH  would be skipped,  and
+C                     output would not be produced.
+BLANK     { 15 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK     { 15 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK     { 15 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK     { 15 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK     { 15 Dec 94,  we add more,  to make 5 even when comments are destroyed
+BLANK

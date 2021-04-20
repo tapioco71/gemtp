@@ -1,0 +1,159 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-35
+C     U.M. test consisting of 3-phase induction motor startup.  See Vol. X  EMTP
+C     Memoranda, 15 April 1980,  page TPIM-6 onward.   TMAX  has been decreased,
+C     DELTAT  has been increased,  and  resistors shorting the rotor  have  been
+C     increased (to help lower-precision computers).  Also appears in Rule Book.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+ .000400    .400
+       1       1       0      00       1      -1       0
+       5       5      20      20     100     100
+C                       The following 3 branches provide connectivity to ground:
+ 0      BUS-A0            1.0
+ 0      BUS-B0            1.0
+ 0      BUS-C0            1.0
+C             Next comes the source impedance, as uncoupled series R-L branches:
+ 0BUS-A1BUS-A0            0.005 1.0                                            2
+ 0BUS-B1BUS-B0BUS-A1BUS-A0                                                     2
+ 0BUS-C1BUS-C0BUS-A1BUS-A0                                                     2
+C         Next there is a near short of the rotor windings (squirrel cage case):
+ 0BUSRA1                   1.E-5
+ 0BUSRB1                   1.E-5
+ 0BUSRC1                   1.E-5
+C      Final branches are for rotor mass (capacitance) and damping (resistance):
+ 0BUS-OM                              6.00E4
+ 0      BUS-OM            33.333                                               1
+BLANK card terminating branch cards
+BLANK card ends non-existent switch cards
+14BUS-A0  180.0      60.0     0.0
+14BUS-B0  180.0      60.0     -120.0
+14BUS-C0  180.0      60.0     +120.0
+11BUS-OM-1 -6.00
+19 UM              { 1st of U.M. data cards to represent 3-phase induction motor
+0
+BLANK card ending Class-1 U.M. data
+ 4 1 1111BUS-OM       2 0.06                       0.18850   { 1st machine table
+0.0           0.020291      0
+0.0           0.020291      0
+0.063         0.0001911     BUS-A1            1 0.0           { 1st winding card
+0.063         0.0003925     BUS-B1            1 0.0
+0.063         0.0003925     BUS-C1            1 0.0
+0.083         0.0003925     BUSRB1            1 0.0
+0.083         0.0003925     BUSRC1            1 0.0
+0.083         0.0003925     BUSRA1            1 0.0
+BLANK card ending all U.M. data
+BLANK card ending electric network source cards
+  BUS-A1BUS-B1BUS-C1BUS-A0BUS-OM
+C   Step      Time       BUS-A1      BUS-B1      BUS-C1      BUS-A1       BUS-B1
+C                        BUS-A0      BUS-B0      BUS-C0
+C
+C                        UM-1        UM-1        UM-1        UM-1           UM-1
+C                        TQGEN       OMEGM       THETAM      IPA             IPB
+C      0       0.0          0.0         0.0         0.0         0.0          0.0
+C                           0.0         0.0         0.0         0.0          0.0
+C      1     .4E-3   -98.574299  36.3155088  62.2587899  79.3830153   -29.245296
+C                    -.1388E-16         0.0         0.0  -19.695165   7.25584591
+C      2     .8E-3   -92.178447  20.8386935  71.3397538  79.6971707   -18.794915
+C                    -.00570624         0.0         0.0   -57.76825   18.6607698
+BLANK card ends requests for program output
+C Last step begins:  1000   0.4   -8.3684481  1.39626098  6.97218715  171.631552
+C Last step begins:   -12.310167  187.573334  46.3605875  -8.8049393   23.504665
+C Maxima begin:       99.6139318   106.19115  100.446912  171.631552  171.624746
+C Maxima begin:       144.878041  197.090289  46.3605875    302.2867  263.869636
+C Associated times :       .0912       .0132       .0356         0.4       .3556
+C Associated times :       .0388       .2492         0.4       .1284       .1508
+C Minima begin:       -103.15511  -99.851577  -103.80211  -171.82882  -171.84501
+C Minima begin:       -186.32292  -.41620944  -.58668E-3  -299.62596  -384.19564
+C Associated times :        .016       .0716       .0104       .3584        .364
+C Associated times :       .0116       .0028       .0052       .0368       .0088
+C     78901234567890123456789012345678901234567890123456789012345678901234567890
+ 193.04 0.0 .40         UM-1  OMEGM             Induction motor w in [rad/sec]
+  PRINTER PLOT    { Now switch to the line printer  (exactly the same plot card)
+ 193.04 0.0 .40         UM-1  OMEGM              { Axis limits: (-0.004,  1.971)
+ 2Single-line, 78-character case title text !
+  First of 2 lines of multi-line, 78-byte, subheading text. !
+  Second and final line of multi-line labeling text.        !
+  CALCOMP PLOT
+ 193.04 0.0 .40         UM-1  IPA
+  PEN PLOT              { Divert vector graphics from screen to disk for printer
+  QUARTER PLOT   { Blank col 32 means all 4 quarters of quarter plotting is used
+ 2Single-line case-title text for 1st of 4 quarters!
+ 193.04 0.0 .40         UM-1  OMEGM             1st of 4 quarterw in [rad/sec] !
+ 2Single-line case-title text for 2nd of 4 quarters!
+ 193.04 0.0 .40         UM-1  THETAM            2nd of 4 quarterAngle in radian!
+ 2Single-line case-title text for 3rd of 4 quarters!
+ 193.04 0.0 .40         UM-1  TQGEN             3rd of 4 quarterTorque in n-m  !
+ 2Single-line case-title text for 4th of 4 quarters!
+ 193.04 0.0 .40         UM-1  IPA               4th of 4 quarterCurrent in amp !
+  SCREEN PLOT
+ 2Done with QUARTER PLOT;  back to full size!
+ 193.04 0.0 .40         UM-1  IPB
+BLANK card ends the last plot card
+BEGIN NEW DATA CASE
+BLANK
+
+
+
+BEGIN NEW DATA CASE
+C     2nd of 2 subcases has the same data as the 1st,  but is used to illustrate
+C     CALCOMP PLOT  usage only.   Both  SCREEN PLOT  and  PEN PLOT  usage of the
+C     Salford  DOS  extender motivated  the addition of this data in Sept, 1990.
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 8 output columns)
+ .000400    .040      { Note the reduction from 1000 to 100 time steps for speed
+       1       1       0      00       0      -1       0
+       5       5      20      20    
+C                       The following 3 branches provide connectivity to ground:
+ 0      BUS-A0            1.0
+ 0      BUS-B0            1.0
+ 0      BUS-C0            1.0
+C             Next comes the source impedance, as uncoupled series R-L branches:
+ 0BUS-A1BUS-A0            0.005 1.0                                            2
+ 0BUS-B1BUS-B0BUS-A1BUS-A0                                                     2
+ 0BUS-C1BUS-C0BUS-A1BUS-A0                                                     2
+C         Next there is a near short of the rotor windings (squirrel cage case):
+ 0BUSRA1                   1.E-5
+ 0BUSRB1                   1.E-5
+ 0BUSRC1                   1.E-5
+C      Final branches are for rotor mass (capacitance) and damping (resistance):
+ 0BUS-OM                              6.00E4
+ 0      BUS-OM            33.333                                               1
+BLANK card terminating branch cards
+BLANK card ends non-existent switch cards
+14BUS-A0  180.0      60.0     0.0
+14BUS-B0  180.0      60.0     -120.0
+14BUS-C0  180.0      60.0     +120.0
+11BUS-OM-1 -6.00
+19 UM              { 1st of U.M. data cards to represent 3-phase induction motor
+0
+BLANK card ending Class-1 U.M. data
+ 4 1 1111BUS-OM       2 0.06                       0.18850   { 1st machine table
+0.0           0.020291      0
+0.0           0.020291      0
+0.063         0.0001911     BUS-A1            1 0.0           { 1st winding card
+0.063         0.0003925     BUS-B1            1 0.0
+0.063         0.0003925     BUS-C1            1 0.0
+0.083         0.0003925     BUSRB1            1 0.0
+0.083         0.0003925     BUSRC1            1 0.0
+0.083         0.0003925     BUSRA1            1 0.0
+BLANK card ending all U.M. data
+BLANK card ending electric network source cards
+  BUS-A1BUS-B1BUS-C1BUS-A0BUS-OM
+BLANK card ends requests for program output
+ 2Single-line, 78-character case title text !
+  First of 2 lines of multi-line, 78-byte, subheading text. !
+  Second and final line of multi-line labeling text.        !
+ 194 4. 0.0 40.         UM-1  OMEGM             Induction motor w in [rad/sec] !
+  PEN PLOT       { Now switch to the Epson printer  (exactly the same plot card)
+ 2Single-line, 78-character case title text !
+  First of 2 lines of multi-line, 78-byte, subheading text. !
+  Second and final line of multi-line labeling text.        !
+ 194 4. 0.0 40.         UM-1  OMEGM             Induction motor w in [rad/sec] !
+  SCREEN PLOT
+  First of 2 lines ---  text is altered, though. !
+  Second   2 lines ---  text is altered.         !
+ 194 4. 0.0 40.         UM-1  OMEGM             Induction motor w in [rad/sec] !
+BLANK card ends the last plot card
+BEGIN NEW DATA CASE
+BLANK
+
+ 

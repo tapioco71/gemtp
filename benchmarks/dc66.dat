@@ -1,0 +1,210 @@
+BEGIN NEW DATA CASE                                  shots:40  part:-1
+C     BENCHMARK DC-66                                             
+C          Parallel Monte Carlo simulation is the only legitimate reason for the
+C          solution of this data case,  which is derived from  DC-24.   See  the
+C          article by Meyer and Liu in the December, 1988,  issue of  EMTP News.
+C          Note  that  the number of energizations has been set to  NENERG = 999
+C          whereas output is minimized: no connectivity, no phasor solution, and
+C          finally,  no  miniature printer plots of switch times.  About special
+C          features, the central statistics file  PARALLEL.LIS must exist before
+C          the simulation has begun.  If it does not, it should be created using
+C          the  INIT  command of  OPMC  (OBSERVE PARALLEL MONTE CARLO).   So  as 
+C          to identify the process independent of the  STARTUP  file,  note  the
+C          use of  "USER IDENTIFICATION"  to override  USERID  of  STARTUP.  The
+C          creation of full tables (including  "LABCOM"  storage) is illustrated
+C          (see  MEMSAV = 1).   This is why there is  $OPEN  usage on both units
+C          LUNIT2 = 2  and  LUNIT9 = 9.   One solution needs this.   But all the
+C          remaining ones should have  MEMSAV = 0,  in which case the file  OPEN
+C          and  CLOSE  on unit  LUNIT2  can and should be deleted. 
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+USER IDENTIFICATION       Paris      FORMATTED   !   { Overrides A6 USERID of STARTUP for plots
+MINIMUM TABLE SIZES     { Request creation of LISTSIZE.PMC during initialization
+CENTRAL STATISTICS FILE          { Request word that precedes the disk file name
+c:\atp\parallel.lis      { Leading percent sign avoids confusion of "/" in column 1
+OMIT BASE CASE   { Comment out this card, if a base case solution is to be added
+ 100.E-6  20.E-3     60.                                                        
+       1       1       0       0       1      -1       0       0     200
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED 
+       1       1       0       0       1         { KSTOUT is blank, not 0! }   1  
+       2       2      10      10   { Printout frequency change only if base case
+ 0GENA  A1                      7.                                             2
+ 0GENB  B1                      7.                                             1
+ 0GENC  C1                      7.                                             2
+ 0ENDA  A10                     7.                                             3
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.                                              
+-1ASW1  A5                .3    2.1146 0.645 50.   0                            
+-2BSW1  B5                .0268 .5397  0.021 50.   0                            
+-3CSW1  C5                                                                      
+ 0A5    A5F               1.                                                    
+ 0B5    B5F               1.                                                    
+ 0C5    C5F               1.                                                    
+-1A5F   ASW10 ASW1  A5                                                          
+-2B5F   BSW10                                                                   
+-3C5F   CSW10                                                                   
+BLANK card ending branch cards
+76A1    ASW1       2.E-3     .1E-3                    STATISTICS                
+  B1    BSW1       4.E-3    0.5E-3                    STATISTICS               4
+  C1    CSW1       6.E-3     1.E-3                    STATISTICS                
+  A10   ASW10    7.95E-3     1.0                                                
+  B10   BSW10    9.95E-3     1.0                                                
+  C10   CSW10   11.95E-3     1.0                                                
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.                
+14GENB     303.       60.      -120.0                        -1.                
+14GENC     303.       60.       120.0                        -1.                
+14ENDA     303.       60.      - 10.0                        -1.                
+14ENDB     303.       60.      -130.0                        -1.                
+14ENDC     303.       60.       110.0                        -1.                
+BLANK card ending source cards
+  ASW10 BSW10 CSW10                     { Request for these node voltage outputs
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending statistical tabulation requests    ---   NO SWITCH PLOTS  ---
+BEGIN NEW DATA CASE                                  shots:10  part:1
+C  2nd of 4 subcases will do 10 shots as the 1st of 4 parts (see preceding card)
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+USER IDENTIFICATION       Paris      FORMATTED   !   { Overrides A6 USERID of STARTUP for plots
+MINIMUM TABLE SIZES     { Request creation of LISTSIZE.PMC during initialization
+CENTRAL STATISTICS FILE          { Request word that precedes the disk file name
+c:\atp\parallel.lis      { Leading percent sign avoids confusion of "/" in column 1
+OMIT BASE CASE   { Comment out this card, if a base case solution is to be added
+ 100.E-6  20.E-3     60.                                                        
+       1       1       0       0       1      -1       0       0     200
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED 
+       1       1       0       0       1         { KSTOUT is blank, not 0! }   1  
+       2       2      10      10   { Printout frequency change only if base case
+ 0GENA  A1                      7.                                             2
+ 0GENB  B1                      7.                                             1
+ 0GENC  C1                      7.                                             2
+ 0ENDA  A10                     7.                                             3
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.                                              
+-1ASW1  A5                .3    2.1146 0.645 50.   0                            
+-2BSW1  B5                .0268 .5397  0.021 50.   0                            
+-3CSW1  C5                                                                      
+ 0A5    A5F               1.                                                    
+ 0B5    B5F               1.                                                    
+ 0C5    C5F               1.                                                    
+-1A5F   ASW10 ASW1  A5                                                          
+-2B5F   BSW10                                                                   
+-3C5F   CSW10                                                                   
+BLANK card ending branch cards
+76A1    ASW1       2.E-3     .1E-3                    STATISTICS                
+  B1    BSW1       4.E-3    0.5E-3                    STATISTICS               4
+  C1    CSW1       6.E-3     1.E-3                    STATISTICS                
+  A10   ASW10    7.95E-3     1.0                                                
+  B10   BSW10    9.95E-3     1.0                                                
+  C10   CSW10   11.95E-3     1.0                                                
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.                
+14GENB     303.       60.      -120.0                        -1.                
+14GENC     303.       60.       120.0                        -1.                
+14ENDA     303.       60.      - 10.0                        -1.                
+14ENDB     303.       60.      -130.0                        -1.                
+14ENDC     303.       60.       110.0                        -1.                
+BLANK card ending source cards
+  ASW10 BSW10 CSW10                     { Request for these node voltage outputs
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending statistical tabulation requests    ---   NO SWITCH PLOTS  ---
+BEGIN NEW DATA CASE                                  shots:15  part:2
+C  3rd of 4 subcases will do 15 shots as the 2nd of 4 parts (see preceding card)
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+USER IDENTIFICATION       Paris      FORMATTED   !   { Overrides A6 USERID of STARTUP for plots
+MINIMUM TABLE SIZES     { Request creation of LISTSIZE.PMC during initialization
+CENTRAL STATISTICS FILE          { Request word that precedes the disk file name
+c:\atp\parallel.lis      { Leading percent sign avoids confusion of "/" in column 1
+OMIT BASE CASE   { Comment out this card, if a base case solution is to be added
+ 100.E-6  20.E-3     60.                                                        
+       1       1       0       0       1      -1       0       0     200
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED 
+       1       1       0       0       1         { KSTOUT is blank, not 0! }   1  
+       2       2      10      10   { Printout frequency change only if base case
+ 0GENA  A1                      7.                                             2
+ 0GENB  B1                      7.                                             1
+ 0GENC  C1                      7.                                             2
+ 0ENDA  A10                     7.                                             3
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.                                              
+-1ASW1  A5                .3    2.1146 0.645 50.   0                            
+-2BSW1  B5                .0268 .5397  0.021 50.   0                            
+-3CSW1  C5                                                                      
+ 0A5    A5F               1.                                                    
+ 0B5    B5F               1.                                                    
+ 0C5    C5F               1.                                                    
+-1A5F   ASW10 ASW1  A5                                                          
+-2B5F   BSW10                                                                   
+-3C5F   CSW10                                                                   
+BLANK card ending branch cards
+76A1    ASW1       2.E-3     .1E-3                    STATISTICS                
+  B1    BSW1       4.E-3    0.5E-3                    STATISTICS               4
+  C1    CSW1       6.E-3     1.E-3                    STATISTICS                
+  A10   ASW10    7.95E-3     1.0                                                
+  B10   BSW10    9.95E-3     1.0                                                
+  C10   CSW10   11.95E-3     1.0                                                
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.                
+14GENB     303.       60.      -120.0                        -1.                
+14GENC     303.       60.       120.0                        -1.                
+14ENDA     303.       60.      - 10.0                        -1.                
+14ENDB     303.       60.      -130.0                        -1.                
+14ENDC     303.       60.       110.0                        -1.                
+BLANK card ending source cards
+  ASW10 BSW10 CSW10                     { Request for these node voltage outputs
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending statistical tabulation requests    ---   NO SWITCH PLOTS  ---
+BEGIN NEW DATA CASE                                  shots:12  part:4
+C  4th of 4 subcases will do 12 shots as the 4th of 4 parts (see preceding card)
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+USER IDENTIFICATION       Paris      FORMATTED   !   { Overrides A6 USERID of STARTUP for plots
+MINIMUM TABLE SIZES     { Request creation of LISTSIZE.PMC during initialization
+CENTRAL STATISTICS FILE          { Request word that precedes the disk file name
+c:\atp\parallel.lis      { Leading percent sign avoids confusion of "/" in column 1
+OMIT BASE CASE   { Comment out this card, if a base case solution is to be added
+ 100.E-6  20.E-3     60.                                                        
+       1       1       0       0       1      -1       0       0     200
+C    ISW   ITEST   IDIST    IMAX   IDICE  KSTOUT                           NSEED 
+       1       1       0       0       1         { KSTOUT is blank, not 0! }   1  
+       2       2      10      10   { Printout frequency change only if base case
+ 0GENA  A1                      7.                                             2
+ 0GENB  B1                      7.                                             1
+ 0GENC  C1                      7.                                             2
+ 0ENDA  A10                     7.                                             3
+ 0ENDB  B10                     7.
+ 0ENDC  C10                     7.                                              
+-1ASW1  A5                .3    2.1146 0.645 50.   0                            
+-2BSW1  B5                .0268 .5397  0.021 50.   0                            
+-3CSW1  C5                                                                      
+ 0A5    A5F               1.                                                    
+ 0B5    B5F               1.                                                    
+ 0C5    C5F               1.                                                    
+-1A5F   ASW10 ASW1  A5                                                          
+-2B5F   BSW10                                                                   
+-3C5F   CSW10                                                                   
+BLANK card ending branch cards
+76A1    ASW1       2.E-3     .1E-3                    STATISTICS                
+  B1    BSW1       4.E-3    0.5E-3                    STATISTICS               4
+  C1    CSW1       6.E-3     1.E-3                    STATISTICS                
+  A10   ASW10    7.95E-3     1.0                                                
+  B10   BSW10    9.95E-3     1.0                                                
+  C10   CSW10   11.95E-3     1.0                                                
+BLANK card ending switch cards
+14GENA     303.       60.         0.0                        -1.                
+14GENB     303.       60.      -120.0                        -1.                
+14GENC     303.       60.       120.0                        -1.                
+14ENDA     303.       60.      - 10.0                        -1.                
+14ENDB     303.       60.      -130.0                        -1.                
+14ENDC     303.       60.       110.0                        -1.                
+BLANK card ending source cards
+  ASW10 BSW10 CSW10                     { Request for these node voltage outputs
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending statistical tabulation requests    ---   NO SWITCH PLOTS  ---
+BEGIN NEW DATA CASE   
+C  5th of 4 subcases shows the results of the preceding 4 using  OPMC (OBSERVE ..
+CENTRAL STATISTICS FILE          { Request word that precedes the disk file name
+c:\atp\parallel.lis      { Leading percent sign avoids confusion of "/" in column 1
+OBSERVE PARALLEL MONTE CARLO
+SHOW ALL  { Command of OPMC to show all parts active within central statistics file 
+SHOW TOP  { Show extra header records (supporting material)
+QUIT      { Command of OPMC to quit this universal display routine
+BEGIN NEW DATA CASE   
+BLANK

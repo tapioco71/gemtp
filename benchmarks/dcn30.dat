@@ -1,0 +1,717 @@
+BEGIN NEW DATA CASE
+C      8th of ?? data subcases is a full-wave version of the preceding half-wave
+C      subcase.  This is comparable to Prof. Ned Mohan's  DBRECT3.DAT  (part 
+C      of  "Computer Exercises for Power Electronics Education by N.Mohan; 
+C      January 1990").  Mohan's comment card had title  " DIODE BRIDGE 
+C      RECTIFIER WITH A 3-PHASE INPUT "   Changes are mentioned on comment
+C      cards and in-line comments that follow.  No snubber circuits or
+C      damping resistors are being used,  there are no manually-specified
+C      initial conditions,  and the time step dT is much larger than Mohan
+C      was able to use, thanks to ISZC.  30 May 2000
+C       Following request carries params  MAXKNT  IOPCVP 
+C POCKET CALCULATOR VARIES PARAMETERS            4       0   { Loop five times
+INTERPOLATE SWITCH ZERO CROSSINGS { Request November, 1995, interpolate, average 
+$DEPOSIT, D4FACT=-1.  { Use SPY DEPOSIT to change STARTUP value to hold plot
+$DEPOSIT, NSMTH=1000  { Use SPY DEPOSIT to change STARTUP value so no averaging
+PRINTED NUMBER WIDTH, 9, 2,   { Full precision on each of 8 columns of printout
+C $PARAMETER   { This will be serviced by CIMAGE just as any other $-card would be
+C DELTAT__ = .000100 * KNT    { Vary time step size dT = 100, 200, ... 500 usec
+C RESIST =  1.5 + KNT * 5.
+C RESIST =  24. + KNT * 0.4
+C RESIST = KNT * 15. - 5.
+C BLANK card ends  $PARAMETER  definitions that are processed just b4 branch cards
+C DELTAT__    .040                 { Note large dT = 500 usec (Mohan used 50 usec)
+ .000100    .023                 { Note large dT = 500 usec (Mohan used 50 usec)
+       1       1       0       0       0                       2
+  GENA  TRANA                0.1   0.5
+  GENB  TRANB GENA  TRANA
+  GENC  TRANC GENA  TRANA
+C   Note about load resistance (next).  Mohan used 20 ohms,  and for this curves
+C   look decent.  There is small overlap of positive & negative charging pulses.
+C   As resistance is decreased (e.g., to 15 or 10 ohms),  overlap increases and
+C   charging current magnitude increases;  and curves become more smooth.  But
+C   as resistance increases, the pulses separate.  For 50 ohms,  pulses are far
+C   from overlapping, and curves look sufficiently smooth.  But for 30 ohms, we
+C   have about the worst case: neither overlap nor separation.  This seems to
+C   correspond to desired opening and closing at the same time: a conflict.  Of
+C   course,  one must come first,  and the other is delayed.  For 30 ohms, the
+C   opening is delayed,  and for a big dT,  the result is substantial reverse
+C   current.
+C NEG   POS                 20.0   { Load resistance connects the 2 dc terminals
+C NEG   POS                 20.0   { Load resistance connects the 2 dc terminals
+C   Some capacitance is needed for smoothing.  But placement is not unique.  In
+C   the preceding subcase,  note that one side of the load was grounded,  so it
+C   was natural to place a single capacitance across the load.  But neither side
+C   of the load is grounded in this full-wave case.  To maintain balance, equal
+C   capacitors will be added from the load terminals to ground (next).  Yes, a
+C   capacitor could be added across the load, too, but this is not necessary.
+C POS                        0.1       900.0   { 1st of 2 capacitances to ground
+C       NEG                  0.1       900.0   { 2nd of 2 capacitances to ground
+  POS   NEG                            500.0 
+C NEG   POS                 16.5  { Mohan's resistor is demanding of dT }      1
+  NEG   POS                 25.0  { Drawing more load current is easier }      1
+C NEG   POS               RESIST                                               1
+C POS                        0.0       150.0   { 1st of 2 capacitances to ground
+C       NEG                  0.0       150.0   { 2nd of 2 capacitances to ground
+  POS                       1.E4
+  NEG         POS
+BLANK card ending branch cards
+11TRANA POS                                                                   13
+11TRANB POS                                                                   13
+11TRANC POS                                                                   13
+11NEG   TRANA                                                                 13
+11NEG   TRANB                                                                 13
+11NEG   TRANC                                                                 13
+C   Mohan paralleled each of his diodes with R-C snubber circuits to control
+C   the transients upon opening.  But for ISZC, not only is this not necessary,
+C   but it would pose a complication.  Snubber circuits would introduce fast
+C   dynamics that would prevent use of large dT,  so omit them.  
+BLANK card ending switch cards
+14GENA          80.0      60.0                                     -1.
+14GENB          80.0      60.0    -120.0                           -1.
+14GENC          80.0      60.0    -240.0                           -1.
+C   About preceding sources,  note presence during a phasor solution.  On the
+C   other hand,  all 6 diodes are open during this,  so only the 3 smoothing
+C   reactors  (GEN, TRAN)  are excited,  and they carry no current.  Whether
+C   a phasor solution is,  or is not used,  has little effect.   The dominant
+C   dynamics are associated with charging the capacitances at the load,  and
+C   this occurs only in the dT loop.
+BLANK card ending source cards
+C   In this location,  Mohan would specify initial conditions manually.  That
+C   is not being done here.  Instead,  the circuit will start itself.  The use
+C   of  CLOSED  as in the preceding half-wave case is not practical because it
+C   would be either  1) completely wrong (if used on 2 or more diodes);  or 2)
+C   partly wrong (if used on just one).  It is simpler to let ATP start itself.
+C   This is plenty fast (plots below show good repetition after about 1 cycle).
+  TRANA TRANB TRANC POS   NEG     { List of nodes for node voltage output
+BLANK card ending output requests (here, just node voltages)
+  CALCOMP PLOT  { Needed to cancel  PRINTER PLOT  of preceding subcase
+C   The following plots document the steady state.  Approximately,  we will plot
+C   the second cycle.  After about half a cycle,  the switching sequence is 
+C   right; and after one cycle, the output is close to the steady state as  
+C   the following plots over the interval  [20 msec, 40 msec]  show:
+ 2DCNEW-30h.  3-phase, full-wave diode bridge
+ 184 2.  3. 23.         BRANCH { Forward voltages across diodes of positive half
+                        NEG   TRANA TRANB POS   NEG   TRANC 
+ 184 .1 22. 23.         BRANCH { Forward voltages across diodes of positive half
+                        NEG   TRANA TRANB POS   NEG   TRANC 
+ 194 2.  3. 23. -10. 10.BRANCH { Forward diode currents that charge positive 1/2
+                        NEG   TRANA TRANB POS   NEG   TRANC 
+ 194 .1 22. 23. -10. 10.BRANCH { Forward diode currents that charge positive 1/2
+                        NEG   TRANA TRANB POS   NEG   TRANC 
+ 184 2.  3. 23.         BRANCH { Forward voltages across diodes of positive half
+                        TRANA POS   NEG   TRANB TRANC POS 
+ 184 .1 22. 23.         BRANCH { Forward voltages across diodes of positive half
+                        TRANA POS   NEG   TRANB TRANC POS 
+C 194 .1 22. 23. -10. 10.BRANCH { Forward diode currents that charge positive 1/2
+C                        TRANA POS   NEG   TRANB TRANC POS 
+BLANK card ending batch-mode plot cards
+BLANK card ending all statistical tabulation request cards
+BEGIN NEW DATA CASE
+BLANK
+EOF
+
+C  SUPERIMPOSE                  2    { Superimpose plots of the following 2 cards
+C 184 2. 20. 40.         POS   NEG            { dc voltage (voltage across load)
+C 144 2. 20. 40.         TRANA TRANB TRANC    { ac voltages that drive the bridge
+C  SUPERIMPOSE                  2    { Superimpose plots of the following 2 cards
+ 184 .1 22. 23.         BRANCH { Forward voltages across diodes of positive half
+                        TRANA POS   TRANB POS   TRANC POS 
+ 194 .1 22. 23. -10. 10.BRANCH { Forward diode currents that charge positive 1/2
+                        TRANA POS   TRANB POS   TRANC POS 
+C  SUPERIMPOSE                  2    { Superimpose plots of the following 2 cards
+
+
+ 184 .1 22. 23.         BRANCH { Forward voltages across diodes of negative half
+                        NEG   TRANA NEG   TRANB NEG   TRANC 
+ 194 .1 22. 23. -10. 10.BRANCH { Forward diode currents that charge positive 1/2
+                        NEG   TRANA NEG   TRANB NEG   TRANC 
+
+
+
+BEGIN NEW DATA CASE
+C      FILE NAME = DBRECT3.DAT " DIODE BRIDGE RECTIFIER WITH A 3-PHASE INPUT "
+C Computer Exercises for Power Electronics Education by N.Mohan; January 1990
+C - -  TIME DATA
+50.00E-6  50.E-3
+    1000       3                                               1
+C - -  BRANCH DATA
+00VSA   VA                0.001 0.1                                            1
+00VSB   VB    VSA   VA                                                         1
+00VSC   VC    VSA   VA                                                         1
+C --------- TO MAKE LINE - LINE VOLTAGES AVAILABLE FOR PLOTTING
+00VSA   VSB               1.00E9                                               2
+00VSB   VSC               1.00E9                                               2
+00VSC   VSA               1.00E9                                               2
+C - - Small resistance in series with the top diodes
+00POSA  POSP              0.01
+00POSB  POSP              0.01
+00POSC  POSP              0.01
+C --------- SNUBBERS (NEXT 6 RECORDS)
+00POSP  VA                33.0        1.0
+00POSP  VB    POSP  VA
+00POSP  VC    POSP  VA
+00VA    NEG   POSP  VA
+00VB    NEG   POSP  VA
+00VC    NEG   POSP  VA
+C - -   dc-side of the rectifier
+00POSP  POS               0.005  0.5                                           1
+00POS   NEG                            500.0                                   2
+00NEG   POS               16.5                                                 1
+C - -   For plotting
+00POSP  NEG               1.0E+9                                               2
+BLANK RECORD ENDING BRANCHES
+C - - SIX DIODES
+11VA    POSA                                                                  13
+11VB    POSB                                                                  13
+11VC    POSC                                                                  13
+11NEG   VA                                                                    13
+11NEG   VB                                                                    13
+11NEG   VC                                                                    13
+BLANK RECORD ENDING SWITCHES
+C - -  THREE PHASE VOLTAGES
+14VSA     169.7     60.0
+14VSB     169.7     60.0      -120.0
+14VSC     169.7     60.0      -240.0
+BLANK RECORD ENDING SOURCES
+C - -  INITIAL CONDITIONS
+ 2POS   140.0
+ 2NEG   -140.0
+ 3POS   NEG                  280.0
+C - -  EMTP VARIABLES TO BE OUTPUTTED
+  VSA   VSB   VSC
+BLANK RECORD ENDING NODE VOLTAGE OUTPUT
+
+
+
+
+
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-30
+C      1st of ?? data subcases that illustrate INTERPOLATE SWITCH ZERO CROSSINGS
+C      Each involves this special request word,  which if removed,  will result
+C      in troublesome oscillation of the trapezoidal rule.
+C    1st subcase is from Hermann Dommel.  It existed when WSM took over at BPA
+C    following Dommel's departure in July of 1973.  Look on page 6A-14 of the
+C    the ATP Rule Book.  This very old data case was recreated 26 April 2000 as
+C    changes from late 1995  (file OS6PUM.ZIP of 5.25-inch floppy)  were merged
+C    with the current UTPF.   No longer mandatory,  the interpolation of switch
+C    current zeros,  followed by time-shift,  followed by half step (average of
+C    values at zero point and full step),  are requested by following key word:
+C
+INTERPOLATE SWITCH ZERO CROSSINGS              1       { Interpolate and average
+ .000200    .001                   
+       1       1       1       1 
+  GEN   SWIT                 .18   0.8                                         3
+BLANK card ending branches
+  SWIT               -1.                                                       3
+BLANK card ending switches
+14GEN           100.       60.     140.0        0.                 -1.
+BLANK card ending sources
+C  First  4     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   2     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time      GEN        SWIT       SWIT       GEN        SWIT       GEN
+C                       SWIT       TERRA                            TERRA      SWIT
+C ***      Phasor I(0) =  4.5373670E+01                     Switch  "SWIT  "  to  "      "  closed in the steady-state.
+C      0       0.0  -76.604444        0.0        0.0 -76.604444 45.3736699 45.3736699
+C      1     .2E-3  -81.228717        0.0        0.0 -81.228717 24.0817772 24.0817772
+C      2     .4E-3  -85.391432        0.0        0.0 -85.391432 2.65273205 2.65273205
+C ***                                                             Open  switch  "SWIT  "  to  "      "  after  6.00000000E-04  sec.
+C      3 .42474E-3  -85.846349        0.0        0.0 -85.846349        0.0        0.0
+C      4 .52474E-3         0.0  -87.66771  -87.66771  -87.66771        0.0 -.1776E-14
+ 1 { Request all node-voltage outputs
+C      5 .72474E-3  .14211E-13 -91.107544 -91.107544 -91.107544        0.0 -.3909E-16
+C      6 .92474E-3  -.1421E-13 -93.953968 -93.953968 -93.953968        0.0 -.3737E-16
+C      7 .00112474  .14211E-13 -96.266527 -96.266527 -96.266527        0.0 -.3572E-16
+  CALCOMP PLOT  { Needed to cancel  PRINTER PLOT  of preceding subcase
+ 2DCNEW-30a.  Dommel Rule Book, dT = 200 usec
+  SUPERIMPOSE                  2    { Superimpose plots of the following 2 cards
+ 1840.1 0.0  1.-120.120.GEN   SWIT  SWIT       { 1st of 2 in overlay is V-branch
+ 1940.1 0.0  1. -50. 50.GEN   SWIT  SWIT       { 2nd of 2 in overlay is I-branch
+BLANK card ending plot
+BEGIN NEW DATA CASE
+C      2nd of ?? data subcases is an extreme, single-phase simplification of the
+C      basic network of DC-53.  First, the Type-59 S.M. is replaced by sinusoidal
+C      sources,  and then phases "a" and "c" are dropped.  The three saturable
+C      TRANSFORMERs are removed, too.  Finally,  data is collapsed to a minimum.
+C      Only 10 steps are required,  to demonstrate oscillation on opening. 
+INTERPOLATE SWITCH ZERO CROSSINGS { Request November, 1995, interpolate, average 
+$DEPOSIT, D4FACT=-1.  { Use SPY DEPOSIT to change STARTUP value to hold plot
+PRINTED NUMBER WIDTH, 11, 2,   { Full precision on each of 8 columns of printout
+ .000100    .001    60.0    60.0
+       1       1       0       0       0        
+  NAVH  MCC2                6.51162.978285.0
+  MCC2  EQV                      19.52
+C   The following resistor is in parallel with the following inductor.  Maybe
+C   it originally was needed to damp the trapezoidal rule oscillation upon
+C   switch opening.  But with the new interpolation,  it represents more of
+C   a problem than a solution,  so remove it:
+C SWT   MCC2              4830.0 
+  MCC2  SWT                      13.01                                         2
+BLANK card terminating branch cards
+C   Note we close switch in the steady state,  so it is ready to be opened
+C   rapidly.  The source angles are adjusted so this will occur quickly.
+  SWT                -1.       0.0                                             1
+BLANK card terminating switch cards
+14EQV           360.       60.    -187.0                           -1.
+14NAVH          361.       60.    -188.0                           -1.
+BLANK card terminating source cards
+C  First  5     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   1     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time      MCC2       SWT        MCC2       NAVH       EQV        SWT
+C                       SWT                                                    TERRA
+C ***      Phasor I(0) =  1.4052450E+00                     Switch  "SWT   "  to  "      "  closed in the steady-state.
+C      0       0.0    -176.453        0.0   -176.453  -357.4868  -357.3166   1.405245
+C      1     .1E-3   -177.0167        0.0  -177.0167  -359.1264  -358.7163  .89312005
+ 1 { Request the output of all node voltages
+C      2     .2E-3   -177.3288        0.0  -177.3288  -360.2556  -359.6063  .37972612
+C ***                                                             Open  switch  "SWT   "  to  "      "  after  3.00000000E-04  sec.
+C      3 .27389E-3   -177.3733        0.0  -177.3733  -360.7118  -359.8862  -.134E-16
+C      4 .32389E-3         0.0   -414.938   -414.938  -360.8557  -359.9114        0.0
+C      5 .42389E-3         0.0  -414.5018  -414.5018  -360.9265  -359.7452        0.0
+C      6 .52389E-3         0.0  -413.4144  -413.4144  -360.3956  -358.9791        0.0
+C      7 .62389E-3         0.0   -411.766   -411.766  -359.3525  -357.7029        0.0
+C      8 .72389E-3         0.0  -409.5588  -409.5588  -357.7988  -355.9185        0.0
+C      9 .82389E-3         0.0  -406.7957  -406.7957  -355.7366  -353.6282        0.0
+C     10 .92389E-3         0.0  -403.4805  -403.4805  -353.1689  -350.8354        0.0
+C     11 .00102389         0.0  -399.6176  -399.6176  -350.0993   -347.544        0.0
+  CALCOMP PLOT
+ 2DCNEW-30b.  1-phase DC-53.  dT = 100 usec
+  SUPERIMPOSE                  2    { Superimpose plots of the following 2 cards
+ 144 .1 0.0 1.0-400.400.NAVH  MCC2  SWT   
+ 184 .1 0.0 1.0-400.400.MCC2  SWT   
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C      3rd of ??  data subcases is a 3-phase version of preceding.  This is much
+C      closer to the original DC-53,  which was 3-phase, after all.  Among other
+C      extensions is use of Type-51,52,53 (i.e., coupling).  But TRANSFORMER is
+C      still missing.  
+INTERPOLATE SWITCH ZERO CROSSINGS { Request November, 1995, interpolate, average 
+$DEPOSIT, D4FACT=-1.  { Use SPY DEPOSIT to change STARTUP value to hold plot
+$DEPOSIT, NSMTH=1000  { Use SPY DEPOSIT to change STARTUP value so no averaging
+PRINTED NUMBER WIDTH, 11, 2,   { Full precision on each of 8 columns of printout
+ .000100    .001   60.0    60.0
+       1       1       0       0       0        
+51NAVH AMCC1 A            162.67   507.51
+52NAVH BMCC1 B            6.51    162.97
+53NAVH CMCC1 C
+  MCC1 AMCC2 A                        8285.
+  MCC1 BMCC2 B                        8285.
+  MCC1 CMCC2 C                        8285.
+  MCC2 AEQV  A                  19.52
+  MCC2 BEQV  B                  19.52
+  MCC2 CEQV  C                  19.52
+C   The following resistors are in parallel with the following inductors.  Maybe
+C   it originally was needed to damp the trapezoidal rule oscillation upon
+C   switch opening.  But with the new interpolation,  it represents more of
+C   a problem than a solution,  so remove it:
+C       MCC2 A            4830.
+C SWT  BMCC2 B            4830.
+C       MCC2 C            4830.
+C   If the preceding are 3 resistors are enable,  there will be seen a small
+C   oscillation in node voltage "SWT  B".  Presumably this is because the time
+C   step is too big for the R-L time constant = L / R = ( 13.01 / 377 ) / 4830
+C   = 7.1448E-6 usec.  Yes,  dT = 100 usec is much too big for this. 
+  MCC2 A                        13.01
+  MCC2 BSWT  B                  13.01
+  MCC2 C                        13.01
+BLANK card terminating branch cards
+  SWT  B             -1.       0.0 
+BLANK card terminating switch cards
+14EQV  A  389997.    60.       -63.81293                          -1.
+14EQV  B  389997.    60.      -183.81293                          -1.
+14EQV  C  389997.    60.      -303.81293                          -1.
+14NAVH A  390000.    60.      -64.0                               -1.
+14NAVH B  390000.    60.     -184.0                               -1.
+14NAVH C  390000.    60.     -304.0                               -1.
+BLANK card terminating source cards
+  SWT  BMCC1 AMCC1 BMCC1 CMCC2 AMCC2 BMCC2 CNAVH ANAVH BNAVH C
+C  First  10     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C   Step   Time     SWT  B     MCC1 A     MCC1 B     MCC1 C     MCC2 A     MCC2 B     MCC2 C     NAVH A     NAVH B     NAVH C
+C ***   Phasor I(0) =  2.4468296E+03   Switch  "SWT  B"  to  "      "  closed in the steady-state.
+C   0       0.0        0.0  -174481.4  394812.58  -290998.8  85657.845  -193693.8  112922.73  170964.75   -389050.  218085.23
+C   1     .1E-3        0.0  -168194.6  405836.81  -314720.1  90810.935  -194755.9  109275.08   184054.8  -387748.2  230116.44
+C   2     .2E-3        0.0  -161668.8  416284.52  -337994.3  95834.982  -195541.2  105472.16   196883.3  -385895.4  241820.64
+C   3     .3E-3        0.0  -154913.4  426140.87  -360788.3  100722.85  -196048.7  101519.35  209432.02  -383494.2  253181.21
+C   4     .4E-3        0.0   -147938.  435391.84  -383069.8  105467.58  -196277.6  97422.292  221683.12  -380548.1  264181.98
+C ***        Open  switch  "SWT  B"  to  "      "  after  5.00000000E-04  sec.
+C   5 .43214E-3        0.0  -145628.6  438166.14  -390055.7  106944.28  -196261.6  96061.088  225519.14  -379427.4  267596.76
+C   6 .48214E-3  -465800.7  -144863.5  172826.49  -403694.3  106372.43  -465800.7  91075.297  231452.34  -377626.9  272868.34
+C   7 .58214E-3  -465328.5  -137555.4  181349.77  -425004.4  110860.46  -465328.5   86744.66  243175.67   -373796.  283243.34
+C   8 .68214E-3  -464115.1  -130135.1  189912.53   -445787.  115170.55  -464115.1  82277.151  254494.72  -369337.3  293146.52
+C   9 .78214E-3  -462262.7  -122588.9  198400.92  -465995.4  119320.82  -462262.7  77696.575  265452.12  -364353.9  302633.12
+C  10 .88214E-3  -459774.1  -114927.6  206801.85  -485600.6  123305.38  -459774.1  73009.427   276032.3  -358852.6  311689.66
+C  11 .98214E-3  -456652.5   -107162.  215102.21  -504574.9  127118.52  -456652.5  68222.349  286220.22  -352841.4  320303.27
+C  12 .00108214  -452902.2  -99303.03  223288.85   -522891.  130754.82  -452902.2  63342.121  296001.41  -346328.8  328461.72
+BLANK card terminating requests for node voltage output
+  CALCOMP PLOT
+ 2DCNEW-30c.  3-phase DC-53.  dT = 100 usec
+  SUPERIMPOSE                  2    { Superimpose plots of the following 2 cards
+ 144 .1 0.0 1.0-6.E56.E5MCC1 AMCC1 BMCC1 C
+ 144 .1 0.0 1.0-6.E52.E5MCC2 AMCC2 BMCC2 CSWT  B
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C      4th of ??  data subcases has all of preceding plus the saturable
+C      TRANSFORMER  ---  different because it uses [A] and [R] internally.  
+INTERPOLATE SWITCH ZERO CROSSINGS { Request November, 1995, interpolate, average 
+$DEPOSIT, D4FACT=-1.  { Use SPY DEPOSIT to change STARTUP value to hold plot
+$DEPOSIT, NSMTH=1000  { Use SPY DEPOSIT to change STARTUP value so no averaging
+PRINTED NUMBER WIDTH, 10, 2,   { Full precision on each of 8 columns of printout
+ .000100    .001    60.0    60.0
+       1       1       0       0
+51NAVH AMCC1 A            162.67   507.51
+52NAVH BMCC1 B            6.51    162.97
+53NAVH CMCC1 C
+  MCC1 AMCC2 A                        8285.                                    1
+  MCC1 BMCC2 B                        8285.                                    1
+  MCC1 CMCC2 C                        8285.                                    1
+  MCC2 AEQV  A                  19.52
+  MCC2 BEQV  B                  19.52
+  MCC2 CEQV  C                  19.52
+  TRANSFORMER                         TRAN A
+            9999
+ 1NAVL ANAVL C                  .1    26.
+ 2NAVH A                        31.23 311.09
+  TRANSFORMER TRAN A                  TRAN B
+ 1NAVL BNAVL A
+ 2NAVH B
+  TRANSFORMER TRAN A                  TRAN C
+ 1NAVL CNAVL B
+ 2NAVH C
+  NAVL A                  2500.       1.13                                     1
+  NAVL B                  2500.       1.13                                     1
+  NAVL C                  2500.       1.13                                     1
+C SWT  AMCC2 A            4830.  { These look like artificial damping resistors
+C SWT  BMCC2 B            4830.  { since they parallel inductors.  Remove them,
+C SWT  CMCC2 C            4830.  { to remove any such artificial influence.
+  MCC2 ASWT  A                  13.01                                          3
+  MCC2 BSWT  B                  13.01                                          3
+  MCC2 CSWT  C                  13.01                                          3
+BLANK card terminating branch cards
+  SWT  A             -1.       0.0  { Note switches close in steady state, so we
+  SWT  B             -1.       0.0  { can open immediately to generate those
+  SWT  C             -1.       0.0  { famous transients of the full test case
+BLANK card terminating switch cards
+14EQV  A  389997.    60.      -58.81293                           -1.
+14EQV  B  389997.    60.      -178.81293                          -1.
+14EQV  C  389997.    60.       61.18707                           -1.
+14NAVL A  21229.     60.      -09.896562                          -1.
+14NAVL B  21229.     60.     -129.896562                          -1.
+14NAVL C  21229.     60.     -249.896562                          -1.
+BLANK card terminating source cards
+  NAVH ANAVH BNAVH CMCC1 AMCC1 BMCC1 CMCC2 AMCC2 BMCC2 C
+C  First  12     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Next   9     output variables are branch currents (flowing from the upper node to the lower node);
+C   Step      Time     MCC2 A    MCC2 B    MCC2 C    NAVH A    NAVH B    NAVH C    MCC1 A    MCC1 B    MCC1 C    MCC2 A    MCC2 B
+C                      SWT  A    SWT  B    SWT  C
+C
+C                      MCC2 C    MCC1 A    MCC1 B    MCC1 C    NAVL A    NAVL B    NAVL C    MCC2 A    MCC2 B    MCC2 C
+C                                MCC2 A    MCC2 B    MCC2 C    TERRA     TERRA     TERRA     SWT  A    SWT  B    SWT  C
+C ***      Phasor I(0) = -8.0963211E+03                     Switch  "SWT  A"  to  "      "  closed in the steady-state.
+C ***      Phasor I(0) =  1.1523735E+03                     Switch  "SWT  B"  to  "      "  closed in the steady-state.
+C ***      Phasor I(0) =  6.9439476E+03                     Switch  "SWT  C"  to  "      "  closed in the steady-state.
+C      0       0.0   99818.42  -178181.   78362.1  226393.8  -283398.  57004.25  -194702.  165656.9  29044.77  99818.42  -178181.
+C                     78362.1  3599.475  2334.334  -5933.81  .0041897  -.018448  .0225037  -8096.32  1152.373  6943.948
+C      1     .1E-3   103717.6  -178619.  74901.35  225066.7  -288180.  63113.22  -174220.  175592.3  -1371.88  103717.6  -178619.
+C                    74901.35  3688.875  2225.321   -5914.2  .0032972   -.01786  .0228056  -7801.43  635.4241  7166.004
+C      2     .2E-3   107469.4  -178804.  71334.16  223419.8  -292552.  69132.51  -153492.  185278.4  -31786.6  107469.4  -178804.
+C                    71334.16  3773.034  2113.145  -5886.18  .0023986  -.017241   .023067  -7495.45   117.572  7377.877
+C ***                                                             Open  switch  "SWT  B"  to  "      "  after  3.00000000E-04  sec.
+C      3  .2227E-3   108286.3  -178788.  70501.52  222973.9  -293450.  70476.37  -148738.   187417.  -38679.4  108286.3  -178788.
+C                    70501.52  3790.918  2087.004  -5877.92  .0021941  -.017096  .0231202  -7423.59  -.71E-14  7423.585
+C      4  .2727E-3   108170.2       0.0  66755.81  233082.2  -338388.  84541.63  -140151.  -57621.2  -55765.2  108170.2  -428483.
+C                    66755.81  3825.099  2046.881  -5863.39  .0018122  -.016824   .023218  -7266.86       0.0  7520.305
+C      5  .3727E-3   111674.3       0.0  63026.43   230983.  -341937.    90444.  -119092.   -48039.  -86099.1  111674.3  -428029.
+C                    63026.43  3890.705  1965.149  -5830.18  .0010551  -.016276  .0233989  -6948.34       0.0   7708.34
+BLANK card terminating requests for node voltage output
+C      6  .4727E-3   114997.9       0.0  59194.89  228475.8  -344872.  96177.22  -97928.3  -38144.4  -116365.  114997.9  -426883.
+C                    59194.89  3950.755  1880.493  -5788.72  -.222E-3  -.015324  .0236596  -6619.93       0.0   7885.42
+C      7  .5727E-3   118160.3       0.0   55281.4  225631.3  -347289.  101761.1   -76665.   -28047.  -146506.  118160.3  -425144.
+C                     55281.4   4005.17  1793.014  -5739.05  -.851E-3  -.014821  .0237371  -6282.11       0.0   8051.28
+C      8  .6727E-3    121157.       0.0  51291.52  222453.6  -349184.  107187.8  -55332.9  -17761.7  -176479.   121157.  -422812.
+C                    51291.52  4053.883  1702.812  -5681.24  -.001957  -.013949  .0238914  -5935.38       0.0  8205.688
+C      9  .7727E-3   123983.6       0.0  47230.91  218947.1  -350554.  112449.5  -33962.2  -7304.08  -206241.  123983.6  -419891.
+C                    47230.91  4096.836  1609.991  -5615.35  -.002707  -.013315    .02393  -5580.21       0.0  8348.432
+C     10  .8727E-3   126636.2       0.0  43105.33  215116.9  -351399.  117538.9  -12583.4  3310.273  -235750.  126636.2  -416386.
+C                    43105.33  4133.977  1514.661  -5541.48  -.003714  -.012471  .0239951   -5217.1       0.0  8479.316
+C     11  .9727E-3   129110.9       0.0  38920.64  210968.6  -351716.  122448.8  8773.356  14065.26  -264964.  129110.9  -412301.
+C                    38920.64  4165.265  1416.934  -5459.71  -.004523   -.01175  .0239814  -4846.56       0.0  8598.159
+C     12  .0010727   131404.3       0.0  34682.77  206508.1  -351507.  127172.3  30077.71  24944.53  -293841.  131404.3  -407642.
+C                    34682.77  4190.666  1316.926  -5370.15  -.005468  -.010909  .0239667  -4469.11       0.0    8704.8
+  CALCOMP PLOT
+ 2DCNEW-30d.  3-phase DC-53.  dT = 100 usec
+  SUPERIMPOSE                  3    { Superimpose plots of the following 4 cards
+ 144 .1 0.0 1.0         NAVH ANAVH BNAVH C      { Not a trace of oscillation in 
+ 144 .1 0.0 1.0         MCC1 AMCC1 BMCC1 C      { Not a trace of oscillation in 
+ 144 .1 0.0 1.0         MCC2 AMCC2 BMCC2 C      { either of these two plots.
+  SUPERIMPOSE                  2    { Superimpose plots of the following 4 cards
+ 194 .1 0.0 1.0         BRANCH
+                        MCC1 AMCC2 AMCC1 BMCC2 BMCC1 CMCC2 C                        
+ 184 .1 0.0 1.0         BRANCH
+                        MCC2 ASWT  AMCC2 BSWT  BMCC2 CSWT  C                  
+  SUPERIMPOSE                  2    { Superimpose plots of the following 4 cards
+ 194 .1 0.0 1.0         BRANCH
+                        MCC2 ASWT  AMCC2 BSWT  BMCC2 CSWT  C                  
+ 194 .1 0.0 1.0         BRANCH
+                        NAVL A      NAVL B      NAVL C                  
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C      5th of ??  data subcases bears no relation to the preceding.  Instead,
+C      it begins the consideration of diodes with the simplest power supply:
+C      single-phase and half wave.  If one looks hard enough,  one can note
+C      similarity to Prof. Ned Mohan's DBRECT1.DAT (part of "Computer Exercises
+C      for Power Electronics Education by N.Mohan; January 1990").  Exercise 2,
+C      was entitled  "Diode bridge rectifier 1-phase"  by Mohan.   Of course,
+C      this was correct, but it also was full-wave,  involving two diodes.  The
+C      circuit being used here consists of just the positive half.  Among other
+C      differences are lack of snubber circuits and damping resistors, and a
+C      much larger time step size dT.  These differences are possible,  and
+C      resulting waveforms are smooth,  thanks to ISZC.  24 May 2000.
+INTERPOLATE SWITCH ZERO CROSSINGS { Request November, 1995, interpolate, average 
+$DEPOSIT, D4FACT=-1.  { Use SPY DEPOSIT to change STARTUP value to hold plot
+$DEPOSIT, NSMTH=1000  { Use SPY DEPOSIT to change STARTUP value so no averaging
+PRINTED NUMBER WIDTH, 9, 2,   { Full precision on each of 8 columns of printout
+ .000400    .020     { Note much larger time step (Mohan used 50 usec)
+       1       1 
+  GEN   ANODE                .01   1.0                                         3
+C   Mohan separated his series resistance from series inductance.  Because WSM
+C   understands no need for this,  a single branch (the preceding) is used.
+C      Mohan paralleled the preceding inductor (minus the resistance) by a
+C      large resistor.   Understanding no physical reason,  this resistor has
+C      been removed.  It is believe that Mohan used the resistor to dampen
+C      trapezoidal rule oscillations.  But using ISZC,  there is no such need.
+C      In fact,  the resistor would create a problem because it is so large.
+C      The associated time constant L/R would be too large to track using any
+C      reasonable dT.  So,  delete the apparent damping resistor.
+  CATHOD                              1000.0  { Smoothing capacitor }          3
+        CATHOD              20.0  { Load resistance parallels capacitor }
+BLANK card ending branches
+11ANODE CATHOD                                                                13
+C   Mohan paralleled each of his diodes with an R-C snubber circuit to control
+C   the transient upon opening.  But for ISZC, this represents a complication.
+C   A snubber circuit would introduce fast dynamics that are unnecessary to
+C   basic theoretical understanding of the circuit.  With the snubber, dT must
+C   be kept small.  But without it, dT can be almost arbitrarily large.  The
+C   400 usec used here is not the maximum, but rather a step size that makes
+C   output curves almost smooth.  Larger dT such as 500 usec produce equally-
+C   valid solutions,  but the plots appear significantly more jagged.
+BLANK card ending switch cards
+14GEN          170.0      60.0     -90.0
+BLANK card ending source cards
+ 2CATHOD          120.0      { Node voltage initial condition is voltage of load capacitor 
+ 3CATHOD                               120.0 { Branch initial condition gives cap voltage
+ 1 { Request for the output of all node voltages
+  CALCOMP PLOT
+ 2DCNEW-30e.  Half-wave, 1-phase diode rectifier
+ 144 2. 0.0 20.         GEN   ANODE CATHOD  
+ 184 2. 0.0 20.-300.100.BRANCH
+                        GEN   ANODE ANODE CATHOD      CATHOD
+ 194 2. 0.0 20.-20.0 60.BRANCH
+                        GEN   ANODE ANODE CATHODCATHOD
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      6th of ??  data subcases is a modification of Prof. Ned Mohan's 
+C      VDOUBLER.DAT (part of "Computer Exercises for Power Electronics 
+C      Education by N.Mohan; January 1990").  Mohan's comment card had title
+C      " VOLTAGE DOUBLER RECTIFIER 1-PHASE "   Changes are mentioned on 
+C      comment cards and in-line comments that follow.  No snubber 
+C      circuits or damping resistors are being used,  and the time step 
+C      dT is much larger.  26 May 2000
+INTERPOLATE SWITCH ZERO CROSSINGS { Request November, 1995, interpolate, average 
+$DEPOSIT, D4FACT=-1.  { Use SPY DEPOSIT to change STARTUP value to hold plot
+$DEPOSIT, NSMTH=1000  { Use SPY DEPOSIT to change STARTUP value so no averaging
+PRINTED NUMBER WIDTH, 9, 2,   { Full precision on each of 8 columns of printout
+ .000400    .020         { Note larger time step (Mohan used 50 usec)
+       1       1                              
+  VSA   VAP                     1.0                                            3
+C   Mohan had a damping resistor in parallel with preceding reactor.
+  POS                        0.1      1000.0                                   1
+        NEG                  0.1      1000.0                                   1
+  POS   NEG                 80.0                                               2
+BLANK card ending branch cards
+C   The following 2 diodes are the only two switches.  Mohan had a MEASURING
+C   switch in series with the first branch,  but this no longer is needed
+C   after removal of the parallel damping resistor.  That inductor now can be
+C   used to measure the source current.
+11VAP   POS                                                                   13
+11NEG   VAP                                                                   13
+C   Mohan had snubber circuits in parallel with each of the two preceding diodes
+BLANK card ending switch cards
+14VSA     170.0     60.0      -90.0
+BLANK card ending source cards
+C   The following initial conditions are substantially different than those used 
+C   by Mohan.  They are believed to be close to right, however.  They do provide
+C   continuation of the steady-state:
+ 2POS             145.0      { Node voltage initial condition is voltage of load capacitor 
+ 2NEG            -178.0      { Node voltage initial condition is voltage of load capacitor 
+ 3POS                                  145.0 { Branch initial condition gives cap voltage
+ 3      NEG                            178.0 { Branch initial condition gives cap voltage
+  VSA   POS   NEG   VAP
+BLANK card ending output requests (here, just node voltages)
+ 2DCNEW-30f.  Mohan's Voltage doubler
+ 144 2. 0.0 20.         VSA   POS   NEG   VAP  
+ 184 2. 0.0 20.-350. 50.BRANCH
+                        VAP   POS   NEG   VAP   VSA   VAP
+ 194 2. 0.0 20.         BRANCH
+                        VAP   POS   NEG   VAP   VAP   VSA
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      7th of ??  data subcases is a 3-phase version of the 5th subcase.
+C      It bears some resemblance to Prof. Ned Mohan's  DBRECT3.DAT 
+C      (part of "Computer Exercises for Power Electronics Education 
+C      by N.Mohan; January 1990").  Mohan's comment card had title
+C      " DIODE BRIDGE RECTIFIER WITH A 3-PHASE INPUT "   But like the 5th 
+C      subcase,  present data is half-wave rather than full-wave.  I.e.,  
+C      rather than six diodes,  it involves just three.  Also,  instead of 
+C      using manually-specified initial conditions,  WSM's data illustrates 
+C      reliance upon a phasor solution,  using  CLOSED  for one diode.  The
+C      resulting automatic initialization is surprisingly good.  Within 90
+C      degrees the shapes are familiar,  and within 180 degrees, the solution
+C      seems to have settled into the steady state.  Other changes to data
+C      are mentioned on comment cards and in-line comments that follow.  No 
+C      snubber circuits are being used thanks to ISZC,  and the time step 
+C      dT is much larger than Mohan used (200 vs. 50 usec).  dT = 400 usec
+C      can be used,  and has been,  but its is marginal for tracking the L-C 
+C      oscillation during charging.  WSM.  30 May 2000
+INTERPOLATE SWITCH ZERO CROSSINGS { Request November, 1995, interpolate, average 
+$DEPOSIT, D4FACT=-1.  { Use SPY DEPOSIT to change STARTUP value to hold plot
+$DEPOSIT, NSMTH=1000  { Use SPY DEPOSIT to change STARTUP value so no averaging
+PRINTED NUMBER WIDTH, 9, 2,   { Full precision on each of 8 columns of printout
+ .000200    .020
+       1       1       0       0       0      -1
+       5       5
+  GENA  ANODA                0.1   0.3
+  GENB  ANODB GENA  ANODA
+  GENC  ANODC GENA  ANODA
+C   The preceding reactance of 0.3 mH has been chosen near the minimum that will  
+C   prevent flopping of the diodes.   Of course, load capacitance, resistance, &
+C   this smoothing reactance form a series R-L-C circuit when a diode is closed.
+C   For given R and C below,  this  L  is near the minimum for a single charging
+C   pulse for each cycle of each phase.  For example,  0.2 will result in a very
+C   small but distinct secondary pulse following the main pulse for each phase.
+C   L = 0.15 mH will give a distinct secondary current pulse of more than 20%
+C   of the primary pulse.  But the pulses are very close together.  For 0.1 mH, 
+C   the two become one,  clearly revealing the oscillatory nature of the current
+C   transient.
+  CATH                                 500.0
+        CATH              20.0
+BLANK card ending branch cards
+C   For the following 3 diodes,  only phase "a" is to be closed in the phasor
+C   steady state.  At time zero,  phase "a" passes through its positive peak,
+C   so timing is about right.
+11ANODA CATH                                          CLOSED                  13
+11ANODB CATH                                                                  13
+11ANODC CATH                                                                  13
+C   Mohan paralleled the preceding diodes with R-C snubber circuits to control
+C   the transient upon opening.  But for ISZC, this represents a complication.
+C   A snubber circuit would introduce fast dynamics that are unnecessary to
+C   basic theoretical understanding of the circuit,  so omit.  
+BLANK card ending switch cards
+14GENA          80.0      60.0                                     -1.
+14GENB          80.0      60.0    -120.0                           -1.
+14GENC          80.0      60.0    -240.0                           -1.
+BLANK card ending source cards
+  ANODA ANODB ANODC CATH   { List of nodes for node voltage output
+BLANK card ending output requests (here, just node voltages)
+ 2DCNEW-30g.  3-phase, half-wave diode bridge
+ 144 2. 0.0 20.         ANODA ANODB ANODC CATH 
+  SUPERIMPOSE                  2    { Superimpose plots of the following 4 cards
+ 184 2. 0.0 20.         BRANCH
+                        ANODA CATH  ANODB CATH  ANODC CATH
+ 194 2. 0.0 20.         BRANCH
+                        ANODA CATH  ANODB CATH  ANODC CATH
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      8th of ?? data subcases is a full-wave version of the preceding half-wave
+C      subcase.  This is comparable to Prof. Ned Mohan's  DBRECT3.DAT  (part 
+C      of  "Computer Exercises for Power Electronics Education by N.Mohan; 
+C      January 1990").  Mohan's comment card had title  " DIODE BRIDGE 
+C      RECTIFIER WITH A 3-PHASE INPUT "   Changes are mentioned on comment
+C      cards and in-line comments that follow.  No snubber circuits or
+C      damping resistors are being used,  there are no manually-specified
+C      initial conditions,  and the time step dT is much larger than Mohan
+C      was able to use, thanks to ISZC.  30 May 2000
+INTERPOLATE SWITCH ZERO CROSSINGS { Request November, 1995, interpolate, average 
+$DEPOSIT, D4FACT=-1.  { Use SPY DEPOSIT to change STARTUP value to hold plot
+$DEPOSIT, NSMTH=1000  { Use SPY DEPOSIT to change STARTUP value so no averaging
+PRINTED NUMBER WIDTH, 9, 2,   { Full precision on each of 8 columns of printout
+ .000500    .040                 { Note large dT = 400 usec (Mohan used 50 usec)
+       1       1       0       0       0
+  GENA  TRANA                0.1   0.5
+  GENB  TRANB GENA  TRANA
+  GENC  TRANC GENA  TRANA
+  NEG   POS                 20.0   { Load resistance connects the 2 dc terminals
+C   Some capacitance is needed for smoothing.  But placement is not unique.  In
+C   the preceding subcase,  note that one side of the load was grounded,  so it
+C   was natural to place a single capacitance across the load.  But neither side
+C   of the load is grounded in this full-wave case.  To maintain balance, equal
+C   capacitors will be added from the load terminals to ground (next).  Yes, a
+C   capacitor could be added across the load, too, but this is not necessary.
+  POS                        0.1       900.0   { 1st of 2 capacitances to ground
+        NEG                  0.1       900.0   { 2nd of 2 capacitances to ground
+BLANK card ending branch cards
+11TRANA POS                                                                   13
+11TRANB POS                                                                   13
+11TRANC POS                                                                   13
+11NEG   TRANA                                                                 13
+11NEG   TRANB                                                                 13
+11NEG   TRANC                                                                 13
+C   Mohan paralleled each of his diodes with R-C snubber circuits to control
+C   the transients upon opening.  But for ISZC, not only is this not necessary,
+C   but it would pose a complication.  Snubber circuits would introduce fast
+C   dynamics that would prevent use of large dT,  so omit them.  
+BLANK card ending switch cards
+14GENA          80.0      60.0                                     -1.
+14GENB          80.0      60.0    -120.0                           -1.
+14GENC          80.0      60.0    -240.0                           -1.
+C   About preceding sources,  note presence during a phasor solution.  On the
+C   other hand,  all 6 diodes are open during this,  so only the 3 smoothing
+C   reactors  (GEN, TRAN)  are excited,  and they carry no current.  Whether
+C   a phasor solution is,  or is not used,  has little effect.
+BLANK card ending source cards
+C   In this location,  Mohan would specify initial conditions manually.  That
+C   is not being done here.  Instead,  the circuit will start itself.  The use
+C   of  CLOSED  as in the preceding half-wave case is not practical because it
+C   would be either  1) completely wrong (if used on 2 or more diodes);  or 2)
+C   partly wrong (if used on just one).  It is simpler to let ATP start itself.
+C   This is plenty fast (plots below show repetition after about 1 cycle).
+  TRANA TRANB TRANC POS   NEG     { List of nodes for node voltage output
+BLANK card ending output requests (here, just node voltages)
+ 2DCNEW-30h.  3-phase, full-wave diode bridge
+  SUPERIMPOSE                  2    { Superimpose plots of the following 2 cards
+ 144 2. 0.0 20.         TRANA TRANB TRANC    { ac voltages that drive the bridge
+ 144 2. 0.0 20.         POS   NEG            { dc voltages that are the output
+  SUPERIMPOSE                  2    { Superimpose plots of the following 4 cards
+ 184 2. 0.0 20.         BRANCH { Forward voltages across diodes of positive half
+                        TRANA POS   TRANB POS   TRANC POS 
+ 194 2. 0.0 20. -40. 40.BRANCH { Forward diode currents that charge positive 1/2
+                        TRANA POS   TRANB POS   TRANC POS 
+  SUPERIMPOSE                  2    { Superimpose plots of the following 2 cards
+ 184 2. 0.0 20.         BRANCH { Forward voltages across diodes of negative half
+                        NEG   TRANA NEG   TRANB NEG   TRANC 
+ 194 2. 0.0 20. -40. 40.BRANCH { Forward diode currents that charge negative 1/2
+                        NEG   TRANA NEG   TRANB NEG   TRANC 
+  SUPERIMPOSE                  2    { Superimpose plots of the following 2 cards
+ 144 2. 20. 40.         TRANA TRANB TRANC    { ac voltages that drive the bridge
+ 144 2. 20. 40.         POS   NEG            { dc voltages that are the output
+  SUPERIMPOSE                  2    { Superimpose plots of the following 4 cards
+ 184 2. 20. 40.         BRANCH { Forward voltages across diodes of positive half
+                        TRANA POS   TRANB POS   TRANC POS 
+ 194 2. 20. 40. -40. 40.BRANCH { Forward diode currents that charge positive 1/2
+                        TRANA POS   TRANB POS   TRANC POS 
+  SUPERIMPOSE                  2    { Superimpose plots of the following 2 cards
+ 184 2. 20. 40.         BRANCH { Forward voltages across diodes of negative half
+                        NEG   TRANA NEG   TRANB NEG   TRANC 
+ 194 2. 20. 40. -40. 40.BRANCH { Forward diode currents that charge negative 1/2
+                        NEG   TRANA NEG   TRANB NEG   TRANC 
+C   The preceding plots document settling into the steady state.  After about
+C   half a cycle,  the switching sequence is right;  after one cycle, the output
+C   is close to the steady state.  To see this, double T-max and plot (0, 40 ms) 
+C   Manual specification of limits of the diode currents serves to show the
+C   steady-state pulses using a convenient scale.  The initial inrush will be
+C   lost off the top of the plot,  but this detail is less interesting.
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+EOF
+

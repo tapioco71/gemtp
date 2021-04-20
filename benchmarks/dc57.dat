@@ -1,0 +1,232 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-57   (former DC-71 of "M39." vintage)
+C     The basic  DC-30  problem has been augmented by batch-mode SPY commands as
+C     an illustration of  $SPY  usage.  See  DC-56  (this is 2nd of 2 examples).
+C     Unlike  DC-56,  this present case uses two sets of in-line  $SPY  data, so
+C     it  is more general.    For SPY use,  the  user may desire conversion from
+C     universal character plotting to computer-dependent vector-graphic plotting
+C     (usually in a separate, third window).   Applicable  to  Apollo for such a
+C     change  are the comment cards beginning with "C ---." (see two locations).
+C       1st of 2 subcases is the original for Salford EMTP.  It involves one
+C       vector plot,  and no  ROLL.  For ROLL, see the 2nd subcase.  Execution
+C       with  DISK  will result in screen output that is limited to the vector
+C       plots (1 from 1st subcase and 4 from 2nd).  Execution using  BOTH  will
+C       differ in that text will be outputted to the screen until the 1st vector
+C       plot.  Then, in effect, ATP switches from  BOTH  to  DISK.  March, 2002.
+$DEPOSIT, D4FACT=2.0  { Use SPY DEPOSIT to change CALCOMP PLOT time from STARTUP
+$DEPOSIT, NOCALC=-1    { We want screen graphics during DISK in spite of STARTUP
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 9 output columns)
+  1.0E-6  1.2E-3
+       1       1       1       0       1      -1
+       5       5      20      20     100     100
+TACS HYBRID
+ 1DUMMY   +UNITY
+       1.0
+       1.0    0.5E-3
+90BUS2
+90BUS3
+99VSW                     BUS2  -     BUS3
+99DRIVE              ABS  VSW
+99BREAK       1.5E+8*     TIMEX             +     1.0E+5
+98GRID  51+UNITY                                                    BREAK DRIVE
+33DUMMY TIMEX UNITY BUS2  BUS3  VSW   DRIVE BREAK GRID
+BLANK card ending the last TACS data
+  GEN   BUS1                       15.
+  BUS1                                   2.9
+  BUS1  BUS2                       0.1
+  BUS2                                   0.1
+  BUS3                                  .017
+  BUS3                            490.
+  BUS2  BUS2R              24.34
+  BUS3  BUS3R BUS2  BUS2R
+BLANK card ending electric network branch cards
+  BUS2  BUS3         -1.                1.E9                                   2
+11BUS2R BUS3R                  20.                              GRID          13
+$SPY         { Request for batch-mode SPY connection: in-line SPY commands begin
+BRANCH          { SPY request for a display of the program branch table (List 2)
+ALL                                       { Display all rows of the branch table
+SPY        { Exit the loop of the branch table display;  back to  "SPY:"  prompt
+SOURCE
+TACS
+ALL
+SPY   { Exit the loop of the TACS source table display;  back to  "SPY:"  prompt
+time   { Extra, do-nothing command makes the last something other than spy
+$SPYEND        { Bound on in-line SPY commands;  back to batch-mode program data
+BLANK card ending switch cards
+14GEN         66500.       50.   -2.0508                           -1.
+$SPY         { Request for batch-mode SPY connection: in-line SPY commands begin
+SOURCE
+ELEC
+ALL
+SPY  { Exit the loop of the electric source table display; back to "SPY:" prompt
+SWITCH     { Show ATP storage related to switches
+ALL        { Display all rows of switch table
+SPY        { Exit the loop of the switch table display;  back to  "SPY:"  prompt
+BREAK      { Initiate a request for a later SPY break
+16, -750    { Next SPY break will be at .75E-3 seconds, which is step number 750
+GO             { Begin EMTP execution;  no "@" read until break point is reached
+PLOT                        { Having just broken at step 750, enter SPY plotting
+C ---.    For 3-window SPY usage and vector plotting,  comment out the MODE card
+C ---.    that follows (assuming LTEK=1 for vector plots is set by STARTUP file)
+C MODE         { Toggle from vector (Apollo default) to character mode of plotting
+SET COLUMN                       { Request a change in the output plotting width
+131   { The default width of 79 is now being changed to 131 for maximum accuracy
+CHOICE          { Request a list of the output variables, available for plotting
+NAME                        { Plot command to begin inputting the variable names
+END               { Step over node voltage input, and begin branch voltage input
+BUS2  BUS3 { The 1st and only variable to be plotted will be this branch voltage
+LAST      { Exit the loop over plot input variables;  back to basic plot command
+LABEL         { Define labeling for plots,  beginning with super title (next):
+Super Title Line
+Vertical axis
+1st of two lines of case title
+2nd and final line of case title
+end
+TIMEUNITS  { Default time units of seconds are not convenient, so change to:
+4          { 4 ==> msec (scale by 1000 in labeling the time axis)
+ALL TIME                      { Perform the plot using all available time points
+SPY                                   { Exit plotting;  back to  "SPY:"  command
+BREAK     { Request a pause in the simulation that will soon resume (after "GO")
+16, -1001           { Next SPY activity will recommence at time step number 1001
+GO             { Begin EMTP execution;  no "@" read until break point is reached
+TIME       { Trivial SPY command before program stop, just to prove SPY activity
+$SPYEND        { Bound on in-line SPY commands;  back to batch-mode program data
+BLANK card ending all electric sources
+C       Total network loss  P-loss  by summing injections =  -1.885346136987E-07
+C      Step      Time       BUS2        BUS2R       BUS3R       BUS2R       BUS3
+C                           BUS3        BUS3R
+C
+C                           TACS        TACS        TACS        TACS        TACS
+C                           DUMMY       TIMEX       UNITY       BUS2        BUS3
+C ***  Phasor I(0) = -1.5049840E+01       Switch  "BUS2  "  to  "BUS3  "  closed
+C       0       0.0          0.0         0.0  64751.3498  64751.3498  64751.3498
+C                            0.0         0.0         1.0         0.0         0.0
+C ***          Open  switch  "BUS2  "  to  "BUS3  "  after  1.00000000E-06  sec.
+C       1     .1E-5          0.0         0.0  64752.0751  64752.0751  64752.0751
+C                     .001998002       .1E-5         1.0  64752.0751  64752.0751
+C $OPEN,  UNIT=42  STATUS=UNKNOWN  FILE=DEBUG.LIS
+ 1                         { Request for the output of all network node voltages
+C ---.        All following cards will only be read for single-window execution:
+C Last step: 1200  .0012  105797.943 105797.943 -37370.689 68427.2546 -37370.689
+C Last step:              .909282119      .0012       1.0  68427.2546 -37370.689
+C maxima : 177392.698 177392.698  102764.956  84422.9848  102764.956  84422.9848
+C maxima : .909282119      .0012         1.0  84422.9848  102764.956  177392.698
+C times max : .497E-3    .497E-3      .83E-4     .478E-3      .83E-4     .478E-3
+C times max :   .0012      .0012         0.0     .478E-3      .83E-4     .497E-3
+  PRINTER PLOT
+ 184 .1 0.0 1.2         BUS2  BUS3               { Axis limits: (-0.386,  1.774)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        2nd of 2 subcases is appended  18 March 2002.  This is modification of
+C        the first.  A big change was made for Salford, as Salford VECPLT in
+C        the UTPF was reformed.  Previously,  SPY PLOT  worked,  but it was not
+C        a ROLL-ing vector plot as Mingw32 ATP demonstrated in its separate plot
+C        window for DISLIN graphics.  Now, Salford EMTP, too, can have a ROLLing
+C        vector  SPY PLOT  just as Mingw32 ATP did.  There is a price, however:
+C        Execution must be using  DISK  rather than  BOTH  (text output to the
+C        screen is not possible).  Also,  NOCALC = -1  is required to enable
+C        CALCOMP PLOT  graphics  (screen graphics)  during  DISK.  Then, during
+C        all plotting,  the screen is held in graphic mode.   Previously, TSTALL
+C        was made positive to slow text output.  Since text and graphics are
+C        mixed for the ROLL-ing SPY PLOT  in the dT loop, this still works.  The
+C        graphics continue to be slowed,  even though text can not be seen on
+C        the screen.  Using default 50% overlap of plots, the first begins at
+C        1/4 msec,  and extends through 1.0 msec.  The 2nd then is (0.5, 1.5),
+C        and the 3rd covers (1.0, 2.0),  of which the simulation covers 80% when
+C        T-max is reached.  Finally, real  CALCOMP PLOT  produces a 4th plot.
+C        All 4 should be in the  .PS  (PostScript) output,  and will be found in
+C        the  ATPHPGL.*  for  HP-GL  (one disk file per plot).
+$DEPOSIT, KSLOWR=5    { Use SPY DEPOSIT to change ROLL buffer from STARTUP value
+PRINTED NUMBER WIDTH, 12, 2,  { Request maximum precision (for 9 output columns)
+  1.0E-6  1.8E-3
+       1       1       1       0       1      -1
+       5       5      20      20     100     100
+TACS HYBRID
+ 1DUMMY   +UNITY
+       1.0
+       1.0    0.5E-3
+90BUS2
+90BUS3
+99VSW                     BUS2  -     BUS3
+99DRIVE              ABS  VSW
+99BREAK       1.5E+8*     TIMEX             +     1.0E+5
+98GRID  51+UNITY                                                    BREAK DRIVE
+33DUMMY TIMEX UNITY BUS2  BUS3  VSW   DRIVE BREAK GRID
+BLANK card ending the last TACS data
+  GEN   BUS1                       15.
+  BUS1                                   2.9
+  BUS1  BUS2                       0.1
+  BUS2                                   0.1
+  BUS3                                  .017
+  BUS3                            490.
+  BUS2  BUS2R              24.34
+  BUS3  BUS3R BUS2  BUS2R
+BLANK card ending electric network branch cards
+  BUS2  BUS3         -1.                1.E9                                   2
+11BUS2R BUS3R                  20.                              GRID          13
+$SPY         { Request for batch-mode SPY connection: in-line SPY commands begin
+BRANCH          { SPY request for a display of the program branch table (List 2)
+ALL                                       { Display all rows of the branch table
+SPY        { Exit the loop of the branch table display;  back to  "SPY:"  prompt
+SOURCE
+TACS
+ALL
+SPY   { Exit the loop of the TACS source table display;  back to  "SPY:"  prompt
+time   { Extra, do-nothing command makes the last something other than spy
+$SPYEND        { Bound on in-line SPY commands;  back to batch-mode program data
+BLANK card ending switch cards
+14GEN         66500.       50.   -2.0508                           -1.
+$SPY         { Request for batch-mode SPY connection: in-line SPY commands begin
+SOURCE
+ELEC
+ALL
+SPY  { Exit the loop of the electric source table display; back to "SPY:" prompt
+SWITCH
+ALL
+SPY        { Exit the loop of the switch table display;  back to  "SPY:"  prompt
+BREAK      { Initiate a request for a later SPY break
+16, -250    { Next SPY break will be at .25E-3 seconds, which is step number 250
+GO             { Begin EMTP execution;  no "@" read until break point is reached
+PLOT                        { Having just broken at step 750, enter SPY plotting
+C ---.    For 3-window SPY usage and vector plotting,  comment out the MODE card
+C ---.    that follows (assuming LTEK=1 for vector plots is set by STARTUP file)
+C MODE         { Toggle from vector (Apollo default) to character mode of plotting
+SET COLUMN                       { Request a change in the output plotting width
+131   { The default width of 79 is now being changed to 131 for maximum accuracy
+CHOICE          { Request a list of the output variables, available for plotting
+NAME                        { Plot command to begin inputting the variable names
+END               { Step over node voltage input, and begin branch voltage input
+BUS2  BUS3 { The 1st and only variable to be plotted will be this branch voltage
+LAST      { Exit the loop over plot input variables;  back to basic plot command
+LABEL         { Define labeling for plots,  beginning with super title (next):
+Super Title Line
+Vertical label
+FLUSH    { Erase any multi-line case title now being stored (preceding subcase)
+1st of two lines of case title
+2nd and final line of case title
+END           { Terminate this multi-line case title
+TIMEUNITS  { Default time units of seconds are not convenient, so change to:
+4          { 4 ==> msec (scale by 1000 in labeling the time axis)
+TIME 0.0 1.0    { Plot 4 times as far as points now exist (0, 1/4 msec)
+ROLLV           { Switch to ROLL-ing plot, Vector mode (not C ==> character)
+SPY                                   { Exit plotting;  back to  "SPY:"  command
+BREAK     { Request a pause in the simulation that will soon resume (after "GO")
+16, -1001           { Next SPY activity will recommence at time step number 1001
+GO             { Begin EMTP execution;  no "@" read until break point is reached
+TIME       { Trivial SPY command before program stop, just to prove SPY activity
+$SPYEND        { Bound on in-line SPY commands;  back to batch-mode program data
+BLANK card ending all electric sources
+C    The following slows output just prior to entry into dT loop (and plotting).
+C    This serves to hold the 1st plot on the screen for several seconds, & also
+C    to slow following ROLL-ing SPY PLOTs of this subcase enough so the user is
+C    able to study structure.  Without TSTALL, the average PC is too fast, so:
+$DEPOSIT, TSTALL=0.1      { 1/10 second delay will occur after each printed line
+ 1                         { Request for the output of all network node voltages
+  CALCOMP PLOT  { Switch to vector plotting (preceding subcase had PRINTER PLOT)
+ 2Arbitrary 78-character case title text of which this is an example, I hope.
+  First of two lines of 78-byte graph subheading text.
+  Second and final such line of graph subheading text.
+ 184 .2 0.0 2.0         BUS2  BUS3              Graph heading---Vertical axis la
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

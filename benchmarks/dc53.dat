@@ -1,0 +1,499 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-53
+C     1976 IEEE PES  SSR test of  Type-59  S.M.  modeling with a six-mass rotor.
+C     The 1st of 2 subproblems uses S.M. saturation,  while the 2nd ignores  it.
+C       Modified under the direction of Prof. Juan Martinez in Barcelona, Spain.
+C       At end of November, 1992, answer changes.  Original data case is at end.
+PRINTED NUMBER WIDTH, 13, 2,   { Full precision on each of 8 columns of printout
+ALTERNATE DIAGNOSTIC PRINTOUT, 9, 9, 9, 9,
+ .000100    .150    60.0    60.0
+       1       1       1       1       1      -1
+       5       5      20      20     100     100     500     500  
+51NAVH AMCC1 A            162.67   507.51
+52NAVH BMCC1 B            6.51    162.97
+53NAVH CMCC1 C
+  MCC1 AMCC2 A                        8285.
+  MCC1 BMCC2 B                        8285.
+  MCC1 CMCC2 C                        8285.
+  MCC2 AEQV  A                  19.52
+  MCC2 BEQV  B                  19.52
+  MCC2 CEQV  C                  19.52
+  TRANSFORMER                         TRAN A
+            9999
+ 1NAVL ANAVL C                  .1    26.
+ 2NAVH A                        31.23 311.09
+  TRANSFORMER TRAN A                  TRAN B
+ 1NAVL BNAVL A
+ 2NAVH B
+  TRANSFORMER TRAN A                  TRAN C
+ 1NAVL CNAVL B
+ 2NAVH C
+  NAVL A                  2500.       1.13
+  NAVL B                  2500.       1.13
+  NAVL C                  2500.       1.13
+  SWT  AMCC2 A            4830.
+  SWT  BMCC2 B            4830.
+  SWT  CMCC2 C            4830.
+  MCC2 ASWT  A                  13.01
+  MCC2 BSWT  B                  13.01
+  MCC2 CSWT  C                  13.01
+BLANK card terminating branch cards
+  SWT  A       .01661667 .09161667
+  SWT  B       .01661667 .09161667
+  SWT  C       .01661667 .09161667
+BLANK card terminating switch cards
+14EQV  A  389997.    60.      -93.81293                           -1.
+14EQV  B  389997.    60.      -213.81293                          -1.
+14EQV  C  389997.    60.       26.18707                           -1.
+59NAVL A  21229.     60.      -44.896562
+  NAVL B
+  NAVL C                         
+TOLERANCES    { Only change columns 51-60: NIOMAX = 20 }  20 
+PARAMETER FITTING           1.
+ 6 5 6   2 1.        1.        892.4      26.     -1800.    1907.     3050.
+                                                  -1.
+          .13       1.79       1.71       .169      .228      .13504  .20029
+ 4.3      .85       .032      .05       .13
+ 1        .3        .027691                       33.68813 { 1st rotor mass card
+ 2        .26       .046379                       60.9591
+ 3        .22       .255958                       90.81823
+ 4        .22       .263573                       123.6634
+ 5                  .258887                       4.925036
+ 6                  .0101995                                { 6th and final mass
+BLANK
+  51
+  11
+  21
+  31
+BLANK
+  FINISH
+BLANK card terminating source cards
+C       Total network loss  P-loss  by summing injections =   1.775782562050E+07
+C 1st gen: NAVL A  15038.245551065    21229.    9214.6926498239  27946.788742442
+C 1st gen:         -14984.04523972  -44.8965620   -26383.94285136    -70.7480503
+C                               Id                  Iq                  Io
+C                     -3.09160628944E+04   1.46878029885E+04  -5.25097010895E-12
+C Field current of the generator:           4.5653502353E+03    4.5653502353E+03
+C Electromechanical torque of the gen  ...  2.1243643866E+00    2.1243643866E+00
+C Exciter electromechanical torque  ...     7.7723230262E-03    7.7723230262E-03
+C Critical level of total air-gap MMF  ... 1.71429881387E+03   1.63168200357E+03
+C All rotor masses have angular velocity   OMEGA = 3.76991118E+02  [radians/sec]
+C         86.9716299  86.1695376  85.3421110  84.5685376  83.8401898  83.7735234
+C Shaft torques  T(i,i+1)  between rotor masses  "i"  and  "i+1",  for  i=1, 2, 
+C         0.6396410129E+00  0.1193996557E+01  0.1663066633E+01  0.2132136710E+01
+  NAVH ANAVH BNAVH C
+C Step    Time        NAVH A       NAVH B       NAVH C       MACH 1       MACH 1        
+C                                                                ID           IQ     
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1  
+C                         IG           IKQ          IA           IB           IC    
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1  
+C                      TQ GEN       TQ EXC       ANG 1        ANG 2        ANG 3  
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1 
+C                      VEL 1        VEL 2        VEL 3        VEL 4        VEL 5 
+C    0     0.0   54291.79404   -385072.51  330780.7161  -30916.0629  14687.80299
+C                -.75273E-13  .292655E-12   9214.69265  -27456.5111  18241.81844
+C                2.124364387   .007772323  86.97162992  86.16953762  85.34211102
+C                .568434E-13  -.56843E-13  .568434E-13          0.0  -.56843E-13
+C    1   .1E-3   69839.72736  -390821.193  320981.4652  -30916.1137  14687.72194
+C                .0014080836  .0048684281  10202.46318  -27633.4201  17430.95695
+C                2.124360609  .0077723236  86.97162992  86.16953762  85.34211102
+C                .568434E-13  -.56843E-13  .113687E-12  .625278E-12  .1731394E-7
+BLANK card terminating output specifications (node voltages only, here)
+C ***          Open  switch  "SWT  C"  to  "      "  after  1.00100000E-01  sec.
+C  ------  Type-59 S.M. number  1   at time  1.12000000E-01  sec ..  1   and  2.
+C  ------  Type-59 S.M. number  1   at time  1.13700000E-01  sec ..  2   and  2.
+C  ------  Type-59 S.M. number  1   at time  1.30100000E-01  sec ..  1   and  2.
+C  ------  Type-59 S.M. number  1   at time  1.37400000E-01  sec ..  1   and  1.
+C 1500     .15   104309.3802  -348086.573  298677.2363  -21759.7047   -10943.295
+C                417.8108108  1357.808512  -9044.48114  -10806.1382  19850.61938
+C                -.070295796  .0089410716  97.59730399  95.86730666  93.82046444
+C                -.941992921  .2045176672  1.339725985  1.915083108  1.384124131
+C Variable max : 585313.3059  520085.4417  539525.0876  17835.73667  63381.56051
+C                988.5212215  3033.444336  72725.64358  62059.23923  72170.40257
+C                6.107369721  .0111718463  97.63617496  95.86730666  93.82046444
+C                9.612649456  6.486026888  3.485964779  3.136429198  3.837403559
+C Times of max :       .1205        .1088         .115        .1131        .1253
+C                      .0431        .0428        .0386        .0766        .0323
+C                      .1269        .0898        .1486          .15          .15
+C                      .1324        .1339        .1383        .1117        .1064
+C Variable min :  -531698.11   -567217.32  -539152.057  -90845.4903  -37996.1401
+C                -878.277652  -3160.31004  -72191.0953  -67636.3644  -70191.1596
+C                -1.13766495  .0074527254  85.34786543  85.03403222  84.47962018
+C                -6.54365807  -2.66345876   -.92720609  -.946755214  -1.05667573
+C Times of min :       .1116        .1177        .1235        .0308         .043
+C                      .1254        .1252        .0296        .0355        .0413
+C                      .1016        .1153        .0709        .0664        .0604
+C                       .109        .1084        .0511        .1383        .1367
+  CALCOMP PLOT
+ 19415.    150.         MACH 1TQ GEN
+  PRINTER PLOT
+ 19415.    150.         MACH 1TQ GEN             { Axis limits: (-1.138,  6.107)
+ 19415.    150.         MACH 1VEL 6              { Axis limits: (-1.311,  1.221)
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE 
+C   2nd of 2 subcases ignores saturation of S.M.   Note  "-1800."  becomes plus.
+C          Modified with Guido's and Juan Martinez's approval during Oct., 1990.
+C          Answers have changed.   The  original data case is unexecuted at end.
+ .000100    .150     60.     60.
+       1       1       1       1       1      -1
+       5       5      20      20     100     100     500     500    2000    2000
+51NAVH AMCC1 A            162.67   507.51
+52NAVH BMCC1 B            6.51    162.97
+53NAVH CMCC1 C
+  MCC1 AMCC2 A                        8285.
+  MCC1 BMCC2 B                        8285.
+  MCC1 CMCC2 C                        8285.
+  MCC2 AEQV  A                  19.52
+  MCC2 BEQV  B                  19.52
+  MCC2 CEQV  C                  19.52
+  TRANSFORMER                         TRAN A
+            9999
+ 1NAVL ANAVL C                  .1    26.
+ 2NAVH A                        31.23 311.09
+  TRANSFORMER TRAN A                  TRAN B
+ 1NAVL BNAVL A
+ 2NAVH B
+  TRANSFORMER TRAN A                  TRAN C
+ 1NAVL CNAVL B
+ 2NAVH C
+  NAVL A                  2500.       1.13
+  NAVL B                  2500.       1.13
+  NAVL C                  2500.       1.13
+  SWT  AMCC2 A            4830.
+  SWT  BMCC2 B            4830.
+  SWT  CMCC2 C            4830.
+  MCC2 ASWT  A                  13.01
+  MCC2 BSWT  B                  13.01
+  MCC2 CSWT  C                  13.01
+BLANK card terminating branch cards
+  SWT  A       .01661667 .09161667
+  SWT  B       .01661667 .09161667
+  SWT  C       .01661667 .09161667
+BLANK card terminating switch cards
+14EQV  A  389997.    60.      -93.81293                           -1.
+14EQV  B  389997.    60.      -213.81293                          -1.
+14EQV  C  389997.    60.       26.18707                           -1.
+59NAVL A  21229.     60.      -44.896562
+  NAVL B
+  NAVL C
+PARAMETER FITTING           1.                  { +1800 below ignores saturation
+ 6 5 6   2 1.        1.        892.4      26.     +1800.    1907.     3050.
+                                                  +1.
+          .13       1.79       1.71       .169      .228      .13504  .20029
+ 4.3      .85       .032      .05       .13
+ 1        .3        .027691                       33.68813
+ 2        .26       .046379                       60.9591
+ 3        .22       .255958                       90.81823
+ 4        .22       .263573                       123.6634
+ 5                  .258887                       4.925036
+ 6                  .0101995
+BLANK
+  51
+  11
+  21
+  31
+BLANK
+  FINISH
+BLANK card terminating source cards
+C       Total network loss  P-loss  by summing injections =   1.775782562050E+07
+C last gen:  EQV  C   349966.92087687   389997.   -1273.1121012  1348.5241961806
+C last gen:      172106.98504408     26.1870700   -444.6381511542   -160.7480946
+C                              Id                  Iq                  Io 
+C                     -3.15542117823E+04   1.32614561915E+04   2.52046565230E-11
+C Field current of the generator:            4.3132669924E+03   4.3132669924E+03
+C Electromechanical torque of the generator: 2.1243643866E+00   2.1243643866E+00
+C Exciter electromechanical torque:          6.9376969460E-03   6.9376969460E-03
+C Critical level of total air-gap MMF ...   1.71429884454E+03  1.60523487584E+03
+C  Shaft torques  T(i,i+1)  between rotor masses  "i"  and  "i+1",  for  i=1, 2,
+C         0.6393906251E+00  0.1193529167E+01  0.1662415625E+01  0.2131302084E+01 
+  NAVH ANAVH BNAVH C
+C Step    Time        NAVH A       NAVH B       NAVH C       MACH 1       MACH 1      
+C                                                                ID           IQ     
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1  
+C                         IG           IKQ          IA           IB           IC    
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1  
+C                      TQ GEN       TQ EXC       ANG 1        ANG 2        ANG 3   
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1  
+C                      VEL 1        VEL 2        VEL 3        VEL 4        VEL 5   
+C    0     0.0   54291.79404   -385072.51  330780.7161  -31554.2118  13261.45619 
+C                .266898E-12   .40723E-12   9214.69265  -27456.5111  18241.81844 
+C                2.124364387  .0069376969  89.58635083   88.7845725   87.9574698 
+C                .568434E-13  -.56843E-13  .568434E-13          0.0  .568434E-13 
+C    1   .1E-3   69839.72934  -390821.194   320981.465  -31554.2581  13261.37561 
+C                 .001503732  .0051991311  10202.46318  -27633.4201  17430.95695 
+C                2.124361136  .0069376975  89.58635083   88.7845725   87.9574698 
+C                .113687E-12  -.17053E-12  .568434E-13  .568434E-12  .1489752E-7 
+BLANK card terminating output specifications (node voltages only, here)
+C ***          Open  switch  "SWT  C"  to  "      "  after  1.00100000E-01  sec.
+C 1500     .15   159611.2311  -295637.509   244451.986  -34560.0561  -28574.9636 
+C                778.2659242  2549.495792  -22170.7519   -14139.568  36310.31987 
+C                -.573968078  .0088136672  102.0794654  99.88637088  97.31608451 
+C                1.687650055  1.529396844  1.342594518   1.09484855  1.070643911 
+C Variable max : 574220.0885  537207.0909  542581.4443  31490.93919  79432.90719 
+C                1213.937639  3705.575724  76494.23421  59041.06889  77325.42412 
+C                7.303244374   .010097191  102.0794654  99.88637088  97.31608451 
+C                10.48984183  7.560864439  4.098092589  3.872103502  4.699362391 
+C Times of max :       .1203        .1264        .1146        .1135         .126 
+C                      .0435        .0432        .1369        .0444        .1299 
+C                      .1276        .0912          .15          .15          .15 
+C                      .1357        .1366        .1377        .1157        .1122 
+C Variable min : -496670.505  -585630.102  -581107.506  -95534.9427  -46519.8766 
+C                -1216.11132  -4455.25617   -78560.484  -67985.0772    -73775.13 
+C                -1.79621128  .0061658656   87.8638354  87.57123441  87.03732385 
+C                -6.75309545  -2.98526171  -.970772973   -1.6937898  -1.92537841 
+C Times of min :       .1292        .1177        .1233        .1385        .0433 
+C                      .1261        .1259         .127        .0355        .1396 
+C                      .1024        .1226        .0714        .0671         .061 
+C                      .1108        .1104        .0516        .1399        .1379 
+  PRINTER PLOT
+ 19415.    150.         MACH 1TQ GEN             { Axis limits: (-1.796,  7.303)
+ 19415.    150.         MACH 1VEL 6              { Axis limits: (-1.617,  1.401)
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C       3rd of 3 subcases is a scaled version of the 2nd.  The network is in  kV
+C       rather than volts, as described in the July, 1995, newsletter.  A single
+C       step is taken  ---  enough for the user to compare with the 2nd subcase.
+PRINTED NUMBER WIDTH, 13, 2,   { Full precision on each of 8 columns of printout
+ .000100   .0001    60.0    60.0
+       1      -1       0       0  
+51NAVH AMCC1 A            162.67   507.51
+52NAVH BMCC1 B            6.51    162.97
+53NAVH CMCC1 C
+  MCC1 AMCC2 A                        8285.
+  MCC1 BMCC2 B                        8285.
+  MCC1 CMCC2 C                        8285.
+  MCC2 AEQV  A                  19.52
+  MCC2 BEQV  B                  19.52
+  MCC2 CEQV  C                  19.52
+  TRANSFORMER                         TRAN A
+            9999
+ 1NAVL ANAVL C                  .1    26.
+ 2NAVH A                        31.23 311.09
+  TRANSFORMER TRAN A                  TRAN B
+ 1NAVL BNAVL A
+ 2NAVH B
+  TRANSFORMER TRAN A                  TRAN C
+ 1NAVL CNAVL B
+ 2NAVH C
+  NAVL A                  2500.       1.13
+  NAVL B                  2500.       1.13
+  NAVL C                  2500.       1.13
+  SWT  AMCC2 A            4830.
+  SWT  BMCC2 B            4830.
+  SWT  CMCC2 C            4830.
+  MCC2 ASWT  A                  13.01
+  MCC2 BSWT  B                  13.01
+  MCC2 CSWT  C                  13.01
+BLANK card terminating branch cards
+  SWT  A       .01661667 .09161667
+  SWT  B       .01661667 .09161667
+  SWT  C       .01661667 .09161667
+BLANK card terminating switch cards
+14EQV  A  389.997    60.      -93.81293                           -1.
+14EQV  B  389.997    60.      -213.81293                          -1.
+14EQV  C  389.997    60.       26.18707                           -1.
+59KILOVI
+59NAVL A  21229.     60.      -44.896562
+  NAVL B
+  NAVL C                         
+PARAMETER FITTING           1.
+ 6 5 6   2 1.        1.        892.4      26.      1800.
+BLANK
+          .13       1.79       1.71       .169      .228      .13504  .20029
+ 4.3      .85       .032      .05       .13
+C         <====EXTRS<=====HICO<======DSR<======DSM<======HSP<======DSD   
+ 1        .3        .027691                       33.68813 { 1st rotor mass card
+ 2        .26       .046379                       60.9591
+ 3        .22       .255958                       90.81823
+ 4        .22       .263573                       123.6634
+ 5                  .258887                       4.925036
+ 6                  .0101995                                { 6th and final mass
+BLANK
+  51
+  11
+  21
+  31
+BLANK
+  FINISH
+BLANK card terminating source cards
+C                   Phase "a" injection                  Phase "b" injection    
+C                Magnitude       Degrees               Magnitude       Degrees  
+C  Actual:     2.7946789E+01   -70.7480503           2.7946789E+01   169.2519497
+C Pos. seq.:   2.7946789E+01   -70.7480503           2.7946789E+01   169.2519497
+C                    Id                  Iq                  Io
+C          -3.15542117823E+01   1.32614561915E+01  -4.10232039762E-14
+C Field current of the generator in units of  [amperes].  Total     dc component
+C                                           4.3132669924E-03    4.3132669924E-03
+C Electromechanical torque of the generator ....      total         dc component
+C                                           2.1243643866E-06    2.1243643866E-06
+C Exciter electromechanical torque in units ....      Total         dc component
+C                                           6.9376969460E-09    6.9376969460E-09
+C Critical level of total air-gap MMF ....  1.71429881387E+03  1.63168200357E+03
+C All rotor masses have angular velocity   OMEGA = 3.76991118E+02  [radians/sec]
+C    ....  units of  [Degrees] :  89.5863508  88.7845725  87.9574698  87.1841991  
+C Shaft torques  T(i,i+1)  between rotor masses  "i"  and  "i+1",  for  i=1, 2, 
+C  0.6393906251E-06  0.1193529167E-05  0.1662415625E-05  0.2131302084E-05  0.693
+  NAVH ANAVH BNAVH C
+BLANK card terminating output specifications (node voltages only, here)
+C Step    Time        NAVH A       NAVH B       NAVH C       MACH 1       MACH 1
+C                                                              ID           IQ    
+C
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1
+C                       IG           IKQ          IA           IB           IC 
+C
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1
+C                     TQ GEN       TQ EXC       ANG 1        ANG 2        ANG 3   
+C
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1
+C                      VEL 1        VEL 2        VEL 3        VEL 4        VEL 5
+C   0      0.0   54.29179404   -385.07251  330.7807161  -31.5542118  13.26145619
+C                -.12113E-18  -.49636E-18   9.21469265  -27.4565111  18.24181844
+C                .2124364E-5  .6937697E-8  89.58635083   88.7845725   87.9574698
+C                        0.0  -.56843E-13  -.56843E-13  -.56843E-13          0.0
+C   1    .1E-3   69.83972934  -390.821194   320.981465  -31.5542581  13.26137561
+C                .1503732E-8  .5199131E-8  10.20246318  -27.6334201  17.43095695
+C                .2124361E-5  .6937697E-8  89.58635083   88.7845725   87.9574698
+C                        0.0  -.56843E-13  -.56843E-13  .511591E-12  .1489752E-7
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+BLANK
+ 
+
+
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-53
+C     1976 IEEE PES  SSR test of  Type-59  S.M.  modeling with a six-mass rotor.
+C     The 1st of 2 subproblems uses S.M. saturation,  while the 2nd ignores  it.
+C           This is old data case, as it existed prior to December, 1992 changes.
+C           Only the 1st of 2 subcases, having saturation, was affected.
+PRINTED NUMBER WIDTH, 13, 2,   { Full precision on each of 8 columns of printout
+ALTERNATE DIAGNOSTIC PRINTOUT, 9, 9, 9, 9,
+ .000100    .150    60.0    60.0
+       1       1       1       1       1      -1
+       5       5      20      20     100     100     500     500  
+51NAVH AMCC1 A            162.67   507.51
+52NAVH BMCC1 B            6.51    162.97
+53NAVH CMCC1 C
+  MCC1 AMCC2 A                        8285.
+  MCC1 BMCC2 B                        8285.
+  MCC1 CMCC2 C                        8285.
+  MCC2 AEQV  A                  19.52
+  MCC2 BEQV  B                  19.52
+  MCC2 CEQV  C                  19.52
+  TRANSFORMER                         TRAN A
+            9999
+ 1NAVL ANAVL C                  .1    26.
+ 2NAVH A                        31.23 311.09
+  TRANSFORMER TRAN A                  TRAN B
+ 1NAVL BNAVL A
+ 2NAVH B
+  TRANSFORMER TRAN A                  TRAN C
+ 1NAVL CNAVL B
+ 2NAVH C
+  NAVL A                  2500.       1.13
+  NAVL B                  2500.       1.13
+  NAVL C                  2500.       1.13
+  SWT  AMCC2 A            4830.
+  SWT  BMCC2 B            4830.
+  SWT  CMCC2 C            4830.
+  MCC2 ASWT  A                  13.01
+  MCC2 BSWT  B                  13.01
+  MCC2 CSWT  C                  13.01
+BLANK card terminating branch cards
+  SWT  A       .01661667 .09161667
+  SWT  B       .01661667 .09161667
+  SWT  C       .01661667 .09161667
+BLANK card terminating switch cards
+14EQV  A  389997.    60.      -93.81293                           -1.
+14EQV  B  389997.    60.      -213.81293                          -1.
+14EQV  C  389997.    60.       26.18707                           -1.
+59NAVL A  21229.     60.      -44.896562
+  NAVL B
+  NAVL C                         
+TOLERANCES    { Only change columns 51-60: NIOMAX = 20 }  20 
+PARAMETER FITTING           1.
+ 6 5 6   2 1.        1.        892.4      26.     -1800.    1907.     3050.
+                                                  -1.
+          .13       1.79       1.71       .169      .228      .13504  .20029
+ 4.3      .85       .032      .05       .13
+ 1        .3        .027691                       33.68813 { 1st rotor mass card
+ 2        .26       .046379                       60.9591
+ 3        .22       .255958                       90.81823
+ 4        .22       .263573                       123.6634
+ 5                  .258887                       4.925036
+ 6                  .0101995                                { 6th and final mass
+BLANK
+  51
+  11
+  21
+  31
+BLANK
+  FINISH
+BLANK card terminating source cards
+C       Total network loss  P-loss  by summing injections =   1.775782562050E+07
+C 1st gen: NAVL A  15038.245551065    21229.    9214.6926498239  27946.788742442
+C 1st gen:         -14984.04523972  -44.8965620   -26383.94285136    -70.7480503
+C                              Id                  Iq                  Io 
+C              -3.09506921061E+04   1.46146898591E+04   1.05019402179E-12    
+C Field current of the generator             4.7988284553E+03   4.7988284553E+03     
+C Electromechanical torque of the generator  2.1243643866E+00   2.1243643866E+00
+C Exciter electromechanical torque           8.5876254010E-03   8.5876254010E-03
+C Critical level of total air-gap MMF ..    1.71429884454E+03  1.60523487584E+03
+  NAVH ANAVH BNAVH C
+C Step    Time        NAVH A       NAVH B       NAVH C       MACH 1       MACH 1        
+C                                                                ID           IQ     
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1  
+C                         IG           IKQ          IA           IB           IC    
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1  
+C                      TQ GEN       TQ EXC       ANG 1        ANG 2        ANG 3  
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1 
+C                      VEL 1        VEL 2        VEL 3        VEL 4        VEL 5 
+C    0     0.0   54291.79404   -385072.51  330780.7161  -30950.6921  14614.68986 
+C                .101141E-12  .353051E-13   9214.69265  -27456.5111  18241.81844 
+C                2.124364387  .0085876254  87.10824973  86.30585072  85.47810772 
+C                -.56843E-13          0.0  .568434E-13          0.0  .568434E-13 
+C    1   .1E-3   69851.88571  -390828.958   320977.072   -30950.731  14614.61128 
+C                .0013420986  .0046402859  10202.48781  -27633.4243  17430.93649 
+C                2.124359795  .0085876259  87.10824973  86.30585072  85.47810772
+C                .568434E-13  -.11369E-12  .568434E-13  .738964E-12  .2104355E-7
+BLANK card terminating output specifications (node voltages only, here)
+C  ------  Type-59 S.M. number  1   at time  1.43500000E-01  sec ..  1   and  2.
+C  ------  Type-59 S.M. number  1   at time  1.49100000E-01  sec ..  2   and  2.
+C 1500     .15    187116.742  -351444.492  130386.7404  -34997.4012  -2947.38066 
+C                256.1673115  903.3100964  -2650.23838  -23402.7126  26052.95098 
+C                .8154064733  .0102479971  97.85801029  96.12500809  94.06169459 
+C                2.131750238  1.898831743  1.583223454  .8996070354  .7581091459 
+C Variable max : 599880.6502  490291.3628  529146.3385  15467.52417  61160.92185 
+C                857.3479933   2578.07728  65109.53928  62005.88698  69266.69128 
+C                 6.04393663  .0118541764  97.85801029  96.12500809  94.06169459 
+C                8.188834317  6.194209412   3.79960882  3.258297661  4.003948697 
+C Times of max :       .1204        .1263        .1319        .1145        .1277 
+C                      .0459        .0455        .0879         .044        .0323 
+C                      .1295        .0942          .15          .15          .15 
+C                      .1353        .1368        .1386        .1168        .1124 
+C Variable min : -524383.824  -498349.107  -581864.736  -84826.9292  -31261.6262 
+C                -838.566123  -2978.23206  -63004.8711  -66097.6721  -65643.9187 
+C                -.932290856   .008199039   85.6754021  85.30248399  84.71598666 
+C                 -5.4368191  -2.31786936  -.816272039   -1.0322752  -1.34433634 
+C Times of min :       .1115        .1176        .1232        .0324        .0457 
+C                      .1279        .1276        .0295        .0352        .0413 
+C                      .1018        .1243         .071        .0665        .0605 
+C                      .1102        .1101        .0512        .1403        .1391 
+  CALCOMP PLOT
+ 19415.    150.         MACH 1TQ GEN
+  PRINTER PLOT
+ 19415.    150.         MACH 1TQ GEN             { Axis limits: (-0.932,  6.044)
+ 19415.    150.         MACH 1VEL 6              { Axis limits: (-1.289,  1.165)
+BLANK card terminating plot cards
+
+
+

@@ -1,0 +1,64 @@
+/MODELS
+MODELS       { Request to begin MODELS data appears just once
+C     End of fixed data.  Begin variable /-cards,  which can appear in any
+C     order.  To illustrate that TACS data really will be sorted to precede
+C     MODELS  data,  note that  /TACS  follows  /MODELS  in the following.
+C     I.e.,  we rely on /-card sorting to correct this.  TACS  data is
+C     separate and distinct from  MODELS  data just as branch data is
+C     separate and distinct from switch or source data.
+/MODELS
+INPUT deltav {TACS(vsw)}
+OUTPUT grid
+MODEL dc30
+ INPUT dv
+ VAR grid
+ OUTPUT grid
+ EXEC
+  IF abs(dv)>=1.5e8*t +1e5 THEN grid:=1 ELSE grid:=0 ENDIF
+ ENDEXEC
+ENDMODEL
+USE dc30 AS dc30
+ INPUT dv:=deltav
+ OUTPUT grid:=grid
+ENDUSE
+RECORD
+ dc30.dv AS dv
+/TACS
+TACS HYBRID  { Request to begin TACS data appears just once
+ 1DUMMY   +UNITY                                                                
+       1.0                                                                      
+       1.0    0.5E-3                                                            
+90BUS2                                                                          
+90BUS3   
+99VSW     =  BUS2  -  BUS3                                      
+27DV     { MODELS variable DV will define Type-27 TACS source of the same name
+33BUS2  BUS3  VSW   DV  
+/BRANCH  
+  GEN   BUS1                       15.                                          
+  BUS1                                   2.9                                    
+  BUS1  BUS2                       0.1                                          
+  BUS2                                   0.1                                    
+  BUS3                                  .017                                    
+  BUS3                            490.                                          
+  BUS2  BUS2R              24.34                                                
+  BUS3  BUS3R BUS2  BUS2R                                                       
+/SWITCH  
+  BUS2  BUS3         -1.                1.E9                                   
+  NAME: Valve  !  { Request "NAME: " of cols. 3-8 precedes A6 valve name in 9-14
+11BUS2R BUS3R                  20.                              GRID          12
+/SOURCE
+14GEN         66500.       50.   -2.0508                           -1.          
+/OUTPUT
+C   Step      Time      BUS2R      TACS       TACS       TACS       TACS       MODELS
+C                       BUS3R      BUS2       BUS3       VSW        DV         DV
+C ***      Phasor I(0) = -1.5049840E+01                     Switch  "BUS2  "  to  "BUS3  "  closed in the steady-state.
+C      0       0.0         0.0        0.0        0.0        0.0        0.0        0.0
+C ***                                                             Open  switch  "BUS2  "  to  "BUS3  "  after  1.00000000E-06  sec.
+C      1     .1E-5         0.0 64752.0751 64752.0751        0.0        0.0        0.0
+C      2     .2E-5  -506.98951 64680.6667 65187.6562 -506.98951        0.0 -506.98951
+C      3     .3E-5   -1509.364 64544.7937 66054.1577  -1509.364 -506.98951  -1509.364
+C      4     .4E-5  -2482.2238  64430.506 66912.7297 -2482.2238  -1509.364 -2482.2238
+C      5     .5E-5  -3414.3602 64348.9091 67763.2693 -3414.3602 -2482.2238 -3414.3602
+C  End of /-card data.  The only thing that remains are the various blank
+C  cards that terminate the various data classes.  Note the one for  MODELS
+C  (optional for MODELS,  but necessary for sorting):

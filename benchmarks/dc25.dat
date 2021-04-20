@@ -1,0 +1,553 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-25
+C       Test of Type-59 S.M., with two connected in parallel.  Problem came from
+C       Chuck Wolf of AEP on  14 Feb 1977.   See  Vol. VII   EMTP Memoranda,  28
+C       January 1978,  pages TDCE-13  through 16.   Results  of  this simulation
+C       correspond to Fig. 4  ---  the case of an untransposed 765-kV line using
+C       Procedure 1  initialization.   The unbalanced Pi-circuit of transmission
+C       line produces an unbalanced phasor solution.   Load flow  ("FIX SOURCE")
+C       usage  begins  from  power constraints for  "M39."  and later solutions.
+C       For other Type-59 S.M. usage,  see cases  DC-26,  DC-53,  and  DCNEW-11.
+C          Modified with Guido's and Juan Martinez's approval during Oct., 1990.
+C          Answers have changed.   The  original data case is unexecuted at end.
+C       Answers change again 10 February 1999 following the massive changes from 
+C       TEPCO (Tokyo Electric Power Company) in Japan.  See April newsletter.
+C       But changes are negligible physically. The 2 printer plots are identical
+C       (demonstrating 4 digit agreement for the variables considered), and most
+C       extrema numbers differ only in the 5th or 6th decimal place.
+PRINTED NUMBER WIDTH, 13, 2,    { Request maximum precision for 8 output columns
+FIX SOURCE      { Declared intention to use load flow (phasor power constraints)
+ .000200    .100     60.     60.
+       1       1       1       1       1      -1
+       5       5      20      20     100     100
+C 11 PI SECTIONS OF THE R-JEF CKT
+ 1  ROCA  RJ0A            9.04  44.88 351.28
+ 2  ROCB  RJ0B            7.84  19.04 -57.6 9.2   44.56 360.88
+ 3  ROCC  RJ0C            7.68  14.96 -14.967.84  19.04 -57.6 9.04  44.88 351.28
+ 1  RJ0A  RJ1A  ROCA  RJ0A
+ 2  RJ0B  RJ1B
+ 3  RJ0C  RJ1C
+ 1  RJ1A  JEFA  ROCA  RJ0A
+ 2  RJ1B  JEFB
+ 3  RJ1C  JEFC
+C SYS IMP MATRIX
+    INFA  JEFA            4.891757.845
+    INFB  JEFB            4.891757.845
+    INFC  JEFC            4.891757.845
+C LINEAR SHUNT REACTORS 300MVAR AT EACH END
+ 0  ROCACOMROC                  1950.                                          1
+ 0  ROCBCOMROC                  1950.                                          1
+ 0  ROCCCOMROC                  1950.
+ 0COMROC                        700.0
+ 0  JEFACOMJEF                  1950.0
+ 0  JEFBCOMJEF                  1950.0
+ 0  JEFCCOMJEF                  1950.0
+ 0COMJEF                        700.0
+C STEP-UP TRANSFORMER AT ROCKPORT
+  TRANSFORMER                         TRAN A
+            9999
+ 1 MACA1 MACC1            .00071.0436824.63
+ 2  ROCA                  .2280414.054441.7
+  TRANSFORMER TRAN A                  TRAN B
+ 1 MACB1 MACA1
+ 2  ROCB
+  TRANSFORMER TRAN A                  TRAN C
+ 1 MACC1 MACB1
+ 2  ROCC
+C     GENERATOR'S  CAPACITANCE TO GROUND
+ 0 MACA1                               50.0
+ 0 MACB1                               50.0
+ 0 MACC1                               50.
+BLANK card ending all branch cards
+    RJ0A           .0501       10.                                             1
+BLANK card ending all switch cards
+14  INFA  624619.    60.       -2.2                           -1.0
+14  INFB  624619.    60.       -122.2                         -1.0
+14  INFC  624619.    60.        117.8                         -1.0
+59 MACA1  22000.     60.0     60.0
+   MACB1
+   MACC1
+TOLERANCES    { Only change columns 51-60: NIOMAX = 20 }  20 
+PARAMETER FITTING       2.0
+ 1 1     21.        1.         722.     26.       1750.     1950.     3200.
+BLANK card for the Q-axis
+.001720594.19       1.92       1.85     .31       0.6       .26       .26
+4.8       1.0       .04       .053      .12       .000001   .000001
+ 1        1.0        .87       .0001
+BLANK card ending mass cards
+  51
+  11
+  21
+  31
+BLANK card ending output specifications for this S.M. only
+  FINISH PART     { End of 1st of 2 machines in parallel on the same 3-phase bus
+PARAMETER FITTING       2.0
+ 1 1     21.        1.         722.     26.       1750.     1950.     3200.
+BLANK card for the Q-axis
+.001720594.19       1.92       1.85     .31       0.6       .26       .26
+4.8       1.0       .04       .053      .12       .000001   .000001
+ 1        1.0        .87       .0001
+BLANK card ending mass cards
+  51
+  11
+  2          1
+  31
+BLANK card ending output specifications for this S.M. only
+  FINISH          { End of 2nd of 2 machines in parallel on the same 3-phase bus
+C --------------+------------------------------ 
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C          ROCA | TERRA *  RJ0A*COMROC*                           
+C          RJ0A | TERRA *  ROCA*  RJ1A*                        
+C          ROCB | TERRA *  RJ0B*COMROC*                     
+C          RJ0B |   ROCB*  RJ1B*                                         
+C          ROCC | TERRA *  RJ0C*COMROC*                                
+C          RJ0C |   ROCC*  RJ1C*                                   
+C            < <   Etc.   This is 1st 1/3-rd or so of table.  > >
+BLANK card ending all source cards
+   MACA1 MACB1 MACC1 2803162500.0    1383483900.0     20000.  25000. 50.0  80.0
+C         NNNOUT  NITERA  NFLOUT  NPRINT  RALCHK  CFITEV  CFITEA  VSCALE  KTAPER
+               1                       1   0.001                               2
+C        Max del-V:  .1803 .1777 .1752 .1727 .1702 .1678 .1654  .163 .1607 .1584 
+C        Source No.     -1    -1    -1    -1    -1    -1    -1    -1    -1    -1 
+C        Exit the load flow iteration loop with counter  NEKITE = 310.   If no w
+C       Total network loss  P-loss  by summing injections =   1.193636643443E+08
+C 1st gen : MACA1 7882.1299837372 22944.294576661 63529.229081234 91991.00055512
+C 1st gen :       21547.915921037      69.9077094 66531.054669802     46.3221669
+C                             Id                  Iq                  Io 
+C                     -5.17606386485E+04   1.11953458746E+04  -9.24170739175E-11
+C          Field current of the generator:  7.6127807443E+03    7.7516029040E+03
+C          Electromechanical torque ... :   3.4914826741E+00    3.7272751437E+00
+    JEFA  JEFB  JEFC  ROCA  ROCB  ROCC MACA1 MACB1 MACC1  { Node voltage outputs
+C  Step   Time          JEFA         JEFB         JEFC         ROCA         ROCB
+C                                                                             
+C                      MACC1         RJ0A         ROCA         ROCB       MACH 1 
+C                                   TERRA        COMROC       COMROC          ID   
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1 
+C                         IKD          IG           IKQ          IA           IB 
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 2 
+C                       MANG       TQ GEN        ANG 1        VEL 1           ID 
+C 
+C                     MACH 2       MACH 2       MACH 2       MACH 2       MACH 2
+C                        IKD          IG           IKQ           IA           IB
+C 
+C                     MACH 2       MACH 2       MACH 2       MACH 2
+C                       MANG       TQ GEN        ANG 1        VEL 1 
+C   0      0.0    595063.429  -170038.378  -430408.555  567829.8077  41131.95807 
+C                -22602.1076          0.0  195.2036215  -347.379708  -51760.6386 
+C                -119.013056  20.25252059  123.7786761  31764.61454  9524.516392 
+C                .6120416955  3.491581073  210.5205098  -.56843E-13  -51760.6386 
+C                -119.013056  20.25252059  123.7786761  31764.61454  9524.516392 
+C                .6120416955  3.491581073  210.5205098  -.56843E-13
+C   1    .2E-3   582660.0376  -124400.236  -463854.309  538020.6136  90826.69064 
+C                -22226.8015          0.0  216.5639977  -344.847463  -51644.9311 
+C                -124.178599   17.6951304  102.1960096  29275.66489  12850.10176 
+C                .6122312386  3.504607103  210.5205169  .0012501818  -51644.9311 
+C                -124.178599   17.6951304  102.1960096  29275.66489  12850.10176 
+C                .6122312386  3.504607103  210.5205169  .0012501818
+BLANK card ending selective node voltage output requests
+C Last step begins:  500  0.1  422565.4027 -113969.735    -360716.4  184973.5528  
+C Last step begins:  -14207.4222 8830.876534 127.5541446 -304.110445 -70239.5493 
+C Last step begins:   434.079499 436.7069486 -1114.11685 41302.06075 15848.22263 
+C Last step begins:  .5709140724 4.269726268 212.0409714 1.274775215 -70239.5493   
+C Last step begins:   434.079499 436.7069486 -1114.11685 41302.06075 15848.22263   
+C Last step begins:  .5709140724 4.269726268 212.0409714 1.274775215
+C Variable max : 614175.4675  689830.8087   698890.353  693955.4017  682007.8375 
+C                23072.26231  12386.83878  350.8889637  346.8138015  -32475.6958 
+C                2497.939838  999.6504516  5424.112392  45447.13214  46674.47781   
+C                .6757375048  6.372899605  212.0409714  1.281702728  -32475.6958 
+C                2497.939838  999.6504516  5424.112392  45447.13214  46674.47781     
+C                .6757375048  6.372899605  212.0409714  1.281702728       
+C Times of max :       .0326        .0544        .0602        .0484         .004       
+C                      .0412        .0856        .0026        .0082        .0642  
+C                      .0594         .095         .062        .0478        .0866   
+C                      .0576        .0576          0.1        .0992        .0642  
+C                      .0594         .095         .062        .0478        .0866  
+C                      .0576        .0576          0.1        .0992                                                         
+  PRINTER PLOT
+ 144 2. 0.0 20.          MACA1 MACB1 MACC1          { Axis span: (-2.318, 2.320)
+ 19410. 0.0100.         MACH 1TQ GENMACH 2TQ GEN    { Axis span: (-1.028, 6.373)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        Second  of  3 subcases of DC-25 replaces the generator delta-Wye stepup
+C        transformers (3 separate, 2-winding saturable TRANSFORMERS, originally)
+C        by 3 Type-18 ideal transformers.  Leakage is ignored during conversion.
+C        Also,  for simplicity,  the Type-59 S.M. is removed,  and values of the
+C        replacement Type-14 sources are set equal  to  the  load flow solution.
+C          23 February 1994,  replace the three pairs of Type-14 and Type-18
+C          source cards by the equivalent, new  IDEAL TRANSFORMER  components.
+C            9 November 2010,  replace the explicit node names  18TYP1,  18TYP2,
+C            and  18TYP3  by blanks on the winding cards of  IDEAL TRANSFORMER
+C            components.  These are default names,  so ATP will supply them, and
+C            the resulting simulation should not change in any way.  The only
+C            change to the  .LIS  file is on lines that document data input.
+C            Connectivity, phasor branch flow, dT-loop heading, and batch-mode
+C            plotting all involve these names,  but are unchange.   This change
+C            is made as new logic is added to  SUBR5  and  OVER16  to guarantee
+C            that ATP-supplied names do not conflict with user bus names.  WSM.
+PRINTED NUMBER WIDTH, 13, 2,    { Request maximum precision for 8 output columns
+ .000200    .015     60.     60.  
+       1       1       1       1       1      -1
+       5       5      10      10    
+  IDEAL TRANSFORMER           { Each ideal Xformer begins with this request card
+ 1   J2A   L2A                          36.0    { Winding 1 has rated voltage 36
+C 2   K1A   M1A18TYP1                     2.0    { Winding 2 has rated voltage  2
+ 2   K1A   M1A                           2.0    { Winding 2 has rated voltage  2
+  IDEAL TRANSFORMER
+ 1   J2B   L2B                          18.0    { Only the voltage ratio matters
+C 2   K1B   M1B18TYP2                     1.0    { and it is the same for all 3
+ 2   K1B   M1B                           1.0    { and it is the same for all 3
+  IDEAL TRANSFORMER
+ 1   J2C   L2C                          54.0
+C 2   K1C   M1C18TYP3                     3.0
+ 2   K1C   M1C                           3.0
+C 11 PI SECTIONS OF THE R-JEF CKT
+ 1  ROCA  RJ0A            9.04  44.88 351.28
+ 2  ROCB  RJ0B            7.84  19.04 -57.6 9.2   44.56 360.88
+ 3  ROCC  RJ0C            7.68  14.96 -14.967.84  19.04 -57.6 9.04  44.88 351.28
+ 1  RJ0A  RJ1A  ROCA  RJ0A
+ 2  RJ0B  RJ1B
+ 3  RJ0C  RJ1C
+ 1  RJ1A  JEFA  ROCA  RJ0A
+ 2  RJ1B  JEFB
+ 3  RJ1C  JEFC
+C SYS IMP MATRIX
+    INFA  JEFA            4.891757.845
+    INFB  JEFB            4.891757.845
+    INFC  JEFC            4.891757.845
+C LINEAR SHUNT REACTORS 300MVAR AT EACH END
+C 34567890123456789012345678901234567890123456789012345678901234567890
+ 0   K1A MACA1            .00071.04368
+ 0   K1B MACB1            .00071.04368 
+ 0   K1C MACC1            .00071.04368 
+ 0   J2A  ROCA            .2280414.054
+ 0   J2B  ROCB            .2280414.054 
+ 0   J2C  ROCC            .2280414.054 
+ 0   L2AGROUND             1.E-6
+ 0   L2BGROUND             1.E-6
+ 0   L2CGROUND             1.E-6
+ 0   M1A MACC1             1.E-6
+ 0   M1B MACA1             1.E-6
+ 0   M1C MACB1             1.E-6
+ 0      GROUND             1.E-6
+ 0  ROCACOMROC                  1950.                                          1
+ 0  ROCBCOMROC                  1950.                                          1
+ 0  ROCCCOMROC                  1950.
+ 0COMROC                        700.0
+ 0  JEFACOMJEF                  1950.0
+ 0  JEFBCOMJEF                  1950.0
+ 0  JEFCCOMJEF                  1950.0
+ 0COMJEF                        700.0
+C     GENERATOR'S  CAPACITANCE TO GROUND
+ 0 MACA1                               50.0
+ 0 MACB1                               50.0
+ 0 MACC1                               50.
+BLANK card ending all branch cards
+    RJ0A           .0501       10.                                             1
+BLANK card ending all switch cards
+C      Begin Type-18 sources (ideal transformers) that distinguish this subcase:
+C 14   J2A      1.E-20      60.0
+C 18   L2A        18.0   K1A   M1A18TYP1
+C 14   J2B      1.E-20      60.0
+C 18   L2B        18.0   K1B   M1B18TYP2
+C 14   J2C      1.E-20      60.0
+C 18   L2C        18.0   K1C   M1C18TYP3     
+14  INFA  624619.    60.       -2.2                           -1.0
+14  INFB  624619.    60.       -122.2                         -1.0
+14  INFC  624619.    60.        117.8                         -1.0
+14 MACA1  22944.3   60.         69.9077                       -1.0
+14 MACB1  22944.3   60.        -50.0922                       -1.0
+14 MACC1  22944.3   60.        -170.0922                      -1.0
+BLANK card ending all source cards
+C       Total network loss  P-loss  by summing injections =   1.199128383848E+08
+C Last gen: MACC1   -22602.10667558   22944.3   -82940.75280602  86941.876492988 
+C Last gen:       -3947.869845313   -170.0922   26071.467394327      162.5500619 
+    JEFA  JEFB  JEFC  ROCA  ROCB  ROCC18TYP118TYP218TYP3 
+C  Step    Time         JEFA         JEFB         JEFC         ROCA         ROCB 
+C                                                                                                                          
+C                     18TYP3         RJ0A         ROCA         ROCB   
+C                                   TERRA        COMROC       COMROC
+C  0       0.0   595774.3334  -170010.161  -431151.342  569612.3085   41241.0688
+C                1889.574253          0.0  195.7951564  -348.444415
+C  1     .2E-3    583329.625  -124300.015  -464630.148  539239.5467  92279.01704
+C                2052.380386          0.0  217.2131016   -345.88244
+BLANK card ending selective node voltage output requests
+C Last step: 75 .015 565929.8878 -490595.576 -77916.3691 685283.5922 -365950.758
+C Last step:         216.6873929         0.0 -13.0438646 -294.203105
+  PRINTER PLOT
+ 144 2. 0.0 20.         18TYP118TYP218TYP3          { Axis span: (-3.033, 3.035)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE                                                             
+C          Third  of  3  subcases of  DC-25  is unrelated to preceding two.   It
+C          does use saturable  TRANSFORMERs,  however.  It is unusual in that it
+C          uses the  "TRANSFORMER THREE PHASE"  option.   From LEC, December, 88
+  .10E-3  80.E-3                                                                
+       1       1       1       3       1      -1                                
+       5       5      20      20     100     100
+  GEN1  BAS1              1.  -4                                               3
+  GEN2  BAS2              1.  -4                                               3
+  GEN3  BAS3              1.  -4                                               3
+  NULP                    1.  -4                                               1
+  TRANSFORMER THREE PHASE T4    .001
+  TRANSFORMER             2.0   1137. T1    0.00E5                             3
+ 2.              26.
+ 5.              63.
+ 10.             122.
+ 20.             225.
+ 50.             459.
+ 100.            702.
+ 200.            956.
+ 500.            1220.
+ 1000.           1343.
+ 2000.           1415.
+ 5000.           1462.
+ 10000.          1478.6
+            9999                                                                                                               
+ 1BAS1  NULP              .00   1.  -43.03E5                                   1
+ 2BASA  NULP              .00   1.  -43.03E5
+  TRANSFORMER             1.0   1137. T2    0.00E5                             3
+ 1.              26.
+ 2.5             63.
+ 5.              122.
+ 10.             225.
+ 25.             459.
+  50.            702.
+ 100.            956.
+ 250.            1220.
+  500.           1343.
+ 1000.           1415.
+ 2500.           1462.
+  5000.          1478.6
+            9999                                                                                                               
+ 1BAS2  NULP              .00   1.  -43.03E5                                   1
+ 2BASB  NULP              .00   1.  -43.03E5
+  TRANSFORMER             2.0   1137. T3    0.00E5                             3
+ 2.              26.
+ 5.              63.
+ 10.             122.
+ 20.             225.
+ 50.             459.
+ 100.            702.
+ 200.            956.
+ 500.            1220.
+ 1000.           1343.
+ 2000.           1415.
+ 5000.           1462.
+ 10000.          1478.6
+            9999                                                                                                               
+ 1BAS3  NULP              .00   1.  -43.03E5                                   1
+ 2BASC  NULP              .00   1.  -43.03E5
+BLANK card terminates electric network branches
+BLANK card ends all switches
+14GEN1    460000.    50.       20.                           -1.          
+14GEN2    460000.    50.       140.                          -1.          
+14GEN3    460000.    50.       260.                          -1.          
+BLANK card terminates electric network sources
+C       Total network loss  P-loss  by summing injections =  -6.154425427667E-03 
+C Last gen:  GEN3  -79878.16172679     460000.  -2.536462187767  2.5755913419774 
+C Last gen:        -453011.5663856  -100.0000000  .44724750518799    169.9999828 
+C           ---- Initial flux of coil  "T1    "  to  "NULP  "  =  5.00794608E+02
+C           ---- Initial flux of coil  "T2    "  to  "NULP  "  =  9.41185994E+02
+C           ---- Initial flux of coil  "T3    "  to  "NULP  "  = -1.44198060E+03
+C   Step    Time        GEN1         GEN2         GEN3         T1             T2           
+C                       BAS1         BAS2         BAS3         NULP         NULP                                     
+C 
+C                        BASA         BAS3         BAS2         BAS1          T2             
+C                                                                                                                                  
+C                        T3          GEN1         GEN2         GEN3           T1           
+C                                                                           NULP           
+C 
+C                       GEN2         GEN3         NULP         BAS1         BAS2                                     
+C                       BAS2         BAS3         TERRA          T1           T2                                       
+C    0     0.0   .8809037E-4  .8277799E-4  -.253646E-3  432258.6055  -352380.444 
+C                432258.6054  -79878.1615  -352380.444  432258.6055  -352380.444 
+C                -79878.1615  432258.6056  -352380.444  -79878.1617  39.55469448 
+C                 .827779877  -2.53646213  -.827780115  .8809052313  .8277787585 
+C    1   .1E-3    .004398076  .0036655092  -.011739905  427103.3935  -361494.243 
+C                427103.3898  -65609.2978  -361494.175   427103.476  -361494.246 
+C                -65609.0681  427103.4804  -361494.171  -65609.3095  44.90081121 
+C                36.65509168  -117.399051  -36.7631993  43.98076016  36.65509158 
+ 1                                        { Request for all node voltage outputs                                          
+C  !!!  Tracking trouble ... number  I = 0.  0.2E+01  -0.20562E+02  -0.17753E+01
+C  !!!  Tracking trouble ... number  I = 0. -0.2E+01   0.51513E+01   0.52578E+00
+C  800     .08   .0055358232  .0091582724  -.372219109  432259.2816  -352380.249 
+C                432258.9241  -79877.7895  -352380.453     432258.6  -352380.607 
+C                -79872.5219  432258.6056  -352380.444  -79878.1617  57.81704152 
+C                91.58272413  -3722.19109  -3575.25014  55.35823213  91.58272332 
+  PRINTER PLOT
+ 144 1. 60. 70.         NULP                      { Axis span: ( -5.455,  5.480)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK
+
+
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-25
+C       Test of Type-59 S.M., with two connected in parallel.  Problem came from
+C       Chuck Wolf of AEP on  14 Feb 1977.   See  Vol. VII   EMTP Memoranda,  28
+C       January 1978,  pages TDCE-13  through 16.   Results  of  this simulation
+C       correspond to Fig. 4  ---  the case of an untransposed 765-kV line using
+C       Procedure 1  initialization.   The unbalanced Pi-circuit of transmission
+C       line produces an unbalanced phasor solution.   Load flow  ("FIX SOURCE")
+C       usage  begins  from  power constraints for  "M39."  and later solutions.
+C       For other Type-59 S.M. usage,  see cases  DC-26,  DC-53,  and  DCNEW-11.
+C           This is old data case, as it existed prior to October, 1990 changes.
+PRINTED NUMBER WIDTH, 13, 2,    { Request maximum precision for 8 output columns
+FIX SOURCE      { Declared intention to use load flow (phasor power constraints)
+ .000200    .100     60.     60.
+       1       1       1       1       1      -1
+       5       5      20      20     100     100
+C 11 PI SECTIONS OF THE R-JEF CKT
+ 1  ROCA  RJ0A            9.04  44.88 351.28
+ 2  ROCB  RJ0B            7.84  19.04 -57.6 9.2   44.56 360.88
+ 3  ROCC  RJ0C            7.68  14.96 -14.967.84  19.04 -57.6 9.04  44.88 351.28
+ 1  RJ0A  RJ1A  ROCA  RJ0A
+ 2  RJ0B  RJ1B
+ 3  RJ0C  RJ1C
+ 1  RJ1A  JEFA  ROCA  RJ0A
+ 2  RJ1B  JEFB
+ 3  RJ1C  JEFC
+C SYS IMP MATRIX
+    INFA  JEFA            4.891757.845
+    INFB  JEFB            4.891757.845
+    INFC  JEFC            4.891757.845
+C LINEAR SHUNT REACTORS 300MVAR AT EACH END
+ 0  ROCACOMROC                  1950.                                          1
+ 0  ROCBCOMROC                  1950.                                          1
+ 0  ROCCCOMROC                  1950.
+ 0COMROC                        700.0
+ 0  JEFACOMJEF                  1950.0
+ 0  JEFBCOMJEF                  1950.0
+ 0  JEFCCOMJEF                  1950.0
+ 0COMJEF                        700.0
+C STEP-UP TRANSFORMER AT ROCKPORT
+  TRANSFORMER                         TRAN A
+            9999
+ 1 MACA1 MACC1            .00071.0436824.63
+ 2  ROCA                  .2280414.054441.7
+  TRANSFORMER TRAN A                  TRAN B
+ 1 MACB1 MACA1
+ 2  ROCB
+  TRANSFORMER TRAN A                  TRAN C
+ 1 MACC1 MACB1
+ 2  ROCC
+C     GENERATOR'S  CAPACITANCE TO GROUND
+ 0 MACA1                               50.0
+ 0 MACB1                               50.0
+ 0 MACC1                               50.
+BLANK card ending all branch cards
+    RJ0A           .0501       10.                                             1
+BLANK card ending all switch cards
+14  INFA  624619.    60.       -2.2                           -1.0
+14  INFB  624619.    60.       -122.2                         -1.0
+14  INFC  624619.    60.        117.8                         -1.0
+59 MACA1  22000.     60.0     60.0
+   MACB1
+   MACC1
+TOLERANCES    { Only change columns 51-60: NIOMAX = 20 }  20 
+PARAMETER FITTING       2.0
+ 1 1     21.        1.         722.     26.       1750.     1950.     3200.
+BLANK card for the Q-axis
+.001720594.19       1.92       1.85     .31       0.6       .26       .26
+4.8       1.0       .04       .053      .12       .000001   .000001
+ 1        1.0        .87       .0001
+BLANK card ending mass cards
+  51
+  11
+  21
+  31
+BLANK card ending output specifications for this S.M. only
+  FINISH PART     { End of 1st of 2 machines in parallel on the same 3-phase bus
+PARAMETER FITTING       2.0
+ 1 1     21.        1.         722.     26.       1750.     1950.     3200.
+BLANK card for the Q-axis
+.001720594.19       1.92       1.85     .31       0.6       .26       .26
+4.8       1.0       .04       .053      .12       .000001   .000001
+ 1        1.0        .87       .0001
+BLANK card ending mass cards
+  51
+  11
+  2          1
+  31
+BLANK card ending output specifications for this S.M. only
+  FINISH          { End of 2nd of 2 machines in parallel on the same 3-phase bus
+C --------------+------------------------------ 
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C          ROCA | TERRA *  RJ0A*COMROC*                           
+C          RJ0A | TERRA *  ROCA*  RJ1A*                        
+C          ROCB | TERRA *  RJ0B*COMROC*                     
+C          RJ0B |   ROCB*  RJ1B*                                         
+C          ROCC | TERRA *  RJ0C*COMROC*                                
+C          RJ0C |   ROCC*  RJ1C*                                   
+C            < <   Etc.   This is 1st 1/3-rd or so of table.  > >
+BLANK card ending all source cards
+   MACA1 MACB1 MACC1 2803162500.0    1383483900.0     20000.  25000. 50.0  80.0
+C         NNNOUT  NITERA  NFLOUT  NPRINT  RALCHK  CFITEV  CFITEA  VSCALE  KTAPER
+               1                         0.001                                 2
+C              1                         0.001       { Load flow misc. data card
+C        Max del-V:  .1803 .1777 .1752 .1727 .1702 .1678 .1654  .163 .1607 .1584 
+C        Source No.     -1    -1    -1    -1    -1    -1    -1    -1    -1    -1 
+C        Exit the load flow iteration loop with counter  NEKITE = 310.   If no w
+C       Total network loss  P-loss  by summing injections =   1.193636643443E+08
+C 1st gen : MACA1 7882.1299837372 22944.294576661 63529.229081234 91991.00055512
+C 1st gen :       21547.915921037      69.9077094 66531.054669802     46.3221669
+C                             Id                  Iq                  Io 
+C                     -5.17606386485E+04   1.11953458746E+04  -9.24170739175E-11
+C          Field current of the generator:  7.6127807443E+03    7.7516029040E+03
+C          Electromechanical torque ... :   3.4914826741E+00    3.7272751437E+00
+    JEFA  JEFB  JEFC  ROCA  ROCB  ROCC MACA1 MACB1 MACC1  { Node voltage outputs
+C  Step   Time          JEFA         JEFB         JEFC         ROCA         ROCB
+C                                                                             
+C                      MACC1         RJ0A         ROCA         ROCB       MACH 1 
+C                                   TERRA        COMROC       COMROC          ID   
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 1 
+C                         IKD          IG           IKQ          IA           IB 
+C 
+C                     MACH 1       MACH 1       MACH 1       MACH 1       MACH 2 
+C                       MANG       TQ GEN        ANG 1        VEL 1           ID 
+C 
+C                     MACH 2       MACH 2       MACH 2       MACH 2       MACH 2
+C                        IKD          IG           IKQ           IA           IB
+C 
+C                     MACH 2       MACH 2       MACH 2       MACH 2
+C                       MANG       TQ GEN        ANG 1        VEL 1 
+C   0      0.0    595063.429  -170038.378  -430408.555  567829.8077  41131.95807
+C                -22602.1076          0.0  195.2036215  -347.379708  -51760.6386 
+C                -109.687843  23.46046976  120.5175269  31764.61454  9524.516392 
+C                .6133720135  3.491482674  210.5205098          0.0  -51760.6386 
+C                -109.687843  23.46046976  120.5175269  31764.61454  9524.516392 
+C                .6133720135  3.491482674  210.5205098          0.0   
+C   1    .2E-3   582660.0313   -124400.23  -463854.308  538017.7227  90829.37154 
+C                -22226.4607          0.0   216.563941  -344.847412  -51636.0369 
+C                -114.822396  20.58268373  99.63923976  29275.32656  12850.25969 
+C                .6135456896  3.503754264  210.5205169  .0012527763  -51636.0369 
+C                -114.822396  20.58268373  99.63923976  29275.32656  12850.25969 
+C                .6135456896  3.503754264  210.5205169  .0012527763  
+BLANK card ending selective node voltage output requests
+C Last step begins:  500  0.1  422384.6068 -116060.664  -360408.406  181592.8113
+C Last step begins:  -14206.7591 8837.628536 127.4636953 -301.640745 -70527.6268
+C Last step begins:  403.5072445 488.6707412 -1237.27694 41166.26379 16455.65357 
+C Last step begins:  .5742173844 4.349309756 212.0422101 1.276736936 -70527.6268 
+C Last step begins:  403.5072445 488.6707412 -1237.27694 41166.26379 16455.65357
+C Last step begins:  .5742173844 4.349309756 212.0422101 1.276736936
+C Variable max : 613982.7179  691015.2085   697406.805  693742.3285  682016.8965       
+C                 23071.3002  12401.73671  350.8166252  346.8830178  -32144.4616      
+C                2306.637425   1158.85933  5312.553787  45431.60834  47102.76399      
+C                 .677541522  6.397682896  212.0422101  1.285133368  -32144.4616      
+C                2306.637425   1158.85933  5312.553787  45431.60834  47102.76399      
+C                 .677541522  6.397682896  212.0422101  1.285133368                                                         
+C Times of max :       .0326        .0544        .0602        .0484         .004       
+C                      .0412        .0856        .0026        .0416        .0642      
+C                      .0594         .095        .0618        .0478        .0866      
+C                      .0576        .0576          0.1        .0992        .0642      
+C                      .0594         .095        .0618        .0478        .0866      
+C                      .0576        .0576          0.1        .0992                                                         
+  PRINTER PLOT
+ 144 2. 0.0 20.          MACA1 MACB1 MACC1          { Axis span: (-2.318, 2.320)
+ 19410. 0.0100.         MACH 1TQ GENMACH 2TQ GEN    { Axis span: (-1.066, 6.398)
+BLANK card ending plot cards
+

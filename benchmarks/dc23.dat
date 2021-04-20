@@ -1,0 +1,333 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-23
+C     1st of 2 parts:  Simple TACS-only test including steady-state ac solution.
+C     1st of 8 total subcases.  Following 2 TACS data subcases,  there will be 5
+C     data subcases that illustrate Kizilcay frequency dependence (add May, 93).
+     0.1     1.0
+       1       1       1       1       1
+TACS STAND ALONE
+  RES1=0  +1/1+S  -1/S
+  RES2=0  +1/1+S  +S/1+S  -MIXER
+ 11/1+S   +MIXER
+        1.
+        1.        1.
+ 11/S     +S/1+S
+        1.
+        0.        1.
+ 1S/1+S   +MIXER
+        0.        1.
+        1.        1.
+  MIXER   +DC     +AC
+11DC             1.0
+14AC                        1.      -90.
+33S/1+S 1/S   1/1+S RES1=0RES2=0MIXER DC    AC
+C  Next   8     output variables belong to TACS (with "TACS" an internally-added 
+C  Step     Time      TACS       TACS       TACS       TACS       TACS      TACS
+C                     S/1+S      1/S        1/1+S      RES1=0     RES2=0    MIXER
+C    0      0.0         0.0        0.0        0.0        0.0        0.0      0.0
+C    1      0.1  .952380952 .047619048 .047619048        0.0        0.0      1.0
+C    2      0.2  .861678005 .138321995 .138321995 -.2776E-16  -.111E-15      1.0
+BLANK card ending all TACS data
+C   10      1.0  .386918466 .613081534 .613081534 -.3331E-15 -.4441E-15      1.0
+C Variable max:  .952380952 .613081534 .613081534        0.0        0.0      1.0
+C Times of max:         0.1        1.0        1.0        0.0        0.0      0.1
+C Variable min:         0.0        0.0        0.0 -.3331E-15 -.4441E-15      0.0
+C Times of min:         0.0        0.0        0.0        1.0        1.0      0.0
+  PRINTER PLOT
+ 143 .2 0.0 1.0         S/1+S 1/S   DC            { Axis limits: (0.000,  1.000)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     2nd of 8 cases:  Simple TACS-only test of supplemental TACS device type 66
+ABSOLUTE TACS DIMENSIONS
+      10      40      50      20      20     200    2000     100
+C     TEST FOR DEVICE 66
+   .0001     .03
+       1       1       1       1       1      -1
+       5       5      20      20
+TACS STAND ALONE
+  DUM     +ZERO
+11DC1            1.0
+11DC2            1.0                                             -1.0
+14AC1            1.0      50.0
+14AC2            1.0      50.0      -90.                         -1.0
+14AC3            1.0     100.0                                   -1.0
+88DV66A 66+AC1    +DC1                             50.
+88DV66B 66+AC2    +DC2                             50.
+88DV66C 66+AC2    -DC2                             50.
+88DV66D 66+AC2    +DC1                             50.
+88DV66E 66+AC1    +DC2                             50.
+88DV66F 66+AC2    +AC3    +DC2                     50.
+33DC1   DC2   AC1   AC2   DV66A DV66B DV66C DV66D DV66E DV66F
+C  Next  10   output variables belong to TACS (with "TACS" an internally-added u
+C Step    Time      TACS       TACS       TACS       TACS       TACS       TACS
+C                   DC1        DC2        AC1        AC2        DV66A      DV66B
+C   0     0.0         0.0        1.0        0.0  .6123E-16        0.0 1.22474487
+C   1   .1E-3         1.0        1.0  .99950656 .031410759 .141386465 1.22474487
+C   2   .2E-3         1.0        1.0 .998026728  .06279052 .199876678 1.22474487
+BLANK card ending all TACS data
+C 300     .03         1.0        1.0        -1. .39893E-13 1.22474487 1.22474487
+C Variable maxima :   1.0        1.0        1.0        1.0 1.22474487 1.22474487
+C Times of maxima : .1E-3        0.0        .02       .005      .0282        .03
+C Variable minima :   0.0        1.0        -1.        -1.        0.0 1.22474487
+C Times of minima :   0.0        0.0        .01       .015        0.0      .0246
+  PRINTER PLOT
+ 144 3. 0.0 30.         DV66F DV66A               { Axis limits: (0.000,  1.414)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         3rd of 8 subcases begins the illustration and verification of Kizilcay
+C         frequency dependence,  named  after  Dr. Mustafa Kizilcay  of Lahmeyer
+C         International in Frankfurt,  Germany.   His  doctoral dissertation  at
+C         the  University of Hannover  was dominated by such modeling,  although
+C         that work may have been restricted to Laplace transformation (possible
+C         alternate use of Z transformation is believed to be newer).  In either 
+C         case, TACS-like transfer functions are allowed not in TACS, but rather  
+C         in the electric network.   As  subcases  3 through 6 are added to this
+C         standard test case on  8 May 1993, the most easily available reference 
+C         for the average  EMTP  user  would  seem to be an 11-page contribution
+C         entitled  "A New Branch in the ATP-EMTP: High-Order, Linear Admittance
+C         Model."  This was published by LEC in its international journal titled
+C         EMTP News (see Vol. 6, No. 1, March 1993,  pp. 19-29).  In WordPerfect
+C         format,  the associated disk file soon should be available from  Prof.
+C         Bruce Mork's Fargo server of E-mail fame.   Details should be found in
+C         the April, 1993, newsletter.
+C  Ordinary RLC branch representation 
+C  Compare the results of this subcase with that of the following one.
+C  The circuit is driven by a voltage step (type-11 source).
+C  Series R-L-C branch has  R  = 0.05 ohm,  L = 1 mH,  C = 5 mF
+C  and the resistive load has   RL = 0.05 ohm
+C DELTAT    TMAX    XOPT    COPT
+ .000500    .050      0.      0.
+C   IOUT   IPLOT  IDOUBL  KSSOUT  MAXOUT 
+       1       1       1       1       1      -1      
+       5       5      10      10
+  RES                     0.05
+  GEN   RES               0.05  1.0   5000.                                    1
+BLANK card  -- ending electrical branches --
+BLANK card  -- ending switches --
+11GEN      10.
+BLANK card  -- ending sources --
+C   Step      Time      RES        GEN        GEN
+C                                             RES
+C      0       0.0         0.0        0.0        0.0
+C      1     .5E-3  .120481928        10. 2.40963855
+C      2     .1E-2  .349833067        10. 6.99666134
+ 1
+C    100       .05  -.00286701        10. -.05734015
+C Variable maxima :  .943967142        10. 18.8793428
+C Times of maxima :       .0035      .5E-3      .0035
+C Variable minima :  -.66356661        0.0 -13.271332
+C Times of minima :       .0105        0.0      .0105
+BLANK card  -- ending plot cards --
+BEGIN NEW DATA CASE
+C           4th of 8 subcases is to be compared with the preceding 3rd.  The two 
+C           solutions should be identical.  The same RLC circuit  is represented
+C           here using a second order rational function  as an admittance in the
+C           S-domain  of  Laplace transformation.   This  provides validation of
+C           Kizilcay frequency dependence for a very simple case  where  we have
+C           an alternate means of computing the transient.
+C DELTAT    TMAX    XOPT    COPT
+ .000500    .050      0.      0.
+C   IOUT   IPLOT  IDOUBL  KSSOUT  MAXOUT 
+       1       1       1       1       1      -1      
+       5       5      10      10
+  RES                      0.05
+C -- preceding R branch defines node names and output option
+C                         <....>: dummy value!
+  GEN   RES                 99.                                                1
+C   The following illustrates F95 ability to size Kizilcay frequency-dependent
+C   tables.  This documents the format.  It is legal for F77, however, only
+C   because the 3 numbers shown equal the fixed, default dimensions.  If any
+C   one of these numbers is changed for F77 use,  an error termination should
+C   result.  Any blank data field is converted automatically to the default
+C   value shown below.  Change made  20 October 2000:
+C                                 MAXHAN  MAXORD  MAXTOT
+C KIZILCAY F-DEPENDENT LIMITS           30      25    1000
+C      The preceding has been moved downward 2 subcases.  We want the first use
+C      of KFD not to have this declaration because lack of it caused trouble for
+C      F95 Lahey ATP prior to a correction to HANNFD on 19 November 2002.
+C ---Request------->    < Order><------ Gain -------->          |
+KIZILCAY F-DEPENDENT           2         1.0                    S-transform
+C -coeff. of numerator--><-coeff. of denominator->
+                 0.0                        1.0
+                 0.005                      2.5E-4
+                 0.0                        5.0E-6
+BLANK card  -- ending electrical branches --
+BLANK card  -- ending switches --
+11GEN      10.
+BLANK card  -- ending sources --
+C   Step      Time      RES        GEN        GEN
+C                                             RES
+C      0       0.0         0.0        0.0        0.0
+C      1     .5E-3  .120481928        10. 2.40963855
+C      2     .1E-2  .349833067        10. 6.99666134
+ 1
+C    100       .05  -.00286701        10. -.05734015
+C Variable maxima :  .943967142        10. 18.8793428
+C Times of maxima :       .0035      .5E-3      .0035
+C Variable minima :  -.66356661        0.0 -13.271332
+C Times of minima :       .0105        0.0      .0105
+BLANK card  -- ending plot cards --
+BEGIN NEW DATA CASE
+C         5th  of 8 subcases continues illustration and verification of Kizilcay
+C         frequency dependence.   Whereas  subcases 3 and 4 considered only step
+C         excitation of the  time-step loop beginning with 0 initial conditions,
+C         the concluding two cases will involve a continuation of the sinusoidal
+C         steady state.   Here,  we  first establish a standard of comparison by
+C         using only tradition EMTP modeling.
+C  Ordinary RLC branch representation 
+C  Compare the results of this subcase with that of the following subcase.
+C  The circuit is driven by a sinusoidal voltage source.
+C  Series R-L-C:  R  = 0.05 ohm,  L = 1 mH,  C = 5 mF
+C  and resistive load,  RL = 0.05 ohm
+C DELTAT    TMAX    XOPT    COPT
+ .000500    .050      0.      0.
+C   IOUT   IPLOT  IDOUBL  KSSOUT  MAXOUT 
+       1       1       1       1       1      -1      
+       5       5      10      10
+  RES                     0.05
+  GEN   RES               0.05  1.0   5000.                                    1
+BLANK card  -- ending electrical branches --
+BLANK card  -- ending switches --
+14GEN      10.       50.                                       -1.
+BLANK card  -- ending sources --
+C    Step      Time      RES        GEN        GEN
+C                                              RES
+C       0       0.0  .438670455        10.  8.7734091
+C       1     .5E-3  .212452642 9.87688341 4.24905284
+C       2     .1E-2  -.01899859 9.51056516  -.3799719
+ 1
+C     100       .05  -.44323561       -10. -8.8647122
+C Variable maxima :  1.48971876        10. 29.7943752
+C Times of maxima :        .016        0.0       .016
+C Variable minima :   -1.491383       -10. -29.827659
+C Times of minima :        .026        .01       .026
+BLANK card  -- ending plot cards --
+BEGIN NEW DATA CASE
+C         6th  of 8 subcases continues illustration of Kizilcay F-dependence.
+C  This shows  KIZILCAY F-DEPENDENT  modelling of the series RLC 
+C  circuit in the Z-domain. The RLC circuit is represented by a second order 
+C  rational function of admittance type in Z-transform. The coefficients are 
+C  obtained by applying the bilinear transform to the rational function in
+C  Laplace domain.
+C DELTAT   TMAX     XOPT    COPT
+  0.0005   0.05   50.
+C   IOUT   IPLOT  IDOUBL  KSSOUT  MAXOUT                    ICAT
+      10       1       1       1       1                       2
+  RES                      0.05
+C -- preceding R branch defines node names and output option
+C                         <....>: dummy value!
+  GEN   RES                 99.                                                1
+C   The following illustrates F95 ability to size Kizilcay frequency-dependent
+C   tables.  This documents the format.  It is legal for F77, however, only
+C   because the 3 numbers shown equal the fixed, default dimensions.  If any
+C   one of these numbers is changed for F77 use,  an error termination should
+C   result.  Any blank data field is converted automatically to the default
+C   value shown below.  Change made  19 November 2002:
+C                                 MAXHAN  MAXORD  MAXTOT
+KIZILCAY F-DEPENDENT LIMITS           30      25    1000
+C ---Request------->    < Order><------ Gain -------->          |
+KIZILCAY F-DEPENDENT           2      1.0                       Z-transform
+C -coeff. of numerator--><-coeff. of denominator->
+                10.0                       41.0
+                 0.0                      -79.0
+               -10.0                       40.0
+BLANK card  -- ending electrical branches --
+BLANK card  -- ending switches --
+14GEN       10.       50.                                     -1.
+BLANK card  -- ending sources --
+C    Step      Time      RES        GEN        GEN
+C                                              RES
+C       0       0.0  .443567421        10. 8.87134842
+C      10      .005  -1.4216487  -.315E-14 -28.432974
+ 1
+C     100       .05  -.44356742       -10. -8.8713484
+C Variable maxima :  1.48913814        10. 29.7827628
+C Times of maxima :        .036        0.0       .016
+C Variable minima :  -1.4891381       -10. -29.782763
+C Times of minima :        .026        .01       .026
+BLANK card  -- ending plot cards --
+BEGIN NEW DATA CASE
+C         7th  of 8 subcases illustrates higher-order Kizilcay F-dependence.
+C         It is a single-phase subset of the 3-phase data named  KFDHEV.DAT
+C         that was received from Orlando Hevia attached to E-mail dated
+C         23 November 2002.  But Orlando said that he received it from Ricardo
+C         Ricardo Tenorio of ABB in Vasteras, Sweden.  It seems this is a low-
+C         or intermediate-order approximation that was "derived from ATP
+C         simulations, although the system represented is a real one" (see
+C         E-mail dated 2002-12-11, 7:39).  Mr. Tenorio was the first to report
+C         stability problems of KFD for high order and small dT as first
+C         mentioned in the January, 2003, newsletter.  Well, that high-order
+C         data is proprietary (secret),  so can not be disclosed.  But the
+C         general phenomenon can be illustrated using the lower-order
+C         approximation of this subcase.  Consider what happens if dT differs
+C         from the 2 microseconds (usec) of the miscellaneous data card:
+C    dT = 3 usec would be perfectly sinusoidal. That final cycle [60, 80] msec
+C    has maximum current = 4117  (at  61.06 msec)  and  min = -4112  (at  71.07
+C    msec).  This is very symmetrical and balanced.  Also, the phasor solution
+C    has 4138,  which seems plenty close.  So all is well at dT = 3 usec using
+C    64 bits of Salford precision.  But 2 usec differs.  It adjusts to sinusoid
+C    during 1st cycle.  The phasor solution is not too different at 4138.  But
+C    the dT loop is quite different.  That final cycle [60, 80] msec has maximum
+C    current of only 3272 (at  61.24 msec)  and  min = -3322  (at  71.28).  Yet,
+C    even with the obvious error (too small amplitude), stability seems good.
+C    Both 1.9 and 2.1 usec do _not_ adjust, but rather become highly distorted
+C    over the first 40 msec (1st of 2 plots).  The second plot,  over [40, 80],
+C    clearly is diverging.  The amplitude of the current grows exponentially.
+C    So, on both sides of dT = 2.0 usec there is instability whereas  dT = 2.0
+C    seems perfectly stable & sinusoidal at 80 msec.  All of this is using 64
+C    bits of Salford EMTP precision.  Using 128-bit Lahey, there is no hint of
+C    distortion anywhere.  The graph for dT = 3.0 usec seems identical to 1.9
+C    or 2.0 usec.  Conclusion: for 64 bits,  dT = 3 usec  is close to the
+C    stability limits of the KFD model.
+C      Addition on 10 December 2002:  Having tested Watcom, GNU Mingw32, and
+C      64-bit F95 Lahey, it can be reported that all behave comparably, but
+C      differently.  Each has different roundoff,  so numbers are different.
+C      But the graphs look similar.  So, be advised that one can not easily
+C      compare any two of the .LIS files using Mike Albert's FC.  Human
+C      intelligence is required.  But for larger time steps, comparisons are
+C      perfect.  To see this,  consider the 4th subcase of DC-48.  This uses
+C      the same data,  but a larger step size of dT = 100 usec.  FC indicates
+C      perfect agreement in this case.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+BEGIN PEAK VALUE SEARCH             .060   { Compare max & min over just 1 cycle
+POWER FREQUENCY                 50.    { Nicer period than using Hevia's 60 Hz
+.0000020    .080              
+       1       7       1       1       1      -1
+       5       5      20      20     100     100    1000    1000
+C ONLY KFD ELEMENT IS HERE: THE CASE IS UNSTABLE FOR SMALL DELTAT
+C NETWORK EQUIVALENT BY KFD
+C <-BUS1<-BUS2<-BUS3<-BUS4<----R<----L<----C      
+  SOURCA                     99.                                               1
+C  PUNCH-OUT FILE GENERATED BY ARMAFIT (NODA SETUP)
+KIZILCAY F-DEPENDENT           6          1.00000E+000          S
+ 2.55564999999999990E-002 1.00000000000000000E+000
+ 2.58174256593059220E-006 1.26190169827623520E-003
+ 3.44528114161255420E-008 6.56757488674167030E-007
+ 2.16578732571550020E-012 6.22037676357393080E-010
+ 7.77318622992575270E-015 1.10717058895704090E-013
+ 2.25856143523397890E-019 5.18376352266273340E-017
+ 3.19918022205034290E-022 4.41171918010679540E-021
+BLANK card ending branch cards
+BLANK card ending switch cards (none)
+14SOURCA  187794.214       50.        0.                           -1.
+C 14SOURCA  187794.214       60.       90.                         { -1.
+BLANK card ending source cards
+  SOURCA
+BLANK card ending node voltage output requests
+  CALCOMP PLOT     { Switch to screen from printer plot of a preceding subcase
+ 194 4. 0.0 40.         SOURCA                  dT = 2.0 usec   H(s) current
+ 194 4. 40. 80.         SOURCA                  2nd 40 msec     H(s) current
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         8th  of 8 subcases continues illustration of Kizilcay F-dependence.
+C   The following illustrates F95 ability to erase Kizilcay frequency-dependent
+C   tables.  This documents the format.  For F77, no storage actually is closed,
+C   however.  For F77,  the declaration has no effect on memory. 
+  0.0005    0.05
+       1       1
+C                                 MAXHAN  MAXORD  MAXTOT
+KIZILCAY F-DEPENDENT LIMITS           -1   { Special 1st of 3 integers ==> close
+  DUMMY                      1.0   { Dummy branch will confirm branch data input
+$STOP  { Since done showing cancellation of Kizilcay tables, terminate execution
+BEGIN NEW DATA CASE
+BLANK

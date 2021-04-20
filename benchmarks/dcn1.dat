@@ -1,0 +1,883 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCNEW-1
+C     Test of automatic U.M. initialization using Type-4  (the induction)  mode.
+C     Continuation of steady-state only (no real transient).   No external rotor
+C     circuit.   Machine rating is as follows:
+C                    2.541 MVA,  4.2 KV,  4 POLE ( 85.67% efficiency at 0.846 PF
+C                    and 14.0E+3 NM.;  KIPP TORQUE = 79.157E+3 NM, SLP = 24.3% )
+POWER FREQUENCY, 60,   { Corrects possible 50-Hz declaration of European STARTUP
+ABSOLUTE U.M. DIMENSIONS, 20, 2, 50, 60,
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000200    .100
+       1       1       1       1       1      -1
+       5       5      20      20     100     100
+C  --------- ROTOR EXTERNAL RESISTANCES
+  BUSA2 BUSAS2            1.0E-4 10.0                                          1
+  BUSB2 BUSBS2BUSA2 BUSAS2
+  BUSC2 BUSCS2BUSA2 BUSAS2
+C  --------- CONNECTIVITY OF EMTP FOR ELECTRIC NETWORK
+  BUSAS2                  1.0E+6
+  BUSBS2      BUSAS2
+  BUSCS2      BUSAS2
+C  --------- MECHANICAL NETWORK COMPONENTS
+  BUSMG BUSMGR            .4548                                                1
+  BUSMGR      BUSMG BUSMGR
+  BUSMG                               9.8E+7                                   1
+C  -------- FOR MEASUREMENT OF ELECTROMECHANICAL TORQUE
+  BUSMS BUSMG             1.0E-6                                               1
+BLANK card ending branch cards
+BLANK card ending nonexistent switch cards
+C  --------- SOURCES FOR INFINITE BUS
+14BUSAS2  3000.0     60.0     0.0                           -1.0
+14BUSBS2  3000.0     60.0     -120.0                        -1.0
+14BUSCS2  3000.0     60.0     +120.0                        -1.0
+C  --------- 3-PHASE SOURCES AT ROTOR SIDE (ACTUAL FREQ SET BY SS):
+C  --------- MECHANICAL INPUT TORQUE (ACTUAL VALUE SET BY SS):
+14BUSMS -1 0.000001  0.00001                                -1.0
+19 UM                                                   { Beginning of U.M. data
+ 1
+BLANK CARD ENDING CLASS 1 UM DATA CARDS
+C  UM-1 MACHINE TABLE :
+ 4    111BUSMG        2                            0.1885
+              0.02358
+              0.02358
+2.0           0.0                 BUSMS
+C  UM-1 COIL TABLE
+                            BUSA2             1
+0.412         0.0012        BUSB2             1
+0.412         0.0012        BUSC2             1
+0.110         0.0012                          1
+0.110         0.0012                          1
+                                              1
+BLANK card terminating all U.M. data
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        BUSA2  |BUSAS2*UM1TLA*
+C        BUSAS2 |TERRA *BUSA2 *
+C        BUSB2  |BUSBS2*UM1TLB*
+C        BUSBS2 |TERRA *BUSB2 *
+C        BUSC2  |BUSCS2*UM1TLC*
+C        BUSCS2 |TERRA *BUSC2 *
+C        BUSMG  |TERRA *BUSMGR*BUSMS *UM1MCC*
+C        BUSMGR |TERRA *BUSMG *
+C        BUSMS  |BUSMG *
+C        UM1TLA |BUSA2 *
+C        UM1TLB |BUSB2 *
+C        UM1TLC |BUSC2 *
+C        UM1MCC |BUSMG *
+C        TERRA  |BUSAS2*BUSBS2*BUSCS2*BUSMG *BUSMGR*
+C --------------+------------------------------
+BLANK card ending all electric-network sources
+C       Total network loss  P-loss  by summing injections =   1.399999999990E+01
+C       Total network loss  P-loss  by summing injections =   1.879270126241E+04
+C       Total network loss  P-loss  by summing injections =   1.879220126241E+04
+C       Total network loss  P-loss  by summing injections =   1.880006219404E+04
+C Last inject:  BUSCS2     -1500.      3000.     182.2227379651  376.33814334153
+C Last inject:    2598.0762113533   120.0000    329.27992939481       61.0399614
+  BUSAS2BUSA2 BUSMG                             { Selective node voltage outputs
+C  Step    Time        BUSAS2       BUSA2        BUSMG        BUSA2        BUSMG
+C                                                            BUSAS2       BUSMGR
+C
+C                       UM-1         UM-1         UM-1         UM-1         UM-1
+C                       OMEGM        THETAM       IPA          IPB           IPC
+C    0     0.0         3000.  1784.374675   184.725648  -194.050415  203.0844855
+C                 184.725648  .7853981634  -194.050415  376.2746528  -182.224238
+C    1   .2E-3   2991.476701  1834.302202  184.7256479  -217.778001  203.0844854
+C                 184.725648   .822343293  -217.778001  374.6919354  -156.913934
+BLANK card terminating output variable requests
+C  500     0.1         3000.  1783.984613  184.7241591  -193.987564  203.0828486
+C                 184.725648  19.25796297  -193.987564  376.1921117  -182.204548
+C Variable maxima :    3000.   1928.26504   184.725648  376.2415171  203.0844855
+C                   184.725648 19.25796297  376.2415171 376.2781467  376.2139786
+C Times of maxima :        0.0        .001          0.0       .0944          0.0
+C                          0.0         0.1        .0944       .0166        .0722
+C Variable minima :   -3000.  -1928.26734  184.7241591  -376.246896  203.0828486
+C                 184.725648  .7853981634  -376.246896  -376.228394  -376.231626
+C Times of minima :     .075         .026          0.1        .0194          0.1
+C                        0.0          0.0        .0194        .0916        .0972
+  PRINTER PLOT
+ 194 10 0.0 100         UM-1  OMEGM UM-1  THETAM  { Plot limits: (0.000,  1.847)
+ 194 20 0.0 100         BUSMG BUSMGRUM-1  TQGEN  { Plot limits: (-4.168,  0.203)
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C     2nd of 7 subcases is related to first.   Solution is nearly the same.  Two
+C     changes have been  made.   First,  prediction rather than compensation  is
+C     used  ("1" in column 15 on 2nd card).  Second, two copies of the induction
+C     machine are in parallel (armature terminals).   The  two  machines do have
+C     separate (but identical) mechanical networks, however.  The impedance that
+C     connects armature  coils  to  the infinite bus has been halved in order to
+C     keep the solution the same until the fault  (armature phase "a" to ground)
+C     at 20 msec.   This simulation has been stopped at 50 msec, but others have
+C     run  to 1/2 second with interesting results.   For example,  fault current
+C     still shows a sizable dc offset that is decaying very slowly.   The  speed
+C     demonstrates  a  small but troublesome oscillation on each time step.   If
+C     the fault switch is erased,  then  the  simulation agrees closely with the
+C     first subcase.
+POWER FREQUENCY, 60,   { Corrects possible 50-Hz declaration of European STARTUP
+ABSOLUTE U.M. DIMENSIONS, 20, 2, 50, 60,
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000200    .050
+       1       1       1       0       1      -1
+       5       5      20      20     100       1     105       5     120      20
+C        Impedance (series R-L) connects armature coils with sinusoidal sources:
+  BUSA2 BUSAS2            .50E-4  5.0                                          1
+  BUSB2 BUSBS2BUSA2 BUSAS2
+  BUSC2 BUSCS2BUSA2 BUSAS2
+C  --------- CONNECTIVITY OF EMTP FOR ELECTRIC NETWORK
+  BUSAS2                  .50E+6
+  BUSBS2      BUSAS2
+  BUSCS2      BUSAS2
+C   ========  Begin mechanical network for 1st of 2 parallel induction machines:
+  BUSMG BUSMGR            .4548                                                1
+  BUSMGR      BUSMG BUSMGR
+  BUSMG                               9.8E+7                                   1
+  BUSMG                               9.8E+7                                   1
+  BUSMS BUSMG             1.0E-6   { To measure electromagnetic torque }       1
+C   ========  Begin mechanical network for 2nd of 2 parallel induction machines:
+  GUSMG GUSMGR            .4548                                                1
+  GUSMGR      GUSMG GUSMGR
+  GUSMG                               9.8E+7                                   1
+  GUSMS GUSMG             1.0E-6   { To measure electromagnetic torque }       1
+BLANK card ending branch cards
+  BUSA2            .0199       1.0  { Retard by dt/2 so close at 20 msec }     1
+BLANK card terminating all switch cards
+C  --------- SOURCES FOR INFINITE BUS
+14BUSAS2  3000.0     60.0     0.0                           -1.0
+14BUSBS2  3000.0     60.0     -120.0                        -1.0
+14BUSCS2  3000.0     60.0     +120.0                        -1.0
+C  --------- 3-PHASE SOURCES AT ROTOR SIDE (ACTUAL FREQ SET BY SS):
+C  --------- MECHANICAL INPUT TORQUE (ACTUAL VALUE SET BY SS):
+14BUSMS -1 0.000001  0.00001                                -1.0
+14GUSMS -1 0.000001  0.00001                                -1.0
+19 UM                                                   { Beginning of U.M. data
+ 1            1
+BLANK CARD ENDING CLASS 1 UM DATA CARDS
+C  UM-1 MACHINE TABLE :
+ 4    111BUSMG        2                            0.1885
+              0.02358
+              0.02358
+2.0           0.0                 BUSMS
+C  UM-1 COIL TABLE
+                            BUSA2             1
+0.412         0.0012        BUSB2             1
+0.412         0.0012        BUSC2             1
+0.110         0.0012                          1
+0.110         0.0012                          1
+                                              1
+ 4    111GUSMG        2                            0.1885
+              0.02358
+              0.02358
+2.0           0.0                 GUSMS
+                            BUSA2             1
+0.412         0.0012        BUSB2             1
+0.412         0.0012        BUSC2             1
+0.110         0.0012                          1
+0.110         0.0012                          1
+                                              1
+BLANK card terminating all U.M. data
+BLANK card ending all electric-network sources
+C       Total network loss  P-loss  by summing injections =   1.434204163862E+06
+C       Total network loss  P-loss  by summing injections =   1.746481733467E+06
+C       Total network loss  P-loss  by summing injections =   2.447413291234E+07
+C       Total network loss  P-loss  by summing injections =   2.447413191234E+07
+C       Total network loss  P-loss  by summing injections =   2.447414763420E+07
+C Step    Time        BUSAS2       BUSA2        BUSMG        BUSA2        BUSA2
+C                                                            TERRA        BUSAS2
+C
+C                     BUSMS        GUSMG        GUSMG        GUSMS        UM-1
+C                     BUSMG        GUSMGR       TERRA        GUSMG        TQGEN
+C
+C                     UM-1         UM-1         UM-1         UM-1         UM-1
+C                     IPB          IPC          IE1          IE2          IE3
+C
+C                     UM-2         UM-2         UM-2         UM-2         UM-2
+C                     IPA          IPB          IPC          IE1          IE2
+C    0     0.0         3000.  1784.374675   184.725648          0.0   -388.10083
+C                -3965.07077  203.0844855          0.0  -3965.07077  -4168.15526
+C                376.2746528  -182.224238   62.0743506   -362.34101  -87.7863885
+C                -194.050415  376.2746528  -182.224238   62.0743506   -362.34101
+C    1   .2E-3   2991.476701  1834.404076   184.725648          0.0  -435.553965
+C                -3965.07077  203.0844854  -.092693806  -3965.07077  -4168.06256
+C                374.6920465  -156.915064  161.7505543  -308.470816  146.7202621
+C                -217.776982  374.6920465  -156.915064  161.7505543  -308.470816
+  BUSAS2BUSA2 BUSMG                             { Selective node voltage outputs
+BLANK card terminating output variable requests
+C  250     .05         3000.          0.0  183.9807585  -1085.80689  804.5211912
+C                -3965.07077  201.4660671  -114.046535  -3965.07077  -3834.24844
+C                480.8586416  -288.589529  192.2606971  -403.962505  211.7018082
+C                -150.261378  499.5514745  -288.045306  219.3886975  -425.409154
+C Variable max :       3000.  1928.308447   184.725648  3888.235034  2395.399979
+C                -3965.07077  203.0844855  3222.786447  -3965.07077  13430.35234
+C                480.8586416   536.090637  1076.526092  1065.863054  274.4477824
+C                 1549.98802  499.5514745  544.7564009  1078.265346  1064.943318
+C Times of maxima :      0.0         .001          0.0        .0374        .0292
+C                      .0412          0.0         .032        .0412        .0272
+C                        .05        .0388        .0306        .0276        .0244
+C                      .0374          .05        .0388        .0306        .0276
+C Variable minima :   -3000.  -1928.21025  183.9697478  -6518.05923  -785.871968
+C                -3965.07077  201.4385025  -17586.9944  -3965.07077  -7353.74079
+C                -465.029322  -560.658809  -574.664871   -544.13558  -1315.26592
+C                -2074.00287  -474.993058  -576.837968  -574.678392   -556.13293
+C Times of minima :     .025        .0094        .0478        .0288        .0208
+C                        0.0        .0478        .0272          0.0         .032
+C                       .042        .0472         .026         .049         .029
+C                      .0286         .042        .0472         .026         .049
+  PRINTER PLOT
+C     193.05 0.0  .5 165.185.UM-1  OMEGM UM-2  OMEGM  { Plot limits: ()
+ 194 5. 0.0  50         UM-1  TQGEN UM-2  TQGEN  { Plot limits: (-0.739,  1.343)
+C     193.05 0.0  .5         UM-1  TQGEN UM-2  TQGEN  { Plot limits: ()
+ 194 10 0.0  50         BUSA2                    { Plot limits: (-6.518,  3.888)
+C     193.05 0.0  .5         BUSA2                    { Plot limits: ()
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+C     3rd of 7 subcases is unrelated to preceding 2.  Oh, the U.M. is involved
+C     as an induction motor, but this subcase illustrates troubled starting
+C     from zero.  The data is from Gabor Furst of suburban Vancouver, B.C.,
+C     Canada.  In E-mail dated April 8th, he wrote about attached data files
+C     TCOMP.DAT  and  TPRED.DAT  (compensation and prediction, respectively).
+C     Using prediction and no automatic initialization, one observes
+C     divergence of the iteration for mechanical speed OMEGM on step 3.
+C     This is for TPRED.  TCOMP has no such trouble (see following subcase).
+C     WINDSYN  is Gabor Furst's MS Windows program that generates data for
+C     the U.M.  From comments that follow,  WINDSYN seems to have been used
+C     to produce the data.  There were several "/" cards for sorting, but WSM
+C     removed them to simplify the data.  He also removed  AVERAGE OUTPUT,
+C     since it had nothing to do with the troubled iteration for speed.  The
+C     maximum number of iterations for U.M. speed is  MAXZNO,  which originally
+C     was introduced as the iteration limit for ZnO surge arresters.  Since the
+C     default value is 50, this has been reduced to 20.  Even 10 would be fine.
+C     Additional iterations do not help.  As the  .DBG  file will show,  speed
+C     is neither converging nor diverging;  it just bounces around over a very
+C     wide range that includes both positive and negative values.  The three
+C     switches in series with the armature windings were removed without effect.
+C     Subcases 3, 4, and 5 were added to DCN1 on  18 April 2003.  WSM.
+C      WindSyn test case
+C  generated on  4/7/03   for RoundDamp
+PRINTED NUMBER WIDTH, 11, 1,  { Return to default precision for dT loop columns
+ZINC OXIDE            20   { MAXZNO is used as iteration limit for omega of U.M.
+POWER FREQUENCY, 50.0,
+  .50E-4    .020
+       1       1       1       1
+C   Note about preceding dT and T-max.  Obviously, T-max is immaterial since
+C   the simulation will end on step 3.  As for dT,  50 usec  is the value Gabor
+C   Furst used.  It can be changed over a wide range without affecting the halt
+C   on step 3.  As dT becomes smaller,  the speed error becomes bigger.  Smaller
+C   dT (50 usec already is small) provides no help.  Shown below,  OMEGM  is on
+C   the order of  1.E+13  as the iteration diverges.  Using 1/2 msec,  this will
+C   drop to  1.E9.  Yes, better, but still completely wrong.  The correct value
+C   is less than unity (the machine started with speed equal to zero).
+C        ELECTRIC NETWORK DATA
+C BUS**>BUS**>BUS**>BUS**><****R<****L<****
+C   short circuit level  =     83  MVA
+C  the machine rating entered was      834.47   kVA
+  SRCA  MOTA              .767   3.83
+  SRCB  MOTB              .767   3.83
+  SRCC  MOTC              .767   3.83
+  MOTA                     1.E06
+  MOTB                     1.E06
+  MOTC                     1.E06
+C
+  INERS INER               1.E-6
+  IX                                  7.E+07        {inetia in uF}
+C   the damping term in ohms
+        INER              .11                        {damping  1/mho}
+BLANK card ending BRANCHes
+  INERS IX            -1     1000.
+BLANK card ending SWITCHes
+C        SOURCE DATA
+C .......1.........2.........3.........4.........5.........6.........7.........8
+C  Source voltages
+14SRCA      8164.965     50.00       0.0       { Vt }
+14SRCB      8164.965     50.00     240.0
+14SRCC      8164.965     50.00     120.0
+C   next  the source records required
+C  source for the mechanical analogue
+14INERS -1  0.000001  .0000001
+C   Note about 4 preceding Type-14 sources.  Gabor Furst had  T-start = -1.0
+C   in columns 61-70.  This added a phasor solution,  but it did not help.  The
+C   error termination on Step 3 is unaffect, so WSM removed the phasor solution.
+19   { Begin U.M. data, which is an electrical source of type 19 (columns 1-2)
+C Col.2 = 0 Decoupled,  = 1 Autoinitialize -----  Col. 15 =0 Compensation,  =1 Prediction
+ 0            1 { Col. 2 ==> no automatic initialization; col. 15 ==> prediction
+BLANK
+ 3 1 111 INER        2                             .157 { Col. 2 ==> Type-3 U.M.
+                  1.125287
+                  1.125287
+C   Armature coils
+                            MOTA              1
+       .980484      .031413 MOTB              1
+       .980484      .031413 MOTC              1
+C    Rotor coils
+      2.388701      .031413                   1
+      2.388701      .031413                   1
+BLANK card ending U.M. data
+BLANK card ending SOURCEs
+C  .......1.........2.........3.........4.........5.........6.........7.........8
+C        NODE VOLTAGE OUTPUT
+  MOTA  MOTB  MOTC
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Final  7     output variables pertain to Type-19 U.M. components (names are generated internally);
+C   Step      Time      MOTA       MOTB       MOTC       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1
+C                                                        TQGEN      OMEGM      IPA        IPB        IPC        IE1        IE2
+C ***      Phasor I(0) =  1.9294775E-17                     Switch  "INERS "  to  "IX    "  closed in the steady-state.
+C      0       0.0  8164.95874 -4082.4879 -4082.4709        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C      1     .5E-4   8163.9516 -3970.9169 -4193.0347 -.1455E-10        0.0 -8326.4506 4049.95584 4276.49477 -9920.3201 155.828901
+C      2     .1E-3  .7986173E9 -.333422E9 -.465196E9 -.157354E9  213.40578 -.809326E9 .3378925E9 .4714332E9 -.965174E9 .8156453E8
+BLANK card ending requests for node voltage output
+C ------------------------------------------------------------------------------------------------------------------------------------
+C ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/
+C ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/
+C ------------------------------------------------------------------------------------------------------------------------------------
+C You lose, fella.   The EMTP logic has detected an error condition  ...
+C    KILL code number            Overlay number           Nearby statement number
+C             91                     19                          14400
+C KILL = 91.   The mechanical speed iteration of the U.M. has failed to converge within iteration limit  ITUMAX = 20   at time  T =
+C 1.50000000E-04.  This is for machine number  JM = 1,  which has a required convergence tolerance  EPSOM = 1.57000000E-01.  It is
+C possible that the time-step  DELTAT  of the simulation is too large, or that  EPSOM  or  ITUMAX  is too small.  These are easily
+C checked.  More complicated is nonconvergence due to an error with U.M. data, about which little can be said in general.
+C      Further information supporting this  KILL = 91  error stop can be found
+C      toward the end of the  .DBG  file.  Values of the OMEGM iteration appear:
+C Error.  Speed iteration did not converge.  Look at the series of speeds:
+C  2.76E+13 -9.62E+11 -2.36E+13 -2.20E+13 -2.95E+13  2.56E+13  2.46E+13 -2.89E+13
+C -2.43E+13  2.64E+13 -2.71E+13  5.11E+12 -2.55E+13  6.30E+12  2.69E+13 -3.06E+12
+C  2.19E+13 -7.18E+12  2.92E+13 -1.72E+13 -4.27E+12
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+C     4th of 7 subcases is the same as the preceding except that prediction has
+C     been replaced by compensation.  In theory,  this is  TCOMP.  But in fact,
+C     Gabor mistakenly sent a synchronous machine for TPRED and TCOMP.  The same
+C     phenomenon can be illustrated using these,  but that is not being done.
+C     Subsequent reception of  TPREDB  and  TCOMPB  contained the desired Type-3
+C     data,  and this,  in fact,  is what is being used.  This simulation only
+C     lasts 2.5 cycles, but can be extended to 1/4 second to see that OMEGM does
+C     reach its terminal load speed of nearly 157 radians/sec (the synchronous
+C     mechanical speed corresponding to zero slip).
+C      WindSyn test case
+C  generated on  4/13/03   for Single Cage  UM 3 -  decoupled start with compensation
+NEW LIST SIZES
+BLANK  { Default dimensioning is adequate for List 1 through 10
+       0       0   36400
+BLANK  { Default dimensioning is adequate for List 21 through 30
+  240000   { Final card of VARDIM data is for offsets for supporting programs
+C   The preceding 5 cards size tables for much longer simulations.  If dT is
+C   smaller and/or T-max is much larger, List 13 will truncate batch-mode plots
+C   over the entire timespan.  The preceding 36400 is the limit in LISTSIZE.BPA
+POWER FREQUENCY, 50.0,
+C AVERAGE OUTPUT  { Activate to suppress trap rule oscillation in armature volt.
+ .000500    .050
+       1       1       1       1       1      -1
+       5       5
+C        ELECTRIC NETWORK DATA
+C BUS**>BUS**>BUS**>BUS**><****R<****L<****
+C   short circuit level  =     83  MVA
+C  the machine rating entered was      834.47   kVA
+  SRCA  MOTA              .767   3.83
+  SRCB  MOTB              .767   3.83
+  SRCC  MOTC              .767   3.83
+  MOTA                     1.E06
+  MOTB                     1.E06
+  MOTC                     1.E06
+C
+  INERS INER               1.E-6
+  IX                                  7.E+07        {inetia in uF}
+C   the damping term in ohms
+        INER              .11                        {damping  1/mho}
+BLANK ending BRANCHes
+  INERS IX            -1     1000.
+BLANK card ending SWITCHes
+C        SOURCE DATA
+C .......1.........2.........3.........4.........5.........6.........7.........8
+C  Source voltages
+14SRCA      8164.965     50.00       0.0       { Vt }
+14SRCB      8164.965     50.00     240.0
+14SRCC      8164.965     50.00     120.0
+C
+C   next  the source records required
+C  source for the mechanical analogue
+14INERS -1  0.000001  .0000001
+C    Note about 4 preceding Type-14 sources.  Gabor Furst had  T-start of cols.
+C    61-70 equal to -1.0,  but the effect was to add a small trapezoidal rule
+C    oscillation to the armature voltages.  This then was removed by his use of
+C    AVERAGE OUTPUT.  Well, removing the phasor solution not only saves the work
+C    of this computation,  it also eliminates the trapezoidal rule oscillation
+C    and does away with the need for  AVERAGE OUTPUT.  Otherwise, the startup
+C    seems unaffected.  So, no phasor solution.  Since the machine begins with
+C    all variables equal to zero, it is not surprising that the phasor solution
+C    did little good.  Without the phasor solution,  this simulation is similar
+C    to DC-35, note.  Each starts a 3-phase induction motor without either auto
+C    initialization or manually-supplied initial conditions.  Each begins with
+C    all variables equal to zero.
+C  UM dat
+19
+C Col.2 = 0 Decoupled,  = 1 Autoinitialize -----  Col. 15 =0 Compensation,  =1 Prediction
+ 0            0 { Col. 2 ==> no automatic initialization; col. 15 ==> compensation
+BLANK
+C 3 1 111 INER        2                             .157  { Gabor's EPSOM
+ 3 1 111 INER        2                             .005
+C    Note about preceding.  Gabor had EPSOM = .157, which is 0.1% of 157 radians
+C    per second.  This is the default value:  the speed iteration will continue
+C    until the change is less than 0.1% or synchronous speed = 2 * 3.14 * 50 =
+C    314 rad/sec.  But this is electrical.  For mechanical, 2 pole pairs will
+C    reduce this to 157 rad/sec.   Well,  the effect of using  EPSOM = .157  is
+C    hash that looks almost like (but is not) trapezoidal rule oscillation.  The
+C    frequency is high,  but less than  0.5/dT of the trapezoidal rule.  Lowered
+C    EPSOM has no physical effect, & effects the overall simulation negligibly.
+C    But the hash looks bad.  To prove that EPSOM is responsible, WSM decreases
+C    the tolerance, thereby making the  OMEGM  curve perfectly smooth.
+                  1.125287
+                  1.125287
+C   Armature coils
+                            MOTA              1
+       .980484      .031413 MOTB              1
+       .980484      .031413 MOTC              1
+C    Rotor coils
+      2.388701      .031413                   1
+      2.388701      .031413                   1
+BLANK card ending U.M. data
+BLANK card ending SOURCEs
+  MOTA  MOTB  MOTC
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Final  7     output variables pertain to Type-19 U.M. components (names are generated internally);
+C   Step      Time      MOTA       MOTB       MOTC       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1
+C                                                        TQGEN      OMEGM      IPA        IPB        IPC        IE1        IE2
+C ***                    Switch  "INERS "  to  "IX    "  closed before  0.00000000E+00  sec.
+C      0       0.0         0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C      1     .5E-3  7578.83363 -2749.8665 -4828.9671 -.8882E-14        0.0 -30.178727    10.9499 19.2288271 -35.938915 5.69216487
+C      2     .1E-2  7266.22683 -1583.9333 -5682.2935 -.49474828        0.0 -88.512952 27.9245391 60.5884132 -105.37025  22.452127
+C      3     .0015  6775.59911 -383.70148 -6391.8976 -5.3447769        0.0 -142.14459 35.0395236 107.105068 -169.12977 49.5195201
+C      4      .002  6119.87287 821.040152  -6940.913   -21.8133        0.0 -189.82973 32.3949561 157.434779 -225.74199 85.8908064
+C      5     .0025  5314.27286 2001.14898 -7315.4218 -59.931159        0.0 -230.46855 20.3228376 210.145711 -273.90453 130.343662
+C     10      .005  -161.65687 6576.68037 -6415.0235 -1020.0826 .015959779 -302.60731 -155.04575 457.653057 -358.12087 419.838698
+BLANK card ending request for node voltage outputs
+C    100       .05  -7657.0908 3639.92922 4017.16154 -3480.5588 2.07810665 67.2105663 -384.61622 317.405655 9.05104642  474.85305
+C Variable maxima:  7663.44456 7638.23782 7699.01515 12225.9976 3.05521655  428.48451  354.32403 561.493051 509.492281 713.091662
+C Times of maxima:         .02      .0465       .013       .045      .0405      .0145       .041      .0075      .0145       .009
+C Variable minima:  -7657.0908 -7725.8797 -7609.1885 -17792.623        0.0 -390.53593 -582.50024 -348.59254 -470.03027 -425.76675
+C Times of minima:         .05      .0165       .043      .0345        0.0      .0445      .0105       .038       .045      .0395
+  CALCOMP PLOT
+ 144 5. 0.0 50.         MOTA  MOTB  MOTC
+ 194 5. 0.0 50.         BRANCH
+                        UM-1  IPA   UM-1  IPB   UM-1  IPC
+ 194 5. 0.0 50.         UM-1  IE1   UM-1  IE2
+ 194 5. 0.0 50.         UM-1  TQGEN
+ 194 5. 0.0 50. -1.  3.0UM-1  OMEGM
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+C     5th of 7 subcases is a corrected version of the 3rd.  Gabor Furst
+C     reported his discovery in E-mail dated April 14th.  He proposed that
+C     we  "initialize  ...  with the machine breaker open, thus the machine
+C     isolated from the system, using autoinitialization for which prediction
+C     ought to work.  Then we close the breaker say in the first time step.
+C     ...  the run did not fail, but the ensuing transient was not the same
+C     as obtained from the regular compensation  ...  Then something suddenly
+C     dawned on me.  ...  I decided to fool ATP into reading a starting
+C     frequency of 0.1 Hz, this the constant FREQ in record 1.  Lo and behold
+C     this worked.  The results were the same as the run with the decoupled
+C     compensation method."   As stored by WSM,  the latest data files have
+C     names  TCOMPNEW  and  TPREDNEW.
+C      WindSyn test case
+C  generated on  4/13/03   for Single Cage  UM 3 -  decoupled start with compensation
+NEW LIST SIZES
+BLANK
+       0       0   36400
+BLANK
+  240000
+POWER FREQUENCY, 50.0,
+C AVERAGE OUTPUT  { No longer need to remove hash (smaller EPSOM solves this)
+ .000500    .050
+       1       1       1       1       1      -1
+       5       5
+C        ELECTRIC NETWORK DATA
+C BUS**>BUS**>BUS**>BUS**><****R<****L<****
+C   short circuit level  =     83  MVA
+C  the machine rating entered was      834.47   kVA
+  SRCA  BUSMA             .767   3.83
+  SRCB  BUSMB             .767   3.83
+  SRCC  BUSMC             .767   3.83
+  MOTA                     1.E06
+  MOTB                     1.E06
+  MOTC                     1.E06
+C
+  INERS INER               1.E-6
+  IX                                  7.E+07        {inetia in uF}
+C   the damping term in ohms
+        INER              .11                        {damping  1/mho}
+BLANK card ending BRANCHes
+C   Following 3 switches have T-close = dT/2.  They will close on 1st time step:
+  BUSMA MOTA     .000025     1000.
+  BUSMB MOTB     .000025     1000.
+  BUSMC MOTC     .000025     1000.
+  INERS IX           -1.     1000.
+BLANK card ending SWITCHes
+C        SOURCE DATA
+C .......1.........2.........3.........4.........5.........6.........7.........8
+C  Source voltages
+14SRCA      8164.965     50.00       0.0       { Vt }              -1.
+14SRCB      8164.965     50.00     240.0                           -1.
+14SRCC      8164.965     50.00     120.0                           -1.
+C
+C   next  the source records required
+C  source for the mechanical analogue
+14INERS -1  0.000001  .0000001                                     -1.
+C  UM dat
+19
+C Col.2 = 0 Decoupled,  = 1 Autoinitialize -----  Col. 15 =0 Compensation,  =1 Prediction
+ 1            1  { Col. 2 ==> automatic initialization; col. 15 ==> compensation
+BLANK
+C   Note about following.  As for preceding subcase,  EPSOM  has been reduced
+C   from the default .157 to .005 to eliminate trapezoidal-rule-like hash.  That
+C   is a detail,  but not critically important.  What is critically important
+C   is the addition of a believable initial frequency.  Gabor used 0.1,  and
+C   WSM arbitrarily reduces this (after all, the machine begins at zero) to .02:
+C 3 1 111 INER        2                             .157           0.1  { Gabor's card
+ 3 1 111 INER        2                             .005           .02
+                  1.125287
+                  1.125287
+   0.0                            INERS
+C   Armature coils
+                            MOTA              1
+       .980484      .031413 MOTB              1
+       .980484      .031413 MOTC              1
+C    Rotor coils
+      2.388701      .031413                   1
+      2.388701      .031413                   1
+BLANK card ending U.M. data
+C     Total network loss  P-loss  by summing injections =   5.000000000000E-01
+C     Total network loss  P-loss  by summing injections =   5.000000000000E-01
+C     Total network loss  P-loss  by summing injections =   5.179447380305E-01
+C     Total network loss  P-loss  by summing injections =   1.794473528970E-02
+BLANK card ending SOURCEs
+C  .......1.........2.........3.........4.........5.........6.........7.........8
+C        NODE VOLTAGE OUTPUT
+  MOTA  MOTB  MOTC
+C  First  3     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Final  7     output variables pertain to Type-19 U.M. components (names are generated internally);
+C   Step      Time      MOTA       MOTB       MOTC       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1       UM-1
+C                                                        TQGEN      OMEGM      IPA        IPB        IPC        IE1        IE2
+C ***      Phasor I(0) = -2.7471728E-06                     Switch  "INERS "  to  "IX    "  closed in the steady-state.
+C      0       0.0         0.0        0.0        0.0        0.0 .062831853        0.0        0.0        0.0        0.0        0.0
+C ***                                                             Close switch  "BUSMA "  to  "MOTA  "  after  5.00000000E-04  sec.
+C ***                                                             Close switch  "BUSMB "  to  "MOTB  "  after  5.00000000E-04  sec.
+C ***                                                             Close switch  "BUSMC "  to  "MOTC  "  after  5.00000000E-04  sec.
+C      1     .5E-3         0.0        0.0        0.0        0.0 -.00681755        0.0        0.0        0.0        0.0        0.0
+C      2     .1E-2  6889.95385 -1506.2217 -5383.7322 -.1421E-13 -.00681755 -54.409056 11.8944338 42.5146218 -21.051495 -64.794511
+C      3     .0015  6774.81805 -449.01361 -6325.8044 -1.7336905 -.00681755 -134.73081 21.3086355 113.422179 -63.308508 -160.38081
+C      4      .002  6346.75373 699.055774 -7045.8095 -15.789751 -.00681755 -169.06787 8.33061014 160.737257  -104.6984 -201.10611
+C      5     .0025  5296.81585 1959.48466 -7256.3005 -48.513561 -.00681755 -198.66848 -11.619478 210.287956 -152.37686 -236.14834
+C     10      .005  -72.939405 6516.97381 -6444.0344 -921.49692 .009585296 -253.15369 -206.10455 459.258236 -455.87668 -299.54205
+BLANK card ending request for node voltage outputs
+C    100       .05  -7628.9146 3673.42423 3955.49034 -2802.3519 2.11520703 113.847447   -403.726 289.878558 -477.50811 61.7298745
+C Variable maxima:  7647.20791 7607.33076 7662.95758 12363.5249 3.10899113 461.052708 354.903207 540.669936 431.477956 547.201164
+C Times of maxima:         .02      .0465      .0135       .045      .0405       .014       .041       .007      .0395       .014
+C Variable minima:  -7628.9146 -7700.2932 -7587.2219 -18068.854 -.00681755 -390.16525 -600.55828 -358.58824 -711.87989   -472.887
+C Times of minima:         .05      .0165      .0435       .035       .004       .044      .0105      .0375      .0085      .0445
+C     78901234567890123456789012345678901234567890123456789012345678901234567890
+ 144 5. 0.0 50.         MOTA  MOTB  MOTC
+ 194 5. 0.0 50.         BRANCH
+                        UM-1  IPA   UM-1  IPB   UM-1  IPC
+ 194 5. 0.0 50.         UM-1  IE1   UM-1  IE2
+ 194 5. 0.0 50.         UM-1  TQGEN
+ 194 5. 0.0 50. -1.  3.0UM-1  OMEGM
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     6th of 7 subcases illustrates the starting of 2 parallel induction
+C     motors.  Compensation is used,  and the two machines are separated by
+C     two stub lines (short distributed-parameter transmission lines that
+C     isolate the uses of compensation).  The two machines are identical;
+C     each is a copy of that used in the 4th subcase.  The stub lines include
+C     use of  "Stub line, dT ="  to free the data from dependence on dT.  Much
+C     larger time step dT is being used as an illustration.  Whereas Gabor Furst
+C     supplied the data with  dT = 5 usec,  note that  0.2 msec  is being used.
+C     Plots of machine torque, speed, and armature current are little affected
+C     by the huge increase.  The speed is slightly reduced.  This seems right:
+C     as the stub lines lengthen, they represent a higher impedance.
+C  Single Cage  UM 3 -  decoupled initialization with compensation of two
+C  parallel units on the same bus, using delay lines to permit compensation.
+C  the delay line is the minimum length for DELTAT = 5 usec.
+NEW LIST SIZES
+BLANK  { Default dimensioning is adequate for List 1 through 10
+       0       0   36400 
+BLANK  { Default dimensioning is adequate for List 21 through 30
+  240000   { Final card of VARDIM data is for offsets for supporting programs
+PRINTED NUMBER WIDTH, 10, 2,  { dT loop output is width 10 including 2 blanks
+POWER FREQUENCY, 50.,
+C AVERAGE OUTPUT
+C    Note about preceding.  The terminal voltage begins with some hash that
+C    takes a cycle or so to disappear.  Perhaps Gabor Furst added the request
+C    to average successive output points in an attempt to remove this hash.
+C    But the hash disappears naturally,  and in any case is not seen in any
+C    of the other plots.  It seems best to omit  AVERAGE OUTPUT.  This assures
+C    the user that what he sees is what the trapezoidal rule really produced.
+ .000200    .050   { Gabor Furst's original data had dT = 5 usec & T-max = 3 sec
+       1       1       1       1       1      -1
+       5       5      20      20     100     100
+C        ELECTRIC NETWORK DATA
+C BUS**>BUS**>BUS**>BUS**><****R<****L<****  
+C   short circuit level  =     83  MVA
+C  the machine rating entered was      834.47   kVA
+  SRCA  BUSMA             .767   3.83
+  SRCB  BUSMB             .767   3.83
+  SRCC  BUSMC             .767   3.83
+C   DELAY LINE TO MOTOR #1
+-1BUSMA MOTA               0.001 .0987 0.408  1.00  { Stub line, dT = 5.E-6
+-2BUSMB MOTB               0.001 .0987 0.408  1.00
+-3BUSMC MOTC  
+C  DELAY LINE TO MOTOR #2
+-1BUSMA MOT2A              0.001 .0987 0.408  1.00  { Stub line, dT = 5.E-6
+-2BUSMB MOT2B              0.001 .0987 0.408  1.00
+-3BUSMC MOT2C 
+C   Note about preceding  "{ Stub line ..."  declaration.  This can begin in
+C   any column.  However, the string beginning with the comment symbol and
+C   ending with the equal sign is fixed.  It is to be followed by the value
+C   of DELTAT for which the line was designed.  Without this new feature, use
+C   of the original  DELTAT = 5.E-6  would have been fine,  but  10.E-6  would
+C   have failed.  A  KILL = 29  error message from overlay 12 would report: "The
+C   distributed parameter branch card connecting  ...  is associated with a
+C   propagation mode having a travel time equal to 6.34583328E-06  seconds.
+C   But this is less than the time-step size  DELTAT,  which is illegal.  ..."
+C   Of course, the dT value is free-format.  Note that there is an implied
+C   restriction to narrow-format (as shown).  Input data is limited to 80
+C   columns, and a switch to the wide alternative of  $VINTAGE, 1,  would not
+C   allow sufficient space for the required tag.
+  INERS INER               1.E-6
+  IX                                  7.E+07        {inetia in uF}
+C   the damping term in ohms
+        INER              .11                        {damping  1/mho}
+C
+  INERS2INER2              1.E-6
+  IX2                                 7.E+07        {inetia in uF}
+C   the damping term in ohms
+        INER2             .11                        {damping  1/mho}
+BLANK card ending BRANCHes
+  INERS IX            -1     1000.  
+  INERS2IX2           -1     1000.
+BLANK card ending SWITCHes
+C  .......1.........2.........3.........4.........5.........6.........7.........8
+C        SOURCE DATA
+C .......1.........2.........3.........4.........5.........6.........7.........8
+C  Source voltages
+14SRCA      8164.965     50.00       0.0       { Vt }              -1.   
+14SRCB      8164.965     50.00     240.0                           -1.   
+14SRCC      8164.965     50.00     120.0                           -1.   
+C   next  the source records required
+C  source for the mechanical analogue 
+14INERS -1  0.000001  .0000001                                     -1.    
+14INERS2-1  0.000001  .0000001                                     -1.    
+C  UM dat
+19
+C Col.2 = 0 Decoupled,  = 1 Autoinitialize -----  Col. 15 =0 Compensation,  =1 Prediction 
+ 0            0 { Col. 2 ==> no automatic initialization; col. 15 ==> compensation
+BLANK
+ 3 1 111 INER        2                             .005
+                  1.125287
+                  1.125287
+C   Armature coils
+                            MOTA              1
+       .980484      .031413 MOTB              1
+       .980484      .031413 MOTC              1
+C    Rotor coils
+      2.388701      .031413                   1
+      2.388701      .031413                   1
+C   MOTOR #2
+ 3 1 111 INER2       2                             .005 
+                  1.125287
+                  1.125287
+C   Armature coils
+                            MOT2A             1
+       .980484      .031413 MOT2B             1
+       .980484      .031413 MOT2C             1
+C    Rotor coils
+      2.388701      .031413                   1
+      2.388701      .031413                   1
+C
+BLANK ending U.M. data 
+BLANK card ending SOURCEs
+C    Total network loss  P-loss  by summing injections =   8.383893803907E+03
+  MOTA  MOTB  MOTC  MOT2A MOT2B MOT2C
+C  First  6     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Final  14     output variables pertain to Type-19 U.M. components (names are generated internally);
+C   Step      Time     MOTA      MOTB      MOTC      MOT2A     MOT2B     MOT2C     UM-1      UM-1      UM-1      UM-1      UM-1
+C                                                                                  TQGEN     OMEGM     IPA       IPB       IPC
+C
+C                      UM-1      UM-1      UM-2      UM-2      UM-2      UM-2      UM-2      UM-2      UM-2
+C                      IE1       IE2       TQGEN     OMEGM     IPA       IPB       IPC       IE1       IE2
+C ***      Phasor I(0) =  1.9294775E-17                     Switch  "INERS "  to  "IX    "  closed in the steady-state.
+C ***      Phasor I(0) =  1.9294775E-17                     Switch  "INERS2"  to  "IX2   "  closed in the steady-state.
+C      0       0.0   8292.999  -4204.56  -4088.44  8292.999  -4204.56  -4088.44       0.0       0.0       0.0       0.0       0.0
+C                         0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+C      1     .2E-3   7873.737  -3552.14   -4321.6  7873.737  -3552.14   -4321.6  -.67E-15       0.0  -25.9511  12.45117  13.49991
+C                    -30.9139  .7212851  -.67E-15       0.0  -25.9511  12.45117  13.49991  -30.9139  .7212851
+C      2     .4E-3   7448.395  -2919.71  -4528.69  7448.395  -2919.71  -4528.69  -.057368       0.0  -50.2764  22.71035  27.56607
+C                    -59.8784  3.339283  -.057368       0.0  -50.2764  22.71035  27.56607  -59.8784  3.339283
+C      3     .6E-3   6736.265  -2173.17  -4563.09  6736.265  -2173.17  -4563.09  -.334498       0.0  -72.5229   30.6493  41.87361
+C                    -86.3546  7.717967  -.334498       0.0  -72.5229   30.6493  41.87361  -86.3546  7.717967
+BLANK card ending request for node voltage outputs
+C    250       .05   -6924.74  3242.656  3682.084  -6924.74  3242.656  3682.084  -4162.72  1.765433  64.78601   -344.98  280.1937
+C                    26.66602   423.799  -4162.72  1.765433  64.78601   -344.98  280.1937  26.66602   423.799
+C Variable maxima:   8292.999  6906.117   7023.04  8292.999  6906.117   7023.04   9190.36   2.47045  375.2239  326.9388  512.8368
+C                    447.0417  636.5509   9190.36   2.47045  375.2239  326.9388  512.8368  447.0417  636.5509
+C Times of maxima:        0.0     .0466     .0128       0.0     .0466     .0128     .0446     .0402     .0144      .041     .0074
+C                       .0144      .009     .0446     .0402     .0144      .041     .0074     .0144      .009
+C Variable minima:    -7141.3   -6993.5   -6921.3   -7141.3   -6993.5   -6921.3  -14054.6       0.0  -353.402   -514.36  -321.777
+C                    -423.298  -393.798  -14054.6       0.0  -353.402   -514.36  -321.777  -423.298  -393.798
+C Times of minima:      .0102     .0164     .0024     .0102     .0164     .0024     .0344       0.0     .0444     .0108     .0378
+C                       .0446     .0396     .0344       0.0     .0444     .0108     .0378     .0446     .0396
+  CALCOMP PLOT
+ 144 5. 0.0 50.         MOTA  MOT2B MOTC
+ 194 5. 0.0 50.         BRANCH
+                        UM-1  IPA   UM-2  IPB   UM-2  IPC
+ 194 5. 0.0 50.         UM-1  IE1   UM-2  IE2   
+ 194 5. 0.0 50.         UM-1  TQGEN UM-2  TQGEN             
+ 194 5. 0.0 50. -1.  3.0UM-1  OMEGM UM-2  OMEGM             
+C   About the preceding plots,  not that variables of UM-1 and UM-2 have been
+C   mixed on the same plot.  This is for the first 3.  Since both machines are
+C   in parallel,  and have comparable solutions,  it makes little difference
+C   which machine is monitored.  The final 2 plots show torque for both machines
+C   and mechanical speed for both machines.  In each case, the two curves lie
+C   on top of each other.
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+C     7th of 7 subcases illustrates the starting of 2 parallel induction
+C     motors.  Compensation is used,  yet the two machines are separated by
+C     two resistors rather than the two stub lines of the preceding subcase.
+C     Needless to say, this should not work.  The result should be an error
+C     termination.  But this does not happen.  Instead, the simulation seems
+C     physically valid.  Why?  Data added by WSM on 15 May 2003.  Gabor Furst
+C     of suburban Vancouver, B.C., Canada, is the source of the data, and the
+C     original discoverer of the phenomenon.
+C VERIFY U.M. COMPENSATION { Request for additional verification of compensation
+C    The preceding did not help.  It did not result in a KILL code, so omit.
+NEW LIST SIZES
+BLANK  { Default dimensioning is adequate for List 1 through 10
+       0       0   36400 
+BLANK  { Default dimensioning is adequate for List 21 through 30
+  240000   { Final card of VARDIM data is for offsets for supporting programs
+PRINTED NUMBER WIDTH, 10, 2,  { dT loop output is width 10 including 2 blanks
+POWER FREQUENCY, 50.,
+C  Single Cage  UM 3 -  decoupled initialization of two oarallel motors with compensation
+C on the same bus,  using a small separating resistance, no delay line
+ .000200    .050  { Gabor Furst's original data had dT = 50 usec & T-max = 3 sec
+       1       1       1       1       1      -1
+       5       5      20      20     100     100
+C   short circuit level  =     83  MVA
+C  the machine rating entered was      834.47   kVA
+  SRCA  BUSMA             .767   3.83
+  SRCB  BUSMB             .767   3.83
+  SRCC  BUSMC             .767   3.83
+C separation resistance to enable compensation used 
+  BUSMA BUSM2A            .0001         
+  BUSMB BUSM2B            .0001           
+  BUSMC BUSM2C            .0001       
+C
+  INERS INER               1.E-6
+  IX                                  7.E+07        {inetia in uF}
+C   the damping term in ohms
+        INER              .11                        {damping  1/mho}
+C
+  INERS2INER2              1.E-6
+  IX2                                 7.E+07        {inetia in uF}
+C   the damping term in ohms
+        INER2             .11                        {damping  1/mho}
+BLANK card ending BRANCHes
+  BUSMA MOTA          -1     1000.                                              
+  BUSMB MOTB          -1     1000.                                              
+  BUSMC MOTC          -1     1000.  
+  BUSM2AMOT2A         -1     1000.                                              
+  BUSM2BMOT2B         -1     1000.                                              
+  BUSM2CMOT2C         -1     1000.                                                                                          
+  INERS IX            -1     1000.  
+  INERS2IX2           -1     1000.
+BLANK card ending SWITCHes
+14SRCA      8164.965     50.00       0.0       { Vt }
+14SRCB      8164.965     50.00     240.0 
+14SRCC      8164.965     50.00     120.0
+C    Note about 3 preceding sinusoidal sources that drive the armature.  These
+C    were present in the steady state (T-start < 0),  but the result was sizable
+C    hash in the terminal voltages  MOTA, MOTB, and MOTC.  Since the machine is
+C    not rotating, anyway, little should be lost by omitting this phasor
+C    excitation.  In fact, doing so removes the hash.
+C  source for the mechanical analogue: 
+14INERS -1  0.000001  .0000001                                      -1
+14INERS2-1  0.000001  .0000001                                      -1
+C  UM dat
+19   { Begin U.M. data, which is an electrical source of type 19 (columns 1-2)
+C Col.2 = 0 Decoupled,  = 1 Autoinitialize -----  Col. 15 =0 Compensation,  =1 Prediction 
+ 0            0 { Col. 2 ==> no automatic initialization; col. 15 ==> compensation 
+BLANK
+ 3 1 111 INER        2                             .005
+                  1.125287
+                  1.125287
+C   Armature coils
+                            MOTA              1
+       .980484      .031413 MOTB              1
+       .980484      .031413 MOTC              1
+C    Rotor coils
+      2.388701      .031413                   1
+      2.388701      .031413                   1
+C   MOROR #2
+ 3 1 111 INER2       2                             .005 
+                  1.125287
+                  1.125287
+C   Armature coils
+                            MOT2A             1
+       .980484      .031413 MOT2B             1
+       .980484      .031413 MOT2C             1
+C    Rotor coils
+      2.388701      .031413                   1
+      2.388701      .031413                   1
+C
+BLANK ending U.M. data 
+BLANK card ending SOURCEs
+  MOTA  MOTB  MOTC  MOT2A MOT2B MOT2C
+C  First  6     output variables are electric-network voltage differences (upper voltage minus lower voltage);
+C  Final  14     output variables pertain to Type-19 U.M. components (names are generated internally);
+C   Step      Time     MOTA      MOTB      MOTC      MOT2A     MOT2B     MOT2C     UM-1      UM-1      UM-1      UM-1      UM-1
+C                                                                                  TQGEN     OMEGM     IPA       IPB       IPC
+C
+C                      UM-1      UM-1      UM-2      UM-2      UM-2      UM-2      UM-2      UM-2      UM-2
+C                      IE1       IE2       TQGEN     OMEGM     IPA       IPB       IPC       IE1       IE2
+C ***      Phasor I(0) =  0.0000000E+00                     Switch  "BUSMA "  to  "MOTA  "  closed in the steady-state.
+C ***      Phasor I(0) =  0.0000000E+00                     Switch  "BUSMB "  to  "MOTB  "  closed in the steady-state.
+C ***      Phasor I(0) =  0.0000000E+00                     Switch  "BUSMC "  to  "MOTC  "  closed in the steady-state.
+C ***      Phasor I(0) =  0.0000000E+00                     Switch  "BUSM2A"  to  "MOT2A "  closed in the steady-state.
+C ***      Phasor I(0) =  0.0000000E+00                     Switch  "BUSM2B"  to  "MOT2B "  closed in the steady-state.
+C ***      Phasor I(0) =  0.0000000E+00                     Switch  "BUSM2C"  to  "MOT2C "  closed in the steady-state.
+C ***      Phasor I(0) =  1.9294775E-17                     Switch  "INERS "  to  "IX    "  closed in the steady-state.
+C ***      Phasor I(0) =  1.9294775E-17                     Switch  "INERS2"  to  "IX2   "  closed in the steady-state.
+C      0       0.0        0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+C                         0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0       0.0
+C      1     .2E-3   7240.705  -3225.84  -4014.87  7240.704  -3225.84  -4014.87  .222E-15       0.0  -11.6229  5.178161  6.444723
+C                    -13.8456  .8710926  .111E-15       0.0  -11.6229   5.17816  6.444722  -13.8456  .8710925
+C      2     .4E-3   7174.532  -2801.06  -4373.47  7174.529  -2801.06  -4373.47  -.011547       0.0  -34.6415  14.79876  19.84276
+C                    -41.2606   3.46871  -.011547       0.0  -34.6415  14.79876  19.84276  -41.2606   3.46871
+C      3     .6E-3   7080.386  -2366.65  -4713.73   7080.38  -2366.65  -4713.73  -.126229       0.0  -57.1634  22.94012  34.22327
+C                    -68.0724  7.758324  -.126229       0.0  -57.1634  22.94011  34.22326  -68.0724  7.758322
+BLANK card ending request for node voltage outputs
+C    500       0.1   7163.172    -3287.  -3876.18  7163.163  -3286.96   -3876.2  -3508.64  4.758604   -93.893  346.3427   -252.45
+C                     85.2129  -430.499   -3508.8  4.761365  -93.8933  346.3423  -252.449  85.22058  -430.497
+C Variable maxima:   7240.705  7193.512  7308.916  7240.704  7193.504  7308.921  9757.768  4.758604  396.7719  362.7327  522.4827
+C                    472.4152  655.3924  9757.762  4.761365  396.7715  362.7323   522.482  472.4147  655.3916
+C Times of maxima:      .2E-3     .0866     .0132     .2E-3     .0866     .0132     .0648       0.1     .0142      .081     .0074
+C                       .0142      .009     .0648       0.1     .0142      .081     .0074     .0142      .009
+C Variable minima:    -7218.2   -7310.4  -7175.71   -7218.2   -7310.4  -7175.71  -14940.3       0.0  -377.803  -532.812  -350.203
+C                    -451.967  -440.193  -14940.2       0.0  -377.803  -532.811  -350.203  -451.967  -440.192
+C Times of minima:      .0898     .0164     .0632     .0898     .0164     .0632     .0546       0.0     .0844     .0106     .0776
+C                       .0854     .0802     .0546       0.0     .0844     .0106     .0776     .0854     .0802
+  CALCOMP PLOT
+ 144 5. 0.0 50.         MOTA  MOT2B MOTC
+ 194 5. 0.0 50.         BRANCH
+                        UM-1  IPA   UM-2  IPB   UM-2  IPC
+ 194 5. 0.0 50.         UM-1  IE1   UM-2  IE2   
+ 194 5. 0.0 50.         UM-1  TQGEN UM-2  TQGEN             
+ 194 5. 0.0 50. -1.  3.0UM-1  OMEGM UM-2  OMEGM             
+C   About the preceding plots,  note that variables of UM-1 and UM-2 have been
+C   mixed on the same plot.  This is for the first 3.  Since both machines are
+C   in parallel,  and have comparable solutions,  it makes little difference
+C   which machine is monitored.  The final 2 plots show torque for both machines
+C   and mechanical speed for both machines.  In each case, the two curves lie
+C   on top of each other.
+BLANK card ending batch-mode plot cards
+BEGIN NEW DATA CASE
+BLANK
+

@@ -1,0 +1,245 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-4
+C        Solution agrees (key variables, anyway) with DC-5 saturable TRANSFORMER
+C        Here,  there is no transformer,  since the secondary impedance has been
+C        reflected to the primary.   Also, the pseudo-nonlinear reactance of the
+C        saturable  TRANSFORMER  is  here  represented by a "true" nonlinearity.
+C        2nd subcase will illustrate residual flux for Type-93 nonlinear induct.
+C        Etc.  5 more subcases were added 21 March 2006 bringing total to 7.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+    .010     6.0
+       1       1       1       1       1      -1
+       5       5      20      20     100     100
+  BRANCH NAME:First   { Even though name could go on next card, use this instead
+  GEN   TRAN                 5.0  5.E4                                         3
+  TRAN        NAME  R-mag   1.E4
+93TRAN        NAME  Magnet  .005   30.                                         3
+C            -5.0           -100.         { No longer needed 3-rd quadrant point
+C             -.1            -50.         { No longer needed 3-rd quadrant point
+C            -.02            -45.         { No longer needed 3-rd quadrant point
+C            -.01            -40.         { No longer needed 3-rd quadrant point
+C           -.005            -30.         { No longer needed 3-rd quadrant point
+             0.0             0.0  { 1st point being origin is request to reflect
+            .005             30.
+             .01             40.
+             .02             45.
+             .10             50.
+             5.0            100.
+            9999
+  TRAN  LOADG               255.  5.E4                                         3
+C   Note: original fixed-format card (next comment) converted to free-format:
+C LOADG                    1.E-6
+0,LOADG, , , ,             1.E-6,  0.0, 0.0, , , , , ,
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70.  .1591549                                     -1.
+BLANK card terminating program source cards.
+C       Total network loss  P-loss  by summing injections =   8.286714400785E+00
+C Inject:  GEN     70.    70.  .23676326859385  .25769284993889  8.2867144007848
+C Inject:          0.0    0.0  -.1017288531066      -23.2514964  3.5605098587304
+C          ---- Initial flux of coil  "TRAN  "  to  "      "  =  -1.13295190E+01
+C Step    Time        GEN          TRAN         TRAN         GEN          TRAN
+C                     TRAN         TERRA        LOADG
+C    0     0.0   6.270257621  63.72974238  63.72974215          70.  63.72974238
+C    1     .01   6.156651781  63.83984825  63.83984802  69.99650003  63.83984825
+  GEN   TRAN
+BLANK card ending program output-variable requests.
+C Last step begins: 600  6.0  12.26276725  54.94912105  54.94912087  67.21188829
+C Last step continued .... :  54.94912105  -.004557817  .1742561973  .1733191018
+C Variable max : 35.83743967  64.72841365   64.7284134          70.  64.72841365
+C Times of max :        5.37          .18          .18          0.0          .18
+C Variable min : -34.5302967  -63.9279756  -63.9279753  -69.9999111  -63.9279756
+C Times of min :         2.2         3.35         3.35         3.14         3.35
+  PRINTER PLOT
+ 193 .5 0.0 6.0         TRAN  LOADG GEN   TRAN   { Axis limits: (-3.494,  3.289)
+ 193 1. 0.0 6.0         TRAN                     { Axis limits: (-3.253,  3.031)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C          2nd of 8 subcases illustrates residual flux for the Type-93 nonlinear
+C          inductor. The solution is a little different because the segment that
+C          passes through the origin has been modified to draw no current  (this
+C          is the poor man's approximation to hysteresis).   Usage of a residual
+C          flux that  is a little different than the phasor solution also alters
+C          the solution somewhat.  Appearance  of  the output column of inductor
+C          current is altered since whenever operation  is on the first segment,
+C          the current now is identically zero.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+C         4 May 2007,  add following  $PREFIX  after modification of  OVER1  and
+C         CIMAGE  that moves  CHAR*80 PREFIX  into  BLKCOM  for use by  $INSERT.
+C         This allows remote execution, from \UNFORM, without data modification.
+$PREFIX, []    { $INCLUDE files are located in same place as this main data file
+    .010     6.0
+       1       1       1       1       1      -1
+       5       5      20      20     100     100
+  GEN   TRAN                 5.0  5.E4                                         3
+  TRAN        NAME  R-mag   1.E4
+C      Next, move entire nonlinear element into file to demonstrate new feature:
+$INSERT, dc4bincl.dat       { Like $INCLUDE only dynamic (no burden on LIMCRD)
+  TRAN  LOADG               255.  5.E4                                         3
+C   Note: original fixed-format card (next comment) converted to free-format:
+C LOADG                    1.E-6
+0,LOADG, , , ,             1.E-6,  0.0, 0.0, , , , , ,
+BLANK card ending program branch cards.
+BLANK card terminating program switch cards (none, for this case)
+14GEN            70.  .1591549                                     -1.
+BLANK card terminating program source cards.
+C   20 July 2009, convert the following N.L. element I.C. card from the original
+C   use of terminal node names  (TRAN, TERRA)  to the use of branch name Magnet.
+C   Yes, within $INSERT file dc4bincl.dat this NL elem. branch name is declared.
+C   Just today, such alternative use of N.L. names is being added to ATP.  WSM
+C  The following is an initial-condition card for the Type-93 nonlinear inductor
+C 4TRAN                    0.0    -11.5508593 { --- Used to reaffirm phasor flux
+C 4TRAN                    0.0          -13.0    { Residual flux differs somewhat
+ 4Name: Magnet            0.0          -13.0    { Residual flux differs somewhat
+  GEN   TRAN                                { Request for 2 node voltage outputs
+C  Step    Time         GEN          TRAN         TRAN         GEN          TRAN
+C                       TRAN         TERRA        LOADG
+C     0    0.0   5.816303518  64.18369648  64.18369625          70.  64.18369648
+C     1    .01   5.700507029    64.295993  64.29599277  69.99650003    64.295993
+C     2    .02    5.58414044  64.40186003   64.4018598  69.98600047  64.40186003
+BLANK card ending program output-variable requests.
+C   600    6.0   12.62786557  54.58402272  54.58402255  67.21188829  54.58402272
+C Variable max :  37.1903484  65.21465971  65.21465947          70.  65.21465971
+C Times of max :         5.4          .18          .18          0.0          .18
+C Variable min : -32.6413814  -64.4282966  -64.4282964  -69.9999111  -64.4282966
+C Times of min :        2.16         3.35         3.35         3.14         3.35
+  PRINTER PLOT
+ 193 .5 0.0 6.0         TRAN  LOADG GEN   TRAN   { Axis limits: (-3.701,  3.055)
+ 193 1. 0.0 6.0         TRAN                     { Axis limits: (-3.474,  2.777)
+BLANK card ending all plot cards
+BEGIN NEW DATA CASE
+C          3rd of 8 subcases begins illustration of enhanced  $INSERT  which
+C          is added to the UTPF on  21 March 2006.  Arguments and "/"-card
+C          sorting and nesting (2 or more levels) all are allowed.  The data
+C          now being added was named  DC17NEW.DAT  during early testing because
+C          initial testing involved the configuration of  DC-17.  WSM.
+$INSERT,  dc4ins.dat,   9,   .005,   TRAN##,
+    .005     4.0
+       1       1       1       1       1      -1
+       5       5      20      20
+  TRAN  LOADG               255.  5.E4                                         3
+  LOADG                    1.E-6
+BLANK card ending  BRANCH  cards
+BLANK card ending  SWITCH  cards (none exists, for this case)
+BLANK card ending  SOURCE  cards
+  GEN   TRAN
+BLANK card ending  OUTPUT  variable requests
+ 193 1. 0.0 7.0         GEN   TRAN               { Axis limits: (-2.544,  3.289)
+BLANK card ending  PLOT  cards
+BEGIN NEW DATA CASE
+C          4th of 8 subcases continues illustration of enhanced  $INSERT.  This
+C          illustrates  /LOAD FLOW  within  $INSERT  using data from the 5th
+C          of 5 data subcases of DC-26.  This is the former  DC17A.DAT
+$INSERT, DC4AINS.DAT, { Move all data except misc. data into this file
+ .000200    .000     60.   { T-max = 0  means that no transient solution follows
+       1       1       1       0       1     
+BLANK card ending branch cards.
+BLANK card ending switch cards.
+BLANK card terminating EMTP source cards.
+BLANK card ending requests for output variables
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C          5th of 8 subcases continues illustration of enhanced  $INSERT.  This
+C          illustrates  /TACS  but no  /MODELS.  The configuration is taken
+C          from the 1st subcase of  DC-33.  This is former  DC17B.DAT
+$INSERT, DC4BINS.DAT, { All data except misc. data has been moved to here
+ .000050    .020
+       1       1       1       1       1      -1
+       5       5      20      20
+BLANK card terminates all TACS data
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+C       Total network loss  P-loss  by summing injections =   7.106450000000E-06
+C Inject:  GEN       377.             377.             .377E-7   2.6786345332877
+C Inject:            0.0              0.0      -2.678634533288       -89.9999992
+C           ---- Initial flux of coil  "GROUND"  to  "GEN   "  =  1.00000000E-09
+C
+C  Step     Time        GEN          GROUND       GROUND       TACS         TACS
+C                                     TERRA        GEN          FLUX         GEN
+C ***      Phasor I(0) =  0.3770000E-07   Switch  "GROUND"  to  "      "  closed
+C   0      0.0          377.      .377E-7          0.0          0.0          0.0
+C   1    .5E-4   376.9330268  .5235646391  -.523564601  .0094233257  376.9330268
+C   2    .1E-3   376.7321312   1.04694322  -1.04694318  .0282649546  376.7321312
+BLANK card ends OUTPUT variable requests
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE
+C          6th of 8 subcases continues illustration of enhanced  $INSERT.  This
+C          illustrates  /MODELS  but no  /TACS.  The configuration is taken
+C          from the 2nd of 3 subcases of DC-33.  This is former  DC17C.DAT
+$INSERT, DC4CINS.DAT, { All data except misc. data has been moved to here
+ .000050    .020
+       1       1       1       1       1      -1
+       5       5      20      20
+BLANK card terminates all MODELS data  { 9 July 1995,  MODELS  replaces old
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+C       Total network loss  P-loss  by summing injections =   7.106450000000E-06
+BLANK card ends OUTPUT variable requests
+BLANK card ending all batch-mode PLOT cards
+BEGIN NEW DATA CASE                                                             
+C          7th of 8 subcases continues illustration of enhanced  $INSERT.  This
+C          illustrates both  /MODELS  and  /TACS.  The configuration is taken
+C          from the 6th of 6 subcases of DC-30.  This is former  DC17D.DAT
+$INSERT, DC4DINS.DAT,
+   1.E-6   5.E-6         { Only take 5 steps;  these are plenty for illustration
+       1      -1
+BLANK card terminates all TACS data
+BLANK card ends all MODELS data
+ENDMODELS
+BLANK card ending all BRANCH cards
+BLANK card ending all SWITCH cards
+BLANK terminates the last SOURCE card
+BLANK card ends OUTPUT variable requests
+BLANK card ending all batch-mode PLOT cards
+C   Comment about 6 lines above.  Note  ENDMODELS  has like the initiation
+C   word MODELS:  there is only one of them,  and has nothing to do with
+C   the actual modeling.  It is part of the structure in which actual data
+C   is carried.  Normally,  ENDMODELS  would precede the blank card ending
+C   MODELS,  but with sorting that is not possible.  /-card sorting will
+C   put the actual data there.  If we raise  ENDMODELS  line by one row,
+C   it would precede all real  MODELS  data,  and that would be completely
+C   wrong.  So,  we put it after the blank.  Recall  MODELS  ignores blank
+C   lines,  so the blank card ending MODELS is ignored.  It is essential
+C   to the sorting,  but then is ignored by MODELS itself.  Since it was
+C   optional, anyway, this works well.
+BEGIN NEW DATA CASE
+C          8th of 8 subcases continues illustration of enhanced  $INSERT.  This
+C          illustrates nesting: a $INSERT line within a $INSERT file.  The
+C          use is quite artificial.  WSM simply took a single-level example
+C          from Orlando Hevia and modified it to illustrate the 2nd level.
+C          Use is realistic in that  $INSERT  is required.  $INCLUDE  can
+C          not be used in its place because a PCVP loop defines one of the
+C          arguments.  In fact,  this was the data that inspired WSM to add
+C          the service of arguments to $INSERT capability during January, 2006.
+C          Arguments came first.  "/"-card sorting by class came later.
+C          Misc. data parameter  ICAT = 1  will create one .PL4 file for each
+C          pass of the loop.  But because this is not the first subcase within
+C          the disk file,  they will not be named  DC4.xxx  as might be hoped.
+C          Instead,  they will be renamed using the date and time.  Remember
+C          that  KOMPAR = 4  in startup results in the WW I Armistice name of
+C          8B111100.  So,  there will be a  .001  file for the first pass,  a
+C          .002  file for the second,  etc. through  MAXKNT  passes.
+C   Controls of following request card:   MAXKNT  IOPCVP  NOSTAT { Loop 3 times with
+POCKET CALCULATOR VARIES PARAMETERS            3       0       1 { full printout
+$PARAMETER
+RHORHO = 10.000*KNT
+BLANK card ends parameter block.
+$DUMMY, XYZ000
+   1.E-6    .001                
+       1       1       1       1       1      -1       0       1
+       5       5      20      20     100     100
+  XX0001XX0003              1.E3                                               0
+  XX0001                  RHORHO
+$INSERT, dc4drtt.dat, XX0003, 10.0, RHORHO
+BLANK card ending BRANCH cards
+BLANK card ending SWITCH cards
+15XX0001 0      1.E4    1.2E-6     5.E-5        2.                            1.
+BLANK card ending SOURCE cards
+  XX0003
+BLANK card ending node voltage OUTPUTs
+BLANK card ending PLOT cards
+BLANK card to be read and ignored by MNTINC.  This avoids 2-line EOF warning.
+BEGIN NEW DATA CASE
+BLANK

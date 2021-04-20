@@ -1,0 +1,10 @@
+$CLOSE,  UNIT=4  STATUS=DELETE  { Disconnect now-empty file connected by SYSDEP  
+$OPEN,  UNIT=4  FILE=dc3.pl4  STATUS=OLD ! Connect C-like plot file from DC-3
+
+
+
+
+
+
+
+

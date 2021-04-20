@@ -1,0 +1,384 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-18
+C     Artificially concocted sample test  of various logical operators of  TACS.
+C     There is no electric network.   Note the unusual use of the  TSTART  field
+C     (columns 61-70)  and   TSTOP   (columns 71-80)  of  the TACS source cards,
+C     which turn the constant source amplitudes  on  and  off during the several
+C     steps  of  this  test.   A study of the operations involved will show that
+C     the variables    RESL1   and   RESL2   are  residuals  which should always
+C     be  zero by logical identity.   See  DCPR24.DAT  for  DIAGNOSTIC  version.
+C     For a  DIAGNOSTIC  version of the very same data case,  refer to  DCPR-24.
+     0.1     2.0
+       1       1       0       0       1
+TACS STAND ALONE
+  DUMMY   +UNITY
+11LGCL1           1.                                              0.25
+11FST             1.                                              0.05      0.15
+11SCND            1.                                              0.25      0.35
+99LGCL4   = FST + SCND
+C 99LGCL4                   FST   +     SCND
+99LGCL2             .NOT. LGCL4
+98NAND                    LGCL1 .NAND.LGCL2
+98RESL1             .NOT. LGCL1 .OR.  LGCL4             -     NAND
+98NOR                     LGCL1 .NOR. LGCL2
+98RESL2             .NOT. LGCL1 .AND. LGCL4             -     NOR
+33LGCL1 LGCL2 LGCL4 NAND  NOR   RESL1 RESL2 FST   SCND
+C  Step   Time     TACS   TACS   TACS    TACS   TACS   TACS   TACS   TACS   TACS
+C                 LGCL1  LGCL2  LGCL4    NAND    NOR   RESL1  RESL2  FST    SCND
+C    0     0.0      0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+C    1     0.1      0.0    0.0    1.0    1.0    1.0    0.0    0.0    1.0    0.0
+C    2     0.2      0.0    1.0    0.0    1.0    0.0    0.0    0.0    0.0    0.0
+C    3     0.3      1.0    0.0    1.0    1.0    0.0    0.0    0.0    0.0    1.0
+C    4     0.4      1.0    1.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+BLANK card ending all TACS data cards
+C   20     2.0      1.0    1.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+C Variable maxima : 1.0    1.0    1.0    1.0    1.0    0.0    0.0    1.0    1.0
+C Times of maxima : 0.3    0.2    0.1    0.1    0.1    0.0    0.0    0.1    0.3
+C Variable minima : 0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+C Times of minima : 0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+  PRINTER PLOT
+ 143 .2 0.0 1.0         LGCL1 NOR                  { Axis limits: (0.000, 1.000)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         2nd subcase of DC-18 tests various free-format supplemental variables.
+C         There  is  no connection between this and the original test case data.
+C         Algebraic and trigonometric computation is done 2 ways:  once in high-
+C         level expressions  (TEST1, TEST2, TEST3),  and  a second time using  a
+C         reordered low-level equivalents (X1, .... X11).   The two are compared
+C         (residual  RESID  should in theory be zero).   As  for  the  following
+C         allocation of TACS tables,  this is just a modification of the default
+C         sizes that were overflowed:  20   90  100   20   30  250  350   60   4
+C         The complaint was about Table 6, so this was expanded at expense of 1.
+C            11 March 2001,  TACS table number 9 was added for  Type-53 devices.
+C            This data involves none, so value is immaterial.  Default is shown.
+TACS WARN LIMIT, 5, 1.0,       { No use other than to illustrate the declaration
+ABSOLUTE TACS DIMENSIONS  { Table #:   5       6       7       8       9
+C     10      90     100      20      30     400     350      60       4
+C        Expand TACS Table 1 from 57 to 130 on 1 April 2007.  Copy use from DC-2
+C        without worrying about probably waste that might be involved:
+C     57     256     285      36      85     713     998     171  ---  default
+     130      65      80      20      70     325     120     115  { From DC2.DAT
+     .02     2.0     { Even though no dynamics, vary time to produce nice plots!
+       1       1       0       0       1      -1
+       5       5
+TACS STAND ALONE
+99TEST1   = 10.0 * ( UNITY + TIMEX ) ** 2 + 50. { High-level, single-card result
+99X1      = 1.0 + TIMEX        { Expression within parentheses on preceding card
+99X2      = X1 * X1            { Mimic exponentiation for special case of square
+99X3      = 10 * X2 + 50         { 3rd of low-level, 3-card equivalent to  TEST1
+99TEST2   = 1.E2 * COS ( 2.0 * PI * TEST1 / 100. )   { High-level d1-card result
+99X4      = PI * TEST1               { Beginning terms of trigonometric argument
+99X5      = X4 * .02       { Complete trig argument using modified form of 2/100
+99X6      = COS ( X5 )
+99X7      = X6 * 100.   { 4th and final line of low-level equivalent gives TEST2
+99TEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( TEST2 ) )
+99X8      = ABS ( X7 )
+99X9      = SQRT ( X8 )
+99X10     = X9 * 5.5 * TIMEX
+99X11     = X10 + 10    { 4th and final line of low-level equivalent gives TEST3
+99RESID   = ABS ( TEST1 - X3 ) + ABS ( TEST2 - X7 ) + ABS ( TEST3 - X11 )
+99NORMAL  = GAUSS ( 0.0 ) { Illustrate Gaussian random # generator. October 2010
+ 1TEST4   +TEST3
+       1.0
+       0.0       1.0
+99TEST5   =  2.0 * PI * TEST1 / 100.
+99TEST6   =  SIN ( TEST5 )
+99UNITY?  = 1.E-4 * ( TEST2 * TEST2  + 1.E4 * TEST6 * TEST6 )
+33TEST1 X3    TEST2 X7    TEST3 X11   TEST4 UNITY?RESID NORMAL
+C Column headings for the  10   EMTP output variables follow.  These are divided among the 5 possible classes as follows ....
+C Next   10     output variables belong to TACS (with "TACS" an internally-added upper name of pair).
+C  Step    Time      TACS       TACS       TACS       TACS       TACS       TACS       TACS       TACS       TACS       TACS
+C                    TEST1      X3         TEST2      X7         TEST3      X11        TEST4      UNITY?     RESID      NORMAL
+C     0     0.0         0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0
+C     1     .02      60.404     60.404 -79.383758 -79.383758 10.9800732 10.9800732 .109800732        1.0        0.0 .890624441
+C     2     .04      60.816     60.816 -77.783088 -77.783088 11.9402839 11.9402839 .339004303        1.0 .30198E-13 -.26382016
+BLANK card ending all TACS data cards
+C     95       1.9       134.1      134.1 -54.112125 -54.112125 86.8711868 86.8711868 88.6795836        1.0        0.0 -1.4747572
+C    100       2.0        140.       140. -80.901699 -80.901699 108.939909 108.939909 98.5281276        1.0        0.0 -.47311878
+C Variable maxima :        140.       140. 99.9938856 99.9938856 108.939909 108.939909 98.5281276        1.0 .33396E-12 2.73027422
+C Times of maxima :         2.0        2.0       1.24       1.24        2.0        2.0        2.0        .08       1.82        0.3
+C Variable minima :         0.0        0.0 -80.901699 -80.901699        0.0        0.0        0.0        0.0        0.0 -2.7809904
+C Times of minima :         0.0        0.0        2.0        2.0        0.0        0.0        0.0        0.0        0.0        1.7
+  CALCOMP PLOT   { Needed for 2nd stacked case;  1st ended with PRINTER PLOT use
+ 143 .2 0.0 2.0         TEST1 TEST2 TEST3 TEST4
+  PRINTER PLOT
+ 143 .4 0.0 2.0         TEST1 TEST2       TEST4   { Axis limits: (-0.809, 1.400)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         3rd of 5 subcases is identical to 2nd except that here the pocket
+C         calculator is used in place of Dube's logic for supplemental variables
+C         of TACS.  Answers should be identical except for roundoff error.
+C         The plots will be omitted for simplicity.
+C TACS ASSEMBLY LANGUAGE     { Temporary request for use of pocket calculator
+TACS POCKET CALCULATOR       { 12 January 2001, this new line replaces preceding
+TACS POCKET CALCULATOR ON    { 1 February 2002,  add this equivalent declaration
+C    The two preceding declarations have exactly the same effect. Either or both
+C    can be repeated any number of times.  Either is simply a request to use the
+C    pocket calculator rather than Dube's logic.  Making the request more than
+C    once has no effect.  The  ON  alternative became effective 1 February 2002.
+C  19 March 2009, add request to prohibit optimization by the pocket calculator.
+C  Addition here is purely illustrative.  The answer changes only slightly, with
+C  near-zero  RESID changing to exact zeros on two time steps (for Salford ATP).
+C  This is variable  (TACS, RESID)  which had nonzero values  .14211E-13  and
+C  .14211E-13  for steps 60 and 70 when there was optimization.  WSM.
+$PARAMETER   NOOPT=1 { Set optimization of pocket calculator compilation to none 
+ABSOLUTE TACS DIMENSIONS
+C     10      90     100      20      30     400     350      60
+C        Expand TACS Table 1 from 57 to 130 on 1 April 2007.  Copy use from DC-2
+C        without worrying about probably waste that might be involved:
+C     57     256     285      36      85     713     998     171  ---  default
+     130      65      80      20      70     325     120     115  { From DC2.DAT
+     .02     2.0     { Even though no dynamics, vary time to produce nice plots!
+       1       1       0       0       1      -1
+       5       5
+TACS STAND ALONE
+99TEST1   = 10.0 * ( UNITY + TIMEX ) ** 2 + 50. { High-level, single-card result
+99X1      = 1.0 + TIMEX        { Expression within parentheses on preceding card
+99X2      = X1 * X1            { Mimic exponentiation for special case of square
+99X3      = 10 * X2 + 50         { 3rd of low-level, 3-card equivalent to  TEST1
+99TEST2   = 1.E2 * COS ( 2.0 * PI * TEST1 / 100. )   { High-level d1-card result
+99X4      = PI * TEST1               { Beginning terms of trigonometric argument
+99X5      = X4 * .02       { Complete trig argument using modified form of 2/100
+99X6      = COS ( X5 )
+99X7      = X6 * 100.   { 4th and final line of low-level equivalent gives TEST2
+99TEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( TEST2 ) )
+99X8      = ABS ( X7 )
+99X9      = SQRT ( X8 )
+99X10     = X9 * 5.5 * TIMEX
+99X11     = X10 + 10    { 4th and final line of low-level equivalent gives TEST3
+99RESID   = ABS ( TEST1 - X3 ) + ABS ( TEST2 - X7 ) + ABS ( TEST3 - X11 )
+ 1TEST4   +TEST3
+       1.0
+       0.0       1.0
+99TEST5   =  2.0 * PI * TEST1 / 100.
+99TEST6   =  SIN ( TEST5 )
+99UNITY?  = 1.E-4 * ( TEST2 * TEST2  + 1.E4 * TEST6 * TEST6 )
+33TEST1 X3    TEST2 X7    TEST3 X11   TEST4 UNITY?RESID
+BLANK card ending all TACS data cards
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         4th of 5 subcases documents the data of  MATHCOMP  as first mentioned
+C         in the April, 1997 newsletter.  The data shown here demonstrates use
+C         of the pocket calculator rather than compiled TACS, however.  This is
+C         the data that was used to estimate improved speed compared with Dube's
+C         code for handling supplemental variables (see July, 2001, newsletter).
+C TACS POCKET CALCULATOR { Use pocket calculator rather than Dube's logic (default)
+C    2 February 2002, remove the preceding line by commenting.  This has no
+C    effect on the answer.  In fact, the TPC declaration of the 3rd subcase will
+C    remain in effect.  The TPC declaration has an effect here if and only if no
+C    preceding subcase had one.  Any TPC declaration remains in effect for all
+C    later data unless cancelled by a TPC OFF  declaration (see DCN21.DAT).
+C $DEPOSIT, KOMPAR=1  { Use SPY DEPOSIT to change STARTUP value so elapsed times
+C         For benchmark purposes,  enable the preceding statement.  Regardless
+C         of the value of KOMPAR in STARTUP,  this will gives elapsed times at
+C         the end of execution.
+C      Add NLS (following 7 noncomment cards) on 8 March 2003 to prove it works.
+C      In fact, dimensions are unchanged from  LISTSIZE.333  as used for RUN.BAT
+NEW LIST SIZES      { Request for a change to program table sizes (VARDIM input)
+DEFAULT      3.0    { Any blank field will be converted to 3 times default value
+BLANK card for lists  1-10.
+BLANK card for lists 11-20.
+BLANK card for lists 21-30.
+     200     300     { Optional card for Lists 31, etc.
+  240000     742     { Offsets for supporting programs (non-simulation overlays)
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+ABSOLUTE TACS DIMENSIONS
+      10      90     100      20      60    1600     350     120
+C .00002     2.0     { Original line gives 100K steps of  July, 2001, newsletter  
+    .002     2.0     { For standard test cases, speed execution by factor of 100
+       1     -11       0       0       1      -1
+C      5       5      20      20     100     100    1000    1000   10000   10000
+       5       5      20      20     100     100  { Preceding was for 100K steps 
+TACS STAND ALONE
+99TEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50. 
+99TEST2   = 1.E2 * COS ( 2.0 * 3.14159 * TEST1 / 100. )
+99TEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( TEST2 ) )
+99TEST5   =  2.0 * PI * TEST1 / 100.
+99TEST6   =  2.0 * SIN ( TEST5 )        { Show that in-line comments are allowed
+99TWOA    = 2.E-4 * ( TEST2 * TEST2  + 2500. * TEST6 * TEST6 )
+99BEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99BEST2   = 1.E2 * COS ( 2.0 * 3.14159 * BEST1 / 100. )
+99BEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( BEST2 ) )
+99BEST5   =  2.0 * PI * BEST1 / 100.
+99BEST6   =  2.0 * SIN ( BEST5 )
+99TWOB    = 2.E-4 * ( BEST2 * BEST2  + 2500. * BEST6 * BEST6 )
+99ZEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99ZEST2   = 1.E2 * COS ( 2.0 * 3.14159 * ZEST1 / 100. )
+99ZEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( ZEST2 ) )
+99ZEST5   =  2.0 * PI * ZEST1 / 100.
+99ZEST6   =  2.0 * SIN ( ZEST5 )
+99TWOC    = 2.E-4 * ( ZEST2 * ZEST2  + 2500. * ZEST6 * ZEST6 )
+99REST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99REST2   = 1.E2 * COS ( 2.0 * 3.14159 * REST1 / 100. )
+99REST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( REST2 ) )
+99REST5   =  2.0 * PI * REST1 / 100.
+99REST6   =  2.0 * SIN ( REST5 )
+99TWOD    = 2.E-4 * ( REST2 * REST2  + 2500. * REST6 * REST6 )
+99DEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99DEST2   = 1.E2 * COS ( 2.0 * 3.14159 * DEST1 / 100. )
+99DEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( DEST2 ) )
+99DEST5   =  2.0 * PI * DEST1 / 100.
+99DEST6   =  2.0 * SIN ( DEST5 )
+99TWOE    = 2.E-4 * ( DEST2 * DEST2  + 2500. * DEST6 * DEST6 )
+99FEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99FEST2   = 1.E2 * COS ( 2.0 * 3.14159 * FEST1 / 100. )
+99FEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( FEST2 ) )
+99FEST5   =  2.0 * PI * FEST1 / 100.
+99FEST6   =  2.0 * SIN ( FEST5 )
+99TWOF    = 2.E-4 * ( FEST2 * FEST2  + 2500. * FEST6 * FEST6 )
+99GEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99GEST2   = 1.E2 * COS ( 2.0 * 3.14159 * GEST1 / 100. )
+99GEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( GEST2 ) )
+99GEST5   =  2.0 * PI * GEST1 / 100.
+99GEST6   =  2.0 * SIN ( GEST5 )
+99TWOG    = 2.E-4 * ( GEST2 * GEST2  + 2500. * GEST6 * GEST6 )
+99HEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99HEST2   = 1.E2 * COS ( 2.0 * 3.14159 * HEST1 / 100. )
+99HEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( HEST2 ) )
+99HEST5   =  2.0 * PI * HEST1 / 100.
+99HEST6   =  2.0 * SIN ( HEST5 )
+99TWOH    = 2.E-4 * ( HEST2 * HEST2  + 2500. * HEST6 * HEST6 )
+99LEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99LEST2   = 1.E2 * COS ( 2.0 * 3.14159 * LEST1 / 100. )
+99LEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( LEST2 ) )
+99LEST5   =  2.0 * PI * LEST1 / 100.
+99LEST6   =  2.0 * SIN ( LEST5 )
+99TWOI    = 2.E-4 * ( LEST2 * LEST2  + 2500. * LEST6 * LEST6 )
+99MEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99MEST2   = 1.E2 * COS ( 2.0 * 3.14159 * MEST1 / 100. )
+99MEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( MEST2 ) )
+99MEST5   =  2.0 * PI * MEST1 / 100.
+99MEST6   =  2.0 * SIN ( MEST5 )
+99TWOJ    = 2.E-4 * ( MEST2 * MEST2  + 2500. * MEST6 * MEST6 )
+33MEST1 MEST2 MEST3 MEST5 MEST6 TWOJ  { Outputs are for 10th of 10 data sets
+BLANK card ending all TACS data cards
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         5th of 5 subcases documents the use of IF blocks within TACS.  This
+C         began  14 March 2001  when most-primitive  IF-THEN-ELSE-ENDIF  first
+C         produced correct answers.  The pocket calculator is required (do not
+C         try to execute after removing the TPC declaration below).
+C DIAGNOSTIC           0 9 0 0 0 0 0 0 0 0 0 0 0 0 0 9 { Make comment 22 Apr 07
+TACS POCKET CALCULATOR  { Use pocket calculator for TACS supplemental variables
+     .02     .14
+       1      -1 
+TACS STAND ALONE
+C      Begin with simplest of block IF statements:  IF-THEN-ELSE-ENDIF:
+IF( TIMEX .LE. 0.08 )  THEN    { If simulation time  T  does not exceed  4 * dT:
+99X1      = 1.0 + TIMEX      { Formula for steps 1 thru 4 will produce a ramp up
+ELSE               { Alternatively  (if simulation time  T  does exceed 4 * dT):
+99X1      = 1.16 - TIMEX  { Formula for steps 5, 6, and 7 will produce ramp down
+ENDIF { Terminate 5-line block that chooses among 2 formulas for supplemental X1      
+C      As 2nd illustration,  add  ELSEIF  to preceding illustration,  and
+C      make the resulting signal more interesting.  First, ramp it up.  Then,
+C      in the middle, will be a flat top.  Finally, ramp it back down to
+C      where it began.  This enhancement became operational March 16th:
+IF( TIMEX .LE. 0.04 )  THEN    { If simulation time  T  does not exceed  2 * dT:
+99X2      = 1.0 + TIMEX         { For steps 1 and 2, assign values 1.02 and 1.04
+ELSEIF( TIMEX .LE. 0.08 ) THEN  { If simulation time  T  is either 3*dT or 4*dT: 
+99X2      = 1.06             { For steps 3 and 4,  assign flat top value of 1.06 
+ELSE               { Alternatively  (if simulation time  T  does exceed 4 * dT):
+99X2      = 1.06 - ( TIMEX - 0.08 )   { For steps 5 thru 7:  1.04, 1.02, and 1.0
+ENDIF { Terminate 7-line block that chooses among 3 formulas for supplemental X2      
+28SOUR28                                DEV69D   { Cols. 41-46 carries user name
+C  Add the preceding Type-28 TACS source, which is defined in user-supplied TACS
+C  source code of  SUBROUTINE DEVT69.  This is disconnected from rest of data.
+C  Addition here on 30 January 2003 simply confirms function DEV69D of the UTPF.
+C  Since the Type-28 source is only defined within the dT loop,  step 0 will
+C  show value zero.  If the user is unhappy with this, the following initial
+C  condition (now commented out) will provide continuity:
+C 77SOUR28         .75     { Initial condition on the Type-28 function avoids zero
+ 1TEST4   +X2
+       1.0
+       0.0       1.0
+33X1    X2    TEST4 SOUR28
+BLANK card ending all TACS data cards
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C         6th of 6 subcases documents is the same as the 4th except that List 32
+C         is made too small for the data.  Added 9 March 2003, this demonstrates
+C         rejection if the new variable limit LSIZ32 is inadequate  --  but only
+C         for F95 (Lahey).  For F77, the 20 below is ignored.  For F77, the size
+C         of tables of the pocket calculator remain fixed at 200.  For F77, this
+C         data demonstrates that any attempt to restrict List 31 is ignored.  To
+C         simplify,  drop extrema and limit output to T-max = 10 * dT.
+NEW LIST SIZES      { Request for a change to program table sizes (VARDIM input)
+DEFAULT      3.0    { Any blank field will be converted to 3 times default value
+BLANK card for lists  1-10.
+BLANK card for lists 11-20.
+BLANK card for lists 21-30.
+     200      20     { Optional card for Lists 31, etc.
+  240000     742     { Offsets for supporting programs (non-simulation overlays)
+PRINTED NUMBER WIDTH, 10, 2,  { Request maximum precision (for 8 output columns)
+ABSOLUTE TACS DIMENSIONS
+      10      90     100      20      60    1600     350     120
+C .00002     2.0     { Original line gives 100K steps of  July, 2001, newsletter  
+    .002     .02     { 10 steps is more than enough to demonstrate LSIZ32 limit
+       1     -11       0       0       0      -1
+       5       5   
+TACS STAND ALONE
+99TEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50. 
+99TEST2   = 1.E2 * COS ( 2.0 * 3.14159 * TEST1 / 100. )
+99TEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( TEST2 ) )
+99TEST5   =  2.0 * PI * TEST1 / 100.
+99TEST6   =  2.0 * SIN ( TEST5 )        { Show that in-line comments are allowed
+99TWOA    = 2.E-4 * ( TEST2 * TEST2  + 2500. * TEST6 * TEST6 )
+99BEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99BEST2   = 1.E2 * COS ( 2.0 * 3.14159 * BEST1 / 100. )
+99BEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( BEST2 ) )
+99BEST5   =  2.0 * PI * BEST1 / 100.
+99BEST6   =  2.0 * SIN ( BEST5 )
+99TWOB    = 2.E-4 * ( BEST2 * BEST2  + 2500. * BEST6 * BEST6 )
+99ZEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99ZEST2   = 1.E2 * COS ( 2.0 * 3.14159 * ZEST1 / 100. )
+99ZEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( ZEST2 ) )
+99ZEST5   =  2.0 * PI * ZEST1 / 100.
+99ZEST6   =  2.0 * SIN ( ZEST5 )
+99TWOC    = 2.E-4 * ( ZEST2 * ZEST2  + 2500. * ZEST6 * ZEST6 )
+99REST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99REST2   = 1.E2 * COS ( 2.0 * 3.14159 * REST1 / 100. )
+99REST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( REST2 ) )
+99REST5   =  2.0 * PI * REST1 / 100.
+99REST6   =  2.0 * SIN ( REST5 )
+99TWOD    = 2.E-4 * ( REST2 * REST2  + 2500. * REST6 * REST6 )
+99DEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99DEST2   = 1.E2 * COS ( 2.0 * 3.14159 * DEST1 / 100. )
+99DEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( DEST2 ) )
+99DEST5   =  2.0 * PI * DEST1 / 100.
+99DEST6   =  2.0 * SIN ( DEST5 )
+99TWOE    = 2.E-4 * ( DEST2 * DEST2  + 2500. * DEST6 * DEST6 )
+99FEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99FEST2   = 1.E2 * COS ( 2.0 * 3.14159 * FEST1 / 100. )
+99FEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( FEST2 ) )
+99FEST5   =  2.0 * PI * FEST1 / 100.
+99FEST6   =  2.0 * SIN ( FEST5 )
+99TWOF    = 2.E-4 * ( FEST2 * FEST2  + 2500. * FEST6 * FEST6 )
+99GEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99GEST2   = 1.E2 * COS ( 2.0 * 3.14159 * GEST1 / 100. )
+99GEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( GEST2 ) )
+99GEST5   =  2.0 * PI * GEST1 / 100.
+99GEST6   =  2.0 * SIN ( GEST5 )
+99TWOG    = 2.E-4 * ( GEST2 * GEST2  + 2500. * GEST6 * GEST6 )
+99HEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99HEST2   = 1.E2 * COS ( 2.0 * 3.14159 * HEST1 / 100. )
+99HEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( HEST2 ) )
+99HEST5   =  2.0 * PI * HEST1 / 100.
+99HEST6   =  2.0 * SIN ( HEST5 )
+99TWOH    = 2.E-4 * ( HEST2 * HEST2  + 2500. * HEST6 * HEST6 )
+99LEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99LEST2   = 1.E2 * COS ( 2.0 * 3.14159 * LEST1 / 100. )
+99LEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( LEST2 ) )
+99LEST5   =  2.0 * PI * LEST1 / 100.
+99LEST6   =  2.0 * SIN ( LEST5 )
+99TWOI    = 2.E-4 * ( LEST2 * LEST2  + 2500. * LEST6 * LEST6 )
+99MEST1   = 10.0 * ( 1.0 + TIMEX ) ** 2 + 50.
+99MEST2   = 1.E2 * COS ( 2.0 * 3.14159 * MEST1 / 100. )
+99MEST3   = 10.0  +  5.5 * TIMEX * SQRT ( ABS ( MEST2 ) )
+99MEST5   =  2.0 * PI * MEST1 / 100.
+99MEST6   =  2.0 * SIN ( MEST5 )
+99TWOJ    = 2.E-4 * ( MEST2 * MEST2  + 2500. * MEST6 * MEST6 )
+33MEST1 MEST2 MEST3 MEST5 MEST6 TWOJ  { Outputs are for 10th of 10 data sets
+BLANK card ending all TACS data cards
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

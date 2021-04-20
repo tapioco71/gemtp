@@ -1,0 +1,511 @@
+BEGIN NEW DATA CASE                                                      
+C     BENCHMARK DC-28                                                           
+C     "CABLE CONSTANTS"  illustration begins with a finite,  overhead  pipe that
+C     encloses  a  3-phase  cable  system.  Each  phase consists of a core only.
+C     For nodes of punched cards,  the  cable stretches from end "1" to end "2".
+C     The cable length (872 meters) is used only for this special output.
+C     1st of 4 subcases.
+CABLE CONSTANTS                                                                 
+$ERASE      { Empty punch buffer as precautionary measure (maybe preceding case)
+BRANCH  CORA1 CORA2 CORB1 CORB2 CORC1 CORC2 PIPE1 PIPE2
+    3    1    3         1    1    1    1                                        
+     0.381     0.401     0.421     2.E-7      300.        1.        3.          
+   0.19393        0.   0.19393      120.   0.19393      240.                    
+    1    1    1                                                                 
+             25.4E-3
+ 6.8912E-8        1.                                                            
+             25.4E-3
+ 6.8912E-8        1.                                                            
+             25.4E-3
+ 6.8912E-8        1.                                                            
+       1.0       0.0                                                            
+         20.0         10.                  872.      { Cable length = 872 meters
+C Impedance matrix  [ Z ]  in [ohm/m]  follows :
+C       8.5303094E-05   4.9395039E-05   4.9395039E-05   2.9513780E-05
+C       1.7535768E-04   1.3713248E-04   1.3713248E-04   1.1639059E-04
+C Admittance matrix   [ Y ]  in [mho/m]  follows :
+C       0.0000000E+00   0.0000000E+00   0.0000000E+00   0.0000000E+00
+C       1.4843948E-09  -1.4823084E-10  -1.4823084E-10  -1.1879330E-09
+C Voltage transformation matrices follow.   These are complex, with the mag
+C                 0.0034957       0.0034958       0.0034959       1.0099676
+C              -162.8209534    -162.8215332    -162.8218384       0.1735267
+C Transformation  [A],  from modal to phase variables:
+C                 0.9937597       0.9999998       0.4999998       1.0000000
+C                -0.1112594       0.0000057    -179.9999847       0.0000000
+C Characteristic impedance matrix  [Zc]  in phase variables, in [ohm]:
+C         447.5839844     280.9452515     280.9451599     230.7716522
+C        -115.0411224     -49.0479126     -49.0479584     -28.8765430
+C            Modal   Propagation       Modal impedance             Modal   
+C Mode   attenuation   velocity        real       imaginary     susceptance 
+C         [ db/km ]    [ m/sec ]       [ ohms / meter ]         [mho/meter]  
+C   1   5.49837E-04  1.22476E+08   2.925856E-05  1.167339E-04  2.220200E-09 
+C   2   1.29433E-03  1.66288E+08   3.202234E-05  3.470583E-05  3.493539E-09 
+C   3   9.35837E-04  2.30950E+08   2.393871E-05  2.548347E-05  2.448938E-09  
+C   4   9.35837E-04  2.30950E+08   1.795402E-05  1.911261E-05  3.265251E-09 
+$PUNCH, dc28a.pch                               ! { Exclamation holds lower case
+BLANK card ending frequency cards
+C $VINTAGE, 1                                                                     
+C -1CORA1 CORA2              2.92540E-05 2.29300E+02 1.22476E+08-8.72000E+02 1 4 
+C -2CORB1 CORB2              3.22334E-05 9.93885E+01 1.66288E+08-8.72000E+02 1 4 
+C -3CORC1 CORC2              2.39387E-05 1.02010E+02 2.30950E+08-8.72000E+02 1 4 
+C -4PIPE1 PIPE2              1.79540E-05 7.65071E+01 2.30950E+08-8.72000E+02 1 4 
+C $VINTAGE, 0                                                                     
+C  -0.00334000 -0.00333993 -0.00334000  1.00996333                                
+C  -0.00103249 -0.00103249 -0.00103246  0.00307810                                
+C   0.33665633  0.33665612  0.33665576 -1.00366375                                
+C  -0.00000644 -0.00000645 -0.00000664  0.00196862                                
+C  -0.33333370 -0.33333334  0.66666698  0.00000001                                
+C  -0.00000003 -0.00000004 -0.00000004  0.00000023                                
+C  -0.50000012  0.50000012 -0.00000004  0.00000016                                
+C  -0.00000005 -0.00000005  0.00000001  0.00000022                                
+C     2nd fourth of test involves a submarine cable donated by  BC Hydro.   It is
+C     modeled as a single-phase, 3-conductor cable.  There  is a core, a sheath,
+C     and armor, with the armor grounded.
+    2   -1    1         1    1    1         2
+    3
+      0.01   0.02525    0.0518  0.055553    0.0675    0.0735
+   1.78E-8       1.0       1.0       3.5    2.8E-7       1.0       1.0       3.5
+   7.54E-8       1.0  
+       0.2       0.0
+           0.21        10.0000    5    1
+C   From final calculation of logarithmic looping, 1.00000000E+06   Hertz. :
+C Impedance matrix  [ Z ]  in [ohm/m]  follows :
+C       9.1996193E-03   4.3044090E-03
+C       1.1569544E+00   2.4907887E-01
+C Admittance matrix   [ Y ]  in [mho/m]  follows :
+C       0.0000000E+00   0.0000000E+00
+C       1.7025936E-03  -1.7025938E-03
+C Voltage transformation matrices follow.   These are complex, with the magnitud
+C Transformation  [AI],  from phase to modal variables:
+C           0.0000011       1.0000008
+C        -135.8211517       0.0000440
+C Transformation  [A],  from modal to phase variables:
+C           0.9999925       1.0000000
+C          -0.0004397       0.0000000
+C Characteristic impedance matrix  [Zc]  in phase variables, in [ohm]:
+C          29.3894901       6.2976413
+C          -0.1167270      -0.0544422
+C  .....      Modal      Characteristic  impedance    Characteristic admittance 
+C  .....    susceptance       real        imaginary         real       imaginary 
+C  .....   [mho/meter]   SQRT ( z / y )  in  [ohm]    SQRT ( y / z )  in  [mho]
+C  .....  6.280722E-03   6.297670E+00 -5.441193E-02   1.587770E-01  1.371835E-03
+C  .....  1.702591E-03   2.309191E+01 -6.221918E-02   4.330489E-02  1.166813E-04
+BLANK card ending frequency cards 
+C         3rd of 4 subcases generates PI-circuit modeling of a crossbonded cable
+C         having one major section.  Armor is solidly grounded,  and sheaths are
+C         cross-bonded.   TEPCO OF275KV SC CABLE.           MAY 17, 1985
+$ERASE      { Empty punch buffer as precautionary measure (maybe preceding case)
+C BRANCH  CORA1 CORA2 CORB1 CORB2 CORC1 CORC2 SHEA1 SHEA2 SHEB1 SHEB2 SHEC1 SHEC2
+C     Ashok Parsotam of Vector Limited in Auckland, New Zealand, inspired a rule
+C     change for  BRANCH  data that eliminates the former need for name packing.
+C     26 December 2008, WSM replaces preceding packed card by the new equivalent
+C     form which ignores imbedded blank name pairs.  This improves readability &
+C     makes easier any later addition or subtraction of conductors.  In order to
+C     handle the rare case where both ends of a conductor are grounded,  replace
+C     the former 12 blank bytes by  "TERRA TERRA "  (upon recognition, this will
+C     be replaced by the two desired blank names).  Another special case is that
+C     where a name pair has not been defined.  Most commonly this will be due to
+C     a user who supplies no BRANCH declaration at all.  But in the more general
+C     case, the user may simply not have supplied enough non-blank name pairs to
+C     cover all phases.  In either case, any unnamed phase will be labeled using
+C     the  2A6  default name pair  "NoNameNoName".
+BRANCH  CORA1 CORA2 CORB1 CORB2 CORC1 CORC2 { All cores are numbered first, note
+BRANCH  SHEA1 SHEA2 SHEB1 SHEB2 SHEC1 SHEC2 { Next in the numbering: all sheaths
+PUNCH      { Request for punched output of PI-circuits that are to be determined
+    2   -1    3    0    1    1    1         2
+   -1    1    0      1.E3     1.E-1A
+    3    3    3
+    0.0132    0.0249    0.0542     0.057     0.063     0.066     0.072
+   1.89E-8       1.0       1.0      2.30   3.00E-8       1.0       1.0      3.50
+     3.E-8       1.0       1.0      3.50
+    0.0132    0.0249    0.0542     0.057     0.063     0.066     0.072
+   1.89E-8       1.0       1.0      2.30   3.00E-8       1.0       1.0      3.50
+     3.E-8       1.0       1.0      3.50
+    0.0132    0.0249    0.0542     0.057     0.063     0.066     0.072
+   1.89E-8       1.0       1.0      2.30   3.00E-8       1.0       1.0      3.50
+     3.E-8       1.0       1.0      3.50
+        2.        0.    1.8095      0.11       2.        .22
+           1.E2           1.E3
+$PUNCH      { Actual punching of card images that by now must be in punch buffer
+C $VINTAGE, 1                                                                     
+C   AIN  4                     1.0000000E-01                                      
+C  1AIN  1A 11 1               3.2000030E-02   6.5728021E-02   5.4835246E-02      
+C  2AIN  2A 11 2               0.0000000E+00   0.0000000E+00   0.0000000E+00      
+C                              3.1999972E-02   6.5727922E-02   5.4835246E-02      
+C  3AIN  3A 11 3               0.0000000E+00   0.0000000E+00   0.0000000E+00      
+C                              0.0000000E+00   0.0000000E+00   0.0000000E+00      
+C                              3.1999991E-02   6.5727972E-02   5.4835246E-02      
+C  4AIN  4A 11 4               1.1000064E-02   9.2998579E-03  -5.4835252E-02      
+C                              0.0000000E+00   0.0000000E+00   0.0000000E+00      
+C                              0.0000000E+00   0.0000000E+00   0.0000000E+00      
+C                              2.0414416E-02   8.7684233E-03   7.0333978E-01      
+C  5AIN  4A 11 5               0.0000000E+00   0.0000000E+00   0.0000000E+00      
+C                              1.1000006E-02   9.2997591E-03  -5.4835252E-02      
+C                              0.0000000E+00   0.0000000E+00   0.0000000E+00      
+C                              0.0000000E+00   0.0000000E+00   0.0000000E+00      
+C                              2.0414358E-02   8.7683245E-03   7.0333978E-01      
+C  6AIN  4A 11 6               0.0000000E+00   0.0000000E+00   0.0000000E+00      
+C                              0.0000000E+00   0.0000000E+00   0.0000000E+00      
+C                              1.1000026E-02   9.2998085E-03  -5.4835252E-02      
+C                              0.0000000E+00   0.0000000E+00   0.0000000E+00      
+C                              0.0000000E+00   0.0000000E+00   0.0000000E+00      
+C                              2.0414377E-02   8.7683739E-03   7.0333978E-01      
+C  1A 11 1A 12 1AIN  1A 11 1                                                      
+C  2A 11 2A 12 2                                                                  
+C  3A 11 3A 12 3                                                                  
+C  4A 11 6A 12 4                                                                  
+C  5A 11 4A 12 5                                                                  
+C  6A 11 5A 12 6                                                                  
+C  1A 12 1AOUT 1AIN  1A 11 1                                                      
+C  2A 12 2AOUT 2                                                                  
+C  3A 12 3AOUT 3                                                                  
+C  4A 12 6AOUT 4                                                                  
+C  5A 12 4AOUT 4                                                                  
+C  6A 12 5AOUT 4                                                                  
+C   AOUT 4      AIN  4                                                            
+C $VINTAGE, 0                                                                     
+BLANK CARD ENDING FREQUENCY CARDS
+C 4th of 4 subcases.  A three phase cable enclosed in a pipe with infinite 
+C thickness.  This case was brought to us by Prof. Aki Ametani in September 
+C of 1993.   Warning!  Prof. Ametani spent 3 weeks at BPA during the summer
+C of 1994,  and warned that this solution is wrong.  The same data can be
+C found in 4th of 4 pipe-type illustrations of  CABLE PARAMETERS  that have
+C been appended to  DC-27.  Note the number of phases below is 8 whereas the
+C correct number is 9 (each of 3 phases has 3 conductors;  the pipe does not
+C contribute because it is infinitely thick).  THL, 17 Aug 1994.
+C  Results of this case changed on March 2, 2001 after implementing the 
+C  correction that Prof. Ametani made on February 17, 2001.
+C  This correction only affects cables having 3 layers of conductors: core,  
+C  sheath and armor.  
+BRANCH  CORA1 CORA2 CORB1 CORB2 CORC1 CORC2 SHEA1 SHEA2 SHEB1 SHEB2 SHEC1 SHEC2
+BRANCH  ARMA1 ARMA2 ARMB1 ARMB2 ARMC1 ARMC2
+    3   -1    3    0    1    1    1    0    1                 
+     1.850     1.860     1.870      33.0       1.0        1.        1.
+1.17183738-29.9354891.18391480-38.1912031.32171262-33.629952
+    3    3    3
+   11.0E-3  30.60E-3  63.80E-3  65.80E-3  71.00E-3  71.80E-3  76.80E-3
+ 1.8365E-8       1.0       1.0       2.3 1.8365E-8       1.0       1.0        1.
+  10.00E-8       1.0       1.0       8.0
+   11.0E-3  30.60E-3  63.80E-3  65.80E-3  71.00E-3  71.80E-3  76.80E-3
+ 1.8365E-8       1.0       1.0       2.3 1.8365E-8       1.0       1.0        1.
+  10.00E-8       1.0       1.0       8.0
+   11.0E-3  30.60E-3  63.80E-3  65.80E-3  71.00E-3  71.80E-3  76.80E-3
+ 1.8365E-8       1.0       1.0       2.3 1.8365E-8       1.0       1.0        1.
+  10.00E-8       1.0       1.0       8.0
+           33.0       100.0E03                                                  
+$PUNCH
+BLANK card ending frequency cards
+BLANK card ending  "CABLE CONSTANTS"  data subcases
+BEGIN NEW DATA CASE
+C       August, 1994.  Prof. Akihiro Ametani has left after 3 weeks of work
+C       at BPA to install his new  CABLE PARAMETERS  program.  There are 18
+C       standard test cases for this,  and these will be split between the
+C       ends of  DC-27  and  DC-28.   See DC-27 for the 6 files  CASE1*.DAT
+C       for overhead lines  (11A, 11G0, 11G1, 11G3, 11Y2, and 11A')  and the  
+C       4 files  CASE3#.DAT  for pipe-type cables (3G0, 3G1, 3G4, and 3NP0).  
+C       Those totaled 10 of 18.  Here we add the remaining 8,  CASE2*.DAT :
+C                  1st of 8 examples of cables without pipe:  CASE21G0.DAT
+CABLE CONSTANTS
+CABLE PARAMETERS
+C                         KOLW27  KOLS27
+MATRIX PRECISION               0       0   { Optimally encode old F-field values
+C      4 December 2003, optional local  KOLWID  and  KOLSEP  of optimal encoding
+C      are read from columns 25-40.  Variables are local to overlay 27,  and are
+C      carried in  LABL27.  The default values (for default use, see  DC-28) are
+C      KOLW27 = 10  and  KOLS27 = 2  (column width of 10 including 2 blanks to
+C      separate matrix columns).  Normally, if this is what the user wants, he
+C      would have no  MATRIX PRECISION  request.  But we can produce the same
+C      effect by specifying illegal values (0 and 0).  Both integers must be
+C      positive, so the zero values shown above will be rejected and data card
+C      interpretation should confirm default values  KOLW27 = 10  &  KOLSEP = 2.
+C MATRIX OUTPUTS                         1
+    2   -1    3    0    1    0    0    0    0    0    0    0
+    2    2    2
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+     2.500       0.0     2.730       0.0     2.960       0.0
+           100.         50.E03
+C           Total impedance [Zc]
+C  4.63767E-02  4.55563E-02  4.55049E-02  4.57808E-02  4.55563E-02  4.55049E-02
+C  4.74692E-01  3.12743E-01  2.69461E-01  4.07294E-01  3.12743E-01  2.69461E-01
+C MODE  ATTENUATION  VELOCITY        IMPEDANCE (OHM/M)         ADMITTANCE (S/M)
+C NO.      (DB/KM) (M/MIC.S)         REAL       IMAG.         REAL        IMAG.
+C   1  1.27756E+01     14.46  4.84121E-02  3.55829E-01  0.00000E+00  1.31982E-03
+C   2  6.55379E-02     39.08  1.29966E-04  6.92398E-02  0.00000E+00  9.33476E-04
+C   3  8.29132E-02     51.43  1.61257E-04  5.15928E-02  0.00000E+00  7.23141E-04
+C   4  7.73951E-02    153.52  5.86972E-04  6.73995E-02  0.00000E+00  6.21266E-05
+C   5  7.73951E-02    153.52  5.86971E-04  6.73994E-02  0.00000E+00  6.21267E-05
+C   6  7.73951E-02    153.52  5.86971E-04  6.73994E-02  0.00000E+00  6.21267E-05
+BLANK card ending frequency cards
+BLANK card ending  "CABLE CONSTANTS"  data subcases
+BEGIN NEW DATA CASE
+C                  2nd of 8 examples of cables without pipe:  CASE21G3.DAT
+CABLE CONSTANTS
+CABLE PARAMETERS
+C   2   -1    3    0    0    0    0    0    3    0    0    0
+    2   -1    3    0    1    0    0    0    3    0    0    0
+    2    2    2
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+     2.500       0.0     2.730       0.0     2.960       0.0
+           100.         50.E03
+C           Total admittance [Yc]
+C   0.00000E+00  0.00000E+00  0.00000E+00
+C   6.21268E-05  0.00000E+00  0.00000E+00
+C  ....  ADMITTANCE (S/M)          CHARACT. IMP. (OHM)       CHARACT. ADMIT. (S)
+C  ....         REAL        IMAG.       REAL     IMAG.         REAL        IMAG.
+C  ....  0.00000E+00  6.21268E-05     32.938    -0.143  3.03598E-02  1.32197E-04
+C  ....  0.00000E+00  6.21268E-05     32.938    -0.143  3.03598E-02  1.32197E-04
+C  ....  0.00000E+00  6.21268E-05     32.938    -0.143  3.03598E-02  1.32197E-04
+BLANK card ending frequency cards
+BLANK card ending  "CABLE CONSTANTS"  data subcases
+BEGIN NEW DATA CASE
+C                  3rd of 8 examples of cables without pipe:  CASE21S1.DAT
+CABLE CONSTANTS
+CABLE PARAMETERS
+C   2   -1    3    0    0    0    0  -99    0    0    0    0
+    2   -1    3    0    1    0    0  -99    0    0    0    0
+    2    2    2
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+     2.500       0.0     2.730       0.0     2.960       0.0
+           100.         50.E03
+C Characteristic impedance matrix  [Zc]  in phase variables,  in [ohm]:
+C   58.63021  10.39525  10.39524  25.69268  10.39520  10.39519
+C   -1.20548  -1.04447  -1.04448  -1.06129  -1.04478  -1.04480
+C
+C  ....       ADMITTANCE (S/M)     CHARACT. IMP. (OHM)       CHARACT. ADMIT. (S)
+C  ....       REAL        IMAG.         REAL     IMAG.         REAL        IMAG.
+C  ....  0.00000E+00  1.40154E-03     15.494    -1.050  6.42445E-02  4.35431E-03
+C  ....  0.00000E+00  7.00772E-04     10.198    -0.010  9.80544E-02  9.95546E-05
+C  ....  0.00000E+00  9.34367E-04      7.649    -0.008  1.30740E-01  1.32736E-04
+C  ....  0.00000E+00  6.21267E-05     32.938    -0.143  3.03598E-02  1.32197E-04
+C  ....  0.00000e+00  6.21267E-05     32.938    -0.143  3.03598E-02  1.32197E-04
+C  ....  0.00000E+00  6.21267E-05     32.938    -0.143  3.03598E-02  1.32197E-04
+BLANK card ending frequency cards
+BLANK card ending  "CABLE CONSTANTS"  data subcases
+BEGIN NEW DATA CASE
+C                  4th of 8 examples of cables without pipe:  CASE21S2.DAT
+CABLE CONSTANTS
+CABLE PARAMETERS
+C                         KOLW27  KOLS27 Only F?
+MATRIX PRECISION              10       2    BOTH { Optimally encode both E and F
+C   About preceding 2 lines, which were added 7 December 2003: KOLW27 and KOLS27
+C   are default values.  BOTH in 45-48 is the request to have optimal encoding
+C   replace both alternative formats (ordinary E-field matrices as well as
+C   F-field matrices).  Matrices have order 12,  so without this treatment,
+C   E-field matrices would require multiple rows (first 10 columns, then 2
+C   columns).  Using BOTH, these multiple lines are avoided.  12 columns of
+C   10 bytes each easily fit within the 131-byte limit.  In fact, there is
+C   room for labeling on the right.
+C   2   -1    6    0    0    0    0  -99    0    0    0    0
+    2   -1    6    0    1    0    0  -99    0    0    0    0
+    2    2    2    2    2    2
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+       0.0  23.30E-3  49.80E-3  51.00E-3  56.00E-3                             
+  1.724E-8       1.0       1.4       2.7  1.724E-8       1.0       1.0      2.5
+     2.500       0.0     2.730       0.0     2.960       0.0      2.50      1.0
+     2.730       1.0     2.960       1.0
+           100.         50.E03
+C Modal transformation matrices follow.   These are complex, with the real part displayed above the imaginary part.
+C Transpose of the current transformation matrix [Ti] follows.  This is the inverse of the voltage transformation matrix.
+C By definition, [Ti] gives the mapping from modal to phase variables: i-phase = [Ti] * i-mode
+C  0.00000   0.00000   0.00000   0.00000   0.00000   0.00000   1.00000   0.00000   
+C  0.00000   0.00000   0.00000  -0.00001   0.00000   0.00000   0.00000   0.00000   
+C      ....  0.00000   0.00000   0.00000   0.00000
+C      ....  0.00000   0.00000   0.00000   0.00000
+C  
+C MODE  ATTENUATION  VELOCITY        IMPEDANCE (OHM/M)         ADMITTANCE (S/M)  CHARACT. IMP. (OHM)       CHARACT. ADMIT. (S)
+C NO.      (DB/KM) (M/MIC.S)         REAL       IMAG.         REAL        IMAG.       REAL     IMAG.         REAL        IMAG.
+C   1  1.98193E+01     11.24  4.54985E-02  2.76775E-01  0.00000E+00  2.80308E-03
+C   2  1.07741E-01     24.61  1.13061E-04  5.81815E-02  0.00000E+00  2.80120E-03
+C   3  6.30266E-02     43.96  1.48041E-04  7.29050E-02  0.00000E+00  7.00585E-04
+C   4  6.30266E-02     43.96  1.48002E-04  7.28856E-02  0.00000E+00  7.00772E-04
+C   5  6.30266E-02     43.96  1.11090E-04  5.47081E-02  0.00000E+00  9.33614E-04
+C   6  6.30266E-02     43.96  1.11001E-04  5.46642E-02  0.00000E+00  9.34363E-04
+C   7  7.73951E-02    153.52  5.86971E-04  6.73994E-02  0.00000E+00  6.21267E-05
+C   8  7.73951E-02    153.52  5.86971E-04  6.73994E-02  0.00000E+00  6.21267E-05
+C   9  7.73951E-02    153.52  5.86971E-04  6.73994E-02  0.00000E+00  6.21267E-05
+C  10  7.73951E-02    153.52  5.86971E-04  6.73994E-02  0.00000E+00  6.21267E-05
+C  11  7.73951E-02    153.52  5.86971E-04  6.73994E-02  0.00000E+00  6.21267E-05
+C  12  7.73950E-02    153.52  5.86971E-04  6.73994E-02  0.00000E+00  6.21267E-05     
+BLANK card ending frequency cards
+BLANK card ending  "CABLE CONSTANTS"  data subcases
+BEGIN NEW DATA CASE
+C                  5th of 8 examples of cables without pipe:  CASE22Y0.DAT
+CABLE CONSTANTS
+BRANCH  CORA1 CORA2 SHEA1 SHEA2
+CABLE PARAMETERS
+C                         KOLW27  KOLS27 Only F?
+MATRIX PRECISION              10       2
+C    The preceding 2 lines, added 7 Dec. 2003, restore the default choice.  Note
+C    that there is no optional  BOTH  in columns 45-48 (see preceding subcase).
+C   2    1    1    0    0    0    0    0    0    0    0    2   IPUNCH gone
+C   2    1    1    0    0    0    0    0    0    0    0
+    2    1    1    0    1    0    0    0    0    0    0
+C    1                2.00          A
+    2
+    0.8E-2   1.00E-2   2.70E-2   3.00E-2   3.10E-2
+  3.000E-8       1.0       1.0     1.063  3.000E-8       1.0       1.0      1.1
+       0.9       0.0
+          1.E-8         10.E06             1000.         2
+C Voltage transformation matrix [Tv].  This gives the mapping from modal to phase variables: v-phase = [Tv] * v-mode
+C    1.00000   1.00000
+C    0.00000   0.00000
+C    0.00000   1.00000
+C    0.00000   0.00000
+C
+C             ADMITTANCE (S/M)     CHARACT. IMP. (OHM)       CHARACT. ADMIT. (S)
+C               REAL        IMAG.       REAL     IMAG.         REAL        IMAG.
+C  ....  0.00000E+00  3.74095E-03     57.817    -0.055  1.72959E-02  1.64284E-05
+C  ....  0.00000E+00  8.54359E-04    245.415    -0.014  4.07472E-03  2.33098E-07
+BLANK card ending frequency cards
+$PUNCH,  case22y0.pch   ! { Of the 18 examples,  this is 1st of 2 that punch
+C $VINTAGE, 1
+C -1CORA1 CORA2             2.37561E-02 5.78171E+01 2.90497E+08-1.00000E+03 1  2
+C -2SHEA1 SHEA2             5.88727E-03 2.45415E+02 2.99666E+08-1.00000E+03 1  2
+C $VINTAGE, 0
+C   1.00000000  0.00000000
+C   0.00000000  0.00000000
+C  -1.00000000  1.00000000
+C   0.00000000  0.00000000
+BLANK card ending  "CABLE CONSTANTS"  data subcases
+BEGIN NEW DATA CASE
+C                  6th of 8 examples of cables without pipe:  CASE22Y1.DAT
+CABLE CONSTANTS
+BRANCH  CORA1 CORA2 SHEA1 SHEA2
+CABLE PARAMETERS
+C   2    1    1    0    0    1    0    0    0    0    1    2
+C   2    1    1    0    0    1    0    0    0    0    1
+    2    1    1    0    1    1    0    0    0    0    1
+C   1                2.00          A
+    2
+    0.8E-2   1.00E-2   2.70E-2   3.00E-2   3.10E-2
+  3.000E-8       1.0       1.0     1.063  3.000E-8       1.0       1.0      1.1
+       0.0   1.0E-15       0.0  0.055E-9
+       0.9       0.0
+          1.E-8         10.E06             1000.         2
+C           EARTH IMPEDANCE ZE
+C   1.11110E-04  1.11110E-04
+C   1.11111E-04  1.11111E-04
+C
+C           CONDUCTOR INTERNAL IMPEDANCE ZC
+C   2.95323E-02  5.77615E-03
+C   1.29231E+01  4.17823E-01
+C  
+C MODE  ATTENUATION  VELOCITY        IMPEDANCE (OHM/M)         ADMITTANCE (S/M)
+C  NO.     (DB/KM) (M/MIC.S)         REAL       IMAG.         REAL        IMAG.
+C   1  2.34005E-01    133.42  5.88727E-03  5.14569E+01  0.00000E+00  4.31011E-03
+C   2  1.78448E+00    290.49  2.37561E-02  1.25053E+01  0.00000E+00  3.74102E-03
+BLANK card ending frequency cards
+$PUNCH,  case22y1.pch   ! { Of the 18 examples,  this is 2nd of 2 that punch
+C $VINTAGE, 1
+C -1CORA1 CORA2             5.88727E-03 1.09264E+02 1.33418E+08-1.00000E+03 1  2
+C -2SHEA1 SHEA2             2.37561E-02 5.78166E+01 2.90494E+08-1.00000E+03 1  2
+C $VINTAGE, 0
+C   0.00000000  1.00000000
+C   0.00000000  0.00000000
+C   1.00000000 -1.00000000
+C   0.00000000  0.00000000
+BLANK card ending  "CABLE CONSTANTS"  data subcases
+BEGIN NEW DATA CASE
+C                  7th of 8 examples of cables without pipe:  CASE22Y2.DAT
+CABLE CONSTANTS
+CABLE PARAMETERS
+C   2    1    1    0    0    0    0    0    0    0    2    0
+    2    1    1    0    1    0    0    0    0    0    2    0
+    2
+    0.8E-2   1.00E-2   2.70E-2   3.00E-2   3.10E-2
+  3.000E-8       1.0       1.0     1.063  3.000E-8       1.0       1.0      1.1
+   0.1E-14        0.     5.E-5        0.
+       0.9       0.0
+          1.E-8         10.E06             1000.         1
+C             ADMITTANCE (S/M)     CHARACT. IMP. (OHM)       CHARACT. ADMIT. (S)
+C               REAL        IMAG.       REAL     IMAG.         REAL        IMAG.
+C  ....  0.00000E+00  3.74095E-03     57.817    -0.055  1.72959E-02  1.64284E-05
+C  ....  5.00000E-05  8.54359E-04    245.101     7.152  4.07647E-03 -1.18949E-04
+BLANK card ending frequency cards
+$PUNCH      { Show Pi-circuit branch cards (1-punch in col 58 of frequency card)  
+C  PI-EQUIVALENT MODEL WITH LENGTH= 0.100E+04(M)
+C $VINTAGE, 1
+C  1                          2.96433904E+01  1.01799070E+00  5.95391119E-02
+C  2                          5.88726509E+00  8.18962579E-01 -5.95391119E-02
+C                             5.88726509E+00  8.18962579E-01  7.31366522E-02
+C $VINTAGE, 0
+BLANK card ending  "CABLE CONSTANTS"  data subcases
+BEGIN NEW DATA CASE
+C                  8th of 8 examples of cables without pipe:  CASE22Y3.DAT
+CABLE CONSTANTS
+CABLE PARAMETERS
+    2    1    1    0    0    0    0    0    0    0    3    0
+    2
+    0.8E-2   1.00E-2   2.70E-2   3.00E-2   3.10E-2
+  3.000E-8       1.0       1.0     1.063  3.000E-8       1.0       1.0      1.1
+   0.1E-14   1.0E-15     5.E-5  0.055E-9
+       0.9       0.0
+          1.E-8         10.E06         0
+C MODE  ATTENUATION  VELOCITY        IMPEDANCE (OHM/M)         ADMITTANCE (S/M)
+C NO.      (DB/KM) (M/MIC.S)         REAL       IMAG.         REAL        IMAG.
+C   1  2.39603E+01    133.42  5.88727E-03  5.14569E+01  5.00000E-05  4.31011E-03
+C   2  1.78448E+00    290.49  2.37561E-02  1.25053E+01  0.00000E+00  3.74102E-03
+BLANK card ending frequency cards
+BLANK card ending  "CABLE CONSTANTS"  data subcases
+BEGIN NEW DATA CASE
+C      First of two examples of cables sent by Prof. Ametani on Feb. 17, 2001
+C      that he used for verifying the correction he made in the calculation of
+C      conductor internal impedance of a cable having 3 layers of conductors,
+C      core, sheath, and armor.
+C      This is a one-phase SC cable with core and sheath only
+CABLE PARAMETERS
+    2   -1    1    0    1    1    0         0    0    0    0
+    2
+ .7000E-01 .8000E-01 .9000E-01 .1000     .1100    
+ .1728E-07 1.000     1.000     2.200     .1728E-07 1.000     1.000     2.200    
+ 1.500     .0000    
+    100.000        50.0000        0    0    0
+BLANK card ending frequency cards
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+C      Second of two examples of cables sent by Prof. Ametani on Feb. 17, 2001
+C      This is a one-phase SC cable with core, sheath, and armor.  This data 
+C      is almost the same as the previous one except having 3 conductors, and
+C      the physical configuration of the sheath and armor here is the same as 
+C      the core and sheath of the previous case
+CABLE PARAMETERS
+C   2   -1    1    0    1    1    0    1    0    0    0    0
+    2   -1    1    0    1    1    0         0    0    0    0
+    3
+ .5000E-01 .6000E-01 .7000E-01 .8000E-01 .9000E-01 .1000     .1100    
+ .1728E-07 1.000     1.000     2.200     .1728E-07 1.000     1.000     2.200    
+ .1728E-07 1.000     1.000     2.200    
+ 1.500     .0000    
+    100.000        50.0000        0    0    0
+BLANK card ending frequency cards
+BLANK card ending  "CABLE PARAMETERS"  data subcases
+BEGIN NEW DATA CASE
+BLANK
+EOF
+
+
+

@@ -1,0 +1,46 @@
+1  RHIGH  EPSZNO  EPWARN  EPSTOP  EPSUBA  EPDGEL  EPOMEG   SZPLT   SZBED  TENFLZ 
+  1.D+10   1.D-8   1.D-3     0.1    100.  1.D-16  1.D-15    10.0    72.0     10.
+2 SIGMAX  TENERG  DEGMIN  DEGMAX  ZNOLIM(1), (2)  STATFR  ZNVREF  XMAXMX   AINCR
+     4.0  1.D+20     0.0    360.     1.0     1.5    60.0   1.D-6     2.0     .05
+3 FREQFR  HLETT1  Unused     VHS      VS      VH  TAXISL  VAXISL   FILL1   FILL2
+            0.25             8.0     1.0     10.    10.0     8.0      6.     7.0
+4 TOLRCE   FHTAX   FXSUP   FYSUP   FXTIT   FYTIT  VPLOTS  VPLOTL  FACTVI  FTCARR
+   8.E-5     0.5     .25     .03    0.10     0.1     1.0     5.0     0.0     1.5
+5 FXNUMV  FXNUMH  FVAXTT  FXVERT  UNIXON  TIMTAC  OVRLAP  FLZERO  EPSILN  FLTINF
+     1.5     5.0    -2.5     0.0     0.0     0.0     0.5  1.D-12   1.D-8  1.D+19
+6 XHEADM  YHEADM  HGTHDM  XCASTI  YCASTI  HGTCST  XLEGND  YLEGND  HGTLGN  TSTALL
+     2.5    7.95     .55     0.5     7.3     .35     0.5    1.30     .25    -0.0
+7 XALPHA  YALPHA  HGTALF  D4FACT  PEKEXP  EPSLRT  EPSPIV  PLMARK  FACOSC
+     1.5     6.5     .25     2.0     43.  1.E-12  1.E-16     1.0     0.3
+8 NMAUTO  INTINF  KOL132  MUNIT5  MAXZNO  IPRSPY  IPRSUP   LNPIN  MINHAR  MAXHAR
+       1 9999999     132       1      50       0       0       6       0      20
+9 NFORS2  NIOMAX    MRGN  LINLIM   MPAGE  MODE28  KPGRID KPEN(1) KPEN(2) KPEN(3)
+      30      10       2     100       0       1       3      12      10      11
+10 ..(4)  KOMLEV   NSMTH  MODSCR  KOLALP  MAXFLG  LIMCRD  NOBLAN  MOUSET  NOTPPL
+      14      -1      50       2       5       1   90000       0       0       1
+1 NOCOMM  NOHELP  NEWPL4  JDELAY  NOTMAX  NSMPLT  KOLWID  KOLSEP  JCOLU1  KSLOWR
+       1       1       0       0       0      50      11       1       0       5
+2 KSYMBL  NOBACK  KOLEXM    LTEK   NCUT1   NCUT2  INCHPX  INCHPY  NODPCX  LCHLIM
+     200       1      60       1      13      11       2       2       0       0
+13 NORUN  JTURBO  MAXSYM     IHS  LIMCOL   KLEVL   KEXTR  NOHPGL  NOPOST  NOSM59
+       0       1       3       3      79       0       0       0       0       0
+4 LEFTA6  LENREC  LU6VRT   LRLIM  KASEND  LUNDAT  KTRPL4  JORIEN  LIMPNL  LUNTEX
+       0       0   32768      75       5       3   -6666       0     200     -11
+5 KINSEN  LISTON  LIMTAC  NOCALC  MFLUSH  L4BYTE  KOMPAR  LIST01   NOGNU  KROSEC
+       1       0      25       0    1000       1       4       0       0       0
+6 LUNIT1  LUNIT2  LUNIT3  LUNIT4  LUNIT5  LUNIT6  LUNIT7  LUNIT8  LUNIT9  LUNT10
+      21      22       3      -4       1       6       7       8       9      10
+17 KS(1)   KS(2)   KS(3)   KS(4)   KP(1)   KP(2)   KP(3)   KP(4)  KOLROV  NUMHLD
+       0       0      12      10       7      14       0       0      18
+18 Name of language font file  ] Window] Root name for SPY @K usage    ]
+blockd51.bin                    junk    inclspy .dat    
+9 SSONLY  CHEFLD  TEXNAM  CHVBAR  BRANCH  TXCOPY  USERID  -TRASH  -TERRA  CHRCOM 
+  PHASOR  E       DUM     |       NAME    COPY    Hannov  ......  TERRA   C {}$, 
+0 DATTYP  LISTYP  PCHTYP  PL4TYP  EFIELD  FMTPL4  PSCTYP  DBGTYP  BINTYP  EXTTYP
+  .dat    .lis    .pch    .pl4                    .ps     .dbg    .bin    .ext
+C    After regular STARTUP comes optional VMS-like symbol definitions that are
+C    used for input data file name in response to the opening prompt.
+scott:==c:\atp\    { 1st of 2 remote directories
+tsu:==c:\tsu-huei\    { 2nd of 2
+$EOF    { Software end-of-file terminates last of 20 or fewer VMS-like symbols
+

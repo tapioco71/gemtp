@@ -1,0 +1,183 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-12
+C        Simulation of BPA single-line-to-ground fault and single-pole switching
+C        of Raver-Sickler-Chief Joseph line.   See Volume I,  19 September 1974,
+C        pagination "DCL".   For double-circuit representation, both Pi-circuits
+C        and constant-parameter distributed modeling with zero-sequence coupling
+C        is illustrated.   Change 3-phase K.C. Lee col-80 "1"-punch to "2"-punch
+C        on  3 July 87,  when realized that branch current output is not yet OK.
+$NEW EPSILN, 1.E-9,    { Not needed;  Just added to prove the card is recognized
+$WATCH, 25, { Illustrate extra echoing of cards to CRT periodically (every 25th)
+PRINTED NUMBER WIDTH, 12, 2,   { Full precision on each of 9 columns of printout
+ .000050    .025     60.
+       1       1       1       3       1      -1
+       5       5      20      20
+ 0CJA   X32A                    .01                                            1
+ 0CJB   X32B                    .01                                            1
+ 0RAA   XA                      .01
+ 0RAB   XB                      .01
+ 0RAGA  RAA                     26.                                            1
+ 0RAGB  RAB                     26.                                            1
+ 0RAGC  RAC                     26.                                            1
+ 0CJGA  CJA                     28.
+ 0CJGB  CJB                     28.
+ 0CJGC  CJC                     28.
+ 0VC    Y17C                     26.
+ 0VB    Y17B                     26.
+ 0VA    Y17A                     26.
+ 0RAA   YA                       .01                                           1
+ 0RAB   YB                       .01                                           1
+ 0RAC   YC                       .01                                           1
+ 0XC                            1680.
+ 0X16B  T                 1.0E18                                               2
+ 0X16C  T                 1.0E18                                               2
+ 0X16A  T                 1.0E18                                               2
+ 0T                       65.                                                  1
+ 1XA    X1A               .3545 3.2009.0476
+ 2XB    X1B               .2599  1.543-.0088.349  3.2067.0449
+ 3XC    X1C               .2624  1.484-.006 .2599 1.543 -.0087.3545 3.2009.0479
+ 4YA    Y1A               .2619  1.128-.0008.2595 1.1848-.0018.2622 1.2824-.0025
+                          .3657 3.6724 .0363
+ 5YB    Y1B               .2615 1.0374-.0004.2592 1.0834-.001 .2619 1.1492-.0011
+                          .2624 1.5455-.0052.3656 3.6724.0361
+ 6YC    Y1C               .261  .9663 -.0003.2588 1.005 -.0007.2616 1.054 -.0006
+                          .2623 1.3076-.002 .2624 1.551 -.0053.3656 3.6724 .036
+ 1X1A   X2A               1.05749.547 .1421
+ 2X1B   X2B               .7752 4.602 -.026 1.042 9.564 .1353
+ 3X1C   X2C               .7826 4.426 -.018 .7752 4.602 -.02561.057 9.547 .1428
+ 4Y1B   Y2B               .7811 3.366 -.0023.7741 3.534 -.0055.7822 3.825 -.0074
+                          1.091 10.95 .1084
+ 5Y1A   Y2A               .7799 3.094 -.0013.7732 3.231 -.0031.7813 3.427 -.0032
+                          .7827 4.609 -.01541.091 10.95 .1076
+ 6Y1C   Y2C               .7785 2.882 -.0009.772  2.998 -.0022.7802 3.145 -.0018
+                          .7822 3.9   -.0059.7827 4.625 -.01591.091 10.95 .0357
+-1X2A   X16A              0.58213.4008.00912   70.
+-2X2B   X16B              .034160.6790.01663   70.
+-3X2C   X16C              .034941.0952.01163   70.
+-4Y2A   Y16A
+-5Y2B   Y16B
+-6Y2C   Y16C
+ 1X16C  X17C              .6198 5.596 .08325
+ 2X16A  X17A              .4545 2.698 -.0156.6110 5.606 .079
+ 3X16B  X17B              .459  2.5945-.0107.4545 2.6975-.0156.6198 5.596 .08325
+ 1X17C  X18C  X16C  X17C
+ 2X17A  X18A
+ 3X17B  X18B
+ 1X18C  X19C  X16C  X17C
+ 2X18A  X19A
+ 3X18B  X19B
+ 1X19A  X20A  X16C  X17C
+ 2X19B  X20B
+ 3X19C  X20C
+ 1X20A  X21A  X16C  X17C
+ 2X20B  X21B
+ 3X20C  X21C
+ 1X21A  X22A  X16C  X17C
+ 2X21B  X22B
+ 3X21C  X22C
+ 1X22A  X23A  X16C  X17C
+ 2X22B  X23B
+ 3X22C  X23C
+ 1X23A  X24A  X16C  X17C
+ 2X23B  X24B
+ 3X23C  X24C
+ 1X24A  X25A  X16C  X17C
+ 2X24B  X25B
+ 3X24C  X25C
+ 1X25A  X26A  X16C  X17C
+ 2X25B  X26B
+ 3X25C  X26C
+ 1X26A  X27A  X16C  X17C
+ 2X26B  X27B
+ 3X26C  X27C
+ 1X27A  X28A  X16C  X17C
+ 2X27B  X28B
+ 3X27C  X28C
+ 1X28A  X29A  X16C  X17C
+ 2X28B  X29B
+ 3X28C  X29C
+ 1X29A  X30A  X16C  X17C
+ 2X29B  X30B
+ 3X29C  X30C
+ 1X30A  X31A  X16C  X17C
+ 2X30B  X31B
+ 3X30C  X31C
+ 1X31A  X32A  X16C  X17C
+ 2X31B  X32B
+ 3X31C  X32C
+C     3 July 1987.  Change 3 column-80 "1"-punches  to "2"-punches that do work:
+-1Y16C  Y17C               .316  752. 123.E3  31.  1                           2
+-2Y16B  Y17B               .03   370. 179.E3  31.  1                           2
+-3Y16A  Y17A                                                                   2
+BLANK card ending branch cards
+  CJC   X32C   -1.       .016        0.1
+  RAC   XC     -1.       .016        0.1                                       2
+  X16C  T      -1.       .2          0.
+BLANK card ending switch cards
+14VA      305418.   60.          -1.5                           -1.
+14VB      305418.   60.        -121.5                           -1.
+14VC      305418.   60.         118.5                           -1.
+14RAGA    301954.   60.           0.0                           -1.
+14RAGB    301954.   60.        -120.0                           -1.
+14RAGC    301954.   60.         120.0                           -1.
+14CJGA    303109.   60.          12.0                           -1.
+14CJGB    303109.   60.        -108.0                           -1.
+14CJGC    303109.   60.         132.0                           -1.
+C --------------+------------------------------
+C From bus name |  Names of all adjacent busses.
+C --------------+------------------------------
+C        CJA    | X32A  *CJGA  *
+C        X32A   | CJA   *X31A  *
+C        CJB    | X32B  *CJGB  *
+C        X32B   | CJB   *X31B  *
+C        RAA    | XA    *RAGA  *YA    *
+C        XA     | RAA   *X1A   *
+C        RAB    | XB    *RAGB  *YB    *
+C        XB     | RAB   *X1B   *
+C        RAGA   | RAA   *
+C        RAGB   | RAB   *
+C        RAGC   | RAC   *
+C        RAC    | RAGC  *YC    *XC    *
+C     Etc.  (many more connections!)  .....
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   4.180325863357E+08
+C Last gen: VA   305313.34087938     305418.    -117.2584310988  258.76988979273
+C (inject)       -7994.911198294  -1.5000000    230.67794909697      116.9451840
+  X16C                                 { Request this single node-voltage output
+C    Step      Time       X16B        X16C        X16A        Y16C          Y16B
+C                         T           T           T           Y17C          Y17B
+C
+C                         CJB         RAGA        RAGB        RAGC           RAA
+C                         X32B        RAA         RAB         RAC             YA
+C  ***      Phasor I(0) = -3.0383545E+02  Switch  "CJC   "  to  "X32C  "  closed
+C  ***      Phasor I(0) =  3.8992458E+02  Switch  "RAC   "  to  "XC    "  closed
+C  ***      Phasor I(0) =  2.0157191E+02  Switch  "X16C  "  to  "T     "  closed
+C       0       0.0   -78763.148         0.0  356989.678  20286.0902  17732.2707
+C                     -18.016564  -303.41193  324.866491  159.741413  116.579991
+C       1     .5E-4   -68915.376         0.0  360816.716  20407.8874  17886.2544
+C                     -7.6834907  -305.95716   323.27785   139.58148  116.957369
+C ***          Open  switch  "CJC   "  to  "X32C  "  after  1.63000000E-02  sec.
+C     340      .017   -58325.296         0.0   332129.95  18459.1058  16144.8216
+C                     -71.509286  -318.23015  312.072738  24.5303035  118.269882
+C ***          Open  switch  "RAC   "  to  "XC    "  after  1.73000000E-02  sec.
+C     360      .018   12731.9904         0.0  250135.752    -12838.9  -16820.319
+C                     52.7863341  -253.90065  320.141582  -141.05357  52.1159786
+BLANK card ending output variable requests (here, just one node voltage)
+C     500      .025   132495.985         0.0  -302263.22  -29.587992  2946.07641
+C                     84.5341302  250.938187  -366.24032  246.772723  -200.01038
+C Variable maxima :   527574.804         0.0  412447.128  31636.9013  29592.9306
+C                     548.378747  333.249762  334.841845  1080.00888  118.507064
+C Times of maxima :       .00455         0.0       .0014      .01945      .01935
+C                         .00425      .00945        .016       .0129       .5E-3
+C Variable minima :   -527587.93         0.0  -412416.39  -42474.614   -23464.43
+C                     -548.38706  -333.20182   -367.8861  -1079.8953  -234.86055
+C Times of minima :        .0129         0.0       .0097      .01835       .0184
+C                          .0126      .00115      .02495      .00455      .02325
+  PRINTER PLOT                                   { Axis limits: (-3.870,  2.119)
+  Voltage across switch (RAC,XC), which opens at 16 milliseconds.
+ 184 1. 15. 30.         RAC   XC                Recovery voltage
+$WATCH, 9999, { Turn off echoing of cards to CRT, in case other solutions follow
+BLANK card terminating plot cards
+BEGIN NEW DATA CASE
+BLANK
+ 

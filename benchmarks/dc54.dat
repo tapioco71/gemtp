@@ -1,0 +1,54 @@
+BEGIN NEW DATA CASE                                                             
+C     BENCHMARK DC-54                                                           
+C     Delayed plotting of DC-3 plot file via  "REPLOT"  usage.   Format  of  the
+C     connection  ($OPEN,)  may  depend on computer due to different file names.
+C     There are 3 subcases,  with  the first providing a character plot and  the
+C     remaining 2 providing vector plots  (maybe not supported on all machines).
+DISK PLOT DATA   { Toggle Apollo default of LUNIT4 = -4  to  +4 for disk storage
+CUSTOM PLOT FILE     { Request for REAL*8 .PL4 file (see July, 1995, newsletter)
+$CLOSE,  UNIT=LUNIT4  STATUS=DELETE  { Disconnect now-empty file connected by SYSDEP  
+$OPEN,  UNIT=LUNIT4  FILE=dc3.pl4  STATUS=OLD    ! Connect C-like plot file from DC-3
+REPLOT                   { Request for connection to batch-mode plotting of EMTP
+  PRINTER PLOT     { Switch from vector (the default mode) plotting to character                                                                
+ 144 1. 0.0 20.         18-A  18-B  18-C         { Axis limits: (-1.276,  0.880)                                  
+$CLOSE,  UNIT=LUNIT4  STATUS=KEEP      { Disconnect data file protects against damage  
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C            2nd of 3 subcases.  This sends two vector plots only to the screen.
+C DISK PLOT DATA   { Toggle Apollo default of LUNIT4 = -4  to  +4 for disk storage
+C CUSTOM PLOT FILE     { Request for REAL*8 .PL4 file (see July, 1995, newsletter)
+$CLOSE,  UNIT=LUNIT4  STATUS=DELETE  { Disconnect now-empty file connected by SYSDEP  
+$OPEN,  UNIT=LUNIT4  FILE=dc3.pl4  STATUS=OLD    ! Connect C-like plot file from DC-3
+REPLOT                   { Request for connection to batch-mode plotting of EMTP
+C   Following CalComp declaration is required only because of preceding subcase:
+  CALCOMP PLOT   { Switch from former  "PRINTER PLOT"  mode to this CalComp mode 
+  SCREEN PLOT   { Send  "CALCOMP PLOT"  output to the screen rather than plotter
+ 2Arbitrary 78-character case title text of which this is an example, I hope.
+  First of two lines of 78-byte graph subheading text.
+  Second and final such line of graph subheading text.
+ 144 1. 0.0 10.         18-A  18-B  18-C        Graph heading---Vertical axis la
+C    Note that no titles are redefined for the following plot.  Hence there will 
+C    be no multi-line sub-title,  although the single-line title at top repeats.
+ 144 1. 0.0 10.         18-B
+$CLOSE,  UNIT=LUNIT4  STATUS=KEEP      { Disconnect data file protects against damage  
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C           3rd of 3 subcases.  This sends two vector plots only to the plotter.
+C DISK PLOT DATA   { Toggle Apollo default of LUNIT4 = -4  to  +4 for disk storage
+C CUSTOM PLOT FILE     { Request for REAL*8 .PL4 file (see July, 1995, newsletter)
+$CLOSE,  UNIT=LUNIT4  STATUS=DELETE  { Disconnect now-empty file connected by SYSDEP  
+$OPEN,  UNIT=LUNIT4  FILE=dc3.pl4  STATUS=OLD    ! Connect C-like plot file from DC-3
+REPLOT                   { Request for connection to batch-mode plotting of EMTP
+C    Following  "PEN PLOT"  declaration is disabled for Apollo only because  the
+C    average owner has no real CalComp (which was coded for Bernd Stein of FGH).
+C    For GEOGRAF of MS-DOS version,  this card should be enabled (it is needed):
+  PEN PLOT { Send  "CALCOMP PLOT"  output to the plotter rather than the screen
+ 2Arbitrary 78-character case title text of which this is an example, I hope.
+  First of two lines of 78-byte graph subheading text.
+  Second and final such line of graph subheading text.
+ 144 1. 0.0 10.         18-A  18-B  18-C        Graph heading---Vertical axis la
+ 144 1. 0.0 10.         18-A        { Note this 2nd pen plot will have no labels
+$CLOSE,  UNIT=LUNIT4  STATUS=KEEP      { Disconnect data file protects against damage  
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

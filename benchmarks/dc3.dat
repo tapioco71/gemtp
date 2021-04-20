@@ -1,0 +1,633 @@
+BEGIN NEW DATA CASE
+$BEGIN PL4 COMMENTS
+C     BENCHMARK DC-3                                                            
+C              Energization of 180-mile 3-phase line represented by 18 identical
+C              Pi-sections.  Transposed at 60 and 120 miles, note.  XOPT = 3000.
+c              Note nice  DELTAT.   For exact "M39." agreement,  use   0.4630E-4
+c              It is test case DC-54 that uses the plot file for "REPLOT" usage.
+c              Note this and preceding 2 comment cards illustrate lower-case "$$
+C c" (the third letter of the alphabet).   End comment text.
+$END PL4 COMMENTS
+CHANGE PLOT FREQUENCY
+C  Beginning  21 March 2010,  the ten integers that define either plotting or
+C  printing frequency may be keyed as a mixture of I8  and  E8.0  FORMAT.  There
+C  exist several special cases, however,  for large values.  Interpretation will
+C  continue to use 6I6 integers if all can be encoded this way. Examples follow:
+       5       5      10       1     { The original alternative has all integers
+C Interpretation of this: Plot out :      5     5    10     1     0     0   | ...
+C      5    5.E0      10       1    1.E4    9.E5   { Near the limit of interpret
+C Interpretation of this: Plot out :      5     5    10     1 10000900000   | ...
+C      5    5.E0      10       1    1.E4    1.E9 { Too big a value for interpret
+C Interpretation of this: 5 pairs.  But a value is too big for I6 display.  | ...
+C      5    5.E0      10       1    1.E4    2.E9 { Verify largest 32-bit integer
+C Interpretation of this: 5 pairs.  But a value is too big for I6 display.  | ...
+C      5    5.E0      10       1    1.E4   2.1E9   { Too big a value for 32 bits
+C rejection of this:  ===  Error defining one or more integers of printing or
+C    plotting frequency.  Too big for 32-bit integer storage.  Halt in SUBR1.
+CUSTOM PLOT FILE     { Request for REAL*8 .PL4 file (see July, 1995, newsletter)
+$MONITOR      { Request time (no other special effect, since not LUNIT6 to disk)
+C DISK PLOT DATA   { Toggle the Apollo default of LUNIT4 = -4  to  +4 (use disk)
+C $CLOSE,  UNIT=4  STATUS=DELETE { Destroy empty date/time plot file of "SYSDEP"
+C $OPEN,  UNIT=4  FILE=dc3to54.pl4  FORM=UNFORMATTED STATUS=UNKNOWN RECL=8000  !
+C$ text   Beginning 31 August 1994, "C$" in columns 1-2 is taken to be a comment
+PRINTED NUMBER WIDTH, 13, 2,
+ .000050    .010   3000.    { XOPT = 3 KHz means reactance in ohms at this freq.
+C      1       1       1       1       1      -1       0       2                
+    1.E0    1.E0       1       1       1      -1       0       2                
+C       The preceding integer misc. data card illustrates that either the number
+C       of steps for printing (cols. 1-8) or the number of steps for plotting
+C       (cols. 9-16) may be E-field.  This is to accomodate values > 1.E8.
+C   See previous explanation of  CHANGE PLOT FREQUENCY.  The same procedure is
+C   applicable to the following card,  which modifies printout frequency:
+C      5       5      10      10      20      20 { Escalating printout frequency
+       5    5.E0    1.E1      10    2.E1      20   { Illustrate some E-field use
+$COMMENT                { Begin discarding (making invisible) all comment cards
+C     Ok, immediately we have a comment card, which should not be seen on LUNIT6
+ 1GEN-A 1-A               34.372457.68.15781                                    
+ 2GEN-B 1-B               35.735164.43-.031538.002451.79.16587                  
+ 3GEN-C 1-C               35.735164.43-.031537.455151.72-.021938.002451.79.16587
+C                     2nd comment card.  This, too, should not be seen on LUNIT6
+$COMMENT   { End discarding of comment cards.  Once again such cards are visible
+C                     Is this comment card visible?  It should be seen on LUNIT6
+ 11-A   2-A   GEN-A 1-A          { Sections 2 through 18 are copies of the first
+ 21-B   2-B                      { which has just been inputted.                
+ 31-C   2-C                                                                     
+ 12-A   3-A   GEN-A 1-A                                                         
+ 22-B   3-B                                                                     
+ 32-C   3-C                                                                     
+ 13-A   4-A   GEN-A 1-A                                                         
+ 23-B   4-B                                                                     
+ 33-C   4-C                                                                     
+ 14-A   5-A   GEN-A 1-A                                                         
+ 24-B   5-B                                                                     
+ 34-C   5-C                                                                     
+ 15-A   6-A   GEN-A 1-A                                                         
+ 25-B   6-B                                                                     
+ 35-C   6-C                                                                     
+ 16-C   7-C   GEN-A 1-A      { Note transposition:  /C/A/B/  rather than  /A/B/C
+ 26-A   7-A                                                                     
+ 36-B   7-B                                                                     
+ 17-C   8-C   GEN-A 1-A                                                         
+ 27-A   8-A                                                                     
+ 37-B   8-B                                                                     
+ 18-C   9-C   GEN-A 1-A                                                         
+ 28-A   9-A                                                                     
+ 38-B   9-B                                                                     
+ 19-C   10-C  GEN-A 1-A                                                         
+ 29-A   10-A                                                                    
+ 39-B   10-B                                                                    
+ 110-C  11-C  GEN-A 1-A                                                         
+ 210-A  11-A                                                                    
+ 310-B  11-B                                                                    
+ 111-C  12-C  GEN-A 1-A                                                         
+ 211-A  12-A                                                                    
+ 311-B  12-B                                                                    
+ 112-B  13-B  GEN-A 1-A  { Note 2nd transposition:  /B/C/A/  rather than  /C/A/B
+ 212-C  13-C                                                                    
+ 312-A  13-A                                                                    
+ 113-B  14-B  GEN-A 1-A                                                         
+ 213-C  14-C                                                                    
+ 313-A  14-A                                                                    
+ 114-B  15-B  GEN-A 1-A                                                         
+ 214-C  15-C                                                                    
+ 314-A  15-A                                                                    
+ 115-B  16-B  GEN-A 1-A                                                         
+ 215-C  16-C                                                                    
+ 315-A  16-A                                                                    
+ 116-B  17-B  GEN-A 1-A                                                         
+ 216-C  17-C                                                                    
+ 316-A  17-A                                                                    
+ 117-B  18-B  GEN-A 1-A                                                         
+ 217-C  18-C                                                                    
+ 317-A  18-A                                                                    
+ 0M-A   GEN-A              400.0   { 400 Ohm closing resistors, to be shorted by
+ 0M-B   GEN-B              400.0   { breaker poles at times  9.98,  14,  and  14
+ 0M-C   GEN-C              400.0   { msec, respectively.}                      1
+ 0POLE-AM-A                15.0                                                 
+ 0POLE-BM-B                15.0                                                 
+ 0POLE-CM-C                15.0                                                 
+BLANK card ending branch cards
+  E-A   POLE-A    0.      20.0                                                 1
+  E-B   POLE-B  0.00398   20.0  { Closing will be at 4.0 msec, all computer }  3
+  E-C   POLE-C  0.00398   20.0  { This backoff from 4.0 was needed by PRIME }  1
+  M-A   GEN-A   0.00998   20.0            { Breaker poles across 400 Ohm closing
+  M-B   GEN-B   0.013998  20.0            { resistors.   Note artificial opening
+  M-C   GEN-C   0.013998  20.0            { time (in fact, there is no opening).
+BLANK card ending switches
+14E-A        -1.0      60.0    -90.0                                            
+14E-B        -1.0      60.0   -210.0                                            
+14E-C        -1.0      60.0    30.0                                             
+BLANK card ending sources
+  18-C  18-B  18-A                                                              
+$MONITOR      { Request time (no other special effect, since not LUNIT6 to disk)
+C  Step      Time        E-B          18-C         18-B         18-A         E-A
+C                     POLE-B                                              POLE-A
+C ***        Switch  "E-A   "  to  "POLE-A"  closed  after  0.00000000E+00  sec.
+C    0     0.0           0.0          0.0          0.0          0.0          0.0
+C    1   .5E-4   .8771390038  .735053E-17  .754138E-17  -.12623E-16  -.277151E-4
+C    2   .1E-3   .8898949351  .408898E-15  .419476E-15  -.70276E-15   -.42636E-4
+C    3  .15E-3   .9023577997  .111958E-13  .114844E-13  -.19259E-13  -.657706E-4
+C    4   .2E-3   .9141912694  .201088E-12  .206252E-12  -.34623E-12  -.902274E-4
+C    5  .25E-3   .9254563554  .266406E-11  .273221E-11  -.45918E-11   -.11094E-3
+C   10   .5E-3   .9821092355  .5616974E-7  .5757735E-7  -.975638E-7  -.211746E-3
+C   20    .001   1.079796132  .0030080496  .0030756136  -.005532677  -.393566E-3
+BLANK card ending output variables requests (node voltages, here)
+$MONITOR      { Request time (no other special effect, since not LUNIT6 to disk)
+C Final step:      200     .01     0.0   .7226176276   -.887792385   .0782571591
+C Final step continued:       .0011948668  -.449544E-3  -.687051E-3  -.687051E-3
+C Variable max : 1.188718074  .8796065581  .1512528782  .0782571591  .0012022221
+C Times of max :        .002        .0085       .00525          .01       .00995
+C Variable min :         0.0  -.133205909  -.887792385  -1.27643205   -.79278E-3
+C Times of min :         0.0        .0048          .01       .00525        .0041
+  PRINTER PLOT                                                                  
+ 144 1. 0.0 10.         18-A  18-B  18-C         { Axis limits: (-1.276,  0.880)
+ 194 1. 0.0 10.         GEN-C M-C   E-A   POLE-A { Axis limits: (-1.105,  1.202)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE                                                             
+C      2nd of 6 subcases illustrates  $PI  which becomes available 14 July 2001.
+C      This is for scaling Pi-circuit data  --  in effect, varying the length of
+C      the Pi-circuits.  Originator of the idea was Dr. Sven Demmig of Bewag
+C      (power utility of city of Berlin, Germany) as explained in the October,
+C      2001 newsletter.  Although a cascade connection of sections is typical,
+C      in fact there is no mandatory association of $PI and cascading.  In this
+C      illustration,  consider 4 different and disconnected cascade connections
+C      of 2 Pi-circuits.  The first is unscaled whereas the following 3 involve
+C      different combinations of scaling.  All 4 disconnected subnetworks give
+C      exactly the same answer because data is either normal or multiplied by
+C      2;  and if the later, it subsequently is scaled by 1/2, thereby restoring
+C      the original values.
+POWER FREQUENCY                    3000.   { Avoid warning about unusual XOPT
+PRINTED NUMBER WIDTH, 11, 2,
+ .000050    .005   3000.    { XOPT = 3 KHz means reactance in ohms at this freq.
+       1       1       1       1       1      -1                
+       5       5      10      10      20      20 { Escalating printout frequency
+C   Begin cascading of 3-phase Pi-circuits from DC-3.  To establish the right 
+C   answer,  we define data params using the 1st section, and then use reference
+C   branch for the second.  So, a total of 6 cells are occupied in List 3:
+ 1GENA  MIDA              34.372457.68.15781                                    
+ 2GENB  MIDB              35.735164.43-.031538.002451.79.16587                  
+ 3GENC  MIDC              35.735164.43-.031537.455151.72-.021938.002451.79.16587
+ 1MIDA  ENDA  GENA  MIDA 
+ 2MIDB  ENDB                             
+ 3MIDC  ENDC                                                                     
+C   Preceding establishes right answer without scaling.  Next, scale.  There are  
+C   3 illustrations.  Each is a disconnected circuit that should give the same 
+C   answer as the first.  Each of the copies uses scaling in a different way.
+C   Begin with Pi-circuit data that is double what it should be, so will require
+C   a scaling factor of a half. Like preceding, this occupies 6 cells of List 3:
+$PI, 0.5,            { Multiply R, L, and C values of Pi-circuits by this factor
+ 1GENA  MIDD              68.744915.36.31562                                    
+ 2GENB  MIDE              71.470328.86-.063076.004903.58.33174                  
+ 3GENC  MIDF              71.470328.86-.063074.910303.44-.043876.004903.58.33174
+$PI, 1.0,            { Cancel preceding scaling;  return to normal, unscaled use
+ 1MIDD  ENDD  GENA  MIDD 
+ 2MIDE  ENDE                             
+ 3MIDF  ENDF                                                                     
+C   2nd of 3 alternatives to the original circuit will define but not use the
+C   doubled data.  Nothing else will be connected to far end (MIDG, H, I).
+C   Instead,  the alternative will consist of 2 scaled copies of this data.
+C   That makes a total of 3 copies of data, so 18 cells of List 3 are occupied:
+ 1GENA  MIDG              68.744915.36.31562
+ 2GENB  MIDH              71.470328.86-.063076.004903.58.33174                  
+ 3GENC  MIDI              71.470328.86-.063074.910303.44-.043876.004903.58.33174
+$PI, 0.5,            { Multiply R, L, and C values of Pi-circuits by this factor
+ 1GENA  MIDJ  GENA  MIDG 
+ 2GENB  MIDK                             
+ 3GENC  MIDL                                                                     
+ 1MIDJ  ENDJ  GENA  MIDG 
+ 2MIDK  ENDK                             
+ 3MIDL  ENDL                                                                     
+C   3rd of 3 alternatives begins (1st half) the same as the preceding second,
+C   but it ends with the 2nd section a copy of this 1st section.  This adds 6  
+C   more cells for List 3 (for the 1st section only).  So, the total burden on
+C   List 3 is the sum of the 4 parts: 6 + 6 + 18 + 6 = 36 cells.
+ 1GENA  MIDM  GENA  MIDG 
+ 2GENB  MIDN                             
+ 3GENC  MIDO                                                                     
+$PI, 1.0,            { Cancel preceding scaling;  return to normal, unscaled use
+ 1MIDM  ENDM  GENA  MIDM 
+ 2MIDN  ENDN                             
+ 3MIDO  ENDO                                                                     
+BLANK card ending branch cards
+BLANK card ending switches
+C 14GENA        -1.0      60.0     -90.0                                            
+C   Note we omit phase "a" (preceding source) to produce great imbalance.  Also,
+C   we will add a steady-state solution, for more generality.  As a result, the
+C   simulation should be pursely sinusoidal.  If  PRINTER PLOT  below is changed
+C   to  CALCOMP PLOT  &  HPI = 1.  msec/inch  is changed to  .5  (columns 6-7),
+C   this will be obvious visually.
+14GENB          -1.0      60.0    -210.0                           -1.
+14GENC          -1.0      60.0      30.0                           -1.                  
+$WIDTH, 79,   { Request narrow, 80-column LUNIT6 output to minimize phasor print
+BLANK card ending sources
+C     Total network loss  P-loss  by summing injections =   5.813026183430E-07
+C GENB                  1.0   .6605121612E-3  -.4572787068E-4   .3302560806E-3
+C               -30.0000000       67.9588504  -.3270749771E-3       -0.1384619
+$WIDTH, 132, { Done with 80 columns, so return to wide, 132-column LUNIT6 output
+  ENDA  ENDD  ENDJ  ENDM  ENDB  ENDE  ENDK  ENDN  ENDC                                                            
+C  Step     Time      ENDA       ENDD       ENDJ       ENDM       ENDB       ENDE       ENDK       ENDN       ENDC
+C    0       0.0   -.0023158  -.0023158  -.0023158  -.0023158  .86301625  .86301625  .86301625  .86301625  -.8705073
+C    1     .5E-4   .00145168  .00145168  .00145168  .00145168  .87229895  .87229895  .87229895  .87229895  -.8609192
+C    2     .1E-3   .00521861  .00521861  .00521861  .00521861  .88127179  .88127179  .88127179  .88127179  -.8510252
+C    3    .15E-3   .00898371  .00898371  .00898371  .00898371  .88993164  .88993164  .88993164  .88993164  -.8408287
+BLANK card ending output variables requests (node voltages, here)
+C  100      .005   .19079849  .19079849  .19079849  .19079849  .20945009  .20945009  .20945009  .20945009  .74501057
+C Variable maxima: .19987826  .19987826  .19987826  .19987826  .99771368  .99771368  .99771368  .99771368  .74501057
+C Times of maxima:     .0042      .0042      .0042      .0042      .0014      .0014      .0014      .0014       .005
+C Variable minima: -.0023158  -.0023158  -.0023158  -.0023158  .20945009  .20945009  .20945009  .20945009  -.8705073
+C Times of minima:       0.0        0.0        0.0        0.0       .005       .005       .005       .005        0.0
+  PRINTER PLOT    { Conversion to CALCOMP PLOT would show that curves are smooth
+ 144 1. 0.0 5.0 -1. 1.0 ENDA  ENDB  ENDC
+BLANK card ending plot cards
+BEGIN NEW DATA CASE                                                             
+C      3rd of 6 subcases illustrates  HIGH ORDER PI CIRCUIT  as first mentioned
+C      in the April, 1998, newsletter.   Prior to addition on  22 November 2001,
+C      this data was stored at home as  f:\data\highpi.dat    Data of this
+C      subcase is identical to the first;  the solution should be identical.
+C      But instead of data for the 1st Pi-circuit being read from in-line card
+C      images, it is to be read from a separate disk file.  Of course, for 3
+C      phases,  this is artificially complicated.  But for really high order
+C      (e.g., 400), there should be a big saving when the C-like alternative is
+C      used.  But here, initially, we just illustrate the universal, FORMATTED
+C      alternative,  which stores Pi-circuit data in separate  DC3HIGH.DAT  The
+C      use is artificial.  Practical use almost always will be C-like.
+PRINTED NUMBER WIDTH, 13, 2,
+ .000050    .010   3000.    { XOPT = 3 KHz means reactance in ohms at this freq.
+       1       1       0       0       0      -1                
+       5       5      10      10      20      20 { Escalating printout frequency
+C 1GEN-A 1-A               34.372457.68.15781
+C 2GEN-B 1-B               35.735164.43-.031538.002451.79.16587                  
+C 3GEN-C 1-C               35.735164.43-.031537.455151.72-.021938.002451.79.16587
+C   The following is FORMATTED.  For the C-like alternative,  see the 4th subcase.
+C HIGH ORDER PI CIRCUIT        3  File=[]dc3high.dat  FORM=FORMATTED C-LIKE OUTPUT
+C     Preceding single card is replaced by following 2-card alternative on
+C     9 September 2003.  Not only was  C-LIKE OUTPUT  being chopped on the
+C     right,  there was no space for additional attributes such as  REAL*4
+C     for single-precision data  and  $UNITS  to apply XOPT and COPT.  So now
+C     2 or more cards are allowed.  Only the last is to carry the file name
+C     after the  File=  tag.  Tags on the optional preface card are free-
+C     format but they must be to the right of column 32 (for # of phases):
+  HIGH ORDER PI CIRCUIT           FORM=FORMATTED   C-LIKE OUTPUT { Optional card
+  HIGH ORDER PI CIRCUIT        3  File=[]dc3high.dat 
+C     Note that preceding creates REAL*8 output file  dc3high.clk  by default.
+C     The alternative single-precision file  dc3high.444  which will be used in
+C     the following subcase # 5 was created by adding  REAL*4  anywhere to the
+C     right of the input data file name (separate by 1 or more blanks).  The
+C     resulting file then will be 108 bytes in size rather than 180.  The
+C     difference is  3 arrays * 6 elements/array * 4 bytes/element = 72 bytes.
+C     But 5th subcase also used  $UNITS  and this requires a change in the code
+C     see comments near the bottom of  SUBR3.SPL
+ 11-A   2-A   GEN-A 1-A          { Sections 2 through 18 are copies of the first
+ 21-B   2-B                      { which has just been inputted.                
+ 31-C   2-C                                                                     
+ 12-A   3-A   GEN-A 1-A                                                         
+ 22-B   3-B                                                                     
+ 32-C   3-C                                                                     
+ 13-A   4-A   GEN-A 1-A                                                         
+ 23-B   4-B                                                                     
+ 33-C   4-C                                                                     
+ 14-A   5-A   GEN-A 1-A                                                         
+ 24-B   5-B                                                                     
+ 34-C   5-C                                                                     
+ 15-A   6-A   GEN-A 1-A                                                         
+ 25-B   6-B                                                                     
+ 35-C   6-C                                                                     
+ 16-C   7-C   GEN-A 1-A      { Note transposition:  /C/A/B/  rather than  /A/B/C
+ 26-A   7-A                                                                     
+ 36-B   7-B                                                                     
+ 17-C   8-C   GEN-A 1-A                                                         
+ 27-A   8-A                                                                     
+ 37-B   8-B                                                                     
+ 18-C   9-C   GEN-A 1-A                                                         
+ 28-A   9-A                                                                     
+ 38-B   9-B                                                                     
+ 19-C   10-C  GEN-A 1-A                                                         
+ 29-A   10-A                                                                    
+ 39-B   10-B                                                                    
+ 110-C  11-C  GEN-A 1-A                                                         
+ 210-A  11-A                                                                    
+ 310-B  11-B                                                                    
+ 111-C  12-C  GEN-A 1-A                                                         
+ 211-A  12-A                                                                    
+ 311-B  12-B                                                                    
+ 112-B  13-B  GEN-A 1-A  { Note 2nd transposition:  /B/C/A/  rather than  /C/A/B
+ 212-C  13-C                                                                    
+ 312-A  13-A                                                                    
+ 113-B  14-B  GEN-A 1-A                                                         
+ 213-C  14-C                                                                    
+ 313-A  14-A                                                                    
+ 114-B  15-B  GEN-A 1-A                                                         
+ 214-C  15-C                                                                    
+ 314-A  15-A                                                                    
+ 115-B  16-B  GEN-A 1-A                                                         
+ 215-C  16-C                                                                    
+ 315-A  16-A                                                                    
+ 116-B  17-B  GEN-A 1-A                                                         
+ 216-C  17-C                                                                    
+ 316-A  17-A                                                                    
+ 117-B  18-B  GEN-A 1-A                                                         
+ 217-C  18-C                                                                    
+ 317-A  18-A                                                                    
+ 0M-A   GEN-A              400.0   { 400 Ohm closing resistors, to be shorted by
+ 0M-B   GEN-B              400.0   { breaker poles at times  9.98,  14,  and  14
+ 0M-C   GEN-C              400.0   { msec, respectively.}                      1
+ 0POLE-AM-A                15.0                                                 
+ 0POLE-BM-B                15.0                                                 
+ 0POLE-CM-C                15.0                                                 
+BLANK card ending branch cards
+  E-A   POLE-A    0.      20.0                                                 1
+  E-B   POLE-B  0.00398   20.0  { Closing will be at 4.0 msec, all computer }  3
+  E-C   POLE-C  0.00398   20.0  { This backoff from 4.0 was needed by PRIME }  1
+  M-A   GEN-A   0.00998   20.0            { Breaker poles across 400 Ohm closing
+  M-B   GEN-B   0.013998  20.0            { resistors.   Note artificial opening
+  M-C   GEN-C   0.013998  20.0            { time (in fact, there is no opening).
+BLANK card ending switches
+14E-A        -1.0      60.0    -90.0                                            
+14E-B        -1.0      60.0   -210.0                                            
+14E-C        -1.0      60.0    30.0                                             
+BLANK card ending sources
+  18-C  18-B  18-A                                                              
+BLANK card ending output variables requests (node voltages, here)
+C  100      .005       0.0  -.084110964  -.076310793   -.92825821  -.621001E-3  .1845237E-3  .9370288E-3  .9370288E-3
+C  120      .006       0.0  .4539217657  .0096691741  -1.01404035   -.10259E-3   -.52007E-3  .0010499755  .0010499755
+C  140      .007       0.0  .6915082663   -.20985407  -.843083014  .6173076E-3  -.951807E-3  .5938305E-3  .5938305E-3
+C  160      .008       0.0  .8512280695  -.465621295  -.605281204  .9350157E-3   -.96575E-3  .1846072E-3  .1846072E-3
+C  180      .009       0.0  .8583902573   -.70840222  -.288190483  .0011711805  -.794874E-3  -.285103E-3  -.285103E-3
+C ***        Close switch  "M-A   "  to  "GEN-A "  after  1.00000000E-02  sec.
+C  200       .01       0.0  .7226176276  -.887792385  .0782571591  .0011948668  -.449544E-3  -.687051E-3  -.687051E-3
+  PRINTER PLOT                                                                  
+BLANK card ending plot cards
+BEGIN NEW DATA CASE                                                             
+C      4th of 6 subcases is the same as the preceding 3rd subcase except for
+C      two changes.  First and most importantly,  the C-like alternative is used 
+C      for the data rather than the FORMATTED alternative.  Second, the ending
+C      time  T-max  has been halved.  Solution through  T = T-max  is identical.
+PRINTED NUMBER WIDTH, 13, 2,
+ .000050    .005   3000.    { XOPT = 3 KHz means reactance in ohms at this freq.
+       1       1       0       0       0      -1                
+       5       5      10      10      20      20 { Escalating printout frequency
+C 1GEN-A 1-A               34.372457.68.15781
+C 2GEN-B 1-B               35.735164.43-.031538.002451.79.16587                  
+C 3GEN-C 1-C               35.735164.43-.031537.455151.72-.021938.002451.79.16587
+  HIGH ORDER PI CIRCUIT        3  File=[]dc3high.clk  { Use default type: C-like 
+ 11-A   2-A   GEN-A 1-A          { Sections 2 through 18 are copies of the first
+ 21-B   2-B                      { which has just been inputted.                
+ 31-C   2-C                                                                     
+ 12-A   3-A   GEN-A 1-A                                                         
+ 22-B   3-B                                                                     
+ 32-C   3-C                                                                     
+ 13-A   4-A   GEN-A 1-A                                                         
+ 23-B   4-B                                                                     
+ 33-C   4-C                                                                     
+ 14-A   5-A   GEN-A 1-A                                                         
+ 24-B   5-B                                                                     
+ 34-C   5-C                                                                     
+ 15-A   6-A   GEN-A 1-A                                                         
+ 25-B   6-B                                                                     
+ 35-C   6-C                                                                     
+ 16-C   7-C   GEN-A 1-A      { Note transposition:  /C/A/B/  rather than  /A/B/C
+ 26-A   7-A                                                                     
+ 36-B   7-B                                                                     
+ 17-C   8-C   GEN-A 1-A                                                         
+ 27-A   8-A                                                                     
+ 37-B   8-B                                                                     
+ 18-C   9-C   GEN-A 1-A                                                         
+ 28-A   9-A                                                                     
+ 38-B   9-B                                                                     
+ 19-C   10-C  GEN-A 1-A                                                         
+ 29-A   10-A                                                                    
+ 39-B   10-B                                                                    
+ 110-C  11-C  GEN-A 1-A                                                         
+ 210-A  11-A                                                                    
+ 310-B  11-B                                                                    
+ 111-C  12-C  GEN-A 1-A                                                         
+ 211-A  12-A                                                                    
+ 311-B  12-B                                                                    
+ 112-B  13-B  GEN-A 1-A  { Note 2nd transposition:  /B/C/A/  rather than  /C/A/B
+ 212-C  13-C                                                                    
+ 312-A  13-A                                                                    
+ 113-B  14-B  GEN-A 1-A                                                         
+ 213-C  14-C                                                                    
+ 313-A  14-A                                                                    
+ 114-B  15-B  GEN-A 1-A                                                         
+ 214-C  15-C                                                                    
+ 314-A  15-A                                                                    
+ 115-B  16-B  GEN-A 1-A                                                         
+ 215-C  16-C                                                                    
+ 315-A  16-A                                                                    
+ 116-B  17-B  GEN-A 1-A                                                         
+ 216-C  17-C                                                                    
+ 316-A  17-A                                                                    
+ 117-B  18-B  GEN-A 1-A                                                         
+ 217-C  18-C                                                                    
+ 317-A  18-A                                                                    
+ 0M-A   GEN-A              400.0   { 400 Ohm closing resistors, to be shorted by
+ 0M-B   GEN-B              400.0   { breaker poles at times  9.98,  14,  and  14
+ 0M-C   GEN-C              400.0   { msec, respectively.}                      1
+ 0POLE-AM-A                15.0                                                 
+ 0POLE-BM-B                15.0                                                 
+ 0POLE-CM-C                15.0                                                 
+BLANK card ending branch cards
+  E-A   POLE-A    0.      20.0                                                 1
+  E-B   POLE-B  0.00398   20.0  { Closing will be at 4.0 msec, all computer }  3
+  E-C   POLE-C  0.00398   20.0  { This backoff from 4.0 was needed by PRIME }  1
+  M-A   GEN-A   0.00998   20.0            { Breaker poles across 400 Ohm closing
+  M-B   GEN-B   0.013998  20.0            { resistors.   Note artificial opening
+  M-C   GEN-C   0.013998  20.0            { time (in fact, there is no opening).
+BLANK card ending switches
+14E-A        -1.0      60.0    -90.0                                            
+14E-B        -1.0      60.0   -210.0                                            
+14E-C        -1.0      60.0    30.0                                             
+BLANK card ending sources
+  18-C  18-B  18-A                                                              
+BLANK card ending output variables requests (node voltages, here)
+C   80      .004   .8173610312  -.086429015  -.083753604   -.67093214  -.487946E-3          0.0          0.0  .555112E-18
+C  100      .005       0.0  -.084110964  -.076310793   -.92825821  -.621001E-3  .1845237E-3  .9370288E-3  .9370288E-3
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      5th of 6 subcases is the same as the preceding 4th subcase except for
+C      two changes.  First, single precision is used for the C-like Pi-circuit
+C      data rather than the default REAL*8 alternative.  Second, XOPT and COPT
+C      are to be applied to control units just as for any other branch.  Answers
+C      are very close (REAL*4 input data change 7th or 8 digit of some numbers).
+PRINTED NUMBER WIDTH, 13, 2,
+ .000050    .005   3000.    { XOPT = 3 KHz means reactance in ohms at this freq.
+       1       1       0       0       0      -1                
+       5       5      10      10      20      20 { Escalating printout frequency
+C 1GEN-A 1-A               34.372457.68.15781
+C 2GEN-B 1-B               35.735164.43-.031538.002451.79.16587                  
+C 3GEN-C 1-C               35.735164.43-.031537.455151.72-.021938.002451.79.16587
+  HIGH ORDER PI CIRCUIT           REAL*4   $UNITS  { Optional card of attributes
+C HIGH ORDER PI CIRCUIT           REAL*4           { Optional card of attributes
+C HIGH ORDER PI CIRCUIT        3  File=[]dc3high.444   
+  HIGH ORDER PI CIRCUIT        3  File=[]dc3high.opt   
+ 11-A   2-A   GEN-A 1-A          { Sections 2 through 18 are copies of the first
+ 21-B   2-B                      { which has just been inputted.                
+ 31-C   2-C                                                                     
+ 12-A   3-A   GEN-A 1-A                                                         
+ 22-B   3-B                                                                     
+ 32-C   3-C                                                                     
+ 13-A   4-A   GEN-A 1-A                                                         
+ 23-B   4-B                                                                     
+ 33-C   4-C                                                                     
+ 14-A   5-A   GEN-A 1-A                                                         
+ 24-B   5-B                                                                     
+ 34-C   5-C                                                                     
+ 15-A   6-A   GEN-A 1-A                                                         
+ 25-B   6-B                                                                     
+ 35-C   6-C                                                                     
+ 16-C   7-C   GEN-A 1-A      { Note transposition:  /C/A/B/  rather than  /A/B/C
+ 26-A   7-A                                                                     
+ 36-B   7-B                                                                     
+ 17-C   8-C   GEN-A 1-A                                                         
+ 27-A   8-A                                                                     
+ 37-B   8-B                                                                     
+ 18-C   9-C   GEN-A 1-A                                                         
+ 28-A   9-A                                                                     
+ 38-B   9-B                                                                     
+ 19-C   10-C  GEN-A 1-A                                                         
+ 29-A   10-A                                                                    
+ 39-B   10-B                                                                    
+ 110-C  11-C  GEN-A 1-A                                                         
+ 210-A  11-A                                                                    
+ 310-B  11-B                                                                    
+ 111-C  12-C  GEN-A 1-A                                                         
+ 211-A  12-A                                                                    
+ 311-B  12-B                                                                    
+ 112-B  13-B  GEN-A 1-A  { Note 2nd transposition:  /B/C/A/  rather than  /C/A/B
+ 212-C  13-C                                                                    
+ 312-A  13-A                                                                    
+ 113-B  14-B  GEN-A 1-A                                                         
+ 213-C  14-C                                                                    
+ 313-A  14-A                                                                    
+ 114-B  15-B  GEN-A 1-A                                                         
+ 214-C  15-C                                                                    
+ 314-A  15-A                                                                    
+ 115-B  16-B  GEN-A 1-A                                                         
+ 215-C  16-C                                                                    
+ 315-A  16-A                                                                    
+ 116-B  17-B  GEN-A 1-A                                                         
+ 216-C  17-C                                                                    
+ 316-A  17-A                                                                    
+ 117-B  18-B  GEN-A 1-A                                                         
+ 217-C  18-C                                                                    
+ 317-A  18-A                                                                    
+ 0M-A   GEN-A              400.0   { 400 Ohm closing resistors, to be shorted by
+ 0M-B   GEN-B              400.0   { breaker poles at times  9.98,  14,  and  14
+ 0M-C   GEN-C              400.0   { msec, respectively.}                      1
+ 0POLE-AM-A                15.0                                                 
+ 0POLE-BM-B                15.0                                                 
+ 0POLE-CM-C                15.0                                                 
+BLANK card ending branch cards
+  E-A   POLE-A    0.      20.0                                                 1
+  E-B   POLE-B  0.00398   20.0  { Closing will be at 4.0 msec, all computer }  3
+  E-C   POLE-C  0.00398   20.0  { This backoff from 4.0 was needed by PRIME }  1
+  M-A   GEN-A   0.00998   20.0            { Breaker poles across 400 Ohm closing
+  M-B   GEN-B   0.013998  20.0            { resistors.   Note artificial opening
+  M-C   GEN-C   0.013998  20.0            { time (in fact, there is no opening).
+BLANK card ending switches
+14E-A        -1.0      60.0    -90.0                                            
+14E-B        -1.0      60.0   -210.0                                            
+14E-C        -1.0      60.0    30.0                                             
+BLANK card ending sources
+  18-C  18-B  18-A                                                              
+BLANK card ending output variables requests (node voltages, here)
+C   80   .004  .8173610397   -.08642902  -.083753607  -.670932147  -.487946E-3          0.0          0.0  .555112E-18
+C  100   .005          0.0  -.084110972  -.076310803  -.928258207  -.621001E-3  .1845237E-3  .9370288E-3  .9370288E-3
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C      6th of 6 subcases is the same as the preceding except that the master
+C      Pi-circuit is defined in user-supplied  SUBROUTINE HOPCOD  rather than
+C      in the HOPC disk file.  The file name must be  "File=HOPCOD."  where the
+C      following file type (001) thus far is being ignored.  Later, if 2 or more
+C      different definitions might be provided in  SUBROUTINE HOPCOD,  the file
+C      type will allow selection among 999 of them.   Since 5th subcase uses
+C      REAL*4  data whereas here we use REAL*8 data,  expect about 7 digits of
+C      agreement in the answers.
+PRINTED NUMBER WIDTH, 13, 2,
+ .000050    .005   3000.    { XOPT = 3 KHz means reactance in ohms at this freq.
+       1       1       0       0       0      -1                
+       5       5      10      10      20      20 { Escalating printout frequency
+C 1GEN-A 1-A               34.372457.68.15781
+C 2GEN-B 1-B               35.735164.43-.031538.002451.79.16587                  
+C 3GEN-C 1-C               35.735164.43-.031537.455151.72-.021938.002451.79.16587
+  HIGH ORDER PI CIRCUIT        3  File=CODE.001  { Define data in code (not disk)  
+ 11-A   2-A   GEN-A 1-A          { Sections 2 through 18 are copies of the first
+ 21-B   2-B                      { which has just been inputted.                
+ 31-C   2-C                                                                     
+ 12-A   3-A   GEN-A 1-A                                                         
+ 22-B   3-B                                                                     
+ 32-C   3-C                                                                     
+ 13-A   4-A   GEN-A 1-A                                                         
+ 23-B   4-B                                                                     
+ 33-C   4-C                                                                     
+ 14-A   5-A   GEN-A 1-A                                                         
+ 24-B   5-B                                                                     
+ 34-C   5-C                                                                     
+ 15-A   6-A   GEN-A 1-A                                                         
+ 25-B   6-B                                                                     
+ 35-C   6-C                                                                     
+ 16-C   7-C   GEN-A 1-A      { Note transposition:  /C/A/B/  rather than  /A/B/C
+ 26-A   7-A                                                                     
+ 36-B   7-B                                                                     
+ 17-C   8-C   GEN-A 1-A                                                         
+ 27-A   8-A                                                                     
+ 37-B   8-B                                                                     
+ 18-C   9-C   GEN-A 1-A                                                         
+ 28-A   9-A                                                                     
+ 38-B   9-B                                                                     
+ 19-C   10-C  GEN-A 1-A                                                         
+ 29-A   10-A                                                                    
+ 39-B   10-B                                                                    
+ 110-C  11-C  GEN-A 1-A                                                         
+ 210-A  11-A                                                                    
+ 310-B  11-B                                                                    
+ 111-C  12-C  GEN-A 1-A                                                         
+ 211-A  12-A                                                                    
+ 311-B  12-B                                                                    
+ 112-B  13-B  GEN-A 1-A  { Note 2nd transposition:  /B/C/A/  rather than  /C/A/B
+ 212-C  13-C                                                                    
+ 312-A  13-A                                                                    
+ 113-B  14-B  GEN-A 1-A                                                         
+ 213-C  14-C                                                                    
+ 313-A  14-A                                                                    
+ 114-B  15-B  GEN-A 1-A                                                         
+ 214-C  15-C                                                                    
+ 314-A  15-A                                                                    
+ 115-B  16-B  GEN-A 1-A                                                         
+ 215-C  16-C                                                                    
+ 315-A  16-A                                                                    
+ 116-B  17-B  GEN-A 1-A                                                         
+ 216-C  17-C                                                                    
+ 316-A  17-A                                                                    
+ 117-B  18-B  GEN-A 1-A                                                         
+ 217-C  18-C                                                                    
+ 317-A  18-A                                                                    
+ 0M-A   GEN-A              400.0   { 400 Ohm closing resistors, to be shorted by
+ 0M-B   GEN-B              400.0   { breaker poles at times  9.98,  14,  and  14
+ 0M-C   GEN-C              400.0   { msec, respectively.}                      1
+ 0POLE-AM-A                15.0                                                 
+ 0POLE-BM-B                15.0                                                 
+ 0POLE-CM-C                15.0                                                 
+BLANK card ending branch cards
+  E-A   POLE-A    0.      20.0                                                 1
+  E-B   POLE-B  0.00398   20.0  { Closing will be at 4.0 msec, all computer }  3
+  E-C   POLE-C  0.00398   20.0  { This backoff from 4.0 was needed by PRIME }  1
+  M-A   GEN-A   0.00998   20.0            { Breaker poles across 400 Ohm closing
+  M-B   GEN-B   0.013998  20.0            { resistors.   Note artificial opening
+  M-C   GEN-C   0.013998  20.0            { time (in fact, there is no opening).
+BLANK card ending switches
+14E-A        -1.0      60.0    -90.0                                            
+14E-B        -1.0      60.0   -210.0                                            
+14E-C        -1.0      60.0    30.0                                             
+BLANK card ending sources
+  18-C  18-B  18-A                                                              
+BLANK card ending output variables requests (node voltages, here)
+C   80   .004   .8173610312  -.086429015  -.083753604   -.67093214  -.487946E-3          0.0          0.0  .555112E-18
+C  100   .005           0.0  -.084110964  -.076310793   -.92825821  -.621001E-3  .1845237E-3  .9370288E-3  .9370288E-3
+  PRINTER PLOT                                                                  
+BLANK ---     extraneous; added here to prove that one or 2 extras are tolerated
+BLANK ---     extraneous; added here to prove that one or 2 extras are tolerated
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

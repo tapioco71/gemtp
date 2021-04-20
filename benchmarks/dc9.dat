@@ -1,0 +1,1367 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-9
+C     A collection of 28 simple cases for testing  CASCADE LINE  as described
+C     in the April, 1998, newsletter.  26th is original DC-9 prior to April, 98.
+C        1st of 28 subcases is single-phase and constant parameter distributed.
+C        It cascades two 100-mile sections of line,  with ZnO only at the end.
+C        Series resistance is at the mid-point,  within  CASCADE LINE.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000050    .020
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+-1SENDA RECA                .306  5.82  .012  100. { Half the length of original
+       1     1             1.E-3     { Small resistor precedes line section
+  REPETITION   1  { Connect another 1 section of preceding 100 miles
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92RECA { Type 92 is for v-i curve }   5555.  { 5555 flag is for exponentials } 1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14SENDA      408000.       60.
+BLANK card ending source data
+ 1
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        2nd of 28 subcases is single-phase and constant-parameter distributed.
+C        It cascades two 100-mile sections of line with ZnO at receiving end and
+C        also at the mid-point (it is within CASCADE LINE as a shunt element).
+PRINTED NUMBER WIDTH, 9, 2,  { Reduced precision
+ .000050    .020
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+92RECA { Type 92 is for v-i curve }   5555.  { 5555 flag is for exponentials }
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+-1SENDA RECA                .306  5.82  .012  100. { 1/4 the length of original
+92     1     0RECA           { Copy Type-92 ZnO at the receiving end
+  REPETITION   1  { Connect another 1 section of preceding 100 miles
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14SENDA      408000.       60.
+BLANK card ending source data
+ 1
+ 144 2. 0.0 20.         RECA  RECA01
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        3rd of 28 subcases is the 1st,  except that 4 sections of 50
+C        miles are used rather than 2 sections of 100 miles.   Also, series
+C        resistance has been made sizable (10 ohms rather than .001 ohms).
+PRINTED NUMBER WIDTH, 9, 2,  { Reduced precision
+ .000050    .020
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+-1SENDA RECA                .306  5.82  .012   50. { 1/4 the length of original
+       1     1             1.E+1     { Small resistor precedes line section
+  REPETITION   3  { Connect another 3 sections of preceding 50 miles
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92RECA { Type 92 is for v-i curve }   5555.  { 5555 flag is for exponentials } 1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14SENDA      408000.       60.
+BLANK card ending source data
+ 1
+ 194 2. 0.0 20.         RECA
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        4th of 28 subcases is like 1st,  except that the line is 3-phase rather
+C        than single phase.  Still constant-parameter distributed, each phase
+C        has a very small resistor in series at the mid-point.  The receiving
+C        end has 3 compensation-based surge arresters as in DC-38.
+PRINTED NUMBER WIDTH, 10, 2,  { Reduced precision
+ .000050    .020
+       1       1       1       0       1      -1
+      30      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+-1SENDA RECA              .305515.8187.01210  100.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937  100.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+       1     1             1.E-3     { Small resistor precedes line section
+       2     2             1.E-3     { Small resistor precedes line section
+       3     3             1.E-3     { Small resistor precedes line section
+  REPETITION   1  { Connect another 1 sections of preceding 100 miles
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92RECA                                5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB        RECA                    5555.       { Phase "b" ZnO is copy of "a"
+92RECC                                4444.  { Phase "c" ZnO is piecewise-linear
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+BLANK card ending source data
+C                       Exclamation point holds lower case of following, note:
+  RECA01RECa01RECA  RECB01RECb01RECB  RECC01RECc01RECC  SENDA !
+BLANK card terminating names of node voltage outputs
+ 194 2. 0.0 20.         RECA
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        5th of 28 subcases is like preceding except that lumped elements are
+C        shunt-connected rather than series,  from conductors to ground.
+PRINTED NUMBER WIDTH, 10, 2,  { Reduced precision
+ .000050    .020
+       1       1       1       0       1      -1
+      30      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+-1SENDA RECA              .305515.8187.01210  100.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937  100.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+       1     0                         1.E-3 { Capacitance to neutral
+       2     0                         1.E-3 
+       3     0                         1.E-3 
+  REPETITION   1  { Connect another 1 sections of preceding 100 miles
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92RECA                                5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB        RECA                    5555.       { Phase "b" ZnO is copy of "a"
+92RECC                                4444.  { Phase "c" ZnO is piecewise-linear
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+BLANK card ending source data
+ 1
+ 194 2. 0.0 20.         RECA
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        6th of 28 subcases is like preceding except that shunt-connected lumped
+C        elements are more involved.  One dummy node (value -1) is used
+C        as well as ground (value 0) and the conductors (values 1, 2, 3).
+PRINTED NUMBER WIDTH, 10, 2,  { Reduced precision
+ .000050    .020
+       1       1       1       0       1      -1
+      30      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+-1SENDA RECA              .305515.8187.01210  100.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937  100.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+       1    -1                         1.E-3 { Capacitance to neutral
+       2    -1                         1.E-3 
+       3    -1                         1.E-3 
+      -1     0             1.E-3             { Resistance from neutral to earth
+  REPETITION   1  { Connect another 1 sections of preceding 100 miles
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92RECA                                5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB        RECA                    5555.       { Phase "b" ZnO is copy of "a"
+92RECC                                4444.  { Phase "c" ZnO is piecewise-linear
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+BLANK card ending source data
+ 1
+ 194 2. 0.0 20.         RECA
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        7th of 28 subcases merely modularizes the data for a 2-phase line that
+C        will be used next.  It is a modification of 500-kV geometry of DC-59.
+C        Preceding line sections were continously transposed.  The next will be
+C        highly unbalanced due to vertical configuration,  note.  Phase 1 has a
+C        real 3-conductor bundle whereas phase 2 consists of just one conductor
+C        twice the height,  immediately above the 1st phase.
+LINE CONSTANTS
+$ERASE   { Flush the punched card buffer (in case 2nd or later subcase of usage)
+ENGLISH     { Redundant request is unnecessary: English units are default choice
+BRANCH  JDA   LMA   JDB   LMB                                       
+  1 .375  .0776  4      .0  1.302      .17   51.04   { Modification of DC-59a
+  1 .375  .0776  4      .0  1.302     1.00   50.00
+  1 .375  .0776  4      .0  1.302     1.83   51.04
+  2 .375  .0776  4      .0  1.302     1.83  101.40  { 2nd phase is twice as high
+BLANK card concludes conductor cards
+C     Following is old format with "1" in column 28.  Newer blank is equivalent:
+  100.0     5000.0         1         1          70.                  1
+BLANK card ends the one and only frequency card
+$PUNCH
+BLANK card ends  "LINE CONSTANTS"  data subcase
+BEGIN NEW DATA CASE
+C        8th of 28 subcases is like 1st except that a 2-phase, untransposed
+C        line is involved.  This involves 1st use of transformation matrix,
+C        note.  Preceding line sections all were transposed.  This one comes
+C        from cards punched by 7th data subcase.  Use of comments cards within
+C        CASCADE LINE  also are illustrated (note those series elements are not
+C        actually being used;  they are comment cards only).  Only one phase is
+C        excited,  for more imbalance.  There is no phasor solution, either.
+PRINTED NUMBER WIDTH, 10, 2,  { Reduced precision
+ .000050    .020
+       1       1       1       0       1      -1
+      30      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+$VINTAGE, 1
+-1JDA   LMA                9.92820E+00 4.56745E+02 1.62458E+05-1.00000E+02 1  2
+-2JDB   LMB                3.89217E-01 3.61489E+02 1.85363E+05-1.00000E+02 1  2
+$VINTAGE, 0
+  0.91340878 -0.63245328
+  0.00000000  0.00000000
+  0.40704349  0.77459851
+  0.00000000  0.00000000
+  REPETITION   1   { Connect another 1 section of preceding 100 miles
+C      1     1             1.E+1     { Small resistor precedes line section
+C      2     2             1.E+1     { Small resistor precedes line section
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92LMA                                 5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92LMB         LMA                     5555.                                    1
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14JDA        800000.       60.        0.
+BLANK card ending source data
+ 1
+ 194 2. 0.0 20.         LMA         LMB
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        9th of 28 subcases illustrates transposition without  CASCADE LINE.
+C        This establishes the answer for the following case.  Note the first
+C        section ends with  (LMA001, LMB001)  whereas the 2nd begins with
+C        (LMB001, LMA001),  which shows  1 --> 2  and  2 --> 1  (swap).
+PRINTED NUMBER WIDTH, 10, 2,  { Reduced precision
+ .000050    .006
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+$VINTAGE, 1
+-1JDA   LMA001             9.92820E+00 4.56745E+02 1.62458E+05-1.00000E+02 1  2
+-2JDB   LMB001             3.89217E-01 3.61489E+02 1.85363E+05-1.00000E+02 1  2
+$VINTAGE, 0
+  0.91340878 -0.63245328
+  0.00000000  0.00000000
+  0.40704349  0.77459851
+  0.00000000  0.00000000
+-1LMB001LMA   JDA   LMA001
+-2LMA001LMB
+92LMA                                 5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92LMB         LMA                     5555.                                    1
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14JDA        800000.       60.        0.    { 1st of 3 sources.   Note balanced,
+14JDB        800000.       60.     -120.    { three-phase, sinusoidal excitation
+BLANK card ending source data
+  LMB001LMA001LMB   LMA   JDA   JDB
+BLANK card terminating names of node voltage outputs
+ 194 .5 0.5 5.5         LMA         LMB
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        10th of 28 subcases repeats the preceding.  But here  CASCADE LINE  is
+C        used to perform the transposition and connect the following (second)
+C        line section.  Answers should be identical to preceding case.
+PRINTED NUMBER WIDTH, 10, 2,  { Reduced precision
+ .000050    .006
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+$VINTAGE, 1
+-1JDA   LMA                9.92820E+00 4.56745E+02 1.62458E+05-1.00000E+02 1  2
+-2JDB   LMB                3.89217E-01 3.61489E+02 1.85363E+05-1.00000E+02 1  2
+$VINTAGE, 0
+  0.91340878 -0.63245328
+  0.00000000  0.00000000
+  0.40704349  0.77459851
+  0.00000000  0.00000000
+  TRANSPOSITION    2   1   { Transpose 2 phases  A --> B,  B --> A
+C      1     1             1.E+1     { Small resistor precedes line section
+C      2     2             1.E+1     { Small resistor precedes line section
+  REPETITION   1   { Connect another 1 section of preceding 100 miles
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92LMA                                 5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92LMB         LMA                     5555.                                    1
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14JDA        800000.       60.        0.    { 1st of 3 sources.   Note balanced,
+14JDB        800000.       60.     -120.    { three-phase, sinusoidal excitation
+BLANK card ending source data
+ 1
+ 194 .5 0.5 5.5         LMA         LMB
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        11th of 28 subcases illustrates transposition within  CASCADE LINE  use
+C    50-mile, 2-phase line section is unbalanced.  After the 1st of these, we
+C    transpose and connect another.  This is done 3 times (4 * 50 = 200 miles).
+C diagnostic               9
+PRINTED NUMBER WIDTH, 9, 2,  { Reduced precision
+ .000050    .020
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+$VINTAGE, 1
+-1JDA   LMA                9.92820E+00 4.56745E+02 1.62458E+05        -50. 1  2
+-2JDB   LMB                3.89217E-01 3.61489E+02 1.85363E+05        -50. 1  2
+$VINTAGE, 0
+  0.91340878 -0.63245328
+  0.00000000  0.00000000
+  0.40704349  0.77459851
+  0.00000000  0.00000000
+  TRANSPOSITION    2   1   { Transpose 2 phases  A --> B,  B --> A
+  REPETITION   1   { Connect another 1 section of 50 miles
+  TRANSPOSITION    2   1   { Transpose 2 phases  A --> B,  B --> A
+  REPETITION   1   { Connect another 1 section of 50 miles
+  TRANSPOSITION    2   1   { Transpose 2 phases  A --> B,  B --> A
+  REPETITION   1   { Connect another 1 section of 50 miles
+C      1     1             1.E+1     { Small resistor precedes line section
+C      2     2             1.E+1     { Small resistor precedes line section
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92LMA                                 5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92LMB         LMA                     5555.                                    1
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14JDA        408000.       60.        0.    { 1st of 3 sources.   Note balanced,
+C 14JDB        408000.       60.        0.    { three-phase, sinusoidal excitation
+BLANK card ending source data
+ 1
+ 194 2. 0.0 20.         LMA       {  LMB
+C 144 2. 0.0 20.         JDA   LMA   LMA001
+C 144 2. 0.0 20.         JDB   LMB   LMB001
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        12th of 28 subcases illustrates transposition within  CASCADE LINE.
+C    Preceding data case consisted of manual connection of 3 transpositions and
+C    line sections following the original line section.  That was manual.  Here
+C    the multiplicity is automated by  INCLUDE TRANSPOSITION IN LOOP   anywhere
+C    on the  REPETITION  card.  This is new and better as of April 24, 1998.
+C diagnostic               9
+PRINTED NUMBER WIDTH, 9, 2,  { Reduced precision
+ .000050    .020
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+$VINTAGE, 1
+-1JDA   LMA                9.92820E+00 4.56745E+02 1.62458E+05        -50. 1  2
+-2JDB   LMB                3.89217E-01 3.61489E+02 1.85363E+05        -50. 1  2
+$VINTAGE, 0
+  0.91340878 -0.63245328
+  0.00000000  0.00000000
+  0.40704349  0.77459851
+  0.00000000  0.00000000
+  TRANSPOSITION    2   1   { Transpose 2 phases  A --> B,  B --> A
+  REPETITION   3  INCLUDE TRANSPOSITION IN LOOP  { Connect another 3 sections of 50 miles
+C      1     1             1.E+1     { Small resistor precedes line section
+C      2     2             1.E+1     { Small resistor precedes line section
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92LMA                                 5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92LMB         LMA                     5555.                                    1
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14JDA        408000.       60.        0.    { 1st of 3 sources.   Note balanced,
+C 14JDB        408000.       60.        0.    { three-phase, sinusoidal excitation
+BLANK card ending source data
+ 1
+ 194 2. 0.0 20.         LMA       {  LMB
+C 144 2. 0.0 20.         JDA   LMA   LMA001
+C 144 2. 0.0 20.         JDB   LMB   LMB001
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        13th of 28 subcases illustrates transposition within  CASCADE LINE.
+C    Preceding created 200 miles of line using 4 sections of length 50 miles.
+C    The only change here is 20 sections of 10 miles each.  Each line section
+C    is preceded by transposition,  so this is close to continuous.  The plot
+C    here is smoother than preceding,  but not greatly different.
+C diagnostic               9
+PRINTED NUMBER WIDTH, 9, 2,  { Reduced precision
+ .000050    .020
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+$VINTAGE, 1
+-1JDA   LMA                9.92820E+00 4.56745E+02 1.62458E+05        -10. 1  2
+-2JDB   LMB                3.89217E-01 3.61489E+02 1.85363E+05        -10. 1  2
+$VINTAGE, 0
+  0.91340878 -0.63245328
+  0.00000000  0.00000000
+  0.40704349  0.77459851
+  0.00000000  0.00000000
+  TRANSPOSITION    2   1   { Transpose 2 phases  A --> B,  B --> A
+  REPETITION  19  INCLUDE TRANSPOSITION IN LOOP  { Connect another 3 sections of 50 miles
+C      1     1             1.E+1     { Small resistor precedes line section
+C      2     2             1.E+1     { Small resistor precedes line section
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92LMA                                 5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92LMB         LMA                     5555.                                    1
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14JDA        408000.       60.        0.    { 1st of 3 sources.   Note balanced,
+C 14JDB        408000.       60.        0.    { three-phase, sinusoidal excitation
+BLANK card ending source data
+  LMA001LMB001LMA006LMB006LMA011LMB011LMA016LMB016LMA   LMB
+BLANK card ending node voltage outputs
+ 194 2. 0.0 20.         LMA       {  LMB
+C 144 2. 0.0 20.         JDA   LMA   LMA001
+C 144 2. 0.0 20.         JDB   LMB   LMB001
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        14th of 28 subcases illustrates transposition without  CASCADE LINE.
+C        The preceding pair of cases was for 2 phases;  the pair now beginning
+C        is for 3 phases.  This 1st of the pair establishes the answer for the
+C        following case.  Note the first section ends with  (RECA01, RECB01, &
+C        RECC01)  whereas the 2nd begins with  (RECC01, RECA01, & RECB01),
+C        which shows  1 --> 2,   2 --> 3,   and  3 --> 1  (a normal roll).
+PRINTED NUMBER WIDTH, 9, 2,  { Reduced precision
+ .000050    .010
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+-1SENDA RECA01            .305515.8187.01210  100.  0      { 200-mile, constant-
+-2SENDB RECB01            .031991.5559.01937  100.  0      { parameter,  3-phase
+-3SENDC RECC01                                             { transmission line.
+-1RECC01RECA  SENDA RECA01
+-2RECA01RECB
+-3RECB01RECC
+  RECB01                               1.E-3 { Capacitance to neutral
+  RECC01                               1.E-3 
+  RECA01                               1.E-3 
+92RECA                                5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB        RECA                    5555.                                    1
+92RECC                                4444.                                    1
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+BLANK card ending source data
+  RECC01RECB01RECA01RECC  RECB  RECA  SENDA SENDB SENDC
+BLANK card terminating names of node voltage outputs
+ 194 1. 0.0 10.         BRANCH
+                        RECA        RECB        RECC
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        15th of 28 subcases repeats the preceding.  But here  CASCADE LINE  is
+C        used to perform the transposition in the middle, and connect line
+C        sections.  Note the plural:  rather than just 2 sections of 100 miles
+C        each,  here we have 4 sections of 50 miles each.  Except for error of
+C        discretization and interpolation of the line history,  answers should
+C        be the same as for the preceding subcase, however.
+PRINTED NUMBER WIDTH, 9, 2,  { Reduced precision
+ .000050    .010
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+-1SENDA RECA              .305515.8187.01210   50.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937   50.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+  REPETITION   1   { Connect another 1 sections of preceding 50 miles, making 50
+  TRANSPOSITION    2   3   1   { Transpose 3 phases  A --> B,  B --> C,  C --> A
+       1     0                         1.E-3 { Capacitance to neutral
+       2     0                         1.E-3 
+       3     0                         1.E-3 
+  REPETITION   1   { Connect another 1 section of preceding 50 miles after R-L-C
+  REPETITION   1   { Connect another 1 section of preceding 50 miles, making 50
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92RECA                                5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB        RECA                    5555.                                    1
+92RECC                                4444.                                    1
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+BLANK card ending source data
+  RECC02RECB02RECA02RECC  RECB  RECA  SENDA SENDB SENDC
+BLANK card terminating names of node voltage outputs
+ 194 1. 0.0 10.         BRANCH
+                        RECA        RECB        RECC
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        16th of 28 subcases repeats the preceding,  only with 10 line sections
+C        rather than 4.  Total line length remains 200 miles,  and transposition
+C        occurs only in the middle (after 5 sections of 20 miles).
+PRINTED NUMBER WIDTH, 9, 2,  { Reduced precision
+ .000050    .010
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+-1SENDA RECA              .305515.8187.01210   20.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937   20.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+  REPETITION   4   { Connect another 4 sections of preceding 20 miles, making 80
+  TRANSPOSITION    2   3   1   { Transpose 3 phases  A --> B,  B --> C,  C --> A
+       1     0                         1.E-3 { Capacitance to neutral
+       2     0                         1.E-3 
+       3     0                         1.E-3 
+  REPETITION   1   { Connect another 1 section of preceding 20 miles after R-L-C
+  REPETITION   4   { Connect another 4 sections of preceding 20 miles, making 80
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92RECA                                5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB        RECA                    5555.                                    1
+92RECC                                4444.                                    1
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+BLANK card ending source data
+  RECC05RECB05RECA05RECC  RECB  RECA  SENDA SENDB SENDC
+BLANK card terminating names of node voltage outputs
+ 194 1. 0.0 10.         BRANCH
+                        RECA        RECB        RECC
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        17th of 28 subcases repeats the preceding,  only with 20 line sections
+C        rather than 10.  Total line length remains 200 miles, and transposition
+C        occurs only in the middle (after 10 sections of 10 miles).
+PRINTED NUMBER WIDTH, 9, 2,  { Reduced precision
+ .000050    .010
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+-1SENDA RECA              .305515.8187.01210   10.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937   10.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+  REPETITION   9   { 9 more sections all by themselves (no lumped elements)
+  TRANSPOSITION    2   3   1  { Transpose A, B, C --> B, C, A
+       1     0                         1.E-3 { Capacitance to neutral
+       2     0                         1.E-3 
+       3     0                         1.E-3 
+  REPETITION   1   { 1 more section after 3 lumped elements
+  REPETITION   9   { 9 more sections all by themselves (no lumped elements)
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92RECA                                5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB        RECA                    5555.                                    1
+92RECC                                4444.                                    1
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+BLANK card ending source data
+  RECC10RECB10RECA10RECC  RECB  RECA  SENDA SENDB SENDC
+BLANK card terminating names of node voltage outputs
+ 194 1. 0.0 10.         BRANCH
+                        RECA        RECB        RECC
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        18th of 28 subcases repeats the preceding,  only with 40 line sections
+C        rather than 10.  Total line length remains 200 miles, and transposition
+C        occurs only in the middle (after 20 sections of 5 miles).  An important
+C        difference is the series elements.  In the preceding case,  they were
+C        used just once.  Here,  they are repeated 20 times.  But since the
+C        resistance is so small,  answer is not changed appreciably.  One final
+C        difference is the addition of 8 dummy branches to force nodes  NTOT
+C        into 3 digits,  which changes the interpretation on  STOP CASCADE.
+PRINTED NUMBER WIDTH, 9, 2,  { Reduced precision
+ .000025    .010
+       1       1       1       0       1      -1
+      66       1      80      10     100     100
+  SENDA DUM1                 1.0   { 1st of 8 dummy branches to increase NTOT
+  SENDA DUM1                 1.0   { These branches are disconnected from line
+  SENDA DUM1                 1.0
+  SENDA DUM1                 1.0
+  SENDA DUM1                 1.0
+  SENDA DUM1                 1.0
+  SENDA DUM1                 1.0
+  SENDA DUM1                 1.0
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+-1SENDA RECA              .305515.8187.01210    5.  0      { 200-mile, constant-
+-2SENDB RECB              .031991.5559.01937    5.  0      { parameter,  3-phase
+-3SENDC RECC                                                { transmission line.
+  REPETITION  19              { 9 more sections of 10 miles for 100 miles total
+  TRANSPOSITION    2   3   1  { 1 more sections;  transpose A, B, C --> B, C, A
+       1     0                         1.E-3 { Capacitance to neutral
+       2     0                         1.E-3 
+       3     0                         1.E-3 
+  REPETITION  20              { 9 more sections of 10 miles for 100 miles total
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92RECA                                5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB        RECA                    5555.                                    1
+92RECC                                4444.                                    1
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+BLANK card ending source data
+  RECC20RECB20RECA20RECC  RECB  RECA  SENDA SENDB SENDC
+BLANK card terminating names of node voltage outputs
+ 194 1. 0.0 10.         BRANCH
+                        RECA        RECB        RECC
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        19th of 28 subcases is like 8th,  but it adds shunt-connected lumped
+C        elements (capacitance) that involve a dummy node (number -1).  The
+C        dummy node is connected to ground by a 1-ohm resistor.
+PRINTED NUMBER WIDTH, 10, 2,  { Reduced precision
+ .000050    .006
+       1       1       1       0       1      -1
+      33       1      40      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+$VINTAGE, 1
+-1JDA   LMA                9.92820E+00 4.56745E+02 1.62458E+05-1.00000E+02 1  2
+-2JDB   LMB                3.89217E-01 3.61489E+02 1.85363E+05-1.00000E+02 1  2
+$VINTAGE, 0
+  0.91340878 -0.63245328
+  0.00000000  0.00000000
+  0.40704349  0.77459851
+  0.00000000  0.00000000
+  TRANSPOSITION    2   1   { Transpose the 2 phases:  A --> B,  B --> A
+       1    -1                         1.E-3 { Capacitance to neutral
+       2    -1                         1.E-3 { Capacitance to neutral
+      -1     0               1.0             { Resistance from neutral to earth
+  REPETITION   1              { 1 more sections of 100 miles for 200 miles total
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92LMA                                 5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92LMB         LMA                     5555.                                    1
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14JDA        408000.       60.        0.    { 1st of 3 sources.   Note balanced,
+14JDB        408000.       60.     -120.    { three-phase, sinusoidal excitation
+BLANK card ending source data
+ 1
+ 194 .5 0.5 5.5         LMA         LMB
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        20th of 28 subcases is like the 1st,  but with the addition of current
+C        output for the series resistor in the middle.  Also, resistance value
+C        has been made sizable (20 ohms) to attenuate the surge.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+ .000050    .020
+       1       1       1       0       1      -1               2
+      33       1      40      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+-1SENDA RECA                .306  5.82  .012  100. { Half the length of original
+       1     1             2.E+1   { Sizable resistor precedes line section }  1
+  REPETITION   1    { Connect another section of preceding 100 miles, making 200
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92RECA { Type 92 is for v-i curve }   5555.  { 5555 flag is for exponentials } 1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14SENDA      408000.       60.
+BLANK card ending source data
+ 1
+ 194 2. 0.0 20.         RECA
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        21th of 28 subcases is like preceding,  but with 4 sections of 50 miles
+C        rather than 2 of 100.  The resistor is repeated 3 times, here, and each
+C        section has its own output of current,  of course.  R = 10 ohms,  note.
+PRINTED NUMBER WIDTH, 9, 2,  { Reduced precision
+ .000050    .020
+       1       1       1       0       1      -1               2
+      33       1      40      10     100      50
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+-1SENDA RECA                .306  5.82  .012   50. { 1/4 the length of original
+       1     1             1.E+1     { Small resistor precedes line section }  1
+  REPETITION   3  { Connect another 3 sections of preceding 50 miles, making 200
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92RECA { Type 92 is for v-i curve }   5555.  { 5555 flag is for exponentials } 1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  2.0
+C                    COEF                    EXPON                     VMIN
+                    1250.                      26.                      0.5
+                    9999.    { Bound on exponential segments (only one precedes)
+BLANK card terminating branch data
+BLANK card terminating all (in this case, nonexistent) switches
+14SENDA      408000.       60.
+BLANK card ending source data
+ 1
+ 194 2. 0.0 20.         RECA
+BLANK card ending plot cards
+BEGIN NEW DATA CASE                                                             
+C        22nd of 28 subcases is same as DC-3,  only built using  CASCADE LINE.
+C        One can use  FC  to compare this solution with DC-3.  Comments from it:
+C              Energization of 180-mile 3-phase line represented by 18 identical
+C              Pi-sections.  Transposed at 60 and 120 miles, note.  XOPT = 3000.
+PRINTED NUMBER WIDTH, 13, 2,
+ .000050    .010   3000.    { XOPT = 3 KHz means reactance in ohms at this freq.
+       1       1       1       1       1      -1                
+       5       5      10      10      20      20 { Escalating printout frequency
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+ 1GEN-A 18-B              34.372457.68.15781                                    
+ 2GEN-B 18-C              35.735164.43-.031538.002451.79.16587                  
+ 3GEN-C 18-A              35.735164.43-.031537.455151.72-.021938.002451.79.16587
+C     Note that receiving-end names correspond to final phase position (B, C, A)
+C     after two cyclic transpositions that will follow.  The final line section
+C     will connect  (18-B17, 18-C17, 18-A17)  with  (18-B, 18-C, and 18-A).
+  REPETITION   5   { Connect another 5 sections of preceding 10 miles, making 50
+  TRANSPOSITION    2   3   1   { Transpose 3 phases  A --> B,  B --> C,  C --> A
+  REPETITION   6   { Connect another 6 sections of preceding 10 miles, making 60
+  TRANSPOSITION    2   3   1   { Transpose 3 phases  A --> B,  B --> C,  C --> A
+  REPETITION   6   { Connect another 6 sections of preceding 10 miles, making 60
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+ 0M-A   GEN-A              400.0   { 400 Ohm closing resistors, to be shorted by
+ 0M-B   GEN-B              400.0   { breaker poles at times  9.98,  14,  and  14
+ 0M-C   GEN-C              400.0   { msec, respectively.}                      1
+ 0POLE-AM-A                15.0                                                 
+ 0POLE-BM-B                15.0                                                 
+ 0POLE-CM-C                15.0                                                 
+BLANK card ending branch cards
+  E-A   POLE-A    0.      20.0                                                 1
+  E-B   POLE-B  0.00398   20.0  { Closing will be at 4.0 msec, all computer }  3
+  E-C   POLE-C  0.00398   20.0  { This backoff from 4.0 was needed by PRIME }  1
+  M-A   GEN-A   0.00998   20.0            { Breaker poles across 400 Ohm closing
+  M-B   GEN-B   0.013998  20.0            { resistors.   Note artificial opening
+  M-C   GEN-C   0.013998  20.0            { time (in fact, there is no opening).
+BLANK card ending switches
+14E-A        -1.0      60.0    -90.0                                            
+14E-B        -1.0      60.0   -210.0                                            
+14E-C        -1.0      60.0    30.0                                             
+BLANK card ending sources
+  18-C  18-B  18-A
+BLANK card ending output variables requests (node voltages, here)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE                                                             
+C        23rd of 28 subcases is like preceding, except that it has added damping
+C        as explained in the July, 1999, newsletter.  Comments document this
+C        exceptional, extra data card immediately following the line section.
+C        The idea comes from Orlando Hevia.  Value 100K ohms used here results
+C        in graphically obvious damping (see screen plot) without changing the
+C        peak value much.  Initial ringing is essentially the same although
+C        following noise disappears much more quickly.
+PRINTED NUMBER WIDTH, 13, 2,
+ .000050    .010   3000.    { XOPT = 3 KHz means reactance in ohms at this freq.
+       1       1       1       1       1      -1                
+       5       5      10      10      20      20 { Escalating printout frequency
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+ 1GEN-A 18-B              34.372457.68.15781                                    
+ 2GEN-B 18-C              35.735164.43-.031538.002451.79.16587                  
+ 3GEN-C 18-A              35.735164.43-.031537.455151.72-.021938.002451.79.16587
+C       For added, artificial damping, an extra card having blank columns 1-26
+C       must immediately following the line section.  Columns 27-32 carry the
+C       value in ohms of resistor that will parallel each phase of each section:
+                            1.E5   { Damping resistor parallels each conductor
+C     Note that receiving-end names correspond to final phase position (B, C, A)
+C     after two cyclic transpositions that will follow.  The final line section
+C     will connect  (18-B17, 18-C17, 18-A17)  with  (18-B, 18-C, and 18-A).
+  REPETITION   5   { Connect another 5 sections of preceding 10 miles, making 50
+  TRANSPOSITION    2   3   1   { Transpose 3 phases  A --> B,  B --> C,  C --> A
+  REPETITION   6   { Connect another 6 sections of preceding 10 miles, making 60
+  TRANSPOSITION    2   3   1   { Transpose 3 phases  A --> B,  B --> C,  C --> A
+  REPETITION   6   { Connect another 6 sections of preceding 10 miles, making 60
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+ 0M-A   GEN-A              400.0   { 400 Ohm closing resistors, to be shorted by
+ 0M-B   GEN-B              400.0   { breaker poles at times  9.98,  14,  and  14
+ 0M-C   GEN-C              400.0   { msec, respectively.}                      1
+ 0POLE-AM-A                15.0                                                 
+ 0POLE-BM-B                15.0                                                 
+ 0POLE-CM-C                15.0                                                 
+BLANK card ending branch cards
+  E-A   POLE-A    0.      20.0                                                 1
+  E-B   POLE-B  0.00398   20.0  { Closing will be at 4.0 msec, all computer }  3
+  E-C   POLE-C  0.00398   20.0  { This backoff from 4.0 was needed by PRIME }  1
+  M-A   GEN-A   0.00998   20.0            { Breaker poles across 400 Ohm closing
+  M-B   GEN-B   0.013998  20.0            { resistors.   Note artificial opening
+  M-C   GEN-C   0.013998  20.0            { time (in fact, there is no opening).
+BLANK card ending switches
+14E-A        -1.0      60.0    -90.0                                            
+14E-B        -1.0      60.0   -210.0                                            
+14E-C        -1.0      60.0    30.0                                             
+BLANK card ending sources
+  18-C  18-B  18-A
+BLANK card ending output variables requests (node voltages, here)
+ 144 1. 0.0 10. -2.  2. 18-C  18-B  18-A
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        24th of 28 subcases begins illustration of frequency-dependent line
+C        sections within  CASCADE LINE.   Begin with Semlyen F-dependence.
+C        This initial subcase will connect 2 100-mile sections manually in
+C        order to establish the right answer.  No  CASCADE LINE  yet.
+PRINTED NUMBER WIDTH, 9, 2,  { Request maximum precision (for 8 output columns)
+ 100.E-6    .004     60.
+       1       1       1       1       0      -1
+      30       5      50      10     100     100
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C SEMLYEN SETUP
+C $ERASE
+C BRANCH  SENDA RECA  SENDB RECB  SENDC RECC
+C TOLERANCES  10      5000.  { Illustration only; value of FMED actually unchang
+C           200  150  10 230   1     7  7777     0    { Semlyen miscellaneous da
+C LINE CONSTANTS
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   3.3636 .05215  4         1.602   19.25   50.     50.
+C   3.3636 .05215  4         1.602   20.75   50.     50.
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C BLANK card ending conductor cards within  "LINE CONSTANTS"  data
+C 100.         5000.                            100.         { Transient frequen
+C 100.         60.00                            100.   { Phasor solution frequen
+C 100.          6.00                            100.           6 20  { log loopi
+C BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+C BLANK card ending  "LINE CONSTANTS"  data cases
+C L=  100.0 miles, rho=   100.0, ss freq=   60.00, NSS=0, KFIT=10, KPS=2, KYC=30
+-1ASW1  A5A001             5.73657E-03 5.80501E-04              1  1  2  2   3
+   1.29532159E+01 6.90147263E+01-1.54971081E-04 1.00826561E-03 6.00000000E+01
+   0.00000E+00 1.99246E+04 7.80012E-01 0.00000E+00 2.39630E+03 2.19988E-01
+   0.00000E+00 2.93896E+05-8.84697E-04 0.00000E+00 6.44826E+02-1.46889E-03
+-1BSW1  B5B001             6.99857E-03 5.37300E-04              2  2  2  2   3
+   3.65631810E-01 3.01288921E+01-1.20641047E-05 1.41887940E-03 6.00000000E+01
+   0.00000E+00 2.54663E+05 9.79674E-01 0.00000E+00 2.72320E+03 2.03258E-02
+   0.00000E+00 9.43770E+03-1.26448E-04 0.00000E+00 5.92472E+01-4.28807E-04
+-1CSW1  C5C001             4.15601E-03 5.36306E-04              3  3  2  2   3
+   1.50114817E+00 5.16927471E+01-1.74676422E-05 8.35146102E-04 6.00000000E+01
+   0.00000E+00 6.39606E+05 9.69072E-01 0.00000E+00 2.23039E+03 3.09277E-02
+   0.00000E+00 2.10503E+03-1.22603E-04 0.00000E+00 9.26329E+01-3.41262E-04
+   1.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00-2.75271E-01 0.00000E+00
+   7.22689E-01 0.00000E+00 4.43389E-13 0.00000E+00 1.00000E+00 0.00000E+00
+   1.00000E+00 0.00000E+00-1.00000E+00 0.00000E+00-2.75271E-01 0.00000E+00
+   4.17084E-01 0.00000E+00 5.00000E-01 0.00000E+00-3.01620E-01 0.00000E+00
+   2.29906E-01 0.00000E+00 3.55101E-13 0.00000E+00 8.34169E-01 0.00000E+00
+   4.17084E-01 0.00000E+00-5.00000E-01 0.00000E+00-3.01620E-01 0.00000E+00
+-1A5A001A5A   ASW1  A5A001                                                     
+-1B5B001B5B                                                                    
+-1C5C001C5C                                                                    
+ 0A5A                     1.                                                   1
+ 0B5B                     1.                                                   1
+ 0C5C                     1.                                                   1
+ 0A5A001                               1.E-3
+ 0B5B001                               1.E-3
+ 0C5C001                               1.E-3
+BLANK card ending branch cards
+BLANK card ending switch cards
+14ASW1     303.       60.         0.0                        -1.
+14BSW1     303.       60.      -120.0                        -1.
+14CSW1     303.       60.       120.0                        -1.
+BLANK card ending source cards
+  A5A   A5A001B5B   B5B001C5C   C5C001
+BLANK card ending the specification of program outputs (node voltages, here)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        25th of 28 subcases repeats the preceding,  only using  CASCADE LINE
+C        to connect together the two Semlyen F-dependent line sections.
+PRINTED NUMBER WIDTH, 9, 2,  { Reduced precision
+ 100.E-6    .004     60.
+       1       1       1       1       0      -1
+      30       5      50      10     100     100
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C SEMLYEN SETUP
+C $ERASE
+C BRANCH  SENDA RECA  SENDB RECB  SENDC RECC
+C TOLERANCES  10      5000.  { Illustration only; value of FMED actually unchang
+C           200  150  10 230   1     7  7777     0    { Semlyen miscellaneous da
+C LINE CONSTANTS
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   3.3636 .05215  4         1.602   19.25   50.     50.
+C   3.3636 .05215  4         1.602   20.75   50.     50.
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C BLANK card ending conductor cards within  "LINE CONSTANTS"  data
+C 100.         5000.                            100.         { Transient frequen
+C 100.         60.00                            100.   { Phasor solution frequen
+C 100.          6.00                            100.           6 20  { log loopi
+C BLANK card ending frequency cards of  "LINE CONSTANTS"  data
+C BLANK card ending  "LINE CONSTANTS"  data cases
+C L=  100.0 miles, rho=   100.0, ss freq=   60.00, NSS=0, KFIT=10, KPS=2, KYC=30
+-1ASW1  A5A                5.73657E-03 5.80501E-04              1  1  2  2   3
+   1.29532159E+01 6.90147263E+01-1.54971081E-04 1.00826561E-03 6.00000000E+01
+   0.00000E+00 1.99246E+04 7.80012E-01 0.00000E+00 2.39630E+03 2.19988E-01
+   0.00000E+00 2.93896E+05-8.84697E-04 0.00000E+00 6.44826E+02-1.46889E-03
+-1BSW1  B5B                6.99857E-03 5.37300E-04              2  2  2  2   3
+   3.65631810E-01 3.01288921E+01-1.20641047E-05 1.41887940E-03 6.00000000E+01
+   0.00000E+00 2.54663E+05 9.79674E-01 0.00000E+00 2.72320E+03 2.03258E-02
+   0.00000E+00 9.43770E+03-1.26448E-04 0.00000E+00 5.92472E+01-4.28807E-04
+-1CSW1  C5C                4.15601E-03 5.36306E-04              3  3  2  2   3
+   1.50114817E+00 5.16927471E+01-1.74676422E-05 8.35146102E-04 6.00000000E+01
+   0.00000E+00 6.39606E+05 9.69072E-01 0.00000E+00 2.23039E+03 3.09277E-02
+   0.00000E+00 2.10503E+03-1.22603E-04 0.00000E+00 9.26329E+01-3.41262E-04
+   1.00000E+00 0.00000E+00 1.00000E+00 0.00000E+00-2.75271E-01 0.00000E+00
+   7.22689E-01 0.00000E+00 4.43389E-13 0.00000E+00 1.00000E+00 0.00000E+00
+   1.00000E+00 0.00000E+00-1.00000E+00 0.00000E+00-2.75271E-01 0.00000E+00
+   4.17084E-01 0.00000E+00 5.00000E-01 0.00000E+00-3.01620E-01 0.00000E+00
+   2.29906E-01 0.00000E+00 3.55101E-13 0.00000E+00 8.34169E-01 0.00000E+00
+   4.17084E-01 0.00000E+00-5.00000E-01 0.00000E+00-3.01620E-01 0.00000E+00
+       1     0                         1.E-3 { Capacitance to neutral
+       2     0                         1.E-3 
+       3     0                         1.E-3 
+  REPETITION   1  { Connect another 1 sections of preceding 50 miles, making 200
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+ 0A5A                     1.                                                   1
+ 0B5B                     1.                                                   1
+ 0C5C                     1.                                                   1
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14ASW1     303.       60.         0.0                        -1.
+14BSW1     303.       60.      -120.0                        -1.
+14CSW1     303.       60.       120.0                        -1.
+BLANK card ending source data
+  A5A   A5A001B5B   B5B001C5C   C5C001
+BLANK card ending node voltage outputs
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C        26th of 28 subcases is like preceding subcase,  but Semlyen line
+C        modeling is replaced by J. Marti line modeling.   Still two 100-mile
+C        sections are cascaded,  however.
+PRINTED NUMBER WIDTH, 10, 2,  { Reduced precision
+ .000050    .020
+       1       1       1       0       1      -1
+      30       5      50      10     100     100
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+C  <++++++>  Cards punched by support routine on  11-Nov-18  11.00.00  <++++++>
+C     ***** UNTRANSPOSED JMARTI line segment ******
+C JMARTI SETUP, 1.0,          { Note use of  PDT0 = 1  to allow reduction of ord
+C $ERASE
+C BRANCH  SENDA RECA  SENDB RECB  SENDC RECC
+C LINE CONSTANTS
+C   1.3636 .05215  4         1.602  -20.75   50.     50.
+C   1.3636 .05215  4         1.602  -19.25   50.     50.
+C   2.3636 .05215  4         1.602  - 0.75   77.5    77.5
+C   2.3636 .05215  4         1.602    0.75   77.5    77.5
+C   3.3636 .05215  4         1.602   19.25   50.     50.
+C   3.3636 .05215  4         1.602   20.75   50.     50.
+C   0.5    2.61    4         0.386  -12.9    98.5    98.5
+C   0.5    2.61    4         0.386   12.9    98.5    98.5
+C BLANK card ending conductor cards of imbedded  "LINE CONSTANTS"  data
+C 100.         5000.                            100.       1           1
+C 100.         60.00                            100.       1           1
+C 100.           .01                            100.       1   9 10    1
+C BLANK card ending frequency cards of inbedded  "LINE CONSTANTS"  data
+C BLANK card ending  "LINE CONSTANTS"  cases (back to "JMARTI SETUP")
+C                1                  .48D-7
+C              .30      30       0       1       3       0       0
+-1SENDA RECA                  1.  1.00              -2 3
+      18       4.7483546376731072800E+02
+  -1.18006161060646209E+00  -3.16766872020413360E+00   2.55699269092638702E+01
+  -6.01797009623673489E+01  -1.18859418694219202E+02   1.28219132925008535E+03
+   5.89997491758850629E+03   2.93123960674098963E+04   1.15769990477470027E+05
+   4.56828075863527542E+05   1.53829254905850161E+06   6.82459590531661455E+06
+   1.55607339315315970E+07   2.31961726607006118E+07   1.43948936484195535E+07
+   2.41675279090378210E+07   2.45138250143723451E+07   4.76943011379202083E+07
+   3.21677891370685698E-01   8.97689663361987301E-01   1.65645914803404449E+00
+   1.66683409949634776E+00   2.53097172028723927E+00   2.00062220020147664E+01
+   1.24317532805618115E+02   6.57762750995805277E+02   2.78828659956286174E+03
+   1.17239579054727201E+04   4.27765179903550234E+04   2.02713498468649341E+05
+   9.69491855126972544E+05   2.97097124115793128E+06   7.38395608260167297E+06
+   1.21069716520713456E+07   1.32941233143761196E+07   2.52144300149374009E+07
+      14       6.2012595281792895700E-04
+   9.21163821482878787E-02   4.49959993192020458E-01   5.85569758182220901E-01
+   1.39148640698697257E+00   5.62298197490835961E+00   1.70440712502643735E+01
+   1.13333401654647077E+02   5.08692785290631662E+02   2.44410769027288780E+03
+   9.94922166773389450E+02   1.34258890978641612E+04   7.13108058148054174E+05
+   6.17020585096151010E+07  -6.24326786990908981E+07
+   3.32380162906116326E+01   1.56591584681817097E+02   2.11026421609272604E+02
+   4.12916697658035276E+02   4.68653759455945079E+02   7.14803232315465494E+02
+   1.93593005557436050E+03   3.70931080902511576E+03   6.84113065949658449E+03
+   9.03279886786780117E+03   1.87891647818270213E+04   3.39154192586971549E+04
+   3.11467431507017864E+04   3.11778898938524981E+04
+-2SENDB RECB                  1.  1.00              -2 3
+      13       2.8580875771920489100E+02
+   3.81761650263625780E+03  -2.69529267120074792E+03   4.45018223196032978E+02
+   2.14658087789413543E+02   8.97324539735147795E+01   1.30479996048504689E+02
+   6.83066754726465888E+01   7.46726687815945383E+01   1.34027409744895681E+03
+   2.50078920872312984E+03   1.87804658322097858E+04   3.91074617528546777E+05
+   5.62682417249109410E+06
+   3.58668998822370755E+00   3.76679183632024107E+00   7.06439014940525656E+00
+   1.09721623541976090E+01   1.40506300112179279E+01   2.34292433673431511E+01
+   4.07689465036720549E+01   7.97671181460381150E+01   1.29186371424101322E+03
+   2.42269462582384268E+03   1.82406263537032428E+04   3.79870364151798015E+05
+   5.48842772234612518E+06
+      12       5.3730880510797227400E-04
+   2.52028254243671146E+00   4.01109349623009948E+01   6.96402856688803383E+01
+   3.57989358491384949E+01   5.71230525753107032E+02   6.38898075449796034E+03
+   4.78340405101482902E+04   3.41271841771830660E+04   5.07996697693548748E+05
+   1.11163339089429100E+07  -1.33632800675941563E+09   1.32461460664639903E+09
+   4.94199695306566128E+02   7.83643468932789893E+03   1.32162679948852129E+04
+   6.60156366445954882E+03   2.62734388612854382E+04   1.06907548589068698E+05
+   2.12743847016397224E+05   2.51865691934913310E+05   6.08900683349632076E+05
+   1.18332010282752617E+06   1.34471502915186296E+06   1.34605974418101414E+06
+-3SENDC RECC                  1.  1.00              -2 3
+      14       2.7244405820675621000E+02
+   3.17764328769020324E+02   3.84056941911861316E+02   7.78154566307962341E+02
+   1.03108316719518073E+02   2.00907813594929423E+02   7.57757504866314662E+01
+   1.33832891336631036E+02   6.58793101560571018E+01   6.29912275222635501E+01
+   9.49916573832233411E+01   1.15740687395458577E+03   2.61294978694073052E+03
+   1.54518909503364667E+04   6.88065437367142179E+05
+   2.24584095184176836E+00   5.75878919400151102E+00   3.82714998158506692E+00
+   6.71993501533223281E+00   1.07191091989576162E+01   1.36101548287774819E+01
+   2.35649762525126896E+01   3.87434226439781427E+01   7.02935629984925754E+01
+   1.04171009267287304E+02   1.11593305416259068E+03   2.53309850094363765E+03
+   1.49935463738342951E+04   6.69557374591290136E+05
+      19       5.4249643968434541500E-04
+   5.03387350941083417E-02   6.52560754647720121E+00   6.22874555413331255E+00
+   1.10921489856047871E+01   1.43892714677717013E+01   2.19646982905073643E+01
+   2.39955726673266483E+01   1.21934358335957640E+02   1.92937966105206875E+03
+   2.44231984427209682E+03   2.02708309307978635E+04  -4.49273698439439250E+04
+   2.83136618112942728E+05   3.18181274590489164E+05   3.43779403231728764E+05
+   4.56485000780035210E+09  -4.47900949758226872E+09   8.07451970047741032E+09
+  -8.16128522933274556E+09
+   1.81395392158859572E+01   2.39258438884147018E+03   2.16963528059100600E+03
+   3.94822566442155040E+03   5.27570056810359165E+03   7.69075350487642664E+03
+   8.80973914669594160E+03   3.76208534925462009E+04   5.81576243785037660E+04
+   6.47439571523925988E+04   1.97383423873635883E+05   6.74981934148844798E+05
+   5.87155884247283801E+05   1.28272476890128758E+06   1.75714198326300784E+06
+   7.85922959411724192E+06   7.86708882371135429E+06   6.80579508985397965E+06
+   6.81260088494382892E+06
+  0.57153211  0.70710678 -0.41762015
+  0.00000000  0.00000000  0.00000000
+  0.58881414  0.00000000  0.80696147
+  0.00000000  0.00000000  0.00000000
+  0.57153211 -0.70710678 -0.41762015
+  0.00000000  0.00000000  0.00000000
+       1     0                         1.E-3 { Capacitance to neutral }        3
+       2     0                         1.E-3 
+       3     0                         1.E-3 
+  REPETITION   1  { Connect another 1 sections of preceding 100 miles
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+92RECA                                5555. { 1st card of 1st of 3 ZnO }       1
+C                    VREF                   VFLASH                    VZERO  COL
+                  778000.                     -1.0                      0.0  4.0
+C                    COEF                    EXPON                     VMIN
+                     625.                      26.                      0.5
+                    9999.
+92RECB        RECA                    5555.       { Phase "b" ZnO is copy of "a"
+92RECC                                4444.  { Phase "c" ZnO is piecewise-linear
+C                    VREF                   VFLASH                    VZERO
+                      0.0                     -1.0                      0.0
+                      1.0                  582400.   { First point of i-v curve.
+                      2.0                  590800.   { Data is copied from DC-39
+                      5.0                  599200.   { which was used to  create
+                      10.                  604800.   { the ZnO branch cards that
+                      20.                  616000.   { are used in phases "a"  &
+                      50.                  630000.   { "b".  But  there  is some
+                     100.                  644000.   { distortion due to the use
+                     200.                  661920.   { of linear rather than the
+                     500.                  694400.   { more accurate exponential
+                    1000.                  721280.   { modeling, of course.
+                    2000.                  756000.
+                    3000.                  778400.   { Last point of  i-v curve.
+                    9999.       { Terminator for piecewise-linear characteristic
+BLANK card follows the last branch card
+BLANK line terminates the last (here, nonexistent) switch
+14SENDA      408000.       60.       0.0    { 1st of 3 sources.   Note balanced,
+14SENDB      408000.       60.     -120.    { three-phase, sinusoidal excitation
+14SENDC      408000.       60.      120.    { with no phasor solution.
+BLANK card ending source data
+  SENDA RECA01SENDB RECB01SENDC RECC01
+BLANK card ending the specification of program outputs (node voltages, here)
+  CALCOMP PLOT
+ 194 2. 0.0 20.         RECA
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+C     BENCHMARK DC-9
+C        27th of 28 subcases is a modification of the original DC-9,  which
+C        for some 24 years carried  CASCADED PI  usage.  Data has been converted
+C        from  CASCADED PI  (now gone as of April, 1998) to  CASCADE LINE
+     0.0     0.0     60.
+       0       0       1       1
+  CASCADE LINE   { Request for February, 1998 replacement of old CASCADED PI
+ 1RA1   MIDA                .877  8.40 .1628
+ 2RB1   MIDB                .747  4.14-.0252  .852  8.43 .1559
+ 3RC1   MIDC                .735  3.47-.0067  .723  4.17-.0277  .829  8.46 .1571
+  REPETITION   1   { Connect another 1 section of preceding
+C    Ok,  we now are at nodes 2A1, 2B1, and 2C1 of Fig. 1 in Sect. IV-F of the
+C    Rule Book.  Next,  we must roll, connect some lumped elements in series,
+C    and finally another (just one) line section:
+  TRANSPOSITION    2   3   1   { Transpose 3 phases  A --> B,  B --> C,  C --> A
+C      1     1             1.E-3   { Poor approximation to short circuit ignored
+       2     2             1.E18
+       3     3                   13.1449.071
+  REPETITION   1   { Loop once over preceding lumped elements and line section
+C    Ok,  we now are at nodes 4C1, 4A1, and 4B1 of Fig. 1.   Next,  we must
+C    roll, connect some lumped elements in series, and finally another line
+C    section.  If final line section is split in half,  each half is very close
+C    to original above,  so we can stay within  CASCADE LINE  longer:
+  TRANSPOSITION    2   3   1   { Transpose 3 phases  A --> B,  B --> C,  C --> A
+       1     1                   13.14
+       2     2                   13.14
+       3     3                   13.1449.071
+       1    -1                   13.1449.071
+       2    -1                   13.1449.071
+       3    -1                   13.1449.071
+       0    -1               5.0 13.14
+C  REPETITION   1
+C  TRANSPOSITION    2   3   1   { Transpose 3 phases  A --> B,  B --> C,  C --> A
+C       1     1                   13.14
+C       2     2                   13.14
+C       3     3                   13.1449.071
+C       1    -1                   13.1449.071
+C       2    -1                   13.1449.071
+C       3    -1                   13.1449.071
+C       0    -1               5.0 13.14
+C  REPETITION   1
+C     Note:  the preceding comment cards are equivalent to the following line:
+  REPETITION   2    INCLUDE TRANSPOSITION IN LOOP  { Replace preceding comments
+  STOP CASCADE   { Terminate cascading that began with  "CASCADE LINE"  request
+C    Final line section was split in two.  Originally,  it was approximately one
+C    double-length section.  It becomes two single-length sections of which the
+C    first of the two is defined by the preceding REPETITION loop.  That leaves
+C    one single-length section to be connected manually:
+ 1MIDA  GENA                .877  8.40 .1628
+ 2MIDB  GENB                .747  4.14-.0252  .852  8.43 .1559
+ 3MIDC  GENC                .735  3.47-.0067  .723  4.17-.0277  .829  8.46 .1571
+BLANK card ending branch cards
+BLANK card ending switch cards (none for this problem)
+14RA1      424.35     60.        10.0                        -.1
+14RB1      424.35     60.      -110.0                        -.1
+14RC1      424.35     60.       130.0                        -.1
+14GENA     424.35     60.         0.0                        -.1
+14GENB     424.35     60.      -120.0                        -.1
+14GENC     424.35     60.       120.0                        -.1
+$WIDTH, 79,         { Request narrow, 80-column LUNIT6 output as an illustration
+BLANK card ending source cards
+BLANK card ending selective node voltage outputs (none for this problem)
+  PRINTER PLOT
+BLANK card ending plot cards (none allowed for CASCADED PI use, actually)
+BEGIN NEW DATA CASE
+$WIDTH, 132,          { Restore normal 132-column LUNIT6 output for this subcase
+C DIAGNOSTIC           0 0 3    { Produce [Y] of CASCADE PI in the .DBG file
+C        28th of 28 subcases is the original DC-9 data from April of 1998.  This
+C        is appended  2 August 2009  as the old  CASCADED PI  code is added back
+C        into ATP.  We do add  $PUNCH  to illustrate the punching of [Y] on
+C        branch cards.  Compare this output with the data of DC-11.  WSM.
+C     Illustration of  many  "CASCADED PI"  features.    See  DCPRINT-25  if any
+C     trouble,  and  DC-10  for comparison  (same solution only manual cascade).
+     0.0     0.0     60.
+       0       0       1       1
+  CASCADED PI                  3 60.0
+ 1RA1   GA1                 .877  8.40 .1628
+ 2RB1   GB1                 .747  4.14-.0252  .852  8.43 .1559
+ 3RC1   GC1                 .735  3.47-.0067  .723  4.17-.0277  .829  8.46 .1571
+     1.0   2   0   0   1   1   2   3
+     1.0   1   1   0   0   2   3   1
+ 2                        999999
+ 3                               13.1449.071
+BLANK card ending first Class-5 (Series R-L-C) set of data
+     1.0   1   1   1   0   3   1   2
+ 1                               13.14
+ 2                               13.14
+ 3                               13.1449.071
+BLANK card ending 2nd   Class-5 (Series R-L-C) set of data
+       1    -1                   13.1449.071
+       2    -1                   13.1449.071
+       3    -1                   13.1449.071
+            -1               5.0 13.14
+BLANK card ending first Class-6 (Shunt R-L-C) set of data
+     2.0   1  -1  -1   1   1   2   3
+ 1                          .829  8.46 .1571
+ 2                          .723  4.17-.0277  .852  8.43 .1559
+ 3                          .735  3.47-.0067  .747  4.14-.0252  .877  8.40 .1628
+C Activate the following comment for full precision of [Y] on punched cards:
+C $VINTAGE, 2,    { Request maximum of 27 columns of precision (not 16) for TR, TX
+  STOP CASCADE
+BLANK card ending branch cards
+C  In 1998, [Y] was obtained from diagnostic output of overlay 3.  As code is
+C  restored in August of 2009,  this no longer is necessary.  [Y]  automatically
+C  is placed on branch cards in the punch buffer.  It only remains for the user
+C  to flush them.  Any time after  STOP CASCADE  should work.  WSM.
+$PUNCH     { Output the branch [Y] as could be used for data in DC-11
+BLANK card ending switch cards (none for this problem)
+14GA1      424.35     60.         0.0                        -.1
+14RA1      424.35     60.        10.0                        -.1
+14GB1      424.35     60.      -120.0                        -.1
+14RB1      424.35     60.      -110.0                        -.1
+14GC1      424.35     60.       120.0                        -.1
+14RC1      424.35     60.       130.0                        -.1
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   9.311041032866E+03
+C 1st gen:  RA1   417.90316999073    424.35     -.0131358847782  .05382578726276
+C 1st gen:        73.687604192962  10.00000     .05219831324431      104.1253709
+C End last gen:  -12.95674346101 44.419110587004 -6432.468410934 9424.6247887975
+C End last gen:  -42.48741206788    -106.9593405 -6888.171205186      -0.6825172
+BLANK card ending selective node voltage outputs (none for this problem)
+  PRINTER PLOT
+BLANK card ending plot cards (none allowed for CASCADED PI use, actually)
+BEGIN NEW DATA CASE
+BLANK

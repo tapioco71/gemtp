@@ -1,0 +1,59 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-7
+C      Test of 3-phase Pi-circuit that is excited by 3 in-phase sources that are
+C      present during the phasor solution.  No transients (phasor continuation).
+DIAGNOSTIC           0 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+     .05     1.0     60.     60.
+       1       1       1       1       1      -1
+       2      -1                      { Turn off the diagnostic on step number 2
+  RECA                      .001      { Short the receiving end through  R=1.E-3
+  RECB                      .001      { ohm resistors,  so  that lots of current
+  RECC                      .001      { will flow (no subtle effects here!).
+ 1SENDA RECA                 1.0   1.0  1.E4    { 1st card of 3-phase Pi-circuit
+ 2SENDB RECB                 0.7   0.3 -2.E3   1.0   1.0  1.E4
+ 3SENDC RECC                 0.7   0.3 -2.E3   0.7   0.3 -2.E3   1.0   1.0  1.E4
+BLANK card ending branch cards
+  GENA  SENDA       -1.0       9.0        { 1st of 3 permanently-closed switches
+  GENB  SENDB       -1.0       9.0
+  GENC  SENDC       -1.0       9.0
+BLANK card ending switch cards
+14GENA          100.       1.0    { Note all 3 sources}            -1.
+14GENB          100.       1.0    { have a phase angle}            -1.
+14GENC          100.       1.0    { of  zero  degrees.}            -1.
+BLANK card ending source cards
+C       Total network loss  P-loss  by summing injections =   6.246626371768E+03
+C                                Output for steady-state phasor switch currents.
+C         Node-K    Node-M            I-real            I-imag            I-magn
+C         GENA      SENDA     0.41644176E+02   -0.45752035E+00    0.41646689E+02
+C         GENB      SENDB     0.41644176E+02   -0.45752035E+00    0.41646689E+02
+C         GENC      SENDC     0.41644176E+02   -0.45752035E+00    0.41646689E+02
+C Last inject:   GENC
+C Last inject:   SENDC     100.       100.      41.644175811789  41.646688990975
+C Last inject:             0.0         0.0      -.4575203468966       -0.6294501
+C  Step    Time        RECC         RECB         RECA         SENDC        SENDB
+C
+C                      GENC
+C ***      Phasor I(0) =  0.4164418E+02   Switch  "GENA  "  to  "SENDA "  closed
+C ***      Phasor I(0) =  0.4164418E+02   Switch  "GENB  "  to  "SENDB "  closed
+C ***      Phasor I(0) =  0.4164418E+02   Switch  "GENC  "  to  "SENDC "  closed
+C    0     0.0   .0416441758  .0416441758  .0416441758         100.         100.
+C                       100.
+C    1     .05   .0397499231  .0397499231  .0397499231  95.10565163  95.10565163
+C                95.10565163
+ 1
+C   20     1.0   .0416440951  .0416440951  .0416440951         100.         100.
+C                       100.
+C Variable max : .0416441758  .0416441758  .0416441758         100.         100.
+C                       100.
+C Times of max :         0.0          0.0          0.0          0.0          0.0
+C                        0.0
+C Variable min : -.041644069  -.041644069  -.041644069        -100.        -100.
+C                      -100.
+C Times of min :         0.5          0.5          0.5          0.5          0.5
+C                        0.5
+  PRINTER PLOT                                  { Axis limits : (-4.164,  4.164)
+ 143 .1 0.0 1.0         RECA   { This receiving end voltage is nice & sinusoidal
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

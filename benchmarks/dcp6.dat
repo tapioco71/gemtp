@@ -1,0 +1,43 @@
+BEGIN NEW DATA CASE
+C     BENCHMARK DCPR-6
+C       Test of Type-99 pseudo-nonlinear resistance.  1-phase line energization.
+PRINTED NUMBER WIDTH, 13, 2,  { Request maximum precision (for 8 output columns)
+DIAGNOSTIC           0 9 9 9 9 9 0 9 9 9 9 9 9 9 9 9 9 9 9
+ .000200    .020     60.     60.
+       1       1       1       1       1      -1
+       2      -1       5       5      20      20
+  REC                       100.                                               3
+-1SEND  REC                  0.3   0.4  12.6  100.
+99REC                        5.0           2                                   1
+             1.0            100.
+             2.0           200.1
+            9999
+BLANK card ending branch cards
+  GEN   SEND       .0003       1.0      { Switch that energizes line on 2nd step
+BLANK card ending switch cards
+14GEN           100.       60.        { Source not present in steady state, note
+BLANK card ending source cards
+C  Step      Time        REC          REC          SEND         GEN          REC
+C                      TERRA                                               TERRA
+C     0       0.0        0.0          0.0          0.0          0.0          0.0
+C     1     .2E-3        0.0          0.0          0.0  99.71589003          0.0
+ 1
+C     2     .4E-3        0.0          0.0          0.0  98.86517447          0.0
+C     3     .6E-3        0.0          0.0  97.45268728  97.45268728          0.0
+C     4     .8E-3        0.0          0.0  95.48645447  95.48645447          0.0
+C     5     .001 1.412558111  1.412558111  92.97764859  92.97764859          0.0
+C   "      "  begins operation on segment  2   at time  T = 1.20000000E-03  sec.
+C    10     .002 31.57766457  31.57766457  72.89686274  72.89686274  .3157766457
+C   "      "  begins operation on segment  0   at time  T = 1.38000000E-02  sec.
+C   "      "  begins operation on segment  2   at time  T = 1.40000000E-02  sec.
+C    80     .016 42.14983507  42.14983507  96.85831611  96.85831611  .4214983507
+C   100      .02 40.44541516  40.44541516  30.90169944  30.90169944  .4044541516
+C Variable max : 62.79749241  62.79749241  99.96841893  99.96841893  .5668106247
+C Times of max :       .0012        .0012        .0166        .0166         .018
+C Variable min : -56.7406992  -56.7406992  -99.9684189  -99.9684189  -.567406992
+C Times of min :       .0096        .0096        .0084        .0084        .0096
+  PRINTER PLOT
+ 194 2. 0.0 20.         REC                     { Axis limits : (-5.674,  5.668)
+BLANK card ending plot cards
+BEGIN NEW DATA CASE
+BLANK

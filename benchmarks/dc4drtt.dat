@@ -1,0 +1,62 @@
+KARD  2  2  2  3  3  4  4  4  5  5  6  6  6  6  7  7  7  7  8  8  8  8  9  9  9
+      9 10 10 10 10 11 11 12 12 12 13 13 13 14 14 14 15 15 15 16 16 16 18 19 19
+     20 20 21 21 22 22 23 23 24 24 26
+KARG  2  3  4  4  5  2  4  6  6  7  5  5  6  8  5  5  6  9  5  5  6 10  5  5  6
+     11  5  5  6 12  4 13  4  5 14  4  5 15  4  5 16  4  5 17  4  5 18  1  7 13
+      8 14  9 15 10 16 11 17 12 18  3
+KBEG 45 26 -7 26 -7 32 24 -7 26 -7 41 57 26 -7 41 62 26 -7 41 62 26 -7 41 62 26
+     -7 41 62 26 -7 26 -7 26 34 -7 26 34 -7 26 34 -7 26 34 -7 26 34 -7  3 17  1
+     17  1 17  1 17  1 17  1 17  1 25
+KEND 50 31 13 32 12 37 30 20 39 22 46 62 39 22 46 67 39 22 46 67 39 22 46 67 39
+     22 46 67 39 22 32 22 32 39 22 32 39 22 32 39 22 32 39 22 32 39 22  8 32 16
+     32 16 32 16 32 16 32 16 32 16 30
+KTEX  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+      0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0
+      0  0  0  0  0  0  0  0  0  0  0
+$LISTON
+      IMINIMA = 300000.0*RRRRRR/6.283185307/AAAAAA**2
+      FACTOR = (200000.0/IMINIMA)**(0.2)
+      EEEEEEEEEEEEEE = IMINIMA*AAAAAA
+      VOLTI1__________ = EEEEEEEEEEEEEE/SQRT(1.0+1.0)
+      VOLTI2__________ = EEEEEEEEEEEEEE*FACTOR/SQRT(1.0+FACTOR)
+      VOLTI3__________ = EEEEEEEEEEEEEE*FACTOR**2.0/SQRT(1.0+FACTOR**2.0)
+      VOLTI4__________ = EEEEEEEEEEEEEE*FACTOR**3.0/SQRT(1.0+FACTOR**3.0)
+      VOLTI5__________ = EEEEEEEEEEEEEE*FACTOR**4.0/SQRT(1.0+FACTOR**4.0)
+      VOLTI6__________ = EEEEEEEEEEEEEE*FACTOR**5.0/SQRT(1.0+FACTOR**5.0)
+      KORRI1__________ = IMINIMA
+      KORRI2__________ = IMINIMA*FACTOR
+      KORRI3__________ = IMINIMA*FACTOR**2.0
+      KORRI4__________ = IMINIMA*FACTOR**3.0
+      KORRI5__________ = IMINIMA*FACTOR**4.0
+      KORRI6__________ = IMINIMA*FACTOR**5.0
+$LISTON
+99BUSBUS
+KORRI1__________VOLTI1__________
+KORRI2__________VOLTI2__________
+KORRI3__________VOLTI3__________
+KORRI4__________VOLTI4__________
+KORRI5__________VOLTI5__________
+KORRI6__________VOLTI6__________
+           9999.
+$INSERT  dc4DRTT2.dat   WSMWSM
+$EOF   User-supplied header cards follow.         24-Jun-04  10:04:06
+C   Note about modification.  The original file ended on changes to
+C   card 24.  Card 25 is the "9999." card,  and I insert new card 26 to
+C   test nested insert.  This takes 1 more arg use, to replace cols. 21-26).
+ARG, BUSBUS, AAAAAA, RRRRRR
+NUM, AAAAAA, RRRRRR
+DEP, IMINIMA
+DEP, FACTOR
+DEP, EEEEEEEEEEEEEE
+DEP, VOLTI1__________
+DEP, VOLTI2__________
+DEP, VOLTI3__________
+DEP, VOLTI4__________
+DEP, VOLTI5__________
+DEP, VOLTI6__________
+DEP, KORRI1__________
+DEP, KORRI2__________
+DEP, KORRI3__________
+DEP, KORRI4__________
+DEP, KORRI5__________
+DEP, KORRI6__________
