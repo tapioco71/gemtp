@@ -133,7 +133,7 @@ subroutine tapsav(narray, n1, n2, n3)
   kpen(2) = 0
   n4 = locint(narray(1))
   write (lunit6, 5831) n1, n2, n3, kburro, n4
-5831 format ( /,   18h top of  'tapsav'., '      n1      n2      n3  kburro              n4', /, 18x, 4i8, i16)
+5831 format (/, " Top of  'tapsav'., '      n1      n2      n3  kburro              n4", /, 18x, 4i8, i16)
   !     following check normally sends VAX EMTP to 6327 (disk is
   !     only wanted for table saving within a simulation for
   !     test purposes):
@@ -158,9 +158,9 @@ subroutine tapsav(narray, n1, n2, n3)
   n9 = ltlabl + kvecsv * nbyte(3)/nbyte(4)
   if (n9 .lt. kpen(2)+50) go to 6342
   write (lunit6, 6335)  n2, kpen(2), n9, nchain
-6335 format ( 37h error stop in "tapsav".  overflow of, ' /c29b01/ storage.  n2, kpen(2) =',  2i8, &
+6335 format (' Error stop in "tapsav".  Overflow of /c29b01/ storage.  n2, kpen(2) =',  2i8, &
           '     needed storage n9 =,  i8     ', /, ' memory requirement in integer words for virtual  ', &
-          ' computer implementation of tapsav. storage must ', /, ' provide for all of --/label/--( deck "labcom" ),   ', &
+          ' computer implementation of tapsav.   Storage must ', /, ' provide for all of --/label/--( deck "labcom" ),   ', &
           ' the several usages of "vecrsv" and "vecisv"(over6-11),  ', ' plus 50 extra cells.   ', /, ' nchain =', i5)
   call stoptp
 6342 j = 50
@@ -175,7 +175,7 @@ subroutine tapsav(narray, n1, n2, n3)
      narray(k) = karray(j)
   end do
 9000 if ( iprsup  .ge.  1 ) write (lunit6, 9003)   n9, kpen(2)
-9003 format ( 31h exit "tapsav".   n9, kpen(2) =,  2i8  )
+9003 format (' Exit "tapsav".   n9, kpen(2) =', 2i8)
   return
 end subroutine tapsav
 !
@@ -398,8 +398,8 @@ subroutine pltfil(k)
   !     single-precision (real*4) numbers only:
   if (k .le. 450 ) go to 7273
   write (lunit6, 7269) k
-7269 format (' ^^^^^^^^^^^^^^^   error stop in "pltfil"', '   ^^^^^^^^^^^^^^'   ,/,  ' ^^^^^^  too many', ' output variables (',  i3,  &
-          ' )  for use', ' real*4 plot file.   limit = 450.')
+7269 format (' ^^^^^^^^^^^^^^^   Error stop in "pltfil"   ^^^^^^^^^^^^^^', /, ' ^^^^^^  too many output variables (', i3,  &
+          ' )  for use real*4 plot file.   limit = 450.')
   call stoptp               ! installation-dependent program stop card
 7273 do j = 1, k
      forbyt(j) = volti(j)
@@ -409,7 +409,7 @@ subroutine pltfil(k)
   write (lunit4)  ( forbyt(j), j=1, k )
   go to 9000                ! exit module after possible diagnostic
 7286 if ( iprsup  .ge.  3 ) write (lunit6, 7301)  indbuf, mflush, k, limbuf, newvec, numcrd, (volti(j), j = 1, 10)
-7301 format ( ' top of "pltfil".  indbuf, mflush, k,', ' limbuf, newvec, numcrd =', 6i10  ,/,  1x,  10e13.4 )
+7301 format (' Top of "pltfil".  indbuf, mflush, k, limbuf, newvec, numcrd =', 6i10, /, 1x, 10e13.4)
   n7 = 0
   if ( indbuf  .gt.  0 )   go to 7308 ! not very 1st step
   !     plot data storage begins after "tables" usage for "labcom"
@@ -422,10 +422,10 @@ subroutine pltfil(k)
 7308 if ( indbuf + k .le. limbuf )  go to 7374 ! not full yet
   write (lunit6, 7311)  indbuf, limbuf
   write (munit6, 7311)  indbuf, limbuf
-7311 format ( '   % % % % % %   suspended', ' simulation;  plot data space exhausted;  use', ' spy.   indbuf, limbuf =',  2i8  )
+7311 format ('   % % % % % %   suspended simulation;  plot data space exhausted;  use', ' spy.   indbuf, limbuf =', 2i8)
   call window               ! output of character variable munit6
   write (munit6, 7312)
-7312 format ( '   % %  time-sharing disabled.   send', ' user-keyed interrupt to silence alarm.' )
+7312 format ('   % %  time-sharing disabled.   Send user-keyed interrupt to silence alarm.')
   call window               ! output of character variable munit6
   ll10 = 10
   call honker ( ll10 )      ! disaster-level audible indication
@@ -451,7 +451,7 @@ subroutine pltfil(k)
   monitr = 1                ! plot regenerated, so turn off request flag
 7396 if ( monits .ne. 0 )  call chrplt ! rolling character plot
 9000 if ( iprsup  .ge.  4 ) write (lunit6, 9004)
-9004 format (  ' exit "pltfil".'  )
+9004 format (' Exit "pltfil".')
   return
 end subroutine pltfil
 !
@@ -473,7 +473,7 @@ subroutine pltlu2 ( d2, volti )
      volti(j) = forbyt(j+1)
   end do
   if ( iprsup  .ge.  1 ) write (lunit6, 1978)  d2, volti(1), volti(iofgnd)
-1978 format (' exit "pltlu2".  d2, volti(1,iofgnd) =', 3e14.5)
+1978 format (' Exit "pltlu2".  d2, volti(1, iofgnd) =', 3e14.5)
   return
 end subroutine pltlu2
 !
@@ -494,19 +494,19 @@ subroutine vecrsv(array, n13, n2)
   !     kofvec(kntvec) remembers index for kntvec-th dumping.
   common /veccom/  kntvec,  kofvec(20)
   if ( iprsup  .ge.  1 ) write (lunit6, 1623) n13, n2, kntvec
-1623 format ( 27h begin "vecrsv".  n13, n2 =,  2i8, '     kntvec =',  i8 )
+1623 format (' Begin "vecrsv".  n13, n2 =',  2i8, '     kntvec =', i8)
   if ( n2  .ne.  0 )  go to 1638
   if ( n13  .ge.  0 )  kntvec = n13
   if ( n13  .lt.  0 )  kntvec = kntvec + n13
   if ( iprsup  .ge.  2 ) write (lunit6, 1629)  n13
-1629 format ( ' initialization of kntvec.  n13 =',  i10 )
+1629 format (' Initialization of kntvec.  n13 =', i10)
   go to 9000
 1638 if ( n2  .eq.  1 )   go to 1671
   !     begin code to restore  (array(k), k=1, n13)  from tank:
   kntvec = kntvec + 1
   n4 = kofvec(kntvec)
   if ( iprsup  .ge.  2 ) write (lunit6, 1640)  kntvec, n4
-1640 format ( ' ready to restore.  kntvec, n4 =',  2i10 )
+1640 format (' Ready to restore.  kntvec, n4 =', 2i10)
   if ( n13  .le.  0 )   go to 9000
   do k=1, n13
      array(k) = farray(n4)
@@ -518,11 +518,11 @@ subroutine vecrsv(array, n13, n2)
   n14 = nbyte(3) / nbyte(4) ! relative lengths  real/integer
   kofvec(1) =  ( ltlabl + 1 ) / n14  +  51 ! begin storage
   if ( iprsup  .ge.  2 ) write (lunit6, 1673)  kofvec(1)
- 1673 format ( ' initialize kofvec(1) =',  i10 )
+ 1673 format (' Initialize kofvec(1) =', i10)
 1674 kntvec = kntvec + 1
   n4 = kofvec(kntvec)
   if ( iprsup  .ge.  2 ) write (lunit6, 1675)  kntvec, n4
-1675 format ( ' ready to dump.  kntvec, n4 =',  2i10 )
+1675 format (' Ready to dump.  kntvec, n4 =', 2i10)
   if ( n13  .le.  0 )   go to 1683
   do k=1, n13
      farray(n4) = array(k)
@@ -532,11 +532,11 @@ subroutine vecrsv(array, n13, n2)
 1683 if ( kntvec  .ge.  20 ) call stoptp          ! installation-dependent program stop card
   kofvec(kntvec+1) = n4
   if ( iprsup  .ge.  2 ) write (lunit6, 1687)  kofvec(kntvec+1)
-1687 format ( ' define  kofvec(kntvec+1) =',  i10 )
+1687 format (' Define  kofvec(kntvec + 1) =', i10)
 9000 if ( iprsup  .ge.  1 ) write (lunit6, 9007) array(1), array(2), array(n13)
-9007 format ( 33h exit "vecrsv".  array(1;2;n13) =,  3e15.6 )
+9007 format (' Exit "vecrsv".  array(1; 2; n13) =',  3e15.6)
   if ( iprsup .ge. 2 )  write (lunit6, 9011) kofvec
-9011 format ( ' kofvec =',  20i6  )
+9011 format (' kofvec =', 20i6)
   return
 end subroutine vecrsv
 !
@@ -557,13 +557,13 @@ subroutine vecisv(karr, n13, n2)
   !     block /VECCOM/ is shared with "VECRSV" (see for more info)
   common /veccom/  kntvec,  kofvec(20)
   if (iprsup .ge. 1) write (lunit6, 1423) n13, n2
-1423 format (27h begin "vecisv".  n13, n2 =,  2i8)
+1423 format (' Begin "vecisv".  n13, n2 =',  2i8)
   if (n2 .eq. 1) go to 1471
   !     begin code to restore  (karr(k), k=1, n13)  from tank:
   kntvec = kntvec + 1
   n4 = kofvec(kntvec)
   if ( iprsup  .ge.  2 ) write (lunit6, 1428)  kntvec, n4
-1428 format ( ' ready to restore.  kntvec, n4 =',  2i10 )
+1428 format (' Ready to restore.  kntvec, n4 =', 2i10)
   do k=1, n13
      karr(k) = farray(n4)
      n4 = n4 + 1
@@ -574,11 +574,11 @@ subroutine vecisv(karr, n13, n2)
   n14 = nbyte(3) / nbyte(4) ! relative lengths  real/integer
   kofvec(1) =  ( ltlabl + 1 ) / n14  +  51
   if (iprsup .ge. 1) write (lunit6, 1473) kofvec(1)
-1473 format ( ' initialize kofvec(1) =',  i10 )
+1473 format (' Initialize kofvec(1) =', i10)
 1474 kntvec = kntvec + 1
   n4 = kofvec(kntvec)
   if ( iprsup  .ge.  1 ) write (lunit6, 1475)  kntvec, n4
-1475 format ( ' ready to dump.  kntvec, n4 =',  2i10 )
+1475 format (' Ready to dump.  kntvec, n4 =', 2i10)
   kofvec(kntvec) = n4       ! correct integer-vector beginning
   do k=1, n13
      farray(n4) = karr(k)
@@ -588,11 +588,11 @@ subroutine vecisv(karr, n13, n2)
   if ( kntvec .ge. 20 ) call stoptp       ! installation-dependent program stop card
   kofvec(kntvec+1) = n4
   if ( iprsup  .ge.  1 ) write (lunit6, 1482)  kofvec(kntvec+1)
-1482 format ( ' define kofvec(kntvec+1) =',  i10 )
+1482 format (' Define kofvec(kntvec + 1) =', i10)
 9000 if ( iprsup  .ge.  1 ) write (lunit6, 9007)  karr(1), karr(2), karr(n13)
-9007 format ( 32h exit "vecisv".  karr(1;2;n13) =,  3i10  )
+9007 format (' Exit "vecisv".  karr(1; 2; n13) =', 3i10)
   if ( iprsup .ge. 2 )  write (lunit6, 9011) kofvec
-9011 format ( ' kofvec =',  20i6  )
+9011 format (' kofvec =', 20i6)
   return
 end subroutine vecisv
 !
@@ -605,7 +605,7 @@ subroutine vecrxx(array, n13, n2)
   include 'blkcom.ftn'
   dimension array(2)
   if (iprsup .ge. 1) write (lunit6, 1575) n13, n2
-1575 format (27h begin "vecrsv".  n13, n2 =, 2i8)
+1575 format (' Begin "vecrsv".  n13, n2 =', 2i8)
   if ( n2  .ne.  0 )  go to 1638
   !     zero n2 means that we want to position tape for next read:
   if ( n13  .ge.  0 )   go to 1592
@@ -620,7 +620,7 @@ subroutine vecrxx(array, n13, n2)
      read (lunt13)  n14
   end do
 1612 if ( iprsup  .ge.  1 ) write (6, 1613)  n13
-1613 format (  ' position magnetic tape.  n13 =',  i4  )
+1613 format (' Position magnetic tape.  n13 =', i4)
   n13 = 3
   go to 9000
 1638 if ( n2  .eq.  1 )   go to 1671
@@ -630,7 +630,7 @@ subroutine vecrxx(array, n13, n2)
   !     begin code to dump  (array(k), k=1, n13)  onto tape:
 1671 write (lunt13)  ( array(k), k=1, n13 )
 9000 if ( iprsup  .ge.  1 ) write (lunit6, 9007)  array(1), array(2), array(n13)
-9007 format ( 33h exit "vecrsv".  array(1;2;n13) =,  3e15.6 )
+9007 format (' Exit "vecrsv".  array(1; 2; n13) =',  3e15.6)
   return
 end subroutine vecrxx
 !
@@ -643,7 +643,7 @@ subroutine vecixx(karr, n13, n2)
   include 'blkcom.ftn'
   dimension karr(2)
   if (iprsup .ge. 1) write (lunit6, 1423) n13, n2
-1423 format (27h begin "vecisv".  n13, n2 =, 2i8)
+1423 format (' Begin "vecisv".  n13, n2 =', 2i8)
   if (n2 .eq. 1) go to 1471
   !     begin code to restore  (karr(k), k=1, n13)  from tape:
   read (lunt13)  ( karr(k), k=1, n13 )
@@ -651,7 +651,7 @@ subroutine vecixx(karr, n13, n2)
   !     begin code to dump  (karr(k), k=1, n13)  onto tape:
 1471 write (lunt13)  ( karr(k), k=1, n13 )
 9000 if ( iprsup  .ge.  1 ) write (lunit6, 9007)  karr(1), karr(2), karr(n13)
-9007 format ( 32h exit "vecisv".  karr(1;2;n13) =,  3i10  )
+9007 format (' Exit "vecisv".  karr(1;2;n13) =',  3i10  )
   return
 end subroutine vecixx
 !
@@ -690,8 +690,8 @@ subroutine namea6 ( text1, n24 )
   n24 = maxbus
   go to 9000
 3438 if ( iprsup .ge. 1 ) write (lunit6, 3442)  maxbus, text1, n24
-3442 format ('  +++++  search of EMTP name vector bus' ,' through cell', i5, '   in  "namea6"  shows no match for', &
-          /, '         "', a6, '".   return -intinf.', i10)
+3442 format ('  +++++  Search of EMTP name vector bus through cell', i5, '   in  "namea6"  shows no match for', &
+          /, '         "', a6, '".   Return -intinf.', i10)
   n24 = -intinf
   go to 9000
 3446 if ( n24 .lt. 0 )  go to 3455
@@ -700,7 +700,7 @@ subroutine namea6 ( text1, n24 )
 3455 texvec(j) = text2
   n17 = j
 9000 if ( iprsup .ge. 6 ) write (lunit6, 9004)  text1, maxbus, n24, j
-9004 format ( 40h exit "namea6".  text1, maxbus, n24, j =, 2x, a6, 3i10)
+9004 format (' Exit "namea6".  text1, maxbus, n24, j =', 2x, a6, 3i10)
   return
 end subroutine namea6
 !
@@ -757,8 +757,8 @@ subroutine tables
   if ( nchain  .eq.  1 )   go to 3289
   if ( nchain  .eq.  20 )  go to 3289
 3289 if ( iprsup  .ge.  1 ) write (lunit6, 2721) n4, n5, nword1, nword2, ltlabl, n9, nchain, lastov, lunit2, t
-2721 format ( /,  19h within  "tables" ., '      n4      n5  nword1  nword2  ltlabl      n9', &
-          '  nchain  lastov  lunit2 ',  14x,  't'  ,/, 19x,  9i8,  e15.6  )
+2721 format (/, ' Within  "tables" .      n4      n5  nword1  nword2  ltlabl      n9', &
+          '  nchain  lastov  lunit2 ',  14x,  't', /, 19x, 9i8, e15.6)
   if ( nchain  .eq.  1 )        go to 5342
   if ( memsav  .eq.  1016 )     go to 5342
   if ( nchain  .lt.  lastov )   go to 5342
@@ -773,7 +773,7 @@ subroutine tables
   go to 5359
 5342 read  (lunit2)  locker
   if ( iprsup .ge. 9 ) write (lunit6, 66) locker
-66 format ( ' after 1st read.  locker =', 2i8  )
+66 format (' After 1st read.  locker =', 2i8)
   n3 = nchain
   n2 = iprsup
   n24 = numdcd
@@ -781,7 +781,7 @@ subroutine tables
   read  (lunit2)  (iprsov(i), i = 35, nword2)
   call tapsav ( integx(1), lunit2, ltlabl, ll2 )
   if ( iprsup .ge. 9 ) write (lunit6, 69) numsm,n4,n5,n9
-69 format ( 32h after tapsav: numsm,n4,n5,n9 = , 4i5)
+69 format (' After tapsav: numsm,n4,n5,n9 =', 4i5)
   if ( numsm  .ne.  0 ) read (lunit2)  (ktemp(i), i=1, n4), (jtemp(i), i=1, n5)
   read (lunit2)  ( itemp(i),  i=1, n9 )
   nchain = n3
@@ -799,7 +799,7 @@ subroutine tables
      iprsov(j+30) = n1
   end do
 5359 if ( iprsup .ge. 1 ) write (lunit6, 5364)
-5364 format (  15h exit "tables".  )
+5364 format (' Exit "tables".')
   return
 end subroutine tables
 !
@@ -823,24 +823,24 @@ subroutine csup(l)
   !     2001 if ( iprsup .lt. 6 )  go to 1000
   if (iprsup .lt. 6) go to 1000
   write (lunit6,1001) t, nsup, karg, kpar
-1001 format (34h0entering subroutine  csup  at  t=, e13.6     ,/, '0e nsup=', i6, '   karg=', i8,  '   kpar=', i6 )
+1001 format ('0entering subroutine  csup  at  t=', e13.6, /, '0e nsup=', i6, '   karg=', i8, '   kpar=', i6)
   write (lunit6,1002) ( i,  ilntab(i+kspvar), insup(i+kjsup), insup(i+kksup), i = 1, nsup )
-1002 format ( 32h  number  supvar    jsup    ksup ,/, (4i8) )
+1002 format ('  Number  supvar    jsup    ksup ',/, (4i8))
   write ( lunit6, 1033 ) karg
-1033 format ( 9h  karg = , i8 ,/, 24h       n  iopsup  ifnsup, 48h  irgsup    idev     kdj     kdk  ildev1  ildev2  )
+1033 format ('  karg = ', i8 ,/, '       n  iopsup  ifnsup  irgsup    idev     kdj     kdk  ildev1  ildev2')
   do i = 1, nsup
      n1 = insup( kjsup + i )
      if (  n1  .lt.  0 )  go to 2014
      n2 = insup( kksup + i )
      write (lunit6,2008) (n,ivarb(n+1),ivarb(n+2), ivarb(n+2), n = n1, n2, 3)
-2008 format ( 4i8 )
+2008 format (4i8)
      go to 2034
 2014 n1 = -n1
      write (lunit6, 2022 ) n1, ivarb(n1), ivarb(n1+1), ivarb(n1+2), ivarb(n1+3), ivarb(n1+4)
-2022 format ( i8, 24x, 5i8 )
+2022 format (i8, 24x, 5i8)
 2034 end do
   if ( kpar .ne. 0 ) write (lunit6,1004) ( i, parsup(i+kprsup), i=1, kpar )
-1004 format ( 2h0e, 5x, 10hparsup ...            ,/, (3h e , 5(i3,  1x, e15.6, 3x)))
+1004 format ('0e', 5x, 'parsup ...', /, (' e', 5(i3, 1x, e15.6, 3x)))
 1000 nnn = kxtcs + nuk + lstat(64)
   i = l
 1234 a = 0.0
@@ -1196,8 +1196,8 @@ subroutine csup(l)
     iuty(kiuty+3) = iuty(kiuty+3) - 1
     ndx6 = ilntab( kspvar + i )
     write (lunit6, 65316)  texvec( ndx6), t
-65316 format (5x, 47hwarning.  ----  value of delay became negative , 5hfor ', a6, 11h' at time =, e14.6, &
-           30h but lower limit nalue = 0.0 ., / 21x, 34hthis message will not be repeated.  )
+65316 format (5x, 'Warning.  ----  value of delay became negative for ', "'", a6, "'", ' at time =', e14.6, &
+           ' but lower limit nalue = 0.0 .', /, 21x, 'This message will not be repeated.')
 65313 d7 = 0.0
     go to 65310
 65320 if ( d9 .gt. 0.0 )  go to 65330
