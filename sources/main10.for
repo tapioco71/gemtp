@@ -1214,8 +1214,8 @@ subroutine csup(l)
     ndx6 = ilntab( kspvar + i )
     d4 = deltat * n6
     write (lunit6, 65356) d4, texvec( ndx6), t
-65356 format (5x, 'warning.  ----  value of delay exceeded ', "max. delay value of '", e14.6, "' for '", a6, &
-           "' at time =", e14.6, / 21x, 'this message will not be repeated.')
+65356 format (5x, 'Warning.  ----  value of delay exceeded max. delay value of ', '"', e14.6, '"', ' for ', '"', a6, &
+           '"', ' at time =', e14.6, ' .', / 21x, 'This message will not be repeated.')
 65353 j = n6
     m1 = 1
 65360 n4 = n7 - j
@@ -1418,7 +1418,7 @@ subroutine csup(l)
        if ( d4 .lt. d10 )   d10 = d4
        if ( d4 .gt. d11 )   d11 = d4
        if ( iprsup  .ge.  1 ) write (lunit6, 7234)  k, j, ndx2, ndx3, ndx6, ksus(ndx2), xtcs(ndx6)
-7234   format ( 36h next input; k, j, ndx2, ndx3, ndx6,, 25h ksus(ndx2), xtcs(ndx6) =,  6i8, e13.3)
+7234   format (' Next input; k, j, ndx2, ndx3, ndx6, ksus(ndx2), xtcs(ndx6) =',  6i8, e13.3)
 66340 end do
 66330 a = d11
     if ( parsup(nn+1) .ge. 0.0 )  go to 11
