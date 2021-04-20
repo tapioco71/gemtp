@@ -619,27 +619,27 @@ subroutine over2
 4041 if( kph .eq. 4 )  kph = 0
   if ( iprsup  .lt.  3 )   go to 84041
   write(lunit6, 34041)  kswtch, ibr, it, inonl, ichar
-34041 format( /, 66h done with sat. xformer at 34041.  kswtch, ibr, it, inonl, ichar=  , 5i10 )
+34041 format (/, ' Done with sat. xformer at 34041.  kswtch, ibr, it, inonl, ichar=  ', 5i10)
   write(lunit6, 44041)  ( i, kbus(i), mbus(i), nr(i), length(i), kodebr(i), bus(i), i=1, ibr )
-44041 format( /,  21h linear branch table.   ,/, 13x, 3hrow, 11x, 4hkbus, 11x, 4hmbus, 13x, 2hnr, 9x, 6hlength, &
-           9x, 6hkodebr, 12x, 3hbus, /, ( 1x, 6i15, a15 ) )
+44041 format(/, ' Linear branch table.', /, 13x, 'row', 11x, 'kbus', 11x, 'mbus', 13x, 'nr', 9x, 'length', &
+           9x, 'kodebr', 12x, 'bus', /, (1x, 6i15, a15))
   n = ichar
   if( inonl .gt. n )  n = inonl
   write(lunit6, 54041) (i, nonlk(i), nonlm(i), nltype(i), nonlad(i), nonle(i), anonl(i), vzero(i), vchar(i), gslope(i), &
        cchar(i), i = 1, n)
-54041 format( /, 18h n.l. elem arrays.   ,/, 6x, 3hrow, 3x, 5hnonlk, 3x, 5hnonlm, 2x, 6hnltype, 2x, 6hnonlad, &
-           3x, 5hnonle,10x, 5hanonl,10x, 5hvzero,10x, 5hvchar, 9x, 6hgslope, 10x, 5hcchar, /,  ( 1x, 6i8, 5e15.5 ) )
+54041 format (/, ' n.l. elem arrays.', /, 6x, 'row', 3x, 'nonlk', 3x, 'nonlm', 2x, 'nltype', 2x, 'nonlad', &
+           3x, 'nonle', 10x, 'anonl', 10x, 'vzero', 10x, 'vchar', 9x, 'gslope', 10x, 'cchar', /, (1x, 6i8, 5e15.5))
   write (lunit6, 64041) ( modswt(i), kmswit(i), isourc(i), nextsw(i), icrit(i), kpos(i), tclose(i), topen(i), i=1, kswtch )
-64041 format( /,  33h switch arrays with xformer info.   ,/, 11x, 6hmodswt, 4x, 6hkmswit, 4x, 6hisourc, &
-           4x, 6hnextsw, 5x, 5hicrit, 6x, 4hkpos, 9x, 6htclose, 9x, 6h topen, /, ( 7x, 6i10, 2e15.5 ) )
+64041 format (/, ' Switch arrays with xformer info.', /, 11x, 'modswt', 4x, 'kmswit', 4x, 'isourc', &
+           4x, 'nextsw', 5x, 'icrit', 6x, 'kpos', 9x, 'tclose', 9x, ' topen', /, (7x, 6i10, 2e15.5))
   write(lunit6, 74041)  ( i, tr(i), tx(i), c(i), i=1, it )
-74041 format( /, 31h lumped param storage tr, tx, c   ,/, ( 1x, i10, 3e20.6 ) )
+74041 format (/, ' Lumped param storage tr, tx, c', /, (1x, i10, 3e20.6))
 84041 if ( n1  .ne.  1 )   go to 4005
   if ( n2  .ne.  1 )   go to 4005
   go to 200
 4045 ksat = ksat + 1
   if ( noutpr  .eq.  0 ) write (kunit6, 74046)  itype
-74046 format ( 10h+  winding, i2, 1h.  )
+74046 format ('+  Winding', i2, '.')
   if( itype .gt. 1 )  go to 4034
   modswt(kswtch) = ibr + 1
   if( ioutmg .le. 1 )  go to 14045
@@ -678,7 +678,7 @@ subroutine over2
   kodebr(ibr) = 1
   if( iprsup .ge. 1 ) write(lunit6, 54033)  yzero, kswtch, ibr, it, inonl, ichar, kph, ksat,  ideal, keepb, keept, ntot, &
        nodtop, n1, n2
-54033 format( /,  47h ideal xformer interconnect, at 54033.  yzero =, e15.6, 5i12, /, ( 1x, 10i12 ) )
+54033 format (/, ' Ideal xformer interconnect, at 54033.  yzero =', e15.6, 5i12, /, (1x, 10i12))
   go to 4034
 4033 nr(ibr) = ideal
   length(ibr) = -2
@@ -707,7 +707,7 @@ subroutine over2
 44035 iref = iref + 1
   n5 = iabs( length(iref) )
   if( iprsup .gt. 3 ) write(lunit6, 74035)  ibr, it, ktref, iref, n5, kbus(ibr), mbus(ibr)
-74035 format( /,  51h ref. comp. copy of r1-l1 and mag. branch, at 74035, /, 1x, 8i15 )
+74035 format(/, ' Ref. comp. copy of r1-l1 and mag. branch, at 74035', /, 1x, 8i15)
   if( n5 .eq. 2 )  go to 100
   call ibrinc
   nr(ibr) = nr(iref)
@@ -720,9 +720,9 @@ subroutine over2
   go to 44035
 4044 continue
   read (unit = abuff, fmt = 4046) tr(it), tx(it), c(it), iout
-4046 format( 26x, 3e6.2, 35x, i1 )
+4046 format (26x, 3e6.2, 35x, i1)
   if ( noutpr  .eq.  0 ) write (kunit6, 54047)  itype, tr(it), tx(it), c(it)
-54047 format ( 10h+  winding, i2, 2h. ,  3e12.4 )
+54047 format ('+  Winding', i2, '. ',  3e12.4)
   i = it + 1
   call mover0 ( tr(i), ll2 )
   call mover0 ( tx(i), ll2 )
@@ -772,7 +772,7 @@ subroutine over2
   ichar = it3 - 1
   inonl = inonl - 1
   if( iprsup .ge. 2 ) write(lunit6, 4053)  it, ibr, ichar, inonl, kswtch, ncoil, ksat, kph
-4053 format( /,  37h mag. br. not actually n.l., at 4053.  ,/, 1x,8i15)
+4053 format (/, ' mag. br. not actually n.l., at 4053.', /, 1x, 8i15)
   if( ncoil .lt. 0 )  go to 100
   tx(it) = delta2 / gslope(it3) * xunits
   if( ioutmg .gt. 0 )  n2 = -n2
