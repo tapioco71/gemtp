@@ -167,7 +167,7 @@ ${COMPILER}/${TARGET}: ${COMPILER}/calcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
 ${COMPILER}/${TARGET}: ${COMPILER}/datain.o
 ${COMPILER}/${TARGET}: ${COMPILER}/inlmfs.o
-${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
+#${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
 
 #${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
 #${COMPILER}/${TARGET}: ${COMPILER}/calcom.o

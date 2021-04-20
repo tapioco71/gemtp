@@ -1,6 +1,6 @@
   !-*- Mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
   !
-  !     file: deskspy.ftn
+  !     file: dekspy.ftn
   !
   !     This deck is used only by interactive execution modules
   !     which begin with "emtspy".  Note "deck29" working space:

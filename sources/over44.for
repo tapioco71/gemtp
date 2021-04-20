@@ -1983,7 +1983,10 @@ subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, 
   include 'blkcom.ftn'
   include 'labl44.ftn'
   include 'deck44.ftn'
-  common /linemodel/ kexact, nsolve, fminsv, kbrnum, numrun
+  common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
+  common /linemodel/ char80, chlmfs(18)
+
+!  common /linemodel/ kexact, nsolve, fminsv, kbrnum, numrun
   character*8 text1, text2, text3, text4, text5, text6
   character*8 text7, text8, text9, text10
   dimension array(1)

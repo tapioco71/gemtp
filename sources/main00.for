@@ -2,6 +2,7 @@
   !
   !     file: main00.for
   !
+program gemtp
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   include 'blkcom.ftn'
   include 'volt45.ftn'
@@ -285,7 +286,7 @@ subroutine erexit
   !     VAX-11   installation-dependent emtp module.   This is
   !     called by the top of "main00", before any emtp data input.
   include 'blkcom.ftn'
-  include 'dekspy.ftn'
+  !include 'dekspy.ftn'
   !     dimension idum(3)   !  dummy vector for ctrl-c handling
   external kwiter       ! needed for ctrl-c initialization
   common /comkwt/  kwtvax  ! magic block for vax/vms ctrl-c

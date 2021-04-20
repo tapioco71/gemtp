@@ -2054,7 +2054,7 @@ end subroutine umdata
 !
 subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld, jtmtac, reamdu, reamds, flxds, flxdr, &
      reamqu, flxqs, flxqr, jcdsat, jcqsat, nppair, rotmom, nclq, jtqout, jthout, reamqs, voltum, anglum, nodfum, nodmum, &
-     kumout, jumout, jclout, dcoef, jomout, umoutp) 
+     kumout, jumout, jclout, dcoef, jomout, umoutp)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   dimension nodvo2(1), jtmtac(1), flxqs(1), rotmom(1)
   dimension reacl(1),gpar(1),fpar(1),nodvo1(1),nodfum(1)
