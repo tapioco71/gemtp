@@ -2249,7 +2249,7 @@ subroutine over1
  2210 if ( kill  .gt.  0 )   go to 9000
       if ( kolbeg  .gt.  0 )   go to 6574
       read (unit=abuff(1), fmt=176) n
- 176  format ( i2 )
+ 176  format (i2)
  1234 if ( n .eq. 88 .or. n .eq. 98 .or. n .eq. 99 ) go to 113
       if ( n  .eq.  33 ) go to 2222
       if ( n  .eq.  77 ) go to 3333
@@ -2315,21 +2315,21 @@ subroutine over1
       if ( n  .ne.  1 ) go to 1399
       iuty( kiuty+6) = 9999
       if ( noutpr  .eq.  0 ) write ( kunit6, 152 )
-152   format (  42h+request for output of all tacs variables.   )
+152   format ('+Request for output of all tacs variables.')
       go to 100
 1399  if ( n  .ne.  0 )   go to 139
       if ( noutpr  .eq.  0 )  write ( kunit6, 137 )
-137   format (  45h+blank card terminating all tacs data cards .   )
+137   format ('+Blank card terminating all tacs data cards .')
       go to 101
 139   if ( dum(1)  .eq.  0.0 )  dum(1) = 1.0
       if ( noutpr  .eq.  0 ) write (kunit6, 179)  alnode, n, dum(1)
- 179  format ( 16h+tacs function ', a6, 8h', order, i2, 1h., e14.4  )
+ 179  format ('+tacs function ', "'", a6, "'", ', order', i2, '.', e14.4)
       if ( n .lt. 8  .and.  n .ge. 0 )   go to 118
       kill = 115
       lstat(19) = 118
       if ( noutpr  .eq.  0 )  write ( lunit6, 163 )
-163   format('0limit.  Dimensions in tacs have not been set to accept an order greater than  7.                                   ',&
-           /, 'it is suggested to break this monstruous block into a set of smaller ones in cascade.')
+163   format ('0limit.  Dimensions in tacs have not been set to accept an order greater than  7.                                   ', /, &
+           'It is suggested to break this monstruous block into a set of smaller ones in cascade.')
 7433  bus1 = alnode
       lstat(14) = n
       go to 9000
@@ -2386,7 +2386,7 @@ subroutine over1
       lstat(14) = n
       lstat(19) = 7420
       write (lunit6,3)
- 3    format ( /,  34h error.  no input node specified.   )
+ 3    format (/, ' Error.  No input node specified.')
       go to 9000
  7420 if ( n  .eq.  0 )  go to 103
       rsblk(nukr+1) = 999999.99
@@ -2440,7 +2440,7 @@ subroutine over1
          ndx1 = kprsup + j2
 6517     if ( noutpr  .eq.  0 ) write (kunit6, 182) sbn(ijk), (parsup(i), i=ndx1, ndx3, 6)
       end do
-182   format ( 3h+  , a6,  4e10.2 )
+182   format ('+  ', a6, 4e10.2)
       do i = j, kpar, 6
          ndx1 = kprsup  + i
          parsup(ndx1+3) = parsup(ndx1+1)
@@ -2475,17 +2475,17 @@ subroutine over1
  231  if ( iprsup  .lt.  2 )  go to 4444
       if ( nuk  .eq.  0 )  go to 2315
       write ( lunit6, 1998 )  nuk
- 1998 format ( 7h nuk = , i4 ,/, 10x, 27h alksx    ksj   kfst    kni  )
+ 1998 format (' nuk = ', i4 ,/, 10x, ' alksx    ksj   kfst    kni')
       nuki = kisblk - 8
       do n = 1, nuk
          nuki = nuki + 8
          write (lunit6,1999)  n, atcs(katcs+n), isblk(nuki+1), isblk(nuki+2), isblk(nuki+3)
       end do
-1999  format ( 2x, i4, 2x, f8.0, 3i7 )
+1999  format (2x, i4, 2x, f8.0, 3i7)
       write ( lunit6, 2005 ) nsu, (n, ksus(kalksu+n), ksus(kksus+n), n=1,nsu)
-2005  format ( 8h0 nsu = , i3  ,/, 8x, 11hksu    ksus  ,/, ( 1x, i3, 1x, 2i6 )  )
+2005  format ('0 nsu = ', i3  ,/, 8x, 'ksu    ksus  ',/, (1x, i3, 1x, 2i6))
 2315  write (lunit6,2006) niu
-2006  format ( 8h0 niu = ,i3 ,/, 8x,11haliu   iuty, 7x, 3hud1, 12x, 3hud2, 12x, 3hud3, 12x, 3hud4, 12x, 3hud5 )
+2006  format ( '0 niu = ', i3, /, 8x, 'aliu   iuty', 7x, 'ud1', 12x, 'ud2', 12x, 'ud3', 12x, 'ud4', 12x, 'ud5')
       ndx5 = kud1 - 5
       do n = 1, niu
          n1 = ilntab(kaliu+n)
@@ -2494,34 +2494,34 @@ subroutine over1
          go to 2323
 2121     ndx5 = ndx5 + 5
          write (lunit6,2306) n,texvec(n1),iuty(kiuty+n),ud1(ndx5+1) ,ud1(ndx5+2), ud1(ndx5+3),  ud1(ndx5+4), ud1(ndx5+5)
-2306     format ( 1x,i3, 1x, a8,i6,5e15.6 )
+2306     format (1x, i3, 1x, a8,i6, 5e15.6)
 2323  end do
       if ( nsup .eq. 0 )  go to 4444
       write (lunit6,2007) nsup, ( n, ilntab(kspvar+n), insup(kjsup+n), insup(kksup+n), n=1, nsup )
-2007  format (7h0 nsup=, i6, /, 8x, 24h  supvar    jsup    ksup, /, ( 4i8 ) )
+2007  format ('0 nsup=', i6, /, 8x, '  supvar    jsup    ksup', /, (4i8))
       write ( lunit6, 1033 ) karg
- 1033 format (9h  karg = , i8 ,/, 24h       n  iopsup  ifnsup, 48h  irgsup    idev     kdj     kdk  ildev1  ildev2  )
+ 1033 format ('  karg = ', i8, /, '       n  iopsup  ifnsup  irgsup    idev     kdj     kdk  ildev1  ildev2')
       do i = 1, nsup
          n1 = insup( kjsup + i )
          if (  n1  .lt.  0 )  go to 2014
          n2 = insup( kksup + i )
          write (lunit6,2008) (n,ivarb(n+1),ivarb(n+2), ivarb(n+2), n = n1, n2, 3)
-2008     format (4i8 )
+2008     format (4i8)
          go to 2034
 2014     n1 = -n1
          write (lunit6, 2022 ) n1, ivarb(n1), ivarb(n1+1), ivarb(n1+2), ivarb(n1+3), ivarb(n1+4)
-2022     format ( i8, 24x, 5i8 )
+2022     format (i8, 24x, 5i8)
 2034  end do
       if ( kpar .ne. 0 ) write (lunit6,2009) kpar, ( parsup(kprsup+n), n=1,kpar )
-2009  format (7h  kpar=, i8, 6x, 18hparsup as follows: ,/,(8e16.6))
+2009  format ('  kpar=', i8, 6x, 'parsup as follows:', /, (8e16.6))
       n22 = nsudv + 1
       if ( nsudv .lt. lstat(63) ) write (lunit6,10031) nsudv, ( n, ksus(kalksu+n), ksus(kksus+n), n = n22,  lstat(63))
-10031 format (8h0 nsudv=, i4/12x,13halksu    ksus/(1x, 3i8))
+10031 format ('0 nsudv=', i4, /, 12x, 'alksu    ksus', /, (1x, 3i8))
       go to  4444
  1066 if ( kill  .gt.  0 )   go to 9000
       if ( kolbeg  .gt.  0 )   go to 6534
       read (unit=abuff(1), fmt=187) n, alnode, dum(1), dum(3), dum(2), prx, pru
-187   format (i2,a6,2x,3e10.0,20x,2e10.0)
+187   format (i2, a6, 2x, 3e10.0, 20x, 2e10.0)
       go to 6537
 6534  nright = -1
       call freone ( d1 )
@@ -2555,14 +2555,14 @@ subroutine over1
       ud1(ndy5+5)  = fltinf
       if ( pru .ne. 0.0 )  ud1(ndy5+5)  = pru
       if ( noutpr  .eq.  0 ) write (kunit6, 170)  ( dum(i), i=1, 3 )
- 170  format (  13h+tacs source.  ,   3e12.3  )
+ 170  format ('+tacs source.', 3e12.3)
       if ( nchain  .eq.  1 )  go to 100
  1090 if ( n  .ne. 90 ) go to 1091
       do j = 2, ntot
          if ( alnode .eq. bus(j) )  go to 479
       end do
       write (lunit6,168) alnode
-168   format (18h  type 90 source ",a6,23h" is not a recognizable, 45h node name in emtp. the card will be discard  )
+168   format ('  Type 90 source "', a6, '" is not a recognizable node name in EMTP. The card will be discard')
       go to 8579
 1091  if ( n1 .ne. 91  .and.  n1 .ne. 93 )  go to 1092
       do j = 1,kswtch
@@ -2573,13 +2573,13 @@ subroutine over1
          if ( alnode  .eq.  bus(m) )   go to 479
 478   end do
       write (lunit6, 55168) alnode
-55168 format (19h  source 90 or 91 ",a6,23h" is not a recognizable, 52h switch node name in emtp. the card will be discard  )
+55168 format ('  Source 90 or 91 "', a6, '" is not a recognizable switch node name in EMTP. The card will be discard')
 8579  niu  = niu  - 1
       ndy5 = ndy5 - 5
       go to 9000
 1092  if ( n1  .ne.  92 )   go to 8579
       write ( lunit6, 5566 )
-5566  format ( 46h  ----- this card will be ignored, because #92, 33h source cannot be changed   ----  )
+5566  format ('  ----- This card will be ignored, because #92 source cannot be changed   ----')
       go to  8579
 479   ud1(ndy5+2) = j
       go to 9000
@@ -2590,7 +2590,7 @@ subroutine over1
       go to 9000
 2222  if ( kolbeg  .gt.  0 )   go to 6554
       read (unit=abuff(1), fmt=190) (dumj(i), i=1, 13)
-190   format ( 2x, 13a6 )
+190   format (2x, 13a6)
       go to 6557
 6554  nfrfld = 13
       nright = -1
@@ -2614,7 +2614,7 @@ subroutine over1
       if ( jr .eq. 1 ) go to 3535
       if ( noutpr .eq. 0 ) write ( kunit6, 4455 )
 3535  if ( noutpr  .eq.  0 ) write ( kunit6, 154 )
-154   format (  39h+tacs variables for emtp output vector.   )
+154   format ('+tacs variables for EMTP output vector.')
       go to 100
  4466 lstat(19) = 1199
  9300 kill = 122
@@ -2623,7 +2623,7 @@ subroutine over1
       go to 9000
  3333 if ( kolbeg  .gt.  0 )   go to 6564
       read (unit=abuff(1), fmt=195) alnode, prx
- 195  format ( 2x, a6, 2x, e10.0)
+ 195  format (2x, a6, 2x, e10.0)
       go to 6567
  6564 nfrfld = 1
       nright = -1
@@ -2633,7 +2633,7 @@ subroutine over1
       call freone ( prx )
  6567 if ( alnode  .ne.  blank )   go to 3838
       if ( noutpr .eq. 0 ) write ( kunit6, 4455 )
- 4455 format ( 24h+ignor the illegal card. )
+ 4455 format ('+Ignor the illegal card.')
       go to 100
  3838 kxic = kxic + 1
       if ( kxic .lt. lstat(68) ) go to 3377
@@ -2646,7 +2646,7 @@ subroutine over1
       call namea6( alnode, n23 )
       xtcs(ndx2) = n23
       if ( noutpr .eq. 0 )  write (kunit6, 4195)  alnode, prx
- 4195 format (14h+init. cond. ', a6, 1h', e16.6)
+ 4195 format ('+Init. cond. ', "'", a6, "'", e16.6)
       go to 100
  113  call tacs1a
       if ( kill .gt. 0 ) go to 9000
@@ -2657,7 +2657,7 @@ subroutine over1
       go to 9300
  4444 call tacs1b
  9000 if ( iprsup  .ge.  1 ) write ( lunit6,4568 )
-4568  format ( 23h  "exit  module tacs1." )
+4568  format ('  "exit  module tacs1."')
       return
     end subroutine tacs1
 !
@@ -2783,11 +2783,11 @@ subroutine over1
       data  smultp   /  1h*  /
       data  text1   /  6hvalue   /
       if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
-4567  format ( 24h  "begin module tacs1a." )
+4567  format ('  "Begin module tacs1a."')
       kjsup = kinsup + lstat(65)
       kksup = kjsup  + lstat(65)
       read (unit=abuff(1), fmt=180) n, alnode, m
- 180  format ( i2, a6, i2)
+ 180  format (i2, a6, i2)
  144  nsup = nsup + 1
       if ( nsup .le. lstat(65) )  go to 2515
       kill = 122
@@ -2802,10 +2802,10 @@ subroutine over1
       insup(kinsup+nsup) = 0
       if ( m .ne. 0 )  go to 10700
       read (unit=abuff(1), fmt=12516) alnm1
-12516 format ( 10x, a1)
+12516 format (10x, a1)
       if ( alnm1 .ne. eqlsgn )  go to 12517
       if ( noutpr .eq. 0 ) write ( kunit6, 1251 )
- 1251 format ( 38h+tacs supplemental fortran expression  )
+ 1251 format ('+tacs supplemental Fortran expression')
 !     ***  read  this  arbitrary  logical/algebraic
 !     ***   free-format  fortran  expression
 !     ***  * * * * * * * * * * * * * * * * *   ***
@@ -3449,7 +3449,7 @@ subroutine over1
 !     ***  old  fixed-format  pseudo-fortran  expression  ***
 !     ***  * * * * * * * * * * * * * * * * * * * * * * *  ***
 12517 if ( noutpr .eq. 0 )  write ( kunit6, 9304 )
- 9304 format ( 28h+tacs supplemental variable  )
+ 9304 format ('+tacs supplemental variable')
       read (unit=abuff(1), fmt=18001) prx, alph(1), dumj(1), dumj(6), alph(2), dumj(2), dumj(7), alph(3), dumj(3), pru, alph(4), &
            dumj(4), dumj(9), alph(5), dumj(5), dumj(10)
 18001 format (10x,e10.0,2(a1,a5,a6),a1,a5,e6.0,2(a1,a5,a6))
@@ -3542,10 +3542,10 @@ subroutine over1
       lstat( 19) = 104
       go to 9000
 10700 if ( noutpr  .eq.  0 ) write (kunit6, 19305) m
-19305 format ( 31h+tacs supplemental device type , i2 )
+19305 format ('+tacs supplemental device type ', i2)
       read (unit=abuff(1), fmt=18002) alph(1), dumj(1), alph(2), dumj(2), alph(3), dumj(3), alph(4), dumj(4), alph(5), dumj(5), &
            (dum(i), i=1, 3), alnm1, alnm2
-18002 format ( 10x, 5(a1,a6,1x), 3e6.0, 2a6)
+18002 format (10x, 5(a1,a6,1x), 3e6.0, 2a6)
       if ( m .ge. 50 )  go to 10701
       kill = 134
       lstat( 19) = 10701
@@ -3640,7 +3640,7 @@ subroutine over1
       parsup(mpar+4) = dum(1)
       dum(1) = 0.0
 1707  if ( iprsup .ge. 1 )  write (lunit6, 8841)  alnm2
-8841  format ( 30h test delay line i.c., value =,  a6  )
+8841  format (' Test delay line i.c., value =', a6)
       do i1 = kpar, n6
          ndx6 = kprsup + i1
          parsup(ndx6) = dum(1)
@@ -3657,7 +3657,7 @@ subroutine over1
       if ( kolbeg  .gt.  0 )   go to 6544
       !     decode ( 80, 10712, abuff( 1))  prx, pru
       read (unit=abuff(1), fmt=10712) prx, pru
-10712 format ( 2e16.0)
+10712 format (2e16.0)
       go to 6547
 6544  nfrfld = 1
       call frefld ( voltbc(1) )
@@ -3667,7 +3667,7 @@ subroutine over1
       pru = voltbc(1)
 6547  if ( prx  .eq.  9999. )   go to 10713
       if ( noutpr  .eq.  0 ) write (kunit6, 10715)  prx, pru
-10715 format ( 18h+data values.             ,  2e13.4)
+10715 format ('+Data values.             ',  2e13.4)
       kpar = kpar + 1
       ndx1 = kprsup +  kpar
       parsup(ndx1) = prx
@@ -3678,7 +3678,7 @@ subroutine over1
       go to 10711
 10713 ivarb(karg+4) = - kpar
       if ( noutpr  .eq.  0 ) write (kunit6, 10716)
-10716 format ( 41h+end of data values for last-read device.   )
+10716 format ('+End of data values for last-read device.')
       if ( m .eq. 57 )  parsup(mpar+2) = 0.
       if ( m .eq. 57 )  parsup(mpar+3) = 0.
       go to  3636
@@ -3737,9 +3737,9 @@ subroutine over1
       kpar = kpar + 4
       go to 3636
 6799  if ( noutpr .eq. 0 ) write ( kunit6, 1104 )
- 1104 format ( 22h+no such sup. device.  )
+ 1104 format ('+No such sup. device.')
 9000  if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
-4568  format ( 24h  "exit  module tacs1a." )
+4568  format ('  "Exit  module tacs1a."')
       return
     end subroutine tacs1a
 !
@@ -3755,7 +3755,7 @@ subroutine over1
       character*6 delay
       data  delay   / 6hdelay  /
       if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
-4567  format ( 24h  "begin module tacs1b." )
+4567  format ('  "Begin module tacs1b."')
       ll0 = 0
       ll1 = 1
       ll2 = 2
@@ -3924,7 +3924,7 @@ subroutine over1
       go to 9000
  777  nukr = krsblk + nuk * 4
       write ( lunit6,  7171 )
- 7171 format ( 47h --------- more than one limiter in the zs loop, 44h insert a delay s-block to decouple the loop  )
+ 7171 format (' --------- More than one limiter in the zs loop insert a delay s-block to decouple the loop')
       nuki = kisblk - 4
       do lc = 1, nuk
          nuki = nuki + 8
@@ -4198,7 +4198,7 @@ subroutine over1
          ilntab(k) = atcs( katcs + i )
       end do
       if ( iprsup .gt. 0 ) write ( lunit6, 8844 ) ( ilntab(klntab+i), i = 1, nuk )
- 8844 format ( 18h  $$$ ilntab $$$ =,/, ( 5x, 15i8 ) )
+ 8844 format ('  $$$ ilntab $$$ =', /, ( 5x, 15i8 ))
       !     $$$  form tables  $$$ m37.1855
 2540  if ( nsup .eq. 0 )  go to 21100
       i = 1
@@ -4285,15 +4285,15 @@ subroutine over1
       go to 9000
 9200  kill = 500
       write ( lunit6, 9202 )
-9202  format (  43h  the case will be killed because there are , 50h some loops in supplemental variables or devices. ,/, &
-           49h  this is not allowed.    the looped supplemental, 25h  blocks are as follows :   )
+9202  format ('  The case will be killed because there are some loops in supplemental variables or devices.',/, &
+           '  This is not allowed.    The looped supplemental blocks are as follows :')
       j = 0
       do i = 1, nsup
          if ( insup(kinsup+i)  .ne.  0 ) go to 9208
          j = j + 1
          ndx1 = ilntab( kspvar + i )
          write ( lunit6, 9204 )   j, texvec(ndx1)
-9204     format ( 10h  ********, 2x, i5, 4x, a6,  10h  ******** )
+9204     format ('  ********', 2x, i5, 4x, a6, '  ********')
 9208  end do
       go to 9000
 21100 do i = 1, nsu
@@ -4318,7 +4318,7 @@ subroutine over1
          ndx1 = klntab + k
          bus2 = texvec( ilntab(klntab+k) )
          write (lunit6,497) bus1, bus2
-497      format('0 error. Entry =', a6, '= referenced in function =', a6, '= is undefined.')
+497      format('0 Error. Entry =', "'", a6, "'", '= referenced in function =', "'", a6, "'", '= is undefined.')
          go to 9000
 213      ksus(ndx3) = j
 211   end do
@@ -4347,7 +4347,7 @@ subroutine over1
             lstat(14) = l
             lstat(19) = 30
             write (lunit6,99) bus6 , bus1
-99          format (24h error.  name of limit  , a6, 13h  at block = , a6, 20h  is unidentifiable. )
+99          format (' Error.  Name of limit  ', a6, '  at block = ', a6, '  is unidentifiable.')
             go to 9000
 40          if ( l .eq. 2 )  go to 41
             isblk(nukm+5) = j
@@ -4360,35 +4360,35 @@ subroutine over1
 10    end do
       if ( iprsup  .lt.  2 )  go to 1006
       write ( lunit6, 2007 )
-2007  format ( 42h         n    ifls   ilim1   ilim2   nuksp )
+2007  format ('         n    ifls   ilim1   ilim2   nuksp')
       nukn = kisblk - 8
       do  n = 1, nuk
          nukn = nukn + 8
 5654     write (lunit6,2010) n, isblk(nukn+4), isblk(nukn+5), isblk(nukn+6), isblk(nukn+7)
       end do
-2010  format ( 2x, 5i8 )
+2010  format (2x, 5i8)
       write (lunit6,2013) (n, ksus(kalksu+n), n=1,nsu)
-2013  format ( 1h0, 17x,3hksu/( 2x, 2i8  )  )
+2013  format ('0', 17x, 'ksu', /, (2x, 2i8))
       if ( nsup  .eq.  0 )  go to  1012
       write ( lunit6, 1033 ) karg
-1033  format('  karg = ', i8, /, '       n  iopsup  ifnsup', '  irgsup    idev     kdj     kdk  ildev1  ildev2')
+1033  format('  karg = ', i8, /, '       n  iopsup  ifnsup  irgsup    idev     kdj     kdk  ildev1  ildev2')
       do i = 1, nsup
          n1 = insup( kjsup + i )
          if (  n1  .lt.  0 )  go to 2014
          n2 = insup( kksup + i )
          write (lunit6,2008) (n,ivarb(n+1),ivarb(n+2), ivarb(n+2), n = n1, n2, 3)
-2008     format ( 4i8 )
+2008     format (4i8)
          go to 2034
 2014     n1 = -n1
          write (lunit6, 2022 ) n1, ivarb(n1), ivarb(n1+1), ivarb(n1+2), ivarb(n1+3), ivarb(n1+4)
-2022     format ( i8, 24x, 5i8 )
+2022     format (i8, 24x, 5i8)
 2034  end do
       if ( nsudv .lt. lstat(63) )  write ( lunit6, 2015 ) (n, ksus(kalksu+n), ksus(kksus+n), n=nsudv+1, lstat(63))
-2015  format ( 1h0,11x,13halksu    ksus, /, (1x, 3i8) )
+2015  format ('0', 11x, 'alksu    ksus', /, (1x, 3i8))
 1012  write (lunit6,2017) ktab, (n, ilntab(klntab+n), n=1,ktab)
-2017  format (9h0 ktab = ,i5/9x,7h ilntab ,/,(1x,2i8))
+2017  format ('0 ktab = ',i5, /, 9x, ' ilntab ', /, (1x,2i8))
       write (lunit6,2018) nuk
-2018  format ( 10h   nuk  = ,i6  )
+2018  format ('   nuk  = ',i6)
 1006  n2 = 0
       min = nuk + niu
       nkn = nuk + lstat(64)
@@ -4403,7 +4403,7 @@ subroutine over1
             n2 = n2 + 1
             bus6 = texvec(n6)
             write (lunit6, 2041)  k, j, bus6
-2041        format ( /,   15h entries number,  i5,  6h   and,  i5, 48h   of the tacs name-vector both have contents  ', a6,  3h' . )
+2041        format (/, ' Entries number', i5, '   and',  i5, '   of the tacs name-vector both have contents  ', "'", a6,  "'", ' .')
 2045     end do
 2046  end do
       if ( n2  .eq.  0 )   go to 2072
@@ -4431,8 +4431,8 @@ subroutine over1
             if ( j8 .eq. ilntab(klntab+j) )  go to 229
 228      end do
          if (noutpr .eq. 0) write (lunit6, 232 ) texvec(j8)
-232      format(/, '   the user has requested a tacs variable named "', a6, '" for output purposes. but this is a non-existant &
-              tacs', /,  ' variable, so the request will be disregarded.')
+232      format (/, '   The user has requested a tacs variable named "', a6, '" for output purposes. But this is a non-existant tacs', /, &
+              ' variable, so the request will be disregarded.')
          go to 109
 229      jr = jr + 1
          ndx1 = kjout + jr
@@ -4446,7 +4446,7 @@ subroutine over1
       lstat(19) = 23153
       go to 9000
 111   if ( iprsup  .ge.  1 ) write (lunit6,192) (jout(kjout+i), i=1,ioutcs)
-192   format(44h0program output will be prepared for nodes 0/(1x,16i8))
+192   format ('0program output will be prepared for nodes 0', /, (1x,16i8))
       !     ******   initial condition   **********   m38.1078
 3072  if ( kxic .eq. 0 ) go to 231
       kxtcs2 = kxtcs + lstat(68)
@@ -4461,7 +4461,7 @@ subroutine over1
             if ( j8 .eq. ilntab(klntab+k) )  go to 412
          end do
          write ( lunit6, 7686 )  texvec(j8)
-7686     format ( 45h $$$$$ ignor the initial condition card since, 16h no such name ( , a6,  27h ) in the tacs table $$$$$ )
+7686     format (' $$$$$ Ignor the initial condition card since no such name ( ', a6,  ' ) in the tacs table $$$$$')
          go to 4111
 412      jr = jr + 1
          xtcs(kxtcs+k) = xtcs( kxtcs2 + i )
@@ -4473,7 +4473,7 @@ subroutine over1
          ndx1 = ilntab( klntab + i )
 3434     if ( xtcs(kxtcs+i) .ne. 0.0 ) write (lunit6,196)  texvec(ndx1), xtcs(kxtcs+i)
       end do
-196   format (34h  user-defined initial condition  , a6, e20.8)
+196   format ('  User-defined initial condition', a6, e20.8)
 231   if ( iplot  .lt.  0 )   go to 9000
       n1 = 0
       write (lunit4) date1, tclock, maxbus, ioutcs, n1, n1, ( texvec(i), i = 1, maxbus )
@@ -4486,7 +4486,7 @@ subroutine over1
       end do
       write (lunit4)  ( icolcs(i), i = n2, n3 )
 9000  if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
-4568  format ( 24h  "exit  module tacs1b." )
+4568  format ('  "Exit  module tacs1b."')
       return
     end subroutine tacs1b
 !
@@ -4513,7 +4513,7 @@ subroutine over1
       data  texnum(10)  /  1h0  /
       data  texnum(11)  /  1h.  /
       read (unit=abuff, fmt=2618) (x(i), i=1, 80)
- 2618 format ( 80a1 )
+ 2618 format (80a1)
       do i = n1, n2, n5
          key = 0
          do j = 1, n5
@@ -4548,7 +4548,7 @@ subroutine over1
       character*8 x
       dimension x(80)
       read (unit=abuff, fmt=2642) (x(i), i=1, 80)
-2642  format ( 80a1 )
+2642  format (80a1)
       n6 = n1 - 1
       do i = n1, n2
          if ( x(i)  .eq.  blank )   go to 2648
@@ -4604,9 +4604,9 @@ subroutine over1
       n5 = n(2) - 10 * n4
       n6 = n(1) / 10
       write (unit=a(1), fmt=1386) n4, n5, n6
-1386  format ( 2i1,  1h/,  1i1  )
+1386  format (2i1, '/',  1i1)
       write (unit=a(2), fmt=1394) n7, n3
-1394  format ( i1,  1h/,  i2  )
+1394  format (i1, '/', i2)
       return
     end subroutine date44
 !
@@ -4627,31 +4627,31 @@ subroutine over1
       character*25 filen
       if (m4plot .ne. 1)  go to 4519 ! not interactive emtp
       write(prom80, 4504)
-4504  format('    send vax disk file name:')
+4504  format('    Send VAX disk file name:')
       call prompt               ! write prom80 with cursor control (no lf)
       read (munit5, 4507) (texcol(j), j = 1, 30)
-4507  format(30a1)
+4507  format (30a1)
       texcol(31) = csepar       ! put "," terminator after name
       ialter = lunit2           ! connect emtp tables file to this unit
 4519  n4 = 0
       write (unit=filen(1:25), fmt=4523)
-4523  format(25x)
+4523  format (25x)
       do k = kolbeg, 80
          if(texcol(k) .eq. blank) go to 4532
          if(texcol(k) .eq. csepar) go to 4536
          n4 = n4 + 1
          write(unit=filen(n4:25), fmt=3041) texcol(k)
-3041     format(80a1)
+3041     format (80a1)
 4532  end do
 4536  nfrfld = 1
       kolbeg = k + 1
       n7 = ialter
       if(iprsup .ge. 1) write(lunit6, 4548) ialter, filen
-4548  format(/, ' ready to connect file to unit  "ialter" =', i3, ' .   "filen" =', a25)
+4548  format (/, ' Ready to connect file to unit  "ialter" =', i3, ' .   "filen" =', a25)
       close (unit=n7)
       open(unit=n7, status='old', form='unformatted', file=filen)
       if(iprsup .ge. 1) write(lunit6, 4561)
- 4561 format (/,  ' successful file opening in  "pfatch" .')
+ 4561 format (/, ' Successful file opening in  "pfatch" .')
       icat = 2
       return
     end subroutine pfatch
