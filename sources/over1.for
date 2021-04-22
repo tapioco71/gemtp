@@ -251,7 +251,7 @@ subroutine over1
        ' list limits  1-10 :', 10i6, /, ' list limits 11-20 :', 10i6, /, ' list limits 21-end:', 10i6)
   go to 15
 6452 write (lunit6, 83044) (ichar(locker(i)), i = 1, 2)
-83044 format (' Associated user documentation is the 864-page EMTP rule book dated  June, 1984.   Version M43.   Vardim time/date =', 2i2)
+83044 format (' Associated user documentation is the 864-page EMTP rule book dated  June, 1984.   Version M43.   Vardim time/date =', 2i7)
   write (lunit6, 5241)  ltlabl, lbus, lbrnch, ldata, lexct, lymat, lswtch, lsize7, lpast, lnonl, lchar, lsmout, &
        lsiz12, lfdep, lwt, ltails, limass, lsyn, maxpe, ltacst, lfsem, lfd, lhist, lsiz23, lcomp, lspcum, &
        lsiz26, lsiz27, lsiz28
@@ -2031,7 +2031,7 @@ subroutine sysdep
   ansi32 = stripper(ansi32, ' ')
   if (iprsup .ge. 1 ) write (lunit6, 3672) ansi32
 3672 format (/,  ' in  #sysdep# ,   ansi32 =',  a32)
-  open (unit = lunit4, status = 'new', file = ansi32, form = 'unformatted')
+  open (unit = lunit4, action = 'readwrite', status = 'replace', file = ansi32, form = 'unformatted')
   blank = busnm1
   trash = busnm2
   terra = busnm3
@@ -2052,9 +2052,10 @@ subroutine sysdep
   epsiln = 1.d-8
   twopi = 6.28318530717958647692d+00
   userid = blank
-  if ( noutpr  .eq.  0 ) write (lunit6, 6305) date1, tclock, col(6:18)
-6305 format (' Date (mm/dd/yy) and time of day (hh.mm.ss.) = ', a8, 2x, a8, &
-          ' name of VAX/VMS plot data file (if any) =', 13a1)
+  if ( noutpr  .eq.  0 ) then
+     write (lunit6, 6305) date1, tclock, (col(j:j), j = 6, 18)
+6305 format (' Date (mm/dd/yy) and time of day (hh.mm.ss.) = ', 1x, 2a4, 2x, 2a4, 11x, ' name of VAX/VMS plot data file (if any) =', 13a1)
+  end if
   ! if not interactive emtp usage,
   if ( m4plot .ne. 1 ) m4plot = 2           ! use "pltfil" for real*4 plot file on d
   lunit5 = -5               ! interactive or not uses "nextcard", no
@@ -4605,10 +4606,12 @@ subroutine date44(a)
   !     VAX-11/780.    'idate'  is a  dec  system subroutine which
   !     returns the month, day, and year (of century) as three  integer*2
   !     numerical values.
-  character(8) a, date
+  character(8) a(2), date
   call date_and_time(date = date)
-  write (unit = a, fmt = 1386) date(7:8), date(5:6), date(3:4)
-1386 format (a2, '/',  a2, '/', a2, $)
+  write (unit = a(1), fmt = 1386) date(7:8), date(5:5)
+1386 format (a2, '/', a1)
+  write (unit = a(2), fmt = 1394) date(6:6), date(3:4)
+1394 format (a1, '/', a2)
   return
 end subroutine date44
 !

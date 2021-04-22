@@ -27,10 +27,10 @@ subroutine datain
   dimension  kard(200), karg(200), kbeg(200), kend(200)
   dimension  ktex(200), lentyp(18)
   dimension  kolinc(35), modarg(35), kkkdum(35)
-  data  komlev     /  -1  /    ! default comment level (none)
-  data  nchpre     /  0  /   ! begin with no file name prefix
-  data  nchsuf     /  0  /   ! begin with no file name suffix
-  data  dumnam     /  'dum   '  /    ! default dummy root name
+  data  komlev     /  -1  /                              ! default comment level (none)
+  data  nchpre     /  0  /                               ! begin with no file name prefix
+  data  nchsuf     /  0  /                               ! begin with no file name suffix
+  data  dumnam     /  'dum   '  /                        ! default dummy root name
   data  typdat(1)  / 'request     ' /,   lentyp(1)  /  7  /
   data  typdat(2)  / 'function    ' /,   lentyp(2)  /  8  /
   data  typdat(3)  / 'tacs source ' /,   lentyp(3)  / 11  /
@@ -47,7 +47,7 @@ subroutine datain
   data  typdat(14) / 'statistics  ' /,   lentyp(14) / 10  /
   data  numtyp  /  14  /                                 ! total number of data type names
   data  filsav  / '                                '  /  ! for lmfs
-  if ( kexact .ne. 88333 )  numrun = 0  ! init. numrun for lmfs runs
+  if ( kexact .ne. 88333 )  numrun = 0                   ! init. numrun for lmfs runs
   if ( kexact .eq. 88333 .and. numrun .gt. 0 ) go to 5266
   if ( numhld .eq. -8899 ) stop
   if ( numhld .eq. 0 ) go to 5244
@@ -65,71 +65,71 @@ subroutine datain
   go to 1774
 5266 kcut = 0
   if ( filsav .eq. '                                ' ) go to 1712   ! data input assigned from outside
-  open ( unit=munit5,status='old',file=filsav )! reuse input for
-1712 if ( llbuff .eq. -3333 ) rewind munit5   !generating 2nd & 3rd lmf
-  ! 2nd or later pass, skip
+  open ( unit=munit5,status='old',file=filsav )          ! reuse input for
+1712 if ( llbuff .eq. -3333 ) rewind munit5              !generating 2nd & 3rd lmf
+                                                         ! 2nd or later pass, skip
 5244 if (llbuff .ne. -3333 .and. file6(numcrd + 1)(1:4) .ne. 'eof ') go to 1708  ! keyboard
-  kverfy = -4545        ! local flag (no windows yet opened)
-  limarg = 35   ! dimensioned limit on arguments of "module"
-  numdcd = 0   ! set pointer at zero (no "cimage" calls yet)
-  munit5 = 5   ! i/o channel for "emtspy" input (keyboard)
-  limcrd = 30000  ! present fixed limit on file6 of "dekspy"
-  n13 = 0               ! initially assume no debug printout
-  ntacs = 0   ! old tacs data format
-  call date44 ( date1(1) )   ! find calendar date and the
-  call time44 ( tclock(1) )  ! time of day for documentation
-  call initsp ! initialize spy common (digit needed to sort)
+  kverfy = -4545                                         ! local flag (no windows yet opened)
+  limarg = 35                                            ! dimensioned limit on arguments of "module"
+  numdcd = 0                                             ! set pointer at zero (no "cimage" calls yet)
+  munit5 = 5                                             ! i/o channel for "emtspy" input (keyboard)
+  limcrd = 30000                                         ! present fixed limit on file6 of "dekspy"
+  n13 = 0                                                ! initially assume no debug printout
+  ntacs = 0                                              ! old tacs data format
+  call date44 ( date1(1) )                               ! find calendar date and the
+  call time44 ( tclock(1) )                              ! time of day for documentation
+  call initsp                                            ! initialize spy common (digit needed to sort)
   do
-1311 write (lunit6, 1324)    ! prompt user at "emtspy" keyboard
-1324 format (' EMTP begins.  Send (spy, $attach, debug, help, module, junk, stop) :'  )
+1311 write (lunit6, 1324)                                ! prompt user at "emtspy" keyboard
+1324 format (' EMTP begins.  Send (spy, $attach, debug, help, module, junk, stop) :')
      write (lunit6, 1325)
 1325 format ('> ', $)
-     read (munit5, 1329) buff77  ! read first card of emtp data
+     read (munit5, 1329) buff77                          ! read first card of emtp data
 1329 format ( a80 )
      if ( buff77(1:5) .eq. 'stop ' )  call stoptp
      if ( buff77(1:5) .ne. 'disk ' )  go to 51329
-     maxzno = 4545  ! signal to apollo "sysdep" for disk lunit6
+     maxzno = 4545                                       ! signal to apollo "sysdep" for disk lunit6
   end do
-51329 if ( buff77(1:7) .eq. '$attach' ) go to 1347  ! batch mode
+51329 if ( buff77(1:7) .eq. '$attach' ) go to 1347       ! batch mode
   if ( buff77(1:5) .ne. 'junk ' )  go to 1332
   write (lunit6, 1330)
 1330 format ('   Send root word to over-ride "junk" for spy and plot windows :' )
-  read (munit5, 1331)  junker   ! read new window pad name
-  buff77(1:8) = 'spy     '   ! implied command next serviced
+  read (munit5, 1331)  junker                            ! read new window pad name
+  buff77(1:8) = 'spy     '                               ! implied command next serviced
 1331 format ( a8 )
-1332 if ( kverfy .eq. 0 )  go to 41332   ! windows already open
-  kverfy = -34543   ! flag indicating desire to open windows
-  call window        ! open 2 extra windows for spy and plot
-  kverfy = 0    ! erase flag, now that both windows are open
+1332 if ( kverfy .eq. 0 )  go to 41332                   ! windows already open
+  kverfy = -34543                                        ! flag indicating desire to open windows
+  call window                                            ! open 2 extra windows for spy and plot
+  kverfy = 0                                             ! erase flag, now that both windows are open
 41332 if ( buff77(1:6) .eq. 'module' )  go to 2613
   if ( buff77(1:5) .ne. 'help ' )  go to 1342
   write (munit6, 1333)
 1333 format ('    Greetings, greetings.  Welcome to the wonderful new world of interactive')
-  call window         ! output of character variable munit6
+  call window                                            ! output of character variable munit6
   write (munit6, 1334)
 1334 format ('    EMTP execution, observation, and control.  After sending  "spy",  send')
-  call window         ! output of character variable munit6
+  call window                                            ! output of character variable munit6
   write (munit6, 1335)
 1335 format ('    "help",  and then  "all"  to receive some 500 lines of instruction.  Also,')
-  call window         ! output of character variable munit6
+  call window                                            ! output of character variable munit6
   write (munit6, 1336)
 1336 format ('    see section 9 of the rule book dated June, 1984.  Also see  "Apollo".')
-  call window         ! output of character variable munit6
+  call window                                            ! output of character variable munit6
   go to 1311
 1342 if ( buff77(1:6) .ne. 'debug ' )  go to 1347
-  n13 = 99    ! change diagnostic printout control to "on"
-  go to 1311   ! back to prompt for interactive choice again
-1347 iprspy = n13          !  diagnostic spy printout (0 or 99)
-  iprsup = n13         !  diagnostic emtp printout (0 or 99)
-  iprsov(1) = n13    ! emtp diagnostic only thru 1st overlay
-  if ( buff77(1:3) .ne. 'spy' ) go to 1724 ! not interactive
-  !     begin interactive control sequence, leading to "emtspy":
-  m4plot = 1               ! set flag remembering use of spy
-  write (prom80, 1357)          ! build very 1st spy prompt
+  n13 = 99                                               ! change diagnostic printout control to "on"
+  go to 1311                                             ! back to prompt for interactive choice again
+1347 iprspy = n13                                        !  diagnostic spy printout (0 or 99)
+  iprsup = n13                                           !  diagnostic emtp printout (0 or 99)
+  iprsov(1) = n13                                        ! emtp diagnostic only thru 1st overlay
+  if ( buff77(1:3) .ne. 'spy' ) go to 1724               ! not interactive
+                                                         !     begin interactive control sequence, leading to "emtspy":
+  m4plot = 1                                             ! set flag remembering use of spy
+  write (prom80, 1357)                                   ! build very 1st spy prompt
 1357 format (' spy: ')
-  call prompt     ! write prom80 with cursor control (no lf)
-1708 if ( m4plot .ne. 1 )  go to 2320   ! non-interactive case
-  lockbr = 1              ! forced spy read within "flager"
+  call prompt                                            ! write prom80 with cursor control (no lf)
+1708 if ( m4plot .ne. 1 )  go to 2320                    ! non-interactive case
+  lockbr = 1                                             ! forced spy read within "flager"
   call emtspy  ! b4 any emtp computation, start spy dialogue
   if ( lockbr .eq. 1 ) go to 1708     ! spy loop until "go"
   go to 1774    ! jump to $include removal, then exit module

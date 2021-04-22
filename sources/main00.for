@@ -396,13 +396,13 @@ subroutine time44(a)
   !    returns the wall-clock time as an 8-byte character string.
   !    This is just what the emtp needs, except that we want periods
   !    rather than colons, and of course we require  2a4  format.
-  character(8) a
   character(10) time
+  character(8) a(2)
   call date_and_time(time = time)
-  write (unit = a, fmt = 2741) time(1:2), time(3:4), time(5:6)
-2741 format (a2, '.',  a2, '.', a2)
-!  write (unit = a, fmt = 2754) char(5), char(7), char(8)
-!2754 format(a1, '.', 2a1)
+  write (unit = a(1), fmt = 2741) time(1:1), time(2:2), time(3:3)
+2741 format (2a1, '.', a1)
+  write (unit = a(2), fmt = 2754) time(4:4), time(5:5), time(6:6)
+2754 format (a1, '.', 2a1)
   return
 end subroutine time44
 !
