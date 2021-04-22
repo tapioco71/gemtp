@@ -358,7 +358,7 @@ subroutine emtspy
   n18 = 0
   if ( iprspy .lt. 9 )  go to 5611
   write (munit6, 5608)  kbreak, kwtspy, nbreak, lockbr, nchain, jjroll, t, tbreak
-5608 format ( ' top "emtspy".  kbreak, kwtspy, nbreak, lockbr', ' jjroll, nchain =',  6i4,  '    t, tbreak =',  2e14.5  )
+5608 format ( ' Top "emtspy".  kbreak, kwtspy, nbreak, lockbr, jjroll, nchain =', 6i4, '    t, tbreak =', 2e14.5)
   call window
 5611 if ( jjroll .gt. 0 )  go to 5632
   if ( kbreak .eq. 1 ) go to 5613
@@ -368,8 +368,8 @@ subroutine emtspy
   !     ok, now we service "break" of spy (time and place to do it):
   tbreak = 8877.e33
 5613 lockbr = 1
-  write (munit6, 5615)  nchain, t
-5615 format ( '   // start "break" service in "emtspy".','   nchain =', i3,  '   t =', e14.5  )
+  write (munit6, 5615) nchain, t
+5615 format ( '   // Start "break" service in "emtspy".   nchain =', i3,  '   t =', e14.5)
   call window
   if ( kfile5 .eq. 1 ) go to 6258
 5617 write (prom80, 5618)
@@ -391,15 +391,15 @@ subroutine emtspy
   buff77 = file6(komadd)
   if (buff77(1:3) .eq. 'eof') go to 6278
   go to 6264
-6260 read (munit5, 6261, end=6274)  buff77
-6261 format ( a80 )
-6264 if ( kfile5 .eq. 1 ) call percnt ( buff77, 80 )
+6260 read (unit = munit5, fmt = 6261, end = 6274) buff77
+6261 format (a80)
+6264 if ( kfile5 .eq. 1 ) call percnt (buff77, 80)
   if ( kilper  .ne.  0 )  go to 6274
 6266 call spying
   if ( lockbr .eq. 1 )  go to 6258
   go to 9000
   !     end-of-file during disk read, so switch to keyboard input:
-6274 close ( unit=munit5 )
+6274 close (unit = munit5)
 6278 munit5 = muntsv(1)
   kfile5 = 0
   kilper = 0
@@ -407,7 +407,7 @@ subroutine emtspy
   muntsv(2) = 0
 9000 if ( iprspy .lt. 1 )  go to 9008
   write (munit6, 9007)  kbreak, nchain, lastov, m4plot
-9007 format (   ' exit "emtspy".  kbreak, nchain, lastov,', ' m4plot =',  4i6  )
+9007 format (' Exit "emtspy".  kbreak, nchain, lastov, m4plot =', 4i6)
   call window
 9008 return
 end subroutine emtspy

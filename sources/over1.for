@@ -1948,9 +1948,6 @@ subroutine sysdep
   data busnm3  /6hterra /
   data text1   /1h,/
   data text2   /1h$/
-  do i = 1, 32
-     ansi32(i:i) = ''
-  end do
   do  i = 1, 18
      col(i:i) = colxxx(i:i)
   end do
@@ -2054,7 +2051,7 @@ subroutine sysdep
   userid = blank
   if ( noutpr  .eq.  0 ) then
      write (lunit6, 6305) date1, tclock, (col(j:j), j = 6, 18)
-6305 format (' Date (mm/dd/yy) and time of day (hh.mm.ss.) = ', 1x, 2a4, 2x, 2a4, 11x, ' name of VAX/VMS plot data file (if any) =', 13a1)
+6305 format (' Date (mm/dd/yy) and time of day (hh.mm.ss.) =', 1x, 2a4, 2x, 2a4, 11x, 'name of VAX/VMS plot data file (if any) = ', 13a1)
   end if
   ! if not interactive emtp usage,
   if ( m4plot .ne. 1 ) m4plot = 2           ! use "pltfil" for real*4 plot file on d

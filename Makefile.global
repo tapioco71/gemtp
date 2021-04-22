@@ -78,6 +78,7 @@ FORTRAN_FLAGS=	-cpp					\
 		-fdollar-ok				\
 		-fdollar-ok				\
 		-ffree-line-length-0			\
+		-finit-local-zero			\
 		-c
 
 # objdump most common flags.
