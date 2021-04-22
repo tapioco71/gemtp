@@ -9,7 +9,7 @@ subroutine datain
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   !     Universal module of interactive EMTP (spy of "emtspy").
   !     If non-interactive version, module can be destroyed.
-  !     first emtp data input, and "spy" choice, are made here.
+  !     first EMTP data input, and "spy" choice, are made here.
   !     Module is called only by installation-dependent "erexit".
   include 'blkcom.ftn'
   include 'dekspy.ftn'
@@ -27,10 +27,10 @@ subroutine datain
   dimension  kard(200), karg(200), kbeg(200), kend(200)
   dimension  ktex(200), lentyp(18)
   dimension  kolinc(35), modarg(35), kkkdum(35)
-  data  komlev    /  -1  /    ! default comment level (none)
-  data  nchpre    /  0  /   ! begin with no file name prefix
-  data  nchsuf    /  0  /   ! begin with no file name suffix
-  data  dumnam   /  'dum   '  /    ! default dummy root name
+  data  komlev     /  -1  /    ! default comment level (none)
+  data  nchpre     /  0  /   ! begin with no file name prefix
+  data  nchsuf     /  0  /   ! begin with no file name suffix
+  data  dumnam     /  'dum   '  /    ! default dummy root name
   data  typdat(1)  / 'request     ' /,   lentyp(1)  /  7  /
   data  typdat(2)  / 'function    ' /,   lentyp(2)  /  8  /
   data  typdat(3)  / 'tacs source ' /,   lentyp(3)  / 11  /
@@ -45,7 +45,7 @@ subroutine datain
   data  typdat(12) / 'output      ' /,   lentyp(12) /  6  /
   data  typdat(13) / 'plot        ' /,   lentyp(13) /  4  /
   data  typdat(14) / 'statistics  ' /,   lentyp(14) / 10  /
-  data  numtyp   /  14  /  ! total number of data type names
+  data  numtyp  /  14  /                                 ! total number of data type names
   data  filsav  / '                                '  /  ! for lmfs
   if ( kexact .ne. 88333 )  numrun = 0  ! init. numrun for lmfs runs
   if ( kexact .eq. 88333 .and. numrun .gt. 0 ) go to 5266
@@ -68,7 +68,7 @@ subroutine datain
   open ( unit=munit5,status='old',file=filsav )! reuse input for
 1712 if ( llbuff .eq. -3333 ) rewind munit5   !generating 2nd & 3rd lmf
   ! 2nd or later pass, skip
-5244 if ( llbuff .ne. -3333   .and. file6(numcrd+1)(1:4) .ne. 'eof ' ) go to 1708  ! keyboard
+5244 if (llbuff .ne. -3333 .and. file6(numcrd + 1)(1:4) .ne. 'eof ') go to 1708  ! keyboard
   kverfy = -4545        ! local flag (no windows yet opened)
   limarg = 35   ! dimensioned limit on arguments of "module"
   numdcd = 0   ! set pointer at zero (no "cimage" calls yet)
@@ -79,16 +79,17 @@ subroutine datain
   call date44 ( date1(1) )   ! find calendar date and the
   call time44 ( tclock(1) )  ! time of day for documentation
   call initsp ! initialize spy common (digit needed to sort)
+  do
 1311 write (lunit6, 1324)    ! prompt user at "emtspy" keyboard
 1324 format (' EMTP begins.  Send (spy, $attach, debug, help, module, junk, stop) :'  )
-  write (lunit6, 1325)
+     write (lunit6, 1325)
 1325 format ('> ', $)
-  read (munit5, 1329) buff77  ! read first card of emtp data
+     read (munit5, 1329) buff77  ! read first card of emtp data
 1329 format ( a80 )
-  if ( buff77(1:5) .eq. 'stop ' )  call stoptp
-  if ( buff77(1:5) .ne. 'disk ' )  go to 51329
-  maxzno = 4545  ! signal to apollo "sysdep" for disk lunit6
-  go to 1311      ! loop back for non-lunit6-disk emtp input
+     if ( buff77(1:5) .eq. 'stop ' )  call stoptp
+     if ( buff77(1:5) .ne. 'disk ' )  go to 51329
+     maxzno = 4545  ! signal to apollo "sysdep" for disk lunit6
+  end do
 51329 if ( buff77(1:7) .eq. '$attach' ) go to 1347  ! batch mode
   if ( buff77(1:5) .ne. 'junk ' )  go to 1332
   write (lunit6, 1330)
@@ -125,7 +126,7 @@ subroutine datain
   !     begin interactive control sequence, leading to "emtspy":
   m4plot = 1               ! set flag remembering use of spy
   write (prom80, 1357)          ! build very 1st spy prompt
-1357 format (' spy:')
+1357 format (' spy: ')
   call prompt     ! write prom80 with cursor control (no lf)
 1708 if ( m4plot .ne. 1 )  go to 2320   ! non-interactive case
   lockbr = 1              ! forced spy read within "flager"
@@ -172,10 +173,10 @@ subroutine datain
      if ( file6(krdoff+j)(1:19)  .ne. 'begin new data case'  .or. j-krdcom  .le.  3 ) go to 1756
      kcut = 1
 5486 numhld = numhld + 1
-     if ( numhld .gt. 1000 ) write (munit6,*) ' input data cards overflow', ' tank(1000).   halt.'
+     if ( numhld .gt. 1000 ) write (munit6,*) ' input data cards overflow tank(1000).   Halt.'
      if ( numhld .gt. 1000 ) call stoptp
      tank(numhld) = file6(krdoff+j)
-     !     if all emtp data (e.g., "kill codes" use) comes via key
+     !     if all EMTP data (e.g., "kill codes" use) comes via key
      !     board, it is ended with "eof"; when solved, more keyboard.
 1756 if ( file6(krdoff+j)(1:4) .eq. 'eof ' )  go to 1766
      if ( kcut .eq. 0 ) numcrd = numcrd + 1     ! another input data card now read

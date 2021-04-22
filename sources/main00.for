@@ -53,8 +53,14 @@ program gemtp
   !    way expressed or implied.                                        *
   !                                                                      *
   !**********************************************************************
+  character(32) arg
   data  ll34   /  34  /
   !     unit assignments of "over1" needed earlier by spy:
+  options_count = command_argument_count()
+  do i = 1, iargc()
+     call getarg(i, arg)
+     write (*, *) arg
+  end do
   lunit1 = 1
   lunit2 = 2
   lunit3 = 3
@@ -238,7 +244,7 @@ end subroutine stoptp
 !
 subroutine copyr(d1, to, kk)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     routine which copies the same floating-point word  'd1'  into a
+  !     Routine which copies the same floating-point word  'd1'  into a
   !     contiguous region of memory ----  'kk'  words in length,
   !     beginning with word  to(1) .
   dimension  to(1)
@@ -255,7 +261,7 @@ subroutine copyi(n1, ito, kk)
   !     routine which copies the same integer word  'n1'  into a
   !     contiguous region of memory ----  'kk'  words in length,
   !     beginning with word  ito(1) .
-  dimension  ito(1)
+  dimension  ito(1000)
   do i = 1, kk
      ito(i) = n1
   end do
@@ -320,7 +326,7 @@ subroutine runtym ( d1, d2 )
   integer*8 cputime_adr
   !     integer*4 zero, zerofin, sys$getjpi, now_cputime
   real*8 now_cputime
-  integer*4 zero, zerofin
+  integer*4 zero, zerofin, time
   data cputime_code /1031/
   data l4cpu /4/
   cputime_adr = %loc(now_cputime)
@@ -328,31 +334,46 @@ subroutine runtym ( d1, d2 )
   !     write(6,*) 'error in another private place'
   !     endif
   call cpu_time(now_cputime)
-  d1 = (now_cputime - cputime) / 100.0
+  time = int(1e6 * now_cputime)
+  d1 = (time - cputime) / 1e6
   d2 = 0.0
   return
 end subroutine runtym
 !
 !     subroutine settym.
 !
+! subroutine settym
+!   implicit real*8 (a-h, o-z), integer*4 (i-n)
+!   !     VAX-11  installation-dependent EMTP module.
+!   !     Called only by VAX "runtym";  destroy for other computers.
+!   !     Include  '[scott]commuk.for' --- share with "runtym" in-line:
+!   common /timers/ cputime
+!   integer*4 cputime
+!   common /timer2/ l4cpu, cputime_code, cputime_adr, zero, zerofin
+!   integer*2 l4cpu, cputime_code
+!   integer*8 cputime_adr
+!   !     integer*4 zero,zerofin,sys$getjpi,now_cputime
+!   integer*4 zero, zerofin
+!   data cputime_code /1031/
+!   data l4cpu /4/
+!   cputime_adr=%loc(cputime)
+!   !     if (.not.sys$getjpi(,,,l4cpu,,,)) then
+!   !     write(6,*) 'error in a private place'
+!   !     endif
+!   return
+! end subroutine settym
 subroutine settym
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     VAX-11  installation-dependent emtp module.
-  !     Called only by VAX "runtym";  destroy for other computers.
-  !     Include  '[scott]commuk.for' --- share with "runtym" in-line:
+  real*8 time
   common /timers/ cputime
   integer*4 cputime
   common /timer2/ l4cpu, cputime_code, cputime_adr, zero, zerofin
-  integer*2 l4cpu, cputime_code
-  integer*8 cputime_adr
-  !     integer*4 zero,zerofin,sys$getjpi,now_cputime
-  integer*4 zero, zerofin
-  data cputime_code /1031/
-  data l4cpu /4/
-  cputime_adr=%loc(cputime)
-  !     if (.not.sys$getjpi(,,,l4cpu,,,)) then
-  !     write(6,*) 'error in a private place'
-  !     endif
+  call cpu_time(time)
+  if (time .eq. -1.0) then
+     write (6, *) 'Error, no timer unit available!'
+  else
+     cputime = int(1e6 * time)
+  end if
   return
 end subroutine settym
 !
@@ -378,7 +399,7 @@ subroutine time44(a)
   character(8) a
   character(10) time
   call date_and_time(time = time)
-  write (unit = a, fmt = 2741) time(1:2), time(3:4), time(4:6)
+  write (unit = a, fmt = 2741) time(1:2), time(3:4), time(5:6)
 2741 format (a2, '.',  a2, '.', a2)
 !  write (unit = a, fmt = 2754) char(5), char(7), char(8)
 !2754 format(a1, '.', 2a1)
@@ -1209,7 +1230,7 @@ end subroutine mover
 !
 subroutine mover0 ( b, n )
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  dimension b(20)
+  real(8) b(*)
   !    Subroutine  mover0  is a block-zeroing routine for floating-point
   !    arrays or variables.   Of the two arguments, the second,  'n' ,
   !    is the number of words of core to be zeroed.   The first argument
@@ -1247,7 +1268,7 @@ subroutine move0(intb, n)
   !    is for floating-point arrays.   There is a difference, on
   !    machines like IBM, where integer words may be shorter than
   !    floating-point words.
-  dimension intb(34)
+  integer(4) intb(*)
   do i = 1, n
      intb(i) = 0
   end do

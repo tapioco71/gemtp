@@ -33,17 +33,18 @@
   dimension fkar1(1), fkar2(1)
   equivalence (kar1, fkar1), (kar2, fkar2)
   !     character*1 char1, filbyt(1), col, filext, digit
-  character*1 char1, col, filext, digit
-  character*8 symb, symbrp, junker, texpar, spykwd
-  character*8 ansi8, brobus
-  character*16 ansi16
-  character*20 bytfnd
-  character*32 ansi32
-  character*35 spycd2
-  character*80 bytbuf, buff77, file6, file6b, blan80
-  character*80 prom80, answ80, texspy, abufsv
-  character*132 munit6, outlin, outsav, heding
-  common /spyf77/ filext(10), symb(1000), col(25)
+  character char1, filext, digit
+  character(8) symb, symbrp, junker, texpar, spykwd
+  character(8) ansi8, brobus
+  character(16) ansi16
+  character(20) bytfnd
+  character(25) col
+  character(32) ansi32
+  character(35) spycd2
+  character(80) bytbuf, buff77, file6, file6b, blan80
+  character(80) prom80, answ80, texspy, abufsv
+  character(132) munit6, outlin, outsav, heding
+  common /spyf77/ filext(10), symb(1000)
   common /spyf77/ bytfnd, char1, symbrp(20), abufsv, junker
   common /spyf77/ bytbuf, buff77, file6b(20), file6(30000)
   common /spyf77/ blan80, prom80, digit(10), texpar(10)
