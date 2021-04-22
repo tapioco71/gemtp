@@ -21,13 +21,13 @@ subroutine over20
   call runtym(d1,d2)
   n10 = 1
   if (iprsup .ge. 1) write (lunit6, 1324)    iplot, nenerg, kbase, m4plot,  mtape, icat, lstat(32), t, aincr
-1324 format ( /,  1x,   23h   iplot  nenerg  kbase, 32h  m4plot   mtape    icat lstat32, 14x, 1ht, 10x, 5haincr  ,/,  1x, 7i8, 2e15.5  )
+1324 format (/, 1x, '   iplot  nenerg  kbase  m4plot   mtape    icat lstat32', 14x, 't', 10x, 'aincr', /, 1x, 7i8, 2e15.5)
   if ( max99m .lt. 0 ) write (lunit6, 9345)  max99m
-9345 format (  ' ++++  number of suppressed type-99 flashover', ' or clearing messages is negative of',  i7  )
+9345 format (' ++++  Number of suppressed type-99 flashover or clearing messages is negative of',  i7)
   if ( peaknd(1)  .eq.  0.0 )   go to 5019
   n6 = peaknd(3)
   write (lunit6, 5011)  peaknd(1), peaknd(2), bus(n6)
-5011 format ( 8x,  38hoverall simulation peak node voltage =, e15.6,      17h .   time (sec) =, e14.5,      12h .   bus = ',   a6,   3h' .    )
+5011 format (8x, 'Overall simulation peak node voltage =', e15.6, ' .   Time (sec) =', e14.5, ' .   bus = ', "'", a6, "'", ' .')
 5019 k = lstat(32) + 1
   if( iplot .lt. 0 )  go to 8005
   volti(1) = -9999.
@@ -43,36 +43,36 @@ subroutine over20
   if ( kbase .eq. 2  .and. aincr .lt. 55.0) go to 3614
   if ( begmax(1)  .le.  0.0 )   go to 3614
   write (lunit6, 8002)   ( xmax(l), l=1, k )
-8002 format (/, 106h maxima and minima which occurred during the simulation follow.   the order and column positioning are the     ,/, &
-       49h same as for the regular printed output vs. time.      ,/,18h variable maxima :   ,/,  ( 15x, 9e13.6 )  )
+8002 format (/, ' Maxima and minima which occurred during the simulation follow.   The order and column positioning are the', /, &
+          ' same as for the regular printed output vs. time.', /, ' Variable maxima :', /, (15x, 9e13.6))
   !     extrema vector  "xmax"  actually has four partitions,
   !     each the size of list 12:  (xmax, tmax, xmin, tmin) .
   ndx1 = lsiz12 + 1
   ndx2 = lsiz12 + k
   write (lunit6, 8003)  ( xmax(l), l=ndx1, ndx2 )
-8003 format ( 18h times of maxima :  ,/,  ( 15x, 9e13.6 )  )
+8003 format (' Times of maxima :', /, (15x, 9e13.6))
   ndx1 = ndx1 + lsiz12
   ndx2 = ndx2 + lsiz12
-  write (lunit6, 8004)   ( xmax(l), l=ndx1, ndx2 )
-8004 format ( 18h variable minima :   ,/,  ( 15x, 9e13.6 )  )
+  write (lunit6, 8004) ( xmax(l), l = ndx1, ndx2)
+8004 format (' Variable minima :', /, (15x, 9e13.6))
   ndx1 = ndx1 + lsiz12
   ndx2 = ndx2 + lsiz12
   write (lunit6, 18005)  ( xmax(l), l=ndx1, ndx2 )
-18005 format ( 18h times of minima :  ,/,  ( 15x, 9e13.6 )  )
+18005 format (' Times of minima :', /, (15x, 9e13.6))
 3614 if (nenerg .ne. 0)   go to 605
   flstat(9) = d1
   flstat(10) = d2
   if ( begmax(1)  .ne.  0.0   .and. begmax(2)  .ne.  0.0 ) write (lunit6, 8006)  begmax(2)
-8006 format (  56x,  32hsearch for extrema began at time, e15.6,   7h   sec.    )
+8006 format (56x, 'Search for extrema began at time', e15.6, '   sec.')
   write (lunit6, 8007)
-8007 format ( 1x )
+8007 format (1x)
   if ( ipunch  .le.  0 )   go to 9800
 5759 kcount = 2
   iold=3
   if ( n10  .ne.  0 ) write (lunit6, 7009)  t
-7009 format ( /,  74h printout of the saving of terminal conditions for all components, at time,    e15.7,     11h   seconds.       ,/, &
-       30h begin with all node voltages.                          ,/, 3( 21x,  4hnode )    ,/,  19x,  6hnumber,  21x,  4hname, &
-       18x,  7hvoltage      )
+7009 format (/, ' Printout of the saving of terminal conditions for all components, at time', e15.7, '   seconds.', /, &
+          ' Begin with all node voltages.', /, 3(21x, 'node'), /, 19x, 'number', 21x, 'name', &
+          18x, 'voltage')
   do k = 2, ntot
      if (n10 .ne. 0) write(lunit6,7012) bus(k), e(k), zero, k
 7012 format( 1h , a6, 2e13.5, 41x, i6 )

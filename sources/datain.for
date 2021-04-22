@@ -18,19 +18,19 @@ subroutine datain
   common /linemodel/ char80, chlmfs(18)
   character*6 chlmfs
   character*80 char80
-  character*6  dumnam
-  character*12  typdat(18)
-  character*20  arginc(35)
-  character*32  filsav
-  character*40  prefix, suffix
-  character*80  tank(1000)
+  character*6 dumnam
+  character*12 typdat(18)
+  character*20 arginc(35)
+  character*32 filsav
+  character*40 prefix, suffix
+  character*80 tank(1000)
   dimension  kard(200), karg(200), kbeg(200), kend(200)
   dimension  ktex(200), lentyp(18)
   dimension  kolinc(35), modarg(35), kkkdum(35)
   data  komlev     /  -1  /                              ! default comment level (none)
   data  nchpre     /  0  /                               ! begin with no file name prefix
   data  nchsuf     /  0  /                               ! begin with no file name suffix
-  data  dumnam     /  'dum   '  /                        ! default dummy root name
+  data  dumnam     / 'dum   ' /                          ! default dummy root name
   data  typdat(1)  / 'request     ' /,   lentyp(1)  /  7  /
   data  typdat(2)  / 'function    ' /,   lentyp(2)  /  8  /
   data  typdat(3)  / 'tacs source ' /,   lentyp(3)  / 11  /
@@ -126,7 +126,7 @@ subroutine datain
                                                          !     begin interactive control sequence, leading to "emtspy":
   m4plot = 1                                             ! set flag remembering use of spy
   write (prom80, 1357)                                   ! build very 1st spy prompt
-1357 format (' spy: ')
+1357 format (' spy:')
   call prompt                                            ! write prom80 with cursor control (no lf)
 1708 if ( m4plot .ne. 1 )  go to 2320                    ! non-interactive case
   lockbr = 1                                             ! forced spy read within "flager"

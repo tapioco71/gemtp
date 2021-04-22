@@ -1940,14 +1940,14 @@ subroutine sysdep
   !     for explicit directory (e.g., "[plt]" ), if desired.
   data col    / '' /
   data colxxx / '_plt_000000000.pl4' /
-  data lettra     /'a'/
-  data lettrb     /'b'/
-  data lettrc     /'c'/
-  data busnm1  /6h      /
-  data busnm2  /8h......../
-  data busnm3  /6hterra /
-  data text1   /1h,/
-  data text2   /1h$/
+  data lettra / 'a' /
+  data lettrb / 'b' /
+  data lettrc / 'c' /
+  data busnm1 / 6h       /
+  data busnm2 / 8h........ /
+  data busnm3 / 6hterra  /
+  data text1  / 1h, /
+  data text2  / 1h$ /
   do  i = 1, 18
      col(i:i) = colxxx(i:i)
   end do

@@ -104,7 +104,7 @@ program gemtp
   if (nchain .gt. 20)   go to 2000
 1983 call main10
   go to 2000
-2010 if ( m4plot .eq. 1 )  call emtspy
+2010 if ( m4plot .eq. 1 ) call emtspy
   if ( nchain  .gt.  29 )   go to 2020
   call over29
   go to 2000
@@ -305,7 +305,7 @@ end subroutine erexit
 !
 !     subroutine runtym.
 !
-subroutine runtym ( d1, d2 )
+subroutine runtym (d1, d2)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   !    This subroutine returns with the current job-execution time, as
   !    broken down into two categories ....
@@ -322,14 +322,8 @@ subroutine runtym ( d1, d2 )
   common /timers/ cputime
   integer*4 cputime
   common /timer2/ l4cpu, cputime_code, cputime_adr, zero, zerofin
-  integer*2 l4cpu, cputime_code
-  integer*8 cputime_adr
-  !     integer*4 zero, zerofin, sys$getjpi, now_cputime
   real*8 now_cputime
   integer*4 zero, zerofin, time
-  data cputime_code /1031/
-  data l4cpu /4/
-  cputime_adr = %loc(now_cputime)
   !     if (.not.sys$getjpi(,,,l4cpu,,,)) then
   !     write(6,*) 'error in another private place'
   !     endif
@@ -424,114 +418,114 @@ subroutine cimage
   equivalence (aupper(1), texcol(1))
   dimension xopt(1), copt(1)
   !     burroughs: preserve local variable between module calls:
-  data n8   /  0  /        ! remember last $-card number
-  data charc   / 1hc /
-  data text4   / 1h9 /
-  data chtacs   / 4htacs /
-  data text5   / 6hblank   /
+  data n8         / 0 /        ! remember last $-card number
+  data charc      / 1hc /
+  data text4      / 1h9 /
+  data chtacs     / 4htacs /
+  data text5      / 6hblank  /
   !              *****    request no. 1.    "$attach"      *****  *****
-  data textay(1)   /  6ha       /
-  data jpntr(1)   /    1       /
-  data textax(1)   /  6hattach  /
+  data textay(1)  / 6ha      /
+  data jpntr(1)   / 1 /
+  data textax(1)  / 6hattach /
   !              *****    request no. 2.    "$punch"       *****  *****
-  data textay(2)   /  6hp       /
-  data  jpntr(2)   /    2       /
-  data textax(2)   /  6hpunch   /
+  data textay(2)  / 6hp      /
+  data  jpntr(2)  / 2 /
+  data textax(2)  / 6hpunch  /
   !              *****    request no. 3.    "$output"      *****  *****
-  data textay(3)   /  6hout     /
-  data jpntr(3)   /    3       /
-  data textax(3)   /  6houtput  /
+  data textay(3)  / 6hout    /
+  data jpntr(3)   / 3 /
+  data textax(3)  / 6houtput /
   !              *****    request no. 4.    "$save"        *****  *****
-  data textay(4)   /  6hs       /
-  data jpntr(4)   /    4       /
-  data textax(4)   /  6hsave    /
+  data textay(4)  / 6hs      /
+  data jpntr(4)   / 4 /
+  data textax(4)  / 6hsave   /
   !              *****    request no. 5.    "$spydata"     *****  *****
   !                  former "$include", which is now in "erexit".
-  data textay(5)   /  6hspy     /
-  data jpntr(5)   /    5       /
-  data textax(5)   /  6hspydat  /
-  data textax(6)   /  6ha       /
+  data textay(5)  / 6hspy    /
+  data jpntr(5)   / 5 /
+  data textax(5)  / 6hspydat /
+  data textax(6)  / 6ha      /
   !              *****    request no. 6.    "$disable"     *****  *****
-  data textay(6)   /  6hd       /
-  data jpntr(6)   /    7       /
-  data textax(7)   /  6hdisabl  /
-  data textax(8)   /  6he       /
+  data textay(6)  / 6hd      /
+  data jpntr(6)   / 7 /
+  data textax(7)  / 6hdisabl /
+  data textax(8)  / 6he      /
   !              *****    request no. 7.    "$enable"      *****  *****
-  data textay(7)   /  6he       /
-  data jpntr(7)   /    9       /
-  data textax(9)   /  6henable  /
+  data textay(7)  / 6he      /
+  data jpntr(7)   / 9 /
+  data textax(9)  / 6henable /
   !              *****    request no. 8.    "$return"      *****  *****
-  data textay(8)   /  6hr       /
-  data jpntr(8)   /    10      /
-  data textax(10)  /  6hreturn  /
+  data textay(8)  / 6hr      /
+  data jpntr(8)   / 10 /
+  data textax(10) / 6hreturn /
   !              *****    request no. 9.    "newfile"      *****  *****
-  data textay(9)   /  6hn       /
-  data jpntr(9)   /    11      /
-  data textax(11)  /  6hnewfil  /
-  data textax(12)  /  6he       /
+  data textay(9)  / 6hn      /
+  data jpntr(9)   / 11 /
+  data textax(11) / 6hnewfil /
+  data textax(12) / 6he      /
   !              *****    request no. 10.   "new epsiln"   *****  *****
-  data textay(10)  /  6hne      /
-  data jpntr(10)   /    13      /
-  data textax(13)  /  6hnew     /
-  data textax(14)  /  6hepsiln  /
+  data textay(10) / 6hne      /
+  data jpntr(10)  / 13 /
+  data textax(13) / 6hnew     /
+  data textax(14) / 6hepsiln  /
   !              *****    request no. 11.   "delete"       *****  *****
-  data textay(11)  /  6hde      /
-  data jpntr(11)   /    15      /
-  data textax(15)  /  6hdelete  /
+  data textay(11) / 6hde      /
+  data jpntr(11)  / 15 /
+  data textax(15) / 6hdelete  /
   !              *****    request no. 12.   "monitor"      *****  *****
-  data textay(12)  /  6hm       /
-  data jpntr(12)   /    16      /
-  data textax(16)  /  6hmonito  /
-  data textax(17)  /  6hr       /
+  data textay(12) / 6hm       /
+  data jpntr(12)  / 16 /
+  data textax(16) / 6hmonito  /
+  data textax(17) / 6hr       /
   !              *****    request no. 13.   "listoff"      *****  *****
-  data textay(13)  /  6hlf      /
-  data jpntr(13)   /    18      /
-  data textax(18)  /  6hlistof  /
-  data textax(19)  /  6hf       /
+  data textay(13) / 6hlf      /
+  data jpntr(13)  / 18 /
+  data textax(18) / 6hlistof  /
+  data textax(19) / 6hf       /
   !              *****    request no. 14.   "liston"       *****  *****
-  data textay(14)  /  6hln      /
-  data jpntr(14)   /    20      /
-  data textax(20)  /  6hliston  /
+  data textay(14) / 6hln      /
+  data jpntr(14)  / 20 /
+  data textax(20) / 6hliston  /
   !              *****    request no. 15.   "vintage"      *****  *****
-  data textay(15)  /  6hv       /
-  data jpntr(15)   /    21      /
-  data textax(21)  /  6hvintag  /
-  data textax(22)  /  6he       /
+  data textay(15) / 6hv       /
+  data jpntr(15)  / 21 /
+  data textax(21) / 6hvintag  /
+  data textax(22) / 6he       /
   !              *****    request no. 16.   "oldfile"      *****  *****
-  data textay(16)  /  6hold     /
-  data jpntr(16)  /    23      /
-  data textax(23)  /  6holdfil  /
-  data textax(24)  /  6he       /
+  data textay(16) / 6hold     /
+  data jpntr(16)  / 23 /
+  data textax(23) / 6holdfil  /
+  data textax(24) / 6he       /
   !              *****    request no. 17.   "stop"         *****  *****
-  data textay(17)  /  6hst      /
-  data jpntr(17)  /    25      /
-  data textax(25)  /  6hstop    /
+  data textay(17) / 6hst      /
+  data jpntr(17)  / 25 /
+  data textax(25) / 6hstop    /
   !              *****    request no. 18.   "watch5"       *****  *****
-  data textay(18)  /  6hw       /
-  data jpntr(18)   /    26      /
-  data textax(26)  /  6hwatch5  /
+  data textay(18) / 6hw       /
+  data jpntr(18)  / 26 /
+  data textax(26) / 6hwatch5  /
   !              *****    request no. 19.   "comment"      *****  *****
-  data textay(19)  /  6hcom     /
-  data jpntr(19)  /    27      /
-  data textax(27)  /  6hcommen  /
-  data textax(28)  /  6ht       /
+  data textay(19) / 6hcom     /
+  data jpntr(19)  / 27 /
+  data textax(27) / 6hcommen  /
+  data textax(28) / 6ht       /
   !              *****    request no. 20.   "width"        *****  *****
-  data textay(20)  /  6hwi      /
-  data jpntr(20)  /    29      /
-  data textax(29)  /  6hwidth   /
+  data textay(20) / 6hwi      /
+  data jpntr(20)  / 29 /
+  data textax(29) / 6hwidth   /
   !              *****    request no. 21.   "units"        *****  *****
-  data textay(21)  /  6hu       /
-  data jpntr(21)   /    30      /
-  data textax(30)  /  6hunits   /
+  data textay(21) / 6hu       /
+  data jpntr(21)  / 30 /
+  data textax(30) / 6hunits   /
   !              *****   bounds follow ...
-  data jpntr(22)  /    31      /
-  data jpntr(23)   /     0      /
-  data n11    /   0    /
-  data n12   /  99999  /
-  data n13   /  99999  /
+  data jpntr(22)  / 31 /
+  data jpntr(23)  / 0 /
+  data n11        / 0 /
+  data n12        / 99999 /
+  data n13        / 99999 /
   n6 = 0
   if (iprsup .ge. 10) write (lunit6, 987) lunit5, lunit6, noutpr, numdcd
-987 format ( ' Begin cimage.  lunit5, lunit6, noutpr,', ' numdcd =',  4i5  )
+987 format (' Begin cimage.  lunit5, lunit6, noutpr, numdcd =', 4i5)
 1000 if (m4plot .eq. 1) call emtspy ! interactive usage
   if (lunit5 .gt. 0) read (lunit5, 3000, end=4000) buff10
 3000 format (10a8)
@@ -562,13 +556,13 @@ subroutine cimage
   read (unit = abuff(1), fmt = 3037) text2
 3037 format (a6)
   if (text2 .ne. text5) go to 3040
-  if (n8  .eq.  6) go to 3044
+  if (n8 .eq. 6) go to 3044
   !     3039 do 3038 i = 1, 10
   do i = 1, 10
      abuff (i) = blank
   end do
   go to 3233
-3040 if (chcont .eq. text4 ) go to 3233
+3040 if (chcont .eq. text4) go to 3233
   read (unit = abuff(1), fmt = 3041) texcol
 3041 format (80a1)
   !     Dan Goldsworthy had trouble with $listoff within $include
@@ -592,20 +586,20 @@ subroutine cimage
   go to 7014
 3237 kolbeg = 1
   go to 7014
-3246 kolbeg =  2
+3246 kolbeg = 2
   !     3251 nright = -2
   nright = -2
   call freone ( d1 )
-  if (iprsup .ge. 1) write (lunit6, 3281)  nfrfld,     texta6(1), texta6(2)
-3281 format (/,  ' nfrfld =', i8, 5x, 'texta6 =',  2a7  )
+  if (iprsup .ge. 1) write (lunit6, 3281) nfrfld, texta6(1), texta6(2)
+3281 format (/,  ' nfrfld =', i8, 5x, 'texta6 =', 2a7)
   nright = 0
   do i = 1, 51        ! was 200 but maximum is 52?
      n1 = jpntr(i)
      n2 = jpntr(i + 1) - 1
-     if ( n2  .lt.  0 )   go to 3319
-     if ( iprsup  .ge.  35 ) write (lunit6, 3285) i, (textax(j), j = n1, n2)
-3285 format (' Special-request word',  i4,  ' .', 10a6)
-     if (textax(n1) .eq. blank ) go to 3306
+     if (n2 .lt. 0) go to 3319
+     if (iprsup .ge. 35) write (lunit6, 3285) i, (textax(j), j = n1, n2)
+3285 format (' Special-request word', i4, ' .', 10a6)
+     if (textax(n1) .eq. blank) go to 3306
      l = 0
      n3 = n2 - n1 + 1
      if (n3 .ne. nfrfld) go to 3306
@@ -613,10 +607,10 @@ subroutine cimage
         l = l + 1
         if (texta6(l) .ne. textax(j)) go to 3306
 3291 end do
-     if ( iprsup  .ge.  2 ) write (lunit6, 3292)  i, n8, texta6(1), textay(i)
+     if (iprsup .ge. 2) write (lunit6, 3292) i, n8, texta6(1), textay(i)
 3292 format (/,  ' key-word found.  i, n8 =',  2i5, 5x, 'texta6, textay =', 2a7)
-3294 if ( n8  .ne.  6 )   go to 3301
-     if ( i  .ne.  7 )    go to 1036
+3294 if (n8 .ne. 6) go to 3301
+     if (i .ne. 7) go to 1036
 3301 n8 = i
      go to (4100, 4200, 4300, 4400, 4500, 4600, 4700, 4800, 4900, 5000, 5100, 5200, 5300, 5400, 5500, 5600, 5700, 5800, 5900, 6000,&
           6100), n8
@@ -635,20 +629,20 @@ subroutine cimage
   call freone ( d11 )
   n1 = int(d11)
   !     4225 if ( n1 .le. 0 ) n1 = n2
-  if ( n1 .le. 0 ) n1 = n2
-  if ( n8 .eq. 8 ) go to 4817
-  if (noutpr  .eq.  0) write (lunit6, 4231)  n1, text1
-4231 format ('+Copy file',  i4,  '   to ',  a6,  ' .')
+  if (n1 .le. 0) n1 = n2
+  if (n8 .eq. 8) go to 4817
+  if (noutpr  .eq.  0) write (lunit6, 4231) n1, text1
+4231 format ('+Copy file', i4, '   to ', a6,  ' .')
   !     segmented, 1, vax e/t can skip translation of rewind:
   rewind n1
   do k = 1, intinf
-     read (n1, 3000, end=4249)  aupper
+     read (n1, 3000, end = 4249) aupper
      !     because dec fortran does not honor the cdc  "punch"  statement
      !     (to directly punch cards), i write to unit 7 as next best
      !     thing.  wsm.  jan, 1980.
-     if ( n8  .eq.  2 ) write (lunit7, 3000)  aupper
-     if ( n8  .eq.  3 ) write (lunit6, 4238) k, aupper
-4238 format (20x,  'record',  i5,  ' .  1', 10a8)
+     if (n8 .eq. 2 ) write (lunit7, 3000) aupper
+     if (n8 .eq. 3 ) write (lunit6, 4238) k, aupper
+4238 format (20x, 'record', i5, ' .  1', 10a8)
   end do
   !     segmented, 1, vax e/t can skip translation of rewind:
 4249 rewind n1
@@ -664,11 +658,11 @@ subroutine cimage
   !     segmented, 1, vax e/t can skip translation of rewind:
   rewind n6
   do k = 1, intinf
-     read (n6, 3000, end=4436)  aupper
-     write (n7, 3000 )   aupper
+     read (n6, 3000, end = 4436) aupper
+     write (n7, 3000) aupper
   end do
-  !     4436 close ( unit=n7,  dispose='save' )                           20
-4436 close (unit=n7, status='keep')
+  !     4436 close ( unit=n7,  dispose='save' )
+4436 close (unit = n7, status = 'keep')
   !     segmented, 1, vax e/t can skip translation of rewind:
   rewind n6
   go to 1000
@@ -680,7 +674,7 @@ subroutine cimage
   kfile5 = 1  ! flag so "spying" knows munit5 opened to disk
 4506 n4 = 0
   !     encode (25, 4523, filen(1))
-  write (unit=filen(1:24), fmt=4523)
+  write (unit = filen(1:24), fmt = 4523)
 4523 format (25x)
   do 4532 k = kolbeg, 80
      if (texcol(k) .eq. blank) go to 4532
@@ -689,7 +683,7 @@ subroutine cimage
      if (texcol(k) .eq. "(") go to 4536
      n4 = n4 + 1
      !     encode (1, 3041, filen(n4))  texcol(k)
-     write (unit=filen(n4:24), fmt=3041) texcol(k)
+     write (unit = filen(n4:24), fmt = 3041) texcol(k)
 4532 end do
   k = 80
 4536 kolbeg = k + 1
@@ -699,65 +693,65 @@ subroutine cimage
   if ( n8  .ne.  4 )   go to 4557
   call freone(d11)
   n6 = int(d11)
-4557 if ( n6  .eq.  0 )   n6 = lunit7
-  if ( n8 .eq. 5 )  n7 = munit5   ! $spy uses this channel
-  if ( n7  .gt.  0 )   go to 4570
+4557 if (n6 .eq. 0) n6 = lunit7
+  if (n8 .eq. 5) n7 = munit5   ! $spy uses this channel
+  if (n7 .gt. 0) go to 4570
   do  k = 1, 15
-     if ( lunsav(k)  .le.  0 )   go to 4568
+     if (lunsav(k) .le. 0) go to 4568
   end do
   write (lunit6, 4565)
 4565 format (/, 10(' error,'))
-  write (lunit6, 4566)  lunsav
-4566 format (5x,  ' All i/o channels occupied.  Kill run at  s.n. 4566  of  "cimage" .', /,  20i5)
+  write (lunit6, 4566) lunsav
+4566 format (5x, ' All i/o channels occupied.  Kill run at  s.n. 4566  of  "cimage" .', /,  20i5)
   call stoptp   ! installation-dependent program stop card
 4568 n7 = k
-4570 if ( noutpr  .eq.  0 ) write (lunit6, 4572)  text1, filen,  n7
-4572 format ('+',  a6,  ' file:',  25a1,  ' unit =',  i3)
-  if ( n8  .eq.  4 )   go to 4423
-  if ( n8  .eq.  9 )   go to 4907
-  if ( n8  .eq.  11 )  go to 5106
-  if ( n8  .eq.  16 )  go to 5608
-  close (unit=n7)
+4570 if (noutpr .eq. 0) write (lunit6, 4572) text1, filen, n7
+4572 format ('+', a6, ' file:', 25a1, ' unit =', i3)
+  if (n8 .eq. 4) go to 4423
+  if (n8 .eq. 9) go to 4907
+  if (n8 .eq. 11) go to 5106
+  if (n8 .eq. 16) go to 5608
+  close (unit = n7)
   open (unit = n7, status = 'old', form = 'formatted', file = filen)
   rewind n7
-  if ( n8 .eq. 5 ) call spying   ! process $spy command file
+  if (n8 .eq. 5) call spying   ! process $spy command file
   go to 1000
   !               *****    request no. 6.    "$disable"     *****  *****
-4600 if ( noutpr  .eq.  0 ) write (lunit6, 4612)
+4600 if (noutpr .eq. 0) write (lunit6, 4612)
 4612 format ('+Begin data to be ignored.')
   go to 1000
   !               *****    request no. 7.    "$enable"      *****  *****
-4700 if ( noutpr  .eq.  0 ) write (lunit6, 4714)
+4700 if (noutpr .eq. 0) write (lunit6, 4714)
 4714 format ('+End of data to be ignored.')
   go to 1000
   !               *****    request no. 8.    "$return"      *****  *****
 4800 n2 = lunit4
   go to 4209
-4817 close (unit=n1)
-  if ( noutpr  .eq.  0 ) write (lunit6, 4823)  n1
+4817 close (unit = n1)
+  if (noutpr .eq. 0) write (lunit6, 4823) n1
 4823 format ('+Close file on unit', i3, ' .')
-  if ( n1  .ne.  lunit5 )   go to 1000
+  if (n1 .ne. lunit5) go to 1000
   noutpr = 1
   go to 1000
   !               *****    request no. 9.    "$newfile"     *****  *****
 4900 text1 = 'newfil'
   n2 = lunit4
   go to 4506
-  !     4907 open (unit=n7, type='new', form='unformatted', name=filen )  69
+  !     4907 open (unit=n7, type='new', form='unformatted', name=filen )
 4907 open (unit = n7, status = 'new', form = 'unformatted', file = filen)
   go to 1000
   !               *****    request no. 10.   "new epsiln"   *****  *****
 5000 nfrfld = 1
   d1 = epsiln
-  call freone ( epsiln )
-  if ( noutpr  .eq.  0 ) write (lunit6, 5017)  d1, epsiln
+  call freone (epsiln)
+  if (noutpr .eq. 0) write (lunit6, 5017)  d1, epsiln
 5017 format ('+ epsiln change.  old, new =', 2e11.2)
   go to 1000
   !               *****    request no. 11.   "delete"       *****  *****
 5100 text1 = 'delete'
   go to 4506
-  !     5106 open ( unit=n7, type='old', name=filen )                     01
-5106 open (unit=n7, status='old', file=filen)
+  !     5106 open ( unit=n7, type='old', name=filen )
+5106 open (unit = n7, status = 'old', file = filen)
   !     close( unit=n7, dispose='delete' )
   close (unit=n7, status='delete')
   go to 1000
@@ -765,12 +759,12 @@ subroutine cimage
 5200 if ( noutpr  .ne.  0 )   go to 5219
   print 3006,  buff10
   print 5214, numdcd
-5214 format ('+crt monitor.  card number =', i5)
+5214 format ('+Crt monitor.  card number =', i5)
 5219 go to 1000
   !               *****    request no. 13.   "listoff"      *****  *****
 5300 if ( noutpr  .ne.  0 )   go to 5324
   write (lunit6, 5307)  numdcd
-5307 format ('+turn off input listing at card', i5)
+5307 format ('+Turn off input listing at card', i5)
   noutpr = 1
 5324 go to 1000
   !               *****    request no. 14.   "liston"       *****  *****
@@ -778,20 +772,20 @@ subroutine cimage
 5404 format (51x, '1$liston')
   noutpr = 0
   write (lunit6, 5412)  numdcd
-5412 format ('+turn on input listing at card', i5)
+5412 format ('+Turn on input listing at card', i5)
   go to 1000
   !               *****    request no. 15.   "vintage"      *****  *****
 5500 nfrfld = 1
   call freone(d11)
   moldat = int(d11)
   if ( noutpr  .eq.  0 ) write (lunit6, 5518)  moldat
-5518 format ('+new moldat =', i4, 5x, '(data vintage)')
+5518 format ('+New moldat =', i4, 5x, '(data vintage)')
   go to 1000
   !               *****    request no. 16.   "oldfile"      *****  *****
 5600 text1 = 'oldfil'
   n2 = lunit2
   go to 4506
-5608 close (unit=n7)
+5608 close (unit = n7)
   !     open (unit=n7, type='old', form='unformatted', name=filen )
   open (unit = n7, status = 'old', form = 'unformatted', file = filen)
   go to 1000
@@ -804,13 +798,13 @@ subroutine cimage
   call freone(d11)
   n12 = int(d11)
   n13 = n12
-  if ( noutpr  .eq.  0 ) write (lunit6, 5812)  n12
+  if (noutpr .eq. 0) write (lunit6, 5812) n12
 5812 format ('+Paint input data on screen.', i8)
   go to 1000
   !               *****    request no. 19.   "comment"      *****  *****
 5900 n11 = n11 + 1
-  if ( n11  .ge.  2 )  n11 = 0
-  if ( noutpr  .eq.  0 ) write (lunit6, 5917)  n11
+  if (n11 .ge. 2) n11 = 0
+  if (noutpr .eq. 0) write (lunit6, 5917) n11
 5917 format ('+Toggle comment card destruction flag.', i8)
   go to 1000
 6000 call stoptp   ! installation-dependent program stop card
@@ -818,7 +812,7 @@ subroutine cimage
 6100 nfrfld = 1
   call frefld(xopt)
   call frefld(copt)
-  if ( noutpr  .eq.  0 ) write (lunit6, 6114) xopt, copt
+  if (noutpr .eq. 0) write (lunit6, 6114) xopt, copt
 6114 format ('+New  xopt, copt =', 2e14.4)
   xunits = 1000.
   if(xopt(1) .gt. 0.0) xunits = twopi * xopt(1)
@@ -828,14 +822,14 @@ subroutine cimage
 4006 format (/, 1x, 85('='), /, ' End of file encounted in "cimage" while attempting to read another data card.   Stop.', /, 1x, 85('='))
   call stoptp   ! installation-dependent program stop card
   !     unique exit of module, possibly after echoing card image:
-7014 if ( inecho  .eq.  0 )   return
+7014 if (inecho .eq. 0) return
   entry cecho
   !     "statistics" over12 echos lunit5 card images of base case
   !     (read in over13, over15, maybe subts3, subr31) so each
   !     energization can re-cimage this lunt12 data. 2nd and later
   !     one skips overlay 12-15 cards with lunit5 read in over12
-  if ( nchain  .le.  15 ) ipntv(11) = ipntv(11) + 1
-  write (inecho, 3000)  buff10
+  if (nchain .le. 15) ipntv(11) = ipntv(11) + 1
+  write (inecho, 3000) buff10
   return
   entry ibrinc
   ibr = ibr + 1

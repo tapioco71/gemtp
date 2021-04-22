@@ -2,8 +2,8 @@
   !
   !     file: volt45.ftn
   !
-  !     Deck used only by "semlyen setup" (overlay 45) and
-  !     "hauer setup" (overlays 48 and 49) to provide inter-
+  !     Deck used only by "Semlyen setup" (overlay 45) and
+  !     "Hauer setup" (overlays 48 and 49) to provide inter-
   !     overlay communication (to "line constants" [44],
   !     "cable constants" [47],  and kill=183 error stop [54]).
   !     This deck was added as a quick and dirty fix when we
