@@ -475,7 +475,7 @@ subroutine over15
 300 if (iplot .lt. 0) isplot = intinf
   lunit6save = lunit6
   lunit6 = 79
-  open (79, status='scratch')
+  open (79, status = 'scratch')
   if (nenerg .ne. 0  .and.  kbase .ne. intinf) go to 54242
   flstat(5) = flstat(5) + d1
   flstat(6) = flstat(6) + d2

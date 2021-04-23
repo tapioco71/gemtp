@@ -1126,7 +1126,7 @@ subroutine datout(w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, r
   character cha
   dimension r(npk), al(npk), c(npk)
   complex*16 zc(ldn, ldn), yc(ldn, ldn)
-  lunit6 = 6
+  lunit6 = gfortran_stdout_unit
   lunit7 = 7
   !     ltype=0 ; output rs
   !     ltype=1 ; not output rs
@@ -1279,7 +1279,7 @@ subroutine pri(i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   character cha
   dimension r(npk),al(npk),c(npk)
-  lunit6 = 6
+  lunit6 = gfortran_stdout_unit
   lunit7 = 7
   go to (10, 20, 30, 40),ipri
 10 continue
@@ -1338,7 +1338,7 @@ end subroutine pri
 subroutine nyan(itype,npc,nc,ncpp,ngrnd,ncros,npais,ldm)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   dimension ncpp(ldm)
-  lunit6=6
+  lunit6 = gfortran_stdout_unit
   if(itype.eq.1) return
   if(ncros.eq.0) return
   if(npc.ne.3) go to 9000
@@ -1387,7 +1387,7 @@ end subroutine nyan
 subroutine gomen(itype,npc,nx,npais,ncros,irsep,ncpp,ldm)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   dimension ncpp(ldm)
-  lunit6=6
+  lunit6 = gfortran_stdout_unit
   if(npais.lt.0) go to 1000
   if(ncros.ne.0) go to 1200
   if(irsep.eq.0) return

@@ -82,12 +82,13 @@ subroutine over1
   isplot = 0
   indstp = 1
   noutpr = 0
+  lunit0 = gfortran_err_unit
   lunit1 = 1
   lunit2 = 2
   lunit3 = 3
   lunit4 = 4
-  lunit5 = 5
-  lunit6 = 6
+  lunit5 = gfortran_stdin_unit
+  lunit6 = gfortran_stdout_unit
   lunit7 = 7
   lunit8 = 8
   lunit9 = 9

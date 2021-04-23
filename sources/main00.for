@@ -61,12 +61,13 @@ program gemtp
      call getarg(i, arg)
      write (*, *) arg
   end do
+  lunit0 = gfortran_err_unit
   lunit1 = 1
   lunit2 = 2
   lunit3 = 3
   lunit4 = 4
-  lunit5 = 5
-  lunit6 = 6
+  lunit5 = gfortran_stdin_unit
+  lunit6 = gfortran_stdout_unit
   lunit7 = 7
   lunit8 = 8
   lunit9 = 9
@@ -295,7 +296,7 @@ subroutine erexit
   !     dimension idum(3)   !  dummy vector for ctrl-c handling
   external kwiter       ! needed for ctrl-c initialization
   common /comkwt/  kwtvax  ! magic block for vax/vms ctrl-c
-  lunit6 = 6  ! for use of "prompt" until fixed tt?? address
+  lunit6 = gfortran_stdout_unit  ! for use of "prompt" until fixed tt?? address
   muntsv(2) = 49  ! alternate munit5 unit number of spy
   kwtvax = 0    ! set flag corresponding to no ctrl-c usage
   !      call enable_ctrl_c ( kwiter, idum(1) )  ! initialize ctrl-c
@@ -999,8 +1000,8 @@ end function cfunl1
 !
 function rfunl2 ( x, y )
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     this function provides for all real library functions of
-  !     two real arguments.  all translations will make a
+  !     This function provides for all real library functions of
+  !     two real arguments.  All translations will make a
   !     substitution.
   rfunl2 = x
   return
@@ -1026,10 +1027,10 @@ end function rfunl2
 !
 function cmplxz ( x, y )
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     this function provides for all complex library functions of
-  !     two real arguments.  all translations will make a
+  !     This function provides for all complex library functions of
+  !     two real arguments.  All translations will make a
   !     substitution.
-  !       vax module switched to complex*16 (from *8) in aug 1981
+  !       VAX module switched to complex*16 (from *8) in aug 1981
   complex*16    cmplxz
   cmplxz = dcmplx ( x, y )
   return
@@ -1039,10 +1040,10 @@ end function cmplxz
 !
 function rfunl3 ( x )
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     this function provides for all real library functions of
-  !     a single complex argument.   all translations will make a
+  !     This function provides for all real library functions of
+  !     a single complex argument.   All translations will make a
   !     substitution.
-  !       this vax module became complex*16 (from *8) in aug 1981
+  !       this VAX module became complex*16 (from *8) in aug 1981
   complex*16     x
   rfunl3 = 0.0
   return
@@ -1089,8 +1090,8 @@ end subroutine cdivz
 !
 function  iabsz ( n1 )
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     one and only integer library function of one integer
-  !     argument.    make entry point if 2nd is used.
+  !     One and only integer library function of one integer
+  !     argument.    Make entry point if 2nd is used.
   iabsz = iabs ( n1 )
   return
 end function iabsz
@@ -1099,7 +1100,7 @@ end function iabsz
 !
 function ifunl2 ( n1, n2 )
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     provision for all integer library functions of 2 integer arguments
+  !     Provision for all integer library functions of 2 integer arguments
   ifunl2 = n1
   return
   entry isignz (n1, n2)
@@ -1121,17 +1122,17 @@ end function ifunl2
 subroutine dlibrf(x, y)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   double precision x, y
-  !     this module serves to provide selected double-precision
+  !     This module serves to provide selected double-precision
   !     library functions for several places in the program.
-  !     making this a subroutine rather than a function avoids all
+  !     Making this a subroutine rather than a function avoids all
   !     complications with the module name having a variable type
-  !     associated with it.   it is installation-dependent because of two
+  !     associated with it.   It is installation-dependent because of two
   !     things --- first the use of entry points, and second the use
   !     of the double-precision declaration (by which is meant double
-  !     the precision of regular floating-point variables of the emtp).
-  !     since most byte-organized machines use  real*8  for other
+  !     the precision of regular floating-point variables of the EMTP).
+  !     Since most byte-organized machines use  real*8  for other
   !     variables, this implies  real*16 ,  if available.
-  !     installation-dependent module coded for  dec vax-11
+  !     Installation-dependent module coded for  dec vax-11
   return
   entry dabsz (x, y)
   y = dabs(x)
@@ -1158,7 +1159,7 @@ end subroutine dlibrf
 subroutine dlibr2(x, y, z)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   double precision  x, y, z
-  !     installation-dependent module for dec vax-11 computer
+  !     Installation-dependent module for dec vax-11 computer
   !     like "dlibrf" (see comments there), only for two inputs
   return
   entry datn2z (x,y,z)
@@ -1175,17 +1176,17 @@ subroutine setmar
   return
   entry chrsiz(n)
   n = 0
-  !     entry point for do-nothing mimiced tektronix plot10 of "tekplt"
+  !     Entry point for do-nothing mimiced tektronix plot10 of "tekplt"
   return
   entry  setplt
-  !     entry point to change lines/page to maximum number allowed,
+  !     Entry point to change lines/page to maximum number allowed,
   !     to allow printer plots to be continuous over page boundries.
   !     call system dependant routine to change page size
   !     write (lunit6, 1000 )
   !     1000 format (1h1)
   return
   entry  setstd
-  !     entry point to restore page limits to standard values.
+  !     Entry point to restore page limits to standard values.
   !     call system dependant routine to change page size
   !     write (lunit6, 1000 )
   return
@@ -1195,7 +1196,7 @@ end subroutine setmar
 !
 subroutine interp
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  !     if  character*51 kunit6,  active module needed to flush
+  !     If  character*51 kunit6,  active module needed to flush
   !     abuff and kunit6 as 132-column interpreted data card line.
   return
 end subroutine interp
@@ -1470,7 +1471,7 @@ subroutine frenum(text1, n3, d1)
      if ( text1(n4)  .eq.  blank )   go to 4718
      if ( n9  .ge.  2 )   go to 4711
      write (6, 4706)
-4706 format (/, ' Error stop in "frenum". There are 33 or more characters in a free- format number on last data card.')
+4706 format (/, ' Error stop in "frenum".   There are 33 or more characters in a free-format number on last data card.')
      call stoptp   ! installation-dependent program stop card
      !     4711 encode (1, 4712, texta(n9))  text1(n4)
 4711 write (unit=texta(n9), fmt=4712) text1(n4)
@@ -1565,13 +1566,13 @@ function seedy(atim)
   !     real*8          atim
   character*8 atim
   dimension atim(2)
-  read (unit=atim, fmt=4286) ihr, imin10, imin1, isec
+  read (unit = atim, fmt = 4286) ihr, imin10, imin1, isec
 4286 format (i2, 1x, i1, 4x, i1, 1x, i2)
   imin = imin10 * 10  +  imin1
   hour = ihr * 3600
   amin = imin * 60
   sec = isec
-  seedy = sec  +  amin  +  hour  +  1.0
+  seedy = sec + amin + hour + 1.0
   return
 end function seedy
 !

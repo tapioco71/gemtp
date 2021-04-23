@@ -421,8 +421,8 @@
   numlst = 28
   lunit2 = 7
   lunit3 = 8
-  lunit5 = 5
-  lunit6 = 6
+  lunit5 = gfortran_stdin_unit
+  lunit6 = gfortran_stdout_unit
   mulvar(1)  =  2
   mulvar(2)  =  2
   mulvar(3)  =  2
