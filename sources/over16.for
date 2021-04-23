@@ -139,7 +139,7 @@ subroutine subts1
   if ( i .eq. 4 )     go to 2103
   if (it1 .eq. 9976)  go to 2110
   if ( it1 .le. 0 )   go to 2110
-  gus4 = (e(nn1)-e(n2)) * delta2
+  gus4 = (emtpe(nn1)-emtpe(n2)) * delta2
   ci1 = ck(it1)
   ck1 = ci1 + gus4
   ck(it1)=ck1+gus4
@@ -150,7 +150,7 @@ subroutine subts1
   cik(it1+1)  =  ck1 + cik(it1)  +  cik(it1+1)
   cik(it1) = -ck1
   go to 2113
-2103 ck1 = e(n2) - e(n1)
+2103 ck1 = emtpe(n2) - emtpe(n1)
   a = (ck1+energy(k)) / 2.0
   energy(k) = ck1
   if ( a .lt. 0.0 )  go to 1002
@@ -160,8 +160,8 @@ subroutine subts1
 2100 if ( t.lt.tcl      ) go to 1002
   if ( it1 .le. 0 ) go to 2101
   iit1 = -nr(it1)
-  e(n1) = e(n2)
-  gus4 = e(nn1) - e(n2)
+  emtpe(n1) = emtpe(n2)
+  gus4 = emtpe(nn1) - emtpe(n2)
   cik(it1) = -x(iit1) * gus4
   gus4 = gus4 * delta2
   ck1 = ck(it1)
@@ -174,12 +174,12 @@ subroutine subts1
   d3 = a * ( ck1+1.0 )  -  ci1 / d2
   crit(k) = absz( d3 / ck1 )
   go to 2102
-2101 ck1 = e(nn1) - e(n2)
+2101 ck1 = emtpe(nn1) - emtpe(n2)
   if ( absz(ck1) .lt. topen(k)) go to 1002
   adelay(k) = t + adelay(ndx1)
   if (  isss .ne. 0 )  go to 8455
-  if ( n2 .eq. 1 ) e(nn1) = e(n2)
-  if ( n2 .ne. 1 ) e(n2) = e(nn1)
+  if ( n2 .eq. 1 ) emtpe(nn1) = emtpe(n2)
+  if ( n2 .ne. 1 ) emtpe(n2) = emtpe(nn1)
   go to 2102
 8455 continue
   d4 = absz ( crest(isss) )
@@ -206,24 +206,24 @@ subroutine subts1
   go to 2105
 2110 l = n1
   if (nextsw(k) .lt. 0 )  l = n2
-  a = -f(l)
+  a = -emtpf(l)
   it2 = kks(l)
 2111 it2 = it2 - 1
   j = km(it2)
   if ( j .lt. 0 ) go to 2116
-  a =  a  +  ykm(it2) * e(j)
+  a =  a  +  ykm(it2) * emtpe(j)
   go to 2111
 2116 j = iabs ( j )
-  a =  a  +  ykm(it2) * e ( j )
-  if (  iprsup .ge. 7 ) write(lunit6, 3407 )  k, bus(n1), bus(n2), l, nextsw(k), f(l), a
-3407 format (37h    k    bus1    bus2    l  nextsw(k), 7x,  4hf(l),  10x,  1ha  ,/, 2x, i3, 2( 2x, a6 ), 2x, i3, i11,  2( 2x, e15.5 ) )
+  a =  a  +  ykm(it2) * emtpe(j)
+  if (  iprsup .ge. 7 ) write (lunit6, 3407 )  k, bus(n1), bus(n2), l, nextsw(k), emtpf(l), a
+3407 format ('    k    bus1    bus2    l  nextsw(k)', 7x, 'emtpf(l)', 10x, 'a', /, 2x, i3, 2(2x, a6), 2x, i3, i11, 2(2x, e15.5))
   if ( iprsup  .ge.  5 ) write (lunit6, 8007)  k,  l, ii, i, isss, it1, tclose(k), t, topen(k), crit(k), adelay(k)
 8007 format ( /, 1x, 48h       k       l      ii       i    isss     it1, /, 1x, &
        6i8  ,/,  7x,  9htclose(k),  14x,  1ht,  7x,  8htopen(k), &
        8x,  7hcrit(k),  6x,  9hadelay(k)  ,/,  1x,  5e15.6 )
   n4 = n1
   if ( n4 .eq. l )  n4 = n2
-  f(n4) = f(n4) - a
+  emtpf(n4) = emtpf(n4) - a
   if ( nextsw(k)  .gt.  0 )  a = -a
   gus1 = a*tclose(k)
   if ( gus1 .eq. 0.0  .and. tclose(k) .ne. 0.)  gus1 = -1.0
@@ -231,7 +231,7 @@ subroutine subts1
   if ( ii .le. 0 ) vsl = a
   if ( i .eq.  3 )   gus1 = -a
   if ( isss .le. 0 ) go to 2112
-  gus4 = (e(nn1) - e(n2))*a
+  gus4 = (emtpe(nn1) - emtpe(n2))*a
   energy(k)=energy(k) + gus4
   if ( gus4 .lt. 0 ) go to 2113
 2112 if ( i .gt. 1 .and. t.lt.topen(k)) go to 1002
@@ -403,7 +403,7 @@ subroutine subts1
      !     ------  was open  ------
 804  ardube(i) = ardube(i) + deltat
      if ( ardube(i) .gt. d1 )  ardube(i) = - fltinf
-     d5 =  e( n1) - e( n2)
+     d5 =  emtpe( n1) - emtpe( n2)
      ndx1 = lswtch + i
      if ( iprsup .eq. 7 ) write (6, *) ' ndx1, ardube(i), d1, d5, ardube(ndx1) =', ndx1, ardube(i), d1, d5, ardube(ndx1)
      if ( k1 .eq. 8890 )  d5 = absz( d5)
@@ -431,8 +431,8 @@ subroutine subts1
   do i=1, inonl
      k = nonlk(i)
      m = iabs( nonlm(i) )
-     vsl = e(k) - e(m)
-     if (  iprsup .gt. 4 ) write (lunit6, 3906)  i, k, m, nltype(i), nonlad(i), curr(i), e(k), e(m), vnonl(i)
+     vsl = emtpe(k) - emtpe(m)
+     if (  iprsup .gt. 4 ) write (lunit6, 3906)  i, k, m, nltype(i), nonlad(i), curr(i), emtpe(k), emtpe(m), vnonl(i)
 3906 format ( /, 9h at  3906   , 5i10, f10.0, 3e15.5  )
      if (  nltype(i) .lt. 0 )  go to 83903
      gus2 = curr(i)
@@ -767,7 +767,7 @@ subroutine subts1
      gus3 = cchar(nn1)
      if (  vsl .lt. 0.0 )  gus3 = -gus3
      d1 = ( vsl + gus4  -  gus3 ) * gslope(nn1) / delta2
-     if (  iprsup .ge. 1 ) write(lunit6, 73926) i, istep, d1, anonl(i), gus2, gus3, vnonl(i)
+     if (  iprsup .ge. 1 ) write (lunit6, 73926) i, istep, d1, anonl(i), gus2, gus3, vnonl(i)
 73926 format ( 23h type-98 segment change   ,2i10, /, 1x, 5e25.15 )
      gus2 = ( anonl(i) + d1 ) / 2.0
      go to 3950
@@ -855,7 +855,7 @@ subroutine subts1
   it2 = kode (l)
   if ( it2 .gt. l) go to 2290
   if ( it2 .eq. 1 )  go to 2290
-  f(1) = 0.0
+  emtpf(1) = 0.0
   n17 = 1
   j=kks(l)
 2220 j = j - 1
@@ -874,13 +874,13 @@ subroutine subts1
   if ( jj .gt. i ) go to 2230
   n17 = jj
   go to 2225
-2237 f(1) = f(1) + ykm(j)
+2237 emtpf(1) = emtpf(1) + ykm(j)
   go to 2233
-2229 f(i) = f(i) + ykm(j)
+2229 emtpf(i) = emtpf(i) + ykm(j)
   go to 2232
 2230 kssfrq( i ) = jj
 2231 kssfrq(n17) = i
-  f(i) = ykm(j)
+  emtpf(i) = ykm(j)
 2232 n17 = n18
   if ( kode(i) .eq. 0 )  n17 = i
 2233 if ( n13 .gt. 0 ) go to 2220
@@ -893,7 +893,7 @@ subroutine subts1
   go to 2220
   !                       addition of elements for closed switches
 2240 n17 = 1
-  acheck=absz(f(1))*epsiln
+  acheck=absz(emtpf(1))*epsiln
   if (  acheck .ne. 0.0 .or. ktrans(l) .eq. -664422 )  go to 2260
   if (nwarn .le. 0 ) write (lunit6, 2253)  bus(l)
 2253 format ( 38h zero diagonal admittance;   zero ykk., 40h  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% &
@@ -901,10 +901,10 @@ subroutine subts1
        ,/,   36h that the diagonal is zero due to no, 41h connected elements.   add high impedance &
        ,/,   40h branch to earth (value 10*flzero),  and, 10h continue.    )
   nwarn = -1
-  f(1) = flzero * 10.
+  emtpf(1) = flzero * 10.
 2260 k = kssfrq(n17)
   if (  k .gt. l  .or.  k .eq. 0 ) go to 2280
-  a=f(k)
+  a=emtpf(k)
   if ( a .eq. 0.) go to 2279
   n14 = k
   i = kk(k)
@@ -921,19 +921,19 @@ subroutine subts1
   if ( n15 .eq. 0 )  go to 2276
   n14 = n15
   go to 2271
-2272 f(1) = f(1) - a * ykm(i)
+2272 emtpf(1) = emtpf(1) - a * ykm(i)
   go to 2270
-2273 f(n1)=f(n1)-a*ykm(i)
+2273 emtpf(n1)=emtpf(n1)-a*ykm(i)
   go to 2277
 2275 kssfrq(n1) = n15
 2276 kssfrq(n14) = n1
-  f(n1) = - a * ykm(i)
+  emtpf(n1) = - a * ykm(i)
 2277 n14 = n1
   go to 2270
 2279 kssfrq(n17) = 0
   n17 = k
   go to 2260
-2280 a=f(1)
+2280 a=emtpf(1)
 1280 if (  absz(a) .ge. acheck ) go to 4312
   if ( nwarn .le. 0 ) write (lunit6, 2281) bus(l), a, acheck, epsiln
 2281 format ( 43h floating subnetwork.  floating subnetwork., 40h  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% &
@@ -973,9 +973,9 @@ subroutine subts1
   km(ii)=-l
   ykm(ii)=a
   go to 2285
-2283 if (  f(k) .eq. 0.0 )  go to 2288
+2283 if (  emtpf(k) .eq. 0.0 )  go to 2288
   ii = ii + 1
-  ykm(ii)=f(k)*a
+  ykm(ii)=emtpf(k)*a
   km(ii)=k
 2288 kssfrq(n17) = 0
   n17 = k
@@ -1042,7 +1042,7 @@ subroutine subts1
      n1 = n1 + ntot
      go to 2306
 2322 end do
-  if (  iprsup .ge. 2 ) write(lunit6, 2318)  ( znonl(i), i=1, j11 )
+  if (  iprsup .ge. 2 ) write (lunit6, 2318)  ( znonl(i), i=1, j11 )
 2318 format ( /, 40h (znonl(1:j11) before solution, at 1313.     ,/, ( 1x, 8e15.5 ) )
   ii = 1
   n4 = -kpartb
@@ -1112,9 +1112,9 @@ subroutine subts1
 2557 a = a * delta2
 2561 anonl(i) = a
 2600 end do
-2616 if (  iprsup .ge. 2 ) write(lunit6, 2603)  ( znonl(i), i=1, j11 )
+2616 if (  iprsup .ge. 2 ) write (lunit6, 2603)  ( znonl(i), i=1, j11 )
 2603 format ( /,  26h znonl after soln, at 2318  ,/, ( 1x, 8e15.5 ) )
-  call mover ( finit(1), f(1), ntot )
+  call mover ( finit(1), emtpf(1), ntot )
   if ( kswtch .eq. 0 ) go to 5000
   do i=1, kswtch
      k1 = kdepsw( lswtch + i )
@@ -1129,8 +1129,8 @@ subroutine subts1
      n2 = kmswit( lswtch + i )
      bi = exp( (a8sw(mk+5) - t - deltat) / a8sw(mk+4) )
      ai = a8sw(mk+3) * bi
-     f(n1) = ai
-     f(n2) = -ai
+     emtpf(n1) = ai
+     emtpf(n2) = -ai
      if ( ai .le. a8sw(mk+7) ) ardube(ndx2) = 0.0
      if ( bi .le. 0.0001 .and. a8sw(mk+7) .eq. 0.) ardube(ndx2) = 0.
 8801 end do
@@ -1142,8 +1142,8 @@ subroutine subts1
        ispum(iuncld), ispum(iunclq), ispum(iujtqo), ispum(iujomo),  ispum(iujtho), spum(iureqs), spum(iuepso), spum(iudcoe), &
        ispum(iukcoi), spum(iuvolt), spum(iuangl), ispum(iunodf),  ispum(iunodm), ispum(iukumo), ispum(iujumo), spum(iuumou))
   if ( kill  .gt.  0 )  go to 9200
-  if ( iprsup .gt. 2 ) write (lunit6, 3992)  ( e(i), f(i), i=1, ntot )
-3992 format ( /,  79h (e(i), f(i), i=1, ntot)   at the end of the first piece of the time-step loop.   ,/, ( 1x, 10e13.3 ) )
+  if ( iprsup .gt. 2 ) write (lunit6, 3992)  ( emtpe(i), emtpf(i), i=1, ntot )
+3992 format (/, ' (emtpe(i), emtpf(i), i=1, ntot)   at the end of the first piece of the time-step loop.', /, (1x, 10e13.3))
   ipoint=ipoint+1
   if ( ipoint.eq.lpast) ipoint=0
   lastov = nchain
@@ -1204,7 +1204,7 @@ subroutine yserlc
      n1 = iabs( n1 )
      d23 = 1.0 / x( n1 )
      d44 = tr( ndx2 ) + xcon * tx( ndx2 )
-     gus1 = c( ndx2 )
+     gus1 = emtpc(ndx2)
      if ( gus1 .ne. 0.0 )  gus1 = 1.0 / ( gus1 * ccon )
      d33 = d44 + gus1
      if ( d33 .ge. epsiln*d23*10. )  go to 8253
@@ -1213,20 +1213,20 @@ subroutine yserlc
           '  send revised desired r,x,c-values :'  )
      read (munit5, 8246)  buff77
 8246 format ( a80 )
-     call frefp3 ( buff77,tr(ndx2),tx(ndx2),c(ndx2) )
+     call frefp3(buff77, tr(ndx2), tx(ndx2), emtpc(ndx2) )
      d44 = tr( ndx2 ) + xcon * tx( ndx2 )
-     gus1 = c(ndx2)
+     gus1 = emtpc(ndx2)
      if ( gus1 .ne. 0.0 )   gus1 = 1.0 / ( gus1 * ccon )
      d33 = d44 + gus1
 8253 d23 = 1.0/d33  -  x( n1 )
      ci(ndx1) = tr(ndx2)
      ck(ndx1) = tx(ndx2)
-     cik(ndx1) = c(ndx2)
+     cik(ndx1) = emtpc(ndx2)
      x(n1) = d44
      gus2 = 1.0 / d33
      r(n1) = gus2 * (ci( ndx1 ) * 2.0 - x(n1) + gus1)
      x(n1) = gus2
-     c( n1 ) = gus1
+     emtpc( n1 ) = gus1
      if ( kbus(ndx1)  .lt.  mbus(ndx1) )   go to 4107
      n8 = mbus(ndx1)
      n9 = kbus(ndx1)
@@ -1958,7 +1958,7 @@ subroutine  tacs3
   if ( n1 .gt. 93 )  go to 500
   n2 = n1 - 89
   go to (502, 503, 504, 506), n2
-502 xtcs(ndx1) = e( k)
+502 xtcs(ndx1) = emtpe( k)
   go to 500
 503 if ( n13 .eq. 0 ) go to 509
   if ( l .eq. 11 ) xtcs(ndx1) = tclose(k)
@@ -1994,11 +1994,11 @@ subroutine  tacs3
   do k = 1, konsce
      ndx1 = ilntab( kaliu + k )
      if (  k  .gt.  11 )  go to 4848
-     write ( lunit6, 3344 ) k, iuty(kiuty+k), texvec(ndx1), kpos(k), e(k), tclose(k), xtcs(kxtcs+nuk+k)
+     write ( lunit6, 3344 ) k, iuty(kiuty+k), texvec(ndx1), kpos(k), emtpe(k), tclose(k), xtcs(kxtcs+nuk+k)
 3344 format ( 2i8, 2x, a6, i8, e15.6, 45x, 2e15.6 )
      go to 4040
 4848 ndx5 = ndx5 + 5
-     write ( lunit6, 3244 ) k,iuty(k+kiuty),texvec(ndx1),kpos(k),e(k),ud1(ndx5+1), ud1(ndx5+2),ud1(ndx5+3),tclose(k),xtcs(kxtcs+nuk+k)
+     write ( lunit6, 3244 ) k,iuty(k+kiuty),texvec(ndx1),kpos(k),emtpe(k),ud1(ndx5+1), ud1(ndx5+2),ud1(ndx5+3),tclose(k),xtcs(kxtcs+nuk+k)
 3244 format (  2i8, 2x, a6, i8, 6e15.6  )
 4040 end do
 3030 l = iuty( kiuty + 4 )
@@ -2190,12 +2190,12 @@ subroutine subts2
   equivalence (semaux(1), wk1(1))
   dimension infdli(1)
   equivalence (namebr(1), infdli(1))
-  common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7,koff8, koff9, koff10, koff13, koff14, koff15, koff16, koff17, &
-       koff18, koff19, koff20, koff21, koff22, koff23, koff24,koff25, inoff1, inoff2, inoff3, inoff4, inoff5, nqtt, lcbl, &
-       lmode, nqtw
+  common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7,koff8, koff9, koff10, koff13, koff14, koff15, koff16, koff17
+  common /fdqlcl/ koff18, koff19, koff20, koff21, koff22, koff23, koff24,koff25, inoff1, inoff2, inoff3, inoff4, inoff5, nqtt, lcbl
+  common /fdqlcl/ lmode, nqtw
   !     intrinsic  iabsz, absz
-  if ( iprsup .ge. 1 ) write (lunit6, 3445) ( f(j), j=1, ntot )
-3445 format ( ' top  subts2.  f(1:ntot) follows ...' ,/,( 1x, 8e16.7 ) )
+  if ( iprsup .ge. 1 ) write (lunit6, 3445) ( emtpf(j), j=1, ntot )
+3445 format ( ' top  subts2.  emtpf(1:ntot) follows ...' ,/,( 1x, 8e16.7 ) )
   nmodal = kcount
   isecti = 400
   k=1
@@ -2212,7 +2212,7 @@ subroutine subts2
   !                                                          updating line
 1100 it2=length(k)
   n1=kbus(k)
-  if ( iprsup .ge. 1 ) write(*,*) 'top of subts2 ,n1=', n1
+  if ( iprsup .ge. 1 ) write (*,*) 'top of subts2 ,n1=', n1
   if (n1.lt.0) go to 1180
   it2=iabs(it2)
   if (it2.eq.1) go to 1150
@@ -2221,8 +2221,8 @@ subroutine subts2
   do i=1,it2
      n1=kbus(it1)
      n2=mbus(it1)
-     volti(i)=-e(n1)
-     voltk(i)=-e(n2)
+     volti(i)=-emtpe(n1)
+     voltk(i)=-emtpe(n2)
      volt(i)=voltk(i)-volti(i)
 1110 it1=it1+1
   end do
@@ -2230,16 +2230,16 @@ subroutine subts2
   if (t.gt.tmax) go to 1190
   !     check for the presence of the -666 branches  *   *   *   *   *   *
   if ( length(k+1) .eq. -666 ) go to 3531
-  call mult(c(n3),volti,ci(k),it2,llm1)
-  call mult(c(n3),voltk,ck(k),it2,llm1)
-  if ( kodebr(k) .le. 0 )  go to 3530
+  call mult(emtpc(n3), volti, ci(k), it2, llm1)
+  call mult(emtpc(n3), voltk, ck(k), it2, llm1)
+  if (kodebr(k) .le. 0) go to 3530
   call mover( cik(k), volti(1), it2 )
   call mult( x(n3), volt(1), volti(1), it2, ll1 )
   call mult( r(n3), volti(1), cik(k), it2, llm1 )
   do i=1, 10
-     if ( istep .le. 2   .and.   iprsup .ge. 3 ) write(lunit6, 73530)  i, kbus(i), mbus(i), nr(i), length(i), &
-          kodebr(i), r(i), x(i), tr(i), tx(i), c(i), volt(i), volti(i), cik(i)
-73530 format( /,  34h update of  i(t-deltat)  at 73530.   , 6i12, /, ( 1x, 5e25.15) )
+     if ( istep .le. 2   .and.   iprsup .ge. 3 ) write (lunit6, 73530)  i, kbus(i), mbus(i), nr(i), length(i), &
+          kodebr(i), r(i), x(i), tr(i), tx(i), emtpc(i), volt(i), volti(i), cik(i)
+73530 format (/, ' Update of  i(t-deltat)  at 73530.   ', 6i12, /, (1x, 5e25.15))
 73529 end do
   go to 3535
 3531 call fdcinj( ikf, isfd, ibf)
@@ -2251,8 +2251,8 @@ subroutine subts2
   do i=k,it1
      n1=kbus(i)
      n2=mbus(i)
-     f(n1)=f(n1)-cik(i)-ci(i)
-1120 f(n2)=f(n2)+cik(i)-ck(i)
+     emtpf(n1)=emtpf(n1)-cik(i)-ci(i)
+1120 emtpf(n2)=emtpf(n2)+cik(i)-ck(i)
   end do
   !
   !
@@ -2262,26 +2262,26 @@ subroutine subts2
 1150 i=nr(k)
   msign=mbus(k)
   n2=iabs(msign)
-  gus1=e(n1)
-  gus2=e(n2)
+  gus1=emtpe(n1)
+  gus2=emtpe(n2)
   gus3=gus1-gus2
   a=cik(k)
   ci1=ci(k)
   ck1=ck(k)
   it1=iabs(i)
-  cap=c(it1)
+  cap = emtpc(it1)
   if ( iprsup .ge. 3 ) write (lunit6, *)  ' it1, n1, n2, k, i, t =', it1, n1, n2, k, i, t
-  if ( iprsup  .ge.  3 ) write (lunit6,5432) x(it1), e(n1), e(n2), cik(k), r(it1)
-5432 format(40h x(it1), e(n1), e(n2), cik(k), r(it1) = ,5e18.10,/)
+  if ( iprsup  .ge.  3 ) write (lunit6,5432) x(it1), emtpe(n1), emtpe(n2), cik(k), r(it1)
+5432 format (' x(it1), emtpe(n1), emtpe(n2), cik(k), r(it1) = ', 5e18.10, /)
   if (i.lt.0) go to 1170
   if (t.gt.tmax) go to 1105
   a=(gus3+a*x(i))*r(i)-a
   gus4=-cap *gus1-ci1
   ck1=-cap *gus2-ck1
-  f(n1)=f(n1)-gus4
-  f(n2)=f(n2)-ck1
-1160 f(n1)=f(n1)-a
-  f(n2)=f(n2)+a
+  emtpf(n1)=emtpf(n1)-gus4
+  emtpf(n2)=emtpf(n2)-ck1
+1160 emtpf(n1)=emtpf(n1)-a
+  emtpf(n2)=emtpf(n2)+a
   cik(k)=a
   ci(k)=gus4
   ck(k)=ck1
@@ -2315,7 +2315,7 @@ subroutine subts2
      wk1( koff10 + i ) = 0.0
      ky = ky + 1
 103 end do
-  if ( iprsup .gt. 0 ) write( *,*)'+++++before updating history source++++ t=', t
+  if ( iprsup .gt. 0 ) write ( *,*)'+++++before updating history source++++ t=', t
   kq = infdli(inoff1+k)
   kqk0 = infdli(inoff2+k)
   kh = k
@@ -2331,8 +2331,8 @@ subroutine subts2
      do i=1,it2
         nn1 = -kbus(ky)
         nn2 = iabs( mbus(ky) )
-        gkt = sconst(kqk0) * e(nn1)
-        gmt = sconst(kqk0) * e(nn2)
+        gkt = sconst(kqk0) * emtpe(nn1)
+        gmt = sconst(kqk0) * emtpe(nn2)
         nteq = wk1(koff20+kq)
         if (  lint .eq. 1 ) go to 9824
         n1 = kodsem(ky)
@@ -2350,10 +2350,8 @@ subroutine subts2
         nq6 = nq5 + 1
         hktdt = sconst(nq6) * sconst(n6)
         hmtdt = sconst(nq6) * sconst(nn5)
-        if ( iprsup .gt. 0 ) write(*,4933)
-4933    format(30h kq nteq   lj  lj1  cjq(iadrs),12h     qk0(kq), &
-             36h   esumq(kq)       hktdt       hmtdt,36h       vk(i)     vkdt(i)   vkj5dt(j), &
-             12h       vm(i))
+        if ( iprsup .gt. 0 ) write (*,4933)
+4933    format (' kq nteq   lj  lj1  cjq(iadrs)     qk0(kq)   esumq(kq)       hktdt       hmtdt       vk(i)     vkdt(i)   vkj5dt(j)       vm(i)')
         lj1 = lj + nteq
         jkl = 0
         do jq=1,nteq
@@ -2362,28 +2360,28 @@ subroutine subts2
            nq4 = nnq3 + nteq
            !     vkj5dt(iadrs) = qki(iadrs) * vkj5dt(iadrs)
            !    1              + ejq(iadrs) * sconst(n6)
-           !    2              + qpi(iadrs) * e(nn1)
+           !    2              + qpi(iadrs) * emtpe(nn1)
            if ( abs(sconst(nnq2)) .ge. 1.e+14 ) go to 1800
            go to 1083
 1800       jkl = jkl + 1
            if (jkl .eq. 2) go to 1801
            sconst(nnq2) = sconst(nnq2) / 1.e+15
-1083       xm(lj1) = sconst(nnq2) * xm(lj1) + sconst(nq4)  * sconst(n6) + sconst(nnq3) * e(nn1)
-           xm(lj)  = sconst(nnq2) * xm(lj) + sconst(nq4)  * sconst(nn5) + sconst(nnq3) * e(nn2)
+1083       xm(lj1) = sconst(nnq2) * xm(lj1) + sconst(nq4)  * sconst(n6) + sconst(nnq3) * emtpe(nn1)
+           xm(lj)  = sconst(nnq2) * xm(lj) + sconst(nq4)  * sconst(nn5) + sconst(nnq3) * emtpe(nn2)
            gkt = gkt + xm(lj1)
            gmt = gmt + xm(lj)
            hktdt = hktdt + sconst(nnq2) * xm(lj1)
            hmtdt = hmtdt + sconst(nnq2) * xm(lj)
            if ( jkl .eq. 1 ) go to 1802
 1801       jkl = 0
-1802       if ( iprsup .gt. 0 ) write(*,4333) kq,nteq,lj,lj1,sconst(nnq2),sconst(kqk0),sconst(nq6),hktdt,hmtdt,e(nn1), sconst(n6),xm(lj1),e(nn2)
-4333       format ( 1x,i2,3x,i2,2x,i3,2x,i3, 9e12.5 )
+1802       if ( iprsup .gt. 0 ) write (*,4333) kq,nteq,lj,lj1,sconst(nnq2),sconst(kqk0),sconst(nq6),hktdt,hmtdt,emtpe(nn1), sconst(n6),xm(lj1),emtpe(nn2)
+4333       format (1x, i2, 3x, i2, 2x, i3, 2x, i3, 9e12.5)
            lj = lj + 1
            lj1 = lj1 + 1
-           if ( lj .ge. lpast+lsiz28) write(*, 9835) lj, lpast+lsiz28
-9835       format(5h+xm(), i5,27h exceed the limit of list28, i5,/, 20h if you are going to/, &
-                58h run the case agian, you should have your programer change,/, &
-                34h the dimenssion. massage from ljg.)
+           if ( lj .ge. lpast+lsiz28) write (*, 9835) lj, lpast+lsiz28
+9835       format ('+xm()', i5, ' exceed the limit of list28', i5, /, ' if you are going to', /, &
+                ' run the case agian, you should have your programer change', /, &
+                ' the dimension. Message from ljg.')
 1009    end do
 9824    kqk0 = kqk0 + 2 * nteq + 1
         lj = lj + nteq
@@ -2407,7 +2405,7 @@ subroutine subts2
      !     1           ,vk5(i),vk5dt(i),gkjdt(iadrs),gk,hk1(i)
      !     2           ,cjy(iadrs),djy(iadrs),ejy(iadrs),yk0(i),esumy(i)
      !     3           ,ntey,0)
-     if ( iprsup .gt. 0 ) write(*,*) 'just before convolution,vm5dt(ky),vk5dt(ky)dt=',wk1(koff1+ky),wk1(koff2+ky)
+     if ( iprsup .gt. 0 ) write (*,*) 'just before convolution,vm5dt(ky),vk5dt(ky)dt=',wk1(koff1+ky),wk1(koff2+ky)
      n4 = indhst(ky)
      n1 = kodsem(ky)
      nrz = cki(ky)
@@ -2418,10 +2416,8 @@ subroutine subts2
      gmt = sconst(n1) * wk1( koff6 + ky )
      wk1(koff13+ky) = sconst(n8) * wk1( koff2 + ky )
      wk1(koff14+ky) = sconst(n8) * wk1( koff1 + ky )
-     if ( iprsup .gt. 0 ) write(*,4833)
-4833 format(21h ky  nrz   cjy(iadrs),27h  yk0(kq) esuy(kq) wk1(k13), &
-          27h wk1(k14)  vk5(ky) vk5dt(k),27h gkjdt(i)  vm5(ky) wk1(kf3), &
-          27h wk1(kf4)  scn(n7)  scn(n6), 27h scn(nn5)      gmt      gkt)
+     if ( iprsup .gt. 0 ) write (*,4833)
+4833 format (' ky  nrz   cjy(iadrs)  yk0(kq) esuy(kq) wk1(k13) wk1(k14)  vk5(ky) vk5dt(k) gkjdt(i)  vm5(ky) wk1(kf3) wk1(kf4)  scn(n7)  scn(n6) scn(nn5)      gmt      gkt')
      jkl = 0
      jql = 1
      nkyw = n4 + 20
@@ -2454,11 +2450,11 @@ subroutine subts2
         wk1(koff13+ky) = wk1(koff13+ky) + sconst(n5) * sconst(nn6)
         wk1(koff14+ky) = wk1(koff14+ky) + sconst(n5) * sconst(nn5)
         jql = jql + 6
-2002    if ( iprsup .gt. 0 ) write(*,5333)     ky,nrz,sconst(n5), sconst(n1),sconst(n8), &
+2002    if ( iprsup .gt. 0 ) write (*,5333)     ky,nrz,sconst(n5), sconst(n1),sconst(n8), &
              wk1(koff13+ky),wk1(koff14+ky),wk1(koff5+ky),wk1(koff2+ky), &
              sconst(nn6), wk1(koff6+ky) ,wk1( koff3 + ky ),wk1( koff4 + ky ), &
              sconst(n7),  sconst(n6), sconst(nn5),      gmt  ,    gkt
-5333    format ( 1x,i2,3x,i2,16e9.3 )
+5333    format (1x, i2, 3x, i2, 16e9.3)
         if ( jkl .eq. 1 ) go to 4009
 2001    jkl = 0
 4009 end do
@@ -2469,9 +2465,9 @@ subroutine subts2
      cnvhst(n4+13) = wk1( koff3 + ky ) - gmt
      cnvhst(n4+14) = - wk1( koff4 + ky ) + gkt
      if ( iprsup .gt. 0 ) &
-                                !     1 write(*,3335) ky,hm1(ky),hk1(ky),aim5(ky),aik5(ky)
-          write(*,3335) ky,wk1(koff14+ky),wk1(koff13+ky),cnvhst(n4+13),cnvhst(n4+14)
-3335 format(30hhm1(t),hk1(t),im5(ky),ik5(ky)=,x,i1,4e14.5)
+                                !     1 write (*,3335) ky,hm1(ky),hk1(ky),aim5(ky),aik5(ky)
+          write (*,3335) ky,wk1(koff14+ky),wk1(koff13+ky),cnvhst(n4+13),cnvhst(n4+14)
+3335 format ('hm1(t),hk1(t),im5(ky),ik5(ky)=', x, i1, 4e14.5)
      ky = ky + 1
 102 end do
   !
@@ -2513,9 +2509,8 @@ subroutine subts2
         nq6 = nq5 + 1
         hkout = sconst(nq6) * sconst(n6)
         hmout = sconst(nq6) * sconst(nn5)
-        if ( iprsup .gt. 0 ) write(*,4433)
-4433    format(27h kq nteq iadrs    cjq(iads),13h      qk0(kq),39h    esumq(kq)        hkout        hmout, &
-             39h     aik5(ka)    aik5dt(j)   aikjdt(is),13h     aim5(ka))
+        if ( iprsup .gt. 0 ) write (*,4433)
+4433    format (' kq nteq iadrs    cjq(iads)      qk0(kq)    esumq(kq)        hkout        hmout     aik5(ka)    aik5dt(j)   aikjdt(is)     aim5(ka)')
         lj1 = lj + nteq
         jkl = 0
         do jq=1,nteq
@@ -2535,19 +2530,19 @@ subroutine subts2
            hmout = hmout + sconst(nnq2) * xk(lj)
            if (jkl .eq. 1 ) go to 1807
 1806       jkl = 0
-1807       if ( iprsup .gt. 0 ) write(*,4773) kq,nteq,iadrs,sconst(nnq2), sconst(kqk0),sconst(nq6),hkout,hmout, &
+1807       if ( iprsup .gt. 0 ) write (*,4773) kq,nteq,iadrs,sconst(nnq2), sconst(kqk0),sconst(nq6),hkout,hmout, &
                 cnvhst(n4+14),sconst(n6),xk(lj1),cnvhst(n4+13)
-4773       format ( 1x,i2,3x,i2,3x,i3, 9e13.5 )
+4773       format (1x, i2, 3x, i2, 3x, i3, 9e13.5)
            !      iadrs = iadrs + 1
            lj = lj + 1
            lj1 = lj1 + 1
 6009    end do
         kqk0 = kqk0 + 2 * nteq + 1
         lj = lj + nteq
-        if ( iprsup .gt. 0 ) write( *,*)'hist.sour. with current  hm3(ki), hk3(ki)', wk1(koff10+ki), wk1(koff9+ki)
+        if ( iprsup .gt. 0 ) write ( *,*)'hist.sour. with current  hm3(ki), hk3(ki)', wk1(koff10+ki), wk1(koff9+ki)
         wk1(koff10+ki) = wk1(koff10+ki) + hmout
         wk1(koff9+ki)  = wk1(koff9+ki)  + hkout
-        if ( iprsup .gt. 0 ) write( *,*)'hist.sour. with current  hm3(ki), hk3(ki)', wk1(koff10+ki), wk1(koff9+ki)
+        if ( iprsup .gt. 0 ) write ( *,*)'hist.sour. with current  hm3(ki), hk3(ki)', wk1(koff10+ki), wk1(koff9+ki)
         ki = ki + 1
         kq=kq+1
         nnq1 = nnq1 + 3 * nteq + 2
@@ -2575,9 +2570,8 @@ subroutine subts2
      !                                       update past history terms of fk'
      kktau = indhst(ka)
      nterm = cnvhst(kktau) / deltat + 1
-     if ( iprsup .gt. 0 ) write(*,4143)
-4143 format(38hnterm ktau    fkh5(ktau)           fk5,28h    bmh5(ktau)           bm5, &
-          42h        fk5tdt        fk5tau        bm5tdt,14h        bm5tau)
+     if ( iprsup .gt. 0 ) write (*,4143)
+4143 format ('nterm ktau    fkh5(ktau)           fk5    bmh5(ktau)           bm5        fk5tdt        fk5tau        bm5tdt        bm5tau')
      !      call updcbl(fkh5(ktau),fk5,fk5tdt,fk5tau
      !     1           ,bmh5(ktau),bm5,bm5tdt,bm5tau
      !     1           ,nterm,nkill(ka),tau(ka),deltat)
@@ -2614,8 +2608,8 @@ subroutine subts2
      koff11 = koff25 + 288 + kaa
      infdli(inoff5+ka) = nk1
      if ( infdli(inoff5+ka) .eq. 0 ) infdli(inoff5+ka) = nterm
-     if ( iprsup .gt. 0 ) write(*,5337) nterm, ktau,wk1(koff11),fk5,wk1(koff12), bm5,fk5tdt,fk5tau,bm5tdt,bm5tau
-5337 format ( 3x,i2,3x,i2, 8e14.5 )
+     if ( iprsup .gt. 0 ) write (*,5337) nterm, ktau,wk1(koff11),fk5,wk1(koff12), bm5,fk5tdt,fk5tau,bm5tdt,bm5tau
+5337 format (3x, i2, 3x, i2, 8e14.5)
      !                                 evaluation of fm'(t+dt) = a1(t+dt) # f
      !                                               bk'(t+dt) = a1(t+dt) # b
      !      call convol(fk5tdt,fk5tau,fmj5(iadrs),fm5(i),hkout
@@ -2626,10 +2620,8 @@ subroutine subts2
      nra = ckkjm(ka)
      wk1( koff3 + ka ) = 0.d0
      wk1( koff4 + ka ) = 0.d0
-     if ( iprsup .gt. 0 ) write(*,4435)
-4435 format(19h ka  nra cja(iadrs),33h dja(iadrs) eja(iadrs)     fk5tdt, &
-          33h     fk5tau fmj5(iars)     bm5tdt,33h     bm5tau bkj5(iars)        fm5, &
-          11h        bk5)
+     if ( iprsup .gt. 0 ) write (*,4435)
+4435 format (' ka  nra cja(iadrs) dja(iadrs) eja(iadrs)     fk5tdt     fk5tau fmj5(iars)     bm5tdt     bm5tau bkj5(iars)        fm5        bk5')
      jgl = 0
      do j=1,nra
         n5 = n1 + 5*nrz + 2 *nra + 2 + j
@@ -2648,9 +2640,9 @@ subroutine subts2
         wk1( koff4 + ka ) = wk1( koff4 + ka ) + sconst(nn6)
         if ( jgl .eq. 1 )  go to 4337
 5486    jgl = 0
-4337    if ( iprsup .gt. 0 ) write(*,5334)   ka,nra,sconst(n5),sconst(n6), sconst(n7),fk5tdt,fk5tau,sconst(nn5),bm5tdt, &
+4337    if ( iprsup .gt. 0 ) write (*,5334)   ka,nra,sconst(n5),sconst(n6), sconst(n7),fk5tdt,fk5tau,sconst(nn5),bm5tdt, &
              bm5tau,sconst(nn6),wk1(koff3+ka),wk1(koff4+ka)
-5334    format ( 1x,i2,3x,i2, 11e11.5 )
+5334    format (1x, i2, 3x, i2, 11e11.5)
 4204 end do
      ka = ka + 1
 109 end do
@@ -2659,7 +2651,7 @@ subroutine subts2
   ka = k
   nq0k=infdli(inoff1+k)
   do i=1, it2
-     if ( iprsup .gt. 0 ) write(*,*)'y05(ka),wk1(koff8+ka),wk1(koff7+ka),hm1(ka),hk1(ka)', wk1(koff21+ka),wk1(koff8+ka),wk1(koff7+ka), &
+     if ( iprsup .gt. 0 ) write (*,*)'y05(ka),wk1(koff8+ka),wk1(koff7+ka),hm1(ka),hk1(ka)', wk1(koff21+ka),wk1(koff8+ka),wk1(koff7+ka), &
           wk1(koff14+ka),wk1(koff13+ka)
      !     vmdt(ka)=fm5(ka)-y05(ka)*hm2(ka)-hm1(ka)
      !     vkdt(ka)=bk5(ka)-y05(ka)*hk2(ka)-hk1(ka)
@@ -2668,7 +2660,7 @@ subroutine subts2
      !    2         - wk1(koff14+ka)
      wk1(koff18+ka) = wk1( koff3 + ka ) - wk1(koff21+ka) * wk1( koff8 + ka ) - wk1(koff14+ka)
      wk1(koff17+ka) = wk1( koff4 + ka ) - wk1(koff21+ka) * wk1( koff7 + ka ) - wk1(koff13+ka)
-     if ( iprsup .gt. 0 ) write(*,*)'ka,fm5(ka),hm1(ka),bk5(ka),hk1(ka),vmdt(ka),vkdt(ka)', &
+     if ( iprsup .gt. 0 ) write (*,*)'ka,fm5(ka),hm1(ka),bk5(ka),hk1(ka),vmdt(ka),vkdt(ka)', &
           ka,wk1( koff3 + ka ),wk1(koff14+ka),wk1( koff4 + ka ), &
           wk1(koff13+ka),wk1(koff18+ka),wk1(koff17+ka)
      ka = ka + 1
@@ -2686,7 +2678,7 @@ subroutine subts2
         nq0k = nq0k + 1
 1027 end do
 1017 end do
-  if ( iprsup .gt. 0 ) write( *,*)'##equi. voltage sour. hm(1), hk(1)', wk1(koff16+1), wk1(koff15+1)
+  if ( iprsup .gt. 0 ) write ( *,*)'##equi. voltage sour. hm(1), hk(1)', wk1(koff16+1), wk1(koff15+1)
   if ( lint .eq. 1 ) go to 119
   ka = k
   do i=1, it2
@@ -2714,7 +2706,7 @@ subroutine subts2
      n4 = indhst(kst)
      sconst(nn5) = cnvhst(n4+13)
      sconst(n6)  = cnvhst(n4+14)
-     if ( iprsup .gt. 0 ) write( *,*)'##equi. current sour. aim5dt(i), aik5dt(i)', sconst(nn5), sconst(n6)
+     if ( iprsup .gt. 0 ) write ( *,*)'##equi. current sour. aim5dt(i), aik5dt(i)', sconst(nn5), sconst(n6)
      !      aim5dt(i)=aim5(i)
      !      aik5dt(i)=aik5(i)
      nn5 = nn5 - 2
@@ -2725,16 +2717,16 @@ subroutine subts2
      !      sconst(n6)  = vk(kst)                                    !update
      nn1 = -kbus(kst)
      nn2 = iabs( mbus(kst) )
-     sconst(nn5) = e(nn2)
-     sconst(n6)  = e(nn1)
-     if ( iprsup .gt. 0 ) write( *,*)'##equi. voltage sour. vmdt(i), vkdt(i)', &
+     sconst(nn5) = emtpe(nn2)
+     sconst(n6)  = emtpe(nn1)
+     if ( iprsup .gt. 0 ) write ( *,*)'##equi. voltage sour. vmdt(i), vkdt(i)', &
           sconst(nn5), sconst(n6)
      !      hmp(kst) = wk1(koff16+kst)
      !      hkp(kst) = wk1(koff15+kst)
      !      if ( iprsup .gt. 0 )
-     !     1 write( *,*)'##equi. voltage sour. hmp(i), hkp(i)',
+     !     1 write ( *,*)'##equi. voltage sour. hmp(i), hkp(i)',
      !     2                                   hmp(kst), hkp(kst)
-     if ( iprsup .gt. 0 ) write( *,*)'##equi. voltage sour. vm5dt(i), vk5dt(i)', &
+     if ( iprsup .gt. 0 ) write ( *,*)'##equi. voltage sour. vm5dt(i), vk5dt(i)', &
           wk1( koff1 + kst), wk1( koff2 + kst )
      kst = kst + 1
 112 end do
@@ -2743,8 +2735,8 @@ subroutine subts2
      n1 = -kbus(k)
      n2 = mbus(k)
      n2p = iabs ( n2 )
-     f(n1) = f(n1) + wk1(koff15+k)
-     f(n2p) = f(n2p) + wk1(koff16+k)
+     emtpf(n1) = emtpf(n1) + wk1(koff15+k)
+     emtpf(n2p) = emtpf(n2p) + wk1(koff16+k)
      k = k + 1
      if ( n2 .gt. 0 ) go to 483
      kcount = kcount + 1
@@ -2771,15 +2763,15 @@ subroutine subts2
   !                                            ** m*vmode=m*qfd(transposed
   it1=k
   if ( iprsup .ge. 3 ) write (lunit6, 21194) gus1, n3, it1, it2
-21194 format ( 35h gus1, n3, it1 and it2 at 21194 are, e12.5, 3i10 )
+21194 format (' gus1, n3, it1 and it2 at 21194 are', e12.5, 3i10)
   do i=1,it2
      n1=-kbus(it1)
      n2=mbus(it1)
-     volt(i)=e(n1)
+     volt(i)=emtpe(n1)
      ndx1 = lsiz26 + i
-     volt(ndx1)=e(n2)
-     if (iprsup .ge. 1) write (lunit6,31194) n1, n2, e(n1), e(n2)
-31194 format (     3h e(, i3, 9h), and e(, i3, 14h) at 31194 are, 2e15.7)
+     volt(ndx1)=emtpe(n2)
+     if (iprsup .ge. 1) write (lunit6,31194) n1, n2, emtpe(n1), emtpe(n2)
+31194 format (' emtpe(', i3, '), and emtpe(', i3, ') at 31194 are', 2e15.7)
 1195 it1=it1+1
   end do
   do i=1,it2
@@ -2797,11 +2789,11 @@ subroutine subts2
 1197 voltk(i)=ck1*gus1
   end do
   if (iprsup .ge. 1 ) write (lunit6, 21197) (volt(i),volti(i),voltk(i),i=1,it2)
-21197 format (51h (volt(i),         volti(i), voltk(i), i=1,it2) are, /,  (1x, 9e14.6) )
+21197 format (' (volt(i),         volti(i), voltk(i), i=1,it2) are', /,  (1x, 9e14.6))
   ndx1 = lsiz26 + 1
   ndx2 = lsiz26 + it2
   if ( iprsup  .ge.  1 ) write (lunit6, 31197)  ( volt(i), i=ndx1, ndx2 )
-31197 format (  6h volt:,  8e16.8  )
+31197 format (' volt:', 8e16.8)
   gus1=unity
   !              update mode quantities and find phase vectors i for right
   ci1=0
@@ -2813,7 +2805,7 @@ subroutine subts2
 4633 bvalue(n8) = voltk(i) * phsinv
   end do
   if ( iprsup  .ge.  1 ) write (lunit6, 4638)  nv, it2, k,  (volti(i), voltk(i), i=1, it2 )
-4638 format ( /,  29h mode voltages in  'subts2' .  , 3i10, /, ( 1x, 8e16.5 ) )
+4638 format (/, " Mode voltages in  'subts2' .  ", 3i10, /, (1x, 8e16.5))
   !              update mode quantities and find phase vectors i for right
 4641 ck1=0.
   msign=k
@@ -2843,14 +2835,14 @@ subroutine subts2
   n2 = - n2
   real_bus4 = 1. + h2
   if (real_bus2 .lt. 0.) real_bus4 = 2.0 * h2
-  real_bus4 = h1 * e(n1) / real_bus4 - xk(n4)
+  real_bus4 = h1 * emtpe(n1) / real_bus4 - xk(n4)
   kcount = kcount + 1
   bvalue(kcount) = real_bus4
   !
-3811 if ( iprsup .gt. 8 ) write(lunit6,31192) i, msign, it1, it21, cik(msign), ci(msign), &
+3811 if ( iprsup .gt. 8 ) write (lunit6,31192) i, msign, it1, it21, cik(msign), ci(msign), &
        ck(msign), xm(it1), xk(it1), xm(it21), xk(it21)
-31192 format(  47h0in "subts2".  i, msign, it1, it21, cik(msign),,50h ci(msign), ck(msign), xm(it1), xk(it1), xm(it21),, &
-       22h xk(it21) follow .....   ,/,  1x,  4i5,  7e15.6 )
+31192 format ('0in "subts2".  i, msign, it1, it21, cik(msign), ci(msign), ck(msign), xm(it1), xk(it1), xm(it21), xk(it21) follow .....', /, &
+           1x, 4i5, 7e15.6)
   xm(n4)=h1*volti(i)-h2*xk(n4)
   xk(n4)=h1*voltk(i)-h2*xmn4
   if (ck(msign).lt.0.0) go to 20510
@@ -2864,8 +2856,7 @@ subroutine subts2
 1192 xk(n41 )=h1
   xm(n41)=d2
   if ( iprsup .gt. 6 ) write (lunit6,1193) i, msign, it1, n41, (xk(j),xm(j),j=it1,n41)
-1193 format(  38h0in "subts2".  i, msign, it1, n41, and, 41h (xk(j), xm(j), j=it1, n41)  follow  ...., &
-       5x,  4i5  ,/,  ( 1x,  5e25.16 )  )
+1193 format ('0in "subts2".  i, msign, it1, n41, and, 41h (xk(j), xm(j), j=it1, n41)  follow  ....', 5x, 4i5,/, (1x, 5e25.16))
 1188 ii = ii + n3 + 2
   !j
   go to 10130
@@ -2942,13 +2933,13 @@ subroutine subts2
   xm(nrf) = 2.0 * vmd - cnvhst(n11+12)
   if ( iprsup .eq. 0)  go to 81000
   write (lunit6,80135) t, i
-80135 format ( 8h at t = , e12.5, 17h for marti branch, i4,/, 16h history vectors )
+80135 format (' at t = ', e12.5, ' for Marti branch', i4, /, ' history vectors')
   j1 = nn4 - nrz + 1
   j2 = nn5 - nrz + 1
   j3 = nn9 - nra + 1
   j4 = nn10 - nra + 1
   write (lunit6, 80140) j1, nn4
-80140 format( 12h sconst from, i6, 6h    to, i6 )
+80140 format (' sconst from', i6, '    to', i6 )
   write (lunit6, 80145) (sconst(ii),ii=j1,nn4)
 80145 format (1x, 10e12.5)
   write (lunit6, 80140)  j2, nn5
@@ -2958,7 +2949,7 @@ subroutine subts2
   write (lunit6, 80140) j4, nn10
   write (lunit6, 80145) (sconst(ii),ii=j4,nn10)
   write (lunit6, 80150) ind, nrf
-80150 format (/, 39h forward functions xk and xm; positions  , i6, 4h  to, i6)
+80150 format (/, ' Forward functions xk and xm; positions  ', i6, '  to', i6)
   write (lunit6,80145) (xk(ii),ii=ind,nrf),(xm(ii),ii=ind,nrf)
   !
   !
@@ -3015,9 +3006,9 @@ subroutine subts2
   d2 = cnvhst(n11+14)
   if (iprsup .eq. 0)  go to 10130
   write (lunit6,81060) t, i
-81060 format(/, 8h at t = , e12.5, 17h for marti branch, i4,48h   equiv. circuit, voltages and current sources: )
+81060 format (/, ' at t = ', e12.5, ' for Marti branch', i4, '   equiv. circuit, voltages and current sources:')
   write (lunit6, 81070) ekh, emh, cnvhst(n11+11), cnvhst(n11+12),cnvhst(n11+13),cnvhst(n11+14)
-81070 format( 1x, 6e16.7)
+81070 format (1x, 6e16.7)
 10130 volti(i)= h1*gus1
   voltk(i)=d2*gus1
   msign=msign+1
@@ -3055,10 +3046,10 @@ subroutine subts2
   !     it is a patch, to obey  common  boundaries for burroughs.
   !5186 sk = sk + weight(l) * xx(im)
   !     sm = sm + weight(l) * xx(ik)
-  if ( iprsup .ge. 8 ) write(lunit6, 7129)  l, ik, im, ik1, im1, iklim, lbound, sk, sm, weight(l), xxik, xxim
-7129 format ( /,  13h partial sum.,56h       l      ik      im     ik1     im1   iklim  lbound, &
-       /,  13x,  7i8  ,/,  13x,  18x,  2hsk,  18x,  2hsm, 11x,  9hweight(l),  16x,  4hxxik,  16x,  4hxxim   ,/, &
-       13x,  5e20.11 )
+  if ( iprsup .ge. 8 ) write (lunit6, 7129)  l, ik, im, ik1, im1, iklim, lbound, sk, sm, weight(l), xxik, xxim
+7129 format (/, ' Partial sum.       l      ik      im     ik1     im1   iklim  lbound', /,  &
+          13x, 7i8,/, 13x, 18x, 'sk', 18x, 'sm', 11x, 'weight(l)', 16x, 'xxik', 16x, 'xxim', /, &
+          13x, 5e20.11)
   l = l + 1
   if ( l .ge. lbound )  go to 5250
   ik = ik1
@@ -3076,11 +3067,11 @@ subroutine subts2
   !5250 iftail = iftail + 1
   !     dk = con1(ifdep2) * xx(im)  +  con1(jfdep2) * xx(im1)  +
   dk = con1(ifdep2) * xxim    +  con1(jfdep2) * xxim1 + con1(kfdep2) * stailk(iftail)
-  if ( iprsup .ge. 8 ) write(lunit6, 7131)  stailk(iftail), stailm(iftail), con1(ifdep2), &
+  if ( iprsup .ge. 8 ) write (lunit6, 7131)  stailk(iftail), stailm(iftail), con1(ifdep2), &
        con1(jfdep2), con1(kfdep2), xxik, xxik1, xxim, xxim1
-7131 format ( /,  15h stailk update.,  6x,  14hstailk(iftail),6x,  14hstailm(iftail),  8x,  12hcon1(ifdep2), &
-       8x,  12hcon1(jfdep2),  8x,  12hcon1(kfdep2)  ,/,15x,  5e20.11  ,/,  15x,  16x,  4hxxik,  15x,  5hxxik1, &
-       16x,  4hxxim,  15x,  5hxxim1  ,/,  15x,  5e20.11 )
+7131 format (/, ' stailk update.', 6x, 'stailk(iftail)', 6x, 'stailm(iftail)', 8x, 'con1(ifdep2)', &
+          8x, 'con1(jfdep2)', 8x, 'con1(kfdep2)', /, 15x, 5e20.11, /, 15x, 16x, 'xxik', 15x, 'xxik1', &
+          16x, 'xxim', 15x, 'xxim1', /, 15x, 5e20.11)
   stailk(iftail) = dk
   sk = sk + dk
   !     dm = con1(ifdep2) * xx(ik)  +  con2(ifdep2) * xx(ik1)  +
@@ -3088,9 +3079,8 @@ subroutine subts2
   stailm(iftail) = dm
   sm = sm + dm
   ndelt = t / deltat
-  if ( ndelt .lt. 10     .and.    iprsup .ge. 2 ) write(lunit6, 5257)  k, ifdep2, iftail,  l, ik, im, dk, dm, sk, sm
-5257 format ( /,  18h convolution done.,48x,  2hdk,  14x,  2hdm,  14x,  2hsk,  14x,  2hsm  ,/, &
-       18x,  6i8,  4e16.7  )
+  if ( ndelt .lt. 10     .and.    iprsup .ge. 2 ) write (lunit6, 5257)  k, ifdep2, iftail,  l, ik, im, dk, dm, sk, sm
+5257 format (/, ' Convolution done.', 48x, 'dk', 14x, 'dm', 14x, 'sk', 14x, 'sm' ,/, 18x, 6i8, 4e16.7)
   ifdep2 = ifdep2 + 1
   jfdep2 = jfdep2 + 1
   kfdep2 = kfdep2 + 1
@@ -3100,9 +3090,8 @@ subroutine subts2
   ik = im + lpast
   iklim = lpast
   go to 5140
-5300 if ( ndelt .lt. 10    .and.    iprsup .ge. 2 ) write(lunit6, 5310)  l,    kf, ifdep2, k, iftail, sk, sm
-5310 format ( /,  16h done f.d. mode., 40h       l      kf  ifdep2       k  iftail,  18x, &
-       2hsk,  18x,  2hsm  ,/,  16x,  5i8,  2e20.11  )
+5300 if ( ndelt .lt. 10    .and.    iprsup .ge. 2 ) write (lunit6, 5310)  l,    kf, ifdep2, k, iftail, sk, sm
+5310 format (/, ' Done f.d. mode.       l      kf  ifdep2       k  iftail',  18x, 'sk', 18x, 'sm', /, 16x, 5i8, 2e20.11)
   go to 1192
 1189 if ( i  .lt.  it2 )   go to 41189
   j = litype(k)
@@ -3121,10 +3110,10 @@ subroutine subts2
      end do
      n1=-kbus(k)
      n2=mbus(k)
-     f(n1)=f(n1)+h1
-     f(n2)=f(n2)+h2
-     if (iprsup .ge. 3 ) write (lunit6, 21199) j, it2,n1, n2, h1, h2, f(n1),f(n2)
-21199 format ( 96h       j     it2      n1      n2              h1       h2           f(n1)           f(n2),/, 4i8, 4(1x,e15.6) )
+     emtpf(n1)=emtpf(n1)+h1
+     emtpf(n2)=emtpf(n2)+h2
+     if (iprsup .ge. 3 ) write (lunit6, 21199) j, it2,n1, n2, h1, h2, emtpf(n1),emtpf(n2)
+21199 format ('       j     it2      n1      n2              h1       h2           emtpf(n1)           emtpf(n2)', /, 4i8, 4(1x,e15.6))
 1203 k=k+1
   end do
   ! *** end of conversion to iphase for untransposed option
@@ -3144,17 +3133,17 @@ subroutine subts2
      do j=1, it2
         ii = j + k - 1
         n3 = - kbus(ii)
-        d1 = d1 + qfd(n2) * e(n3)
+        d1 = d1 + qfd(n2) * emtpe(n3)
         n3 = iabs(mbus(ii))
-        d2 = d2 + qfd(n2) * e(n3)
+        d2 = d2 + qfd(n2) * emtpe(n3)
         n2 = n2 + 1
 11782 end do
      go to 11786
 11784 ii = i + k - 1
      n3 = - kbus(ii)
-     d1 = e(n3)
+     d1 = emtpe(n3)
      n3 = iabsz(mbus(ii))
-     d2 = e(n3)
+     d2 = emtpe(n3)
 11786 n3 = it2 + i
      semaux(i) = d1
      semaux(n3) = d2
@@ -3167,7 +3156,7 @@ subroutine subts2
   if (iprsup .lt. 9) go to 23200
   n3 = it2 + it2
   write (lunit6, 23210) k, it2, cik(k), (semaux(i), i=1, n3)
-23210 format(/  64h  after calculation of modal/phase voltage vector in 'subts2'.   ,i10,i10,f10.0,/,(8(1x,e15.7)))
+23210 format (/, "  After calculation of modal/phase voltage vector in 'subts2'.   ", i10, i10, f10.0, /, (8(1x,e15.7)))
 23200 ii = k
   if (kodsem(k) .gt. 0) go to 11824
   !  calculation of branch(volt) and norton(volti) i's for lumped elements
@@ -3189,11 +3178,11 @@ subroutine subts2
   !  exponential representation of the transfer function.  complete convol
   !  ution to get current at t=t0, then preform partial conv. to get i-nor
 11792 if (iprsup .ge. 9) write (lunit6, 23040) n2, n3, n4, n5, n6, d1, d2, d3
-23040 format(//, 14h  at 11792.    ,5i10,3(1x,e15.7))
+23040 format (//, '  at 11792.    ', 5i10, 3(1x,e15.7))
   do j=1, n4
      d4 = cnvhst(n5 + 1) + d1 * sconst(n6 + 4)
      if (iprsup .ge. 9) write (lunit6, 23030)  cnvhst(n5 + 1), d4
-23030 format('  Top of lumped element exponential convolution loop. ', 2(2x,e15.8))
+23030 format ('  Top of lumped element exponential convolution loop. ', 2(2x,e15.8))
      if (sconst(n6 + 2)) 11794, 11796, 11798
 11794 cnvhst(n5 + 1) = - sconst(n6 + 3) * cnvhst(n5) + sconst(n6 - 1) * d4 + sconst(n6 + 5) * d1
      d4 = sconst(n6 - 1) * cnvhst(n5) + sconst(n6 + 3) * d4 + sconst(n6 + 1) * d1
@@ -3210,7 +3199,7 @@ subroutine subts2
 11800 n6 = n6 + 5
      n5 = n5 + 1
      if (iprsup .ge. 9) write (lunit6, 23020) j, n5, n6, cnvhst(n5), d2, d3, d4
-23020 format( 23h  in exp. conv. loop.   ,3i10, 4(1x,e15.7))
+23020 format ('  In exp. conv. loop.   ', 3i10, 4(1x,e15.7))
 11802 end do
   go to 11814
   !  piecewise-linear representation of the step function.  complete conv
@@ -3245,8 +3234,8 @@ subroutine subts2
   if (n7 .gt. lpast) n7 = n7 - lpast
   write (lunit6, 23010) n2, n3, n4, n5, n6, n7, n8, n9, n10, d1, d2, d3, d4, d5, d6, cnvhst(n5), cnvhst(n5+1), &
        (xk(j), j=n7, n8)
-23010 format(/     62h  after linear conv.  n2, n3, n4, n5, n6, n7, n8, n9, n10 =  ,9i7/5x, 28h  d1, d2, d3, d4, d5, d6 =   ,6(1x,e15.7) &
-       ,/, 53hcnvhst(n5), cnvhst(n5+1), (xk/xm(j) j=n7, n8)  ...   , /,(8(1x,e15.7)))
+23010 format (/, '  After linear conv.  n2, n3, n4, n5, n6, n7, n8, n9, n10 =  ', 9i7, /, &
+           5x, '  d1, d2, d3, d4, d5, d6 =   ', 6(1x,e15.7), /, 'cnvhst(n5), cnvhst(n5+1), (xk/xm(j) j=n7, n8)  ...', /, (8(1x,e15.7)))
   go to 11812
   !  past history of convolution input is stored in 'xm'.
 11808 xm(n8) = d1
@@ -3295,8 +3284,8 @@ subroutine subts2
      n4 = - n4
      kcount = kcount + 1
      bvalue(kcount) = volt(i)
-11816 f(n3) = f(n3) - volti(i)
-     f(n4) = f(n4) + volti(i)
+11816 emtpf(n3) = emtpf(n3) - volti(i)
+     emtpf(n4) = emtpf(n4) + volti(i)
      go to 11822
 11818 if (n4 .gt. 0) go to 11820
      n4 = - n4
@@ -3315,9 +3304,9 @@ subroutine subts2
         n5 = n5 + it2
 11821 end do
      if (iprsup .ge. 9) write (lunit6, 23050) n2, n3, n4, kcount, d1, bvalue(kcount)
-23050 format( 73h  phase conversion at 11822.  n2, n3, n4, kcount, d1, b value(kcount) =   ,4i6,2(1x,e15.7))
-     f(n3) = f(n3) + d1
-     f(n4) = f(n4) - d1
+23050 format ('  Phase conversion at 11822.  n2, n3, n4, kcount, d1, b value(kcount) =   ', 4i6, 2(1x, e15.7))
+     emtpf(n3) = emtpf(n3) + d1
+     emtpf(n4) = emtpf(n4) - d1
      n2 = n2 + 1
 11822 end do
   it2 = 1
@@ -3350,7 +3339,7 @@ subroutine subts2
   if (n10 .gt. lpast) n10 = n10 - lpast
   do j=1, n8
      if (iprsup .ge. 9) write (lunit6, 23060) n7, cnvhst(n5), cnvhst(n5+1), sconst(n6)
-23060 format(64h  top of do 11838.  n7, cnvhst(n5), cnvhst(n5+1), sconst (n6) =    ,i10,  3(1x,e15.7))
+23060 format ('  Top of do 11838.  n7, cnvhst(n5), cnvhst(n5+1), sconst (n6) =    ', i10, 3(1x, e15.7))
      if (sconst(n6)) 11830, 11826, 11828
 11826 d1 = d1 + cnvhst(n5 + 0)
      d2 = d2 + cnvhst(n5 + 1)
@@ -3376,7 +3365,7 @@ subroutine subts2
 11836 n5 = n5 + 2
      n6 = n6 + 5
      if (iprsup .ge. 9) write (lunit6, 23070) n5, n6, d3, d4, cnvhst(n5 - 2), cnvhst(n5 - 1)
-23070 format( 65h  end of do 11838.  n5, n6, d3, d4, cnvhst(n5-2), cnvhs t(n5-1) =   ,2i5 ,4(1x,e13.6))
+23070 format ('  End of do 11838.  n5, n6, d3, d4, cnvhst(n5-2), cnvhs t(n5-1) =   ', 2i5, 4(1x,e13.6))
 11838 end do
   n7 = n7 + length(ii) - 2
   if (n7 .gt. lpast) n7 = n7 - lpast
@@ -3396,9 +3385,8 @@ subroutine subts2
   if (n8 .gt. lpast) n8 = n8 - lpast
   write (lunit6, 23100) n2, n3, n4, n5, n6, n7, n8, semaux(n3), semaux(n9), d1, d2, d3, d4, d5, d6, &
        (xk(j), xm(j), j=n8, n7)
-23100 format(/, 60h  after voltage convolution.  n2, n3, n4, n5, n6, n7, &
-       n8  =   ,7i10,/, 83h   semaux(n3), semaux(n9), d1, d2, d3, d4, d5, &
-       d6, (xk(j), xm(j), j=n8, n7)  ....    /  (8(1x,e15.7)))
+23100 format (/, '  After voltage convolution.  n2, n3, n4, n5, n6, n7, n8  =   ', 7i10, /, &
+           '   semaux(n3), semaux(n9), d1, d2, d3, d4, d5, d6, (xk(j), xm(j), j=n8, n7)  ....', /, (8(1x,e15.7)))
   !  volt(volti) = branch current at t=t0 at kbus(mbus).
   !  voltk(vim) = norton current via partial admittance convolution.
   !  exponential(semlyen) representation of admittance impulse...
@@ -3464,9 +3452,9 @@ subroutine subts2
      bvalue(kcount) = volt(i)
      !     kcount = kcount + 1
      !     bvalue(kcount) = volti(i)
-11864 f(n3) = f(n3) - voltk(i)
+11864 emtpf(n3) = emtpf(n3) - voltk(i)
      ndx1 = lsiz26 + i
-     f(n4) = f(n4) - volt(ndx1)
+     emtpf(n4) = emtpf(n4) - volt(ndx1)
      go to 11874
 11866 if (n4 .gt. 0) go to 11870
      n4 = - n4
@@ -3494,8 +3482,8 @@ subroutine subts2
 11872 end do
      if (iprsup .ge. 9) write (lunit6, 23170) n2, n3, n4, kcount, bvalue(kcount), d1, d2
 23170 format( 50h  after phase conversion.  n2, n3, n4, kcount =   , 4i10,/, 30h   bvalue(kcount), d1, d2 =   ,3(1x,e15.7))
-     f(n3) = f(n3) + d1
-     f(n4) = f(n4) + d2
+     emtpf(n3) = emtpf(n3) + d1
+     emtpf(n4) = emtpf(n4) + d2
      n2 = n2 + 1
 11874 end do
   it2 = 1
@@ -3512,16 +3500,16 @@ subroutine subts2
      if ( kodebr(k) .gt. 0 )  go to 1191
      volt(i) = -volt(i)
 1191 end do
-  call mult(x(n3),volt,cik(k),it2,ll1)
-  call mult(c(n3),volti,ci(k),it2,ll1)
-  call mult(c(n3),voltk,ck(k),it2,ll1)
+  call mult(x(n3), volt, cik(k), it2, ll1)
+  call mult(emtpc(n3), volti, ci(k), it2, ll1)
+  call mult(emtpc(n3), voltk, ck(k), it2, ll1)
 1200 k=k+it2
-  if ( iprsup  .ge.  4 ) write (lunit6, 7342)  k, ibr,  ( f(i), i=1, ntot )
-7342 format ( /,  9h k, ibr =,  2i6,  10x, 30h(f(i), i=1, ntot )  follow ...    ,/,  (1x, 8e16.7)  )
+  if ( iprsup  .ge.  4 ) write (lunit6, 7342)  k, ibr,  ( emtpf(i), i=1, ntot )
+7342 format (/, ' k, ibr =', 2i6, 10x, '(emtpf(i), i=1, ntot )  follow ...', /, (1x, 8e16.7))
   if (k.le.ibr) go to 1100
   lastov = nchain
   nchain = 18
-  if ( iprsup  .ge.  4 ) write (lunit6, 7342)  k, ibr,  ( f(i), i=1, ntot )
+  if ( iprsup  .ge.  4 ) write (lunit6, 7342)  k, ibr,  ( emtpf(i), i=1, ntot )
 9999 return
 end subroutine subts2
 !
@@ -3540,7 +3528,7 @@ subroutine fdcinj( ikf, isfd, ibf )
   ikf = ikf + 1
   isf = isfd + 1
   isc = ibf + 1
-  if ( iprsup .gt. 0 ) write( lunit6, 1 ) ikf, isfd, ibf, imfd(idk+1), imfd(idk+2)
+  if ( iprsup .gt. 0 ) write ( lunit6, 1 ) ikf, isfd, ibf, imfd(idk+1), imfd(idk+2)
 1 format(41h integer counters at start of fdcinj.....,7x,3hikf,6x,4hisfd,7x,3hibf,6x,4hizfd,6x,4hipfd,/,41x,5i10)
   !     convert phase voltages to modal frame of reference   *   *   *   *
   cz = it2
@@ -3551,7 +3539,7 @@ subroutine fdcinj( ikf, isfd, ibf )
 2    ur(ka) = ( volt(1) - volt(ka) ) * cz
   end do
   ur(1) = ur(1) * cz
-  if ( iprsup .gt. 0 ) write( lunit6, 3 ) ikf, ( ur(ka), ka = 1, it2 )
+  if ( iprsup .gt. 0 ) write ( lunit6, 3 ) ikf, ( ur(ka), ka = 1, it2 )
 3 format(37h modal voltages in fdcinj for set no.,i6,/, (2x,6e21.11))
   !     process first the 'zero' sequence data   *   *   *   *   *   *   *
   ar = 0.
@@ -3612,9 +3600,9 @@ subroutine fdcinj( ikf, isfd, ibf )
 8    volt(ka) = volt(1) - cz * ur(ka)
   end do
   if ( iprsup .le. 0 ) go to 15
-  write( lunit6, 9 ) ( volt(ka), ka = 1, it2 )
+  write ( lunit6, 9 ) ( volt(ka), ka = 1, it2 )
 9 format(35h phase current injections cik......,/,(2x,6e21.11))
-  write( lunit6, 10 ) isc, ibf, ( cikfd(ka), ka = isc, ibf )
+  write ( lunit6, 10 ) isc, ibf, ( cikfd(ka), ka = isc, ibf )
 10 format(31h updated modal branch data from,i6,4h  to,i6,/, (2x,6e21.11))
 15 return
 end subroutine fdcinj
@@ -3637,7 +3625,7 @@ subroutine update
   !     intrinsic  cosz, sinz, absz, sqrtz, atan2z
   !     this routine adjusts the current sources to be injected into
   !     the equivalent pi-circuits * * * * * * * * * * * * * * * * * * * *
-  if ( iprsup  .ge.  1 ) write( lunit6, 4099 )
+  if ( iprsup  .ge.  1 ) write ( lunit6, 4099 )
 4099 format ( 24h  "begin module update." )
   !     initialize counters     ******************************************
   ilk = 0
@@ -3658,7 +3646,7 @@ subroutine update
   ipout = -2
   !!!!  acb = omdt * istep
   acb = omega * t
-  if ( iprsup .gt. 0 ) write( lunit6, 4100 ) ibr, numsm, it
+  if ( iprsup .gt. 0 ) write ( lunit6, 4100 ) ibr, numsm, it
 4100 format(17h begin  'update' ,5x, 3hibr, 5x, 5hnumsm, 8x, 2hit, /, 15x, 3( 5x,i5 ) )
   j30 = 1
   i30 = 1
@@ -3668,18 +3656,18 @@ subroutine update
      im = ismdat( j30 )
      n1 = ismdat( j30+2 )
      n2 = ismdat( j30+5 )
-     v1 = e( n1 ) - e( n2 )
+     v1 = emtpe( n1 ) - emtpe( n2 )
      n1 = ismdat( j30+3 )
      n2 = ismdat( j30+6 )
-     v2 = e( n1 ) - e( n2 )
+     v2 = emtpe( n1 ) - emtpe( n2 )
      n1 = ismdat( j30+4 )
      n2 = ismdat( j30+7 )
-     v3 = e( n1 ) - e( n2 )
+     v3 = emtpe( n1 ) - emtpe( n2 )
      idsat = 0
      idelta = ismdat( j30+1 )
      ap1 = 0.0
      ap2 = 0.0
-     if ( iprsup  .gt.  0  ) write( lunit6, 4101 ) v1, ismdat(j30+2), v2, ismdat(j30+3), v3, ismdat(j30+4)
+     if ( iprsup  .gt.  0  ) write ( lunit6, 4101 ) v1, ismdat(j30+2), v2, ismdat(j30+3), v3, ismdat(j30+4)
 4101 format ( 13x, 2hv1, 9x, 6hnodsma, 13x, 2hv2, 9x, 6hnodsmb, 13x, 2hv3, 9x, 6hnodsmc, /, 3(1x, e14.7, 10x, i5) )
 800  ilk = ilk + 1
      numask = ismdat( i30+11 )
@@ -3709,7 +3697,7 @@ subroutine update
      d8 =  -a1 * v3 - a2 * (v1+v2) - cik( juk+2 )
      cv3 = ( v1 + v2 + v3 ) * asqrt3
      a5 = - ( cv3 - cu( ikn+2 ) ) * elp( i26+17 )
-     if ( iprsup .gt. 0 ) write( lunit6, 4102 )  d6, d7, d8
+     if ( iprsup .gt. 0 ) write ( lunit6, 4102 )  d6, d7, d8
 4102 format( 21h for time "t-deltat"., 18x, 2hd6, 18x, 2hd7, 18x, 2hd8, /, 21x, 3e20.11 )
      !     transform phase variables to park"s coordinates  * * * * * * * * *
      cz = elp( i26+26 )
@@ -3743,9 +3731,9 @@ subroutine update
      c3 = elp( i75+7 ) * a4 + elp( i75+13 ) * cu( ikn+5 ) + elp( i75+14 ) * cu( ikn+6 )
      c4 = elp( i75+8 ) * a4 + elp( i75+14 ) * cu( ikn+5 ) + elp( i75+16 ) * cu( ikn+6 )
      if ( iprsup .lt. 1 )   go  to  922
-     write( lunit6, 4103 )    a3, a4, a5, cv1, cv2, cv3
+     write ( lunit6, 4103 )    a3, a4, a5, cv1, cv2, cv3
 4103 format( 40x, 17h updated currents, 40x, 17h updated voltages, /,3x, 3e18.10, 3x, 3e18.10 )
-     write( lunit6, 4104 )    c1, c2, c3, c4
+     write ( lunit6, 4104 )    c1, c2, c3, c4
 4104 format( 23h updated rotor currents, /, 2x, 4( e20.12,5x ) )
      !     calculate the electromagnetic torque*****************************
 922  ac2 = elp(i26+1)*a3 + elp(i26+2)*c1 + elp(i26+4)*c2
@@ -3820,7 +3808,7 @@ subroutine update
      sum = sinz( dang )
      if ( ispdr .le. iprsov(37) )  go to 200
      if ( spdd .gt. epomeg )  go  to  920
-     write( lunit6, 4105 )   ilk, istep, iprsov(37)
+     write ( lunit6, 4105 )   ilk, istep, iprsov(37)
 4105 format( 2x, 7hwarning,2x,  15(1h*), /,2x, 35hlack of convergence for machine no., i5, 2x, 11hon step no., i10, &
           /,  ' iteration limit  iprsov(37) =',  i10  )
      go to 204
@@ -3833,7 +3821,7 @@ subroutine update
      kill = 104
      return
 208  if ( iprsup .eq. 0 )  go to  50
-     write( lunit6, 4106 )   spdn, histq(ksex), cd, cexc
+     write ( lunit6, 4106 )   spdn, histq(ksex), cd, cexc
 4106 format( 6x, 23hafter speed calculation, 5x, 5hrotor, 13x,7hexciter, 17x, 3hteg, 16x, 4htexc, /, 20x, 4e20.12 )
      !     load internal machine variables into tacs variable 'etac' *******
 50   if ( n22spy .ne. -1 )  go to 51
@@ -4010,7 +3998,7 @@ subroutine update
      if ( iprsup .lt. 1 )   go   to   214
      ij = iu + 1
      ik = iu  + num6
-     write( lunit6, 4107 )  ij, ik, ( histq( ka ), ka = ij, ik )
+     write ( lunit6, 4107 )  ij, ik, ( histq( ka ), ka = ij, ik )
 4107 format( 2x,  12hhistq at 213,  2i8  ,/, ( 1x, 5e22.13) )
      !     finish the prediction of speed and angle   **********************
 214  alpha = 9.0 * ( cu( ikn+21 ) - dang ) + cu( ikn+22 ) + delta6 * ( d2  + cu( ikn+23 ) )
@@ -4074,9 +4062,9 @@ subroutine update
      x1( 6 ) = elp(i75+29)*a4 + elp(i75+30)*c3 + elp(i75+31)*c4
      x1( 7 ) = elp(i75+32)*a4 + elp(i75+33)*c3 + elp(i75+34)*c4
      if ( iprsup .lt. 1 )   go   to  952
-     write( lunit6, 4108 )   ilk, acd, acq, ( x1( itq ), itq = 3, 7 )
+     write ( lunit6, 4108 )   ilk, acd, acq, ( x1( itq ), itq = 3, 7 )
 4108 format( 2x, 29h at 16 history terms mach no., i5,/,(2x,6e19.11))
-     write( lunit6, 4109 )  acur1, acur2
+     write ( lunit6, 4109 )  acur1, acur2
 4109 format( 2x, 26h predicted stator currents, 2x, 2e25.12 )
 952  x1( 4 ) = x1( 4 ) - ( q3*damrat + q4 )
      !     account for the influence of  rotor circuits  *   *   *   *   *
@@ -4131,7 +4119,7 @@ subroutine update
      cik( juk+1 ) = -etot * a3 - c3 * a4 - a5
      cik( juk+2 ) = -sum * a3 - c4 * a4 - a5
      ibr = ibr + 3
-     if ( iprsup  .gt.  0  ) write( lunit6, 4110 )   alpha, ( cik(ip), ip = juk, ibr )
+     if ( iprsup  .gt.  0  ) write ( lunit6, 4110 )   alpha, ( cik(ip), ip = juk, ibr )
 4110 format( 10x, e20.12, 4x, 3e20.12)
      a1 = elp( i75 )
      a2 = elp(i75+1)
@@ -4177,7 +4165,7 @@ subroutine update
   nexmod = 0
   ll3 = 3
   call move0 ( ksmspy(1), ll3 )
-  if ( iprsup  .gt.  0 ) write( lunit6, 4111 )
+  if ( iprsup  .gt.  0 ) write ( lunit6, 4111 )
 4111 format ( 24h  "exit  module update." )
   return
 end subroutine update
@@ -4191,10 +4179,10 @@ subroutine increm(ilk, sf3)
   include 'labcom.ftn'
   include 'tacsar.ftn'
   include 'synmac.ftn'
-  if ( iprsup  .ge.  1 ) write( lunit6, 6000 )
+  if ( iprsup  .ge.  1 ) write ( lunit6, 6000 )
 6000 format( 24h  "begin module increm." )
   i30 = 30 * ilk - 29
-  write( lunit6, 6001 ) ilk, ismdat( i30+9 ), ismdat( i30+10 )
+  write ( lunit6, 6001 ) ilk, ismdat( i30+9 ), ismdat( i30+10 )
 6001 format( 4h ***, 10x, 11hmachine no., i6, 10x, 31hbegin operation on segments no., 2x, 2i10 )
   ll36 = 36
   call mover0(z(1),ll36)
@@ -4254,19 +4242,19 @@ subroutine increm(ilk, sf3)
   do k = 1, 6
      n1 = ( k - 1 ) * 6 + 1
      n2 = n1 + 5
-407  write( lunit6, 6004 )    k, ( z(i), i = n1, n2 )
+407  write ( lunit6, 6004 )    k, ( z(i), i = n1, n2 )
   end do
 208 call mover( z(1), x1( 1 ), ll36 )
   ll7 = 6
   ll3 = 2
   call redusm( x1( 1 ), ll7, ll3 )
   if ( iprsup .le. 0 )   go  to  210
-  write( lunit6, 6003 )   ilk
+  write ( lunit6, 6003 )   ilk
 6003 format ( /, 23h reduced network model., i10 )
   do k = 1, 6
      n1 = ( k - 1 ) * 6 + 1
      n2 = n1 + 5
-409  write( lunit6, 6004 )   k, ( x1(i), i = n1, n2 )
+409  write ( lunit6, 6004 )   k, ( x1(i), i = n1, n2 )
   end do
 6004 format ( /, 11h new column, i6, /, ( 1x, 7e17.8 )  )
 210 a = x1( 1 )
@@ -4289,7 +4277,7 @@ subroutine increm(ilk, sf3)
   elp(i75+53) = a * athtw
   elp(i75+54) = b * asqrt3
   if ( iprsup .le. 0 )   go  to  212
-  write( lunit6, 6005 )  elp(i75), elp(i75+1), elp(i75+53), elp(i75+54)
+  write ( lunit6, 6005 )  elp(i75), elp(i75+1), elp(i75+53), elp(i75+54)
 6005 format( 3x, 8e15.7 )
   !     correction terms for voltage and current calculations*************
 212 elp( i75+5 ) = x1( 3 )
@@ -4316,15 +4304,15 @@ subroutine increm(ilk, sf3)
   idp = in
   in = in + 7
   ids =  idt + 3
-  write( lunit6, 6006 )  ilk
+  write ( lunit6, 6006 )  ilk
 6006 format( 5x, 20h arrays for mach no., i5, 17h  in order of ac ,1x, 4ha21,, 1x, 4ha22,, 1x )
-  write( lunit6, 6005 )  elp(i75+2), elp(i75+3), elp(i75+51), elp(i75+52)
+  write ( lunit6, 6005 )  elp(i75+2), elp(i75+3), elp(i75+51), elp(i75+52)
   idt = i75 + 5
   ids = idt + 3
-  write( lunit6, 6005 )   ( elp( iu ),  iu = idt, ids )
+  write ( lunit6, 6005 )   ( elp( iu ),  iu = idt, ids )
   ids = ids + 1
   idt = ids + 7
-  write( lunit6, 6005 )   ( elp( iu ),  iu = ids, idt )
+  write ( lunit6, 6005 )   ( elp( iu ),  iu = ids, idt )
   !     calculate the resistive matrix for history calculations
   !     store  constants for future use in the time-step loop ************
 214 elp( i75+17 ) = z( 50 ) - elp( i26+19 ) * damrat
@@ -4346,17 +4334,17 @@ subroutine increm(ilk, sf3)
   elp( i75+33 ) = z( 30 )
   elp( i75+34 ) = z( 55 ) - elp( i26+15 ) * damrat
   if ( iprsup .lt. 1 )    go to  216
-  write( lunit6, 6007 )  ilk
+  write ( lunit6, 6007 )  ilk
 6007 format( /, 33h history matrix for generator no.,  i5  )
   in = i75 + 9
   do k = 1, 5
      in = in + 7
      n2 = in + 7
      n1 = in + 1
-410  write( lunit6, 6008 )    in, ( elp( i ), i = n1, n2 )
+410  write ( lunit6, 6008 )    in, ( elp( i ), i = n1, n2 )
   end do
 6008 format( 1x, 12hnew  row    ,i6, /, (1x, 7e17.8) )
-  write( lunit6, 6009 )
+  write ( lunit6, 6009 )
 6009 format ( 24h  "exit  module increm." )
 216 return
 end subroutine increm
@@ -4509,9 +4497,9 @@ subroutine subts3
   if ( begmax(maxout)  .gt.  t )   go to 1003
   d1 = absz( peaknd(1) )
   do j=2, ntot
-     if ( absz( e(j) )  .le.  d1 )   go to 1002
-     peaknd(1) = e(j)
-     d1 = absz( e(j) )
+     if ( absz( emtpe(j) )  .le.  d1 )   go to 1002
+     peaknd(1) = emtpe(j)
+     d1 = absz( emtpe(j) )
      peaknd(2) = t
      peaknd(3) = j
 1002 end do
@@ -4543,7 +4531,7 @@ subroutine subts3
   do k=1,nv
      n1 = ibrnch(k)
      n2 = jbrnch(k)
-1201 bvalue(k)=e(n1)-e(n2)
+1201 bvalue(k)=emtpe(n1)-emtpe(n2)
   end do
 1202 volti(1) = t
   if ( ivolt .eq. 1 )  go to 1610
@@ -4551,10 +4539,10 @@ subroutine subts3
 1600 if ( k  .gt.  numnvo )   go to 1630
   i = ibsout(k)
   k = k + 1
-  volti(k) = e(i)
+  volti(k) = emtpe(i)
   go to 1600
 1610 k = ntot
-  call mover ( e(ll2), volti(ll2), ntot1 )
+  call mover ( emtpe(ll2), volti(ll2), ntot1 )
 1630 if ( nc  .eq.  0 ) go to 1642
   nodev = k
   do i=1,nc
@@ -4581,7 +4569,7 @@ subroutine subts3
      if ( j .gt. 0 )  go to 54262
      j = -j
      n1 = ibrnch(j)
-     d4 = e(n1)
+     d4 = emtpe(n1)
      go to 54265
 54262 d4 = bvalue(j)
 54265 l = koutvp(mpower)
@@ -4593,7 +4581,7 @@ subroutine subts3
      n6 = l + nodev
      volti(n5) = d1
      volti(n6) = d2
-     if ( istep .le. 5    .and.    iprsup .ge. 2 ) write(lunit6, 54270)  i, k,   j  , l, d1, d2, bnrg(i), d4, bvalue+(l)
+     if ( istep .le. 5    .and.    iprsup .ge. 2 ) write (lunit6, 54270)  i, k,   j  , l, d1, d2, bnrg(i), d4, bvalue+(l)
 54270 format( /,  9h at 54270   , 4i10, 5e15.4 )
 54272 end do
 54280 if ( nsmout  .eq.  0 )   go to 54284
@@ -4626,7 +4614,7 @@ subroutine subts3
   if ( istep  .gt.  99999 )   istep = istep - 100000
   if ( t  .ge.  unity )   go to 48
   if ( deltat  .lt.  tenm6 )   go to 48
-  write(lunit6, 37)  istep, ( volti(i), i=1, n1 )
+  write (lunit6, 37)  istep, ( volti(i), i=1, n1 )
 37 format ( 1x, i5,  f9.6, 9e13.6 )
   go to 56
 48 if ( istep  .le.  9999 )   go to 39
@@ -4635,7 +4623,7 @@ subroutine subts3
   go to 56
 39 write (lunit6, 40)  istep,  ( volti(i), i=1, n1 )
 40 format ( 1x,  i4,  e10.3,  9e13.6  )
-56 if ( k  .gt.  n1 ) write(lunit6, 87437)  ( volti(i), i=11, k )
+56 if ( k  .gt.  n1 ) write (lunit6, 87437)  ( volti(i), i=11, k )
 87437 format ( 15x, 9e13.6 )
   isprin = iout
 1654 if ( begmax(1) .eq. 0.0 ) go to 1660
@@ -4666,8 +4654,8 @@ subroutine subts3
   if ( t .lt. sptacs(29) ) go to 1945
   sptacs(29) = fltinf
   iuty(kiuty+3) = iuty(kiuty+2)
-1945 if ( iprsup  .ge.  4 ) write (lunit6, 7342)  k, ibr,  ( f(i), i=1, ntot )
-7342 format ( /,  9h k, ibr =,  2i6,  10x, 30h(f(i), i=1, ntot )  follow ...    ,/,  (1x, 8e16.7)  )
+1945 if ( iprsup  .ge.  4 ) write (lunit6, 7342)  k, ibr,  ( emtpf(i), i=1, ntot )
+7342 format (/, ' k, ibr =', 2i6, 10x, '(emtpf(i), i=1, ntot )  follow ...', /, (1x, 8e16.7))
   !                                 constant voltages and currents
   i=0
   if (iread.eq.0) go to 1247
@@ -4699,8 +4687,8 @@ subroutine subts3
   if ( kill  .gt.  0 )   go to 9200
 1249 i=i+1
   if (i.gt.kconst) go to 1300
-  if ( iprsup  .ge.  4 ) write (lunit6, 7356)  i, kconst,  ( f(m), m=1, ntot )
-7356 format ( /, 12h i, kconst =,  2i6,  10x, 30h(f(i), i=1, ntot )  follow ...    ,/,  (1x, 8e16.7)  )
+  if ( iprsup  .ge.  4 ) write (lunit6, 7356)  i, kconst,  ( emtpf(m), m=1, ntot )
+7356 format (/, ' i, kconst =',  2i6, 10x, '(emtpf(i), i=1, ntot )  follow ...', /, (1x, 8e16.7))
   n1=node(i)
   n2=iabs(n1)
   n3=iform(i)
@@ -4712,12 +4700,12 @@ subroutine subts3
 7362 if ( n3 .ne. 18 )   go to 7368
   !     following code is for ideal transformer and source:
   n14 = time1(i)
-  f(n14) = yx
+  emtpf(n14) = yx
   go to 1249
 7368 if (n3.ne.16) go to 1251
   j=i+1
   n4=iabs(node(j))
-  gus1=e(n2)-e(n4)
+  gus1=emtpe(n2)-emtpe(n4)
   n3=iform(j)
   gus2 = time1(j)
   gus3 = time2(j)
@@ -4730,7 +4718,7 @@ subroutine subts3
   iform(j)=1
 1258 tstart(j)  =  sfreq(i)*ck1  +  time1(i)*sfreq(j)  +  tstart(i)*tstop(j)
   yx = crest(i)+tstart(j)
-  f(n4)=f(n4)-yx
+  emtpf(n4)=emtpf(n4)-yx
   crest(j+1)=yx
   i=j
   go to 1250
@@ -4758,16 +4746,16 @@ subroutine subts3
   if (k.ge.12) go to 1280
   if (k.lt.11) yx=voltbc(k)
 1250 if (n1.gt.0) go to 1260
-  f(n2)=f(n2)+yx
+  emtpf(n2)=emtpf(n2)+yx
   go to 1249
-1260 if (n3.lt.0)  yx=yx+e(n2)
-  e(n2)=yx
+1260 if (n3.lt.0)  yx=yx+emtpe(n2)
+  emtpe(n2)=yx
   go to 1249
 1270 yx = crest(i) * cosz(sfreq(i) * ts + time1(i))
   if ( iprsup .lt. 3 )  go to 1250
-  write(lunit6, 1273)  i, kconst, n1, n2, n3, node(i), iform(i), &
+  write (lunit6, 1273)  i, kconst, n1, n2, n3, node(i), iform(i), &
        t, tstart(i), tstop(i), crest(i), sfreq(i), ts, &
-       time1(i),yx,f(n2),e(n2)
+       time1(i),yx,emtpf(n2),emtpe(n2)
 1273 format( /, 9h at 1273   , 7i12, //, ( 1x, 6e20.8 ) )
   go to 1250
 1280 if (ts .ge. time1(i)) go to 1285
@@ -4780,9 +4768,9 @@ subroutine subts3
   go to 1250
   !                                         elimination process on right s
   !                                         solve for v = [y] ** -1 * i
-1300 call mover ( f(1), e(1), kpartb )
+1300 call mover ( emtpf(1), emtpe(1), kpartb )
   n1 = 1
-1301 e(n1) = 0.0
+1301 emtpe(n1) = 0.0
   if ( kode(n1) .le. n1 )   go to 1302
   n1 = kode(n1)
   go to 1301
@@ -4790,27 +4778,27 @@ subroutine subts3
      if ( kode(j) .eq. 0 ) go to 1303
      k = kode(j)
      if ( k .gt. kpartb )  go to 1303
-     if ( k .gt. j ) e(k) = e(k) + e(j)
+     if ( k .gt. j ) emtpe(k) = emtpe(k) + emtpe(j)
 1303 end do
   ii=1
   if ( iprsup .lt. 4 )   go  to  1410
-  write(lunit6, 41300)  ( e(l), l=1, ntot )
-41300 format( /, 39h e(l), l=1, ntot  at begin repeat soln.   ,/, ( 1x, 5e25.15 ) )
-  write(lunit6, 51300)  ( l, km(l), ykm(l), l=1, iupper )
+  write (lunit6, 41300)  ( emtpe(l), l=1, ntot )
+41300 format(/, ' emtpe(l), l=1, ntot  at begin repeat soln.', /, (1x, 5e25.15))
+  write (lunit6, 51300)  ( l, km(l), ykm(l), l=1, iupper )
 51300 format( /,  41h table of factors used.  l, km(l), ykm(l)  ,/, ( 2i10, e30.20 , 5x, 2i10, e30.20 ) )
 1410 if ( ii .gt. iupper ) go to 1450
   l=iabs(km(ii))
-  a = e(l)
-  e(l) = a*ykm(ii)
+  a = emtpe(l)
+  emtpe(l) = a*ykm(ii)
   j = kk(l)
 1420 ii=ii+1
   if ( ii .gt. j ) go to 1410
   k=km(ii)
   if ( k .gt. kpartb )   go to  1420
-  e(k) = e(k) - a * ykm(ii)
+  emtpe(k) = emtpe(k) - a * ykm(ii)
   go to 1420
-1450 if (iprsup .ge. 5) write (lunit6, 5203) (e(k), k = 1, ntot)
-5203 format ( 39h after downward,  ( e(k), k = 1, ntot ), 12h  follow ...  ,/,  ( 1x, 8e16.8 ) )
+1450 if (iprsup .ge. 5) write (lunit6, 5203) (emtpe(k), k = 1, ntot)
+5203 format (' After downward,  ( emtpe(k), k = 1, ntot )  follow ...', /, (1x, 8e16.8))
   !                                               backsubstitution
   l = ntot
   go to 5211
@@ -4819,15 +4807,15 @@ subroutine subts3
 1510 ii=ii-1
   k=km(ii)
   if (k.lt.0) go to 1520
-  a=a-e(k)*ykm(ii)
+  a=a-emtpe(k)*ykm(ii)
   go to 1510
 1520 l=iabs(k)
-  e(l) = e(l) + a
+  emtpe(l) = emtpe(l) + a
 5211 if ( kode(l) .eq. 0 ) go to 5218
   if ( kode(l) .gt. l ) go to 5218
   j = l
   n5 = kode ( j )
-5214 e(n5) = e ( j )
+5214 emtpe(n5) = emtpe(j)
   j = n5
   n5 = kode(j)
   if ( n5 .ne. l ) go to 5214
@@ -4852,7 +4840,7 @@ subroutine subts3
      l=iabs(nonlm(i))
      a2=anonl(i)
      n1=ilast(i)
-     vzero2=e(k)-e(l)
+     vzero2=emtpe(k)-emtpe(l)
      if ( nltype(i)  .eq.  94 )   go to 1521
      i2=iabs(i2)
      vzero2=     vzero2*delta2 +vnonl(i)
@@ -4868,8 +4856,8 @@ subroutine subts3
      lstat(19) = 3100
 4296 kill = 35
      flstat(13) = a2
-     flstat(11) = e(k)
-     flstat(12) = e(l)
+     flstat(11) = emtpe(k)
+     flstat(12) = emtpe(l)
 4297 lstat(16) = i
      k = nonlk(i)
      bus1 = bus(k)
@@ -4902,25 +4890,25 @@ subroutine subts3
      if ( vchar(i2+5)  .ne.  0.0 )   go to 1561
      if (absz(vnonl(i)).gt.absz(vzero2)) go to 8259
      tz1=t-deltat
-     write(lunit6,1562) bus(k),bus(l),tz1
+     write (lunit6,1562) bus(k),bus(l),tz1
 1562 format ( 60x, 11harrester  ', a6, 8h'  to  ', a6, 20h'  flashover at time, e13.5, 6h  sec.   )
 1561 vchar(i2) = vzero2
      call arrest ( cchar(i1), vchar(i2), anonl(i), vzero2, curr(i)  )
      if (vchar(i2+5) .ne. 0.0)   go to 8259
      tz1=t-deltat
-     write(lunit6,1563) bus(k),bus(l),tz1, vchar(i1+8)
+     write (lunit6,1563) bus(k),bus(l),tz1, vchar(i1+8)
 1563 format ( 60x, 11harrester  ', a6, 8h'  to  ', a6, 20h'   cleared  at time, e13.5, 6h  sec.        ,/, &
           70x, 28hper unit energy dissipated =, e14.6     )
      !     next assign compensation current for non-zno  compensation
      !     elements.  this is used in  "subts4"  superposition.
 8259 n8 = n15 / 5 + 1
      cursub(n8) = curr(i)
-     f(k) = f(k) - curr(i)
-     f(l) = f(l) + curr(i)
-     if ( iprsup  .ge.  4 ) write (lunit6, 8261)  i, nltype(i), nn15, n8, k, l, curr(i), f(k), f(l)
+     emtpf(k) = emtpf(k) - curr(i)
+     emtpf(l) = emtpf(l) + curr(i)
+     if ( iprsup  .ge.  4 ) write (lunit6, 8261)  i, nltype(i), nn15, n8, k, l, curr(i), emtpf(k), emtpf(l)
 8261 format (  20h n.l. elem. current.,  6i10, 3e15.6  )
 1559 end do
-  if ( iprsup .ge. 3 ) write(lunit6, 1571)  ( curr(i), i=1, inonl )
+  if ( iprsup .ge. 3 ) write (lunit6, 1571)  ( curr(i), i=1, inonl )
 1571 format( /,  35h n.l. element,  curr(i), i=1, inonl   ,   6e15.5 )
 1570 lastov = nchain
   nchain = 19
@@ -4993,7 +4981,7 @@ subroutine zincox ( ns )
   lstat(16) = 26
   go to 4567
 3424 if ( n7*2 .lt. lsiz26 )  go  to  3425
-  write( lunit6, 3418 ) n7
+  write ( lunit6, 3418 ) n7
 3418 format ( /,  22h overflow in "zincox".,   i5, 49h coupled arresters, if doubled, overflow list 26. )
   kill = 1
   lstat(19) = 3425
@@ -5023,7 +5011,7 @@ subroutine zincox ( ns )
 3431 n1 = n1 + ntot
   end do
   n5 = n5 - 1
-  if ( iprsup  .ge.  6 ) write(lunit6, 3438) n6,ns,n7,n5, (volti(l), l=1,n5)
+  if ( iprsup  .ge.  6 ) write (lunit6, 3438) n6,ns,n7,n5, (volti(l), l=1,n5)
 3438 format ( /,  34h thevenin matrix. n6, ns, n7, n5 =,  4i8 ,/,  ( 1x,  8e16.7 )  )
   !     extract and store thevenin voltages****************************
   m = 0
@@ -5031,13 +5019,13 @@ subroutine zincox ( ns )
      n10 = nsubkm( m5+1 )
      n11 = nsubkm( m5+2 )
      inl = nsubkm( m5+3 )
-     voltk( m+1 ) = e( n10 ) - e( n11 )
+     voltk( m+1 ) = emtpe( n10 ) - emtpe( n11 )
      voltk( m+2 ) = vzero( inl )
      vecnl2( inl ) = curr( inl )
      m5 = nsubkm( m5 )
 3452 m = m + 2
   end do
-  if ( iprsup  .gt.  1 ) write(lunit6, 3613)  ( ksing(l), l=ndx1i, ndx7i )
+  if ( iprsup  .gt.  1 ) write (lunit6, 3613)  ( ksing(l), l=ndx1i, ndx7i )
 3613 format ( /,  27h 'ksing'  b4 copy checking.,  20i5  )
 22 n15 = n7 -1
   if ( n15  .eq.  0 )   go to 3638
@@ -5062,13 +5050,13 @@ subroutine zincox ( ns )
 3634 n10 = n10 + n7
   end do
 3638 if ( iprsup .lt. 6 )  go  to 40
-  write(lunit6, 3458)
+  write (lunit6, 3458)
 3458 format( /, 1x, 42h    row  ksing         vthev          vold)
   m2 = -1
   do l = 1, n7
      m2 = m2 + 2
      l1 = iofzni + l
-     write( lunit6, 32 ) l, ksing(l1), voltk(m2), voltk(m2+1)
+     write ( lunit6, 32 ) l, ksing(l1), voltk(m2), voltk(m2+1)
 32   format( (1x, 2i7, 2e14.5) )
 35 end do
 40 n17 = 0
@@ -5131,7 +5119,7 @@ subroutine zincox ( ns )
   write (munit6, 3688)
 3688 format (  37h   ? ? ?   singular jacobian.  newton,19h iteration stopped.    )
   call window
-3691 write( munit6, 3692 )
+3691 write ( munit6, 3692 )
 3692 format(  39h trouble in  "zincox".  kill  lstat(19),27h   ier  niter            d3  )
   call window
   write (munit6, 3696)  kill, lstat(19), ier, niter, d3
@@ -5435,8 +5423,8 @@ subroutine zincox ( ns )
      cursub( n13+1 ) = curr( inl )
      k1 = nsubkm( m5 + 1 )
      k2 = nsubkm( m5 + 2 )
-     f(k1) = f(k1) - curr( inl )
-     f(k2) = f(k2) + curr( inl )
+     emtpf(k1) = emtpf(k1) - curr( inl )
+     emtpf(k2) = emtpf(k2) + curr( inl )
 200  m5 = nsubkm( m5 )
   end do
 4567 if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )  kill, lstat(19)
@@ -5767,7 +5755,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
   if (nsmach .eq. 0) go to 70
   if (umoutp(numout+1) .ne. -9999.0) go to 70
   n5 = umoutp(numout+3)
-  if (iprsup .ge. 1) write(lunit6,7250) numout,n5
+  if (iprsup .ge. 1) write (lunit6,7250) numout,n5
 7250 format(/, 9h numout =,i4,10x,17hnumout+nsmtac+3 =,i4)
   if (iprsup .ge. 1) write (lunit6,7252) (umoutp(n1),n1=1,n5)
 7252 format( 46h tacs interface requested for sm-59 data input, 47h. the um output table umoutp(numout+nsmtac+3) :, &
@@ -5796,7 +5784,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
   !  history of mass nr 1 of machine jm :
   umoutp(n5+3) = 0.0
   if (n7 .eq. 1) umoutp(n5+3) = d5
-  umoutp(n5+4) = e(n5+1)
+  umoutp(n5+4) = emtpe(n5+1)
   if (n7 .eq. 1) go to 17034
   !  history of mass nr 2 and higher for machine jm :
   do n15 = 2,n7
@@ -5813,14 +5801,14 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
      !  umoutp(n19+3) was lmut of mass nr (n15-1) and (n15)
      !  umoutp(n19+4) was lmut/rmut of mass nr (n15-1) and (n15)
      umoutp(n19+3) = umoutp(n18+3) + umoutp(n19+3)*tclose(n20)
-     d1 = e(n11) - e(n12)
+     d1 = emtpe(n11) - emtpe(n12)
      umoutp(n19+3) = umoutp(n19+3) + umoutp(n19+4)*d1
      !  now umoutp(n19+3) has been set to history of mass angle.
      if (n12 .ne. nodom(jm)) go to 17015
      n14 = n15
      d3 = umoutp(n19+3) - d5
      !  n14 is the generator mass of machine jm :
-17015 umoutp(n19+4) = e(n12)
+17015 umoutp(n19+4) = emtpe(n12)
      !  now umoutp(n19+4) has been set to history of mass speed.
 17020 end do
   !  shift of angles to have gen angle = d5 = thetam(jm)+twopi/nppair:
@@ -5863,7 +5851,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
   go to 17050
   !  transfer of mass speeds :
 17100 if (n10 .ne. -2) go to 17110
-  etac(n8) = e(n7)
+  etac(n8) = emtpe(n7)
   n5 = n5 + 3
   go to 17050
   !  transfer of mass angles :
@@ -5873,9 +5861,9 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
   n5 = n5 + 5
   go to 17050
 17114 d1 = deltat/2.0
-  etac(n8) = umoutp(n5+3) + (umoutp(n5+4) * e(n7))*d1
+  etac(n8) = umoutp(n5+3) + (umoutp(n5+4) * emtpe(n7))*d1
   umoutp(n5+3) = etac(n8)
-  umoutp(n5+4) = d1 * e(n7)
+  umoutp(n5+4) = d1 * emtpe(n7)
   n5 = n5 + 5
   go to 17050
 17116 if (n10 .ne. -299) go to 17120
@@ -5888,7 +5876,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
   go to 17050
   !  transfer of exciter voltage
 17130 if (n10 .ne. -5) go to 17140
-  etac(n8) = e(n7)
+  etac(n8) = emtpe(n7)
   n5 = n5 + 3
   go to 17050
 17140 write (lunit6,17142)
@@ -5904,13 +5892,13 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
   !. program stop if speed convergence failed in previous
   !. time step.
 79 if (inpu .ne. 50) go to 90
-  write(lunit6,80)
+  write (lunit6,80)
 80 format(43h0program stop because of um nonconvergence., 24h  possible reasons are :)
-  write(lunit6,82)
+  write (lunit6,82)
 82 format(21h * time step too high)
-  write(lunit6,83)
+  write (lunit6,83)
 83 format(35h * convergence margin epsom too low)
-  write(lunit6,84)
+  write (lunit6,84)
 84 format(25h * error in um data input)
   call stoptp
 90 seltat = deltat
@@ -5925,25 +5913,24 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
 1004 tau = omegrf * t
      !  injection of predicted um power current to f array in subts1.
      if (loopss(8) .ne. 3) go to 1100
-     if (iprsup .ge. 1) write(lunit6,1006) jm
-1006 format(/,40h ***************************************, 43h injection of predicted power-coil currents, &
-          14h for um number,i4,2h :,/,40h ***************************************, &
-          2x,6hnodvo1,5x,9hf(nodvo1), 2x,6hnodvo2,5x,9hf(nodvo2) )
+     if (iprsup .ge. 1) write (lunit6,1006) jm
+1006 format(/, ' *************************************** Injection of predicted power-coil currents for um number', i4, ' :', /, &
+          ' ***************************************', 2x, 'nodvo1', 5x, 'emtpf(nodvo1)', 2x, 'nodvo2', 5x, 'emtpf(nodvo2)')
      do n1 = 1,3
         n2 = 3 * (numum + jm - 1) + n1
         n3 = kcoil(jm) - 1 + n1
         n4 = nodvo1(n3)
         if (n4 .eq. nodvo2(n3)) go to 1030
         if (n4 .le. 1) go to 1010
-        f(n4) = f(n4) + umcurp(n2)
+        emtpf(n4) = emtpf(n4) + umcurp(n2)
 1010    n5 = nodvo2(n3)
         if (n5 .le. 1) go to 1020
-        f(n5) = f(n5) - umcurp(n2)
-1020    d4 = f(n4)
-        d5 = f(n5)
+        emtpf(n5) = emtpf(n5) - umcurp(n2)
+1020    d4 = emtpf(n4)
+        d5 = emtpf(n5)
         if (n4 .le. 1) d4 = 0.0
         if (n5 .le. 1) d5 = 0.0
-        if (iprsup .ge. 1) write(lunit6,1022) n3,n4,d4,n5,d5
+        if (iprsup .ge. 1) write (lunit6,1022) n3,n4,d4,n5,d5
 1022    format(10h *********, 12h coil number,i4,2h :,14x,i6,e14.5,2x,i6,e14.5)
 1030 end do
      if (jm .eq. numum) loopss(8) = 1
@@ -6090,7 +6077,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
         n3 = ndum(n1+3)
         n4 = n1 + 6
         if (ndum(n4) .eq. 0) go to 4022
-        vinp(n1+3) = - e(n2) + e(n3)
+        vinp(n1+3) = - emtpe(n2) + emtpe(n3)
 4022 end do
      if (istart .eq. 0) go to 4110
      n20 = 0
@@ -6139,7 +6126,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
         if (nodvo1(n1) .eq. nodvo2(n1)) go to 4120
         if (istart .eq. 0) go to 4115
         zthevs(n10) = - znonl(n2) + znonl(n3)
-4115    vinp(n10) = - e(n2) + e(n3)
+4115    vinp(n10) = - emtpe(n2) + emtpe(n3)
 4120 end do
      !. thev voltages and impedances for rotor(power)-coils :
 4200 do n1 = 1,3
@@ -6153,7 +6140,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
         n3 = ndum(n1+3)
         n4 = n1 + 6
         if (ndum(n4) .eq. 0) go to 4222
-        vinp(n1) = e(n2) - e(n3)
+        vinp(n1) = emtpe(n2) - emtpe(n3)
 4222 end do
      if (loopss(8) .eq. 1) go to 5000
      if (istart .eq. 0) go to 5000
@@ -6217,7 +6204,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
      tqgen2 = 0.0
      tqgen3 = 0.0
      if (jtmtac(jm) .ne. 0) go to 8000
-     omthev = e(n1)
+     omthev = emtpe(n1)
      if (istart .eq. 0) go to 8000
      zthevm = - znonl(n1)
      !  if more um's share the same mech network of this um nr. jm :
@@ -6845,9 +6832,9 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
       if (d1 .ge. d3) go to 14500
 14410 omegmp = omegm(jm)
       if (nitrom .le. 50) go to 14416
-      write(lunit6,14414)
+      write (lunit6,14414)
 14414 format ( 42h0rotor speed iteration fails  in 50 steps.  )
-      write(lunit6,14415) jm,t
+      write (lunit6,14415) jm,t
 14415 format(25h failing machine number :,i3,3x,6htime =,e14.5)
       inpu = 50
       go to 79
@@ -6912,9 +6899,9 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
          cursub(nclcom) = - dumvec(n1)
          nclcom = nclcom + 1
          n10 = nodvo1(n2)
-         if (n10 .gt. 1) f(n10) = f(n10) + dumvec(n1)
+         if (n10 .gt. 1) emtpf(n10) = emtpf(n10) + dumvec(n1)
          n10 = nodvo2(n2)
-         if (n10 .gt. 1) f(n10) = f(n10) - dumvec(n1)
+         if (n10 .gt. 1) emtpf(n10) = emtpf(n10) - dumvec(n1)
 14622    if (jclout(n2) .eq. 0) go to 14625
          nxout = nxout + 1
          umoutp(nxout) = dumvec(n1)
@@ -6952,9 +6939,9 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
          cursub(nclcom) = dumvec(n3)
          nclcom = nclcom + 1
          n10 = nodvo1(n4)
-         if (n10 .gt. 1) f(n10) = f(n10) - dumvec(n3)
+         if (n10 .gt. 1) emtpf(n10) = emtpf(n10) - dumvec(n3)
          n10 = nodvo2(n4)
-         if (n10 .gt. 1) f(n10) = f(n10) + dumvec(n3)
+         if (n10 .gt. 1) emtpf(n10) = emtpf(n10) + dumvec(n3)
 14652    if (jclout(n4) .eq. 0) go to 14655
          nxout = nxout + 1
          umoutp(nxout) = - dumvec(n3)
@@ -6970,9 +6957,9 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
          cursub(nclcom) = umcur(n1) * d1
          nclcom = nclcom + 1
          n10 = nodvo1(n2)
-         if (n10 .gt. 1) f(n10) = f(n10) - umcur(n1)*d1
+         if (n10 .gt. 1) emtpf(n10) = emtpf(n10) - umcur(n1)*d1
          n10 = nodvo2(n2)
-         if (n10 .gt. 1) f(n10) = f(n10) + umcur(n1)*d1
+         if (n10 .gt. 1) emtpf(n10) = emtpf(n10) + umcur(n1)*d1
 14664    if (jclout(n2) .eq. 0) go to 14665
          nxout = nxout + 1
          umoutp(nxout) = - umcur(n1)
@@ -6982,7 +6969,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
       !. output vector if mech. system = electr. network :
 14700 if (jtmtac(jm) .ne. 0) go to 15000
       n10 = nodom(jm)
-      f(n10) = f(n10) - tqgen
+      emtpf(n10) = emtpf(n10) - tqgen
       if (jcltac(kcl+2) .lt. 0) go to 15000
       cursub(nclcom) = tqgen
       nclcom = nclcom + 1
@@ -6991,7 +6978,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
       if (jcltac(kcl+2) .le. 0) go to 15000
       nclcom = nclcom + 1
       if (jcltac(kcl+1) .ne. 0) nclcom = nclcom+1
-      !. e(k) and vinp adjustment for rem magn + open power terminals:
+      !. emtpe(k) and vinp adjustment for rem magn + open power terminals:
 15000 if (inpu .ne. 2) go to 15005
       if (istart .ne. 0) go to 15005
       if (jtype(jm) .eq. 6) go to 15005
@@ -7020,8 +7007,8 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
          n4 = kcl + 1
          n3 = nodvo1(n2)
          if (nodvo2(kcl) .ne. nodvo2(n4)) n3 = nodvo2(n2)
-         e(n3) = dumvec(n1)
-         if (nodvo2(kcl) .ne. nodvo2(n4)) e(n3) = - dumvec(n1)
+         emtpe(n3) = dumvec(n1)
+         if (nodvo2(kcl) .ne. nodvo2(n4)) emtpe(n3) = - dumvec(n1)
 15004 end do
       !. calculation of history vectors:
       !.determination of rotor(power)-hist:
@@ -7135,7 +7122,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
       !. output statements for um:
 16000 n1 = istart + jm - 1
       if (n1 .ne. 0) go to 16008
-      if ( iprsup .ge. 1 ) write(lunit6,16005)
+      if ( iprsup .ge. 1 ) write (lunit6,16005)
 16005 format(50h0-------------------------------------------------)
       go to 16016
 16008 if (istart .ne. 0) go to 16012
@@ -7144,34 +7131,34 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
       if (iout .eq. 0) go to 16100
 16014 if (istart .ne. itolto) go to 16100
       if (jm .gt. 1) go to 16020
-16016 if (iprsup .ge. 2 ) write(lunit6,16005)
+16016 if (iprsup .ge. 2 ) write (lunit6,16005)
       if (iprsup .ge. 2 ) write (lunit6,16017) t, ncomp
 16017 format(7h0time =,e14.5,36h***************************  ncomp =,  i3  )
 16020 if (jm .eq. numum) itol = istart
       !. momentary test output :
-      if ( iprsup  .ge.  2 ) write(lunit6,16052)
+      if ( iprsup  .ge.  2 ) write (lunit6,16052)
 16052 format(18h0*** test output :)
-      if ( iprsup  .ge.  3 ) write(lunit6,16054) (umcur(n1),n1=1,3)
+      if ( iprsup  .ge.  3 ) write (lunit6,16054) (umcur(n1),n1=1,3)
 16054 format(10h0umcur(1)=,e14.5,2x,9humcur(2)=,e14.5,2x,9humcur(3)=,e14.5)
       if (con(6) .ne. 1.0) go to 16056
-      if ( iprsup  .ge.  3 ) write(lunit6,16055) (umcur(n1),n1=4,6)
+      if ( iprsup  .ge.  3 ) write (lunit6,16055) (umcur(n1),n1=4,6)
 16055 format(10h umcur(4)=,e14.5,2x,9humcur(5)=,e14.5,2x,9humcur(6)=,e14.5)
-16056 if ( iprsup  .ge.  2 ) write(lunit6,16057) flxd(jm),flxq(jm),nitrom
+16056 if ( iprsup  .ge.  2 ) write (lunit6,16057) flxd(jm),flxq(jm),nitrom
 16057 format(10h     flxd=,e14.5,2x,9h    flxq=,e14.5,2x,9h  nitrom=,i3)
       n2 = kcl + ncl - 1
       if (istart .gt. 1) go to 16077
       if ( iprsup .le. 3 ) go to 16077
-      write(lunit6,16060) (nodvo1(n1),n1=kcl,n2)
-      write(lunit6,16061) (nodvo2(n1),n1=kcl,n2)
-      write(lunit6,16062) nodom(jm)
+      write (lunit6,16060) (nodvo1(n1),n1=kcl,n2)
+      write (lunit6,16061) (nodvo2(n1),n1=kcl,n2)
+      write (lunit6,16062) nodom(jm)
 16060 format(9h0nodvo1 :,3x,15i4)
 16061 format(9h nodvo2 :,3x,15i4)
 16062 format(9h nodom  :,3x,15i4)
-16077 if (iprsup .ge. 2) write(lunit6,16078) zthevm
+16077 if (iprsup .ge. 2) write (lunit6,16078) zthevm
 16078 format(10h0zthevm = ,e14.5)
-      if (iprsup .ge. 2) write(lunit6,16080) ((zthevr(n1,n2),n2=1,3),n1=1,3)
+      if (iprsup .ge. 2) write (lunit6,16080) ((zthevr(n1,n2),n2=1,3),n1=1,3)
 16080 format(13h0zthevr(3,3):,3x,3e14.5/(16x,3e14.5))
-      if (iprsup .ge. 2) write(lunit6,16082) ((zths3(n1,n2),n2=1,3),n1=1,3)
+      if (iprsup .ge. 2) write (lunit6,16082) ((zths3(n1,n2),n2=1,3),n1=1,3)
 16082 format(12h0zths3(3,3):,3x,3e14.5/(15x,3e14.5))
       !. end momentary
       !  final statements of machine do-loop *************************
@@ -7181,8 +7168,8 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
       jtype(jm) = 13
       inpu = inpust
       if (nmexc .eq. 0) go to 18000
-      d1 = e(nmexc)
-      d2 = e(nexc)
+      d1 = emtpe(nmexc)
+      d2 = emtpe(nexc)
       d3 = umcur(4) * dcoef(jm)
       crest(kconex) = - d2 * d3/d1
       fpar(kcl+3) = - kconex
@@ -7245,7 +7232,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
          n2 = 3 * (numum+jm-1) + n1
 18120    umcurp(n2) = dumvec(n1)
       end do
-      if (iprsup .ge. 1) write(lunit6,18130) jm
+      if (iprsup .ge. 1) write (lunit6,18130) jm
 18130 format(/,39h **************************************, 42h predicted a,b,c power voltages/resistance, &
            32h for next time-step of um number, i4, 2h :)
       n1 = 3 * (numum + jm - 1) + 1
@@ -7352,7 +7339,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
         ispum(iunodm), ispum(iukumo), ispum(iujumo), spum(iuumou))
    if ( kill  .gt.  0 )   go to 9200
 1742 if ( ncomp .le. 0 )  go to 1570
-   if ( iprsup .ge. 6 ) write(lunit6, 1554)  ( k, kknonl(k), e(k), znonl(k), k=2, ntot )
+   if ( iprsup .ge. 6 ) write (lunit6, 1554)  ( k, kknonl(k), emtpe(k), znonl(k), k=2, ntot )
 1554 format(  41h n.l. element comp.   k, kknonl, e, znonl   , 2i10, 2e20.8 )
    do k=2,ntot
       n1 = kpsour(k)
@@ -7360,18 +7347,18 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
       n15 = isubeg(n1)
       n4 = k
 1111  m = n15 / 5 + 1
-      e(k) = e(k)  +  cursub(m) * znonl(n4)
+      emtpe(k) = emtpe(k)  +  cursub(m) * znonl(n4)
       n15 = nsubkm(n15)
       if ( n15  .eq. isubeg(n1) ) go to 2323
 1557  n4 = n4 + ntot
       go to 1111
 2323  n8 = n15 / 5 + 1
-      if ( iprsup  .ge.  7 ) write (lunit6, 1558)  k, n1, n15, e(k), cursub(n8), znonl(k)
+      if ( iprsup  .ge.  7 ) write (lunit6, 1558)  k, n1, n15, emtpe(k), cursub(n8), znonl(k)
 1558  format (  11h row super., 24h       k      n1     n15,  14x,  1he, 9x, 6hcursub, 10x, 5hznonl ,/, 11x, 3i8, 3e15.6 )
 1560 end do
 1570 if ( ialter  .eq.  1 )   ialter = 0
-   if ( iprsup .gt. 6 ) write(lunit6, 1571)  ( e(k), k=1, ntot )
-1571 format( //,  44h vector e(k) at 1571, immediately after calc   , /, ( 1x, 5e25.15 ) )
+   if ( iprsup .gt. 6 ) write (lunit6, 1571)  ( emtpe(k), k=1, ntot )
+1571 format(//, ' Vector emtpe(k) at 1571, immediately after calc', /, (1x, 5e25.15))
    if ( tenerg  .lt.  0.0 )          go to 1609
    if ( knt  .gt.  1 )               go to 1609
    if ( kbase  .lt.  2 )             go to 1609

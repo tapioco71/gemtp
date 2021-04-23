@@ -57,7 +57,7 @@ subroutine over6
   it = it + 1
   tr(it) = d1
   tx(it) = 0.0
-  c(it) = 0.0
+  emtpc(it) = 0.0
 54162 nr(ibr) = - it
   length(ibr) = 1
   if(n3 .gt. 0)length(ibr) = -1
@@ -73,7 +73,7 @@ subroutine over6
 54180 lstat(24) = kconst
   lstat(23) = it
   it1 = ibr
-  iv  =  locint( c(1) )     -     locint( x(1) )
+  iv  = locint(emtpc(1)) - locint(x(1))
   if ( kburro  .eq.  1 )   go to 4802
   last = ( iv - 1 ) / ( 3 * nbyte(3) / nbyte(4) )
   lstat(14) = lsiz23
@@ -91,7 +91,7 @@ subroutine over6
   call tapsav ( integx(1), lunit2, iv, n11 )
   n17 = 0
   call vecrsv ( volt(1), n17, n17 )
-  call vecrsv (  c(1), it, n11 )
+  call vecrsv ( emtpc(1), it, n11 )
   call vecrsv ( tr(1), it, n11 )
   call vecrsv ( tx(1), it, n11 )
   call vecrsv (  r(1), it, n11 )
@@ -394,7 +394,7 @@ subroutine rinfin
   it = it + 1
   tr(it) = d1
   tx(it) = 0.0
-  c(it) = 0.0
+  emtpc(it) = 0.0
 54162 nr(ibr) = - it
   length(ibr) = 1
   if(n3 .gt. 0)length(ibr) = -1

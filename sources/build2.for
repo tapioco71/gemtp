@@ -3,7 +3,7 @@
 !     file: build2.for
 !
 subroutine build2
-  include 'tacsto.ins'
+  include 'tacsto.ftn'
   sptr = sptr - 1
   if (sptr .eq. iptr) go to 910
   isto(sptr) = from

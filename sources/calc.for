@@ -6,7 +6,7 @@
 !     subroutine calc.
 !
 subroutine calc
-  include 'tacsto.ins'
+  include 'tacsto.ftn'
   sptr=sptr-1
   if(sptr.eq.iptr) goto 910
   isto(sptr)=from

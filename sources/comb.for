@@ -6,7 +6,7 @@
 !     subroutine comb.
 !
 subroutine comb
-  include  'tacsto.ins'
+  include  'tacsto.ftn'
   sptr=sptr-1
   isto(sptr)=from
   from=0

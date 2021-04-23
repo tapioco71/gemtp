@@ -653,7 +653,7 @@ subroutine over5a
      it = it + 1
      tr(it) = volti(j)
      tx(it) = 0.0
-     c(it)  = 0.0
+     emtpc(it)  = 0.0
      r(it)  = 0.0
      ibr = ibr + 1
      kbus(ibr) = kpen(j)
@@ -663,7 +663,7 @@ subroutine over5a
      it = it + 1
      tr(it) = -volti(j)
      tx(it) = 0.0
-     c(it) = 0.0
+     emtpc(it) = 0.0
      r(it) = 0.0
 6343 end do
   go to 310
@@ -887,7 +887,7 @@ subroutine over5a
   if ( reps  .eq.  0.0 )   reps = sqrtz(epsiln)
   tr(it) = reps
   tx(it) = 0.0
-  c(it) = 0.0
+  emtpc(it) = 0.0
   nr(ibr) = -it
   k=ntot
   node(kconst)=-k
@@ -906,7 +906,7 @@ subroutine over5a
 2344 iprint = 4
   nr(ibr)=-it
   length(ibr)=1
-  c(it)=0.
+  emtpc(it)=0.
   tr(it)=gus3
   tx(it)=0.
   if ( noutpr  .eq.  0 ) write (kunit6, 340)  gus3
@@ -1051,7 +1051,7 @@ subroutine over5a
   tr(1) = 1.e10
   tx(1) = 0.0
   r(1) = 0.0
-  c(1) = 0.0
+  emtpc(1) = 0.0
 2436 if (iprsup .lt. 3)   go to 1416
   write (lunit6, 12416)
 12416 format ( /,  21h switch table vectors  ,/, 56h     row   bus1     bus2    kpos  kdepsm  isourc  kswtyp, &
@@ -1068,7 +1068,7 @@ subroutine over5a
   write (lunit6, 14416)  (i, iform(i), node(i), crest(i), time1(i), tstart(i), sfreq(i), i = 1, kconst)
 14416 format (/, 21h source table vectors,/, 30h       row     iform node, 15x, 5hcrest, 15x, 5htime1, 14x, 6htstart,15x,5hsfreq,&
        /, (3i10, 4e20.10)   )
-  write (lunit6,2584) (i, tr(i), tx(i), r(i), c(i), i=1, it)
+  write (lunit6,2584) (i, tr(i), tx(i), r(i), emtpc(i), i=1, it)
 2584 format ( /, 40h rows 1 through it of parameters follow: ,/,    7x,  3hrow,  13x,  2htr,  13x,  2htx,  14x, &
        1hr,  14x,  1hc  ,/,  ( i10,  4e15.5  ) )
 1416 if (iprsup .ge. 1) write (lunit6, 1417)  kconst, ibr, inonl, kswtch, istead, omega, xopt, copt, twopi
@@ -1182,12 +1182,12 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   dimension  reamqs(1), epsom(1), dcoef(1), kcoil(1)
   dimension  voltum(1), anglum(1), nodfum(1), nodmum(1)
   dimension  kumout(1), jumout(1), umoutp(1)
-  common /umlocal/ texta, d1,d2,d3,d17, stat59, fmum, rmvaum, rkvum, s1um, s2um, zlsbum, s1qum, s2qum, aglqum, raum, xdum, &
-       squm, xdpum, xqpum, xdppum, xqppum, tdpum, tdppum, x0um, rnum, xnum, xfum, xdfum, xdkdum, xkdum, xkqum, xqkqum, &
-       xgkqum, xqum, xqgum, xgum, distrf, hjum, dsynum, dmutum, spring, dabsum, tqppum, agldum, xlum, n1, n2, n3, n4, n5, n6, &
-       n7, n8, n9, n10, n11, n12, n14, n15, n16, n17, n18, n19, n20, jr,jf, nexc, kconex, ibrexc, nstan, numasu, nmgen, nmexc, &
-       ntypsm, netrun, netrum, nsmtpr, nsmtac, nrsyn, ntorq, mlum, nparum, ngroup, nall, nangre, nexcsw, limasu, lopss2, &
-       lopss1, lopss8, lopss9, lopss10, lopss4, nshare
+  common /umlocal/ texta, d1, d2, d3, d17, stat59, fmum, rmvaum, rkvum, s1um, s2um, zlsbum, s1qum, s2qum, aglqum, raum, xdum
+  common /umlocal/ squm, xdpum, xqpum, xdppum, xqppum, tdpum, tdppum, x0um, rnum, xnum, xfum, xdfum, xdkdum, xkdum, xkqum, xqkqum
+  common /umlocal/ xgkqum, xqum, xqgum, xgum, distrf, hjum, dsynum, dmutum, spring, dabsum, tqppum, agldum, xlum, n1, n2, n3, n4, n5, n6
+  common /umlocal/ n7, n8, n9, n10, n11, n12, n14, n15, n16, n17, n18, n19, n20, jr,jf, nexc, kconex, ibrexc, nstan, numasu, nmgen, nmexc
+  common /umlocal/ ntypsm, netrun, netrum, nsmtpr, nsmtac, nrsyn, ntorq, mlum, nparum, ngroup, nall, nangre, nexcsw, limasu, lopss2
+  common /umlocal/ lopss1, lopss8, lopss9, lopss10, lopss4, nshare
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'umdeck.ftn'
@@ -1855,7 +1855,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
         length(ibr) = 1
         nr(ibr) = - it
         tr(it) = 0.0
-        c(it) = 0.0
+        emtpc(it) = 0.0
         d1 = reacl(kcl+2)
         if (d1 .gt. reacl(kcl+1)) d1 = reacl(kcl+1)
         if (jtype(n1) .lt. 3) go to 966
@@ -1897,11 +1897,11 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      kbus(ibr) = nodom(n1)
      mbus(ibr) = ntot
      tr(it) = epsiln
-     c(it) = 0.0
+     emtpc(it) = 0.0
      tx(it) = 0.0
-     if (iprsup .ge. 1) write (lunit6,80980) mbus(ibr),kbus(ibr),ibr,it,tr(it),c(it)
-80980 format(10h *********,29h potential speed cap : mbus =,i6, 7h kbus =,i6,6h ibr =,i6, 5h it =,i6, 9h tr(it) =,e14.5, &
-          8h c(it) =,e14.5)
+     if (iprsup .ge. 1) write (lunit6,80980) mbus(ibr),kbus(ibr),ibr,it,tr(it),emtpc(it)
+80980 format (' ********* Potential speed cap : mbus =', i6, ' kbus =', i6, ' ibr =', i6, ' it =', i6, ' tr(it) =', e14.5, &
+          ' emtpc =', e14.5)
      !  creation of sources to represent im excitation coils for
      !    steady-state initialization (accommodates kpsour use):
      if (jtype(n1) .lt. 3) go to 990
@@ -2065,12 +2065,12 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   dimension reamqs(1),dcoef(1),voltum(1),anglum(1)
   dimension nodmum(1), kumout(1), jumout(1), umoutp(1)
   dimension reamdu(1)
-  common /umlocal/ texta, d1,d2,d3,d17, stat59, fmum, rmvaum, rkvum, s1um, s2um, zlsbum, s1qum, s2qum, aglqum, raum, xdum, &
-       squm, xdpum, xqpum, xdppum, xqppum, tdpum, tdppum, x0um, rnum, xnum, xfum, xdfum, xdkdum, xkdum, xkqum, xqkqum, &
-       xgkqum, xqum, xqgum, xgum, distrf, hjum, dsynum, dmutum, spring, dabsum, tqppum, agldum, xlum, n1, n2, n3, n4, n5, n6, &
-       n7, n8, n9, n10, n11, n12, n14, n15, n16, n17, n18, n19, n20, jr, jf, nexc, kconex, ibrexc, nstan, numasu, nmgen, nmexc, &
-       ntypsm, netrun, netrum, nsmtpr, nsmtac, nrsyn, ntorq, mlum, nparum, ngroup, nall, nangre, nexcsw, limasu, lopss2, lopss1, &
-       lopss8, lopss9, lopss10, lopss4, nshare
+  common /umlocal/ texta, d1,d2,d3,d17, stat59, fmum, rmvaum, rkvum, s1um, s2um, zlsbum, s1qum, s2qum, aglqum, raum, xdum
+  common /umlocal/ squm, xdpum, xqpum, xdppum, xqppum, tdpum, tdppum, x0um, rnum, xnum, xfum, xdfum, xdkdum, xkdum, xkqum, xqkqum
+  common /umlocal/ xgkqum, xqum, xqgum, xgum, distrf, hjum, dsynum, dmutum, spring, dabsum, tqppum, agldum, xlum, n1, n2, n3, n4, n5, n6
+  common /umlocal/ n7, n8, n9, n10, n11, n12, n14, n15, n16, n17, n18, n19, n20, jr, jf, nexc, kconex, ibrexc, nstan, numasu, nmgen, nmexc
+  common /umlocal/ ntypsm, netrun, netrum, nsmtpr, nsmtac, nrsyn, ntorq, mlum, nparum, ngroup, nall, nangre, nexcsw, limasu, lopss2, lopss1
+  common /umlocal/ lopss8, lopss9, lopss10, lopss4, nshare
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'umdeck.ftn'
@@ -2167,7 +2167,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   itexc = it
   !  note : tr(it=itexc) will be changed later to 0.5 * rf
   tx(it) = 0.0
-  c(it) = 0.0
+  emtpc(it) = 0.0
   if (iprsup .ge. 1) write(lunit6,17080) mbus(ibr),kbus(ibr),ibr,it
 17080 format(10h *********,21h series field resist.,23x,i4,4x,i4,4x,i4,4x,i4)
   call ibrinc
@@ -2178,7 +2178,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   nr(ibr) = - it
   tr(it) = epsiln
   tx(it) = 0.0
-  c(it) = 0.0
+  emtpc(it) = 0.0
   if (iprsup .ge. 1) write(lunit6,17082) mbus(ibr),kbus(ibr),ibr,it
 17082 format(10h *********,21h parall field resist.,23x,i4,4x,i4,4x,i4,4x,i4)
   !  shorting damper and eddy current coils
@@ -2491,7 +2491,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      nr(ibr) = - it
      tr(it) = 1.0d+8
      tx(it) = 0.0
-     c(it) = 0.0
+     emtpc(it) = 0.0
      if (iprsup .ge. 1) write (lunit6,17531) mbus(ibr),kbus(ibr),ibr,it
 17531 format(10h *********,19h high power resist.,25x,i4,4x,i4,4x,i4,4x,i4)
 17532 end do
@@ -2506,7 +2506,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   tr(it) = rnum
   if (xopt .eq. 0.0) tx(it) = xnum * 1.0d+3
   if (xopt .ne. 0.0) tx(it) = xnum * twopi * xopt
-  c(it) = 0.0
+  emtpc(it) = 0.0
   if (iprsup .ge. 1)write(lunit6,17539) mbus(ibr),kbus(ibr),ibr,it
 17539 format(10h *********,18h neutral impedance,26x,i4,4x,i4,4x,i4,4x,i4)
   !  set 0.5*rf for external exciter resistance:
@@ -2623,8 +2623,8 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      tr(it) = 0.0
      tx(it) = 0.0
      !  the following factor of d10=1.0d+6 is due to micro f or mho.
-     c(it) = d10*d10*hjum/23.73
-     if (copt .ne. 0.0) c(it) = c(it)*copt*twopi
+     emtpc(it) = d10*d10*hjum/23.73
+     if (copt .ne. 0.0) emtpc(it) = emtpc(it)*copt*twopi
      if (iprsup .ge. 1) write (lunit6,17605) mlum,mbus(ibr),kbus(ibr),ibr,it
 17605 format(10h *********,16h mass branch nr.,i3,25x,i4,4x,i4,4x,i4,4x,i4)
      !  creating spring element :
@@ -2642,7 +2642,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      d1 = d10 * spring/0.73756
      if (xopt .eq. 0.0) tx(it) = 1.0d+3/d1
      if (xopt .ne. 0.0) tx(it) = twopi*xopt/d1
-     c(it) = 0.0
+     emtpc(it) = 0.0
      if (iprsup .ge. 1) write(lunit6,17606) mbus(ibr),kbus(ibr),ibr,it
 17606 format(10h *********,14h spring branch,30x,i4,4x,i4,4x,i4,4x,i4)
      umoutp(n6) = 1.0/d1
@@ -2677,7 +2677,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      nr(ibr) = - it
      tr(it) = 0.73756/dsynum
      tx(it) = 0.0
-     c(it) = 0.0
+     emtpc(it) = 0.0
      if (iprsup .ge. 1) write(lunit6,17616) mlum,mbus(ibr),kbus(ibr),ibr,it
 17616 format(10h *********, 36h synchr. damping branch for mass nr.,i3,5x,i4,4x,i4,4x,i4,4x,i4)
      !  creating mutual damping :
@@ -2692,7 +2692,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      nr(ibr) = - it
      tr(it) = 0.73756/dmutum
      tx(it) = 0.0
-     c(it) = 0.0
+     emtpc(it) = 0.0
      if (iprsup .ge. 1) write (lunit6,17626) mbus(ibr),kbus(ibr),ibr,it
 17626 format(10h *********, 22h mutual damping branch,22x,i4,4x,i4,4x,i4,4x,i4)
      if (spring .eq. 0.0) go to 17628
@@ -2710,7 +2710,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      nr(ibr) = - it
      tr(it) = 0.73756/dabsum
      tx(it) = 0.0
-     c(it) = 0.0
+     emtpc(it) = 0.0
      if (iprsup .ge. 1) write(lunit6,17638) mlum,mbus(ibr),kbus(ibr),ibr,it
 17638 format(10h *********,34h abslt damping branch for mass nr.,i3,7x,i4,4x,i4,4x,i4,4x,i4)
      !  storing applied torque distribution factors distrf in
@@ -2837,7 +2837,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   nr(ibr) = - it
   tr(it) = 1.0
   tx(it) = 0.0
-  c(it) = 0.0
+  emtpc(it) = 0.0
   if (iprsup .ge. 1) write(lunit6,17748) mbus(ibr),kbus(ibr),ibr,it
 17748 format(10h *********,40h small series resist for apll gen torque, 4x,i4,4x,i4,4x,i4,4x,i4)
   go to 17800
@@ -3741,7 +3741,7 @@ subroutine smdat (mtype)
      nr( ibr ) = -it
      tr( it ) = 1.0
      tx( it ) = 0.0
-     c( it ) = 0.0
+     emtpc(it) = 0.0
   end do
   it = it + 3
   !     read output specification card. ismout is array of output flags.

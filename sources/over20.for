@@ -13,7 +13,7 @@ subroutine over20
   equivalence (moncar(3), ltdelt), (moncar(4), isw)
   equivalence (moncar(10), mtape)
   if (iprsup .ge. 1) write ( lunit6, 4567 )
-4567 format ( 23h begin module "over20".  )
+4567 format (' Begin module "over20".')
   zero = 0.0
   ll1 = 1
   ll9  =  9
@@ -74,16 +74,16 @@ subroutine over20
           ' Begin with all node voltages.', /, 3(21x, 'node'), /, 19x, 'number', 21x, 'name', &
           18x, 'voltage')
   do k = 2, ntot
-     if (n10 .ne. 0) write(lunit6,7012) bus(k), e(k), zero, k
-7012 format( 1h , a6, 2e13.5, 41x, i6 )
-7010 write(lunit7, 7011) kcount, bus(k), e(k), zero, zero, k
+     if (n10 .ne. 0) write (lunit6,7012) bus(k), emtpe(k), zero, k
+7012 format(' ', a6, 2e13.5, 41x, i6)
+7010 write (lunit7, 7011) kcount, bus(k), emtpe(k), zero, zero, k
   end do
-7011 format( i2, a6, 3e15.8, 21x, i6 )
+7011 format (i2, a6, 3e15.8, 21x, i6)
   if (n10 .ne. 0) write (lunit6, 7013)
-7013 format ( /,  " linear branch table state variables ( 'currents' ) follow.",/, &
-       7x,  3hrow,  9x,  11h'from' node,  11x,  9h'to' node,  9x, &
-       'linear branch parameters, identified by the fortran vector storage' ,/,  9x,  1hi,  8x,  12hbus(kbus(i)),  8x, &
-       12hbus(mbus(i)),  19x,  6hcik(i),  20x,  5hci(i), 20x,  5hck(i)    )
+7013 format (/, " Linear branch table state variables ( 'currents' ) follow.", /, &
+          7x,  'row', 9x, "'from' node", 11x, "'to' node", 9x, &
+          'linear branch parameters, identified by the Fortran vector storage', /,  9x, 'i', 8x, 'bus(kbus(i))', 8x, &
+          'bus(mbus(i))', 19x, 'cik(i)', 20x, 'ci(i)', 20x, 'ck(i)')
   k=1
 7014 it2=1
   if(kbus(k).lt.0) go to 7024
@@ -93,25 +93,25 @@ subroutine over20
   if(ci1.eq.0. .and. ck1.eq.0.) go to 7025
   l=kbus(k)
   m=iabs(mbus(k))
-  write(lunit7,7020) iold, bus(l), bus(m), ci1, ck1, zero, zero, k
-7020 format( i2, 2a6, 4e15.8, i6)
-  if( n10 .ne. 0 ) write(lunit6,7021) bus(l), bus(m), ci1, ck1, zero, zero, k
-7021 format( 1h , a6, 1x, a6, 4e13.5, i6 )
+  write (lunit7,7020) iold, bus(l), bus(m), ci1, ck1, zero, zero, k
+7020 format (i2, 2a6, 4e15.8, i6)
+  if( n10 .ne. 0 ) write (lunit6,7021) bus(l), bus(m), ci1, ck1, zero, zero, k
+7021 format (' ', a6, 1x, a6, 4e13.5, i6)
   go to 7025
 7022 it2=iabs(length(k))
   it1=k+it2-1
   do i=k,it1
      n1=kbus(i)
      n2=iabs(mbus(i))
-     if ( n10  .ne.  0 ) write(lunit6,7021) bus(n1),bus(n2), cik(i), ci(i), ck(i), zero,i
-7023 write(lunit7,7020) iold, bus(n1), bus(n2), cik(i), ci(i), ck(i), zero, i
+     if ( n10  .ne.  0 ) write (lunit6,7021) bus(n1),bus(n2), cik(i), ci(i), ck(i), zero,i
+7023 write (lunit7,7020) iold, bus(n1), bus(n2), cik(i), ci(i), ck(i), zero, i
   end do
   go to 7025
 7024 n1 = iabsz( kbus(k) )
   n2 = iabsz( mbus(k) )
-  write( lunit6, 70241 ) bus(n1), bus(n2)
-70241 format ( 42h  ****  warning.   ****   no currents will, 36h be punched for the distributed line, &
-       20h connecting nodes  ",  a6,  9h"  and  ", a6,  3h" .   )
+  write ( lunit6, 70241 ) bus(n1), bus(n2)
+70241 format ('  ****  Warning.   ****   no currents will be punched for the distributed line connecting nodes  ', &
+           '"', a6,  '"', '  and  ', '"', a6, '"', ' . ')
   it2 = length(k)
   if( it2 .lt. 0 ) it2 = -it2
   if( length(k) .gt. 0 ) it2 = 1
@@ -120,7 +120,7 @@ subroutine over20
   if(k.le.ibr) go to 7014
   if (inonl .eq. 0) go to 9207
   if ( n10  .ne.  0 ) write (lunit6, 4688)
-4688 format ( /, 48h nonlinear element table state variables follow. )
+4688 format (/, ' Nonlinear element table state variables follow.')
   iold=4
   do k=1,inonl
      if(nonle(k).ge.0) go to 7035
@@ -131,34 +131,32 @@ subroutine over20
      n6 = n5 + 1
      n7 = n5 + 2
      n8 = n5 + 3
-     write(lunit7, 7020) iold, bus(n1), bus(n2), vchar(n7), cchar(n8)
+     write (lunit7, 7020) iold, bus(n1), bus(n2), vchar(n7), cchar(n8)
      n9 = cchar(n6)
      n11 = cchar(n7)
      write (lunit7, 7018)  n9, n11,  ( vchar(ipp), ipp=n5, n8 )
-7018 format ( 2i10, 4e15.8)
+7018 format (2i10, 4e15.8)
      n12 = n5 + 4
      n13 = n5 + 5
      n14 = cchar(n12)
-     write(lunit7,7026) n14, vchar(n12), vchar(n13), gslope(n12), gslope(n13)
-7026 format ( i10 , 4e15.8 )
+     write (lunit7,7026) n14, vchar(n12), vchar(n13), gslope(n12), gslope(n13)
+7026 format (i10 , 4e15.8)
      if ( n10  .eq.  0)  go to 7035
      write ( lunit6, 7021) k, bus(n1), bus(n2), vchar(n7), cchar(n8)
      write ( lunit6, 7019)  n9, n11,  ( vchar(ipp), ipp=n5, n8 )
-7019 format ( 1h ,i10, 2x, i10, 4( 3x, e15.8) )
-     write(lunit6,7027)  n14, vchar(n13), vchar(n14), gslope(n12), gslope(n13)
-7027 format ( 1h , i10 , 4(3x,e15.8) )
+7019 format (' ', i10, 2x, i10, 4(3x, e15.8))
+     write (lunit6,7027)  n14, vchar(n13), vchar(n14), gslope(n12), gslope(n13)
+7027 format (' ', i10 , 4(3x, e15.8))
      go to 7035
 7031 a = curr(k)
      if(a.eq.0.) go to 7035
-     write(lunit7,7020) iold,bus(n1),bus(n2),a
+     write (lunit7,7020) iold,bus(n1),bus(n2),a
      if ( n10  .ne.  0 ) write (lunit6, 7021)  bus(n1), bus(n2), a
 7035 end do
 9207 if (kswtch .eq. 0) go to 4020
   if ( n10  .ne.  0 ) write (lunit6, 7348)
-7348 format ( /,  38h status variables for switches follow.       ,/, &
-       1x,  6hbus(l),  1x,  6hbus(m),  3x,  7hkpos(k),  2x, &
-       8h kode(l),  2x,  8h kode(m),  14x,  6htclose,  14x, &
-       6hadelay,  14x,  6henergy,  16x,  4hcrit   )
+7348 format (/, ' Status variables for switches follow.', /, 1x,  'bus(l)', 1x, 'bus(m)', 3x, 'kpos(k)',  2x, &
+          ' kode(l)', 2x, ' kode(m)', 14x, 'tclose', 14x, 'adelay', 14x, 'energy', 16x, 'crit')
   do k=1, kswtch
      l = iabs(kmswit(k))
      kn1 = lswtch + k
@@ -166,10 +164,10 @@ subroutine over20
      npl = nextsw(k)
      if ( npl  .ne.  0 )  npl = 87
      write (lunit7,4003) bus(l), bus(m), kpos(k), kode(l), kode(m), tclose(k), adelay(k), energy(k), crit(k), npl
-4003 format(2h 5,2a6,3i4,4e13.6 ,/, 14x, i4)
+4003 format (' 5', 2a6, 3i4, 4e13.6, /, 14x, i4)
      if ( n10  .eq.  0 )   go to 4010
      write (lunit6,4004) bus(l), bus(m), kpos(k), kode(l), kode(m), tclose(k), adelay(k), energy(k), crit(k), nextsw(k)
-4004 format(1x,a6,1x,a6,3i10,4e20.10 ,/, 14x, i10)
+4004 format (1x, a6, 1x, a6, 3i10, 4e20.10, /, 14x, i10)
 4010 end do
 4020 go to 9800
   !     code below is just for  'statistics'  or  'systematic'  runs. ----
@@ -183,7 +181,7 @@ subroutine over20
      xmax(ndx3) = xmax(ndx2)
 8010 end do
   if (iprsup .gt. 0) write (lunit6,8903) isw, nstat, knt, nenerg, (xmax(i), i=1, nstat)
-8903 format(27h isw, nstat, knt, nenerg = ,4i10,/, 25h (xmax(i), i=1, nstat) =   /  6(5x,e15.8))
+8903 format (' isw, nstat, knt, nenerg = ', 4i10, /, ' (xmax(i), i=1, nstat) =', /, 6(5x,e15.8))
   knt = knt + 1
   write (lunit9)  ( xmax(l), l=1, nstat )
   if ( begmax(1)  .eq.  0.0 )   go to 627
@@ -191,7 +189,7 @@ subroutine over20
   if (nenerg .lt. 0)   go to 612
   if ( nswtpe .le. 1 )  go to 1610
   write (lunit6, 1510) angle, angtpe, ( xmax(l),l=1,ll9)
-1510 format ( 1x, f6.2, 1x, f6.2, 1x, 9e13.6 )
+1510 format (1x, f6.2, 1x, f6.2, 1x, 9e13.6)
   go to 611
 1610 write (lunit6, 617)  angle,  ( xmax(l), l=1, ll9 )
 611 write (lunit6, 618)  ( xmax(l), l=ll10, nstat )
@@ -205,8 +203,8 @@ subroutine over20
 1620 write (lunit6, 617)  angle, (xmax(l), l = 1, nstat)
   go to 624
 614 write (lunit6, 618)   (xmax(l), l = 1, nstat)
-617 format ( 1x, f9.4, 5x, 9e13.6 )
-618 format ( 15x, 9e13.6 )
+617 format (1x, f9.4, 5x, 9e13.6)
+618 format (15x, 9e13.6)
 624 ndx1 = lsiz12 + 1
   ndx2 = lsiz12 + nstat
   if ( begmax(1)  .gt.  0.0 ) write (lunit6, 8003)  ( xmax(l), l=ndx1, ndx2 )
@@ -214,41 +212,37 @@ subroutine over20
   lastov = nchain
   nchain = 12
   if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
-4568 format ( 15h exit "over20".   )
+4568 format (' Exit "over20".')
   go to 99999
 610 write (lunit6, 654 )
-654 format ( //,1x)
+654 format (//, 1x)
   lunit5 = mtape
   !     reset numdcd counter if it is not a omit base case
   if ( lstat(15) .ne. intinf )    numdcd = numdcd - ipntv(11)
   write (lunit6, 659 )
-659 format ( 132h ----------------------------------------------------&
-       ------------------------------------------------------------------&
-       -------------   )
+659 format (' -----------------------------------------------------------------------------------------------------------------------------------')
   write (lunit6, 616)  nenerg
-616 format (  30h Simulation of all  'nenerg' =,  i4, 75h  energizations is now complete, and the emtp is ready to begin statistical ,/, &
-       108h processing of the voltage solutions.   but before doing so, two cautions about discretization of continuous    ,/, &
-       61h variables are probably appropriate to mention at this point.,/, 5x,  &
-       109h1.  The switch closing times which are printed along with peak voltages of each energization are only desired   ,/, &
-       9x, 113htimes, just as with all such times which are punched on data cards which define switches upon data input.   since   )
+616 format (" Simulation of all  'nenerg' =", i4, '  energizations is now complete, and the EMTP is ready to begin statistical', /, &
+         ' processing of the voltage solutions.   But before doing so, two cautions about discretization of continuous', /, &
+         ' variables are probably appropriate to mention at this point.', /, 5x,  &
+         '1.  The switch closing times which are printed along with peak voltages of each energization are only desired', /, &
+         9x, 'times, just as with all such times which are punched on data cards which define switches upon data input.   Since')
   write (lunit6, 644)
-644 format(9x,112htime is discretized in multiples of time-step-size 'deltat' ,   actual closure will occur at the first discrete   ,/, &
-       9x,  47hstep which does not precede the requested time.    ,/, 5x, &
-       112h2.  In the tabulation of voltage distributions which follow, an arbitrary decision had to be made concerning the   ,/, &
-       9x, 108hcolumn which is labeled  'frequency' .    The continuous variable voltage has been discretized, divided into   ,/, &
-       9x, 114hcompartments of size  'aincr'  (read from columns 25-32 of the special statistics misc. data card).   for an entry   )
+644 format (9x, "time is discretized in multiples of time-step-size 'deltat' ,   actual closure will occur at the first discrete", /, &
+         9x,  'step which does not precede the requested time.', /, 5x, &
+         '2.  In the tabulation of voltage distributions which follow, an arbitrary decision had to be made concerning the', /, &
+         9x, "column which is labeled  'frequency' .    The continuous variable voltage has been discretized, divided into", /, &
+         9x, "compartments of size  'aincr'  (read from columns 25-32 of the special statistics misc. data card).   For an entry")
   write (lunit6, 648)
-648 format ( 9x, 105hwhich is printed in a row marked as being for voltage  'vrow' ,   the associated compartment contains all  ,/, &
-       9x,  73hvoltages  'v'  which satisfy       vrow  .le.  v  .lt.  (vrow + aincr)  .    ,/, &
-       5x, 44h3.  floating-point counting (t = t + deltat), 45h is used to increment time.   Switching times, &
-       28h which are an exact multiple    ,/,  9x, 47hof the time-step thus are ambiguous;  different, &
-       43h computers may switch one step later, then.   )
+648 format (9x, "Which is printed in a row marked as being for voltage  'vrow' ,   the associated compartment contains all", /, &
+         9x, "voltages  'v'  which satisfy       vrow  .le.  v  .lt.  (vrow + aincr)  .", /, &
+         5x, '3.  floating-point counting (t = t + deltat) is used to increment time.   Switching times which are an exact multiple', /, &
+         9x, 'of the time-step thus are ambiguous;  different computers may switch one step later, then.')
   if ( ltdelt  .le.  0 )   go to 7314
   write (lunit6, 7305)
-7305 format ( //,1x)
+7305 format (//, 1x)
   write (lunit6, 7304)
-7304 format ( 60h ***********************************************************  , 12h look, look , &
-       60h************************************************************ )
+7304 format (' ***********************************************************   Look, look   ************************************************************')
   write (lunit6, 7309)  ltdelt
 7309 format ( /,  ' During this run, a total of', i4,  '  random switch closings less than time zero were generated by the random  ',/, &
        ' number generator.   But the EMTP has no way of handling such closures.   All such illegal closing times were converted  ',/, &
@@ -298,13 +292,13 @@ subroutine katalg
   character*132 ansi132
   common /comlock/ locker(2)   ! share with "over1" only
   if ( iprsup  .ge.  1 ) write (lunit6, 2467)  icat, memsav, lunit2, ltlabl
-2467 format ( /,  18h enter  "katalg" ., 32h    icat  memsav  lunit2  ltlabl        ,/,  18x,  10i8  )
+2467 format (/, ' Enter  "katalg" .    icat  memsav  lunit2  ltlabl', /, 18x, 10i8)
   if ( memsav .eq. 0 )  go to 9800  ! no table moving at all
   ! if interactive emtp control, then
   if ( m4plot .eq. 1 )  tmax = fltinf      ! make end-time of simulation infinite
   if ( memsav  .eq.  1016 )   go to 2634   ! "restore"   use
   write (lunit6, 2472)
-2472 format ( /,  20x,  '----- "memsav = 1  represents', ' request for table dumping on disk.' )
+2472 format (/, 20x, '----- "memsav = 1  represents', ' request for table dumping on disk.' )
   close (unit = lunit2)
   open (unit = lunit2, status = 'new', form = 'unformatted', file = 'tptables.bin' )
   call tables
@@ -320,13 +314,13 @@ subroutine katalg
   karray(2) = mflush
   karray(3) = newvec
   write (lunit6, 2483)  ltlabl
-2483 format (  26x,  'successful saving of emtp', ' tables as file  "tptables.bin" .', '    ltlabl  =',  i8  )
+2483 format (26x,  'Successful saving of EMTP tables as file  "tptables.bin" .    ltlabl  =',  i8)
   if ( memsav .eq. 1 )  go to 9800  ! exit module (no spy)
   go to 9700     ! exit module after "emtspy" linkage set
   !     following code services  "restore"  of  "emtspy".  memory
   !     is restored from dumping of previous "sleep" or "save":
 2634 write (lunit6, 2637)  ltlabl
-2637 format (  ' begin emtp table restoration.  ltlabl =', i7,  ' .  wait for completion.'  )
+2637 format (' Begin EMTP table restoration.  ltlabl =', i7,  ' .  Wait for completion.')
   close (unit = lunit2)
   open (unit = lunit2, status = 'old', form = 'unformatted', file = 'tptables.bin')
   call tables
@@ -336,7 +330,7 @@ subroutine katalg
   mflush = karray(2)
   newvec = karray(3)
   write (lunit6, 2642)
-2642 format (  ' restoration complete, user can now', ' begin  depositing  emtp  variables via  spy .' )
+2642 format (' Restoration complete, user can now begin  depositing  EMTP  variables via  spy .' )
   memsav = 0     !  ?????????????  table changes done.
 9700 kbreak = 1   ! lock flag for "emtspy" dialogue in "over16"
 9800 return
@@ -358,7 +352,7 @@ subroutine emtspy
   n18 = 0
   if ( iprspy .lt. 9 )  go to 5611
   write (munit6, 5608)  kbreak, kwtspy, nbreak, lockbr, nchain, jjroll, t, tbreak
-5608 format ( ' Top "emtspy".  kbreak, kwtspy, nbreak, lockbr, jjroll, nchain =', 6i4, '    t, tbreak =', 2e14.5)
+5608 format (' Top "emtspy".  kbreak, kwtspy, nbreak, lockbr, jjroll, nchain =', 6i4, '    t, tbreak =', 2e14.5)
   call window
 5611 if ( jjroll .gt. 0 )  go to 5632
   if ( kbreak .eq. 1 ) go to 5613
@@ -369,11 +363,11 @@ subroutine emtspy
   tbreak = 8877.e33
 5613 lockbr = 1
   write (munit6, 5615) nchain, t
-5615 format ( '   // Start "break" service in "emtspy".   nchain =', i3,  '   t =', e14.5)
+5615 format (//, '    Start "break" service in "emtspy".   nchain =', i3,  '   t =', e14.5)
   call window
   if ( kfile5 .eq. 1 ) go to 6258
 5617 write (prom80, 5618)
-5618 format ( ' spy:' )
+5618 format (' spy:')
   call prompt
 5623 if ( ksmspy(3) .eq. 1 ) go to 5632
   call flager
@@ -428,7 +422,7 @@ subroutine spying
   save
   if (iprspy .lt. 1) go to 31006
   write (munit6, 1006)  nchain, jjroll, kbreak, lockbr, nexmod, buff77(1:20)
-1006 format ( ' enter "spying".  nchain, jjroll, kbreak,', ' lockbr, nexmod =',  5i5,  '    buff77(1:20) =', a20 )
+1006 format (' Enter "spying".  nchain, jjroll, kbreak,', ' lockbr, nexmod =',  5i5,  '    buff77(1:20) =', a20 )
   call window
   write (*,*)  ' top spying, ksmspy(1:3) =',  ksmspy
 31006 if ( buff77(1:4) .ne. 'spy ' ) go to 51006
@@ -452,19 +446,19 @@ subroutine spying
   go to 31269
 1240 assign 31269 to nextsn
   write (prom80, 1260)
-1260 format (  ' spy:'  )
+1260 format (' spy:')
 51269 go to 9800
 31269 answ80 = buff77
   if ( iprspy .le. 9 ) go to 39843
   write (munit6, 29843)  answ80
-29843 format ( '  --- just read answ80:',  a80 )
+29843 format ( '  --- Just read answ80:', a80)
   call window
 39843 if ( answ80(1:4)  .eq.  'type'  )   go to 2506
   if (answ80(1:2) .ne. 'c ') go to 1275
   if ( kfile5  .eq.  1    .and.  kverfy  .eq.  0 ) go to 51269
   if ( icomm .ne. 0 )  go to 51269
   write (munit6, 1273)  answ80
-1273 format ( ' comment:',  a80  )
+1273 format (' Comment:', a80)
   call window
   go to 51269
 1275 if (answ80(1:1) .ne. '@')  go to 1289
@@ -472,7 +466,7 @@ subroutine spying
   !     now process user request for disk-file connection to keyboard (5):
   if ( kfile5 .ne. 1 ) go to 1278
   write (munit6, 1277)
-1277 format (  '  === reject  "@"  usage;  one such', ' file is presently connected.  try again.'  )
+1277 format ('  === Reject  "@"  usage;  one such file is presently connected.  Try again.')
   call window
   go to 1240
 1278 if ( answ80(2:2) .ne. '/' ) go to 51278
@@ -500,7 +494,7 @@ subroutine spying
         if ( n6  .gt.  80 )   go to 4542
         if ( iprspy .lt. 1 )  go to 8900
         write (munit6, 8899)  l, m, n6, answ80(n6:n6)
-8899    format ( ' next character. l, m, n6, answ80(n6) =', 3i5, 1x, a1 )
+8899    format (' Next character. l, m, n6, answ80(n6) =', 3i5, 1x, a1)
         call window
 8900    if ( m  .eq.  0     .and.  answ80(n6:n6)  .eq.  '(' ) answ80(n6:n6) = ' '
         if ( answ80(n6:n6)  .eq.  ')' )   go to 4544
@@ -509,7 +503,7 @@ subroutine spying
         m = m + 1
         if ( m  .le.  8 )  go to 4540
         write (munit6, 4539)  idmxxx
-4539    format (  '  ??? argument number',  i3, '  of  "@?"  has over 8 digits.  try again.'   )
+4539    format ('  ??? argument number',  i3, '  of  "@?"  has over 8 digits.  Try again.')
         call window
         go to 1240
 4540    ansi8(m:m) = answ80(n6:n6)
@@ -523,17 +517,17 @@ subroutine spying
      texpar(maxarg) = ansi8
      if ( iprspy .lt. 1 )  go to 1271
      write (munit6, 4543)  maxarg
-4543 format ( ' maxarg =',  i8 )
+4543 format (' maxarg =', i8)
      call window
      go to 1271
 4544 maxarg = maxarg + 1
      read  (ansi8, 1360)  texpar(maxarg)
-1360 format ( 15a1 )
+1360 format (15a1)
      if ( answ80(n6:n6)  .eq.  ')' )   go to 1271
 4549 n6 = n6 + 1
   end do
   write (munit6, 4551)
-4551 format (  '   ? ? ?  illegal  "@?"  use.', '   over 10 arguments.   try again.'  )
+4551 format ('   ? ? ?  illegal  "@?"  use.   Over 10 arguments.   Try again.')
   call window
   go to 1240
   !     any arguments have been successfully found;  now use file
@@ -555,12 +549,12 @@ subroutine spying
 1302 end do
   !     we reach here if illegal response to "spy:" prompt has been read:
 1303 write (munit6, 1304)  answ80(1:8)
-1304 format ( '   ? ? ?  illegal spy command  "',  a, '" .   try again  .....'   )
+1304 format ('   ? ? ?  illegal spy command  "',  a, '" .   Try again  .....')
   call window
   go to 1240
 1307 if ( iprspy .lt. 1 ) go to 1309
   write (munit6, 1308)  jword
-1308 format ( '   keyword found is  jword =',  i8 )
+1308 format ('   Keyword found is  jword =', i8)
   call window
 1309 jwdsav = jword
   if ( jword .gt. 63 )  go to 71309
@@ -591,18 +585,18 @@ subroutine spying
   call stoptp
   !     $$$$$$$  key word no.  4:  "help"     $$$$  $$$$  $$$$  $$$$  $$$$
 1311 write (munit6, 11312 )
-11312 format (  '    available key-word responses to the  "spy:"', '  prompt are as follows:'  )
+11312 format ('    Available key-word responses to the  "spy:"  prompt are as follows:')
   call window
   do j=1, numkey, 8
      n15 = j + 7
      if ( n15 .gt. numkey )  n15 = numkey
      write (munit6, 1313)  (spykwd(k), k=j, n15)
-1313 format ( 5x,  8a9 )
+1313 format (5x, 8a9)
      call window
 21313 end do
   jword = jwdsav
 21314 write (prom80, 1314)
-1314 format (  '       key-word of interest (all, <cr>,', ' top, bot, back):'  )
+1314 format ('       key-word of interest (all, <cr>,', ' top, bot, back):')
   assign 1315 to nextsn
   go to 9800
 1315 spycd2 = buff77(1:35)
@@ -616,7 +610,7 @@ subroutine spying
   if ( jword .gt. 0 )  go to 1317
   jword = numkey
   write (munit6, 31315)
-31315 format ( '      //// wrap around, beginning to end ////' )
+31315 format ('      //// wrap around, beginning to end ////' )
   call window
   go to 1317
 61315 if ( spycd2(1:4) .eq. 'top ' )   go to 41315
@@ -625,7 +619,7 @@ subroutine spying
   if ( jword  .le.  numkey )  go to 1317
   if ( spycd2(1:4) .eq. 'all ' )  go to 21314
   write (munit6, 81315)
-81315 format ( '      //// wrap around, end to beginning ////' )
+81315 format ('      //// wrap around, end to beginning ////' )
   call window
 41315 jword = 1
   go to 1317
@@ -702,7 +696,7 @@ subroutine spying
   if ( ivec(ind)  .eq.  1 )   go to 1394
   if ( n1 .eq. 1   .and.   n2 .eq. 1 )   go to 1460
 1394 write (ansi8, 1400)  n14
-1400 format ( 1h(,  i4,  2h)    )
+1400 format ('(',  i4,  ') ')
   heding(khead:khead+6) = ansi8(1:7)
   khead = khead + 7
   n14 = n14 + 1
@@ -712,14 +706,14 @@ subroutine spying
   go to 1496
   !     $$$$$$$  key word no.  6:  "deposit"  $$$$  $$$$  $$$$  $$$$  $$$$
 1460 write (prom80, 1480)
-1480 format ( '  send emtp variable:' )
+1480 format ('  Send EMTP variable:')
   assign 1485 to nextsn
   go to 9800
 1485 spycd2 = buff77(1:35)
   if ( spycd2(1:1) .ne. 'c'   .or.  spycd2(2:2) .ne. ' ' )  go to 1491
   if ( icomm .ne. 0 )  go to 1460
   write (munit6, 1487)  spycd2
-1487 format ( ' comment:',  a35 )
+1487 format (' Comment:', a35)
   call window
   go to 1460
 1491 if ( spycd2(1:4)  .ne.  'end ' )   go to 1720
@@ -807,7 +801,7 @@ subroutine spying
      if ( spycd2(1:8)  .eq.  symb(ind) )   go to 1780
 1740 end do
   write (munit6, 1760)  spycd2
-1760 format ( '   ? ?  sorry, no symbol match for  "', a6, '" .')
+1760 format ('   ? ?  sorry, no symbol match for  "', a6, '" .')
   call window
   go to 1460
 1780 intype = 0
@@ -819,7 +813,7 @@ subroutine spying
   if ( spycd2(1:1)  .eq.  'n' )   intype = 1
   if ( ivec(ind) .eq. 1   .or.   n2 .le. n1 )  go to 31807
   write (munit6, 1807)
-1807 format ( '    note :  this is a vector dump using a scalar', ' emtp variable.'  )
+1807 format ('    Note :  this is a vector dump using a scalar EMTP variable.')
   call window
 31807 if ( answ80(1:8)  .eq.  spykwd(5) )   go to 1340
   if ( answ80(1:8)  .eq.  spykwd(34) )   go to 3134
@@ -833,7 +827,7 @@ subroutine spying
      n22 = n22 + 1
      if ( n22  .le.  20 )   go to 1808
      write (munit6, 51807)
-51807 format ( ' sorry, spy buffer overflow.  try again ....' )
+51807 format (' Sorry, spy buffer overflow.  Try again ....')
      call window
      go to 1837
 1808 bytbuf(n22:n22) = spycd2(j:j)
@@ -843,12 +837,12 @@ subroutine spying
 1819 ansi8(1:6) = spycd2(n13+1:n13+6)
   if ( iprspy .lt. 1 ) go to 1824
   write (munit6, 1820)  ansi8
-1820 format ( ' ansi8 after alphanumeric transfer =',  a )
+1820 format (' ansi8 after alphanumeric transfer =', a)
   call window
 1824 go to 1846
   !     no equal sign means that we prompt for separate number:
 1837 write (prom80, 1840)
-1840 format ( 4x,  'new value:' )
+1840 format (4x, 'new value:')
   assign 1842 to nextsn
   go to 9800
 1842 bytbuf = buff77(1:20)
@@ -864,10 +858,10 @@ subroutine spying
   go to 1460
   !     $$$$$$$  key word no. 13:  "find"     $$$$  $$$$  $$$$  $$$$  $$$$
 2040 write (munit6, 2042)
-2042 format ( 1x,  40h    symbol      word   address      next   )
+2042 format (1x, '    symbol      word   address      next')
   call window
 2043 write (prom80, 2044)
-2044 format ( '      index   address    change      symbol :' )
+2044 format ('      index   address    change      symbol :')
 2050 assign 2048 to nextsn
   go to 9800
 2048 spycd2 = buff77(1:35)
@@ -875,7 +869,7 @@ subroutine spying
   if ( spycd2(1:8)  .eq.  'stop    '   )   go to 1240
   if ( spycd2(1:8)  .ne.  blan80(1:8)   )   go to 2052
   write (prom80, 2051)
-2051 format ( '   ? ? ?  blank emtp symbol is clearly wrong.', '  try again :'  )
+2051 format ('   ? ? ?  blank emtp symbol is clearly wrong.  Try again :')
   go to 2050
   !     first we must see if  "spycd2"  has any wild-card characters:
 2052 do i=1, 8
@@ -891,7 +885,7 @@ subroutine spying
 2063 n4 = locate(ind) - n5
   n5 = locate(ind)
   write (prom80, 2066)  ind, n5, n4
-2066 format ( 1x,  3i10,  4x, 1h: )
+2066 format (1x, 3i10, 4x, ':')
   call prompt
   go to 2050
   !     begin search for case where "d2" has one or more wild cards ("*"):
@@ -927,7 +921,7 @@ subroutine spying
 2081 n4 = locate(ind) - n5
      n6 = locate(ind)
      write (munit6, 2083)  ind, n6, n4, chard7
-2083 format ( 1x,  3i10,  6x,  a6,  ' = name  '  )
+2083 format (1x, 3i10, 6x, a6, ' = name  ')
      call window
 2086 call quiter
      if ( kwtspy .eq. 0 ) go to 2087
@@ -936,14 +930,14 @@ subroutine spying
 2087 end do
   if ( n4 .ne. 0 )  go to 2043
   write (prom80, 2088)
-2088 format ( '    sorry, no matches.   try again :' )
+2088 format ('    Sorry, no matches.   Try again :')
   go to 2050
   !     $$$$$$$  key word no. 14:  "list"     $$$$  $$$$  $$$$  $$$$  $$$$
 2092 write (munit6, 2093)  numsym
-2093 format ('    row    symbol    word    vector?    ascii?   next', 5x,  i4,  ' symbols'   )
+2093 format ('    row    symbol    word    vector?    ascii?   next', 5x,  i4,  ' symbols')
   call window
   write (prom80, 2095)
-2095 format ('  number    name   address   (yes=1)   (yes=1)   :'  )
+2095 format ('  number    name   address   (yes=1)   (yes=1)   :')
   n33 = 0
 2099 assign 2101 to nextsn
   go to 9800
@@ -973,7 +967,7 @@ subroutine spying
   if ( n2 .gt. numsym )  n2 = numsym
 2109 do i=n1, n2-1
      write (munit6, 2113)  i, symb(i), locate(i), ivec(i), iascii(i)
-2113 format ( i8, 4x, a6, i9, i8, i10 )
+2113 format (i8, 4x, a6, i9, i8, i10)
      call window
      call quiter
      if ( kwtspy .eq. 0 ) go to 2116
@@ -981,11 +975,11 @@ subroutine spying
      go to 2092
 2116 end do
   write (prom80, 3217)  n2, symb(n2), locate(n2), ivec(n2), iascii(n2)
-3217 format ( i8, 4x, a6, i9, i8, i10, 4x,  1h:  )
+3217 format (i8, 4x, a6, i9, i8, i10, 4x,  ':')
   go to 2099
   !     $$$$$$$  key word no. 16:  "break"    $$$$  $$$$  $$$$  $$$$  $$$$
 2124 write (prom80, 2125)
-2125 format (  '   send  t-break  in', ' sec. ("-" means step #):'  )
+2125 format ('   send  t-break  in', ' sec. ("-" means step #):')
   assign 2126 to nextsn
   go to 9800
 2126 call frefp1 ( buff77, tbreak )
@@ -994,12 +988,12 @@ subroutine spying
   if (tbreak .eq. 0.0)  go to 2131
   d13 = -tbreak * deltat
   write (munit6, 2128)  deltat, d13
-2128 format ( '    ok, using  deltat =',  e12.3, '  this gives  t-break =',  e13.5  )
+2128 format ('    ok, using  deltat =',  e12.3, '  this gives  t-break =',  e13.5)
   call window
   tbreak = d13
   go to 2142
 2131 write (prom80, 2136)
-2136 format (  '    send utpf overlay number nchain for', ' the break :'   )
+2136 format ('    Send utpf overlay number nchain for the break :')
   assign 2139 to nextsn
   go to 9800
 2139 call frein1 ( buff77, nbreak )
@@ -1020,12 +1014,12 @@ subroutine spying
 2402 lockbr = 0
   if ( iprspy .lt. 1 )  go to 2409
   write (munit6, 2407)
-2407 format ( ' "go" acknowledged, set lockbr = 0.'  )
+2407 format (' "go" acknowledged, set lockbr = 0.')
   call window
 2409 go to 1240
   !     $$$$$$$  key word no. 17:  "when"     $$$$  $$$$  $$$$  $$$$  $$$$
 2430 write (prom80, 2433)  twhen
-2433 format (  '  supply tmax for "save" & "restore"  [',  f8.4, ' ] :'   )
+2433 format ('  Supply tmax for "save" & "restore"  [',  f8.4, ' ] :')
   assign 2436 to nextsn
   go to 9800
 2436 bytbuf = buff77(1:20)
@@ -1037,24 +1031,24 @@ subroutine spying
 2486 if ( icomm  .eq.  0 )   go to 2491
   icomm = 0
   write (munit6, 2488)
-2488 format ('   begin displaying comment cards of  "@"  usage.' )
+2488 format ('   Begin displaying comment cards of  "@"  usage.')
   call window
   go to 1240
 2491 icomm = 1
   write (munit6, 2492)
-2492 format ('   stop showing comment cards of  "@"  usage.' )
+2492 format ('   Stop showing comment cards of  "@"  usage.')
   call window
   go to 1240
   !     $$$$$$$  key word no. 22:  "verify"   $$$$  $$$$  $$$$  $$$$  $$$$
 2494 if ( kverfy  .eq.  0 )   go to 2497
   kverfy = 0
   write (munit6, 2495)
-2495 format ( '   begin echoing commands of  "@"  file usage.' )
+2495 format ('   Begin echoing commands of  "@"  file usage.')
   call window
   go to 1240
 2497 kverfy = 1
   write (munit6, 2499)
-2499 format ( '   stop echoing commands of  "@"  file usage.' )
+2499 format ('   Stop echoing commands of  "@"  file usage.')
   call window
   go to 1240
   !     $$$$$$$  key word no. 21:  "type?"    $$$$  $$$$  $$$$  $$$$  $$$$
@@ -1063,7 +1057,7 @@ subroutine spying
   ansi32 = 'inclspy .dat                    '
   if ( iprspy .lt. 1 )  go to 2509
   write (munit6, 2508)   answ80(1:20)
-2508 format ( '   start "type" service.  answ80(1:20) =', a20 )
+2508 format ('   Start "type" service.  answ80(1:20) =', a20)
   call window
 2509 if ( answ80(5:7) .eq. '?  ' ) n16 = 1
   if ( answ80(5:7) .eq. ' ? ' ) n16 = 1
@@ -1083,7 +1077,7 @@ subroutine spying
 2517 end do
 2519 if ( iprspy .lt. 1 )  go to 32521
   write (munit6, 2521)  n12, n13
-2521 format ( ' file name bounded.  n12, n13 =',  2i5 )
+2521 format (' File name bounded.  n12, n13 =',  2i5)
   call window
 32521 if ( n13 .ne. n12 )  go to 2524
   ansi32(8:8) = answ80(n12:n12)
@@ -1096,14 +1090,14 @@ subroutine spying
 2524 inquire (file=answ80(n12:n13), exist=logvar)
   if ( logvar ) go to 2529
   write (munit6, 2526) answ80(n12:n13)
-2526 format ( '   ?? ??  sorry, no such file named : ', a32 )
+2526 format ('   ?? ??  sorry, no such file named : ', a32)
   call window
   go to 1240
 2529 ansi32 = blan80(1:32)
   ansi32(1:n13-n12+1) = answ80(n12:n13)
 2532 if ( answ80(1:1) .eq. '@' )  go to 2536
   write (munit6, 2534)  ansi32
-2534 format ( 20x,  ' ******  listing of file : ',  a32 )
+2534 format (20x, ' ******  Listing of file : ', a32)
   call window
 2536 muntsv(1) = munit5
   munit5 = muntsv(2)
@@ -1115,9 +1109,9 @@ subroutine spying
      kwtspy = 0
      go to 2545
 2538 read (munit5, 1269, end=2545)  buff77
-1269 format ( a80 )
+1269 format (a80)
      write (munit6, 2539)  i, buff77
-2539 format ( ' line', i4,  ': ',  a80 )
+2539 format (' Line', i4,  ': ', a80)
      call window
 2542 end do
 2545 close (unit=munit5, status='keep')
@@ -1133,10 +1127,10 @@ subroutine spying
   !     "files"  results in a display of the status of "@?" files, as
   !     previously determined by  "initsp"  as simulation began.
 2563 write (munit6, 2572)  (j, j=1, 9)
-2572 format (  '   file number :',  9i5  )
+2572 format ('   File number :', 9i5)
   call window
   write (munit6, 2576)  ( filext(j), j=1, 9 )
-2576 format (  '   inclspy?.dat:',  9(4x, a1) )
+2576 format ('   inclspy?.dat:', 9(4x, a1))
   call window
   go to 1240
   !     $$$$$$$  key word no. 24:  "sleep"    $$$$  $$$$  $$$$  $$$$  $$$$
@@ -1148,22 +1142,21 @@ subroutine spying
   go to 1240
   !     $$$$$$$  key word no. 25:  "wake"     $$$$  $$$$  $$$$  $$$$  $$$$
 2604 write (munit6, 32604)
-32604 format ( '     begin  "wake"  processing.'  )
+32604 format ('     Begin  "wake"  processing.')
   call window
   if ( n13 .ne. 1 )  go to 2611
   !     regenerate header of plot file attached to unit lunit4:
   write (munit6, 2605)
-2605 format ( '    start regenerating lunit4 header.'  )
+2605 format ('    Start regenerating lunit4 header.')
   call window
   rewind lunit4
   read (lunit4)  date1, tclock, numnam, numnvo, numbco, numbrn
   if ( lbus  .ge.  numnam    .and. lsiz12  .ge.  numnvo    .and. lbrnch .ge. numbrn )   go to 2608
   write (munit6, 2606)
-2606 format (  '   $$$$  overflow.  emtp list sizes', ' are too small to regenerate the header', &
-       ' information of the plot file.'  )
+2606 format ('   $$$$  overflow.  EMTP list sizes are too small to regenerate the header information of the plot file.')
   call window
   write (munit6, 2607)  numnam, numnvo, numbrn
-2607 format (  '       abort this command.  sorry.', '   numnam, numnvo, numbrn =', 3i5 )
+2607 format ('       Abort this command.  sorry.   numnam, numnvo, numbrn =', 3i5)
   call window
   go to 1240
 2608 rewind lunit4
@@ -1181,10 +1174,10 @@ subroutine spying
   flstat(2) = -d2
   if ( lstat(16) .eq. ltlabl )  go to 2614
   write (munit6, 2612)
-2612 format ( '   ????  sorry, present emtp dimensions', ' do not agree with those of the disk file' )
+2612 format ('   ????  sorry, present EMTP dimensions do not agree with those of the disk file')
   call window
   write (munit6, 32612)
-32612 format ( 9x, 'just attached.  sleeping simulation can not', ' be awakened.  abort the command.  sorry.'  )
+32612 format (9x, 'Just attached.  Sleeping simulation can not be awakened.  Abort the command.  Sorry.')
   call window
   go to 1240
 2614 kill = 7733
@@ -1192,7 +1185,7 @@ subroutine spying
   go to 2402
   !     $$$$$$$  key word no. 29:  "catalog"  $$$$  $$$$  $$$$  $$$$  $$$$
 2907 write (prom80, 2910)
-2910 format ( ' send complete, legal disk-file name:'  )
+2910 format (' Send complete, legal disk-file name:')
   assign 2913 to nextsn
   go to 9800
 2913 ansi32 = buff77(1:32)
@@ -1205,7 +1198,7 @@ subroutine spying
 2914 write (luntsp, 1269)  file6(j)
   end do
   write (munit6, 2917)  luntsp, numcrd
-2917 format ( '    ---- write to disk via unit',  i4, '   is now complete.  number of cards =',  i5  )
+2917 format ('    ---- Write to disk via unit',  i4, '   is now complete.  Number of cards =', i5)
   call window
   close (unit=luntsp, status='keep')
   go to 1240
@@ -1219,11 +1212,11 @@ subroutine spying
   !     $$$$$$$  key word no. 31:  "step"     $$$$  $$$$  $$$$  $$$$  $$$$
 2937 if ( kbreak .eq. 0 )  go to 2944
   write (munit6, 2941)
-2941 format ( '   ---  toggle to "off"  (no more stepping)'  )
+2941 format ('   ---  Toggle to "off"  (no more stepping)')
   call window
   go to 2946
 2944 write (munit6, 2945)
-2945 format ( '   ---  toggle to "on"  (begin stepping)'  )
+2945 format ('   ---  Toggle to "on"  (begin stepping)')
   call window
 2946 kbreak = kbreak + 1
   if ( kbreak .ge. 2 )  kbreak = 0
@@ -1231,7 +1224,7 @@ subroutine spying
   go to 1240
   !     $$$$$$$  key word no. 32:  "debug"    $$$$  $$$$  $$$$  $$$$  $$$$
 2964 write (prom80, 2967)   iprspy
-2967 format ( '   send new "iprspy" value  [',  i3,  '  ] :'  )
+2967 format ('   Send new "iprspy" value  [',  i3,  '  ] :')
   assign 2969 to nextsn
   go to 9800
 2969 call frein1 ( buff77, iprspy )
@@ -1242,59 +1235,59 @@ subroutine spying
   n14 = 1
   n15 = 0
 2975 write (prom80, 2976)
-2976 format ( '   send emtp data file name (control) :' )
+2976 format ('   Send EMTP data file name (control) :')
   assign 2979 to nextsn
   go to 9800
 2979 ansi32 = buff77(1:32)
   if ( ansi32(1:8) .ne. 'control ' ) go to 2984
   write (prom80, 2981)
-2981 format ( ' send disk card numbers n-beg and n-end :'  )
+2981 format (' Send disk card numbers n-beg and n-end :')
   assign 32981 to nextsn
   go to 9800
 32981 call frein2(buff77, n12, n13)
   write (prom80, 2982)
-2982 format (  ' send n-beg in emtp, lunit5 offset :'  )
+2982 format (' Send n-beg in EMTP, lunit5 offset :')
   assign 2983 to nextsn
   go to 9800
 2983 call frein2(buff77, n14, n15)
   go to 2975
 2984 if ( iprspy .lt. 1 ) go to 32985
   write (munit6, 2985)  n12, n13, n14, n15
-2985 format ( ' prepare to open.  n12, n13, n14, n15 =', 4i8 )
+2985 format (' Prepare to open.  n12, n13, n14, n15 =', 4i8)
   call window
 32985 close (lunt14)
   open (unit=lunt14, status='unknown', file=ansi32)
   if ( iprspy .lt. 1 ) go to 2987
   write (munit6, 2986)
-2986 format ( ' after file open (it worked).'  )
+2986 format (' After file open (it worked).')
   call window
 2987 do l=1, n13
      if ( l .ge. n12 )  go to 2988
      read (lunt14, 2991)  ansi8
      go to 2994
 2988 read (lunt14, 2991, end= 2998)  file6(n14)
-2991 format ( a80 )
+2991 format (a80)
      if ( file6(n14)(1:4) .eq. 'eof ' )  go to 2998
      n14 = n14 + 1
      if ( n14 .le. limcrd )  go to 2994
      write (munit6, 2191)
-2191 format ( '   ****  warning.   card image buffer has', ' filled.  disk read is truncated.'      )
+2191 format ('   ****  Warning.   Card image buffer has filled.  Disk read is truncated.')
      call window
      write (munit6, 2192)  limcrd
-2192 format ( '                    storage capacity in', ' cards = limcrd =',  i5  )
+2192 format ('                    Storage capacity in cards = limcrd =', i5)
      call window
      go to 2998
 2994 end do
   write (munit6, 2996)  n13
-2996 format ( '    note :  no  end-of-file  encountered.', '   stop reading after card number',  i5  )
+2996 format ('    Note :  no  end-of-file  encountered.   Stop reading after card number', i5)
   call window
 2998 if ( numcrd .lt. n14 ) numcrd = n14 - 1
   write (munit6, 2999)  numcrd
-2999 format (  i9,  '  =  numcrd  (upper bound on card-image', ' storage in file6 cache).'  )
+2999 format (i9, '  =  numcrd  (upper bound on card-image storage in file6 cache).')
   call window
   if ( l .gt. 1 )  go to 3006
   write (munit6, 3004)
-3004 format ( '  ? ? ? ? ?   warning.  data file is empty.', '   did user misspell the file name?'  )
+3004 format ('  ? ? ? ? ?   warning.  Data file is empty.   Did user misspell the file name?')
   call window
 3006 close ( unit=lunt14 )
   numdcd = n15
@@ -1303,7 +1296,7 @@ subroutine spying
 3095 if ( numrmp .le. 0 ) go to 3099
   !     beginning of loop over ramps having same begin and ending times:
 3096 write (prom80, 3098)
-3098 format ( ' send "t-begin", "t-end" (end, show, rewind) :' )
+3098 format (' Send "t-begin", "t-end" (end, show, rewind) :')
   assign 33098 to nextsn
   go to 9800
 33098 bytbuf = buff77(1:20)
@@ -1318,15 +1311,15 @@ subroutine spying
 3100 if ( bytbuf(1:4)  .ne.  'show' )   go to 3116
   !     following code provides confirmation of the ramped deposits:
   write (munit6, 3102)
-3102 format (  ' row  name   index   num    t-begin        t-end', '        f-begin        f-end'     )
+3102 format (' row  name   index   num    t-begin        t-end        f-begin        f-end')
   call window
   do j=1, numrmp
      write (munit6, 3103) j, symbrp(j), indxrp(j), looprp(j),  tbegrp(j), tendrp(j), fbegrp(j), fendrp(j)
-3103 format ( 1x, i2,  2x, a6, 2i6,  4e14.5  )
+3103 format (1x, i2,  2x, a6, 2i6, 4e14.5)
      call window
 3104 end do
   write (munit6, 3105)  tminrp, tmaxrp
-3105 format ( '         no ramping before',  e13.4,  '  or after',  e13.4,  '  sec.'  )
+3105 format ('         No ramping before',  e13.4,  '  or after', e13.4, '  sec.')
   call window
   go to 3096
 3116 call frefp2 ( bytbuf, tim1rp, tim2rp )
@@ -1334,7 +1327,7 @@ subroutine spying
   if ( tim2rp  .lt.  0.0 ) tim2rp = tim1rp + abs ( tim2rp )
   !     beginning of loop over function values (for given times):
 3122 write (prom80, 3125)
-3125 format ( ' send "f-begin", "f-end" (end) : '  )
+3125 format (' Send "f-begin", "f-end" (end) : ')
   assign 3128 to nextsn
   go to 9800
 3128 bytbuf = buff77(1:20)
@@ -1353,7 +1346,7 @@ subroutine spying
   kanal = 1
   if ( numrmp  .le.  20 )   go to 3135
   write (munit6, 23134)
-23134 format (   '  ** **  table overflow.   erase all', '  "ramp"  entries, and start again ....' )
+23134 format ('  ** **  Table overflow.   Erase all  "ramp"  entries, and start again ....')
   call window
   go to 3095
 3135 memrmp(numrmp) = n9 + 1
@@ -1370,7 +1363,7 @@ subroutine spying
   rampsl(numrmp) = (val2rp - val1rp) / (tim2rp - tim1rp)
   rampcn(numrmp)  =   val2rp  -  rampsl(numrmp) * tim2rp
   write (prom80, 3136)
-3136 format (  '     [y] change? (0=no, 1=yes) :'  )
+3136 format ('     [y] change? (0=no, 1=yes) :')
   assign 43137 to nextsn
   go to 9800
 43137 call frein1 ( buff77, n8 )
@@ -1380,7 +1373,7 @@ subroutine spying
   if ( tmaxrp .lt. tendrp(numrmp) )  tmaxrp = tendrp(numrmp)
   if ( n1 .gt. ibr )  go to 3131
   write (munit6, 3137)  n1, ibr
-3137 format ( '  %%  %%  cancel last "ramp" request.', '  row number',  i4,  '  does not exceed ibr =', i4 )
+3137 format ('  %%  %%  Cancel last "ramp" request.  row number',  i4,  '  does not exceed ibr =', i4)
   call window
   numrmp = numrmp - 1
   go to 3131
@@ -1390,45 +1383,45 @@ subroutine spying
 3153 call time44 ( spytim(1) )
   call date44 ( spdate(1) )
   write (munit6, 3158)  t, tmax, deltat, spytim, spdate
-3158 format ( 3x,  3ht =,  e13.6,  3x,  6htmax =,  e11.4,  3x, 8hdeltat =,  e11.4,  3x,  2a4,  2x,  2a4 )
+3158 format (3x, 't =',  e13.6, 3x, 'tmax =', e11.4, 3x, 'deltat =', e11.4, 3x, 2a4, 2x, 2a4)
   call window
   go to 1240
   !     $$$$$$$  key word no. 36:  "tek"      $$$$  $$$$  $$$$  $$$$  $$$$
 3174 write (munit6, 3177)
-3177 format ( '  >< to tamper with the rolling vector plot,  send', ' choice.'    )
+3177 format ('  >< To tamper with the rolling vector plot,  send choice.')
   call window
 3178 write (prom80, 3179)
-3179 format ( '  >< option (mark, delay, inner, overlap,', ' end, help) : ' )
+3179 format ('  >< Option (mark, delay, inner, overlap, end, help) : ' )
   assign 3180 to nextsn
   go to 9800
 3180 ansi8 = buff77(1:8)
   if ( ansi8 .ne. 'help    ' ) go to 3186
   write (munit6, 3181)
-3181 format (  '     mark  ---- for instantaneous marking of curves', ' on tek screen;'                   )
+3181 format ('     Mark  ---- for instantaneous marking of curves on tek screen;')
   call window
   write (munit6, 33181)
-33181 format (  '     delay  --- to control how simultaneous the', ' rolling is to be;'                )
+33181 format ('     Delay  --- to control how simultaneous the rolling is to be;')
   call window
   write (munit6, 43181)
-43181 format (  '     inner  ---- to  call timval  (the "inner:"', ' level of ploting);'           )
+43181 format ('     Inner  ---- to  call timval  (the "inner:" level of ploting);')
   call window
   write (munit6, 53181)
-53181 format (  '     overlap  -- to modify the percent overlap', ' for new-page plot;'           )
+53181 format ('     Overlap  -- to modify the percent overlap for new-page plot;')
   call window
   write (munit6, 3182)
-3182 format (  '     end   ---- for return to  "spy:"  prompt.'   )
+3182 format ('     End   ---- for return to  "spy:"  prompt.')
   call window
   go to 3178
 3186 if ( ansi8 .ne. 'mark    ' )   go to 3193
   write (prom80, 3189)  ksymbl
-3189 format (  '    send repeat frequency after', ' immediate 1st one [',  i6,  ' ] :'  )
+3189 format ('    Send repeat frequency after immediate 1st one [',  i6,  ' ] :')
   assign 3191 to nextsn
   go to 9800
 3191 call frein1 ( buff77, ksymbl )
   go to 3178
 3193 if ( ansi8 .ne. 'delay   ' ) go to 3207
   write (prom80, 3202)  kslowr
-3202 format  ( '  send new rolling frequency [', i5, ' ] :' )
+3202 format ('  Send new rolling frequency [', i5, ' ] :')
   assign 3204 to nextsn
   go to 9800
 3204 call frein1 ( buff77, kslowr )
@@ -1442,14 +1435,14 @@ subroutine spying
   go to 9803
 3209 if ( ansi8 .ne. 'overlap ' )  go to 3214
   write (prom80, 3211)  inchlp
-3211 format ( '    send time-overlap percentage [',  i3,  ' ] :'  )
+3211 format ('    Send time-overlap percentage [',  i3,  ' ] :'  )
   assign 3204 to nextsn
   go to 9800
 3212 call frein1 ( buff77, inchlp )
   go to 3178
 3214 if ( ansi8 .eq. 'end     ' )  go to 1240
   write (munit6, 3227)
-3227 format ( '   sorry,  spy  does not understand.   come again ...' )
+3227 format ('   Sorry,  spy  does not understand.   Come again ...')
   call window
   go to 3178
   !     $$$$$$$  key word no. 37:  "branch"   $$$$  $$$$  $$$$  $$$$  $$$$
@@ -1470,10 +1463,10 @@ subroutine spying
   if ( n33 .ge. 2 )  n33 = 0
 3310 if ( n33 .eq. 0 )  go to 3314
   write (prom80, 3311)
-3311 format ( 4h row, 13x, 2hci,  13x, 2hck,  12x, 3hcik, 12x, 3hcik,  10x, 5hckkjm,  1h:  )
+3311 format (' row', 13x, 'ci', 13x, 'ck', 12x, 'cik', 12x, 'cik', 10x, 'ckkjm', ':')
   go to 3306
 3314 write (prom80, 3315)
-3315 format ( ' row  name  name-k name-m kbus mbus lgth  nr', ' kodebr kodsem litype imodel indhst:'  )
+3315 format (' row  name  name-k name-m kbus mbus lgth  nr kodebr kodsem litype imodel indhst:')
   go to 3306
 3317 if ( bytbuf(1:4) .eq. spykwd(37)(1:4)  .or. bytbuf(1:4) .eq. spykwd(1)(1:4) ) go to 3310
   !     Since not key-word response, we extract (n1,n2) integer
@@ -1502,11 +1495,11 @@ subroutine spying
   n7 = namebr(i)
   write (munit6, 3328) i, texvec(n7), bus1, bus2, kbus(i), mbus(i), length(i), nr(i), kodebr(i), kodsem(i), &
        litype(i), imodel(i), indhst(i)
-3328 format ( 1x, i3, 1x, a6, 1x, a6, 1x, a6,  3i5,  i4,  5i7 )
+3328 format (1x, i3, 1x, a6, 1x, a6, 1x, a6, 3i5, i4, 5i7)
   call window
 3329 if ( n33 .ne. 1 )  go to 3334
   write (munit6, 3331) i, ci(i), ck(i), cik(i), cki(i), ckkjm(i)
-3331 format ( 1x, i3,  5e15.6  )
+3331 format (1x, i3, 5e15.6)
   call window
 3334 i = i + n27
   if ( i .le. n2 )  go to 3323
@@ -1534,17 +1527,17 @@ subroutine spying
   go to 1240
   !     $$$$$$$  key word no. 57:  "open"     $$$$  $$$$  $$$$  $$$$  $$$$
 3568 write (prom80, 3571)
-3571 format ( '    next unit, name (i2, a32 ) :'  )
+3571 format ('    Next unit, name (i2, a32 ) :')
   assign 3573 to nextsn
   go to 9800
 3573 read (buff77, 3576)  n7, ansi32
-3576 format ( i2, a32 )
+3576 format (i2, a32)
   if ( n7 .le. 0 )  go to 1240
   open (unit=n7, status='unknown', file=ansi32)
   go to 3568
   !     $$$$$$$  key word no. 58:  "close"    $$$$  $$$$  $$$$  $$$$  $$$$
 3584 write (prom80, 3587)
-3587 format ( '    next unit, status (i2, a32) :' )
+3587 format ('    next unit, status (i2, a32) :')
   assign 3591 to nextsn
   go to 9800
 3591 read (buff77, 3576)  n7, ansi32
@@ -1558,7 +1551,7 @@ subroutine spying
   !     $$$$$$$  key word no. 59:  "sm"       $$$$  $$$$  $$$$  $$$$  $$$$
 3606 if ( nchain .ge. 16   .and. nst .gt. 0 ) go to 43606
   write (munit6, 3607)
-3607 format ( '   ?? ??  no s.m. data present or not yet', ' in time-step loop.'  )
+3607 format ('   ?? ??  no s.m. data present or not yet in time-step loop.')
   call window
   go to 1240
 43606 ksmspy(3) = 1
@@ -1571,19 +1564,19 @@ subroutine spying
   go to 9800
 3609 if ( iprspy .lt. 1 ) go to 83609
   write (munit6, 23609)  ksmspy(2)
-23609 format ( ' at s.n. 3609 of "spying".  ksmspy(2) =', i4 )
+23609 format (' At s.n. 3609 of "spying".  ksmspy(2) =', i4)
   call window
 83609 if ( ksmspy(2) .eq. 0 ) go to 3608
   ksmspy(3) = 0
   write (prom80, 43609)  ksmspy(2)
-43609 format ( '  s.m.', i3,  '  wanted (y or n) ? :'  )
+43609 format ('  s.m.', i3, '  wanted (y or n) ? :')
   ksmspy(1) = +1
   assign 3610 to nextsn
   go to 9800
 3610 if ( buff77(1:1) .eq. 'n' )  go to 43606
   ksmspy(1) = +1
 3611 write (prom80, 3612)
-3612 format ( '     send s.m. class (elec, mech, elva, meva,', ' all, end) :'  )
+3612 format ('     Send s.m. class (elec, mech, elva, meva,', ' all, end) :')
   assign 3613 to nextsn
   go to 9800
 3613 n14 = ksmspy(2)
@@ -1591,7 +1584,7 @@ subroutine spying
   if ( buff77(1:4) .ne. 'elec'   .and. buff77(1:4) .ne. 'all ' )  go to 43615
   k2 = ( n14-1 ) * 101
   write (munit6, 33614)
-33614 format ( '             ld            laf             lf', '           lakd           lfkd' )
+33614 format ('             ld            laf             lf           lakd           lfkd')
   call window
   xl = elp( k2+20 )
   d3 = elp( k2+1 ) + xl
@@ -1600,10 +1593,10 @@ subroutine spying
   d6 = elp( k2+4 )
   d8 = elp( k2+5 )
   write (munit6, 53614)   d3, d4, d5, d6, d8
-53614 format( 5e15.7 )
+53614 format (5e15.7)
   call window
   write ( munit6, 63614 )
-63614 format ( '            lkd             rf            rkd', '             lq            lag' )
+63614 format ('            lkd             rf            rkd             lq            lag')
   call window
   d3 = ( elp( k2+6 ) + elp( k2+63 ) ) / factom
   d4 = elp( k2+7 )
@@ -1613,7 +1606,7 @@ subroutine spying
   write (munit6, 53614)  d3, d4, d5, d6, d8
   call window
   write (munit6, 73614)
-73614 format ( '             lg           lakq           lgkq', '            lkq             rg' )
+73614 format ('             lg           lakq           lgkq            lkq             rg')
   call window
   d3 = ( elp( k2+11 ) + elp( k2+64 ) ) / factom
   d4 = elp( k2+12 )
@@ -1622,8 +1615,8 @@ subroutine spying
   d8 = elp( k2+15 )
   write (munit6, 53614)  d3, d4, d5, d6, d8
   call window
-  write( munit6, 83614 )
-83614 format ( '            rkq             l0             r0', '         agline             ra' )
+  write ( munit6, 83614 )
+83614 format ('            rkq             l0             r0         agline             ra')
   call window
   d3 = elp( k2+16 )
   d4 = 1.0 / elp( k2+17 )
@@ -1634,7 +1627,7 @@ subroutine spying
   write (munit6, 53614)  d3, d4, d5, xl, d8
   call window
   write (munit6, 23615)
-23615 format ( '           rat1         dsat10         dsat12', '         qsat10         qsat12' )
+23615 format ('           rat1         dsat10         dsat12         qsat10         qsat12')
   call window
   k3 = k2 + 21
   k2 = k2 + 25
@@ -1645,13 +1638,13 @@ subroutine spying
   k3 = ( n14-1 ) * 30  + 12
   numask = ismdat( k3 )
   write ( munit6, 53615 )
-53615 format ( '  numask   nlocg   nloce     cnp' )
+53615 format ('  numask   nlocg   nloce     cnp')
   call window
   write (munit6, 63615)  numask, ismdat(k3+1), ismdat(k3+2), elp(k2)
-63615 format ( 3i8, f8.1 )
+63615 format (3i8, f8.1)
   call window
   write ( munit6, 83615 )
-83615 format ( '           hico            dsm            hsp', '            dsr' )
+83615 format ('           hico            dsm            hsp            dsr')
   call window
   k2 = 0
   kp = 0
@@ -1670,8 +1663,8 @@ subroutine spying
      call window
 43616 end do
 13617 if ( buff77(1:4) .ne. 'meva'   .and. buff77(1:4) .ne. 'all ' )  go to 13618
-  write( munit6, 23617 )
-23617 format( ' mechanical angles in units of radians ' )
+  write ( munit6, 23617 )
+23617 format(' Mechanical angles in units of radians ')
   call window
   k3 = ( n14-1 ) * 30 + 12
   numask = ismdat( k3 )
@@ -1688,34 +1681,34 @@ subroutine spying
   call window
   k3 = k2 + 1
   k2 = k2 + numask
-  write( munit6, 33617 )
-33617 format( ' mechanical speeds in units of  radians/sec ' )
+  write ( munit6, 33617 )
+33617 format(' Mechanical speeds in units of  radians/sec ')
   call window
   write (munit6, 53614)  ( histq( k1 ), k1 = k3, k2 )
   call window
 13618 if ( buff77(1:4) .ne. 'elva'  .and. buff77(1:4) .ne. 'all ' )  go to 3611
-  write( munit6, 23618 )
-23618 format( '             id             iq             i0', '             if            ikd' )
+  write ( munit6, 23618 )
+23618 format('             id             iq             i0             if            ikd')
   call window
   k2 = ( n14-1 ) * 24
   k3 = k2 + 1
   k2 = k2 + 5
   write (munit6, 53614)  ( cu( k1 ), k1 = k3, k2 )
   call window
-  write( munit6, 33618 )
-33618 format( '             ig            ikq             ia', '             ib             ic' )
+  write ( munit6, 33618 )
+33618 format('             ig            ikq             ia             ib             ic')
   call window
   k3 = k2 + 1
   k2 = k2 + 2
   write (munit6, 53614)  cu( k3 ), cu( k2 ), ( smoutv( k1 ), k1 = 1, 3 )
   call window
-  write( munit6, 43618 )
-43618 format( '             vd             vq             v0', '             vf             va' )
+  write ( munit6, 43618 )
+43618 format('             vd             vq             v0             vf             va')
   call window
   write (munit6, 53614)  ( smoutv( k1 ), k1 = 4, 8 )
   call window
-  write( munit6, 53618 )
-53618 format( '             vb             vc            teq', '           texc' )
+  write ( munit6, 53618 )
+53618 format('             vb             vc            teq           texc')
   call window
   write (munit6, 53614)  ( smoutv( k1 ), k1 = 9, 12 )
   call window
@@ -1723,7 +1716,7 @@ subroutine spying
   go to 3611
   !     $$$$$$$  key word no. 60:  "honk"     $$$$  $$$$  $$$$  $$$$  $$$$
 3623 write (prom80, 3626)
-3626 format ( '   send severity level of alert (1 to 10) :' )
+3626 format ('   Send severity level of alert (1 to 10) :')
   assign 3629 to nextsn
   go to 9800
 3629 call frein1 ( buff77, n24 )
@@ -1731,7 +1724,7 @@ subroutine spying
   go to 1240
   !     $$$$$$$  key word no. 63:  "wait"     $$$$  $$$$  $$$$  $$$$  $$$$
 3644 write (prom80, 3647)
-3647 format ( '     send desired hibernation time in seconds :' )
+3647 format ('     Send desired hibernation time in seconds :')
   assign 3649 to nextsn
   go to 9800
 3649 call frefp1 ( buff77, d13 )
@@ -1739,14 +1732,14 @@ subroutine spying
   go to 1240
   !     $$$$$$$  key word no. 12:  "echo"     $$$$  $$$$  $$$$  $$$$  $$$$
 3673 write (prom80, 3676)
-3676 format ( '    send desired operation (begin, file, show) :' )
+3676 format ('    Send desired operation (begin, file, show) :')
   assign 3681 to nextsn
   go to 9800
 3681 if ( buff77(1:6) .ne. 'begin ' )  go to 3686
   kspsav = limcrd + 1
   n23 = limcrd - numcrd
   write (munit6, 3683)  n23
-3683 format ( '         ok, up to a maximum of',  i7, '   commands can be accumulated, if no more data.' )
+3683 format ('         Ok, up to a maximum of',  i7, '   commands can be accumulated, if no more data.')
   call window
   go to 1240
 3686 if ( buff77(1:5) .ne. 'file ' )  go to 3702
@@ -1764,7 +1757,7 @@ subroutine spying
 9800 nexmod = 2
 9803 if ( iprspy .lt. 1 ) go to 9811
   write (munit6, 9807) jjroll, kbreak, lockbr, nchain, prom80(1:20)
-9807 format (  ' exit "spying".  jjroll, kbreak, lockbr,', ' nchain =',  4i5,  '   prom80(1:20) =',  a20  )
+9807 format (' Exit "spying".  jjroll, kbreak, lockbr, nchain =',  4i5,  '   prom80(1:20) =', a20)
   call window
 9811 if ( prom80(1:8) .eq. '        ' )  go to 9833
   if ( kfile5 .eq. 1 ) go to 9833
@@ -1789,7 +1782,7 @@ subroutine spyink
   data text1 /  6htamper  /
   if ( iprspy .lt. 1 ) go to 1003
   write (munit6, 1002) nchain, jjroll, kbreak, lockbr, nexmod
-1002 format ( ' Enter "spying".  nchain  jjroll  kbreak', '  lockbr, nexmod =',  5i5 )
+1002 format (' Enter "spying".  nchain  jjroll  kbreak  lockbr, nexmod =', 5i5)
   call window
 1003 if ( nexmod .ne. 3 ) go to 1004
   nexmod = 0
@@ -1830,10 +1823,10 @@ subroutine spyink
   assign 2620 to nextsn
   go to 9800
 2620 read (buff77, 2623)  char1, bytbuf
-2623 format ( a1, a20 )
+2623 format (a1, a20)
   if ( iprspy .lt. 1 )  go to 2626
   write (munit6, 2622)  char1,  bytbuf(ip:ip+9)
-2622 format ( ' char1, bytbuf(1:10) after read:', a2, 1x, a10 )
+2622 format (' char1, bytbuf(1:10) after read:', a2, 1x, a10)
   call window
 2626 if ( char1  .eq.  'f' )   go to 2669
   if ( char1  .eq.  's'  )   go to 2669
@@ -1846,13 +1839,13 @@ subroutine spyink
   if ( char1  .eq.  'r' )   go to 2629
   if ( char1  .eq.  ' '  )   go to 2629
   write (munit6, 42622)
-42622 format (  '     sorry, 1st character is meaningless.', '   try again .... '     )
+42622 format ('     Sorry, 1st character is meaningless.   Try again .... ')
   call window
   go to 2618
 2629 call sosrng ( n17 )
   if ( iprspy .lt. 2 )  go to 2633
   write (munit6, 2632)  n17, lidnt1, lidnt2
-2632 format ( ' n17, lidnt1, lidnt2 =',  3i8 )
+2632 format (' n17, lidnt1, lidnt2 =', 3i8)
   call window
 2633 if ( n17  .gt.  0 )   go to 2618
   if ( char1  .eq.  'i' )  go to 2695
@@ -1868,7 +1861,7 @@ subroutine spyink
      lidnt2 = j - 1
      go to 2618
 2639 write (munit6, 2667)  j, file6(j)
-2667 format ( 1x, i4,  1x,  a80 )
+2667 format (1x, i4, 1x, a80)
      call window
 2665 end do
   linspn = lidnt2 - lidnt1
@@ -1884,12 +1877,12 @@ subroutine spyink
   if ( n5  .eq.  0 )   go to 2671
   if ( n4  .eq.  1 )   go to 2673
   write (munit6, 32670)
-32670 format ('  illegal "*f" --- string not terminated by "@".' )
+32670 format ('  Illegal "*f" --- string not terminated by "@".')
   call window
   go to 2618
 2671 if ( mstrng  .eq.  1 ) go to 2672
   write (munit6, 22671)
-22671 format (  '  illegal "*f" --- blank string, but no', ' earlier usage for reference.'  )
+22671 format ('  Illegal "*f" --- blank string, but no earlier usage for reference.')
   call window
   go to 2618
   !2672 call movers ( bytfnd(1), bytbuf(1), 20 )    ! restore old string
@@ -1912,12 +1905,12 @@ subroutine spyink
 2683 end do
   l = 0
   write (munit6, 2686)
-2686 format (  ' string not found, search failed'  )
+2686 format (' String not found, search failed')
   call window
   linnow = linnow - 1
 2691 if ( l .le. 0 )  go to 2693
   write (munit6, 2692)  j,  file6(j)
-2692 format ( i5, 1x,  a80 )
+2692 format (i5, 1x,  a80)
   call window
 2693 bytfnd = bytbuf
   mstrng = 1
@@ -1928,12 +1921,12 @@ subroutine spyink
   linnow = lidnt1
 2701 if ( n1  .lt. 20 )   go to 2703
   write (munit6, 52701)
-52701 format ( '    filled working storage of 20 lines.', '   truncated insertion now in progress.'  )
+52701 format ('    Filled working storage of 20 lines.   Truncated insertion now in progress.')
   call window
   go to 2704
 2703 linnow = linnow + 1
   write (prom80, 2702)  linnow
-2702 format ( 1x, i4,  1h   )
+2702 format (1x, i4, ' ')
   assign 52703 to nextsn
   go to 9800
 52703 if ( buff77(1:1) .ne. '@'  )  go to 2711
@@ -1979,7 +1972,7 @@ subroutine spyink
   if ( bytbuf(1:1) .eq.  '1'   .or.  bytbuf(1:1) .eq.  '2'   .or.  bytbuf(1:1) .eq.  '3'   .or. bytbuf(1:1) .eq.  '4') file6b(j)(80:80) = bytbuf(1:1)
   if ( bytbuf(2:2) .ne. file6(j)(80:80)) go to 2738
   write (munit6, 2737)  bytbuf(1:1)
-2737 format (  '   illegal col. 80 value  "',  a1, '" .   cancel substitution.'   )
+2737 format ('   Illegal col. 80 value  "',  a1, '" .   Cancel substitution.')
   call window
 2738 j = j + 1
   if ( j  .le.  numcrd )   go to 2736
@@ -1988,7 +1981,7 @@ subroutine spyink
   !     following code is for  "*8,?"  case, to deposit in column 80:
 2743 if ( bytbuf(1:1) .eq. ',' )  go to 2749
 2744 write (munit6, 2746)
-2746 format (   ' sorry,  "*8"  must be followed by a', ' comma and digit 1-4, or blanks.'     )
+2746 format (' Sorry,  "*8"  must be followed by a comma and digit 1-4, or blanks.')
   call window
   go to 2618
 2749 file6b(linnow)(80:80) = bytbuf(2:2)
@@ -1998,11 +1991,11 @@ subroutine spyink
   !     following code is for  "*rule"  request for column marking:
 2756 if ( bytbuf(3:3) .eq.  ' ' )  go to 2758
   write (munit6, 2759)
-2759 format ( 1x,  '1234567890123456789012345678901234567890', '1234567890123456789012345678901234567890'  )
+2759 format (1x,  '12345678901234567890123456789012345678901234567890123456789012345678901234567890')
   call window
   go to 2761
 2758 write (munit6, 2760)
-2760 format ( 5x,  '1234567890123456789012345678901234567890', '1234567890123456789012345678901234567890'  )
+2760 format (5x, '12345678901234567890123456789012345678901234567890123456789012345678901234567890')
   call window
 2761 go to 2618
   !     the following is for  "*s"  processing, after branch from the
@@ -2010,7 +2003,7 @@ subroutine spyink
 2763 k = k + 1
   if ( iprspy .lt. 1 ) go to 32764
   write (munit6, 2764)  k, l
-2764 format (   ' *s exited to 2763.  k, l =',  2i8  )
+2764 format (' *s exited to 2763.  k, l =', 2i8)
   call window
 32764 n7 = k - l
   n12 = 81 - k
@@ -2028,22 +2021,22 @@ subroutine spyink
   file6(linnow)(n7:80) = buff77(1:n14)
   if ( iprspy .lt. 1 )  go to 2781
   write (munit6, 2768)
-2768 format (   ' done with string sub.  exit to 2772.'  )
+2768 format (' Done with string sub.  Exit to 2772.')
   call window
   go to 2781
 2769 write (munit6, 2772)
-2772 format (   '   illegal  "*s" ---- 2nd  "@"  missing.'  )
+2772 format ('   Illegal  "*s" ---- 2nd  "@"  missing.')
   call window
   go to 2618
 2781 j = linnow
   if ( iprspy .lt. 1 )  go to 2691
   write (munit6, 62781)  j, n3, n4
-62781 format (  ' at 2781.  j, n3, n4 =',  3i8  )
+62781 format (' at 2781.  j, n3, n4 =', 3i8)
   call window
   go to 2691
   !     $$$$$$$  key word no. 28:  "language" $$$$  $$$$  $$$$  $$$$  $$$$
 2782 write (prom80, 2785)
-2785 format ( '   next command language operation (single,', ' entire, show, spy :'  )
+2785 format ('   Next command language operation (single, entire, show, spy :')
   assign 2786 to nextsn
   go to 9800
 2786 ansi8 = buff77(1:8)
@@ -2053,7 +2046,7 @@ subroutine spyink
 32786 assign 2787 to nextsn
   go to 9800
 2787 read (buff77, 2788) ( spykwd(j), j=n13, n14 )
-2788 format ( 10a8 )
+2788 format (10a8)
   if ( n14 .eq. numkey )  go to 2782
   n13 = n13 + 10
   n14 = n14 + 10
@@ -2062,13 +2055,13 @@ subroutine spyink
 32788 if ( ansi8 .ne. 'show    ' )   go to 2790
   do j=1, numkey, 10
      write (munit6, 2789) ( spykwd(ip), ip=j, j+9 )
-2789 format ( 1x, 10a8 )
+2789 format (1x, 10a8)
      call window
 32789 end do
   go to 2782
 2790 if ( ansi8 .ne. 'single  ' )  go to 2782
 2791 write (prom80, 2792)
-2792 format (   '      send next old and new symbols', ' as 2a8 (end) : '  )
+2792 format ('      Send next old and new symbols as 2a8 (end) : ')
   call prompt
   assign 2793 to nextsn
   go to 9800
@@ -2079,7 +2072,7 @@ subroutine spyink
      if ( ansi8 .eq. spykwd(j) )  go to 2798
 2794 end do
   write (munit6, 2796)  ansi8
-2796 format ( '    ? ? ?   sorry,  no such symbol found.', '   try again ...'  )
+2796 format ('    ? ? ?   sorry,  no such symbol found.   Try again ...')
   call window
   go to 2791
 2798 spykwd(j) = buff77(1:8)
@@ -2089,7 +2082,7 @@ subroutine spyink
   n33 = 0
   if ( kswtch .gt. 0 ) go to 2808
   write (munit6, 2805)
-2805 format ( '   ---  sorry, no such elements available in', ' this data case.  try another key word ...'  )
+2805 format ('   ---  Sorry, no such elements available in this data case.  Try another key word ...')
   call window
   go to 1240
 2806 assign 2807 to nextsn
@@ -2099,12 +2092,12 @@ subroutine spyink
   if ( bytbuf(1:4)  .eq.  'stop' )   go to 1240
   if ( bytbuf(1:4)  .ne.  'extr' )   go to 2814
 2810 write (prom80, 2811)
-2811 format ( 7h  name , 10x, 4hakey, 10x, 4hcrit, 8x, 6henergy, '  kswtyp  modswt  nextsw',  2h :   )
+2811 format ('  name ', 10x, 'akey', 10x, 'crit', 8x, 'energy  kswtyp  modswt  nextsw :')
   n33 = 1
   go to 2806
 2814 if ( bytbuf(1:4) .ne. spykwd(7)(1:4)  .and. bytbuf(1:4) .ne. spykwd(1)(1:4)  ) go to 2822
   write (prom80, 2815)
-2815 format ( ' row name-k name-m k(kmswit)m kpos kentnb', 3x, 6htclose,  7x,  6hadelay,  7x, 6htopen:  )
+2815 format (' row name-k name-m k(kmswit)m kpos kentnb', 3x, 'tclose', 7x, 'adelay',  7x, 'topen:')
   call prompt
   if ( n33  .gt.  0 )   go to 2810
   go to 2806
@@ -2145,18 +2138,17 @@ subroutine spyink
   n33 = 1
   n14 = kxtcs + nuk
   write (munit6, 2860)
-2860 format (  ' row  a6 tacs  source value', 3x, 12hdata field-a,  4x, 12hdata field-b, &
-       4x, 12hdata field-!      )
+2860 format (' row  a6 tacs  source value', 3x, 'data field-A', 4x, 'data field-B', 4x, 'data field-C')
   call window
   write (prom80, 2861)  n14, kud1, kud3, kud2
-2861 format ( ' no.   name', 4x,  6hoffset, i6,  3x, 6hoffset, i6, 4x,  6hoffset, i6,  4x, 6hoffset, i6,  2h :  )
+2861 format ( ' no.   name', 4x, 'offset', i6,  3x, 'offset', i6, 4x, 'offset', i6, 4x, 'offset', i6, ' :')
   go to 2859
 2862 if ( bytbuf(1:4)  .ne.  'elec'  )   go to 2868
   !     "elec" is the command for a new heading for electric-network
   !     source table:
   n33 = 0
 2863 write (prom80, 2865)
-2865 format (  22h row  name  node iform,  6x, 5hcrest, 9x, 5hsfreq,  10x, 5htime1,  9x, 8htstart :  )
+2865 format (' row  name  node iform', 6x, 'crest', 9x, 'sfreq', 10x, 'time1', 9x, 'tstart :')
   go to 2859
 2868 if ( n33  .eq.  1 )   go to 2884
   !     following is display code for electric-network source table:
@@ -2169,7 +2161,7 @@ subroutine spyink
      go to 2859
 2873 n5 = iabs ( node(i) )
      write (munit6, 2878)  i, bus(n5), node(i), iform(i), crest(i), sfreq(i), time1(i), tstart(i)
-2878 format ( 1x, i3,  1x, a6,  i5,  i6,  2e14.5,  2e15.6  )
+2878 format (1x, i3,  1x, a6, i5, i6, 2e14.5, 2e15.6)
      call window
 2876 end do
   prom80(1:8) = blan80(1:8)
@@ -2185,7 +2177,7 @@ subroutine spyink
 2887 ansi8 = blan80(1:8)
      if ( iuty(kiuty+i) .lt. 90 ) write (ansi8, 3691) sptacs(kaliu+i)
      write (munit6, 2891)  i,  ansi8,   sptacs(kxtcs+nuk+i), sptacs(kud1+i),  sptacs(kud3+i),  sptacs(kud2+i)
-2891 format ( 1x,  i3,  1x, a6,  4e16.6  )
+2891 format (1x, i3, 1x, a6, 4e16.6)
      call window
 2888 end do
   prom80(1:8) = blan80(1:8)
@@ -2203,9 +2195,9 @@ subroutine spyink
   n33 = n33 + 1
   if ( n33 .ge. 2 )  n33 = 0
 3471 if ( n33 .eq. 1 ) write (prom80, 3478)
-3478 format ( ' no extension yet in use.  but structure allows it.' )
+3478 format (' No extension yet in use.  But structure allows it.')
   if ( n33 .eq. 0 )  write (prom80, 3488)
-3488 format (  4h row,  9x, 5htr(i),  9x, 5htx(i),  10x, 4hr(i), 10x, 4hc(i),  10x, 5hx(i):  )
+3488 format (' row', 9x, 'tr(i)', 9x, 'tx(i)', 10x, 'hr(i)', 10x, 'c(i)', 10x, 'x(i):')
   go to 3462
 3490 if ( bytbuf(1:4) .eq. spykwd(42)(1:4)  .or. bytbuf(1:4) .eq. spykwd(1)(1:4) ) go to 3471
   !     we get here if no known key word;  extract integer pair.   this
@@ -2217,8 +2209,8 @@ subroutine spyink
      if ( kwtspy .eq. 0 ) go to 3497
      kwtspy = 0
      go to 3462
-3497 write (munit6, 3503)  i, tr(i), tx(i), r(i), c(i), x(i)
-3503 format ( 1x, i3,  5e14.5  )
+3497 write (munit6, 3503)  i, tr(i), tx(i), r(i), emtpc(i), x(i)
+3503 format (1x, i3, 5e14.5)
      call window
 3513 end do
   prom80(1:8) = blan80(1:8)
@@ -2227,11 +2219,11 @@ subroutine spyink
 3526 n13 = kol132
   if ( n13 .ne. 80 )  go to 3529
   write (munit6, 3527)
-3527 format ( '   ---  switch from 80- to 132-column', ' lunit6 emtp output.'  )
+3527 format ('   ---  Switch from 80- to 132-column lunit6 EMTP output.')
   call window
   go to 3532
 3529 write (munit6, 3528)
-3528 format ( '   ---  switch from 132- to 80-column', ' lunit6 emtp output.'   )
+3528 format ('   ---  Switch from 132- to 80-column lunit6 emtp output.')
   call window
 3532 kol132 = 132
   if ( n13 .eq. 132 )  kol132 = 80
@@ -2249,9 +2241,9 @@ subroutine spyink
   n33 = n33 + 1
   if ( n33 .ge. 2 )  n33 = 0
 3572 if ( n33 .eq. 1 ) write (prom80, 3578)
-3578 format ( 5h  row,  8x,  5hfinit,   6x, 14hznonl-a kknonl, 6x, 14hznonl-b kknonl,  6x, 14hznonl-c kknonl ,  2h :  )
+3578 format ('  row',  8x, 'finit', 6x, 'znonl-a kknonl', 6x, 'znonl-b kknonl', 6x, 'znonl-c kknonl', ' :')
   if ( n33 .eq. 0 ) write (prom80, 3588)
-3588 format (  ' node  name  kode  kssfrq    kk     kks', 12x, 4he(i),  12x, 6hf(i) :  )
+3588 format (' node  name  kode  kssfrq    kk     kks', 12x, 'emtpe(i)', 12x, 'emtpf(i) :')
   go to 3562
 3590 if ( bytbuf(1:4)  .eq.  spykwd(44)(1:4)  .or. bytbuf(1:4)  .eq.  spykwd(1)(1:4) ) go to 3572
   !     we get here if no known key word;  extract integer pair.   this
@@ -2263,41 +2255,41 @@ subroutine spyink
      if ( kwtspy .eq. 0 ) go to 3597
      kwtspy = 0
      go to 3562
-3597 if ( n33 .eq. 0 ) write (munit6, 3603)  i, bus(i), kode(i), kssfrq(i), kk(i), kks(i), e(i), f(i)
-3603 format ( 1x, i4,  2x, a6,  i4, i8, i6, i8,  2e16.6  )
+3597 if ( n33 .eq. 0 ) write (munit6, 3603)  i, bus(i), kode(i), kssfrq(i), kk(i), kks(i), emtpe(i), emtpf(i)
+3603 format (1x, i4,  2x, a6,  i4, i8, i6, i8, 2e16.6)
      n22 = ntot + i
      n23 = ntot + n22
      if ( n33 .eq. 1 ) write (munit6, 3609)  i,  finit(i),  znonl(i), kknonl(i), znonl(n22), kknonl(n22),  znonl(n23), kknonl(n23)
-3609 format ( 1x, i4, f13.4,  3( f14.5, i6)  )
+3609 format (1x, i4, f13.4, 3( f14.5, i6))
      call window
 3613 end do
   prom80(1:8) = blan80(1:8)
   go to 3562
   !     $$$$$$$  key word no. 45:  "size"     $$$$  $$$$  $$$$  $$$$  $$$$
 3635 write (munit6, 3638)  ( lstat(i+20),  i=1, 10 )
-3638 format (   14h   size  1-10:,  10i6  )
+3638 format ('   size  1-10:', 10i6)
   call window
   write (munit6, 3639)  ( lstat(i+20), i=11, 20 )
-3639 format (   14h   size 11-20:,  10i6  )
+3639 format ('   size 11-20:', 10i6)
   call window
   write (munit6, 3640)  ( lstat(i+20), i=21, 27 )
-3640 format (   14h   size 21-on:,  10i6   )
+3640 format ('   size 21-on:', 10i6)
   call window
   go to 1240
   !     $$$$$$$  key word no. 46:  "limit"    $$$$  $$$$  $$$$  $$$$  $$$$
 3647 write (munit6, 3649)  lbus, lbrnch, ldata, lexct, lymat, lswtch, lsize7, lpast, lnonl, lchar
-3649 format (  15h   limit  1-10:,  10i6 )
+3649 format ('   limit  1-10:', 10i6)
   call window
   write (munit6, 3650)  lsmout, lsiz12, lfdep, lwt, ltails, limass, lsyn, maxpe, ltacst, lfsem
-3650 format (  15h   limit 11-20:,  10i6 )
+3650 format ('   limit 11-20:', 10i6)
   call window
   write (munit6, 3651)  lfd, lhist, lsiz23, lcomp, lspcum, lsiz26, lsiz27
-3651 format (  15h   limit 21-on:,  10i6 )
+3651 format ('   limit 21-on:', 10i6)
   call window
   go to 1240
   !     $$$$$$$  key word no. 47:  "iout"     $$$$  $$$$  $$$$  $$$$  $$$$
 3662 write (prom80, 3664)  iout
-3664 format (  '    send new printout frequency [', i5,  ' ] : '  )
+3664 format ('    Send new printout frequency [', i5,  ' ] : ')
   assign 3665 to nextsn
   go to 9800
 3665 call frein1 ( buff77, n6 )
@@ -2311,7 +2303,7 @@ subroutine spyink
      if ( n6*n8 .ne. n7 )  go to 3668
      if ( iprsup .lt. 1 )  go to 3667
      write (munit6, 3666)  n7
-3666 format ( ' new round stop.  n7 =',  i8  )
+3666 format (' New round stop.  n7 =', i8)
      call window
 3667 if ( n6 .lt. 20 )  n7 = n7 + n6
      if ( n7 .lt. istep+20 ) n7 = n7 + n6
@@ -2327,12 +2319,12 @@ subroutine spyink
   indstp = 2
   if ( iprspy .lt. 1 ) go to 3679
   write (munit6, 3678) limstp, indstp, istep, iout, isprin
-3678 format ( ' limstp, indstp, istep, iout, isprin =', 5i8 )
+3678 format (' limstp, indstp, istep, iout, isprin =', 5i8)
   call window
 3679 go to 1240
   !     $$$$$$$  key word no. 48:  "node"     $$$$  $$$$  $$$$  $$$$  $$$$
 3684 write (prom80, 3687)
-3687 format (  '       send  a6  bus name (connect) :'  )
+3687 format ('       Send  a6  bus name (connect) :')
 3688 assign 3690 to nextsn
   go to 9800
 3690 spycd2 = buff77(1:35)
@@ -2340,14 +2332,14 @@ subroutine spyink
   if ( spycd2(1:8) .eq. 'connect '   )  go to 3701
   do j=1, ntot
      write (brobus, 3691)  bus(j)
-3691 format ( a6, 2x )
+3691 format (a6, 2x)
      if ( brobus .ne. spycd2(1:8) )  go to 3693
      write (prom80, 3692)  j
-3692 format (  '       >>> node =',  i4,  15x,  1h:  )
+3692 format ('       >>> node =', i4, 15x, ':')
      go to 3688
 3693 end do
   write (munit6, 3695)
-3695 format ('        ????  sorry, no such bus.  try again ...'  )
+3695 format ('        ????  sorry, no such bus.  Try again ...')
   call window
   go to 3684
 3701 mmfind = j
@@ -2363,7 +2355,7 @@ subroutine spyink
 3705 end do
   if ( n6 .le. 0 )  go to 3709
   write (munit6, 3708)  ( mmhold(k), k=1, n6 )
-3708 format (  '    %% linear branches :',  20i5  )
+3708 format ('    %% linear branches :', 20i5)
   call window
 3709 n6 = 0
   do k=1, kswtch
@@ -2373,7 +2365,7 @@ subroutine spyink
 3719 end do
   if ( n6 .le. 0 )  go to 3722
   write (munit6, 3721)  ( mmhold(k), k=1, n6 )
-3721 format (  '    %% emtp  switches  :',  20i5  )
+3721 format ('    %% EMTP  switches  :', 20i5)
   call window
 3722 n6 = 0
   do k=1, inonl
@@ -2383,7 +2375,7 @@ subroutine spyink
 3726 end do
   if ( n6 .le. 0 )  go to 3731
   write (munit6, 3730)  ( mmhold(k), k=1, n6 )
-3730 format (  '    %% nonlinear elem. :',  20i5  )
+3730 format ('    %% nonlinear elem. :', 20i5)
   call window
 3731 n6 = 0
   do k=1, kconst
@@ -2393,7 +2385,7 @@ subroutine spyink
 3734 end do
   if ( n6 .le. 0 )  go to 3739
   write (munit6, 3738)  ( mmhold(k), k=1, n6 )
-3738 format (  '    %% emtp  sources  : ',  20i5  )
+3738 format ('    %% EMTP  sources  : ', 20i5)
   call window
 3739 mmfind = 0
   go to 3684
@@ -2411,12 +2403,12 @@ subroutine spyink
   if ( bytbuf(1:4)  .eq.  'stop' )   go to 1240
   if ( bytbuf(1:4)  .ne.  'extr' )   go to 3774
 3766 write (prom80, 3769)
-3769 format (  9x, 5hanonl,  8x, 5hvzero,  8x, 5hvnonl, 9x, 4hcurr,  7x, 6hvecnl1,  7x,  7hvecnl1:   )
+3769 format (9x, 'anonl', 8x, 'vzero', 8x, 'vnonl', 9x, 'curr', 7x, 'vecnl1', 7x, 'vecnl1:')
   n33 = 1
   go to 3758
 3774 if ( bytbuf(1:4) .ne. spykwd(49)(1:4)  ) go to 3781
   write (prom80, 3777)
-3777 format ( ' row  name  name-k name-m  nonlk  nonlm nltype', ' nonlad nonle ilast kupl nlsub :'  )
+3777 format ( ' row  name  name-k name-m  nonlk  nonlm nltype nonlad nonle ilast kupl nlsub :')
   call prompt
   if ( n33  .gt.  0 )   go to 3766
   prom80(1:8) = blan80(1:8)
@@ -2438,11 +2430,11 @@ subroutine spyink
      if (n6 .eq. 1) d13 = terra
      n7 = namenl(i)
      write (munit6, 3786) i, texvec(n7), d12, d13, nonlk(i), nonlm(i), nltype(i), nonlad(i), nonle(i), ilast(i), kupl(i),  nlsub(i)
-3786 format ( 1x, i3,  3( 1x, a6),  4i7, 2i6, i5, i6  )
+3786 format (1x, i3, 3(1x, a6), 4i7, 2i6, i5, i6)
      call window
      if ( n33 .ne. 1 ) go to 3796
      write (munit6, 3792)  anonl(i), vzero(i), vnonl(i), curr(i), vecnl1(i), vecnl2(i)
-3792 format ( 1x,  6e13.4 )
+3792 format (1x, 6e13.4)
      call window
 3796 end do
   prom80(1:8) = blan80(1:8)
@@ -2453,13 +2445,13 @@ subroutine spyink
   n77 = 0
   n22 = kptplt + 1
   write (munit6, 3843)
-3843 format ( 2x, 40h current values.  indbuf  indbeg  limbuf, 32h  mflush  numdcd  numcrd  limcrd   )
+3843 format (2x, ' Current values.  indbuf  indbeg  limbuf  mflush  numdcd  numcrd  limcrd')
   call window
   write (munit6, 3844)  indbuf, indbeg, limbuf, mflush, numdcd, numcrd, limcrd
-3844 format ( 18x, 7i8 )
+3844 format (18x, 7i8)
   call window
   write (munit6, 3845)  d14, t
-3845 format ( 3x, 'plot timespan now in memory (in sec) =',  2e15.6 )
+3845 format ( 3x, 'Plot timespan now in memory (in sec) =',  2e15.6)
   call window
   if ( mflush .lt. 1000 )  go to 3848
 3846 buff77(1:6) = 'flush '
@@ -2471,13 +2463,13 @@ subroutine spyink
   lastov = nchain - 1
   go to 3857
 3851 write (prom80, 3854)
-3854 format ( '    choose class (cards, plot) :'  )
+3854 format ('    Choose class (cards, plot) :')
   assign 3855 to nextsn
   go to 9800
 3855 if ( buff77(1:4) .ne. 'plot' ) go to 3934
   !     begin logic to free some storage space for emtp plot data:
 3857 write (prom80, 3858)
-3858 format ( '   operation (write, thin, flush,', ' delete, auto, read, out, help) :'  )
+3858 format ('   Operation (write, thin, flush, delete, auto, read, out, help) :')
   assign 43858 to nextsn
   go to 9800
 43858 if ( buff77(1:6) .eq. 'delete' )  n77 = 1
@@ -2487,28 +2479,28 @@ subroutine spyink
   if ( buff77(1:6) .eq. 'flush ' )  n77 = 5
   if ( buff77(1:4) .ne. 'help' )  go to 3861
   write (munit6, 3859)
-3859 format ( '        to free memory for more simulation', ' plot points,  use one of these:'      )
+3859 format ('        To free memory for more simulation plot points,  use one of these:')
   call window
   write (munit6, 33859)
-33859 format ( '        either: 1) begin by saving', ' points on disk, prior to loss ("write");'  )
+33859 format ('        Either: 1) begin by saving points on disk, prior to loss ("write");')
   call window
   write (munit6, 43859)
-43859 format ( '                2) thin out present', ' storage by regular omission ("thin");'  )
+43859 format ('                2) thin out present storage by regular omission ("thin");')
   call window
   write (munit6, 53859)
-53859 format ( '                3) delete older', ' points, and shift the remainder ("delete") :' )
+53859 format ('                3) delete older points, and shift the remainder ("delete") :')
   call window
   write (munit6, 3860)
-3860 format ('                4) combined "write" and', ' "thin", with common iplot ("flush").'    )
+3860 format ('                4) combined "write" and "thin", with common iplot ("flush").')
   call window
   write (munit6, 23860)
-23860 format ( '        send  "read"  to load memory', ' with plot data now on disk (lunit4).'  )
+23860 format ('        Send  "read"  to load memory with plot data now on disk (lunit4).')
   call window
   write (munit6, 63860)
-63860 format (  '        send  "out"  to switch from plot', ' file to cards,  or  "spy"  to abort.'  )
+63860 format ('        Send  "out"  to switch from plot file to cards,  or  "spy"  to abort.')
   call window
   write (munit6, 73860)
-73860 format ( '        finally, send  "auto"  for automatic', ' full flush to disk from now on.'   )
+73860 format ('        Finally, send  "auto"  for automatic full flush to disk from now on.')
   call window
   go to 3857
 3861 if ( buff77(1:4) .ne. 'auto' )  go to 3862
@@ -2516,7 +2508,7 @@ subroutine spyink
   go to 3846
 3862 if ( buff77(1:4) .eq. 'out ') go to 3851
   write (prom80, 3863)
-3863 format ( '     send [tmin, tmax]', ' (all, half) :'  )
+3863 format ('     Send [tmin, tmax] (all, half) :')
   assign 3865 to nextsn
   go to 9800
 3865 answ80 = buff77
@@ -2531,13 +2523,13 @@ subroutine spyink
   d17 = -1.
   d18 = pltbuf(n3)
   if ( iprspy .ge. 1 ) write (*, 3869)  n22, n3, d18
-3869 format ( ' "half" computed.  n22, n3, d18 =',  2i8, e14.5 )
+3869 format (' "half" computed.  n22, n3, d18 =', 2i8, e14.5)
   go to 3874
 3871 call frefp2 ( answ80, d17, d18 )
 3874 n4 = intinf
   if ( n77 .eq. 1 ) go to 3876
   write (prom80, 3875)
-3875 format ( '      process every  n-th  step.  send n:'  )
+3875 format ('      Process every  n-th  step.  Send n:')
   assign 43875 to nextsn
   go to 9800
 43875 prom80 = buff77
@@ -2550,18 +2542,16 @@ subroutine spyink
   n13 = n13 + n22
   if ( n13 .lt. indbuf )  go to 3877
   write (munit6, 3881)
-3881 format ( '       ?? ??  sorry, no plot points in the', ' requested time span.  abort.'  )
+3881 format ('       ?? ??  sorry, no plot points in the requested time span.  Abort.')
   call window
   go to 1240
 3886 if ( n77 .ne. 4   .and. n77 .ne. 5 )  go to 3904
   mflush = mflush + 1
   write (lunit6, 3891)  mflush, n6, n4, d17, d18
-3891 format ( '   ++++  begin plot-data copy from', ' memory to disk.   mflush, n6,', &
-       ' n4, tbeg, tend =',  i3, 2i8, 2e14.5  )
+3891 format ('   ++++  Begin plot-data copy from memory to disk.   mflush, n6, n4, tbeg, tend =', i3, 2i8, 2e14.5)
   go to 3906
 3904 write (lunit6, 3905)  n4, d17, d18
-3905 format ( '   ****  begin thinning of plot data',' points, to reduce memory burden.', &
-       '   n4, tbeg, tend =',  i10, 2e14.5  )
+3905 format ('   ****  Begin thinning of plot data points, to reduce memory burden.   n4, tbeg, tend =', i10, 2e14.5)
 3906 ip = 0
   n8 = n13 + kptplt
   n6 = n13
@@ -2587,12 +2577,12 @@ subroutine spyink
   if ( n77 .ne. 5 ) go to 3914
   n5 = limbuf - indbuf
   write (lunit6, 3913)  n5
-3913 format ( 9x,  'completed "flush", leaving', i8,    '  free cells for new plot points.'  )
+3913 format (9x, 'Completed "flush", leaving', i8, '  free cells for new plot points.')
   if ( mflush .ge. 1000 ) go to 1240
 3914 go to 3857
   !     begin "read" servicing (plot data goes disk to memory):
 3915 write (prom80, 3916)
-3916 format ( '      destination (0--start; 1--as now) :'  )
+3916 format ('      Destination (0--start; 1--as now) :')
   assign 3917 to nextsn
   go to 9800
 3917 prom80 = buff77
@@ -2614,7 +2604,7 @@ subroutine spyink
 3921 n8 = n8 + n22
      if ( n8 .le. limbuf )  go to 3925
      write (munit6, 3923)  pltbuf(n13)
-3923 format ( '   ###  squish.  memory space for plot data', ' has run out after storing t=',  e14.5  )
+3923 format ('   ###  Squish.  Memory space for plot data has run out after storing t=', e14.5)
      call window
      go to 3928
 3925 n13 = n13 + n22
@@ -2622,17 +2612,17 @@ subroutine spyink
   j = 999999
   go to 3928
 3926 write (munit6, 3927)  d18
-3927 format ( '     eof during read (lunit4).  quit search', ' for tend =',  e13.4  )
+3927 format ('     eof during read (lunit4).  Quit search for tend =', e13.4)
   call window
 3928 indbuf = n13
   n6 = limbuf - indbuf
   write (munit6, 3931)  j, n11, n6
-3931 format ( '     steps read and retained =',  i7, i6, '   remaining free words =',  i8  )
+3931 format ('     Steps read and retained =',  i7, i6, '   remaining free words =', i8)
   call window
   go to 3857
   !     begin "cards" servicing (file6 character storage):
 3934 write (prom80, 3937)
-3937 format ( '   choose operation (move, blank,', ' out, space) :'  )
+3937 format ('   Choose operation (move, blank, out, space) :')
   assign 3938 to nextsn
   go to 9800
 3938 if ( buff77(1:4) .eq. 'out '   )  go to 3851
@@ -2640,14 +2630,14 @@ subroutine spyink
   n66 = 0
   if ( buff77(1:6) .eq. 'blank ' )  n66 = 1
   write (prom80, 3941)
-3941 format ( '      number of cards to be handled :'  )
+3941 format ('      Number of cards to be handled :')
   assign 3942 to nextsn
   go to 9800
 3942 call frein1 ( buff77, n11 )
   if ( n11 .le. 0 )  go to 3851
   if ( n66 .eq. 1 )  go to 3955
   write (prom80, 3944)
-3944 format ( '      card addresses n-from and n-to :'  )
+3944 format ('      Card addresses n-from and n-to :')
   assign 3947 to nextsn
   go to 9800
 3947 call frein1 ( buff77, n11 )
@@ -2660,7 +2650,7 @@ subroutine spyink
   end do
   go to 3934
 3955 write (prom80, 3956)
-3956 format ( '      card address :'  )
+3956 format ('      Card address :')
   assign 3959 to nextsn
   go to 9800
 3959 call frein1 ( buff77, n17 )
@@ -2675,12 +2665,12 @@ subroutine spyink
   kptplt = lstat(32)
   d24 = fltinf
 4008 write (prom80, 4010)
-4010 format ( '   operation (open, close,', ' top, bot, next, back, time) :'  )
+4010 format ('   Operation (open, close, top, bot, next, back, time) :')
   assign 4011 to nextsn
   go to 9800
 4011 if ( buff77(1:5) .ne. 'close' )  go to 4022
   write (prom80, 4013)
-4013 format ( '     save permanently? (y or n) :'  )
+4013 format ('     Save permanently? (y or n) :')
   assign 4016 to nextsn
   go to 9800
 4016 ansi8 = 'keep    '
@@ -2689,12 +2679,12 @@ subroutine spyink
   go to 4008
 4022 if ( buff77(1:5) .ne. 'open ' )  go to 4036
   write (prom80, 4025)
-4025 format ( '     desired disk file name :'  )
+4025 format ('     Desired disk file name :')
   assign 4026 to nextsn
   go to 9800
 4026 ansi32 = buff77(1:32)
   write (prom80, 4028)
-4028 format ( '     desired status (new, old) :'  )
+4028 format ('     Desired status (new, old) :')
   assign 4029 to nextsn
   go to 9800
 4029 open (unit = lunit4, status = buff77, file = ansi32, form = 'unformatted' )
@@ -2705,10 +2695,10 @@ subroutine spyink
   if ( nchain .le. 16  .or. nchain .gt. 20 ) go to 4044
   if ( n2 .eq. numnvo  .and. n3 .eq. nc-nv   .and. n4 .eq. nc )  go to 4044
   write (munit6, 4038)
-4038 format ( '   ++++  error.  inconsistent lunit4 plot', ' file.  automatic close.  try again.'   )
+4038 format ( '   ++++  Error.  Inconsistent lunit4 plot file.  Automatic close.  Try again.')
   call window
   write (munit6, 4039)  date1, tclock, n1, n2, n3, n4
-4039 format (  '         date1, tclock =', 2( 1x, 2a4), 5x,  'n1:n4 =',  4i8  )
+4039 format ('         date1, tclock =', 2( 1x, 2a4), 5x, 'n1:n4 =', 4i8)
   call window
   close (lunit4)
   go to 4008
@@ -2725,30 +2715,30 @@ subroutine spyink
      end do
      n15 = n15 + 1000
      write (munit6, 4056)  n15
-4056 format ( '+      still reading.',  i8  )
+4056 format ('+      Still reading.', i8)
      call window
 4059 end do
   go to 4008
 4062 n15 = n15 + j
   write (munit6, 4063)  forbyt(1), n15
-4063 format ( '       ok, at end lunit4.  t-end =', e15.6,  '   steps taken =',  i8  )
+4063 format ('       Ok, at end lunit4.  t-end =', e15.6, '   steps taken =', i8)
   call window
   go to 4008
 4068 if ( buff77(1:4) .ne. 'next' )  go to 4079
 4069 read (lunit4, end=4075)  ( forbyt(j), j=1, kptplt+1 )
   write (munit6, 4071)     ( forbyt(j), j=1, kptplt+1 )
-4071 format ( 1x, 10e13.4 )
+4071 format (1x, 10e13.4)
   call window
   if ( forbyt(1) .lt. d24 )  d24 = forbyt(1)
   go to 4008
 4075 write (munit6, 4076)
-4076 format ( '     ===   sorry,  no more  lunit4  data.', '   eof hit.'  )
+4076 format ('     ===   Sorry,  no more  lunit4  data.   eof hit.')
   call window
   go to 4008
 4079 if ( buff77(1:4) .ne. 'back' )  go to 4083
   if ( noback .ne. 1 )  go to 4082
   write (munit6, 4080)
-4080 format ( '    ok,  but wait for  "top"  and  "time"', '  using  t = t - 2*deltat'  )
+4080 format ('    Ok,  but wait for  "top"  and  "time"  using  t = t - 2*deltat')
   call window
   buff77(1:5) = 'time '
   d8 = forbyt(1) - 2 * deltat
@@ -2761,7 +2751,7 @@ subroutine spyink
   go to 4008
 4083 if ( buff77(1:4) .ne. 'time' )  go to 4098
   write (prom80, 4084)  forbyt(1)
-4084 format ( '       send desired time [',  e15.6,  ' ] :'  )
+4084 format ('       Send desired time [',  e15.6,  ' ] :')
   assign 4085 to nextsn
   go to 9800
 4085 call frefp1 ( buff77, d8 )
@@ -2778,12 +2768,12 @@ subroutine spyink
   go to 4008
 4090 n15 = n15 + j
   write (munit6, 4091)   n15
-4091 format (  '      ? ? ?   search fails with eof after', i8,  '   steps.'  )
+4091 format ('      ? ? ?   search fails with eof after', i8, '   steps.')
   call window
   go to 4008
 4094 n15 = n15 + j
   write (munit6, 4095)  forbyt(1), n15
-4095 format ( '      ok, record of  t =',  e15.6, '  just read on try number',  i7  )
+4095 format ('      Ok, record of  t =',  e15.6, '  just read on try number', i7)
   call window
   go to 4008
   !     put any later operation choices here and below:
@@ -2796,11 +2786,11 @@ subroutine spyink
   n43 = lstat(23)
   if ( kbrser .ne. 2 )  go to 4165
   write (munit6, 4164)
-4164 format ( '   @ @ @ @ @ @   ok, guy, this is the', ' "over12" break for "series" usage.'   )
+4164 format ('   @ @ @ @ @ @   Ok, guy, this is the "over12" break for "series" usage.')
   call window
   kbrser = 0
 4165 write (prom80, 4166)
-4166 format ( '  operation (show, extra, change,', ' step, rewind) :'  )
+4166 format ('  Operation (show, extra, change, step, rewind) :')
   assign 4169 to nextsn
   go to 9800
 4169 ansi32 = buff77(1:32)
@@ -2810,10 +2800,10 @@ subroutine spyink
   go to 4165
 4172 if ( ansi32(1:5) .ne. 'show ' )  go to 4184
   write (munit6, 4174)
-4174 format (  '  memory:  list-2 ---',  2i5, '     list-3 ---',  2i5,  '    lserlc =',  i4  )
+4174 format ('  Memory:  list-2 ---', 2i5, '     list-3 ---', 2i5, '    lserlc =', i4)
   call window
   write (munit6, 4175)  n42, lbrnch, n43, ldata, lserlc
-4175 format ( ' num row use  bus-k  bus-m   name ????', 5x, 9hpresent-r,  5x, 9hpresent-l,  5x, 9hpresent-c  )
+4175 format (' num row use  bus-k  bus-m   name ????', 5x, 'present-R', 5x, 'present-L',  5x, 'present-C')
   call window
   do j=1, lserlc
      ndx1 = n42 + j
@@ -2823,20 +2813,20 @@ subroutine spyink
      m = mbus(ndx1)
      ndx3 = namebr(ndx1)
      write (munit6, 4179)  j, litype(ndx1), nr(ndx1), bus(k), bus(m), namebr(ndx3),  ci(ndx1), ck(ndx1), cik(ndx1)
-4179 format ( 1x, i3, 2i4, 3( 1x, a6 ), 5x, 3e13.4 )
+4179 format (1x, i3, 2i4, 3( 1x, a6 ), 5x, 3e13.4)
      call window
 4180 end do
   go to 4165
 4184 if ( ansi32(1:5) .ne. 'extra' )  go to 4197
   write (munit6, 4187)
-4187 format ( 4x, 10hstarting-r, 3x,  10hstarting-l, 3x, 10hstarting-c, 7x, 6hnext-r,  7x, 6hnext-l,  7x, 6hnext-c  )
+4187 format (4x, 'starting-R', 3x, 'starting-L', 3x, 'starting-C', 7x, 'next-R', 7x, 'next-L', 7x, 'next-C')
   call window
   do j=1, lserlc
      ndx1 = n42 + j
      if ( kbus(ndx1) .eq. 0 )  go to 4192
      ndx2 = n43 + j
-     write (munit6, 4191)  cki(ndx1), ckkjm(ndx1), r(ndx2), tr(ndx2), tx(ndx2), c(ndx2)
-4191 format ( 1x, 6e13.4 )
+     write (munit6, 4191)  cki(ndx1), ckkjm(ndx1), r(ndx2), tr(ndx2), tx(ndx2), emtpc(ndx2)
+4191 format (1x, 6e13.4)
      call window
 4192 end do
   go to 4165
@@ -2845,7 +2835,7 @@ subroutine spyink
   go to 4165
 4211 if ( ansi32(1:6) .ne. 'change' )  go to 4165
 4214 write (prom80, 4215)
-4215 format ( '    change type (data, move, blank, use, value,', ' end) :'  )
+4215 format ('    Change type (data, move, blank, use, value,', ' end) :')
   assign 34215 to nextsn
   go to 9800
 34215 ansi32 = buff77(1:32)
@@ -2853,7 +2843,7 @@ subroutine spyink
   if ( ansi32(1:6) .eq. 'series')go to 4165
   if ( ansi32(1:5) .ne. 'move ' )  go to 4223
 4216 write (prom80, 4217)
-4217 format ( '    send  n-from, n-to (1, 2, ...) :'  )
+4217 format ('    Send  n-from, n-to (1, 2, ...) :')
   assign 4219 to nextsn
   go to 9800
 4219 bytbuf = buff77(1:20)
@@ -2880,7 +2870,7 @@ subroutine spyink
   tr(n14) = tr(n13)
   tx(n14) = tx(n13)
   r(n14)  = r(n13)
-  c(n14)  = c(n13)
+  emtpc(n14)  = emtpc(n13)
   go to 4216
 4223 if ( ansi32(1:5) .ne. 'data ' )  go to 4232
 4225 write (prom80, 4217)
@@ -2903,16 +2893,16 @@ subroutine spyink
   ckkjm(n14) = tx(n13)
   ci(n14)    = tr(n13)
   ck(n14)    = tx(n13)
-  cik(n14)   = c(n13)
+  cik(n14)   = emtpc(n13)
   n14 = n14 - n42 + n43
   tr(n14)    = tr(n13)
   tx(n14)    = tx(n13)
-  c(n14)     = c(n13)
-  r(n14)     = c(n13)
+  emtpc(n14) = emtpc(n13)
+  r(n14)     = emtpc(n13)
   go to 4225
 4232 if ( ansi32(1:5) .ne. 'blank' )  go to 4245
 4235 write (prom80, 4236)
-4236 format ( '    send n-beg and n-end line numbers :'   )
+4236 format ('    Send n-beg and n-end line numbers :')
   assign 4237 to nextsn
   go to 9800
 4237 bytbuf = buff77(1:20)
@@ -2927,10 +2917,10 @@ subroutine spyink
   go to 4235
 4245 if ( ansi32(1:4) .ne. 'use ' )  go to 4256
   write (munit6, 4248)  ( nr(j+n42), j=1, lserlc )
-4248 format ( '    nr:',  10i7  )
+4248 format ('    nr:', 10i7)
   call window
 4251 write (prom80, 4253)
-4253 format ( '    send number to toggle (0=end) :'  )
+4253 format ('    Send number to toggle (0=end) :')
   assign 4254 to nextsn
   go to 9800
 4254 if ( buff77(1:4) .eq. 'end ' ) go to 4214
@@ -2948,7 +2938,7 @@ subroutine spyink
   !     $$$$$$$  key word no. 54:  "[y]"      $$$$  $$$$  $$$$  $$$$  $$$$
 4471 j = 1
 4473 write (prom80, 4474)
-4474 format ( '   send row name or number (end) :'  )
+4474 format ('   Send row name or number (end) :')
   assign 54474 to nextsn
   go to 9800
 54474 prom80 = buff77
@@ -2966,12 +2956,12 @@ subroutine spyink
      if ( prom80(1:1) .eq. digit(j) )  go to 4491
 4478 end do
   read (prom80, 1380)  text2
-1380 format ( a6 )
+1380 format (a6)
   do j=1, kpartb
      if (text2 .eq. bus(j)) go to 4494
 4483 end do
 4486 write (munit6, 4487)
-4487 format ( '  %% %% == ++  sorry, no such row.  try again.' )
+4487 format ('  %% %% == ++  Sorry, no such row.  Try again.')
   call window
   go to 4473
 4491 call frein1 ( prom80, j )
@@ -2982,13 +2972,13 @@ subroutine spyink
   n16 = kks(j+1)
   if ( j .eq. kpartb )  n16 = kks(1)
   write (munit6, 4496)  j, bus(j), n16, n17
-4496 format ( ' row',  i4,  '   name = ',  a6,  '   limits =', 2i5,  '    nonzero  (m, ykm)  follow ....'  )
+4496 format (' row',  i4, '   name = ', a6, '   limits =', 2i5, '    nonzero  (m, ykm)  follow ....')
   call window
   do l=n16, n17, 4
      n23 = l + 3
      if ( n23 .gt. n17 )  n23 = n17
      write (munit6, 4497)   ( km(m), ykm(m), m=l, n23 )
-4497 format ( 1x,  4( i5, e15.6 )  )
+4497 format (1x, 4(i5, e15.6))
      call window
 4502 end do
   go to 4473
@@ -2998,7 +2988,7 @@ subroutine spyink
   if ( j .gt. kpartb )  j = 2
   n17 = kk(j-1) + 1
   write (munit6, 4521)  j, bus(j), n17, kk(j)
-4521 format ( ' row',  i4,  '   name = ',  a6,  '   limits =', 2i5,  '    nonzero  (m, fkm)  follow ....'  )
+4521 format (' row', i4, '   name = ', a6, '   limits =', 2i5, '    nonzero  (m, fkm)  follow ....')
   call window
   do l=n17, kk(j), 4
      n23 = l + 3
@@ -3011,41 +3001,41 @@ subroutine spyink
 4563 if ( monits .eq. 0 ) go to 4571
   monits = 0
   write (munit6, 4566)
-4566 format ( 6x, '===  cancel previous rolling printer plot.' )
+4566 format (6x, '===  Cancel previous rolling printer plot.')
   call window
 4571 if ( monitr .eq. 0 ) go to 1240
   monitr = 0
   write (munit6, 4573)
-4573 format ( 6x, '===  cancel previous rolling vector plot.' )
+4573 format (6x, '===  Cancel previous rolling vector plot.')
   call window
   go to 1240
   !     $$$$$$$  key word no. 61:  "choice"   $$$$  $$$$  $$$$  $$$$  $$$$
 4592 n17 = nc - nv
   n24 = numnvo + nc + nsmout + ioutcs + numout
   write (munit6, 4595)  n24
-4595 format ( '     total number of emtp outputs (sum of 5', ' classes) =',  i5   )
+4595 format ('     Total number of EMTP outputs (sum of 5 classes) =', i5)
   call window
   write (munit6, 4596)
-4596 format ( '     ordered class limits :   numnvo      nv', '   nc-nv  nsmout  ioutcs   numout'  )
+4596 format ( '     Ordered class limits :   numnvo      nv   nc-nv  nsmout  ioutcs   numout')
   call window
   write (munit6, 4597) numnvo, nv, n17, nsmout, ioutcs, numout
-4597 format ( 28x, 6i8 )
+4597 format (28x, 6i8)
   call window
   write (munit6, 4608) numnvo
-4608 format ( '     selective node voltage outputs (cells  1', '  through',  i3,  ' ) :'   )
+4608 format ('     Selective node voltage outputs (cells  1  through', i3, ' ) :')
   call window
   do j=1, numnvo, 7
      n17 = j + 6
      if ( n17 .gt. numnv0 )  n17 = numnvo
      write (munit6, 4609)  ( bus(ibsout(m)), m=j, n17 )
-4609 format ( 7x, 10a7 )
+4609 format (7x, 10a7)
      call window
 4611 end do
   n7 = numnvo + 1
   n8 = numnvo + nv
   if ( n8 .lt. n7 )  go to 4631
   write (munit6, 4615)  n7, n8
-4615 format ( '     branch voltage node-name pairs (cells', i3,   '  through',  i3,  ' ) :' )
+4615 format ('     Branch voltage node-name pairs (cells', i3, '  through', i3, ' ) :')
   call window
   n9 = 7878
   call spyout ( n9, n9 )
@@ -3057,7 +3047,7 @@ subroutine spyink
 4631 n7 = numnvo + nv + 1
   n8 = numnvo + nc
   write (munit6, 4636)  n7, n8
-4636 format ( '     element current node-name pairs (cells', i3,  '  through',  i3,  ' ) :'  )
+4636 format ('     Element current node-name pairs (cells', i3, '  through', i3, ' ) :')
   call window
   if ( n17 .le. 0 ) go to 4658
   n9 = 7878
@@ -3079,7 +3069,7 @@ subroutine spyink
 4658 go to 1240
   !     $$$$$$$  key word no. 62:  "tacs"     $$$$  $$$$  $$$$  $$$$  $$$$
 4716 write (prom80, 4717)
-4717 format ( ' send control (rewind, source,', ' supplemental, patch, show, end) :'  )
+4717 format (' Send control (rewind, source, supplemental, patch, show, end) :')
   assign 4719 to nextsn
   go to 9800
 4719 prom80 = buff77
@@ -3115,20 +3105,20 @@ subroutine spyink
   n13 = ( n12 - n11 ) / 2
   if ( iprspy .le. 1 )  go to 34753
   write (munit6, 4753)  n11, n12, n13
-4753 format ( ' volti memory indices.  n11, n12, n13 =', 3i8,  '    fkar1(j), j=n13+1, n13+9) ....'  )
+4753 format (' volti memory indices.  n11, n12, n13 =', 3i8,  '    fkar1(j), j=n13+1, n13+9) ....')
   call window
   write (munit6, 24753)   (fkar1(j), j=n13+1, n13+9)
-24753 format ( 9e14.4 )
+24753 format (9e14.4)
   call window
 34753 n14 = 0
 4754 write (prom80, 4757)
-4757 format ( ' send source name, address (a6, i6), or "end":' )
+4757 format (' Send source name, address (a6, i6), or "end":')
   assign 4759 to nextsn
   go to 9800
 4759 prom80 = buff77
   if ( prom80(1:4) .eq. 'end ' ) go to 4776
   read (prom80, 4763)  bus1, n7
-4763 format ( a6, i6, e8.0 )
+4763 format (a6, i6, e8.0)
   do j=1, niu
      ndx3 = ilntab( kaliu + j )
      bus2 = texvec(ndx3)
@@ -3141,11 +3131,11 @@ subroutine spyink
      go to 4754
 4769 end do
   write (munit6, 4771)
-4771 format ( '  ? ? ?   sorry, no such tacs source named  "', a6,  '".  try again ....'  )
+4771 format ('  ? ? ?   Sorry, no such tacs source named  "', a6,  '".   Try again ....')
   call window
   go to 4754
 4776 write (prom80, 4777)
-4777 format ( ' send usage name, address, tolerance', ' (a6, i6, e8.0), or "end":'  )
+4777 format (' Send usage name, address, tolerance (a6, i6, e8.0), or "end":')
   assign 4778 to nextsn
   go to 9800
 4778 prom80 = buff77
@@ -3165,20 +3155,20 @@ subroutine spyink
      go to 4776
 4785 end do
   write (munit6, 4788)
-4788 format ( '  ? ? ?   sorry, no such tacs output named  "', a6,  '".  try again ....'  )
+4788 format ('  ? ? ?   Sorry, no such tacs output named  "', a6,  '".   Try again ....')
   call window
   go to 4776
 4792 if ( prom80(1:5) .ne. 'show ' )  go to 4807
   write (munit6, 4794) koncur, kontot
-4794 format ( ' concurrent sequential processing (csp)', ' controls.  koncur =',  i4,  5x,  'kontot =', i4 )
+4794 format (' Concurrent sequential processing (csp) controls.  koncur =',  i4,  5x, 'kontot =', i4)
   call window
   write (munit6, 4795)
-4795 format ( '     row    name   index  memory    threshold'  )
+4795 format ('     row    name   index  memory    threshold')
   call window
   do i=1, kontot
      n13 = ilntab( kontac(i) + klntab - kxtcs )
      write (munit6, 4798)  i, texvec(n13), kontac(i), konadd(i), epskon(i)
-4798 format ( i8, 2x, a6, 2i8, e13.4 )
+4798 format (i8, 2x, a6, 2i8, e13.4)
      call window
 4801 end do
   !     any additional responses to tacs prompt go here:
@@ -3187,10 +3177,10 @@ subroutine spyink
 4823 n17 = 0
   n8 = 0
   write (munit6, 4825)  inonl, i_char
-4825 format ( ' lists 9, 10 =',  2i4, '      (next, <cr>, last, all, mode).' )
+4825 format (' lists 9, 10 =',  2i4, '      (next, <cr>, last, all, mode).')
   call window
 4824 write (prom80, 4827)
-4827 format ( 1x, ' row        vchar        cchar       gslope', ' row nltype nonlad nonle  class :'  )
+4827 format (1x, ' row        vchar        cchar       gslope row nltype nonlad nonle  class :')
   assign 4828 to nextsn
   go to 9800
 4828 bytbuf = buff77(1:20)
@@ -3212,7 +3202,7 @@ subroutine spyink
   n8 = n8 + 1
   if ( n8 .ge. 2 )  n8 = 0
   write (munit6, 4833)  n8
-4833 format ( '    ----  new mode flag n8 =',  i2 )
+4833 format ('    ----  New mode flag n8 =', i2)
   call window
   go to 4824
 4834 call frein2(bytbuf, n1, n2)
@@ -3227,7 +3217,7 @@ subroutine spyink
   ansi8(1:6) = 'pseudo'
   if ( nltype(n17) .gt. 0 )  ansi8(1:6) = ' true '
   write (munit6, 4851) n1, vchar(n1), cchar(n1), gslope(n1), n17, nltype(n17), nonlad(n17), nonle(n17), ansi8(1:6)
-4851 format ( 1x, i4, 3e13.4, i4, 2i7, i6, 1x, a6 )
+4851 format (1x, i4, 3e13.4, i4, 2i7, i6, 1x, a6)
   call window
   n1 = n1 + 1
 4854 do j=n1, n2
@@ -3244,7 +3234,7 @@ subroutine spyink
 9800 nexmod = 3
 9804 if ( iprspy .lt. 1 ) go to 9999
   write (munit6, 9807) jjroll, kbreak, lockbr, nchain, prom80(1:20)
-9807 format (  ' exit "spyink".  jjroll, kbreak, lockbr,', ' nchain =',  4i5,  '   prom80(1:20) =',  a20  )
+9807 format (' Exit "spyink".  jjroll, kbreak, lockbr, nchain =',  4i5,  '   prom80(1:20) =',  a20)
   call window
 9999 return
   entry spytac
@@ -3265,7 +3255,7 @@ subroutine spyink
 3486 end do
   if ( iprspy .lt. 1 ) go to 3496
   write (munit6, 3493)  koncur, kontot, ialter
-3493 format ( ' exit "spytac" after csp.  koncur,', ' kontot, ialter =',  3i5  )
+3493 format (' Exit "spytac" after csp.  koncur, kontot, ialter =',  3i5)
   call window
 3496 return
 end subroutine spyink
@@ -3348,11 +3338,11 @@ subroutine initsp
   data  textay(64)  /  'v-i     '  /
   data  textay(65)  /  '        '  /
   n3 = 29
-  call dimens ( memrmp(1), n3, bus1, bus1 )
+  call dimens (memrmp(1), n3, bus1, bus1)
   limbuf = memrmp(2)
-  if ( iprspy .lt. 1 )  go to 1144
-  write (munit6, 1143)  limbuf
-1143 format ( ' near top of "initsp".  limbuf =',  i8 )
+  if (iprspy .lt. 1) go to 1144
+  write (munit6, 1143) limbuf
+1143 format (' Near top of "initsp".  limbuf =', i8)
   call window
 1144 lockbr = 1
   kbreak = 0
@@ -3372,7 +3362,7 @@ subroutine initsp
   komadd = 0
   blan80 = ' '
   do j=1, 9999
-     if ( textay(j) .eq. '        ' )  go to 1152
+     if (textay(j) .eq. '        ') go to 1152
 1148 spykwd(j) = textay(j)
   end do
 1152 numkey = j - 1
@@ -3389,15 +3379,15 @@ subroutine initsp
   digit(9) = '9'
   digit(10) = '0'
   call locatn
-  do j=1, 9
+  do j = 1, 9
      filext(j) =  ' '
      write (ansi32, 1283)          j
-1283 format ( 7hinclspy,  i1 , 4h.dat,  13x )
-     inquire (file=ansi32, exist=logvar)
-     if ( logvar )  filext(j) = 'x'
-     if ( iprspy .lt. 1 )  go to 2795
-     write (munit6, 2789)  j, ansi32
-2789 format ( ' next use of "inquire".  j, ansi32 =', i5, 1x, a32 )
+1283 format ('inclspy', i1, '.dat', 13x)
+     inquire (file = ansi32, exist = logvar)
+     if (logvar) filext(j) = 'x'
+     if (iprspy .lt. 1) go to 2795
+     write (munit6, 2789) j, ansi32
+2789 format (' Next use of "inquire".  j, ansi32 =', i5, 1x, a32)
      call window
 2795 end do
   kwtspy = 0
@@ -3515,7 +3505,7 @@ subroutine honker (klevel)
   buff77(4:6) = buff77(1:3)     ! define bells number 4 to 6
   buff77(7:10) = buff77(1:4)      ! define bells number 7-10
 3608 write (munit6, 3627) spytim, spdate, klevel, buff77(1:klevel)
-3627 format ( ' audible alarm began at  ',  2a4,  2x,  2a4, 5x,  i3,  ' bells.',  a )
+3627 format ( ' Audible alarm began at  ',  2a4,  2x,  2a4, 5x,  i3, ' bells.',  a)
   call window         ! output of character variable munit6
   if ( klevel .lt. 10 ) go to 9000  ! exit module (no loop)
   call tdelay ( d13 )           ! now stall for d13 seconds
@@ -3590,23 +3580,23 @@ subroutine percnt ( vbyte, n7 )
      itexp = itexp + 1
      if ( itexp  .le.  maxarg )   go to 1284
      write (munit6, 1274)  maxarg
-1274 format ( ' ????  trouble.  "@?"  usage only defined', i4,  '   arguments, while the disk'     )
+1274 format (' ????  Trouble.  "@?"  Usage only defined', i4, '   arguments, while the disk')
      call window
      write (munit6, 1275)
-1275 format (  '                 file has more  %-strings.', '   trouble detected in following:'   )
+1275 format ('                 File has more  %-strings.   Trouble detected in following:')
      call window
      write (munit6, 1277)  ( vbyte(i), i=1, n7 )
-1277 format ( '              >>>',  80a1  )
+1277 format ('              >>>', 80a1)
      call window
      kilper = 1
      go to 1313
 1284 ansi8 = texpar(itexp)
      read (ansi8, 1296)  ( vbyte(k+j-1), j=1, 8 )
-1296 format ( 80a1 )
+1296 format (80a1)
 1297 end do
   if ( kverfy .ne. 0 )  go to 1313
   write (munit6, 1306)  ( vbyte(j), j=1, n7 )
-1306 format ( ' @>>>',  80a1 )
+1306 format (' @>>>', 80a1)
   call window
 1313 return
 end subroutine percnt
@@ -3664,9 +3654,9 @@ subroutine numchk ( vbyte, nchar, kill )
   if ( nume  .eq.  1     .and. kolper  .gt.  kolexp ) kill = 1
   if ( kill  .eq.  0 )   return
   write (munit6, 3492)  ( vbyte(j), j=1, nchar )
-3492 format ( ' ??? sorry, illegal numeric just read:',  50a1 )
+3492 format (' ??? Sorry, illegal numeric just read:', 50a1)
   write (munit6, 3493)
-3493 format ( '            make a second try, please ....'  )
+3493 format ('            Make a second try, please ....')
   return
 end subroutine numchk
 !
@@ -3680,7 +3670,7 @@ subroutine getnum ( num )
   character*1   c4
   if ( iprspy .lt. 1 )  go to 4204
   write (munit6, 4203)  ibegcl, bytbuf(ibegcl:ibegcl)
-4203 format ( ' begin  "getnum".   ibegcl =', i5,   '      bytbuf(ibegcl) =',  a1 )
+4203 format (' Begin  "getnum".   ibegcl =', i5, '      bytbuf(ibegcl) =', a1)
   call window
 4204 n1 = 1
   num = 0
@@ -3698,7 +3688,7 @@ subroutine getnum ( num )
         if ( c4  .eq.  digit(j) )   go to 4256
 4234 end do
      write (munit6, 4239)  i, c4
-4239 format (  '    -- illegal byte in "number".', 1x,  i4,  3x,  a1,  3x,  'try again ...'  )
+4239 format ('    -- Illegal byte in "number".', 1x,  i4,  3x,  a1,  3x,  'Try again ...')
      call window
      num = -87654
      go to 4294
@@ -3706,18 +3696,18 @@ subroutine getnum ( num )
      num = 10 * num  +  j
      if ( iprspy .lt. 2 )  go to 4265
      write (munit6, 4259)  j, num
-4259 format ( ' next digit.  j, num =',  2i8 )
+4259 format (' Next digit.  j, num =', 2i8)
      call window
 4265 end do
   write (munit6, 4271)  num
-4271 format ( ' stop at 4271 of "getnum".  num =',  i8 )
+4271 format (' Stop at 4271 of "getnum".  num =', i8)
   call window
   call stoptp
 4286 if ( n1  .lt.  0 )   num = -num
   iendcl = i - 1
   if ( iprspy .lt. 1 )  go to 4294
   write (munit6, 4293)  iendcl, num
-4293 format (  ' exit "number".   iendcl, num =',  2i8  )
+4293 format (' Exit "number".   iendcl, num =', 2i8)
   call window
 4294 return
 end subroutine getnum
@@ -3767,7 +3757,7 @@ subroutine window
      if ( munit6(k:k) .ne. ' ' )  go to 5621 ! end of line
 5614 end do                   ! end  do 5614  loop to find right edge of line
 5621 write (lunit6, 5624)  munit6(1:k) ! output nonblank part
-5624 format ( a )
+5624 format (a)
 9000 return
 end subroutine window
 !
@@ -3783,7 +3773,7 @@ subroutine spylin
   !     temporarily, until we learn how to write to a 2nd crt for
   !     VAX/VMS, we will just write to lunit6 in universal form:
 5621 write (lunit6, 5624)
-5624 format ( 1x )
+5624 format (1x)
 end subroutine spylin
 !
 !     subroutine spyout.
@@ -3808,7 +3798,7 @@ subroutine spyout(n1, n2)
 4618 if (n11 .ne. -7878) go to 4626
 4621 if (k .le. 0) go to 9000
   write (munit6, 4629) (text10(j), j = 1, k)
-4629 format(7x, 10a7)
+4629 format (7x, 10a7)
   call window
   k = 0
   go to 9000
@@ -3826,7 +3816,7 @@ subroutine spyout(n1, n2)
   if ( k .eq. 10 )  go to 4621
 9000 if ( iprspy .lt. 3 )  go to 9007
   write (munit6, 9004)  n1, n2, k, n11, n12
-9004 format ( ' exit "spyout".  n1, n2, k, n11, n12 =', 5i6 )
+9004 format (' Exit "spyout".  n1, n2, k, n11, n12 =', 5i6)
   call window
 9007 return
 end subroutine spyout
@@ -3843,7 +3833,7 @@ subroutine examin
   include 'dekspy.ftn'
   if ( iprspy .lt. 1 ) go to 1718
   write (munit6, 1707)  numex, imin(1), locout(1)
-1707 format (' top of "examin".  numex, imin(1), locout(1) =', 3i6 )
+1707 format (' Top of "examin".  numex, imin(1), locout(1) =', 3i6)
   call window
 1718 jj = 0
   outlin(1:1) = ' '
@@ -3856,7 +3846,7 @@ subroutine examin
   if ( intout(jj)  .eq.  0 )   n8 = n8 + n5 - 1
   if ( iprspy .lt. 3 )  go to 1560
   write (munit6, 1544)  jj, n5, n3, n8, intout(jj)
-1544 format ( ' next  examine.  jj, n5, n3, n8, intout(jj)',  5i8 )
+1544 format (' Next  examine.  jj, n5, n3, n8, intout(jj)', 5i8)
   call window
 1560 if ( intout(jj)  .eq.  0 )   go to 1600
   n9 =  n8 - memkar
@@ -3864,7 +3854,7 @@ subroutine examin
   if ( ivec(n3)  .eq.  1 )   go to 1577
   if ( n5 .eq. 1  .and.  imax(jj) .eq. 1 )  go to 1640
 1577 write (ansi16, 1580)  kar1(1+n9)
-1580 format ( i10 )
+1580 format (i10)
   outlin(kolout:kolout+9) = ansi16(1:10)
   outlin(kolout+10:kolout+14) = blan80(1:5)
   kolout = kolout + 15
@@ -3875,9 +3865,9 @@ subroutine examin
   if ( n10  .ne.  0 )   go to 1628
   !     following real*8 extractions line up (no need for 4-byte shift):
   if ( iascii(n3) .eq. 0 ) write (ansi16, 1620)  fkar1(1+n9)
-1620 format ( e15.6 )
+1620 format (e15.6)
   if ( iascii(n3) .eq. 1 ) write (ansi16, 1624)  fkar1(1+n9)
-1624 format ( 4x,  1h",  a6,  1h",  3x )
+1624 format (4x, '"', a6, '"', 3x)
   go to 1633
   !     Following real*8 extractions require a 4-byte shift (fkar2 use).
   !     fkar2 has higher memory address than fkar1, so it is correct with
@@ -3892,7 +3882,7 @@ subroutine examin
   kolout = kolout + 15
   go to 1664
 1640 write (ansi8, 1660)  kar1(1+n9)
-1660 format ( i6 )
+1660 format (i6)
   outlin(kolout:kolout+5) = ansi8(1:6)
   if ( iprspy .lt. 3 ) go to 1662
   write (munit6, 1661)  n9,  kar1(1+n9)
@@ -3907,7 +3897,7 @@ subroutine examin
   n17 = kolout
   if ( n17 .gt. 80 )  n17 = 80
   write (munit6, 8872)  kolout, outlin(1:n17)
-8872 format (' exit "examin".   kolout =',  i5, '    outlin(1:80) =',  a  )
+8872 format (' Exit "examin".   kolout =',  i5, '    outlin(1:80) =',  a  )
   call window
 9000 return
 end subroutine examin
@@ -3928,13 +3918,13 @@ subroutine deposi ( ind, intype, n1, n2, d4 )
   include 'dekspy.ftn'
   if ( iprspy .lt. 1 ) go to 1846
   write (munit6, 1707)  ind, intype, iascii(ind), d4, ansi8
-1707 format (' top of "deposi".   ind, intype, iascii(ind),', ' d4, ansi8 =',  3i8, e15.4, 3x, a8 )
+1707 format (' Top of "deposi".   ind, intype, iascii(ind), d4, ansi8 =',  3i8, e15.4, 3x, a8 )
   call window
 1846 n8 = locate(ind)
   !     following use of real*8 deposit logic to also handle
   !     alphanumeric only works for computers with this equality:
   if ( iascii(ind) .eq. 1 ) read (ansi8, 1849)  d4
-1849 format ( a6 )
+1849 format (a6)
   if ( intype .eq. 0 ) go to 1880
   n9 = n8 - memkar + n1
   !     enter loop of integer deposits, subscripts n1 through n2:
@@ -3954,7 +3944,7 @@ subroutine deposi ( ind, intype, n1, n2, d4 )
   if ( n1  .le.  n2 )   go to 1904
 8000 if ( iprspy .lt. 1 ) go to 9000
   write (munit6, 8872)
-8872 format (' exit "deposi".' )
+8872 format (' Exit "deposi".')
   call window
 9000 return
 end subroutine deposi
@@ -4035,17 +4025,17 @@ subroutine intpar ( max, n1, n2, kill )
   n1 = n2 + 1
   if ( n1  .le.  max )  go to 2107
   write (munit6, 2105)
-2105 format ( '    ---- wrap around, end to beginning ----' )
+2105 format ('    ---- Wrap around, end to beginning ----')
   call window
   n1 = 1
 2107 n2 = n1 + n33
   go to 2110
 2109 if ( n13  .eq. 2 )   go to 2132
 2113 write (munit6, 2115)
-2115 format (  ' ????  illegal data (not blank or two dec', ' free-format integers.   try again.'   )
+2115 format (' ????  Illegal data (not blank or two dec free-format integers.   Try again.')
   call window
   write (munit6, 2118)
-2118 format (  '       is it possible user"s data has no', ' such table (other cause of message)?'  )
+2118 format ("       Is it possible user's data has no such table (other cause of message)?")
   call window
   kill = 1
   go to 9000
@@ -4055,7 +4045,7 @@ subroutine intpar ( max, n1, n2, kill )
   if ( n2  .gt.  max )   n2 = max
 9000 if ( iprspy .lt. 1 ) go to 9006
   write (munit6, 9002)  max, n1, n2, kill
-9002 format (  ' return from "intpar".  max, n1, n2, kill =', 4i6 )
+9002 format (' Return from "intpar".  max, n1, n2, kill =', 4i6)
   call window
 9006 return
 end subroutine intpar
@@ -4074,10 +4064,10 @@ subroutine sosrng ( kill )
   include 'dekspy.ftn'
   if ( iprspy .lt. 1 )  go to 2615
   write (munit6, 2613)   bytbuf
-2613 format ( ' top "sosrange".  bytbuf(a20) =',   a20  )
+2613 format (' Top "sosrange".  bytbuf(a20) =', a20)
   call window
   write (munit6, 2614)  numsym, lidnt1, linnow, char1
-2614 format ( ' numsym, lidnt1, linnow, char1 =',  3i5, 2x, a1 )
+2614 format (' numsym, lidnt1, linnow, char1 =', 3i5, 2x, a1)
   call window
 2615 kill = 0
   if ( char1  .ne.  ' ' )   go to 2629
@@ -4111,10 +4101,10 @@ subroutine sosrng ( kill )
   n24 = 0
   if ( iprspy  .lt.  2 )  go to 2644
   write (munit6, 2640)
-2640 format (  ' begin next lidnt.', '    ibeg     n13  lidnt1  jpoint      n1     n24'  )
+2640 format (' Begin next lidnt.    ibeg     n13  lidnt1  jpoint      n1     n24')
   call window
   write (munit6, 2641) ibegcl, n13, lidnt1, linnow, n1, n24
-2641 format (  '                  ',   6i8  )
+2641 format ('                  ', 6i8)
   call window
 2644 if ( bytbuf(ibegcl:ibegcl)  .ne.  '.' )   go to 2645
   n24 = linnow
@@ -4152,7 +4142,7 @@ subroutine sosrng ( kill )
 2664 if ( lidnt2 .gt. numcrd )  lidnt2 = numcrd
 9000 if ( iprspy .lt. 1 )  go to 9006
   write (munit6, 9003)  lidnt1, lidnt2,  kill, char2
-9003 format ( ' exit "sosrng".  lidnt1, lidnt2, kill, char2 =', 3i6,  2x,  a1  )
+9003 format (' Exit "sosrng".  lidnt1, lidnt2, kill, char2 =', 3i6, 2x, a1)
   call window
 9006 return
 end subroutine sosrng
@@ -4192,7 +4182,7 @@ subroutine prompt
   return
   !     following lunit6 should really go to 2nd screen ("window")
 1426 write (lunit6, 1475)  prom80(1:n2)
-1475 format ( a, $ )           ! ",$" is dec magic to hold cursor
+1475 format (a, $)           ! ",$" is dec magic to hold cursor
   return
 end subroutine prompt
 !
@@ -4209,7 +4199,7 @@ subroutine frefp1(ansi, d12)
   n8 = 1
   call frefix ( ansi, n8 )
   read (ansi, 3892)  d12
-3892 format ( e20.0 )
+3892 format (e20.0)
   return
 end subroutine frefp1
 !
@@ -4242,7 +4232,7 @@ subroutine frefp2(ansi, d12, d13)
   n8 = 2
   call frefix ( ansi, n8 )
   read (ansi, 3892)  d12, d13
-3892 format ( 2e20.0 )
+3892 format (2e20.0)
   return
 end subroutine frefp2
 !
@@ -4258,7 +4248,7 @@ subroutine fresp2(ansi, d12, d13)
   n8 = 2
   call frefix ( ansi, n8 )
   read (ansi, 3892)  d12, d13
-3892 format ( 2e20.0 )
+3892 format (2e20.0)
   return
 end subroutine fresp2
 !
@@ -4275,7 +4265,7 @@ subroutine frefp3(ansi, d12, d13, d14)
   n8 = 3
   call frefix ( ansi, n8 )
   read (ansi, 3892)  d12, d13, d14
-3892 format ( 3e20.0 )
+3892 format (3e20.0)
   return
 end subroutine frefp3
 !
@@ -4291,7 +4281,7 @@ subroutine fresp3(ansi, d12, d13, d14)
   n8 = 3
   call frefix ( ansi, n8 )
   read (ansi, 3892)  d12, d13, d14
-3892 format ( 3e20.0 )
+3892 format (3e20.0)
   return
 end subroutine fresp3
 !
@@ -4308,7 +4298,7 @@ subroutine frein1(ansi, n12)
   n8 = 1
   call frefix ( ansi, n8 )
   read (ansi, 3892)  d12
-3892 format ( 3e20.0 )
+3892 format (3e20.0)
   n12 = d12
   return
 end subroutine frein1
@@ -4325,7 +4315,7 @@ subroutine frein2(ansi, n12, n13)
   n8 = 2
   call frefix(ansi, n8)
   read (ansi, 3892)  d12, d13
-3892 format ( 3e20.0 )
+3892 format (3e20.0)
   n12 = d12
   n13 = d13
   return
@@ -4348,7 +4338,7 @@ subroutine frefix(ansi, n8)
   character*80 ansi, hold
   if ( iprspy .lt. 3 )  go to 3582
   write (munit6, 3579)  n8, ansi(1:40)
-3579 format ( ' top of "frefix".  n8 =',  i5, '   ansi(1:40) = ',  a40  )
+3579 format (' Top of "frefix".  n8 =',  i5, '   ansi(1:40) = ', a40)
   call window
 3582 hold(1:80) = ' '
   kk = 0
@@ -4390,7 +4380,7 @@ subroutine frefix(ansi, n8)
   n3 = i
   go to 3612
 3758 write (prom80, 3761)  j, ansi(j-2:j+2)
-3761 format ( '   @@@  illegal data in column', i3, ' [',  a5,  '].  resend line or end :'  )
+3761 format ('   @@@  Illegal data in column', i3, ' [',  a5,  '].  Resend line or end :')
   call prompt
   write (*,*) ' ok, "frefix" call to "flager" begins.'
   lockbr = 1
@@ -4403,7 +4393,7 @@ subroutine frefix(ansi, n8)
 4100 ansi(1:n2) = hold(1:n2)
 4103 if ( iprspy .lt. 2 )  go to 4109
   write (munit6, 4108)  ansi(1:n2)
-4108 format ( ' exit "frefix".  ansi(1:n2) =',  a80 )
+4108 format ( ' Exit "frefix".  ansi(1:n2) =', a80)
   call window
 4109 return
 end subroutine frefix
@@ -6858,23 +6848,23 @@ subroutine stopin
   include 'blkcom.ftn'
   include 'dekspy.ftn'
   write (munit6, 1218) istep
-1218 format ('   ? ? ?   trouble with input data.  last card', ' number',  i5,  '   is in error.'   )
+1218 format ('   ? ? ?   Trouble with input data.  Last card', ' number',  i5,  '   is in error.')
   call window
   write (munit6, 1219)
-1219 format ( '     1234567890123456789012345678901234567890', '1234567890123456789012345678901234567890' )
+1219 format ('     12345678901234567890123456789012345678901234567890123456789012345678901234567890')
   call window
   write (munit6, 1221)  file6(istep)
-1221 format ( a80 )
+1221 format (a80)
   call window
   if ( m4plot .eq. 1 )  go to 1227
   kill = 79
   lstat(19) = 1218
   go to 9000
 1227 write (prom80, 1232)
-1232 format ( ' send corrected card (spy, stop) :' )
+1232 format (' Send corrected card (spy, stop) :')
   call prompt
   read (munit5, 1236)  buff77
-1236 format ( a80 )
+1236 format (a80)
   if ( buff77(1:4) .eq. 'stop' ) call stoptp
   if ( buff77(1:4) .ne. 'spy' )  go to 1244
   call spying
@@ -7106,7 +7096,7 @@ subroutine tpplot
 564  mcurve(j) = mline
   end do
 1000 write (prom80, 5000)
-5000 format (  ' --- outer :'  )
+5000 format (' --- Outer :')
   assign 5003 to nextsn
   go to 9800
 5003 buffin = buff77
@@ -7119,24 +7109,24 @@ subroutine tpplot
   go to 563
 2757 if ( buffin(1:8)  .ne.  debug )   go to 7368
   write (prom80, 7358)  iprspy
-7358 format (  '  supply level-number  iprspy  (', i3,  ' ) :'  )
+7358 format ('  Supply level-number  iprspy  (', i3,  ' ) :')
   assign 7361 to nextsn
   go to 9800
 7361 call frein1 ( buff77, iprspy )
   go to 1000
 7368 if ( iprspy .lt. 1 )  go to 3877
   write (munit6, 3876)  buffin
-3876 format ( '  buffin vector =',  a80  )
+3876 format ('  Buffin vector =', a80)
   call window
 3877 if( buffin(1:8) .eq.  stop ) go to 3818
   if ( buffin(1:8)  .ne.  tek )   go to 5136
   if ( ltek .eq. 1 )  go to 7387
   write (munit6, 7385)
-7385 format ( '  ---- switch from character to vector-', 'graphic plotting.'  )
+7385 format ('  ---- Switch from character to vector-graphic plotting.')
   call window
   go to 7388
 7387 write (munit6, 7386)
-7386 format ( '  ---- switch from vector-graphic to', ' character plotting'  )
+7386 format ('  ---- Switch from vector-graphic to character plotting')
   call window
 7388 ltek = ltek + 1
   if ( ltek  .eq.  2 )   ltek = 0
@@ -7146,20 +7136,20 @@ subroutine tpplot
   if ( n1  .ne.  131 )   limcol = 131
   if ( n1  .ne.  79)   limcol =  79
   write (munit6, 5139)  n1
-5139 format (  '   character-plot column width was',  i5, '  columns.'   )
+5139 format ('   Character-plot column width was',  i5, '  columns.')
   call window
   write (munit6, 5140)  limcol
-5140 format (  '   it is now being toggled to',  i5,  ' .'  )
+5140 format ('   It is now being toggled to', i5, ' .')
   call window
   go to 1000
 5143 if ( buffin(1:8)  .ne.  setcol )   go to 5154
   write (prom80, 5146)  limcol
-5146 format (  '  supply printer-plot column width (',  i4, ' ) :'  )
+5146 format ( '  Supply printer-plot column width (',  i4, ' ) :')
   assign 5147 to nextsn
   go to 9800
 5147 call frein1 ( buff77, limcol )
   write (munit6, 5148)  limcol
-5148 format (  '   confirmation.   new value =',  i4,  ' .'  )
+5148 format ('   Confirmation.   New value =', i4, ' .')
   call window
   go to 1000
 5154 if ( buffin(1:8)  .eq.  inner )   go to 3769
@@ -7173,11 +7163,11 @@ subroutine tpplot
   read (l4plot)  datepl, tclopl, numnam, numnvo, numbco, numbrn,  ( buslst(i), i=1, numnam )
   if ( iprspy .lt. 2 )  go to 5739
   write (munit6, 1001)  datepl, tclopl, numnam, numnvo, numbco, numbrn
-1001 format ( 23h plot-file header info.,  2(1x, 2a4), 4i6 )
+1001 format (' plot-file header info.', 2(1x, 2a4), 4i6)
   call window
   do j=1, numnam, 10
      write (munit6, 5733)  ( buslst(k), k=j, j+9 )
-5733 format ( 1x, 10a7 )
+5733 format (1x, 10a7)
      call window
 5736 end do
 5739 kptplt = numnvo + numbrn
@@ -7186,12 +7176,12 @@ subroutine tpplot
   if ( iprspy .lt. 2 ) go to 5754
   do j=1, numnvo, 10
      write (munit6, 1002)  ( ibsout(k), k=j, j+9 )
-1002 format (  ' node numbers ibsout:',  10i5  )
+1002 format (' Node numbers ibsout:', 10i5)
      call window
 5742 end do
   do j=1, numbrn, 5
      write (munit6, 5744)  (ibrnch(k), jbrnch(k), k=j, j+4)
-5744 format ( ' branch node pairs:',  5( 2x, 2i4)  )
+5744 format (' Branch node pairs:', 5( 2x, 2i4))
      call window
 5747 end do
 5754 numout = numnvo + 2 * numbrn
@@ -7217,11 +7207,11 @@ subroutine tpplot
   go to 1012
 1013 if ( iprspy .lt. 2 ) go to 3769
   write (munit6, 1014)  numout, numnvo, nv, nt2, i
-1014 format ( ' numout, numnvo, nv, nt2, i =',  5i6 )
+1014 format (' numout, numnvo, nv, nt2, i =', 5i6)
   call window
   do j=1, numout, 10
      write (munit6, 5763) ( bbus(m), m=j, j+9 )
-5763 format ( 1x, 10a6 )
+5763 format (1x, 10a6)
      call window
 5766 end do
 3769 call pltvar
@@ -7235,7 +7225,7 @@ subroutine tpplot
   if ( numtek  .gt.  0 )   call tekplt
 9800 if ( iprspy .lt. 1 ) go to 9817
   write (munit6, 9807)   prom80(1:40)
-9807 format (  ' exit "tpplot".   prom80(1:40) =',  a40  )
+9807 format (' Exit "tpplot".   prom80(1:40) =', a40)
   call window
 9817 nexmod = 4
 9835 return
@@ -7273,7 +7263,7 @@ subroutine helper ( n1 )
      if ( texspy(j)(3:10) .eq. buffin(6:13) )  go to 3649
 3642 end do
   write (munit6, 3645)
-3645 format ( '    ? ? ?   sorry, no such plot command.', '   try again ... '  )
+3645 format ('    ? ? ?   Sorry, no such plot command.   Try again ... ')
   call window
   go to 9000
 3649 n23 = j
@@ -7310,7 +7300,7 @@ subroutine pltvar
   go to nextsn
 1005 tolrce = 0.0
   go to 1008
-1053 write(prom80,1045)
+1053 write (prom80,1045)
 1045 format (  ' --- middle :'  )
   assign 1048 to nextsn
   go to 9800
@@ -7624,7 +7614,7 @@ subroutine timval
   nexmod = 0
   go to nextsn
 31549 if ( monitr .eq. 8765 ) go to 1926
-1550 write(prom80,1930)
+1550 write (prom80,1930)
 1930 format (  ' --- inner :'  )
   assign 1556 to nextsn
   go to 9800

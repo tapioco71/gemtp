@@ -6,7 +6,7 @@
 !     subroutine init.
 !
 subroutine init
-  include 'tacsto.ins'
+  include 'tacsto.ftn'
   character*8 atim(2)      ! wsm + thl manual modification for bpa emtp
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910

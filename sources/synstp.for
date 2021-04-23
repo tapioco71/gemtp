@@ -6,7 +6,7 @@
 !     subroutine synstp.
 !
 subroutine synstp
-  include  'tacsto.ins'
+  include  'tacsto.ftn'
   k=dptr-449
   if(k.le.1500) k=1501
   write(unit06,1000) (csto(i),i=k,dptr)

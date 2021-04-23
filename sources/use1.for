@@ -7,10 +7,10 @@
 !
 subroutine use1
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  include 'tacsto.ins'
+  include 'tacsto.ftn'
   include 'blkcom.ftn'  ! wsm + thl
   include 'tacsar.ftn'  ! wsm + thl
-  include 'labcom.ins'  ! wsm + thl
+  include 'labcom.ftn'  ! wsm + thl
   !  common  / c0b014 /   sptacs(  29 )  ! wsm + thl
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910

@@ -14,6 +14,7 @@ subroutine datain
   include 'blkcom.ftn'
   include 'dekspy.ftn'
   include 'labcom.ftn'
+  include 'io.ftn'
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
   character*6 chlmfs
@@ -65,14 +66,14 @@ subroutine datain
   go to 1774
 5266 kcut = 0
   if ( filsav .eq. '                                ' ) go to 1712   ! data input assigned from outside
-  open ( unit=munit5,status='old',file=filsav )          ! reuse input for
+  open (unit = munit5, status = 'old', file = filsav )          ! reuse input for
 1712 if ( llbuff .eq. -3333 ) rewind munit5              !generating 2nd & 3rd lmf
                                                          ! 2nd or later pass, skip
 5244 if (llbuff .ne. -3333 .and. file6(numcrd + 1)(1:4) .ne. 'eof ') go to 1708  ! keyboard
   kverfy = -4545                                         ! local flag (no windows yet opened)
   limarg = 35                                            ! dimensioned limit on arguments of "module"
   numdcd = 0                                             ! set pointer at zero (no "cimage" calls yet)
-  munit5 = 5                                             ! i/o channel for "emtspy" input (keyboard)
+  munit5 = gfortran_stdin_unit                           ! i/o channel for "emtspy" input (keyboard)
   limcrd = 30000                                         ! present fixed limit on file6 of "dekspy"
   n13 = 0                                                ! initially assume no debug printout
   ntacs = 0                                              ! old tacs data format

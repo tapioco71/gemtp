@@ -10,8 +10,8 @@
   common /com47/  htoj4,pai,roe,spdlgt,u0,u2p
   common /com47/  value1, value2, value3, value4, value5,valu14
   !     end of real variables
-  common /com47/  iearth,itypec,ncct,ncc,npc,izflag,iyflag,npc2
-  common /com47/  np2,logsix,kmode,iprs47,npais,ncros,numaki,npp
+  common /com47/  iearth, itypec, ncct, ncc, npc, izflag, iyflag, npc2
+  common /com47/  np2, logsix, kmode, iprs47, npais, ncros, numaki, npp
   common /com47/  iprint
   !     end of integer variables
   complex*16  bin, bkn, cimag1, creal1, czero, ypo

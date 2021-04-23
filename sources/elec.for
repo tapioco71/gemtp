@@ -7,10 +7,10 @@
 !
 subroutine elec
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  include 'tacsto.ins'
+  include 'tacsto.ftn'
   include 'blkcom.ftn'      ! wsm + thl manual modification for bpa emtp
   include 'tacsar.ftn'      ! wsm + thl manual modification for bpa emtp
-  include 'labcom.ins'      ! wsm + thl manual modification for bpa emtp
+  include 'labcom.ftn'      ! wsm + thl manual modification for bpa emtp
   !     common  / c0b014 /   sptacs(  29 )    ! wsm + thl manual modification for bpa emtp
   sptr = sptr - 1
   if (sptr .eq. iptr) go to 910

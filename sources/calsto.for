@@ -6,7 +6,7 @@
 !     subroutine calsto.
 !
 subroutine calsto
-  include 'tacsto.ins'
+  include 'tacsto.ftn'
   from=0
   goto 9000
 9500 if(from.eq.0) return

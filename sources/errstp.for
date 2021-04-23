@@ -6,7 +6,7 @@
 !     subroutine errstp.
 !
 subroutine errstp
-  include 'tacsto.ins'
+  include 'tacsto.ftn'
   if (stpl1 .gt. 50) stpl1=0
   if (stpl2 .gt. 50) stpl2=0
   i1 = isto(ishenv+61)

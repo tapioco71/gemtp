@@ -1,11 +1,15 @@
-  !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
-  !
-  !     file: main00.for
-  !
+!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!
+!     file: main00.for
+!
+!
+! program gemtp.
+!
 program gemtp
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   include 'blkcom.ftn'
   include 'volt45.ftn'
+  include 'io.ftn'
   !**********************************************************************
   !                                                                     *
   !    --------------- Electromagnetic Transients Program ------------  *
@@ -51,17 +55,20 @@ program gemtp
   !    warranty as to the usefulness, accuracy, fidelity, or            *
   !    completeness of these materials is (or ever has been) in any     *
   !    way expressed or implied.                                        *
-  !                                                                      *
+  !                                                                     *
   !**********************************************************************
   character(32) arg
-  data  ll34   /  34  /
+  data ll34                 / 34 /
+  data gfortran_stderr_unit / 0 /
+  data gfortran_stdin_unit  / 5 /
+  data gfortran_stdout_unit / 6 /
   !     unit assignments of "over1" needed earlier by spy:
   options_count = command_argument_count()
   do i = 1, iargc()
      call getarg(i, arg)
      write (*, *) arg
   end do
-  lunit0 = gfortran_err_unit
+  lunit0 = gfortran_stderr_unit
   lunit1 = 1
   lunit2 = 2
   lunit3 = 3
@@ -224,7 +231,7 @@ program gemtp
   !          the exiting linkage is generally to module  over1  (to read
   !          a new data case), but may be to module  over31 (for final
   !          case termination).
-end program
+end program gemtp
 !
 !     subroutine stoptp.
 !
@@ -292,6 +299,7 @@ subroutine erexit
   !     VAX-11   installation-dependent EMTP module.   This is
   !     called by the top of "main00", before any emtp data input.
   include 'blkcom.ftn'
+  include 'io.ftn'
   !include 'dekspy.ftn'
   !     dimension idum(3)   !  dummy vector for ctrl-c handling
   external kwiter       ! needed for ctrl-c initialization
@@ -843,28 +851,28 @@ end subroutine cimage
 !
 subroutine ioerr(naddr)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
- naddr = 0
- return
+  naddr = 0
+  return
 end subroutine ioerr
 !
 !     subroutine caterr.
 !
 subroutine caterr(naddr, koderr)
- implicit real*8 (a-h, o-z), integer*4 (i-n)
- naddr = 0
- koderr = 0
- return
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  naddr = 0
+  koderr = 0
+  return
 end subroutine caterr
 !
 !     function locf.
 !
 function locf(array)
- implicit real*8 (a-h, o-z), integer*4 (i-n)
- integer*8 locf
- real*8 array
- dimension array(1)
- locf = %loc(array(1)) / 8
- return
+  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  integer*8 locf
+  real*8 array
+  dimension array(1)
+  locf = %loc(array(1)) / 8
+  return
 end function locf
 !
 !     function locint.
@@ -1757,7 +1765,7 @@ function sandnm(x)
 2632 n1 = (l-1) / 100
   if ( iprsup  .ge.  1 ) write (lunit6, 2645)  l, knt, kswtch, n1, x
 2645 format (/, " Variables in  'sandnm' ,   the random-number generator with 100 built-in numbers.       &
-          l     knt  kswtch      n1 ", 14x, 'x', /, 82x, 4i8, e15.5)
+       l     knt  kswtch      n1 ", 14x, 'x', /, 82x, 4i8, e15.5)
   if ( n1  .gt.  0 ) l = l  -  100 * n1
   sandnm = a(l)
   return

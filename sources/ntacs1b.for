@@ -7,10 +7,10 @@
 !
 subroutine ntacs1b
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  include 'tacsto.ins'
+  include 'tacsto.ftn'
   include 'blkcom.ftn'      ! wsm + thl manual modification for bpa emtp
   include 'tacsar.ftn'      ! wsm + thl manual modification for bpa emtp
-  include 'labcom.ins'      ! wsm + thl manual modification for bpa emtp
+  include 'labcom.ftn'      ! wsm + thl manual modification for bpa emtp
 !  common  / c0b014 /   sptacs(  29 )    ! wsm + thl manual modification for bpa emtp
 !  common  / c0b063 /   texvec(1000 )    ! wsm + thl manual modification for bpa emtp
 !  character*6  texvec                   ! wsm + thl manual modification for bpa emtp

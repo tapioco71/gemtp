@@ -2,8 +2,8 @@
 !
 !     file: labl29.ftn
 !
-  common /com29/   per, xmean1, xvar1, stdev1, vmax
-  common /com29/   liminc, iofarr, nvar, key, maxo29
+  common /com29/ per, xmean1, xvar1, stdev1, vmax
+  common /com29/ liminc, iofarr, nvar, key, maxo29
 !
 !     end of file: labl29.ftn
 !

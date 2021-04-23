@@ -31,9 +31,8 @@
 !               (integer-numeric usage only, with arrays
 !                preceding scalars).
       common moncar(10)
-      common lunit1, lunit2, lunit3, lunit4, lunit5, lunit6
-      common lunit7, lunit8, lunit9, lunt10, lunt11
-      common lunt12, lunt13, lunt14, lunt15
+      common lunit0, lunit1, lunit2, lunit3, lunit4, lunit5, lunit6, lunit7
+      common lunit8, lunit9, lunt10, lunt11, lunt12, lunt13, lunt14, lunt15
       common nright, nfrfld, kolbeg, max99m
       common kprchg(6), multpr(5), ipntv(11), indtv(10)
       common lstat(80), nbyte(6), lunsav(15),iprsov(39)

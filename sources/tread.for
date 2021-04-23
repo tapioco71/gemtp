@@ -7,8 +7,8 @@
 !
 subroutine tread
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  include 'blkcom.ins'     ! wsm + thl manual modification for bpa emtp
-  include 'tacsto.ins'
+  include 'blkcom.ftn'     ! wsm + thl manual modification for bpa emtp
+  include 'tacsto.ftn'
   character*80 dbuff
   !  equivalence ( moncas(109), noutpr )   ! wsm + thl manual modification for bpa emtp
   character*6 chvbar

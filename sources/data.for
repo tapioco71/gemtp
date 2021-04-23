@@ -3,7 +3,7 @@
   !     file: data.for
   !
   block data tdata
-     include  'tacsto.ins'
+     include 'tacsto.ftn'
      data ctbl(   1:  26) / 'abcdefghijklmnopqrstuvwxyz' /
      data ctbl(  27:  37) / '0123456789_' /
      data ctbl(  39:  48) / '"[](){}+-*' /

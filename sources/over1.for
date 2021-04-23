@@ -8,6 +8,7 @@ subroutine over1
   include 'labcom.ftn'
   include 'umdeck.ftn'
   include 'labl02.ftn'
+  include 'io.ftn'
   !     %include  '//c/tsu/cables.ins.ftn'
   !     to avoid "insert deck tacsar" here, use small part of it:
   real*4 r4(1)
@@ -82,7 +83,7 @@ subroutine over1
   isplot = 0
   indstp = 1
   noutpr = 0
-  lunit0 = gfortran_err_unit
+  lunit0 = gfortran_stderr_unit
   lunit1 = 1
   lunit2 = 2
   lunit3 = 3

@@ -12,7 +12,7 @@ subroutine subr10
   include 'tacsar.ftn'
   include 'syncom.ftn'
   include 'umdeck.ftn'
-  !     %include  '//c/tsu/cables.ins.ftn'
+  !     %include  '//c/tsu/cables.ftn'
   ktab = 0
 3000 if (nchain .gt. 20) go to 9000
   if (kill .eq. 0) go to 1679

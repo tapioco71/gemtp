@@ -27,9 +27,9 @@ subroutine over12
   equivalence (moncar(5), idist), (moncar(6),itest)
   equivalence (moncar(8), jseedr)
   equivalence (moncar(9), kloaep), (moncar(10), mtape)
-  common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7,koff8, koff9, koff10, koff13, koff14, koff15, koff16, koff17, &
-       koff18, koff19, koff20, koff21, koff22, koff23, koff24,koff25, inoff1, inoff2, inoff3, inoff4, inoff5, nqtt, lcbl, &
-       lmode, nqtw
+  common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7,koff8, koff9, koff10, koff13, koff14, koff15, koff16, koff17
+  common /fdqlcl/ koff18, koff19, koff20, koff21, koff22, koff23, koff24,koff25, inoff1, inoff2, inoff3, inoff4, inoff5, nqtt, lcbl
+  common /fdqlcl/ lmode, nqtw
   character*8 atim
   dimension atim(2)
   common /systematic/  linsys
@@ -597,7 +597,7 @@ subroutine over12
   call elecyy
   call premec
 901 if(it.eq.0) go to 433
-  if( iprsup .ge. 1 ) write(lunit6, 65435)  ( tr(i), tx(i), r(i), c(i), i=1, it )
+  if( iprsup .ge. 1 ) write(lunit6, 65435)  ( tr(i), tx(i), r(i), emtpc(i), i=1, it )
 65435 format ( /,  39h lumped-element branch-parameter values, 34h in "over12", prior to processing.   ,/, &
        18x, 2htr, 18x, 2htx, 19x, 1hr, 19x, 1hc, /,( 1x, 4e20.10 ) )
   k = 1
@@ -638,14 +638,14 @@ subroutine over12
      lb = lb + ka
 904 end do
 905 do  i = n1, n2
-     c(i) = c(i) * ci1
+     emtpc(i) = emtpc(i) * ci1
      x(i) = tr(i)  +  tx(i) * d22
      tx(i) = -x(i)
   end do
 5539 k = k + j
   if( k .le. ibr )  go to 5527
-  if( iprsup .ge. 1 ) write(lunit6, 5543)  ( x(i), c(i), i=1, it )
-5543 format ( /,  ' (x(i), c(i), i=1, it)   after conversion', ' to  r + 2*l/deltat .'   ,/, ( 1x, 8e16.7 ) )
+  if( iprsup .ge. 1 ) write(lunit6, 5543)  ( x(i), emtpc(i), i=1, it )
+5543 format ( /,  ' (x(i), emtpc(i), i=1, it)   after conversion', ' to  r + 2*l/deltat .'   ,/, ( 1x, 8e16.7 ) )
 433 if ( kswtch  .eq.  0 )   go to 430
   if ( iprsup  .ge.  1 )   go to 455
   go to 477
@@ -678,10 +678,10 @@ subroutine over12
      if ( n15  .eq.  1 )   n15 = n2
      n16 = iabs ( kssfrq(n15) )
      omega = twopi * sfreq(n16)
-     ck1=(f(nn1)-f(n2))/omega
+     ck1 = (emtpf(nn1) - emtpf(n2)) / omega
      if ( noutpr  .eq.  0 ) write(lunit6,427) bus(nn1),bus(n2),ck1
 427  format( 23h initial flux in coil ', a6, 6h' to ', a6, 3h' =, e13.5 )
-     ck(icheck)=ck1-(e(nn1)-e(n2))*delta2
+     ck(icheck) = ck1 - (emtpe(nn1) - emtpe(n2)) * delta2
      if(absz(ck1).gt.topen(k) .and. noutpr  .eq.  0 ) write(lunit6,426)
 426  format (' Warning.  assumption that ac steady state has fundamental frequency only is questionable with preceding flux outside linear region')
 422 end do
@@ -741,12 +741,12 @@ subroutine over12
   if(n2.le.it2) go to 501
   go to 520
 530 i=iabs(i)
-  gus1=c(i)
+  gus1=emtpc(i)
   if(gus1.ne.0.) gus1=1.0/gus1
   gus2=1.0/(x(i)+gus1)
   r(i)=gus2*(tr(i)*2.0-x(i)+gus1)
   x(i)=gus2
-  c(i)=gus1
+  emtpc(i)=gus1
   go to 520
 535 it2=iabs(length(k))
   if ( kodsem(k) .eq. 0  .or. imodel(k) .eq. -2 ) go to 5349
@@ -1732,7 +1732,7 @@ subroutine  tacs2
      if ( n1 .gt. 93 )  go to 500
      n2 = n1 - 89
      go to ( 502, 508, 504, 506), n2
-502  if ( ud1(ndy5+1)  .eq.  1.0 ) xtcs(ndxi) = e( k)
+502  if (ud1(ndy5 + 1) .eq. 1.0) xtcs(ndxi) = emtpe(k)
      go to 500
 504  xtcs(ndxi) = etac( k)
      go to 500
@@ -2326,8 +2326,8 @@ subroutine  tacs2
         go to 3020
 3001    k = ud1( ndy5 + 2 )
         if ( ndxi  .eq.  91 ) go to 3131
-        xar(ndx3) = e( k)
-        xar(ndx2) = f( k)
+        xar(ndx3) = emtpe( k)
+        xar(ndx2) = emtpf( k)
         go to 3030
 3131    if ( nextsw(k)  .ne.  87 )  go to 3020
         xar(ndx3) = tclose(k)
@@ -3123,7 +3123,7 @@ subroutine csupac( l, omegar )
        it=it+1
        tr(it)=a
        tx(it)=0.0
-       c(it)=0.0
+       emtpc(it)=0.0
        length( ibr+1 ) = 3
        nr( ibr+1 ) = it
        cik( ibr+1 ) = 0.0
@@ -3141,11 +3141,11 @@ subroutine csupac( l, omegar )
        cik( ibr+2 ) = 0.0
        tr(it)=b
        tx(it)=0.0
-       c(it)=0.0
+       emtpc(it)=0.0
        it=it+1
        tr(it)=a
        tx(it)=0.0
-       c(it)=0.0
+       emtpc(it)=0.0
        it=it+1
        kbus( ibr+3 ) = ismdat( j30+4 )
        mbus( ibr+3 ) = ismdat( j30+7 )
@@ -3157,15 +3157,15 @@ subroutine csupac( l, omegar )
        ibr = ibr + 3
        tr(it)=b
        tx(it)=0.0
-       c(it)=0.0
+       emtpc(it)=0.0
        it=it+1
        tr(it)=b
        tx(it)=0.0
-       c(it)=0.0
+       emtpc(it)=0.0
        it=it+1
        tr(it)=a
        tx(it)=0.0
-       c(it)=0.0
+       emtpc(it)=0.0
        if( iprsup .lt. 1 )  go  to  1408
        ll1 = ibr - 2
        write( lunit6, 6706 )  ( nr( i ), i = ll1, ibr )

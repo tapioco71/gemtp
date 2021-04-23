@@ -1122,6 +1122,7 @@ end subroutine mxmnm
 !
 subroutine datout(w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, r, al, c, npk)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
+  include 'io.ftn'
   !     8.19 data cards punch out subroutine
   character cha
   dimension r(npk), al(npk), c(npk)
