@@ -1,0 +1,272 @@
+  ! -*- Mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+  !
+  !     file: tacsto.ins
+  !
+  integer*4 isto, strtbl
+  integer*4 from, to
+  integer*4 ilen, rlen, clen, iptr, rptr, cptr, sptr, rsptr, dptr
+  integer*4 ibkptr, rbkptr, ishenv, env, useenv, datenv
+  integer*4 xprndx, xprcnt, xprknd, xprsub
+  integer*4 mflg, mndx
+  integer*4 stpflg, stpi1, stpi2, stpi3, stpi4, stpi5
+  integer*4 stpl1, stpc1, stpl2, stpc2
+  integer*4 ptr0,ptr1,ptr2,ptr3,ptr4,ptr5,ptr6,ptr7,ptr8,ptr9,ptr10
+  integer*4 ptr11,ptr12,ptr13,ptr14,ptr15,ptr16,ptr17,ptr18,ptr19
+  integer*4 cnt0,cnt1,cnt2,cnt3,cnt4,cnt5,cnt6,cnt7,cnt8,cnt9,cnt10
+  integer*4 cnt11,cnt12,cnt13,cnt14,cnt15,cnt16,cnt17,cnt18,cnt19
+  integer*4 ndx0,ndx1,ndx2,ndx3,ndx4,ndx5,ndx6,ndx7,ndx8,ndx9,ndx10
+  integer*4 ndx11,ndx12,ndx13,ndx14,ndx15,ndx16,ndx17,ndx18,ndx19
+  integer*4 cnt, ndx, lpflg, flg, flg1, flg2, ipol, ipn
+  integer*4 i,j,k,l,m,n
+  integer*4 i0,i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15
+  integer*4 i16,i17,i18,i19
+  integer*4 j0,j1,j2,j3,j4,j5,j6,j7,j8,j9
+  integer*4 k0,k1,k2,k3,k4,k5,k6,k7,k8,k9
+  integer*4 base1,base2,base3,base4,base5,base6,base7
+  integer*4 base13,base14,base15,base16
+  integer*4 iinf, inull
+  integer*4 strcnt, ishcnt, intcnt, reacnt, iempty, rempty, ctblen
+  integer*4 unit05, unit06, unit08, unit09, unit10
+  integer*4 unit11, unit12, unit13, unit14, unit15
+  integer*4 stoflt, stocha, fltlen, intlen, bkfile
+  integer*4 pgsize, isize, rsize, csize, rbase
+  real*8 rspare, rsto
+  real*8 etime, estep, estop, bratio, split
+  real*8 ten, zero, one, two, half
+  real*8 p, stpt, stpr1, stpr2, stpr3
+  real*8 a, b, c, d, e, f, g
+  real*8 r0, r1, r2, r3, r4, r5, r6
+  real*8 rinf, rmargn, divzro, pi, rnull
+  character*1 csto, char1
+  character ctbl*1232, cbuff*256
+  dimension isto(18000)
+  dimension rsto(9000)
+  dimension csto(9000)       ! wsm + thl manual modification for bpa emtp
+  !     stoflt and stocha are hard-dimensioned in data.ftn
+  dimension strtbl( 514 )
+  ! wsm + thl manual modification for bpa emtp
+  common / cmrsto / split, ten, zero, one, two, half, p, stpt, stpr1, stpr2, stpr3, a, b, c, d, e, f, g, r0, r1, r2, r3, r4,&
+       r5, r6, rinf, rmargn, divzro, pi, rnull, bratio, etime, estep, estop, rspare(6), rsto
+  ! wsm + thl manual modification for bpa emtp
+  common / cmcsto / csto
+  common isto, strtbl, from, to, ilen, rlen, clen, iptr, rptr, cptr
+  common sptr, rsptr, dptr, ibkptr, rbkptr, ishenv, env, useenv
+  common datenv, xprndx, xprcnt, xprknd, xprsub, mflg, mndx, stpflg
+  common stpi1, stpi2, stpi3, stpi4, stpi5, stpl1, stpc1, stpl2
+  common stpc2, ptr0, ptr1, ptr2, ptr3, ptr4, ptr5, ptr6, ptr7
+  common ptr8, ptr9, ptr10, ptr11, ptr12, ptr13, ptr14, ptr15
+  common ptr16, ptr17, ptr18, ptr19, cnt0, cnt1, cnt2, cnt3, cnt4
+  common cnt5, cnt6, cnt7, cnt8, cnt9, cnt10, cnt11, cnt12, cnt13
+  common cnt14, cnt15, cnt16, cnt17, cnt18, cnt19, ndx0, ndx1, ndx2
+  common ndx3, ndx4, ndx5, ndx6, ndx7, ndx8, ndx9, ndx10, ndx11
+  common ndx12, ndx13, ndx14, ndx15, ndx16, ndx17, ndx18, ndx19
+  common cnt, ndx, lpflg, flg, flg1, flg2, ipol, ipn
+  common i, j, k, l, m, n, i0, i1, i2, i3, i4, i5, i6, i7, i8, i9
+  common i10, i11, i12, i13, i14, i15, i16, i17, i18, i19
+  common j0, j1, j2, j3, j4, j5, j6, j7, j8, j9
+  common k0, k1, k2, k3, k4, k5, k6, k7, k8, k9
+  common base1, base2, base3, base4, base5, base6, base7
+  common base13, base14, base15, base16
+  common iinf, inull
+  common strcnt, ishcnt, intcnt, reacnt, iempty, rempty, ctblen
+  common unit05, unit06, unit08, unit09, unit10
+  common unit11, unit12, unit13, unit14, unit15
+  common stoflt, stocha, fltlen, intlen, bkfile
+  common pgsize, isize, rsize, csize, rbase
+  common char1
+  common ctbl, cbuff
+  !$$$      equivalence (isto(1), rsto(1))
+  !$$$      equivalence (csto(1),    ctbl    )
+  !$$$      equivalence (csto(1233), cbuff   )
+  !$$$      equivalence (csto(1500), char1   )
+  !$$$      equivalence (strtbl(1),  isto(11))
+  !$$$      equivalence (isto(594),  ibkptr )
+  !$$$      equivalence (isto(595),  rbkptr )
+  !$$$      equivalence (isto(596),  pgsize )
+  !$$$      equivalence (isto(597),  isize  )
+  !$$$      equivalence (isto(598),  rsize  )
+  !$$$      equivalence (isto(599),  csize  )
+  !$$$      equivalence (isto(600),  rbase   )
+  !$$$      equivalence (isto(601),  from   )
+  !$$$      equivalence (isto(602),  to     )
+  !$$$      equivalence (isto(603),  ilen   )
+  !$$$      equivalence (isto(604),  rlen   )
+  !$$$      equivalence (isto(605),  clen   )
+  !$$$      equivalence (isto(606),  iptr   )
+  !$$$      equivalence (isto(607),  rptr   )
+  !$$$      equivalence (isto(608),  cptr   )
+  !$$$      equivalence (isto(609),  sptr   )
+  !$$$      equivalence (isto(610),  rsptr  )
+  !$$$      equivalence (isto(611),  dptr   )
+  !$$$      equivalence (isto(613),  ishenv )
+  !$$$      equivalence (isto(614),  env    )
+  !$$$      equivalence (isto(615),  useenv )
+  !$$$      equivalence (isto(616),  datenv )
+  !$$$      equivalence (isto(617),  xprndx )
+  !$$$      equivalence (isto(618),  xprcnt )
+  !$$$      equivalence (isto(619),  xprknd )
+  !$$$      equivalence (isto(620),  xprsub )
+  !$$$      equivalence (isto(621),  mflg   )
+  !$$$      equivalence (isto(622),  mndx   )
+  !$$$      equivalence (isto(623),  stpflg )
+  !$$$      equivalence (isto(624),  stpi1 )
+  !$$$      equivalence (isto(625),  stpi2 )
+  !$$$      equivalence (isto(626),  stpi3 )
+  !$$$      equivalence (isto(627),  stpi4 )
+  !$$$      equivalence (isto(628),  stpi5 )
+  !$$$      equivalence (isto(629),  stpl1 )
+  !$$$      equivalence (isto(630),  stpc1 )
+  !$$$      equivalence (isto(631),  stpl2 )
+  !$$$      equivalence (isto(632),  stpc2 )
+  !$$$      equivalence (isto(633),  ptr0 )
+  !$$$      equivalence (isto(634),  ptr1 )
+  !$$$      equivalence (isto(635),  ptr2 )
+  !$$$      equivalence (isto(636),  ptr3 )
+  !$$$      equivalence (isto(637),  ptr4 )
+  !$$$      equivalence (isto(638),  ptr5 )
+  !$$$      equivalence (isto(639),  ptr6 )
+  !$$$      equivalence (isto(640),  ptr7 )
+  !$$$      equivalence (isto(641),  ptr8 )
+  !$$$      equivalence (isto(642),  ptr9 )
+  !$$$      equivalence (isto(643),  ptr10 )
+  !$$$      equivalence (isto(644),  ptr11 )
+  !$$$      equivalence (isto(645),  ptr12 )
+  !$$$      equivalence (isto(646),  ptr13 )
+  !$$$      equivalence (isto(647),  ptr14 )
+  !$$$      equivalence (isto(648),  ptr15 )
+  !$$$      equivalence (isto(649),  ptr16 )
+  !$$$      equivalence (isto(650),  ptr17 )
+  !$$$      equivalence (isto(651),  ptr18 )
+  !$$$      equivalence (isto(652),  ptr19 )
+  !$$$      equivalence (isto(653),  cnt0 )
+  !$$$      equivalence (isto(654),  cnt1 )
+  !$$$      equivalence (isto(655),  cnt2 )
+  !$$$      equivalence (isto(656),  cnt3 )
+  !$$$      equivalence (isto(657),  cnt4 )
+  !$$$      equivalence (isto(658),  cnt5 )
+  !$$$      equivalence (isto(659),  cnt6 )
+  !$$$      equivalence (isto(660),  cnt7 )
+  !$$$      equivalence (isto(661),  cnt8 )
+  !$$$      equivalence (isto(662),  cnt9 )
+  !$$$      equivalence (isto(663),  cnt10 )
+  !$$$      equivalence (isto(664),  cnt11 )
+  !$$$      equivalence (isto(665),  cnt12 )
+  !$$$      equivalence (isto(666),  cnt13 )
+  !$$$      equivalence (isto(667),  cnt14 )
+  !$$$      equivalence (isto(668),  cnt15 )
+  !$$$      equivalence (isto(669),  cnt16 )
+  !$$$      equivalence (isto(670),  cnt17 )
+  !$$$      equivalence (isto(671),  cnt18 )
+  !$$$      equivalence (isto(672),  cnt19 )
+  !$$$      equivalence (isto(673),  ndx0 )
+  !$$$      equivalence (isto(674),  ndx1 )
+  !$$$      equivalence (isto(675),  ndx2 )
+  !$$$      equivalence (isto(676),  ndx3 )
+  !$$$      equivalence (isto(677),  ndx4 )
+  !$$$      equivalence (isto(678),  ndx5 )
+  !$$$      equivalence (isto(679),  ndx6 )
+  !$$$      equivalence (isto(680),  ndx7 )
+  !$$$      equivalence (isto(681),  ndx8 )
+  !$$$      equivalence (isto(682),  ndx9 )
+  !$$$      equivalence (isto(683),  ndx10 )
+  !$$$      equivalence (isto(684),  ndx11 )
+  !$$$      equivalence (isto(685),  ndx12 )
+  !$$$      equivalence (isto(686),  ndx13 )
+  !$$$      equivalence (isto(687),  ndx14 )
+  !$$$      equivalence (isto(688),  ndx15 )
+  !$$$      equivalence (isto(689),  ndx16 )
+  !$$$      equivalence (isto(690),  ndx17 )
+  !$$$      equivalence (isto(691),  ndx18 )
+  !$$$      equivalence (isto(692),  ndx19 )
+  !$$$      equivalence (isto(693),  cnt )
+  !$$$      equivalence (isto(694),  ndx )
+  !$$$      equivalence (isto(695),  lpflg )
+  !$$$      equivalence (isto(696),  flg )
+  !$$$      equivalence (isto(697),  flg1 )
+  !$$$      equivalence (isto(698),  flg2 )
+  !$$$      equivalence (isto(699),  ipol )
+  !$$$      equivalence (isto(700),  ipn )
+  !$$$      equivalence (isto(701),  i )
+  !$$$      equivalence (isto(702),  j )
+  !$$$      equivalence (isto(703),  k )
+  !$$$      equivalence (isto(704),  l )
+  !$$$      equivalence (isto(705),  m )
+  !$$$      equivalence (isto(706),  n )
+  !$$$      equivalence (isto(707),  i0 )
+  !$$$      equivalence (isto(708),  i1 )
+  !$$$      equivalence (isto(709),  i2 )
+  !$$$      equivalence (isto(710),  i3 )
+  !$$$      equivalence (isto(711),  i4 )
+  !$$$      equivalence (isto(712),  i5 )
+  !$$$      equivalence (isto(713),  i6 )
+  !$$$      equivalence (isto(714),  i7 )
+  !$$$      equivalence (isto(715),  i8 )
+  !$$$      equivalence (isto(716),  i9 )
+  !$$$      equivalence (isto(717),  i10 )
+  !$$$      equivalence (isto(718),  i11 )
+  !$$$      equivalence (isto(719),  i12 )
+  !$$$      equivalence (isto(720),  i13 )
+  !$$$      equivalence (isto(721),  i14 )
+  !$$$      equivalence (isto(722),  i15 )
+  !$$$      equivalence (isto(723),  i16 )
+  !$$$      equivalence (isto(724),  i17 )
+  !$$$      equivalence (isto(725),  i18 )
+  !$$$      equivalence (isto(726),  i19 )
+  !$$$      equivalence (isto(727),  j0 )
+  !$$$      equivalence (isto(728),  j1 )
+  !$$$      equivalence (isto(729),  j2 )
+  !$$$      equivalence (isto(730),  j3 )
+  !$$$      equivalence (isto(731),  j4 )
+  !$$$      equivalence (isto(732),  j5 )
+  !$$$      equivalence (isto(733),  j6 )
+  !$$$      equivalence (isto(734),  j7 )
+  !$$$      equivalence (isto(735),  j8 )
+  !$$$      equivalence (isto(736),  j9 )
+  !$$$      equivalence (isto(737),  k0 )
+  !$$$      equivalence (isto(738),  k1 )
+  !$$$      equivalence (isto(739),  k2 )
+  !$$$      equivalence (isto(740),  k3 )
+  !$$$      equivalence (isto(741),  k4 )
+  !$$$      equivalence (isto(742),  k5 )
+  !$$$      equivalence (isto(743),  k6 )
+  !$$$      equivalence (isto(744),  k7 )
+  !$$$      equivalence (isto(745),  k8 )
+  !$$$      equivalence (isto(746),  k9 )
+  !$$$      equivalence (isto(747),  base1 )
+  !$$$      equivalence (isto(748),  base2 )
+  !$$$      equivalence (isto(749),  base3 )
+  !$$$      equivalence (isto(750),  base4 )
+  !$$$      equivalence (isto(751),  base5 )
+  !$$$      equivalence (isto(752),  base6 )
+  !$$$      equivalence (isto(753),  base7 )
+  !$$$      equivalence (isto(755),  base13 )
+  !$$$      equivalence (isto(756),  base14 )
+  !$$$      equivalence (isto(757),  base15 )
+  !$$$      equivalence (isto(758),  base16 )
+  !$$$      equivalence (isto(759),  iinf   )
+  !$$$      equivalence (isto(760),  inull )
+  !$$$      equivalence (isto(761),  strcnt )
+  !$$$      equivalence (isto(762),  ishcnt )
+  !$$$      equivalence (isto(763),  intcnt )
+  !$$$      equivalence (isto(764),  reacnt )
+  !$$$      equivalence (isto(765),  iempty )
+  !$$$      equivalence (isto(766),  rempty )
+  !$$$      equivalence (isto(767),  ctblen )
+  !$$$      equivalence (isto(768),  unit05 )
+  !$$$      equivalence (isto(769),  unit06 )
+  !$$$      equivalence (isto(770),  unit08 )
+  !$$$      equivalence (isto(771),  unit09 )
+  !$$$      equivalence (isto(772),  unit10 )
+  !$$$      equivalence (isto(773),  unit11 )
+  !$$$      equivalence (isto(774),  unit12 )
+  !$$$      equivalence (isto(775),  unit13 )
+  !$$$      equivalence (isto(776),  unit14 )
+  !$$$      equivalence (isto(777),  unit15 )
+  !$$$      equivalence (isto(778),  bkfile )
+  !$$$      equivalence (isto(779),  fltlen )
+  !$$$      equivalence (isto(780),  intlen )
+  !$$$      equivalence (isto(781),  stoflt )
+  !$$$      equivalence (isto(782),  stocha )
+  !
+  !     end of file:: tacsto.ins
+  !

@@ -1,0 +1,11 @@
+!-*- Mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!
+!     file: io.ftn
+!
+  integer(4) gfortran_stderr_unit, gfortran_stdin_unit, gfortran_stdout_unit
+  common /io/ gfortran_stderr_unit
+  common /io/ gfortran_stdin_unit
+  common /io/ gfortran_stdout_unit
+!
+!     end of file: io.ftn
+!
