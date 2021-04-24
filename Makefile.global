@@ -121,11 +121,11 @@ LIBRARIES=	quadmath	\
 
 LD_FLAGS+=${patsubst %,-l%,${subst :, ,${LIBRARIES}}}
 
-ifdef DEBUG
-AS_FLAGS+=-g
-CC_FLAGS+=-g
-CPP_FLAGS+=-g
-FORTRAN_FLAGS+=-g
+ifeq (${DEBUG},1)
+AS_FLAGS	+=	-ggdb
+CC_FLAGS	+=	-ggdb
+CPP_FLAGS	+=	-ggdb
+FORTRAN_FLAGS	+=	-ggdb
 endif
 
 # Rule for building the object file from each assembly source files.
@@ -134,7 +134,7 @@ ${COMPILER}/%.o: %.S
 	then						\
 		echo " [ AS ] ${<}";			\
 	else						\
-		echo "${AS} ${AS_FLAGS}  ${<} -o ${@}";	\
+		echo "${AS} ${AS_FLAGS} ${<} -o ${@}";	\
 	fi
 	@${AS} ${AS_FLAGS} ${<} -o ${@}
 
@@ -144,7 +144,7 @@ ${COMPILER}/%.o: %.c
 	then						\
 		echo " [ CC ] ${<}";			\
 	else						\
-		echo "${CC} ${CC_FLAGS}  ${<} -o ${@}";	\
+		echo "${CC} ${CC_FLAGS} ${<} -o ${@}";	\
 	fi
 	@${CC} ${CC_FLAGS} ${<} -o ${@}
 
@@ -154,7 +154,7 @@ ${COMPILER}/%.o: %.cpp
 	then							\
 		echo " [ CPP ] ${<}";				\
 	else							\
-		echo "${CPP} ${CPP_FLAGS}  ${<} -o ${@}";	\
+		echo "${CPP} ${CPP_FLAGS} ${<} -o ${@}";	\
 	fi
 	@${CPP} ${CPP_FLAGS} ${<} -o ${@}
 
@@ -164,7 +164,7 @@ ${COMPILER}/%.o: %.for
 	then								\
 		echo " [ FOR ] ${<}";					\
 	else								\
-		echo "${FORTRAN} ${FORTRAN_FLAGS}  ${<} -o ${@}";	\
+		echo "${FORTRAN} ${FORTRAN_FLAGS} ${<} -o ${@}";	\
 	fi
 	@${FORTRAN} ${FORTRAN_FLAGS} ${<} -o ${@}
 

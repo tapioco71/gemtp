@@ -41,6 +41,10 @@ DEBUG=1
 # Target name.
 TARGET=gemtp
 
+# vardim name.
+VARDIM=vardim
+LISTSIZE=listsize.dat
+
 # Linker script name.
 LINKER_SCRIPT=
 
@@ -64,6 +68,8 @@ include ${ROOT}/Makefile.global
 
 # The default rule.
 all: ${COMPILER}
+all: ${COMPILER}/${VARDIM}
+all: dimension
 all: ${COMPILER}/${TARGET}
 
 # List rule
@@ -103,7 +109,7 @@ ${COMPILER}:
 	fi
 	@mkdir -p ${COMPILER}
 
-# Rule for assembling the program.
+# Rule for compiling the main program.
 ${COMPILER}/${TARGET}: ${COMPILER}/build1.o
 ${COMPILER}/${TARGET}: ${COMPILER}/build2.o
 ${COMPILER}/${TARGET}: ${COMPILER}/calc.o
@@ -172,6 +178,29 @@ ${COMPILER}/${TARGET}: ${COMPILER}/inlmfs.o
 #${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
 #${COMPILER}/${TARGET}: ${COMPILER}/calcom.o
 
+# Rule for compiling vardim program.
+${COMPILER}/${VARDIM}: ${COMPILER}/date44.o
+${COMPILER}/${VARDIM}: ${COMPILER}/time44.o
+${COMPILER}/${VARDIM}: ${COMPILER}/${VARDIM}.o
+
+dimension:
+	@if [ -f ${COMPILER}/${VARDIM} ];					\
+	then									\
+		if [ -f ${LISTSIZE} ];						\
+		then								\
+			if [ 'x${VERBOSE}' = x ];				\
+			then							\
+				echo " [ VARDIM ] ${LISTSIZE}";			\
+			else							\
+				echo "cat ${LISTSIZE} | ${COMPILER}/${VARDIM}";	\
+			fi;							\
+			cat ${LISTSIZE} | ${COMPILER}/${VARDIM};		\
+		else								\
+			echo "No ${LISTSIZE} file";				\
+		fi;								\
+	else									\
+		echo "No ${COMPILER}/${VARDIM}";				\
+	fi
 
 # Rule to create a list file.
 ${COMPILER}/${TARGET}.lst: ${COMPILER}/${TARGET}

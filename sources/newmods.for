@@ -7,7 +7,7 @@
 !
 subroutine main10
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  common /c0b001/   x     (   10000 )
+  common /c0b001/   x     (       1 )
   common /c0b002/   ykm   (   20000 )
   common /c0b003/   km    (   20000 )
   common /c0b004/   xk    (  121080 )
