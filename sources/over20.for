@@ -110,7 +110,7 @@ subroutine over20
 7024 n1 = iabsz( kbus(k) )
   n2 = iabsz( mbus(k) )
   write ( lunit6, 70241 ) bus(n1), bus(n2)
-70241 format ('  ****  Warning.   ****   no currents will be punched for the distributed line connecting nodes  ', &
+70241 format ('  ****  Warning.   ****   No currents will be punched for the distributed line connecting nodes  ', &
            '"', a6,  '"', '  and  ', '"', a6, '"', ' . ')
   it2 = length(k)
   if( it2 .lt. 0 ) it2 = -it2
@@ -1287,7 +1287,7 @@ subroutine spying
   call window
   if ( l .gt. 1 )  go to 3006
   write (munit6, 3004)
-3004 format ('  ? ? ? ? ?   warning.  Data file is empty.   Did user misspell the file name?')
+3004 format ('  ? ? ? ? ?   Warning.  Data file is empty.   Did user misspell the file name?')
   call window
 3006 close ( unit=lunt14 )
   numdcd = n15

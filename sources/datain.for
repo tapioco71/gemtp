@@ -527,7 +527,7 @@ subroutine datain
   n1 = 0      ! no class-1  ("request")   usage found so far
   n10 = 0     ! no class-10 ("load flow") usage found so far
   n11 = 0     ! no class-11 ("initial")   usage found so far
-  n12 = 0        ! initialize number of data class ("/") cards found
+  n12 = 0     ! initialize number of data class ("/") cards found
   if ( iprsup .ge. 9 ) write (lunit6, 2416)  ( j, file6(j), j=1, numcrd )
 2416 format (' Entire input file as we start sorting ...', /, ( i5, a80 ))
   do 2436  j=1, numcrd   ! search each data card for "/" usage

@@ -473,7 +473,7 @@ subroutine over1
   call expchk ( ll1,  ll80,  ll8 )
   if ( kill  .gt.  0 )   go to 9200
   !     decode (80, 3415, abuff(1) )  deltat, tmax, d1, d2, d3, tolmat, t
-  read (unit=abuff(1), fmt=3415) deltat, tmax, d1, d2, d3, tolmat, t
+  read (unit = abuff(1), fmt = 3415, iostat = kerror) deltat, tmax, d1, d2, d3, tolmat, t
 3415 format (10e8.0)
   if ( t  .eq.  0.0 )   t = 0.0
   go to 4202
@@ -584,7 +584,7 @@ subroutine over1
   tolmat = tolmat**2
   if (iplot.eq.0) iplot = 1
   if( iplot .lt. 0 )  go to 6279
-  if(  (iplot/2)*2   .eq.   iplot  ) write (lunit6, *) '    -----  warning!  even  iplot =', iplot
+  if(  (iplot/2)*2   .eq.   iplot  ) write (lunit6, *) '    -----  Warning!  even  iplot =', iplot
 6279 if (iout.eq.0) iout = 1
   if ( tmax  .le.  0.0 .and. deltat .le. 0.0 ) deltat = 1.0
   if ( deltat .gt. 0.0 .and. t .ge. 0.0) go to 4215
