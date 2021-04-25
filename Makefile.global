@@ -81,6 +81,16 @@ FORTRAN_FLAGS=	-cpp					\
 		-finit-local-zero			\
 		-c
 
+F90_FLAGS=	-std=f95				\
+		-fno-align-commons			\
+		-fbounds-check				\
+		-ffree-form				\
+		-ffree-line-length-0			\
+		-fdollar-ok				\
+		-fdollar-ok				\
+		-finit-local-zero			\
+		-c
+
 # objdump most common flags.
 OBJDUMP_FLAGS=	-h	\
 		-EL	\
@@ -105,6 +115,7 @@ AS_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
 CC_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
 CPP_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
 FORTRAN_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
+F90_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
 
 # Add the library path to LD_FLAGS.
 LD_FLAGS+=${patsubst %,-L%,${subst :, ,${LIBRARY_PATH}}}
@@ -126,6 +137,7 @@ AS_FLAGS	+=	-ggdb
 CC_FLAGS	+=	-ggdb
 CPP_FLAGS	+=	-ggdb
 FORTRAN_FLAGS	+=	-ggdb
+F90_FLAGS	+=	-ggdb
 endif
 
 # Rule for building the object file from each assembly source files.
@@ -158,7 +170,7 @@ ${COMPILER}/%.o: %.cpp
 	fi
 	@${CPP} ${CPP_FLAGS} ${<} -o ${@}
 
-# Rule for building the object file from each c source files.
+# Rule for building the object file from each fortran source files.
 ${COMPILER}/%.o: %.for
 	@if [ 'x${VERBOSE}' = x ];					\
 	then								\
@@ -167,6 +179,16 @@ ${COMPILER}/%.o: %.for
 		echo "${FORTRAN} ${FORTRAN_FLAGS} ${<} -o ${@}";	\
 	fi
 	@${FORTRAN} ${FORTRAN_FLAGS} ${<} -o ${@}
+
+# Rule for building the object file from each fortran 90 source files.
+${COMPILER}/%.o: %.f90
+	@if [ 'x${VERBOSE}' = x ];					\
+	then								\
+		echo " [ F90 ] ${<}";					\
+	else								\
+		echo "${FORTRAN} ${F90_FLAGS} ${<} -o ${@}";	\
+	fi
+	@${FORTRAN} ${F90_FLAGS} ${<} -o ${@}
 
 # Rule for linking the final program file.
 ${COMPILER}/%:
