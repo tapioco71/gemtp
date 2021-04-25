@@ -89,6 +89,7 @@ clean:
 				${ROOT}/includes/*~		\
 				*.output			\
 				.depend				\
+				fort.*				\
 				${wildcard *~} ${<}";		\
 	fi
 	@rm -rf ${COMPILER} 			\
@@ -97,6 +98,7 @@ clean:
 		${ROOT}/includes/*~		\
 		*.output			\
 		.depend				\
+		fort.-*				\
 		${wildcard *~} ${<}
 
 # The rule which creates the .o and executable directory.
