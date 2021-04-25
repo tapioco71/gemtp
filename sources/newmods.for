@@ -5,9 +5,12 @@
 !
 !     subroutine main10.
 !
+!
+! subroutine main10.
+!
 subroutine main10
   implicit real*8 (a-h, o-z), integer*4 (i-n)
-  common /c0b001/   x     (       1 )
+  common /c0b001/   x     (   10000 )
   common /c0b002/   ykm   (   20000 )
   common /c0b003/   km    (   20000 )
   common /c0b004/   xk    (  121080 )
@@ -65,9 +68,9 @@ subroutine main10
   common /c0b056/   cchar (     900 )
   common /c0b057/   vchar (     900 )
   common /c0b058/   gslope(     900 )
-  common /c0b059/   ktrans(    3002 )
-  common /c0b060/   kk    (    3002 )
-  common /c0b061/   c     (   10000 )
+  common /c0b059/   ktrans(   93002 )
+  common /c0b060/   kk    (   93002 )
+  common /c0b061/   emtpc (   10000 )
   common /c0b062/   tr    (   20000 )
   common /c0b063/   tx    (   20000 )
   common /c0b064/   r     (   10000 )
@@ -83,19 +86,19 @@ subroutine main10
   common /c0b074/   histq (     504 )
   common /c0b075/   ismdat(     120 )
   common /c0b076/   texvec(    4000 )
-  real*8         texvec
+  real*8            texvec
   common /c0b077/   ibrnch(     900 )
   common /c0b078/   jbrnch(     900 )
   common /c0b079/   tstop (     100 )
   common /c0b080/   nonlk (     300 )
   common /c0b081/   nonlm (     300 )
   common /c0b082/   spum  (   30000 )
-  common /c0b083/   kks   (    3002 )
-  common /c0b084/   kknonl(   72048 )
-  common /c0b085/   znonl (   72048 )
-  common /c0b086/   znonlb(    3002 )
-  common /c0b087/   znonlc(    3002 )
-  common /c0b088/   finit (    3002 )
+  common /c0b083/   kks   (   93002 )
+  common /c0b084/   kknonl( 2232048 )
+  common /c0b085/   znonl ( 2232048 )
+  common /c0b086/   znonlb(   93002 )
+  common /c0b087/   znonlc(   93002 )
+  common /c0b088/   finit (   93002 )
   common /c0b089/   ksub  (     312 )
   common /c0b090/   msub  (     312 )
   common /c0b091/   isubeg(     304 )
@@ -125,16 +128,16 @@ subroutine main10
   common /c0b115/   adelay(    3600 )
   common /c0b116/   kpos  (    1200 )
   common /c0b117/   namesw(    1200 )
-  common /c0b118/   e     (    3002 )
-  common /c0b119/   f     (    3002 )
-  common /c0b120/   kssfrq(    3002 )
-  common /c0b121/   kode  (    3002 )
-  common /c0b122/   kpsour(    3002 )
+  common /c0b118/   emtpe (   93002 )
+  common /c0b119/   emtpf (   93002 )
+  common /c0b120/   kssfrq(   93002 )
+  common /c0b121/   kode  (   93002 )
+  common /c0b122/   kpsour(   93002 )
   common /c0b123/   volti (    6000 )
   common /c0b124/   voltk (    3000 )
   common /c0b125/   volt  (    6000 )
-  common /c0b126/   bus   (    3002 )
-  real*8            bus
+  common /c0b126/   bus   (   93002 )
+  real*8            bus   
   call subr10
   return
 end subroutine main10
@@ -143,15 +146,15 @@ end subroutine main10
 !
 subroutine over29
   implicit real*8 (a-h, o-z),  integer*4 (i-n)
-  common /c29b01/   karray( 1992869 )
+  common /c29b01/   karray( 9942869 )
   common /spac01/   tp    (   30000 )
-  common /spac02/   norder(    3002 )
-  common /spac03/   index (    3002 )
-  common /spac04/   diag  (    3002 )
-  common /spac05/   diab  (    3002 )
-  common /spac06/   solr  (    3002 )
-  common /spac07/   soli  (    3002 )
-  common /spac08/   ich1  (    3002 )
+  common /spac02/   norder(   93002 )
+  common /spac03/   index (   93002 )
+  common /spac04/   diag  (   93002 )
+  common /spac05/   diab  (   93002 )
+  common /spac06/   solr  (   93002 )
+  common /spac07/   soli  (   93002 )
+  common /spac08/   ich1  (   93002 )
   common /spac09/   bnd   (     300 )
   common /spac10/   iloc  (   30000 )
   common /spac11/   gnd   (   30000 )
@@ -163,7 +166,7 @@ end subroutine over29
 !
 subroutine over31
   implicit real*8 (a-h, o-z),  integer*4 (i-n)
-  common  / c31b01 /   karray(     300 )
+  common /c31b01/   karray(     300 )
   call subr31
   return
 end subroutine over31
@@ -172,9 +175,9 @@ end subroutine over31
 !
 subroutine over39
   implicit real*8 (a-h, o-z),  integer*4 (i-n)
-  common  / c39b01 /   xdat  (   10000 )
-  common  / c39b02 /   ydat  (   10000 )
-  common  / c39b03 /   aphdat(   10000 )
+  common /c39b01/   xdat  (   10000 )
+  common /c39b02/   ydat  (   10000 )
+  common /c39b03/   aphdat(   10000 )
   call subr39
   return
 end subroutine over39
@@ -183,11 +186,11 @@ end subroutine over39
 !
 subroutine fixs10
   implicit real*8 (a-h, o-z),  integer*4 (i-n)
-  common /c10b01/   jndex (    3002 )
-  common /c10b02/   diagg (    3002 )
-  common /c10b03/   diabb (    3002 )
-  common /c10b04/   solrsv(    3002 )
-  common /c10b05/   solisv(    3002 )
+  common /c10b01/   jndex (   93002 )
+  common /c10b02/   diagg (   93002 )
+  common /c10b03/   diabb (   93002 )
+  common /c10b04/   solrsv(   93002 )
+  common /c10b05/   solisv(   93002 )
   common /c10b06/   gndd  (   30000 )
   common /c10b07/   bndd  (   30000 )
   common /c10b08/   nekfix(     100 )
@@ -218,42 +221,42 @@ end subroutine fixs10
 subroutine over44
   implicit real*8 (a-h, o-z),  integer*4 (i-n)
   common /c44b01/   karray(     300 )
-  common /c44b02/   p     (   22155 )
-  common /c44b03/   z     (   22155 )
-  common /c44b04/   ic    (     210 )
-  common /c44b05/   r     (     210 )
-  common /c44b06/   d     (     210 )
-  common /c44b07/   gmd   (     210 )
-  common /c44b08/   x     (     210 )
-  common /c44b09/   y     (     210 )
-  common /c44b10/   tb2   (     210 )
-  common /c44b11/   itb3  (     210 )
-  common /c44b12/   workr1(     210 )
-  common /c44b13/   workr2(     210 )
-  common /c44b14/   text  (     420 )
-  real*8 text
-  common /c44b15/   gd    (    5565 )
-  common /c44b16/   bd    (    5565 )
-  common /c44b17/   yd    (    5565 )
-  common /c44b18/   itbic (     211 )
-  common /c44b19/   tbr   (     211 )
-  common /c44b20/   tbd   (     211 )
-  common /c44b21/   tbg   (     211 )
-  common /c44b22/   tbx   (     211 )
-  common /c44b23/   tby   (     211 )
-  common /c44b24/   tbtb2 (     211 )
-  common /c44b25/   itbtb3(     211 )
-  common /c44b26/   tbtext(     211 )
+  common /c44b02/   p     (  110685 )
+  common /c44b03/   z     (  110685 )
+  common /c44b04/   ic    (     470 )
+  common /c44b05/   r     (     470 )
+  common /c44b06/   emptd (     470 )
+  common /c44b07/   gmd   (     470 )
+  common /c44b08/   x     (     470 )
+  common /c44b09/   y     (     470 )
+  common /c44b10/   tb2   (     470 )
+  common /c44b11/   itb3  (     470 )
+  common /c44b12/   workr1(     470 )
+  common /c44b13/   workr2(     470 )
+  common /c44b14/   text  (     940 )
+  real*8            text  
+  common /c44b15/   gd    (   27730 )
+  common /c44b16/   bd    (   27730 )
+  common /c44b17/   yd    (   27730 )
+  common /c44b18/   itbic (     471 )
+  common /c44b19/   tbr   (     471 )
+  common /c44b20/   tbd   (     471 )
+  common /c44b21/   tbg   (     471 )
+  common /c44b22/   tbx   (     471 )
+  common /c44b23/   tby   (     471 )
+  common /c44b24/   tbtb2 (     471 )
+  common /c44b25/   itbtb3(     471 )
+  common /c44b26/   tbtext(     471 )
   real*8            tbtext
   call subr44
   return
 end subroutine over44
 !
-!     subroutine over44.
+! subroutine over45.
 !
 subroutine over45
   implicit real*8 (a-h, o-z),  integer*4 (i-n)
-  common  / c45b01 /   karray(     300 )
+  common /c45b01/   karray(     300 )
   call subr45
   return
 end subroutine over45
@@ -262,19 +265,19 @@ end subroutine over45
 !
 subroutine over47
   implicit real*8 (a-h, o-z),  integer*4 (i-n)
-  common  / c47b01 /   karray(     300 )
+  common /c47b01/   karray(     300 )
   call subr47
   return
 end subroutine over47
 !
 ! subroutine dimens.
 !
-subroutine dimens ( lsize, nchain, bus1, bus2 )
+subroutine dimens(lsize, nchain, bus1, bus2)
   implicit real*8 (a-h, o-z)
-  dimension  lsize(62)
+  dimension lsize(62)
   real          bus1, bus2
-  if ( nchain  .ge.  29 )   go to 2900
-  lsize( 1)  =    3002
+  if (nchain .ge. 29) go to 2900
+  lsize( 1)  =   93002
   lsize( 2)  =    3000
   lsize( 3)  =   10000
   lsize( 4)  =     100
@@ -303,61 +306,61 @@ subroutine dimens ( lsize, nchain, bus1, bus2 )
   lsize(27)  =     600
   lsize(28)  =    1080
   n7 = 28 + 1
-  lsize(n7) = 1842869
-  bus1 =   91205
-  bus2 =  123093
+  lsize(n7) = 9942869
+  bus1 =  202501
+      bus2 =  250421
   return
-2900 if ( nchain  .gt.  29 )   go to 3100
+2900 if (nchain .gt.  29) go to 3100
   lsize( 1)  =       0
-  lsize( 2) =1992869
+  lsize( 2) =9942869
   lsize( 3)  =      23
   lsize( 4) =  30000
   lsize( 5)  =       1
-  lsize( 6) =   3002
+  lsize( 6) =  93002
   lsize( 7)  =       9
   lsize( 8) =    300
   return
-3100 if ( nchain  .gt.  31 )   go to 3900
+3100 if (nchain .gt.  31) go to 3900
   lsize( 1)  =       9
   lsize( 2) =    300
   return
-3900 if ( nchain  .gt.  39 )   go to 1000
+3900 if (nchain .gt.  39) go to 1000
   lsize( 1)  =      71
   lsize( 2) =  10000
   return
-1000 if ( nchain  .gt.  10 )   go to 4400
+1000 if (nchain .gt.  10) go to 4400
   lsize( 1)  =       1
-  lsize( 2) =   3002
+  lsize( 2) =  93002
   lsize( 3)  =      23
   lsize( 4) =  30000
   lsize( 5)  =       4
   lsize( 6) =    100
   return
-4400 if ( nchain  .gt.  44 )   go to 4500
+4400 if (nchain .gt.  44) go to 4500
   lsize( 1)  =       9
   lsize( 2) =    300
   lsize( 3)  =      75
-  lsize( 4) =  22155
+  lsize( 4) = 110685
   lsize( 5)  =      71
-  lsize( 6) =    210
+  lsize( 6) =    470
   lsize( 7)  =      76
-  lsize( 8) =    420
+  lsize( 8) =    940
   lsize( 9)  =      74
-  lsize(10) =   5565
+  lsize(10) =  27730
   lsize(11)  =      73
-  lsize(12) =    211
+  lsize(12) =    471
   return
-4500 if ( nchain  .gt.  45 )   go to 4700
+4500 if (nchain .gt.  45) go to 4700
   lsize( 1)  =       9
   lsize( 2) =    300
   return
-4700 if ( nchain  .gt.  47 )   go to 9900
+4700 if (nchain .gt.  47) go to 9900
   lsize( 1)  =       9
   lsize( 2) =    300
   return
-9900 lsize(1) = locint(bus1) - locint(bus2)
+ 9900 lsize(1) = locint(bus1) - locint(bus2)
   return
 end subroutine dimens
 !
-!     end of file: newmods.for
+! end of file newmods.for
 !

@@ -113,6 +113,8 @@ ${COMPILER}:
 	@mkdir -p ${COMPILER}
 
 # Rule for compiling the main program.
+${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
+
 ${COMPILER}/${TARGET}: ${COMPILER}/build1.o
 ${COMPILER}/${TARGET}: ${COMPILER}/build2.o
 ${COMPILER}/${TARGET}: ${COMPILER}/calc.o
@@ -173,7 +175,6 @@ ${COMPILER}/${TARGET}: ${COMPILER}/over53.o
 ${COMPILER}/${TARGET}: ${COMPILER}/over54.o
 ${COMPILER}/${TARGET}: ${COMPILER}/over55.o
 ${COMPILER}/${TARGET}: ${COMPILER}/calcom.o
-${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
 ${COMPILER}/${TARGET}: ${COMPILER}/datain.o
 ${COMPILER}/${TARGET}: ${COMPILER}/inlmfs.o
 #${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
@@ -210,10 +211,10 @@ newmods:
 	then						\
 		if [ 'x${VERBOSE}' = x ];		\
 		then					\
-			echo " [ NEWMODS ] "		\
+			echo " [ NEWMODS ] ";		\
 		else					\
 			echo "cp fort.7 newmods.for";	\
-		fi					\
+		fi;					\
 		cp fort.7 newmods.for;			\
 	else						\
 		echo "Cannot create newmods.for.";	\

@@ -1,37 +1,37 @@
 $ SET NOVERIFY
 $ set def disk00:[emtpd.bpa_code]
-$ FORTRAN/nodeb/opt/nolis BUILD1.FTN 
-$ FORTRAN/nodeb/opt/nolis BUILD2.FTN 
+$ FORTRAN/nodeb/opt/nolis BUILD1.FTN
+$ FORTRAN/nodeb/opt/nolis BUILD2.FTN
 $ FORTRAN/nodeb/opt/nolis CALC.FTN
-$ FORTRAN/nodeb/opt/nolis CALSTO.FTN 
-$ FORTRAN/nodeb/opt/nolis COMB.FTN 
-$ FORTRAN/nodeb/opt/nolis DATA.FTN   
-$ FORTRAN/nodeb/opt/nolis ELEC.FTN  
+$ FORTRAN/nodeb/opt/nolis CALSTO.FTN
+$ FORTRAN/nodeb/opt/nolis COMB.FTN
+$ FORTRAN/nodeb/opt/nolis DATA.FTN
+$ FORTRAN/nodeb/opt/nolis ELEC.FTN
 $ FORTRAN/nodeb/opt/nolis ERRSTP.FTN
-$ FORTRAN/nodeb/opt/nolis INIT.FTN   
-$ FORTRAN/nodeb/opt/nolis PMODL.FTN 
-$ FORTRAN/nodeb/opt/nolis PSTMT.FTN  
-$ FORTRAN/nodeb/opt/nolis PTACS.FTN 
-$ FORTRAN/nodeb/opt/nolis PUSE.FTN  
-$ FORTRAN/nodeb/opt/nolis PUTIL1.FTN  
-$ FORTRAN/nodeb/opt/nolis PUTIL2.FTN  
-$ FORTRAN/nodeb/opt/nolis STEP.FTN  
-$ FORTRAN/nodeb/opt/nolis SYNSTP.FTN   
-$ FORTRAN/nodeb/opt/nolis NTACS1.FTN 
-$ FORTRAN/nodeb/opt/nolis NTACS1A.FTN  
-$ FORTRAN/nodeb/opt/nolis NTACS1B.FTN 
-$ FORTRAN/nodeb/opt/nolis NTACS2.FTN  
-$ FORTRAN/nodeb/opt/nolis NTACS3.FTN  
-$ FORTRAN/nodeb/opt/nolis DGNOST.FTN   
+$ FORTRAN/nodeb/opt/nolis INIT.FTN
+$ FORTRAN/nodeb/opt/nolis PMODL.FTN
+$ FORTRAN/nodeb/opt/nolis PSTMT.FTN
+$ FORTRAN/nodeb/opt/nolis PTACS.FTN
+$ FORTRAN/nodeb/opt/nolis PUSE.FTN
+$ FORTRAN/nodeb/opt/nolis PUTIL1.FTN
+$ FORTRAN/nodeb/opt/nolis PUTIL2.FTN
+$ FORTRAN/nodeb/opt/nolis STEP.FTN
+$ FORTRAN/nodeb/opt/nolis SYNSTP.FTN
+$ FORTRAN/nodeb/opt/nolis NTACS1.FTN
+$ FORTRAN/nodeb/opt/nolis NTACS1A.FTN
+$ FORTRAN/nodeb/opt/nolis NTACS1B.FTN
+$ FORTRAN/nodeb/opt/nolis NTACS2.FTN
+$ FORTRAN/nodeb/opt/nolis NTACS3.FTN
+$ FORTRAN/nodeb/opt/nolis DGNOST.FTN
 %FORT-F-OPENIN, error opening DGNOST.FTN as input
 -RMS-E-FNF, file not found
-$ FORTRAN/nodeb/opt/nolis TREAD.FTN 
-$ FORTRAN/nodeb/opt/nolis USE1.FTN  
-$ FORTRAN/nodeb/opt/nolis USE2.FTN  
-$ FORTRAN/nodeb/opt/nolis XPR1.FTN    
-$ FORTRAN/nodeb/opt/nolis XPR2.FTN   
-$ FORTRAN/nodeb/opt/nolis XREF1.FTN  
-$ FORTRAN/nodeb/opt/nolis XREF2.FTN   
+$ FORTRAN/nodeb/opt/nolis TREAD.FTN
+$ FORTRAN/nodeb/opt/nolis USE1.FTN
+$ FORTRAN/nodeb/opt/nolis USE2.FTN
+$ FORTRAN/nodeb/opt/nolis XPR1.FTN
+$ FORTRAN/nodeb/opt/nolis XPR2.FTN
+$ FORTRAN/nodeb/opt/nolis XREF1.FTN
+$ FORTRAN/nodeb/opt/nolis XREF2.FTN
 $ FORTRAN/nodeb/opt/nolis MAIN00.for
 
       DIMENSION   FKAR1(1), FKAR2(1)                                    M35.  29
@@ -171,7 +171,7 @@ at line number 761 in file DISK00:[EMTPD.BPA_CODE]OVER13.FOR;69
 %FORT-W-UNINIT, Variable NPHS is used before its value has been defined
 at line number 847 in file DISK00:[EMTPD.BPA_CODE]OVER13.FOR;69
 
-      WINIC = CK1 * TPI                                                         
+      WINIC = CK1 * TPI
 ....................^
 %FORT-W-UNINIT, Variable TPI is used before its value has been defined
 at line number 349 in file DISK00:[EMTPD.BPA_CODE]OVER13.FOR;69
@@ -350,22 +350,22 @@ at line number 29 in file DISK00:[EMTPD.BPA_CODE]DEKSPY.FOR;62
 %FORT-W-MISALIGN, Alignment of variable or array is inconsistent with its data type
 at line number 29 in file DISK00:[EMTPD.BPA_CODE]DEKSPY.FOR;62
 
-      IF ( KWTSPY .EQ. 1 )  GO TO 9000                                          
+      IF ( KWTSPY .EQ. 1 )  GO TO 9000
 ...........^
 %FORT-W-UNINIT, Variable KWTSPY is used before its value has been defined
 at line number 7853 in file DISK00:[EMTPD.BPA_CODE]OVER20.FOR;67
 
-      IF ( IPRSUP .LE. 0 )  GO TO 7324                                          
+      IF ( IPRSUP .LE. 0 )  GO TO 7324
 ...........^
 %FORT-W-UNINIT, Variable IPRSUP is used before its value has been defined
 at line number 7569 in file DISK00:[EMTPD.BPA_CODE]OVER20.FOR;67
 
-      N24 = NUMNVO + NC + NSMOUT + IOUTCS + NUMOUT                              
+      N24 = NUMNVO + NC + NSMOUT + IOUTCS + NUMOUT
 ..........................^
 %FORT-W-UNINIT, Variable NSMOUT is used before its value has been defined
 at line number 3308 in file DISK00:[EMTPD.BPA_CODE]OVER20.FOR;67
 
-      IF ( N17 .GT. NUMNV0 )  N17 = NUMNVO                                      
+      IF ( N17 .GT. NUMNV0 )  N17 = NUMNVO
 ....................^
 %FORT-W-UNINIT, Variable NUMNV0 is used before its value has been defined
 at line number 3326 in file DISK00:[EMTPD.BPA_CODE]OVER20.FOR;67
@@ -388,7 +388,7 @@ $ FORTRAN/nodeb/opt/nolis OVER29.for
 $ FORTRAN/nodeb/opt/nolis OVER31.for
 $ FORTRAN/nodeb/opt/nolis OVER39.for
 
-      WRITE(LUNIT6,7083)              !  THL                                 
+      WRITE(LUNIT6,7083)              !  THL
 ............^
 %FORT-W-UNINIT, Variable LUNIT6 is used before its value has been defined
 at line number 1929 in file DISK00:[EMTPD.BPA_CODE]OVER39.FOR;66
@@ -405,7 +405,7 @@ at line number 29 in file DISK00:[EMTPD.BPA_CODE]DEKSPY.FOR;62
 at line number 29 in file DISK00:[EMTPD.BPA_CODE]DEKSPY.FOR;62
 $ FORTRAN/nodeb/opt/nolis OVER42.for
 
-      IF( ZK( 7 ) .EQ. VSTART )  GO  TO  570                                    
+      IF( ZK( 7 ) .EQ. VSTART )  GO  TO  570
 .......................^
 %FORT-W-UNINIT, Variable VSTART is used before its value has been defined
 at line number 1164 in file DISK00:[EMTPD.BPA_CODE]OVER42.FOR;62
@@ -437,7 +437,7 @@ $ FORTRAN/nodeb/opt/nolis OVER55.for
 ...........^
 %FORT-W-UNINIT, Variable KILSAV is used before its value has been defined
 at line number 1120 in file DISK00:[EMTPD.BPA_CODE]OVER55.FOR;63
-$ FORTRAN/nodeb/opt/nolis  Blockdspy.for 
+$ FORTRAN/nodeb/opt/nolis  Blockdspy.for
 $! FORTRAN  DATE44
 $! FORTRAN  TIME44
 $! FORTRAN  VARDIM
