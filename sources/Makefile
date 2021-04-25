@@ -70,6 +70,7 @@ include ${ROOT}/Makefile.global
 all: ${COMPILER}
 all: ${COMPILER}/${VARDIM}
 all: dimension
+all: newmods
 all: ${COMPILER}/${TARGET}
 
 # List rule
@@ -98,7 +99,7 @@ clean:
 		${ROOT}/includes/*~		\
 		*.output			\
 		.depend				\
-		fort.-*				\
+		fort.*				\
 		${wildcard *~} ${<}
 
 # The rule which creates the .o and executable directory.
@@ -202,6 +203,20 @@ dimension:
 		fi;								\
 	else									\
 		echo "No ${COMPILER}/${VARDIM}";				\
+	fi
+
+newmods:
+	@if [ -f fort.7 ];				\
+	then						\
+		if [ 'x${VERBOSE}' = x ];		\
+		then					\
+			echo " [ NEWMODS ] "		\
+		else					\
+			echo "cp fort.7 newmods.for";	\
+		fi					\
+		cp fort.7 newmods.for;			\
+	else						\
+		echo "Cannot create newmods.for.";	\
 	fi
 
 # Rule to create a list file.

@@ -576,8 +576,10 @@ program vardim
            if (jbltyp(i) .ne. 0 ) n37 = jbltyp(i)
            mtot = mtot + mulvar(n37) * lstnew(n9)
 4301    end do
-        write (lunit(2), 4200)
-4200    format ('!', /, '! subroutine main10', /, '!')
+        write (lunit(2), 4190)
+4190    format ('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', / &
+             '!', /, '!     file: newmods.for', /, '!', /, '!', /, '!     subroutine main10.', /, '!')
+        call make_subroutine_comment(lunit(2), 'main10')
         write (lunit(2), 4201)
 4201    format (6x, 'subroutine main10', 57x, /, '      implicit real*8 (a-h, o-z), integer*4 (i-n)')
         do ii = 1, 126
@@ -597,13 +599,14 @@ program vardim
         write (lunit(2), 7297)
 7297    format (6x, 'return', 68x)
         write (lunit(2), 7298) 'main10'
-7298    format (6x, 'end subroutine ', a, //)
+7298    format (6x, 'end subroutine ', a)
         ltlabl = mtot
         if ( ltlabl  .gt.  9999999 )   go to 9000
         indexm = indexm + 1
         mul34 = mulvar(3) / mulvar(4)
         mextra = 4000
         lstnew(98) = ltlabl
+        call make_subroutine_comment(lunit(3), 'dimens')
         write (lunit(3), 8116)
 8116    format (6x, 'subroutine dimens(lsize, nchain, bus1, bus2)', 27x, /, '      implicit real*8 (a-h, o-z)')
         write (lunit(3), 8120)
@@ -647,6 +650,7 @@ program vardim
         lstnew(99) = ltlabl + kextra(1)
         if (lstnew(99) .le. 0) lstnew(99) = 1
         ncbarr(127) = 99
+        call make_subroutine_comment(lunit(2), 'over29')
         write (lunit(2), 4202)
 4202    format (6x, 'subroutine over29', 57x, /, '      implicit real*8 (a-h, o-z),  integer*4 (i-n)')
         write (lunit(3), 8156)
@@ -688,6 +692,7 @@ program vardim
         write (lunit(2), 7298) 'dimens'
         indexm = indexm + 1
         mextra = 5000
+        call make_subroutine_comment(lunit(2), 'over31')
         write (lunit(2), 4203)
 4203    format (6x, 'subroutine over31', 57x, /, '      implicit real*8 (a-h, o-z),  integer*4 (i-n)')
         write (lunit(3), 8156)
@@ -725,6 +730,7 @@ program vardim
         write (lunit(2), 7298) 'over31'
         lstnew(71) = 500
         if (lstnew(3) .gt. 500) lstnew(71) = lstnew(3)
+        call make_subroutine_comment(lunit(2), 'over39')
         write (lunit(2), 4204)
 4204    format (6x, 'subroutine over39', 57x, /, '      implicit real*8 (a-h, o-z),  integer*4 (i-n)')
         write (lunit(3), 8156)
@@ -760,6 +766,7 @@ program vardim
         write (lunit(2), 7274) n18
         write (lunit(2), 7297)
         write (lunit(2), 7298) 'over39'
+        call make_subroutine_comment(lunit(2), 'fixs10')
         write (lunit(2), 4205)
 4205    format (6x, 'subroutine fixs10', 57x, /, '      implicit real*8 (a-h, o-z),  integer*4 (i-n)')
         write (lunit(3), 8156)
@@ -810,6 +817,7 @@ program vardim
         lstnew(74) = (lphd2 * (lphd2 + 1)) / 2
         lstnew(75) = (lstnew(71) * (lstnew(71) + 1)) / 2
         lstnew(76) = 2 * lstnew(71)
+        call make_subroutine_comment(lunit(2), 'over44')
         write (lunit(2), 4206)
 4206    format (6x, 'subroutine over44', 57x, /, '      implicit real*8 (a-h, o-z),  integer*4 (i-n)')
         write (lunit(3), 8156)
@@ -847,6 +855,7 @@ program vardim
         write (lunit(2), 7298) 'over44'
         indexm = indexm + 1
         mextra = 5000
+        call make_subroutine_comment(lunit(2), 'over45')
         write (lunit(2), 4207)
 4207    format (6x, 'subroutine over45', 57x, /, '      implicit real*8 (a-h, o-z),  integer*4 (i-n)')
         write (lunit(3), 8156)
@@ -884,6 +893,7 @@ program vardim
         write (lunit(2), 7298) 'over45'
         indexm = indexm + 1
         mextra = 5000
+        call make_subroutine_comment(lunit(2), 'over47')
         write (lunit(2), 4208)
 4208    format (6x, 'subroutine over47', 57x, /, '      implicit real*8 (a-h, o-z),  integer*4 (i-n)')
         write (lunit(3), 8156)
@@ -929,10 +939,12 @@ program vardim
         nrec3 = nrec3 + 4
         rewind lunit(3)
         do m = 1, 99999
-           read (lunit(3), 8253, end = 8259, iostat = kerror) abuff
-8253       format (13a6, a2)
-8258       write (lunit(2), 8253) abuff
-8259    end do
+           read (lunit(3), 8253, end = 8260) abuff
+           write (lunit(2), 8253) abuff
+        end do
+8253    format (13a6, a2)
+8260    write (lunit(2), 8258)
+8258    format ('!', /, '! end of file newmods.for', /, '!')
         write (lunit(6), 8942) ltlabl
 8942    format (" Normal termination within  'vardim' .   The size of   /label/   equals", i8, '   integer words.', //, 1x)
         go to 9999
@@ -974,6 +986,17 @@ program vardim
   endif
 9999 stop
 end program vardim
+!
+! subroutine make_comment.
+!
+subroutine make_subroutine_comment(unit, name)
+  implicit  real(8) (a-h, o-z), integer(4) (i-n)
+  integer(4) unit
+  character(*) name
+  write (unit, 10) trim(name)
+10 format ('!', /, '! subroutine ', a, '.', /, '!')
+  return
+end subroutine make_subroutine_comment
 !
 !     end of file: vardim.for
 !
