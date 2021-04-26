@@ -734,7 +734,8 @@ subroutine tables
   !     comment card immediately following "synmac" -------------
   include 'umdeck.ftn'
   dimension  integx(1)
-  equivalence  ( x(1), integx(1) )
+  !equivalence  ( x(1), integx(1) )
+  equivalence (x, integx)
   dimension  busone(1), idistx(1)
   equivalence  ( bus1, busone(1) ), ( nenerg, idistx(1) )
   dimension  kpen(1), itemp(1),  jtemp(1),  ktemp(1)

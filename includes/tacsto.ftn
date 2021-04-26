@@ -45,10 +45,10 @@
   !     stoflt and stocha are hard-dimensioned in data.ftn
   dimension strtbl( 514 )
   ! wsm + thl manual modification for bpa emtp
-  common / cmrsto / split, ten, zero, one, two, half, p, stpt, stpr1, stpr2, stpr3, a, b, c, d, e, f, g, r0, r1, r2, r3, r4,&
+  common /cmrsto/ split, ten, zero, one, two, half, p, stpt, stpr1, stpr2, stpr3, a, b, c, d, e, f, g, r0, r1, r2, r3, r4,&
        r5, r6, rinf, rmargn, divzro, pi, rnull, bratio, etime, estep, estop, rspare(6), rsto
   ! wsm + thl manual modification for bpa emtp
-  common / cmcsto / csto
+  common /cmcsto/ csto
   common isto, strtbl, from, to, ilen, rlen, clen, iptr, rptr, cptr
   common sptr, rsptr, dptr, ibkptr, rbkptr, ishenv, env, useenv
   common datenv, xprndx, xprcnt, xprknd, xprsub, mflg, mndx, stpflg

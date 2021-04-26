@@ -68,10 +68,10 @@ include ${ROOT}/Makefile.global
 
 # The default rule.
 all: ${COMPILER}
-all: ${COMPILER}/${VARDIM}
-all: dimension
-all: newmods
 all: ${COMPILER}/${TARGET}
+
+vardim: ${COMPILER}
+vardim: ${COMPILER}/${VARDIM}
 
 # List rule
 lst: all
@@ -176,7 +176,6 @@ ${COMPILER}/${TARGET}: ${COMPILER}/over55.o
 ${COMPILER}/${TARGET}: ${COMPILER}/calcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/datain.o
 ${COMPILER}/${TARGET}: ${COMPILER}/inlmfs.o
-#${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
 
 # Rule for compiling vardim program.
 ${COMPILER}/${VARDIM}: ${COMPILER}/date44.o
@@ -203,17 +202,31 @@ dimension:
 	fi
 
 newmods:
-	@if [ -f fort.7 ];				\
-	then						\
-		if [ 'x${VERBOSE}' = x ];		\
-		then					\
-			echo " [ NEWMODS ] ";		\
-		else					\
-			echo "cp fort.7 newmods.for";	\
-		fi;					\
-		cp fort.7 newmods.for;			\
-	else						\
-		echo "Cannot create newmods.for.";	\
+	@if [ -f fort.7 ];						\
+	then								\
+		if [ 'x${VERBOSE}' = x ];				\
+		then							\
+			echo " [ NEWMODS ] ";				\
+		else							\
+			echo "cp fort.7 newmods.for";			\
+		fi;							\
+		cp fort.7 newmods.for;					\
+	else								\
+		echo "Cannot create newmods.for.";			\
+	fi
+
+labcom:
+	@if [ -f fort.9 ];						\
+	then								\
+		if [ 'x${VERBOSE}' = x ];				\
+		then							\
+			echo " [ LABCOM ] ";				\
+		else							\
+			echo "cp fort.9 ${INCLUDE_PATH}/labcom.ftn";	\
+		fi;							\
+		cp fort.9 ${INCLUDE_PATH}/labcom.ftn;			\
+	else								\
+		echo "Cannot create labcom.ftn.";			\
 	fi
 
 # Rule to create a list file.

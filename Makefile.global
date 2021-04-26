@@ -79,6 +79,7 @@ FORTRAN_FLAGS=	-cpp					\
 		-fdollar-ok				\
 		-ffree-line-length-0			\
 		-finit-local-zero			\
+		-freorder-blocks			\
 		-c
 
 F90_FLAGS=	-std=f95				\

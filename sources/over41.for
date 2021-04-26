@@ -488,7 +488,8 @@ subroutine crdchg
   write( lunit6, 26 )
 26 format(  ' the data will be converted, formated,', ' and written out to meet the new EMTP', ' rule book''s requirements.' )
   !
-  open(unit = 7, status = 'new', err = 40)
+  !open(unit = 7, status = 'new', err = 40)
+  open (unit = 7, err = 40)
   !
   go to 50
   !

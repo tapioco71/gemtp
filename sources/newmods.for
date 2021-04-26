@@ -86,7 +86,7 @@ subroutine main10
   common /c0b074/   histq (     504 )
   common /c0b075/   ismdat(     120 )
   common /c0b076/   texvec(    4000 )
-  real(8)           texvec
+  character(8)      texvec
   common /c0b077/   ibrnch(     900 )
   common /c0b078/   jbrnch(     900 )
   common /c0b079/   tstop (     100 )
@@ -137,7 +137,7 @@ subroutine main10
   common /c0b124/   voltk (    3000 )
   common /c0b125/   volt  (    6000 )
   common /c0b126/   bus   (   93002 )
-  real(8)              bus
+  character(8)         bus
   call subr10
   return
 end subroutine main10
@@ -146,7 +146,7 @@ end subroutine main10
 !
 subroutine over29
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  common /c29b01/   karray( 9942869 )
+  common /c29b01/   karray( 9748865 )
   common /spac01/   tp    (   30000 )
   common /spac02/   norder(   93002 )
   common /spac03/   index (   93002 )
@@ -221,33 +221,33 @@ end subroutine fixs10
 subroutine over44
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c44b01/   karray(     300 )
-  common /c44b02/   p     (  110685 )
-  common /c44b03/   z     (  110685 )
-  common /c44b04/   ic    (     470 )
-  common /c44b05/   r     (     470 )
-  common /c44b06/   emptd (     470 )
-  common /c44b07/   gmd   (     470 )
-  common /c44b08/   x     (     470 )
-  common /c44b09/   y     (     470 )
-  common /c44b10/   tb2   (     470 )
-  common /c44b11/   itb3  (     470 )
-  common /c44b12/   workr1(     470 )
-  common /c44b13/   workr2(     470 )
-  common /c44b14/   text  (     940 )
-  real(8)             text
-  common /c44b15/   gd    (   27730 )
-  common /c44b16/   bd    (   27730 )
-  common /c44b17/   yd    (   27730 )
-  common /c44b18/   itbic (     471 )
-  common /c44b19/   tbr   (     471 )
-  common /c44b20/   tbd   (     471 )
-  common /c44b21/   tbg   (     471 )
-  common /c44b22/   tbx   (     471 )
-  common /c44b23/   tby   (     471 )
-  common /c44b24/   tbtb2 (     471 )
-  common /c44b25/   itbtb3(     471 )
-  common /c44b26/   tbtext(     471 )
-  real(8)           tbtext
+  common /c44b02/   p     (  108811 )
+  common /c44b03/   z     (  108811 )
+  common /c44b04/   ic    (     466 )
+  common /c44b05/   r     (     466 )
+  common /c44b06/   emptd (     466 )
+  common /c44b07/   gmd   (     466 )
+  common /c44b08/   x     (     466 )
+  common /c44b09/   y     (     466 )
+  common /c44b10/   tb2   (     466 )
+  common /c44b11/   itb3  (     466 )
+  common /c44b12/   workr1(     466 )
+  common /c44b13/   workr2(     466 )
+  common /c44b14/   text  (     932 )
+  character(8)        text
+  common /c44b15/   gd    (   27261 )
+  common /c44b16/   bd    (   27261 )
+  common /c44b17/   yd    (   27261 )
+  common /c44b18/   itbic (     467 )
+  common /c44b19/   tbr   (     467 )
+  common /c44b20/   tbd   (     467 )
+  common /c44b21/   tbg   (     467 )
+  common /c44b22/   tbx   (     467 )
+  common /c44b23/   tby   (     467 )
+  common /c44b24/   tbtb2 (     467 )
+  common /c44b25/   itbtb3(     467 )
+  common /c44b26/   tbtext(     467 )
+  character(8)      tbtext
   call subr44
   return
 end subroutine over44
@@ -273,9 +273,9 @@ end subroutine over47
 ! subroutine dimens.
 !
 subroutine dimens(lsize, nchain, bus1, bus2)
-  implicit real(8) (a-h, o-z)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension lsize(62)
-  real          bus1, bus2
+  real bus1, bus2
   if (nchain .ge. 29) go to 2900
   lsize( 1)  =   93002
   lsize( 2)  =    3000
@@ -306,13 +306,13 @@ subroutine dimens(lsize, nchain, bus1, bus2)
   lsize(27)  =     600
   lsize(28)  =    1080
   n7 = 28 + 1
-  lsize(n7) = 9942869
-  bus1 =    2617
+  lsize(n7) = 9748865
+  bus1 =  212604
       bus2 =  260421
   return
 2900 if (nchain .gt.  29) go to 3100
   lsize( 1)  =       0
-  lsize( 2) =9942869
+  lsize( 2) =9748865
   lsize( 3)  =      23
   lsize( 4) =  30000
   lsize( 5)  =       1
@@ -340,15 +340,15 @@ subroutine dimens(lsize, nchain, bus1, bus2)
   lsize( 1)  =       9
   lsize( 2) =    300
   lsize( 3)  =      75
-  lsize( 4) = 110685
+  lsize( 4) = 108811
   lsize( 5)  =      71
-  lsize( 6) =    470
+  lsize( 6) =    466
   lsize( 7)  =      76
-  lsize( 8) =    940
+  lsize( 8) =    932
   lsize( 9)  =      74
-  lsize(10) =  27730
+  lsize(10) =  27261
   lsize(11)  =      73
-  lsize(12) =    471
+  lsize(12) =    467
   return
 4500 if (nchain .gt.  45) go to 4700
   lsize( 1)  =       9
