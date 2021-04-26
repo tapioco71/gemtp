@@ -411,17 +411,17 @@ program vardim
   data  char(4)   / 'l' /
   data  char(5)   / 'm' /
   data  char(6)   / 'n' /
-  data  type(1,1)  / 'real*8' /
-  data  type(1,2)  / '      ' /
+  data  type(1,1)  / 'real(8' /
+  data  type(1,2)  / ')     ' /
   data  type(1,3)  / '      ' /
   data  type(2,1)  / 'comple' /
-  data  type(2,2)  / 'x* 8  ' /
+  data  type(2,2)  / 'x(8)  ' /
   data  type(2,3)  / '      ' /
-  data  type(3,1)  / 'real*8' /
-  data  type(3,2)  / '      ' /
+  data  type(3,1)  / 'real(8' /
+  data  type(3,2)  / ')     ' /
   data  type(3,3)  / '      ' /
   data  type(4,1)  / 'intege' /
-  data  type(4,2)  / 'r*4   ' /
+  data  type(4,2)  / 'r(4)  ' /
   data  type(4,3)  / '      ' /
   numlst = 28
   lunit(2) = 7
@@ -582,23 +582,22 @@ program vardim
              '!', /, '!     file: newmods.for', /, '!', /, '!', /, '!     subroutine main10.', /, '!')
         call make_subroutine_comment(lunit(2), 'main10')
         write (lunit(2), 4201)
-4201    format ('subroutine main10', /, 2x, 'implicit real*8 (a-h, o-z), integer*4 (i-n)')
+4201    format ('subroutine main10', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
         do ii = 1, 126
            i = 0 + ii
            n3 = ncbarr(i)
            nonneg = lstnew(n3)
            if (nonneg .le. 0) nonneg = 1
            write (lunit(2), 7236) cblser(i), cblock(i), nonneg
-7236       format (2x, 'common /', a6, '/   ', a6, '(', i8, ' )', 38x)
+7236       format (2x, 'common /', a6, '/   ', a6, '(', i8, ' )')
            n4 = jbltyp(i)
            if (n4 .eq. 0) go to 4101
-           write (lunit(2), 7243) (type(n4,j), j = 1, 3), cblock(i)
-7243       format (2x, 3a6, a6, 50x)
+           write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+7243       format (2x, 3a6, a6)
 4101    end do
-        write (lunit(2), 7286)
-7286    format (2x, 'call subr10', 63x)
+        write (lunit(2), "(2x, 'call subr10')")
         write (lunit(2), 7297)
-7297    format (2x, 'return', 68x)
+7297    format (2x, 'return')
         write (lunit(2), 7298) 'main10'
 7298    format ('end subroutine ', a)
         ltlabl = mtot
@@ -609,7 +608,7 @@ program vardim
         lstnew(98) = ltlabl
         call make_subroutine_comment(lunit(3), 'dimens')
         write (lunit(3), 8116)
-8116    format ('subroutine dimens(lsize, nchain, bus1, bus2)', /, 2x, 'implicit real*8 (a-h, o-z)')
+8116    format ('subroutine dimens(lsize, nchain, bus1, bus2)', /, 2x, 'implicit real(8) (a-h, o-z)')
         write (lunit(3), 8120)
 8120    format (2x, 'dimension lsize(62)')
         write (lunit(3), 8124)
@@ -653,7 +652,7 @@ program vardim
         ncbarr(127) = 99
         call make_subroutine_comment(lunit(2), 'over29')
         write (lunit(2), 4202)
-4202    format ('subroutine over29', /, 2x, 'implicit real*8 (a-h, o-z),  integer*4 (i-n)')
+4202    format ('subroutine over29', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
         write (lunit(3), 8156)
 8156    format (2x, 'return')
         lm = 0
@@ -684,7 +683,7 @@ program vardim
            write (lunit(2), 7236) cblser(i), cblock(i), nonneg
            n4 = jbltyp(i)
            if (n4 .eq. 0) go to 4102
-           write (lunit(2), 7243) (type(n4, j), j = 1, 3), cblock(i)
+           write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
 4102    end do
         n18 = 29
         write (lunit(2), 7274) n18
@@ -695,7 +694,7 @@ program vardim
         mextra = 5000
         call make_subroutine_comment(lunit(2), 'over31')
         write (lunit(2), 4203)
-4203    format ('subroutine over31', /, 2x, 'implicit real*8 (a-h, o-z),  integer*4 (i-n)')
+4203    format ('subroutine over31', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
         write (lunit(3), 8156)
         lm = 0
         n86 = 31
@@ -723,7 +722,7 @@ program vardim
            write (lunit(2), 7236) cblser(i), cblock(i), nonneg
            n4 = jbltyp(i)
            if (n4 .eq. 0) go to 4103
-           write (lunit(2), 7243) (type(n4, j), j = 1, 3), cblock(i)
+           write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
 4103    end do
         n18 = 31
         write (lunit(2), 7274) n18
@@ -733,7 +732,7 @@ program vardim
         if (lstnew(3) .gt. 500) lstnew(71) = lstnew(3)
         call make_subroutine_comment(lunit(2), 'over39')
         write (lunit(2), 4204)
-4204    format ('subroutine over39', /, 2x, 'implicit real*8 (a-h, o-z),  integer*4 (i-n)')
+4204    format ('subroutine over39', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
         write (lunit(3), 8156)
         lm = 0
         n86 = 39
@@ -761,7 +760,7 @@ program vardim
            write (lunit(2), 7236) cblser(i), cblock(i), nonneg
            n4 = jbltyp(i)
            if (n4 .eq. 0) go to 4104
-           write (lunit(2), 7243) (type(n4, j), j = 1, 3), cblock(i)
+           write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
 4104    end do
         n18 = 39
         write (lunit(2), 7274) n18
@@ -769,7 +768,7 @@ program vardim
         write (lunit(2), 7298) 'over39'
         call make_subroutine_comment(lunit(2), 'fixs10')
         write (lunit(2), 4205)
-4205    format ('subroutine fixs10', /, 2x, 'implicit real*8 (a-h, o-z),  integer*4 (i-n)')
+4205    format ('subroutine fixs10', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
         write (lunit(3), 8156)
         lm = 0
         n86 = 10
@@ -797,7 +796,7 @@ program vardim
            write (lunit(2), 7236) cblser(i), cblock(i), nonneg
            n4 = jbltyp(i)
            if ( n4  .eq.  0 )   go to 4105
-           write (lunit(2), 7243) (type(n4, j), j= 1, 3), cblock(i)
+           write (lunit(2), 7243) (type(n4, j), j= 1, 3), trim(cblock(i))
 4105    end do
         n18 = 10
         write (lunit(2), 7274) n18
@@ -820,7 +819,7 @@ program vardim
         lstnew(76) = 2 * lstnew(71)
         call make_subroutine_comment(lunit(2), 'over44')
         write (lunit(2), 4206)
-4206    format ('subroutine over44', /, 2x, 'implicit real*8 (a-h, o-z),  integer*4 (i-n)')
+4206    format ('subroutine over44', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
         write (lunit(3), 8156)
         lm = 0
         n86 = 44
@@ -848,7 +847,7 @@ program vardim
            write (lunit(2), 7236) cblser(i), cblock(i), nonneg
            n4 = jbltyp(i)
            if (n4 .eq. 0) go to 4106
-           write (lunit(2), 7243) (type(n4, j), j = 1, 3), cblock(i)
+           write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
 4106    end do
         n18 = 44
         write (lunit(2), 7274) n18
@@ -858,7 +857,7 @@ program vardim
         mextra = 5000
         call make_subroutine_comment(lunit(2), 'over45')
         write (lunit(2), 4207)
-4207    format ('subroutine over45', /, 2x, 'implicit real*8 (a-h, o-z),  integer*4 (i-n)')
+4207    format ('subroutine over45', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
         write (lunit(3), 8156)
         lm = 0
         n86 = 45
@@ -886,7 +885,7 @@ program vardim
            write (lunit(2), 7236) cblser(i), cblock(i), nonneg
            n4 = jbltyp(i)
            if ( n4  .eq.  0 )   go to 4107
-           write (lunit(2), 7243) (type(n4, j), j = 1, 3), cblock(i)
+           write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
 4107    end do
         n18 = 45
         write (lunit(2), 7274) n18
@@ -896,7 +895,7 @@ program vardim
         mextra = 5000
         call make_subroutine_comment(lunit(2), 'over47')
         write (lunit(2), 4208)
-4208    format ('subroutine over47', /, 2x, 'implicit real*8 (a-h, o-z),  integer*4 (i-n)')
+4208    format ('subroutine over47', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
         write (lunit(3), 8156)
         lm = 0
         n86 = 47
@@ -924,7 +923,7 @@ program vardim
            write (lunit(2), 7236) cblser(i), cblock(i), nonneg
            n4 = jbltyp(i)
            if ( n4  .eq.  0 )   go to 4108
-           write (lunit(2), 7243) (type(n4, j), j = 1, 3), cblock(i)
+           write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
 4108    end do
         n18 = 47
         write (lunit(2), 7274) n18

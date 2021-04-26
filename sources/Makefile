@@ -114,7 +114,6 @@ ${COMPILER}:
 
 # Rule for compiling the main program.
 ${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
-
 ${COMPILER}/${TARGET}: ${COMPILER}/build1.o
 ${COMPILER}/${TARGET}: ${COMPILER}/build2.o
 ${COMPILER}/${TARGET}: ${COMPILER}/calc.o
@@ -178,9 +177,6 @@ ${COMPILER}/${TARGET}: ${COMPILER}/calcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/datain.o
 ${COMPILER}/${TARGET}: ${COMPILER}/inlmfs.o
 #${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
-
-#${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
-#${COMPILER}/${TARGET}: ${COMPILER}/calcom.o
 
 # Rule for compiling vardim program.
 ${COMPILER}/${VARDIM}: ${COMPILER}/date44.o

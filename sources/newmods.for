@@ -9,7 +9,7 @@
 ! subroutine main10.
 !
 subroutine main10
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c0b001/   x     (   10000 )
   common /c0b002/   ykm   (   20000 )
   common /c0b003/   km    (   20000 )
@@ -86,7 +86,7 @@ subroutine main10
   common /c0b074/   histq (     504 )
   common /c0b075/   ismdat(     120 )
   common /c0b076/   texvec(    4000 )
-  real*8            texvec
+  real(8)           texvec
   common /c0b077/   ibrnch(     900 )
   common /c0b078/   jbrnch(     900 )
   common /c0b079/   tstop (     100 )
@@ -137,7 +137,7 @@ subroutine main10
   common /c0b124/   voltk (    3000 )
   common /c0b125/   volt  (    6000 )
   common /c0b126/   bus   (   93002 )
-  real*8            bus   
+  real(8)              bus
   call subr10
   return
 end subroutine main10
@@ -145,7 +145,7 @@ end subroutine main10
 ! subroutine over29.
 !
 subroutine over29
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c29b01/   karray( 9942869 )
   common /spac01/   tp    (   30000 )
   common /spac02/   norder(   93002 )
@@ -165,7 +165,7 @@ end subroutine over29
 ! subroutine over31.
 !
 subroutine over31
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c31b01/   karray(     300 )
   call subr31
   return
@@ -174,7 +174,7 @@ end subroutine over31
 ! subroutine over39.
 !
 subroutine over39
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c39b01/   xdat  (   10000 )
   common /c39b02/   ydat  (   10000 )
   common /c39b03/   aphdat(   10000 )
@@ -185,7 +185,7 @@ end subroutine over39
 ! subroutine fixs10.
 !
 subroutine fixs10
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c10b01/   jndex (   93002 )
   common /c10b02/   diagg (   93002 )
   common /c10b03/   diabb (   93002 )
@@ -219,7 +219,7 @@ end subroutine fixs10
 ! subroutine over44.
 !
 subroutine over44
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c44b01/   karray(     300 )
   common /c44b02/   p     (  110685 )
   common /c44b03/   z     (  110685 )
@@ -234,7 +234,7 @@ subroutine over44
   common /c44b12/   workr1(     470 )
   common /c44b13/   workr2(     470 )
   common /c44b14/   text  (     940 )
-  real*8            text  
+  real(8)             text
   common /c44b15/   gd    (   27730 )
   common /c44b16/   bd    (   27730 )
   common /c44b17/   yd    (   27730 )
@@ -247,7 +247,7 @@ subroutine over44
   common /c44b24/   tbtb2 (     471 )
   common /c44b25/   itbtb3(     471 )
   common /c44b26/   tbtext(     471 )
-  real*8            tbtext
+  real(8)           tbtext
   call subr44
   return
 end subroutine over44
@@ -255,7 +255,7 @@ end subroutine over44
 ! subroutine over45.
 !
 subroutine over45
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c45b01/   karray(     300 )
   call subr45
   return
@@ -264,7 +264,7 @@ end subroutine over45
 ! subroutine over47.
 !
 subroutine over47
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c47b01/   karray(     300 )
   call subr47
   return
@@ -273,7 +273,7 @@ end subroutine over47
 ! subroutine dimens.
 !
 subroutine dimens(lsize, nchain, bus1, bus2)
-  implicit real*8 (a-h, o-z)
+  implicit real(8) (a-h, o-z)
   dimension lsize(62)
   real          bus1, bus2
   if (nchain .ge. 29) go to 2900
@@ -307,8 +307,8 @@ subroutine dimens(lsize, nchain, bus1, bus2)
   lsize(28)  =    1080
   n7 = 28 + 1
   lsize(n7) = 9942869
-  bus1 =  202501
-      bus2 =  250421
+  bus1 =    2617
+      bus2 =  260421
   return
 2900 if (nchain .gt.  29) go to 3100
   lsize( 1)  =       0
