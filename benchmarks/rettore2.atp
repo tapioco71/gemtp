@@ -1,0 +1,12 @@
+/branch
+xx0001                    1.e3                                               1
+/source
+14xx0001        1.e4       50.                                     -1.      100.
+/output
+blank branch
+blank switch
+blank source
+blank output
+blank plot
+begin new data case
+blank
