@@ -584,11 +584,11 @@ subroutine spying
   call stoptp
 71309 n14 = jword - 63
   go to ( &
-                                !         v-i                                                   (64-64)
+!      v-i                                                   (64-64)
        8500 ), n14
   call stoptp
   !     $$$$$$$  key word no.  4:  "help"     $$$$  $$$$  $$$$  $$$$  $$$$
-1311 write (munit6, 11312 )
+1311 write (munit6, 11312)
 11312 format ('    Available key-word responses to the  "spy:"  prompt are as follows:')
   call window
   do j = 1, numkey, 8
@@ -605,26 +605,26 @@ subroutine spying
   assign 1315 to nextsn
   go to 9800
 1315 spycd2 = buff77(1:35)
-  if ( spycd2(1:4) .eq. '    ')   go to 11315
-  if ( spycd2(1:4) .eq. 'end ' )  go to 1240
-  if ( spycd2(1:4) .ne. 'bot ')  go to 51315
+  if (spycd2(1:4) .eq. '    ') go to 11315
+  if (spycd2(1:4) .eq. 'end ') go to 1240
+  if (spycd2(1:4) .ne. 'bot ') go to 51315
   jword = numkey
   go to 1317
-51315 if ( spycd2(1:4) .ne. 'back' )  go to 61315
+51315 if (spycd2(1:4) .ne. 'back') go to 61315
   jword = jword - 1
-  if ( jword .gt. 0 )  go to 1317
+  if (jword .gt. 0) go to 1317
   jword = numkey
   write (munit6, 31315)
-31315 format ('      //// wrap around, beginning to end ////' )
+31315 format ('      //// Wrap around, beginning to end ////' )
   call window
   go to 1317
-61315 if ( spycd2(1:4) .eq. 'top ' )   go to 41315
-  if ( spycd2(1:4) .ne. 'next' )   go to 21315
+61315 if (spycd2(1:4) .eq. 'top ') go to 41315
+  if (spycd2(1:4) .ne. 'next') go to 21315
 11315 jword = jword + 1
-  if ( jword  .le.  numkey )  go to 1317
-  if ( spycd2(1:4) .eq. 'all ' )  go to 21314
+  if (jword .le. numkey) go to 1317
+  if (spycd2(1:4) .eq. 'all ') go to 21314
   write (munit6, 81315)
-81315 format ('      //// wrap around, end to beginning ////' )
+81315 format ('      //// Wrap around, end to beginning ////' )
   call window
 41315 jword = 1
   go to 1317
@@ -633,38 +633,36 @@ subroutine spying
   do jword = 1, numkey
      if (spycd2(1:8) .eq. spykwd(jword)) go to 1317
   end do
-1316 continue
-  write (munit6, 1760)  spycd2
+  write (munit6, 1760) spycd2
   call window
   go to 1318
 1317 n17 = kbegtx(jword)
-  n18 = kbegtx(jword+1) - 1
+  n18 = kbegtx(jword + 1) - 1
   do j = n17, n18
-     munit6(1:81) = ' '//texspy(j)
+     munit6(1 : 81) = ' ' // texspy(j)
      call window
   end do
 91315 continue
-  if ( jword .ne. 4 )  go to 61317
+  if (jword .ne. 4) go to 61317
   write (munit6, 11312)
   call window
   do j = 1, numkey, 8
      write (munit6, 1313) (spykwd(k), k = j, j + 7)
      call window
   end do
-51317 continue
 61317 jwdsav = jword
-  if ( spycd2(1:4) .ne. 'all ' )  go to 1318
+  if (spycd2(1 : 4) .ne. 'all ') go to 1318
   call quiter
-  if ( kwtspy .eq. 0 ) go to 11315
+  if (kwtspy .eq. 0) go to 11315
   kwtspy = 0
 1318 go to 21314
   !     $$$$$$$  key word no.  3:  "plot"     $$$$  $$$$  $$$$  $$$$  $$$$
 1319 call rtmplt
-  if ( nexmod .ge. 4 ) go to 9803
+  if (nexmod .ge. 4) go to 9803
   go to 1240
   !     $$$$$$$  key word no.  8:  "append"   $$$$  $$$$  $$$$  $$$$  $$$$
 1320 call append
-  if ( nexmod .eq. 7 ) go to 9803
+  if (nexmod .eq. 7) go to 9803
   go to 1240
   !     $$$$$$$  key word no.  5:  "examine"  $$$$  $$$$  $$$$  $$$$  $$$$
 1337 numex = 0
@@ -674,38 +672,38 @@ subroutine spying
   !     encode heading buffer with variable request now known:
 1340 numex = numex + 1
   intout(numex) = intype
-  if ( nchd2  .lt.  6 ) spycd2(nchd2+1:6) = blan80(nchd2+1:6)
+  if (nchd2 .lt. 6) spycd2(nchd2 + 1 : 6) = blan80(nchd2 + 1 : 6)
   n14 = n1
-1354 if ( n14  .gt.  n2 )   go to 1460
-  heding(khead:khead+14) = blan80(khead:khead+14)
+1354 if (n14 .gt. n2) go to 1460
+  heding(khead : khead + 14) = blan80(khead : khead + 14)
   !     reals or vectors occupy 15 cols, so can be shifted:
-  if ( intype .eq. 0  .or.  ivec(ind) .eq. 1 .or. n2     .ne. 1 )   khead = khead + 2
+  if (intype .eq. 0 .or. ivec(ind) .eq. 1 .or. n2 .ne. 1) khead = khead + 2
   !     real scalars can be shifted 3 more columns:
-  if ( intype .eq. 0  .and.  ivec(ind) .eq. 0   .and.  n2     .eq. 1 )   khead = khead + 3
+  if (intype .eq. 0 .and. ivec(ind) .eq. 0 .and. n2 .eq. 1) khead = khead + 3
   !     next see if symbol can be profitably centered in 6-column slot:
   n15 = 6
-  if ( nchd2  .le.  4 )   go to 1373
-  if ( nchd2  .eq.  6 )   go to 1377
-  if ( heding(khead-1:khead-1)  .eq.  ' ' )   go to 1377
+  if (nchd2 .le. 4) go to 1373
+  if (nchd2 .eq. 6) go to 1377
+  if (heding(khead - 1 : khead - 1) .eq. ' ') go to 1377
   n17 = 1
   go to 1374
-1373 n17 = ( 6 - nchd2 ) / 2
+1373 n17 = (6 - nchd2) / 2
 1374 khead = khead + n17
   n15 = n15 - n17
-1377 heding(khead:khead+5) = spycd2(1:6)
+1377 heding(khead : khead + 5) = spycd2(1 : 6)
   khead = khead + n15
   !     real scalars end up with four blanks on the right:
-  if ( intype .eq. 0  .and.  ivec(ind) .eq. 0   .and.  n2     .eq. 1 )   khead = khead + 4
+  if (intype .eq. 0 .and. ivec(ind) .eq. 0 .and. n2 .eq. 1) khead = khead + 4
   locout(numex) = ind
   imin(numex) = n1
   imax(numex) = n2
   !     if ( ivec(ind)  .eq.  0 )   go to 1460    ! original record.
   !     next we want to execute s.n. 1394 if subscripting is involved:
-  if ( ivec(ind)  .eq.  1 )   go to 1394
-  if ( n1 .eq. 1   .and.   n2 .eq. 1 )   go to 1460
-1394 write (ansi8, 1400)  n14
-1400 format ('(',  i4,  ') ')
-  heding(khead:khead+6) = ansi8(1:7)
+  if (ivec(ind) .eq. 1) go to 1394
+  if (n1 .eq. 1 .and. n2 .eq. 1) go to 1460
+1394 write (ansi8, 1400) n14
+1400 format ('(', i4, ') ')
+  heding(khead : khead + 6) = ansi8(1 : 7)
   khead = khead + 7
   n14 = n14 + 1
   go to 1354
@@ -718,46 +716,46 @@ subroutine spying
   assign 1485 to nextsn
   go to 9800
 1485 spycd2 = buff77(1:35)
-  if ( spycd2(1:1) .ne. 'c'   .or.  spycd2(2:2) .ne. ' ' )  go to 1491
-  if ( icomm .ne. 0 )  go to 1460
-  write (munit6, 1487)  spycd2
+  if (spycd2(1:1) .ne. 'c' .or. spycd2(2:2) .ne. ' ') go to 1491
+  if (icomm .ne. 0) go to 1460
+  write (munit6, 1487) spycd2
 1487 format (' Comment:', a35)
   call window
   go to 1460
-1491 if ( spycd2(1:4)  .ne.  'end ' )   go to 1720
+1491 if (spycd2(1 : 4) .ne. 'end ') go to 1720
   !     if processing "deposit" = spykwd(6), then back to "spy:":
-1496 if ( answ80(1:8)  .eq.  spykwd(6) )    go to 1240
+1496 if (answ80(1 : 8) .eq. spykwd(6)) go to 1240
   !     if internal "deposit" issued from "ramp"= spykwd(34), return:
-  if ( answ80(1:8)  .eq.  spykwd(34) )  go to 3138
+  if (answ80(1 : 8) .eq. spykwd(34)) go to 3138
   !     if internal "deposit", issued from "restore", then back to "spy:":
-  if ( answ80(1:8)  .eq.  spykwd(10) )   go to 1240
+  if (answ80(1 : 8) .eq. spykwd(10)) go to 1240
   !     ok, this is "examine";  first, blank unused right portion:
-  if ( khead .lt. 132 ) heding(khead+1:132) = ' '
+  if (khead .lt. 132) heding(khead + 1 : 132) = ' '
   !     if disk file is connected to unit 5, we want return to  "spy:" :
-  if ( kfile5  .eq.  1 )   go to 1240
+  if (kfile5 .eq. 1) go to 1240
   !     $$$$$$$  key word no.  1:  "heading"  $$$$  $$$$  $$$$  $$$$  $$$$
 1500 munit6 = heding
   call window
   !     following code outputs table dumping in accord with earlier
   !     setup using  "examine"  specification.
 1520 call examin
-  if ( jjroll  .eq.  0 )  go to 1682
+  if (jjroll .eq. 0) go to 1682
   jjroll = jjroll + 1
-  if ( jjroll .le. 2 )  go to 1669
+  if (jjroll .le. 2) go to 1669
   call quiter
-  if ( kwtspy .eq. 0 ) go to 1523
+  if (kwtspy .eq. 0) go to 1523
   jjroll = 0
   go to 1240
-1523 if ( outsav .eq. outlin ) go to 1684
+1523 if (outsav .eq. outlin) go to 1684
 1669 outsav = outlin
   !     output line of "examine" is all built;  display it:
-1682 if ( kfile5 .ne. 1  .and.  jjroll .eq. 0  .and. kolout .le. 81 ) go to 1685
+1682 if (kfile5 .ne. 1 .and. jjroll .eq. 0 .and. kolout .le. 81) go to 1685
   munit6 = outlin
   call window
-  prom80(1:8) = blan80(1:8)
-1684 if ( jjroll .gt. 0 )  go to 9833
+  prom80(1 : 8) = blan80(1:8)
+1684 if (jjroll .gt. 0) go to 9833
   go to 1714
-1685 prom80 = outlin(1:kolout-1)
+1685 prom80 = outlin(1 : kolout - 1)
 1714 assign 31269 to nextsn
   go to 9800
   !     process emtp symbol name (spycd2) which has just been read;
