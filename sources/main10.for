@@ -339,13 +339,13 @@ end subroutine dgelg
 !     subroutine matmul.
 !
 subroutine matmul(aum,bum)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     matrix algebra module used by universal machine (u.m.)
-  dimension aum(3,3),bum(3,3),cum(3,3)
+  dimension aum(3, 3), bum(3, 3), cum(3, 3)
   n5 = 3
   do n1 = 1, n5
      do n2 = 1, n5
-        cum(n1,n2) = aum(n1,1) * bum(1,n2)
+        cum(n1, n2) = aum(n1, 1) * bum(1, n2)
         do n3 = 2, n5
 10         cum(n1, n2) =  cum(n1, n2) + aum(n1, n3) * bum(n3, n2)
         end do
@@ -363,16 +363,16 @@ end subroutine matmul
 !     subroutine matvec.
 !
 subroutine matvec(aum,yum)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     matrix algebra module used by universal machine (u.m.)
-  dimension aum(3,3),yum(15),x(3)
+  dimension aum(3, 3), yum(15), x(3)
   n1 = 3
-  do n2 = 1,n1
+  do n2 = 1, n1
      x(n2) = 0.0
   end do
   do n2 = 1, n1
      do n3 = 1, n1
-        x(n2) = x(n2) + aum(n2,n3) * yum(n3)
+        x(n2) = x(n2) + aum(n2, n3) * yum(n3)
      end do
   end do
   do n2 = 1, n1
@@ -384,7 +384,7 @@ end subroutine matvec
 !     subroutine pltfil
 !
 subroutine pltfil(k)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Installation-dependent module which is called for
   !     output-vector dumping by  "subts3"  and  "over20"  if
   !     "m4plot" of  /blank/  is nonzero.   This
@@ -460,29 +460,29 @@ end subroutine pltfil
 !
 !     subroutine pltlu2.
 !
-subroutine pltlu2 ( d2, volti )
+subroutine pltlu2 (d2, volti)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   !     called by "tacs2" only, if and only if m4plot .ne. 0
   !     this module is universal for fortran 77 compilers and
   !     computers for which real*4 corresponds to single precision.
   dimension  volti(1)
   include 'blkcom.ftn'
-  real*4  forbyt(150)
-  if ( iofgnd .gt. 149 ) call stoptp
+  real(4) forbyt(150)
+  if (iofgnd .gt. 149) call stoptp
   n12 = iofgnd + 1
-  read (lunit2)  ( forbyt(j), j=1, n12 )
+  read (lunit2) (forbyt(j), j = 1, n12)
   d2 = forbyt(1)
-  do j=1, iofgnd
-     volti(j) = forbyt(j+1)
+  do j = 1, iofgnd
+     volti(j) = forbyt(j + 1)
   end do
-  if ( iprsup  .ge.  1 ) write (lunit6, 1978)  d2, volti(1), volti(iofgnd)
+  if (iprsup .ge. 1) write (lunit6, 1978) d2, volti(1), volti(iofgnd)
 1978 format (' Exit "pltlu2".  d2, volti(1, iofgnd) =', 3e14.5)
   return
 end subroutine pltlu2
 !
 !     subroutine vecrsv.
 !
-subroutine vecrsv(array, n13, n2)
+subroutine vecrsv (array, n13, n2)
   implicit real*8 (a-h, o-z), integer*4 (i-n)
   !     Module for vector dumping/restoring of "OVER6", "OVER8", etc.
   !     This is universal for virtual computers which chose to
