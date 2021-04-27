@@ -6,7 +6,7 @@
 !     subroutine over20.
 !
 subroutine over20
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   equivalence (moncar(1), knt), (moncar(2), kbase)
@@ -18,31 +18,31 @@ subroutine over20
   ll1 = 1
   ll9  =  9
   ll10 = 10
-  call runtym(d1,d2)
+  call runtym(d1, d2)
   n10 = 1
-  if (iprsup .ge. 1) write (lunit6, 1324)    iplot, nenerg, kbase, m4plot,  mtape, icat, lstat(32), t, aincr
+  if (iprsup .ge. 1) write (lunit6, 1324) iplot, nenerg, kbase, m4plot,  mtape, icat, lstat(32), t, aincr
 1324 format (/, 1x, '   iplot  nenerg  kbase  m4plot   mtape    icat lstat32', 14x, 't', 10x, 'aincr', /, 1x, 7i8, 2e15.5)
-  if ( max99m .lt. 0 ) write (lunit6, 9345)  max99m
+  if (max99m .lt. 0) write (lunit6, 9345) max99m
 9345 format (' ++++  Number of suppressed type-99 flashover or clearing messages is negative of',  i7)
-  if ( peaknd(1)  .eq.  0.0 )   go to 5019
+  if (peaknd(1) .eq. 0.0) go to 5019
   n6 = peaknd(3)
-  write (lunit6, 5011)  peaknd(1), peaknd(2), bus(n6)
+  write (lunit6, 5011) peaknd(1), peaknd(2), bus(n6)
 5011 format (8x, 'Overall simulation peak node voltage =', e15.6, ' .   Time (sec) =', e14.5, ' .   bus = ', "'", a6, "'", ' .')
 5019 k = lstat(32) + 1
-  if( iplot .lt. 0 )  go to 8005
+  if(iplot .lt. 0) go to 8005
   volti(1) = -9999.
-  if ( m4plot  .eq.  0 )   go to 5022
+  if (m4plot .eq. 0) go to 5022
   call pltfil ( k )
   go to 8005
-5022 write (lunit4)  ( volti(i), i=1, k )
-8005 if ( icat  .gt.  0     .or.      memsav  .gt.  0 ) call katalg
-  close (unit=79)
+5022 write (lunit4) ( volti(i), i = 1, k)
+8005 if (icat .gt. 0 .or. memsav .gt. 0) call katalg
+  close (unit = 79)
   k = lstat(32)
   !      both max and min will be printed for each energization when
   !      'aincr' is set to be greater than or equal to '55.0'.
-  if ( kbase .eq. 2  .and. aincr .lt. 55.0) go to 3614
-  if ( begmax(1)  .le.  0.0 )   go to 3614
-  write (lunit6, 8002)   ( xmax(l), l=1, k )
+  if (kbase .eq. 2 .and. aincr .lt. 55.0) go to 3614
+  if (begmax(1) .le.  0.0) go to 3614
+  write (lunit6, 8002) (xmax(l), l = 1, k)
 8002 format (/, ' Maxima and minima which occurred during the simulation follow.   The order and column positioning are the', /, &
           ' same as for the regular printed output vs. time.', /, ' Variable maxima :', /, (15x, 9e13.6))
   !     extrema vector  "xmax"  actually has four partitions,
@@ -282,7 +282,7 @@ end subroutine over20
 !     subroutine katalg.
 !
 subroutine katalg
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11/780  installation-dependent module which is used
   !     to honor the miscellaneous data card request for emtp table
   !     saving, for later  "start again"  usage.   A call to the
@@ -292,9 +292,9 @@ subroutine katalg
   !     only to rtm (real time monitor) use of BPA VAX.
   include 'blkcom.ftn'
   include 'dekspy.ftn'
-  character*132 ansi132
+  character(132) ansi132
   common /comlock/ locker(2)   ! share with "over1" only
-  if ( iprsup  .ge.  1 ) write (lunit6, 2467)  icat, memsav, lunit2, ltlabl
+  if (iprsup .ge. 1 ) write (lunit6, 2467)  icat, memsav, lunit2, ltlabl
 2467 format (/, ' Enter  "katalg" .    icat  memsav  lunit2  ltlabl', /, 18x, 10i8)
   if ( memsav .eq. 0 )  go to 9800  ! no table moving at all
   ! if interactive emtp control, then
@@ -342,7 +342,7 @@ end subroutine katalg
 !     subroutine emtspy.
 !
 subroutine emtspy
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, convert to dummy module ("return").
   include 'blkcom.ftn'
@@ -351,59 +351,59 @@ subroutine emtspy
   save
   data n18    / 0 /
   n18 = n18 + 1
-  if ( n18 .lt. maxflg ) go to 9008
+  if (n18 .lt. maxflg) go to 9008
   n18 = 0
-  if ( iprspy .lt. 9 )  go to 5611
-  write (munit6, 5608)  kbreak, kwtspy, nbreak, lockbr, nchain, jjroll, t, tbreak
+  if (iprspy .lt. 9) go to 5611
+  write (munit6, 5608) kbreak, kwtspy, nbreak, lockbr, nchain, jjroll, t, tbreak
 5608 format (' Top "emtspy".  kbreak, kwtspy, nbreak, lockbr, jjroll, nchain =', 6i4, '    t, tbreak =', 2e14.5)
   call window
 5611 if ( jjroll .gt. 0 )  go to 5632
-  if ( kbreak .eq. 1 ) go to 5613
-  if ( lockbr .eq. 1 ) go to 5623
-  if ( t .lt. tbreak ) go to 5623
-  if ( nchain .ne. nbreak ) go to 5623
+  if (kbreak .eq. 1) go to 5613
+  if (lockbr .eq. 1) go to 5623
+  if (t .lt. tbreak) go to 5623
+  if (nchain .ne. nbreak) go to 5623
   !     ok, now we service "break" of spy (time and place to do it):
   tbreak = 8877.e33
 5613 lockbr = 1
   write (munit6, 5615) nchain, t
 5615 format (//, '    Start "break" service in "emtspy".   nchain =', i3,  '   t =', e14.5)
   call window
-  if ( kfile5 .eq. 1 ) go to 6258
+  if (kfile5 .eq. 1) go to 6258
 5617 write (prom80, 5618)
 5618 format (' spy:')
   call prompt
-5623 if ( ksmspy(3) .eq. 1 ) go to 5632
+5623 if (ksmspy(3) .eq. 1) go to 5632
   call flager
-  if ( kwtspy .eq. 1 )  go to 5632
-  if ( kfile5 .eq. 1 )  go to 6258
+  if (kwtspy .eq. 1) go to 5632
+  if (kfile5 .eq. 1) go to 6258
   go to 9000
 5632 kwtspy = 0
   call spying
-  if ( jjroll .gt. 0 ) go to 9000
-  if ( lockbr .eq. 1 )  go to 5623
+  if (jjroll .gt. 0) go to 9000
+  if (lockbr .eq. 1) go to 5623
   go to 9000
   !     entry point for pre-defined spy commands ($spy or "@"):
-6258 if ( komadd .eq. 0 )  go to 6260
+6258 if (komadd .eq. 0)  go to 6260
   komadd = komadd + 1
   buff77 = file6(komadd)
   if (buff77(1:3) .eq. 'eof') go to 6278
   go to 6264
 6260 read (unit = munit5, fmt = 6261, end = 6274) buff77
 6261 format (a80)
-6264 if ( kfile5 .eq. 1 ) call percnt (buff77, 80)
-  if ( kilper  .ne.  0 )  go to 6274
+6264 if (kfile5 .eq. 1) call percnt (buff77, 80)
+  if (kilper .ne. 0) go to 6274
 6266 call spying
-  if ( lockbr .eq. 1 )  go to 6258
+  if (lockbr .eq. 1) go to 6258
   go to 9000
   !     end-of-file during disk read, so switch to keyboard input:
 6274 close (unit = munit5)
 6278 munit5 = muntsv(1)
   kfile5 = 0
   kilper = 0
-  if ( muntsv(2) .ne. 2288 ) go to 5617
+  if (muntsv(2) .ne. 2288) go to 5617
   muntsv(2) = 0
-9000 if ( iprspy .lt. 1 )  go to 9008
-  write (munit6, 9007)  kbreak, nchain, lastov, m4plot
+9000 if (iprspy .lt. 1) go to 9008
+  write (munit6, 9007) kbreak, nchain, lastov, m4plot
 9007 format (' Exit "emtspy".  kbreak, nchain, lastov, m4plot =', 4i6)
   call window
 9008 return
@@ -412,7 +412,7 @@ end subroutine emtspy
 !     subroutine spying.
 !
 subroutine spying
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
   !     This is the principle module, called by "emtspy".
   include 'blkcom.ftn'
@@ -420,8 +420,8 @@ subroutine spying
   include 'synmac.ftn'
   include 'tacsar.ftn'
   include 'dekspy.ftn'
-  character*8 chard7
-  character*8 spytim(2), spdate(2)
+  character(8) chard7
+  character(8) spytim(2), spdate(2)
   save
   if (iprspy .lt. 1) go to 31006
   write (munit6, 1006)  nchain, jjroll, kbreak, lockbr, nexmod, buff77(1:20)
@@ -1278,8 +1278,8 @@ subroutine spying
 2985 format (' Prepare to open.  n12, n13, n14, n15 =', 4i8)
   call window
 32985 close (lunt14)
-  open (unit=lunt14, status='unknown', file=ansi32)
-  if ( iprspy .lt. 1 ) go to 2987
+  open (unit = lunt14, status = 'unknown', file = ansi32)
+  if (iprspy .lt. 1) go to 2987
   write (munit6, 2986)
 2986 format (' After file open (it worked).')
   call window
@@ -1301,14 +1301,14 @@ subroutine spying
      go to 2998
   end do
 2994 continue
-  write (munit6, 2996)  n13
+  write (munit6, 2996) n13
 2996 format ('    Note :  no  end-of-file  encountered.   Stop reading after card number', i5)
   call window
-2998 if ( numcrd .lt. n14 ) numcrd = n14 - 1
-  write (munit6, 2999)  numcrd
+2998 if (numcrd .lt. n14) numcrd = n14 - 1
+  write (munit6, 2999) numcrd
 2999 format (i9, '  =  numcrd  (upper bound on card-image storage in file6 cache).')
   call window
-  if ( l .gt. 1 )  go to 3006
+  if (l .gt. 1) go to 3006
   write (munit6, 3004)
 3004 format ('  ? ? ? ? ?   Warning.  Data file is empty.   Did user misspell the file name?')
   call window
@@ -1793,7 +1793,7 @@ end subroutine spying
 ! subroutine spyink.
 !
 subroutine spyink
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp only, which services "emtspy".
   !     this is the 2nd half of principle module "spying".
   include 'blkcom.ftn'
@@ -1802,7 +1802,7 @@ subroutine spyink
   include 'dekspy.ftn'
   character d13
   dimension mmhold(20)
-  character*8 text1, text2, d12
+  character(8) text1, text2, d12
   save
   data text1 /  6htamper  /
   if ( iprspy .lt. 1 ) go to 1003
@@ -1987,7 +1987,7 @@ subroutine spyink
   lidnt2 = linnow
   if ( char1 .ne. 'r' )  go to 2618
   go to 2695
-  !     following code is for  "*8"  request :
+  !     following code is for  "(8)"  request :
 2734 if ( bytbuf(1:4)  .ne.  '    ' )  go to 2743
   j = linnow
 2736 if ( file6(j)(80:80) .eq.  ' ' )  go to 2738
@@ -2007,10 +2007,10 @@ subroutine spyink
   if ( j  .le.  numcrd )   go to 2736
   linnow = numcrd
   go to 2618
-  !     following code is for  "*8,?"  case, to deposit in column 80:
+  !     following code is for  "(8),?"  case, to deposit in column 80:
 2743 if ( bytbuf(1:1) .eq. ',' )  go to 2749
 2744 write (munit6, 2746)
-2746 format (' Sorry,  "*8"  must be followed by a comma and digit 1-4, or blanks.')
+2746 format (' Sorry,  "(8)"  must be followed by a comma and digit 1-4, or blanks.')
   call window
   go to 2618
 2749 file6b(linnow)(80:80) = bytbuf(2:2)
@@ -3325,14 +3325,14 @@ end subroutine spyink
 !     subroutine initsp.
 !
 subroutine initsp
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive emtp use, this module can be deleted.
   !     Universal initialization module for "spying".   Constants
   !     must be set only once, at the beginning of execution only.
   include 'blkcom.ftn'
   include 'dekspy.ftn'
-  character*8 textay(75)
+  character(8) textay(75)
   !     next come all possible key-word responses to "spy:" prompt:
   data  textay(1)   /  'heading '  /
   data  textay(2)   /  'stop    '  /
@@ -3466,64 +3466,64 @@ end subroutine initsp
 ! subroutine flager.
 !
 subroutine flager
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module of interactive emtp only, which services "emtspy".
   !     if no interactive use, convert to dummy module ("return").
-  !       vax-11 installation-dependent emtp module which serves
-  !       to read spy command from munit5 if: 1) ctrl-c interrupt
-  !       has occurred, or 2) if  lockbr = 1  upon entry.
+  !     VAX-11 installation-dependent emtp module which serves
+  !     to read spy command from munit5 if: 1) ctrl-c interrupt
+  !     has occurred, or 2) if  lockbr = 1  upon entry.
   include 'blkcom.ftn'
   include 'dekspy.ftn'
-  common /comkwt/  kwtvax           ! magic block for ctrl-c trapping
-  dimension  idum(3)                !  dummy vector for ctrl-c handling
-  external kwiter                   ! needed for ctrl-c initialization
-  if ( iprspy .lt. 10 ) go to 3456  ! jump around diagnostic
-  write (munit6, 3409)  istep, kwtspy, itype, lastov
+  common /comkwt/ kwtvax                                    ! magic block for ctrl-c trapping
+  dimension idum(3)                                         !  dummy vector for ctrl-c handling
+  external kwiter                                           ! needed for ctrl-c initialization
+  if (iprspy .lt. 10) go to 3456                            ! jump around diagnostic
+  write (munit6, 3409) istep, kwtspy, itype, lastov
 3409 format (' Top flager.  istep, kwtspy, itype, lastov =', 4i6)
-  call window                       ! output of character variable munit6
-3456 if (lastov .ne. 9911) go to 3614 ! not "pltfil" overflow
-  buff77 = 'space'                  ! next spy command we want to execute
-  kwtspy = 1                        ! set flag for global emtp use (remember)
-  kfile5 = 2                        ! signal to "spying" that buff77 now read
-  go to 3651                        ! exit module after possible diagnostic
-3614 if ( kwtvax .eq. 0 ) go to 3642 ! no user-keyed interrupt
-  write (prom80, 3462)              ! prompt for spy keyboard input
-3462 format (' spy: ' )
-  call prompt                       ! write prom80 with cursor control (no lf)
-  kwtvax = 0                        ! reset flag of ctrl-c interception for next
-  !     call enable_ctrl_c ( kwiter, idum(1) )  ! re-enable it
-  if ( iprspy .lt. 1 )  go to 3491  ! jump around diagnostic
+  call window                                               ! output of character variable munit6
+3456 if (lastov .ne. 9911) go to 3614                       ! not "pltfil" overflow
+  buff77 = 'space'                                          ! next spy command we want to execute
+  kwtspy = 1                                                ! set flag for global emtp use (remember)
+  kfile5 = 2                                                ! signal to "spying" that buff77 now read
+  go to 3651                                                ! exit module after possible diagnostic
+3614 if (kwtvax .eq. 0) go to 3642                          ! no user-keyed interrupt
+  write (prom80, 3462)                                      ! prompt for spy keyboard input
+3462 format (' spy:')
+  call prompt                                               ! write prom80 with cursor control (no lf)
+  kwtvax = 0                                                ! reset flag of ctrl-c interception for next
+                                                            !     call enable_ctrl_c ( kwiter, idum(1) )  ! re-enable it
+  if (iprspy .lt. 1) go to 3491                             ! jump around diagnostic
   write (munit6, 3487)
 3487 format (' Enable VAX ctrl-c interception in "flager" .')
-  call window         ! output of character variable munit6
-3491 go to 3643     ! jump to read from unit munit5 (keyboard)
-3642 if ( lockbr .ne. 1 )  go to 3651        ! no forced input
-  if ( kfile5 .eq. 1 )  go to 3651  ! "@" read out in emtspy
-3643 read (munit5, 3647) buff77         ! read next spy input
+  call window                                               ! output of character variable munit6
+3491 go to 3643                                             ! jump to read from unit munit5 (keyboard)
+3642 if (lockbr .ne. 1) go to 3651                          ! no forced input
+  if (kfile5 .eq. 1) go to 3651                             ! "@" read out in emtspy
+3643 read (munit5, 3647) buff77                             ! read next spy input
 3647 format (a80)
-  kwtspy = 1    ! set flag for global emtp use (remember)
-  kfile5 = 2     ! signal to "spying" that buff77 now read
-  if ( kspsav .eq. 0 )  go to 3650  ! no echoing of spy command
-  if ( buff77(1:7) .ne. 'cancel ' )  go to 3648
-  kspsav = kspsav + 1   ! erase previous, erroneous command
-  go to 3643      ! loop back for another, a real, command
-3648 kspsav = kspsav - 1  ! next file6 cell to save buff77 in
-  if ( kspsav .gt. numcrd )  go to 3649   ! no overlap yet
-  write (*, *)  ' Error stop; overflow in "flager".'
-  call stoptp     ! installation-dependent fortran stop
-3649 file6(kspsav) = buff77   ! accumulate user-keyed spy input
-3650 go to 3651    ! exit module with 80-col. buff77 card now read
-3651 if ( iprspy .lt. 9 )  go to 9000
-  write (munit6, 9004)  kwtspy, buff77
-9004 format (' Exit "flager".  kwtspy =',  i4, '   buff77 = ',  a80  )
-  call window         ! output of character variable munit6
+  kwtspy = 1                                                ! set flag for global emtp use (remember)
+  kfile5 = 2                                                ! signal to "spying" that buff77 now read
+  if (kspsav .eq. 0) go to 3650                             ! no echoing of spy command
+  if (buff77(1:7) .ne. 'cancel ') go to 3648
+  kspsav = kspsav + 1                                       ! erase previous, erroneous command
+  go to 3643                                                ! loop back for another, a real, command
+3648 kspsav = kspsav - 1                                    ! next file6 cell to save buff77 in
+  if (kspsav .gt. numcrd) go to 3649                        ! no overlap yet
+  write (*, *) ' Error stop; overflow in "flager".'
+  call stoptp                                               ! installation-dependent fortran stop
+3649 file6(kspsav) = buff77                                 ! accumulate user-keyed spy input
+3650 go to 3651                                             ! exit module with 80-col. buff77 card now read
+3651 if (iprspy .lt. 9) go to 9000
+  write (munit6, 9004) kwtspy, buff77
+9004 format (' Exit "flager".  kwtspy =', i4, '   buff77 = ', a80)
+  call window                                               ! output of character variable munit6
 9000 return
 end subroutine flager
 !
 !     subroutine quiter.
 !
 subroutine quiter
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !     module of interactive emtp only, which services "emtspy".
   !     if no interactive use, convert to dummy module ("return").
   !     this module provides a special-purpose connection to the
@@ -3542,7 +3542,7 @@ end subroutine quiter
 !     subroutine honker.
 !
 subroutine honker (klevel)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, this module can be deleted.
   !     VAX-11 installation-dependent emtp module which issues
@@ -3557,8 +3557,8 @@ subroutine honker (klevel)
   !     carriage control, maybe (see n8 = j + 1, rather than j, below).
   include 'blkcom.ftn'
   include 'dekspy.ftn'
-  real*8 d13
-  character*8 spytim(2), spdate(2)
+  real(8) d13
+  character(8) spytim(2), spdate(2)
   d13 = 2.0                 ! initialize time delay at two seconds
   call time44 ( spytim(1) )    ! emtp wall-clock time
   call date44 ( spdate(1) )    ! emtp date utility
@@ -3585,7 +3585,7 @@ end subroutine honker
 !     subroutine tdelay.
 !
 subroutine tdelay ( d8 )
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !     Module of interactive emtp only, which services "emtspy".
   !     If no interactive use, this module can be deleted.
   !     VAX-11   module designed to stall for  d8  seconds.
@@ -3612,7 +3612,7 @@ end subroutine tdelay
 !     subroutine kwiter.
 !
 subroutine kwiter ( idum )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11  installation-dependent emtp module which serves
   !     control interactive usage.  if none, destroy the module.
   !     Purpose is to sense user-keyed interrupt, and set flag.
@@ -3627,7 +3627,7 @@ end subroutine kwiter
 !     subroutine percnt.
 !
 subroutine percnt ( vbyte, n7 )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     Utility which serves to replace  "%%%%%%%%"  strings of disk
   !     files by parameters of  "@?"  call.   columns 1, ... n7  are
@@ -3670,7 +3670,7 @@ end subroutine percnt
 !     subroutine numchk.
 !
 subroutine numchk ( vbyte, nchar, kill )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     This utility serves to scrutinize the input character string
   !     (vbyte(j), j=1, nchar)  to see if it is a legal floating-point
@@ -3731,7 +3731,7 @@ end subroutine numchk
 !     subroutine getnum.
 !
 subroutine getnum ( num )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
@@ -3785,7 +3785,7 @@ end subroutine getnum
 !     subroutine movers.
 !
 subroutine movers ( from, to, num )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   character*1   from(1), to(1)
@@ -3798,10 +3798,10 @@ end subroutine movers
 !     subroutine moverl.
 !
 subroutine moverl ( from, to, num )
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
-  real*8   from(1), to(1)
+  real(8)   from(1), to(1)
   do j = 1, num
 1763 to(j) = from(j)
   end do
@@ -3811,7 +3811,7 @@ end subroutine moverl
 !     subroutine window.
 !
 subroutine window
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   !     For character*132 spy display channel munit6, this serves
@@ -3835,7 +3835,7 @@ end subroutine window
 !     subroutine spylin.
 !
 subroutine spylin
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   !     One blank line is written on spy screen by this module.
@@ -3850,7 +3850,7 @@ end subroutine spylin
 !     subroutine spyout.
 !
 subroutine spyout(n1, n2)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, this module can be deleted.
   !     Arguments n1 and n2 are node nos., with possible "-" signs.
@@ -3858,7 +3858,7 @@ subroutine spyout(n1, n2)
   include 'labcom.ftn'
   include 'dekspy.ftn'
   save
-  character*8 text10(10), terra
+  character(8) text10(10), terra
   data terra / 6hterra  /
   n11 = n1
   n12 = n2
@@ -3895,7 +3895,7 @@ end subroutine spyout
 !     subroutine examin.
 !
 subroutine examin
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   !     This near-universal module serves to build the character*132
@@ -3934,13 +3934,13 @@ subroutine examin
   n10 = memkar + 2 * n9  -  n8
   n8 = n8 + 2
   if ( n10  .ne.  0 )   go to 1628
-  !     following real*8 extractions line up (no need for 4-byte shift):
+  !     following real(8) extractions line up (no need for 4-byte shift):
   if ( iascii(n3) .eq. 0 ) write (ansi16, 1620)  fkar1(1+n9)
 1620 format (e15.6)
   if ( iascii(n3) .eq. 1 ) write (ansi16, 1624)  fkar1(1+n9)
 1624 format (4x, '"', a6, '"', 3x)
   go to 1633
-  !     Following real*8 extractions require a 4-byte shift (fkar2 use).
+  !     Following real(8) extractions require a 4-byte shift (fkar2 use).
   !     fkar2 has higher memory address than fkar1, so it is correct with
   !     n9 offset if n9 is positive.   But if n9 is negative, the half
   !     word shift really should be toward lower addresses, which we
@@ -3976,7 +3976,7 @@ end subroutine examin
 ! subroutine deposi.
 !
 subroutine deposi ( ind, intype, n1, n2, d4 )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     for non-interactive EMTP, this module can be destroyed.
   !     this near-universal module services "deposit", to actually
@@ -3992,7 +3992,7 @@ subroutine deposi ( ind, intype, n1, n2, d4 )
 1707 format (' Top of "deposi".   ind, intype, iascii(ind), d4, ansi8 =',  3i8, e15.4, 3x, a8 )
   call window
 1846 n8 = locate(ind)
-  !     following use of real*8 deposit logic to also handle
+  !     following use of real(8) deposit logic to also handle
   !     alphanumeric only works for computers with this equality:
   if ( iascii(ind) .eq. 1 ) read (ansi8, 1849)  d4
 1849 format (a6)
@@ -4004,7 +4004,7 @@ subroutine deposi ( ind, intype, n1, n2, d4 )
   n9 = n9 + 1
   if ( n1 .le. n2 ) go to 1854
   go to 8000
-  !     our vector is  real*8, so requires the following special deposit:
+  !     our vector is  real(8), so requires the following special deposit:
 1880 n9 = (n8 - memkar)/2 + n1
   n10 = memkar + 2*(n9-n1) - n8
   !     enter loop of real deposits, subscripts n1 through n2:
@@ -4023,7 +4023,7 @@ end subroutine deposi
 ! subroutine append.
 !
 subroutine append
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !     module connected to key word "append" of spy.  others
   !     can perfect and use their own installation-dependent
   !     (and perhaps proprietary) extensions via this module.
@@ -4033,7 +4033,7 @@ end subroutine append
 ! subroutine intpar.
 !
 subroutine intpar ( max, n1, n2, kill )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module of interactive emtp usage only, which services "emtspy".
   !     this module is designed to extract two free-format row numbers
   !     from  bytbuf(20)  input buffer of common.   these numbers must
@@ -4127,7 +4127,7 @@ end subroutine intpar
 ! subroutine sosrng.
 !
 subroutine sosrng ( kill )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module of interactive emtp usage only, which services "emtspy".
   !     this module serves to extract a beginning and ending line number
   !     for sos-like editing operations of  "edit"  command.   these two
@@ -4228,7 +4228,7 @@ subroutine movesp(from, to, n15)
   !     For non-interactive EMTP, this module can be destroyed.
   !     This routine transfers single-precision from(1:n15) to
   !     to(1:n15).  except for missing implicit, it equals "mover".
-  real*8 from, to
+  real(8) from, to
   dimension from(1), to(1)
   do j = 1, n15
 4829 to(j) = from(j)
@@ -4239,10 +4239,10 @@ end subroutine movesp
 !     subroutine prompt.
 !
 subroutine prompt
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11  installation-dependent EMTP module used only
   !     for interactive EMTP ("emtspy").  Input is program
-  !     prompt in character*80 variable prom80 of deck "dekspy".
+  !     prompt in character(8)0 variable prom80 of deck "dekspy".
   !     The prompt must end with colon (":").  then line feed
   !     will be suppressed, so subsequent read is to right of ":".
   !     For non-interactive EMTP, this module can be destroyed.
@@ -4263,13 +4263,13 @@ end subroutine prompt
 !     subroutine frefp1.
 !
 subroutine frefp1(ansi, d12)
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode a
-  !     single floating point number.  The input is character*80
+  !     single floating point number.  The input is character(8)0
   !     variable  ansi,  and the output is double precision d12.
   !     For non-interactive emtp, this module can be destroyed.
-  character*80  ansi
+  character(80) ansi
   n8 = 1
   call frefix ( ansi, n8 )
   read (ansi, 3892)  d12
@@ -4282,10 +4282,10 @@ end subroutine frefp1
 subroutine fresp1(ansi, d12)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode one
-  !     floating point numbers d12 from character*80 ansi.   This
+  !     floating point numbers d12 from character(8)0 ansi.   This
   !     is identical to "frefp1", except for single precision.
-  character*80  ansi
-  real*8 d12
+  character(80) ansi
+  real(8) d12
   n8 = 1
   call frefix(ansi, n8)
   read (ansi, 3892) d12
@@ -4296,13 +4296,13 @@ end subroutine fresp1
 !     subroutine frefp2.
 !
 subroutine frefp2(ansi, d12, d13)
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode two
-  !     floating point numbers d12 and d13 from character*80 ansi.
+  !     floating point numbers d12 and d13 from character(8)0 ansi.
   !     For non-interactive emtp, this module can be destroyed.
-  character*80  ansi
-  real*8 d12, d13
+  character(80) ansi
+  real(8) d12, d13
   n8 = 2
   call frefix ( ansi, n8 )
   read (ansi, 3892)  d12, d13
@@ -4315,10 +4315,10 @@ end subroutine frefp2
 subroutine fresp2(ansi, d12, d13)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  it is called to decode two
-  !     floating point numbers d12 and d13 from character*80 ansi.
+  !     floating point numbers d12 and d13 from character(8)0 ansi.
   !     This is identical to "frefp2", except for single precision.
-  character*80 ansi
-  real*8 d12, d13
+  character(80) ansi
+  real(8) d12, d13
   n8 = 2
   call frefix ( ansi, n8 )
   read (ansi, 3892)  d12, d13
@@ -4329,13 +4329,13 @@ end subroutine fresp2
 !     subroutine frefp3.
 !
 subroutine frefp3(ansi, d12, d13, d14)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode three
-  !     floating point numbers d12,d13,d14 from character*80 ansi.
+  !     floating point numbers d12,d13,d14 from character(8)0 ansi.
   !     For non-interactive emtp, this module can be destroyed.
-  character*80  ansi
-  real*8 d12, d13, d14
+  character(80)  ansi
+  real(8) d12, d13, d14
   n8 = 3
   call frefix ( ansi, n8 )
   read (ansi, 3892)  d12, d13, d14
@@ -4348,13 +4348,13 @@ end subroutine frefp3
 subroutine fresp3(ansi, d12, d13, d14)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode three
-  !     floating point numbers d12, d13, d13 from character*80 ansi.
+  !     floating point numbers d12, d13, d13 from character(8)0 ansi.
   !     This is identical to "frefp3", except for single precision.
-  character*80 ansi
-  real*8 d12, d13, d14
+  character(80) ansi
+  real(8) d12, d13, d14
   n8 = 3
-  call frefix ( ansi, n8 )
-  read (ansi, 3892)  d12, d13, d14
+  call frefix (ansi, n8)
+  read (ansi, 3892) d12, d13, d14
 3892 format (3e20.0)
   return
 end subroutine fresp3
@@ -4362,13 +4362,13 @@ end subroutine fresp3
 !     subroutine frein1.
 !
 subroutine frein1(ansi, n12)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  it is called to decode a
-  !     single integer number n12 from character*80 input ansi.
+  !     single integer number n12 from character(8)0 input ansi.
   !     For non-interactive EMTP, this module can be destroyed.
-  character*80  ansi
-  integer*4 n12
+  character(80) ansi
+  integer(4) n12
   n8 = 1
   call frefix ( ansi, n8 )
   read (ansi, 3892)  d12
@@ -4380,12 +4380,12 @@ end subroutine frein1
 !     subroutine frein2.
 !
 subroutine frein2(ansi, n12, n13)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode two
-  !     integer numbers n12 and n13 from character*80 input ansi.
+  !     integer numbers n12 and n13 from character(8)0 input ansi.
   !     For non-interactive emtp, this module can be destroyed.
-  character*80 ansi
+  character(80) ansi
   n8 = 2
   call frefix(ansi, n8)
   read (ansi, 3892)  d12, d13
@@ -4398,7 +4398,7 @@ end subroutine frein2
 !     subroutine frefix.
 !
 subroutine frefix(ansi, n8)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module used only by interactive emtp ("emtspy").
   !     for non-interactive use only, it can be destroyed.
   !     This module is called by "frefp1", "frein1", etc. --- all
@@ -4409,7 +4409,7 @@ subroutine frefix(ansi, n8)
   !     Ansi is the input being processed, for n8 numbers.  Upon
   !     exit, ansi will be converted to 4e20.0 fixed-format data.
   include 'dekspy.ftn'
-  character*80 ansi, hold
+  character(80) ansi, hold
   if ( iprspy .lt. 3 )  go to 3582
   write (munit6, 3579)  n8, ansi(1:40)
 3579 format (' Top of "frefix".  n8 =',  i5, '   ansi(1:40) = ', a40)
@@ -4477,7 +4477,7 @@ end subroutine frefix
 !     subroutine locatn.
 !
 subroutine locatn
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'synmac.ftn'
@@ -6240,7 +6240,7 @@ block data blkhlp
    data texspy ( 277 )   /  '  character string by another).  concerning  "*s",  however, once again  "@"    '  /
    data texspy ( 278 )   /  '  is used as a delimiter rather than  <esc>,  and no qualifiers (e.g., ",d" for '  /
    data texspy ( 279 )   /  '  "decide mode") are allowed.   finally, there are special EMTP-designed        '  /
-   data texspy ( 280 )   /  '  commands.   the first of these is  "*8",  which initiates a search for the    '  /
+   data texspy ( 280 )   /  '  commands.   the first of these is  "(8)",  which initiates a search for the    '  /
    data texspy ( 281 )   /  '  next card which has a non-blank column 80.   after display of this record,    '  /
    data texspy ( 282 )   /  '  spy awaits a user decision regarding disposition:  <cr>  will leave the card  '  /
    data texspy ( 283 )   /  '  unchanged and initiate a search for the following one;  digits 0, 1, 2, 3, 4  '  /
@@ -6248,8 +6248,8 @@ block data blkhlp
    data texspy ( 285 )   /  '  the next such record (with "0" internally changed to a blank before punching).'  /
    data texspy ( 286 )   /  '  the  "*"  prompt will reappear automatically when the search hits the bottom  '  /
    data texspy ( 287 )   /  '  of the file.  or,  "*"  can be reached at any point of the search-display loop'  /
-   data texspy ( 288 )   /  '  by sending  "e" .   even if not in the  "*8"  loop, column-80 deposits are    '  /
-   data texspy ( 289 )   /  '  possible by use of  "*8,?"  where  "?"  is the desired col.-80 content of the '  /
+   data texspy ( 288 )   /  '  by sending  "e" .   even if not in the  "(8)"  loop, column-80 deposits are    '  /
+   data texspy ( 289 )   /  '  possible by use of  "(8),?"  where  "?"  is the desired col.-80 content of the '  /
    data texspy ( 290 )   /  '  current line.   finally,  the command "*col"  will produce a heading of      '  /
    data texspy ( 291 )   /  '  column numbers, which is useful when inserting new data records using  "*i" . '  /
    data texspy ( 292 )   /  '  this ruler heading will be shifted to line up with  "*p"  displays.   if an   '  /
@@ -6484,7 +6484,7 @@ block data blkhlp
    data texspy ( 521 )   /  '     indbeg --- beginning location (index to /c29b01/) of plot data points;     '  /
    data texspy ( 522 )   /  '     indbuf --- next free cell (index to /c29b01/) for storage of plot data;    '  /
    data texspy ( 523 )   /  '     limbuf --- limit on indbuf (end of /c29b01/);                              '  /
-   data texspy ( 524 )   /  '     numdcd --- last card read by EMTP (index to character*80 file6 storage)    '  /
+   data texspy ( 524 )   /  '     numdcd --- last card read by EMTP (index to character(8)0 file6 storage)    '  /
    data texspy ( 525 )   /  '     numcrd --- largest index for card storage in file6 (as read by data);      '  /
    data texspy ( 526 )   /  '     limcrd --- limiting index for file6 card storage (dimensioned limit).      '  /
    data texspy ( 527 )   /  '  immediately after this display there will be a choice among the possible      '  /
@@ -6916,7 +6916,7 @@ end subroutine sysplt
 !     subroutine stopin.
 !
 subroutine stopin
-  implicit real*8 (a-h, o-z),  integer*4 (i-n)
+  implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !     universal module of interactive emtp (spy of "emtspy").
   !     if non-interactive version, module can be destroyed.  this
   !     module is called only to display erroneous file6(istep), &
@@ -7688,7 +7688,7 @@ subroutine timval
   !     for non-interactive EMTP, this module can be destroyed.
   include 'dekspy.ftn'
   include 'dekplt.ftn'
-  real*8 d1, d3, tolrce, vmin, vmax, din1, din2
+  real(8) d1, d3, tolrce, vmin, vmax, din1, din2
   maxevk = maxev - 30
   if ( iprspy .lt. 1 ) go to 1549
   write (munit6, 1386)  monitr, limfix, vmin, vmax
@@ -8356,7 +8356,7 @@ subroutine setrtm
   !     For non-interactive EMTP, this module can be destroyed.
   include 'dekspy.ftn'
   include 'dekplt.ftn'
-  real*8 d1, d6
+  real(8) d1, d6
   save
   lunt15 = 15
   close ( unit=lunt15 )
@@ -8656,14 +8656,14 @@ end subroutine chrplt
 !     subroutine tekplt.
 !
 subroutine tekplt
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   return
 end subroutine tekplt
 !
 !     subroutine flatbd.
 !
 subroutine flatbd         ! no implicit
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module used only for interactive EMTP (service to "emtspy").
   !     For non-interactive emtp, this module can be destroyed.
   !     The one and only use is to provide calcomp copies of what
@@ -8671,7 +8671,7 @@ subroutine flatbd         ! no implicit
   !     BPA pseudo-calcomp versatek calls actually used.
   include 'dekspy.ftn'
   include 'dekplt.ftn'
-  real*8 d1, d2
+  real(8) d1, d2
   if ( killpl  .eq.  0 )   go to 2005
   call plot ( 0.0, 0.0, 999 )
   return
@@ -9011,7 +9011,7 @@ end subroutine flatbd
 !     subroutine tgrid.
 !
 subroutine tgrid(ix,iy,nx,idelx,ny,idely,ldash) ! no implicit
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module used only for interactive EMTP (service to "emtspy").
   !     for non-interactive EMTP, this module can be destroyed.
   !     Reliance upon Tektronix plot10 makes this installation-
