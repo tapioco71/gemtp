@@ -236,7 +236,8 @@ subroutine dgelg(r, a, m, n, eps, ier)
      if (tb .le. piv) go to 3
      piv = tb
      i = l
-3 end do
+  end do
+3 continue
   tol = eps * piv
   !     a(i) is pivot element. piv contains the absolute value of a(i).
   !     start elimination loop
@@ -295,7 +296,8 @@ subroutine dgelg(r, a, m, n, eps, ier)
            if (tb .le. piv) go to 15
            piv = tb
            i = l
-15      end do
+        end do
+15      continue
         do l = k, nm, m
            ll = l + j
            r(ll) = r(ll) + pivi * r(l)
@@ -346,7 +348,8 @@ subroutine matmul(aum,bum)
         cum(n1,n2) = aum(n1,1) * bum(1,n2)
         do n3 = 2, n5
 10         cum(n1, n2) =  cum(n1, n2) + aum(n1, n3) * bum(n3, n2)
-20      end do
+        end do
+20      continue
      end do
   end do
   do n1 = 1, n5
@@ -677,11 +680,12 @@ subroutine namea6 ( text1, n24 )
   if ( n17 .eq. 0 )  go to 3434
   texvec(n17) = text1
   n24 = n17
-  do j=1, maxbus
-     if ( texvec(j) .ne. text2 ) go to 3428
+  do j = 1, maxbus
+     if (texvec(j) .ne. text2) go to 3428
      n17 = j
      go to 9000
-3428 end do
+  end do
+3428 continue
   n17 = 0
   go to 9000
 3434 maxbus = maxbus + 1
@@ -839,7 +843,8 @@ subroutine csup(l)
 2014 n1 = -n1
      write (lunit6, 2022 ) n1, ivarb(n1), ivarb(n1+1), ivarb(n1+2), ivarb(n1+3), ivarb(n1+4)
 2022 format (i8, 24x, 5i8)
-2034 end do
+  end do
+2034 continue
   if ( kpar .ne. 0 ) write (lunit6,1004) ( i, parsup(i+kprsup), i=1, kpar )
 1004 format ('0e', 5x, 'parsup ...', /, (' e', 5(i3, 1x, e15.6, 3x)))
 1000 nnn = kxtcs + nuk + lstat(64)
@@ -1004,7 +1009,8 @@ subroutine csup(l)
        go to 5025
        !     :: fortran tacs function
 5020   arg( k) = i2
-5025 end do
+    end do
+5025 continue
 !     :::  calculate value of fortran expression  :::
     zfl = 10.0 * flzero
     jfl = 1
@@ -1420,7 +1426,8 @@ subroutine csup(l)
        if ( d4 .gt. d11 )   d11 = d4
        if ( iprsup  .ge.  1 ) write (lunit6, 7234)  k, j, ndx2, ndx3, ndx6, ksus(ndx2), xtcs(ndx6)
 7234   format (' Next input; k, j, ndx2, ndx3, ndx6, ksus(ndx2), xtcs(ndx6) =',  6i8, e13.3)
-66340 end do
+    end do
+66340 continue
 66330 a = d11
     if ( parsup(nn+1) .ge. 0.0 )  go to 11
     a = d10
@@ -1472,7 +1479,8 @@ subroutine csup(l)
        bb = bb * xtcs( kxtcs + ksus(m) )
        go to 1144
 1155   b = b + bb
-1166 end do
+    end do
+1166 continue
     a = b * parsup( nn + 3 )
     aa = a * parsup( nn )
     if ( aa .ge. parsup(nn+1) ) go to 6677

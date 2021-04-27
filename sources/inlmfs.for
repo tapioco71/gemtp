@@ -6,7 +6,7 @@
 !     subroutine inlmfs.
 !
 subroutine inlmfs
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'dekspy.ftn'
   character*20  arginc(35)
@@ -60,16 +60,17 @@ subroutine inlmfs
   stop
 2294 prom80 = file6(j)
   file6(j) = 'c '//prom80(1:78)
-  open (unit=lunt13, status='old', file=answ80(1:n8))
+  open (unit = lunt13, status = 'old', file = answ80(1:n8))
   n16 = 0
   n26 = k + 1
-4203 do l=n26, 80      ! search cols. n26-80 for nonblank
-     if ( buff77(l:l+1) .eq. '$$' )  go to 2006 ! if continue card, exit
+4203 do l = n26, 80      ! search cols. n26-80 for nonblank
+     if (buff77(l:l + 1) .eq. '$$') go to 2006 ! if continue card, exit
      ! if not "," or blank,
-     if ( buff77(l:l) .ne. ','  .and. buff77(l:l) .ne. ' ' ) go to 4208   ! argument starts
-4205 end do       ! end  do 4205  loop;  col. "l" not argument
+     if (buff77(l:l) .ne. ',' .and. buff77(l:l) .ne. ' ') go to 4208   ! argument starts
+  end do
+4205 continue       ! end  do 4205  loop;  col. "l" not argument
   go to 4226             ! all arguments found; now use them
-2006 write (*,*) ' continuation next.   n13, n16, keybrd, incdat, l =', n13, n16, keybrd, incdat, l
+2006 write (*, *) ' continuation next.   n13, n16, keybrd, incdat, l =', n13, n16, keybrd, incdat, l
   kard(200) = n16     ! save n16 when '$$' card is read
   return    !  go back  to over2 for 2nd 'arg' card for lmfs
   !      n13 = n13 + 1 ! next lunt10 index below last $include: for continu
@@ -112,9 +113,10 @@ subroutine inlmfs
   n1 = 0
   if ( n16 .eq. 0 )  go to 4239
 4228 read (lunt13, 4232) ( kbeg(l), l=1, 25 )
-  do l=1, 25
-     if ( kbeg(l) .eq. 0 ) go to 4230
-4229 end do
+  do l = 1, 25
+     if (kbeg(l) .eq. 0) go to 4230
+  end do
+4229 continue
   n1 = n1 + 25
   if ( n1 .le. 175 )  go to 4228
   call stoptp
@@ -153,9 +155,10 @@ subroutine inlmfs
      read (lunt13, 1329, end=1828)  buff77
 1329 format ( a80 )
      if ( buff77(1:1) .ne. 'c' )  go to 4247
-     do l=1, 10
-        if ( buff77(2:2) .eq. digit(l) )  go to 4244
-4241 end do
+     do l = 1, 10
+        if (buff77(2:2) .eq. digit(l)) go to 4244
+     end do
+4241 continue
      go to 4247
 4244 if ( l .eq. 10 )  l = 0
      if ( l .gt. komlev )  go to 4273
@@ -203,12 +206,14 @@ subroutine inlmfs
         if ( n .lt. n1 ) go to 4253
         file6(j)(n:n) = char1
         n = n - 1
-4263 end do
+     end do
+4263 continue
      if ( n+1 .gt. n1  .and. ktex(n24) .eq. 1 ) go to 4253
      if ( n .ge. n1 ) file6(j)(n1:n) = ' '
      n24 = n24 + 1
      go to 4249
-4273 end do
+  end do
+4273 continue
   stop
 1828 close (unit=lunt13,  status='keep')
   if ( iprspy .lt. 1 ) go to 1832
@@ -220,11 +225,11 @@ subroutine inlmfs
   j = j + 1
   file6(j) = buff77
   n13 = limcrd + 1
-1833 do 1835  m=n19, limcrd
+1833 do m = n19, limcrd
      j = j + 1
      n13 = n13 - 1
      file6(j) = file6(n13)
-1835 end do
+  end do
   numcrd = j
   !     write (*,*) ' exit inlmfs.   numdcd, numcrd =',
   !    1                             numdcd, numcrd

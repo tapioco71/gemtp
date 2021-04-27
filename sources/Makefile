@@ -68,7 +68,11 @@ include ${ROOT}/Makefile.global
 
 # The default rule.
 all: ${COMPILER}
+all: vardim dimension newmods labcom
 all: ${COMPILER}/${TARGET}
+
+${TARGET}: ${COMPILER}
+${TARGET}: ${COMPILER}/${TARGET}
 
 vardim: ${COMPILER}
 vardim: ${COMPILER}/${VARDIM}

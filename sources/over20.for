@@ -121,12 +121,12 @@ subroutine over20
   if (inonl .eq. 0) go to 9207
   if ( n10  .ne.  0 ) write (lunit6, 4688)
 4688 format (/, ' Nonlinear element table state variables follow.')
-  iold=4
-  do k=1,inonl
-     if(nonle(k).ge.0) go to 7035
-     n1=nonlk(k)
-     n2=iabs(nonlm(k))
-     if ( nltype(k)  .ne.  -96 )  go to 7031
+  iold = 4
+  do k = 1, inonl
+     if(nonle(k) .ge. 0) go to 7035
+     n1 = nonlk(k)
+     n2 = iabs(nonlm(k))
+     if (nltype(k) .ne. -96) go to 7031
      n5 = nonlad(k)
      n6 = n5 + 1
      n7 = n5 + 2
@@ -134,16 +134,16 @@ subroutine over20
      write (lunit7, 7020) iold, bus(n1), bus(n2), vchar(n7), cchar(n8)
      n9 = cchar(n6)
      n11 = cchar(n7)
-     write (lunit7, 7018)  n9, n11,  ( vchar(ipp), ipp=n5, n8 )
+     write (lunit7, 7018) n9, n11, (vchar(ipp), ipp = n5, n8)
 7018 format (2i10, 4e15.8)
      n12 = n5 + 4
      n13 = n5 + 5
      n14 = cchar(n12)
      write (lunit7,7026) n14, vchar(n12), vchar(n13), gslope(n12), gslope(n13)
 7026 format (i10 , 4e15.8)
-     if ( n10  .eq.  0)  go to 7035
-     write ( lunit6, 7021) k, bus(n1), bus(n2), vchar(n7), cchar(n8)
-     write ( lunit6, 7019)  n9, n11,  ( vchar(ipp), ipp=n5, n8 )
+     if (n10  .eq.  0)  go to 7035
+     write (lunit6, 7021) k, bus(n1), bus(n2), vchar(n7), cchar(n8)
+     write (lunit6, 7019) n9, n11, (vchar(ipp), ipp = n5, n8)
 7019 format (' ', i10, 2x, i10, 4(3x, e15.8))
      write (lunit6,7027)  n14, vchar(n13), vchar(n14), gslope(n12), gslope(n13)
 7027 format (' ', i10 , 4(3x, e15.8))
@@ -152,7 +152,8 @@ subroutine over20
      if(a.eq.0.) go to 7035
      write (lunit7,7020) iold,bus(n1),bus(n2),a
      if ( n10  .ne.  0 ) write (lunit6, 7021)  bus(n1), bus(n2), a
-7035 end do
+  end do
+7035 continue
 9207 if (kswtch .eq. 0) go to 4020
   if ( n10  .ne.  0 ) write (lunit6, 7348)
 7348 format (/, ' Status variables for switches follow.', /, 1x,  'bus(l)', 1x, 'bus(m)', 3x, 'kpos(k)',  2x, &
@@ -168,19 +169,21 @@ subroutine over20
      if ( n10  .eq.  0 )   go to 4010
      write (lunit6,4004) bus(l), bus(m), kpos(k), kode(l), kode(m), tclose(k), adelay(k), energy(k), crit(k), nextsw(k)
 4004 format (1x, a6, 1x, a6, 3i10, 4e20.10, /, 14x, i10)
-4010 end do
+  end do
+4010 continue
 4020 go to 9800
   !     code below is just for  'statistics'  or  'systematic'  runs. ----
 605 nstat = k
-  do 8010  l=1, nstat
+  do l = 1, nstat
      ndx1 = 2 * lsiz12  +  l
-     if ( -xmax(ndx1)  .le.  xmax(l) )   go to 8010
+     if (-xmax(ndx1) .le. xmax(l)) go to 8010
      xmax(l) = xmax(ndx1)
      ndx3 = lsiz12 + l
      ndx2 = ndx1 + lsiz12
      xmax(ndx3) = xmax(ndx2)
-8010 end do
-  if (iprsup .gt. 0) write (lunit6,8903) isw, nstat, knt, nenerg, (xmax(i), i=1, nstat)
+  end do
+8010 continue
+  if (iprsup .gt. 0) write (lunit6,8903) isw, nstat, knt, nenerg, (xmax(i), i = 1, nstat)
 8903 format (' isw, nstat, knt, nenerg = ', 4i10, /, ' (xmax(i), i=1, nstat) =', /, 6(5x,e15.8))
   knt = knt + 1
   write (lunit9)  ( xmax(l), l=1, nstat )
@@ -482,9 +485,10 @@ subroutine spying
   !     ok, so file is legal;  next check for argument list;  extract any:m35.1747
 1276 n6 = n13 + 1
   maxarg = 0
-  do j=n6, 80
+  do j = n6, 80
      if (answ80(j:j) .ne. ' ')  go to 4535
-4531 end do
+  end do
+4531 continue
   go to 1271
 4535 maxarg = 0
   do idmxxx=1, 10
@@ -544,12 +548,13 @@ subroutine spying
   if ( answ80(1:5) .ne. 'wake4' )  go to 1296
   n13 = 1
   answ80(5:5) = ' '
-1296 do jword=1, numkey
-     if ( answ80(1:8)  .eq.  spykwd(jword) )   go to 1307
-1302 end do
+1296 do jword = 1, numkey
+     if (answ80(1:8) .eq. spykwd(jword)) go to 1307
+  end do
+1302 continue
   !     we reach here if illegal response to "spy:" prompt has been read:
 1303 write (munit6, 1304)  answ80(1:8)
-1304 format ('   ? ? ?  illegal spy command  "',  a, '" .   Try again  .....')
+1304 format ('   ? ? ?  Illegal spy command  "',  a, '" .   Try again  .....')
   call window
   go to 1240
 1307 if ( iprspy .lt. 1 ) go to 1309
@@ -587,13 +592,14 @@ subroutine spying
 1311 write (munit6, 11312 )
 11312 format ('    Available key-word responses to the  "spy:"  prompt are as follows:')
   call window
-  do j=1, numkey, 8
+  do j = 1, numkey, 8
      n15 = j + 7
-     if ( n15 .gt. numkey )  n15 = numkey
-     write (munit6, 1313)  (spykwd(k), k=j, n15)
+     if (n15 .gt. numkey) n15 = numkey
+     write (munit6, 1313) (spykwd(k), k = j, n15)
 1313 format (5x, 8a9)
      call window
-21313 end do
+  end do
+21313 continue
   jword = jwdsav
 21314 write (prom80, 1314)
 1314 format ('       key-word of interest (all, <cr>,', ' top, bot, back):')
@@ -624,26 +630,29 @@ subroutine spying
 41315 jword = 1
   go to 1317
 21315 jword = 1
-  if ( spycd2(1:4) .eq. 'all ' )     go to 1317
-  do jword=1, numkey
-     if ( spycd2(1:8)  .eq.  spykwd(jword) )    go to 1317
-1316 end do
+  if (spycd2(1:4) .eq. 'all ') go to 1317
+  do jword = 1, numkey
+     if (spycd2(1:8) .eq. spykwd(jword)) go to 1317
+  end do
+1316 continue
   write (munit6, 1760)  spycd2
   call window
   go to 1318
 1317 n17 = kbegtx(jword)
   n18 = kbegtx(jword+1) - 1
-  do j=n17, n18
+  do j = n17, n18
      munit6(1:81) = ' '//texspy(j)
      call window
-91315 end do
+  end do
+91315 continue
   if ( jword .ne. 4 )  go to 61317
   write (munit6, 11312)
   call window
-  do j=1, numkey, 8
-     write (munit6, 1313) ( spykwd(k), k=j, j+7)
+  do j = 1, numkey, 8
+     write (munit6, 1313) (spykwd(k), k = j, j + 7)
      call window
-51317 end do
+  end do
+51317 continue
 61317 jwdsav = jword
   if ( spycd2(1:4) .ne. 'all ' )  go to 1318
   call quiter
@@ -755,25 +764,26 @@ subroutine spying
   !     process emtp symbol name (spycd2) which has just been read;
 1720 nchd2 = 0
   n13 = 0
-  do j=1, 8
-     if ( spycd2(j:j)  .eq.  '('  )   go to 1726
-     if ( spycd2(j:j)  .eq.  ','  )   go to 1726
-     if ( spycd2(j:j)  .ne.  ' ' )   go to 1721
-     if ( nchd2  .eq.  0 )   nchd2 = j - 1
+  do j = 1, 8
+     if (spycd2(j:j) .eq. '(') go to 1726
+     if (spycd2(j:j) .eq. ',') go to 1726
+     if (spycd2(j:j) .ne. ' ') go to 1721
+     if (nchd2 .eq. 0)   nchd2 = j - 1
      go to 1723
-1721 if ( spycd2(j:j)  .ne.  '='  )   go to 1723
+1721 if (spycd2(j:j) .ne. '=') go to 1723
      n13 = j
      if ( nchd2  .eq.  0 )   nchd2 = j - 1
-1723 end do
+  end do
+1723 continue
   n1 = 1
   n2 = 1
   j = n13
-  if ( n13  .eq.  0 )   j = 7
+  if (n13 .eq. 0) j = 7
   go to 1735
 1726 if ( nchd2  .eq.  0 )   nchd2 = j - 1
   n9 = 0
-  do k=j, 20
-     if ( spycd2(k:k)  .ne.  '-' )   go to 1727
+  do k = j, 20
+     if (spycd2(k:k) .ne. '-') go to 1727
      n12 = -1
      go to 1733
 1727 if ( spycd2(k:k)  .eq.  ' ' )   go to 1733
@@ -782,7 +792,8 @@ subroutine spying
      go to 1734
 21727 do i=1, 10
         if ( spycd2(k:k)  .eq.  digit(i) )   go to 1730
-1728 end do
+     end do
+1728 continue
      if ( n9  .gt.  0 )   limarr(n9) = limarr(n9) * n12
      !     non-digit means we initialize for next number to be built:
      n9 = n9 + 1
@@ -791,17 +802,19 @@ subroutine spying
      go to 1733
 1730 if ( i  .eq.  10 )   i = 0
      limarr(n9) = 10 * limarr(n9)  +  i
-1733 end do
+  end do
+1733 continue
 1734 n1 = limarr(1)
   n2 = limarr(2)
   if ( n9  .le.  2 )   n2 = n1
 1735 spycd2(j:8) = blan80(j:8)
   !     next identify the emtp name involved in this request:
-1738 do ind=1, numsym
-     if ( spycd2(1:8)  .eq.  symb(ind) )   go to 1780
-1740 end do
+1738 do ind = 1, numsym
+     if (spycd2(1:8) .eq. symb(ind)) go to 1780
+  end do
+1740 continue
   write (munit6, 1760)  spycd2
-1760 format ('   ? ?  sorry, no symbol match for  "', a6, '" .')
+1760 format ('   ? ?  Sorry, no symbol match for  "', a6, '" .')
   call window
   go to 1460
 1780 intype = 0
@@ -831,7 +844,8 @@ subroutine spying
      call window
      go to 1837
 1808 bytbuf(n22:n22) = spycd2(j:j)
-1813 end do
+  end do
+1813 continue
   if ( n22 .lt. 20 ) bytbuf(n22+1:20) = blan80(n22+1:20)
   !     following code is for alphanumeric emtp symbol after "=" :
 1819 ansi8(1:6) = spycd2(n13+1:n13+6)
@@ -874,11 +888,13 @@ subroutine spying
   !     first we must see if  "spycd2"  has any wild-card characters:
 2052 do i=1, 8
      if ( spycd2(i:i)  .eq.  '*'  )   go to 2069
-2053 end do
+  end do
+2053 continue
   !     simple case with no wild-card characters:
   do ind=1, numsym
      if ( spycd2(1:8)  .eq.  symb(ind) )   go to 2063
-2055 end do
+  end do
+2055 continue
   write (munit6, 2088)
   call window
   go to 2050
@@ -903,9 +919,10 @@ subroutine spying
      if ( spycd2(n2:n2)  .eq.  '*' )   go to 2072
      if ( spycd2(n2:n2)  .eq.  ' ' )   go to 2081
      !     nonblank  spycd2(n2:n2) means we must search "d7" for it:
-     do i=n7, 6
-        if ( chard7(i:i) .eq. spycd2(n2:n2) )  go to 2077
-2074 end do
+     do i = n7, 6
+        if (chard7(i:i) .eq. spycd2(n2:n2)) go to 2077
+     end do
+2074 continue
      go to 2086
 2077 n2 = n2 + 1
      n7 = i + 1
@@ -927,7 +944,8 @@ subroutine spying
      if ( kwtspy .eq. 0 ) go to 2087
      kwtspy = 0
      go to 2040
-2087 end do
+  end do
+2087 continue
   if ( n4 .ne. 0 )  go to 2043
   write (prom80, 2088)
 2088 format ('    Sorry, no matches.   Try again :')
@@ -973,8 +991,9 @@ subroutine spying
      if ( kwtspy .eq. 0 ) go to 2116
      kwtspy = 0
      go to 2092
-2116 end do
-  write (prom80, 3217)  n2, symb(n2), locate(n2), ivec(n2), iascii(n2)
+  end do
+2116 continue
+  write (prom80, 3217) n2, symb(n2), locate(n2), ivec(n2), iascii(n2)
 3217 format (i8, 4x, a6, i9, i8, i10, 4x,  ':')
   go to 2099
   !     $$$$$$$  key word no. 16:  "break"    $$$$  $$$$  $$$$  $$$$  $$$$
@@ -1074,16 +1093,18 @@ subroutine spying
      n12 = j
 2514 if ( answ80(j:j) .eq. ' ' ) go to 2519
      n13 = j
-2517 end do
+  end do
+2517 continue
 2519 if ( iprspy .lt. 1 )  go to 32521
   write (munit6, 2521)  n12, n13
 2521 format (' File name bounded.  n12, n13 =',  2i5)
   call window
 32521 if ( n13 .ne. n12 )  go to 2524
   ansi32(8:8) = answ80(n12:n12)
-  do i=1, 9
-     if ( answ80(n12:n12) .eq. digit(i)  .and. filext(i) .eq. 'x' ) go to 2536
-2522 end do
+  do i = 1, 9
+     if (answ80(n12:n12) .eq. digit(i) .and. filext(i) .eq. 'x') go to 2536
+  end do
+2522 continue
   write (munit6, 2526) answ80(n12:n12)
   call window
   go to 1240
@@ -1103,18 +1124,19 @@ subroutine spying
   munit5 = muntsv(2)
 2537 open (unit=munit5, status='old', file=ansi32)
   if ( answ80(1:1) .eq. '@' ) go to 1276
-  do i=1, 9999
+  do i = 1, 9999
      call quiter
-     if ( kwtspy .eq. 0 )  go to 2538
+     if (kwtspy .eq. 0) go to 2538
      kwtspy = 0
      go to 2545
-2538 read (munit5, 1269, end=2545)  buff77
+2538 read (munit5, 1269, end = 2545) buff77
 1269 format (a80)
-     write (munit6, 2539)  i, buff77
+     write (munit6, 2539) i, buff77
 2539 format (' Line', i4,  ': ', a80)
      call window
-2542 end do
-2545 close (unit=munit5, status='keep')
+  end do
+2542 continue
+2545 close (unit = munit5, status = 'keep')
   if ( n16 .eq. 0 ) go to 2551
 2548 n18 = n18 + 1
   if ( n18 .eq. 10 )  go to 2551
@@ -1261,15 +1283,15 @@ subroutine spying
   write (munit6, 2986)
 2986 format (' After file open (it worked).')
   call window
-2987 do l=1, n13
-     if ( l .ge. n12 )  go to 2988
-     read (lunt14, 2991)  ansi8
+2987 do l = 1, n13
+     if (l .ge. n12) go to 2988
+     read (lunt14, 2991) ansi8
      go to 2994
-2988 read (lunt14, 2991, end= 2998)  file6(n14)
+2988 read (lunt14, 2991, end = 2998) file6(n14)
 2991 format (a80)
-     if ( file6(n14)(1:4) .eq. 'eof ' )  go to 2998
+     if (file6(n14)(1:4) .eq. 'eof ') go to 2998
      n14 = n14 + 1
-     if ( n14 .le. limcrd )  go to 2994
+     if (n14 .le. limcrd) go to 2994
      write (munit6, 2191)
 2191 format ('   ****  Warning.   Card image buffer has filled.  Disk read is truncated.')
      call window
@@ -1277,7 +1299,8 @@ subroutine spying
 2192 format ('                    Storage capacity in cards = limcrd =', i5)
      call window
      go to 2998
-2994 end do
+  end do
+2994 continue
   write (munit6, 2996)  n13
 2996 format ('    Note :  no  end-of-file  encountered.   Stop reading after card number', i5)
   call window
@@ -1313,11 +1336,12 @@ subroutine spying
   write (munit6, 3102)
 3102 format (' row  name   index   num    t-begin        t-end        f-begin        f-end')
   call window
-  do j=1, numrmp
+  do j = 1, numrmp
      write (munit6, 3103) j, symbrp(j), indxrp(j), looprp(j),  tbegrp(j), tendrp(j), fbegrp(j), fendrp(j)
 3103 format (1x, i2,  2x, a6, 2i6, 4e14.5)
      call window
-3104 end do
+  end do
+3104 continue
   write (munit6, 3105)  tminrp, tmaxrp
 3105 format ('         No ramping before',  e13.4,  '  or after', e13.4, '  sec.')
   call window
@@ -1659,9 +1683,10 @@ subroutine spying
   k2 = k2 + num2
   do k1 = 1, numask
      k2 = k2 + 1
-     write (munit6, 53614)  shp( k2+numask ), shp( k2+num2 ), shp( k2+num3 ), shp( k2+num5 )
+     write (munit6, 53614) shp( k2+numask ), shp( k2+num2 ), shp( k2+num3 ), shp( k2+num5 )
      call window
-43616 end do
+  end do
+43616 continue
 13617 if ( buff77(1:4) .ne. 'meva'   .and. buff77(1:4) .ne. 'all ' )  go to 13618
   write ( munit6, 23617 )
 23617 format(' Mechanical angles in units of radians ')
@@ -1852,28 +1877,30 @@ subroutine spyink
   if ( char1  .eq.  'd' )   go to 2719
   if ( char1  .eq.  'r' )   go to 2719
   !     we reach here ready to print lines  (lidnt1, lidnt2) :  *p  case
-2634 do j=lidnt1, lidnt2
+2634 do j = lidnt1, lidnt2
      call quiter
-     if ( kwtspy .eq. 0 ) go to 2639
+     if (kwtspy .eq. 0) go to 2639
      kwtspy = 0
      linnow = j - 1
      lidnt1 = j - 1
      lidnt2 = j - 1
      go to 2618
-2639 write (munit6, 2667)  j, file6(j)
+2639 write (munit6, 2667) j, file6(j)
 2667 format (1x, i4, 1x, a80)
      call window
-2665 end do
+  end do
+2665 continue
   linspn = lidnt2 - lidnt1
   linnow = lidnt2
   go to 2618
   !     following code is for  "*f[string]@"  locate request (like sos):
 2669 n4 = 0
   n5 = 0
-  do i=2, 20
-     if ( bytbuf(i:i) .eq.  '@' )   n4 = 1
-     if ( bytbuf(i:i) .ne.  ' ' )   n5 = 1
-2670 end do
+  do i = 2, 20
+     if (bytbuf(i:i) .eq. '@') n4 = 1
+     if (bytbuf(i:i) .ne. ' ') n5 = 1
+  end do
+2670 continue
   if ( n5  .eq.  0 )   go to 2671
   if ( n4  .eq.  1 )   go to 2673
   write (munit6, 32670)
@@ -1889,20 +1916,22 @@ subroutine spyink
 2672 bytbuf = bytfnd
   linnow = linnow + 1
 2673 n6 = linnow
-  do j=n6, numcrd
+  do j = n6, numcrd
      l = 1
-     do k=1, 80
-        if ( file6(j)(k:k) .eq. bytbuf(l:l) )   go to 2674
+     do k = 1, 80
+        if (file6(j)(k:k) .eq. bytbuf(l:l)) go to 2674
         l = 1
         go to 2677
-2674    if ( bytbuf(l+1:l+1) .ne. '@' )  go to 2676
+2674    if (bytbuf(l + 1:l + 1) .ne. '@') go to 2676
         linnow = j
         lidnt2 = j
-        if ( char1 .eq. 's' )  go to 2763
+        if (char1 .eq. 's') go to 2763
         go to 2691
 2676    l = l + 1
-2677 end do
-2683 end do
+     end do
+2677 continue
+  end do
+2683 continue
   l = 0
   write (munit6, 2686)
 2686 format (' String not found, search failed')
@@ -2053,11 +2082,12 @@ subroutine spyink
   if ( n14 .gt. numkey )  n14 = numkey
   go to 32786
 32788 if ( ansi8 .ne. 'show    ' )   go to 2790
-  do j=1, numkey, 10
-     write (munit6, 2789) ( spykwd(ip), ip=j, j+9 )
+  do j = 1, numkey, 10
+     write (munit6, 2789) (spykwd(ip), ip = j, j + 9)
 2789 format (1x, 10a8)
      call window
-32789 end do
+  end do
+32789 continue
   go to 2782
 2790 if ( ansi8 .ne. 'single  ' )  go to 2782
 2791 write (prom80, 2792)
@@ -2067,12 +2097,13 @@ subroutine spyink
   go to 9800
 2793 ansi8 = buff77(1:8)
   buff77(1:8) = buff77(9:16)
-  if ( ansi8 .eq. 'end     ' )  go to 2782
-  do j=1, numkey
-     if ( ansi8 .eq. spykwd(j) )  go to 2798
-2794 end do
+  if (ansi8 .eq. 'end     ') go to 2782
+  do j = 1, numkey
+     if (ansi8 .eq. spykwd(j)) go to 2798
+  end do
+2794 continue
   write (munit6, 2796)  ansi8
-2796 format ('    ? ? ?   sorry,  no such symbol found.   Try again ...')
+2796 format ('    ? ? ?   Sorry,  no such symbol found.   Try again ...')
   call window
   go to 2791
 2798 spykwd(j) = buff77(1:8)
@@ -2105,18 +2136,18 @@ subroutine spyink
   !     is dec free-format; "kswtch" is maximum;  "n17" is error flag:
 2822 call intpar ( kswtch, n1, n2, n17 )
   if ( n17  .gt.  0 )   go to 2806
-  do i=n1, n2
+  do i = n1, n2
      call quiter
-     if ( kwtspy .eq. 0 ) go to 2825
+     if (kwtspy .eq. 0) go to 2825
      kwtspy = 0
      go to 2806
-2825 n5 = iabs ( kmswit(i) )
-     n6 = iabs ( kmswit(lswtch+i)  )
+2825 n5 = iabs (kmswit(i))
+     n6 = iabs (kmswit(lswtch + i))
      d12 = bus(n5)
-     if ( n5 .eq. 1 ) d12 = terra
+     if (n5 .eq. 1) d12 = terra
      d13 = bus(n6)
      if (n6 .eq. 1) d13 = terra
-     write (munit6, 2828)  i, d12, d13, kmswit(i), kmswit(lswtch + i), kpos(i), kentnb(i), tclose(i), adelay(i), topen(i)
+     write (munit6, 2828) i, d12, d13, kmswit(i), kmswit(lswtch + i), kpos(i), kentnb(i), tclose(i), adelay(i), topen(i)
 2828 format (1x, i3, 1x, a6, 1x, a6, i6, i5, i5, i7, 3e13.4)
      call window
      if (n33 .ne. 1) go to 2834
@@ -2124,7 +2155,8 @@ subroutine spyink
      write (munit6, 2831) texvec(n7), adelay(i), crit(i), energy(i), kswtyp(i), modswt(i), nextsw(i)
 2831 format (1x, a6, 3e14.5, 3i8)
      call window
-2834 end do
+  end do
+2834 continue
   go to 2806
   !     $$$$$$$  key word no. 25:  "source"   $$$$  $$$$  $$$$  $$$$  $$$$
 2856 n33 = 0
@@ -2163,7 +2195,8 @@ subroutine spyink
      write (munit6, 2878)  i, bus(n5), node(i), iform(i), crest(i), sfreq(i), time1(i), tstart(i)
 2878 format (1x, i3,  1x, a6, i5, i6, 2e14.5, 2e15.6)
      call window
-2876 end do
+  end do
+2876 continue
   prom80(1:8) = blan80(1:8)
   go to 2859
   !     we reach 2884 with request to output another set of tacs sources:
@@ -2179,7 +2212,8 @@ subroutine spyink
      write (munit6, 2891)  i,  ansi8,   sptacs(kxtcs+nuk+i), sptacs(kud1+i),  sptacs(kud3+i),  sptacs(kud2+i)
 2891 format (1x, i3, 1x, a6, 4e16.6)
      call window
-2888 end do
+  end do
+2888 continue
   prom80(1:8) = blan80(1:8)
   go to 2859
   !     $$$$$$$  key word no. 42:  "rlc"      $$$$  $$$$  $$$$  $$$$  $$$$
@@ -2212,7 +2246,8 @@ subroutine spyink
 3497 write (munit6, 3503)  i, tr(i), tx(i), r(i), emtpc(i), x(i)
 3503 format (1x, i3, 5e14.5)
      call window
-3513 end do
+  end do
+3513 continue
   prom80(1:8) = blan80(1:8)
   go to 3462
   !     $$$$$$$  key word no. 43:  "width"    $$$$  $$$$  $$$$  $$$$  $$$$
@@ -2262,7 +2297,8 @@ subroutine spyink
      if ( n33 .eq. 1 ) write (munit6, 3609)  i,  finit(i),  znonl(i), kknonl(i), znonl(n22), kknonl(n22),  znonl(n23), kknonl(n23)
 3609 format (1x, i4, f13.4, 3( f14.5, i6))
      call window
-3613 end do
+  end do
+3613 continue
   prom80(1:8) = blan80(1:8)
   go to 3562
   !     $$$$$$$  key word no. 45:  "size"     $$$$  $$$$  $$$$  $$$$  $$$$
@@ -2297,22 +2333,23 @@ subroutine spyink
   if ( n6 .le. 0 )  n6 = 1
   call copyi ( n6, multpr(1), 5 )
   n7 = istep - 1
-  do j=1, 9999
+  do j = 1, 9999
      n7 = n7 + 1
      n8 = n7 / n6
-     if ( n6*n8 .ne. n7 )  go to 3668
-     if ( iprsup .lt. 1 )  go to 3667
+     if (n6*n8 .ne. n7) go to 3668
+     if (iprsup .lt. 1) go to 3667
      write (munit6, 3666)  n7
 3666 format (' New round stop.  n7 =', i8)
      call window
-3667 if ( n6 .lt. 20 )  n7 = n7 + n6
-     if ( n7 .lt. istep+20 ) n7 = n7 + n6
+3667 if (n6 .lt. 20)  n7 = n7 + n6
+     if (n7 .lt. istep + 20) n7 = n7 + n6
      kprchg(2) = n7
      kprchg(5) = 999999
      kprchg(4) = 999999
      kprchg(3) = 999999
      go to 3675
-3668 end do
+  end do
+3668 continue
 3675 iout = n6
   if ( isprin .gt. iout ) isprin = iout
   limstp = n7
@@ -2330,16 +2367,17 @@ subroutine spyink
 3690 spycd2 = buff77(1:35)
   if ( spycd2(1:8) .eq. 'stop    '   .or. spycd2(1:8) .eq. 'end     '   )  go to 1240
   if ( spycd2(1:8) .eq. 'connect '   )  go to 3701
-  do j=1, ntot
-     write (brobus, 3691)  bus(j)
+  do j = 1, ntot
+     write (brobus, 3691) bus(j)
 3691 format (a6, 2x)
-     if ( brobus .ne. spycd2(1:8) )  go to 3693
-     write (prom80, 3692)  j
+     if (brobus .ne. spycd2(1:8)) go to 3693
+     write (prom80, 3692) j
 3692 format ('       >>> node =', i4, 15x, ':')
      go to 3688
-3693 end do
+  end do
+3693 continue
   write (munit6, 3695)
-3695 format ('        ????  sorry, no such bus.  Try again ...')
+3695 format ('        ????  Sorry, no such bus.  Try again ...')
   call window
   go to 3684
 3701 mmfind = j
@@ -2352,37 +2390,41 @@ subroutine spyink
      n6 = 0
 3703 n6 = n6 + 1
      mmhold(n6) = k
-3705 end do
+  end do
+3705 continue
   if ( n6 .le. 0 )  go to 3709
   write (munit6, 3708)  ( mmhold(k), k=1, n6 )
 3708 format ('    %% linear branches :', 20i5)
   call window
 3709 n6 = 0
-  do k=1, kswtch
-     if ( mmfind .ne. iabs(kmswit(k)) .and. mmfind .ne. iabs(kmswit(lswtch+k) ) )   go to 3719
+  do k = 1, kswtch
+     if (mmfind .ne. iabs(kmswit(k)) .and. mmfind .ne. iabs(kmswit(lswtch + k))) go to 3719
      n6 = n6 + 1
      mmhold(n6) = k
-3719 end do
-  if ( n6 .le. 0 )  go to 3722
-  write (munit6, 3721)  ( mmhold(k), k=1, n6 )
+  end do
+3719 continue
+  if (n6 .le. 0) go to 3722
+  write (munit6, 3721) (mmhold(k), k = 1, n6)
 3721 format ('    %% EMTP  switches  :', 20i5)
   call window
 3722 n6 = 0
-  do k=1, inonl
-     if ( mmfind .ne. iabs(nonlk(k)) .and. mmfind .ne. iabs(nonlm(k)) )  go to 3726
+  do k = 1, inonl
+     if (mmfind .ne. iabs(nonlk(k)) .and. mmfind .ne. iabs(nonlm(k))) go to 3726
      n6 = n6 + 1
      mmhold(n6) = k
-3726 end do
+  end do
+3726 continue
   if ( n6 .le. 0 )  go to 3731
   write (munit6, 3730)  ( mmhold(k), k=1, n6 )
 3730 format ('    %% nonlinear elem. :', 20i5)
   call window
 3731 n6 = 0
-  do k=1, kconst
-     if ( mmfind .ne. iabs(node(k)) )  go to 3734
+  do k = 1, kconst
+     if (mmfind .ne. iabs(node(k))) go to 3734
      n6 = n6 + 1
      mmhold(n6) = k
-3734 end do
+  end do
+3734 continue
   if ( n6 .le. 0 )  go to 3739
   write (munit6, 3738)  ( mmhold(k), k=1, n6 )
 3738 format ('    %% EMTP  sources  : ', 20i5)
@@ -2417,26 +2459,27 @@ subroutine spyink
   !     is dec free-format; "inonl" is maximum;  "n17" is error flag:
 3781 call intpar ( inonl, n1, n2, n17 )
   if ( n17  .gt.  0 )   go to 3758
-  do 3796  i=n1, n2
+  do i = n1, n2
      call quiter
-     if ( kwtspy .eq. 0 ) go to 3785
+     if (kwtspy .eq. 0) go to 3785
      kwtspy = 0
      go to 3758
-3785 n5 = iabs ( nonlk(i) )
+3785 n5 = iabs (nonlk(i))
      d12 = bus(n5)
-     if ( n5 .eq. 1 )  d12 = terra
-     n6 = iabs ( nonlm(i) )
+     if (n5 .eq. 1) d12 = terra
+     n6 = iabs (nonlm(i))
      d13 = bus(n6)
      if (n6 .eq. 1) d13 = terra
      n7 = namenl(i)
      write (munit6, 3786) i, texvec(n7), d12, d13, nonlk(i), nonlm(i), nltype(i), nonlad(i), nonle(i), ilast(i), kupl(i),  nlsub(i)
 3786 format (1x, i3, 3(1x, a6), 4i7, 2i6, i5, i6)
      call window
-     if ( n33 .ne. 1 ) go to 3796
+     if (n33 .ne. 1) go to 3796
      write (munit6, 3792)  anonl(i), vzero(i), vnonl(i), curr(i), vecnl1(i), vecnl2(i)
 3792 format (1x, 6e13.4)
      call window
-3796 end do
+  end do
+3796 continue
   prom80(1:8) = blan80(1:8)
   go to 3758
   !     $$$$$$$  key word no. 50:  "space"    $$$$  $$$$  $$$$  $$$$  $$$$
@@ -2717,7 +2760,8 @@ subroutine spyink
      write (munit6, 4056)  n15
 4056 format ('+      Still reading.', i8)
      call window
-4059 end do
+  end do
+4059 continue
   go to 4008
 4062 n15 = n15 + j
   write (munit6, 4063)  forbyt(1), n15
@@ -2756,19 +2800,21 @@ subroutine spyink
   go to 9800
 4085 call frefp1 ( buff77, d8 )
 24085 n15 = 0
-  do k=1, 100
-     do j=1, 1000
-        read (lunit4, end=4090) forbyt(1)
-        if ( forbyt(1) .ge. d8 ) go to 4094
-4086 end do
+  do k = 1, 100
+     do j = 1, 1000
+        read (lunit4, end = 4090) forbyt(1)
+        if (forbyt(1) .ge. d8) go to 4094
+     end do
+4086 continue
      n15 = n15 + 1000
      write (munit6, 4056)  n15
      call window
-4089 end do
+  end do
+4089 continue
   go to 4008
 4090 n15 = n15 + j
   write (munit6, 4091)   n15
-4091 format ('      ? ? ?   search fails with eof after', i8, '   steps.')
+4091 format ('      ? ? ?   Search fails with eof after', i8, '   steps.')
   call window
   go to 4008
 4094 n15 = n15 + j
@@ -2805,17 +2851,18 @@ subroutine spyink
   write (munit6, 4175)  n42, lbrnch, n43, ldata, lserlc
 4175 format (' num row use  bus-k  bus-m   name ????', 5x, 'present-R', 5x, 'present-L',  5x, 'present-C')
   call window
-  do j=1, lserlc
+  do j = 1, lserlc
      ndx1 = n42 + j
      ndx2 = n43 + j
      k = kbus(ndx1)
-     if ( k .eq. 0 )  go to 4180
+     if (k .eq. 0) go to 4180
      m = mbus(ndx1)
      ndx3 = namebr(ndx1)
      write (munit6, 4179)  j, litype(ndx1), nr(ndx1), bus(k), bus(m), namebr(ndx3),  ci(ndx1), ck(ndx1), cik(ndx1)
 4179 format (1x, i3, 2i4, 3( 1x, a6 ), 5x, 3e13.4)
      call window
-4180 end do
+  end do
+4180 continue
   go to 4165
 4184 if ( ansi32(1:5) .ne. 'extra' )  go to 4197
   write (munit6, 4187)
@@ -2828,7 +2875,8 @@ subroutine spyink
      write (munit6, 4191)  cki(ndx1), ckkjm(ndx1), r(ndx2), tr(ndx2), tx(ndx2), emtpc(ndx2)
 4191 format (1x, 6e13.4)
      call window
-4192 end do
+  end do
+4192 continue
   go to 4165
 4197 if ( ansi32(1:5) .ne. 'step ' )  go to 4211
   kserlc = 1
@@ -2952,14 +3000,16 @@ subroutine spyink
 4476 if ( prom80(1:4) .ne. 'bot ' ) go to  4477
   j = -9999
   go to 4494
-4477 do j=1, 10
-     if ( prom80(1:1) .eq. digit(j) )  go to 4491
-4478 end do
+4477 do j = 1, 10
+     if (prom80(1:1) .eq. digit(j)) go to 4491
+  end do
+4478 continue
   read (prom80, 1380)  text2
 1380 format (a6)
   do j=1, kpartb
      if (text2 .eq. bus(j)) go to 4494
-4483 end do
+  end do
+4483 continue
 4486 write (munit6, 4487)
 4487 format ('  %% %% == ++  Sorry, no such row.  Try again.')
   call window
@@ -2974,13 +3024,14 @@ subroutine spyink
   write (munit6, 4496)  j, bus(j), n16, n17
 4496 format (' row',  i4, '   name = ', a6, '   limits =', 2i5, '    nonzero  (m, ykm)  follow ....')
   call window
-  do l=n16, n17, 4
+  do l = n16, n17, 4
      n23 = l + 3
-     if ( n23 .gt. n17 )  n23 = n17
-     write (munit6, 4497)   ( km(m), ykm(m), m=l, n23 )
+     if (n23 .gt. n17) n23 = n17
+     write (munit6, 4497) (km(m), ykm(m), m = l, n23)
 4497 format (1x, 4(i5, e15.6))
      call window
-4502 end do
+  end do
+4502 continue
   go to 4473
   !     $$$$$$$  key word no. 55:  "[f]"      $$$$  $$$$  $$$$  $$$$  $$$$
 4512 go to 4473
@@ -2990,12 +3041,13 @@ subroutine spyink
   write (munit6, 4521)  j, bus(j), n17, kk(j)
 4521 format (' row', i4, '   name = ', a6, '   limits =', 2i5, '    nonzero  (m, fkm)  follow ....')
   call window
-  do l=n17, kk(j), 4
+  do l = n17, kk(j), 4
      n23 = l + 3
-     if ( n23 .gt. kk(j) )  n23 = kk(j)
-     write (munit6, 4497)   ( km(m), ykm(m), m=l, n23 )
+     if (n23 .gt. kk(j)) n23 = kk(j)
+     write (munit6, 4497) (km(m), ykm(m), m = l, n23)
      call window
-4524 end do
+  end do
+4524 continue
   go to 4512
   !     $$$$$$$  key word no. 56:  "noroll"   $$$$  $$$$  $$$$  $$$$  $$$$
 4563 if ( monits .eq. 0 ) go to 4571
@@ -3030,7 +3082,8 @@ subroutine spyink
      write (munit6, 4609)  ( bus(ibsout(m)), m=j, n17 )
 4609 format (7x, 10a7)
      call window
-4611 end do
+  end do
+4611 continue
   n7 = numnvo + 1
   n8 = numnvo + nv
   if ( n8 .lt. n7 )  go to 4631
@@ -3052,20 +3105,23 @@ subroutine spyink
   if ( n17 .le. 0 ) go to 4658
   n9 = 7878
   call spyout ( n9, n9 )
-  do j=1, kswtch
-     if ( kmswit(lswtch+j) .gt. 0 )  go to 4639
-     call spyout ( kmswit(j), kmswit(lswtch+j) )
-4639 end do
-  do j=1, inonl
-     if ( nonlm(j) .gt. 0 )  go to 4644
-     call spyout ( nonlk(j), nonlm(j) )
-4644 end do
-  do j=1, ibr
-     if ( mbus(j) .gt. 0 )  go to 4649
-     call spyout ( kbus(j), mbus(j) )
-4649 end do
+  do j = 1, kswtch
+     if (kmswit(lswtch + j) .gt. 0) go to 4639
+     call spyout (kmswit(j), kmswit(lswtch + j))
+  end do
+4639 continue
+  do j = 1, inonl
+     if (nonlm(j) .gt. 0) go to 4644
+     call spyout (nonlk(j), nonlm(j))
+  end do
+4644 continue
+  do j = 1, ibr
+     if (mbus(j) .gt. 0) go to 4649
+     call spyout (kbus(j), mbus(j))
+  end do
+4649 continue
   n9 = -7878
-  call spyout ( n9, n9 )
+  call spyout (n9, n9)
 4658 go to 1240
   !     $$$$$$$  key word no. 62:  "tacs"     $$$$  $$$$  $$$$  $$$$  $$$$
 4716 write (prom80, 4717)
@@ -3129,7 +3185,8 @@ subroutine spyink
      epskon(n14) = 0.0
      konadd(n14) = n7
      go to 4754
-4769 end do
+  end do
+4769 continue
   write (munit6, 4771)
 4771 format ('  ? ? ?   Sorry, no such tacs source named  "', a6,  '".   Try again ....')
   call window
@@ -3143,17 +3200,18 @@ subroutine spyink
   kontot = n14
   go to 4716
 4780 read (prom80, 4763)  bus1, n7, d13
-  do j=1, ktab
+  do j = 1, ktab
      ndx1 = kxtcs + j
-     ndx2 = ilntab(klntab+j)
-     if ( bus1 .ne. texvec(ndx2) ) go to 4785
-     if ( koncur .eq. 0 )  koncur = n14
+     ndx2 = ilntab(klntab + j)
+     if (bus1 .ne. texvec(ndx2)) go to 4785
+     if (koncur .eq. 0) koncur = n14
      n14 = n14 + 1
      kontac(n14) = ndx1
      konadd(n14) = n7
      epskon(n14) = ichar(d13)
      go to 4776
-4785 end do
+  end do
+4785 continue
   write (munit6, 4788)
 4788 format ('  ? ? ?   Sorry, no such tacs output named  "', a6,  '".   Try again ....')
   call window
@@ -3170,7 +3228,8 @@ subroutine spyink
      write (munit6, 4798)  i, texvec(n13), kontac(i), konadd(i), epskon(i)
 4798 format (i8, 2x, a6, 2i8, e13.4)
      call window
-4801 end do
+  end do
+4801 continue
   !     any additional responses to tacs prompt go here:
 4807 go to 4716
   !     $$$$$$$  key word no. 64:  "v-i"      $$$$  $$$$  $$$$  $$$$  $$$$
@@ -3207,10 +3266,11 @@ subroutine spyink
   go to 4824
 4834 call frein2(bytbuf, n1, n2)
   if ( n8 .eq. 1 )  go to 4854
-  do n17=1, inonl
-     if ( iabsz(nonlad(n17)) .lt. n1 )  go to 4837
-     if ( iabsz(nonlad(n17)) .le. n2 )  go to 4844
-4837 end do
+  do n17 = 1, inonl
+     if (iabsz(nonlad(n17)) .lt. n1) go to 4837
+     if (iabsz(nonlad(n17)) .le. n2) go to 4844
+  end do
+4837 continue
   go to 4824
 4844 n1 = iabsz ( nonlad(n17) )
   n2 = iabsz ( nonle(n17) )
@@ -3220,14 +3280,15 @@ subroutine spyink
 4851 format (1x, i4, 3e13.4, i4, 2i7, i6, 1x, a6)
   call window
   n1 = n1 + 1
-4854 do j=n1, n2
-     write (munit6, 4851)  j, vchar(j), cchar(j), gslope(j)
+4854 do j = n1, n2
+     write (munit6, 4851) j, vchar(j), cchar(j), gslope(j)
      call window
      call quiter
-     if ( kwtspy .eq. 0 ) go to 4858
+     if (kwtspy .eq. 0) go to 4858
      kwtspy = 0
      go to 4824
-4858 end do
+  end do
+4858 continue
   go to 4824
 1240 nexmod = 0
   go to 9804
@@ -3245,14 +3306,15 @@ subroutine spyink
 3472 xtcs(n7) = fkar1(n13)
   end do
   call tacs3
-  do j=koncur+1, kontot
+  do j = koncur + 1, kontot
      n7 = kontac(j)
      n13 = konadd(j)
      d8 = fkar1(n13) - xtcs(n7)
      if (absz(d8) .le. epskon(j)) go to 3486
      fkar1(n13) = xtcs(n7)
      ialter = 1
-3486 end do
+  end do
+3486 continue
   if ( iprspy .lt. 1 ) go to 3496
   write (munit6, 3493)  koncur, kontot, ialter
 3493 format (' Exit "spytac" after csp.  koncur, kontot, ialter =',  3i5)
@@ -3389,7 +3451,8 @@ subroutine initsp
      write (munit6, 2789) j, ansi32
 2789 format (' Next use of "inquire".  j, ansi32 =', i5, 1x, a32)
      call window
-2795 end do
+  end do
+2795 continue
   kwtspy = 0
   jjroll = 0
   tdroll = 1.0
@@ -3530,18 +3593,19 @@ subroutine tdelay ( d8 )
   !     later be replaced by a less-wasteful, true hibernation.
   include 'blkcom.ftn'
   n23 = d8                  ! integer number of seconds for hibernation
-  do j=1, n23         ! loop once for each second of delay
-     do k=1, 6        ! one second = about 6 writes to disk
+  do j = 1, n23         ! loop once for each second of delay
+     do k = 1, 6        ! one second = about 6 writes to disk
         rewind 36           ! rewind unused, dummy i/o channel 36
-3624    write (36, 3629)   k ! dummy write to disk
+3624    write (36, 3629) k ! dummy write to disk
      end do
-3629 format ( i2 )
+3629 format (i2)
      call quiter               ! check for user-keyed interrupt signal
      if ( kwtspy .eq. 0 ) go to 3641 ! no user abort of alarm
      kwtspy = 0                ! reset interrupt indicator as we begin service
      d8 = -7654                ! argument flag remembering abort (for honker)
      go to 9000                ! jump out of time-delay loop, to return
-3641 end do
+  end do
+3641 continue
 9000 return
 end subroutine tdelay
 !
@@ -3571,29 +3635,31 @@ subroutine percnt ( vbyte, n7 )
   !     For non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
   character*1 vbyte(1)
-  do k=1, n7
-     if ( vbyte(k)  .ne.  '%' )   go to 1297
-     do j=1, 7
-        if ( vbyte(k+j) .ne.  '%' )   go to 1297
-1253 end do
+  do k = 1, n7
+     if (vbyte(k) .ne. '%') go to 1297
+     do j = 1, 7
+        if (vbyte(k + j) .ne. '%') go to 1297
+     end do
+1253 continue
      !     we exit  do 1253  with string of 8 "%" beginning in column k
      itexp = itexp + 1
-     if ( itexp  .le.  maxarg )   go to 1284
-     write (munit6, 1274)  maxarg
+     if (itexp .le. maxarg) go to 1284
+     write (munit6, 1274) maxarg
 1274 format (' ????  Trouble.  "@?"  Usage only defined', i4, '   arguments, while the disk')
      call window
      write (munit6, 1275)
 1275 format ('                 File has more  %-strings.   Trouble detected in following:')
      call window
-     write (munit6, 1277)  ( vbyte(i), i=1, n7 )
+     write (munit6, 1277) (vbyte(i), i = 1, n7)
 1277 format ('              >>>', 80a1)
      call window
      kilper = 1
      go to 1313
 1284 ansi8 = texpar(itexp)
-     read (ansi8, 1296)  ( vbyte(k+j-1), j=1, 8 )
+     read (ansi8, 1296) (vbyte(k + j - 1), j = 1, 8)
 1296 format (80a1)
-1297 end do
+  end do
+1297 continue
   if ( kverfy .ne. 0 )  go to 1313
   write (munit6, 1306)  ( vbyte(j), j=1, n7 )
 1306 format (' @>>>', 80a1)
@@ -3642,18 +3708,20 @@ subroutine numchk ( vbyte, nchar, kill )
      if ( nper .gt. 1 )  kill = 1
      kolper = i
      go to 3481
-3428 do j=1, 10
-        if ( vbyte(i)  .eq.  digit(j) )   go to 3438
-3431 end do
+3428 do j = 1, 10
+        if (vbyte(i) .eq. digit(j)) go to 3438
+     end do
+3431 continue
      kill = 1
      go to 3481
      !     following code considers ramifications of just-found digit:
 3438 koldig = i
-3481 end do
-  if ( nume  .eq.  1     .and. kolexp  .gt.  koldig ) kill = 1
-  if ( nume  .eq.  1     .and. kolper  .gt.  kolexp ) kill = 1
-  if ( kill  .eq.  0 )   return
-  write (munit6, 3492)  ( vbyte(j), j=1, nchar )
+  end do
+3481 continue
+  if (nume .eq. 1 .and. kolexp .gt. koldig) kill = 1
+  if (nume .eq. 1 .and. kolper .gt. kolexp) kill = 1
+  if (kill .eq. 0) return
+  write (munit6, 3492) (vbyte(j), j = 1, nchar)
 3492 format (' ??? Sorry, illegal numeric just read:', 50a1)
   write (munit6, 3493)
 3493 format ('            Make a second try, please ....')
@@ -3674,7 +3742,7 @@ subroutine getnum ( num )
   call window
 4204 n1 = 1
   num = 0
-  do i=ibegcl, 20
+  do i = ibegcl, 20
      c4 = bytbuf(i:i)
      if ( c4  .eq.  ' ' )   go to 4286
      if ( c4  .eq.  ':'  )   go to 4286
@@ -3684,9 +3752,10 @@ subroutine getnum ( num )
      if ( c4  .ne.  '-'  )   go to 4218
      n1 = -1
      go to 4265
-4218 do j=1, 10
-        if ( c4  .eq.  digit(j) )   go to 4256
-4234 end do
+4218 do j = 1, 10
+        if (c4 .eq. digit(j)) go to 4256
+     end do
+4234 continue
      write (munit6, 4239)  i, c4
 4239 format ('    -- Illegal byte in "number".', 1x,  i4,  3x,  a1,  3x,  'Try again ...')
      call window
@@ -3698,15 +3767,16 @@ subroutine getnum ( num )
      write (munit6, 4259)  j, num
 4259 format (' Next digit.  j, num =', 2i8)
      call window
-4265 end do
-  write (munit6, 4271)  num
+  end do
+4265 continue
+  write (munit6, 4271) num
 4271 format (' Stop at 4271 of "getnum".  num =', i8)
   call window
   call stoptp
-4286 if ( n1  .lt.  0 )   num = -num
+4286 if (n1 .lt. 0) num = -num
   iendcl = i - 1
-  if ( iprspy .lt. 1 )  go to 4294
-  write (munit6, 4293)  iendcl, num
+  if (iprspy .lt. 1) go to 4294
+  write (munit6, 4293) iendcl, num
 4293 format (' Exit "number".   iendcl, num =', 2i8)
   call window
 4294 return
@@ -3719,7 +3789,7 @@ subroutine movers ( from, to, num )
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   character*1   from(1), to(1)
-  do j=1, num
+  do j = 1, num
 1763 to(j) = from(j)
   end do
   return
@@ -3732,7 +3802,7 @@ subroutine moverl ( from, to, num )
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   real*8   from(1), to(1)
-  do j=1, num
+  do j = 1, num
 1763 to(j) = from(j)
   end do
   return
@@ -3751,12 +3821,13 @@ subroutine window
   include 'dekspy.ftn'
   !     temporarily, until we learn how to write to a 2nd crt for
   !     vax/vms, we will just write to lunit6:
-  if ( iabs(kverfy) .eq. 34543 ) go to 9000 ! no spy windows
-  do j=1, 132         ! search line for right most non-blank
+  if (iabs(kverfy) .eq. 34543) go to 9000 ! no spy windows
+  do j = 1, 132         ! search line for right most non-blank
      k = 133 - j            ! reverse index (step from right to left)
-     if ( munit6(k:k) .ne. ' ' )  go to 5621 ! end of line
-5614 end do                   ! end  do 5614  loop to find right edge of line
-5621 write (lunit6, 5624)  munit6(1:k) ! output nonblank part
+     if (munit6(k:k) .ne. ' ') go to 5621 ! end of line
+  end do
+5614 continue                   ! end  do 5614  loop to find right edge of line
+5621 write (lunit6, 5624) munit6(1:k) ! output nonblank part
 5624 format (a)
 9000 return
 end subroutine window
@@ -3998,7 +4069,8 @@ subroutine intpar ( max, n1, n2, kill )
 2037    bytbuf(n13:n13) = bytbuf(j:j)
      end do
      go to 2054
-2046 end do
+  end do
+2046 continue
 2054 n22 = 0
   n13 = 0
   do i=1, 20
@@ -4016,10 +4088,12 @@ subroutine intpar ( max, n1, n2, kill )
      if ( bytbuf(n17:n17) .eq. ' ' )  go to 2104
      n13 = n13 + 1
      go to 2104
-2093 do 2097  j=1, 10
-        if ( bytbuf(i:i)  .eq.  digit(j) )   go to 2104
-2097 end do
-2104 end do
+2093 do j = 1, 10
+        if (bytbuf(i:i) .eq. digit(j)) go to 2104
+     end do
+2097 continue
+  end do
+2104 continue
   if ( n22  .gt.  0 )   go to 2109
   !     blank response is interpreted as a request for more of same:
   n1 = n2 + 1
@@ -4156,7 +4230,7 @@ subroutine movesp(from, to, n15)
   !     to(1:n15).  except for missing implicit, it equals "mover".
   real*8 from, to
   dimension from(1), to(1)
-  do j=1, n15
+  do j = 1, n15
 4829 to(j) = from(j)
   end do
   return
@@ -4367,9 +4441,11 @@ subroutine frefix(ansi, n8)
      go to 3758
 3634 do k = 1, 10
         if (ansi(j:j) .eq. digit(k)) go to 3642
-3638 end do
+     end do
+3638 continue
      go to 3758
-3642 end do
+  end do
+3642 continue
   n2 = 20 * kk
   n1 = n2 - ( n5 - n3 )
   hold(n1:n2) = ansi(n3:n5)
@@ -7169,21 +7245,24 @@ subroutine tpplot
      write (munit6, 5733)  ( buslst(k), k=j, j+9 )
 5733 format (1x, 10a7)
      call window
-5736 end do
+  end do
+5736 continue
 5739 kptplt = numnvo + numbrn
   if ( numnvo  .gt.  0 ) read (l4plot)  ( ibsout(j), j=1, numnvo )
   if ( numbrn  .gt.  0 )   read (l4plot) (ibrnch(j), j=1, numbrn), (jbrnch(j), j=1, numbrn)
   if ( iprspy .lt. 2 ) go to 5754
-  do j=1, numnvo, 10
-     write (munit6, 1002)  ( ibsout(k), k=j, j+9 )
+  do j = 1, numnvo, 10
+     write (munit6, 1002) (ibsout(k), k = j, j + 9)
 1002 format (' Node numbers ibsout:', 10i5)
      call window
-5742 end do
-  do j=1, numbrn, 5
-     write (munit6, 5744)  (ibrnch(k), jbrnch(k), k=j, j+4)
+  end do
+5742 continue
+  do j = 1, numbrn, 5
+     write (munit6, 5744) (ibrnch(k), jbrnch(k), k = j, j + 4)
 5744 format (' Branch node pairs:', 5( 2x, 2i4))
      call window
-5747 end do
+  end do
+5747 continue
 5754 numout = numnvo + 2 * numbrn
   nv = numbrn - numbco
   jbegbv = numnvo + 1
@@ -7209,11 +7288,12 @@ subroutine tpplot
   write (munit6, 1014)  numout, numnvo, nv, nt2, i
 1014 format (' numout, numnvo, nv, nt2, i =', 5i6)
   call window
-  do j=1, numout, 10
-     write (munit6, 5763) ( bbus(m), m=j, j+9 )
+  do j = 1, numout, 10
+     write (munit6, 5763) (bbus(m), m = j, j + 9)
 5763 format (1x, 10a6)
      call window
-5766 end do
+  end do
+5766 continue
 3769 call pltvar
   if ( nexmod .gt. 0 ) go to 9835
   if ( buffin(1:4) .eq. 'stop' )  return
@@ -7257,25 +7337,28 @@ subroutine helper ( n1 )
   go to 3613
 3634 n23 = kbegtx(numkey+1)
   n24 = kbegtx(numkey+5) - 1
-  if ( buffin(6:8) .eq. 'all' )  go to 3673
-  do j=n23, n24
-     if ( texspy(j)(1:3) .eq. '   ' )  go to 3642
-     if ( texspy(j)(3:10) .eq. buffin(6:13) )  go to 3649
-3642 end do
+  if (buffin(6:8) .eq. 'all') go to 3673
+  do j = n23, n24
+     if (texspy(j)(1:3) .eq. '   ') go to 3642
+     if (texspy(j)(3:10) .eq. buffin(6:13)) go to 3649
+  end do
+3642 continue
   write (munit6, 3645)
 3645 format ('    ? ? ?   Sorry, no such plot command.   Try again ... ')
   call window
   go to 9000
 3649 n23 = j
-  do j=n23+1, n24
-     if ( texspy(j)(1:3) .ne. '   ' )  go to 3658
-3653 end do
+  do j = n23 + 1, n24
+     if (texspy(j)(1:3) .ne. '   ') go to 3658
+  end do
+3653 continue
 3658 n24 = j - 1
-3673 do j=n23, n24
+3673 do j = n23, n24
      write (munit6, 3677)  texspy(j)
 3677 format (a80)
      call window
-3681 end do
+  end do
+3681 continue
 9000 if ( iprspy .lt. 1 ) go to 9011
   write (munit6, 9004)  n1, n8, n23, n24
 9004 format (' Exit  "helper".  n1, n8, n23, n24 =', 4i6)
@@ -7334,11 +7417,12 @@ subroutine pltvar
      write (munit6, 5676) j, (pltbuf(ip), ip=j, j+7)
 5676 format (' pltbuf(', i6, ':)', 8e14.5)
      call window
-3214 end do
-3218 write (munit6, 5677)  timbeg, timend
+  end do
+3214 continue
+3218 write (munit6, 5677) timbeg, timend
 5677 format ('   Time limits are :', 2e14.6)
   call window
-  if ( ihs  .eq.  0 )   ihs = 3
+  if (ihs .eq. 0) ihs = 3
   go to 7531
 5681 if (  buffin(1:8)  .ne.  choice )   go to 1957
   call spylin
@@ -7347,35 +7431,38 @@ subroutine pltvar
   write (munit6, 1041)
 1041 format (' Type-1 entries (node voltages).')
   call window
-  do j=1, numnvo, 10
-     n13 = j+9
-     if ( n13 .gt. numnvo )  n13 = numnvo
-     write (munit6, 3223) ( bbus(ip), ip=j, n13 )
+  do j = 1, numnvo, 10
+     n13 = j + 9
+     if (n13 .gt. numnvo) n13 = numnvo
+     write (munit6, 3223) (bbus(ip), ip = j, n13)
 3223 format (1x, 10a7)
      call window
-3227 end do
+  end do
+3227 continue
   i = i + numnvo
   jj = i + nc - 1
   write (munit6, 1047)
 1047 format (' Type-8 entries (branch voltages or powers).')
   call window
-  do j=i, jj, 8
-     n13 = j+7
-     if ( n13 .gt. jj )  n13 = jj
-     write (munit6, 3232) ( bbus(ip), ip=j, n13 )
+  do j = i, jj, 8
+     n13 = j + 7
+     if (n13 .gt. jj) n13 = jj
+     write (munit6, 3232) (bbus(ip), ip = j, n13)
 3232 format (1x, 4(2a7, 3x))
      call window
-3236 end do
+  end do
+3236 continue
   i = i + nc
   write (munit6, 1051)
 1051 format (' Type-9 entries (branch currents or energies).')
   call window
-  do j=i, numout, 8
-     n13 = j+7
-     if ( n13 .gt. numout )  n13 = numout
-     write (munit6, 3232) ( bbus(ip), ip=j, n13 )
+  do j = i, numout, 8
+     n13 = j + 7
+     if (n13 .gt. numout) n13 = numout
+     write (munit6, 3232) (bbus(ip), ip = j, n13)
      call window
-3247 end do
+  end do
+3247 continue
   go to 1053
 1957 if ( buffin(1:8)  .ne.  stop )   go to 4423
   kill = 99
@@ -7531,21 +7618,23 @@ subroutine pltvar
      headl = alpha
      nchsup = n3
      go to 1885
-1535 end do
+  end do
+1535 continue
 1536 nchsup = 0
 1885 write (prom80, 1886)  vertl(1:16)
 1886 format ('   Send vertical axis label (', a16,  '...) :')
   assign 1887 to nextsn
   go to 9800
 1887 vertl = buff77
-  if ( vertl(1:8)  .eq.  repeat )   go to 1550
-  if ( vertl(1:8)  .eq.  texblk )  go to 1545
-  do j=1, 78
+  if (vertl(1:8) .eq. repeat) go to 1550
+  if (vertl(1:8) .eq. texblk) go to 1545
+  do j = 1, 78
      n3 = 81 - j
-     if ( vertl(n3:n3) .eq. ' ' )  go to 1544
+     if (vertl(n3:n3) .eq. ' ') go to 1544
      nchver = n3
      go to 1888
-1544 end do
+  end do
+1544 continue
 1545 nchver = 0
 1888 n3 = numtit  +  1
   write (prom80, 1891)  n3,  sext(n3)(1:16)
@@ -7560,11 +7649,12 @@ subroutine pltvar
   write (munit6, 1895)
 1895 format (6x, 'Playback of total title (80a1 format) ...')
   call window
-  do ip=1, numtit
-     write (munit6, 3264)  sext(ip)
-3264 format ( 1x, a80 )
+  do ip = 1, numtit
+     write (munit6, 3264) sext(ip)
+3264 format (1x, a80)
      call window
-3267 end do
+  end do
+3267 continue
   go to 1888
 1896 if ( alpha(1:8)  .eq.  '        ' )   go to 1899
   if ( alpha(1:8)  .eq.  end  )   go to 1550
@@ -7923,15 +8013,17 @@ subroutine timval
      if ( mmm(j)  .eq.  0 )   go to 2140
      if ( aaa(j)  .ne.  0.0 ) ev(kplt) = ev(kplt) * aaa(j)
      ev(kplt) = ev(kplt) + bbb(j)
-2140 end do
+  end do
+2140 continue
   go to 1940
 2200 tstep = 1.e+30
 2205 if ( iprspy .lt. 4 ) go to 3342
-  do j=1, kplt, 8
-     write (munit6, 3336) j, ( ev(ip), ip=j, j+7 )
+  do j = 1, kplt, 8
+     write (munit6, 3336) j, (ev(ip), ip = j, j + 7)
 3336 format (' ev(', i5,  3h:)=,  8e15.6  )
      call window
-3338 end do
+  end do
+3338 continue
 3342 ind1 = indexp - ( kptplt + 1 )
   if ( iprspy .lt. 1 )  go to 3343
   write (munit6, 82205)  ind1
@@ -7996,7 +8088,8 @@ subroutine timval
      write (munit6, 3361) j, ( ew(ip), ip=j, j+7 )
 3361 format (' ew(', i5, ':)=',  8e15.6)
      call window
-3363 end do
+  end do
+3363 continue
   go to 7309
 2218 dx = hpi
   evmx=0.0
@@ -8006,33 +8099,35 @@ subroutine timval
      evdh=0.0
      isw=0
      itimes = 0
-     do i=1,kplt,jplt1
-        ipj=i+j
-        evp=ev(ipj)
-        if (isw.gt.0) go to 2240
-        evdp=evp-evh
-        if (evdp*evdh.ge.0.0) go to 2250
-        if (isww.eq.1) go to 2255
-        itimes=itimes+1
-        if ( itimes .le. nsmplt )   go to 2260
-        isw=1
-2240    ev(ipj)=(evh+evp)/2.0
+     do i = 1, kplt, jplt1
+        ipj = i + j
+        evp = ev(ipj)
+        if (isw .gt. 0) go to 2240
+        evdp = evp - evh
+        if (evdp * evdh .ge. 0.0) go to 2250
+        if (isww .eq. 1) go to 2255
+        itimes = itimes + 1
+        if (itimes .le. nsmplt) go to 2260
+        isw = 1
+2240    ev(ipj) = (evh + evp) / 2.0
         go to 2260
-2250    isww=1
+2250    isww = 1
         go to 2260
-2255    itimes=1
-        isww=0
-2260    evdh=evdp
-        evh=evp
-        evmx=amax1(evmx,abs(ev(ipj)))
-        if (ev(ipj).lt.vminr) go to 2280
-        if (ev(ipj).gt.vmaxr) go to 2300
+2255    itimes = 1
+        isww = 0
+2260    evdh = evdp
+        evh = evp
+        evmx = amax1(evmx, abs(ev(ipj)))
+        if (ev(ipj) .lt. vminr) go to 2280
+        if (ev(ipj) .gt. vmaxr) go to 2300
         go to 2320
-2280    ev(ipj)=vminr
+2280    ev(ipj) = vminr
         go to 2320
-2300    ev(ipj)=vmaxr
-2320 end do
-2340 end do
+2300    ev(ipj) = vmaxr
+     end do
+2320 continue
+  end do
+2340 continue
   if ( iprspy .lt. 4 ) go to 3369
   write (munit6, 2344)
 2344 format (' After points discard.', 11x, 'evmx', 11x, 'vmax', 11x, 'vmin', 9x, 'finfin', 13x, 'vl', 13x, 'vs')
@@ -8089,14 +8184,15 @@ subroutine timval
   write (munit6, 3374)  ( ev(i), i=11, 20 )
 3374 format ( 1x, 10e13.4 )
   call window
-3382 do i=1, jplt
+3382 do i = 1, jplt
      yymin(i) = 1.e30
      yymax(i) = -yymin(i)
      mlevel(i) = 0
-     if ( klevl  .eq.  0 )   go to 2567
+     if (klevl .eq. 0) go to 2567
      mlevel(i) = -1
      ttlev(i) = -9999.
-2567 end do
+  end do
+2567 continue
   do i=1,jplt
      istold = istore
      ibase=1
@@ -8182,7 +8278,8 @@ subroutine timval
 3234 format (' Done smoothing next curve.  i, istore =', 2i8 )
      call window
 3235 numpts(i) = ( istore - istold ) / 2
-3240 end do
+  end do
+3240 continue
 3263 if ( kextr  .eq.  1 )   go to 3270
   if ( klevl  .eq.  1 )   go to 3288
   go to 7309
@@ -8190,17 +8287,18 @@ subroutine timval
 3271 format (' mplot  name-1  name-2', 7x, 'minimum', 7x, 'maximum',  6x, 't of min', 6x, 't of max')
   call window
   l = 1
-  do j=1, jplt
+  do j = 1, jplt
      textd1 = slot1(l)
      textd2 = '        '
      l = l + 1
-     if ( iabs( mplot(j) )  .le.  numnvo )   go to 3279
+     if (iabs(mplot(j)) .le. numnvo) go to 3279
      textd2 = slot1(l)
      l = l + 1
      write (munit6, 3282)  mplot(j), textd1, textd2, yymin(j), yymax(j), ttmin(j), ttmax(j)
 3282 format ( 1x,  i5,  2( 2x, a6 ),  4e14.5  )
      call window
-3279 end do
+  end do
+3279 continue
   if ( klevl  .eq.  0 )   go to 3296
 3288 write (munit6, 3294)  ( ylevel(j), j=1, jplt )
 3294 format (' Levels sought :',  4e15.4  )
@@ -8280,7 +8378,7 @@ subroutine setrtm
   read (munit5, 5100)  prom80
   call frein1 ( prom80, n1 )
   if ( n1  .eq.  0 )   n1 = 1
-  do 2728  j=1, 9999
+  do j = 1, 9999
      read (lunt15, 5151, end=2729)  buffin
 5151 format ( a16 )
      if ( buffin(1:8)  .ne.  setdat )   go to 2728
@@ -8288,8 +8386,9 @@ subroutine setrtm
      read (ansi, 2726)  n2
 2726 format ( i2 )
      if ( n2  .eq.  n1 )   go to 2732
-2728 end do
-2729 write (munit6, 2730)  n1
+  end do
+2728 continue
+2729 write (munit6, 2730) n1
 2730 format (' ** Error.   Subset number',  i4, '  does not exist.   Try again.')
   call window
   go to 2751
@@ -8331,16 +8430,18 @@ subroutine setrtm
      write (munit6, 3413) ( fvcom(ip), ip=j, j+5 )
 3413 format ( 1x, 6e13.4 )
      call window
-3417 end do
+  end do
+3417 continue
   write (munit6, 2754)
 2754 format ( ' Final integer data ivcom through the last modified cell follows ....')
   call window
-  do j=1, n22, 10
-     write (munit6, 3424) ( ivcom(ip), ip=j, j+9 )
+  do j = 1, n22, 10
+     write (munit6, 3424) (ivcom(ip), ip = j, j + 9)
 3424 format ( 1x, 10i7 )
      call window
-3427 end do
-2763 close ( unit=lunt15, status='keep' )
+  end do
+3427 continue
+2763 close (unit = lunt15, status = 'keep')
   return
 end subroutine setrtm
 !
@@ -8399,18 +8500,19 @@ subroutine chrplt
      write (munit6, 6423)   sext(ip)
 6423 format (' Graph title : ', a80)
      call window
-6427 end do
-  if ( mxypl  .gt.  0 )   go to 6582
-  if ( jplt  .le.  1 )   go to 6447
-  do k=2, jplt
-6431 kp(k) = mstart(k-1) + 5
+  end do
+6427 continue
+  if (mxypl .gt. 0) go to 6582
+  if (jplt .le. 1) go to 6447
+  do k = 2, jplt
+6431 kp(k) = mstart(k - 1) + 5
   end do
 6447 dt = hpi / 6.0
   temp(1) = vmin + dy
   d2 = 2.0 * dy
   n4 = 6
   if ( limcol  .le.  79 )   n4 = 4
-  do k=2, n4
+  do k = 2, n4
 6449 temp(k) = temp(k-1) + d2
   end do
   write (munit6, 6450)  ( temp(k), k=1, n4 )
@@ -8472,12 +8574,13 @@ subroutine chrplt
      if ( l  .lt.  mstart(k) )   go to 6485
      kp(k) = 0
      idat = idat - 1
-6531 end do
-  if ( inch  .ge.  6 )   go to 6548
-  if ( kzero  .le.  9 )   go to 6542
-  if ( dol(kzero)  .eq.  ' '  )  dol(kzero) = '1'
-6542 write (munit6, 6543)  ( dol(k), k=1, limcol )
-6543 format ( 1x, 131a1 )
+  end do
+6531 continue
+  if (inch .ge. 6) go to 6548
+  if (kzero .le. 9) go to 6542
+  if (dol(kzero) .eq. ' ') dol(kzero) = '1'
+6542 write (munit6, 6543) (dol(k), k = 1, limcol)
+6543 format (1x, 131a1)
   call window
   go to 6559
 6548 if ( t  .le.  9.999999 ) write (kunit6, 6553)  t
@@ -8515,19 +8618,20 @@ subroutine chrplt
 2516 format (' Past 1/6 inch? ind1, jplt, pltbuf(ind1), t =', 2i7, 2e15.5)
   call window
 2517 if ( pltbuf(ind1)  .gt.  t )   go to 2564
-  do k=1, jplt
-     j1 = iabs( mplot(k) )
-     d1 = pltbuf(ind1+j1)
-     if ( mplot(k)  .lt.  0 )   d1 = -d1
-     if ( d1  .gt.  vmin )   go to 2532
+  do k = 1, jplt
+     j1 = iabs(mplot(k))
+     d1 = pltbuf(ind1 + j1)
+     if (mplot(k) .lt. 0) d1 = -d1
+     if (d1 .gt. vmin) go to 2532
      dol(1) = letter(k)
      go to 2542
-2532 if ( d1  .lt.  vmax )   go to 2537
+2532 if (d1 .lt. vmax) go to 2537
      dol(limcol) = letter(k)
      go to 2542
 2537 m = (d1 - vmin ) * d3
      dol(m) = letter(k)
-2542 end do
+  end do
+2542 continue
   ind1 = ind1 + kptplt + 1
   go to 2507
 2564 if ( inch  .lt.  6 )   go to 2571
@@ -8637,9 +8741,10 @@ subroutine flatbd         ! no implicit
   write (munit6, 7254)  ( mcurve(j), j=1, jplt )
 7254 format ( 3x,  'Vector of curve weights (',  20i3,  ' ) :'  )
   read (munit5, *)  ( kp(j), j=1, jplt )
-  do j=1, jplt
-     if ( kp(j)  .ne.  0 )   mcurve(j) = kp(j)
-7255 end do
+  do j = 1, jplt
+     if (kp(j) .ne. 0) mcurve(j) = kp(j)
+  end do
+7255 continue
   go to 2005
 7261 if ( buff77(1:8)  .ne.  show  )   go to 7287
   write (munit6, 3421)  mtit, maxisx, maxisy, mgrid1, mgrid2, msuper, mid
@@ -8926,19 +9031,21 @@ subroutine tgrid(ix,iy,nx,idelx,ny,idely,ldash) ! no implicit
      n4 = n3
      n3 = n9
      if ( n4  .eq.  n9 )   n3 = iy
-1341 end do
+  end do
+1341 continue
 1356 call movabs ( n8, n9 )
   n2 = ix
   n3 = n9
-  do 1374  j=1, ny
-     call dshabs ( n2, n3, ldash )
-     if ( j  .eq.  ny )   go to 1382
+  do j = 1, ny
+     call dshabs (n2, n3, ldash)
+     if (j .eq. ny) go to 1382
      n3 = n3 - idely
-     call movabs ( n2, n3 )
+     call movabs (n2, n3)
      n4 = n2
      n2 = n8
-     if ( n4  .eq.  n8 )   n2 = ix
-1374 end do
+     if (n4 .eq. n8) n2 = ix
+  end do
+1374 continue
 1382 return
 end subroutine tgrid
 !
