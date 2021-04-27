@@ -4,13 +4,13 @@
 !
 !     Usage is restricted to "plot" function of "emtspy", due
 !     to variable-length conflict (this is single-precision).
-  character*8          datepl, tclopl,   buslst(1), bbus
-  common /cblock/  datepl(2), tclopl(2),  bbus(300)
-  common /cblock/  tmult, dy, dx, hpi, tstep, gxmin, gxmax
-  common /cblock/  ew(15000), finfin, fill,  fvcom(50)
-  common /cblock/  yymin(20), yymax(20), ttmin(20), ttmax(20)
-  common /cblock/  ylevel(20), ttlev(20), dyold(20), mlevel(20)
-  common /cblock/  aaa(20), bbb(20), kp(20), fxref(25), fyref(25)
+  character(8) datepl, tclopl, buslst(1), bbus
+  common /cblock/ datepl(2), tclopl(2),  bbus(300)
+  common /cblock/ tmult, dy, dx, hpi, tstep, gxmin, gxmax
+  common /cblock/ ew(15000), finfin, fill, fvcom(50)
+  common /cblock/ yymin(20), yymax(20), ttmin(20), ttmax(20)
+  common /cblock/ ylevel(20), ttlev(20), dyold(20), mlevel(20)
+  common /cblock/ aaa(20), bbb(20), kp(20), fxref(25), fyref(25)
   !     evnbyt puts buslst on real*8 byte boundary (ibm level 4 error):
   common /cblock/  evnbyt, ev(15000), bx(150), vminr, vmaxr
   dimension  ibsout(1), ibrnch(1), jbrnch(1)
@@ -39,17 +39,17 @@
   equivalence  ( fvcom(41), fxnumv ),  ( fvcom(42), fxnumh )
   equivalence  ( fvcom(43), fvaxtt ),  ( fvcom(44), fxvert )
   equivalence  ( fvcom(45), fsymb  ),  ( fvcom(46), paplim )
-  common /cblock/  mmm(20), mstart(20), numpts(20), killpl
-  common /cblock/  kstart(20)
-  common /cblock/  mplot(20), jhmsp, jchan, labrtm(20)
-  common /cblock/  jplt, icp, icurse, mxypl, indexp, ind1
-  common /cblock/  numflt, ncut, numtek, newfil, mu6sav
-  common /cblock/  mcurve(20), namvar, mfake, numraw
-  common /cblock/  nchsup, nchver, maxev, kptplt
-  common /cblock/  numnvo, nv, nc, numbrn, numout
-  common /cblock/  jplt1, jbegbv, jbegbc, limfix, nt2
-  common /cblock/  maxew,   maxip, msymbt(20)
-  common /cblock/  l4plot, ivcom(60)
+  common /cblock/ mmm(20), mstart(20), numpts(20), killpl
+  common /cblock/ kstart(20)
+  common /cblock/ mplot(20), jhmsp, jchan, labrtm(20)
+  common /cblock/ jplt, icp, icurse, mxypl, indexp, ind1
+  common /cblock/ numflt, ncut, numtek, newfil, mu6sav
+  common /cblock/ mcurve(20), namvar, mfake, numraw
+  common /cblock/ nchsup, nchver, maxev, kptplt
+  common /cblock/ numnvo, nv, nc, numbrn, numout
+  common /cblock/ jplt1, jbegbv, jbegbc, limfix, nt2
+  common /cblock/ maxew,   maxip, msymbt(20)
+  common /cblock/ l4plot, ivcom(60)
   equivalence  ( ivcom( 1),  klevl ),  ( ivcom( 2),  kextr )
   equivalence  ( ivcom( 3),    ihs ),  ( ivcom( 4), lu7plt )
   equivalence  ( ivcom( 5), iprsrt ),  ( ivcom( 6), limcol )
@@ -80,24 +80,24 @@
   equivalence  ( ivcom(55), inwait ),  ( ivcom(56), nolabl )
   equivalence  ( ivcom(57), lchfil ),  ( ivcom(58), lchlim )
   equivalence  ( ivcom(59), mu6std )
-  character*80   filnam, alpha, buffin, vertl, headl, sext
-  character*30   file30
-  character*24   xytitl, horzl
-  character*8    textd1, textd2
-  character*8    curren, voltag, brclas, char20
-  character*8   slot1, date, time
-  character*8        ibuff,  ansi, abuf77, anplt
+  character(80) filnam, alpha, buffin, vertl, headl, sext
+  character(30) file30
+  character(24) xytitl, horzl
+  character(8) textd1, textd2
+  character(8) curren, voltag, brclas, char20
+  character(8) slot1, date, time
+  character(8) ibuff,  ansi, abuf77, anplt
   !       next type key character key words in common, in order:
-  character*8   choice,   stop,  purge,    out,   help
-  character*8   smooth,   size,   show, linezz,   photo
-  character*8   repeat,  flush, playba,    pen, multip
-  character*8   offset, limits,  debug,    tek,  stack
-  character*8   printe, metric, alltim, column, setcol
-  character*8   longer, averag,  inner, rescal,   lastpl
-  character*8    batch,  punch, extrem,  level, noplot
-  character*8   messag,    end, timesp,  label, timeun
-  character*8   cursor, xyplot,  slope,   back, refile
-  character*8   texblk, setdat, texfnt
+  character(8) choice,   stop,  purge,    out,   help
+  character(8) smooth,   size,   show, linezz,   photo
+  character(8) repeat,  flush, playba,    pen, multip
+  character(8) offset, limits,  debug,    tek,  stack
+  character(8) printe, metric, alltim, column, setcol
+  character(8) longer, averag,  inner, rescal,   lastpl
+  character(8) batch,  punch, extrem,  level, noplot
+  character(8) messag,    end, timesp,  label, timeun
+  character(8) cursor, xyplot,  slope,   back, refile
+  character(8) texblk, setdat, texfnt
   common /pltans/  abuf77(10),  ansi, ibuff(20), texfnt
   common /pltans/     sext(6), headl, vertl, buffin
   common /pltans/  slot1(20), horzl(8), date, time
