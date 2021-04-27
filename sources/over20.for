@@ -8717,7 +8717,7 @@ subroutine flatbd         ! no implicit
   if ( n1  .ne.  0 )   mid = n1
   write (munit6, 7254)  ( mcurve(j), j=1, jplt )
 7254 format ( 3x,  'Vector of curve weights (',  20i3,  ' ) :'  )
-  read (munit5, *)  ( kp(j), j=1, jplt )
+  read (munit5, *) (kp(j), j = 1, jplt)
   do j = 1, jplt
      if (kp(j) .ne. 0) mcurve(j) = kp(j)
   end do
