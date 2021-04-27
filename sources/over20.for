@@ -1547,24 +1547,24 @@ subroutine spying
   go to 9800
 3573 read (buff77, 3576) n7, ansi32
 3576 format (i2, a32)
-  if ( n7 .le. 0 )  go to 1240
-  open (unit=n7, status='unknown', file=ansi32)
+  if (n7 .le. 0) go to 1240
+  open (unit = n7, status = 'unknown', file = ansi32)
   go to 3568
   !     $$$$$$$  key word no. 58:  "close"    $$$$  $$$$  $$$$  $$$$  $$$$
 3584 write (prom80, 3587)
-3587 format ('    next unit, status (i2, a32) :')
+3587 format ('    Next unit, status (i2, a32) :')
   assign 3591 to nextsn
   go to 9800
-3591 read (buff77, 3576)  n7, ansi32
-  if ( n7 .le. 0 )  go to 1240
-  if ( ansi32(1:6) .eq. 'keep  ' ) go to 3596
-  if ( ansi32(1:6) .eq. 'delete' ) go to 3596
-  close ( unit=n7 )
+3591 read (buff77, 3576) n7, ansi32
+  if (n7 .le. 0) go to 1240
+  if (ansi32(1 : 6) .eq. 'keep  ') go to 3596
+  if (ansi32(1 : 6) .eq. 'delete') go to 3596
+  close (unit = n7)
   go to 3584
-3596 close ( unit=n7, status=ansi32 )
+3596 close (unit = n7, status = ansi32)
   go to 3584
   !     $$$$$$$  key word no. 59:  "sm"       $$$$  $$$$  $$$$  $$$$  $$$$
-3606 if ( nchain .ge. 16   .and. nst .gt. 0 ) go to 43606
+3606 if (nchain .ge. 16 .and. nst .gt. 0) go to 43606
   write (munit6, 3607)
 3607 format ('   ?? ??  no s.m. data present or not yet in time-step loop.')
   call window
@@ -1577,156 +1577,155 @@ subroutine spying
   assign 3609 to nextsn
   prom80(1:8) = '        '
   go to 9800
-3609 if ( iprspy .lt. 1 ) go to 83609
-  write (munit6, 23609)  ksmspy(2)
+3609 if (iprspy .lt. 1) go to 83609
+  write (munit6, 23609) ksmspy(2)
 23609 format (' At s.n. 3609 of "spying".  ksmspy(2) =', i4)
   call window
-83609 if ( ksmspy(2) .eq. 0 ) go to 3608
+83609 if (ksmspy(2) .eq. 0) go to 3608
   ksmspy(3) = 0
-  write (prom80, 43609)  ksmspy(2)
+  write (prom80, 43609) ksmspy(2)
 43609 format ('  s.m.', i3, '  wanted (y or n) ? :')
   ksmspy(1) = +1
   assign 3610 to nextsn
   go to 9800
-3610 if ( buff77(1:1) .eq. 'n' )  go to 43606
+3610 if (buff77(1 : 1) .eq. 'n') go to 43606
   ksmspy(1) = +1
 3611 write (prom80, 3612)
-3612 format ('     Send s.m. class (elec, mech, elva, meva,', ' all, end) :')
+3612 format ('     Send s.m. class (elec, mech, elva, meva, all, end) :')
   assign 3613 to nextsn
   go to 9800
 3613 n14 = ksmspy(2)
-  if ( buff77(1:4) .eq. 'end' )  go to 43606
-  if ( buff77(1:4) .ne. 'elec'   .and. buff77(1:4) .ne. 'all ' )  go to 43615
-  k2 = ( n14-1 ) * 101
+  if (buff77(1 : 4) .eq. 'end') go to 43606
+  if (buff77(1 : 4) .ne. 'elec' .and. buff77(1 : 4) .ne. 'all ') go to 43615
+  k2 = (n14 - 1) * 101
   write (munit6, 33614)
 33614 format ('             ld            laf             lf           lakd           lfkd')
   call window
-  xl = elp( k2+20 )
-  d3 = elp( k2+1 ) + xl
-  d4 = elp( k2+2 )
-  d5 = ( elp( k2+3 ) + elp( k2+62 ) ) / factom
-  d6 = elp( k2+4 )
-  d8 = elp( k2+5 )
-  write (munit6, 53614)   d3, d4, d5, d6, d8
+  xl = elp(k2 + 20)
+  d3 = elp(k2 + 1) + xl
+  d4 = elp(k2 + 2)
+  d5 = (elp(k2 + 3) + elp(k2 + 62)) / factom
+  d6 = elp(k2 + 4)
+  d8 = elp(k2 + 5)
+  write (munit6, 53614) d3, d4, d5, d6, d8
 53614 format (5e15.7)
   call window
-  write ( munit6, 63614 )
+  write (munit6, 63614)
 63614 format ('            lkd             rf            rkd             lq            lag')
   call window
-  d3 = ( elp( k2+6 ) + elp( k2+63 ) ) / factom
-  d4 = elp( k2+7 )
-  d5 = elp( k2+8 )
-  d6 = elp( k2+9 ) + xl
-  d8 = elp( k2+10 )
-  write (munit6, 53614)  d3, d4, d5, d6, d8
+  d3 = (elp(k2 + 6) + elp(k2 + 63)) / factom
+  d4 = elp(k2 + 7)
+  d5 = elp(k2 + 8)
+  d6 = elp(k2 + 9) + xl
+  d8 = elp(k2 + 10)
+  write (munit6, 53614) d3, d4, d5, d6, d8
   call window
   write (munit6, 73614)
 73614 format ('             lg           lakq           lgkq            lkq             rg')
   call window
-  d3 = ( elp( k2+11 ) + elp( k2+64 ) ) / factom
-  d4 = elp( k2+12 )
-  d5 = elp( k2+13 )
-  d6 = ( elp( k2+14 ) + elp( k2+65 ) ) / factom
-  d8 = elp( k2+15 )
-  write (munit6, 53614)  d3, d4, d5, d6, d8
+  d3 = (elp(k2 + 11 ) + elp(k2 + 64)) / factom
+  d4 = elp(k2 + 12)
+  d5 = elp(k2 + 13)
+  d6 = (elp(k2 + 14) + elp(k2 + 65)) / factom
+  d8 = elp(k2 + 15)
+  write (munit6, 53614) d3, d4, d5, d6, d8
   call window
-  write ( munit6, 83614 )
+  write (munit6, 83614)
 83614 format ('            rkq             l0             r0         agline             ra')
   call window
-  d3 = elp( k2+16 )
-  d4 = 1.0 / elp( k2+17 )
-  d5 = elp( k2+18 )
-  d5 = ( d4 -d5 ) / ( 1.0 + damrat )
-  d4 = ( d4 - d5 ) / factom
-  d8 = elp( k2+20 )
-  write (munit6, 53614)  d3, d4, d5, xl, d8
+  d3 = elp(k2 + 16)
+  d4 = 1.0 / elp(k2 + 17)
+  d5 = elp(k2 + 18)
+  d5 = (d4 - d5) / (1.0 + damrat)
+  d4 = (d4 - d5) / factom
+  d8 = elp(k2 + 20)
+  write (munit6, 53614) d3, d4, d5, xl, d8
   call window
   write (munit6, 23615)
 23615 format ('           rat1         dsat10         dsat12         qsat10         qsat12')
   call window
   k3 = k2 + 21
   k2 = k2 + 25
-  write (munit6, 53614)  ( elp( k1 ), k1 = k3, k2 )
+  write (munit6, 53614) (elp(k1), k1 = k3, k2)
   call window
-43615 if ( buff77(1:4) .ne. 'mech'   .and. buff77(1:4) .ne. 'all ' )  go to 13617
-  k2 = ( n14-1 ) * 101 + 26
-  k3 = ( n14-1 ) * 30  + 12
-  numask = ismdat( k3 )
-  write ( munit6, 53615 )
+43615 if (buff77(1 : 4) .ne. 'mech' .and. buff77(1 : 4) .ne. 'all ') go to 13617
+  k2 = (n14 - 1) * 101 + 26
+  k3 = (n14 - 1) * 30 + 12
+  numask = ismdat(k3)
+  write (munit6, 53615)
 53615 format ('  numask   nlocg   nloce     cnp')
   call window
-  write (munit6, 63615)  numask, ismdat(k3+1), ismdat(k3+2), elp(k2)
+  write (munit6, 63615) numask, ismdat(k3 + 1), ismdat(k3 + 2), elp(k2)
 63615 format (3i8, f8.1)
   call window
-  write ( munit6, 83615 )
+  write (munit6, 83615)
 83615 format ('           hico            dsm            hsp            dsr')
   call window
   k2 = 0
   kp = 0
   do k1 = 1, n14
-     k2 = k2 + ismdat( kp+12 )
+     k2 = k2 + ismdat(kp + 12)
 3616 kp = kp + 30
   end do
   num2 = numask + numask
   num3 = numask + num2
   num5 = num3 + num2
-  k2 = ( k2 - numask ) * 12
+  k2 = (k2 - numask) * 12
   k2 = k2 + num2
   do k1 = 1, numask
      k2 = k2 + 1
-     write (munit6, 53614) shp( k2+numask ), shp( k2+num2 ), shp( k2+num3 ), shp( k2+num5 )
+     write (munit6, 53614) shp(k2 + numask), shp(k2 + num2), shp(k2 + num3), shp(k2 + num5)
      call window
   end do
-43616 continue
-13617 if ( buff77(1:4) .ne. 'meva'   .and. buff77(1:4) .ne. 'all ' )  go to 13618
-  write ( munit6, 23617 )
+13617 if (buff77(1 : 4) .ne. 'meva' .and. buff77(1 : 4) .ne. 'all ') go to 13618
+  write (munit6, 23617)
 23617 format(' Mechanical angles in units of radians ')
   call window
-  k3 = ( n14-1 ) * 30 + 12
-  numask = ismdat( k3 )
+  k3 = (n14 - 1) * 30 + 12
+  numask = ismdat(k3)
   k2 = 0
   kp = 0
   do k1 = 1, n14
-     k2 = k2 + ismdat( kp+12 )
+     k2 = k2 + ismdat(kp + 12)
 3617 kp = kp + 30
   end do
-  k2 = ( k2 - numask ) * 6
+  k2 = (k2 - numask) * 6
   k3 = k2 + 1
   k2 = k2 + numask
-  write (munit6, 53614)  ( histq( k1 ), k1 = k3, k2 )
+  write (munit6, 53614) (histq(k1), k1 = k3, k2)
   call window
   k3 = k2 + 1
   k2 = k2 + numask
-  write ( munit6, 33617 )
+  write (munit6, 33617)
 33617 format(' Mechanical speeds in units of  radians/sec ')
   call window
-  write (munit6, 53614)  ( histq( k1 ), k1 = k3, k2 )
+  write (munit6, 53614) (histq(k1), k1 = k3, k2)
   call window
-13618 if ( buff77(1:4) .ne. 'elva'  .and. buff77(1:4) .ne. 'all ' )  go to 3611
-  write ( munit6, 23618 )
+13618 if (buff77(1 : 4) .ne. 'elva' .and. buff77(1 : 4) .ne. 'all ') go to 3611
+  write (munit6, 23618)
 23618 format('             id             iq             i0             if            ikd')
   call window
-  k2 = ( n14-1 ) * 24
+  k2 = (n14 - 1) * 24
   k3 = k2 + 1
   k2 = k2 + 5
-  write (munit6, 53614)  ( cu( k1 ), k1 = k3, k2 )
+  write (munit6, 53614) (cu(k1), k1 = k3, k2)
   call window
-  write ( munit6, 33618 )
+  write (munit6, 33618)
 33618 format('             ig            ikq             ia             ib             ic')
   call window
   k3 = k2 + 1
   k2 = k2 + 2
-  write (munit6, 53614)  cu( k3 ), cu( k2 ), ( smoutv( k1 ), k1 = 1, 3 )
+  write (munit6, 53614) cu(k3), cu(k2), (smoutv(k1), k1 = 1, 3)
   call window
-  write ( munit6, 43618 )
+  write (munit6, 43618)
 43618 format('             vd             vq             v0             vf             va')
   call window
-  write (munit6, 53614)  ( smoutv( k1 ), k1 = 4, 8 )
+  write (munit6, 53614) (smoutv(k1), k1 = 4, 8)
   call window
-  write ( munit6, 53618 )
+  write (munit6, 53618)
 53618 format('             vb             vc            teq           texc')
   call window
-  write (munit6, 53614)  ( smoutv( k1 ), k1 = 9, 12 )
+  write (munit6, 53614) (smoutv(k1), k1 = 9, 12)
   call window
 3619 continue
   go to 3611
@@ -1735,48 +1734,48 @@ subroutine spying
 3626 format ('   Send severity level of alert (1 to 10) :')
   assign 3629 to nextsn
   go to 9800
-3629 call frein1 ( buff77, n24 )
-  call honker ( n24 )
+3629 call frein1 (buff77, n24)
+  call honker (n24)
   go to 1240
   !     $$$$$$$  key word no. 63:  "wait"     $$$$  $$$$  $$$$  $$$$  $$$$
 3644 write (prom80, 3647)
 3647 format ('     Send desired hibernation time in seconds :')
   assign 3649 to nextsn
   go to 9800
-3649 call frefp1 ( buff77, d13 )
-  call tdelay ( d13 )
+3649 call frefp1 (buff77, d13)
+  call tdelay (d13)
   go to 1240
   !     $$$$$$$  key word no. 12:  "echo"     $$$$  $$$$  $$$$  $$$$  $$$$
 3673 write (prom80, 3676)
 3676 format ('    Send desired operation (begin, file, show) :')
   assign 3681 to nextsn
   go to 9800
-3681 if ( buff77(1:6) .ne. 'begin ' )  go to 3686
+3681 if (buff77(1 : 6) .ne. 'begin ') go to 3686
   kspsav = limcrd + 1
   n23 = limcrd - numcrd
-  write (munit6, 3683)  n23
-3683 format ('         Ok, up to a maximum of',  i7, '   commands can be accumulated, if no more data.')
+  write (munit6, 3683) n23
+3683 format ('         Ok, up to a maximum of', i7, '   commands can be accumulated, if no more data.')
   call window
   go to 1240
-3686 if ( buff77(1:5) .ne. 'file ' )  go to 3702
-  write (*, *)  ' to be completed later.  ?????????'
+3686 if (buff77(1 : 5) .ne. 'file ') go to 3702
+  write (*, *) ' to be completed later.  ?????????'
   go to 1240
-3702 if ( buff77(1:5) .ne. 'show ' )  go to 1303
-  write (*, *)  ' to be completed later.  ??????'
+3702 if (buff77(1 : 5) .ne. 'show ') go to 1303
+  write (*, *) ' to be completed later.  ??????'
   go to 3673
   !     $$$$$$$  key word no.  2:  "stop"     $$$$  $$$$  $$$$  $$$$  $$$$
-9000 call time44 ( spytim(1) )
-  call date44 ( spdate(1) )
-  write (munit6, 3158)  t, tmax, deltat, spytim, spdate
+9000 call time44 (spytim)
+  call date44 (spdate)
+  write (munit6, 3158) t, tmax, deltat, spytim, spdate
   call window
   call stoptp
 9800 nexmod = 2
-9803 if ( iprspy .lt. 1 ) go to 9811
-  write (munit6, 9807) jjroll, kbreak, lockbr, nchain, prom80(1:20)
-9807 format (' Exit "spying".  jjroll, kbreak, lockbr, nchain =',  4i5,  '   prom80(1:20) =', a20)
+9803 if (iprspy .lt. 1) go to 9811
+  write (munit6, 9807) jjroll, kbreak, lockbr, nchain, prom80(1 : 20)
+9807 format (' Exit "spying".  jjroll, kbreak, lockbr, nchain =', 4i5, '   prom80(1:20) =', a20)
   call window
-9811 if ( prom80(1:8) .eq. '        ' )  go to 9833
-  if ( kfile5 .eq. 1 ) go to 9833
+9811 if (prom80(1 : 8) .eq. '        ') go to 9833
+  if (kfile5 .eq. 1) go to 9833
   call prompt
 9833 return
 end subroutine spying
@@ -1795,8 +1794,8 @@ subroutine spyink
   dimension mmhold(20)
   character(8) text1, text2, d12
   save
-  data text1 /  6htamper  /
-  if ( iprspy .lt. 1 ) go to 1003
+  data text1 / 6htamper /
+  if (iprspy .lt. 1) go to 1003
   write (munit6, 1002) nchain, jjroll, kbreak, lockbr, nexmod
 1002 format (' Enter "spying".  nchain  jjroll  kbreak  lockbr, nexmod =', 5i5)
   call window
@@ -1805,28 +1804,28 @@ subroutine spyink
   go to nextsn
 1004 if ( jword .gt. 63 )     go to 1007
   go to ( &
-                                !       heading  stop    plot    help  examine  deposit  switch  (1-7)
+!      heading  stop    plot    help  examine  deposit  switch  (1-7)
        9999 ,   9999,   9999,   9999,   9999,   9999,   2804, &
-                                !        rest    save   restore   go    blank    find    list    (8-14)
+!      rest    save   restore   go    blank    find    list    (8-14)
        9999 ,   9999,   9999,   9999,   9999,   9999,   9999, &
-                                !         spy    break   when  comment    @?     roll   type?   (15-21)
+!      spy    break   when  comment    @?     roll   type?   (15-21)
        9999 ,   9999,   9999,   9999,   9999,   9999,   9999, &
-                                !       verify   files   sleep  source   edit    wake  language (22-28)
+!      verify   files   sleep  source   edit    wake  language (22-28)
        9999 ,   9999,   9999,   2856,   2617,   9999,   2782, &
-                                !      catalog  begin    step    debug   data    ramp    time   (29-35)
+!      catalog  begin    step    debug   data    ramp    time   (29-35)
        9999 ,   9999,   9999,   9999,   9999,   9999,   9999, &
-                                !         tek   branch   yform    noy   factor    nof    rlc    (36-42)
+!      tek   branch   yform    noy   factor    nof    rlc    (36-42)
        9999 ,   9999,   9999,   9999,   9999,   9999,   3456, &
-                                !        width    bus    size   limit    iout    node   nonlin  (43-49)
+!      width    bus    size   limit    iout    node   nonlin  (43-49)
        3526 ,   3541,   3635,   3647,   3662,   3684,   3752, &
-                                !        space  lunit4  series   lock     [y]     [f]   noroll  (50-56)
+!      space  lunit4  series   lock     [y]     [f]   noroll  (50-56)
        3842 ,   4002,   4163,   4436,   4471,   4512,   4563, &
-                                !        open    close  unlock   honk   choice   tacs    wait   (57-63)
+!      open    close  unlock   honk   choice   tacs    wait   (57-63)
        9999 ,   9999,   9999,   9999,   4592,   4716,   9999), jword
   call stoptp
 1007 n14 = jword - 63
   go to ( &
-                                !         v-i                                                   (64-64)
+!      v-i                                                   (64-64)
        4823 ),  n14
   call stoptp
   !     $$$$$$$  key word no. 26:  "edit"     $$$$  $$$$  $$$$  $$$$  $$$$
@@ -1838,22 +1837,22 @@ subroutine spyink
 2621 format (' *')
   assign 2620 to nextsn
   go to 9800
-2620 read (buff77, 2623)  char1, bytbuf
+2620 read (buff77, 2623) char1, bytbuf
 2623 format (a1, a20)
-  if ( iprspy .lt. 1 )  go to 2626
-  write (munit6, 2622)  char1,  bytbuf(ip:ip+9)
-2622 format (' char1, bytbuf(1:10) after read:', a2, 1x, a10)
+  if (iprspy .lt. 1) go to 2626
+  write (munit6, 2622) char1, bytbuf(ip : ip + 9)
+2622 format (' char1, bytbuf(1 : 10) after read:', a2, 1x, a10)
   call window
-2626 if ( char1  .eq.  'f' )   go to 2669
-  if ( char1  .eq.  's'  )   go to 2669
-  if ( char1  .eq.  'e' )    go to 1240
-  if ( char1  .eq.  '8' )   go to 2734
-  if ( char1  .eq.  'c' .and. bytbuf(1:1) .eq. 'o' .and. bytbuf(2:2)  .eq.  'l' )   go to 2756
-  if ( char1  .eq.  'p' )   go to 2629
-  if ( char1  .eq.  'd' )   go to 2629
-  if ( char1  .eq.  'i' )   go to 2629
-  if ( char1  .eq.  'r' )   go to 2629
-  if ( char1  .eq.  ' '  )   go to 2629
+2626 if (char1 .eq. 'f') go to 2669
+  if (char1 .eq. 's') go to 2669
+  if (char1 .eq. 'e') go to 1240
+  if (char1 .eq. '8') go to 2734
+  if (char1 .eq. 'c' .and. bytbuf(1 : 1) .eq. 'o' .and. bytbuf(2 : 2) .eq. 'l') go to 2756
+  if (char1 .eq. 'p') go to 2629
+  if (char1 .eq. 'd') go to 2629
+  if (char1 .eq. 'i') go to 2629
+  if (char1 .eq. 'r') go to 2629
+  if (char1 .eq. ' ') go to 2629
   write (munit6, 42622)
 42622 format ('     Sorry, 1st character is meaningless.   Try again .... ')
   call window
@@ -1863,10 +1862,10 @@ subroutine spyink
   write (munit6, 2632)  n17, lidnt1, lidnt2
 2632 format (' n17, lidnt1, lidnt2 =', 3i8)
   call window
-2633 if ( n17  .gt.  0 )   go to 2618
-  if ( char1  .eq.  'i' )  go to 2695
-  if ( char1  .eq.  'd' )   go to 2719
-  if ( char1  .eq.  'r' )   go to 2719
+2633 if (n17 .gt. 0) go to 2618
+  if (char1 .eq. 'i') go to 2695
+  if (char1 .eq. 'd') go to 2719
+  if (char1 .eq. 'r') go to 2719
   !     we reach here ready to print lines  (lidnt1, lidnt2) :  *p  case
 2634 do j = lidnt1, lidnt2
      call quiter
@@ -1880,7 +1879,6 @@ subroutine spyink
 2667 format (1x, i4, 1x, a80)
      call window
   end do
-2665 continue
   linspn = lidnt2 - lidnt1
   linnow = lidnt2
   go to 2618
@@ -1892,13 +1890,13 @@ subroutine spyink
      if (bytbuf(i:i) .ne. ' ') n5 = 1
   end do
 2670 continue
-  if ( n5  .eq.  0 )   go to 2671
-  if ( n4  .eq.  1 )   go to 2673
+  if (n5 .eq. 0) go to 2671
+  if (n4 .eq. 1) go to 2673
   write (munit6, 32670)
 32670 format ('  Illegal "*f" --- string not terminated by "@".')
   call window
   go to 2618
-2671 if ( mstrng  .eq.  1 ) go to 2672
+2671 if (mstrng .eq. 1) go to 2672
   write (munit6, 22671)
 22671 format ('  Illegal "*f" --- blank string, but no earlier usage for reference.')
   call window
@@ -1910,10 +1908,10 @@ subroutine spyink
   do j = n6, numcrd
      l = 1
      do k = 1, 80
-        if (file6(j)(k:k) .eq. bytbuf(l:l)) go to 2674
+        if (file6(j)(k : k) .eq. bytbuf(l : l)) go to 2674
         l = 1
         go to 2677
-2674    if (bytbuf(l + 1:l + 1) .ne. '@') go to 2676
+2674    if (bytbuf(l + 1 : l + 1) .ne. '@') go to 2676
         linnow = j
         lidnt2 = j
         if (char1 .eq. 's') go to 2763
@@ -1922,15 +1920,14 @@ subroutine spyink
      end do
 2677 continue
   end do
-2683 continue
   l = 0
   write (munit6, 2686)
 2686 format (' String not found, search failed')
   call window
   linnow = linnow - 1
-2691 if ( l .le. 0 )  go to 2693
-  write (munit6, 2692)  j,  file6(j)
-2692 format (i5, 1x,  a80)
+2691 if (l .le. 0) go to 2693
+  write (munit6, 2692) j, file6(j)
+2692 format (i5, 1x, a80)
   call window
 2693 bytfnd = bytbuf
   mstrng = 1
@@ -1939,28 +1936,28 @@ subroutine spyink
   !     following code is for  "*i"  request :
 2695 n1 = 0
   linnow = lidnt1
-2701 if ( n1  .lt. 20 )   go to 2703
+2701 if (n1 .lt. 20) go to 2703
   write (munit6, 52701)
 52701 format ('    Filled working storage of 20 lines.   Truncated insertion now in progress.')
   call window
   go to 2704
 2703 linnow = linnow + 1
-  write (prom80, 2702)  linnow
+  write (prom80, 2702) linnow
 2702 format (1x, i4, ' ')
   assign 52703 to nextsn
   go to 9800
-52703 if ( buff77(1:1) .ne. '@'  )  go to 2711
+52703 if (buff77(1 : 1) .ne. '@') go to 2711
 2704 j = numcrd
-2706 file6(j+n1) = file6(j)
+2706 file6(j + n1) = file6(j)
   j = j - 1
-  if ( j .gt. lidnt1 )  go to 2706
-  do j=1, n1
-2708 file6(linnow+j) = file6b(j)
+  if (j .gt. lidnt1) go to 2706
+  do j = 1, n1
+2708 file6(linnow + j) = file6b(j)
   end do
   linnow = linnow - 1
   lidnt1 = linnow
   lidnt2 = linnow
-  numcrd = numcrd + n1/10
+  numcrd = numcrd + n1 / 10
   go to 2618
 2711 n1 = n1 + 1
   file6b(n1) = buff77
@@ -1971,47 +1968,47 @@ subroutine spyink
 2723 file6(n2) = file6(j)
   n2 = n2 + 1
   j = j + 1
-  if ( j .le. numcrd )  go to 2723
-  numcrd = numcrd - ( lidnt2 - lidnt1 + 1 )
+  if (j .le. numcrd) go to 2723
+  numcrd = numcrd - (lidnt2 - lidnt1 + 1)
   linnow = lidnt1 - 1
   lidnt1 = linnow
   lidnt2 = linnow
-  if ( char1 .ne. 'r' )  go to 2618
+  if (char1 .ne. 'r') go to 2618
   go to 2695
   !     following code is for  "(8)"  request :
-2734 if ( bytbuf(1:4)  .ne.  '    ' )  go to 2743
+2734 if (bytbuf(1 : 4) .ne. '    ') go to 2743
   j = linnow
-2736 if ( file6(j)(80:80) .eq.  ' ' )  go to 2738
-  write (munit6, 2692)  j,  file6(j)
+2736 if (file6(j)(80 : 80) .eq. ' ') go to 2738
+  write (munit6, 2692) j, file6(j)
   call window
-  read (munit5, 2623)  bytbuf
-  if ( bytbuf(1:1) .eq. 'e' )  go to 2618
-  if ( bytbuf(1:1) .eq. ' ' )   go to 2738
-  bytbuf(2:2) = file6(j)(80:80)
-  if ( bytbuf(1:1) .eq. '0' ) file6b(j)(80:80) = ' '
-  if ( bytbuf(1:1) .eq.  '1'   .or.  bytbuf(1:1) .eq.  '2'   .or.  bytbuf(1:1) .eq.  '3'   .or. bytbuf(1:1) .eq.  '4') file6b(j)(80:80) = bytbuf(1:1)
-  if ( bytbuf(2:2) .ne. file6(j)(80:80)) go to 2738
-  write (munit6, 2737)  bytbuf(1:1)
-2737 format ('   Illegal col. 80 value  "',  a1, '" .   Cancel substitution.')
+  read (munit5, 2623) bytbuf
+  if (bytbuf(1 : 1) .eq. 'e') go to 2618
+  if (bytbuf(1 : 1) .eq. ' ') go to 2738
+  bytbuf(2 : 2) = file6(j)(80 : 80)
+  if (bytbuf(1 : 1) .eq. '0') file6b(j)(80 : 80) = ' '
+  if (bytbuf(1 : 1) .eq. '1' .or. bytbuf(1:1) .eq. '2' .or. bytbuf(1 : 1) .eq. '3' .or. bytbuf(1 : 1) .eq. '4') file6b(j)(80 : 80) = bytbuf(1 : 1)
+  if (bytbuf(2 : 2) .ne. file6(j)(80 : 80)) go to 2738
+  write (munit6, 2737) bytbuf(1 : 1)
+2737 format ('   Illegal col. 80 value  "', a1, '" .   Cancel substitution.')
   call window
 2738 j = j + 1
-  if ( j  .le.  numcrd )   go to 2736
+  if (j .le. numcrd) go to 2736
   linnow = numcrd
   go to 2618
   !     following code is for  "(8),?"  case, to deposit in column 80:
-2743 if ( bytbuf(1:1) .eq. ',' )  go to 2749
+2743 if (bytbuf(1 : 1) .eq. ',') go to 2749
 2744 write (munit6, 2746)
 2746 format (' Sorry,  "(8)"  must be followed by a comma and digit 1-4, or blanks.')
   call window
   go to 2618
-2749 file6b(linnow)(80:80) = bytbuf(2:2)
+2749 file6b(linnow)(80 : 80) = bytbuf(2 : 2)
   lidnt1 = linnow
   lidnt2 = linnow
   go to 2634
   !     following code is for  "*rule"  request for column marking:
-2756 if ( bytbuf(3:3) .eq.  ' ' )  go to 2758
+2756 if (bytbuf(3 : 3) .eq. ' ' ) go to 2758
   write (munit6, 2759)
-2759 format (1x,  '12345678901234567890123456789012345678901234567890123456789012345678901234567890')
+2759 format (1x, '12345678901234567890123456789012345678901234567890123456789012345678901234567890')
   call window
   go to 2761
 2758 write (munit6, 2760)
@@ -2021,25 +2018,25 @@ subroutine spyink
   !     the following is for  "*s"  processing, after branch from the
   !     middle of  "*f"  (where string was found):
 2763 k = k + 1
-  if ( iprspy .lt. 1 ) go to 32764
-  write (munit6, 2764)  k, l
+  if (iprspy .lt. 1) go to 32764
+  write (munit6, 2764) k, l
 2764 format (' *s exited to 2763.  k, l =', 2i8)
   call window
 32764 n7 = k - l
   n12 = 81 - k
-  buff77(1:n12) = file6(linnow)(k:80)
-  buff77(n12+1:n12+20) = blan80(1:20)
+  buff77(1 : n12) = file6(linnow)(k : 80)
+  buff77(n12 + 1 : n12 + 20) = blan80(1 : 20)
   l = l + 2
   go to 2767
-2765 file6(linnow)(n7:n7) = bytbuf(l:l)
-  if ( n7 .eq. 80 )  go to 2781
+2765 file6(linnow)(n7 : n7) = bytbuf(l : l)
+  if (n7 .eq. 80) go to 2781
   n7 = n7 + 1
   l = l + 1
-  if ( l .gt. 20 )  go to 2769
-2767 if ( bytbuf(l:l) .ne. '@' )  go to 2765
+  if (l .gt. 20) go to 2769
+2767 if (bytbuf(l : l) .ne. '@') go to 2765
   n14 = 81 - n7
-  file6(linnow)(n7:80) = buff77(1:n14)
-  if ( iprspy .lt. 1 )  go to 2781
+  file6(linnow)(n7 : 80) = buff77(1 : n14)
+  if (iprspy .lt. 1) go to 2781
   write (munit6, 2768)
 2768 format (' Done with string sub.  Exit to 2772.')
   call window
@@ -2049,8 +2046,8 @@ subroutine spyink
   call window
   go to 2618
 2781 j = linnow
-  if ( iprspy .lt. 1 )  go to 2691
-  write (munit6, 62781)  j, n3, n4
+  if (iprspy .lt. 1) go to 2691
+  write (munit6, 62781) j, n3, n4
 62781 format (' at 2781.  j, n3, n4 =', 3i8)
   call window
   go to 2691
@@ -2059,74 +2056,72 @@ subroutine spyink
 2785 format ('   Next command language operation (single, entire, show, spy :')
   assign 2786 to nextsn
   go to 9800
-2786 ansi8 = buff77(1:8)
-  if ( ansi8 .ne. 'entire  ' ) go to 32788
+2786 ansi8 = buff77(1 : 8)
+  if (ansi8 .ne. 'entire  ') go to 32788
   n13 = 1
   n14 = 10
 32786 assign 2787 to nextsn
   go to 9800
-2787 read (buff77, 2788) ( spykwd(j), j=n13, n14 )
+2787 read (buff77, 2788) (spykwd(j), j = n13, n14)
 2788 format (10a8)
-  if ( n14 .eq. numkey )  go to 2782
+  if (n14 .eq. numkey) go to 2782
   n13 = n13 + 10
   n14 = n14 + 10
-  if ( n14 .gt. numkey )  n14 = numkey
+  if (n14 .gt. numkey) n14 = numkey
   go to 32786
-32788 if ( ansi8 .ne. 'show    ' )   go to 2790
+32788 if (ansi8 .ne. 'show    ') go to 2790
   do j = 1, numkey, 10
      write (munit6, 2789) (spykwd(ip), ip = j, j + 9)
 2789 format (1x, 10a8)
      call window
   end do
-32789 continue
   go to 2782
-2790 if ( ansi8 .ne. 'single  ' )  go to 2782
+2790 if (ansi8 .ne. 'single  ') go to 2782
 2791 write (prom80, 2792)
 2792 format ('      Send next old and new symbols as 2a8 (end) : ')
   call prompt
   assign 2793 to nextsn
   go to 9800
-2793 ansi8 = buff77(1:8)
-  buff77(1:8) = buff77(9:16)
+2793 ansi8 = buff77(1 : 8)
+  buff77(1 : 8) = buff77(9:16)
   if (ansi8 .eq. 'end     ') go to 2782
   do j = 1, numkey
      if (ansi8 .eq. spykwd(j)) go to 2798
   end do
-2794 continue
-  write (munit6, 2796)  ansi8
+  write (munit6, 2796) ansi8
 2796 format ('    ? ? ?   Sorry,  no such symbol found.   Try again ...')
   call window
   go to 2791
-2798 spykwd(j) = buff77(1:8)
+2798 spykwd(j) = buff77(1 : 8)
   go to 2791
   !     $$$$$$$  key word no.  7:  "switch"   $$$$  $$$$  $$$$  $$$$  $$$$
-2804 bytbuf(1:4) = answ80(1:4)
+2804 bytbuf(1 : 4) = answ80(1 : 4)
   n33 = 0
-  if ( kswtch .gt. 0 ) go to 2808
+  if (kswtch .gt. 0) go to 2808
   write (munit6, 2805)
 2805 format ('   ---  Sorry, no such elements available in this data case.  Try another key word ...')
   call window
   go to 1240
 2806 assign 2807 to nextsn
   go to 9800
-2807 bytbuf = buff77(1:20)
-2808 if ( bytbuf(1:4)  .eq.  'end ' )   go to 1240
-  if ( bytbuf(1:4)  .eq.  'stop' )   go to 1240
-  if ( bytbuf(1:4)  .ne.  'extr' )   go to 2814
+2807 bytbuf = buff77(1 : 20)
+2808 if (bytbuf(1 : 4)  .eq.  'end ') go to 1240
+  if (bytbuf(1 : 4) .eq. 'stop') go to 1240
+  if (bytbuf(1 : 4) .ne. 'extr') go to 2814
 2810 write (prom80, 2811)
 2811 format ('  name ', 10x, 'akey', 10x, 'crit', 8x, 'energy  kswtyp  modswt  nextsw :')
   n33 = 1
   go to 2806
-2814 if ( bytbuf(1:4) .ne. spykwd(7)(1:4)  .and. bytbuf(1:4) .ne. spykwd(1)(1:4)  ) go to 2822
+2814 if (bytbuf(1 : 4) .ne. spykwd(7)(1 : 4) .and. bytbuf(1 : 4) .ne. spykwd(1)(1 : 4)) go to 2822
   write (prom80, 2815)
 2815 format (' row name-k name-m k(kmswit)m kpos kentnb', 3x, 'tclose', 7x, 'adelay',  7x, 'topen:')
   call prompt
-  if ( n33  .gt.  0 )   go to 2810
+  if (n33 .gt. 0) go to 2810
   go to 2806
   !     we get to 2822 if no known key word;  extract integer pair.   this
   !     is dec free-format; "kswtch" is maximum;  "n17" is error flag:
-2822 call intpar ( kswtch, n1, n2, n17 )
-  if ( n17  .gt.  0 )   go to 2806
+2822 call intpar (kswtch, n1, n2, n17)
+  if (n17  .gt.  0) go to 2806
   do i = n1, n2
      call quiter
      if (kwtspy .eq. 0) go to 2825
@@ -2155,76 +2150,74 @@ subroutine spyink
   assign 42859 to nextsn
   go to 9800
 42859 bytbuf = buff77(1:20)
-  if ( bytbuf(1:4)  .eq.  'end ' )   go to 1240
-  if ( bytbuf(1:4)  .eq.  'stop' )   go to 1240
-  if ( bytbuf(1:4)  .ne.  'tacs'  )   go to 2862
+  if (bytbuf(1:4) .eq. 'end ') go to 1240
+  if (bytbuf(1:4) .eq. 'stop') go to 1240
+  if (bytbuf(1:4) .ne. 'tacs') go to 2862
   n33 = 1
   n14 = kxtcs + nuk
   write (munit6, 2860)
 2860 format (' row  a6 tacs  source value', 3x, 'data field-A', 4x, 'data field-B', 4x, 'data field-C')
   call window
-  write (prom80, 2861)  n14, kud1, kud3, kud2
-2861 format ( ' no.   name', 4x, 'offset', i6,  3x, 'offset', i6, 4x, 'offset', i6, 4x, 'offset', i6, ' :')
+  write (prom80, 2861) n14, kud1, kud3, kud2
+2861 format ( ' No.   name', 4x, 'offset', i6,  3x, 'offset', i6, 4x, 'offset', i6, 4x, 'offset', i6, ' :')
   go to 2859
-2862 if ( bytbuf(1:4)  .ne.  'elec'  )   go to 2868
+2862 if (bytbuf(1 : 4) .ne. 'elec') go to 2868
   !     "elec" is the command for a new heading for electric-network
   !     source table:
   n33 = 0
 2863 write (prom80, 2865)
 2865 format (' row  name  node iform', 6x, 'crest', 9x, 'sfreq', 10x, 'time1', 9x, 'tstart :')
   go to 2859
-2868 if ( n33  .eq.  1 )   go to 2884
+2868 if (n33 .eq. 1) go to 2884
   !     following is display code for electric-network source table:
-  call intpar ( kconst, n1, n2, n17 )
-  if ( n17 .gt. 0 )   go to 2859
-  do i=n1, n2
+  call intpar (kconst, n1, n2, n17)
+  if (n17 .gt. 0) go to 2859
+  do i = n1, n2
      call quiter
-     if ( kwtspy .eq. 0 ) go to 2873
+     if (kwtspy .eq. 0) go to 2873
      kwtspy = 0
      go to 2859
-2873 n5 = iabs ( node(i) )
-     write (munit6, 2878)  i, bus(n5), node(i), iform(i), crest(i), sfreq(i), time1(i), tstart(i)
-2878 format (1x, i3,  1x, a6, i5, i6, 2e14.5, 2e15.6)
+2873 n5 = iabs (node(i))
+     write (munit6, 2878) i, bus(n5), node(i), iform(i), crest(i), sfreq(i), time1(i), tstart(i)
+2878 format (1x, i3, 1x, a6, i5, i6, 2e14.5, 2e15.6)
      call window
   end do
-2876 continue
-  prom80(1:8) = blan80(1:8)
+  prom80(1 : 8) = blan80(1 : 8)
   go to 2859
   !     we reach 2884 with request to output another set of tacs sources:
-2884 call intpar ( niu,  n1,  n2,  n17 )
-  if ( n17  .gt.  0 )   go to 2859
-  do i=n1, n2
+2884 call intpar (niu, n1, n2, n17)
+  if (n17 .gt. 0) go to 2859
+  do i = n1, n2
      call quiter
-     if ( kwtspy .eq. 0 ) go to 2887
+     if (kwtspy .eq. 0) go to 2887
      kwtspy = 0
      go to 2859
-2887 ansi8 = blan80(1:8)
-     if ( iuty(kiuty+i) .lt. 90 ) write (ansi8, 3691) sptacs(kaliu+i)
-     write (munit6, 2891)  i,  ansi8,   sptacs(kxtcs+nuk+i), sptacs(kud1+i),  sptacs(kud3+i),  sptacs(kud2+i)
+2887 ansi8 = blan80(1 : 8)
+     if (iuty(kiuty + i) .lt. 90) write (ansi8, 3691) sptacs(kaliu + i)
+     write (munit6, 2891) i, ansi8, sptacs(kxtcs + nuk + i), sptacs(kud1 + i), sptacs(kud3 + i), sptacs(kud2 + i)
 2891 format (1x, i3, 1x, a6, 4e16.6)
      call window
   end do
-2888 continue
-  prom80(1:8) = blan80(1:8)
+  prom80(1 : 8) = blan80(1 : 8)
   go to 2859
   !     $$$$$$$  key word no. 42:  "rlc"      $$$$  $$$$  $$$$  $$$$  $$$$
-3456 bytbuf(1:4) = answ80(1:4)
+3456 bytbuf(1 : 4) = answ80(1 : 4)
   n33 = 0
   go to 3467
 3462 assign 3464 to nextsn
   go to 9800
-3464 bytbuf = buff77(1:20)
-3467 if ( bytbuf(1:4)  .eq.  'end ' )   go to 1240
-  if ( bytbuf(1:4)  .eq.  'stop' )   go to 1240
-  if ( bytbuf(1:4)  .ne.  'extr' ) go to 3490
+3464 bytbuf = buff77(1 : 20)
+3467 if (bytbuf(1 : 4) .eq. 'end ') go to 1240
+  if (bytbuf(1 : 4) .eq. 'stop') go to 1240
+  if (bytbuf(1 : 4) .ne. 'extr') go to 3490
   n33 = n33 + 1
-  if ( n33 .ge. 2 )  n33 = 0
-3471 if ( n33 .eq. 1 ) write (prom80, 3478)
+  if (n33 .ge. 2) n33 = 0
+3471 if (n33 .eq. 1) write (prom80, 3478)
 3478 format (' No extension yet in use.  But structure allows it.')
-  if ( n33 .eq. 0 )  write (prom80, 3488)
+  if (n33 .eq. 0) write (prom80, 3488)
 3488 format (' row', 9x, 'tr(i)', 9x, 'tx(i)', 10x, 'hr(i)', 10x, 'c(i)', 10x, 'x(i):')
   go to 3462
-3490 if ( bytbuf(1:4) .eq. spykwd(42)(1:4)  .or. bytbuf(1:4) .eq. spykwd(1)(1:4) ) go to 3471
+3490 if (bytbuf(1 : 4) .eq. spykwd(42)(1 : 4) .or. bytbuf(1 : 4) .eq. spykwd(1)(1 : 4)) go to 3471
   !     we get here if no known key word;  extract integer pair.   this
   !     is dec free-format; "it" is maximum;  "n17" is error flag:
   call intpar ( it, n1, n2, n17 )
