@@ -7244,13 +7244,13 @@ subroutine tpplot
   jbegbc = jbegbv + 2 * nv
   nt2 = numbrn * 2
   i = 1
-1008 if ( i  .gt.  numnvo )   go to 1009
+1008 if (i .gt. numnvo) go to 1009
   j = ibsout(i)
   bbus(i) = buslst(j)
   i = i + 1
   go to 1008
 1009 j = 1
-1012 if ( j  .gt.  numbrn )   go to 1013
+1012 if (j .gt. numbrn) go to 1013
   k = ibrnch(j)
   l = jbrnch(j)
   bbus(i) = buslst(k)
@@ -7259,8 +7259,8 @@ subroutine tpplot
   i = i + 1
   j = j + 1
   go to 1012
-1013 if ( iprspy .lt. 2 ) go to 3769
-  write (munit6, 1014)  numout, numnvo, nv, nt2, i
+1013 if (iprspy .lt. 2) go to 3769
+  write (munit6, 1014) numout, numnvo, nv, nt2, i
 1014 format (' numout, numnvo, nv, nt2, i =', 5i6)
   call window
   do j = 1, numout, 10
@@ -7270,17 +7270,17 @@ subroutine tpplot
   end do
 5766 continue
 3769 call pltvar
-  if ( nexmod .gt. 0 ) go to 9835
-  if ( buffin(1:4) .eq. 'stop' )  return
+  if (nexmod .gt. 0 ) go to 9835
+  if (buffin(1 : 4) .eq. 'stop') return
   !     if ( buffin(1:4) .eq. 'spy ' )  return  ! abort "plot" use
-  if ( kill  .eq.  0 )   go to 1000
-3818 close ( unit=14,  status='keep' )
+  if (kill .eq. 0) go to 1000
+3818 close (unit = 14,  status = 'keep')
   !     now stop.   if there were tektronix crt plots, call for
   !     buffer flushing in  #tekplt# .
-  if ( numtek  .gt.  0 )   call tekplt
-9800 if ( iprspy .lt. 1 ) go to 9817
-  write (munit6, 9807)   prom80(1:40)
-9807 format (' Exit "tpplot".   prom80(1:40) =', a40)
+  if (numtek .gt. 0) call tekplt
+9800 if (iprspy .lt. 1) go to 9817
+  write (munit6, 9807) prom80(1 : 40)
+9807 format (' Exit "tpplot".   prom80(1 : 40) =', a40)
   call window
 9817 nexmod = 4
 9835 return
@@ -7288,7 +7288,7 @@ end subroutine tpplot
 !
 !     subroutine helper.
 !
-subroutine helper ( n1 )
+subroutine helper (n1)
   !     module used only for interactive emtp (service to "emtspy").
   !     for non-interactive emtp, this module can be destroyed.
   !     this module does nothing other than service the "help"
@@ -7296,26 +7296,26 @@ subroutine helper ( n1 )
   include 'dekspy.ftn'
   include 'dekplt.ftn'
   n8 = n1
-  if (buffin(5:10) .ne. '      ') go to 3618
+  if (buffin(5 : 10) .ne. '      ') go to 3618
 3613 k = numkey + n8 + 1
   n23 = kbegtx(k)
   n24 = kbegtx(k + 1) - 1
   go to 3673
-3618 if (buffin(6:10) .ne. 'outer') go to 3622
+3618 if (buffin(6 : 10) .ne. 'outer') go to 3622
   n8 = 1
   go to 3613
-3622 if (buffin(6:11) .ne. 'middle') go to 3627
+3622 if (buffin(6 : 11) .ne. 'middle') go to 3627
   n8 = 2
   go to 3613
-3627 if (buffin(6:10) .ne. 'inner') go to 3634
+3627 if (buffin(6 : 10) .ne. 'inner') go to 3634
   n8 = 3
   go to 3613
 3634 n23 = kbegtx(numkey + 1)
   n24 = kbegtx(numkey + 5) - 1
-  if (buffin(6:8) .eq. 'all') go to 3673
+  if (buffin(6 : 8) .eq. 'all') go to 3673
   do j = n23, n24
-     if (texspy(j)(1:3) .eq. '   ') go to 3642
-     if (texspy(j)(3:10) .eq. buffin(6:13)) go to 3649
+     if (texspy(j)(1 : 3) .eq. '   ') go to 3642
+     if (texspy(j)(3 : 10) .eq. buffin(6 : 13)) go to 3649
   end do
 3642 continue
   write (munit6, 3645)
@@ -7324,18 +7324,18 @@ subroutine helper ( n1 )
   go to 9000
 3649 n23 = j
   do j = n23 + 1, n24
-     if (texspy(j)(1:3) .ne. '   ') go to 3658
+     if (texspy(j)(1 : 3) .ne. '   ') go to 3658
   end do
 3653 continue
 3658 n24 = j - 1
 3673 do j = n23, n24
-     write (munit6, 3677)  texspy(j)
+     write (munit6, 3677) texspy(j)
 3677 format (a80)
      call window
   end do
 3681 continue
-9000 if ( iprspy .lt. 1 ) go to 9011
-  write (munit6, 9004)  n1, n8, n23, n24
+9000 if (iprspy .lt. 1) go to 9011
+  write (munit6, 9004) n1, n8, n23, n24
 9004 format (' Exit  "helper".  n1, n8, n23, n24 =', 4i6)
   call window
 9011 return
@@ -7348,12 +7348,12 @@ subroutine pltvar
   !     for non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
   include 'dekplt.ftn'
-  if ( iprspy .lt. 1 ) go to 1003
-  write (munit6, 1002)  nexmod
+  if (iprspy .lt. 1) go to 1003
+  write (munit6, 1002) nexmod
 1002 format (' Enter "pltvar".  nexmod =', i4)
   call window
-1003 if ( nexmod .eq. 6 ) go to 1550
-  if ( nexmod .ne. 5 )  go to 1005
+1003 if (nexmod .eq. 6) go to 1550
+  if (nexmod .ne. 5) go to 1005
   nexmod = 0
   go to nextsn
 1005 tolrce = 0.0
@@ -7363,9 +7363,9 @@ subroutine pltvar
   assign 1048 to nextsn
   go to 9800
 1048 buffin = buff77
-  if ( buffin(1:4) .eq. 'stop' )  return
+  if (buffin(1 : 4) .eq. 'stop') return
   !     if ( buffin(1:4) .eq. 'spy ' )  return  ! abort "plot" use
-  if ( buffin(1:8)  .ne.  refile )   go to 1007
+  if (buffin(1 : 8) .ne. refile) go to 1007
   write (prom80, 1004)
 1004 format (' File :')
   assign 1052 to nextsn
@@ -7373,23 +7373,23 @@ subroutine pltvar
 1052 buffin = buff77
   newfil = 1
   go to 1053
-1007 if ( buffin(1:8)  .eq.  inner )   go to 1550
-  if ( buffin(1:8)  .ne.  timesp )   go to 5681
+1007 if (buffin(1 : 8) .eq. inner) go to 1550
+  if (buffin(1 : 8) .ne. timesp) go to 5681
 1008 timbeg = pltbuf(newvec)
   n4 = (indbuf - newvec ) / (kptplt + 1 )
-  if ( iprspy .lt. 1 ) go to 5673
-  write (munit6, 5672)  indbuf, newvec, kptplt, n4
+  if (iprspy .lt. 1) go to 5673
+  write (munit6, 5672) indbuf, newvec, kptplt, n4
 5672 format (' Timespan calc.  indbuf, newvec, kptplt, n4 =', 4i8)
   call window
 5673 n4 = newvec + n4 * (kptplt + 1)
   timend = pltbuf(n4)
   if ( iprspy .lt. 1 ) go to 35675
-  write (munit6, 5675)  newvec, n4, timbeg, timend
+  write (munit6, 5675) newvec, n4, timbeg, timend
 5675 format (' pltbuf cells', 2i8, '     tmin, tmax (sec) =', 2e14.5)
   call window
-35675 if ( iprspy .lt. 5 )  go to 3218
-  do m=newvec, n4, 8
-     write (munit6, 5676) j, (pltbuf(ip), ip=j, j+7)
+35675 if (iprspy .lt. 5) go to 3218
+  do m = newvec, n4, 8
+     write (munit6, 5676) j, (pltbuf(ip), ip =j, j + 7)
 5676 format (' pltbuf(', i6, ':)', 8e14.5)
      call window
   end do
@@ -7399,7 +7399,7 @@ subroutine pltvar
   call window
   if (ihs .eq. 0) ihs = 3
   go to 7531
-5681 if (  buffin(1:8)  .ne.  choice )   go to 1957
+5681 if (buffin(1 : 8) .ne. choice) go to 1957
   call spylin
   i = 1
   nc = 2 * nv
@@ -7439,128 +7439,128 @@ subroutine pltvar
   end do
 3247 continue
   go to 1053
-1957 if ( buffin(1:8)  .ne.  stop )   go to 4423
+1957 if (buffin(1 : 8) .ne. stop) go to 4423
   kill = 99
   return
-4423 if ( buffin(1:8) .ne. purge ) go to 1958
-  close ( unit=14,  status='delete' )
+4423 if (buffin(1 : 8) .ne. purge) go to 1958
+  close (unit = 14, status = 'delete')
   return
-1958 if ( buffin(1:8) .ne. out )go to 1931
+1958 if (buffin(1 : 8) .ne. out) go to 1931
   return
-1931 if ( buffin(1:5) .ne. help(1:5) ) go to 1059
-  call helper ( 2 )
+1931 if (buffin(1 : 5) .ne. help(1 : 5)) go to 1059
+  call helper (2)
   go to 1053
-1059 if ( buffin(1:8)  .eq.  label    )   go to 1210
-  if ( buffin(1:8)  .ne.  timeun )   go to 1167
-1155 write (prom80, 1164)  ihs
+1059 if ( buffin(1 : 8) .eq. label) go to 1210
+  if (buffin(1 : 8) .ne. timeun) go to 1167
+1155 write (prom80, 1164) ihs
 1164 format ('   Send time-units code (', i2, ' ) :')
   assign 1165 to nextsn
   go to 9800
-1165 call frein1 ( buff77, n4 )
-  if ( n4  .gt.  0 )   ihs = n4
-  if ( ihs  .gt.  0     .and.     ihs  .lt.  8 ) go to 7531
+1165 call frein1 (buff77, n4)
+  if (n4 .gt. 0) ihs = n4
+  if (ihs .gt. 0 .and. ihs .lt. 8) go to 7531
   write (munit6, 4163)
 4163 format ('  ? ? ?  Illegal value.   Try again ...')
   call window
   go to 1155
 7531 if ( ihs  .eq.  1 )   tmult = 21600.
-  if ( ihs  .eq.  2 )   tmult = 60.
-  if ( ihs  .eq.  3 )   tmult = 1.0
-  if ( ihs  .eq.  4 )   tmult = 1000.
-  if ( ihs  .eq.  5 )   tmult = 1.e6
-  if ( ihs  .eq.  6 )   tmult = 1.0
-  if ( ihs  .eq.  7 )   tmult = 1.0
+  if (ihs .eq. 2) tmult = 60.
+  if (ihs .eq. 3) tmult = 1.0
+  if (ihs .eq. 4) tmult = 1000.
+  if (ihs .eq. 5) tmult = 1.e6
+  if (ihs .eq. 6) tmult = 1.0
+  if (ihs .eq. 7) tmult = 1.0
   go to 1053
 1167 l = 1
   icp = 4
   jplt = 0
-7338 write (prom80, 7341)  slot1(l)
+7338 write (prom80, 7341) slot1(l)
 7341 format ('   Send node name or end (', a6, ') :')
   assign 7342 to nextsn
   go to 9800
-7342 textd1 = buff77(1:8)
-  if ( textd1  .eq.  lastpl )   go to 1175
-7344 if ( textd1  .ne.  end  )   go to 7348
+7342 textd1 = buff77(1 : 8)
+  if (textd1 .eq. lastpl) go to 1175
+7344 if (textd1 .ne. end) go to 7348
   icp = 8
   brclas = voltag
   go to 1168
-7348 if ( textd1  .eq.  '        ' )   textd1 = slot1(l)
-  if ( textd1  .eq.  back  )   go to 1053
-  if ( l  .eq.  1     .and.     jplt  .gt.  0 .and.   textd1  .eq.  repeat  )   go to 1210
+7348 if (textd1 .eq. '        ') textd1 = slot1(l)
+  if (textd1 .eq. back) go to 1053
+  if (l .eq. 1 .and. jplt .gt. 0 .and. textd1 .eq. repeat) go to 1210
   k = 0
-1600 k=k+1
-  if ( k  .le.  numnvo )   go to 1640
-  write (munit6,1620) textd1
+1600 k = k + 1
+  if (k .le. numnvo) go to 1640
+  write (munit6, 1620) textd1
 1620 format (' ??? List of node voltages does not include  "', a6,  '" .   Try again ....')
   call window
   go to 7338
-1640 write (ansi, 1641)  bbus(k)
-1641 format ( a6, 2x )
-  if ( textd1 .ne. ansi )  go to 1600
+1640 write (ansi, 1641) bbus(k)
+1641 format (a6, 2x)
+  if (textd1 .ne. ansi) go to 1600
   jplt = l
   l = l + 1
-  mplot(jplt)=k
+  mplot(jplt) = k
   slot1(jplt) = textd1
   go to 7338
-1168 write (prom80, 1169)  brclas,  slot1(l), slot1(l+1)
-1169 format ('   Send branch ',  a7,  ' names or end (', a6,  1h,,  a6,  ' ) :'   )
+1168 write (prom80, 1169) brclas, slot1(l), slot1(l + 1)
+1169 format ('   Send branch ', a7, ' names or end (', a6, ',', a6, ' ) :')
   assign 31169 to nextsn
   go to 9800
-31169 textd1 = buff77(1:6)
-  textd2 = buff77(7:12)
-  if ( textd1  .eq.  back  )   go to 1053
-  if ( textd1  .eq.  end  )   go to 1175
-  if ( textd1  .eq.  lastpl )   go to 1175
-  if ( textd1  .eq.  '        '     .and. textd2  .eq.  '        '  )   go to 1173
+31169 textd1 = buff77(1 : 6)
+  textd2 = buff77(7 : 12)
+  if (textd1 .eq. back) go to 1053
+  if (textd1 .eq. end) go to 1175
+  if (textd1 .eq. lastpl) go to 1175
+  if (textd1 .eq. '        ' .and. textd2 .eq. '        ') go to 1173
   slot1(l) = textd1
-  slot1(l+1) = textd2
-1173 if ( slot1(l)  .eq.  '        '     .and. slot1(l+1)  .eq.  '        '  )   go to 1168
-  if ( icp  .eq.  9 )   go to 1720
+  slot1(l + 1) = textd2
+1173 if (slot1(l) .eq. '        ' .and. slot1(l + 1) .eq. '        ') go to 1168
+  if (icp .eq. 9) go to 1720
   ib = jbegbv
   il = jbegbc
   n1 = ib
   go to 1740
-1720 ib=jbegbc
-  il=numout
+1720 ib = jbegbc
+  il = numout
   n1 = jbegbv + nv
-1740 if (ib.lt.il) go to 1780
-  write (munit6, 1760)  brclas, slot1(l), slot1(l+1)
-1760 format (' ??? Branch ',  a7,  ' list does not include an entry from  "',  a6,  '"  to  "',  a6, '" .   Try again ....')
+1740 if (ib .lt. il) go to 1780
+  write (munit6, 1760) brclas, slot1(l), slot1(l + 1)
+1760 format (' ??? Branch ', a7, ' list does not include an entry from  "', a6, '"  to  "', a6, '" .   Try again ....')
   call window
   go to 1168
-1780 write (ansi, 1641)  bbus(ib)
-  if ( slot1(l) .ne. ansi )   go to 1800
-  write (ansi, 1641)  bbus(ib+1)
-  if ( slot1(l+1) .ne. ansi )   go to 1820
+1780 write (ansi, 1641) bbus(ib)
+  if (slot1(l) .ne. ansi) go to 1800
+  write (ansi, 1641) bbus(ib + 1)
+  if (slot1(l + 1) .ne. ansi) go to 1820
   !               node pair found - sign correct
-  mplot(jplt+1)= n1
+  mplot(jplt + 1) = n1
   go to 1840
-1800 write (ansi, 1641)  bbus(ib)
-  if ( slot1(l+1) .ne. ansi )   go to 1820
-  write (ansi, 1641)  bbus(ib+1)
-  if ( slot1(l) .ne. ansi )   go to 1820
+1800 write (ansi, 1641) bbus(ib)
+  if (slot1(l + 1) .ne. ansi) go to 1820
+  write (ansi, 1641) bbus(ib + 1)
+  if (slot1(l) .ne. ansi) go to 1820
   !               node pair found - sign negative
-  mplot(jplt+1)=-n1
+  mplot(jplt + 1) = -n1
   go to 1840
-1820 ib=ib+2
+1820 ib = ib + 2
   n1 = n1 + 1
   go to 1740
-1840 jplt=jplt+1
+1840 jplt = jplt + 1
   l = l + 2
   go to 1168
 1175 namvar = l - 1
-  if ( iprspy .lt. 1 ) go to 1218
-  write (munit6, 1217)  jplt, icp, namvar
+  if (iprspy .lt. 1) go to 1218
+  write (munit6, 1217) jplt, icp, namvar
 1217 format (' Done class.    jplt, icp, namvar =', 3i8)
   call window
-1218 if ( iprspy .lt. 1 )  go to 3252
+1218 if (iprspy .lt. 1) go to 3252
   n14 = jplt
-  if ( n14 .gt. 20 )  n14 = 20
-  write (munit6, 3251) ( mplot(i), i=1, n14 )
+  if (n14 .gt. 20) n14 = 20
+  write (munit6, 3251) (mplot(i), i = 1, n14)
 3251 format (' mplot:', 20i6)
   call window
-3252 if ( textd1  .ne.  lastpl     .and. icp     .lt.   9   )   go to 1204
-  if ( jplt  .gt.  0 )   go to 1210
+3252 if (textd1 .ne. lastpl .and. icp .lt. 9) go to 1204
+  if (jplt .gt. 0) go to 1210
   write (munit6, 1202)
 1202 format ('  ???  Error.   No valid plot variables of any type were specified.   Try again ....')
   call window
@@ -7569,58 +7569,58 @@ subroutine pltvar
   brclas = curren
   go to 1168
 1210 nc = namvar + 1
-  do i=nc, 20
+  do i = nc, 20
 1215 slot1(i) = '        '
   end do
-  ievsw=0
+  ievsw = 0
   nc = nt2 / 2  -  nv
-  if ( iprspy .lt. 1 ) go to 1880
-  write (munit6, 4217)  kptplt, numnvo, numbrn
-4217 format ( ' Assign kptplt.  kptplt, numnvo, numbrn =', 3i10)
+  if (iprspy .lt. 1) go to 1880
+  write (munit6, 4217) kptplt, numnvo, numbrn
+4217 format (' Assign kptplt.  kptplt, numnvo, numbrn =', 3i10)
   call window
-1880 jplt1=jplt+1
-  kplt=0
-  write (prom80, 1882)  headl(1:16)
+1880 jplt1 = jplt + 1
+  kplt = 0
+  write (prom80, 1882) headl(1 : 16)
 1882 format ('   Send super-title (', a16, '...) :')
   assign 31882 to nextsn
   go to 9800
 31882 alpha = buff77
-  if ( alpha(1:8)  .eq.  repeat  )   go to 1550
-  if ( alpha(1:8)  .eq.  texblk )   go to 1536
-  do j=1, 80
+  if (alpha(1 : 8) .eq. repeat) go to 1550
+  if (alpha(1 : 8) .eq. texblk) go to 1536
+  do j = 1, 80
      n3 = 81 - j
-     if ( alpha(n3:n3)  .eq.  ' ' )   go to 1535
+     if (alpha(n3 : n3) .eq. ' ') go to 1535
      headl = alpha
      nchsup = n3
      go to 1885
   end do
 1535 continue
 1536 nchsup = 0
-1885 write (prom80, 1886)  vertl(1:16)
-1886 format ('   Send vertical axis label (', a16,  '...) :')
+1885 write (prom80, 1886) vertl(1 : 16)
+1886 format ('   Send vertical axis label (', a16, '...) :')
   assign 1887 to nextsn
   go to 9800
 1887 vertl = buff77
-  if (vertl(1:8) .eq. repeat) go to 1550
-  if (vertl(1:8) .eq. texblk) go to 1545
+  if (vertl(1 : 8) .eq. repeat) go to 1550
+  if (vertl(1 : 8) .eq. texblk) go to 1545
   do j = 1, 78
      n3 = 81 - j
-     if (vertl(n3:n3) .eq. ' ') go to 1544
+     if (vertl(n3 : n3) .eq. ' ') go to 1544
      nchver = n3
      go to 1888
   end do
 1544 continue
 1545 nchver = 0
-1888 n3 = numtit  +  1
-  write (prom80, 1891)  n3,  sext(n3)(1:16)
-1891 format ('   Send case-title line', i2, ' (',  a16, '...) :')
+1888 n3 = numtit + 1
+  write (prom80, 1891) n3, sext(n3)(1 : 16)
+1891 format ('   Send case-title line', i2, ' (', a16, '...) :')
   assign 1892 to nextsn
   go to 9800
 1892 alpha = buff77
-  if ( alpha(1:8)  .ne.  flush  )   go to 1894
+  if (alpha(1 : 8) .ne. flush) go to 1894
   numtit = 0
   go to 1888
-1894 if ( alpha(1:8)  .ne.  playba  )   go to 1896
+1894 if (alpha(1 : 8) .ne. playba) go to 1896
   write (munit6, 1895)
 1895 format (6x, 'Playback of total title (80a1 format) ...')
   call window
@@ -7631,26 +7631,26 @@ subroutine pltvar
   end do
 3267 continue
   go to 1888
-1896 if ( alpha(1:8)  .eq.  '        ' )   go to 1899
-  if ( alpha(1:8)  .eq.  end  )   go to 1550
-  if ( alpha(1:8)  .ne.  texblk )   go to 1897
-  alpha(1:8) = '        '
+1896 if (alpha(1 : 8) .eq. '        ') go to 1899
+  if (alpha(1 : 8) .eq. end) go to 1550
+  if (alpha(1 : 8) .ne. texblk) go to 1897
+  alpha(1 : 8) = '        '
 1897 sext(n3) = alpha
 1899 numtit = n3
-  if ( numtit .lt. 5 )  go to 1901
+  if (numtit .lt. 5) go to 1901
   write (munit6, 1547)
 1547 format (' ** Warning.  Title storage is now full.   No additional lines can be accepted.')
   call window
 1901 go to 1888
 1550 call timval
-  if ( nexmod .gt. 0 ) go to 9835
-  if ( kill  .eq.  99 )  go to 9835
-  if ( buffin(1:4) .eq. 'stop' ) go to 9835
+  if (nexmod .gt. 0) go to 9835
+  if (kill .eq. 99) go to 9835
+  if (buffin(1 : 4) .eq. 'stop') go to 9835
   !     if ( buffin(1:4) .eq. 'spy ' ) go to 9835 ! abort "plot" use
   go to 1053
-9800 if ( iprspy .lt. 1 ) go to 9817
-  write (munit6, 9807)   prom80(1:40)
-9807 format (' Exit "pltvar".   prom80(1:40) =', a40)
+9800 if (iprspy .lt. 1) go to 9817
+  write (munit6, 9807) prom80(1 : 40)
+9807 format (' Exit "pltvar".   prom80(1 : 40) =', a40)
   call window
 9817 nexmod = 5
 9835 return
@@ -7665,346 +7665,346 @@ subroutine timval
   include 'dekplt.ftn'
   real(8) d1, d3, tolrce, vmin, vmax, din1, din2
   maxevk = maxev - 30
-  if ( iprspy .lt. 1 ) go to 1549
-  write (munit6, 1386)  monitr, limfix, vmin, vmax
-1386 format (' Begin  "timval".  monitr, limfix =',  2i6, '    vmin, vmax =', 2e13.4)
+  if (iprspy .lt. 1) go to 1549
+  write (munit6, 1386) monitr, limfix, vmin, vmax
+1386 format (' Begin  "timval".  monitr, limfix =', 2i6, '    vmin, vmax =', 2e13.4)
   call window
   n16 = jplt
-  if ( n16 .gt. 20 )  n16 = 20
-  write (munit6, 3274) ( mplot(i), i=1, n16 )
-3274 format ( ' mplot:', 20i6)
+  if (n16 .gt. 20) n16 = 20
+  write (munit6, 3274) (mplot(i), i = 1, n16)
+3274 format (' mplot:', 20i6)
   call window
-1549 if ( nexmod .ne. 6 ) go to 31549
+1549 if (nexmod .ne. 6) go to 31549
   nexmod = 0
   go to nextsn
-31549 if ( monitr .eq. 8765 ) go to 1926
-1550 write (prom80,1930)
+31549 if (monitr .eq. 8765) go to 1926
+1550 write (prom80, 1930)
 1930 format (' --- Inner :')
   assign 1556 to nextsn
   go to 9800
 1556 buffin = buff77
   !     if ( buffin(1:4) .eq. 'spy ' ) go to 9835   ! exit module
-  if ( buffin(1:8)  .ne.  setdat )   go to 2713
+  if (buffin(1 : 8) .ne. setdat) go to 2713
   call setrtm
   go to 1550
-2713 if ( buffin(1:8)  .ne.  'rollv   '     )   go to 2715
+2713 if (buffin(1 : 8) .ne. 'rollv   ') go to 2715
   monitr = monitr + 1
-  if ( monitr  .ge.  2 )   monitr = 0
-  if ( monitr .ne. 0 )  write (munit6, 42713)
+  if (monitr .ge. 2) monitr = 0
+  if (monitr .ne. 0) write (munit6, 42713)
 42713 format ('            ===  Begin  rolling  of vector-graphic  plot.')
-  if ( monitr .eq. 0 )  write (munit6, 2714)
+  if (monitr .eq. 0) write (munit6, 2714)
 2714 format ('            ===  Previous  rolling  of vector plot is hereby cancelled.  ===')
   call window
   go to 1550
-2715 if ( buffin(1:8) .ne. 'rollc   ' )  go to 42715
+2715 if (buffin(1 : 8) .ne. 'rollc   ') go to 42715
   monits = monits + 1
-  if ( monits .ge. 2 )  monits = 0
-  if ( monits .ne. 0 )  go to 1550
+  if (monits .ge. 2) monits = 0
+  if (monits .ne. 0) go to 1550
   write (munit6, 22714)
 22714 format ('            ===  Previous  rolling  of character plot is hereby cancelled.  ===')
   call window
   go to 1550
-42715 if ( buffin(1:8)  .ne.  'span    '     )   go to 2718
+42715 if (buffin(1 : 8) .ne. 'span    ') go to 2718
   write (prom80, 2716)
 2716 format (' Send desired tmax-tmin:')
   assign 52716 to nextsn
   go to 9800
-52716 call fresp1(buff77, d3)
-2717 n4 = (indbuf - newvec ) / (kptplt + 1 )
-  if ( iprspy .lt. 1 ) go to 82717
-  write (munit6, 42717)  indbuf, newvec, kptplt, n4
+52716 call fresp1 (buff77, d3)
+2717 n4 = (indbuf - newvec) / (kptplt + 1)
+  if (iprspy .lt. 1) go to 82717
+  write (munit6, 42717) indbuf, newvec, kptplt, n4
 42717 format (' Timespan calculation.  indbuf, newvec, kptplt, n4=', 4i8)
   call window
 82717 n4 = newvec + n4 * (kptplt + 1)
   din2 = pltbuf(n4)
   din1 = din2 - d3
   go to 1927
-2718 if ( buffin(1:8)  .ne.  'front   '    )   go to 2720
+2718 if (buffin(1 : 8) .ne. 'front   ') go to 2720
   d3 = spsave
   go to 2717
-2720 if ( buffin(1:8)  .ne.  xyplot )   go to 2728
+2720 if (buffin(1 : 8) .ne. xyplot) go to 2728
   mxypl = mxypl + 1
-  if ( mxypl  .ge.  2 )   mxypl = 0
-  if ( mxypl  .eq.  0 )   go to 2724
-  write (prom80, 2721)  xytitl(1:16)
-2721 format (' Send x-axis label (',  a16,  '...) :')
+  if (mxypl .ge. 2) mxypl = 0
+  if (mxypl .eq. 0) go to 2724
+  write (prom80, 2721) xytitl(1 : 16)
+2721 format (' Send x-axis label (', a16, '...) :')
   assign 42721 to nextsn
   go to 9800
 42721 buffin = buff77
-  if ( buffin(1:8)  .eq.  '        ' )   go to 2724
-  if ( buffin(1:8)  .eq.  texblk )   go to 2722
-  xytitl(1:24) = buffin(1:24)
+  if (buffin(1 : 8) .eq. '        ') go to 2724
+  if (buffin(1 : 8) .eq. texblk) go to 2722
+  xytitl(1 : 24) = buffin(1 : 24)
   go to 2724
 2722 xytitl = '                        '
 2724 go to 1550
-2728 if ( buffin(1:8)  .ne.  cursor )   go to 2733
+2728 if (buffin(1 : 8) .ne. cursor) go to 2733
   icurse = icurse + 1
-  if ( icurse  .eq.  2 )   icurse = 0
+  if (icurse .eq. 2) icurse = 0
   go to 1550
-2733 if ( buffin(1:8)  .ne.  debug )   go to 2742
+2733 if (buffin(1 : 8) .ne. debug) go to 2742
   write (prom80, 2738)  iprspy
-2738 format ('  Supply level-number  iprspy  (', i3,  ' ) :')
+2738 format ('  Supply level-number  iprspy  (', i3, ' ) :')
   assign 2740 to nextsn
   go to 9800
-2740 call frein1 ( buff77, iprspy )
+2740 call frein1 (buff77, iprspy)
   go to 1550
-2742 if ( buffin(1:8)  .ne.  extrem )   go to 4774
+2742 if (buffin(1 : 8) .ne. extrem) go to 4774
   kextr = kextr + 1
-  if ( kextr  .gt.  1 )   kextr = 0
+  if (kextr .gt. 1) kextr = 0
   go to 1550
-4774 if ( buffin(1:8)  .ne.  level )   go to 4781
+4774 if (buffin(1 : 8) .ne. level) go to 4781
   klevl = klevl + 1
-  if ( klevl  .gt.  1 )   klevl = 0
-  if ( klevl  .eq.  0 )   go to 4777
-  write (munit6, 4776)  ( ylevel(j), j=1, jplt )
+  if (klevl .gt. 1) klevl = 0
+  if (klevl .eq. 0) go to 4777
+  write (munit6, 4776) (ylevel(j), j = 1, jplt)
 4776 format ('   Input vector of levels :')
   call window
-  write (munit6, 3284)  ( ylevel(j), j=1, jplt )
+  write (munit6, 3284) (ylevel(j), j = 1, jplt)
 3284 format (1x, 7e10.2)
   call window
-  if ( ltek .le. 0 )  go to 34776
+  if (ltek .le. 0) go to 34776
   write (munit6, 3303)
   call window
-34776 read (munit5, *)  ( ylevel(j), j=1, jplt )
+34776 read (munit5, *) (ylevel(j), j = 1, jplt)
 4777 go to 1550
-4781 if ( buffin(1:8)  .ne.  stop )   go to 4784
+4781 if (buffin(1 : 8) .ne. stop) go to 4784
   kill = 99
   go to 9835
-4784 if ( buffin(1:8)  .ne.  smooth )   go to 4805
-  write (prom80, 4791)  tolrce
+4784 if (buffin(1 : 8) .ne. smooth) go to 4805
+  write (prom80, 4791) tolrce
 4791 format (' Supply new tolerance in inches**2 (', e9.2, ' ) :')
   assign 4794 to nextsn
   go to 9800
-4794 call fresp1(buff77, tolrce)
+4794 call fresp1 (buff77, tolrce)
   go to 1550
-4805 if ( buffin(1:8)  .ne.  size )   go to 4823
-  write (prom80, 4808)  taxisl
+4805 if (buffin(1 : 8) .ne. size) go to 4823
+  write (prom80, 4808) taxisl
 4808 format (' Supply new time-axis length in inches (', f5.1, ' ) :')
   assign 4811 to nextsn
   go to 9800
 4811 call fresp1 (buff77, d1)
-  if ( d1  .gt.  2.0 )   taxisl = d1
+  if (d1 .gt. 2.0) taxisl = d1
   go to 1550
-4823 if ( buffin(1:8)  .ne.  show )   go to 4841
+4823 if (buffin(1 : 8) .ne. show) go to 4841
   n1 = limcol + 1
   write (munit6, 4831)
 4831 format (' Parameter settings follow ....')
   call window
-  write (munit6, 2291)  n1
-2291 format (i15,  ' = number of columns in character plot')
+  write (munit6, 2291) n1
+2291 format (i15, ' = number of columns in character plot')
   call window
-  write (munit6, 2293)  iprspy
-2293 format (i15,  ' = diagnostic (debug) printout level' )
+  write (munit6, 2293) iprspy
+2293 format (i15, ' = diagnostic (debug) printout level')
   call window
-  write (munit6, 2295)  taxisl
-2295 format (  e15.3,  ' = length of time axis in inches' )
+  write (munit6, 2295) taxisl
+2295 format (e15.3, ' = length of time axis in inches')
   call window
-  write (munit6, 2297)  tolrce
-2297 format (  e15.3,  ' = smoothing tolerance in inches' )
+  write (munit6, 2297) tolrce
+2297 format (e15.3, ' = smoothing tolerance in inches')
   call window
-  write (munit6, 2299)  linepr
-2299 format ( i15, ' = logical unit number of line printer.' )
+  write (munit6, 2299) linepr
+2299 format ( i15, ' = logical unit number of line printer.')
   call window
-  write (munit6, 2303)  lu7plt
-2303 format ( i15,  ' = logical unit number of current output' )
+  write (munit6, 2303) lu7plt
+2303 format (i15, ' = logical unit number of current output')
   call window
-  write (munit6, 2305)  ltek
-2305 format ( i15,  ' = ltek (1 if vector plot, 0 otherwise)' )
+  write (munit6, 2305) ltek
+2305 format (i15, ' = ltek (1 if vector plot, 0 otherwise)')
   call window
-  write (munit6, 2307)  ihs
-2307 format ( i15,  ' = time units code ihs'   )
+  write (munit6, 2307) ihs
+2307 format (i15, ' = time units code ihs')
   call window
-  write (munit6, 2309)  ibaud
-2309 format ( i15,  ' = ibaud (tektronix plot10 characters/sec)' )
+  write (munit6, 2309) ibaud
+2309 format (i15, ' = ibaud (tektronix plot10 characters/sec)')
   call window
-  write (munit6, 2311)  nxmax
-2311 format ( i15,  ' = nxmax (vector points horizontally)' )
+  write (munit6, 2311) nxmax
+2311 format (i15, ' = nxmax (vector points horizontally)')
   call window
   go to 1550
-4841 if ( buffin(1:5) .ne. help(1:5) ) go to 1990
-  call helper ( 3 )
+4841 if (buffin(1 : 5) .ne. help(1 : 5)) go to 1990
+  call helper (3)
   go to 1550
-1990 if ( iprspy .lt. 1 )  go to 8992
-  write (munit6, 8991)  kptplt, numnvo, numbrn
-8991 format (  ' kptplt, numnvo, numbrn below 1990 =', 3i8 )
+1990 if (iprspy .lt. 1) go to 8992
+  write (munit6, 8991) kptplt, numnvo, numbrn
+8991 format (' kptplt, numnvo, numbrn below 1990 =', 3i8)
   call window
-8992 if ( buffin(1:8)  .ne.  out  )go to 1921
+8992 if (buffin(1 : 8) .ne. out) go to 1921
   go to 9835
-1921 if ( buffin(1:8)  .ne.  multip )   go to 1960
+1921 if (buffin(1 : 8) .ne. multip) go to 1960
   write (munit6, 1954)
-1954 format (  '   Input vector of multipliers :'  )
+1954 format ('   Input vector of multipliers :')
   call window
-  write (munit6, 3317)  ( aaa(j), j=1, jplt )
-3317 format ( 1x,  7e10.2 )
+  write (munit6, 3317) (aaa(j), j = 1, jplt)
+3317 format (1x, 7e10.2)
   call window
-  if ( ltek .le. 0 )  go to 1957
+  if (ltek .le. 0) go to 1957
   write (munit6, 1956)
-1956 format ( 1x )
+1956 format (1x)
   call window
 1957 assign 1958 to nextsn
   go to 9800
-1958 read (buff77, 1959)  ( aaa(j), j=1, jplt )
-1959 format ( 10e8.0 )
+1958 read (buff77, 1959) (aaa(j), j = 1, jplt)
+1959 format (10e8.0)
   go to 1550
-1960 if ( buffin(1:8)  .ne.  offset )   go to 1970
+1960 if (buffin(1 : 8) .ne. offset) go to 1970
   write (munit6, 1964)
-1964 format (  '   Input vector of offsets :'  )
+1964 format ('   Input vector of offsets :')
   call window
-  write (munit6, 3317)  ( bbb(j), j=1, jplt )
+  write (munit6, 3317) (bbb(j), j = 1, jplt)
   call window
-  if ( ltek .le. 0 )  go to 1969
+  if (ltek .le. 0) go to 1969
   write (munit6, 1956)
   call window
 1969 assign 31969 to nextsn
   go to 9800
-31969 read (buff77, 1959)  ( bbb(j), j=1, jplt )
+31969 read (buff77, 1959) (bbb(j), j = 1, jplt)
   go to 1550
-1970 if ( buffin(1:8)  .ne.  limits )   go to 1980
-  write (prom80, 1973)  vmin, vmax
-1973 format ('   Vertical min & max (', 2e12.3,  ' ) :')
+1970 if (buffin(1 : 8) .ne. limits) go to 1980
+  write (prom80, 1973) vmin, vmax
+1973 format ('   Vertical min & max (', 2e12.3, ' ) :')
   assign 1975 to nextsn
   go to 9800
-1975 call fresp2(buff77, vmin, vmax)
+1975 call fresp2 (buff77, vmin, vmax)
   limfix = 1
-  if ( vmin  .eq.  0.0     .and. vmax  .eq.  0.0 )   limfix = 0
+  if (vmin .eq. 0.0 .and. vmax .eq. 0.0) limfix = 0
   go to 1550
-1980 if ( buffin(1:8)  .ne.  averag )   go to 1989
-  write (prom80, 1982)  nsmplt
+1980 if (buffin(1 : 8) .ne. averag) go to 1989
+  write (prom80, 1982) nsmplt
 1982 format ('   Supply consecutive-oscillation limit (', i6, ' ) :')
   assign 1985 to nextsn
   go to 9800
-1985 call frein1 ( buff77, n1 )
-  if ( n1  .gt.  0 )   nsmplt = n1
+1985 call frein1 (buff77, n1)
+  if (n1 .gt. 0) nsmplt = n1
   go to 1550
-1989 if ( buffin(1:8)  .ne.  rescal )   go to 1992
+1989 if (buffin(1 : 8) .ne. rescal) go to 1992
   limfix = 0
-  do j=1, 20
+  do j = 1, 20
      aaa(j) = 1.0
 1991 bbb(j) = 0.0
   end do
   go to 1550
-1992 if ( buffin(1:8)  .ne.  time )   go to 5618
+1992 if (buffin(1 : 8) .ne. time) go to 5618
   din1 = hmin * tmult
   din2 = hmax * tmult
-  write (prom80, 1925)  din1, din2
+  write (prom80, 1925) din1, din2
 1925 format ('   Supply tmin & tmax (', 2e12.3, ' ) :')
   assign 31925 to nextsn
   go to 9800
-31925 call fresp2(buff77, din1, din2)
-  if ( din1  .ne.  0.0 )   go to 1927
-  if ( din2  .ne.  0.0 )   go to 1927
+31925 call fresp2 (buff77, din1, din2)
+  if (din1 .ne. 0.0) go to 1927
+  if (din2 .ne. 0.0) go to 1927
   go to 1928
   !     auto internal "time", called from "pltfil" if rolling plot needs
   !     a new page:
 1926 d6 = din2 - din1
   d7 = inchlp
-  din1 = din2 - (d7/100.) * d6
+  din1 = din2 - (d7 / 100.) * d6
   din2 = din1 + d6
-  if ( iprspy .le. 0 )  go to 1927
-  write (munit6, 41927)  limfix, inchlp, vmin, vmax, din1, din2
-41927 format (' "timval", s.n. 1926.  limfix, inchlp, vmin, vmax, din1, din2 =', 2i8,  4e13.4  )
+  if (iprspy .le. 0) go to 1927
+  write (munit6, 41927) limfix, inchlp, vmin, vmax, din1, din2
+41927 format (' "timval", s.n. 1926.  limfix, inchlp, vmin, vmax, din1, din2 =', 2i8, 4e13.4)
   call window
 1927 hmin = din1
   hmax = din2
   spsave = din2 - din1
-  hmin=hmin/tmult
-  hmax=hmax/tmult
+  hmin=hmin / tmult
+  hmax=hmax / tmult
   hpi = (hmax - hmin ) / taxisl
-1928 if ( iprspy  .lt.  1 )  go to 1942
-  write (munit6, 1934)  kplt, jplt
-1934 format (' b4 read points.  kplt, jplt =',  2i8 )
+1928 if (iprspy .lt. 1) go to 1942
+  write (munit6, 1934) kplt, jplt
+1934 format (' b4 read points.  kplt, jplt =', 2i8)
   call window
-  write (munit6, 3324)  hmin, hmax, hpi, taxisl, tmult
-3324 format ('         hmin, hmax, hpi, taxisl, tmult =', 5e15.6  )
+  write (munit6, 3324) hmin, hmax, hpi, taxisl, tmult
+3324 format ('         hmin, hmax, hpi, taxisl, tmult =', 5e15.6)
   call window
-1942 if ( monitr .ne. 2345 )  go to 5648
+1942 if (monitr .ne. 2345) go to 5648
   go to 1550
-5618 if ( buffin(1:8)  .ne.  '        '     .and. buffin(1:8)  .ne.  inner )   go to 4431
-  if ( hmax  .gt.  hmin )   go to 5648
+5618 if (buffin(1 : 8) .ne. '        ' .and. buffin(1 : 8) .ne. inner) go to 4431
+  if (hmax .gt. hmin) go to 5648
   go to 4437
-4431 if ( buffin(1:8)  .ne.  alltim )   go to 5623
+4431 if (buffin(1 : 8) .ne. alltim) go to 5623
 4437 hmin = timbeg
   hmax = timend
-  hpi = ( hmax - hmin ) / taxisl
+  hpi = (hmax - hmin) / taxisl
   go to 5648
 5623 write (munit6, 5624)
 5624 format (' ??? Unrecognizable data.  Try again ....')
   call window
   go to 1550
 5648 kplt = 0
-  if ( iprspy .lt. 1 ) go to 75648
-  write (munit6, 35648)   mplot
-35648 format (' Begin points extraction.  mplot =', 20i4 )
+  if (iprspy .lt. 1) go to 75648
+  write (munit6, 35648) mplot
+35648 format (' Begin points extraction.  mplot =', 20i4)
   call window
-75648 if ( limfix  .eq.  1 )   go to 5647
-  vmin=-finfin
-  vmax=finfin
-5647 vmaxr=vmin+(vmax-vmin)*(vh-vs)/(vl-vs)
-  vminr=vmin-(vmax-vmin)*vs/(vl-vs)
+75648 if (limfix .eq. 1) go to 5647
+  vmin = -finfin
+  vmax = finfin
+5647 vmaxr = vmin + (vmax - vmin) * (vh - vs) / (vl - vs)
+  vminr = vmin - (vmax - vmin) * vs / (vl - vs)
   mfake = 0
-  do j=1, jplt
+  do j = 1, jplt
      mmm(j) = 1
-     if ( aaa(j)  .eq.  0.0 )   go to 5646
-     if ( aaa(j)  .eq.  1.0 )   go to 5646
+     if (aaa(j) .eq. 0.0) go to 5646
+     if (aaa(j) .eq. 1.0) go to 5646
      go to 5645
-5646 if ( bbb(j)  .ne.  0.0 )   go to 5645
+5646 if (bbb(j) .ne. 0.0) go to 5645
   end do
   mmm(j) = 0
   mfake = mfake + 1
 5645 continue
 5649 indexp = newvec - (kptplt + 1)
-  if ( iprspy .lt. 1 ) go to 1940
-  write (munit6, 45649)   newvec, kptplt
-45649 format (' Reinitialize pointer:  newvec, kptplt =', 2i9 )
+  if (iprspy .lt. 1) go to 1940
+  write (munit6, 45649) newvec, kptplt
+45649 format (' Reinitialize pointer:  newvec, kptplt =', 2i9)
   call window
 1940 indexp = indexp + kptplt + 1
-  if ( iprspy .lt. 3 ) go to 81940
-  write (munit6, 61940)   indexp
-61940 format ( ' indexp at the time test =',  i9 )
+  if (iprspy .lt. 3) go to 81940
+  write (munit6, 61940) indexp
+61940 format (' indexp at the time test =', i9)
   call window
-81940 if ( indexp  .ge.  indbuf )   go to 2200
+81940 if (indexp .ge. indbuf) go to 2200
   tstep = pltbuf(indexp)
-  if (tstep.ge.hmin) go to 2060
+  if (tstep .ge. hmin) go to 2060
   go to 1940
-2060 if (tstep.gt.hmax) go to 2205
-  if ( indexp  .gt.  indbuf )   go to 2200
-  if (kplt.le.maxevk) go to 2100
-  write (munit6, 2068)  tstep
+2060 if (tstep .gt. hmax) go to 2205
+  if (indexp .gt. indbuf) go to 2200
+  if (kplt .le. maxevk) go to 2100
+  write (munit6, 2068) tstep
 2068 format (2x, 'Plot truncated to', e11.3, ' seconds due to filled storage.')
   call window
   go to 2205
-2100 kplt=kplt+1
-  ev(kplt)=tstep
-  do j=1,jplt
-     j1=mplot(j)
-     if (j1.ge.0) go to 2120
-     j1=-j1
-     bx(j1)=-bx(j1)
-2120 if ( mxypl  .eq.  0 )   go to 2126
-     if ( j  .eq.  1 )   go to 2127
-2126 kplt=kplt+1
-2127 ev(kplt) = pltbuf(indexp+j1)
-     if ( mplot(j)  .lt.  0 )   ev(kplt) = -ev(kplt)
-     if ( mmm(j)  .eq.  0 )   go to 2140
-     if ( aaa(j)  .ne.  0.0 ) ev(kplt) = ev(kplt) * aaa(j)
+2100 kplt = kplt + 1
+  ev(kplt) = tstep
+  do j = 1, jplt
+     j1 = mplot(j)
+     if (j1 .ge. 0) go to 2120
+     j1 = -j1
+     bx(j1) = -bx(j1)
+2120 if (mxypl .eq. 0) go to 2126
+     if (j .eq. 1) go to 2127
+2126 kplt = kplt + 1
+2127 ev(kplt) = pltbuf(indexp + j1)
+     if (mplot(j) .lt. 0) ev(kplt) = -ev(kplt)
+     if (mmm(j) .eq. 0) go to 2140
+     if (aaa(j) .ne. 0.0) ev(kplt) = ev(kplt) * aaa(j)
      ev(kplt) = ev(kplt) + bbb(j)
   end do
 2140 continue
   go to 1940
 2200 tstep = 1.e+30
-2205 if ( iprspy .lt. 4 ) go to 3342
+2205 if (iprspy .lt. 4) go to 3342
   do j = 1, kplt, 8
      write (munit6, 3336) j, (ev(ip), ip = j, j + 7)
-3336 format (' ev(', i5,  3h:)=,  8e15.6  )
+3336 format (' ev(', i5, ':)=', 8e15.6)
      call window
   end do
 3338 continue
-3342 ind1 = indexp - ( kptplt + 1 )
-  if ( iprspy .lt. 1 )  go to 3343
-  write (munit6, 82205)  ind1
+3342 ind1 = indexp - (kptplt + 1)
+  if (iprspy .lt. 1)  go to 3343
+  write (munit6, 82205) ind1
 82205 format (' Another ind1 change.  ind1 =', i8)
   call window
-3343 if ( mxypl  .eq.  0 )   go to 2218
+3343 if (mxypl .eq. 0) go to 2218
   k = 0
   n7 = 0
   n8 = 2 * kplt / jplt  +  4
@@ -8012,21 +8012,21 @@ subroutine timval
   gymin = finfin
   gxmax = -gxmin
   gymax = -gymin
-8303 if ( k  .ge.  kplt )   go to 8317
+8303 if (k .ge. kplt) go to 8317
   kk = n7
   do j=1, jplt, 2
-     if ( ev(k+1)  .lt.  gxmin )   gxmin = ev(k+1)
-     if ( ev(k+1)  .gt.  gxmax )   gxmax = ev(k+1)
-     if ( ev(k+2)  .lt.  gymin )   gymin = ev(k+2)
-     if ( ev(k+2)  .gt.  gymax )   gymax = ev(k+2)
-     ew(kk+1) = ev(k+1)
-     ew(kk+2) = ev(k+2)
+     if (ev(k + 1) .lt. gxmin) gxmin = ev(k + 1)
+     if (ev(k + 1) .gt. gxmax) gxmax = ev(k + 1)
+     if (ev(k + 2) .lt. gymin) gymin = ev(k + 2)
+     if (ev(k + 2) .gt. gymax) gymax = ev(k + 2)
+     ew(kk + 1) = ev(k + 1)
+     ew(kk + 2) = ev(k + 2)
      k = k + 2
 8310 kk = kk + n8
   end do
   n7 = n7 + 2
   go to 8303
-8317 write (munit6, 8322)  gxmin, gxmax, gymin, gymax
+8317 write (munit6, 8322) gxmin, gxmax, gymin, gymax
 8322 format ('  x-min, y-min =', 2e12.4, '  y-min, y-max =', 2e12.4)
   call window
   write (prom80, 3356)
@@ -8034,28 +8034,28 @@ subroutine timval
   assign 43356 to nextsn
   go to 9800
 43356 read (buff77, 1959)  d1, d2, d3, d4
-  if ( d1  .ne.  0.0 )   gxmin = d1
-  if ( d2  .ne.  0.0 )   gxmax = d2
-  if ( d3  .ne.  0.0 )   gymin = d3
-  if ( d4  .ne.  0.0 )   gymax = d4
+  if (d1 .ne. 0.0) gxmin = d1
+  if (d2 .ne. 0.0) gxmax = d2
+  if (d3 .ne. 0.0) gymin = d3
+  if (d4 .ne. 0.0) gymax = d4
   vmin = gymin
   vmax = gymax
   mfake = mfake / 2
   l = 0
   kk = n8
-8371 do j=1, jplt, 2
+8371 do j = 1, jplt, 2
      l = l + 1
      mstart(l) = kk - 4
      ew(kk-3) = gxmin
      ew(kk-2) = gymin
-     ew(kk-1) = ( gxmax - gxmin ) / taxisl
-     ew(kk)   = ( gymax - gymin ) / 8.0
+     ew(kk-1) = (gxmax - gxmin) / taxisl
+     ew(kk)   = (gymax - gymin) / 8.0
 8376 kk = kk + n8
   end do
   kk = kk - n8
   jplt = l
-  if ( iprspy .lt. 1 )  go to 8382
-  write (munit6, 8381)  jplt,  ( mstart(j), j=1, jplt )
+  if (iprspy .lt. 1) go to 8382
+  write (munit6, 8381) jplt, (mstart(j), j = 1, jplt)
 8381 format (' Done with x-y pack.   jplt =',  i3, 5x,  'mstart(j) :', 5i5)
   call window
 8382 if ( iprspy .lt. 9 ) go to 7309
