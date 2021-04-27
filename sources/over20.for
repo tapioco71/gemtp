@@ -424,27 +424,27 @@ subroutine spying
   character(8) spytim(2), spdate(2)
   save
   if (iprspy .lt. 1) go to 31006
-  write (munit6, 1006)  nchain, jjroll, kbreak, lockbr, nexmod, buff77(1:20)
-1006 format (' Enter "spying".  nchain, jjroll, kbreak,', ' lockbr, nexmod =',  5i5,  '    buff77(1:20) =', a20 )
+  write (munit6, 1006) nchain, jjroll, kbreak, lockbr, nexmod, buff77(1:20)
+1006 format (' Enter "spying".  nchain, jjroll, kbreak, lockbr, nexmod =', 5i5, '    buff77(1:20) =', a20)
   call window
-  write (*,*)  ' top spying, ksmspy(1:3) =',  ksmspy
+  write (*, *) ' Top spying, ksmspy(1:3) =',  ksmspy
 31006 if ( buff77(1:4) .ne. 'spy ' ) go to 51006
   nexmod = 0
   ksmspy(1) = 2
   ksmspy(3) = 0
-51006 if ( nexmod .ne. 2 ) go to 1007
+51006 if (nexmod .ne. 2) go to 1007
   nexmod = 0
   go to nextsn
-1007 if ( nexmod .eq. 3 ) go to 8500
-  if ( nexmod .eq. 1 ) go to 3208
-  if ( nexmod .eq. 7 ) go to 1320
-  if ( nexmod .ge. 4 ) go to 1319
-  if ( jjroll .gt. 0 ) go to 1520
-  if ( kbrser .ne. 2 )  go to 1009
+1007 if (nexmod .eq. 3) go to 8500
+  if (nexmod .eq. 1) go to 3208
+  if (nexmod .eq. 7) go to 1320
+  if (nexmod .ge. 4) go to 1319
+  if (jjroll .gt. 0) go to 1520
+  if (kbrser .ne. 2) go to 1009
   jword = 52
   go to 8500
-1009 memkar = locint ( kar1(1) )
-  if ( kfile5 .ne. 2 )  go to 1240
+1009 memkar = locint (kar1(1))
+  if (kfile5 .ne. 2) go to 1240
   kfile5 = 0
   go to 31269
 1240 assign 31269 to nextsn
@@ -452,29 +452,29 @@ subroutine spying
 1260 format (' spy:')
 51269 go to 9800
 31269 answ80 = buff77
-  if ( iprspy .le. 9 ) go to 39843
-  write (munit6, 29843)  answ80
+  if (iprspy .le. 9) go to 39843
+  write (munit6, 29843) answ80
 29843 format ( '  --- Just read answ80:', a80)
   call window
-39843 if ( answ80(1:4)  .eq.  'type'  )   go to 2506
+39843 if (answ80(1:4) .eq. 'type') go to 2506
   if (answ80(1:2) .ne. 'c ') go to 1275
-  if ( kfile5  .eq.  1    .and.  kverfy  .eq.  0 ) go to 51269
-  if ( icomm .ne. 0 )  go to 51269
-  write (munit6, 1273)  answ80
+  if (kfile5 .eq. 1 .and. kverfy .eq. 0) go to 51269
+  if (icomm .ne. 0) go to 51269
+  write (munit6, 1273) answ80
 1273 format (' Comment:', a80)
   call window
   go to 51269
-1275 if (answ80(1:1) .ne. '@')  go to 1289
+1275 if (answ80(1:1) .ne. '@') go to 1289
   !     $$$$$$$  key word no. 19:  "@?"       $$$$  $$$$  $$$$  $$$$  $$$$
   !     now process user request for disk-file connection to keyboard (5):
-  if ( kfile5 .ne. 1 ) go to 1278
+  if (kfile5 .ne. 1) go to 1278
   write (munit6, 1277)
 1277 format ('  === Reject  "@"  usage;  one such file is presently connected.  Try again.')
   call window
   go to 1240
-1278 if ( answ80(2:2) .ne. '/' ) go to 51278
+1278 if (answ80(2:2) .ne. '/') go to 51278
   answ80(1:2) = '  '
-  call frein1 ( answ80, komadd )
+  call frein1 (answ80, komadd)
   komadd = komadd - 1
   n13 = 6
   go to 1276
@@ -482,7 +482,7 @@ subroutine spying
   komadd = 0
   n26 = 2
   go to 2511
-  !     ok, so file is legal;  next check for argument list;  extract any:m35.1747
+  !     ok, so file is legal;  next check for argument list;  extract any:
 1276 n6 = n13 + 1
   maxarg = 0
   do j = n6, 80
@@ -1292,8 +1292,7 @@ subroutine spying
      if (file6(n14)(1:4) .eq. 'eof ') go to 2998
      n14 = n14 + 1
      if (n14 .le. limcrd) go to 2994
-     write (munit6, 2191)
-2191 format ('   ****  Warning.   Card image buffer has filled.  Disk read is truncated.')
+     write (munit6, "('   ****  Warning.   Card image buffer has filled.  Disk read is truncated.')")
      call window
      write (munit6, 2192)  limcrd
 2192 format ('                    Storage capacity in cards = limcrd =', i5)
@@ -3678,7 +3677,7 @@ subroutine numchk ( vbyte, nchar, kill )
   !     structurally deficient,  "kill"  is to be set positive.
   !     For non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
-  character*1 vbyte(1)
+  character(1) vbyte(1)
   kill = 0
   koldig = 0
   nper = 0
@@ -3730,7 +3729,7 @@ end subroutine numchk
 !
 !     subroutine getnum.
 !
-subroutine getnum ( num )
+subroutine getnum (num)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
@@ -3821,14 +3820,12 @@ subroutine window
   include 'dekspy.ftn'
   !     temporarily, until we learn how to write to a 2nd crt for
   !     vax/vms, we will just write to lunit6:
-  if (iabs(kverfy) .eq. 34543) go to 9000 ! no spy windows
-  do j = 1, 132         ! search line for right most non-blank
-     k = 133 - j            ! reverse index (step from right to left)
-     if (munit6(k:k) .ne. ' ') go to 5621 ! end of line
+  if (iabs(kverfy) .eq. 34543) go to 9000                   ! no spy windows
+  do j = 1, 132                                             ! search line for right most non-blank
+     k = 133 - j                                            ! reverse index (step from right to left)
+     if (munit6(k:k) .ne. ' ') go to 5621                   ! end of line
   end do
-5614 continue                   ! end  do 5614  loop to find right edge of line
-5621 write (lunit6, 5624) munit6(1:k) ! output nonblank part
-5624 format (a)
+5621 write (lunit6, '(a)') munit6(1:k) ! output nonblank part
 9000 return
 end subroutine window
 !
@@ -4249,13 +4246,13 @@ subroutine prompt
   include 'blkcom.ftn'
   include 'dekspy.ftn'
   n2 = 80
-  do j=1, 80
-     if ( prom80(n2:n2) .ne. ' ' )  go to 1426
+  do j = 1, 80
+     if (prom80(n2:n2) .ne. ' ') go to 1426
 1394 n2 = n2 - 1
   end do
   return
   !     following lunit6 should really go to 2nd screen ("window")
-1426 write (lunit6, 1475)  prom80(1:n2)
+1426 write (lunit6, 1475) prom80(1:n2)
 1475 format (a, $)           ! ",$" is dec magic to hold cursor
   return
 end subroutine prompt
@@ -6916,7 +6913,7 @@ end subroutine sysplt
 !     subroutine stopin.
 !
 subroutine stopin
-  implicit real(8) (a-h, o-z),  integer(4) (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     universal module of interactive emtp (spy of "emtspy").
   !     if non-interactive version, module can be destroyed.  this
   !     module is called only to display erroneous file6(istep), &
@@ -6941,8 +6938,8 @@ subroutine stopin
   call prompt
   read (munit5, 1236)  buff77
 1236 format (a80)
-  if ( buff77(1:4) .eq. 'stop' ) call stoptp
-  if ( buff77(1:4) .ne. 'spy' )  go to 1244
+  if (buff77(1:4) .eq. 'stop') call stoptp
+  if (buff77(1:4) .ne. 'spy')  go to 1244
   call spying
   go to 9000
 1244 file6(istep) = buff77
@@ -7321,22 +7318,22 @@ subroutine helper ( n1 )
   include 'dekspy.ftn'
   include 'dekplt.ftn'
   n8 = n1
-  if ( buffin(5:10) .ne. '      ' )  go to 3618
+  if (buffin(5:10) .ne. '      ') go to 3618
 3613 k = numkey + n8 + 1
   n23 = kbegtx(k)
-  n24 = kbegtx(k+1) - 1
+  n24 = kbegtx(k + 1) - 1
   go to 3673
-3618 if ( buffin(6:10) .ne. 'outer' ) go to 3622
+3618 if (buffin(6:10) .ne. 'outer') go to 3622
   n8 = 1
   go to 3613
-3622 if ( buffin(6:11) .ne. 'middle' )  go to 3627
+3622 if (buffin(6:11) .ne. 'middle') go to 3627
   n8 = 2
   go to 3613
-3627 if ( buffin(6:10) .ne. 'inner' )  go to 3634
+3627 if (buffin(6:10) .ne. 'inner') go to 3634
   n8 = 3
   go to 3613
-3634 n23 = kbegtx(numkey+1)
-  n24 = kbegtx(numkey+5) - 1
+3634 n23 = kbegtx(numkey + 1)
+  n24 = kbegtx(numkey + 5) - 1
   if (buffin(6:8) .eq. 'all') go to 3673
   do j = n23, n24
      if (texspy(j)(1:3) .eq. '   ') go to 3642
@@ -8453,8 +8450,8 @@ subroutine chrplt
   include 'dekspy.ftn'
   include 'dekplt.ftn'
   dimension temp(6)
-  character*9 kunit6
-  character*1 dol(131), letter(20)
+  character(9) kunit6
+  character(1) dol(131), letter(20)
   save
   data  letter(1)   /  'a'  /
   data  letter(2)   /  'b'  /

@@ -6,7 +6,7 @@
 !     subroutine datain.
 !
 subroutine datain
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module of interactive EMTP (spy of "emtspy").
   !     If non-interactive version, module can be destroyed.
   !     first EMTP data input, and "spy" choice, are made here.
@@ -17,17 +17,17 @@ subroutine datain
   include 'io.ftn'
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
-  character*6 chlmfs
-  character*80 char80
-  character*6 dumnam
-  character*12 typdat(18)
-  character*20 arginc(35)
-  character*32 filsav
-  character*40 prefix, suffix
-  character*80 tank(1000)
-  dimension  kard(200), karg(200), kbeg(200), kend(200)
-  dimension  ktex(200), lentyp(18)
-  dimension  kolinc(35), modarg(35), kkkdum(35)
+  character(6) chlmfs
+  character(80) char80
+  character(6) dumnam
+  character(12) typdat(18)
+  character(20) arginc(35)
+  character(32) filsav
+  character(40) prefix, suffix
+  character(80) tank(1000)
+  dimension kard(200), karg(200), kbeg(200), kend(200)
+  dimension ktex(200), lentyp(18)
+  dimension kolinc(35), modarg(35), kkkdum(35)
   data  komlev     /  -1  /                              ! default comment level (none)
   data  nchpre     /  0  /                               ! begin with no file name prefix
   data  nchsuf     /  0  /                               ! begin with no file name suffix
@@ -66,246 +66,244 @@ subroutine datain
   go to 1774
 5266 kcut = 0
   if ( filsav .eq. '                                ' ) go to 1712   ! data input assigned from outside
-  open (unit = munit5, status = 'old', file = filsav )          ! reuse input for
-1712 if ( llbuff .eq. -3333 ) rewind munit5              !generating 2nd & 3rd lmf
-                                                         ! 2nd or later pass, skip
+  open (unit = munit5, status = 'old', file = filsav)       ! reuse input for
+1712 if ( llbuff .eq. -3333 ) rewind munit5                 !generating 2nd & 3rd lmf
+                                                            ! 2nd or later pass, skip
 5244 if (llbuff .ne. -3333 .and. file6(numcrd + 1)(1:4) .ne. 'eof ') go to 1708  ! keyboard
-  kverfy = -4545                                         ! local flag (no windows yet opened)
-  limarg = 35                                            ! dimensioned limit on arguments of "module"
-  numdcd = 0                                             ! set pointer at zero (no "cimage" calls yet)
-  munit5 = gfortran_stdin_unit                           ! i/o channel for "emtspy" input (keyboard)
-  limcrd = 30000                                         ! present fixed limit on file6 of "dekspy"
-  n13 = 0                                                ! initially assume no debug printout
-  ntacs = 0                                              ! old tacs data format
-  call date44 ( date1(1) )                               ! find calendar date and the
-  call time44 ( tclock(1) )                              ! time of day for documentation
-  call initsp                                            ! initialize spy common (digit needed to sort)
+  kverfy = -4545                                            ! local flag (no windows yet opened)
+  limarg = 35                                               ! dimensioned limit on arguments of "module"
+  numdcd = 0                                                ! set pointer at zero (no "cimage" calls yet)
+  munit5 = gfortran_stdin_unit                              ! i/o channel for "emtspy" input (keyboard)
+  limcrd = 30000                                            ! present fixed limit on file6 of "dekspy"
+  n13 = 0                                                   ! initially assume no debug printout
+  ntacs = 0                                                 ! old tacs data format
+  call date44 (date1)                                       ! find calendar date and the
+  call time44 (tclock)                                      ! time of day for documentation
+  call initsp                                               ! initialize spy common (digit needed to sort)
   do
-1311 write (lunit6, 1324)                                ! prompt user at "emtspy" keyboard
+1311 write (lunit6, 1324)                                   ! prompt user at "emtspy" keyboard
 1324 format (' EMTP begins.  Send (spy, $attach, debug, help, module, junk, stop) :')
-     write (lunit6, 1325)
-1325 format ('> ', $)
-     read (munit5, 1329) buff77                          ! read first card of emtp data
-1329 format ( a80 )
-     if ( buff77(1:5) .eq. 'stop ' )  call stoptp
-     if ( buff77(1:5) .ne. 'disk ' )  go to 51329
-     maxzno = 4545                                       ! signal to apollo "sysdep" for disk lunit6
+     read (munit5, 1329) buff77                             ! read first card of emtp data
+1329 format (a80)
+     if (buff77(1:5) .eq. 'stop ') call stoptp
+     if (buff77(1:5) .ne. 'disk ') go to 51329
+     maxzno = 4545                                          ! signal to apollo "sysdep" for disk lunit6
   end do
-51329 if ( buff77(1:7) .eq. '$attach' ) go to 1347       ! batch mode
-  if ( buff77(1:5) .ne. 'junk ' )  go to 1332
+51329 if (buff77(1:7) .eq. '$attach') go to 1347            ! batch mode
+  if (buff77(1:5) .ne. 'junk ') go to 1332
   write (lunit6, 1330)
 1330 format ('   Send root word to over-ride "junk" for spy and plot windows :' )
-  read (munit5, 1331)  junker                            ! read new window pad name
-  buff77(1:8) = 'spy     '                               ! implied command next serviced
-1331 format ( a8 )
-1332 if ( kverfy .eq. 0 )  go to 41332                   ! windows already open
-  kverfy = -34543                                        ! flag indicating desire to open windows
-  call window                                            ! open 2 extra windows for spy and plot
-  kverfy = 0                                             ! erase flag, now that both windows are open
-41332 if ( buff77(1:6) .eq. 'module' )  go to 2613
-  if ( buff77(1:5) .ne. 'help ' )  go to 1342
+  read (munit5, 1331) junker                                ! read new window pad name
+  buff77(1:8) = 'spy     '                                  ! implied command next serviced
+1331 format (a8)
+1332 if (kverfy .eq. 0) go to 41332                         ! windows already open
+  kverfy = -34543                                           ! flag indicating desire to open windows
+  call window                                               ! open 2 extra windows for spy and plot
+  kverfy = 0                                                ! erase flag, now that both windows are open
+41332 if (buff77(1:6) .eq. 'module') go to 2613
+  if (buff77(1:5) .ne. 'help ') go to 1342
   write (munit6, 1333)
 1333 format ('    Greetings, greetings.  Welcome to the wonderful new world of interactive')
-  call window                                            ! output of character variable munit6
+  call window                                               ! output of character variable munit6
   write (munit6, 1334)
 1334 format ('    EMTP execution, observation, and control.  After sending  "spy",  send')
-  call window                                            ! output of character variable munit6
+  call window                                               ! output of character variable munit6
   write (munit6, 1335)
 1335 format ('    "help",  and then  "all"  to receive some 500 lines of instruction.  Also,')
-  call window                                            ! output of character variable munit6
+  call window                                               ! output of character variable munit6
   write (munit6, 1336)
 1336 format ('    see section 9 of the rule book dated June, 1984.  Also see  "Apollo".')
-  call window                                            ! output of character variable munit6
+  call window                                               ! output of character variable munit6
   go to 1311
-1342 if ( buff77(1:6) .ne. 'debug ' )  go to 1347
-  n13 = 99                                               ! change diagnostic printout control to "on"
-  go to 1311                                             ! back to prompt for interactive choice again
-1347 iprspy = n13                                        ! diagnostic spy printout (0 or 99)
-  iprsup = n13                                           ! diagnostic EMTP printout (0 or 99)
-  iprsov(1) = n13                                        ! EMTP diagnostic only thru 1st overlay
-  if ( buff77(1:3) .ne. 'spy' ) go to 1724               ! not interactive
-                                                         ! begin interactive control sequence, leading to "emtspy":
-  m4plot = 1                                             ! set flag remembering use of spy
-  write (prom80, 1357)                                   ! build very 1st spy prompt
+1342 if (buff77(1:6) .ne. 'debug ') go to 1347
+  n13 = 99                                                  ! change diagnostic printout control to "on"
+  go to 1311                                                ! back to prompt for interactive choice again
+1347 iprspy = n13                                           ! diagnostic spy printout (0 or 99)
+  iprsup = n13                                              ! diagnostic EMTP printout (0 or 99)
+  iprsov(1) = n13                                           ! EMTP diagnostic only thru 1st overlay
+  if (buff77(1:3) .ne. 'spy') go to 1724                    ! not interactive
+                                                            ! begin interactive control sequence, leading to "emtspy":
+  m4plot = 1                                                ! set flag remembering use of spy
+  write (prom80, 1357)                                      ! build very 1st spy prompt
 1357 format (' spy:')
-  call prompt                                            ! write prom80 with cursor control (no lf)
-1708 if ( m4plot .ne. 1 )  go to 2320                    ! non-interactive case
-  lockbr = 1                                             ! forced spy read within "flager"
-  call emtspy                                            ! b4 any EMTP computation, start spy dialogue
-  if ( lockbr .eq. 1 ) go to 1708                        ! spy loop until "go"
-  go to 1774                                             ! jump to $include removal, then exit module
-                                                         ! begin non-interactive variable initialization:
-1724 m4plot = 2                                          ! not interactive, and use real*4 lunit4 plots
-  lunt13 = 5                                             ! initially assume externally-connected data
-  numcrd = 1                                             ! so far, we have read one input data card
-  file6(1) = buff77                                      ! 1st card image permanently stored
-  if ( buff77(1:7) .ne. '$attach' )  go to 1753
-                                                         ! "$attach,filename,5" usage requires extraction of name:
-  lunt13 = 13                                            ! we will internally connect data to unit 13
-  n16 = 0                                                ! column which begins file name is not yet known
-  do j = 9, 40                                           ! search for 2nd comma in these columns
-                                                         ! if nonblank column,
-     if (buff77(j:j) .ne. ' ' .and. n16 .eq. 0) n16 = j  ! and 1st, save it in n16
-     if (buff77(j:j) .eq. ',' ) go to 1746               ! 2nd comma found
+  call prompt                                               ! write prom80 with cursor control (no lf)
+1708 if (m4plot .ne. 1) go to 2320                          ! non-interactive case
+  lockbr = 1                                                ! forced spy read within "flager"
+  call emtspy                                               ! b4 any EMTP computation, start spy dialogue
+  if (lockbr .eq. 1) go to 1708                             ! spy loop until "go"
+  go to 1774                                                ! jump to $include removal, then exit module
+                                                            ! begin non-interactive variable initialization:
+1724 m4plot = 2                                             ! not interactive, and use real*4 lunit4 plots
+  lunt13 = 5                                                ! initially assume externally-connected data
+  numcrd = 1                                                ! so far, we have read one input data card
+  file6(1) = buff77                                         ! 1st card image permanently stored
+  if (buff77(1:7) .ne. '$attach') go to 1753
+                                                            ! "$attach,filename,5" usage requires extraction of name:
+  lunt13 = 13                                               ! we will internally connect data to unit 13
+  n16 = 0                                                   ! column which begins file name is not yet known
+  do j = 9, 40                                              ! search for 2nd comma in these columns
+                                                            ! if nonblank column,
+     if (buff77(j:j) .ne. ' ' .and. n16 .eq. 0) n16 = j     ! and 1st, save it in n16
+     if (buff77(j:j) .eq. ',') go to 1746                   ! 2nd comma found
   end do
 1732 continue
 1736 write (munit6, 1737)
 1737 format ('  ----  Illegal file name.  Try again ....' )
-  call window                                            ! output of character variable munit6
-  go to 1311                                             ! loop back to opening prompt (repeat it)
-1746 n14 = j - n16                                       ! number of characters in file name
-  ansi32(1:n14) = buff77(n16:j-1)                        ! transfer disk file name
-  ansi32(n14+1:32) = blan80(n14+1:32)                    ! blank out remainder
+  call window                                               ! output of character variable munit6
+  go to 1311                                                ! loop back to opening prompt (repeat it)
+1746 n14 = j - n16                                          ! number of characters in file name
+  ansi32(1:n14) = buff77(n16:j - 1)                         ! transfer disk file name
+  ansi32(n14 + 1:32) = blan80(n14 + 1:32)                   ! blank out remainder
   filsav = ansi32(1:32)
   if (iprsup .ge. 1) write (lunit6, 1752) ansi32
 1752 format (' Extracted file name ansi32(1:32) =', a32)
-  inquire (file = ansi32, exist = logvar )               ! ask if file exists
-  if (.not. logvar) go to 1736                           ! illegal file; reprompt
-  spycd2(1:32) = ansi32                                  ! save file name for prime "erexit"
+  inquire (file = ansi32, exist = logvar )                  ! ask if file exists
+  if (.not. logvar) go to 1736                              ! illegal file; reprompt
+  spycd2(1:32) = ansi32                                     ! save file name for prime "erexit"
   open (unit = lunt13, status = 'old', file = ansi32)
-  file6(1) = 'c '//buff77(1:78)                          ! make $attach into comment
+  file6(1) = 'c ' // buff77(1:78)                           ! make $attach into comment
   kcut = 0
 1753 continue
   krdoff = numcrd
   krdcom = 0
-  do j = 1, limcrd                                       ! read until an end-of-file detected
+  do j = 1, limcrd                                          ! read until an end-of-file detected
      read (lunt13, 1329, end = 1766) file6(krdoff + j)
      if (kcut .eq. 1) go to 5486
-     if (file6(krdoff+j)(1:2) .eq. 'c ' ) krdcom = krdcom + 1
-     if (file6(krdoff+j)(1:19) .ne. 'begin new data case' .or. j-krdcom .le. 3) go to 1756
+     if (file6(krdoff + j)(1:2) .eq. 'c ') krdcom = krdcom + 1
+     if (file6(krdoff+j)(1:19) .ne. 'begin new data case' .or. j - krdcom .le. 3) go to 1756
      kcut = 1
 5486 numhld = numhld + 1
      if (numhld .gt. 1000) write (munit6, *) ' Input data cards overflow tank(1000).   Halt.'
      if (numhld .gt. 1000) call stoptp
      tank(numhld) = file6(krdoff+j)
-     !     if all EMTP data (e.g., "kill codes" use) comes via key
-     !     board, it is ended with "eof"; when solved, more keyboard.
+                                                            !     if all EMTP data (e.g., "kill codes" use) comes via key
+                                                            !     board, it is ended with "eof"; when solved, more keyboard.
 1756 if (file6(krdoff + j)(1:4) .eq. 'eof ') go to 1766
-     if (kcut .eq. 0) numcrd = numcrd + 1                ! another input data card now read
+     if (kcut .eq. 0) numcrd = numcrd + 1                   ! another input data card now read
   end do
 1758 continue
 1760 write (munit6, 1761) limcrd
-1761 format ('  & & & & &   Input buffer overflow.  limit =', i6,   '.   Reject this data, and reprompt ....')
-  call window                                            ! output of character variable munit6
-                                                         ! if this was $attach usage, then
-  if (lunt13 .eq. 13) go to 1311                         ! loop back to start anew the data input
-  call stoptp                                            ! installation-dependent program stop card
+1761 format ('  & & & & &   Input buffer overflow.  limit =', i6, '.   Reject this data, and reprompt ....')
+  call window                                               ! output of character variable munit6
+                                                            ! if this was $attach usage, then
+  if (lunt13 .eq. 13) go to 1311                            ! loop back to start anew the data input
+  call stoptp                                               ! installation-dependent program stop card
 1766 numcrd = numcrd + 1
   write (munit6, 1767) numcrd
 1767 format (' Done reading disk file into EMTP cache.   numcrd =', i5, '  cards.')
-  call window                                            ! output of character variable munit6
-                                                         ! if internally-connected file, then
-  if(lunt13 .ne. 5) close (unit = lunt13, status='keep') ! disconnect it
-1774 n22 = 1                                             ! initialize pass number of $include processing
-  n13 = 1                                                ! 1st $include might be 1st data card (do 1786)
-                                                         !     begin loop to replace next presently-visible $include :
-1776 n17 = 0                                             ! switch set so do 1816 loop executed 1st time
-  do j = n13, numcrd                                     ! search suspect data for $include
-1777 if (file6(j)(1:1) .ne. '$') go to 1786              ! skip all non-$
-     buff77 = file6(j)                                   ! transfer to scalar working storage
-     if (iprspy .lt. 3) go to 41777                      ! jump around diagnostic
+  call window                                               ! output of character variable munit6
+                                                            ! if internally-connected file, then
+  if(lunt13 .ne. 5) close (unit = lunt13, status = 'keep')  ! disconnect it
+1774 n22 = 1                                                ! initialize pass number of $include processing
+  n13 = 1                                                   ! 1st $include might be 1st data card (do 1786)
+                                                            !     begin loop to replace next presently-visible $include :
+1776 n17 = 0                                                ! switch set so do 1816 loop executed 1st time
+  do j = n13, numcrd                                        ! search suspect data for $include
+1777 if (file6(j)(1:1) .ne. '$') go to 1786                 ! skip all non-$
+     buff77 = file6(j)                                      ! transfer to scalar working storage
+     if (iprspy .lt. 3) go to 41777                         ! jump around diagnostic
      write (munit6, 31777) j, buff77
 31777 format (' j =', i4, '   next $-card = ', a80)
-     call window                                         ! output of character variable munit6
-41777 if ( buff77(1:8) .eq. '$include' ) go to 1787
-                                                         ! only processes ! these limited ! dollar cards
+     call window                                            ! output of character variable munit6
+41777 if (buff77(1:8) .eq. '$include') go to 1787
+                                                            ! only processes ! these limited ! dollar cards
      if (buff77(1:7) .ne. '$prefix' .and. buff77(1:7) .ne. '$suffix' .and. buff77(1:6) .ne. '$level' .and. buff77(1:6) .ne. '$dummy') go to 1786
-     k = 8                                               ! begin searching for file pre/suffix in col. 8
-                                                         ! if not blank and not
+     k = 8                                                  ! begin searching for file pre/suffix in col. 8
+                                                            ! if not blank and not
 1778 if (buff77(k:k) .ne. ' ' .and. buff77(k:k) .ne. ',') go to 1779     ! comma, exit
-     k = k + 1                                           ! next column to right in search for file start
-     if (k .lt. 80) go to 1778                           !  back to check new column k
-     k = 10                                              ! pretend pre/suffix name begins in column 10
-     l = 4                                               ! pretend pre/suffix name is 5 characters long
-     if (buff77(5:7) .eq. 'fix') go to 31779             ! $pre/suffix
-     istep = j                                           ! blank common communication of card number
-     call stopin                                         ! allow user to correct erroneous card j
-     if (kill .gt. 0) go to 9200                         ! on our way to "over51"
-     go to 1777                                          !  return to re-process corrected card j
+     k = k + 1                                              ! next column to right in search for file start
+     if (k .lt. 80) go to 1778                              !  back to check new column k
+     k = 10                                                 ! pretend pre/suffix name begins in column 10
+     l = 4                                                  ! pretend pre/suffix name is 5 characters long
+     if (buff77(5:7) .eq. 'fix') go to 31779                ! $pre/suffix
+     istep = j                                              ! blank common communication of card number
+     call stopin                                            ! allow user to correct erroneous card j
+     if (kill .gt. 0) go to 9200                            ! on our way to "over51"
+     go to 1777                                             !  return to re-process corrected card j
 1779 if (buff77(1:7) .ne. '$prefix' .and. buff77(1:7) .ne. '$suffix') go to 1783
-     l = index (buff77(k:), ' ')                         ! one col. past end of name
-     m = index (buff77(k:), ',')                         ! col. of comma, if any
-                                                         ! if there is a trailing comma, and
-                                                         ! if this precedes the blank, then
-     if (m .ne. 0 .and. m .lt. l) l = m                  ! it bounds user-supplied name;  bound is "l"
-     l = l - 1                                           ! index for final character of prefix/suffix
-31779 n5 = k - 1 + l                                     ! end of pre/suffix relative to col. 1
+     l = index (buff77(k:), ' ')                            ! one col. past end of name
+     m = index (buff77(k:), ',')                            ! col. of comma, if any
+                                                            ! if there is a trailing comma, and
+                                                            ! if this precedes the blank, then
+     if (m .ne. 0 .and. m .lt. l) l = m                     ! it bounds user-supplied name;  bound is "l"
+     l = l - 1                                              ! index for final character of prefix/suffix
+31779 n5 = k - 1 + l                                        ! end of pre/suffix relative to col. 1
      if (buff77(1:7) .ne. '$prefix') go to 1782
-     prefix = buff77(k:n5)                               ! permanent storage of name prefix
-     nchpre = l                                          ! length of file name prefix now stored
-     go to 1785                                          ! done processing $prefix card; make comment
-1782 suffix = buff77(k:n5)                               ! permanent storage of name suffix
-     nchsuf = l                                          ! length of file name suffix now stored
-     go to 1785                                          ! done processing $suffix card; make comment
+     prefix = buff77(k:n5)                                  ! permanent storage of name prefix
+     nchpre = l                                             ! length of file name prefix now stored
+     go to 1785                                             ! done processing $prefix card; make comment
+1782 suffix = buff77(k:n5)                                  ! permanent storage of name suffix
+     nchsuf = l                                             ! length of file name suffix now stored
+     go to 1785                                             ! done processing $suffix card; make comment
 1783 if (buff77(1:6) .ne. '$level') go to 1784
-     prom80 = buff77(k:80)                               ! transfer numerical part of card
-     call frein1 (prom80, komlev)                        ! decode komlev from prom80
-     go to 1785                                          ! done processing $level card;  make comment
+     prom80 = buff77(k:80)                                  ! transfer numerical part of card
+     call frein1 (prom80, komlev)                           ! decode komlev from prom80
+     go to 1785                                             ! done processing $level card;  make comment
 1784 if (buff77(1:6) .ne. '$dummy') go to 1786
-     dumnam(1:3) = buff77(k:k + 2)                       ! store new 3-char root name
-     ansi8(1:3) = buff77(k + 3:k + 5)                    ! transfer digits to cell 1
-     read (ansi8, 31784) kntdum                          ! re-initialize serialization
-31784 format (3i1)                                       ! 3-digit decimal serialization for dummy
-1785 file6(j) = 'c '//buff77(1:78)                       ! convert to comment card
+     dumnam(1:3) = buff77(k:k + 2)                          ! store new 3-char root name
+     ansi8(1:3) = buff77(k + 3:k + 5)                       ! transfer digits to cell 1
+     read (ansi8, 31784) kntdum                             ! re-initialize serialization
+31784 format (3i1)                                          ! 3-digit decimal serialization for dummy
+1785 file6(j) = 'c ' // buff77(1:78)                        ! convert to comment card
   end do
-1786 continue                                            ! end  do 1786  check of data card j for $incl.
-  go to 2320                                             ! done with input data; no $include remain
-1787 n13 = j                                             ! remember index of 1st $include, for next search
-1788 n26 = 9                                             ! begin looking for separator in column 11
+1786 continue                                               ! end  do 1786  check of data card j for $incl.
+  go to 2320                                                ! done with input data; no $include remain
+1787 n13 = j                                                ! remember index of 1st $include, for next search
+1788 n26 = 9                                                ! begin looking for separator in column 11
 1789 if (buff77(n26:n26) .ne. ' ' .and. buff77(n26:n26) .ne. ',') go to 1797
-  n26 = n26 + 1                                          ! move one column to right in search
+  n26 = n26 + 1                                             ! move one column to right in search
   if (n26 .lt. 40) go to 1789
-1794 istep = j                                           ! blank common communication of card number
-  call stopin                                            ! allow user to correct erroneous card j
-  if (kill .gt. 0) go to 9200                            ! on our way to "over51"
-  go to 1776                                             !  return to re-process corrected card j
-1797 k = n26 + 1                                         ! starting candidate for last col. of name
-                                                         ! if comma or blank, exit
+1794 istep = j                                              ! blank common communication of card number
+  call stopin                                               ! allow user to correct erroneous card j
+  if (kill .gt. 0) go to 9200                               ! on our way to "over51"
+  go to 1776                                                !  return to re-process corrected card j
+1797 k = n26 + 1                                            ! starting candidate for last col. of name
+                                                            ! if comma or blank, exit
 1801 if (buff77(k:k) .eq. ',' .or. buff77(k:k) .eq. ' ') go to 1804   ! with file name
-  k = k + 1                                              ! next col. right in search for end of name
-  if (k .gt. 60) go to 1794                              ! jump to error correction
-  go to 1801                                             ! loop back to continue search for end of name
-                                                         ! if non-blank prefix exists, then
-1804 if (nchpre .gt. 0) answ80(1:nchpre) = prefix(1:nchpre)  ! prefix begins name
-  n7 = nchpre + k - n26                                  ! length of prefix + center name
-  answ80(nchpre + 1:n7) = buff77(n26:k - 1)              ! add center name
-  n8 = n7 + nchsuf                                       ! length of entire, complete file name
-                                                         ! if non-blank suffix exists, then
-  if (nchsuf .gt. 0) answ80(n7+1:n8) = suffix(1:nchsuf)  ! suffix finishes name
-  answ80(n8 + 1:80) = blan80(n8 + 1:80)                  ! blank out remainder
-1811 if (n17 .eq. 1) go to 1819                          ! 2nd or later pass, so skip
-  l = numcrd                                             ! 1st card copied is bottom of data case
-  n19 = limcrd                                           ! destination of this first card copied
-  do m = j + 1, numcrd                                   ! loop over all data below $incl.
-     file6(n19) = file6(l)                               ! move card down as far as possible
-     l = l - 1                                           ! preceding data card is next to be copied
-1816 n19 = n19 - 1                                       ! corresponding card destination address
+  k = k + 1                                                 ! next col. right in search for end of name
+  if (k .gt. 60) go to 1794                                 ! jump to error correction
+  go to 1801                                                ! loop back to continue search for end of name
+                                                            ! if non-blank prefix exists, then
+1804 if (nchpre .gt. 0) answ80(1:nchpre) = prefix(1:nchpre) ! prefix begins name
+  n7 = nchpre + k - n26                                     ! length of prefix + center name
+  answ80(nchpre + 1:n7) = buff77(n26:k - 1)                 ! add center name
+  n8 = n7 + nchsuf                                          ! length of entire, complete file name
+                                                            ! if non-blank suffix exists, then
+  if (nchsuf .gt. 0) answ80(n7+1:n8) = suffix(1:nchsuf)     ! suffix finishes name
+  answ80(n8 + 1:80) = blan80(n8 + 1:80)                     ! blank out remainder
+1811 if (n17 .eq. 1) go to 1819                             ! 2nd or later pass, so skip
+  l = numcrd                                                ! 1st card copied is bottom of data case
+  n19 = limcrd                                              ! destination of this first card copied
+  do m = j + 1, numcrd                                      ! loop over all data below $incl.
+     file6(n19) = file6(l)                                  ! move card down as far as possible
+     l = l - 1                                              ! preceding data card is next to be copied
+1816 n19 = n19 - 1                                          ! corresponding card destination address
   end do
-  n19 = n19 + 1                                          ! remember 1st card of copy stored below
+  n19 = n19 + 1                                             ! remember 1st card of copy stored below
 1819 write (lunit6, 1820)  n22, j, answ80(1:n8)
 1820 format ('   --- Pass', i3,  ',  card =', i4,'.   Ready to open $include =',  a  )
-  inquire (file = answ80(1:n8), exist = logvar)          ! file exists?
-  if (.not. logvar) go to 1794                           ! illegal name correction
-  prom80 = file6(j)                                      ! temp storage b4 2-byte shift
-  file6(j) = 'c '//prom80(1:78)                          ! make into a comment card
+  inquire (file = answ80(1:n8), exist = logvar)             ! file exists?
+  if (.not. logvar) go to 1794                              ! illegal name correction
+  prom80 = file6(j)                                         ! temp storage b4 2-byte shift
+  file6(j) = 'c ' // prom80(1:78)                           ! make into a comment card
   open (unit = lunt13, status = 'old', file = answ80(1:n8))
-  n16 = 0                                                ! so far, no arguments of $include are known
-  n26 = k + 1                                            ! point to "," or " " ending file name
-4203 do l = n26, 80                                      ! search cols. n26-80 for nonblank
-                                                         ! if not "," or blank,
+  n16 = 0                                                   ! so far, no arguments of $include are known
+  n26 = k + 1                                               ! point to "," or " " ending file name
+4203 do l = n26, 80                                         ! search cols. n26-80 for nonblank
+                                                            ! if not "," or blank,
      if (buff77(l:l) .ne. ',' .and. buff77(l:l) .ne. ' ' ) go to 4208   ! argument starts
   end do
-4205 continue                                            ! end  do 4205  loop;  col. "l" not argument
-  go to 4226                                             ! all arguments found; now use them
-4208 n16 = n16 + 1                                       ! another (the n16-th) argument begins
-                                                         ! if number of arguments is too large,
-  if (n16 .gt. 10) call stoptp                           ! installation-dependent program stop card
-  n12 = index (buff77(l:), ',')                          ! locate bounding comma
-  n13 = index (buff77(l:), ' ')                          ! locate bounding blank
-  n14 = n12                                              ! assume there's a comma, in this col.
-  if (n12 .gt. 0) go to 4214                             ! trailing comma is present
-  n14 = n13                                              ! assume there's a blank, in this col.
-  if (n13 .gt. 0) go to 4220                             ! no ",", but there is " "
+4205 continue                                               ! end  do 4205  loop;  col. "l" not argument
+  go to 4226                                                ! all arguments found; now use them
+4208 n16 = n16 + 1                                          ! another (the n16-th) argument begins
+                                                            ! if number of arguments is too large,
+  if (n16 .gt. 10) call stoptp                              ! installation-dependent program stop card
+  n12 = index (buff77(l:), ',')                             ! locate bounding comma
+  n13 = index (buff77(l:), ' ')                             ! locate bounding blank
+  n14 = n12                                                 ! assume there's a comma, in this col.
+  if (n12 .gt. 0) go to 4214                                ! trailing comma is present
+  n14 = n13                                                 ! assume there's a blank, in this col.
+  if (n13 .gt. 0) go to 4220                                ! no ",", but there is " "
   write (munit6, 4211)
 4211 format (' No bounding symbol.  Stop after display.' )
   call window                                            ! output of character variable munit6
