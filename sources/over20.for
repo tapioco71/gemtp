@@ -758,18 +758,18 @@ subroutine spying
 1685 prom80 = outlin(1 : kolout - 1)
 1714 assign 31269 to nextsn
   go to 9800
-  !     process emtp symbol name (spycd2) which has just been read;
+  !     process EMTP symbol name (spycd2) which has just been read;
 1720 nchd2 = 0
   n13 = 0
   do j = 1, 8
      if (spycd2(j:j) .eq. '(') go to 1726
      if (spycd2(j:j) .eq. ',') go to 1726
      if (spycd2(j:j) .ne. ' ') go to 1721
-     if (nchd2 .eq. 0)   nchd2 = j - 1
+     if (nchd2 .eq. 0) nchd2 = j - 1
      go to 1723
-1721 if (spycd2(j:j) .ne. '=') go to 1723
+1721 if (spycd2(j : j) .ne. '=') go to 1723
      n13 = j
-     if ( nchd2  .eq.  0 )   nchd2 = j - 1
+     if (nchd2 .eq. 0) nchd2 = j - 1
   end do
 1723 continue
   n1 = 1
@@ -777,37 +777,36 @@ subroutine spying
   j = n13
   if (n13 .eq. 0) j = 7
   go to 1735
-1726 if ( nchd2  .eq.  0 )   nchd2 = j - 1
+1726 if (nchd2 .eq. 0) nchd2 = j - 1
   n9 = 0
   do k = j, 20
      if (spycd2(k:k) .ne. '-') go to 1727
      n12 = -1
      go to 1733
-1727 if ( spycd2(k:k)  .eq.  ' ' )   go to 1733
-     if ( spycd2(k:k)  .ne.  '='  )   go to 21727
+1727 if (spycd2(k : k) .eq. ' ') go to 1733
+     if (spycd2(k : k) .ne. '=') go to 21727
      n13 = k
      go to 1734
-21727 do i=1, 10
-        if ( spycd2(k:k)  .eq.  digit(i) )   go to 1730
+21727 do i = 1, 10
+        if (spycd2(k : k) .eq. digit(i)) go to 1730
      end do
-1728 continue
-     if ( n9  .gt.  0 )   limarr(n9) = limarr(n9) * n12
+     if (n9 .gt. 0) limarr(n9) = limarr(n9) * n12
      !     non-digit means we initialize for next number to be built:
      n9 = n9 + 1
      n12 = 1
      limarr(n9) = 0
      go to 1733
-1730 if ( i  .eq.  10 )   i = 0
-     limarr(n9) = 10 * limarr(n9)  +  i
+1730 if (i .eq. 10) i = 0
+     limarr(n9) = 10 * limarr(n9) + i
   end do
 1733 continue
 1734 n1 = limarr(1)
   n2 = limarr(2)
-  if ( n9  .le.  2 )   n2 = n1
-1735 spycd2(j:8) = blan80(j:8)
+  if (n9 .le. 2) n2 = n1
+1735 spycd2(j : 8) = blan80(j : 8)
   !     next identify the emtp name involved in this request:
 1738 do ind = 1, numsym
-     if (spycd2(1:8) .eq. symb(ind)) go to 1780
+     if (spycd2(1 : 8) .eq. symb(ind)) go to 1780
   end do
 1740 continue
   write (munit6, 1760)  spycd2
@@ -815,57 +814,57 @@ subroutine spying
   call window
   go to 1460
 1780 intype = 0
-  if ( spycd2(1:1)  .eq.  'i' )   intype = 1
-  if ( spycd2(1:1)  .eq.  'j' )   intype = 1
-  if ( spycd2(1:1)  .eq.  'k' )   intype = 1
-  if ( spycd2(1:1)  .eq.  'l' )   intype = 1
-  if ( spycd2(1:1)  .eq.  'm' )   intype = 1
-  if ( spycd2(1:1)  .eq.  'n' )   intype = 1
-  if ( ivec(ind) .eq. 1   .or.   n2 .le. n1 )  go to 31807
+  if (spycd2(1 : 1) .eq. 'i') intype = 1
+  if (spycd2(1 : 1) .eq. 'j') intype = 1
+  if (spycd2(1 : 1) .eq. 'k') intype = 1
+  if (spycd2(1 : 1) .eq. 'l') intype = 1
+  if (spycd2(1 : 1) .eq. 'm') intype = 1
+  if (spycd2(1 : 1) .eq. 'n') intype = 1
+  if (ivec(ind) .eq. 1 .or. n2 .le. n1) go to 31807
   write (munit6, 1807)
 1807 format ('    Note :  this is a vector dump using a scalar EMTP variable.')
   call window
-31807 if ( answ80(1:8)  .eq.  spykwd(5) )   go to 1340
-  if ( answ80(1:8)  .eq.  spykwd(34) )   go to 3134
+31807 if (answ80(1 : 8) .eq. spykwd(5)) go to 1340
+  if (answ80(1 : 8) .eq. spykwd(34)) go to 3134
   !     for the case of "deposit", the user-desired value must be read:
-  if ( n13  .eq.  0 )   go to 1837
-  if ( iascii(ind)  .eq.  1 )   go to 1819
+  if (n13 .eq. 0) go to 1837
+  if (iascii(ind) .eq. 1) go to 1819
   n13 = n13 + 1
   n22 = 0
-  do j=n13, 35
-     if ( spycd2(j:j)  .eq.  ' ' )   go to 1813
+  do j = n13, 35
+     if (spycd2(j : j) .eq. ' ') go to 1813
      n22 = n22 + 1
-     if ( n22  .le.  20 )   go to 1808
+     if (n22 .le. 20) go to 1808
      write (munit6, 51807)
 51807 format (' Sorry, spy buffer overflow.  Try again ....')
      call window
      go to 1837
-1808 bytbuf(n22:n22) = spycd2(j:j)
+1808 bytbuf(n22 : n22) = spycd2(j : j)
   end do
 1813 continue
-  if ( n22 .lt. 20 ) bytbuf(n22+1:20) = blan80(n22+1:20)
+  if (n22 .lt. 20) bytbuf(n22 + 1 : 20) = blan80(n22 + 1 : 20)
   !     following code is for alphanumeric emtp symbol after "=" :
-1819 ansi8(1:6) = spycd2(n13+1:n13+6)
-  if ( iprspy .lt. 1 ) go to 1824
-  write (munit6, 1820)  ansi8
+1819 ansi8(1 : 6) = spycd2(n13 + 1 : n13 + 6)
+  if (iprspy .lt. 1) go to 1824
+  write (munit6, 1820) ansi8
 1820 format (' ansi8 after alphanumeric transfer =', a)
   call window
 1824 go to 1846
   !     no equal sign means that we prompt for separate number:
 1837 write (prom80, 1840)
-1840 format (4x, 'new value:')
+1840 format (4x, 'New value:')
   assign 1842 to nextsn
   go to 9800
-1842 bytbuf = buff77(1:20)
-  if ( iascii(ind)  .eq.  0 )   go to 1844
-  ansi8(1:6) = bytbuf(1:6)
+1842 bytbuf = buff77(1 : 20)
+  if (iascii(ind) .eq. 0) go to 1844
+  ansi8(1 : 6) = bytbuf(1 : 6)
   go to 1846
   !     following code first checks 20-column "bytbuf" working vector
   !     for a legal fortran number;  then free-format write/read gets it:
-1844 call numchk ( bytbuf, 20, n33 )
-  if ( n33  .eq.  1 )   go to 1837
+1844 call numchk (bytbuf, 20, n33)
+  if (n33 .eq. 1) go to 1837
   call frefp1(bytbuf, d4)
-1846 call deposi ( ind, intype, n1, n2, d4 )
+1846 call deposi (ind, intype, n1, n2, d4)
   go to 1460
   !     $$$$$$$  key word no. 13:  "find"     $$$$  $$$$  $$$$  $$$$  $$$$
 2040 write (munit6, 2042)
@@ -875,40 +874,39 @@ subroutine spying
 2044 format ('      index   address    change      symbol :')
 2050 assign 2048 to nextsn
   go to 9800
-2048 spycd2 = buff77(1:35)
-  if ( spycd2(1:8)  .eq.  'end     '  )   go to 1240
-  if ( spycd2(1:8)  .eq.  'stop    '   )   go to 1240
-  if ( spycd2(1:8)  .ne.  blan80(1:8)   )   go to 2052
+2048 spycd2 = buff77(1 : 35)
+  if (spycd2(1 : 8) .eq. 'end     ') go to 1240
+  if (spycd2(1 : 8) .eq. 'stop    ') go to 1240
+  if (spycd2(1 : 8) .ne. blan80(1 : 8)) go to 2052
   write (prom80, 2051)
-2051 format ('   ? ? ?  blank emtp symbol is clearly wrong.  Try again :')
+2051 format ('   ? ? ?  Blank EMTP symbol is clearly wrong.  Try again :')
   go to 2050
   !     first we must see if  "spycd2"  has any wild-card characters:
-2052 do i=1, 8
-     if ( spycd2(i:i)  .eq.  '*'  )   go to 2069
+2052 do i = 1, 8
+     if (spycd2(i : i) .eq. '*') go to 2069
   end do
 2053 continue
   !     simple case with no wild-card characters:
-  do ind=1, numsym
-     if ( spycd2(1:8)  .eq.  symb(ind) )   go to 2063
+  do ind = 1, numsym
+     if (spycd2(1 : 8) .eq. symb(ind)) go to 2063
   end do
-2055 continue
   write (munit6, 2088)
   call window
   go to 2050
 2063 n4 = locate(ind) - n5
   n5 = locate(ind)
-  write (prom80, 2066)  ind, n5, n4
+  write (prom80, 2066) ind, n5, n4
 2066 format (1x, 3i10, 4x, ':')
   call prompt
   go to 2050
   !     begin search for case where "d2" has one or more wild cards ("*"):
 2069 n4 = 0
-  do ind=1, numsym
+  do ind = 1, numsym
      chard7 = symb(ind)
      n7 = 1
      n2 = 1
      !     enter loop which compares  chard2(n2)  against  chard7(n7):
-2071 if ( spycd2(n2:n2) .ne. '*' )  go to 2079
+2071 if (spycd2(n2 : n2) .ne. '*') go to 2079
      !     enter code where "*" implies skipping indeterminate number of
      !     characters in  "d7" :
 2072 n2 = n2 + 1
