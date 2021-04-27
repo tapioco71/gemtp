@@ -4310,8 +4310,8 @@ subroutine frefp3(ansi, d12, d13, d14)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode three
-  !     floating point numbers d12,d13,d14 from character(8)0 ansi.
-  !     For non-interactive emtp, this module can be destroyed.
+  !     floating point numbers d12, d13, d14 from character(8)0 ansi.
+  !     For non-interactive EMTP, this module can be destroyed.
   character(80)  ansi
   real(8) d12, d13, d14
   n8 = 3
@@ -4323,6 +4323,7 @@ end subroutine frefp3
 !     subroutine fresp3.
 !
 subroutine fresp3(ansi, d12, d13, d14)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode three
   !     floating point numbers d12, d13, d13 from character(8)0 ansi.
@@ -4331,8 +4332,7 @@ subroutine fresp3(ansi, d12, d13, d14)
   real(8) d12, d13, d14
   n8 = 3
   call frefix (ansi, n8)
-  read (ansi, 3892) d12, d13, d14
-3892 format (3e20.0)
+  read (ansi, '(3e20.0)') d12, d13, d14
   return
 end subroutine fresp3
 !
@@ -4348,8 +4348,7 @@ subroutine frein1(ansi, n12)
   integer(4) n12
   n8 = 1
   call frefix ( ansi, n8 )
-  read (ansi, 3892)  d12
-3892 format (3e20.0)
+  read (ansi, '(3e20.0)') d12
   n12 = d12
   return
 end subroutine frein1
@@ -4364,9 +4363,8 @@ subroutine frein2(ansi, n12, n13)
   !     For non-interactive emtp, this module can be destroyed.
   character(80) ansi
   n8 = 2
-  call frefix(ansi, n8)
-  read (ansi, 3892)  d12, d13
-3892 format (3e20.0)
+  call frefix (ansi, n8)
+  read (ansi, '(3e20.0)') d12, d13
   n12 = d12
   n13 = d13
   return
@@ -4387,37 +4385,37 @@ subroutine frefix(ansi, n8)
   !     exit, ansi will be converted to 4e20.0 fixed-format data.
   include 'dekspy.ftn'
   character(80) ansi, hold
-  if ( iprspy .lt. 3 )  go to 3582
+  if (iprspy .lt. 3)  go to 3582
   write (munit6, 3579)  n8, ansi(1:40)
-3579 format (' Top of "frefix".  n8 =',  i5, '   ansi(1:40) = ', a40)
+3579 format (' Top of "frefix".  n8 =', i5, '   ansi(1:40) = ', a40)
   call window
-3582 hold(1:80) = ' '
+3582 hold(1 : 80) = ' '
   kk = 0
   i = 0
   go to 3648
-3612 if (ansi(i:i) .eq. ' ' .or. ansi(i:i) .eq. ','  .or. i .ge. 80) go to 3615
+3612 if (ansi(i : i) .eq. ' ' .or. ansi(i : i) .eq. ',' .or. i .ge. 80) go to 3615
   i = i + 1
   go to 3612
 3615 n5 = i - 1
   kk = kk + 1
   n13 = 0
   n14 = 0
-  do j=n3, n5
-     if (ansi(j:j) .ne. '+' .and. ansi(j:j) .ne. '-' ) go to 3617
+  do j = n3, n5
+     if (ansi(j : j) .ne. '+' .and. ansi(j : j) .ne. '-' ) go to 3617
      if (j .eq. n3) go to 3642
      n16 = j - 1
-     if (ansi(n16:n16) .eq. 'e' .or. ansi(n16:n16) .eq. 'd') go to 3642
+     if (ansi(n16 : n16) .eq. 'e' .or. ansi(n16 : n16) .eq. 'd') go to 3642
      go to 3758
-3617 if (ansi(j:j) .ne. '.') go to 3626
+3617 if (ansi(j : j) .ne. '.') go to 3626
      n14 = n14 + 1
      if (n14 .le. 1) go to 3642
      go to 3758
-3626 if (ansi(j:j) .ne. 'd' .and. ansi(j:j) .ne. 'e') go to 3634
+3626 if (ansi(j : j) .ne. 'd' .and. ansi(j : j) .ne. 'e') go to 3634
      n13 = n13 + 1
      if (n13 .le. 1) go to 3642
      go to 3758
 3634 do k = 1, 10
-        if (ansi(j:j) .eq. digit(k)) go to 3642
+        if (ansi(j : j) .eq. digit(k)) go to 3642
      end do
 3638 continue
      go to 3758
@@ -4425,28 +4423,28 @@ subroutine frefix(ansi, n8)
 3642 continue
   n2 = 20 * kk
   n1 = n2 - ( n5 - n3 )
-  hold(n1:n2) = ansi(n3:n5)
+  hold(n1 : n2) = ansi(n3 : n5)
   if (kk .ge. n8) go to 4100
 3648 i = i + 1
   if (i .gt. 80) go to 3758
-  if (ansi(i:i) .eq. ' ') go to 3648
+  if (ansi(i : i) .eq. ' ') go to 3648
   n3 = i
   go to 3612
-3758 write (prom80, 3761)  j, ansi(j-2:j+2)
-3761 format ('   @@@  Illegal data in column', i3, ' [',  a5,  '].  Resend line or end :')
+3758 write (prom80, 3761)  j, ansi(j - 2 : j + 2)
+3761 format ('   @@@  Illegal data in column', i3, ' [', a5, '].  Resend line or end :')
   call prompt
-  write (*,*) ' ok, "frefix" call to "flager" begins.'
+  write (*, *) ' Ok, "frefix" call to "flager" begins.'
   lockbr = 1
   call flager
-  write (*,*) ' ok, back in "frefix" with buff77 again.'
+  write (*, *) ' Ok, back in "frefix" with buff77 again.'
   ansi = buff77
-  if (ansi(1:4) .ne. 'end ') go to 3582
-  ansi(1:80) = ' '
+  if (ansi(1 : 4) .ne. 'end ') go to 3582
+  ansi(1 : 80) = ' '
   go to 4103
-4100 ansi(1:n2) = hold(1:n2)
-4103 if ( iprspy .lt. 2 )  go to 4109
-  write (munit6, 4108)  ansi(1:n2)
-4108 format ( ' Exit "frefix".  ansi(1:n2) =', a80)
+4100 ansi(1 : n2) = hold(1 : n2)
+4103 if (iprspy .lt. 2) go to 4109
+  write (munit6, 4108) ansi(1 : n2)
+4108 format ( ' Exit "frefix".  ansi(1 : n2) =', a80)
   call window
 4109 return
 end subroutine frefix
@@ -6906,20 +6904,20 @@ subroutine stopin
   write (munit6, 1219)
 1219 format ('     12345678901234567890123456789012345678901234567890123456789012345678901234567890')
   call window
-  write (munit6, 1221)  file6(istep)
+  write (munit6, 1221) file6(istep)
 1221 format (a80)
   call window
-  if ( m4plot .eq. 1 )  go to 1227
+  if (m4plot .eq. 1) go to 1227
   kill = 79
   lstat(19) = 1218
   go to 9000
 1227 write (prom80, 1232)
 1232 format (' Send corrected card (spy, stop) :')
   call prompt
-  read (munit5, 1236)  buff77
+  read (munit5, 1236) buff77
 1236 format (a80)
-  if (buff77(1:4) .eq. 'stop') call stoptp
-  if (buff77(1:4) .ne. 'spy')  go to 1244
+  if (buff77(1 : 4) .eq. 'stop') call stoptp
+  if (buff77(1 : 4) .ne. 'spy')  go to 1244
   call spying
   go to 9000
 1244 file6(istep) = buff77
@@ -6942,9 +6940,9 @@ block data blkplt
    include 'dekspy.ftn'
    include 'dekplt.ftn'
    data texfnt  /  'f7x13.b '  /
-   data  xytitl(1:24)  /  '                        '  /
-   data  headl(1:16)   /  '                '  /
-   data  vertl(1:16)   /  '                '  /
+   data  xytitl(1 : 24)  /  '                        '  /
+   data  headl(1 : 16)   /  '                '  /
+   data  vertl(1 : 16)   /  '                '  /
    data  horzl(1)    /  'degrees based on 60 hz  '  /
    data  horzl(2)    /  'cycles based on 60 hz   '  /
    data  horzl(3)    /  'seconds                 '  /
@@ -7124,28 +7122,28 @@ subroutine tpplot
   include 'dekspy.ftn'
   include 'dekplt.ftn'
   save
-  if ( nexmod .gt. 4 ) go to 3769
-  if ( nexmod .ne. 4 ) go to 1742
+  if (nexmod .gt. 4) go to 3769
+  if (nexmod .ne. 4) go to 1742
   nexmod = 0
   go to nextsn
 1742 hmax = 0.0
   hmin = 0.0
   ihs = 3
   tmult = 1.0
-  maxev = locint ( bx(1) )     -     locint ( ev(1) )
-  maxew = locint ( finfin )    -     locint ( ew(1) )
+  maxev = locint (bx) - locint (ev)
+  maxew = locint (finfin) - locint (ew)
   maxew = maxew - 50
-  do j=1, 6
+  do j = 1, 6
 1751 sext(j) = blan80
   end do
-  do i=1, 20
+  do i = 1, 20
      aaa(i) = 1.0
      bbb(i) = 0.0
      mmm(i) = 0
      ylevel(i) = 0.0
 1765 slot1(i) = '        '
   end do
-563 do j=1, 20
+563 do j = 1, 20
 564  mcurve(j) = mline
   end do
 1000 write (prom80, 5000)
@@ -7154,26 +7152,26 @@ subroutine tpplot
   go to 9800
 5003 buffin = buff77
   kill = 0
-  if ( buffin(1:8)  .ne.  purge )   go to 2716
-  close ( unit=14,  status='delete' )
+  if (buffin(1 : 8) .ne. purge) go to 2716
+  close (unit = 14, status = 'delete')
   go to 1000
-2716 if ( buffin(1:8)  .ne.  setdat  )   go to 2757
+2716 if (buffin(1 : 8) .ne. setdat) go to 2757
   call setrtm
   go to 563
-2757 if ( buffin(1:8)  .ne.  debug )   go to 7368
-  write (prom80, 7358)  iprspy
+2757 if (buffin(1 : 8) .ne. debug) go to 7368
+  write (prom80, 7358) iprspy
 7358 format ('  Supply level-number  iprspy  (', i3,  ' ) :')
   assign 7361 to nextsn
   go to 9800
-7361 call frein1 ( buff77, iprspy )
+7361 call frein1 (buff77, iprspy)
   go to 1000
-7368 if ( iprspy .lt. 1 )  go to 3877
-  write (munit6, 3876)  buffin
+7368 if (iprspy .lt. 1) go to 3877
+  write (munit6, 3876) buffin
 3876 format ('  Buffin vector =', a80)
   call window
-3877 if( buffin(1:8) .eq.  stop ) go to 3818
-  if ( buffin(1:8)  .ne.  tek )   go to 5136
-  if ( ltek .eq. 1 )  go to 7387
+3877 if (buffin(1 : 8) .eq. stop) go to 3818
+  if (buffin(1 : 8) .ne. tek) go to 5136
+  if (ltek .eq. 1) go to 7387
   write (munit6, 7385)
 7385 format ('  ---- Switch from character to vector-graphic plotting.')
   call window
@@ -7182,52 +7180,52 @@ subroutine tpplot
 7386 format ('  ---- Switch from vector-graphic to character plotting')
   call window
 7388 ltek = ltek + 1
-  if ( ltek  .eq.  2 )   ltek = 0
+  if (ltek .eq. 2) ltek = 0
   go to 1000
-5136 if ( buffin(1:8)  .ne.  column )   go to 5143
+5136 if (buffin(1 : 8) .ne. column) go to 5143
   n1 = limcol
-  if ( n1  .ne.  131 )   limcol = 131
-  if ( n1  .ne.  79)   limcol =  79
+  if (n1 .ne. 131) limcol = 131
+  if (n1 .ne. 79) limcol =  79
   write (munit6, 5139)  n1
 5139 format ('   Character-plot column width was',  i5, '  columns.')
   call window
-  write (munit6, 5140)  limcol
+  write (munit6, 5140) limcol
 5140 format ('   It is now being toggled to', i5, ' .')
   call window
   go to 1000
-5143 if ( buffin(1:8)  .ne.  setcol )   go to 5154
-  write (prom80, 5146)  limcol
-5146 format ( '  Supply printer-plot column width (',  i4, ' ) :')
+5143 if (buffin(1 : 8) .ne. setcol) go to 5154
+  write (prom80, 5146) limcol
+5146 format ('  Supply printer-plot column width (', i4, ' ) :')
   assign 5147 to nextsn
   go to 9800
-5147 call frein1 ( buff77, limcol )
-  write (munit6, 5148)  limcol
+5147 call frein1 (buff77, limcol)
+  write (munit6, 5148) limcol
 5148 format ('   Confirmation.   New value =', i4, ' .')
   call window
   go to 1000
-5154 if ( buffin(1:8)  .eq.  inner )   go to 3769
-  if ( buffin(1:4) .eq. 'stop' )  return
-  if ( buffin(1:5)  .ne.  help(1:5) )   go to 5200
-  call helper ( 1 )
+5154 if (buffin(1 : 8) .eq. inner) go to 3769
+  if (buffin(1 : 4) .eq. 'stop') return
+  if (buffin(1 : 5) .ne. help(1 : 5)) go to 5200
+  call helper (1)
   go to 1000
 5200 newfil = 0
   tstep = -1.0
   rewind l4plot
-  read (l4plot)  datepl, tclopl, numnam, numnvo, numbco, numbrn,  ( buslst(i), i=1, numnam )
-  if ( iprspy .lt. 2 )  go to 5739
-  write (munit6, 1001)  datepl, tclopl, numnam, numnvo, numbco, numbrn
+  read (l4plot) datepl, tclopl, numnam, numnvo, numbco, numbrn, (buslst(i), i = 1, numnam)
+  if (iprspy .lt. 2) go to 5739
+  write (munit6, 1001) datepl, tclopl, numnam, numnvo, numbco, numbrn
 1001 format (' plot-file header info.', 2(1x, 2a4), 4i6)
   call window
-  do j=1, numnam, 10
-     write (munit6, 5733)  ( buslst(k), k=j, j+9 )
+  do j = 1, numnam, 10
+     write (munit6, 5733) (buslst(k), k = j, j + 9)
 5733 format (1x, 10a7)
      call window
   end do
 5736 continue
 5739 kptplt = numnvo + numbrn
-  if ( numnvo  .gt.  0 ) read (l4plot)  ( ibsout(j), j=1, numnvo )
-  if ( numbrn  .gt.  0 )   read (l4plot) (ibrnch(j), j=1, numbrn), (jbrnch(j), j=1, numbrn)
-  if ( iprspy .lt. 2 ) go to 5754
+  if (numnvo .gt. 0) read (l4plot) (ibsout(j), j = 1, numnvo)
+  if (numbrn .gt. 0) read (l4plot) (ibrnch(j), j = 1, numbrn), (jbrnch(j), j = 1, numbrn)
+  if (iprspy .lt. 2) go to 5754
   do j = 1, numnvo, 10
      write (munit6, 1002) (ibsout(k), k = j, j + 9)
 1002 format (' Node numbers ibsout:', 10i5)
@@ -7236,7 +7234,7 @@ subroutine tpplot
 5742 continue
   do j = 1, numbrn, 5
      write (munit6, 5744) (ibrnch(k), jbrnch(k), k = j, j + 4)
-5744 format (' Branch node pairs:', 5( 2x, 2i4))
+5744 format (' Branch node pairs:', 5(2x, 2i4))
      call window
   end do
 5747 continue
