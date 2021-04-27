@@ -8058,21 +8058,21 @@ subroutine timval
   write (munit6, 8381) jplt, (mstart(j), j = 1, jplt)
 8381 format (' Done with x-y pack.   jplt =',  i3, 5x,  'mstart(j) :', 5i5)
   call window
-8382 if ( iprspy .lt. 9 ) go to 7309
-  do j=1, kk, 8
-     write (munit6, 3361) j, ( ew(ip), ip=j, j+7 )
-3361 format (' ew(', i5, ':)=',  8e15.6)
+8382 if (iprspy .lt. 9) go to 7309
+  do j = 1, kk, 8
+     write (munit6, 3361) j, (ew(ip), ip = j, j + 7)
+3361 format (' ew(', i5, ':)=', 8e15.6)
      call window
   end do
 3363 continue
   go to 7309
 2218 dx = hpi
-  evmx=0.0
-  k9=kplt+jplt1+jplt1
-  do j=1,jplt
-     evh=0.0
-     evdh=0.0
-     isw=0
+  evmx = 0.0
+  k9 = kplt + jplt1 + jplt1
+  do j = 1, jplt
+     evh = 0.0
+     evdh = 0.0
+     isw = 0
      itimes = 0
      do i = 1, kplt, jplt1
         ipj = i + j
@@ -8103,61 +8103,61 @@ subroutine timval
 2320 continue
   end do
 2340 continue
-  if ( iprspy .lt. 4 ) go to 3369
+  if (iprspy .lt. 4) go to 3369
   write (munit6, 2344)
 2344 format (' After points discard.', 11x, 'evmx', 11x, 'vmax', 11x, 'vmin', 9x, 'finfin', 13x, 'vl', 13x, 'vs')
   call window
   write (munit6, 3366)  evmx, vmax, vmin, finfin, vl, vs
 3366 format ( 22x,  6e15.5  )
   call window
-3369 if ( limfix  .eq.  1 )   go to 2540
-  if (evmx.eq.0.0) evmx=1.0
-2357 a=8.0
-  evmxf=evmx*0.8
-2360 d1=evmxf-a
-  if (d1.eq.0.0) go to 2400
-  if (d1.gt.0.0) go to 2380
-  a=a/10.
+3369 if (limfix .eq. 1) go to 2540
+  if (evmx .eq. 0.0) evmx = 1.0
+2357 a = 8.0
+  evmxf = evmx * 0.8
+2360 d1 = evmxf - a
+  if (d1 .eq. 0.0) go to 2400
+  if (d1 .gt. 0.0) go to 2380
+  a = a / 10.
   go to 2360
-2380 a=a*10.
-  d1=evmxf-a
-  if (d1.eq.0.0) go to 2400
-  if (d1.gt.0.0) go to 2380
-  d1=evmxf-0.5*a
-  if (d1.eq.0.0) go to 2440
-  if (d1.lt.0.0) go to 2420
-2400 vmax=a
+2380 a = a * 10.
+  d1 = evmxf - a
+  if (d1 .eq. 0.0) go to 2400
+  if (d1 .gt. 0.0) go to 2380
+  d1 = evmxf - 0.5 * a
+  if (d1 .eq. 0.0) go to 2440
+  if (d1 .lt. 0.0) go to 2420
+2400 vmax = a
   go to 2520
-2420 d1=evmxf-.25*a
-  if (d1.lt.0.0) go to 2460
-  if (d1.eq.0.0) go to 2480
-2440 vmax=a/2.0
+2420 d1 = evmxf - .25 * a
+  if (d1 .lt. 0.0) go to 2460
+  if (d1 .eq. 0.0) go to 2480
+2440 vmax = a / 2.0
   go to 2520
-2460 if (evmxf-a/8.0.le.0.0) go to 2500
-2480 vmax=a/4.0
+2460 if (evmxf - a / 8.0 .le. 0.0) go to 2500
+2480 vmax = a / 4.0
   go to 2520
-2500 vmax=a/8.0
-2520 vmin=-vmax
-  if ( vmax  .ge.  0.99*evmx )   go to 2540
+2500 vmax = a / 8.0
+2520 vmin = -vmax
+  if (vmax .ge. 0.99 * evmx) go to 2540
   evmx = evmx * 1.1
   go to 2357
-2540 dy=(vmax-vmin)/(vl-vs)
-  if ( kplt  .gt.  0 )   go to 2543
-  write (munit6, 2542)  hmin, hmax
+2540 dy = (vmax - vmin) / (vl - vs)
+  if (kplt .gt. 0) go to 2543
+  write (munit6, 2542) hmin, hmax
 2542 format ('   ** Sorry.  No data available between times', 2e13.4, 'sec.')
   call window
   go to 1550
-2543 ipl=0
-  kpltq=kplt/jplt1
+2543 ipl = 0
+  kpltq = kplt / jplt1
   istore = 0
-  if ( iprspy  .lt. 4 )  go to 3382
+  if (iprspy .lt. 4) go to 3382
   write (munit6, 2548)
 2548 format (' Dump cells 1-20 of ev at s.n. 2548 . . . .')
   call window
-  write (munit6, 3374)  ( ev(i), i=1,  10 )
+  write (munit6, 3374) (ev(i), i = 1, 10)
   call window
-  write (munit6, 3374)  ( ev(i), i=11, 20 )
-3374 format ( 1x, 10e13.4 )
+  write (munit6, 3374) (ev(i), i = 11, 20)
+3374 format (1x, 10e13.4)
   call window
 3382 do i = 1, jplt
      yymin(i) = 1.e30
@@ -8168,95 +8168,95 @@ subroutine timval
      ttlev(i) = -9999.
   end do
 2567 continue
-  do i=1,jplt
+  do i = 1, jplt
      istold = istore
-     ibase=1
-     num=0
-     n13 = 1+jplt1+i
+     ibase = 1
+     num = 0
+     n13 = 1 + jplt1 + i
      vold = ev(n13)
      istore = istore + 1
-3000 evbasx=ev(ibase)
-     evbasy=ev(ibase+i)
-     ew(istore)=evbasx
-     ew(istore+1)=evbasy
-     istore=istore+2
-     if ( istore  .le.  maxew )   go to 3004
+3000 evbasx = ev(ibase)
+     evbasy = ev(ibase + i)
+     ew(istore) = evbasx
+     ew(istore + 1) = evbasy
+     istore = istore + 2
+     if (istore .le. maxew) go to 3004
      write (munit6, 3001)
 3001 format (' Sorry, tables have overflowed during smoothing.')
      call window
      write (munit6, 3392)
-3392 format ( ' Either try a larger tolerance (to discard more')
+3392 format (' Either try a larger tolerance (to discard more')
      call window
      write (munit6, 3394)
-3394 format ( ' points), or decrease the time span, or expand')
+3394 format (' points), or decrease the time span, or expand')
      call window
      write (munit6, 3396)  maxew
-3396 format ( ' array  ew(',  i6,  ')  in deck "dekspy" .')
+3396 format (' array  ew(',  i6,  ')  in deck "dekspy" .')
      call window
      go to 1550
-3004 if ( kextr  .eq.  0 )   go to 2949
-     if ( evbasy  .le.  yymax(i) )   go to 2941
+3004 if (kextr .eq. 0) go to 2949
+     if (evbasy .le. yymax(i)) go to 2941
      yymax(i) = evbasy
      ttmax(i) = evbasx
-2941 if ( evbasy  .ge.  yymin(i) )   go to 2949
+2941 if (evbasy .ge. yymin(i)) go to 2949
      yymin(i) = evbasy
      ttmin(i) = evbasx
-2949 if ( mlevel(i)  .eq.  0 )   go to 3010
+2949 if (mlevel(i) .eq. 0) go to 3010
      d1 = evbasy - ylevel(i)
-     if ( d1*dyold(i)  .gt.  0.0 )   go to 2956
-     if ( mlevel(i)  .eq.  -1 )   go to 2954
-     d3 = d1 * ( evbasx - ew(istore-4) )
-     ttlev(i) = evbasx  -  d3 / ( d1 - dyold(i) )
+     if (d1 * dyold(i) .gt. 0.0) go to 2956
+     if (mlevel(i) .eq. -1) go to 2954
+     d3 = d1 * (evbasx - ew(istore - 4))
+     ttlev(i) = evbasx - d3 / (d1 - dyold(i))
      mlevel(i) = 0
      go to 3010
 2954 mlevel(i) = 1
 2956 dyold(i) = d1
-3010 hvec=(ev(ibase+jplt1)-evbasx)/dx
-     n13 = ibase+jplt1+i
-     vvec = ( ev(n13) - evbasy ) / dy
-     denom=hvec*hvec+vvec*vvec
-     ipontr=ibase+jplt1
-3020 ipontr=ipontr+jplt1
-     if (ipontr.gt.kplt) go to 3140
-     hdif=(ev(ipontr)-evbasx)/dx
-     vnew=ev(ipontr+i)
-     vdif=(vnew-evbasy)/dy
-     disqr=hdif*hdif+vdif*vdif-(hvec*hdif+vvec*vdif)**2/denom
-     if (disqr.gt.tolrce) go to 3040
-     vchnge=vnew-vold
-     vold=vnew
-     if(vvec.eq.0.0.and.vchnge.eq.0.0)go to 3020
-     if (vvec*vchnge.gt.0.0) go to 3020
-3040 vold=vnew
-     ibase=ipontr-jplt1
+3010 hvec = (ev(ibase + jplt1) - evbasx) / dx
+     n13 = ibase + jplt1 + i
+     vvec = (ev(n13) - evbasy) / dy
+     denom = hvec * hvec + vvec * vvec
+     ipontr = ibase + jplt1
+3020 ipontr = ipontr + jplt1
+     if (ipontr .gt. kplt) go to 3140
+     hdif = (ev(ipontr) - evbasx) / dx
+     vnew = ev(ipontr + i)
+     vdif = (vnew - evbasy) / dy
+     disqr = hdif * hdif + vdif * vdif - (hvec * hdif + vvec * vdif) ** 2 / denom
+     if (disqr .gt. tolrce) go to 3040
+     vchnge = vnew - vold
+     vold = vnew
+     if(vvec .eq. 0.0 .and. vchnge .eq. 0.0) go to 3020
+     if (vvec * vchnge .gt. 0.0) go to 3020
+3040 vold = vnew
+     ibase = ipontr - jplt1
      go to 3000
-3140 ipontr=ipontr-jplt1
-     ew(istore)=ev(ipontr)
-     ew(istore+1)=ev(ipontr+i)
+3140 ipontr = ipontr - jplt1
+     ew(istore) = ev(ipontr)
+     ew(istore + 1) = ev(ipontr + i)
      mstart(i) = istore + 1
      istore = istore + 1
-     ew(istore+1) = hmin
-     ew(istore+3) = hpi
-     ew(istore+2) = vmin
-     ew(istore+4) = (vmax - vmin ) / 8.0
+     ew(istore + 1) = hmin
+     ew(istore + 3) = hpi
+     ew(istore + 2) = vmin
+     ew(istore + 4) = (vmax - vmin ) / 8.0
      n5 = istore + 4
-     if ( iprspy .lt. 2 )  go to 3406
+     if (iprspy .lt. 2) go to 3406
      write (munit6, 3176)
-3176 format (  ' Store calcomp scaling.       i  istore',  10x,  '(ew(j), j=istore, n5)')
+3176 format (' Store calcomp scaling.       i  istore', 10x, '(ew(j), j = istore, n5)')
      call window
-     write (munit6, 3402)  i, istore, ( ew(kl), kl=istore, n5 )
-3402 format (  23x,  2i8,  5e15.6  )
+     write (munit6, 3402) i, istore, (ew(kl), kl = istore, n5)
+3402 format (23x, 2i8, 5e15.6)
      call window
 3406 istore = n5
-     if ( iprspy .lt. 1 )  go to 3235
-     write (munit6,3234)  i, istore
-3234 format (' Done smoothing next curve.  i, istore =', 2i8 )
+     if (iprspy .lt. 1) go to 3235
+     write (munit6,3234) i, istore
+3234 format (' Done smoothing next curve.  i, istore =', 2i8)
      call window
-3235 numpts(i) = ( istore - istold ) / 2
+3235 numpts(i) = (istore - istold) / 2
   end do
 3240 continue
-3263 if ( kextr  .eq.  1 )   go to 3270
-  if ( klevl  .eq.  1 )   go to 3288
+3263 if (kextr .eq. 1) go to 3270
+  if (klevl .eq. 1) go to 3288
   go to 7309
 3270 write (munit6, 3271)
 3271 format (' mplot  name-1  name-2', 7x, 'minimum', 7x, 'maximum',  6x, 't of min', 6x, 't of max')
@@ -8269,41 +8269,41 @@ subroutine timval
      if (iabs(mplot(j)) .le. numnvo) go to 3279
      textd2 = slot1(l)
      l = l + 1
-     write (munit6, 3282)  mplot(j), textd1, textd2, yymin(j), yymax(j), ttmin(j), ttmax(j)
-3282 format ( 1x,  i5,  2( 2x, a6 ),  4e14.5  )
+     write (munit6, 3282) mplot(j), textd1, textd2, yymin(j), yymax(j), ttmin(j), ttmax(j)
+3282 format (1x, i5, 2(2x, a6), 4e14.5)
      call window
   end do
 3279 continue
-  if ( klevl  .eq.  0 )   go to 3296
-3288 write (munit6, 3294)  ( ylevel(j), j=1, jplt )
-3294 format (' Levels sought :',  4e15.4  )
+  if (klevl .eq. 0) go to 3296
+3288 write (munit6, 3294) (ylevel(j), j = 1, jplt)
+3294 format (' Levels sought :', 4e15.4)
   call window
-  write (munit6, 3295)  ( ttlev(j), j=1, jplt )
-3295 format (' 1st hit time :',  4e16.6  )
+  write (munit6, 3295) (ttlev(j), j = 1, jplt)
+3295 format (' 1st hit time :', 4e16.6)
   call window
-3296 if ( ltek .le. 0 ) go to 43305
+3296 if (ltek .le. 0) go to 43305
   write (munit6, 3303)
 3303 format (' ')
   call window
-43305 read (munit5, 3305)  textd1
-3305 format ( a8 )
-  if ( textd1  .eq.  '        ' )   go to 7309
-  if ( textd1  .ne.  linezz )   go to 3306
+43305 read (munit5, 3305) textd1
+3305 format (a8)
+  if (textd1 .eq. '        ') go to 7309
+  if (textd1 .ne. linezz) go to 3306
   mu6std = linepr
   go to 3263
-3306 if ( textd1  .eq.  noplot )   go to 1550
-7309 if ( ltek  .ne.  0 )   call tekplt
-  if ( ltek  .eq.  0 )   call chrplt
-  if ( monitr .ne. 8765 )  go to 1550
+3306 if (textd1 .eq. noplot) go to 1550
+7309 if (ltek .ne. 0) call tekplt
+  if (ltek .eq. 0) call chrplt
+  if (monitr .ne. 8765) go to 1550
   !     check if special "pltvar" call for rolling plot paging:
-  if ( iprsup .le. 0 )  go to 7324
+  if (iprsup .le. 0) go to 7324
   write (munit6, 7318)
 7318 format (' Done with "tekplt", monitr = 8765 so exit "timval".')
   call window
 7324 go to 9835
-9800 if ( iprspy .lt. 1 ) go to 9817
-  write (munit6, 9807)   prom80(1:40)
-9807 format (  ' Exit "timval".   prom80(1:40) =',  a40  )
+9800 if (iprspy .lt. 1) go to 9817
+  write (munit6, 9807) prom80(1 : 40)
+9807 format (' Exit "timval".   prom80(1 : 40) =', a40)
   call window
 9817 nexmod = 6
 9835 return
@@ -8312,13 +8312,14 @@ end subroutine timval
 ! subroutine back14.
 !
 subroutine back14
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module used only for interactive EMTP (service to "emtspy").
   !     For non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
   include 'dekplt.ftn'
   if ( iprspy .lt. 1 ) go to 1483
-  write (munit6, 1478)  tstep
-1478 format (' Top of  "back14" .   tstep =', e15.5 )
+  write (munit6, 1478) tstep
+1478 format (' Top of  "back14" .   tstep =', e15.5)
   call window
 1483 tstep = -1.0
   return
@@ -8327,6 +8328,7 @@ end subroutine back14
 !     subroutine setrtm.
 !
 subroutine setrtm
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module used only for interactive EMTP (service to "emtspy").
   !     For non-interactive EMTP, this module can be destroyed.
   include 'dekspy.ftn'
@@ -8334,85 +8336,85 @@ subroutine setrtm
   real(8) d1, d6
   save
   lunt15 = 15
-  close ( unit=lunt15 )
+  close (unit = lunt15)
   open (unit = lunt15, status = 'old', file = 'tpparam')
-  if ( iprspy .lt. 1 ) go to 2719
+  if (iprspy .lt. 1) go to 2719
   write (munit6, 2718)
 2718 format (' After unit lunt15 connection tpparam.')
   call window
 2719 n22 = 0
   n23 = 0
   rewind lunt15
-  read (lunt15, 5100, end=2729)  buffin
-5100 format ( a80 )
+  read (lunt15, 5100, end = 2729) buffin
+5100 format (a80)
   rewind lunt15
-  if ( buffin(1:8)  .ne.  setdat )   go to 2732
+  if (buffin(1 : 8) .ne. setdat) go to 2732
   write (prom80, 2724)
-2724 format (  '  Send subset number :')
+2724 format ('  Send subset number :')
   call prompt
-  read (munit5, 5100)  prom80
-  call frein1 ( prom80, n1 )
-  if ( n1  .eq.  0 )   n1 = 1
+  read (munit5, 5100) prom80
+  call frein1 (prom80, n1)
+  if (n1 .eq. 0) n1 = 1
   do j = 1, 9999
-     read (lunt15, 5151, end=2729)  buffin
-5151 format ( a16 )
-     if ( buffin(1:8)  .ne.  setdat )   go to 2728
-     write (ansi, 5100)  buffin(9:16)
-     read (ansi, 2726)  n2
-2726 format ( i2 )
-     if ( n2  .eq.  n1 )   go to 2732
+     read (lunt15, 5151, end = 2729) buffin
+5151 format (a16)
+     if (buffin(1 : 8) .ne. setdat) go to 2728
+     write (ansi, 5100) buffin(9 : 16)
+     read (ansi, 2726) n2
+2726 format (i2)
+     if (n2 .eq. n1) go to 2732
   end do
 2728 continue
 2729 write (munit6, 2730) n1
-2730 format (' ** Error.   Subset number',  i4, '  does not exist.   Try again.')
+2730 format (' ** Error.   Subset number', i4, '  does not exist.   Try again.')
   call window
   go to 2751
-2732 read (lunt15, 5100)  prom80
-  call fresp2(prom80, d6, d1)
+2732 read (lunt15, 5100) prom80
+  call fresp2 (prom80, d6, d1)
   jj = d6
-  if ( jj  .eq.  0 )   go to 2741
-  if ( jj .gt. n23 )  n23 = jj
-  if ( iprspy .lt. 5 ) go to 2736
-  write (munit6, 2735)  jj, fvcom(jj), d1
-2735 format (' Next real datum.  jj, fvcom, d1 =', i6,  2e14.5)
+  if (jj .eq. 0) go to 2741
+  if (jj .gt. n23) n23 = jj
+  if (iprspy .lt. 5) go to 2736
+  write (munit6, 2735) jj, fvcom(jj), d1
+2735 format (' Next real datum.  jj, fvcom, d1 =', i6, 2e14.5)
   call window
 2736 fvcom(jj) = d1
   go to 2732
-2741 read (lunt15, 5100)  prom80
+2741 read (lunt15, 5100) prom80
   call frein2(prom80, jj, n1)
-  if ( jj  .eq.  0 )   go to 2745
-  if ( jj .gt. n22 )  n22 = jj
-  if ( iprspy .lt. 5 ) go to 2744
-  write (munit6, 2743)  jj, ivcom(jj), n1
+  if (jj .eq. 0) go to 2745
+  if (jj .gt. n22) n22 = jj
+  if (iprspy .lt. 5) go to 2744
+  write (munit6, 2743) jj, ivcom(jj), n1
 2743 format (' Next integer datum.  jj, ivcom, n1 =', 3i8)
   call window
 2744 ivcom(jj) = n1
   go to 2741
-2745 read (lunt15, 2746)  jj, textd1
-2746 format ( i2, a8 )
-  if ( jj  .le.  0 )   go to 2751
-  if ( iprspy .lt. 5 ) go to 2748
-  write (munit6, 2747)  jj, anplt(jj), textd1
-2747 format (' Next key word.  j =',  i3,  1x, a8,  1x, a8  )
+2745 read (lunt15, 2746) jj, textd1
+2746 format (i2, a8)
+  if (jj .le. 0) go to 2751
+  if (iprspy .lt. 5) go to 2748
+  write (munit6, 2747) jj, anplt(jj), textd1
+2747 format (' Next key word.  j =', i3, 1x, a8, 1x, a8)
   call window
 2748 anplt(jj) = textd1
   go to 2745
-2751 if ( iprspy .lt. 3 ) go to 2763
+2751 if (iprspy .lt. 3) go to 2763
   write (munit6, 2753)
 2753 format (' Final real data fvcom through the last modified cell follows ....')
   call window
-  do j=1, n23, 6
-     write (munit6, 3413) ( fvcom(ip), ip=j, j+5 )
-3413 format ( 1x, 6e13.4 )
+  do j = 1, n23, 6
+     write (munit6, 3413) (fvcom(ip), ip = j, j + 5)
+3413 format (1x, 6e13.4)
      call window
   end do
 3417 continue
   write (munit6, 2754)
-2754 format ( ' Final integer data ivcom through the last modified cell follows ....')
+2754 format (' Final integer data ivcom through the last modified cell follows ....')
   call window
   do j = 1, n22, 10
      write (munit6, 3424) (ivcom(ip), ip = j, j + 9)
-3424 format ( 1x, 10i7 )
+3424 format (1x, 10i7)
      call window
   end do
 3427 continue
@@ -8451,28 +8453,28 @@ subroutine chrplt
   data  letter(18)  /  'r'  /
   data  letter(19)  /  's'  /
   data  letter(20)  /  't'  /
-  if ( monits .eq. 1 )  go to 2513
+  if (monits .eq. 1) go to 2513
   vspan = vmax - vmin
   d3 = limcol / vspan
   kzero = -vmin * d3
-  if ( kzero  .eq.  0 )   kzero = 1
-  if ( kzero  .lt.  0 )   kzero = 0
+  if (kzero .eq. 0) kzero = 1
+  if (kzero .lt. 0) kzero = 0
   kp(1) = 1
-  dy = vspan / (0.1*limcol)
-  if ( mfake  .eq.  jplt )   go to 6413
+  dy = vspan / (0.1 * limcol)
+  if (mfake .eq. jplt) go to 6413
   write (munit6, 6403)
 6403 format (' Hidden variable scalings follow :')
   call window
-  write (munit6, 6411)  ( aaa(j), j=1, jplt )
+  write (munit6, 6411) ( aaa(j), j = 1, jplt)
 6411 format ('  Factor :', 10e11.3)
   call window
-  write (munit6, 6412)  ( bbb(j), j=1, jplt )
+  write (munit6, 6412) (bbb(j), j = 1, jplt)
 6412 format ('  Offset :', 10e11.3)
   call window
 6413 din1 = hmin * tmult
   din2 = hmax * tmult
-  do ip=1, numtit
-     write (munit6, 6423)   sext(ip)
+  do ip = 1, numtit
+     write (munit6, 6423) sext(ip)
 6423 format (' Graph title : ', a80)
      call window
   end do
@@ -8486,14 +8488,14 @@ subroutine chrplt
   temp(1) = vmin + dy
   d2 = 2.0 * dy
   n4 = 6
-  if ( limcol  .le.  79 )   n4 = 4
+  if (limcol .le. 79) n4 = 4
   do k = 2, n4
-6449 temp(k) = temp(k-1) + d2
+6449 temp(k) = temp(k - 1) + d2
   end do
-  write (munit6, 6450)  ( temp(k), k=1, n4 )
-6450 format (3x, 6( e14.5, 6x ))
+  write (munit6, 6450) (temp(k), k = 1, n4)
+6450 format (3x, 6(e14.5, 6x))
   call window
-  if ( limcol  .le. 79 )  go to 6453
+  if (limcol .le. 79) go to 6453
   write (munit6, 6451)
 6451 format (1x, '1---------1---------1---------1---------1---------1---------1---------1---------1---------1---------1---------1---------1---------1')
   call window
@@ -8501,12 +8503,12 @@ subroutine chrplt
 6453 write (munit6, 6454)
 6454 format (1x, '1---------1---------1---------1---------1---------1---------1---------1---------1')
   call window
-6456 if ( iprspy  .lt. 1 )  go to 6460
+6456 if (iprspy .lt. 1) go to 6460
   write (munit6, 6458)
 6458 format (' Begin character plot.', 11x, 'hmin', 11x, 'hmax',  13x, 'dt',  11x, 'vmin',  11x, 'vmax')
   call window
-  write (munit6, 6459)  hmin, hmax, dt, vmin, vmax
-6459 format ( 22x, 5e15.6 )
+  write (munit6, 6459) hmin, hmax, dt, vmin, vmax
+6459 format (22x, 5e15.6)
   call window
 6460 inch = 0
   idat = jplt
@@ -8514,39 +8516,39 @@ subroutine chrplt
 6461 t = t + dt
   inch = inch + 1
   call quiter
-  if ( kwtspy .eq. 1 )  go to 9000
-  if ( t  .gt.  hmax )   go to 6582
-  do k=1, limcol
+  if (kwtspy .eq. 1) go to 9000
+  if (t .gt. hmax) go to 6582
+  do k = 1, limcol
 6478 dol(k) = ' '
   end do
-  do k=1, jplt
+  do k = 1, jplt
      l = kp(k)
-     if ( iprspy  .ne.  34 )  go to 6483
-     write (munit6, 6481)  k, l, mstart(k), ew(l), t
+     if (iprspy .ne. 34) go to 6483
+     write (munit6, 6481) k, l, mstart(k), ew(l), t
 6481 format (1x, '       k       l  mstart', 10x, 'ew(l)', 14x, 't')
      call window
-     write (munit6, 6482)  k, l, mstart(k), ew(l), t
-6482 format (1x, 3i8, 2e15.6 )
+     write (munit6, 6482) k, l, mstart(k), ew(l), t
+6482 format (1x, 3i8, 2e15.6)
      call window
-6483 if ( l  .eq.  0 )   go to 6531
-6485 if ( ew(l)  .le.  t )   go to 6493
+6483 if (l .eq. 0) go to 6531
+6485 if (ew(l) .le. t) go to 6493
      kp(k) = l
      go to 6531
-6493 d1 = ew(l+1)
-     if ( d1  .gt.  vmin )   go to 6503
+6493 d1 = ew(l + 1)
+     if (d1 .gt. vmin) go to 6503
      dol(1) = letter(k)
      go to 6518
-6503 if ( d1  .lt.  vmax )   go to 6508
+6503 if (d1 .lt. vmax) go to 6508
      dol(limcol) = letter(k)
      go to 6518
-6508 m = ( d1 - vmin ) * d3
+6508 m = (d1 - vmin) * d3
      dol(m) = letter(k)
-     if ( iprspy .ne. 34 ) go to 6518
-     write (munit6, 6511)  m, dol(m)
-6511 format (' In-bounds insert..  m, dol(m) =',  i4, 1x, a1 )
+     if (iprspy .ne. 34) go to 6518
+     write (munit6, 6511) m, dol(m)
+6511 format (' In-bounds insert..  m, dol(m) =', i4, 1x, a1)
      call window
 6518 l = l + 2
-     if ( l  .lt.  mstart(k) )   go to 6485
+     if (l .lt. mstart(k)) go to 6485
      kp(k) = 0
      idat = idat - 1
   end do
@@ -8558,41 +8560,41 @@ subroutine chrplt
 6543 format (1x, 131a1)
   call window
   go to 6559
-6548 if ( t  .le.  9.999999 ) write (kunit6, 6553)  t
-6553 format (' ', f8.6 )
-  if ( t  .ge.  10.0 ) write (kunit6, 6554)  t
+6548 if (t .le. 9.999999) write (kunit6, 6553) t
+6553 format (' ', f8.6)
+  if (t .ge. 10.0) write (kunit6, 6554) t
 6554 format (' ', f8.5)
-  if ( kzero  .le.  9 )  go to 6555
-  if ( dol(kzero)  .eq.  ' '  )  dol(kzero) = '1'
-6555 write (munit6, 6556) kunit6, ( dol(k), k=10, limcol )
-6556 format ( 1x, a9, 123a1 )
+  if (kzero .le. 9) go to 6555
+  if (dol(kzero) .eq. ' ') dol(kzero) = '1'
+6555 write (munit6, 6556) kunit6, (dol(k), k = 10, limcol)
+6556 format (1x, a9, 123a1)
   call window
   inch = 0
-6559 if ( idat  .gt.  0 ) go to 6461
-6582 if ( mu6std .eq. 6 ) go to 2694
+6559 if (idat .gt. 0) go to 6461
+6582 if (mu6std .eq. 6) go to 2694
   mu6std = 6
   write (munit6, 2687)  linepr
-2687 format ('   ***  Line printer copy completed on unit',  i3,  ' .  ***')
+2687 format ('   ***  Line printer copy completed on unit', i3, ' .  ***')
   call window
-2694 if ( monits  .eq.  0 )   go to 9000
-  if ( iprspy .lt. 1 )  go to 2501
-  write (munit6, 7832)  ind1
-7832 format (' Begin rolling.  ind1 =',  i8)
+2694 if (monits .eq. 0) go to 9000
+  if (iprspy .lt. 1) go to 2501
+  write (munit6, 7832) ind1
+7832 format (' Begin rolling.  ind1 =', i8)
   call window
 2501 t = t + dt
   call quiter
-  if ( kwtspy .eq. 1 )  go to 9000
+  if (kwtspy .eq. 1) go to 9000
   inch = inch + 1
-  do k=1, limcol
+  do k = 1, limcol
 2504 dol(k) = ' '
   end do
-2507 if ( ind1 .le. indbuf-kptplt )  go to 2513
+2507 if (ind1 .le. indbuf - kptplt) go to 2513
   go to 9000
-2513 if ( iprspy .lt. 3 ) go to 2517
-  write (munit6, 2516)  ind1, jplt, pltbuf(ind1), t
+2513 if (iprspy .lt. 3) go to 2517
+  write (munit6, 2516) ind1, jplt, pltbuf(ind1), t
 2516 format (' Past 1/6 inch? ind1, jplt, pltbuf(ind1), t =', 2i7, 2e15.5)
   call window
-2517 if ( pltbuf(ind1)  .gt.  t )   go to 2564
+2517 if (pltbuf(ind1) .gt. t) go to 2564
   do k = 1, jplt
      j1 = iabs(mplot(k))
      d1 = pltbuf(ind1 + j1)
@@ -8652,39 +8654,39 @@ subroutine flatbd         ! no implicit
   return
 2005 d1 = hpi * tmult
   write (prom80, 2010)  d1
-2010 format (' Send t-axis units/inch (',  e12.3, ' ) :')
+2010 format (' Send t-axis units/inch (', e12.3, ' ) :')
   call prompt     ! write prom80 with cursor control (no lf)
-  read (munit5, 7241)  buff77   ! read a80 character input
-  if ( buff77(1:8)  .ne.  metric )   go to 7236
+  read (munit5, 7241) buff77   ! read a80 character input
+  if (buff77(1 : 8) .ne. metric) go to 7236
   fact = .7874
   dxgrd1 = 0.5
   dygrd1 = dxgrd1
   dxgrd2 = 0.1
   dygrd2 = dxgrd2
   go to 2005
-7236 if ( buff77(1:8)  .ne.  pen )   go to 7261
+7236 if (buff77(1 : 8) .ne. pen) go to 7261
   write (munit6, 7238)
-7238 format (' Respond to each pen-width request with integer'  ,/, &
-          ' information.  Blank or zero implies that there'  ,/, &
-          ' will be no change from the present value, while' ,/, &
-          ' a value of  -1  suppresses the printout, and'    ,/, &
-          ' values of  1  through  5  are versatek dot'      ,/, &
+7238 format (' Respond to each pen-width request with integer', /, &
+          ' information.  Blank or zero implies that there', /, &
+          ' will be no change from the present value, while', /, &
+          ' a value of  -1  suppresses the printout, and', /, &
+          ' values of  1  through  5  are versatek dot', /, &
           ' widths (VAX "calcomp" at BPA is Versatek).')
-  write (prom80, 7240)  mtit
+  write (prom80, 7240) mtit
 7240 format (3x, '80-col. case-title (', i2, ' ) :')
   call prompt     ! write prom80 with cursor control (no lf)
   read (munit5, 7241)  prom80
 7241 format ( a80 )
-  call frein1 ( prom80, n1 )   ! decode free-field n1
-  if ( n1  .ne.  0 )   mtit = n1
+  call frein1 (prom80, n1)   ! decode free-field n1
+  if (n1 .ne. 0)   mtit = n1
   write (prom80, 7242)  maxisx
-7242 format ( 3x,  'x-axis structure (',  i2,  ' ) :'    )
+7242 format (3x, 'x-axis structure (', i2, ' ) :')
   call prompt     ! write prom80 with cursor control (no lf)
-  read (munit5, 7241)  prom80
-  call frein1 ( prom80, n1 )   ! decode free-field n1
-  if ( n1  .ne.  0 )   maxisx = n1
-  write (prom80, 7244)  maxisy
-7244 format ( 3x,  'y-axis structure (',  i2,  ' ) :'    )
+  read (munit5, 7241) prom80
+  call frein1 (prom80, n1)   ! decode free-field n1
+  if (n1 .ne. 0) maxisx = n1
+  write (prom80, 7244) maxisy
+7244 format (3x, 'y-axis structure (', i2, ' ) :')
   call prompt     ! write prom80 with cursor control (no lf)
   read (munit5, 7241)  prom80
   call frein1 ( prom80, n1 )   ! decode free-field n1
