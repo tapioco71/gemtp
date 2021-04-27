@@ -3624,7 +3624,7 @@ subroutine percnt ( vbyte, n7 )
         if (vbyte(k + j) .ne. '%') go to 1297
      end do
 1253 continue
-                                                            !     we exit  do 1253  with string of 8 "%" beginning in column k
+!     we exit  do 1253  with string of 8 "%" beginning in column k
      itexp = itexp + 1
      if (itexp .le. maxarg) go to 1284
      write (munit6, 1274) maxarg
@@ -3643,8 +3643,8 @@ subroutine percnt ( vbyte, n7 )
 1296 format (80a1)
   end do
 1297 continue
-  if ( kverfy .ne. 0 )  go to 1313
-  write (munit6, 1306)  ( vbyte(j), j=1, n7 )
+  if (kverfy .ne. 0) go to 1313
+  write (munit6, 1306) (vbyte(j), j = 1, n7)
 1306 format (' @>>>', 80a1)
   call window
 1313 return
@@ -3668,27 +3668,27 @@ subroutine numchk ( vbyte, nchar, kill )
   nsign = 0
   nume = 0
   kk = 0
-  do i=1, nchar
-     if ( vbyte(i)  .eq.  ' '  )  go to 3481
+  do i = 1, nchar
+     if (vbyte(i) .eq.  ' ') go to 3481
      kk = kk + 1
-     if ( vbyte(i)  .ne.  '+'     .and. vbyte(i)  .ne.  '-'  )   go to 3412
+     if (vbyte(i) .ne. '+' .and. vbyte(i) .ne. '-') go to 3412
      !     following code considers ramifications of just-found "+" or "-" :
      nsign = nsign + 1
-     if ( nsign  .gt.  2 )   kill = 1
-     if ( kk  .eq.  1 )   go to 3481
-     if ( kolexp  .eq.  i-1 )   go to 3481
+     if (nsign .gt. 2) kill = 1
+     if (kk .eq. 1) go to 3481
+     if (kolexp .eq. i - 1) go to 3481
      kill = 1
      go to 3481
-3412 if ( vbyte(i)  .ne.  'e'     .and. vbyte(i)  .ne.  'd'  )   go to 3425
+3412 if (vbyte(i) .ne. 'e' .and. vbyte(i) .ne. 'd') go to 3425
      !     following code considers ramifications of just-found "d" or "e":
      nume = nume + 1
      kolexp = i
-     if ( nume .gt. 1 )   kill = 1
+     if (nume .gt. 1) kill = 1
      go to 3481
-3425 if ( vbyte(i)  .ne.  '.' )   go to 3428
+3425 if (vbyte(i) .ne. '.') go to 3428
      !     following code considers ramifications of just-found decimal point
      nper = nper + 1
-     if ( nper .gt. 1 )  kill = 1
+     if (nper .gt. 1) kill = 1
      kolper = i
      go to 3481
 3428 do j = 1, 10
@@ -3718,21 +3718,21 @@ subroutine getnum (num)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
-  character*1   c4
-  if ( iprspy .lt. 1 )  go to 4204
-  write (munit6, 4203)  ibegcl, bytbuf(ibegcl:ibegcl)
+  character(1) c4
+  if (iprspy .lt. 1) go to 4204
+  write (munit6, 4203) ibegcl, bytbuf(ibegcl:ibegcl)
 4203 format (' Begin  "getnum".   ibegcl =', i5, '      bytbuf(ibegcl) =', a1)
   call window
 4204 n1 = 1
   num = 0
   do i = ibegcl, 20
      c4 = bytbuf(i:i)
-     if ( c4  .eq.  ' ' )   go to 4286
-     if ( c4  .eq.  ':'  )   go to 4286
-     if ( c4  .eq.  '#' )   go to 4286
-     if ( c4  .eq.  ','  )   go to 4286
-     if ( c4  .eq.  '+'  )   go to 4265
-     if ( c4  .ne.  '-'  )   go to 4218
+     if (c4 .eq. ' ') go to 4286
+     if (c4 .eq. ':') go to 4286
+     if (c4 .eq. '#') go to 4286
+     if (c4 .eq. ',') go to 4286
+     if (c4 .eq. '+') go to 4265
+     if (c4 .ne. '-') go to 4218
      n1 = -1
      go to 4265
 4218 do j = 1, 10
@@ -3744,10 +3744,10 @@ subroutine getnum (num)
      call window
      num = -87654
      go to 4294
-4256 if ( j  .eq.  10 )   j = 0
+4256 if (j .eq. 10) j = 0
      num = 10 * num  +  j
-     if ( iprspy .lt. 2 )  go to 4265
-     write (munit6, 4259)  j, num
+     if (iprspy .lt. 2) go to 4265
+     write (munit6, 4259) j, num
 4259 format (' Next digit.  j, num =', 2i8)
      call window
   end do
@@ -3767,11 +3767,11 @@ end subroutine getnum
 !
 !     subroutine movers.
 !
-subroutine movers ( from, to, num )
+subroutine movers (from, to, num)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
-  character*1   from(1), to(1)
+  character(1) from(:), to(:)
   do j = 1, num
 1763 to(j) = from(j)
   end do
@@ -3780,11 +3780,11 @@ end subroutine movers
 !
 !     subroutine moverl.
 !
-subroutine moverl ( from, to, num )
-  implicit real(8) (a-h, o-z),  integer(4) (i-n)
+subroutine moverl (from, to, num)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
-  real(8)   from(1), to(1)
+  real(8) from(:), to(:)
   do j = 1, num
 1763 to(j) = from(j)
   end do
@@ -3807,9 +3807,9 @@ subroutine window
   if (iabs(kverfy) .eq. 34543) go to 9000                   ! no spy windows
   do j = 1, 132                                             ! search line for right most non-blank
      k = 133 - j                                            ! reverse index (step from right to left)
-     if (munit6(k:k) .ne. ' ') go to 5621                   ! end of line
+     if (munit6(k : k) .ne. ' ') go to 5621                 ! end of line
   end do
-5621 write (lunit6, '(a)') munit6(1:k) ! output nonblank part
+5621 write (lunit6, '(a)') munit6(1 : k)                    ! output nonblank part
 9000 return
 end subroutine window
 !
@@ -3858,16 +3858,16 @@ subroutine spyout(n1, n2)
 4626 if (n11 .lt. 0) n11 = -n11
   k = k + 1
   text10(k) = bus(n11)
-  if ( n11 .eq. 1 ) text10(k) = terra
-  if ( k .eq. 10 )  go to 4621
-  if ( n12 .eq. 0 ) go to 9000
-  if ( n12 .lt. 0 ) n12 = -n12
+  if (n11 .eq. 1) text10(k) = terra
+  if (k .eq. 10) go to 4621
+  if (n12 .eq. 0) go to 9000
+  if (n12 .lt. 0) n12 = -n12
   k = k + 1
   text10(k) = bus(n12)
-  if ( n12 .eq. 1 ) text10(k) = terra
-  if ( k .eq. 10 )  go to 4621
-9000 if ( iprspy .lt. 3 )  go to 9007
-  write (munit6, 9004)  n1, n2, k, n11, n12
+  if (n12 .eq. 1) text10(k) = terra
+  if (k .eq. 10) go to 4621
+9000 if (iprspy .lt. 3)  go to 9007
+  write (munit6, 9004) n1, n2, k, n11, n12
 9004 format (' Exit "spyout".  n1, n2, k, n11, n12 =', 5i6)
   call window
 9007 return
@@ -3888,37 +3888,37 @@ subroutine examin
 1707 format (' Top of "examin".  numex, imin(1), locout(1) =', 3i6)
   call window
 1718 jj = 0
-  outlin(1:1) = ' '
+  outlin(1 : 1) = ' '
   kolout = 2
-  if ( numex .le. 0 )  go to 9000
+  if (numex .le. 0) go to 9000
 1540 jj = jj + 1
   n5 = imin(jj)
   n3 = locout(jj)
-  n8 = locate(n3) + n5-1
-  if ( intout(jj)  .eq.  0 )   n8 = n8 + n5 - 1
-  if ( iprspy .lt. 3 )  go to 1560
-  write (munit6, 1544)  jj, n5, n3, n8, intout(jj)
+  n8 = locate(n3) + n5 - 1
+  if (intout(jj) .eq. 0) n8 = n8 + n5 - 1
+  if (iprspy .lt. 3) go to 1560
+  write (munit6, 1544) jj, n5, n3, n8, intout(jj)
 1544 format (' Next  examine.  jj, n5, n3, n8, intout(jj)', 5i8)
   call window
-1560 if ( intout(jj)  .eq.  0 )   go to 1600
+1560 if (intout(jj) .eq. 0) go to 1600
   n9 =  n8 - memkar
   n8 = n8 + 1
-  if ( ivec(n3)  .eq.  1 )   go to 1577
-  if ( n5 .eq. 1  .and.  imax(jj) .eq. 1 )  go to 1640
+  if (ivec(n3) .eq. 1) go to 1577
+  if (n5 .eq. 1 .and. imax(jj) .eq. 1) go to 1640
 1577 write (ansi16, 1580)  kar1(1+n9)
 1580 format (i10)
-  outlin(kolout:kolout+9) = ansi16(1:10)
-  outlin(kolout+10:kolout+14) = blan80(1:5)
+  outlin(kolout : kolout + 9) = ansi16(1 : 10)
+  outlin(kolout + 10 : kolout + 14) = blan80(1 : 5)
   kolout = kolout + 15
   go to 1664
-1600 n9 = ( n8 - memkar ) / 2
-  n10 = memkar + 2 * n9  -  n8
+1600 n9 = (n8 - memkar) / 2
+  n10 = memkar + 2 * n9 - n8
   n8 = n8 + 2
-  if ( n10  .ne.  0 )   go to 1628
+  if (n10 .ne. 0) go to 1628
   !     following real(8) extractions line up (no need for 4-byte shift):
-  if ( iascii(n3) .eq. 0 ) write (ansi16, 1620)  fkar1(1+n9)
+  if (iascii(n3) .eq. 0) write (ansi16, 1620) fkar1(1 + n9)
 1620 format (e15.6)
-  if ( iascii(n3) .eq. 1 ) write (ansi16, 1624)  fkar1(1+n9)
+  if (iascii(n3) .eq. 1) write (ansi16, 1624) fkar1(1 + n9)
 1624 format (4x, '"', a6, '"', 3x)
   go to 1633
   !     Following real(8) extractions require a 4-byte shift (fkar2 use).
@@ -3927,36 +3927,36 @@ subroutine examin
   !     word shift really should be toward lower addresses, which we
   !     compensate for by the continued use of fkar2 but with one smaller
   !     n9 value:
-1628 if ( n9 .lt. 0 )  n9 = n9 - 1
-  if ( iascii(n3) .eq. 0 ) write (ansi16, 1620)  fkar2(1+n9)
-  if ( iascii(n3) .eq. 1 ) write (ansi16, 1624)  fkar2(1+n9)
-1633 outlin(kolout:kolout+14) = ansi16(1:15)
+1628 if( n9 .lt. 0) n9 = n9 - 1
+  if (iascii(n3) .eq. 0) write (ansi16, 1620) fkar2(1 + n9)
+  if (iascii(n3) .eq. 1) write (ansi16, 1624) fkar2(1 + n9)
+1633 outlin(kolout:kolout+14) = ansi16(1 : 15)
   kolout = kolout + 15
   go to 1664
-1640 write (ansi8, 1660)  kar1(1+n9)
+1640 write (ansi8, 1660) kar1(1 + n9)
 1660 format (i6)
-  outlin(kolout:kolout+5) = ansi8(1:6)
-  if ( iprspy .lt. 3 ) go to 1662
-  write (munit6, 1661)  n9,  kar1(1+n9)
-1661 format (' i6 integer encoded for examine.  n9,kar1(1+n9) =', 2i8 )
+  outlin(kolout : kolout + 5) = ansi8(1 : 6)
+  if (iprspy .lt. 3) go to 1662
+  write (munit6, 1661) n9, kar1(1 + n9)
+1661 format (' i6 integer encoded for examine.  n9,kar1(1 + n9) =', 2i8 )
   call window
 1662 kolout = kolout + 6
 1664 n5 = n5 + 1
-  if ( n5  .le.  imax(jj) )   go to 1560
-  if ( jj .lt. numex ) go to 1540
-  if ( kolout .lt. 132 ) outlin(kolout:132) = ' '
-  if ( iprspy .lt. 1 ) go to 9000
+  if (n5 .le. imax(jj)) go to 1560
+  if (jj .lt. numex) go to 1540
+  if (kolout .lt. 132) outlin(kolout:132) = ' '
+  if (iprspy .lt. 1) go to 9000
   n17 = kolout
-  if ( n17 .gt. 80 )  n17 = 80
-  write (munit6, 8872)  kolout, outlin(1:n17)
-8872 format (' Exit "examin".   kolout =',  i5, '    outlin(1:80) =',  a  )
+  if (n17 .gt. 80) n17 = 80
+  write (munit6, 8872) kolout, outlin(1 : n17)
+8872 format (' Exit "examin".   kolout =', i5, '    outlin(1:80) =', a)
   call window
 9000 return
 end subroutine examin
 !
 ! subroutine deposi.
 !
-subroutine deposi ( ind, intype, n1, n2, d4 )
+subroutine deposi (ind, intype, n1, n2, d4)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     for non-interactive EMTP, this module can be destroyed.
@@ -3968,33 +3968,33 @@ subroutine deposi ( ind, intype, n1, n2, d4 )
   !     Bounding subscripts on the deposit are n1 and n2, respectively.
   !     Computers with index problems (e.g., prime) need replacement
   include 'dekspy.ftn'
-  if ( iprspy .lt. 1 ) go to 1846
-  write (munit6, 1707)  ind, intype, iascii(ind), d4, ansi8
-1707 format (' Top of "deposi".   ind, intype, iascii(ind), d4, ansi8 =',  3i8, e15.4, 3x, a8 )
+  if (iprspy .lt. 1) go to 1846
+  write (munit6, 1707) ind, intype, iascii(ind), d4, ansi8
+1707 format (' Top of "deposi".   ind, intype, iascii(ind), d4, ansi8 =', 3i8, e15.4, 3x, a8)
   call window
 1846 n8 = locate(ind)
   !     following use of real(8) deposit logic to also handle
   !     alphanumeric only works for computers with this equality:
-  if ( iascii(ind) .eq. 1 ) read (ansi8, 1849)  d4
+  if (iascii(ind) .eq. 1) read (ansi8, 1849) d4
 1849 format (a6)
-  if ( intype .eq. 0 ) go to 1880
+  if (intype .eq. 0) go to 1880
   n9 = n8 - memkar + n1
   !     enter loop of integer deposits, subscripts n1 through n2:
 1854 kar1(n9) = d4
   n1 = n1 + 1
   n9 = n9 + 1
-  if ( n1 .le. n2 ) go to 1854
+  if (n1 .le. n2) go to 1854
   go to 8000
   !     our vector is  real(8), so requires the following special deposit:
-1880 n9 = (n8 - memkar)/2 + n1
-  n10 = memkar + 2*(n9-n1) - n8
+1880 n9 = (n8 - memkar) / 2 + n1
+  n10 = memkar + 2 * (n9 - n1) - n8
   !     enter loop of real deposits, subscripts n1 through n2:
-1904 if ( n10 .gt. 0 ) fkar2(n9) = d4
-  if ( n10 .eq. 0 ) fkar1(n9) = d4
+1904 if (n10 .gt. 0 ) fkar2(n9) = d4
+  if (n10 .eq. 0) fkar1(n9) = d4
   n1 = n1 + 1
   n9 = n9 + 1
-  if ( n1  .le.  n2 )   go to 1904
-8000 if ( iprspy .lt. 1 ) go to 9000
+  if (n1 .le. n2) go to 1904
+8000 if (iprspy .lt. 1) go to 9000
   write (munit6, 8872)
 8872 format (' Exit "deposi".')
   call window
@@ -4004,7 +4004,7 @@ end subroutine deposi
 ! subroutine append.
 !
 subroutine append
-  implicit real(8) (a-h, o-z),  integer(4) (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module connected to key word "append" of spy.  others
   !     can perfect and use their own installation-dependent
   !     (and perhaps proprietary) extensions via this module.
@@ -4013,7 +4013,7 @@ end subroutine append
 !
 ! subroutine intpar.
 !
-subroutine intpar ( max, n1, n2, kill )
+subroutine intpar (max, n1, n2, kill)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module of interactive emtp usage only, which services "emtspy".
   !     this module is designed to extract two free-format row numbers
@@ -4026,66 +4026,66 @@ subroutine intpar ( max, n1, n2, kill )
   include 'dekspy.ftn'
   kill = 0
   !     check for english request "top" (for the top of the file):
-  if ( bytbuf(1:1)   .ne.  't' )  go to 2071
+  if (bytbuf(1 : 1) .ne. 't') go to 2071
   n1 = 1
   n2 = 1
   go to 2110
   !     check for english request "bot" (for the bottom of the file):
-2071 if ( bytbuf(1:1)  .ne. 'b' )   go to 2075
+2071 if (bytbuf(1 : 1) .ne. 'b') go to 2075
   n1 = max
   n2 = max
   go to 2110
   !     check for english request "all" (for the entire file):
-2075 if ( bytbuf(1:1)  .ne.  'a' )   go to 2088
+2075 if (bytbuf(1 : 1) .ne. 'a') go to 2088
   n1 = 1
   n2 = max
   go to 2110
-2088 do i=1, 20
+2088 do i = 1, 20
      n13 = 21 - i
-     if ( bytbuf(n13:n13) .eq. ' ' )  go to 2046
-     if ( bytbuf(n13:n13) .ne. ',' )   go to 2054
+     if (bytbuf(n13 : n13) .eq. ' ') go to 2046
+     if (bytbuf(n13 : n13) .ne. ',') go to 2054
      n6 = 20 - i
-     do j=1, n6
+     do j = 1, n6
         n13 = 21 - i + j
-2037    bytbuf(n13:n13) = bytbuf(j:j)
+2037    bytbuf(n13 : n13) = bytbuf(j : j)
      end do
      go to 2054
   end do
 2046 continue
 2054 n22 = 0
   n13 = 0
-  do i=1, 20
+  do i = 1, 20
      n17 = i - 1
-     if ( bytbuf(i:i)  .ne.  ' ' )   go to 2091
+     if (bytbuf(i : i) .ne. ' ') go to 2091
      !     blank is ignored if before 1st digit, of if not 1st of string:
-     if ( n22 .eq. 0 )  go to 2104
-     if ( bytbuf(n17:n17) .eq. ' ' )  go to 2104
-     if ( bytbuf(n17:n17) .eq. ',' )  go to 2104
+     if (n22 .eq. 0) go to 2104
+     if (bytbuf(n17 : n17) .eq. ' ') go to 2104
+     if (bytbuf(n17 : n17) .eq. ',') go to 2104
      n13 = n13 + 1
      go to 2104
      !     begin processing of non-blank character  bytbuf(i) :
 2091 n22 = n22 + 1
-     if ( bytbuf(i:i)  .ne.  ',' )  go to 2093
-     if ( bytbuf(n17:n17) .eq. ' ' )  go to 2104
+     if (bytbuf(i : i) .ne.  ',') go to 2093
+     if (bytbuf(n17 : n17) .eq. ' ') go to 2104
      n13 = n13 + 1
      go to 2104
 2093 do j = 1, 10
-        if (bytbuf(i:i) .eq. digit(j)) go to 2104
+        if (bytbuf(i : i) .eq. digit(j)) go to 2104
      end do
 2097 continue
   end do
 2104 continue
-  if ( n22  .gt.  0 )   go to 2109
+  if (n22 .gt. 0) go to 2109
   !     blank response is interpreted as a request for more of same:
   n1 = n2 + 1
-  if ( n1  .le.  max )  go to 2107
+  if (n1 .le. max) go to 2107
   write (munit6, 2105)
 2105 format ('    ---- Wrap around, end to beginning ----')
   call window
   n1 = 1
 2107 n2 = n1 + n33
   go to 2110
-2109 if ( n13  .eq. 2 )   go to 2132
+2109 if (n13 .eq. 2) go to 2132
 2113 write (munit6, 2115)
 2115 format (' ????  Illegal data (not blank or two dec free-format integers.   Try again.')
   call window
@@ -4094,11 +4094,11 @@ subroutine intpar ( max, n1, n2, kill )
   call window
   kill = 1
   go to 9000
-2132 call frein2(bytbuf, n1, n2)
+2132 call frein2 (bytbuf, n1, n2)
   n33 = n2 - n1
-2110 if ( n1  .le.  0  )       n1 = 1
-  if ( n2  .gt.  max )   n2 = max
-9000 if ( iprspy .lt. 1 ) go to 9006
+2110 if (n1 .le. 0) n1 = 1
+  if (n2 .gt. max) n2 = max
+9000 if (iprspy .lt. 1) go to 9006
   write (munit6, 9002)  max, n1, n2, kill
 9002 format (' Return from "intpar".  max, n1, n2, kill =', 4i6)
   call window
@@ -4117,34 +4117,34 @@ subroutine sosrng ( kill )
   !     success:  "0" means success,  "1" means error.
   !     for non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
-  if ( iprspy .lt. 1 )  go to 2615
-  write (munit6, 2613)   bytbuf
+  if (iprspy .lt. 1) go to 2615
+  write (munit6, 2613) bytbuf
 2613 format (' Top "sosrange".  bytbuf(a20) =', a20)
   call window
-  write (munit6, 2614)  numsym, lidnt1, linnow, char1
+  write (munit6, 2614) numsym, lidnt1, linnow, char1
 2614 format (' numsym, lidnt1, linnow, char1 =', 3i5, 2x, a1)
   call window
 2615 kill = 0
-  if ( char1  .ne.  ' ' )   go to 2629
+  if (char1 .ne. ' ') go to 2629
   !     blank means we just continue displaying as many lines as last time
   n12 = linspn
   lidnt1 = lidnt2 + 1
   lidnt2 = lidnt1 + n12
   go to 2662
-2629 if ( bytbuf(1:1)  .ne.  '#' )   go to 2632
+2629 if (bytbuf(1 : 1) .ne. '#') go to 2632
   !     following code processes a command like  "*p22" :
   ibegcl = 2
-  call getnum ( n1 )
-  if ( n1  .ne.  -87654 )  go to 2630
+  call getnum (n1)
+  if ( n1 .ne. -87654) go to 2630
 2621 kill = 1
   go to 9000
 2630 lidnt1 = linnow + 1
   lidnt2 = linnow + n1
   go to 2662
-2632 if ( bytbuf(1:1)  .ne.  ' ' )   go to 2635
+2632 if (bytbuf(1 : 1) .ne. ' ') go to 2635
   !     following code process simple "*p" ---- next 16 lines, like sos:
-  if ( linnow  .lt.  numcrd )   go to 2634
-  print *,   ' no such lines exist'
+  if (linnow .lt. numcrd) go to 2634
+  print *, ' No such lines exist'
   go to 2621
 2634 n1 = 16
   go to 2630
@@ -4154,49 +4154,49 @@ subroutine sosrng ( kill )
   lidnt2 = 0
 2636 ibegcl = ibegcl + 1
   n24 = 0
-  if ( iprspy  .lt.  2 )  go to 2644
+  if (iprspy .lt. 2) go to 2644
   write (munit6, 2640)
 2640 format (' Begin next lidnt.    ibeg     n13  lidnt1  jpoint      n1     n24')
   call window
   write (munit6, 2641) ibegcl, n13, lidnt1, linnow, n1, n24
 2641 format ('                  ', 6i8)
   call window
-2644 if ( bytbuf(ibegcl:ibegcl)  .ne.  '.' )   go to 2645
+2644 if (bytbuf(ibegcl : ibegcl) .ne. '.') go to 2645
   n24 = linnow
   go to 2654
-2645 if ( bytbuf(ibegcl:ibegcl)  .ne.  '^' )   go to 2648
+2645 if (bytbuf(ibegcl : ibegcl) .ne. '^') go to 2648
   n24 = 1
   go to 2654
-2648 if ( bytbuf(ibegcl:ibegcl)  .ne.  '*' )   go to 2657
+2648 if (bytbuf(ibegcl : ibegcl) .ne. '*') go to 2657
   n24 = numcrd
 2654 ibegcl = ibegcl + 1
-2657 call getnum ( n1 )
-  if ( n1  .eq.  -87654 )   go to 2621
+2657 call getnum (n1)
+  if (n1 .eq. -87654) go to 2621
   n13 = n13 + 1
-  if ( n13  .eq.  1 )   lidnt1 = n24 + n1
-  if ( n13  .eq.  2 )   lidnt2 = n24 + n1
-  if ( n13  .eq.  2 )   go to 2662
+  if (n13 .eq. 1) lidnt1 = n24 + n1
+  if (n13 .eq. 2) lidnt2 = n24 + n1
+  if (n13 .eq. 2) go to 2662
   ibegcl = iendcl + 1
-  if ( bytbuf(ibegcl:ibegcl)  .eq.  ':' )   go to 2636
-  if ( bytbuf(ibegcl:ibegcl)  .ne.  '#' )   go to 2659
+  if (bytbuf(ibegcl : ibegcl) .eq. ':') go to 2636
+  if (bytbuf(ibegcl : ibegcl) .ne. '#') go to 2659
   !     we get here with a request like  "*p200!5",  after "200" is known
   ibegcl = ibegcl + 1
-  call getnum ( n1 )
-  if ( n1  .eq.  -87654 )   go to 2621
+  call getnum (n1)
+  if (n1 .eq. -87654) go to 2621
   lidnt2 = lidnt1 + n1 - 1
   go to 2662
   !     we reach 2659 if nothing follows first number (e.g., "*p200"):
 2659 lidnt2 = lidnt1
   !     now we display lines  lidnt1, ...., lidnt2,  after limit check:
-2662 if ( lidnt1  .ge.  1 )   go to 2663
-  print *,   ' illegal syntax of command'
+2662 if (lidnt1 .ge. 1) go to 2663
+  print *, ' Illegal syntax of command'
   go to 2621
-2663 if ( lidnt1  .le.  numcrd )   go to 2664
-  print *,   ' range given does not contain any lines'
+2663 if (lidnt1 .le. numcrd) go to 2664
+  print *, ' Range given does not contain any lines'
   go to 2621
-2664 if ( lidnt2 .gt. numcrd )  lidnt2 = numcrd
-9000 if ( iprspy .lt. 1 )  go to 9006
-  write (munit6, 9003)  lidnt1, lidnt2,  kill, char2
+2664 if (lidnt2 .gt. numcrd) lidnt2 = numcrd
+9000 if (iprspy .lt. 1) go to 9006
+  write (munit6, 9003) lidnt1, lidnt2,  kill, char2
 9003 format (' Exit "sosrng".  lidnt1, lidnt2, kill, char2 =', 3i6, 2x, a1)
   call window
 9006 return
@@ -4204,13 +4204,12 @@ end subroutine sosrng
 !
 !     subroutine movesp.
 !
-subroutine movesp(from, to, n15)
+subroutine movesp (from, to, n15)
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     For non-interactive EMTP, this module can be destroyed.
   !     This routine transfers single-precision from(1:n15) to
   !     to(1:n15).  except for missing implicit, it equals "mover".
-  real(8) from, to
-  dimension from(1), to(1)
+  real(8) from(*), to(*)
   do j = 1, n15
 4829 to(j) = from(j)
   end do
@@ -4223,7 +4222,7 @@ subroutine prompt
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11  installation-dependent EMTP module used only
   !     for interactive EMTP ("emtspy").  Input is program
-  !     prompt in character(8)0 variable prom80 of deck "dekspy".
+  !     prompt in character(80) variable prom80 of deck "dekspy".
   !     The prompt must end with colon (":").  then line feed
   !     will be suppressed, so subsequent read is to right of ":".
   !     For non-interactive EMTP, this module can be destroyed.
@@ -4231,13 +4230,12 @@ subroutine prompt
   include 'dekspy.ftn'
   n2 = 80
   do j = 1, 80
-     if (prom80(n2:n2) .ne. ' ') go to 1426
-1394 n2 = n2 - 1
+     if (prom80(n2 : n2) .ne. ' ') go to 1426
+     n2 = n2 - 1
   end do
   return
   !     following lunit6 should really go to 2nd screen ("window")
-1426 write (lunit6, 1475) prom80(1:n2)
-1475 format (a, $)           ! ",$" is dec magic to hold cursor
+1426 write (lunit6, '(a, $)') prom80(1 : n2)                ! ",$" is dec magic to hold cursor
   return
 end subroutine prompt
 !
@@ -4247,37 +4245,36 @@ subroutine frefp1(ansi, d12)
   implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode a
-  !     single floating point number.  The input is character(8)0
+  !     single floating point number.  The input is character(80)
   !     variable  ansi,  and the output is double precision d12.
   !     For non-interactive emtp, this module can be destroyed.
   character(80) ansi
   n8 = 1
-  call frefix ( ansi, n8 )
-  read (ansi, 3892)  d12
-3892 format (e20.0)
+  call frefix (ansi, n8)
+  read (ansi, '(e20.0)') d12
   return
 end subroutine frefp1
 !
 !     subroutine fresp1.
 !
 subroutine fresp1(ansi, d12)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode one
-  !     floating point numbers d12 from character(8)0 ansi.   This
+  !     floating point numbers d12 from character(80) ansi.   This
   !     is identical to "frefp1", except for single precision.
   character(80) ansi
   real(8) d12
   n8 = 1
   call frefix(ansi, n8)
-  read (ansi, 3892) d12
-3892 format (e20.0)
+  read (ansi, '(e20.0)') d12
   return
 end subroutine fresp1
 !
 !     subroutine frefp2.
 !
 subroutine frefp2(ansi, d12, d13)
-  implicit real(8) (a-h, o-z),  integer(4) (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode two
   !     floating point numbers d12 and d13 from character(8)0 ansi.
@@ -4294,6 +4291,7 @@ end subroutine frefp2
 ! subroutine fresp2.
 !
 subroutine fresp2(ansi, d12, d13)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  it is called to decode two
   !     floating point numbers d12 and d13 from character(8)0 ansi.
@@ -4302,8 +4300,7 @@ subroutine fresp2(ansi, d12, d13)
   real(8) d12, d13
   n8 = 2
   call frefix ( ansi, n8 )
-  read (ansi, 3892)  d12, d13
-3892 format (2e20.0)
+  read (ansi, '(2e20.0)')  d12, d13
   return
 end subroutine fresp2
 !
@@ -4319,8 +4316,7 @@ subroutine frefp3(ansi, d12, d13, d14)
   real(8) d12, d13, d14
   n8 = 3
   call frefix ( ansi, n8 )
-  read (ansi, 3892)  d12, d13, d14
-3892 format (3e20.0)
+  read (ansi, '(3e20.0)') d12, d13, d14
   return
 end subroutine frefp3
 !
