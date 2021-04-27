@@ -119,7 +119,7 @@ end subroutine subr10
 !     subroutine tapsav.
 !
 subroutine tapsav(narray, n1, n2, n3)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Near-universal module for dumping or restoring (central memory
   !     vs. disk) of  /label/ .   This does not work for those
   !     computers like Prime and Burroughs where  common  blocks
@@ -154,11 +154,11 @@ subroutine tapsav(narray, n1, n2, n3)
   !     first 50 cells of /c29b01/ (karray) are saved for rtm use.
   n13 = 29
   call dimens(kpen(1), n13, trash, trash)
-  kvecsv = 2*(it+it+ibr+ntot+ioffd)+kswtch+lhist
-  n9 = ltlabl + kvecsv * nbyte(3)/nbyte(4)
+  kvecsv = 2 * (it + it + ibr + ntot + ioffd) + kswtch + lhist
+  n9 = ltlabl + kvecsv * nbyte(3) / nbyte(4)
   if (n9 .lt. kpen(2)+50) go to 6342
   write (lunit6, 6335)  n2, kpen(2), n9, nchain
-6335 format (' Error stop in "tapsav".  Overflow of /c29b01/ storage.  n2, kpen(2) =',  2i8, &
+6335 format (' Error stop in "tapsav".  Overflow of /c29b01/ storage.  n2, kpen(2) =', 2i8, &
           '     needed storage n9 =,  i8     ', /, ' memory requirement in integer words for virtual  ', &
           ' computer implementation of tapsav.   Storage must ', /, ' provide for all of --/label/--( deck "labcom" ),   ', &
           ' the several usages of "vecrsv" and "vecisv"(over6-11),  ', ' plus 50 extra cells.   ', /, ' nchain =', i5)
@@ -174,7 +174,7 @@ subroutine tapsav(narray, n1, n2, n3)
      j = j + 1
      narray(k) = karray(j)
   end do
-9000 if ( iprsup  .ge.  1 ) write (lunit6, 9003)   n9, kpen(2)
+9000 if (iprsup .ge. 1) write (lunit6, 9003) n9, kpen(2)
 9003 format (' Exit "tapsav".   n9, kpen(2) =', 2i8)
   return
 end subroutine tapsav
@@ -182,7 +182,7 @@ end subroutine tapsav
 !     subroutine dpelg.
 !
 subroutine dgelg(r, a, m, n, eps, ier)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension a(1), r(1)
   i = 0
   !     purpose
