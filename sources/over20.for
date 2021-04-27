@@ -486,52 +486,51 @@ subroutine spying
 1276 n6 = n13 + 1
   maxarg = 0
   do j = n6, 80
-     if (answ80(j:j) .ne. ' ')  go to 4535
+     if (answ80(j:j) .ne. ' ') go to 4535
   end do
-4531 continue
   go to 1271
 4535 maxarg = 0
-  do idmxxx=1, 10
+  do idmxxx = 1, 10
      m = 0
      ansi8(1:8) = blan80(1:8)
-     do l=1, 80
-        if ( n6  .gt.  80 )   go to 4542
-        if ( iprspy .lt. 1 )  go to 8900
-        write (munit6, 8899)  l, m, n6, answ80(n6:n6)
+     do l = 1, 80
+        if (n6 .gt. 80) go to 4542
+        if (iprspy .lt. 1) go to 8900
+        write (munit6, 8899) l, m, n6, answ80(n6:n6)
 8899    format (' Next character. l, m, n6, answ80(n6) =', 3i5, 1x, a1)
         call window
-8900    if ( m  .eq.  0     .and.  answ80(n6:n6)  .eq.  '(' ) answ80(n6:n6) = ' '
-        if ( answ80(n6:n6)  .eq.  ')' )   go to 4544
-        if ( answ80(n6:n6)  .eq.  ' ' )   go to 4541
-        if ( answ80(n6:n6)  .eq.  ',' )   go to 4544
+8900    if (m .eq. 0 .and. answ80(n6:n6) .eq. '(') answ80(n6:n6) = ' '
+        if (answ80(n6:n6) .eq. ')') go to 4544
+        if (answ80(n6:n6) .eq. ' ') go to 4541
+        if (answ80(n6:n6) .eq. ',') go to 4544
         m = m + 1
-        if ( m  .le.  8 )  go to 4540
-        write (munit6, 4539)  idmxxx
-4539    format ('  ??? argument number',  i3, '  of  "@?"  has over 8 digits.  Try again.')
+        if (m .le. 8) go to 4540
+        write (munit6, 4539) idmxxx
+4539    format ('  ??? Argument number',  i3, '  of  "@?"  has over 8 digits.  Try again.')
         call window
         go to 1240
 4540    ansi8(m:m) = answ80(n6:n6)
-        if ( ansi8(m:m)  .eq.  '#' ) ansi8(m:m) = ' '
+        if (ansi8(m:m) .eq. '#') ansi8(m:m) = ' '
 4541    n6 = n6 + 1
      end do
      !     no ")" on "@?"  argument list means we ran through column 80:
-4542 if ( m  .eq.  0 )   go to 1271
+4542 if (m .eq. 0) go to 1271
      !     one or more non-blank characters since last "," is final argument:
      maxarg = maxarg + 1
      texpar(maxarg) = ansi8
-     if ( iprspy .lt. 1 )  go to 1271
-     write (munit6, 4543)  maxarg
+     if (iprspy .lt. 1) go to 1271
+     write (munit6, 4543) maxarg
 4543 format (' maxarg =', i8)
      call window
      go to 1271
 4544 maxarg = maxarg + 1
-     read  (ansi8, 1360)  texpar(maxarg)
+     read (ansi8, 1360) texpar(maxarg)
 1360 format (15a1)
-     if ( answ80(n6:n6)  .eq.  ')' )   go to 1271
+     if (answ80(n6:n6) .eq. ')') go to 1271
 4549 n6 = n6 + 1
   end do
   write (munit6, 4551)
-4551 format ('   ? ? ?  illegal  "@?"  use.   Over 10 arguments.   Try again.')
+4551 format ('   ? ? ?  Illegal  "@?"  use.   Over 10 arguments.   Try again.')
   call window
   go to 1240
   !     any arguments have been successfully found;  now use file
@@ -539,13 +538,13 @@ subroutine spying
   itexp = 0
   go to 51269
   !       former eof s.n. 1286 with file close and other resetting
-1289 if ( answ80(1:8)  .ne.  blan80(1:8) )   go to 1293
+1289 if (answ80(1:8) .ne. blan80(1:8)) go to 1293
   !     blank (just <cr>) represents request for repeat "examine"
   go to 1520
   !     check for  "%%%%%%%%"  field of  "@?"  arguments;  replace any:
   !     next check card image for one of the "numkey" key-words:
 1293 n13 = 0
-  if ( answ80(1:5) .ne. 'wake4' )  go to 1296
+  if (answ80(1:5) .ne. 'wake4') go to 1296
   n13 = 1
   answ80(5:5) = ' '
 1296 do jword = 1, numkey
@@ -553,34 +552,34 @@ subroutine spying
   end do
 1302 continue
   !     we reach here if illegal response to "spy:" prompt has been read:
-1303 write (munit6, 1304)  answ80(1:8)
+1303 write (munit6, 1304) answ80(1:8)
 1304 format ('   ? ? ?  Illegal spy command  "',  a, '" .   Try again  .....')
   call window
   go to 1240
-1307 if ( iprspy .lt. 1 ) go to 1309
-  write (munit6, 1308)  jword
+1307 if (iprspy .lt. 1) go to 1309
+  write (munit6, 1308) jword
 1308 format ('   Keyword found is  jword =', i8)
   call window
 1309 jwdsav = jword
-  if ( jword .gt. 63 )  go to 71309
+  if (jword .gt. 63) go to 71309
   go to ( &
-                                !       heading  stop    plot    help  examine  deposit  switch  (1-7)
+!      heading  stop   plot    help    examine deposit switch  (1-7)
        1500,   9000,   1319,   1311,   1337,   1460,   8500, &
-                                !       append   save   restore   go     echo    find    list    (8-14)
+!      append   save   restore go    echo   find   list    (8-14)
        1320,   2206,   2317,   2402,   3673,   2040,   2092, &
-                                !         spy    break   when  comment    @?     roll   type?   (15-21)
+!      spy     break   when    comment @?      roll    type?   (15-21)
        1240,   2124,   2430,   2486,   1303,   1424,   1303, &
-                                !       verify   files   sleep  source   edit    wake  language (22-28)
+!      verify  files   sleep   source  edit    wake    language (22-28)
        2494,   2563,   2591,   8500,   8500,   2604,   8500, &
-                                !      catalog  begin    step    debug   data    ramp    time   (29-35)
+!      catalog begin   step    debug   data    ramp    time   (29-35)
        2907,   2926,   2937,   2964,   2974,   3095,   3153, &
-                                !         tek   branch   yform    noy   factor    nof    rlc    (36-42)
+!      tek     branch  yform   noy     factor  nof     rlc    (36-42)
        3174,   3256,   3357,   3381,   3394,   3406,   8500, &
-                                !        width    bus    size   limit    iout    node   nonlin  (43-49)
+!      width   bus     size    limit   iout    node    nonlin  (43-49)
        8500,   8500,   8500,   8500,   8500,   8500,   8500, &
-                                !        space  lunit4  series   lock     [y]     [f]   noroll  (50-56)
+!      space   lunit4  series  lock    [y]     [f]     noroll  (50-56)
        8500,   8500,   8500,   8500,   8500,   8500,   8500, &
-                                !        open    close    sm     honk   choice   tacs    wait   (57-63)
+!      open    close   sm      honk    choice  tacs    wait   (57-63)
        3568,   3584,   3606,   3623,   8500,   8500,   3644), jword
   call stoptp
 71309 n14 = jword - 63
