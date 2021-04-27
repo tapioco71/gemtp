@@ -6,7 +6,7 @@
 !     subroutine subr10.
 !
 subroutine subr10
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
@@ -76,42 +76,42 @@ subroutine subr10
   !     1.  input of miscellaneous data cards.
   !     2.  input branch data.
   !     3.  code associated with the cascading of pi-circuits for
-  !     steady-state phasor solutions only.
+  !         steady-state phasor solutions only.
   !     4.  input and processing of frequency-dependence data for
-  !     distributed-parameter line mode.
+  !         distributed-parameter line mode.
   !     5.  input of switch and source data cards.
   !     6.  network connectivity output.   setup of transient-network
-  !     renumbering tables.
+  !         renumbering tables.
   !     7.  network node renumbering routine (john walker's old
-  !     subroutine number).
+  !         subroutine number).
   !     8.  convert tables to new node numbers.   find steady-state
-  !     phasor equivalents for distributed branches.
+  !         phasor equivalents for distributed branches.
   !     9.  set up steady-state phasor network renumbering tables.
   !     10.  form the steady-state admittance matrix (y).   solve for
-  !     steady-state phasor voltages.
+  !          steady-state phasor voltages.
   !     11.  output steady-state phasor solution (if requested).
   !     12.  branch-table and switch-table processing, as preparation
-  !     for the integration in time-step loop.
+  !          for the integration in time-step loop.
   !     13.  setup initial conditions on lumped elements, and past
-  !     history for distributed lines.
+  !          history for distributed lines.
   !     14.  form (y) for the transients network.   triangularize the
-  !     first partition (nonswitch/source nodes).
+  !          first partition (nonswitch/source nodes).
   !     15.  final setup operations before time-step loop.
   !     16.  first quarter of time-step loop (checking for changes of
-  !     switches and pseudo-nonlinear elements, retriangularization
-  !     of  ybb  and calculation of thevenin impedance vectors).
+  !          switches and pseudo-nonlinear elements, retriangularization
+  !          of  ybb  and calculation of thevenin impedance vectors).
   !     17.  second quarter of time-step loop (branch-table history
-  !     updating, addition of branch contributions to nodal
-  !     injected current vector  i ).
+  !          updating, addition of branch contributions to nodal
+  !          injected current vector  i ).
   !     18.  third quarter of time-step loop (source update, repeat
-  !     solution of   (y)v = i   for node voltage vector  v ).
+  !          solution of   (y)v = i   for node voltage vector  v ).
   !     19.  fourth quarter of time-step loop (solution of 3-phase
-  !     nonlinearities and compensation-based rotating
-  !     machinery [type-50 s.m., u.m.],  superposition to
-  !     give the total solution including compensation).
+  !          nonlinearities and compensation-based rotating
+  !          machinery [type-50 s.m., u.m.],  superposition to
+  !          give the total solution including compensation).
   !     20.  punch and print terminal conditions (if requested).
-  !     catalog plot-data points on the disk as a permanent file, if
-  !     misc. data parameter  'icat'  is positive.
+  !          catalog plot-data points on the disk as a permanent file, if
+  !          misc. data parameter  'icat'  is positive.
   !
 9000 return
 end subroutine subr10

@@ -1780,7 +1780,7 @@ end function sandnm
 !
 ! subroutine mult.
 !
-subroutine mult(a, x, y, n, icheck)
+subroutine mult (a, x, y, n, icheck)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     subroutine  'mult'  is used to post-multiply a symmetric matrix
   !     by a vector.
@@ -1790,22 +1790,23 @@ subroutine mult(a, x, y, n, icheck)
   !     matrix a is real, symmetric and stored as upper triangular matrix
   !     in one-dimensional array (1 element for first column, 2 for second
   !     column etc.). y must not be identical with x.
-  dimension a(1), x(1), y(1)
+  real(8) a(*), x(*), y(*)
   ii = 0
   k = 0
-1 k = k + 1
-  if(k .gt. n) return
-  xx = x(k)
-  yy = y(k)
-  if(icheck .eq. 0) yy = 0.
-  if(icheck .lt. 0) yy = -yy
-  do i = 1, k
-     ii = ii + 1
-     y(i) = y(i) + a(ii) * xx
-     yy = yy + a(ii) * x(i)
+  do
+     k = k + 1
+     if(k .gt. n) return
+     xx = x(k)
+     yy = y(k)
+     if(icheck .eq. 0) yy = 0.
+     if(icheck .lt. 0) yy = -yy
+     do i = 1, k
+        ii = ii + 1
+        y(i) = y(i) + a(ii) * xx
+        yy = yy + a(ii) * x(i)
+     end do
+     y(k) = yy
   end do
-  y(k) = yy
-  go to 1
 end subroutine mult
 !
 !     end of file: main00.for
