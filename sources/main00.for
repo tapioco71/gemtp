@@ -422,7 +422,7 @@ subroutine cimage
   character(8) text4, text5
   dimension  buff10(10)
   equivalence (buff10(1), abuff(1))
-  character*25 filen
+  character(25) filen
   dimension textax(60), jpntr(52), textay(50), aupper(10)
   equivalence (aupper(1), texcol(1))
   dimension xopt(1), copt(1)
@@ -536,7 +536,7 @@ subroutine cimage
   if (iprsup .ge. 10) write (lunit6, 987) lunit5, lunit6, noutpr, numdcd
 987 format (' Begin cimage.  lunit5, lunit6, noutpr, numdcd =', 4i5)
 1000 if (m4plot .eq. 1) call emtspy ! interactive usage
-  if (lunit5 .gt. 0) read (lunit5, 3000, end=4000) buff10
+  if (lunit5 .gt. 0) read (lunit5, 3000, end = 4000) buff10
 3000 format (10a8)
   if (lunit5 .le. 0) call nextcard
   if (kill .gt. 0) go to 4000 ! "nextcard" eof jump
