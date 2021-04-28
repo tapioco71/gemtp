@@ -65,7 +65,7 @@ program gemtp
   !     unit assignments of "over1" needed earlier by spy:
   options_count = command_argument_count()
   do i = 1, iargc()
-     call getarg(i, arg)
+     call getarg (i, arg)
      write (*, *) arg
   end do
   lunit0 = gfortran_stderr_unit
@@ -89,20 +89,20 @@ program gemtp
   nchain = -1
   lastov = 0
   kill = 0
-2000 if ( kill  .eq.  0 )   go to 2001
-  if ( kill  .eq.  9999 )   go to 2001
-  if ( kill .ne. 7733 )  go to 4372
+2000 if (kill .eq. 0) go to 2001
+  if (kill .eq. 9999) go to 2001
+  if (kill .ne. 7733) go to 4372
   write (lunit6, 4367)
 4367 format (' "main00" intercept of "begin" request.')
   kill = 0
   numdcd = 0
   nchain = 1
   go to 1983
-4372 if ( nchain  .gt.  51 )   go to 2001
+4372 if (nchain .gt. 51) go to 2001
   nchain = 51
 2001 n1 = nchain
-  if ( n1  .gt.  30 )   n1 = n1 - 30
-  if ( n1  .le.  0 )  n1 = 1
+  if (n1 .gt. 30) n1 = n1 - 30
+  if (n1 .le. 0) n1 = 1
   iprsup = iprsov(n1)
   if (nchain .gt. 20)   go to 2010
   if (nchain .eq. 12 .or. nchain .eq. 2) go to 1983
@@ -112,44 +112,44 @@ program gemtp
   if (nchain .gt. 20)   go to 2000
 1983 call main10
   go to 2000
-2010 if ( m4plot .eq. 1 ) call emtspy
-  if ( nchain  .gt.  29 )   go to 2020
+2010 if (m4plot .eq. 1) call emtspy
+  if (nchain .gt. 29) go to 2020
   call over29
   go to 2000
-2020 if ( nchain  .gt.  31 )   go to 2024
+2020 if (nchain .gt. 31) go to 2024
   call over31
   go to 2000
-2024 if ( nchain  .gt.  39 )   go to 2025
+2024 if (nchain .gt. 39) go to 2025
   call over39
   go to 2000
-2025 if ( nchain  .gt.  41 )   go to 2070
+2025 if (nchain .gt. 41) go to 2070
   call over41
   go to 2000
-2070 if ( nchain  .gt.  42 )   go to 2080
+2070 if (nchain .gt. 42) go to 2080
   call over42
   go to 2000
 2080 if (nchain .gt. 44) go to 2100
   call over44
   go to 2000
-2100 if ( nchain  .gt.  45 )   go to 2110
+2100 if (nchain .gt. 45) go to 2110
   call over45
   go to 2000
-2110 if ( nchain  .gt.  47 )   go to 2130
+2110 if (nchain .gt. 47) go to 2130
   call over47
   go to 2000
-2130 if ( nchain  .gt.  51 )   go to 2260
+2130 if (nchain .gt. 51) go to 2260
   call over51
   go to 2000
-2260 if ( nchain  .gt.  52 )   go to 2270
+2260 if (nchain .gt. 52) go to 2270
   call over52
   go to 2000
-2270 if ( nchain  .gt.  53 )   go to 2280
+2270 if (nchain .gt. 53) go to 2280
   call over53
   go to 2000
-2280 if ( nchain  .gt.  54 )   go to 2290
+2280 if (nchain .gt. 54) go to 2290
   call over54
   go to 2000
-2290 if ( nchain  .gt.  55 )   go to 2300
+2290 if (nchain .gt. 55) go to 2300
   call over55
   go to 2000
 2300 write (lunit6, 9236)  nchain
@@ -239,7 +239,7 @@ subroutine stoptp
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Temporary stop statements of EMTP have been converted to
   !     "call stoptp", allowing installation-dependent clean up.
-  include  "blkcom.ftn"
+  include 'blkcom.ftn'
   read (unit = abuff, fmt = 5607) texcol
 5607 format (80a1)
   if (nchain .eq. 31 .and. lastov .eq. 1 .and. kill .eq. 9999) go to 9000
@@ -250,21 +250,21 @@ end subroutine stoptp
 !
 ! subroutine copyr.
 !
-subroutine copyr(d1, to, kk)
+subroutine copyr (d1, to, kk)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Routine which copies the same floating-point word  'd1'  into a
   !     contiguous region of memory ----  'kk'  words in length,
   !     beginning with word  to(1) .
   dimension to(1)
-  do i = 1, kk ! do 5431
-     to(i) = d1    ! 5431
+  do i = 1, kk                                              ! do 5431
+     to(i) = d1                                             ! 5431
   end do
   return
 end subroutine copyr
 !
 ! subroutine copyi.
 !
-subroutine copyi(n1, ito, kk)
+subroutine copyi (n1, ito, kk)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     routine which copies the same integer word  'n1'  into a
   !     contiguous region of memory ----  'kk'  words in length,
@@ -278,14 +278,14 @@ end subroutine copyi
 !
 !    subroutine copya.
 !
-subroutine copya ( text1, text2, kk )
+subroutine copya (text1, text2, kk)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     routine which copies the same alphanumeric word  'text1'  into
   !     a contiguous region of memory ----  'kk'  words in length,
   !     beginning with word  text2(1) .
   !     real(8)         text1, text2
   character(8) text1, text2
-  dimension  text2(1)
+  dimension text2(1)
   do i = 1, kk
      text2(i) = text1
   end do
@@ -1282,13 +1282,13 @@ end subroutine move0
 !
 !     subroutine addmxd.
 !
-subroutine addmxd(a, b, c, n)
+subroutine addmxd (a, b, c, n)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Subroutine  addmxd  forms matrix   (c) = (a) + b(u)  , where (a),
   !     and (c)  are n by n matrices,  b  is a scalar, and (u) is the
   !     identity matrix.   Array (c) may be the same as (a), if desired.
   !     See subr.  mult  for symmetric-matric storage scheme assumed.
-  dimension  a(1), c(1)
+  real(8) a(*), c(*)
   k = 1
   j = 1
   jt = n * (n+1) / 2
@@ -1305,7 +1305,7 @@ end subroutine addmxd
 !
 !     subroutine multmx.
 !
-subroutine multmx(a, b, c, temp, n)
+subroutine multmx (a, b, c, temp, n)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Subroutine multmx  forms the matrix product   (c) = (a)(b)   where
   !     matrices  (a), (b), and (c)  are all  n by n  square arrays.
@@ -1314,7 +1314,7 @@ subroutine multmx(a, b, c, temp, n)
   !     the product   (a)(b)   back into  (b) .    See subroutine  'mult'
   !     which is called herein, for details about the storage scheme used
   !     )    for these real, symmetric matrices.
-  dimension a(1), b(1), c(1), temp(1)
+  real(8) a(*), b(*), c(*), temp(*)
   l = 0
   ll0 = 0
   ii = 0
@@ -1336,29 +1336,29 @@ end subroutine multmx
 !
 !     subroutine frefld.
 !
-subroutine frefld(array)
+subroutine frefld (array)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   character(8) text1, chtacs, texbuf, texvec
   dimension texbuf(30), array(1), texvec(1)
   equivalence (texvec(1), text1)
-  data  chtacs  /  6htacs     /
+  data chtacs / 'tacs  ' /
   if (iprsup .ge. 5) write (lunit6, 1016) nfrfld, nright, kolbeg
 1016 format (' Top "frefld".  nfrfld, nright, kolbeg =', 3i6)
-  if (nright .lt. 0 ) go to 5913
+  if (nright .lt. 0) go to 5913
   do jj = 1, nfrfld
      if (kolbeg .le. 80) go to 5600
      lstat(19) = 5600
      go to 9200
 5600 n3 = 0
      go to 5805
-5603 if (chcont .eq. chtacs ) go to 5614
-     if (text1 .eq. blank ) go to 5802
-     if (text1 .ne. csepar ) go to 5623
+5603 if (chcont .eq. chtacs) go to 5614
+     if (text1 .eq. blank) go to 5802
+     if (text1 .ne. csepar) go to 5623
 5609 kolbeg = kolbeg + 1
      go to 5827
-5614 if (text1 .ne. csepar ) go to 5623
-     if (text1 .eq. blank ) go to 5802
+5614 if (text1 .ne. csepar) go to 5623
+     if (text1 .eq. blank) go to 5802
      go to 5609
 5623 if (n3 .lt. 30 ) go to 5627
      lstat(19) = 5623
@@ -1367,19 +1367,19 @@ subroutine frefld(array)
      texbuf(n3) = text1
 5802 kolbeg = kolbeg + 1
 5805 text1 = texcol(kolbeg)
-     if (text1 .ne. chcont ) go to 5819
+     if (text1 .ne. chcont) go to 5819
      !     read input card using cimage
      call cimage
      kolbeg = 1
-     if (n3 .eq. 0 ) go to 5805
+     if (n3 .eq. 0) go to 5805
      go to 5827
-5819 if (kolbeg .le. 80 ) go to 5603
+5819 if (kolbeg .le. 80) go to 5603
 5827 if (n3 .gt. 0) go to 5829
      array(jj) = 0.0
      go to 5831
 5829 call frenum (texbuf(1), n3, array(jj))
-5831 if (iprsup .ge. 5) write (lunit6, 5837)  jj, kolbeg, n3, array(jj)
-5837 format (/, ' "frefld" number.      jj  kolbeg      n3',  21x,  'array(jj)  ', /, 17x, 3i8, e30.20)
+5831 if (iprsup .ge. 5) write (lunit6, 5837) jj, kolbeg, n3, array(jj)
+5837 format (/, ' "frefld" number.      jj  kolbeg      n3', 21x,  'array(jj)', /, 17x, 3i8, e30.20)
   end do
 5851 continue
   go to 9900
@@ -1393,17 +1393,17 @@ subroutine frefld(array)
 5920 text1 = texcol(kolbeg)
      kolbeg = kolbeg + 1
      if (chcont .eq. chtacs) go to 5928
-     if (text1 .eq. blank ) go to 5923
-     if (text1 .eq. csepar ) go to 5948
-5921 if (ll .le. 6 ) go to 5922
+     if (text1 .eq. blank) go to 5923
+     if (text1 .eq. csepar) go to 5948
+5921 if (ll .le. 6) go to 5922
      lstat(19) = 5922
      go to 9200
-5928 if (text1 .eq. csepar ) go to 5948
-     if (text1 .eq. blank ) go to 5923
+5928 if (text1 .eq. csepar) go to 5948
+     if (text1 .eq. blank) go to 5923
      go to 5921
 5922 ll = ll + 1
      call packa1(texvec(1), texta6(jj), ll)
-5923 if (kolbeg .le. 80 ) go to 5920
+5923 if (kolbeg .le. 80) go to 5920
   end do
 5948 continue
   go to 9900
@@ -1411,7 +1411,7 @@ subroutine frefld(array)
   jj = 0
   go to 6054
 6042 jj = jj + 1
-  if ( jj  .gt.  10 )   go to 6072
+  if (jj .gt. 10) go to 6072
   texta6(jj) = blank
   ll = 0
 6048 text1 = texcol(kolbeg)
@@ -1423,7 +1423,7 @@ subroutine frefld(array)
   if (text1 .eq. blank) go to 6054
 6052 if (ll .eq. 6) go to 6042
   ll = ll + 1
-  call packa1 ( texvec(1), texta6(jj), ll )
+  call packa1 (texvec(1), texta6(jj), ll)
   kolbeg = kolbeg + 1
   go to 6048
 6054 n9 = kolbeg
@@ -1434,30 +1434,30 @@ subroutine frefld(array)
   kolbeg = 79
   go to 6072
 6067 kolbeg = i
-  if (kolbeg - n9 .le. 2 ) go to 6069
-  if (jj .gt. 0 ) go to 6072
+  if (kolbeg - n9 .le. 2) go to 6069
+  if (jj .gt. 0) go to 6072
 6069 if (texcol(kolbeg) .ne. csepar ) go to 6042
 6072 nfrfld = jj
   kolbeg = kolbeg + 1
   if (iprsup .ge. 1) write (lunit6, 6083) jj, ll, kolbeg, texcol
-6083 format (/, ' Keyword near "frefld" exit.      jj      ll  kolbeg   ', /, 28x, 3i8, /, (' texcol =', 30a4))
+6083 format (/, ' Keyword near "frefld" exit.      jj      ll  kolbeg', /, 28x, 3i8, /, (' texcol =', 30a4))
   go to 9900
 9200 kill = 166
-  if (iprsup .ge. 0) write (lunit6, 9207)  lstat(19), nchain, lastov, kolbeg, nfrfld, nright
+  if (iprsup .ge. 0) write (lunit6, 9207) lstat(19), nchain, lastov, kolbeg, nfrfld, nright
 9207 format (/, " Error stop within  'frefld' .", 6i8, /, 1x)
   lstat(18) = -1
-9900 if (iprsup .ge. 2) write (lunit6, 9901)  kill, kolbeg, array(1)
+9900 if (iprsup .ge. 2) write (lunit6, 9901) kill, kolbeg, array
 9901 format (' Exit "frefld".  Kill, kolbeg, array(1) =', i6, e20.10)
   return
 end subroutine frefld
 !
 !     subroutine freone
 !
-subroutine freone(d1)
+subroutine freone (d1)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     scalar version of  "frefld"  which enters the utpf with
+  !     Scalar version of  "frefld"  which enters the utpf with
   !     "m29."  vintage, to satisfy burroughs (see problem b,
-  !     section ii, page ecwb-4, vol. x  emtp memo of 14 feb 1981.)
+  !     section ii, page ecwb-4, vol. x  EMTP memo of 14 feb 1981.)
   dimension array(10)
   call frefld(array)
   d1 = array(1)
@@ -1466,7 +1466,7 @@ end subroutine freone
 !
 ! subroutine frenum.
 !
-subroutine frenum(text1, n3, d1)
+subroutine frenum (text1, n3, d1)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11/780  installation-dependent module called only by
   !     the free-format data module  "frefld" .  Purpose is to
@@ -1476,19 +1476,19 @@ subroutine frenum(text1, n3, d1)
   character(8) text1(1), blank
   !     logical*1  texta(30), textb
   character texta(30), textb
-  data  blank   /  6h          /
-  data  textb   /  1h          /
+  data  blank   / '      ' /
+  data  textb   / ' ' /
   n9 = 30
   n4 = n3 + 1
   do i = 1, n3
      n4 = n4 - 1
-     if ( text1(n4)  .eq.  blank )   go to 4718
-     if ( n9  .ge.  2 )   go to 4711
+     if (text1(n4) .eq. blank) go to 4718
+     if (n9 .ge. 2) go to 4711
      write (6, 4706)
 4706 format (/, ' Error stop in "frenum".   There are 33 or more characters in a free-format number on last data card.')
      call stoptp   ! installation-dependent program stop card
      !     4711 encode (1, 4712, texta(n9))  text1(n4)
-4711 write (unit=texta(n9), fmt=4712) text1(n4)
+4711 write (unit = texta(n9), fmt = 4712) text1(n4)
 4712 format (80a1)
      n9 = n9 - 1
   end do
@@ -1496,7 +1496,7 @@ subroutine frenum(text1, n3, d1)
   do i = 1, n9
      texta(i) = textb
   end do
-  read (unit=texta(1), fmt=4732) d1
+  read (unit = texta(1), fmt = 4732) d1
 4732 format (e30.0)
   return
 end subroutine frenum
@@ -1644,7 +1644,7 @@ end function randnm
 !
 !     function sandnm.
 !
-function sandnm(x)
+function sandnm (x)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This version of  'randnm'  is used for testing of the
   !     statistical overvoltage capability of the emtp only.   It uses
@@ -1658,11 +1658,11 @@ function sandnm(x)
   !     is input by the user with negative value, the emtp takes
   !     this to mean that "sandnm" is to be used for random
   !     numbers rather than "randnm" .
-  include  'blkcom.ftn'
-  dimension  a(100)
-  equivalence  ( moncar(1), knt )
+  include 'blkcom.ftn'
+  dimension a(100)
+  equivalence (moncar(1), knt)
   !     burroughs: preserve local variable between module calls:
-  data   l  / 0 /
+  data l / 0 /
   !     beginning of assignment of random numbers to array  'a' .
   a(  1) =  .1445312506618
   a(  2) =  .8477795260409
@@ -1765,15 +1765,14 @@ function sandnm(x)
   a( 99) =  .7599602497147
   a(100) =  .1154361048406
   !     end       of assignment of random numbers to array  'a' .
-  if ( x  .eq.  0.0 )   go to 2614
-  l = (knt - 1 ) * kswtch + 1
+  if (x .eq. 0.0) go to 2614
+  l = (knt - 1) * kswtch + 1
   go to 2632
 2614 l = l + 1
-2632 n1 = (l-1) / 100
-  if ( iprsup  .ge.  1 ) write (lunit6, 2645)  l, knt, kswtch, n1, x
-2645 format (/, " Variables in  'sandnm' ,   the random-number generator with 100 built-in numbers.       &
-       l     knt  kswtch      n1 ", 14x, 'x', /, 82x, 4i8, e15.5)
-  if ( n1  .gt.  0 ) l = l  -  100 * n1
+2632 n1 = (l - 1) / 100
+  if (iprsup .ge. 1) write (lunit6, 2645) l, knt, kswtch, n1, x
+2645 format (/, " Variables in  'sandnm' ,   the random-number generator with 100 built-in numbers.       l     knt  kswtch      n1 ", 14x, 'x', /, 82x, 4i8, e15.5)
+  if (n1 .gt. 0) l = l - 100 * n1
   sandnm = a(l)
   return
 end function sandnm
