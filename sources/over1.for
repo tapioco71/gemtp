@@ -30,8 +30,8 @@ subroutine over1
   character locker
   dimension aupper(14)
   dimension lstacs(8)
-  character*80 disk_file
-  character*132 ansi132
+  character(80) disk_file
+  character(132) ansi132
   common /comlock/ locker(2)
   !     default list sizes for tacs proportioning of emtp list 19.
   data  text2   /  6hname    /
@@ -142,7 +142,7 @@ subroutine over1
   !     assign  'n1'  equal to the number of emtp lists of variable
   !     dimensioning (of the solution overlays).
   n1 = 28
-  ltlabl = lstat(n1+1)
+  ltlabl = lstat(n1 + 1)
   locker(1) = bus1
   locker(2) = bus2
   !     write (*,*) ' save  locker =',  locker
@@ -249,8 +249,8 @@ subroutine over1
   write (lunit6, 6438) ltlabl, lbus, lbrnch, ldata, lexct, lymat, lswtch, lsize7, lpast, lnonl, lchar, lsmout, &
        lsiz12, lfdep, lwt, ltails, limass, lsyn, maxpe, ltacst, lfsem, lfd, lhist, lsiz23, lcomp, lspcum, &
        lsiz26, lsiz27, lsiz28
-6438 format (' *********  Begin "m40." EMTP solution.   Size /label/ =', i7, '  integer words.   ', /, &
-       ' list limits  1-10 :', 10i6, /, ' list limits 11-20 :', 10i6, /, ' list limits 21-end:', 10i6)
+6438 format (' *********  Begin "m40." EMTP solution.   Size /label/ =', i7, '  integer words.', /, &
+          ' list limits  1-10 :', 10i6, /, ' list limits 11-20 :', 10i6, /, ' list limits 21-end:', 10i6)
   go to 15
 6452 write (lunit6, 83044) (ichar(locker(i)), i = 1, 2)
 83044 format (' Associated user documentation is the 864-page EMTP rule book dated  June, 1984.   Version M43.   Vardim time/date =', 2i7)
@@ -261,9 +261,9 @@ subroutine over1
           i8, '  integer words.', 3x, 6i6, /, (1x, 21i6, i5))
   write (lunit6, 83049)
   write (lunit6, 83047) (i, i = 1, 8)
-83047 format (' Descriptive interpretation of new-case input data 1 input data card images printed below, all 80 columns, character by character.' ,/, 51x, '0', 8(9x, i1))
+83047 format (' Descriptive interpretation of new-case input data 1 input data card images printed below, all 80 columns, character by character.', /, 51x, '0', 8(9x, i1))
   j = 0
-  write (lunit6, 83048)  ( j, i=1, 8 )
+  write (lunit6, 83048) (j, i = 1, 8)
 83048 format (51x, '0', 8(9x, i1))
   write (lunit6, 83049)
 83049 format (' --------------------------------------------------+----------------------------------------', &
@@ -271,7 +271,7 @@ subroutine over1
   !     begin loop over all input data cards read by "over1" :
   !     read input card using cimage.
 15 call cimage
-  if ( kill  .gt.  0 )   go to 9200
+  if (kill .gt. 0) go to 9200
   nright = -2
   n9 = kolbeg
   kolbeg = 1
@@ -322,53 +322,53 @@ subroutine over1
      if (disk_file(j : j) .ne. ' ') go to 2849
   end do
 2848 continue
-2849 write (*,*) ' name of old pl4 file  disk_file(j:80) =', disk_file(j : 80)
+2849 write (*, *) ' name of old pl4 file  disk_file(j : 80) =', disk_file(j : 80)
   lunt77 = 77
   open (unit = lunt77, status = 'old', file = disk_file(j : 80), form = 'unformatted' )
   texcol(13) = blank
   rewind lunt77
-  read (lunt77)  datexx, tcloxx, numnam, numnvo, numbco, numbrn
+  read (lunt77) datexx, tcloxx, numnam, numnvo, numbco, numbrn
   write (*, *) ' 1st record.  numnam, numnvo, numbco, numbrn =', numnam, numnvo, numbco, numbrn
-  if(lbus+lsize7 .ge. numnam .and. lsiz12 .ge. numnvo .and. lbrnch .ge. numbrn) go to 2859
+  if(lbus + lsize7 .ge. numnam .and. lsiz12 .ge. numnvo .and. lbrnch .ge. numbrn) go to 2859
   write (lunit6, 2858) numnam, numnvo, numbrn
 2858 format (' Temporary error stop in "over1".   Program dimensioning is inadequate.   numnam, numnvo, numbrn =', 3i8)
   call stoptp
 2859 rewind lunt77
   n8 = lbus
   if(lbus .ge. numnam) n8 = numnam - 1
-  write (*, *) ' new name logic. n8, numnam, lbus =', n8, numnam, lbus
+  write (*, *) ' New name logic. n8, numnam, lbus =', n8, numnam, lbus
   read (lunt77) datexx, tcloxx, numnam, numnvo, numbco, numbrn, (bus(j), j = 1, n8)
   write (*, 9442) (bus(j), j = 1, n8)
-9442 format (' bus(1:n8) =', 10a7)
+9442 format (' bus(1 : n8) =', 10a7)
   rewind lunt77
   num888 = numnam - n8
-  write (*, *) ' ready for final, full read with  num888 =', num888
+  write (*, *) ' Ready for final, full read with  num888 =', num888
   read (lunt77)  datexx, tcloxx, numnam, numnvo, numbco, numbrn, ( bus(j), j=1, n8), ( texvec(j), j=1, num888 )
-  write (*,*) ' after all names are read.  next, ibsout.'
-  if ( numnvo  .gt.  0 ) read (lunt77)  ( ibsout(j),  j=1, numnvo )
-  write (*,*) ' after ibsout.  next, ....'
-  if ( numbrn  .gt.  0 ) read (lunt77)  ( kbus(j), mbus(j),  j=1, numbrn )
-  write (*,*) ' after kbus, mbus.'
-  write (lunit4)  date1, tclock, numnam, numnvo, numbco, numbrn, ( bus(j), j=1, n8), ( texvec(j), j=1, num888 )
-  write (*, 3899)  date1, tclock
+  write (*, *) ' After all names are read.  next, ibsout.'
+  if (numnvo .gt. 0) read (lunt77) (ibsout(j), j = 1, numnvo)
+  write (*, *) ' After ibsout.  next, ....'
+  if (numbrn .gt. 0) read (lunt77) (kbus(j), mbus(j), j = 1, numbrn)
+  write (*, *) ' After kbus, mbus.'
+  write (lunit4) date1, tclock, numnam, numnvo, numbco, numbrn, (bus(j), j = 1, n8), (texvec(j), j = 1, num888)
+  write (*, 3899) date1, tclock
 3899 format (' over1, lunit4 date and time =', 2a4, 2x, 2a4)
-  if ( numnvo  .gt.  0 ) write (lunit4)  ( ibsout(j), j=1, numnvo )
-  if ( numbrn  .gt.  0 ) write (lunit4)  ( kbus(j), mbus(j), j=1, numbrn )
+  if (numnvo .gt. 0) write (lunit4) (ibsout(j), j = 1, numnvo)
+  if (numbrn .gt. 0) write (lunit4) (kbus(j), mbus(j), j = 1, numbrn)
   n18 = numnvo + numbrn + 1
-  write (*,*) ' enter loop over numbers.  n18 =',  n18
+  write (*, *) ' Enter loop over numbers.  n18 =', n18
   do j = 1, 99999
-     read (lunt77, end=6539)  ( r4(k), k=1, n18 )
-     if ( iprsup .eq. 7 .or. iprsup .gt. 9 ) write (*,*) ' j, r4(1) =',  j, r4(1)
-     if ( r4(1) .eq. -9999. ) go to 6539
-6528 write (lunit4)  ( r4(k), k=1, n18 )
+     read (lunt77, end = 6539) (r4(k), k = 1, n18)
+     if (iprsup .eq. 7 .or. iprsup .gt. 9) write (*, *) ' j, r4(1) =', j, r4(1)
+     if (r4(1) .eq. -9999.) go to 6539
+6528 write (lunit4) (r4(k), k = 1, n18)
   end do
-6539 write (*,*) ' done transferring lunt77 to lunit4.  j =',  j
-2861 call runtym(d1, d2)
-  n18 = ichar(locker(1))
-  n19 = ichar(locker(2))
+6539 write (*, *) ' Done transferring lunt77 to lunit4.  j =', j
+2861 call runtym (d1, d2)
+  n18 = ichar (locker(1))
+  n19 = ichar (locker(2))
   call pfatch
   call tables
-  write (*,*) ' n18, n19, locker(1), locker(2) =', n18, n19, locker(1), locker(2)
+  write (*, *) ' n18, n19, locker(1), locker(2) =', n18, n19, locker(1), locker(2)
   flstat(1) = -d1
   flstat(2) = -d2
   if (n18 .eq. ichar(locker(1)) .and. n19 .eq. ichar(locker(2))) go to 2863
@@ -378,35 +378,35 @@ subroutine over1
 2863 continue
   !     read input card using cimage.
 2868 call cimage
-  read (unit=abuff, fmt=1212) ijk
+  read (unit = abuff, fmt = 1212) ijk
 1212 format (54x, i6)
-  if ( ijk  .ne.  0 )  go to 6161
-  if ( kolbeg  .gt.  0 )   go to 2872
+  if (ijk .ne. 0) go to 6161
+  if (kolbeg .gt. 0) go to 2872
   read (unit = abuff, fmt = 2870) n3, d7, d8
 2870 format (i8, 2e16.0)
   go to 2875
 2872 nfrfld = 1
-  call freone(d3)
+  call freone (d3)
   n3 = d3
-  call freone(d7)
-  call freone(d8)
-  call freone(ddd)
+  call freone (d7)
+  call freone (d8)
+  call freone (ddd)
 2875 if (n3 .eq. 9999) go to 2879
   if (noutpr .eq. 0) write (kunit6, 2876)  n3, d7, d8
 2876 format ('+Altered switch.', i4, 2e13.4)
   tclose(n3) = d7
   if (d8 .gt. 0.0) topen(n3) = d8
   go to 2868
-6161 if ( iabs(ijk)  .eq.  1111 ) go to 6363
+6161 if (iabs(ijk) .eq. 1111) go to 6363
   call swmodf
   go to 2868
 6363 call tacs1c
   go to 2868
-2879 if ( noutpr  .eq.  0 ) write (kunit6, 2882)
+2879 if (noutpr .eq. 0) write (kunit6, 2882)
 2882 format ('+Terminator for switch closing times.')
-  read (lunit2)  locker
+  read (lunit2) locker
   do j = 1, 9999
-     read (lunit2, end=2479) ansi132
+     read (lunit2, end = 2479) ansi132
 2474 format (a132)
      write (lunit6, 2474) ansi132
   end do
@@ -419,36 +419,35 @@ subroutine over1
   go to 15
   !     $$$$$  special request-word no. 32.  'absolute tacs dimensions'  $
 8032 if ( noutpr  .eq.  0 ) write (kunit6, 7020)
-7020 format ('+Set absolute tacs list size limits.')
+7020 format ('+Set absolute TACS list size limits.')
   !     read input card using cimage
   call cimage
   if (kolbeg .gt. 0) go to 7030
   call intchk(ll1, ll80, ll8)
   if (kill .gt. 0) go to 9200
-  !     decode (80, 5, abuff) (lstacs(i), i=1, 8)
-  read (unit=abuff, fmt=5) (lstacs(i), i=1, 8)
+  read (unit = abuff, fmt = 5) (lstacs(i), i = 1, 8)
   go to 7050
 7030 nfrfld = 10
-  call frefld( voltbc(1) )
+  call frefld (voltbc)
   do i = 1, 8
      lstacs(i) = voltbc(i)
   end do
-7050 if (lstacs(1) .lt. 5 )   lstacs(1) = 5
-  if ( noutpr  .eq.  0 ) write (kunit6, 7060) lstacs(1), lstacs(2), lstacs(3)
-7060 format ('+1st tacs dimensions card.', 3i6)
+7050 if (lstacs(1) .lt. 5) lstacs(1) = 5
+  if (noutpr .eq. 0 ) write (kunit6, 7060) lstacs(1), lstacs(2), lstacs(3)
+7060 format ('+1st TACS dimensions card.', 3i6)
   go to 15
   !     $$$$$  special request-word no. 33.  'relative tacs dimensions'  $
-8033 if ( noutpr  .eq.  0 ) write (kunit6, 7110)
-7110 format ('+Proportional allocation of total tacs storage.')
+8033 if (noutpr .eq. 0) write (kunit6, 7110)
+7110 format ('+Proportional allocation of total TACS storage.')
   !     read input card using cimage
   call cimage
   if (kolbeg .gt. 0) go to 7120
   call expchk(ll1, ll80, ll8)
   if (kill .gt. 0) go to 9200
-  read (unit=abuff, fmt=3415) (voltbc(i), i = 1, 10)
+  read (unit = abuff, fmt = 3415) (voltbc(i), i = 1, 10)
   go to 7130
 7120 nfrfld = 10
-  call frefld( voltbc(1) )
+  call frefld (voltbc)
 7130 if(noutpr .eq. 0) write (kunit6, 7140) voltbc(1), voltbc(2), voltbc(3)
 7140 format ('+Relative list sizes.', 3e9.2)
   d1 = 0.0
@@ -456,26 +455,26 @@ subroutine over1
      d1 = d1 + voltbc(i)
   end do
   d1 = ltacst * nbyte(3) / d1
-  lstacs( 1) = voltbc( 1) * d1 / ( 4 * nbyte(3) + 8 * nbyte(4) )
-  lstacs( 2) = voltbc( 2) * d1 / ( 2 * nbyte(3) + nbyte(4) )
-  lstacs( 3) = voltbc( 3) * d1 / ( 2 * nbyte(4) )
-  lstacs( 4) = voltbc( 4) * d1 / ( 5 * nbyte(3) + nbyte(4) )
-  lstacs( 5) = voltbc( 5) * d1 / ( 3 * nbyte(4) )
-  lstacs( 6) = voltbc( 6) * d1 / nbyte(4)
-  lstacs( 7) = voltbc( 7) * d1 / nbyte(3)
-  lstacs( 8) = voltbc( 8) * d1 / ( 6 * nbyte(3) + 2 * nbyte(4) )
+  lstacs(1) = voltbc(1) * d1 / (4 * nbyte(3) + 8 * nbyte(4))
+  lstacs(2) = voltbc(2) * d1 / (2 * nbyte(3) + nbyte(4))
+  lstacs(3) = voltbc(3) * d1 / (2 * nbyte(4) )
+  lstacs(4) = voltbc(4) * d1 / (5 * nbyte(3) + nbyte(4))
+  lstacs(5) = voltbc(5) * d1 / (3 * nbyte(4) )
+  lstacs(6) = voltbc(6) * d1 / nbyte(4)
+  lstacs(7) = voltbc(7) * d1 / nbyte(3)
+  lstacs(8) = voltbc(8) * d1 / (6 * nbyte(3) + 2 * nbyte(4))
   go to 15
   !     begin processing floating point misc. data card ....
-2843 if ( noutpr .ne. 0 .and. iprsup .gt. 0) noutpr = 0
+2843 if (noutpr .ne. 0 .and. iprsup .gt. 0) noutpr = 0
   xopt = statfr
   copt = statfr
   kolbeg = n9
-  if ( kolbeg .gt. 0) go to 4201
-  call expchk ( ll1,  ll80,  ll8 )
-  if ( kill  .gt.  0 )   go to 9200
+  if (kolbeg .gt. 0) go to 4201
+  call expchk (ll1, ll80, ll8)
+  if (kill .gt. 0) go to 9200
   read (unit = abuff(1), fmt = 3415, iostat = ios) deltat, tmax, d1, d2, d3, tolmat, t
 3415 format (10e8.0)
-  if ( t  .eq.  0.0 )   t = 0.0
+  if (t .eq. 0.0) t = 0.0
   go to 4202
 4201 nfrfld = 1
   nright = 0
@@ -488,7 +487,7 @@ subroutine over1
   call freone (t)
 4202 if (noutpr .eq. 0) write (kunit6, 4205)  deltat, tmax, d1
 4205 format ('+Misc. data.', 3e12.3)
-  if(iofbnd .ne. 33666) go to 4206
+  if (iofbnd .ne. 33666) go to 4206
   nchain = 41
   xopt = d1
   go to 9800
@@ -501,23 +500,23 @@ subroutine over1
 5 format (10i8)
   go to 4208
 4207 nfrfld = 10
-  call frefld ( voltbc(1) )
-  iout   = voltbc(1)
-  iplot  = voltbc(2)
+  call frefld (voltbc)
+  iout = voltbc(1)
+  iplot = voltbc(2)
   idoubl = voltbc(3)
   kssout = voltbc(4)
   maxout = voltbc(5)
-  ipun   = voltbc(6)
+  ipun = voltbc(6)
   memsav = voltbc(7)
-  icat   = voltbc(8)
+  icat = voltbc(8)
   n1 = voltbc(9)
   n2 = voltbc(10)
 4208 nenerg = n1
   if (iplot .eq. 0) iplot = 1
   if (m4plot .eq. 1 .and. iplot .eq. -1) iplot = 1
   if (iplot .eq. -1) isplot = intinf
-  if (noutpr .eq.  0) write (kunit6, 4210) iout, iplot, idoubl, kssout, maxout, ipun, memsav, icat, n1, n2
-4210 format ('+Misc. data.', 2i5, 8i3, $)
+  if (noutpr .eq. 0) write (kunit6, 4210) iout, iplot, idoubl, kssout, maxout, ipun, memsav, icat, n1, n2
+4210 format ('+Misc. data.', 2i5, 8i3)
   begmax(1) = maxout
   maxout = 2
   if (n2 .eq. 0) go to 6519
@@ -535,7 +534,7 @@ subroutine over1
 620 format (3i8, 6f8.0, i8)
   go to 624
 623 nfrfld = 3
-  call frefld ( voltbc(1) )
+  call frefld (voltbc)
   isw = voltbc(1)
   itest = voltbc(2)
   idist = voltbc(3)
@@ -546,7 +545,7 @@ subroutine over1
   call freone (degmax)
   call freone (d4)
   call freone (sigmax)
-  call frefld (voltbc(1))
+  call frefld (voltbc)
   jseedr = voltbc(1)
 624 if (noutpr .eq.  0) write (kunit6, 630) isw, itest, idist, aincr
 630 format ('+Statistics data.', 3i8, f9.4, $)
@@ -572,7 +571,7 @@ subroutine over1
   if( d2 .eq. copt )  go to 6265
   if ( noutpr  .eq.  0 ) write (lunit6, 6256) copt, d2
 6256 format (' ----- Warning. Nonzero misc. data parameter "copt" differs from the power frequency of', f8.2, &
-       ' .   This is unusual.         ', /, 7x,  'A value of', e13.4, ' was read from columns 25-32 of the data card just read.   Execution will continue using   ', /, &
+       ' .   This is unusual.', /, 7x,  'A value of', e13.4, ' was read from columns 25-32 of the data card just read.   Execution will continue using', /, &
        7x, 'this value, as suspicious as it seems to the EMTP.')
 6265 copt = d2
   if ( d3  .gt.  0.0 )   epsiln = d3
@@ -602,15 +601,15 @@ subroutine over1
   tmax = tmax - delta2
   if ( memsav .eq. 1 )  tmax = tmax + deltat
   i = 1
-  if ( ipun  .lt.  0 )   go to 4303
-  if ( kprchg(1)  .eq.  -7777 )   go to 4213
+  if (ipun .lt. 0) go to 4303
+  if (kprchg(1) .eq. -7777) go to 4213
   go to 4312
 4303 ipun = 0
   !     read input card using cimage.
 4308 call cimage
-  if ( kolbeg  .gt.  0 )   go to 4217
-  call intchk ( ll1, ll80, ll8 )
-  if ( kill  .gt.  0 )   go to 9200
+  if (kolbeg .gt. 0) go to 4217
+  call intchk (ll1, ll80, ll8)
+  if (kill  .gt.  0) go to 9200
   read (unit = abuff, fmt = 4211) (kprchg(i), multpr(i), i = 1, 5)
 4211 format (10i8)
   go to 4219
@@ -830,12 +829,12 @@ subroutine reques
   equivalence (moncar(2), kbase),   (moncar(3), ltdelt)
   equivalence (iprsov(39), nmauto)
   character(8) textax, textay
-  common /systematic/  linsys
+  common /systematic/ linsys
   dimension textax(300), jpntr(10000), textay(100)
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
   character*6 chlmfs        ! 9-phase as limit for lmfs test
-  character*80 char80
+  character(80) char80
   !     $$$$$    special-request word no. 1.   'xformer'           $$$$$
   data  textay(1)   /  6hx       /
   data  jpntr(1)    /  1  /
