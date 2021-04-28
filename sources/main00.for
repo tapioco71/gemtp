@@ -104,12 +104,12 @@ program gemtp
   if (n1 .gt. 30) n1 = n1 - 30
   if (n1 .le. 0) n1 = 1
   iprsup = iprsov(n1)
-  if (nchain .gt. 20)   go to 2010
+  if (nchain .gt. 20) go to 2010
   if (nchain .eq. 12 .or. nchain .eq. 2) go to 1983
-  if (nchain .eq. -1) call move0(iprsov(1), ll34)
+  if (nchain .eq. -1) call move0 (iprsov(1), ll34)
   call erexit
   nchain = 0
-  if (nchain .gt. 20)   go to 2000
+  if (nchain .gt. 20) go to 2000
 1983 call main10
   go to 2000
 2010 if (m4plot .eq. 1) call emtspy
@@ -330,7 +330,6 @@ subroutine runtym (d1, d2)
   !     Include  '[scott]commuk.for' --- share with "settym" in-line:
   common /timers/ cputime
   integer(4) cputime
-  common /timer2/ l4cpu, cputime_code, cputime_adr, zero, zerofin
   real(8) now_cputime
   integer(4) zero, zerofin, time
   !     if (.not.sys$getjpi(,,,l4cpu,,,)) then
