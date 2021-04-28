@@ -27,7 +27,7 @@ subroutine over1
   equivalence (iprsov(39), nmauto)
   character(8) aupper, text1, text2, text6, datexx(2)
   character(8) text3, text4, text5, text9, tcloxx(2)
-  character locker
+  integer(4) locker
   dimension aupper(14)
   dimension lstacs(8)
   character(80) disk_file
@@ -110,7 +110,7 @@ subroutine over1
   do j = 1, 6
      nbyte(j) = 1
   end do
-  call dimens ( lstat(1), nchain, bus1, bus2 )
+  call dimens (lstat(1), nchain, bus1, bus2)
   lbus   = lstat( 1)
   lbrnch = lstat( 2)
   ldata  = lstat( 3)
@@ -143,8 +143,10 @@ subroutine over1
   !     dimensioning (of the solution overlays).
   n1 = 28
   ltlabl = lstat(n1 + 1)
-  locker(1) = bus1
-  locker(2) = bus2
+  !locker(1) = bus1
+  write (unit = bus1, fmt = '(i4)') locker(1)
+  !locker(2) = bus2
+  write (unit = bus2, fmt = '(i4)') locker(2)
   !     write (*,*) ' save  locker =',  locker
   d13 = ltacst
   d13 = d13 / 1600.
@@ -152,10 +154,10 @@ subroutine over1
      lstacs(j) = lstacs(j) * d13
   end do
   n1 = -9999
-  call copyi(n1, lstat(1), ll60)
+  call copyi (n1, lstat(1), ll60)
   call sysdep
-  call mover0(flstat(1), ll20)
-  call runtym(d1, d2)
+  call mover0 (flstat(1), ll20)
+  call runtym (d1, d2)
   flstat(1) = flstat(1) - d1
   flstat(2) = flstat(2) - d2
   tenm6 = tenm3 ** 2
@@ -198,12 +200,12 @@ subroutine over1
   inecho = 0
   bus(1) = blank
   iaverg = 0
-  call move0(isourc(1), lswtch)
-  call move0(kodebr(1), lbrnch)
-  call move0(kodsem(1), lbrnch)
-  call move0(length(1), lbrnch)
-  call move0(indhst(1), lbrnch)
-  call mover0(bvalue(1), lsiz12)
+  call move0 (isourc(1), lswtch)
+  call move0 (kodebr(1), lbrnch)
+  call move0 (kodsem(1), lbrnch)
+  call move0 (length(1), lbrnch)
+  call move0 (indhst(1), lbrnch)
+  call mover0 (bvalue(1), lsiz12)
   iswent = 1
   omega = 0.0
   degmin = 0.0
@@ -252,8 +254,8 @@ subroutine over1
 6438 format (' *********  Begin "m40." EMTP solution.   Size /label/ =', i7, '  integer words.', /, &
           ' list limits  1-10 :', 10i6, /, ' list limits 11-20 :', 10i6, /, ' list limits 21-end:', 10i6)
   go to 15
-6452 write (lunit6, 83044) (ichar(locker(i)), i = 1, 2)
-83044 format (' Associated user documentation is the 864-page EMTP rule book dated  June, 1984.   Version M43.   Vardim time/date =', 2i7)
+6452 write (lunit6, 83044) (locker(i), i = 1, 2)
+83044 format (' Associated user documentation is the 864-page EMTP rule book dated  June, 1984.   Version M43.   Vardim time/date =', 2i4)
   write (lunit6, 5241)  ltlabl, lbus, lbrnch, ldata, lexct, lymat, lswtch, lsize7, lpast, lnonl, lchar, lsmout, &
        lsiz12, lfdep, lwt, ltails, limass, lsyn, maxpe, ltacst, lfsem, lfd, lhist, lsiz23, lcomp, lspcum, &
        lsiz26, lsiz27, lsiz28
@@ -364,14 +366,14 @@ subroutine over1
   end do
 6539 write (*, *) ' Done transferring lunt77 to lunit4.  j =', j
 2861 call runtym (d1, d2)
-  n18 = ichar (locker(1))
-  n19 = ichar (locker(2))
+  n18 = locker(1)
+  n19 = locker(2)
   call pfatch
   call tables
   write (*, *) ' n18, n19, locker(1), locker(2) =', n18, n19, locker(1), locker(2)
   flstat(1) = -d1
   flstat(2) = -d2
-  if (n18 .eq. ichar(locker(1)) .and. n19 .eq. ichar(locker(2))) go to 2863
+  if (n18 .eq. locker(1) .and. n19 .eq. locker(2)) go to 2863
   kill = 201
   lstat(19) = 2861
   go to 9200

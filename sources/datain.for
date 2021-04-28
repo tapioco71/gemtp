@@ -17,21 +17,19 @@ subroutine datain
   include 'io.ftn'
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
-  character(6) chlmfs
-  character(80) char80
-  character(6) dumnam
+  character(6) chlmfs, dumnam
   character(12) typdat(18)
   character(20) arginc(35)
   character(32) filsav
   character(40) prefix, suffix
-  character(80) tank(1000)
+  character(80) char80, tank(1000)
   dimension kard(200), karg(200), kbeg(200), kend(200)
   dimension ktex(200), lentyp(18)
   dimension kolinc(35), modarg(35), kkkdum(35)
-  data  komlev     /  -1  /                              ! default comment level (none)
-  data  nchpre     /  0  /                               ! begin with no file name prefix
-  data  nchsuf     /  0  /                               ! begin with no file name suffix
-  data  dumnam     / 'dum   ' /                          ! default dummy root name
+  data  komlev     / -1 /                                   ! default comment level (none)
+  data  nchpre     / 0 /                                    ! begin with no file name prefix
+  data  nchsuf     / 0 /                                    ! begin with no file name suffix
+  data  dumnam     / 'dum   ' /                             ! default dummy root name
   data  typdat(1)  / 'request     ' /,   lentyp(1)  /  7  /
   data  typdat(2)  / 'function    ' /,   lentyp(2)  /  8  /
   data  typdat(3)  / 'tacs source ' /,   lentyp(3)  / 11  /
@@ -46,14 +44,14 @@ subroutine datain
   data  typdat(12) / 'output      ' /,   lentyp(12) /  6  /
   data  typdat(13) / 'plot        ' /,   lentyp(13) /  4  /
   data  typdat(14) / 'statistics  ' /,   lentyp(14) / 10  /
-  data  numtyp  /  14  /                                 ! total number of data type names
-  data  filsav  / '                                '  /  ! for lmfs
-  if (kexact .ne. 88333) numrun = 0                   ! init. numrun for lmfs runs
+  data  numtyp     / 14 /                                   ! total number of data type names
+  data  filsav     / '                                '  /  ! for lmfs
+  if (kexact .ne. 88333) numrun = 0                         ! init. numrun for lmfs runs
   if (kexact .eq. 88333 .and. numrun .gt. 0) go to 5266
   if (numhld .eq. -8899) stop
   if (numhld .eq. 0) go to 5244
   do j = 1, numhld
-     if (tank(j)(1 : 19) .eq. 'begin new data case' .and. j .gt. 3) go to 3389
+     if (tank(j)(1 : 19) .eq. 'Begin new data case' .and. j .gt. 3) go to 3389
 2847 file6(j) = tank(j)
   end do
 3389 numcrd = j - 1
@@ -152,7 +150,7 @@ subroutine datain
   call window                                               ! output of character variable munit6
   go to 1311                                                ! loop back to opening prompt (repeat it)
 1746 n14 = j - n16                                          ! number of characters in file name
-  ansi32(1 : n14) = buff77(n16:j - 1)                       ! transfer disk file name
+  ansi32(1 : n14) = buff77(n16 : j - 1)                     ! transfer disk file name
   ansi32(n14 + 1 : 32) = blan80(n14 + 1 : 32)               ! blank out remainder
   filsav = ansi32(1 : 32)
   if (iprsup .ge. 1) write (lunit6, 1752) ansi32
@@ -175,7 +173,7 @@ subroutine datain
 5486 numhld = numhld + 1
      if (numhld .gt. 1000) write (munit6, *) ' Input data cards overflow tank(1000).   Halt.'
      if (numhld .gt. 1000) call stoptp
-     tank(numhld) = file6(krdoff+j)
+     tank(numhld) = file6(krdoff + j)
                                                             !     if all EMTP data (e.g., "kill codes" use) comes via key
                                                             !     board, it is ended with "eof"; when solved, more keyboard.
 1756 if (file6(krdoff + j)(1 : 4) .eq. 'eof ') go to 1766
@@ -632,223 +630,224 @@ subroutine datain
   n24 = n24 + 1                                             ! increment destination address past this
   file6(n24) = file6(j + 1)                                 ! transfer case-marker card below
   j = j + 1                                                 ! update number of original data cards now done
-2446 if (n1 .eq. 0)  go to 2453                             ! no "/request" cards used
+2446 if (n1 .eq. 0) go to 2453                              ! no "/request" cards used
   n8 = 1                                                    !  index for "request", data which we now add
   go to 2472                                                ! jump to the insertion of this class-1 data
 2453 j = j + 1                                              ! next card number of original data considered
   if (j .gt. numcrd) go to 2497                             ! done with all data
   if (j .ne. n18) go to 2456                                ! not a "/" card, so bypass such
-  j = kpsour(n17)   ! advance card pointer to last card in "/" class
-  n17 = n17 + 1   ! following "/" usage is in this next row of table
-  n18 = kssfrq(n17)   ! card number where next "/" cards will appear
-  go to 2453         ! loop back to continue search for "blank" card
-2456 if ( n8 .ne. 9 )  go to 2458   ! not at end of source data
-  if ( n10 .eq. 0 )  go to 2460   ! no "/load flow" requests
-  n8 = n10   !  index for "load flow", data which we now add
-  go to 2472   ! jump to the insertion of this class-10 data
-2458 if ( n8 .ne. 10 )  go to 2462  ! "/initial" not just added
-2460 if ( n11 .eq. 0 ) go to 2462   ! no "/initial" to be added
-  n8 = 11      !  index for "initial", data which we now add
-  go to 2472   ! jump to the insertion of this class-11 data
-2462 if (file6(j)(1 : 6) .ne. 'blank ') go to 2493   ! not end of class
-  if ( iprspy .lt. 2 )  go to 2465  ! jump around diagnostic
-  write (munit6, 2464)  j
-2464 format (' Blank card recognized.  j =',  i6)
-  call window         ! output of character variable munit6
-2465 do k=1, numtyp    ! search class table to identify data type
-     n8 = lentyp(k)   ! number of characters in k-th key word
+  j = kpsour(n17)                                           ! advance card pointer to last card in "/" class
+  n17 = n17 + 1                                             ! following "/" usage is in this next row of table
+  n18 = kssfrq(n17)                                         ! card number where next "/" cards will appear
+  go to 2453                                                ! loop back to continue search for "blank" card
+2456 if (n8 .ne. 9) go to 2458                              ! not at end of source data
+  if (n10 .eq. 0) go to 2460                                ! no "/load flow" requests
+  n8 = n10                                                  ! index for "load flow", data which we now add
+  go to 2472                                                ! jump to the insertion of this class-10 data
+2458 if (n8 .ne. 10) go to 2462                             ! "/initial" not just added
+2460 if (n11 .eq. 0) go to 2462                             ! no "/initial" to be added
+  n8 = 11                                                   ! index for "initial", data which we now add
+  go to 2472                                                ! jump to the insertion of this class-11 data
+2462 if (file6(j)(1 : 6) .ne. 'blank ') go to 2493          ! not end of class
+  if (iprspy .lt. 2) go to 2465                             ! jump around diagnostic
+  write (munit6, 2464) j
+2464 format (' Blank card recognized.  j =', i6)
+  call window                                               ! output of character variable munit6
+2465 do k = 1, numtyp                                       ! search class table to identify data type
+     n8 = lentyp(k)                                         ! number of characters in k-th key word
      n14 = index (file6(j), typdat(k)(1 : n8))              ! search for keyword k
-     if ( n14 .gt. 0 ) go to 2469   ! yes, one of our data classes foun
+     if (n14 .gt. 0) go to 2469                             ! yes, one of our data classes foun
   end do
-2466 continue        ! end  do 2464  loop seeking to identify blank card
+2466 continue                                               ! end  do 2464  loop seeking to identify blank card
   n14 = index(file6(j), 'tacs data')
-  if ( n14 .eq. 0 )  go to 2493    ! only one class if new tacs
-  k = 6            ! data format, so set class no. to 6 (last one)
-2469 n8 = k       ! data class which this blank card terminates
-  !     convert end of class blank card in old tacs data to comment card
+  if ( n14 .eq. 0 )  go to 2493                             ! only one class if new tacs
+  k = 6                                                     ! data format, so set class no. to 6 (last one)
+2469 n8 = k                                                 ! data class which this blank card terminates
+                                                            ! convert end of class blank card in old tacs data to comment card
   if (k .eq. 2 .or. k .eq. 3 .or. k .eq. 4 .or. k .eq. 5) file6(j)(1 : 2) = 'c '
-2472 if (iprspy .lt. 3)  go to 2475                         ! jump around diagnostic
+2472 if (iprspy .lt. 3) go to 2475                          ! jump around diagnostic
   write (munit6, 2474) n8
-2474 format (' Data class needs consideration.  n8 =',  i6)
-  call window         ! output of character variable munit6
-2475 do k=1, n12   ! search rows of "/" table for class number n8
-     if ( kode(k) .ne. n8 )  go to 2484   ! not correct class for blank
-     n5 = kssfrq(k) + 1  ! beginning active data card of k-th "/" usage
-     n6 = kpsour(k)                ! ending data card of k-th "/" usage
-     if ( n24+n6-n5 .ge. limcrd ) go to 1760 ! overflow message
-     do l=n5, n6   ! loop over each active card of k-th "/" usage
-        n24 = n24 + 1         ! next destination card address we copy into
+2474 format (' Data class needs consideration.  n8 =', i6)
+  call window                                               ! output of character variable munit6
+2475 do k = 1, n12                                          ! search rows of "/" table for class number n8
+     if (kode(k) .ne. n8) go to 2484                        ! not correct class for blank
+     n5 = kssfrq(k) + 1                                     ! beginning active data card of k-th "/" usage
+     n6 = kpsour(k)                                         ! ending data card of k-th "/" usage
+     if (n24 + n6 - n5 .ge. limcrd) go to 1760              ! overflow message
+     do l = n5, n6                                          ! loop over each active card of k-th "/" usage
+        n24 = n24 + 1                                       ! next destination card address we copy into
 2477    file6(n24) = file6(l)                               ! insert "/" card in lower working area
      end do
-     if (iprspy .lt. 3) go to 2484  ! jump around diagnostic
-     write (munit6, 2479)  n5, n6, n24
+     if (iprspy .lt. 3) go to 2484                          ! jump around diagnostic
+     write (munit6, 2479) n5, n6, n24
 2479 format (' Done with "/" copy below.  n5, n6, n24 =', 3i6)
-     call window         ! output of character variable munit6
+     call window                                            ! output of character variable munit6
   end do
-2484 continue     ! end  do 2484  loop over all entries "k" in "/" table
-  ! if just done with "/load flow" or
-  if ( n8 .eq. 10  .or.  n8 .eq. 11 ) go to 2456  ! "/initial", special return
-  if ( j .le. 2 )  go to 2453  ! "/request" preceded nothing
-2493 n24 = n24 + 1 ! next destination card address we copy into
+2484 continue                                               ! end  do 2484  loop over all entries "k" in "/" table
+                                                            ! if just done with "/load flow" or
+  if (n8 .eq. 10 .or. n8 .eq. 11) go to 2456                ! "/initial", special return
+  if (j .le. 2) go to 2453                                  ! "/request" preceded nothing
+2493 n24 = n24 + 1                                          ! next destination card address we copy into
   file6(n24) = file6(j)                                     ! copy original card j into low assembly
-  if ( n24 .ge. limcrd ) go to 1760 ! overflow error message
-  if ( j .lt. numcrd )  go to 2453   ! not finished; back for next j
-2497 if ( iprspy .lt. 2 )  go to 2500  ! jump around diagnostic
-  write (munit6, 2499)  n24
-2499 format (' Done with lower assembly.  n24 =',  i8)
-  call window         ! output of character variable munit6
-2500 j = 0         ! initialize card destination index for upward shift
-  do k=numcrd+1, n24    ! consider each lower-assembled card k
-     j = j + 1      ! final upper index, where card in lower row k goes
+  if (n24 .ge. limcrd) go to 1760                           ! overflow error message
+  if (j .lt. numcrd) go to 2453                             ! not finished; back for next j
+2497 if (iprspy .lt. 2) go to 2500                          ! jump around diagnostic
+  write (munit6, 2499) n24
+2499 format (' Done with lower assembly.  n24 =', i8)
+  call window                                               ! output of character variable munit6
+2500 j = 0                                                  ! initialize card destination index for upward shift
+  do k = numcrd + 1, n24                                    ! consider each lower-assembled card k
+     j = j + 1                                              ! final upper index, where card in lower row k goes
      file6(j) = file6(k)                                    ! shift card image upward to final position
-     if (iprspy .lt. 9) go to 2505  ! jump around diagnostic
+     if (iprspy .lt. 9) go to 2505                          ! jump around diagnostic
      write (munit6, 2501) j, file6(j)
-2501 format (' Card',  i3,  '.', a80)
-     call window         ! output of character variable munit6
+2501 format (' Card', i3, '.', a80)
+     call window                                            ! output of character variable munit6
   end do
 2505 continue
-  numcrd = j    ! final length of emtp input data, after "/" removal
-  if ( iprspy .lt. 1 )  go to 2509  ! jump around diagnostic
-  write (munit6, 2508)  numcrd
+  numcrd = j                                                ! final length of EMTP input data, after "/" removal
+  if (iprspy .lt. 1) go to 2509                             ! jump around diagnostic
+  write (munit6, 2508) numcrd
 2508 format (' Done with all "/" processing.  numcrd =', i8)
-  call window         ! output of character variable munit6 ! ?????  if interactive use,
-2509 if ( m4plot .eq. 1 )  call spying    !  ????????   temporary diagnostic  ??????
+  call window                                               ! output of character variable munit6
+                                                            ! ?????  if interactive use,
+2509 if (m4plot .eq. 1) call spying                         !  ????????   temporary diagnostic  ??????
   go to 9800         ! exit module after possible diagnostic
-  !     begin code to process "module" of user.  convert user data
+  !     Begin code to process "module" of user.  Convert user data
   !     from  "arg", "dum", and "num" character declarations to
   !     the vectors kard/karg/kbeg/kend/ktex as needed by $include
-2613 iprspy = n13          ! diagnostic spy printout (0 or 99)
-  numcrd = 0     ! erase memory of any previous data storage
-  call spying        ! allow "data" usage to read input file
-  n8 = 0     ! initialize the number of declaration cards recognized
-  numarg = 0          ! initialize the number of non-dummy arguments
-  n11 = limcrd + 1    ! initialize destination address 1 past bottom
-  n13 = 0           ! initialize count of card being considered next
-  n4 = 1      ! temporary integer variable storage for unity
-  call copyi ( n4, modarg(1), limarg )     ! initialize mode
-  go to 2628              ! jump into loop over all input cards n13
-2621 n11 = n11 - 1    ! next destination address (store from bottom up)
-  file6(n11) = buff77         ! copy non-declaration card down below
-2628 n13 = n13 + 1         ! next input card (natural order) considered
-  if ( n13 .gt. numcrd )  go to 2703     ! done processing all cards
-  buff77 = file6(n13)         ! copy input card into working storage
-  ! skip over any card ! not "arg" or "dum"
-  if ( buff77(1:3) .ne. 'arg'  .and. buff77(1:3) .ne. 'dum'  .and. buff77(1:3) .ne. 'num' )  go to 2621     ! or "num"
+2613 iprspy = n13                                           ! diagnostic spy printout (0 or 99)
+  numcrd = 0                                                ! erase memory of any previous data storage
+  call spying                                               ! allow "data" usage to read input file
+  n8 = 0                                                    ! initialize the number of declaration cards recognized
+  numarg = 0                                                ! initialize the number of non-dummy arguments
+  n11 = limcrd + 1                                          ! initialize destination address 1 past bottom
+  n13 = 0                                                   ! initialize count of card being considered next
+  n4 = 1                                                    ! temporary integer variable storage for unity
+  call copyi (n4, modarg(1), limarg)                        ! initialize mode
+  go to 2628                                                ! jump into loop over all input cards n13
+2621 n11 = n11 - 1                                          ! next destination address (store from bottom up)
+  file6(n11) = buff77                                       ! copy non-declaration card down below
+2628 n13 = n13 + 1                                          ! next input card (natural order) considered
+  if ( n13 .gt. numcrd )  go to 2703                        ! done processing all cards
+  buff77 = file6(n13)                                       ! copy input card into working storage
+                                                            ! skip over any card ! not "arg" or "dum"
+  if (buff77(1 : 3) .ne. 'arg' .and. buff77(1 : 3) .ne. 'dum' .and. buff77(1 : 3) .ne. 'num') go to 2621     ! or "num"
   k = 4
-  n8 = n8 + 1       ! one more declaration pushed to top of vector
-  file6(n8) = buff77      ! store declaration after last such card
-  ! start of next argument is
-2637 if ( buff77(k:k) .ne. ' '  .and. buff77(k:k) .ne. ',' )  go to 2648        ! non-"," & non-" "
-  k = k + 1     ! move one byte to right in search for next argument
-  if ( k .le. 80 ) go to 2637     ! loop back to try this new column
-  go to 2628     ! done with this card, so loop back to read another
-2648 l = k + 1           ! initialize search for right edge of argument
-  ! blank or comma bounds
-2656 if ( buff77(l:l) .eq. ' '  .or. buff77(l:l) .eq. ',' )  go to 2664   ! right edge of argument
-  l = l + 1        ! move one byte to right in search for right edge
-  if ( l .le. 80 )  go to 2656    ! loop back to try this new column
-2664 l = l - 1    ! right edge of argument is one byte to left of bound
-  if ( buff77(1:3) .ne. 'num' )  go to 2687
-  do m=1, numarg  ! search existing argument list for this one
-     n6 = l - k + 1  ! number of characters in argument just identified
-     if ( kolinc(m) .ne. n6 )  go to 2672       ! wrong length; skip it
-     if ( arginc(m)(1:n6) .ne. buff77(k:l) )  go to 2672  ! no match
-     modarg(m) = 0    ! indicate numeric storage (right adjust)
-     go to 2695          ! exit loop; on to next argument on "num" card
+  n8 = n8 + 1                                               ! one more declaration pushed to top of vector
+  file6(n8) = buff77                                        ! store declaration after last such card
+                                                            ! start of next argument is
+2637 if (buff77(k : k) .ne. ' ' .and. buff77(k : k) .ne. ',') go to 2648        ! non-"," & non-" "
+  k = k + 1                                                 ! move one byte to right in search for next argument
+  if (k .le. 80) go to 2637                                 ! loop back to try this new column
+  go to 2628                                                ! done with this card, so loop back to read another
+2648 l = k + 1                                              ! initialize search for right edge of argument
+                                                            ! blank or comma bounds
+2656 if (buff77(l : l) .eq. ' ' .or. buff77(l : l) .eq. ',') go to 2664   ! right edge of argument
+  l = l + 1                                                 ! move one byte to right in search for right edge
+  if (l .le. 80) go to 2656                                 ! loop back to try this new column
+2664 l = l - 1                                              ! right edge of argument is one byte to left of bound
+  if (buff77(1 : 3) .ne. 'num') go to 2687
+  do m = 1, numarg                                          ! search existing argument list for this one
+     n6 = l - k + 1                                         ! number of characters in argument just identified
+     if (kolinc(m) .ne. n6) go to 2672                      ! wrong length; skip it
+     if (arginc(m)(1 : n6) .ne. buff77(k : l)) go to 2672   ! no match
+     modarg(m) = 0                                          ! indicate numeric storage (right adjust)
+     go to 2695                                             ! exit loop; on to next argument on "num" card
   end do
-2672 continue                ! end  do 2672  card searching for argument
-  write (munit6, 2679) buff77(k:l)
-2679 format ('   ???  Illegal "num" declaration.  Unrecognized name = ',  a)
-  call window         ! output of character variable munit6
-  call stoptp   ! installation-dependent program stop card
-2687 numarg = numarg + 1        ! index for this input argument storage
-  if ( numarg .le. limarg )  go to 2692   ! no overflow yet
-  write (munit6, 2689)  limarg
-2689 format (' Overflow error stop.  Argument usage is limited in number to limarg =',  i5)
-  call window         ! output of character variable munit6
-  call stoptp   ! installation-dependent program stop card
-2692 arginc(numarg) = buff77(k:l)     ! store newly-identified argument
-  kolinc(numarg) = l - k + 1               ! byte length of argument
-  if ( buff77(1:3) .eq. 'dum' )   kkkdum(numarg) = 1
-2695 k = l + 1   ! next left edge could be 1 beyond present right edge
-  go to 2637        ! loop back to identify next argument of buff77
-2703 n11 = n11 - 1       ! next destination address for $eof we create
+2672 continue                                               ! end  do 2672  card searching for argument
+  write (munit6, 2679) buff77(k : l)
+2679 format ('   ???  Illegal "num" declaration.  Unrecognized name = ', a)
+  call window                                               ! output of character variable munit6
+  call stoptp                                               ! installation-dependent program stop card
+2687 numarg = numarg + 1                                    ! index for this input argument storage
+  if (numarg .le. limarg) go to 2692                        ! no overflow yet
+  write (munit6, 2689) limarg
+2689 format (' Overflow error stop.  Argument usage is limited in number to limarg =', i5)
+  call window                                               ! output of character variable munit6
+  call stoptp                                               ! installation-dependent program stop card
+2692 arginc(numarg) = buff77(k : l)                         ! store newly-identified argument
+  kolinc(numarg) = l - k + 1                                ! byte length of argument
+  if (buff77(1 : 3) .eq. 'dum') kkkdum(numarg) = 1
+2695 k = l + 1                                              ! next left edge could be 1 beyond present right edge
+  go to 2637                                                ! loop back to identify next argument of buff77
+2703 n11 = n11 - 1                                          ! next destination address for $eof we create
   write (ansi32, 2705)  date1, tclock
 2705 format (2a4, 2x, 2a4)
   file6(n11) = '$eof   user-supplied header cards follow.  '
-  file6(n11)(51 : 68) = ansi32(1 : 18)    ! add on date and time
-  do j = 1, n8   ! loop over all declaration, now stored at top
-     n11 = n11 - 1     ! next destination address for declaration card
-2708 file6(n11) = file6(j)    ! transfer declaration from top to bottom
+  file6(n11)(51 : 68) = ansi32(1 : 18)                      ! add on date and time
+  do j = 1, n8                                              ! loop over all declaration, now stored at top
+     n11 = n11 - 1                                          ! next destination address for declaration card
+2708 file6(n11) = file6(j)                                  ! transfer declaration from top to bottom
   end do
-  if ( iprspy .lt. 1 )  go to 2721  ! jump around diagnostic
-  write (munit6, 2716)  n8, n11, limcrd
+  if (iprspy .lt. 1) go to 2721                             ! jump around diagnostic
+  write (munit6, 2716) n8, n11, limcrd
 2716 format (' Done processing declarations.  n8, n11,', ' limcrd =',  3i5)
-  call window         ! output of character variable munit6
+  call window                                               ! output of character variable munit6
   write (munit6, 2717)
 2717 format ('     row  kolinc  kkkdum  modarg  arginc ....')
-  call window         ! output of character variable munit6
-  do j = 1, numarg  ! print each row j of argument table
-     write (munit6, 2718)  j, kolinc(j), kkkdum(j), modarg(j), arginc(j)
+  call window                                               ! output of character variable munit6
+  do j = 1, numarg                                          ! print each row j of argument table
+     write (munit6, 2718) j, kolinc(j), kkkdum(j), modarg(j), arginc(j)
 2718 format (4i8, a20)
-     call window         ! output of character variable munit6
+     call window                                            ! output of character variable munit6
   end do
-2719 continue    ! end  do 2719  loop over all rows "j" of table
-2721 n20 = 0        ! initialize number of argument usages found so far
-  n16 = limcrd + 1     ! initialize location of next card considered
-  n13 = 0               ! so far, no active (non-comment) cards read
-  do n17 = n11, limcrd       ! process all non-declation cards
-     n16 = n16 - 1    ! reverse-indexed location of next non-decl. card
-     buff77 = file6(n16)      ! transfer card to scalar working storage
-     if ( buff77(1:1) .eq. 'c' )  go to 2766       ! skip comment cards
-     n13 = n13 + 1   ! present card has this active card number in file
-     if ( buff77(1:1) .eq. '/' )  go to 2766    ! skip sorting commands
-     if ( buff77(1:4) .eq. '$eof' )  go to 2772    ! effective file end
-     do j = 1, numarg        ! check present card for each argument
-        l = 1              ! begin search for string in column 1 of buff77
-        n15 = kolinc(j)        ! number of characters in the j-th argument
-2724    k = index ( buff77(l:), arginc(j)(1:n15) )
-        if ( k .eq. 0 )  go to 2754            ! no more j-th string usage
-        n20 = n20 + 1      ! another argument usage found; advance storage
-        if ( n20 .le. 200 )  go to 2737     ! not overflow working vectors
-        write (munit6, 2731)  n16
+2719 continue                                               ! end  do 2719  loop over all rows "j" of table
+2721 n20 = 0                                                ! initialize number of argument usages found so far
+  n16 = limcrd + 1                                          ! initialize location of next card considered
+  n13 = 0                                                   ! so far, no active (non-comment) cards read
+  do n17 = n11, limcrd                                      ! process all non-declation cards
+     n16 = n16 - 1                                          ! reverse-indexed location of next non-decl. card
+     buff77 = file6(n16)                                    ! transfer card to scalar working storage
+     if (buff77(1 : 1) .eq. 'c') go to 2766                 ! skip comment cards
+     n13 = n13 + 1                                          ! present card has this active card number in file
+     if (buff77(1 : 1) .eq. '/') go to 2766                 ! skip sorting commands
+     if (buff77(1 : 4) .eq. '$eof') go to 2772              ! effective file end
+     do j = 1, numarg                                       ! check present card for each argument
+        l = 1                                               ! begin search for string in column 1 of buff77
+        n15 = kolinc(j)                                     ! number of characters in the j-th argument
+2724    k = index (buff77(l :), arginc(j)(1 : n15) )
+        if (k .eq. 0) go to 2754                            ! no more j-th string usage
+        n20 = n20 + 1                                       ! another argument usage found; advance storage
+        if (n20 .le. 200) go to 2737                        ! not overflow working vectors
+        write (munit6, 2731) n16
 2731    format ('  ====   Overflow error stop at card number', i6,      '    over 200 arguments.')
-        call window         ! output of character variable munit6
-        call stoptp   ! installation-dependent program stop card
-2737    karg(n20) = j           ! it is the j-th string which is used here
-        ! if this is a dummy rather than real one,
-        if ( j .gt. numarg ) karg(n20) = -(j-numarg)    ! store dummy arg number with "-" flag
-        kard(n20) = n13                 ! active card count of this record
-        kbeg(n20) = l - 1 + k   ! beginning card column number for string
-        kend(n20) = kbeg(n20) + n15 - 1     ! ending column number
-        ! if this is a non-dummy argument, then
-        if ( j .le. numarg ) ktex(n20) = modarg(j)        ! store right adjust flag (0=y, 1=n)
-        l = kend(n20) + 1  ! search continues one byte beyond string end
-        if ( iprspy .lt. 6 )  go to 2749  ! jump around diagnostic
-        write (munit6, 2748)  n16, j, l, k, n20
+        call window                                         ! output of character variable munit6
+        call stoptp                                         ! installation-dependent program stop card
+2737    karg(n20) = j                                       ! it is the j-th string which is used here
+                                                            ! if this is a dummy rather than real one,
+        if (j .gt. numarg) karg(n20) = -(j - numarg)        ! store dummy arg number with "-" flag
+        kard(n20) = n13                                     ! active card count of this record
+        kbeg(n20) = l - 1 + k                               ! beginning card column number for string
+        kend(n20) = kbeg(n20) + n15 - 1                     ! ending column number
+                                                            ! if this is a non-dummy argument, then
+        if (j .le. numarg) ktex(n20) = modarg(j)            ! store right adjust flag (0=y, 1=n)
+        l = kend(n20) + 1                                   ! search continues one byte beyond string end
+        if (iprspy .lt. 6) go to 2749                       ! jump around diagnostic
+        write (munit6, 2748) n16, j, l, k, n20
 2748    format ('    Another string found.  n16, j, l, k, n20 =', 5i6)
-        call window         ! output of character variable munit6
-2749    go to 2724    ! loop back to check for another appearance to right
+        call window                                         ! output of character variable munit6
+2749    go to 2724                                          ! loop back to check for another appearance to right
      end do
-2754 continue          ! end  do 2754  loop over each candidate string j
-     if ( iprspy .lt. 2 )  go to 2766  ! jump around diagnostic
-     write (munit6, 2759)  n16, n20, buff77
+2754 continue                                               ! end  do 2754  loop over each candidate string j
+     if (iprspy .lt. 2) go to 2766                          ! jump around diagnostic
+     write (munit6, 2759) n16, n20, buff77
 2759 format (' Done with this card.  n16, n20 =', 2i5, '   buff77=', a80)
-     call window         ! output of character variable munit6
+     call window                                            ! output of character variable munit6
   end do
-2766 continue                ! end  do 2766  loop over card number n16
-2772 if ( iprspy .lt. 1 )  go to 2778  ! jump around diagnostic
-  write (munit6, 2777)  n20
-2777 format (' Done with identifying all arguments of all cards.   n20 =',  i4)
-  call window         ! output of character variable munit6
-2778 if ( (n20/25)*25 .ne. n20 )  go to 2783   ! 25i3 cards not filled
-  !     extra zero entry must be added, since otherwise card is full:
-  n20 = n20 + 1     ! add zero entry, which goes on blank extra card
-  kard(n20) = 0            ! only value actually used, of quintuplet
-  karg(n20) = 0      ! remove possible garbage, to avoid output mess
-  kbeg(n20) = 0      ! remove possible garbage, to avoid output mess
-  kend(n20) = 0      ! remove possible garbage, to avoid output mess
-  ktex(n20) = 0      ! remove possible garbage, to avoid output mess
+2766 continue                                               ! end  do 2766  loop over card number n16
+2772 if (iprspy .lt. 1) go to 2778                          ! jump around diagnostic
+  write (munit6, 2777) n20
+2777 format (' Done with identifying all arguments of all cards.   n20 =', i4)
+  call window                                               ! output of character variable munit6
+2778 if ((n20 / 25) * 25 .ne. n20) go to 2783               ! 25i3 cards not filled
+                                                            ! extra zero entry must be added, since otherwise card is full:
+  n20 = n20 + 1                                             ! add zero entry, which goes on blank extra card
+  kard(n20) = 0                                             ! only value actually used, of quintuplet
+  karg(n20) = 0                                             ! remove possible garbage, to avoid output mess
+  kbeg(n20) = 0                                             ! remove possible garbage, to avoid output mess
+  kend(n20) = 0                                             ! remove possible garbage, to avoid output mess
+  ktex(n20) = 0                                             ! remove possible garbage, to avoid output mess
 2783 write (prom80, 2787)
 2787 format (' Send output file name for final $include file :')
   call prompt
@@ -856,57 +855,57 @@ subroutine datain
   !open (unit = lunt13, status = 'new', file = buff77 )
   open (unit = lunt13, file = buff77 )
   rewind lunt13
-  ansi8(1:4) = 'kard'
-  write (lunt13, 2791)  ansi8(1:4),  ( kard(j), j=1, n20 )
-  ansi8(1:4) = 'karg'
-  write (lunt13, 2791)  ansi8(1:4),  ( karg(j), j=1, n20 )
-  ansi8(1:4) = 'kbeg'
-  write (lunt13, 2791)  ansi8(1:4),  ( kbeg(j), j=1, n20 )
-  ansi8(1:4) = 'kend'
-  write (lunt13, 2791)  ansi8(1:4),  ( kend(j), j=1, n20 )
-  ansi8(1:4) = 'ktex'
-  write (lunt13, 2791)  ansi8(1:4),  ( ktex(j), j=1, n20 )
+  ansi8(1 : 4) = 'kard'
+  write (lunt13, 2791) ansi8(1 : 4), (kard(j), j = 1, n20)
+  ansi8(1 : 4) = 'karg'
+  write (lunt13, 2791) ansi8(1 : 4), (karg(j), j = 1, n20)
+  ansi8(1 : 4) = 'kbeg'
+  write (lunt13, 2791) ansi8(1 : 4), (kbeg(j), j = 1, n20)
+  ansi8(1 : 4) = 'kend'
+  write (lunt13, 2791) ansi8(1 : 4), (kend(j), j = 1, n20)
+  ansi8(1 : 4) = 'ktex'
+  write (lunt13, 2791) ansi8(1 : 4), (ktex(j), j = 1, n20)
 2791 format (a4, 25i3 ,/, (4x, 25i3))
-  do j=n11, limcrd           ! next, dump all input data cards
-2795 write (lunt13, 2802)  file6 ( limcrd + n11 - j )
+  do j = n11, limcrd                                        ! next, dump all input data cards
+2795 write (lunt13, 2802) file6 (limcrd + n11 - j)
   end do
 2802 format (a80)
   close (unit = lunt13)
-  go to 1311   ! back to original prompt at start of emtp execution
-9200 nchain = 51  ! head for error overlays, for "kill" message
-  lstat(18) = -1   ! overlay number presently being executed
-9800 if ( ntacs .ne. 2 )  go to 9002
-  k = 1    ! begin to convert tacs data without '/' cards
+  go to 1311                                                ! back to original prompt at start of emtp execution
+9200 nchain = 51                                            ! head for error overlays, for "kill" message
+  lstat(18) = -1                                            ! overlay number presently being executed
+9800 if (ntacs .ne. 2) go to 9002
+  k = 1                                                     ! begin to convert tacs data without '/' cards
   do j = 1, numcrd
-     if ( file6(j)(1:5) .ne. 'blank' .and. file6(j)(1:80) .ne. blan80(1:80) )   go to 3005
-     k = k + 1    ! counter for tacs data types
-     if ( k .ge. 6 )  go to 9002  ! done with all 5 data types
-     file6(j)(1:2) = 'c '  !convert blank card to comment card
-     go to 3500            ! except the last one to end tacs data
+     if (file6(j)(1 : 5) .ne. 'blank' .and. file6(j)(1 : 80) .ne. blan80(1 : 80)) go to 3005
+     k = k + 1                                              ! counter for tacs data types
+     if (k .ge. 6) go to 9002                               ! done with all 5 data types
+     file6(j)(1 : 2) = 'c '                                 !convert blank card to comment card
+     go to 3500                                             ! except the last one to end tacs data
 3005 go to (3010, 3020, 3500, 3040, 3050), k
       !convert type code '99' to
-3010 if (file6(j)(1:2) .eq. '99') file6(j)(1:2) = '  '       !'  ' for functions
+3010 if (file6(j)(1 : 2) .eq. '99') file6(j)(1 : 2) = '  '  !'  ' for functions
      go to 3500
-3020 if ( file6(j)(1:1) .eq. 'c' .or. file6(j)(1:1) .eq. '9' .or. file6(j)(1:1) .eq. '$') go to 3500
-     if ( file6(j)(2:2) .ne. '1' )  go to 3022
-     file6(j)(1:1) = '1'     ! to convert tacs source cards:
-     go to 3500              ! type ' 1' to '11', ' 2' to '14'
-3022 if ( file6(j)(2:2) .ne. '2' )  go to 3024
-     file6(j)(1:2)  = '14'   ! ' 3' to '23', and ' 4' to '24'
+3020 if (file6(j)(1 : 1) .eq. 'c' .or. file6(j)(1 : 1) .eq. '9' .or. file6(j)(1 : 1) .eq. '$') go to 3500
+     if (file6(j)(2 : 2) .ne. '1') go to 3022
+     file6(j)(1 : 1) = '1'                                  ! to convert tacs source cards:
+     go to 3500                                             ! type ' 1' to '11', ' 2' to '14'
+3022 if (file6(j)(2 : 2) .ne. '2')  go to 3024
+     file6(j)(1 : 2)  = '14'                                ! ' 3' to '23', and ' 4' to '24'
      go to 3500
 3024 file6(j)(1:1)  = '2'
      go to 3500
-3040 if (file6(j)(1:1) .ne. ' ')  go to 3500
-     file6(j)(1:2) = '33'        !convert type '  ' to '33'
-     go to 3500                  !for tacs output variables
-3050 if (file6(j)(1:1) .ne. ' ' )  go to 3500
-     file6(j)(1:2) = '77'          !convert type '  ' to '77'
+3040 if (file6(j)(1 : 1) .ne. ' ')  go to 3500
+     file6(j)(1 : 2) = '33'                                 !convert type '  ' to '33'
+     go to 3500                                             !for tacs output variables
+3050 if (file6(j)(1 : 1) .ne. ' ' )  go to 3500
+     file6(j)(1 : 2) = '77'                                 !convert type '  ' to '77'
   end do
-3500 continue                  !for tacs initial condition cards
-9002 if ( iprsup .lt. 1 )  go to 9007  ! jump around diagnostic
-  write (munit6, 9004)  numcrd, limcrd, kill
+3500 continue                                               !for tacs initial condition cards
+9002 if (iprsup .lt. 1) go to 9007  ! jump around diagnostic
+  write (munit6, 9004) numcrd, limcrd, kill
 9004 format (' Exit "datain".   numcrd, limcrd, kill =', 3i8)
-  call window         ! output of character variable munit6
+  call window                                               ! output of character variable munit6
 9007 return
 end subroutine datain
 !
