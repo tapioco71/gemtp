@@ -331,11 +331,8 @@ subroutine runtym (d1, d2)
   common /timers/ cputime
   integer(4) cputime
   real(8) now_cputime
-  integer(4) zero, zerofin, time
-  !     if (.not.sys$getjpi(,,,l4cpu,,,)) then
-  !     write(6,*) 'error in another private place'
-  !     endif
-  call cpu_time(now_cputime)
+  integer(4) time
+  call cpu_time (now_cputime)
   time = int(1e6 * now_cputime)
   d1 = (time - cputime) / 1e6
   d2 = 0.0
@@ -344,37 +341,16 @@ end subroutine runtym
 !
 !     subroutine settym.
 !
-! subroutine settym
-!   implicit real(8) (a-h, o-z), integer(4) (i-n)
-!   !     VAX-11  installation-dependent EMTP module.
-!   !     Called only by VAX "runtym";  destroy for other computers.
-!   !     Include  '[scott]commuk.for' --- share with "runtym" in-line:
-!   common /timers/ cputime
-!   integer(4) cputime
-!   common /timer2/ l4cpu, cputime_code, cputime_adr, zero, zerofin
-!   integer*2 l4cpu, cputime_code
-!   integer(8) cputime_adr
-!   !     integer(4) zero,zerofin,sys$getjpi,now_cputime
-!   integer(4) zero, zerofin
-!   data cputime_code /1031/
-!   data l4cpu /4/
-!   cputime_adr=%loc(cputime)
-!   !     if (.not.sys$getjpi(,,,l4cpu,,,)) then
-!   !     write(6,*) 'error in a private place'
-!   !     endif
-!   return
-! end subroutine settym
 subroutine settym
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   real(8) time
   common /timers/ cputime
   integer(4) cputime
-  common /timer2/ l4cpu, cputime_code, cputime_adr, zero, zerofin
-  call cpu_time(time)
+  call cpu_time (time)
   if (time .eq. -1.0) then
      write (6, *) 'Error, no timer unit available!'
   else
-     cputime = int(1e6 * time)
+     cputime = int (1e6 * time)
   end if
   return
 end subroutine settym
@@ -400,7 +376,7 @@ subroutine time44(a)
   !    rather than colons, and of course we require  2a4  format.
   character(10) time
   character(8) a(2)
-  call date_and_time(time = time)
+  call date_and_time (time = time)
   write (unit = a(1), fmt = 2741) time(1:1), time(2:2), time(3:3)
 2741 format (2a1, '.', a1)
   write (unit = a(2), fmt = 2754) time(4:4), time(5:5), time(6:6)
@@ -419,18 +395,18 @@ subroutine cimage
   real(8) d11
   character(8) charc, chtacs, textax, textay, text1, text2
   character(8) text4, text5
-  dimension  buff10(10)
+  dimension buff10(10)
   equivalence (buff10(1), abuff(1))
   character(25) filen
-  dimension textax(60), jpntr(52), textay(50), aupper(10)
+  dimension textax(60), jpntr(201), textay(50), aupper(10)
   equivalence (aupper(1), texcol(1))
   dimension xopt(1), copt(1)
   !     burroughs: preserve local variable between module calls:
   data n8         / 0 /        ! remember last $-card number
-  data charc      / 1hc /
-  data text4      / 1h9 /
-  data chtacs     / 4htacs /
-  data text5      / 6hblank  /
+  data charc      / 'c' /
+  data text4      / '9' /
+  data chtacs     / 'tacs' /
+  data text5      / 'blank ' /
   !              *****    request no. 1.    "$attach"      *****  *****
   data textay(1)  / 6ha      /
   data jpntr(1)   / 1 /
@@ -534,11 +510,11 @@ subroutine cimage
   n6 = 0
   if (iprsup .ge. 10) write (lunit6, 987) lunit5, lunit6, noutpr, numdcd
 987 format (' Begin cimage.  lunit5, lunit6, noutpr, numdcd =', 4i5)
-1000 if (m4plot .eq. 1) call emtspy ! interactive usage
+1000 if (m4plot .eq. 1) call emtspy                         ! interactive usage
   if (lunit5 .gt. 0) read (lunit5, 3000, end = 4000) buff10
 3000 format (10a8)
   if (lunit5 .le. 0) call nextcard
-  if (kill .gt. 0) go to 4000 ! "nextcard" eof jump
+  if (kill .gt. 0) go to 4000                               ! "nextcard" eof jump
   if (lunsav(5) .ne. -5) numdcd = numdcd + 1
   read (unit = abuff, fmt = 3012) text1, text2
 3012 format (2a1)
@@ -597,11 +573,11 @@ subroutine cimage
 3246 kolbeg = 2
   !     3251 nright = -2
   nright = -2
-  call freone ( d1 )
+  call freone (d1)
   if (iprsup .ge. 1) write (lunit6, 3281) nfrfld, texta6(1), texta6(2)
-3281 format (/,  ' nfrfld =', i8, 5x, 'texta6 =', 2a7)
+3281 format (/, ' nfrfld =', i8, 5x, 'texta6 =', 2a7)
   nright = 0
-  do i = 1, 51        ! was 200 but maximum is 52?
+  do i = 1, 200
      n1 = jpntr(i)
      n2 = jpntr(i + 1) - 1
      if (n2 .lt. 0) go to 3319
@@ -617,17 +593,17 @@ subroutine cimage
      end do
 3291 continue
      if (iprsup .ge. 2) write (lunit6, 3292) i, n8, texta6(1), textay(i)
-3292 format (/,  ' key-word found.  i, n8 =',  2i5, 5x, 'texta6, textay =', 2a7)
+3292 format (/, ' key-word found.  i, n8 =', 2i5, 5x, 'texta6, textay =', 2a7)
 3294 if (n8 .ne. 6) go to 3301
      if (i .ne. 7) go to 1036
 3301 n8 = i
-     go to (4100, 4200, 4300, 4400, 4500, 4600, 4700, 4800, 4900, 5000, 5100, 5200, 5300, 5400, 5500, 5600, 5700, 5800, 5900, 6000,&
+     go to (4100, 4200, 4300, 4400, 4500, 4600, 4700, 4800, 4900, 5000, 5100, 5200, 5300, 5400, 5500, 5600, 5700, 5800, 5900, 6000, &
           6100), n8
 3306 if (texta6(1) .eq. textay(i)) go to 3294
   end do
 3319 write (lunit6, 3230)
 3230 format (' Illegal $-card.   Stop at s.n. 3319 of "cimage" .')
-  call stoptp   ! installation-dependent program stop card
+  call stoptp                                               ! installation-dependent program stop card
   !               *****    request no. 1.    "$attach"      *****  *****
 4100 text1 = 'attach'
   go to 4506
@@ -635,20 +611,20 @@ subroutine cimage
 4200 text1 = textax(2)
 4206 n2 = lunit7
 4209 nfrfld = 1
-  call freone ( d11 )
-  n1 = int(d11)
+  call freone (d11)
+  n1 = int (d11)
   !     4225 if ( n1 .le. 0 ) n1 = n2
   if (n1 .le. 0) n1 = n2
   if (n8 .eq. 8) go to 4817
-  if (noutpr  .eq.  0) write (lunit6, 4231) n1, text1
-4231 format ('+Copy file', i4, '   to ', a6,  ' .')
+  if (noutpr .eq. 0) write (lunit6, 4231) n1, text1
+4231 format ('+Copy file', i4, '   to ', a6, ' .')
   !     segmented, 1, vax e/t can skip translation of rewind:
   rewind n1
   do k = 1, intinf
      read (n1, 3000, end = 4249) aupper
-     !     because dec fortran does not honor the cdc  "punch"  statement
+     !     because DEC Fortran does not honor the CDC  "punch"  statement
      !     (to directly punch cards), i write to unit 7 as next best
-     !     thing.  wsm.  jan, 1980.
+     !     thing.  wsm.  Jan, 1980.
      if (n8 .eq. 2 ) write (lunit7, 3000) aupper
      if (n8 .eq. 3 ) write (lunit6, 4238) k, aupper
 4238 format (20x, 'record', i5, ' .  1', 10a8)
@@ -677,13 +653,12 @@ subroutine cimage
   go to 1000
   !               *****    request no. 5.    "$spy"         *****  *****
 4500 text1 = 'spying'
-  muntsv(2) = 2288  ! remember $spy for eof time in "spying"
-  muntsv(1) = munit5   ! remember spy input channel till now
-  munit5 = 17   ! special i/o unit used for $spy connection
-  kfile5 = 1  ! flag so "spying" knows munit5 opened to disk
+  muntsv(2) = 2288                                          ! remember $spy for eof time in "spying"
+  muntsv(1) = munit5                                        ! remember spy input channel till now
+  munit5 = 17                                               ! special i/o unit used for $spy connection
+  kfile5 = 1                                                ! flag so "spying" knows munit5 opened to disk
 4506 n4 = 0
-  !     encode (25, 4523, filen(1))
-  write (unit = filen(1:24), fmt = 4523)
+  write (unit = filen, fmt = 4523)
 4523 format (25x)
   do k = kolbeg, 80
      if (texcol(k) .eq. blank) go to 4532
@@ -692,19 +667,19 @@ subroutine cimage
      if (texcol(k) .eq. "(") go to 4536
      n4 = n4 + 1
      !     encode (1, 3041, filen(n4))  texcol(k)
-     write (unit = filen(n4:24), fmt = 3041) texcol(k)
+     write (unit = filen(n4 : 24), fmt = 3041) texcol(k)
   end do
 4532 continue
   k = 80
 4536 kolbeg = k + 1
   nfrfld = 1
-  call freone(d11)
-  n7 = int(d11)
-  if ( n8  .ne.  4 )   go to 4557
-  call freone(d11)
+  call freone (d11)
+  n7 = int (d11)
+  if (n8 .ne. 4) go to 4557
+  call freone (d11)
   n6 = int(d11)
 4557 if (n6 .eq. 0) n6 = lunit7
-  if (n8 .eq. 5) n7 = munit5   ! $spy uses this channel
+  if (n8 .eq. 5) n7 = munit5                                ! $spy uses this channel
   if (n7 .gt. 0) go to 4570
   do  k = 1, 15
      if (lunsav(k) .le. 0) go to 4568
@@ -713,7 +688,7 @@ subroutine cimage
 4565 format (/, 10(' error,'))
   write (lunit6, 4566) lunsav
 4566 format (5x, ' All i/o channels occupied.  Kill run at  s.n. 4566  of  "cimage" .', /,  20i5)
-  call stoptp   ! installation-dependent program stop card
+  call stoptp                                               ! installation-dependent program stop card
 4568 n7 = k
 4570 if (noutpr .eq. 0) write (lunit6, 4572) text1, filen, n7
 4572 format ('+', a6, ' file:', 25a1, ' unit =', i3)
@@ -754,7 +729,7 @@ subroutine cimage
 5000 nfrfld = 1
   d1 = epsiln
   call freone (epsiln)
-  if (noutpr .eq. 0) write (lunit6, 5017)  d1, epsiln
+  if (noutpr .eq. 0) write (lunit6, 5017) d1, epsiln
 5017 format ('+ epsiln change.  old, new =', 2e11.2)
   go to 1000
   !               *****    request no. 11.   "delete"       *****  *****
@@ -763,17 +738,17 @@ subroutine cimage
   !     5106 open ( unit=n7, type='old', name=filen )
 5106 open (unit = n7, status = 'old', file = filen)
   !     close( unit=n7, dispose='delete' )
-  close (unit=n7, status='delete')
+  close (unit = n7, status = 'delete')
   go to 1000
   !               *****    request no. 12.   "monitor"      *****  *****
-5200 if ( noutpr  .ne.  0 )   go to 5219
-  print 3006,  buff10
+5200 if (noutpr .ne. 0) go to 5219
+  print 3006, buff10
   print 5214, numdcd
 5214 format ('+Crt monitor.  card number =', i5)
 5219 go to 1000
   !               *****    request no. 13.   "listoff"      *****  *****
-5300 if ( noutpr  .ne.  0 )   go to 5324
-  write (lunit6, 5307)  numdcd
+5300 if (noutpr .ne. 0) go to 5324
+  write (lunit6, 5307) numdcd
 5307 format ('+Turn off input listing at card', i5)
   noutpr = 1
 5324 go to 1000
@@ -781,14 +756,14 @@ subroutine cimage
 5400 write (lunit6, 5404)
 5404 format (51x, '1$liston')
   noutpr = 0
-  write (lunit6, 5412)  numdcd
+  write (lunit6, 5412) numdcd
 5412 format ('+Turn on input listing at card', i5)
   go to 1000
   !               *****    request no. 15.   "vintage"      *****  *****
 5500 nfrfld = 1
-  call freone(d11)
-  moldat = int(d11)
-  if ( noutpr  .eq.  0 ) write (lunit6, 5518)  moldat
+  call freone (d11)
+  moldat = int (d11)
+  if (noutpr .eq. 0) write (lunit6, 5518)  moldat
 5518 format ('+New moldat =', i4, 5x, '(data vintage)')
   go to 1000
   !               *****    request no. 16.   "oldfile"      *****  *****
@@ -802,11 +777,11 @@ subroutine cimage
   !               *****    request no. 17.   "stop"         *****  *****
 5700 write (lunit6, 5706)
 5706 format ('+Stop execution immediately, in "cimage".')
-  call stoptp   ! installation-dependent program stop card
+  call stoptp                                               ! installation-dependent program stop card
   !               *****    request no. 18.   "watch5"       *****  *****
 5800 nfrfld = 1
-  call freone(d11)
-  n12 = int(d11)
+  call freone (d11)
+  n12 = int (d11)
   n13 = n12
   if (noutpr .eq. 0) write (lunit6, 5812) n12
 5812 format ('+Paint input data on screen.', i8)
@@ -817,11 +792,11 @@ subroutine cimage
   if (noutpr .eq. 0) write (lunit6, 5917) n11
 5917 format ('+Toggle comment card destruction flag.', i8)
   go to 1000
-6000 call stoptp   ! installation-dependent program stop card
+6000 call stoptp                                            ! installation-dependent program stop card
   !               *****    request no. 21.   "units"        *****  *****
 6100 nfrfld = 1
-  call frefld(xopt)
-  call frefld(copt)
+  call frefld (xopt)
+  call frefld (copt)
   if (noutpr .eq. 0) write (lunit6, 6114) xopt, copt
 6114 format ('+New  xopt, copt =', 2e14.4)
   xunits = 1000.
@@ -850,7 +825,7 @@ end subroutine cimage
 !
 !     subroutine ioerr.
 !
-subroutine ioerr(naddr)
+subroutine ioerr (naddr)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   naddr = 0
   return
@@ -858,7 +833,7 @@ end subroutine ioerr
 !
 !     subroutine caterr.
 !
-subroutine caterr(naddr, koderr)
+subroutine caterr (naddr, koderr)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   naddr = 0
   koderr = 0
@@ -867,18 +842,18 @@ end subroutine caterr
 !
 !     function locf.
 !
-function locf(array)
+function locf (array)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   integer(8) locf
   real(8) array
   dimension array(1)
-  locf = %loc(array(1)) / 8
+  locf = %loc (array(1)) / 8
   return
 end function locf
 !
 !     function locint.
 !
-function  locint(iarray)
+function  locint (iarray)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   integer(8) locint
   integer(4) iarray
@@ -889,13 +864,13 @@ function  locint(iarray)
   !     constant offset is allowed, since only differences will ever be
   !     used by the EMTP.   Note vector argument  "iarray"  (which
   !     is an assumption for all EMTP usage).
-  locint = (%loc(iarray(1))) / 4
+  locint = (%loc (iarray(1))) / 4
   return
 end function locint
 !
 !     function rfunl1.
 !
-function rfunl1(x)
+function rfunl1 (x)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this function provides for all real library functions of
   !     a single real argument.   All translations will make a
@@ -903,61 +878,61 @@ function rfunl1(x)
   include 'blkcom.ftn'
   rfunl1 = x
   return
-  entry absz   (x)
-  absz = dabs(x)
+  entry absz (x)
+  absz = dabs (x)
   return
-  entry acosz  (x)
-  acosz = dacos ( x )
+  entry acosz (x)
+  acosz = dacos (x)
   return
-  entry aintz  (x)
-  aintz = dint(x)
+  entry aintz (x)
+  aintz = dint (x)
   return
-  entry alogz  (x)
-  alogz = dlog(x)
+  entry alogz (x)
+  alogz = dlog (x)
   return
   entry alog1z (x)
-  alog1z = dlog10(x)
+  alog1z = dlog10 (x)
   return
-  entry asinz  (x)
-  asinz = dasin(x)
+  entry asinz (x)
+  asinz = dasin (x)
   return
-  entry atanz  (x)
-  atanz = datan(x)
+  entry atanz (x)
+  atanz = datan (x)
   return
-  entry cosz   (x)
-  cosz = dcos(x)
+  entry cosz (x)
+  cosz = dcos (x)
   return
-  entry coshz  (x)
-  coshz = dcosh(x)
+  entry coshz (x)
+  coshz = dcosh (x)
   return
   entry cotanz (x)
   y = dsin(x)
-  if ( dabs(y)*fltinf  .gt.  1.0 )   go to 4783
-  write (lunit6, 4761)  x
+  if (dabs(y) * fltinf .gt. 1.0) go to 4783
+  write (lunit6, 4761) x
 4761 format (/, " Stop.   Too small argument at  'cotanz'  within 'rfunl1' .", e15.5)
   call stoptp   ! installation-dependent program stop card
 4783 cotanz = dcos(x) / y
   return
-  entry expz   (x)
-  if ( x .ge. -87 ) go to 1488
+  entry expz (x)
+  if (x .ge. -87) go to 1488
   expz = 0.0
   return
 1488 expz = dexp(x)
   return
-  entry sinz   (x)
-  sinz = dsin(x)
+  entry sinz (x)
+  sinz = dsin (x)
   return
-  entry sinhz  (x)
-  sinhz = dsinh(x)
+  entry sinhz (x)
+  sinhz = dsinh (x)
   return
-  entry sqrtz  (x)
-  sqrtz = dsqrt(x)
+  entry sqrtz (x)
+  sqrtz = dsqrt (x)
   return
-  entry tanz   (x)
-  tanz = dtan(x)
+  entry tanz (x)
+  tanz = dtan (x)
   return
-  entry tanhz  (x)
-  tanhz = dtanh(x)
+  entry tanhz (x)
+  tanhz = dtanh (x)
   return
 end function rfunl1
 !
@@ -970,44 +945,44 @@ subroutine trgwnd ( x, d17 )
   if (dabs(x) .lt. 25000.) go to 9000
   n13 = int(x / twopi)
   d17 = d17 - n13 * twopi
-  if ( iprsup .ge. 1 ) write (*, 3456)  nchain, x, d17
+  if (iprsup .ge. 1) write (*, 3456) nchain, x, d17
 3456 format (' Angle unwind in "trgwnd" called by "rfunl1".   nchain, x, d17 =', i5, 2e25.16)
 9000 return
 end subroutine trgwnd
 !
 !     function ifunl1.
 !
-function  ifunl1(d1)
+function ifunl1 (d1)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function is to provide neutral names ending in "z"
   !     for all integer library functions of one real argument.
   ifunl1 = int(d1)
   return
-  entry     intz ( d1 )
-  intz = int(dint(d1))
+  entry intz (d1)
+  intz = int (dint (d1))
   return
 end function ifunl1
 !
 ! function cfunl1.
-function cfunl1(x)
+function cfunl1 (x)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  complex*16    cfunl1, x, cexpz, csqrtz, clogz
+  complex(8) cfunl1, x, cexpz, csqrtz, clogz
   cfunl1 = x
   return
-  entry cexpz  (x)
-  cexpz = cdexp(x)
+  entry cexpz (x)
+  cexpz = cdexp (x)
   return
   entry csqrtz (x)
-  csqrtz = cdsqrt(x)
+  csqrtz = cdsqrt (x)
   return
   entry clogz (x)
-  clogz = cdlog(x)
+  clogz = cdlog (x)
   return
 end function cfunl1
 !
 ! function rfunl2.
 !
-function rfunl2 ( x, y )
+function rfunl2 (x, y)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function provides for all real library functions of
   !     two real arguments.  All translations will make a
@@ -1018,96 +993,96 @@ function rfunl2 ( x, y )
   atan2z = 0.0
   if (x .ne. 0.0  .or. y .ne. 0.0) atan2z = datan2(x,y)
   return
-  entry signz  (x,y)
-  signz = dsign(x,y)
+  entry signz (x, y)
+  signz = dsign (x, y)
   return
-  entry amodz(x,y)
-  amodz = dmod (x,y)
+  entry amodz (x, y)
+  amodz = dmod (x, y)
   return
-  entry amin1z(x,y)
-  amin1z = dmin1(x,y)
+  entry amin1z (x, y)
+  amin1z = dmin1 (x, y)
   return
-  entry amax1z(x,y)
-  amax1z = dmax1(x,y)
+  entry amax1z (x, y)
+  amax1z = dmax1(x, y)
   return
 end function rfunl2
 !
 ! function cmpxz.
 !
-function cmplxz ( x, y )
+function cmplxz (x, y)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function provides for all complex library functions of
   !     two real arguments.  All translations will make a
   !     substitution.
   !       VAX module switched to complex*16 (from (8)) in aug 1981
-  complex*16    cmplxz
-  cmplxz = dcmplx ( x, y )
+  complex(16) cmplxz
+  cmplxz = dcmplx (x, y)
   return
 end function cmplxz
 !
 ! function rfunl3.
 !
-function rfunl3 ( x )
+function rfunl3 (x)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function provides for all real library functions of
   !     a single complex argument.   All translations will make a
   !     substitution.
   !       this VAX module became complex*16 (from (8)) in aug 1981
-  complex*16     x
+  complex(8) x
   rfunl3 = 0.0
   return
   entry aimagz (x)
-  aimagz = dimag ( x )
+  aimagz = dimag (x)
   return
-  entry realz  (x)
-  realz = dreal ( x )
+  entry realz (x)
+  realz = dreal (x)
   return
-  entry cabsz(x)
-  cabsz = cdabs ( x )
+  entry cabsz (x)
+  cabsz = cdabs (x)
   return
 end function rfunl3
 !
 ! subroutine cmultz.
 !
-subroutine cmultz (ar,ai,br,bi,cr,ci,ksn)
+subroutine cmultz (ar, ai, br, bi, cr, ci, ksn)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  sr=br*cr-bi*ci
-  ai=bi*cr+br*ci
-  ar=sr
-  if (ksn.ge.0) go to 200
-  ar=-ar
-  ai=-ai
+  sr = br * cr - bi * ci
+  ai = bi * cr + br * ci
+  ar = sr
+  if (ksn .ge. 0) go to 200
+  ar = -ar
+  ai = -ai
 200 return
 end subroutine cmultz
 !
 ! subroutine cdivz.
 !
-subroutine cdivz (ar,ai,br,bi,cr,ci,ksn)
+subroutine cdivz (ar, ai, br, bi, cr, ci, ksn)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  fac=cr*cr+ci*ci
-  fac=1./fac
-  sr=br*fac*cr+bi*fac*ci
-  ai=bi*fac*cr-br*fac*ci
-  ar=sr
-  if (ksn.ge.0) go to 200
-  ar=-ar
-  ai=-ai
+  fac = cr * cr + ci * ci
+  fac = 1. / fac
+  sr = br * fac * cr + bi * fac * ci
+  ai = bi * fac * cr - br * fac * ci
+  ar = sr
+  if (ksn .ge. 0) go to 200
+  ar = -ar
+  ai = -ai
 200 return
 end subroutine cdivz
 !
 ! function iabsz.
 !
-function  iabsz ( n1 )
+function  iabsz (n1)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     One and only integer library function of one integer
   !     argument.    Make entry point if 2nd is used.
-  iabsz = iabs ( n1 )
+  iabsz = iabs (n1)
   return
 end function iabsz
 !
 ! function ifunl2.
 !
-function ifunl2 ( n1, n2 )
+function ifunl2 (n1, n2)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Provision for all integer library functions of 2 integer arguments
   ifunl2 = n1
@@ -1128,7 +1103,7 @@ end function ifunl2
 !
 ! subroutine dlibrf.
 !
-subroutine dlibrf(x, y)
+subroutine dlibrf (x, y)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   double precision x, y
   !     This module serves to provide selected double-precision
@@ -1144,35 +1119,35 @@ subroutine dlibrf(x, y)
   !     Installation-dependent module coded for  dec vax-11
   return
   entry dabsz (x, y)
-  y = dabs(x)
+  y = dabs (x)
   return
   entry dcosz (x, y)
-  y = dcos(x)
+  y = dcos (x)
   return
   entry dexpz (x, y)
-  y = dexp(x)
+  y = dexp (x)
   return
   entry dsinz (x, y)
-  y = dsin(x)
+  y = dsin (x)
   return
   entry dsqrtz (x, y)
-  y = dsqrt(x)
+  y = dsqrt (x)
   return
   entry dlogz (x, y)
-  y = dlog(x)
+  y = dlog (x)
   return
 end subroutine dlibrf
 !
 ! subroutine dlibr2.
 !
-subroutine dlibr2(x, y, z)
+subroutine dlibr2 (x, y, z)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  double precision  x, y, z
+  double precision x, y, z
   !     Installation-dependent module for dec vax-11 computer
   !     like "dlibrf" (see comments there), only for two inputs
   return
-  entry datn2z (x,y,z)
-  z = datan2 ( x, y )
+  entry datn2z (x, y, z)
+  z = datan2 (x, y)
   return
 end subroutine dlibr2
 !
@@ -1187,14 +1162,14 @@ subroutine setmar
   n = 0
   !     Entry point for do-nothing mimiced tektronix plot10 of "tekplt"
   return
-  entry  setplt
+  entry setplt
   !     Entry point to change lines/page to maximum number allowed,
   !     to allow printer plots to be continuous over page boundries.
   !     call system dependant routine to change page size
   !     write (lunit6, 1000 )
   !     1000 format (1h1)
   return
-  entry  setstd
+  entry setstd
   !     Entry point to restore page limits to standard values.
   !     call system dependant routine to change page size
   !     write (lunit6, 1000 )
@@ -1223,7 +1198,7 @@ subroutine mover(a, b, n)
   !             of array  'b'.   for zeroing array  'b' ,  the subroutine
   !             call is made with the first argument explicitely
   !             punched as zero.
-  dimension  a(1), b(1)
+  real(8) a(*), b(*)
   do i = 1, n
      b(i) = a(i)
   end do
@@ -1232,7 +1207,7 @@ end subroutine mover
 !
 !     subroutine mover0.
 !
-subroutine mover0 ( b, n )
+subroutine mover0 (b, n)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   real(8) b(*)
   !    Subroutine  mover0  is a block-zeroing routine for floating-point
@@ -1248,7 +1223,7 @@ end subroutine mover0
 !
 !     subroutine move.
 !
-subroutine move(inta, intb, n)
+subroutine move (inta, intb, n)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !    Subroutine  move  is identical to the
   !    block-transfer routine  mover  except
@@ -1256,7 +1231,7 @@ subroutine move(inta, intb, n)
   !    floating-point arrays.   There is a difference, of course, on
   !    machines like ibm, where integer words may be shorter than
   !    floating-point words.
-  dimension inta(1), intb(1)
+  integer(4) inta(*), intb(*)
   do i = 1, n
      intb(i) = inta(i)
   end do
@@ -1265,7 +1240,7 @@ end subroutine move
 !
 !     subroutine move0.
 !
-subroutine move0(intb, n)
+subroutine move0 (intb, n)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !    Subroutine  move0  is identical to  the block-zeroing routine
   !    mover0  except that  move0  is for integer arrays, while  mover0
@@ -1326,8 +1301,8 @@ subroutine multmx (a, b, c, temp, n)
 3430    temp(i) = b(l)
      end do
      m = n + 1
-     call mult(a(1), temp(1), temp(m), n, ll0)
-     call mover(temp(m), c(ii+1), j)
+     call mult (a, temp(1), temp(m), n, ll0)
+     call mover (temp(m), c(ii+1), j)
      ii = ii + j
   end do
   return
@@ -1458,7 +1433,7 @@ subroutine freone (d1)
   !     "m29."  vintage, to satisfy burroughs (see problem b,
   !     section ii, page ecwb-4, vol. x  EMTP memo of 14 feb 1981.)
   dimension array(10)
-  call frefld(array)
+  call frefld (array)
   d1 = array(1)
   return
 end subroutine freone
@@ -1472,11 +1447,11 @@ subroutine frenum (text1, n3, d1)
   !     convert input characters  (text1(1) ... text1(n3))  into
   !     a floating point number.
   !     real(8)        text1(1), blank
-  character(8) text1(1), blank
+  character(8) text1(*), blank
   !     logical*1  texta(30), textb
   character texta(30), textb
-  data  blank   / '      ' /
-  data  textb   / ' ' /
+  data blank / '      ' /
+  data textb / ' ' /
   n9 = 30
   n4 = n3 + 1
   do i = 1, n3
@@ -1502,21 +1477,21 @@ end subroutine frenum
 !
 !     subroutine packa1.
 !
-subroutine packa1(from, to, kk)
+subroutine packa1 (from, to, kk)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     System-dependent emtp module  'packa1'  for  VAX-11/780.
   !     Argument  'from'  contains  a1  information which is to be stored
   !     in character position  kk  of argument  'to' .
   !     For all emtp usage,  1st 2 arguments must be vectors.
   !     logical*1 from(1), to(6)
-  character from(1), to(6)
+  character from(*), to(*)
   to(kk) = from(1)
   return
 end subroutine packa1
 !
 !     subroutine packch.
 !
-subroutine packch(from, to, k4or6, nchbeg, nword)
+subroutine packch (from, to, k4or6, nchbeg, nword)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !
   !     This module performs the system-dependent function of packing bcd
@@ -1552,7 +1527,7 @@ subroutine packch(from, to, k4or6, nchbeg, nword)
   !                     for example, a value of  27  means that the cdc
   !                     character insertion begins in position  7  of
   !                     word  to(3) .
-  logical*1 from(nword), to(nword)
+  logical(1) from(nword), to(nword)
   i_char = nchbeg
   do i_word = 1, nword
      do k_char = 1, k4or6
@@ -1566,7 +1541,7 @@ end subroutine packch
 !
 !     function seedy.
 !
-function seedy(atim)
+function seedy (atim)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !
   !     This function is designed to take the time of day (wall-clock
@@ -1592,7 +1567,7 @@ end function seedy
 !
 !     subroutine randnm.
 !
-function randnm(x)
+function randnm (x)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !
   !     This is a random number generating function, whose purpose is to
@@ -1628,10 +1603,10 @@ function randnm(x)
   !     Installation-dependent  EMTP  module written for the  dec
   !     VAX-11/780.    'ran'  is a  dec  system subroutine which
   !     returns a random number uniformly distributed over  (0, 1) .
-  include  'blkcom.ftn'
+  include 'blkcom.ftn'
   equivalence (moncar(1), knt)
-  if (xmaxmx  .lt.  0.0) go to 7265
-  if (x .eq.  0.0) go to 4213
+  if (xmaxmx .lt. 0.0) go to 7265
+  if (x .eq. 0.0) go to 4213
   if (knt .gt. 1) go to 9800 ! skip 2nd or later seed
   n14 = int(x)
   if (n14 / 2 * 2 .eq. n14) n14 = n14 + 1
