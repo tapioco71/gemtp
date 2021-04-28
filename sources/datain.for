@@ -304,132 +304,132 @@ subroutine datain
   if (n13 .gt. 0) go to 4220                                ! no ",", but there is " "
   write (munit6, 4211)
 4211 format (' No bounding symbol.  Stop after display.' )
-  call window                                            ! output of character variable munit6
+  call window                                               ! output of character variable munit6
   write (munit6, 4223) l, n12, n13, n14, n26
-  call window                                            ! output of character variable munit6
-  call stoptp                                            ! installation-dependent program stop card
-                                                         ! if trailing blank, and if blank
-4214 if (n13 .gt. 0 .and. n13 .lt. n14) n14 = n13        ! precedes ",", blank bounds
-4220 n15 = n14 - 1                                       ! number of columns making up the argument
-  kolinc(n16) = n15                                      ! remember the width of argument n16
-  n18 = l - 1 + n15                                      ! col. ending argument, based on col. 1
-  arginc(n16) = ' '                                      ! blank out storage b4 adding string
-  arginc(n16)(1 : n15) = buff77(l : n18)                 ! remember argument
-  n26 = n18 + 1                                          ! column to begin search for next argument
-  if (iprspy .lt. 5) go to 4224                          ! jump around diagnostic
+  call window                                               ! output of character variable munit6
+  call stoptp                                               ! installation-dependent program stop card
+                                                            ! if trailing blank, and if blank
+4214 if (n13 .gt. 0 .and. n13 .lt. n14) n14 = n13           ! precedes ",", blank bounds
+4220 n15 = n14 - 1                                          ! number of columns making up the argument
+  kolinc(n16) = n15                                         ! remember the width of argument n16
+  n18 = l - 1 + n15                                         ! col. ending argument, based on col. 1
+  arginc(n16) = ' '                                         ! blank out storage b4 adding string
+  arginc(n16)(1 : n15) = buff77(l : n18)                    ! remember argument
+  n26 = n18 + 1                                             ! column to begin search for next argument
+  if (iprspy .lt. 5) go to 4224                             ! jump around diagnostic
   write (munit6, 4223) l, n12, n13, n14, n26
 4223 format (' Done with argument.  l, n12, n13, n14, n26 =', 8i6)
-  call window                                            ! output of character variable munit6
-4224 go to 4203                                          ! loop back to process next argument if any
-4226 kard(1) = 999999                                    ! assume no arguments (this is bound)
-  n1 = 0                                                 ! initialize offset for pointer vector reads below
-  if (n16 .eq. 0) go to 4239                             ! skip argument pointers
-4228 read (lunt13, 4232) (kbeg(l), l = 1, 25)            ! read next card
-  do l = 1, 25                                           ! search i3 replacement fields for blank
-     if (kbeg(l) .eq. 0) go to 4230                      ! yes, bound is found
+  call window                                               ! output of character variable munit6
+4224 go to 4203                                             ! loop back to process next argument if any
+4226 kard(1) = 999999                                       ! assume no arguments (this is bound)
+  n1 = 0                                                    ! initialize offset for pointer vector reads below
+  if (n16 .eq. 0) go to 4239                                ! skip argument pointers
+4228 read (lunt13, 4232) (kbeg(l), l = 1, 25)               ! read next card
+  do l = 1, 25                                              ! search i3 replacement fields for blank
+     if (kbeg(l) .eq. 0) go to 4230                         ! yes, bound is found
   end do
-4229 continue                                            ! end  do 4229  loop to bound replacements
-  n1 = n1 + 25                                           ! 25 more parameter usages found
-  if (n1 .le. 175) go to 4228                            ! still room for 25 more
-                                                         !     overflow.  199 is max number of replacements, temporarily
-  call stoptp                                            ! installation-dependent program stop card
-4230 rewind lunt13                                       ! rewind $include file, to start again
-  n6 = n1 + l - 1                                        ! number of effective argument usages
-  read (lunt13, 4232) (kard(k), k = 1, n6)               ! card nos. used
-  read (lunt13, 4232) (karg(k), k = 1, n6)               ! arguments used
-  read (lunt13, 4232) (kbeg(k), k = 1, n6)               ! col. no. start
-  read (lunt13, 4232) (kend(k), k = 1, n6)               ! col. no. ending
-  read (lunt13, 4232) (ktex(k), k = 1, n6)               ! alphanum. flag
+4229 continue                                               ! end  do 4229  loop to bound replacements
+  n1 = n1 + 25                                              ! 25 more parameter usages found
+  if (n1 .le. 175) go to 4228                               ! still room for 25 more
+                                                            !     overflow.  199 is max number of replacements, temporarily
+  call stoptp                                               ! installation-dependent program stop card
+4230 rewind lunt13                                          ! rewind $include file, to start again
+  n6 = n1 + l - 1                                           ! number of effective argument usages
+  read (lunt13, 4232) (kard(k), k = 1, n6)                  ! card nos. used
+  read (lunt13, 4232) (karg(k), k = 1, n6)                  ! arguments used
+  read (lunt13, 4232) (kbeg(k), k = 1, n6)                  ! col. no. start
+  read (lunt13, 4232) (kend(k), k = 1, n6)                  ! col. no. ending
+  read (lunt13, 4232) (ktex(k), k = 1, n6)                  ! alphanum. flag
 4232 format (4x, 25i3)
-  if (iprspy .lt. 1)  go to 4235                         ! jump around diagnostic
+  if (iprspy .lt. 1)  go to 4235                            ! jump around diagnostic
   write (munit6, 4233)  n6
 4233 format (' Done reading argument usage vectors.  n4 =', i5 )
-  call window                                            ! output of character variable munit6
-4235 if (iprspy .lt. 5) go to 4238                       ! jump around diagnostic
+  call window                                               ! output of character variable munit6
+4235 if (iprspy .lt. 5) go to 4238                          ! jump around diagnostic
   write (munit6, 4236)
 4236 format (' Vectors kard, karg, kbeg, kend, ktext(1:25) ...')
-  call window                                            ! output of character variable munit6
+  call window                                               ! output of character variable munit6
   write (munit6, 4237) (kard(k), k = 1, n5)
-  call window                                            ! output of character variable munit6
+  call window                                               ! output of character variable munit6
   write (munit6, 4237) (karg(k), k = 1, n5)
-  call window                                            ! output of character variable munit6
+  call window                                               ! output of character variable munit6
   write (munit6, 4237) (kbeg(k), k = 1, n5)
-  call window                                            ! output of character variable munit6
+  call window                                               ! output of character variable munit6
   write (munit6, 4237) (kend(k), k = 1, n5)
-  call window                                            ! output of character variable munit6
+  call window                                               ! output of character variable munit6
   write (munit6, 4237) (ktex(k), k = 1, n5)
 4237 format (4x, 25i3)
-  call window                                            ! output of character variable munit6
-4238 kard(n6 + 1) = 999999                               ! bound (no more argument usage)
-4239 n20 = 0                                             ! no records read from $include file so far
-  n24 = 1                                                ! start by considering 1st argument first
-  n5 = 0                                                 ! so far, no "/" cards encountered in include file
-  n18 = j + 1                                            ! do-loop limit (needed, for j changes inside)
-  kntmax = 0                                             ! initialize maximum counter for dummy names
-  kntold = kntdum                                        ! save serialize index at start of file
-  do k = n18, limcrd                                     ! read $include records until eof
-     read (lunt13, 1329, end = 1828) buff77              ! next data card
-     if (buff77(1 : 4) .eq. '$eof') go to 1828           ! effective eof
-     if (buff77(1 : 1) .eq. '/') n5 = 1                  ! yes, 1 or more "/"
-     if (buff77(1 : 1) .ne. 'c') go to 4247              ! accept non-com.
-     do  l = 1, 10                                       ! see if col. 2 is one of 10 digits
-        if (buff77(2 : 2) .eq. digit(l)) go to 4244      ! yes, digit
+  call window                                               ! output of character variable munit6
+4238 kard(n6 + 1) = 999999                                  ! bound (no more argument usage)
+4239 n20 = 0                                                ! no records read from $include file so far
+  n24 = 1                                                   ! start by considering 1st argument first
+  n5 = 0                                                    ! so far, no "/" cards encountered in include file
+  n18 = j + 1                                               ! do-loop limit (needed, for j changes inside)
+  kntmax = 0                                                ! initialize maximum counter for dummy names
+  kntold = kntdum                                           ! save serialize index at start of file
+  do k = n18, limcrd                                        ! read $include records until eof
+     read (lunt13, 1329, end = 1828) buff77                 ! next data card
+     if (buff77(1 : 4) .eq. '$eof') go to 1828              ! effective eof
+     if (buff77(1 : 1) .eq. '/') n5 = 1                     ! yes, 1 or more "/"
+     if (buff77(1 : 1) .ne. 'c') go to 4247                 ! accept non-com.
+     do  l = 1, 10                                          ! see if col. 2 is one of 10 digits
+        if (buff77(2 : 2) .eq. digit(l)) go to 4244         ! yes, digit
      end do
-4241 continue                                            ! end  do 4241  loop to check if col. 2 is digit
-     go to 4247                                          ! non-digited comment card is accepted
-4244 if (l .eq. 10) l = 0                                ! digit(10) = 0   is exception
-     if (l .gt. komlev) go to 4273                       ! ignore comment card
-     buff77(2 : 2) = ' '                                 ! blank out level-digit in col. 2
-4247 j = j + 1                                           ! accept this data card; do not discard it
-     file6(j) = buff77                                   ! transfer buffer to regular storage
-                                                         ! comment cards can have no
-     if (buff77(1 : 1) .eq. 'c') go to 4273              ! arguments, so bypass the check for usage
-     n20 = n20 + 1                                       ! no. of countable $include card just read
-     if (iprspy .lt. 3) go to 4249                       ! jump around diagnostic
+4241 continue                                               ! end  do 4241  loop to check if col. 2 is digit
+     go to 4247                                             ! non-digited comment card is accepted
+4244 if (l .eq. 10) l = 0                                   ! digit(10) = 0   is exception
+     if (l .gt. komlev) go to 4273                          ! ignore comment card
+     buff77(2 : 2) = ' '                                    ! blank out level-digit in col. 2
+4247 j = j + 1                                              ! accept this data card; do not discard it
+     file6(j) = buff77                                      ! transfer buffer to regular storage
+                                                            ! comment cards can have no
+     if (buff77(1 : 1) .eq. 'c') go to 4273                 ! arguments, so bypass the check for usage
+     n20 = n20 + 1                                          ! no. of countable $include card just read
+     if (iprspy .lt. 3) go to 4249                          ! jump around diagnostic
      write (munit6, 4248) n20, n24, kard(n24)
 4248 format (' Ready with next card.  n20, n24, kard(n24) =', 3i8)
-     call window                                         ! output of character variable munit6
-4249 if (n20 .lt. kard(n24)) go to 4273                  ! no argument usage
-     n1 = kbeg(n24)                                      ! beginning column number of replacement
-     n2 = kend(n24)                                      ! ending    column number of replacement
-     n4 = karg(n24)                                      ! index number of argument being used
-     n3 = kolinc(n4)                                     ! length of argument being substituted
-     if (n4 .le. n16) go to 34250                        ! legal argument request
+     call window                                            ! output of character variable munit6
+4249 if (n20 .lt. kard(n24)) go to 4273                     ! no argument usage
+     n1 = kbeg(n24)                                         ! beginning column number of replacement
+     n2 = kend(n24)                                         ! ending    column number of replacement
+     n4 = karg(n24)                                         ! index number of argument being used
+     n3 = kolinc(n4)                                        ! length of argument being substituted
+     if (n4 .le. n16) go to 34250                           ! legal argument request
      write (lunit6, 4250)  n24, n4, n16
-4250 format ('   ? ? ? ?   Error stop at s.n. 4250 of "datain".   Insufficient number of $include arguments.', /, '             n24, n4, n16 =',  3i8)
-     call stoptp                                         ! installation-dependent program stop card
-34250 if (n4 .gt. 0) go to 4252                          ! use argument of $include
-     kntdum = kntold - n4                                ! serialization for dummy name usage
-     if (-n4 .gt. kntmax) kntmax = -n4                   ! new larger dummy
-     write (ansi8, 4251) kntdum                          ! convert integer to character
+4250 format ('   ? ? ? ?   Error stop at s.n. 4250 of "datain".   Insufficient number of $include arguments.', /, '             n24, n4, n16 =', 3i8)
+     call stoptp                                            ! installation-dependent program stop card
+34250 if (n4 .gt. 0) go to 4252                             ! use argument of $include
+     kntdum = kntold - n4                                   ! serialization for dummy name usage
+     if (-n4 .gt. kntmax) kntmax = -n4                      ! new larger dummy
+     write (ansi8, 4251) kntdum                             ! convert integer to character
 4251 format (i3)
-     if (kntdum .lt. 100) ansi8(1:1) = '0'               ! 1st of 3 digits
-     if (kntdum .lt. 10) ansi8(2:2) = '0'                ! 2nd of 3 digits
-                                                         ! if name is not 6 characters,
-     if (n2 - n1 .ne. 5) call stoptp                     ! installation-dependent program stop card
-     dumnam(4:6) = ansi8(1:3)                            ! add serialization to root name
-     file6(j)(n1 : n2) = dumnam                          ! transfer dummy name to card
-     go to 4249                                          ! loop back to consider possible next argument
-                                                         ! if arg. length mismatch, ! & if this is text, then
+     if (kntdum .lt. 100) ansi8(1 : 1) = '0'                ! 1st of 3 digits
+     if (kntdum .lt. 10) ansi8(2 : 2) = '0'                 ! 2nd of 3 digits
+                                                            ! if name is not 6 characters,
+     if (n2 - n1 .ne. 5) call stoptp                        ! installation-dependent program stop card
+     dumnam(4:6) = ansi8(1:3)                               ! add serialization to root name
+     file6(j)(n1 : n2) = dumnam                             ! transfer dummy name to card
+     go to 4249                                             ! loop back to consider possible next argument
+                                                            ! if arg. length mismatch, ! & if this is text, then
 4252 if (n2 - n1 .ne. n3 - 1 .and. ktex(n24) .eq. 1) go to 4253  ! jump to correction chance
-     if (n2 - n1 .ge. n3 - 1 ) go to 4261                ! arg. is short enough
+     if (n2 - n1 .ge. n3 - 1 ) go to 4261                   ! arg. is short enough
 4253 write (munit6, 4254)  n4, n20
-4254 format ('   +++ Argument',  i4,  '   length-mismatch error.   Used on card', i4, ' .')
-     call window         ! output of character variable munit6
-     write (munit6, 4255)  n24, n1, n2, n3
-4255 format ('       n24 =',  i4,  '    kbeg, kend =',  2i4, '    length from $include =',  i4,  2h .  )
-     call window         ! output of character variable munit6
+4254 format ('   +++ Argument', i4, '   length-mismatch error.   Used on card', i4, ' .')
+     call window                                            ! output of character variable munit6
+     write (munit6, 4255) n24, n1, n2, n3
+4255 format ('       n24 =', i4,  '    kbeg, kend =', 2i4, '    length from $include =', i4, ' .')
+     call window                                            ! output of character variable munit6
      write (prom80, 4256)
-4256 format (' Send corrected argument (stop) :'  )
-     call prompt     ! write prom80 with cursor control (no lf)
-     if ( m4plot .eq. 1 )  go to 4259   ! spy usage allows recovery
-     kill = 79  ! kill code indicating interactive hopelessness
+4256 format (' Send corrected argument (stop) :')
+     call prompt                                            ! write prom80 with cursor control (no lf)
+     if (m4plot .eq. 1) go to 4259                          ! spy usage allows recovery
+     kill = 79                                              ! kill code indicating interactive hopelessness
      lstat(19) = 4259
-     go to 9200   ! assign lstat(18), then nchain=51; then exit
-4259 read (munit5, 4260) arginc(n4)    ! read revised argument
+     go to 9200                                             ! assign lstat(18), then nchain=51; then exit
+4259 read (munit5, 4260) arginc(n4)                         ! read revised argument
 4260 format (a20)
-     ! if user surrenders,
-     if ( arginc(n4)(1:5) .eq. 'stop ' ) call stoptp   ! installation-dependent program stop card
+                                                            ! if user surrenders,
+     if ( arginc(n4)(1:5) .eq. 'stop ' ) call stoptp        ! installation-dependent program stop card
 4261 n = n2      ! initialize destination address at right edge
      if ( iprspy .lt. 4 ) go to 34261  ! jump around diagnostic
      write (munit6, 24261)  arginc(n4)
