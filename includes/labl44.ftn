@@ -2,7 +2,7 @@
 !
 !     file: labl44.ftn
 !
-  character*8 brname
+  character(8) brname
   common /com44/  bcars(30), ccars(30),  dcars(30), fbe(20)
   common /com44/  brname(40)
   common /com44/  fbed(20), fke(20), fked(20), pi, picon, sqrt2

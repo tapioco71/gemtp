@@ -3,7 +3,7 @@
 !     subroutine over1.
 !
 subroutine over1
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'umdeck.ftn'
@@ -25,8 +25,8 @@ subroutine over1
   equivalence (moncar(9), kloaep)
   equivalence (moncar(10), mtape)
   equivalence (iprsov(39), nmauto)
-  character*8 aupper, text1, text2, text6, datexx(2)
-  character*8 text3, text4, text5, text9, tcloxx(2)
+  character(8) aupper, text1, text2, text6, datexx(2)
+  character(8) text3, text4, text5, text9, tcloxx(2)
   character locker
   dimension aupper(14)
   dimension lstacs(8)
@@ -257,15 +257,15 @@ subroutine over1
   write (lunit6, 5241)  ltlabl, lbus, lbrnch, ldata, lexct, lymat, lswtch, lsize7, lpast, lnonl, lchar, lsmout, &
        lsiz12, lfdep, lwt, ltails, limass, lsyn, maxpe, ltacst, lfsem, lfd, lhist, lsiz23, lcomp, lspcum, &
        lsiz26, lsiz27, lsiz28
-5241 format(' Independent list limits follow. Total length of /label/  equals ', &
-       i8,  '  integer words.', 3x, 6i6, /, (1x, 21i6, i5))
+5241 format (' Independent list limits follow. Total length of /label/  equals ', &
+          i8, '  integer words.', 3x, 6i6, /, (1x, 21i6, i5))
   write (lunit6, 83049)
-  write(lunit6, 83047)  ( i, i=1, 8 )
-83047 format(' Descriptive interpretation of new-case input data 1 input data card images printed below, all 80 columns, character by character.' ,/, 51x, '0', 8(9x, i1))
+  write (lunit6, 83047) (i, i = 1, 8)
+83047 format (' Descriptive interpretation of new-case input data 1 input data card images printed below, all 80 columns, character by character.' ,/, 51x, '0', 8(9x, i1))
   j = 0
   write (lunit6, 83048)  ( j, i=1, 8 )
 83048 format (51x, '0', 8(9x, i1))
-  write(lunit6, 83049)
+  write (lunit6, 83049)
 83049 format (' --------------------------------------------------+----------------------------------------', &
        '----------------------------------------')
   !     begin loop over all input data cards read by "over1" :
@@ -473,34 +473,31 @@ subroutine over1
   if ( kolbeg .gt. 0) go to 4201
   call expchk ( ll1,  ll80,  ll8 )
   if ( kill  .gt.  0 )   go to 9200
-  !     decode (80, 3415, abuff(1) )  deltat, tmax, d1, d2, d3, tolmat, t
-  read (unit = abuff(1), fmt = 3415, iostat = kerror) deltat, tmax, d1, d2, d3, tolmat, t
+  read (unit = abuff(1), fmt = 3415, iostat = ios) deltat, tmax, d1, d2, d3, tolmat, t
 3415 format (10e8.0)
   if ( t  .eq.  0.0 )   t = 0.0
   go to 4202
 4201 nfrfld = 1
   nright = 0
-  call freone ( deltat )
-  call freone ( tmax   )
-  call freone ( d1     )
-  call freone ( d2     )
-  call freone ( d3     )
-  call freone ( tolmat )
-  call freone ( t      )
-4202 if ( noutpr  .eq.  0 ) write (kunit6, 4205)  deltat, tmax, d1
-4205 format ('+Misc. data.', 3e12.3  )
-  if( iofbnd .ne. 33666 ) go to 4206
+  call freone (deltat)
+  call freone (tmax)
+  call freone (d1)
+  call freone (d2)
+  call freone (d3)
+  call freone (tolmat)
+  call freone (t)
+4202 if (noutpr .eq. 0) write (kunit6, 4205)  deltat, tmax, d1
+4205 format ('+Misc. data.', 3e12.3)
+  if(iofbnd .ne. 33666) go to 4206
   nchain = 41
   xopt = d1
   go to 9800
   !     read input card using cimage.
 4206 call cimage
-  if ( kolbeg  .gt.  0 )   go to 4207
-  call intchk ( ll1, ll80, ll8 )
-  if ( kill  .gt.  0 )   go to 9200
-  !     decode (80, 5, abuff) iout, iplot, idoubl, kssout, maxout,
-  !     1                            ipun, memsav, icat, n1, n2
-  read (unit=abuff, fmt=5) iout, iplot, idoubl, kssout, maxout, ipun, memsav, icat, n1, n2
+  if (kolbeg .gt. 0) go to 4207
+  call intchk (ll1, ll80, ll8)
+  if (kill .gt. 0) go to 9200
+  read (unit = abuff, fmt = 5, iostat = ios) iout, iplot, idoubl, kssout, maxout, ipun, memsav, icat, n1, n2
 5 format (10i8)
   go to 4208
 4207 nfrfld = 10
@@ -516,62 +513,60 @@ subroutine over1
   n1 = voltbc(9)
   n2 = voltbc(10)
 4208 nenerg = n1
-  if ( iplot .eq. 0 )  iplot = 1
-  if ( m4plot .eq. 1  .and. iplot .eq. -1 ) iplot = 1
-  if ( iplot .eq. -1 )  isplot = intinf
-  if ( noutpr  .eq.  0 ) write (kunit6, 4210)  iout, iplot, idoubl, kssout, maxout, ipun, memsav, icat, n1, n2
-4210 format ('+Misc. data.', 2i5, 8i3)
+  if (iplot .eq. 0) iplot = 1
+  if (m4plot .eq. 1 .and. iplot .eq. -1) iplot = 1
+  if (iplot .eq. -1) isplot = intinf
+  if (noutpr .eq.  0) write (kunit6, 4210) iout, iplot, idoubl, kssout, maxout, ipun, memsav, icat, n1, n2
+4210 format ('+Misc. data.', 2i5, 8i3, $)
   begmax(1) = maxout
   maxout = 2
-  if ( n2  .eq.  0 )   go to 6519
-  call copyi ( n2, iprsov(1), ll30 )
+  if (n2 .eq. 0) go to 6519
+  call copyi (n2, iprsov(1), ll30)
 6519 iprsup = iprsov(1)
-  if ( icat .gt. 2 ) icat = 0
+  if (icat .gt. 2) icat = 0
   if (n1 .eq. 0) go to 600
   !     read input card using cimage
 6523 call cimage
-  if ( kolbeg  .gt.  0 )   go to 623
-  call intchk ( ll1, ll24, ll8 )
-  call expchk ( ll25, ll64, ll8 )
-  if ( kill  .gt.  0 )   go to 9200
-  !     decode (80, 620, abuff)  isw, itest, idist, aincr, xmaxmx, degmin,
-  !     1  degmax, d4, sigmax, jseedr
-  read (unit=abuff, fmt=620) isw, itest, idist, aincr, xmaxmx, degmin, degmax, d4, sigmax, jseedr
+  if (kolbeg .gt. 0) go to 623
+  call intchk (ll1, ll24, ll8)
+  call expchk (ll25, ll64, ll8)
+  if (kill .gt. 0) go to 9200
+  read (unit = abuff, fmt = 620, iostat = ios) isw, itest, idist, aincr, xmaxmx, degmin, degmax, d4, sigmax, jseedr
 620 format (3i8, 6f8.0, i8)
   go to 624
 623 nfrfld = 3
   call frefld ( voltbc(1) )
-  isw    = voltbc(1)
-  itest  = voltbc(2)
-  idist  = voltbc(3)
+  isw = voltbc(1)
+  itest = voltbc(2)
+  idist = voltbc(3)
   nfrfld = 1
-  call freone ( aincr  )
-  call freone ( xmaxmx )
-  call freone ( degmin )
-  call freone ( degmax )
-  call freone ( d4     )
-  call freone ( sigmax )
-  call frefld ( voltbc(1) )
+  call freone (aincr)
+  call freone (xmaxmx)
+  call freone (degmin)
+  call freone (degmax)
+  call freone (d4)
+  call freone (sigmax)
+  call frefld (voltbc(1))
   jseedr = voltbc(1)
-624 if ( noutpr  .eq.  0 ) write (kunit6, 630)  isw, itest, idist, aincr
-630 format ('+Statistics data.', 3i8, f9.4)
-  if ( xmaxmx  .eq.  0.0 )   xmaxmx = 2.0
-  if(aincr.eq.0.0) aincr = unity / 20.
-  if ( d4  .gt.  0.0 )   statfr = d4
-  if ( degmax  .eq.  0.0 )   degmax = 360.
-  if (sigmax .eq. 0.0)   sigmax = 4.0
-  if ( jseedr  .gt.  0 )   jseedr = intinf
-  if (  kbase  .ne.  intinf ) kbase = 1
+624 if (noutpr .eq.  0) write (kunit6, 630) isw, itest, idist, aincr
+630 format ('+Statistics data.', 3i8, f9.4, $)
+  if (xmaxmx .eq. 0.0) xmaxmx = 2.0
+  if(aincr .eq. 0.0) aincr = unity / 20.
+  if (d4 .gt. 0.0) statfr = d4
+  if (degmax .eq. 0.0) degmax = 360.
+  if (sigmax .eq. 0.0) sigmax = 4.0
+  if (jseedr .gt. 0) jseedr = intinf
+  if (kbase .ne. intinf) kbase = 1
   begmax(1) = 1.0
-  if ( nenerg  .ne.  intinf )   go to 600
+  if (nenerg .ne. intinf) go to 600
   nchain = 29
   go to 9800
-600 if( d1 .eq. 0.0 )  go to 6260
-  if( d1 .eq. xopt )  go to 6260
-  if ( noutpr  .eq.  0 ) write(lunit6, 6255)  xopt, d1
-6255 format (' ----- Warning. Nonzero misc. data  parameter "xopt" differs from the  power frequency of ',  f8.2, &
-       ' . This is unusual.', /, 7x, 'A value of ', e13.4, ' was read from columns 17-24 of the data card just read. Execution will continue using', /, &
-       7x, 'this value, as suspicious as it seems to the EMTP.')
+600 if (d1 .eq. 0.0) go to 6260
+  if (d1 .eq. xopt) go to 6260
+  if (noutpr .eq. 0) write (lunit6, 6255) xopt, d1
+6255 format (' ----- Warning. Nonzero misc. data  parameter "xopt" differs from the  power frequency of ',  f8.2, ' . This is unusual.', /, &
+          7x, 'A value of ', e13.4, ' was read from columns 17-24 of the data card just read. Execution will continue using', /, &
+          7x, 'this value, as suspicious as it seems to the EMTP.')
 6260 xopt = d1
   if ( d2  .eq.  0.0 )   go to 6265
   if( d2 .eq. copt )  go to 6265
@@ -616,7 +611,7 @@ subroutine over1
   if ( kolbeg  .gt.  0 )   go to 4217
   call intchk ( ll1, ll80, ll8 )
   if ( kill  .gt.  0 )   go to 9200
-  read (unit=abuff, fmt=4211) (kprchg(i), multpr(i), i=1, 5)
+  read (unit = abuff, fmt = 4211) (kprchg(i), multpr(i), i = 1, 5)
 4211 format (10i8)
   go to 4219
 4217 nfrfld = 10
@@ -629,26 +624,26 @@ subroutine over1
   end do
 4219 if ( noutpr  .eq.  0 ) write (kunit6, 14211)   (kprchg(i), multpr(i), i=1, 3)
 14211 format ('Printout :', 6i6)
-  do   i=1, 5
-     if( kprchg(i) .eq. 0 )  go to 4213
+  do i = 1, 5
+     if(kprchg(i) .eq. 0) go to 4213
   end do
   i = 6
 4213 kprchg(i) = intinf
-  if ( ktref  .ne.  -7777 )   go to 4312
+  if (ktref .ne. -7777) go to 4312
   ktref = 0
   go to 15
-4312 if ( iprsup  .ge.  1 ) write(lunit6, 4258 )  deltat, tmax, xopt, copt, epsiln, tolmat
+4312 if (iprsup .ge. 1) write (lunit6, 4258) deltat, tmax, xopt, copt, epsiln, tolmat
 4258 format (10x, 'deltat', 11x, 'tmax', 11x, 'xopt', 11x, 'copt', 9x, 'epsiln', 9x, 'tolmat', /, 1x, 6e15.5, /, 1x)
-  if ( iprsup  .le.  0 )   go to 4266
-  if (nenerg .eq. 0)   go to 4266
-  if ( noutpr  .eq.  0 ) write (lunit6, 4264)  isw, itest, idist, aincr, xmaxmx, degmin, degmax, statfr
+  if (iprsup .le. 0) go to 4266
+  if (nenerg .eq. 0) go to 4266
+  if (noutpr .eq. 0) write (lunit6, 4264)  isw, itest, idist, aincr, xmaxmx, degmin, degmax, statfr
 4264 format (/, ' Statistics parameters.     iswitest   idist ', 10x, 'aincr', 9x, 'xmaxmx', 9x, 'degmin', 9x, 'degmax', 9x, &
-       'statfr', /, 23x, 3i8, 5e15.5)
-4266 if ( ifdep  .ne.  -5555 )   go to 4269
+          'statfr', /, 23x, 3i8, 5e15.5)
+4266 if (ifdep .ne. -5555) go to 4269
   ifdep = 0
   go to 15
 4269 xunits = 1000.
-  if( xopt .gt. 0.0 )   xunits = twopi * xopt
+  if(xopt .gt. 0.0) xunits = twopi * xopt
   ntot=1
   maxbus = 0
   n23 = 0
@@ -676,12 +671,12 @@ subroutine over1
   lstat(39) = 137
   !     read input card using cimage
 2691 call cimage
-  read (unit=abuff(1), fmt=3245) (aupper(i), i=1, 14)
+  read (unit = abuff(1), fmt = 3245) (aupper(i), i = 1, 14)
 3245 format (13a6, a2)
-  if ( aupper( 1) .eq. text1 )  go to 2697
-  if ( aupper( 1) .eq. text3 )  go to 2697
-  if ( aupper( 1) .eq. text4 )  go to 2699
-  if ( aupper( 1) .ne. text6 ) go to 7722
+  if (aupper( 1) .eq. text1) go to 2697
+  if (aupper( 1) .eq. text3) go to 2697
+  if (aupper( 1) .eq. text4) go to 2699
+  if (aupper( 1) .ne. text6) go to 7722
   write (kunit6, 5389)
 5389 format (' Begin tacs. ==========================')
   newtac = 1
@@ -697,13 +692,13 @@ subroutine over1
   if ( noutpr .ne. 0 )  go to 2691
   if ( ntcsex .eq. 0 )  go to 22699
   if ( noutpr  .eq.  0 ) write (kunit6, 32699)
-32699 format ('+tacs hybrid setup.  tacs data cards follow.')
+32699 format ('+TACS hybrid setup.  tacs data cards follow.')
   read (unit = abuff(1), fmt = 1984) lstat(52)
 1984 format (18x, i2)
   go to 2691
 22699 if ( noutpr  .eq.  0 ) write (kunit6, 42699)
-42699 format ('+tacs stand-alone setup.  Data cards follow.')
-  read (unit=abuff(1), fmt=1984) lstat(52)
+42699 format ('+TACS stand-alone setup.  Data cards follow.')
+  read (unit = abuff(1), fmt = 1984) lstat(52)
   go to 2691
 4281 if ( n1  .eq.  0 )   go to 4284
   call move ( lstacs(1), lstat(61), ll8 )
@@ -732,21 +727,21 @@ subroutine over1
   !     write (*,*) ' end over1.  n5, n6, ida, ifkc =',
   !     1                          n5, n6, ida, ifkc
   if ( iprsup  .ge.  1 ) write (lunit6, 4568)
-4568 format (' "exit  module over1."')
+4568 format (' "Exit  module over1."')
 99999 return
 end subroutine over1
 !
 !     tacs1c
 !
 subroutine tacs1c
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     called only by over1 for start again usage
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
-  character*8 alnode
+  character(8) alnode
 1000 if ( iprsup  .ge.  1 ) write ( lunit6,4567 )
-4567 format ('  "begin module tacs1c."')
+4567 format ('  "Begin module tacs1c."')
   read (unit = abuff(1), fmt = 187) n, alnode, dum1, dum3, dum2, ijk, prx, pru
 187 format (i2, a6, 2x, 3e10.0, 14x, i6, 2e10.0)
   if ( niu  .lt.  12 )  go to 2868
@@ -772,23 +767,23 @@ subroutine tacs1c
   if ( prx .ne. 0. .or. ijk .lt. 0) ud1(ndy5+4) = prx
   if ( pru .ne. 0. ) ud1(ndy5+5) = pru
   if ( noutpr .gt. 0 ) write ( lunit6, 1515 )
-1515 format (' Another tacs source changing card')
+1515 format (' Another TACS source changing card')
 2868 return
 end subroutine tacs1c
 !
 !     subroutine swmodf.
 !
 subroutine  swmodf
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     called only by over1 for start again usage
   include 'blkcom.ftn'
   include 'labcom.ftn'
-  character*8 text14, text15
+  character(8) text14, text15
   data  text14   /  6hing     /
   data  text15   / 6hclosed /
 1000 if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
 4567 format (' Begin module "swmodf".')
-  read (unit=abuff(1), fmt=35) it2, bus1, bus2, gus3, gus4, ck1, a, jk, bus4, bus5, bus6, jdu, j
+  read (unit = abuff(1), fmt = 35) it2, bus1, bus2, gus3, gus4, ck1, a, jk, bus4, bus5, bus6, jdu, j
 35 format (i2, 2a6, 4e10.0, i6, a4, 2a6, 2x, 2i1)
   do msw = 1, kswtch
      k = kmswit(msw)
@@ -808,7 +803,7 @@ subroutine  swmodf
   gus4 = fltinf
   go to 216
 7218 if ( noutpr  .eq.  0 ) write (kunit6, 36 )  gus3, gus4, ck1, a
-36 format ('+Switch.', 2x, 4e10.2)
+36 format ('+Switch.', 2x, 4e10.2, $)
   if ( a    .eq.  0.0   )   go to 216
   if ( gus4 .ne. 0.0 .or. ijk .lt. 0 ) adelay(msw)=absz(gus4)
   gus4=absz(a)
@@ -827,14 +822,14 @@ end subroutine swmodf
 !     subroutine reques.
 !
 subroutine reques
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'umdeck.ftn'
   dimension anglex(1), farray(1)
   equivalence (anglex(1), angle)
   equivalence (moncar(2), kbase),   (moncar(3), ltdelt)
   equivalence (iprsov(39), nmauto)
-  character*8 textax, textay
+  character(8) textax, textay
   common /systematic/  linsys
   dimension textax(300), jpntr(10000), textay(100)
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
@@ -1258,7 +1253,7 @@ subroutine reques
   data ll56 / 56 /
   data ll80 / 80 /
   lstat(18) = 0
-  if(iprsup .ge. 1) write(lunit6, 4567)
+  if(iprsup .ge. 1) write (lunit6, 4567)
 4567 format ('  "begin module reques."')
   do i = 1, 9999
      n1 = jpntr(i)
@@ -1481,7 +1476,7 @@ subroutine reques
   write (kunit6, 2780)  fminfs, delffs, fmaxfs, n8
 2780 format ('+f-scan.', 3e12.3, i5)
   go to 2781
-2778 write(kunit6, 3779) fminfs, fmaxfs, n8
+2778 write (kunit6, 3779) fminfs, fmaxfs, n8
 3779 format ('+Line model freq scan.', 2e12.3, i3)
   fminsv = fminfs
 2781 if ( fminfs  .le.  0.0 )   go to 2785
@@ -1739,7 +1734,7 @@ subroutine reques
   !     $$$$$$$  special request-word no. 45.   'absolute u.m.  $$$$$$$$$$
   !     dimensions'    $$$$$$$$$$m28.1751
 8045 if ( kolbeg  .gt.  0 )   go to 7279
-  read(unit=abuff(1), fmt=7276) nclfix, numfix, iotfix, ibsfix
+  read (unit = abuff, fmt = 7276) nclfix, numfix, iotfix, ibsfix
 7276 format (32x, 6i8)
   go to 7282
 7279 nfrfld = 4
@@ -1933,7 +1928,7 @@ end function stripper
 ! subroutine sysdep.
 !
 subroutine sysdep
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   common /komthl/ pekexp
   dimension intbus(1)
@@ -2088,7 +2083,7 @@ end subroutine sysdep
 ! subroutine midov1.
 !
 subroutine midov1
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module called only from one location in "over1" of overlay
   !     one.  it should be acceptable to all fortran 77 compilers
   include 'blkcom.ftn'
@@ -2128,7 +2123,7 @@ end subroutine midov1
 !     subroutine nmincr.
 !
 subroutine nmincr(texta, n12)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module designed to serialize input root name  texta  with decimal
   !     component number  n12,  encoding only required digits.   It is
   !     assumed that a fortran 77 compiler is being used, and that
@@ -2152,16 +2147,16 @@ end subroutine nmincr
 !     subroutine tacs1.
 !
 subroutine tacs1
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
   include 'syncom.ftn'
-  real*8 parsup
-  character*8 alnm1, alnm2, stacs
-  character*8 alph, alnode
+  real(8) parsup
+  character(8) alnm1, alnm2, stacs
+  character(8) alph, alnode
   dimension stacs(11), alph(5), dum(3), dumj(13)
-  character*8 dumj, sminus, splus, sbn(2)
+  character(8) dumj, sminus, splus, sbn(2)
   data  stacs(1)  / 6htimex /
   data  stacs(2)  / 6histep /
   data  stacs(3)  / 6hdeltat/
@@ -2694,21 +2689,21 @@ end subroutine tacs1
 !     subroutine tacs1a
 !
 subroutine tacs1a
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
-  character*8 alph, dumj
+  character(8) alph, dumj
   dimension alph(5), dum(3), dumj(13)
-  character*8 text1, text2, text4, sminus, splus, smultp
-  character*8 supfn, supop, text5, text6, text7
-  character*8 alnode, alnm1, alnm2, alphi, atmpbf
+  character(8) text1, text2, text4, sminus, splus, smultp
+  character(8) supfn, supop, text5, text6, text7
+  character(8) alnode, alnm1, alnm2, alphi, atmpbf
   dimension supfn( 35), supop( 6)
   character el
-  character*8 alnrcl, sepch, sepchm, opname, atmbf, btmpbf
-  character*8 csprch, curch, curch1, contch, chdum1, chdum2
-  character*8 eqlsgn, ch9, chdolr, comma, che, chd
-  character*8 cha, chn, cho, cht, chq, chl, chg, chr
+  character(8) alnrcl, sepch, sepchm, opname, atmbf, btmpbf
+  character(8) csprch, curch, curch1, contch, chdum1, chdum2
+  character(8) eqlsgn, ch9, chdolr, comma, che, chd
+  character(8) cha, chn, cho, cht, chq, chl, chg, chr
   dimension el(100), alnrcl(10), sepch(8), opname(18)
   dimension atmpbf(20), btmpbf(80)
   dimension argel(100)
@@ -3780,12 +3775,12 @@ end subroutine tacs1a
 !     subroutine tacs1b.
 !
 subroutine tacs1b
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
   dimension dumj(13)
-  real*8 dumj
+  real(8) dumj
   character*6 delay
   data  delay   / 6hdelay  /
   if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
@@ -3813,7 +3808,7 @@ subroutine tacs1b
   mc = 1
   mins = 0
   iuser = 0
-  !     $$$  ordering  $$$                      m37.1577
+  !     $$$  ordering  $$$
   kint = - 1000
   go to 1555
 4747 if ( iabs(ia) .ne. 1 )  go to 1984
@@ -4377,7 +4372,7 @@ subroutine tacs1b
      ndx1 = klntab + k
      bus2 = texvec( ilntab(klntab+k) )
      write (lunit6,497) bus1, bus2
-497  format('0 Error. Entry =', "'", a6, "'", '= referenced in function =', "'", a6, "'", '= is undefined.')
+497  format ('0 Error. Entry =', "'", a6, "'", '= referenced in function =', "'", a6, "'", '= is undefined.')
      go to 9000
 213  ksus(ndx3) = j
   end do
@@ -4434,7 +4429,7 @@ subroutine tacs1b
 2013 format ('0', 17x, 'ksu', /, (2x, 2i8))
   if ( nsup  .eq.  0 )  go to  1012
   write ( lunit6, 1033 ) karg
-1033 format('  karg = ', i8, /, '       n  iopsup  ifnsup  irgsup    idev     kdj     kdk  ildev1  ildev2')
+1033 format ('  karg = ', i8, /, '       n  iopsup  ifnsup  irgsup    idev     kdj     kdk  ildev1  ildev2')
   do i = 1, nsup
      n1 = insup( kjsup + i )
      if (  n1  .lt.  0 )  go to 2014
@@ -4563,10 +4558,10 @@ end subroutine tacs1b
 !     subroutine expchk.
 !
 subroutine expchk ( n1, n2, n5 )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
-  character*8 a, texnum, text1, x
-  character*8 textp, textn
+  character(8) a, texnum, text1, x
+  character(8) textp, textn
   dimension x(80), texnum(11)
   data  text1   /  1he  /
   data textp / 1h+ /
@@ -4616,22 +4611,22 @@ end subroutine expchk
 !     subroutine intchk.
 !
 subroutine  intchk ( n1, n2, n5 )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
-  character*8 x
+  character(8) x
   dimension x(80)
-  read (unit=abuff, fmt=2642) (x(i), i=1, 80)
+  read (unit = abuff, fmt = 2642) (x(i), i = 1, 80)
 2642 format (80a1)
   n6 = n1 - 1
   do i = n1, n2
-     if ( x(i)  .eq.  blank )   go to 2648
+     if (x(i) .eq. blank) go to 2648
      n7 = i - n6
      n8 = n7 / n5
      n3 = n8 * n5
-     if ( n3  .eq.  n7 )   go to 2648
-     n4 = n6  +  ( n8 + 1 ) * n5
-     if ( n4  .gt.  n2 )   go to 2645
-     if ( x(n4)  .ne.  blank )   go to 2648
+     if (n3 .eq. n7) go to 2648
+     n4 = n6 + (n8 + 1) * n5
+     if (n4 .gt. n2) go to 2645
+     if (x(n4) .ne. blank) go to 2648
 2645 kill = 98
      lstat(14) = i
      lstat(15) = n4
@@ -4646,7 +4641,7 @@ end subroutine intchk
 !     subroutine date44.
 !
 subroutine date44(a)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !         The purpose of subroutine  date44  is to interrogate the
   !         installation calendar, and return the current date through the
   !         argument of the subroutine.   eight bcd characters are allowed,
@@ -4666,9 +4661,9 @@ subroutine date44(a)
   !     numerical values.
   character(8) a(2), date
   call date_and_time(date = date)
-  write (unit = a(1), fmt = 1386) date(7:8), date(5:5)
+  write (unit = a(1), fmt = 1386) date(7 : 8), date(5 : 5)
 1386 format (a2, '/', a1)
-  write (unit = a(2), fmt = 1394) date(6:6), date(3:4)
+  write (unit = a(2), fmt = 1394) date(6 : 6), date(3 : 4)
 1394 format (a1, '/', a2)
   return
 end subroutine date44
@@ -4676,7 +4671,7 @@ end subroutine date44
 !     subroutine pfatch.
 !
 subroutine pfatch
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This installation-dependent module serves to connect a
   !     file to  i/o  channel  ialter  (/blank/ variable),
   !     based on the file specification contained on last-
@@ -4689,8 +4684,8 @@ subroutine pfatch
   include 'dekspy.ftn'
   character*25 filen
   if (m4plot .ne. 1)  go to 4519 ! not interactive emtp
-  write(prom80, 4504)
-4504 format('    Send VAX disk file name:')
+  write (prom80, 4504)
+4504 format ('    Send VAX disk file name:')
   call prompt               ! write prom80 with cursor control (no lf)
   read (munit5, 4507) (texcol(j), j = 1, 30)
 4507 format (30a1)
@@ -4703,18 +4698,18 @@ subroutine pfatch
      if(texcol(k) .eq. blank) go to 4532
      if(texcol(k) .eq. csepar) go to 4536
      n4 = n4 + 1
-     write(unit=filen(n4:25), fmt=3041) texcol(k)
+     write (unit=filen(n4:25), fmt=3041) texcol(k)
 3041 format (80a1)
   end do
 4532 continue
 4536 nfrfld = 1
   kolbeg = k + 1
   n7 = ialter
-  if(iprsup .ge. 1) write(lunit6, 4548) ialter, filen
+  if(iprsup .ge. 1) write (lunit6, 4548) ialter, filen
 4548 format (/, ' Ready to connect file to unit  "ialter" =', i3, ' .   "filen" =', a25)
   close (unit=n7)
-  open(unit=n7, status='old', form='unformatted', file=filen)
-  if(iprsup .ge. 1) write(lunit6, 4561)
+  open(unit = n7, status = 'old', form = 'unformatted', file = filen)
+  if(iprsup .ge. 1) write (lunit6, 4561)
 4561 format (/, ' Successful file opening in  "pfatch" .')
   icat = 2
   return

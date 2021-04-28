@@ -461,7 +461,7 @@ end subroutine pltfil
 !     subroutine pltlu2.
 !
 subroutine pltlu2 (d2, volti)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     called by "tacs2" only, if and only if m4plot .ne. 0
   !     this module is universal for fortran 77 compilers and
   !     computers for which real*4 corresponds to single precision.
@@ -483,14 +483,14 @@ end subroutine pltlu2
 !     subroutine vecrsv.
 !
 subroutine vecrsv (array, n13, n2)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module for vector dumping/restoring of "OVER6", "OVER8", etc.
   !     This is universal for virtual computers which chose to
   !     use /C29B01/ space for this, as well as all of "LABCOM".
   !     Also needed are uncounted Hollerith.  Parallel to "VECISV".
   include 'blkcom.ftn'
   include 'deck29.ftn'
-  real*8 karray, farray
+  real(8) karray, farray
   dimension array(2), farray(3)
   equivalence (karray(1), farray(1))
   !     block /veccom/ is shared by "vecrsv" and "vecisv".
@@ -546,14 +546,14 @@ end subroutine vecrsv
 !     subroutine vecisv.
 !
 subroutine vecisv(karr, n13, n2)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module for vector dumping/restoring of "OVER6", "OVER8", etc.
   !     This is universal for virtual computers which chose to
   !     use /C29B01/ space for this, as well as all of "LABCOM".
   !     also needed are uncounted Hollerith.  Parallel to "VECISV".
   include 'blkcom.ftn'
   include 'deck29.ftn'
-  real*8 karr, karray, farray
+  real(8) karr, karray, farray
   dimension farray(3)
   equivalence (karray(1), farray(1))
   dimension karr(2)
@@ -602,7 +602,7 @@ end subroutine vecisv
 !     subroutine vecrxx.
 !
 subroutine vecrxx(array, n13, n2)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal (non-virtual) form of module for binary i/o.  If
   !     extracted from UTPF for use, convert name "VECRXX" to "VECRSV"
   include 'blkcom.ftn'
@@ -640,7 +640,7 @@ end subroutine vecrxx
 !     subroutine vecixx.
 !
 subroutine vecixx(karr, n13, n2)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal (non-virtual) form of module for binary i/o.  If
   !     extracted from UTPF for use, convert name "VECIXX" to "VECISV"
   include 'blkcom.ftn'
@@ -661,7 +661,7 @@ end subroutine vecixx
 !     subroutine namea6.
 !
 subroutine namea6 ( text1, n24 )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module for maintainance of alphanumeric vector texvec of
   !     "labcom".  maxbus of "blkcom" is last used cell.  n24 chooses
   !     mode of use:  0 will add text1, positive will locate it,
@@ -711,7 +711,7 @@ end subroutine namea6
 !     subroutine tables.
 !
 subroutine tables
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Utility which is used to both dump and restore EMTP
   !     tables (central memory vs. disk).  Usage is for both
   !     "statistics" (over12, over15, over20) and  "start again"
@@ -811,7 +811,7 @@ end subroutine tables
 !     subroutine csup.
 !
 subroutine csup(l)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'

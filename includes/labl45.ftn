@@ -2,7 +2,7 @@
 !
 !     file: labl45.ftn
 !
-  character*8 pl
+  character(8) pl
   common /com45/ pl(91)
   common /com45/ f, w, cold, xpan, conv5, ratio, pi2, sll, spdlt
   common /com45/ tt, tstrt, tretrd, tstep, ffin, shiftr, shifti

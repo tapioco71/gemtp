@@ -5,7 +5,7 @@
   !     This deck is used only by interactive execution modules
   !     which begin with "emtspy".  Note "deck29" working space:
   common /c29b01/ karray(3) ! "deck29" stores plot points
-  real*8 pltbuf(1), forbyt(600) ! real*4 plot storage
+  real(8) pltbuf(1), forbyt(600) ! real*4 plot storage
   equivalence (pltbuf(1), karray(1)) ! /c29b01/ plot points
   logical logvar            ! logical variable for "inquire" usage
   common /spycom/ rampcn(20), rampsl(20), kyramp(20)
@@ -33,6 +33,7 @@
   dimension fkar1(1), fkar2(1)
   equivalence (kar1, fkar1), (kar2, fkar2)
   !     character*1 char1, filbyt(1), col, filext, digit
+  integer(4) nextsn
   character char1, filext, digit
   character(8) symb, symbrp, junker, texpar, spykwd
   character(8) ansi8, brobus

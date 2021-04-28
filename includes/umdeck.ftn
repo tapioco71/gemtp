@@ -2,7 +2,7 @@
   !
   !     file: umdeck.ftn
   !
-  character*8 busum
+  character(8) busum
   common /umcom/ busum(50),ptheta(3,3),zthevr(3,3)
   common /umcom/ vinp(40), zthevs(40), umcur(40), con(10)
   common /umcom/ dumvec(40),dummat(3,3),date(2),clock(2)

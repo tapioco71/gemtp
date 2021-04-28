@@ -427,8 +427,8 @@ subroutine spying
   write (munit6, 1006) nchain, jjroll, kbreak, lockbr, nexmod, buff77(1:20)
 1006 format (' Enter "spying".  nchain, jjroll, kbreak, lockbr, nexmod =', 5i5, '    buff77(1:20) =', a20)
   call window
-  write (*, *) ' Top spying, ksmspy(1:3) =',  ksmspy
-31006 if ( buff77(1:4) .ne. 'spy ' ) go to 51006
+  write (*, *) ' Top spying, ksmspy(1 : 3) =', ksmspy
+31006 if (buff77(1 : 4) .ne. 'spy ') go to 51006
   nexmod = 0
   ksmspy(1) = 2
   ksmspy(3) = 0
@@ -443,7 +443,7 @@ subroutine spying
   if (kbrser .ne. 2) go to 1009
   jword = 52
   go to 8500
-1009 memkar = locint (kar1(1))
+1009 memkar = locint (kar1)
   if (kfile5 .ne. 2) go to 1240
   kfile5 = 0
   go to 31269
@@ -1264,7 +1264,7 @@ subroutine spying
 2982 format (' Send n-beg in EMTP, lunit5 offset :')
   assign 2983 to nextsn
   go to 9800
-2983 call frein2(buff77, n14, n15)
+2983 call frein2 (buff77, n14, n15)
   go to 2975
 2984 if (iprspy .lt. 1) go to 32985
   write (munit6, 2985) n12, n13, n14, n15
@@ -1280,7 +1280,7 @@ subroutine spying
      if (l .ge. n12) go to 2988
      read (lunt14, 2991) ansi8
      go to 2994
-2988 read (lunt14, 2991, end = 2998) file6(n14)
+2988 read (lunt14, fmt = 2991, end = 2998) file6(n14)
 2991 format (a80)
      if (file6(n14)(1 : 4) .eq. 'eof ') go to 2998
      n14 = n14 + 1

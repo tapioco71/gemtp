@@ -26,7 +26,7 @@ end subroutine over51
 !     subroutine subr51.
 !
 subroutine subr51
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   dimension  kpen(20)
   !     note. --- as the structure of the emtp error overlays change,
@@ -41,119 +41,120 @@ subroutine subr51
   data  kpen(3)   /  150  /
   data  kpen(4)   /  200  /
   nfrfld = 5
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )  kill
-4567 format ( 24h begin "subr51".  kill =,  i8 )
-  if ( kill .eq. 99  .and.  lstat(19) .eq. 11111 ) call stoptp
+  if (iprsup .ge. 1) write (lunit6, 4567) kill
+4567 format (' Begin "subr51".  kill =', i8)
+  if (kill .eq. 99 .and. lstat(19) .eq. 11111) call stoptp
   kpen(nfrfld) = intinf
-  call runtym ( vmin, vmax )
+  call runtym (vmin, vmax)
   flstat(9) = vmin - flstat(9)
-  if ( ipntv(1)  .ne.  -8888 )   go to 1643
+  if (ipntv(1) .ne. -8888) go to 1643
   !     following assignments are to define exceptional /blank/
   !     variables used in  "kill codes"  usage:
-  if ( kill  .eq.  38 )   flstat(12) = 1.0
-  if (kill  .eq. 41)   lstat(10) = 1
-  if (kill  .eq. 43)  flstat(12) = 1.
-  if ( kill - 1  .ne.  ipntv(3) )   go to 1643
+  if (kill .eq. 38) flstat(12) = 1.0
+  if (kill .eq. 41) lstat(10) = 1
+  if (kill .eq. 43) flstat(12) = 1.
+  if (kill - 1 .ne. ipntv(3)) go to 1643
   ipntv(3) = kill
   go to 1649
-1643 if ( lastov  .ge.  nchain )   go to 1649
+1643 if (lastov .ge. nchain) go to 1649
   noutpr = 0
   call interp
-  write(lunit6, 5315)
-5315 format( 1h  )
-  write(lunit6, 5316)
-5316 format( 132h -----------------------------------------------------------------------------------------------------------------------------------     )
-  do i=1, 2
-5319 write(lunit6, 5320)
+  write (lunit6, 5315)
+5315 format (' ')
+  write (lunit6, 5316)
+5316 format (' -----------------------------------------------------------------------------------------------------------------------------------')
+  do i = 1, 2
+5319 write (lunit6, 5320)
   end do
-5320 format( 132h error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error     )
+5320 format (' error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error')
   write(lunit6, 5316)
-  if ( m4plot .eq. 1 )  go to 5534
+  if (m4plot .eq. 1) go to 5534
   write(lunit6, 5332)
-5332 format('0You lose, fella.   The EMTP logic has detected an error condition, and is going to terminate your run.  The following  ', &
-       /, ' printout message summarizes the data difficulty leading to this program decision.  By studying this message, the problem  ', &
-       /,' data,  and the rules delineated by the  840-page emtp rule book,  it is hoped that the user can rectify the problem.     ', &
-       /,  ' If still in doubt after some study, come see program maintenance for assistance.    ')
+5332 format ('0You lose, fella.   The EMTP logic has detected an error condition, and is going to terminate your run.  The following', /, &
+       ' printout message summarizes the data difficulty leading to this program decision.  By studying this message, the problem', /, &
+       ' data,  and the rules delineated by the  840-page EMTP rule book,  it is hoped that the user can rectify the problem.', /, &
+       ' If still in doubt after some study, come see program maintenance for assistance.')
   read (unit = abuff(1), fmt = 1019) (texcol(j), j = 1, 14)
-1019 format ( 13a6, a2 )
-  write (lunit6, 5333)  ( texcol(j), j=1, 14 )
-5333 format( 113h where an otherwise-unidentified card is referred to, or is called the 'last' card, this means the most-recently-   ,/, &
-       113h read card of the input data deck.   the 80-column card image in question is the last one printed out before this   ,/, &
-       42h termination message.   a copy follows....,  13a6, a2 )
-5534 write (lunit6, 5335)  kill, lstat(18), lstat(19)
-5335 format( 14x, 16hkill code number, 16x, 14hoverlay number, 10x, 20hnearby statement no.  , /, 3i30 )
-1649 do 1658  j=1, nfrfld
-     if ( kill  .gt.  kpen(j) )   go to 1658
-     if ( j  .eq.  1 )   go to 1684
+1019 format (13a6, a2)
+  write (lunit6, 5333) (texcol(j), j = 1, 14)
+5333 format (" Where an otherwise-unidentified card is referred to, or is called the 'last' card, this means the most-recently-", /, &
+       'read card of the input data deck.   The 80-column card image in question is the last one printed out before this', /, &
+       ' termination message.   A copy follows....', 13a6, a2)
+5534 write (lunit6, 5335) kill, lstat(18), lstat(19)
+5335 format(14x, 'kill code number', 16x, 'overlay number', 10x, 'nearby statement no.', /, 3i30)
+1649 do j = 1, nfrfld
+     if (kill .gt. kpen(j)) go to 1658
+     if (j .eq. 1) go to 1684
      lastov = nchain
      nchain = 50 + j
-     if ( iprsup  .ge.  1 ) write ( lunit6, 1652 )   kill, j, kpen(j), nchain
-1652 format ( 21h error overlay found., 29h   kill, j, kpen(j), nchain =,  4i8  )
+     if (iprsup .ge. 1) write (lunit6, 1652) kill, j, kpen(j), nchain
+1652 format (' Error overlay found.   kill, j, kpen(j), nchain =', 4i8)
      go to 9000
-1658 end do
+  end do
+1658 continue
 1684 continue
-  go to ( 6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010, 6011, 6012, 6013, 6014, 6015, 6016, 6017, 6018, 6019, 6020, &
+  go to (6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010, 6011, 6012, 6013, 6014, 6015, 6016, 6017, 6018, 6019, 6020, &
        6021, 6022, 6023, 6024, 6025, 6026, 6027, 6028, 6029, 6030, 6031, 6032, 6033, 6034, 6035, 6036, 6037, 6038, 6039, 6040, &
        6041, 6042, 6043, 6044, 6045, 6046, 6047, 6048, 6049, 6050), kill
-6001 write(lunit6, 7001)  lstat(16)
-7001 format(5x, 'Storage exceeded for list number ', i2, '.   See dimensioned limit in tabulation below.  ',/, &
+6001 write (lunit6, 7001)  lstat(16)
+7001 format (5x, 'Storage exceeded for list number ', i2, '.   See dimensioned limit in tabulation below.',/, &
        5x, 'The problem being inputted is simply too big for the program as currently dimensioned.   Since there usually are ',/, &
        5x, 'ways of circumventing this difficulty, it is suggested that the user consult his friendly neighborhood program   ',/, &
-       5x,  'maintenance man.   ')
+       5x,  'maintenance man.')
   go to 6220
-6002 if ( t  .lt.  0.0 )   go to 7102
+6002 if (t .lt. 0.0) go to 7102
   write (lunit6, 7002)  flstat(16)
-7002 format( 5x, "Time-step size 'deltat' as read from columns 1-8 of the first miscellaneous data card is not positive.   The  ",/, &
-       5x,  'user punched a value of ', e14.4,  '.   Unlike Jules Verne, you are not allowed to stop or decrease time during  ',/, &
-       5x, "a simulation, my friend.   Don't try riding out of an active volcano on a raft floating on molten lava, either,   ",/, &
-       5x,  "although that's another story.   ")
+7002 format (5x, "Time-step size 'deltat' as read from columns 1-8 of the first miscellaneous data card is not positive.   The", /, &
+       5x,  'user punched a value of ', e14.4,  '.   Unlike Jules Verne, you are not allowed to stop or decrease time during', /, &
+       5x, "a simulation, my friend.   Don't try riding out of an active volcano on a raft floating on molten lava, either,", /, &
+       5x, "although that's another story.")
   go to 6220
-7102 write (lunit6, 7202)  t
-7202 format (5x, "The starting time   't'   as read from the floating-point miscellaneous data card is negative, which is        ",/, &
-       5x,  'illegal.   A value of',    e15.5,     '   was read from the data field of columns 49-56.      ')
+7102 write (lunit6, 7202) t
+7202 format (5x, "The starting time   't'   as read from the floating-point miscellaneous data card is negative, which is", /, &
+       5x,  'illegal.   A value of', e15.5, '   was read from the data field of columns 49-56.')
   go to 6220
-6003 write(lunit6, 7003)  lstat(16)
-7003 format(5x, 'Illegal type code read from columns 1-2 of last branch card.   The user punched a value of ', i2, '.   Either ',/, &
-       5x, 'the punched number itself is patently illegal (always an error, under any circumstances), or the card in question  ',/, &
-       5x, 'his out of sequence in relation to the preceding data card which was inputted.   As an example of the latter  ',/, &
-       5x, "case, consider a '-3' punch, with the preceeding card not bearing a '-2' punch.   In any case, open up the user's  ",/, &
-       5x,  'manual, and reread the rules for the data type that you have been trying to input, my friend.   ')
+6003 write (lunit6, 7003) lstat(16)
+7003 format (5x, 'Illegal type code read from columns 1-2 of last branch card.   The user punched a value of ', i2, '.   Either', /, &
+          5x, 'the punched number itself is patently illegal (always an error, under any circumstances), or the card in question  ',/, &
+          5x, 'his out of sequence in relation to the preceding data card which was inputted.   As an example of the latter',/, &
+          5x, "case, consider a '-3' punch, with the preceeding card not bearing a '-2' punch.   In any case, open up the user's",/, &
+          5x,  'manual, and reread the rules for the data type that you have been trying to input, my friend.')
   write (lunit6, 7103)
-7103 format (5x, 'Yet, in case this general advice does not seem to apply, consider the possible trouble which can arise from a   ',/, &
-       5x, 'preceding faulty use of the reference-branch capability. This feature has the emtp looking for a certain number   ',/, &
-       5x, "and type of branch cards, based on properties of the component to which reference has been made.   if the user's   ",/, &
-       5x, 'data cards do not in structure match those of the reference component, an error stop of the present type may very    ')
+7103 format (5x, 'Yet, in case this general advice does not seem to apply, consider the possible trouble which can arise from a', /, &
+          5x, 'preceding faulty use of the reference-branch capability. This feature has the emtp looking for a certain number', /, &
+          5x, "and type of branch cards, based on properties of the component to which reference has been made.   If the user's", /, &
+          5x, 'data cards do not in structure match those of the reference component, an error stop of the present type may very')
   write (lunit6, 7203)
-7203 format (5x, "be expected.   Remember that in cases where two or more branches from reference bus  'bus3'  to reference bus   ",/, &
-       5x, "'bus4'  (ordered pair of names, read from columns 15-24 as  2a6  information) exist, the EMTP will always pick    ",/, &
-       5x, 'the first one that it finds (in order of branch input) for reference purposes.     ')
+7203 format (5x, "be expected.   Remember that in cases where two or more branches from reference bus  'bus3'  to reference bus", /, &
+          5x, "'bus4'  (ordered pair of names, read from columns 15-24 as  2a6  information) exist, the EMTP will always pick", /, &
+          5x, 'the first one that it finds (in order of branch input) for reference purposes.')
   go to 6220
 6004 write(lunit6, 7004)
-7004 format( 5x, 'Last branch was zero impedance (r, l, c fields of columns 27-44 were all zero).   If you really want a short   ',/, &
-       5x, 'circuit, you must punch a very small value for  r  or l.   Or better yet, why not do away with one of the node   ',/, &
-       5x,  'names of this branch, treating both ends as the same bus (a perfect short circuit).   ')
+7004 format (5x, 'Last branch was zero impedance (R, L, C fields of columns 27-44 were all zero).   If you really want a short', /, &
+          5x, 'circuit, you must punch a very small value for  r  or l.   Or better yet, why not do away with one of the node', /, &
+          5x, 'names of this branch, treating both ends as the same bus (a perfect short circuit).')
   go to 6220
 6005 write(lunit6, 7105)
-7105 format( 5x, 'The user has been inputting pairs of points which define a nonlinear (or pseudo-nonlinear) element characteristic. ', &
-       /, 5x, "These must be in order, moving ever to the right and upward in the x-y plane.   But the user's just-inputted     ")
+7105 format (5x, 'The user has been inputting pairs of points which define a nonlinear (or pseudo-nonlinear) element characteristic.', /, &
+          5x, "These must be in order, moving ever to the right and upward in the x-y plane.   But the user's just-inputted")
   write (lunit6, 7005)
-7005 format( 5x, 'characteristic is not monotone increasing as it should be.   A decrease in one of the two coordinate points   ',/, &
-       5x,  'has been detected on the last data card which was read. Shape up or ship out, Jack.   ')
+7005 format (5x, 'characteristic is not monotone increasing as it should be.   A decrease in one of the two coordinate points', /, &
+          5x, 'has been detected on the last data card which was read.   Shape up or ship out, Jack.')
   go to 6220
-6006 write(lunit6, 7006)  bus3, bus4
-7006 format( 5x, 'Reference branch names of last data card do not refer to previously-inputted branch of same type.   The data being ', &
-       /, 5x, 'referenced can not be found.   Check for spelling errors, or position differences of blanks within the field widths. ',/, &
-       5x,  'Defective names as read off card from columns 15-26 were ',  "'", a6, "' and '", a6, "'."   )
+6006 write (lunit6, 7006) bus3, bus4
+7006 format (5x, 'Reference branch names of last data card do not refer to previously-inputted branch of same type.   The data being', /, &
+          5x, 'referenced can not be found.   Check for spelling errors, or position differences of blanks within the field widths. ', /, &
+          5x, 'Defective names as read off card from columns 15-26 were ',  "'", a6, "' and '", a6, "'.")
   go to 6220
 6007 write(lunit6, 7007)  lstat(16)
-7007 format( 5x, 'An illegal type code has been read from columns 1-2 of the last data card, which the EMTP believes to be a ',/, &
-       5x,  'switch card.   The EMTP read a value of ', i2,  '.   But such a value cannot be accepted, since   ',/, &
-       5x, 'only type codes  0 (ordinary switch),  92 (switched resistance),  93 (switched inductance)', /, &
-       5x, ' 11 (diode and tacs-controlled valve),  12 (tacs-controlled spark gap or triac)', /, &
-       5x, 'hand  13 (tacs-controlled ordinary switch)  are allowed.     ')
+7007 format (5x, 'An illegal type code has been read from columns 1-2 of the last data card, which the EMTP believes to be a ', /, &
+          5x, 'switch card.   The EMTP read a value of ', i2,  '.   But such a value cannot be accepted, since   ', /, &
+          5x, 'only type codes  0 (ordinary switch),  92 (switched resistance),  93 (switched inductance)', /, &
+          5x, ' 11 (diode and tacs-controlled valve),  12 (tacs-controlled spark gap or triac)', /, &
+          5x, 'hand  13 (tacs-controlled ordinary switch)  are allowed.')
   go to 6220
 6008 write(lunit6, 7008)
-7008 format( 5x, 'An error in the ordering of switch cards has occured.   All switched-resistance elements (type-92) must precede ',/, &
+7008 format(5x, 'An error in the ordering of switch cards has occured.   All switched-resistance elements (type-92) must precede ',/, &
        5x, 'any switched-inductance (type-93) elements.   The last data card which has been read violates this rule.    ',/, &
        5x,  'Get with it, guy, shape up.   ')
   go to 6220
