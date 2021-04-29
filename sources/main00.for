@@ -1376,7 +1376,7 @@ subroutine frefld (array)
      if (text1 .eq. blank) go to 5923
      go to 5921
 5922 ll = ll + 1
-     call packa1(texvec(1), texta6(jj), ll)
+     call packa1 (texvec(1), texta6(jj), ll)
 5923 if (kolbeg .le. 80) go to 5920
   end do
 5948 continue
