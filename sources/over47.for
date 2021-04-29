@@ -6,18 +6,18 @@
 !     subroutine subr47.
 !
 subroutine subr47
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'deck47.ftn'
   include 'labl47.ftn'
   dimension lltemp(20)
   dimension rtg(1), itg(1), ctg(1)
-  complex*16 ctg
+  complex(16) ctg
   equivalence (karray(1), itg(1), rtg(1), ctg(1))
   if (iprsup .ge. 1) write (lunit6, 4567)
-4567 format (24h  begin module "subr47".)
+4567 format ('  Begin module "subr47".')
   n8 = nchain
-  if ( kburro .eq. 1)  n8 =29
+  if ( kburro .eq. 1) n8 = 29
 1000 call  dimens ( lltemp(1), n8, trash, trash )
   n7 = lltemp(2) * nbyte(4) / nbyte(3)
   cc = 2 * nbyte(2)
@@ -110,19 +110,19 @@ end subroutine subr47
 !
 !     subroutine guts47.
 !
-subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4, bi5, hi,  di, gn, rad, wy, zy, yz, sc, qc, &
+subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4, bi5, hi,  di, gn, rad, wy, zy, yz, sc, qc, &
      dr0, th0, al0, dij, dir, ang, roi, esi, usi, usr, gi, radi, yzn, qn, yo, ys, yc, zs, zc, ze, zp, zpc, a, ai, b, bi, ca, &
      cb, cc, cd, f, ldm, ldn, ldn2, lnq2)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl47.ftn'
   include 'volt45.ftn'
-  complex*16 ys(ldn, ldn), yc(ldn, ldn), zs(ldn, ldn), zc(ldn, ldn)
-  complex*16 ze(ldn, ldn), ai(ldn, ldn), bi(ldn, ldn), zp(ldn, ldn)
-  complex*16 zpc(ldn, ldn), a(ldn, ldn),  b(ldn, ldn), yo(ldn, ldn)
-  complex*16 qn( ldn ), cmplxz, cj , f(ldn, ldn2)
-  complex*16 ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn), cd(ldn, ldn)
-  character*8 bufsem, cname, text1, text2, text3, text4
+  complex(16) ys(ldn, ldn), yc(ldn, ldn), zs(ldn, ldn), zc(ldn, ldn)
+  complex(16) ze(ldn, ldn), ai(ldn, ldn), bi(ldn, ldn), zp(ldn, ldn)
+  complex(16) zpc(ldn, ldn), a(ldn, ldn),  b(ldn, ldn), yo(ldn, ldn)
+  complex(16) qn( ldn ), cmplxz, cj , f(ldn, ldn2)
+  complex(16) ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn), cd(ldn, ldn)
+  character(8) bufsem, cname, text1, text2, text3, text4
   dimension bufsem(14)
   dimension ngg(ldn), ncpp(ldm), rad(ldn), yzn(lnq2), wy(ldn)
   dimension sc(ldn,ldn), qc(ldn,ldn), gi(ldn,3)
@@ -133,9 +133,9 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
   dimension bio(ldm), bi1(ldm), bi2(ldm), bi3(ldm), bi4(ldm)
   dimension bi5(ldm), dci(ldm), thc(ldm),  hi(ldm),  di(ldn)
   dimension al1i(ldm),   al2i(ldm),   al3i(ldm),   gn(ldn)
-  data text1   /  6hpunch    /
-  data text2   /  6h line   /
-  data text3   /  6hcable   /
+  data text1 / 'punch ' /
+  data text2 / ' line ' /
+  data text3 / 'cable ' /
   nrp =  0
   mrr =  0
   junit4=77
@@ -187,7 +187,7 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
 5 ngrnd = 0
   !     read input card using cimage.
   call cimage
-  read (unit = abuff(1), fmt = 4230) bufsem
+  read (unit = abuff, fmt = 4230) bufsem
 4230 format ( 13a6, a2 )
   if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
   if ( bufsem(1)  .ne.  text1 )   go to 8214
@@ -238,7 +238,7 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
   if ( mispun  .ne.  1 )   go to 8234
   !     read input card using cimage.
   call cimage
-  read (unit = abuff(1), fmt = 903) npais, ncros, irsep, xmajor, rsg, cname
+  read (unit = abuff, fmt = 903) npais, ncros, irsep, xmajor, rsg, cname
 903 format( 3i5, 2e10.1, a1 )
 8234 mispun = 0
   go to (10, 20, 20) , itypec
@@ -254,24 +254,24 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
      in = im + 3
      !     read input card using cimage.
      call cimage
-     read (unit = abuff(1), fmt = 4230) bufsem
+     read (unit = abuff, fmt = 4230) bufsem
      if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
-     read (unit = abuff(1), fmt = 900) (ncpp(j), j = im, in)
+     read (unit = abuff, fmt = 900) (ncpp(j), j = im, in)
      write (kunit6, 1220)
 1220 format (42h+additional data for phase & ground wires.)
      !     read input card using cimage.
      call cimage
-     read (unit = abuff(1), fmt = 4230) bufsem
+     read (unit = abuff, fmt = 4230) bufsem
      if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
-     read (unit = abuff(1), fmt = 901) (radi(i, j), j = 1, 4), (dr0(i, j), j = 1, 2)
+     read (unit = abuff, fmt = 901) (radi(i, j), j = 1, 4), (dr0(i, j), j = 1, 2)
 901  format(8e10.1)
      write (kunit6, 1230)
 1230 format (40h+geometrical data of bundled conductors.)
      !     read input card using cimage.
      call cimage
-     read (unit = abuff(1), fmt = 4230) bufsem
+     read (unit = abuff, fmt = 4230) bufsem
      if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
-     read (unit = abuff(1), fmt = 901) (roi(i, j), usr(i, j), j = 1, 2)
+     read (unit = abuff, fmt = 901) (roi(i, j), usr(i, j), j = 1, 2)
      write (kunit6, 1240)
 1240 format (49h+resistivity & permeability of phase & gd. wires.)
 13 end do
@@ -291,9 +291,9 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
      in = im + 1
      !     read input card using cimage.
      call cimage
-     read (unit = abuff(1), fmt = 4230) bufsem
+     read (unit = abuff, fmt = 4230) bufsem
      if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
-     read (unit = abuff(1), fmt = 901) (thc(i), dci(i), di(i), i = im, in)
+     read (unit = abuff, fmt = 901) (thc(i), dci(i), di(i), i = im, in)
      if (j .gt. 1)   go to 19
      write (kunit6, 16)
 16   format (46h+heights and horizontal distance of each line.)
@@ -324,9 +324,9 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
   if(npp.ne.1) npp=1
   !     read input card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 4230) bufsem
+  read (unit = abuff, fmt = 4230) bufsem
   if (ialter .ne. 2) write (lunit2, 4230)  bufsem
-  read (unit = abuff(1), fmt = 901) (radp(i), i = 1, 3), rop, usp, es1, es2
+  read (unit = abuff, fmt = 901) (radp(i), i = 1, 3), rop, usp, es1, es2
   write (kunit6, 3035)
 3035 format (21h+pipe characteristic.)
   if (radp(3) .ne. 0.0) go to 3036
@@ -334,17 +334,17 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
   es2 = 1.0
   !     read input card using cimage
 3036 call cimage
-  read (unit = abuff(1), fmt = 4230) bufsem
+  read (unit = abuff, fmt = 4230) bufsem
   if (ialter .ne. 2) write (lunit2, 4230)  bufsem
-  read (unit = abuff(1), fmt = 901) (dci(i), thc(i), i = 1, npc)
+  read (unit = abuff, fmt = 901) (dci(i), thc(i), i = 1, npc)
   write (kunit6, 3040)
 3040 format (34h+relation between cables and pipe.)
   np2 = npc * 3  +  npp
   !     read input card using cimage.
 3050 call cimage
-  read (unit = abuff(1), fmt = 4230) bufsem
+  read (unit = abuff, fmt = 4230) bufsem
   if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
-  read (unit = abuff(1), fmt = 900) (ncpp(i), i = 1, npc)
+  read (unit = abuff, fmt = 900) (ncpp(i), i = 1, npc)
   write (kunit6, 3220)
 3220 format (36h+number of conductors in each cable.)
   if ( itypec  .eq.  2 )   go to 22
@@ -355,24 +355,24 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
 22 do i=1, npc
      !     read input card using cimage.
      call cimage
-     read (unit = abuff(1), fmt = 4230) bufsem
+     read (unit = abuff, fmt = 4230) bufsem
      if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
-     read (unit = abuff(1), fmt = 901) (radi(i, j), j = 1, 7)
+     read (unit = abuff, fmt = 901) (radi(i, j), j = 1, 7)
      write (kunit6, 3230) (radi(i,j), j=1, 7)
 3230 format(7h+radii., 1x, 7f6.2 )
      !     read input card using cimage.
      call cimage
-     read (unit = abuff(1), fmt = 4230) bufsem
+     read (unit = abuff, fmt = 4230) bufsem
      if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
-     read (unit = abuff(1), fmt = 901) (roi(i, j), usr(i, j), usi(i, j), esi(i, j), j= 1, 2)
+     read (unit = abuff, fmt = 901) (roi(i, j), usr(i, j), usi(i, j), esi(i, j), j= 1, 2)
      write (kunit6, 3240)
 3240 format(50h+physical constants for conductors and insulators.)
      if (ncpp(i) .le. 2)  go to 3245
      !     read input card using cimage.
      call cimage
-     read (unit = abuff(1), fmt = 4230) bufsem
+     read (unit = abuff, fmt = 4230) bufsem
      if (ialter .ne. 2) write(lunit2, 4230)  bufsem
-     read (unit = abuff(1), fmt = 901) roi(i, 3), usr(i, 3), usi(i, 3), esi(i, 3)
+     read (unit = abuff, fmt = 901) roi(i, 3), usr(i, 3), usi(i, 3), esi(i, 3)
      write(kunit6, 3240)
      if ( radi(i,7) .ne. 0. ) go to 3239
      radi(i,7)=radi(i,6) + 100.*epsiln
@@ -417,9 +417,9 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
   if (npp .eq. 0)   go to 85
   !     read input card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 4230) bufsem
+  read (unit = abuff, fmt = 4230) bufsem
   if (ialter .ne. 2) write (lunit2, 4230)  bufsem
-  read (unit = abuff(1), fmt = 901) (hi(i), di(i), i = 1, npp)
+  read (unit = abuff, fmt = 901) (hi(i), di(i), i = 1, npp)
   write (kunit6, 3055)
 3055 format (45h+height and horizontal distance of each pipe.)
   go to 85
@@ -429,9 +429,9 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
      in = im + 3
      !     read input card using cimage.
      call cimage
-     read (unit = abuff(1), fmt = 4230) bufsem
+     read (unit = abuff, fmt = 4230) bufsem
      if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
-     read (unit = abuff(1), fmt = 901) (hi(i), di(i), i = im, in)
+     read (unit = abuff, fmt = 901) (hi(i), di(i), i = im, in)
      if (j .gt. 1)   go to 93
      write (kunit6, 3250)
 3250 format(46h+height and horizontal distance of each cable.)
@@ -447,7 +447,7 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
   end do
   if ( ngrnd  .le.  3 )  go to 3983
   call cimage
-  read (unit = abuff(1), fmt = 1999) (ngg(i), i = 1, npc ), npipe
+  read (unit = abuff, fmt = 1999) (ngg(i), i = 1, npc ), npipe
 1999 format ( 2x, 78i1 )
   do i = 1, npc
      if ( ngg(i)  .le.  1 ) go to 1919
@@ -466,7 +466,7 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
 86 format(16h at 86 of subr47, /, 4i5)
   !     read input card using cimage
 87 call cimage
-  read (unit = abuff(1), fmt = 4230) bufsem
+  read (unit = abuff, fmt = 4230) bufsem
   if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
   read (unit = abuff, fmt = 902) d9, freq, ik, ips, dist, j13, j14
 902 format (2e15.6, 2i5, f8.3, i10, i2)
@@ -481,14 +481,14 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
   if (iearth .ne. 99)   go to 95
   !     read input card using cimage.
   call cimage
-  read (unit = abuff(1), fmt = 4230) bufsem
+  read (unit = abuff, fmt = 4230) bufsem
   if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
   read (unit = abuff, fmt = 901) dep1, dep2, roe3, roe4
   write (kunit6, 3280)
 3280 format (49h+depths & resistivities of 2nd & 3rd layer earth.)
   !     read input card using cimage.
   call cimage
-  read (unit = abuff(1), fmt = 4230) bufsem
+  read (unit = abuff, fmt = 4230) bufsem
   if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
   read (unit = abuff, fmt = 901) htoj2, htoj3, htoj4, hyud2, hyud3, hyud4
   write (kunit6, 3290)
@@ -907,7 +907,7 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
 9002 continue
   !     read input card using cimage
 2899 call cimage
-  read (unit = abuff(1), fmt = 4230) bufsem
+  read (unit = abuff, fmt = 4230) bufsem
   if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
   read (unit = abuff, fmt = 902) d9, freq, ik, ips, dist, j13, j14
   freqsv=freq
@@ -922,13 +922,13 @@ subroutine guts47(ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4
   if (iearth .ne. 99)   go to 706
   !     read input card using cimage.
   call cimage
-  read (unit = abuff(1), fmt = 4230) bufsem
+  read (unit = abuff, fmt = 4230) bufsem
   if (ialter .ne. 2) write (lunit2, 4230)   bufsem
   read (unit = abuff, fmt = 901) dep1, dep2, roe3, roe4
   write (kunit6, 3280)
   !     read input card using cimage.
   call cimage
-  read (unit = abuff(1), fmt = 4230) bufsem
+  read (unit = abuff, fmt = 4230) bufsem
   if (ialter .ne. 2) write (lunit2, 4230)   bufsem
   read (unit = abuff, fmt = 901) htoj2, htoj3, htoj4, hyud2, hyud3, hyud4
   write (kunit6, 3290)
@@ -952,12 +952,12 @@ end subroutine guts47
 !
 ! subroutine crosa4.
 !
-subroutine crosa4(czy,icont,ldn,ca,cb,cc,cd,ce,cf,cg,f,ldn2)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
-  complex*16  czy(ldn,ldn)
-  complex*16  ca(ldn,ldn), cb(ldn,ldn), cc(ldn,ldn), cd(ldn,ldn)
-  complex*16  ce(ldn,ldn), cf(ldn,ldn), cg(ldn,ldn), f(ldn, ldn2)
-  complex*16  cwork1
+subroutine crosa4 (czy, icont, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  complex(16) czy(ldn,ldn)
+  complex(16) ca(ldn,ldn), cb(ldn,ldn), cc(ldn,ldn), cd(ldn,ldn)
+  complex(16) ce(ldn,ldn), cf(ldn,ldn), cg(ldn,ldn), f(ldn, ldn2)
+  complex(16) cwork1
   write ( 6, 1001 )
 1001 format ( 33h  begin module "crosa4".  ******  )
   cwork1=0.
@@ -1002,11 +1002,11 @@ end subroutine crosa4
 !
 ! subroutine minvn.
 !
-subroutine minvn( cinout, n, l, ix, ldn, ca, cb, cc, cd, cwork1, cwork2, cwork3, f, ldn2 )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
-  complex*16  ca(ldn,ldn),cb(ldn,ldn),cc(ldn,ldn),cd(ldn,ldn)
-  complex*16  cwork1(ldn,ldn),cwork2(ldn,ldn),cwork3(ldn,ldn)
-  complex*16  cinout(ldn,ldn), f(ldn, ldn2)
+subroutine minvn (cinout, n, l, ix, ldn, ca, cb, cc, cd, cwork1, cwork2, cwork3, f, ldn2)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  complex(16) ca(ldn,ldn),cb(ldn,ldn),cc(ldn,ldn),cd(ldn,ldn)
+  complex(16) cwork1(ldn,ldn),cwork2(ldn,ldn),cwork3(ldn,ldn)
+  complex(16) cinout(ldn,ldn), f(ldn, ldn2)
   nml=n-l
   call cutmat(cinout,ca,cb,cc,cd,n,l,ldn)
   do i=1,nml
@@ -1071,9 +1071,9 @@ end subroutine minvn
 ! subroutine cutmat.
 !
 subroutine cutmat(cinput,ca,cb,cc,cd,n,l,ldn)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
-  complex*16  cinput( ldn, ldn )
-  complex*16  ca(ldn,ldn),cb(ldn,ldn),cc(ldn,ldn),cd(ldn,ldn)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  complex(16) cinput( ldn, ldn )
+  complex(16) ca(ldn,ldn),cb(ldn,ldn),cc(ldn,ldn),cd(ldn,ldn)
   do i=1,l
      do j=1,l
         ca(i,j)=cinput(i,j)
@@ -1104,9 +1104,9 @@ end subroutine cutmat
 !
 !     subroutine mxmnm.
 !
-subroutine mxmnm(ca, cb, cc, l, m, n, ldn)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
-  complex*16 ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn)
+subroutine mxmnm (ca, cb, cc, l, m, n, ldn)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  complex(16) ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn)
   do i = 1, l
      do j = 1, n
         cc(i, j) = 0.
@@ -1120,13 +1120,13 @@ end subroutine mxmnm
 !
 !     subroutine datout.
 !
-subroutine datout(w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, r, al, c, npk)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+subroutine datout (w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, r, al, c, npk)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'io.ftn'
   !     8.19 data cards punch out subroutine
   character cha
   dimension r(npk), al(npk), c(npk)
-  complex*16 zc(ldn, ldn), yc(ldn, ldn)
+  complex(16) zc(ldn, ldn), yc(ldn, ldn)
   lunit6 = gfortran_stdout_unit
   lunit7 = 7
   !     ltype=0 ; output rs
@@ -1239,8 +1239,8 @@ end subroutine datout
 !
 !     subroutine cha645.
 !
-subroutine cha645(k,k1)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+subroutine cha645 (k,k1)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   if(k.le.3.or.k.ge.7) return
   kk=k-3
   go to (10,20,30),kk
@@ -1254,8 +1254,8 @@ end subroutine cha645
 !
 ! subroutine cha312.
 !
-subroutine cha312(j,j1)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+subroutine cha312 (j, j1)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   go to (10,20,30),j
 10 j1=3
   return
@@ -1267,8 +1267,8 @@ end subroutine cha312
 !
 ! subroutine cha444.
 !
-subroutine cha444(k,kk)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+subroutine cha444 (k, kk)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   if(k.le.3.or.k.gt.7) return
   kk=4
   return
@@ -1276,8 +1276,8 @@ end subroutine cha444
 !
 !     subroutine pri.
 !!
-subroutine pri(i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+subroutine pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   character cha
   dimension r(npk),al(npk),c(npk)
   lunit6 = gfortran_stdout_unit
@@ -1336,8 +1336,8 @@ end subroutine pri
 !
 !     subroutine nyan.
 !
-subroutine nyan(itype,npc,nc,ncpp,ngrnd,ncros,npais,ldm)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+subroutine nyan (itype, npc, nc, ncpp, ngrnd, ncros, npais, ldm)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension ncpp(ldm)
   lunit6 = gfortran_stdout_unit
   if(itype.eq.1) return
@@ -1385,8 +1385,8 @@ end subroutine nyan
 !
 ! subroutine gomen.
 !
-subroutine gomen(itype,npc,nx,npais,ncros,irsep,ncpp,ldm)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+subroutine gomen (itype, npc, nx, npais, ncros, irsep, ncpp, ldm)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension ncpp(ldm)
   lunit6 = gfortran_stdout_unit
   if(npais.lt.0) go to 1000
@@ -1472,27 +1472,27 @@ end subroutine gomen
 !
 ! subroutine prcon.
 !
-subroutine  prcon(w,nconpw, zc,zs,ys,yc,yo,qn,gn,ze,a,ai,b,bi,an,  ca, zo, cc, f, ldn, ldn2, lnq2, mrr, nrp )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, ca, zo, cc, f, ldn, ldn2, lnq2, mrr, nrp)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl47.ftn'
-  dimension  gn(ldn), an(lnq2)
-  dimension  tir(20,20), tii(20,20)
-  dimension  pp1(20,20), pp2(20,20)
-  dimension  zz(30), ps(30), ping(200), iseq(15),kmax(15)
-  complex*16  pp6(20,20),ee6(15)
-  complex*16  anglec, cjw
-  complex*16  csqrtz
-  complex*16  cmplxz, d1, d2, d3, d4
-  complex*16  ca(ldn, ldn), zo(ldn, ldn), cc(ldn, ldn)
-  complex*16  zc(ldn, ldn), zs(ldn, ldn), ys(ldn, ldn), yc(ldn, ldn)
-  complex*16  a(ldn, ldn), ai(ldn, ldn),  b(ldn, ldn), bi(ldn, ldn)
-  complex*16  yo(ldn, ldn), ze(ldn, ldn), qn(ldn), f(ldn, ldn2)
+  dimension gn(ldn), an(lnq2)
+  dimension tir(20,20), tii(20,20)
+  dimension pp1(20,20), pp2(20,20)
+  dimension zz(30), ps(30), ping(200), iseq(15),kmax(15)
+  complex(16) pp6(20,20),ee6(15)
+  complex(16) anglec, cjw
+  complex(16) csqrtz
+  complex(16) cmplxz, d1, d2, d3, d4
+  complex(16) ca(ldn, ldn), zo(ldn, ldn), cc(ldn, ldn)
+  complex(16) zc(ldn, ldn), zs(ldn, ldn), ys(ldn, ldn), yc(ldn, ldn)
+  complex(16) a(ldn, ldn), ai(ldn, ldn),  b(ldn, ldn), bi(ldn, ldn)
+  complex(16) yo(ldn, ldn), ze(ldn, ldn), qn(ldn), f(ldn, ldn2)
   data  iseq  /  15*0  /
   ntol=iprint-1
   cjw = cmplxz ( fzero, w )
   if ( iprs47  .ge.  1 ) write (logsix, 2624)  nconpw, numaki, value1, value3, pai, cjw
-2624 format ( /,  17h enter  'prcon' .,  16h  nconpw  numaki, 13x,  6hvalue1,  13x,  6hvalue3,  16x,  3hpai, 11x,  8hreal-cjw,  11x,  8himag-cjw  ,/,  17x,  2i8,  5e19.10 )
+2624 format (/, " Enter  'prcon' .  nconpw  numaki", 13x, 'value1', 13x, 'value3', 16x, 'pai', 11x, 'real-cjw',  11x, 'imag-cjw', /, 17x, 2i8, 5e19.10)
   ll1 = 1
   ll2 = 2
   call mxm(zc,yc,zs,nconpw,ldn)
@@ -1796,8 +1796,8 @@ end subroutine prcon
 !
 ! subroutine unwind.
 !
-subroutine unwind (ping,kthl,mrr,nrp,ntol,iseq)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
 !!!!! %include  '//a/tsu/tpplotkom.ins.ftn'
   dimension ping(200),tping(200)
@@ -1805,8 +1805,8 @@ subroutine unwind (ping,kthl,mrr,nrp,ntol,iseq)
   dimension bom(180),vfreq(3), kuid(15), kuse(15)
   dimension iseq(15), iseqa(15), iseqt(15), iold(15)
   dimension sb(60), tt(4), tzz(30), tps(30)
-  data  bom  /  180*0.0d0  /
-  data  kunf  / 0 /
+  data bom  / 180 * 0.0d0 /
+  data kunf / 0 /
   !      write(*,*) ' change order ? 1 (for yes) or 2 (for no)'
   !      read(*,*) ny
   if ( iprsup .ge. 1 ) write(*,*) ' beginning of unwind.   kthl, mrr, nrp, ntol =', kthl, mrr, nrp, ntol
@@ -2122,14 +2122,14 @@ end subroutine unwind
 !
 subroutine zymx( w,nw,isyst,ngrnd, ngg,ncpp, radi,zy,yz,dir,dij,ang,usi,usr,esi,dr0,th0,al0,hi,di,bio,bi1,bi2,bi3,bi4, &
      bi5,al1i,al2i,al3i,dci, nx, yzn,   ys,yc,zp,zpc,zs,ze,zc,ca,cb,cc,cd,f, ldm, ldn, ldn2, lnq2 )
-  implicit real*8 (a-h, o-z),integer*4 (i-n)
+  implicit real(8) (a-h, o-z),integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl47.ftn'
-  complex*16  zpc(ldn, ldn), cmplxz, cjw
-  complex*16  ys(ldn, ldn), yc(ldn, ldn), zp(ldn, ldn)
-  complex*16  zs(ldn, ldn), ze(ldn, ldn), zc(ldn, ldn)
-  complex*16  ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn)
-  complex*16  cd(ldn, ldn), f(ldn, ldn2)
+  complex(16)  zpc(ldn, ldn), cmplxz, cjw
+  complex(16)  ys(ldn, ldn), yc(ldn, ldn), zp(ldn, ldn)
+  complex(16)  zs(ldn, ldn), ze(ldn, ldn), zc(ldn, ldn)
+  complex(16)  ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn)
+  complex(16)  cd(ldn, ldn), f(ldn, ldn2)
   dimension  ngg(ldn), ncpp(ldm), yzn(lnq2)
   dimension  radi(ldm, 7),  zy(ldn, ldn),  yz(ldn, ldn)
   dimension  dij(ldm, ldm), ang(ldm, ldm), usi(ldm, 3), usr(ldm, 3)
@@ -2343,7 +2343,7 @@ end subroutine zymx
 ! subroutine ymatr.
 !
 subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, a2, ldm, ldn )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   dimension  a1(ldn,ldn), a2(ldn,ldn), ncpp(ldm)
   dimension  zy(ldn, ldn), yz(ldn, ldn), al0(ldm, ldm)
@@ -2452,7 +2452,7 @@ end subroutine ymatrx
 ! subroutine simp.
 !
 subroutine  simp(nw,h,dd,rad,zy,dir,dij,ang,ldm,ldn)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   dimension  rad(ldn), h(ldm), dd(ldn),  zy(ldn, ldn)
   dimension  dir(ldm, ldm), dij(ldm, ldm), ang(ldm, ldm)
@@ -2502,13 +2502,13 @@ end subroutine simp
 ! subroutine sczy1.
 !
 subroutine  sczy1 ( w,isyst,zy,dir,dij,ang,hi,di,zs,ze,ldm,ldn )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   dimension  zy(ldn, ldn), dir(ldm, ldm), dij(ldm, ldm)
   dimension  ang(ldm, ldm), hi(ldm), di(ldn)
-  complex*16  zs(ldn, ldn),  ze(ldn, ldn)
-  complex*16  cjw, xe
-  complex*16  cmplxz
+  complex(16)  zs(ldn, ldn),  ze(ldn, ldn)
+  complex(16)  cjw, xe
+  complex(16)  cmplxz
   cjw = cmplxz ( fzero, w )
   if ( iprs47  .ge.  1 ) write (logsix, 3027)  isyst, npc, iearth, itypec, roe, u0, w
 3027 format ( /,  17h enter  'sczy1' ., 32h   isyst     npc  iearth  itypec,  17x,  3hroe,  18x,  2hu0, 19x, 1hw, /, 17x, 4i8, 3e20.11 )
@@ -2598,15 +2598,15 @@ end subroutine sczy1
 ! subroutine sczy2.
 !
 subroutine  sczy2 ( s, ncpp, radi, usi, usr, bio, bi1,bi2, bi3, bi4, bi5, al1i, al2i, al3i, zc, ldm, ldn )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   common /komthl/  pekexp
-  complex*16  s, ss, s1, s2, s3, s4, s5, s6, s8, su0
-  complex*16  z11, z12, z2i, z2m, z2o, z23
-  complex*16  cexpz, cmplxz, csqrtz
-  complex*16  s0, s7, z3i, z3m, z3o, z34
-  complex*16  c1, c2,  c3
-  complex*16  zc(ldn, ldn)
+  complex(16)  s, ss, s1, s2, s3, s4, s5, s6, s8, su0
+  complex(16)  z11, z12, z2i, z2m, z2o, z23
+  complex(16)  cexpz, cmplxz, csqrtz
+  complex(16)  s0, s7, z3i, z3m, z3o, z34
+  complex(16)  c1, c2,  c3
+  complex(16)  zc(ldn, ldn)
   dimension  ncpp(ldm), radi(ldm, 7), usi(ldm, 3), usr(ldm, 3)
   dimension  bio(ldm), bi1(ldm), bi2(ldm), bi3(ldm), bi4(ldm)
   dimension  bi5(ldm), al1i(ldm), al2i(ldm), al3i(ldm)
@@ -2781,7 +2781,7 @@ end subroutine sczy2
 ! subroutine ptzy1.
 !
 subroutine  ptzy1 ( radi, dci, thc, dr0, th0, al0, ldm )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   dimension  radi(ldm, 7), dci(ldm), thc(ldm)
   dimension  dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm)
@@ -2837,14 +2837,14 @@ end subroutine ptzy1
 ! subroutine ptzy2.
 !
 subroutine ptzy2(s,ncpp,dci,dr0,th0,al0,zp,zpc,ldm,ldn)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include  'labl47.ftn'
   common /komthl/ pekexp
-  complex*16  s, ss, s1, s2, s3, s4, s5, s6, su0
-  complex*16  cexpz, cmplxz, csqrtz
-  complex*16  se0, zm, zi, zzo, zzi
-  complex*16  c1, c2, c3, c4, c5, c6
-  complex*16  zp(ldn, ldn), zpc(ldn, ldn)
+  complex(16)  s, ss, s1, s2, s3, s4, s5, s6, su0
+  complex(16)  cexpz, cmplxz, csqrtz
+  complex(16)  se0, zm, zi, zzo, zzi
+  complex(16)  c1, c2, c3, c4, c5, c6
+  complex(16)  zp(ldn, ldn), zpc(ldn, ldn)
   dimension  ncpp(ldm),  dci(ldm)
   dimension  dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm)
   unity = 1.0
@@ -2973,12 +2973,12 @@ end subroutine ptzy2
 ! subroutine bsikm.
 !
 subroutine bsikm (x, kn, bbin, bbkn, ikm, ixa)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
-  complex*16  bk0, bk1, bi0, bj1, x
-  complex*16  y, y0, y1, y2, y3, y4, y5, y6, y7, y8
-  complex*16  cexpz, cmplxz, clogz, csqrtz
-  complex*16  bbin(kn), bbkn(kn)
+  complex(16)  bk0, bk1, bi0, bj1, x
+  complex(16)  y, y0, y1, y2, y3, y4, y5, y6, y7, y8
+  complex(16)  cexpz, cmplxz, clogz, csqrtz
+  complex(16)  bbin(kn), bbkn(kn)
   xa=cabsz(x)
   c1 = 3.75
   c2 =  2.
@@ -3062,14 +3062,14 @@ end subroutine bsikm
 ! subroutine olzy.
 !
 subroutine  olzy( w,ncpp,zy,dij,ang,usi,usr,esi,hi,di,zs,ze,zc,ldm,ldn )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   dimension  ncpp(ldm)
   dimension  zy(ldn, ldn), dij(ldm, ldm), ang(ldm,ldm), di(ldn)
   dimension  usi(ldm, 3),  usr(ldm, 3),   esi(ldm, 3),  hi(ldm)
-  complex*16  zs(ldn, ldn), ze(ldn, ldn),  zc(ldn, ldn)
-  complex*16  cwu, s, ss, xc, xe
-  complex*16  cmplxz, csqrtz
+  complex(16)  zs(ldn, ldn), ze(ldn, ldn),  zc(ldn, ldn)
+  complex(16)  cwu, s, ss, xc, xe
+  complex(16)  cmplxz, csqrtz
   s = cmplxz(fzero, w)
   cwu = s * cmplxz(u2p, fzero)
   ss = csqrtz ( s )
@@ -3128,11 +3128,11 @@ end subroutine olzy
 !     subroutine transp.
 !
 subroutine transp(yyc, ncpp, ann, jnn, znn, ldm, ldn)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
-  real*8 jnn
-  complex*16 cmplxz
-  complex*16 yyc(ldn,ldn), zss, zmm, znn(ldn)
+  real(8) jnn
+  complex(16) cmplxz
+  complex(16) yyc(ldn,ldn), zss, zmm, znn(ldn)
   dimension ncpp(ldm), ann(ldn), jnn(ldn)
   if (iprs47 .ge. 1) write (logsix, 3611)  ncct, yyc(1,1), yyc(1,2)
 3611 format ( /,  " enter  'transp' .,  8h    ncct", 7x,  'real-yyc(1,1)', 7x, 'imag-yyc(1,1)', 7x,  'real-yyc(1,2)', 7x, 'imag-yyc(1,2)', /,  &
@@ -3207,12 +3207,12 @@ end subroutine transp
 !     subroutine skin47.
 !
 subroutine skin47(b1,b2,ur,cjw,sjw,zcc)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   common /komthl/ pekexp
-  complex*16  cjw, sjw, x1, x2, x3, x4, zcc
-  complex*16  cexpz, cmplxz
-  complex*16  c1, c2
+  complex(16)  cjw, sjw, x1, x2, x3, x4, zcc
+  complex(16)  cexpz, cmplxz
+  complex(16)  c1, c2
   c1 = cmplxz(u2p, fzero)
   c2 = cmplxz(ur, fzero)
   x1 = cmplxz(b1, fzero) * sjw
@@ -3256,12 +3256,12 @@ end subroutine skin47
 ! subroutine zegen.
 !
 subroutine zegen(be1,be2,th,w,xe,isyst)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   common /komthl/ pekexp
-  complex*16  cj, cjw, x1, x2, xe
-  complex*16  cexpz, cmplxz, csqrtz
-  complex*16  c1
+  complex(16)  cj, cjw, x1, x2, xe
+  complex(16)  cexpz, cmplxz, csqrtz
+  complex(16)  c1
   unity = 1.0
   c1 = cmplxz(u2p, fzero)
   cj = cimag1
@@ -3370,14 +3370,14 @@ subroutine zegen(be1,be2,th,w,xe,isyst)
   return
 end subroutine zegen
 subroutine eigen ( cjw, p, n, a, ai, qn, q, xx, yy, ldn )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include  'labl47.ftn'
-  complex*16  ad, cjw, qi, s, sa
-  complex*16  cmplxz, csqrtz
-  complex*16  q(ldn, ldn), xx(ldn, ldn), yy(ldn, ldn)
-  complex*16  p(ldn, ldn), a(ldn, ldn), ai(ldn, ldn), qn(ldn)
-  complex*16  c1, c2
+  complex(16)  ad, cjw, qi, s, sa
+  complex(16)  cmplxz, csqrtz
+  complex(16)  q(ldn, ldn), xx(ldn, ldn), yy(ldn, ldn)
+  complex(16)  p(ldn, ldn), a(ldn, ldn), ai(ldn, ldn), qn(ldn)
+  complex(16)  c1, c2
   !     eigenvalue calculation subroutine.   'kvalue'  =  iteration limit.
   kvalue = 20
   c1 = cjw/cmplxz(spdlgt, fzero)
@@ -3524,13 +3524,13 @@ end subroutine eigen
 ! subroutine zest.
 !
 subroutine  zest ( h1, h2, e, res, omg, s )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
-  complex*16  qq, bbb, rom, s, sa, s1, s2
-  complex*16  s3, s5, s6, s8, sp12, sp23, sm12
-  complex*16  sm23, sq1, sq3, u, u1, u2, z
-  complex*16  cexpz, cmplxz, csqrtz
-  complex*16  c1, c2, c3, c4, c5, c6, c7, c8
+  complex(16)  qq, bbb, rom, s, sa, s1, s2
+  complex(16)  s3, s5, s6, s8, sp12, sp23, sm12
+  complex(16)  sm23, sq1, sq3, u, u1, u2, z
+  complex(16)  cexpz, cmplxz, csqrtz
+  complex(16)  c1, c2, c3, c4, c5, c6, c7, c8
   toj = u0
   if ( iprs47  .ge.  2 ) write (logsix, 3917)  h1, h2, e, res, omg
 3917 format ( /,  16h enter  'zest' .,  18x,  2hh1,  18x,  2hh2, 19 x,  1he,  17x,  3hres,  17x,  3homg  ,/,  16x,  5e20.11  )
@@ -3677,12 +3677,12 @@ end subroutine zest
 ! subroutine minv.
 !
 subroutine minv ( tcmpx, m, f, ldn, ldn2 )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
-  complex*16  ad, cc, d
+  complex(16)  ad, cc, d
   include  'labl47.ftn'
-  complex*16  tcmpx(ldn,ldn), f(ldn, ldn2),  d2,  cmplxz, fnew
-  complex*16  fident
+  complex(16)  tcmpx(ldn,ldn), f(ldn, ldn2),  d2,  cmplxz, fnew
+  complex(16)  fident
   dimension  fr(10,20), fi(10,20), fnew(10,20), fident(10,20)
   d1 = 0.0
   do i=1,m
@@ -3821,9 +3821,9 @@ end subroutine minv
 ! subroutine mxm.
 !
 subroutine mxm(xm,yym,c,n,ldn)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
-  complex*16  xm(ldn,ldn), yym(ldn,ldn), c(ldn,ldn)
+  complex(16)  xm(ldn,ldn), yym(ldn,ldn), c(ldn,ldn)
   if ( iprs47  .ge.  1 ) write (logsix, 4062)  n, xm(1,1), yym(1,1)
 4062 format ( /,  15h enter  'mxm' .,  8h       n, 7x,  13hreal- xm(1,1),  7x,  13himag- xm(1,1), 7x,  13hreal-yym(1,1),  7x,  13himag-yym(1,1)  ,/, &
           15x,  i8,  4e20.11  ,/, 57h diagnostic left factor.   xm(i,j)  for  (i,j)=1, ... n .  )
@@ -3851,12 +3851,12 @@ end subroutine mxm
 ! subroutine print.
 !
 subroutine print(c,n,iform,ldn)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl47.ftn'
-  complex*16  c(ldn,ldn)
+  complex(16) c(ldn,ldn)
   dimension  workr(8), worki(8)
-  real*8          text1, text2, text3
+  real(8) text1, text2, text3
   data  text1   /  3hrow  /
   data  text2   /  3h     /
   nline = ( n + 7 ) / 8

@@ -240,11 +240,11 @@ subroutine stoptp
   !     Temporary stop statements of EMTP have been converted to
   !     "call stoptp", allowing installation-dependent clean up.
   include 'blkcom.ftn'
-  read (unit = abuff, fmt = 5607) texcol
-5607 format (80a1)
+  read (unit = abuff, fmt = '(80a1)') texcol
   if (nchain .eq. 31 .and. lastov .eq. 1 .and. kill .eq. 9999) go to 9000
-  write (lunit6, 5623) nchain, lastov, texcol
-5623 format (/, ' Temporary error stop in "stoptp".   nchain, lastov =', i5, i5, 5x, 'Last-read card image abuff follows ....', /, 80a1)
+  write (lunit6, 5623) nchain, lastov
+5623 format (/, ' Temporary error stop in "stoptp".   nchain, lastov =', 2i5, $)
+  write (lunit6, "(5x, 'last-read card image abuff follows ....', /, 80a1)") texcol
 9000 stop
 end subroutine stoptp
 !
@@ -396,7 +396,7 @@ subroutine cimage
   character(8) charc, chtacs, textax, textay, text1, text2
   character(8) text4, text5
   dimension buff10(10)
-  equivalence (buff10(1), abuff(1))
+  equivalence (buff10(1), abuff(1 : 1))
   character(25) filen
   dimension textax(60), jpntr(201), textay(50), aupper(10)
   equivalence (aupper(1), texcol(1))
@@ -524,36 +524,36 @@ subroutine cimage
   if (n11 .ne. 0) go to 1000
   if (kol132 .eq. 132) write (lunit6, 3015) buff10
 3015 format (' Comment card.', 37x, '1', 10a8)
-  if (kol132 .ne. 132) write (lunit6, 3016) (abuff(j), j = 1, 4)
-3016 format (' Comment card.', 37x, '1', 3a8, a5)
+  if (kol132 .ne. 132) write (lunit6, 3016) abuff(1 : 32)
+3016 format (' Comment card.', 37x, '1', a24, a5)
   go to 1000
 3034 if (noutpr .ne. 0) go to 3035
   if (kol132 .eq. 132) write (lunit6, 3006) buff10
 3006 format(51x, '1', 10a8)
-  if (kol132 .ne. 132) write (lunit6, 3007) (abuff(j), j = 1, 4)
-3007 format (51x, '1', 3a8, a5)
+  if (kol132 .ne. 132) write (lunit6, 3007) abuff(1 : 32)
+3007 format (51x, '1', a24, a5)
 3035 if (n13 .gt. 0) go to 3011
-  print 3009, numdcd, (abuff(i), i = 1, 9)
-3009 format (1x, i5, ' :', 9a8)
+  print 3009, numdcd, abuff(1 : 72)
+3009 format (1x, i5, ' :', a72)
   n13 = n12
 3011 n13 = n13 - 1
-  read (unit = abuff(1), fmt = 3037) text2
+  read (unit = abuff, fmt = 3037) text2
 3037 format (a6)
   if (text2 .ne. text5) go to 3040
   if (n8 .eq. 6) go to 3044
   !     3039 do 3038 i = 1, 10
   do i = 1, 10
-     abuff (i) = blank
+     abuff(8 * i - 7 : 8 * i + 1) = blank
   end do
   go to 3233
 3040 if (chcont .eq. text4) go to 3233
-  read (unit = abuff(1), fmt = 3041) texcol
+  read (unit = abuff, fmt = 3041) texcol
 3041 format (80a1)
   !     Dan Goldsworthy had trouble with $listoff within $include
   !     which was within tacs supplemental variables.  wsm+thl
   !      if ( abuff(1) .ne. 8h$listoff   .and.
   !     1     abuff(1) .ne. 8h$liston  )   go to 3042
-  if (abuff(1) .ne. "$listoff" .and. abuff(1) .ne. "$liston") go to 3042
+  if (abuff(1 : 8) .ne. "$listoff" .and. abuff(1 : 8) .ne. "$liston") go to 3042
   go to 3246
   !     chcont is 'tacs' if cimage called from within tacs fortran express
 3042 if (chcont .eq. chtacs) go to 3233
@@ -1314,7 +1314,8 @@ subroutine frefld (array)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   character(8) text1, chtacs, texbuf, texvec
-  dimension texbuf(30), array(1), texvec(1)
+  real(8) array(*)
+  dimension texbuf(30), texvec(1)
   equivalence (texvec(1), text1)
   data chtacs / 'tacs  ' /
   if (iprsup .ge. 5) write (lunit6, 1016) nfrfld, nright, kolbeg
@@ -1420,7 +1421,7 @@ subroutine frefld (array)
   if (iprsup .ge. 0) write (lunit6, 9207) lstat(19), nchain, lastov, kolbeg, nfrfld, nright
 9207 format (/, " Error stop within  'frefld' .", 6i8, /, 1x)
   lstat(18) = -1
-9900 if (iprsup .ge. 2) write (lunit6, 9901) kill, kolbeg, array
+9900 if (iprsup .ge. 2) write (lunit6, 9901) kill, kolbeg, array(1)
 9901 format (' Exit "frefld".  kill, kolbeg, array(1) =', i6, e20.10)
   return
 end subroutine frefld

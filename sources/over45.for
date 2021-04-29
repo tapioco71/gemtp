@@ -6,7 +6,7 @@
 !     subroutine subr45.
 !
 subroutine subr45
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Code connected to  'semlyen setup'  special request card.
   !)  This overlay is used to calculate
   !)     1)  propagation step response as approximated by an analytic
@@ -98,7 +98,7 @@ end subroutine subr45
 !     subroutine guts45.
 !
 subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo, xr, xl, xg, xc, um, si, vresp, ymin, fv, hhm, hhn, zcos)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl45.ftn'
   include 'volt45.ftn'
@@ -182,7 +182,7 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
 10050 format (26h+bus names for each phase.)
   go to 2946
 10060 continue
-  read (unit = abuff(1), fmt = 10020) bus1, bus2
+  read (unit = abuff, fmt = 10020) bus1, bus2
   if (bus1 .ne. text10) go to 10090
   if (bus2 .ne. text11) go to 10090
   !     optional  'tolerances'  card, to redefine overlay tolerances.
@@ -218,7 +218,7 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   lstat(19) = 10132
   go to 9200
 10132 continue
-  read (unit = abuff(1), fmt = 10130) russ(1), ck1
+  read (unit = abuff, fmt = 10130) russ(1), ck1
 10130 format( 48x,2e12.5 )
   if ( ck1 .eq. 0. ) ck1 = sll
   if ( russ(1) .eq. ci1 .or. russ(1) .eq. 0. ) go to 10131
@@ -237,7 +237,7 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   lstat(19) = 10133
   go to 9200
 10133 continue
-  read (unit = abuff(1), fmt = 10130) ci1, ck1
+  read (unit = abuff, fmt = 10130) ci1, ck1
   if ( ck1 .eq. 0. ) ck1 = sll
   go to 10140
 10136 ci1 = -fltinf
@@ -248,7 +248,7 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
      n10 = 0
      !     read input card using cimage
      call cimage
-     read (unit = abuff(1), fmt = 1704) (itemp(n8), n8 = 1, 12)
+     read (unit = abuff, fmt = 1704) (itemp(n8), n8 = 1, 12)
 1704 format ( 20i4 )
      do j=1, 4
         n8 = 4
@@ -304,7 +304,7 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   go to 9900
   !     read input card using cimage.
 3121 call cimage
-  read (unit = abuff(1), fmt = 10020) bus3, bus4, bus5
+  read (unit = abuff, fmt = 10020) bus3, bus4, bus5
   if ( bus3  .ne.  text12 )   go to 3128
   if ( bus4  .ne.  text13 )   go to 3128
   if ( bus5  .ne.  text14 )   go to 3128
@@ -1021,7 +1021,7 @@ end subroutine guts45
 ! subroutine cxc.
 !
 subroutine cxc(a,b,c,kode)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !)  this subroutine performs some of the matrix manipulation procedures
   !)  used by over45 on linearized complex matrices stored in column
   !)  order.  these processes include multiplication by complex mtx, by
@@ -1169,7 +1169,7 @@ end subroutine cxc
 ! subroutine frqdom.
 !
 subroutine frqdom(ioutp, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq,cqt, q, qi, g, g60, yo, xr, xl, xg, xc)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !)  this subroutine is used to process line/cable constants data at a
   !)  specific frequency.  the r, l, c matrices (low. tri, col order) are
   !)  read from tape3.  each matrix is a separate record.  the routine can
@@ -1845,7 +1845,7 @@ end subroutine frqdom
 ! subroutine xift.
 !
 function xift(tsp, omegas, funw, cosi)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl45.ftn'
   include 'blkcom.ftn'
   !  this routine calculates the inverse fourier transform of a geometric
@@ -1957,7 +1957,7 @@ end function xift
 ! subroutine rise.
 !
 subroutine rise(time, thr, t2, vresp, si, cosi)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this routine is used to estimate the time at which the step
   !     response in the time domain is at value 'thr'(0.0 to 1.0).
   !     the initial guess is in 'time' when the  'rise' function is called
@@ -2039,7 +2039,7 @@ end subroutine rise
 !     subroutine tdfit.
 !
 subroutine tdfit(vresp, si, fv, hhm, hhn, cosi)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This routine calculates the time domain sequence of points
   !     representing the step response in 'fv' by inverse fourier trans-
   !     formation of 'vresp'.  This sequence is then fitted by a least-

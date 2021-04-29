@@ -6,42 +6,42 @@
 !     subroutine sbr31.
 !
 subroutine subr31
-  implicit real*4 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include  'blkcom.ftn'
   !     flag-1.   begin class-1  /blank/  variables
   !     flag-2.   begin class-2  /blank/  variables
   !               (floating-point numeric usage only, with scalars
   !               preceding arrays).
-  real*8 degmin, degmax, hmin, tmax, twopi, voltbc
-  real*8 ci1, ck1, deltat, delta2, freqcs
-  real*8 epsiln, xunits, aincr, xmaxmx
-  real*8 znolim, epszno, epwarn, epstop, t, tolmat
-  real*8 omega, copt, xopt, szplt
-  real*8 szbed, sglfir, sigmax,  epsuba,  epdgel,  epomeg
-  real*8 fminfs, delffs, fmaxfs, tenerg, begmax
-  real*8 tenm3, tenm6, unity, onehaf, peaknd
-  real*8 fltinf, flzero, statfr, hpi
-  real*8 flstat, angle, pu, dltinv, speedl
+  real(8) degmin, degmax, hmin, tmax, twopi, voltbc
+  real(8) ci1, ck1, deltat, delta2, freqcs
+  real(8) epsiln, xunits, aincr, xmaxmx
+  real(8) znolim, epszno, epwarn, epstop, t, tolmat
+  real(8) omega, copt, xopt, szplt
+  real(8) szbed, sglfir, sigmax,  epsuba,  epdgel,  epomeg
+  real(8) fminfs, delffs, fmaxfs, tenerg, begmax
+  real(8) tenm3, tenm6, unity, onehaf, peaknd
+  real(8) fltinf, flzero, statfr, hpi
+  real(8) flstat, angle, pu, dltinv, speedl
   !     flag-3.   begin class-3  /blank/  variables
   !               (integer-numeric usage only, with arrays
   !                preceding scalars).
   include 'deck31.ftn'
   common /ldec31/  kalcom
   dimension array(1), evdoub(1)
-  integer*4 j1, j2, mhoriz
-  real*8 bxsing, flong1, tstep, xyplot, xin, bx, evdoub
-  real*8 fl90, d4, d5, dy, ev, size, zero, xyshor
-  real*8 vhs, vmin, one, dstrt, ha, dlen, horz1
-  character*8 aupper, daytim, textax, sext, buslst
-  character*8 slot, alpha, headl, vertl, blanka, busvec
-  character*8 text1, text2, text3, text4, text5, text6, text7
-  character*8 text8, cstxt, pltle, horzl
-  character*8 text9, text10, text11, text12, text13
-  character*8 text14, text15, text16, arch10
-  character*8 text18, text19, text20
-  character*8 text22, text23, text24, text25, text26
-  character*8 text27, text28, text29
-  character*8 text30, text31, text32, text33
+  integer(4) j1, j2, mhoriz
+  real(8) bxsing, flong1, tstep, xyplot, xin, bx, evdoub
+  real(8) fl90, d4, d5, dy, ev, size, zero, xyshor
+  real(8) vhs, vmin, one, dstrt, ha, dlen, horz1
+  character(8) aupper, daytim, textax, sext, buslst
+  character(8) slot, alpha, headl, vertl, blanka, busvec
+  character(8) text1, text2, text3, text4, text5, text6, text7
+  character(8) text8, cstxt, pltle, horzl
+  character(8) text9, text10, text11, text12, text13
+  character(8) text14, text15, text16, arch10
+  character(8) text18, text19, text20
+  character(8) text22, text23, text24, text25, text26
+  character(8) text27, text28, text29
+  character(8) text30, text31, text32, text33
   !     declaration2   intd8, intd9, maxev, karray, lltemp
   !     declaration2   long1, long2, long3, jhmsp
   !     declaration2   mmmin1, mm0, mm1, mm2, mm3, mm4, mm6
@@ -276,7 +276,7 @@ subroutine subr31
   go to 1050
 5843 if ( aupper(1)  .ne.  text18 )   go to 1079
   if ( aupper(2)  .ne.  text19 )   go to 1079
-  read (unit = abuff(1), fmt = 1072) kpgrid, isww
+  read (unit = abuff, fmt = 1072) kpgrid, isww
 1072 format ( 16x, 5i8 )
   write (kunit6, 1073)  kpgrid, isww
 1073 format ( 20h+grid & pen choices.,  5i5  )
@@ -287,14 +287,14 @@ subroutine subr31
 1079 if ( aupper(1)  .ne.  text22 )   go to 7392
   if ( aupper(2)  .ne.  text23 )   go to 7392
   if ( aupper(3)  .ne.  text24 )   go to 7392
-  read (unit = abuff(1), fmt = 7381) linlim
+  read (unit = abuff, fmt = 7381) linlim
 7381 format ( 24x, 3i8  )
   write (kunit6, 7386)  linlim
 7386 format (  38h+line limit for sparse printer plots =,  i8 )
   go to 1050
 7392 if ( aupper(1)  .ne.  text25 )   go to 7406
   if ( aupper(2)  .ne.  text26 )   go to 7406
-  read (unit = abuff(1), fmt = 7381) mulplt(1), mulplt(4), mulplt(5)
+  read (unit = abuff, fmt = 7381) mulplt(1), mulplt(4), mulplt(5)
   if ( mulplt(1)  .le.  0 )   mulplt(1) = 1
   write (kunit6, 7398)  mulplt(1), mulplt(4), mulplt(5)
 7398 format (  21h+graph superposition.,  3i8  )
@@ -302,7 +302,7 @@ subroutine subr31
   mulplt(3) = 0
   go to 1050
 7406 if ( aupper(1)  .ne.  text27 )   go to 7627
-  read (unit = abuff(1), fmt = 7613) d4
+  read (unit = abuff, fmt = 7613) d4
 7613 format ( 24x, e8.0 )
   write (kunit6, 7618)  d4
 7618 format ( 26h+scaling factor for plots.,  f10.5  )
@@ -324,7 +324,7 @@ subroutine subr31
   !     read input card using cimage
   call cimage
   if ( kolbeg  .gt.  0 )   go to 7644
-  read (unit = abuff(1), fmt = 7641) (xyplot(i), i = 1, 3)
+  read (unit = abuff, fmt = 7641) (xyplot(i), i = 1, 3)
 7641 format ( 10e8.0 )
   go to 7648
 7644 nfrfld = 3
@@ -336,7 +336,7 @@ subroutine subr31
   !     read input card using cimage
   call cimage
   if ( kolbeg  .gt.  0 )   go to 7651
-  read (unit = abuff(1), fmt = 7641) (xyplot(i), i = 4, 9)
+  read (unit = abuff, fmt = 7641) (xyplot(i), i = 4, 9)
   go to 7653
 7651 nfrfld = 6
   call frefld ( xyplot(4) )
@@ -348,7 +348,7 @@ subroutine subr31
   go to 1050
 7661 if ( aupper(1)  .ne.  text30 )   go to 7679
   if ( aupper(2)  .ne.  text31 )   go to 7671
-  read (unit = abuff(1), fmt = 7381) nfour
+  read (unit = abuff, fmt = 7381) nfour
   if ( nfour  .le.  1 )   nfour = 30
   write (kunit6, 7664)  nfour
 7664 format (  33h+fourier series started.  nfour =,  i8  )
@@ -1564,7 +1564,7 @@ subroutine subr31
  ! subroutine series.
  !
  subroutine series ( nfour, kpl, jplt, maxevk )
-   implicit real*8 (a-h, o-z),  integer*4 (i-n)
+   implicit real(8) (a-h, o-z),  integer(4) (i-n)
    include 'blkcom.ftn'
    include 'deck31.ftn'
    dimension evdoub(2)
@@ -1676,7 +1676,7 @@ subroutine subr31
  ! subroutine begplt.
  !
  subroutine begplt
-   implicit real*8 (a-h, o-z), integer*4 (i-n)
+   implicit real(8) (a-h, o-z), integer(4) (i-n)
    include 'blkcom.ftn'
    if ( iprsov(38) .eq. 0 ) call plots (0, 0, 0 )
    return
@@ -1685,7 +1685,7 @@ subroutine subr31
 !     subroutine endplt.
 !
  subroutine endplt ( kalcom )
-   implicit real*8 (a-h, o-z), integer*4 (i-n)
+   implicit real(8) (a-h, o-z), integer(4) (i-n)
    !     This system-dependent module is always called once as control
    !     leaves  'subr31'  during a normal exit (no error stop).
    !     Argument  "kalcom"  is zero if the data case did no
@@ -1698,7 +1698,7 @@ subroutine subr31
  !     subroutine fintp.
  !
  subroutine fintp
-   implicit real*8 (a-h, o-z), integer*4 (i-n)
+   implicit real(8) (a-h, o-z), integer(4) (i-n)
    include 'blkcom.ftn'
    if ( iprsov(38) .gt. 0 ) call plot ( 0.0, 0.0, 999 )
    if (ivolt .eq. 7777) close (unit = 20, status = 'delete')
@@ -1708,7 +1708,7 @@ subroutine subr31
 !     subroutine axis.
 !
  subroutine axis(xx, yy, title, numch, size, ang, begin, scale)
-   implicit real*8 (a-h, o-z), integer*4 (i-n)
+   implicit real(8) (a-h, o-z), integer(4) (i-n)
    !     Module  'axis'  was written by W. Scott Meyer of BPA in June of
    !     1976, especially for BPA EMTP usage only.   Anyone having the real
    !     calcomp module of the same name should discard this present
@@ -1717,10 +1717,10 @@ subroutine subr31
    !     by adding two more arguments to the module which is available in
    !     our system library).
    include 'blkcom.ftn'
-   real*8 xx, yy
-   character*8 text1, title
-   integer*4 numch
-   real*8 size, ang, begin, scale
+   real(8) xx, yy
+   character(8) text1, title
+   integer(4) numch
+   real(8) size, ang, begin, scale
    data tic   /  .075  /
    data ticd2   /  .03  /
    data hgt1   /  0.2  /
@@ -1808,14 +1808,14 @@ subroutine subr31
 !     subroutine grid.
 !
  subroutine grid(d1, d2, d3, d4, n1, n2)
-   implicit real*8 (a-h, o-z), integer*4 (i-n)
+   implicit real(8) (a-h, o-z), integer(4) (i-n)
    !     This module has been written for use only on the BPA CDC-6500
    !     computer installation, which does not have legitimate calcomp.
    !     It simulates the calcomp module of the same name.   Anyone who
    !     has real calcomp plotting software with these subroutines should
    !     destroy this module.        W. Scott Meyer, April 1977.
-   real*8 d1, d2, d3, d4
-   integer*4 n1, n2
+   real(8) d1, d2, d3, d4
+   integer(4) n1, n2
    ll2 = 2
    ll3 = 3
    d8 = n2 * d4  +  d2
@@ -1852,7 +1852,7 @@ subroutine subr31
  ! subroutine linplt.
  !
  subroutine linplt ( krv, klm )
-   implicit real*8 (a-h, o-z), integer*4 (i-n)
+   implicit real(8) (a-h, o-z), integer(4) (i-n)
 !
 !c****** this is the standard version of linplt ******
 !
@@ -1972,7 +1972,7 @@ subroutine subr31
  ! subroutine paprsz.
  !
  subroutine paprsz ( horiz, vert )
-   implicit real*8 (a-h, o-z), integer*4 (i-n)
+   implicit real(8) (a-h, o-z), integer(4) (i-n)
    !)    the real (i.e., non-dummy) subroutine paprsz is used with bpa's
    !)    eai flatbed plotter.   this is the way the dimensions of the table
    !)    upon which the emtp can legally draw plots is communicated to the
@@ -1988,7 +1988,7 @@ subroutine subr31
  ! subroutine advanz.
  !
  subroutine advanz ( jhmsp )
-   implicit real*8 (a-h, o-z),  integer*4 (i-n)
+   implicit real(8) (a-h, o-z),  integer(4) (i-n)
    !)    the real (i.e., non-dummy) subroutine advanz is used with bpa's
    !)    eai flatbed plotter, to roll  'jhmsp'  inches of new paper onto
    !)    the plotting table, making room for the upcoming plot to be
@@ -2004,7 +2004,7 @@ subroutine subr31
 !     subroutine prnthhd.
 !
  subroutine prnthd ( n1 )
-   implicit real*8 (a-h, o-z), integer*4 (i-n)
+   implicit real(8) (a-h, o-z), integer(4) (i-n)
    !)    the real (i.e., non-dummy) subroutine prnthd is used with bpa's
    !)    eai flatbed plotter.   it is associated with the printhead feature
    !)    of the eai plotter, where alphanumeric characters may be typed

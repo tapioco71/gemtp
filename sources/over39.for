@@ -6,15 +6,15 @@
 !     subroutine subr39.
 !
 subroutine subr39
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl39.ftn'
   include 'deck39.ftn'
   dimension lltemp(20)
   equivalence (kdeflt, indtv(1))
-  character*8 text1, text2, text3, text4, text5, text6
-  character*8 text7, text8, text9, text10, text11, text12
-  character*8 texta, textp, text13, text14, text15
+  character(8) text1, text2, text3, text4, text5, text6
+  character(8) text7, text8, text9, text10, text11, text12
+  character(8) texta, textp, text13, text14, text15
   dimension texta(14), textp(14)
   dimension alintp(4100)
   dimension minust(11)
@@ -110,7 +110,7 @@ subroutine subr39
   ialdum = 3
   ialter = 3
   if ( kolbeg  .gt.  0 )   go to 7623
-  read (unit = abuff(1), fmt = 7622) dist
+  read (unit = abuff, fmt = 7622) dist
 7622 format ( 24x,  e8.0 )
   go to 7624
 7623 nfrfld = 1
@@ -128,7 +128,7 @@ subroutine subr39
   write (kunit6, 8814) sglfir
 8814 format ( '+new log-f/line of printer plot.  sglfir =', f8.4 )
 8819 continue
-  read (unit = abuff(1), fmt = 1019) (texta(k), k = 1, 14)
+  read (unit = abuff, fmt = 1019) (texta(k), k = 1, 14)
 1019 format ( 13a6, a2 )
   do k=1, 14
      if ( texta(k)  .ne.  blank )  go to 4044
@@ -161,7 +161,7 @@ subroutine subr39
   if( texta6(2) .ne. text13 )   go   to  4057
   !     read data card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 4027) ktab, imodal, metrik, d9
+  read (unit = abuff, fmt = 4027) ktab, imodal, metrik, d9
 4027 format (3i8,e8.0)
   ck1 = d9
   if( metrik .eq. 0 )  ck1 = ck1 * .62135896d0
@@ -175,7 +175,7 @@ subroutine subr39
   write (lunit9) imodal, metrik, d9, mspedb, itrnsf
   !     read data card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 4029) (voltbc(i), i = 1, 3)
+  read (unit = abuff, fmt = 4029) (voltbc(i), i = 1, 3)
 4029 format ( 5e16.0)
   !     read in the current transformation matrix   *  *  *  *  *  *  *
   if( imodal .eq. 0 ) go to 4033
@@ -185,7 +185,7 @@ subroutine subr39
         if( ij .gt. ktab ) ij = ktab
         !     read data card using cimage   *   *   *   *   *   *   *   *   *
         call cimage
-        read (unit = abuff(1), fmt = 4023) (tir(j, kp), kp = i, ij)
+        read (unit = abuff, fmt = 4023) (tir(j, kp), kp = i, ij)
 4023    format ( 6e12.0 )
 4021 end do
      do i = 1, ktab, 6
@@ -193,7 +193,7 @@ subroutine subr39
         if( ij .gt. ktab ) ij = ktab
         !     read data card using cimage   *   *   *   *   *   *   *   *   *
         call cimage
-        read (unit = abuff(1), fmt = 4023) (tii(j, kp), kp = i, ij)
+        read (unit = abuff, fmt = 4023) (tii(j, kp), kp = i, ij)
 4022 end do
 !!!      write (*,*) ' subr39.  tir, tii on  lunit9.'
      write (lunit9) (tir(j, kp), tii(j, kp), kp = 1, ktab)
@@ -201,7 +201,7 @@ subroutine subr39
   !     read modal g, b, r, x    *   *   *   *   *   *   *   *   *   *   *
   !     read data card using cimage
 4033 call cimage
-  read (unit = abuff(1), fmt = 4029) (alinvc(i), i = 1, 5)
+  read (unit = abuff, fmt = 4029) (alinvc(i), i = 1, 5)
   if( alinvc(ll4) .le. 0. )   go  to  4034
 !!!      write (*,*) ' subr39.  alinvc on lunit9.'
   write (lunit9) (alinvc(i), i = 1, 5)
@@ -1453,7 +1453,7 @@ end subroutine subr39
 ! subroutine locsl.
 !
 subroutine locsl (xbeg,xend,alpha,xmid,xcorna,xcornb,erymax)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   d78 = xend - xbeg
@@ -1556,7 +1556,7 @@ end subroutine locsl
 ! subroutine adjpk.
 !
 subroutine adjpk
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension fpz1(50),fpz2(50)
   include 'labl39.ftn'
   include 'deck39.ftn'
@@ -1706,7 +1706,7 @@ end subroutine adjpk
 ! subroutine adjcr.
 !
 subroutine adjcr
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   call refh
@@ -1852,7 +1852,7 @@ end subroutine adjcr
 ! subroutine shira.
 !
 subroutine shira (xbeg,xend,fbeg,fend,iter,index,irange)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension fpz(50)
   include 'labl39.ftn'
   include 'deck39.ftn'
@@ -1960,7 +1960,7 @@ end subroutine shira
 ! subroutine inran.
 !
 subroutine inran (irange,indx0,indxr1,indxr2,indxr3,indxl1,indxl2)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   id = irange
@@ -1986,7 +1986,7 @@ end subroutine inran
 ! subroutine refh.
 !
 subroutine refh
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   xref = xdat(1)
@@ -2028,7 +2028,7 @@ end subroutine refh
 ! subroutine ratp.
 !
 subroutine ratp (freq,amaglg)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   i2 = ntotra
@@ -2069,7 +2069,7 @@ end subroutine ratp
 ! subroutine split.
 !
 subroutine split (xbeg,xend,ycutpu,xcut)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   dxspli = .1d0
@@ -2117,7 +2117,7 @@ end subroutine split
 ! function yfun39.
 !
 function yfun39(x)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   if (x.le.xdat(1)) go to 120
@@ -2136,7 +2136,7 @@ end function yfun39
 ! function aph.
 !
 function aph(x)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   if (x.le.xdat(1)) go to 120
@@ -2154,8 +2154,8 @@ end function aph
 ! subroutine ftplot.
 !
 subroutine ftplot (icurve,imode,nfitmx)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
-  real*8       text1,text2,text3,blank,pl
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  real(8)       text1,text2,text3,blank,pl
   dimension pl(92)
   include 'labl39.ftn'
   include 'deck39.ftn'
@@ -2248,29 +2248,29 @@ end subroutine ftplot
 !     subroutine misc39.
 !
 subroutine misc39
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl39.ftn'
   !     This module is called by "subr39"  of
   !     overlay 39 when new miscellaneous data cards are required
   !     (possibly once for each mode,  in the most extreme case).
-  character*8 text1, text2, text3, text4
+  character(8) text1, text2, text3, text4
   dimension itemp(9)
   equivalence (kdeflt, indtv(1))
-  data text1   /  6hdata    /
-  data text2   /  6hselect  /
-  data text3   /  6hdefaul  /
-  data text4   /  6ht       /
+  data text1 / 'data  ' /
+  data text2 / 'select' /
+  data text3 / 'defaul' /
+  data text4 / 't     ' /
   if (iprsup .ge.  6) write (lunit6, 2243)  modify
-2243 format (  28h top of "misc39".   modify =,  i4  )
+2243 format (' Top of "misc39".   modify =', i4)
   if ( modify  .eq.  0 )   go to 2268
   !     read input card using cimage
 2245 if ( kdeflt  .ne.  1 ) call cimage
-  read (unit = abuff(1), fmt = 2247) bus1, bus3
+  read (unit = abuff, fmt = 2247) bus1, bus3
 2247 format (  2a6  )
   if (bus1 .ne. text1) go to 4063
 2268 continue
-  read (unit = abuff(1), fmt = 2247) bus1, bus3
+  read (unit = abuff, fmt = 2247) bus1, bus3
   if ( bus1  .ne.  text3 )   go to 2274
   if ( bus3  .ne.  text4 )   go to 2274
   write (kunit6, 2270)
@@ -2281,7 +2281,7 @@ subroutine misc39
   call defblk ( abuff )
 2274 if ( bus1  .ne.  text2 )   go to 2286
   modesk = 1
-  read (unit = abuff(1), fmt = 2281) itemp
+  read (unit = abuff, fmt = 2281) itemp
 2281 format ( 8x,  9i8 )
   do j=1, 9
      if ( itemp(j)  .eq.  0 )   go to 2283
@@ -2294,10 +2294,10 @@ subroutine misc39
   call cimage
   go to 2268
 2286 continue
-  read (unit = abuff(1), fmt = 2289) bus2
+  read (unit = abuff, fmt = 2289) bus2
 2289 format ( 66x,  a6 )
   !     begin code to read overall program miscellaneous param.:
-  read (unit = abuff(1), fmt = 4057) idebug, ipunch, koutpr, gmode
+  read (unit = abuff, fmt = 4057) idebug, ipunch, koutpr, gmode
 4057 format ( 8x,3i8,e8.0)
   if ( gmode.le.0.0 .and. metrik.eq.0 ) gmode=.48d-7
   if ( gmode.le.0.0 .and. metrik.eq.1 ) gmode=.30d-7
@@ -2323,7 +2323,7 @@ subroutine misc39
   go to 9900
   !     begin code for miscellaneous param. of a1 fitting
 4387 continue
-  read (unit = abuff(1), fmt = 4391) nexmis, epstol, normax, iecode, ifwta, ifplot, ifdat, inelim, amina1
+  read (unit = abuff, fmt = 4391) nexmis, epstol, normax, iecode, ifwta, ifplot, ifdat, inelim, amina1
 4391 format (i8,e8.0,6i8,e8.0)
   if (epstol.eq.0) epstol = .3d0
   d1 = epstol
@@ -2341,17 +2341,16 @@ end subroutine misc39
 !
 !     subroutine defblk.
 !
-subroutine defblk ( abuff )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
-  character*8 abuff
-  dimension abuff(5)
+subroutine defblk (abuff)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  character(160) abuff
   !     Almost-universal module for blanking out "abuff" card
   !     image of "default" data card of "marti setup".   The one
   !     and only call is by module "misc39" of overlay 39.   It
   !     is not universal only for those computers (e.g., apollo)
   !     which have  "character abuff*80"  declaration.
-  abuff(1) = abuff(5)
-  abuff(2) = abuff(5)
+  abuff(1 : 8) = abuff(40 : 48)
+  abuff(16 : 24) = abuff(40 : 48)
   return
 end subroutine defblk
 !

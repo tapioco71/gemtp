@@ -6,11 +6,11 @@
 !     subroutine over41.
 !
 subroutine over41
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real*8 (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
-  character*8 text1, text2, text3, t1, t2, t3
-  character*8 text6, text7, text8, text9
-  character*8 text10, text11, text12, aupper, alower, typec
+  character(8) text1, text2, text3, t1, t2, t3
+  character(8) text6, text7, text8, text9
+  character(8) text10, text11, text12, aupper, alower, typec
   dimension rr(6), xx(6), v(3), rik(3), xik(3), text1(3), text2(3), text3(3), temp1(3), temp2(3), temp3(3), text7(3), text8(3)
   dimension aupper(20), alower(20), typec(20), ohm(20), henry(20)
   dimension volt(20), volti(20), voltk(20)
@@ -58,7 +58,7 @@ subroutine over41
   ll0 = 0
   ll2 = 2
   ll3 = 3
-  read (unit = abuff(1), fmt = 7108) statfr, xopt
+  read (unit = abuff, fmt = 7108) statfr, xopt
 7108 format ( 32x,  2e8.0 )
   if ( statfr  .ne.  44. )   go to 7119
   !     enter hermann's ubc 3-phase transformer routine  "bctran"
@@ -75,7 +75,7 @@ subroutine over41
 3857 call cimage
   n4 = kolbeg
   if ( kolbeg  .gt.  0 )   go to 1723
-  read (unit = abuff(1), fmt = 3861) bus1
+  read (unit = abuff, fmt = 3861) bus1
 3861 format ( a6, 2x, 12a6 )
   go to 1725
 1723 nfrfld = 1
@@ -87,7 +87,7 @@ subroutine over41
   write (kunit6, 3864)
 3864 format (  37h+node names for punched branch cards.    )
   if ( kolbeg  .gt.  0 )   go to 1733
-  read (unit = abuff(1), fmt = 3861) bus1, (text7(i), text8(i), i = 1, 3)
+  read (unit = abuff, fmt = 3861) bus1, (text7(i), text8(i), i = 1, 3)
   go to 1735
 1733 nfrfld = 6
   nright = -1
@@ -105,7 +105,7 @@ subroutine over41
 1735 go to 3857
 3869 kolbeg = n4
   if ( kolbeg  .gt.  0 )   go to 1743
-  read (unit = abuff(1), fmt = 6) iwind, cmag, pmag, ipunch
+  read (unit = abuff, fmt = 6) iwind, cmag, pmag, ipunch
 6 format ( i1, e9.0, e10.0, i10 )
   go to 1745
 1743 nfrfld = 1
@@ -137,7 +137,7 @@ subroutine over41
      call cimage
      !     read input card using cimage
      if ( kolbeg  .gt.  0 )   go to 1753
-     read (unit = abuff(1), fmt = 10) vtap, ploss, z, pratg
+     read (unit = abuff, fmt = 10) vtap, ploss, z, pratg
 10   format ( 5e10.0 )
      go to 1755
 1753 nfrfld = 1
@@ -295,7 +295,7 @@ subroutine over41
   !     read input card using cimage
 500 call cimage
   if ( kolbeg  .gt.  0 )   go to 1763
-  read (unit = abuff(1), fmt = 10) v1, v2, ploss, z, pratg
+  read (unit = abuff, fmt = 10) v1, v2, ploss, z, pratg
   go to 1765
 1763 nfrfld = 1
   call freone ( v1 )
@@ -349,7 +349,7 @@ subroutine over41
   !     read input card using cimage
 7122 call cimage
 7123 continue
-  read (unit = abuff(1), fmt = 7129) bus5, d1, d2, d3
+  read (unit = abuff, fmt = 7129) bus5, d1, d2, d3
 7129 format ( 2x, a6, 18x, 2e6.2, 6x, e6.2 )
   if ( bus5  .eq.  text12 )   go to 7132
   lstat(19) = 7132
@@ -362,7 +362,7 @@ subroutine over41
   do i=1, 99
      !     read input card using cimage
      call cimage
-     read (unit = abuff(1), fmt = 7142) bus5, bus6
+     read (unit = abuff, fmt = 7142) bus5, bus6
 7142 format ( 2a1 )
      if ( bus6  .ne.  text11 )   go to 7151
      if ( bus5  .eq.  text10 )   go to 7157
@@ -378,7 +378,7 @@ subroutine over41
      !     read input card using cimage
      call cimage
 7161 continue
-     read (unit = abuff(1), fmt = 7163) kk, aupper(i), alower(i), ohm(i), henry(i), volt(i)
+     read (unit = abuff, fmt = 7163) kk, aupper(i), alower(i), ohm(i), henry(i), volt(i)
 7163 format ( i2,  2a6,  12x,  3e6.2  )
      if ( kk  .ne.  i )   go to 7175
      iwind = kk
@@ -443,14 +443,14 @@ subroutine over41
           ' questionable value for purposes of EMTP simulation.   Column 1 is to be added to column 3,   and column 2  is      ', /, &
           ' to be added to column 4 to produce the diagonals.  ', /, 7x, 'row', 11x, 'leakage r', 6x, 'leakage l or x', &
           12x, 'magnetizing r', 6x, 'magnet. l or x', 16x, /, (i10, 2e20.10, 5x, 2e20.10))
-  read (unit = abuff(1), fmt = 7284) (aupper(i), i = 1, 14)
+  read (unit = abuff, fmt = 7284) (aupper(i), i = 1, 14)
 7284 format ( 13a6, a2 )
   write (lunit6, 7288)  ( aupper(i), i=1, 14 )
 7288 format (///, ' Another saturable transformer has now been successfully converted to  (r), (l)  format.   that computation ', /, &
           ' is now complete.  The EMTP now begins to process the following case (if any) by re-listing the last-read data           ', /, &
           ' card (which did not belong to the last case, recall).  ', /, 1x, 131('-'), /, '+', 50x, '1', /, &
           51x, '1', 13a6, a2)
-  read (unit = abuff(1), fmt = 7281) bus5
+  read (unit = abuff, fmt = 7281) bus5
 7281 format ( 2x,  a6  )
   if ( bus5  .eq.  text12 )   go to 7123
   if ( bus5  .eq.  blank )   go to 3870
@@ -467,7 +467,7 @@ end subroutine over41
 !     subroutine crdchg.
 !
 subroutine crdchg
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !
   !     fortran77 used to provide a subroutine to
   !     input old data cards and change their format;
@@ -478,7 +478,7 @@ subroutine crdchg
   include 'blkcom.ftn'
   include 'dekspy.ftn'
   character*80 card, blanks, work
-  character*8 text(14)
+  character(8) text(14)
   !
   blanks = ' '
   work = ' '
@@ -679,7 +679,7 @@ end subroutine crdchg
 ! subroutine fltopt.
 !
 subroutine fltopt ( d8, n14 )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !       this module services         , and is designed to optimally
   !       encode the floating number  d8  into  ansi32  of  "dekspy".  by
   !       optimal, we mean a showing of the greatest precision within the
@@ -799,7 +799,7 @@ end subroutine fltopt
 ! subroutine store.
 !
 subroutine store(i,j,n,d2r,d2x,d1r,d1x)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   common /zprint/ zoutr(120),zoutx(120)
   if ( iprsup  .ge.  5 ) write (lunit6, 2472)  i, j, n, d2r, d2x, d1r, d1x
@@ -842,7 +842,7 @@ end subroutine store
 ! subroutine round.
 !
 subroutine round ( x )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
 !
 !)    the purpose of this module is to numerically round the argument
 !)    'x'  to five decimal digits (or thereabouts), and then pass this
@@ -869,7 +869,7 @@ end subroutine round
 !     subroutine bctran.
 !
 subroutine bctran
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Multi-phase transformer data generator that was handed over
   !     to us at BPA by prof. Hermann W. Dommel of the University of
   !     British Columbia (Vancouver, b.c., Canada) on December
@@ -880,7 +880,7 @@ subroutine bctran
   !     then simply change 10 to n and 55 to n*(n+1)/2, 30 to 3*n
   !     and 60 to 6*n in next 6 lines and in one line between statement
   !     number 1 and 4.
-  character*8 name(60),iname(6)
+  character(8) name(60),iname(6)
   dimension  kb(55),ke(55)
   dimension x(3),rout(30),rmva(55),y(30),xo(55)
   dimension xp(55),zs(55),zm(55),zsd(10),zmd(10),v(10),nad(55),rwin2(10)
@@ -896,7 +896,7 @@ subroutine bctran
   three = 3.0
   !     read input card using cimage.
 100 call cimage
-  read (unit = abuff(1), fmt = 4001) iwin, freq, bexs, ratpos, gexs, bexm, ratzer, gexm, nphase, itest, iput, iprint
+  read (unit = abuff, fmt = 4001) iwin, freq, bexs, ratpos, gexs, bexm, ratzer, gexm, nphase, itest, iput, iprint
 4001 format (i2, 7e10.2, 4i2 )
   if(iwin.le.0) go to 312
   if(iwin.gt.10 .or. iwin.eq.1)go to 120
@@ -922,7 +922,7 @@ subroutine bctran
   do k=1,iwin
      !     read input card using cimage.
      call cimage
-     read (unit = abuff(1), fmt = 701) m1, z1, zo, (iname(i), i = 1, 6)
+     read (unit = abuff, fmt = 701) m1, z1, zo, (iname(i), i = 1, 6)
 701  format(i3, 2e10.2, 1x, 6a6)
      write (lunit6, 4009) m1, z1, zo, (iname(i), i=1, 6)
 4009 format (1h , i6, f16.3, f10.5, 6(4x, a6)  )
@@ -958,7 +958,7 @@ subroutine bctran
           43h(percent)  rating(mva)   impedance(percent), 12h rating(mva),5x,2hin)
   !     read input card using cimage.
 25 call cimage
-  read (unit = abuff(1), fmt = 4202) ibg, ien, h1, xpos, ratpos, xzero, ratzer, idelt, k3
+  read (unit = abuff, fmt = 4202) ibg, ien, h1, xpos, ratpos, xzero, ratzer, idelt, k3
 4202 format(2i2, 5e10.2, 2i2)
   if(i.eq.0) iloss = k3
   if(ibg.le.0.or.ien.le.0) go to 10
@@ -1438,7 +1438,7 @@ end subroutine bctran
 !     subroutine newton.
 !
 subroutine newton (x, maxit, err)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   common /newt1/ rwin(10),zhl,zht,zlt,k,m,idelt, logsix
   dimension x(1)
@@ -1470,7 +1470,7 @@ end subroutine newton
 !     subroutine cxred1.
 !
 subroutine cxred1( as, cs, n, m )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !)    for an explanation  as to the calling sequence of this module,
   !)    refer to the same subroutine of overlay 3.
   !     Define double precision for single precision univac

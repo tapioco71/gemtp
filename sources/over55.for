@@ -6,11 +6,11 @@
 !     subroutine over55.
 !
 subroutine over55
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   equivalence (moncar(4),  isw)
   if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )  kill
-4567 format ( 24h begin "over55".  kill =,  i6  )
+4567 format (' Begin "over55".  kill =', i6)
   kilsav = kill
   if ( kill  .le.  0 )   go to 6633
 6624 call subr55
@@ -19,129 +19,129 @@ subroutine over55
   kill = 0
   if ( kol132  .eq.  132 )   go to 6639
   write (lunit6, 6634)  ( lstat(i+20),  i=1, 26 )
-6634 format ( /,  42h actual list sizes for preceding solution: ,/,  14h   size  1-10:,  10i6 ,/,  14h   size 11-20:,  10i6 ,/,  14h   size 21-on:,  10i6   )
+6634 format (/, ' Actual list sizes for preceding solution:', /, '   size  1-10:', 10i6, /, '   size 11-20:', 10i6, /, '   size 21-on:', 10i6)
   go to 6645
 6639 write (lunit6, 6554)
-6554 format( /, 101h core storage figures for preceding data case now completed.  ---------------------------------------, 2x,7hpresent, 3x, 7hprogram, /, &
-       63h a value of  -9999 indicates default, with no figure available.  ,  41x, 6hfigure, 5x, 12hlimit (name)    )
-  write(lunit6, 38021)  lstat(21), lbus
-38021 format( 5x,  39hsize list 1.   number of network nodes.  , 56x, 2i10, 7h (lbus)   )
-  write(lunit6, 38022)  lstat(22), lbrnch
-38022 format( 5x, 42hsize list 2.   number of network branches.  , 53x, 2i10, 9h (lbrnch)   )
-  write(lunit6, 38023)  lstat(23), ldata
-38023 format( 5x, 55hsize list 3.   number of data values in r, l, c tables.  , 40x, 2i10, 8h (ldata)   )
-  write(lunit6, 38024)  lstat(24), lexct
-38024 format( 5x,  49hsize list 4.   number of entries in source table., 46x, 2i10, 8h (lexct)   )
+6554 format (/, ' Core storage figures for preceding data case now completed.  ---------------------------------------', 2x, 'present', 3x, 'program', /, &
+          ' a value of  -9999 indicates default, with no figure available.', 41x, 'figure', 5x, 'limit (name)')
+  write (lunit6, 38021) lstat(21), lbus
+38021 format (5x, 'Size list 1.   Number of network nodes.', 56x, 2i10, ' (lbus)')
+  write (lunit6, 38022) lstat(22), lbrnch
+38022 format (5x, 'Size list 2.   Number of network branches.', 53x, 2i10, ' (lbrnch)')
+  write (lunit6, 38023) lstat(23), ldata
+38023 format (5x, 'Size list 3.   Number of data values in R, L, C tables.', 40x, 2i10, ' (ldata)')
+  write (lunit6, 38024) lstat(24), lexct
+38024 format (5x, 'Size list 4.   Number of entries in source table.', 46x, 2i10, ' (lexct)')
   write (lunit6, 38025) ktrlsw(3), iprsov(36), lstat(25), lymat
-38025 format ( 5x,  34hsize list 5.   storage for (y) and, 20h triangularized (y).,   6x, 11hno. times =,  i5,  3x,   9hfactors =,  i5, 2x,  2i10,  8h (lymat)    )
-  write (lunit6, 38026)  ktrlsw(5),  lstat(26), lswtch
-38026 format( 5x,  35hsize list 6.   number of entries in, 14h switch table.,  15x,  11hno. flops =, i6,   14x, 2i10, 9h (lswtch)   )
-  write (lunit6, 38027)  maxbus, lsize7
-38027 format ( 5x, 39hsize list 7.   number of total distinct, 32h alphanumeric (a6) program names, 24x, 2i10,  9h (lsize7)   )
-  write(lunit6, 38028)  lstat(28), lpast
-38028 format( 5x, 67hsize list 8.   number of past history points for distributed lines.   , 28x, 2i10, 8h (lpast)    )
-  write(lunit6, 38029)  lstat(29), lnonl
-38029 format( 5x, 44hsize list 9.   number of nonlinear elements.   , 51x, 2i10, 8h (lnonl)   )
-  write(lunit6, 38030)  lstat(30), lchar
-38030 format( 5x, 67hsize list 10.  number of points defining nonlinear characteristics.   , 28x, 2i10, 8h (lchar)   )
-  write (lunit6, 38031)  lstat(31), lsmout
-38031 format (5x,  66hsize list 11.  number of branch or selective-node-voltage outputs.   ,  29x,  2i10,  9h (lsmout)    )
-  write(lunit6, 38032)  lstat(32), lsiz12
-38032 format( 5x, 92hsize list 12.  number of output quantities (limited only when printing max absolute values)., 3x, 2i10, 9h (lsiz12) )
-  write(lunit6, 38033)  lstat(33), lfdep
-38033 format ( 5x,  68hsize list 13.  number of 'weighting' frequency-dependent line modes.,  27x,  2i10,  8h (lfdep)   )
-  write(lunit6, 38034)  lstat(34), lwt
-38034 format( 5x, 82hsize list 14.  number of cells used to store freq.-dependence weighting functions.   , 13x, 2i10, 6h (lwt)   )
-  write(lunit6, 38035)  lstat(35), ltails
-38035 format( 5x, 78hsize list 15.  number of cells used for exponential-tail line-history storage.   , 17x, 2i10, 9h (ltails)   )
-  write (lunit6, 38036)  lstat(36), limass
-38036 format( 5x, 38hsize list 16.  total number of type-59, 13h s.m. masses.,  44x, 2i10, 9h (limass)   )
-  write (lunit6, 38037)  lstat(37), lsyn
-38037 format (5x,  54hsize list 17.  number of dynamic synchronous machines.   ,  41x,   2i10,  7h (lsyn)     )
-  write (lunit6, 38038)  lstat(38), maxpe
-38038 format (5x,  57hsize list 18.  number of branch power-and-energy outputs.     ,   38x,  2i10,  8h (maxpe)    )
-  write (lunit6, 38039)  lstat(39), ltacst
-38039 format (5x,  64hsize list 19.  floating-point working space for all tacs arrays. ,   31x,  2i10,  9h (ltacst)    )
+38025 format (5x, 'Size list 5.   Storage for (Y) and triangularized (Y).', 6x, 'no. times =', i5, 3x, 'factors =', i5, 2x, 2i10, ' (lymat)')
+  write (lunit6, 38026) ktrlsw(5), lstat(26), lswtch
+38026 format (5x, 'Size list 6.   Number of entries in switch table.', 15x, 'no. flops =', i6, 14x, 2i10, ' (lswtch)')
+  write (lunit6, 38027) maxbus, lsize7
+38027 format (5x, 'Size list 7.   Number of total distinct alphanumeric (a6) program names', 24x, 2i10, ' (lsize7)')
+  write (lunit6, 38028) lstat(28), lpast
+38028 format (5x, 'Size list 8.   Number of past history points for distributed lines.', 28x, 2i10, ' (lpast)')
+  write (lunit6, 38029) lstat(29), lnonl
+38029 format (5x, 'Size list 9.   Number of nonlinear elements.', 51x, 2i10, ' (lnonl)')
+  write (lunit6, 38030) lstat(30), lchar
+38030 format (5x, 'Size list 10.  Number of points defining nonlinear characteristics.', 28x, 2i10, ' (lchar)')
+  write (lunit6, 38031) lstat(31), lsmout
+38031 format (5x, 'Size list 11.  Number of branch or selective-node-voltage outputs.', 29x, 2i10, ' (lsmout)')
+  write (lunit6, 38032) lstat(32), lsiz12
+38032 format (5x, 'Size list 12.  Number of output quantities (limited only when printing max absolute values).', 3x, 2i10, ' (lsiz12)')
+  write (lunit6, 38033) lstat(33), lfdep
+38033 format (5x, "Size list 13.  Number of 'weighting' frequency-dependent line modes.", 27x, 2i10, ' (lfdep)')
+  write (lunit6, 38034) lstat(34), lwt
+38034 format (5x, 'Size list 14.  Number of cells used to store freq.-dependence weighting functions.', 13x, 2i10, ' (lwt)')
+  write (lunit6, 38035) lstat(35), ltails
+38035 format (5x, 'Size list 15.  Number of cells used for exponential-tail line-history storage.', 17x, 2i10, ' (ltails)')
+  write (lunit6, 38036) lstat(36), limass
+38036 format (5x, 'Size list 16.  Total number of type-59 s.m. masses.', 44x, 2i10, ' (limass)')
+  write (lunit6, 38037) lstat(37), lsyn
+38037 format (5x, 'Size list 17.  Number of dynamic synchronous machines.', 41x, 2i10, ' (lsyn)')
+  write (lunit6, 38038) lstat(38), maxpe
+38038 format (5x, 'Size list 18.  Number of branch power-and-energy outputs.', 38x, 2i10, ' (maxpe)')
+  write (lunit6, 38039) lstat(39), ltacst
+38039 format (5x, 'Size list 19.  Floating-point working space for all tacs arrays.', 31x, 2i10, ' (ltacst)')
   !     ktab is in blkcom, so it can not be equivalenced to
-  if ( ktab .le. 0 )  go to 7272
+  if (ktab .le. 0) go to 7272
   lstat(53) = lstat(63) - lstat(60) + lstat(53)
   lstat(56) = lstat(56) - lstat(58) + 3
   lstat(58) = ktab
-  write (lunit6, 3632)  ( k,  k=1, 8 ), ( lstat(k), k=51, 58),   ( lstat(k), k=61, 68 )
-3632 format ( 7x,  14htacs table no.,   8i10     ,/, 7x,  14hpresent figure,   8i10     ,/, 7x,  14hprogram limit ,   8i10         )
-7272 write (lunit6, 38040)  lstat(40), lfsem
-38040 format (5x, 46hsize list 20.  recursive convolution parameter, 42h storage for non-copied branch components., 7x,  2i10,  8h (lfsem)   )
-  write (lunit6, 38041)  lstat(41), lfd
-38041 format (5x,  75hsize list 21.  total storage cells for modal-phase transformation matrices. ,  20x ,  2i10,  6h (lfd)    )
-  write (lunit6, 38042)  lstat(42), lhist
-38042 format (5x,  34hsize list 22.  number of cells for, 21h convolution history.,  40x,  2i10,  8h (lhist)    )
-  write (lunit6, 38071)  lstat(43), lsiz23
-38071 format( 5x,  83hsize list 23.  giant arrays for renumbering and steady-state solution calculations.,  12x,  2i10,  9h (lsiz23)  )
-  write (lunit6, 38044)  ncomp, lcomp
-38044 format (5x,  72hsize list 24.  number of phases of compensation, based on maximum nodes.,  23x,  2i10,  8h (ncomp)    )
-  write (lunit6, 38045)  lstat(45), lspcum
-38045 format (5x,  13hsize list 25., 49h  floating-point working space for  u.m.  arrays., 33x,  2i10,  9h (lspcum)     )
-  write (lunit6, 38046)  lstat(46), lsiz26
-38046 format (5x,  39hsize list 26.  square of maximum number, 19h of coupled phases., 37x, 2i10, 9h (lsiz26)  )
-6645 if ( kol132  .eq.  132 ) write (lunit6, 38003)
-38003 format( 100h timing figures (decimal) characterizing case solution speed.  -------------------------------------, 4x, 6hcp sec, 3x, 7hi/o sec, 3x, 7hsum sec  )
-  if ( flstat(7)  .ne.  -9999. )   go to 2601
+  write (lunit6, 3632) (k, k = 1, 8), (lstat(k), k = 51, 58), (lstat(k), k = 61, 68)
+3632 format (7x, 'TACS table no.', 8i10, /, 7x, 'present figure', 8i10, /, 7x, 'program limit', 8i10)
+7272 write (lunit6, 38040) lstat(40), lfsem
+38040 format (5x, 'Size list 20.  Recursive convolution parameter storage for non-copied branch components.', 7x, 2i10, ' (lfsem)')
+  write (lunit6, 38041) lstat(41), lfd
+38041 format (5x, 'Size list 21.  Total storage cells for modal-phase transformation matrices.', 20x, 2i10, ' (lfd)')
+  write (lunit6, 38042) lstat(42), lhist
+38042 format (5x, 'Size list 22.  Number of cells for convolution history.', 40x, 2i10, ' (lhist)')
+  write (lunit6, 38071) lstat(43), lsiz23
+38071 format (5x, 'Size list 23.  Giant arrays for renumbering and steady-state solution calculations.', 12x, 2i10, ' (lsiz23)')
+  write (lunit6, 38044) ncomp, lcomp
+38044 format (5x, 'Size list 24.  Number of phases of compensation, based on maximum nodes.', 23x, 2i10, ' (ncomp)')
+  write (lunit6, 38045) lstat(45), lspcum
+38045 format (5x, 'Size list 25.  Floating-point working space for  u.m.  arrays.', 33x, 2i10, ' (lspcum)')
+  write (lunit6, 38046) lstat(46), lsiz26
+38046 format (5x, 'Size list 26.  Square of maximum number of coupled phases.', 37x, 2i10, ' (lsiz26)')
+6645 if (kol132 .eq. 132) write (lunit6, 38003)
+38003 format (' Timing figures (decimal) characterizing case solution speed.  -------------------------------------', 4x, 'cp sec', 3x, 'i/o sec', 3x, 'sum sec')
+  if (flstat(7) .ne. -9999.) go to 2601
   !     special timing code for supporting programs.
   d6 = flstat(9) + flstat(1)
   d7 = flstat(10) + flstat(2)
   d1 = d6 + d7
-  if ( kol132  .eq.  132 ) write (lunit6, 38010)   d6, d7, d1
-  if ( kol132  .eq.  80 ) write (lunit6, 6651)  d6, d7, d1
-6651 format (  39h total case timing (cp, i/o, tot), sec:, 1x,  3f10.3  )
+  if (kol132 .eq. 132) write (lunit6, 38010) d6, d7, d1
+  if (kol132 .eq. 80) write (lunit6, 6651) d6, d7, d1
+6651 format (' Total case timing (cp, i/o, tot), sec:', 1x, 3f10.3)
   lastov = nchain
   nchain = 1
-  if ( iprsup  .ge.  1 ) write (lunit6, 4568)  kill
-4568 format ( 23h exit "over55".  kill =,  i6  )
+  if (iprsup .ge. 1) write (lunit6, 4568) kill
+4568 format (' Exit "over55".  kill =', i6)
   go to 99999
 2601 d1 = flstat(1) + flstat(2)
   d4 = d1
-  if ( kol132  .eq.  132 ) write(lunit6, 38004)  flstat(1), flstat(2), d1
+  if ( kol132  .eq.  132 ) write (lunit6, 38004)  flstat(1), flstat(2), d1
   if ( kol132  .eq.  80 ) write (lunit6, 6652)  flstat(1), flstat(2), d1
-6652 format (  29h seconds for overlays  1-6  :, 3f9.3,   22h  --- (cp;  i/o;  tot)    )
-38004 format( 5x, 67hdata input, sorting, and renumbering (pre steady state stuff) .....   , 28x, 3f10.3 )
+6652 format (' Seconds for overlays  1-6  :', 3f9.3, '  --- (cp;  i/o;  tot)')
+38004 format (5x, 'Data input, sorting, and renumbering (pre steady state stuff) .....', 28x, 3f10.3)
   d1 = flstat(3) + flstat(4)
   d4 = d4 + d1
-  if ( kol132  .eq.  132 ) write (lunit6, 38005)  flstat(3), flstat(4), d1
-38005 format( 5x, 47hsteady-state (s.s.) solution calculations ..... , 48 x, 3f10.3 )
-  if ( kol132  .eq.  80 ) write (lunit6, 6653)  flstat(3), flstat(4), d1
-6653 format (  29h seconds for overlays  7-12 :,  3f9.3  )
+  if (kol132  .eq.  132) write (lunit6, 38005) flstat(3), flstat(4), d1
+38005 format (5x, 'Steady-state (s.s.) solution calculations .....', 48x, 3f10.3)
+  if (kol132 .eq. 80) write (lunit6, 6653) flstat(3), flstat(4), d1
+6653 format (' Seconds for overlays  7-12 :', 3f9.3)
   d1 = flstat(5) + flstat(6)
   d4 = d4 + d1
-  if ( kol132  .eq.  132 ) write(lunit6, 38006) flstat(5), flstat(6), d1
-38006 format( 5x, 53hpost-s.s. to pre-integration-setup calculations .....  , 42x, 3f10.3 )
-  if ( kol132  .eq.  80 ) write (lunit6, 6654)  flstat(5), flstat(6), d1
-6654 format (  29h seconds for overlays 13-15 :,  3f9.3  )
+  if (kol132 .eq. 132) write (lunit6, 38006) flstat(5), flstat(6), d1
+38006 format (5x, 'post-s.s. to pre-integration-setup calculations .....', 42x, 3f10.3)
+  if (kol132 .eq. 80) write (lunit6, 6654) flstat(5), flstat(6), d1
+6654 format (' Seconds for overlays 13-15 :', 3f9.3)
   d1 = flstat(7) + flstat(8)
   d4 = d4 + d1
-  if ( kol132  .eq.  132 ) write(lunit6, 38007)  flstat(7), flstat(8), d1
-38007 format( 5x, 54hintegration calculation (time in time-step loop) .....  , 41x, 3f10.3   )
-  if ( kol132  .eq.  80 ) write (lunit6, 6655)  flstat(7), flstat(8), d1
-6655 format (  29h seconds for time-step loop :,  3f9.3  )
+  if (kol132 .eq. 132) write (lunit6, 38007) flstat(7), flstat(8), d1
+38007 format (5x, 'Integration calculation (time in time-step loop) .....', 41x, 3f10.3)
+  if (kol132 .eq. 80) write (lunit6, 6655)  flstat(7), flstat(8), d1
+6655 format (' Seconds for time-step loop :', 3f9.3)
   hmin = flstat(9)  +  flstat(10)
   d4 = d4 + hmin
-  if ( kol132  .eq.  132 ) write (lunit6, 38008)  flstat(9), flstat(10), hmin
-38008 format( 5x,   65hcomputer time in plotting or statistics termination overlay ..... ,30x,3f10.3)
-  if ( kol132  .eq.  80 ) write (lunit6, 6656)   flstat(9), flstat(10), hmin
-6656 format (  29h seconds after deltat-loop  :,  3f9.3  )
+  if (kol132 .eq. 132) write (lunit6, 38008) flstat(9), flstat(10), hmin
+38008 format (5x, 'Computer time in plotting or statistics termination overlay .....', 30x, 3f10.3)
+  if (kol132 .eq. 80) write (lunit6, 6656)   flstat(9), flstat(10), hmin
+6656 format (' Seconds after deltat-loop  :', 3f9.3)
   d1 = flstat(11) + flstat(12)
   d4 = d1 + d4
-  if ( kol132  .eq.  132 ) write (lunit6, 38009)  flstat(11), flstat(12), d1
-38009 format ( 5x,  37h'deltat'-change restart time  .......,  58x, 3f10.3  ,/,  101x,  29h-----------------------------        )
+  if (kol132 .eq. 132) write (lunit6, 38009) flstat(11), flstat(12), d1
+38009 format (5x, "'deltat'-change restart time  .......", 58x, 3f10.3, /, 101x, '-----------------------------')
   d2 = 0.0
   d3 = 0.0
   do i=1, 12, 2
      d2 = d2 + flstat(i)
 38011 d3 = d3 + flstat(i+1)
   end do
-  if ( kol132  .eq.  132 ) write (lunit6, 38010)  d2, d3, d4
-38010 format ( 93x, 7htotals , 3f10.3, //,1x)
+  if (kol132  .eq.  132) write (lunit6, 38010)  d2, d3, d4
+38010 format (93x, 'totals ', 3f10.3, //, 1x)
   if ( kol132  .eq.  80 ) write (lunit6, 6658)  d2, d3, d4
-6658 format (  29x,  27h-------------------------   ,/, 20x,  9htotals  :,  3f9.3  )
+6658 format (29x, '-------------------------', /, 20x, 'totals  :', 3f9.3)
   if ( isw  .ne.  4444 )  go to 6673
   isw = -3344
   call subr55
@@ -155,27 +155,27 @@ end subroutine over55
 !     subroutine subr55.
 !
 subroutine subr55
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   equivalence  (moncar(1),  knt),   (moncar(4),  isw)
   equivalence                       (moncar(10), mtape)
-  character*8         text1, text2, text3, text4, text5
-  character*8         text11, text12, text13, text14, text15
-  character*8         text16, text17, text18, text19
-  data  text1   / 6hbegin   /
-  data  text2   / 6hnew     /
-  data  text3   / 6hdata    /
-  data  text4   / 6hcase    /
-  data  text5   / 6hbndc    /
-  data  text11  / 6hend     /
-  data  text12  / 6hlast    /
-  data  text13  / 6heldc    /
-  data  text14   /  6hstatis  /
-  data  text15   /  6htics    /
-  data  text16   /  6houtput  /
-  data  text17   /  6hsalvag  /
-  data  text18   /  6he       /
-  data  text19   /  6hsos     /
+  character(8) text1, text2, text3, text4, text5
+  character(8) text11, text12, text13, text14, text15
+  character(8) text16, text17, text18, text19
+  data  text1  / 'begin ' /
+  data  text2  / 'new   ' /
+  data  text3  / 'data  ' /
+  data  text4  / 'case  ' /
+  data  text5  / 'bndc  ' /
+  data  text11 / 'end   ' /
+  data  text12 / 'last  ' /
+  data  text13 / 'eldc  ' /
+  data  text14 / 'statis' /
+  data  text15 / 'tics  ' /
+  data  text16 / 'output' /
+  data  text17 / 'salvag' /
+  data  text18 / 'e     ' /
+  data  text19 / 'sos   ' /
   if ( iprsup .ge. 1 ) write (lunit6, 1001)  kill
 1001 format (  25h top of "subr55".  kill =,  i6  )
   if ( isw  .eq.  -3344 )  go to 6740
@@ -189,7 +189,7 @@ subroutine subr55
 7201 format (5x, 'The last-read data card is a request for the further (continued) solution of a previously-solved emtp data',/, &
        5x, "case.   The   'restart'   request specifies a permanent file in which is stored   /blank/   and   /label/ .",/, &
        5x, 'but EMTP dimensioning of the present program version is not identical to that for the version which created the',/, &
-       5x, 'permanent file.   Specifically, the total length of   /label/   for the file-creating program was',  i8,  '   integer ')
+       5x, 'permanent file.   Specifically, the total length of   /label/   for the file-creating program was', i8, '   integer ')
   write (lunit6, 7301)  ltlabl
 7301 format (5x,  'words, while the corresponding present figure is', i8,   ' .    Any such discrepancy is illegal.   As a',/, &
        5x, 'general rule, the user is counseled to use the same program version for both operations, thereby guaranteeing success. ')
@@ -245,11 +245,11 @@ subroutine subr55
 7209 format (5x, 'The jacobian matrix for a Newton solution of zinc-oxide arresters has been found to be singular.',/, &
        5x, "the tolerance  'epsiln'  equals", e12.3,  ' ,   while the iteration count is', i5,   ' . ')
   go to 7412
-6210 write(lunit6,7210)  lstat(14)
+6210 write (lunit6,7210)  lstat(14)
 7210 format (5x, 'The initialization of a saturated synchronous machine has failed to converge. the machine in question',/, &
        5x, 'had the following number', 2x, i6 )
   go to 6550
-6211 write(lunit6,7211) lstat(14),flstat(13),flstat(14),flstat(15)
+6211 write (lunit6,7211) lstat(14),flstat(13),flstat(14),flstat(15)
 7211 format (5x, 'The program was inputting data for synchronous machine no.', i8, 'a non-positive set of saturation data', /, &
        5x, 'for one of the axis has been detected.   The read in data follow below this line ........',/, &
        10x, 3e20.8, /, 5x, "in a case of an unsaturated s.m. this kill-code is caused by a nonspecified value of parameter 'agline' . ")
@@ -366,8 +366,8 @@ subroutine subr55
 62192 write (lunit6, 72192)  lstat( 16)
 72192 format (10x, 'Unrecognizable logical operator near column  ', i2 )
   go to 6550
-62193 write( lunit6, 72193)  lstat( 16)
-72193 format( 10x, 'The numerical argument ending in column ',  i2,/, &
+62193 write ( lunit6, 72193)  lstat( 16)
+72193 format ( 10x, 'The numerical argument ending in column ',  i2,/, &
        10x, 'contains more than one decimal point. ')
   go to 6550
 6219 write (lunit6, 7213)  lstat(16), lstat(15)
@@ -394,8 +394,8 @@ subroutine subr55
 6224 write (lunit6, 7224)
 7224 format ( 5x,  'The last-read switch card has both names identical.   The switch is closed on itself, and has no use. ')
   go to 6550
-6225 write(lunit6, 7225)  lstat(14), lstat(15)
-7225 format( 5x, 'The user has overflowed storage within the cable connstants supporting program.   For the current program',/, &
+6225 write (lunit6, 7225)  lstat(14), lstat(15)
+7225 format ( 5x, 'The user has overflowed storage within the cable connstants supporting program.   For the current program',/, &
        5x,  'version, one is limited to cases having not over', i4 , ' conductors or ', i4, ' cables( the storage for a three',/, &
        5x, 'phase transmission line is equal to 5 cables if it has 2 ground wires.  Storage for the arrays in question has',/, &
        5x, 'been optimally (and dynamically) allocated so as to use as much of the EMTP core storage as is available.   It thus',/, &
@@ -421,8 +421,8 @@ subroutine subr55
 6239 continue
 6240 continue
 6241 continue
-6540 write(lunit6,7540) kill, lastov
-7540 format(/, 'Invalid  kill  code', i5,  5x, 'lastov =', i4  ,/, 1x  )
+6540 write (lunit6,7540) kill, lastov
+7540 format (/, 'Invalid  kill  code', i5,  5x, 'lastov =', i4  ,/, 1x  )
 6550 if ( ipntv(1)  .ne.  -8888 )   go to 1429
   kill = ipntv(3) + 1
   if ( kill  .le.  ipntv(2) )   go to 1417
@@ -456,48 +456,48 @@ subroutine subr55
   write (lunit6, 3392)  flstat
 3392 format ( /,   17h vector  'flstat'   ,/, ( 1x, 10e13.4 ) )
   n1 = lstat(16)
-  write(lunit6, 4000 )  n1
+  write (lunit6, 4000 )  n1
 4000 format (/, ' of course maybe the user would like some suggestions as to why the table in question (list number , i2, 1h)', /, &
        ' has overflowed.   If so, read on, good buddy.   the EMTP has a long-established policy of meritorious and laudable',/, &
        ' cooperation in the form of crystal-clear diagnostic messages, such as the following ..... ')
   if ( n1  .eq.  99 )   go to 4499
   go to (4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019, &
        4020, 4021, 4022, 4023, 4024, 4025, 4026, 4027, 4028, 4029),  n1
-4001 write(lunit6, 4101)
+4001 write (lunit6, 4101)
 4101 format (5x, "Network nodes are of course defined by the user's branch and switch cards, by the names which identify the ",/, &
        5x, "two ends of the element (fields  'bus1'  and  'bus2'  of the data card, columns 3-14).   In addition, there are  ",/, &
        5x, 'several less-obvious ways in which nodes are added to the bus table ....',/, &
        8x, '1.  Switched-r elements (type-92) and switched-l elements (type 93) each create one internal node for every',/, &
        12x,'such element. ')
-  write(lunit6, 4201)
-4201 format( 8x,  '2.  Ground (blank node name) always has an entry in the bus list.',/, &
+  write (lunit6, 4201)
+4201 format ( 8x,  '2.  Ground (blank node name) always has an entry in the bus list.',/, &
        8x, "3.  Each single-phase saturable transformer component adds one node (node name  'bustop' ,  columns 39-44 of the",/, &
        12x, "card bearing the request word 'transformer ' in columns 53-14).",/, &
        8x, "4.  Each three-phase saturable transformer component adds one node (node name 'bus3ph', read from columns 27-32",/, &
        12x, "of the card bearing the request word 'transformer three phase ' in columns 3-26).   This is a 4-th word, in " )
-  write(lunit6, 4301)
+  write (lunit6, 4301)
 4301 format (12x, 'Addition to the 3 which are added under point 3, for a 3-phase transformer. ' )
   go to 4099
-4002 write(lunit6, 4102)
+4002 write (lunit6, 4102)
 4102 format (5x, 'Network branches are of course defined directly by the user as he inputs branch data.   Yet the counting of',/, &
        5x, 'entries in this linear branch table has some subtle points which are worthy of the following detailed comment ....',/, &
        8x, '1.  True nonlinear elements (type codes 92 or 93) or the continuous time-varying resistance element (type 91)',/, &
        12x, 'never contribute to the linear branch table.   These elements are pulled outside of the network, and are handled',/, &
        12x,  'by compensation. ')
-  write(lunit6, 4202)
+  write (lunit6, 4202)
 4202 format (8x, '2.  Switched-resistance elements (type-92) each contribute one entry to the linear branch table.   Switched-',/, &
           12x, 'inductance elements (type 93) contribute two entries apiece.',/, &
           8x, '3.  Each type-99 pseudo-nonlinear resistance element contributes an entry, unless it is paralleled by another',/, &
           12x, 'linear branch.   These added very-high-impedance branches show up with a card image and data interpretation',/, &
           12x, 'almost as though the user had inputted the resistor himself. ')
-  write(lunit6, 4302)
-4302 format(8x, '4.  Each n-winding single-phase saturable transformer component always internally sets up   2(n-1) + 1   branches',/, &
+  write (lunit6, 4302)
+4302 format (8x, '4.  Each n-winding single-phase saturable transformer component always internally sets up   2(n-1) + 1   branches',/, &
           12x, "for everything but the magnetizing branch.   For the latter, a nonzero magnetizing resistance (field  'rmag' ,",/, &
           12x, 'columns 45-50 of the transformer request card) will add an entry, as will a saturation characteristic defined',/, &
           12x, 'by exactly one point.   A 3-phase saturable-transformer component contributes only in that it consists of 3',/, &
           12x,  'single-phase units as just detailed. '   )
   go to 4099
-4003 write(lunit6, 4103)
+4003 write (lunit6, 4103)
 4103 format (5x, 'The r, l, c tables store floating-point resistance, inductance, and capacitance parameter values associated',/, &
           5x, 'with lumped-parameter elements.   Although such values are inputted on branch cards (mostly), the user should not',/, &
           5x, 'confuse the present parameter storage with the branch-table storage of list 2.   Contributions to the present',/, &
@@ -526,9 +526,9 @@ subroutine subr55
           5x, 'r, l, c tables.   In this case, the program simply makes reference to previously-stored (and hence previously-',/, &
           5x,  'counted) data values. ' )
   go to 4099
-4004 write(lunit6, 4104)
+4004 write (lunit6, 4104)
 4104 format (5x, 'Counting the number of entries in the source table (size of list 4) is quite simple, as per the following',/, &
-          5x, 10hrules ....   ,/, &
+          5x, 'rules ....', /, &
           8x, '1.  Each conventional source component (type code 1 through 14, punched in columns 1-2 of the source card)',/, &
           12x, 'contributes one entry.',/, &
           8x, '2.  Each type-15 source component (the simplified ac/dc converter model, neglecting ripple on the dc side)',/, &
@@ -544,7 +544,7 @@ subroutine subr55
           5x, ' (y)v = i   are solved for real node-voltage vector  v ,  by means of a repeat solution using the table of factors.',/, &
           5x, 'Because  (y)  is symmetric, only the upper-triangular factors (including the diagonal) are stored.   There is only',/, &
           5x, 'one integer word and one floating-point word for each factor, it will be noted (see below).   Node ordering ' )
-  if ( lstat(13)  .eq.  1 ) write (lunit6, 4805)  lstat(14), kpartb
+  if (lstat(13) .eq. 1) write (lunit6, 4805)  lstat(14), kpartb
 4805 format (5x, 'beginning with "m32." versions,  list 7 storage of (ybb/ybc) is being destroyed,  and the full (y) is added',/, &
           5x,  'to the bottom of list 5 (fills from the bottom up).   But space ran out before the storage of (y) is finished.   Only',/, &
           i8,  '   rows are done,  out of a total of', i4,  ' ,   and factoring has not yet even begun. ')
@@ -576,12 +576,12 @@ subroutine subr55
   go to 4099
 4009 write (lunit6, 4109)
 4109 format ( 5x,  'Entries in the nonlinear-element table are created by the following element types .... ',/, &
-          8x,  '1.  Piecewise-linear time-varying resistance elements  R(t) ,   branch-type 91.',/, &
-          8x,  '2.  True nonlinear  v-i  characteristic, branch-type 92.',/, &
-          8x,  '3.  True nonlinear inductance element, branch-type 93.',/, &
-          8x,  '4.  Staircase time-varying resistance element  R(t) ,   branch-type 97. '        )
+          8x, '1.  Piecewise-linear time-varying resistance elements  R(t) ,   branch-type 91.',/, &
+          8x, '2.  True nonlinear  v-i  characteristic, branch-type 92.',/, &
+          8x, '3.  True nonlinear inductance element, branch-type 93.',/, &
+          8x, '4.  Staircase time-varying resistance element  R(t) ,   branch-type 97. '        )
   write (lunit6, 4209)
-4209 format (8x,  '5.  Pseudo-nonlinear inductance element, branch-type 98.',/, &
+4209 format (8x, '5.  Pseudo-nonlinear inductance element, branch-type 98.',/, &
           8x, '6.  Pseudo-nonlinear  v-i  characteristic, branch-type 99.',/, &
           5x, 'Every element falling into this classification contributes one entry to list 9. '    )
   go to 4099
@@ -656,7 +656,7 @@ subroutine subr55
   lstat(16) = 0
   lastov = nchain
   nchain = 51
-  if ( iprsup  .ge.  1 ) write (lunit6, 4568)  kill
+  if (iprsup .ge. 1) write (lunit6, 4568)  kill
   go to 9000
 4020 go to 4012
 4021 go to 4012
@@ -664,21 +664,21 @@ subroutine subr55
 4023 go to 4012
 4024 n9 = lcomp * lbus / ntot
   write (lunit6, 4124)  ncomp, n9
-4124 format (5x,  'The present data case involves',  i4, '   phase compensation, which exceeds the effective program limit of', i4, ' . ',/, &
-          5x, 'This latter figure is the limiting value of list 24 multiplied by  lbus/ntot  (the ratio of the',/, &
+4124 format (5x, 'The present data case involves',  i4, '   phase compensation, which exceeds the effective program limit of', i4, ' . ', /, &
+          5x, 'This latter figure is the limiting value of list 24 multiplied by  lbus/ntot  (the ratio of the', /, &
           5x, 'maximum number of buses to the, 33h actual number for this problem). '  )
   write (lunit6, 4224)
 4224 format (5x, 'Note that the effective limit on the number of phases of compensation thus varies inversely with problem',/, &
           5x, 'size.  Cut the size in half, and twice as many phases are available, without redimensioning with a larger list 24. ' )
   go to 4099
 4025 go to 4012
-4026 if ( lstat(13)  .eq.  0 )   go to 4226
+4026 if (lstat(13) .eq. 0) go to 4226
   write (lunit6, 4126)  lstat(13), lsiz26
 4126 format (5x,  "The user's data includes a coupled, 16h branch group of,  i5, 33h   phases.   squaring this number, 20h exceeds  list 26  (,  i5,  3h ). ")
   go to 4099
 4226 write (lunit6, 4326)
 4326 format (5x, 'List 26 working vectors "volt", "volti", "voltk", "vim", and "volta"  are used in various ways.   This is one.',/, &
-          5x, 'if user does not request 50 or more,  and if he has trouble,  see program maintenance for details. '   )
+          5x, 'if user does not request 50 or more,  and if he has trouble,  see program maintenance for details. ')
   go to 4099
 4027 go to 4012
 4028 go to 4012
@@ -703,30 +703,30 @@ subroutine subr55
           ' are in each table (effectively).   The following tabulation shows the effective multiplicity associated with each',/, &
           ' independent list ----- those lists whose lengths are under user  control by means of EMTP variable dimensioning. ' )
   write (lunit6, 4096)
-4096 format ( 5x, '-------------1----------------------------------------------------------------------------------------------------' )
+4096 format (5x, '-------------1----------------------------------------------------------------------------------------------------' )
   write (lunit6, 4095)  ( i, i=1, 25 )
-4095 format ( 5x, 14hlist number  1, 25i4 )
+4095 format (5x, 'list number  1', 25i4)
   write (lunit6, 4096)
   write (lunit6, 4093)
 4093 format (5x, 'loating pt. 1   6   5   3   6   1  12   2   2   8   3   1   4   8   1   2   2   0   6   1   1  24   2   1   #   *   1 ' )
   write (lunit6, 4097)
-4097 format(5x, 'Integer      1   4   7   0   2   1  10   0   0  11   0   3   0   4   0   0   1  10   2   0   0   0   0   0   0   0',/, &
+4097 format (5x, 'Integer      1   4   7   0   2   1  10   0   0  11   0   3   0   4   0   0   1  10   2   0   0   0   0   0   0   0',/, &
           5x,  'total        1  10  12   3   8   2  22   2   2  19   3   4   4  12   1   2   1  16   3   1  24   2   1   #   *   1 '      )
   write (lunit6, 4096)
   write (lunit6, 4091)
 4091 format (3x,  '# --- used only for virtual machines (Burroughs, Prime, VAX, Apollo, etc.)   others can ignore this list.',/, &
           3x, '* --- rather than count list 24 itself, add the value to the floating-point and total counts for lists 1 and 6. '   )
-4092 write(lunit6, 5315)
-5315 format(' ')
+4092 write (lunit6, 5315)
+5315 format (' ')
   write (lunit6, 5314)
 5314 format (25x, "Caution.   Be skeptical of above  'present figure'  entries, due to abnormal termination of case. " )
-  write(lunit6, 5316)
-5316 format( ' ----------------------------------------------------------------------------------------------------------------------------------- ')
+  write (lunit6, 5316)
+5316 format ( ' ----------------------------------------------------------------------------------------------------------------------------------- ')
   do  i=1, 2
-6512 write(lunit6, 5320)
+6512 write (lunit6, 5320)
   end do
-5320 format(' error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error ')
-  write(lunit6, 5316)
+5320 format (' error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error ')
+  write (lunit6, 5316)
   if ( kilsav  .eq.  92 )    go to 6767
   !     lunit5 = mtape
   write (*,*)  ' commented out  lunit5 = mtape.', '   set kill = 0.'
@@ -737,7 +737,7 @@ subroutine subr55
   n13 = kolbeg
   nright = -2
   kolbeg = 1
-  read (unit = abuff(1), fmt = 6741) texcol
+  read (unit = abuff, fmt = 6741) texcol
 6741 format ( 80a1 )
   call freone ( d1 )
   nright = 0
@@ -751,12 +751,12 @@ subroutine subr55
   if ( texta6(2)  .ne.  text2 )   go to 6760
   if ( texta6(1)  .ne.  text1 )   go to 6760
 6754 write (kunit6, 6755)
-6755 format(  37h+marker card preceding new data case.    )
+6755 format ('+Marker card preceding new data case.')
   call interp
   if ( n6  .lt.  5 )   go to 6758
   n6 = n6 - 4
   write (lunit6, 6757)  n6
-6757 format ( 51x,  27hend suppression of listing.,  i6, 22h  cards were unlisted.  )
+6757 format (51x, 'End suppression of listing.', i6, '  cards were unlisted.')
 6758 noutpr = 0
   kolbeg = -intinf
   lastov = nchain
@@ -766,7 +766,7 @@ subroutine subr55
 6760 if ( texta6(2)  .ne.  text12 )   go to 6770
   if ( texta6(1)  .ne.  text11 )   go to 6770
 6764 write (kunit6, 6765)
-6765 format(  38h+marker card following last data case.   )
+6765 format (38h+marker card following last data case.   )
   call interp
 6767 kill = 9999
   lastov = nchain
@@ -792,7 +792,7 @@ subroutine subr55
   write (lunit9)  ( d7, j=1, n15 )
   if ( n13  .eq.  -intinf )   kolbeg = n13
   if ( kolbeg  .gt.  0 )   go to 1773
-  read (unit = abuff(1), fmt = 1764) n1
+  read (unit = abuff, fmt = 1764) n1
 1764 format ( 29x, i3 )
   go to 1778
 1773 call freone ( d1 )
@@ -810,21 +810,21 @@ subroutine subr55
   n5 = n1 - 100 * n2
   n3 = n5 / 10
   n4 = n5 - 10 * n3
-  write(lunit6, 1792)  n2, n3, n4
-1792 format ( 1h+,  34x,  1h',  3i1,  1h'  )
+  write (lunit6, 1792)  n2, n3, n4
+1792 format ('+', 34x, "'",  3i1, "'")
   lstat(14) = n2
   lstat(15) = n3
   lstat(16) = n4
   call statsv
   go to 6740
 6773 if ( noutpr  .eq.  0 ) write (kunit6, 6775)
-6775 format (   47h+card ignored in search for new-case beginning.   )
+6775 format ('+Card ignored in search for new-case beginning.')
   n6 = n6 + 1
   if ( n6  .lt.  5 )   go to 6769
   if ( noutpr  .eq.  1 )   go to 6769
   noutpr = 1
   write (lunit6, 6768)
-6768 format ( 51x, 45hbegin suppression of skipped-record printout. )
+6768 format (51x, 'Begin suppression of skipped-record printout.')
 6769 go to 6740
 9000 return
 end subroutine subr55
@@ -832,7 +832,7 @@ end subroutine subr55
 ! subroutine statsv.
 !
 subroutine statsv
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   return
 end subroutine statsv
 !  m99.9999      overlay ( finish, 99999 )

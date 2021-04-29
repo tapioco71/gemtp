@@ -74,12 +74,12 @@ subroutine subr51
        ' printout message summarizes the data difficulty leading to this program decision.  By studying this message, the problem', /, &
        ' data,  and the rules delineated by the  840-page EMTP rule book,  it is hoped that the user can rectify the problem.', /, &
        ' If still in doubt after some study, come see program maintenance for assistance.')
-  read (unit = abuff(1), fmt = 1019) (texcol(j), j = 1, 14)
+  read (unit = abuff, fmt = 1019) (texcol(j), j = 1, 14)
 1019 format (13a6, a2)
   write (lunit6, 5333) (texcol(j), j = 1, 14)
 5333 format (" Where an otherwise-unidentified card is referred to, or is called the 'last' card, this means the most-recently-", /, &
        'read card of the input data deck.   The 80-column card image in question is the last one printed out before this', /, &
-       ' termination message.   A copy follows....', 13a6, a2)
+       ' termination message.   A copy follows.... ', 13a6, a2)
 5534 write (lunit6, 5335) kill, lstat(18), lstat(19)
 5335 format (14x, 'kill code number', 16x, 'overlay number', 10x, 'nearby statement no.', /, 3i30)
 1649 do j = 1, nfrfld

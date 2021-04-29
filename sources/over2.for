@@ -32,25 +32,25 @@ subroutine over2
   !     character*6   char6
   !     character*26  alphan
   !     data alphan  / 'abcdefghijklmnopqrstuvwxyz' /
-  data text1   / 6hstop c /
-  data text2   / 6hascade /
-  data text3   / 6huse ab /
-  data text4   / 6huse rl /
-  data text5   / 6hcascad /
-  data text6   / 6hed pi  /
-  data text7   / 6htransf /
-  data text8   / 6hormer  /
-  data text9   / 6hthree  /
-  data text10  / 6hphase  /
-  data text11  / 6hbranch /
-  data text12  / 6h name: /
-  data text13  / 6hnonlin /
-  data text14  / 6hes     /
-  data text16  / 6hlin000 /
-  data text17  / 6hnln000 /
-  data ibrnam  /  0  /
-  data inonam  /  0  /
-  data nfscan  /  0  /
+  data text1   / 'stop c' /
+  data text2   / 'ascade' /
+  data text3   / 'use ab' /
+  data text4   / 'use rl' /
+  data text5   / 'cascad' /
+  data text6   / 'ed pi ' /
+  data text7   / 'transf' /
+  data text8   / 'ormer ' /
+  data text9   / 'three ' /
+  data text10  / 'phase ' /
+  data text11  / 'branch' /
+  data text12  / ' name:' /
+  data text13  / 'nonlin' /
+  data text14  / 'es    ' /
+  data text16  / 'lin000' /
+  data text17  / 'nln000' /
+  data ibrnam  / 0 /
+  data inonam  / 0 /
+  data nfscan  / 0 /
   if (lastov .ne. 44) go to 2000
   k = nphlmt  + 1           ! ready for next branch, lmfs case
   ibr = nphlmt
@@ -61,10 +61,10 @@ subroutine over2
      m = jk + nphlmt
      l = 2 * jk
      !     write (bus(l), 2689)  chlmfs(jk)(1:6)
-     read(chlmfs(jk)(1:6), 2689) bus(l)
+     read(chlmfs(jk)(1 : 6), 2689) bus(l)
 2689 format (a6)
      !     write (bus(l+1), 2689)  chlmfs(m)(1:6)
-     read(chlmfs(m)(1:6), 2689)  bus(l+1)
+     read(chlmfs(m)(1 : 6), 2689) bus(l + 1)
   end do
   go to 4199                ! go directly to use $include for lmfs pi model half
   !     following used rather than data statements due to common:
@@ -903,7 +903,7 @@ subroutine over2
   if ( itype  .gt.  50 .and. itype  .le.  90 )   go to 64117
   if ( kolbeg  .gt.  0 ) go to 132
   if ( moldat  .gt.  0 ) go to 64117
-  read (unit = abuff, fmt = 64114) (tr(i), tx(i), emtpc(i), i = it, it2)
+  read (unit = abuff, fmt = 64114, iostat = ios) (tr(i), tx(i), emtpc(i), i = it, it2)
 64114 format (26x, 9e6.2)
   go to 64117
 132 kolbeg = 27
@@ -1033,7 +1033,7 @@ subroutine over2
   if ( kreqab .gt. 0 )   kodebr(ibr) = 1
   if ( moldat  .eq.  0 )   go to 171
   if ( kolbeg  .gt.  0 )   go to 171
-  read (unit = abuff(1), fmt = 8331) tr(it), tx(it), emtpc(it)
+  read (unit = abuff, fmt = 8331) tr(it), tx(it), emtpc(it)
 171 if ( noutpr  .ne.  0 )   go to 5411
   if ( itrans .gt. 0 )  go to 54108
   write (kunit6, 54777)  tr(it), tx(it), emtpc(it)
@@ -1054,7 +1054,7 @@ subroutine over2
   do it32 = it, it2
      !     read input card using cimage.
      if ( it32  .gt.  it ) call cimage
-     read (unit = abuff(1), fmt = 8331) tr(it32), tx(it32), emtpc(it32)
+     read (unit = abuff, fmt = 8331) tr(it32), tx(it32), emtpc(it32)
 8331 format (26x, 3e16.0)
      if ( noutpr  .ne.  0 )   go to 8346
      if ( it32  .gt.  it )   go to 8338
@@ -1173,8 +1173,8 @@ subroutine over2
   icheck=1
   if ( moldat  .eq.  0 )   go to 8371
   if ( kolbeg  .gt.  0 )   go to 8371
-  read (unit = abuff(1), fmt = 8331) tr(it), tx(it), emtpc(it)
-8371 if ( noutpr  .eq.  0 ) write (kunit6, 54107)  tr(it), tx(it), emtpc(it)
+  read (unit = abuff, fmt = 8331) tr(it), tx(it), emtpc(it)
+8371 if (noutpr .eq. 0) write (kunit6, 54107) tr(it), tx(it), emtpc(it)
 54107 format ('+Series R-L-C.', 2x, 3e11.3)
 8383 d1 = absz(tr(it))  +  absz(tx(it))  +  absz(emtpc(it))
   if ( d1 .ne. 0.0 )  go to 4220
@@ -1540,7 +1540,7 @@ subroutine fddata( ikf, isfd, ibf )
      ibk = 0
      !     read input card using cimage
 3    call cimage
-     read (unit = abuff(1), fmt = 4) ar1, al1, ac1, arl
+     read (unit = abuff, fmt = 4) ar1, al1, ac1, arl
 4    format (4e16.0)
      ifk = 3
      if ( ar1 .eq. 9999. ) go to 10
@@ -2165,7 +2165,7 @@ subroutine nonln2
      call cimage
      n6 = j + ichar
      n7 = ii + ichar
-     read (unit = abuff(1), fmt = 1272) (cchar(i), i = n6, n7)
+     read (unit = abuff, fmt = 1272) (cchar(i), i = n6, n7)
 274  if (noutpr .eq. 0) write (kunit6, 2272)  j, ii, (cchar(i), i = n6, n7)
   end do
   ichar = ichar + 18
@@ -2234,11 +2234,11 @@ subroutine distr2
   !     decode (80, 3241, abuff(1))  text1
   !  3241 format ( 75x,  a1 )
   !     if ( text1  .eq.  blank )   go to 3265
-  read (unit = abuff(1), fmt = 3256) h1, aa, h3, xlong, iline, punch
+  read (unit = abuff, fmt = 3256) h1, aa, h3, xlong, iline, punch
 3256 format (26x, 4e12.0, 2i2)
   if (xlong .gt. 0.) go to 21633
   xlong = absz(xlong)
-  read (unit = abuff(1), fmt = 3257) text1
+  read (unit = abuff, fmt = 3257) text1
 3257 format (78x, a1)
   if ( text1 .eq. text6  )   n13 = 10
   if ( text1 .eq. text7  )   n13 = 11
@@ -2250,7 +2250,7 @@ subroutine distr2
   if ( text1 .eq. text13 )   n13 = 17
   if ( text1 .eq. text14 )   n13 = 18
   if ( n13 .ne. 0 )  go to 21633
-  read (unit = abuff(1), fmt = 3258) n13
+  read (unit = abuff, fmt = 3258) n13
 3258 format (78x, i1)
   go to 21633
 3265 continue
@@ -2274,7 +2274,7 @@ subroutine distr2
   ips3 = 0
   n5 = ipsem
 8040 continue
-  read (unit = abuff(1), fmt = 8045) d1, d2, d3, n1, n2, n3, n4
+  read (unit = abuff, fmt = 8045) d1, d2, d3, n1, n2, n3, n4
 8045 format (26x, 3e12.5, 4i3)
   if (ipsem .ne. n5) go to 8050
   if (n2 .le. 0 .or. n2 .gt. ipunch) go to 8050
@@ -2340,10 +2340,10 @@ subroutine distr2
   call frefld( cnvhst(n8) )
   go to 8162
 8161 if ( moldat .eq. 1)   go to 18161
-  read (unit = abuff(1), fmt = 18170) (cnvhst(i), i = n8, n6)
+  read (unit = abuff, fmt = 18170) (cnvhst(i), i = n8, n6)
   go to 8162
 18161 continue
-  read (unit = abuff(1), fmt = 8170) (cnvhst(i), i = n8, n6)
+  read (unit = abuff, fmt = 8170) (cnvhst(i), i = n8, n6)
 8162 d1 = cnvhst(n6)
 18170 format (2x, 5e15.8)
 8170 format (2x, 6e12.5)
@@ -2365,7 +2365,7 @@ subroutine distr2
   call frefld( sconst(n8) )
   go to 8208
 8206 continue
-  read (unit = abuff(1), fmt = 8170) (sconst(i), i = n8, ifsem)
+  read (unit = abuff, fmt = 8170) (sconst(i), i = n8, ifsem)
 8208 if (n9 .eq. 0) go to 8207
   if (sconst(n8) - sconst(n8 - 2) .lt. deltat) go to 8210
 8207 if (n9 .eq. 0 .and. sconst(n8) .lt. deltat) go to 8210
@@ -2402,7 +2402,7 @@ subroutine distr2
   call frefld( voltbc(1) )
   go to 8252
 8251 continue
-  read (unit = abuff(1), fmt = 8170) (voltbc(i), i = 1, n11)
+  read (unit = abuff, fmt = 8170) (voltbc(i), i = 1, n11)
 8252 n11 = 1
   do i = n8, ifsem, 5
      sconst(i + 0) = voltbc(n11 + 0)
@@ -2433,7 +2433,7 @@ subroutine distr2
   call frefld ( sconst(n8) )
   go to 8293
 8291 continue
-  read (unit = abuff(1), fmt = 8170) (sconst(i), i = n8, ifsem)
+  read (unit = abuff, fmt = 8170) (sconst(i), i = n8, ifsem)
 8293 if (n9 .eq. 0) go to 8292
   if (sconst(n8) - sconst(n8 - 2) .lt. deltat) go to 8210
 8292 if (n9 .eq. 0 .and. sconst(n8) .ne. 0.0) go to 8210
@@ -2468,7 +2468,7 @@ subroutine distr2
   call frefld( voltbc(1) )
   go to 8322
 8321 continue
-  read (unit = abuff(1), fmt = 8170) (voltbc(i), i = 1, n11)
+  read (unit = abuff, fmt = 8170) (voltbc(i), i = 1, n11)
 8322 n11 = 1
   do i = n8, ifsem, 4
      sconst(i + 0) = voltbc(n11 + 0)
@@ -2535,7 +2535,7 @@ subroutine distr2
 18377 call frefld( voltbc(1) )
   go to 8377
 8376 continue
-  read (unit = abuff(1), fmt = 18376) (voltbc(i), i = 1, 6)
+  read (unit = abuff, fmt = 18376) (voltbc(i), i = 1, 6)
 18376 format (2x, 6e12.5)
 8377 if (noutpr .eq. 0) write (kunit6, 8380) n5, (voltbc(i), i=1, 3)
 8380 format ('+[tv] row', i3, '.', 3e12.3)
@@ -2576,7 +2576,7 @@ subroutine distr2
 28377 call frefld( voltbc(1) )
   go to 8417
 8415 continue
-  read (unit = abuff(1), fmt = 18376) (voltbc(i), i = 1, 6)
+  read (unit = abuff, fmt = 18376) (voltbc(i), i = 1, 6)
 8417 if (noutpr .eq. 0) write (kunit6, 8420) n5, (voltbc(i), i=1, 3)
 8420 format ('+[ti] row', i3, '.', 3e12.3)
   do i = 1, 5, 2
@@ -2603,14 +2603,14 @@ subroutine distr2
   go to 100
 20000 kbus(ibr) = n1
   mbus(ibr) = n2
-  read (unit = abuff(1), fmt = 191) n5
+  read (unit = abuff, fmt = 191) n5
   if (n5 .eq. 0) go to 8350
   go to 8040
   !     end of recursive convolution branch input ************************
 21633 continue
   if (ipsem .ne. 0) imodel(ibr) = -4
   if (ipsem .eq. 0) go to 1923
-  read (unit = abuff(1), fmt = 8045) d1, d2, d3, nt1, nt2, n3, n4
+  read (unit = abuff, fmt = 8045) d1, d2, d3, nt1, nt2, n3, n4
 1923 if (ipsem .eq. 0) imodel(ibr)=ipunch
   if (imodel(ibr) .ne. -4 ) go to 76893
   !     1 .and.imodel(ibr).ne.-2)go to 76893    !if not marti model bapass
@@ -2641,7 +2641,7 @@ subroutine distr2
   if ( h1  .eq.  2.0 )   noutpr = 1
   !     read input card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 6733) npz, ak0zc
+  read (unit = abuff, fmt = 6733) npz, ak0zc
 6733 format (i8, e32.20)
   cki(ibr) = npz
   sconst(ifsem) = ak0zc
@@ -2656,7 +2656,7 @@ subroutine distr2
   if ( n12  .gt.  npz )   n12 = npz
   !     read input card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 6741) (voltbc(ii), ii = n11, n12)
+  read (unit = abuff, fmt = 6741) (voltbc(ii), ii = n11, n12)
 6741 format (3e26.0)
   if ( noutpr  .eq.  0 ) write (kunit6, 6744) n11, n12, (voltbc(ii), ii=n11,n12 )
 6744 format ('+Residuals', i3, '-', i2, '.', 3e11.3)
@@ -2757,7 +2757,7 @@ subroutine distr2
   go to 1992
 45000 call cimage
   ! 3456789012345678901234567890123456789012345678901234567890123456789012
-  read (unit = abuff(1), fmt = 6733) npa, tauo
+  read (unit = abuff, fmt = 6733) npa, tauo
 1992 if (tauo .gt. deltat) go to 6756
   kill = 197
   flstat(14) = tauo
@@ -2772,7 +2772,7 @@ subroutine distr2
   call cimage
   n8 = ifx + 15
   n6 = ifx + 19
-  read (unit = abuff(1), fmt = 18170) (cnvhst(i), i = n8, n6)
+  read (unit = abuff, fmt = 18170) (cnvhst(i), i = n8, n6)
   if ( noutpr  .eq.  0 ) write (kunit6, 2019)  (cnvhst(i), i=n8, n6)
 2019 format (' Phasor Z-Y.', 3e12.3)
   n11 = npz * 2 + ifsem + 1
@@ -2785,7 +2785,7 @@ subroutine distr2
      call frefld( voltbc(1) )
      go to 1994
 1993 continue
-     read (unit = abuff(1), fmt = 8170) (voltbc(i), i = 1, nfrfld)
+     read (unit = abuff, fmt = 8170) (voltbc(i), i = 1, nfrfld)
 1994 n12 = 1
      if ( noutpr  .eq.  0 ) write (kunit6, 2017)  (voltbc(ii), ii=1,nfrfld )
 2017 format (' Propagation exp.', 2e12.3)
@@ -2825,7 +2825,7 @@ subroutine distr2
      call frefld( voltbc(1) )
      go to 1999
 1998 continue
-     read (unit = abuff(1), fmt = 8170) (voltbc(i), i = 1, nfrfld)
+     read (unit = abuff, fmt = 8170) (voltbc(i), i = 1, nfrfld)
 1999 n12 = 1
      if ( noutpr  .eq.  0 ) write (kunit6, 2018)  (voltbc(ii), ii=1,nfrfld )
 2018 format (' Char. admt. exp.', 2e12.3)
@@ -2848,7 +2848,7 @@ subroutine distr2
   if ( n12  .gt.  npa )   n12 = npa
   !     read input card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 6741) ( voltbc(ii), ii = n11, n12)
+  read (unit = abuff, fmt = 6741) ( voltbc(ii), ii = n11, n12)
   if ( noutpr  .eq.  0 ) write (kunit6, 6744) n11, n12, (voltbc(ii), ii=n11,n12 )
   nn11 = nn13 + n11
   nn12 = nn13 + n12
@@ -2942,7 +2942,7 @@ subroutine distr2
   if ( h1  .eq.  2.0 )   noutpr = 1
   !     read input card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 7633) npz, ak0zc
+  read (unit = abuff, fmt = 7633) npz, ak0zc
 7633 format (i8, e32.20)
   cki(ibr) = npz
   sconst(ifsem) = ak0zc
@@ -2956,7 +2956,7 @@ subroutine distr2
   if ( n12  .gt.  npz )   n12 = npz
   !     read input card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 7641) (voltbc(ii), ii = n11, n12)
+  read (unit = abuff, fmt = 7641) (voltbc(ii), ii = n11, n12)
 7641 format (3e26.0)
   if ( noutpr  .eq.  0 ) write (kunit6, 7644) n11, n12, (voltbc(ii), ii=n11,n12 )
 7644 format ('+Residuals', i3, '-', i2, '.', 3e11.3)
@@ -3039,7 +3039,7 @@ subroutine distr2
   !     read input card using cimage
 55000 call cimage
   ! 3456789012345678901234567890123456789012345678901234567890123456789012
-  read (unit = abuff(1), fmt = 7633) npa, tauo
+  read (unit = abuff, fmt = 7633) npa, tauo
   if (tauo .gt. deltat) go to 7656
   kill = 197
   flstat(14) = tauo
@@ -3239,7 +3239,7 @@ subroutine distr2
   do i = 1, nphs2
      wk1(koff20+ncount)=idq
      call cimage
-     read (unit = abuff(1), fmt = 6366) np, sconst(ifq)
+     read (unit = abuff, fmt = 6366) np, sconst(ifq)
 6366 format (i8, e32.0)
      if (noutpr .ne. -7777 .and. noutpr .ne. 1 ) write (kunit6, 8262) np , sconst(ifq)
 8262 format ('+ ti.  np, sconst(ifq) =', i5, e15.5)
@@ -3253,7 +3253,7 @@ subroutine distr2
      if ( j2 .gt. m)  j2 = m
      !     read input card using cimage
      call cimage
-     read (unit = abuff(1), fmt = 105) (voltbc(j), j = j1, j2)
+     read (unit = abuff, fmt = 105) (voltbc(j), j = j1, j2)
 105  format (3e26.0)
      if (noutpr .ne. -7777 .and. noutpr .ne. 1 ) write (kunit6, 4413)   ( voltbc(j), j=j1, j2 )
 4413 format ('+ qk-i:', 3e14.5)
@@ -3276,7 +3276,7 @@ subroutine distr2
      if ( j2 .gt. m)  j2 = m
      !     read input card using cimage
      call cimage
-     read (unit = abuff(1), fmt = 105) (voltbc(j), j = j1, j2)
+     read (unit = abuff, fmt = 105) (voltbc(j), j = j1, j2)
      if (noutpr .ne. -7777 .and. noutpr .ne. 1) write (kunit6, 8414) (voltbc(j), j = j1, j2)
 8414 format ('+ qp-i:', 3e14.5)
      nn11 = jj2 + j1
@@ -3335,7 +3335,7 @@ subroutine distr2
      call frefld( voltbc(1) )
      go to 2006
 2005 continue
-     read (unit = abuff(1), fmt = 8170) (voltbc(ik), ik = 1, nfrfld)
+     read (unit = abuff, fmt = 8170) (voltbc(ik), ik = 1, nfrfld)
 2006 n12 = 1
      if ( noutpr  .eq.  0 ) write (kunit6, 2020)  (voltbc(ii), ii=1,nfrfld )
 2020 format (' ti - Semlyen.', 3e12.3)
@@ -3632,7 +3632,7 @@ subroutine over3
   call mover0 ( cser(1), nphcas )
   !     read input card using cimage.
 76511 call cimage
-  read (unit = abuff(1), fmt = 7651) itype
+  read (unit = abuff, fmt = 7651) itype
 7651 format (i2)
   if (itype.ge.0.and.itype.le.nphcas)goto76714
   lstat(19)=7651

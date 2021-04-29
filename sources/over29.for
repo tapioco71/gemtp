@@ -6,7 +6,7 @@
 !     subroutine subr29.
 !
 subroutine subr29
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'deck29.ftn'
   include 'labl29.ftn'
@@ -58,7 +58,7 @@ end subroutine subr29
 ! subroutine guts29.
 !
 subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, topen  )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   character*8 bus
   dimension bus(1), kmswit(1), kdepsw(1), ibrnch(1), jbrnch(1)
   dimension akey(1), tstat(1), tclose(1), topen(1)
@@ -134,7 +134,7 @@ subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, t
   !     read input card using cimage.
 6227 call cimage
   if ( kolbeg  .gt.  0 )   go to 6263
-  read (unit = abuff(1), fmt = 6234) (lltemp(i), i = 1, 10)
+  read (unit = abuff, fmt = 6234) (lltemp(i), i = 1, 10)
 6234 format ( 10i8 )
   do i=1, 10
      if ( lltemp(i)  .eq.  0 )   go to 6239
@@ -329,7 +329,7 @@ end subroutine guts29
 !
 subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibrnch, jbrnch, &
      akey, tstat, tclose, topen  )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension  array(1), ibsout(1), kount(1), kpoint(1)
   dimension  nsum(1), bus(1), kmswit(1), kdepsw(1)
   dimension  ibrnch(1), jbrnch(1), akey(1)
@@ -1278,7 +1278,7 @@ end subroutine innr29
 ! subroutine plotng.
 !
 subroutine plotng ( kkrv, kklm )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     universal module called only by "innr29" of overlay 29.
   !     some logic is similar to "linplt" of overlay 31.
   include 'blkcom.ftn'
@@ -1371,7 +1371,7 @@ end subroutine plotng
 ! subroutine fltdat.
 !
 subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, nmax, lspars )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension  array(maxsq,maxsq), arrsav(maxsq,maxsq)
   dimension  soln(maxsq), rhs(maxsq), ymat(nmax,nmax2)
   dimension  kspars(lspars,lspars)
@@ -1754,7 +1754,7 @@ end subroutine fltdat
 !     subroutine statrs.
 !
 subroutine statrs
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     installation-dependent module of overlay 29,  called only
   !     for  "tabulate energization results"  usage.
   include 'blkcom.ftn'

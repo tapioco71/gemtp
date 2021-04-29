@@ -6,7 +6,7 @@
 !     subroutine over42.
 !
 subroutine over42
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   dimension  currr(101), flux(101), sss(90)
   !     the following limit checks overflow of  curr, flux
@@ -28,7 +28,7 @@ subroutine over42
   !     read input card using cimage
   call cimage
   if ( kolbeg  .gt.  0 )   go to 2103
-  read (unit = abuff(1), fmt = 10) freq, vbase, pbase, ipnch, kthird
+  read (unit = abuff, fmt = 10) freq, vbase, pbase, ipnch, kthird
 10 format ( 3e8.0, 2i8 )
   go to 2105
 2103 nfrfld = 1
@@ -320,7 +320,7 @@ end subroutine over42
 ! subroutine hysdat.
 !
 subroutine hysdat
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include  'blkcom.ftn'
   dimension b(50),h(50),itop(1,4),ibot(1,4)
   !     set the top and bottom pointers.
@@ -433,7 +433,7 @@ subroutine hysdat
   !     read input card using cimage.
   call cimage
   if ( kolbeg  .gt.  0 )   go to 3628
-  read (unit = abuff(1), fmt = 100) itype, level, ipunch
+  read (unit = abuff, fmt = 100) itype, level, ipunch
 100 format ( 10i8 )
   if ( itype  .ne.  0 )     go to 3645
   if ( level  .ne.  0 )     go to 3645
@@ -462,7 +462,7 @@ subroutine hysdat
   !     read input card using cimage
   call cimage
   if ( kolbeg  .gt.  0 )   go to 3682
-  read (unit = abuff(1), fmt = 160) cursat, flxsat
+  read (unit = abuff, fmt = 160) cursat, flxsat
 160 format ( 10e8.0 )
   go to 3695
 3682 nfrfld = 1
@@ -497,7 +497,7 @@ end subroutine hysdat
 !     subroutine arrdat.
 !
 subroutine arrdat
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   !     program to perform least-squares fit of straight-line segments to
   !     a set of data points. the number of segments is limited to maxexp
@@ -526,7 +526,7 @@ subroutine arrdat
   !     read input card using cimage
   call cimage
   !     check for "branch" request
-  read (unit = abuff(1), fmt = 1208) textc
+  read (unit = abuff, fmt = 1208) textc
 1208 format( a6 )
   if( textc .ne. textb )  go to 1212
   !     process terminal nodes input*************************************
@@ -539,14 +539,14 @@ subroutine arrdat
 1308 continue
   nk1 = ndat + 1
   ndat = ndat + 12
-  read (unit = abuff(1), fmt = 1304) (textna(jv), jv = nk1, ndat )
+  read (unit = abuff, fmt = 1304) (textna(jv), jv = nk1, ndat )
 1304 format( 8x, 12a6 )
   write( kunit6, 1305 )
 1305 format(  27h+bus names for each phase.    )
   go to 1202
   !     process miscellaneous data card**********************************
 1212 continue
-  read (unit = abuff(1), fmt = 1220) nexp, iphase, d66, iprzno, vref, vflash
+  read (unit = abuff, fmt = 1220) nexp, iphase, d66, iprzno, vref, vflash
 1220 format( 2i12, e12.0, i12, 2e12.0 )
   if( nexp .ne. 0 .or. iphase .ne. 0 )  go  to  1232
   write (kunit6, 1226)
@@ -567,7 +567,7 @@ subroutine arrdat
   nd( 2 ) = 0
   !     read input card using cimage.
   call cimage
-  read (unit = abuff(1), fmt = 1540) a1, a2, a3, a4, a5, amin
+  read (unit = abuff, fmt = 1540) a1, a2, a3, a4, a5, amin
   write (kunit6, 1324)  a1, a2, a3, a4
 1324 format (   9h+ratings.,  4e10.2  )
   if( a1  .gt. 0.0  )    go  to  1340
@@ -644,7 +644,7 @@ subroutine arrdat
   n6 = nk + 1
   !     read input card using cimage.
 1520 call cimage
-  read (unit = abuff(1), fmt = 1540) a, b
+  read (unit = abuff, fmt = 1540) a, b
 1540 format ( 6e12.0 )
   icar = icar + 1
   if( a .eq. 0.0  .and.  icar .gt. 2 )   go  to  1620
@@ -871,7 +871,7 @@ subroutine arrdat
 2040 format (    33h  process second part of case no.,  i6, 20h   &&&&&&&&&&&&&&&&&   )
   !     read input card using cimage.
   call cimage
-  read (unit = abuff(1), fmt = 1220) nexp
+  read (unit = abuff, fmt = 1220) nexp
   ifit = 1
   if( nexp .le. maxexp )  go  to  2060
   ifit = -1
@@ -956,7 +956,7 @@ end subroutine arrdat
 !     subroutine zinold.
 !
 subroutine zinold
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module is used to convert old  ("m36." or earlier vintage )
   !     zinc oxide arrester data into the new form as required for the
   !     m37 (and later emtp versions).

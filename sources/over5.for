@@ -6,7 +6,7 @@
 !     subroutine over5.
 !
 subroutine over5
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
@@ -16,21 +16,21 @@ subroutine over5
   equivalence (moncar(1), knt), (moncar(4), isw)
   equivalence (moncar(5), idist), (moncar(6), itest)
   equivalence (moncar(9), kloaep)
-  character*8 text1, text2, text5, text6, text7
-  character*8 text8, text13, text14, text15, text16
-  character*8 text17
-  character*80  buffer
-  data  text1    / 6hname   /
-  data  text2    / 6hswt001 /
-  data  text5    / 6hstatis /
-  data  text6    / 4htics   /
-  data  text7    / 6hsystem /
-  data  text8    / 4hatic   /
-  data  text13   / 6hmeasur /
-  data  text14   / 6hing    /
-  data  text15   / 6hclosed /
-  data  text16   / 6hsame   /
-  data  text17   / 6htarget /
+  character(8) text1, text2, text5, text6, text7
+  character(8) text8, text13, text14, text15, text16
+  character(8) text17
+  character(80) buffer
+  data  text1    / 'name  ' /
+  data  text2    / 'swt001' /
+  data  text5    / 'statis' /
+  data  text6    / 'tics  ' /
+  data  text7    / 'system' /
+  data  text8    / 'atic'   /
+  data  text13   / 'measur' /
+  data  text14   / 'ing   ' /
+  data  text15   / 'closed' /
+  data  text16   / 'same  ' /
+  data  text17   / 'target' /
   if (iprsup .ge. 1) write (lunit6, 4567)
 4567 format ( 22h begin module "over5".  )
   lstat(29) = inonl
@@ -92,8 +92,8 @@ subroutine over5
   !     read input card using cimage.
 3483 call cimage
   if ( kolbeg  .gt.  0 )   go to 3503
-  read (unit = abuff(1), fmt = 35) it2, bus1, bus2, gus3, gus4, ck1, a, bus3, bus4, bus5, bus6, jdube1, j
-35 format (i2,2a6,4e10.0,a6,a4,2a6,2x,2i1)
+  read (unit = abuff, fmt = 35, iostat = ios) it2, bus1, bus2, gus3, gus4, ck1, a, bus3, bus4, bus5, bus6, jdube1, j
+35 format (i2, 2a6, 4e10.0, a6, a4, 2a6, 2x, 2i1)
   go to 3506
 3503 nfrfld = 1
   call frefld ( voltbc(1) )
@@ -288,8 +288,8 @@ subroutine over5
   iardub(ndx2) = jdube1
   if ( a .ne. 7777. ) go to 220
   call cimage
-  read (unit = abuff(1), fmt = 3355) a8sw(mk + 1), a8sw(mk + 2), a8sw(mk + 3), a8sw(mk + 8)
-3355 format ( 4e16.6 )
+  read (unit = abuff, fmt = 3355) a8sw(mk + 1), a8sw(mk + 2), a8sw(mk + 3), a8sw(mk + 8)
+3355 format (4e16.6)
   a8sw(mk+7) = 0.0
   mk = mk + 8
   adelay(kswtch) = 7 - mk
@@ -330,7 +330,7 @@ subroutine over5
   topen(kswtch) =gus4
   crit(kswtch) =ck1
   read (unit = abuff, fmt = 3898) buffer
-3898 format ( a80 )
+3898 format (a80)
   n98 = index ( buffer, '   statistics' )
   n99 = index ( buffer, '   st'         )
   if ( n98 .eq. 52  .or. n99 .eq. 0 ) go to 3920
@@ -544,7 +544,7 @@ end subroutine over5
 !     subroutine over5a.
 !
 subroutine over5a
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
@@ -683,7 +683,7 @@ subroutine over5a
   if ( kill  .gt.  0 )   return
   go to 310
 313 continue
-  read (unit = abuff(1), fmt = 6304) n2, bus1
+  read (unit = abuff, fmt = 6304) n2, bus1
   nfrfld = 1
   nright = 6
   call freone ( h2 )
@@ -711,7 +711,7 @@ subroutine over5a
   lstat(19)= 8
   return
 110 if ( kolbeg  .gt.  0 )   go to 7642
-  read (unit = abuff(1), fmt = 111) bus1
+  read (unit = abuff, fmt = 111) bus1
 111 format(2x,a6)
   go to 7646
 7642 nfrfld = 1
@@ -720,7 +720,7 @@ subroutine over5a
   nright = 0
   bus1 = texta6(1)
 7646 smang = smang - 120.
-  read (unit = abuff(1), fmt = 102) smamp, smangl
+  read (unit = abuff, fmt = 102) smamp, smangl
 102 format(10x,e10.6,10x,e10.6)
   if( smamp .eq. 0.  .and. smangl .eq. 0.  )  go  to  103
   smang = smangl
@@ -812,7 +812,7 @@ subroutine over5a
   !     read input card using cimage.
   call cimage
   if ( kolbeg  .gt.  0 )   go to 7653
-  read (unit = abuff(1), fmt = 4255) bus1, n3, a, gus2, time1(kconst), tstart(kconst), reps, dcfreq, loutbr
+  read (unit = abuff, fmt = 4255) bus1, n3, a, gus2, time1(kconst), tstart(kconst), reps, dcfreq, loutbr
 4255 format ( 2x, a6, i2, 6e10.6,  9x, i1 )
   go to 7658
 7653 nfrfld = 1
@@ -1085,7 +1085,7 @@ end subroutine over5a
 ! subroutine umoffs.
 !
 subroutine umoffs
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     overlay-5  u.m.  module called by "over5a".
   include 'blkcom.ftn'
   include 'umdeck.ftn'
@@ -1169,7 +1169,7 @@ end subroutine umoffs
 subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout,jtype,nodom, jtmtac, histom, omegm, omold, &
      thetam, reamdu, reamds, flxds, flxdr, reamqu, flxqs, flxqr, jcdsat, jcqsat, flxd, flxq, nppair, rotmom, ncld, nclq, &
      jtqout, jomout, jthout, reamqs, epsom, dcoef, kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, umoutp)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension  reacl(1), gpar(1), fpar(1), hist(1),umcurp(1)
   dimension  nodvo1(1), nodvo2(1), jcltac(1), jclout(1)
   dimension  jtype(1), nodom(1), jtmtac(1), histom(1)
@@ -1290,7 +1290,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   !     .user1 : general specifications (class 1 um data cards)
   !     read input card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 60) inpu, initum, bus3, limasu, loopss(8)
+  read (unit = abuff, fmt = 60) inpu, initum, bus3, limasu, loopss(8)
 60 format(2i1,a6,i6,i1)
   if (bus3 .eq. tesm1) initum = 1
   if (limasu .eq. 0) limasu = 10
@@ -1309,7 +1309,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   !     decision on m31 or m32 data input ***************************
   !     with m32 , the input is modular.
 150 call cimage
-  read (unit = abuff(1), fmt = 1207) text3, text4, text5
+  read (unit = abuff, fmt = 1207) text3, text4, text5
   if (text3 .ne. blank) go to 3202
   if (text4 .ne. blank) go to 3202
   if (text5 .ne. blank) go to 3202
@@ -1321,7 +1321,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   !     read input card using cimage
 1202 call cimage
 1203 n6 = 0
-  read (unit = abuff(1), fmt = 1207) text3, text4, text5
+  read (unit = abuff, fmt = 1207) text3, text4, text5
 1207 format ( 13a6, a2 )
   if ( text3  .ne.  blank )   go to 3202
   if ( text4  .ne.  blank )   go to 3202
@@ -1338,7 +1338,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
        52hu.m.,  numfix on the card for absolute um dimensions, /,28 h must be set to no less than, 2x, i4, 1h.  )
   go to 9600
 5202 n1 = numum
-  read (unit = abuff(1), fmt = 1204) nclq(n1),jtqout(n1), jomout(n1), jthout(n1), bus3, bus4, nppair(n1), rotmom(n1), &
+  read (unit = abuff, fmt = 1204) nclq(n1),jtqout(n1), jomout(n1), jthout(n1), bus3, bus4, nppair(n1), rotmom(n1), &
        dcoef(n1), epsom(n1)
 1204 format ( 3i2, 3i1, 2a6, i2, 3e14.5 )
   if ( noutpr  .eq.  0 ) write (kunit6, 3203)  jtype(n1), ncld(n1), nclq(n1)
@@ -1368,13 +1368,13 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   jtmtac(n1) = ndx1
   !     read input card using cimage
 213 call cimage
-  read (unit = abuff(1), fmt = 4203) omegm(n1), reamdu(n1), jcdsat(n1), reamds(n1), flxds(n1), flxdr(n1)
+  read (unit = abuff, fmt = 4203) omegm(n1), reamdu(n1), jcdsat(n1), reamds(n1), flxds(n1), flxdr(n1)
 4203 format ( 2e14.5,  i1,  3e14.5 )
   if ( noutpr  .eq.  0 ) write (kunit6, 5203)  omegm(n1), reamdu(n1)
 5203 format (  21h+mach-table card   2., 2e12.4)
   !     read input card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 4203) thetam(n1), reamqu(n1), jcqsat(n1), reamqs(n1), flxqs(n1), flxqr(n1)
+  read (unit = abuff, fmt = 4203) thetam(n1), reamqu(n1), jcqsat(n1), reamqs(n1), flxqs(n1), flxqr(n1)
   if (reamqu(n1) .gt. 0.0) go to 6199
   write(lunit6,6198) n1
 6198 format( /, 41h error stop. incorrect um data input. the, 42h result is that the q-axis main inductance, /,7x, &
@@ -1391,7 +1391,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   d1 = 1.0e+3
   n5 = 4
   n6 = 0
-  read (unit = abuff(1), fmt = 6204) voltum(n1), anglum(n1), bus5, bus6, distrf
+  read (unit = abuff, fmt = 6204) voltum(n1), anglum(n1), bus5, bus6, distrf
 6204 format(2e14.5, 2a6, e14.5)
   if (noutpr .eq. 0) write (kunit6, 6205)  voltum(n1), anglum(n1)
 6205 format(   21h+mach-table card   4., 2e12.4)
@@ -1432,12 +1432,12 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
        /, 37h of any electric network source node., 6h busm=,  a6  )
   go to 9600
 240 call cimage
-  read (unit = abuff(1), fmt = 6240) text3
+  read (unit = abuff, fmt = 6240) text3
 6240 format(a6)
   if (text3 .ne. textm) go to 248
   n5 = n5 + 1
   n6 = 1
-  read (unit = abuff(1), fmt = 6241) text3, bus6, distrf
+  read (unit = abuff, fmt = 6241) text3, bus6, distrf
 6241 format(a6, 28x, a6, e14.5)
   if (noutpr .eq. 0) write (kunit6, 6242)  n5, distrf
 6242 format( 16h+mach-table card, i4, 1h., e12.4)
@@ -1464,7 +1464,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 303 format(2e14.5,3a6,i1,e14.5 )
   !     read input card using cimage
 3302 call cimage
-  read (unit = abuff(1), fmt = 1207) text3, text4, text5
+  read (unit = abuff, fmt = 1207) text3, text4, text5
   if ( text3  .ne.  blank )   go to 4303
   if ( text4  .ne.  blank )   go to 4303
   if ( text5  .ne.  blank )   go to 4303
@@ -1479,7 +1479,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 5302 format ( /,   26h overflow u.m. coil table., 11h   ncltot =,  i5  )
   go to 9600
 6302 n1 = ncltot
-  read (unit = abuff(1), fmt = 303) gpar(n1), reacl(n1), bus1, bus2, bus6, jclout(n1), hist(n1)
+  read (unit = abuff, fmt = 303) gpar(n1), reacl(n1), bus1, bus2, bus6, jclout(n1), hist(n1)
   if ( noutpr  .eq.  0 ) write (kunit6, 2203) ncltot,   gpar(n1), reacl(n1), jclout(n1)
 2203 format (  5h+coil,  i4,  1h.,  2e14.5,  i5  )
   n11 = 0
@@ -1517,7 +1517,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   !. user2 : mach-table input for m32 and newer
   !     class 2 and class 3 um data cards
 11202 call cimage
-  read (unit = abuff(1), fmt = 11207) text3, text4, text5
+  read (unit = abuff, fmt = 11207) text3, text4, text5
 11207 format ( 13a6, a2 )
   if ( text3  .ne.  blank )   go to 13202
   if ( text4  .ne.  blank )   go to 13202
@@ -1532,7 +1532,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   go to 9600
   !  checking of data input format ******************************
 17000 n10 = 0
-  read (unit = abuff(1), fmt = 17002) n10
+  read (unit = abuff, fmt = 17002) n10
 17002 format(i2)
   if (n10 .ne. 19) go to 17004
   write (lunit6,30)
@@ -1556,7 +1556,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   !  end reading sm type-59 data input $$$$$$$$$$$$$$$$$$$$$$$$$$
   !    start reading pure um data input format ******************
 15202 n1 = numum
-  read (unit = abuff(1), fmt = 11203) jtype(n1), ncld(n1), nclq(n1), jtqout(n1), jomout(n1), jthout(n1), bus3, bus4, &
+  read (unit = abuff, fmt = 11203) jtype(n1), ncld(n1), nclq(n1), jtqout(n1), jomout(n1), jthout(n1), bus3, bus4, &
        nppair(n1), rotmom(n1), dcoef(n1), epsom(n1), d10
 11203 format ( 3i2, 3i1, 2a6, i2, 4e14.5 )
   if ( noutpr  .eq.  0 ) write (kunit6, 13203)  numum, jtype(n1)
@@ -1588,13 +1588,13 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   jtmtac(n1) = ndx1
   !     read input card using cimage
 10213 call cimage
-  read (unit = abuff(1), fmt = 14203) omegm(n1), reamdu(n1), jcdsat(n1), reamds(n1), flxds(n1), flxdr(n1)
+  read (unit = abuff, fmt = 14203) omegm(n1), reamdu(n1), jcdsat(n1), reamds(n1), flxds(n1), flxdr(n1)
 14203 format ( 2e14.5,  i1,  3e14.5 )
   if ( noutpr  .eq.  0 ) write (kunit6, 15203)  numum, omegm(n1), reamdu(n1)
 15203 format(5h+um -, i3, 16h   mach card  2.,2e10.2)
   !     read input card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 14203) thetam(n1), reamqu(n1), jcqsat(n1), reamqs(n1), flxqs(n1), flxqr(n1)
+  read (unit = abuff, fmt = 14203) thetam(n1), reamqu(n1), jcqsat(n1), reamqs(n1), flxqs(n1), flxqr(n1)
   if (reamqu(n1) .gt. 0.0) go to 15910
   write (lunit6,6198) n1
   go to 9600
@@ -1609,11 +1609,11 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   !  read share card(if sharing of mech netw is requested) :
   nshare = 0
   call cimage
-  read (unit = abuff(1), fmt = 15800) text3
+  read (unit = abuff, fmt = 15800) text3
 15800 format(a6)
   if (text3 .ne. tesm9) go to 15830
   nshare = 1
-  read (unit = abuff(1), fmt = 15810) n5, n6
+  read (unit = abuff, fmt = 15810) n5, n6
 15810 format(6x,2i6)
   if (n6 .eq. 0) go to 15822
   if (noutpr .eq. 0) write(kunit6,15820) numum,n5,n6
@@ -1638,14 +1638,14 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   !  make sure that user sets up automatic ss-calc if ldflow :
   if (istep .ne. -4567) go to 15890
   if (nshare .eq. 2) go to 15890
-  read (unit = abuff(1), fmt = 15882) bus6
+  read (unit = abuff, fmt = 15882) bus6
 15882 format(34x,a6)
   if (bus6 .ne. blank) go to 15890
   write(lunit6,80502)
   call stoptp
 15890 n5 = 4
   n6 = 0
-  read (unit = abuff(1), fmt = 15904) voltum(n1), anglum(n1), bus5, bus6, distrf
+  read (unit = abuff, fmt = 15904) voltum(n1), anglum(n1), bus5, bus6, distrf
 15904 format(2e14.5, 2a6, e14.5)
   if (noutpr .eq. 0) write (kunit6, 15905)  numum, voltum(n1), anglum(n1)
 15905 format(5h+um -, i3, 16h   mach card  4.,2e10.2)
@@ -1695,7 +1695,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
        /, 37h of any electric network source node., 6h busm=,  a6  )
   go to 9600
 10250 call cimage
-  read (unit = abuff(1), fmt = 10260) text3
+  read (unit = abuff, fmt = 10260) text3
 10260 format(a6)
   if (text3 .ne. textm) go to 10300
   if (nshare .ne. 2) go to 90260
@@ -1705,7 +1705,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   call stoptp
 90260 n5 = n5 + 1
   n6 = 1
-  read (unit = abuff(1), fmt = 10261) text3, bus6, distrf
+  read (unit = abuff, fmt = 10261) text3, bus6, distrf
 10261 format(a6, 28x, a6, e14.5)
   if (noutpr .eq. 0) write (kunit6, 10262)  numum, n5, distrf
 10262 format( 5h+um -, i3, 12h   mach card, i3, 1h., e14.5)
@@ -1732,7 +1732,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 14304 format ( /,   26h overflow u.m. coil table., 11h   ncltot =,  i5  )
   go to 9600
 14305 n8 = n8 + 1
-  read (unit = abuff(1), fmt = 13303) gpar(ncltot), reacl(ncltot), bus1, bus2, bus6, jclout(ncltot), hist(ncltot)
+  read (unit = abuff, fmt = 13303) gpar(ncltot), reacl(ncltot), bus1, bus2, bus6, jclout(ncltot), hist(ncltot)
 13303 format (2e14.5, 3a6, i1, e14.5)
   if ( noutpr  .eq.  0 ) write (kunit6, 14306) numum, n8, gpar(ncltot), reacl(ncltot)
 14306 format(5h+um -, i3, 12h   coil card, i3, 1h.,2e11.2)
@@ -2055,7 +2055,7 @@ end subroutine umdata
 subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld, jtmtac, reamdu, reamds, flxds, flxdr, &
      reamqu, flxqs, flxqr, jcdsat, jcqsat, nppair, rotmom, nclq, jtqout, jthout, reamqs, voltum, anglum, nodfum, nodmum, &
      kumout, jumout, jclout, dcoef, jomout, umoutp)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension nodvo2(1), jtmtac(1), flxqs(1), rotmom(1)
   dimension reacl(1),gpar(1),fpar(1),nodvo1(1),nodfum(1)
   dimension jcltac(1), jclout(1), jtype(1), nodom(1)
@@ -2100,7 +2100,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   do n5 = 1, 3
      if (n5 .ne. 1) call cimage
      n6 = ncltot + n5
-     read (unit = abuff(1), fmt = 17050) n19, bus1, d1, d2, d3
+     read (unit = abuff, fmt = 17050) n19, bus1, d1, d2, d3
 17050 format(i2, a6, 2x, 3e10.6)
      if (noutpr .eq. 0) write (kunit6, 17052)  numum, n5
 17052 format(5h+um -, i3, 23h   sm-59 class 1, card ,i1)
@@ -2190,14 +2190,14 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   !  nstan = 1 is a flag for standard manufacturer data
 17100 nstan = 0
   call cimage
-  read (unit = abuff(1), fmt = 17102) text3
+  read (unit = abuff, fmt = 17102) text3
 17102 format(a6)
   if (text3 .ne. tesm2) go to 17106
   if (noutpr .eq. 0) write (kunit6, 17104)  numum
 17104 format(5h+um -, i3, 32h   sm-59 class 2, tolerance card)
   call cimage
 17106 n19 = 1
-  read (unit = abuff(1), fmt = 17107) text3, fmum
+  read (unit = abuff, fmt = 17107) text3, fmum
 17107 format(a6, 18x, e8.0)
   if (text3 .ne. tesm3) go to 17200
   if (noutpr .eq. 0) write (kunit6, 17108)  numum
@@ -2206,7 +2206,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   call cimage
   !  *************************** read class 3 sm type-59 data
 17200 n2 = 0
-  read (unit = abuff(1), fmt = 17210) numasu, nmgen, nmexc, n20, d17, rmvaum, rkvum, agldum, s1um, s2um
+  read (unit = abuff, fmt = 17210) numasu, nmgen, nmexc, n20, d17, rmvaum, rkvum, agldum, s1um, s2um
 17210 format(3i2, i4, f6.0, 14x, 5e10.6)
   if (numasu .eq. 0) numasu = d17
   if (noutpr .eq. 0) write (kunit6, 17212)  numum
@@ -2229,7 +2229,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
        26h specified for mach number, i4, 1h.)
   go to 9600
 17218 call cimage
-  read (unit = abuff(1), fmt = 17222) text3, text4, text5, aglqum, s1qum, s2qum
+  read (unit = abuff, fmt = 17222) text3, text4, text5, aglqum, s1qum, s2qum
 17222 format(3a6, 32x, 3e10.6)
   if (text3 .ne. blank) go to 17224
   if (text4 .ne. blank) go to 17224
@@ -2257,13 +2257,13 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   if (ntypsm .eq. 51) go to 17241
   if (nstan .ne. 1) go to 17400
 17241 n2 = 0
-  read (unit = abuff(1), fmt = 17242) raum, xlum, xdum, xqum, xdpum, xqpum, xdppum, xqppum
+  read (unit = abuff, fmt = 17242) raum, xlum, xdum, xqum, xdpum, xqpum, xdppum, xqppum
 17242 format(8e10.6)
   n2 = n2 + 1
   if (noutpr .eq. 0) write (kunit6, 17244)  numum, n2
 17244 format(5h+um -,i3,17h   sm-59 class 3,,18h manufacture card ,i1)
   call cimage
-  read (unit = abuff(1), fmt = 17246) tdpum, tqpum, tdppum, tqppum, x0um, rnum, xnum, netrum
+  read (unit = abuff, fmt = 17246) tdpum, tqpum, tdppum, tqppum, x0um, rnum, xnum, netrum
 17246 format(7e10.6, i10)
   n2 = n2 + 1
   if (noutpr .eq. 0) write (kunit6, 17244)  numum, n2
@@ -2363,18 +2363,18 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   !  processing standard manufacturer data completed.
   !  reading of inductance/resistance data input :
 17400 n2 = 0
-  read (unit = abuff(1), fmt = 17410) xfum, xdfum, xfkdum, xdum, xdkdum, xkdum
+  read (unit = abuff, fmt = 17410) xfum, xdfum, xfkdum, xdum, xdkdum, xkdum
 17410 format(6e10.6)
   n2 = n2 + 1
   if (noutpr .eq. 0) write (kunit6, 17412)  numum, n2
 17412 format(5h+um -,i3,17h   sm-59 class 3,, 20h r and l param card ,i1)
   call cimage
-  read (unit = abuff(1), fmt = 17420) xkqum, xqkqum, xgkqum, xqum, xqgum, xgum, netrum
+  read (unit = abuff, fmt = 17420) xkqum, xqkqum, xgkqum, xqum, xqgum, xgum, netrum
 17420 format(6e10.6, 10x, i10)
   n2 = n2 + 1
   if (noutpr .eq. 0) write (kunit6, 17412)  numum, n2
   call cimage
-  read (unit = abuff(1), fmt = 17430) reacl(ncltot + 1), gpar(ncltot + 1), gpar(ncltot + 4), gpar(ncltot + 5), &
+  read (unit = abuff, fmt = 17430) reacl(ncltot + 1), gpar(ncltot + 1), gpar(ncltot + 4), gpar(ncltot + 5), &
        gpar(ncltot + 6), gpar(ncltot + 7), rnum, xnum
 17430 format(8e10.6)
   n2 = n2 + 1
@@ -2522,10 +2522,10 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   !   nmexc now becomes emtp node nr of exciter mass
   jtmtac(n1) = 0
   call cimage
-  read (unit = abuff(1), fmt = 17550) text3
+  read (unit = abuff, fmt = 17550) text3
 17550 format(a6)
   if (text3 .ne. tesm9) go to 17570
-  read (unit = abuff(1), fmt = 17552) n3, n4
+  read (unit = abuff, fmt = 17552) n3, n4
 17552 format(6x,2i6)
   if (noutpr .eq. 0) write(kunit6,17553) numum
 17553 format(5h+um -,i3,33h   sm-59 class 4, share mech netw)
@@ -2600,7 +2600,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      if (n5 .eq. 1 .and. jtmtac(n1) .eq. 0) go to 17582
      call cimage
 17582 n17 = 0
-     read (unit = abuff(1), fmt = 17600) mlum, n17, distrf, hjum, dsynum, dmutum, spring, dabsum, bus1
+     read (unit = abuff, fmt = 17600) mlum, n17, distrf, hjum, dsynum, dmutum, spring, dabsum, bus1
 17600 format(i2,i6,2x,6e10.6,a6)
      if (mlum .eq. 0) mlum = n17
      if (noutpr .eq. 0) write (kunit6, 17602)  numum, mlum
@@ -2740,7 +2740,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   bus(n7) = texta(n3)
   !  *************************** read class 5 sm type-59 data
 17700 call cimage
-  read (unit = abuff(1), fmt = 17701) texxt3
+  read (unit = abuff, fmt = 17701) texxt3
 17701 format(a6)
   if (text3 .eq. blank) go to 17770
   if (text3 .eq. tesm4) go to 17750
@@ -2748,7 +2748,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   if (text3 .eq. tesm6) go to 17750
   n15 = 68
   if (numasu .le. 68) n15 = numasu
-  read (unit = abuff(1), fmt = 17702) nparum, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, (jumout(i), i = 1, n15)
+  read (unit = abuff, fmt = 17702) nparum, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, (jumout(i), i = 1, n15)
 17702 format(80i1)
   if (jtmtac(n1) .ne. -999999) go to 17703
   do i = 1, n15
@@ -2764,7 +2764,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   n14 = 68*n17 + (n16 - 1)*80 + 1
   n15 = 68*n17 + n16*80
   if (numasu .le. n15) n15 = numasu
-  read (unit = abuff(1), fmt = 17702) (jumout(i), i = n14, n15)
+  read (unit = abuff, fmt = 17702) (jumout(i), i = n14, n15)
   if (jtmtac(n1) .ne. -999999) go to 17709
   do i = n14, n15
      jumout(i) = 0
@@ -2842,7 +2842,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
 17748 format(10h *********,40h small series resist for apll gen torque, 4x,i4,4x,i4,4x,i4,4x,i4)
   go to 17800
 17750 n15 = 1
-  read (unit = abuff(1), fmt = 17752) nparum, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12
+  read (unit = abuff, fmt = 17752) nparum, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12
 17752 format(10x, 12i5)
   if (noutpr .eq. 0) write (kunit6, 17704)  numum
   if (text3 .ne. tesm4) go to 17756
@@ -2864,9 +2864,9 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
 17770 if (noutpr .eq. 0) write(kunit6,17772) numum
 17772 format(5h+um -,i3,34h   sm-59 class 4, termination card)
 17774 call cimage
-  read (unit = abuff(1), fmt = 17701) text3
+  read (unit = abuff, fmt = 17701) text3
   if (text3 .eq. blank) go to 17799
-  read (unit = abuff(1), fmt = 17776) ngroup, nall,(ndum(i), i = 1, 12)
+  read (unit = abuff, fmt = 17776) ngroup, nall,(ndum(i), i = 1, 12)
 17776 format(2x,2i1,4x,12i6)
   if (noutpr .eq. 0) write(kunit6,17778) numum,ngroup
 17778 format(5h+um -,i3,30h   sm-59 class 5, output group,i2)
@@ -2971,7 +2971,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   n17 = 0
   !  n17 is in reading class 6 reserved as flag for modified
   !    format of code numbers if n20 .eq. 0
-  read (unit = abuff(1), fmt = 17812) n20, bus1, n2
+  read (unit = abuff, fmt = 17812) n20, bus1, n2
 17812 format(i2,a6,i6)
   if (n20 .eq. 0) n17 = 3 * limasu
   if (n20 .eq. 0) n20 = n2
@@ -2979,7 +2979,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   if (noutpr .eq. 0) write (kunit6, 17814)  numum
 17814 format(5h+um -,i3,30h   sm-59 class 6, tacs request)
 17816 if (bus1 .ne. tesm7) go to 17820
-  read (unit = abuff(1), fmt = 17817) bus1, bus2
+  read (unit = abuff, fmt = 17817) bus1, bus2
 17817 format(2x,2a6)
   if (bus2 .ne. tesm8) go to 17818
   write (lunit6,17053)
@@ -3252,7 +3252,7 @@ end subroutine umdatb
 !     smdat.
 !
 subroutine smdat (mtype)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module is used only by type-59 brandwajn  s.m.  model
   include 'blkcom.ftn'
   include 'labcom.ftn'
@@ -3354,7 +3354,7 @@ subroutine smdat (mtype)
   if ( texta6(1)  .ne.  text2 )   go to  7106
   if ( texta6(2)  .ne.  text3 )   go to  7106
 7103 if ( n11  .gt.  0 )   go to 7104
-  read (unit = abuff(1), fmt = 3609) d1, d2, d3, n9
+  read (unit = abuff, fmt = 3609) d1, d2, d3, n9
 3609 format ( 10x, 3e10.0, 10x, i10 )
   go to 7105
 7104 nfrfld = 1
@@ -3377,7 +3377,7 @@ subroutine smdat (mtype)
   if ( texta6(3)  .ne.  text17 )   go to 8641
   if ( texta6(4)  .ne.  text18 )   go to 8641
 2115 if ( n11  .gt.  0 )   go to 7109
-  read (unit = abuff(1), fmt = 6011) fm
+  read (unit = abuff, fmt = 6011) fm
 6011 format ( 24x, e8.0 )
   go to 7110
 7109 nfrfld = 1
@@ -3413,7 +3413,7 @@ subroutine smdat (mtype)
   i30 = 30 * k - 29
   ismdat( i30+1 ) = idelta
   if ( kolbeg  .gt.  0 )   go to 7113
-  read (unit = abuff(1), fmt = 5) ismdat(i30 + 11 ), ismdat(i30 + 12), ismdat(i30 + 13), np, sm3, sm4, rmva, rkv, aglin, dab, dac
+  read (unit = abuff, fmt = 5) ismdat(i30 + 11 ), ismdat(i30 + 12), ismdat(i30 + 13), np, sm3, sm4, rmva, rkv, aglin, dab, dac
 5 format( 3i2, i4, 7e10.6 )
   go to 7114
 7113 nfrfld = 4
@@ -3457,7 +3457,7 @@ subroutine smdat (mtype)
 150 aglin = absz( aglin )
   !     read  input  cards  using  cimage
   call  cimage
-  read (unit = abuff(1), fmt = 163) ad1, ad2, aq1, aq2, qaa, qab, qac
+  read (unit = abuff, fmt = 163) ad1, ad2, aq1, aq2, qaa, qab, qac
 163 format( 10x, 7e10.6 )
   if( noutpr  .eq.   0 ) write( kunit6, 154 )  aq1, qaa, qab, qac
 154 format( 9h+  q-axis,  f7.3, 3f10.4  )
@@ -3468,7 +3468,7 @@ subroutine smdat (mtype)
   emf = rkv / ( tenm3*aglin )
   if( fm.le.-1.0) go to 100
   if ( kolbeg  .gt.  0 )   go to 7124
-  read (unit = abuff(1), fmt = 6) ra, xl, xd, xq, xdp, xqp, xdpp, xqpp
+  read (unit = abuff, fmt = 6) ra, xl, xd, xq, xdp, xqp, xdpp, xqpp
 6 format(8e10.6)
   go to 7125
 7124 call freone ( ra )
@@ -3513,7 +3513,7 @@ subroutine smdat (mtype)
   !     read input card using cimage
   call cimage
   if ( kolbeg  .gt.  0 )   go to 7136
-  read (unit = abuff(1), fmt = 30) tdop, tqop, tdopp, tqopp, el2, r1, el1
+  read (unit = abuff, fmt = 30) tdop, tqop, tdopp, tqopp, el2, r1, el1
 30 format (7e10.6,9x,i1)
   go to 7137
 7136 call freone ( tdop )
@@ -3672,7 +3672,7 @@ subroutine smdat (mtype)
      !     read input card using cimage
      call cimage
      if ( kolbeg  .gt.  0 )   go to 7144
-     read (unit = abuff(1), fmt = 36) mloc, extrs, hico, dsr, dsm, hsp, dsd
+     read (unit = abuff, fmt = 36) mloc, extrs, hico, dsr, dsm, hsp, dsd
 36   format( i2, 8x, 6e10.6 )
      go to 7145
 7144 call frefld ( voltbc(1) )
@@ -3717,7 +3717,7 @@ subroutine smdat (mtype)
   !     check for blank card terminating mass cards  *********************
   !     read input card using cimage   ***********************************
   call cimage
-  read (unit = abuff(1), fmt = 1122) (voltbc(i), i = 1, 41)
+  read (unit = abuff, fmt = 1122) (voltbc(i), i = 1, 41)
 1122 format ( 41f1.0 )
   n167 = 3654
   if( kill .gt. 0 )  go  to  9999
@@ -3765,7 +3765,7 @@ subroutine smdat (mtype)
 1700 format( 36h+ blank card terminating mass cards.)
   !     read input card using cimage
 7219 call cimage
-  read (unit = abuff(1), fmt = 3654) n7
+  read (unit = abuff, fmt = 3654) n7
 3654 format ( i8 )
   if( n7 .ne. 0 )   go  to  8235
   if( noutpr .eq. 0 ) write (kunit6, 3656)
@@ -3782,7 +3782,7 @@ subroutine smdat (mtype)
   lstat( 19 ) = 8235
   go to 9999
 7220 continue
-  read (unit = abuff(1), fmt = 3657) (voltbc(i), i = 1, nn14)
+  read (unit = abuff, fmt = 3657) (voltbc(i), i = 1, nn14)
 3657 format(2x, 2f1.0, 4x, 12f6.0)
   ioutr = voltbc( 1 )
   iall = voltbc( 2 )
@@ -3951,7 +3951,7 @@ subroutine smdat (mtype)
         !     read input card using cimage
         call cimage
         if ( kolbeg  .gt.  0 )   go to 2183
-        read (unit = abuff(1), fmt = 3669) n3, bus6, bus5, iv
+        read (unit = abuff, fmt = 3669) n3, bus6, bus5, iv
 3669    format ( i2,  2a6, i3  )
         go to 2185
 2183    nfrfld = 1
@@ -4110,7 +4110,7 @@ subroutine smdat (mtype)
      !     read per unit machine data  as normally defined in transient
      !     stability programs,i.e., obtained with an assymmetric matrix
      if ( kolbeg  .gt.  0 )   go to 7313
-     read (unit = abuff(1), fmt = 105) elf, elaf, elfkd, xd, elakd, elkd
+     read (unit = abuff, fmt = 105) elf, elaf, elfkd, xd, elakd, elkd
      go to 7314
 7313 call freone ( elf )
      call freone ( elaf )
@@ -4122,7 +4122,7 @@ subroutine smdat (mtype)
      !     read input card using cimage.
      call cimage
      if ( kolbeg  .gt.  0 )   go to 7327
-     read (unit = abuff(1), fmt = 105) elg, elag, elgkq, xq, elakq, elkq
+     read (unit = abuff, fmt = 105) elg, elag, elgkq, xq, elakq, elkq
 105  format(6e10.6,19x,i1)
      go to 7328
 7327 call freone ( elg )
@@ -4135,7 +4135,7 @@ subroutine smdat (mtype)
      !     read input card using cimage.
      call cimage
      if ( kolbeg  .gt.  0 )   go to 7235
-     read (unit = abuff(1), fmt = 110) el2, ra, rf, rkd, rg, rkq, r1, el1
+     read (unit = abuff, fmt = 110) el2, ra, rf, rkd, rg, rkq, r1, el1
 110  format(8e10.6)
      go to 7236
 7235 call freone ( el2 )
@@ -4185,7 +4185,7 @@ subroutine smdat (mtype)
    ! subroutine smpfit.
    !
    subroutine smpfit(x, ism, fm, lunit6, noutpr )
-     implicit real*8 (a-h, o-z), integer*4 (i-n)
+     implicit real(8) (a-h, o-z), integer(4) (i-n)
      !     this module applies only to  s.m.  modeling (both 50, 59).
      !     this module applies only to s.m.  modelling ( both 50 and 59 )
      dimension x(6)

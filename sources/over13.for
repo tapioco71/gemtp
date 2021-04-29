@@ -6,7 +6,7 @@
 !     subroutine over13.
 !
 subroutine over13
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   dimension cblhst(1)
@@ -498,7 +498,7 @@ subroutine over13
   curr(k) = cchar(n20)
   !     read input card using cimage.
   call cimage
-  read (unit = abuff(1), fmt = 7018) n15, n16, (vchar(ipp), ipp = n17, n20)
+  read (unit = abuff, fmt = 7018) n15, n16, (vchar(ipp), ipp = n17, n20)
 7018 format ( 2i10, 4e15.8)
   cchar(n18) = n15
   cchar(n19) = n16
@@ -524,7 +524,7 @@ subroutine over13
   n19 = n17 + 5
   ! read input card using cimage.
   call cimage
-  read (unit = abuff(1), fmt = 7026) n20, vchar(n18), vchar(n19), gslope(n18), gslope(n19)
+  read (unit = abuff, fmt = 7026) n20, vchar(n18), vchar(n19), gslope(n18), gslope(n19)
 7026 format ( i10 , 4e15.8 )
   cchar(n18) = n20
   if ( noutpr  .eq.  0 ) write (kunit6, 7025)  n20, vchar(n18), vchar(n19)
@@ -1838,7 +1838,7 @@ end subroutine over13
 !     subroutine fdint.
 !
 subroutine fdint(ikf, isfd, ibf, omg)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   dimension ur(40), ui(40)
@@ -1941,7 +1941,7 @@ end subroutine fdint
 !
 ! function funp13y.
 function funp13(y,x,twopi)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   if (x.ne.0.0) go to 101
   if (y.ne.0.0) go to 102
   funp13=0.0
@@ -1964,7 +1964,7 @@ end function funp13
 ! subroutine redinv.
 !
 subroutine redinv(x1,m,n)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension x1(1),a1(20)
   !     gauss-jordan elimination process performed on a square matrix x
   !)    this routine can also be used for matrix inversion * * * * * * * *
@@ -2004,7 +2004,7 @@ end subroutine redinv
 ! subroutine last13.
 !
 subroutine last13
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   dimension   tailp(1), tailq(1), tailt(1), vim(1)
@@ -2920,7 +2920,7 @@ end subroutine last13
 ! subroutine redu13.
 !
 subroutine redu13(a,n,m)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This subroutine can be used for either partial reduction or for
   !     complete inversion of a real  n by n  symmetric matrix  'a' .
   !     Storage for matrix elements is in the implied order   (1,1),

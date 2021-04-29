@@ -1054,7 +1054,7 @@ subroutine guts44 (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2
   go to 9200
 1202 if ( nfreq .eq. 3 )  ntol = ntol + 1
   if ( kexact .eq. 88333) dist = distsv
-  call modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, xtir, xtii, zsurge, dummi, dummr, tixf, work1, freq, &
+  call modal (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, xtir, xtii, zsurge, dummi, dummr, tixf, work1, freq, &
        kcirct, iw, dist, metrik, fmipkm, ndim, ntri, nsqr2, itrnsf,  kfull, mrr, nrp, ntol, conduc)
   if ( kill .ne. 0 ) go to 9900
 2202 if (lastov.eq.39 .or. lastov.eq.45 .or. imodal .ne.0) go to 8777
@@ -1975,7 +1975,7 @@ end subroutine punpie
 !
 !     subroutine modal.
 !
-subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, xtir, xtii, zsurge, dummi, dummr, tixf, &
+subroutine modal (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, xtir, xtii, zsurge, dummi, dummr, tixf, &
      work1, freq, m, iw, dist, metrik, fmipkm, ndim, ntri, nsqr2, itrnsf, kfull, mrr, nrp, ntol, conduc)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -1985,27 +1985,27 @@ subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, 
   common /linemodel/ char80, chlmfs(18)
 
 !  common /linemodel/ kexact, nsolve, fminsv, kbrnum, numrun
-  character*8 text1, text2, text3, text4, text5, text6
-  character*8 text7, text8, text9, text10
+  character(8) text1, text2, text3, text4, text5, text6
+  character(8) text7, text8, text9, text10
   dimension array(1)
-  dimension xwc(ntri),xwy(ntri),yzi(ndim,ndim),yzr(ndim,ndim)
-  dimension tii(ndim,ndim),tir(ndim,ndim),tvi(ndim,ndim)
-  dimension er(ndim),ei(ndim),theta2(ndim),tvr(ndim,ndim)
-  dimension xtir(ndim),xtii(ndim),zsurge(ndim),dummi(ndim)
-  dimension dummr(ndim),tixf(nsqr2),work1(nsqr2)
-  dimension ping(200),iseq(15),kmax(15)
-  dimension pp1(20,20), pp2(20,20), ee1(15), ee2(15)
-  dimension tempr(20,20), tempi(20,20)
-  data text2  /  1ha  /
-  data text3  /  1hb  /
-  data text4  /  1hc  /
-  data text5  /  1hd  /
-  data text6  /  1he  /
-  data text7  /  1hf  /
-  data text8  /  1hg  /
-  data text9  /  1hh  /
-  data text10 /  1hi  /
-  data iseq  /  15*0  /
+  dimension xwc(ntri), xwy(ntri), yzi(ndim, ndim), yzr(ndim, ndim)
+  dimension tii(ndim, ndim), tir(ndim, ndim), tvi(ndim, ndim)
+  dimension er(ndim), ei(ndim), theta2(ndim), tvr(ndim, ndim)
+  dimension xtir(ndim), xtii(ndim), zsurge(ndim), dummi(ndim)
+  dimension dummr(ndim), tixf(nsqr2), work1(nsqr2)
+  dimension ping(200), iseq(15), kmax(15)
+  dimension pp1(20, 20), pp2(20, 20), ee1(15), ee2(15)
+  dimension tempr(20, 20), tempi(20, 20)
+  data text2  / 'a' /
+  data text3  / 'b' /
+  data text4  / 'c' /
+  data text5  / 'd' /
+  data text6  / 'e' /
+  data text7  / 'f' /
+  data text8  / 'g' /
+  data text9  / 'h' /
+  data text10 / 'i' /
+  data iseq   / 15 * 0 /
   if ( kexact .eq. 88333 )  go to 100
   if (itrnsf .eq. 1  .and. nfreq .eq. 1) return
   if (itrnsf .eq. 1  .and. nfreq .eq. 2) return
@@ -2022,7 +2022,7 @@ subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, 
      xwc(i) = xwc(i) * c
 27   xwy(i)=-xwc(i)
   end do
-  call redu44(xwy(1),workr1(1) ,m,ll0)
+  call redu44 (xwy(1),workr1(1) ,m,ll0)
   !    const. [t], marti setup will bypass the exact diagonalization
   !     at each looping frequency
   if (nfreq .ne. 1  .and.  lastov .eq. 39 .and. itrnsf .ne. 1) go to 2520
