@@ -621,7 +621,7 @@ program vardim
            write (lunit(3), 8120)
 8120       format (2x, 'dimension lsize(62)')
            write (lunit(3), 8124)
-8124       format (2x, 'real bus1, bus2')
+8124       format (2x, 'character(8) bus1, bus2')
            write (lunit(3), 8134)
 8134       format (2x, 'if (nchain .ge. 29) go to 2900')
            do i = 1, numlst
@@ -642,7 +642,7 @@ program vardim
            ntime = 10000 * nh + 100 * nm + ns
            ndate = 10000 * nm + 100 * nd + ny
            write (lunit(3), 3684) ntime, ndate
-3684       format (2x, 'bus1 =', i8, /, 6x, 'bus2 =', i8)
+3684       format (2x, 'bus1 =', "'", i8, "'", /, 6x, 'bus2 =', "'", i8, "'")
            mtot = 0
            do i = 127, 138
               n9 = ncbarr(i)

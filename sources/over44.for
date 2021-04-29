@@ -6,7 +6,7 @@
 !     subroutine subr44.
 !
 subroutine subr44
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'deck44.ftn'
   include 'labl44.ftn'
@@ -14,34 +14,35 @@ subroutine subr44
   dimension stg(1)
   equivalence (stg(1), karray(1))
   !     list-zero "karray" is always 1st, and maybe "over29":
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
-4567 format ( 24h  "begin module subr44." )
+  if (iprsup .ge. 1 ) write (lunit6, 4567)
+4567 format ('  "Begin module subr44."')
   n8 = nchain
-  if ( kburro  .eq.  1 )   n8 = 29
-  call dimens ( lltemp(1), n8, trash, trash )
-  do j=1, 9999, 2
-     if ( lltemp(j)  .eq.  0 )   go to 5636
+  if (kburro .eq. 1) n8 = 29
+  call dimens (lltemp(1), n8, trash, trash)
+  do j = 1, 9999, 2
+     if (lltemp(j) .eq. 0) go to 5636
 1003 end do
   write (lunit6, 5632)  lltemp(1), kburro, nchain
-5632 format (  29h temp error stop in "subr44".,  3i8 )
+5632 format (' Temp error stop in "subr44".', 3i8)
   call stoptp
-5636 n7 = lltemp(j+1) * nbyte(4) / nbyte(3)
-  call dimens ( lltemp(1), nchain, trash, trash )
+5636 n7 = lltemp(j + 1) * nbyte(4) / nbyte(3)
+  call dimens (lltemp(1), nchain, trash, trash)
   n3 = 0
-  do 5654  i=1, 9999, 2
-     if ( n3  .ge.  2 )   go to 5655
-     if ( lltemp(i)  .ne.  71 )   go to 5641
-     lphase = lltemp(i+1)
+  do i = 1, 9999, 2
+     if (n3 .ge. 2) go to 5655
+     if (lltemp(i) .ne. 71) go to 5641
+     lphase = lltemp(i + 1)
      n3 = n3 + 1
-5641 if ( lltemp(i)  .ne.  74 )   go to 5654
-     lgdbd = lltemp(i+1)
+5641 if (lltemp(i) .ne. 74) go to 5654
+     lgdbd = lltemp(i + 1)
      n3 = n3 + 1
-5654 end do
+  end do
+5654 continue
   call stoptp
 5655 lphpl1 = lphase + 1
   lphd2 = lphase / 2
   write (kunit6, 2456)  lphase
-2456 format (  44h+request for line-constants supporting prog., i6   )
+2456 format ('+Request for line-constants supporting prog.', i6)
   ndim = lphase
   ntri = ndim * (ndim + 1) / 2
   nsqr = ndim * ndim
@@ -66,7 +67,7 @@ subroutine subr44
   ioftix = iofdur + ndim
   iofwor = ioftix + nsqr2
   n5 = iofwor + nsqr2
-  if ( n5 .lt. n7 )  go to 10
+  if (n5 .lt. n7) go to 10
   kill = 82
   lstat(19) = 10
   lstat(15) = lphase
@@ -74,30 +75,30 @@ subroutine subr44
   lastov = nchain
   nchain = 51
   go to 99999
-10 call guts44( stg(iofarr), stg(iofxwc), stg(iofxwy), stg(iofyzr), stg(iofyzi), stg(ioftii), stg(ioftir),stg(ioftvi), &
+10 call guts44 (stg(iofarr), stg(iofxwc), stg(iofxwy), stg(iofyzr), stg(iofyzi), stg(ioftii), stg(ioftir), stg(ioftvi), &
         stg(ioftvr), stg(iofer), stg(iofei), stg(iofthe), stg(iofxtr), stg(iofxti), stg(iofzsu), stg(iofdum), stg(iofdur),stg(ioftix), &
-        stg(iofwor), ndim, ntri, nsqr2 )
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
-4568 format ( 24h  "exit  module subr44." )
+        stg(iofwor), ndim, ntri, nsqr2)
+  if (iprsup .ge. 1) write (lunit6, 4568)
+4568 format ('  "Exit  module subr44."')
 99999 return
 end subroutine subr44
 !
 !     subroutine guts44.
 !
-subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, xtir, xtii, zsurge, dummi, dummr, tixf, &
+subroutine guts44 (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, xtir, xtii, zsurge, dummi, dummr, tixf, &
      work1, ndim, ntri,nsqr2)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'deck44.ftn'
   include 'labl44.ftn'
   include 'volt45.ftn'
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
-  character*6 chlmfs        ! 9-phase as limit for lmfs test
+  character(6) chlmfs        ! 9-phase as limit for lmfs test
   character*80 char80
-  character*8 text1, text2, fmetrc, englis, bufsem
-  character*8 text3, text4, text5, text6, text7
-  character*8 text8, text9
+  character(8) text1, text2, fmetrc, englis, bufsem
+  character(8) text3, text4, text5, text6, text7
+  character(8) text8, text9
   dimension bufsem(14), jprmat(16)
   dimension array(1)
   dimension xwc(ntri), xwy(ntri), yzi(ndim,ndim), yzr(ndim,ndim)
@@ -105,41 +106,42 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   dimension er(ndim), ei(ndim), theta2(ndim)
   dimension xtir(ndim), xtii(ndim), zsurge(ndim), dummi(ndim)
   dimension dummr(ndim), tixf(nsqr2), work1(nsqr2)
-  equivalence ( jprmat(1), j1 ),     ( jprmat(2), j2 )
-  equivalence ( jprmat(3), j3 ),     ( jprmat(4), j4 )
-  equivalence ( jprmat(5), j5 ),     ( jprmat(6), j6 )
-  equivalence ( jprmat(7), j7 ),     ( jprmat(8), j8 )
-  equivalence ( jprmat(9), j9 ),     ( jprmat(10), j10 )
-  equivalence ( jprmat(11), j11 ),    ( jprmat(12), j12 )
-  equivalence ( jprmat(13), j13 ),    ( jprmat(14), j14)
-  equivalence ( jprmat(15), j15 ),    ( jprmat(16), j16)
-  data text1  / 6hchange /
-  data text2  / 6hbranch /
-  data text3  / 6hfreque /
-  data text4  / 6hspecia /
-  data text5  / 6hl doub /
-  data text6  / 6huntran /
-  data text7  / 6hsposed /
-  data text8  / 6htransp /
-  data text9  / 6hosed   /
-  data fmetrc  / 6hmetric /
-  data englis   /  6henglis  /
+  equivalence (jprmat(1), j1 ), (jprmat(2), j2)
+  equivalence (jprmat(3), j3 ), (jprmat(4), j4)
+  equivalence (jprmat(5), j5 ), (jprmat(6), j6)
+  equivalence (jprmat(7), j7 ), (jprmat(8), j8)
+  equivalence (jprmat(9), j9 ), (jprmat(10), j10)
+  equivalence (jprmat(11), j11 ), (jprmat(12), j12)
+  equivalence (jprmat(13), j13 ), (jprmat(14), j14)
+  equivalence (jprmat(15), j15 ), (jprmat(16), j16)
+  data text1  / 'change' /
+  data text2  / 'branch' /
+  data text3  / 'freque' /
+  data text4  / 'specia' /
+  data text5  / 'l doub' /
+  data text6  / 'untran' /
+  data text7  / 'sposed' /
+  data text8  / 'transp' /
+  data text9  / 'osed  ' /
+  data fmetrc / 'metric' /
+  data englis / 'englis' /
   data nrp / 0 /
   data mrr / 0 /
   mfrqpr = 0
-  if ( kexact .ne. 88333 )  go to 423
+  if (kexact .ne. 88333) go to 423
   nfqpl1 = 0
-  close (unit=lunit2, status='delete' )
-  open (unit=lunit2, status='scratch',form='formatted')
+  close (unit = lunit2, status = 'delete')
+  !open (unit = lunit2, status = 'scratch', form = 'formatted')
+  open (unit = lunit2, form = 'formatted')
 423 rewind  lunit9
   rewind lunit2
   rewind lunit3
   rewind lunt13
-  if ( ialter  .ne.  2 )   go to 7407
+  if (ialter .ne. 2) go to 7407
   l5save = lunit5
   lunit5 = lunit2
- 7407 ldisfr  =  locf( flstat(1) )     -     locf( voltbc(1) )
-  metrik=0
+ 7407 ldisfr = locf (flstat(1)) - locf (voltbc(1))
+  metrik = 0
   finpcm = unity / 2.5400d0
   ftpm = 100. * finpcm / 12.
   fmipkm = ftpm * 1000. / 5280.
@@ -148,35 +150,35 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   !     fspac needed for conversion of reactance at 1 meter
   !     spacing to 1 foot spacing.
   !              start of constants definition.
-  valu1    =  5584596.2d0
-  valu2    =  .00085646541d0
-  valu3    =  .00064373888d0
-  valu4    =  .61593152d0
-  valu5    =  8.68588964d0
-  valu6    =  .0005000000d0
+  valu1 = 5584596.2d0
+  valu2 = .00085646541d0
+  valu3 = .00064373888d0
+  valu4 = .61593152d0
+  valu5 = 8.68588964d0
+  valu6 = .0005000000d0
   valu7 = 3.0
-  valu7    =  onehaf * sqrtz( valu7 )
-  valu8    =  .0040447306d0
-  valu9    =  .21139217d0
-  valu10   =  .5772156649015328606d0
-  valu11   =  .3926991d0
-  valu12   =  .398942280401433d0
-  valu13   =  1.2533141373155d0
+  valu7 = onehaf * sqrtz( valu7 )
+  valu8 = .0040447306d0
+  valu9 = .21139217d0
+  valu1 = .5772156649015328606d0
+  valu11 = .3926991d0
+  valu12 = .398942280401433d0
+  valu13 = 1.2533141373155d0
   valu14 = 2.302585093000d0
-  aaa1    = .785398163397448d0
-  aaa2    = .318309886183791d0
+  aaa1 = .785398163397448d0
+  aaa2 = .318309886183791d0
   sqrt2 = 1.4142135623730950488d0
-  ccars(2)=1.3659315156584124488d0
-  ll0   =   0
-  ll1   =   1
-  ll2   =   2
-  ll3   =   3
-  ll5   =   5
-  ll6   =   6
-  ll7   =   7
-  ll8   =   8
-  ll9   =   9
-  ll10  =   10
+  ccars(2) =1.3659315156584124488d0
+  ll0 = 0
+  ll1 = 1
+  ll2 = 2
+  ll3 = 3
+  ll5 = 5
+  ll6 = 6
+  ll7 = 7
+  ll8 = 8
+  ll9 = 9
+  ll10 = 10
   liu = 0
   nfreq = 0
   nbundl = 0
@@ -184,38 +186,38 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   picon = 360. / twopi
   corchk = unity - tenm6/10.
   !              begin calculate constants for carson % bessel.
-  bcars(1)=sqrt2/6.
-  bcars(2)=unity/16.
-  dcars(2)=bcars(2)*pi/4.
-  do i=3,30
-     isn=(-1) ** ((i-1)/2)
-     bcars(i) =-bcars(i-2)/(i * i + 2. * i)*isn
-6603 dcars(i)=bcars(i)*pi/4.
+  bcars(1) = sqrt2 / 6.
+  bcars(2) = unity / 16.
+  dcars(2) = bcars(2) * pi / 4.
+  do i = 3, 30
+     isn = (-1) ** ((i - 1) / 2)
+     bcars(i) = -bcars(i - 2) / (i * i + 2. * i) * isn
+6603 dcars(i) = bcars(i) * pi / 4.
   end do
-  ccars(1)=unity/sqrt2
-  ccars(3)=ccars(1)
-  ccars(5)=3.*sqrt2/2.
-  ccars(7)=-45.*onehaf*sqrt2
-  do i=1,29,2
-     if ( i .gt. 8 ) ccars(i) = 0.0
+  ccars(1) = unity / sqrt2
+  ccars(3) = ccars(1)
+  ccars(5) = 3. * sqrt2 / 2.
+  ccars(7) = -45. * onehaf * sqrt2
+  do i = 1, 29, 2
+     if (i .gt. 8) ccars(i) = 0.0
 64   dcars(i) = ccars(i)
   end do
   dcars(3) = -dcars(3)
   dcars(7) = -dcars(7)
-  do i=4,30,2
-46   ccars(i)=ccars(i-2)+unity/i + unity/(i+2.)
+  do i = 4, 30, 2
+46   ccars(i) = ccars(i - 2) + unity / i + unity / (i + 2.)
   end do
-  fbe(1)=16.
-  fbed(1)=-4.
+  fbe(1) = 16.
+  fbed(1) = -4.
   d1 = unity - valu10
-  fke(1)=fbe(1)*d1
-  do i=2, 14
-     isn= (-1)**i
-     fbe(i)=fbe(i-1)*(16./(i*i))*(-isn)
-     fbed(i)=fbe(i)/(2.*i+2.)*isn
-     d1=d1+unity/i
-     fke(i)=fbe(i)*d1
-811  fked(i-1) = fke(i) * i / 32.
+  fke(1) = fbe(1) * d1
+  do i = 2, 14
+     isn = (-1) ** i
+     fbe(i) = fbe(i - 1) * (16. / (i * i)) * (-isn)
+     fbed(i) = fbe(i) / (2. * i + 2.) * isn
+     d1 = d1 + unity / i
+     fke(i) = fbe(i) * d1
+811  fked(i - 1) = fke(i) * i / 32.
   end do
   fked(14) = 0.0
   valu9=fke(1)/32.
@@ -243,13 +245,13 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   fked(18) =  .00003380d0
   fked(19) = -.00000240d0
   fked(20) = -.00000320d0
-  if(iprsup.ge.2)write(lunit6,333)(fbe(i),i=1,20),(fbed(i),i=1,20), (fke(i),i=1,20),(fked(i),i=1,20),(bcars(i),i=1,30), &
-       (dcars(i),i=1,30),(ccars(i),i=1,30)
-333 format(1x,10hdata fbe /  ,/,4(1x,5e25.15,/),/,12h data fbed / ,/ 4(1x,5e25.15,/),/,11h data fke / ,/,4(1x,5e25.15,/),/, &
-         12h data fked /  ,/,4(1x,5e25.15,/),/ ,13h data bcars / ,/,6(1x,5e25.15,/),/,13h data dcars / ,/,6(1x, 5e25.15,/), &
-         /,13h data ccars / ,/,6(1x,5e25.15,/),/,1x)
-  if ( iprsup  .ge.  1 ) write (lunit6, 3866)  pi, picon, sqrt2
-3866 format ( /,  9h at 3866  , 3e25.15  )
+  if(iprsup .ge. 2) write (lunit6, 333) (fbe(i), i = 1, 20), (fbed(i), i = 1, 20), (fke(i), i = 1, 20), (fked(i), i = 1, 20), (bcars(i), i = 1, 30), &
+       (dcars(i), i = 1, 30), (ccars(i), i = 1, 30)
+333 format (1x, 'data fbe', /, /, 4(1x, 5e25.15, /), /, ' data fbed', /, /, 4(1x, 5e25.15, /), /, ' data fke', /, /, 4(1x,5e25.15, /), /, &
+         ' data fked', /, /, 4(1x, 5e25.15, /), /, ' data bcars', /, /, 6(1x, 5e25.15, /), /, ' data dcars', /, /, 6(1x, 5e25.15, /), &
+         /, ' data ccars', /, /, 6(1x, 5e25.15, /), /, 1x)
+  if (iprsup .ge. 1) write (lunit6, 3866) pi, picon, sqrt2
+3866 format (/, ' at 3866 ', 3e25.15)
 2 m = 1
   do i = 1, 40
 13866 brname(i) = blank
@@ -258,75 +260,75 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   muntrn = 0
   mtrnsp = 0
   !     segmented, 1, vax e/t can skip translation of rewind:
-  if (lastov .eq. 1)  rewind lunit2
+  if (lastov .eq. 1) rewind lunit2
   rewind lunt13
   !     read input card using cimage
 7403 call cimage
 7413 continue
   read (unit = abuff, fmt = 4230) bus1
-  if ( bus1 .ne. text2)  go to 37403
+  if (bus1 .ne. text2) go to 37403
   !     optional "branch" card, which species  a6  branch names
   n1 = m + 11
   read (unit = abuff, fmt = 17403) (brname(i), i = m, n1)
 17403 format (8x, 12a6)
   m = m + 12
   write (kunit6, 27403)
-27403 format (26h+bus names for each phase.)
+27403 format ('+Bus names for each phase.')
   go to 7403
 37403 continue
-  read (unit = abuff(1), fmt = 4230) bufsem
-4230 format ( 13a6, a2 )
-  if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
+  read (unit = abuff, fmt = 4230) bufsem
+4230 format (13a6, a2)
+  if (ialter .ne. 2) write (lunit2, 4230) bufsem
   bus1 = bufsem(1)
-  if ( bus1 .ne. fmetrc ) goto 4258
+  if (bus1 .ne. fmetrc) goto 4258
   metrik = 1
   write (kunit6, 4252)
-4252 format ( 44h+request card for metric  units on all data.    )
+4252 format ('+Request card for metric  units on all data.')
   go to 7403
-4258 if ( bus1  .ne.  englis )   go to 24258
+4258 if (bus1 .ne. englis) go to 24258
   metrik = 0
-  write (kunit6, 14258 )
-14258 format (  44h+request card for english units on all data.   )
+  write (kunit6, 14258)
+14258 format ('+Request card for english units on all data.')
   go to 7403
-24258 if ( bus1  .ne.  text3 )   go to 34258
+24258 if (bus1 .ne. text3) go to 34258
   write (kunit6, 44258)
-44258 format ( 37h+request for frequency-loop printout.  )
+44258 format ('+Request for frequency-loop printout.')
   mfrqpr = 1
   go to 7403
-34258 if ( bufsem(1) .ne. text4 )  go to 54258
-  if ( bufsem(2) .ne. text5 )  go to 54258
+34258 if (bufsem(1) .ne. text4) go to 54258
+  if (bufsem(2) .ne. text5) go to 54258
   mspedb = 1
   write (kunit6, 5010)
-5010 format (47h+request for special double circuit transposed.  )
+5010 format ('+Request for special double circuit transposed.')
   go to 7403
-54258 if ( bufsem(1) .ne. text6 )  go to 5020
-  if ( bufsem(2) .ne. text7 )  go to 5020
+54258 if (bufsem(1) .ne. text6) go to 5020
+  if (bufsem(2) .ne. text7) go to 5020
   muntrn = 1
   write (kunit6, 5015)
-5015 format (40h+request for untransposed line modeling.  )
+5015 format ('+Request for untransposed line modeling.')
   go to 7403
-5020 if ( bufsem(1) .ne. text8 )  go to 5029
-  if ( bufsem(2) .ne. text9 )  go to 5029
+5020 if (bufsem(1) .ne. text8) go to 5029
+  if (bufsem(2) .ne. text9) go to 5029
   mtrnsp = 1
   write (kunit6,5027)
-5027 format (38h+request for transposed line modeling.  )
+5027 format ('+Request for transposed line modeling.')
   go to 7403
-5029 do j=1, 14
-     if ( bufsem(j)  .ne.  blank )   go to 4251
+5029 do j = 1, 14
+     if (bufsem(j)  .ne.  blank) go to 4251
 7436 end do
-  write (kunit6, 4244 )
-4244 format (  45h+blank card terminating line-constants cases.  )
+  write (kunit6, 4244)
+4244 format ('+Blank card terminating line-constants cases.')
   call interp
-  if ( lastov  .eq.  1 )   go to 7439
+  if (lastov .eq. 1) go to 7439
   n1 = lastov
   lastov = nchain
   nchain = n1
-  if ( ialter  .eq.  2 ) lunit5 = l5save
-  if ( ipunch  .eq.  0 )   go to 7496
+  if (ialter .eq. 2) lunit5 = l5save
+  if (ipunch .eq. 0) go to 7496
   d1 = 0.0
-  write (lunit9)  d1, d1, d1
-  if ( iprsup .ge. 1   .or.   lastov .eq. 39 ) write (lunit6, 14244)  d1, d1, d1, ipunch
-14244 format (21h last record on unit9, 3e15.6,/, 1x, 8hipunch =,i10)
+  write (lunit9) d1, d1, d1
+  if (iprsup .ge. 1 .or. lastov .eq. 39 ) write (lunit6, 14244) d1, d1, d1, ipunch
+14244 format (' Last record on unit9', 3e15.6, /, 1x, 'ipunch =', i10)
   !     segmented, 1, vax e/t can skip translation of rewind:
   rewind lunit9
 7496 go to 9900
@@ -336,9 +338,9 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   !     segmented, 1, vax e/t can skip translation of rewind:
 4251 rewind lunt13
   ik = 0
-  if ( bus1  .ne.  text1 )   go to 4260
+  if (bus1 .ne. text1) go to 4260
   write (kunit6, 4257)
-4257 format (  37h+request card for change-case option.   )
+4257 format ('+Request card for change-case option.')
   go to 500
 4260 i = 1
   assign 4236 to moon
@@ -346,44 +348,44 @@ subroutine guts44(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
 5 i = i + 1
   !     read input card using cimage
   call cimage
-  read (unit = abuff(1), fmt = 4230) bufsem
-  if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
-4164 if ( kolbeg  .gt.  0 )   go to 8712
-  read (unit = abuff(1), fmt = 11) itbic(i), tbtb2(i), tbr(i),itbtb3(i),tbg(i),tbd(i), tbx(i), h1, h2, d8, d9, tbtext(i), i3
-11 format ( i3, f5.4, f8.5, i2, 2f8.5, 3f8.3, f8.5, f6.2, a6, i2 )
+  read (unit = abuff, fmt = 4230) bufsem
+  if (ialter .ne. 2 ) write (lunit2, 4230) bufsem
+4164 if (kolbeg .gt. 0) go to 8712
+  read (unit = abuff, fmt = 11) itbic(i), tbtb2(i), tbr(i),itbtb3(i),tbg(i),tbd(i), tbx(i), h1, h2, d8, d9, tbtext(i), i3
+11 format (i3, f5.4, f8.5, i2, 2f8.5, 3f8.3, f8.5, f6.2, a6, i2)
   go to 8715
 8712 nfrfld = 1
-  call freone ( d11 )
+  call freone (d11)
   itbic(i) = d11
-  call frefld ( tbtb2(i) )
-  call frefld ( tbr(i) )
-  call freone ( d11 )
+  call frefld (tbtb2(i))
+  call frefld (tbr(i))
+  call freone (d11)
   itbtb3(i) = d11
-  call frefld ( tbg(i) )
-  call frefld ( tbd(i) )
-  call frefld ( tbx(i) )
-  call freone ( h1 )
-  call freone ( h2 )
-  call freone ( d8 )
-  call freone ( d9 )
+  call frefld (tbg(i))
+  call frefld (tbd(i))
+  call frefld (tbx(i))
+  call freone (h1)
+  call freone (h2)
+  call freone (d8)
+  call freone (d9)
   nright = -1
-  call freone ( d1 )
+  call freone (d1)
   nright = 0
   tbtext(i) = texta6(1)
-  call freone ( d11 )
+  call freone (d11)
   i3 = d11
-  if ( kill  .gt.  0 )   go to 9200
+  if (kill .gt. 0) go to 9200
   go to 4235
-8715 if ( i  .eq.  1 )   go to 4320
-4280 if( itbic(i)  .ne.  0 )  go to 4285
+8715 if (i .eq. 1) go to 4320
+4280 if(itbic(i) .ne. 0) go to 4285
   read (unit = abuff, fmt = 4281) bus1
-4281 format ( a3 )
-  if ( bus1  .ne.  blank )   go to 4285
-  itbic(i) = itbic(i-1)
-4285 if ( tbtb2(i)  .ne.  0.0 )  go to 4291
+4281 format (a3)
+  if (bus1 .ne. blank) go to 4285
+  itbic(i) = itbic(i - 1)
+4285 if (tbtb2(i) .ne. 0.0) go to 4291
   read (unit = abuff, fmt = 4286) bus1
-4286 format ( 3x, a5 )
-  if( bus1  .ne.  blank )  go to 4291
+4286 format (3x, a5)
+  if(bus1 .ne. blank) go to 4291
   tbtb2(i) = tbtb2(i-1)
 4291 if( tbr(i)  .ne.  0.0 )  go to 4296
   read (unit = abuff, fmt = 4292) bus1, bus2
@@ -1950,7 +1952,7 @@ end subroutine guts44
 ! subroutine punpie.
 !
 subroutine punpie ( kcirct )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl44.ftn'
   include 'deck44.ftn'
@@ -1979,7 +1981,7 @@ end subroutine punpie
 !
 subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, xtir, xtii, zsurge, dummi, dummr, tixf, &
      work1, freq, m, iw, dist, metrik, fmipkm, ndim, ntri, nsqr2, itrnsf, kfull, mrr, nrp, ntol, conduc)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl44.ftn'
   include 'deck44.ftn'
@@ -2530,7 +2532,7 @@ end subroutine modal
 ! subroutine cominv.
 !
 subroutine cominv(a,b,m,freq)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !   this subroutine performs inversion of a complex matrix
   include 'blkcom.ftn'
   include 'labl44.ftn'
@@ -2606,7 +2608,7 @@ end subroutine cominv
 ! subroutine dceign.
 !
 subroutine dceign(ar,ai,vi,vr,er,ei,n,nm,ierr,nv,nb,lunit6,iprsup,ndim)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension ar(ndim,ndim),ai(ndim,ndim),er(ndim),ei(ndim),vi(ndim,ndim),vr(ndim,ndim)
   dimension scale(20),int(20),iord(20)
   if ( iprsup .ge. 1 ) write (*,*) ' top of dceign.  input matrix ar ....'
@@ -2669,7 +2671,7 @@ end subroutine dceign
 ! subroutine dceign.
 !
 subroutine cbal(nm,n,ar,ai,low,igh,scale,ndim)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension ar(ndim,ndim),ai(ndim,ndim),scale(20)
   !     this subroutine is a translation of the algol procedure
   !     cbalance, which is a complex version of balance,
@@ -2841,7 +2843,7 @@ end subroutine cbal
 ! subroutine cbabk2.
 !
 subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi,ndim)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension scale(20),zr(ndim,ndim),zi(ndim,ndim)
   !     this subroutine is a translation of the algol procedure
   !     cbabk2, which is a complex version of balbak,
@@ -2917,7 +2919,7 @@ end subroutine cbabk2
 ! subroutine cmhes.
 !
 subroutine comhes(nm,n,low,igh,ar,ai,int,lunit6,iprsup,ndim,iord)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension ar(ndim,ndim), ai(ndim,ndim), int(20), iord(20)
   !     this subroutine is a translation of the algol procedure comhes,
   !     num. math. 12, 349-368(1968) by martin and wilkinson.
@@ -3045,7 +3047,7 @@ end subroutine comhes
 ! subroutine comlr.
 !
 subroutine comlr(nm,n,low,igh,hr,hi,wr,wi,ierr,ndim)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   dimension hr(ndim,ndim),hi(ndim,ndim),wr(ndim),wi(ndim)
   !     this subroutine is a translation of the algol procedure comlr,
@@ -3251,7 +3253,7 @@ end subroutine comlr
 ! subroutine comlr2.
 !
 subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   dimension hr(ndim,ndim),hi(ndim,ndim),wr(ndim),wi(ndim)
   dimension zr(ndim,ndim),zi(ndim,ndim)
@@ -3664,7 +3666,7 @@ end subroutine comlr2
 ! subroutine cxred2.
 !
 subroutine cxred2( a, c, b, d, n, m )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !)    elimination of variables m+1,...n in symmetric complex matrix with
   !)    a=real part, c=imaginary part. a and c are
   !)    stored as triangle (1 element for 1.column,2 for 2.column etc.).
@@ -3732,7 +3734,7 @@ end subroutine cxred2
 ! subroutine symn.
 !
 subroutine symm(p,z,switch,kcirct,kk)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension p(9), z(9)
   dimension ar(3,3),ai(3,3),fr(3),fi(3)
   include 'blkcom.ftn'
@@ -3813,7 +3815,7 @@ end subroutine symm
 ! subroutine skin.
 !
 subroutine skin (s,r,freq,rf,xf)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl44.ftn'
   double precision  vsmall
@@ -3970,7 +3972,7 @@ end subroutine skin
 ! subroutine undrfl.
 !
 subroutine undrfl ( n1 )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     dummy imitation of ontario hydro univac module.
   n1 = -7654
   return
@@ -3979,7 +3981,7 @@ end subroutine undrfl
 ! subroutine wrte.
 !
 subroutine wrte ( p, i2, i3, iflag, l, unit, lunit6 )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension p(1),r(10)
   j=0
   do i=i2,i3
@@ -4001,7 +4003,7 @@ end subroutine wrte
 !     subroutine redu44.
 !
 subroutine redu44 ( a, b, n, m )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !)    Elimination of variables m+1,...n in symmetric matrix a. A is
   !)    stored as triangle (1 element for 1.column,2 for 2.column etc.).
   !)    Result is reduced matrix in columns 1,...m in case of reduction
@@ -4072,7 +4074,7 @@ end subroutine redu44
 !     subroutine output.
 !
 subroutine output(metrik, p, z, switch, kmax, is, k2)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl44.ftn'
   dimension p(1), z(1)
@@ -4177,7 +4179,7 @@ end subroutine output
 ! subroutine outspc.
 !
 subroutine outspc(p, z, kmax, metrik, fmipkm)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension p(9), z(9)
   include 'blkcom.ftn'
   include 'labl44.ftn'

@@ -275,7 +275,7 @@ end subroutine over47
 subroutine dimens(lsize, nchain, bus1, bus2)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension lsize(62)
-  real bus1, bus2
+  character(8) bus1, bus2
   if (nchain .ge. 29) go to 2900
   lsize( 1)  =   93002
   lsize( 2)  =    3000
@@ -307,8 +307,8 @@ subroutine dimens(lsize, nchain, bus1, bus2)
   lsize(28)  =    1080
   n7 = 28 + 1
   lsize(n7) = 9748865
-  bus1 =  232823
-      bus2 =  280421
+  bus1 ='   92930'
+      bus2 ='  290421'
   return
 2900 if (nchain .gt.  29) go to 3100
   lsize( 1)  =       0

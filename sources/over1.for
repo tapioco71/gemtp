@@ -144,9 +144,19 @@ subroutine over1
   n1 = 28
   ltlabl = lstat(n1 + 1)
   !locker(1) = bus1
-  write (unit = bus1, fmt = '(i4)') locker(1)
+  !read (unit = bus1, fmt = '(i4)') locker(1)
+  call str2int (bus1, locker(1), ios)
+  if (.not. (ios .eq. 0)) then
+     write (*, *) 'Error converting bus1 string.'
+     call stoptp
+  end if
   !locker(2) = bus2
-  write (unit = bus2, fmt = '(i4)') locker(2)
+  !read (unit = bus2, fmt = '(i4)') locker(2)
+  call str2int (bus2, locker(2), ios)
+  if (.not. (ios .eq. 0)) then
+     write (*, *) 'Error converting bus2 string.'
+     call stoptp
+  end if
   !     write (*,*) ' save  locker =',  locker
   d13 = ltacst
   d13 = d13 / 1600.
@@ -156,7 +166,7 @@ subroutine over1
   n1 = -9999
   call copyi (n1, lstat(1), ll60)
   call sysdep
-  call mover0 (flstat(1), ll20)
+  call mover0 (flstat, ll20)
   call runtym (d1, d2)
   flstat(1) = flstat(1) - d1
   flstat(2) = flstat(2) - d2
@@ -200,12 +210,12 @@ subroutine over1
   inecho = 0
   bus(1) = blank
   iaverg = 0
-  call move0 (isourc(1), lswtch)
-  call move0 (kodebr(1), lbrnch)
-  call move0 (kodsem(1), lbrnch)
-  call move0 (length(1), lbrnch)
-  call move0 (indhst(1), lbrnch)
-  call mover0 (bvalue(1), lsiz12)
+  call move0 (isourc, lswtch)
+  call move0 (kodebr, lbrnch)
+  call move0 (kodsem, lbrnch)
+  call move0 (length, lbrnch)
+  call move0 (indhst, lbrnch)
+  call mover0 (bvalue, lsiz12)
   iswent = 1
   omega = 0.0
   degmin = 0.0
@@ -255,7 +265,7 @@ subroutine over1
           ' list limits  1-10 :', 10i6, /, ' list limits 11-20 :', 10i6, /, ' list limits 21-end:', 10i6)
   go to 15
 6452 write (lunit6, 83044) (locker(i), i = 1, 2)
-83044 format (' Associated user documentation is the 864-page EMTP rule book dated  June, 1984.   Version M43.   Vardim time/date =', 2i4)
+83044 format (' Associated user documentation is the 864-page EMTP rule book dated  June, 1984.   Version M43.   Vardim time/date =', 2i8)
   write (lunit6, 5241)  ltlabl, lbus, lbrnch, ldata, lexct, lymat, lswtch, lsize7, lpast, lnonl, lchar, lsmout, &
        lsiz12, lfdep, lwt, ltails, limass, lsyn, maxpe, ltacst, lfsem, lfd, lhist, lsiz23, lcomp, lspcum, &
        lsiz26, lsiz27, lsiz28
@@ -731,6 +741,17 @@ subroutine over1
 4568 format (' "Exit  module over1."')
 99999 return
 end subroutine over1
+!
+! subroutine str2int.
+!
+subroutine str2int(str, int, stat)
+  implicit none
+  ! Arguments
+  character(len=*),intent(in) :: str
+  integer,intent(out)         :: int
+  integer,intent(out)         :: stat
+  read(str,*,iostat=stat)  int
+end subroutine str2int
 !
 !     tacs1c
 !

@@ -1421,7 +1421,7 @@ subroutine frefld (array)
 9207 format (/, " Error stop within  'frefld' .", 6i8, /, 1x)
   lstat(18) = -1
 9900 if (iprsup .ge. 2) write (lunit6, 9901) kill, kolbeg, array
-9901 format (' Exit "frefld".  Kill, kolbeg, array(1) =', i6, e20.10)
+9901 format (' Exit "frefld".  kill, kolbeg, array(1) =', i6, e20.10)
   return
 end subroutine frefld
 !
