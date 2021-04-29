@@ -2433,11 +2433,11 @@ subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, 
      if ( i .le. 9 ) write (lunit7,143) i, brname(2*i-1), brname(2*i), g,zsurge(i),vmode,distm,text1
 143  format ('-', i1, 2a6, 12x, 4e12.5, ' 1', 2x, a1)
      if ( i  .gt.  9 ) write (lunit7,145) i, brname(2*i-1), brname(2*i), g,zsurge(i),vmode,distm,text1
-145  format (i2,2a6,12x,4e12.5,2h 1,2x,a1)
+145  format (i2, 2a6, 12x, 4e12.5, ' 1', 2x, a1)
      go to 40
 155  write (lunit9) d13,ycharm,ychara,alpha,beta
      if ( iprsup .ge. 1 ) write (lunit6, 158) d13, i, ycharm,ychara,alpha,beta
-158  format (' at ', e12.5,' hz,ycharm,ychara,alpha,beta for mode',  i5, ' are', 5x, 4e12.5)
+158  format (' at ', e12.5,' Hz,ycharm,ychara,alpha,beta for mode',  i5, ' are', 5x, 4e12.5)
      if ( kexact .eq. 88333 )  go to 40
      if ( itrnsf .ne. 1 )  go to 40
      write (lunit9) (pp1(j,i),pp2(j,i), j=1,m )
@@ -2455,7 +2455,7 @@ subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, 
   write (lunit9) ( tixf(k),k=1,n9sq), (work1(k),k=1,n9sq)
   go to 9900
 119 if ( lastov .eq. 1 )  write (lunit7,240)
-240 format (11h$vintage, 0)
+240 format ('$vintage, 0')
   if ( nfreq .ne. 1  .and.  lastov .eq. 39 )  go to 9900
   do i=1,m
      c=cosz(theta2(i))
@@ -2468,17 +2468,17 @@ subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, 
 37   end do
   end do
   ! ***** end of rotation of ti matrix for k.c.lee's const.param.*******
-39 format (//,33h      real components, row by row)
+39 format (//, '      Real components, row by row')
 166 write (lunit6,66)
-66 format (////, ' Eigenvector matrix ti for current transformation i (phase)=ti*i(mode)')
+66 format (////, ' Eigenvector matrix ti for current transformation i (phase) = ti * i(mode)')
   write (lunit6,39)
-9 format (2x,6e12.5)
+9 format (2x, 6e12.5)
   do k=1,m
      write (lunit6,9)(tir(k,j),j=1,m)
 59   format (6f12.8)
 57 end do
   write (lunit6,60)
-60 format (//,37h     imaginary components, row by row)
+60 format (//, '     Imaginary components, row by row')
   do k=1,m
      write (lunit6,9)(tii(k,j),j=1,m)
   end do
@@ -2511,7 +2511,7 @@ subroutine modal(array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, 
   call redu44(xwc(1),workr1(1),m,ll0)
   if ( kill .ne. 0 ) go to 9200
   write (lunit6,83)
-83 format (/,' phase domain zsurge (real; the imag. of ti ignored)')
+83 format (/,' Phase domain zsurge (real; the imag. of ti ignored)')
   n=1
   do i=1,m
      k=n+i-1
@@ -2624,18 +2624,18 @@ subroutine dceign(ar,ai,vi,vr,er,ei,n,nm,ierr,nv,nb,lunit6,iprsup,ndim)
   !  do transformation to upper hessenberg form
 1 continue
   if (iprsup .ge. 3 ) write (lunit6, 300) nm,n,low,nupp,nb,nv,((ar(i,j),ai(i,j),j=1, nm),i=1,nm)
-300 format ( 49h before call comhes, nm, n, low, nupp, nb, nv are, 6i5,/, 38h ((ar(i,j),ai(i,j),j=1,nm),i=1,nm) are,/, (1x,8e15.6))
+300 format (' Before call comhes, nm, n, low, nupp, nb, nv are', 6i5, /, ' ((ar(i, j), ai(i, j), j = 1, nm), i = 1, nm) are', /, (1x, 8e15.6))
   call comhes(nm,n,low,nupp,ar,ai,int,lunit6,iprsup,ndim,iord)
   if (nv.eq.0) go to 12
   !  calculate values and vectors
   if ( iprsup .ge. 3 ) write (lunit6, 350) ((ar(i,j),ai(i,j),j=1,nm),i=1,nm)
-350 format ( 43h after call comhes, ar(i,j) and ai(i,j) are,/, (1x, 8e15.6) )
+350 format (' After call comhes, ar(i, j) and ai(i, j) are', /, (1x, 8e15.6))
   call comlr2(nm,n,low,nupp,int,ar,ai,vi,vr,er,ei,ierr,ndim,iord)
   if (iprsup .lt. 3 ) go to 410
   write (lunit6,400)  (er(i),ei(i),i=1,nm)
-400 format ( 49h after call comlr2 in dceign, the eigenvalues are,/, ( 1x, 8e15.6), / )
+400 format (' After call comlr2 in dceign, the eigenvalues are', /, (1x, 8e15.6), /)
   write (lunit6, 405)  ((vr(i,j),vi(i,j),j=1,nm),i=1,nm)
-405 format ( 21h and eigenvectors are,/ (1x,8e15.6) )
+405 format (' and eigenvectors are', /, (1x, 8e15.6))
 410 if (ierr.ne.0) go to 5
   !  transform vectors to vectors of original matrix
   if (nb.eq.0) return
@@ -2648,11 +2648,11 @@ subroutine dceign(ar,ai,vi,vr,er,ei,n,nm,ierr,nv,nb,lunit6,iprsup,ndim)
   return
   !  output error messages
 5 write (lunit6,6) ierr
-6 format ( 31h ***warning-dceign:  eigenvalue,  i4, 18h did not converge.)
+6 format (' ***Warning-dceign:  eigenvalue', i4, ' did not converge.')
   return
 90 ierr=-1
   write (lunit6,91) n,nm
-91 format (52h **error-dceign:  order of matrix greater than first, 20h dimension of matrix,/,18x,6horder=,i5, 17h first dimension=, i5)
+91 format (' **Error-dceign:  order of matrix greater than first dimension of matrix', /, 18x, 'order=', i5, ' first dimension=', i5)
   write (*,*) 'output matrix ar '
   do i=1,n
      write (*,*) (ar(i,j), j=1,n)
@@ -2969,7 +2969,7 @@ subroutine comhes(nm,n,low,igh,ar,ai,int,lunit6,iprsup,ndim,iord)
   la = igh - 1
   kp1 = low + 1
   if (iprsup .ge. 3 ) write (lunit6, 20 )  igh, low, la, kp1
-20 format ( 47h at the top of comhes, igh, low, la and kp1 are, 4i10)
+20 format (' At the top of comhes, igh, low, la and kp1 are', 4i10)
   d13=epscmh
   if (la .lt. kp1) go to 200
   do m = kp1, la
@@ -3035,7 +3035,7 @@ subroutine comhes(nm,n,low,igh,ar,ai,int,lunit6,iprsup,ndim,iord)
 150     end do
 160  end do
      if ( iprsup .ge. 3 ) write (lunit6, 170) m, igh, int(m),(ar(j,m),ai(j,m),j=1,igh)
-170  format ( 29h m, igh and int(m) at 170 are, 3i10,/, 31h (ar(j,m),ai(j,m),j=1,igh), are,/, (1x,8e15.6) )
+170  format (' m, igh and int(m) at 170 are', 3i10, /, ' (ar(j, m), ai(j, m), j = 1, igh), are', /, (1x, 8e15.6))
 180 end do
 200 return
 end subroutine comhes
@@ -3356,8 +3356,8 @@ subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
 140  end do
      zr(j,i) = 1.0
 160 end do
-  if ( iprsup .ge. 3 ) write (lunit6, 170) ((zr(i,j),zi(i,j),j=1,igh),i=1,igh)
-170 format ( 69h after do 160 loop in comlr2, ((zr(i,j),zi(i,j),j=1,igh),i=1,igh) are,/, (1x,8e15.6) )
+  if (iprsup .ge. 3) write (lunit6, 170) ((zr(i, j), zi(i, j), j = 1, igh), i = 1, igh)
+170 format (' After do 160 loop in comlr2, ((zr(i, j), zi(i, j), j = 1, igh), i = 1, igh) are', /, (1x, 8e15.6))
   !     :::::::::: store roots isolated by cbal ::::::::::
 180 do i = 1, n
      if (i .ge. low .and. i .le. igh) go to 200
@@ -3388,7 +3388,7 @@ subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
   xr = hr(ienm1,ien) * hr(ien,ienm1) - hi(ienm1,ien) * hi(ien,ienm1)
   xi = hr(ienm1,ien) * hi(ien,ienm1) + hi(ienm1,ien) * hr(ien,ienm1)
   if ( iprsup .ge. 3) write (lunit6, 305) sr, si, xr, xi
-305 format ( 29h sr, si, xr and xi at 305 are, 4e15.6 )
+305 format (' sr, si, xr and xi at 305 are', 4e15.6)
   if (xr .eq. 0.0 .and. xi .eq. 0.0) go to 340
   yr = (hr(ienm1,ienm1) - sr) * onehaf
   yi = (hi(ienm1,ienm1) - si) * onehaf
@@ -3406,7 +3406,7 @@ subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
   d2 = ( xr*(yr+zzr) + xi*(yi+zzi) ) / d1
   d3 = ( xi*(yr+zzr) - xr*(yi+zzi) ) / d1
   if ( iprsup .ge. 3 ) write (lunit6, 315) yr, yi, zzr, zzi, d2,d3
-315 format ( 38h yr, yi, zzr, zzi and d2,d3 at 315 are, 6e15.6)
+315 format (' yr, yi, zzr, zzi and d2,d3 at 315 are', 6e15.6)
   sr = sr - d2
   si = si - d3
   go to 340
@@ -3417,7 +3417,7 @@ subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
      hr(i,i) = hr(i,i) - sr
      hi(i,i) = hi(i,i) - si
      if ( iprsup .ge. 3 ) write (lunit6, 350) i, sr, si, hr(i,i),hi(i,i)
-  350 format ( 43h i, sr, si, hr(i,i), and hi(i,i) at 350 are,/,10 x, i8, 4e15.6)
+  350 format (' i, sr, si, hr(i,i), and hi(i,i) at 350 are', /, 10x, i8, 4e15.6)
 360 end do
   tr = tr + sr
   ti = ti + si
@@ -3428,7 +3428,7 @@ subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
   yr = absz(hr(ien,ienm1)) + absz(hi(ien,ienm1))
   zzr = absz(hr(ien,ien)) + absz(hi(ien,ien))
   if ( iprsup .ge. 3 ) write (lunit6, 370) xr, yr, zzr
-370 format ( 27h xr, yr, and zzr at 370 are, 3e15.6)
+370 format (' xr, yr, and zzr at 370 are', 3e15.6)
   !     :::::::::: for m=ien-1 step -1 until l do -- ::::::::::
   do mm = l, ienm1
      m = ienm1 + l - mm
@@ -3439,7 +3439,7 @@ subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
      zzr = xr
      xr = absz(hr(m-1,m-1)) + absz(hi(m-1,m-1))
      if ( iprsup .ge. 3 ) write (lunit6, 375) mm, yr, zzr, yi, xr, xi, epmach
-375  format ( 47h at 375, mm, yr, zzr, yi, xr, xi and epmach are,/, 10x, i8, 6e15.6)
+375  format (' at 375, mm, yr, zzr, yi, xr, xi and epmach are', /, 10x, i8, 6e15.6)
      if (yr .le. epmach * zzr / yi * (zzr + xr + xi)) go to 420
 380 end do
   !     :::::::::: triangular decomposition h=l*r ::::::::::
@@ -3484,7 +3484,7 @@ subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
         hi(i,j) = hi(i,j) - zzr * hi(im1,j) - zzi * hr(im1,j)
 500  end do
      if ( iprsup .ge. 3 ) write (lunit6, 510) i,n, (hr(i,j), hi(i,j), j=1,n)
-510  format ( 42h at 510, (hr(i,j), hi(i,j), j=1,n) for i =, i8, 10h, and n = , i8,  2x, 3hare,/, (1x, 8e15.6) )
+510  format (' At 510, (hr(i, j), hi(i, j), j = 1, n) for i =', i8, ', and n = ', i8, 2x, 'are', /, (1x, 8e15.6))
 520 end do
   !     :::::::::: composition r*l=h ::::::::::
   do j = mp1, ien
@@ -3521,7 +3521,7 @@ subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
         zi(i,j-1) = zi(i,j-1) + xr * zi(i,j) + xi * zr(i,j)
 620  end do
      if ( iprsup .ge. 3 ) write ( lunit6, 630) j, low, igh, (hr(i,j),hi(i,j),i=1,j), (zr(i,j),zi(i,j),i=low,igh)
-630  format ( 26h j, low and igh at 630 are, 3i8, 60h (hr(i,j),hi(i,j),i=1,j) and (zr(i,j),zi(i,j),i=low,igh) are, /, (1x,8e15.6) )
+630  format (' j, low and igh at 630 are', 3i8, ' (hr(i, j), hi(i, j), i = 1, j) and (zr(i, j), zi(i, j), i = low, igh) are', /, (1x, 8e15.6))
 640 end do
   go to 240
   !     :::::::::: a root found ::::::::::
@@ -3531,7 +3531,7 @@ subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
   wi(ien) = hi(ien,ien)
   ien = ienm1
   if ( iprsup .ge. 3 ) write (lunit6, 670) ien,hr(ien,ien),hi(ien,ien),wr(ien),wi(ien)
-670 format ( 67h     ien    hr(ien,ien)    hi(ien,ien)       wr(ien)      wi(ien),/, i8, 4e15.6)
+670 format ('     ien    hr(ien, ien)    hi(ien, ien)       wr(ien)      wi(ien)', /, i8, 4e15.6)
   go to 220
 680 continue
   do id=low,igh
@@ -3575,7 +3575,7 @@ subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
         hr(i,ien) = d2
         hi(i,ien) = d3
         if ( iprsup .ge. 3 ) write (lunit6, 770)  nn,n,ien,ii,i,ienm1,zzr,zzi,yr,yi,d2,d3, hr(i,ien),hi(i,ien)
-770     format ( 87h nn, n, ien, ii, i, ienm1, zzr, zzi, yr, yi, d2, d3, hr(i,ien) and hi(i,ien) at 770 are,/, 1x, 6i5, 8e12.5)
+770     format (' nn, n, ien, ii, i, ienm1, zzr, zzi, yr, yi, d2, d3, hr(i, ien) and hi(i,ien) at 770 are', /, 1x, 6i5, 8e12.5)
 780  end do
 800 end do
   !     :::::::::: end backsubstitution ::::::::::
@@ -3607,7 +3607,7 @@ subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
         zr(i,j) = zzr
         zi(i,j) = zzi
         if (iprsup .ge. 3 ) write (lunit6, 870) jj, j, m, zr(i,j),zi(i,j)
-870     format ( 62h at the end of do 880 loop, jj, j,  m, zr(i,j) and zi(i,j) are,5x,3i8,2e15.6)
+870     format (' At the end of do 880 loop, jj, j,  m, zr(i, j) and zi(i, j) are', 5x, 3i8, 2e15.6)
 880  end do
   end do
   go to 1001
@@ -3857,7 +3857,7 @@ subroutine skin (s,r,freq,rf,xf)
 7 e2f2 = e**2 + f**2
   s2 =  x * s3 * onehaf / e2f2
   if (iprsup .ge. 1) write (lunit6, 320)  e, f, e2f2, s2
-320 format (27h e, f,  e2f2, and s2 at 320, 4e16.6)
+320 format (' e, f,  e2f2, and s2 at 320', 4e16.6)
   rf = (-h*e+g*f)*s2
   xf = (g*e+h*f)*s2
   go to 9900
@@ -3991,9 +3991,9 @@ subroutine wrte ( p, i2, i3, iflag, l, unit, lunit6 )
   return
 3 write (lunit6,33) l, (r(i),i=1,j)
   return
-11 format (1h0,3x,9e14.5)
-22 format (4x,9e14.5)
-33 format (1h0,i3,9e14.5)
+11 format ('0', 3x, 9e14.5)
+22 format (4x, 9e14.5)
+33 format ('0', i3, 9e14.5)
 end subroutine wrte
 !
 !     subroutine redu44.
@@ -4013,8 +4013,8 @@ subroutine redu44 ( a, b, n, m )
   if (m .gt. 0) w=-w
   ij=n*j/2
   if ( iprsup  .ge.  4 ) write (lunit6, 2692)  n, m, ij,  ( a(k), k=1, ij )
-2692 format ( /,  24h at start of  'redu44' ., 24h       n       m      ij  ,/, &
-          24x,  3i8  ,/,  29h (a(k), k=1, ij)  follow ....  ,/, ( 1x,  8e16.7 )  )
+2692 format (/, " At start of  'redu44' .       n       m      ij  ", /, &
+          24x, 3i8, /, ' (a(k), k = 1, ij)  follow ....', /, (1x, 8e16.7))
 3 j=j-1
   if (j.eq.m) return
   h1=a(ij)
@@ -4087,55 +4087,55 @@ subroutine output(metrik, p, z, switch, kmax, is, k2)
   if ( metrik .eq. 1 ) unit = 5280. * 12. *2.54d0/ 100000.d0
   check=switch
   write (lunit6,66)
-66 format (1h0)
-  go to (305,306,307,308,332,333,336,337,340,341), is
-305 write (lunit6,301) txtunt
-301 format (1h0,12x,35hinverted capacitance matrix (daraf- ,a4, 1h) )
+66 format ('0')
+  go to (305, 306, 307, 308, 332, 333, 336, 337, 340, 341), is
+305 write (lunit6, 301) txtunt
+301 format ('0', 12x, 'Inverted capacitance matrix (daraf-', a4, ')')
   go to 5
-306 write (lunit6,302) txtunt
-302 format (1h0,14x,33hinverted susceptance matrix (ohm- ,a4, 1h) )
+306 write (lunit6, 302) txtunt
+302 format ('0', 14x, 'Inverted susceptance matrix (Ohm-', a4, ')')
   go to 5
-307 write (lunit6,303) txtunt
-303 format (1h0,21x,26hcapacitance matrix (farad/ ,a4, 1h) )
+307 write (lunit6, 303) txtunt
+303 format ('0', 21x, 'Capacitance matrix (Farad/',a4, ')')
   unit = 1.0 / unit
   go to 5
-308 write (lunit6,304) txtunt
-304 format (1h0,23x,24hsusceptance matrix (mho/ ,a4, 1h) )
+308 write (lunit6, 304) txtunt
+304 format ('0', 23x, 'Susceptance matrix (mho/', a4, ')')
   unit = 1.0 / unit
   go to 5
-332 write (lunit6,330) txtunt
-330 format (1h0,16x,31hinverted impedance matrix (mho- ,a4, 1h) )
+332 write (lunit6, 330) txtunt
+330 format ('0', 16x, 'Inverted impedance matrix (mho-', a4, ')')
   go to 5
-333 write (lunit6,331) txtunt
-331 format (1h0,25x,22himpedance matrix (ohm/ ,a4, 1h) )
+333 write (lunit6, 331) txtunt
+331 format ('0', 25x, 'Impedance matrix (ohm/', a4, ')')
   unit = 1.0 / unit
   go to 5
-336 write (lunit6,334)
-334 format (1h0,19x,33htransfer admittance matrix (mhos))
+336 write (lunit6, 334)
+334 format ('0', 19x, 'Transfer admittance matrix (mhos)')
   go to 5
-337 write (lunit6,335)
-335 format (1h0, 16x, 36htwice shunt admittance matrix (mhos))
+337 write (lunit6, 335)
+335 format ('0', 16x, 'Twice shunt admittance matrix (mhos)')
   go to 5
-340 write (lunit6,338)
-338 format (1h0,20x,32htransfer impedance matrix (ohms))
+340 write (lunit6, 338)
+338 format ('0', 20x, 'Transfer impedance matrix (Ohms)')
   go to 5
-341 write (lunit6,339)
-339 format (1h0, 11x, 41hone half of shunt impedance matrix (ohms))
+341 write (lunit6, 339)
+339 format ('0', 11x, 'One half of shunt impedance matrix (Ohms)')
 5 go to (320,321,322),k2
-320 write (lunit6,309)
-309 format (1h+,53x,37hfor the system of physical conductors)
+320 write (lunit6, 309)
+309 format ('+', 53x, 'For the system of physical conductors')
   go to 6
-321 write (lunit6,310)
-310 format (1h+,53x,45hfor the system of equivalent phase conductors)
+321 write (lunit6, 310)
+310 format ('+', 53x, 'For the system of equivalent phase conductors')
   go to 6
 322 write (lunit6,311)
-311 format (1h+,53x,65hfor the symmetrical components of the equivalent phase conductors)
-6 if (k2.eq.3  ) go to 3
+311 format ('+', 53x, 'For the symmetrical components of the equivalent phase conductors')
+6 if (k2 .eq. 3) go to 3
   write (lunit6,312)
-312 format (1h ,30x,54hrows and columns proceed in same order as sorted input)
+312 format (' ', 30x, 'Rows and columns proceed in same order as sorted input')
 4 k=0
-  if (is .eq. 8)  write (lunit6, 350)
-  if (is .eq.10)  write (lunit6, 350)
+  if (is .eq. 8) write (lunit6, 350)
+  if (is .eq.10) write (lunit6, 350)
 350 format (' Sum of two equal shunt admittances at both terminals or its inverse, printed to conform to transients program input format')
   kk=0
   ki = 0
