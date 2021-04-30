@@ -61,10 +61,10 @@ subroutine over2
      m = jk + nphlmt
      l = 2 * jk
      !     write (bus(l), 2689)  chlmfs(jk)(1:6)
-     read(chlmfs(jk)(1 : 6), 2689) bus(l)
+     read (chlmfs(jk)(1 : 6), 2689) bus(l)
 2689 format (a6)
      !     write (bus(l+1), 2689)  chlmfs(m)(1:6)
-     read(chlmfs(m)(1 : 6), 2689) bus(l + 1)
+     read (chlmfs(m)(1 : 6), 2689) bus(l + 1)
   end do
   go to 4199                ! go directly to use $include for lmfs pi model half
   !     following used rather than data statements due to common:
@@ -121,7 +121,7 @@ subroutine over2
 3988 call cimage
 3989 mread2 = 1
   read (unit = abuff, fmt = 2005) char80
-2005 format (a)
+2005 format (a80)
   if (char80(1:8) .ne. 'no. of p') go to 2100 ! not lmfs case
   do jk = 16, 80
      if (char80(jk : jk) .ne. ' ') go to 2008
@@ -443,9 +443,9 @@ subroutine over2
   !     1583 do 5281  m= 2, ntot, 2
   !     n9 = m / 2
   !     char6 = 'send_'//alphan(n9:n9)
-  !     read(char6,4207) bus(m)
+  !     read (char6,4207) bus(m)
   !     char6 = 'recv_'//alphan(n9:n9)
-  !     read(char6,4207) bus(m+1)
+  !     read (char6,4207) bus(m+1)
   !     4207 format ( a6 )
   !     5281 continue
   do m = 1, 2 * nphlmt
@@ -524,9 +524,9 @@ subroutine over2
   if ( bus4 .ne. text10 )  go to 4003
   read (unit = abuff, fmt = 44002) bus6, yzero
 44002 format (26x, a6, e6.2)
-  if ( noutpr  .eq.  0 ) write (kunit6, 3996 )  bus6, yzero
+  if (noutpr  .eq.  0) write (kunit6, 3996) bus6, yzero
 3996 format ('+3-phase xformer request.  ', "'", a6, "'", '  ', e12.4  )
-  if ( yzero .gt. 0.0 )  go to 3998
+  if (yzero .gt. 0.0)  go to 3998
   kill = 52
   lstat(16) = 1
   lstat(19) = 3998
@@ -861,17 +861,17 @@ subroutine over2
   iprsov(36) = it
   iprsov(35) = ibr + 1
   read (unit = abuff, fmt = 764) nphcas, freqcs
-  if ( noutpr  .eq.  0 ) write (kunit6, 76701)  nphcas, freqcs
+  if (noutpr .eq. 0) write (kunit6, 76701)  nphcas, freqcs
 76701 format ('+Cascaded-pi header card.', i10, 2x, e12.4)
 764 format (26x, i6, e6.2)
   idumy = 3 * nphcas
-  idumy = idumy * (idumy+1) / 2
-  if ( idumy  .lt.  lpast )   go to 7671
-  lstat(19)=764
+  idumy = idumy * (idumy + 1) / 2
+  if (idumy .lt. lpast) go to 7671
+  lstat(19) = 764
   lstat(15) = 1
   go to 76724
-7671 idumy = nphcas * (nphcas+1) / 2
-  if (idumy.lt.lbus)goto100
+7671 idumy = nphcas * (nphcas + 1) / 2
+  if (idumy .lt. lbus) go to 100
   lstat(19)=7671
   lstat(15) = 2
 76724 kill=53
@@ -2848,7 +2848,7 @@ subroutine distr2
   if ( n12  .gt.  npa )   n12 = npa
   !     read input card using cimage
   call cimage
-  read (unit = abuff, fmt = 6741) ( voltbc(ii), ii = n11, n12)
+  read (unit = abuff, fmt = 6741) (voltbc(ii), ii = n11, n12)
   if ( noutpr  .eq.  0 ) write (kunit6, 6744) n11, n12, (voltbc(ii), ii=n11,n12 )
   nn11 = nn13 + n11
   nn12 = nn13 + n12
