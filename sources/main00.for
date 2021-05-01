@@ -408,99 +408,99 @@ subroutine cimage
   data chtacs     / 'tacs' /
   data text5      / 'blank ' /
   !              *****    request no. 1.    "$attach"      *****  *****
-  data textay(1)  / 6ha      /
+  data textay(1)  / 'a     ' /
   data jpntr(1)   / 1 /
-  data textax(1)  / 6hattach /
+  data textax(1)  / 'attach' /
   !              *****    request no. 2.    "$punch"       *****  *****
-  data textay(2)  / 6hp      /
+  data textay(2)  / 'p     ' /
   data  jpntr(2)  / 2 /
-  data textax(2)  / 6hpunch  /
+  data textax(2)  / 'punch ' /
   !              *****    request no. 3.    "$output"      *****  *****
-  data textay(3)  / 6hout    /
+  data textay(3)  / 'out   ' /
   data jpntr(3)   / 3 /
-  data textax(3)  / 6houtput /
+  data textax(3)  / 'output' /
   !              *****    request no. 4.    "$save"        *****  *****
-  data textay(4)  / 6hs      /
+  data textay(4)  / 's     ' /
   data jpntr(4)   / 4 /
-  data textax(4)  / 6hsave   /
+  data textax(4)  / 'save  ' /
   !              *****    request no. 5.    "$spydata"     *****  *****
   !                  former "$include", which is now in "erexit".
-  data textay(5)  / 6hspy    /
+  data textay(5)  / 'spy   ' /
   data jpntr(5)   / 5 /
-  data textax(5)  / 6hspydat /
-  data textax(6)  / 6ha      /
+  data textax(5)  / 'spydat' /
+  data textax(6)  / 'a     ' /
   !              *****    request no. 6.    "$disable"     *****  *****
-  data textay(6)  / 6hd      /
+  data textay(6)  / 'd     ' /
   data jpntr(6)   / 7 /
-  data textax(7)  / 6hdisabl /
-  data textax(8)  / 6he      /
+  data textax(7)  / 'disabl' /
+  data textax(8)  / 'e     ' /
   !              *****    request no. 7.    "$enable"      *****  *****
-  data textay(7)  / 6he      /
+  data textay(7)  / 'e     ' /
   data jpntr(7)   / 9 /
-  data textax(9)  / 6henable /
+  data textax(9)  / 'enable' /
   !              *****    request no. 8.    "$return"      *****  *****
-  data textay(8)  / 6hr      /
+  data textay(8)  / 'r     ' /
   data jpntr(8)   / 10 /
-  data textax(10) / 6hreturn /
+  data textax(10) / 'return' /
   !              *****    request no. 9.    "newfile"      *****  *****
-  data textay(9)  / 6hn      /
+  data textay(9)  / 'n     ' /
   data jpntr(9)   / 11 /
-  data textax(11) / 6hnewfil /
-  data textax(12) / 6he      /
+  data textax(11) / 'newfil' /
+  data textax(12) / 'e     ' /
   !              *****    request no. 10.   "new epsiln"   *****  *****
-  data textay(10) / 6hne      /
+  data textay(10) / 'ne    ' /
   data jpntr(10)  / 13 /
-  data textax(13) / 6hnew     /
-  data textax(14) / 6hepsiln  /
+  data textax(13) / 'new   ' /
+  data textax(14) / 'epsiln' /
   !              *****    request no. 11.   "delete"       *****  *****
-  data textay(11) / 6hde      /
+  data textay(11) / 'de    ' /
   data jpntr(11)  / 15 /
-  data textax(15) / 6hdelete  /
+  data textax(15) / 'delete' /
   !              *****    request no. 12.   "monitor"      *****  *****
-  data textay(12) / 6hm       /
+  data textay(12) / 'm     ' /
   data jpntr(12)  / 16 /
-  data textax(16) / 6hmonito  /
-  data textax(17) / 6hr       /
+  data textax(16) / 'monito' /
+  data textax(17) / 'r     ' /
   !              *****    request no. 13.   "listoff"      *****  *****
-  data textay(13) / 6hlf      /
+  data textay(13) / 'lf    ' /
   data jpntr(13)  / 18 /
-  data textax(18) / 6hlistof  /
-  data textax(19) / 6hf       /
+  data textax(18) / 'listof' /
+  data textax(19) / 'f     ' /
   !              *****    request no. 14.   "liston"       *****  *****
-  data textay(14) / 6hln      /
+  data textay(14) / 'ln    ' /
   data jpntr(14)  / 20 /
-  data textax(20) / 6hliston  /
+  data textax(20) / 'liston' /
   !              *****    request no. 15.   "vintage"      *****  *****
-  data textay(15) / 6hv       /
+  data textay(15) / 'v     ' /
   data jpntr(15)  / 21 /
-  data textax(21) / 6hvintag  /
-  data textax(22) / 6he       /
+  data textax(21) / 'vintag' /
+  data textax(22) / 'e     ' /
   !              *****    request no. 16.   "oldfile"      *****  *****
-  data textay(16) / 6hold     /
+  data textay(16) / 'old   ' /
   data jpntr(16)  / 23 /
-  data textax(23) / 6holdfil  /
-  data textax(24) / 6he       /
+  data textax(23) / 'oldfil' /
+  data textax(24) / 'e     ' /
   !              *****    request no. 17.   "stop"         *****  *****
-  data textay(17) / 6hst      /
+  data textay(17) / 'st    ' /
   data jpntr(17)  / 25 /
-  data textax(25) / 6hstop    /
+  data textax(25) / 'stop  ' /
   !              *****    request no. 18.   "watch5"       *****  *****
-  data textay(18) / 6hw       /
+  data textay(18) / 'w     ' /
   data jpntr(18)  / 26 /
-  data textax(26) / 6hwatch5  /
+  data textax(26) / 'watch5' /
   !              *****    request no. 19.   "comment"      *****  *****
-  data textay(19) / 6hcom     /
+  data textay(19) / 'com   ' /
   data jpntr(19)  / 27 /
-  data textax(27) / 6hcommen  /
-  data textax(28) / 6ht       /
+  data textax(27) / 'commen' /
+  data textax(28) / 't     ' /
   !              *****    request no. 20.   "width"        *****  *****
-  data textay(20) / 6hwi      /
+  data textay(20) / 'wi    ' /
   data jpntr(20)  / 29 /
-  data textax(29) / 6hwidth   /
+  data textax(29) / 'width ' /
   !              *****    request no. 21.   "units"        *****  *****
-  data textay(21) / 6hu       /
+  data textay(21) / 'u     ' /
   data jpntr(21)  / 30 /
-  data textax(30) / 6hunits   /
+  data textax(30) / 'units ' /
   !              *****   bounds follow ...
   data jpntr(22)  / 31 /
   data jpntr(23)  / 0 /
