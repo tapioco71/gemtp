@@ -4703,10 +4703,10 @@ subroutine pfatch
   !     replot, file specification
   !     start again, file specification
   !     free-format is here required, temporarily.
-  !     Module written specially for  dec  vax-11/780 .
+  !     Module written specially for  DEC  VAX-11/780 .
   include 'blkcom.ftn'
   include 'dekspy.ftn'
-  character*25 filen
+  character(25) filen
   if (m4plot .ne. 1)  go to 4519 ! not interactive emtp
   write (prom80, 4504)
 4504 format ('    Send VAX disk file name:')
@@ -4716,13 +4716,13 @@ subroutine pfatch
   texcol(31) = csepar       ! put "," terminator after name
   ialter = lunit2           ! connect emtp tables file to this unit
 4519 n4 = 0
-  write (unit=filen(1:25), fmt=4523)
+  write (unit = filen(1 : 25), fmt = 4523)
 4523 format (25x)
   do k = kolbeg, 80
      if(texcol(k) .eq. blank) go to 4532
      if(texcol(k) .eq. csepar) go to 4536
      n4 = n4 + 1
-     write (unit=filen(n4:25), fmt=3041) texcol(k)
+     write (unit = filen(n4 : 25), fmt = 3041) texcol(k)
 3041 format (80a1)
   end do
 4532 continue
