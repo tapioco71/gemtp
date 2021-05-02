@@ -1381,7 +1381,7 @@ subroutine reques
 2608 nfrfld = 1
   call freone ( szplt )
 2612 if ( noutpr  .eq.  0 ) write (kunit6, 2614)  szplt
-2614 format ('+New plotter paper-height limit.', 2x, e13.3)
+2614 format ('+new plotter paper-height limit.', 2x, e13.3)
   go to 15
   !     $$$$$    special-request word no. 9.   'printer lines per inch'
 8009 if ( kolbeg  .gt.  0 )   go to 2628
@@ -1393,7 +1393,7 @@ subroutine reques
   call frefld ( voltbc(1) )
   lnpin = voltbc(1)
 2631 if ( noutpr  .eq.  0 ) write (kunit6, 2634)  lnpin
-2634 format ('+New printer spacing, lines/distance =', 2x, i8)
+2634 format ('+new printer spacing, lines/distance =', 2x, i8)
   go to 15
   !     $$$$$    special-request word no. 10.   'mode voltage output' $$$
 8010 if ( kolbeg  .gt.  0 )   go to 2644
@@ -1407,11 +1407,11 @@ subroutine reques
   modout = voltbc(1)
 2646 if ( modout  .le.  0 ) modout = 3
   if ( noutpr  .eq.  0 ) write (kunit6, 2648)  modout
-2648 format ('+Request for tricky Karrenbauer output,', i3, '  modes.')
+2648 format ('+request for tricky Karrenbauer output,', i3, '  modes.')
   go to 15
   !     $$$$$    special-request word no. 11.   'end last data case' $$$$
 8011 if ( noutpr  .eq.  0 ) write (kunit6, 2654)
-2654 format ('+Special terminator record for all data.')
+2654 format ('+special terminator record for all data.')
   go to 15
   !     $$$$$    special-request word no. 12.   'analytic sources usage'
 8012 if (noutpr .eq. 0) write (kunit6, 2667)
@@ -1430,7 +1430,7 @@ subroutine reques
   go to 15
   !     $$$$$    special-request word no. 14.   'tacs emtp sources'  $$$$
 8014 if (noutpr .eq. 0) write (kunit6, 2682)
-2682 format ('+tacs names controlling type 1-10 EMTP sources.')
+2682 format ('+TACS names controlling type 1-10 EMTP sources.')
   if (kolbeg .gt. 0) go to 2683
   read (unit = abuff, fmt = 2685) (vstacs(j), j = 1, 10)
 2685 format (20x, 10a6)
@@ -1449,12 +1449,12 @@ subroutine reques
   !     this request is handled outside of subroutine.           m28.1421
   !     $$$$$    special-request word no. 16.   'semlyen setup'     $$$$$
 8016 if ( noutpr  .eq.  0 ) write (kunit6, 2705)
-2705 format ('+Request for Semlyen step-response routine.')
+2705 format ('+request for Semlyen step-response routine.')
   nchain = 45
   go to 5617
   !     $$$$  special request-word no. 17.   'linear bias usage' $$$$$$$$$
 8017 if ( noutpr .eq. 0 ) write (lunit6, 8719)
-8719 format ('+Ramped linear variation of random bias.')
+8719 format ('+ramped linear variation of random bias.')
   linsys = 1
   go to 15
   !     $$$$$    special-request word no. 18.   'cable constants'   $$$$$
@@ -1463,18 +1463,18 @@ subroutine reques
 2732 format (48x, e8.0, i8)
   if ( d13  .gt.  0.0 ) znvref = d13
   if ( noutpr  .eq.  0 ) write (kunit6, 2726)  ktrlsw(3)
-2726 format ('+Transfer to "cable constants".  type =', i6)
+2726 format ('+transfer to "cable constants".  type =', i6)
   nchain = 47
   go to 5617
   !     $$$$$    special-request word no. 19.   'auto name'         $$$$$
 8019 nmauto = nmauto + 1
   if ( nmauto .ge. 2 )  nmauto = 0
   if ( noutpr  .eq.  0 ) write (kunit6, 2743)  nmauto
-2743 format ('+Toggle branch naming option.   nmauto =', i8)
+2743 format ('+toggle branch naming option.   nmauto =', i8)
   go to 15
   !     $$$$$    special-request word no. 20.   'renumber bypass'   $$$$$
 8020 if ( noutpr  .eq.  0 ) write (kunit6, 2758)
-2758 format ('+Bypass of transient network renumbering.')
+2758 format ('+bypass of transient network renumbering.')
   !     negative "kpartb" (1000 or exponent of "high resistance")
   !     is flag carried into "over6" to bypass overlay 7:
   kpartb = -iabs ( kpartb )
@@ -1499,7 +1499,7 @@ subroutine reques
 2780 format ('+f-scan.', 3e12.3, i5)
   go to 2781
 2778 write (kunit6, 3779) fminfs, fmaxfs, n8
-3779 format ('+Line model freq scan.', 2e12.3, i3)
+3779 format ('line model freq scan.', 2e12.3, i3)
   fminsv = fminfs
 2781 if ( fminfs  .le.  0.0 )   go to 2785
   if ( fmaxfs  .le.  fminfs )   go to 2785
@@ -1521,7 +1521,7 @@ subroutine reques
   read (unit = abuff, fmt = 2796) bus4, bus5
 2796 format (16x, a1, 7x, a1)
   if ( noutpr  .eq.  0 ) write (kunit6, 2801)  bus4, bus5
-2801 format ('+Free-field characters.   ', a1, '   and   ',  a1,  ' .')
+2801 format ('+free-field characters.   ', a1, '   and   ',  a1,  ' .')
   if ( bus4  .ne.  blank )   csepar = bus4
   if ( bus5  .ne.  blank )   chcont = bus5
   go to 15
@@ -1538,7 +1538,7 @@ subroutine reques
   end do
 2816 iprsup = iprsov(1)
   if ( noutpr  .eq.  0 ) write (kunit6, 2813)  ( iprsov(i), i=1, 5 )
-2813 format ('+Diagnostic printout codes.', 5i4)
+2813 format ('+diagnostic printout codes.', 5i4)
   go to 15
   !     $$$$$    special-request word no. 24.   'power frequency'   $$$$$
 8024 if ( kolbeg  .gt.  0 )   go to 2820
@@ -1547,11 +1547,11 @@ subroutine reques
 2820 nfrfld = 1
   call freone ( statfr )
 2822 if ( noutpr  .eq.  0 ) write (kunit6, 2824)  statfr
-2824 format ('+Redefined power frequency =', e12.3, '  Hz.')
+2824 format ('+redefined power frequency =', e12.3, '  Hz.')
   go to 15
   !     $$$$$    special-request word no. 25.   'file request'      $$$$$
 8025 if ( noutpr  .eq.  0 ) write (kunit6, 4654)
-4654 format ('+Call subroutine "midov1" .')
+4654 format ('+call subroutine "midov1" .')
   call midov1
   go to 15
   !     $$$$$    special-request word no. 26.   'user identification' $$$
@@ -1570,11 +1570,11 @@ subroutine reques
 8027 iofbnd = 99876
   nchain = 42
   if ( noutpr  .eq.  0 ) write (kunit6, 4685)
-4685 format ('+Request to convert old zno data to new formats.')
+4685 format ('+request to convert old zno data to new formats.')
   go to 5617
   !     $$$$$    special-request word no. 28.   'abort data case'   $$$$$
 8028 if ( noutpr  .eq.  0 ) write (kunit6, 4695)
-4695 format ('+Request to abort this data case.')
+4695 format ('+request to abort this data case.')
   l = 0
   !     read input card using cimage
 4699 call cimage
@@ -1592,7 +1592,7 @@ subroutine reques
   go to 15
 4711 l = l + 1
   if ( noutpr  .eq.  0 ) write (kunit6, 4713)  l
-4713 format ('+   Discarded card number,  i5, 19h   of skipped case.')
+4713 format ('+   discarded card number',  i5, '   of skipped case.')
   go to 4699
   !     $$$$$    special-request word no. 29.   'kill codes'        $$$$$
 8029 ipntv(1) = -8888
@@ -1605,7 +1605,7 @@ subroutine reques
   kill = voltbc(1)
   ipntv(2) = voltbc(2)
 4726 write (kunit6, 4728)  kill, ipntv(2)
-4728 format ('+Listing of error messages.', 2i8)
+4728 format ('+listing of error messages.', 2i8)
   ipntv(3) = kill
   write (lunit6, 4733)  kill
 4733 format (/, ' Message of kill-code number', i4, '.')
@@ -1633,7 +1633,7 @@ subroutine reques
   kpartb = voltbc(1)
 4737 d1 = 10.0 ** kpartb
   if ( noutpr  .eq.  0 ) write (kunit6, 4739)  d1
-4739 format ('+Exponent of high resistance.   R =', e12.2)
+4739 format ('+exponent of high resistance.   R =', e12.2)
   !     possible negative sign on previous "kpartb" must be
   !     retained as flag for "renumber bypass" usage:
   if ( n7  .lt.  0 )   kpartb = -kpartb
@@ -1642,14 +1642,14 @@ subroutine reques
 8031 iaverg = 1
   nsmth = intinf
   if ( noutpr  .eq.  0 ) write (kunit6, 7010)
-7010 format ('+Request to average (smooth) output.')
+7010 format ('+request to average (smooth) output.')
   go to 15
   !     $$$$$  special request-word no. 32.  'absolute tacs dimensions'  $
   !     $$$$$  special request-word no. 33.  'relative tacs dimensions'  $
   !     these two requests handled outside of subroutine.
   !     $$ special request-word no. 34.  'tabulate energization results'
 8034 write (kunit6, 7183)
-7183 format ("+Request for  'statistics'  termination.")
+7183 format ("+request for  'statistics'  termination.")
   nenerg = intinf
   go to 15
   !     $$ special request-word no. 35.  'statistics output salvage'
@@ -1662,30 +1662,30 @@ subroutine reques
   jflsos = d1
 7195 if ( jflsos  .gt.  0 )   go to 7199
   !     find random integer  'jflsos'  between zero and 999.
-  call runtym ( d1, d2 )
-  seed = seedy( tclock(1) )  +  1000. * ( d1 + d2 )
+  call runtym (d1, d2)
+  seed = seedy(tclock(1)) + 1000. * (d1 + d2)
   n13 = alog1z(seed)  +  epsiln
   n13 = n13 - 2
   seed = seed / 10.**n13
   jflsos = seed
 7199 if ( noutpr  .eq.  0 ) write (kunit6, 7200)  jflsos
-7200 format ('+Disk storage of energization results.', i8)
+7200 format ('+disk storage of energization results.', i8)
   go to 15
   !     $$$$  special request-word no. 36.   'omit base case'    $$$$$$$$$
 8036 if ( noutpr  .eq.  0 ) write (kunit6, 7203)
-7203 format ('+Omit base case if statistics/systematic case.')
+7203 format ('+omit base case if statistics/systematic case.')
   kbase = intinf
   go to 15
   !     $$$$  special request-word no. 37.   'change switch'     $$$$$$$$$
 8037 if ( noutpr .eq. 0 ) write (kunit6, 7206)
-7206 format ('+Convert switched-L,R to pseudo-nonlinear.')
+7206 format ('+convert switched-L,R to pseudo-nonlinear.')
   iofbnd = 33666
   go to 15
   !     $$$$$$$  special request-word no. 38.   'miscellaneous data
   !     cards'          $$$$$$$$$m28.1692
 8038 ifdep = -5555
   write (kunit6, 7212)
-7212 format ('+Request record before misc. data cards.')
+7212 format ('+request record before misc. data cards.')
   go to 15
   !     $$$$$$$  special request-word no. 39.   'redefine tolerance
   !     epsiln'         $$$$$$$$$m28.1698
@@ -1695,12 +1695,12 @@ subroutine reques
 7217 nfrfld = 1
   call freone ( epsiln )
 7223 write (kunit6, 7226)  epsiln
-7226 format ("+Misc. data constant  'epsiln' .", e12.3)
+7226 format ("+misc. data constant  'epsiln' .", e12.3)
   go to 15
   !     $$$$$$$  special request-word no. 40.   'change printout
   !     frequency       $$$$$$$$$m28.1708
 8040 if ( noutpr  .eq.  0 ) write (kunit6, 7234)
-7234 format ('+Request record before printout frequencies.')
+7234 format ('+request record before printout frequencies.')
   ktref = -7777
   go to 15
   !     $$$$$$$  special request-word no. 41.   'begin peak
@@ -1711,7 +1711,7 @@ subroutine reques
 7247 nfrfld = 1
   call frefld ( begmax(2) )
 7249 if ( noutpr  .eq.  0 ) write (kunit6, 7252)  begmax(2)
-7252 format ('+Extrema calc. begins at', e13.4, '  seconds.')
+7252 format ('+extrema calc. begins at', e13.4, '  seconds.')
   if ( begmax(2)  .ne.  -1. )   go to 15
   !     read input data card using cimage
   call cimage
@@ -1728,7 +1728,7 @@ subroutine reques
 7255 nfrfld = 1
   call freone ( tenerg )
 7261 if ( noutpr  .eq.  0 ) write (kunit6, 7262)  tenerg
-7262 format ('+Statistics table-saving time =', e12.3, '  sec. ')
+7262 format ('+statistics table-saving time =', e12.3, '  sec. ')
   go to 15
   !     $$$$$$$  special request-word no. 43.   'zinc oxide'   $$$$$$$$$$$
 8043 if ( kolbeg  .gt.  0 )  go to 7266
@@ -1751,7 +1751,7 @@ subroutine reques
   !     $$$$$$$                                  monitor'      $$$$$$$$$$$
 8044 peaknd(1) = flzero
   if ( noutpr  .eq.  0 ) write (kunit6, 7273)
-7273 format ('+Overall problem peak node voltage.')
+7273 format ('+overall problem peak node voltage.')
   go to 15
   !     $$$$$$$  special request-word no. 45.   'absolute u.m.  $$$$$$$$$$
   !     dimensions'    $$$$$$$$$$m28.1751
@@ -1796,11 +1796,11 @@ subroutine reques
   iotfix  =  voltbc(3)*d1 / (               2*nbyte(4) )
   ibsfix  =  voltbc(4)*d1 / (     1*nbyte(1)           )
   if ( noutpr  .eq.  0 ) write (kunit6, 7309)  nclfix, numfix, iotfix, ibsfix
-7309 format ('+Derived u.m. sizes.', 4i6)
+7309 format ('+derived u.m. sizes.', 4i6)
   go to 15
   !     $$$$$$$  special request-word no. 47.   'time step loop'  $$$$$$$$
 8047 if ( noutpr  .eq.  0 ) write (kunit6, 7314)
-7314 format ('+Transfer control to time-step loop.')
+7314 format ('+transfer control to time-step loop.')
   nchain = 16
   t = flstat(14)
   call mover0 ( flstat(3), 4 )
@@ -1821,7 +1821,7 @@ subroutine reques
      iprsov(j+30) = voltbc(j)
   end do
 7329 if ( noutpr  .eq.  0 ) write (kunit6, 7331)  ( iprsov(j+30), j=1, 4 )
-7331 format ('+Deltat-loop printout.', 4i6)
+7331 format ('+deltat-loop printout.', 4i6)
   go to 15
   !     $$$$$$$  special request-word no. 49.   'tacs warn limit' $$$$$$$$
 8049 if ( kolbeg  .gt.  0 )   go to 7334
@@ -1833,14 +1833,14 @@ subroutine reques
   lstat(51) = voltbc(1)
   pu = voltbc(2)
 7335 if ( noutpr  .eq.  0 ) write (kunit6, 7336)  lstat(51), pu
-7336 format ('+Warning controls.  lim, t-beg =', i6, e10.2)
+7336 format ('+warning controls.  lim, t-beg =', i6, e10.2)
   go to 15
   !     $$$$$    special-request word no. 50.   'marti setup'       $$$$$
 8050 continue
   !     $$$$$    special-request word no. 51.   'jmarti setup' $$$$$$$$$$
 8051 if ( noutpr  .eq.  0 ) write (kunit6, 7352)
   !     7352                format (42h+request for new, fortified "marti
-7352 format ('+Request for new, fortified Marti setup.')
+7352 format ('+request for new, fortified Marti setup.')
   nchain = 39
   go to 5617
   !     $$$$$$$  special request-word no. 52.   'custom plot file' $$$$$$
@@ -1848,16 +1848,16 @@ subroutine reques
   if ( n4  .eq.  0 )  m4plot = 2
   if ( n4  .eq.  2 )  m4plot = 0
   if ( noutpr  .eq.  0 ) write (kunit6, 7359)  m4plot
-7359 format ('+Non-std. choice of disk plot file.   m4plot =',  i2)
+7359 format ('+non-std. choice of disk plot file.   m4plot =',  i2)
   go to 15
   !     $$$$$$$  special request-word no. 53.   'output width 132' $$$$$$
 8053 if ( noutpr  .eq.  0 ) write (kunit6, 7364)
-7364 format ('+Use full-width (132-col.) printout.')
+7364 format ('+use full-width (132-col.) printout.')
   kol132 = 132
   go to 15
   !     $$$$$$$  special request-word no. 54.   'output width 80'  $$$$$$
 8054 if ( noutpr  .eq.  0 ) write (kunit6, 7368)
-7368 format ('+Use narrow (80-col.) printout.')
+7368 format ('+use narrow (80-col.) printout.')
   kol132 = 80
   go to 15
   !     $$$$$$$  special request-word no. 55.   'modify switch logic  $$$
