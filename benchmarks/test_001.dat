@@ -1,5 +1,5 @@
-begin new data case                                                             
- 200.e-6  50.e-3                                                                
+begin new data case                                                            0
+ 200.e-6  50.e-3                                                               
       25       1       1       0       0                        0              0
 c Bus-->Bus-->Bus-->Bus--><----R<----L<----C                                   0
     load                   1.e-1  1.e1                                         0
@@ -10,7 +10,7 @@ c blank End of switch data                                                     :
 c Bus--><I<Amplitude<Frequency<--TO:Phi0<---0=Phi0<-Ignore-><---Tstart<----Tstop
 14src             1.       50.         0        0.                 -1.     9999.
 blank End of source data                                                       :
-  src   load                                                                  
+  src   load                                                                   
 c blank End of output requests                                                 :
 c 194 5. 0.0 50. -4.   4.src   load              RL Energization Amps          
 c blank End of Plot Request Data                                               :

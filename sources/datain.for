@@ -165,7 +165,8 @@ subroutine datain
   krdoff = numcrd
   krdcom = 0
   do j = 1, limcrd                                          ! read until an end-of-file detected
-     read (lunt13, 1329, end = 1766) file6(krdoff + j)
+     !read (unit = lunt13, fmt = 1329, end = 1766) file6(krdoff + j)
+     read (unit = lunt13, fmt = '(a80)', end = 1766) file6(krdoff + j)
      if (kcut .eq. 1) go to 5486
      if (file6(krdoff + j)(1 : 2) .eq. 'c ') krdcom = krdcom + 1
      if (file6(krdoff+j)(1 : 19) .ne. 'begin new data case' .or. j - krdcom .le. 3) go to 1756

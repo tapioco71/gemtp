@@ -68,8 +68,7 @@ CPP_FLAGS=	-Wall			\
 		-c
 
 # gfortran flags.
-FORTRAN_FLAGS=	-cpp					\
-		-std=gnu				\
+FORTRAN_FLAGS=	-std=gnu				\
 		-fno-align-commons			\
 		-fbounds-check				\
 		-ffree-form				\
