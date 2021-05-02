@@ -162,70 +162,74 @@ program gemtp
   !    based on the value of variable  'nchain' .   The following
   !     legitimate values, and the meaning of the associated overlay
   !     calls, exist .....
-  !     1-20.  for overlays 1, 2, ..., 20, which are secondary-level
+  !     1-20.  For overlays 1, 2, ..., 20, which are secondary-level
   !            overlays, a call must be first made to the controlling
   !            primary-level overlay.   thus for such  'nchain'  values,
   !            control is transfered first to module  main10 .   this
   !            is the only case where calls to overlays are not made
   !            directly.
   !
-  !     29.  completion of statistics (monte carlo) study, where variable
+  !     29.  Completion of statistics (monte carlo) study, where variable
   !          maxima of the different case solutions are read off the
   !          disk, and are processed statistically to produce
   !          cumulative distribution functions, etc.
   !
-  !     31.  plot routine, for graphical output of transients.
+  !     31.  Plot routine, for graphical output of transients.
   !          the program also terminates execution here, usually,
   !          after writing an end-of-information mark on the
   !          plot tape (whether or not the user has plotted anything).
   !
-  !     39.  supporting routine which generates EMTP branch
+  !     39.  Supporting routine which generates EMTP branch
   !          cards for the frequency-dependent representation of
   !          an untransposed transmission line.   this is the
   !          "marti setup"  code, named after dr. jose marti of
   !          vancouver and caracas (see 1981 ieee pica paper).
   !
-  !     41.  supporting routine which calculates transformer matrices  (r)
+  !     41.  Supporting routine which calculates transformer matrices  (r)
   !          and  (l)  from short-circuit and open-circuit data.
   !
-  !     42.  supporting routine which converts an rms voltage vs. current
+  !     42.  Supporting routine which converts an rms voltage vs. current
   !          saturation characteristic into an instantaneous flux vs.
   !          current characteristic.
   !
-  !     43.  supporting routine which calculates weighting functions
+  !     43.  Supporting routine which calculates weighting functions
   !          a1(t)  and  a2(2)  for the zero-sequence mode of a
   !          distributed line which has frequency-dependent line
   !          constants  r  and  l .
   !
-  !     44.  supporting routine which calculates line constants for
+  !     44.  Supporting routine which calculates line constants for
   !          overhead transmission lines by means of carson's formula.
   !          this is a modified version of what was originally (until
   !          january 1975) the completely-separate bpa line-constants
   !          program.
   !
-  !     45.  supporting routine of  'semlyen setup'  code.   the output
+  !     45.  Supporting routine of  'Semlyen setup'  code.   the output
   !          is a group of punched cards, as are required for the EMTP
   !          simulation of a transmission circuit using  semlyen
   !          recursive convolution modeling.
   !
-  !     47.  supporting routine of  'cable constants'  code.   the
+  !     47.  Supporting routine of  'cable constants'  code.   the
   !          primary function is to calculate  (r),  (l),  %  (c)
   !          matrices for a multi-phase system of single-core coaxial
   !          cables.
   !
-  !     51.  printing of introductory paragraph of error-message
+  !     51.  Printing of introductory paragraph of error-message
   !          termination ('you lose, fella, ... '), plus error-message
   !          texts for  'kill'  codes numbered  1  through  50 .
   !          the exiting linkage is to the last error overlay.
-  !     52.  error message texts for  'kill'  codes numbered  51
+  !
+  !     52.  Error message texts for  'kill'  codes numbered  51
   !          the exiting linkage is to the last error overlay.
-  !     53.  error message texts for  'kill'  codes numbered  91
+  !
+  !     53.  Error message texts for  'kill'  codes numbered  91
   !          through  150.  the exiting linkage is to the last
   !          error overlay.
-  !     54.  error message texts for  'kill'  codes numbered  151
+  !
+  !     54.  Error message texts for  'kill'  codes numbered  151
   !          through  200.   the exiting linkage is to the
   !          last error overlay.
-  !     55.  final error overlay.  messages for  kill = 201
+  !
+  !     55.  Final error overlay.  messages for  kill = 201
   !          onward are contained, as well as summary statistics
   !          --- table sizes and timing figures for the run.
   !          the exiting linkage is generally to module  over1  (to read
