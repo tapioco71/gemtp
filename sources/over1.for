@@ -3500,7 +3500,7 @@ subroutine tacs1a
   !     ***  old  fixed-format  pseudo-fortran  expression  ***
   !     ***  * * * * * * * * * * * * * * * * * * * * * * *  ***
 12517 if ( noutpr .eq. 0 )  write ( kunit6, 9304 )
-9304 format ('+tacs supplemental variable')
+9304 format ('+TACS supplemental variable')
   read (unit = abuff, fmt = 18001) prx, alph(1), dumj(1), dumj(6), alph(2), dumj(2), dumj(7), alph(3), dumj(3), pru, alph(4), &
        dumj(4), dumj(9), alph(5), dumj(5), dumj(10)
 18001 format (10x,e10.0,2(a1,a5,a6),a1,a5,e6.0,2(a1,a5,a6))
@@ -3594,7 +3594,7 @@ subroutine tacs1a
   lstat( 19) = 104
   go to 9000
 10700 if (noutpr .eq. 0) write (kunit6, 19305) m
-19305 format ('+tacs supplemental device type ', i2)
+19305 format ('+TACS supplemental device type ', i2)
   read (unit = abuff, fmt = 18002) alph(1), dumj(1), alph(2), dumj(2), alph(3), dumj(3), alph(4), dumj(4), alph(5), dumj(5), &
        (dum(i), i=1, 3), alnm1, alnm2
 18002 format (10x, 5(a1,a6,1x), 3e6.0, 2a6)
@@ -3720,7 +3720,7 @@ subroutine tacs1a
   pru = voltbc(1)
 6547 if ( prx  .eq.  9999. )   go to 10713
   if ( noutpr  .eq.  0 ) write (kunit6, 10715)  prx, pru
-10715 format ('+Data values.             ',  2e13.4)
+10715 format ('+data values.             ',  2e13.4)
   kpar = kpar + 1
   ndx1 = kprsup +  kpar
   parsup(ndx1) = prx
@@ -3731,7 +3731,7 @@ subroutine tacs1a
   go to 10711
 10713 ivarb(karg+4) = - kpar
   if ( noutpr  .eq.  0 ) write (kunit6, 10716)
-10716 format ('+End of data values for last-read device.')
+10716 format ('+end of data values for last-read device.')
   if ( m .eq. 57 )  parsup(mpar+2) = 0.
   if ( m .eq. 57 )  parsup(mpar+3) = 0.
   go to  3636
@@ -3790,7 +3790,7 @@ subroutine tacs1a
   kpar = kpar + 4
   go to 3636
 6799 if ( noutpr .eq. 0 ) write ( kunit6, 1104 )
-1104 format ('+No such sup. device.')
+1104 format ('+no such sup. device.')
 9000 if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
 4568 format ('  "Exit  module tacs1a."')
   return
@@ -4535,7 +4535,7 @@ subroutine tacs1b
   go to 9000
 111 if ( iprsup  .ge.  1 ) write (lunit6,192) (jout(kjout+i), i=1,ioutcs)
 192 format ('0program output will be prepared for nodes 0', /, (1x,16i8))
-  !     ******   initial condition   **********   m38.1078
+  !     ******   initial condition   **********
 3072 if ( kxic .eq. 0 ) go to 231
   kxtcs2 = kxtcs + lstat(68)
   do i = 1, kxic
@@ -4587,20 +4587,20 @@ subroutine expchk ( n1, n2, n5 )
   character(8) a, texnum, text1, x
   character(8) textp, textn
   dimension x(80), texnum(11)
-  data  text1   /  1he  /
-  data textp / 1h+ /
-  data textn / 1h- /
-  data  texnum(1)   /  1h1  /
-  data  texnum(2)   /  1h2  /
-  data  texnum(3)   /  1h3  /
-  data  texnum(4)   /  1h4  /
-  data  texnum(5)   /  1h5  /
-  data  texnum(6)   /  1h6  /
-  data  texnum(7)   /  1h7  /
-  data  texnum(8)   /  1h8  /
-  data  texnum(9)   /  1h9  /
-  data  texnum(10)  /  1h0  /
-  data  texnum(11)  /  1h.  /
+  data text1 / 'e' /
+  data textp / '+' /
+  data textn / '-' /
+  data texnum(1)  / '1' /
+  data texnum(2)  / '2' /
+  data texnum(3)  / '3' /
+  data texnum(4)  / '4' /
+  data texnum(5)  / '5' /
+  data texnum(6)  / '6' /
+  data texnum(7)  / '7' /
+  data texnum(8)  / '8' /
+  data texnum(9)  / '9' /
+  data texnum(10) / '0' /
+  data texnum(11) / '.' /
   read (unit = abuff, fmt = 2618) (x(i), i = 1, 80)
 2618 format (80a1)
   do i = n1, n2, n5
