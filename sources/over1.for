@@ -2806,32 +2806,32 @@ subroutine tacs1a
   data supfn(22) / 'exp  ' /
   data supfn(23) / 'log  ' /
   data supfn(24) / 'log10' /
-  data supfn(25) /5hsqrt /
-  data supfn(26) /5habs  /
-  data supfn(27) /5htrunc/
-  data supfn(28) /5hminus/
-  data supfn(29) /5hinvrs/
-  data supfn(30) /5hrad  /
-  data supfn(31) /5hdeg  /
-  data supfn(32) /5hseq6 /
-  data supfn(33)  /5hsign /
-  data supfn(34)  /5hnot  /
-  data supfn(35)  /5hran  /
-  data supop( 1) /5h+    /
-  data supop( 2) /5h-    /
-  data supop( 3) /5h*    /
-  data supop( 4) /5h/    /
-  data supop( 5) /5h0    /
-  data supop( 6) /5h.    /
-  data  text4   / 6hcountr /
-  data  text5   /  6hinput   /
-  data  text6   /  6houtput  /
-  data  text7   /  6hinside  /
-  data  splus    /  1h+  /
-  data  sminus   /  1h-  /
-  data  smultp   /  1h*  /
-  data  text1   /  6hvalue   /
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
+  data supfn(25) / 'sqrt ' /
+  data supfn(26) / 'abs  ' /
+  data supfn(27) / 'trunc' /
+  data supfn(28) / 'minus' /
+  data supfn(29) / 'invrs' /
+  data supfn(30) / 'rad  ' /
+  data supfn(31) / 'deg  ' /
+  data supfn(32) / 'seq6 ' /
+  data supfn(33) / 'sign ' /
+  data supfn(34) / 'not  ' /
+  data supfn(35) / 'ran  ' /
+  data supop( 1) / '+    ' /
+  data supop( 2) / '-    ' /
+  data supop( 3) / '*    ' /
+  data supop( 4) / '/    ' /
+  data supop( 5) / '0    ' /
+  data supop( 6) / '.    ' /
+  data  text4    / 'countr' /
+  data  text5    / 'input ' /
+  data  text6    / 'output' /
+  data  text7    / 'inside' /
+  data  splus    / '+' /
+  data  sminus   / '-' /
+  data  smultp   / '*' /
+  data  text1    / 'value ' /
+  if (iprsup .ge. 1) write (lunit6, 4567)
 4567 format ('  "Begin module tacs1a."')
   kjsup = kinsup + lstat(65)
   kksup = kjsup  + lstat(65)
