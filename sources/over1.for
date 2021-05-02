@@ -2136,10 +2136,11 @@ subroutine midov1
   !     conflicts with usual usage.
   close ( unit=lunt12 )
   !     open ( unit=lunt12, type='scratch' )
-  open (unit=lunt12, status='scratch')
-5933 if ( m4plot .ne. 1 ) go to 5947 ! not interactive emtp
-  if ( iplot .ge. 0 )  go to 5947 ! yes, plotting requested
-  iplot = intinf            ! write little to plot file, not nothing
+  !open (unit = lunt12, status = 'scratch')
+  open (unit = lunt12)
+5933 if (m4plot .ne. 1) go to 5947                          ! not interactive emtp
+  if (iplot .ge. 0)  go to 5947                             ! yes, plotting requested
+  iplot = intinf                                            ! write little to plot file, not nothing
 5947 return
 end subroutine midov1
 !
@@ -2151,18 +2152,18 @@ subroutine nmincr(texta, n12)
   !     component number  n12,  encoding only required digits.   It is
   !     assumed that a fortran 77 compiler is being used, and that
   !     "alphanumeric" is translated to something other than  character*6
-  character*6 texta         ! input argument carries a6 root name
-  character*6  text1, text2 ! local character-handling variables
-  write (text1, 4523)  n12  ! encode component number
-4523 format (i6)             ! 6-digit format allows number through 999999
-  do j = 1, 6           ! search for first non-blank in encoded number
-     if ( text1(j:j) .ne. ' ' )  go to 4552 !  if nonblank, exit
+  character(6) texta                                        ! input argument carries a6 root name
+  character(6) text1, text2                                 ! local character-handling variables
+  write (text1, 4523)  n12                                  ! encode component number
+4523 format (i6)                                            ! 6-digit format allows number through 999999
+  do j = 1, 6                                               ! search for first non-blank in encoded number
+     if (text1(j : j) .ne. ' ') go to 4552                  !  if nonblank, exit
   end do
-4538 continue                  ! end  do 4538  loop to find non-blank left edge
-4552 write (text2, 4556)  texta ! transfer input alphanumeric to char*6
-4556 format (a6)             ! alphanumeric variables are 6 characters wide
-  text2(j:6) = text1(j:6)   ! add component number onto input name
-  read (text2, 4556)  texta ! convert back from char*6 to alphanum.
+4538 continue                                               ! end  do 4538  loop to find non-blank left edge
+4552 write (text2, 4556) texta                              ! transfer input alphanumeric to char*6
+4556 format (a6)                                            ! alphanumeric variables are 6 characters wide
+  text2(j : 6) = text1(j : 6)                               ! add component number onto input name
+  read (text2, 4556) texta                                  ! convert back from char*6 to alphanum.
   !     write (*,*)  ' exit "nmincr".   n12 =',  n12,  '   texta =', texta
   return
 end subroutine nmincr
@@ -2180,21 +2181,21 @@ subroutine tacs1
   character(8) alph, alnode
   dimension stacs(11), alph(5), dum(3), dumj(13)
   character(8) dumj, sminus, splus, sbn(2)
-  data  stacs(1)  / 6htimex /
-  data  stacs(2)  / 6histep /
-  data  stacs(3)  / 6hdeltat/
-  data  stacs(4)  / 6hfreqhz/
-  data  stacs(5)  / 6homegar/
-  data  stacs(6)  / 6hzero  /
-  data  stacs(7)  / 6hplus1 /
-  data  stacs(8)  / 6hminus1/
-  data  stacs(9)  / 6hunity /
-  data  stacs(10) / 6hinfnty/
-  data  stacs(11) / 6hpi    /
-  data  splus     /  1h+  /
-  data  sminus    /  1h-  /
-  data  sbn(1)    /  6hnum.   /
-  data  sbn(2)    /  6hden.   /
+  data stacs(1)  / 'timex ' /
+  data stacs(2)  / 'istep ' /
+  data stacs(3)  / 'deltat' /
+  data stacs(4)  / 'freqhz' /
+  data stacs(5)  / 'omegar' /
+  data stacs(6)  / 'zero  ' /
+  data stacs(7)  / 'plus1 ' /
+  data stacs(8)  / 'minus1' /
+  data stacs(9)  / 'unity ' /
+  data stacs(10) / 'infnty' /
+  data stacs(11) / 'pi    ' /
+  data splus     / '+' /
+  data sminus    / '-' /
+  data sbn(1)    / 'num.  ' /
+  data sbn(2)    / 'den.  ' /
   if (iprsup .ge. 1) write (lunit6, 4567)
 4567 format ('  "begin module tacs1."')
   if (iprsup .gt. 0) write (lunit6, 701) ltacst, (lstat(i), i = 61, 68)
