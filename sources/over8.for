@@ -3303,13 +3303,12 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
   !  load-flow preparation of im type-4 temporary branches, which
   !   are to be wiped out in the second part of the umrenu code :
   if (loopss(10) .ne. 1) go to 2250
-  do 2248 k = 1,numum
+  do k = 1, numum
      if (jtype(k) .lt. 3) go to 2248
      if (jtype(k) .gt. 4) go to 2248
-     slip = voltum(k)/100.0
+     slip = voltum(k) / 100.0
      if (iprsup .ge. 1) write(lunit6,2201)
-2201 format(/,40h ***************************************,43h momentary changes or creation of momentary, &
-          44h elements for load-flow involving ind. mach.)
+2201 format (/, ' *************************************** Momentary changes or creation of momentary elements for load-flow involving ind. mach.')
      if (iprsup .ge. 1) write(lunit6,1904) k
      kcl = kcoil(k)
      ncl = ncld(k) + nclq(k)
@@ -3340,15 +3339,13 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
         tx(it) = reacl(kcl+4) * 1.0d+3
         if (xopt .ne. 0.0) tx(it) = reacl(kcl+4) * twopi * xopt
         if (iprsup .ge. 1) write(lunit6,2208) kbus(ibr),mbus(ibr),ibr,it,tr(it),tx(it)
-2208    format(10h *********,34h im rotor branche just for ld-flow,i4,4x,i4,2i6,2e14.5)
+2208    format (' ********* im rotor branche just for ld-flow', i4, 4x, i4, 2i6, 2e14.5)
 2220 end do
      if (ndum(33) .ne. 1 .and. ndum(36) .ne. 1) go to 2222
      if (nodvo1(kcl) .eq. 1 .or. nodvo2(kcl) .eq. 1) go to 2226
-2222 write(lunit6,2224)
-2224 format(/,43h error stop. you have requested a load-flow,45h of a network containing an induction machine, &
-          35h with ungrounded power coils and/or, /,    38h excitation coils. this request is not, &
-          43h honored in the current emtp version. these, 38h coils are both to be y-connected with, &
-          19h grounded neutrals.)
+2222 write (lunit6, 2224)
+2224 format (/, ' Error stop. You have requested a load-flow of a network containing an induction machine with ungrounded power coils and/or', &
+          ' excitation coils. This request is not honored in the current emtp version. These coils are both to be y-connected with grounded neutrals.')
      call stoptp
      !  set temporary branches for im main inductances if full comp :
 2226 if (loopss(8) .ne. 0) go to 2230
@@ -3425,11 +3422,14 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
                 37h one higher than these used elements.)
            call stoptp
 82246      if (iprsup .ge. 1) write(lunit6,2243) n11,n12,n10,n9,tr(n9),tx(n9)
-2243       format(10h *********,34h change ext exc r just for ld-flow,i4,4x,i4,2i6,2e14.5)
+2243       format(' ********* Change ext exc r just for ld-flow', i4, 4x, i4, 2i6, 2e14.5)
            go to 2245
-2244    end do
-2245 end do
-2248 end do
+        end do
+2244    continue
+     end do
+2245 continue
+  end do
+2248 continue
   !  ld-flow conditions if ld-flow not yet conducted ******** :
   !  (a) condition of first umrenu pass, unless um type-3 is prese
   !      which would make it the second pass.
@@ -3479,7 +3479,7 @@ subroutine equiv(req,xeq,geq,beq,z,r,tau,w,n)
      zs=z(j)
      rs=r(j)
      if ( iprsup  .ge.  3 ) write (lunit6, 1786)  l, n, w, tau(j), zs, rs
-1786 format ( /,  28h within l-loop of  'equiv' ., 16h       l       n,  15x,  1hw,  10x,  6htau(j), 14x,  2hzs,  14x,  2hrs  ,/,  28x,  2i8,  4e16.7  )
+1786 format (/, " Within l-loop of  'equiv' .       l       n", 15x, 'w', 10x, 'tau(j)', 14x, 'zs', 14x, 'rs', /, 28x, 2i8, 4e16.7)
      if( rs .ge. 0.0 )  go to 1
      rs = -rs
      denr = a * zs
