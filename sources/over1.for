@@ -684,10 +684,10 @@ subroutine over1
 2691 call cimage
   read (unit = abuff, fmt = 3245) (aupper(i), i = 1, 14)
 3245 format (13a6, a2)
-  if (aupper( 1) .eq. text1) go to 2697
-  if (aupper( 1) .eq. text3) go to 2697
-  if (aupper( 1) .eq. text4) go to 2699
-  if (aupper( 1) .ne. text6) go to 7722
+  if (aupper(1) .eq. text1) go to 2697
+  if (aupper(1) .eq. text3) go to 2697
+  if (aupper(1) .eq. text4) go to 2699
+  if (aupper(1) .ne. text6) go to 7722
   write (kunit6, 5389)
 5389 format (' Begin tacs. ==========================')
   newtac = 1
@@ -782,13 +782,13 @@ subroutine tacs1c
 6811 if (dum1 .ne. 0. .or. ijk .lt. 0) ud1(ndy5+1) = dum1
   if (dum2 .eq. 0. .and. ijk .gt. 0) go to 6822
   ud1(ndy5+2) = dum2
-  if (iuty(kiuty+i) .eq. 14) ud1(ndy5+2) = dum2*twopi/360.
-  if (iuty(kiuty+i) .ne. 23) go to 6822
-  if ( ud1(ndy5+2) .lt. deltat ) ud1(ndy5+2) = deltat
-6822 if (dum3 .ne. 0. .or. ijk .lt. 0) ud1(ndy5+3) = dum3
-  if ( prx .ne. 0. .or. ijk .lt. 0) ud1(ndy5+4) = prx
-  if ( pru .ne. 0. ) ud1(ndy5+5) = pru
-  if ( noutpr .gt. 0 ) write ( lunit6, 1515 )
+  if (iuty(kiuty + i) .eq. 14) ud1(ndy5 + 2) = dum2 * twopi / 360.
+  if (iuty(kiuty + i) .ne. 23) go to 6822
+  if (ud1(ndy5 + 2) .lt. deltat) ud1(ndy5 + 2) = deltat
+6822 if (dum3 .ne. 0. .or. ijk .lt. 0) ud1(ndy5 + 3) = dum3
+  if (prx .ne. 0. .or. ijk .lt. 0) ud1(ndy5 + 4) = prx
+  if (pru .ne. 0.) ud1(ndy5+5) = pru
+  if (noutpr .gt. 0) write (lunit6, 1515)
 1515 format (' Another TACS source changing card')
 2868 return
 end subroutine tacs1c
@@ -801,42 +801,42 @@ subroutine  swmodf
   include 'blkcom.ftn'
   include 'labcom.ftn'
   character(8) text14, text15
-  data  text14   /  6hing     /
-  data  text15   / 6hclosed /
-1000 if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
+  data text14 / 'ing   ' /
+  data text15 / 'closed' /
+1000 if (iprsup .ge. 1) write (lunit6, 4567)
 4567 format (' Begin module "swmodf".')
   read (unit = abuff, fmt = 35) it2, bus1, bus2, gus3, gus4, ck1, a, jk, bus4, bus5, bus6, jdu, j
 35 format (i2, 2a6, 4e10.0, i6, a4, 2a6, 2x, 2i1)
   do msw = 1, kswtch
      k = kmswit(msw)
-     if ( bus(k) .ne. bus1 ) go to 3535
+     if (bus(k) .ne. bus1) go to 3535
      m = kmswit(msw+lswtch)
-     if ( bus(m) .eq. bus2 ) go to 3510
+     if (bus(m) .eq. bus2) go to 3510
   end do
 3535 continue
-3636 write ( lunit6, 3131  )
+3636 write (lunit6, 3131)
 3131 format (' No such switch, the card will be discarded')
   go to 209
 3510 if ( it2 .ne. 0  .or.  kswtyp(msw) .ne. 0 )  go to 209
   if ( bus4  .ne.  text14 )  go to 7218
   if ( noutpr  .eq.  0 )  write ( kunit6, 1218 )
-1218 format ('+Permanently-closed switch used for metering.')
+1218 format ('+permanently-closed switch used for metering.')
   gus3 = -1.0
   gus4 = fltinf
   go to 216
-7218 if ( noutpr  .eq.  0 ) write (kunit6, 36 )  gus3, gus4, ck1, a
-36 format ('+Switch.', 2x, 4e10.2, $)
-  if ( a    .eq.  0.0   )   go to 216
-  if ( gus4 .ne. 0.0 .or. ijk .lt. 0 ) adelay(msw)=absz(gus4)
-  gus4=absz(a)
+7218 if (noutpr  .eq.  0) write (kunit6, 36) gus3, gus4, ck1, a
+36 format ('+switch.', 2x, 4e10.2)
+  if (a .eq. 0.0)   go to 216
+  if (gus4 .ne. 0.0 .or. ijk .lt. 0) adelay(msw) = absz(gus4)
+  gus4 = absz(a)
   if (gus3 .ge. 0.) go to 216
   gus3 = 0.
-  if( iprsup .ge. 1 )  write (lunit6, 217)
+  if(iprsup .ge. 1) write (lunit6, 217)
 217 format (16x, 'tclose changed to zero')
-216 if ( gus3 .ne. 0.0 .or. ijk .lt. 0 ) tclose(msw)=gus3
-  if ( gus4 .ne. 0.0 .or. ijk .lt. 0 ) topen(msw)=gus4
-  if ( ck1  .ne. 0.0 .or. ijk .lt. 0 ) crit(msw)=ck1
-209 if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
+216 if (gus3 .ne. 0.0 .or. ijk .lt. 0) tclose(msw) = gus3
+  if (gus4 .ne. 0.0 .or. ijk .lt. 0) topen(msw) = gus4
+  if (ck1 .ne. 0.0 .or. ijk .lt. 0) crit(msw) = ck1
+209 if (iprsup .ge. 1) write (lunit6, 4568)
 4568 format ('  Exit  module "swmodf."')
 99999 return
 end subroutine swmodf
