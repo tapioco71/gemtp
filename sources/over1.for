@@ -34,13 +34,13 @@ subroutine over1
   character(132) ansi132
   common /comlock/ locker(2)
   !     default list sizes for tacs proportioning of emtp list 19.
-  data  text2   /  6hname    /
-  data  text6   /  6hcopy    /
-  data  text1   /  6htacs o  /
-  data  text3   /  6htacs h  /
-  data  text4   /  6htacs s  /
-  data  text5   /  6h4       /
-  data  text6   /  6htacs    /
+  data  text2 / 'name  ' /
+  data  text6 / 'copy  ' /
+  data  text1 / 'tacs o' /
+  data  text3 / 'tacs h' /
+  data  text4 / 'tacs s' /
+  data  text5 / '4     ' /
+  data  text6 / 'tacs  ' /
   data ll1  /  1 /
   data ll6  /  6 /
   data ll8  /  8 /
@@ -111,15 +111,15 @@ subroutine over1
      nbyte(j) = 1
   end do
   call dimens (lstat(1), nchain, bus1, bus2)
-  lbus   = lstat( 1)
-  lbrnch = lstat( 2)
-  ldata  = lstat( 3)
-  lexct  = lstat( 4)
-  lymat  = lstat( 5)
-  lswtch = lstat( 6)
-  lsize7 = lstat( 7)
-  lpast  = lstat( 8)
-  lnonl  = lstat( 9)
+  lbus   = lstat(1)
+  lbrnch = lstat(2)
+  ldata  = lstat(3)
+  lexct  = lstat(4)
+  lymat  = lstat(5)
+  lswtch = lstat(6)
+  lsize7 = lstat(7)
+  lpast  = lstat(8)
+  lnonl  = lstat(9)
   lchar  = lstat(10)
   lsmout = lstat(11)
   lsiz12 = lstat(12)
@@ -450,7 +450,7 @@ subroutine over1
   go to 15
   !     $$$$$  special request-word no. 33.  'relative tacs dimensions'  $
 8033 if (noutpr .eq. 0) write (kunit6, 7110)
-7110 format ('+Proportional allocation of total TACS storage.')
+7110 format ('+proportional allocation of total TACS storage.')
   !     read input card using cimage
   call cimage
   if (kolbeg .gt. 0) go to 7120
@@ -461,7 +461,7 @@ subroutine over1
 7120 nfrfld = 10
   call frefld (voltbc)
 7130 if(noutpr .eq. 0) write (kunit6, 7140) voltbc(1), voltbc(2), voltbc(3)
-7140 format ('+Relative list sizes.', 3e9.2)
+7140 format ('+relative list sizes.', 3e9.2)
   d1 = 0.0
   do i = 1, 8
      d1 = d1 + voltbc(i)
@@ -498,7 +498,7 @@ subroutine over1
   call freone (tolmat)
   call freone (t)
 4202 if (noutpr .eq. 0) write (kunit6, 4205)  deltat, tmax, d1
-4205 format ('+Misc. data.', 3e12.3)
+4205 format ('+misc. data.', 3e12.3)
   if (iofbnd .ne. 33666) go to 4206
   nchain = 41
   xopt = d1
@@ -528,7 +528,7 @@ subroutine over1
   if (m4plot .eq. 1 .and. iplot .eq. -1) iplot = 1
   if (iplot .eq. -1) isplot = intinf
   if (noutpr .eq. 0) write (kunit6, 4210) iout, iplot, idoubl, kssout, maxout, ipun, memsav, icat, n1, n2
-4210 format ('+Misc. data.', 2i5, 8i3)
+4210 format ('+misc. data.', 2i5, 8i3)
   begmax(1) = maxout
   maxout = 2
   if (n2 .eq. 0) go to 6519
@@ -560,7 +560,7 @@ subroutine over1
   call frefld (voltbc)
   jseedr = voltbc(1)
 624 if (noutpr .eq.  0) write (kunit6, 630) isw, itest, idist, aincr
-630 format ('+Statistics data.', 3i8, f9.4, $)
+630 format ('+statistics data.', 3i8, f9.4, $)
   if (xmaxmx .eq. 0.0) xmaxmx = 2.0
   if(aincr .eq. 0.0) aincr = unity / 20.
   if (d4 .gt. 0.0) statfr = d4
