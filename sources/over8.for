@@ -1724,7 +1724,7 @@ subroutine umrenu(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
         if (n10 .lt. 0) n10 = - n10
         tr(n10) = 1.0/gpar(kcl+2)
         if (iprsup .ge. 1) write(lunit6,8860) n12,tr(n10),tx(n10)
-8860    format(20h ********** changed:,2x,i6,2e14.5)
+8860    format (' ********** Changed:', 2x, i6, 2e14.5)
 8870    d15 = d1
         if (n1 .eq. 2) d15 = d2
         if (n1 .eq. 3) d15 = d3
@@ -1732,7 +1732,7 @@ subroutine umrenu(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
         crest(nclout) = d10
         time1(nclout) = d15
         if (iprsup .ge. 1) write(lunit6,8862) nclout,sfreq(nclout),crest(nclout),time1(nclout),tstop(nclout)
-8862    format(20h ********** changed:,38x,i6,4e14.5)
+8862    format (' ********** Changed:', 38x, i6, 4e14.5)
         nclout = nclout + 1
 8500    if (nodvo2(n2) .eq. 1) go to 8505
         crest(nclout) = - d10
@@ -2534,9 +2534,9 @@ subroutine umrenu(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      if (loopss(10) .ne. 3) jtmtac(jm) = 0
      if (iprsup .ge. 1) write(lunit6,8862) nclout,sfreq(nclout),crest(nclout),time1(nclout),tstop(nclout)
      if (iprsup .ge. 1) write(lunit6,12010) (hist(n1),n1 = 1,ncl)
-12010 format(/,14h hist(1:ncl) =, (1x,6e15.6))
+12010 format (/, ' hist(1 : ncl) =', (1x, 6e15.6))
      if (iprsup .ge. 1) write(lunit6,12020) tqgen
-12020 format(/, 8h tqgen =, 1x,e15.6)
+12020 format(/, ' tqgen =', 1x, e15.6)
 12100 nclout = nclout + 1
      !  final statements of machine do-loop
      !     13000 if (ntyp59 .eq. 1) jtype(jm) = 13
@@ -2564,8 +2564,7 @@ subroutine umrenu(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      !  note: if nshare=10, no mech slack bus calc but speed capacitor
      !         and torque source of um nr. n1 and um nr. n2 to be set
      if (iprsup .ge. 1) write (lunit6,13110) jm
-13110 format(/,26h *************************,39h start adjustment of slack buses in the, &
-           37h EMTP networks connected to um number,i4,2h :)
+13110 format (/, ' ************************* Start adjustment of slack buses in the EMTP networks connected to um number', i4, ' :')
      !  checking speeds for multi-mach sharing common network :
      if (loopss(4) .gt. 0) go to 13118
      if (nshare .eq. 0) go to 13118
@@ -2576,22 +2575,18 @@ subroutine umrenu(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      go to 13118
 13112 if (n2 .eq. 0) go to 13115
      write(lunit6,13113) jm,n1,n2
-13113 format(/,45h ********************************************,45h ********************************************,&
-           20h warning : um number,i4,2h, ,i4,5h, and,i4)
+13113 format (/, ' ******************************************** ******************************************** Warning : um number', i4, ', ', i4, ', and', i4)
      write (lunit6,13114)
-13114 format(  42h share a common mechanical network, but do, 45h not have equal mechanical machine-speeds. is,&
-           43h this intentional or have you made an error    ,/,   45h in designing your mechanical network ? these, &
-           45h speeds (rad/sec) are equal to (1-slip) times,         44 h angular freq of electric power grid devided)
-     write(lunit6,93116)
-93116 format(  39h by the nr of pole-pairs. the slip here, 42h is in abs. values and in steady-state can, &
-           40h obviously only be nonzero for induction, 10h machines.,/)
-13115 write(lunit6,13116) jm,n1
-13116 format(/,45h ********************************************, 45h ********************************************, &
-           20h warning : um number,i4,5h, and,i4)
-     write(lunit6,13114)
-     write(lunit6,93116)
+13114 format (' Share a common mechanical network, but do not have equal mechanical machine-speeds. Is this intentional or have you made an error', /, &
+           ' in designing your mechanical network ? These speeds (rad/sec) are equal to (1-slip) times angular freq of electric power grid devided')
+     write (lunit6, 93116)
+93116 format (' by the nr of pole-pairs. The slip here is in abs. values and in steady-state can obviously only be nonzero for induction machines.', /)
+13115 write (lunit6, 13116) jm,n1
+13116 format (/, ' ******************************************** ******************************************** Warning : um number', i4, ', and', i4)
+     write (lunit6, 13114)
+     write (lunit6, 93116)
 13118 if (iprsup .ge. 1) write(lunit6,13120)
-13120 format(30h *********** slack bus source:,2x,6hkconst,4x,4hnode,9x,5hsfreq,9x,5hcrest,9x,5htime1,8x,6htstart,9x,5htstop)
+13120 format (' *********** Slack bus source:', 2x, 'kconst', 4x, 'node', 9x, 'sfreq', 9x, 'crest', 9x, 'time1', 8x, 'tstart', 9x, 'tstop')
      imach = 1
      if (jtype(jm) .lt. 3) imach = 0
      if (jtype(jm) .gt. 7) imach = 0
@@ -2599,8 +2594,8 @@ subroutine umrenu(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      if (loopss(4) .gt. 0) go to 13130
      if (imach .ne. 1) crest(n10) = voltum(jm)
      if (imach .ne. 1 .and. iprsup .ge. 1) write(lunit6,13122) n10,node(n10),sfreq(n10),crest(n10),time1(n10),tstart(n10),tstop(n10)
-13122 format(30h ****** exct slack bus source:,2x,i6,2x,i6,5e14.5)
-13123 format(30h ****** mech slack bus source:,2x,i6,2x,i6,5e14.5)
+13122 format (' ****** Exct slack bus source:', 2x, i6, 2x, i6, 5e14.5)
+13123 format (' ****** Mech slack bus source:', 2x, i6, 2x, i6, 5e14.5)
      if (nshare .eq. 10) go to 13170
      go to 13370
      !  coil terminal voltage and mechanical speed for given crest:
@@ -2677,7 +2672,7 @@ subroutine umrenu(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      kconst = kconst + 1
      if ( kconst .le. lexct )  go to 6784
      write (lunit6, 6783)  lexct
-6783 format ( 38h overflow list 4 in "umrenu".  lexct =,i5,    18h     stop locally.     )
+6783 format (' Overflow list 4 in "umrenu".  lexct =', i5, '     Stop locally.')
      call stoptp
 6784 node(kconst) = - nodom(jm)
      iform(kconst) = 14
@@ -2688,7 +2683,7 @@ subroutine umrenu(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      n5 = nodmum(jm)
      sfreq(kconst) = sfreq(n5)
      if (iprsup .ge. 1) write(lunit6,13172) kconst,node(kconst),sfreq(kconst),crest(kconst),time1(kconst),tstart(kconst),tstop(kconst)
-13172 format(31h ****** temporary tqgen source:,1x,i6,2x,i6,5e14.5)
+13172 format (' ****** Temporary tqgen source:', 1x, i6, 2x, i6, 5e14.5)
 13370 end do
   loopss(4) = loopss(4) + 1
   if (loopss(4) .lt. 3) go to 13500
@@ -2697,19 +2692,17 @@ subroutine umrenu(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   kssout = loopss(7)
   istart = 0
   if (iprsup .ge. 1) write (lunit6,13400)
-13400 format( /, 40h permanent exit of umrenu **************)
+13400 format (/, ' Permanent exit of umrenu **************')
   go to 14000
 13500 istart = istart + 1
   if (iprsup .lt. 4) go to 14000
   write (lunit6, 13616)  (i, kbus(i), mbus(i), nr(i), length(i), kodebr(i), kodsem(i), i = 1, ibr)
-13616 format (/, 21h branch table vectors,/,  70h       row      kbus    mbus        nr    length    kodebr    kodsem,/, (1x, 7i10) )
-  write (lunit6, 13716)  (i, iform(i), node(i), crest(i), time1(i), tstart(i), sfreq(i), i = 1, kconst)
-13716 format (/, 21h source table vectors,/, 30h       row     iform    node,15x, 5hcrest, 15x, 5htime1, 14x, 6htstart,15x,5hsfreq,/, &
-           (3i10, 4e20.10)   )
+13616 format (/, ' Branch table vectors', /, '       row      kbus    mbus        nr    length    kodebr    kodsem', /, (1x, 7i10))
+  write (lunit6, 13716) (i, iform(i), node(i), crest(i), time1(i), tstart(i), sfreq(i), i = 1, kconst)
+13716 format (/, ' Source table vectors', /, '       row     iform    node', 15x, 'crest', 15x, 'time1', 14x, 'tstart', 15x, 'sfreq', /, (3i10, 4e20.10))
 14000 if (iprsup .ge. 1) write(lunit6, 14100)  istart,istep,loopss(1),loopss(2), loopss(4),loopss(8),loopss(9),loopss(10),kconst,ibr, &
            inonl,kswtch,istead,omegrf
-14100 format (/,26h *************************,30h setting at this umrenu exit :    ,/, 48h  istart   istep  lopss1  lopss2  lopss4  lopss8, &
-           48h  lopss9 lopss10  kconst     ibr   inonl  kswtch, 8h  istead,8x,6homegrf,/,13i8,e14.5, /)
+14100 format (/, ' ************************* Setting at this umrenu exit :', /, '  istart   istep  lopss1  lopss2  lopss4  lopss8  lopss9 lopss10  kconst     ibr   inonl  kswtch  istead', 8x, 'omegrf', /, 13i8, e14.5, /)
   return
 end subroutine umrenu
 !
@@ -2772,9 +2765,8 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
      if (n1 .eq. 1) go to 1250
      if (n1 .le. 40) go to 81246
      write (lunit6,81245) n1,i
-81245 format(/,23h error stop. there are ,i2, 8h type-14, 41h sources present in mechanical network of, &
-           10h um number, i4, 28h.  this number overflows the,/, 42h limit of 40. increasing this limit can be, &
-           42h done by increasing the dimension of array, 41h "ndum" which is dimensioned in "umdeck".)
+81245 format (/, ' Error stop. There are ', i2, ' type-14 sources present in mechanical network of um number', i4, '.  This number overflows the',/, &
+           ' limit of 40. Increasing this limit can be done by increasing the dimension of array "ndum" which is dimensioned in "umdeck".')
      call stoptp
 81246 nummec = 0
      do j = 1, numum
@@ -2796,11 +2788,10 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
      if (nummec .le. 2) go to 1250
      n2 = nummec - 1
      write (lunit6,1249) i,n2
-1249 format(/,22h error stop. um number, i4,13h is connected, 17h mechanically to ,i2,17h other um's. this, &
-          44h can not be honored because at the most only,/,   45h 3 um's can be connected to a same mechanical, &
-          41h network. you may resolve this problem by,42h inserting stub lines in order to seperate)
-     write (lunit6,81249)
-81249 format(" the mechanical network from the remaining um's.")
+1249 format (/, ' Error stop. um number', i4, ' is connected mechanically to ', i2, " other um's. This can not be honored because at the most only", /, &
+          " 3 um's can be connected to a same mechanical network. You may resolve this problem by inserting stub lines in order to seperate")
+     write (lunit6, 81249)
+81249 format (" the mechanical network from the remaining um's.")
      call stoptp
      !. default value for epsom(i) :
 1250 if (epsom(i) .ne. 0.0) go to 1260
