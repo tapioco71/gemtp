@@ -944,325 +944,325 @@ subroutine reques
   data textax(44)  / 'oscill' /
   data textax(45)  / 'ations'  /
   !    $$$$$    special-request word no. 14.   'tacs emtp sources'  $$$$
-  data textay(14)  /  6htes     /
-  data jpntr(14)   /  46  /
-  data textax(46)  /  6htacs    /
-  data textax(47)  /  6hemtp    /
-  data textax(48)  /  6hsource  /
-  data textax(49)  /  6hs       /
+  data textay(14)  / 6htes     /
+  data jpntr(14)   / 46  /
+  data textax(46)  / 6htacs    /
+  data textax(47)  / 6hemtp    /
+  data textax(48)  / 6hsource  /
+  data textax(49)  / 6hs       /
   !    $$$$$    special-request word no. 15.   'start again'       $$$$$
-  data textay(15)  /  6hsa      /
-  data jpntr(15)   /  50  /
-  data textax(50)  /  6hstart   /
-  data textax(51)  /  6hagain   /
+  data textay(15)  / 6hsa      /
+  data jpntr(15)   / 50  /
+  data textax(50)  / 6hstart   /
+  data textax(51)  / 6hagain   /
   !    $$$$$    special-request word no. 16.   'semlyen setup'     $$$$$
-  data textay(16)  /  6hss      /
-  data jpntr(16)   /  52  /
-  data textax(52)  /  6hsemlye  /
-  data textax(53)  /  6hn       /
-  data textax(54)  /  6hsetup   /
+  data textay(16)  / 6hss      /
+  data jpntr(16)   / 52  /
+  data textax(52)  / 6hsemlye  /
+  data textax(53)  / 6hn       /
+  data textax(54)  / 6hsetup   /
   !    $$$$  special request-word no. 17.   'linear bias usage' $$$$$$$$$
-  data textay(17)  /  6hlbu      /
-  data jpntr(17)   /  55  /
-  data textax(55)  /  6hlinear  /
-  data textax(56)  /  6hbias    /
-  data textax(57)  /  6husage   /
+  data textay(17)  / 6hlbu      /
+  data jpntr(17)   / 55  /
+  data textax(55)  / 6hlinear  /
+  data textax(56)  / 6hbias    /
+  data textax(57)  / 6husage   /
   !    $$$$$    special-request word no. 18.   'cable constants'   $$$$$
-  data textay(18)  /  6hcc      /
-  data jpntr(18)   /  58  /
-  data textax(58)  /  6hcable   /
-  data textax(59)  /  6hconsta  /
-  data textax(60)  /  6hnts     /
+  data textay(18)  / 6hcc      /
+  data jpntr(18)   / 58  /
+  data textax(58)  / 6hcable   /
+  data textax(59)  / 6hconsta  /
+  data textax(60)  / 6hnts     /
   !    $$$$$    special-request word no. 19.   'auto name'         $$$$$
-  data textay(19)  /  6han      /
-  data jpntr(19)   /  61  /
-  data textax(61)  /  6hauto    /
-  data textax(62)  /  6hname    /
+  data textay(19)  / 6han      /
+  data jpntr(19)   / 61  /
+  data textax(61)  / 6hauto    /
+  data textax(62)  / 6hname    /
   !    $$$$$    special-request word no. 20.   'renumber bypass'   $$$$$
-  data textay(20)  /  6hrb      /
-  data jpntr(20)   /  63  /
-  data textax(63)  /  6hrenumb  /
-  data textax(64)  /  6her      /
-  data textax(65)  /  6hbypass  /
+  data textay(20)  / 6hrb      /
+  data jpntr(20)   / 63  /
+  data textax(63)  / 6hrenumb  /
+  data textax(64)  / 6her      /
+  data textax(65)  / 6hbypass  /
   !    $$$$$    special-request word no. 21.   'frequency scan'    $$$$$
-  data textay(21)  /  6hfs      /
-  data jpntr(21)   /  66  /
-  data textax(66)  /  6hfreque  /
-  data textax(67)  /  6hncy     /
-  data textax(68)  /  6hscan    /
+  data textay(21)  / 6hfs      /
+  data jpntr(21)   / 66  /
+  data textax(66)  / 6hfreque  /
+  data textax(67)  / 6hncy     /
+  data textax(68)  / 6hscan    /
   !    $$$$$    special-request word no. 22.   'free format'       $$$$$
-  data textay(22)  /  6hff      /
-  data jpntr(22)   /  69  /
-  data textax(69)  /  6hfree    /
-  data textax(70)  /  6hformat  /
+  data textay(22)  / 6hff      /
+  data jpntr(22)   / 69  /
+  data textax(69)  / 6hfree    /
+  data textax(70)  / 6hformat  /
   !    $$$$$    special-request word no. 23.   'diagnostic'        $$$$$
-  data textay(23)  /  6hd       /
-  data jpntr(23)   /  71  /
-  data textax(71)  /  6hdiagno  /
-  data textax(72)  /  6hstic    /
+  data textay(23)  / 6hd       /
+  data jpntr(23)   / 71  /
+  data textax(71)  / 6hdiagno  /
+  data textax(72)  / 6hstic    /
   !    $$$$$    special-request word no. 24.   'power frequency'   $$$$$
-  data textay(24)  /  6hpf      /
-  data jpntr(24)   /  73  /
-  data textax(73)  /  6hpower   /
-  data textax(74)  /  6hfreque  /
-  data textax(75)  /  6hncy     /
+  data textay(24)  / 6hpf      /
+  data jpntr(24)   / 73  /
+  data textax(73)  / 6hpower   /
+  data textax(74)  / 6hfreque  /
+  data textax(75)  / 6hncy     /
   !    $$$$$    special-request word no. 25.   'file request'      $$$$$
-  data textay(25)  /  6hfr      /
-  data jpntr(25)   /  76  /
-  data textax(76)  /  6hfile    /
-  data textax(77)  /  6hreques  /
-  data textax(78)  /  6ht       /
+  data textay(25)  / 6hfr      /
+  data jpntr(25)   / 76  /
+  data textax(76)  / 6hfile    /
+  data textax(77)  / 6hreques  /
+  data textax(78)  / 6ht       /
   !    $$$$$    special-request word no. 26.   'user identification' $$$
-  data textay(26)  /  6hui      /
-  data jpntr(26)   /  79  /
-  data textax(79)  /  6huser    /
-  data textax(80)  /  6hidenti  /
-  data textax(81)  /  6hficati  /
-  data textax(82)  /  6hon      /
+  data textay(26)  / 6hui      /
+  data jpntr(26)   / 79  /
+  data textax(79)  / 6huser    /
+  data textax(80)  / 6hidenti  /
+  data textax(81)  / 6hficati  /
+  data textax(82)  / 6hon      /
   !    $$$$$    special-request word no. 27.   'convert zno'  $$$$$$$$$$
-  data textay(27)  /  6hcz      /
-  data jpntr(27)   /  83  /
-  data textax(83)  /  6hconver  /
-  data textax(84)  /  6ht       /
-  data textax(85)  /  6hzno     /
+  data textay(27)  / 6hcz      /
+  data jpntr(27)   / 83  /
+  data textax(83)  / 6hconver  /
+  data textax(84)  / 6ht       /
+  data textax(85)  / 6hzno     /
   !    $$$$$    special-request word no. 28.   'abort data case'   $$$$$
-  data textay(28)  /  6hadc     /
-  data jpntr(28)   /  86  /
-  data textax(86)  /  6habort   /
-  data textax(87)  /  6hdata    /
-  data textax(88)  /  6hcase    /
+  data textay(28)  / 6hadc     /
+  data jpntr(28)   / 86  /
+  data textax(86)  / 6habort   /
+  data textax(87)  / 6hdata    /
+  data textax(88)  / 6hcase    /
   !    $$$$$    special-request word no. 29.   'kill codes'        $$$$$
-  data textay(29)  /  6hkc      /
-  data jpntr(29)   /  89  /
-  data textax(89)  /  6hkill    /
-  data textax(90)  /  6hcodes   /
+  data textay(29)  / 6hkc      /
+  data jpntr(29)   / 89  /
+  data textax(89)  / 6hkill    /
+  data textax(90)  / 6hcodes   /
   !    $$$$$    special-request word no. 30.   'high resistance'   $$$$$
-  data textay(30)  /  6hhr      /
-  data jpntr(30)   /  91  /
-  data textax(91)  /  6hhigh    /
-  data textax(92)  /  6hresist  /
-  data textax(93)  /  6hance    /
+  data textay(30)  / 6hhr      /
+  data jpntr(30)   / 91  /
+  data textax(91)  / 6hhigh    /
+  data textax(92)  / 6hresist  /
+  data textax(93)  / 6hance    /
   !    $$$$$    special-request word no. 31.   'average output'    $$$$$
-  data textay(31)  /  6hao      /
-  data jpntr(31)   /  94  /
-  data textax(94)  /  6haverag  /
-  data textax(95)  /  6he       /
-  data textax(96)  /  6houtput  /
+  data textay(31)  / 6hao      /
+  data jpntr(31)   / 94  /
+  data textax(94)  / 6haverag  /
+  data textax(95)  / 6he       /
+  data textax(96)  / 6houtput  /
   !    $$$$$  special request-word no. 32.  'absolute tacs dimensions'  $
-  data textay(32)  /  6hatd     /
-  data jpntr(32)   /  97  /
-  data textax(97)  /  6habsolu  /
-  data textax(98)  /  6hte      /
-  data textax(99)  /  6htacs    /
-  data textax(100) /  6hdimens  /
-  data textax(101) /  6hions    /
+  data textay(32)  / 6hatd     /
+  data jpntr(32)   / 97  /
+  data textax(97)  / 6habsolu  /
+  data textax(98)  / 6hte      /
+  data textax(99)  / 6htacs    /
+  data textax(100) / 6hdimens  /
+  data textax(101) / 6hions    /
   !    $$$$$  special request-word no. 33.  'relative tacs dimensions'  $
-  data textay(33)   /  6hrtd     /
-  data jpntr(33)    /  102  /
-  data textax(102)  /  6hrelati  /
-  data textax(103)  /  6hve      /
-  data textax(104)  /  6htacs    /
-  data textax(105)  /  6hdimens  /
-  data textax(106)  /  6hions    /
+  data textay(33)  / 6hrtd     /
+  data jpntr(33)   / 102  /
+  data textax(102) / 6hrelati  /
+  data textax(103) / 6hve      /
+  data textax(104) / 6htacs    /
+  data textax(105) / 6hdimens  /
+  data textax(106) / 6hions    /
   !    $$ special request-word no. 34.  'tabulate energization results'
-  data textay(34)   /  6hter     /
-  data jpntr(34)    /  107  /
-  data textax(107)  /  6htabula  /
-  data textax(108)  /  6hte      /
-  data textax(109)  /  6henergi  /
-  data textax(110)  /  6hzation  /
-  data textax(111)  /  6hresult  /
-  data textax(112)  /  6hs       /
+  data textay(34)  / 6hter     /
+  data jpntr(34)   / 107  /
+  data textax(107) / 6htabula  /
+  data textax(108) / 6hte      /
+  data textax(109) / 6henergi  /
+  data textax(110) / 6hzation  /
+  data textax(111) / 6hresult  /
+  data textax(112) / 6hs       /
   !    $$ special request-word no. 35. 'statistics output salvage'
-  data textay(35)   /  6hsos     /
-  data jpntr(35)    /  113  /
-  data textax(113)  /  6hstatis  /
-  data textax(114)  /  6htics    /
-  data textax(115)  /  6houtput  /
-  data textax(116)  /  6hsalvag  /
-  data textax(117)  /  6he       /
+  data textay(35)  /  6hsos     /
+  data jpntr(35)   /  113  /
+  data textax(113) /  6hstatis  /
+  data textax(114) /  6htics    /
+  data textax(115) /  6houtput  /
+  data textax(116) /  6hsalvag  /
+  data textax(117) /  6he       /
   !    $$$$  special request-word no. 36.   'omit base case'    $$$$$$$$$
-  data textay(36)   /  6hob!     /
-  data jpntr(36)    /  118  /
-  data textax(118)  /  6homit    /
-  data textax(119)  /  6hbase    /
-  data textax(120)  /  6hcase    /
+  data textay(36)  /  6hobc     /
+  data jpntr(36)   /  118  /
+  data textax(118) /  6homit    /
+  data textax(119) /  6hbase    /
+  data textax(120) /  6hcase    /
   !    $$$$  special request-word no. 37.   'change switch'     $$$$$$$$$
-  data textay(37)   /  6hcs      /
-  data jpntr(37)    /  121  /
-  data textax(121)  /  6hchange  /
-  data textax(122)  /  6hswitch  /
+  data textay(37)  /  6hcs      /
+  data jpntr(37)   /  121  /
+  data textax(121) /  6hchange  /
+  data textax(122) /  6hswitch  /
   !    $$$$$$$  special request-word no. 38.   'miscellaneous data
   !    cards'          $$$$$$$$$m28.1130
-  data textay(38)   /  6hmd!     /
-  data jpntr(38)    /  123  /
-  data textax(123)  /  6hmiscel  /
-  data textax(124)  /  6hlaneou  /
-  data textax(125)  /  6hs       /
-  data textax(126)  /  6hdata    /
-  data textax(127)  /  6hcards   /
+  data textay(38)  /  6hmdc    /
+  data jpntr(38)   /  123  /
+  data textax(123) /  6hmiscel  /
+  data textax(124) /  6hlaneou  /
+  data textax(125) /  6hs       /
+  data textax(126) /  6hdata    /
+  data textax(127) /  6hcards   /
   !    $$$$$$$  special request-word no. 39.   'redefine tolerance
   !    epsiln'         $$$$$$$$$m28.1139
-  data textay(39)   /  6hrte     /
-  data jpntr(39)    /  128  /
-  data textax(128)  /  6hredefi  /
-  data textax(129)  /  6hne      /
-  data textax(130)  /  6htolera  /
-  data textax(131)  /  6hnce     /
-  data textax(132)  /  6hepsiln  /
+  data textay(39)  /  6hrte     /
+  data jpntr(39)   /  128  /
+  data textax(128) /  6hredefi  /
+  data textax(129) /  6hne      /
+  data textax(130) /  6htolera  /
+  data textax(131) /  6hnce     /
+  data textax(132) /  6hepsiln  /
   !    $$$$$$$  special request-word no. 40.   'change printout
   !    frequency       $$$$$$$$$m28.1148
-  data textay(40)   /  6hcpf     /
-  data jpntr(40)    /  133  /
-  data textax(133)  /  6hchange  /
-  data textax(134)  /  6hprinto  /
-  data textax(135)  /  6hut      /
-  data textax(136)  /  6hfreque  /
-  data textax(137)  /  6hncy     /
+  data textay(40)  /  6hcpf     /
+  data jpntr(40)   /  133  /
+  data textax(133) /  6hchange  /
+  data textax(134) /  6hprinto  /
+  data textax(135) /  6hut      /
+  data textax(136) /  6hfreque  /
+  data textax(137) /  6hncy     /
   !    $$$$$$$  special request-word no. 41.   'begin peak
   !    value search'   $$$$$$$$$m28.1157
-  data textay(41)   /  6hbpvs    /
-  data jpntr(41)    /  138  /
-  data textax(138)  /  6hbegin   /
-  data textax(139)  /  6hpeak    /
-  data textax(140)  /  6hvalue   /
-  data textax(141)  /  6hsearch  /
+  data textay(41)  /  6hbpvs    /
+  data jpntr(41)   /  138  /
+  data textax(138) /  6hbegin   /
+  data textax(139) /  6hpeak    /
+  data textax(140) /  6hvalue   /
+  data textax(141) /  6hsearch  /
   !    $$$$$$$  special request-word no. 42.   'time of
   !    dice roll'    $$$$$$$$$$$m28.1165
-  data textay(42)   /  6htodr    /
-  data jpntr(42)    /  142  /
-  data textax(142)  /  6htime    /
-  data textax(143)  /  6hof      /
-  data textax(144)  /  6hdice    /
-  data textax(145)  /  6hroll    /
+  data textay(42)  /  6htodr    /
+  data jpntr(42)   /  142  /
+  data textax(142) /  6htime    /
+  data textax(143) /  6hof      /
+  data textax(144) /  6hdice    /
+  data textax(145) /  6hroll    /
   !    $$$$$$$  special request-word no. 43.   'zinc oxide'   $$$$$$$$$$$
-  data textay(43)   /  6hzo      /
-  data jpntr(43)    /  146  /
-  data textax(146)  /  6hzinc    /
-  data textax(147)  /  6hoxide   /
+  data textay(43)  /  6hzo      /
+  data jpntr(43)   /  146  /
+  data textax(146) /  6hzinc    /
+  data textax(147) /  6hoxide   /
   !    $$$$$$$  special request-word no. 44.   'peak voltage'  $$$$$$$$$$
   !    $$$$$$$                                  monitor'      $$$$$$$$$$$
-  data textay(44)   /  6hpvm     /
-  data jpntr(44)    /  148  /
-  data textax(148)  /  6hpeak    /
-  data textax(149)  /  6hvoltag  /
-  data textax(150)  /  6he       /
-  data textax(151)  /  6hmonito  /
-  data textax(152)  /  6hr       /
+  data textay(44)  /  6hpvm     /
+  data jpntr(44)   /  148  /
+  data textax(148) /  6hpeak    /
+  data textax(149) /  6hvoltag  /
+  data textax(150) /  6he       /
+  data textax(151) /  6hmonito  /
+  data textax(152) /  6hr       /
   !    $$$$$$$  special request-word no. 45.   'absolute u.m.  $$$$$$$$$$
   !    dimensions'    $$$$$$$$$$m28.1187
-  data textay(45)   /  6haumd    /
-  data jpntr(45)    /  153  /
-  data textax(153)  /  6habsolu  /
-  data textax(154)  /  6hte      /
-  data textax(155)  /  6hu.m.    /
-  data textax(156)  /  6hdimens  /
-  data textax(157)  /  6hions    /
+  data textay(45)  /  6haumd    /
+  data jpntr(45)   /  153  /
+  data textax(153) /  6habsolu  /
+  data textax(154) /  6hte      /
+  data textax(155) /  6hu.m.    /
+  data textax(156) /  6hdimens  /
+  data textax(157) /  6hions    /
   !    $$$$$$$  special request-word no. 46.   'relative u.m.  $$$$$$$$$$
   !    dimensions'    $$$$$$$$$$m28.1196
-  data textay(46)   /  6hrumd    /
-  data jpntr(46)    /  158  /
-  data textax(158)  /  6hrelati  /
-  data textax(159)  /  6hve      /
-  data textax(160)  /  6hu.m.    /
-  data textax(161)  /  6hdimens  /
-  data textax(162)  /  6hions    /
+  data textay(46)  /  6hrumd    /
+  data jpntr(46)   /  158  /
+  data textax(158) /  6hrelati  /
+  data textax(159) /  6hve      /
+  data textax(160) /  6hu.m.    /
+  data textax(161) /  6hdimens  /
+  data textax(162) /  6hions    /
   !    $$$$$$$  special request-word no. 47.   'time step loop'  $$$$$$$$
-  data textay(47)   /  6htsl     /
-  data jpntr(47)    /  163  /
-  data textax(163)  /  6htime    /
-  data textax(164)  /  6hstep    /
-  data textax(165)  /  6hloop    /
+  data textay(47)  /  6htsl     /
+  data jpntr(47)   /  163  /
+  data textax(163) /  6htime    /
+  data textax(164) /  6hstep    /
+  data textax(165) /  6hloop    /
   !    $$$$$$$  special request-word no. 48.   'alternate diagnostic
   !    printout'  $$$$$$$$m28.1211
-  data textay(48)   /  6hadp     /
-  data jpntr(48)    /  166  /
-  data textax(166)  /  6haltern  /
-  data textax(167)  /  6hate     /
-  data textax(168)  /  6hdiagno  /
-  data textax(169)  /  6hstic    /
-  data textax(170)  /  6hprinto  /
-  data textax(171)  /  6hut      /
+  data textay(48)  /  6hadp     /
+  data jpntr(48)   /  166  /
+  data textax(166) /  6haltern  /
+  data textax(167) /  6hate     /
+  data textax(168) /  6hdiagno  /
+  data textax(169) /  6hstic    /
+  data textax(170) /  6hprinto  /
+  data textax(171) /  6hut      /
   !    $$$$$$$  special request-word no. 49.   'tacs warn limit' $$$$$$$$
-  data textay(49)   /  6htwl     /
-  data jpntr(49)    /  172  /
-  data textax(172)  /  6htacs    /
-  data textax(173)  /  6hwarn    /
-  data textax(174)  /  6hlimit   /
+  data textay(49)  /  6htwl     /
+  data jpntr(49)   /  172  /
+  data textax(172) /  6htacs    /
+  data textax(173) /  6hwarn    /
+  data textax(174) /  6hlimit   /
   !    $$$$$    special-request word no. 50.   'marti setup'       $$$$$
   data textay(50)  /  6hms      /
-  data jpntr(50)    /  175  /
-  data textax(175)  /  6hmarti   /
-  data textax(176)  /  6hsetup   /
+  data jpntr(50)   /  175  /
+  data textax(175) /  6hmarti   /
+  data textax(176) /  6hsetup   /
   !    $$$$$    special-request word no. 51.   'jmarti setup' $$$$$$$$$$
   data textay(51)  /  6hjms     /
-  data jpntr(51)    /  177  /
-  data textax(177)  /  6hjmarti  /
-  data textax(178)  /  6hsetup   /
+  data jpntr(51)   /  177  /
+  data textax(177) /  6hjmarti  /
+  data textax(178) /  6hsetup   /
   !    $$$$$$$  special request-word no. 52.   'custom plot file' $$$$$$
-  data textay(52)   /  6hcpf     /
-  data jpntr(52)    /  179  /
-  data textax(179)  /  6hcustom  /
-  data textax(180)  /  6hplot    /
-  data textax(181)  /  6hfile    /
+  data textay(52)  /  6hcpf     /
+  data jpntr(52)   /  179  /
+  data textax(179) /  6hcustom  /
+  data textax(180) /  6hplot    /
+  data textax(181) /  6hfile    /
   !    $$$$$$$  special request-word no. 53.   'output width 132' $$$$$$
-  data textay(53)   /  6how1     /
-  data jpntr(53)    /  182  /
-  data textax(182)  /  6houtput  /
-  data textax(183)  /  6hwidth   /
-  data textax(184)  /  6h132     /
+  data textay(53)  /  6how1     /
+  data jpntr(53)   /  182  /
+  data textax(182) /  6houtput  /
+  data textax(183) /  6hwidth   /
+  data textax(184) /  6h132     /
   !    $$$$$$$  special request-word no. 54.   'output width 80'  $$$$$$
-  data textay(54)   /  6how8     /
-  data jpntr(54)    /  185  /
-  data textax(185)  /  6houtput  /
-  data textax(186)  /  6hwidth   /
-  data textax(187)  /  6h80      /
+  data textay(54)  /  6how8     /
+  data jpntr(54)   /  185  /
+  data textax(185) /  6houtput  /
+  data textax(186) /  6hwidth   /
+  data textax(187) /  6h80      /
   !    $$$$$$$  special request-word no. 55.   'modify switch logic  $$$
-  data textay(55)   /  6hmsl     /
-  data jpntr(55)    /  188  /
-  data textax(188)  /  6hmodify  /
-  data textax(189)  /  6hswitch  /
-  data textax(190)  /  6hlogic   /
+  data textay(55)  /  6hmsl     /
+  data jpntr(55)   /  188  /
+  data textax(188) /  6hmodify  /
+  data textax(189) /  6hswitch  /
+  data textax(190) /  6hlogic   /
   !    $$$$$$$  special request-word no. 56.   'fault data usage' $$$$$$
-  data textay(56)   /  6hfdu     /
-  data jpntr(56)    /  191  /
-  data textax(191)  /  6hfault   /
-  data textax(192)  /  6hdata    /
-  data textax(193)  /  6husage   /
+  data textay(56)  / 'fdu   ' /
+  data jpntr(56)   / 191 /
+  data textax(191) / 'fault ' /
+  data textax(192) / 'data  ' /
+  data textax(193) / 'usage ' /
   !    $$$$$$$  special request-word no. 57.   'fix source'  $$$$$$
-  data textay(57)   /  6hfxs     /
-  data jpntr(57)    /  194       /
-  data textax(194)  /  6hfix     /
-  data textax(195)  /  6hsource  /
+  data textay(57)  / 'fxs   ' /
+  data jpntr(57)   / 194 /
+  data textax(194) / 'fix   ' /
+  data textax(195) / 'source' /
   !    $$$$$$$  special request-word no. 58.   'user supplied     $$$$$$
   !    $$$$$$$                                  switch times'     $$$$$$
-  data textay(58)   /  6husst    /
-  data jpntr(58)    /  196  /
-  data textax(196)  /  6huser    /
-  data textax(197)  /  6hsuppli  /
-  data textax(198)  /  6hed      /
-  data textax(199)  /  6hswitch  /
-  data textax(200)  /  6htimes   /
+  data textay(58)  / 'usst  ' /
+  data jpntr(58)   / 196 /
+  data textax(196) / 'user  ' /
+  data textax(197) / 'suppli' /
+  data textax(198) / 'ed    ' /
+  data textax(199) / 'switch' /
+  data textax(200) / 'times ' /
   !    $$$$$$$  special request-word no. 59.   'ametani setup'  $$$
-  data textay(59)   /  6has      /
-  data jpntr(59)    /  201       /
-  data textax(201)  /  6hametan  /
-  data textax(202)  /  6hi       /
-  data textax(203)  /  6hsetup   /
+  data textay(59)  / 'as    ' /
+  data jpntr(59)   / 201 /
+  data textax(201) / 'ametan' /
+  data textax(202) / 'i     ' /
+  data textax(203) / 'setup ' /
   !    $$$$$$$  special request-word no. 60.   'hauer setup'  $$$$$
-  data textay(60)   /  6hhs      /
-  data jpntr(60)    /  204       /
-  data textax(204)  /  6hhauer   /
-  data textax(205)  /  6hsetup   /
+  data textay(60)  / 'hs    ' /
+  data jpntr(60)   / 204 /
+  data textax(204) / 'hauer ' /
+  data textax(205) / 'setup ' /
   !    $$$$$$$  special request-word no. 61.   'line model freq. scan  $$
-  data textay(61)   /  6hlmfs    /
-  data jpntr(61)    /  206       /
-  data textax(206)  / 6hline    /
-  data textax(207)  / 6hmodel  /
-  data textax(208)  / 6hfreq   /
-  data textax(209)  / 6hscan   /
-  data jpntr(62)    /  210      /
-  data jpntr(63)    /    0        /
+  data textay(61)  / 'lmfs  ' /
+  data jpntr(61)   / 206 /
+  data textax(206) / 'line  ' /
+  data textax(207) / 'model ' /
+  data textax(208) / 'freq  ' /
+  data textax(209) / 'scan  ' /
+  data jpntr(62)   / 210 /
+  data jpntr(63)   / 0 /
   data ll1  /  1 /
   data ll8  /  8 /
   data ll16 / 16 /
