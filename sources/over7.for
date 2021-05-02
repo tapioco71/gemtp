@@ -6,7 +6,7 @@
 !     subroutine over7.
 !
 subroutine over7
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'space2.ftn'
@@ -16,21 +16,21 @@ subroutine over7
   !     following carries "next" among over6, insert, over7, & over9:
   equivalence (loopss(11), next)
   if (iprsup .ge. 1) write (lunit6, 4567)
-4567 format (23h  "begin module over7." )
+4567 format ('  "Begin module over7."')
   ischm = 2
   if(iprsup .lt. 4) go to 4054
   write(lunit6, 4050)  ischm, ntot, next, iofkol, iofkor, ncurr
-4050 format (/,  " scalars upon entry into renumbering,  'over7' .ischm    ntot    next  iofkol  iofkor   ncurr  ", /,50x, 6i8 )
+4050 format (/, " Scalars upon entry into renumbering,  'over7' .ischm    ntot    next  iofkol  iofkor   ncurr  ", /, 50x, 6i8)
   write (lunit6, 4053)
-4053 format (" integer arrays upon entry into renumbering,  'over7' .  ", /,  &
-       '     row   kolum  korder   kownt     loc   kode kbus    mbus      nr  length   bus1     bus2')
+4053 format (" Integer arrays upon entry into renumbering,  'over7' .  ", /,  &
+          '     row   kolum  korder   kownt     loc   kode kbus    mbus      nr  length   bus1     bus2')
   do i = 1, next
      n1 = i + iofkol
      n2 = i + iofkor
      ndx1 = lswtch + i
      write (lunit6, 4055) i, kolum(n1),korder(n2),kownt(i),loc(i), kode(i), kbus(i),mbus(i),nr(i), length(i), kmswit(i), &
           kmswit(ndx1)
-4055 format(12i8)
+4055 format (12i8)
 4057 end do
 4054 ioffd = 0
   td = 0.0
@@ -82,18 +82,18 @@ subroutine over7
   call subscr ( nelim, lbus, 220, 2 )
   if( iprsup .le. 25 )  go to 222
   write(lunit6, 4061)  nelim, ncn, ioffd, ntot, ncurr, next, mext, icon
-4061 format (" prepare to renumber next network node in  'over7'.     nelim     ncn   ioffd    ntot   ncurr    next    mext    icon   ",/,  54x, 8i8)
+4061 format (" Prepare to renumber next network node in  'over7'.     nelim     ncn   ioffd    ntot   ncurr    next    mext    icon   ", /, 54x, 8i8)
   if ( iprsup  .le.  34 )   go to 222
   write (lunit6, 4062)
-4062 format (' renumbering arrays.       row   kolum  korder   kownt     loc    ich1    ich2    ndex')
+4062 format (' Renumbering arrays.       row   kolum  korder   kownt     loc    ich1    ich2    ndex')
   do ii = 1, 15
      n1 = ii + iofkol
      n2 = ii + iofkor
      write (lunit6, 4064) ii, kolum(n1), korder(n2), kownt(ii), loc(ii), ich1(ii), ich2(ii), ndex(ii)
-4064 format(22x, 8i8)
+4064 format (22x, 8i8)
 4066 end do
 222 j = ich1(i)
-  call subscr ( i, lbus, 222, 1 )
+  call subscr (i, lbus, 222, 1)
   ndex(ncn+1) = j
   jsub = ncn + 1
   call subscr ( jsub, lbus, 222, 2 )
@@ -107,13 +107,13 @@ subroutine over7
 231  lorder(j) = i
   end do
   if( iprsup .ge. 3 ) write (lunit6, 5231)
-5231 format (/, " final renumbering arrays at the end of  'over7' .    row  norder   index    iloc  lorder   kownt     loc   kolum    korder")
+5231 format (/, " Final renumbering arrays at the end of  'over7' .    row  norder   index    iloc  lorder   kownt     loc   kolum    korder")
   do i = 1, 20
      n1 = i + iofkol
      n2 = i + iofkor
      if ( iprsup  .ge.  3 ) write (lunit6, 5233) i, norder(i), index(i), iloc(i), lorder(i), kownt(i), loc(i), kolum(n1), &
           korder(n2)
-5233 format(50x, 9i8)
+5233 format (50x, 9i8)
 5235 end do
   if (ioffd .le. 0)   go to 233
   do i = 1, ioffd
@@ -149,19 +149,19 @@ subroutine over7
   jsub = ntot + 1
   call subscr ( jsub, lbus, 5236, 1 )
   if( iprsup .ge. 3 ) write(lunit6, 5241)  ( i, norder(i), index(i), iloc(i), i=1, 20 )
-5241 format ( /,  65h arrays upon exit from  'over7' .     row  norder index    iloc  ,/,  ( 33x, 4i8 ) )
+5241 format ( /, " Arrays upon exit from  'over7' .     row  norder index    iloc", /, (33x, 4i8))
   if ( ioffd  .gt.  lstat(43) ) lstat(43) = ioffd
 5276 if ( lastov  .gt.  nchain )   go to 5283
   if (iprsup .gt. 0) write(lunit6, 47881)  ( norder(i), i=1, ntot )
-47881 format ( /,  63h (norder(i), i=1, ntot)   after transient-network renumbering .    ,/,  ( 1x, 20i6 ) )
+47881 format (/, ' (norder(i), i = 1, ntot)   after transient-network renumbering .', /, (1x, 20i6))
   if( iprsup .ge. 1 ) write(lunit6, 54230)  next, last, ntot, kswtch, kconst, nv, ibr, inonl  , npower, it, istead, norder(1), ncurr
-54230 format ( /,    121h before 'over8' .    next    last    ntot  kswtch  kconst      nv     ibr   inonl  npower      it  istead  nor(1) ncurr   ,/, 17x, 13i8 )
+54230 format (/, " Before 'over8' .    Next    last    ntot  kswtch  kconst      nv     ibr   inonl  npower      it  istead  nor(1) ncurr", /, 17x, 13i8)
   if( norder(1) .eq. 1 )  go to 14
   if ( noutpr  .eq.  0 ) write(lunit6, 47881 )  ( norder(i), i=1, ntot )
   if ( iprsup  .gt.  0 ) write(lunit6, 6045 )
-6045 format( 114h note ---- the preceding printout shows that ground was not renumbered first in the transient-network renumbering.  ,/, &
-       11x, 112hwe will swap the new numbers between ground and whatever node was renumbered first, in order to get a legitimate   ,/, &
-       11x,  48hnumbering for the rest of the emtp calculations.   )
+6045 format(' Note ---- the preceding printout shows that ground was not renumbered first in the transient-network renumbering.', /, &
+          11x, 'We will swap the new numbers between ground and whatever node was renumbered first, in order to get a legitimate', /, &
+          11x, 'numbering for the rest of the emtp calculations.')
   do i = 1, ntot
      if( norder(i) .eq. 1 )  go to 32
 26 end do
@@ -180,7 +180,7 @@ subroutine over7
      if( kode(k) .eq. 0 )  go to 73775
      do l=1, kconst
         if ( iprsup .ge. 3 ) write (lunit6, 6049)  i, k, kode(k), n1, j, l, node(l), tstart(l)
-6049    format ( 43h at 6049 of "over7".  i, k, kode(k), etc. =,7i8,  e20.10  )
+6049    format (' at 6049 of "over7".  i, k, kode(k), etc. =', 7i8, e20.10)
         !     s.m.  source node must precede regular voltage source nodes.
         !     alter renumbering map to produce this, if  tstart  .eq.  -9988.
         if ( tstart(l)  .ne.  -9988. )   go to 6051
@@ -211,7 +211,7 @@ subroutine over7
   nchain = lastov + 1
   lastov = n1
   if ( iprsup  .ge.  1 ) write (lunit6, 4568 )
-4568 format (23h  "exit  module over7." )
+4568 format ('  "Exit  module over7."')
 5294 go to 99999
 240 nelim = nelim +1
   if (ischm .eq. 1)   go to 200
@@ -716,29 +716,29 @@ subroutine over7
 9999 if ( lastov  .gt.  nchain )   go to 9996
   kill=0
   write (lunit6, 9998)
-9998 format( /, 106h warning ---- node renumbering of the transients network has broken down, presumably due to table overflow  ,/, &
-       113h (i.e., the network is too big and/or too dense for the present EMTP dimensioning).   the next time that the user         ,/, &
-       111h redimensions the emtp, he is advised to increase the size of list number  5  and/or  8 .   both of these lists           ,/, &
-       118h contribute fully (100 per cent) to dependent list number  99,   which is what has actually overflowed at this point.    )
+9998 format (/, ' Warning ---- node renumbering of the transients network has broken down, presumably due to table overflow', /, &
+          ' (i.e., the network is too big and/or too dense for the present EMTP dimensioning).   the next time that the user', /, &
+          ' redimensions the emtp, he is advised to increase the size of list number  5  and/or  8 .   both of these lists', /, &
+          ' contribute fully (100 per cent) to dependent list number  99,   which is what has actually overflowed at this point.')
   nelim = nelim - 1
   write (lunit6, 9997)  nelim, ntot, ncurr
-9997 format( 1x, i4,  23h nodes out of total of  , i4,61h were renumbered before breakdown in the renumbering overlay. ,/, &
-       18h had we made it to,  i6,  80h   nodes, the operation would have terminated normally (since the remaining ones         ,/, &
-       67h are always forced last without regard to sparsity considerations).     )
+9997 format (1x, i4, ' Nodes out of total of  ', i4, ' were renumbered before breakdown in the renumbering overlay.', /, &
+          ' Had we made it to', i6, '   nodes, the operation would have terminated normally (since the remaining ones', /, &
+          ' are always forced last without regard to sparsity considerations).')
   do i = 1, ntot
      if ( norder(i)  .gt.  0 )   go to 2236
      nelim = nelim + 1
      norder(i) = nelim
 2236 end do
   write (lunit6, 2240)
-2240 format ( /, 107h anyway, the emtp will try to continue with execution of this data case, as best it can.   nodes which were      ,/, &
-       110h not renumbered before the overflow limit was reached will now simply be renumbered in their original relative            ,/, &
-       117h order, without regard to sparsity considerations.   recall that the original node order comes from the order of data       ,/, &
-       88h input (the order in which node names are encountered, as the EMTP data cards are read).        )
+2240 format (/, ' Anyway, the EMTP will try to continue with execution of this data case, as best it can.   Nodes which were', /, &
+          ' not renumbered before the overflow limit was reached will now simply be renumbered in their original relative', /, &
+          ' order, without regard to sparsity considerations.   Recall that the original node order comes from the order of data', /, &
+          ' input (the order in which node names are encountered, as the EMTP data cards are read).')
   write (lunit6, 2241)  ( norder(i), i=1, ntot )
-2241 format (  86h the final renumbering map   (norder(i), i=1, ntot) will then appear as follows ....    ,/,  ( 1x, 20i6 )  )
+2241 format (' The final renumbering map   (norder(i), i = 1, ntot) will then appear as follows ....', /, (1x, 20i6))
   write (lunit6, 2247)
-2247 format ( 103h the  k-th  such entry gives the row (and column) position of old variable  k  in the reordered matrix.   ,/,  1x  )
+2247 format (' The  k-th  such entry gives the row (and column) position of old variable  k  in the reordered matrix.', /, 1x)
   go to 5276
 9996 lstat(18)=7
   lastov = nchain
@@ -750,7 +750,7 @@ end subroutine over7
 !     subroutine subscr.
 !
 subroutine subscr(j, limit, istat, n1)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   !     module used to check out-of-bounds subscripts for "over7"
   !     special n1=99 case is for subscripts which are used only
@@ -758,9 +758,9 @@ subroutine subscr(j, limit, istat, n1)
   if (j .ge. 1 .and. j .le. limit) go to 9000
   if (j .le. 0 .and. n1 .eq. 99) go to 9000
   write (lunit6, 1487)  j, limit, istat, n1
-1487 format (  26h out-of-bounds subscript =,  i6, 12h .   limit =,  i6, 15h .   below s.n.,  i6, 20h   with sequence no., i2, ' .')
-9000 if ( iprsup  .ge.  99 ) write (lunit6, 9006)  j, limit, istat, n1
-9006 format (  30h trace.  j, limit, istat, n1 =,  4i8 )
+1487 format (' out-of-bounds subscript =', i6, ' .   limit =', i6, ' .   Bbelow s.n.', i6, '   with sequence no.', i2, ' .')
+9000 if (iprsup .ge. 99) write (lunit6, 9006)  j, limit, istat, n1
+9006 format (' Trace.  j, limit, istat, n1 =', 4i8)
   return
 end subroutine subscr
 !

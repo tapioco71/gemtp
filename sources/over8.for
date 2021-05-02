@@ -6,18 +6,18 @@
 !     subroutine over8.
 !
 subroutine over8
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'synmac.ftn'
   include 'umdeck.ftn'
   include 'space2.ftn'
   !     %include  '//c/tsu/cables.ftn'
-  real*8 l
+  real(8) l
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
-  character*6 chlmfs        ! 9-phase as limit for lmfs test
-  character*80 char80
+  character(6) chlmfs        ! 9-phase as limit for lmfs test
+  character(80) char80
   dimension infdli(1)
   equivalence  ( namebr(1),  infdli(1) )
   dimension wk1(1)
@@ -28,10 +28,10 @@ subroutine over8
   equivalence ( spum(1), ispum(1) )
   dimension integx(1)
   equivalence ( x(1), integx(1) ),   ( moncar(1), knt )
-  character*6 tempbus
+  character(6) tempbus
   !     1001 if ( iprsup .ge. 1 )
   if (iprsup .ge. 1) write (lunit6, 101) loopss(1), iv, it, tmax
-101 format ( 28h top of "over8".   loopss(1), 15h iv, it, tmax =,  3i8, e15.5 )
+101 format (' Top of "over8".   loopss(1) iv, it, tmax =', 3i8, e15.5)
   isecti = 400
   n7 = 1
   if (tmax .le. 0.0 .and. nchain .gt. lastov) go to 40014
@@ -105,10 +105,10 @@ subroutine over8
      go to 3442
 3456 end do
   if( iprsup .gt. 1 ) write(lunit6, 73825)  kpartb, ntot
-73825 format( //, 33h final renumbering maps.  kpartb= , i5, 5x, 5hntot=, i3, /, 9x, 1hi, 4x, 6hbus(i), 3x, 9hnorder(i), 5x, &
-       7hich1(i) , 5x, 7hkode(i)   )
+73825 format(//, ' Final renumbering maps.  kpartb= ', i5, 5x, 'ntot=', i3, /, 9x, 'i', 4x, 'bus(i)', 3x, 'norder(i)', 5x, &
+           'ich1(i)', 5x, 'kode(i)')
   if( iprsup .gt. 1 ) write(lunit6, 73826)  ( i, bus(i), norder(i),   ich1(i), kode(i), i=1, ntot )
-73826 format( i10, 4x, a6, 3i12 )
+73826 format (i10, 4x, a6, 3i12)
   if (kswtch.lt.1) go to 40017
   do i = 1, kswtch
      ndx1 = lswtch + i
@@ -217,11 +217,11 @@ subroutine over8
      sfreq(j) = fminfs
 3225 end do
   if ( iprsup  .ge.  2 ) write (lunit6, 3227)  knt, ltlabl, fminfs, fmaxfs
-3227 format ( /,  33h begin next freq.     knt  ltlabl, 9x,  6hfminfs,  9x,  6hfmaxfs  ,/,  17x, 2i8,  2e15.6  )
+3227 format (/, ' Begin next freq.     knt  ltlabl', 9x, 'fminfs', 9x, 'fmaxfs', /, 17x, 2i8, 2e15.6)
 1413 if ( iprsup  .ge.  1 ) write (lunit6, 1417)  kconst, ibr, inonl, kswtch, istead, xopt, copt, twopi
-1417 format ( 1x, 40h  kconst     ibr   inonl  kswtch  istead, 11x,  4hxopt,  11x,  4hcopt,  10x,  5htwopi,/,  1x,  5i8,  3e15.6)
+1417 format (1x, '  kconst     ibr   inonl  kswtch  istead', 11x, 'xopt',  11x, 'copt', 10x, 'twopi', /, 1x, 5i8, 3e15.6)
   if ( iprsup .ge. 1 ) write (lunit6, 1419)  ( xoptbr(j), coptbr(j), j=1, ibr )
-1419 format ( ' x/coptbr =',  10f12.2 )
+1419 format (' x/coptbr =', 10f12.2)
   !     before starting steady-state solution for initial conditions, we
   !     must find pi-equivalents for distributed branches.
   !     1425 itadd = it + 1
@@ -284,7 +284,7 @@ subroutine over8
   if ( kodsem(k) .eq. 0  .or. im1 .eq. -2 )  go to 5136
   if ( im1 .eq. -4 )  go to 1536
   it2 = iabs(kodebr(k))
-  !  formation of phase symmetric pi matrices for components reperesented
+  !  Formation of phase symmetric pi matrices for components reperesented
   !  by recursive convolution.  for lumped elements the steady-state modal
   !  values of the symmetric pi are stored in sconst(j+0 ... j+3).  for
   !  transmiddion lines, sconst(j+0 ... j+3) holds the modal series z and
@@ -302,17 +302,17 @@ subroutine over8
   n3 = n1 + n5
   n4 = n3 + n5
   write (lunit6, 8001) cik(k)
-8001 format(//,5x,4hsfd(,f4.0,5h) ...,/)
+8001 format (//, 5x, 'sfd(', f4.0, ') ...', /)
   do i = 1, it2
      n2 = i + n1
      write (lunit6, 8002) i, (sfd(j), j=n2, n3, it2)
-8002 format(/,2x,i5,8(1x,e15.7)/(7x,8(1x,e15.7)))
+8002 format (/, 2x, i5, 8(1x, e15.7), /, (7x, 8(1x, e15.7)))
      n2 = i + n3
      write (lunit6, 8003) (sfd(j), j=n2, n4, it2)
-8003 format(7x,8(1x,e15.7))
+8003 format (7x, 8(1x, e15.7))
 8004 end do
   write (lunit6, 8005) cik(k)
-8005 format(///,5x,4hqfd(,f4.0,5h) ...,/)
+8005 format (///, 5x, 'qfd(', f4.0, ') ...', /)
   do i = 1, it2
      n2 = i + n1
      write (lunit6, 8002) i, (qfd(j), j=n2, n3, it2)
@@ -331,7 +331,7 @@ subroutine over8
      d2 = 0.0
      if (n3) 8300, 8400, 8200
 8200 if (iprsup .ge. 9) write(lunit6, 8201) n1, n2, n3, sconst(n2), sconst(n2+1), sconst(n2+2), d1, d2
-8201 format(43h n1, n2, n3, sconst(n2 ... n2+2), d1, d2 = , 3i10/5(1x,e15.8))
+8201 format (' n1, n2, n3, sconst(n2 ... n2+2), d1, d2 = ', 3i10, /, 5(1x, e15.8))
      if (n3 .le. 0) go to 8250
      if (sconst(n2)) 8210, 8220, 8230
 8210 d5 = sconst(n2 - 3)
@@ -369,7 +369,7 @@ subroutine over8
      go to 8400
 8300 d5 = 0.0
 8310 if (iprsup .ge. 9) write (lunit6, 8311) n2, n3, sconst(n2), sconst(n2+1), d5, d6, d1, d2
-8311 format(34h  n2, n3, sconst(n2 ... n2+1), d5, , 13hd6, d1, d2 = ,2i10/6(1x,e15.8))
+8311 format ('  n2, n3, sconst(n2 ... n2+1), d5, d6, d1, d2 = ', 2i10, /, 6(1x, e15.8))
      if (n3 .ge. 0) go to 8320
      n3 = n3 + 1
      d6 = - omega * sconst(n2)
@@ -450,9 +450,9 @@ subroutine over8
      n2 = -kbus(ii)
      n3 = iabs(mbus(ii))
      write (lunit6, 8010) bus(n2), bus(n3), i, cnvhst(n1 + 4), omega
-8010 format(//97h warning...  steady state modal parameters for recursive-convolution component connecting nodes ',a6,7h' and ',a6,1h',/, &
-          13x,  9hfor mode ,i2, 40h are determined at angular frequency of, e12.5, 51h radians/sec.  the steady-state solution frequency ,/, &
-          13x,  14hbeing used is ,e12.5,14h radians/sec.   )
+8010 format(//, ' Warning...  Steady state modal parameters for recursive-convolution component connecting nodes ', "'", a6, "'", ' and ', a6, "'", /, &
+          13x, 'for mode ', i2, ' are determined at angular frequency of', e12.5, ' radians/sec.  The steady-state solution frequency', /, &
+          13x, 'being used is ', e12.5, ' radians/sec.')
 8020 if (kodsem(k) .gt. 0) go to 8030
      volt(i) = cnvhst(n1 + 0)
      volti(i) = cnvhst(n1 + 1) * d2
@@ -503,8 +503,8 @@ subroutine over8
      n3 = iabs(mbus(ii))
      write (lunit6, 8085) bus(n2), bus(n3), ii, n1, cnvhst(n1 + 0), cnvhst(n1 + 1), cnvhst(n1 + 2), cnvhst(n1 + 3), &
           cnvhst(n1 + 4), d3, d4, d5, d6, d7, d8, d9, d10, volt(i), volti(i), voltk(i), vim(ndx1)
-8085 format(/,5x,a6,4h to ,a6,5x,12hbr. index = ,i3,5x,5hn1 = ,i3,/,1x,29hcnvhst(n1) ... cnvhst(n1+4) =  ,5(1x,e15.7),/, &
-          1x,25hd3, d4, d5, d6, d7, d8 =  ,6(1x,e15.7),/,1x,34hd9, d10, volt, volti, voltk, vim =   ,6(1x,e15.7)  )
+8085 format(/, 5x, a6, ' to ', a6, 5x, 'br. index = ', i3, 5x, 'n1 = ', i3, /, 1x, 'cnvhst(n1) ... cnvhst(n1+4) =  ', 5(1x, e15.7), /, &
+          1x, 'd3, d4, d5, d6, d7, d8 =  ', 6(1x, e15.7), /, 1x, 'd9, d10, volt, volti, voltk, vim =   ', 6(1x, e15.7))
 8090 end do
   n1 = int(absz(cik(k)) - 1.0)
   n2 = n1 + it2 * it2
@@ -552,7 +552,7 @@ subroutine over8
      n3 = itadd - 1
      n4 = nr(ii)
      write (lunit6, 8125) n4, nr(ii), ii, (tr(j), tx(j), r(j), emtpc(j), j = n4, n3)
-8125 format(//, 5x, 'n4 = ', i4, 5x, 'nr(ii) = ', i4, 5x, 'ii = ', i4, 5x, '(tr(j), tx(j), r(j), emtpc(j), j=n3, n4)  ....', /, (8(1x,e15.8)))
+8125 format (//, 5x, 'n4 = ', i4, 5x, 'nr(ii) = ', i4, 5x, 'ii = ', i4, 5x, '(tr(j), tx(j), r(j), emtpc(j), j=n3, n4)  ....', /, (8(1x, e15.8)))
 8130 end do
   it2 = 1
 8140 if (cki(k) .lt. 0.0) go to 407
@@ -565,8 +565,8 @@ subroutine over8
   if (im1 .ne. -4 )  go to 5137
   !      ktrlsw(5) = 1
   if ( iprsup  .ge.  1 ) write (lunit6, 50002)  omega
-50002 format(44h the following lines are frequency dependent, 15h parameters at ,  f10.3,  13h radians/sec.  ,/, &
-       5h bus1, 7x, 4hbus2, 14x, 15hsurge impedance, 20x, 21h propagation function, 12x, 11htravel time)
+50002 format (' The following lines are frequency dependent parameters at ', f10.3, ' radians/sec.', /, &
+           ' bus1', 7x, 'bus2', 14x, 'surge impedance', 20x, ' propagation function', 12x, 'travel time')
   do i = 1, it2
      j = i + k -1
      npz = int(cki(j))
@@ -580,7 +580,7 @@ subroutine over8
      gjl = 56789.0
      jgl = 0
      if ( iprsup .ge. 1) write(*,1990)
-1990 format(41hnpz   ii   n4    sconst(n4)    sconst(n5)      28h  cnvhst(n8+1)  cnvhst(n8+2))
+1990 format ('npz   ii   n4    sconst(n4)    sconst(n5)        cnvhst(n8+1)  cnvhst(n8+2)')
      do ii = 1, npz
         n4 = n3 + ii
         if( imodel(j) .eq. -4 ) go to 8015
@@ -607,7 +607,7 @@ subroutine over8
         cnvhst(n8+1)=cnvhst(n8+1)+d1*dd2/d3
         cnvhst(n8+2) = cnvhst(n8+2)-omega*d1/d3
         if ( iprsup .ge. 1) write(*,1991) npz,  ii,  n4, sconst(n4), sconst(n5), cnvhst(n8+1), cnvhst(n8+2)
-1991    format(1x,i2,2x,i3,2x,i6,2x 4e26.9)
+1991    format (1x, i2, 2x, i3, 2x, i6, 2x, 4e26.9)
 30001 end do
      cnvhst(n8+3) = 0.0
      cnvhst(n8+4) = 0.0
@@ -1135,7 +1135,7 @@ end function indblk
 !     subroutine frqchk.
 !
 subroutine frqchk
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module called in two places by "over8" to determine which
   !     nodes are excited by which sources (subnetwork bounding),
   !     with error stop if there is frequency mixing.
@@ -1301,7 +1301,7 @@ end subroutine frqchk
 ! subroutine cxred8.
 !
 subroutine cxred8(a,c,n,m)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     elimination of variables m+1,...n in symmetric complex matrix with
   !     a=real part, c=imaginary part. a and c are
   !     stored as triangle (1 element for 1.column,2 for 2.column etc.).
@@ -1371,7 +1371,7 @@ end subroutine cxred8
 subroutine umrenu(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout,jtype,nodom, jtmtac, histom, omegm, omold, &
      thetam, reamdu, reamds, flxds, flxdr, reamqu, flxqs, flxqr, jcdsat, jcqsat, flxd, flxq, nppair, rotmom, ncld, nclq, &
      jtqout, jomout, jthout, reamqs, epsom, dcoef, kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, umoutp )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension  reacl(1), gpar(1), fpar(1), hist(1), umcurp(1)
   dimension  nodvo1(1), nodvo2(1), jcltac(1), jclout(1)
   dimension  jtype(1), nodom(1), jtmtac(1), histom(1)
@@ -2722,8 +2722,8 @@ end subroutine umrenu
 !
 subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam, imach,reamdu, reamqu,nodvo2, &
      nppair,rotmom, ncld,jcltac, kcl,nclq, epsom,dcoef,kcoil,voltum, anglum,nodfum, nodmum, umoutp)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
-  real*8 n6, n8
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  real(8) n6, n8
   dimension  reacl(1), gpar(1), fpar(1), hist(1), umcurp(1)
   dimension  nodvo1(1), nodvo2(1), jcltac(1)
   dimension  jtype(1), nodom(1), jtmtac(1)
@@ -3493,7 +3493,7 @@ end subroutine umrnu2
 ! subroutine equiv.
 !
 subroutine equiv(req,xeq,geq,beq,z,r,tau,w,n)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   dimension req(1), xeq(1), geq(1), beq(1), z(1), r(1), tau(1)
   equivalence (anumr, rzero), (anumx, xzero), (ypos, sinb), (yneg, cosb), (epos, sinhgr), (eneg, sinhgi), (c, cosha), (d, sinha)
