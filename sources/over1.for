@@ -944,49 +944,49 @@ subroutine reques
   data textax(44)  / 'oscill' /
   data textax(45)  / 'ations'  /
   !    $$$$$    special-request word no. 14.   'tacs emtp sources'  $$$$
-  data textay(14)  / 6htes     /
-  data jpntr(14)   / 46  /
-  data textax(46)  / 6htacs    /
-  data textax(47)  / 6hemtp    /
-  data textax(48)  / 6hsource  /
-  data textax(49)  / 6hs       /
+  data textay(14)  / 'tes   ' /
+  data jpntr(14)   / 46 /
+  data textax(46)  / 'tacs  ' /
+  data textax(47)  / 'emtp  ' /
+  data textax(48)  / 'source' /
+  data textax(49)  / 's     ' /
   !    $$$$$    special-request word no. 15.   'start again'       $$$$$
-  data textay(15)  / 6hsa      /
-  data jpntr(15)   / 50  /
-  data textax(50)  / 6hstart   /
-  data textax(51)  / 6hagain   /
+  data textay(15)  / 'sa    ' /
+  data jpntr(15)   / 50 /
+  data textax(50)  / 'start ' /
+  data textax(51)  / 'again ' /
   !    $$$$$    special-request word no. 16.   'semlyen setup'     $$$$$
-  data textay(16)  / 6hss      /
-  data jpntr(16)   / 52  /
-  data textax(52)  / 6hsemlye  /
-  data textax(53)  / 6hn       /
-  data textax(54)  / 6hsetup   /
+  data textay(16)  / 'ss    ' /
+  data jpntr(16)   / 52 /
+  data textax(52)  / 'semlye' /
+  data textax(53)  / 'n     ' /
+  data textax(54)  / 'setup ' /
   !    $$$$  special request-word no. 17.   'linear bias usage' $$$$$$$$$
-  data textay(17)  / 6hlbu      /
-  data jpntr(17)   / 55  /
-  data textax(55)  / 6hlinear  /
-  data textax(56)  / 6hbias    /
-  data textax(57)  / 6husage   /
+  data textay(17)  / 'lbu   ' /
+  data jpntr(17)   / 55 /
+  data textax(55)  / 'linear' /
+  data textax(56)  / 'bias  ' /
+  data textax(57)  / 'usage ' /
   !    $$$$$    special-request word no. 18.   'cable constants'   $$$$$
-  data textay(18)  / 6hcc      /
-  data jpntr(18)   / 58  /
-  data textax(58)  / 6hcable   /
-  data textax(59)  / 6hconsta  /
-  data textax(60)  / 6hnts     /
+  data textay(18)  / 'cc    ' /
+  data jpntr(18)   / 58 /
+  data textax(58)  / 'cable ' /
+  data textax(59)  / 'consta' /
+  data textax(60)  / 'nts   ' /
   !    $$$$$    special-request word no. 19.   'auto name'         $$$$$
-  data textay(19)  / 6han      /
-  data jpntr(19)   / 61  /
-  data textax(61)  / 6hauto    /
-  data textax(62)  / 6hname    /
+  data textay(19)  / 'an    ' /
+  data jpntr(19)   / 61 /
+  data textax(61)  / 'auto  ' /
+  data textax(62)  / 'name  ' /
   !    $$$$$    special-request word no. 20.   'renumber bypass'   $$$$$
-  data textay(20)  / 6hrb      /
-  data jpntr(20)   / 63  /
-  data textax(63)  / 6hrenumb  /
-  data textax(64)  / 6her      /
-  data textax(65)  / 6hbypass  /
+  data textay(20)  / 'rb    ' /
+  data jpntr(20)   / 63 /
+  data textax(63)  / 'renumb' /
+  data textax(64)  / 'er    ' /
+  data textax(65)  / 'bypass' /
   !    $$$$$    special-request word no. 21.   'frequency scan'    $$$$$
-  data textay(21)  / 6hfs      /
-  data jpntr(21)   / 66  /
+  data textay(21)  / 'fs    ' /
+  data jpntr(21)   / 66 /
   data textax(66)  / 6hfreque  /
   data textax(67)  / 6hncy     /
   data textax(68)  / 6hscan    /
