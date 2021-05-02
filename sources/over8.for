@@ -2846,22 +2846,21 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
   go to 1330
 1338 n5 = int(umoutp(numout+3))
   if (iprsup .ge. 1) write (lunit6,1339) (umoutp(i),i=1,n5)
-1339 format(/,40h um output table umoutp(numout+nsmtac+3),40h with some entries renumbered because of,&
-          38h tacs interface for sm-59 data input :                     ,/,6(6x,e14.5)/(6(6x,e14.5)) )
+1339 format (/, ' um output table umoutp(numout+nsmtac+3) with some entries renumbered because of TACS interface for sm-59 data input :', /, 6(6x,e14.5), /, (6(6x, e14.5)))
 1340 if (iprsup .lt. 1) go to 1350
   write (lunit6, 1341)
-1341 format (/,29h um nodes after renumbering :)
-  write (lunit6, 1345)  ( nodvo1(i), i=1, ncltot )
-1345 format (19h nodvo1(1:ncltot) :,  20i5  )
+1341 format (/, ' um nodes after renumbering :')
+  write (lunit6, 1345) (nodvo1(i), i = 1, ncltot )
+1345 format (' nodvo1(1 : ncltot) :', 20i5)
   write (lunit6, 1346)  ( nodvo2(i), i=1, ncltot )
-1346 format (19h nodvo2(1:ncltot) :,  20i5  )
+1346 format (' nodvo2(1 : ncltot) :', 20i5)
   n5 = 3 * numum
   write (lunit6, 1349)  ( umcurp(i), i=1, n5)
-1349 format (19h umcurp(1:3numum) :,  20f5.1)
+1349 format (' umcurp(1 : 3numum) :', 20f5.1)
   write(lunit6,1347) (kcoil(i),i=1,numum)
-1347 format (19h kcoil(1:numum)   :,20i5)
-  write(lunit6,1348) (nodom(i),i=1,numum)
-1348 format (19h nodom(1:numum)   :,20i5)
+1347 format (' kcoil(1 : numum)   :', 20i5)
+  write (lunit6, 1348) (nodom(i), i = 1, numum)
+1348 format (' nodom(1 : numum)   :', 20i5)
   !.   if user does not request for automatic initialization :
 1350 if (initum .eq. 0) return
   !.   setting of all flags (if not included, then they are 0):
@@ -2901,16 +2900,13 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
      if (imach .eq. 1) slip = voltum(k)/100.0
      if (loopss(10) .ne. 3) go to 1900
      if (iprsup .ge. 1) write(lunit6,1850)
-1850 format(/,40h ***************************************,45h preparing thevenin calculation for um type-3,&
-          44h excitation circuits due to ld-flow request:)
+1850 format (/, ' *************************************** Preparing thevenin calculation for um type-3 excitation circuits due to ld-flow request:')
      go to 2008
 1900 if (iprsup .ge. 1) write (lunit6,1902)
-1902 format(/,40h ***************************************,38h momentary creation of additional EMTP, &
-          38h elements (permanent branches if power, /,   40h ***************************************, &
-          38h coils are non-comp.) for steady-state, 16h calculations of)
+1902 format (/, ' *************************************** Momentary creation of additional EMTP elements (permanent branches if power', /, &
+          ' *************************************** Coils are non-comp). For steady-state calculations of')
      if (iprsup .ge. 1) write (lunit6,1904) k
-1904 format(10h um number,i4,2h :,28x,18hnode to node   ibr,4x,2hit,8x,6htr(it),8x,6htx(it),2x,6hkconst, &
-          9x,5hsfreq,9x,5hcrest)
+1904 format (' um number', i4, ' :', 28x, 'node to node   ibr', 4x, 'it', 8x, 'tr(it)', 8x, 'tx(it)', 2x, 'kconst', 9x, 'sfreq', 9x, 'crest')
      if (jtype(k) .eq. 4 .and. loopss(10) .eq. 1) lfim4i = 1
      if (jtype(k) .eq. 4 .and. loopss(10) .eq. 2) lfim4i = 2
      !  bring the im type-4 excitation  sources back to slip-freq at
@@ -2945,12 +2941,11 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
         if (n13 .eq. 1) write(lunit6,1954)
         write(lunit6,1956) bus(n6),crest(n3),sfreq(n3),d4
         if (n13 .eq. n18) write(lunit6,1958)
-1952    format(/,45h on completion of the load-flow calculations,,45h the arguments of the type-14 sources used to, &
-             42h represent the external voltage sources in,/,    36h the excitation network of um number,i4, &
-             35h,  are adjusted by the program as :)
-1954    format(9h bus name,2x,14h  amplitude(v),2x, 14h frequency(hz),2x,14h   angle(degr))
-1956    format(3x,a6,3e16.5)
-1958    format(/)
+1952    format (/, ' On completion of the load-flow calculations, the arguments of the type-14 sources used to represent the external voltage sources in', /, &
+             ' the excitation network of um number', i4, '  are adjusted by the program as :')
+1954    format (' bus name', 2x, '  amplitude(v)', 2x, ' frequency(Hz)', 2x, '   angle(degr)')
+1956    format (3x, a6, 3e16.5)
+1958    format (/)
 1960    n3 = kpsour(n3)
         if (n3 .ne. n4) go to 1950
 1970 end do
@@ -2961,15 +2956,14 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
      if (jtype(k) .ne. 4) go to 2002
      if (reamdu(k) .eq. reamqu(k)) go to 2008
 2002 write(lunit6,2004)
-2004 format(/,44h error stop . you have requested a load-flow, 45h of a network containing an induction machine, &
-          42h which is either not of type 4 or which is, /,43h of type 4 but is not a symmetrical machine, &
-          45h with a round rotor. the current emtp version, 42h is not capable of honoring your load flow,/, 9h request.)
+2004 format (/, ' Error stop . You have requested a load-flow of a network containing an induction machine which is either not of type 4 or which is', /, &
+          ' of type 4 but is not a symmetrical machine with a round rotor. The current EMTP version is not capable of honoring your load flow', /, ' request.')
      call stoptp
      !  compensation code ************************************* :
 2008 if (loopss(10) .eq. 1) go to 2048
      if (imach .ne. 1) go to 2048
      if (iprsup .ge. 1) write (lunit6,2010) k,numsub
-2010 format(44h * * * * * * * * * * * * * * * * * * * * * *, 37h begin compensation for ind.machines:, 10h um number,i4,3x, 9h numsub =, i4)
+2010 format (' * * * * * * * * * * * * * * * * * * * * * * Begin compensation for ind.machines: um number', i4, 3x, ' numsub =', i4)
      !     2017 n1 = 0
      n1 = 0
      n18 = 0
@@ -3014,8 +3008,7 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
         msub(n15) = nodvo2(j)
 2040 end do
 2045 if (iprsup .ge. 1) write (lunit6,2047) numsub
-2047 format(44h * * * * * * * * * * * * * * * * * * * * * *,30h * * * * * * * * * * * * * * *, &
-          42h * end compensation for ind.mach. numsub =, i4)
+2047 format (' * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * End compensation for ind.mach. numsub =', i4)
 2048 ncomum = ncomcl
      if (loopss(10) .eq. 3) go to 2087
      !.  set type 14 current sources and parallel r for power coils:
