@@ -552,9 +552,9 @@ subroutine over5a
   include 'umdeck.ftn'
   include 'dekspy.ftn'
   dimension  ispum(1), kpen(4)
-  equivalence  ( spum(1), ispum(1) )
+  equivalence (spum(1), ispum(1))
   character(8) text12
-  data  text12   / 6htyp-16 /
+  data text12 / 'typ-16' /
   ll2 = 2
   ll3 = 3
   ll4 = 4
@@ -570,11 +570,11 @@ subroutine over5a
   kode(1) = -1
   !     read input card using cimage.
 310 call cimage
-  if ( kill  .gt.  0 )   return
-  if ( machfl.eq.1 ) go to 110
-  if ( machfl.eq.2 ) go to 110
-  if ( machfl.eq.3 ) machfl=0
-  if ( kolbeg  .gt.  0 )   go to 313
+  if (kill .gt. 0) return
+  if (machfl .eq. 1) go to 110
+  if (machfl .eq. 2) go to 110
+  if (machfl .eq. 3) machfl = 0
+  if (kolbeg .gt. 0) go to 313
   read (unit = abuff, fmt = 6304) n2, bus1, n1
 6304 format (i2, a6, i2)
   if ( n2  .ne.  18 )   go to 6347
@@ -725,8 +725,8 @@ subroutine over5a
   a = smamp
 103 n2 = 14
   gus2=smang
-  if ( machfl  .eq.  2 )   go to 130
-  if ( noutpr  .eq.  0 ) write (kunit6, 3128)  a, smang
+  if (machfl .eq. 2) go to 130
+  if (noutpr .eq. 0) write (kunit6, 3128)  a, smang
 3128 format ('+2nd phase of s.m. ', e12.5, 2x, f8.2)
   go to 113
 130 if ( noutpr  .eq.  0 ) write (kunit6, 3129)  a, smang
@@ -745,7 +745,7 @@ subroutine over5a
   if (numsm.le. lsyn) go to 125
   kill= 1
   lstat(16) = 17
-  lstat(19)=125
+  lstat(19) = 125
   return
 125 machfl = 1
   n2mach=n2
@@ -757,7 +757,7 @@ subroutine over5a
 27 if ( gus4 .eq. 0.0 )  gus4 = fltinf
   if (kpu .eq. 1) pu = a
   sfreq(kconst) = d1
-  if ( machfl  .le.  1 .and. noutpr  .eq.  0 ) write (kunit6, 7)  a, sfreq(kconst), gus2, gus3
+  if ( machfl .le. 1 .and. noutpr .eq. 0) write (kunit6, 7)  a, sfreq(kconst), gus2, gus3
 7 format ('+source.', 2x, 4e10.2)
   if ( n2  .eq.  17 )  go to 4259
   if ( n2  .ne.  14 )   go to 317
@@ -948,11 +948,11 @@ subroutine over5a
   lstat(19) = 349
   lstat(16) = n2
   return
-362 if ( n1 .ge. 0 )  go to 336
-  i=-i
-331 node(kconst)=i
+362 if (n1 .ge. 0) go to 336
+  i = -i
+331 node(kconst) = i
   k13 = j30 + machfl
-  ismdat( k13 ) = i
+  ismdat(k13) = i
   if ( n2 .gt. 0 )  go to 4266
   lstat(19) = 331
   go to 4249

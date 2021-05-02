@@ -6,12 +6,12 @@ c Bus-->Bus-->Bus-->Bus--><----R<----L<----C                                   0
 blank End of circuit data                                                      :
 c Bus-->Bus--><---Tclose<----Topen<-------Ie                                   0
   src   load       1.e-3     9999.         0                                   1
-c blank End of switch data                                                     :
+blank End of switch data                                                       :
 c Bus--><I<Amplitude<Frequency<--TO:Phi0<---0=Phi0<-Ignore-><---Tstart<----Tstop
-14   src          1.       50.        0.       0.5                 -1.     9999.
+14src             1.       50.        0.       0.5                 -1.     9999.
 blank End of source data                                                       :
-  src   load
-c blank End of output requests                                                 :
+   src  load                                                                   1
+blank End of output requests                                                   :
 c 194 5. 0.0 50. -4.   4.src   load              RL Energization Amps
 c blank End of Plot Request Data                                               :
 c blank End of All Cases                                                       :
