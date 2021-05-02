@@ -4710,11 +4710,11 @@ subroutine pfatch
   if (m4plot .ne. 1)  go to 4519 ! not interactive emtp
   write (prom80, 4504)
 4504 format ('    Send VAX disk file name:')
-  call prompt               ! write prom80 with cursor control (no lf)
+  call prompt                                               ! write prom80 with cursor control (no lf)
   read (munit5, 4507) (texcol(j), j = 1, 30)
 4507 format (30a1)
-  texcol(31) = csepar       ! put "," terminator after name
-  ialter = lunit2           ! connect emtp tables file to this unit
+  texcol(31) = csepar                                       ! put "," terminator after name
+  ialter = lunit2                                           ! connect emtp tables file to this unit
 4519 n4 = 0
   write (unit = filen(1 : 25), fmt = 4523)
 4523 format (25x)
