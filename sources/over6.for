@@ -64,9 +64,9 @@ subroutine over6
   n7 = -nltype(i)
   if ( n7  .ne.  98 )  n7 = 99
   if ( noutpr  .eq.  0   .and. n3  .gt.  0 ) write (lunit6, 54164)  n7, i, bus(k), bus(m), bus(j1), bus(j2)
-54164 format (  37h high res. added by emtp across type-,  i2,6h elem.,  i3,  1x,  2x,  3h1 0,  4a6  )
+54164 format (' High res. added by EMTP across type-', i2, ' elem.', i3,  1x,  2x, '1 0', 4a6)
   if ( n3  .eq.  0     .and. noutpr  .eq.  0 ) write (lunit6, 54165)  n7, i, bus(k), bus(m), tr(it)
-54165 format (  37h high res. added by emtp across type-,  i2,6h elem.,  i3,  1x,  2x,  3h1 0,  2a6, 12x, e6.1 )
+54165 format (' High res. added by EMTP across type-', i2, ' elem.', i3, 1x, 2x, '1 0', 2a6, 12x, e6.1)
   n3 = 1
 54174 i = i - 1
   if( i .gt. 0 )  go to 54147
@@ -86,7 +86,7 @@ subroutine over6
   iofbnd = 0
 4803 n11 = 1
   if( iprsup .ge. 1 ) write (lunit6, 55414)  kburro, iv, last
-55414 format ( /,  21h in "over6", kburro =,  i3, 23h .   compute iv, last =,  2i8  )
+55414 format (/, ' In "over6", kburro =', i3, ' .   Compute iv, last =', 2i8)
   rewind lunit2
   call tapsav ( integx(1), lunit2, iv, n11 )
   n17 = 0
@@ -174,13 +174,12 @@ subroutine over6
   go to 5204
 5240 go to moon, ( 5020, 5050, 5085)
 5250 write(lunit6, 5254)
-5254 format(//,  ' list of input elements connected to each bus.', &
-       /, 10x, &
-       '1) only the physical connections of multiphase lines are shown (capacitive and inductive coupling ignored)' ,/, &
-       10x, '2) repeated entries imply parallel connections   ', /, 10x,  '3) sources are omitted, although switches ', &
-       ' are included;    ', /, 10x,  '4) u.m. usage produces extra, internally-defined nodes "um????" (1st 2 letters "um").')
+5254 format(//, ' list of input elements connected to each bus.', /, &
+          10x, '1) only the physical connections of multiphase lines are shown (capacitive and inductive coupling ignored)' ,/, &
+          10x, '2) repeated entries imply parallel connections', /, 10x,  '3) sources are omitted, although switches ', &
+          ' are included;', /, 10x, '4) u.m. usage produces extra, internally-defined nodes "um????" (1st 2 letters "um").')
   write(lunit6, 5261)
-5261 format( 45h from bus name 1 names of all adjacent busses )
+5261 format(' From bus name 1 names of all adjacent busses')
   write(lunit6, 5266)
 5266 format(' --------------+----------------------------------------------------------------------------------------------------------')
   n22 = kwtspy
@@ -197,7 +196,7 @@ subroutine over6
   if( m .eq. 1 )  buff(ipass) = terra
   if( ipass .lt. 15 )  go to 5285
 5277 write(lunit6, 5278)  bus5, (buff(m), m=1, ipass)
-5278 format( 9x, a6, 1h1, 15(a6, 1h* )  )
+5278 format (9x, a6, '1', 15(a6, '*'))
   bus5 = blank
   ipass = 0
   if( ltest .eq. 0 )  go to 5294
@@ -225,7 +224,7 @@ subroutine over6
   !     renumber nodes based on sparsity of coeff matrix of transient
   !     network solution.
 5344 if( iprsup .gt. 0 ) write(lunit6, 73524)  ( bus(i), i=1, ntot )
-73524 format( /, 10h bus names   ,/, ( 1x, 10a12 ) )
+73524 format(/, ' Bus names', /, (1x, 10a12))
   if ( kpartb  .gt.  0 )   go to 5351
   !     negative sign on "kpartb" is for "renumber bypass":
   norder(1) = 1
@@ -297,13 +296,13 @@ subroutine over6
 73530 end do
 73535 continue
   if( iprsup .ge. 1 ) write (lunit6, 1335)  nz, iofkol, iofkor
-1335 format ( /,  37h in  'over6' ,   nz, iofkol, iofkor =, 3i10, /, 1x, 38h   row            kode           kolum, &
-       32h           koder           kownt  )
+1335 format (/, " In  'over6' ,   nz, iofkol, iofkor =", 3i10, /, 1x, '   row            kode           kolum', &
+          '           koder           kownt')
   do i = 1, 10
      il = i + iofkol
      ir = i + iofkor
      if ( iprsup  .ge.  3 ) write (lunit6, 1337) i,kode(i),kolum(il),korder(ir),kownt(i)
-1337 format ( i6, 4i16 )
+1337 format (i6, 4i16)
 1339 end do
   if (kswtch.lt.1) go to 40015
   do i = 1, kswtch
@@ -334,8 +333,8 @@ subroutine over6
   korder(isubs1)      = 0
   icas = 0
   if( iprsup .ge. 2 ) write(lunit6, 54230)  next, last, ntot, kswtch, kconst, nv, ibr, inonl,  npower, it, istead, num99,  nz, iv
-54230 format ( /,  29h scalars at end of  'over6' .   ,/,40h    next    last    ntot  kswtch  kconst, &
-       40h      nv     ibr   inonl  npower      it, 32h  istead   num99      nz      iv   ,/,  1x, 14i8 )
+54230 format (/, " Scalars at end of  'over6' .", /, '    Next    last    ntot  kswtch  kconst', &
+           '      nv     ibr   inonl  npower      it  istead   num99      nz      iv', /, 1x, 14i8)
   ncurr = ntot - nz
   lastov = nchain
   nchain = 7
@@ -348,7 +347,7 @@ subroutine over6
   lstat(18) = 6
   nchain = 51
 9988 if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
-4568 format ( 23h  "exit  module over6." )
+4568 format ('  "Exit  module over6."')
 99999 return
 end subroutine over6
 !
@@ -401,9 +400,9 @@ subroutine rinfin
   n7 = -nltype(i)
   if ( n7  .ne.  98 )  n7 = 99
   if ( noutpr  .eq.  0   .and. n3  .gt.  0 ) write (lunit6, 54164)  n7, i, bus(k), bus(m), bus(j1), bus(j2)
-54164 format (  37h high res. added by emtp across type-,  i2, 6h elem.,  i3,  1x,  2x,  3h1 0,  4a6  )
+54164 format (' High res. added by EMTP across type-', i2, ' elem.', i3, 1x, 2x, '1 0', 4a6)
   if ( n3  .eq.  0     .and. noutpr  .eq.  0 ) write (lunit6, 54165)  n7, i, bus(k), bus(m), tr(it)
-54165 format (  37h high res. added by emtp across type-,  i2, 6h elem.,  i3,  1x,  2x,  3h1 0,  2a6, 12x, e6.1 )
+54165 format (' High res. added by EMTP across type-', i2, ' elem.', i3, 1x, 2x, '1 0', 2a6, 12x, e6.1)
   n3 = 1
 54174 i = i - 1
   if( i .gt. 0 )  go to 54147
