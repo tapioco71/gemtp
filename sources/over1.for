@@ -895,54 +895,54 @@ subroutine reques
   data textay(7)   / 'ppf   ' /
   data jpntr(7)    / 15 /
   data textax(15)  / 'postpr' /
-  data textax(16)  / 6hocess   /
-  data textax(17)  / 6hplot    /
-  data textax(18)  / 6hfile    /
+  data textax(16)  / 'ocess ' /
+  data textax(17)  / 'plot  ' /
+  data textax(18)  / 'file  ' /
   !    $$$$$    special-request word no. 8.   'plotter paper height' $$
-  data textay(8)   / 6hpph     /
-  data jpntr(8)    / 19  /
-  data textax(19)  / 6hplotte  /
-  data textax(20)  / 6hr       /
-  data textax(21)  / 6hpaper   /
-  data textax(22)  / 6hheight  /
+  data textay(8)   / 'pph   ' /
+  data jpntr(8)    / 19 /
+  data textax(19)  / 'plotte' /
+  data textax(20)  / 'r     ' /
+  data textax(21)  / 'paper ' /
+  data textax(22)  / 'height' /
   !    $$$$$    special-request word no. 9.   'printer lines per inch'
-  data textay(9)   / 6hplpi    /
-  data jpntr(9)    / 23  /
-  data textax(23)  / 6hprinte  /
-  data textax(24)  / 6hr       /
-  data textax(25)  / 6hlines   /
-  data textax(26)  / 6hper     /
-  data textax(27)  / 6hinch    /
+  data textay(9)   / 'plpi  ' /
+  data jpntr(9)    / 23 /
+  data textax(23)  / 'printe' /
+  data textax(24)  / 'r     ' /
+  data textax(25)  / 'lines ' /
+  data textax(26)  / 'per   ' /
+  data textax(27)  / 'inch  ' /
   !    $$$$$    special-request word no. 10.   'mode voltage output' $$$
-  data textay(10)  / 6hmvo     /
-  data jpntr(10)   / 28  /
-  data textax(28)  / 6hmode    /
-  data textax(29)  / 6hvoltag  /
-  data textax(30)  / 6he       /
-  data textax(31)  / 6houtput  /
+  data textay(10)  / 'mvo   ' /
+  data jpntr(10)   / 28 /
+  data textax(28)  / 'mode  ' /
+  data textax(29)  / 'voltag' /
+  data textax(30)  / 'e     ' /
+  data textax(31)  / 'output' /
   !    $$$$$    special-request word no. 11.   'end last data case' $$$$
-  data textay(11)  / 6heldc    /
-  data jpntr(11)   / 32  /
-  data textax(32)  / 6hend     /
-  data textax(33)  / 6hlast    /
-  data textax(34)  / 6hdata    /
-  data textax(35)  / 6hcase    /
+  data textay(11)  / 'eldc  ' /
+  data jpntr(11)   / 32 /
+  data textax(32)  / 'end   ' /
+  data textax(33)  / 'last  ' /
+  data textax(34)  / 'data  ' /
+  data textax(35)  / 'case  ' /
   !    $$$$$    special-request word no. 12.   'analytic sources usage'
-  data textay(12)  /  6hasu     /
-  data jpntr(12)   /  36  /
-  data textax(36)  /  6hanalyt  /
-  data textax(37)  /  6hic      /
-  data textax(38)  /  6hsource  /
-  data textax(39)  /  6hs       /
-  data textax(40)  /  6husage   /
+  data textay(12)  / 'asu   ' /
+  data jpntr(12)   / 36 /
+  data textax(36)  / 'analyt' /
+  data textax(37)  / 'ic    ' /
+  data textax(38)  / 'source' /
+  data textax(39)  / 's     ' /
+  data textax(40)  / 'usage ' /
   !    $$$$$ special-request word no. 13.   'limit on plot oscillations'
-  data textay(13)  /  6hlopo    /
-  data jpntr(13)   /  41  /
-  data textax(41)  /  6hlimit   /
-  data textax(42)  /  6hon      /
-  data textax(43)  /  6hplot    /
-  data textax(44)  /  6hoscill  /
-  data textax(45)  /  6hations  /
+  data textay(13)  / 'lopo  ' /
+  data jpntr(13)   / 41 /
+  data textax(41)  / 'limit ' /
+  data textax(42)  / 'on    ' /
+  data textax(43)  / 'plot  ' /
+  data textax(44)  / 'oscill' /
+  data textax(45)  / 'ations'  /
   !    $$$$$    special-request word no. 14.   'tacs emtp sources'  $$$$
   data textay(14)  /  6htes     /
   data jpntr(14)   /  46  /
