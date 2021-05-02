@@ -762,26 +762,26 @@ subroutine tacs1c
   include 'labcom.ftn'
   include 'tacsar.ftn'
   character(8) alnode
-1000 if ( iprsup  .ge.  1 ) write ( lunit6,4567 )
+1000 if (iprsup .ge. 1) write (lunit6,4567)
 4567 format ('  "Begin module tacs1c."')
   read (unit = abuff, fmt = 187) n, alnode, dum1, dum3, dum2, ijk, prx, pru
 187 format (i2, a6, 2x, 3e10.0, 14x, i6, 2e10.0)
-  if ( niu  .lt.  12 )  go to 2868
+  if (niu .lt. 12) go to 2868
   ndy5 = kud1 - 5
   do i = 12, niu
      ndy5 = ndy5 + 5
-     ndx1 = ilntab( kaliu + i )
-     if ( texvec(ndx1) .eq. alnode ) go to 6767
+     ndx1 = ilntab(kaliu + i)
+     if (texvec(ndx1) .eq. alnode) go to 6767
   end do
 6565 continue
-  write ( lunit6, 1313 )
+  write (lunit6, 1313)
 1313 format (' $$$ No such sources, the card will be ignored $$$')
   go to 2868
-6767 if ( n .eq. 0 ) go to 6811
-  iuty(kiuty+i) = n
-6811 if (dum1 .ne. 0. .or. ijk .lt. 0) ud1(ndy5+1) = dum1
+6767 if (n .eq. 0) go to 6811
+  iuty(kiuty + i) = n
+6811 if (dum1 .ne. 0. .or. ijk .lt. 0) ud1(ndy5 + 1) = dum1
   if (dum2 .eq. 0. .and. ijk .gt. 0) go to 6822
-  ud1(ndy5+2) = dum2
+  ud1(ndy5 + 2) = dum2
   if (iuty(kiuty + i) .eq. 14) ud1(ndy5 + 2) = dum2 * twopi / 360.
   if (iuty(kiuty + i) .ne. 23) go to 6822
   if (ud1(ndy5 + 2) .lt. deltat) ud1(ndy5 + 2) = deltat
@@ -1261,10 +1261,10 @@ subroutine reques
   data textax(207) / 'model ' /
   data textax(208) / 'freq  ' /
   data textax(209) / 'scan  ' /
-  data jpntr(62)   / 210 /
-  data jpntr(63)   / 0 /
-  data ll1  /  1 /
-  data ll8  /  8 /
+  data jpntr(62) / 210 /
+  data jpntr(63) / 0 /
+  data ll1  / 1 /
+  data ll8  / 8 /
   data ll16 / 16 /
   data ll25 / 25 /
   data ll32 / 32 /
@@ -1282,56 +1282,56 @@ subroutine reques
      n2 = jpntr(i + 1) - 1
      !     next check if last request word has been exhaused.  if so,
      !     exit with  lstat(18)  equal to zero.
-     if ( n2  .lt.  0 )   go to 9200
-     if ( iprsup  .ge.  35 ) write (lunit6, 3285)  i,  ( textax(j), j=n1, n2 )
+     if (n2 .lt. 0) go to 9200
+     if (iprsup .ge. 35) write (lunit6, 3285) i, (textax(j), j = n1, n2)
 3285 format (/, ' Special-request word',  i4,  ' .', 10a6)
-     if ( textax(n1)  .eq.  blank )   go to 3306
+     if (textax(n1) .eq. blank) go to 3306
      l = 0
      n3 = n2 - n1 + 1
-     if ( n3  .ne.  nfrfld )   go to 3306
+     if (n3 .ne. nfrfld) go to 3306
      do j = n1, n2
         l = l + 1
-        if ( texta6(l)  .ne.  textax(j) )   go to 3306
+        if (texta6(l) .ne. textax(j)) go to 3306
      end do
 3291 continue
 3294 lstat(18) = i
      !     next check for exceptional request words which are
      !     processed outside of subroutine, by calling module.
-     if ( i  .eq.  15 )   go to 9200
-     if ( i  .eq.  32 )   go to 9200
-     if ( i  .eq.  33 )   go to 9200
+     if (i .eq. 15) go to 9200
+     if (i .eq. 32) go to 9200
+     if (i .eq. 33) go to 9200
      go to (8001, 8002, 8003, 8004, 8005, 8006, 8007, 8008, 8009, 8010, 8011, 8012, 8013, 8014, 9200, 8016, 8017, 8018, 8019,&
           8020, 8021, 8022, 8023, 8024, 8025, 8026, 8027, 8028, 8029, 8030, 8031, 9200, 9200, 8034, 8035, 8036, 8037, 8038, &
           8039, 8040, 8041, 8042, 8043, 8044, 8045, 8046, 8047, 8048, 8049, 8050, 8051, 8052, 8053, 8054, 8055, 8056, 8057, &
           8058, 8059, 8060, 8061, 8062), i
-3306 if ( texta6(1)  .eq.  textay(i) )   go to 3294
+3306 if (texta6(1) .eq. textay(i)) go to 3294
   end do
 3307 continue
   !     control will never reach  "stop"  which follows.
   call stoptp
   !     $$$$$    special-request word no. 1.   'xformer'           $$$$$
-8001 if ( noutpr  .eq.  0 ) write (kunit6, 83056)
-83056 format ('+Request for transformer impedance-matrix routine.')
+8001 if (noutpr .eq. 0) write (kunit6, 83056)
+83056 format ('+request for transformer impedance-matrix routine.')
   nchain = 41
   go to 5617
   !     $$$$$    special-request word no. 2.   'saturation'        $$$$$
-8002 if ( noutpr  .eq.  0 ) write (kunit6, 83057)
-83057 format ('+Request for magnetic-saturation routine.')
+8002 if (noutpr .eq. 0) write (kunit6, 83057)
+83057 format ('+request for magnetic-saturation routine.')
   nchain = 42
   go to 5617
   !     $$$$$    special-request word no. 3.   'type99 limit'      $$$$$
-8003 if ( kolbeg  .gt.  0 )   go to 3352
+8003 if (kolbeg .gt. 0) go to 3352
   read (unit = abuff, fmt = 2642) max99m
   go to 3354
 3352 nfrfld = 1
-  call freone ( d1 )
+  call freone (d1)
   max99m = d1
-3354 if ( noutpr  .eq.  0 ) write (kunit6, 3355)  max99m
-3355 format ('+Redefine type-99 message limit to', i6)
+3354 if (noutpr .eq. 0) write (kunit6, 3355) max99m
+3355 format ('+redefine type-99 message limit to', i6)
   go to 15
   !     $$$$$    special-request word no. 4.   'replot'            $$$$$
-8004 if ( noutpr  .eq.  0 ) write (kunit6, 3364)
-3364 format ('+Request to re-plot old plot data.')
+8004 if (noutpr .eq. 0) write (kunit6, 3364)
+3364 format ('+request to re-plot old plot data.')
   degmax = 0.0
   ialter = lunit4
   call midov1
@@ -1339,33 +1339,33 @@ subroutine reques
   nchain = 31
   go to 5617
   !     $$$$$    special-request word no. 5.   'begin new data case' $$$
-8005 if ( noutpr  .eq.  0 ) write (kunit6, 4154 )
-4154 format ('+Marker card preceding new data case.')
+8005 if (noutpr .eq. 0) write (kunit6, 4154 )
+4154 format ('+marker card preceding new data case.')
   go to 15
   !     $$$$$    special-request word no. 6.   'line constants'    $$$$$
 8006 nchain = 44
-  if ( iprsup .ge. 1 )  write (lunit6, 3411)
+  if (iprsup .ge. 1) write (lunit6, 3411)
 3411 format (' Set nchain = 44 for "line constants".')
   go to 5617
   !     $$$$$    special-request word no. 7.   'postprocess
   !     plot file'       $$$$$  m28.1317
-8007 if ( kolbeg  .gt.  0 )   go to 3375
+8007 if (kolbeg .gt. 0)   go to 3375
   read (unit = abuff, fmt = 2642) iofbnd
   go to 3379
 3375 nfrfld = 1
-  call freone ( d1 )
+  call freone (d1)
   iofbnd = d1
 3379 write (kunit6, 3382)  iofbnd
-3382 format ('+Postprocess.  iplot =', i6)
-  read (lunit2)  bus1, bus2, bus3, bus4, n1, n2, n3, n4, (bus5, i=1, n1)
+3382 format ('+postprocess.  iplot =', i6)
+  read (lunit2)  bus1, bus2, bus3, bus4, n1, n2, n3, n4, (bus5, i = 1, n1)
   n13 = n2 + n4
-  if ( iprsup  .gt.  0 ) write (lunit6, 3383)  bus1, bus2, n1, n2, n3, n4
-3383 format (/, ' After 1st record.  date=',  2a4, 4i5)
-  if ( n2  .gt.  0 ) read (lunit2)  ( n5, i=1, n2 )
-  if ( n4  .gt.  0 ) read (lunit2)  ( n5, i=1, n4 )
-  if ( m4plot  .eq.  0 )  go to 3385
+  if (iprsup .gt. 0) write (lunit6, 3383)  bus1, bus2, n1, n2, n3, n4
+3383 format (/, ' After 1st record.  date=', 2a4, 4i5)
+  if (n2 .gt. 0) read (lunit2) (n5, i = 1, n2)
+  if (n4 .gt. 0) read (lunit2) (n5, i = 1, n4)
+  if (m4plot .eq. 0) go to 3385
   iofgnd = 1
-  call pltlu2(epsuba, farray(1))
+  call pltlu2 (epsuba, farray(1))
   go to 3386
 3385 read (lunit2) epsuba, farray(1)
 3386 ltdelt = -6789
@@ -1414,36 +1414,36 @@ subroutine reques
 2654 format ('+Special terminator record for all data.')
   go to 15
   !     $$$$$    special-request word no. 12.   'analytic sources usage'
-8012 if ( noutpr  .eq.  0 ) write (kunit6, 2667)
-2667 format ('+Request for use of analytic type 1-10 sources.')
+8012 if (noutpr .eq. 0) write (kunit6, 2667)
+2667 format ('+request for use of analytic type 1-10 sources.')
   kanal = 1
   go to 15
   !     $$$$$ special-request word no. 13.   'limit on plot oscillations'
-8013 if ( kolbeg  .gt.  0 )   go to 2671
+8013 if (kolbeg .gt. 0) go to 2671
   read (unit = abuff, fmt = 2642) nsmth
   go to 2673
 2671 nfrfld = 1
-  call frefld ( voltbc(1) )
+  call frefld (voltbc)
   nsmth = voltbc(1)
-2673 if ( noutpr  .eq.  0 ) write (kunit6, 2675 )  nsmth
-2675 format ('+Change successive oscillation limit.', 2x, i8)
+2673 if (noutpr .eq. 0) write (kunit6, 2675) nsmth
+2675 format ('+change successive oscillation limit.', 2x, i8)
   go to 15
   !     $$$$$    special-request word no. 14.   'tacs emtp sources'  $$$$
-8014 if ( noutpr  .eq.  0 ) write (kunit6, 2682)
+8014 if (noutpr .eq. 0) write (kunit6, 2682)
 2682 format ('+tacs names controlling type 1-10 EMTP sources.')
-  if ( kolbeg  .gt.  0 )   go to 2683
+  if (kolbeg .gt. 0) go to 2683
   read (unit = abuff, fmt = 2685) (vstacs(j), j = 1, 10)
 2685 format (20x, 10a6)
   go to 2686
 2683 nright = -2
-  call freone ( d1 )
-  do j=1, 10
+  call freone (d1)
+  do j = 1, 10
      vstacs(j) = texta6(j)
   end do
 2686 nstacs = 10
-2687 if ( vstacs(nstacs)  .ne.  blank )   go to 2690
+2687 if (vstacs(nstacs) .ne. blank) go to 2690
   nstacs = nstacs - 1
-  if ( nstacs  .gt.  0 )   go to 2687
+  if (nstacs .gt. 0) go to 2687
 2690 go to 15
   !     $$$$$    special-request word no. 15.   'start again'       $$$$$
   !     this request is handled outside of subroutine.           m28.1421
