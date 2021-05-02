@@ -2197,7 +2197,7 @@ subroutine tacs1
   data sbn(1)    / 'num.  ' /
   data sbn(2)    / 'den.  ' /
   if (iprsup .ge. 1) write (lunit6, 4567)
-4567 format ('  "begin module tacs1."')
+4567 format ('  "Begin module tacs1."')
   if (iprsup .gt. 0) write (lunit6, 701) ltacst, (lstat(i), i = 61, 68)
 701 format (6x, 'ltacst, (lstacs(i), i=1, 8) ... .', /, 9i10, /)
   if ( nchain  .eq.  1 )  go to 1001
@@ -2357,15 +2357,15 @@ subroutine tacs1
   if ( n  .ne.  1 ) go to 1399
   iuty( kiuty+6) = 9999
   if ( noutpr  .eq.  0 ) write ( kunit6, 152 )
-152 format ('+Request for output of all tacs variables.')
+152 format ('+request for output of all TACS variables.')
   go to 100
 1399 if ( n  .ne.  0 )   go to 139
   if ( noutpr  .eq.  0 )  write ( kunit6, 137 )
-137 format ('+Blank card terminating all tacs data cards .')
+137 format ('+blank card terminating all TACS data cards .')
   go to 101
 139 if ( dum(1)  .eq.  0.0 )  dum(1) = 1.0
   if ( noutpr  .eq.  0 ) write (kunit6, 179)  alnode, n, dum(1)
-179 format ('+tacs function ', "'", a6, "'", ', order', i2, '.', e14.4)
+179 format ('+TACS function ', "'", a6, "'", ', order', i2, '.', e14.4)
   if ( n .lt. 8  .and.  n .ge. 0 )   go to 118
   kill = 115
   lstat(19) = 118
@@ -2621,7 +2621,7 @@ subroutine tacs1
   end do
 478 continue
   write (lunit6, 55168) alnode
-55168 format ('  Source 90 or 91 "', a6, '" is not a recognizable switch node name in EMTP. The card will be discard')
+55168 format ('  Source 90 or 91 ', '"', a6, '"', ' is not a recognizable switch node name in EMTP. The card will be discard')
 8579 niu  = niu  - 1
   ndy5 = ndy5 - 5
   go to 9000
@@ -2663,7 +2663,7 @@ subroutine tacs1
   if ( jr .eq. 1 ) go to 3535
   if ( noutpr .eq. 0 ) write ( kunit6, 4455 )
 3535 if ( noutpr  .eq.  0 ) write ( kunit6, 154 )
-154 format ('+tacs variables for EMTP output vector.')
+154 format ('+TACS variables for EMTP output vector.')
   go to 100
 4466 lstat(19) = 1199
 9300 kill = 122
@@ -2682,7 +2682,7 @@ subroutine tacs1
   call freone ( prx )
 6567 if ( alnode  .ne.  blank )   go to 3838
   if ( noutpr .eq. 0 ) write ( kunit6, 4455 )
-4455 format ('+Ignor the illegal card.')
+4455 format ('+ignore the illegal card.')
   go to 100
 3838 kxic = kxic + 1
   if ( kxic .lt. lstat(68) ) go to 3377
@@ -2706,7 +2706,7 @@ subroutine tacs1
   go to 9300
 4444 call tacs1b
 9000 if ( iprsup  .ge.  1 ) write ( lunit6,4568 )
-4568 format ('  "exit  module tacs1."')
+4568 format ('  "Exit  module tacs1."')
   return
 end subroutine tacs1
 !
@@ -2732,80 +2732,80 @@ subroutine tacs1a
   dimension atmpbf(20), btmpbf(80)
   dimension argel(100)
   dimension iel(100)
-  data alnrcl( 1) /6h1     /
-  data alnrcl( 2) /6h2     /
-  data alnrcl( 3) /6h3     /
-  data alnrcl( 4) /6h4     /
-  data alnrcl( 5) /6h5     /
-  data alnrcl( 6) /6h6     /
-  data alnrcl( 7) /6h7     /
-  data alnrcl( 8) /6h8     /
-  data alnrcl( 9) /6h9     /
-  data alnrcl(10) /6h0     /
-  data sepch( 1) /6h(     /
-  data sepch( 2) /6h)     /
-  data sepch( 3) /6h+     /
-  data sepch( 4) /6h-     /
-  data sepch( 5) /6h/     /
-  data sepch( 6) /6h*     /
-  data sepch( 7) /6h.     /
-  data sepch( 8) /6h**    /
-  data opname( 1) /6h(     /
-  data opname( 2) /6h.not. /
-  data opname( 3) /6h.or.  /
-  data opname( 4) /6h.ornot/
-  data opname( 5) /6h.and. /
-  data opname( 6) /6h.andnt/
-  data opname( 7) /6h)     /
-  data opname( 8) /6h.ne.  /
-  data opname( 9) /6h.eq.  /
-  data opname(10) /6h.lt.  /
-  data opname(11) /6h.le.  /
-  data opname(12) /6h.ge.  /
-  data opname(13) /6h.gt.  /
-  data opname(14) /6h*     /
-  data opname(15) /6h/     /
-  data opname(16) /6h**    /
-  data opname(17) /6h+     /
-  data opname(18) /6h-     /
-  data eqlsgn /6h=     /
-  data chdolr /6h$     /
-  data ch9    /6h9     /
-  data  che   /1he/
-  data  chd   /1hd/
-  data  comma /1h,/
-  data  cha   /1ha/
-  data  chn   /1hn/
-  data  cho   /1ho/
-  data  cht   /1ht/
-  data  chq   /1hq/
-  data  chl   /1hl/
-  data  chg   /1hg/
-  data  chr   /1hr/
-  data supfn( 1) /5h     /
-  data supfn( 2) /5hand. /
-  data supfn( 3) /5hor.  /
-  data supfn( 4) /5hnot. /
-  data supfn( 5) /5hnand./
-  data supfn( 6) /5hnor. /
-  data supfn( 7) /5h     /
-  data supfn( 8) /5h     /
-  data supfn( 9) /5h     /
-  data supfn(10) /5h     /
-  data supfn(11) /5h     /
-  data supfn(12) /5hsin  /
-  data supfn(13) /5hcos  /
-  data supfn(14) /5htan  /
-  data supfn(15) /5hcotan/
-  data supfn(16) /5hsinh /
-  data supfn(17) /5hcosh /
-  data supfn(18) /5htanh /
-  data supfn(19) /5hasin /
-  data supfn(20) /5hacos /
-  data supfn(21) /5hatan /
-  data supfn(22) /5hexp  /
-  data supfn(23) /5hlog  /
-  data supfn(24) /5hlog10/
+  data alnrcl(1)  / '1     ' /
+  data alnrcl(2)  / '2     ' /
+  data alnrcl(3)  / '3     ' /
+  data alnrcl(4)  / '4     ' /
+  data alnrcl(5)  / '5     ' /
+  data alnrcl(6)  / '6     ' /
+  data alnrcl(7)  / '7     ' /
+  data alnrcl(8)  / '8     ' /
+  data alnrcl(9)  / '9     ' /
+  data alnrcl(10) / '0     ' /
+  data sepch(1)   / '(     ' /
+  data sepch(2)   / ')     ' /
+  data sepch(3)   / '+     ' /
+  data sepch(4)   / '-     ' /
+  data sepch(5)   / '/     ' /
+  data sepch(6)   / '*     ' /
+  data sepch(7)   / '.     ' /
+  data sepch(8)   / '**    ' /
+  data opname(1)  / '(     ' /
+  data opname(2)  / '.not. ' /
+  data opname(3)  / '.or.  ' /
+  data opname(4)  / '.ornot' /
+  data opname(5)  / '.and. ' /
+  data opname(6)  / '.andnt' /
+  data opname(7)  / ')     ' /
+  data opname(8)  / '.ne.  ' /
+  data opname(9)  / '.eq.  ' /
+  data opname(10) / '.lt.  ' /
+  data opname(11) / '.le.  ' /
+  data opname(12) / '.ge.  ' /
+  data opname(13) / '.gt.  ' /
+  data opname(14) / '*     ' /
+  data opname(15) / '/     ' /
+  data opname(16) / '**    ' /
+  data opname(17) / '+     ' /
+  data opname(18) / '-     ' /
+  data eqlsgn / '=     ' /
+  data chdolr / '$     ' /
+  data ch9    / '9     ' /
+  data  che   / 'e' /
+  data  chd   / 'd' /
+  data  comma / ',' /
+  data  cha   / 'a' /
+  data  chn   / 'n' /
+  data  cho   / 'o' /
+  data  cht   / 't' /
+  data  chq   / 'q' /
+  data  chl   / 'l' /
+  data  chg   / 'g' /
+  data  chr   / 'r' /
+  data supfn( 1) / '     ' /
+  data supfn( 2) / 'and. ' /
+  data supfn( 3) / 'or.  ' /
+  data supfn( 4) / 'not. ' /
+  data supfn( 5) / 'nand.' /
+  data supfn( 6) / 'nor. ' /
+  data supfn( 7) / '     ' /
+  data supfn( 8) / '     ' /
+  data supfn( 9) / '     ' /
+  data supfn(10) / '     ' /
+  data supfn(11) / '     ' /
+  data supfn(12) / 'sin  ' /
+  data supfn(13) / 'cos  ' /
+  data supfn(14) / 'tan  ' /
+  data supfn(15) / 'cotan' /
+  data supfn(16) / 'sinh ' /
+  data supfn(17) / 'cosh ' /
+  data supfn(18) / 'tanh ' /
+  data supfn(19) / 'asin ' /
+  data supfn(20) / 'acos ' /
+  data supfn(21) / 'atan ' /
+  data supfn(22) / 'exp  ' /
+  data supfn(23) / 'log  ' /
+  data supfn(24) / 'log10' /
   data supfn(25) /5hsqrt /
   data supfn(26) /5habs  /
   data supfn(27) /5htrunc/
