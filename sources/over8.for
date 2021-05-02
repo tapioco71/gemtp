@@ -19,15 +19,15 @@ subroutine over8
   character(6) chlmfs        ! 9-phase as limit for lmfs test
   character(80) char80
   dimension infdli(1)
-  equivalence  ( namebr(1),  infdli(1) )
+  equivalence (namebr(1), infdli(1))
   dimension wk1(1)
-  equivalence ( semaux(1), wk1(1) )
+  equivalence (semaux(1), wk1(1))
   dimension vim(1)
-  equivalence ( volt(1), vim(1) )
+  equivalence (volt(1), vim(1))
   dimension ispum(1)
-  equivalence ( spum(1), ispum(1) )
+  equivalence (spum(1), ispum(1))
   dimension integx(1)
-  equivalence ( x(1), integx(1) ),   ( moncar(1), knt )
+  equivalence (x(1), integx(1)), (moncar(1), knt)
   character(6) tempbus
   !     1001 if ( iprsup .ge. 1 )
   if (iprsup .ge. 1) write (lunit6, 101) loopss(1), iv, it, tmax
@@ -37,34 +37,34 @@ subroutine over8
   if (tmax .le. 0.0 .and. nchain .gt. lastov) go to 40014
   n7 = 2
   rewind lunit2
-  call tapsav ( integx(1), lunit2, iv, n7 )
+  call tapsav ( integx(1), lunit2, iv, n7)
   n12 = 0
-  call vecrsv ( volt(1), n12, n12 )
+  call vecrsv ( volt(1), n12, n12)
   n12 = ktrlsw(7)
-  call vecrsv (  emtpc(1), n12, n7 )
-  call vecrsv ( tr(1), n12, n7 )
-  call vecrsv ( tx(1), n12, n7 )
-  call vecrsv (  r(1), n12, n7 )
+  call vecrsv (emtpc(1), n12, n7)
+  call vecrsv (tr(1), n12, n7)
+  call vecrsv (tx(1), n12, n7)
+  call vecrsv (r(1), n12, n7)
   n12 = ktrlsw(8)
-  call vecisv (     nr(1), n12, n7 )
-  call vecisv ( length(1), n12, n7 )
-  if ( numum .eq. 0 .or. lastov .lt. nchain ) go to 6123
-  if ( loopss(1)  .eq.  7766 )  go to 6121
-  call vecisv( kssfrq(1), ntot, n7 )
-  call vecisv( kpsour(1), ntot, n7 )
+  call vecisv (nr(1), n12, n7)
+  call vecisv (length(1), n12, n7)
+  if (numum .eq. 0 .or. lastov .lt. nchain) go to 6123
+  if (loopss(1) .eq. 7766) go to 6121
+  call vecisv(kssfrq(1), ntot, n7)
+  call vecisv(kpsour(1), ntot, n7)
   go to 6123
 6121 m7 = 0
   m8 = 8
   call vecrsv( volt(1), m8, m7 )
-6123 if ( ktrlsw(5) .eq. 1  .and.  lastov .gt. nchain ) call vecrsv (cnvhst(1), lhist, n7)
-  if ( loopss(1) .ne. 7766 )  go to 3489
+6123 if (ktrlsw(5) .eq. 1 .and. lastov .gt. nchain) call vecrsv (cnvhst(1), lhist, n7)
+  if (loopss(1) .ne. 7766) go to 3489
   !     back from "over11" after final phasor solution, so exit:
   lastov = nchain
   nchain = 12
   lstat(22) = ibr
   go to 9600
   !     2nd or later pass skips renumbering of 3rd partition labcom:
-3489 if ( lastov  .gt.  nchain )  go to 40014
+3489 if (lastov .gt. nchain) go to 40014
   if (inonl.eq.0) go to 4141
   do i = 1, inonl
      k = nonlk(i)
@@ -92,7 +92,7 @@ subroutine over8
   do i = 2, ntot
 3442 l = ich2(i)
      j = norder(l)
-     if( j .eq. i )  go to 3456
+     if(j .eq. i) go to 3456
      bus1 = bus(j)
      nsave = ktrans(j)
      n3 = ich2(j)
@@ -105,7 +105,7 @@ subroutine over8
      go to 3442
 3456 end do
   if( iprsup .gt. 1 ) write(lunit6, 73825)  kpartb, ntot
-73825 format(//, ' Final renumbering maps.  kpartb= ', i5, 5x, 'ntot=', i3, /, 9x, 'i', 4x, 'bus(i)', 3x, 'norder(i)', 5x, &
+73825 format (//, ' Final renumbering maps.  kpartb= ', i5, 5x, 'ntot=', i3, /, 9x, 'i', 4x, 'bus(i)', 3x, 'norder(i)', 5x, &
            'ich1(i)', 5x, 'kode(i)')
   if( iprsup .gt. 1 ) write(lunit6, 73826)  ( i, bus(i), norder(i),   ich1(i), kode(i), i=1, ntot )
 73826 format (i10, 4x, a6, 3i12)
@@ -450,7 +450,7 @@ subroutine over8
      n2 = -kbus(ii)
      n3 = iabs(mbus(ii))
      write (lunit6, 8010) bus(n2), bus(n3), i, cnvhst(n1 + 4), omega
-8010 format(//, ' Warning...  Steady state modal parameters for recursive-convolution component connecting nodes ', "'", a6, "'", ' and ', a6, "'", /, &
+8010 format (//, ' Warning...  Steady state modal parameters for recursive-convolution component connecting nodes ', "'", a6, "'", ' and ', a6, "'", /, &
           13x, 'for mode ', i2, ' are determined at angular frequency of', e12.5, ' radians/sec.  The steady-state solution frequency', /, &
           13x, 'being used is ', e12.5, ' radians/sec.')
 8020 if (kodsem(k) .gt. 0) go to 8030
@@ -503,7 +503,7 @@ subroutine over8
      n3 = iabs(mbus(ii))
      write (lunit6, 8085) bus(n2), bus(n3), ii, n1, cnvhst(n1 + 0), cnvhst(n1 + 1), cnvhst(n1 + 2), cnvhst(n1 + 3), &
           cnvhst(n1 + 4), d3, d4, d5, d6, d7, d8, d9, d10, volt(i), volti(i), voltk(i), vim(ndx1)
-8085 format(/, 5x, a6, ' to ', a6, 5x, 'br. index = ', i3, 5x, 'n1 = ', i3, /, 1x, 'cnvhst(n1) ... cnvhst(n1+4) =  ', 5(1x, e15.7), /, &
+8085 format (/, 5x, a6, ' to ', a6, 5x, 'br. index = ', i3, 5x, 'n1 = ', i3, /, 1x, 'cnvhst(n1) ... cnvhst(n1+4) =  ', 5(1x, e15.7), /, &
           1x, 'd3, d4, d5, d6, d7, d8 =  ', 6(1x, e15.7), /, 1x, 'd9, d10, volt, volti, voltk, vim =   ', 6(1x, e15.7))
 8090 end do
   n1 = int(absz(cik(k)) - 1.0)
@@ -1038,7 +1038,7 @@ subroutine over8
 2584 format (7x, 'row', 13x, 'tr', 13x, 'tx', 14x, 'r', 14x, 'c', /, (i10, 4e15.5))
   if(inonl.eq.0) go to 414
   if ( noutpr  .eq.  0 ) write(lunit6,406)
-406 format(' Nonlinear and time-varying resistances ignored in steady state solution. Nonlinear inductances included with linear part')
+406 format (' Nonlinear and time-varying resistances ignored in steady state solution. Nonlinear inductances included with linear part')
   d2 = 1000.0
   if(xopt .gt. 0.0)  d2 = xopt * twopi
   if ( iprsup  .le.  1 )   go to 4265
@@ -2536,7 +2536,7 @@ subroutine umrenu(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      if (iprsup .ge. 1) write(lunit6,12010) (hist(n1),n1 = 1,ncl)
 12010 format (/, ' hist(1 : ncl) =', (1x, 6e15.6))
      if (iprsup .ge. 1) write(lunit6,12020) tqgen
-12020 format(/, ' tqgen =', 1x, e15.6)
+12020 format (/, ' tqgen =', 1x, e15.6)
 12100 nclout = nclout + 1
      !  final statements of machine do-loop
      !     13000 if (ntyp59 .eq. 1) jtype(jm) = 13
@@ -3417,12 +3417,11 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
            tr(n9) = tr(n9)/slip
 82244      if (n18 .lt. 40) go to 82246
            write(lunit6,82245) k
-82245      format(/,22h error stop. um number,i4,14h has more than, 44h 40 excitation branches or sources. overflow, &
-                42h is avoided by increasing the dimension of ,/,   45h the arrays "vinp" and "ndum" in umdeck to be, &
-                37h one higher than these used elements.)
+82245      format (/, ' Error stop. um number', i4, ' has more than 40 excitation branches or sources. Overflow is avoided by increasing the dimension of ',/, &
+                ' the arrays "vinp" and "ndum" in umdeck to be one higher than these used elements.')
            call stoptp
-82246      if (iprsup .ge. 1) write(lunit6,2243) n11,n12,n10,n9,tr(n9),tx(n9)
-2243       format(' ********* Change ext exc r just for ld-flow', i4, 4x, i4, 2i6, 2e14.5)
+82246      if (iprsup .ge. 1) write(lunit6, 2243) n11, n12, n10, n9, tr(n9), tx(n9)
+2243       format (' ********* Change ext exc r just for ld-flow', i4, 4x, i4, 2i6, 2e14.5)
            go to 2245
         end do
 2244    continue
