@@ -6,20 +6,20 @@
 !     subroutine over6.
 !
 subroutine over6
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'syncom.ftn'
   include 'space2.ftn'
-  character*8 buff
+  character(8) buff
   dimension buff(20)
-  equivalence  ( iofkol, iofgnd ), ( iofkor, iofbnd )
-  dimension  integx(1)
-  equivalence  ( x(1), integx(1) )
+  equivalence (iofkol, iofgnd), (iofkor, iofbnd)
+  dimension integx(1)
+  equivalence  (x(1), integx(1))
   !     following carries "next" among over6, insert, over7, & over9:
-  equivalence  ( loopss(11), next )
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
-4567 format ( 23h  "begin module over6." )
+  equivalence (loopss(11), next)
+  if (iprsup .ge. 1) write (lunit6, 4567)
+4567 format ('  "Begin module over6."')
   ntot1 = ntot - 1
   n3 = 0
   d1 = 1.0 / ( 100. * flzero )
