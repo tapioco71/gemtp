@@ -3051,16 +3051,16 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
         if (iprsup .ge. 1) then
            write(lunit6,2052) kbus(ibr),mbus(ibr),ibr,it,tr(it),tx(i)
         end if
-2052    format(10h *********,32h im main ind branche for ld-flow,2x,i4,4x,i4,2i6,2e14.5)
+2052    format (' ********* im main ind branche for ld-flow', 2x, i4, 4x, i4, 2i6, 2e14.5)
         go to 2055
         !   set parallel resistances for sm and dm and predicted im :
 2053    if (kbus(ibr) .ne. 1 .and. mbus(ibr) .ne. 1) tr(it)=epsiln
         if (loopss(10) .eq. 1) tr(it) = 1.0d+6
         if (imach .eq. 1) tr(it) = 1.0
         if (iprsup .ge. 1) write (lunit6,2054) kbus(ibr),mbus(ibr),ibr,it,tr(it),tx(it)
-2054    format(10h *********,31h parall resist. for power coils, 3x,i4,4x,i4,2i6,2e14.5)
+2054    format (' ********* parall resist. for power coils', 3x, i4, 4x, i4, 2i6, 2e14.5)
         if (loopss(10) .eq. 1) go to 2055
-        d10 = voltum(k)/tr(it)
+        d10 = voltum(k) / tr(it)
         !   set sources representing the um power coils :
 2055    if (imach .eq. 1) d10 = 0.0
         !     2056 do 2070 n3 = 1,2
@@ -3070,7 +3070,7 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
            kconst = kconst + 1
            if ( kconst .le. lexct )  go to 6785
            write (lunit6, 6783)  lexct
-6783       format ( 38h overflow list 4 in "umrenu".  lexct =, i5,    18h     stop locally.     )
+6783       format (' Overflow list 4 in "umrenu".  lexct =', i5, '     Stop locally.')
            call stoptp
 6785       n10 = nodvo1(n2)
            node(kconst) = - nodvo1(n2)
@@ -3120,10 +3120,10 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
 2066       if (loopss(10) .eq. 0) go to 2068
            if (imach .eq. 1) go to 2068
            if (iprsup .ge. 1) write (lunit6,2067) node(kconst),kconst,sfreq(kconst),crest(kconst)
-2067       format(10h *********, 30h voltage source for power coil, 4x,i4,50x,i6,e14.5,1x,e13.5)
+2067       format (' ********* Voltage source for power coil', 4x, i4, 50x, i6, e14.5, 1x, e13.5)
            go to 2070
 2068       if (iprsup .ge. 1) write (lunit6,2069) node(kconst),kconst,sfreq(kconst),crest(kconst)
-2069       format(10h *********,30h current source for power coil, 4x,i4,50x,i6,e14.5,1x,e13.5)
+2069       format (' ********* Current source for power coil', 4x, i4, 50x, i6, e14.5, 1x, e13.5)
 2070    end do
         !     for sm and dm : make leakage inductance zero in emtp
         !     network for this next round of ss calculation because
@@ -3144,7 +3144,7 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
         tx(n5) = epsiln * 1.0d+3
         if (xopt .ne. 0.0) tx(n5) = epsiln * twopi * xopt
         if (iprsup .ge. 1) write (lunit6,2074) kbus(n10),mbus(n10),n10,n5,tr(n5),tx(n5)
-2074    format (32h *********  leakage ind. change:,12x,i4,4x,i4,2i6,2e14.5)
+2074    format (' *********  Leakage ind. change:', 12x, i4, 4x, i4, 2i6, 2e14.5)
         !  load-flow preparation of im type-4 power series branche :
 2076    if (lfim4i .ne. 1) go to 2080
         n10 = int(fpar(kcl) + n1 - 1)
@@ -3152,7 +3152,7 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
         if (n5 .lt. 0) n5 = - n5
         tr(n5) = 1.0/gpar(kcl+2)
         if (iprsup .ge. 1) write (lunit6,2078) kbus(n10),mbus(n10),n10,n5,tr(n5),tx(n5)
-2078    format (39h ********* im power branche for ld-flow,5x,i4,4x,i4,2i6,2e14.5)
+2078    format (' ********* im power branche for ld-flow', 5x, i4, 4x, i4, 2i6, 2e14.5)
 2080 end do
      !  storing permanently created branches (if full compensation is
      !   requested, then all created branches in umrenu are just
@@ -3189,7 +3189,7 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
         n10 = nodfum(k)
         sfreq(kconst) = sfreq(n10)
         if (iprsup .ge. 1) write(lunit6,2085) node(kconst),kconst,sfreq(kconst),crest(kconst)
-2085    format(10h *********,31h current source for excit coils,3x,i4,50x,i6,e14.5,1x,e13.5)
+2085    format (' ********* Current source for excit coils', 3x, i4, 50x, i6, e14.5, 1x, e13.5)
 2086 end do
      go to 2100
      !  treatment of  excitation sources of im :
@@ -3221,7 +3221,7 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
         !  negative sequence conversion to positive if slip .lt. 0.0 :
         if (slip .lt. 0.0) time1(n3) = - time1(n3)
 2090    if (iprsup .ge. 1) write (lunit6,2088) node(n3),n3,sfreq(n3),crest(n3)
-2088    format(10h *********,31h adjusted im excitation sources,3x,i4,50x,i6,e14.5,1x,e13.5)
+2088    format (' ********* Adjusted im excitation sources', 3x, i4, 50x, i6, e14.5, 1x, e13.5)
 2089    n3 = kpsour(n3)
         if (n3 .eq. n4) go to 2094
         sfreq(n3) = d1
@@ -3253,9 +3253,8 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
      d17 = d15 + d13
      if (d12 .gt. d16 .and. d12 .lt. d17) go to 2097
      write (lunit6,2095) k
-2095 format(/,22h error stop. um number,i4,16h is an ind. mach,42h and is requested to be initialized with a, &
-          43h negative slip value. the phase sequence of,/,    45h the specified external excitation sources is, &
-          42h incorrect. it should be negative sequence,31h rather than positive sequence.)
+2095 format (/, ' Error stop. um number', i4, ' is an ind. mach and is requested to be initialized with a negative slip value. The phase sequence of', /, &
+          ' the specified external excitation sources is incorrect. It should be negative sequence rather than positive sequence.')
      call stoptp
 2096 d16 = d14 - d13
      d17 = d14 + d13
@@ -3264,22 +3263,20 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
      d17 = - d15 + d13
      if (d12 .gt. d16 .and. d12 .lt. d17) go to 2097
      write (lunit6,82096) k
-82096 format(/,22h error stop. um number,i4,16h is an ind. mach,42h and is requested to be initialized with a, &
-           43h positive slip value. the phase sequence of,/,    45h the specified external excitation sources is, &
-           42h incorrect. it should be positive sequence,31h rather than negative sequence.)
+82096 format (/, ' Error stop. um number', i4, ' is an ind. mach and is requested to be initialized with a positive slip value. The phase sequence of',/, &
+           ' the specified external excitation sources is incorrect. It should be positive sequence rather than negative sequence.')
      call stoptp
 2097 if (nminum .ge. 10000) go to 2100
      if (node(nminum) .gt. 0) go to 2100
      if (lfim4i .eq. 0) go to 2100
      write(lunit6,2098)
-2098 format(/,43h warning :   you have requested a load-flow,38h for a network containing an induction, &
-          42h machine. you chose the exciter sources as, /,     42h current sources and will therefore not be, &
-          34h adjusted by the load-flow module.,/)
+2098 format (/, ' Warning :   you have requested a load-flow for a network containing an induction machine. You chose the exciter sources as', /, &
+          ' current sources and will therefore not be adjusted by the load-flow module.', /)
 2100 if (jtmtac(k) .le. 0) go to 2150
      write (lunit6,2110)
-2110 format(24h0program stop because of, 26h conflicting request, i.e.)
+2110 format ('0program stop because of conflicting request, i.e.')
      write (lunit6,2120)
-2120 format(35h no initialization if no mechanical,15h network option)
+2120 format (' no initialization if no mechanical network option')
      call stoptp
      !   creating temporary speed-source for each um mass :
 2150 if (loopss(10) .eq. 3) go to 2200
@@ -3300,8 +3297,8 @@ subroutine umrnu2(reacl,gpar,fpar, hist,umcurp,nodvo1,jtype,nodom, jtmtac,thetam
      n10 = nodmum(k)
      sfreq(kconst) = sfreq(n10)
      crest(kconst) = 0.0
-2160 format(10h *********,21h um mass speed-source,13x,i4,50x,i6,e14.5,1x,e13.5)
-     if (iprsup .ge. 1) write(lunit6,2160) node(kconst),kconst,sfreq(kconst),crest(kconst)
+2160 format (' ********* um mass speed-source', 13x, i4, 50x, i6, e14.5, 1x, e13.5)
+     if (iprsup .ge. 1) write(lunit6,2160) node(kconst), kconst, sfreq(kconst), crest(kconst)
 2200 end do
   !  load-flow preparation of im type-4 temporary branches, which
   !   are to be wiped out in the second part of the umrenu code :
