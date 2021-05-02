@@ -1865,7 +1865,7 @@ subroutine reques
   if ( n7  .ge.  2 )  n7 = 0
   ktrlsw(6) = n7
   if ( noutpr  .eq.  0 ) write (kunit6, 7374)  n7
-7374 format ('+Request for altered logic.  ktrlsw(6) =', i2)
+7374 format ('+request for altered logic.  ktrlsw(6) =', i2)
   go to 15
   !     $$$$$$$  special request-word no. 56.   'fault data usage' $$$$$$
 8056 if ( kolbeg  .gt.  0 )   go to 7379
@@ -1875,14 +1875,14 @@ subroutine reques
   call frefld ( voltbc(1) )
   iofbnd = voltbc(1)
 7382 if ( noutpr  .eq.  0 ) write (kunit6, 7385)
-7385 format ('+Request for generator equivalents.')
+7385 format ('+request for generator equivalents.')
   istep = -6633
   nchain = 29
   go to 5617
   !     $$$$$$$  special request-word no. 57.   'fix source'  $$$$$$
 8057 istep = -4567
   if ( noutpr  .eq.  0 ) write (kunit6, 7388)
-7388 format ('+Declaration of desired load flow use.')
+7388 format ('+declaration of desired load flow use.')
   go to 15
   !     $$$$$$$  special request-word no. 58.   'user supplied     $$$$$$
   !     $$$$$$$                                  switch times'     $$$$$$
@@ -1895,16 +1895,16 @@ subroutine reques
 7402 moncar(7) = n14
   if ( n14 .eq. 0 )   moncar(7) = 24
   if ( noutpr  .eq.  0 ) write (kunit6, 7406)  moncar(7)
-7406 format ('+File of random switching times.  unit =', i6)
+7406 format ('+file of random switching times.  unit =', i6)
   go to 15
   !     $$$$$$$  special request-word no. 59.   'ametani setup'  $$$
 8059 if ( noutpr  .eq.  0 ) write (lunit6, 7411)
-7411 format ('+Request for Ametani step-response routine.')
+7411 format ('+request for Ametani step-response routine.')
   nchain = 46
   go to 5617
   !     $$$$$$$  special request-word no. 60.   'hauer setup'  $$$$$
 8060 if ( noutpr  .eq.  0 ) write (lunit6,7418)
-7418 format ('+Request for Hauer impulse-response routine.')
+7418 format ('+request for Hauer impulse-response routine.')
   nchain = 48
   nenerg = 49
   go to 5617
@@ -1939,10 +1939,10 @@ recursive function stripper(string, ch) result(stripped)
         stripped = string
      end if
   else
-     if (string(1:1) == ch) then
-        stripped = stripper(string(2:), ch)
+     if (string(1 : 1) == ch) then
+        stripped = stripper(string(2 :), ch)
      else
-        stripped = string(1:1)//stripper(string(2:),ch)
+        stripped = string(1 : 1) // stripper(string(2 :), ch)
      end if
   end if
 end function stripper
@@ -1967,38 +1967,38 @@ subroutine sysdep
   data lettra / 'a' /
   data lettrb / 'b' /
   data lettrc / 'c' /
-  data busnm1 / 6h       /
-  data busnm2 / 8h........ /
-  data busnm3 / 6hterra  /
-  data text1  / 1h, /
-  data text2  / 1h$ /
+  data busnm1 / '      ' /
+  data busnm2 / '........' /
+  data busnm3 / 'terra ' /
+  data text1  / ',' /
+  data text2  / '$' /
   do  i = 1, 18
-     col(i:i) = colxxx(i:i)
+     col(i : i) = colxxx(i : i)
   end do
   lunit2 = 19
   lunit4 = 20
   call sysplt(lunit4)       ! define l4plot=lunit4 for "dekplt"
   luntsp = 14               ! the catalog command of "spying" uses this
   mflush = 0
-  if ( m4plot  .eq.  1 )   go to 1355
-  if ( llbuff  .eq.  -3333 )   go to 1342
-  if (nenerg .eq. 49 ) close (unit=lunit1, status='keep')
-  if (nenerg .ne. 49 ) close (unit=lunit1, status='delete')
-  close(unit=lunit2)
-  close ( unit=lunit3 )
+  if (m4plot .eq. 1) go to 1355
+  if (llbuff .eq. -3333) go to 1342
+  if (nenerg .eq. 49) close (unit = lunit1, status = 'keep')
+  if (nenerg .ne. 49) close (unit = lunit1, status = 'delete')
+  close (unit = lunit2)
+  close (unit = lunit3)
   if (icat .eq. 0) go to 120
   if (icat .gt. 2) go to 120
-100 close (unit=lunit4, status='keep')
+100 close (unit = lunit4, status = 'keep')
   go to 140
-120 close (unit=lunit4, status='delete')
+120 close (unit = lunit4, status = 'delete')
 140 continue
-  close ( unit=lunit9 )
-  close ( unit=lunt10 )
-  close ( unit=lunt11 )
-  close ( unit=lunt12 )
-  close ( unit=lunt13 )
-  close ( unit=lunt14 )
-  close ( unit=lunt15 )
+  close (unit = lunit9)
+  close (unit = lunt10)
+  close (unit = lunt11)
+  close (unit = lunt12)
+  close (unit = lunt13)
+  close (unit = lunt14)
+  close (unit = lunt15)
   !     1342 open (unit=lunit1, type='new', form='formatted')
   !     open (unit=lunit2, type='scratch', form='formatted', status='delete' )
   !     open ( unit=lunit3, type='scratch', form='unformatted', status='delete' )
@@ -2016,10 +2016,10 @@ subroutine sysdep
   call settym
   iprsov(38) = 0
   llbuff = 1025
-  if ( ltacst  .ge.  3000 )   go to 1359
+  if (ltacst .ge. 3000) go to 1359
   !     vax link-edits according to longest common block, not
   !     according to 1st appearance (size of vardim output):
-  ltlabl = ltlabl  +  2 * (3000 - ltacst)
+  ltlabl = ltlabl + 2 * (3000 - ltacst)
   ltacst = 3000
 1359 statfr = 60.
   kburro = 1
@@ -2032,22 +2032,22 @@ subroutine sysdep
   iprsov(37) = 10
   lnpin = 6
   nsmth = 50
-  call date44(date1)
-  call time44(tclock)
-  if ( noutpr  .eq.  0 ) write (lunit6, 6301)
+  call date44 (date1)
+  call time44 (tclock)
+  if (noutpr .eq. 0) write (lunit6, 6301)
 6301 format (' Electromagnetic Transients Program (EMTP) Digital (DEC) VAX-11/780 translation as used by BPA in Portland, Oregon  97208;  USA.')
   read (unit = date1(1), fmt = 3641) col(25:25), col(6:6), col(7:7)
 3641 format (2a1, 1x, a1)
-  if ( col(25:25)  .eq.  '0' ) go to 3642
-  if ( col(6:6)   .eq.  '0' ) col(6:6) = lettra
-  if ( col(6:6)   .eq.  '1' ) col(6:6) = lettrb
-  if ( col(6:6)   .eq.  '2' ) col(6:6) = lettrc
+  if (col(25 : 25) .eq. '0') go to 3642
+  if (col(6 : 6) .eq. '0') col(6 : 6) = lettra
+  if (col(6 : 6) .eq. '1') col(6 : 6) = lettrb
+  if (col(6 : 6) .eq. '2') col(6 : 6) = lettrc
 3642 continue
-  read (unit = date1(2), fmt = 3641) col(8:8)
-  read (unit = tclock(1), fmt = 3652) (col(j:j), j = 9, 14)
+  read (unit = date1(2), fmt = 3641) col(8 : 8)
+  read (unit = tclock(1), fmt = 3652) (col(j : j), j = 9, 14)
 3652 format (2a1, 1x, a1, 4x, a1, 1x, 2a1)
   !ansi32(1:25) = stripper(col, ' ')
-  write (ansi32, 3668)  ( col(j:j), j = 1, 18 )
+  write (ansi32, 3668)  (col(j : j), j = 1, 18)
 3668 format (18a1, 14x)
   ansi32 = stripper(ansi32, ' ')
   if (iprsup .ge. 1 ) write (lunit6, 3672) ansi32
@@ -2073,26 +2073,26 @@ subroutine sysdep
   epsiln = 1.d-8
   twopi = 6.28318530717958647692d+00
   userid = blank
-  if ( noutpr  .eq.  0 ) then
-     write (lunit6, 6305) date1, tclock, (col(j:j), j = 6, 18)
+  if (noutpr .eq. 0) then
+     write (lunit6, 6305) date1, tclock, (col(j : j), j = 6, 18)
 6305 format (' Date (mm/dd/yy) and time of day (hh.mm.ss.) =', 1x, 2a4, 2x, 2a4, 11x, 'name of VAX/VMS plot data file (if any) = ', 13a1)
   end if
   ! if not interactive emtp usage,
-  if ( m4plot .ne. 1 ) m4plot = 2           ! use "pltfil" for real*4 plot file on d
-  lunit5 = -5               ! interactive or not uses "nextcard", no
+  if (m4plot .ne. 1) m4plot = 2                             ! use "pltfil" for real*4 plot file on d
+  lunit5 = -5                                               ! interactive or not uses "nextcard", no
 9999 return
   entry nextcard
   !     This entry is used only for interactive EMTP.  it gets
   !     next card image from memory rather than unit 5.
-  n7 = numdcd + 1           ! next data card is right after last
-1472 if ( iprspy .lt. 5 )  go to 1486 ! jump around diagnostic
-  write (munit6, 1477)  n7, file6(n7)
+  n7 = numdcd + 1                                           ! next data card is right after last
+1472 if (iprspy .lt. 5) go to 1486                          ! jump around diagnostic
+  write (munit6, 1477) n7, file6(n7)
 1477 format (' in "nextcard":', i5, 1x, a80)
-  call window               ! output of character variable munit6
-1486 if ( n7 .le. numcrd ) go to 1488 ! at least 1 card remains
+  call window                                               ! output of character variable munit6
+1486 if (n7 .le. numcrd) go to 1488                         ! at least 1 card remains
   write (lunit6, 1483)  numcrd
 1483 format ('   ****  ****   Data crisis.   Last card has been read.   numcrd =', i6 ,/, 'Use "data" command of spy to read in next block of data.')
-  if ( m4plot .ne. 1 )  go to 9000 ! set kill, then exit
+  if (m4plot .ne. 1)  go to 9000                            ! set kill, then exit
   call emtspy               ! allow user to change data card storage
   go to 1472                ! loop back for another try at reading
 1488 read (file6(n7), 1489) abuff
@@ -2113,24 +2113,25 @@ subroutine midov1
   equivalence (moncar(3), ltdelt)
   ! if interactive execution (spy),
   ! and if not monte carlo study,
-  if ( m4plot .eq. 1  .and. nenerg .eq. 0 ) tmax = fltinf        ! set end-time of study to infinity
+  if (m4plot .eq. 1  .and. nenerg .eq. 0) tmax = fltinf     ! set end-time of study to infinity
   !     flag for postprocessing (ltdelt=-6789) skips the
   !     tampering with old plot file now connected to  lunit2:
-  if ( ltdelt  .eq.  -6789 )   go to 1815
-  close (unit=lunit2, status='delete' )
-  open (unit=lunit2, status='scratch', form='unformatted')
+  if (ltdelt .eq. -6789) go to 1815
+  close (unit = lunit2, status = 'delete')
+  !open (unit = lunit2, status = 'scratch', form = 'unformatted')
+  open (unit = lunit2, form = 'unformatted')
 1815 if (jflsos .eq. 0) go to 4271
   if (lastov .eq. 20) go to 4271
-  close (unit=lunit3)
-  close (unit=lunit9)
-  n4 = lunit3               ! 1st of two units to be opened as scratch
-5910 write (ansi16, 5914)  n4, (lstat(j), j=14,16)
+  close (unit = lunit3)
+  close (unit = lunit9)
+  n4 = lunit3                                               ! 1st of two units to be opened as scratch
+5910 write (ansi16, 5914)  n4, (lstat(j), j = 14, 16)
 5914 format ('st', i1, 'log', 3i1, '.dat', 3x)
-  open ( unit=n4, status='new', file=ansi16,form='unformatted')
-  if (n4 .eq. lunit9 )  go to 4271 ! both opened, so exit
-  n4 = lunit9               ! switch to second of two i/o channels
+  open (unit = n4, status = 'new', file = ansi16,form = 'unformatted')
+  if (n4 .eq. lunit9 ) go to 4271                           ! both opened, so exit
+  n4 = lunit9                                               ! switch to second of two i/o channels
   go to 5910
-4271 if ( nenerg .eq. 0 )  go to 5933
+4271 if (nenerg .eq. 0) go to 5933
   !     "statisitics"  requires formatted writes to unit 12, which
   !     conflicts with usual usage.
   close ( unit=lunt12 )
