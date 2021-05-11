@@ -2,7 +2,9 @@
 !
 !     file: deck29.ftn
 !
-  common /c29b01/ karray(3)
+
+  common /c29b01/ karray(1)
+
 !
 !     end of file: deck29.ftn
 !

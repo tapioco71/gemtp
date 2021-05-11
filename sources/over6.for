@@ -90,13 +90,13 @@ subroutine over6
   rewind lunit2
   call tapsav ( integx(1), lunit2, iv, n11 )
   n17 = 0
-  call vecrsv ( volt(1), n17, n17 )
-  call vecrsv ( emtpc(1), it, n11 )
-  call vecrsv ( tr(1), it, n11 )
-  call vecrsv ( tx(1), it, n11 )
-  call vecrsv (  r(1), it, n11 )
-  call vecisv (     nr(1), ibr, n11 )
-  call vecisv ( length(1), ibr, n11 )
+  call vecrsv (volt, n17, n17)
+  call vecrsv (emtpc, it, n11)
+  call vecrsv (tr, it, n11)
+  call vecrsv (tx, it, n11)
+  call vecrsv (r, it, n11)
+  call vecisv (nr, ibr, n11)
+  call vecisv (length, ibr, n11)
   ktrlsw(7) = it
   ktrlsw(8) = ibr
   call move0 ( kolum(1), ibr )

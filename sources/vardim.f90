@@ -4,12 +4,12 @@
 !
 program vardim
   implicit  real(8) (a-h, o-z), integer(4) (i-n)
-  logical ifnamed
-  integer(4) lunit(15)
+  integer(4) lunit(15), lstnew
   character char, bus2
   character(8) bus1, texta(2), textb(2), cblock, cblser, type
   character(16) ansi16
   character(80) abuff
+  real(8) lphd2, lphase
   dimension cblock(300), ncbarr(300), cblser(300), jbltyp(300)
   dimension lstnew(99), lstdef(49), type(5, 3), kextra(29)
   dimension char(6), mulvar(5)
@@ -449,7 +449,7 @@ program vardim
            !     default values for extra offsets of  'vardim'
            !     modules belonging to  non-solution overlays.
            do i = 1, numkex
-5245          kextra(i) = 0
+              kextra(i) = 0
            end do
            !     Default values for EMTP list sizes follow.
            lstdef(1)  =  250
@@ -497,7 +497,7 @@ program vardim
 5294       if (lstnew(11) / 10000000 .ne. 9) go to 5297
            n4 = lstnew(11) - 90000000
            do j = 1, numlst
-5296          lstnew(j) = lstdef(j) * n4
+              lstnew(j) = lstdef(j) * n4
            end do
 5297       if (lstnew(1) .gt. 0) lstnew(1) = lstnew(1) + 2
            write (lunit(6), 5381)
@@ -506,7 +506,7 @@ program vardim
               n1 = i
               if (lstnew(i) .ge. 1000000) go to 9000
               if (lstnew(i) .le. 0) lstnew(i) = lstdef(i)
-5326       end do
+           end do
            if (lstnew(19) .le. 23) lstnew(19) = 23
            if (lstnew(26) .le. 10) lstnew(26) = 10
            n1 = lstnew(16) / 2
@@ -579,10 +579,11 @@ program vardim
 8104          format (a1)
               do j = 1, 6
                  if (bus2 .eq. char(j)) n37 = 4
-4701          end do
+              end do
               if (jbltyp(i) .ne. 0 ) n37 = jbltyp(i)
               mtot = mtot + mulvar(n37) * lstnew(n9)
-4301       end do
+           end do
+4301       continue
            write (lunit(2), 4190)
 4190       format ('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', / &
                 '!', /, '!     file: newmods.for', /, '!', /, '!', /, '!     subroutine main10.', /, '!')
@@ -602,7 +603,8 @@ program vardim
               write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
               write (lunit(4), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
 7243          format (2x, 3a6, a6)
-4101       end do
+4101          continue
+           end do
            write (lunit(4), "('!', /, '! end of file: labcom.ftn', /, '!')")
            write (lunit(2), "(2x, 'call subr10')")
            write (lunit(2), 7297)
@@ -610,14 +612,14 @@ program vardim
            write (lunit(2), 7298) 'main10'
 7298       format ('end subroutine ', a)
            ltlabl = mtot
-           if ( ltlabl  .gt.  9999999 )   go to 9000
+           if (ltlabl .gt. 9999999) go to 9000
            indexm = indexm + 1
            mul34 = mulvar(3) / mulvar(4)
            mextra = 4000
            lstnew(98) = ltlabl
            call make_subroutine_comment(lunit(3), 'dimens')
            write (lunit(3), 8116)
-8116       format ('subroutine dimens(lsize, nchain, bus1, bus2)', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+8116       format ('subroutine dimens (lsize, nchain, bus1, bus2)', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (lunit(3), 8120)
 8120       format (2x, 'dimension lsize(62)')
            write (lunit(3), 8124)
@@ -625,7 +627,7 @@ program vardim
            write (lunit(3), 8134)
 8134       format (2x, 'if (nchain .ge. 29) go to 2900')
            do i = 1, numlst
-8137          write (lunit(3), 8143) i, lstnew(i)
+              write (lunit(3), 8143) i, lstnew(i)
            end do
 8143       format (2x, 'lsize(', i2, ')  =', i8)
            write (lunit(3), 8155) numlst
@@ -633,8 +635,8 @@ program vardim
            write (lunit(3), 8159) ltlabl
 8159       format (2x, 'lsize(n7) =', i8)
            nrec3 = numlst + 7
-           call time44(texta)
-           call date44(textb)
+           call time44 (texta)
+           call date44 (textb)
            write (ansi16, 3672) texta, textb
 3672       format (4a4)
            read (ansi16, 3676) nh, nm, ns, nm, nd, ny
@@ -642,7 +644,7 @@ program vardim
            ntime = 10000 * nh + 100 * nm + ns
            ndate = 10000 * nm + 100 * nd + ny
            write (lunit(3), 3684) ntime, ndate
-3684       format (2x, 'bus1 =', "'", i8, "'", /, 6x, 'bus2 =', "'", i8, "'")
+3684       format (2x, 'bus1 =', "'", i8, "'", /, 2x, 'bus2 =', "'", i8, "'")
            mtot = 0
            do i = 127, 138
               n9 = ncbarr(i)
@@ -652,10 +654,11 @@ program vardim
               read (unit = bus1, fmt = 8104) bus2
               do j = 1, 6
                  if (bus2 .eq. char(j)) n37 = 4
-4702          end do
+              end do
               if (jbltyp(i) .ne. 0) n37 = jbltyp(i)
               mtot = mtot + mulvar(n37) * lstnew(n9)
-4302       end do
+           end do
+4302       continue
            lstnew(99) = ltlabl + kextra(1)
            if (lstnew(99) .le. 0) lstnew(99) = 1
            ncbarr(127) = 99
@@ -677,7 +680,7 @@ program vardim
               n7 = ii - 1
               do kk = 1, n7
                  if (ncbarr(kk+126) .eq. n3) go to 4602
-4402          end do
+              end do
 4502          lm = lm + 1
               n28 = n3
               if (n3 .eq. 99) n28 = 0
@@ -693,7 +696,8 @@ program vardim
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4102
               write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
-4102       end do
+           end do
+4102       continue
            n18 = 29
            write (lunit(2), 7274) n18
 7274       format (2x, 'call subr', i2, 63x)
@@ -717,7 +721,7 @@ program vardim
               n7 = ii - 1
               do kk = 1, n7
                  if (ncbarr(kk+138) .eq. n3) go to 4603
-4403          end do
+              end do
 4503          lm = lm + 1
               n28 = n3
               if (n3 .eq. 99) n28 = 0
@@ -732,7 +736,8 @@ program vardim
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4103
               write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
-4103       end do
+           end do
+4103       continue
            n18 = 31
            write (lunit(2), 7274) n18
            write (lunit(2), 7297)
@@ -755,7 +760,7 @@ program vardim
               n7 = ii - 1
               do kk = 1, n7
                  if (ncbarr(kk+139) .eq. n3) go to 4604
-4404          end do
+              end do
 4504          lm = lm + 1
               n28 = n3
               if (n3 .eq. 99) n28 = 0
@@ -770,7 +775,8 @@ program vardim
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4104
               write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
-4104       end do
+           end do
+4104       continue
            n18 = 39
            write (lunit(2), 7274) n18
            write (lunit(2), 7297)
@@ -791,7 +797,7 @@ program vardim
               n7 = ii - 1
               do kk = 1, n7
                  if (ncbarr(kk + 142) .eq. n3) go to 4605
-4405          end do
+              end do
 4505          lm = lm + 1
               n28 = n3
               if (n3 .eq. 99) n28 = 0
@@ -806,7 +812,8 @@ program vardim
               n4 = jbltyp(i)
               if ( n4  .eq.  0 )   go to 4105
               write (lunit(2), 7243) (type(n4, j), j= 1, 3), trim(cblock(i))
-4105       end do
+           end do
+4105       continue
            n18 = 10
            write (lunit(2), 7274) n18
            write (lunit(2), 7297)
@@ -821,9 +828,9 @@ program vardim
            if (lphase .le. 1) lphase = 2
            if (lphase .gt. 100) lphase = lphase * 0.7
            lphd2 = lphase / 2
-           lstnew(71) = lphd2 * 2
+           lstnew(71) = int (lphd2 * 2)
            lstnew(73) = lstnew(71) + 1
-           lstnew(74) = (lphd2 * (lphd2 + 1)) / 2
+           lstnew(74) = int ((lphd2 * (lphd2 + 1)) / 2)
            lstnew(75) = (lstnew(71) * (lstnew(71) + 1)) / 2
            lstnew(76) = 2 * lstnew(71)
            call make_subroutine_comment(lunit(2), 'over44')
@@ -842,7 +849,7 @@ program vardim
               n7 = ii - 1
               do kk = 1, n7
                  if (ncbarr(kk + 168) .eq. n3) go to 4606
-4406          end do
+              end do
 4506          lm = lm + 1
               n28 = n3
               if (n3 .eq. 99) n28 = 0
@@ -857,7 +864,8 @@ program vardim
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4106
               write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
-4106       end do
+           end do
+4106       continue
            n18 = 44
            write (lunit(2), 7274) n18
            write (lunit(2), 7297)
@@ -880,7 +888,7 @@ program vardim
               n7 = ii - 1
               do kk = 1, n7
                  if ( ncbarr(kk+194)  .eq.  n3 )   go to 4607
-4407          end do
+              end do
 4507          lm = lm + 1
               n28 = n3
               if ( n3  .eq.  99 )   n28 = 0
@@ -895,7 +903,8 @@ program vardim
               n4 = jbltyp(i)
               if ( n4  .eq.  0 )   go to 4107
               write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
-4107       end do
+           end do
+4107       continue
            n18 = 45
            write (lunit(2), 7274) n18
            write (lunit(2), 7297)
@@ -918,7 +927,7 @@ program vardim
               n7 = ii - 1
               do kk = 1, n7
                  if ( ncbarr(kk+195)  .eq.  n3 )   go to 4608
-4408          end do
+              end do
 4508          lm = lm + 1
               n28 = n3
               if ( n3  .eq.  99 )   n28 = 0
@@ -933,7 +942,8 @@ program vardim
               n4 = jbltyp(i)
               if ( n4  .eq.  0 )   go to 4108
               write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
-4108       end do
+           end do
+4108       continue
            n18 = 47
            write (lunit(2), 7274) n18
            write (lunit(2), 7297)
@@ -971,7 +981,7 @@ program vardim
                 5x, 'user-inputted list sizes must be rejected as being illegally large.   User-supplied limits (or default limits,')
            write (lunit(6), 9045) (lstnew(i), i = 1, numlst)
 9045       format (5x, 'for any non-positive data fields) are as follows ....', /, (1x, 10i10))
-           if ( ltlabl  .gt.  0 )   go to 9061
+           if (ltlabl .gt. 0) go to 9061
            write (lunit(6), 9049) n1, lstnew(n1)
 9049       format (5x, 'Specifically, the user-supplied value which was read for list number', i4, '  exceeds  999999 ,', /, &
                 5x, 'which is unreal.   A value of', i10, "   was read from the user's data card for this list.", /, 1x)
@@ -989,11 +999,11 @@ program vardim
                 5x, 'in the world.', /, 1x)
            go to 9054
 9900       continue
-           close (unit = lunit(2), status = 'delete' )
+           close (unit = lunit(2), status = 'keep')
         end if
-        close (unit = lunit(3), status = 'delete' )
+        close (unit = lunit(3), status = 'keep')
      endif
-     close (unit = lunit(4), status = 'delete')
+     close (unit = lunit(4), status = 'keep')
   end if
 9999 stop
 end program vardim

@@ -562,14 +562,14 @@ subroutine over10
      if (kode(i) .gt. 0)   kode(i) = -kode(i)
 4502 end do
   n3 = 1
-  call vecrsv( tclose(1), kswtch, n3 )
-  call vecrsv( diag(1), ntot, n3 )
-  call vecrsv( diab(1), ntot, n3 )
-  call vecrsv( gnd(iofgnd+1), ioffd, n3 )
-  call vecrsv( bnd(iofbnd+1), ioffd, n3 )
+  call vecrsv(tclose, kswtch, n3)
+  call vecrsv(diag, ntot, n3)
+  call vecrsv(diab, ntot, n3)
+  call vecrsv(gnd(iofgnd + 1), ioffd, n3)
+  call vecrsv(bnd(iofbnd + 1), ioffd, n3)
   n12 = -4
   n15 = 0
-  call vecrsv( volt(1), n12, n15 )
+  call vecrsv(volt, n12, n15)
   if ( iprsup .lt. 3 )  go to 4517
   write (lunit6, 4513)  ntot, ioffd
 4513 format( /,  77h y-matrix of s.s. phasor solution, b4 starting elimination.    ntot, ioffd =  , 2i8, /, 9x, 1hi, 6x, 4hiloc, &
@@ -1003,18 +1003,18 @@ subroutine over10
       go to 3466
       !     begin calculation of node currents
 1000  n3 = 2
-      call vecrsv( diagg(1), ntot, n3 )
-      call vecrsv( diabb(1), ntot, n3 )
+      call vecrsv (diagg, ntot, n3)
+      call vecrsv (diabb, ntot, n3)
       if ( kburro .eq. 1 ) go to 4372
       if ( ioffd .le. lstat(14) )  go to 4372
       write ( lunit6, 4848 ) ioffd, lstat(14)
 4848  format ( 41h no enough space for load flow .  ioffd = ,i8, 33h but the limit space is lsiz23 =  , i8 )
       stop
- 4372 call vecrsv( gndd(1), ioffd, n3 )
-      call vecrsv( bndd(1), ioffd, n3 )
+ 4372 call vecrsv (gndd, ioffd, n3)
+      call vecrsv (bndd, ioffd, n3)
       n3 = -4
       n15 = 0
-      call vecrsv( volt(1), n3, n15 )
+      call vecrsv (volt, n3, n15)
       nekcc = 0
       vdiff(npp) = 0.0
       if ( ncurr  .le.  0 )  ncurr = 1

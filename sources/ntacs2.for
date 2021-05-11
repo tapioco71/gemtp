@@ -6,13 +6,12 @@
 !     subroutine ntacs2.
 !
 subroutine ntacs2
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'tacsto.ftn'
   include 'blkcom.ftn'      ! wsm + thl manual modification for bpa emtp
   include 'tacsar.ftn'      ! wsm + thl manual modification for bpa emtp
   include 'labcom.ftn'      ! wsm + thl manual modification for bpa emtp
   !  common  / c0b002 /   ykm   (   1 )    ! wsm + thl manual modification for bpa emtp
-  !  common  / c0b014 /   sptacs(  29 )    ! wsm + thl manual modification for bpa emtp
   !  common  / c0b063 /   texvec(1000 )    ! wsm + thl manual modification for bpa emtp
   !  character*6  texvec                   ! wsm + thl manual modification for bpa emtp
   !  common  / c0b064 /   bus   (   1 )    ! wsm + thl manual modification for bpa emtp
@@ -25,9 +24,9 @@ subroutine ntacs2
   !  common  / c0b103 /   emtpe (   1 )    ! wsm + thl manual modification for bpa emtp
   !  common  / c0b104 /   emtpf (   1 )    ! wsm + thl manual modification for bpa emtp
   !  equivalence    ( moncar(32), kitacs ),    ( moncar(61),  lswtch )
-  character*6 hus1          ! wsm + thl manual modification for bpa emtp
-  character*8 real8
-  if (.not.(niu.gt.0)) goto 5020
+  character(6) hus1          ! wsm + thl manual modification for bpa emtp
+  character(8) real8
+  if (.not. (niu .gt. 0)) goto 5020
   i5 = kud1
   do 4010 i = 1, niu
      i1  =  iuty(kiuty+i)

@@ -68,6 +68,7 @@ include ${ROOT}/Makefile.global
 
 # The default rule.
 all: ${COMPILER}
+all: clear_modules
 all: vardim dimension newmods labcom
 all: ${COMPILER}/${TARGET}
 
@@ -105,6 +106,9 @@ clean:
 		.depend				\
 		fort.*				\
 		${wildcard *~} ${<}
+
+clear_modules:
+	@rm -rf *.mod
 
 # The rule which creates the .o and executable directory.
 ${COMPILER}:

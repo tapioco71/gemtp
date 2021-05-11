@@ -6,7 +6,7 @@
 !     subroutine over16.
 !
 subroutine over16
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'umdeck.ftn'
@@ -56,7 +56,7 @@ end subroutine over16
 !     subroutine subts1.
 !
 subroutine subts1
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'   ! wsm + thl
   include 'labcom.ftn'
   include 'tacsar.ftn'
@@ -1172,7 +1172,7 @@ end subroutine subts1
 !     subroutine yserlc.
 !
 subroutine yserlc
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module of interactive emtp only, associated with "emtspy".
   !     non-interactive versions can replace by a dummy module.
   !     this module is called only by "subts1" of overlay 16.
@@ -1265,7 +1265,7 @@ end subroutine yserlc
 !     subroutine switch.
 !
 subroutine switch
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   equivalence ( ktrlsw(1), n20 )
@@ -1910,7 +1910,7 @@ end subroutine switch
 !     subroutine tacs3.
 !
 subroutine  tacs3
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
@@ -2170,11 +2170,11 @@ end subroutine tacs3
 !     subroutine subts2.
 !
 subroutine subts2
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   !     %include  '//c/tsu/cables.ins.ftn'
-  real*8 real_bus2, real_bus4
+  real(8) real_bus2, real_bus4
   equivalence (real_bus2, bus2), (real_bus4, bus4)
   equivalence (h1, sk), (d2, sm)
   equivalence (iprsov(35), ipoint)
@@ -3516,7 +3516,7 @@ end subroutine subts2
 !     subroutine fdcinj.
 !
 subroutine fdcinj( ikf, isfd, ibf )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   dimension  ur(40)
@@ -3610,7 +3610,7 @@ end subroutine fdcinj
 !     subroutine update.
 !
 subroutine update
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module is used only by brandwajn (type-59) s.m. model
   include 'blkcom.ftn'
   include 'labcom.ftn'
@@ -4173,7 +4173,7 @@ end subroutine update
 !     subroutine increm.
 !
 subroutine increm(ilk, sf3)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module is used only by brandwajn (type-59) s.m. model
   include 'blkcom.ftn'
   include 'labcom.ftn'
@@ -4352,7 +4352,7 @@ end subroutine increm
 ! subroutine redusm.
 !
 subroutine redusm(x,m,n)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this routine is a copy  of an identical routine used in over12****
   !     it uses gauss-jordan elimination process for both matrix inversion
   !     and matrix rduction( elimination of variables)********************
@@ -4391,7 +4391,7 @@ end subroutine redusm
 ! subroutine bansol.
 !
 subroutine bansol(ab, x, n)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this routine performs forward and backward solution with
   !     with a tridiagonal symmetric matrix 'ab'. for detail of
   !     storage arrangements for 'ab' see subroutine 'bandel'.
@@ -4419,7 +4419,7 @@ end subroutine bansol
 ! subroutine redu17.
 !
 subroutine redu17(a, n, m)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !)    for an explanation about the parameters of this subroutine,
   !)    see comment cards in same module  'reduct'  of overlay 12 .
   dimension  a(1), b(100)
@@ -4471,11 +4471,11 @@ end subroutine redu17
 !     subroutine subts3.
 !
 subroutine subts3
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'umdeck.ftn'
-  integer*4 n1
+  integer(4) n1
   dimension xx(1),  volta(1)
   dimension nsubkm(1)
   equivalence (kknonl(1), nsubkm(1))
@@ -4678,7 +4678,7 @@ subroutine subts3
 11247 call interp
   if ( nstacs  .eq.  0 ) go to 11248
   do j = 1, nstacs
-     n1 = ichar(vstacs(j))
+     n1 = ichar (vstacs(j)(1 : 1))
      if (n1  .eq.  0) go to 21247
      ndx1 = kxtcs  + n1
      voltbc(j) = xtcs(ndx1)
@@ -4925,7 +4925,7 @@ end subroutine subts3
 ! subroutine zincox.
 !
 subroutine zincox ( ns )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'dekspy.ftn'
@@ -5435,7 +5435,7 @@ end subroutine zincox
 ! subroutine analyt.
 !
 subroutine  analyt
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !)    this module is called by subroutine  'subts3'  of overlay 16 if
   !)    data case being solved uses one or more sources of type 1 through
   !)    10, and also has a special   'analytic sources'   request card
@@ -5532,7 +5532,7 @@ end subroutine analyt
 ! subroutine arrest.
 !
 subroutine  arrest(a, b, srt, svt, carst)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !   number   variable                description
   !    a(1)       k        valve block resistance constant
   !    a(2)       b        valve block current exponent
@@ -5693,7 +5693,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
      jcdsat, jcqsat, flxd, flxq, nppair, rotmom, ncld, &
      nclq, jtqout, jomout, jthout, reamqs, epsom, dcoef, &
      kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, umoutp)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension  reacl(1), gpar(1), fpar(1), hist(1), umcurp(1)
   dimension  nodvo1(1), nodvo2(1), jcltac(1), jclout(1)
   dimension  jtype(1), nodom(1), jtmtac(1), histom(1)
@@ -7270,7 +7270,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
  ! subroutine lineqs.
  !
  subroutine lineqs(aum,yum)
-   implicit real*8 (a-h, o-z), integer*4 (i-n)
+   implicit real(8) (a-h, o-z), integer(4) (i-n)
    dimension bum(3,4),aum(3,3),yum(15)
    n5 = 3
    n6 = n5 + 1
@@ -7311,7 +7311,7 @@ subroutine solvum(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, &
  ! subroutine subts4.
  !
  subroutine subts4
-   implicit real*8 (a-h, o-z),  integer*4 (i-n)
+   implicit real(8) (a-h, o-z),  integer(4) (i-n)
    include 'blkcom.ftn'
    include 'labcom.ftn'
    include 'umdeck.ftn'

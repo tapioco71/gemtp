@@ -6,19 +6,18 @@
 !     subroutine ntacs3.
 !
 subroutine ntacs3
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'tacsto.ftn'
   include 'blkcom.ftn'      ! wsm  +  thl manual modification for bpa emtp
   include 'tacsar.ftn'      ! wsm  +  thl manual modification for bpa emtp
   include 'labcom.ftn'      ! wsm  +  thl manual modification for bpa emtp
 !  common  / c0b002 /   ykm   (   1 )    ! wsm  +  thl manual modification for bpa emtp
-!  common  / c0b014 /   sptacs(  29 )    ! wsm  +  thl manual modification for bpa emtp
 !  common  / c0b099 /   tclose(   1 )    ! wsm  +  thl manual modification for bpa emtp
 !  common  / c0b101 /   kpos  (   1 )    ! wsm  +  thl manual modification for bpa emtp
 !  common  / c0b103 /   emtpe (   1 )    ! wsm  +  thl manual modification for bpa emtp
   if (.not. (niu .gt. 0)) go to 5000
   i5 = kud1
-  do 4080 i = 1,niu
+  do i = 1,niu
      i2 = kxtcs + nuk + i
      xtcs(i2) = flzero
      i1 = iuty(kiuty + i)
@@ -33,7 +32,9 @@ subroutine ntacs3
 4092 xtcs(i2) = ykm(k)
      go to 4080
 4093 if (i6 .le. 3) xtcs(i2) = unity
-4080 i5 = i5 + 5
+     i5 = i5 + 5
+  end do
+4080 continue
 5000 continue
   etime = t
   to = 9000

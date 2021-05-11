@@ -147,17 +147,6 @@ end subroutine main10
 subroutine over29
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c29b01/   karray( 9748865 )
-  common /spac01/   tp    (   30000 )
-  common /spac02/   norder(   93002 )
-  common /spac03/   index (   93002 )
-  common /spac04/   diag  (   93002 )
-  common /spac05/   diab  (   93002 )
-  common /spac06/   solr  (   93002 )
-  common /spac07/   soli  (   93002 )
-  common /spac08/   ich1  (   93002 )
-  common /spac09/   bnd   (     300 )
-  common /spac10/   iloc  (   30000 )
-  common /spac11/   gnd   (   30000 )
   call subr29
   return
 end subroutine over29
@@ -176,8 +165,6 @@ end subroutine over31
 subroutine over39
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c39b01/   xdat  (   10000 )
-  common /c39b02/   ydat  (   10000 )
-  common /c39b03/   aphdat(   10000 )
   call subr39
   return
 end subroutine over39
@@ -187,31 +174,6 @@ end subroutine over39
 subroutine fixs10
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c10b01/   jndex (   93002 )
-  common /c10b02/   diagg (   93002 )
-  common /c10b03/   diabb (   93002 )
-  common /c10b04/   solrsv(   93002 )
-  common /c10b05/   solisv(   93002 )
-  common /c10b06/   gndd  (   30000 )
-  common /c10b07/   bndd  (   30000 )
-  common /c10b08/   nekfix(     100 )
-  common /c10b09/   fxtem1(     100 )
-  common /c10b10/   fxtem2(     100 )
-  common /c10b11/   fxtem3(     100 )
-  common /c10b12/   fxtem4(     100 )
-  common /c10b13/   fxtem5(     100 )
-  common /c10b14/   fxtem6(     100 )
-  common /c10b15/   fixbu1(     100 )
-  common /c10b16/   fixbu2(     100 )
-  common /c10b17/   fixbu3(     100 )
-  common /c10b18/   fixbu4(     100 )
-  common /c10b19/   fixbu5(     100 )
-  common /c10b20/   fixbu6(     100 )
-  common /c10b21/   fixbu7(     100 )
-  common /c10b22/   fixbu8(     100 )
-  common /c10b23/   fixbu9(     100 )
-  common /c10b24/   fixb10(     100 )
-  common /c10b25/   fixb11(     100 )
-  common /c10b26/   kndex (     100 )
   call subr10
   return
 end subroutine fixs10
@@ -221,33 +183,6 @@ end subroutine fixs10
 subroutine over44
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c44b01/   karray(     300 )
-  common /c44b02/   p     (  108811 )
-  common /c44b03/   z     (  108811 )
-  common /c44b04/   ic    (     466 )
-  common /c44b05/   r     (     466 )
-  common /c44b06/   emptd (     466 )
-  common /c44b07/   gmd   (     466 )
-  common /c44b08/   x     (     466 )
-  common /c44b09/   y     (     466 )
-  common /c44b10/   tb2   (     466 )
-  common /c44b11/   itb3  (     466 )
-  common /c44b12/   workr1(     466 )
-  common /c44b13/   workr2(     466 )
-  common /c44b14/   text  (     932 )
-  character(8)        text
-  common /c44b15/   gd    (   27261 )
-  common /c44b16/   bd    (   27261 )
-  common /c44b17/   yd    (   27261 )
-  common /c44b18/   itbic (     467 )
-  common /c44b19/   tbr   (     467 )
-  common /c44b20/   tbd   (     467 )
-  common /c44b21/   tbg   (     467 )
-  common /c44b22/   tbx   (     467 )
-  common /c44b23/   tby   (     467 )
-  common /c44b24/   tbtb2 (     467 )
-  common /c44b25/   itbtb3(     467 )
-  common /c44b26/   tbtext(     467 )
-  character(8)      tbtext
   call subr44
   return
 end subroutine over44
@@ -272,7 +207,7 @@ end subroutine over47
 !
 ! subroutine dimens.
 !
-subroutine dimens(lsize, nchain, bus1, bus2)
+subroutine dimens (lsize, nchain, bus1, bus2)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension lsize(62)
   character(8) bus1, bus2
@@ -307,18 +242,12 @@ subroutine dimens(lsize, nchain, bus1, bus2)
   lsize(28)  =    1080
   n7 = 28 + 1
   lsize(n7) = 9748865
-  bus1 ='  170253'
-      bus2 ='   20521'
+  bus1 ='  111121'
+  bus2 ='  110521'
   return
 2900 if (nchain .gt.  29) go to 3100
   lsize( 1)  =       0
   lsize( 2) =9748865
-  lsize( 3)  =      23
-  lsize( 4) =  30000
-  lsize( 5)  =       1
-  lsize( 6) =  93002
-  lsize( 7)  =       9
-  lsize( 8) =    300
   return
 3100 if (nchain .gt.  31) go to 3900
   lsize( 1)  =       9
@@ -331,24 +260,10 @@ subroutine dimens(lsize, nchain, bus1, bus2)
 1000 if (nchain .gt.  10) go to 4400
   lsize( 1)  =       1
   lsize( 2) =  93002
-  lsize( 3)  =      23
-  lsize( 4) =  30000
-  lsize( 5)  =       4
-  lsize( 6) =    100
   return
 4400 if (nchain .gt.  44) go to 4500
   lsize( 1)  =       9
   lsize( 2) =    300
-  lsize( 3)  =      75
-  lsize( 4) = 108811
-  lsize( 5)  =      71
-  lsize( 6) =    466
-  lsize( 7)  =      76
-  lsize( 8) =    932
-  lsize( 9)  =      74
-  lsize(10) =  27261
-  lsize(11)  =      73
-  lsize(12) =    467
   return
 4500 if (nchain .gt.  45) go to 4700
   lsize( 1)  =       9

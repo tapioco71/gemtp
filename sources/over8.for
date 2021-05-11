@@ -16,7 +16,7 @@ subroutine over8
   real(8) l
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
-  character(6) chlmfs        ! 9-phase as limit for lmfs test
+  character(6) chlmfs                                       ! 9-phase as limit for lmfs test
   character(80) char80
   dimension infdli(1)
   equivalence (namebr(1), infdli(1))
@@ -39,12 +39,12 @@ subroutine over8
   rewind lunit2
   call tapsav ( integx(1), lunit2, iv, n7)
   n12 = 0
-  call vecrsv ( volt(1), n12, n12)
+  call vecrsv (volt, n12, n12)
   n12 = ktrlsw(7)
-  call vecrsv (emtpc(1), n12, n7)
-  call vecrsv (tr(1), n12, n7)
-  call vecrsv (tx(1), n12, n7)
-  call vecrsv (r(1), n12, n7)
+  call vecrsv (emtpc, n12, n7)
+  call vecrsv (tr, n12, n7)
+  call vecrsv (tx, n12, n7)
+  call vecrsv (r, n12, n7)
   n12 = ktrlsw(8)
   call vecisv (nr(1), n12, n7)
   call vecisv (length(1), n12, n7)
@@ -55,8 +55,8 @@ subroutine over8
   go to 6123
 6121 m7 = 0
   m8 = 8
-  call vecrsv( volt(1), m8, m7 )
-6123 if (ktrlsw(5) .eq. 1 .and. lastov .gt. nchain) call vecrsv (cnvhst(1), lhist, n7)
+  call vecrsv (volt, m8, m7)
+6123 if (ktrlsw(5) .eq. 1 .and. lastov .gt. nchain) call vecrsv (cnvhst, lhist, n7)
   if (loopss(1) .ne. 7766) go to 3489
   !     back from "over11" after final phasor solution, so exit:
   lastov = nchain
@@ -155,12 +155,12 @@ subroutine over8
   m7 = 1
   call vecisv ( kssfrq(1), ntot, m7 )
   call vecisv ( kpsour(1), ntot, m7 )
-6666 if ( nchain  .gt.  lastov )   go to 2236
-  call vecrsv ( tclose(1), kswtch, n7 )
+6666 if (nchain .gt. lastov) go to 2236
+  call vecrsv (tclose, kswtch, n7)
   n12 = -1
   if ( ktrlsw(5) .eq. 1 ) n12 = -2
   n15 = 0
-  call vecrsv( volt(1), n12, n15 )
+  call vecrsv (volt, n12, n15)
   !     preceding call to "frqchk" shows user-defined sources
   !     identified by subnetwork for use in following "umrenu",
   !     for cases having one or more u.m. (numum .gt. 0).
@@ -1029,7 +1029,7 @@ subroutine over8
 407 k=k+it2
 393 if ( k .le. ibr ) go to 401
   n13 = 1
-  if (ktrlsw(5) .eq. 1) call vecrsv (cnvhst(1), lhist, n13)
+  if (ktrlsw(5) .eq. 1) call vecrsv (cnvhst, lhist, n13)
   i = it + 1
   j0 = itadd - 1
   if ( lastov .eq. nchain - 1  .or.  iprsup .ge. 1 ) write (lunit6, 47884)  i, j0
@@ -1293,7 +1293,7 @@ subroutine frqchk
   bus2 = bus4
   lstat(15) = n18
   lstat(16) = n19
-9204 if ( iprsup  .ge.  1 ) write (lunit6, 9207)
+9204 if (iprsup .ge. 1) write (lunit6, 9207)
 9207 format (' Exit "frqchk".')
   return
 end subroutine frqchk

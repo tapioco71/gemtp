@@ -2,9 +2,11 @@
 !
 !     file: over2.for
 !
+
 !
 !     subroutine over2.
 !
+
 subroutine over2
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -14,7 +16,7 @@ subroutine over2
   !     %include  '//c/tsu/cables.ftn'
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
-  character(6) chlmfs        ! 9-phase as limit for lmfs test
+  character(6) chlmfs                                       ! 9-phase as limit for lmfs test
   character(80) char80
   character(6) chrpad(18)
   dimension wk1(1)
@@ -60,13 +62,13 @@ subroutine over2
   do jk = 1, nphlmt
      m = jk + nphlmt
      l = 2 * jk
-     !     write (bus(l), 2689)  chlmfs(jk)(1:6)
-     read (chlmfs(jk)(1 : 6), 2689) bus(l)
+     write (bus(l), 2689) chlmfs(jk)(1:6)
+     !read (chlmfs(jk)(1 : 6), 2689) bus(l)
 2689 format (a6)
-     !     write (bus(l+1), 2689)  chlmfs(m)(1:6)
-     read (chlmfs(m)(1 : 6), 2689) bus(l + 1)
+     write (bus(l+1), 2689) chlmfs(m)(1:6)
+     !read (chlmfs(m)(1 : 6), 2689) bus(l + 1)
   end do
-  go to 4199                ! go directly to use $include for lmfs pi model half
+  go to 4199                                                ! go directly to use $include for lmfs pi model half
   !     following used rather than data statements due to common:
 2000 ityold = 0
   kreqab = 0
@@ -179,7 +181,7 @@ subroutine over2
   itype = voltbc(1)
   nfrfld = 4
   nright = -1
-  call freone(d1)
+  call freone (d1)
   bus1 = texta6(1)
   bus2 = texta6(2)
   bus3 = texta6(3)
@@ -189,9 +191,9 @@ subroutine over2
 7621 format (' Cont. transp.?,  ibr1, ityold, kodsem(ibr1), itranm, itype, length(ibr1) =', 6i7)
   if (bus2 .ne. text12) go to 7682
   n24 = 0
-  if (bus1 .ne. text11 ) go to 7677
+  if (bus1 .ne. text11) go to 7677
   n1 = ibr + 1
-  call namea6 ( bus3, n24 )
+  call namea6 (bus3, n24)
   namebr(n1) = n24
   if (noutpr .eq. 0) write (kunit6, 7674) bus3, n1
 7674 format ('+moniker ', '"', a6, '"', ' is for next branch  +', i6, ' .')
@@ -324,7 +326,8 @@ subroutine over2
      do jj = jj1, jj2
         sconst(jj) = 0.0
         iml = iml + 1
-4844 end do
+     end do
+4844 continue
      !     if (noutpr .eq. 0)
      !     1 write (*, 4413)   ( sconst(j), j=jj1, jj2 )
      !     4413 format ( 7h+ qk-i:, 3e14.5 )
@@ -341,7 +344,8 @@ subroutine over2
      do jj = nn11, nn13
         sconst(jj) = 1.0
         iml = iml + 1
-4744 end do
+     end do
+4744 continue
      !     if (noutpr .eq. 0)
      !     1 write (*, 8414)  ( sconst(j), j=j1, j2 )
      !     8414 format ( 7h+ qp-i:, 3e14.5 )
@@ -466,7 +470,8 @@ subroutine over2
 2516 format ('c ', 11(a6,1x) )
      numdcd = numdcd  +  1
      call inlmfs
-2518 end do
+  end do
+2518 continue
   go to 3988
 2540 if ( numrun .gt. 2 )   go to 2560
   if ( nphlmt .gt. 3 )   go to 2545
@@ -479,7 +484,8 @@ subroutine over2
      if (i .eq. 2)  write(buff77, 2516)(chrpad(m)(1:6),m=8,2*nphlmt)
      numdcd = numdcd  +  1
      call inlmfs
-2558 end do
+  end do
+2558 continue
   go to 3988
 2560 do i = 1, 2
      if ( i .eq. 1 ) write (buff77, 3649) nphlmt, (chrpad(m)(1:6), m=1, 7)
@@ -1063,7 +1069,8 @@ subroutine over2
      go to 8346
 8338 write (kunit6, 8341)        tr(it32), tx(it32), emtpc(it32)
 8341 format ('+', 3x, 'cont.', 3e13.4)
-8346 end do
+  end do
+8346 continue
   go to 163
 8352 if ( itype .ne. 3 )  go to 47634
   d3 = absz(tr(it)) + absz(tx(it)) + absz(tr(it+1)) + absz(tx(it+1)) + absz(tr(it+2)) + absz(tx(it+2))
@@ -1478,7 +1485,8 @@ subroutine over2
   do i = 1, ibr
      if (litype(i) .ge. 0 )  go to 1642
      litype(i) = - litype(i)
-1642 end do
+  end do
+1642 continue
 8675 ibrnam = ibrnam + 1
   if ( ibrnam .gt. ibr )  go to 8680
   namebr(ibrnam) = 1
@@ -1494,7 +1502,7 @@ subroutine over2
   if ( nmauto .eq. 0 ) go to 8680
   call nmincr ( text17, inonam )
   n24 = 0
-  call namea6 ( text17, n24 )
+  call namea6 (text17, n24)
   namenl(inonam) = n24
   go to 8680
 8681 if ( iprsup  .ge.  1 ) write (lunit6, 1644)  ntot, ibr, it, inonl, mxphas
@@ -1578,7 +1586,8 @@ subroutine fddata( ikf, isfd, ibf )
      lstat( 19 ) = 16
      go to 3742
 16   imfd( kb ) = ibk
-12 end do
+  end do
+12 continue
   if ( iprsup .lt. 1 ) go to 14
   isk = isfd + 1
   write (lunit6, 13 ) isk, ikk, ( rmfd(ka), ka = isk, ikk )
@@ -2192,8 +2201,8 @@ subroutine distr2
   dimension  wk1(1)
   equivalence (semaux(1), wk1(1))
   dimension infdli(1)
-  equivalence ( namebr(1),  infdli(1) )
-  equivalence (omega, xlong1 ),  ( indtv(4), ichtr2 )
+  equivalence (namebr(1),  infdli(1))
+  equivalence (omega, xlong1),  (indtv(4), ichtr2)
   equivalence (indtv(1), iaddrs), (indtv(2), itranm)
   character*8 text1, text2, text3, text4, text5, textmx
   character*8 text6, text7, text8, text9, text10, text11
@@ -2502,7 +2511,8 @@ subroutine distr2
   n2 = ibr - ips2 + 1
   do i = n2, ibr
      cik(i) = n1
-8353 end do
+  end do
+8353 continue
   bus5 = text4
   bus6 = text5
 8357 n1 = iaddrs - 1
@@ -2666,7 +2676,8 @@ subroutine distr2
   do jj = nn11, nn12
      sconst(jj) = voltbc(i)
      i = i + 1
-72644 end do
+  end do
+72644 continue
   n11 = n11 + 3
   if ( n11  .le.  npz )  go to 6738
   nycmp = 0
@@ -2685,7 +2696,8 @@ subroutine distr2
      sconst(jj) = voltbc(i)
      if (sconst(jj) .ge. 1.e+14 .or. sconst(jj) .le. -1.e+14) nycmp = nycmp + 1
      i = i + 1
-72655 end do
+  end do
+72655 continue
   n11 = n11 + 3
   if ( n11  .le.  npz )   go to 6753
   !     go to 3567
@@ -2703,7 +2715,8 @@ subroutine distr2
   do jj = n11, n12
      if (sconst(jj)*deltat.lt.pdt)go to 40000
      go to 40001
-40000 end do
+  end do
+40000 continue
   go to 40007
 40001 if (jj.eq.n11)jj=jj+1
   if (jj.eq.n12)go to 40007
@@ -2856,7 +2869,8 @@ subroutine distr2
   do jj = nn11, nn12
      sconst(jj) = voltbc(i)
      i = i + 1
-73644 end do
+  end do
+73644 continue
   n11 = n11 + 3
   if ( n11  .le.  npa )   go to 6764
   nn17 = 0
@@ -2874,7 +2888,8 @@ subroutine distr2
      sconst(jj) = voltbc(i)
      if (sconst(jj) .ge. 1.e+14 .or. sconst(jj) .le. -1.e+14) nn17 = nn17 + 1
      i = i + 1
-73655 end do
+  end do
+73655 continue
   n11 = n11 + 3
   if ( n11  .le.  npa )   go to 6772
 2001 nn17 = nn17 * 3
@@ -2966,7 +2981,8 @@ subroutine distr2
   do jj = nn11, nn12
      sconst(jj) = voltbc(i)
      i = i + 1
-27644 end do
+  end do
+27644 continue
   n11 = n11 + 3
   if ( n11  .le.  npz )   go to 7638
   n11 = 1
@@ -2983,7 +2999,8 @@ subroutine distr2
   do jj = nn11, nn13
      sconst(jj) = voltbc(i)
      i = i + 1
-27655 end do
+  end do
+27655 continue
   n11 = n11 + 3
   if ( n11  .le.  npz )   go to 7653
   if ( h1  .eq.  1.0 )   noutpr = aa
@@ -2997,7 +3014,8 @@ subroutine distr2
   do jj = n11, n12
      if (sconst(jj)*deltat.lt.pdt)go to 50000
      go to 50001
-50000 end do
+  end do
+50000 continue
   go to 50007
 50001 if (jj.eq.n11)jj=jj+1
   if (jj.eq.n12)go to 50007
@@ -3062,7 +3080,8 @@ subroutine distr2
   do jj = nn11, nn12
      sconst(jj) = voltbc(i)
      i = i + 1
-37644 end do
+  end do
+37644 continue
   n11 = n11 + 3
   if ( n11  .le.  npa )   go to 7664
   n11 = 1
@@ -3078,7 +3097,8 @@ subroutine distr2
   do jj = nn11, nn13
      sconst(jj) = voltbc(i)
      i = i + 1
-37655 end do
+  end do
+37655 continue
   n11 = n11 + 3
   if ( n11  .le.  npa )   go to 7672
   if (pdt.eq.0.)go to 50022
@@ -3264,7 +3284,8 @@ subroutine distr2
         if ( abs(sconst(jj)) .ge. 1.e+13 ) nticpl = nticpl + 1
         sconst(jj) = voltbc(iml)
         iml = iml + 1
-4844 end do
+     end do
+4844 continue
      j1 = j1 + 3
      if ( j1 .le. m )  go to 4888
      call interp
@@ -3285,7 +3306,8 @@ subroutine distr2
      do jj = nn11, nn13
         sconst(jj) = voltbc(iml)
         iml = iml + 1
-4744 end do
+     end do
+4744 continue
      j1 = j1 + 3
      if ( j1 .le. m )  go to 4847
      ifq = nn13 + 1
@@ -3308,7 +3330,8 @@ subroutine distr2
   do j = 1, nphs2
      wk1(koff20 + ncount) = 1
      ncount = ncount + 1
-2010 end do
+  end do
+2010 continue
   if ( ipsem .le. 3) ip = ipsem *2
   if ( ipsem .gt. 3 .and. ipsem .lt. 6 ) ip = ipsem*4
   if (ipsem .eq. 6) ip = ipsem*4
@@ -3492,69 +3515,69 @@ subroutine over3
   include 'blkcom.ftn'
   include 'labcom.ftn'
   dimension trser(1),txser(1)
-  equivalence (trser(1),emtpe(1)),(txser(1),emtpf(1))
-  dimension  mapcas(1),  mapinv(1), node1(1), node2(1)
-  equivalence  (volti(1), node1(1)),  (voltk(1), node2(1))
-  equivalence  ( volt(1), mapinv(1) )
-  equivalence  ( mapcas(1), ykm(1) )
-  dimension caslnr(1),caslnx(1)
-  equivalence (caslnr(1),xk(1)),(caslnx(1),xm(1))
+  equivalence (trser(1), emtpe(1)), (txser(1), emtpf(1))
+  dimension  mapcas(1), mapinv(1), node1(1), node2(1)
+  equivalence (volti(1), node1(1)), (voltk(1), node2(1))
+  equivalence (volt(1), mapinv(1) )
+  equivalence (mapcas(1), ykm(1) )
+  dimension caslnr(1), caslnx(1)
+  equivalence (caslnr(1), xk(1)), (caslnx(1), xm(1))
   dimension cser(1)
-  equivalence ( cser(1), kode(1) )
-  dimension trshun(1),txshun(1),cshun(1)
-  equivalence (trshun(1),kk(1)),(txshun(1),kks(1)), (cshun(1),kknonl(1))
-  equivalence  (iprsov(35), ipoint), (iprsov(36), locz11)
+  equivalence (cser(1), kode(1))
+  dimension trshun(1), txshun(1), cshun(1)
+  equivalence (trshun(1), kk(1)), (txshun(1), kks(1)), (cshun(1), kknonl(1))
+  equivalence (iprsov(35), ipoint), (iprsov(36), locz11)
   character*8 text1, text2, text3, text4, text5, text6, text7
-  data text1  / 4hstop /
-  data text2  / 4h cas /
-  data text3  / 4hcade /
-  data text4  / 4h     /
-  locatn(i,j)=(j*j-j)/2+i
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
+  data text1  / 'stop' /
+  data text2  / ' cas' /
+  data text3  / 'cade' /
+  data text4  / '    ' /
+  locatn (i, j) =(j * j - j) / 2 + i
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over3."')
   ll0 = 0
   ll3 = 3
-  iend=nphcas
-  idumy=nphcas
+  iend = nphcas
+  idumy = nphcas
   !     read input card using cimage.
   call cimage
-  if (iend.gt.14)idumy=14
+  if (iend .gt. 14) idumy = 14
   read (unit = abuff, fmt = 76501) dsectj, multip, mser, mbr, msect, (mapcas(i), i = 1, idumy)
 76501 format (2x, e6.2, 18i4)
-  if ( noutpr  .eq.  0 ) write (kunit6, 76702)  dsectj,multip,mser,mbr,msect, ( mapcas(i), i=1, ll3 )
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 76702) dsectj, multip, mser, mbr, msect, (mapcas(i), i = 1, ll3)
 76702 format ('+line pos.', 1x, e11.3, 7i4)
-  if (dsectj.eq.0.0)dsectj=1.0
-  if (multip.eq.0)multip=1
-  if ( multip  .gt.  0 )   go to 7671
-  kill=55
+  if (dsectj .eq. 0.0) dsectj = 1.0
+  if (multip .eq. 0) multip = 1
+  if (multip .gt. 0) go to 7671
+  kill = 55
   lstat(19) = 7671
-  lstat(12)=multip
-  goto9200
+  lstat(12) = multip
+  go to 9200
 7671 istart = 15
-76504 iend=iend-14
-  if (iend.le.0)goto76503
+76504 iend = iend - 14
+  if (iend .le. 0) go to 76503
   !     read input card using cimage.
   call cimage
-  idumy=istart+iend-1
-  if (iend.gt.14)idumy=istart+13
-  read (unit = abuff, fmt = 76502) (mapcas(i),i = istart, idumy)
+  idumy = istart + iend - 1
+  if (iend .gt. 14) idumy = istart + 13
+  read (unit = abuff, fmt = 76502) (mapcas(i), i = istart, idumy)
 76502 format (24x, 14i4)
-  if ( idumy  .gt.  istart+11 )   idumy = istart + 11
-  if ( noutpr  .eq.  0 ) write (kunit6, 76703)  (mapcas(i),i=istart,idumy)
+  if (idumy .gt. istart + 11) idumy = istart + 11
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 76703) (mapcas(i), i = istart, idumy)
 76703 format ('+', 12i4)
-  istart=istart+14
-  goto76504
-76503 npos2=2*nphcas
-  npos3=3*nphcas
-  freqcs=twopi*freqcs
-  locznn=locz11+locatn(nphcas,nphcas)-1
-  freqx=xopt*twopi
-  freqc=copt*twopi*1000000.0
-  if (xopt.eq.0.0)freqx = 1000.
-  if (copt.eq.0.0)freqc=1000000.0
+  istart = istart + 14
+  go to 76504
+76503 npos2 = 2 * nphcas
+  npos3 = 3 * nphcas
+  freqcs = twopi * freqcs
+  locznn = locz11 + locatn (nphcas, nphcas) - 1
+  freqx = xopt * twopi
+  freqc = copt * twopi * 1000000.0
+  if (xopt .eq. 0.0) freqx = 1000.
+  if (copt .eq. 0.0) freqc = 1000000.0
   do i = locz11, locznn
-     tx(i)=freqcs*tx(i)/freqx
-     emtpc(i)=freqcs*emtpc(i)/(2.0*freqc)
+     tx(i) = freqcs * tx(i) / freqx
+     emtpc(i) = freqcs * emtpc(i) / (2.0 * freqc)
   end do
   call cxred(tr(locz11), tx(locz11), nphcas, ll0)
   do i = locz11, locznn
@@ -3566,568 +3589,569 @@ subroutine over3
   call mover0 (caslnx(1), iend)
   do i = 1, nphcas
      do j = i, nphcas
-        if (mapcas(i).le.nphcas)goto76711
-        kill=54
+        if (mapcas(i) .le. nphcas) go to 76711
+        kill = 54
         lstat(19) = 7655
-        lstat(12)=mapcas(i)
-        lstat(13)=nphcas
+        lstat(12) = mapcas(i)
+        lstat(13) = nphcas
         go to 9200
-76711   npos=locatn(mapcas(i),mapcas(j))+locz11-1
-        if (mapcas(i).gt.mapcas(j))npos=locatn(mapcas(j),mapcas(i))+locz11-1
-        nnpos=locatn(i,j)
-        caslnr(nnpos)=tr(npos)/dsectj
-        caslnx(nnpos)=tx(npos)/dsectj+emtpc(npos)*dsectj
-        nnpos=locatn(i,j+nphcas)
-        caslnr(nnpos)=-tr(npos)/dsectj
-        caslnx(nnpos)=-tx(npos)/dsectj
-        if (i.eq.j)goto 76433
-        nnpos=locatn(j,i+nphcas)
-        caslnr(nnpos)=-tr(npos)/dsectj
-        caslnx(nnpos)=-tx(npos)/dsectj
-76433   nnpos=locatn(i+nphcas,j+nphcas)
-        caslnr(nnpos)=tr(npos)/dsectj
-76432   caslnx(nnpos)=tx(npos)/dsectj+emtpc(npos)*dsectj
+76711   npos = locatn (mapcas(i), mapcas(j)) + locz11 - 1
+        if (mapcas(i) .gt. mapcas(j)) npos = locatn(mapcas(j), mapcas(i)) + locz11 - 1
+        nnpos = locatn (i, j)
+        caslnr(nnpos) = tr(npos) / dsectj
+        caslnx(nnpos) = tx(npos) / dsectj + emtpc(npos) * dsectj
+        nnpos = locatn (i, j + nphcas)
+        caslnr(nnpos) = -tr(npos) / dsectj
+        caslnx(nnpos) = -tx(npos) / dsectj
+        if (i .eq. j) go to 76433
+        nnpos = locatn (j, i + nphcas)
+        caslnr(nnpos) = -tr(npos) / dsectj
+        caslnx(nnpos) = -tx(npos) / dsectj
+76433   nnpos = locatn (i + nphcas, j + nphcas)
+        caslnr(nnpos) = tr(npos) / dsectj
+76432   caslnx(nnpos) = tx(npos) / dsectj + emtpc(npos) * dsectj
      end do
   end do
-76521 multip=multip-1
-  if (multip.gt.0)goto76505
-  iend=nphcas
-  idumy=nphcas
+76521 multip = multip - 1
+  if (multip .gt. 0) go to 76505
+  iend = nphcas
+  idumy = nphcas
   !     read input card using cimage.
   call cimage
   if (iend .gt. 14) idumy = 14
   read (unit = abuff, fmt = 4012) text5, text6, text7
 4012 format (2x, 3a4)
-  if ( text5 .ne. text1 )  go to 4013
-  if ( text6 .ne. text2 )  go to 4013
-  if ( text7 .eq. text3 )  go to 76600
+  if (text5 .ne. text1) go to 4013
+  if (text6 .ne. text2) go to 4013
+  if (text7 .eq. text3) go to 76600
 4013 continue
   read (unit = abuff, fmt = 76501) dsectj, multip, mser, mbr, msect, (mapcas(i), i = 1, idumy)
-  if ( noutpr  .eq.  0 ) write (kunit6, 76702)  dsectj, multip, mser, mbr, msect, ( mapcas(i), i=1, ll3 )
-  if (dsectj.eq.0.0)dsectj=1.0
-  if (multip.eq.0)multip=1
-  if (multip.gt.0)goto76713
+  if (noutpr .eq.  0) write (kunit6, 76702)  dsectj, multip, mser, mbr, msect, (mapcas(i), i = 1, ll3)
+  if (dsectj .eq. 0.0) dsectj = 1.0
+  if (multip .eq. 0) multip = 1
+  if (multip .gt. 0) go to 76713
   lstat(19) = 4013
-  kill=55
-  lstat(12)=multip
-  goto9200
-76713 istart=15
-76506 iend=iend-14
-  if (iend.le.0)goto76507
+  kill = 55
+  lstat(12) = multip
+  go to 9200
+76713 istart = 15
+76506 iend = iend - 14
+  if (iend .le. 0) go to 76507
   !     read input card using cimage.
   call cimage
-  idumy=istart+iend-1
-  if (iend.gt.14)idumy=istart+13
+  idumy = istart + iend - 1
+  if (iend .gt. 14) idumy = istart + 13
   read (unit = abuff, fmt = 76502) (mapcas(i), i = istart, idumy)
-  if (idumy.gt.istart+12)idumy=istart+12
-  if ( noutpr  .eq.  0 ) write (kunit6, 76703)  (mapcas(i),i=istart,idumy)
-  goto 76506
+  if (idumy .gt. istart + 12) idumy = istart + 12
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 76703) (mapcas(i), i = istart, idumy)
+  go to 76506
 76507 do i = 1, nphcas
      idumy = mapcas(i)
 76429 mapinv(idumy) = i
   end do
-  if (mser.le.0)goto 76510
-  call mover0 ( trser(1), nphcas )
-  call mover0 ( txser(1), nphcas )
-  call mover0 ( cser(1), nphcas )
+  if (mser .le. 0) go to 76510
+  call mover0 (trser(1), nphcas)
+  call mover0 (txser(1), nphcas)
+  call mover0 (cser(1), nphcas)
   !     read input card using cimage.
 76511 call cimage
   read (unit = abuff, fmt = 7651) itype
 7651 format (i2)
-  if (itype.ge.0.and.itype.le.nphcas)goto76714
-  lstat(19)=7651
-  kill=54
-  lstat(12)=itype
-  goto9200
-76714 if (itype .eq. 0 .and. noutpr .eq. 0) write (kunit6, 76705)
+  if (itype .ge. 0 .and. itype .le. nphcas) go to 76714
+  lstat(19) = 7651
+  kill = 54
+  lstat(12) = itype
+  go to 9200
+76714 if (itype .eq. 0 .and. noutpr .eq. 0) write (unit = kunit6, fmt = 76705)
 76705 format ('+blank card terminating series R-L-C.')
-  if (itype.eq.0)goto76510
+  if (itype .eq. 0) go to 76510
   read (unit = abuff, fmt = 76530) trser(itype), txser(itype), cser(itype)
 76530 format (26x, 3e6.0)
-  if ( noutpr  .eq.  0 ) write(kunit6,76704)trser(itype),txser(itype),cser(itype)
+  if (noutpr .eq. 0) write(unit = kunit6, fmt = 76704) trser(itype), txser(itype), cser(itype)
 76704 format ('+series R-L-C.', 2x, 3e11.3)
-  goto76511
-76510 if (mbr.le.0)goto 76513
-  mbr1=0
-76516 mbr1=mbr1+1
+  go to 76511
+76510 if (mbr .le. 0) go to 76513
+  mbr1 = 0
+76516 mbr1 = mbr1 + 1
   !     read input card using cimage.
   call cimage
   read (unit = abuff, fmt = 4012) text5, text6, text7
-  if ( text5 .ne. text4 )  go to 4018
-  if ( text6 .ne. text4 )  go to 4018
-  if ( text7 .ne. text4 )  go to 4018
-  if ( noutpr  .eq.  0 ) write (kunit6, 4017)
+  if (text5 .ne. text4) go to 4018
+  if (text6 .ne. text4) go to 4018
+  if (text7 .ne. text4) go to 4018
+  if (noutpr .eq. 0) write (kunit6, 4017)
 4017 format ('+blank card terminating shunt R-L-C branches.')
   go to 76540
 4018 continue
   read (unit = abuff, fmt = 76515) node1(mbr1), node2(mbr1), trshun(mbr1), txshun(mbr1), cshun(mbr1)
 76515 format (2x, 2i6, 12x, 3e6.2)
-  if ( noutpr  .eq.  0 ) write(kunit6,76706)node1(mbr1),node2(mbr1 ),trshun(mbr1), txshun(mbr1),cshun(mbr1)
+  if (noutpr .eq. 0) write(unit = kunit6, fmt = 76706) node1(mbr1), node2(mbr1), trshun(mbr1), txshun(mbr1), cshun(mbr1)
 76706 format ('+shunt.', 2x, 2i4, 3e11.3)
-  goto 76516
-76540 mbr1=mbr1-1
-76513 if (msect.le.0)goto 76505
-  istart=locz11
+  go to 76516
+76540 mbr1 = mbr1 - 1
+76513 if (msect .le. 0) go to 76505
+  istart = locz11
   do i = 1, nphcas
-     idumy=i
-     if (idumy.gt.3)idumy=3
-     iend=istart+idumy-1
+     idumy = i
+     if (idumy .gt. 3) idumy=3
+     iend = istart + idumy - 1
      !     read input card using cimage.
      call cimage
      read (unit = abuff, fmt = 76518) itype, (tr(j), tx(j), emtpc(j), j = istart, iend)
 76518 format (i2, 24x, 9e6.2)
-     if ( i  .gt.  1 )   go to 5264
-     if ( noutpr  .eq.  0 ) write (kunit6, 54777)  tr(istart), tx(istart), emtpc(istart)
+     if (i .gt. 1) go to 5264
+     if (noutpr .eq. 0) write (unit = kunit6, fmt = 54777) tr(istart), tx(istart), emtpc(istart)
 54777 format ('+1st of pi-ckt.', 1x, 3e11.3)
      go to 5271
 5264 idumy = istart + 1
-     if ( noutpr  .eq.  0 ) write (kunit6, 54104)  tr(idumy), tx(idumy), emtpc(idumy), tr(idumy+1), tx(idumy+1)
+     if (noutpr .eq. 0) write (unit = kunit6, fmt = 54104) tr(idumy), tx(idumy), emtpc(idumy), tr(idumy + 1), tx(idumy + 1)
 54104 format ('+', 5e10.3)
 5271 istart = iend + 1
-     idumy=i
-76520 idumy=idumy-3
-     if (idumy.le.0)goto 76517
-     iend=istart+idumy-1
-     if (idumy.gt.3)iend=istart+2
+     idumy = i
+76520 idumy = idumy - 3
+     if (idumy .le. 0) go to 76517
+     iend = istart + idumy - 1
+     if (idumy .gt. 3) iend = istart + 2
      !     read input card using cimage.
      call cimage
      read (unit = abuff, fmt = 76519) (tr(j), tx(j), emtpc(j), j = istart, iend)
 76519 format (26x, 9e6.2)
-     iendd=iend
-     if (idumy.gt.3)iendd=istart+1
-     if ( noutpr  .eq.  0 ) write (kunit6, 54104)  tr(istart), tx(istart), emtpc(istart), tr(istart+1), tx(istart+1)
-     istart=iend+1
-     goto 76520
+     iendd = iend
+     if (idumy .gt. 3) iendd = istart + 1
+     if (noutpr .eq. 0) write (unit = kunit6, fmt = 54104) tr(istart), tx(istart), emtpc(istart), tr(istart + 1), tx(istart + 1)
+     istart = iend + 1
+     go to 76520
 76517 end do
   do i = locz11, locznn
-     tx(i)=freqcs*tx(i)/freqx
-     emtpc(i)=freqcs*emtpc(i)/(2.0*freqc)
+     tx(i) = freqcs * tx(i) / freqx
+     emtpc(i) = freqcs * emtpc(i) / (2.0 * freqc)
   end do
   call cxred (tr(locz11), tx(locz11), nphcas, ll0)
   do i = locz11, locznn
      tr(i) = -tr(i)
      tx(i) = -tx(i)
   end do
-76505 if ( mser  .eq.  0 )   go to 6434
+76505 if (mser .eq. 0) go to 6434
   do i = 1, nphcas
      do j = 1, nphcas
-        npos=locatn(i,j+nphcas)
-        nnpos=locatn(i,j+npos2)
-        caslnr(nnpos)=caslnr(npos)
-        caslnr(npos)=0.0
-        caslnx(nnpos)=caslnx(npos)
-        caslnx(npos)=0.0
+        npos = locatn (i, j + nphcas)
+        nnpos = locatn (i, j + npos2)
+        caslnr(nnpos) = caslnr(npos)
+        caslnr(npos) = 0.0
+        caslnx(nnpos) = caslnx(npos)
+        caslnx(npos) = 0.0
      end do
   end do
   do i = 1, nphcas
      do j = i, nphcas
-        npos=locatn(i+nphcas,j+nphcas)
-        nnpos=locatn(i+npos2,j+npos2)
-        caslnr(nnpos)=caslnr(npos)
-        caslnr(npos)=0.0
-        caslnx(nnpos)=caslnx(npos)
-        caslnx(npos)=0.0
+        npos = locatn (i + nphcas, j + nphcas)
+        nnpos = locatn (i + npos2, j + npos2)
+        caslnr(nnpos) = caslnr(npos)
+        caslnr(npos) = 0.0
+        caslnx(nnpos) = caslnx(npos)
+        caslnx(npos) = 0.0
      end do
   end do
-  nredct=nphcas
-  do 76442 iph=1,nphcas
-     iphase=mapcas(iph)
-     if (trser(iphase).eq.0.0.and.txser(iphase).eq.0.0.and.cser(iphase) .eq.0.0) goto 76438
-     if (trser(iphase).eq. 999999.) go to 76441
-     if (cser(iphase).eq.0.0)goto 76439
-     ymag2=trser(iphase)**2+(freqcs*txser(iphase)/freqx-1.0/(freqcs*cser(iphase)/freqc))**2
-     yserr=trser(iphase)/ymag2
-     yserx=(-freqcs*txser(iphase)/freqx+1.0/(freqcs*cser(iphase)/freqc))/ymag2
-     goto 76440
-76439 yserr=trser(iphase)/(trser(iphase)**2+(freqcs*txser(iphase)/freqx)**2)
-     yserx=(-freqcs*txser(iphase)/freqx)/(trser(iphase)**2+(freqcs*txser(iphase)/freqx)**2)
-     goto 76440
-76441 yserr=0.0
-     yserx=0.0
-76440 nnpos=locatn(iph+nphcas,iph+nphcas)
-     caslnr(nnpos)=yserr
-     caslnx(nnpos)=yserx
-     nnpos=locatn(iph+nphcas,iph+nphcas+nredct)
-     caslnr(nnpos)=-yserr
-     caslnx(nnpos)=-yserx
-     nnpos=locatn(iph+nphcas+nredct,iph+nphcas+nredct)
-     caslnr(nnpos)=caslnr(nnpos)+yserr
-     caslnx(nnpos)=caslnx(nnpos)+yserx
-     goto 76442
-76438 idumy=nphcas+iph
+  nredct = nphcas
+  do iph = 1, nphcas
+     iphase = mapcas(iph)
+     if (trser(iphase) .eq. 0.0 .and. txser(iphase) .eq. 0.0 .and. cser(iphase) .eq. 0.0) go to 76438
+     if (trser(iphase) .eq. 999999.) go to 76441
+     if (cser(iphase) .eq. 0.0) go to 76439
+     ymag2 = trser(iphase) ** 2 + (freqcs * txser(iphase) / freqx - 1.0 / (freqcs * cser(iphase) / freqc)) ** 2
+     yserr = trser(iphase) / ymag2
+     yserx = (-freqcs * txser(iphase) / freqx + 1.0 / (freqcs * cser(iphase) / freqc)) / ymag2
+     go to 76440
+76439 yserr = trser(iphase) / (trser(iphase) ** 2 + (freqcs * txser(iphase) / freqx) ** 2)
+     yserx = (-freqcs * txser(iphase) / freqx) / (trser(iphase) ** 2 + (freqcs * txser(iphase) / freqx) ** 2)
+     go to 76440
+76441 yserr = 0.0
+     yserx = 0.0
+76440 nnpos = locatn (iph + nphcas, iph + nphcas)
+     caslnr(nnpos) = yserr
+     caslnx(nnpos) = yserx
+     nnpos = locatn (iph + nphcas, iph + nphcas + nredct)
+     caslnr(nnpos) = -yserr
+     caslnx(nnpos) = -yserx
+     nnpos = locatn(iph + nphcas + nredct, iph + nphcas + nredct)
+     caslnr(nnpos) = caslnr(nnpos) + yserr
+     caslnx(nnpos) = caslnx(nnpos) + yserx
+     go to 76442
+76438 idumy = nphcas + iph
      do i = 1, idumy
-        nnpos=locatn(i,idumy)
-        npos=locatn(i,idumy+nredct)
-        caslnr(nnpos)=caslnr(npos)
-76443   caslnx(nnpos)=caslnx(npos)
+        nnpos = locatn (i, idumy)
+        npos = locatn (i, idumy + nredct)
+        caslnr(nnpos) = caslnr(npos)
+76443   caslnx(nnpos) = caslnx(npos)
      end do
-     nnpos=locatn(idumy,idumy)
-     npos=locatn(idumy+nredct,idumy+nredct)
-     caslnr(nnpos)=caslnr(npos)
-     caslnx(nnpos)=caslnx(npos)
-     iend=npos2 + nredct
-     istart=idumy+nredct
+     nnpos = locatn (idumy, idumy)
+     npos = locatn(idumy + nredct, idumy + nredct)
+     caslnr(nnpos) = caslnr(npos)
+     caslnx(nnpos) = caslnx(npos)
+     iend = npos2 + nredct
+     istart = idumy + nredct
      do i = istart, iend
-        nnpos=locatn(idumy,i)
-        npos=locatn(idumy+nredct,i)
-        caslnr(nnpos)=caslnr(npos)
-76444   caslnx(nnpos)=caslnx(npos)
+        nnpos = locatn (idumy, i)
+        npos = locatn (idumy + nredct, i)
+        caslnr(nnpos) = caslnr(npos)
+76444   caslnx(nnpos) = caslnx(npos)
      end do
-     istart=npos2+1
-     iend=idumy+nredct
+     istart = npos2 + 1
+     iend = idumy + nredct
      do i = istart, iend
-        nnpos=locatn(idumy,i)
-        npos=locatn(i,idumy+nredct)
-        caslnr(nnpos)=caslnr(npos)
-76445   caslnx(nnpos)=caslnx(npos)
+        nnpos = locatn (idumy, i)
+        npos = locatn (i, idumy + nredct)
+        caslnr(nnpos) = caslnr(npos)
+76445   caslnx(nnpos) = caslnx(npos)
      end do
-     istart=idumy+nredct+1
-     iend=npos2+nredct
+     istart = idumy + nredct + 1
+     iend = npos2 + nredct
      do i = istart, iend
         do j = i, iend
-           npos=locatn(i,j)
-           nnpos=npos-1
-           caslnr(nnpos)=caslnr(npos)
-76446      caslnx(nnpos)=caslnx(npos)
+           npos = locatn(i, j)
+           nnpos = npos - 1
+           caslnr(nnpos) = caslnr(npos)
+76446      caslnx(nnpos) = caslnx(npos)
         end do
      end do
      do j = istart, iend
-        iendd=j-1
+        iendd = j - 1
         do i = 1, iendd
-           nnpos=locatn(i,iendd)
-           npos=locatn(i,j)
-           caslnr(nnpos)=caslnr(npos)
-76447      caslnx(nnpos)=caslnx(npos)
+           nnpos = locatn (i, iendd)
+           npos = locatn (i, j)
+           caslnr(nnpos) = caslnr(npos)
+76447      caslnx(nnpos) = caslnx(npos)
         end do
      end do
-     nredct=nredct-1
-76442 end do
+     nredct = nredct - 1
+  end do
+76442 continue
   if (iprsup .lt. 9) go to 76630
-  write(lunit6,76605)
-  write(lunit6,76631)
+  write (unit = lunit6, fmt = 76605)
+  write (unit = lunit6, fmt = 76631)
 76631 format (5x, 'Y-matrix before series R-L-C elimination.')
   do i = 1, npos3
-     write(lunit6,76605)
-     istart = locatn(i-1,i-1) +1
+     write (unit = lunit6, fmt = 76605)
+     istart = locatn (i - 1, i - 1) + 1
      idumy = i + 9
 76633 idumy = idumy - 9
      iend = idumy + istart - 1
      if (idumy .gt. 9) iend = istart + 8
-     write(lunit6,76604)(caslnr(ii),ii = istart,iend)
-     write(lunit6,76604)(caslnx(ii),ii = istart,iend)
+     write (unit = lunit6, fmt = 76604) (caslnr(ii), ii = istart, iend)
+     write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
      istart = istart + 9
      if (idumy .gt. 9) go to 76633
 76632 end do
 76630 continue
   call cxred (caslnr, caslnx, npos2 + nredct, npos2)
   if (iprsup .lt. 9) go to 76650
-  write(lunit6,76605)
-  write(lunit6,76653)
+  write (unit = lunit6, fmt = 76605)
+  write (unit = lunit6, fmt = 76653)
 76653 format (5x, 'Y-matrix after series R-L-C elimination.')
   do i = 1, npos2
-     write (lunit6, 76605)
-     istart = locatn(i - 1, i - 1) + 1
+     write (unit = lunit6, fmt = 76605)
+     istart = locatn (i - 1, i - 1) + 1
      idumy = i + 9
 76659 idumy = idumy - 9
      iend = idumy + istart - 1
      if (idumy .gt. 9) iend = istart + 8
-     write(lunit6,76604)(caslnr(ii),ii = istart,iend)
-     write(lunit6,76604)(caslnx(ii),ii = istart,iend)
+     write (unit = lunit6, fmt = 76604) (caslnr(ii), ii = istart, iend)
+     write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
      istart = istart + 9
      if (idumy .gt. 9) go to 76659
 76656 end do
 76650 continue
-  istart=locatn(npos2,npos2)+1
-  iend=locatn(npos3,npos3)
+  istart = locatn (npos2, npos2) + 1
+  iend = locatn (npos3, npos3)
   i = iend - istart + 1
-  call mover0 ( caslnr(istart), i )
-  call mover0 ( caslnx(istart), i )
-6434 if ( mbr  .eq.  0 )   go to 76450
+  call mover0 (caslnr(istart), i)
+  call mover0 (caslnx(istart), i)
+6434 if (mbr .eq. 0) go to 76450
   do jbr = 1, mbr1
-     if ( node1(jbr)  .ne.  node2(jbr) )   go to 6715
+     if (node1(jbr) .ne. node2(jbr)) go to 6715
      lstat(19) = 6434
-     kill=56
-     lstat(12)=node1(jbr)
+     kill = 56
+     lstat(12) = node1(jbr)
      lstat(13) = mbr1
      lstat(14) = jbr
-     goto9200
-6715 if ( iabs( node1(jbr) )  .le.  nphcas )   go to 6716
+     go to 9200
+6715 if (iabs (node1(jbr)) .le. nphcas) go to 6716
      lstat(19) = 6715
-     kill=54
-     lstat(12)=node1(jbr)
-     goto9200
-6716 if ( iabs( node2(jbr) )  .le.  nphcas )   go to 76717
+     kill = 54
+     lstat(12) = node1(jbr)
+     go to 9200
+6716 if (iabs (node2(jbr)) .le. nphcas) go to 76717
      lstat(19) = 6716
-     kill=54
-     lstat(12)=node2(jbr)
-     goto9200
-76717 if (trshun(jbr).ne.0.0.or.txshun(jbr).ne.0.0.or.cshun(jbr).ne.0.0) go to 6718
+     kill = 54
+     lstat(12) = node2(jbr)
+     go to 9200
+76717 if (trshun(jbr) .ne. 0.0 .or. txshun(jbr) .ne. 0.0 .or. cshun(jbr) .ne. 0.0) go to 6718
      lstat(19) = 6718
-     kill=57
-     lstat(12)=node1(jbr)
-     lstat(13)=node2(jbr)
-     goto9200
-6718 if ( cshun(jbr)  .eq.  0.0 )   go to 76452
-     ymag2=trshun(jbr)**2+(freqcs*txshun(jbr)/freqx-1.0/(cshun(jbr)*freqcs/freqc))**2
-     yshunr=trshun(jbr)/ymag2
-     yshunx=(-freqcs*txshun(jbr)/freqx+1.0/(freqcs*cshun(jbr)/freqc )) /ymag2
-     if ( iprsup .ge. 6 ) write(lunit6, 76721)  jbr, mbr1, node1(jbr), node2(jbr), trshun(jbr), txshun(jbr), cshun(jbr), freqx, &
+     kill = 57
+     lstat(12) = node1(jbr)
+     lstat(13) = node2(jbr)
+     go to 9200
+6718 if (cshun(jbr) .eq. 0.0) go to 76452
+     ymag2 = trshun(jbr) ** 2 + (freqcs * txshun(jbr) / freqx - 1.0 / (cshun(jbr) * freqcs / freqc)) ** 2
+     yshunr = trshun(jbr) / ymag2
+     yshunx = (-freqcs * txshun(jbr) / freqx + 1.0 / (freqcs * cshun(jbr) / freqc)) / ymag2
+     if (iprsup .ge. 6) write (unit = lunit6, fmt = 76721) jbr, mbr1, node1(jbr), node2(jbr), trshun(jbr), txshun(jbr), cshun(jbr), freqx, &
           freqc, freqcs, ymag2, yshunr, yshunx
 76721 format (/, ' Shunt branch admittance calculation at 76721.', 4i10, /, (1x, 3e30.8))
-     goto76453
-76452 ymag2= trshun(jbr)**2+(freqcs*txshun(jbr)/freqx)**2
-     yshunr=trshun(jbr)/ymag2
-     yshunx=(-freqcs*txshun(jbr)/freqx)/ymag2
-     if ( iprsup .ge. 6 ) write(lunit6, 76721)  jbr, mbr1, node1(jbr), node2(jbr), trshun(jbr), txshun(jbr), cshun(jbr), freqx, &
+     go to 76453
+76452 ymag2 = trshun(jbr) ** 2 + (freqcs * txshun(jbr) / freqx) ** 2
+     yshunr = trshun(jbr) / ymag2
+     yshunx = (-freqcs * txshun(jbr) / freqx) / ymag2
+     if (iprsup .ge. 6) write (unit = lunit6, fmt = 76721) jbr, mbr1, node1(jbr), node2(jbr), trshun(jbr), txshun(jbr), cshun(jbr), freqx, &
           freqc, freqcs, ymag2, yshunr, yshunx
-76453 if (node1(jbr).ge.0.and.node2(jbr).ge.0)goto 76454
-     if (node1(jbr).le.0.and.node2(jbr).le.0)goto 76455
-     if (node1(jbr).gt.0)goto 76456
-     idumy=node1(jbr)
-     node1(jbr)=node2(jbr)
-     node2(jbr)=idumy
-76456 node2(jbr)=-node2(jbr)
-     idumy=node1(jbr)
-     nrow1=nphcas+mapinv(idumy)
-     nrow2=npos2+node2(jbr)
-     nnpos=locatn(nrow1,nrow1)
-     caslnr(nnpos)=caslnr(nnpos)+yshunr
-     caslnx(nnpos)=caslnx(nnpos)+yshunx
-     nnpos=locatn(nrow1,nrow2)
-     caslnr(nnpos)=-yshunr
-     caslnx(nnpos)=-yshunx
-     nnpos=locatn(nrow2,nrow2)
-     caslnr(nnpos)=caslnr(nnpos)+yshunr
-     caslnx(nnpos)=caslnx(nnpos)+yshunx
-     node2(jbr)=-node2(jbr)
-     goto 76451
-76454 if (node1(jbr).eq.0.or.node2(jbr).eq.0)goto76457
-     idumy=node1(jbr)
-     idumy2=node2(jbr)
-     if (mapinv(idumy).lt.mapinv(idumy2))goto 76458
-     idumy=node2(jbr)
-     idumy2=node1(jbr)
-76458 nrow1=nphcas+mapinv(idumy)
-     nrow2=nphcas+mapinv(idumy2)
-     nnpos=locatn(nrow1,nrow1)
-     caslnr(nnpos)=caslnr(nnpos)+yshunr
-     caslnx(nnpos)=caslnx(nnpos)+yshunx
-     nnpos=locatn(nrow1,nrow2)
-     caslnr(nnpos)=caslnr(nnpos)-yshunr
-     caslnx(nnpos)=caslnx(nnpos)-yshunx
-     nnpos=locatn(nrow2,nrow2)
-     caslnr(nnpos)=caslnr(nnpos)+yshunr
-     caslnx(nnpos)=caslnx(nnpos)+yshunx
-     goto 76451
-76457 idumy=node1(jbr)+node2(jbr)
-     nrow1=nphcas+mapinv(idumy)
-     nnpos=locatn(nrow1,nrow1)
-     caslnr(nnpos)=caslnr(nnpos)+yshunr
-     caslnx(nnpos)=caslnx(nnpos)+yshunx
-     goto 76451
-76455 node1(jbr)=-node1(jbr)
-     node2(jbr)=-node2(jbr)
-     if (node1(jbr).eq.0.or.node2(jbr).eq.0)goto 76460
-     if (node1(jbr).lt.node2(jbr))goto 76459
-     idumy=node1(jbr)
-     node1(jbr)=node2(jbr)
-     node2(jbr)=idumy
-76459 nrow1=npos2+node1(jbr)
-     nrow2=npos2+node2(jbr)
-     nnpos=locatn(nrow1,nrow1)
-     caslnr(nnpos)=caslnr(nnpos)+yshunr
-     caslnx(nnpos)=caslnx(nnpos)+yshunx
-     nnpos=locatn(nrow1,nrow2)
-     caslnr(nnpos)=caslnr(nnpos)-yshunr
-     caslnx(nnpos)=caslnx(nnpos)-yshunx
-     nnpos=locatn(nrow2,nrow2)
-     caslnr(nnpos)=caslnr(nnpos)+yshunr
-     caslnx(nnpos)=caslnx(nnpos)+yshunx
-     node1(jbr)=-node1(jbr)
-     node2(jbr)=-node2(jbr)
-     goto 76451
-76460 nrow1=npos2+node1(jbr)+node2(jbr)
-     nnpos=locatn(nrow1,nrow1)
-     caslnr(nnpos)=caslnr(nnpos)+yshunr
-     caslnx(nnpos)=caslnx(nnpos)+yshunx
-     node1(jbr)=-node1(jbr)
-     node2(jbr)=-node2(jbr)
+76453 if (node1(jbr) .ge. 0 .and. node2(jbr) .ge. 0) go to 76454
+     if (node1(jbr) .le. 0 .and. node2(jbr) .le. 0) go to 76455
+     if (node1(jbr) .gt. 0) go to 76456
+     idumy = node1(jbr)
+     node1(jbr) = node2(jbr)
+     node2(jbr) = idumy
+76456 node2(jbr) = -node2(jbr)
+     idumy = node1(jbr)
+     nrow1 = nphcas + mapinv(idumy)
+     nrow2 = npos2 + node2(jbr)
+     nnpos = locatn (nrow1, nrow1)
+     caslnr(nnpos) = caslnr(nnpos) + yshunr
+     caslnx(nnpos) = caslnx(nnpos) + yshunx
+     nnpos = locatn (nrow1, nrow2)
+     caslnr(nnpos) = -yshunr
+     caslnx(nnpos) = -yshunx
+     nnpos = locatn(nrow2, nrow2)
+     caslnr(nnpos) = caslnr(nnpos) + yshunr
+     caslnx(nnpos) = caslnx(nnpos) + yshunx
+     node2(jbr) = -node2(jbr)
+     go to 76451
+76454 if (node1(jbr) .eq. 0 .or. node2(jbr) .eq. 0) go to 76457
+     idumy = node1(jbr)
+     idumy2 = node2(jbr)
+     if (mapinv(idumy) .lt. mapinv(idumy2)) go to 76458
+     idumy = node2(jbr)
+     idumy2 = node1(jbr)
+76458 nrow1 = nphcas + mapinv(idumy)
+     nrow2 = nphcas + mapinv(idumy2)
+     nnpos = locatn (nrow1, nrow1)
+     caslnr(nnpos) = caslnr(nnpos) + yshunr
+     caslnx(nnpos) = caslnx(nnpos) + yshunx
+     nnpos = locatn (nrow1, nrow2)
+     caslnr(nnpos) = caslnr(nnpos) - yshunr
+     caslnx(nnpos) = caslnx(nnpos) - yshunx
+     nnpos = locatn (nrow2, nrow2)
+     caslnr(nnpos) = caslnr(nnpos) + yshunr
+     caslnx(nnpos) = caslnx(nnpos) + yshunx
+     go to 76451
+76457 idumy = node1(jbr) + node2(jbr)
+     nrow1 = nphcas + mapinv(idumy)
+     nnpos = locatn(nrow1, nrow1)
+     caslnr(nnpos) = caslnr(nnpos) + yshunr
+     caslnx(nnpos) = caslnx(nnpos) + yshunx
+     go to 76451
+76455 node1(jbr) = -node1(jbr)
+     node2(jbr) = -node2(jbr)
+     if (node1(jbr) .eq. 0 .or. node2(jbr) .eq. 0) go to 76460
+     if (node1(jbr) .lt. node2(jbr)) go to 76459
+     idumy = node1(jbr)
+     node1(jbr) = node2(jbr)
+     node2(jbr) = idumy
+76459 nrow1 = npos2 + node1(jbr)
+     nrow2 = npos2 + node2(jbr)
+     nnpos = locatn(nrow1, nrow1)
+     caslnr(nnpos) = caslnr(nnpos) + yshunr
+     caslnx(nnpos) = caslnx(nnpos) + yshunx
+     nnpos = locatn (nrow1, nrow2)
+     caslnr(nnpos) = caslnr(nnpos) - yshunr
+     caslnx(nnpos) = caslnx(nnpos) - yshunx
+     nnpos = locatn (nrow2, nrow2)
+     caslnr(nnpos) = caslnr(nnpos) + yshunr
+     caslnx(nnpos) = caslnx(nnpos) + yshunx
+     node1(jbr) = -node1(jbr)
+     node2(jbr) = -node2(jbr)
+     go to 76451
+76460 nrow1 = npos2 + node1(jbr) + node2(jbr)
+     nnpos = locatn (nrow1, nrow1)
+     caslnr(nnpos) = caslnr(nnpos) + yshunr
+     caslnx(nnpos) = caslnx(nnpos) + yshunx
+     node1(jbr) = -node1(jbr)
+     node2(jbr) = -node2(jbr)
 76451 end do
   nredct=0
   do i = 1, nphcas
-     npos=locatn(npos2+i-1,npos2+i-1)
-     nnpos=locatn(npos2+i,npos2+i)
-     ymag2=absz(caslnr(nnpos))+absz(caslnx(nnpos))
-     if (ymag2.eq.0.0)go to 76461
-     ymag2=absz(caslnr(npos))+absz(caslnx(npos))
-     if ( ymag2  .ne.  0.0 )  go to 6470
+     npos = locatn (npos2 + i - 1, npos2 + i - 1)
+     nnpos = locatn (npos2 + i, npos2 + i)
+     ymag2 =absz (caslnr(nnpos)) + absz (caslnx(nnpos))
+     if (ymag2 .eq. 0.0) go to 76461
+     ymag2 = absz (caslnr(npos)) + absz (caslnx(npos))
+     if (ymag2 .ne. 0.0) go to 6470
      lstat(19) = 6470
-     kill= 60
-     lstat(12)=-i
+     kill = 60
+     lstat(12) = -i
      go to 9200
 6470 nredct = nredct + 1
 76461 end do
   if (iprsup .lt. 9) go to 76640
-  write(lunit6,76605)
-  write(lunit6,76634)
+  write (unit = lunit6, fmt = 76605)
+  write (unit = lunit6, fmt = 76634)
 76634 format (5x, 'Y-matrix before shunt R-L-C elimation.')
-  do i = 1,npos3
-     write(lunit6,76605)
-     istart = locatn(i-1,i-1) +1
+  do i = 1, npos3
+     write (unit = lunit6, fmt = 76605)
+     istart = locatn (i - 1, i - 1) + 1
      idumy = i + 9
 76638 idumy = idumy - 9
      iend = idumy + istart - 1
      if (idumy .gt. 9) iend = istart + 8
-     write(lunit6,76604)(caslnr(ii),ii = istart,iend)
-     write(lunit6,76604)(caslnx(ii),ii = istart,iend)
+     write (unit = lunit6, fmt = 76604) (caslnr(ii), ii = istart, iend)
+     write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
      istart = istart + 9
      if (idumy .gt. 9) go to 76638
 76636 end do
 76640 continue
-  call cxred(caslnr,caslnx,npos2+nredct,npos2)
+  call cxred (caslnr, caslnx, npos2 + nredct, npos2)
   if (iprsup .lt. 9) go to 76651
-  write(lunit6,76605)
-  write(lunit6,76654)
+  write (unit = lunit6, fmt = 76605)
+  write (unit = lunit6, fmt = 76654)
 76654 format (5x, 'Y-matrix after shunt R-L-C elimation.')
   do i = 1, npos2
-     write(lunit6,76605)
-     istart = locatn(i-1,i-1) +1
+     write (unit = lunit6, fmt = 76605)
+     istart = locatn (i - 1, i - 1) + 1
      idumy = i + 9
 76660 idumy = idumy - 9
      iend = idumy + istart - 1
      if (idumy .gt. 9) iend = istart + 8
-     write(lunit6,76604)(caslnr(ii),ii = istart,iend)
-     write(lunit6,76604)(caslnx(ii),ii = istart,iend)
+     write (unit = lunit6, fmt = 76604) (caslnr(ii), ii = istart, iend)
+     write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
      istart = istart + 9
      if (idumy .gt. 9) go to 76660
 76657 end do
 76651 continue
-  istart=locatn(npos2,npos2)+1
-  iend=locatn(npos3,npos3)
+  istart = locatn(npos2, npos2) + 1
+  iend = locatn(npos3, npos3)
   i = iend - istart + 1
-  call mover0 ( caslnr(istart), i )
-  call mover0 ( caslnx(istart), i )
+  call mover0 (caslnr(istart), i)
+  call mover0 (caslnx(istart), i)
 76450 do i = 1, nphcas
      do j = 1, nphcas
-        npos=locatn(i,j+nphcas)
-        nnpos=locatn(i,j+npos2)
-        caslnr(nnpos)=caslnr(npos)
-        caslnr(npos)=0.0
-        caslnx(nnpos)=caslnx(npos)
-76463   caslnx(npos)=0.0
+        npos = locatn (i, j + nphcas)
+        nnpos = locatn (i, j + npos2)
+        caslnr(nnpos) = caslnr(npos)
+        caslnr(npos) = 0.0
+        caslnx(nnpos) = caslnx(npos)
+76463   caslnx(npos) = 0.0
      end do
   end do
   do i = 1, nphcas
      do j = i, nphcas
-        npos=locatn(i+nphcas,j+nphcas)
-        nnpos=locatn(i+npos2,j+npos2)
-        caslnr(nnpos)=caslnr(npos)
-        caslnr(npos)=0.0
-        caslnx(nnpos)=caslnx(npos)
-76464   caslnx(npos)=0.0
+        npos = locatn (i + nphcas, j + nphcas)
+        nnpos = locatn (i + npos2, j + npos2)
+        caslnr(nnpos) = caslnr(npos)
+        caslnr(npos) = 0.0
+        caslnx(nnpos) = caslnx(npos)
+76464   caslnx(npos) = 0.0
      end do
   end do
   do i = 1, nphcas
      do j = i, nphcas
-        npos=locatn(mapcas(i),mapcas(j))+locz11-1
-        if (mapcas(i).gt.mapcas(j))npos=locatn(mapcas(j),mapcas(i))+locz11-1
-        nnpos=locatn(i+nphcas,j+nphcas)
-        caslnr(nnpos)=tr(npos)/dsectj
-        caslnx(nnpos)=tx(npos)/dsectj+emtpc(npos)*dsectj
-        nnpos=locatn(i+nphcas,j+npos2)
-        caslnr(nnpos)=-tr(npos)/dsectj
-        caslnx(nnpos)=-tx(npos)/dsectj
-        if (i.eq.j)goto 76466
-        nnpos=locatn(j+nphcas,i+npos2)
-        caslnr(nnpos)=-tr(npos)/dsectj
-        caslnx(nnpos)=-tx(npos)/dsectj
-76466   nnpos=locatn(i+npos2,j+npos2)
-        caslnr(nnpos)=tr(npos)/dsectj+caslnr(nnpos)
-76465   caslnx(nnpos)=tx(npos)/dsectj+emtpc(npos)*dsectj+caslnx(nnpos)
+        npos = locatn (mapcas(i), mapcas(j)) + locz11 - 1
+        if (mapcas(i) .gt. mapcas(j)) npos = locatn (mapcas(j), mapcas(i)) + locz11 - 1
+        nnpos=locatn (i + nphcas, j + nphcas)
+        caslnr(nnpos) = tr(npos) / dsectj
+        caslnx(nnpos) = tx(npos) / dsectj + emtpc(npos) * dsectj
+        nnpos = locatn (i + nphcas, j + npos2)
+        caslnr(nnpos) = -tr(npos) / dsectj
+        caslnx(nnpos) = -tx(npos) / dsectj
+        if (i .eq. j) go to 76466
+        nnpos = locatn(j + nphcas, i + npos2)
+        caslnr(nnpos) = -tr(npos) / dsectj
+        caslnx(nnpos) = -tx(npos) / dsectj
+76466   nnpos = locatn (i + npos2, j + npos2)
+        caslnr(nnpos) = tr(npos) / dsectj + caslnr(nnpos)
+76465   caslnx(nnpos) = tx(npos) / dsectj + emtpc(npos) * dsectj + caslnx(nnpos)
      end do
   end do
   if (iprsup .lt. 9) go to 76641
-  write(lunit6,76605)
-  write(lunit6,76635)
+  write (unit = lunit6, fmt = 76605)
+  write (unit = lunit6, fmt = 76635)
 76635 format (5x, 'Y-matrix before section elimination.')
   do i = 1, npos3
-     write(lunit6,76605)
-     istart = locatn(i-1,i-1) +1
+     write (unit = lunit6, fmt = 76605)
+     istart = locatn (i - 1, i - 1) + 1
      idumy = i + 9
 76639 idumy = idumy - 9
      iend = idumy + istart - 1
      if (idumy .gt. 9) iend = istart + 8
-     write(lunit6,76604)(caslnr(ii),ii = istart,iend)
-     write(lunit6,76604)(caslnx(ii),ii = istart,iend)
+     write (unit = lunit6, fmt = 76604) (caslnr(ii), ii = istart, iend)
+     write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
      istart = istart + 9
      if (idumy .gt. 9) go to 76639
 76637 end do
 76641 continue
-  call cxred(caslnr,caslnx,npos3,npos2)
+  call cxred (caslnr, caslnx, npos3, npos2)
   if (iprsup .lt. 9) go to 76652
-  write(lunit6,76605)
-  write(lunit6,76655)
+  write (unit = lunit6, fmt = 76605)
+  write (unit = lunit6, fmt = 76655)
 76655 format (5x, 'Y-matrix after section elimination.')
   do i = 1, npos2
-     write(lunit6,76605)
-     istart = locatn(i-1,i-1) +1
+     write (unit = lunit6, fmt = 76605)
+     istart = locatn (i - 1, i - 1) + 1
      idumy = i + 9
 76661 idumy = idumy - 9
      iend = idumy + istart - 1
      if (idumy .gt. 9) iend = istart + 8
-     write(lunit6,76604)(caslnr(ii),ii = istart,iend)
-     write(lunit6,76604)(caslnx(ii),ii = istart,iend)
+     write (unit = lunit6, fmt = 76604) (caslnr(ii), ii = istart, iend)
+     write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
      istart = istart + 9
      if (idumy .gt. 9) go to 76661
 76658 end do
 76652 continue
-  istart=locatn(npos2,npos2)+1
-  iend=locatn(npos3,npos3)
+  istart = locatn (npos2, npos2) + 1
+  iend = locatn (npos3, npos3)
   i = iend - istart + 1
-  call mover0 ( caslnr(istart), i )
-  call mover0 ( caslnx(istart), i )
+  call mover0 (caslnr(istart), i)
+  call mover0 (caslnx(istart), i)
   go to 76521
-76600 if ( noutpr  .eq.  0 ) write (kunit6, 76620)
+76600 if (noutpr .eq. 0 ) write (unit = kunit6, fmt = 76620)
 76620 format ('+termination of cascaded pi.')
-  locznn=locatn(npos2,npos2)+locz11-1
-  it=locz11+locatn(npos2,npos2)
-  tmax=-1.0
-  icas=0
+  locznn = locatn (npos2, npos2) + locz11 - 1
+  it = locz11 + locatn (npos2, npos2)
+  tmax = -1.0
+  icas = 0
   do i = locz11, locznn
-     j=i-locz11+1
-     tr(i)=caslnr(j)
-     tx(i)=caslnx(j)
-76601 emtpc(i)=0.0
+     j = i - locz11 + 1
+     tr(i) = caslnr(j)
+     tx(i) = caslnx(j)
+76601 emtpc(i) = 0.0
   end do
   do i = ipoint, ibr
-76610 kodebr(i)=-2
+76610 kodebr(i) = -2
   end do
-  if (iprsup.lt.2)goto100
-  write(lunit6,76607)
+  if (iprsup .lt. 2) go to 100
+  write (unit = lunit6, fmt = 76607)
 76607 format (5x, 'Y-matrix for line represented by cascaded-pi.')
   do i = 1, npos2
-     write(lunit6,76605)
-76605 format (/, /, 1x)
-     istart=locatn(i-1,i-1)+1
-     idumy=i+9
-76603 idumy=idumy-9
-     iend=idumy+istart-1
-     if (idumy.gt.9)iend=istart+8
-     write(lunit6,76604)(caslnr(ii),ii=istart,iend)
-     write(lunit6,76604)(caslnx(ii),ii=istart,iend)
+     write (unit = lunit6, fmt = 76605)
+76605 format (//, 1x)
+     istart = locatn(i - 1, i - 1) + 1
+     idumy = i + 9
+76603 idumy = idumy - 9
+     iend = idumy + istart - 1
+     if (idumy .gt. 9) iend = istart + 8
+     write (unit = lunit6, fmt = 76604) (caslnr(ii), ii = istart, iend)
+     write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
 76604 format (1x, 9e13.5)
-     istart=istart+9
-     if (idumy.gt.9)goto76603
+     istart = istart + 9
+     if (idumy .gt. 9) go to 76603
 76602 end do
 100 lastov = nchain
   nchain = 2
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
 4568 format ('  "Exit  module over3."')
   go to 99999
 9200 lastov = nchain
   nchain = 51
   lstat(18) = 3
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
 99999 return
 end subroutine over3
 !
@@ -4208,43 +4232,43 @@ subroutine over4
   include 'space1.ftn'
   dimension  buffin (8)
   !     frequency dependent line. ********************************
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over4."')
   jfdep2 = 2 * lfdep + ifdep2
   kfdep2 = 4 * lfdep + ifdep2
   d1tttt = t
-  if ( kburro  .eq.  1 )   go to 8716
-  iofa1p = ( locf(weight(1)) - locf(ykm(1)) ) / 4
+  if (kburro .eq. 1) go to 8716
+  iofa1p = (locf (weight(1)) - locf (ykm(1))) / 4
   go to 8721
 8716 iofa1p = lsiz23 / 4
 8721 ioftm2 = 2 * iofa1p
   ioftm1 = 3 * iofa1p
   ifdep = ifdep + 1
-  if (ifdep.le.lfdep) go to 20170
+  if (ifdep .le. lfdep) go to 20170
   kill = 1
   lstat(16) = 13
-  lstat(19)=20170
+  lstat(19) = 20170
   go to 9200
 20170 nr(ibr) = ifdep
   length(ibr) = kcount
   ck(ibr) = -ck(ibr)
   d1 = -tenm3 / 100.
-  if ( ck(ibr)  .gt.  d1 )   ck(ibr) = d1
-  ci(ibr) = absz( ci(ibr) )
+  if (ck(ibr) .gt. d1) ck(ibr) = d1
+  ci(ibr) = absz (ci(ibr))
   !     read input card using cimage.
   call cimage
   read (unit = abuff, fmt = 6105) ntime1, ntime2, locmax, locmin, z1, cut1, cut2, n10, rtotal, nii
 6105 format (4i8, 3f8.0, i8, f8.0, i8)
-  if ( cut1  .le. 0.0 )  cut1  = 10. * tenm3
-  if ( cut2  .le. 0.0 )  cut2  = 100. * tenm3
-  if ( nii  .le.  0 )    nii = 100
-  if ( noutpr  .eq.  0 ) write (kunit6, 6110)
+  if (cut1 .le. 0.0) cut1 = 10. * tenm3
+  if (cut2 .le. 0.0) cut2 = 100. * tenm3
+  if (nii .le. 0) nii = 100
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 6110)
 6110 format ('+frequency-dependence misc. Data values.')
   n9 = noutpr
   noutpr = n10
   n1 = ntime1
-  if ( ntime2  .gt.  n1 )   n1 = ntime2
-  if ( n1+3  .le.  iofa1p )   go to 6103
+  if (ntime2 .gt. n1) n1 = ntime2
+  if (n1 + 3 .le. iofa1p) go to 6103
   kill = 145
   lstat(14) = ntime1
   lstat(15) = ntime2
@@ -4260,13 +4284,13 @@ subroutine over4
   read (unit = abuff, fmt = 6115) buffin
   do j = 1, 7, 2
      tim1 (n2) = buffin(j)
-     a1p(n3) = buffin(j+1)
+     a1p(n3) = buffin(j + 1)
      n2 = n2 + 1
 26111 n3 = n3 + 1
   end do
-  if ( noutpr  .eq.  0 ) write (kunit6, 6112)
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 6112)
 6112 format ('+weighting function a1 points.')
-5736 if ( n2  .le.  n12 )   go to 6111
+5736 if (n2 .le. n12) go to 6111
   n4 = ioftm2 + 1
   n5 = 1
   go to 5741
@@ -4275,16 +4299,16 @@ subroutine over4
   read (unit = abuff, fmt = 6115) buffin
   do j = 1, 7, 2
      tim2(n4) = buffin(j)
-     a2p(n5) = buffin(j+1)
+     a2p(n5) = buffin(j + 1)
      n4 = n4 + 1
 26116 n5 = n5 + 1
   end do
 6115 format (8f10.0)
-  if ( noutpr  .eq.  0    .and. n12  .gt.  0 ) write (kunit6, 6117)
+  if (noutpr .eq. 0 .and. n12 .gt. 0) write (unit = kunit6, fmt = 6117)
 6117 format ('+weighting function a2 points.')
 5741 n12 = ntime2 - n5
-  if ( n12  .le.  7 ) noutpr = n9
-  if ( n12  .ge.  0 )   go to 6116
+  if (n12 .le. 7) noutpr = n9
+  if (n12 .ge. 0) go to 6116
   do i = 1, ntime1
      n6 = ioftm1 + i
 6121 tim1(n6) = tim1(n6) / 1000000.
@@ -4297,36 +4321,36 @@ subroutine over4
   do i = 2, ntime1
      n2 = ioftm1 + i
      n4 = iofa1p + i
-     d1 = tim1(n2) - tim1(n2-1)
-     d2 = a1p(n4) + a1p(n4-1)
-     if ( d1 .gt. 0.0 )  go to 6125
+     d1 = tim1(n2) - tim1(n2 - 1)
+     d2 = a1p(n4) + a1p(n4 - 1)
+     if (d1 .gt. 0.0) go to 6125
      kill = 45
      lstat(19) = 6125
      lstat(17) = 1
      lstat(14) = i
      flstat(15) = tim1(n2)
-     flstat(16) = tim1(n2-1)
+     flstat(16) = tim1(n2 - 1)
      go to 9200
 6125 d3 = d3 + d1 * d2
   end do
   do i = 2, ntime2
      n6 = ioftm2 + i
-     d1 = tim2(n6) - tim2(n6-1)
-     d2 = a2p(i) + a2p(i-1)
-     if ( d1 .gt. 0.0 )  go to 6126
+     d1 = tim2(n6) - tim2(n6 - 1)
+     d2 = a2p(i) + a2p(i - 1)
+     if (d1 .gt. 0.0) go to 6126
      kill = 45
      lstat(19) = 6126
      lstat(17) = 2
      lstat(14) = i
      flstat(15) = tim2(n6)
-     flstat(16) = tim2(n6-1)
+     flstat(16) = tim2(n6 - 1)
      go to 9200
 6126 d3 = d3 + d1 * d2
   end do
   d3 = d3 * onehaf
-  if ( noutpr  .eq.  0 ) write (kunit6, 6129)  d3
-6129 format ('+weighting function a2 points.',  f16.8)
-  if ( rtotal  .gt.  0.0 )   go to 7820
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 6129) d3
+6129 format ('+weighting function a2 points.', f16.8)
+  if (rtotal .gt. 0.0) go to 7820
   d1 = 1.0 / d3
   do i = 1, ntime1
      n2 = iofa1p + i
@@ -4336,7 +4360,7 @@ subroutine over4
 6136 a2p(i) = a2p(i) * d1
   end do
 7820 cut2 = cut2 * a2p(locmin)
-  atheo = rtotal / ( 2.0 * z1 + rtotal )
+  atheo = rtotal / (2.0 * z1 + rtotal)
   iend = ntime2
   dzero = 0.0
   i = 1
@@ -4354,40 +4378,40 @@ subroutine over4
   n = n - 1
   kflop = 1
   mode  = 0
-  if ( iprsup  .ge.  1 ) write (lunit6, 6213)  ifdep, ifdep2, jst, i, ioftm2, iend, dzero, deltat
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 6213) ifdep, ifdep2, jst, i, ioftm2, iend, dzero, deltat
 6213 format (/, ' Begin  A(t)  processing.   ifdep  ifdep2     jst       i  ioftm2    iend', 11x, 'dzero', 10x, 'deltat',/, 25x, 6i8, 2e16.7)
   go to 6450
-6220 if ( mode .gt. 0 )  go to 6240
-  if ( t .le. tend )  go to 6240
+6220 if (mode .gt. 0) go to 6240
+  if (t .le. tend) go to 6240
   kflop = 1
-  d1 = (a-a1) / (t-t1)
-  a = a1 + d1*(tend-t1)
+  d1 = (a - a1) / (t - t1)
+  a = a1 + d1 * (tend - t1)
   i = i - 1
   t = tend
   go to 6250
-6240 if ( i .lt. iend )  go to 6250
-  if ( iprsup  .le.  0 )   go to 6245
-  write (lunit6, 6243)  i, iend, jst, mode, kflop, lwt, kfin, n, ifdep, ifdep2, ioftm2, locmin, locmax
-6243 format (/, ' End raw data points.       i    iend     jst    mode   kflop     lwt,     kfin       n   ifdep  ifdep2  ioftm2  locmin  locmax  ',/, 21x,  13i8)
-  write (lunit6, 6244)  t1, a1, t, a, d5, d6, tend, d3
-6244 format (/, 15x, 't1', 14x, 'a1',  15x, 't', 15x, 'a',  14x, 'd5', 14x, 'd6', 12x, 'tend', 14x, 'd3',/, 1x, 8e16.7)
+6240 if (i .lt. iend) go to 6250
+  if (iprsup .le. 0) go to 6245
+  write (unit = lunit6, fmt = 6243) i, iend, jst, mode, kflop, lwt, kfin, n, ifdep, ifdep2, ioftm2, locmin, locmax
+6243 format (/, ' End raw data points.       i    iend     jst    mode   kflop     lwt,     kfin       n   ifdep  ifdep2  ioftm2  locmin  locmax  ', /, 21x, 13i8)
+  write (unit = lunit6, fmt = 6244)  t1, a1, t, a, d5, d6, tend, d3
+6244 format (/, 15x, 't1', 14x, 'a1',  15x, 't', 15x, 'a',  14x, 'd5', 14x, 'd6', 12x, 'tend', 14x, 'd3', /, 1x, 8e16.7)
 6245 i = -1
   kflop = 1
-6250 d1 = ( t - t1 ) * onehaf
-  d18 = d1 * (a1 + a )
+6250 d1 = (t - t1) * onehaf
+  d18 = d1 * (a1 + a)
   d5 = d5 + d18
-  d6 = d6 + d1 * ( t1*a1 + t*a )
+  d6 = d6 + d1 * (t1 * a1 + t * a)
   t1 = t
   a1 = a
-  if ( mode .eq. 0 )  go to 6260
-  if ( i .gt. 0 )  go to 6450
+  if (mode .eq. 0) go to 6260
+  if (i .gt. 0) go to 6450
   go to 6465
-6260 aditn = aditn  + d18
-  if ( kflop .eq. 0 )  go to 6450
+6260 aditn = aditn + d18
+  if (kflop .eq. 0) go to 6450
   d6 = d6 / deltat
-  if ( iprsup  .ge.  4 ) write (lunit6, 6316)  i, jst, mode, n, t, a, d5, d6
+  if (iprsup .ge. 4) write (unit = lunit6, fmt = 6316) i, jst, mode, n, t, a, d5, d6
 6316 format (/, ' Done with panel.       i     jst    mode       n', 15x, 't', 15x, 'a', 14x, 'd5', 14x, 'd6', /, 17x, 4i8, 4e16.7)
-  if ( dzero .ne. 0.0 )  go to 6320
+  if (dzero .ne. 0.0) go to 6320
   dzero = d5
   d3 = dzero - d6
   d4  = 1.0 + d3
@@ -4400,30 +4424,30 @@ subroutine over4
   !     way they were in  "m21." .   remove the  "m22."  change
   !     which has (we suspect) lead to instability for al's cases.
 6320 d1 = d6 - n * d5
-  d2 = (d5 - d1 ) * d3
+  d2 = (d5 - d1) * d3
   d1 = d1 * d3
   weight(jst) = weight(jst) + d2
-  if ( n .le. 5    .and.    iprsup .ge. 2 ) write(lunit6, 6323)  d1, d2, d3, weight(jst)
-6323 format (/, " Accumulate  'weight' .", 4x, 'weight(jst1)', 14x, 'd2', 14x, 'd3', 5x, 'weight(jst)',/, 23x, 4e16.7)
+  if (n .le. 5 .and. iprsup .ge. 2) write (unit = lunit6, fmt = 6323) d1, d2, d3, weight(jst)
+6323 format (/, " Accumulate  'weight' .", 4x, 'weight(jst1)', 14x, 'd2', 14x, 'd3', 5x, 'weight(jst)', /, 23x, 4e16.7)
   weight(jst1) = d1
-  if ( kfin .gt. 0 )  go to 6340
-  if ( i .le. locmin )  go to 6450
-  if ( a .lt. cut2 )  go to 6450
+  if (kfin .gt. 0) go to 6340
+  if (i .le. locmin) go to 6450
+  if (a .lt. cut2) go to 6450
   go to 6410
-6340 if ( i .le. locmax )  go to 6450
-  if ( a .gt. cut1 )  go to 6450
+6340 if (i .le. locmax) go to 6450
+  if (a .gt. cut1) go to 6450
 6410 mode  = 1
   tails  = t
   aamp = a
-6450 if ( kflop .eq. 0 )  go to 6460
+6450 if (kflop .eq. 0) go to 6460
   jst = jst1
   jst1 = jst1 + 1
-  if ( jst .le. lwt )  go to 6455
+  if (jst .le. lwt) go to 6455
   kill = 1
   lstat(16) = 14
-  lstat(19)= 6455
+  lstat(19) = 6455
   go to 9200
-6455 if ( i .lt. 0 )  go to 6470
+6455 if (i .lt. 0) go to 6470
   kflop = 0
   d5 = 0.0
   d6 = 0.0
@@ -4434,39 +4458,39 @@ subroutine over4
   t = tp(n5)
   a = ap(i)
   go to 6220
-6465 d1 = 1.0 / ( d6/d5 - tails )
+6465 d1 = 1.0 / (d6/d5 - tails)
   d2 = d1 * d5
-  if ( iprsup .ge. 2 ) write(lunit6, 6466)  ifdep2, d2, d1, tails, d5, d6
-6466 format (/,  ' Tail integral complete.  ifdep2', 14x, 'd2', 14x, 'd1', 11x, 'tails', 14x, 'd5', 14x, 'd6',/, 24x, i8, 5e16.7)
+  if (iprsup .ge. 2) write (unit = lunit6, fmt = 6466) ifdep2, d2, d1, tails, d5, d6
+6466 format (/, ' Tail integral complete.  ifdep2', 14x, 'd2', 14x, 'd1', 11x, 'tails', 14x, 'd5', 14x, 'd6', /, 24x, i8, 5e16.7)
   con1(ifdep2) = d2 * d3
   con1(jfdep2) = d1
   con1(kfdep2) = tails
-  if ( rtotal .le. 0.0 )   go to 6475
-  if ( iprsup .ge. 1 ) write (lunit6, 7812) d3, aamp, aditn, con1(ifdep2), d1, tails, ifdep2
+  if (rtotal .le. 0.0)  go to 6475
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 7812) d3, aamp, aditn, con1(ifdep2), d1, tails, ifdep2
 7812 format ('  Before tail adjustment.', /, 18x, 'd3', 16x,'aamp', 15x, 'aditn', 15x, 'tailp', 15x, 'tailq', 15x, 'tails', 4x, 'ifdep2', /, x, 6e20.11, i10)
   tcor = atheo - aditn
   !     start newton raphson iterations on tailq * * * * * * * * * * * * *
-  bct = absz ( tcor / aamp )
-  bct = alogz ( bct )
+  bct = absz (tcor / aamp)
+  bct = alogz (bct)
   d18 = 0.0
   ik = 0
 7843 ik = ik + 1
-  if ( ik .gt. nii )  go to 7904
+  if (ik .gt. nii) go to 7904
   d12 = d1 + d18
-  if ( ik .eq. 1 )  go to 7910
-  d17 = absz ( d18 ) / d1
-  if ( d17  .le.  epsiln )   go to 7905
+  if (ik .eq. 1) go to 7910
+  d17 = absz (d18) / d1
+  if (d17 .le. epsiln) go to 7905
 7910 d1 = d12
-  fstar = -alogz ( d1 ) - d1 * tails - bct
+  fstar = -alogz (d1) - d1 * tails - bct
   fder = 1.0 / d1 + tails
   d18 = fstar / fder
-  if ( iprsup  .ge.  1 ) write (lunit6, 7912) ik, fstar, fder, d18, d1, bct
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 7912) ik, fstar, fder, d18, d1, bct
 7912 format (1x, 'On iteration no.', i5, /, 5e22.12)
   do ikp = 1, 6
-     if ( absz(d18)  .lt.  d1 )   go to 7843
+     if (absz (d18) .lt. d1) go to 7843
 7914 d18 = d18 / 5.0
   end do
-  if ( absz(d18) .lt. d1 ) go to 7843
+  if (absz (d18) .lt. d1) go to 7843
 7904 kill = 46
   lstat(19) = 7904
   lstat(14) = nii
@@ -4475,7 +4499,7 @@ subroutine over4
   go to 9200
 7905 con1(jfdep2) = d1
   con1(ifdep2) = tcor * d1 * d3
-  if ( iprsup  .ge.  1 ) write (lunit6, 7913) ifdep2, con1(ifdep2), con1(jfdep2)
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 7913) ifdep2, con1(ifdep2), con1(jfdep2)
 7913 format (' Successful termination.  ifdep2', 15x, 'tailp', 15x, 'tailq', /, 24x, i8, 2e20.12)
   go to 6475
 6470 con1(ifdep2) = 0.0
@@ -4485,11 +4509,11 @@ subroutine over4
   ifdep2 = ifdep2 + 1
   jfdep2 = jfdep2 + 1
   kfdep2 = kfdep2 + 1
-  if ( kfin  .gt.  0 )   go to 6600
+  if (kfin .gt. 0) go to 6600
   kfin = 1
   n6 = iofa1p + locmax
   cut1 = cut1 * a1p(n6)
-  n = tim1(ioftm1+1) / deltat
+  n = tim1(ioftm1 + 1) / deltat
   iskip(ifdep) = n
   tend = n * deltat
   nhist(ifdep) = npoint
@@ -4497,27 +4521,28 @@ subroutine over4
   iend = ntime1 + i
   locmax = locmax + i
   i = i + 1
-  atheo = (2.0*z1) / (2.0*z1 + rtotal)
+  atheo = (2.0 * z1) / (2.0 * z1 + rtotal)
   go to 6200
 6600 zinf(ifdep) = z1
-  npoint = npoint   +   ( iskip(ifdep) - 1 )
-  if ( iprsup .ge. 1 ) write(lunit6, 6601)  ibr, jst, npoint, iskip(ifdep), nr(ibr), nhist(ifdep)
+  npoint = npoint + (iskip(ifdep) - 1)
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 6601) ibr, jst, npoint, iskip(ifdep), nr(ibr), nhist(ifdep)
 6601 format (/, " Ready to exit  'over4' .", 12x, 'ibr', 12x, 'jst', 9x, 'npoint', 3x, 'iskip(ifdep)', 8x, 'nr(ibr)', 3x, 'nhist(ifdep)', /, 25x, 6i15)
-  if ( npoint  .gt.  nhist(ifdep)  )   nhist(ifdep) = npoint
+  if (npoint .gt. nhist(ifdep)) nhist(ifdep) = npoint
   nhist(ifdep) = nhist(ifdep) + 1
   icheck = 3
   lastov = nchain
   nchain = 2
   t = d1tttt
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
 4568 format ('  "Exit  module over4."')
   go to 99999
 9200 lastov = nchain
   nchain = 51
   lstat(18) = 4
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
 99999 return
 end subroutine over4
+
 !
 !     end of file: over2.for
 !

@@ -61,91 +61,91 @@ subroutine subr31
   equivalence (karray(1), array(1), ev(1), buslst(1), evdoub(1), ibsout(1), ibrnch(1), jbrnch(1))
   equivalence (busvec(1), bus1)
   equivalence (moncar(2), kbase)
-  data text1   / 6hprint  /
-  data text2   / 6hhead o /
-  data text3   / 6hn      /
-  data text4   / 6hff     /
-  data text5   / 6hsmooth /
-  data text6   / 6hbranch /
-  data text7   / 6hheight /
-  data text8   / 6hmargin /
-  data text9   / 6hcalcom /
-  data text10  / 6hp plot /
-  data text11  / 6hprinte /
-  data text12  / 6hr plot /
-  data text13  / 6hp prin /
-  data text14(1)   / 6hplot t     /
-  data text14(2)   / 6hype        /
-  data text15  / 6hpage    /
-  data text16(1)   / 6hnode n     /
-  data text16(2)   / 6hames       /
-  data text18   / 6hpen ch /
-  data text19   / 6hoice   /
-  data text20   / 6ha1     /
-  data text22   /  6hplot l  /
-  data text23   /  6hine li  /
-  data text24   /  6hmit     /
-  data text25   /  6hsuperi  /
-  data text26   /  6hmpose   /
-  data text27   /  6hscale   /
-  data text28   /  6hx-y pl  /
-  data text29   /  6hot      /
-  data text30   /  6hfourie  /
-  data text31   /  6hr on    /
-  data text32   /  6hr off   /
-  data text33   /  6hbounds  /
-  data textax(1)   / 6hdegree /
-  data textax(2)   / 6hs base /
-  data textax(3)   / 6hd on 6 /
-  data textax(4)   / 6h0 hz   /
-  data textax(5)   / 6hcycles /
-  data textax(6)   / 6h based /
-  data textax(7)   / 6h on 60 /
-  data textax(8)   / 6h hz    /
-  data textax(9)   / 6hsecond /
-  data textax(10)  / 6hs      /
-  data textax(11)  / 6h       /
-  data textax(12)  / 6h       /
-  data textax(13)  / 6hmillis /
-  data textax(14)  / 6heconds /
-  data textax(15)  / 6h       /
-  data textax(16)  / 6h       /
-  data textax(17)  / 6hmicros /
-  data textax(18)  / 6heconds /
-  data textax(19)  / 6h       /
-  data textax(20)  / 6h       /
-  data textax(21)  / 6hfreque /
-  data textax(22)  / 6hncy in /
-  data textax(23)  / 6h hertz /
-  data textax(24)  / 6h       /
-  data textax(25)  / 6hlog10  /
-  data textax(26)  / 6hfreque /
-  data textax(27)  / 6hncy in /
-  data textax(28)  / 6h hertz /
-  data textax(29)  / 6hspace  /
-  data textax(30)  / 6hfor    /
-  data textax(31)  / 6hx-y    /
-  data textax(32)  / 6hplot   /
-  data kscale  /  0  /
-  data llmin3 / -3 /
-  data llmin1 / -1 /
-  data ll0    / 0  /
-  data ll1    / 1  /
-  data ll2    / 2  /
-  data ll3    / 3  /
-  data ll6    / 6  /
-  data ll10   / 10 /
-  data ll16   / 16 /
-  data ll18   / 18 /
-  data ll24   / 24 /
-  data ll78   / 78 /
+  data text1      / 'print ' /
+  data text2      / 'head o' /
+  data text3      / 'n     ' /
+  data text4      / 'ff    ' /
+  data text5      / 'smooth' /
+  data text6      / 'branch' /
+  data text7      / 'height' /
+  data text8      / 'margin' /
+  data text9      / 'calcom' /
+  data text10     / 'p plot' /
+  data text11     / 'printe' /
+  data text12     / 'r plot' /
+  data text13     / 'p prin' /
+  data text14(1)  / 'plot t' /
+  data text14(2)  / 'ype   ' /
+  data text15     / 'page  ' /
+  data text16(1)  / 'node n' /
+  data text16(2)  / 'ames  ' /
+  data text18     / 'pen ch' /
+  data text19     / 'oice  ' /
+  data text20     / 'a1    ' /
+  data text22     / 'plot l' /
+  data text23     / 'ine li' /
+  data text24     / 'mit   ' /
+  data text25     / 'superi' /
+  data text26     / 'mpose ' /
+  data text27     / 'scale ' /
+  data text28     / 'x-y pl' /
+  data text29     / 'ot    ' /
+  data text30     / 'fourie' /
+  data text31     / 'r on  ' /
+  data text32     / 'r off ' /
+  data text33     / 'bounds' /
+  data textax(1)  / 'degree' /
+  data textax(2)  / 's base' /
+  data textax(3)  / 'd on 6' /
+  data textax(4)  / '0 hz  ' /
+  data textax(5)  / 'cycles' /
+  data textax(6)  / ' based' /
+  data textax(7)  / ' on 60' /
+  data textax(8)  / ' hz   ' /
+  data textax(9)  / 'second' /
+  data textax(10) / 's     ' /
+  data textax(11) / '      ' /
+  data textax(12) / '      ' /
+  data textax(13) / 'millis' /
+  data textax(14) / 'econds' /
+  data textax(15) / '      ' /
+  data textax(16) / '      ' /
+  data textax(17) / 'micros' /
+  data textax(18) / 'econds' /
+  data textax(19) / '      ' /
+  data textax(20) / '      ' /
+  data textax(21) / 'freque' /
+  data textax(22) / 'ncy in' /
+  data textax(23) / ' hertz' /
+  data textax(24) / '      ' /
+  data textax(25) / 'log10 ' /
+  data textax(26) / 'freque' /
+  data textax(27) / 'ncy in' /
+  data textax(28) / ' hertz' /
+  data textax(29) / 'space ' /
+  data textax(30) / 'for   ' /
+  data textax(31) / 'x-y   ' /
+  data textax(32) / 'plot  ' /
+  data kscale     / 0 /
+  data llmin3     / -3 /
+  data llmin1     / -1 /
+  data ll0        / 0 /
+  data ll1        / 1 /
+  data ll2        / 2 /
+  data ll3        / 3 /
+  data ll6        / 6 /
+  data ll10       / 10 /
+  data ll16       / 16 /
+  data ll18       / 18 /
+  data ll24       / 24 /
+  data ll78       / 78 /
   blanka(1) = blank
   long1 = nchain
-  if ( kburro .eq. 1)  long1 =29
-  call dimens (lltemp(1),long1,trash,trash)
-  do i=1, 9999, 2
-     if ( lltemp(i)  .ne.  0 )   go to 5654
-     maxev = lltemp(i+1) * nbyte(6) / nbyte(5)
+  if (kburro .eq. 1) long1 = 29
+  call dimens (lltemp(1), long1, trash, trash)
+  do i = 1, 9999, 2
+     if (lltemp(i) .ne. 0) go to 5654
+     maxev = lltemp(i + 1) * nbyte(6) / nbyte(5)
      go to 5655
 5654 end do
   call stoptp
@@ -201,96 +201,97 @@ subroutine subr31
   !     dimension of buffer integer arrays   'intd8'  and  'intd9' .
   limbin = 150
   jdumy = 999
-  if ( iprsup  .ge.  1 ) write (lunit6, 962)  llbuff, kill, lnpin, nsmth, szbed, szplt,  date1, tclock
-962 format ( /, 50h begin  'subr31' .  llbuff    kill   lnpin   nsmth, 10x, 5hszbed, 10x, 5hszplt, 5x, 5hdate1, 4x, 6htclock, /, &
-         18x, 4i8, 2e15.5,   2(2x, 2a4)   )
-  do j=1, 4
-963  kpen(j) = 1
+  if (iprsup .ge. 1) write (lunit6, 962) llbuff, kill, lnpin, nsmth, szbed, szplt,  date1, tclock
+962 format (/, "  Begin  'subr31' .  llbuff    kill   lnpin   nsmth", 10x, 'szbed', 10x, 'szplt', 5x, 'date1', 4x, 'tclock', /, &
+         18x, 4i8, 2e15.5, 2(2x, 2a4))
+  do j = 1, 4
+     kpen(j) = 1
   end do
   kprhd = 1
   nfour = 0
   kalcom = 0
-  if (kill.eq.9999) go to 2740
+  if (kill .eq. 9999) go to 2740
   long1 = 6
   long2 = 1
   long3 = 1
-  do i=1, 13
+  do i = 1, 13
      cstxt(i) = blank
-     call packch ( blanka(1), sext(1), long1, long2, long3 )
+     call packch (blanka(1), sext(1), long1, long2, long3)
 980  long2 = long2 + 6
   end do
   do j = 1, 52
 983  pltle(j) = blank
   end do
   countp = 0.0
-  if ( iprsup  .ge.  1 ) write (lunit6, 982)  sext
-982 format ( /,  27h vector  'sext'  as  13a6 .,  13a6  ,/, 1x, 13a6 )
+  if (iprsup .ge. 1) write (lunit6, 982)  sext
+982 format (/, " Vector  'sext'  as  13a6 .", 13a6, /, 1x, 13a6)
   !     segmented, 1, vax e/t can skip translation of rewind:
 1000 rewind lunit4
-  if ( iout .ge. 2 )  write (lunit6, 1005)
-1005 format ( ///,1x)
-1020 tstep=0.0
-  ialf=0
+  if (iout .ge. 2) write (lunit6, 1005)
+1005 format (///, 1x)
+1020 tstep = 0.0
+  ialf = 0
   !     read input card using cimage
 1050 call cimage
   read (unit = abuff, fmt = 1060) itp, aupper
-1060 format ( i2, 13a6 )
-  if ( iplot  .lt.  0 )   go to 1070
-  if ( lunit4 .le.  0 )   go to 1070
-  if ( aupper(1) .ne. text15 )  go to 10452
+1060 format (i2, 13a6)
+  if (iplot .lt. 0) go to 1070
+  if (lunit4 .le. 0) go to 1070
+  if (aupper(1) .ne. text15) go to 10452
   mpage = 1
   go to 1050
-10452 if ( aupper(1) .ne. text9 )  go to 1052
-  if ( aupper(2) .ne. text10 )  go to 1054
+10452 if (aupper(1) .ne. text9) go to 1052
+  if (aupper(2) .ne. text10) go to 1054
   iout = 1
   write (kunit6, 1051)
-1051 format ( 26h+request for calcomp plot.  )
+1051 format ('+request for calcomp plot.')
   go to 1050
-1052 if ( aupper(1) .ne. text11 )  go to 1061
-  if ( aupper(2) .ne. text12 )  go to 1061
+1052 if (aupper(1) .ne. text11) go to 1061
+  if (aupper(2) .ne. text12) go to 1061
   iout = 2
   write (kunit6, 1053)
-1053 format ( 31h+request for line printer plot.  )
+1053 format ('+request for line printer plot.')
   go to 1050
-1054 if ( aupper(2) .ne. text13 )  go to 1061
+1054 if (aupper(2) .ne. text13) go to 1061
   iout = 3
   write (kunit6, 1055)
-1055 format ( 44h+request for calcomp and line printer plots.  )
+1055 format ('+request for calcomp and line printer plots.')
   go to 1050
-1061 if ( aupper(1) .ne. text1 )  go to 1067
-  if ( aupper(2)  .ne.  text2 )   go to 1067
-  if ( aupper(3)  .ne.  text3 )   go to 1064
+1061 if (aupper(1) .ne. text1) go to 1067
+  if (aupper(2) .ne. text2) go to 1067
+  if (aupper(3) .ne. text3) go to 1064
   kprhd = 1
   write (kunit6, 1062)
-1062 format(  39h+request for typing of plot characters.    )
+1062 format ('+request for typing of plot characters.')
   go to 1050
-1064 if ( aupper(3)  .ne.  text4  )   go to 1067
+1064 if (aupper(3) .ne. text4) go to 1067
   kprhd = 0
   write (kunit6, 1065)
-1065 format(  40h+request for drawing of plot characters.    )
+1065 format('+request for drawing of plot characters.')
   go to 1050
-1067 if ( aupper(1) .ne. text33 )   go to 5843
+1067 if (aupper(1) .ne. text33) go to 5843
   kbound = 1
   write (kunit6, 4865)
-4865 format(  41h+scale y axis so no curve exceeds limits.  )
+4865 format('+scale y axis so no curve exceeds limits.')
   go to 1050
-5843 if ( aupper(1)  .ne.  text18 )   go to 1079
-  if ( aupper(2)  .ne.  text19 )   go to 1079
+5843 if (aupper(1) .ne. text18) go to 1079
+  if (aupper(2) .ne. text19) go to 1079
   read (unit = abuff, fmt = 1072) kpgrid, isww
-1072 format ( 16x, 5i8 )
-  write (kunit6, 1073)  kpgrid, isww
-1073 format ( 20h+grid & pen choices.,  5i5  )
-  do i=1, 4
-     if ( isww(i)  .gt.  0 ) kpen(i) = isww(i)
-1077 end do
+1072 format (16x, 5i8)
+  write (kunit6, 1073) kpgrid, isww
+1073 format ('+grid & pen choices.', 5i5)
+  do i = 1, 4
+     if (isww(i) .gt. 0) kpen(i) = isww(i)
+  end do
+1077 continue
   go to 1050
-1079 if ( aupper(1)  .ne.  text22 )   go to 7392
-  if ( aupper(2)  .ne.  text23 )   go to 7392
-  if ( aupper(3)  .ne.  text24 )   go to 7392
+1079 if (aupper(1) .ne. text22) go to 7392
+  if (aupper(2) .ne. text23) go to 7392
+  if (aupper(3) .ne. text24) go to 7392
   read (unit = abuff, fmt = 7381) linlim
-7381 format ( 24x, 3i8  )
-  write (kunit6, 7386)  linlim
-7386 format (  38h+line limit for sparse printer plots =,  i8 )
+7381 format (24x, 3i8)
+  write (kunit6, 7386) linlim
+7386 format ('+line limit for sparse printer plots =', i8)
   go to 1050
 7392 if ( aupper(1)  .ne.  text25 )   go to 7406
   if ( aupper(2)  .ne.  text26 )   go to 7406

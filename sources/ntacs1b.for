@@ -1,4 +1,4 @@
-!-*- mode: fortran; syntax: ansi-fortran-90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 !
 !     file: ntacs1b.for
 !
@@ -6,18 +6,18 @@
 !     subroutine ntacs1b.
 !
 subroutine ntacs1b
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'tacsto.ftn'
-  include 'blkcom.ftn'      ! wsm + thl manual modification for bpa emtp
-  include 'tacsar.ftn'      ! wsm + thl manual modification for bpa emtp
-  include 'labcom.ftn'      ! wsm + thl manual modification for bpa emtp
-!  common  / c0b014 /   sptacs(  29 )    ! wsm + thl manual modification for bpa emtp
-!  common  / c0b063 /   texvec(1000 )    ! wsm + thl manual modification for bpa emtp
-!  character*6  texvec                   ! wsm + thl manual modification for bpa emtp
-  equivalence (lstat (67), maxniu)
-  equivalence (lstat (68), maxnuk)
-!  equivalence    ( moncar(  5),  ioutcs )   ! wsm + thl manual modification for bpa emtp
-  character*6 hus1          ! wsm + thl manual modification for bpa emtp
+  include 'blkcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
+  include 'tacsar.ftn'                                      ! wsm + thl manual modification for bpa emtp
+  include 'labcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
+!  common  / c0b063 /   texvec(1000 )                       ! wsm + thl manual modification for bpa emtp
+!  character*6  texvec                                      ! wsm + thl manual modification for bpa emtp
+  equivalence (lstat(67), maxniu)
+  equivalence (lstat(68), maxnuk)
+!  equivalence    ( moncar(  5),  ioutcs )                  ! wsm + thl manual modification for bpa emtp
+  character(6) hus1                                         ! wsm + thl manual modification for bpa emtp
+  character(8) real8
   sptr = sptr - 1
   isto(sptr) = env
   env = datenv
@@ -31,15 +31,16 @@ subroutine ntacs1b
 !  bus1=blank     ! wsm + thl manual modification for bpa emtp
   hus1 = ' '                ! wsm + thl manual modification for bpa emtp
   j = 0
-3011 if (.not. (j .lt. i1)) go to 3010
-  j = j + 1
-  hus1(j:j) = csto(i2 + j)
-  go to 3011
+  do
+     if (.not. (j .lt. i1)) go to 3010
+     j = j + 1
+     hus1(j : j) = csto(i2 + j)
+  end do
 3010 continue
   n = 0
   read (hus1, 7398) real8
 7398 format (a6)
-  call namea6(real8, n)  ! wsm + thl manual modification for bpa emtp
+  call namea6 (real8, n)                                    ! wsm + thl manual modification for bpa emtp
   ilntab(klntab + i) = n
   env = isto(env)
   go to 3001
@@ -51,8 +52,8 @@ subroutine ntacs1b
 3021 if (.not. (env .gt. 0)) go to 3020
   i1 = isto(env + 4)
   i2 = isto(env + 5) - 1
-!  bus1=blank     ! wsm + thl manual modification for bpa emtp
-  hus1 = ' '                ! wsm + thl manual modification for bpa emtp
+                                                            !  bus1=blank     ! wsm + thl manual modification for bpa emtp
+  hus1 = ' '                                                ! wsm + thl manual modification for bpa emtp
   j = 0
 3031 if (.not. (j .lt. i1)) go to 3030
   j = j + 1
@@ -61,14 +62,14 @@ subroutine ntacs1b
 3030 continue
   read (hus1, 7398) real8
   n = 0
-  call namea6(real8, n)  ! wsm + thl manual modification for bpa emtp
+  call namea6(real8, n)                                     ! wsm + thl manual modification for bpa emtp
   if (.not. (nuk .lt. n - 1)) go to 5030
-  nuk = n - 1               !only in bpa emtp
+  nuk = n - 1                                               !only in bpa emtp
   ilntab(klntab + nuk) = n
 5030 continue
   ioutcs = ioutcs + 1
-  jout(kjout + ioutcs) = n - 1    !only in bpa emtp
-  isto(env + 6) = n - 1           !only in bpa emtp
+  jout(kjout + ioutcs) = n - 1                              !only in bpa emtp
+  isto(env + 6) = n - 1                                     !only in bpa emtp
   env = isto(env + 0)
   go to 3021
 3020 continue
