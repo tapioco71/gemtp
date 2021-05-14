@@ -242,8 +242,8 @@ subroutine dimens (lsize, nchain, bus1, bus2)
   lsize(28)  =    1080
   n7 = 28 + 1
   lsize(n7) = 9748865
-  bus1 ='  111121'
-  bus2 ='  110521'
+  bus1 ='  151344'
+  bus2 ='  130521'
   return
 2900 if (nchain .gt.  29) go to 3100
   lsize( 1)  =       0

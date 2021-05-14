@@ -79,7 +79,6 @@ FORTRAN_FLAGS=	-Wall				\
 		-ffree-line-length-0		\
 		-finit-local-zero		\
 		-freorder-blocks		\
-		-static				\
 		-c
 
 F90_FLAGS=	-Wall				\
@@ -87,11 +86,10 @@ F90_FLAGS=	-Wall				\
 		-falign-commons			\
 		-fbounds-check			\
 		-ffree-form			\
-		-ffree-line-length-0		\
 		-fdollar-ok			\
+		-ffree-line-length-0		\
 		-finit-local-zero		\
 		-freorder-blocks		\
-		-static				\
 		-c
 
 # objdump most common flags.
@@ -185,10 +183,10 @@ ${COMPILER}/%.o: %.for
 
 # Rule for building the object file from each fortran 90 source files.
 ${COMPILER}/%.o: %.f90
-	@if [ 'x${VERBOSE}' = x ];					\
-	then								\
-		echo " [ F90 ] ${<}";					\
-	else								\
+	@if [ 'x${VERBOSE}' = x ];				\
+	then							\
+		echo " [ F90 ] ${<}";				\
+	else							\
 		echo "${FORTRAN} ${F90_FLAGS} ${<} -o ${@}";	\
 	fi
 	@${FORTRAN} ${F90_FLAGS} ${<} -o ${@}
@@ -207,7 +205,7 @@ ${COMPILER}/%:
 				'${LIBM}'					\
 				-Wl,--end-group;				\
 	fi
-	@${FORTRAN} 	-Wl,--start-group				\
+	@${FORTRAN} 	-Wl,--start-group			\
 		${LD_FLAGS} -o ${@} $(filter %.o %.a, ${^})	\
 		'${LIBGCC}'					\
 		'${LIBGFORTRAN}'				\

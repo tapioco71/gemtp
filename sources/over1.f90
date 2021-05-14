@@ -2298,7 +2298,7 @@ subroutine midov1
   equivalence (moncar(3), ltdelt)
   ! if interactive execution (spy),
   ! and if not monte carlo study,
-  if (m4plot .eq. 1  .and. nenerg .eq. 0) tmax = fltinf     ! set end-time of study to infinity
+  if (m4plot .eq. 1 .and. nenerg .eq. 0) tmax = fltinf      ! set end-time of study to infinity
   !     flag for postprocessing (ltdelt=-6789) skips the
   !     tampering with old plot file now connected to  lunit2:
   if (ltdelt .eq. -6789) go to 1815
