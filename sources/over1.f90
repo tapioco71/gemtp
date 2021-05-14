@@ -285,10 +285,10 @@ subroutine over1
      kolbeg = 1
      read (unit = abuff(1), fmt = 3246, iostat = ios) texcol
 3246 format (80a1)
-     if (ios .ne. 0) then
-        write (unit = lunit6, fmt = "('Could not read from abuff.  Stop.')")
-        stop
-     end if
+!     if (ios .ne. 0) then
+!        write (unit = lunit6, fmt = "('Could not read from abuff.  Stop.')")
+!        stop
+!     end if
      call freone (d1)
 3247 nright = 0
      if (n9 .eq. -intinf) kolbeg = n9

@@ -121,6 +121,7 @@ ${COMPILER}:
 	@mkdir -p ${COMPILER}
 
 # Rule for compiling the main program.
+#${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
 ${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
 ${COMPILER}/${TARGET}: ${COMPILER}/build1.o
 ${COMPILER}/${TARGET}: ${COMPILER}/build2.o

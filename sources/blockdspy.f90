@@ -1,6 +1,6 @@
   !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
   !
-  !     file: blockdspy.for
+  !     file: blockdspy.f90
   !
   block data blkhlp
      include 'dekspy.ftn'
@@ -943,5 +943,5 @@
      data kbegtx ( 69 )   /   869   /
   end block data
   !
-  !     end of file: blockdspy.for
+  !     end of file: blockdspy.f90
   !

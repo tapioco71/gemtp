@@ -250,8 +250,8 @@ subroutine stoptp
 5607 format (80a1)
   if (ios .ne. 0) go to 9000
   if (nchain .eq. 31 .and. lastov .eq. 1 .and. kill .eq. 9999) go to 9000
-  write (unit = lunit6, fmt = 5623) nchain, lastov, texcol
-5623 format (/, ' Temporary error stop in "stoptp".   nchain, lastov =', 2i5, 5x, 'last-read card image abuff follows ....', /, 80a1)
+  write (unit = lunit6, fmt = 5623) nchain, lastov, (texcol(i), i = 1, 10)
+5623 format (/, ' Temporary error stop in "stoptp".   nchain, lastov =', 2i5, 5x, 'last-read card image abuff follows ....', /, 10a1)
 9000 stop
 end subroutine stoptp
 !
@@ -400,7 +400,7 @@ subroutine cimage
   include 'labcom.ftn'
   real(8) d11
   character(8) charc, chtacs, textax, textay, text1, text2
-  character(8) text4, text5, aupper, buff10, textcol
+  character(8) text4, text5, aupper, buff10
   dimension buff10(10)
   equivalence (buff10(1), abuff(1))
   character(25) filen
@@ -559,10 +559,10 @@ subroutine cimage
 3040 if (chcont .eq. text4) go to 3233
   read (unit = abuff(1), fmt = 3041, iostat = ios) texcol
 3041 format (80a1)
-  if (ios .ne. 0) then
-     write (unit = lunit6, fmt = "('Could not read from abuff.  Stop.')")
-     stop
-  end if
+!  if (ios .ne. 0) then
+!     write (unit = lunit6, fmt = "('Could not read from abuff.  Stop.')")
+!     stop
+!  end if
   !     Dan Goldsworthy had trouble with $listoff within $include
   !     which was within tacs supplemental variables.  wsm+thl
   !      if ( abuff(1) .ne. 8h$listoff   .and.

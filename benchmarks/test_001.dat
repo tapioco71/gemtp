@@ -1,32 +1,32 @@
-begin new data case                                                            1
+begin new data case
 c ..................................................figure 3.10(b).............:
 c Energization of an RL load                                                   :
 c ----dt<---tmax...............................................................:
-  50.e-6  50.e-3                                                               1
+  50.e-6  50.e-3
 c -Iprnt<--Iplot<-Idoubl<-KssOut<-MaxOut                 <---Icat              :
-      15       1       0       0       0                        0              1
+      15       1       0       0       0                        0
 c                                                                              :
 c Circuit data.................................................................:
 c Bus-->Bus-->Bus-->Bus--><----R<----L<----C                                   :
-  bus13                    22.61 19.72                                         1
-blank End of circuit data.......................................................
+  bus13                    22.61 19.72
+c blank end of circuit data.......................................................
 c                                                                              :
 c switch data..................................................................:
 c Bus-->Bus--><---Tclose<----Topen<-------Ie                                   :
-  src   load       1.e-3     9999.         0                                   1
-blank End of switch data........................................................
+  src   load       1.e-3     9999.         0
+c blank End of switch data........................................................
 c                                                                              :
 c source data..................................................................:
 c Bus--><I<Amplitude<Frequency<--TO:Phi0<---0=Phi0<-Ignore-><---Tstart<----Tstop
 14src          56.34       60.         0        0.                 -1.     9999.
-blank End of source data                                                       1
-c nodal output request data....................................................1
+c blank end of source data
+c nodal output request data.....................................................
 c Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->
-  src   bus13                                                                  1
-blank End of output requests....................................................
+  src   bus13
+c blank End of output requests....................................................
 c
 c plot request data.............................................................
- 2Figure 3.10(c)  3.10(d)                                                      1
- 194 5. 0.0 50.  -4.   4.src   bus13              ener 200MVA.95pfKAmps        1
-blank End of Plot Request Data..................................................
+ 2Figure 3.10(c)  3.10(d)
+ 194 5. 0.0 50.  -4.   4.src   bus13              ener 200MVA.95pfKAmps
+c blank End of Plot Request Data..................................................
 blank End of All Cases..........................................................

@@ -13,7 +13,7 @@
   character(8) vstacs, texta6, abuff
   common bus1, bus2, bus3, bus4, bus5, bus6
   common trash, blank, terra, userid, branch, copy
-  common csepar, chcont, texcol(80), texta6(15)
+  common csepar, chcont, texcol(160), texta6(15)
   common date1(2), tclock(2), vstacs(24)
   common abuff(20)
   !     flag-2.   begin class-2  /blank/  variables
