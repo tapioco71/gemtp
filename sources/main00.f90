@@ -59,6 +59,87 @@ program gemtp
   !    way expressed or implied.                                        *
   !                                                                     *
   !**********************************************************************
+  !
+  !    The present module  main00  is always in memory.   It is the
+  !    highest level module of a program which has two levels of
+  !    overlaying.   It calls primary level overlays only (directly),
+  !    based on the value of variable  'nchain' .   The following
+  !     legitimate values, and the meaning of the associated overlay
+  !     calls, exist .....
+  !     1-20.  For overlays 1, 2, ..., 20, which are secondary-level
+  !            overlays, a call must be first made to the controlling
+  !            primary-level overlay.   thus for such  'nchain'  values,
+  !            control is transfered first to module  main10 .   this
+  !            is the only case where calls to overlays are not made
+  !            directly.
+  !
+  !     29.  Completion of statistics (monte carlo) study, where variable
+  !          maxima of the different case solutions are read off the
+  !          disk, and are processed statistically to produce
+  !          cumulative distribution functions, etc.
+  !
+  !     31.  Plot routine, for graphical output of transients.
+  !          the program also terminates execution here, usually,
+  !          after writing an end-of-information mark on the
+  !          plot tape (whether or not the user has plotted anything).
+  !
+  !     39.  Supporting routine which generates EMTP branch
+  !          cards for the frequency-dependent representation of
+  !          an untransposed transmission line.   this is the
+  !          "marti setup"  code, named after dr. jose marti of
+  !          vancouver and caracas (see 1981 ieee pica paper).
+  !
+  !     41.  Supporting routine which calculates transformer matrices  (r)
+  !          and  (l)  from short-circuit and open-circuit data.
+  !
+  !     42.  Supporting routine which converts an rms voltage vs. current
+  !          saturation characteristic into an instantaneous flux vs.
+  !          current characteristic.
+  !
+  !     43.  Supporting routine which calculates weighting functions
+  !          a1(t)  and  a2(2)  for the zero-sequence mode of a
+  !          distributed line which has frequency-dependent line
+  !          constants  r  and  l .
+  !
+  !     44.  Supporting routine which calculates line constants for
+  !          overhead transmission lines by means of carson's formula.
+  !          this is a modified version of what was originally (until
+  !          january 1975) the completely-separate bpa line-constants
+  !          program.
+  !
+  !     45.  Supporting routine of  'Semlyen setup'  code.   the output
+  !          is a group of punched cards, as are required for the EMTP
+  !          simulation of a transmission circuit using  semlyen
+  !          recursive convolution modeling.
+  !
+  !     47.  Supporting routine of  'cable constants'  code.   the
+  !          primary function is to calculate  (r),  (l),  %  (c)
+  !          matrices for a multi-phase system of single-core coaxial
+  !          cables.
+  !
+  !     51.  Printing of introductory paragraph of error-message
+  !          termination ('you lose, fella, ... '), plus error-message
+  !          texts for  'kill'  codes numbered  1  through  50 .
+  !          the exiting linkage is to the last error overlay.
+  !
+  !     52.  Error message texts for  'kill'  codes numbered  51
+  !          the exiting linkage is to the last error overlay.
+  !
+  !     53.  Error message texts for  'kill'  codes numbered  91
+  !          through  150.  the exiting linkage is to the last
+  !          error overlay.
+  !
+  !     54.  Error message texts for  'kill'  codes numbered  151
+  !          through  200.   the exiting linkage is to the
+  !          last error overlay.
+  !
+  !     55.  Final error overlay.  messages for  kill = 201
+  !          onward are contained, as well as summary statistics
+  !          --- table sizes and timing figures for the run.
+  !          the exiting linkage is generally to module  over1  (to read
+  !          a new data case), but may be to module  over31 (for final
+  !          case termination).
+
   character(32) arg
   data ll34                 / 34 /
   data gfortran_stderr_unit / 0 /
@@ -158,105 +239,29 @@ program gemtp
 9236 format (/, ' Illegal nchain in main00.', i8)
   go to 2000
 end program gemtp
-!
-!    The present module  main00  is always in memory.   It is the
-!    highest level module of a program which has two levels of
-!    overlaying.   It calls primary level overlays only (directly),
-!    based on the value of variable  'nchain' .   The following
-!     legitimate values, and the meaning of the associated overlay
-!     calls, exist .....
-!     1-20.  For overlays 1, 2, ..., 20, which are secondary-level
-!            overlays, a call must be first made to the controlling
-!            primary-level overlay.   thus for such  'nchain'  values,
-!            control is transfered first to module  main10 .   this
-!            is the only case where calls to overlays are not made
-!            directly.
-!
-!     29.  Completion of statistics (monte carlo) study, where variable
-!          maxima of the different case solutions are read off the
-!          disk, and are processed statistically to produce
-!          cumulative distribution functions, etc.
-!
-!     31.  Plot routine, for graphical output of transients.
-!          the program also terminates execution here, usually,
-!          after writing an end-of-information mark on the
-!          plot tape (whether or not the user has plotted anything).
-!
-!     39.  Supporting routine which generates EMTP branch
-!          cards for the frequency-dependent representation of
-!          an untransposed transmission line.   this is the
-!          "marti setup"  code, named after dr. jose marti of
-!          vancouver and caracas (see 1981 ieee pica paper).
-!
-!     41.  Supporting routine which calculates transformer matrices  (r)
-!          and  (l)  from short-circuit and open-circuit data.
-!
-!     42.  Supporting routine which converts an rms voltage vs. current
-!          saturation characteristic into an instantaneous flux vs.
-!          current characteristic.
-!
-!     43.  Supporting routine which calculates weighting functions
-!          a1(t)  and  a2(2)  for the zero-sequence mode of a
-!          distributed line which has frequency-dependent line
-!          constants  r  and  l .
-!
-!     44.  Supporting routine which calculates line constants for
-!          overhead transmission lines by means of carson's formula.
-!          this is a modified version of what was originally (until
-!          january 1975) the completely-separate bpa line-constants
-!          program.
-!
-!     45.  Supporting routine of  'Semlyen setup'  code.   the output
-!          is a group of punched cards, as are required for the EMTP
-!          simulation of a transmission circuit using  semlyen
-!          recursive convolution modeling.
-!
-!     47.  Supporting routine of  'cable constants'  code.   the
-!          primary function is to calculate  (r),  (l),  %  (c)
-!          matrices for a multi-phase system of single-core coaxial
-!          cables.
-!
-!     51.  Printing of introductory paragraph of error-message
-!          termination ('you lose, fella, ... '), plus error-message
-!          texts for  'kill'  codes numbered  1  through  50 .
-!          the exiting linkage is to the last error overlay.
-!
-!     52.  Error message texts for  'kill'  codes numbered  51
-!          the exiting linkage is to the last error overlay.
-!
-!     53.  Error message texts for  'kill'  codes numbered  91
-!          through  150.  the exiting linkage is to the last
-!          error overlay.
-!
-!     54.  Error message texts for  'kill'  codes numbered  151
-!          through  200.   the exiting linkage is to the
-!          last error overlay.
-!
-!     55.  Final error overlay.  messages for  kill = 201
-!          onward are contained, as well as summary statistics
-!          --- table sizes and timing figures for the run.
-!          the exiting linkage is generally to module  over1  (to read
-!          a new data case), but may be to module  over31 (for final
-!          case termination).
+
 !
 !     subroutine stoptp.
 !
+
 subroutine stoptp
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Temporary stop statements of EMTP have been converted to
   !     "call stoptp", allowing installation-dependent clean up.
   include 'blkcom.ftn'
-  read (unit = abuff, fmt = 5607, iostat = ios) texcol
+  read (unit = abuff, fmt = 5607, iostat = ios) (texcol(i), i = 1, 80)
 5607 format (80a1)
   if (ios .ne. 0) go to 9000
   if (nchain .eq. 31 .and. lastov .eq. 1 .and. kill .eq. 9999) go to 9000
-  write (unit = lunit6, fmt = 5623) nchain, lastov, (texcol(i), i = 1, 10)
-5623 format (/, ' Temporary error stop in "stoptp".   nchain, lastov =', 2i5, 5x, 'last-read card image abuff follows ....', /, 10a1)
+  write (unit = lunit6, fmt = 5623) nchain, lastov, (texcol(i), i = 1, 80)
+5623 format (/, ' Temporary error stop in "stoptp".   nchain, lastov =', 2i5, 5x, 'last-read card image abuff follows ....', /, 80a1)
 9000 stop
 end subroutine stoptp
+
 !
 ! subroutine copyr.
 !
+
 subroutine copyr (d1, to, kk)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Routine which copies the same floating-point word  'd1'  into a
@@ -268,9 +273,11 @@ subroutine copyr (d1, to, kk)
   end do
   return
 end subroutine copyr
+
 !
 ! subroutine copyi.
 !
+
 subroutine copyi (n1, ito, kk)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Routine which copies the same integer word  'n1'  into a
@@ -282,9 +289,11 @@ subroutine copyi (n1, ito, kk)
   end do
   return
 end subroutine copyi
+
 !
 !    subroutine copya.
 !
+
 subroutine copya (text1, text2, kk)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     routine which copies the same alphanumeric word  'text1'  into
@@ -297,9 +306,11 @@ subroutine copya (text1, text2, kk)
   end do
   return
 end subroutine copya
+
 !
 !     subroutine erexit.
 !
+
 subroutine erexit
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11   installation-dependent EMTP module.   This is
@@ -317,9 +328,11 @@ subroutine erexit
   call datain                                               ! read data in, process $include, spy, etc.
   return
 end subroutine erexit
+
 !
 !     subroutine runtym.
 !
+
 subroutine runtym (d1, d2)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !    This subroutine returns with the current job-execution time, as
@@ -344,9 +357,11 @@ subroutine runtym (d1, d2)
   d2 = 0.0
   return
 end subroutine runtym
+
 !
 !     subroutine settym.
 !
+
 subroutine settym
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   real(8) time
@@ -360,9 +375,11 @@ subroutine settym
   end if
   return
 end subroutine settym
+
 !
 !     subroutine time44.
 !
+
 subroutine time44(a)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !    The purpose of subroutine  time44  is to interrogate the
@@ -389,9 +406,11 @@ subroutine time44(a)
 2754 format (a1, '.', 2a1)
   return
 end subroutine time44
+
 !
 !     subroutine cimage.
 !
+
 subroutine cimage
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11  installation-dependent emtp module which serves
@@ -420,7 +439,7 @@ subroutine cimage
   data textax(1)  / 'attach' /
   !              *****    request no. 2.    "$punch"       *****  *****
   data textay(2)  / 'p     ' /
-  data  jpntr(2)  / 2 /
+  data jpntr(2)   / 2 /
   data textax(2)  / 'punch ' /
   !              *****    request no. 3.    "$output"      *****  *****
   data textay(3)  / 'out   ' /
@@ -557,12 +576,12 @@ subroutine cimage
   end do
   go to 3233
 3040 if (chcont .eq. text4) go to 3233
-  read (unit = abuff(1), fmt = 3041, iostat = ios) texcol
+  read (unit = abuff(1), fmt = 3041, iostat = ios) (texcol(i), i = 1, 80)
 3041 format (80a1)
-!  if (ios .ne. 0) then
-!     write (unit = lunit6, fmt = "('Could not read from abuff.  Stop.')")
-!     stop
-!  end if
+  !  if (ios .ne. 0) then
+  !     write (unit = lunit6, fmt = "('Could not read from abuff.  Stop.')")
+  !     stop
+  !  end if
   !     Dan Goldsworthy had trouble with $listoff within $include
   !     which was within tacs supplemental variables.  wsm+thl
   !      if ( abuff(1) .ne. 8h$listoff   .and.
@@ -897,26 +916,32 @@ subroutine cimage
   coptbr(ibr) = copt(1)
   return
 end subroutine cimage
+
 !
 !     subroutine ioerr.
 !
+
 subroutine ioerr (naddr)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   naddr = 0
   return
 end subroutine ioerr
+
 !
 !     subroutine caterr.
 !
+
 subroutine caterr (naddr, koderr)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   naddr = 0
   koderr = 0
   return
 end subroutine caterr
+
 !
 !     function locf.
 !
+
 function locf (array)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   integer(8) locf
@@ -924,9 +949,11 @@ function locf (array)
   locf = loc (array(1)) / 8
   return
 end function locf
+
 !
 !     function locint.
 !
+
 function  locint (iarray)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   integer(8) locint
@@ -940,9 +967,11 @@ function  locint (iarray)
   locint = (loc (iarray(1))) / 4
   return
 end function locint
+
 !
 !     function rfunl1.
 !
+
 function rfunl1 (x)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function provides for all real library functions of
@@ -1009,9 +1038,11 @@ function rfunl1 (x)
   tanhz = dtanh (x)
   return
 end function rfunl1
+
 !
 ! subroutine trgwnd.
 !
+
 subroutine trgwnd (x, d17)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -1023,40 +1054,50 @@ subroutine trgwnd (x, d17)
 3456 format (' Angle unwind in "trgwnd" called by "rfunl1".   nchain, x, d17 =', i5, 2e25.16)
 9000 return
 end subroutine trgwnd
+
 !
 !     function ifunl1.
 !
+
 function ifunl1 (d1)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function is to provide neutral names ending in "z"
   !     for all integer library functions of one real argument.
   ifunl1 = int (d1)
   return
+
   entry intz (d1)
   intz = int (dint (d1))
   return
 end function ifunl1
+
 !
 ! function cfunl1.
 !
+
 function cfunl1 (x)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   complex(8) cfunl1, x, cexpz, csqrtz, clogz
   cfunl1 = x
   return
+
   entry cexpz (x)
   cexpz = cdexp (x)
   return
+
   entry csqrtz (x)
   csqrtz = cdsqrt (x)
   return
+
   entry clogz (x)
   clogz = cdlog (x)
   return
 end function cfunl1
+
 !
 ! function rfunl2.
 !
+
 function rfunl2 (x, y)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function provides for all real library functions of
@@ -1065,26 +1106,33 @@ function rfunl2 (x, y)
   real(8), intent(in) :: x, y
   rfunl2 = x
   return
+
   entry atan2z (x,y)
   atan2z = 0.0
   if (x .ne. 0.0  .or. y .ne. 0.0) atan2z = datan2(x,y)
   return
+
   entry signz (x, y)
   signz = dsign (x, y)
   return
+
   entry amodz (x, y)
   amodz = dmod (x, y)
   return
+
   entry amin1z (x, y)
   amin1z = dmin1 (x, y)
   return
+
   entry amax1z (x, y)
   amax1z = dmax1 (x, y)
   return
 end function rfunl2
+
 !
 ! function cmpxz.
 !
+
 function cmplxz (x, y)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function provides for all complex library functions of
@@ -1096,9 +1144,11 @@ function cmplxz (x, y)
   cmplxz = dcmplx (x, y)
   return
 end function cmplxz
+
 !
 ! function rfunl3.
 !
+
 function rfunl3 (x)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function provides for all real library functions of
@@ -1108,19 +1158,24 @@ function rfunl3 (x)
   complex(8) x
   rfunl3 = 0.0
   return
+
   entry aimagz (x)
   aimagz = dimag (x)
   return
+
   entry realz (x)
   realz = dreal (x)
   return
+
   entry cabsz (x)
   cabsz = cdabs (x)
   return
 end function rfunl3
+
 !
 ! subroutine cmultz.
 !
+
 subroutine cmultz (ar, ai, br, bi, cr, ci, ksn)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   sr = br * cr - bi * ci
@@ -1131,9 +1186,11 @@ subroutine cmultz (ar, ai, br, bi, cr, ci, ksn)
   ai = -ai
 200 return
 end subroutine cmultz
+
 !
 ! subroutine cdivz.
 !
+
 subroutine cdivz (ar, ai, br, bi, cr, ci, ksn)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   fac = cr * cr + ci * ci
@@ -1146,9 +1203,11 @@ subroutine cdivz (ar, ai, br, bi, cr, ci, ksn)
   ai = -ai
 200 return
 end subroutine cdivz
+
 !
 ! function iabsz.
 !
+
 function  iabsz (n1)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     One and only integer library function of one integer
@@ -1157,30 +1216,38 @@ function  iabsz (n1)
   iabsz = iabs (n1)
   return
 end function iabsz
+
 !
 ! function ifunl2.
 !
+
 function ifunl2 (n1, n2)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Provision for all integer library functions of 2 integer arguments
   ifunl2 = n1
   return
+
   entry isignz (n1, n2)
   isignz = isign (n1, n2)
   return
+
   entry modz (n1, n2)
   modz = mod (n1, n2)
   return
+
   entry min0z (n1, n2)
   min0z = min0 (n1, n2)
   return
+
   entry max0z (n1, n2)
   max0z = max0 (n1, n2)
   return
 end function ifunl2
+
 !
 ! subroutine dlibrf.
 !
+
 subroutine dlibrf (x, y)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   double precision x, y
@@ -1196,50 +1263,63 @@ subroutine dlibrf (x, y)
   !     variables, this implies  real*16 ,  if available.
   !     Installation-dependent module coded for  dec vax-11
   return
+
   entry dabsz (x, y)
   y = dabs (x)
   return
+
   entry dcosz (x, y)
   y = dcos (x)
   return
+
   entry dexpz (x, y)
   y = dexp (x)
   return
+
   entry dsinz (x, y)
   y = dsin (x)
   return
+
   entry dsqrtz (x, y)
   y = dsqrt (x)
   return
+
   entry dlogz (x, y)
   y = dlog (x)
   return
 end subroutine dlibrf
+
 !
 ! subroutine dlibr2.
 !
+
 subroutine dlibr2 (x, y, z)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   double precision x, y, z
   !     Installation-dependent module for dec vax-11 computer
   !     like "dlibrf" (see comments there), only for two inputs
   return
+
   entry datn2z (x, y, z)
   z = datan2 (x, y)
   return
 end subroutine dlibr2
+
 !
 !     subroutine setmar.
 !
+
 subroutine setmar
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Subroutine to change page size and eject page for printer plots.
   !     Dummy module since this ontario hydro (univac) trick is unknown.
   return
+
   entry chrsiz (n)
   n = 0
   !     Entry point for do-nothing mimiced tektronix plot10 of "tekplt"
   return
+
   entry setplt
   !     Entry point to change lines/page to maximum number allowed,
   !     to allow printer plots to be continuous over page boundries.
@@ -1247,24 +1327,29 @@ subroutine setmar
   !     write (lunit6, 1000 )
   !     1000 format (1h1)
   return
+
   entry setstd
   !     Entry point to restore page limits to standard values.
   !     call system dependant routine to change page size
   !     write (lunit6, 1000 )
   return
 end subroutine setmar
+
 !
 !     subroutine interp.
 !
+
 subroutine interp
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     If  character*51 kunit6,  active module needed to flush
   !     abuff and kunit6 as 132-column interpreted data card line.
   return
 end subroutine interp
+
 !
 !     subroutine mover.
 !
+
 subroutine mover(a, b, n)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !    Subroutine  mover  (with entry point mover0) is used for block
@@ -1282,9 +1367,11 @@ subroutine mover(a, b, n)
   end do
   return
 end subroutine mover
+
 !
 !     subroutine mover0.
 !
+
 subroutine mover0 (b, n)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   real(8) :: b(*)
@@ -1298,9 +1385,11 @@ subroutine mover0 (b, n)
   end do
   return
 end subroutine mover0
+
 !
 !     subroutine move.
 !
+
 subroutine move (inta, intb, n)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !    Subroutine  move  is identical to the
@@ -1315,9 +1404,11 @@ subroutine move (inta, intb, n)
   end do
   return
 end subroutine move
+
 !
 !     subroutine move0.
 !
+
 subroutine move0 (intb, n)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !    Subroutine  move0  is identical to  the block-zeroing routine
@@ -1331,9 +1422,11 @@ subroutine move0 (intb, n)
   end do
   return
 end subroutine move0
+
 !
 !     subroutine addmxd.
 !
+
 subroutine addmxd (a, b, c, n)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Subroutine  addmxd  forms matrix   (c) = (a) + b(u)  , where (a),
@@ -1354,9 +1447,11 @@ subroutine addmxd (a, b, c, n)
 3010 continue
   return
 end subroutine addmxd
+
 !
 !     subroutine multmx.
 !
+
 subroutine multmx (a, b, c, temp, n)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Subroutine multmx  forms the matrix product   (c) = (a)(b)   where
@@ -1385,9 +1480,11 @@ subroutine multmx (a, b, c, temp, n)
   end do
   return
 end subroutine multmx
+
 !
 !     subroutine frefld.
 !
+
 subroutine frefld (array)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -1500,9 +1597,11 @@ subroutine frefld (array)
 9901 format (' Exit "frefld".  kill, kolbeg, array(1) =', i6, e20.10)
   return
 end subroutine frefld
+
 !
 !     subroutine freone
 !
+
 subroutine freone (d1)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Scalar version of  "frefld"  which enters the utpf with
@@ -1513,9 +1612,11 @@ subroutine freone (d1)
   d1 = array(1)
   return
 end subroutine freone
+
 !
 ! subroutine frenum.
 !
+
 subroutine frenum (text1, n3, d1)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11/780  installation-dependent module called only by
@@ -1549,9 +1650,11 @@ subroutine frenum (text1, n3, d1)
 4732 format (e30.0)
   return
 end subroutine frenum
+
 !
 !     subroutine packa1.
 !
+
 subroutine packa1 (from, to, kk)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     System-dependent EMTP module  'packa1'  for  VAX-11/780.
@@ -1563,9 +1666,11 @@ subroutine packa1 (from, to, kk)
   to(kk) = from(1)
   return
 end subroutine packa1
+
 !
 !     subroutine packch.
 !
+
 subroutine packch (from, to, k4or6, nchbeg, nword)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !
@@ -1613,9 +1718,11 @@ subroutine packch (from, to, k4or6, nchbeg, nword)
   end do
   return
 end subroutine packch
+
 !
 !     function seedy.
 !
+
 function seedy (atim)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !
@@ -1638,9 +1745,11 @@ function seedy (atim)
   seedy = sec + amin + hour + 1.0
   return
 end function seedy
+
 !
 !     subroutine randnm.
 !
+
 function randnm (x)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !
@@ -1689,9 +1798,11 @@ function randnm (x)
 7265 randnm = sandnm(x)
 9800 return
 end function randnm
+
 !
 !     function sandnm.
 !
+
 function sandnm (x)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This version of  'randnm'  is used for testing of the
@@ -1824,9 +1935,11 @@ function sandnm (x)
   sandnm = a(l)
   return
 end function sandnm
+
 !
 ! subroutine mult.
 !
+
 subroutine mult (a, x, y, n, icheck)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     subroutine  'mult'  is used to post-multiply a symmetric matrix

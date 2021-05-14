@@ -283,7 +283,7 @@ subroutine over1
      nright = -2
      n9 = kolbeg
      kolbeg = 1
-     read (unit = abuff(1), fmt = 3246, iostat = ios) texcol
+     read (unit = abuff(1), fmt = 3246, iostat = ios) (texcol(i), i = 1, 80)
 3246 format (80a1)
 !     if (ios .ne. 0) then
 !        write (unit = lunit6, fmt = "('Could not read from abuff.  Stop.')")
@@ -793,7 +793,7 @@ end subroutine tacs1c
 !
 !     subroutine swmodf.
 !
-subroutine  swmodf
+subroutine swmodf
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     called only by over1 for start again usage
   include 'blkcom.ftn'
@@ -838,9 +838,11 @@ subroutine  swmodf
 4568 format ('  Exit  module "swmodf."')
   return
 end subroutine swmodf
+
 !
 !     subroutine reques.
 !
+
 subroutine reques
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -1301,190 +1303,687 @@ subroutine reques
      !if (i .eq. 33) go to 9200
      select case (i)
      case (1)
-        go to 8001
+        ! $$$$$    special-request word no. 1.   'xformer'                 $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 83056)
+83056 format ('+request for transformer impedance-matrix routine.')
+        nchain = 41
+        go to 5617
 
      case (2)
-        go to 8002
+        ! $$$$$    special-request word no. 2.   'saturation'              $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 83057)
+83057 format ('+request for magnetic-saturation routine.')
+        nchain = 42
+        go to 5617
 
      case (3)
-        go to 8003
+        ! $$$$$    special-request word no. 3.   'type99 limit'            $$$$$
+        if (kolbeg .gt. 0) go to 3352
+        read (unit = abuff(1), fmt = 2642) max99m
+        go to 3354
+3352    nfrfld = 1
+        call freone (d1)
+        max99m = d1
+3354    if (noutpr .eq. 0) write (unit = kunit6, fmt = 3355) max99m
+3355    format ('+redefine type-99 message limit to', i6)
+        go to 15
 
      case (4)
-        go to 8004
+        ! $$$$$    special-request word no. 4.   'replot'                  $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 3364)
+3364    format ('+request to re-plot old plot data.')
+        degmax = 0.0
+        ialter = lunit4
+        call midov1
+        call pfatch
+        nchain = 31
+        go to 5617
 
      case (5)
-        go to 8005
+        ! $$$$$    special-request word no. 5.   'begin new data case'     $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 4154)
+4154    format ('+marker card preceding new data case.')
+        go to 15
 
      case (6)
-        go to 8006
+        ! $$$$$    special-request word no. 6.   'line constants'          $$$$$
+        nchain = 44
+        if (iprsup .ge. 1) write (unit = lunit6, fmt = 3411)
+3411    format (' Set nchain = 44 for "line constants".')
+        go to 5617
 
      case (7)
-        go to 8007
+        ! $$$$$    special-request word no. 7.   'postprocess plot file'   $$$$$
+        if (kolbeg .gt. 0)   go to 3375
+        read (unit = abuff(1), fmt = 2642) iofbnd
+        go to 3379
+3375    nfrfld = 1
+        call freone (d1)
+        iofbnd = int (d1)
+3379    write (unit = kunit6, fmt = 3382) iofbnd
+3382    format ('+postprocess.  iplot =', i6)
+        read (unit = lunit2) bus1, bus2, bus3, bus4, n1, n2, n3, n4, (bus5, k = 1, n1)
+        n13 = n2 + n4
+        if (iprsup .gt. 0) write (unit = lunit6, fmt = 3383)  bus1, bus2, n1, n2, n3, n4
+3383    format (/, ' After 1st record.  date=', 2a4, 4i5)
+        if (n2 .gt. 0) read (unit = lunit2) (n5, k = 1, n2)
+        if (n4 .gt. 0) read (unit = lunit2) (n5, k = 1, n4)
+        if (m4plot .eq. 0) go to 3385
+        iofgnd = 1
+        call pltlu2 (epsuba, farray(1))
+        go to 3386
+3385    read (unit = lunit2) epsuba, farray(1)
+3386    ltdelt = -6789
+        iofgnd = n13
+        go to 15
 
      case (8)
-        go to 8008
+        ! $$$$$    special-request word no. 8.   'plotter paper height'    $$$$$
+        if (kolbeg .gt. 0) go to 2608
+        call expchk (ll25, ll80, ll8)
+        if (kill .gt. 0) go to 9200
+        read (unit = abuff, fmt = 2605) szplt
+2605    format (32x, e8.0)
+        go to 2612
+2608    nfrfld = 1
+        call freone (szplt)
+2612    if (noutpr .eq. 0) write (unit = kunit6, fmt = 2614) szplt
+2614    format ('+new plotter paper-height limit.', 2x, e13.3)
+        go to 15
 
      case (9)
-        go to 8009
+        ! $$$$$    special-request word no. 9.   'printer lines per inch'  $$$$$
+        if (kolbeg .gt. 0) go to 2628
+        call intchk (ll25, ll80, ll8)
+        if (kill .gt. 0) go to 9200
+        read (unit = abuff, fmt = 2642) lnpin
+        go to 2631
+2628    nfrfld = 1
+        call frefld (voltbc(1))
+        lnpin = voltbc(1)
+2631    if (noutpr .eq. 0 ) write (unit = kunit6, fmt = 2634) lnpin
+2634    format ('+new printer spacing, lines/distance =', 2x, i8)
+        go to 15
 
      case (10)
-        go to 8010
+        ! $$$$$    special-request word no. 10.   'mode voltage output'    $$$$$
+        if (kolbeg .gt. 0) go to 2644
+        call intchk (ll25, ll80, ll8)
+        if (kill .gt. 0) go to 9200
+        read (unit = abuff, fmt = 2642) modout
+2642    format (32x, 6i8)
+        go to 2646
+2644    nfrfld = 1
+        call frefld (voltbc(1))
+        modout = voltbc(1)
+2646    if (modout .le. 0) modout = 3
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 2648) modout
+2648    format ('+request for tricky Karrenbauer output,', i3, '  modes.')
+        go to 15
 
      case (11)
-        go to 8011
+        ! $$$$$    special-request word no. 11.   'end last data case'     $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 2654)
+2654    format ('+special terminator record for all data.')
+        go to 15
 
      case (12)
-        go to 8012
+        ! $$$$$    special-request word no. 12.   'analytic sources usage' $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 2667)
+2667    format ('+request for use of analytic type 1-10 sources.')
+        kanal = 1
+        go to 15
 
      case (13)
-        go to 8013
+        !     $$$$$ special-request word no. 13.   'limit on plot oscillations'
+        if (kolbeg .gt. 0) go to 2671
+        read (unit = abuff(1), fmt = 2642) nsmth
+        go to 2673
+2671    nfrfld = 1
+        call frefld (voltbc)
+        nsmth = voltbc(1)
+2673    if (noutpr .eq. 0) write (unit = kunit6, fmt = 2675) nsmth
+2675    format ('+change successive oscillation limit.', 2x, i8)
+        go to 15
 
      case (14)
-        go to 8014
+        ! $$$$$    special-request word no. 14.   'tacs emtp sources'      $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 2682)
+2682    format ('+TACS names controlling type 1-10 EMTP sources.')
+        if (kolbeg .gt. 0) go to 2683
+        read (unit = abuff(1), fmt = 2685) (vstacs(k), k = 1, 10)
+2685    format (20x, 10a6)
+        go to 2686
+2683    nright = -2
+        call freone (d1)
+        do j = 1, 10
+           vstacs(j) = texta6(j)
+        end do
+2686    nstacs = 10
+2687    if (vstacs(nstacs) .ne. blank) go to 2690
+        nstacs = nstacs - 1
+        if (nstacs .gt. 0) go to 2687
+2690    go to 15
 
      case (15)
+        ! $$$$$    special-request word no. 15.   'start again'            $$$$$
+        !          this request is handled outside of subroutine.
         go to 9200
 
      case (16)
-        go to 8016
+        ! $$$$$    special-request word no. 16.   'semlyen setup'          $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 2705)
+2705    format ('+request for Semlyen step-response routine.')
+        nchain = 45
+        go to 5617
 
      case (17)
-        go to 8017
+        ! $$$$$  special request-word no. 17.   'linear bias usage'        $$$$$
+        if (noutpr .eq. 0) write (unit = lunit6, fmt = 8719)
+8719    format ('+ramped linear variation of random bias.')
+        linsys = 1
+        go to 15
 
      case (18)
-        go to 8018
+        ! $$$$$    special-request word no. 18.   'cable constants'        $$$$$
+        read (unit = abuff, fmt = 2732) d13, ktrlsw(3)
+2732    format (48x, e8.0, i8)
+        if (d13 .gt. 0.0) znvref = d13
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 2726) ktrlsw(3)
+2726    format ('+transfer to "cable constants".  type =', i6)
+        nchain = 47
+        go to 5617
 
      case (19)
-        go to 8019
+        ! $$$$$    special-request word no. 19.   'auto name'              $$$$$
+        nmauto = nmauto + 1
+        if (nmauto .ge. 2) nmauto = 0
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 2743) nmauto
+2743    format ('+toggle branch naming option.   nmauto =', i8)
+        go to 15
 
      case (20)
-        go to 8020
+        ! $$$$$    special-request word no. 20.   'renumber bypass'        $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 2758)
+2758    format ('+bypass of transient network renumbering.')
+     ! negative "kpartb" (1000 or exponent of "high resistance")
+     ! is flag carried into "over6" to bypass overlay 7:
+        kpartb = -iabs (kpartb)
+        go to 15
 
      case (21)
+        ! $$$$$    special-request word no. 21.   'frequency scan'         $$$$$
         go to 8021
-
+        
      case (22)
-        go to 8022
+        ! $$$$$    special-request word no. 22.   'free format'            $$$$$
+        read (unit = abuff(1), fmt = 2796) bus4, bus5
+2796    format (16x, a1, 7x, a1)
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 2801) bus4, bus5
+2801    format ('+free-field characters.   ', a1, '   and   ', a1, ' .')
+        if (bus4 .ne. blank) csepar = bus4
+        if (bus5 .ne. blank) chcont = bus5
+        go to 15
 
      case (23)
-        go to 8023
+        ! $$$$$    special-request word no. 23.   'diagnostic'             $$$$$
+        if (kolbeg .gt. 0) go to 2814
+        read (unit = abuff(1), fmt = 2811) (iprsov(k), k = 1, 30)
+2811    format (20x, 30i2)
+        go to 2816
+2814    nfrfld = 30
+        call frefld (voltbc(1))
+        if (kill .gt. 0) go to 9200
+        do  k = 1, 30
+           iprsov(k) = int (voltbc(k))
+        end do
+2816    iprsup = iprsov(1)
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 2813) (iprsov(k), k = 1, 5)
+2813    format ('+diagnostic printout codes.', 5i4)
+        go to 15
 
      case (24)
-        go to 8024
+        ! $$$$$    special-request word no. 24.   'power frequency'        $$$$$
+        if (kolbeg .gt. 0) go to 2820
+        read (unit = abuff(1), fmt = 2605) statr
+        go to 2822
+2820    nfrfld = 1
+        call freone (statfr)
+2822    if (noutpr .eq. 0) write (unit = kunit6, fmt = 2824) statfr
+2824    format ('+redefined power frequency =', e12.3, '  Hz.')
+        go to 15
 
      case (25)
-        go to 8025
+        ! $$$$$    special-request word no. 25.   'file request'           $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 4654)
+4654    format ('+call subroutine "midov1" .')
+        call midov1
+        go to 15
 
      case (26)
-        go to 8026
+          ! $$$$$    special-request word no. 26.   'user identification'  $$$$$
+        if (kolbeg .gt. 0) go to 4661
+        read (unit = abuff(1), fmt = 4658) userid
+4658    format (24x, 8a6)
+        go to 4664
+4661    nright = -2
+        call freone (d1)
+        nright = 0
+        userid = texta6(1)
+4664    if (noutpr .eq. 0) write (unit = kunit6, fmt = 4667) userid
+4667    format ('+user identification.', 1x, 4a6)
+        go to 15
 
      case (27)
-        go to 8027
+        ! $$$$$    special-request word no. 27.   'convert zno'            $$$$$
+        iofbnd = 99876
+        nchain = 42
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 4685)
+4685    format ('+request to convert old zno data to new formats.')
+        go to 5617
 
      case (28)
-        go to 8028
+        ! $$$$$    special-request word no. 28.   'abort data case'        $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 4695)
+4695    format ('+request to abort this data case.')
+        l = 0
+        !     read input card using cimage
+4699    call cimage
+        n9 = kolbeg
+        kolbeg = 1
+        nright = -2
+        call freone (d1)
+        n1 = jpntr(5)
+        n2 = jpntr(6) - 1
+        k = 0
+        do j = n1, n2
+           k = k + 1
+           if (texta6(k) .ne. textax(j)) go to 4711
+        end do
+        go to 15
+4711    l = l + 1
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 4713) l
+4713    format ('+discarded card number', i5, '   of skipped case.')
+        go to 4699
 
      case (29)
-        go to 8029
+        ! $$$$$    special-request word no. 29.   'kill codes'             $$$$$
+        ipntv(1) = -8888
+        if (kolbeg .gt. 0) go to 4724
+        read (unit = abuff(1), fmt = 4721) kill, ipntv(2)
+4721    format (32x, 2i8)
+        go to 4726
+4724    nfrfld = 2
+        call frefld (voltbc(1))
+        kill = int (voltbc(1))
+        ipntv(2) = int (voltbc(2))
+4726    write (unit = kunit6, fmt = 4728) kill, ipntv(2)
+4728    format ('+listing of error messages.', 2i8)
+        ipntv(3) = kill
+        write (unit = lunit6, fmt = 4733) kill
+4733    format (/, ' Message of kill-code number', i4, '.')
+        bus1 = trash
+        bus2 = trash
+        bus3 = trash
+        bus4 = trash
+        bus5 = trash
+        bus6 = trash
+        do j = 11, 17
+           lstat(j) = 0
+           flstat(j) = 0.0
+        end do
+        nchain = 51
+        go to 9200
 
      case (30)
-        go to 8030
+        ! $$$$$    special-request word no. 30.   'high resistance'        $$$$$
+        n7 = kpartb
+        if (kolbeg .gt. 0) go to 4735
+        read (unit = abuff(1), fmt = 4721) kpartb
+        call intchk (ll33, ll40, ll8)
+        if (kill .gt. 0) go to 9200
+        go to 4737
+4735    nfrfld = 1
+        call frefld (voltbc(1))
+        kpartb = int (voltbc(1))
+4737    d1 = 10.0 ** kpartb
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 4739) d1
+4739    format ('+exponent of high resistance.   R =', e12.2)
+        !     possible negative sign on previous "kpartb" must be
+        !     retained as flag for "renumber bypass" usage:
+        if (n7 .lt. 0) kpartb = -kpartb
+        go to 15
 
      case (31)
-        go to 8031
+        ! $$$$$    special-request word no. 31.   'average output'         $$$$$
+        iaverg = 1
+        nsmth = intinf
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7010)
+7010    format ('+request to average (smooth) output.')
+        go to 15
 
      case (32)
+        ! $$$$$  special request-word no. 32.  'absolute tacs dimensions'  $$$$$
+        !        this request is handled outside of subroutine.
         go to 9200
 
      case (33)
+        ! $$$$$  special request-word no. 33.  'relative tacs dimensions'  $$$$$
+        !        this request is handled outside of subroutine.
         go to 9200
 
      case (34)
-        go to 8034
+        ! $$$ special request-word no. 34.  'tabulate energization results' $$$$
+        write (unit = kunit6, fmt = 7183)
+7183    format ("+request for  'statistics'  termination.")
+        nenerg = intinf
+        go to 15
 
      case (35)
-        go to 8035
+        ! $$$$$ special request-word no. 35.  'statistics output salvage'  $$$$$
+        if (kolbeg .gt. 0) go to 7193
+        read (unit = abuff(1), fmt = 7191) jflsos
+7191    format (29x, i3)
+        go to 7195
+7193    nfrfld = 1
+        call freone (d1)
+        jflsos = int (d1)
+7195    if (jflsos .gt. 0) go to 7199
+        !     find random integer  'jflsos'  between zero and 999.
+        call runtym (d1, d2)
+        seed = seedy (tclock(1)) + 1000. * (d1 + d2)
+        n13 = int (alog1z (seed) + epsiln)
+        n13 = n13 - 2
+        seed = seed / 10. ** n13
+        jflsos = int (seed)
+7199    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7200) jflsos
+7200    format ('+disk storage of energization results.', i8)
+        go to 15
 
      case (36)
-        go to 8036
+        ! $$$$$  special request-word no. 36.   'omit base case'           $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7203)
+7203    format ('+omit base case if statistics/systematic case.')
+        kbase = intinf
+        go to 15
 
      case (37)
-        go to 8037
+        ! $$$$$  special request-word no. 37.   'change switch'            $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7206)
+7206    format ('+convert switched-L,R to pseudo-nonlinear.')
+        iofbnd = 33666
+        go to 15
 
      case (38)
-        go to 8038
+        ! $$$$$  special request-word no. 38.   'miscellaneous data cards' $$$$$
+        ifdep = -5555
+        write (unit = kunit6, fmt = 7212)
+7212    format ('+request record before misc. data cards.')
+        go to 15
 
      case (39)
-        go to 8039
+        ! $$$$$ special request-word no. 39.   'redefine tolerance epsiln' $$$$$
+        if (kolbeg .gt. 0) go to 7217
+        read (unit = abuff(1), fmt = 2605) epsiln
+        go to 7223
+7217    nfrfld = 1
+        call freone (epsiln)
+7223    write (unit = kunit6, fmt = 7226) epsiln
+7226    format ("+misc. data constant  'epsiln' .", e12.3)
+        go to 15
 
      case (40)
-        go to 8040
+        ! $$$$$ special request-word no. 40.   'change printout frequency' $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7234)
+7234    format ('+request record before printout frequencies.')
+        ktref = -7777
+        go to 15
 
      case (41)
-        go to 8041
+        ! $$$$$  special request-word no. 41.   'begin peak value search'  $$$$$
+        if (kolbeg .gt. 0) go to 7247
+        read (unit = abuff(1), fmt = 2605) begmax(2)
+        go to 7249
+7247    nfrfld = 1
+        call frefld (begmax(2))
+7249    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7252) begmax(2)
+7252    format ('+extrema calc. begins at', e13.4, '  seconds.')
+        if (begmax(2) .ne. -1.) go to 15
+        !     read input data card using cimage
+        call cimage
+        read (unit = abuff(1), fmt = 7253) (begmax(ip), ip = 2, 6)
+7253    format (10e8.0)
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7254) (begmax(ip), ip = 2, 5)
+7254    format ('+(t1, t2):', 4e10.2)
+        go to 15
 
      case (42)
-        go to 8042
+        ! $$$$$  special request-word no. 42.   'time of dice roll'        $$$$$
+        if (kolbeg .gt. 0) go to 7255
+        read (unit = abuff(1), fmt = 2605) tenerg
+        go to 7261
+7255    nfrfld = 1
+        call freone (tenerg)
+7261    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7262) tenerg
+7262    format ('+statistics table-saving time =', e12.3, '  sec. ')
+        go to 15
 
      case (43)
-        go to 8043
+          ! $$$$$  special request-word no. 43.   'zinc oxide'             $$$$$
+        if (kolbeg .gt. 0) go to 7266
+        read (unit = abuff, fmt = 7264) n13, (flstat(m), m = 15, 19)
+7264    format (16x, i8, 5e8.0)
+        go to 7268
+7266    nfrfld = 6
+        call frefld (flstat(14))
+        n13 = int (flstat(14))
+7268    if (n13 .gt. 0)  maxzno = n13
+        if (flstat(15) .gt. 0.0) epszno = flstat(15)
+        if (flstat(16) .gt. 0.0) epwarn = flstat(16)
+        if (flstat(17) .gt. 0.0) epstop = flstat(17)
+        if (flstat(18) .gt. 0.0) znolim(1) = flstat(18)
+        if (flstat(19) .gt. 0.0) znolim(2) = flstat(19)
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7270) maxzno, epszno, epwarn, epstop
+7270    format ('+Zno const.', i4, 3e11.3)
+        go to 15
 
      case (44)
-        go to 8044
+        ! $$$$$  special request-word no. 44.   'peak voltage' monitor'    $$$$$
+        peaknd(1) = flzero
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7273)
+7273    format ('+overall problem peak node voltage.')
+        go to 15
 
      case (45)
-        go to 8045
+        ! $$$$$  special request-word no. 45.   'absolute u.m. dimensions' $$$$$
+        if (kolbeg .gt. 0) go to 7279
+        read (unit = abuff(1), fmt = 7276) nclfix, numfix, iotfix, ibsfix
+7276    format (32x, 6i8)
+        go to 7282
+7279    nfrfld = 4
+        call frefld (voltbc)
+        nclfix = int (voltbc(1))
+        numfix = int (voltbc(2))
+        iotfix = int (voltbc(3))
+        ibsfix = int (voltbc(4))
+7282    if (nclfix .gt. 0) go to 7284
+        nclfix = 20
+        numfix = 3
+        iotfix = 50
+        ibsfix = 60
+7284    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7287) nclfix, numfix, iotfix, ibsfix
+7287    format ('+u.m. table sizes.', 4i6)
+        go to 15
 
      case (46)
-        go to 8046
+        ! $$$$$  special request-word no. 46.   'relative u.m. dimensions' $$$$$
+        if (kolbeg .gt. 0) go to 7298
+        read (unit = abuff(1), fmt = 7276) (voltbc(k), k = 1, 4)
+        go to 7303
+7298    nfrfld = 4
+        call frefld (voltbc(1))
+7303    d1 = 0.0
+        do j = 1, 4
+           d1 = d1 + voltbc(j)
+        end do
+        if (d1 .gt. 0.0) go to 7310
+        voltbc(1) = 42
+        voltbc(2) = 23
+        voltbc(3) = 10
+        voltbc(4) = 10
+        go to 7303
+7310    d1 = lspcum * nbyte(3) / d1
+        nclfix = int (voltbc(1) * d1 / (4 * nbyte(3) +  4 * nbyte(4)))
+        numfix = int (voltbc(2) * d1 / (17 * nbyte(3) + 12 * nbyte(4)))
+        iotfix = int (voltbc(3) * d1 / (2 * nbyte(4)))
+        ibsfix = int (voltbc(4) * d1 / (1 * nbyte(1)))
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7309) nclfix, numfix, iotfix, ibsfix
+7309    format ('+derived u.m. sizes.', 4i6)
+        go to 15
 
      case (47)
-        go to 8047
+        ! $$$$$  special request-word no. 47.   'time step loop'           $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7314)
+7314    format ('+transfer control to time-step loop.')
+        nchain = 16
+        t = flstat(14)
+        call mover0 (flstat(3), 4)
+        call runtym (d1, d2)
+        flstat(1) = d1 + flstat(1)
+        flstat(2) = d2 + flstat(2)
+        flstat(7) = -d1
+        flstat(8) = -d2
+        go to 15
 
      case (48)
-        go to 8048
+        ! $$$ special request-word no. 48.   'alternate diagnostic printout' $$$
+        if (kolbeg .gt. 0) go to 7322
+        read (unit = abuff(1), fmt = 2642) (iprsov(j + 30), j = 1, 4)
+        go to 7329
+7322    nfrfld = 4
+        call frefld (voltbc(1))
+        do j = 1, 4
+           iprsov(j + 30) = int (voltbc(j))
+        end do
+7329    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7331) (iprsov(j + 30), j = 1, 4)
+7331    format ('+deltat-loop printout.', 4i6)
+        go to 15
 
      case (49)
-        go to 8049
+        ! $$$$$  special request-word no. 49.   'tacs warn limit'          $$$$$
+        if (kolbeg .gt. 0) go to 7334
+        read (unit = abuff(1), fmt = 2582) lstat(51), pu
+2582    format (16x, i8, e8.0)
+        go to 7335
+7334    nfrfld = 2
+        call frefld (voltbc(1))
+        lstat(51) = int (voltbc(1))
+        pu = voltbc(2)
+7335    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7336) lstat(51), pu
+7336    format ('+warning controls.  lim, t-beg =', i6, e10.2)
+        go to 15
 
-     case (50)
-        go to 8050
-
-     case (51)
-        go to 8051
+     case (50, 51)
+        ! $$$$$    special-request word no. 50.   'marti setup'            $$$$$
+        ! $$$$$    special-request word no. 51.   'jmarti setup'           $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7352)
+        !     7352                format (42h+request for new, fortified "marti
+7352    format ('+request for new, fortified Marti setup.')
+        nchain = 39
+        go to 5617
 
      case (52)
-        go to 8052
+        ! $$$$$  special request-word no. 52.   'custom plot file'         $$$$$
+        n4 = m4plot
+        if (n4 .eq. 0) m4plot = 2
+        if (n4 .eq. 2) m4plot = 0
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7359) m4plot
+7359    format ('+non-std. choice of disk plot file.   m4plot =',  i2)
+        go to 15
 
      case (53)
-        go to 8053
+        ! $$$$$  special request-word no. 53.   'output width 132'         $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7364)
+7364    format ('+use full-width (132-col.) printout.')
+        kol132 = 132
+        go to 15
 
      case (54)
-        go to 8054
+        ! $$$$$  special request-word no. 54.   'output width 80'          $$$$$
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7368)
+7368    format ('+use narrow (80-col.) printout.')
+        kol132 = 80
+        go to 15
 
      case (55)
-        go to 8055
+        ! $$$$$  special request-word no. 55.   'modify switch logic       $$$$$
+        n7 = ktrlsw(6) + 1
+        if (n7 .ge. 2) n7 = 0
+        ktrlsw(6) = n7
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7374) n7
+7374    format ('+request for altered logic.  ktrlsw(6) =', i2)
+        go to 15
+
+     case (56)
+        ! $$$$$  special request-word no. 56.   'fault data usage'         $$$$$
+        if (kolbeg .gt. 0) go to 7379
+        read (unit = abuff(1), fmt = 2642) iofbnd
+        go to 7382
+7379    nfrfld = 1
+        call frefld (voltbc(1))
+        iofbnd = int (voltbc(1))
+7382    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7385)
+7385    format ('+request for generator equivalents.')
+        istep = -6633
+        nchain = 29
+        go to 5617
 
      case (57)
-        go to 8056
+        ! $$$$$  special request-word no. 57.   'fix source'               $$$$$
+        istep = -4567
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7388)
+7388    format ('+declaration of desired load flow use.')
+        go to 15
 
      case (58)
-        go to 8057
+        ! $$$$$  special request-word no. 58.   'user supplied             $$$$$
+        ! $$$$$  switch times'                                             $$$$$
+        if (kolbeg .gt. 0) go to 7396
+        read (unit = abuff(1), fmt = 2642) n14
+        go to 7402
+7396    nfrfld = 1
+        call frefld (voltbc(1))
+        n14 = int (voltbc(1))
+7402    moncar(7) = n14
+        if (n14 .eq. 0) moncar(7) = 24
+        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7406) moncar(7)
+7406    format ('+file of random switching times.  unit =', i6)
+        go to 15
 
      case (59)
-        go to 8058
+        ! $$$$$  special request-word no. 59.   'ametani setup'            $$$$$
+        if (noutpr .eq. 0) write (unit = lunit6, fmt = 7411)
+7411    format ('+request for Ametani step-response routine.')
+        nchain = 46
+        go to 5617
 
      case (60)
-        go to 8059
+        ! $$$$$  special request-word no. 60.   'hauer setup'              $$$$$
+        if (noutpr .eq. 0) write (unit = lunit6, fmt = 7418)
+7418    format ('+request for Hauer impulse-response routine.')
+        nchain = 48
+        nenerg = 49
+        go to 5617
 
      case (61)
-        go to 8060
+        ! $$$$$  special request-word no. 61.   'line model freq. scan     $$$$$
+        kexact = 88333
+        nsolve = 0
+        kbrnum = 0
+        go to 8021
 
      case (62)
-        go to 8061
-
-     case (63)
-        go to 8062
+        goto 5617
 
      end select
 
@@ -1492,177 +1991,8 @@ subroutine reques
   end do
   !     control will never reach  "stop"  which follows.
   call stoptp
-  !     $$$$$    special-request word no. 1.   'xformer'           $$$$$
-8001 if (noutpr .eq. 0) write (unit = kunit6, fmt = 83056)
-83056 format ('+request for transformer impedance-matrix routine.')
-  nchain = 41
-  go to 5617
-  !     $$$$$    special-request word no. 2.   'saturation'        $$$$$
-8002 if (noutpr .eq. 0) write (unit = kunit6, fmt = 83057)
-83057 format ('+request for magnetic-saturation routine.')
-  nchain = 42
-  go to 5617
-  !     $$$$$    special-request word no. 3.   'type99 limit'      $$$$$
-8003 if (kolbeg .gt. 0) go to 3352
-  read (unit = abuff(1), fmt = 2642) max99m
-  go to 3354
-3352 nfrfld = 1
-  call freone (d1)
-  max99m = d1
-3354 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3355) max99m
-3355 format ('+redefine type-99 message limit to', i6)
-  go to 15
-  !     $$$$$    special-request word no. 4.   'replot'            $$$$$
-8004 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3364)
-3364 format ('+request to re-plot old plot data.')
-  degmax = 0.0
-  ialter = lunit4
-  call midov1
-  call pfatch
-  nchain = 31
-  go to 5617
-  !     $$$$$    special-request word no. 5.   'begin new data case' $$$
-8005 if (noutpr .eq. 0) write (unit = kunit6, fmt = 4154)
-4154 format ('+marker card preceding new data case.')
-  go to 15
-  !     $$$$$    special-request word no. 6.   'line constants'    $$$$$
-8006 nchain = 44
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 3411)
-3411 format (' Set nchain = 44 for "line constants".')
-  go to 5617
-  !     $$$$$    special-request word no. 7.   'postprocess
-  !     plot file'       $$$$$  m28.1317
-8007 if (kolbeg .gt. 0)   go to 3375
-  read (unit = abuff(1), fmt = 2642) iofbnd
-  go to 3379
-3375 nfrfld = 1
-  call freone (d1)
-  iofbnd = int (d1)
-3379 write (unit = kunit6, fmt = 3382) iofbnd
-3382 format ('+postprocess.  iplot =', i6)
-  read (unit = lunit2) bus1, bus2, bus3, bus4, n1, n2, n3, n4, (bus5, i = 1, n1)
-  n13 = n2 + n4
-  if (iprsup .gt. 0) write (unit = lunit6, fmt = 3383)  bus1, bus2, n1, n2, n3, n4
-3383 format (/, ' After 1st record.  date=', 2a4, 4i5)
-  if (n2 .gt. 0) read (unit = lunit2) (n5, i = 1, n2)
-  if (n4 .gt. 0) read (unit = lunit2) (n5, i = 1, n4)
-  if (m4plot .eq. 0) go to 3385
-  iofgnd = 1
-  call pltlu2 (epsuba, farray(1))
-  go to 3386
-3385 read (unit = lunit2) epsuba, farray(1)
-3386 ltdelt = -6789
-  iofgnd = n13
-  go to 15
-  !     $$$$$    special-request word no. 8.   'plotter paper height' $$
-8008 if (kolbeg .gt. 0) go to 2608
-  call expchk (ll25, ll80, ll8)
-  if (kill .gt. 0) go to 9200
-  read (unit = abuff, fmt = 2605) szplt
-2605 format (32x, e8.0)
-  go to 2612
-2608 nfrfld = 1
-  call freone (szplt)
-2612 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2614) szplt
-2614 format ('+new plotter paper-height limit.', 2x, e13.3)
-  go to 15
-  !     $$$$$    special-request word no. 9.   'printer lines per inch'
-8009 if (kolbeg .gt. 0) go to 2628
-  call intchk (ll25, ll80, ll8)
-  if (kill .gt. 0) go to 9200
-  read (unit = abuff, fmt = 2642) lnpin
-  go to 2631
-2628 nfrfld = 1
-  call frefld (voltbc(1))
-  lnpin = voltbc(1)
-2631 if (noutpr .eq. 0 ) write (unit = kunit6, fmt = 2634) lnpin
-2634 format ('+new printer spacing, lines/distance =', 2x, i8)
-  go to 15
-  !     $$$$$    special-request word no. 10.   'mode voltage output' $$$
-8010 if (kolbeg .gt. 0) go to 2644
-  call intchk (ll25, ll80, ll8)
-  if ( kill .gt. 0) go to 9200
-  read (unit = abuff, fmt = 2642) modout
-2642 format (32x, 6i8)
-  go to 2646
-2644 nfrfld = 1
-  call frefld (voltbc(1))
-  modout = voltbc(1)
-2646 if (modout .le. 0) modout = 3
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 2648) modout
-2648 format ('+request for tricky Karrenbauer output,', i3, '  modes.')
-  go to 15
-  !     $$$$$    special-request word no. 11.   'end last data case' $$$$
-8011 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2654)
-2654 format ('+special terminator record for all data.')
-  go to 15
-  !     $$$$$    special-request word no. 12.   'analytic sources usage'
-8012 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2667)
-2667 format ('+request for use of analytic type 1-10 sources.')
-  kanal = 1
-  go to 15
-  !     $$$$$ special-request word no. 13.   'limit on plot oscillations'
-8013 if (kolbeg .gt. 0) go to 2671
-  read (unit = abuff(1), fmt = 2642) nsmth
-  go to 2673
-2671 nfrfld = 1
-  call frefld (voltbc)
-  nsmth = voltbc(1)
-2673 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2675) nsmth
-2675 format ('+change successive oscillation limit.', 2x, i8)
-  go to 15
-  !     $$$$$    special-request word no. 14.   'tacs emtp sources'  $$$$
-8014 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2682)
-2682 format ('+TACS names controlling type 1-10 EMTP sources.')
-  if (kolbeg .gt. 0) go to 2683
-  read (unit = abuff(1), fmt = 2685) (vstacs(j), j = 1, 10)
-2685 format (20x, 10a6)
-  go to 2686
-2683 nright = -2
-  call freone (d1)
-  do j = 1, 10
-     vstacs(j) = texta6(j)
-  end do
-2686 nstacs = 10
-2687 if (vstacs(nstacs) .ne. blank) go to 2690
-  nstacs = nstacs - 1
-  if (nstacs .gt. 0) go to 2687
-2690 go to 15
-  !     $$$$$    special-request word no. 15.   'start again'       $$$$$
-  !     this request is handled outside of subroutine.           m28.1421
-  !     $$$$$    special-request word no. 16.   'semlyen setup'     $$$$$
-8016 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2705)
-2705 format ('+request for Semlyen step-response routine.')
-  nchain = 45
-  go to 5617
-  !     $$$$  special request-word no. 17.   'linear bias usage' $$$$$$$$$
-8017 if (noutpr .eq. 0) write (unit = lunit6, fmt = 8719)
-8719 format ('+ramped linear variation of random bias.')
-  linsys = 1
-  go to 15
-  !     $$$$$    special-request word no. 18.   'cable constants'   $$$$$
-8018 continue
-  read (unit = abuff, fmt = 2732) d13, ktrlsw(3)
-2732 format (48x, e8.0, i8)
-  if (d13 .gt. 0.0) znvref = d13
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 2726) ktrlsw(3)
-2726 format ('+transfer to "cable constants".  type =', i6)
-  nchain = 47
-  go to 5617
-  !     $$$$$    special-request word no. 19.   'auto name'         $$$$$
-8019 nmauto = nmauto + 1
-  if (nmauto .ge. 2) nmauto = 0
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 2743) nmauto
-2743 format ('+toggle branch naming option.   nmauto =', i8)
-  go to 15
-  !     $$$$$    special-request word no. 20.   'renumber bypass'   $$$$$
-8020 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2758)
-2758 format ('+bypass of transient network renumbering.')
-  !     negative "kpartb" (1000 or exponent of "high resistance")
-  !     is flag carried into "over6" to bypass overlay 7:
-  kpartb = -iabs (kpartb)
-  go to 15
-  !     $$$$$    special-request word no. 21.   'frequency scan'    $$$$$
+  !     these two requests handled outside of subroutine.
+  !     $$$$$$$  additional key words go in slots below:
 8021 if (kolbeg .gt. 0) go to 2773
   call expchk (ll25, ll48, ll8)
   call intchk (ll49, ll56, ll8)
@@ -1698,408 +2028,9 @@ subroutine reques
   lstat(14) = n8
   lstat(19) = 2785
   go to 9200
-  !     $$$$$    special-request word no. 22.   'free format'       $$$$$
-8022 continue
-  read (unit = abuff(1), fmt = 2796) bus4, bus5
-2796 format (16x, a1, 7x, a1)
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 2801) bus4, bus5
-2801 format ('+free-field characters.   ', a1, '   and   ',  a1, ' .')
-  if (bus4 .ne. blank) csepar = bus4
-  if (bus5 .ne. blank) chcont = bus5
-  go to 15
-  !     $$$$$    special-request word no. 23.   'diagnostic'        $$$$$
-8023 if (kolbeg .gt. 0) go to 2814
-  read (unit = abuff(1), fmt = 2811) (iprsov(i), i = 1, 30)
-2811 format (20x, 30i2)
-  go to 2816
-2814 nfrfld = 30
-  call frefld (voltbc(1))
-  if (kill .gt. 0) go to 9200
-  do  i = 1, 30
-     iprsov(i) = int (voltbc(i))
-  end do
-2816 iprsup = iprsov(1)
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 2813) (iprsov(i), i = 1, 5)
-2813 format ('+diagnostic printout codes.', 5i4)
-  go to 15
-  !     $$$$$    special-request word no. 24.   'power frequency'   $$$$$
-8024 if (kolbeg .gt. 0) go to 2820
-  read (unit = abuff(1), fmt = 2605) statr
-  go to 2822
-2820 nfrfld = 1
-  call freone (statfr)
-2822 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2824) statfr
-2824 format ('+redefined power frequency =', e12.3, '  Hz.')
-  go to 15
-  !     $$$$$    special-request word no. 25.   'file request'      $$$$$
-8025 if (noutpr .eq. 0) write (unit = kunit6, fmt = 4654)
-4654 format ('+call subroutine "midov1" .')
-  call midov1
-  go to 15
-  !     $$$$$    special-request word no. 26.   'user identification' $$$
-8026 if (kolbeg .gt. 0) go to 4661
-  read (unit = abuff(1), fmt = 4658) userid
-4658 format (24x, 8a6)
-  go to 4664
-4661 nright = -2
-  call freone (d1)
-  nright = 0
-  userid = texta6(1)
-4664 if (noutpr .eq. 0) write (unit = kunit6, fmt = 4667) userid
-4667 format ('+user identification.', 1x, 4a6)
-  go to 15
-  !     $$$$$    special-request word no. 27.   'convert zno'  $$$$$$$$$$
-8027 iofbnd = 99876
-  nchain = 42
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 4685)
-4685 format ('+request to convert old zno data to new formats.')
-  go to 5617
-  !     $$$$$    special-request word no. 28.   'abort data case'   $$$$$
-8028 if (noutpr .eq. 0) write (unit = kunit6, fmt = 4695)
-4695 format ('+request to abort this data case.')
-  l = 0
-  !     read input card using cimage
-4699 call cimage
-  n9 = kolbeg
-  kolbeg = 1
-  nright = -2
-  call freone (d1)
-  n1 = jpntr(5)
-  n2 = jpntr(6) - 1
-  k = 0
-  do i = n1, n2
-     k = k + 1
-     if (texta6(k) .ne. textax(i)) go to 4711
-  end do
-  go to 15
-4711 l = l + 1
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 4713) l
-4713 format ('+discarded card number', i5, '   of skipped case.')
-  go to 4699
-  !     $$$$$    special-request word no. 29.   'kill codes'        $$$$$
-8029 ipntv(1) = -8888
-  if (kolbeg .gt. 0) go to 4724
-  read (unit = abuff(1), fmt = 4721) kill, ipntv(2)
-4721 format (32x, 2i8)
-  go to 4726
-4724 nfrfld = 2
-  call frefld (voltbc(1))
-  kill = int (voltbc(1))
-  ipntv(2) = int (voltbc(2))
-4726 write (unit = kunit6, fmt = 4728) kill, ipntv(2)
-4728 format ('+listing of error messages.', 2i8)
-  ipntv(3) = kill
-  write (unit = lunit6, fmt = 4733) kill
-4733 format (/, ' Message of kill-code number', i4, '.')
-  bus1 = trash
-  bus2 = trash
-  bus3 = trash
-  bus4 = trash
-  bus5 = trash
-  bus6 = trash
-  do j = 11, 17
-     lstat(j) = 0
-     flstat(j) = 0.0
-  end do
-  nchain = 51
-  go to 9200
-  !     $$$$$    special-request word no. 30.   'high resistance'   $$$$$
-8030 n7 = kpartb
-  if (kolbeg .gt. 0) go to 4735
-  read (unit = abuff(1), fmt = 4721) kpartb
-  call intchk (ll33, ll40, ll8)
-  if (kill .gt. 0) go to 9200
-  go to 4737
-4735 nfrfld = 1
-  call frefld (voltbc(1))
-  kpartb = int (voltbc(1))
-4737 d1 = 10.0 ** kpartb
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 4739) d1
-4739 format ('+exponent of high resistance.   R =', e12.2)
-  !     possible negative sign on previous "kpartb" must be
-  !     retained as flag for "renumber bypass" usage:
-  if (n7 .lt. 0) kpartb = -kpartb
-  go to 15
-  !     $$$$$    special-request word no. 31.   'average output'    $$$$$
-8031 iaverg = 1
-  nsmth = intinf
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 7010)
-7010 format ('+request to average (smooth) output.')
-  go to 15
-  !     $$$$$  special request-word no. 32.  'absolute tacs dimensions'  $
-  !     $$$$$  special request-word no. 33.  'relative tacs dimensions'  $
-  !     these two requests handled outside of subroutine.
-  !     $$ special request-word no. 34.  'tabulate energization results'
-8034 write (unit = kunit6, fmt = 7183)
-7183 format ("+request for  'statistics'  termination.")
-  nenerg = intinf
-  go to 15
-  !     $$ special request-word no. 35.  'statistics output salvage'
-8035 if (kolbeg .gt. 0) go to 7193
-  read (unit = abuff(1), fmt = 7191) jflsos
-7191 format (29x, i3)
-  go to 7195
-7193 nfrfld = 1
-  call freone (d1)
-  jflsos = int (d1)
-7195 if (jflsos .gt. 0) go to 7199
-  !     find random integer  'jflsos'  between zero and 999.
-  call runtym (d1, d2)
-  seed = seedy (tclock(1)) + 1000. * (d1 + d2)
-  n13 = int (alog1z (seed) + epsiln)
-  n13 = n13 - 2
-  seed = seed / 10. ** n13
-  jflsos = int (seed)
-7199 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7200) jflsos
-7200 format ('+disk storage of energization results.', i8)
-  go to 15
-  !     $$$$  special request-word no. 36.   'omit base case'    $$$$$$$$$
-8036 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7203)
-7203 format ('+omit base case if statistics/systematic case.')
-  kbase = intinf
-  go to 15
-  !     $$$$  special request-word no. 37.   'change switch'     $$$$$$$$$
-8037 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7206)
-7206 format ('+convert switched-L,R to pseudo-nonlinear.')
-  iofbnd = 33666
-  go to 15
-  !     $$$$$$$  special request-word no. 38.   'miscellaneous data
-  !     cards'          $$$$$$$$$m28.1692
-8038 ifdep = -5555
-  write (unit = kunit6, fmt = 7212)
-7212 format ('+request record before misc. data cards.')
-  go to 15
-  !     $$$$$$$  special request-word no. 39.   'redefine tolerance
-  !     epsiln'         $$$$$$$$$m28.1698
-8039 if (kolbeg .gt. 0) go to 7217
-  read (unit = abuff(1), fmt = 2605) epsiln
-  go to 7223
-7217 nfrfld = 1
-  call freone (epsiln)
-7223 write (unit = kunit6, fmt = 7226) epsiln
-7226 format ("+misc. data constant  'epsiln' .", e12.3)
-  go to 15
-  !     $$$$$$$  special request-word no. 40.   'change printout
-  !     frequency       $$$$$$$$$m28.1708
-8040 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7234)
-7234 format ('+request record before printout frequencies.')
-  ktref = -7777
-  go to 15
-  !     $$$$$$$  special request-word no. 41.   'begin peak
-  !     value search'   $$$$$$$$$m28.1715
-8041 if (kolbeg .gt. 0) go to 7247
-  read (unit = abuff(1), fmt = 2605) begmax(2)
-  go to 7249
-7247 nfrfld = 1
-  call frefld (begmax(2))
-7249 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7252) begmax(2)
-7252 format ('+extrema calc. begins at', e13.4, '  seconds.')
-  if ( begmax(2) .ne. -1.) go to 15
-  !     read input data card using cimage
-  call cimage
-  read (unit = abuff(1), fmt = 7253) (begmax(ip), ip = 2, 6)
-7253 format (10e8.0)
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 7254) (begmax(ip), ip = 2, 5)
-7254 format ('+(t1, t2):', 4e10.2)
-  go to 15
-  !     $$$$$$$  special request-word no. 42.   'time of
-  !     dice roll'    $$$$$$$$$$$m28.1726
-8042 if (kolbeg .gt. 0) go to 7255
-  read (unit = abuff(1), fmt = 2605) tenerg
-  go to 7261
-7255 nfrfld = 1
-  call freone (tenerg)
-7261 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7262) tenerg
-7262 format ('+statistics table-saving time =', e12.3, '  sec. ')
-  go to 15
-  !     $$$$$$$  special request-word no. 43.   'zinc oxide'   $$$$$$$$$$$
-8043 if (kolbeg .gt. 0) go to 7266
-  read (unit = abuff, fmt = 7264) n13, (flstat(m), m = 15, 19)
-7264 format (16x, i8, 5e8.0)
-  go to 7268
-7266 nfrfld = 6
-  call frefld (flstat(14))
-  n13 = int (flstat(14))
-7268 if (n13 .gt. 0)  maxzno = n13
-  if (flstat(15) .gt. 0.0) epszno = flstat(15)
-  if (flstat(16) .gt. 0.0) epwarn = flstat(16)
-  if (flstat(17) .gt. 0.0) epstop = flstat(17)
-  if (flstat(18) .gt. 0.0) znolim(1) = flstat(18)
-  if (flstat(19) .gt. 0.0) znolim(2) = flstat(19)
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 7270) maxzno, epszno, epwarn, epstop
-7270 format ('+Zno const.', i4, 3e11.3)
-  go to 15
-  !     $$$$$$$  special request-word no. 44.   'peak voltage'  $$$$$$$$$$
-  !     $$$$$$$                                  monitor'      $$$$$$$$$$$
-8044 peaknd(1) = flzero
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 7273)
-7273 format ('+overall problem peak node voltage.')
-  go to 15
-  !     $$$$$$$  special request-word no. 45.   'absolute u.m.  $$$$$$$$$$
-  !     dimensions'    $$$$$$$$$$m28.1751
-8045 if (kolbeg .gt. 0) go to 7279
-  read (unit = abuff(1), fmt = 7276) nclfix, numfix, iotfix, ibsfix
-7276 format (32x, 6i8)
-  go to 7282
-7279 nfrfld = 4
-  call frefld (voltbc)
-  nclfix = int (voltbc(1))
-  numfix = int (voltbc(2))
-  iotfix = int (voltbc(3))
-  ibsfix = int (voltbc(4))
-7282 if (nclfix .gt. 0) go to 7284
-  nclfix = 20
-  numfix = 3
-  iotfix = 50
-  ibsfix = 60
-7284 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7287) nclfix, numfix, iotfix, ibsfix
-7287 format ('+u.m. table sizes.', 4i6)
-  go to 15
-  !     $$$$$$$  special request-word no. 46.   'relative u.m.  $$$$$$$$$$
-  !     dimensions'    $$$$$$$$$$m28.1773
-8046 if (kolbeg .gt. 0) go to 7298
-  read (unit = abuff(1), fmt = 7276) (voltbc(k), k = 1, 4)
-  go to 7303
-7298 nfrfld = 4
-  call frefld (voltbc(1))
-7303 d1 = 0.0
-  do j = 1, 4
-     d1 = d1 + voltbc(j)
-  end do
-  if (d1 .gt. 0.0) go to 7310
-  voltbc(1) = 42
-  voltbc(2) = 23
-  voltbc(3) = 10
-  voltbc(4) = 10
-  go to 7303
-7310 d1 = lspcum * nbyte(3) / d1
-  nclfix = int (voltbc(1) * d1 / (4 * nbyte(3) +  4 * nbyte(4)))
-  numfix = int (voltbc(2) * d1 / (17 * nbyte(3) + 12 * nbyte(4)))
-  iotfix = int (voltbc(3) * d1 / (2 * nbyte(4)))
-  ibsfix = int (voltbc(4) * d1 / (1 * nbyte(1)))
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 7309) nclfix, numfix, iotfix, ibsfix
-7309 format ('+derived u.m. sizes.', 4i6)
-  go to 15
-  !     $$$$$$$  special request-word no. 47.   'time step loop'  $$$$$$$$
-8047 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7314)
-7314 format ('+transfer control to time-step loop.')
-  nchain = 16
-  t = flstat(14)
-  call mover0 (flstat(3), 4)
-  call runtym (d1, d2)
-  flstat(1) = d1 + flstat(1)
-  flstat(2) = d2 + flstat(2)
-  flstat(7) = -d1
-  flstat(8) = -d2
-  go to 15
-  !     $$$$$$$  special request-word no. 48.   'alternate diagnostic
-  !     printout'  $$$$$$$$m28.1811
-8048 if (kolbeg .gt. 0) go to 7322
-  read (unit = abuff(1), fmt = 2642) (iprsov(j + 30), j = 1, 4)
-  go to 7329
-7322 nfrfld = 4
-  call frefld (voltbc(1))
-  do j = 1, 4
-     iprsov(j + 30) = int (voltbc(j))
-  end do
-7329 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7331) (iprsov(j + 30), j = 1, 4)
-7331 format ('+deltat-loop printout.', 4i6)
-  go to 15
-  !     $$$$$$$  special request-word no. 49.   'tacs warn limit' $$$$$$$$
-8049 if (kolbeg .gt. 0) go to 7334
-  read (unit = abuff(1), fmt = 2582) lstat(51), pu
-2582 format (16x, i8, e8.0)
-  go to 7335
-7334 nfrfld = 2
-  call frefld (voltbc(1))
-  lstat(51) = int (voltbc(1))
-  pu = voltbc(2)
-7335 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7336) lstat(51), pu
-7336 format ('+warning controls.  lim, t-beg =', i6, e10.2)
-  go to 15
-  !     $$$$$    special-request word no. 50.   'marti setup'       $$$$$
-8050 continue
-  !     $$$$$    special-request word no. 51.   'jmarti setup' $$$$$$$$$$
-8051 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7352)
-  !     7352                format (42h+request for new, fortified "marti
-7352 format ('+request for new, fortified Marti setup.')
-  nchain = 39
-  go to 5617
-  !     $$$$$$$  special request-word no. 52.   'custom plot file' $$$$$$
-8052 n4 = m4plot
-  if (n4 .eq. 0) m4plot = 2
-  if (n4 .eq. 2) m4plot = 0
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 7359) m4plot
-7359 format ('+non-std. choice of disk plot file.   m4plot =',  i2)
-  go to 15
-  !     $$$$$$$  special request-word no. 53.   'output width 132' $$$$$$
-8053 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7364)
-7364 format ('+use full-width (132-col.) printout.')
-  kol132 = 132
-  go to 15
-  !     $$$$$$$  special request-word no. 54.   'output width 80'  $$$$$$
-8054 if ( noutpr  .eq.  0 ) write (unit = kunit6, fmt = 7368)
-7368 format ('+use narrow (80-col.) printout.')
-  kol132 = 80
-  go to 15
-  !     $$$$$$$  special request-word no. 55.   'modify switch logic  $$$
-8055 n7 = ktrlsw(6) + 1
-  if (n7 .ge. 2) n7 = 0
-  ktrlsw(6) = n7
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 7374) n7
-7374 format ('+request for altered logic.  ktrlsw(6) =', i2)
-  go to 15
-  !     $$$$$$$  special request-word no. 56.   'fault data usage' $$$$$$
-8056 if (kolbeg .gt. 0) go to 7379
-  read (unit = abuff(1), fmt = 2642) iofbnd
-  go to 7382
-7379 nfrfld = 1
-  call frefld (voltbc(1))
-  iofbnd = int (voltbc(1))
-7382 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7385)
-7385 format ('+request for generator equivalents.')
-  istep = -6633
-  nchain = 29
-  go to 5617
-  !     $$$$$$$  special request-word no. 57.   'fix source'  $$$$$$
-8057 istep = -4567
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 7388)
-7388 format ('+declaration of desired load flow use.')
-  go to 15
-  !     $$$$$$$  special request-word no. 58.   'user supplied     $$$$$$
-  !     $$$$$$$                                  switch times'     $$$$$$
-8058 if (kolbeg .gt. 0) go to 7396
-  read (unit = abuff(1), fmt = 2642) n14
-  go to 7402
-7396 nfrfld = 1
-  call frefld (voltbc(1))
-  n14 = int (voltbc(1))
-7402 moncar(7) = n14
-  if (n14 .eq. 0) moncar(7) = 24
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 7406) moncar(7)
-7406 format ('+file of random switching times.  unit =', i6)
-  go to 15
-  !     $$$$$$$  special request-word no. 59.   'ametani setup'  $$$
-8059 if ( noutpr  .eq.  0 ) write (unit = lunit6, fmt = 7411)
-7411 format ('+request for Ametani step-response routine.')
-  nchain = 46
-  go to 5617
-  !     $$$$$$$  special request-word no. 60.   'hauer setup'  $$$$$
-8060 if (noutpr .eq. 0) write (unit = lunit6, fmt = 7418)
-7418 format ('+request for Hauer impulse-response routine.')
-  nchain = 48
-  nenerg = 49
-  go to 5617
-  !     $$$$$$$  special request-word no. 61.   'line model freq. scan  $$
-8061 kexact = 88333
-  nsolve = 0
-  kbrnum = 0
-  go to 8021
-  !     $$$$$$$  additional key words go in slots below:
-8062 continue
 5617 flstat(7) = -9999.
   ck1 = -fltinf
-  ci1 = -fltinf
+  ci1 = -fltin
 15 continue
 9200 if (iprsup .ge. 5) write (unit = lunit6, fmt = 9201) nchain, lunit6, lstat(18), kill
 9201 format (/, ' Exit  "reques" .  nchain  lunit6 lstat18    kill ', /, 17x, 4i8)
@@ -2107,9 +2038,11 @@ subroutine reques
 4568 format ('  "Exit  module reques."')
   return
 end subroutine reques
+
 !
 ! subroutine strip.
 !
+
 subroutine strip(string, char)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   character char
@@ -2124,9 +2057,11 @@ subroutine strip(string, char)
   end do
   string = temp
 end subroutine strip
+
 !
 ! subroutine sysdep.
 !
+
 subroutine sysdep
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -2286,9 +2221,11 @@ subroutine sysdep
 9000 kill = 7654                                            ! positive kill is eof flag in "cimage"
 9200 return
 end subroutine sysdep
+
 !
 ! subroutine midov1.
 !
+
 subroutine midov1
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module called only from one location in "over1" of overlay
@@ -2350,9 +2287,11 @@ subroutine nmincr (texta, n12)
   !     write (*,*)  ' exit "nmincr".   n12 =',  n12,  '   texta =', texta
   return
 end subroutine nmincr
+
 !
 !     subroutine tacs1.
 !
+
 subroutine tacs1
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -2890,9 +2829,11 @@ subroutine tacs1
 4568 format ('  "Exit  module tacs1."')
   return
 end subroutine tacs1
+
 !
 !     subroutine tacs1a
 !
+
 subroutine tacs1a
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -4014,9 +3955,11 @@ subroutine tacs1a
 4568 format ('  "Exit  module tacs1a."')
   return
 end subroutine tacs1a
+
 !
 !     subroutine tacs1b.
 !
+
 subroutine tacs1b
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -4788,9 +4731,11 @@ subroutine tacs1b
 4568 format ('  "Exit  module tacs1b."')
   return
 end subroutine tacs1b
+
 !
 !     subroutine expchk.
 !
+
 subroutine expchk (n1, n2, n5)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -4839,10 +4784,12 @@ subroutine expchk (n1, n2, n5)
 2625 continue
   return
 end subroutine expchk
+
 !
 !     subroutine intchk.
 !
-subroutine  intchk (n1, n2, n5)
+
+subroutine intchk (n1, n2, n5)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   character(8) x
@@ -4869,25 +4816,27 @@ subroutine  intchk (n1, n2, n5)
 2648 continue
   return
 end subroutine intchk
+
 !
 !     subroutine date44.
 !
+
 subroutine date44(a)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !         The purpose of subroutine  date44  is to interrogate the
   !         installation calendar, and return the current date through the
-  !         argument of the subroutine.   eight bcd characters are allowed,
+  !         argument of the subroutine.   Eight bcd characters are allowed,
   !         with the first (left) four characters to be placed in  a(1) ,
-  !         and the final (right) four placed in  a(2) .   a statement like
+  !         and the final (right) four placed in  a(2) .   A statement like
   !                  write (lunit6, 4041)  a
   !             4041 format ( 1x, 2a4 )
   !         thus outputs the current date as first the month, then the day,
   !         and finally the year, separated by slashes (mm/dd/yy) .
-  !         subroutine  date44  is of course installation dependent.
-  !         european (or generally non-united-states, perhaps) users of this
+  !         Subroutine  date44  is of course installation dependent.
+  !         European (or generally non-united-states, perhaps) users of this
   !         program may want to reverse the order of appearance of the month
   !         and the day, in conformity with established european usage.
-  !     installation-dependent  EMTP  module written for the  DEC
+  !     Installation-dependent  EMTP  module written for the  DEC
   !     VAX-11/780.    'idate'  is a  dec  system subroutine which
   !     returns the month, day, and year (of century) as three  integer*2
   !     numerical values.
@@ -4899,9 +4848,11 @@ subroutine date44(a)
 1394 format (a1, '/', a2)
   return
 end subroutine date44
+
 !
 !     subroutine pfatch.
 !
+
 subroutine pfatch
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This installation-dependent module serves to connect a
