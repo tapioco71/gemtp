@@ -576,8 +576,10 @@ subroutine cimage
   end do
   go to 3233
 3040 if (chcont .eq. text4) go to 3233
-  read (unit = abuff(1), fmt = 3041, iostat = ios) (texcol(i), i = 1, 80)
-3041 format (80a1)
+  do i = 1, 10
+     read (unit = abuff(i), fmt = 3041, iostat = ios) (texcol((i - 1) * 8 + j), j = 1, 8)
+  end do
+3041 format (8a1)
   !  if (ios .ne. 0) then
   !     write (unit = lunit6, fmt = "('Could not read from abuff.  Stop.')")
   !     stop
