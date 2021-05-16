@@ -21,7 +21,8 @@ subroutine subr31
   real(8) fminfs, delffs, fmaxfs, tenerg, begmax
   real(8) tenm3, tenm6, unity, onehaf, peaknd
   real(8) fltinf, flzero, statfr, hpi
-  real(8) flstat, angle, pu, dltinv, speedl
+  !real(8) flstat, angle, pu, dltinv, speedl
+  real(8) angle, pu, dltinv, speedl
   !     flag-3.   begin class-3  /blank/  variables
   !               (integer-numeric usage only, with arrays
   !                preceding scalars).

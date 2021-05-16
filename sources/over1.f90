@@ -26,7 +26,7 @@ subroutine over1
   equivalence (moncar(8), jseedr)
   equivalence (moncar(9), kloaep), (moncar(10), mtape)
   equivalence (iprsov(39), nmauto)
-  integer(4) lstacs
+  integer(4) lstacs, lstat
   character(8) aupper, text1, text2, text6, datexx(2)
   character(8) text3, text4, text5, tcloxx(2)
   integer(4) locker
@@ -858,6 +858,7 @@ subroutine reques
   dimension textax(300), jpntr(100), textay(100)
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
+  integer(4) lstat
   character(6) chlmfs                                       ! 9-phase as limit for lmfs test
   character(80) char80
   real(8) max99m, lnpin, modout, nsmth
@@ -1266,7 +1267,6 @@ subroutine reques
   data ll49 / 49 /
   data ll56 / 56 /
   data ll80 / 80 /
-  lstat(18) = 0
   if(iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module reques."')
   do i = 1, size(jpntr) - 1                                 ! was 1 to 9999
@@ -1274,7 +1274,10 @@ subroutine reques
      n2 = jpntr(i + 1) - 1
      !     Next check if last request word has been exhaused.  if so,
      !     exit with  lstat(18)  equal to zero.
-     if (n2 .lt. 0) go to 9200
+     if (n2 .lt. 0) then
+        lstat(18) = 0
+        go to 9200
+     end if
      if (iprsup .ge. 35) write (unit = lunit6, fmt = 3285) i, (textax(j), j = n1, n2)
 3285 format (/, ' Special-request word', i4, ' .', 10a6)
      if (textax(n1) .eq. blank) go to 3306
@@ -1286,12 +1289,7 @@ subroutine reques
         if (texta6(l) .ne. textax(j)) go to 3306
      end do
 3294 lstat(18) = i
-     !     Next check for exceptional request words which are
-     !     processed outside of subroutine, by calling module.
-     !if (i .eq. 15) go to 9200
-     !if (i .eq. 32) go to 9200
-     !if (i .eq. 33) go to 9200
-     select case (i)
+    select case (i)
      case (1)
         ! $$$$$    special-request word no. 1.   'xformer'                 $$$$$
         if (noutpr .eq. 0) write (unit = kunit6, fmt = 83056)

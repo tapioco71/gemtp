@@ -3486,7 +3486,7 @@ subroutine flager
 3491 go to 3643                                             ! jump to read from unit munit5 (keyboard)
 3642 if (lockbr .ne. 1) go to 3651                          ! no forced input
   if (kfile5 .eq. 1) go to 3651                             ! "@" read out in emtspy
-3643 read (munit5, 3647) buff77                             ! read next spy input
+3643 read (unit = munit5, fmt = 3647, iostat = ios) buff77  ! read next spy input
 3647 format (a80)
   kwtspy = 1                                                ! set flag for global emtp use (remember)
   kfile5 = 2                                                ! signal to "spying" that buff77 now read

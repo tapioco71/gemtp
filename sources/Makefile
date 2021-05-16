@@ -217,11 +217,11 @@ newmods:
 		then							\
 			echo " [ NEWMODS ] ";				\
 		else							\
-			echo "cp fort.7 newmods.for";			\
+			echo "cp fort.7 newmods.f90";			\
 		fi;							\
-		cp fort.7 newmods.for;					\
+		cp fort.7 newmods.f90;					\
 	else								\
-		echo "Cannot create newmods.for.";			\
+		echo "Cannot create newmods.f90.";			\
 	fi
 
 labcom:

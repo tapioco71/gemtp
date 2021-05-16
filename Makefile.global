@@ -68,28 +68,28 @@ CPP_FLAGS=	-Wall			\
 		-c
 
 # gfortran flags.
-FORTRAN_FLAGS=	-Wall				\
-		-std=gnu			\
-		-falign-commons			\
-		-fbounds-check			\
-		-ffree-form			\
-		-fdec				\
-		-fdec-static			\
-		-fdollar-ok			\
-		-ffree-line-length-0		\
-		-finit-local-zero		\
-		-freorder-blocks		\
+FORTRAN_FLAGS=	-Wall			\
+		-std=gnu		\
+		-falign-commons		\
+		-fcheck=bounds		\
+		-ffree-form		\
+		-fdec			\
+		-fdec-static		\
+		-fdollar-ok		\
+		-ffree-line-length-0	\
+		-finit-local-zero	\
+		-freorder-blocks	\
 		-c
 
-F90_FLAGS=	-Wall				\
-		-std=gnu			\
-		-falign-commons			\
-		-fbounds-check			\
-		-ffree-form			\
-		-fdollar-ok			\
-		-ffree-line-length-0		\
-		-finit-local-zero		\
-		-freorder-blocks		\
+F90_FLAGS=	-Wall			\
+		-std=gnu		\
+		-falign-commons		\
+		-fcheck=bounds		\
+		-ffree-form		\
+		-fdollar-ok		\
+		-ffree-line-length-0	\
+		-finit-local-zero	\
+		-freorder-blocks	\
 		-c
 
 # objdump most common flags.

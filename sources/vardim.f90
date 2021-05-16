@@ -480,18 +480,18 @@ program vardim
            lstdef(26)  =  50
            lstdef(27)  =  lstdef(11)
            lstdef(28)  =  1080
-           read (lunit(5), 5287, iostat = ios) (lstnew(i), i = 1, numlst)
+           read (unit = lunit(5), fmt = 5287, iostat = ios) (lstnew(i), i = 1, numlst)
 5287       format (10i8)
-           write (lunit(6), 5263)
+           write (unit = lunit(6), fmt = 5263)
 5263       format (/,  " Pseudo-listing of data cards which have been read by the variable-dimensioning program  'vardim' .   Only  ",/, &
                 " if all data fields are punched with  'clean'  i8  integer information will this be a true listing.   Data cards", /, &
                 ' are in fact read in and then printed out using integer variables and  10i8  format.')
-           write (lunit(6), 5264) (i, i = 1, 8), (lstnew(i), i = 1, numlst)
+           write (unit = lunit(6), fmt = 5264) (i, i = 1, 8), (lstnew(i), i = 1, numlst)
 5264       format (1x, 111('-'), /, 31x, '0', 8(9x, i1 ), /, 31x, '0', 8(9x, '0'), /, 31x, 80('-'), /, ' 1st card (lists  1-10).', 7x, '1', 10i8 ,/, &
                 ' 2nd card (lists 11-20).', 7x, '1', 10i8, /, ' 3rd card (lists 21-30).', 7x, '1', 10i8)
            if (lstnew(1) / 10000000 .ne. 9) go to 5294
-           read (lunit(5), 5287, iostat = ios) (kextra(i), i = 1, numkex)
-           write (lunit(6), 5378) (kextra(i), i = 1, numkex)
+           read (unit = lunit(5), fmt = 5287, iostat = ios) (kextra(i), i = 1, numkex)
+           write (unit = lunit(6), fmt = 5378) (kextra(i), i = 1, numkex)
 5378       format (' Supplemental offsets.', 9x, '1', 10i8)
            lstnew(1) = lstnew(1) - 90000000
 5294       if (lstnew(11) / 10000000 .ne. 9) go to 5297
@@ -500,7 +500,7 @@ program vardim
               lstnew(j) = lstdef(j) * n4
            end do
 5297       if (lstnew(1) .gt. 0) lstnew(1) = lstnew(1) + 2
-           write (lunit(6), 5381)
+           write (unit = lunit(6), fmt = 5381)
 5381       format (1x, 111('-'))
            do i = 1, numlst
               n1 = i
@@ -584,32 +584,32 @@ program vardim
               mtot = mtot + mulvar(n37) * lstnew(n9)
            end do
 4301       continue
-           write (lunit(2), 4190)
+           write (unit = lunit(2), fmt = 4190)
 4190       format ('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', / &
                 '!', /, '!     file: newmods.for', /, '!', /, '!', /, '!     subroutine main10.', /, '!')
            write (lunit(4), "('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', / '!', /, '!     file: labcom.ftn', /, '!', /, '!')")
            call make_subroutine_comment(lunit(2), 'main10')
-           write (lunit(2), "('subroutine main10', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')")
+           write (unit = lunit(2), fmt = "('subroutine main10', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')")
            do ii = 1, 126
               i = 0 + ii
               n3 = ncbarr(i)
               nonneg = lstnew(n3)
               if (nonneg .le. 0) nonneg = 1
-              write (lunit(2), 7236) cblser(i), cblock(i), nonneg
-              write (lunit(4), 7236) cblser(i), cblock(i), nonneg
+              write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
+              write (unit = lunit(4), fmt = 7236) cblser(i), cblock(i), nonneg
 7236          format (2x, 'common /', a6, '/   ', a6, '(', i8, ' )')
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4101
-              write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
-              write (lunit(4), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(4), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
 7243          format (2x, 3a6, a6)
 4101          continue
            end do
-           write (lunit(4), "('!', /, '! end of file: labcom.ftn', /, '!')")
-           write (lunit(2), "(2x, 'call subr10')")
-           write (lunit(2), 7297)
+           write (unit = lunit(4), fmt = "('!', /, '! end of file: labcom.ftn', /, '!')")
+           write (unit = lunit(2), fmt = "(2x, 'call subr10')")
+           write (unit = lunit(2), fmt = 7297)
 7297       format (2x, 'return')
-           write (lunit(2), 7298) 'main10'
+           write (unit = lunit(2), fmt = 7298) 'main10'
 7298       format ('end subroutine ', a)
            ltlabl = mtot
            if (ltlabl .gt. 9999999) go to 9000
@@ -618,32 +618,32 @@ program vardim
            mextra = 4000
            lstnew(98) = ltlabl
            call make_subroutine_comment(lunit(3), 'dimens')
-           write (lunit(3), 8116)
+           write (unit = lunit(3), fmt = 8116)
 8116       format ('subroutine dimens (lsize, nchain, bus1, bus2)', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
-           write (lunit(3), 8120)
-8120       format (2x, 'dimension lsize(62)')
-           write (lunit(3), 8124)
+           write (unit = lunit(3), fmt = 8120)
+8120       format (2x, 'integer(4) lsize(80)')
+           write (unit = lunit(3), fmt = 8124)
 8124       format (2x, 'character(8) bus1, bus2')
-           write (lunit(3), 8134)
+           write (unit = lunit(3), fmt = 8134)
 8134       format (2x, 'if (nchain .ge. 29) go to 2900')
            do i = 1, numlst
-              write (lunit(3), 8143) i, lstnew(i)
+              write (unit = lunit(3), fmt = 8143) i, lstnew(i)
            end do
 8143       format (2x, 'lsize(', i2, ')  =', i8)
-           write (lunit(3), 8155) numlst
+           write (unit = lunit(3), fmt = 8155) numlst
 8155       format (2x, 'n7 =', i3, ' + 1')
-           write (lunit(3), 8159) ltlabl
+           write (unit = lunit(3), fmt = 8159) ltlabl
 8159       format (2x, 'lsize(n7) =', i8)
            nrec3 = numlst + 7
            call time44 (texta)
            call date44 (textb)
-           write (ansi16, 3672) texta, textb
+           write (unit = ansi16, fmt = 3672) texta, textb
 3672       format (4a4)
-           read (ansi16, 3676) nh, nm, ns, nm, nd, ny
+           read (unit = ansi16, fmt = 3676) nh, nm, ns, nm, nd, ny
 3676       format (i2, 1x, i2, 1x, 2i2, 1x, i2, 1x, i2)
            ntime = 10000 * nh + 100 * nm + ns
            ndate = 10000 * nm + 100 * nd + ny
-           write (lunit(3), 3684) ntime, ndate
+           write (unit = lunit(3), fmt = 3684) ntime, ndate
 3684       format (2x, 'bus1 =', "'", i8, "'", /, 2x, 'bus2 =', "'", i8, "'")
            mtot = 0
            do i = 127, 138
@@ -663,14 +663,14 @@ program vardim
            if (lstnew(99) .le. 0) lstnew(99) = 1
            ncbarr(127) = 99
            call make_subroutine_comment(lunit(2), 'over29')
-           write (lunit(2), 4202)
+           write (unit = lunit(2), fmt = 4202)
 4202       format ('subroutine over29', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
-           write (lunit(3), 8156)
+           write (unit = lunit(3), fmt = 8156)
 8156       format (2x, 'return')
            lm = 0
            n86 = 29
            n87 = 31
-           write (lunit(3), 8158) n86, n86, n87
+           write (unit = lunit(3), fmt = 8158) n86, n86, n87
            nrec3 = nrec3 + 2
 8158       format (i2.2, '00 if (nchain .gt.', i4, ') go to ', i2.2, '00')
            do ii = 1, 12
@@ -686,33 +686,33 @@ program vardim
               if (n3 .eq. 99) n28 = 0
               write (lunit(3), 8143) lm, n28
               lm = lm + 1
-              write (lunit(3), 4769) lm, lstnew(n3)
+              write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
 4769          format (2x, 'lsize(', i2, ') =', i7)
               nrec3 = nrec3 + 2
 4602          continue
               nonneg = lstnew(n3)
               if (nonneg .le. 0) nonneg = 1
-              write (lunit(2), 7236) cblser(i), cblock(i), nonneg
+              write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4102
-              write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
            end do
 4102       continue
            n18 = 29
-           write (lunit(2), 7274) n18
+           write (unit = lunit(2), fmt = 7274) n18
 7274       format (2x, 'call subr', i2, 63x)
-           write (lunit(2), 7297)
-           write (lunit(2), 7298) 'over29'
+           write (unit = lunit(2), fmt = 7297)
+           write (unit = lunit(2), fmt = 7298) 'over29'
            indexm = indexm + 1
            mextra = 5000
            call make_subroutine_comment(lunit(2), 'over31')
-           write (lunit(2), 4203)
+           write (unit = lunit(2), fmt = 4203)
 4203       format ('subroutine over31', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
-           write (lunit(3), 8156)
+           write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 31
            n87 = 39
-           write (lunit(3), 8158) n86, n86, n87
+           write (unit = lunit(3), fmt = 8158) n86, n86, n87
            nrec3 = nrec3 + 2
            do ii = 1, 1
               i = 138 + ii
@@ -725,33 +725,33 @@ program vardim
 4503          lm = lm + 1
               n28 = n3
               if (n3 .eq. 99) n28 = 0
-              write (lunit(3), 8143) lm, n28
+              write (unit = lunit(3), fmt = 8143) lm, n28
               lm = lm + 1
-              write (lunit(3), 4769) lm, lstnew(n3)
+              write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
               nrec3 = nrec3 + 2
 4603          continue
               nonneg = lstnew(n3)
               if (nonneg .le. 0) nonneg = 1
-              write (lunit(2), 7236) cblser(i), cblock(i), nonneg
+              write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4103
-              write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
            end do
 4103       continue
            n18 = 31
-           write (lunit(2), 7274) n18
-           write (lunit(2), 7297)
-           write (lunit(2), 7298) 'over31'
+           write (unit = lunit(2), fmt = 7274) n18
+           write (unit = lunit(2), fmt = 7297)
+           write (unit = lunit(2), fmt = 7298) 'over31'
            lstnew(71) = 500
            if (lstnew(3) .gt. 500) lstnew(71) = lstnew(3)
            call make_subroutine_comment(lunit(2), 'over39')
-           write (lunit(2), 4204)
+           write (unit = lunit(2), fmt = 4204)
 4204       format ('subroutine over39', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
-           write (lunit(3), 8156)
+           write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 39
            n87 = 10
-           write (lunit(3), 8158) n86, n86, n87
+           write (unit = lunit(3), fmt = 8158) n86, n86, n87
            nrec3 = nrec3 + 2
            do ii = 1, 3
               i = 139  +  ii
@@ -764,31 +764,31 @@ program vardim
 4504          lm = lm + 1
               n28 = n3
               if (n3 .eq. 99) n28 = 0
-              write (lunit(3), 8143) lm, n28
+              write (unit = lunit(3), fmt = 8143) lm, n28
               lm = lm + 1
               write (lunit(3), 4769) lm, lstnew(n3)
               nrec3 = nrec3 + 2
 4604          continue
               nonneg = lstnew(n3)
               if (nonneg .le. 0) nonneg = 1
-              write (lunit(2), 7236) cblser(i), cblock(i), nonneg
+              write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4104
-              write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
            end do
 4104       continue
            n18 = 39
-           write (lunit(2), 7274) n18
-           write (lunit(2), 7297)
-           write (lunit(2), 7298) 'over39'
+           write (unit = lunit(2), fmt = 7274) n18
+           write (unit = lunit(2), fmt = 7297)
+           write (unit = lunit(2), fmt = 7298) 'over39'
            call make_subroutine_comment(lunit(2), 'fixs10')
-           write (lunit(2), 4205)
+           write (unit = lunit(2), fmt = 4205)
 4205       format ('subroutine fixs10', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
-           write (lunit(3), 8156)
+           write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 10
            n87 = 44
-           write (lunit(3), 8158) n86, n86, n87
+           write (unit = lunit(3), fmt = 8158) n86, n86, n87
            nrec3 = nrec3 + 2
            do ii = 1, 26
               i = 142  +  ii
@@ -801,23 +801,23 @@ program vardim
 4505          lm = lm + 1
               n28 = n3
               if (n3 .eq. 99) n28 = 0
-              write (lunit(3), 8143) lm, n28
+              write (unit = lunit(3), fmt = 8143) lm, n28
               lm = lm + 1
-              write (lunit(3), 4769) lm, lstnew(n3)
+              write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
               nrec3 = nrec3 + 2
 4605          continue
               nonneg = lstnew(n3)
               if ( nonneg  .le.  0 )   nonneg = 1
-              write (lunit(2), 7236) cblser(i), cblock(i), nonneg
+              write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if ( n4  .eq.  0 )   go to 4105
-              write (lunit(2), 7243) (type(n4, j), j= 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
            end do
 4105       continue
            n18 = 10
-           write (lunit(2), 7274) n18
-           write (lunit(2), 7297)
-           write (lunit(2), 7298) 'fixs10'
+           write (unit = lunit(2), fmt = 7274) n18
+           write (unit = lunit(2), fmt = 7297)
+           write (unit = lunit(2), fmt = 7298) 'fixs10'
            indexm = indexm + 1
            mextra = 7000
            d1 = (ltlabl + mextra + kextra(indexm)) / mul34
@@ -834,13 +834,13 @@ program vardim
            lstnew(75) = (lstnew(71) * (lstnew(71) + 1)) / 2
            lstnew(76) = 2 * lstnew(71)
            call make_subroutine_comment(lunit(2), 'over44')
-           write (lunit(2), 4206)
+           write (unit = lunit(2), fmt = 4206)
 4206       format ('subroutine over44', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
-           write (lunit(3), 8156)
+           write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 44
            n87 = 45
-           write (lunit(3), 8158) n86, n86, n87
+           write (unit = lunit(3), fmt = 8158) n86, n86, n87
            nrec3 = nrec3 + 2
            do ii = 1, 26
               i = 168 + ii
@@ -853,33 +853,33 @@ program vardim
 4506          lm = lm + 1
               n28 = n3
               if (n3 .eq. 99) n28 = 0
-              write (lunit(3), 8143) lm, n28
+              write (unit = lunit(3), fmt = 8143) lm, n28
               lm = lm + 1
-              write (lunit(3), 4769) lm, lstnew(n3)
+              write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
               nrec3 = nrec3 + 2
 4606          continue
               nonneg = lstnew(n3)
               if (nonneg .le. 0) nonneg = 1
-              write (lunit(2), 7236) cblser(i), cblock(i), nonneg
+              write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4106
-              write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
            end do
 4106       continue
            n18 = 44
-           write (lunit(2), 7274) n18
-           write (lunit(2), 7297)
-           write (lunit(2), 7298) 'over44'
+           write (unit = lunit(2), fmt = 7274) n18
+           write (unit = lunit(2), fmt = 7297)
+           write (unit = lunit(2), fmt = 7298) 'over44'
            indexm = indexm + 1
            mextra = 5000
            call make_subroutine_comment(lunit(2), 'over45')
-           write (lunit(2), 4207)
+           write (unit = lunit(2), fmt = 4207)
 4207       format ('subroutine over45', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
-           write (lunit(3), 8156)
+           write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 45
            n87 = 47
-           write (lunit(3), 8158) n86, n86, n87
+           write (unit = lunit(3), fmt = 8158) n86, n86, n87
            nrec3 = nrec3 + 2
            do ii = 1, 1
               i = 194  +  ii
@@ -892,33 +892,33 @@ program vardim
 4507          lm = lm + 1
               n28 = n3
               if ( n3  .eq.  99 )   n28 = 0
-              write (lunit(3), 8143) lm, n28
+              write (unit = lunit(3), fmt = 8143) lm, n28
               lm = lm + 1
-              write (lunit(3), 4769) lm, lstnew(n3)
+              write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
               nrec3 = nrec3 + 2
 4607          continue
               nonneg = lstnew(n3)
               if (nonneg .le. 0) nonneg = 1
-              write (lunit(2), 7236) cblser(i), cblock(i), nonneg
+              write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if ( n4  .eq.  0 )   go to 4107
-              write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
            end do
 4107       continue
            n18 = 45
-           write (lunit(2), 7274) n18
-           write (lunit(2), 7297)
-           write (lunit(2), 7298) 'over45'
+           write (unit = lunit(2), fmt = 7274) n18
+           write (unit = lunit(2), fmt = 7297)
+           write (unit = lunit(2), fmt = 7298) 'over45'
            indexm = indexm + 1
            mextra = 5000
            call make_subroutine_comment(lunit(2), 'over47')
-           write (lunit(2), 4208)
+           write (unit = lunit(2), fmt = 4208)
 4208       format ('subroutine over47', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
-           write (lunit(3), 8156)
+           write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 47
            n87 = 99
-           write (lunit(3), 8158) n86, n86, n87
+           write (unit = lunit(3), fmt = 8158) n86, n86, n87
            nrec3 = nrec3 + 2
            do ii = 1, 1
               i = 195  +  ii
@@ -931,70 +931,70 @@ program vardim
 4508          lm = lm + 1
               n28 = n3
               if ( n3  .eq.  99 )   n28 = 0
-              write (lunit(3), 8143) lm, n28
+              write (unit = lunit(3), fmt = 8143) lm, n28
               lm = lm + 1
-              write (lunit(3), 4769) lm, lstnew(n3)
+              write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
               nrec3 = nrec3 + 2
 4608          continue
               nonneg = lstnew(n3)
               if ( nonneg  .le.  0 )   nonneg = 1
-              write (lunit(2), 7236) cblser(i), cblock(i), nonneg
+              write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if ( n4  .eq.  0 )   go to 4108
-              write (lunit(2), 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
            end do
 4108       continue
            n18 = 47
-           write (lunit(2), 7274) n18
-           write (lunit(2), 7297)
-           write (lunit(2), 7298) 'over47'
-           write (lunit(3), 8156)
-           write (lunit(3), 8234)
+           write (unit = lunit(2), fmt = 7274) n18
+           write (unit = lunit(2), fmt = 7297)
+           write (unit = lunit(2), fmt = 7298) 'over47'
+           write (unit = lunit(3), fmt = 8156)
+           write (unit = lunit(3), fmt = 8234)
 8234       format (' 9900 lsize(1) = locint(bus1) - locint(bus2)')
-           write (lunit(3), 8156)
+           write (unit = lunit(3), fmt = 8156)
            !        write (lunit(3), 8242)
            !8242    format (2x, 'end subroutine dimens')
-           write (lunit(3), 7298) 'dimens'
+           write (unit = lunit(3), fmt = 7298) 'dimens'
            nrec3 = nrec3 + 4
            rewind lunit(3)
            do m = 1, 99999
-              read (lunit(3), 8253, end = 8260) abuff
-              write (lunit(2), 8253) trim(abuff)
+              read (unit = lunit(3), fmt = 8253, end = 8260) abuff
+              write (unit = lunit(2), fmt = 8253) trim(abuff)
            end do
 8253       format (a)
-8260       write (lunit(2), 8258)
+8260       write (unit = lunit(2), fmt = 8258)
 8258       format ('!', /, '! end of file newmods.for', /, '!')
-           write (lunit(6), 8942) ltlabl
+           write (unit = lunit(6), fmt = 8942) ltlabl
 8942       format (" Normal termination within  'vardim' .   The size of   /label/   equals", i8, '   integer words.', //, 1x)
            go to 9999
-9000       write (lunit(6), 9023)
+9000       write (unit = lunit(6), fmt = 9023)
 9023       format (//, 1x)
-           write (lunit(6), 9027)
+           write (unit = lunit(6), fmt = 9027)
 9027       format (1x, 131('-'))
-           write (lunit(6), 9031)
+           write (unit = lunit(6), fmt = 9031)
 9031       format (22(' error'))
-           write (lunit(6), 9031)
-           write (lunit(6), 9027)
-           write (lunit(6), 9044)
+           write (unit = lunit(6), fmt = 9031)
+           write (unit = lunit(6), fmt = 9027)
+           write (unit = lunit(6), fmt = 9044)
 9044       format (/, 5x, 'The user is in trouble, unless he has made a data-punching error.   Variable-dimensioning of the EMTP has', /, &
                 5x, "broken down within the separate variable-dimensioning program  'vardim' .   In particular, one or more of the", /, &
                 5x, 'user-inputted list sizes must be rejected as being illegally large.   User-supplied limits (or default limits,')
-           write (lunit(6), 9045) (lstnew(i), i = 1, numlst)
+           write (unit = lunit(6), fmt = 9045) (lstnew(i), i = 1, numlst)
 9045       format (5x, 'for any non-positive data fields) are as follows ....', /, (1x, 10i10))
            if (ltlabl .gt. 0) go to 9061
-           write (lunit(6), 9049) n1, lstnew(n1)
+           write (unit = lunit(6), fmt = 9049) n1, lstnew(n1)
 9049       format (5x, 'Specifically, the user-supplied value which was read for list number', i4, '  exceeds  999999 ,', /, &
                 5x, 'which is unreal.   A value of', i10, "   was read from the user's data card for this list.", /, 1x)
-9054       write (lunit(6), 9027)
-           write (lunit(6), 9031)
-           write (lunit(6), 9031)
-           write (lunit(6), 9027)
+9054       write (unit = lunit(6), fmt = 9027)
+           write (unit = lunit(6), fmt = 9031)
+           write (unit = lunit(6), fmt = 9031)
+           write (unit = lunit(6), fmt = 9027)
            write (lunit(6), 9023)
            go to 9900
-9061       write (lunit(6), 9064) ltlabl
+9061       write (unit = lunit(6), fmt = 9064) ltlabl
 9064       format (5x, 'Specifically, the user-supplied dimensions have collectively produced a total labeled-common allocation', /, &
                 5x, 'of', i12, '   words, which is unreal.   A limit of   9999999   has arbitrarily been imposed by the better judgment')
-           write (lunit(6), 9065)
+           write (unit = lunit(6), fmt = 9065)
 9065       format (5x, 'of the program.   A machine this big (with this much real central memory) is not known to be in existence anywhere', /, &
                 5x, 'in the world.', /, 1x)
            go to 9054
