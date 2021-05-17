@@ -6,6 +6,7 @@
 !
 !     subroutine over20.
 !
+
 subroutine over20
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -434,7 +435,20 @@ subroutine spying
   ksmspy(3) = 0
 51006 if (nexmod .ne. 2) go to 1007
   nexmod = 0
-  go to nextsn
+  !go to nextsn
+  select case (nextsn)
+  case (1315)
+     go to 1315
+
+  case (1485)
+     go to 1485
+
+  case (1842)
+     go to 1842
+
+  case (31269)
+     go to 31269
+  end select
 1007 if (nexmod .eq. 3) go to 8500
   if (nexmod .eq. 1) go to 3208
   if (nexmod .eq. 7) go to 1320
@@ -562,30 +576,174 @@ subroutine spying
   call window
 1309 jwdsav = jword
   if (jword .gt. 63) go to 71309
-  go to ( &
-!      heading  stop   plot    help    examine deposit switch  (1-7)
-       1500,   9000,   1319,   1311,   1337,   1460,   8500, &
-!      append   save   restore go    echo   find   list    (8-14)
-       1320,   2206,   2317,   2402,   3673,   2040,   2092, &
-!      spy     break   when    comment @?      roll    type?   (15-21)
-       1240,   2124,   2430,   2486,   1303,   1424,   1303, &
-!      verify  files   sleep   source  edit    wake    language (22-28)
-       2494,   2563,   2591,   8500,   8500,   2604,   8500, &
-!      catalog begin   step    debug   data    ramp    time   (29-35)
-       2907,   2926,   2937,   2964,   2974,   3095,   3153, &
-!      tek     branch  yform   noy     factor  nof     rlc    (36-42)
-       3174,   3256,   3357,   3381,   3394,   3406,   8500, &
-!      width   bus     size    limit   iout    node    nonlin  (43-49)
-       8500,   8500,   8500,   8500,   8500,   8500,   8500, &
-!      space   lunit4  series  lock    [y]     [f]     noroll  (50-56)
-       8500,   8500,   8500,   8500,   8500,   8500,   8500, &
-!      open    close   sm      honk    choice  tacs    wait   (57-63)
-       3568,   3584,   3606,   3623,   8500,   8500,   3644), jword
+  select case (jword)
+  case (1)     ! heading
+     go to 1500
+
+  case (2)     ! stop
+     go to 9000
+
+  case (3)     ! plot
+     go to 1319
+
+  case (4)     ! help
+     go to 1311
+
+  case (5)     ! examine
+     go to 1337
+
+  case (6)     ! deposit
+     go to 1460
+
+  case (7)     ! switch
+     go to 8500
+
+  case (8)     ! append
+     go to 1320
+
+  case (9)     ! save
+     go to 2206
+
+  case (10)    ! restore
+     go to 2317
+
+  case (11)    ! go
+     go to 2402
+
+  case (12)    ! echo
+     go to 3673
+
+  case (13)    ! find
+     go to 2040
+
+  case (14)    ! list
+     go to 2092
+
+  case (15)    ! spy
+     go to 1240
+
+  case (16)    ! break
+     go to 2124
+
+  case (17)    ! when
+     go to 2430
+
+  case (18)    ! comment
+     go to 2486
+
+  case (19)    ! @?
+     go to 1303
+
+  case (20)    ! roll
+     go to 1424
+
+  case (21)    ! type?
+     go to 1303
+
+  case (22)    ! verify
+     go to 2494
+
+  case (23)    ! files
+     go to 2563
+
+  case (24)    ! sleep
+     go to 2591
+
+  case (25 : 26, 42 : 56, 61 : 62)    ! source, edit, rlc, width, bus, size, limit, iout, node, nonlin, space, lunit4, series, lock, [y], [f], noroll, choice, tacs
+     go to 8500
+
+  case (27)    ! wake
+     go to 2604
+
+  case (28)    ! language
+     go to 8500
+
+  case (29)    ! catalog
+     go to 2907
+
+  case (30)    ! begin
+     go to 2926
+
+  case (31)    ! step
+     go to 2937
+
+  case (32)    ! debug
+     go to 2964
+
+  case (33)    ! data
+     go to 2974
+
+  case (34)    ! ramp
+     go to 3095
+
+  case (35)    ! time
+     go to 3153
+
+  case (36)    ! tek
+     go to 3174
+
+  case (37)    ! branch
+     go to 3256
+
+  case (38)    ! yform
+     go to 3357
+
+  case (39)    ! noy
+     go to 3381
+
+  case (40)    ! factor
+     go to 3394
+
+  case (41)    ! nof
+     go to 3406
+
+
+     go to 8500
+
+  case (57)    ! open
+     go to 3568
+
+  case (58)    ! close
+     go to 3584
+
+  case (59)    ! sm
+     go to 3606
+
+  case (60)    ! honk
+     go to 3623
+
+  case (63)    ! wait
+     go to 3644
+  end select
+
+!  go to ( &
+!      heading  stop   plot    help    examine deposit switch         (1-7)
+!       1500,   9000,   1319,   1311,   1337,   1460,   8500, &
+!      append   save   restore go    echo   find   list               (8-14)
+!       1320,   2206,   2317,   2402,   3673,   2040,   2092, &
+!      spy     break   when    comment @?      roll    type?          (15-21)
+!       1240,   2124,   2430,   2486,   1303,   1424,   1303, &
+!      verify  files   sleep   source  edit    wake    language       (22-28)
+!       2494,   2563,   2591,   8500,   8500,   2604,   8500, &
+!      catalog begin   step    debug   data    ramp    time           (29-35)
+!       2907,   2926,   2937,   2964,   2974,   3095,   3153, &
+!      tek     branch  yform   noy     factor  nof     rlc            (36-42)
+!       3174,   3256,   3357,   3381,   3394,   3406,   8500, &
+!      width   bus     size    limit   iout    node    nonlin         (43-49)
+!       8500,   8500,   8500,   8500,   8500,   8500,   8500, &
+!      space   lunit4  series  lock    [y]     [f]     noroll         (50-56)
+!       8500,   8500,   8500,   8500,   8500,   8500,   8500, &
+!      open    close   sm      honk    choice  tacs    wait           (57-63)
+!       3568,   3584,   3606,   3623,   8500,   8500,   3644), jword
   call stoptp
 71309 n14 = jword - 63
-  go to ( &
+!  go to ( &
 !      v-i                                                   (64-64)
-       8500 ), n14
+!       8500 ), n14
+  select case (n14)
+  case (1)
+     go to 8500
+  end select
   call stoptp
   !     $$$$$$$  key word no.  4:  "help"     $$$$  $$$$  $$$$  $$$$  $$$$
 1311 write (unit = munit6, fmt = 11312)
@@ -1579,7 +1737,7 @@ subroutine spying
   ksmspy(2) = 0
   maxflg = 1
   assign 3609 to nextsn
-  prom80(1:8) = '        '
+  prom80(1 : 8) = '        '
   go to 9800
 3609 if (iprspy .lt. 1) go to 83609
   write (unit = munit6, fmt = 23609) ksmspy(2)
@@ -1807,30 +1965,98 @@ subroutine spyink
   nexmod = 0
   go to nextsn
 1004 if ( jword .gt. 63 )     go to 1007
-  go to ( &
+  select case (jword)
+  case (1 : 6, 8 : 24, 27, 29 : 41, 57 : 60, 63)
+     go to 9999
+
+  case (25)
+     go to 2856
+
+  case (26)
+     go to 2617
+
+  case (28)
+     go to 2782
+
+  case (42)
+     go to 3456
+
+  case (43)
+     go to 3526
+
+  case (44)
+     go to 3541
+
+  case (45)
+     go to 3635
+
+  case (46)
+     go to 3647
+
+  case (47)
+     go to 3662
+
+  case (48)
+     go to 3684
+
+  case (49)
+     go to 3752
+
+  case (50)
+     go to 3842
+
+  case (51)
+     go to 4002
+
+  case (52)
+     go to 4163
+
+  case (53)
+     go to 4436
+
+  case (54)
+     go to 4471
+
+  case (55)
+     go to 4512
+
+  case (56)
+     go to 4563
+
+  case (61)
+     go to 4592
+
+  case (62)
+     go to 4716
+  end select
+!  go to ( &
 !      heading  stop    plot    help  examine  deposit  switch  (1-7)
-       9999 ,   9999,   9999,   9999,   9999,   9999,   2804, &
+!       9999 ,   9999,   9999,   9999,   9999,   9999,   2804, &
 !      rest    save   restore   go    blank    find    list    (8-14)
-       9999 ,   9999,   9999,   9999,   9999,   9999,   9999, &
+!       9999 ,   9999,   9999,   9999,   9999,   9999,   9999, &
 !      spy    break   when  comment    @?     roll   type?   (15-21)
-       9999 ,   9999,   9999,   9999,   9999,   9999,   9999, &
+!       9999 ,   9999,   9999,   9999,   9999,   9999,   9999, &
 !      verify   files   sleep  source   edit    wake  language (22-28)
-       9999 ,   9999,   9999,   2856,   2617,   9999,   2782, &
+!       9999 ,   9999,   9999,   2856,   2617,   9999,   2782, &
 !      catalog  begin    step    debug   data    ramp    time   (29-35)
-       9999 ,   9999,   9999,   9999,   9999,   9999,   9999, &
+!       9999 ,   9999,   9999,   9999,   9999,   9999,   9999, &
 !      tek   branch   yform    noy   factor    nof    rlc    (36-42)
-       9999 ,   9999,   9999,   9999,   9999,   9999,   3456, &
+!       9999 ,   9999,   9999,   9999,   9999,   9999,   3456, &
 !      width    bus    size   limit    iout    node   nonlin  (43-49)
-       3526 ,   3541,   3635,   3647,   3662,   3684,   3752, &
+!       3526 ,   3541,   3635,   3647,   3662,   3684,   3752, &
 !      space  lunit4  series   lock     [y]     [f]   noroll  (50-56)
-       3842 ,   4002,   4163,   4436,   4471,   4512,   4563, &
+!       3842 ,   4002,   4163,   4436,   4471,   4512,   4563, &
 !      open    close  unlock   honk   choice   tacs    wait   (57-63)
-       9999 ,   9999,   9999,   9999,   4592,   4716,   9999), jword
+!       9999 ,   9999,   9999,   9999,   4592,   4716,   9999), jword
   call stoptp
 1007 n14 = jword - 63
-  go to ( &
+  select case (n14)
+  case (1)
+     go to 4823
+  end select
+!  go to ( &
 !      v-i                                                   (64-64)
-       4823 ),  n14
+!       4823 ),  n14
   call stoptp
   !     $$$$$$$  key word no. 26:  "edit"     $$$$  $$$$  $$$$  $$$$  $$$$
   !     "edit"  command allows the user to look at the emtp data case
@@ -4241,7 +4467,8 @@ subroutine prompt
   end do
   return
   !     following lunit6 should really go to 2nd screen ("window")
-1426 write (lunit6, '(a, $)') prom80(1 : n2)                ! ",$" is DEC magic to hold cursor
+  !1426 write (lunit6, '(a, $)') prom80(1 : n2)                ! ",$" is DEC magic to hold cursor
+1426 write (unit = lunit6, fmt = '(a)', advance = 'no') prom80(1 : n2)
   return
 end subroutine prompt
 !
@@ -7063,8 +7290,10 @@ block data blkplt
    data  nxend    /   512   /
    data  nyend    /    50   /
    data  icurse   /    0    /
-   data  ichref   /   1hp   /
-   data  ichend   /   1he   /
+   !   data  ichref   /   'p'   /
+   data ichref    /   112   /
+   !   data  ichend   /   'e'   /
+   data ichend    /   101   /
    data  vaxisl   /   4.0   /
    data  fxnumv   /   1.5   /
    data  fxnumh   /   5.0   /
@@ -7293,9 +7522,11 @@ subroutine tpplot
 9817 nexmod = 4
 9835 return
 end subroutine tpplot
+
 !
 !     subroutine helper.
 !
+
 subroutine helper (n1)
   !     Module used only for interactive EMTP (service to "emtspy").
   !     for non-interactive EMTP, this module can be destroyed.
@@ -7348,9 +7579,11 @@ subroutine helper (n1)
   call window
 9011 return
 end subroutine helper
+
 !
 !     subroutine pltvar.
 !
+
 subroutine pltvar
   !     module used only for interactive emtp (service to "emtspy").
   !     for non-interactive emtp, this module can be destroyed.
@@ -7663,9 +7896,11 @@ subroutine pltvar
 9817 nexmod = 5
 9835 return
 end subroutine pltvar
+
 !
 !     subroutine timval.
 !
+
 subroutine timval
   !     Module used only for interactive EMTP (service to "emtspy").
   !     for non-interactive EMTP, this module can be destroyed.
@@ -8316,9 +8551,11 @@ subroutine timval
 9817 nexmod = 6
 9835 return
 end subroutine timval
+
 !
 ! subroutine back14.
 !
+
 subroutine back14
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module used only for interactive EMTP (service to "emtspy").

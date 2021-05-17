@@ -18,6 +18,7 @@ subroutine over1
   !     To avoid "insert deck tacsar" here, use small part of it:
   real(4) r4(1)
   equivalence (volti(1), r4(1))
+  character(8) ibusum, kpen
   dimension kpen(1), ibusum(1)
   equivalence (bus1, kpen(1)), (busum(1), ibusum(1))
   equivalence (moncar(1), knt), (moncar(2), kbase)
@@ -37,7 +38,7 @@ subroutine over1
   common /comlock/ locker(2)
   !     default list sizes for tacs proportioning of emtp list 19.
   data text2 / 'name  ' /
-  data text6 / 'copy  ' /
+  !data text6 / 'copy  ' /
   data text1 / 'tacs o' /
   data text3 / 'tacs h' /
   data text4 / 'tacs s' /
@@ -55,6 +56,7 @@ subroutine over1
   data ll60  / 60 /
   data ll64  / 64 /
   data ll80  / 80 /
+  text6 = 'copy  '
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over1."')
   lstacs(1) = 20
@@ -301,7 +303,8 @@ subroutine over1
 3273 kill = 9999
      nchain = 31
      go to 9800
-3280 call reques
+     !3280 call reques
+3280 call reques (lstat(1))
      i = lstat(18)
      !     request word number  0  implies miscellaneous data cards:
      if (i .eq. 0) go to 2843
@@ -559,8 +562,9 @@ subroutine over1
   call freone (sigmax)
   call frefld (voltbc(1))
   jseedr = int (voltbc(1))
-624 if (noutpr .eq.  0) write (unit = kunit6, fmt = 630) isw, itest, idist, aincr
-630 format ('+statistics data.', 3i8, f9.4, $)
+624 if (noutpr .eq.  0) write (unit = kunit6, fmt = 630, advance = 'no') isw, itest, idist, aincr
+  !630 format ('+statistics data.', 3i8, f9.4, $)
+630 format ('+statistics data.', 3i8, f9.4)
   if (xmaxmx .eq. 0.0) xmaxmx = 2.0
   if(aincr .eq. 0.0) aincr = unity / 20.
   if (d4 .gt. 0.0) statfr = d4
@@ -693,9 +697,9 @@ subroutine over1
   newtac = 1
   ntcsex = 1
   niunrs = 1
-  write (*, *) ' prepare to call  ntacs1  from over1.'
+  write (unit = *,  fmt = *) ' Prepare to call  ntacs1  from over1.'
   call ntacs1
-  write (*, *) ' back from ntacs1, back in over1.'
+  write (unit = *, fmt = *) ' Back from ntacs1, back in over1.'
   go to 4284
 7722 go to 4281
 2697 ntcsex = 1
@@ -844,21 +848,20 @@ end subroutine swmodf
 !     subroutine reques.
 !
 
-subroutine reques
+subroutine reques (ls)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'umdeck.ftn'
-  integer(4) n1, n2, n8, jpntr
+  integer(4) n1, n2, n8, jpntr, ls
   dimension anglex(1), farray(1)
   equivalence (anglex(1), angle)
   equivalence (moncar(2), kbase), (moncar(3), ltdelt)
   equivalence (iprsov(39), nmauto)
   character(8) textax, textay
   common /systematic/ linsys
-  dimension textax(300), jpntr(100), textay(100)
+  dimension textax(300), jpntr(100), textay(100), ls(*)
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
-  integer(4) lstat
   character(6) chlmfs                                       ! 9-phase as limit for lmfs test
   character(80) char80
   real(8) max99m, lnpin, modout, nsmth
@@ -1272,10 +1275,11 @@ subroutine reques
   do i = 1, size(jpntr) - 1                                 ! was 1 to 9999
      n1 = jpntr(i)
      n2 = jpntr(i + 1) - 1
-     !     Next check if last request word has been exhaused.  if so,
+     !     Next check if last request word has been exhaused.  If so,
      !     exit with  lstat(18)  equal to zero.
      if (n2 .lt. 0) then
-        lstat(18) = 0
+        !        lstat(18) = 0
+        ls(18) = 0
         go to 9200
      end if
      if (iprsup .ge. 35) write (unit = lunit6, fmt = 3285) i, (textax(j), j = n1, n2)
@@ -1288,7 +1292,8 @@ subroutine reques
         l = l + 1
         if (texta6(l) .ne. textax(j)) go to 3306
      end do
-3294 lstat(18) = i
+     !3294 lstat(18) = i
+3294 ls(18) = i
     select case (i)
      case (1)
         ! $$$$$    special-request word no. 1.   'xformer'                 $$$$$
@@ -2013,15 +2018,18 @@ subroutine reques
   delffs = -expz (d8)
   go to 15
 2785 kill = 193
-  lstat(14) = n8
-  lstat(19) = 2785
+  !  lstat(14) = n8
+  ls(14) = n8
+  !  lstat(19) = 2785
+  ls(19) = 2785
   go to 9200
 5617 flstat(7) = -9999.
   ck1 = -fltinf
   ci1 = -fltin
 15 continue
-9200 if (iprsup .ge. 5) write (unit = lunit6, fmt = 9201) nchain, lunit6, lstat(18), kill
-9201 format (/, ' Exit  "reques" .  nchain  lunit6 lstat18    kill ', /, 17x, 4i8)
+  !9200 if (iprsup .ge. 5) write (unit = lunit6, fmt = 9201) nchain, lunit6, lstat(18), kill
+9200 if (iprsup .ge. 5) write (unit = lunit6, fmt = 9201) nchain, lunit6, ls(18), kill
+9201 format (/, ' Exit  "reques" .  nchain  lunit6 lstat(18)   kill ', /, 17x, 4i8)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
 4568 format ('  "Exit  module reques."')
   return
@@ -2054,6 +2062,7 @@ subroutine sysdep
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   common /komthl/ pekexp
+  character(8) intbus
   dimension intbus(1)
   equivalence (intbus(1), bus1)
   include 'dekspy.ftn'

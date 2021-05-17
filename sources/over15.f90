@@ -2,11 +2,13 @@
 !
 !     file: over15.for
 !
+
 !
 !     subroutine over15.
 !
+
 subroutine over15
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
@@ -38,11 +40,11 @@ subroutine over15
   data  text11  / 'm     ' /
   data  text12  / 'chan01' /
   !     transfer to  "top15"  for front end of overlay 15.
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format (24h  "begin module over15." )
-  call move0 ( kssfrq(1), ntot )
+  call move0 (kssfrq(1), ntot)
   call top15
-  if ( kill  .gt.  0 )   go to 9200
+  if (kill .gt. 0) go to 9200
   go to 3038
   !     read user-supplied names for emtp node-voltage output.  ----------
   !     read input card using cimage.
@@ -199,11 +201,11 @@ subroutine over15
   call interp
   if ( nenerg .eq. 0 )  go to 3094
   write (lunit6, 637)  nenerg
-637 format ( //,  87h the data case now ready to be solved is a statistical overvoltage study which involves, i7, 16h   energizations )
-  if ( nenerg  .lt.  0 )   go to 1329
+637 format (//, ' The data case now ready to be solved is a statistical overvoltage study which involves', i7, '   energizations')
+  if (nenerg .lt. 0) go to 1329
   text2 = text4
   text3 = text5
-  if ( idist  .eq.  0 )   go to 1310
+  if (idist .eq. 0) go to 1310
   text2 = text6
   text3 = text7
 1310 write (lunit6, 1311)   text2, text3
@@ -233,8 +235,8 @@ subroutine over15
        'are the associated ',  a6, a1, '  closing times and step-increment sizes for the, switches, exactly as was read from the switch cards.')
 1336 write (lunit6, 1338)
 1338 format ( /, 10x, 'entry', 4x, 'switch', 6x, 'from', 8x, 'to', 9x, 'columns 15-24', 8x, 'columns 25-34', &
-       7x, 'reference switch no.', /, 5x,  2(4x, 6hnumber),  2(7x, 3hbus), 10x, '(in seconds)', 9x, '(in seconds)', &
-       5x, '(0 implies independence)')
+          7x, 'reference switch no.', /, 5x,  2(4x, 'number'),  2(7x, 'bus'), 10x, '(in seconds)', 9x, '(in seconds)', &
+          5x, '(0 implies independence)')
   n1 = 0
   do i=1, kswtch
      if ( absz(adelay(i))  .ne.   44444. )   go to 1352
@@ -550,7 +552,7 @@ subroutine over15
   if ( n1  .eq.  1 ) write (lunit6, 3131)  ( aupper(i), i=1, 9 )
 3131 format ( /, 15x,  9(7x, a6)  )
   if ( n1  .eq.  0 ) write (lunit6, 3132)  ( aupper(i), i=1, 9 )
-3132 format ( /,  15h  step     time,  9( 7x, a6 )  )
+3132 format (/, '  step     time', 9(7x, a6))
   if( n1 .gt. 0 )  go to 3144
   n1 = 1
 3144 if ( kprsta  .eq.  1 ) write (lunit6, 3145)  ( alower(i), i=1, 9 )
@@ -558,7 +560,7 @@ subroutine over15
   if ( kprsta  .eq.  0 ) write (lunit6, 8145)  ( alower(i), i=1, 9 )
 8145 format( 15h  ref. angle   ,  9( 7x, a6 )   )
   kprsta=1
-7113 go to ( 3152, 3166, 3188, 3197, 3177, 8637 ) moon
+7113 go to (3152, 3166, 3188, 3197, 3177, 8637) moon
 3152 m = 0
 3158 if( k .lt. numnvo )  go to 3119
   k = 0
@@ -623,7 +625,7 @@ subroutine over15
   aupper(m) = blank
   alower(m) = blank
   if( m .lt. 9 )  go to 3171
-  assign  3177  to moon
+  assign 3177 to moon
   go to 3126
 3177 kcount = nv
   lunit6 = lunit6save
@@ -650,7 +652,7 @@ subroutine over15
 8689 d11 = 0.0
      if ( kbase .eq. 2 )  go to 8702
      write (lunit6,8692)  tclose(i),  bus(k), bus(m),  d11
-8692 format ( 27h ***          phasor i(0) =,  e15.7,  33x,8hswitch ",  a6,  6h" to ",  a6,  14h" closed after,e12.5,  5h sec.   )
+8692 format (' ***          phasor i(0) =', e15.7, 33x, 'switch ', '"', a6,  '"', ' to ', '"', a6, '"', ' closed after', e12.5, ' sec.')
      go to 8702
 8693 d6 = 0.0
      go to  8710
@@ -659,7 +661,7 @@ subroutine over15
      if ( absz(emtpe(k) - emtpe(m)) .lt. topen(i)) go to 8710
 8284 if ( kbase .eq. 2 )  go to 8702
      write (lunit6, 8699 )  bus(k), bus(m),  tclose(i)
-8699 format ( 27h ***                       ,  15x,    33x,8hswitch ",  a6,  6h" to ",  a6,  14h" closed after,e12.5,  5h sec.   )
+8699 format (' ***                       ', 15x, 33x, 'switch ', '"', a6, '"', ' to ', '"', a6, '"', ' closed after', e12.5, ' sec.')
 8702 n8 = kpos(i)
      kpos(i) = 2
      if ( n8 .lt. 0 )  kpos(i) = -2
@@ -691,41 +693,38 @@ subroutine over15
 4215 nextsw(n6) = k1
 4216 end do
   write (lunit6, 701) knt, (nextsw(k1), volti(k1), k1=1, n6 )
-701 format (/, 32x, 46hrandom switching times for energization number,i4, /,  ( 32x,   5(i4, e16.6)   )   )
+701 format (/, 32x, 'Random switching times for energization number', i4, /, (32x, 5(i4, e16.6)))
 710 if (iprsup .ge. 1) write(lunit6, 1077)  kprchg, multpr
-1077 format( /,  43h begin del-t loop at 1077.  kprchg, multpr=,/, ( 1x, 12i10 ) )
+1077 format (/, ' Begin del-t loop at 1077.  kprchg, multpr=', /, (1x, 12i10))
   call move0 ( nextsw(1), kswtch )
-1079 if ( iprsup  .ge.  1 ) write (lunit6, 76101)  (i, iform(i), node(i), crest(i), time1(i), &
-          time2(i), tstart(i), sfreq(i), i = 1, kconst)
-76101 format (/, 14h source table.   , /, 5x, 3hrow, 3x, 5hiform, 4x, 4hnode, 10x, 5hcrest,10x,5htime1, &
-           10x, 5htime2, 9x, 6htstart, 10x, 5hsfreq, / , (3i8, 5e15.6))
-  if( iprsup .gt. 0 ) write(lunit6, 73899)
-73899 format( /, 45h n.l. elem table upon entering time-step loop   ,/, 5x, 3hrow, 2x, 6hnltype, 3x, 5hnonlk, 3x, 5hnonlm, 2x, &
-           6hnonlad, 2x, 6hnonle , 9x, 6hvecnl1, 3x, 5hanonl, 4x, 4hcurr, 8x, 5hvnonl  )
+1079 if (iprsup .ge. 1) write (unit = lunit6, fmt = 76101)  (i, iform(i), node(i), crest(i), time1(i), time2(i), tstart(i), sfreq(i), i = 1, kconst)
+76101 format (/, ' Source table.', /, 5x, 'row', 3x, 'iform', 4x, 'node', 10x, 'crest', 10x, 'time1', 10x, 'time2', 9x, 'tstart', 10x, 'sfreq', /, (3i8, 5e15.6))
+  if (iprsup .gt. 0) write (unit = lunit6, fmt = 73899)
+73899 format (/, ' n.l. elem table upon entering time-step loop', /, 5x, 'row', 2x, 'nltype', 3x, 'nonlk', 3x, 'nonlm', 2x, &
+           'nonlad', 2x, 'nonle', 9x, 'vecnl1', 3x, 'anonl', 4x, 'curr', 8x, 'vnonl')
   i = 1
-73900 if( i .gt. inonl )  go to 73902
-  if( iprsup .gt. 0 ) write(lunit6, 73901)  i, nltype(i),  nonlk(i),  nonlm(i), nonlad(i), nonle(i), vecnl1(i), anonl(i), curr(i), &
-       vnonl(i)
-73901 format ( 6i8,  e15.5,  2f8.0,  e12.3  )
+73900 if (i .gt. inonl) go to 73902
+  if (iprsup .gt. 0) write (unit = lunit6, fmt = 73901) i, nltype(i), nonlk(i), nonlm(i), nonlad(i), nonle(i), vecnl1(i), anonl(i), curr(i), vnonl(i)
+73901 format (6i8, e15.5, 2f8.0, e12.3)
   i = i + 1
   go to 73900
 73902 i = 1
-73903 if( i .gt. ichar )  go to 1000
-  if( iprsup .gt. 1 ) write(lunit6, 73904)   i, gslope(i), cchar(i), vchar(i)
-73904 format(  30h n.l. char at 73904 of main14.   , i10, 3e15.5  )
+73903 if (i .gt. ichar) go to 1000
+  if (iprsup .gt. 1) write (unit = lunit6, fmt = 73904) i, gslope(i), cchar(i), vchar(i)
+73904 format (' n.l. char at 73904 of main14.   ', i10, 3e15.5)
   i = i + 1
   go to 73903
-1000 if ( nenerg  .ne.  0 )   go to 1009
+1000 if (nenerg .ne. 0) go to 1009
   n1 = 2 * modout
-  if ( modout  .eq.  0 )   go to 9999
-  if ( noutpr  .eq.  0 ) write (lunit6, 1006)  n1, modout
-1006 format ( /, 10x,  45hremember ---- what are labeled as the initial, i3,  39h  branch-output currents are in reality, /, &
-          24x, 100hmodal voltages at the two ends of the last distributed-parameter line of the data case being solved.    ,/, &
-          24x, 9hthe first, i3,  85h  mode voltages at the  'bus1'  end all come first, followed by all the corresponding   ,/, &
-          24x, 41hentries for the  'bus2'  end of the line.,/,1x)
+  if (modout .eq. 0) go to 9999
+  if (noutpr .eq. 0) write (unit = lunit6, fmt = 1006) n1, modout
+1006 format (/, 10x, 'Remember ---- what are labeled as the initial', i3,  '  branch-output currents are in reality', /, &
+          24x, 'modal voltages at the two ends of the last distributed-parameter line of the data case being solved.', /, &
+          24x, 'The first', i3, "  mode voltages at the  'bus1'  end all come first, followed by all the corresponding", /, &
+          24x, "entries for the  'bus2'  end of the line.", /, 1x)
   go to 9999
-1009 if ( kbase  .eq.  intinf )   kbase = 2
-  if ( kbase  .eq.  2     .and. tenerg  .lt.  0.0 ) call tables
+1009 if (kbase .eq. intinf) kbase = 2
+  if (kbase .eq. 2 .and. tenerg .lt. 0.0) call tables
   ltdelt = 0
   go to 9999
 9000 lstat(16) = iprint
@@ -734,18 +733,20 @@ subroutine over15
   nchain = 51
   lstat(18) = 15
   if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
-4568 format (24h  "exit  module over15." )
+4568 format ('  "Exit  module over15."')
   go to 99999
 9999 lastov = nchain
   nchain = nchain + 1
   if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
 99999 return
 end subroutine over15
+
 !
 ! subroutine top15.
 !
+
 subroutine top15
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   dimension  nsubkm(1)
@@ -771,7 +772,7 @@ subroutine top15
   l = cik(i)
   a = 1.0 / eta(l)
   if( iprsup .ge. 2 ) write(lunit6, 24903)  i, l, k, a, ck1, ci(i)
-24903 format( /, 26h freq dep  2/m*z  at 24903   , 3i10, 3e20.6  )
+24903 format (/, ' freq dep  2/m*z  at 24903   ', 3i10, 3e20.6)
 25903 ci(i) = ci(i) * (a + ck1 )
 905 i = i + 1
   go to 904
@@ -861,49 +862,54 @@ subroutine top15
 9200 call move0 ( kode(1), ntot )
   nfrfld = n15
   if ( iprsup  .ge.  3 ) write (lunit6, 9201)
-9201 format (  16h exit  "top15" .   )
+9201 format (' Exit  "top15" .')
   return
 end subroutine top15
 !
 !     subroutine smout.
 !
 subroutine smout
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module is used only by  type 59 s.m.  modeling
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'synmac.ftn'
   character*8 texta, textb, digit, text1, text2, busvec
   dimension texta(15), digit(10), textb(3), busvec(1)
-  data texta(1)   /6hid    /
-  data texta(2)   /6hiq    /
-  data texta(3)   /6hi0    /
-  data texta(4)   /6hif    /
-  data texta(5)   /6hikd   /
-  data texta(6)   /6hig    /
-  data texta(7)   /6hikq   /
-  data texta(8)   /6hia    /
-  data texta(9)   /6hib    /
-  data texta(10)  /6hic    /
-  data texta(11)  /6hefd   /
-  data texta(12)  /6hmforce/
-  data texta(13)  /6hmang  /
-  data texta(14)  /6htq gen/
-  data texta(15)  /6htq exc/
-  data  textb(1)   /  6hang     /
-  data  textb(2)   /  6hvel     /
-  data  textb(3)   /  6htor     /
-  data  digit(1)    /  6h1       /
-  data  digit(2)    /  6h2       /
-  data  digit(3)    /  6h3       /
-  data  digit(4)    /  6h4       /
-  data  digit(5)    /  6h5       /
-  data  digit(6)    /  6h6       /
-  data  digit(7)    /  6h7       /
-  data  digit(8)    /  6h8       /
-  data  digit(9)    /  6h9       /
-  data  digit(10)   /  6h0       /
-  data  text1   /  6hmach    /
+  texta = (/ 'id    ', 'iq    ', 'i0    ', 'if    ', 'ikd   ', 'ig    ', 'ikq   ', 'ia    ', 'ib    ', 'ic    ', 'efd   ', 'mforce', &
+       'mang  ', 'tq gen', 'tq exc' /)
+  ! data texta(1)   /6hid    /
+  ! data texta(2)   /6hiq    /
+  ! data texta(3)   /6hi0    /
+  ! data texta(4)   /6hif    /
+  ! data texta(5)   /6hikd   /
+  ! data texta(6)   /6hig    /
+  ! data texta(7)   /6hikq   /
+  ! data texta(8)   /6hia    /
+  ! data texta(9)   /6hib    /
+  ! data texta(10)  /6hic    /
+  ! data texta(11)  /6hefd   /
+  ! data texta(12)  /6hmforce/
+  ! data texta(13)  /6hmang  /
+  ! data texta(14)  /6htq gen/
+  ! data texta(15)  /6htq exc/
+  textb = (/ 'ang   ', 'vel   ', 'tor   ' /)
+  ! data  textb(1)   /  6hang     /
+  ! data  textb(2)   /  6hvel     /
+  ! data  textb(3)   /  6htor     /
+  digit = (/ '1     ', '2     ', '3     ', '4     ', '5     ', '6     ', '7     ', '8     ', '9     ', '0     ' /)
+  ! data  digit(1)    /  6h1       /
+  ! data  digit(2)    /  6h2       /
+  ! data  digit(3)    /  6h3       /
+  ! data  digit(4)    /  6h4       /
+  ! data  digit(5)    /  6h5       /
+  ! data  digit(6)    /  6h6       /
+  ! data  digit(7)    /  6h7       /
+  ! data  digit(8)    /  6h8       /
+  ! data  digit(9)    /  6h9       /
+  ! data  digit(10)   /  6h0       /
+  text1 = 'mach  '
+  !data  text1   /  6hmach    /
   ll5 = 5
   ll6 = 6
   nsmout = 0
@@ -994,7 +1000,7 @@ subroutine uminit(n15, reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, j
      omegm, omold, thetam, reamdu, reamds, flxds, flxdr, reamqu,flxqs, flxqr, jcdsat, jcqsat, flxd, flxq, nppair, rotmom, &
      ncld, nclq, jtqout, jomout, jthout, reamqs, epsom, dcoef,kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, &
      umoutp)
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension  reacl(1), gpar(1), fpar(1), hist(1), umcurp(1)
   dimension  nodvo1(1), nodvo2(1), jcltac(1), jclout(1)
   dimension  jtype(1), nodom(1), jtmtac(1), histom(1)
@@ -1181,6 +1187,7 @@ subroutine uminit(n15, reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, j
 4568 format ( 24h  "exit  module uminit." )
   return
 end subroutine uminit
+
 !
 !     end of file: over15.for
 !

@@ -2,9 +2,11 @@
 !
 !     file: dekplt.ftn
 !
+
 !     Usage is restricted to "plot" function of "emtspy", due
 !     to variable-length conflict (this is single-precision).
-  character(8) datepl, tclopl, buslst(1), bbus
+!  character(8) datepl, tclopl, buslst(1), bbus
+
   common /cblock/ datepl(2), tclopl(2),  bbus(300)
   common /cblock/ tmult, dy, dx, hpi, tstep, gxmin, gxmax
   common /cblock/ ew(15000), finfin, fill, fvcom(50)
@@ -13,6 +15,7 @@
   common /cblock/ aaa(20), bbb(20), kp(20), fxref(25), fyref(25)
   !     evnbyt puts buslst on real*8 byte boundary (ibm level 4 error):
   common /cblock/  evnbyt, ev(15000), bx(150), vminr, vmaxr
+  real(8) buslst(1)
   dimension  ibsout(1), ibrnch(1), jbrnch(1)
   equivalence  ( ev(   1), buslst(1) ),  ( ev(1001), ibsout(1) )
   equivalence  ( ev(1301), ibrnch(1) ),  ( ev(1601), jbrnch(1) )
@@ -98,11 +101,11 @@
   character(8) messag,    end, timesp,  label, timeun
   character(8) cursor, xyplot,  slope,   back, refile
   character(8) texblk, setdat, texfnt
-  common /pltans/  abuf77(10),  ansi, ibuff(20), texfnt
-  common /pltans/     sext(6), headl, vertl, buffin
-  common /pltans/  slot1(20), horzl(8), date, time
-  common /pltans/  textd1, textd2, curren, voltag, brclas
-  common /pltans/  filnam, alpha, xytitl, anplt(60)
+  common /pltans/ abuf77(10), ansi, ibuff(20), texfnt
+  common /pltans/ sext(6), headl, vertl, buffin
+  common /pltans/ slot1(20), horzl(8), date, time
+  common /pltans/ textd1, textd2, curren, voltag, brclas
+  common /pltans/ filnam, alpha, xytitl, anplt(60)
   equivalence ( anplt( 1), choice ),  ( anplt( 2),   stop )
   equivalence ( anplt( 3),  purge ),  ( anplt( 4),    out )
   equivalence ( anplt( 5),   help ),  ( anplt( 6), smooth )
@@ -127,6 +130,7 @@
   equivalence ( anplt(43),  slope ),  ( anplt(44),   back )
   equivalence ( anplt(45), refile ),  ( anplt(46), texblk )
   equivalence ( anplt(47), setdat )
+
 !
 !     end of file: dekplt.ftn
 !

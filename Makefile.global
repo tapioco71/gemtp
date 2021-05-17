@@ -71,7 +71,7 @@ CPP_FLAGS=	-Wall			\
 FORTRAN_FLAGS=	-Wall			\
 		-std=gnu		\
 		-falign-commons		\
-		-fcheck=bounds		\
+		-fcheck=all		\
 		-ffree-form		\
 		-fdec			\
 		-fdec-static		\
@@ -79,17 +79,20 @@ FORTRAN_FLAGS=	-Wall			\
 		-ffree-line-length-0	\
 		-finit-local-zero	\
 		-freorder-blocks	\
+		-frepack-arrays		\
 		-c
 
 F90_FLAGS=	-Wall			\
 		-std=gnu		\
+		-fall-intrinsics	\
 		-falign-commons		\
-		-fcheck=bounds		\
+		-fcheck=all		\
 		-ffree-form		\
 		-fdollar-ok		\
 		-ffree-line-length-0	\
 		-finit-local-zero	\
 		-freorder-blocks	\
+		-frepack-arrays		\
 		-c
 
 # objdump most common flags.
@@ -175,7 +178,7 @@ ${COMPILER}/%.o: %.cpp
 ${COMPILER}/%.o: %.for
 	@if [ 'x${VERBOSE}' = x ];					\
 	then								\
-		echo " [ FOR ] ${<}";					\
+		echo " [ F77 ] ${<}";					\
 	else								\
 		echo "${FORTRAN} ${FORTRAN_FLAGS} ${<} -o ${@}";	\
 	fi

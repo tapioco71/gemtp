@@ -528,7 +528,9 @@ subroutine vecrsv (array, n13, n2)
   !     Also needed are uncounted Hollerith.  Parallel to "VECISV".
   include 'blkcom.ftn'
   include 'deck29.ftn'
-  dimension array(1), farray(1)
+  integer(4) array(*)
+  !dimension array(*), farray(*)
+  real(8) farray(1)
   equivalence (karray(1), farray(1))
   !     block /veccom/ is shared by "vecrsv" and "vecisv".
   !       ltlabl = 0
@@ -787,6 +789,7 @@ subroutine tables
   include 'umdeck.ftn'
   dimension  integx(1)
   equivalence  (x(1), integx(1))
+  character(8) busone, kpen, itemp
   dimension  busone(1), idistx(1)
   equivalence (bus1, busone(1)), (nenerg, idistx(1))
   dimension kpen(1), itemp(1), jtemp(1), ktemp(1)
@@ -915,7 +918,22 @@ subroutine csup (l)
   if (m2 .lt. 0) b = parsup(kprsup + m1)
   if (m .gt. 10) go to 30
   if (m .le. 0 .or. m .gt. 5)  go to 100
-  go to (101, 102, 103, 104, 105), m
+  select case (m)
+  case (1)
+     go to 101
+
+  case (2)
+     go to 102
+
+  case (3)
+     go to 103
+
+  case (4)
+     go to 104
+
+  case (5)
+     go to 105
+  end select
 30 if (m .gt. 20) go to 40
   m = m - 10
   select case (m)
@@ -1032,7 +1050,8 @@ subroutine csup (l)
   go to 100
 128 d7 = 1.0
   d8 = b
-  assign 7128 to idiv
+  !assign 7128 to idiv
+  idiv = 7128
   go to 500
 7128 b = div
   go to 100
@@ -1060,7 +1079,22 @@ subroutine csup (l)
 100 continue
   if (nop .gt. 0) go to 6113
   m = iabs (m2)
-  go to (201, 202, 203, 204, 205), m
+  select case (m)
+  case (1)
+     go to 201
+
+  case (2)
+     go to 202
+
+  case (3)
+     go to 203
+
+  case (4)
+     go to 204
+
+  case (5)
+     go to 205
+  end select
 201 a = a + b
   go to 20
 202 a = a - b
@@ -1069,7 +1103,8 @@ subroutine csup (l)
   go to 20
 204 d7 = a
   d8 = b
-  assign 7204 to idiv
+  !assign 7204 to idiv
+  idiv = 7204
   go to 500
 7204 a = div
   go to 20
@@ -1087,7 +1122,17 @@ subroutine csup (l)
   if (d8 .lt. 0.0) div = - div
   go to 530
 510 div = 0.0
-530 go to idiv, (7128, 7204, 6120)
+  !530 go to idiv, (7128, 7204, 6120)
+530 select case(idiv)
+  case (7128)
+     go to 7128
+
+  case (7204)
+     go to 7204
+
+  case (6120)
+     go to 6120
+  end select
   !     ------  free-format fortran expression  ------
 5000 n2 = -n2
   !     :: load iop( nop)  and  arg( nop)
@@ -1098,7 +1143,19 @@ subroutine csup (l)
      arg(k) = 0.0
      i1 = ivarb(j + 1) + 2
      i2 = ivarb(j + 3)
-     go to (5010, 5025, 5015, 5020), i1
+     select case (i1)
+     case (1)
+        go to 5010
+
+     case (2)
+        go to 5025
+
+     case (3)
+        go to 5015
+
+     case (4)
+        go to 5020
+     end select
      !     :: numerical argument
 5010 ndx4 = kprsup + i2
      arg(k) = parsup(ndx4)
@@ -1126,10 +1183,46 @@ subroutine csup (l)
   k1 = iop(i1)
   if (k1 .eq. 0) go to 6028
   if (k1 .gt. 7) go to 6025
-  go to (6110, 6121, 6130, 6121, 6150, 6121, 6170), k1
+  select case (k1)
+  case (1)
+     go to 6110
+
+  case (2)
+     go to 6121
+
+  case (3)
+     go to 6130
+
+  case (4)
+     go to 6121
+
+  case (5)
+     go to 6150
+
+  case (6)
+     go to 6121
+
+  case (7)
+     go to 6170
+  end select
 6025 if (k1 .lt. 14) go to 6180
   k1 = k1 - 13
-  go to (6114, 6115, 6116, 6117, 6118), k1
+  select case (k1)
+  case (1)
+     go to 6114
+
+  case (2)
+     go to 6115
+
+  case (3)
+     go to 6116
+
+  case (4)
+     go to 6117
+
+  case (5)
+     go to 6118
+  end select
 6026 amx(jfl) = 1.0
 6027 iop(i1) = 0
 6028 ifl(jfl) = ifl(jfl) - 1
@@ -1151,7 +1244,8 @@ subroutine csup (l)
   !     ::  k1 = /  ::
 6115 d7 = amx(jfl)
   d8 = arg(i1)
-  assign 6120 to idiv
+  !assign 6120 to idiv
+  idiv = 6120
   go to 500
 6120 amx(jfl) = div
   go to 6027
@@ -1204,7 +1298,25 @@ subroutine csup (l)
   d8 = acc(jfl + 1)
   acc(jfl) = 0.0
   i2 = k1 - 7
-  go to (6188, 6189, 6190, 6191, 6192, 6193), i2
+  select case (i2)
+  case (1)
+     go to 6188
+
+  case (2)
+     go to 6189
+
+  case (3)
+     go to 6190
+
+  case (4)
+     go to 6191
+
+  case (5)
+     go to 6192
+
+  case (6)
+     go to 6193
+  end select
 6188 if (d8 .ne. d7) go to 6195
   go to 6020
 6189 if (d8 .eq. d7) go to 6195
@@ -1236,7 +1348,55 @@ subroutine csup (l)
   end do
 602 if (n2 .gt. 67) go to 10
   n2 = n2 - 49
-  go to (650,651,651,653,654,655,656,657,658,659, 660,661,662,663,664,664,666,667), n2
+  select case (n2)
+  case (1)
+     go to 650
+
+  case (2, 3)
+     go to 651
+
+  case (4)
+     go to 653
+
+  case (5)
+     go to 654
+
+  case (6)
+     go to 655
+
+  case (7)
+     go to 656
+
+  case (8)
+     go to 657
+
+  case (9)
+     go to 658
+
+  case (10)
+     go to 659
+
+  case (11)
+     go to 660
+
+  case (12)
+     go to 661
+
+  case (13)
+     go to 662
+
+  case (14)
+     go to 663
+
+  case (15, 16)
+     go to 664
+
+  case (17)
+     go to 666
+
+  case (18)
+     go to 667
+  end select
   !     ---  frequency sensors  ---
 650 n = 1
   if (b .lt. 0.0) n = -1

@@ -1196,28 +1196,38 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   !      nodes if load-flow is requested. then after load-flow is
   !      is completed, these same cells of umcurp are used as
   !      pointers for the shift of power resistances to network.
-  data texta(1), texta(2), texta(3), texta(4), texta(5), texta(6), texta(7), texta(8), texta(9), texta(10) &
-       / 'um-1  ', 'um-2  ', 'um-3  ', 'um-4  ', 'um-5  ', 'um-6  ', 'um-7  ', 'um-8  ', 'um-9  ', 'um-10 ' /
-  data texta(11), texta(12), texta(13), texta(14), texta(15), texta(16), texta(17), texta(18), texta(19), texta(20) &
-       / 'um-11 ', 'um-12 ', 'um-13 ', 'um-14 ', 'um-15 ', 'um-16 ', 'um-17 ', 'um-18 ', 'um-19 ', 'um-20 ' /
-  data texta(21), texta(22), texta(23), texta(24), texta(25), texta(26), texta(27), texta(28), texta(29), texta(30) &
-       / 'tqgen ', 'omegm ', 'thetam', 'ipa   ', 'ipb   ', 'ipc   ', 'ie1   ', 'ie2   ', 'ie3   ', 'ie4   ' /
-  data texta(31), texta(32), texta(33), texta(34), texta(35), texta(36), texta(37), texta(38), texta(39), texta(40) &
-       / 'ie5   ', 'ie6   ', 'ie7   ', 'ie8   ', 'ie9   ', 'ie10  ', 'ie11  ', 'ie12  ', 'ie13  ', 'ie14  ' /
-  data texta(41), texta(42), texta(43), texta(44), texta(45), texta(46), texta(47), texta(48) &
-       / 'um1mxx', 'um1e1x', 'um1e2x', 'um1e3x', 'um2mxx', 'um2e1x', 'um2e2x', 'um2e3x' /
-  data texta(49), texta(50), texta(51), texta(52), texta(53), texta(54), texta(55), texta(56) &
-       / 'um3mxx', 'um3e1x', 'um3e2x', 'um3e3x', 'um4mxx', 'um4e1x', 'um4e2x', 'um4e3x' /
-  data texta(57), texta(58), texta(59), texta(60) / 'um5mxx', 'um5e1x', 'um5e2x', 'um5e3x' /
-  data texta(61), texta(62), texta(63), texta(64), texta(65) / 'um1ntr', 'um2ntr', 'um3ntr', 'um4ntr', 'um5ntr' /
-  data texta(66), texta(67), texta(68), texta(69), texta(70) / 'um1ms1', 'um2ms1', 'um3ms1', 'um4ms1', 'um5ms1' /
-  data texta(71), texta(72), texta(73), texta(74), texta(75) / 'um1ms2', 'um2ms2', 'um3ms2', 'um4ms2', 'um5ms2' /
-  data texta(76), texta(77), texta(78), texta(79), texta(80) / 'um1tla', 'um1tlb', 'um1tlc', 'um2tla', 'um2tlb' /
-  data texta(81), texta(82), texta(83), texta(84), texta(85) / 'um2tlc', 'um3tla', 'um3tlb', 'um3tlc', 'um4tla' /
-  data texta(86), texta(87), texta(88), texta(89), texta(90) / 'um4tlb', 'um4tlc', 'um5tla', 'um5tlb', 'um5tlc' /
-  data texta(91), texta(92), texta(93), texta(94) / 'fluxmd', 'imd   ', 'fluxmq', 'imq   ' /
-  data texta(95), texta(96), texta(97), texta(98) / 'ip0   ', 'ipd   ', 'ipq   ', 'tqexc ' /
-  data texta(99), texta(100), texta(101) / 'um1mcc', 'um2mcc', 'um3mcc' /
+  texta = (/ 'um-1  ', 'um-2  ', 'um-3  ', 'um-4  ', 'um-5  ', 'um-6  ', 'um-7  ', 'um-8  ', 'um-9  ', 'um-10 ', &
+       'um-11 ', 'um-12 ', 'um-13 ', 'um-14 ', 'um-15 ', 'um-16 ', 'um-17 ', 'um-18 ', 'um-19 ', 'um-20 ', &
+       'tqgen ', 'omegm ', 'thetam', 'ipa   ', 'ipb   ', 'ipc   ', 'ie1   ', 'ie2   ', 'ie3   ', 'ie4   ', &
+       'ie5   ', 'ie6   ', 'ie7   ', 'ie8   ', 'ie9   ', 'ie10  ', 'ie11  ', 'ie12  ', 'ie13  ', 'ie14  ', &
+       'um1mxx', 'um1e1x', 'um1e2x', 'um1e3x', 'um2mxx', 'um2e1x', 'um2e2x', 'um2e3x', 'um3mxx', 'um3e1x', &
+       'um3e2x', 'um3e3x', 'um4mxx', 'um4e1x', 'um4e2x', 'um4e3x', 'um5mxx', 'um5e1x', 'um5e2x', 'um5e3x', &
+       'um1ntr', 'um2ntr', 'um3ntr', 'um4ntr', 'um5ntr', 'um1ms1', 'um2ms1', 'um3ms1', 'um4ms1', 'um5ms1', &
+       'um1ms2', 'um2ms2', 'um3ms2', 'um4ms2', 'um5ms2', 'um1tla', 'um1tlb', 'um1tlc', 'um2tla', 'um2tlb', &
+       'um2tlc', 'um3tla', 'um3tlb', 'um3tlc', 'um4tla', 'um4tlb', 'um4tlc', 'um5tla', 'um5tlb', 'um5tlc', &
+       'fluxmd', 'imd   ', 'fluxmq', 'imq   ', 'ip0   ', 'ipd   ', 'ipq   ', 'tqexc ', 'um1mcc', 'um2mcc', 'um3mcc' /)
+  ! data texta(1), texta(2), texta(3), texta(4), texta(5), texta(6), texta(7), texta(8), texta(9), texta(10) &
+  !      / 'um-1  ', 'um-2  ', 'um-3  ', 'um-4  ', 'um-5  ', 'um-6  ', 'um-7  ', 'um-8  ', 'um-9  ', 'um-10 ' /
+  ! data texta(11), texta(12), texta(13), texta(14), texta(15), texta(16), texta(17), texta(18), texta(19), texta(20) &
+  !      / 'um-11 ', 'um-12 ', 'um-13 ', 'um-14 ', 'um-15 ', 'um-16 ', 'um-17 ', 'um-18 ', 'um-19 ', 'um-20 ' /
+  ! data texta(21), texta(22), texta(23), texta(24), texta(25), texta(26), texta(27), texta(28), texta(29), texta(30) &
+  !      / 'tqgen ', 'omegm ', 'thetam', 'ipa   ', 'ipb   ', 'ipc   ', 'ie1   ', 'ie2   ', 'ie3   ', 'ie4   ' /
+  ! data texta(31), texta(32), texta(33), texta(34), texta(35), texta(36), texta(37), texta(38), texta(39), texta(40) &
+  !      / 'ie5   ', 'ie6   ', 'ie7   ', 'ie8   ', 'ie9   ', 'ie10  ', 'ie11  ', 'ie12  ', 'ie13  ', 'ie14  ' /
+  ! data texta(41), texta(42), texta(43), texta(44), texta(45), texta(46), texta(47), texta(48) &
+  !      / 'um1mxx', 'um1e1x', 'um1e2x', 'um1e3x', 'um2mxx', 'um2e1x', 'um2e2x', 'um2e3x' /
+  ! data texta(49), texta(50), texta(51), texta(52), texta(53), texta(54), texta(55), texta(56) &
+  !      / 'um3mxx', 'um3e1x', 'um3e2x', 'um3e3x', 'um4mxx', 'um4e1x', 'um4e2x', 'um4e3x' /
+  ! data texta(57), texta(58), texta(59), texta(60) / 'um5mxx', 'um5e1x', 'um5e2x', 'um5e3x' /
+  ! data texta(61), texta(62), texta(63), texta(64), texta(65) / 'um1ntr', 'um2ntr', 'um3ntr', 'um4ntr', 'um5ntr' /
+  ! data texta(66), texta(67), texta(68), texta(69), texta(70) / 'um1ms1', 'um2ms1', 'um3ms1', 'um4ms1', 'um5ms1' /
+  ! data texta(71), texta(72), texta(73), texta(74), texta(75) / 'um1ms2', 'um2ms2', 'um3ms2', 'um4ms2', 'um5ms2' /
+  ! data texta(76), texta(77), texta(78), texta(79), texta(80) / 'um1tla', 'um1tlb', 'um1tlc', 'um2tla', 'um2tlb' /
+  ! data texta(81), texta(82), texta(83), texta(84), texta(85) / 'um2tlc', 'um3tla', 'um3tlb', 'um3tlc', 'um4tla' /
+  ! data texta(86), texta(87), texta(88), texta(89), texta(90) / 'um4tlb', 'um4tlc', 'um5tla', 'um5tlb', 'um5tlc' /
+  ! data texta(91), texta(92), texta(93), texta(94) / 'fluxmd', 'imd   ', 'fluxmq', 'imq   ' /
+  ! data texta(95), texta(96), texta(97), texta(98) / 'ip0   ', 'ipd   ', 'ipq   ', 'tqexc ' /
+  ! data texta(99), texta(100), texta(101) / 'um1mcc', 'um2mcc', 'um3mcc' /
   data textm / 'more  ' /
   data tesm1, tesm2, tesm3, tesm4, tesm5, tesm6, tesm7, tesm8, tesm9 / 'smdata', 'tolera', 'parame', 'all   ', 'none  ', 'extend', 'finish', ' part ', 'share ' /
   !   if mech network option is used, rotmom is used to store
@@ -3179,9 +3189,9 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
 17950 end do
   if (nparum .ne. 0) go to 17951
   if (iprsup .lt. 3) go to 17958
-17951 write (lunit6,17952) n1,reamdu(n1),reamds(n1),reamqu(n1),reamqs(n1),flxds(n1),flxqs(n1)
-17952 format (/, ' Parameters of um nr.', i4, ':', 10x, 'lmud', x, 'lmsd', 10x, 'lmuq', 10x, 'lmsq', 9x, 'flxsd',9x, 'flxsq', /, 26x, 6e14.5)
-  write (lunit6, 17953)
+17951 write (unit = lunit6, fmt = 17952) n1, reamdu(n1), reamds(n1), reamqu(n1), reamqs(n1), flxds(n1), flxqs(n1)
+17952 format (/, ' Parameters of um nr.', i4, ':', 10x, 'lmud', 1x, 'lmsd', 10x, 'lmuq', 10x, 'lmsq', 9x, 'flxsd', 9x, 'flxsq', /, 26x, 6e14.5)
+  write (unit = lunit6, fmt = 17953)
 17953 format (/, ' coil     resistance    leakage inductance')
   n6 = ncltot - 6
   do n5 = n6, ncltot
