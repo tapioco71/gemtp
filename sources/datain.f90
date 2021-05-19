@@ -563,9 +563,14 @@ subroutine datain
      if (k .eq. 1) n1 = 1                                   ! remember usage of "/request"
      if (k .eq. 10) n10 = 1                                 ! remember usage of "/load flow"
      if (k .eq. 11) n11 = 1                                 ! remember usage of "/initial"
-                                                            ! if 1 or more "/" found so far, ! & last "/" not yet ended,
+                                                            ! if 1 or more "/" found so far,
+                                                            ! & last "/" not yet ended,
                                                             ! and card is blank,
-2431 if (n12 .ge. 1 .and. kpsour(n12) .eq. 0 .and. file6(j)(1 : 6) .eq. 'blank ') kpsour(n12) = j - 1 ! then bound last "/" usage
+2431 if (n12 .ge. 1) then
+        if (kpsour(n12) .eq. 0 .and. file6(j)(1 : 6) .eq. 'blank ') then
+           kpsour(n12) = j - 1                              ! then bound last "/" usage
+        end if
+     end if
   end do                                                    ! end  do 2436  loop which sets up summary "/" table
   if (kpsour(n12) .eq. 0) kpsour(n12) = numcrd              ! final bound
   l = 0
@@ -624,7 +629,7 @@ subroutine datain
   n18 = kssfrq(n17)                                         ! initialize card number where these begin
   n8 = 0                                                    ! initialize "/" index to remove possible garbage
   n24 = numcrd                                              ! initialize destination address (1 b4 1st)
-  j = 0                                                     !  initialize card number of original data done
+  j = 0                                                     ! initialize card number of original data done
   if (file6(1)(1 : 9) .ne. 'c $attach') go to 2445
   n24 = n24 + 1                                             ! increment destination address past this
   file6(n24) = file6(1)                                     ! transfer case-marker card below
@@ -705,8 +710,8 @@ subroutine datain
      write (unit = munit6, fmt = 2501) j, file6(j)
 2501 format (' Card', i3, '.', a80)
      call window                                            ! output of character variable munit6
-  end do
 2505 continue
+  end do
   numcrd = j                                                ! final length of EMTP input data, after "/" removal
   if (iprspy .lt. 1) go to 2509                             ! jump around diagnostic
   write (unit = munit6, fmt = 2508) numcrd

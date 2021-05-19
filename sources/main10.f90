@@ -529,9 +529,11 @@ subroutine vecrsv (array, n13, n2)
   include 'blkcom.ftn'
   include 'deck29.ftn'
   integer(4) array(*)
+  integer(4), target :: karray
   !dimension array(*), farray(*)
-  real(8) farray(1)
-  equivalence (karray(1), farray(1))
+  !real(8) farray(1)
+  integer(4), pointer :: farray(:)
+  !equivalence (karray(1), farray(1))
   !     block /veccom/ is shared by "vecrsv" and "vecisv".
   !       ltlabl = 0
   common /veccom/ kntvec, kofvec(20)
@@ -547,13 +549,22 @@ subroutine vecrsv (array, n13, n2)
   !     begin code to restore  (array(k), k=1, n13)  from tank:
   kntvec = kntvec + 1
   n4 = kofvec(kntvec)
-  if (iprsup .ge. 2 ) write (unit = lunit6, fmt = 1640) kntvec, n4
+  farray => karray(n4 : n4 + n13)
+  if (associated (farray)) then
+     if (iprsup .ge. 2 ) write (unit = lunit6, fmt = 1640) kntvec, n4
 1640 format (' Ready to restore.  kntvec, n4 =', 2i10)
-  if (n13 .le. 0) go to 9000
-  do k = 1, n13
-     array(k) = karray(n4)
-     n4 = n4 + 1
-  end do
+     if (n13 .le. 0) go to 9000
+     do k = 1, n13
+        !array(k) = karray(n4)
+        array(k) = farray(k)
+        !n4 = n4 + 1
+     end do
+     n4 = n4 + n13
+     nullify (farray)
+  else
+     write (unit = lunit6, fmt = "('Could not associate farray to karray for restore in vecrsv.  Stop.')")
+     stop
+  end if
   go to 9000
   !     begin code to dump  (array(k), k=1, n13)  into tank:
 1671 if (kntvec .gt. 0) go to 1674
@@ -563,13 +574,22 @@ subroutine vecrsv (array, n13, n2)
 1673 format (' Initialize kofvec(1) =', i10)
 1674 kntvec = kntvec + 1
   n4 = kofvec(kntvec)
-  if (iprsup .ge. 2) write (unit = lunit6, fmt = 1675) kntvec, n4
+  farray => karray(n4 : n4 + n13)
+  if (associated (farray)) then
+     if (iprsup .ge. 2) write (unit = lunit6, fmt = 1675) kntvec, n4
 1675 format (' Ready to dump.  kntvec, n4 =', 2i10)
-  if (n13 .le. 0) go to 1683
-  do k = 1, n13
-     karray(n4) = array(k)
-     n4 = n4 + 1
-  end do
+     if (n13 .le. 0) go to 1683
+     do k = 1, n13
+        !karray(n4) = array(k)
+        farray(k) = array(k)
+        !n4 = n4 + 1
+     end do
+     n4 = n4 + n13
+     nullify (farray)
+  else
+     write (unit = lunit6, fmt = "('Could not associate farray to karray for dump in vecrsv.  Stop.')")
+     stop
+  end if
   ! if /veccom/ storage exceeded,
 1683 if (kntvec .ge. 20) call stoptp                        ! installation-dependent program stop card
   kofvec(kntvec + 1) = n4
@@ -594,48 +614,69 @@ subroutine vecisv (karr, n13, n2)
   !     also needed are uncounted Hollerith.  Parallel to "VECISV".
   include 'blkcom.ftn'
   include 'deck29.ftn'
-  real(8) karr, karray, farray
-  dimension farray(3)
-  equivalence (karray(1), farray(1))
+  !real(8) karr, karray, farray
+  integer(4), target :: karray
+  integer(4), pointer :: farray(:)
+  integer(4) karr
+  !dimension farray(3)
+  !equivalence (karray(1), farray(1))
   dimension karr(2)
   !     block /VECCOM/ is shared with "VECRSV" (see for more info)
-  common /veccom/  kntvec,  kofvec(20)
+  common /veccom/ kntvec, kofvec(20)
   if (iprsup .ge. 1) write (lunit6, 1423) n13, n2
 1423 format (' Begin "vecisv".  n13, n2 =',  2i8)
   if (n2 .eq. 1) go to 1471
   !     begin code to restore  (karr(k), k=1, n13)  from tank:
   kntvec = kntvec + 1
   n4 = kofvec(kntvec)
-  if ( iprsup  .ge.  2 ) write (lunit6, 1428)  kntvec, n4
+  farray => karray(n4 : n4 + n13)
+  if (associated (farray)) then
+     if (iprsup .ge. 2) write (lunit6, 1428)  kntvec, n4
 1428 format (' Ready to restore.  kntvec, n4 =', 2i10)
-  do k=1, n13
-     karr(k) = farray(n4)
-     n4 = n4 + 1
-  end do
+     do k = 1, n13
+        !karr(k) = farray(n4)
+        karr(k) = farray(k)
+        !n4 = n4 + 1
+     end do
+     n4 = n4 + n13
+     nullify (farray)
+  else
+     write (unit = lunit6, fmt = "('Could not associate farray to karray for restore in vecisv.  Stop.')")
+     stop
+  end if
   go to 9000
   !     begin code to dump  (karr(k), k=1, n13)  into tank:
-1471 if ( kntvec .gt. 0 )  go to 1474
-  n14 = nbyte(3) / nbyte(4) ! relative lengths  real/integer
-  kofvec(1) =  (ltlabl + 1) / n14  +  51
+1471 if (kntvec .gt. 0) go to 1474
+  n14 = nbyte(3) / nbyte(4)                                 ! relative lengths  real/integer
+  kofvec(1) = (ltlabl + 1) / n14 + 51
   if (iprsup .ge. 1) write (lunit6, 1473) kofvec(1)
 1473 format (' Initialize kofvec(1) =', i10)
 1474 kntvec = kntvec + 1
   n4 = kofvec(kntvec)
-  if ( iprsup  .ge.  1 ) write (lunit6, 1475)  kntvec, n4
+  farray => karray(n4 : n4 + n13)
+  if (associated (farray)) then
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 1475) kntvec, n4
 1475 format (' Ready to dump.  kntvec, n4 =', 2i10)
-  kofvec(kntvec) = n4       ! correct integer-vector beginning
-  do k=1, n13
-     farray(n4) = karr(k)
-     n4 = n4 + 1
-  end do
-  ! if /veccom/ storage exceeded,
-  if ( kntvec .ge. 20 ) call stoptp       ! installation-dependent program stop card
-  kofvec(kntvec+1) = n4
-  if ( iprsup  .ge.  1 ) write (lunit6, 1482)  kofvec(kntvec+1)
+     kofvec(kntvec) = n4                                    ! correct integer-vector beginning
+     do k = 1, n13
+        !farray(n4) = karr(k)
+        farray(k) = karr(k)
+        !n4 = n4 + 1
+     end do
+     n4 = n4 + n13
+     nullify (farray)
+     ! if /veccom/ storage exceeded,
+     if (kntvec .ge. 20) call stoptp                        ! installation-dependent program stop card
+     kofvec(kntvec + 1) = n4
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 1482) kofvec(kntvec + 1)
 1482 format (' Define kofvec(kntvec + 1) =', i10)
-9000 if ( iprsup  .ge.  1 ) write (lunit6, 9007)  karr(1), karr(2), karr(n13)
+  else
+     write (unit = lunit6, fmt = "('Could not associate farray to karray for dump in vecisv.  Stop.')")
+     stop
+  end if
+9000 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9007) karr(1), karr(2), karr(n13)
 9007 format (' Exit "vecisv".  karr(1; 2; n13) =', 3i10)
-  if ( iprsup .ge. 2 )  write (lunit6, 9011) kofvec
+  if (iprsup .ge. 2) write (unit = lunit6, fmt = 9011) kofvec
 9011 format (' kofvec =', 20i6)
   return
 end subroutine vecisv

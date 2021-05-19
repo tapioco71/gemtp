@@ -421,7 +421,7 @@ subroutine cimage
   character(8) charc, chtacs, textax, textay, text1, text2
   character(8) text4, text5, aupper, buff10
   dimension buff10(10)
-  equivalence (buff10(1), abuff(1))
+  equivalence (buff10(1), abuff(1 : 1))
   character(25) filen
   dimension textax(60), jpntr(201), textay(50), aupper(10)
   equivalence (aupper(1), texcol(1))
@@ -554,32 +554,42 @@ subroutine cimage
   if (n11 .ne. 0) go to 1000
   if (kol132 .eq. 132) write (unit = lunit6, fmt = 3015) buff10
 3015 format (' Comment card.', 37x, '1', 10a8)
-  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) (abuff(j), j = 1, 4)
-3016 format (' Comment card.', 37x, '1', 3a8, a5)
+  !if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) (abuff(j), j = 1, 4)
+  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) abuff(1 : 29)
+  !3016 format (' Comment card.', 37x, '1', 3a8, a5)
+3016 format (' Comment card.', 37x, '1', a24, a5)
   go to 1000
 3034 if (noutpr .ne. 0) go to 3035
   if (kol132 .eq. 132) write (unit = lunit6, fmt = 3006) buff10
 3006 format (51x, '1', 10a8)
-  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) (abuff(j), j = 1, 4)
+  !if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) (abuff(j), j = 1, 4)
+  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) abuff(1 : 29)
+  !3007 format (51x, '1', a24, a5)
 3007 format (51x, '1', a24, a5)
 3035 if (n13 .gt. 0) go to 3011
-  print 3009, numdcd, (abuff(i), i = 1, 9)
-3009 format (1x, i5, ' :', 9a8)
+  !print 3009, numdcd, (abuff(i), i = 1, 9)
+  print 3009, numdcd, abuff(1 : 72)
+  !3009 format (1x, i5, ' :', 9a8)
+3009 format (1x, i5, ' :', a72)
   n13 = n12
 3011 n13 = n13 - 1
-  read (unit = abuff(1), fmt = 3037) text2
+  !read (unit = abuff(1), fmt = 3037) text2
+  read (unit = abuff, fmt = 3037) text2
 3037 format (a6)
   if (text2 .ne. text5) go to 3040
   if (n8 .eq. 6) go to 3044
-  do i = 1, 10
-     abuff(i) = blank
-  end do
+  ! do i = 1, 10
+  !    abuff(i) = blank
+  ! end do
+  abuff(1 : 80) = blank
   go to 3233
 3040 if (chcont .eq. text4) go to 3233
-  do i = 1, 10
-     read (unit = abuff(i), fmt = 3041, iostat = ios) (texcol((i - 1) * 8 + j), j = 1, 8)
-  end do
-3041 format (8a1)
+  ! do i = 1, 10
+  !    read (unit = abuff(i), fmt = 3041, iostat = ios) (texcol((i - 1) * 8 + j), j = 1, 8)
+  ! end do
+  read (unit = abuff, fmt = 3041, iostat = ios) (texcol(j), j = 1, 80)
+  !3041 format (8a1)
+3041 format (80a1)
   !  if (ios .ne. 0) then
   !     write (unit = lunit6, fmt = "('Could not read from abuff.  Stop.')")
   !     stop
@@ -588,7 +598,8 @@ subroutine cimage
   !     which was within tacs supplemental variables.  wsm+thl
   !      if ( abuff(1) .ne. 8h$listoff   .and.
   !     1     abuff(1) .ne. 8h$liston  )   go to 3042
-  if (abuff(1) .ne. '$listoff' .and. abuff(1) .ne. '$liston') go to 3042
+  !  if (abuff(1) .ne. '$listoff' .and. abuff(1) .ne. '$liston') go to 3042
+  if (abuff(1 : 8) .ne. '$listoff' .and. abuff(1 : 8) .ne. '$liston') go to 3042
   go to 3246
   !     chcont is 'tacs' if cimage called from within tacs fortran express
 3042 if (chcont .eq. chtacs) go to 3233

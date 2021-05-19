@@ -279,9 +279,11 @@ subroutine over20
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
 99999 return
 end subroutine over20
+
 !
 !     subroutine katalg.
 !
+
 subroutine katalg
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11/780  installation-dependent module which is used
@@ -339,9 +341,11 @@ subroutine katalg
 9700 kbreak = 1   ! lock flag for "emtspy" dialogue in "over16"
 9800 return
 end subroutine katalg
+
 !
 !     subroutine emtspy.
 !
+
 subroutine emtspy
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
@@ -409,9 +413,11 @@ subroutine emtspy
   call window
 9008 return
 end subroutine emtspy
+
 !
 !     subroutine spying.
 !
+
 subroutine spying
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
@@ -1941,9 +1947,11 @@ subroutine spying
   call prompt
 9833 return
 end subroutine spying
+
 !
 ! subroutine spyink.
 !
+
 subroutine spyink
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp only, which services "emtspy".
@@ -3534,9 +3542,11 @@ subroutine spyink
   call window
 3496 return
 end subroutine spyink
+
 !
 !     subroutine initsp.
 !
+
 subroutine initsp
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
@@ -3675,9 +3685,11 @@ subroutine initsp
   linspn = 1
   return
 end subroutine initsp
+
 !
 ! subroutine flager.
 !
+
 subroutine flager
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
@@ -3732,9 +3744,11 @@ subroutine flager
   call window                                               ! output of character variable munit6
 9000 return
 end subroutine flager
+
 !
 !     subroutine quiter.
 !
+
 subroutine quiter
   implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
@@ -3751,9 +3765,11 @@ subroutine quiter
   kfile5 = n25   ! restore original value of b4 flager use
   return
 end subroutine quiter
+
 !
 !     subroutine honker.
 !
+
 subroutine honker (klevel)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
@@ -3794,10 +3810,12 @@ subroutine honker (klevel)
   go to 3608                                                ! loop back to repeat string of 10 bells
 9000 return
 end subroutine honker
+
 !
 !     subroutine tdelay.
 !
-subroutine tdelay ( d8 )
+
+subroutine tdelay (d8)
   implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !     Module of interactive emtp only, which services "emtspy".
   !     If no interactive use, this module can be deleted.
@@ -3821,9 +3839,11 @@ subroutine tdelay ( d8 )
 3641 continue
 9000 return
 end subroutine tdelay
+
 !
 !     subroutine kwiter.
 !
+
 subroutine kwiter (idum)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11  installation-dependent emtp module which serves
@@ -3836,10 +3856,12 @@ subroutine kwiter (idum)
   kwtvax = 1
   return
 end subroutine kwiter
+
 !
 !     subroutine percnt.
 !
-subroutine percnt ( vbyte, n7 )
+
+subroutine percnt (vbyte, n7)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     Utility which serves to replace  "%%%%%%%%"  strings of disk
@@ -3879,10 +3901,12 @@ subroutine percnt ( vbyte, n7 )
   call window
 1313 return
 end subroutine percnt
+
 !
 !     subroutine numchk.
 !
-subroutine numchk ( vbyte, nchar, kill )
+
+subroutine numchk (vbyte, nchar, kill)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     This utility serves to scrutinize the input character string
@@ -3940,9 +3964,11 @@ subroutine numchk ( vbyte, nchar, kill )
 3493 format ('            Make a second try, please ....')
   return
 end subroutine numchk
+
 !
 !     subroutine getnum.
 !
+
 subroutine getnum (num)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
@@ -3994,35 +4020,41 @@ subroutine getnum (num)
   call window
 4294 return
 end subroutine getnum
+
 !
 !     subroutine movers.
 !
+
 subroutine movers (from, to, num)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     Module of interactive emtp usage only, which services "emtspy".
-  !     For non-interactive emtp, this module can be destroyed.
-  character(1) from(:), to(:)
+  !     Module of interactive EMTP usage only, which services "emtspy".
+  !     For non-interactive EMTP, this module can be destroyed.
+  character(1) from(*), to(*)
   do j = 1, num
 1763 to(j) = from(j)
   end do
   return
 end subroutine movers
+
 !
 !     subroutine moverl.
 !
+
 subroutine moverl (from, to, num)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     Module of interactive emtp usage only, which services "emtspy".
-  !     For non-interactive emtp, this module can be destroyed.
-  real(8) from(:), to(:)
+  !     Module of interactive EMTP usage only, which services "emtspy".
+  !     For non-interactive EMTP, this module can be destroyed.
+  real(8) from(*), to(*)
   do j = 1, num
 1763 to(j) = from(j)
   end do
   return
 end subroutine moverl
+
 !
 !     subroutine window.
 !
+
 subroutine window
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
@@ -4034,17 +4066,19 @@ subroutine window
   include 'dekspy.ftn'
   !     temporarily, until we learn how to write to a 2nd crt for
   !     vax/vms, we will just write to lunit6:
-  if (iabs(kverfy) .eq. 34543) go to 9000                   ! no spy windows
+  if (iabs (kverfy) .eq. 34543) go to 9000                  ! no spy windows
   do j = 1, 132                                             ! search line for right most non-blank
      k = 133 - j                                            ! reverse index (step from right to left)
      if (munit6(k : k) .ne. ' ') go to 5621                 ! end of line
   end do
-5621 write (lunit6, '(a)') munit6(1 : k)                    ! output nonblank part
+5621 write (unit = lunit6, fmt = *) munit6                  ! output nonblank part
 9000 return
 end subroutine window
+
 !
 !     subroutine spylin.
 !
+
 subroutine spylin
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
@@ -4054,12 +4088,14 @@ subroutine spylin
   include 'dekspy.ftn'
   !     temporarily, until we learn how to write to a 2nd crt for
   !     VAX/VMS, we will just write to lunit6 in universal form:
-5621 write (lunit6, 5624)
+5621 write (unit = lunit6, fmt = 5624)
 5624 format (1x)
 end subroutine spylin
+
 !
 !     subroutine spyout.
 !
+
 subroutine spyout(n1, n2)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
@@ -4079,7 +4115,7 @@ subroutine spyout(n1, n2)
   go to 9000
 4618 if (n11 .ne. -7878) go to 4626
 4621 if (k .le. 0) go to 9000
-  write (munit6, 4629) (text10(j), j = 1, k)
+  write (unit = munit6, fmt = 4629) (text10(j), j = 1, k)
 4629 format (7x, 10a7)
   call window
   k = 0
@@ -4097,14 +4133,16 @@ subroutine spyout(n1, n2)
   if (n12 .eq. 1) text10(k) = terra
   if (k .eq. 10) go to 4621
 9000 if (iprspy .lt. 3)  go to 9007
-  write (munit6, 9004) n1, n2, k, n11, n12
+  write (unit = munit6, fmt = 9004) n1, n2, k, n11, n12
 9004 format (' Exit "spyout".  n1, n2, k, n11, n12 =', 5i6)
   call window
 9007 return
 end subroutine spyout
+
 !
 !     subroutine examin.
 !
+
 subroutine examin
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP usage only, which services "emtspy".
@@ -4113,8 +4151,8 @@ subroutine examin
   !     output vector outlin of the "examine" command of spy.
   !     Computers with index problems (e.g., prime) need replacement
   include 'dekspy.ftn'
-  if ( iprspy .lt. 1 ) go to 1718
-  write (munit6, 1707)  numex, imin(1), locout(1)
+  if (iprspy .lt. 1) go to 1718
+  write (unit = munit6, fmt = 1707) numex, imin(1), locout(1)
 1707 format (' Top of "examin".  numex, imin(1), locout(1) =', 3i6)
   call window
 1718 jj = 0
@@ -4127,7 +4165,7 @@ subroutine examin
   n8 = locate(n3) + n5 - 1
   if (intout(jj) .eq. 0) n8 = n8 + n5 - 1
   if (iprspy .lt. 3) go to 1560
-  write (munit6, 1544) jj, n5, n3, n8, intout(jj)
+  write (unit = munit6, fmt = 1544) jj, n5, n3, n8, intout(jj)
 1544 format (' Next  examine.  jj, n5, n3, n8, intout(jj)', 5i8)
   call window
 1560 if (intout(jj) .eq. 0) go to 1600
@@ -4135,7 +4173,7 @@ subroutine examin
   n8 = n8 + 1
   if (ivec(n3) .eq. 1) go to 1577
   if (n5 .eq. 1 .and. imax(jj) .eq. 1) go to 1640
-1577 write (ansi16, 1580)  kar1(1+n9)
+1577 write (unit = ansi16, fmt = 1580) kar1(1 + n9)
 1580 format (i10)
   outlin(kolout : kolout + 9) = ansi16(1 : 10)
   outlin(kolout + 10 : kolout + 14) = blan80(1 : 5)
@@ -4146,9 +4184,9 @@ subroutine examin
   n8 = n8 + 2
   if (n10 .ne. 0) go to 1628
   !     following real(8) extractions line up (no need for 4-byte shift):
-  if (iascii(n3) .eq. 0) write (ansi16, 1620) fkar1(1 + n9)
+  if (iascii(n3) .eq. 0) write (unit = ansi16, fmt = 1620) fkar1(1 + n9)
 1620 format (e15.6)
-  if (iascii(n3) .eq. 1) write (ansi16, 1624) fkar1(1 + n9)
+  if (iascii(n3) .eq. 1) write (unit = ansi16, fmt = 1624) fkar1(1 + n9)
 1624 format (4x, '"', a6, '"', 3x)
   go to 1633
   !     Following real(8) extractions require a 4-byte shift (fkar2 use).
@@ -4157,13 +4195,13 @@ subroutine examin
   !     word shift really should be toward lower addresses, which we
   !     compensate for by the continued use of fkar2 but with one smaller
   !     n9 value:
-1628 if ( n9 .lt. 0) n9 = n9 - 1
-  if (iascii(n3) .eq. 0) write (ansi16, 1620) fkar2(1 + n9)
-  if (iascii(n3) .eq. 1) write (ansi16, 1624) fkar2(1 + n9)
-1633 outlin(kolout:kolout+14) = ansi16(1 : 15)
+1628 if (n9 .lt. 0) n9 = n9 - 1
+  if (iascii(n3) .eq. 0) write (unit = ansi16, fmt = 1620) fkar2(1 + n9)
+  if (iascii(n3) .eq. 1) write (unit = ansi16, fmt = 1624) fkar2(1 + n9)
+1633 outlin(kolout : kolout + 14) = ansi16(1 : 15)
   kolout = kolout + 15
   go to 1664
-1640 write (ansi8, 1660) kar1(1 + n9)
+1640 write (unit = ansi8, fmt = 1660) kar1(1 + n9)
 1660 format (i6)
   outlin(kolout : kolout + 5) = ansi8(1 : 6)
   if (iprspy .lt. 3) go to 1662
@@ -4174,18 +4212,20 @@ subroutine examin
 1664 n5 = n5 + 1
   if (n5 .le. imax(jj)) go to 1560
   if (jj .lt. numex) go to 1540
-  if (kolout .lt. 132) outlin(kolout:132) = ' '
+  if (kolout .lt. 132) outlin(kolout : 132) = ' '
   if (iprspy .lt. 1) go to 9000
   n17 = kolout
   if (n17 .gt. 80) n17 = 80
-  write (munit6, 8872) kolout, outlin(1 : n17)
+  write (unit = munit6, fmt = 8872) kolout, outlin(1 : n17)
 8872 format (' Exit "examin".   kolout =', i5, '    outlin(1:80) =', a)
   call window
 9000 return
 end subroutine examin
+
 !
 ! subroutine deposi.
 !
+
 subroutine deposi (ind, intype, n1, n2, d4)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP usage only, which services "emtspy".
@@ -4205,7 +4245,7 @@ subroutine deposi (ind, intype, n1, n2, d4)
 1846 n8 = locate(ind)
   !     following use of real(8) deposit logic to also handle
   !     alphanumeric only works for computers with this equality:
-  if (iascii(ind) .eq. 1) read (ansi8, 1849) d4
+  if (iascii(ind) .eq. 1) read (unit = ansi8, fmt = 1849) d4
 1849 format (a6)
   if (intype .eq. 0) go to 1880
   n9 = n8 - memkar + n1
@@ -4230,9 +4270,11 @@ subroutine deposi (ind, intype, n1, n2, d4)
   call window
 9000 return
 end subroutine deposi
+
 !
 ! subroutine append.
 !
+
 subroutine append
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module connected to key word "append" of spy.  others
@@ -4240,9 +4282,11 @@ subroutine append
   !     (and perhaps proprietary) extensions via this module.
   return
 end subroutine append
+
 !
 ! subroutine intpar.
 !
+
 subroutine intpar (max, n1, n2, kill)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module of interactive emtp usage only, which services "emtspy".
@@ -4334,9 +4378,11 @@ subroutine intpar (max, n1, n2, kill)
   call window
 9006 return
 end subroutine intpar
+
 !
 ! subroutine sosrng.
 !
+
 subroutine sosrng (kill)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP usage only, which services "emtspy".
@@ -4348,10 +4394,10 @@ subroutine sosrng (kill)
   !     For non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
   if (iprspy .lt. 1) go to 2615
-  write (munit6, 2613) bytbuf
+  write (unit = munit6, fmt = 2613) bytbuf
 2613 format (' Top "sosrange".  bytbuf(a20) =', a20)
   call window
-  write (munit6, 2614) numsym, lidnt1, linnow, char1
+  write (unit = munit6, fmt = 2614) numsym, lidnt1, linnow, char1
 2614 format (' numsym, lidnt1, linnow, char1 =', 3i5, 2x, a1)
   call window
 2615 kill = 0
@@ -4385,10 +4431,10 @@ subroutine sosrng (kill)
 2636 ibegcl = ibegcl + 1
   n24 = 0
   if (iprspy .lt. 2) go to 2644
-  write (munit6, 2640)
+  write (unit = munit6, fmt = 2640)
 2640 format (' Begin next lidnt.    ibeg     n13  lidnt1  jpoint      n1     n24')
   call window
-  write (munit6, 2641) ibegcl, n13, lidnt1, linnow, n1, n24
+  write (unit = munit6, fmt = 2641) ibegcl, n13, lidnt1, linnow, n1, n24
 2641 format ('                  ', 6i8)
   call window
 2644 if (bytbuf(ibegcl : ibegcl) .ne. '.') go to 2645
@@ -4426,14 +4472,16 @@ subroutine sosrng (kill)
   go to 2621
 2664 if (lidnt2 .gt. numcrd) lidnt2 = numcrd
 9000 if (iprspy .lt. 1) go to 9006
-  write (munit6, 9003) lidnt1, lidnt2,  kill, char2
+  write (unit = munit6, fmt = 9003) lidnt1, lidnt2,  kill, char2
 9003 format (' Exit "sosrng".  lidnt1, lidnt2, kill, char2 =', 3i6, 2x, a1)
   call window
 9006 return
 end subroutine sosrng
+
 !
 !     subroutine movesp.
 !
+
 subroutine movesp (from, to, n15)
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     For non-interactive EMTP, this module can be destroyed.
@@ -4447,9 +4495,11 @@ subroutine movesp (from, to, n15)
   end do
   return
 end subroutine movesp
+
 !
 !     subroutine prompt.
 !
+
 subroutine prompt
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11  installation-dependent EMTP module used only
@@ -4471,9 +4521,11 @@ subroutine prompt
 1426 write (unit = lunit6, fmt = '(a)', advance = 'no') prom80(1 : n2)
   return
 end subroutine prompt
+
 !
 !     subroutine frefp1.
 !
+
 subroutine frefp1 (ansi, d12)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the

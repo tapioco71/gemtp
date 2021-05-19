@@ -10,26 +10,34 @@ subroutine over7
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'space2.ftn'
-  dimension lorder(1), ndex(15)
-  equivalence (ich2(1), lorder(1)), (emtpe(1), ndex(1))
+  real(8), target :: emtpe
+  real(8), pointer :: ndex(:)
+  !dimension lorder(1), ndex(20)
+  dimension lorder(15)
+  !equivalence (ich2(1), lorder(1)), (emtpe(1), ndex(1))
+  equivalence (ich2(1), lorder(1))
   equivalence (iofkol, iofgnd), (iofkor, iofbnd)
   !     following carries "next" among over6, insert, over7, & over9:
   equivalence (loopss(11), next)
   if (iprsup .ge. 1) write (lunit6, 4567)
 4567 format ('  "Begin module over7."')
+  ndex => emtpe(:)
+  if (.not. associated (ndex)) then
+     write (unit = lunit6, fmt = "('Could not associate ndex to emtpe in over7.  Stop.')")
+     stop
+  end if
   ischm = 2
   if(iprsup .lt. 4) go to 4054
-  write(lunit6, 4050)  ischm, ntot, next, iofkol, iofkor, ncurr
+  write (unit = lunit6, fmt = 4050) ischm, ntot, next, iofkol, iofkor, ncurr
 4050 format (/, " Scalars upon entry into renumbering,  'over7' .ischm    ntot    next  iofkol  iofkor   ncurr  ", /, 50x, 6i8)
-  write (lunit6, 4053)
+  write (unit = lunit6, fmt = 4053)
 4053 format (" Integer arrays upon entry into renumbering,  'over7' .  ", /,  &
           '     row   kolum  korder   kownt     loc   kode kbus    mbus      nr  length   bus1     bus2')
   do i = 1, next
      n1 = i + iofkol
      n2 = i + iofkor
      ndx1 = lswtch + i
-     write (lunit6, 4055) i, kolum(n1),korder(n2),kownt(i),loc(i), kode(i), kbus(i),mbus(i),nr(i), length(i), kmswit(i), &
-          kmswit(ndx1)
+     write (unit = lunit6, fmt = 4055) i, kolum(n1), korder(n2), kownt(i), loc(i), kode(i), kbus(i), mbus(i), nr(i), length(i), kmswit(i), kmswit(ndx1)
 4055 format (12i8)
 4057 end do
 4054 ioffd = 0
@@ -37,28 +45,28 @@ subroutine over7
   zzza = 0.0
   lastxx = last
   !     n1 = lbus + 1  // use lbus, not this n1,  in following:
-  call move0 ( ndex(1), lbus )
+  call move0 (ndex(1), lbus)
   nz = ncurr
   i = 0
 140 i = i + 1
-  if (ischm .eq. 3)   go to 1510
+  if (ischm .eq. 3) go to 1510
 150 j = kownt(i)
-  call subscr ( i, lbus, 150, 1 )
-  if( j .eq. (-1) )  go to 170
-155 k =  ndex(j+1)
+  call subscr (i, lbus, 150, 1)
+  if (j .eq. (-1)) go to 170
+155 k =  ndex(j + 1)
   jsub = j + 1
-  call subscr ( jsub, lbus, 155, 1 )
+  call subscr (jsub, lbus, 155, 1)
   ich1(i) = k
-  call subscr ( i, lbus, 155, 2 )
-  if ( k  .gt.  0 )   ich2(k) = i
-  call subscr ( k, lbus, 155, 99 )
-  ndex(j+1) = i
+  call subscr (i, lbus, 155, 2)
+  if (k .gt. 0) ich2(k) = i
+  call subscr (k, lbus, 155, 99)
+  ndex(j + 1) = i
   ich2(i) = 0
   norder(i) = 0
   go to 180
 170 nz = nz + 1
   norder(i) = nz
-  call subscr ( i, lbus, 170, 1 )
+  call subscr (i, lbus, 170, 1)
 180 if ( i  .lt.  ntot )   go to 140
   if( nz .eq. ntot )  go to 190
   lstat(19) = 190
@@ -68,23 +76,23 @@ subroutine over7
   !     next delete obviously zero-cell zeroing of vectors:
   nelim = 1
 200 continue
-  if ( ncn  .ge.  lbus )     go to 220
+  if (ncn  .ge.  lbus) go to 220
   jsub = ncn + 1
-  call subscr ( jsub, lbus, 200, 1 )
-  if ( ndex(ncn+1) .ne. 0)   go to 220
+  call subscr (jsub, lbus, 200, 1)
+  if (ndex(ncn + 1) .ne. 0) go to 220
 210 ncn = ncn +1
   go to 200
 220 if (ncurr .lt. nelim)   go to 229
   jsub = ncn + 1
-  call subscr ( jsub, lbus, 220, 1 )
-  i = ndex(ncn+1)
-  index(nelim) = ioffd +1
-  call subscr ( nelim, lbus, 220, 2 )
-  if( iprsup .le. 25 )  go to 222
-  write(lunit6, 4061)  nelim, ncn, ioffd, ntot, ncurr, next, mext, icon
+  call subscr (jsub, lbus, 220, 1)
+  i = ndex(ncn + 1)
+  index(nelim) = ioffd + 1
+  call subscr (nelim, lbus, 220, 2)
+  if (iprsup .le. 25) go to 222
+  write (unit = lunit6, fmt = 4061) nelim, ncn, ioffd, ntot, ncurr, next, mext, icon
 4061 format (" Prepare to renumber next network node in  'over7'.     nelim     ncn   ioffd    ntot   ncurr    next    mext    icon   ", /, 54x, 8i8)
-  if ( iprsup  .le.  34 )   go to 222
-  write (lunit6, 4062)
+  if (iprsup .le. 34) go to 222
+  write (unit = lunit6, fmt = 4062)
 4062 format (' Renumbering arrays.       row   kolum  korder   kownt     loc    ich1    ich2    ndex')
   do ii = 1, 15
      n1 = ii + iofkol
@@ -111,8 +119,7 @@ subroutine over7
   do i = 1, 20
      n1 = i + iofkol
      n2 = i + iofkor
-     if ( iprsup  .ge.  3 ) write (lunit6, 5233) i, norder(i), index(i), iloc(i), lorder(i), kownt(i), loc(i), kolum(n1), &
-          korder(n2)
+     if ( iprsup  .ge.  3 ) write (lunit6, 5233) i, norder(i), index(i), iloc(i), lorder(i), kownt(i), loc(i), kolum(n1), korder(n2)
 5233 format (50x, 9i8)
 5235 end do
   if (ioffd .le. 0)   go to 233

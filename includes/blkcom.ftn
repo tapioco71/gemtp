@@ -10,12 +10,14 @@
   character(8) trash, blank, terra, userid, branch, copy
   character(8) chcont, csepar
   character(8) date1, tclock
-  character(8) vstacs, texta6, abuff
+  character(8) vstacs, texta6                               !, abuff
+  character(80) abuff
   common bus1, bus2, bus3, bus4, bus5, bus6
   common trash, blank, terra, userid, branch, copy
   common csepar, chcont, texcol(160), texta6(15)
   common date1(2), tclock(2), vstacs(24)
-  common abuff(20)
+  !common abuff(20)
+  common abuff
   !     flag-2.   begin class-2  /blank/  variables
   !               (floating-point numeric usage only, with scalars
   !               preceding arrays).
