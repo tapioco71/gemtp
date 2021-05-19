@@ -4540,9 +4540,11 @@ subroutine frefp1 (ansi, d12)
   read (unit = ansi, fmt = '(e20.0)') d12
   return
 end subroutine frefp1
+
 !
 !     subroutine fresp1.
 !
+
 subroutine fresp1 (ansi, d12)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
@@ -4552,13 +4554,15 @@ subroutine fresp1 (ansi, d12)
   character(80), intent(in) :: ansi
   real(8), intent(out) :: d12
   n8 = 1
-  call frefix(ansi, n8)
+  call frefix (ansi, n8)
   read (unit = ansi, fmt = '(e20.0)') d12
   return
 end subroutine fresp1
+
 !
 !     subroutine frefp2.
 !
+
 subroutine frefp2 (ansi, d12, d13)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
@@ -4572,9 +4576,11 @@ subroutine frefp2 (ansi, d12, d13)
   read (unit = ansi, fmt = '(2e20.0)') d12, d13
   return
 end subroutine frefp2
+
 !
 ! subroutine fresp2.
 !
+
 subroutine fresp2 (ansi, d12, d13)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
@@ -4588,9 +4594,11 @@ subroutine fresp2 (ansi, d12, d13)
   read (unit = ansi, fmt = '(2e20.0)') d12, d13
   return
 end subroutine fresp2
+
 !
 !     subroutine frefp3.
 !
+
 subroutine frefp3 (ansi, d12, d13, d14)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
@@ -4604,9 +4612,11 @@ subroutine frefp3 (ansi, d12, d13, d14)
   read (unit = ansi, fmt = '(3e20.0)') d12, d13, d14
   return
 end subroutine frefp3
+
 !
 !     subroutine fresp3.
 !
+
 subroutine fresp3 (ansi, d12, d13, d14)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
@@ -4620,9 +4630,11 @@ subroutine fresp3 (ansi, d12, d13, d14)
   read (unit = ansi, fmt = '(3e20.0)') d12, d13, d14
   return
 end subroutine fresp3
+
 !
 !     subroutine frein1.
 !
+
 subroutine frein1 (ansi, n12)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
@@ -4637,9 +4649,11 @@ subroutine frein1 (ansi, n12)
   n12 = d12
   return
 end subroutine frein1
+
 !
 !     subroutine frein2.
 !
+
 subroutine frein2 (ansi, n12, n13)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
@@ -4655,9 +4669,11 @@ subroutine frein2 (ansi, n12, n13)
   n13 = d13
   return
 end subroutine frein2
+
 !
 !     subroutine frefix.
 !
+
 subroutine frefix (ansi, n8)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module used only by interactive EMTP ("emtspy").
