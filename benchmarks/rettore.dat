@@ -5,7 +5,7 @@ c a bonneville power administration program
 c by h. k. høidalen at sefas/ntnu - norway 1994-2016
 c --------------------------------------------------------
 c  dt  >< tmax >< xopt >< copt ><epsiln>
-   1.e-6      .1
+  10.e-6      .1
      500       1       1       1       1       0       0       1       0
 c        1         2         3         4         5         6         7         8
 c 345678901234567890123456789012345678901234567890123456789012345678901234567890

@@ -17,18 +17,18 @@ subroutine over6
   dimension buff(20)
   equivalence (iofkol, iofgnd), (iofkor, iofbnd)
   dimension integx(1)
-  equivalence  (x(1), integx(1))
-  !     following carries "next" among over6, insert, over7, & over9:
+  equivalence (x(1), integx(1))
+  ! following carries "next" among over6, insert, over7, & over9:
   equivalence (loopss(11), next)
-  if (iprsup .ge. 1) write (lunit6, 4567)
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over6."')
   ntot1 = ntot - 1
   n3 = 0
   d1 = 1.0 / (100. * flzero)
-  !     1st remove minus sign of "kpartb" if present as flag
-  !     indicating "renumber bypass".   then redefine value of
-  !     this lofty resistance if user had a "high resistance"
-  !     request (known by n7 .ne. default value of 1000 in over1):
+  ! 1st remove minus sign of "kpartb" if present as flag
+  ! indicating "renumber bypass".   then redefine value of
+  ! this lofty resistance if user had a "high resistance"
+  ! request (known by n7 .ne. default value of 1000 in over1):
   n7 = iabs (kpartb)
   if (n7 .lt. 1000) d1 = 10.0 ** n7
   i = inonl
@@ -60,7 +60,7 @@ subroutine over6
   tr(it) = d1
   tx(it) = 0.0
   emtpc(it) = 0.0
-54162 nr(ibr) = - it
+54162 nr(ibr) = -it
   length(ibr) = 1
   if (n3 .gt. 0) length(ibr) = -1
   n7 = -nltype(i)
@@ -145,15 +145,15 @@ subroutine over6
   ltest = 0
 5208 loc(k) = next
   go to 5235
-5214 isubs1 =  iofkol + lleft
+5214 isubs1 = iofkol + lleft
   jleft = kolum(isubs1)
   if (m .gt. jleft) go to 5222
   ltest = lleft
   go to 5208
-5222 isubs1 = iofkor+lleft
+5222 isubs1 = iofkor + lleft
   ltest = korder(isubs1)
   if (ltest .eq. 0) go to 5228
-  isubs1 = iofkol+ltest
+  isubs1 = iofkol + ltest
   jtest = kolum(isubs1)
   if(jtest .ge. m) go to 5228
   lleft = ltest
@@ -176,8 +176,7 @@ subroutine over6
   go to 5204
 5240 go to moon, (5020, 5050, 5085)
 5250 write (unit = lunit6, fmt = 5254)
-5254 format(//, ' list of input elements connected to each bus.', /, &
-          10x, '1) only the physical connections of multiphase lines are shown (capacitive and inductive coupling ignored)' ,/, &
+5254 format(//, ' list of input elements connected to each bus.', /, 10x, '1) only the physical connections of multiphase lines are shown (capacitive and inductive coupling ignored)' ,/, &
           10x, '2) repeated entries imply parallel connections', /, 10x,  '3) sources are omitted, although switches ', &
           ' are included;', /, 10x, '4) u.m. usage produces extra, internally-defined nodes "um????" (1st 2 letters "um").')
   write (unit = lunit6, fmt = 5261)
@@ -190,7 +189,7 @@ subroutine over6
 5268 if (loc(k) .eq. 0) go to 5294
   bus5 = bus(k)
 5270 ltest = loc(k)
-  if (ltest  .eq.  0) go to 5294
+  if (ltest .eq. 0) go to 5294
 5272 isubs1 = iofkol + ltest
   m = kolum(isubs1)
   ipass = ipass + 1
@@ -223,12 +222,12 @@ subroutine over6
 5340 norder(i) = i
   end do
   go to 40013
-  !     renumber nodes based on sparsity of coeff matrix of transient
-  !     network solution.
+  ! renumber nodes based on sparsity of coeff matrix of transient
+  ! network solution.
 5344 if (iprsup .gt. 0) write (unit = lunit6, fmt = 73524) (bus(i), i = 1, ntot)
 73524 format(/, ' Bus names', /, (1x, 10a12))
   if (kpartb .gt. 0) go to 5351
-  !     negative sign on "kpartb" is for "renumber bypass":
+  ! negative sign on "kpartb" is for "renumber bypass":
   norder(1) = 1
   n9 = 1
   do i = 2, ntot
@@ -259,14 +258,14 @@ subroutine over6
   call move0 (kownt(1), ntot)
   i = 1
 41001 l = iabs (length(i))
-  !      if (kodsem(i) .ne. 0 .and. imodel(i) .ne. -2
-  !     1                     .and. imodel(i) .ne. -4) l = iabs(kodebr(i))
+  ! if (kodsem(i) .ne. 0 .and. imodel(i) .ne. -2
+  !1                     .and. imodel(i) .ne. -4) l = iabs(kodebr(i))
   if (kodsem(i) .ne. 0 .and. imodel(i) .ge. 0) l = iabs (kodebr(i))
   if (l .gt. 1) go to 41002
   call insert (kbus(i), iabs (mbus(i)))
   go to 40004
-41002 l1 = i+l-2
-  l3 = l1+1
+41002 l1 = i + l - 2
+  l3 = l1 + 1
   do j1 = i, l1
      k = iabs (kbus(j1))
      m = iabs (mbus(j1))
@@ -334,8 +333,7 @@ subroutine over6
   korder(isubs1) = 0
   icas = 0
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 54230) next, last, ntot, kswtch, kconst, nv, ibr, inonl,  npower, it, istead, num99,  nz, iv
-54230 format (/, " Scalars at end of  'over6' .", /, '    Next    last    ntot  kswtch  kconst', &
-           '      nv     ibr   inonl  npower      it  istead   num99      nz      iv', /, 1x, 14i8)
+54230 format (/, " Scalars at end of  'over6' .", /, '    Next    last    ntot  kswtch  kconst      nv     ibr   inonl  npower      it  istead   num99      nz      iv', /, 1x, 14i8)
   ncurr = ntot - nz
   lastov = nchain
   nchain = 7
@@ -362,10 +360,10 @@ subroutine rinfin
   include 'labcom.ftn'
   n3 = 0
   d1 = 1.0 / (100. * flzero)
-  !     1st remove minus sign of "kpartb" if present as flag
-  !     indicating "renumber bypass".   then redefine value of
-  !     this lofty resistance if user had a "high resistance"
-  !     request (known by n7 .ne. default value of 1000 in over1):
+  ! 1st remove minus sign of "kpartb" if present as flag
+  ! indicating "renumber bypass".   then redefine value of
+  ! this lofty resistance if user had a "high resistance"
+  ! request (known by n7 .ne. default value of 1000 in over1):
   n7 = iabs (kpartb)
   if (n7 .lt. 1000) d1 = 10.0 ** n7
   i = inonl
@@ -421,8 +419,8 @@ subroutine insert (irrr, icc)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'space2.ftn'
-  !     following carries "next" among over6, insert, over7, & over9:
-  equivalence  (loopss(11), next)
+  ! following carries "next" among over6, insert, over7, & over9:
+  equivalence (loopss(11), next)
   if (irrr .le. 1) return
   if (icc .le. 1) return
   if (irrr .eq. icc) return
@@ -440,14 +438,14 @@ subroutine insert (irrr, icc)
 1 loc(ir) = next
   go to 4
 2 ir = irn
-  isubs1 =  iofbnd+ir
+  isubs1 = iofbnd + ir
   irn = korder(isubs1)
   if (irn .eq. 0) go to 3
   n2 = irn + iofgnd
   n1 = ic - kolum(n2)
   if (n1 .gt. 0) go to 2
   if (n1 .eq. 0) go to 5
-3 isubs1 =  iofbnd + ir
+3 isubs1 = iofbnd + ir
   korder(isubs1) = next
 4 isubs1 = iofbnd + next
   korder(isubs1) = irn

@@ -60,7 +60,7 @@ subroutine over5
      n4 = iwtent(n1 + 2) - 1
      d1 = 0.0
      ip2 = 2 * lfdep + i
-     ip3 = 2 * ip2   - i
+     ip3 = 2 * ip2 - i
      do j = n3, n4
         d1 = d1 + weight(j)
      end do
@@ -198,10 +198,10 @@ subroutine over5
   lstat(19) = 224
   lstat(16) = it2
   go to 9200
-  !     *****   interpreting   ******************************************
-  !     *****     diode  or  tacs-controlled valve  (type-11)  **********
-  !     *****     tacs-controlled spark gap         (type-12)  **********
-  !     *****     tacs-controlled ordinary switch   (type-13)  **********
+  ! *****   interpreting   ******************************************
+  ! *****     diode  or  tacs-controlled valve  (type-11)  **********
+  ! *****     tacs-controlled spark gap         (type-12)  **********
+  ! *****     tacs-controlled ordinary switch   (type-13)  **********
 250 if (bus4 .ne. text16) go to 262
   if (it2 .ne. 11) go to 262
   if (idube1 .ne. 0) go to 257
@@ -243,7 +243,7 @@ subroutine over5
   go to 25150
 25110 ndx1 = ilntab(klntab + idube2)
   write (unit = kunit6, fmt = 253) texvec(ndx1)
-253 format ('+valve, TACS grid= ', "'", a6,  "'")
+253 format ('+valve, TACS grid= ', "'", a6, "'")
   go to 25150
 25100 if (it2 .ne. 12) go to 25120
   if (idube2 .ne. 0) go to 25105
@@ -541,9 +541,11 @@ subroutine over5
   if (iprsup .ge. 1 ) write (unit = lunit6, fmt = 4568)
 99999 return
 end subroutine over5
+
 !
 !     subroutine over5a.
 !
+
 subroutine over5a
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -553,7 +555,7 @@ subroutine over5a
   include 'syncom.ftn'
   include 'umdeck.ftn'
   include 'dekspy.ftn'
-  dimension  ispum(1), kpen(4)
+  dimension ispum(1), kpen(4)
   equivalence (spum(1), ispum(1))
   character(8) text12
   data j30 / 1 /
@@ -571,7 +573,7 @@ subroutine over5a
   call move0 (ksmspy, ll3)
   call move0 (kode, ntot)
   kode(1) = -1
-  !     read input card using cimage.
+  ! read input card using cimage.
 310 call cimage
   if (kill .gt. 0) return
   if (machfl .eq. 1) go to 110
@@ -1153,9 +1155,11 @@ subroutine umoffs
 3472 format ('+u.m. data begins.  list-25 cells used =', i5)
   return
 end subroutine umoffs
+
 !
 !     subroutine umdata.
 !
+
 subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout,jtype,nodom, jtmtac, histom, omegm, omold, &
      thetam, reamdu, reamds, flxds, flxdr, reamqu, flxqs, flxqr, jcdsat, jcqsat, flxd, flxq, nppair, rotmom, ncld, nclq, &
      jtqout, jomout, jthout, reamqs, epsom, dcoef, kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, umoutp)
@@ -1253,7 +1257,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 36 format (/, ' (2). The data cards of the last um to be included to this data case is to be terminated with a blank card, indicating' ,/, &
        ' the ending of all um data cards.')
   go to 9600
-  !     . busum adjustment due to variable numfix :
+  ! . busum adjustment due to variable numfix :
 40 do n1 = 1, numfix
 42   busum(n1) = texta(n1)
   end do
@@ -1272,18 +1276,18 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   sroot2 = sqrtz (d2)
   sroot3 = sqrtz (d3)
   omegrf = twopi * statfr
-  !     start reading um data ***************************************
-  !     note : the following variable names are reserved for
-  !     looping during reading of the data input :
+  ! start reading um data ***************************************
+  ! note : the following variable names are reserved for
+  ! looping during reading of the data input :
   numum = 0
   ncltot = 0
   nsmtac = 0
   nsmach = 0
-  !     nsmtac is the total number of additional entries to
-  !     umoutp(numout) because of sm tacs transfer.
+  ! nsmtac is the total number of additional entries to
+  ! umoutp(numout) because of sm tacs transfer.
   n1 = 0
-  !     .user1 : general specifications (class 1 um data cards)
-  !     read input card using cimage
+  ! .user1 : general specifications (class 1 um data cards)
+  ! read input card using cimage
   call cimage
   read (unit = abuff, fmt = 60) inpu, initum, bus3, limasu, loopss(8)
 60 format (2i1, a6, i6, i1)
@@ -1295,14 +1299,14 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   go to 150
 105 if (noutpr .eq. 0) write (unit = kunit6, fmt = 110)
 110 format ('+um fully compensated')
-  !     read (lunit5,203) jtype(n1),ncld(n1),nclq(n1),jtqout(n1),
-  !     vjomout(n1),jthout(n1),bum3(n1),bum4(n1),nppair(n1),
-  !     vrotmom(n1),dcoef(n1),epsom(n1),omegm(n1),reamdu(n1),
-  !     vjcdsat(n1),reamds(n1),flxds(n1),flxdr(n1),thetam(n1),
-  !     vreamqu(n1),jcqsat(n1),reamqs(n1),flxqs(n1),flxqr(n1),noread
+  ! read (lunit5,203) jtype(n1),ncld(n1),nclq(n1),jtqout(n1),
+  ! vjomout(n1),jthout(n1),bum3(n1),bum4(n1),nppair(n1),
+  ! vrotmom(n1),dcoef(n1),epsom(n1),omegm(n1),reamdu(n1),
+  ! vjcdsat(n1),reamds(n1),flxds(n1),flxdr(n1),thetam(n1),
+  ! vreamqu(n1),jcqsat(n1),reamqs(n1),flxqs(n1),flxqr(n1),noread
 203 format (3i2, 3i1, 2a6, i2, 3e14.5, /, 2e14.5, i1, 3e14.5, /, 2e14.5, i1, 3e14.5,i1)
-  !     decision on m31 or m32 data input ***************************
-  !     with m32 , the input is modular.
+  ! decision on m31 or m32 data input ***************************
+  ! with m32 , the input is modular.
 150 call cimage
   read (unit = abuff, fmt = 1207) text3, text4, text5
   if (text3 .ne. blank) go to 3202
@@ -1353,7 +1357,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      ndx1 = ilntab(klntab + j)
      if (bus4 .eq. texvec(ndx1)) go to 209
 207 end do
-  if ( bus4  .eq.  blank )   go to 213
+  if (bus4 .eq. blank) go to 213
   write (unit = lunit6, fmt = 3207) bus4
 3207 format (/, ' Error stop.   The TACS name  "bus4" on the last-read card is unrecognized.   bus4=', a6)
   go to 9600

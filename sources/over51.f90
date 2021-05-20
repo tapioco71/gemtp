@@ -2,9 +2,11 @@
 !
 !     file: over51.for
 !
+
 !
 !     subroutine over51.
 !
+
 subroutine over51
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -22,9 +24,11 @@ subroutine over51
 4568 format (' Exit module "over51".')
 99999 return
 end subroutine over51
+
 !
 !     subroutine subr51.
 !
+
 subroutine subr51
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -48,8 +52,8 @@ subroutine subr51
   call runtym (vmin, vmax)
   flstat(9) = vmin - flstat(9)
   if (ipntv(1) .ne. -8888) go to 1643
-  !     following assignments are to define exceptional /blank/
-  !     variables used in  "kill codes"  usage:
+  ! following assignments are to define exceptional /blank/
+  ! variables used in  "kill codes"  usage:
   if (kill .eq. 38) flstat(12) = 1.0
   if (kill .eq. 41) lstat(10) = 1
   if (kill .eq. 43) flstat(12) = 1.
@@ -59,17 +63,17 @@ subroutine subr51
 1643 if (lastov .ge. nchain) go to 1649
   noutpr = 0
   call interp
-  write (lunit6, 5315)
+  write (unit = lunit6, fmt = 5315)
 5315 format (' ')
-  write (lunit6, 5316)
+  write (unit = lunit6, fmt =  5316)
 5316 format (' -----------------------------------------------------------------------------------------------------------------------------------')
   do i = 1, 2
-5319 write (lunit6, 5320)
+5319 write (unit = lunit6, fmt = 5320)
   end do
 5320 format (' error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error')
-  write (lunit6, 5316)
+  write (unit = lunit6, fmt = 5316)
   if (m4plot .eq. 1) go to 5534
-  write (lunit6, 5332)
+  write (unit = lunit6, fmt = 5332)
 5332 format ('0You lose, fella.   The EMTP logic has detected an error condition, and is going to terminate your run.  The following', /, &
        ' printout message summarizes the data difficulty leading to this program decision.  By studying this message, the problem', /, &
        ' data,  and the rules delineated by the  840-page EMTP rule book,  it is hoped that the user can rectify the problem.', /, &
@@ -78,16 +82,16 @@ subroutine subr51
 1019 format (13a6, a2)
   write (lunit6, 5333) (texcol(j), j = 1, 14)
 5333 format (" Where an otherwise-unidentified card is referred to, or is called the 'last' card, this means the most-recently-", /, &
-       'read card of the input data deck.   The 80-column card image in question is the last one printed out before this', /, &
+       ' read card of the input data deck.   The 80-column card image in question is the last one printed out before this', /, &
        ' termination message.   A copy follows.... ', 13a6, a2)
-5534 write (lunit6, 5335) kill, lstat(18), lstat(19)
+5534 write (unit = lunit6, fmt = 5335) kill, lstat(18), lstat(19)
 5335 format (14x, 'kill code number', 16x, 'overlay number', 10x, 'nearby statement no.', /, 3i30)
 1649 do j = 1, nfrfld
      if (kill .gt. kpen(j)) go to 1658
      if (j .eq. 1) go to 1684
      lastov = nchain
      nchain = 50 + j
-     if (iprsup .ge. 1) write (lunit6, 1652) kill, j, kpen(j), nchain
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 1652) kill, j, kpen(j), nchain
 1652 format (' Error overlay found.   kill, j, kpen(j), nchain =', 4i8)
      go to 9000
   end do
@@ -96,24 +100,24 @@ subroutine subr51
   go to (6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010, 6011, 6012, 6013, 6014, 6015, 6016, 6017, 6018, 6019, 6020, &
        6021, 6022, 6023, 6024, 6025, 6026, 6027, 6028, 6029, 6030, 6031, 6032, 6033, 6034, 6035, 6036, 6037, 6038, 6039, 6040, &
        6041, 6042, 6043, 6044, 6045, 6046, 6047, 6048, 6049, 6050), kill
-6001 write (lunit6, 7001) lstat(16)
+6001 write (unit = lunit6, fmt = 7001) lstat(16)
 7001 format (5x, 'Storage exceeded for list number ', i2, '.   See dimensioned limit in tabulation below.',/, &
           5x, 'The problem being inputted is simply too big for the program as currently dimensioned.   Since there usually are ',/, &
           5x, 'ways of circumventing this difficulty, it is suggested that the user consult his friendly neighborhood program   ',/, &
           5x, 'maintenance man.')
   go to 6220
 6002 if (t .lt. 0.0) go to 7102
-  write (lunit6, 7002)  flstat(16)
+  write (unit = lunit6, fmt = 7002) flstat(16)
 7002 format (5x, "Time-step size 'deltat' as read from columns 1-8 of the first miscellaneous data card is not positive.   The", /, &
           5x, 'user punched a value of ', e14.4,  '.   Unlike Jules Verne, you are not allowed to stop or decrease time during', /, &
           5x, "a simulation, my friend.   Don't try riding out of an active volcano on a raft floating on molten lava, either,", /, &
           5x, "although that's another story.")
   go to 6220
-7102 write (lunit6, 7202) t
+7102 write (unit = lunit6, fmt = 7202) t
 7202 format (5x, "The starting time   't'   as read from the floating-point miscellaneous data card is negative, which is", /, &
           5x, 'illegal.   A value of', e15.5, '   was read from the data field of columns 49-56.')
   go to 6220
-6003 write (lunit6, 7003) lstat(16)
+6003 write (unit = lunit6, fmt = 7003) lstat(16)
 7003 format (5x, 'Illegal type code read from columns 1-2 of last branch card.   The user punched a value of ', i2, '.   Either', /, &
           5x, 'the punched number itself is patently illegal (always an error, under any circumstances), or the card in question  ',/, &
           5x, 'his out of sequence in relation to the preceding data card which was inputted.   As an example of the latter',/, &
@@ -499,10 +503,11 @@ subroutine subr51
           5x, 'single-phase components.')
 6220 lastov = nchain
   nchain = nfrfld + 50
-  if (iprsup .ge. 1) write (lunit6, 8943) nchain, kill
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 8943) nchain, kill
 8943 format (' Exit "subr51".  nchain, kill =', 2i6)
 9000 return
 end subroutine subr51
+
 !
 !     file: over51.for
 !
