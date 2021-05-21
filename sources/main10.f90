@@ -150,6 +150,7 @@ subroutine tapsav (narray, n1, n2, n3)
   !     selects between disk or virtual memory (/C29B01/).
   include 'blkcom.ftn'
   include 'deck29.ftn'
+  integer(4) narray
   dimension narray(1), kpen(2)
   if (iprsup .lt. 1) go to 5840
   n9 = 0
@@ -829,7 +830,7 @@ subroutine tables
   !     comment card immediately following "synmac" -------------
   include 'umdeck.ftn'
   dimension  integx(1)
-  equivalence  (x(1), integx(1))
+  equivalence (x(1), integx(1))
   character(8) busone, kpen, itemp
   dimension  busone(1), idistx(1)
   equivalence (bus1, busone(1)), (nenerg, idistx(1))
@@ -843,7 +844,8 @@ subroutine tables
   ll1 = 1
   ll2 = 2
   ll4 = 4
-  nword1 = locint (voltbc(1)) - locint (kpen(1))
+  !nword1 = locint (voltbc(1)) - locint (kpen(1))
+  nword1 = locf (voltbc(1)) - locchar (kpen(1))
   nword2 = locint (idistx(1)) - locint (lunsav(15))
   n4 = locint (msmout) - locint (z(1)) + 1
   n5 = locint (lbstac) - locint (etac(1)) + 1

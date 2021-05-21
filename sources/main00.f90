@@ -967,7 +967,7 @@ end function locf
 !     function locint.
 !
 
-function  locint (iarray)
+function locint (iarray)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   integer(8) locint
   integer(4) iarray(*)
@@ -977,9 +977,46 @@ function  locint (iarray)
   !     constant offset is allowed, since only differences will ever be
   !     used by the EMTP.   Note vector argument  "iarray"  (which
   !     is an assumption for all EMTP usage).
-  locint = (loc (iarray(1))) / 4
+  !locint = (loc (iarray(1))) / 4
+  locint = (loc (iarray(1)))
   return
 end function locint
+
+!
+!     function locstr.
+!
+
+function locstr (str)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  integer(8) locstr
+  character(*) str
+  !     Installation-dependent EMTP module.   This is  VAX  version.
+  !     function  'LOCINT'  is designed to return the address in memory
+  !     of the argument, as an  INTEGER(4)  word address.   An arbitrary
+  !     constant offset is allowed, since only differences will ever be
+  !     used by the EMTP.   Note vector argument  "iarray"  (which
+  !     is an assumption for all EMTP usage).
+  locstr = (loc (str(1 : 1)))
+  return
+end function locstr
+
+!
+!     function locstr.
+!
+
+function locchar (carray)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  integer(8) locchar
+  character carray(*)
+  !     Installation-dependent EMTP module.   This is  VAX  version.
+  !     function  'LOCINT'  is designed to return the address in memory
+  !     of the argument, as an  INTEGER(4)  word address.   An arbitrary
+  !     constant offset is allowed, since only differences will ever be
+  !     used by the EMTP.   Note vector argument  "iarray"  (which
+  !     is an assumption for all EMTP usage).
+  locstr = (loc (carray(1)))
+  return
+end function locchar
 
 !
 !     function rfunl1.
