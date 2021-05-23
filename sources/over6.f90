@@ -1,6 +1,6 @@
 !-*- mode: f90; syntax: free-format; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 !
-!     file: over6.for
+!     file: over6.f90
 !
 
 !
@@ -103,19 +103,21 @@ subroutine over6
   ktrlsw(8) = ibr
   call move0 (kolum(1), ibr)
   !     output network-connectivity table if so requested (idoubl=1).
-  if (idoubl .le.  0) go to 5324
+  if (idoubl .le. 0) go to 5324
   call move0 (loc(1), ntot)
   next = 1
   i = 1
-5010 if (i .gt. ibr) go to 5040
-  k = iabs (kbus(i))
-  m = iabs (mbus(i))
-  if (bus(k) .eq. trash) go to 5020
-  if (bus(m) .eq. trash) go to 5020
-  assign 5020 to moon
-  go to 5200
+5010 do while (i .le. ibr)
+!5010 if (i .gt. ibr) go to 5040
+     k = iabs (kbus(i))
+     m = iabs (mbus(i))
+     if (bus(k) .eq. trash) go to 5020
+     if (bus(m) .eq. trash) go to 5020
+     assign 5020 to moon
+     go to 5200
 5020 i = i + 1
-  go to 5010
+     ! go to 5010
+  end do
 5040 i = 1
 5045 if (i .gt. inonl) go to 5060
   k = iabs (nonlk(i))
@@ -130,9 +132,9 @@ subroutine over6
   k = kmswit(i)
   m = kmswit(ndx1)
   ltest = isourc(i)
-  if(ltest .le. 0) go to 5080
+  if (ltest .le. 0) go to 5080
   k = iabs (node(ltest + 1))
-5080 if(bus(k) .eq. trash) go to 5085
+5080 if (bus(k) .eq. trash) go to 5085
   if (bus(m) .eq. trash) go to 5085
   assign 5085 to moon
   go to 5200
@@ -176,9 +178,9 @@ subroutine over6
   go to 5204
 5240 go to moon, (5020, 5050, 5085)
 5250 write (unit = lunit6, fmt = 5254)
-5254 format(//, ' list of input elements connected to each bus.', /, 10x, '1) only the physical connections of multiphase lines are shown (capacitive and inductive coupling ignored)' ,/, &
-          10x, '2) repeated entries imply parallel connections', /, 10x,  '3) sources are omitted, although switches ', &
-          ' are included;', /, 10x, '4) u.m. usage produces extra, internally-defined nodes "um????" (1st 2 letters "um").')
+5254 format (//, ' list of input elements connected to each bus.', /, 10x, '1) only the physical connections of multiphase lines are shown (capacitive and inductive coupling ignored)', /, &
+          10x, '2) repeated entries imply parallel connections', /, 10x,  '3) sources are omitted, although switches  are included;', /, &
+          10x, '4) u.m. usage produces extra, internally-defined nodes "um????" (1st 2 letters "um").')
   write (unit = lunit6, fmt = 5261)
 5261 format(' From bus name 1 names of all adjacent busses')
   write (unit = lunit6, fmt = 5266)
@@ -215,7 +217,7 @@ subroutine over6
   go to 5270
 5320 write (unit = lunit6, fmt = 5266)
   write (unit = lunit6, fmt = 1337)
-  if ( n22 .ge. 2) kwtspy = 1
+  if (n22 .ge. 2) kwtspy = 1
 5324 if (tmax .gt. 0.0) go to 5344
   do i = 1, ntot
      ich1(i) = i
@@ -225,7 +227,7 @@ subroutine over6
   ! renumber nodes based on sparsity of coeff matrix of transient
   ! network solution.
 5344 if (iprsup .gt. 0) write (unit = lunit6, fmt = 73524) (bus(i), i = 1, ntot)
-73524 format(/, ' Bus names', /, (1x, 10a12))
+73524 format (/, ' Bus names', /, (1x, 10a12))
   if (kpartb .gt. 0) go to 5351
   ! negative sign on "kpartb" is for "renumber bypass":
   norder(1) = 1
@@ -381,7 +383,7 @@ subroutine rinfin
      if (n1 .eq. m) go to 54174
 54155 end do
   ibr = ibr + 1
-  if (ibr  .le.  lbrnch) go to 4716
+  if (ibr .le. lbrnch) go to 4716
   lstat(19) = 4716
   kill = 1
   lstat(16) = 2
@@ -466,5 +468,5 @@ subroutine insert (irrr, icc)
 end subroutine insert
 
 !
-!     end of file: over6.for
+!     end of file: over6.f90
 !

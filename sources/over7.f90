@@ -2,9 +2,11 @@
 !
 !     file: over7.for
 !
+
 !
 !     subroutine over7.
 !
+
 subroutine over7
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
@@ -44,7 +46,7 @@ subroutine over7
   td = 0.0
   zzza = 0.0
   lastxx = last
-  !     n1 = lbus + 1  // use lbus, not this n1,  in following:
+  ! n1 = lbus + 1  // use lbus, not this n1,  in following:
   call move0 (ndex(1), lbus)
   nz = ncurr
   i = 0
@@ -73,7 +75,7 @@ subroutine over7
   nelim = 0
   go to 453
 190 ncn = 0
-  !     next delete obviously zero-cell zeroing of vectors:
+  ! next delete obviously zero-cell zeroing of vectors:
   nelim = 1
 200 continue
   if (ncn  .ge.  lbus) go to 220
@@ -97,80 +99,80 @@ subroutine over7
   do ii = 1, 15
      n1 = ii + iofkol
      n2 = ii + iofkor
-     write (lunit6, 4064) ii, kolum(n1), korder(n2), kownt(ii), loc(ii), ich1(ii), ich2(ii), ndex(ii)
+     write (unit = lunit6, fmt = 4064) ii, kolum(n1), korder(n2), kownt(ii), loc(ii), ich1(ii), ich2(ii), ndex(ii)
 4064 format (22x, 8i8)
 4066 end do
 222 j = ich1(i)
   call subscr (i, lbus, 222, 1)
   ndex(ncn+1) = j
   jsub = ncn + 1
-  call subscr ( jsub, lbus, 222, 2 )
-  if ( j  .gt.  0 )   ich2(j) = 0
-  call subscr ( j, lbus, 222, 99 )
+  call subscr (jsub, lbus, 222, 2)
+  if (j .gt. 0) ich2(j) = 0
+  call subscr (j, lbus, 222, 99)
   norder(i) = nelim
   go to 240
 229 do i = 1, ntot
      j = norder(i)
-     call subscr ( j, lbus, 229, 1 )
+     call subscr (j, lbus, 229, 1)
 231  lorder(j) = i
   end do
-  if( iprsup .ge. 3 ) write (lunit6, 5231)
+  if( iprsup .ge. 3 ) write (unit = lunit6, fmt = 5231)
 5231 format (/, " Final renumbering arrays at the end of  'over7' .    row  norder   index    iloc  lorder   kownt     loc   kolum    korder")
   do i = 1, 20
      n1 = i + iofkol
      n2 = i + iofkor
-     if ( iprsup  .ge.  3 ) write (lunit6, 5233) i, norder(i), index(i), iloc(i), lorder(i), kownt(i), loc(i), kolum(n1), korder(n2)
+     if (iprsup  .ge.  3) write (unit = lunit6, fmt = 5233) i, norder(i), index(i), iloc(i), lorder(i), kownt(i), loc(i), kolum(n1), korder(n2)
 5233 format (50x, 9i8)
 5235 end do
-  if (ioffd .le. 0)   go to 233
+  if (ioffd .le. 0) go to 233
   do i = 1, ioffd
-     call subscr ( i, lsiz23, 5235, 1 )
+     call subscr (i, lsiz23, 5235, 1)
      j = iloc(i)
-     call subscr ( j, lbus, 5235, 2 )
+     call subscr (j, lbus, 5235, 2)
      j = norder(j)
 232  iloc(i) = j
   end do
-233 if( nelim .gt. ntot )  go to 5236
+233 if (nelim .gt. ntot) go to 5236
   do i = nelim , ntot
-     call subscr ( i, lbus, 233, 1 )
+     call subscr (i, lbus, 233, 1)
      index(i) = ioffd +1
      k = lorder(i)
-     call subscr ( k, lbus, 233, 2 )
+     call subscr (k, lbus, 233, 2)
      j = loc(k)
 234  if (j .eq. 0)   go to 236
-     call subscr ( j, lsiz23, 234, 1 )
-     isubs1 =  iofkol+j
+     call subscr (j, lsiz23, 234, 1)
+     isubs1 = iofkol + j
      k = kolum(isubs1)
-     call subscr ( k, lbus, 234, 2 )
+     call subscr (k, lbus, 234, 2)
      l = norder(k)
      if (i .gt. l)   go to 235
-     ioffd = ioffd +1
-     call subscr ( ioffd, lsiz23, 234, 3 )
+     ioffd = ioffd + 1
+     call subscr (ioffd, lsiz23, 234, 3)
      iloc(ioffd) = l
-235  isubs1 =  iofkor+j
-     call subscr ( j, lsiz23, 235, 1 )
+235  isubs1 =  iofkor + j
+     call subscr (j, lsiz23, 235, 1)
      j = korder(isubs1)
      go to 234
 236 end do
-5236 index(ntot+1) = ioffd + 1
+5236 index(ntot + 1) = ioffd + 1
   jsub = ntot + 1
-  call subscr ( jsub, lbus, 5236, 1 )
-  if( iprsup .ge. 3 ) write(lunit6, 5241)  ( i, norder(i), index(i), iloc(i), i=1, 20 )
+  call subscr (jsub, lbus, 5236, 1)
+  if (iprsup .ge. 3) write (unit = lunit6, fmt = 5241) (i, norder(i), index(i), iloc(i), i = 1, 20)
 5241 format ( /, " Arrays upon exit from  'over7' .     row  norder index    iloc", /, (33x, 4i8))
-  if ( ioffd  .gt.  lstat(43) ) lstat(43) = ioffd
-5276 if ( lastov  .gt.  nchain )   go to 5283
-  if (iprsup .gt. 0) write(lunit6, 47881)  ( norder(i), i=1, ntot )
+  if (ioffd .gt. lstat(43)) lstat(43) = ioffd
+5276 if (lastov .gt. nchain) go to 5283
+  if (iprsup .gt. 0) write (unit = lunit6, fmt = 47881) (norder(i), i = 1, ntot)
 47881 format (/, ' (norder(i), i = 1, ntot)   after transient-network renumbering .', /, (1x, 20i6))
-  if( iprsup .ge. 1 ) write(lunit6, 54230)  next, last, ntot, kswtch, kconst, nv, ibr, inonl  , npower, it, istead, norder(1), ncurr
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 54230) next, last, ntot, kswtch, kconst, nv, ibr, inonl, npower, it, istead, norder(1), ncurr
 54230 format (/, " Before 'over8' .    Next    last    ntot  kswtch  kconst      nv     ibr   inonl  npower      it  istead  nor(1) ncurr", /, 17x, 13i8)
-  if( norder(1) .eq. 1 )  go to 14
-  if ( noutpr  .eq.  0 ) write(lunit6, 47881 )  ( norder(i), i=1, ntot )
-  if ( iprsup  .gt.  0 ) write(lunit6, 6045 )
-6045 format(' Note ---- the preceding printout shows that ground was not renumbered first in the transient-network renumbering.', /, &
+  if (norder(1) .eq. 1) go to 14
+  if (noutpr .eq. 0) write (unit = lunit6, fmt = 47881) (norder(i), i = 1, ntot)
+  if (iprsup .gt. 0) write (unit = lunit6, fmt = 6045)
+6045 format (' Note ---- the preceding printout shows that ground was not renumbered first in the transient-network renumbering.', /, &
           11x, 'We will swap the new numbers between ground and whatever node was renumbered first, in order to get a legitimate', /, &
           11x, 'numbering for the rest of the emtp calculations.')
   do i = 1, ntot
-     if( norder(i) .eq. 1 )  go to 32
+     if (norder(i) .eq. 1) go to 32
 26 end do
   call stoptp
 32 norder(i) = norder(1)
@@ -179,19 +181,19 @@ subroutine over7
      j = norder(i)
      ich1(j) = i
   end do
-  if ( kconst  .eq.  0 )   go to 73820
+  if (kconst .eq. 0) go to 73820
   n1 = 0
   j = 1
   do i = 2, ntot
      k = ich1(i)
-     if( kode(k) .eq. 0 )  go to 73775
-     do l=1, kconst
-        if ( iprsup .ge. 3 ) write (lunit6, 6049)  i, k, kode(k), n1, j, l, node(l), tstart(l)
+     if (kode(k) .eq. 0) go to 73775
+     do l = 1, kconst
+        if (iprsup .ge. 3) write (unit = lunit6, fmt = 6049) i, k, kode(k), n1, j, l, node(l), tstart(l)
 6049    format (' at 6049 of "over7".  i, k, kode(k), etc. =', 7i8, e20.10)
-        !     s.m.  source node must precede regular voltage source nodes.
-        !     alter renumbering map to produce this, if  tstart  .eq.  -9988.
-        if ( tstart(l)  .ne.  -9988. )   go to 6051
-        if ( node(l) .eq. k ) go to 73775
+        ! s.m.  source node must precede regular voltage source nodes.
+        ! alter renumbering map to produce this, if  tstart  .eq.  -9988.
+        if (tstart(l) .ne. -9988.) go to 6051
+        if (node(l) .eq. k) go to 73775
 6051 end do
 2318 n1 = n1 + 1
      norder(n1) = k
@@ -200,14 +202,14 @@ subroutine over7
      ich1(j) = k
 73780 end do
   kpartb = j
-  if( n1 .le. 0 )  go to 73820
+  if (n1 .le. 0) go to 73820
   do i = 1, n1
      j = j + 1
      k = norder(i)
-     ich1(j)=k
+     ich1(j) = k
   end do
   do i = 1, ntot
-     j=ich1(i)
+     j = ich1(i)
      norder(j) = i
   end do
 73820 continue
@@ -217,19 +219,19 @@ subroutine over7
 5283 n1 = nchain
   nchain = lastov + 1
   lastov = n1
-  if ( iprsup  .ge.  1 ) write (lunit6, 4568 )
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
 4568 format ('  "Exit  module over7."')
 5294 go to 99999
 240 nelim = nelim +1
-  if (ischm .eq. 1)   go to 200
-  call subscr ( i, lbus, 240, 1 )
+  if (ischm .eq. 1) go to 200
+  call subscr (i, lbus, 240, 1)
   if (loc(i) .eq. 0)   go to 200
 260 ist = loc(i)
-  call subscr ( i, lbus, 260, 1 )
+  call subscr (i, lbus, 260, 1)
   jst = ist
   go to 290
 270 isubs1 =  iofkor+jst
-  call subscr ( jst, lsiz23, 270, 1 )
+  call subscr (jst, lsiz23, 270, 1)
   jst = korder(isubs1)
 280 if (jst .ne. 0)   go to 290
   if (ischm .eq. 3)   go to 1110
