@@ -274,7 +274,7 @@ subroutine over2
   inoff3 = 3 * lbrnch
   inoff4 = 4 * lbrnch
   koff1 = 900
-  koff2 = koff1 +isecti
+  koff2 = koff1 + isecti
   koff3 = koff2 + isecti
   koff4 = koff3 + isecti
   koff5 = koff4 + isecti
@@ -431,25 +431,25 @@ subroutine over2
   icas = -1
   go to 147
 4199 continue
-  !     =================  line-model f-scan building of network ===
+  ! =================  line-model f-scan building of network ===
   if (kexact .ne. 88333) go to 5823
-  !     write (*,*) ' check f-scan data.  ntot, ibr =',  ntot, ibr
+  ! write (*,*) ' check f-scan data.  ntot, ibr =',  ntot, ibr
   if (nfscan .gt. 0) go to 5823
   if (lastov .ne. 44) numrun = numrun + 1
   nfscan = nphlmt
-  !     if ( nfscan*2 .eq. ntot - 1  .and.
-  !     1     nfscan .eq. ibr ) go to 1583
-  !     if ( nfscan*2 .eq. ntot-1 )  go to 1583
-  !     write (*,*) ' error f-scan data.  ntot, ibr =',  ntot, ibr
-  !     stop
-  !     1583 do 5281  m= 2, ntot, 2
-  !     n9 = m / 2
-  !     char6 = 'send_'//alphan(n9:n9)
-  !     read (char6,4207) bus(m)
-  !     char6 = 'recv_'//alphan(n9:n9)
-  !     read (char6,4207) bus(m+1)
-  !     4207 format ( a6 )
-  !     5281 continue
+  ! if ( nfscan*2 .eq. ntot - 1  .and.
+  ! 1     nfscan .eq. ibr ) go to 1583
+  ! if ( nfscan*2 .eq. ntot-1 )  go to 1583
+  ! write (*,*) ' error f-scan data.  ntot, ibr =',  ntot, ibr
+  ! stop
+  ! 1583 do 5281  m= 2, ntot, 2
+  ! n9 = m / 2
+  ! char6 = 'send_'//alphan(n9:n9)
+  ! read (char6,4207) bus(m)
+  ! char6 = 'recv_'//alphan(n9:n9)
+  ! read (char6,4207) bus(m+1)
+  ! 4207 format ( a6 )
+  ! 5281 continue
   do m = 1, 2 * nphlmt
      chrpad(m)(1 : 6) = chlmfs(m)(1 : 6)
      do k = 1, 6
@@ -1525,7 +1525,7 @@ end subroutine over2
 !     subroutine fddata.
 !
 
-subroutine fddata( ikf, isfd, ibf )
+subroutine fddata (ikf, isfd, ibf)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   ! overlay 2 module used only for frequency-dependent
   ! representation of generator equivalents.
@@ -1614,7 +1614,7 @@ subroutine nonln2
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module nonln2."')
   ll9 = 9
-  !     following check is for saturable transformer char.
+  ! following check is for saturable transformer char.
   if (lstat(18) .eq. 187) go to 187
   if (itype .ge. 91) go to 4221
   kill = 3
@@ -1745,7 +1745,7 @@ subroutine nonln2
   a2 = 0.0
   vzero(inonl) = d4
   if (emtpc(it) .eq. 4444.) go to 40
-  !     enter zno data code**********************************************
+  ! enter zno data code**********************************************
   if (d2 .gt. 0.0) go to 25
   kill = 28
   lstat(19) = 23
@@ -1756,7 +1756,7 @@ subroutine nonln2
   vnonl(inonl) = d3
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 57) d2, d3, d4
 57 format ('+vref, vgap, vinit', 1x, 3e11.3)
-  !     read-in arrester characteristics*********************************
+  ! read-in arrester characteristics*********************************
   iseg = 2
   if (d3 .eq. fltinf) iseg = 1
   if (iseg .eq. 2) vnonl(inonl) = d3 * d2
@@ -1765,7 +1765,7 @@ subroutine nonln2
      ichr = ichar
      icard = 0
 29   icard = icard + 1
-     !     read cards using cimage
+     ! read cards using cimage
      call cimage
      if (kolbeg .gt. 0) go to 30
      read (unit = abuff, fmt = 149) d2, d3, d4
@@ -1788,13 +1788,13 @@ subroutine nonln2
 59   format ('+breakpoint', 4x, 3e11.4)
      go to 29
 37   if (icard .gt. 1) go to 38
-     !     no valid data encountered, terminate run
+     ! no valid data encountered, terminate run
      kill = 28
      lstat(19) = 37
      go to 9999
 38   if (noutpr .eq. 0) write (unit = kunit6, fmt = 54118)
      if (ibk .eq. 1) ilast(inonl) = ichar
-     !     calculate initial ( linear ) slope
+     ! calculate initial ( linear ) slope
      d11 = cchar(ichr + 1) * (vchar(ichr + 1) ** gslope(ichr + 1))
      cchar(ichr) = d11 / (vchar(ichr + 1) * anonl(inonl))
      vchar(ichr) = 0.0
@@ -1803,7 +1803,7 @@ subroutine nonln2
   nonle(inonl) = ichar
   nltype(inonl) = 921
   go to 100
-  !     enter code for piecewise linear and time varying resistance******
+  ! enter code for piecewise linear and time varying resistance******
 40 a2 = d2
   if (d3 .lt. 0.0) d3 = fltinf
   vnonl(inonl) = d3
@@ -1816,10 +1816,10 @@ subroutine nonln2
   anonl(inonl) = 2.0 * d2
   vnonl(inonl) = d2
   ilast(inonl) = 1
-  !     read-in nonlinear characteristic (mininmum two data points)******
+  ! read-in nonlinear characteristic (mininmum two data points)******
 46 icard = 0
 47 icard = icard + 1
-  !     read cards using cimage
+  ! read cards using cimage
   call cimage
   if (kolbeg .gt. 0) go  to  48
   read (unit = abuff, fmt = 149) d2, d3
@@ -1848,18 +1848,18 @@ subroutine nonln2
   lstat(19) = 53
   go to 9999
 54 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54118)
-  !     process input data (calculate slope + constant, extend data
-  !     points to infinity , determine vreference************************
+  ! process input data (calculate slope + constant, extend data
+  ! points to infinity , determine vreference************************
   ichr = nonlad(inonl)
   if (itype .eq. 91) go to 74
   d5 = absz (vchar(ichr))
   d3 = absz (vchar(ichar))
   if (d5 .gt. d3)  d3 = d5
   anonl(inonl) = d3
-  !     determine whether only upper half of data specified *************
+  ! determine whether only upper half of data specified *************
   if (vchar(ichr) .gt. 0.0 .and. cchar(ichr) .gt. 0.0) go to 55
   go to 74
-  !     add ( 0.0, 0.0 ) point to the user's data ***********************
+  ! add ( 0.0, 0.0 ) point to the user's data ***********************
 55 jk = ichar + 1
   if (jk .le. lchar) go to 70
   lstat(19) = 55
@@ -1968,8 +1968,8 @@ subroutine nonln2
   vchar(n12) = -vchar(ichar - 1)
   cchar(n11) = ichar - ilast(inonl)
   n13 = cchar(n11)
-  !     calculate the slope and intercept for major hysteresis loop
-  !     segments,  for  type-96  pseudononlinear element.
+  ! calculate the slope and intercept for major hysteresis loop
+  ! segments,  for  type-96  pseudononlinear element.
   n14 = ichar + 2
   n15 = n14 + n13 - 1
   do n16 = n14, n15
@@ -1989,14 +1989,14 @@ subroutine nonln2
   ichar = ichar + n13 + 1
   if (iprsup .ge. 3) write (unit = lunit6, fmt = 4239) ichar, (cchar(j), vchar(j), gslope(j), j = n11, ichar)
 4239 format (/, ' ichar =', i3, 5x, '(cchar(j), vchar(j), gslope(j), j = n11, ichar)  follow ...', /, (1x, 6e20.11))
-  !     handling of steady-state current and flux conditions.
+  ! handling of steady-state current and flux conditions.
 5309 n12 = ilast(inonl)
   n13 = nonlad(inonl)
   n13 = cchar(n13)
   n14 = n12 + n13 - 1
   if (tr(it) .eq. 8888.) go to 5330
-  !     make sure that the user-specified point lies within the major
-  !     hysteresis loop.
+  ! make sure that the user-specified point lies within the major
+  ! hysteresis loop.
   do n15 = n12, n14
      if (tr(it) .gt. cchar(n15)) go to 5310
      n16 = n15
@@ -2238,9 +2238,9 @@ subroutine distr2
   if (icheck .eq. 3) go to 196
   if (icheck .eq. 5) go to 20000
 190 if (moldat .eq. 0) go to 3265
-  !     decode (80, 3241, abuff(1))  text1
-  !  3241 format ( 75x,  a1 )
-  !     if ( text1  .eq.  blank )   go to 3265
+  ! decode (80, 3241, abuff(1))  text1
+  ! 3241 format ( 75x,  a1 )
+  ! if ( text1  .eq.  blank )   go to 3265
   read (unit = abuff, fmt = 3256) h1, aa, h3, xlong, iline, punch
 3256 format (26x, 4e12.0, 2i2)
   if (xlong .gt. 0.) go to 21633
@@ -2263,7 +2263,7 @@ subroutine distr2
 3265 continue
   read (unit = abuff, fmt = 191) ipsem
 191 format (75x, i3)
-  !      if (ipsem .ne. 0) go to 21633
+  ! if (ipsem .ne. 0) go to 21633
   if (ipsem .ne. 0) go to 8010
   read (unit = abuff, fmt = 1920) h1, aa, h3, xlong, iline, ipunch, n13, lint
 1920 format (26x, 4e6.2, 4i2)
@@ -2308,7 +2308,7 @@ subroutine distr2
   indhst(ibr) = ifx + 1
   ips1 = n5
   ips2 = ips2 + 1
-  !     make length(ibr) conditional for toronto.  6 oct 1981:
+  ! make length(ibr) conditional for toronto.  6 oct 1981:
   if (ips3 .eq. 0) length(ibr) = ipunch
   if (ipunch .gt. mxphas) mxphas = ipunch
   bus5 = text2
@@ -2337,7 +2337,7 @@ subroutine distr2
   if (ifx .gt. lhist) go to 8120
   sconst(ifsem) = d2
 8160 if (ips2 .gt. ipunch) go to 8190
-  !     read input card using cimage
+  ! read input card using cimage
   call cimage
   n8 = n6 + 1
   n6 = n6 + 5
@@ -2365,7 +2365,7 @@ subroutine distr2
   if (n10 .gt. 3) n10 = 3
   ifsem = ifsem + n10 + n10
   if (ifsem .gt. lfsem) go to 8090
-  !     read input card using cimage
+  ! read input card using cimage
   call cimage
   if (kolbeg .le. 0) go to 8206
   nfrfld = ifsem - n8 + 1
@@ -2468,7 +2468,7 @@ subroutine distr2
   n11 = 3 * n10
   ifsem = ifsem + 4 * n10
   if (ifsem .gt. lfsem) go to 8090
-  !     read input card using cimage
+  ! read input card using cimage
   call cimage
   if (kolbeg .le. 0) go to 8321
   nfrfld = n11
@@ -2568,7 +2568,7 @@ subroutine distr2
   n4 = 1
   n5 = 1
   irow = 0
-  !     read input card using cimage
+  ! read input card using cimage
 8410 call cimage
   if (kolbeg .le. 0) go to 8415
 28375 irow = irow + 1

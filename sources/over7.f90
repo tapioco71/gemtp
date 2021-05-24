@@ -233,91 +233,91 @@ subroutine over7
 270 isubs1 =  iofkor+jst
   call subscr (jst, lsiz23, 270, 1)
   jst = korder(isubs1)
-280 if (jst .ne. 0)   go to 290
-  if (ischm .eq. 3)   go to 1110
+280 if (jst .ne. 0) go to 290
+  if (ischm .eq. 3) go to 1110
   go to 200
 290 ib = ist
-  call subscr ( jst, lsiz23, 290, 1 )
-  isubs1 =  iofkol+jst
+  call subscr (jst, lsiz23, 290, 1)
+  isubs1 = iofkol + jst
   j = kolum(isubs1)
-  call subscr ( j, lbus, 290, 2 )
+  call subscr (j, lbus, 290, 2)
   jb = loc(j)
   icon = -1
   jbs = 0
-300 if (jb .eq. 0)   go to 200
-  ioffd = ioffd +1
-  call subscr ( ioffd, lsiz23, 300, 1 )
+300 if (jb .eq. 0) go to 200
+  ioffd = ioffd + 1
+  call subscr (ioffd, lsiz23, 300, 1)
   iloc(ioffd) = j
-310 isubs1 =  iofkol+ib
-  isubs2 =  iofkol+jb
-  call subscr ( ib, lsiz23, 310, 1 )
-  call subscr ( jb, lsiz23, 310, 2 )
+310 isubs1 = iofkol + ib
+  isubs2 = iofkol + jb
+  call subscr (ib, lsiz23, 310, 1)
+  call subscr (jb, lsiz23, 310, 2)
   n13 = kolum(isubs1) - kolum(isubs2)
-  if ( n13  .gt.  0 )   go to 500
-  if ( n13  .lt.  0 )   go to 360
-  !     if (kolum(isubs1)    - kolum(isubs2)   ) 360, 320, 500
+  if (n13 .gt. 0) go to 500
+  if (n13 .lt. 0) go to 360
+  ! if (kolum(isubs1) - kolum(isubs2)) 360, 320, 500
   ! 320 isubs1 =  iofkor+ib
   isubs1 = iofkor + ib
-  if (korder(isubs1)    .eq. 0)   go to 430
-330 isubs1 =  iofkor+ib
-  call subscr ( ib, lsiz23, 330, 1 )
+  if (korder(isubs1) .eq. 0) go to 430
+330 isubs1 = iofkor + ib
+  call subscr (ib, lsiz23, 330, 1)
   ib = korder(isubs1)
-340 isubs1 =  iofkor+jb
-  call subscr ( jb, lsiz23, 340, 1 )
-  if (korder(isubs1)    .eq. 0)   go to 700
+340 isubs1 = iofkor + jb
+  call subscr (jb, lsiz23, 340, 1)
+  if (korder(isubs1) .eq. 0) go to 700
 350 jbs = jb
-  isubs1 =  iofkor+jb
-  call subscr ( jb, lsiz23, 350, 1 )
+  isubs1 =  iofkor + jb
+  call subscr (jb, lsiz23, 350, 1)
   jb = korder(isubs1)
   go to 310
-360 isubs1 =  iofkol+ib
-  call subscr ( ib, lsiz23, 360, 1 )
-  if (kolum(isubs1)    .eq. j)   go to 410
-370 isubs1 =  iofkol+next
-  call subscr ( next, lsiz23, 370, 1 )
-  isubs2 =  iofkol+ib
-  call subscr ( ib,   lsiz23, 370, 2 )
-  kolum(isubs1)      = kolum(isubs2)
+360 isubs1 = iofkol + ib
+  call subscr (ib, lsiz23, 360, 1)
+  if (kolum(isubs1) .eq. j) go to 410
+370 isubs1 = iofkol+next
+  call subscr (next, lsiz23, 370, 1)
+  isubs2 = iofkol + ib
+  call subscr (ib, lsiz23, 370, 2)
+  kolum(isubs1) = kolum(isubs2)
   mext = next
-  if (next .eq. lastxx)   go to 375
-  call subscr ( next, lsiz23, 370, 3 )
-  isubs1 =  iofkor+next
+  if (next .eq. lastxx) go to 375
+  call subscr (next, lsiz23, 370, 3)
+  isubs1 = iofkor + next
   next = korder(isubs1)
-  isubs1 =  iofkor+mext
-  call subscr ( mext, lsiz23, 370, 4 )
-  korder(isubs1)      = jb
+  isubs1 = iofkor + mext
+  call subscr (mext, lsiz23, 370, 4)
+  korder(isubs1) = jb
   jbt = jbs
   jbs = mext
-  icon = icon +1
+  icon = icon + 1
   go to 380
 375 kill = 16
   lstat(19) = 375
-  lstat(16)=last
+  lstat(16) = last
   lstat(15) = nelim
-  if ( iprsup  .ge.  1) write ( lunit6, 4568 )
+  if (iprsup  .ge.  1) write (unit = lunit6, fmt = 4568)
   go to 9999
-380 if (jbt .eq. 0)   go to 400
-390 isubs1 =  iofkor+jbt
-  call subscr ( jbt, lsiz23, 390, 1 )
-  korder(isubs1)     = mext
+380 if (jbt .eq. 0) go to 400
+390 isubs1 = iofkor + jbt
+  call subscr (jbt, lsiz23, 390, 1)
+  korder(isubs1) = mext
   go to 410
 400 loc(j) = mext
   call subscr ( j, lbus, 400, 1 )
-410 isubs1 =  iofkor+ib
-  call subscr ( ib, lsiz23, 410, 1 )
+410 isubs1 = iofkor + ib
+  call subscr (ib, lsiz23, 410, 1)
   ib = korder(isubs1)
-420 if (ib .ne. 0)   go to 310
-430 isubs1 =  iofkol+jb
-  call subscr ( jb, lsiz23, 430, 1 )
-  !     if (kolum(isubs1)    -i) 440, 470, 790
+420 if (ib .ne. 0) go to 310
+430 isubs1 =  iofkol + jb
+  call subscr (jb, lsiz23, 430, 1)
+  ! if (kolum(isubs1)    -i) 440, 470, 790
   ! 440 jbs = jb
   n13 = kolum(isubs1) - i
-  if ( n13  .eq.  0 )   go to 470
-  if ( n13  .gt.  0 )   go to 790
+  if (n13 .eq. 0) go to 470
+  if (n13 .gt. 0) go to 790
   jbs = jb
-  isubs1 =  iofkor+jb
+  isubs1 = iofkor + jb
   jb = korder(isubs1)
-450 if (jb .ne. 0)   go to 430
+450 if (jb .ne. 0) go to 430
   lstat(19) = 450
 453 kill = 25
   lstat(16) = nelim
@@ -326,40 +326,40 @@ subroutine over7
   lstat(13) = ib
   lstat(12) = mext
   lstat(11) = next
-  if ( iprsup  .ge.  1) write ( lunit6, 4568 )
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
   go to 9999
-470 isubs1 =  iofkor+lastxx
-  call subscr ( lastxx, lsiz23, 470, 1 )
-  korder(isubs1)        = jb
+470 isubs1 = iofkor + lastxx
+  call subscr (lastxx, lsiz23, 470, 1)
+  korder(isubs1) = jb
   lastxx = jb
-  if (jbs .eq. 0)   go to 490
-480 isubs1 =  iofkor+jbs
-  isubs2 =  iofkor+jb
-  call subscr ( jbs, lsiz23, 480, 1 )
-  call subscr ( jb,  lsiz23, 480, 2 )
-  korder(isubs1)     = korder(isubs2)
+  if (jbs .eq. 0) go to 490
+480 isubs1 = iofkor + jbs
+  isubs2 = iofkor + jb
+  call subscr (jbs, lsiz23, 480, 1)
+  call subscr (jb, lsiz23, 480, 2)
+  korder(isubs1) = korder(isubs2)
   go to 790
-490 isubs1 =  iofkor+jb
-  call subscr ( jb, lsiz23, 490, 1 )
+490 isubs1 = iofkor + jb
+  call subscr (jb, lsiz23, 490, 1)
   loc(j) = korder(isubs1)
-  call subscr ( j,  lbus,   490, 2 )
+  call subscr (j, lbus, 490, 2)
   go to 790
-500 isubs1 =  iofkol+jb
-  call subscr ( jb, lsiz23, 500, 1 )
+500 isubs1 = iofkol + jb
+  call subscr (jb, lsiz23, 500, 1)
   !     if (kolum(isubs1)    -i) 510, 540, 520
   ! 510 jbs = jb
   n13 = kolum(isubs1) - i
-  if ( n13  .eq.  0 )   go to 540
-  if ( n13  .gt.  0 )   go to 520
+  if (n13 .eq. 0) go to 540
+  if (n13 .gt. 0) go to 520
   jbs = jb
   isubs1 =  iofkor+jb
   jb = korder(isubs1)
   go to 310
-520 isubs1 =  iofkor+jb
-  call subscr ( jb, lsiz23, 520, 1 )
-  if (korder(isubs1)    .eq. 0)   go to 700
+520 isubs1 = iofkor+jb
+  call subscr (jb, lsiz23, 520, 1)
+  if (korder(isubs1) .eq. 0) go to 700
 530 jbs = jb
-  isubs1 =  iofkor+jb
+  isubs1 = iofkor+jb
   call subscr ( jb, lsiz23, 530, 1 )
   jb = korder(isubs1)
   go to 310
