@@ -1,6 +1,6 @@
 !-*- mode: f90; syntax: free-format; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 !
-!     file: over5.for
+!     file: over5.f90
 !
 
 !
@@ -152,7 +152,8 @@ subroutine over5
   do i = 1, ntot
      if (bus1 .eq. bus(i)) n1 = i
      if (bus2 .eq. bus(i)) n2 = i
-210 end do
+  end do
+210 continue
   iprint = 1
   if (n1 .ne. 0) go to 211
   ntot = ntot + 1
@@ -220,7 +221,8 @@ subroutine over5
   do i = 1, ktab
      ndx1 = ilntab(klntab + i)
      if (bus5 .eq. texvec(ndx1)) go to 261
-258 end do
+  end do
+258 continue
 259 kill = 147
   lstat(19) = 259
   go to 9200
@@ -230,7 +232,8 @@ subroutine over5
   do i = 1, ktab
      ndx1 = ilntab(klntab + i)
      if (bus6 .eq. texvec(ndx1)) go to 267
-266 end do
+  end do
+266 continue
 265 kill = 119
   lstat(19) = 265
   go to 9200
@@ -338,8 +341,8 @@ subroutine over5
   if (n99 .lt. 30 .or. n99 .gt. 60) go to 3920
   write (unit = lunit6, fmt = 3906) buffer
 3906 format (" Temporary error stop in  over5.   The user's data is for a monte carlo simulation,", /, &
-       ' but  "statistics"  in columns 55-64 of the last-read data card has been misspelled.', /, &
-       ' The defective 80-column card image =', a80)
+          ' but  "statistics"  in columns 55-64 of the last-read data card has been misspelled.', /, &
+          ' The defective 80-column card image =', a80)
   stop
 3920 if (bus3 .ne. text5) go to 3260
   if (bus4 .eq. text6) go to 3360
@@ -381,7 +384,8 @@ subroutine over5
   do i = 1, ntot
      if (bus5 .eq. bus(i)) n5 = i
      if (bus6 .eq. bus(i)) n6 = i
-240 end do
+  end do
+240 continue
   if (n5 * n6 .eq. 1) go to 225
 241 n7 = kswtch - 1
   if (n7 .le. 0) go to 7245
@@ -391,7 +395,8 @@ subroutine over5
      if (n6 .ne. kmswit(ndx3)) go to 245
      kdepsw(kswtch) = i
      go to 225
-245 end do
+  end do
+245 continue
 7245 kill = 110
   lstat(19) = 245
   lstat(15) = n5
@@ -402,7 +407,7 @@ subroutine over5
   if (gus4 .lt. 0.0) go to  620
   ndxi = kswtch + lswtch
   topen(ndxi) = gus4
-  if (it2 .eq. 9976 .or. idist .eq. 1) topen(ndxi) = - gus4
+  if (it2 .eq. 9976 .or. idist .eq. 1) topen(ndxi) = -gus4
   go to 209
 617 kill = 94
   flstat(14) = ststat
@@ -452,8 +457,9 @@ subroutine over5
 616  timchk = ststat - 1.732050808 * ssigma
      if (timchk .lt. 0.0) go to 618
 614  if (timchk .lt. tenerg) tenerg = timchk
-8211 end do
-8299 if (noutpr .eq. 0) write (kunit6, 54133)
+  end do
+8211 continue
+8299 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54133)
 54133 format ('+blank card terminating switch cards.')
   call move0 (ipntv(1), ll10)
   if (tenerg .ge. 1.e+19) go to 1642
@@ -484,9 +490,10 @@ subroutine over5
 510  ipntv(numref) = i
      if (kloaep .ne. i) go to  625
      iloaep = numref
-625 end do
+  end do
+625 continue
   if (nenerg .gt. 0) go to 640
-  n2 = iabs(nenerg)
+  n2 = iabs (nenerg)
   if (n1 .eq. n2) go to 640
   kill = 113
   lstat(19) = 625
@@ -497,7 +504,8 @@ subroutine over5
      if (kdepsw(i) .ne. 0) go to 520
      j = j + 1
      ipntv(j) = tdns(i)
-520 end do
+  end do
+520 continue
   go to 9200
 640 if (nenerg .le. 0) go to 643
   if (isw .ne. 4444) go to 643
@@ -515,16 +523,15 @@ subroutine over5
   lstat(26) = kswtch
   lstat(38) = npower
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 8025) ibr, inonl, kswtch, nv, npower, ntot, it, ifdep, num99, ichar, knt
-8025 format (/, " Misc. scalars, in  'over5'  after completing switch input.", /, 1x, &
-          '     ibr   inonl  kswtch      nv  npower ntot      it   ifdep   num99   ichar     knt', /, 1x, 11i8)
+8025 format (/, " Misc. scalars, in  'over5'  after completing switch input.", /, 1x, '     ibr   inonl  kswtch      nv  npower ntot      it   ifdep   num99   ichar     knt', /, 1x, 11i8)
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 8026) (koutvp(i), i = 1, npower)
 8026 format (/, ' koutvp, koutie', /, (1x, 10i10))
   ndx1 = maxpe + 1
   ndx2 = maxpe + npower
-  if (iprsup .ge. 2) write (lunit6, 8026) (koutvp(i), i = ndx1, ndx2)
+  if (iprsup .ge. 2) write (unit = lunit6, fmt = 8026) (koutvp(i), i = ndx1, ndx2)
   ipunch = ipun
   iout = ioutin
-  !     code for input of emtp sources is in  "over5a" .
+  ! code for input of emtp sources is in  "over5a" .
   call over5a
   if (ktab .eq. 0) go to 3636
   ndx1 = kxtcs + nuk
@@ -583,8 +590,8 @@ subroutine over5a
   read (unit = abuff, fmt = 6304) n2, bus1, n1
 6304 format (i2, a6, i2)
   if (n2 .ne. 18) go to 6347
-  !     special type-18 input extends preceding source to allow
-  !     for ungrounded 2nd terminal and ideal transformer:
+  ! special type-18 input extends preceding source to allow
+  ! for ungrounded 2nd terminal and ideal transformer:
   kconst = kconst + 1
   lstat(19) = 6304
   iprint = 4
@@ -603,7 +610,8 @@ subroutine over5a
 6317 if (bus(j) .ne. bus3) go to 6322
      kpen(3) = j
      sfreq(kconst) = j
-6322 end do
+  end do
+6322 continue
   if (kpen(1) .ne. 0) go to 6325
   bus6 = bus1
   go to 6330
@@ -612,12 +620,12 @@ subroutine over5a
   go to 6330
 6326 if (kpen(3) .ne. 0) go to 6335
   bus6 = bus3
-6330 write (lunit6, 6331) bus6
+6330 write (unit = lunit6, fmt = 6331) bus6
 6331 format ('  ++++++  Warning.  ++++++  type-18 source has unrecognizable node name  ', '"', a6, '"', ' .   Device ignored.')
   kconst = kconst - 1
   go to 310
 6335 if (n1 .ne. -1) go to 6339
-  !     ungrounded current source (no transformer allowed):
+  ! ungrounded current source (no transformer allowed):
   iform(kconst) = iform(kconst - 1)
   crest(kconst) = -crest(kconst - 1)
   node(kconst) = kpen(1)
@@ -656,8 +664,8 @@ subroutine over5a
      it = it + 1
      tr(it) = volti(j)
      tx(it) = 0.0
-     emtpc(it)  = 0.0
-     r(it)  = 0.0
+     emtpc(it) = 0.0
+     r(it) = 0.0
      ibr = ibr + 1
      kbus(ibr) = kpen(j)
      mbus(ibr) = 1
@@ -668,14 +676,15 @@ subroutine over5a
      tx(it) = 0.0
      emtpc(it) = 0.0
      r(it) = 0.0
-6343 end do
+  end do
+6343 continue
   go to 310
-  !     end of type-18 (ideal transformer) code;  consider non-18:
+  ! end of type-18 (ideal transformer) code;  consider non-18:
 6347 continue
   read (unit = abuff, fmt = 6358) a, d1, gus2, h1, h2, gus3, gus4
 6358 format (10x, 7e10.0)
   if (n2 .ne. 19) go to 314
-  !     universal machine of hian lauw --- type-19 source.
+  ! universal machine of hian lauw --- type-19 source.
   call umoffs
   call umdata (spum(iureac), spum(iugpar), spum(iufpar), spum(iuhist), spum(iuumrp), ispum(iunod1), ispum(iunod2), &
        ispum(iujclt), ispum(iujclo), ispum(iujtyp), ispum(iunodo), ispum(iujtmt), spum(iuhism), spum(iuomgm), &
@@ -707,7 +716,7 @@ subroutine over5a
   lstat(16) = n2
   return
 4568 if (n2 .ge. 50 .and. n2 .le. 59) go to 114
-  !     check that conventional sources dont follow synch.machines
+  ! check that conventional sources dont follow synch.machines
   if (numsm .eq. 0) go to 114
   kill = 177
   lstat(14) = n2
@@ -773,7 +782,8 @@ subroutine over5a
   return
 317 do i = 1, ntot
      if (bus1 .eq. bus(i)) go to 330
-320 end do
+  end do
+320 continue
   lstat(19) = 320
 4258 kill = 12
   return
@@ -783,7 +793,8 @@ subroutine over5a
 4259 do m = 1, ktab
      ndx1 = ilntab(klntab + m)
      if (bus1 .eq. texvec(ndx1)) go to 3435
-3429 end do
+  end do
+3429 continue
   lstat(19) = 3429
   go to 4249
 3435 sfreq(kconst) = m
@@ -842,7 +853,8 @@ subroutine over5a
   gus3 = gus4 * gus2 / gus3
   do k = 1, ntot
      if (bus1 .eq. bus(k)) go to 342
-341 end do
+  end do
+341 continue
   lstat(19) = 341
   go to 4258
 342 n3 = 4
@@ -997,7 +1009,8 @@ subroutine over5a
      crest(j) = crest(j + 1)
      write (unit = lunit6, fmt = 6616) j, crest(j)
 6616 format (' type-17 reassign. j, crest(j) =', i5, e15.4)
-4142 end do
+  end do
+4142 continue
 4145 if (t .gt. 0.0) go to 5737
   if (istead .ne. 0) go to 5737
   if (inonl .le. 0) go to 5737
@@ -1006,7 +1019,8 @@ subroutine over5a
      kill = 203
      lstat(19) = 5732
      return
-5732 end do
+  end do
+5732 continue
 5737 if (ncomp .gt. 0) go to 419
   if (inonl .gt. num99) ncomp = 1
 419 if (fmaxfs .eq. 0.0) go to 447
@@ -1020,7 +1034,8 @@ subroutine over5a
      if (tstart(j) .lt. 0.0) go to 424
      n2 = n2 + 1
 424  sfreq(j) = fminfs
-431 end do
+  end do
+431 continue
   if (n1 .gt. n2) go to 437
 433 kill = 194
   lstat(13) = n1
@@ -1030,15 +1045,15 @@ subroutine over5a
 437 if (n2 .eq. 0) go to 447
   write (unit = lunit6, fmt = 441) kconst, n1, n2
 441 format (/, " Notice  ----  this  'frequency scan'  data case contains", i5, '   EMTP sources, of which', i5, '   are', /, &
-       15x, "sinusoidal (type-code 14).   But of these sinusoidal sources, not all have field  'tstart'  of columns", /, &
-       15x, '61-70 punched negative (which would indicate that such a source is present during the steady-state', /, &
-       15x, 'phasor solutions).   There were',  i5, '   exceptions of this sort.   The user is reminded that only')
+         15x, "sinusoidal (type-code 14).   But of these sinusoidal sources, not all have field  'tstart'  of columns", /, &
+         15x, '61-70 punched negative (which would indicate that such a source is present during the steady-state', /, &
+         15x, 'phasor solutions).   There were',  i5, '   exceptions of this sort.   The user is reminded that only')
   write (unit = lunit6, fmt = 442)
 442 format (15x, "sinusoidal sources which have negative  'tstart' will affect the EMTP solution.   By definition of", /, &
-       15x, " 'frequency scan' ,   this data case will involve only steady-state phasor solutions (there will be", /, &
-       15x, 'no transient simulations).')
+         15x, " 'frequency scan' ,   this data case will involve only steady-state phasor solutions (there will be", /, &
+         15x, 'no transient simulations).')
 447 if (ibr .gt. 0) go to 2436
-  !     degenerate case without linear branches; add infinite r:
+  ! degenerate case without linear branches; add infinite r:
   write (unit = lunit6, fmt = 2430)
 2430 format (/, ' This is a degenerate data case without any linear branches.  Add infinite resistance from node 2 to ground.', /)
   ibr = 1
@@ -1075,12 +1090,14 @@ subroutine over5a
   kill = 1
 9999 return
 end subroutine over5a
+
 !
 ! subroutine umoffs.
 !
+
 subroutine umoffs
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     overlay-5  u.m.  module called by "over5a".
+  ! overlay-5  u.m.  module called by "over5a".
   include 'blkcom.ftn'
   include 'umdeck.ftn'
   if ( nclfix  .gt.  0 )   go to 1758
@@ -1093,7 +1110,7 @@ subroutine umoffs
   d5 = nbyte(4)
   d5 = d5 / nbyte(3)
   iureac = 1
-  !     step over all coil-table vectors next.
+  ! step over all coil-table vectors next.
   iugpar = iureac + nclfix
   iufpar = iugpar + nclfix
   iuhist = iufpar + nclfix
@@ -1103,7 +1120,7 @@ subroutine umoffs
   iujclt = iunod2 + nclfix
   iujclo = iujclt + nclfix
   iujtyp = iujclo + nclfix
-  !     step over all machine-table vectors next.
+  ! step over all machine-table vectors next.
   iunodo = iujtyp + numfix
   iujtmt = iunodo + numfix
   iuhism = (iujtmt + numfix) * d5 + 1
@@ -1137,19 +1154,19 @@ subroutine umoffs
   iunodf = (iuangl + numfix) / d5 + 1
   iunodm = iunodf + numfix
   iukumo = iunodm + numfix
-  !     step over all output-table vectors next.
+  ! step over all output-table vectors next.
   iujumo = iukumo + iotfix
   iuumou = (iujumo + iotfix) * d5 + 1
-  !     finally, step over last vector, and check for overflow.
+  ! finally, step over last vector, and check for overflow.
   n5 = iuumou + ibsfix
   lstat(45) = n5
   if (n5 .le. lspcum) go to 3458
-  !     following is temporary message, to be moved to error overlays
-  !     later, when we have time.
+  ! following is temporary message, to be moved to error overlays
+  ! later, when we have time.
   write (unit = lunit6, fmt = 3451) n5, lspcum, nclfix, numfix, iotfix, ibsfix
 3451 format (/, ' Overflow error stop in  "umoffs" .    Insufficient total working space.', /, 1x, 10i8)
   call stoptp
-3458 if (iprsup .ge. 1 ) write (unit = lunit6, fmt = 3465) n5, lspcum
+3458 if (iprsup .ge. 1) write (unit = lunit6, fmt = 3465) n5, lspcum
 3465 format (/, ' Exit  "umoffs" .   n5, lspcum =', 2i6, /)
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 3472) n5
 3472 format ('+u.m. data begins.  list-25 cells used =', i5)
@@ -1160,22 +1177,22 @@ end subroutine umoffs
 !     subroutine umdata.
 !
 
-subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout,jtype,nodom, jtmtac, histom, omegm, omold, &
+subroutine umdata (reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout,jtype,nodom, jtmtac, histom, omegm, omold, &
      thetam, reamdu, reamds, flxds, flxdr, reamqu, flxqs, flxqr, jcdsat, jcqsat, flxd, flxq, nppair, rotmom, ncld, nclq, &
      jtqout, jomout, jthout, reamqs, epsom, dcoef, kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, umoutp)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  dimension  reacl(1), gpar(1), fpar(1), hist(1),umcurp(1)
-  dimension  nodvo1(1), nodvo2(1), jcltac(1), jclout(1)
-  dimension  jtype(1), nodom(1), jtmtac(1), histom(1)
-  dimension  omegm(1), omold(1), thetam(1)
-  dimension  reamdu(1), reamds(1), flxds(1), flxdr(1)
-  dimension  reamqu(1), flxqs(1), flxqr(1)
-  dimension  jcdsat(1), jcqsat(1), flxd(1), flxq(1)
-  dimension  nppair(1), rotmom(1), ncld(1)
-  dimension  nclq(1), jtqout(1), jomout(1), jthout(1)
-  dimension  reamqs(1), epsom(1), dcoef(1), kcoil(1)
-  dimension  voltum(1), anglum(1), nodfum(1), nodmum(1)
-  dimension  kumout(1), jumout(1), umoutp(1)
+  dimension reacl(1), gpar(1), fpar(1), hist(1),umcurp(1)
+  dimension nodvo1(1), nodvo2(1), jcltac(1), jclout(1)
+  dimension jtype(1), nodom(1), jtmtac(1), histom(1)
+  dimension omegm(1), omold(1), thetam(1)
+  dimension reamdu(1), reamds(1), flxds(1), flxdr(1)
+  dimension reamqu(1), flxqs(1), flxqr(1)
+  dimension jcdsat(1), jcqsat(1), flxd(1), flxq(1)
+  dimension nppair(1), rotmom(1), ncld(1)
+  dimension nclq(1), jtqout(1), jomout(1), jthout(1)
+  dimension reamqs(1), epsom(1), dcoef(1), kcoil(1)
+  dimension voltum(1), anglum(1), nodfum(1), nodmum(1)
+  dimension kumout(1), jumout(1), umoutp(1)
   common /umlocal/ texta, d1, d2, d3, d17, stat59, fmum, rmvaum, rkvum, s1um, s2um, zlsbum, s1qum, s2qum, aglqum, raum, xdum
   common /umlocal/ squm, xdpum, xqpum, xdppum, xqppum, tdpum, tdppum, x0um, rnum, xnum, xfum, xdfum, xdkdum, xkdum, xkqum, xqkqum
   common /umlocal/ xgkqum, xqum, xqgum, xgum, distrf, hjum, dsynum, dmutum, spring, dabsum, tqppum, agldum, xlum, n1, n2, n3, n4, n5, n6
@@ -1234,9 +1251,9 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   ! data texta(99), texta(100), texta(101) / 'um1mcc', 'um2mcc', 'um3mcc' /
   data textm / 'more  ' /
   data tesm1, tesm2, tesm3, tesm4, tesm5, tesm6, tesm7, tesm8, tesm9 / 'smdata', 'tolera', 'parame', 'all   ', 'none  ', 'extend', 'finish', ' part ', 'share ' /
-  !   if mech network option is used, rotmom is used to store
-  !      frequency of network connected to power coil. initiali -
-  !      zation is in umrenu, except if sm type-59 is used.
+  ! if mech network option is used, rotmom is used to store
+  !    frequency of network connected to power coil. initiali -
+  !    zation is in umrenu, except if sm type-59 is used.
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module umdata."')
   if (numum .eq. 0) go to 40
@@ -1244,7 +1261,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 30 format (/, ' um error stop. You have requested another um to be included to this data case. the rules regarding the ordering of um')
   write (unit = lunit6, fmt = 31)
 31 format (' data cards have however been violated. The data cards of this um should be placed immediately behind those of the', /, &
-       ' previous um in accordance with the following rules :')
+        ' previous um in accordance with the following rules :')
   write (unit = lunit6, fmt = 32)
 32 format (/, ' (1). The data cards of the next um have to follow immediately those of the previous um without the insertion of')
   write (unit = lunit6, fmt = 33)
@@ -1254,8 +1271,8 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   write (unit = lunit6, fmt = 35)
 35 format (' therefore to be placed on top and never to be repeated between the cards of the', " different um's.")
   write (unit = lunit6, fmt = 36)
-36 format (/, ' (2). The data cards of the last um to be included to this data case is to be terminated with a blank card, indicating' ,/, &
-       ' the ending of all um data cards.')
+36 format (/, ' (2). The data cards of the last um to be included to this data case is to be terminated with a blank card, indicating' , /, &
+        ' the ending of all um data cards.')
   go to 9600
   ! . busum adjustment due to variable numfix :
 40 do n1 = 1, numfix
@@ -1312,12 +1329,12 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   if (text3 .ne. blank) go to 3202
   if (text4 .ne. blank) go to 3202
   if (text5 .ne. blank) go to 3202
-  if (noutpr .eq. 0) write (kunit6, 1001)
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 1001)
 1001 format ('+blank card ending class-1 um data cards')
   go to 11202
-  !     data input for m31 and older versions ***********************
+  ! data input for m31 and older versions ***********************
   !. user2 : mach-table input for m31 and older
-  !     read input card using cimage
+  ! read input card using cimage
 1202 call cimage
 1203 n6 = 0
   read (unit = abuff, fmt = 1207) text3, text4, text5
@@ -1325,16 +1342,16 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   if (text3 .ne. blank) go to 3202
   if (text4 .ne. blank) go to 3202
   if (text5 .ne. blank) go to 3202
-  if (noutpr .eq. 0) write (kunit6, 2202)
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 2202)
 2202 format ('+blank card ending machine table.')
   go to 300
 3202 numum = numum + 1
-  if (iprsup .ge. 1) write (lunit6,170) numum
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 170) numum
 170 format ('0the machine-table input of um number', i3, ':')
   if (numum .le. numfix) go to 5202
   write (unit = lunit6, fmt = 4202) numum
 4202 format (/, ' Overflow u.m. machine table in module "umdata". Current case has', 2x, i4, 2x, &
-       'u.m.,  numfix on the card for absolute um dimensions', /, ' must be set to no less than', 2x, i4, '. ')
+          'u.m.,  numfix on the card for absolute um dimensions', /, ' must be set to no less than', 2x, i4, '. ')
   go to 9600
 5202 n1 = numum
   read (unit = abuff, fmt = 1204) nclq(n1), jtqout(n1), jomout(n1), jthout(n1), bus3, bus4, nppair(n1), rotmom(n1), dcoef(n1), epsom(n1)
@@ -1347,7 +1364,8 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      nodom(n1) = n10
      rotmom(n1) = twopi * statfr
      go to 205
-204 end do
+  end do
+204 continue
   write (unit = lunit6, fmt = 3204) bus3
 3204 format (/, ' Error stop.   The node name  "bus3" on the last-read card is not that', /, ' of any electric network node. bus3=', a6)
   go to 9600
@@ -1356,26 +1374,26 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   do j = 1, ktab
      ndx1 = ilntab(klntab + j)
      if (bus4 .eq. texvec(ndx1)) go to 209
-207 end do
+  end do
+207 continue
   if (bus4 .eq. blank) go to 213
   write (unit = lunit6, fmt = 3207) bus4
 3207 format (/, ' Error stop.   The TACS name  "bus4" on the last-read card is unrecognized.   bus4=', a6)
   go to 9600
 209 ndx1 = kxtcs + j
   jtmtac(n1) = ndx1
-  !     read input card using cimage
+  ! read input card using cimage
 213 call cimage
   read (unit = abuff, fmt = 4203) omegm(n1), reamdu(n1), jcdsat(n1), reamds(n1), flxds(n1), flxdr(n1)
 4203 format (2e14.5, i1, 3e14.5)
-  if (noutpr  .eq.  0) write (unit = kunit6, fmt = 5203) omegm(n1), reamdu(n1)
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 5203) omegm(n1), reamdu(n1)
 5203 format ('+mach-table card   2.', 2e12.4)
-  !     read input card using cimage
+  ! read input card using cimage
   call cimage
   read (unit = abuff, fmt = 4203) thetam(n1), reamqu(n1), jcqsat(n1), reamqs(n1), flxqs(n1), flxqr(n1)
   if (reamqu(n1) .gt. 0.0) go to 6199
   write (unit = lunit6, fmt = 6198) n1
-6198 format (/, ' Error stop. Incorrect um data input. the result is that the q-axis main inductance', /, 7x, &
-       ' is either zero or negative for machine number', i4, '.')
+6198 format (/, ' Error stop. Incorrect um data input. the result is that the q-axis main inductance', /, 7x, ' is either zero or negative for machine number', i4, '.')
   go to 9600
 6199 if (noutpr  .eq.  0) write (unit = kunit6, fmt = 6203) thetam(n1), reamqu(n1)
 6203 format ('+mach-table card   3.', 2e12.4)
@@ -1398,17 +1416,18 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   do n10 = 1,ntot
      if (bus5 .ne. bus(n10)) go to 220
      nodfum(n1) = n10
-     do n11 = 1,kconst
+     do n11 = 1, kconst
         n12 = node(n11)
         if (n12 .lt. 0) n12 = - n12
         if (nodfum(n1) .ne. n12) go to 219
         nodfum(n1) = n11
         go to 230
-219  end do
-220 end do
+     end do
+219  continue
+  end do
+220 continue
   write (unit = lunit6, fmt = 222) bus5
-222 format (/, ' Error stop.   The node name  "busf" on the last-read card is not that', /, &
-       ' of any electric network source node. busf=', a6)
+222 format (/, ' Error stop.   The node name  "busf" on the last-read card is not that', /, ' of any electric network source node. busf=', a6)
   go to 9600
 230 do n10 = 1,ntot
      if (bus6 .ne. bus(n10)) go to 233
@@ -1422,11 +1441,12 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
         if (distrf .eq. 0.0) crest(n11) = d1
 231     tstart(n11) = - 7777.
         go to 240
-232  end do
-233 end do
+     end do
+232  continue
+  end do
+233 continue
   write (unit = lunit6, fmt = 234) bus6
-234 format (/, ' Error stop.   The node name  "busm" on the last-read card is not that', /, &
-       ' of any electric network source node. busm=', a6)
+234 format (/, ' Error stop.   The node name  "busm" on the last-read card is not that', /, ' of any electric network source node. busm=', a6)
   go to 9600
 240 call cimage
   read (unit = abuff, fmt = 6240) text3
@@ -1441,12 +1461,12 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   go to 230
 248 go to 1203
 249 go to 1202
-  !     . if flux output is desired :
-  !     . user3 : coil-table input for m31 and older
+  ! . if flux output is desired :
+  ! . user3 : coil-table input for m31 and older
 300 if (iprsup .ge. 1) write (unit = lunit6, fmt = 301)
 301 format ('0the coil-table input:', /, 1x)
-  !     . avoid conflict blank termination card with dummy coil
-  !     . and adjustment of ncld and nclq for um type 4 :
+  ! . avoid conflict blank termination card with dummy coil
+  ! . and adjustment of ncld and nclq for um type 4 :
   n5 = 0
   do n10 = 1, numum
      if (jtype(n10) .ne. 4) go to 302
@@ -1492,7 +1512,8 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      n12 = 1
 305  n13 = n11 * n12
      if (n13 .ne. 0) go to 307
-306 end do
+  end do
+306 continue
   if (n11 .eq. 0) write (unit = lunit6, fmt = 3206) bus1
 3206 format (/, ' Error stop.  Just-read coil card bears illegal node name:', a6)
   if (n12 .eq. 0) write (unit = lunit6, fmt = 3206) bus2
@@ -1502,7 +1523,8 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   do j = 1, ktab
      ndx1 = ilntab(klntab + j)
      if (bus6 .eq. texvec(ndx1)) go to 311
-309 end do
+  end do
+309 continue
   write (unit = lunit6, fmt = 3207) bus6
   go to 9600
 311 ndx1 = kxtcs + j
@@ -1542,16 +1564,16 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   go to 9600
 17004 if (n10 .ge. 50 .and. n10 .lt. 60) go to 17040
   if (n10 .lt. 50) go to 15202
-  !  start reading sm type -50 to 59 data input format **********
+  ! start reading sm type -50 to 59 data input format **********
   jf = 0
   jr = 0
 17040 call umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld, jtmtac, reamdu, reamds, flxds, flxdr, reamqu, &
-       flxqs, flxqr, jcdsat, jcqsat, nppair, rotmom, nclq, jtqout, jthout, reamqs, voltum, anglum, nodfum, nodmum, kumout, jumout, &
-       jclout, dcoef, jomout, umoutp)
+           flxqs, flxqr, jcdsat, jcqsat, nppair, rotmom, nclq, jtqout, jthout, reamqs, voltum, anglum, nodfum, nodmum, kumout, jumout, &
+           jclout, dcoef, jomout, umoutp)
   if (jf .eq. 1) goto 11202
   if (jr .eq. 1) return
-  !  end reading sm type-59 data input $$$$$$$$$$$$$$$$$$$$$$$$$$
-  !    start reading pure um data input format ******************
+  ! end reading sm type-59 data input $$$$$$$$$$$$$$$$$$$$$$$$$$
+  ! start reading pure um data input format ******************
 15202 n1 = numum
   read (unit = abuff, fmt = 11203) jtype(n1), ncld(n1), nclq(n1), jtqout(n1), jomout(n1), jthout(n1), bus3, bus4, &
        nppair(n1), rotmom(n1), dcoef(n1), epsom(n1), d10
@@ -1565,7 +1587,8 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      if (d10 .eq. 0.0) d10 = statfr
      rotmom(n1) = twopi * d10
      go to 10205
-10204 end do
+  end do
+10204 continue
   write (unit = lunit6, fmt = 13204) bus3
 13204 format (/, ' Error stop.   The node name  "bus3" on the last-read card is not that', /, ' of any electric network node. bus3=', a6)
   go to 9600
@@ -1574,20 +1597,21 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   do j = 1, ktab
      ndx1 = ilntab(klntab + j)
      if (bus4 .eq. texvec(ndx1)) go to 10209
-10207 end do
+  end do
+10207 continue
   if (bus4 .eq. blank) go to 10213
   write (unit = lunit6, fmt = 13207) bus4
 13207 format (/, ' Error stop.   The TACS name  "bus4" on the last-read card is', /, ' unrecognized.   bus4=', a6)
   go to 9600
 10209 ndx1 = kxtcs + j
   jtmtac(n1) = ndx1
-  !     read input card using cimage
+  ! read input card using cimage
 10213 call cimage
   read (unit = abuff, fmt = 14203) omegm(n1), reamdu(n1), jcdsat(n1), reamds(n1), flxds(n1), flxdr(n1)
 14203 format (2e14.5, i1, 3e14.5)
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 15203) numum, omegm(n1), reamdu(n1)
 15203 format ('+um -', i3, '   mach card  2.', 2e10.2)
-  !     read input card using cimage
+  ! read input card using cimage
   call cimage
   read (unit = abuff, fmt = 14203) thetam(n1), reamqu(n1), jcqsat(n1), reamqs(n1), flxqs(n1), flxqr(n1)
   if (reamqu(n1) .gt. 0.0) go to 15910
@@ -1601,7 +1625,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
        nppair(n1), rotmom(n1), dcoef(n1), epsom(n1), omegm(n1), reamdu(n1), jcdsat(n1), reamds(n1), flxds(n1), flxdr(n1), thetam(n1), &
        reamqu(n1), jcqsat(n1), reamqs(n1), flxqs(n1), flxqr(n1)
 10214 format (' *********', 3i2, 3i1, 2a6, i2, 3e14.5, ' *********', 2e14.5, i1, 3e14.5, ' *********', 2e14.5, i1, 3e14.5)
-  !  read share card(if sharing of mech netw is requested) :
+  ! read share card(if sharing of mech netw is requested) :
   nshare = 0
   call cimage
   read (unit = abuff, fmt = 15800) text3
@@ -1619,8 +1643,8 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 15826 if (n1 .ne. n5 .and. n1 .ne. n6) go to 15828
   write (unit = lunit6, fmt = 15827) n1
 15827 format (/, ' Error stop. This um-', i3, " is supposed to share its mech network with other um's. What", &
-       ' should be specified on this card are the', /, " numbers of these other um's without", &
-       ' including the number of the um which is being processed right now.')
+           ' should be specified on this card are the', /, " numbers of these other um's without", &
+           ' including the number of the um which is being processed right now.')
   call stoptp
 15828 n10 = n1
   if (n10 .gt. n5) n10 = n5
@@ -1630,7 +1654,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   if (nshare .eq. 0) go to 15880
   call cimage
 15880 d1 = 1.0e+3
-  !  make sure that user sets up automatic ss-calc if ldflow :
+  ! make sure that user sets up automatic ss-calc if ldflow :
   if (istep .ne. -4567) go to 15890
   if (nshare .eq. 2) go to 15890
   read (unit = abuff, fmt = 15882) bus6
@@ -1656,13 +1680,14 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
         if (nodfum(n1) .ne. n12) go to 10219
         nodfum(n1) = n11
         go to 10230
-10219 end do
-10220 end do
+     end do
+10219 continue
+  end do
+10220 continue
   write (unit = lunit6, fmt = 10222) bus5
-10222 format (/, ' Error stop.   The node name  "busf" on the last-read card is not that', /, &
-       ' of any electric network source node. busf=', a6)
+10222 format (/, ' Error stop.   The node name  "busf" on the last-read card is not that', /, ' of any electric network source node. busf=', a6)
   go to 9600
-10230 do n10 = 1,ntot
+10230 do n10 = 1, ntot
      if (nshare .eq. 2 .and. bus6 .eq. blank) go to 10250
      if (bus6 .ne. bus(n10)) go to 10233
      do n11 = 1,kconst
@@ -1675,15 +1700,17 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
         if (distrf .eq. 0.0) crest(n11) = d1
 10231   tstart(n11) = - 7777.
         go to 10250
-10232 end do
-10233 end do
+     end do
+10232 continue
+  end do
+10233 continue
   if (nshare .ne. 2) go to 90233
   write (unit = lunit6, fmt = 90200) bus6
 90200 format (/, ' Error stop. The node name', '"', a6, '"', ' on the last-read card should be left blank.')
   write (unit = lunit6, fmt = 90202) n1
 90202 format (' this um -', i3, " is requested to share its mechanical network with other um's.  The", &
-       ' specification of all applied torques in this', /, ' mech network should have been placed with', &
-       " the data input for the lowest-numbered um of the set of um's sharing this mech network.")
+           ' specification of all applied torques in this', /, ' mech network should have been placed with', &
+           " the data input for the lowest-numbered um of the set of um's sharing this mech network.")
   call stoptp
 90233 write (unit = lunit6, fmt = 10234) bus6
 10234 format (/, ' Error stop.   The node name  "busm" on the last-read card is not that', /, ' of any electric network source node. busm=', a6)
@@ -1701,16 +1728,16 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   n6 = 1
   read (unit = abuff, fmt = 10261) text3, bus6, distrf
 10261 format (a6, 28x, a6, e14.5)
-  if (noutpr .eq. 0) write (kunit6, 10262)  numum, n5, distrf
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 10262) numum, n5, distrf
 10262 format ('+um -', i3, '   mach card', i3, '.', e14.5)
   go to 10230
-  !     . if flux output is desired :
-  !     . user3 : coil-table input for m32 and newer
+  ! . if flux output is desired :
+  ! . user3 : coil-table input for m32 and newer
 10300 if (iprsup .ge. 4) write (unit = lunit6, fmt = 10301) numum
 10301 format (/, ' *************************************** The coil-table input of um number', i4, ' :')
   n8 = 0
   ncldq = ncld(n1) + nclq(n1) + 3
-  !. adjustment of ncld and nclq for um type 4 :
+  ! . adjustment of ncld and nclq for um type 4 :
   if (jtype(n1) .ne. 4) go to 10304
   ncld(n1) = 1
   nclq(n1) = 1
@@ -1743,7 +1770,8 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      n12 = 1
 13305 n13 = n11 * n12
      if (n13 .ne. 0) go to 13307
-13306 end do
+  end do
+13306 continue
   if (n11 .eq. 0) write (unit = lunit6, fmt = 13206) bus1
 13206 format (/, ' Error stop.  Just-read coil card bears illegal node name:', a6)
   if (n12 .eq. 0) write (unit = lunit6, fmt = 13206) bus2
@@ -1753,7 +1781,8 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   do j = 1, ktab
      ndx1 = ilntab( klntab + j )
      if (bus6 .eq. texvec(ndx1)) go to 13311
-13309 end do
+  end do
+13309 continue
   write (unit = lunit6, fmt = 13207)  bus6
   go to 9600
 13311 ndx1 = kxtcs + j
@@ -1761,12 +1790,13 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 13313 if (iprsup .ge. 4) write (unit = lunit6, fmt = 13314) ncltot, gpar(ncltot), reacl(ncltot), bus1, bus2, bus6, jclout(ncltot), hist(ncltot)
 13314 format (' ******** Coil card nr.', i3, ' :', 2e14.5, 3a6, i1, e14.5)
   go to 13302
-  !.  at this point reading of all um data input is finished
-  !         ******************************************************
-  !. calculation of real gpar :
+  ! . at this point reading of all um data input is finished
+  !   ******************************************************
+  ! . calculation of real gpar :
 500 do n1 = 1, ncltot
      if (gpar(n1) .ne. 0.0) gpar(n1) = 1.0 / gpar(n1)
-502 end do
+  end do
+502 continue
   if (istep .ne. -4567) go to 80510
   if (initum .eq. 1) go to 80510
   write (unit = lunit6, fmt = 80502)
@@ -1774,7 +1804,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
            ' data input for automatic steady-state initialization. Consult the EMTP rule book regarding this usage of the um.')
   call stoptp
 80510 if (nsmach .eq. 0) go to 510
-  !  warning if overflow of etac,ismtac and bustac
+  ! warning if overflow of etac,ismtac and bustac
   n1 = ntotac - ntacb
   if (n1 .le. 10) go to 510
   write (unit = lunit6, fmt = 504) n1
@@ -1795,7 +1825,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
   write (unit = lunit6, fmt = 520)
 520 format (/, ' overflow of um coil table,  increase nclfix on um dimension card to be greater than 6 times the total nr. of used um machines.')
   go to 9600
-  !. machine looping for special processing of some parameters:
+  ! . machine looping for special processing of some parameters:
 530 do n1 = 1, numum
      numoui = numout
      rppair = nppair(n1)
@@ -1804,11 +1834,11 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      omold(n1) = omegm(n1)
      flxd(n1) = 0.0
      flxq(n1) = 0.0
-     !. omold initialization, torque angle for type 1 and 1,
-     !. and coil adjustment for three-phase exc. coils :
+     ! . omold initialization, torque angle for type 1 and 1,
+     ! . and coil adjustment for three-phase exc. coils :
      if (jtype(n1) .gt. 2) go to 921
      thetam(n1) = (thetam(n1) + pi / 2.0) / rppair
-     !. set up of array kcoil(1:numum) :
+     ! . set up of array kcoil(1:numum) :
 921  if (n1 .eq. numum) go to 950
      n2 = n1 + 1
      n3 = 3 + ncld(n1) + nclq(n1)
@@ -1816,7 +1846,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      n3 = n3 + 1
 940  kcoil(n2) = kcoil(n1) + n3
 950  kcl = kcoil(n1)
-     !  making sure that power coils are not tacs controlled :
+     ! making sure that power coils are not tacs controlled :
      do n2 = 1, 3
         n3 = kcl - 1 + n2
         if (jcltac(n3) .eq. 0) go to 958
@@ -1824,30 +1854,31 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 952     format (/, ' Error stop. um number', i4, ' is provided with TACS controlled sources on the power side. This is only allowed for the coils on', /, &
              ' the excitation side. TACS control of power side coils is to be done through the network which is connected to these coils.')
         call stoptp
-958  end do
+     end do
+958  continue
      if (initum .eq. 0) go to 990
      do n2 = 1, 3
         n3 = kcl - 1 + n2
-        !  preparing shift of leakage inductances of power coils *******
-        !  note : the emtp address it of these shifted inductances
-        !         are stored in fpar(kcl).
+        ! preparing shift of leakage inductances of power coils *******
+        ! note : the EMTP address it of these shifted inductances
+        !        are stored in fpar(kcl).
 961     if (nodvo1(n3) .eq. nodvo2(n3)) go to 980
-        !  create new node behind leakage inductance. this node
-        !    becomes the new um power node.
+        ! create new node behind leakage inductance. this node
+        ! becomes the new um power node.
         ntot = ntot + 1
         kode(ntot) = 0
         bus(ntot) = trash
         if (n1 .gt. 5) go to 962
-        n4 = 75 + (n1-1)*3 + n2
+        n4 = 75 + (n1 - 1) * 3 + n2
         bus(ntot) = texta(n4)
-        !  creation of the leakage inductance branche
+        ! creation of the leakage inductance branche
 962     call ibrinc
         it = it + 1
         length(ibr) = 1
-        nr(ibr) = - it
+        nr(ibr) = -it
         tr(it) = 0.0
         emtpc(it) = 0.0
-        d1 = reacl(kcl+2)
+        d1 = reacl(kcl + 2)
         if (d1 .gt. reacl(kcl + 1)) d1 = reacl(kcl + 1)
         if (jtype(n1) .lt. 3) go to 966
         if (jtype(n1) .gt. 5) go to 966
@@ -1873,8 +1904,9 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 975     format (/, ' Additional branches created to move leakage induct to EMTP network for um number', i3, '.', /, 21x, 'node to node', 5x, 'ibr', 6x, 'it', 8x, 'tx(it)')
 976     if (iprsup .ge. 1) write (unit = lunit6, fmt = 977) mbus(ibr), kbus(ibr), ibr, it, tx(it)
 977     format (21x, i4, 4x, i4, 4x, i4, 4x, i4, e14.5)
-980  end do
-     !  creation of speed capacitors for steady-state initialization:
+     end do
+980  continue
+     ! creation of speed capacitors for steady-state initialization:
      ntot = ntot + 1
      if (jtmtac(n1) .le. 0) jtmtac(n1) = - ntot
      bus(ntot) = trash
@@ -1890,10 +1922,9 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
      emtpc(it) = 0.0
      tx(it) = 0.0
      if (iprsup .ge. 1) write (unit = lunit6, fmt = 80980) mbus(ibr), kbus(ibr), ibr, it, tr(it), emtpc(it)
-80980 format (' ********* Potential speed cap : mbus =', i6, ' kbus =', i6, ' ibr =', i6, ' it =', i6, ' tr(it) =', e14.5, &
-          ' emtpc =', e14.5)
-     !  creation of sources to represent im excitation coils for
-     !    steady-state initialization (accommodates kpsour use):
+80980 format (' ********* Potential speed cap : mbus =', i6, ' kbus =', i6, ' ibr =', i6, ' it =', i6, ' tr(it) =', e14.5, ' emtpc =', e14.5)
+     ! creation of sources to represent im excitation coils for
+     ! steady-state initialization (accommodates kpsour use):
      if (jtype(n1) .lt. 3) go to 990
      if (jtype(n1) .gt. 7) go to 990
      n5 = kcl + 3
@@ -1926,8 +1957,10 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 985        format (' ********* Steady-state curr sources for im excit coils :    node  kconst         sfreq         crest         tstop')
            if (iprsup .ge. 1) write (unit = lunit6, fmt = 986) node(kconst), kconst, sfreq(kconst), crest(kconst), tstop(kconst)
 986        format (' *********', 47x, 2i8, 3e14.5)
-987     end do
-988  end do
+        end do
+987     continue
+     end do
+988  continue
 990  n2 = kcoil(n1)
      n3 = n2 + ncld(n1) + nclq(n1) + 2
      if (jtype(n1) .eq. 4) n3 = n3 + 1
@@ -1939,7 +1972,7 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 994  format (' nodvo2 :', 3x, 15i4)
      if (iprsup .ge. 1) write (unit = lunit6, fmt = 995) nodom(n1), nodmum(n1), nodfum(n1)
 995  format (/, ' um mass node nr. = nodom(jm) =', i4, /, ' slack buses :', 3x, 'nodmum(jm) =', i4, 10x, 'nodfum(jm) =', i4)
-     !. determination of pointers for output vector :
+     ! . determination of pointers for output vector :
      if (jtqout(n1) .eq. 0) go to 1000
      numout = numout + 1
      kumout(numout) = n1
@@ -1967,9 +2000,9 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 1010 if (jthout(n1) .eq. 0) go to 1020
      numout = numout + 1
      kumout(numout) = n1
-     !  if output request for thetam (torque angle or rotor position)
+     ! if output request for thetam (torque angle or rotor position)
      if (jthout(n1) .eq. 1) jumout(numout) = 3 + numfix
-     !  if output request for tqexc (for sm type-59 data input)
+     ! if output request for tqexc (for sm type-59 data input)
      if (jthout(n1) .eq. 3) jumout(numout) = 11 + numfix
 1020 n2 = 3 + ncld(n1) + nclq(n1)
      if (jtype(n1) .ne. 4) go to 1030
@@ -1988,36 +2021,39 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
         if (n3 .eq. 1) jumout(numout) = numfix + 8
         if (n3 .eq. 2) jumout(numout) = numfix + 9
         if (n3 .eq. 3) jumout(numout) = numfix + 10
-1040 end do
+     end do
+1040 continue
      if (numout .eq. numoui) go to 1050
      if (n1 .eq. 1) numbus = jumout(numout)
      n11 = jumout(numout)
      if (n11 .gt. numbus) numbus = n11
-1050 end do
+  end do
+1050 continue
   if (numbus .le. ibsfix) go to 1060
   write (unit = lunit6, fmt = 1055)
 1055 format (/, ' Overflow of um output name table,  increase ibsfix on um dimension card.')
   go to 9600
-  !  shifting entries of umoutp vector because of sm type-59
-  !    request for transfer of variables to tacs :
+  ! shifting entries of umoutp vector because of sm type-59
+  ! request for transfer of variables to tacs :
 1060 if (nsmach .eq. 0) go to 18010
   if (nsmtac .eq. 0) go to 18010
   do n5 = 1, nsmtac
      n6 = nsmtac + 1 - n5
      n7 = numout + 3 + n6
      umoutp(n7) = umoutp(n6)
-18000 end do
+  end do
+18000 continue
   do n5 = 1,numout
 18002 umoutp(n5) = 0.0
   end do
   n5 = numout + nsmtac + 3
   umoutp(numout+3) = n5
-  !  umoutp(numout+3) is last entry of umoutp that is used
+  ! umoutp(numout+3) is last entry of umoutp that is used
   umoutp(numout+2) = nangre
-  !  umoutp(numout+2) .ne. 0.0 indicates request for angle transf.
+  ! umoutp(numout+2) .ne. 0.0 indicates request for angle transf.
   umoutp(numout+1) = - 9999.0
-  !  umoutp(numout+1) .eq. -9999. is a flag for request of tacs
-  !  transfer of um variables.
+  ! umoutp(numout+1) .eq. -9999. is a flag for request of tacs
+  ! transfer of um variables.
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 18006) (umoutp(n1), n1 = 1, n5)
 18006 format (/, ' The um output table umoutp(numout + nsmtac + 3):', /, 6(6x,e14.5), /, (6(6x,e14.5)))
 18010 istart = 0
@@ -2036,9 +2072,11 @@ subroutine umdata(reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout
 9600 call stoptp
   return
 end subroutine umdata
+
 !
 !     subroutine umdatb.
 !
+
 subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld, jtmtac, reamdu, reamds, flxds, flxdr, &
      reamqu, flxqs, flxqr, jcdsat, jcqsat, nppair, rotmom, nclq, jtqout, jthout, reamqs, voltum, anglum, nodfum, nodmum, &
      kumout, jumout, jclout, dcoef, jomout, umoutp)
@@ -2067,9 +2105,8 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   character(8) textm, tesm1, tesm2, tesm3, tesm4, tesm5
   character(8) tesm6, tesm7, tesm8, tesm9, text6, text7
   data textm / 'more  ' /
-  data tesm1, tesm2, tesm3, tesm4, tesm5, tesm6, tesm7, tesm8, tesm9 / 'smdata', 'tolera', 'parame', 'all   ', 'none  ' , 'extend', &
-       'finish', ' part ', 'share ' /
-  !     start reading sm type -50 to 59 data input format **********
+  data tesm1, tesm2, tesm3, tesm4, tesm5, tesm6, tesm7, tesm8, tesm9 / 'smdata', 'tolera', 'parame', 'all   ', 'none  ' , 'extend', 'finish', ' part ', 'share ' /
+  ! start reading sm type -50 to 59 data input format **********
 17040 initum = 1
   nsmach = numum
   n1 = numum
@@ -2083,7 +2120,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   do n10 = n5,n6
      fpar(n10) = 0.0
   end do
-  !  *************************** read class 1 sm type-59 data
+  ! *************************** read class 1 sm type-59 data
   do n5 = 1, 3
      if (n5 .ne. 1) call cimage
      n6 = ncltot + n5
@@ -2104,7 +2141,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      if (d2 .eq. 0.0) d2 = statfr
      rotmom(n1) = twopi * d2
      stat59 = d2
-     !  creation of 2 excitation nodes :
+     ! creation of 2 excitation nodes :
      ntot = ntot + 1
      kode(ntot) = 0
      nodvo1(ncltot + 4) = ntot
@@ -2122,14 +2159,16 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
         if (bus1 .ne. bus(n10)) go to 17060
         nodvo1(n6) = n10
         go to 17070
-17060 end do
+     end do
+17060 continue
      write (unit = lunit6, fmt = 17062) bus1
 17062 format (/, ' Error stop.   Just-read sm class 1 card bears illegal node name:', a6)
      go to 9600
-17070 end do
+  end do
+17070 continue
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 17072) n1
 17072 format (/, ' ********* Elements internally created for um nr.', i3, ': node to node', 5x, 'ibr', 6x, 'it' ,2x, 'kswtch', 2x, 'lswtch', 2x, 'kconst', 9x, 'sfreq', /)
-  !  set voltage source for excitation
+  ! set voltage source for excitation
   kconst = kconst + 1
   kconex = kconst
   nodfum(n1) = kconst
@@ -2141,7 +2180,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   tstop(kconst) = fltinf
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 17076) node(kconst), kconst, sfreq(kconst)
 17076 format (' ********* Field voltage source', 23x, i4, 44x, i4, e14.5)
-  !  set series and parallel resistance for excitation
+  ! set series and parallel resistance for excitation
   call ibrinc
   ibrexc = ibr
   it = it + 1
@@ -2151,7 +2190,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   nr(ibr) = - it
   tr(it) = epsiln
   itexc = it
-  !  note : tr(it=itexc) will be changed later to 0.5 * rf
+  ! note : tr(it=itexc) will be changed later to 0.5 * rf
   tx(it) = 0.0
   emtpc(it) = 0.0
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 17080) mbus(ibr), kbus(ibr), ibr, it
@@ -2167,13 +2206,14 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   emtpc(it) = 0.0
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 17082) mbus(ibr),kbus(ibr),ibr,it
 17082 format (' ********* Parall field resist.', 23x, i4, 4x, i4, 4x, i4, 4x, i4)
-  !  shorting damper and eddy current coils
+  ! shorting damper and eddy current coils
   do n5 = 5, 7
      nodvo1(ncltot + n5) = 1
      nodvo2(ncltot + n5) = 1
-17090 end do
-  !  *************************** read class 2 sm type-59 data
-  !  nstan = 1 is a flag for standard manufacturer data
+  end do
+17090 continue
+  ! *************************** read class 2 sm type-59 data
+  ! nstan = 1 is a flag for standard manufacturer data
 17100 nstan = 0
   call cimage
   read (unit = abuff, fmt = 17102) text3
@@ -2190,15 +2230,15 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
 17108 format ('+um -', i3, '   sm-59 class 2, par fit request')
   nstan = 1
   call cimage
-  !  *************************** read class 3 sm type-59 data
+  ! *************************** read class 3 sm type-59 data
 17200 n2 = 0
   read (unit = abuff, fmt = 17210) numasu, nmgen, nmexc, n20, d17, rmvaum, rkvum, agldum, s1um, s2um
 17210 format (3i2, i4, f6.0, 14x, 5e10.6)
   if (numasu .eq. 0) numasu = d17
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 17212)  numum
 17212 format ('+um -', i3, '   sm-59 class 3, general parameters')
-  !   zlsbum is the stator base inductance, if multiplied with
-  !      rotmom(n1), it becomes the stator base impedance.
+  ! zlsbum is the stator base inductance, if multiplied with
+  ! rotmom(n1), it becomes the stator base impedance.
   rmvaum = rmvaum * 1.0d+6
   rkvum = rkvum * 1.0d+3
   zlsbum = rkvum * rkvum
@@ -2225,7 +2265,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   s2qum = 0.0
   go to 17230
 17226 if (noutpr .eq. 0) write (unit = kunit6, fmt = 17228) numum
-17228 format ('+um -',i3, '   sm-59 class 3, q-axis saturation card')
+17228 format ('+um -', i3, '   sm-59 class 3, q-axis saturation card')
   call cimage
 17230 jcqsat(n1) = 0
   d1 = s1qum + s2qum
@@ -2235,7 +2275,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   aglqum = 1.6 * agldum
   s1qum = 1.5 * s1um
   s2qum = 1.5 * s2um
-  !  reading standard manufacturer data :
+  ! reading standard manufacturer data :
 17240 if (ntypsm .eq. 52) go to 17400
   if (ntypsm .eq. 53) go to 17400
   if (ntypsm .eq. 50) go to 17241
@@ -2252,7 +2292,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
 17246 format (7e10.6, i10)
   n2 = n2 + 1
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 17244) numum, n2
-  !  conversion of pu system to stator refered si system :
+  ! conversion of pu system to stator refered si system :
   raum = raum * zlsbum * rotmom(n1)
   xlum = xlum * zlsbum
   xdum = xdum * zlsbum
@@ -2264,14 +2304,15 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   x0um = x0um * zlsbum
   rnum = rnum * zlsbum * rotmom(n1)
   xnum = xnum * zlsbum
-  !   establishing stator and mach table variables
+  ! establishing stator and mach table variables
   if (raum .eq. 0.0) raum = epsiln
   do n5 = 1,3
-     gpar(ncltot+n5) = raum
+     gpar(ncltot + n5) = raum
      if (n5 .eq. 1) go to 17260
-     reacl(ncltot+n5) = xlum
-17260 end do
-  reacl(ncltot+1) = x0um
+     reacl(ncltot + n5) = xlum
+  end do
+17260 continue
+  reacl(ncltot + 1) = x0um
   reamdu(n1) = xdum - xlum
   reamqu(n1) = xqum - xlum
   if (reamqu(n1) .gt. 0.0) go to 17262
@@ -2280,114 +2321,113 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   go to 9600
 17262 if (xqum .ne. xqpum) go to 17290
   if (xqum .ne. xqppum) go to 17280
-  gpar(ncltot+6) = 0.0
-  gpar(ncltot+7) = 0.0
-  reacl(ncltot+6) = 1.0
-  reacl(ncltot+7) = 1.0
+  gpar(ncltot + 6) = 0.0
+  gpar(ncltot + 7) = 0.0
+  reacl(ncltot + 6) = 1.0
+  reacl(ncltot + 7) = 1.0
   go to 17290
 17280 if (fmum .ne. 1.0) go to 17285
-  gpar(ncltot+6) = 0.0
-  reacl(ncltot+6) = 1.0
+  gpar(ncltot + 6) = 0.0
+  reacl(ncltot + 6) = 1.0
 17285 if (fmum .eq. 0.0) fmum = 0.95
   if (fmum .lt. 1.0) xqpum = fmum * xqum
 17290 if (xdum .ne. xdpum) go to 17310
   if (xdum .ne. xdppum) go to 17300
-  gpar(ncltot+4) = 0.0
-  gpar(ncltot+5) = 0.0
-  reacl(ncltot+4) = 1.0
-  reacl(ncltot+5) = 1.0
+  gpar(ncltot + 4) = 0.0
+  gpar(ncltot + 5) = 0.0
+  reacl(ncltot + 4) = 1.0
+  reacl(ncltot + 5) = 1.0
   go to 17310
 17300 if (fmum .ne. 1.0) go to 17305
-  gpar(ncltot+4) = 0.0
-  reacl(ncltot+4) = 1.0
+  gpar(ncltot + 4) = 0.0
+  reacl(ncltot + 4) = 1.0
 17305 if (fmum .eq. 0.0) fmum = 0.3
   if (fmum .lt. 1.0) xdpum = fmum * xdum
-  !  establishing rotor variables :
+  ! establishing rotor variables :
 17310 d1 = reamdu(n1) * reamdu(n1)
-  if (reacl(ncltot+4) .ne. 1.0) go to 17320
-  if (reacl(ncltot+5) .eq. 1.0) go to 17330
-  d10 = d1/(xdum - xdppum)
-  reacl(ncltot+5) = d10 - reamdu(n1)
-  d10 = reamdu(n1) + reacl(ncltot+5)
-  gpar(ncltot+5) = d10/tdppum
+  if (reacl(ncltot + 4) .ne. 1.0) go to 17320
+  if (reacl(ncltot + 5) .eq. 1.0) go to 17330
+  d10 = d1 / (xdum - xdppum)
+  reacl(ncltot + 5) = d10 - reamdu(n1)
+  d10 = reamdu(n1) + reacl(ncltot + 5)
+  gpar(ncltot + 5) = d10 / tdppum
   go to 17330
-17320 d10 = d1/(xdum - xdpum)
-  reacl(ncltot+4) = d10 - reamdu(n1)
-  d10 = reamdu(n1) + reacl(ncltot+4)
-  gpar(ncltot+4) = d10/tdpum
-  if (reacl(ncltot+5) .eq. 1.0) go to 17330
+17320 d10 = d1 / (xdum - xdpum)
+  reacl(ncltot + 4) = d10 - reamdu(n1)
+  d10 = reamdu(n1) + reacl(ncltot + 4)
+  gpar(ncltot + 4) = d10 / tdpum
+  if (reacl(ncltot + 5) .eq. 1.0) go to 17330
   d11 = xdum - xdppum + d10 - 2.0 * reamdu(n1)
   d11 = d11 * d1
   d12 = (xdum - xdppum) * d10 - d1
-  reacl(ncltot+5) = d11/d12 - reamdu(n1)
-  d11 = reamdu(n1) + reacl(ncltot+5)
-  d12 = d1/d10
-  gpar(ncltot+5) = (d11 - d12)/tdppum
+  reacl(ncltot + 5) = d11 / d12 - reamdu(n1)
+  d11 = reamdu(n1) + reacl(ncltot + 5)
+  d12 = d1 / d10
+  gpar(ncltot + 5) = (d11 - d12) / tdppum
 17330 d1 = reamqu(n1) * reamqu(n1)
-  if (reacl(ncltot+6) .ne. 1.0) go to 17340
-  if (reacl(ncltot+7) .eq. 1.0) go to 17500
-  d10 = d1/(xqum - xqppum)
-  reacl(ncltot+7) = d10 - reamqu(n1)
-  d10 = reamqu(n1) + reacl(ncltot+7)
-  gpar(ncltot+7) = d10/tqppum
+  if (reacl(ncltot + 6) .ne. 1.0) go to 17340
+  if (reacl(ncltot + 7) .eq. 1.0) go to 17500
+  d10 = d1 / (xqum - xqppum)
+  reacl(ncltot + 7) = d10 - reamqu(n1)
+  d10 = reamqu(n1) + reacl(ncltot + 7)
+  gpar(ncltot + 7) = d10 / tqppum
   go to 17500
-17340 d10 = d1/(xqum - xqpum)
-  reacl(ncltot+6) = d10 - reamqu(n1)
-  d10 = reamqu(n1) + reacl(ncltot+6)
-  gpar(ncltot+6) = d10/tqpum
-  if (reacl(ncltot+7) .eq. 1.0) go to 17500
+17340 d10 = d1 / (xqum - xqpum)
+  reacl(ncltot + 6) = d10 - reamqu(n1)
+  d10 = reamqu(n1) + reacl(ncltot + 6)
+  gpar(ncltot + 6) = d10 / tqpum
+  if (reacl(ncltot + 7) .eq. 1.0) go to 17500
   d11 = xqum - xqppum + d10 - 2.0 * reamqu(n1)
   d11 = d11 * d1
   d12 = (xqum - xqppum) * d10 - d1
-  reacl(ncltot+7) = d11/d12 - reamqu(n1)
-  d11 = reamqu(n1) + reacl(ncltot+7)
-  d12 = d1/d10
-  gpar(ncltot+7) = (d11 - d12)/tqppum
+  reacl(ncltot + 7) = d11 / d12 - reamqu(n1)
+  d11 = reamqu(n1) + reacl(ncltot + 7)
+  d12 = d1 / d10
+  gpar(ncltot + 7) = (d11 - d12) / tqppum
   go to 17500
-  !  processing standard manufacturer data completed.
-  !  reading of inductance/resistance data input :
+  ! processing standard manufacturer data completed.
+  ! reading of inductance/resistance data input :
 17400 n2 = 0
   read (unit = abuff, fmt = 17410) xfum, xdfum, xfkdum, xdum, xdkdum, xkdum
 17410 format (6e10.6)
   n2 = n2 + 1
-  if (noutpr .eq. 0) write (kunit6, 17412)  numum, n2
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 17412) numum, n2
 17412 format ('+um -', i3, '   sm-59 class 3, R and L param card ', i1)
   call cimage
   read (unit = abuff, fmt = 17420) xkqum, xqkqum, xgkqum, xqum, xqgum, xgum, netrum
 17420 format (6e10.6, 10x, i10)
   n2 = n2 + 1
-  if (noutpr .eq. 0) write (kunit6, 17412)  numum, n2
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 17412)  numum, n2
   call cimage
-  read (unit = abuff, fmt = 17430) reacl(ncltot + 1), gpar(ncltot + 1), gpar(ncltot + 4), gpar(ncltot + 5), &
-       gpar(ncltot + 6), gpar(ncltot + 7), rnum, xnum
+  read (unit = abuff, fmt = 17430) reacl(ncltot + 1), gpar(ncltot + 1), gpar(ncltot + 4), gpar(ncltot + 5), gpar(ncltot + 6), gpar(ncltot + 7), rnum, xnum
 17430 format (8e10.6)
   n2 = n2 + 1
-  if (noutpr .eq. 0) write (kunit6, 17412)  numum, n2
-  !  conversion pu system into stator refered si system and um
-  !    parameter input
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 17412) numum, n2
+  ! conversion pu system into stator refered si system and um
+  ! parameter input
   rnum = rnum * zlsbum * rotmom(n1)
   xnum = xnum * zlsbum
-  if (gpar(ncltot+1) .eq. 0.0) gpar(ncltot+1) = epsiln
-  gpar(ncltot+2) = gpar(ncltot+1)
-  gpar(ncltot+3) = gpar(ncltot+1)
+  if (gpar(ncltot + 1) .eq. 0.0) gpar(ncltot + 1) = epsiln
+  gpar(ncltot + 2) = gpar(ncltot + 1)
+  gpar(ncltot + 3) = gpar(ncltot + 1)
   d1 = zlsbum * rotmom(n1)
   do n5 = 1, 7
-17432 gpar(ncltot+n5) = gpar(ncltot+n5) * d1
+17432 gpar(ncltot + n5) = gpar(ncltot + n5) * d1
   end do
   reamdu(n1) = xdfum
   reamqu(n1) = xqkqum
-  reacl(ncltot+1) = reacl(ncltot+1) * zlsbum
-  reacl(ncltot+2) = (xdum - reamdu(n1)) * zlsbum
-  reacl(ncltot+3) = (xqum - reamqu(n1)) * zlsbum
-  reacl(ncltot+4) = (xfum - reamdu(n1)) * zlsbum
-  reacl(ncltot+5) = (xkdum - reamdu(n1)) * zlsbum
-  reacl(ncltot+6) = (xkqum - reamqu(n1)) * zlsbum
-  reacl(ncltot+7) = (xgum - reamqu(n1)) * zlsbum
+  reacl(ncltot + 1) = reacl(ncltot + 1) * zlsbum
+  reacl(ncltot + 2) = (xdum - reamdu(n1)) * zlsbum
+  reacl(ncltot + 3) = (xqum - reamqu(n1)) * zlsbum
+  reacl(ncltot + 4) = (xfum - reamdu(n1)) * zlsbum
+  reacl(ncltot + 5) = (xkdum - reamdu(n1)) * zlsbum
+  reacl(ncltot + 6) = (xkqum - reamqu(n1)) * zlsbum
+  reacl(ncltot + 7) = (xgum - reamqu(n1)) * zlsbum
   reamdu(n1) = reamdu(n1) * zlsbum
   reamqu(n1) = reamqu(n1) * zlsbum
-  !  reduction factor 1/kf = ifb/isb , stored in dcoef(n1) :
-17500 dcoef(n1) = reamdu(n1)*agldum * rotmom(n1)/rkvum
-  !  start processing saturation :
+  ! reduction factor 1 / kf = ifb / isb, stored in dcoef(n1) :
+17500 dcoef(n1) = reamdu(n1) * agldum * rotmom(n1) / rkvum
+  ! start processing saturation :
   flxds(n1) = 0.0
   flxqs(n1) = 0.0
   reamds(n1) = 0.0
@@ -2396,12 +2436,12 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   flxqr(n1) = 0.0
   if (jcdsat(n1) .eq. 0) jcqsat(n1) = 0
   if (jcdsat(n1) .eq. 0) go to 17510
-  reamds(n1) = 0.2*reamdu(n1)*agldum/(s2um-s1um)
+  reamds(n1) = 0.2 * reamdu(n1) * agldum / (s2um - s1um)
   d1 = reamds(n1) - epsiln
   if (d1 .le. reamdu(n1)) go to 17504
-  write (lunit6,17502)
+  write (unit = lunit6, fmt = 17502)
 17502 format (/, ' Error stop. You have chosen incorrect d - axis saturation parameters s1 and s2.')
-  write (lunit6, 17503) n1
+  write (unit = lunit6, fmt = 17503) n1
 17503 format (/, ' The result is a saturated inductance greater than the unsaturated one. The machine concerned is um number ', i4, '.', /, &
        ' please take realistically either a lower value for s1 or a higher value for s2.')
   go to 9600
@@ -2415,19 +2455,19 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   d10 = 1.0 - reamds(n1) / reamdu(n1)
   d10 = d10 * flxds(n1)
   if (d10 .ge. 0.0) go to 97510
-  write (lunit6,97506)
+  write (unit = lunit6, fmt = 97506)
 97506 format (/, ' Error stop.  You have chosen incorrect d-axis saturation parameters s1 and s2.')
-  write (lunit6, 97507) n1
+  write (unit = lunit6, fmt = 97507) n1
 97507 format (' The result is an unrealistic saturation characteristic with the saturated line-segment not intersecting the unsaturated line-segment', /, &
-       ' in the first quadrant. The machine concerned is um number', i4, '.')
+           ' in the first quadrant. The machine concerned is um number', i4, '.')
   go to 9600
 97510 if (jcqsat(n1) .eq. 0) go to 17510
   reamqs(n1) = 0.2*reamqu(n1)*aglqum/(s2qum-s1qum)
   d1 = reamqs(n1) - epsiln
   if (d1 .le. reamqu(n1)) go to 17508
-  write (lunit6,17506)
+  write (unit = lunit6, fmt = 17506)
 17506 format (/, ' Error stop. You have chosen incorrect q - axis saturation parameters s1 and s2.')
-  write (lunit6,17503) n1
+  write (unit = lunit6, fmt = 17503) n1
   go to 9600
 17508 flxqs(n1) = (s2qum-1.2*s1qum) * rkvum/rotmom(n1)
   d2 = s2qum - s1qum - 0.2*aglqum
@@ -2435,14 +2475,14 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   jcqsat(n1) = 0.0
   go to 17510
 17509 flxqs(n1) = flxqs(n1)/d2
-  d10 = 1.0 - reamqs(n1)/reamqu(n1)
+  d10 = 1.0 - reamqs(n1) / reamqu(n1)
   d10 = d10 * flxqs(n1)
   if (d10 .ge. 0.0) go to 17510
-  write (lunit6,97520)
+  write (unit = lunit6, fmt = 97520)
 97520 format (/, ' Error stop.  You have chosen incorrect q-axis saturation paramaters s1 and s2.')
-  write (lunit6,97507) n1
+  write (unit = lunit6, fmt = 97507) n1
   go to 9600
-  !  start processing neutral element values :
+  ! start processing neutral element values :
 17510 d2 = 1.0d+2
   if (netrum .eq. 1) rnum = d2
   d1 = rnum + xnum * 1.0d+3
@@ -2459,10 +2499,11 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      n7 = ntot
      bus(ntot) = trash
      if (numum .gt. 5) go to 17520
-     bus(ntot) = texta(numum+60)
+     bus(ntot) = texta(numum + 60)
 17520 nodvo2(n6) = n7
-17530 end do
-  !  create high resistances in parallel over coils if
+  end do
+17530 continue
+  ! create high resistances in parallel over coils if
   if (loopss(8) .ne. 0) go to 17536
   do n5 = 1, 3
      call ibrinc
@@ -2474,10 +2515,11 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      tr(it) = 1.0d+8
      tx(it) = 0.0
      emtpc(it) = 0.0
-     if (iprsup .ge. 1) write (lunit6,17531) mbus(ibr),kbus(ibr),ibr,it
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17531) mbus(ibr), kbus(ibr), ibr, it
 17531 format (' ********* High power resist.', 25x, i4, 4x, i4, 4x, i4, 4x, i4)
-17532 end do
-  !  insertion of neutral impedance
+  end do
+17532 continue
+  ! insertion of neutral impedance
 17536 if (d1 .eq. 0.0) go to 17540
   call ibrinc
   it = it + 1
@@ -2489,7 +2531,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   if (xopt .eq. 0.0) tx(it) = xnum * 1.0d+3
   if (xopt .ne. 0.0) tx(it) = xnum * twopi * xopt
   emtpc(it) = 0.0
-  if (iprsup .ge. 1)write (lunit6,17539) mbus(ibr),kbus(ibr),ibr,it
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 17539) mbus(ibr), kbus(ibr), ibr, it
 17539 format (' ********* Neutral impedance', 26x, i4, 4x, i4, 4x, i4, 4x, i4)
   !  set 0.5*rf for external exciter resistance:
   !    (internal field resistance adjusted at 17958)
@@ -2512,21 +2554,21 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   if (noutpr .eq. 0) write (kunit6,17553) numum
 17553 format ('+um -', i3, '   sm-59 class 4, share mech netw')
   if (n1 .ne. n3 .and. n1 .ne. n4) go to 17560
-  write (lunit6,15827) n1
+  write (unit = lunit6, fmt = 15827) n1
 15827 format (/, " Error stop. This um-', i3, ' is supposed to share its mech network with other um's. What should be specified on this card are the", /, &
-       " numbers of these other um's without including the number of the um which is being processed right now.")
+           " numbers of these other um's without including the number of the um which is being processed right now.")
   go to 9600
 17560 n6 = n1
   if (n3 .ne. 0 .and. n3 .lt. n6) n6 = n3
   if (n4 .ne. 0 .and. n4 .lt. n6) n6 = n4
-  !  only the lowest numbered um of the machines sharing
-  !   a common mech network are specified with the mech network
-  !   structure (through the mass cards of class 4). the flag
-  !   jtmtac(n1)=-999999 indicates that um number n1 is not the
-  !   this lowest numbered um.
-  if (n1 .eq. n6) jtmtac(n1) = - ntot
-  if (n1 .ne. n6) jtmtac(n1) = - 999999
-  ntotst = - jtmtac(n6)
+  ! only the lowest numbered um of the machines sharing
+  ! a common mech network are specified with the mech network
+  ! structure (through the mass cards of class 4). the flag
+  ! jtmtac(n1)=-999999 indicates that um number n1 is not the
+  ! this lowest numbered um.
+  if (n1 .eq. n6) jtmtac(n1) = -ntot
+  if (n1 .ne. n6) jtmtac(n1) = -999999
+  ntotst = -jtmtac(n6)
   go to 17571
 17570 ntotst = ntot
 17571 nmgen = ntotst + nmgen
@@ -2547,36 +2589,36 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   fpar(ncltot + 5) = nmexc
   fpar(ncltot + 6) = nexc
 17575 nodom(n1) = nmgen
-  !  set all mechanical nodes
+  ! set all mechanical nodes
   if (jtmtac(n1) .eq. -999999) go to 17700
   ntot = ntot + 2 * numasu
   n6 = ntotst + 1
   do n5 = n6, ntot
 17577 kode(n5) = 0
   end do
-  !  nsmtpr is to store the value of nsmtac of the previous mach.
-  !  nsmtac is the total nr of variables to be passed to tacs.
-  !  ntorq is the number of masses with distrf .ne. 0.0 , thus
-  !    for the masses with an externally applied torque.
-  !  Storage approach in umoutp for each sm :
-  !    the first numasu cells behind nsmtpr is for distrf.
-  !    the second numasu cells for l12 (and of course l23,etc).
-  !    the third numasu cells for l12/r12 .
-  !    then the rest for quantities reflecting tacs transfer.
-  !    after completion of reading all sm data, the 3*numasu
-  !      cells behind nsmtpr are destroyed and the quantities
-  !      for tacs transfer are shifted to behind nsmtpr.
-  !  Storage approach for each variable to be transfered :
-  !   * for voltages (speeds) :
-  !          first cell = code nr provided with neg sign
-  !          second cell = node nr
-  !          third cell = tacs table nr (ntotac)
-  !   * for currents (torques) :
-  !        same as voltages, except third cell = switch table nr.
-  !   * for mass angles :
-  !          first, second and third cell same as voltages
-  !          fourth cell = angle history, angle part
-  !          fifth cell = angle history, omega*deltat/2 part
+  ! nsmtpr is to store the value of nsmtac of the previous mach.
+  ! nsmtac is the total nr of variables to be passed to tacs.
+  ! ntorq is the number of masses with distrf .ne. 0.0 , thus
+  ! for the masses with an externally applied torque.
+  ! Storage approach in umoutp for each sm :
+  ! the first numasu cells behind nsmtpr is for distrf.
+  ! the second numasu cells for l12 (and of course l23,etc).
+  ! the third numasu cells for l12/r12 .
+  ! then the rest for quantities reflecting tacs transfer.
+  ! after completion of reading all sm data, the 3*numasu
+  ! cells behind nsmtpr are destroyed and the quantities
+  ! for tacs transfer are shifted to behind nsmtpr.
+  ! Storage approach for each variable to be transfered :
+  ! * for voltages (speeds) :
+  ! first cell = code nr provided with neg sign
+  ! second cell = node nr
+  ! third cell = tacs table nr (ntotac)
+  ! * for currents (torques) :
+  ! same as voltages, except third cell = switch table nr.
+  ! * for mass angles :
+  ! first, second and third cell same as voltages
+  ! fourth cell = angle history, angle part
+  ! fifth cell = angle history, omega*deltat/2 part
 17580 do n5 = 1, numasu
      if (n5 .eq. 1 .and. jtmtac(n1) .eq. 0) go to 17582
      call cimage
@@ -2584,30 +2626,30 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      read (unit = abuff, fmt = 17600) mlum, n17, distrf, hjum, dsynum, dmutum, spring, dabsum, bus1
 17600 format (i2, i6, 2x, 6e10.6, a6)
      if (mlum .eq. 0) mlum = n17
-     if (noutpr .eq. 0) write (kunit6, 17602)  numum, mlum
+     if (noutpr .eq. 0) write (kunit6, 17602) numum, mlum
 17602 format ('+um -', i3, '   sm-59 class 4, mass nr.', i6)
      if (mlum .le. numasu) go to 17604
-     write (lunit6,17603) mlum,numasu
+     write (unit = lunit6, fmt = 17603) mlum, numasu
 17603 format (/, ' Error stop. The last card indicates the data of mass number', i6, ', and yet in class-3 of', /, &
-          ' of sm data cards you have specified the total number of masses "numas" to be equal to', i6, '.', /, ' Please remove this conflict.')
+           ' of sm data cards you have specified the total number of masses "numas" to be equal to', i6, '.', /, ' Please remove this conflict.')
      go to 9600
-     !  output names of mechanical nodes :
-17604 bus(ntotst+mlum) = bus1
-     !  creating mass element
+     ! output names of mechanical nodes :
+17604 bus(ntotst + mlum) = bus1
+     ! creating mass element
      call ibrinc
      it = it + 1
      kbus(ibr) = ntotst + mlum
      mbus(ibr) = 1
      length(ibr) = 1
-     nr(ibr) = - it
+     nr(ibr) = -it
      tr(it) = 0.0
      tx(it) = 0.0
-     !  the following factor of d10=1.0d+6 is due to micro f or mho.
-     emtpc(it) = d10*d10*hjum/23.73
-     if (copt .ne. 0.0) emtpc(it) = emtpc(it)*copt*twopi
-     if (iprsup .ge. 1) write (lunit6,17605) mlum,mbus(ibr),kbus(ibr),ibr,it
+     ! the following factor of d10=1.0d+6 is due to micro f or mho.
+     emtpc(it) = d10 * d10 * hjum / 23.73
+     if (copt .ne. 0.0) emtpc(it) = emtpc(it) * copt * twopi
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17605) mlum, mbus(ibr), kbus(ibr), ibr, it
 17605 format (' ********* Mass branch nr.', i3, 25x, i4, 4x, i4, 4x, i4, 4x, i4)
-     !  creating spring element :
+     ! creating spring element :
      n6 = nsmtpr + numasu + mlum + 1
      if (mlum .eq. numasu) go to 17608
      if (spring .eq. 0.0) go to 17608
@@ -2619,16 +2661,16 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      nr(ibr) = - it
      tr(it) = 0.0
      !  the following factor of 1.0d+3 is because of milli henry
-     d1 = d10 * spring/0.73756
-     if (xopt .eq. 0.0) tx(it) = 1.0d+3/d1
-     if (xopt .ne. 0.0) tx(it) = twopi*xopt/d1
+     d1 = d10 * spring / 0.73756
+     if (xopt .eq. 0.0) tx(it) = 1.0d+3 / d1
+     if (xopt .ne. 0.0) tx(it) = twopi * xopt / d1
      emtpc(it) = 0.0
-     if (iprsup .ge. 1) write (lunit6,17606) mbus(ibr),kbus(ibr),ibr,it
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17606) mbus(ibr), kbus(ibr), ibr, it
 17606 format (' ********* Spring branch', 30x, i4, 4x, i4, 4x, i4, 4x, i4)
      umoutp(n6) = 1.0/d1
      go to 17610
 17608 umoutp(n6) = 0.0
-     !  creating synchronous damping and synchronous speed source :
+     ! creating synchronous damping and synchronous speed source :
 17610 if (dsynum .eq. 0.0) go to 17620
      ntot = ntot + 1
      nrsyn = nrsyn + 1
@@ -2644,10 +2686,10 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      node(kconst) = ntot
      kode(ntot) = - ntot
      sfreq(kconst) = 0.00001
-     tstart(kconst) = - 1.0
+     tstart(kconst) = -1.0
      tstop(kconst) = fltinf
-     crest(kconst) = rotmom(n1)/nppair(n1)
-     if (iprsup .ge. 1) write (lunit6,17615) node(kconst),kconst,sfreq(kconst)
+     crest(kconst) = rotmom(n1) / nppair(n1)
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17615) node(kconst), kconst, sfreq(kconst)
 17615 format (' ********* Synchr damping voltage source', 14x, i4, 44x, i4, e14.5)
      call ibrinc
      it = it + 1
@@ -2655,12 +2697,12 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      mbus(ibr) = ntot
      length(ibr) = 1
      nr(ibr) = - it
-     tr(it) = 0.73756/dsynum
+     tr(it) = 0.73756 / dsynum
      tx(it) = 0.0
      emtpc(it) = 0.0
-     if (iprsup .ge. 1) write (lunit6,17616) mlum,mbus(ibr),kbus(ibr),ibr,it
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17616) mlum, mbus(ibr), kbus(ibr), ibr, it
 17616 format (' ********* Synchr. damping branch for mass nr.', i3, 5x, i4, 4x, i4, 4x, i4, 4x, i4)
-     !  creating mutual damping :
+     ! creating mutual damping :
 17620 n6 = nsmtpr + 2*numasu + mlum + 1
      if (mlum .eq. numasu) go to 17628
      if (dmutum .eq. 0.0) go to 17628
@@ -2673,14 +2715,14 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      tr(it) = 0.73756/dmutum
      tx(it) = 0.0
      emtpc(it) = 0.0
-     if (iprsup .ge. 1) write (lunit6,17626) mbus(ibr),kbus(ibr),ibr,it
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17626) mbus(ibr), kbus(ibr), ibr, it
 17626 format (' ********* Mutual damping branch', 22x, i4, 4x, i4, 4x, i4, 4x, i4)
      if (spring .eq. 0.0) go to 17628
-     d1 = 0.73756/(d10*spring)
-     umoutp(n6) = d1/tr(it)
+     d1 = 0.73756 / (d10 * spring)
+     umoutp(n6) = d1 / tr(it)
      go to 17630
 17628 umoutp(n6) = 0.0
-     !  creating absolute damping :
+     ! creating absolute damping :
 17630 if (dabsum .eq. 0.0) go to 17640
      call ibrinc
      it = it + 1
@@ -2688,23 +2730,24 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      mbus(ibr) = 1
      length(ibr) = 1
      nr(ibr) = - it
-     tr(it) = 0.73756/dabsum
+     tr(it) = 0.73756 / dabsum
      tx(it) = 0.0
      emtpc(it) = 0.0
-     if (iprsup .ge. 1) write (lunit6,17638) mlum,mbus(ibr),kbus(ibr),ibr,it
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17638) mlum, mbus(ibr), kbus(ibr), ibr, it
 17638 format (' ********* Abslt damping branch for mass nr.', i3, 7x, i4, 4x, i4, 4x, i4, 4x, i4)
-     !  storing applied torque distribution factors distrf in
-     !   umoutp and the corresponding mass node nrs in kumout
+     ! storing applied torque distribution factors distrf in
+     ! umoutp and the corresponding mass node nrs in kumout
 17640 if (distrf .eq. 0.0) go to 17660
      ntorq = ntorq + 1
      kumout(ntorq) = ntotst + mlum
      if (ntorq .ne. 1) go to 17650
      distr1 = distrf
-     !  distr1 is the first mass encountered with distrf .ne. 0.0
-     umoutp(nsmtpr+1) = 1.0d+3
+     ! distr1 is the first mass encountered with distrf .ne. 0.0
+     umoutp(nsmtpr + 1) = 1.0d+3
      go to 17660
-17650 umoutp(nsmtpr+ntorq) = 1.0d+3 * distrf/distr1
-17660 end do
+17650 umoutp(nsmtpr + ntorq) = 1.0d+3 * distrf / distr1
+  end do
+17660 continue
   !  output names of nodes next to measurement switches :
   n6 = numasu - 1
   if (numasu .eq. 1) go to 17672
@@ -2712,7 +2755,8 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      n7 = ntotst + numasu + n5
      n8 = ntotst + n5 + 1
      bus(n7) = bus(n8)
-17670 end do
+  end do
+17670 continue
 17672 n7 = ntotst + 2*numasu
   bus(n7) = trash
   if (numum .gt. 5) go to 17700
@@ -2734,7 +2778,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   do i = 1, n15
      jumout(i) = 0
   end do
-17703 if (noutpr .eq. 0) write (kunit6, 17704)  numum
+17703 if (noutpr .eq. 0) write (unit = kunit6, fmt = 17704) numum
 17704 format ('+um -', i3, '   sm-59 class 5, output card')
   n16 = 0
   n17 = 1
@@ -2749,7 +2793,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   do i = n14, n15
      jumout(i) = 0
   end do
-17709 if (noutpr .eq. 0) write (kunit6, 17704)  numum
+17709 if (noutpr .eq. 0) write (unit = kunit6, fmt = 17704) numum
   go to 17706
 17710 if (n3 .eq. 0) go to 17716
   do n15 = 1,3
@@ -2777,19 +2821,20 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
 17727 jtqout(n1) = 3
   jomout(n1) = 3
   !  interfacing if mass speed output is requested :
-17728 do n15 = 1,numasu
+17728 do n15 = 1, numasu
      if (jumout(n15) .eq. 0) go to 17734
      if (jumout(n15) .eq. 2) go to 17734
      nv = nv + 1
      if (nv .le. lsiz12) go to 17732
-     write (lunit6, 17730) numum
+     write (unit = lunit6, fmt = 17730) numum
 17730 format (/, ' Error stop.   Output nv .gt. lsiz12 for speeds of um -', i3)
      go to 9600
 17732 ibrnch(nv) = ntotst + n15
      jbrnch(nv) = 1
-17734 end do
-  !  set measurement switches and shaft torque outputting :
-  !   (kswsta+1) is first switch to be set from mass 1 to mass 2
+  end do
+17734 continue
+  ! set measurement switches and shaft torque outputting :
+  ! (kswsta+1) is first switch to be set from mass 1 to mass 2
   if (jtmtac(n1) .eq. -999999) go to 17800
   kswsta = kswtch
   n16 = numasu - 1
@@ -2798,33 +2843,34 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      kswtch = kswtch + 1
      ndx1 = kswtch + lswtch
      kmswit(kswtch) = ntotst + n15 + numasu
-     kmswit(ndx1)  =  ntotst + n15
+     kmswit(ndx1) = ntotst + n15
      kswtyp(kswtch) = 0
-     tclose(kswtch) = - 1.0
+     tclose(kswtch) = -1.0
      topen(kswtch) = fltinf
      kpos(kswtch) = 11
      if (jumout(n15) .eq. 2) kpos(kswtch) = - 11
      if (jumout(n15) .eq. 3) kpos(kswtch) = - 11
-     if (iprsup .ge. 1) write (lunit6,17738) kmswit(kswtch),kmswit(ndx1),kswtch,lswtch
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17738) kmswit(kswtch), kmswit(ndx1), kswtch, lswtch
 17738 format (' ********* Torque sensor switch', 23x, i4, 4x, i4, 20x, i4, 4x, i4)
-17740 end do
-  !  create small series resistance for applied torque to um mass
+  end do
+17740 continue
+  ! create small series resistance for applied torque to um mass
 17742 call ibrinc
   it = it + 1
   kbus(ibr) = nmgen
-  mbus(ibr) = ntotst + 2*numasu
+  mbus(ibr) = ntotst + 2 * numasu
   length(ibr) = 1
-  nr(ibr) = - it
+  nr(ibr) = -it
   tr(it) = 1.0
   tx(it) = 0.0
   emtpc(it) = 0.0
-  if (iprsup .ge. 1) write (lunit6,17748) mbus(ibr),kbus(ibr),ibr,it
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 17748) mbus(ibr), kbus(ibr), ibr, it
 17748 format (' ********* Small series resist for apll gen torque', 4x, i4, 4x, i4, 4x, i4, 4x, i4)
   go to 17800
 17750 n15 = 1
   read (unit = abuff, fmt = 17752) nparum, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12
 17752 format (10x, 12i5)
-  if (noutpr .eq. 0) write (kunit6, 17704)  numum
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 17704) numum
   if (text3 .ne. tesm4) go to 17756
   if (jtmtac(n1) .eq. -999999) go to 17710
   do n15 = 1,numasu
@@ -2840,8 +2886,8 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   n16 = 0
   n17 = 0
   go to 17708
-  !  in case of new sm-59 output request usage :
-17770 if (noutpr .eq. 0) write (kunit6,17772) numum
+  ! in case of new sm-59 output request usage :
+17770 if (noutpr .eq. 0) write (unit = kunit6, fmt = 17772) numum
 17772 format ('+um -', i3, '   sm-59 class 4, termination card')
 17774 call cimage
   read (unit = abuff, fmt = 17701) text3
@@ -2851,25 +2897,25 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   if (noutpr .eq. 0) write (kunit6,17778) numum,ngroup
 17778 format ('+um -', i3, '   sm-59 class 5, output group', i2)
   if (ngroup .gt. 0 .and. ngroup .le. 4) go to 97778
-  write (lunit6,97777) ngroup
+  write (unit = lunit6, fmt = 97777) ngroup
 97777 format (/, ' Error stop. The last-read card is an sm-59 output request card for output group', i2, '. This is an illegal output group as you', /, &
-       ' could find out by consulting the EMTP rule book regarding the sm-59 output request rules.')
+           ' could find out by consulting the EMTP rule book regarding the sm-59 output request rules.')
   go to 9600
-97778 go to (17782,17779,17793,17798), ngroup
-  !  treatment of group 2 (angles) output request : ignored
-17779 if (noutpr .eq. 0) write (lunit6,17780)
+97778 go to (17782, 17779, 17793, 17798), ngroup
+  ! treatment of group 2 (angles) output request : ignored
+17779 if (noutpr .eq. 0) write (unit = lunit6, fmt = 17780)
 17780 format (/, ' Warning : this output request for mass angles is ignored by the um. They are to be obtained from the TACS output', /, &
-       ' after request of transfer into TACS through the class-6 sm-59 data input cards (consult EMTP rule book)', /)
+           ' after request of transfer into TACS through the class-6 sm-59 data input cards (consult EMTP rule book)', /)
   go to 17774
-  !   treatment of group 1 (electrical variables) output request :
+  ! treatment of group 1 (electrical variables) output request :
 17782 if (nall .eq. 0) go to 17784
   kssout = 1
   if (nmexc .ne. 0) jthout(n1) = 3
   if (nmexc .eq. 0) jthout(n1) = 1
   jtqout(n1) = 3
   jomout(n1) = 3
-  do i = 1,7
-     jclout(ncltot+i) = 1
+  do i = 1, 7
+     jclout(ncltot + i) = 1
   end do
   go to 17774
 17784 do i = 1, 12
@@ -2880,13 +2926,15 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
         if (j .gt. 7) n2 = j - 7
         jclout(ncltot+n2) = 1
         go to 17786
-17785 end do
+     end do
+17785 continue
      if (ndum(i) .eq. 15) jthout(n1) = 3
      if (ndum(i) .ne. 14) go to 17786
      jtqout(n1) = 1
      jomout(n1) = 1
      if (jthout(n1) .eq. 0) jthout(n1) = 1
-17786 end do
+  end do
+17786 continue
   n3 = 0
   do i = 1, 12
      if (ndum(i) .eq. 0) go to 17792
@@ -2897,17 +2945,19 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
 17788   format (/, ' Warning : simultaneous request of Park domain currents and real currents of the power windings of this um nr.', i3, ' is not', /, &
              ' honored. The output will only display the real currents.', /)
         go to 17792
-17790   jclout(ncltot+j) = 2
+17790   jclout(ncltot + j) = 2
         go to 17792
-17791 end do
+     end do
+17791 continue
      if (ndum(i) .lt. 12) go to 17792
      if (ndum(i) .gt. 13) go to 17792
      jtqout(n1) = 3
      jomout(n1) = 3
-17792 end do
-  if (noutpr .eq. 0 .and. n3 .ne. 0) write (lunit6,17788) num
+  end do
+17792 continue
+  if (noutpr .eq. 0 .and. n3 .ne. 0) write (unit = lunit6, fmt = 17788) num
   go to 17774
-  !   treatment of group 3 (mass speeds) output request :
+  ! treatment of group 3 (mass speeds) output request :
 17793 n2 = 2
   n3 = 1
 17794 if (jtmtac(n1) .ne. -999999) go to 17796
@@ -2919,49 +2969,51 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   do i = 1, numasu
      if (jumout(i) .eq. n2) jumout(i) = 3
      if (jumout(i) .eq. 0) jumout(i) = n3
-17797 end do
+  end do
+17797 continue
   go to 17774
-97797 do i = 1,12
+97797 do i = 1, 12
      n15 = ndum(i)
      if (n15 .eq. 0) go to 97798
      if (jumout(n15) .eq. n2) jumout(n15) = 3
      if (jumout(n15) .eq. 0) jumout(n15) = n3
-97798 end do
+  end do
+97798 continue
   go to 17774
-  !   treatment of group 4 (torques) output request :
+  ! treatment of group 4 (torques) output request :
 17798 n2 = 1
   n3 = 2
   go to 17794
-  !   blank card ending sm-59 output request :
-17799 if (noutpr .eq. 0) write (kunit6,97799) numum
+  ! blank card ending sm-59 output request :
+17799 if (noutpr .eq. 0) write (unit = kunit6, fmt = 97799) numum
 97799 format ('+um -', i3, '   sm-59 class 5, termination card')
   go to 17728
-  !  *************************** read class 6 sm type-59 data
+  ! *************************** read class 6 sm type-59 data
 17800 nangre = 0
   nexcsw = 0
   ntacb = ntotac
-  !  nangre is first entry of umoutp that indicates angle transfer
+  ! nangre is first entry of umoutp that indicates angle transfer
   n19 = 0
-  !  n19 = 1 is flag for tacs control of total applied torque.
+  ! n19 = 1 is flag for tacs control of total applied torque.
   niunrs = iuty(kiuty+1)
 17810 call cimage
   n17 = 0
-  !  n17 is in reading class 6 reserved as flag for modified
-  !    format of code numbers if n20 .eq. 0
+  ! n17 is in reading class 6 reserved as flag for modified
+  ! format of code numbers if n20 .eq. 0
   read (unit = abuff, fmt = 17812) n20, bus1, n2
 17812 format (i2,a6,i6)
   if (n20 .eq. 0) n17 = 3 * limasu
   if (n20 .eq. 0) n20 = n2
   if (n20 .eq. 0) go to 17816
-  if (noutpr .eq. 0) write (kunit6, 17814)  numum
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 17814) numum
 17814 format ('+um -', i3, '   sm-59 class 6, TACS request')
 17816 if (bus1 .ne. tesm7) go to 17820
   read (unit = abuff, fmt = 17817) bus1, bus2
 17817 format (2x,2a6)
   if (bus2 .ne. tesm8) go to 17818
-  write (lunit6,17053)
+  write (unit = lunit6, fmt = 17053)
   go to 9600
-17818 if (noutpr .eq. 0) write (kunit6, 17819)  numum
+17818 if (noutpr .eq. 0) write (unit = kunit6, fmt = 17819) numum
 17819 format ('+um -', i3, '   reading completed')
   if (n19 .eq. 0) go to 17890
   go to 17900
@@ -2971,8 +3023,9 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   do n5 = 1, ktab
      ndx1 = ilntab( klntab + n5 )
      if (bus1 .eq. texvec(ndx1)) go to 17827
-17825 end do
-  write (lunit6,17826) bus1
+  end do
+17825 continue
+  write (unit = lunit6, fmt = 17826) bus1
 17826 format (/, ' Error stop.   Just-read card requesting control by TACS, bears unrecognized', /, ' TACS name :', a6)
   go to 9600
 17827 tstop(kconex) = 0.0
@@ -2985,7 +3038,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   sfreq(kconst) = n5
   tstart(kconst) = 0.0
   tstop(kconst) = fltinf
-  if (iprsup .ge. 1) write (lunit6,17828) node(kconst),kconst,sfreq(kconst)
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 17828) node(kconst), kconst, sfreq(kconst)
 17828 format (' ********* TACS originated field volt type-60 source', 2x, i4, 44x, i4, e14.5)
   write (lunit6, 17829)
 17829 format (/, ' Note: the EMTP connectivity listing will show one of the nodes bearing the TACS name as used in the last read card. No reason', /, &
@@ -3005,37 +3058,37 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
 15481 ndy5 = ndy5 + 5
   end do
   kill = 108
-  lstat( 19 ) = 15481
-  lstat( 15 ) = lbstac
-  lstat( 16 ) = ntotac
-  lstat( 14 ) = n20
-  lstat( 17 ) = -1
-  lstat( 13 ) = 0
+  lstat(19) = 15481
+  lstat(15) = lbstac
+  lstat(16) = ntotac
+  lstat(14) = n20
+  lstat(17) = -1
+  lstat(13) = 0
   bus6 = bus1
   jr = 1
   return
 15482 ntotac = ntotac + 1
-  ud1( ndy5+2 ) = ntotac
-  if ( ntotac .le. lbstac )  go  to 17834
-  write (lunit6,17831)
+  ud1(ndy5 + 2) = ntotac
+  if (ntotac .le. lbstac) go to 17834
+  write (unit = lunit6, fmt = 17831)
 17831 format (/, ' Error stop.   Overflow lbstac during execution of request in umdata to')
-  write (lunit6,17832) numum
+  write (unit = lunit6, fmt = 17832) numum
 17832 format (/, ' pass um variables to TACS. The machine in question, um -', i3, ',is provided')
-  write (lunit6,17833)
+  write (unit = lunit6, fmt = 17833)
 17833 format (/, ' with sm type-59 data input.')
   go to 9600
 17834 ismtac(ntotac) = n20
   if (n20 .ne. n4) go to 17840
-  n3 = 3*numasu + nsmtac
-  umoutp(n3+1) = - 5.0
-  umoutp(n3+2) = nexc
-  umoutp(n3+3) = ntotac
+  n3 = 3 * numasu + nsmtac
+  umoutp(n3 + 1) = -5.0
+  umoutp(n3 + 2) = nexc
+  umoutp(n3 + 3) = ntotac
   nsmtac = nsmtac + 3
   go to 17810
-  !  request for transfer to tacs of exciter current :
+  ! request for transfer to tacs of exciter current :
 17840 n4 = 74 + n17
   if (n20 .ne. n4) go to 17850
-  !    create additional exciter node to insert switch
+  ! create additional exciter node to insert switch
   ntot = ntot + 1
   kode(ntot) = 0
   nexcsw = ntot
@@ -3043,7 +3096,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   if (numum .gt. 5) go to 17842
   n3 = 41 + (numum - 1)*4
   bus(nexcsw) = texta(n3+3)
-  !    create switch in exciter circuit
+  ! create switch in exciter circuit
 17842 kswtch = kswtch + 1
   kswexc = kswtch
   ndx1 = kswtch + lswtch
@@ -3053,74 +3106,75 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   tclose(kswtch) = - 1.0
   topen(kswtch) = fltinf
   kpos(kswtch) = 11
-  if (iprsup .ge. 1) write (lunit6,17843) kmswit(kswtch),kmswit(ndx1),kswtch,lswtch
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 17843) kmswit(kswtch), kmswit(ndx1), kswtch, lswtch
 17843 format (' ********* Field current sensor switch', 16x, i4, 4x, i4, 20x, i4, 4x, i4)
-  !    connect exciter series resistance to new switch node
+  ! connect exciter series resistance to new switch node
   mbus(ibrexc) = nexcsw
-  n3 = 3*numasu + nsmtac
-  umoutp(n3+1) = - 4.0
-  umoutp(n3+2) = kswexc
-  umoutp(n3+3) = ntotac
+  n3 = 3 * numasu + nsmtac
+  umoutp(n3 + 1) = - 4.0
+  umoutp(n3 + 2) = kswexc
+  umoutp(n3 + 3) = ntotac
   nsmtac = nsmtac + 3
   go to 17810
-  !  transfer to solvum for angle history calculations if angle
-  !    transfer to tacs is requested :
+  ! transfer to solvum for angle history calculations if angle
+  ! transfer to tacs is requested :
 17850 if (jtmtac(n1) .eq. -999999) go to 17810
   if (n20 .gt. limasu) go to 17858
-  !  note : in case that just one mass angle is requested to be
-  !         passed to tacs, then the angle history of all masses
-  !         needs to be transfered to solvum.
+  ! note : in case that just one mass angle is requested to be
+  ! passed to tacs, then the angle history of all masses
+  ! needs to be transfered to solvum.
   if (nangre .ne. 0) go to 17854
   nangre = nsmtac + 1
   do n5 = 1, numasu
-     n3 = 3*numasu + nsmtac
+     n3 = 3 * numasu + nsmtac
      n4 = nsmtpr + n5
-     umoutp(n3+1) = - 299
-     umoutp(n3+2) = ntotst + n5
-     umoutp(n3+3) = 0.0
-     umoutp(n3+4) = umoutp(n4)
-     umoutp(n3+5) = umoutp(numasu+n4)
+     umoutp(n3 + 1) = - 299
+     umoutp(n3 + 2) = ntotst + n5
+     umoutp(n3 + 3) = 0.0
+     umoutp(n3 + 4) = umoutp(n4)
+     umoutp(n3 + 5) = umoutp(numasu + n4)
      nsmtac = nsmtac + 5
      if (n5 .ne. 1) go to 17852
-     umoutp(n3+1) = - 300.0 - kswsta
-     umoutp(n3+4) = 5.0 * numasu
-     umoutp(n3+5) = numasu
-17852 end do
-  !  request for transfer to tacs of mass angles
+     umoutp(n3 + 1) = -300.0 - kswsta
+     umoutp(n3 + 4) = 5.0 * numasu
+     umoutp(n3 + 5) = numasu
+  end do
+17852 continue
+  ! request for transfer to tacs of mass angles
 17854 continue
-  n3 = 3*numasu + nangre
+  n3 = 3 * numasu + nangre
   if (n20 .eq. 1) go to 17857
-  n6 = n3 + (n20-1)*5
-  umoutp(n6) = - 3.0
-17857 n6 = n3 + 2 + (n20-1)*5
+  n6 = n3 + (n20 - 1) * 5
+  umoutp(n6) = -3.0
+17857 n6 = n3 + 2 + (n20 - 1) * 5
   umoutp(n6) = ntotac
   go to 17810
-  !  request for transfer to tacs of mass speeds :
+  ! request for transfer to tacs of mass speeds :
 17858 if (jtmtac(n1) .eq. -999999) go to 17810
-  n10 = 2*limasu
+  n10 = 2 * limasu
   if (n20 .gt. n10) go to 17860
-  n3 = 3*numasu + nsmtac
-  umoutp(n3+1) = - 2.0
-  umoutp(n3+2) = ntotst + n20 - limasu
-  umoutp(n3+3) = ntotac
+  n3 = 3 * numasu + nsmtac
+  umoutp(n3 + 1) = -2.0
+  umoutp(n3 + 2) = ntotst + n20 - limasu
+  umoutp(n3 + 3) = ntotac
   nsmtac = nsmtac + 3
   go to 17810
-  !  request for transfer to tacs of shaft torques :
+  ! request for transfer to tacs of shaft torques :
 17860 if (jtmtac(n1) .eq. -999999) go to 17810
   n10 = 3 * limasu
   if (n20 .gt. n10) go to 17870
-  n3 = 3*limasu + nsmtac
-  umoutp(n3+1) = - 1.0
-  umoutp(n3+2) = kswsta + n20 - 2*limasu
-  umoutp(n3+3) = ntotac
+  n3 = 3 * limasu + nsmtac
+  umoutp(n3 + 1) = -1.0
+  umoutp(n3 + 2) = kswsta + n20 - 2 * limasu
+  umoutp(n3 + 3) = ntotac
   nsmtac = nsmtac + 3
   go to 17810
-  !  set type-14 and 18 for electromech. exciter torque from tacs:
+  ! set type-14 and 18 for electromech. exciter torque from tacs:
 17870 n4 = 80 + n17
   if (n20 .ne. n4) go to 17880
-  write (lunit6,17872) numum
+  write (unit = lunit6, fmt = 17872) numum
 17872 format (/, ' Note : this TACS interface request regarding the exciter torque for um number', i4, ',  is no longer in effect. The influence of', /, &
-       ' the exciter torque will be automatically included in exactly the same way as with the sm type-59 code.', /)
+           ' the exciter torque will be automatically included in exactly the same way as with the sm type-59 code.', /)
   go to 17810
   ! request for tacs control of total applied torque :
 17880 if (jtmtac(n1) .eq. -999999) go to 17810
@@ -3130,10 +3184,11 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   do n10 = 1, ktab
      ndx1 = ilntab( klntab + n10 )
      if (bus1 .eq. texvec(ndx1)) go to 17890
-17882 end do
-  write (lunit6,17826) bus1
+  end do
+17882 continue
+  write (unit = lunit6, fmt = 17826) bus1
   go to 9600
-  !  set type-14 sources for applied torques :
+  ! set type-14 sources for applied torques :
 17890 if (jtmtac(n1) .eq. -999999) go to 17899
   do n5 = 1, ntorq
      if (n19 .ne. 1) go to 17894
@@ -3143,7 +3198,7 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      node(kconst) = - 1
      tstart(kconst) = - 1.0
      tstop(kconst) = fltinf
-     if (iprsup .ge. 1) write (lunit6,17892) node(kconst),kconst,sfreq(kconst)
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17892) node(kconst), kconst, sfreq(kconst)
 17892 format (' ********* type-17 source for next TACS control', 7x, i4, 44x, i4, e14.5)
 17894 kconst = kconst + 1
      if (n5 .eq. 1) nodmum(n1) = kconst
@@ -3158,15 +3213,16 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      tstart(kconst) = - 7777.0
      tstop(kconst) = fltinf
      sfreq(kconst) = 0.00001
-     if (iprsup .ge. 1) write (lunit6,17896) node(kconst),kconst,sfreq(kconst)
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17896) node(kconst), kconst, sfreq(kconst)
 17896 format (' ********* Applied torque source', 22x, i4, 44x, i4, e14.5)
-17898 end do
+  end do
+17898 continue
 17899 if (n19 .eq. 0) go to 17900
   go to 17810
   ! ********************* finish statements of sm type-59 data
 17900 ncltot = ncltot + 7
   if (ncltot .le. nclfix) go to 17905
-  write (lunit6,17904) ncltot
+  write (unit = lunit6, fmt = 17904) ncltot
 17904 format (/, ' Overflow of u.m. coil table, ncltot = ', i5, ' increase nclfix on um dimension card.')
   go to 9600
 17905 do n5 = 1, numasu
@@ -3177,10 +3233,10 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   do nk = mjm, ncltot
      jcltac(nk) = 0
   end do
-  if (iprsup .ge. 1) write (lunit6,17930) ntotst,numasu,nrsyn,nmgen,nmexc
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 17930) ntotst, numasu, nrsyn, nmgen, nmexc
 17930 format (/, ' ********* Created nodes for mechanical system : first node nr = ntotst + 1, last node nr = ntotst + 2 * numasu + nrsyn .', /, &
        30x, 'ntotst', 2x, 'numasu', 2x, ' nrsyn', 2x, ' nmgen', 2x, ' nmexc', /, 32x, i4, 4x, i4, 4x, i4, 4x, i4, 4x, i4)
-  if (iprsup .ge. 1) write (lunit6,17932) nexc, nexcsw
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 17932) nexc, nexcsw
 17932 format (/, ' ********* Created nodes for field circuit : nexc = ', i4, 10x, 'nexcsw = ', i4)
   !  shifting umoutp entries with 3*numasu to behind nsmtpr :
   n6 = nsmtac - nsmtpr
@@ -3190,7 +3246,8 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
      n4 = n3 + 3*numasu
      umoutp(n3) = umoutp(n4)
      if (n4 .gt. n7) umoutp(n4) = 0.0
-17950 end do
+  end do
+17950 continue
   if (nparum .ne. 0) go to 17951
   if (iprsup .lt. 3) go to 17958
 17951 write (unit = lunit6, fmt = 17952) n1, reamdu(n1), reamds(n1), reamqu(n1), reamqs(n1), flxds(n1), flxqs(n1)
@@ -3199,47 +3256,50 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
 17953 format (/, ' coil     resistance    leakage inductance')
   n6 = ncltot - 6
   do n5 = n6, ncltot
-     if (gpar(n5) .eq. 0.0) write (lunit6,17954) n5
+     if (gpar(n5) .eq. 0.0) write (unit = lunit6, fmt = 17954) n5
 17954 format (1x, i4, 10x, ' dummy coil')
      if (gpar(n5) .eq. 0.0) go to 17957
-     write (lunit6,17955) n5,gpar(n5),reacl(n5)
+     write (unit = lunit6, fmt = 17955) n5, gpar(n5), reacl(n5)
 17955 format (1x, i4, 2x, 2e14.5)
-     if (n5 .eq. ncltot) write (lunit6,17956)
+     if (n5 .eq. ncltot) write (unit = lunit6, fmt = 17956)
 17956 format (/, ' ')
-17957 end do
-  !  set 0.5*rf for internal field resistance :
-17958 gpar(ncltot-3) = 0.5 * gpar(ncltot-3)
-  n5 = nsmtac + 3*numasu
+  end do
+17957 continue
+  ! set 0.5 * rf for internal field resistance :
+17958 gpar(ncltot - 3) = 0.5 * gpar(ncltot - 3)
+  n5 = nsmtac + 3 * numasu
   if (n5 .le. iotfix) go to 17970
-  write (lunit6, 17960)
+  write (unit = lunit6, fmt = 17960)
 17960 format (/, ' Overflow of um output table, increase in card for absolute um dimensions', /, ' value of iotfix.', /, &
-       ' Remark : if sm type-59 data input is included, then iotfix is also', /, ' related to outputs of mech. Systems,  in all sm type-59 data machines.')
+           ' Remark : if sm type-59 data input is included, then iotfix is also', /, ' related to outputs of mech. Systems,  in all sm type-59 data machines.')
   go to 9600
 17970 jf = 1
   return
-  !  end reading sm type-59 data input $$$$$$$$$$$$$$$$$$$$$$$$$$
+  ! end reading sm type-59 data input $$$$$$$$$$$$$$$$$$$$$$$$$$
 9600 call stoptp
   return
 end subroutine umdatb
+
 !
 !     smdat.
 !
+
 subroutine smdat (mtype)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     this module is used only by type-59 brandwajn  s.m.  model
+  ! this module is used only by type-59 brandwajn  s.m.  model
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
   include 'syncom.ftn'
   include 'synmac.ftn'
-  !     the following array is sized 3 (nn4-1) * n50 ( n50 = 50  at pre-
-  !     sent ) + nn10 ( no. of class 1 requests <=15 at present> ) ******
-  dimension  npbuf( 165 )
-  equivalence (ismdat(22),ipout), (ismdat(23),n56), ( ismdat(24), ismold), (ismdat(25),nn10), (ismdat(26),nn4), (ismdat(27),nn14)
+  ! the following array is sized 3 (nn4-1) * n50 ( n50 = 50  at pre-
+  ! sent ) + nn10 ( no. of class 1 requests <=15 at present> ) ******
+  dimension  npbuf(165)
+  equivalence (ismdat(22), ipout), (ismdat(23), n56), (ismdat(24), ismold), (ismdat(25), nn10), (ismdat(26), nn4), (ismdat(27), nn14)
   dimension massex(1)
-  equivalence (histq(1),massex(1))
+  equivalence (histq(1), massex(1))
   character(8) text1, text2, text3
-  character(8) text7, text8,        text10, text11, text12
+  character(8) text7, text8, text10, text11, text12
   character(8) text16, text17
   character(8) text18, text19, text20, text21
   data  text1  / 'finish' /
@@ -3256,31 +3316,31 @@ subroutine smdat (mtype)
   data  text20 / 'pf    ' /
   data  text21 / 'dc    ' /
   data  text16 / ' part ' /
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
+  if (iprsup  .ge.  1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module smdat."')
-  !     define no. of outputs in class 1 (nn10) and no. of classes (nn4)**
+  ! define no. of outputs in class 1 (nn10) and no. of classes (nn4)**
   nn10 = 15
   nn4 = 4
   nn14 = 14
   n50 = 50
   nright = 0
   nfrfld = 1
-  d10  =  1.0  / fltinf
-  if ( numsm .gt. 1 ) go to 123
+  d10 = 1.0 / fltinf
+  if (numsm .gt. 1) go to 123
   call rinfin
-  n19 = locf( flstat(1) ) - locf(  voltbc(1) )
-  if (  n19  .ge. 41 )     go  to  8258
+  n19 = locf (flstat(1)) - locf (voltbc(1))
+  if (n19 .ge. 41) go to 8258
   kill = 180
-  lstat( 18 ) = nchain
-  lstat( 19 ) = 8258
-  lstat( 17 ) = 41
-  lstat( 16 ) = n19
+  lstat(18) = nchain
+  lstat(19) = 8258
+  lstat(17) = 41
+  lstat(16) = n19
   go to 9999
-8258 d8  =  3.0 / 2.0
-  thtw  =  sqrtz( d8 )
+8258 d8 = 3.0 / 2.0
+  thtw = sqrtz (d8)
   athtw = 1.0 / thtw
   d8 = 3.0
-  sqrt3 = sqrtz( d8 )
+  sqrt3 = sqrtz (d8)
   asqrt3 = 1.0 / sqrt3
   sqrt32 = sqrt3 * onehaf
   omdt = omega * deltat
@@ -3292,7 +3352,7 @@ subroutine smdat (mtype)
   ibrold = ibr
   ismold = 0
   ipout = 0
-  n56 = ( nn4-1 ) * n50 + nn10
+  n56 = (nn4 - 1) * n50 + nn10
   mfirst = 6 * limass
   d8 = nbyte(3)
   d8 = d8 / nbyte(4)
@@ -3303,47 +3363,47 @@ subroutine smdat (mtype)
   ism = 0
   fm = -2.0
   k = nst + 1
-  if ( k .le. lsyn )  go  to  8818
+  if (k .le. lsyn) go to 8818
   kill = 1
-  lstat( 19 ) = 123
-  lstat( 16 ) = 17
+  lstat(19) = 123
+  lstat(16) = 17
   go to 9999
 8818 j30 = 30 * jk - 29
-  ismdat( j30 ) = 0
-  statfr = sfreq( kconst-1 )
+  ismdat(j30) = 0
+  statfr = sfreq(kconst - 1)
   idelta = 0
-  if ( iprsup  .ge.  1 ) write (lunit6, 3604)  k,  nst, mtype, kconst, numsm
-3604 format (/, " At start of  'smdat'  ...       k     nst   mtype  kconst   numsm  ",/,  24x, 10i8)
-  !     read input card using cimage
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 3604) k, nst, mtype, kconst, numsm
+3604 format (/, " At start of  'smdat'  ...       k     nst   mtype  kconst   numsm  ", /, 24x, 10i8)
+  ! read input card using cimage
 1 call cimage
-  if ( kill  .gt.  0 )   go to 9999
+  if (kill .gt. 0) go to 9999
   nright = -2
   n11 = kolbeg
   kolbeg = 1
-  call freone ( d1 )
+  call freone (d1)
   nright = 0
-  !     check for key word   'tolerances'  (or  't' ).
-  if ( texta6(1)  .eq.  text19 )   go to 7103
-  if ( texta6(1)  .ne.  text2 )   go to  7106
-  if ( texta6(2)  .ne.  text3 )   go to  7106
-7103 if ( n11  .gt.  0 )   go to 7104
+  ! check for key word   'tolerances'  (or  't' ).
+  if (texta6(1) .eq. text19) go to 7103
+  if (texta6(1) .ne. text2) go to 7106
+  if (texta6(2) .ne. text3) go to 7106
+7103 if (n11 .gt. 0) go to 7104
   read (unit = abuff, fmt = 3609) d1, d2, d3, n9
 3609 format (10x, 3e10.0, 10x, i10)
   go to 7105
 7104 nfrfld = 1
-  call freone ( d1 )
-  call freone ( d2 )
-  call freone ( d3 )
-  call frefld ( voltbc(1) )
+  call freone (d1)
+  call freone (d2)
+  call freone (d3)
+  call frefld (voltbc(1))
   n9 = voltbc(1)
-7105 if ( d1  .gt.  0.0 )   epsuba = d1
-  if ( d2  .gt.  0.0 )   epomeg = d2
-  if ( d3  .gt.  0.0 )   epdgel = d3
-  if ( n9  .gt.  0 )   iprsov(37) = n9
-  if ( noutpr  .eq.  0 ) write (kunit6, 3610)  epsuba, epomeg, epdgel, iprsov(37)
+7105 if (d1 .gt. 0.0) epsuba = d1
+  if (d2 .gt. 0.0) epomeg = d2
+  if (d3 .gt. 0.0) epdgel = d3
+  if (n9 .gt. 0) iprsov(37) = n9
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 3610) epsuba, epomeg, epdgel, iprsov(37)
 3610 format ('+  epsilon.', 3e11.2, i5)
   go to 1
-  !     check for key word   'parameter fitting'  (or  'pf' ).
+  ! check for key word   'parameter fitting'  (or  'pf' ).
 7106 if (texta6(1) .eq. text20) go to 2115
   if (texta6(1) .ne. text7) go to 8641
   if (texta6(2) .ne. text8) go to 8641
@@ -3354,138 +3414,138 @@ subroutine smdat (mtype)
 6011 format (24x, e8.0)
   go to 7110
 7109 nfrfld = 1
-  call freone ( fm )
-7110 if ( fm  .gt.  1.0  )  go  to  152
-  ism  =  1
-  go  to  153
-152 ism  =  0
-  fm  =  1.0
-153 if ( noutpr  .eq.  0 ) write ( kunit6, 3617 )  fm
+  call freone (fm)
+7110 if (fm .gt. 1.0) go to 152
+  ism = 1
+  go to 153
+152 ism = 0
+  fm = 1.0
+153 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3617) fm
 3617 format ("+  optimize Park's data.", 3x, e12.3)
   go to 1
-  !     check for key word   'delta connection'  (or  'dc' ).
-8641 if ( texta6(1)  .eq.  text21 )   go to 2125
-  if ( texta6(1)  .ne.  text10 )   go to 8659
-  if ( texta6(2)  .ne.  text11 )   go to 8659
-  if ( texta6(3)  .ne.  text12 )   go to 8659
-2125 if ( noutpr  .eq.  0 ) write (kunit6, 8646)
+  ! check for key word   'delta connection'  (or  'dc' ).
+8641 if (texta6(1) .eq. text21)   go to 2125
+  if (texta6(1) .ne. text10) go to 8659
+  if (texta6(2) .ne. text11) go to 8659
+  if (texta6(3) .ne. text12) go to 8659
+2125 if (noutpr .eq. 0) write (unit = kunit6, fmt = 8646)
 8646 format ('+  notification of delta-connected armature.')
   idelta = 1
   go to 1
 8659 kolbeg = n11
-  ismdat( j30 ) = ismdat( j30 ) + 1
+  ismdat(j30) = ismdat(j30) + 1
   nst = nst + 1
-  if ( nst .le. lsyn )  go  to  8819
+  if (nst .le. lsyn) go to 8819
   kill = 1
-  lstat( 19 ) = 8659
-  lstat( 16 ) = 17
+  lstat(19) = 8659
+  lstat(16) = 17
   go to 9999
 8819 k = nst
   i101 = 101 * k - 100
   i26  = i101
   i30 = 30 * k - 29
-  ismdat( i30+1 ) = idelta
-  if ( kolbeg  .gt.  0 )   go to 7113
+  ismdat(i30 + 1) = idelta
+  if (kolbeg .gt. 0) go to 7113
   read (unit = abuff, fmt = 5) ismdat(i30 + 11 ), ismdat(i30 + 12), ismdat(i30 + 13), np, sm3, sm4, rmva, rkv, aglin, dab, dac
 5 format (3i2, i4, 7e10.6)
   go to 7114
 7113 nfrfld = 4
-  call frefld ( voltbc(1) )
-  ismdat( i30+11 ) = voltbc(1)
-  ismdat( i30+12 ) = voltbc(2)
-  ismdat( i30+13 ) = voltbc(3)
-  np = voltbc( 4 )
+  call frefld (voltbc(1))
+  ismdat(i30 + 11) = voltbc(1)
+  ismdat(i30 + 12) = voltbc(2)
+  ismdat(i30 + 13) = voltbc(3)
+  np = voltbc(4)
   nfrfld = 1
-  call freone ( sm3 )
-  call freone ( sm4 )
-  call freone ( rmva )
-  call freone ( rkv )
-  call freone ( aglin )
-  call freone( dab )
-  call freone( dac )
-7114 if ( noutpr  .eq.  0 ) write (kunit6,3619) ismdat( i30+11 ), ismdat( i30+12 ), ismdat( i30+13 ), np, sm3, sm4
+  call freone (sm3)
+  call freone (sm4)
+  call freone (rmva)
+  call freone (rkv)
+  call freone (aglin)
+  call freone (dab)
+  call freone (dac)
+7114 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3619) ismdat(i30 + 11), ismdat(i30 + 12), ismdat(i30 + 13), np, sm3, sm4
 3619 format ('+  4th s.m. card.', 4i4, 2f7.3)
-  elp( i26+25 ) = np / 2
-  if ( sm3  .eq.  0.0  )    sm3 = d10
-  if ( sm4  .eq.  0.0  )    sm4 = d10
-  elp( i26+28 ) = sm3
-  elp( i26+29 ) = sm4
-  numask = ismdat( i30+11 )
-300 if ( numask .lt. 0  )  go  to  306
+  elp(i26 + 25) = np / 2
+  if (sm3 .eq. 0.0) sm3 = d10
+  if (sm4 .eq. 0.0) sm4 = d10
+  elp(i26 + 28) = sm3
+  elp(i26 + 29) = sm4
+  numask = ismdat(i30 + 11)
+300 if (numask .lt. 0) go to 306
   iln = ismold * 12
   ismold = ismold + numask
-  if ( ismold .le. limass )  go to 8
+  if (ismold .le. limass) go to 8
   kill = 1
-  lstat( 19 ) = 300
-  lstat( 16 ) = 16
+  lstat(19) = 300
+  lstat(16) = 16
   go to 9999
 306 kill = 105
-  lstat( 19 ) = 306
-  lstat( 14 ) = numask
-  lstat( 18 ) = nchain
+  lstat(19) = 306
+  lstat(14) = numask
+  lstat(18) = nchain
   go to 9999
-8 ismdat( i30+8 ) = 0
-  if ( aglin .gt. 0.0 )   go  to  150
-  ismdat( i30+8 ) = 2
-150 aglin = absz( aglin )
-  !     read  input  cards  using  cimage
+8 ismdat(i30 + 8) = 0
+  if (aglin .gt. 0.0) go to 150
+  ismdat(i30 + 8) = 2
+150 aglin = absz (aglin)
+  ! read  input  cards  using  cimage
   call  cimage
   read (unit = abuff, fmt = 163) ad1, ad2, aq1, aq2, qaa, qab, qac
 163 format (10x, 7e10.6)
-  if ( noutpr  .eq.   0 ) write ( kunit6, 154 )  aq1, qaa, qab, qac
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 154) aq1, qaa, qab, qac
 154 format ('+  q-axis', f7.3, 3f10.4)
-  !     read input card using cimage.
+  ! read input card using cimage.
   call cimage
-5564 zb = ( rkv**2 ) / rmva
-  !     if ( idelta  .eq.  1  )  zb = 3.d0 * zb
-  emf = rkv / ( tenm3*aglin )
-  if ( fm.le.-1.0) go to 100
-  if ( kolbeg  .gt.  0 )   go to 7124
+5564 zb = (rkv ** 2) / rmva
+  ! if ( idelta  .eq.  1  )  zb = 3.d0 * zb
+  emf = rkv / (tenm3 * aglin)
+  if (fm .le. -1.0) go to 100
+  if (kolbeg .gt. 0) go to 7124
   read (unit = abuff, fmt = 6) ra, xl, xd, xq, xdp, xqp, xdpp, xqpp
 6 format (8e10.6)
   go to 7125
-7124 call freone ( ra )
-  call freone ( xl )
-  call freone ( xd )
-  call freone ( xq )
-  call freone ( xdp )
-  call freone ( xqp )
-  call freone ( xdpp )
-  call freone ( xqpp )
-7125 if ( noutpr  .eq.  0 ) write (kunit6, 3628)  ra, xl, xd
+7124 call freone (ra)
+  call freone (xl)
+  call freone (xd)
+  call freone (xq)
+  call freone (xdp)
+  call freone (xqp)
+  call freone (xdpp)
+  call freone (xqpp)
+7125 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3628) ra, xl, xd
 3628 format ('+  5th s.m. card.', 3f10.4)
-  !     check for an error in reactance values ***************************
-  if ( ra  .lt.  0.0 )   go to 19
-  if ( xl  .lt.  0.0 )   go to 19
-  if ( xd  .lt.  0.0 )   go to 19
-  if ( xq  .lt.  0.0 )   go to 19
-  if ( xdp  .lt.  0.0 )   go to 19
-  if ( xqp  .lt.  0.0 )   go to 19
-  if ( xdpp  .lt.  0.0 )   go to 19
-  if ( xqpp  .lt.  0.0 )   go to 19
-  if ((xd-xdp).le.flzero.and.fm.eq.0.0) go to 19
-  if ((xdp-xdpp).le.flzero) go to 19
-  if ((xdpp-xl).le.flzero)  go to 19
+  ! check for an error in reactance values ***************************
+  if (ra .lt. 0.0) go to 19
+  if (xl .lt. 0.0) go to 19
+  if (xd .lt. 0.0) go to 19
+  if (xq .lt. 0.0) go to 19
+  if (xdp .lt. 0.0) go to 19
+  if (xqp .lt. 0.0) go to 19
+  if (xdpp .lt. 0.0) go to 19
+  if (xqpp .lt. 0.0) go to 19
+  if ((xd - xdp) .le. flzero .and. fm .eq. 0.0) go to 19
+  if ((xdp - xdpp) .le. flzero) go to 19
+  if ((xdpp - xl) .le. flzero) go to 19
   ndwqa = 0
-  if ( xq .eq. xqp .and.  xqp .eq. xqpp ) ndwqa = -2
-  if ( ndwqa .lt. 0 )   go to 25
-  if ((xq-xqp).le.flzero.and.fm.eq.0.0) go to 19
-  if ((xqp-xqpp).le.flzero) go to 19
-  if ((xqpp-xl).le.flzero)  go to 19
+  if (xq .eq. xqp .and.  xqp .eq. xqpp) ndwqa = -2
+  if (ndwqa .lt. 0) go to 25
+  if ((xq - xqp) .le. flzero .and. fm. eq. 0.0) go to 19
+  if ((xqp - xqpp) .le. flzero) go to 19
+  if ((xqpp - xl) .le. flzero) go to 19
   go to 25
 19 kill = 176
   go to 9999
 25 continue
-  !     convert machine parameters to physical values ,this will  result
-  !     in all data being referred to the rotor side ********************
+  ! convert machine parameters to physical values, this will  result
+  ! in all data being referred to the rotor side ********************
   xq = xq * zb
   xd = xd * zb
   xl = xl * zb
   ra = ra * zb
-  if ( iprsup  .gt.  0  ) write (kunit6, 3628)  ra, xl, xd
-  !     read input card using cimage
+  if (iprsup .gt. 0) write (unit = kunit6, fmt = 3628) ra, xl, xd
+  ! read input card using cimage
   call cimage
-  if ( kolbeg  .gt.  0 )   go to 7136
+  if (kolbeg .gt. 0) go to 7136
   read (unit = abuff, fmt = 30) tdop, tqop, tdopp, tqopp, el2, r1, el1
 30 format (7e10.6, 9x, i1)
   go to 7137
@@ -3496,145 +3556,145 @@ subroutine smdat (mtype)
   call freone (el2)
   call freone (r1)
   call freone (el1)
-7137 if (noutpr  .eq.  0) write (kunit6, 3637) tdop, tqop, tdopp
+7137 if (noutpr  .eq.  0) write (unit = kunit6, fmt = 3637) tdop, tqop, tdopp
 3637 format ('+  6th s.m. card.', 3f10.4)
-  !     process manufacturer's data ,start with the d-axis **************
+  ! process manufacturer's data ,start with the d-axis **************
   x1(1) = xd
   x1(2) = xdp * zb
   x1(3) = xdpp * zb
   x1(4) = tdopp * omega
   x1(5) = tdop * omega
   x1(6) = xl
-  call smpfit( x1(1), ism, fm, lunit6, noutpr )
-  !     calculate transformer ratio for scaling of rotor circuits ********
+  call smpfit (x1(1), ism, fm, lunit6, noutpr)
+  ! calculate transformer ratio for scaling of rotor circuits ********
   a = x1(2) / thtw
   rat = emf / a
-  rat2 = 2.0 * rat**2 / 3.0
-  a=emf*rat/thtw
-  !     load processed data into permanent storage **********************
+  rat2 = 2.0 * rat ** 2 / 3.0
+  a = emf * rat / thtw
+  ! load processed data into permanent storage **********************
   ib2 = 20
-  call mover0( elp( i26 ), ib2 )
-  elp( i26 ) = xd
-  elp( i26+1 ) = emf
-  if ( x1(5) .eq. 0 ) go to 6014
-  elp( i26+2 ) = x1(3) * rat2
-  elp( i26+3 ) = emf
-  elp( i26+4 ) = a
-  elp( i26+5 ) = x1(4) * rat2
-  elp( i26+6 ) = x1(5) * rat2
-  elp( i26+7 ) = x1(6) * rat2
+  call mover0 (elp(i26), ib2)
+  elp(i26) = xd
+  elp(i26 + 1) = emf
+  if (x1(5) .eq. 0) go to 6014
+  elp(i26 + 2) = x1(3) * rat2
+  elp(i26 + 3) = emf
+  elp(i26 + 4) = a
+  elp(i26 + 5) = x1(4) * rat2
+  elp(i26 + 6) = x1(5) * rat2
+  elp(i26 + 7) = x1(6) * rat2
   go to 6015
-6014 elp( i26+2 ) = x1(4) * rat2
-  elp( i26+5 ) = rat2
-  elp( i26+6 ) = x1(6) * rat2
-6015 rat1 = emf / x1( 2 )
-  !     quadrature axis parameters ***************************************
-  elp( i26+8 ) = xq
-  if ( ndwqa .lt. 0 )  go to 6013
+6014 elp(i26 + 2) = x1(4) * rat2
+  elp(i26 + 5) = rat2
+  elp(i26 + 6) = x1(6) * rat2
+6015 rat1 = emf / x1(2)
+  ! quadrature axis parameters ***************************************
+  elp(i26 + 8) = xq
+  if (ndwqa .lt. 0) go to 6013
   x1(1) = xq
   x1(2) = xqp * zb
   x1(3) = xqpp * zb
   x1(4) = tqopp * omega
   x1(5) = tqop * omega
   x1(6) = xl
-  call smpfit( x1(1), ism, fm, lunit6, noutpr )
+  call smpfit (x1(1), ism, fm, lunit6, noutpr)
   a = x1(2) * rat / thtw
-  elp( i26+9 ) = a
-  if ( x1(5) .eq. 0. )  go to 71
-  elp( i26+10 ) = x1(3) * rat2
-  elp( i26+11 ) = a
-  elp( i26+12 ) = x1(2) * rat2
-  elp( i26+13 ) = x1(4) * rat2
-  elp( i26+14 ) = x1(5) * rat2
-  elp( i26+15 ) = x1(6) * rat2
+  elp(i26 + 9) = a
+  if (x1(5) .eq. 0.) go to 71
+  elp(i26 + 10) = x1(3) * rat2
+  elp(i26 + 11) = a
+  elp(i26 + 12) = x1(2) * rat2
+  elp(i26 + 13) = x1(4) * rat2
+  elp(i26 + 14) = x1(5) * rat2
+  elp(i26 + 15) = x1(6) * rat2
   go to 70
-71 elp( i26+10 ) = x1(4) * rat2
-  elp( i26+13 ) = rat2
-  elp( i26+14 ) = x1(6) * rat2
+71 elp(i26 + 10) = x1(4) * rat2
+  elp(i26 + 13) = rat2
+  elp(i26 + 14) = x1(6) * rat2
   go to 70
-6013 elp( i26+10 ) = rat2
-  elp( i26+13 ) = rat2
-  !     store remaining variables ***************************************
-70 elp( i26+16 ) = el2 * zb  + 3.0 * el1
-  elp( i26+17 ) = ra  +  3.0 * r1
-  elp( i26+18 ) = xl
-  elp( i26+19 ) = ra
-  elp( i26+20 ) = rat1
-  !     calculate and store saturation constants ************************
-  if ( ismdat( i30+8 ) .eq. 0 )   go  to 158
-  !     start   with   the  d-axis   characteristic***********************
-  !     check for inconsistent saturation data ***************************
-  if ( dab .ge. aglin .and. dac .gt. dab )  go  to  167
+6013 elp(i26 + 10) = rat2
+  elp(i26 + 13) = rat2
+  ! store remaining variables ***************************************
+70 elp(i26 + 16) = el2 * zb  + 3.0 * el1
+  elp(i26 + 17) = ra + 3.0 * r1
+  elp(i26 + 18) = xl
+  elp(i26 + 19) = ra
+  elp(i26 + 20) = rat1
+  ! calculate and store saturation constants ************************
+  if (ismdat(i30 + 8) .eq. 0) go to 158
+  ! start   with   the  d-axis   characteristic***********************
+  ! check for inconsistent saturation data ***************************
+  if (dab .ge. aglin .and. dac .gt. dab) go to 167
   kill = 211
-  lstat( 14 ) = k
-  lstat( 19 ) = 167
-  flstat( 13 ) = aglin
-  flstat( 14 ) = dab
-  flstat( 15 ) = dac
+  lstat(14) = k
+  lstat(19) = 167
+  flstat(13) = aglin
+  flstat(14) = dab
+  flstat(15) = dac
   go to 9999
-167 if ( ad1 .le. 0.0 )    ad1 = 1.0
-  if ( ad2 .le. 0.0 )    ad2 = 1.2
-  sf5 = dab / ( aglin * ad1 )
-  sf2 = dac / ( aglin * ad2 )
-  sf3 = ( sf2 - sf5 ) / ( dac - dab )
-  sf6 = dac + ( 1.0 - sf2 ) / sf3
-  if ( sf6 .gt. (aglin * onehaf ) )  go  to  437
-  !     reset saturation parameters *************************************
+167 if (ad1 .le. 0.0) ad1 = 1.0
+  if (ad2 .le. 0.0) ad2 = 1.2
+  sf5 = dab / (aglin * ad1)
+  sf2 = dac / (aglin * ad2)
+  sf3 = (sf2 - sf5) / (dac - dab)
+  sf6 = dac + (1.0 - sf2) / sf3
+  if (sf6 .gt. (aglin * onehaf)) go to 437
+  ! reset saturation parameters *************************************
   dsm = rkv / aglin
-  hsp = rkv * ( ad2 - ad1 ) / ( dac - dab )
+  hsp = rkv * (ad2 - ad1) / (dac - dab)
   dsd = rkv * ad1 - hsp * dab
-  dsr = dsd / ( dsm - hsp )
+  dsr = dsd / (dsm - hsp)
   ilv = 167
-  write ( lunit6, 6110 )  ilv, sf6, dsr
+  write (unit = lunit6, fmt = 6110) ilv, sf6, dsr
 6110 format ('  ****** Warning, warning ******', /, '  subroutine smdat, nearby statement number', i8, /, &
-       '  saturation treshold reset from', 2x, e15.8, 3x, 'to', 2x, e15.8)
+          '  saturation treshold reset from', 2x, e15.8, 3x, 'to', 2x, e15.8)
   sf6 = dsr
-  sf3 = ( 1.0 - sf2 ) / ( sf6 - dac )
-437 elp( i26+21 ) = sf6
-  elp( i26+22 ) = sf3
-  if ( iprsup .ge. 1 ) write (lunit6,155) k,sf3,sf6,sf5,sf2
+  sf3 = (1.0 - sf2) / (sf6 - dac)
+437 elp(i26 + 21) = sf6
+  elp(i26 + 22) = sf3
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 155) k, sf3, sf6, sf5, sf2
 155 format (1x, ' Saturation constants.', 7x, 'k', 11x, 'sf3', 11x, 'sf6', 11x, 'sf5', 11x, 'sf2', /, 22x, i8, 4e14.5, /, 1x)
-  !     calculate  parameters  for  the  q-axis **************************
-  if ( qaa .gt.  0.0  )   go  to 157
-  !     unknown   parameters-calculate an  approximate characteristic ****
-  b6 = ( elp( i26+8 ) - xl )  / ( elp( i26 ) - xl )
+  ! calculate  parameters  for  the  q-axis **************************
+  if (qaa .gt. 0.0) go to 157
+  ! unknown   parameters-calculate an  approximate characteristic ****
+  b6 = (elp(i26 + 8) - xl) / (elp(i26) - xl)
   sf6 = sf6 * b6
-  elp( i26+23 ) = sf6
-  elp( i26+24 ) = sf3
-  if ( iprsup  .ge.  1 ) write (lunit6, 156 )  k, sf3, sf6
+  elp(i26 + 23) = sf6
+  elp(i26 + 24) = sf3
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 156) k, sf3, sf6
 156 format (10x, 'Approximate characteristic for the q-axis, machine no.', i5, /, 14x, 'qsat12', 14x, 'qsat10', /, 2(6x, e14.5))
-  go  to 158
-  !     known  parameters , calculate constants **************************
-  !     check for missing  saturation data for the q-axis ****************
-157 if ( qab .ge. qaa  .and.  qac .gt. qab )  go  to  166
+  go to 158
+  ! known  parameters , calculate constants **************************
+  ! check for missing  saturation data for the q-axis ****************
+157 if (qab .ge. qaa .and. qac .gt. qab) go to 166
   kill = 211
-  lstat( 19 ) = 157
-  lstat( 14 ) = k
-  flstat( 13 ) = qaa
-  flstat( 14 ) = qab
-  flstat( 15 ) = qac
+  lstat(19) = 157
+  lstat(14) = k
+  flstat(13) = qaa
+  flstat(14) = qab
+  flstat(15) = qac
   go to 9999
-166 if ( aq1 .le. 0.0 )   aq1 = 1.0
-  if ( aq2 .le. 0.0 )   aq2 = 1.2
-  sf5 = qab / ( qaa * aq1 )
-  sf2 = qac / ( qaa * aq2 )
-  sf3 = ( sf2 - sf5 ) / ( qac - qab )
-  sf6 = qac + ( 1.0 - sf2 ) / sf3
-  if ( sf6 .gt. ( qaa * onehaf ) )  go  to  439
+166 if (aq1 .le. 0.0) aq1 = 1.0
+  if (aq2 .le. 0.0) aq2 = 1.2
+  sf5 = qab / (qaa * aq1)
+  sf2 = qac / (qaa * aq2)
+  sf3 = (sf2 - sf5) / (qac - qab)
+  sf6 = qac + (1.0 - sf2) / sf3
+  if (sf6 .gt. (qaa * onehaf)) go to 439
   dsm = rkv / qaa
-  hsp = rkv * ( aq2 - aq1 ) / ( qac - qab )
+  hsp = rkv * (aq2 - aq1) / (qac - qab)
   dsd = rkv * aq1 - hsp * qab
-  dsr = dsd / ( dsm - hsp )
+  dsr = dsd / (dsm - hsp)
   ilv = 166
-  write ( lunit6, 6110 )   ilv, sf6, dsr
+  write (unit = lunit6, fmt = 6110) ilv, sf6, dsr
   sf6 = dsr
-  sf3 = ( 1.0 - sf2 ) / ( sf6 - dac )
-439 elp( i26+23 ) = sf6
-  elp( i26+24 ) = sf3
-  if ( iprsup .ge. 1 ) write (lunit6,156) k,sf3,sf6,sf5,sf2
-  !     process mechanical data of the generator  ***********************
-  !     scale the mechanical data to mks units   *************************
-  !     this scaling of data corresponds to torque given in mva  *********
+  sf3 = (1.0 - sf2) / (sf6 - dac)
+439 elp(i26 + 23) = sf6
+  elp(i26 + 24) = sf3
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 156) k, sf3, sf6, sf5, sf2
+  ! process mechanical data of the generator  ***********************
+  ! scale the mechanical data to mks units   *************************
+  ! this scaling of data corresponds to torque given in mva  *********
 158 smext = 0.
   num2 = numask + numask
   num3 = num2 + numask
@@ -3642,117 +3702,118 @@ subroutine smdat (mtype)
   num5 = num3 + num2
   ib2 = iln + num2
   do i = 1, numask
-     !     read input card using cimage
+     ! read input card using cimage
      call cimage
-     if ( kolbeg  .gt.  0 )   go to 7144
+     if (kolbeg .gt. 0) go to 7144
      read (unit = abuff, fmt = 36) mloc, extrs, hico, dsr, dsm, hsp, dsd
 36   format (i2, 8x, 6e10.6)
      go to 7145
-7144 call frefld ( voltbc(1) )
-     if ( kill  .gt.  0 )   go to 9999
+7144 call frefld (voltbc(1))
+     if (kill .gt. 0) go to 9999
      mloc = voltbc(1)
      nfrfld = 1
-     call freone( extrs )
-     call freone( hico )
-     call freone( dsr )
-     call freone( dsm )
-     call freone( hsp )
-     call freone( dsd )
-7145 if ( mloc .gt. 0   .and.   mloc .le. numask )  go  to  7146
+     call freone (extrs)
+     call freone (hico)
+     call freone (dsr)
+     call freone (dsm)
+     call freone (hsp)
+     call freone (dsd)
+7145 if (mloc .gt. 0 .and. mloc .le. numask) go to 7146
      n167 = 7145
 7147 kill = 181
-     lstat( 19 ) = n167
-     lstat( 18 ) = nchain
-     lstat( 15 ) = mloc
-     lstat( 16 ) = numask
-     go  to  9999
-7146 if (noutpr .eq. 0) write (kunit6, 3653) i, mloc, extrs, hico, dsd
+     lstat(19) = n167
+     lstat(18) = nchain
+     lstat(15) = mloc
+     lstat(16) = numask
+     go to 9999
+7146 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3653) i, mloc, extrs, hico, dsd
 3653 format ('+  mass card', i2, i2, 3e11.3)
      il1 = ib2 + mloc
-     shp(  il1  ) = extrs
-     shp( il1+numask ) = hico * bin
-     shp( il1+num2 ) = dsm * bdam
-     shp( il1+num3 ) = hsp * bdam / tenm6
-     shp( il1+num4 ) = dsd * bdam
-     shp( il1+num5 ) = dsr * bdam
+     shp(il1) = extrs
+     shp(il1 + numask) = hico * bin
+     shp(il1 + num2) = dsm * bdam
+     shp(il1 + num3) = hsp * bdam / tenm6
+     shp(il1 + num4) = dsd * bdam
+     shp(il1 + num5) = dsr * bdam
      smext = smext + extrs
   end do
-  if (  numask  .eq.  1  )    smext = 1.0
-  if ( absz(smext) .gt. flzero )   go to 410
+  if (numask .eq. 1) smext = 1.0
+  if (absz (smext) .gt. flzero) go to 410
 420 kill = 107
-  lstat( 19 ) = 420
+  lstat(19) = 420
   go to 9999
 410 il2 = ib2 + numask
   il1 = ib2 + 1
   do il = il1, il2
-     shp( il ) = shp( il ) / smext
+     shp(il) = shp(il) / smext
   end do
-  !     check for blank card terminating mass cards  *********************
-  !     read input card using cimage   ***********************************
+  ! check for blank card terminating mass cards  *********************
+  ! read input card using cimage   ***********************************
   call cimage
   read (unit = abuff, fmt = 1122) (voltbc(i), i = 1, 41)
 1122 format (41f1.0)
   n167 = 3654
-  if ( kill .gt. 0 )  go  to  9999
-  !     set-up dummy branches to reserve space for future use  ***********
-  if ( it+6  .le.  ldata )   go to 8917
+  if (kill .gt. 0) go to 9999
+  ! set-up dummy branches to reserve space for future use  ***********
+  if (it + 6 .le. ldata) go to 8917
   kill = 1
   lstat(19) = 8917
   lstat(16) = 3
   go to 9999
-8917 if ( ibr+3  .le.  lbrnch )   go to 8921
+8917 if (ibr + 3 .le. lbrnch) go to 8921
   kill = 1
   lstat(19) = 8921
   lstat(16) = 2
   go to 9999
-8921 do il=1, 3
+8921 do il = 1, 3
      it = it + 1
      ibr = ibr + 1
-     length( ibr ) = 1
-     kbus( ibr ) = 1
-     mbus( ibr ) = 1
-     nr( ibr ) = -it
-     tr( it ) = 1.0
-     tx( it ) = 0.0
+     length(ibr) = 1
+     kbus(ibr) = 1
+     mbus(ibr) = 1
+     nr(ibr) = -it
+     tr(it) = 1.0
+     tx(it) = 0.0
      emtpc(it) = 0.0
   end do
   it = it + 3
-  !     read output specification card. ismout is array of output flags.
-  !     zero-out output request arrays. preset flags for parameter output
-  !     requests     *****************************************************
+  ! read output specification card. ismout is array of output flags.
+  ! zero-out output request arrays. preset flags for parameter output
+  ! requests     *****************************************************
   iexc = 0
-  if ( ismdat( i30+13 ) .eq. 0 )    iexc = 1
+  if (ismdat(i30 + 13) .eq. 0) iexc = 1
   n14 = i30 + 20
   n8 = n14 - 3
   do il = n8, n14
-     ismdat( il ) = 0
+     ismdat(il) = 0
   end do
-  elp( i26+26 ) = 0.0
-  elp( i26+27 ) = 0.0
+  elp(i26 + 26) = 0.0
+  elp(i26 + 27) = 0.0
   ism = 0
   n8 = n8 - 1
   do ij = 1, 41
-     if ( voltbc( ij )  .ne.  0.0 )  go to 1983
-1500 end do
-  if ( noutpr .eq. 0 )  write (kunit6, 1700)
+     if (voltbc(ij) .ne. 0.0) go to 1983
+  end do
+1500 continue
+  if (noutpr .eq. 0)  write (unit = kunit6, fmt = 1700)
 1700 format ('+ blank card terminating mass cards.')
-  !     read input card using cimage
+  ! read input card using cimage
 7219 call cimage
   read (unit = abuff, fmt = 3654) n7
 3654 format (i8)
-  if ( n7 .ne. 0 )   go  to  8235
-  if ( noutpr .eq. 0 ) write (kunit6, 3656)
+  if (n7 .ne. 0) go to 8235
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 3656)
 3656 format ('+ blank card terminating output requests.')
   go to 7251
-  !     check for overflow of npbuf() ***********************************
-8235 n55 = ( nn4-1 ) * numask + nn10
-  if ( n55 .lt. n56 )  go to  7220
+  ! check for overflow of npbuf() ***********************************
+8235 n55 = (nn4 - 1) * numask + nn10
+  if (n55 .lt. n56) go to 7220
   kill = 111
-  lstat( 13 ) = n56
-  lstat( 15 ) = k
-  lstat( 16 ) = n55
-  lstat( 17 ) = 0
-  lstat( 19 ) = 8235
+  lstat(13) = n56
+  lstat(15) = k
+  lstat(16) = n55
+  lstat(17) = 0
+  lstat(19) = 8235
   go to 9999
 7220 continue
   read (unit = abuff, fmt = 3657) (voltbc(i), i = 1, nn14)
@@ -3782,8 +3843,9 @@ subroutine smdat (mtype)
      if ( ivar .gt. n16 )  go  to  7219
      kflag = i26 + n6
      elp( kflag+25 ) = n6
-7211 end do
-  go  to   7219
+  end do
+7211 continue
+  go to 7219
 7230 n16 = nn10 - iexc
   n21 = 0
 7231 n17 = n8 + ioutr
@@ -3823,26 +3885,28 @@ subroutine smdat (mtype)
      do ijk = ijn, ipl
 7246    npbuf( ijk ) = npbuf( ijk+1 )
      end do
-7232 end do
-7234 if ( (ipout+ism) .le.  lsmout ) go to 7219
+  end do
+7232 continue
+7234 if ((ipout + ism) .le. lsmout) go to 7219
   kill = 111
-  lstat( 19 ) = 7234
-  lstat( 13 ) =  lsmout
-  lstat( 15 ) =  k
-  lstat( 16 ) =  ipout + ism
-  lstat( 17 ) =  0
+  lstat(19) = 7234
+  lstat(13) = lsmout
+  lstat(15) = k
+  lstat(16) = ipout + ism
+  lstat(17) = 0
   go to 9999
-7238 if ( n16 .gt. 0 )  go  to  7239
-  write (lunit6,3662) n16,ioutr,k,n16
+7238 if (n16 .gt. 0) go to 7239
+  write (unit = lunit6, fmt = 3662) n16, ioutr, k, n16
   go to 7234
-7239 n21 = n21 - ismdat( n17 )
-  ismdat( n17 ) = 0
+7239 n21 = n21 - ismdat(n17)
+  ismdat(n17) = 0
   do il = 1, n16
-     ismdat( n17 ) = ismdat( n17 ) + 1
+     ismdat(n17) = ismdat(n17) + 1
      ism = ism + 1
      n21 = n21 + 1
-     npbuf( n21 ) = il
-7237 end do
+     npbuf(n21) = il
+  end do
+7237 continue
   go to 7234
 7240 n16 = numask
   n21 = nn10 + (ioutr-2) * numask
@@ -3875,21 +3939,22 @@ subroutine smdat (mtype)
      n21 = n21 + 1
      ismdat( n17 ) = ismdat( n17 ) + 1
      npbuf(n21) = jk + jkn
-1277 end do
-  if ( ij  .eq.  3 )   go to 1950
+  end do
+1277 continue
+  if (ij .eq. 3) go to 1950
 1299 ij = ij - 3
   go to 1130
 1355 n21 = n21 + 1
-  ismdat( n17 ) = ismdat( n17 ) + 1
-  if ( ij  .ge. 13 )  go to 1990
+  ismdat(n17) = ismdat(n17) + 1
+  if (ij .ge. 13) go to 1990
   npbuf(n21) = ij
-  if ( ij  .eq.  8 )  npbuf(n21) = npbuf(n21) + 3
-  if (ij .eq. 9  .or.  ij .eq. 10) npbuf(n21) = npbuf(n21) + 5
-1899 if ( ij .eq. 11 .or.  ij .eq. 12)  go to 1299
-  if ( ij  .eq.  10 )  ij = ij + 2
-  if ( ij .eq. 7  .or.  ij .eq. 8 )  ij = ij + 3
+  if (ij .eq. 8) npbuf(n21) = npbuf(n21) + 3
+  if (ij .eq. 9 .or. ij .eq. 10) npbuf(n21) = npbuf(n21) + 5
+1899 if (ij .eq. 11 .or.  ij .eq. 12) go to 1299
+  if (ij .eq. 10) ij = ij + 2
+  if (ij .eq. 7 .or. ij .eq. 8) ij = ij + 3
 1950 ij = ij + 1
-  if ( ij  .gt.  jj3 )  go to 7251
+  if (ij .gt. jj3) go to 7251
   go to 1125
 1990 npbuf(n21) = ij - 12 - jkm * 10
   go to 1950
@@ -3954,13 +4019,14 @@ subroutine smdat (mtype)
      do m = 1, ktab
         ndx1 = ilntab( klntab+m )
         if ( bus6  .eq.  texvec(ndx1) )   go to 3672
-3676 end do
+     end do
+3676 continue
      n3671 = 3676
      go to 5448
 3672 ismdat( i30+15 ) = m
      go to 204
-5431 if ( n3  .ne.  72 )   go to 5460
-     if ( noutpr  .eq.  0 ) write (kunit6, 5436)   bus6
+5431 if (n3 .ne. 72)   go to 5460
+     if (noutpr .eq. 0) write (unit = kunit6, fmt = 5436) bus6
 5436 format ('+  TACS controlled mechanical torque. ', '"', a6, '"', ' . ')
      n3671 = 5434
      if ( i72 .gt. 0 )   go to  5434
@@ -3988,7 +4054,8 @@ subroutine smdat (mtype)
      do m = 1, ktab
         ndx1 = ilntab( klntab+m )
         if ( bus6  .eq.  texvec(ndx1) )   go to 5455
-5442 end do
+     end do
+5442 continue
      n3671 = 5442
 5448 kill = 190
      lstat( 19 ) = n3671
@@ -4040,118 +4107,122 @@ subroutine smdat (mtype)
      lstat(15) = lbstac
      lstat(16) = ntotac
      go to 9999
-204 end do
-205 if ( bus5  .ne.  text16 )   go to 99
-  ism=0
-  fm=-2.0
+  end do
+204 continue
+205 if (bus5 .ne. text16) go to 99
+  ism = 0
+  fm = -2.0
   go to 1
-99 if ( iprsup  .le.  0 )   go to 4793
-  write (lunit6, 4703)  numsm, kconst, rmva, rkv, aglin
-4703 format (//, " Dump of tables at end of  'smdat' .   numsm  kconst,  11x,  4hrmva", 12x, 'rkv', 10x, 'aglin', /, 36x, 2i8, 3e15.7)
+99 if (iprsup .le. 0) go to 4793
+  write (unit = lunit6, fmt = 4703) numsm, kconst, rmva, rkv, aglin
+4703 format (//, " Dump of tables at end of  'smdat' .   numsm  kconst",  11x,  'rmva', 12x, 'rkv', 10x, 'aglin', /, 36x, 2i8, 3e15.7)
   do k = 1, nst
      k1 = 30 * k
      k2 = 101 * k
-     write ( lunit6, 4707 )    k, ismdat( k1-29 ), ismdat( k1-28 ), ismdat( k1-18 ), ismdat( k1-17 ), ismdat( k1-16 ), &
-          elp( k2-75 ), elp( k2-100 ), elp( k2-92 ), elp( k2-98 ), elp( k2-96 ), elp( k2-97 )
+     write (unit = lunit6, fmt = 4707) k, ismdat(k1 - 29), ismdat(k1 - 28), ismdat(k1 - 18), ismdat(k1 - 17), ismdat(k1 - 16), &
+          elp(k2 - 75), elp(k2 - 100), elp(k2 - 92), elp(k2 - 98), elp(k2 - 96), elp(k2 - 97)
 4707 format (/, ' row  imdual  iconfg   numas    kmac    kexc     cnp', 12x, 'eld', 12x, 'elq', 12x, 'elf', 10x, 'elfkd', 10x, 'elakd', /, (1x, i3, 5i8, f8.0, 5e15.6))
-     write (lunit6, 4712) k, elp( k2-90 ), elp( k2-88 ), elp( k2-84 ), elp( k2-91 ), elp( k2-89 ), elp( k2-87 ), elp( k2-95 ), elp( k2-99 )
+     write (unit = lunit6, fmt = 4712) k, elp( k2-90 ), elp( k2-88 ), elp( k2-84 ), elp( k2-91 ), elp( k2-89 ), elp( k2-87 ), elp( k2-95 ), elp( k2-99 )
 4712 format (/, ' row', 12x, 'elg', 10x, 'elgkq', 12x, 'el0', 11x, 'elag', 10x, 'elakq', 11x, 'elkq', 11x, 'elkd', 11x, 'elaf', /, (1x, i3, 8e15.6))
-     write (lunit6, 4717)  k, elp( k2-81 ), elp( k2-83 ), elp( k2-94 ), elp( k2-93 ), elp( k2-86 ), elp( k2-85 ), &
+     write (unit = lunit6, fmt = 4717)  k, elp( k2-81 ), elp( k2-83 ), elp( k2-94 ), elp( k2-93 ), elp( k2-86 ), elp( k2-85 ), &
           elp( k2-72 ), elp( k2-71 )
 4717 format (/, ' row', 13x, 'ra', 13x, 'r0', 13x, 'rf', 12x, 'rkd', 13x, 'rg', 12x, 'rkq', 9x, 'smoutp', 9x, 'smoutq', /, (1x, i3, 8e15.6))
      n4 = k2 - 76
-     write (lunit6,4738) k, ismdat( k1-21 ), elp(n4-3), elp(n4-1), elp(n4-2), elp(n4), elp(n4-4), elp(n4-6)
+     write (unit = lunit6, fmt = 4738) k, ismdat(k1 - 21), elp(n4 - 3), elp(n4 - 1), elp(n4 - 2), elp(n4), elp(n4 - 4), elp(n4 - 6)
 4738 format (/, ' row', 11x, 'isat', 10x, 'sat10', 9x, 'qsat10', 10x, 'sat12', 9x, 'qsat12', 11x, 'rat1', 9x, 'agline', /, (1x, i3, 10x, i2, 3x, 6e15.6))
-8259 end do
+  end do
+8259 continue
   n2 = 0
   do k = 1, nst
      num2 = ismdat( 30*k-18 ) * 2
      n3 = n2 + num2 * 4
      n2 = n2 + num2 + 1
-     write (lunit6, 4723)   ( shp( k2 ),  k2 = n2, n3 )
+     write (unit = lunit6, fmt = 4723) (shp(k2), k2 = n2, n3)
 4723 format (/, " 'shfdat' storage cells follow ............", /, (1x, 8e16.7))
 8260 n2 = n3 + num2 * 2
   end do
 4793 return
 100 continue
-  !     read per unit machine data  as normally defined in transient
-  !     stability programs,i.e., obtained with an assymmetric matrix
-  if ( kolbeg  .gt.  0 )   go to 7313
+  ! read per unit machine data  as normally defined in transient
+  ! stability programs,i.e., obtained with an assymmetric matrix
+  if (kolbeg .gt. 0) go to 7313
   read (unit = abuff, fmt = 105) elf, elaf, elfkd, xd, elakd, elkd
   go to 7314
-7313 call freone ( elf )
-  call freone ( elaf )
-  call freone ( elfkd )
-  call freone ( xd )
-  call freone ( elakd )
-  call freone ( elkd )
-7314 if ( noutpr  .eq.  0 ) write (kunit6, 3628)  elf, elaf, elfkd
-  !     read input card using cimage.
+7313 call freone (elf)
+  call freone (elaf)
+  call freone (elfkd)
+  call freone (xd)
+  call freone (elakd)
+  call freone (elkd)
+7314 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3628) elf, elaf, elfkd
+  ! read input card using cimage.
   call cimage
-  if ( kolbeg  .gt.  0 )   go to 7327
+  if (kolbeg .gt. 0) go to 7327
   read (unit = abuff, fmt = 105) elg, elag, elgkq, xq, elakq, elkq
 105 format (6e10.6, 19x, i1)
   go to 7328
-7327 call freone ( elg )
-  call freone ( elag )
-  call freone ( elgkq )
-  call freone ( xq )
-  call freone ( elakq )
-  call freone ( elkq )
-7328 if ( noutpr  .eq.  0 ) write (kunit6, 3637)  elg, elag, elgkq
-  !     read input card using cimage.
+7327 call freone (elg)
+  call freone (elag)
+  call freone (elgkq)
+  call freone (xq)
+  call freone (elakq)
+  call freone (elkq)
+7328 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3637) elg, elag, elgkq
+  ! read input card using cimage.
   call cimage
-  if ( kolbeg  .gt.  0 )   go to 7235
+  if (kolbeg .gt. 0) go to 7235
   read (unit = abuff, fmt = 110) el2, ra, rf, rkd, rg, rkq, r1, el1
 110 format (8e10.6)
   go to 7236
-7235 call freone ( el2 )
-  call freone ( ra )
-  call freone ( rf )
-  call freone ( rkd )
-  call freone ( rg )
-  call freone ( rkq )
-  call freone ( r1 )
-  call freone ( el1 )
-7236 if ( noutpr  .eq.  0 ) write (kunit6, 3687)  el2, ra, rf
+7235 call freone (el2)
+  call freone (ra)
+  call freone (rf)
+  call freone (rkd)
+  call freone (rg)
+  call freone (rkq)
+  call freone (r1)
+  call freone (el1)
+7236 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3687)  el2, ra, rf
 3687 format ('+  7th s.m. card.', 3f10.4)
-  elp( i26 ) = xd * zb
-  elp( i26+8 ) = xq * zb
+  elp(i26) = xd * zb
+  elp(i26 + 8) = xq * zb
   elaf = elaf * zb
-  xl = ( xd - elaf ) * zb
+  xl = (xd - elaf) * zb
   ra = ra * zb
   zb3 = zb
-  !     calculate the transformer ratio  *********************************
+  ! calculate the transformer ratio  *********************************
   a = elaf / thtw
   rat = emf / a
-  rat2 = 2.0 * rat**2 / 3.0
+  rat2 = 2.0 * rat ** 2 / 3.0
   rat1 = emf / elaf
-  elp( i26+1 ) = emf
+  elp(i26 + 1) = emf
   zb1 = zb * rat2
-  elp( i26+2 ) = elf * zb1
-  elp( i26+4 ) = elfkd * zb1
-  elp( i26+5 ) = elkd * zb1
-  elp( i26+6 ) = rf * zb1
-  elp( i26+7 ) = rkd * zb1
-  elp( i26+10 ) = elg * zb1
-  elp( i26+12 ) = elgkq * zb1
-  elp( i26+13 ) = elkq * zb1
-  elp( i26+14 ) = rg * zb1
-  elp( i26+15 ) = rkq * zb1
+  elp(i26+2) = elf * zb1
+  elp(i26+4) = elfkd * zb1
+  elp(i26+5) = elkd * zb1
+  elp(i26+6) = rf * zb1
+  elp(i26+7) = rkd * zb1
+  elp(i26+10) = elg * zb1
+  elp(i26+12) = elgkq * zb1
+  elp(i26+13) = elkq * zb1
+  elp(i26+14) = rg * zb1
+  elp(i26+15) = rkq * zb1
   zb = zb * rat / thtw
-  elp( i26+3 ) = elakd * zb
-  elp( i26+9 ) = elag * zb
-  elp( i26+11 ) = elakq * zb
+  elp(i26+3) = elakd * zb
+  elp(i26+9) = elag * zb
+  elp(i26+11) = elakq * zb
   zb = zb3
   go to 70
 9999 if ( iprsup  .ge.  1 )  write ( lunit6, 4568 )
 4568 format ('  "exit  module smdat."')
   return
 end subroutine smdat
+
 !
 ! subroutine smpfit.
 !
-subroutine smpfit(x, ism, fm, lunit6, noutpr )
+
+subroutine smpfit (x, ism, fm, lunit6, noutpr)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module applies only to  s.m.  modeling (both 50, 59).
   !     this module applies only to s.m.  modelling ( both 50 and 59 )
@@ -4165,46 +4236,46 @@ subroutine smpfit(x, ism, fm, lunit6, noutpr )
   c = d1 - h3
   u2 = c * c
   if ( d1 .eq. h2 )   go  to  5
-  b = u2 / ( d1 - h2 )  - c
+  b = u2 / (d1 - h2) - c
   f1 = b + c
   f3 = f1 / x( 5 )
   d = b * c
-  a = -a / ( ( a * f1 ) / d - 1.0 )
+  a = -a / ((a * f1) / d - 1.0)
   f2 = a + c
-  f4 = ( a + d / f1 ) / x( 4 )
-  if ( ism  .eq.  0  )     go   to   13
-  !     improve the rotor resistances    *   *   *   *   *   *   *   *   *
-  u = ( x( 4 ) + x( 5 ) ) * .5d0
-  d = u * u - ( x( 4 ) * x( 5 ) ) / ( 1.0 - u2 / ( f1 * f2 ) )
-  if ( d .lt. 0. )   go   to    12
-  d = u - sqrtz( d )
+  f4 = (a + d / f1) / x(4)
+  if (ism .eq. 0) go to 13
+  ! improve the rotor resistances    *   *   *   *   *   *   *   *   *
+  u = (x(4) + x(5)) * .5d0
+  d = u * u - (x(4) * x(5)) / (1.0 - u2 / (f1 * f2))
+  if (d .lt. 0.) go to 12
+  d = u - sqrtz (d)
   f4 = f2 / d
-  f3 = f1 / ( 2.0 * u - d )
+  f3 = f1 / (2.0 * u - d)
   go  to  13
-12 if (noutpr .ne. 0 )   go   to   13
-  write (lunit6, 26 )
+12 if (noutpr .ne. 0) go to 13
+  write (unit = lunit6, fmt = 26)
 26 format (5x, ' Note  ----  the last-read data card belongs to a dynamic synchronous machine, for which the parameters', /, &
-       18x, 'are to be mathematically improved within the module "smpfit" of overlay number 5.   The user', /, &
-       18x, 'requested this procedure by means of the  "parameter fitting"  card which accompanied the')
-  write (lunit6, 4267)
+        18x, 'are to be mathematically improved within the module "smpfit" of overlay number 5.   The user', /, &
+        18x, 'requested this procedure by means of the  "parameter fitting"  card which accompanied the')
+  write (unit = lunit6, fmt = 4267)
 4267 format (18x, 'data cards for this machine.   The attempted iteration has failed to converge.')
-  write (lunit6, 27)
+  write (unit = lunit6, fmt = 27)
 27 format (18x, 'The EMTP logic will now recover and simply ignore the request to improve machine parameters.', /, &
-       18x, 'Input data will be used without any alterations.')
+        18x, 'Input data will be used without any alterations.')
   go to 13
   !     parameters of the reduced order model    *   *   *   *   *   *   *
 5 f1 = 1.0
-  f2 = u2 / ( d1 - x( 3 ) )
+  f2 = u2 / (d1 - x(3))
   f3 = 0.
-  f4 = f2 / x( 4 )
-13 x( 2 ) = c
-  x( 3 ) = f1
-  x( 4 ) = f2
-  x( 5 ) = f3
-  x( 6 ) = f4
+  f4 = f2 / x(4)
+13 x(2) = c
+  x(3) = f1
+  x(4) = f2
+  x(5) = f3
+  x(6) = f4
   return
 end subroutine smpfit
 
 !
-!     end of file: over5.for
+!     end of file: over5.f90
 !

@@ -17,7 +17,7 @@ subroutine over13
   equivalence (namebr(1), infdli(1))
   dimension cmr(1), cmi(1), vim(1)
   equivalence (volt(1), vim(1))
-  equivalence (kks(1), cmr(1)), ( kknonl(1), cmi(1) )
+  equivalence (kks(1), cmr(1)), (kknonl(1), cmi(1))
   dimension ekreal(50), ekimag(50), emreal(50), emimag(50)
   dimension closev(50), farv(50), closei(50), fari(50)
   equivalence (lstat(14), mdrive)
@@ -28,8 +28,8 @@ subroutine over13
   character(8) text1, text2
   common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7, koff8, koff9, koff10, koff13, koff14, koff15, koff16, koff17, koff18
   common /fdqlcl/ koff19, koff20, koff21, koff22, koff23, koff24, koff25, inoff1, inoff2, inoff3, inoff4, inoff5, nqtt, lcbl, lmode, nqtw
-  data text1 / 6hparame /
-  data text2 / 6hters   /
+  data text1 / 'parame' /
+  data text2 / 'ters  ' /
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567) istead, ibr, ntot
 4567 format (' Begin module "over13".  istead     ibr    ntot', /, 23x, 8i8)
   jglnn = 0
@@ -908,7 +908,7 @@ subroutine over13
            lj = lj + 1
            lj1 = lj1 + 1
         end do
-104     contnue
+104     continue
         lj = lj + nteq
         n7 = n7 + 1
         if (iv .eq. it2) n7 = n7 - it2
@@ -1573,7 +1573,7 @@ subroutine over13
         do ip = 1, it2
            jip = n5 + j
            iip = n5 + i
-           gus1 = gus1 +q fd(jip) * volti(ip) * qfd(iip)
+           gus1 = gus1 + qfd(jip) * volti(ip) * qfd(iip)
 596        n5 = n5 + it2
         end do
         n6 = n6 + 1
@@ -2141,7 +2141,7 @@ subroutine last13
   n23 = i8 + it2
   i10 = n23 + it2
   i11 = i10 + it2
-  n1 = absz(cik(i))
+  n1 = absz (cik(i))
   n2 = n1 + it2 * it2
   n3 = nr(i)
   n4 = n3 + it2 - 1
@@ -2181,9 +2181,9 @@ subroutine last13
 14020 continue
      if (kodsem(i) .lt. 0) go to 14050
      ii = k + i - 1
-     n5 = - indhst(ii)
+     n5 = -indhst(ii)
      if (ci(ii) .gt. 0.0) n5 = n5 + 1
-     if (absz(w - cnvhst(n5 + 4)) .lt. 0.0001) go to 14040
+     if (absz (w - cnvhst(n5 + 4)) .lt. 0.0001) go to 14040
      n6 = -kbus(ii)
      n7 = iabs (mbus(ii))
      write (unit = lunit6, fmt = 14030) bus(n6), bus(n7), k, cnvhst(n5 + 4), w
