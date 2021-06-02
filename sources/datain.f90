@@ -80,7 +80,7 @@ subroutine datain
   call date44 (date1(1))                                    ! find calendar date and the
   call time44 (tclock(1))                                   ! time of day for documentation
   call initsp                                               ! initialize spy common (digit needed to sort)
-1311 write (unit = lunit6, fmt = 1324, advance = 'no')      ! prompt user at "emtspy" keyboard
+1311 write (unit = lunit6, fmt = 1324)                      ! prompt user at "emtspy" keyboard
 1324 format (' EMTP begins.  Send (spy, $attach, debug, help, module, junk, stop): ')
   read (unit = munit5, fmt = 1329, iostat = ios) buff77     ! read first card of EMTP data
 1329 format (a80)
