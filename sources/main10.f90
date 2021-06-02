@@ -29,36 +29,36 @@
 !     5.  input of switch and source data cards.
 !     6.  network connectivity output.   setup of transient-network
 !         renumbering tables.
-!     7.  network node renumbering routine (john walker's old
+!     7.  network node renumbering routine (John Walker's old
 !         subroutine number).
-!     8.  convert tables to new node numbers.   find steady-state
+!     8.  convert tables to new node numbers.   Find steady-state
 !         phasor equivalents for distributed branches.
 !     9.  set up steady-state phasor network renumbering tables.
-!     10.  form the steady-state admittance matrix (y).   solve for
-!          steady-state phasor voltages.
-!     11.  output steady-state phasor solution (if requested).
-!     12.  branch-table and switch-table processing, as preparation
-!          for the integration in time-step loop.
-!     13.  setup initial conditions on lumped elements, and past
-!          history for distributed lines.
-!     14.  form (y) for the transients network.   triangularize the
-!          first partition (nonswitch/source nodes).
-!     15.  final setup operations before time-step loop.
-!     16.  first quarter of time-step loop (checking for changes of
-!          switches and pseudo-nonlinear elements, retriangularization
-!          of  ybb  and calculation of thevenin impedance vectors).
-!     17.  second quarter of time-step loop (branch-table history
-!          updating, addition of branch contributions to nodal
-!          injected current vector  i ).
-!     18.  third quarter of time-step loop (source update, repeat
-!          solution of   (y)v = i   for node voltage vector  v ).
-!     19.  fourth quarter of time-step loop (solution of 3-phase
-!          nonlinearities and compensation-based rotating
-!          machinery [type-50 s.m., u.m.],  superposition to
-!          give the total solution including compensation).
-!     20.  punch and print terminal conditions (if requested).
-!          catalog plot-data points on the disk as a permanent file, if
-!          misc. data parameter  'icat'  is positive.
+!     10. form the steady-state admittance matrix (Y).   Solve for
+!         steady-state phasor voltages.
+!     11. output steady-state phasor solution (if requested).
+!     12. branch-table and switch-table processing, as preparation
+!         for the integration in time-step loop.
+!     13. setup initial conditions on lumped elements, and past
+!         history for distributed lines.
+!     14. form (Y) for the transients network.   Triangularize the
+!         first partition (nonswitch/source nodes).
+!     15. final setup operations before time-step loop.
+!     16. first quarter of time-step loop (checking for changes of
+!         switches and pseudo-nonlinear elements, retriangularization
+!         of  Ybb  and calculation of thevenin impedance vectors).
+!     17. second quarter of time-step loop (branch-table history
+!         updating, addition of branch contributions to nodal
+!         injected current vector  i ).
+!     18. third quarter of time-step loop (source update, repeat
+!         solution of   (y)v = i   for node voltage vector  v ).
+!     19. fourth quarter of time-step loop (solution of 3-phase
+!         nonlinearities and compensation-based rotating
+!         machinery [type-50 s.m., u.m.],  superposition to
+!         give the total solution including compensation).
+!     20. punch and print terminal conditions (if requested).
+!         catalog plot-data points on the disk as a permanent file, if
+!         misc. data parameter  'icat'  is positive.
 !
 
 subroutine subr10
@@ -746,21 +746,21 @@ subroutine vecixx (karr, n13, n2)
 end subroutine vecixx
 
 !
-!     subroutine namea6.
+! subroutine namea6.
 !
 
 subroutine namea6 (text1, n24)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     module for maintainance of alphanumeric vector texvec of
-  !     "labcom".  maxbus of "blkcom" is last used cell.  n24 chooses
-  !     mode of use:  0 will add text1, positive will locate it,
-  !     and negative will destroy (remove) it.
+  ! module for maintainance of alphanumeric vector texvec of
+  ! "labcom".  maxbus of "blkcom" is last used cell.  n24 chooses
+  ! mode of use:  0 will add text1, positive will locate it,
+  ! and negative will destroy (remove) it.
   include 'blkcom.ftn'
   include 'labcom.ftn'
   integer(4) n24
   character(8) text1, text2
-  !     Burroughs: preserve local variable between module calls:
-  data n17   / 0 /
+  ! Burroughs: preserve local variable between module calls:
+  data n17 / 0 /
   data text2 / 'unused' /
   if (maxbus .le. 0) go to 3423
   do j = 1, maxbus
@@ -774,8 +774,8 @@ subroutine namea6 (text1, n24)
      if (texvec(j) .ne. text2) go to 3428
      n17 = j
      go to 9000
-  end do
 3428 continue
+  end do
   n17 = 0
   go to 9000
 3434 maxbus = maxbus + 1

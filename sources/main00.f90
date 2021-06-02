@@ -68,12 +68,12 @@ program gemtp
   !     calls, exist .....
   !     1-20.  For overlays 1, 2, ..., 20, which are secondary-level
   !            overlays, a call must be first made to the controlling
-  !            primary-level overlay.   thus for such  'nchain'  values,
-  !            control is transfered first to module  main10 .   this
+  !            primary-level overlay.   Thus for such  'nchain'  values,
+  !            control is transfered first to module  main10 .   This
   !            is the only case where calls to overlays are not made
   !            directly.
   !
-  !     29.  Completion of statistics (monte carlo) study, where variable
+  !     29.  Completion of statistics (Monte Carlo) study, where variable
   !          maxima of the different case solutions are read off the
   !          disk, and are processed statistically to produce
   !          cumulative distribution functions, etc.
@@ -89,8 +89,8 @@ program gemtp
   !          "marti setup"  code, named after dr. jose marti of
   !          vancouver and caracas (see 1981 ieee pica paper).
   !
-  !     41.  Supporting routine which calculates transformer matrices  (r)
-  !          and  (l)  from short-circuit and open-circuit data.
+  !     41.  Supporting routine which calculates transformer matrices  (R)
+  !          and  (L)  from short-circuit and open-circuit data.
   !
   !     42.  Supporting routine which converts an rms voltage vs. current
   !          saturation characteristic into an instantaneous flux vs.
@@ -553,19 +553,19 @@ subroutine cimage
 1036 if (noutpr .ne. 0) go to 1000
   if (n11 .ne. 0) go to 1000
   if (kol132 .eq. 132) write (unit = lunit6, fmt = 3015) buff10
-3015 format (' Comment card.', 37x, '1', 10a8)
+3015 format (' Comment card.', 37x, '|', 10a8)
   !if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) (abuff(j), j = 1, 4)
   if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) abuff(1 : 29)
   !3016 format (' Comment card.', 37x, '1', 3a8, a5)
-3016 format (' Comment card.', 37x, '1', a24, a5)
+3016 format (' Comment card.', 37x, '|', a29)
   go to 1000
 3034 if (noutpr .ne. 0) go to 3035
   if (kol132 .eq. 132) write (unit = lunit6, fmt = 3006) buff10
-3006 format (51x, '1', 10a8)
+3006 format (51x, '|', 10a8)
   !if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) (abuff(j), j = 1, 4)
   if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) abuff(1 : 29)
   !3007 format (51x, '1', a24, a5)
-3007 format (51x, '1', a24, a5)
+3007 format (51x, '1', a29)
 3035 if (n13 .gt. 0) go to 3011
   !print 3009, numdcd, (abuff(i), i = 1, 9)
   print 3009, numdcd, abuff(1 : 72)

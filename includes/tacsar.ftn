@@ -3,10 +3,10 @@
 !     file: tacsar.ftn
 !
 !     000000            definition of table names                 000000
-  dimension isblk(1), insup(1), jout(1), icolcs(1), ilntab(1)
-  dimension ksus(1), iuty(1), ivarb(1)
-  dimension rsblk(1), ud1(1), xtcs(1), atcs(1), xar(1)
-  dimension parsup(30), awkcs(1)
+  dimension isblk(1), insup(170000), jout(1), icolcs(1), ilntab(170000)
+  dimension ksus(1), iuty(170000), ivarb(170000)
+  dimension rsblk(1), ud1(5000), xtcs(1), atcs(1), xar(1)
+  dimension parsup(90000), awkcs(1)
   !     equivalencing of scalars which are to be carried between modules.
   equivalence (konsce, sptacs(1)), (koncur, sptacs(2))
   equivalence (kontot, sptacs(3)), (kofsce, sptacs(4))

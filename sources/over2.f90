@@ -1,6 +1,6 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 !
-!     file: over2.for
+!     file: over2.f90
 !
 
 !
@@ -4548,5 +4548,5 @@ subroutine over4
 end subroutine over4
 
 !
-!     end of file: over2.for
+!     end of file: over2.f90
 !

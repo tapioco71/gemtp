@@ -39,7 +39,7 @@ subroutine over1
   common /comlock/ locker(2)
   !     default list sizes for tacs proportioning of emtp list 19.
   data text2 / 'name  ' /
-  !data text6 / 'copy  ' /
+  data text6 / 'copy  ' /
   data text1 / 'tacs o' /
   data text3 / 'tacs h' /
   data text4 / 'tacs s' /
@@ -57,7 +57,6 @@ subroutine over1
   data ll60  / 60 /
   data ll64  / 64 /
   data ll80  / 80 /
-  text6 = 'copy  '
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over1."')
   lstacs(1) = 20
@@ -107,11 +106,11 @@ subroutine over1
   speedl = 2.997925d8
   peaknd(1) = 0.0
   kburro = 0
-  !     assign default relative precision for 6 emtp variable types.
-  !     1 --- alphanumeric              2 --- complex
-  !     3 --- floating-point numeric    4 --- integer numeric
-  !     5 --- 3 of 'subr31'             6 --- 4 of 'subr31'
-  !     setting all equal to unity means that all have equal length.
+  ! assign default relative precision for 6 EMTP variable types.
+  ! 1 --- alphanumeric              2 --- complex
+  ! 3 --- floating-point numeric    4 --- integer numeric
+  ! 5 --- 3 of 'subr31'             6 --- 4 of 'subr31'
+  ! setting all equal to unity means that all have equal length.
   call copyi (1, nbyte(1), 6)
   call dimens (lstat(1), nchain, bus1, bus2)
   lbus   = lstat(1)
@@ -142,25 +141,25 @@ subroutine over1
   lsiz26 = lstat(26)
   lsiz27 = lstat(27)
   lsiz28 = lstat(28)
-  !     assign  'n1'  equal to the number of emtp lists of variable
-  !     dimensioning (of the solution overlays).
+  ! assign  'n1'  equal to the number of emtp lists of variable
+  ! dimensioning (of the solution overlays).
   n1 = 28
   ltlabl = lstat(n1 + 1)
-  !locker(1) = bus1
-  !read (unit = bus1, fmt = '(i4)') locker(1)
+  ! locker(1) = bus1
+  ! read (unit = bus1, fmt = '(i4)') locker(1)
   call str2int (bus1, locker(1), ios)
   if (.not. (ios .eq. 0)) then
      write (unit = lunit6, fmt = "('Error converting bus1 string.  Stop.')")
      stop
   end if
-  !locker(2) = bus2
-  !read (unit = bus2, fmt = '(i4)') locker(2)
+  ! locker(2) = bus2
+  ! read (unit = bus2, fmt = '(i4)') locker(2)
   call str2int (bus2, locker(2), ios)
   if (.not. (ios .eq. 0)) then
      write (unit = lunit6, fmt = "('Error converting bus2 string.  .Stop.')")
      stop
   end if
-  !     write (*,*) ' save  locker =',  locker
+  ! write (*,*) ' save  locker =',  locker
   d13 = ltacst
   d13 = d13 / 1600.
   do j = 1, 8
@@ -193,10 +192,10 @@ subroutine over1
   ntcsex = 0
   nstacs = 0
   kanal = 0
-  !     initialize "kpartb" with nonzero value so later minus
-  !     sign can be applied as flag of "renumber bypass" usage:
+  ! initialize "kpartb" with nonzero value so later minus
+  ! sign can be applied as flag of "renumber bypass" usage:
   kpartb = 1000
-  !     "sysdep" will redefine if low-prec. complex ("cable constants"):
+  ! "sysdep" will redefine if low-prec. complex ("cable constants"):
   znvref = 0.0
   fmaxfs = 0.0
   begmax(1) = 0.0
@@ -244,16 +243,16 @@ subroutine over1
   nfdbr = 27
   nfdph = 9
   nfdhst = 5400
-  !     nfdpol = 25      ! assign maximum order of rational approximation
+  ! nfdpol = 25      ! assign maximum order of rational approximation
   nfdpol = 30
   ntlin = 0
   lu2 = 69
   lu6 = lunit6
-  !     if ( abuff(1:5) .ne. 'file:' )  go to 5223
-  !     write (*,*) ' ready to open  abuff(6:40) =',  abuff(6:40)
-  !     open ( unit=lu2,  status='old',  file=abuff(6:40) )
-  !     write (*,*) ' successful open abuff(6:40) =', abuff(6:40)
-  !     call cimage  ! erase spcl request of cables by rding 1st real brnch
+  ! if ( abuff(1:5) .ne. 'file:' )  go to 5223
+  ! write (*,*) ' ready to open  abuff(6:40) =',  abuff(6:40)
+  ! open ( unit=lu2,  status='old',  file=abuff(6:40) )
+  ! write (*,*) ' successful open abuff(6:40) =', abuff(6:40)
+  ! call cimage  ! erase spcl request of cables by rding 1st real brnch
   ifx = 0
   ip = 2
   iy = 2
@@ -263,7 +262,7 @@ subroutine over1
   write (unit = lunit6, fmt = 6438) ltlabl, lbus, lbrnch, ldata, lexct, lymat, lswtch, lsize7, lpast, lnonl, lchar, lsmout, &
        lsiz12, lfdep, lwt, ltails, limass, lsyn, maxpe, ltacst, lfsem, lfd, lhist, lsiz23, lcomp, lspcum, lsiz26, lsiz27, lsiz28
 6438 format (' *********  Begin "m40." EMTP solution.   Size /label/ =', i7, '  integer words.', /, &
-       ' list limits  1-10 :', 10i6, /, ' list limits 11-20 :', 10i6, /, ' list limits 21-end:', 10i6)
+          ' list limits  1-10 :', 10i6, /, ' list limits 11-20 :', 10i6, /, ' list limits 21-end:', 10i6)
   go to 15
 6452 write (unit = lunit6, fmt = 83044) locker
 83044 format (' Associated user documentation is the 864-page EMTP rule book dated  June, 1984.   Version M43.   Vardim time/date =', 2i7)
@@ -278,8 +277,8 @@ subroutine over1
 83048 format (51x, '0', 8(9x, i1))
   write (unit = lunit6, fmt = 83049)
 83049 format (1x, 50('-'), '+', 80('-'))
-  !     begin loop over all input data cards read by "over1" :
-  !     read input card using cimage.
+  ! begin loop over all input data cards read by "over1" :
+  ! read input card using cimage.
 15 do
      call cimage
      if (kill .gt. 0) go to 9200
@@ -309,27 +308,55 @@ subroutine over1
 3273 kill = 9999
      nchain = 31
      go to 9800
-     !3280 call reques
+     ! 3280 call reques
 3280 call reques (lstat(1))
      i = lstat(18)
-     !     request word number  0  implies miscellaneous data cards:
-     if (i .eq. 0) go to 2843
-     !     next come exceptions handled outside subroutine:
-     if (i .eq. 15) go to 8015
-     if (i .eq. 32) go to 8032
-     if (i .eq. 33) go to 8033
-     !     next come exceptional terminations (special jumps):
-     if (i .eq. 11) go to 3273
-     if (i .eq. 28) go to 3247
-     if (i .eq. 34) go to 6523
-     if (i .eq. 38) go to 15
-     if (i .eq. 40) go to 4308
-     !     next come exits to other overlays:
+     select case (i)
+     case (0)
+        go to 2843
+
+     case (15)
+        go to 8015
+
+     case (32)
+        go to 8032
+
+     case (33)
+        go to 8033
+
+     case (11)
+        go to 3273
+
+     case (28)
+        go to 3247
+
+     case (34)
+        go to 6523
+
+     case (38)
+        go to 15
+
+     case (40)
+        go to 15
+     end select
+     ! request word number  0  implies miscellaneous data cards:
+     !if (i .eq. 0) go to 2843
+     ! next come exceptions handled outside subroutine:
+     !if (i .eq. 15) go to 8015
+     !if (i .eq. 32) go to 8032
+     !if (i .eq. 33) go to 8033
+     ! next come exceptional terminations (special jumps):
+     !if (i .eq. 11) go to 3273
+     !if (i .eq. 28) go to 3247
+     !if (i .eq. 34) go to 6523
+     !if (i .eq. 38) go to 15
+     !if (i .eq. 40) go to 4308
+     ! next come exits to other overlays:
      if (kill .gt. 0) go to 9200
      if (nchain .ne. 1) go to 9800
-     !     continue in loop of request words, if none of above.
+     ! continue in loop of request words, if none of above.
   end do
-  !     $$$$$    special-request word no. 15.   'start again'       $$$$$
+  ! $$$$$    special-request word no. 15.   'start again'       $$$$$
 8015 ialter = lunit2
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 2857)
 2857 format ('+continue partially-completed data case.')
@@ -397,7 +424,7 @@ subroutine over1
   lstat(19) = 2861
   go to 9200
 2863 continue
-  !     read input card using cimage.
+  ! read input card using cimage.
 2868 call cimage
   read (unit = abuff, fmt = 1212) ijk
 1212 format (54x, i6)
@@ -457,10 +484,10 @@ subroutine over1
   if (noutpr .eq. 0 ) write (unit = kunit6, fmt = 7060) lstacs(1), lstacs(2), lstacs(3)
 7060 format ('+1st TACS dimensions card.', 3i6)
   go to 15
-  !     $$$$$  special request-word no. 33.  'relative tacs dimensions'  $
+  ! $$$$$  special request-word no. 33.  'relative tacs dimensions'  $
 8033 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7110)
 7110 format ('+proportional allocation of total TACS storage.')
-  !     read input card using cimage
+  ! read input card using cimage
   call cimage
   if (kolbeg .gt. 0) go to 7120
   call expchk (ll1, ll80, ll8)
@@ -507,7 +534,7 @@ subroutine over1
   call freone (d3)
   call freone (tolmat)
   call freone (t)
-4202 if (noutpr .eq. 0) write (unit = kunit6, fmt = 4205)  deltat, tmax, d1
+4202 if (noutpr .eq. 0) write (unit = kunit6, fmt = 4205) deltat, tmax, d1
 4205 format ('+misc. data.', 3e12.3)
   if (iofbnd .ne. 33666) go to 4206
   nchain = 41
@@ -628,8 +655,8 @@ subroutine over1
   if (kprchg(1) .eq. -7777) go to 4213
   go to 4312
 4303 ipun = 0
-  !     read input card using cimage.
-4308 call cimage
+  ! read input card using cimage.
+  call cimage
   if (kolbeg .gt. 0) go to 4217
   call intchk (ll1, ll80, ll8)
   if (kill .gt. 0) go to 9200
@@ -755,9 +782,11 @@ subroutine over1
 4568 format (' "Exit  module over1."')
   return
 end subroutine over1
+
 !
 ! subroutine str2int.
 !
+
 subroutine str2int(str, int, stat)
   implicit none
   ! Arguments
@@ -766,9 +795,11 @@ subroutine str2int(str, int, stat)
   integer, intent(out) :: stat
   read (unit = str, fmt = *, iostat = stat) int
 end subroutine str2int
+
 !
-!     tacs1c
+! subroutine tacs1c.
 !
+
 subroutine tacs1c
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     called only by over1 for start again usage
@@ -806,9 +837,11 @@ subroutine tacs1c
 1515 format (' Another TACS source changing card')
 2868 return
 end subroutine tacs1c
+
 !
-!     subroutine swmodf.
+! subroutine swmodf.
 !
+
 subroutine swmodf
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     called only by over1 for start again usage
@@ -857,7 +890,7 @@ subroutine swmodf
 end subroutine swmodf
 
 !
-!     subroutine reques.
+! subroutine reques.
 !
 
 subroutine reques (ls)
@@ -2298,9 +2331,11 @@ subroutine midov1
   iplot = intinf                                            ! write little to plot file, not nothing
 5947 return
 end subroutine midov1
+
 !
 !     subroutine nmincr.
 !
+
 subroutine nmincr (texta, n12)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module designed to serialize input root name  texta  with decimal
@@ -2323,7 +2358,7 @@ subroutine nmincr (texta, n12)
 end subroutine nmincr
 
 !
-!     subroutine tacs1.
+! subroutine tacs1.
 !
 
 subroutine tacs1
@@ -2872,7 +2907,7 @@ subroutine tacs1
 end subroutine tacs1
 
 !
-!     subroutine tacs1a
+! subroutine tacs1a.
 !
 
 subroutine tacs1a
@@ -3051,7 +3086,7 @@ subroutine tacs1a
      if (curch .eq. sepch(j)) k1 = j
   end do
   if (isrchl .eq. 1) go to 50065
-  if (ilgcl.eq.1 .and. iflpnt .eq. 2) go to 50120
+  if (ilgcl .eq. 1 .and. iflpnt .eq. 2) go to 50120
   if (k1 .eq. 0) go to 50020
   if (ilgnum .eq. 0) go to 50016
   if (k1 .ne. 3 .and. k1 .ne. 4) go to 50016
@@ -3060,21 +3095,21 @@ subroutine tacs1a
   k1 = 8
   go to 50165
 50017 if (k1 .ge. 1 .and. k1 .le. 6) go to 50120
-  !     m28.2042
-  !     :::  this char is '.' not first  :::
+  ! m28.2042
+  ! :::  this char is '.' not first  :::
   iflpnt = iflpnt + 1
   if (ilgcl .eq. 1) go to 50020
-  !     m28.2046
-  !     :::  this  '.'  follows alph or num  :::
+  ! m28.2046
+  ! :::  this  '.'  follows alph or num  :::
   go to 50021
 50019 if (ilgcl .eq. 1) go to 50120
-  !     m28.2050
-  !     :::  this char not first not separ  :::
+  ! m28.2050
+  ! :::  this char not first not separ  :::
 50020 if (ilglph .gt. 0) ilglph = ilglph + 1
   if (ilgnum .gt. 0) ilgnum = ilgnum + 1
   go to 50010
-  !     m28.2055
-  !     :::  preread  4  char  :::
+  ! m28.2055
+  ! :::  preread  4  char  :::
 50021 if (icurch .gt. 77) go to 50024
   curch1 = texcol(icurch + 1)
   chdum1 = texcol(icurch + 2)
@@ -3104,19 +3139,19 @@ subroutine tacs1a
   go to 50900
 50028 ilgnum = 1
   go to 50010
-  !     m28.2088
-  !     :::  hit col. 81  :::
+  ! m28.2088
+  ! :::  hit col. 81  :::
 50030 if (isrchl .eq. 1) go to 50185
   isrchl = -1
   go to 50120
-  !     m28.2093
-  !     :::  hit a blank  :::
+  ! m28.2093
+  ! :::  hit a blank  :::
 50035 if (isrchl .eq. 1) go to 50010
   if (iflpnt .eq. 1 .and. curch1 .eq. sepch(7) .and. ilgnum .eq. 0) go to 50027
   isrchl = 1
   go to 50120
-  !     m28.2100
-  !     :::  hit continuation-character  :::
+  ! m28.2100
+  ! :::  hit continuation-character  :::
 50040 if (isrchl .eq. 1) go to 50050
   icurch = icurch - 1
   if (icurch .lt. ifstch) go to 50050
@@ -3128,7 +3163,7 @@ subroutine tacs1a
   ifstch = 1
   call cimage
   go to 50010
-  !     :::  first character of a new word  :::
+  ! :::  first character of a new word  :::
 50065 isrchl = 0
   ifstch = icurch
   if (k1 .ne. 6) go to 50070
@@ -3138,7 +3173,7 @@ subroutine tacs1a
   iflpnt = 1
   go to 50021
 50075 if (k1 .ge. 1 .and. k1 .le. 6) go to 50165
-  !     :::  first char. of numer.  or  alphanum.  :::
+  ! :::  first char. of numer.  or  alphanum.  :::
   do j = 1, 10
      if (curch .eq. alnrcl(j)) go to 50090
   end do
@@ -3146,7 +3181,7 @@ subroutine tacs1a
   go to 50010
 50090 ilgnum = 1
   go to 50010
-  !     :::  current word is complete  :::
+  ! :::  current word is complete  :::
 50120 curch1 = texcol(icurch)
   texcol(icurch) = comma
   if (ilgnum .le. 20) go to 50125
@@ -3160,7 +3195,7 @@ subroutine tacs1a
   lstat( 16) = icurch - 1
   go to 50900
 50130 if (itmpbf .eq. 0) go to 50150
-  !     : word is spread over more than one card
+  ! : word is spread over more than one card
   do j = 1, 80
      btmpbf(j) = texcol(j)
   end do
@@ -3175,7 +3210,7 @@ subroutine tacs1a
   end do
 50150 if (ilgnum .gt. 0) go to 50155
   if (ilglph .gt. 0) go to 50160
-  !     :::  storing numerical word  :::
+  ! :::  storing numerical word  :::
 50155 if (iflpnt .le. 1) go to 50156
   ikill1 = 13
   ikill2 = 50155
@@ -3191,7 +3226,7 @@ subroutine tacs1a
   ilgnum = 0
   iflpnt = 0
   go to 50170
-  !     :::  storing alphanumeric word  :::
+  ! :::  storing alphanumeric word  :::
 50160 nfrfld = 1
   nright = -1
   kolbeg = ifstch
@@ -3203,13 +3238,13 @@ subroutine tacs1a
   ilgcl = 0
   iflpnt = 0
   go to 50170
-  !     :::  storing  operator  :::
+  ! :::  storing  operator  :::
 50165 isrchl = 1
   ilst = ilst + 1
   iel(ilst) = ilst + 1
   el(ilst) = sepch(k1)
   go to 50010
-  !     :::  restore current line  :::
+  ! :::  restore current line  :::
 50170 if (itmpbf .eq. 0) go to 50180
   itmpbf = 0
   do j = 1, 80
@@ -3217,7 +3252,7 @@ subroutine tacs1a
   end do
 50180 texcol(icurch) = curch1
   if (isrchl) 50185, 50065, 50010
-  !     :::  out : whole expression has been interpreted  :::
+  ! :::  out : whole expression has been interpreted  :::
 50185 if (ilst .ne. 0) go to 50190
   ikill1 = 2
   ikill2 = 50185
@@ -3230,12 +3265,12 @@ subroutine tacs1a
   iel(ilst) = 999
   if (j .lt. 0) iel(ilst) = -999
   csepar = csprch
-  !     ***  check  validity  and  pre-process
-  !     ***   this  fortran  expression
-  !     ***   * * * * * * * * * * * * * * * * *
+  ! ***  check  validity  and  pre-process
+  ! ***   this  fortran  expression
+  ! ***   * * * * * * * * * * * * * * * * *
   ifst = 1
   ilst1 = ilst
-  !     :::  check brackets  :::
+  ! :::  check brackets  :::
 50200 i1 = 0
   k1 = 0
   i2 = 0
@@ -3273,8 +3308,8 @@ subroutine tacs1a
   ikill1 = 1
   ikill2 = 50220
   go to 50900
-  !     m28.2264
-  !     :::  check all pairs of adjacent elements  :::
+  ! m28.2264
+  ! :::  check all pairs of adjacent elements  :::
 50225 i = ifst - 1
 50230 i = i + 1
   if (i .gt. ilst) go to 50485
@@ -3375,7 +3410,7 @@ subroutine tacs1a
   bus2 = alnm1
   bus3 = alnm2
   go to 50900
-50385 if ( k3 .ne. 0  .or.  k2 .ne. 1 )  go to 50390
+50385 if (k3 .ne. 0 .or. k2 .ne. 1) go to 50390
   ikill1 = 5
   ikill2 = 50385
   bus2 = alnm1
@@ -3386,7 +3421,7 @@ subroutine tacs1a
   ikill2 = 50390
   bus2 = alnm1
   go to 50900
-  !     :::  insert  '+'  or  '.or.'  where needed  :::
+  ! :::  insert  '+'  or  '.or.'  where needed  :::
 50400 i1 = 0
   i2 = 0
   i3 = k
@@ -3424,7 +3459,7 @@ subroutine tacs1a
   if (i1 .eq. 0) go to 50445
   if (el(k) .eq. opname(7)) i1 = i1 - 1
   go to 50435
-50445 if(el(k) .ne. opname(3) .and. el(k) .ne. opname(4) .and. el(k) .ne. opname(5) .and. el(k) .ne. opname(6)) go to 50450
+50445 if (el(k) .ne. opname(3) .and. el(k) .ne. opname(4) .and. el(k) .ne. opname(5) .and. el(k) .ne. opname(6)) go to 50450
   i2 = 1
 50450 if (i .eq. ifst) go to 50455
   j = iel(i)
@@ -3457,8 +3492,8 @@ subroutine tacs1a
 50480 if (i .ne. ifst) go to 50485
   i2 = 0
   go to 50455
-  !     m28.2453
-  !     :::  change  ".nn.expression"  into  ".nn.+expression)"
+  ! m28.2453
+  ! :::  change  ".nn.expression"  into  ".nn.+expression)"
 50485 i = ifst
 50490 i = iel(i)
   if (i .lt. 0) i = -i
@@ -3504,8 +3539,8 @@ subroutine tacs1a
 50530 ifree = ifree - 1
   if (i2 .eq. i) go to 50500
   go to 50490
-  !     m28.2500
-  !     :::  change  "expression.nn."  into  "(expression.nn."
+  ! m28.2500
+  ! :::  change  "expression.nn."  into  "(expression.nn."
 50535 j = ilst
   go to 50550
 50540 do j = 1, 100
@@ -3557,8 +3592,8 @@ subroutine tacs1a
   ikill1 = 8
   ikill2 = 50590
   go to 50900
-  !     m28.2550
-  !     :::  check homology of successive operators  :::
+  ! m28.2550
+  ! :::  check homology of successive operators  :::
 50600 i = ifst
   go to 50610
 50605 i = iel( i)
@@ -3601,8 +3636,8 @@ subroutine tacs1a
   bus2 = alnm1
   bus3 = alnm2
   go to 50900
-  !     m28.2594
-  !     :::  store 'el' into ivarb, parsup  :::
+  ! m28.2594
+  ! :::  store 'el' into ivarb, parsup  :::
 50645 ndx1 = kjsup + nsup
   insup(ndx1) = karg + 3
   i = ifst
@@ -3611,7 +3646,7 @@ subroutine tacs1a
   i = k
 50655 k = iel( i)
   if (k .gt. 0) go to 50660
-  !     : numerical argument
+  ! : numerical argument
   k = -k
   ivarb(karg + 1) = -1
   kpar = kpar + 1
@@ -3627,7 +3662,7 @@ subroutine tacs1a
   do j = 12, 35
      if (alnm1 .eq. supfn(j)) go to 50680
   end do
-  !     : tacs variable
+  ! : tacs variable
   ivarb(karg + 1) = 1
   n23 = 0
   call namea6 (alnm1, n23)
@@ -3639,32 +3674,32 @@ subroutine tacs1a
   ivarb(karg + 1) = 0
   ivarb(karg + 3) = 0
   go to 50650
-  !     : function
+  ! : function
 50680 ivarb(karg + 1) = 2
   ivarb(karg + 3) = j - 1
   go to 50650
-  !     : exit
+  ! : exit
 50685 ndx1 = kksup + nsup
   insup(ndx1) = -karg
   ndx1 = kjsup + nsup
   if (karg - insup( ndx1) .lt. 150) go to 12599
   ikill1 = 8
   ikill2 = 50685
-  !     m28.2651
-  !     ***  kill  codes  for  fortran  expression  ***
-  !     ***  * * * * * * * * * * * * * * * * * * *  ***
+  ! m28.2651
+  ! ***  kill  codes  for  fortran  expression  ***
+  ! ***  * * * * * * * * * * * * * * * * * * *  ***
 50900 kill = 218
   lstat( 19) = ikill2
   lstat( 17) = ikill1
   bus1 = alnode
   go to 9000
-  !     m28.2659
-  !     ***  old  fixed-format  pseudo-fortran  expression  ***
-  !     ***  * * * * * * * * * * * * * * * * * * * * * * *  ***
+  ! m28.2659
+  ! ***  old  fixed-format  pseudo-fortran  expression  ***
+  ! ***  * * * * * * * * * * * * * * * * * * * * * * *  ***
 12517 if (noutpr .eq. 0) write (unit = kunit6, fmt = 9304)
 9304 format ('+TACS supplemental variable')
-  !read (unit = abuff(1), fmt = 18001) prx, alph(1), dumj(1), dumj(6), alph(2), dumj(2), dumj(7), alph(3), dumj(3), pru, alph(4), &
-  !     dumj(4), dumj(9), alph(5), dumj(5), dumj(10)
+  ! read (unit = abuff(1), fmt = 18001) prx, alph(1), dumj(1), dumj(6), alph(2), dumj(2), dumj(7), alph(3), dumj(3), pru, alph(4), &
+  ! dumj(4), dumj(9), alph(5), dumj(5), dumj(10)
   read (unit = abuff, fmt = 18001) prx, alph(1), dumj(1), dumj(6), alph(2), dumj(2), dumj(7), alph(3), dumj(3), pru, alph(4), &
        dumj(4), dumj(9), alph(5), dumj(5), dumj(10)
 18001 format (10x, e10.0, 2(a1, a5, a6), a1, a5, e6.0, 2(a1, a5, a6))
@@ -3680,10 +3715,10 @@ subroutine tacs1a
   parsup(ndx1) = prx
 126 do i = 1, 5
      if (alph(i) .ne. blank) go to 12601
-     !     Previous record fails occasionally for Burroughs EMTP
-     !     (see vol. xi  emtp memo,  page dttm-4,  24 dec 1981).
-     !     Yet following burroughs patch produces fatal VAX error:
-     !     if ( .not. (alph(i) .is. blank) )   go to 12601
+     ! Previous record fails occasionally for Burroughs EMTP
+     ! (see vol. xi  emtp memo,  page dttm-4,  24 dec 1981).
+     ! Yet following burroughs patch produces fatal VAX error:
+     ! if ( .not. (alph(i) .is. blank) )   go to 12601
      if (i .eq. 3) go to 12602
      if (dumj(i + 5) .eq. blank) go to 125
      if (i .ne. 1) go to 12603
@@ -3759,8 +3794,8 @@ subroutine tacs1a
   go to 9000
 10700 if (noutpr .eq. 0) write (unit = kunit6, fmt = 19305) m
 19305 format ('+TACS supplemental device type ', i2)
-  !read (unit = abuff(1), fmt = 18002) alph(1), dumj(1), alph(2), dumj(2), alph(3), dumj(3), alph(4), dumj(4), alph(5), dumj(5), &
-  !     (dum(i), i = 1, 3), alnm1, alnm2
+  ! read (unit = abuff(1), fmt = 18002) alph(1), dumj(1), alph(2), dumj(2), alph(3), dumj(3), alph(4), dumj(4), alph(5), dumj(5), &
+  ! (dum(i), i = 1, 3), alnm1, alnm2
   read (unit = abuff, fmt = 18002) alph(1), dumj(1), alph(2), dumj(2), alph(3), dumj(3), alph(4), dumj(4), alph(5), dumj(5), &
        (dum(i), i = 1, 3), alnm1, alnm2
 18002 format (10x, 5(a1, a6, 1x), 3e6.0, 2a6)
@@ -3810,7 +3845,7 @@ subroutine tacs1a
   if (m .eq. 61 .or. m .eq. 63) go to 1073
   kill = 135
   bus1 = alnode
-  lstat( 19) = 1073
+  lstat(19) = 1073
   go to 9000
 1073 ivarb(karg + 1) = nsudv + 1
   mpar = kprsup + kpar
@@ -3913,10 +3948,10 @@ subroutine tacs1a
   go to 6511
 655 ivarb(karg + 3) = -kpar - 4
   kpar = kpar + 3
-  !     read input card using cimage
+  ! read input card using cimage
 10711 call cimage
   if (kolbeg .gt. 0) go to 6544
-  !read (unit = abuff(1), fmt = 10712) prx, pru
+  ! read (unit = abuff(1), fmt = 10712) prx, pru
   read (unit = abuff, fmt = 10712) prx, pru
 10712 format (2e16.0)
   go to 6547
@@ -4005,7 +4040,7 @@ subroutine tacs1a
 end subroutine tacs1a
 
 !
-!     subroutine tacs1b.
+! subroutine tacs1b.
 !
 
 subroutine tacs1b
@@ -4026,7 +4061,7 @@ subroutine tacs1b
   llm1 = -1
   isour = lstat(64)
   kjsup = kinsup + lstat(65)
-  kksup = kjsup  + lstat(65)
+  kksup = kjsup + lstat(65)
   kxai  = kxar + lstat(68)
   kbtcs = katcs + lstat(62)
   kbwkcs = kawkcs + lstat(68)
@@ -4042,7 +4077,7 @@ subroutine tacs1b
   mc = 1
   mins = 0
   iuser = 0
-  !     $$$  ordering  $$$
+  ! $$$  ordering  $$$
   kint = -1000
   go to 1555
 4747 if (iabs (ia) .ne. 1) go to 1984
@@ -4160,8 +4195,8 @@ subroutine tacs1b
      if (namsup .gt. 1) go to 1853
 1978 mmm = 1
      if (ndxb .le. nuk .or. kint .ne. -1000) go to 4848
-     iuty(kiuty+4) = is
-     kint = - 100
+     iuty(kiuty + 4) = is
+     kint = -100
      go to 4949
 4848 if (nnn .eq. 0) isblk(ndy) = is
      if (nnn .ne. 0) insup(kinsup+nnn) = is
@@ -4193,7 +4228,7 @@ subroutine tacs1b
   go to 9000
 777 nukr = krsblk + nuk * 4
   write (unit = lunit6, fmt = 7171)
-7171 format (' --------- More than one limiter in the zs loop insert a delay s-block to decouple the loop')
+7171 format (' --------- More than one limiter in the Zs loop insert a delay s-block to decouple the loop')
   nuki = kisblk - 4
   do lc = 1, nuk
      nuki = nuki + 8
@@ -4231,25 +4266,25 @@ subroutine tacs1b
   nexd = nexd + 1
   n23 = 0
   call namea6 (delay, n23)
-  atcs(katcs+nuk) = n23
-  ksus(kksus+nsu) = 1
-  ksus(kalksu+nsu) = ksus(kalksu + k)
-  ksus(kalksu+k) = n23
-  rsblk(nukr+4) = 0.0
-  xar(kxar+nuk) = 0.0
-  xar(kxai+nuk) = 0.0
-  awkcs(kawkcs+nuk) = 1.0
-  awkcs(kbwkcs+nuk) = 1.0
-  parsup(ndx1+1) = 1.0
-  parsup(ndx1+2) = 1.0
-  parsup(ndx1+3) = 1.0
-  parsup(ndx1+4) = 1.0
-  parsup(ndx1+5) = 0.0
-  parsup(ndx1+6) = 0.0
-  parsup(ndx1+7) = -deltat / 2.0
-  parsup(ndx1+8) = -parsup(ndx1 + 5)
-  parsup(ndx1+9) = parsup(ndx1 + 7)
-  parsup(ndx1+10) = parsup(ndx1 + 8)
+  atcs(katcs + nuk) = n23
+  ksus(kksus + nsu) = 1
+  ksus(kalksu + nsu) = ksus(kalksu + k)
+  ksus(kalksu + k) = n23
+  rsblk(nukr + 4) = 0.0
+  xar(kxar + nuk) = 0.0
+  xar(kxai + nuk) = 0.0
+  awkcs(kawkcs + nuk) = 1.0
+  awkcs(kbwkcs + nuk) = 1.0
+  parsup(ndx1 + 1) = 1.0
+  parsup(ndx1 + 2) = 1.0
+  parsup(ndx1 + 3) = 1.0
+  parsup(ndx1 + 4) = 1.0
+  parsup(ndx1 + 5) = 0.0
+  parsup(ndx1 + 6) = 0.0
+  parsup(ndx1 + 7) = -deltat / 2.0
+  parsup(ndx1 + 8) = -parsup(ndx1 + 5)
+  parsup(ndx1 + 9) = parsup(ndx1 + 7)
+  parsup(ndx1 + 10) = parsup(ndx1 + 8)
   do jc = 2, nuk
      isblk(nuki + 7) = isblk(nuki - 1)
      nuki = nuki - 8
@@ -4344,7 +4379,7 @@ subroutine tacs1b
      nukm = kisblk - 8
      do jj = 1, mnp
         nukm = nukm + 8
-        icolcs( mkk + jj ) = isblk(nukm + 5)
+        icolcs(mkk + jj) = isblk(nukm + 5)
      end do
      go to 1414
 1814 jk1 = mkk + 1
@@ -4478,7 +4513,7 @@ subroutine tacs1b
   end do
   if (iprsup .gt. 0) write (unit = lunit6, fmt = 8844) (ilntab(klntab + i), i = 1, nuk)
 8844 format ('  $$$ ilntab $$$ =', /, (5x, 15i8))
-  !     $$$  form tables  $$$ m37.1855
+  ! $$$  form tables  $$$ m37.1855
   if (nsup .eq. 0) go to 21100
   i = 1
 5577 j = insup(kjsup + i)
@@ -4487,7 +4522,7 @@ subroutine tacs1b
   k1 = k
   if (k .lt. 0) k = -k
   do n = j, k, 3
-     if (ivarb(n+1) .lt. 0) go to 2113
+     if (ivarb(n + 1) .lt. 0) go to 2113
      if (k1 .lt. 0 .and. ivarb(n + 1) .ne. 1) go to 2113
      nivarb = ivarb(n + 3)
      do m = 1, ktab
@@ -4566,7 +4601,7 @@ subroutine tacs1b
   go to 9000
 9200 kill = 500
   write (unit = lunit6, fmt = 9202)
-9202 format ('  The case will be killed because there are some loops in supplemental variables or devices.',/, &
+9202 format ('  The case will be killed because there are some loops in supplemental variables or devices.', /, &
           '  This is not allowed.    The looped supplemental blocks are as follows :')
   j = 0
   do i = 1, nsup
@@ -4698,7 +4733,7 @@ subroutine tacs1b
   lstat(15) = n2
   lstat(19) = 2059
   go to 9000
-  !     *****  output request  *****               m38.1007
+  ! *****  output request  *****               m38.1007
 2072 if (iuty(kiuty + 6) .ne. 9999) go to 153
   ioutcs = 0
   n1 = nuk + niu
@@ -4736,7 +4771,7 @@ subroutine tacs1b
   go to 9000
 111 if (iprsup .ge. 1) write (unit = lunit6, fmt = 192) (jout(kjout + i), i = 1, ioutcs)
 192 format ('0program output will be prepared for nodes 0', /, (1x, 16i8))
-  !     ******   initial condition   **********
+  ! ******   initial condition   **********
 3072 if (kxic .eq. 0) go to 231
   kxtcs2 = kxtcs + lstat(68)
   do i = 1, kxic
@@ -4750,9 +4785,9 @@ subroutine tacs1b
         if (j8 .eq. ilntab(klntab + k)) go to 412
      end do
      write (unit = lunit6, fmt = 7686) texvec(j8)
-7686 format (' $$$$$ Ignor the initial condition card since no such name ( ', a6,  ' ) in the TACS table $$$$$')
+7686 format (' $$$$$ Ignore the initial condition card since no such name ( ', "'", a6, "'", ' ) in the TACS table $$$$$')
      go to 4111
-412 jr = jr + 1
+412  jr = jr + 1
      xtcs(kxtcs + k) = xtcs(kxtcs2 + i)
   end do
 4111 continue
@@ -4781,7 +4816,7 @@ subroutine tacs1b
 end subroutine tacs1b
 
 !
-!     subroutine expchk.
+! subroutine expchk.
 !
 
 subroutine expchk (n1, n2, n5)
@@ -4834,7 +4869,7 @@ subroutine expchk (n1, n2, n5)
 end subroutine expchk
 
 !
-!     subroutine intchk.
+! subroutine intchk.
 !
 
 subroutine intchk (n1, n2, n5)
@@ -4866,28 +4901,31 @@ subroutine intchk (n1, n2, n5)
 end subroutine intchk
 
 !
-!     subroutine date44.
+! subroutine date44.
 !
 
 subroutine date44(a)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !         The purpose of subroutine  date44  is to interrogate the
-  !         installation calendar, and return the current date through the
-  !         argument of the subroutine.   Eight bcd characters are allowed,
-  !         with the first (left) four characters to be placed in  a(1) ,
-  !         and the final (right) four placed in  a(2) .   A statement like
-  !                  write (lunit6, 4041)  a
-  !             4041 format ( 1x, 2a4 )
-  !         thus outputs the current date as first the month, then the day,
-  !         and finally the year, separated by slashes (mm/dd/yy) .
-  !         Subroutine  date44  is of course installation dependent.
-  !         European (or generally non-united-states, perhaps) users of this
-  !         program may want to reverse the order of appearance of the month
-  !         and the day, in conformity with established european usage.
-  !     Installation-dependent  EMTP  module written for the  DEC
-  !     VAX-11/780.    'idate'  is a  dec  system subroutine which
-  !     returns the month, day, and year (of century) as three  integer*2
-  !     numerical values.
+  ! The purpose of subroutine  date44  is to interrogate the
+  ! installation calendar, and return the current date through the
+  ! argument of the subroutine.   Eight bcd characters are allowed,
+  ! with the first (left) four characters to be placed in  a(1) ,
+  ! and the final (right) four placed in  a(2) .   A statement like
+  !          write (lunit6, 4041) a
+  !     4041 format ( 1x, 2a4 )
+  ! thus outputs the current date as first the month, then the day,
+  ! and finally the year, separated by slashes (mm/dd/yy) .
+  ! Subroutine  date44  is of course installation dependent.
+  ! European (or generally non-united-states, perhaps) users of this
+  ! program may want to reverse the order of appearance of the month
+  ! and the day, in conformity with established european usage.
+  ! Installation-dependent  EMTP  module written for the  DEC
+  ! VAX-11/780.    'idate'  is a  dec  system subroutine which
+  ! returns the month, day, and year (of century) as three  integer*2
+  ! numerical values.
+  ! Note for non VAX users: on UNIX/Linux date_and_time is used, the
+  !                         result is stored in date and accessed
+  !                         accordingly.
   character(8) a(2), date
   call date_and_time(date = date)
   write (unit = a(1), fmt = 1386) date(7 : 8), date(5 : 5)
@@ -4898,19 +4936,19 @@ subroutine date44(a)
 end subroutine date44
 
 !
-!     subroutine pfatch.
+! subroutine pfatch.
 !
 
 subroutine pfatch
   implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     This installation-dependent module serves to connect a
-  !     file to  i/o  channel  ialter  (/blank/ variable),
-  !     based on the file specification contained on last-
-  !     read data card.   Different usages include:
-  !     replot, file specification
-  !     start again, file specification
-  !     free-format is here required, temporarily.
-  !     Module written specially for  DEC  VAX-11/780 .
+  ! This installation-dependent module serves to connect a
+  ! file to  i/o  channel  ialter  (/blank/ variable),
+  ! based on the file specification contained on last-
+  ! read data card.   Different usages include:
+  ! replot, file specification
+  ! start again, file specification
+  ! free-format is here required, temporarily.
+  ! Module written specially for  DEC  VAX-11/780 .
   include 'blkcom.ftn'
   include 'dekspy.ftn'
   character(25) filen
@@ -4947,5 +4985,5 @@ subroutine pfatch
 end subroutine pfatch
 
 !
-!     end of file: over1.for
+!     end of file: over1.f90
 !

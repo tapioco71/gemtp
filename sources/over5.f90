@@ -50,7 +50,7 @@ subroutine over5
   iwtent(ifdep2) = jst1
   if (iprsup .le. 0) go to 6693
   if (ifdep .eq. 0) go to 6693
-  if (iprsup .ge. 9) write (unit = lunit6, fmt = 6656)  (weight(i), i = 1, jst)
+  if (iprsup .ge. 9) write (unit = lunit6, fmt = 6656) (weight(i), i = 1, jst)
 6656 format (' Weight ---- array of weighting function storage', /, (1x, 10e13.4))
   write (unit = lunit6, fmt = 6648)
 6648 format (/, 2x, 'row', 3x, 'iskip', 2x, 'iwtent', 12x, 'eta', 11x, 'zinf', 10x, 'tailp', 10x, 'tailq', 10x, 'tailt', 4x, 'sum weights')
@@ -531,12 +531,12 @@ subroutine over5
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 8026) (koutvp(i), i = ndx1, ndx2)
   ipunch = ipun
   iout = ioutin
-  ! code for input of emtp sources is in  "over5a" .
+  ! code for input of EMTP sources is in  "over5a" .
   call over5a
   if (ktab .eq. 0) go to 3636
   ndx1 = kxtcs + nuk
-  xtcs(ndx1+5) = omega
-  xtcs(ndx1+4) = omega / twopi
+  xtcs(ndx1 + 5) = omega
+  xtcs(ndx1 + 4) = omega / twopi
 3636 if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
   if (kill .eq. 0) go to 99999
   go to 9200
@@ -3529,7 +3529,7 @@ subroutine smdat (mtype)
   ndwqa = 0
   if (xq .eq. xqp .and.  xqp .eq. xqpp) ndwqa = -2
   if (ndwqa .lt. 0) go to 25
-  if ((xq - xqp) .le. flzero .and. fm. eq. 0.0) go to 19
+  if ((xq - xqp) .le. flzero .and. fm .eq. 0.0) go to 19
   if ((xqp - xqpp) .le. flzero) go to 19
   if ((xqpp - xl) .le. flzero) go to 19
   go to 25
@@ -3950,7 +3950,7 @@ subroutine smdat (mtype)
   npbuf(n21) = ij
   if (ij .eq. 8) npbuf(n21) = npbuf(n21) + 3
   if (ij .eq. 9 .or. ij .eq. 10) npbuf(n21) = npbuf(n21) + 5
-1899 if (ij .eq. 11 .or.  ij .eq. 12) go to 1299
+1899 if (ij .eq. 11 .or. ij .eq. 12) go to 1299
   if (ij .eq. 10) ij = ij + 2
   if (ij .eq. 7 .or. ij .eq. 8) ij = ij + 3
 1950 ij = ij + 1

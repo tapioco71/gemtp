@@ -1,6 +1,6 @@
 ! -*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 !
-!     file: datain.for
+!     file: datain.f90
 !
 
 !
@@ -28,26 +28,26 @@ subroutine datain
   dimension kard(200), karg(200), kbeg(200), kend(200)
   dimension ktex(200), lentyp(18)
   dimension kolinc(35), modarg(35), kkkdum(35)
-  data  komlev     / -1 /                                   ! default comment level (none)
-  data  nchpre     / 0 /                                    ! begin with no file name prefix
-  data  nchsuf     / 0 /                                    ! begin with no file name suffix
-  data  dumnam     / 'dum   ' /                             ! default dummy root name
-  data  typdat(1)  / 'request     ' /,   lentyp(1)  /  7  /
-  data  typdat(2)  / 'function    ' /,   lentyp(2)  /  8  /
-  data  typdat(3)  / 'tacs source ' /,   lentyp(3)  / 11  /
-  data  typdat(4)  / 'supplemental' /,   lentyp(4)  / 12  /
-  data  typdat(5)  / 'tacs output ' /,   lentyp(5)  / 11  /
-  data  typdat(6)  / 'tacs initial' /,   lentyp(6)  / 12  /
-  data  typdat(7)  / 'branch      ' /,   lentyp(7)  /  6  /
-  data  typdat(8)  / 'switch      ' /,   lentyp(8)  /  6  /
-  data  typdat(9)  / 'source      ' /,   lentyp(9)  /  6  /
-  data  typdat(10) / 'load flow   ' /,   lentyp(10) /  9  /
-  data  typdat(11) / 'initial     ' /,   lentyp(11) /  7  /
-  data  typdat(12) / 'output      ' /,   lentyp(12) /  6  /
-  data  typdat(13) / 'plot        ' /,   lentyp(13) /  4  /
-  data  typdat(14) / 'statistics  ' /,   lentyp(14) / 10  /
-  data  numtyp     / 14 /                                   ! total number of data type names
-  data  filsav     / '                                '  /  ! for lmfs
+  data komlev     / -1 /                                   ! default comment level (none)
+  data nchpre     / 0 /                                    ! begin with no file name prefix
+  data nchsuf     / 0 /                                    ! begin with no file name suffix
+  data dumnam     / 'dum   ' /                             ! default dummy root name
+  data typdat(1)  / 'request     ' /, lentyp(1)  /  7  /
+  data typdat(2)  / 'function    ' /, lentyp(2)  /  8  /
+  data typdat(3)  / 'tacs source ' /, lentyp(3)  / 11  /
+  data typdat(4)  / 'supplemental' /, lentyp(4)  / 12  /
+  data typdat(5)  / 'tacs output ' /, lentyp(5)  / 11  /
+  data typdat(6)  / 'tacs initial' /, lentyp(6)  / 12  /
+  data typdat(7)  / 'branch      ' /, lentyp(7)  /  6  /
+  data typdat(8)  / 'switch      ' /, lentyp(8)  /  6  /
+  data typdat(9)  / 'source      ' /, lentyp(9)  /  6  /
+  data typdat(10) / 'load flow   ' /, lentyp(10) /  9  /
+  data typdat(11) / 'initial     ' /, lentyp(11) /  7  /
+  data typdat(12) / 'output      ' /, lentyp(12) /  6  /
+  data typdat(13) / 'plot        ' /, lentyp(13) /  4  /
+  data typdat(14) / 'statistics  ' /, lentyp(14) / 10  /
+  data numtyp     / 14 /                                    ! total number of data type names
+  data filsav     / '                                '  /   ! for lmfs
   if (kexact .ne. 88333) numrun = 0                         ! init. numrun for lmfs runs
   if (kexact .eq. 88333 .and. numrun .gt. 0) go to 5266
   if (numhld .eq. -8899) stop
@@ -77,11 +77,10 @@ subroutine datain
   limcrd = 30000                                            ! present fixed limit on file6 of "dekspy"
   n13 = 0                                                   ! initially assume no debug printout
   ntacs = 0                                                 ! old tacs data format
-  call date44 (date1)                                       ! find calendar date and the
-  call time44 (tclock)                                      ! time of day for documentation
+  call date44 (date1(1))                                    ! find calendar date and the
+  call time44 (tclock(1))                                   ! time of day for documentation
   call initsp                                               ! initialize spy common (digit needed to sort)
-1311 do
-     write (unit = lunit6, fmt = 1324)                      ! prompt user at "emtspy" keyboard
+1311 write (unit = lunit6, fmt = 1324)                      ! prompt user at "emtspy" keyboard
 1324 format (' EMTP begins.  Send (spy, $attach, debug, help, module, junk, stop) :')
      read (unit = munit5, fmt = 1329, iostat = ios) buff77  ! read first card of EMTP data
 1329 format (a80)
@@ -92,7 +91,7 @@ subroutine datain
      if (buff77(1 : 5) .eq. 'stop ') call stoptp
      if (buff77(1 : 5) .ne. 'disk ') go to 51329
      maxzno = 4545                                          ! signal to apollo "sysdep" for disk lunit6
-  end do
+  go to 1311
 51329 if (buff77(1 : 7) .eq. '$attach') go to 1347          ! batch mode
   if (buff77(1 : 5) .ne. 'junk ') go to 1332
   write (unit = lunit6, fmt = 1330)
@@ -445,8 +444,8 @@ subroutine datain
         if (char1 .eq. ' ') go to 4263                      ! skip over blank
         if (iprspy .lt. 8) go to 54262                      ! jump around diagnostic
         write (unit = munit6, fmt = 4262) ip, m, char1
-4262    format ('  Next non-blank digit.  ip, n, digit =', 2i6, '   ', '"', a1, '"')
-        call window         ! output of character variable munit6
+4262    format ('  Next non-blank digit.  ip, n, digit =', 2i6, 3x, '"', a1, '"')
+        call window                                         ! output of character variable munit6
         ! pounds reserves blank space, so
 54262   if (char1 .eq. '#') char1 = ' '                     ! it is now blanked as it is used
         if (n .lt. n1) go to 4253                           ! space error; allow correction
@@ -666,8 +665,8 @@ subroutine datain
      n14 = index (file6(j), typdat(k)(1 : n8))              ! search for keyword k
      if (n14 .gt. 0) go to 2469                             ! yes, one of our data classes foun
   end do                                                    ! end  do 2464  loop seeking to identify blank card
-  n14 = index(file6(j), 'tacs data')
-  if (n14 .eq. 0) go to 2493                             ! only one class if new tacs
+  n14 = index (file6(j), 'tacs data')
+  if (n14 .eq. 0) go to 2493                                ! only one class if new tacs
   k = 6                                                     ! data format, so set class no. to 6 (last one)
 2469 n8 = k                                                 ! data class which this blank card terminates
                                                             ! convert end of class blank card in old tacs data to comment card
@@ -710,8 +709,8 @@ subroutine datain
      write (unit = munit6, fmt = 2501) j, file6(j)
 2501 format (' Card', i3, '.', a80)
      call window                                            ! output of character variable munit6
-2505 continue
   end do
+2505 continue
   numcrd = j                                                ! final length of EMTP input data, after "/" removal
   if (iprspy .lt. 1) go to 2509                             ! jump around diagnostic
   write (unit = munit6, fmt = 2508) numcrd
@@ -889,37 +888,33 @@ subroutine datain
      go to 3500                                             ! except the last one to end tacs data
 3005 select case (k)
      case (1)
-        go to 3010
+        !convert type code '99' to
+        if (file6(j)(1 : 2) .eq. '99') file6(j)(1 : 2) = '  '  !'  ' for functions
+        go to 3500
 
      case (2)
-        go to 3020
+        if (file6(j)(1 : 1) .eq. 'c' .or. file6(j)(1 : 1) .eq. '9' .or. file6(j)(1 : 1) .eq. '$') go to 3500
+        if (file6(j)(2 : 2) .ne. '1') go to 3022
+        file6(j)(1 : 1) = '1'                                  ! to convert tacs source cards:
+        go to 3500                                             ! type ' 1' to '11', ' 2' to '14'
 
      case (3)
         go to 3500
 
      case (4)
-        go to 3040
+        if (file6(j)(1 : 1) .ne. ' ') go to 3500
+        file6(j)(1 : 2) = '33'                                 !convert type '  ' to '33'
+        go to 3500                                             !for tacs output variables
 
      case (5)
-        go to 3050
+        if (file6(j)(1 : 1) .ne. ' ') go to 3500
+        file6(j)(1 : 2) = '77'                                 !convert type '  ' to '77'
      end select
-                                                            !convert type code '99' to
-3010 if (file6(j)(1 : 2) .eq. '99') file6(j)(1 : 2) = '  '  !'  ' for functions
-     go to 3500
-3020 if (file6(j)(1 : 1) .eq. 'c' .or. file6(j)(1 : 1) .eq. '9' .or. file6(j)(1 : 1) .eq. '$') go to 3500
-     if (file6(j)(2 : 2) .ne. '1') go to 3022
-     file6(j)(1 : 1) = '1'                                  ! to convert tacs source cards:
-     go to 3500                                             ! type ' 1' to '11', ' 2' to '14'
 3022 if (file6(j)(2 : 2) .ne. '2') go to 3024
      file6(j)(1 : 2) = '14'                                 ! ' 3' to '23', and ' 4' to '24'
      go to 3500
 3024 file6(j)(1 : 1) = '2'
      go to 3500
-3040 if (file6(j)(1 : 1) .ne. ' ') go to 3500
-     file6(j)(1 : 2) = '33'                                 !convert type '  ' to '33'
-     go to 3500                                             !for tacs output variables
-3050 if (file6(j)(1 : 1) .ne. ' ') go to 3500
-     file6(j)(1 : 2) = '77'                                 !convert type '  ' to '77'
   end do
 3500 continue                                               !for tacs initial condition cards
 9002 if (iprsup .lt. 1) go to 9007                          ! jump around diagnostic
@@ -930,5 +925,5 @@ subroutine datain
 end subroutine datain
 
 !
-!     end of file: datain.for
+!     end of file: datain.f90
 !
