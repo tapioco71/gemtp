@@ -82,7 +82,7 @@ subroutine datain
   call initsp                                               ! initialize spy common (digit needed to sort)
 1311 write (unit = lunit6, fmt = 1324, advance = 'no')      ! prompt user at "emtspy" keyboard
 1324 format (' EMTP begins.  Send (spy, $attach, debug, help, module, junk, stop): ')
-  read (unit = munit5, fmt = 1329, iostat = ios) buff77  ! read first card of EMTP data
+  read (unit = munit5, fmt = 1329, iostat = ios) buff77     ! read first card of EMTP data
 1329 format (a80)
   if (ios .ne. 0) then
      write (unit = lunit6, fmt = "(' Could not read from stdin.')")
@@ -90,7 +90,7 @@ subroutine datain
   end if
   if (buff77(1 : 5) .eq. 'stop ') call stoptp
   if (buff77(1 : 5) .ne. 'disk ') go to 51329
-  maxzno = 4545                                          ! signal to apollo "sysdep" for disk lunit6
+  maxzno = 4545                                             ! signal to apollo "sysdep" for disk lunit6
   go to 1311
 51329 if (buff77(1 : 7) .eq. '$attach') go to 1347          ! batch mode
   if (buff77(1 : 5) .ne. 'junk ') go to 1332
