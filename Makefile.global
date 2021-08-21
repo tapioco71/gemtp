@@ -61,7 +61,7 @@ AS_FLAGS=	-Wall			\
 # gcc flags.
 CC_FLAGS=	-Wall			\
 		-c	  		\
-		-std=gnu1x
+		-std=c99
 
 # g++ flags.
 CPP_FLAGS=	-Wall			\
