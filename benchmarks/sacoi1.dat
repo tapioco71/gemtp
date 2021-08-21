@@ -1,0 +1,1151 @@
+begin new data case
+c 
+c 
+c ------------------------------------------------------------------------------
+c miscellaneous data cards
+c ------------------------------------------------------------------------------
+c  dt  >< tmax >< xopt >< copt ><epsiln>
+  2.5e-5     1.5
+     500       1       1       1       1       0       0       1       0
+c 	 
+c ------------------------------------------------------------------------------
+c blocco tacs
+c ------------------------------------------------------------------------------
+tacs hybrid
+c ----- misura dell'angolo gamma, convertitore suvereto ---------------
+90vysuva                                                                     10.
+90vysuvb                                                                     10.
+90vysuvc                                                                     10.
+90vdsuva                                                                     10.
+90vdsuvb                                                                     10.
+90vdsuvc                                                                     10.
+90elesuv                                                                     10.
+90meio11                                                                     10.
+90polosu                                                                     10.
+c
+98va1101  =suvera.lt.suverb
+98va1102  =suvera.lt.suverc
+98va1103  =suverb.lt.suverc
+98va1104  =suverb.lt.suvera
+98va1105  =suverc.lt.suvera
+98va1106  =suverc.lt.suverb
+98va1107  =suvera.lt.zero
+98va1108  =suverc.gt.zero
+98va1109  =suverb.lt.zero
+98va1110  =suvera.gt.zero
+98va1111  =suverc.lt.zero
+98va1112  =suverb.gt.zero
+c
+98vd110153                +va1101                       2.5e-5
+98vd110253                +va1102                       2.5e-5
+98vd110353                +va1103                       2.5e-5
+98vd110453                +va1104                       2.5e-5
+98vd110553                +va1105                       2.5e-5
+98vd110653                +va1106                       2.5e-5
+98vd110753                +va1107                       2.5e-5
+98vd110853                +va1108                       2.5e-5
+98vd110953                +va1109                       2.5e-5
+98vd111053                +va1110                       2.5e-5
+98vd111153                +va1111                       2.5e-5
+98vd111253                +va1112                       2.5e-5
+c
+98re1101  =(vysuva.lt.meio11).and.(timex.gt.0.02)
+98re1102  =(elesuv.lt.vysuvc).and.(timex.gt.0.02)
+98re1103  =(vysuvb.lt.meio11).and.(timex.gt.0.02)
+98re1104  =(elesuv.lt.vysuva).and.(timex.gt.0.02)
+98re1105  =(vysuvc.lt.meio11).and.(timex.gt.0.02)
+98re1106  =(elesuv.lt.vysuvb).and.(timex.gt.0.02)
+98re1107  =(vdsuva.lt.polosu).and.(timex.gt.0.02)
+98re1108  =(meio11.lt.vdsuvc).and.(timex.gt.0.02)
+98re1109  =(vdsuvb.lt.polosu).and.(timex.gt.0.02)
+98re1110  =(meio11.lt.vdsuva).and.(timex.gt.0.02)
+98re1111  =(vdsuvc.lt.polosu).and.(timex.gt.0.02)
+98re1112  =(meio11.lt.vdsuvb).and.(timex.gt.0.02)
+c
+98tr1101  =(.not.va1101).and.vd1101
+98tr1102  =(.not.va1102).and.vd1102
+98tr1103  =(.not.va1103).and.vd1103
+98tr1104  =(.not.va1104).and.vd1104
+98tr1105  =(.not.va1105).and.vd1105
+98tr1106  =(.not.va1106).and.vd1106
+98tr1107  =(.not.va1107).and.vd1107
+98tr1108  =(.not.va1108).and.vd1108
+98tr1109  =(.not.va1109).and.vd1109
+98tr1110  =(.not.va1110).and.vd1110
+98tr1111  =(.not.va1111).and.vd1111
+98tr1112  =(.not.va1112).and.vd1112
+c
+98ig110158        +re1101                          1.8e4          1.vd1101
+98ig110258        +re1102                          1.8e4          1.vd1102
+98ig110358        +re1103                          1.8e4          1.vd1103
+98ig110458        +re1104                          1.8e4          1.vd1104
+98ig110558        +re1105                          1.8e4          1.vd1105
+98ig110658        +re1106                          1.8e4          1.vd1106
+98ig110758        +re1107                          1.8e4          1.vd1107
+98ig110858        +re1108                          1.8e4          1.vd1108
+98ig110958        +re1109                          1.8e4          1.vd1109
+98ig111058        +re1110                          1.8e4          1.vd1110
+98ig111158        +re1111                          1.8e4          1.vd1111
+98ig111258        +re1112                          1.8e4          1.vd1112
+c
+98gi110158        +vd1101                          1.8e4          1.ig1101
+98gi110258        +vd1102                          1.8e4          1.ig1102
+98gi110358        +vd1103                          1.8e4          1.ig1103
+98gi110458        +vd1104                          1.8e4          1.ig1104
+98gi110558        +vd1105                          1.8e4          1.ig1105
+98gi110658        +vd1106                          1.8e4          1.ig1106
+98gi110758        +vd1107                          1.8e4          1.ig1107
+98gi110858        +vd1108                          1.8e4          1.ig1108
+98gi110958        +vd1109                          1.8e4          1.ig1109
+98gi111058        +vd1110                          1.8e4          1.ig1110
+98gi111158        +vd1111                          1.8e4          1.ig1111
+98gi111258        +vd1112                          1.8e4          1.ig1112
+c
+98gm110162        +gi1101                                           tr1101
+98gm110262        +gi1102                                           tr1102
+98gm110362        +gi1103                                           tr1103
+98gm110462        +gi1104                                           tr1104
+98gm110562        +gi1105                                           tr1105
+98gm110662        +gi1106                                           tr1106
+98gm110762        +gi1107                                           tr1107
+98gm110862        +gi1108                                           tr1108
+98gm110962        +gi1109                                           tr1109
+98gm111062        +gi1110                                           tr1110
+98gm111162        +gi1111                                           tr1111
+98gm111262        +gi1112                                           tr1112
+c
+98tra11y  =(tr1101+tr1102+tr1103+tr1104+tr1105+tr1106)/deltat
+98gm11_y61+gm1106 +gm1101 +gm1102 +gm1103 +gm1104                99.gm1105gam11y
+98gam11y58                +tra11y                     1.          1.nt1106unity
+98nt1106  =(.not.tr1106).eq.1
+98tra11d  =(tr1107+tr1108+tr1109+tr1110+tr1111+tr1112)/deltat
+98gm11_d61+gm1112 +gm1107 +gm1108 +gm1109 +gm1110                99.gm1111gam11d
+98gam11d58                +tra11d                     1.          1.nt1112unity
+98nt1112  =(.not.tr1112).eq.1
+98alfar 63+gm11_y                         +gm11_d          -1.
+c
+90suvera
+90suverb
+90suverc
+c
+c -------  misura della tensione media (50hz), sbarre di commutazione ---------
+98vacm11  =sqrt(suvera*suvera+suverb*suverb+suverc*suverc)/400.e3
+33vacm11alfar
+c
+c -------  pll (per la gfu), lato suvereto  -----------------------------------
+98omeg11  =2.*pi*   50.
+98iga11   =(2*suvera-suverb-suverc)/(sqrt(6.)*400.e3)
+98igb11   =(suverb-suverc)/(sqrt(2.)*400.e3)
+88err11   =iga11*cos(p11pll)+igb11*sin(p11pll)
+ 1erin11  +err11                                     10.
+        1.
+                  1.
+ 0erpp11  +err11                                     50.
+98res11   =phd11.le.(2*pi-2*w11*deltat)
+98p11pll58                +w11                        1.          1.res11 zero
+ 0w11             +erpp11 +erin11 +omeg11             1. 301.6 452.4
+ 0phd11                   +p11pll                     1.
+77p11pll        1.57
+c 33p##pll
+c 33w##
+c ------------------  innesco dei tiristori ----------------------------------
+90uctd11
+11grd11   .017453292
+98vad11   = sin(p11pll-(uctd11+30)*grd11)
+98vbd11   = sin(p11pll-(uctd11+150)*grd11)
+98vcd11   = sin(p11pll-(uctd11-90)*grd11)
+c -------------------------------------------------
+98vay11   = sin(p11pll-uctd11*grd11)
+98vby11   = sin(p11pll-(uctd11+120)*grd11)
+98vcy11   = sin(p11pll-(uctd11-120)*grd11)
+98ds1101  = vay11.gt.vcy11.and.vay11.gt.vby11.and.timex.gt.   0.0
+98ds1102  = vcy11.lt.vay11.and.vcy11.lt.vby11.and.timex.gt.   0.0
+98ds1103  = vby11.gt.vcy11.and.vby11.gt.vay11.and.timex.gt.   0.0
+98ds1104  = vay11.lt.vcy11.and.vay11.lt.vby11.and.timex.gt.   0.0
+98ds1105  = vcy11.gt.vay11.and.vcy11.gt.vby11.and.timex.gt.   0.0
+98ds1106  = vby11.lt.vcy11.and.vby11.lt.vay11.and.timex.gt.   0.0
+c -------------------------------------------------
+98ds1107  = vad11.gt.vcd11.and.vad11.gt.vbd11.and.timex.gt.   0.0
+98ds1108  = vcd11.lt.vad11.and.vcd11.lt.vbd11.and.timex.gt.   0.0
+98ds1109  = vbd11.gt.vcd11.and.vbd11.gt.vad11.and.timex.gt.   0.0
+98ds1110  = vad11.lt.vcd11.and.vad11.lt.vbd11.and.timex.gt.   0.0
+98ds1111  = vcd11.gt.vad11.and.vcd11.gt.vbd11.and.timex.gt.   0.0
+98ds1112  = vbd11.lt.vcd11.and.vbd11.lt.vad11.and.timex.gt.   0.0
+c
+c
+c ----- misura dell'angolo gamma, convertitore codrongianos --------------------
+90vycoda                                                                     10.
+90vycodb                                                                     10.
+90vycodc                                                                     10.
+90vdcoda                                                                     10.
+90vdcodb                                                                     10.
+90vdcodc                                                                     10.
+90poloco                                                                     10.
+90meio21                                                                     10.
+90elecod                                                                     10.
+c
+98va2101  =codroa.lt.codrob
+98va2102  =codroa.lt.codroc
+98va2103  =codrob.lt.codroc
+98va2104  =codrob.lt.codroa
+98va2105  =codroc.lt.codroa
+98va2106  =codroc.lt.codrob
+98va2107  =codroa.lt.zero
+98va2108  =codroc.gt.zero
+98va2109  =codrob.lt.zero
+98va2110  =codroa.gt.zero
+98va2111  =codroc.lt.zero
+98va2112  =codrob.gt.zero
+c
+98vd210153                +va2101                       2.5e-5
+98vd210253                +va2102                       2.5e-5
+98vd210353                +va2103                       2.5e-5
+98vd210453                +va2104                       2.5e-5
+98vd210553                +va2105                       2.5e-5
+98vd210653                +va2106                       2.5e-5
+98vd210753                +va2107                       2.5e-5
+98vd210853                +va2108                       2.5e-5
+98vd210953                +va2109                       2.5e-5
+98vd211053                +va2110                       2.5e-5
+98vd211153                +va2111                       2.5e-5
+98vd211253                +va2112                       2.5e-5
+c
+98re2101  =(vycoda.lt.meio21).and.(timex.gt.0.02)
+98re2102  =(poloco.lt.vycodc).and.(timex.gt.0.02)
+98re2103  =(vycodb.lt.meio21).and.(timex.gt.0.02)
+98re2104  =(poloco.lt.vycoda).and.(timex.gt.0.02)
+98re2105  =(vycodc.lt.meio21).and.(timex.gt.0.02)
+98re2106  =(poloco.lt.vycodb).and.(timex.gt.0.02)
+98re2107  =(vdcoda.lt.elecod).and.(timex.gt.0.02)
+98re2108  =(meio21.lt.vdcodc).and.(timex.gt.0.02)
+98re2109  =(vdcodb.lt.elecod).and.(timex.gt.0.02)
+98re2110  =(meio21.lt.vdcoda).and.(timex.gt.0.02)
+98re2111  =(vdcodc.lt.elecod).and.(timex.gt.0.02)
+98re2112  =(meio21.lt.vdcodb).and.(timex.gt.0.02)
+c
+98tr2101  =(.not.va2101).and.vd2101
+98tr2102  =(.not.va2102).and.vd2102
+98tr2103  =(.not.va2103).and.vd2103
+98tr2104  =(.not.va2104).and.vd2104
+98tr2105  =(.not.va2105).and.vd2105
+98tr2106  =(.not.va2106).and.vd2106
+98tr2107  =(.not.va2107).and.vd2107
+98tr2108  =(.not.va2108).and.vd2108
+98tr2109  =(.not.va2109).and.vd2109
+98tr2110  =(.not.va2110).and.vd2110
+98tr2111  =(.not.va2111).and.vd2111
+98tr2112  =(.not.va2112).and.vd2112
+c
+98ig210158        +re2101                          1.8e4          1.vd2101
+98ig210258        +re2102                          1.8e4          1.vd2102
+98ig210358        +re2103                          1.8e4          1.vd2103
+98ig210458        +re2104                          1.8e4          1.vd2104
+98ig210558        +re2105                          1.8e4          1.vd2105
+98ig210658        +re2106                          1.8e4          1.vd2106
+98ig210758        +re2107                          1.8e4          1.vd2107
+98ig210858        +re2108                          1.8e4          1.vd2108
+98ig210958        +re2109                          1.8e4          1.vd2109
+98ig211058        +re2110                          1.8e4          1.vd2110
+98ig211158        +re2111                          1.8e4          1.vd2111
+98ig211258        +re2112                          1.8e4          1.vd2112
+c
+98gi210158        +vd2101                          1.8e4          1.ig2101
+98gi210258        +vd2102                          1.8e4          1.ig2102
+98gi210358        +vd2103                          1.8e4          1.ig2103
+98gi210458        +vd2104                          1.8e4          1.ig2104
+98gi210558        +vd2105                          1.8e4          1.ig2105
+98gi210658        +vd2106                          1.8e4          1.ig2106
+98gi210758        +vd2107                          1.8e4          1.ig2107
+98gi210858        +vd2108                          1.8e4          1.ig2108
+98gi210958        +vd2109                          1.8e4          1.ig2109
+98gi211058        +vd2110                          1.8e4          1.ig2110
+98gi211158        +vd2111                          1.8e4          1.ig2111
+98gi211258        +vd2112                          1.8e4          1.ig2112
+c
+98gm210162        +gi2101                                           tr2101
+98gm210262        +gi2102                                           tr2102
+98gm210362        +gi2103                                           tr2103
+98gm210462        +gi2104                                           tr2104
+98gm210562        +gi2105                                           tr2105
+98gm210662        +gi2106                                           tr2106
+98gm210762        +gi2107                                           tr2107
+98gm210862        +gi2108                                           tr2108
+98gm210962        +gi2109                                           tr2109
+98gm211062        +gi2110                                           tr2110
+98gm211162        +gi2111                                           tr2111
+98gm211262        +gi2112                                           tr2112
+c
+98tra21y  =(tr2101+tr2102+tr2103+tr2104+tr2105+tr2106)/deltat
+98gm21_y61+gm2106 +gm2101 +gm2102 +gm2103 +gm2104                99.gm2105gam21y
+98gam21y58                +tra21y                     1.          1.nt2106unity
+98nt2106  =(.not.tr2106).eq.1
+98tra21d  =(tr2107+tr2108+tr2109+tr2110+tr2111+tr2112)/deltat
+98gm21_d61+gm2112 +gm2107 +gm2108 +gm2109 +gm2110                99.gm2111gam21d
+98gam21d58                +tra21d                     1.          1.nt2112unity
+98nt2112  =(.not.tr2112).eq.1
+98gammai63+gm21_y                         +gm21_d          -1.
+c
+90codroa
+90codrob
+90codroc
+c
+c -------  misura della tensione media (50hz), sbarre di commutazione ---------
+98vacm21  =sqrt(codroa*codroa+codrob*codrob+codroc*codroc)/400.e3
+33vacm21gammai
+c
+c -------  pll (per la gfu), lato codrongianos  -----------------------------------
+98omeg21  =2.*pi*   50.
+98iga21   =(2*codroa-codrob-codroc)/(sqrt(6.)*400.e3)
+98igb21   =(codrob-codroc)/(sqrt(2.)*400.e3)
+88err21   =iga21*cos(p21pll)+igb21*sin(p21pll)
+ 1erin21  +err21                                     10.
+        1.
+                  1.
+ 0erpp21  +err21                                     50.
+98res21   =phd21.le.(2*pi-2*w21*deltat)
+98p21pll58                +w21                        1.          1.res21 zero
+ 0w21             +erpp21 +erin21 +omeg21             1. 301.6 452.4
+ 0phd21                   +p21pll                     1.
+77p21pll        1.57
+c 33p##pll
+c 33w##
+c ------------------  innesco dei tiristori ----------------------------------
+90uctd21
+11grd21   .017453292
+98vad21   = sin(p21pll-(uctd21+30)*grd21)
+98vbd21   = sin(p21pll-(uctd21+150)*grd21)
+98vcd21   = sin(p21pll-(uctd21-90)*grd21)
+c -------------------------------------------------
+98vay21   = sin(p21pll-uctd21*grd21)
+98vby21   = sin(p21pll-(uctd21+120)*grd21)
+98vcy21   = sin(p21pll-(uctd21-120)*grd21)
+98ds2101  = vay21.gt.vcy21.and.vay21.gt.vby21.and.timex.gt.   0.0
+98ds2102  = vcy21.lt.vay21.and.vcy21.lt.vby21.and.timex.gt.   0.0
+98ds2103  = vby21.gt.vcy21.and.vby21.gt.vay21.and.timex.gt.   0.0
+98ds2104  = vay21.lt.vcy21.and.vay21.lt.vby21.and.timex.gt.   0.0
+98ds2105  = vcy21.gt.vay21.and.vcy21.gt.vby21.and.timex.gt.   0.0
+98ds2106  = vby21.lt.vcy21.and.vby21.lt.vay21.and.timex.gt.   0.0
+c -------------------------------------------------
+98ds2107  = vad21.gt.vcd21.and.vad21.gt.vbd21.and.timex.gt.   0.0
+98ds2108  = vcd21.lt.vad21.and.vcd21.lt.vbd21.and.timex.gt.   0.0
+98ds2109  = vbd21.gt.vcd21.and.vbd21.gt.vad21.and.timex.gt.   0.0
+98ds2110  = vad21.lt.vcd21.and.vad21.lt.vbd21.and.timex.gt.   0.0
+98ds2111  = vcd21.gt.vad21.and.vcd21.gt.vbd21.and.timex.gt.   0.0
+98ds2112  = vbd21.lt.vcd21.and.vbd21.lt.vad21.and.timex.gt.   0.0
+c 
+c ----- misura dell'angolo gamma, convertitore lucciana  -----------------------
+90vyluca                                                                     10.
+90vylucb                                                                     10.
+90vylucc                                                                     10.
+90vdluca                                                                     10.
+90vdlucb                                                                     10.
+90vdlucc                                                                     10.
+90pololu                                                                     10.
+90meio31                                                                     10.
+90eleluc                                                                     10.
+c
+98va3101  =luccia.lt.luccib
+98va3102  =luccia.lt.luccic
+98va3103  =luccib.lt.luccic
+98va3104  =luccib.lt.luccia
+98va3105  =luccic.lt.luccia
+98va3106  =luccic.lt.luccib
+98va3107  =luccia.lt.zero
+98va3108  =luccic.gt.zero
+98va3109  =luccib.lt.zero
+98va3110  =luccia.gt.zero
+98va3111  =luccic.lt.zero
+98va3112  =luccib.gt.zero
+c
+98vd310153                +va3101                       2.5e-5
+98vd310253                +va3102                       2.5e-5
+98vd310353                +va3103                       2.5e-5
+98vd310453                +va3104                       2.5e-5
+98vd310553                +va3105                       2.5e-5
+98vd310653                +va3106                       2.5e-5
+98vd310753                +va3107                       2.5e-5
+98vd310853                +va3108                       2.5e-5
+98vd310953                +va3109                       2.5e-5
+98vd311053                +va3110                       2.5e-5
+98vd311153                +va3111                       2.5e-5
+98vd311253                +va3112                       2.5e-5
+c
+98re3101  =(vyluca.lt.meio31).and.(timex.gt.0.02)
+98re3102  =(pololu.lt.vylucc).and.(timex.gt.0.02)
+98re3103  =(vylucb.lt.meio31).and.(timex.gt.0.02)
+98re3104  =(pololu.lt.vyluca).and.(timex.gt.0.02)
+98re3105  =(vylucc.lt.meio31).and.(timex.gt.0.02)
+98re3106  =(pololu.lt.vylucb).and.(timex.gt.0.02)
+98re3107  =(vdluca.lt.eleluc).and.(timex.gt.0.02)
+98re3108  =(meio31.lt.vdlucc).and.(timex.gt.0.02)
+98re3109  =(vdlucb.lt.eleluc).and.(timex.gt.0.02)
+98re3110  =(meio31.lt.vdluca).and.(timex.gt.0.02)
+98re3111  =(vdlucc.lt.eleluc).and.(timex.gt.0.02)
+98re3112  =(meio31.lt.vdlucb).and.(timex.gt.0.02)
+c
+98tr3101  =(.not.va3101).and.vd3101
+98tr3102  =(.not.va3102).and.vd3102
+98tr3103  =(.not.va3103).and.vd3103
+98tr3104  =(.not.va3104).and.vd3104
+98tr3105  =(.not.va3105).and.vd3105
+98tr3106  =(.not.va3106).and.vd3106
+98tr3107  =(.not.va3107).and.vd3107
+98tr3108  =(.not.va3108).and.vd3108
+98tr3109  =(.not.va3109).and.vd3109
+98tr3110  =(.not.va3110).and.vd3110
+98tr3111  =(.not.va3111).and.vd3111
+98tr3112  =(.not.va3112).and.vd3112
+c
+98ig310158        +re3101                          1.8e4          1.vd3101
+98ig310258        +re3102                          1.8e4          1.vd3102
+98ig310358        +re3103                          1.8e4          1.vd3103
+98ig310458        +re3104                          1.8e4          1.vd3104
+98ig310558        +re3105                          1.8e4          1.vd3105
+98ig310658        +re3106                          1.8e4          1.vd3106
+98ig310758        +re3107                          1.8e4          1.vd3107
+98ig310858        +re3108                          1.8e4          1.vd3108
+98ig310958        +re3109                          1.8e4          1.vd3109
+98ig311058        +re3110                          1.8e4          1.vd3110
+98ig311158        +re3111                          1.8e4          1.vd3111
+98ig311258        +re3112                          1.8e4          1.vd3112
+c
+98gi310158        +vd3101                          1.8e4          1.ig3101
+98gi310258        +vd3102                          1.8e4          1.ig3102
+98gi310358        +vd3103                          1.8e4          1.ig3103
+98gi310458        +vd3104                          1.8e4          1.ig3104
+98gi310558        +vd3105                          1.8e4          1.ig3105
+98gi310658        +vd3106                          1.8e4          1.ig3106
+98gi310758        +vd3107                          1.8e4          1.ig3107
+98gi310858        +vd3108                          1.8e4          1.ig3108
+98gi310958        +vd3109                          1.8e4          1.ig3109
+98gi311058        +vd3110                          1.8e4          1.ig3110
+98gi311158        +vd3111                          1.8e4          1.ig3111
+98gi311258        +vd3112                          1.8e4          1.ig3112
+c
+98gm310162        +gi3101                                           tr3101
+98gm310262        +gi3102                                           tr3102
+98gm310362        +gi3103                                           tr3103
+98gm310462        +gi3104                                           tr3104
+98gm310562        +gi3105                                           tr3105
+98gm310662        +gi3106                                           tr3106
+98gm310762        +gi3107                                           tr3107
+98gm310862        +gi3108                                           tr3108
+98gm310962        +gi3109                                           tr3109
+98gm311062        +gi3110                                           tr3110
+98gm311162        +gi3111                                           tr3111
+98gm311262        +gi3112                                           tr3112
+c
+98tra31y  =(tr3101+tr3102+tr3103+tr3104+tr3105+tr3106)/deltat
+98gm31_y61+gm3106 +gm3101 +gm3102 +gm3103 +gm3104                99.gm3105gam31y
+98gam31y58                +tra31y                     1.          1.nt3106unity
+98nt3106  =(.not.tr3106).eq.1
+98tra31d  =(tr3107+tr3108+tr3109+tr3110+tr3111+tr3112)/deltat
+98gm31_d61+gm3112 +gm3107 +gm3108 +gm3109 +gm3110                99.gm3111gam31d
+98gam31d58                +tra31d                     1.          1.nt3112unity
+98nt3112  =(.not.tr3112).eq.1
+98gammal63+gm31_y                         +gm31_d          -1.
+c
+90luccia
+90luccib
+90luccic
+c
+c -------  misura della tensione media (50hz), sbarre di commutazione ---------
+98vacm31  =sqrt(luccia*luccia+luccib*luccib+luccic*luccic)/90.e3
+33vacm31gammal
+c
+c -------  pll (per la gfu), lato lucciana  ------------------------------------
+98omeg31  =2.*pi*   50.
+98iga31   =(2*luccia-luccib-luccic)/(sqrt(6.)*90.e3)
+98igb31   =(luccib-luccic)/(sqrt(2.)*90.e3)
+88err31   =iga31*cos(p31pll)+igb31*sin(p31pll)
+ 1erin31  +err31                                     10.
+        1.
+                  1.
+ 0erpp31  +err31                                     50.
+98res31   =phd31.le.(2*pi-2*w31*deltat)
+98p31pll58                +w31                        1.          1.res31 zero
+ 0w31             +erpp31 +erin31 +omeg31             1. 301.6 452.4
+ 0phd31                   +p31pll                     1.
+77p31pll        1.57
+c ------------------  innesco dei tiristori ----------------------------------
+90uctd31
+11grd31   .017453292
+98vad31   = sin(p31pll-(uctd31+30)*grd31)
+98vbd31   = sin(p31pll-(uctd31+150)*grd31)
+98vcd31   = sin(p31pll-(uctd31-90)*grd31)
+c -------------------------------------------------
+98vay31   = sin(p31pll-uctd31*grd31)
+98vby31   = sin(p31pll-(uctd31+120)*grd31)
+98vcy31   = sin(p31pll-(uctd31-120)*grd31)
+98ds3101  = vay31.gt.vcy31.and.vay31.gt.vby31.and.timex.gt.   0.0
+98ds3102  = vcy31.lt.vay31.and.vcy31.lt.vby31.and.timex.gt.   0.0
+98ds3103  = vby31.gt.vcy31.and.vby31.gt.vay31.and.timex.gt.   0.0
+98ds3104  = vay31.lt.vcy31.and.vay31.lt.vby31.and.timex.gt.   0.0
+98ds3105  = vcy31.gt.vay31.and.vcy31.gt.vby31.and.timex.gt.   0.0
+98ds3106  = vby31.lt.vcy31.and.vby31.lt.vay31.and.timex.gt.   0.0
+c -------------------------------------------------
+98ds3107  = vad31.gt.vcd31.and.vad31.gt.vbd31.and.timex.gt.   0.0
+98ds3108  = vcd31.lt.vad31.and.vcd31.lt.vbd31.and.timex.gt.   0.0
+98ds3109  = vbd31.gt.vcd31.and.vbd31.gt.vad31.and.timex.gt.   0.0
+98ds3110  = vad31.lt.vcd31.and.vad31.lt.vbd31.and.timex.gt.   0.0
+98ds3111  = vcd31.gt.vad31.and.vcd31.gt.vbd31.and.timex.gt.   0.0
+98ds3112  = vbd31.lt.vcd31.and.vbd31.lt.vad31.and.timex.gt.   0.0
+blank tacs
+c ------------------------------------------------------------------------------
+c blocco models
+c ------------------------------------------------------------------------------
+models
+input
+mm0001 {i(dccodr)}
+mm0002 {v(dccodr)}
+mm0003 {tacs(gammai)}
+mm0004 {i(dcsuve)}
+mm0005 {v(dcsuve)}
+mm0006 {i(dclucc)}
+mm0007 {v(dclucc)}
+mm0008 {tacs(gammal)}
+output
+  uccai
+  uccar
+  uccal
+  iordem
+model rad_suv
+      --- modello raddrizzatore suvereto --- 
+     input  idc,vdc
+     output alfa,iorder
+     data   vdc_ba{dflt:200.},idc_ba{dflt:1.},kpv{dflt:63},kiv{dflt:5247}
+            tc_idc{dflt:0.012},tc_vdc{dflt:0.00531},iordep{dflt:1.0}
+			vdcref{dflt:1.0},idcref{dflt:1.1},kpi{dflt:63},kii{dflt:5247}
+     var    idc_pu,vdc_pu,idcmed,vdcmed,alfa,errv,errv_int,errv_pro
+	        betav,erri,erri_int,erri_pro,betai,beta
+			iorder,udinp,vdcoli
+     init
+ ---- misure
+            histdef(idcmed)  :=1.0
+            histdef(vdcmed)  :=1.0
+ ---- regolatori
+            errv             :=0
+            errv_pro         :=0
+            histdef(errv_int):=163
+            erri             :=0.1			
+			erri_pro         :=0
+			histdef(erri_int):=175
+     endinit
+  exec
+ ---- filtri grandezze dc ---
+     idc_pu:=idc/(idc_ba*1000.)
+     vdc_pu:=vdc/(vdc_ba*1000.)
+     laplace(idcmed/idc_pu):=(1|s0)/(1|s0+tc_idc|s1)
+     laplace(vdcmed/vdc_pu):=(1|s0)/(1|s0+tc_vdc|s1)
+ ---- vdcol ----
+     udinp  := vdcmed {min:0.4,max:0.9}
+	 vdcoli := udinp*0.9 + 0.19
+     iorder := vdcoli*iordep 
+ -------------------------------------------------------------------------
+ 
+ ---- regolatore tensione costante (modalit?? constant-voltage) ----
+     errv := (vdcref - vdcmed)
+     laplace(errv_int/errv) {dmin:90.,dmax:175.}:=(kiv|s0)/(1|s1)
+     errv_pro := kpv*(vdcref - vdcmed)
+     betav := (errv_int + errv_pro) {min:90.,max:175.}
+	 
+ ---- regolatore di corrente (modalit?? cc) ----
+     erri := (iorder - idcmed + 0.1)
+     laplace(erri_int/erri) {dmin:30.,dmax:175.} := (kii|s0)/(1|s1)	
+     erri_pro := kpi*(iorder - idcmed)
+     betai := (erri_int	+ erri_pro) {min:30.,max:175}
+     
+	 beta :=min(betai,betav)	
+     alfa := 180. - beta	 
+   endexec
+endmodel  
+model inv_cod
+     ---- modello inverter codrongianos ----
+     input  idc,vdc,gamma,iorder
+     output alfa
+     data   vdc_ba{dflt:200.},idc_ba{dflt:1.}
+            freq{dflt:50},tc_idc{dflt:0.0012},tc_vdc{dflt:0.02}
+            kpi{dflt:36},kii{dflt:3760},kpg{dflt:0.7506},kig{dflt:18.38}
+			icodro{dflt:0.75}
+     var    idc_pu,vdc_pu,idcmed,vdcmed,alfa
+            betaic,erri_int,erri_pro,erri
+			gamman,gammin,errg_int,errg_pro,gnlg,gerri,betaig,g[1..12]
+			k,inter,betai
+     init
+ ---- misure
+            histdef(idcmed)  :=0.75
+            histdef(vdcmed)  :=0.92
+ ---- regolatori
+            erri             :=0
+            erri_pro         :=0
+            histdef(erri_int):=34.
+			errg_pro         :=0
+			histdef(errg_int):=30.
+			gamman           :=22.
+			gammin           :=180
+			k                :=1
+			g[1..12]         :=22.
+			inter            :=0.0
+     endinit
+  exec
+     --- filtri ---
+     idc_pu:=idc/(idc_ba*1000.)
+     vdc_pu:=vdc/(vdc_ba*1000.)
+     laplace(idcmed/idc_pu):=(1|s0)/(1|s0+tc_idc|s1)
+     laplace(vdcmed/vdc_pu):=(1|s0)/(1|s0+tc_vdc|s1)
+
+ -------------------------------------------------------------------------
+ --- regolatore corrente (modalita cc) ----
+     erri := (iorder*icodro - idcmed)
+     laplace(erri_int/erri) {dmin:30.,dmax:90.}:=(kii|s0)/(1|s1)
+     erri_pro:=kpi*erri
+     betaic:=(erri_int + erri_pro) {min:30.,max:90.}
+     
+	 
+ -------------------------------------------------------------------------
+ --- regolatore angolo costante (modalit?? cea) ----
+     gerri:=15-gamman
+     gnlg:=max(-31,gerri)
+     laplace(errg_int/gnlg) {dmin:30.,dmax:90.}:=(kig|s0)/(1|s1)
+	 errg_pro:=kpg*gnlg
+	 betaig:=(errg_int + errg_pro) {min:30.,max:90.}	 	 
+	 if and(t>0.03,inter>30) then
+	    g[k]:=gamma
+	    k:=k+1
+	    if k=13 then k:=1 endif
+	    gammin:=min(g[1],g[2],g[3],g[4],g[5],g[6])
+	    gamman:=min(gammin,g[7],g[8],g[9],g[10],g[11],g[12])
+	    inter:=0.0
+	 endif
+	 inter:=inter+timestep*360*freq	 
+	 
+	 betai:=max(betaic,betaig)
+	 alfa:=180-betai
+   endexec
+endmodel
+model inv_luc
+     ---- modello inverter lucciana ----
+     input  idc,vdc,gamma,iorder
+     output alfa
+     data   vdc_ba{dflt:200.},idc_ba{dflt:1.}
+            freq{dflt:50},tc_idc{dflt:0.0012},tc_vdc{dflt:0.02}
+            kpi{dflt:36},kii{dflt:3760},kpg{dflt:0.7506},kig{dflt:18.38}
+			ilucci{dflt:0.25}
+     var    idc_pu,vdc_pu,idcmed,vdcmed,alfa
+            betaic,erri_int,erri_pro,erri
+			gamman,gammin,errg_int,errg_pro,gnlg,gerri,betaig,g[1..12]
+			k,inter,betai
+     init
+ ---- misure
+            histdef(idcmed)  :=0.25
+            histdef(vdcmed)  :=0.97
+ ---- regolatori
+            erri             :=0
+            erri_pro         :=0
+            histdef(erri_int):=30.
+			errg_pro         :=0
+			histdef(errg_int):=32.
+			gamman           :=15.
+			gammin           :=180
+			k                :=1
+			g[1..12]         :=180.
+			inter            :=0.0
+     endinit
+  exec
+     --- filtri ---
+     idc_pu:=idc/(idc_ba*1000.)
+     vdc_pu:=vdc/(vdc_ba*1000.)
+     laplace(idcmed/idc_pu):=(1|s0)/(1|s0+tc_idc|s1)
+     laplace(vdcmed/vdc_pu):=(1|s0)/(1|s0+tc_vdc|s1)
+
+ -------------------------------------------------------------------------
+ --- regolatore corrente (modalita cc) ----
+     erri := (iorder*ilucci - idcmed)
+     laplace(erri_int/erri) {dmin:30.,dmax:110.}:=(kii|s0)/(1|s1)
+     erri_pro:=kpi*erri
+     betaic:=(erri_int + erri_pro) {min:30.,max:110.}
+     
+	 
+ -------------------------------------------------------------------------
+ --- regolatore angolo costante (modalit?? cea) ----
+     gerri:=15-gamman
+     gnlg:=max(-31,gerri)
+     laplace(errg_int/gnlg) {dmin:30.,dmax:90.}:=(kig|s0)/(1|s1)
+	 errg_pro:=kpg*gnlg
+	 betaig:=(errg_int + errg_pro) {min:30.,max:90.}	 	 
+	 if and(t>0.03,inter>30) then
+	    g[k]:=gamma
+	    k:=k+1
+	    if k=13 then k:=1 endif
+	    gammin:=min(g[1],g[2],g[3],g[4],g[5],g[6])
+	    gamman:=min(gammin,g[7],g[8],g[9],g[10],g[11],g[12])
+	    inter:=0.0
+	 endif
+	 inter:=inter+timestep*360*freq	 
+	 
+	 betai:=max(betaic,betaig)
+	 alfa:=180-betai
+   endexec
+endmodel
+use rad_suv as rad_suv
+input
+  idc:= mm0004
+  vdc:= mm0005
+data
+  vdc_ba:=   200.
+  idc_ba:=     1.
+  kpv   :=   142.
+  kiv   :=  7194.
+  kpi   :=    43.
+  kii   :=  3547.
+  tc_idc:= 0.0012
+  tc_vdc:=   0.02
+output
+  uccar := alfa
+  iordem:= iorder
+enduse
+use inv_cod as inv_cod
+input
+  idc   := mm0001
+  vdc   := mm0002
+  gamma := mm0003
+  iorder:= iordem
+data
+  vdc_ba:=   200.
+  idc_ba:=     1.
+  kpi   :=    50.
+  kii   := 476.
+  kpg   := 0.4506
+  kig   :=  18.38
+  tc_idc:= 0.0012
+  tc_vdc:=   0.02
+  icodro:=   0.75
+output
+  uccai:=alfa
+enduse
+use inv_luc as inv_luc
+input
+  idc   := mm0006
+  vdc   := mm0007
+  gamma := mm0008
+  iorder:= iordem
+data
+  vdc_ba:=   200.
+  idc_ba:=     1.
+  kpi   :=   65.
+  kii   :=   568.
+  kpg   := 0.4506
+  kig   :=  18.38
+  tc_idc:= 0.0012
+  tc_vdc:=   0.02
+  ilucci:=   0.25
+output
+  uccal:=alfa
+enduse
+record
+  inv_cod.gamman as gamman
+  inv_cod.betaig as betaig
+  inv_cod.betaic as betaic
+  inv_cod.erri as errii
+  inv_cod.gerri as gerri
+  inv_cod.erri_int as erri_i
+  inv_cod.erri_pro as erri_p
+  inv_cod.errg_int as erri_n
+  inv_cod.errg_pro as erri_r
+  rad_suv.erri as errir
+  rad_suv.alfa as alfar
+  rad_suv.idc_pu as idc_pu
+  rad_suv.idcmed as idcmed
+  rad_suv.vdc_pu as vdc_pu
+  rad_suv.vdcmed as vdcmed
+  rad_suv.errv as errv
+  rad_suv.errv_int as errv_i
+  rad_suv.errv_pro as errv_p
+  rad_suv.erri_int as erri_i
+  rad_suv.erri_pro as erri_p
+  rad_suv.betav as betav
+  rad_suv.betai as betai
+  rad_suv.beta as beta 
+endmodels
+c        1         2         3         4         5         6         7         8
+c 345678901234567890123456789012345678901234567890123456789012345678901234567890
+blank models
+c ------------------------------------------------------------------------------
+c branch cards
+c ------------------------------------------------------------------------------
+c
+c -------------------  impedenze della rete  -----------------------------------
+c < n1 >< n2 ><ref1><ref2>< r  >< l  >< c  >
+  fontcamisrtc            6.4454205.16                                         1
+  fontcbcodrob            6.4454205.16                                         0
+  fontcccodroc            6.4454205.16                                         0
+  fontsamisrts            2.671285.026                                         1                                                         
+  fontsbsuverb            2.671285.026                                         0                                                         
+  fontscsuverc            2.671285.026                                         0
+  fontlamisrtl            1.366143.483                                         1                                                         
+  fontlbluccib            1.366143.483                                         0                                                         
+  fontlcluccic            1.366143.483                                         0  
+c -----------------  linea di trasmissione  ------------------------------------  
+c < n1 >< n2 ><ref1><ref2>< r  >< l  >< c  >
+  dcsuvedcsali            2.1904   37.                                         0
+  dcsuve                              0.1665                                   0
+  dcsali                              0.1665                                   0 
+  dcsalidclucc            1.8621 952.2                                         0
+  dcsali                               21.16                                   0
+  dclucc                               21.16                                   0   
+  dcluccdcboni             9.157  156.                                         0
+  dclucc                               0.702                                   0
+  dcboni                               0.702                                   0   
+  dcbonidcsant             0.264  135.                                         0
+  dcboni                                  3.                                   0
+  dcsant                                  3.                                   0   
+  dcsantdccodr             5.032   85.                                         0
+  dcsant                              0.3825                                   0
+  dccodr                              0.3825                                   0   
+c -----------------  trasformatori  --------------------------------------------  
+c ----------------- suvereto ---------------------------------------------------
+  transformer                         xt001a136.e3                             0
+            9999
+ 1suve00                        271.68  400.
+ 2vdsuvavdsuvb                  34.963142.85
+  transformer xt001a                  xt001b                                   0
+ 1suverb
+ 2vdsuvbvdsuvc
+  transformer xt001a                  xt001c                                   0
+ 1suverc
+ 2vdsuvcvdsuva
+  transformer                         xt002a136.e3                             0          
+            9999
+ 1suvera                        271.68  400.
+ 2vysuvaxt0004                  11.65482.474
+  transformer xt002a                  xt002b                                   0
+ 1suverb
+ 2vysuvbxt0004
+  transformer xt002a                  xt002c                                   0
+ 1suverc
+ 2vysuvcxt0004
+c -------------------- codrongianos --------------------------------------------
+  transformer                         xt005a136.e3                             0                    
+            9999
+ 1codr00                        271.68  400.
+ 2vycodaxt0006                  11.65484.211
+  transformer xt005a                  xt005b                                   0
+ 1codrob
+ 2vycodbxt0006
+  transformer xt005a                  xt005c                                   0
+ 1codroc
+ 2vycodcxt0006
+  transformer                         xt007a136.e3                             0
+            9999
+ 1codroa                        271.68  400.
+ 2vdcodavdcodb                  34.963145.86
+  transformer xt007a                  xt007b                                   0
+ 1codrob
+ 2vdcodbvdcodc
+  transformer xt007a                  xt007c                                   0
+ 1codroc
+ 2vdcodcvdcoda
+c --------------------- lucciana -----------------------------------------------
+  transformer                         xt008a13.4e3                             0                    
+            9999
+ 1lucc00                        26.612   90.
+ 2vylucaxt0009                   24.09  100.
+  transformer xt008a                  xt008b                                   0
+ 1luccib
+ 2vylucbxt0009
+  transformer xt008a                  xt008c                                   0
+ 1luccic
+ 2vyluccxt0009
+  transformer                         xt010a13.4e3                             0
+            9999
+ 1luccia                        26.612   90.
+ 2vdlucavdlucb                  72.281173.21
+  transformer xt010a                  xt010b                                   0
+ 1luccib
+ 2vdlucbvdlucc
+  transformer xt010a                  xt010c                                   0
+ 1luccic
+ 2vdluccvdluca
+c -----------------------------------------------------------------------------
+c                         filtri suvereto 
+c -----------------------------------------------------------------------------
+c ------------------  passa-alto 2 ordine  ------------------------------------
+c < n 1>< n 2><ref1><ref2>< r  >< l  >< c  >
+  suveraxf002a                         0.997                                   0
+  suverbxf002b                         0.997                                   0
+  suvercxf002c                         0.997                                   0
+  xf002a                  1639.9                                               0
+  xf002b                  1639.9                                               0
+  xf002c                  1639.9                                               0
+  xf002a                        72.498                                         0
+  xf002b                        72.498                                         0
+  xf002c                        72.498                                         0
+c ------------------  doppio accordo  -----------------------------------------
+  suveraxf001a                  35.201 0.999                                   0
+  suverbxf001b                  35.201 0.999                                   0
+  suvercxf001c                  35.201 0.999                                   0
+  xf001a                        17.601                                         0
+  xf001b                        17.601                                         0
+  xf001c                        17.601                                         0
+  xf001a                               1.999                                   0
+  xf001b                               1.999                                   0
+  xf001c                               1.999                                   0
+c -----------------------------------------------------------------------------
+c                      filtri codrongianos
+c -----------------------------------------------------------------------------
+c ------------------  passa-alto 2 ordine  ------------------------------------
+c < n 1>< n 2><ref1><ref2>< r  >< l  >< c  >
+  codroaxf004a                         0.997                                   1
+  codrobxf004b                         0.997                                   0
+  codrocxf004c                         0.997                                   0
+  xf004a                  1639.9                                               0
+  xf004b                  1639.9                                               0
+  xf004c                  1639.9                                               0
+  xf004a                        72.498                                         0
+  xf004b                        72.498                                         0
+  xf004c                        72.498                                         0
+c ------------------  doppio accordo  -----------------------------------------
+  codroaxf003a                  35.201 0.999                                   1
+  codrobxf003b                  35.201 0.999                                   0
+  codrocxf003c                  35.201 0.999                                   0
+  xf003a                        17.601                                         0
+  xf003b                        17.601                                         0
+  xf003c                        17.601                                         0
+  xf003a                               1.999                                   0
+  xf003b                               1.999                                   0
+  xf003c                               1.999                                   0
+c -----------------------------------------------------------------------------
+c                       filtri lucciana
+c -----------------------------------------------------------------------------
+c ------------------  passa-alto 2 ordine  ------------------------------------
+c < n 1>< n 2><ref1><ref2>< r  >< l  >< c  >
+  lucciaxf006a                        11.315                                   0
+  luccibxf006b                        11.315                                   0
+  luccicxf006c                        11.315                                   0
+  xf006a                  144.57                                               0
+  xf006b                  144.57                                               0
+  xf006c                  144.57                                               0
+  xf006a                         6.391                                         0
+  xf006b                         6.391                                         0
+  xf006c                         6.391                                         0
+c ------------------  doppio accordo  ------------------------------------------
+  lucciaxf005a                   3.10311.337                                   0
+  luccibxf005b                   3.10311.337                                   0
+  luccicxf005c                   3.10311.337                                   0
+  xf005a                         1.552                                         0
+  xf005b                         1.552                                         0
+  xf005c                         1.552                                         0
+  xf005a                              22.674                                   0
+  xf005b                              22.674                                   0
+  xf005c                              22.674                                   0
+c ------------------------------------------------------------------------------
+c                              reattori 
+c ------------------------------------------------------------------------------
+  xyz005xyz004            7.9e-4 500.0
+  xyz006xyz007            7.9e-4 500.0  
+  xyz015xyz016            7.9e-4 500.0  
+c ------------------------------------------------------------------------------
+c convertitore 12 impulsi suvereto
+c ------------------------------------------------------------------------------
+  elesuv                    .001                                               0
+  uccar uctd11              1.e0                                               0
+        uctd11              1.e0                                               0
+c -------------------  snubber circuits  ---------------------------------------
+  vdsuvacv0711              5.e3        0.05
+  vdsuvccv0811              5.e3        0.05
+  vdsuvbcv0911              5.e3        0.05
+  vdsuvacv1011              5.e3        0.05
+  vdsuvccv1111              5.e3        0.05
+  vdsuvbcv1211              5.e3        0.05
+  vysuvacv0111              5.e3        0.05
+  vysuvccv0211              5.e3        0.05
+  vysuvbcv0311              5.e3        0.05
+  vysuvacv0411              5.e3        0.05
+  vysuvccv0511              5.e3        0.05
+  vysuvbcv0611              5.e3        0.05
+c ---------  resistori di accoppiamento valvole  -------------------------------
+  polosucv0711             .0100
+  polosucv0911             .0100
+  polosucv1111             .0100
+  meio11cv0811             .0100
+  meio11cv1011             .0100
+  meio11cv1211             .0100
+  meio11cv0111             .0100
+  meio11cv0311             .0100
+  meio11cv0511             .0100
+  elesuvcv0211             .0100
+  elesuvcv0411             .0100
+  elesuvcv0611             .0100
+c ------------------------------------------------------------------------------
+c convertitore 12 impulsi codrongianos
+c ------------------------------------------------------------------------------
+  uccai uctd21              1.e0                                               0
+        uctd21              1.e0                                               0
+  elecod                    .001                                               0
+c -------------------  snubber circuits  ---------------------------------------
+  vdcodacv0721              5.e3        0.05
+  vdcodccv0821              5.e3        0.05
+  vdcodbcv0921              5.e3        0.05
+  vdcodacv1021              5.e3        0.05
+  vdcodccv1121              5.e3        0.05
+  vdcodbcv1221              5.e3        0.05
+  vycodacv0121              5.e3        0.05
+  vycodccv0221              5.e3        0.05
+  vycodbcv0321              5.e3        0.05
+  vycodacv0421              5.e3        0.05
+  vycodccv0521              5.e3        0.05
+  vycodbcv0621              5.e3        0.05
+c ---------  resistori di accoppiamento valvole  -------------------------------
+  elecodcv0721             .0100
+  elecodcv0921             .0100
+  elecodcv1121             .0100
+  meio21cv0821             .0100
+  meio21cv1021             .0100
+  meio21cv1221             .0100
+  meio21cv0121             .0100
+  meio21cv0321             .0100
+  meio21cv0521             .0100
+  polococv0221             .0100
+  polococv0421             .0100
+  polococv0621             .0100
+c ------------------------------------------------------------------------------
+c convertitore 12 impulsi lucciana 
+c ------------------------------------------------------------------------------
+  uccal uctd31              1.e0                                               0
+        uctd31              1.e0                                               0
+  eleluc                    .001                                               0
+c -------------------  snubber circuits  ---------------------------------------
+  vdlucacv0731              5.e3        0.05
+  vdlucccv0831              5.e3        0.05
+  vdlucbcv0931              5.e3        0.05
+  vdlucacv1031              5.e3        0.05
+  vdlucccv1131              5.e3        0.05
+  vdlucbcv1231              5.e3        0.05
+  vylucacv0131              5.e3        0.05
+  vylucccv0231              5.e3        0.05
+  vylucbcv0331              5.e3        0.05
+  vylucacv0431              5.e3        0.05
+  vylucccv0531              5.e3        0.05
+  vylucbcv0631              5.e3        0.05
+c ---------  resistori di accoppiamento valvole  -------------------------------
+  eleluccv0731             .0100
+  eleluccv0931             .0100
+  eleluccv1131             .0100
+  meio31cv0831             .0100
+  meio31cv1031             .0100
+  meio31cv1231             .0100
+  meio31cv0131             .0100
+  meio31cv0331             .0100
+  meio31cv0531             .0100
+  pololucv0231             .0100
+  pololucv0431             .0100
+  pololucv0631             .0100
+blank branch
+c ------------------------------------------------------------------------------
+c switch cards
+c ------------------------------------------------------------------------------
+c ---------------------  interruttori per l'inizializzazione  ------------------
+c ---------------------  sbarre di commutazione  -------------------------------
+  suveraxyz001    -1.000    20.e-3                                             1
+  suverbxyz002    -1.000    20.e-3                                             1
+  suvercxyz003    -1.000    20.e-3                                             1
+  codroaxyz009    -1.000    20.e-3                                             1
+  codrobxyz010    -1.000    20.e-3                                             1
+  codrocxyz011    -1.000    20.e-3                                             1
+  lucciaxyz012    -1.000    20.e-3                                             1
+  luccibxyz013    -1.000    20.e-3                                             1
+  luccicxyz014    -1.000    20.e-3                                             1
+c ---------------------  linea in c.c.  ----------------------------------------  
+  xyz004poloco     0.010     50.00      {sw2}
+  xyz016pololu     0.010     50.00      {sw2}
+  polosuxyz006     0.000     50.00      {sw2}
+  xyz006xyz008    -1.000     0.000      {sw4}
+c  --------------------  interruttori di misura per la corrente in linea  ------
+  dccodrxyz005                                        measuring                1
+  xyz007dcsuve                                        measuring                1
+  dcluccxyz015                                        measuring                1
+c  --------------------  interruttori di misura per la corrente tr  ------------  
+  suverasuve00                                        measuring                1
+  codroacodr00                                        measuring                1                                         
+  luccialucc00                                        measuring                1
+  misrtccodroa                                        measuring                1
+  misrtssuvera                                        measuring                1
+  misrtlluccia                                        measuring                1
+c -----------------------  valvole  suvereto  ----------------------------------
+11vysuvacv0111                        0.0e-6                    ds1101         0
+11vysuvbcv0311                        0.0e-6                    ds1103         0
+11vysuvccv0511                        0.0e-6                    ds1105         0
+11cv0411vysuva                        0.0e-6                    ds1104         0
+11cv0611vysuvb                        0.0e-6                    ds1106         0
+11cv0211vysuvc                        0.0e-6                    ds1102         0
+11vdsuvacv0711                        0.0e-6                    ds1107         0
+11vdsuvbcv0911                        0.0e-6                    ds1109         0
+11vdsuvccv1111                        0.0e-6                    ds1111         0
+11cv1011vdsuva                        0.0e-6                    ds1110         0
+11cv1211vdsuvb                        0.0e-6                    ds1112         0
+11cv0811vdsuvc                        0.0e-6                    ds1108         0
+c 
+c -----------------------  valvole  codrongianos  ------------------------------  
+11vycodacv0121                      555.5e-6                    ds2101         0
+11vycodbcv0321                      555.5e-6                    ds2103         0
+11vycodccv0521                      555.5e-6                    ds2105         0
+11cv0421vycoda                      555.5e-6                    ds2104         0
+11cv0621vycodb                      555.5e-6                    ds2106         0
+11cv0221vycodc                      555.5e-6                    ds2102         0
+11vdcodacv0721                      555.5e-6                    ds2107         0
+11vdcodbcv0921                      555.5e-6                    ds2109         0
+11vdcodccv1121                      555.5e-6                    ds2111         0
+11cv1021vdcoda                      555.5e-6                    ds2110         0
+11cv1221vdcodb                      555.5e-6                    ds2112         0
+11cv0821vdcodc                      555.5e-6                    ds2108         0
+c -----------------------  valvole  lucciana  ----------------------------------  
+11vylucacv0131                      555.5e-6                    ds3101         0
+11vylucbcv0331                      555.5e-6                    ds3103         0
+11vylucccv0531                      555.5e-6                    ds3105         0
+11cv0431vyluca                      555.5e-6                    ds3104         0
+11cv0631vylucb                      555.5e-6                    ds3106         0
+11cv0231vylucc                      555.5e-6                    ds3102         0
+11vdlucacv0731                      555.5e-6                    ds3107         0
+11vdlucbcv0931                      555.5e-6                    ds3109         0
+11vdlucccv1131                      555.5e-6                    ds3111         0
+11cv1031vdluca                      555.5e-6                    ds3110         0
+11cv1231vdlucb                      555.5e-6                    ds3112         0
+11cv0831vdlucc                      555.5e-6                    ds3108         0
+blank switch
+c ------------------------------------------------------------------------------
+c source cards
+c ------------------------------------------------------------------------------
+c ---------------  sorgenti per l'inizializzazione  ----------------------------
+c ---------------  sbarre di commutazione  -------------------------------------
+14xyz001 1  327.69e3       50.      +22.       0.0                  -1
+14xyz002 1  327.69e3       50.      -98.       0.0                  -1
+14xyz003 1  327.69e3       50.     -218.       0.0                  -1
+14xyz009 1  328.57e3       50.     -20.0       0.0                  -1
+14xyz010 1  328.57e3       50.     -140.       0.0                  -1
+14xyz011 1  328.57e3       50.     +100.       0.0                  -1
+14xyz012 1   74.10e3       50.     -20.0       0.0                  -1
+14xyz013 1   74.10e3       50.     -140.       0.0                  -1
+14xyz014 1   74.10e3       50.     +100.       0.0                  -1
+c ---------------  linea in c.c.  ----------------------------------------------
+14xyz004-1     -750.     0.001       0.0       0.0   {i1}           -1     0.015
+12poloco-1      750.               0.010       0.0   {i2}          0.0     0.015
+14xyz016-1     -250.     0.001       0.0       0.0   {i1}           -1     0.015
+12pololu-1      250.               0.010       0.0   {i2}          0.0     0.015
+14xyz008 1    200.e3     0.001       0.0       0.0   {s3}           -1     0.015
+c ---------------  passaggio angolo di innesco  --------------------------------
+60uccar -1                                                                   10.
+60uccai -1                                                                   10.
+60uccal -1                                                                   10.
+c ---------------  sorgenti reti c.a.  -----------------------------------------
+c < n 1><>< ampl.  >< freq.  ><phase/t0><   a1   ><   t1   >< tstart >< tstop  >
+14fontca 0   323000.       50.      -22.                           -1.       10.
+14fontcb 0   323000.       50.     -142.                           -1.       10.
+14fontcc 0   323000.       50.       98.                           -1.       10.
+14fontsa 0   327690.       50.      22.5                           -1.       10.
+14fontsb 0   327690.       50.     -97.5                           -1.       10.
+14fontsc 0   327690.       50.     142.5                           -1.       10.
+14fontla 0    70266.       50.      22.5                           -1.       10.
+14fontlb 0    70266.       50.     -97.5                           -1.       10.
+14fontlc 0    70266.       50.     142.5                           -1.       10.
+blank source
+  suverasuverbsuverccodroacodrobcodrocdcsuvedccodrdcluccluccialuccibluccic
