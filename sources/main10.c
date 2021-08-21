@@ -13,13 +13,14 @@
 extern int iprsup;
 extern int iprsov[ 39 ];
 extern int ktab;
+extern int kill;
 extern int nchain;
 
 void subr10(void)
 {
   int iprcbl;
   int n24;
-  
+
   ktab = 0;
   do {
     if(nchain > 20)

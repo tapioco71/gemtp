@@ -251,9 +251,10 @@ int main(int argc, char *argv[])
 /*         a new data case), but may be to module  over31 (for final    */
 /*         case termination).                                           */
 
+/*
 void stoptp(void)
 {
-  sprintf(texcol, "%80s", abuff);
+  sprintf(texcol, "%80c", abuff);
   if((nchain == 31) && (lastov == 1) && (kill == 9999)) {
     exit(-1L);
   } else {
@@ -341,61 +342,17 @@ void cimage(void)
 {
   int n8 = 0;
   char charc = 'c';
+  char chcont;
+  char csepar;
   char text1;
   char text2;
+  char textcol[ 81 ];
   char text4[] = "9";
   char chtacs[] = "tacs";
   char text5[] = "blank";
-  char *textay[ 21 ] =
-    {
-      "a",
-      "p",
-      "out",
-      "s",
-      "spy",
-      "d",
-      "e",
-      "r",
-      "n",
-      "ne",
-      "de",
-      "m ",
-      "lf",
-      "ln",
-      "v",
-      "old",
-      "st",
-      "w",
-      "com",
-      "wi",
-      "u"
-    };
-  char *textax[ 30 ] =
-    {
-      "attach",
-      "punch",
-      "output",
-      "save",
-      "spydata",
-      "disable",
-      "enable",
-      "return",
-      "newfile",
-      "new",
-      "epsiln",
-      "delete",
-      "monitor",
-      "listoff",
-      "liston",
-      "vintage",
-      "oldfile",
-      "stop",
-      "watch5",
-      "comment",
-      "width",
-      "units"
-    };
-  int jpntr[ 23 ] = { 1, 2, 3, 4, 5, 7, 9, 10, 11, 13, 15, 16, 18, 20, 21, 23, 25, 26, 27, 29, 30, 31 };
+  char textax[] = "attachpunchoutputsavespydatadisableenablereturnnewfilenewepsilndeletemonitorlistofflistonvintageoldfilestopwatch5commentwidthunits";
+  char textay[] = "apoutsspydernedemlflnvoldstwcomwiu";
+  int jpntr[ 23 ] = { 0, 1, 2, 3, 4, 6, 8, 9, 10, 12, 14, 15, 17, 19, 20, 22, 24, 25, 26, 28, 29, 30 };
   int n11 = 0;
   int n12 = 99999;
   int n13 = 99999;
@@ -458,7 +415,7 @@ void cimage(void)
   a3040:
     if (chcont == text4)
       goto a3233;
-    sscanf(abuff, "%80c", textcol);
+    sscanf(abuff, "%80s", textcol);
     if ((strncmp(abuff, "$listoff", 8) != 0) && (strncmp(abuff, "$liston", 8) != 0))
       goto a3042;
     goto a3246;
@@ -473,7 +430,7 @@ void cimage(void)
     if (noutpr == 0)
       fprintf(lunit[ 6 ], "+comment card (implicit).\n");
   } while (1);
-  for (k = 0; k < 80; k++) {
+  for (int k = 0; k < 80; k++) {
     if (textcol[ k ] == csepar)
       goto a3237;
     if (textcol[ k ] == chcont)
@@ -491,7 +448,7 @@ void cimage(void)
  a3246:
   kolbeg = 2;
   nright = 0;
-  for (i = 0; i < 200; i++) {
+  for (int i = 0; i < 200; i++) {
     n1 = jpntr[ i ];
     n2 = jpntr[ i + 1 ] - 1;
     if (n2 < 0)
@@ -926,6 +883,7 @@ float complex cfunl1(float x)
 {
   return (float complex) x;
 }
+*/
 
 /*
  * end of file: main00.c

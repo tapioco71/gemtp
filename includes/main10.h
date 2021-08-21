@@ -27,7 +27,24 @@
  * variables.
  */
 
-(*void)(void) overlays[ ] =
+void over1(void);
+void over2(void);
+void over5(void);
+void over6(void);
+void over7(void);
+void over8(void);
+void over9(void);
+void over10(void);
+void over11(void);
+void over12(void);
+void over13(void);
+void over14(void);
+void over15(void);
+void over16(void);
+void over20(void);
+void stoptp(void);
+
+void (*overlays[])(void) =
   {
    over1,
    over2,
@@ -49,6 +66,7 @@
    over16,
    over16,
    over20,
+   NULL
   };
 
 /*
