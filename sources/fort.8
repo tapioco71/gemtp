@@ -1,0 +1,74 @@
+
+!
+! subroutine dimens.
+!
+
+subroutine dimens (lsize, nchain, bus1, bus2)
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  integer(4) lsize(80)
+  character(8) bus1, bus2
+  if (nchain .ge. 29) go to 2900
+  lsize( 1)  =   93002
+  lsize( 2)  =    3000
+  lsize( 3)  =   10000
+  lsize( 4)  =     100
+  lsize( 5)  =   20000
+  lsize( 6)  =    1200
+  lsize( 7)  =    4000
+  lsize( 8)  =  120000
+  lsize( 9)  =     300
+  lsize(10)  =     900
+  lsize(11)  =     210
+  lsize(12)  =     900
+  lsize(13)  =       5
+  lsize(14)  =     460
+  lsize(15)  =      90
+  lsize(16)  =      84
+  lsize(17)  =       4
+  lsize(18)  =     254
+  lsize(19)  =   90000
+  lsize(20)  =  100000
+  lsize(21)  =    3000
+  lsize(22)  =   50000
+  lsize(23)  =   30000
+  lsize(24)  =      24
+  lsize(25)  =   30000
+  lsize(26)  =    3000
+  lsize(27)  =     600
+  lsize(28)  =    1080
+  n7 = 28 + 1
+  lsize(n7) = 9748865
+  bus1 ='  222609'
+  bus2 ='  260921'
+  return
+2900 if (nchain .gt.  29) go to 3100
+  lsize( 1)  =       0
+  lsize( 2) =9748865
+  return
+3100 if (nchain .gt.  31) go to 3900
+  lsize( 1)  =       9
+  lsize( 2) =    300
+  return
+3900 if (nchain .gt.  39) go to 1000
+  lsize( 1)  =      71
+  lsize( 2) =  10000
+  return
+1000 if (nchain .gt.  10) go to 4400
+  lsize( 1)  =       1
+  lsize( 2) =  93002
+  return
+4400 if (nchain .gt.  44) go to 4500
+  lsize( 1)  =       9
+  lsize( 2) =    300
+  return
+4500 if (nchain .gt.  45) go to 4700
+  lsize( 1)  =       9
+  lsize( 2) =    300
+  return
+4700 if (nchain .gt.  47) go to 9900
+  lsize( 1)  =       9
+  lsize( 2) =    300
+  return
+ 9900 lsize(1) = locint(bus1) - locint(bus2)
+  return
+end subroutine dimens

@@ -1,0 +1,163 @@
+;; -*- Mode: emacs-lisp-mode; Syntax: lisp; indent-tabs-mode-nil; coding: utf-8; show-trailing-whitespace: t -*-
+
+(defun generate-vectors-table ()
+  (let* ((start (if (search-forward "*/" nil t)
+                    (progn
+                      (goto-char (match-end 0))
+                      (end-of-line)
+                      (point))
+                  (point)))
+         (end (if (search-forward "* end vectors *" nil t)
+                  (progn
+                    (goto-char (match-end 0))
+                    (end-of-line)
+                    (point))
+                start)))
+    (delete-region start end)
+    (insert "\n\n")
+    (dolist (v '((:name "Initial_SP_value" :count 1 :mnemonic ".long __stack_end__")
+                 (:name "Reset" :count 1 :mnemonic ".long reset")
+                 (:name "NMI" :count 1 :mnemonic ".long __bad_ISR__")
+                 (:name "Hard_fault" :count 1 :mnemonic ".long __bad_ISR__")
+                 (:name "Memory_management_fault" :count 1 :mnemonic ".long __bad_ISR__")
+                 (:name "Bus_fault" :count 1 :mnemonic ".long __bad_ISR__")
+                 (:name "Usage_fault" :count 1 :mnemonic ".long __bad_ISR__")
+                 (:name "Reserved" :count 4 :start 1 :mnemonic ".long __bad_ISR__")
+                 (:name "SVCall" :count 1 :mnemonic ".long __bad_ISR__")
+                 (:name "Reserved_for_Debug" :count 1 :mnemonic ".long __bad_ISR__")
+                 (:name "Reserved" :start 5 :count 1 :mnemonic ".long __bad_ISR__")
+                 (:name "PendSV" :count 1 :mnemonic ".long __bad_ISR__")
+                 (:name "Systick" :count 1 :mnemonic ".long __bad_ISR__")
+                 (:name "IRQ" :count 240 :start 0 :mnemonic ".long __bad_ISR__"))
+               (insert "\n/* end vectors */"))
+      (cond
+       ((integerp (getf v :count))
+	(if (> (getf v :count) 1)
+	    (loop
+	     for i from 0 below (getf v :count)
+	     do
+	     (insert (format "\n_%s_%d_vector:\n\t%s\n" (getf v :name) (+ i (getf v :start)) (getf v :mnemonic))))
+	  (if (integerp (getf v :start))
+	      (insert (format "\n_%s_%d_vector:\n\t%s\n" (getf v :name) (getf v :start) (getf v :mnemonic)))
+	    (insert (format "\n_%s_vector:\n\t%s\n" (getf v :name) (getf v :mnemonic))))))
+       (t
+        (insert "\n;\n"))))))
+
+(defun generate-select-case (variable-name cases)
+  (let* ((start (if (search-forward "! start select case" nil t)
+                    (progn
+                      (goto-char (match-end 0))
+                      (end-of-line)
+                      (point))
+                  (point)))
+         (end (if (search-forward "! end select case" nil t)
+                  (progn
+                    (goto-char (match-end 0))
+                    (end-of-line)
+                    (point))
+                start)))
+    (delete-region start end)
+    (insert "\n")
+    (insert (format "select case (%s)\n" variable-name))
+    (when cases
+      (dolist (v cases (insert "\nend select case\n"))
+        (cond
+         ((getf v :label)
+          (insert (format "  case (%s)\n" (getf v :label)))
+          (if (getf v :case-code)
+              (loop
+               finally (insert "\n")
+               for x in (getf v :case-code)
+               do
+               (insert (format "    %s\n" x)))
+            (insert "\n")))
+         (t
+          (insert "\n"))))
+      (insert "! end select case\n\n"))))
+
+(generate-select-case "nchain" '((:label "1" :case-code ("go to 8001"))
+                                 (:label "2" :case-code ("go to 8002"))
+                                 (:label "3" :case-code ("go to 8003"))
+                                 (:label "4" :case-code ("go to 8004"))
+                                 (:label "5" :case-code ("go to 8005"))
+                                 (:label "6" :case-code ("go to 8006"))
+                                 (:label "7" :case-code ("go to 8007"))
+                                 (:label "8" :case-code ("go to 8008"))
+                                 (:label "9" :case-code ("go to 8009"))
+                                 (:label "10" :case-code ("go to 8010"))
+                                 (:label "11" :case-code ("go to 8011"))
+                                 (:label "12" :case-code ("go to 8012"))
+                                 (:label "13" :case-code ("go to 8013"))
+                                 (:label "14" :case-code ("go to 8014"))
+                                 (:label "15" :case-code ("go to 8015"))
+                                 (:label "16" :case-code ("go to 8016"))
+                                 (:label "17" :case-code ("go to 8016"))
+                                 (:label "18" :case-code ("go to 8016"))
+                                 (:label "19" :case-code ("go to 8016"))
+                                 (:label "20" :case-code ("go to 8020"))))
+
+! start select case
+select case (nchain)
+  case (1)
+    go to 8001
+
+  case (2)
+    go to 8002
+
+  case (3)
+    go to 8003
+
+  case (4)
+    go to 8004
+
+  case (5)
+    go to 8005
+
+  case (6)
+    go to 8006
+
+  case (7)
+    go to 8007
+
+  case (8)
+    go to 8008
+
+  case (9)
+    go to 8009
+
+  case (10)
+    go to 8010
+
+  case (11)
+    go to 8011
+
+  case (12)
+    go to 8012
+
+  case (13)
+    go to 8013
+
+  case (14)
+    go to 8014
+
+  case (15)
+    go to 8015
+
+  case (16)
+    go to 8016
+
+  case (17)
+    go to 8016
+
+  case (18)
+    go to 8016
+
+  case (19)
+    go to 8016
+
+  case (20)
+    go to 8020
+
+
+end select case
+! end select case

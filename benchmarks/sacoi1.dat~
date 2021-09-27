@@ -1,0 +1,1151 @@
+BEGIN NEW DATA CASE
+C 
+C 
+C ------------------------------------------------------------------------------
+C MISCELLANEOUS DATA CARDS
+C ------------------------------------------------------------------------------
+C  dT  >< Tmax >< Xopt >< Copt ><Epsiln>
+  2.5E-5     1.5
+     500       1       1       1       1       0       0       1       0
+C 	 
+C ------------------------------------------------------------------------------
+C BLOCCO TACS
+C ------------------------------------------------------------------------------
+TACS HYBRID
+C ----- MISURA DELL'ANGOLO GAMMA, CONVERTITORE SUVERETO ---------------
+90VYSUVA                                                                     10.
+90VYSUVB                                                                     10.
+90VYSUVC                                                                     10.
+90VDSUVA                                                                     10.
+90VDSUVB                                                                     10.
+90VDSUVC                                                                     10.
+90ELESUV                                                                     10.
+90MEIO11                                                                     10.
+90POLOSU                                                                     10.
+C
+98VA1101  =SUVERA.LT.SUVERB
+98VA1102  =SUVERA.LT.SUVERC
+98VA1103  =SUVERB.LT.SUVERC
+98VA1104  =SUVERB.LT.SUVERA
+98VA1105  =SUVERC.LT.SUVERA
+98VA1106  =SUVERC.LT.SUVERB
+98VA1107  =SUVERA.LT.ZERO
+98VA1108  =SUVERC.GT.ZERO
+98VA1109  =SUVERB.LT.ZERO
+98VA1110  =SUVERA.GT.ZERO
+98VA1111  =SUVERC.LT.ZERO
+98VA1112  =SUVERB.GT.ZERO
+C
+98VD110153                +VA1101                       2.5E-5
+98VD110253                +VA1102                       2.5E-5
+98VD110353                +VA1103                       2.5E-5
+98VD110453                +VA1104                       2.5E-5
+98VD110553                +VA1105                       2.5E-5
+98VD110653                +VA1106                       2.5E-5
+98VD110753                +VA1107                       2.5E-5
+98VD110853                +VA1108                       2.5E-5
+98VD110953                +VA1109                       2.5E-5
+98VD111053                +VA1110                       2.5E-5
+98VD111153                +VA1111                       2.5E-5
+98VD111253                +VA1112                       2.5E-5
+C
+98RE1101  =(VYSUVA.LT.MEIO11).AND.(TIMEX.GT.0.02)
+98RE1102  =(ELESUV.LT.VYSUVC).AND.(TIMEX.GT.0.02)
+98RE1103  =(VYSUVB.LT.MEIO11).AND.(TIMEX.GT.0.02)
+98RE1104  =(ELESUV.LT.VYSUVA).AND.(TIMEX.GT.0.02)
+98RE1105  =(VYSUVC.LT.MEIO11).AND.(TIMEX.GT.0.02)
+98RE1106  =(ELESUV.LT.VYSUVB).AND.(TIMEX.GT.0.02)
+98RE1107  =(VDSUVA.LT.POLOSU).AND.(TIMEX.GT.0.02)
+98RE1108  =(MEIO11.LT.VDSUVC).AND.(TIMEX.GT.0.02)
+98RE1109  =(VDSUVB.LT.POLOSU).AND.(TIMEX.GT.0.02)
+98RE1110  =(MEIO11.LT.VDSUVA).AND.(TIMEX.GT.0.02)
+98RE1111  =(VDSUVC.LT.POLOSU).AND.(TIMEX.GT.0.02)
+98RE1112  =(MEIO11.LT.VDSUVB).AND.(TIMEX.GT.0.02)
+C
+98TR1101  =(.NOT.VA1101).AND.VD1101
+98TR1102  =(.NOT.VA1102).AND.VD1102
+98TR1103  =(.NOT.VA1103).AND.VD1103
+98TR1104  =(.NOT.VA1104).AND.VD1104
+98TR1105  =(.NOT.VA1105).AND.VD1105
+98TR1106  =(.NOT.VA1106).AND.VD1106
+98TR1107  =(.NOT.VA1107).AND.VD1107
+98TR1108  =(.NOT.VA1108).AND.VD1108
+98TR1109  =(.NOT.VA1109).AND.VD1109
+98TR1110  =(.NOT.VA1110).AND.VD1110
+98TR1111  =(.NOT.VA1111).AND.VD1111
+98TR1112  =(.NOT.VA1112).AND.VD1112
+C
+98IG110158        +RE1101                          1.8E4          1.VD1101
+98IG110258        +RE1102                          1.8E4          1.VD1102
+98IG110358        +RE1103                          1.8E4          1.VD1103
+98IG110458        +RE1104                          1.8E4          1.VD1104
+98IG110558        +RE1105                          1.8E4          1.VD1105
+98IG110658        +RE1106                          1.8E4          1.VD1106
+98IG110758        +RE1107                          1.8E4          1.VD1107
+98IG110858        +RE1108                          1.8E4          1.VD1108
+98IG110958        +RE1109                          1.8E4          1.VD1109
+98IG111058        +RE1110                          1.8E4          1.VD1110
+98IG111158        +RE1111                          1.8E4          1.VD1111
+98IG111258        +RE1112                          1.8E4          1.VD1112
+C
+98GI110158        +VD1101                          1.8E4          1.IG1101
+98GI110258        +VD1102                          1.8E4          1.IG1102
+98GI110358        +VD1103                          1.8E4          1.IG1103
+98GI110458        +VD1104                          1.8E4          1.IG1104
+98GI110558        +VD1105                          1.8E4          1.IG1105
+98GI110658        +VD1106                          1.8E4          1.IG1106
+98GI110758        +VD1107                          1.8E4          1.IG1107
+98GI110858        +VD1108                          1.8E4          1.IG1108
+98GI110958        +VD1109                          1.8E4          1.IG1109
+98GI111058        +VD1110                          1.8E4          1.IG1110
+98GI111158        +VD1111                          1.8E4          1.IG1111
+98GI111258        +VD1112                          1.8E4          1.IG1112
+C
+98GM110162        +GI1101                                           TR1101
+98GM110262        +GI1102                                           TR1102
+98GM110362        +GI1103                                           TR1103
+98GM110462        +GI1104                                           TR1104
+98GM110562        +GI1105                                           TR1105
+98GM110662        +GI1106                                           TR1106
+98GM110762        +GI1107                                           TR1107
+98GM110862        +GI1108                                           TR1108
+98GM110962        +GI1109                                           TR1109
+98GM111062        +GI1110                                           TR1110
+98GM111162        +GI1111                                           TR1111
+98GM111262        +GI1112                                           TR1112
+C
+98TRA11Y  =(TR1101+TR1102+TR1103+TR1104+TR1105+TR1106)/DELTAT
+98GM11_Y61+GM1106 +GM1101 +GM1102 +GM1103 +GM1104                99.GM1105GAM11Y
+98GAM11Y58                +TRA11Y                     1.          1.NT1106UNITY
+98NT1106  =(.NOT.TR1106).EQ.1
+98TRA11D  =(TR1107+TR1108+TR1109+TR1110+TR1111+TR1112)/DELTAT
+98GM11_D61+GM1112 +GM1107 +GM1108 +GM1109 +GM1110                99.GM1111GAM11D
+98GAM11D58                +TRA11D                     1.          1.NT1112UNITY
+98NT1112  =(.NOT.TR1112).EQ.1
+98ALFAR 63+GM11_Y                         +GM11_D          -1.
+C
+90SUVERA
+90SUVERB
+90SUVERC
+C
+C -------  MISURA DELLA TENSIONE MEDIA (50HZ), SBARRE DI COMMUTAZIONE ---------
+98VACM11  =SQRT(SUVERA*SUVERA+SUVERB*SUVERB+SUVERC*SUVERC)/400.E3
+33VACM11ALFAR
+C
+C -------  PLL (PER LA GFU), LATO SUVERETO  -----------------------------------
+98OMEG11  =2.*PI*   50.
+98IGA11   =(2*SUVERA-SUVERB-SUVERC)/(SQRT(6.)*400.E3)
+98IGB11   =(SUVERB-SUVERC)/(SQRT(2.)*400.E3)
+88ERR11   =IGA11*COS(P11PLL)+IGB11*SIN(P11PLL)
+ 1ERIN11  +ERR11                                     10.
+        1.
+                  1.
+ 0ERPP11  +ERR11                                     50.
+98RES11   =PHD11.LE.(2*PI-2*W11*DELTAT)
+98P11PLL58                +W11                        1.          1.RES11 ZERO
+ 0W11             +ERPP11 +ERIN11 +OMEG11             1. 301.6 452.4
+ 0PHD11                   +P11PLL                     1.
+77P11PLL        1.57
+C 33P##PLL
+C 33W##
+C ------------------  INNESCO DEI TIRISTORI ----------------------------------
+90UCTD11
+11GRD11   .017453292
+98VAD11   = SIN(P11PLL-(UCTD11+30)*GRD11)
+98VBD11   = SIN(P11PLL-(UCTD11+150)*GRD11)
+98VCD11   = SIN(P11PLL-(UCTD11-90)*GRD11)
+C -------------------------------------------------
+98VAY11   = SIN(P11PLL-UCTD11*GRD11)
+98VBY11   = SIN(P11PLL-(UCTD11+120)*GRD11)
+98VCY11   = SIN(P11PLL-(UCTD11-120)*GRD11)
+98DS1101  = VAY11.GT.VCY11.AND.VAY11.GT.VBY11.AND.TIMEX.GT.   0.0
+98DS1102  = VCY11.LT.VAY11.AND.VCY11.LT.VBY11.AND.TIMEX.GT.   0.0
+98DS1103  = VBY11.GT.VCY11.AND.VBY11.GT.VAY11.AND.TIMEX.GT.   0.0
+98DS1104  = VAY11.LT.VCY11.AND.VAY11.LT.VBY11.AND.TIMEX.GT.   0.0
+98DS1105  = VCY11.GT.VAY11.AND.VCY11.GT.VBY11.AND.TIMEX.GT.   0.0
+98DS1106  = VBY11.LT.VCY11.AND.VBY11.LT.VAY11.AND.TIMEX.GT.   0.0
+C -------------------------------------------------
+98DS1107  = VAD11.GT.VCD11.AND.VAD11.GT.VBD11.AND.TIMEX.GT.   0.0
+98DS1108  = VCD11.LT.VAD11.AND.VCD11.LT.VBD11.AND.TIMEX.GT.   0.0
+98DS1109  = VBD11.GT.VCD11.AND.VBD11.GT.VAD11.AND.TIMEX.GT.   0.0
+98DS1110  = VAD11.LT.VCD11.AND.VAD11.LT.VBD11.AND.TIMEX.GT.   0.0
+98DS1111  = VCD11.GT.VAD11.AND.VCD11.GT.VBD11.AND.TIMEX.GT.   0.0
+98DS1112  = VBD11.LT.VCD11.AND.VBD11.LT.VAD11.AND.TIMEX.GT.   0.0
+C
+C
+C ----- MISURA DELL'ANGOLO GAMMA, CONVERTITORE CODRONGIANOS --------------------
+90VYCODA                                                                     10.
+90VYCODB                                                                     10.
+90VYCODC                                                                     10.
+90VDCODA                                                                     10.
+90VDCODB                                                                     10.
+90VDCODC                                                                     10.
+90POLOCO                                                                     10.
+90MEIO21                                                                     10.
+90ELECOD                                                                     10.
+C
+98VA2101  =CODROA.LT.CODROB
+98VA2102  =CODROA.LT.CODROC
+98VA2103  =CODROB.LT.CODROC
+98VA2104  =CODROB.LT.CODROA
+98VA2105  =CODROC.LT.CODROA
+98VA2106  =CODROC.LT.CODROB
+98VA2107  =CODROA.LT.ZERO
+98VA2108  =CODROC.GT.ZERO
+98VA2109  =CODROB.LT.ZERO
+98VA2110  =CODROA.GT.ZERO
+98VA2111  =CODROC.LT.ZERO
+98VA2112  =CODROB.GT.ZERO
+C
+98VD210153                +VA2101                       2.5E-5
+98VD210253                +VA2102                       2.5E-5
+98VD210353                +VA2103                       2.5E-5
+98VD210453                +VA2104                       2.5E-5
+98VD210553                +VA2105                       2.5E-5
+98VD210653                +VA2106                       2.5E-5
+98VD210753                +VA2107                       2.5E-5
+98VD210853                +VA2108                       2.5E-5
+98VD210953                +VA2109                       2.5E-5
+98VD211053                +VA2110                       2.5E-5
+98VD211153                +VA2111                       2.5E-5
+98VD211253                +VA2112                       2.5E-5
+C
+98RE2101  =(VYCODA.LT.MEIO21).AND.(TIMEX.GT.0.02)
+98RE2102  =(POLOCO.LT.VYCODC).AND.(TIMEX.GT.0.02)
+98RE2103  =(VYCODB.LT.MEIO21).AND.(TIMEX.GT.0.02)
+98RE2104  =(POLOCO.LT.VYCODA).AND.(TIMEX.GT.0.02)
+98RE2105  =(VYCODC.LT.MEIO21).AND.(TIMEX.GT.0.02)
+98RE2106  =(POLOCO.LT.VYCODB).AND.(TIMEX.GT.0.02)
+98RE2107  =(VDCODA.LT.ELECOD).AND.(TIMEX.GT.0.02)
+98RE2108  =(MEIO21.LT.VDCODC).AND.(TIMEX.GT.0.02)
+98RE2109  =(VDCODB.LT.ELECOD).AND.(TIMEX.GT.0.02)
+98RE2110  =(MEIO21.LT.VDCODA).AND.(TIMEX.GT.0.02)
+98RE2111  =(VDCODC.LT.ELECOD).AND.(TIMEX.GT.0.02)
+98RE2112  =(MEIO21.LT.VDCODB).AND.(TIMEX.GT.0.02)
+C
+98TR2101  =(.NOT.VA2101).AND.VD2101
+98TR2102  =(.NOT.VA2102).AND.VD2102
+98TR2103  =(.NOT.VA2103).AND.VD2103
+98TR2104  =(.NOT.VA2104).AND.VD2104
+98TR2105  =(.NOT.VA2105).AND.VD2105
+98TR2106  =(.NOT.VA2106).AND.VD2106
+98TR2107  =(.NOT.VA2107).AND.VD2107
+98TR2108  =(.NOT.VA2108).AND.VD2108
+98TR2109  =(.NOT.VA2109).AND.VD2109
+98TR2110  =(.NOT.VA2110).AND.VD2110
+98TR2111  =(.NOT.VA2111).AND.VD2111
+98TR2112  =(.NOT.VA2112).AND.VD2112
+C
+98IG210158        +RE2101                          1.8E4          1.VD2101
+98IG210258        +RE2102                          1.8E4          1.VD2102
+98IG210358        +RE2103                          1.8E4          1.VD2103
+98IG210458        +RE2104                          1.8E4          1.VD2104
+98IG210558        +RE2105                          1.8E4          1.VD2105
+98IG210658        +RE2106                          1.8E4          1.VD2106
+98IG210758        +RE2107                          1.8E4          1.VD2107
+98IG210858        +RE2108                          1.8E4          1.VD2108
+98IG210958        +RE2109                          1.8E4          1.VD2109
+98IG211058        +RE2110                          1.8E4          1.VD2110
+98IG211158        +RE2111                          1.8E4          1.VD2111
+98IG211258        +RE2112                          1.8E4          1.VD2112
+C
+98GI210158        +VD2101                          1.8E4          1.IG2101
+98GI210258        +VD2102                          1.8E4          1.IG2102
+98GI210358        +VD2103                          1.8E4          1.IG2103
+98GI210458        +VD2104                          1.8E4          1.IG2104
+98GI210558        +VD2105                          1.8E4          1.IG2105
+98GI210658        +VD2106                          1.8E4          1.IG2106
+98GI210758        +VD2107                          1.8E4          1.IG2107
+98GI210858        +VD2108                          1.8E4          1.IG2108
+98GI210958        +VD2109                          1.8E4          1.IG2109
+98GI211058        +VD2110                          1.8E4          1.IG2110
+98GI211158        +VD2111                          1.8E4          1.IG2111
+98GI211258        +VD2112                          1.8E4          1.IG2112
+C
+98GM210162        +GI2101                                           TR2101
+98GM210262        +GI2102                                           TR2102
+98GM210362        +GI2103                                           TR2103
+98GM210462        +GI2104                                           TR2104
+98GM210562        +GI2105                                           TR2105
+98GM210662        +GI2106                                           TR2106
+98GM210762        +GI2107                                           TR2107
+98GM210862        +GI2108                                           TR2108
+98GM210962        +GI2109                                           TR2109
+98GM211062        +GI2110                                           TR2110
+98GM211162        +GI2111                                           TR2111
+98GM211262        +GI2112                                           TR2112
+C
+98TRA21Y  =(TR2101+TR2102+TR2103+TR2104+TR2105+TR2106)/DELTAT
+98GM21_Y61+GM2106 +GM2101 +GM2102 +GM2103 +GM2104                99.GM2105GAM21Y
+98GAM21Y58                +TRA21Y                     1.          1.NT2106UNITY
+98NT2106  =(.NOT.TR2106).EQ.1
+98TRA21D  =(TR2107+TR2108+TR2109+TR2110+TR2111+TR2112)/DELTAT
+98GM21_D61+GM2112 +GM2107 +GM2108 +GM2109 +GM2110                99.GM2111GAM21D
+98GAM21D58                +TRA21D                     1.          1.NT2112UNITY
+98NT2112  =(.NOT.TR2112).EQ.1
+98GAMMAI63+GM21_Y                         +GM21_D          -1.
+C
+90CODROA
+90CODROB
+90CODROC
+C
+C -------  MISURA DELLA TENSIONE MEDIA (50HZ), SBARRE DI COMMUTAZIONE ---------
+98VACM21  =SQRT(CODROA*CODROA+CODROB*CODROB+CODROC*CODROC)/400.E3
+33VACM21GAMMAI
+C
+C -------  PLL (PER LA GFU), LATO CODRONGIANOS  -----------------------------------
+98OMEG21  =2.*PI*   50.
+98IGA21   =(2*CODROA-CODROB-CODROC)/(SQRT(6.)*400.E3)
+98IGB21   =(CODROB-CODROC)/(SQRT(2.)*400.E3)
+88ERR21   =IGA21*COS(P21PLL)+IGB21*SIN(P21PLL)
+ 1ERIN21  +ERR21                                     10.
+        1.
+                  1.
+ 0ERPP21  +ERR21                                     50.
+98RES21   =PHD21.LE.(2*PI-2*W21*DELTAT)
+98P21PLL58                +W21                        1.          1.RES21 ZERO
+ 0W21             +ERPP21 +ERIN21 +OMEG21             1. 301.6 452.4
+ 0PHD21                   +P21PLL                     1.
+77P21PLL        1.57
+C 33P##PLL
+C 33W##
+C ------------------  INNESCO DEI TIRISTORI ----------------------------------
+90UCTD21
+11GRD21   .017453292
+98VAD21   = SIN(P21PLL-(UCTD21+30)*GRD21)
+98VBD21   = SIN(P21PLL-(UCTD21+150)*GRD21)
+98VCD21   = SIN(P21PLL-(UCTD21-90)*GRD21)
+C -------------------------------------------------
+98VAY21   = SIN(P21PLL-UCTD21*GRD21)
+98VBY21   = SIN(P21PLL-(UCTD21+120)*GRD21)
+98VCY21   = SIN(P21PLL-(UCTD21-120)*GRD21)
+98DS2101  = VAY21.GT.VCY21.AND.VAY21.GT.VBY21.AND.TIMEX.GT.   0.0
+98DS2102  = VCY21.LT.VAY21.AND.VCY21.LT.VBY21.AND.TIMEX.GT.   0.0
+98DS2103  = VBY21.GT.VCY21.AND.VBY21.GT.VAY21.AND.TIMEX.GT.   0.0
+98DS2104  = VAY21.LT.VCY21.AND.VAY21.LT.VBY21.AND.TIMEX.GT.   0.0
+98DS2105  = VCY21.GT.VAY21.AND.VCY21.GT.VBY21.AND.TIMEX.GT.   0.0
+98DS2106  = VBY21.LT.VCY21.AND.VBY21.LT.VAY21.AND.TIMEX.GT.   0.0
+C -------------------------------------------------
+98DS2107  = VAD21.GT.VCD21.AND.VAD21.GT.VBD21.AND.TIMEX.GT.   0.0
+98DS2108  = VCD21.LT.VAD21.AND.VCD21.LT.VBD21.AND.TIMEX.GT.   0.0
+98DS2109  = VBD21.GT.VCD21.AND.VBD21.GT.VAD21.AND.TIMEX.GT.   0.0
+98DS2110  = VAD21.LT.VCD21.AND.VAD21.LT.VBD21.AND.TIMEX.GT.   0.0
+98DS2111  = VCD21.GT.VAD21.AND.VCD21.GT.VBD21.AND.TIMEX.GT.   0.0
+98DS2112  = VBD21.LT.VCD21.AND.VBD21.LT.VAD21.AND.TIMEX.GT.   0.0
+C 
+C ----- MISURA DELL'ANGOLO GAMMA, CONVERTITORE LUCCIANA  -----------------------
+90VYLUCA                                                                     10.
+90VYLUCB                                                                     10.
+90VYLUCC                                                                     10.
+90VDLUCA                                                                     10.
+90VDLUCB                                                                     10.
+90VDLUCC                                                                     10.
+90POLOLU                                                                     10.
+90MEIO31                                                                     10.
+90ELELUC                                                                     10.
+C
+98VA3101  =LUCCIA.LT.LUCCIB
+98VA3102  =LUCCIA.LT.LUCCIC
+98VA3103  =LUCCIB.LT.LUCCIC
+98VA3104  =LUCCIB.LT.LUCCIA
+98VA3105  =LUCCIC.LT.LUCCIA
+98VA3106  =LUCCIC.LT.LUCCIB
+98VA3107  =LUCCIA.LT.ZERO
+98VA3108  =LUCCIC.GT.ZERO
+98VA3109  =LUCCIB.LT.ZERO
+98VA3110  =LUCCIA.GT.ZERO
+98VA3111  =LUCCIC.LT.ZERO
+98VA3112  =LUCCIB.GT.ZERO
+C
+98VD310153                +VA3101                       2.5E-5
+98VD310253                +VA3102                       2.5E-5
+98VD310353                +VA3103                       2.5E-5
+98VD310453                +VA3104                       2.5E-5
+98VD310553                +VA3105                       2.5E-5
+98VD310653                +VA3106                       2.5E-5
+98VD310753                +VA3107                       2.5E-5
+98VD310853                +VA3108                       2.5E-5
+98VD310953                +VA3109                       2.5E-5
+98VD311053                +VA3110                       2.5E-5
+98VD311153                +VA3111                       2.5E-5
+98VD311253                +VA3112                       2.5E-5
+C
+98RE3101  =(VYLUCA.LT.MEIO31).AND.(TIMEX.GT.0.02)
+98RE3102  =(POLOLU.LT.VYLUCC).AND.(TIMEX.GT.0.02)
+98RE3103  =(VYLUCB.LT.MEIO31).AND.(TIMEX.GT.0.02)
+98RE3104  =(POLOLU.LT.VYLUCA).AND.(TIMEX.GT.0.02)
+98RE3105  =(VYLUCC.LT.MEIO31).AND.(TIMEX.GT.0.02)
+98RE3106  =(POLOLU.LT.VYLUCB).AND.(TIMEX.GT.0.02)
+98RE3107  =(VDLUCA.LT.ELELUC).AND.(TIMEX.GT.0.02)
+98RE3108  =(MEIO31.LT.VDLUCC).AND.(TIMEX.GT.0.02)
+98RE3109  =(VDLUCB.LT.ELELUC).AND.(TIMEX.GT.0.02)
+98RE3110  =(MEIO31.LT.VDLUCA).AND.(TIMEX.GT.0.02)
+98RE3111  =(VDLUCC.LT.ELELUC).AND.(TIMEX.GT.0.02)
+98RE3112  =(MEIO31.LT.VDLUCB).AND.(TIMEX.GT.0.02)
+C
+98TR3101  =(.NOT.VA3101).AND.VD3101
+98TR3102  =(.NOT.VA3102).AND.VD3102
+98TR3103  =(.NOT.VA3103).AND.VD3103
+98TR3104  =(.NOT.VA3104).AND.VD3104
+98TR3105  =(.NOT.VA3105).AND.VD3105
+98TR3106  =(.NOT.VA3106).AND.VD3106
+98TR3107  =(.NOT.VA3107).AND.VD3107
+98TR3108  =(.NOT.VA3108).AND.VD3108
+98TR3109  =(.NOT.VA3109).AND.VD3109
+98TR3110  =(.NOT.VA3110).AND.VD3110
+98TR3111  =(.NOT.VA3111).AND.VD3111
+98TR3112  =(.NOT.VA3112).AND.VD3112
+C
+98IG310158        +RE3101                          1.8E4          1.VD3101
+98IG310258        +RE3102                          1.8E4          1.VD3102
+98IG310358        +RE3103                          1.8E4          1.VD3103
+98IG310458        +RE3104                          1.8E4          1.VD3104
+98IG310558        +RE3105                          1.8E4          1.VD3105
+98IG310658        +RE3106                          1.8E4          1.VD3106
+98IG310758        +RE3107                          1.8E4          1.VD3107
+98IG310858        +RE3108                          1.8E4          1.VD3108
+98IG310958        +RE3109                          1.8E4          1.VD3109
+98IG311058        +RE3110                          1.8E4          1.VD3110
+98IG311158        +RE3111                          1.8E4          1.VD3111
+98IG311258        +RE3112                          1.8E4          1.VD3112
+C
+98GI310158        +VD3101                          1.8E4          1.IG3101
+98GI310258        +VD3102                          1.8E4          1.IG3102
+98GI310358        +VD3103                          1.8E4          1.IG3103
+98GI310458        +VD3104                          1.8E4          1.IG3104
+98GI310558        +VD3105                          1.8E4          1.IG3105
+98GI310658        +VD3106                          1.8E4          1.IG3106
+98GI310758        +VD3107                          1.8E4          1.IG3107
+98GI310858        +VD3108                          1.8E4          1.IG3108
+98GI310958        +VD3109                          1.8E4          1.IG3109
+98GI311058        +VD3110                          1.8E4          1.IG3110
+98GI311158        +VD3111                          1.8E4          1.IG3111
+98GI311258        +VD3112                          1.8E4          1.IG3112
+C
+98GM310162        +GI3101                                           TR3101
+98GM310262        +GI3102                                           TR3102
+98GM310362        +GI3103                                           TR3103
+98GM310462        +GI3104                                           TR3104
+98GM310562        +GI3105                                           TR3105
+98GM310662        +GI3106                                           TR3106
+98GM310762        +GI3107                                           TR3107
+98GM310862        +GI3108                                           TR3108
+98GM310962        +GI3109                                           TR3109
+98GM311062        +GI3110                                           TR3110
+98GM311162        +GI3111                                           TR3111
+98GM311262        +GI3112                                           TR3112
+C
+98TRA31Y  =(TR3101+TR3102+TR3103+TR3104+TR3105+TR3106)/DELTAT
+98GM31_Y61+GM3106 +GM3101 +GM3102 +GM3103 +GM3104                99.GM3105GAM31Y
+98GAM31Y58                +TRA31Y                     1.          1.NT3106UNITY
+98NT3106  =(.NOT.TR3106).EQ.1
+98TRA31D  =(TR3107+TR3108+TR3109+TR3110+TR3111+TR3112)/DELTAT
+98GM31_D61+GM3112 +GM3107 +GM3108 +GM3109 +GM3110                99.GM3111GAM31D
+98GAM31D58                +TRA31D                     1.          1.NT3112UNITY
+98NT3112  =(.NOT.TR3112).EQ.1
+98GAMMAL63+GM31_Y                         +GM31_D          -1.
+C
+90LUCCIA
+90LUCCIB
+90LUCCIC
+C
+C -------  MISURA DELLA TENSIONE MEDIA (50HZ), SBARRE DI COMMUTAZIONE ---------
+98VACM31  =SQRT(LUCCIA*LUCCIA+LUCCIB*LUCCIB+LUCCIC*LUCCIC)/90.E3
+33VACM31GAMMAL
+C
+C -------  PLL (PER LA GFU), LATO LUCCIANA  ------------------------------------
+98OMEG31  =2.*PI*   50.
+98IGA31   =(2*LUCCIA-LUCCIB-LUCCIC)/(SQRT(6.)*90.E3)
+98IGB31   =(LUCCIB-LUCCIC)/(SQRT(2.)*90.E3)
+88ERR31   =IGA31*COS(P31PLL)+IGB31*SIN(P31PLL)
+ 1ERIN31  +ERR31                                     10.
+        1.
+                  1.
+ 0ERPP31  +ERR31                                     50.
+98RES31   =PHD31.LE.(2*PI-2*W31*DELTAT)
+98P31PLL58                +W31                        1.          1.RES31 ZERO
+ 0W31             +ERPP31 +ERIN31 +OMEG31             1. 301.6 452.4
+ 0PHD31                   +P31PLL                     1.
+77P31PLL        1.57
+C ------------------  INNESCO DEI TIRISTORI ----------------------------------
+90UCTD31
+11GRD31   .017453292
+98VAD31   = SIN(P31PLL-(UCTD31+30)*GRD31)
+98VBD31   = SIN(P31PLL-(UCTD31+150)*GRD31)
+98VCD31   = SIN(P31PLL-(UCTD31-90)*GRD31)
+C -------------------------------------------------
+98VAY31   = SIN(P31PLL-UCTD31*GRD31)
+98VBY31   = SIN(P31PLL-(UCTD31+120)*GRD31)
+98VCY31   = SIN(P31PLL-(UCTD31-120)*GRD31)
+98DS3101  = VAY31.GT.VCY31.AND.VAY31.GT.VBY31.AND.TIMEX.GT.   0.0
+98DS3102  = VCY31.LT.VAY31.AND.VCY31.LT.VBY31.AND.TIMEX.GT.   0.0
+98DS3103  = VBY31.GT.VCY31.AND.VBY31.GT.VAY31.AND.TIMEX.GT.   0.0
+98DS3104  = VAY31.LT.VCY31.AND.VAY31.LT.VBY31.AND.TIMEX.GT.   0.0
+98DS3105  = VCY31.GT.VAY31.AND.VCY31.GT.VBY31.AND.TIMEX.GT.   0.0
+98DS3106  = VBY31.LT.VCY31.AND.VBY31.LT.VAY31.AND.TIMEX.GT.   0.0
+C -------------------------------------------------
+98DS3107  = VAD31.GT.VCD31.AND.VAD31.GT.VBD31.AND.TIMEX.GT.   0.0
+98DS3108  = VCD31.LT.VAD31.AND.VCD31.LT.VBD31.AND.TIMEX.GT.   0.0
+98DS3109  = VBD31.GT.VCD31.AND.VBD31.GT.VAD31.AND.TIMEX.GT.   0.0
+98DS3110  = VAD31.LT.VCD31.AND.VAD31.LT.VBD31.AND.TIMEX.GT.   0.0
+98DS3111  = VCD31.GT.VAD31.AND.VCD31.GT.VBD31.AND.TIMEX.GT.   0.0
+98DS3112  = VBD31.LT.VCD31.AND.VBD31.LT.VAD31.AND.TIMEX.GT.   0.0
+BLANK TACS
+C ------------------------------------------------------------------------------
+C BLOCCO MODELS
+C ------------------------------------------------------------------------------
+MODELS
+INPUT
+MM0001 {i(DCCODR)}
+MM0002 {v(DCCODR)}
+MM0003 {tacs(GAMMAI)}
+MM0004 {i(DCSUVE)}
+MM0005 {v(DCSUVE)}
+MM0006 {i(DCLUCC)}
+MM0007 {v(DCLUCC)}
+MM0008 {tacs(GAMMAL)}
+OUTPUT
+  UCCAI
+  UCCAR
+  UCCAL
+  IORDEM
+MODEL RAD_SUV
+      --- MODELLO RADDRIZZATORE SUVERETO --- 
+     INPUT  IDC,VDC
+     OUTPUT ALFA,IORDER
+     DATA   VDC_BA{DFLT:200.},IDC_BA{DFLT:1.},KPV{DFLT:63},KIV{DFLT:5247}
+            TC_IDC{DFLT:0.012},TC_VDC{DFLT:0.00531},IORDEP{DFLT:1.0}
+			VDCREF{DFLT:1.0},IDCREF{DFLT:1.1},KPI{DFLT:63},KII{DFLT:5247}
+     VAR    IDC_PU,VDC_PU,IDCMED,VDCMED,ALFA,ERRV,ERRV_INT,ERRV_PRO
+	        BETAV,ERRI,ERRI_INT,ERRI_PRO,BETAI,BETA
+			IORDER,UDINP,VDCOLI
+     INIT
+ ---- MISURE
+            histdef(IDCMED)  :=1.0
+            histdef(VDCMED)  :=1.0
+ ---- REGOLATORI
+            ERRV             :=0
+            ERRV_PRO         :=0
+            histdef(ERRV_INT):=163
+            ERRI             :=0.1			
+			ERRI_PRO         :=0
+			histdef(ERRI_INT):=175
+     ENDINIT
+  EXEC
+ ---- FILTRI GRANDEZZE DC ---
+     IDC_PU:=IDC/(IDC_BA*1000.)
+     VDC_PU:=VDC/(VDC_BA*1000.)
+     LAPLACE(IDCMED/IDC_PU):=(1|S0)/(1|S0+TC_IDC|S1)
+     LAPLACE(VDCMED/VDC_PU):=(1|S0)/(1|S0+TC_VDC|S1)
+ ---- VDCOL ----
+     UDINP  := VDCMED {MIN:0.4,MAX:0.9}
+	 VDCOLI := UDINP*0.9 + 0.19
+     IORDER := VDCOLI*IORDEP 
+ -------------------------------------------------------------------------
+ 
+ ---- REGOLATORE TENSIONE COSTANTE (modalit?? Constant-Voltage) ----
+     ERRV := (VDCREF - VDCMED)
+     LAPLACE(ERRV_INT/ERRV) {DMIN:90.,DMAX:175.}:=(KIV|S0)/(1|S1)
+     ERRV_PRO := KPV*(VDCREF - VDCMED)
+     BETAV := (ERRV_INT + ERRV_PRO) {MIN:90.,MAX:175.}
+	 
+ ---- REGOLATORE DI CORRENTE (modalit?? CC) ----
+     ERRI := (IORDER - IDCMED + 0.1)
+     LAPLACE(ERRI_INT/ERRI) {DMIN:30.,DMAX:175.} := (KII|S0)/(1|S1)	
+     ERRI_PRO := KPI*(IORDER - IDCMED)
+     BETAI := (ERRI_INT	+ ERRI_PRO) {MIN:30.,MAX:175}
+     
+	 BETA :=MIN(BETAI,BETAV)	
+     ALFA := 180. - BETA	 
+   ENDEXEC
+ENDMODEL  
+MODEL INV_COD
+     ---- MODELLO INVERTER CODRONGIANOS ----
+     INPUT  IDC,VDC,GAMMA,IORDER
+     OUTPUT ALFA
+     DATA   VDC_BA{DFLT:200.},IDC_BA{DFLT:1.}
+            FREQ{DFLT:50},TC_IDC{DFLT:0.0012},TC_VDC{DFLT:0.02}
+            KPI{DFLT:36},KII{DFLT:3760},KPG{DFLT:0.7506},KIG{DFLT:18.38}
+			ICODRO{DFLT:0.75}
+     VAR    IDC_PU,VDC_PU,IDCMED,VDCMED,ALFA
+            BETAIC,ERRI_INT,ERRI_PRO,ERRI
+			GAMMAN,GAMMIN,ERRG_INT,ERRG_PRO,GNLG,GERRI,BETAIG,G[1..12]
+			K,INTER,BETAI
+     INIT
+ ---- MISURE
+            histdef(IDCMED)  :=0.75
+            histdef(VDCMED)  :=0.92
+ ---- REGOLATORI
+            ERRI             :=0
+            ERRI_PRO         :=0
+            histdef(ERRI_INT):=34.
+			ERRG_PRO         :=0
+			histdef(ERRG_INT):=30.
+			GAMMAN           :=22.
+			GAMMIN           :=180
+			K                :=1
+			G[1..12]         :=22.
+			INTER            :=0.0
+     ENDINIT
+  EXEC
+     --- FILTRI ---
+     IDC_PU:=IDC/(IDC_BA*1000.)
+     VDC_PU:=VDC/(VDC_BA*1000.)
+     LAPLACE(IDCMED/IDC_PU):=(1|S0)/(1|S0+TC_IDC|S1)
+     LAPLACE(VDCMED/VDC_PU):=(1|S0)/(1|S0+TC_VDC|S1)
+
+ -------------------------------------------------------------------------
+ --- REGOLATORE CORRENTE (modalita CC) ----
+     ERRI := (IORDER*ICODRO - IDCMED)
+     LAPLACE(ERRI_INT/ERRI) {DMIN:30.,DMAX:90.}:=(KII|S0)/(1|S1)
+     ERRI_PRO:=KPI*ERRI
+     BETAIC:=(ERRI_INT + ERRI_PRO) {MIN:30.,MAX:90.}
+     
+	 
+ -------------------------------------------------------------------------
+ --- REGOLATORE ANGOLO COSTANTE (modalit?? CEA) ----
+     GERRI:=15-GAMMAN
+     GNLG:=MAX(-31,GERRI)
+     LAPLACE(ERRG_INT/GNLG) {DMIN:30.,DMAX:90.}:=(KIG|S0)/(1|S1)
+	 ERRG_PRO:=KPG*GNLG
+	 BETAIG:=(ERRG_INT + ERRG_PRO) {MIN:30.,MAX:90.}	 	 
+	 IF AND(T>0.03,INTER>30) THEN
+	    G[K]:=GAMMA
+	    K:=K+1
+	    IF K=13 THEN K:=1 ENDIF
+	    GAMMIN:=MIN(G[1],G[2],G[3],G[4],G[5],G[6])
+	    GAMMAN:=MIN(GAMMIN,G[7],G[8],G[9],G[10],G[11],G[12])
+	    INTER:=0.0
+	 ENDIF
+	 INTER:=INTER+TIMESTEP*360*FREQ	 
+	 
+	 BETAI:=MAX(BETAIC,BETAIG)
+	 ALFA:=180-BETAI
+   ENDEXEC
+ENDMODEL
+MODEL INV_LUC
+     ---- MODELLO INVERTER LUCCIANA ----
+     INPUT  IDC,VDC,GAMMA,IORDER
+     OUTPUT ALFA
+     DATA   VDC_BA{DFLT:200.},IDC_BA{DFLT:1.}
+            FREQ{DFLT:50},TC_IDC{DFLT:0.0012},TC_VDC{DFLT:0.02}
+            KPI{DFLT:36},KII{DFLT:3760},KPG{DFLT:0.7506},KIG{DFLT:18.38}
+			ILUCCI{DFLT:0.25}
+     VAR    IDC_PU,VDC_PU,IDCMED,VDCMED,ALFA
+            BETAIC,ERRI_INT,ERRI_PRO,ERRI
+			GAMMAN,GAMMIN,ERRG_INT,ERRG_PRO,GNLG,GERRI,BETAIG,G[1..12]
+			K,INTER,BETAI
+     INIT
+ ---- MISURE
+            histdef(IDCMED)  :=0.25
+            histdef(VDCMED)  :=0.97
+ ---- REGOLATORI
+            ERRI             :=0
+            ERRI_PRO         :=0
+            histdef(ERRI_INT):=30.
+			ERRG_PRO         :=0
+			histdef(ERRG_INT):=32.
+			GAMMAN           :=15.
+			GAMMIN           :=180
+			K                :=1
+			G[1..12]         :=180.
+			INTER            :=0.0
+     ENDINIT
+  EXEC
+     --- FILTRI ---
+     IDC_PU:=IDC/(IDC_BA*1000.)
+     VDC_PU:=VDC/(VDC_BA*1000.)
+     LAPLACE(IDCMED/IDC_PU):=(1|S0)/(1|S0+TC_IDC|S1)
+     LAPLACE(VDCMED/VDC_PU):=(1|S0)/(1|S0+TC_VDC|S1)
+
+ -------------------------------------------------------------------------
+ --- REGOLATORE CORRENTE (modalita CC) ----
+     ERRI := (IORDER*ILUCCI - IDCMED)
+     LAPLACE(ERRI_INT/ERRI) {DMIN:30.,DMAX:110.}:=(KII|S0)/(1|S1)
+     ERRI_PRO:=KPI*ERRI
+     BETAIC:=(ERRI_INT + ERRI_PRO) {MIN:30.,MAX:110.}
+     
+	 
+ -------------------------------------------------------------------------
+ --- REGOLATORE ANGOLO COSTANTE (modalit?? CEA) ----
+     GERRI:=15-GAMMAN
+     GNLG:=MAX(-31,GERRI)
+     LAPLACE(ERRG_INT/GNLG) {DMIN:30.,DMAX:90.}:=(KIG|S0)/(1|S1)
+	 ERRG_PRO:=KPG*GNLG
+	 BETAIG:=(ERRG_INT + ERRG_PRO) {MIN:30.,MAX:90.}	 	 
+	 IF AND(T>0.03,INTER>30) THEN
+	    G[K]:=GAMMA
+	    K:=K+1
+	    IF K=13 THEN K:=1 ENDIF
+	    GAMMIN:=MIN(G[1],G[2],G[3],G[4],G[5],G[6])
+	    GAMMAN:=MIN(GAMMIN,G[7],G[8],G[9],G[10],G[11],G[12])
+	    INTER:=0.0
+	 ENDIF
+	 INTER:=INTER+TIMESTEP*360*FREQ	 
+	 
+	 BETAI:=MAX(BETAIC,BETAIG)
+	 ALFA:=180-BETAI
+   ENDEXEC
+ENDMODEL
+USE RAD_SUV AS RAD_SUV
+INPUT
+  IDC:= MM0004
+  VDC:= MM0005
+DATA
+  VDC_BA:=   200.
+  IDC_BA:=     1.
+  KPV   :=   142.
+  KIV   :=  7194.
+  KPI   :=    43.
+  KII   :=  3547.
+  TC_IDC:= 0.0012
+  TC_VDC:=   0.02
+OUTPUT
+  UCCAR := ALFA
+  IORDEM:= IORDER
+ENDUSE
+USE INV_COD AS INV_COD
+INPUT
+  IDC   := MM0001
+  VDC   := MM0002
+  GAMMA := MM0003
+  IORDER:= IORDEM
+DATA
+  VDC_BA:=   200.
+  IDC_BA:=     1.
+  KPI   :=    50.
+  KII   := 476.
+  KPG   := 0.4506
+  KIG   :=  18.38
+  TC_IDC:= 0.0012
+  TC_VDC:=   0.02
+  ICODRO:=   0.75
+OUTPUT
+  UCCAI:=ALFA
+ENDUSE
+USE INV_LUC AS INV_LUC
+INPUT
+  IDC   := MM0006
+  VDC   := MM0007
+  GAMMA := MM0008
+  IORDER:= IORDEM
+DATA
+  VDC_BA:=   200.
+  IDC_BA:=     1.
+  KPI   :=   65.
+  KII   :=   568.
+  KPG   := 0.4506
+  KIG   :=  18.38
+  TC_IDC:= 0.0012
+  TC_VDC:=   0.02
+  ILUCCI:=   0.25
+OUTPUT
+  UCCAL:=ALFA
+ENDUSE
+RECORD
+  INV_COD.GAMMAN AS GAMMAN
+  INV_COD.BETAIG AS BETAIG
+  INV_COD.BETAIC AS BETAIC
+  INV_COD.ERRI AS ERRII
+  INV_COD.GERRI AS GERRI
+  INV_COD.ERRI_INT AS ERRI_I
+  INV_COD.ERRI_PRO AS ERRI_P
+  INV_COD.ERRG_INT AS ERRI_N
+  INV_COD.ERRG_PRO AS ERRI_R
+  RAD_SUV.ERRI AS ERRIR
+  RAD_SUV.ALFA AS ALFAR
+  RAD_SUV.IDC_PU AS IDC_PU
+  RAD_SUV.IDCMED AS IDCMED
+  RAD_SUV.VDC_PU AS VDC_PU
+  RAD_SUV.VDCMED AS VDCMED
+  RAD_SUV.ERRV AS ERRV
+  RAD_SUV.ERRV_INT AS ERRV_I
+  RAD_SUV.ERRV_PRO AS ERRV_P
+  RAD_SUV.ERRI_INT AS ERRI_I
+  RAD_SUV.ERRI_PRO AS ERRI_P
+  RAD_SUV.BETAV AS BETAV
+  RAD_SUV.BETAI AS BETAI
+  RAD_SUV.BETA AS BETA 
+ENDMODELS
+C        1         2         3         4         5         6         7         8
+C 345678901234567890123456789012345678901234567890123456789012345678901234567890
+BLANK MODELS
+C ------------------------------------------------------------------------------
+C BRANCH CARDS
+C ------------------------------------------------------------------------------
+C
+C -------------------  IMPEDENZE DELLA RETE  -----------------------------------
+C < n1 >< n2 ><ref1><ref2>< R  >< L  >< C  >
+  FONTCAMISRTC            6.4454205.16                                         1
+  FONTCBCODROB            6.4454205.16                                         0
+  FONTCCCODROC            6.4454205.16                                         0
+  FONTSAMISRTS            2.671285.026                                         1                                                         
+  FONTSBSUVERB            2.671285.026                                         0                                                         
+  FONTSCSUVERC            2.671285.026                                         0
+  FONTLAMISRTL            1.366143.483                                         1                                                         
+  FONTLBLUCCIB            1.366143.483                                         0                                                         
+  FONTLCLUCCIC            1.366143.483                                         0  
+C -----------------  LINEA DI TRASMISSIONE  ------------------------------------  
+C < n1 >< n2 ><ref1><ref2>< R  >< L  >< C  >
+  DCSUVEDCSALI            2.1904   37.                                         0
+  DCSUVE                              0.1665                                   0
+  DCSALI                              0.1665                                   0 
+  DCSALIDCLUCC            1.8621 952.2                                         0
+  DCSALI                               21.16                                   0
+  DCLUCC                               21.16                                   0   
+  DCLUCCDCBONI             9.157  156.                                         0
+  DCLUCC                               0.702                                   0
+  DCBONI                               0.702                                   0   
+  DCBONIDCSANT             0.264  135.                                         0
+  DCBONI                                  3.                                   0
+  DCSANT                                  3.                                   0   
+  DCSANTDCCODR             5.032   85.                                         0
+  DCSANT                              0.3825                                   0
+  DCCODR                              0.3825                                   0   
+C -----------------  TRASFORMATORI  --------------------------------------------  
+C ----------------- Suvereto ---------------------------------------------------
+  TRANSFORMER                         XT001A136.E3                             0
+            9999
+ 1SUVE00                        271.68  400.
+ 2VDSUVAVDSUVB                  34.963142.85
+  TRANSFORMER XT001A                  XT001B                                   0
+ 1SUVERB
+ 2VDSUVBVDSUVC
+  TRANSFORMER XT001A                  XT001C                                   0
+ 1SUVERC
+ 2VDSUVCVDSUVA
+  TRANSFORMER                         XT002A136.E3                             0          
+            9999
+ 1SUVERA                        271.68  400.
+ 2VYSUVAXT0004                  11.65482.474
+  TRANSFORMER XT002A                  XT002B                                   0
+ 1SUVERB
+ 2VYSUVBXT0004
+  TRANSFORMER XT002A                  XT002C                                   0
+ 1SUVERC
+ 2VYSUVCXT0004
+C -------------------- Codrongianos --------------------------------------------
+  TRANSFORMER                         XT005A136.E3                             0                    
+            9999
+ 1CODR00                        271.68  400.
+ 2VYCODAXT0006                  11.65484.211
+  TRANSFORMER XT005A                  XT005B                                   0
+ 1CODROB
+ 2VYCODBXT0006
+  TRANSFORMER XT005A                  XT005C                                   0
+ 1CODROC
+ 2VYCODCXT0006
+  TRANSFORMER                         XT007A136.E3                             0
+            9999
+ 1CODROA                        271.68  400.
+ 2VDCODAVDCODB                  34.963145.86
+  TRANSFORMER XT007A                  XT007B                                   0
+ 1CODROB
+ 2VDCODBVDCODC
+  TRANSFORMER XT007A                  XT007C                                   0
+ 1CODROC
+ 2VDCODCVDCODA
+C --------------------- Lucciana -----------------------------------------------
+  TRANSFORMER                         XT008A13.4E3                             0                    
+            9999
+ 1LUCC00                        26.612   90.
+ 2VYLUCAXT0009                   24.09  100.
+  TRANSFORMER XT008A                  XT008B                                   0
+ 1LUCCIB
+ 2VYLUCBXT0009
+  TRANSFORMER XT008A                  XT008C                                   0
+ 1LUCCIC
+ 2VYLUCCXT0009
+  TRANSFORMER                         XT010A13.4E3                             0
+            9999
+ 1LUCCIA                        26.612   90.
+ 2VDLUCAVDLUCB                  72.281173.21
+  TRANSFORMER XT010A                  XT010B                                   0
+ 1LUCCIB
+ 2VDLUCBVDLUCC
+  TRANSFORMER XT010A                  XT010C                                   0
+ 1LUCCIC
+ 2VDLUCCVDLUCA
+C -----------------------------------------------------------------------------
+C                         FILTRI SUVERETO 
+C -----------------------------------------------------------------------------
+C ------------------  Passa-alto 2 ordine  ------------------------------------
+C < n 1>< n 2><ref1><ref2>< R  >< L  >< C  >
+  SUVERAXF002A                         0.997                                   0
+  SUVERBXF002B                         0.997                                   0
+  SUVERCXF002C                         0.997                                   0
+  XF002A                  1639.9                                               0
+  XF002B                  1639.9                                               0
+  XF002C                  1639.9                                               0
+  XF002A                        72.498                                         0
+  XF002B                        72.498                                         0
+  XF002C                        72.498                                         0
+C ------------------  Doppio accordo  -----------------------------------------
+  SUVERAXF001A                  35.201 0.999                                   0
+  SUVERBXF001B                  35.201 0.999                                   0
+  SUVERCXF001C                  35.201 0.999                                   0
+  XF001A                        17.601                                         0
+  XF001B                        17.601                                         0
+  XF001C                        17.601                                         0
+  XF001A                               1.999                                   0
+  XF001B                               1.999                                   0
+  XF001C                               1.999                                   0
+C -----------------------------------------------------------------------------
+C                      FILTRI CODRONGIANOS
+C -----------------------------------------------------------------------------
+C ------------------  Passa-alto 2 ordine  ------------------------------------
+C < n 1>< n 2><ref1><ref2>< R  >< L  >< C  >
+  CODROAXF004A                         0.997                                   1
+  CODROBXF004B                         0.997                                   0
+  CODROCXF004C                         0.997                                   0
+  XF004A                  1639.9                                               0
+  XF004B                  1639.9                                               0
+  XF004C                  1639.9                                               0
+  XF004A                        72.498                                         0
+  XF004B                        72.498                                         0
+  XF004C                        72.498                                         0
+C ------------------  Doppio accordo  -----------------------------------------
+  CODROAXF003A                  35.201 0.999                                   1
+  CODROBXF003B                  35.201 0.999                                   0
+  CODROCXF003C                  35.201 0.999                                   0
+  XF003A                        17.601                                         0
+  XF003B                        17.601                                         0
+  XF003C                        17.601                                         0
+  XF003A                               1.999                                   0
+  XF003B                               1.999                                   0
+  XF003C                               1.999                                   0
+C -----------------------------------------------------------------------------
+C                       FILTRI LUCCIANA
+C -----------------------------------------------------------------------------
+C ------------------  Passa-alto 2 ordine  ------------------------------------
+C < n 1>< n 2><ref1><ref2>< R  >< L  >< C  >
+  LUCCIAXF006A                        11.315                                   0
+  LUCCIBXF006B                        11.315                                   0
+  LUCCICXF006C                        11.315                                   0
+  XF006A                  144.57                                               0
+  XF006B                  144.57                                               0
+  XF006C                  144.57                                               0
+  XF006A                         6.391                                         0
+  XF006B                         6.391                                         0
+  XF006C                         6.391                                         0
+C ------------------  Doppio accordo  ------------------------------------------
+  LUCCIAXF005A                   3.10311.337                                   0
+  LUCCIBXF005B                   3.10311.337                                   0
+  LUCCICXF005C                   3.10311.337                                   0
+  XF005A                         1.552                                         0
+  XF005B                         1.552                                         0
+  XF005C                         1.552                                         0
+  XF005A                              22.674                                   0
+  XF005B                              22.674                                   0
+  XF005C                              22.674                                   0
+C ------------------------------------------------------------------------------
+C                              REATTORI 
+C ------------------------------------------------------------------------------
+  XYZ005XYZ004            7.9E-4 500.0
+  XYZ006XYZ007            7.9E-4 500.0  
+  XYZ015XYZ016            7.9E-4 500.0  
+C ------------------------------------------------------------------------------
+C CONVERTITORE 12 IMPULSI SUVERETO
+C ------------------------------------------------------------------------------
+  ELESUV                    .001                                               0
+  UCCAR UCTD11              1.E0                                               0
+        UCTD11              1.E0                                               0
+C -------------------  SNUBBER CIRCUITS  ---------------------------------------
+  VDSUVACV0711              5.E3        0.05
+  VDSUVCCV0811              5.E3        0.05
+  VDSUVBCV0911              5.E3        0.05
+  VDSUVACV1011              5.E3        0.05
+  VDSUVCCV1111              5.E3        0.05
+  VDSUVBCV1211              5.E3        0.05
+  VYSUVACV0111              5.E3        0.05
+  VYSUVCCV0211              5.E3        0.05
+  VYSUVBCV0311              5.E3        0.05
+  VYSUVACV0411              5.E3        0.05
+  VYSUVCCV0511              5.E3        0.05
+  VYSUVBCV0611              5.E3        0.05
+C ---------  RESISTORI DI ACCOPPIAMENTO VALVOLE  -------------------------------
+  POLOSUCV0711             .0100
+  POLOSUCV0911             .0100
+  POLOSUCV1111             .0100
+  MEIO11CV0811             .0100
+  MEIO11CV1011             .0100
+  MEIO11CV1211             .0100
+  MEIO11CV0111             .0100
+  MEIO11CV0311             .0100
+  MEIO11CV0511             .0100
+  ELESUVCV0211             .0100
+  ELESUVCV0411             .0100
+  ELESUVCV0611             .0100
+C ------------------------------------------------------------------------------
+C CONVERTITORE 12 IMPULSI CODRONGIANOS
+C ------------------------------------------------------------------------------
+  UCCAI UCTD21              1.E0                                               0
+        UCTD21              1.E0                                               0
+  ELECOD                    .001                                               0
+C -------------------  SNUBBER CIRCUITS  ---------------------------------------
+  VDCODACV0721              5.E3        0.05
+  VDCODCCV0821              5.E3        0.05
+  VDCODBCV0921              5.E3        0.05
+  VDCODACV1021              5.E3        0.05
+  VDCODCCV1121              5.E3        0.05
+  VDCODBCV1221              5.E3        0.05
+  VYCODACV0121              5.E3        0.05
+  VYCODCCV0221              5.E3        0.05
+  VYCODBCV0321              5.E3        0.05
+  VYCODACV0421              5.E3        0.05
+  VYCODCCV0521              5.E3        0.05
+  VYCODBCV0621              5.E3        0.05
+C ---------  RESISTORI DI ACCOPPIAMENTO VALVOLE  -------------------------------
+  ELECODCV0721             .0100
+  ELECODCV0921             .0100
+  ELECODCV1121             .0100
+  MEIO21CV0821             .0100
+  MEIO21CV1021             .0100
+  MEIO21CV1221             .0100
+  MEIO21CV0121             .0100
+  MEIO21CV0321             .0100
+  MEIO21CV0521             .0100
+  POLOCOCV0221             .0100
+  POLOCOCV0421             .0100
+  POLOCOCV0621             .0100
+C ------------------------------------------------------------------------------
+C CONVERTITORE 12 IMPULSI LUCCIANA 
+C ------------------------------------------------------------------------------
+  UCCAL UCTD31              1.E0                                               0
+        UCTD31              1.E0                                               0
+  ELELUC                    .001                                               0
+C -------------------  SNUBBER CIRCUITS  ---------------------------------------
+  VDLUCACV0731              5.E3        0.05
+  VDLUCCCV0831              5.E3        0.05
+  VDLUCBCV0931              5.E3        0.05
+  VDLUCACV1031              5.E3        0.05
+  VDLUCCCV1131              5.E3        0.05
+  VDLUCBCV1231              5.E3        0.05
+  VYLUCACV0131              5.E3        0.05
+  VYLUCCCV0231              5.E3        0.05
+  VYLUCBCV0331              5.E3        0.05
+  VYLUCACV0431              5.E3        0.05
+  VYLUCCCV0531              5.E3        0.05
+  VYLUCBCV0631              5.E3        0.05
+C ---------  RESISTORI DI ACCOPPIAMENTO VALVOLE  -------------------------------
+  ELELUCCV0731             .0100
+  ELELUCCV0931             .0100
+  ELELUCCV1131             .0100
+  MEIO31CV0831             .0100
+  MEIO31CV1031             .0100
+  MEIO31CV1231             .0100
+  MEIO31CV0131             .0100
+  MEIO31CV0331             .0100
+  MEIO31CV0531             .0100
+  POLOLUCV0231             .0100
+  POLOLUCV0431             .0100
+  POLOLUCV0631             .0100
+BLANK BRANCH
+C ------------------------------------------------------------------------------
+C SWITCH CARDS
+C ------------------------------------------------------------------------------
+C ---------------------  INTERRUTTORI PER L'INIZIALIZZAZIONE  ------------------
+C ---------------------  Sbarre di commutazione  -------------------------------
+  SUVERAXYZ001    -1.000    20.E-3                                             1
+  SUVERBXYZ002    -1.000    20.E-3                                             1
+  SUVERCXYZ003    -1.000    20.E-3                                             1
+  CODROAXYZ009    -1.000    20.E-3                                             1
+  CODROBXYZ010    -1.000    20.E-3                                             1
+  CODROCXYZ011    -1.000    20.E-3                                             1
+  LUCCIAXYZ012    -1.000    20.E-3                                             1
+  LUCCIBXYZ013    -1.000    20.E-3                                             1
+  LUCCICXYZ014    -1.000    20.E-3                                             1
+C ---------------------  Linea in c.c.  ----------------------------------------  
+  XYZ004POLOCO     0.010     50.00      {SW2}
+  XYZ016POLOLU     0.010     50.00      {SW2}
+  POLOSUXYZ006     0.000     50.00      {SW2}
+  XYZ006XYZ008    -1.000     0.000      {SW4}
+C  --------------------  INTERRUTTORI DI MISURA PER LA CORRENTE IN LINEA  ------
+  DCCODRXYZ005                                        MEASURING                1
+  XYZ007DCSUVE                                        MEASURING                1
+  DCLUCCXYZ015                                        MEASURING                1
+C  --------------------  INTERRUTTORI DI MISURA PER LA CORRENTE TR  ------------  
+  SUVERASUVE00                                        MEASURING                1
+  CODROACODR00                                        MEASURING                1                                         
+  LUCCIALUCC00                                        MEASURING                1
+  MISRTCCODROA                                        MEASURING                1
+  MISRTSSUVERA                                        MEASURING                1
+  MISRTLLUCCIA                                        MEASURING                1
+C -----------------------  VALVOLE  SUVERETO  ----------------------------------
+11VYSUVACV0111                        0.0E-6                    DS1101         0
+11VYSUVBCV0311                        0.0E-6                    DS1103         0
+11VYSUVCCV0511                        0.0E-6                    DS1105         0
+11CV0411VYSUVA                        0.0E-6                    DS1104         0
+11CV0611VYSUVB                        0.0E-6                    DS1106         0
+11CV0211VYSUVC                        0.0E-6                    DS1102         0
+11VDSUVACV0711                        0.0E-6                    DS1107         0
+11VDSUVBCV0911                        0.0E-6                    DS1109         0
+11VDSUVCCV1111                        0.0E-6                    DS1111         0
+11CV1011VDSUVA                        0.0E-6                    DS1110         0
+11CV1211VDSUVB                        0.0E-6                    DS1112         0
+11CV0811VDSUVC                        0.0E-6                    DS1108         0
+C 
+C -----------------------  VALVOLE  CODRONGIANOS  ------------------------------  
+11VYCODACV0121                      555.5E-6                    DS2101         0
+11VYCODBCV0321                      555.5E-6                    DS2103         0
+11VYCODCCV0521                      555.5E-6                    DS2105         0
+11CV0421VYCODA                      555.5E-6                    DS2104         0
+11CV0621VYCODB                      555.5E-6                    DS2106         0
+11CV0221VYCODC                      555.5E-6                    DS2102         0
+11VDCODACV0721                      555.5E-6                    DS2107         0
+11VDCODBCV0921                      555.5E-6                    DS2109         0
+11VDCODCCV1121                      555.5E-6                    DS2111         0
+11CV1021VDCODA                      555.5E-6                    DS2110         0
+11CV1221VDCODB                      555.5E-6                    DS2112         0
+11CV0821VDCODC                      555.5E-6                    DS2108         0
+C -----------------------  VALVOLE  LUCCIANA  ----------------------------------  
+11VYLUCACV0131                      555.5E-6                    DS3101         0
+11VYLUCBCV0331                      555.5E-6                    DS3103         0
+11VYLUCCCV0531                      555.5E-6                    DS3105         0
+11CV0431VYLUCA                      555.5E-6                    DS3104         0
+11CV0631VYLUCB                      555.5E-6                    DS3106         0
+11CV0231VYLUCC                      555.5E-6                    DS3102         0
+11VDLUCACV0731                      555.5E-6                    DS3107         0
+11VDLUCBCV0931                      555.5E-6                    DS3109         0
+11VDLUCCCV1131                      555.5E-6                    DS3111         0
+11CV1031VDLUCA                      555.5E-6                    DS3110         0
+11CV1231VDLUCB                      555.5E-6                    DS3112         0
+11CV0831VDLUCC                      555.5E-6                    DS3108         0
+BLANK SWITCH
+C ------------------------------------------------------------------------------
+C SOURCE CARDS
+C ------------------------------------------------------------------------------
+C ---------------  SORGENTI PER L'INIZIALIZZAZIONE  ----------------------------
+C ---------------  Sbarre di commutazione  -------------------------------------
+14XYZ001 1  327.69E3       50.      +22.       0.0                  -1
+14XYZ002 1  327.69E3       50.      -98.       0.0                  -1
+14XYZ003 1  327.69E3       50.     -218.       0.0                  -1
+14XYZ009 1  328.57E3       50.     -20.0       0.0                  -1
+14XYZ010 1  328.57E3       50.     -140.       0.0                  -1
+14XYZ011 1  328.57E3       50.     +100.       0.0                  -1
+14XYZ012 1   74.10E3       50.     -20.0       0.0                  -1
+14XYZ013 1   74.10E3       50.     -140.       0.0                  -1
+14XYZ014 1   74.10E3       50.     +100.       0.0                  -1
+C ---------------  linea in c.c.  ----------------------------------------------
+14XYZ004-1     -750.     0.001       0.0       0.0   {I1}           -1     0.015
+12POLOCO-1      750.               0.010       0.0   {I2}          0.0     0.015
+14XYZ016-1     -250.     0.001       0.0       0.0   {I1}           -1     0.015
+12POLOLU-1      250.               0.010       0.0   {I2}          0.0     0.015
+14XYZ008 1    200.E3     0.001       0.0       0.0   {S3}           -1     0.015
+C ---------------  PASSAGGIO ANGOLO DI INNESCO  --------------------------------
+60UCCAR -1                                                                   10.
+60UCCAI -1                                                                   10.
+60UCCAL -1                                                                   10.
+C ---------------  SORGENTI RETI C.A.  -----------------------------------------
+C < n 1><>< Ampl.  >< Freq.  ><Phase/T0><   A1   ><   T1   >< TSTART >< TSTOP  >
+14FONTCA 0   323000.       50.      -22.                           -1.       10.
+14FONTCB 0   323000.       50.     -142.                           -1.       10.
+14FONTCC 0   323000.       50.       98.                           -1.       10.
+14FONTSA 0   327690.       50.      22.5                           -1.       10.
+14FONTSB 0   327690.       50.     -97.5                           -1.       10.
+14FONTSC 0   327690.       50.     142.5                           -1.       10.
+14FONTLA 0    70266.       50.      22.5                           -1.       10.
+14FONTLB 0    70266.       50.     -97.5                           -1.       10.
+14FONTLC 0    70266.       50.     142.5                           -1.       10.
+BLANK SOURCE
+  SUVERASUVERBSUVERCCODROACODROBCODROCDCSUVEDCCODRDCLUCCLUCCIALUCCIBLUCCIC
