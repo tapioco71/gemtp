@@ -3460,8 +3460,12 @@ subroutine spyink
   !  assign 4237 to nextsn
   nextsn = 4237
   go to 9800
+<<<<<<< HEAD
 !4237 bytbuf = buff77(1 : 20)
   bytbuf = buff77(1 : 20)
+=======
+4237 bytbuf = buff77(1 : 20)
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
   if (bytbuf(1 : 4) .eq. 'end ') go to 4214
   call frein2(bytbuf, n13, n14)
   if (n14 .lt. lserlc) go to 4239
@@ -7823,6 +7827,10 @@ subroutine tpplot
   end do
 1000 write (unit = prom80, fmt = 5000)
 5000 format (' --- Outer :')
+<<<<<<< HEAD
+=======
+  !  assign 5003 to nextsn
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
   nextsn = 5003
   go to 9800
 5003 buffin = buff77
@@ -7836,6 +7844,10 @@ subroutine tpplot
 2757 if (buffin(1 : 8) .ne. debug) go to 7368
   write (unit = prom80, fmt = 7358) iprspy
 7358 format ('  Supply level-number  iprspy  (', i3,  ' ) :')
+<<<<<<< HEAD
+=======
+  !  assign 7361 to nextsn
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
   nextsn = 7361
   go to 9800
 7361 call frein1 (buff77, iprspy)
@@ -7871,6 +7883,10 @@ subroutine tpplot
 5143 if (buffin(1 : 8) .ne. setcol) go to 5154
   write (unit = prom80, fmt = 5146) limcol
 5146 format ('  Supply printer-plot column width (', i4, ' ) :')
+<<<<<<< HEAD
+=======
+  !  assign 5147 to nextsn
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
   nextsn = 5147
   go to 9800
 5147 call frein1 (buff77, limcol)
@@ -8407,6 +8423,7 @@ subroutine timval
   case (1556)
      go to 1556
 
+<<<<<<< HEAD
   case (2740)
      go to 2740
 
@@ -8428,6 +8445,11 @@ subroutine timval
   case (43356)
      go to 43356
 
+=======
+  case (42721)
+     go to 42721
+
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
   case (52716)
      go to 52716
   end select

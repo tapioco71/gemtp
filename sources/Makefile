@@ -68,8 +68,8 @@ include ${ROOT}/Makefile.global
 
 # The default rule.
 all: ${COMPILER}
-all: clear_modules
-all: vardim dimension newmods labcom
+#all: clear_modules
+#all: vardim dimension newmods labcom
 all: ${COMPILER}/${TARGET}
 
 ${TARGET}: ${COMPILER}
@@ -121,6 +121,7 @@ ${COMPILER}:
 	@mkdir -p ${COMPILER}
 
 # Rule for compiling the main program.
+<<<<<<< HEAD
 # ${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
 ${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
 ${COMPILER}/${TARGET}: ${COMPILER}/build1.o
@@ -157,6 +158,42 @@ ${COMPILER}/${TARGET}: ${COMPILER}/main10.o
 ${COMPILER}/${TARGET}: ${COMPILER}/datain.o
 ${COMPILER}/${TARGET}: ${COMPILER}/calcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/over1.o
+=======
+#${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/build1.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/build2.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/calc.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/calsto.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/comb.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/data.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/elec.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/errstp.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/init.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/pmodl.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/pstmt.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/ptacs.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/puse.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/putil1.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/putil2.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/step.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/synstp.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/ntacs1.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/ntacs1a.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/ntacs1b.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/ntacs2.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/ntacs3.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/tread.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/use1.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/use2.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/xpr1.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/xpr2.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/xref1.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/xref2.o
+${COMPILER}/${TARGET}: ${COMPILER}/main00.o
+${COMPILER}/${TARGET}: ${COMPILER}/main10.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/over1.o
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
 # ${COMPILER}/${TARGET}: ${COMPILER}/over2.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over5.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over6.o
@@ -169,7 +206,11 @@ ${COMPILER}/${TARGET}: ${COMPILER}/over1.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over13.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over14.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over15.o
+<<<<<<< HEAD
 ${COMPILER}/${TARGET}: ${COMPILER}/over16.o
+=======
+# ${COMPILER}/${TARGET}: ${COMPILER}/over16.o
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
 ${COMPILER}/${TARGET}: ${COMPILER}/over20.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over29.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over31.o
@@ -184,59 +225,64 @@ ${COMPILER}/${TARGET}: ${COMPILER}/over20.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over53.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over54.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over55.o
+<<<<<<< HEAD
+=======
+# ${COMPILER}/${TARGET}: ${COMPILER}/calcom.o
+# ${COMPILER}/${TARGET}: ${COMPILER}/datain.o
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
 # ${COMPILER}/${TARGET}: ${COMPILER}/inlmfs.o
 
 # Rule for compiling vardim program.
-${COMPILER}/${VARDIM}: ${COMPILER}/date44.o
-${COMPILER}/${VARDIM}: ${COMPILER}/time44.o
-${COMPILER}/${VARDIM}: ${COMPILER}/${VARDIM}.o
+# ${COMPILER}/${VARDIM}: ${COMPILER}/date44.o
+# ${COMPILER}/${VARDIM}: ${COMPILER}/time44.o
+# ${COMPILER}/${VARDIM}: ${COMPILER}/${VARDIM}.o
 
-dimension:
-	@if [ -f ${COMPILER}/${VARDIM} ];					\
-	then									\
-		if [ -f ${LISTSIZE} ];						\
-		then								\
-			if [ 'x${VERBOSE}' = x ];				\
-			then							\
-				echo " [ VARDIM ] ${LISTSIZE}";			\
-			else							\
-				echo "cat ${LISTSIZE} | ${COMPILER}/${VARDIM}";	\
-			fi;							\
-			cat ${LISTSIZE} | ${COMPILER}/${VARDIM};		\
-		else								\
-			echo "No ${LISTSIZE} file";				\
-		fi;								\
-	else									\
-		echo "No ${COMPILER}/${VARDIM}";				\
-	fi
+# dimension:
+# 	@if [ -f ${COMPILER}/${VARDIM} ];					\
+# 	then									\
+# 		if [ -f ${LISTSIZE} ];						\
+# 		then								\
+# 			if [ 'x${VERBOSE}' = x ];				\
+# 			then							\
+# 				echo " [ VARDIM ] ${LISTSIZE}";			\
+# 			else							\
+# 				echo "cat ${LISTSIZE} | ${COMPILER}/${VARDIM}";	\
+# 			fi;							\
+# 			cat ${LISTSIZE} | ${COMPILER}/${VARDIM};		\
+# 		else								\
+# 			echo "No ${LISTSIZE} file";				\
+# 		fi;								\
+# 	else									\
+# 		echo "No ${COMPILER}/${VARDIM}";				\
+# 	fi
 
-newmods:
-	@if [ -f fort.7 ];						\
-	then								\
-		if [ 'x${VERBOSE}' = x ];				\
-		then							\
-			echo " [ NEWMODS ] ";				\
-		else							\
-			echo "cp fort.7 newmods.f90";			\
-		fi;							\
-		cp fort.7 newmods.f90;					\
-	else								\
-		echo "Cannot create newmods.f90.";			\
-	fi
+# newmods:
+# 	@if [ -f fort.7 ];						\
+# 	then								\
+# 		if [ 'x${VERBOSE}' = x ];				\
+# 		then							\
+# 			echo " [ NEWMODS ] ";				\
+# 		else							\
+# 			echo "cp fort.7 newmods.f90";			\
+# 		fi;							\
+# 		cp fort.7 newmods.f90;					\
+# 	else								\
+# 		echo "Cannot create newmods.f90.";			\
+# 	fi
 
-labcom:
-	@if [ -f fort.9 ];						\
-	then								\
-		if [ 'x${VERBOSE}' = x ];				\
-		then							\
-			echo " [ LABCOM ] ";				\
-		else							\
-			echo "cp fort.9 ${INCLUDE_PATH}/labcom.ftn";	\
-		fi;							\
-		cp fort.9 ${INCLUDE_PATH}/labcom.ftn;			\
-	else								\
-		echo "Cannot create labcom.ftn.";			\
-	fi
+# labcom:
+# 	@if [ -f fort.9 ];						\
+# 	then								\
+# 		if [ 'x${VERBOSE}' = x ];				\
+# 		then							\
+# 			echo " [ LABCOM ] ";				\
+# 		else							\
+# 			echo "cp fort.9 ${INCLUDE_PATH}/labcom.ftn";	\
+# 		fi;							\
+# 		cp fort.9 ${INCLUDE_PATH}/labcom.ftn;			\
+# 	else								\
+# 		echo "Cannot create labcom.ftn.";			\
+# 	fi
 
 # Rule to create a list file.
 ${COMPILER}/${TARGET}.lst: ${COMPILER}/${TARGET}

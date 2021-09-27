@@ -1,5 +1,6 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 !
+<<<<<<< HEAD
 
 !     file: newmods.f90
 !
@@ -9,6 +10,16 @@
 ! subroutine main10.
 !
 
+=======
+!     file: newmods.for
+!
+!
+!     subroutine main10.
+!
+!
+! subroutine main10.
+!
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
 subroutine main10
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c0b001/   x     (   10000 )
@@ -142,6 +153,7 @@ subroutine main10
   call subr10
   return
 end subroutine main10
+<<<<<<< HEAD
 
 !
 ! subroutine over29.
@@ -150,10 +162,18 @@ end subroutine main10
 #ifdef WITH_OVER29
 subroutine over29
   implicit real(8) (a-h, o-z), integer(8) (i-n)
+=======
+!
+! subroutine over29.
+!
+subroutine over29
+  implicit real(8) (a-h, o-z), integer(4) (i-n)
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
   common /c29b01/   karray( 9748865 )
   call subr29
   return
 end subroutine over29
+<<<<<<< HEAD
 #endif
 
 !
@@ -161,12 +181,18 @@ end subroutine over29
 !
 
 #ifdef WITH_OVER31
+=======
+!
+! subroutine over31.
+!
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
 subroutine over31
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c31b01/   karray(     300 )
   call subr31
   return
 end subroutine over31
+<<<<<<< HEAD
 #endif
 
 !
@@ -174,12 +200,18 @@ end subroutine over31
 !
 
 #ifdef WITH_OVER39
+=======
+!
+! subroutine over39.
+!
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
 subroutine over39
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c39b01/   xdat  (   10000 )
   call subr39
   return
 end subroutine over39
+<<<<<<< HEAD
 #endif
 
 !
@@ -187,12 +219,18 @@ end subroutine over39
 !
 
 #ifdef WITH_FIXS10
+=======
+!
+! subroutine fixs10.
+!
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
 subroutine fixs10
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c10b01/   jndex (   93002 )
   call subr10
   return
 end subroutine fixs10
+<<<<<<< HEAD
 #endif
 
 !
@@ -200,12 +238,18 @@ end subroutine fixs10
 !
 
 #ifdef WITH_OVER44
+=======
+!
+! subroutine over44.
+!
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
 subroutine over44
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c44b01/   karray(     300 )
   call subr44
   return
 end subroutine over44
+<<<<<<< HEAD
 #endif
 
 !
@@ -213,12 +257,18 @@ end subroutine over44
 !
 
 #ifdef WITH_OVER45
+=======
+!
+! subroutine over45.
+!
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
 subroutine over45
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c45b01/   karray(     300 )
   call subr45
   return
 end subroutine over45
+<<<<<<< HEAD
 #endif
 
 !
@@ -226,18 +276,29 @@ end subroutine over45
 !
 
 #ifdef WITH_OVER47
+=======
+!
+! subroutine over47.
+!
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
 subroutine over47
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   common /c47b01/   karray(     300 )
   call subr47
   return
 end subroutine over47
+<<<<<<< HEAD
 #endif
 
 !
 ! subroutine dimens.
 !
 
+=======
+!
+! subroutine dimens.
+!
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
 subroutine dimens (lsize, nchain, bus1, bus2)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   integer(4) lsize(80)
@@ -273,8 +334,13 @@ subroutine dimens (lsize, nchain, bus1, bus2)
   lsize(28)  =    1080
   n7 = 28 + 1
   lsize(n7) = 9748865
+<<<<<<< HEAD
   bus1 ='  222609'
   bus2 ='  260921'
+=======
+  bus1 ='  203037'
+  bus2 ='  300621'
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
   return
 2900 if (nchain .gt.  29) go to 3100
   lsize( 1)  =       0
@@ -307,7 +373,12 @@ subroutine dimens (lsize, nchain, bus1, bus2)
  9900 lsize(1) = locint(bus1) - locint(bus2)
   return
 end subroutine dimens
+<<<<<<< HEAD
 
 !
 ! end of file newmods.f90
+=======
+!
+! end of file newmods.for
+>>>>>>> 9378f1dae0e7889b63a22cdce25f895a580df603
 !
