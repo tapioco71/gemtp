@@ -131,6 +131,8 @@
   common /c0b125/   volt  (    6000 )
   common /c0b126/   bus   (   93002 )
   character(8)         bus
+
 !
 ! end of file: labcom.ftn
 !
+

@@ -8,9 +8,11 @@
 !
 
 subroutine over20
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
+  integer cchar, n5, n6, n9, n11, n14, n18
+  real peaknd
   equivalence (moncar(1), knt), (moncar(2), kbase)
   equivalence (moncar(3), ltdelt), (moncar(4), isw)
   equivalence (moncar(10), mtape)
@@ -27,7 +29,7 @@ subroutine over20
   if (max99m .lt. 0) write (unit = lunit6, fmt = 9345) max99m
 9345 format (' ++++  Number of suppressed type-99 flashover or clearing messages is negative of', i7)
   if (peaknd(1) .eq. 0.0) go to 5019
-  n6 = peaknd(3)
+  n6 = int (peaknd(3), kind (n6))
   write (unit = lunit6, fmt = 5011) peaknd(1), peaknd(2), bus(n6)
 5011 format (8x, 'Overall simulation peak node voltage =', e15.6, ' .   Time (sec) =', e14.5, ' .   bus = ', "'", a6, "'", ' .')
 5019 k = lstat(32) + 1
@@ -69,7 +71,8 @@ subroutine over20
   write (unit = lunit6, fmt = 8007)
 8007 format (1x)
   if (ipunch .le. 0) go to 9800
-5759 kcount = 2
+!5759 kcount = 2
+  kcount = 2
   iold = 3
   if (n10 .ne. 0) write (unit = lunit6, fmt = 7009) t
 7009 format (/, ' Printout of the saving of terminal conditions for all components, at time', e15.7, '   seconds.', /, &
@@ -78,7 +81,8 @@ subroutine over20
   do k = 2, ntot
      if (n10 .ne. 0) write (unit = lunit6, fmt = 7012) bus(k), emtpe(k), zero, k
 7012 format(' ', a6, 2e13.5, 41x, i6)
-7010 write (unit = lunit7, fmt = 7011) kcount, bus(k), emtpe(k), zero, zero, k
+!7010 write (unit = lunit7, fmt = 7011) kcount, bus(k), emtpe(k), zero, zero, k
+     write (unit = lunit7, fmt = 7011) kcount, bus(k), emtpe(k), zero, zero, k
   end do
 7011 format (i2, a6, 3e15.8, 21x, i6)
   if (n10 .ne. 0) write (unit = lunit6, fmt = 7013)
@@ -106,7 +110,8 @@ subroutine over20
      n1 = kbus(i)
      n2 = iabs(mbus(i))
      if (n10 .ne. 0) write (lunit6,7021) bus(n1),bus(n2), cik(i), ci(i), ck(i), zero,i
-7023 write (unit = lunit7, fmt = 7020) iold, bus(n1), bus(n2), cik(i), ci(i), ck(i), zero, i
+!7023 write (unit = lunit7, fmt = 7020) iold, bus(n1), bus(n2), cik(i), ci(i), ck(i), zero, i
+     write (unit = lunit7, fmt = 7020) iold, bus(n1), bus(n2), cik(i), ci(i), ck(i), zero, i
   end do
   go to 7025
 7024 n1 = iabsz (kbus(k))
@@ -285,7 +290,7 @@ end subroutine over20
 !
 
 subroutine katalg
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11/780  installation-dependent module which is used
   !     to honor the miscellaneous data card request for emtp table
   !     saving, for later  "start again"  usage.   A call to the
@@ -297,7 +302,7 @@ subroutine katalg
   include 'dekspy.ftn'
   character(132) ansi132
   common /comlock/ locker(2)                                ! share with "over1" only
-  if (iprsup .ge. 1) write (lunit6, 2467) icat, memsav, lunit2, ltlabl
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 2467) icat, memsav, lunit2, ltlabl
 2467 format (/, ' Enter  "katalg" .    icat  memsav  lunit2  ltlabl', /, 18x, 10i8)
   if (memsav .eq. 0) go to 9800                             ! no table moving at all
   ! if interactive emtp control, then
@@ -313,7 +318,8 @@ subroutine katalg
   do j = 1, 9999
      read (unit = 79, fmt = 2474, end = 2479) ansi132
 2474 format (a132)
-2476 write (unit = lunit2) ansi132
+!2476 write (unit = lunit2) ansi132
+     write (unit = lunit2) ansi132
   end do
 2479 close (unit = lunit2, status = 'keep')
   karray(1) = indbuf
@@ -347,12 +353,13 @@ end subroutine katalg
 !
 
 subroutine emtspy
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, convert to dummy module ("return").
   include 'blkcom.ftn'
   include 'dekspy.ftn'
   include 'synmac.ftn'
+  integer komadd, n18
   save
   data n18 / 0 /
   n18 = n18 + 1
@@ -397,7 +404,8 @@ subroutine emtspy
 6261 format (a80)
 6264 if (kfile5 .eq. 1) call percnt (buff77, 80)
   if (kilper .ne. 0) go to 6274
-6266 call spying
+!6266 call spying
+  call spying
   if (lockbr .eq. 1) go to 6258
   go to 9000
   !     end-of-file during disk read, so switch to keyboard input:
@@ -419,7 +427,7 @@ end subroutine emtspy
 !
 
 subroutine spying
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
   !     This is the principle module, called by "emtspy".
   include 'blkcom.ftn'
@@ -427,8 +435,16 @@ subroutine spying
   include 'synmac.ftn'
   include 'tacsar.ftn'
   include 'dekspy.ftn'
-  character(8) chard7
-  character(8) spytim(2), spdate(2)
+  integer i, ibr, imax, imin, inchlp, ind, indxrp, intout, intype, iprspy, j
+  integer k, k1, k2, k3, khead, komadd, kslowr, ksymbl, kyramp
+  integer l, limarr, locout, looprp
+  integer memkar, memrmp
+  integer n1, n2, n23, n4, n5, n6, n7, n8, n9, n10, n10rmp, n12, n13, n14
+  integer n15, n17, n24, nbreak, nchd2, nd13, numcrd, numdcd
+  real d4, d5, d13, d34, fbegrp, fendrp, rampcn, rampsl
+  real tbegrp, tbreak, tendrp, tim1rp, tim2rp, tmax, tmaxrp, tminrp, twhen
+  real val1rp, val2rp
+  character(8) chard7, spytim(2), spdate(2)
   save
   if (iprspy .lt. 1) go to 31006
   write (unit = munit6, fmt = 1006) nchain, jjroll, kbreak, lockbr, nexmod, buff77(1 : 20)
@@ -452,8 +468,84 @@ subroutine spying
   case (1842)
      go to 1842
 
+  case (2048)
+     go to 2048
+
+  case (2101)
+     go to 2101
+
+  case (2126)
+     go to 2126
+
+  case (2139)
+     go to 2139
+
+  case (2436)
+     go to 2436
+
+  case (2913)
+     go to 2913
+
+  case (2969)
+     go to 2969
+
+  case (2979)
+     go to 2979
+
+  case (2983)
+     go to 2983
+
+  case (3128)
+     go to 3128
+
+  case (3180)
+     go to 3180
+
+  case (3191)
+     go to 3191
+
+  case (3204)
+     go to 3204
+
+  case (3307)
+     go to 3307
+
+  case (3573)
+     go to 3573
+
+  case (3591)
+     go to 3591
+
+  case (3609)
+     go to 3609
+
+  case (3610)
+     go to 3610
+
+  case (3613)
+     go to 3613
+
+  case (3629)
+     go to 3629
+
+  case (3649)
+     go to 3649
+
+  case (3681)
+     go to 3681
+
   case (31269)
      go to 31269
+
+  case (32981)
+     go to 32981
+
+  case (33098)
+     go to 33098
+
+  case (43137)
+     go to 43137
+
   end select
 1007 if (nexmod .eq. 3) go to 8500
   if (nexmod .eq. 1) go to 3208
@@ -463,11 +555,13 @@ subroutine spying
   if (kbrser .ne. 2) go to 1009
   jword = 52
   go to 8500
-1009 memkar = locint (kar1)
+!1009 memkar = locint (kar1)
+1009 memkar = int (ishft (loc (kar1), -32), kind (memkar))
   if (kfile5 .ne. 2) go to 1240
   kfile5 = 0
   go to 31269
-1240 assign 31269 to nextsn
+  !1240 assign 31269 to nextsn
+1240 nextsn = 31269
   write (unit = prom80, fmt = 1260)
 1260 format (' spy:')
 51269 go to 9800
@@ -547,7 +641,8 @@ subroutine spying
      read (unit = ansi8, fmt = 1360) texpar(maxarg)
 1360 format (15a1)
      if (answ80(n6 : n6) .eq. ')') go to 1271
-4549 n6 = n6 + 1
+!4549 n6 = n6 + 1
+     n6 = n6 + 1
   end do
   write (unit = munit6, fmt = 4551)
 4551 format ('   ? ? ?  Illegal  "@?"  use.   Over 10 arguments.   Try again.')
@@ -570,7 +665,7 @@ subroutine spying
 1296 do jword = 1, numkey
      if (answ80(1 : 8) .eq. spykwd(jword)) go to 1307
   end do
-1302 continue
+!1302 continue
   !     we reach here if illegal response to "spy:" prompt has been read:
 1303 write (unit = munit6, fmt = 1304) answ80(1 : 8)
 1304 format ('   ? ? ?  Illegal spy command  "',  a, '" .   Try again  .....')
@@ -762,11 +857,12 @@ subroutine spying
 1313 format (5x, 8a9)
      call window
   end do
-21313 continue
+!21313 continue
   jword = jwdsav
 21314 write (unit = prom80, fmt = 1314)
 1314 format ('       key-word of interest (all, <cr>,', ' top, bot, back):')
-  assign 1315 to nextsn
+!  assign 1315 to nextsn
+  nextsn = 1315
   go to 9800
 1315 spycd2 = buff77(1 : 35)
   if (spycd2(1 : 4) .eq. '    ') go to 11315
@@ -806,7 +902,7 @@ subroutine spying
      munit6(1 : 81) = ' ' // texspy(j)
      call window
   end do
-91315 continue
+!91315 continue
   if (jword .ne. 4) go to 61317
   write (unit = munit6, fmt = 11312)
   call window
@@ -877,7 +973,8 @@ subroutine spying
   !     $$$$$$$  key word no.  6:  "deposit"  $$$$  $$$$  $$$$  $$$$  $$$$
 1460 write (unit = prom80, fmt = 1480)
 1480 format ('  Send EMTP variable:')
-  assign 1485 to nextsn
+  !  assign 1485 to nextsn
+  nextsn = 1485
   go to 9800
 1485 spycd2 = buff77(1 : 35)
   if (spycd2(1 : 1) .ne. 'c' .or. spycd2(2 : 2) .ne. ' ') go to 1491
@@ -920,7 +1017,8 @@ subroutine spying
 1684 if (jjroll .gt. 0) go to 9833
   go to 1714
 1685 prom80 = outlin(1 : kolout - 1)
-1714 assign 31269 to nextsn
+  !1714 assign 31269 to nextsn
+1714 nextsn = 31269
   go to 9800
   !     process EMTP symbol name (spycd2) which has just been read;
 1720 nchd2 = 0
@@ -969,10 +1067,11 @@ subroutine spying
   if (n9 .le. 2) n2 = n1
 1735 spycd2(j : 8) = blan80(j : 8)
   !     next identify the emtp name involved in this request:
-1738 do ind = 1, numsym
+!1738 do ind = 1, numsym
+  do ind = 1, numsym
      if (spycd2(1 : 8) .eq. symb(ind)) go to 1780
   end do
-1740 continue
+!1740 continue
   write (unit = munit6, fmt = 1760) spycd2
 1760 format ('   ? ?  Sorry, no symbol match for  "', a6, '" .')
   call window
@@ -1017,7 +1116,8 @@ subroutine spying
   !     no equal sign means that we prompt for separate number:
 1837 write (unit = prom80, fmt = 1840)
 1840 format (4x, 'New value:')
-  assign 1842 to nextsn
+  !  assign 1842 to nextsn
+  nextsn = 1842
   go to 9800
 1842 bytbuf = buff77(1 : 20)
   if (iascii(ind) .eq. 0) go to 1844
@@ -1036,7 +1136,8 @@ subroutine spying
   call window
 2043 write (unit = prom80, fmt = 2044)
 2044 format ('      index   address    change      symbol :')
-2050 assign 2048 to nextsn
+  !2050 assign 2048 to nextsn
+2050 nextsn = 2048
   go to 9800
 2048 spycd2 = buff77(1 : 35)
   if (spycd2(1 : 8) .eq. 'end     ') go to 1240
@@ -1049,7 +1150,7 @@ subroutine spying
 2052 do i = 1, 8
      if (spycd2(i : i) .eq. '*') go to 2069
   end do
-2053 continue
+!2053 continue
   !     simple case with no wild-card characters:
   do ind = 1, numsym
      if (spycd2(1 : 8) .eq. symb(ind)) go to 2063
@@ -1115,7 +1216,8 @@ subroutine spying
   write (unit = prom80, fmt = 2095)
 2095 format ('  number    name   address   (yes=1)   (yes=1)   :')
   n33 = 0
-2099 assign 2101 to nextsn
+  !2099 assign 2101 to nextsn
+2099 nextsn = 2101
   go to 9800
 2101 bytbuf = buff77(1 : 20)
   if (bytbuf(1 : 4) .eq. 'end ') go to 1240
@@ -1157,7 +1259,8 @@ subroutine spying
   !     $$$$$$$  key word no. 16:  "break"    $$$$  $$$$  $$$$  $$$$  $$$$
 2124 write (unit = prom80, fmt = 2125)
 2125 format ('   Send  t-break  in', ' sec. ("-" means step #):')
-  assign 2126 to nextsn
+  !  assign 2126 to nextsn
+  nextsn = 2126
   go to 9800
 2126 call frefp1 (buff77, tbreak)
   nbreak = 16
@@ -1171,7 +1274,8 @@ subroutine spying
   go to 2142
 2131 write (unit = prom80, fmt = 2136)
 2136 format ('    Send utpf overlay number nchain for the break :')
-  assign 2139 to nextsn
+  !  assign 2139 to nextsn
+  nextsn = 2139
   go to 9800
 2139 call frein1 (buff77, nbreak)
   if (nbreak .lt. -1 .or. nbreak .gt. 20) go to 2131
@@ -1197,7 +1301,8 @@ subroutine spying
   !     $$$$$$$  key word no. 17:  "when"     $$$$  $$$$  $$$$  $$$$  $$$$
 2430 write (unit = prom80, fmt = 2433)  twhen
 2433 format ('  Supply tmax for "save" & "restore"  [',  f8.4, ' ] :')
-  assign 2436 to nextsn
+  !  assign 2436 to nextsn
+  nextsn = 2436
   go to 9800
 2436 bytbuf = buff77(1 : 20)
   if (bytbuf(1 : 4) .eq. '    ') go to 2439
@@ -1273,7 +1378,8 @@ subroutine spying
   go to 1240
 2529 ansi32 = blan80(1 : 32)
   ansi32(1 : n13 - n12 + 1) = answ80(n12 : n13)
-2532 if (answ80(1 : 1) .eq. '@') go to 2536
+!2532 if (answ80(1 : 1) .eq. '@') go to 2536
+  if (answ80(1 : 1) .eq. '@') go to 2536
   write (unit = munit6, fmt = 2534) ansi32
 2534 format (20x, ' ******  Listing of file : ', a32)
   call window
@@ -1292,7 +1398,7 @@ subroutine spying
 2539 format (' Line', i4,  ': ', a80)
      call window
   end do
-2542 continue
+!2542 continue
 2545 close (unit = munit5, status = 'keep')
   if (n16 .eq. 0) go to 2551
 2548 n18 = n18 + 1
@@ -1365,7 +1471,8 @@ subroutine spying
   !     $$$$$$$  key word no. 29:  "catalog"  $$$$  $$$$  $$$$  $$$$  $$$$
 2907 write (unit = prom80, fmt = 2910)
 2910 format (' Send complete, legal disk-file name:')
-  assign 2913 to nextsn
+  !  assign 2913 to nextsn
+  nextsn = 2913
   go to 9800
 2913 ansi32 = buff77(1 : 32)
   if (ansi32 .eq. blan80(1 : 32)) ansi32 = 'spydata                         '
@@ -1374,7 +1481,8 @@ subroutine spying
   n1 = 1
   n2 = 80
   do j = 1, numcrd
-2914 write (unit = luntsp, fmt = 1269) file6(j)
+!2914 write (unit = luntsp, fmt = 1269) file6(j)
+     write (unit = luntsp, fmt = 1269) file6(j)
   end do
   write (unit = munit6, fmt = 2917) luntsp, numcrd
 2917 format ('    ---- Write to disk via unit', i4, '   is now complete.  Number of cards =', i5)
@@ -1404,7 +1512,8 @@ subroutine spying
   !     $$$$$$$  key word no. 32:  "debug"    $$$$  $$$$  $$$$  $$$$  $$$$
 2964 write (unit = prom80, fmt = 2967) iprspy
 2967 format ('   Send new "iprspy" value  [', i3, '  ] :')
-  assign 2969 to nextsn
+  !  assign 2969 to nextsn
+  nextsn = 2969
   go to 9800
 2969 call frein1 (buff77, iprspy)
   go to 1240
@@ -1415,18 +1524,21 @@ subroutine spying
   n15 = 0
 2975 write (unit = prom80, fmt = 2976)
 2976 format ('   Send EMTP data file name (control) :')
-  assign 2979 to nextsn
+  !  assign 2979 to nextsn
+  next = 2979
   go to 9800
 2979 ansi32 = buff77(1 : 32)
   if (ansi32(1 : 8) .ne. 'control ') go to 2984
   write (unit = prom80, fmt = 2981)
 2981 format (' Send disk card numbers n-beg and n-end :')
-  assign 32981 to nextsn
+  !  assign 32981 to nextsn
+  nextsn = 32981
   go to 9800
 32981 call frein2 (buff77, n12, n13)
   write (unit = prom80, fmt = 2982)
 2982 format (' Send n-beg in EMTP, lunit5 offset :')
-  assign 2983 to nextsn
+  !  assign 2983 to nextsn
+  nextsn = 2983
   go to 9800
 2983 call frein2 (buff77, n14, n15)
   go to 2975
@@ -1480,7 +1592,8 @@ subroutine spying
   !     beginning of loop over ramps having same begin and ending times:
 3096 write (unit = prom80, fmt = 3098)
 3098 format (' Send "t-begin", "t-end" (end, show, rewind) :')
-  assign 33098 to nextsn
+  !  assign 33098 to nextsn
+  nextsn = 33098
   go to 9800
 33098 bytbuf = buff77(1:20)
   if (bytbuf(1 : 4) .eq. 'end ') go to 1240
@@ -1511,7 +1624,8 @@ subroutine spying
   !     beginning of loop over function values (for given times):
 3122 write (unit = prom80, fmt = 3125)
 3125 format (' Send "f-begin", "f-end" (end) : ')
-  assign 3128 to nextsn
+  !  assign 3128 to nextsn
+  nextsn = 3128
   go to 9800
 3128 bytbuf = buff77(1 : 20)
   if (bytbuf(1 : 4) .eq. 'end ') go to 3096
@@ -1547,7 +1661,8 @@ subroutine spying
   rampcn(numrmp) = val2rp - rampsl(numrmp) * tim2rp
   write (unit = prom80, fmt = 3136)
 3136 format ('     [y] change? (0=no, 1=yes) :')
-  assign 43137 to nextsn
+  !  assign 43137 to nextsn
+  nextsn = 43137
   go to 9800
 43137 call frein1 (buff77, n8)
   kyramp(numrmp) = n8
@@ -1575,7 +1690,8 @@ subroutine spying
   call window
 3178 write (unit = prom80, fmt = 3179)
 3179 format ('  >< Option (mark, delay, inner, overlap, end, help) : ' )
-  assign 3180 to nextsn
+  !  assign 3180 to nextsn
+  nextsn = 3180
   go to 9800
 3180 ansi8 = buff77(1 : 8)
   if (ansi8 .ne. 'help    ') go to 3186
@@ -1598,14 +1714,16 @@ subroutine spying
 3186 if (ansi8 .ne. 'mark    ') go to 3193
   write (unit = prom80, fmt = 3189) ksymbl
 3189 format ('    Send repeat frequency after immediate 1st one [',  i6,  ' ] :')
-  assign 3191 to nextsn
+  !  assign 3191 to nextsn
+  nextsn = 3191
   go to 9800
 3191 call frein1 (buff77, ksymbl)
   go to 3178
 3193 if (ansi8 .ne. 'delay   ') go to 3207
   write (unit = prom80, fmt = 3202) kslowr
 3202 format ('  Send new rolling frequency [', i5, ' ] :')
-  assign 3204 to nextsn
+  !  assign 3204 to nextsn
+  nextsn = 3204
   go to 9800
 3204 call frein1 (buff77, kslowr)
   go to 3178
@@ -1619,9 +1737,11 @@ subroutine spying
 3209 if (ansi8 .ne. 'overlap ') go to 3214
   write (unit = prom80, fmt = 3211) inchlp
 3211 format ('    Send time-overlap percentage [',  i3,  ' ] :')
-  assign 3204 to nextsn
+  !  assign 3204 to nextsn
+  nextsn = 3204
   go to 9800
-3212 call frein1 (buff77, inchlp)
+!3212 call frein1 (buff77, inchlp)
+  call frein1 (buff77, inchlp)
   go to 3178
 3214 if (ansi8 .eq. 'end     ') go to 1240
   write (unit = munit6, fmt = 3227)
@@ -1633,7 +1753,8 @@ subroutine spying
   n33 = 0
   n24 = 0
   go to 3308
-3306 assign 3307 to nextsn
+  !3306 assign 3307 to nextsn
+3306 nextsn = 3307
   go to 9800
 3307 bytbuf = buff77(1 : 20)
 3308 if (bytbuf(1 : 4) .eq. 'end ') go to 1240
@@ -1654,7 +1775,8 @@ subroutine spying
 3317 if (bytbuf(1 : 4) .eq. spykwd(37)(1 : 4) .or. bytbuf(1 : 4) .eq. spykwd(1)(1 : 4)) go to 3310
   !     Since not key-word response, we extract (n1,n2) integer
   !     pair (free-format); "ibr" is maximum; "n17" is error flag:
-3322 call intpar (ibr, n1, n2, n17)
+!3322 call intpar (ibr, n1, n2, n17)
+  call intpar (ibr, n1, n2, n17)
   if (n17 .gt. 0) go to 3306
   n27 = 1
   i = n1
@@ -1711,7 +1833,8 @@ subroutine spying
   !     $$$$$$$  key word no. 57:  "open"     $$$$  $$$$  $$$$  $$$$  $$$$
 3568 write (unit = prom80, fmt = 3571)
 3571 format ('    Next unit, name (i2, a32 ) :')
-  assign 3573 to nextsn
+  !  assign 3573 to nextsn
+  nextsn = 3573
   go to 9800
 3573 read (unit = buff77, fmt = 3576) n7, ansi32
 3576 format (i2, a32)
@@ -1721,7 +1844,8 @@ subroutine spying
   !     $$$$$$$  key word no. 58:  "close"    $$$$  $$$$  $$$$  $$$$  $$$$
 3584 write (unit = prom80, fmt = 3587)
 3587 format ('    Next unit, status (i2, a32) :')
-  assign 3591 to nextsn
+  !  assign 3591 to nextsn
+  nextsn = 3591
   go to 9800
 3591 read (unit = buff77, fmt = 3576) n7, ansi32
   if (n7 .le. 0) go to 1240
@@ -1742,7 +1866,8 @@ subroutine spying
 3608 ksmspy(1) = -1
   ksmspy(2) = 0
   maxflg = 1
-  assign 3609 to nextsn
+  !  assign 3609 to nextsn
+  nextsn = 3609
   prom80(1 : 8) = '        '
   go to 9800
 3609 if (iprspy .lt. 1) go to 83609
@@ -1754,13 +1879,15 @@ subroutine spying
   write (unit = prom80, fmt = 43609) ksmspy(2)
 43609 format ('  s.m.', i3, '  wanted (y or n) ? :')
   ksmspy(1) = +1
-  assign 3610 to nextsn
+  !  assign 3610 to nextsn
+  nextsn = 3610
   go to 9800
 3610 if (buff77(1 : 1) .eq. 'n') go to 43606
   ksmspy(1) = +1
 3611 write (unit = prom80, fmt = 3612)
 3612 format ('     Send s.m. class (elec, mech, elva, meva, all, end) :')
-  assign 3613 to nextsn
+  !  assign 3613 to nextsn
+  nextsn = 3613
   go to 9800
 3613 n14 = ksmspy(2)
   if (buff77(1 : 4) .eq. 'end') go to 43606
@@ -1833,7 +1960,8 @@ subroutine spying
   kp = 0
   do k1 = 1, n14
      k2 = k2 + ismdat(kp + 12)
-3616 kp = kp + 30
+!3616 kp = kp + 30
+     kp = kp + 30
   end do
   num2 = numask + numask
   num3 = numask + num2
@@ -1855,7 +1983,8 @@ subroutine spying
   kp = 0
   do k1 = 1, n14
      k2 = k2 + ismdat(kp + 12)
-3617 kp = kp + 30
+!3617 kp = kp + 30
+     kp = kp + 30
   end do
   k2 = (k2 - numask) * 6
   k3 = k2 + 1
@@ -1895,12 +2024,13 @@ subroutine spying
   call window
   write (unit = munit6, fmt = 53614) (smoutv(k1), k1 = 9, 12)
   call window
-3619 continue
+!3619 continue
   go to 3611
   !     $$$$$$$  key word no. 60:  "honk"     $$$$  $$$$  $$$$  $$$$  $$$$
 3623 write (unit = prom80, fmt = 3626)
 3626 format ('   Send severity level of alert (1 to 10) :')
-  assign 3629 to nextsn
+  !  assign 3629 to nextsn
+  nextsn = 3629
   go to 9800
 3629 call frein1 (buff77, n24)
   call honker (n24)
@@ -1908,15 +2038,18 @@ subroutine spying
   !     $$$$$$$  key word no. 63:  "wait"     $$$$  $$$$  $$$$  $$$$  $$$$
 3644 write (unit = prom80, fmt = 3647)
 3647 format ('     Send desired hibernation time in seconds :')
-  assign 3649 to nextsn
+  !  assign 3649 to nextsn
+  nextsn = 3649
   go to 9800
 3649 call frefp1 (buff77, d13)
-  call tdelay (d13)
+  nd13 = int (d13, kind (nd13))
+  call tdelay (nd13)
   go to 1240
   !     $$$$$$$  key word no. 12:  "echo"     $$$$  $$$$  $$$$  $$$$  $$$$
 3673 write (unit = prom80, fmt = 3676)
 3676 format ('    Send desired operation (begin, file, show) :')
-  assign 3681 to nextsn
+  !  assign 3681 to nextsn
+  nextsn = 3681
   go to 9800
 3681 if (buff77(1 : 6) .ne. 'begin ') go to 3686
   kspsav = limcrd + 1
@@ -1953,25 +2086,138 @@ end subroutine spying
 !
 
 subroutine spyink
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp only, which services "emtspy".
   !     this is the 2nd half of principle module "spying".
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
   include 'dekspy.ftn'
-  character d13
+  integer i, indbuf, iout, ip, iascii, inonl, isprin, it
+  integer j, k, kconst, konadd, koncur, kontac, kontot, kprchg, kswtch
+  integer l, lidnt1, lidnt2, limstp, linnow, linspn, litype, lserlc
+  integer m, mmfind, mmhold
+  integer n1, n2, n3, n4, n5, n6, n7, n8, n12, n11, n13, n14, n15, n17, n22
+  integer n23, n43, ndx1, ndx2, ndx4, niu, ntot, numcrd
+  real d8, d14, d17, d18, d24, epskon
+  character(8) d13, text1, text2, d12
   dimension mmhold(20)
-  character(8) text1, text2, d12
   save
   data text1 / 'tamper' /
   if (iprspy .lt. 1) go to 1003
-  write (munit6, 1002) nchain, jjroll, kbreak, lockbr, nexmod
+  write (unit = munit6, fmt = 1002) nchain, jjroll, kbreak, lockbr, nexmod
 1002 format (' Enter "spying".  nchain  jjroll  kbreak  lockbr, nexmod =', 5i5)
   call window
-1003 if ( nexmod .ne. 3 ) go to 1004
+1003 if (nexmod .ne. 3) go to 1004
   nexmod = 0
-  go to nextsn
+!  go to nextsn
+  select case (nextsn)
+  case (2620)
+     go to 2620
+
+  case (2786)
+     go to 2786
+
+  case (2787)
+     go to 2787
+
+  case (2793)
+     go to 2793
+
+  case (2807)
+     go to 2807
+
+  case (3464)
+     go to 3464
+
+  case (3564)
+     go to 3564
+
+  case (3665)
+     go to 3665
+
+  case (3690)
+     go to 3690
+
+  case (3760)
+     go to 3760
+
+  case (3855)
+     go to 3855
+
+  case (3865)
+     go to 3865
+
+  case (3917)
+     go to 3917
+
+  case (3938)
+     go to 3938
+
+  case (3942)
+     go to 3942
+
+  case (3947)
+     go to 3947
+
+  case (3959)
+     go to 3959
+
+  case (4011)
+     go to 4011
+
+  case (4016)
+     go to 4016
+
+  case (4026)
+     go to 4026
+
+  case (4029)
+     go to 4029
+
+  case (4085)
+     go to 4085
+
+  case (4169)
+     go to 4169
+
+  case (4219)
+     go to 4219
+
+  case (4227)
+     go to 4227
+
+  case (4254)
+     go to 4254
+
+  case (4719)
+     go to 4719
+
+  case (4759)
+     go to 4759
+
+  case (4778)
+     go to 4778
+
+  case (34215)
+     go to 34215
+
+  case (42859)
+     go to 42859
+
+  case (43858)
+     go to 43858
+
+  case (43875)
+     go to 43875
+
+  case (52703)
+     go to 52703
+
+  case (54474)
+     go to 54474
+
+  end select
 1004 if ( jword .gt. 63 )     go to 1007
   select case (jword)
   case (1 : 6, 8 : 24, 27, 29 : 41, 57 : 60, 63)
@@ -2071,9 +2317,10 @@ subroutine spyink
   !     which is stored in the rtm data base; display commands are
   !     similar to  vax/vms  editor  "sos" :
 2617 linnow = 0
-2618 write (prom80, 2621)
+2618 write (unit = prom80, fmt = 2621)
 2621 format (' *')
-  assign 2620 to nextsn
+  !  assign 2620 to nextsn
+  nextsn = 2620
   go to 9800
 2620 read (buff77, 2623) char1, bytbuf
 2623 format (a1, a20)
@@ -2127,7 +2374,7 @@ subroutine spyink
      if (bytbuf(i:i) .eq. '@') n4 = 1
      if (bytbuf(i:i) .ne. ' ') n5 = 1
   end do
-2670 continue
+!2670 continue
   if (n5 .eq. 0) go to 2671
   if (n4 .eq. 1) go to 2673
   write (munit6, 32670)
@@ -2159,7 +2406,7 @@ subroutine spyink
 2677 continue
   end do
   l = 0
-  write (munit6, 2686)
+  write (unit = munit6, fmt = 2686)
 2686 format (' String not found, search failed')
   call window
   linnow = linnow - 1
@@ -2167,7 +2414,8 @@ subroutine spyink
   write (munit6, 2692) j, file6(j)
 2692 format (i5, 1x, a80)
   call window
-2693 bytfnd = bytbuf
+!2693 bytfnd = bytbuf
+2693 bytfnd(1:20) = bytbuf(1:20)
   mstrng = 1
   go to 2618
   !     following code is to process  "*i"  command:
@@ -2182,7 +2430,8 @@ subroutine spyink
 2703 linnow = linnow + 1
   write (prom80, 2702) linnow
 2702 format (1x, i4, ' ')
-  assign 52703 to nextsn
+  !  assign 52703 to nextsn
+  nextsn = 52703
   go to 9800
 52703 if (buff77(1 : 1) .ne. '@') go to 2711
 2704 j = numcrd
@@ -2190,7 +2439,8 @@ subroutine spyink
   j = j - 1
   if (j .gt. lidnt1) go to 2706
   do j = 1, n1
-2708 file6(linnow + j) = file6b(j)
+!2708 file6(linnow + j) = file6b(j)
+     file6(linnow + j) = file6b(j)
   end do
   linnow = linnow - 1
   lidnt1 = linnow
@@ -2235,7 +2485,8 @@ subroutine spyink
   go to 2618
   !     following code is for  "(8),?"  case, to deposit in column 80:
 2743 if (bytbuf(1 : 1) .eq. ',') go to 2749
-2744 write (munit6, 2746)
+!2744 write (munit6, 2746)
+  write (unit = munit6, fmt = 2746)
 2746 format (' Sorry,  "(8)"  must be followed by a comma and digit 1-4, or blanks.')
   call window
   go to 2618
@@ -2292,13 +2543,15 @@ subroutine spyink
   !     $$$$$$$  key word no. 28:  "language" $$$$  $$$$  $$$$  $$$$  $$$$
 2782 write (prom80, 2785)
 2785 format ('   Next command language operation (single, entire, show, spy :')
-  assign 2786 to nextsn
+  !  assign 2786 to nextsn
+  nextsn = 2786
   go to 9800
 2786 ansi8 = buff77(1 : 8)
   if (ansi8 .ne. 'entire  ') go to 32788
   n13 = 1
   n14 = 10
-32786 assign 2787 to nextsn
+  !32786 assign 2787 to nextsn
+32786 nextsn = 2787
   go to 9800
 2787 read (buff77, 2788) (spykwd(j), j = n13, n14)
 2788 format (10a8)
@@ -2309,7 +2562,7 @@ subroutine spyink
   go to 32786
 32788 if (ansi8 .ne. 'show    ') go to 2790
   do j = 1, numkey, 10
-     write (munit6, 2789) (spykwd(ip), ip = j, j + 9)
+     write (unit = munit6, fmt = 2789) (spykwd(ip), ip = j, j + 9)
 2789 format (1x, 10a8)
      call window
   end do
@@ -2318,7 +2571,8 @@ subroutine spyink
 2791 write (prom80, 2792)
 2792 format ('      Send next old and new symbols as 2a8 (end) : ')
   call prompt
-  assign 2793 to nextsn
+  !  assign 2793 to nextsn
+  nextsn = 2793
   go to 9800
 2793 ansi8 = buff77(1 : 8)
   buff77(1 : 8) = buff77(9:16)
@@ -2333,14 +2587,16 @@ subroutine spyink
 2798 spykwd(j) = buff77(1 : 8)
   go to 2791
   !     $$$$$$$  key word no.  7:  "switch"   $$$$  $$$$  $$$$  $$$$  $$$$
-2804 bytbuf(1 : 4) = answ80(1 : 4)
+!2804 bytbuf(1 : 4) = answ80(1 : 4)
+  bytbuf(1 : 4) = answ80(1 : 4)
   n33 = 0
   if (kswtch .gt. 0) go to 2808
   write (munit6, 2805)
 2805 format ('   ---  Sorry, no such elements available in this data case.  Try another key word ...')
   call window
   go to 1240
-2806 assign 2807 to nextsn
+  !2806 assign 2807 to nextsn
+2806 nextsn = 2807
   go to 9800
 2807 bytbuf = buff77(1 : 20)
 2808 if (bytbuf(1 : 4)  .eq.  'end ') go to 1240
@@ -2385,7 +2641,8 @@ subroutine spyink
   !     $$$$$$$  key word no. 25:  "source"   $$$$  $$$$  $$$$  $$$$  $$$$
 2856 n33 = 0
 2859 prom80 = '        '
-  assign 42859 to nextsn
+  !  assign 42859 to nextsn
+  nextsn = 42859
   go to 9800
 42859 bytbuf = buff77(1:20)
   if (bytbuf(1:4) .eq. 'end ') go to 1240
@@ -2403,7 +2660,8 @@ subroutine spyink
   !     "elec" is the command for a new heading for electric-network
   !     source table:
   n33 = 0
-2863 write (prom80, 2865)
+!2863 write (prom80, 2865)
+  write (unit = prom80, fmt = 2865)
 2865 format (' row  name  node iform', 6x, 'crest', 9x, 'sfreq', 10x, 'time1', 9x, 'tstart :')
   go to 2859
 2868 if (n33 .eq. 1) go to 2884
@@ -2442,7 +2700,8 @@ subroutine spyink
 3456 bytbuf(1 : 4) = answ80(1 : 4)
   n33 = 0
   go to 3467
-3462 assign 3464 to nextsn
+!3462 assign 3464 to nextsn
+3462 nextsn = 3464
   go to 9800
 3464 bytbuf = buff77(1 : 20)
 3467 if (bytbuf(1 : 4) .eq. 'end ') go to 1240
@@ -2488,7 +2747,8 @@ subroutine spyink
 3541 bytbuf(1 : 4) = answ80(1 : 4)
   n33 = 0
   go to 3567
-3562 assign 3564 to nextsn
+  !3562 assign 3564 to nextsn
+3562 nextsn = 3564
   go to 9800
 3564 bytbuf = buff77(1 : 20)
 3567 if (bytbuf(1 : 4) .eq. 'end ') go to 1240
@@ -2519,7 +2779,7 @@ subroutine spyink
 3609 format (1x, i4, f13.4, 3( f14.5, i6))
      call window
   end do
-3613 continue
+!3613 continue
   prom80(1 : 8) = blan80(1 : 8)
   go to 3562
   !     $$$$$$$  key word no. 45:  "size"     $$$$  $$$$  $$$$  $$$$  $$$$
@@ -2547,7 +2807,8 @@ subroutine spyink
   !     $$$$$$$  key word no. 47:  "iout"     $$$$  $$$$  $$$$  $$$$  $$$$
 3662 write (prom80, 3664) iout
 3664 format ('    Send new printout frequency [', i5,  ' ] : ')
-  assign 3665 to nextsn
+  !  assign 3665 to nextsn
+  nextsn = 3665
   go to 9800
 3665 call frein1 (buff77, n6)
   limstp = 999999
@@ -2583,7 +2844,8 @@ subroutine spyink
   !     $$$$$$$  key word no. 48:  "node"     $$$$  $$$$  $$$$  $$$$  $$$$
 3684 write (prom80, 3687)
 3687 format ('       Send  a6  bus name (connect) :')
-3688 assign 3690 to nextsn
+  !3688 assign 3690 to nextsn
+3688 nextsn = 3690
   go to 9800
 3690 spycd2 = buff77(1 : 35)
   if (spycd2(1 : 8) .eq. 'stop    ' .or. spycd2(1 : 8) .eq. 'end     ') go to 1240
@@ -2659,7 +2921,8 @@ subroutine spyink
   write (munit6, 2805)
   call window
   go to 1240
-3758 assign 3760 to nextsn
+  !3758 assign 3760 to nextsn
+3758 nextsn = 3760
   go to 9800
 3760 bytbuf = buff77(1 : 20)
 3762 if (bytbuf(1 : 4) .eq. 'end ') go to 1240
@@ -2728,13 +2991,15 @@ subroutine spyink
   go to 3857
 3851 write (prom80, 3854)
 3854 format ('    Choose class (cards, plot) :')
-  assign 3855 to nextsn
+  !  assign 3855 to nextsn
+  nextsn = 3855
   go to 9800
 3855 if (buff77(1 : 4) .ne. 'plot') go to 3934
   !     begin logic to free some storage space for emtp plot data:
 3857 write (prom80, 3858)
 3858 format ('   Operation (write, thin, flush, delete, auto, read, out, help) :')
-  assign 43858 to nextsn
+  !  assign 43858 to nextsn
+  nextsn = 43858
   go to 9800
 43858 if (buff77(1 : 6) .eq. 'delete') n77 = 1
   if (buff77(1 : 6) .eq. 'read  ') n77 = 2
@@ -2773,7 +3038,8 @@ subroutine spyink
 3862 if (buff77(1 : 4) .eq. 'out ') go to 3851
   write (prom80, 3863)
 3863 format ('     Send [tmin, tmax] (all, half) :')
-  assign 3865 to nextsn
+  !  assign 3865 to nextsn
+  nextsn = 3865
   go to 9800
 3865 answ80 = buff77
   if (answ80(1 : 4) .ne. 'all ') go to 3867
@@ -2794,7 +3060,8 @@ subroutine spyink
   if (n77 .eq. 1) go to 3876
   write (prom80, 3875)
 3875 format ('      Process every  n-th  step.  Send n:')
-  assign 43875 to nextsn
+  !  assign 43875 to nextsn
+  nextsn = 43875
   go to 9800
 43875 prom80 = buff77
   call frein1 (prom80, n4)
@@ -2831,7 +3098,8 @@ subroutine spyink
      n6 = n6 + n22
 3908 n13 = n13 + n22
      if (n13 .ge. indbuf) go to 3911
-3910 n8 = n8 + n22
+!3910 n8 = n8 + n22
+     n8 = n8 + n22
   end do
 3911 if (n77 .eq. 4) go to 3914
   n14 = indbuf - n13 + 1
@@ -2847,7 +3115,8 @@ subroutine spyink
   !     begin "read" servicing (plot data goes disk to memory):
 3915 write (prom80, 3916)
 3916 format ('      Destination (0--start; 1--as now) :')
-  assign 3917 to nextsn
+  !  assign 3917 to nextsn
+  nextsn = 3917
   go to 9800
 3917 prom80 = buff77
   call frein1 ( prom80, n3 )
@@ -2887,7 +3156,8 @@ subroutine spyink
   !     begin "cards" servicing (file6 character storage):
 3934 write (prom80, 3937)
 3937 format ('   Choose operation (move, blank, out, space) :')
-  assign 3938 to nextsn
+  !  assign 3938 to nextsn
+  nextsn = 3938
   go to 9800
 3938 if (buff77(1 : 4) .eq. 'out ') go to 3851
   if (buff77(1 : 6) .eq. 'space ') go to 3851
@@ -2895,14 +3165,16 @@ subroutine spyink
   if (buff77(1 : 6) .eq. 'blank ') n66 = 1
   write (prom80, 3941)
 3941 format ('      Number of cards to be handled :')
-  assign 3942 to nextsn
+  !  assign 3942 to nextsn
+  nextsn = 3942
   go to 9800
 3942 call frein1 (buff77, n11)
   if (n11 .le. 0) go to 3851
   if (n66 .eq. 1) go to 3955
   write (prom80, 3944)
 3944 format ('      Card addresses n-from and n-to :')
-  assign 3947 to nextsn
+  !  assign 3947 to nextsn
+  nextsn = 3947
   go to 9800
 3947 call frein1 (buff77, n11)
   if (n17 .le. 0) go to 3934
@@ -2915,13 +3187,15 @@ subroutine spyink
   go to 3934
 3955 write (prom80, 3956)
 3956 format ('      Card address :')
-  assign 3959 to nextsn
+  !  assign 3959 to nextsn
+  nextsn = 3959
   go to 9800
 3959 call frein1 (buff77, n17)
   if (n17 .le. 0) go to 3851
   do j = 1, n11
      file6(n17) = blan80
-3962 n17 = n17 + 1
+!3962 n17 = n17 + 1
+     n17 = n17 + 1
   end do
   go to 3934
   !     $$$$$$$  key word no. 51:  "lunit4"   $$$$  $$$$  $$$$  $$$$  $$$$
@@ -2930,12 +3204,14 @@ subroutine spyink
   d24 = fltinf
 4008 write (prom80, 4010)
 4010 format ('   Operation (open, close, top, bot, next, back, time) :')
-  assign 4011 to nextsn
+  !  assign 4011 to nextsn
+  nextsn = 4011
   go to 9800
 4011 if (buff77(1 : 5) .ne. 'close') go to 4022
   write (prom80, 4013)
 4013 format ('     Save permanently? (y or n) :')
-  assign 4016 to nextsn
+  !  assign 4016 to nextsn
+  nextsn = 4016
   go to 9800
 4016 ansi8 = 'keep'
   if (buff77(1 : 1) .eq. 'n') ansi8 = 'delete'
@@ -2944,12 +3220,14 @@ subroutine spyink
 4022 if ( buff77(1:5) .ne. 'open ' )  go to 4036
   write (prom80, 4025)
 4025 format ('     Desired disk file name :')
-  assign 4026 to nextsn
+  !  assign 4026 to nextsn
+  nextsn = 4026
   go to 9800
 4026 ansi32 = buff77(1:32)
   write (prom80, 4028)
 4028 format ('     Desired status (new, old) :')
-  assign 4029 to nextsn
+  !  assign 4029 to nextsn
+  nextsn = 4029
   go to 9800
 4029 open (unit = lunit4, status = buff77, file = ansi32, form = 'unformatted' )
   go to 4008
@@ -2974,15 +3252,16 @@ subroutine spyink
 4051 if ( buff77(1:4) .ne. 'bot ' )  go to 4068
   n15 = 0
   do k=1, 100
-     do j=1, 1000
-4053    read (lunit4, end=4062)  forbyt(1)
+     do j = 1, 1000
+!4053    read (lunit4, end=4062)  forbyt(1)
+        read (unit = lunit4, end = 4062) forbyt(1)
      end do
      n15 = n15 + 1000
-     write (munit6, 4056)  n15
+     write (unit = munit6, fmt = 4056) n15
 4056 format ('+      Still reading.', i8)
      call window
   end do
-4059 continue
+!4059 continue
   go to 4008
 4062 n15 = n15 + j
   write (munit6, 4063)  forbyt(1), n15
@@ -2990,8 +3269,9 @@ subroutine spyink
   call window
   go to 4008
 4068 if ( buff77(1:4) .ne. 'next' )  go to 4079
-4069 read (lunit4, end=4075)  ( forbyt(j), j=1, kptplt+1 )
-  write (munit6, 4071)     ( forbyt(j), j=1, kptplt+1 )
+!4069 read (lunit4, end=4075)  ( forbyt(j), j=1, kptplt+1 )
+  read (unit = lunit4, end = 4075) (forbyt(j), j = 1, kptplt + 1)
+  write (unit = munit6, fmt = 4071) (forbyt(j), j = 1, kptplt + 1)
 4071 format (1x, 10e13.4)
   call window
   if ( forbyt(1) .lt. d24 )  d24 = forbyt(1)
@@ -3017,7 +3297,8 @@ subroutine spyink
 4083 if ( buff77(1:4) .ne. 'time' )  go to 4098
   write (prom80, 4084)  forbyt(1)
 4084 format ('       Send desired time [',  e15.6,  ' ] :')
-  assign 4085 to nextsn
+  !  assign 4085 to nextsn
+  nextsn = 4085
   go to 9800
 4085 call frefp1 ( buff77, d8 )
 24085 n15 = 0
@@ -3026,12 +3307,12 @@ subroutine spyink
         read (lunit4, end = 4090) forbyt(1)
         if (forbyt(1) .ge. d8) go to 4094
      end do
-4086 continue
+!4086 continue
      n15 = n15 + 1000
      write (munit6, 4056)  n15
      call window
   end do
-4089 continue
+!4089 continue
   go to 4008
 4090 n15 = n15 + j
   write (munit6, 4091)   n15
@@ -3058,15 +3339,16 @@ subroutine spyink
   kbrser = 0
 4165 write (prom80, 4166)
 4166 format ('  Operation (show, extra, change, step, rewind) :')
-  assign 4169 to nextsn
+  !  assign 4169 to nextsn
+  nextsn = 4169
   go to 9800
 4169 ansi32 = buff77(1:32)
   if ( ansi32(1:6) .ne. 'rewind' )  go to 4172
   kserlc = 0
   lserlc = 0
   go to 4165
-4172 if ( ansi32(1:5) .ne. 'show ' )  go to 4184
-  write (munit6, 4174)
+4172 if (ansi32(1:5) .ne. 'show ')  go to 4184
+  write (unit = munit6, fmt = 4174)
 4174 format ('  Memory:  list-2 ---', 2i5, '     list-3 ---', 2i5, '    lserlc =', i4)
   call window
   write (munit6, 4175)  n42, lbrnch, n43, ldata, lserlc
@@ -3105,7 +3387,8 @@ subroutine spyink
 4211 if ( ansi32(1:6) .ne. 'change' )  go to 4165
 4214 write (prom80, 4215)
 4215 format ('    Change type (data, move, blank, use, value,', ' end) :')
-  assign 34215 to nextsn
+  !  assign 34215 to nextsn
+  nextsn = 34215
   go to 9800
 34215 ansi32 = buff77(1:32)
   if ( ansi32(1:4) .eq. 'end ' ) go to 4165
@@ -3113,7 +3396,8 @@ subroutine spyink
   if ( ansi32(1:5) .ne. 'move ' )  go to 4223
 4216 write (prom80, 4217)
 4217 format ('    Send  n-from, n-to (1, 2, ...) :')
-  assign 4219 to nextsn
+  !  assign 4219 to nextsn
+  nextsn = 4219
   go to 9800
 4219 bytbuf = buff77(1:20)
   if ( bytbuf(1:4) .eq. 'end ' ) go to 4214
@@ -3143,7 +3427,8 @@ subroutine spyink
   go to 4216
 4223 if ( ansi32(1:5) .ne. 'data ' )  go to 4232
 4225 write (prom80, 4217)
-  assign 4227 to nextsn
+  !  assign 4227 to nextsn
+  nextsn = 4227
   go to 9800
 4227 bytbuf = buff77(1:20)
   if ( bytbuf(1:4) .eq. 'end ' ) go to 4214
@@ -3172,16 +3457,19 @@ subroutine spyink
 4232 if ( ansi32(1:5) .ne. 'blank' )  go to 4245
 4235 write (prom80, 4236)
 4236 format ('    Send n-beg and n-end line numbers :')
-  assign 4237 to nextsn
+  !  assign 4237 to nextsn
+  nextsn = 4237
   go to 9800
-4237 bytbuf = buff77(1:20)
-  if ( bytbuf(1:4) .eq. 'end ' ) go to 4214
+!4237 bytbuf = buff77(1 : 20)
+  bytbuf = buff77(1 : 20)
+  if (bytbuf(1 : 4) .eq. 'end ') go to 4214
   call frein2(bytbuf, n13, n14)
-  if ( n14 .lt. lserlc )  go to 4239
+  if (n14 .lt. lserlc) go to 4239
   lserlc = n13 - 1
   go to 4235
 4239 do j=n13, n14
-4241 kbus(j+n42) = 0
+!4241 kbus(j+n42) = 0
+     kbus(j + n42) = 0
   end do
   go to 4235
 4245 if ( ansi32(1:4) .ne. 'use ' )  go to 4256
@@ -3190,7 +3478,8 @@ subroutine spyink
   call window
 4251 write (prom80, 4253)
 4253 format ('    Send number to toggle (0=end) :')
-  assign 4254 to nextsn
+  !  assign 4254 to nextsn
+  nextsn = 4254
   go to 9800
 4254 if ( buff77(1:4) .eq. 'end ' ) go to 4214
   call frein1 ( buff77, n6 )
@@ -3208,7 +3497,8 @@ subroutine spyink
 4471 j = 1
 4473 write (prom80, 4474)
 4474 format ('   Send row name or number (end) :')
-  assign 54474 to nextsn
+  !  assign 54474 to nextsn
+  nextsn = 54474
   go to 9800
 54474 prom80 = buff77
   if ( prom80(1:4) .eq. 'end ' ) go to 1240
@@ -3224,14 +3514,15 @@ subroutine spyink
 4477 do j = 1, 10
      if (prom80(1:1) .eq. digit(j)) go to 4491
   end do
-4478 continue
+!4478 continue
   read (prom80, 1380)  text2
 1380 format (a6)
   do j=1, kpartb
      if (text2 .eq. bus(j)) go to 4494
   end do
-4483 continue
-4486 write (munit6, 4487)
+!4483 continue
+!4486 write (munit6, 4487)
+  write (unit = munit6, fmt = 4487)
 4487 format ('  %% %% == ++  Sorry, no such row.  Try again.')
   call window
   go to 4473
@@ -3252,7 +3543,7 @@ subroutine spyink
 4497 format (1x, 4(i5, e15.6))
      call window
   end do
-4502 continue
+!4502 continue
   go to 4473
   !     $$$$$$$  key word no. 55:  "[f]"      $$$$  $$$$  $$$$  $$$$  $$$$
 4512 go to 4473
@@ -3268,7 +3559,7 @@ subroutine spyink
      write (munit6, 4497) (km(m), ykm(m), m = l, n23)
      call window
   end do
-4524 continue
+!4524 continue
   go to 4512
   !     $$$$$$$  key word no. 56:  "noroll"   $$$$  $$$$  $$$$  $$$$  $$$$
 4563 if ( monits .eq. 0 ) go to 4571
@@ -3304,17 +3595,18 @@ subroutine spyink
 4609 format (7x, 10a7)
      call window
   end do
-4611 continue
+!4611 continue
   n7 = numnvo + 1
   n8 = numnvo + nv
   if ( n8 .lt. n7 )  go to 4631
-  write (munit6, 4615)  n7, n8
+  write (unit = munit6, fmt = 4615) n7, n8
 4615 format ('     Branch voltage node-name pairs (cells', i3, '  through', i3, ' ) :')
   call window
   n9 = 7878
   call spyout ( n9, n9 )
   do j=1, nv
-4623 call spyout ( ibrnch(j), jbrnch(j) )
+!4623 call spyout ( ibrnch(j), jbrnch(j) )
+     call spyout (ibrnch(j), jbrnch(j))
   end do
   n9 = -7878
   call spyout ( n9, n9 )
@@ -3347,7 +3639,8 @@ subroutine spyink
   !     $$$$$$$  key word no. 62:  "tacs"     $$$$  $$$$  $$$$  $$$$  $$$$
 4716 write (prom80, 4717)
 4717 format (' Send control (rewind, source, supplemental, patch, show, end) :')
-  assign 4719 to nextsn
+  !  assign 4719 to nextsn
+  nextsn = 4719
   go to 9800
 4719 prom80 = buff77
   if (prom80(1 : 4) .eq. 'end ') go to 1240
@@ -3368,17 +3661,19 @@ subroutine spyink
 4738 call cimage
   read (unit = abuff, fmt = 2788) ansi8
   if (ansi8(1 : 4) .ne. 'end ') go to 4741
-  lunit5 = n23
+  lunit5 = int (n23, kind (lunit5))
   go to 4716
 4741 if (ansi8(1 : 4) .ne. 'spy ') go to 4745
-  lunit5 = n23
+  lunit5 = int (n23, kind (lunit5))
   go to 1240
 4745 if (koncur .eq. 1) call tacs1
   if (koncur .eq. 2) call tacs1a
   go to 4738
 4752 if (prom80(1 : 6) .ne. 'patch ') go to 4792
-  n11 = locint (kar1)
-  n12 = locint (volti)
+!  n11 = locint (kar1)
+  n11 = loc (kar1)
+!  n12 = locint (volti)
+  n12 = loc (volti)
   n13 = (n12 - n11) / 2
   if (iprspy .le. 1) go to 34753
   write (munit6, 4753) n11, n12, n13
@@ -3390,7 +3685,8 @@ subroutine spyink
 34753 n14 = 0
 4754 write (prom80, 4757)
 4757 format (' Send source name, address (a6, i6), or "end":')
-  assign 4759 to nextsn
+  !  assign 4759 to nextsn
+  nextsn = 4759
   go to 9800
 4759 prom80 = buff77
   if (prom80(1 : 4) .eq. 'end ') go to 4776
@@ -3414,7 +3710,8 @@ subroutine spyink
   go to 4754
 4776 write (prom80, 4777)
 4777 format (' Send usage name, address, tolerance (a6, i6, e8.0), or "end":')
-  assign 4778 to nextsn
+  !  assign 4778 to nextsn
+  nextsn = 4778
   go to 9800
 4778 prom80 = buff77
   if (prom80(1 : 4) .ne. 'end ') go to 4780
@@ -3429,7 +3726,8 @@ subroutine spyink
      n14 = n14 + 1
      kontac(n14) = ndx1
      konadd(n14) = n7
-     epskon(n14) = ichar(d13)
+!     epskon(n14) = ichar(d13)
+     epskon(n14) = ichar(d13(1:1))
      go to 4776
   end do
 4785 continue
@@ -3450,7 +3748,7 @@ subroutine spyink
 4798 format (i8, 2x, a6, 2i8, e13.4)
      call window
   end do
-4801 continue
+!4801 continue
   !     any additional responses to tacs prompt go here:
 4807 go to 4716
   !     $$$$$$$  key word no. 64:  "v-i"      $$$$  $$$$  $$$$  $$$$  $$$$
@@ -3461,9 +3759,11 @@ subroutine spyink
   call window
 4824 write (prom80, 4827)
 4827 format (1x, ' row        vchar        cchar       gslope row nltype nonlad nonle  class :')
-  assign 4828 to nextsn
+  !  assign 4828 to nextsn
+  nextsn = 4828
   go to 9800
-4828 bytbuf = buff77(1 : 20)
+!4828 bytbuf = buff77(1 : 20)
+  bytbuf = buff77(1 : 20)
   if (bytbuf(1 : 4) .eq. 'end ') go to 1240
   if (bytbuf(1 : 4) .eq. 'stop') go to 1240
   if (bytbuf(1 : 4) .ne. 'next' .and. bytbuf(1 : 4) .ne. '    ') go to 4829
@@ -3515,7 +3815,7 @@ subroutine spyink
   go to 9804
 9800 nexmod = 3
 9804 if (iprspy .lt. 1) go to 9999
-  write (munit6, 9807) jjroll, kbreak, lockbr, nchain, prom80(1 : 20)
+  write (unit = munit6, fmt = 9807) jjroll, kbreak, lockbr, nchain, prom80(1 : 20)
 9807 format (' Exit "spyink".  jjroll, kbreak, lockbr, nchain =', 4i5,  '   prom80(1:20) =', a20)
   call window
 9999 return
@@ -3524,7 +3824,8 @@ subroutine spyink
   do j = 1, koncur
      n7 = kontac(j)
      n13 = konadd(j)
-3472 xtcs(n7) = fkar1(n13)
+!3472 xtcs(n7) = fkar1(n13)
+     xtcs(n7) = fkar1(n13)
   end do
   call tacs3
   do j = koncur + 1, kontot
@@ -3548,13 +3849,14 @@ end subroutine spyink
 !
 
 subroutine initsp
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive emtp use, this module can be deleted.
   !     Universal initialization module for "spying".   Constants
   !     must be set only once, at the beginning of execution only.
   include 'blkcom.ftn'
   include 'dekspy.ftn'
+  integer numkey
   character(8) textay(75)
   !     next come all possible key-word responses to "spy:" prompt:
   data  textay(1)   /  'heading '  /
@@ -3648,7 +3950,8 @@ subroutine initsp
   blan80 = ' '
   do j = 1, 9999
      if (textay(j) .eq. '        ') go to 1152
-1148 spykwd(j) = textay(j)
+!1148 spykwd(j) = textay(j)
+     spykwd(j) = textay(j)
   end do
 1152 numkey = j - 1
   nexmod = 0
@@ -3691,7 +3994,7 @@ end subroutine initsp
 !
 
 subroutine flager
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
   !     if no interactive use, convert to dummy module ("return").
   !     VAX-11 installation-dependent EMTP module which serves
@@ -3699,6 +4002,7 @@ subroutine flager
   !     has occurred, or 2) if  lockbr = 1  upon entry.
   include 'blkcom.ftn'
   include 'dekspy.ftn'
+  integer kspsav
   common /comkwt/ kwtvax                                    ! magic block for ctrl-c trapping
   dimension idum(3)                                         !  dummy vector for ctrl-c handling
   external kwiter                                           ! needed for ctrl-c initialization
@@ -3750,16 +4054,17 @@ end subroutine flager
 !
 
 subroutine quiter
-  implicit real(8) (a-h, o-z),  integer(4) (i-n)
+!  implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
   !     if no interactive use, convert to dummy module ("return").
   !     this module provides a special-purpose connection to the
   !     more general "flager".  Here, we only want to sense a
   !     user-keyed interrupt (no spy input is to be read).
   include 'dekspy.ftn'
+  integer n24, n25, kfile5, lockbr
   n24 = lockbr   ! save current time-slicing flag value
   n25 = kfile5   ! save current status of input connection
-  lockbr = 0         ! temporarily turn time-sharing on
+  lockbr = 0     ! temporarily turn time-sharing on
   call flager    ! check for user-keyed interrupt, and return
   lockbr = n24   ! restore original value of b4 flager use
   kfile5 = n25   ! restore original value of b4 flager use
@@ -3771,7 +4076,7 @@ end subroutine quiter
 !
 
 subroutine honker (klevel)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, this module can be deleted.
   !     VAX-11 installation-dependent emtp module which issues
@@ -3786,7 +4091,9 @@ subroutine honker (klevel)
   !     carriage control, maybe (see n8 = j + 1, rather than j, below).
   include 'blkcom.ftn'
   include 'dekspy.ftn'
-  real(8) d13
+  integer, intent(in) :: klevel
+  integer nd13
+  real d13
   character(8) spytim(2), spdate(2)
   d13 = 2.0                                                 ! initialize time delay at two seconds
   call time44 (spytim)                                      ! emtp wall-clock time
@@ -3800,7 +4107,8 @@ subroutine honker (klevel)
 3627 format ( ' Audible alarm began at  ', 2a4, 2x, 2a4, 5x, i3, ' bells.', a)
   call window                                               ! output of character variable munit6
   if (klevel .lt. 10) go to 9000                            ! exit module (no loop)
-  call tdelay (d13)                                         ! now stall for d13 seconds
+  nd13 = int (d13, kind (nd13))
+  call tdelay (nd13)                                        ! now stall for d13 seconds
   if (d13 .eq. -7654) go to 9000                            ! interrupt in "tdelay"
   call flager                                               ! check for user-keyed interrupt signal
   if (kwtspy .eq. 0) go to 3643                             ! no user abort of alarm
@@ -3816,18 +4124,20 @@ end subroutine honker
 !
 
 subroutine tdelay (d8)
-  implicit real(8) (a-h, o-z),  integer(4) (i-n)
-  !     Module of interactive emtp only, which services "emtspy".
+!  implicit real(8) (a-h, o-z),  integer(4) (i-n)
+  !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, this module can be deleted.
   !     VAX-11   module designed to stall for  d8  seconds.
   !     Present use of disk writes is temporary only, and should
   !     later be replaced by a less-wasteful, true hibernation.
   include 'blkcom.ftn'
+  integer, intent(out) :: d8
+  integer j, k, kwtspy, n23
   n23 = d8                                                  ! integer number of seconds for hibernation
   do j = 1, n23                                             ! loop once for each second of delay
      do k = 1, 6                                            ! one second = about 6 writes to disk
         rewind 36                                           ! rewind unused, dummy i/o channel 36
-3624    write (36, 3629) k                                  ! dummy write to disk
+        write (unit = 36, fmt = 3629) k                     ! dummy write to disk
      end do
 3629 format (i2)
      call quiter                                            ! check for user-keyed interrupt signal
@@ -3845,12 +4155,14 @@ end subroutine tdelay
 !
 
 subroutine kwiter (idum)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     VAX-11  installation-dependent emtp module which serves
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !     VAX-11  installation-dependent EMTP module which serves
   !     control interactive usage.  if none, destroy the module.
   !     Purpose is to sense user-keyed interrupt, and set flag.
   !     Name "comkwt" is reserved (connected to "controlc.obj")
   include 'dekspy.ftn'
+  integer, intent(in) :: idum
+  integer kwtvax
   common /comkwt/ kwtvax
   dimension idum(3)
   kwtvax = 1
@@ -3862,20 +4174,22 @@ end subroutine kwiter
 !
 
 subroutine percnt (vbyte, n7)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     Utility which serves to replace  "%%%%%%%%"  strings of disk
   !     files by parameters of  "@?"  call.   columns 1, ... n7  are
   !     searched, of character vector  "vbyte" .
   !     For non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
+  integer, intent(in) :: n7
+  integer itexp, j, k
   character(1) vbyte(1)
   do k = 1, n7
      if (vbyte(k) .ne. '%') go to 1297
      do j = 1, 7
         if (vbyte(k + j) .ne. '%') go to 1297
      end do
-1253 continue
+!1253 continue
 !     we exit  do 1253  with string of 8 "%" beginning in column k
      itexp = itexp + 1
      if (itexp .le. maxarg) go to 1284
@@ -3907,15 +4221,18 @@ end subroutine percnt
 !
 
 subroutine numchk (vbyte, nchar, kill)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     Module of interactive emtp usage only, which services "emtspy".
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !     Module of interactive EMTP usage only, which services "emtspy".
   !     This utility serves to scrutinize the input character string
   !     (vbyte(j), j=1, nchar)  to see if it is a legal floating-point
   !     number.   If so,  "kill"  is to be set to zero;  if number is
   !     structurally deficient,  "kill"  is to be set positive.
   !     For non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
-  character(1) vbyte(1)
+  integer, intent(in) :: nchar
+  integer, intent(out) :: kill
+  character, intent(in) :: vbyte(*)
+  integer i, ll
   kill = 0
   koldig = 0
   nper = 0
@@ -3948,7 +4265,7 @@ subroutine numchk (vbyte, nchar, kill)
 3428 do j = 1, 10
         if (vbyte(i) .eq. digit(j)) go to 3438
      end do
-3431 continue
+!3431 continue
      kill = 1
      go to 3481
      !     following code considers ramifications of just-found digit:
@@ -3958,9 +4275,9 @@ subroutine numchk (vbyte, nchar, kill)
   if (nume .eq. 1 .and. kolexp .gt. koldig) kill = 1
   if (nume .eq. 1 .and. kolper .gt. kolexp) kill = 1
   if (kill .eq. 0) return
-  write (munit6, 3492) (vbyte(j), j = 1, nchar)
+  write (unit = munit6, fmt = 3492) (vbyte(j), j = 1, nchar)
 3492 format (' ??? Sorry, illegal numeric just read:', 50a1)
-  write (munit6, 3493)
+  write (unit = munit6, fmt = 3493)
 3493 format ('            Make a second try, please ....')
   return
 end subroutine numchk
@@ -3970,10 +4287,12 @@ end subroutine numchk
 !
 
 subroutine getnum (num)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
+  integer, intent(out) :: num
+  integer i
   character(1) c4
   if (iprspy .lt. 1) go to 4204
   write (munit6, 4203) ibegcl, bytbuf(ibegcl:ibegcl)
@@ -3994,8 +4313,8 @@ subroutine getnum (num)
 4218 do j = 1, 10
         if (c4 .eq. digit(j)) go to 4256
      end do
-4234 continue
-     write (munit6, 4239)  i, c4
+!4234 continue
+     write (unit = munit6, fmt = 4239) i, c4
 4239 format ('    -- Illegal byte in "number".', 1x,  i4,  3x,  a1,  3x,  'Try again ...')
      call window
      num = -87654
@@ -4003,19 +4322,19 @@ subroutine getnum (num)
 4256 if (j .eq. 10) j = 0
      num = 10 * num  +  j
      if (iprspy .lt. 2) go to 4265
-     write (munit6, 4259) j, num
+     write (unit = munit6, fmt = 4259) j, num
 4259 format (' Next digit.  j, num =', 2i8)
      call window
   end do
 4265 continue
-  write (munit6, 4271) num
+  write (unit = munit6, fmt = 4271) num
 4271 format (' Stop at 4271 of "getnum".  num =', i8)
   call window
   call stoptp
 4286 if (n1 .lt. 0) num = -num
   iendcl = i - 1
   if (iprspy .lt. 1) go to 4294
-  write (munit6, 4293) iendcl, num
+  write (unit = munit6, fmt = 4293) iendcl, num
 4293 format (' Exit "number".   iendcl, num =', 2i8)
   call window
 4294 return
@@ -4026,13 +4345,16 @@ end subroutine getnum
 !
 
 subroutine movers (from, to, num)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     For non-interactive EMTP, this module can be destroyed.
-  character(1) from(*), to(*)
-  do j = 1, num
-1763 to(j) = from(j)
-  end do
+  integer(4), intent(in) :: num
+  character, intent(in) :: from(1:*)
+  character, intent(out) :: to(1:*)
+  to(1:num) = from(1:num)
+!  do j = 1, num
+!1763 to(j) = from(j)
+!  end do
   return
 end subroutine movers
 
@@ -4041,13 +4363,13 @@ end subroutine movers
 !
 
 subroutine moverl (from, to, num)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     For non-interactive EMTP, this module can be destroyed.
-  real(8) from(*), to(*)
-  do j = 1, num
-1763 to(j) = from(j)
-  end do
+  integer(4), intent(in) :: num
+  real(8), intent(in) :: from(*)
+  real(8), intent(out) :: to(*)
+  to(1 : num) = from(1 : num)
   return
 end subroutine moverl
 
@@ -4056,7 +4378,7 @@ end subroutine moverl
 !
 
 subroutine window
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   !     For character*132 spy display channel munit6, this serves
@@ -4064,6 +4386,7 @@ subroutine window
   !     VAX-11  installation-dependent emtp module.
   include 'blkcom.ftn'
   include 'dekspy.ftn'
+  integer j, k, kverfy
   !     temporarily, until we learn how to write to a 2nd crt for
   !     vax/vms, we will just write to lunit6:
   if (iabs (kverfy) .eq. 34543) go to 9000                  ! no spy windows
@@ -4080,7 +4403,7 @@ end subroutine window
 !
 
 subroutine spylin
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   !     One blank line is written on spy screen by this module.
@@ -4088,7 +4411,8 @@ subroutine spylin
   include 'dekspy.ftn'
   !     temporarily, until we learn how to write to a 2nd crt for
   !     VAX/VMS, we will just write to lunit6 in universal form:
-5621 write (unit = lunit6, fmt = 5624)
+!5621 write (unit = lunit6, fmt = 5624)
+  write (unit = lunit6, fmt = 5624)
 5624 format (1x)
 end subroutine spylin
 
@@ -4097,13 +4421,15 @@ end subroutine spylin
 !
 
 subroutine spyout(n1, n2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, this module can be deleted.
   !     Arguments n1 and n2 are node nos., with possible "-" signs.
   !     Purpose is to load and print corresponding names for "output"
   include 'labcom.ftn'
   include 'dekspy.ftn'
+  integer, intent(in) :: n1, n2
+  integer k, n11, n12
   save
   character(8) text10(10), terra
   data terra / 'terra ' /
@@ -4144,13 +4470,14 @@ end subroutine spyout
 !
 
 subroutine examin
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   !     This near-universal module serves to build the character*132
   !     output vector outlin of the "examine" command of spy.
   !     Computers with index problems (e.g., prime) need replacement
   include 'dekspy.ftn'
+  integer intout, iprspy, ivec, jj, n3, n5, n8, n9, n10
   if (iprspy .lt. 1) go to 1718
   write (unit = munit6, fmt = 1707) numex, imin(1), locout(1)
 1707 format (' Top of "examin".  numex, imin(1), locout(1) =', 3i6)
@@ -4205,7 +4532,7 @@ subroutine examin
 1660 format (i6)
   outlin(kolout : kolout + 5) = ansi8(1 : 6)
   if (iprspy .lt. 3) go to 1662
-  write (munit6, 1661) n9, kar1(1 + n9)
+  write (unit = munit6, fmt = 1661) n9, kar1(1 + n9)
 1661 format (' i6 integer encoded for examine.  n9,kar1(1 + n9) =', 2i8 )
   call window
 1662 kolout = kolout + 6
@@ -4227,7 +4554,7 @@ end subroutine examin
 !
 
 subroutine deposi (ind, intype, n1, n2, d4)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     For non-interactive EMTP, this module can be destroyed.
   !     This near-universal module services "deposit", to actually
@@ -4238,6 +4565,11 @@ subroutine deposi (ind, intype, n1, n2, d4)
   !     Bounding subscripts on the deposit are n1 and n2, respectively.
   !     Computers with index problems (e.g., prime) need replacement
   include 'dekspy.ftn'
+  integer, intent(in) :: ind, intype
+  integer, intent(out) :: n1, n2
+  real, intent(out) :: d4
+  integer memkar, n8, n9, n10
+  real fkar1, fkar2, kar1
   if (iprspy .lt. 1) go to 1846
   write (unit = munit6, fmt = 1707) ind, intype, iascii(ind), d4, ansi8
 1707 format (' Top of "deposi".   ind, intype, iascii(ind), d4, ansi8 =', 3i8, e15.4, 3x, a8)
@@ -4288,16 +4620,19 @@ end subroutine append
 !
 
 subroutine intpar (max, n1, n2, kill)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     module of interactive emtp usage only, which services "emtspy".
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !     Module of interactive EMTP usage only, which services "emtspy".
   !     this module is designed to extract two free-format row numbers
-  !     from  bytbuf(20)  input buffer of common.   these numbers must
+  !     from  bytbuf(20)  input buffer of common.   These numbers must
   !     be positive, ordered (1st less than or equal to 2nd), and not
-  !     in excess of the last table row "max".   the to row numbers are
+  !     in excess of the last table row "max".   The to row numbers are
   !     passed back as  "n1"  and  "n2"  arguments.   if this extraction
   !     was successful,  "kill"  is set to zero;  if it failed,  kill = 1.
   !     for non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
+  integer, intent(in) :: max
+  integer, intent(out) :: n1, n2, kill
+  integer n22, n33
   kill = 0
   !     check for english request "top" (for the top of the file):
   if (bytbuf(1 : 1) .ne. 't') go to 2071
@@ -4321,7 +4656,7 @@ subroutine intpar (max, n1, n2, kill)
      n6 = 20 - i
      do j = 1, n6
         n13 = 21 - i + j
-2037    bytbuf(n13 : n13) = bytbuf(j : j)
+        bytbuf(n13 : n13) = bytbuf(j : j)
      end do
      go to 2054
   end do
@@ -4346,7 +4681,6 @@ subroutine intpar (max, n1, n2, kill)
 2093 do j = 1, 10
         if (bytbuf(i : i) .eq. digit(j)) go to 2104
      end do
-2097 continue
   end do
 2104 continue
   if (n22 .gt. 0) go to 2109
@@ -4360,7 +4694,7 @@ subroutine intpar (max, n1, n2, kill)
 2107 n2 = n1 + n33
   go to 2110
 2109 if (n13 .eq. 2) go to 2132
-2113 write (unit = munit6, fmt = 2115)
+  write (unit = munit6, fmt = 2115)
 2115 format (' ????  Illegal data (not blank or two dec free-format integers.   Try again.')
   call window
   write (munit6, 2118)
@@ -4384,7 +4718,7 @@ end subroutine intpar
 !
 
 subroutine sosrng (kill)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     this module serves to extract a beginning and ending line number
   !     for sos-like editing operations of  "edit"  command.   These two
@@ -4393,6 +4727,7 @@ subroutine sosrng (kill)
   !     success:  "0" means success,  "1" means error.
   !     For non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
+  integer, intent(out) :: kill
   if (iprspy .lt. 1) go to 2615
   write (unit = munit6, fmt = 2613) bytbuf
 2613 format (' Top "sosrange".  bytbuf(a20) =', a20)
@@ -4487,12 +4822,11 @@ subroutine movesp (from, to, n15)
   !     For non-interactive EMTP, this module can be destroyed.
   !     This routine transfers single-precision from(1 : n15) to
   !     to(1 : n15).  Except for missing implicit, it equals "mover".
-  real(8), intent(in) :: from(*)
-  real(8), intent(out) :: to(*)
-  integer(4), intent(in) :: n15
-  do j = 1, n15
-     to(j) = from(j)
-  end do
+  real, intent(in) :: from(*)
+  real, intent(out) :: to(*)
+  integer, intent(in) :: n15
+  integer j
+  to(1 : n15) = from(1 : n15)
   return
 end subroutine movesp
 
@@ -4501,7 +4835,7 @@ end subroutine movesp
 !
 
 subroutine prompt
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11  installation-dependent EMTP module used only
   !     for interactive EMTP ("emtspy").  Input is program
   !     prompt in character(80) variable prom80 of deck "dekspy".
@@ -4510,6 +4844,7 @@ subroutine prompt
   !     For non-interactive EMTP, this module can be destroyed.
   include 'blkcom.ftn'
   include 'dekspy.ftn'
+  integer j, n2
   n2 = 80
   do j = 1, 80
      if (prom80(n2 : n2) .ne. ' ') go to 1426
@@ -4527,14 +4862,15 @@ end subroutine prompt
 !
 
 subroutine frefp1 (ansi, d12)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode a
   !     single floating point number.  The input is character(80)
   !     variable  ansi,  and the output is double precision d12.
   !     For non-interactive EMTP, this module can be destroyed.
   character(80), intent(in) :: ansi
-  real(8), intent(out) :: d12
+  real, intent(out) :: d12
+  integer n8
   n8 = 1
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(e20.0)') d12
@@ -4546,13 +4882,14 @@ end subroutine frefp1
 !
 
 subroutine fresp1 (ansi, d12)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode one
   !     floating point numbers d12 from character(80) ansi.   This
   !     is identical to "frefp1", except for single precision.
   character(80), intent(in) :: ansi
-  real(8), intent(out) :: d12
+  real, intent(out) :: d12
+  integer n8
   n8 = 1
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(e20.0)') d12
@@ -4564,13 +4901,14 @@ end subroutine fresp1
 !
 
 subroutine frefp2 (ansi, d12, d13)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode two
   !     floating point numbers d12 and d13 from character(80) ansi.
   !     For non-interactive emtp, this module can be destroyed.
   character(80), intent(in) :: ansi
-  real(8), intent(out) :: d12, d13
+  real, intent(out) :: d12, d13
+  integer n8
   n8 = 2
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(2e20.0)') d12, d13
@@ -4582,13 +4920,14 @@ end subroutine frefp2
 !
 
 subroutine fresp2 (ansi, d12, d13)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode two
   !     floating point numbers d12 and d13 from character(80) ansi.
   !     This is identical to "frefp2", except for single precision.
   character(80), intent(in) :: ansi
-  real(8), intent(out) :: d12, d13
+  real, intent(out) :: d12, d13
+  integer n8
   n8 = 2
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(2e20.0)') d12, d13
@@ -4600,13 +4939,14 @@ end subroutine fresp2
 !
 
 subroutine frefp3 (ansi, d12, d13, d14)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode three
   !     floating point numbers d12, d13, d14 from character(80) ansi.
   !     For non-interactive EMTP, this module can be destroyed.
   character(80), intent(in) :: ansi
-  real(8), intent(out) :: d12, d13, d14
+  real, intent(out) :: d12, d13, d14
+  integer n8
   n8 = 3
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(3e20.0)') d12, d13, d14
@@ -4618,13 +4958,14 @@ end subroutine frefp3
 !
 
 subroutine fresp3 (ansi, d12, d13, d14)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode three
   !     floating point numbers d12, d13, d13 from character(8)0 ansi.
   !     This is identical to "frefp3", except for single precision.
   character(80), intent(in) :: ansi
-  real(8), intent(out) :: d12, d13, d14
+  real, intent(out) :: d12, d13, d14
+  integer n8
   n8 = 3
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(3e20.0)') d12, d13, d14
@@ -4636,13 +4977,14 @@ end subroutine fresp3
 !
 
 subroutine frein1 (ansi, n12)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode a
-  !     single integer number n12 from character(8)0 input ansi.
+  !     single integer number n12 from character(80) input ansi.
   !     For non-interactive EMTP, this module can be destroyed.
   character(80), intent(in) :: ansi
-  integer(4), intent(out) :: n12
+  integer, intent(out) :: n12
+  integer d12, n8
   n8 = 1
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(3e20.0)') d12
@@ -4655,13 +4997,14 @@ end subroutine frein1
 !
 
 subroutine frein2 (ansi, n12, n13)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode two
-  !     integer numbers n12 and n13 from character(8)0 input ansi.
+  !     integer numbers n12 and n13 from character(80) input ansi.
   !     For non-interactive emtp, this module can be destroyed.
   character(80), intent(in) :: ansi
-  integer(4), intent(out) :: n12, n13
+  integer, intent(out) :: n12, n13
+  integer d12, d13, n8
   n8 = 2
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(3e20.0)') d12, d13
@@ -4675,7 +5018,7 @@ end subroutine frein2
 !
 
 subroutine frefix (ansi, n8)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module used only by interactive EMTP ("emtspy").
   !     For non-interactive use only, it can be destroyed.
   !     This module is called by "frefp1", "frein1", etc. --- all
@@ -4687,7 +5030,8 @@ subroutine frefix (ansi, n8)
   !     exit, ansi will be converted to 4e20.0 fixed-format data.
   include 'dekspy.ftn'
   character(80) :: ansi, hold
-  integer(4), intent(in) :: n8
+  integer, intent(in) :: n8
+  integer j, k, kk, n1, n2, n3, n5, n13, n14, n16
   if (iprspy .lt. 3) go to 3582
   write (munit6, 3579) n8, ansi(1 : 40)
 3579 format (' Top of "frefix".  n8 =', i5, '   ansi(1:40) = ', a40)
@@ -4720,7 +5064,6 @@ subroutine frefix (ansi, n8)
 3634 do k = 1, 10
         if (ansi(j : j) .eq. digit(k)) go to 3642
      end do
-3638 continue
      go to 3758
   end do
 3642 continue
@@ -4733,20 +5076,20 @@ subroutine frefix (ansi, n8)
   if (ansi(i : i) .eq. ' ') go to 3648
   n3 = i
   go to 3612
-3758 write (prom80, 3761) j, ansi(j - 2 : j + 2)
+3758 write (unit = prom80, fmt = 3761) j, ansi(j - 2 : j + 2)
 3761 format ('   @@@  Illegal data in column', i3, ' [', a5, '].  Resend line or end :')
   call prompt
-  write (*, *) ' Ok, "frefix" call to "flager" begins.'
+  write (unit = *, fmt = *) ' Ok, "frefix" call to "flager" begins.'
   lockbr = 1
   call flager
-  write (*, *) ' Ok, back in "frefix" with buff77 again.'
+  write (unit = *, fmt = *) ' Ok, back in "frefix" with buff77 again.'
   ansi = buff77
   if (ansi(1 : 4) .ne. 'end ') go to 3582
   ansi(1 : 80) = ' '
   go to 4103
 4100 ansi(1 : n2) = hold(1 : n2)
 4103 if (iprspy .lt. 2) go to 4109
-  write (munit6, 4108) ansi(1 : n2)
+  write (unit = munit6, fmt = 4108) ansi(1 : n2)
 4108 format (' Exit "frefix".  ansi(1 : n2) =', a80)
   call window
 4109 return
@@ -4757,7 +5100,7 @@ end subroutine frefix
 !
 
 subroutine locatn
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'synmac.ftn'
@@ -4765,738 +5108,738 @@ subroutine locatn
   include 'umdeck.ftn'
   include 'dekspy.ftn'
   include 'fixcom.ftn'
-  locate(   1)  =  locint ( bus1   )
-  locate(   2)  =  locint ( bus2   )
-  locate(   3)  =  locint ( bus3   )
-  locate(   4)  =  locint ( bus4   )
-  locate(   5)  =  locint ( bus5   )
-  locate(   6)  =  locint ( bus6   )
-  locate(   7)  =  locint ( trash  )
-  locate(   8)  =  locint ( blank  )
-  locate(   9)  =  locint ( terra  )
-  locate(  10)  =  locint ( userid )
-  locate(  11)  =  locint ( branch )
-  locate(  12)  =  locint ( copy   )
-  locate(  13)  =  locint ( csepar )
-  locate(  14)  =  locint ( chcont )
-  locate(  15)  =  locint ( texcol )
-  locate(  16)  =  locint ( texta6 )
-  locate(  17)  =  locint ( date1  )
-  locate(  18)  =  locint ( tclock )
-  locate(  19)  =  locint ( vstacs )
-  locate(  20)  =  locint ( abuff  )
-  locate(  21)  =  locint ( ci1    )
-  locate(  22)  =  locint ( ck1    )
-  locate(  23)  =  locint ( deltat )
-  locate(  24)  =  locint ( delta2 )
-  locate(  25)  =  locint ( freqcs )
-  locate(  26)  =  locint ( epsiln )
-  locate(  27)  =  locint ( xunits )
-  locate(  28)  =  locint ( aincr  )
-  locate(  29)  =  locint ( xmaxmx )
-  locate(  30)  =  locint ( znvref )
-  locate(  31)  =  locint ( epszno )
-  locate(  32)  =  locint ( epwarn )
-  locate(  33)  =  locint ( epstop )
-  locate(  34)  =  locint ( t      )
-  locate(  35)  =  locint ( hertz  )
-  locate(  36)  =  locint ( tolmat )
-  locate(  37)  =  locint ( twopi  )
-  locate(  38)  =  locint ( tmax   )
-  locate(  39)  =  locint ( omega  )
-  locate(  40)  =  locint ( copt   )
-  locate(  41)  =  locint ( xopt   )
-  locate(  42)  =  locint ( szplt  )
-  locate(  43)  =  locint ( szbed  )
-  locate(  44)  =  locint ( sglfir )
-  locate(  45)  =  locint ( sigmax )
-  locate(  46)  =  locint ( epsuba )
-  locate(  47)  =  locint ( epdgel )
-  locate(  48)  =  locint ( epomeg )
-  locate(  49)  =  locint ( fminfs )
-  locate(  50)  =  locint ( delffs )
-  locate(  51)  =  locint ( fmaxfs )
-  locate(  52)  =  locint ( tenerg )
-  locate(  53)  =  locint ( begmax )
-  locate(  54)  =  locint ( tenm3  )
-  locate(  55)  =  locint ( tenm6  )
-  locate(  56)  =  locint ( unity  )
-  locate(  57)  =  locint ( onehaf )
-  locate(  58)  =  locint ( peaknd )
-  locate(  59)  =  locint ( fltinf )
-  locate(  60)  =  locint ( flzero )
-  locate(  61)  =  locint ( degmin )
-  locate(  62)  =  locint ( degmax )
-  locate(  63)  =  locint ( statfr )
-  locate(  64)  =  locint ( voltbc )
-  locate(  65)  =  locint ( flstat )
-  locate(  66)  =  locint ( dtnext )
-  locate(  67)  =  locint ( angle  )
-  locate(  68)  =  locint ( pu     )
-  locate(  69)  =  locint ( seedr  )
-  locate(  70)  =  locint ( speedl )
-  locate(  71)  =  locint ( kstart )
-  locate(  72)  =  locint ( knt    )
-  locate(  73)  =  locint ( kbase  )
-  locate(  74)  =  locint ( ltdelt )
-  locate(  75)  =  locint ( unused )
-  locate(  76)  =  locint ( mtape  )
-  locate(  77)  =  locint ( lunit1 )
-  locate(  78)  =  locint ( lunit2 )
-  locate(  79)  =  locint ( lunit3 )
-  locate(  80)  =  locint ( lunit4 )
-  locate(  81)  =  locint ( lunit5 )
-  locate(  82)  =  locint ( lunit6 )
-  locate(  83)  =  locint ( lunit7 )
-  locate(  84)  =  locint ( lunit8 )
-  locate(  85)  =  locint ( lunit9 )
-  locate(  86)  =  locint ( lunt10 )
-  locate(  87)  =  locint ( lunt11 )
-  locate(  88)  =  locint ( lunt12 )
-  locate(  89)  =  locint ( lunt13 )
-  locate(  90)  =  locint ( lunt14 )
-  locate(  91)  =  locint ( lunt15 )
-  locate(  92)  =  locint ( nexout )
-  locate(  93)  =  locint ( nright )
-  locate(  94)  =  locint ( nfrfld )
-  locate(  95)  =  locint ( kolbeg )
-  locate(  96)  =  locint ( kprchg )
-  locate(  97)  =  locint ( multpr )
-  locate(  98)  =  locint ( ipntv  )
-  locate(  99)  =  locint ( indtv  )
-  locate( 100)  =  locint ( lstat  )
-  locate( 101)  =  locint ( nbyte  )
-  locate( 102)  =  locint ( lunsav )
-  locate( 103)  =  locint ( iprsov )
-  locate( 104)  =  locint ( icheck )
-  locate( 105)  =  locint ( unused )
-  locate( 106)  =  locint ( iend   )
-  locate( 107)  =  locint ( iline  )
-  locate( 108)  =  locint ( inonl  )
-  locate( 109)  =  locint ( iold   )
-  locate( 110)  =  locint ( iout   )
-  locate( 111)  =  locint ( iprint )
-  locate( 112)  =  locint ( ipunch )
-  locate( 113)  =  locint ( iread  )
-  locate( 114)  =  locint ( kol132 )
-  locate( 115)  =  locint ( istep  )
-  locate( 116)  =  locint ( unused )
-  locate( 117)  =  locint ( itype  )
-  locate( 118)  =  locint ( it1    )
-  locate( 119)  =  locint ( it2    )
-  locate( 120)  =  locint ( iupper )
-  locate( 121)  =  locint ( izero  )
-  locate( 122)  =  locint ( kcount )
-  locate( 123)  =  locint ( istead )
-  locate( 124)  =  locint ( unused )
-  locate( 125)  =  locint ( ldata  )
-  locate( 126)  =  locint ( lbrnch )
-  locate( 127)  =  locint ( limtxf )
-  locate( 128)  =  locint ( mdebug )
-  locate( 129)  =  locint ( lexct  )
-  locate( 130)  =  locint ( lbus   )
-  locate( 131)  =  locint ( lymat  )
-  locate( 132)  =  locint ( lswtch )
-  locate( 133)  =  locint ( lnonl  )
-  locate( 134)  =  locint ( lchar  )
-  locate( 135)  =  locint ( m4plot )
-  locate( 136)  =  locint ( lpast  )
-  locate( 137)  =  locint ( lsmat  )
-  locate( 138)  =  locint ( iplot  )
-  locate( 139)  =  locint ( ncomp  )
-  locate( 140)  =  locint ( nv     )
-  locate( 141)  =  locint ( lcomp  )
-  locate( 142)  =  locint ( numsm  )
-  locate( 143)  =  locint ( ifdep  )
-  locate( 144)  =  locint ( ltails )
-  locate( 145)  =  locint ( lfdep  )
-  locate( 146)  =  locint ( lwt    )
-  locate( 147)  =  locint ( last   )
-  locate( 148)  =  locint ( npower )
-  locate( 149)  =  locint ( maxpe  )
-  locate( 150)  =  locint ( lpeak  )
-  locate( 151)  =  locint ( nout   )
-  locate( 152)  =  locint ( iv     )
-  locate( 153)  =  locint ( ineof  )
-  locate( 154)  =  locint ( ktrlsw )
-  locate( 155)  =  locint ( num99  )
-  locate( 156)  =  locint ( kpartb )
-  locate( 157)  =  locint ( llbuff )
-  locate( 158)  =  locint ( kanal  )
-  locate( 159)  =  locint ( nsmth  )
-  locate( 160)  =  locint ( ntcsex )
-  locate( 161)  =  locint ( nstacs )
-  locate( 162)  =  locint ( kloaep )
-  locate( 163)  =  locint ( lastov )
-  locate( 164)  =  locint ( ltacst )
-  locate( 165)  =  locint ( lhist  )
-  locate( 166)  =  locint ( ifx    )
-  locate( 167)  =  locint ( ndelta )
-  locate( 168)  =  locint ( idelta )
-  locate( 169)  =  locint ( inecho )
-  locate( 170)  =  locint ( noutpr )
-  locate( 171)  =  locint ( ktab   )
-  locate( 172)  =  locint ( jflsos )
-  locate( 173)  =  locint ( numdcd )
-  locate( 174)  =  locint ( numum  )
-  locate( 175)  =  locint ( lspcum )
-  locate( 176)  =  locint ( nphcas )
-  locate( 177)  =  locint ( locz11 )
-  locate( 178)  =  locint ( locbr1 )
-  locate( 179)  =  locint ( ialter )
-  locate( 180)  =  locint ( i_char )
-  locate( 181)  =  locint ( ktref  )
-  locate( 182)  =  locint ( kph    )
-  locate( 183)  =  locint ( kreqab )
-  locate( 184)  =  locint ( ksat   )
-  locate( 185)  =  locint ( memsav )
-  locate( 186)  =  locint ( lisoff )
-  locate( 187)  =  locint ( lspov4 )
-  locate( 188)  =  locint ( kburro )
-  locate( 189)  =  locint ( iaverg )
-  locate( 190)  =  locint ( lsiz23 )
-  locate( 191)  =  locint ( lsiz26 )
-  locate( 192)  =  locint ( numout )
-  locate( 193)  =  locint ( moldat )
-  locate( 194)  =  locint ( lsiz27 )
-  locate( 195)  =  locint ( ltlabl )
-  locate( 196)  =  locint ( iwt    )
-  locate( 197)  =  locint ( ifdep2 )
-  locate( 198)  =  locint ( idoubl )
-  locate( 199)  =  locint ( ioutin )
-  locate( 200)  =  locint ( ipun   )
-  locate( 201)  =  locint ( jst    )
-  locate( 202)  =  locint ( jst1   )
-  locate( 203)  =  locint ( unused )
-  locate( 204)  =  locint ( numsub )
-  locate( 205)  =  locint ( maxzno )
-  locate( 206)  =  locint ( kalplt )
-  locate( 207)  =  locint ( niomax )
-  locate( 208)  =  locint ( niamax )
-  locate( 209)  =  locint ( ibr1   )
-  locate( 210)  =  locint ( ifsem  )
-  locate( 211)  =  locint ( lfsem  )
-  locate( 212)  =  locint ( iadd   )
-  locate( 213)  =  locint ( lfd    )
-  locate( 214)  =  locint ( laux   )
-  locate( 215)  =  locint ( iofgnd )
-  locate( 216)  =  locint ( iofbnd )
-  locate( 217)  =  locint ( unused )
-  locate( 218)  =  locint ( jseedr )
-  locate( 219)  =  locint ( modout )
-  locate( 220)  =  locint ( iftail )
-  locate( 221)  =  locint ( ipoint )
-  locate( 222)  =  locint ( lpast2 )
-  locate( 223)  =  locint ( ncurr  )
-  locate( 224)  =  locint ( ioffd  )
-  locate( 225)  =  locint ( isplot )
-  locate( 226)  =  locint ( isprin )
-  locate( 227)  =  locint ( maxout )
-  locate( 228)  =  locint ( ipos   )
-  locate( 229)  =  locint ( unused )
-  locate( 230)  =  locint ( unused )
-  locate( 231)  =  locint ( kill   )
-  locate( 232)  =  locint ( ivolt  )
-  locate( 233)  =  locint ( nchain )
-  locate( 234)  =  locint ( iprsup )
-  locate( 235)  =  locint ( unused )
-  locate( 236)  =  locint ( intinf )
-  locate( 237)  =  locint ( kconst )
-  locate( 238)  =  locint ( kswtch )
-  locate( 239)  =  locint ( it     )
-  locate( 240)  =  locint ( ntot   )
-  locate( 241)  =  locint ( ibr    )
-  locate( 242)  =  locint ( lcom10 )
-  locate( 243)  =  locint ( ltrnst )
-  locate( 244)  =  locint ( lsyn   )
-  locate( 245)  =  locint ( kssout )
-  locate( 246)  =  locint ( loopss )
-  locate( 247)  =  locint ( infexp )
-  locate( 248)  =  locint ( numref )
-  locate( 249)  =  locint ( nword1 )
-  locate( 250)  =  locint ( nword2 )
-  locate( 251)  =  locint ( iloaep )
-  locate( 252)  =  locint ( lnpin  )
-  locate( 253)  =  locint ( ntot1  )
-  locate( 254)  =  locint ( limstp )
-  locate( 255)  =  locint ( indstp )
-  locate( 256)  =  locint ( nc     )
-  locate( 257)  =  locint ( unused )
-  locate( 258)  =  locint ( unused )
-  locate( 259)  =  locint ( icat   )
-  locate( 260)  =  locint ( numnvo )
-  locate( 261)  =  locint ( unused )
-  locate( 262)  =  locint ( nenerg )
-  locate( 263)  =  locint ( isw    )
-  locate( 264)  =  locint ( itest  )
-  locate( 265)  =  locint ( idist  )
-  locate( 266)  =  locint ( x      )
-  locate( 267)  =  locint ( ykm    )
-  locate( 268)  =  locint ( km     )
-  locate( 269)  =  locint ( xk     )
-  locate( 270)  =  locint ( xm     )
-  locate( 271)  =  locint ( weight )
-  locate( 272)  =  locint ( iwtent )
-  locate( 273)  =  locint ( con1   )
-  locate( 274)  =  locint ( iskip  )
-  locate( 275)  =  locint ( zinf   )
-  locate( 276)  =  locint ( eta    )
-  locate( 277)  =  locint ( nhist  )
-  locate( 278)  =  locint ( stailm )
-  locate( 279)  =  locint ( stailk )
-  locate( 280)  =  locint ( xmax   )
-  locate( 281)  =  locint ( koutvp )
-  locate( 282)  =  locint ( bnrg   )
-  locate( 283)  =  locint ( sconst )
-  locate( 284)  =  locint ( cnvhst )
-  locate( 285)  =  locint ( sfd    )
-  locate( 286)  =  locint ( qfd    )
-  locate( 287)  =  locint ( semaux )
-  locate( 288)  =  locint ( ibsout )
-  locate( 289)  =  locint ( bvalue )
-  locate( 290)  =  locint ( sptacs )
-  locate( 291)  =  locint ( kswtyp )
-  locate( 292)  =  locint ( modswt )
-  locate( 293)  =  locint ( kbegsw )
-  locate( 294)  =  locint ( lastsw )
-  locate( 295)  =  locint ( kentnb )
-  locate( 296)  =  locint ( nbhdsw )
-  locate( 297)  =  locint ( topen  )
-  locate( 298)  =  locint ( crit   )
-  locate( 299)  =  locint ( kdepsw )
-  locate( 300)  =  locint ( tdns   )
-  locate( 301)  =  locint ( isourc )
-  locate( 302)  =  locint ( energy )
-  locate( 303)  =  locint ( iardub )
-  locate( 304)  =  locint ( ardube )
-  locate( 305)  =  locint ( nonlad )
-  locate( 306)  =  locint ( nonle  )
-  locate( 307)  =  locint ( vnonl  )
-  locate( 308)  =  locint ( curr   )
-  locate( 309)  =  locint ( anonl  )
-  locate( 310)  =  locint ( vecnl1 )
-  locate( 311)  =  locint ( vecnl2 )
-  locate( 312)  =  locint ( brnonl )
-  locate( 313)  =  locint ( vzero  )
-  locate( 314)  =  locint ( ilast  )
-  locate( 315)  =  locint ( nltype )
-  locate( 316)  =  locint ( kupl   )
-  locate( 317)  =  locint ( nlsub  )
-  locate( 318)  =  locint ( cursub )
-  locate( 319)  =  locint ( cchar  )
-  locate( 320)  =  locint ( vchar  )
-  locate( 321)  =  locint ( gslope )
-  locate( 322)  =  locint ( kk     )
-  locate( 323)  =  locint ( c      )
-  locate( 324)  =  locint ( tr     )
-  locate( 325)  =  locint ( tx     )
-  locate( 326)  =  locint ( r      )
-  locate( 327)  =  locint ( nr     )
-  locate( 328)  =  locint ( length )
-  locate( 329)  =  locint ( cik    )
-  locate( 330)  =  locint ( ci     )
-  locate( 331)  =  locint ( ck     )
-  locate( 332)  =  locint ( swname )
-  locate( 333)  =  locint ( ibrnch )
-  locate( 334)  =  locint ( jbrnch )
-  locate( 335)  =  locint ( tstop  )
-  locate( 336)  =  locint ( nonlk  )
-  locate( 337)  =  locint ( nonlm  )
-  locate( 338)  =  locint ( spum   )
-  locate( 339)  =  locint ( kks    )
-  locate( 340)  =  locint ( kknonl )
-  locate( 341)  =  locint ( znonl  )
-  locate( 342)  =  locint ( znonlb )
-  locate( 343)  =  locint ( znonlc )
-  locate( 344)  =  locint ( finit  )
-  locate( 345)  =  locint ( ksub   )
-  locate( 346)  =  locint ( msub   )
-  locate( 347)  =  locint ( isubeg )
-  locate( 348)  =  locint ( litype )
-  locate( 349)  =  locint ( imodel )
-  locate( 350)  =  locint ( kbus   )
-  locate( 351)  =  locint ( mbus   )
-  locate( 352)  =  locint ( kodebr )
-  locate( 353)  =  locint ( cki    )
-  locate( 354)  =  locint ( ckkjm  )
-  locate( 355)  =  locint ( indhst )
-  locate( 356)  =  locint ( kodsem )
-  locate( 357)  =  locint ( brname )
-  locate( 358)  =  locint ( iform  )
-  locate( 359)  =  locint ( node   )
-  locate( 360)  =  locint ( crest  )
-  locate( 361)  =  locint ( time1  )
-  locate( 362)  =  locint ( time2  )
-  locate( 363)  =  locint ( tstart )
-  locate( 364)  =  locint ( sfreq  )
-  locate( 365)  =  locint ( kmswit )
-  locate( 366)  =  locint ( nextsw )
-  locate( 367)  =  locint ( rmfd   )
-  locate( 368)  =  locint ( cikfd  )
-  locate( 369)  =  locint ( imfd   )
-  locate( 370)  =  locint ( tclose )
-  locate( 371)  =  locint ( adelay )
-  locate( 372)  =  locint ( kpos   )
-  locate( 373)  =  locint ( e      )
-  locate( 374)  =  locint ( f      )
-  locate( 375)  =  locint ( kssfrq )
-  locate( 376)  =  locint ( kode   )
-  locate( 377)  =  locint ( kpsour )
-  locate( 378)  =  locint ( volti  )
-  locate( 379)  =  locint ( voltk  )
-  locate( 380)  =  locint ( volt   )
-  locate( 381)  =  locint ( bus    )
-  locate( 382)  =  locint ( eld    )
-  locate( 383)  =  locint ( elaf   )
-  locate( 384)  =  locint ( elf    )
-  locate( 385)  =  locint ( elakd  )
-  locate( 386)  =  locint ( elfkd  )
-  locate( 387)  =  locint ( elkd   )
-  locate( 388)  =  locint ( elq    )
-  locate( 389)  =  locint ( elag   )
-  locate( 390)  =  locint ( elg    )
-  locate( 391)  =  locint ( elakq  )
-  locate( 392)  =  locint ( elgkq  )
-  locate( 393)  =  locint ( elkq   )
-  locate( 394)  =  locint ( el0    )
-  locate( 395)  =  locint ( ra     )
-  locate( 396)  =  locint ( rf     )
-  locate( 397)  =  locint ( rkd    )
-  locate( 398)  =  locint ( rg     )
-  locate( 399)  =  locint ( rkq    )
-  locate( 400)  =  locint ( r0     )
-  locate( 401)  =  locint ( agline )
-  locate( 402)  =  locint ( rat1   )
-  locate( 403)  =  locint ( smoutp )
-  locate( 404)  =  locint ( smoutq )
-  locate( 405)  =  locint ( teg    )
-  locate( 406)  =  locint ( texc   )
-  locate( 407)  =  locint ( cnp    )
-  locate( 408)  =  locint ( a22    )
-  locate( 409)  =  locint ( a12    )
-  locate( 410)  =  locint ( a21    )
-  locate( 411)  =  locint ( ac     )
-  locate( 412)  =  locint ( ai     )
-  locate( 413)  =  locint ( at     )
-  locate( 414)  =  locint ( ah     )
-  locate( 415)  =  locint ( xay    )
-  locate( 416)  =  locint ( cu     )
-  locate( 417)  =  locint ( cv     )
-  locate( 418)  =  locint ( dsat   )
-  locate( 419)  =  locint ( qsat   )
-  locate( 420)  =  locint ( acr    )
-  locate( 421)  =  locint ( ce     )
-  locate( 422)  =  locint ( dsr    )
-  locate( 423)  =  locint ( dsd    )
-  locate( 424)  =  locint ( hico   )
-  locate( 425)  =  locint ( dsm    )
-  locate( 426)  =  locint ( hsp    )
-  locate( 427)  =  locint ( power  )
-  locate( 428)  =  locint ( extrs  )
-  locate( 429)  =  locint ( histq  )
-  locate( 430)  =  locint ( histr  )
-  locate( 431)  =  locint ( yfor   )
-  locate( 432)  =  locint ( zsk    )
-  locate( 433)  =  locint ( y      )
-  locate( 434)  =  locint ( tork   )
-  locate( 435)  =  locint ( temp   )
-  locate( 436)  =  locint ( z      )
-  locate( 437)  =  locint ( x1     )
-  locate( 438)  =  locint ( sqrt3  )
-  locate( 439)  =  locint ( asqrt3 )
-  locate( 440)  =  locint ( sqrt32 )
-  locate( 441)  =  locint ( thtw   )
-  locate( 442)  =  locint ( athtw  )
-  locate( 443)  =  locint ( radeg  )
-  locate( 444)  =  locint ( omdt   )
-  locate( 445)  =  locint ( factom )
-  locate( 446)  =  locint ( damrat )
-  locate( 447)  =  locint ( isat   )
-  locate( 448)  =  locint ( ised   )
-  locate( 449)  =  locint ( iseq   )
-  locate( 450)  =  locint ( imdual )
-  locate( 451)  =  locint ( iconfg )
-  locate( 452)  =  locint ( kmac   )
-  locate( 453)  =  locint ( kexc   )
-  locate( 454)  =  locint ( numas  )
-  locate( 455)  =  locint ( nodma  )
-  locate( 456)  =  locint ( nodmb  )
-  locate( 457)  =  locint ( nodmc  )
-  locate( 458)  =  locint ( jasmit )
-  locate( 459)  =  locint ( jsmtor )
-  locate( 460)  =  locint ( jexcit )
-  locate( 461)  =  locint ( isloc  )
-  locate( 462)  =  locint ( noutsm )
-  locate( 463)  =  locint ( ismout )
-  locate( 464)  =  locint ( mfirst )
-  locate( 465)  =  locint ( limass )
-  locate( 466)  =  locint ( nst    )
-  locate( 467)  =  locint ( itold  )
-  locate( 468)  =  locint ( ibrold )
-  locate( 469)  =  locint ( busum  )
-  locate( 470)  =  locint ( ptheta )
-  locate( 471)  =  locint ( zthevr )
-  locate( 472)  =  locint ( vinp   )
-  locate( 473)  =  locint ( zthevs )
-  locate( 474)  =  locint ( umcur  )
-  locate( 475)  =  locint ( con    )
-  locate( 476)  =  locint ( dumvec )
-  locate( 477)  =  locint ( dummat )
-  locate( 478)  =  locint ( date   )
-  locate( 479)  =  locint ( clock  )
-  locate( 480)  =  locint ( pi     )
-  locate( 481)  =  locint ( sroot2 )
-  locate( 482)  =  locint ( sroot3 )
-  locate( 483)  =  locint ( omegrf )
-  locate( 484)  =  locint ( inpu   )
-  locate( 485)  =  locint ( numbus )
-  locate( 486)  =  locint ( ncltot )
-  locate( 487)  =  locint ( ndum   )
-  locate( 488)  =  locint ( initum )
-  locate( 489)  =  locint ( iureac )
-  locate( 490)  =  locint ( iugpar )
-  locate( 491)  =  locint ( iufpar )
-  locate( 492)  =  locint ( iuhist )
-  locate( 493)  =  locint ( iuumrp )
-  locate( 494)  =  locint ( iunod1 )
-  locate( 495)  =  locint ( iunod2 )
-  locate( 496)  =  locint ( iujclt )
-  locate( 497)  =  locint ( iujclo )
-  locate( 498)  =  locint ( iujtyp )
-  locate( 499)  =  locint ( iunodo )
-  locate( 500)  =  locint ( iujtmt )
-  locate( 501)  =  locint ( iuhism )
-  locate( 502)  =  locint ( iuomgm )
-  locate( 503)  =  locint ( iuomld )
-  locate( 504)  =  locint ( iutham )
-  locate( 505)  =  locint ( iuredu )
-  locate( 506)  =  locint ( iureds )
-  locate( 507)  =  locint ( iuflds )
-  locate( 508)  =  locint ( iufldr )
-  locate( 509)  =  locint ( iurequ )
-  locate( 510)  =  locint ( iuflqs )
-  locate( 511)  =  locint ( iuflqr )
-  locate( 512)  =  locint ( iujcds )
-  locate( 513)  =  locint ( iujcqs )
-  locate( 514)  =  locint ( iuflxd )
-  locate( 515)  =  locint ( iuflxq )
-  locate( 516)  =  locint ( iunppa )
-  locate( 517)  =  locint ( iurotm )
-  locate( 518)  =  locint ( iuncld )
-  locate( 519)  =  locint ( iunclq )
-  locate( 520)  =  locint ( iujtqo )
-  locate( 521)  =  locint ( iujomo )
-  locate( 522)  =  locint ( iujtho )
-  locate( 523)  =  locint ( iureqs )
-  locate( 524)  =  locint ( iuepso )
-  locate( 525)  =  locint ( iudcoe )
-  locate( 526)  =  locint ( iukcoi )
-  locate( 527)  =  locint ( iuvolt )
-  locate( 528)  =  locint ( iuangl )
-  locate( 529)  =  locint ( iunodf )
-  locate( 530)  =  locint ( iunodm )
-  locate( 531)  =  locint ( iukumo )
-  locate( 532)  =  locint ( iujumo )
-  locate( 533)  =  locint ( iuumou )
-  locate( 534)  =  locint ( nclfix )
-  locate( 535)  =  locint ( numfix )
-  locate( 536)  =  locint ( iotfix )
-  locate( 537)  =  locint ( ibsfix )
-  locate( 538)  =  locint ( ksubum )
-  locate( 539)  =  locint ( nsmach )
-  locate( 540)  =  locint ( istart )
-  locate( 541)  =  locint ( karray )
-  locate( 542)  =  locint ( rampcn )
-  locate( 543)  =  locint ( rampsl )
-  locate( 544)  =  locint ( kyramp )
-  locate( 545)  =  locint ( texpar )
-  locate( 546)  =  locint ( fendrp )
-  locate( 547)  =  locint ( tminrp )
-  locate( 548)  =  locint ( tmaxrp )
-  locate( 549)  =  locint ( tbegrp )
-  locate( 550)  =  locint ( tendrp )
-  locate( 551)  =  locint ( fbegrp )
-  locate( 552)  =  locint ( tbreak )
-  locate( 553)  =  locint ( indxrp )
-  locate( 554)  =  locint ( ivec   )
-  locate( 555)  =  locint ( iascii )
-  locate( 556)  =  locint ( numsym )
-  locate( 557)  =  locint ( jjroll )
-  locate( 558)  =  locint ( itexp  )
-  locate( 559)  =  locint ( labels )
-  locate( 560)  =  locint ( maxarg )
-  locate( 561)  =  locint ( kilper )
-  locate( 562)  =  locint ( kfile5 )
-  locate( 563)  =  locint ( kverfy )
-  locate( 564)  =  locint ( ibegcl )
-  locate( 565)  =  locint ( iendcl )
-  locate( 566)  =  locint ( lidnt1 )
-  locate( 567)  =  locint ( lidnt2 )
-  locate( 568)  =  locint ( linnow )
-  locate( 569)  =  locint ( linspn )
-  locate( 570)  =  locint ( numcrd )
-  locate( 571)  =  locint ( munit5 )
-  locate( 572)  =  locint ( indbuf )
-  locate( 573)  =  locint ( indbeg )
-  locate( 574)  =  locint ( mflush )
-  locate( 575)  =  locint ( newvec )
-  locate( 576)  =  locint ( munit6 )
-  locate( 577)  =  locint ( lserlc )
-  locate( 578)  =  locint ( kserlc )
-  locate( 579)  =  locint ( kbrser )
-  locate( 580)  =  locint ( lockbr )
-  locate( 581)  =  locint ( iprspy )
-  locate( 582)  =  locint ( monitr )
-  locate( 583)  =  locint ( monits )
-  locate( 584)  =  locint ( locate )
-  locate( 585)  =  locint ( nline  )
-  locate( 586)  =  locint ( kwtspy )
-  locate( 587)  =  locint ( kbreak )
-  locate( 588)  =  locint ( limbuf )
-  locate( 589)  =  locint ( inchlp )
-  locate( 590)  =  locint ( ksymbl )
-  locate( 591)  =  locint ( kopyit )
-  locate( 592)  =  locint ( kslowr )
-  locate( 593)  =  locint ( limcrd )
-  locate( 594)  =  locint ( looprp )
-  locate( 595)  =  locint ( n10rmp )
-  locate( 596)  =  locint ( memrmp )
-  locate( 597)  =  locint ( kar1   )
-  locate( 598)  =  locint ( kar2   )
-  locate( 599)  =  locint ( numrmp )
-  locate( 600)  =  locint ( luntsp )
-  locate( 601)  =  locint ( logvar )
-  locate( 602)  =  locint ( filext )
-  locate( 603)  =  locint ( symb   )
-  locate( 604)  =  locint ( col    )
-  locate( 605)  =  locint ( bytfnd )
-  locate( 606)  =  locint ( char1  )
-  locate( 607)  =  locint ( symbrp )
-  locate( 608)  =  locint ( chard4 )
-  locate( 609)  =  locint ( bytbuf )
-  locate( 610)  =  locint ( buff77 )
-  locate( 611)  =  locint ( file6b )
-  locate( 612)  =  locint ( file6  )
-  locate( 613)  =  locint ( blan80 )
-  locate( 614)  =  locint ( prom80 )
-  locate( 615)  =  locint ( digit  )
-  locate( 616)  =  locint ( iac    )
-  locate( 617)  =  locint ( idctcs )
-  locate( 618)  =  locint ( ipl    )
-  locate( 619)  =  locint ( ipr    )
-  locate( 620)  =  locint ( ixr    )
-  locate( 621)  =  locint ( jpl    )
-  locate( 622)  =  locint ( jpr    )
-  locate( 623)  =  locint ( kint   )
-  locate( 624)  =  locint ( kout   )
-  locate( 625)  =  locint ( nds    )
-  locate( 626)  =  locint ( nkn    )
-  locate( 627)  =  locint ( nmax   )
-  locate( 628)  =  locint ( nuk    )
-  locate( 629)  =  locint ( kwrite )
-  locate( 630)  =  locint ( kpr    )
-  locate( 631)  =  locint ( kpl    )
-  locate( 632)  =  locint ( mxtacw )
-  locate( 633)  =  locint ( iptacw )
-  locate( 634)  =  locint ( nhst   )
-  locate( 635)  =  locint ( kvin   )
-  locate( 636)  =  locint ( kvou   )
-  locate( 637)  =  locint ( kvxx   )
-  locate( 638)  =  locint ( icsup  )
-  locate( 639)  =  locint ( nxic   )
-  locate( 640)  =  locint ( kksj   )
-  locate( 641)  =  locint ( kksk   )
-  locate( 642)  =  locint ( kkfst  )
-  locate( 643)  =  locint ( kkni   )
-  locate( 644)  =  locint ( kkhst  )
-  locate( 645)  =  locint ( kifls  )
-  locate( 646)  =  locint ( kidum  )
-  locate( 647)  =  locint ( kslim1 )
-  locate( 648)  =  locint ( kslim2 )
-  locate( 649)  =  locint ( kslim3 )
-  locate( 650)  =  locint ( kpac1r )
-  locate( 651)  =  locint ( kpac1i )
-  locate( 652)  =  locint ( kpac2r )
-  locate( 653)  =  locint ( kpac2i )
-  locate( 654)  =  locint ( kalksx )
-  locate( 655)  =  locint ( kilms1 )
-  locate( 656)  =  locint ( kilms2 )
-  locate( 657)  =  locint ( kdumj  )
-  locate( 658)  =  locint ( kdumk  )
-  locate( 659)  =  locint ( kkzj   )
-  locate( 660)  =  locint ( kkzk   )
-  locate( 661)  =  locint ( kiflz  )
-  locate( 662)  =  locint ( kgnz   )
-  locate( 663)  =  locint ( kzlim1 )
-  locate( 664)  =  locint ( kzlim2 )
-  locate( 665)  =  locint ( kalkzx )
-  locate( 666)  =  locint ( kilmz1 )
-  locate( 667)  =  locint ( kilmz2 )
-  locate( 668)  =  locint ( kksus  )
-  locate( 669)  =  locint ( kalksu )
-  locate( 670)  =  locint ( kiuty  )
-  locate( 671)  =  locint ( kud1   )
-  locate( 672)  =  locint ( kud2   )
-  locate( 673)  =  locint ( kud3   )
-  locate( 674)  =  locint ( kud4   )
-  locate( 675)  =  locint ( kud5   )
-  locate( 676)  =  locint ( kaliu  )
-  locate( 677)  =  locint ( ktysup )
-  locate( 678)  =  locint ( kjsup  )
-  locate( 679)  =  locint ( kksup  )
-  locate( 680)  =  locint ( kspvar )
-  locate( 681)  =  locint ( kopsup )
-  locate( 682)  =  locint ( kfnsup )
-  locate( 683)  =  locint ( krgsup )
-  locate( 684)  =  locint ( kprsup )
-  locate( 685)  =  locint ( ktypdv )
-  locate( 686)  =  locint ( kkdj   )
-  locate( 687)  =  locint ( kkdk   )
-  locate( 688)  =  locint ( kgndev )
-  locate( 689)  =  locint ( kdev1  )
-  locate( 690)  =  locint ( kdev2  )
-  locate( 691)  =  locint ( kldev1 )
-  locate( 692)  =  locint ( kldev2 )
-  locate( 693)  =  locint ( kkdus  )
-  locate( 694)  =  locint ( kalkdu )
-  locate( 695)  =  locint ( ktbdev )
-  locate( 696)  =  locint ( kpn    )
-  locate( 697)  =  locint ( kpd    )
-  locate( 698)  =  locint ( kxhst  )
-  locate( 699)  =  locint ( khscr  )
-  locate( 700)  =  locint ( khsci  )
-  locate( 701)  =  locint ( kilim1 )
-  locate( 702)  =  locint ( kilim2 )
-  locate( 703)  =  locint ( krowcs )
-  locate( 704)  =  locint ( krhsde )
-  locate( 705)  =  locint ( kvlim1 )
-  locate( 706)  =  locint ( kvlim2 )
-  locate( 707)  =  locint ( kkxic  )
-  locate( 708)  =  locint ( kawkcs )
-  locate( 709)  =  locint ( kxar   )
-  locate( 710)  =  locint ( kxai   )
-  locate( 711)  =  locint ( kbwkcs )
-  locate( 712)  =  locint ( kxtcs  )
-  locate( 713)  =  locint ( klntab )
-  locate( 714)  =  locint ( klmxic )
-  locate( 715)  =  locint ( kcolcs )
-  locate( 716)  =  locint ( katcs  )
-  locate( 717)  =  locint ( kbtcs  )
-  locate( 718)  =  locint ( kjout  )
-  locate( 719)  =  locint ( kkout  )
-  locate( 720)  =  locint ( kxmncs )
-  locate( 721)  =  locint ( ktxmn  )
-  locate( 722)  =  locint ( kxmxcs )
-  locate( 723)  =  locint ( ktxmx  )
-  locate( 724)  =  locint ( klnout )
-  locate( 725)  =  locint ( ekbuf  )
-  locate( 726)  =  locint ( ektemp )
-  locate( 727)  =  locint ( errchk )
-  locate( 728)  =  locint ( solrsv )
-  locate( 729)  =  locint ( solisv )
-  locate( 730)  =  locint ( nitera )
-  locate( 731)  =  locint ( nekreq )
-  locate( 732)  =  locint ( nekcod )
+  locate(   1)  =  loc ( bus1   )
+  locate(   2)  =  loc ( bus2   )
+  locate(   3)  =  loc ( bus3   )
+  locate(   4)  =  loc ( bus4   )
+  locate(   5)  =  loc ( bus5   )
+  locate(   6)  =  loc ( bus6   )
+  locate(   7)  =  loc ( trash  )
+  locate(   8)  =  loc ( blank  )
+  locate(   9)  =  loc ( terra  )
+  locate(  10)  =  loc ( userid )
+  locate(  11)  =  loc ( branch )
+  locate(  12)  =  loc ( copy   )
+  locate(  13)  =  loc ( csepar )
+  locate(  14)  =  loc ( chcont )
+  locate(  15)  =  loc ( texcol )
+  locate(  16)  =  loc ( texta6 )
+  locate(  17)  =  loc ( date1  )
+  locate(  18)  =  loc ( tclock )
+  locate(  19)  =  loc ( vstacs )
+  locate(  20)  =  loc ( abuff  )
+  locate(  21)  =  loc ( ci1    )
+  locate(  22)  =  loc ( ck1    )
+  locate(  23)  =  loc ( deltat )
+  locate(  24)  =  loc ( delta2 )
+  locate(  25)  =  loc ( freqcs )
+  locate(  26)  =  loc ( epsiln )
+  locate(  27)  =  loc ( xunits )
+  locate(  28)  =  loc ( aincr  )
+  locate(  29)  =  loc ( xmaxmx )
+  locate(  30)  =  loc ( znvref )
+  locate(  31)  =  loc ( epszno )
+  locate(  32)  =  loc ( epwarn )
+  locate(  33)  =  loc ( epstop )
+  locate(  34)  =  loc ( t      )
+  locate(  35)  =  loc ( hertz  )
+  locate(  36)  =  loc ( tolmat )
+  locate(  37)  =  loc ( twopi  )
+  locate(  38)  =  loc ( tmax   )
+  locate(  39)  =  loc ( omega  )
+  locate(  40)  =  loc ( copt   )
+  locate(  41)  =  loc ( xopt   )
+  locate(  42)  =  loc ( szplt  )
+  locate(  43)  =  loc ( szbed  )
+  locate(  44)  =  loc ( sglfir )
+  locate(  45)  =  loc ( sigmax )
+  locate(  46)  =  loc ( epsuba )
+  locate(  47)  =  loc ( epdgel )
+  locate(  48)  =  loc ( epomeg )
+  locate(  49)  =  loc ( fminfs )
+  locate(  50)  =  loc ( delffs )
+  locate(  51)  =  loc ( fmaxfs )
+  locate(  52)  =  loc ( tenerg )
+  locate(  53)  =  loc ( begmax )
+  locate(  54)  =  loc ( tenm3  )
+  locate(  55)  =  loc ( tenm6  )
+  locate(  56)  =  loc ( unity  )
+  locate(  57)  =  loc ( onehaf )
+  locate(  58)  =  loc ( peaknd(1) )
+  locate(  59)  =  loc ( fltinf )
+  locate(  60)  =  loc ( flzero )
+  locate(  61)  =  loc ( degmin )
+  locate(  62)  =  loc ( degmax )
+  locate(  63)  =  loc ( statfr )
+  locate(  64)  =  loc ( voltbc )
+  locate(  65)  =  loc ( flstat )
+  locate(  66)  =  loc ( dtnext )
+  locate(  67)  =  loc ( angle  )
+  locate(  68)  =  loc ( pu     )
+  locate(  69)  =  loc ( seedr  )
+  locate(  70)  =  loc ( speedl )
+  locate(  71)  =  loc ( kstart )
+  locate(  72)  =  loc ( knt    )
+  locate(  73)  =  loc ( kbase  )
+  locate(  74)  =  loc ( ltdelt )
+  locate(  75)  =  loc ( unused )
+  locate(  76)  =  loc ( mtape  )
+  locate(  77)  =  loc ( lunit1 )
+  locate(  78)  =  loc ( lunit2 )
+  locate(  79)  =  loc ( lunit3 )
+  locate(  80)  =  loc ( lunit4 )
+  locate(  81)  =  loc ( lunit5 )
+  locate(  82)  =  loc ( lunit6 )
+  locate(  83)  =  loc ( lunit7 )
+  locate(  84)  =  loc ( lunit8 )
+  locate(  85)  =  loc ( lunit9 )
+  locate(  86)  =  loc ( lunt10 )
+  locate(  87)  =  loc ( lunt11 )
+  locate(  88)  =  loc ( lunt12 )
+  locate(  89)  =  loc ( lunt13 )
+  locate(  90)  =  loc ( lunt14 )
+  locate(  91)  =  loc ( lunt15 )
+  locate(  92)  =  loc ( nexout )
+  locate(  93)  =  loc ( nright )
+  locate(  94)  =  loc ( nfrfld )
+  locate(  95)  =  loc ( kolbeg )
+  locate(  96)  =  loc ( kprchg )
+  locate(  97)  =  loc ( multpr )
+  locate(  98)  =  loc ( ipntv  )
+  locate(  99)  =  loc ( indtv  )
+  locate( 100)  =  loc ( lstat  )
+  locate( 101)  =  loc ( nbyte  )
+  locate( 102)  =  loc ( lunsav )
+  locate( 103)  =  loc ( iprsov )
+  locate( 104)  =  loc ( icheck )
+  locate( 105)  =  loc ( unused )
+  locate( 106)  =  loc ( iend   )
+  locate( 107)  =  loc ( iline  )
+  locate( 108)  =  loc ( inonl  )
+  locate( 109)  =  loc ( iold   )
+  locate( 110)  =  loc ( iout   )
+  locate( 111)  =  loc ( iprint )
+  locate( 112)  =  loc ( ipunch )
+  locate( 113)  =  loc ( iread  )
+  locate( 114)  =  loc ( kol132 )
+  locate( 115)  =  loc ( istep  )
+  locate( 116)  =  loc ( unused )
+  locate( 117)  =  loc ( itype  )
+  locate( 118)  =  loc ( it1    )
+  locate( 119)  =  loc ( it2    )
+  locate( 120)  =  loc ( iupper )
+  locate( 121)  =  loc ( izero  )
+  locate( 122)  =  loc ( kcount )
+  locate( 123)  =  loc ( istead )
+  locate( 124)  =  loc ( unused )
+  locate( 125)  =  loc ( ldata  )
+  locate( 126)  =  loc ( lbrnch )
+  locate( 127)  =  loc ( limtxf )
+  locate( 128)  =  loc ( mdebug )
+  locate( 129)  =  loc ( lexct  )
+  locate( 130)  =  loc ( lbus   )
+  locate( 131)  =  loc ( lymat  )
+  locate( 132)  =  loc ( lswtch )
+  locate( 133)  =  loc ( lnonl  )
+  locate( 134)  =  loc ( lchar  )
+  locate( 135)  =  loc ( m4plot )
+  locate( 136)  =  loc ( lpast  )
+  locate( 137)  =  loc ( lsmat  )
+  locate( 138)  =  loc ( iplot  )
+  locate( 139)  =  loc ( ncomp  )
+  locate( 140)  =  loc ( nv     )
+  locate( 141)  =  loc ( lcomp  )
+  locate( 142)  =  loc ( numsm  )
+  locate( 143)  =  loc ( ifdep  )
+  locate( 144)  =  loc ( ltails )
+  locate( 145)  =  loc ( lfdep  )
+  locate( 146)  =  loc ( lwt    )
+  locate( 147)  =  loc ( last   )
+  locate( 148)  =  loc ( npower )
+  locate( 149)  =  loc ( maxpe  )
+  locate( 150)  =  loc ( lpeak  )
+  locate( 151)  =  loc ( nout   )
+  locate( 152)  =  loc ( iv     )
+  locate( 153)  =  loc ( ineof  )
+  locate( 154)  =  loc ( ktrlsw )
+  locate( 155)  =  loc ( num99  )
+  locate( 156)  =  loc ( kpartb )
+  locate( 157)  =  loc ( llbuff )
+  locate( 158)  =  loc ( kanal  )
+  locate( 159)  =  loc ( nsmth  )
+  locate( 160)  =  loc ( ntcsex )
+  locate( 161)  =  loc ( nstacs )
+  locate( 162)  =  loc ( kloaep )
+  locate( 163)  =  loc ( lastov )
+  locate( 164)  =  loc ( ltacst )
+  locate( 165)  =  loc ( lhist  )
+  locate( 166)  =  loc ( ifx    )
+  locate( 167)  =  loc ( ndelta )
+  locate( 168)  =  loc ( idelta )
+  locate( 169)  =  loc ( inecho )
+  locate( 170)  =  loc ( noutpr )
+  locate( 171)  =  loc ( ktab   )
+  locate( 172)  =  loc ( jflsos )
+  locate( 173)  =  loc ( numdcd )
+  locate( 174)  =  loc ( numum  )
+  locate( 175)  =  loc ( lspcum )
+  locate( 176)  =  loc ( nphcas )
+  locate( 177)  =  loc ( locz11 )
+  locate( 178)  =  loc ( locbr1 )
+  locate( 179)  =  loc ( ialter )
+  locate( 180)  =  loc ( i_char )
+  locate( 181)  =  loc ( ktref  )
+  locate( 182)  =  loc ( kph    )
+  locate( 183)  =  loc ( kreqab )
+  locate( 184)  =  loc ( ksat   )
+  locate( 185)  =  loc ( memsav )
+  locate( 186)  =  loc ( lisoff )
+  locate( 187)  =  loc ( lspov4 )
+  locate( 188)  =  loc ( kburro )
+  locate( 189)  =  loc ( iaverg )
+  locate( 190)  =  loc ( lsiz23 )
+  locate( 191)  =  loc ( lsiz26 )
+  locate( 192)  =  loc ( numout )
+  locate( 193)  =  loc ( moldat )
+  locate( 194)  =  loc ( lsiz27 )
+  locate( 195)  =  loc ( ltlabl )
+  locate( 196)  =  loc ( iwt    )
+  locate( 197)  =  loc ( ifdep2 )
+  locate( 198)  =  loc ( idoubl )
+  locate( 199)  =  loc ( ioutin )
+  locate( 200)  =  loc ( ipun   )
+  locate( 201)  =  loc ( jst    )
+  locate( 202)  =  loc ( jst1   )
+  locate( 203)  =  loc ( unused )
+  locate( 204)  =  loc ( numsub )
+  locate( 205)  =  loc ( maxzno )
+  locate( 206)  =  loc ( kalplt )
+  locate( 207)  =  loc ( niomax )
+  locate( 208)  =  loc ( niamax )
+  locate( 209)  =  loc ( ibr1   )
+  locate( 210)  =  loc ( ifsem  )
+  locate( 211)  =  loc ( lfsem  )
+  locate( 212)  =  loc ( iadd   )
+  locate( 213)  =  loc ( lfd    )
+  locate( 214)  =  loc ( laux   )
+  locate( 215)  =  loc ( iofgnd )
+  locate( 216)  =  loc ( iofbnd )
+  locate( 217)  =  loc ( unused )
+  locate( 218)  =  loc ( jseedr )
+  locate( 219)  =  loc ( modout )
+  locate( 220)  =  loc ( iftail )
+  locate( 221)  =  loc ( ipoint )
+  locate( 222)  =  loc ( lpast2 )
+  locate( 223)  =  loc ( ncurr  )
+  locate( 224)  =  loc ( ioffd  )
+  locate( 225)  =  loc ( isplot )
+  locate( 226)  =  loc ( isprin )
+  locate( 227)  =  loc ( maxout )
+  locate( 228)  =  loc ( ipos   )
+  locate( 229)  =  loc ( unused )
+  locate( 230)  =  loc ( unused )
+  locate( 231)  =  loc ( kill   )
+  locate( 232)  =  loc ( ivolt  )
+  locate( 233)  =  loc ( nchain )
+  locate( 234)  =  loc ( iprsup )
+  locate( 235)  =  loc ( unused )
+  locate( 236)  =  loc ( intinf )
+  locate( 237)  =  loc ( kconst )
+  locate( 238)  =  loc ( kswtch )
+  locate( 239)  =  loc ( it     )
+  locate( 240)  =  loc ( ntot   )
+  locate( 241)  =  loc ( ibr    )
+  locate( 242)  =  loc ( lcom10 )
+  locate( 243)  =  loc ( ltrnst )
+  locate( 244)  =  loc ( lsyn   )
+  locate( 245)  =  loc ( kssout )
+  locate( 246)  =  loc ( loopss )
+  locate( 247)  =  loc ( infexp )
+  locate( 248)  =  loc ( numref )
+  locate( 249)  =  loc ( nword1 )
+  locate( 250)  =  loc ( nword2 )
+  locate( 251)  =  loc ( iloaep )
+  locate( 252)  =  loc ( lnpin  )
+  locate( 253)  =  loc ( ntot1  )
+  locate( 254)  =  loc ( limstp )
+  locate( 255)  =  loc ( indstp )
+  locate( 256)  =  loc ( nc     )
+  locate( 257)  =  loc ( unused )
+  locate( 258)  =  loc ( unused )
+  locate( 259)  =  loc ( icat   )
+  locate( 260)  =  loc ( numnvo )
+  locate( 261)  =  loc ( unused )
+  locate( 262)  =  loc ( nenerg )
+  locate( 263)  =  loc ( isw    )
+  locate( 264)  =  loc ( itest  )
+  locate( 265)  =  loc ( idist  )
+  locate( 266)  =  loc ( x      )
+  locate( 267)  =  loc ( ykm    )
+  locate( 268)  =  loc ( km     )
+  locate( 269)  =  loc ( xk     )
+  locate( 270)  =  loc ( xm     )
+  locate( 271)  =  loc ( weight )
+  locate( 272)  =  loc ( iwtent )
+  locate( 273)  =  loc ( con1   )
+  locate( 274)  =  loc ( iskip  )
+  locate( 275)  =  loc ( zinf   )
+  locate( 276)  =  loc ( eta    )
+  locate( 277)  =  loc ( nhist  )
+  locate( 278)  =  loc ( stailm )
+  locate( 279)  =  loc ( stailk )
+  locate( 280)  =  loc ( xmax   )
+  locate( 281)  =  loc ( koutvp )
+  locate( 282)  =  loc ( bnrg   )
+  locate( 283)  =  loc ( sconst )
+  locate( 284)  =  loc ( cnvhst )
+  locate( 285)  =  loc ( sfd    )
+  locate( 286)  =  loc ( qfd    )
+  locate( 287)  =  loc ( semaux )
+  locate( 288)  =  loc ( ibsout )
+  locate( 289)  =  loc ( bvalue )
+  locate( 290)  =  loc ( sptacs )
+  locate( 291)  =  loc ( kswtyp )
+  locate( 292)  =  loc ( modswt )
+  locate( 293)  =  loc ( kbegsw )
+  locate( 294)  =  loc ( lastsw )
+  locate( 295)  =  loc ( kentnb )
+  locate( 296)  =  loc ( nbhdsw )
+  locate( 297)  =  loc ( topen  )
+  locate( 298)  =  loc ( crit   )
+  locate( 299)  =  loc ( kdepsw )
+  locate( 300)  =  loc ( tdns   )
+  locate( 301)  =  loc ( isourc )
+  locate( 302)  =  loc ( energy )
+  locate( 303)  =  loc ( iardub )
+  locate( 304)  =  loc ( ardube )
+  locate( 305)  =  loc ( nonlad )
+  locate( 306)  =  loc ( nonle  )
+  locate( 307)  =  loc ( vnonl  )
+  locate( 308)  =  loc ( curr   )
+  locate( 309)  =  loc ( anonl  )
+  locate( 310)  =  loc ( vecnl1 )
+  locate( 311)  =  loc ( vecnl2 )
+  locate( 312)  =  loc ( brnonl )
+  locate( 313)  =  loc ( vzero  )
+  locate( 314)  =  loc ( ilast  )
+  locate( 315)  =  loc ( nltype )
+  locate( 316)  =  loc ( kupl   )
+  locate( 317)  =  loc ( nlsub  )
+  locate( 318)  =  loc ( cursub )
+  locate( 319)  =  loc ( cchar  )
+  locate( 320)  =  loc ( vchar  )
+  locate( 321)  =  loc ( gslope )
+  locate( 322)  =  loc ( kk     )
+  locate( 323)  =  loc ( c      )
+  locate( 324)  =  loc ( tr     )
+  locate( 325)  =  loc ( tx     )
+  locate( 326)  =  loc ( r      )
+  locate( 327)  =  loc ( nr     )
+  locate( 328)  =  loc ( length )
+  locate( 329)  =  loc ( cik    )
+  locate( 330)  =  loc ( ci     )
+  locate( 331)  =  loc ( ck     )
+  locate( 332)  =  loc ( swname )
+  locate( 333)  =  loc ( ibrnch )
+  locate( 334)  =  loc ( jbrnch )
+  locate( 335)  =  loc ( tstop  )
+  locate( 336)  =  loc ( nonlk  )
+  locate( 337)  =  loc ( nonlm  )
+  locate( 338)  =  loc ( spum   )
+  locate( 339)  =  loc ( kks    )
+  locate( 340)  =  loc ( kknonl )
+  locate( 341)  =  loc ( znonl  )
+  locate( 342)  =  loc ( znonlb )
+  locate( 343)  =  loc ( znonlc )
+  locate( 344)  =  loc ( finit  )
+  locate( 345)  =  loc ( ksub   )
+  locate( 346)  =  loc ( msub   )
+  locate( 347)  =  loc ( isubeg )
+  locate( 348)  =  loc ( litype )
+  locate( 349)  =  loc ( imodel )
+  locate( 350)  =  loc ( kbus   )
+  locate( 351)  =  loc ( mbus   )
+  locate( 352)  =  loc ( kodebr )
+  locate( 353)  =  loc ( cki    )
+  locate( 354)  =  loc ( ckkjm  )
+  locate( 355)  =  loc ( indhst )
+  locate( 356)  =  loc ( kodsem )
+  locate( 357)  =  loc ( brname )
+  locate( 358)  =  loc ( iform  )
+  locate( 359)  =  loc ( node   )
+  locate( 360)  =  loc ( crest  )
+  locate( 361)  =  loc ( time1  )
+  locate( 362)  =  loc ( time2  )
+  locate( 363)  =  loc ( tstart )
+  locate( 364)  =  loc ( sfreq  )
+  locate( 365)  =  loc ( kmswit )
+  locate( 366)  =  loc ( nextsw )
+  locate( 367)  =  loc ( rmfd   )
+  locate( 368)  =  loc ( cikfd  )
+  locate( 369)  =  loc ( imfd   )
+  locate( 370)  =  loc ( tclose )
+  locate( 371)  =  loc ( adelay )
+  locate( 372)  =  loc ( kpos   )
+  locate( 373)  =  loc ( e      )
+  locate( 374)  =  loc ( f      )
+  locate( 375)  =  loc ( kssfrq )
+  locate( 376)  =  loc ( kode   )
+  locate( 377)  =  loc ( kpsour )
+  locate( 378)  =  loc ( volti  )
+  locate( 379)  =  loc ( voltk  )
+  locate( 380)  =  loc ( volt   )
+  locate( 381)  =  loc ( bus    )
+  locate( 382)  =  loc ( eld    )
+  locate( 383)  =  loc ( elaf   )
+  locate( 384)  =  loc ( elf    )
+  locate( 385)  =  loc ( elakd  )
+  locate( 386)  =  loc ( elfkd  )
+  locate( 387)  =  loc ( elkd   )
+  locate( 388)  =  loc ( elq    )
+  locate( 389)  =  loc ( elag   )
+  locate( 390)  =  loc ( elg    )
+  locate( 391)  =  loc ( elakq  )
+  locate( 392)  =  loc ( elgkq  )
+  locate( 393)  =  loc ( elkq   )
+  locate( 394)  =  loc ( el0    )
+  locate( 395)  =  loc ( ra     )
+  locate( 396)  =  loc ( rf     )
+  locate( 397)  =  loc ( rkd    )
+  locate( 398)  =  loc ( rg     )
+  locate( 399)  =  loc ( rkq    )
+  locate( 400)  =  loc ( r0     )
+  locate( 401)  =  loc ( agline )
+  locate( 402)  =  loc ( rat1   )
+  locate( 403)  =  loc ( smoutp )
+  locate( 404)  =  loc ( smoutq )
+  locate( 405)  =  loc ( teg    )
+  locate( 406)  =  loc ( texc   )
+  locate( 407)  =  loc ( cnp    )
+  locate( 408)  =  loc ( a22    )
+  locate( 409)  =  loc ( a12    )
+  locate( 410)  =  loc ( a21    )
+  locate( 411)  =  loc ( ac     )
+  locate( 412)  =  loc ( ai     )
+  locate( 413)  =  loc ( at     )
+  locate( 414)  =  loc ( ah     )
+  locate( 415)  =  loc ( xay    )
+  locate( 416)  =  loc ( cu     )
+  locate( 417)  =  loc ( cv     )
+  locate( 418)  =  loc ( dsat   )
+  locate( 419)  =  loc ( qsat   )
+  locate( 420)  =  loc ( acr    )
+  locate( 421)  =  loc ( ce     )
+  locate( 422)  =  loc ( dsr    )
+  locate( 423)  =  loc ( dsd    )
+  locate( 424)  =  loc ( hico   )
+  locate( 425)  =  loc ( dsm    )
+  locate( 426)  =  loc ( hsp    )
+  locate( 427)  =  loc ( power  )
+  locate( 428)  =  loc ( extrs  )
+  locate( 429)  =  loc ( histq  )
+  locate( 430)  =  loc ( histr  )
+  locate( 431)  =  loc ( yfor   )
+  locate( 432)  =  loc ( zsk    )
+  locate( 433)  =  loc ( y      )
+  locate( 434)  =  loc ( tork   )
+  locate( 435)  =  loc ( temp   )
+  locate( 436)  =  loc ( z      )
+  locate( 437)  =  loc ( x1     )
+  locate( 438)  =  loc ( sqrt3  )
+  locate( 439)  =  loc ( asqrt3 )
+  locate( 440)  =  loc ( sqrt32 )
+  locate( 441)  =  loc ( thtw   )
+  locate( 442)  =  loc ( athtw  )
+  locate( 443)  =  loc ( radeg  )
+  locate( 444)  =  loc ( omdt   )
+  locate( 445)  =  loc ( factom )
+  locate( 446)  =  loc ( damrat )
+  locate( 447)  =  loc ( isat   )
+  locate( 448)  =  loc ( ised   )
+  locate( 449)  =  loc ( iseq   )
+  locate( 450)  =  loc ( imdual )
+  locate( 451)  =  loc ( iconfg )
+  locate( 452)  =  loc ( kmac   )
+  locate( 453)  =  loc ( kexc   )
+  locate( 454)  =  loc ( numas  )
+  locate( 455)  =  loc ( nodma  )
+  locate( 456)  =  loc ( nodmb  )
+  locate( 457)  =  loc ( nodmc  )
+  locate( 458)  =  loc ( jasmit )
+  locate( 459)  =  loc ( jsmtor )
+  locate( 460)  =  loc ( jexcit )
+  locate( 461)  =  loc ( isloc  )
+  locate( 462)  =  loc ( noutsm )
+  locate( 463)  =  loc ( ismout )
+  locate( 464)  =  loc ( mfirst )
+  locate( 465)  =  loc ( limass )
+  locate( 466)  =  loc ( nst    )
+  locate( 467)  =  loc ( itold  )
+  locate( 468)  =  loc ( ibrold )
+  locate( 469)  =  loc ( busum  )
+  locate( 470)  =  loc ( ptheta )
+  locate( 471)  =  loc ( zthevr )
+  locate( 472)  =  loc ( vinp   )
+  locate( 473)  =  loc ( zthevs )
+  locate( 474)  =  loc ( umcur  )
+  locate( 475)  =  loc ( con    )
+  locate( 476)  =  loc ( dumvec )
+  locate( 477)  =  loc ( dummat )
+  locate( 478)  =  loc ( date   )
+  locate( 479)  =  loc ( clock  )
+  locate( 480)  =  loc ( pi     )
+  locate( 481)  =  loc ( sroot2 )
+  locate( 482)  =  loc ( sroot3 )
+  locate( 483)  =  loc ( omegrf )
+  locate( 484)  =  loc ( inpu   )
+  locate( 485)  =  loc ( numbus )
+  locate( 486)  =  loc ( ncltot )
+  locate( 487)  =  loc ( ndum   )
+  locate( 488)  =  loc ( initum )
+  locate( 489)  =  loc ( iureac )
+  locate( 490)  =  loc ( iugpar )
+  locate( 491)  =  loc ( iufpar )
+  locate( 492)  =  loc ( iuhist )
+  locate( 493)  =  loc ( iuumrp )
+  locate( 494)  =  loc ( iunod1 )
+  locate( 495)  =  loc ( iunod2 )
+  locate( 496)  =  loc ( iujclt )
+  locate( 497)  =  loc ( iujclo )
+  locate( 498)  =  loc ( iujtyp )
+  locate( 499)  =  loc ( iunodo )
+  locate( 500)  =  loc ( iujtmt )
+  locate( 501)  =  loc ( iuhism )
+  locate( 502)  =  loc ( iuomgm )
+  locate( 503)  =  loc ( iuomld )
+  locate( 504)  =  loc ( iutham )
+  locate( 505)  =  loc ( iuredu )
+  locate( 506)  =  loc ( iureds )
+  locate( 507)  =  loc ( iuflds )
+  locate( 508)  =  loc ( iufldr )
+  locate( 509)  =  loc ( iurequ )
+  locate( 510)  =  loc ( iuflqs )
+  locate( 511)  =  loc ( iuflqr )
+  locate( 512)  =  loc ( iujcds )
+  locate( 513)  =  loc ( iujcqs )
+  locate( 514)  =  loc ( iuflxd )
+  locate( 515)  =  loc ( iuflxq )
+  locate( 516)  =  loc ( iunppa )
+  locate( 517)  =  loc ( iurotm )
+  locate( 518)  =  loc ( iuncld )
+  locate( 519)  =  loc ( iunclq )
+  locate( 520)  =  loc ( iujtqo )
+  locate( 521)  =  loc ( iujomo )
+  locate( 522)  =  loc ( iujtho )
+  locate( 523)  =  loc ( iureqs )
+  locate( 524)  =  loc ( iuepso )
+  locate( 525)  =  loc ( iudcoe )
+  locate( 526)  =  loc ( iukcoi )
+  locate( 527)  =  loc ( iuvolt )
+  locate( 528)  =  loc ( iuangl )
+  locate( 529)  =  loc ( iunodf )
+  locate( 530)  =  loc ( iunodm )
+  locate( 531)  =  loc ( iukumo )
+  locate( 532)  =  loc ( iujumo )
+  locate( 533)  =  loc ( iuumou )
+  locate( 534)  =  loc ( nclfix )
+  locate( 535)  =  loc ( numfix )
+  locate( 536)  =  loc ( iotfix )
+  locate( 537)  =  loc ( ibsfix )
+  locate( 538)  =  loc ( ksubum )
+  locate( 539)  =  loc ( nsmach )
+  locate( 540)  =  loc ( istart )
+  locate( 541)  =  loc ( karray )
+  locate( 542)  =  loc ( rampcn )
+  locate( 543)  =  loc ( rampsl )
+  locate( 544)  =  loc ( kyramp )
+  locate( 545)  =  loc ( texpar )
+  locate( 546)  =  loc ( fendrp )
+  locate( 547)  =  loc ( tminrp )
+  locate( 548)  =  loc ( tmaxrp )
+  locate( 549)  =  loc ( tbegrp )
+  locate( 550)  =  loc ( tendrp )
+  locate( 551)  =  loc ( fbegrp )
+  locate( 552)  =  loc ( tbreak )
+  locate( 553)  =  loc ( indxrp )
+  locate( 554)  =  loc ( ivec   )
+  locate( 555)  =  loc ( iascii )
+  locate( 556)  =  loc ( numsym )
+  locate( 557)  =  loc ( jjroll )
+  locate( 558)  =  loc ( itexp  )
+  locate( 559)  =  loc ( labels )
+  locate( 560)  =  loc ( maxarg )
+  locate( 561)  =  loc ( kilper )
+  locate( 562)  =  loc ( kfile5 )
+  locate( 563)  =  loc ( kverfy )
+  locate( 564)  =  loc ( ibegcl )
+  locate( 565)  =  loc ( iendcl )
+  locate( 566)  =  loc ( lidnt1 )
+  locate( 567)  =  loc ( lidnt2 )
+  locate( 568)  =  loc ( linnow )
+  locate( 569)  =  loc ( linspn )
+  locate( 570)  =  loc ( numcrd )
+  locate( 571)  =  loc ( munit5 )
+  locate( 572)  =  loc ( indbuf )
+  locate( 573)  =  loc ( indbeg )
+  locate( 574)  =  loc ( mflush )
+  locate( 575)  =  loc ( newvec )
+  locate( 576)  =  loc ( munit6 )
+  locate( 577)  =  loc ( lserlc )
+  locate( 578)  =  loc ( kserlc )
+  locate( 579)  =  loc ( kbrser )
+  locate( 580)  =  loc ( lockbr )
+  locate( 581)  =  loc ( iprspy )
+  locate( 582)  =  loc ( monitr )
+  locate( 583)  =  loc ( monits )
+  locate( 584)  =  loc ( locate )
+  locate( 585)  =  loc ( nline  )
+  locate( 586)  =  loc ( kwtspy )
+  locate( 587)  =  loc ( kbreak )
+  locate( 588)  =  loc ( limbuf )
+  locate( 589)  =  loc ( inchlp )
+  locate( 590)  =  loc ( ksymbl )
+  locate( 591)  =  loc ( kopyit )
+  locate( 592)  =  loc ( kslowr )
+  locate( 593)  =  loc ( limcrd )
+  locate( 594)  =  loc ( looprp )
+  locate( 595)  =  loc ( n10rmp )
+  locate( 596)  =  loc ( memrmp )
+  locate( 597)  =  loc ( kar1   )
+  locate( 598)  =  loc ( kar2   )
+  locate( 599)  =  loc ( numrmp )
+  locate( 600)  =  loc ( luntsp )
+  locate( 601)  =  loc ( logvar )
+  locate( 602)  =  loc ( filext )
+  locate( 603)  =  loc ( symb   )
+  locate( 604)  =  loc ( col    )
+  locate( 605)  =  loc ( bytfnd )
+  locate( 606)  =  loc ( char1  )
+  locate( 607)  =  loc ( symbrp )
+  locate( 608)  =  loc ( chard4 )
+  locate( 609)  =  loc ( bytbuf )
+  locate( 610)  =  loc ( buff77 )
+  locate( 611)  =  loc ( file6b )
+  locate( 612)  =  loc ( file6  )
+  locate( 613)  =  loc ( blan80 )
+  locate( 614)  =  loc ( prom80 )
+  locate( 615)  =  loc ( digit  )
+  locate( 616)  =  loc ( iac    )
+  locate( 617)  =  loc ( idctcs )
+  locate( 618)  =  loc ( ipl    )
+  locate( 619)  =  loc ( ipr    )
+  locate( 620)  =  loc ( ixr    )
+  locate( 621)  =  loc ( jpl    )
+  locate( 622)  =  loc ( jpr    )
+  locate( 623)  =  loc ( kint   )
+  locate( 624)  =  loc ( kout   )
+  locate( 625)  =  loc ( nds    )
+  locate( 626)  =  loc ( nkn    )
+  locate( 627)  =  loc ( nmax   )
+  locate( 628)  =  loc ( nuk    )
+  locate( 629)  =  loc ( kwrite )
+  locate( 630)  =  loc ( kpr    )
+  locate( 631)  =  loc ( kpl    )
+  locate( 632)  =  loc ( mxtacw )
+  locate( 633)  =  loc ( iptacw )
+  locate( 634)  =  loc ( nhst   )
+  locate( 635)  =  loc ( kvin   )
+  locate( 636)  =  loc ( kvou   )
+  locate( 637)  =  loc ( kvxx   )
+  locate( 638)  =  loc ( icsup  )
+  locate( 639)  =  loc ( nxic   )
+  locate( 640)  =  loc ( kksj   )
+  locate( 641)  =  loc ( kksk   )
+  locate( 642)  =  loc ( kkfst  )
+  locate( 643)  =  loc ( kkni   )
+  locate( 644)  =  loc ( kkhst  )
+  locate( 645)  =  loc ( kifls  )
+  locate( 646)  =  loc ( kidum  )
+  locate( 647)  =  loc ( kslim1 )
+  locate( 648)  =  loc ( kslim2 )
+  locate( 649)  =  loc ( kslim3 )
+  locate( 650)  =  loc ( kpac1r )
+  locate( 651)  =  loc ( kpac1i )
+  locate( 652)  =  loc ( kpac2r )
+  locate( 653)  =  loc ( kpac2i )
+  locate( 654)  =  loc ( kalksx )
+  locate( 655)  =  loc ( kilms1 )
+  locate( 656)  =  loc ( kilms2 )
+  locate( 657)  =  loc ( kdumj  )
+  locate( 658)  =  loc ( kdumk  )
+  locate( 659)  =  loc ( kkzj   )
+  locate( 660)  =  loc ( kkzk   )
+  locate( 661)  =  loc ( kiflz  )
+  locate( 662)  =  loc ( kgnz   )
+  locate( 663)  =  loc ( kzlim1 )
+  locate( 664)  =  loc ( kzlim2 )
+  locate( 665)  =  loc ( kalkzx )
+  locate( 666)  =  loc ( kilmz1 )
+  locate( 667)  =  loc ( kilmz2 )
+  locate( 668)  =  loc ( kksus  )
+  locate( 669)  =  loc ( kalksu )
+  locate( 670)  =  loc ( kiuty  )
+  locate( 671)  =  loc ( kud1   )
+  locate( 672)  =  loc ( kud2   )
+  locate( 673)  =  loc ( kud3   )
+  locate( 674)  =  loc ( kud4   )
+  locate( 675)  =  loc ( kud5   )
+  locate( 676)  =  loc ( kaliu  )
+  locate( 677)  =  loc ( ktysup )
+  locate( 678)  =  loc ( kjsup  )
+  locate( 679)  =  loc ( kksup  )
+  locate( 680)  =  loc ( kspvar )
+  locate( 681)  =  loc ( kopsup )
+  locate( 682)  =  loc ( kfnsup )
+  locate( 683)  =  loc ( krgsup )
+  locate( 684)  =  loc ( kprsup )
+  locate( 685)  =  loc ( ktypdv )
+  locate( 686)  =  loc ( kkdj   )
+  locate( 687)  =  loc ( kkdk   )
+  locate( 688)  =  loc ( kgndev )
+  locate( 689)  =  loc ( kdev1  )
+  locate( 690)  =  loc ( kdev2  )
+  locate( 691)  =  loc ( kldev1 )
+  locate( 692)  =  loc ( kldev2 )
+  locate( 693)  =  loc ( kkdus  )
+  locate( 694)  =  loc ( kalkdu )
+  locate( 695)  =  loc ( ktbdev )
+  locate( 696)  =  loc ( kpn    )
+  locate( 697)  =  loc ( kpd    )
+  locate( 698)  =  loc ( kxhst  )
+  locate( 699)  =  loc ( khscr  )
+  locate( 700)  =  loc ( khsci  )
+  locate( 701)  =  loc ( kilim1 )
+  locate( 702)  =  loc ( kilim2 )
+  locate( 703)  =  loc ( krowcs )
+  locate( 704)  =  loc ( krhsde )
+  locate( 705)  =  loc ( kvlim1 )
+  locate( 706)  =  loc ( kvlim2 )
+  locate( 707)  =  loc ( kkxic  )
+  locate( 708)  =  loc ( kawkcs )
+  locate( 709)  =  loc ( kxar   )
+  locate( 710)  =  loc ( kxai   )
+  locate( 711)  =  loc ( kbwkcs )
+  locate( 712)  =  loc ( kxtcs  )
+  locate( 713)  =  loc ( klntab )
+  locate( 714)  =  loc ( klmxic )
+  locate( 715)  =  loc ( kcolcs )
+  locate( 716)  =  loc ( katcs  )
+  locate( 717)  =  loc ( kbtcs  )
+  locate( 718)  =  loc ( kjout  )
+  locate( 719)  =  loc ( kkout  )
+  locate( 720)  =  loc ( kxmncs )
+  locate( 721)  =  loc ( ktxmn  )
+  locate( 722)  =  loc ( kxmxcs )
+  locate( 723)  =  loc ( ktxmx  )
+  locate( 724)  =  loc ( klnout )
+  locate( 725)  =  loc ( ekbuf  )
+  locate( 726)  =  loc ( ektemp )
+  locate( 727)  =  loc ( errchk )
+  locate( 728)  =  loc ( solrsv )
+  locate( 729)  =  loc ( solisv )
+  locate( 730)  =  loc ( nitera )
+  locate( 731)  =  loc ( nekreq )
+  locate( 732)  =  loc ( nekcod )
   return
 end subroutine locatn
 
@@ -6243,874 +6586,874 @@ end block data
 
 block data blkhlp
    include 'dekspy.ftn'
-   data texspy (   1 ) / 'key word no.  1:  "heading"     ----  ----  ----                                '  /
-   data texspy (   2 ) / '  response will be the printing of the previously-defined heading of  "examine",'  /
-   data texspy (   3 ) / '  followed by current values of all variables (as for the 1st  "examine"  use). '  /
-   data texspy (   4 ) / 'key word no.  2:  "stop"        ----  ----  ----                                '  /
-   data texspy (   5 ) / '  this command will terminate interactive EMP execution immediately,  by  means '  /
-   data texspy (   6 ) / '  of a fortran "stop" statement.  There will be no automatic saving  of  tables,'  /
-   data texspy (   7 )   /  '  or  of plot data points before such a termination  (use prior  "sleep"  and/or'  /
-   data texspy (   8 )   /  '  "lunit4"  commands, if such preservation is desired).                         '  /
-   data texspy (   9 )   /  'key word no.  3:  "plot"        ----  ----  ----                                '  /
-   data texspy (  10 )   /  '  issue this command to transfer control to the  "outer:"  prompt of interactive'  /
-   data texspy (  11 )   /  '  emtp plotting (the former separate EMTP crt plotting program  "tpplot").   due'  /
-   data texspy (  12 )   /  '  to the absorbtion into spy,  several changes have been made.  first,  no plot-'  /
-   data texspy (  13 )   /  '  file specification is required of the user  (he should subsequently send  "go"'  /
-   data texspy (  14 )   /  '  if no other outer-level response is desired).   at the  "middle:"  level,  the'  /
-   data texspy (  15 )   /  '  "timespan"  computation is now automatically performed,  internally.   at  any'  /
-   data texspy (  16 )   /  '  level,  "stop"  no longer terminates program execution, but instead it returns'  /
-   data texspy (  17 )   /  '  control to the  "spy:"  prompt.   continuous,  automatic plotting  of  the on-'  /
-   data texspy (  18 )   /  '  going solution  (like a strip-chart) is  based  on the use of either  "rollc"'  /
-   data texspy (  19 )   /  '  (for character plotting)  or  "rollv" (for vector plotting)  as  commands  at'  /
-   data texspy (  20 )   /  '  the  "inner:"  level.   for  a  detailed explanation of all  "plot"  commands,'  /
-   data texspy (  21 )   /  '  send  "help"  at any of the three levels within  "plot".                      '  /
-   data texspy (  22 )   /  'key word no.  4:  "help"        ----  ----  ----                                '  /
-   data texspy (  23 )   /  '  education for the ignorant, such as the user is now being subjected to (joke).'  /
-   data texspy (  24 )   /  '  a  carriage return  <cr>  will  produce text for the next key word  in  order,'  /
-   data texspy (  25 )   /  '  while  a  return  to the  "spy:"  prompt is accomplished by  "spy", or  "end".'  /
-   data texspy (  26 )   /  '  "all"  will loop over  all  explanations  (subject  to  user-keyed interrupt).'  /
-   data texspy (  27 )   /  '  sending  "top"  will rewind to the first message, while  "bot"  will give the '  /
-   data texspy (  28 )   /  '  last.   use  "back"  to back up one message.                                  '  /
-   data texspy (  29 )   /  'key word no.  5:  "examine"     ----  ----  ----                                '  /
-   data texspy (  30 )   /  '  issue this command  to  examine the contents of any EMTP common variables  (of'  /
-   data texspy (  31 )   /  '  solution overlays).   integer  scalars require 6 columns;  all other variables'  /
-   data texspy (  32 )   /  '  require 15.   subsequent prompts willallow  the  user  to specify scalars and'  /
-   data texspy (  33 )   /  '  vector ranges (e.g.,  "kbus(3:8)"  for  cells  3  through  8 of kbus).   "end"'  /
-   data texspy (  34 )   /  '  terminates the list,  resulting  in adisplay of heading and numerical values.'  /
-   data texspy (  35 )   /  '  any later striking of the  "return" key  will  then display current numerical'  /
-   data texspy (  36 )   /  '  values only.   send  "heading"  for a  refresh of the variable names.  for  a'  /
-   data texspy (  37 )   /  '  rolling display,  send  "roll"  (also,  see  separate  instructions  for  this'  /
-   data texspy (  38 )   /  '  command).  for  rolling, the  output vector  is  re-formed at each spy chance,'  /
-   data texspy (  39 )   /  '  but is only output when one or more variables has changed.  to  terminate  the'  /
-   data texspy (  40 )   /  '  roll-loop,  use the regular user-keyed interrupt.                             '  /
-   data texspy (  41 )   /  'key word no.  6:  "deposit"     ----  ----  ----                                '  /
-   data texspy (  42 )   /  '  issue this command to modify the contents of any  EMTP  common  variables  (of'  /
-   data texspy (  43 )   /  '  solution overlays).   subsequent prompts  will  permit  the  user  to  specify'  /
-   data texspy (  44 )   /  '  scalars  and vector ranges  (e.g.,  "kbus(3:8)"  for  cells  3  through  8  of'  /
-   data texspy (  45 )   /  '  kbus).   "end"  terminates the list, returning to the  "spy:"  prompt.  after'  /
-   data texspy (  46 )   /  '  each  variable,  there will be a prompt for the desired new value (free-format'  /
-   data texspy (  47 )   /  '  number),  if no  "="  is used.   the separately-prompted input  is  rigorously'  /
-   data texspy (  48 )   /  '  free-format  (so  that any  i, f, or e-field number is permissible).  but  for'  /
-   data texspy (  49 )   /  '  simple numeric values which  can  be read  using  f15.0,  or  for  text (a6),'  /
-   data texspy (  50 )   /  '  follow the scalar or vector by an equal sign and then the number.  the case of'  /
-   data texspy (  51 )   /  '  alphanumeric  must  not  have imbedded blanks after the  "=",  but numbers can'  /
-   data texspy (  52 )   /  '  (within the span of 15 columns).'  /
-   data texspy (  53 )   /  'key word no.  7:  "switch"      ----  ----  ----                                '  /
-   data texspy (  54 )   /  '  this response to the  "spy:"  prompt is  issued  for  a  display  of the EMTP'  /
-   data texspy (  55 )   /  '  switch  table.   subsequently  send an  additional  "extra"  to change to the'  /
-   data texspy (  56 )   /  '  next sub-table (as of february 1984, there are two),  if different columns are'  /
-   data texspy (  57 )   /  '  desired.  within any one choice as to sub-table,  there is a loop in which the'  /
-   data texspy (  58 )   /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
-   data texspy (  59 )   /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
-   data texspy (  60 )   /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage'  /
-   data texspy (  61 )   /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
-   data texspy (  62 )   /  '  and return to the  "spy:"  prompt.  to refresh the heading, use either  "swit"'  /
-   data texspy (  63 )   /  '  or  "head"  (only 4 characters of "switch" or "heading" are checked).         '  /
-   data texspy (  64 )   /  'key word no.  8:  "append"      ----  ----  ----                                '  /
-   data texspy (  65 )   /  '  this command is the gateway to installation-dependent commands which are non- '  /
-   data texspy (  66 )   /  '  standard,  and which have been installed locally.   the  utpf carries a dummy '  /
-   data texspy (  67 )   /  '  subroutine append,  by  definition. one clean  way  of adding a functional '  /
-   data texspy (  68 )   /  '  module is at translation time,  using a submod  request.                     '  /
-   data texspy (  69 )   /  'key word no.  9:  "save"        ----  ----  ----                                '  /
-   data texspy (  70 )   /  '  when the EMTP is in the time-step loop, this command will force an exit to    '  /
-   data texspy (  71 )   /  '  overlay 20 upon completion of present time-step.   there,  "katalg"  saves    '  /
-   data texspy (  72 )   /  '  EMTP tables as rapidly as possible (may not be permanent).   the simulation   '  /
-   data texspy (  73 )   /  '  then recommences by an automatic transfer back to the beginning of the        '  /
-   data texspy (  74 )   /  '  time-step loop ("over16").   since plot data points are not part of the       '  /
-   data texspy (  75 )   /  '  saving, if the user wants these to be preserved, too, he must be careful.     '  /
-   data texspy (  76 )   /  '  provided EMTP storage for plot data points does not fill up before the        '  /
-   data texspy (  77 )   /  '  subsequent  restore  operation (to back up time to the  save  point), there   '  /
-   data texspy (  78 )   /  '  is no problem.  otherwise, consider use of  "space"  and  "lunit4"  commands. '  /
-   data texspy (  79 )   /  'key word no. 10:  "restore"     ----  ----  ----                                '  /
-   data texspy (  80 )   /  '  the  "restore"  command is the reverse of  "save".  when within the deltat    '  /
-   data texspy (  81 )   /  '  loop, use of  "restore"  will rapidly transfer to overlay 20.  there, module  '  /
-   data texspy (  82 )   /  '  "katalg" restores former tables, after which control is transferred to spy.   '  /
-   data texspy (  83 )   /  '  possibly the  "space"  and  "lunit4" would also be appropriate, to restore   '  /
-   data texspy (  84 )   /  '  any separately plot files.   also after tables have been restored, the user   '  /
-   data texspy (  85 )   /  '  can modify any EMTP variables  desired,  and exit  "deposit"  with  "end";    '  /
-   data texspy (  86 )   /  '  finally, send  "go"  in response to the  "spy:"  prompt, to transfer back to  '  /
-   data texspy (  87 )   /  '  the top of the time-step loop ("over16").                                     '  /
-   data texspy (  88 )   /  'key word no. 11:  "go"          ----  ----  ----                                '  /
-   data texspy (  89 )   /  '  this command is issued in response to the  "spy:"  prompt to terminate        '  /
-   data texspy (  90 )   /  '  several sequences, such as one which might have begun with  "restore".  in    '  /
-   data texspy (  91 )   /  '  this case, there would be the preceding transfers of control from overlay 16  '  /
-   data texspy (  92 )   /  '  to overlay 20 ("katalg"), and then back to overlay 16 again.  as a second     '  /
-   data texspy (  93 )   /  '  example,  "go"  cancels the  "rest" command.  third, it can be used to       '  /
-   data texspy (  94 )   /  '  begin the EMTP solution following the  "data"  command (for data card input   '  /
-   data texspy (  95 )   /  '  at the beginning of program execution).   finally,  "go"  cancels the         '  /
-   data texspy (  96 )   /  '  suspension   of execution which accompanies the  "sleep"  command.            '  /
-   data texspy (  97 )   /  'key word no. 12:  "echo"        ----  ----  ----                                '  /
-   data texspy (  98 )   /  '  users who are interested in keeping a history of spy commands which are to    '  /
-   data texspy (  99 )   /  '  be issued can use the  "echo"  command.   a subsequent prompt then allows     '  /
-   data texspy ( 100 )   /  '  several choices.  to begin such accumulation, send  "begin";  to end it,      '  /
-   data texspy ( 101 )   /  '  send  "file",  which will result in the dumping of all accumulation onto      '  /
-   data texspy ( 102 )   /  '  disk as a permanent file of the users choice (a subsequent prompt will        '  /
-   data texspy ( 103 )   /  '  ask for the desired file name).   the history consists of 80-column card      '  /
-   data texspy ( 104 )   /  '  images,  stored from the bottom of  file6  upward  (with cell  kspsav         '  /
-   data texspy ( 105 )   /  '  storing the last, and  limcrd  storing the first).  to view the accumulation  '  /
-   data texspy ( 106 )   /  '  to date, use  "show".   when  "file" is used,  not only is a copy sent to    '  /
-   data texspy ( 107 )   /  '  disk, but those in memory are erased. hence, if  echoing  is to continue,   '  /
-   data texspy ( 108 )   /  '  the user must send  "begin"  again, immediately after  "file"  is complete.  '  /
-   data texspy ( 109 )   /  '  in order to erase an erroneous, immediately-preceding command, use  "cancel"  '  /
-   data texspy ( 110 )   /  '  at any point.  this is intercepted by the input routine  "flager",  so is     '  /
-   data texspy ( 111 )   /  '  not a spy command per se.   there will be confirmation of the erasure.        '  /
-   data texspy ( 112 )   /  'key word no. 13:  "find"        ----  ----  ----                                '  /
-   data texspy ( 113 )   /  '  the sending of  "find"  will result in the printing of a heading, followed    '  /
-   data texspy ( 114 )   /  '  by a pause, as  spy  waits for the user to supply a 6-character EMTP symbol   '  /
-   data texspy ( 115 )   /  '  name.   this is a closed loop: after receiving a name,  spy  will display     '  /
-   data texspy ( 116 )   /  '  the memory address, and then wait foranother such symbol.   exit by  "end".  '  /
-   data texspy ( 117 )   /  '  wild cards ("*") of  vax/vms  are honored here, although the candidate        '  /
-   data texspy ( 118 )   /  '  string is limited to eight characters maximum (only the first 8 are read).    '  /
-   data texspy ( 119 )   /  'key word no. 14:  "list"        ----  ----  ----                                '  /
-   data texspy ( 120 )   /  '  this command will result in the printing of a heading, followed by a pause.   '  /
-   data texspy ( 121 )   /  '  at this point the user is in a loop, supplying row numbers (beginning and     '  /
-   data texspy ( 122 )   /  '  ending rows as a pair of free-format integers).   spy responds to each with   '  /
-   data texspy ( 123 )   /  '  a display of those rows of the spy symbol table, and then waits for the next  '  /
-   data texspy ( 124 )   /  '  request.   the sending of  "0,0"  will break out, returning to the  "spy:"    '  /
-   data texspy ( 125 )   /  '  prompt.   the user can interrupt any excessively long display with his keyed  '  /
-   data texspy ( 126 )   /  '  interrupt (details depend upon computer).  instead of  "0,0"  to break out,   '  /
-   data texspy ( 127 )   /  '  "end"  or  "spy:"  can alternatively be used.  sending nothing (just a        '  /
-   data texspy ( 128 )   /  '  carriage return <cr>) is interpreted by spy as a request for "more of the     '  /
-   data texspy ( 129 )   /  '  same" ---- the same number of rows as just displayed, beginning where the     '  /
-   data texspy ( 130 )   /  '  last display left off.   special trickery is required if an argument of  "@"  '  /
-   data texspy ( 131 )   /  '  usage is to respond to the  "list"  prompt,  since a comma must not be used   '  /
-   data texspy ( 132 )   /  '  as the free-format separator (due to confusion with use of the same symbol    '  /
-   data texspy ( 133 )   /  '  for argument separation by "@").  instead, a pounds sign  "#"  must be used   '  /
-   data texspy ( 134 )   /  '  rather than a blank (due to extraction of blanks by  "@"  logic).  finally,   '  /
-   data texspy ( 135 )   /  '  sending  "all"  instead of two row numbers displays the whole table.          '  /
-   data texspy ( 136 )   /  'key word no. 15:  "spy"         ----  ----  ----                                '  /
-   data texspy ( 137 )   /  '  this text, supplied almost anywhere that the program is looking for text,     '  /
-   data texspy ( 138 )   /  '  will cause an internal interruption of whatever was happening, and a return   '  /
-   data texspy ( 139 )   /  '  to the  "spy:"  prompt.   one exception is the  "help"  prompt which is now   '  /
-   data texspy ( 140 )   /  '  being serviced.    '  /
-   data texspy ( 141 )   /  'key word no. 16:  "break"       ----  ----  ----                                '  /
-   data texspy ( 142 )   /  '  this response to the  "spy:"  prompt is appropriate if the user wants the     '  /
-   data texspy ( 143 )   /  '  simulation to continue uninterrupted until some pre-specified time, when a    '  /
-   data texspy ( 144 )   /  '  clean break at the start of "subts1" will be made.  a subsequent prompt will  '  /
-   data texspy ( 145 )   /  '  allow the user to specify the future break time  t-break  in seconds.  if a   '  /
-   data texspy ( 146 )   /  '  minus sign is appended, then the input is taken to be a step number of the    '  /
-   data texspy ( 147 )   /  '  time-step loop, and the program will calculate  t-break   by multiplying by   '  /
-   data texspy ( 148 )   /  '  deltat.  oh, in case "subts1" means nothing to the user, this is the first of '  /
-   data texspy ( 149 )   /  '  four pieces of overlay 16 (the time-step loop).  in case the user sends zero  '  /
-   data texspy ( 150 )   /  '  for  t-break, an added prompt will seek clarification as to which utpf overlay'  /
-   data texspy ( 151 )   /  '  is the desired stopping point (immediately prior to entry).  common usage     '  /
-   data texspy ( 152 )   /  '  involves overlays numbered 6  (after all sources have been read),  12  (when  '  /
-   data texspy ( 153 )   /  '  the   phasor solution is complete), or  16  (the time-step loop).             '  /
-   data texspy ( 154 )   /  'key word no. 17:  "when"        ----  ----  ----                                '  /
-   data texspy ( 155 )   /  '  this response to the  "spy:"  prompt will redefine the EMTP table-handling    '  /
-   data texspy ( 156 )   /  '  time of  "save"  and  "restore" .   that is,  if so defined,  this overrides  '  /
-   data texspy ( 157 )   /  '  the otherwise immediate exit of the time-step loop for table-handling.        '  /
-   data texspy ( 158 )   /  'key word no. 18:  "comment"     ----  ----  ----                                '  /
-   data texspy ( 159 )   /  '  this response to the  "spy:"  prompt will toggle the switch which controls the'  /
-   data texspy ( 160 )   /  '  printing of comment cards ("c ") which may be contained within command files. '  /
-   data texspy ( 161 )   /  '  the default (starting value) is to show comment cards during execution ("@"). '  /
-   data texspy ( 162 )   /  'key word no. 19:  "@?"          ----  ----  ----                                '  /
-   data texspy ( 163 )   /  '  this response to the  "spy:"  prompt will result in the internal  opening  of '  /
-   data texspy ( 164 )   /  '  an arbitary disk file, and the connection of this file as replacement for     '  /
-   data texspy ( 165 )   /  '  keyboard input to spy.  if the file name consists of just a single digit      '  /
-   data texspy ( 166 )   /  '  (?=1-9),  inclspy?.dat  is the disk file name to be used.  reading from the   '  /
-   data texspy ( 167 )   /  '  disk file continues until an end-of-file is hit, at which point the spy input '  /
-   data texspy ( 168 )   /  '  channel is connected once again to the keyboard.  such usage can not be nested'  /
-   data texspy ( 169 )   /  '  (i.e., no such disk file can itself contain an  "@"  statement).   EMTP       '  /
-   data texspy ( 170 )   /  '  comment cards ("c ") are permitted within such disk files, however,  with the '  /
-   data texspy ( 171 )   /  '  "comment"  switch controlling whether or not they are written to the screen   '  /
-   data texspy ( 172 )   /  '  (the default is for such writing).other lines of an executed disk file are '  /
-   data texspy ( 173 )   /  '  generally not seen by the user as they are read during execution, and neither '  /
-   data texspy ( 174 )   /  '  are the repetitive  "spy:"  prompts. parameters are possible, to substitute  '  /
-   data texspy ( 175 )   /  '  for 8-column   "%%%%%%%%"   fields of the disk file.   blanks are ignored,    '  /
-   data texspy ( 176 )   /  '  and arguments are to be separated by commas.  an opening parenthesis  "("  and'  /
-   data texspy ( 177 )   /  '  a closing parenthesis  ")"  are optional delimiters.   each command line is   '  /
-   data texspy ( 178 )   /  '  limited to 80 columns (no continuation), and a maximum of 10 arguments.   the '  /
-   data texspy ( 179 )   /  '  left-to-right list is applied to the file %-fields from top to bottom, in     '  /
-   data texspy ( 180 )   /  '  order.  the %-fields can be built into any line of the disk file which        '  /
-   data texspy ( 181 )   /  '  is read by  spy  proper (not plotting).   finally, there is the use of a pound'  /
-   data texspy ( 182 )   /  '  sign "#" for reserved blanks, which are otherwise ignored.   the classic case '  /
-   data texspy ( 183 )   /  '  where it is needed is for a response to  "list"  (e.g.,  "2#4");   this is    '  /
-   data texspy ( 184 )   /  '  free-format information, with a comma impossible due to the conflict with "@".'  /
-   data texspy ( 185 )   /  '  although not a part of the interactive  spy  code per se, it should also be   '  /
-   data texspy ( 186 )   /  '  remembered that commands which could be built into  "@"  files can also be    '  /
-   data texspy ( 187 )   /  '  executed as part of the regular EMTP data.  the key to such usage is  "$spy", '  /
-   data texspy ( 188 )   /  '  which is processed by  "cimage"  and/or  "erexit".   if all spy commands are  '  /
-   data texspy ( 189 )   /  '  to be built in-line as part of the lunit5 EMTP input data, then precede such  '  /
-   data texspy ( 190 )   /  '  data by a card reading  "$spy",  with columns 5 onward blank.  in this        '  /
-   data texspy ( 191 )   /  '  case,  "erexit"  reads and removes such data cards, creating special reserved '  /
-   data texspy ( 192 )   /  '  disk files named  spyfile?.dat,  where  "?"  is a single digit between one    '  /
-   data texspy ( 193 )   /  '  and nine (allowing a maximum of nine such distinct groups of spy commands).   '  /
-   data texspy ( 194 )   /  '  the last spy command of each such group is to be followed by  "$endspy"  as a '  /
-   data texspy ( 195 )   /  '  special marker record.  on the other hand, if the user does not care about    '  /
-   data texspy ( 196 )   /  '  unifying all such EMTP data in a single disk file, then a single line of EMTP '  /
-   data texspy ( 197 )   /  '  data,  "$spy, filename",  is all that is required to provide the connection to'  /
-   data texspy ( 198 )   /  '  spy.  in this second card,  filename can be any legal, full file name of the '  /
-   data texspy ( 199 )   /  '  computer system being considered (if the user supplies the file name, and     '  /
-   data texspy ( 200 )   /  '  puts commands in the disk file, then there is no limit on the number of       '  /
-   data texspy ( 201 )   /  '  such usages.   the role of  "cimage" is to treat  "$spy"  like   "$include".  '  /
-   data texspy ( 202 )   /  'key word no. 20:  "roll"        ----  ----  ----                                '  /
-   data texspy ( 203 )   /  '  this response to the  "spy:"  prompt will result in a "rolling" of previously-'  /
-   data texspy ( 204 )   /  '  defined  "examine"  request.   while this happens, no other spy activity is   '  /
-   data texspy ( 205 )   /  '  permitted (any <cr> will abort the loop, and return to the  "spy:"  prompt).  '  /
-   data texspy ( 206 )   /  '  following  "roll",  the simulation will recommence, with spy called at each   '  /
-   data texspy ( 207 )   /  '  opportunity for a spy break (within frequency  maxflg  of  "dekspy",  which   '  /
-   data texspy ( 208 )   /  '  nominally has the value one, implying four checks per time step).   the very  '  /
-   data texspy ( 209 )   /  '  first check, the heading and current value of the  "examine"  vector will be  '  /
-   data texspy ( 210 )   /  '  displayed;  thereafter, output will be produced if and only if a change in    '  /
-   data texspy ( 211 )   /  '  the output (compared with the previous evaluation) has occurred.              '  /
-   data texspy ( 212 )   /  '  a final thought is about other commands which function much like the  "roll"  '  /
-   data texspy ( 213 )   /  '  commands, although in fact these are not issued at the  "spy:" level.  for    '  /
-   data texspy ( 214 )   /  '  "plot"  use,  at the  "inner:"  level,  "rollc"  will produce continuous      '  /
-   data texspy ( 215 )   /  '  character plotting, while  "rollv"  does the same for vector plotting.   it   '  /
-   data texspy ( 216 )   /  '  is the  "noroll"  command of spy which will cancel either or both of these.   '  /
-   data texspy ( 217 )   /  'key word no. 21:  "type?"       ----  ----  ----                                '  /
-   data texspy ( 218 )   /  '  this response to the  "spy:"  prompt will result in the listing of command    '  /
-   data texspy ( 219 )   /  '  file  inclspy?.dat  of  "@?"  usage. for any specific numerical digit       '  /
-   data texspy ( 220 )   /  '  "?",  just that one file will be listed.   but if symbolic "?" is retained, or'  /
-   data texspy ( 221 )   /  '  if column 5 onward is blank, then all possible  "@?"  files will be listed    '  /
-   data texspy ( 222 )   /  '  in natural order, preceded by an identifying heading.  also, for arbitrary    '  /
-   data texspy ( 223 )   /  '  disk files of card images with names of 2 or more characters, this command    '  /
-   data texspy ( 224 )   /  '  will display them.  "type filename" is the form of this more general         '  /
-   data texspy ( 225 )   /  '  command, where  filename  is any legal file name of 32 or fewer characters.   '  /
-   data texspy ( 226 )   /  '  if no such file exists, there will be a warning message, so this command      '  /
-   data texspy ( 227 )   /  '  can be used to check on the existence of arbitary disk files of card images.  '  /
-   data texspy ( 228 )   /  'key word no. 22:  "verify"      ----  ----  ----                                '  /
-   data texspy ( 229 )   /  '  this response to the  "spy:"  prompt will toggle the switch that controls the '  /
-   data texspy ( 230 )   /  '  echoing of data cards within a disk file which is read via  "@"  usage.  the  '  /
-   data texspy ( 231 )   /  '  default (beginning) setting is to have such echoing.   a related command is   '  /
-   data texspy ( 232 )   /  '  "comment",  which can separately control the display of comment ("c ") cards  '  /
-   data texspy ( 233 )   /  '  as they are encountered during processing of the  "@"  file.  if there is no  '  /
-   data texspy ( 234 )   /  '  echoing of spy data, then comment cards might likewise not be displayed;  or, '  /
-   data texspy ( 235 )   /  '  they can be used as an absolute reference (if they are displayed), to mark the'  /
-   data texspy ( 236 )   /  '  beginning or ending of invisible operations due to no-echoing of "verify".    '  /
-   data texspy ( 237 )   /  'key word no. 23:  "files"       ----  ----  ----                                '  /
-   data texspy ( 238 )   /  '  this  response  to  the  "spy:"  prompt will result in a display of all of the'  /
-   data texspy ( 239 )   /  '  inclspy?.dat  files which exist,  based on the fortran "inquire" operation  at'  /
-   data texspy ( 240 )   /  '  the time program execution began.  an "x"  means that the file exists (in the'  /
-   data texspy ( 241 )   /  '  display),  whereas a blank means that it does not.  there are 9 columns.      '  /
-   data texspy ( 242 )   /  'key word no. 24:  "sleep"       ----  ----  ----                                '  /
-   data texspy ( 243 )   /  '  this response to the  "spy:"  prompt will put the EMTP to sleep in such a way '  /
-   data texspy ( 244 )   /  '  that the simulation can be continued at any later time.  the interactive      '  /
-   data texspy ( 245 )   /  '  "sleep"  command is comparable to the batch-mode use of miscellaneous data    '  /
-   data texspy ( 246 )   /  '  parameter   memsav = 1   for the saving of EMTP tables on disk.  to service a '  /
-   data texspy ( 247 )   /  '  "sleep"  command, spy exits the time-step loop and jumps to  "over20"  for    '  /
-   data texspy ( 248 )   /  '  table dumping to disk.  subsequent awakening is via  "wake",  which reads     '  /
-   data texspy ( 249 )   /  '  EMTP tables back from disk into EMTP memory.  any plot data must be separately'  /
-   data texspy ( 250 )   /  '  and manually provided for by the user (using  "space", "lunit4"),  if it, too,'  /
-   data texspy ( 251 )   /  '  is to be permanently saved.      '  /
-   data texspy ( 252 )   /  'key word no. 25:  "source"      ----  ----  ----                                '  /
-   data texspy ( 253 )   /  '  this response to the  "spy:"  prompt will allow the user to look at either    '  /
-   data texspy ( 254 )   /  '  the electric network or the tacs source table.   there will be a pause after  '  /
-   data texspy ( 255 )   /  '  spy receives  "source",  as it waits to receive either  "tacs"  or  "elec"  as'  /
-   data texspy ( 256 )   /  '  an indication of source-table choice. then  spy  waits for a pair of free-  '  /
-   data texspy ( 257 )   /  '  format integer row numbers, to define the limits of the table display.   a few'  /
-   data texspy ( 258 )   /  '  key words are also accepted here:  "all"  to display entire table,  "end"  or '  /
-   data texspy ( 259 )   /  '  "stop"  or  "spy"  to return to  "spy:"  prompt,  and  "tacs"  or  "elec"  to '  /
-   data texspy ( 260 )   /  '  produce a new table heading (or switch between the two tables).   the tacs    '  /
-   data texspy ( 261 )   /  '  table displays offsets of  "sptacs" which are used with  "deposit/examine",  '  /
-   data texspy ( 262 )   /  '  in case the user wants to redefine such quantities.                           '  /
-   data texspy ( 263 )   /  'key word no. 26:  "edit"        ----  ----  ----                                '  /
-   data texspy ( 264 )   /  '  this response to the  "spy:"  prompt will allow the user to examine and modify'  /
-   data texspy ( 265 )   /  '  card images which are currently stored in memory (see the  "data"  command).  '  /
-   data texspy ( 266 )   /  '  a  "*"  prompt will next appear, at which point vax sos-like editing commands '  /
-   data texspy ( 267 )   /  '  can be issued.  the only bothersome changes of notation are the use of  "#"   '  /
-   data texspy ( 268 )   /  '  in place of vax"s  "!"  (because of in-line comment problems with e/ts),  and '  /
-   data texspy ( 269 )   /  '  use of  "@"  in place of vax"s  "esc" key as a character string delimiter.   '  /
-   data texspy ( 270 )   /  '  for an explanation of sos editing rules, see dec vax-11 user documentation.   '  /
-   data texspy ( 271 )   /  '  examples of printing include:  "*p^:*",  "*p5",  "*p^:18",  "*p5#10",  "*p",  '  /
-   data texspy ( 272 )   /  '  and  "p.-20:."   there also is  "*f" usage,  only with  "@"  replacing  <esc> '  /
-   data texspy ( 273 )   /  '  of  vax/vms  sos.  to exit the  "edit"  command and return to the  "spy:"     '  /
-   data texspy ( 274 )   /  '  prompt, use  "*e"  (analogous to the sos exit).  additional user commands     '  /
-   data texspy ( 275 )   /  '  include  "*d"  (for deletion of lines),  "*r"  (for replacement of lines),    '  /
-   data texspy ( 276 )   /  '  "*i"  (for insertion of new lines), and  "*s"  (for the substitution of one  '  /
-   data texspy ( 277 )   /  '  character string by another).  concerning  "*s",  however, once again  "@"    '  /
-   data texspy ( 278 )   /  '  is used as a delimiter rather than  <esc>,  and no qualifiers (e.g., ",d" for '  /
-   data texspy ( 279 )   /  '  "decide mode") are allowed.   finally, there are special EMTP-designed        '  /
-   data texspy ( 280 )   /  '  commands.   the first of these is  "(8)",  which initiates a search for the    '  /
-   data texspy ( 281 )   /  '  next card which has a non-blank column 80.   after display of this record,    '  /
-   data texspy ( 282 )   /  '  spy awaits a user decision regarding disposition:  <cr>  will leave the card  '  /
-   data texspy ( 283 )   /  '  unchanged and initiate a search for the following one;  digits 0, 1, 2, 3, 4  '  /
-   data texspy ( 284 )   /  '  will result in the punching of this value into column 80 before searching for '  /
-   data texspy ( 285 )   /  '  the next such record (with "0" internally changed to a blank before punching).'  /
-   data texspy ( 286 )   /  '  the  "*"  prompt will reappear automatically when the search hits the bottom  '  /
-   data texspy ( 287 )   /  '  of the file.  or,  "*"  can be reached at any point of the search-display loop'  /
-   data texspy ( 288 )   /  '  by sending  "e" .   even if not in the  "(8)"  loop, column-80 deposits are    '  /
-   data texspy ( 289 )   /  '  possible by use of  "(8),?"  where  "?"  is the desired col.-80 content of the '  /
-   data texspy ( 290 )   /  '  current line.   finally,  the command "*col"  will produce a heading of      '  /
-   data texspy ( 291 )   /  '  column numbers, which is useful when inserting new data records using  "*i" . '  /
-   data texspy ( 292 )   /  '  this ruler heading will be shifted to line up with  "*p"  displays.   if an   '  /
-   data texspy ( 293 )   /  '  unshifted display is desired,  use  "*col8" .                                 '  /
-   data texspy ( 294 )   /  'key word no. 27:  "wake"        ----  ----  ----                                '  /
-   data texspy ( 295 )   /  '  this response to the  "spy:"  prompt will awaken a hibernating solution (one  '  /
-   data texspy ( 296 )   /  '  which was put to bed with an earlier "sleep"  command).   altered program    '  /
-   data texspy ( 297 )   /  '  dimensions are not allowed  (both programs must be dimensioned identically),  '  /
-   data texspy ( 298 )   /  '  just as with the batch-mode  "start again".  the  "wake"  command is the exact'  /
-   data texspy ( 299 )   /  '  interactive equivalent of the batch-mode request  "start again".  there is a  '  /
-   data texspy ( 300 )   /  '  related  "wake4"  command for regeneration of the lunit4 plot-file header     '  /
-   data texspy ( 301 )   /  '  information, in case this is wanted by the user (it is in fact needed, if the '  /
-   data texspy ( 302 )   /  '  "plot"  command is to be used, as of 26 feb 1984).                            '  /
-   data texspy ( 303 )   /  'key word no. 28:  "language"    ----  ----  ----                                '  /
-   data texspy ( 304 )   /  '  this response to the  "spy:"  prompt allows the user to either examine or     '  /
-   data texspy ( 305 )   /  '  modify "spy:"-level command words (e.g., "plot", "data", etc.).  a loop will  '  /
-   data texspy ( 306 )   /  '  be entered, in which there are only 4 legal responses  ("single",  "entire",  '  /
-   data texspy ( 307 )   /  '  "show",  and  "spy")  to the prompt. sending  "single"  will lead to an      '  /
-   data texspy ( 308 )   /  '  inner input loop in which old and new symbol pairs are to be redefined one at '  /
-   data texspy ( 309 )   /  '  a time, terminated by  "end"  (to return to outer  "language"  loop) or  "spy"'  /
-   data texspy ( 310 )   /  '  (to return to the  "spy:"  prompt).  the second outer response,  "entire",   '  /
-   data texspy ( 311 )   /  '  must be followed by an unabridged dictionary of symbols using 10a8 format.    '  /
-   data texspy ( 312 )   /  '  sending the third response  "show"  will result in an unabridged display of   '  /
-   data texspy ( 313 )   /  '  all such current commands.  finally, sending  "spy"  will exit the outer loop,'  /
-   data texspy ( 314 )   /  '  and return to the  "spy:"  prompt.  the language of  "plot"  usage does not   '  /
-   data texspy ( 315 )   /  '  occur at the command level with prompt  "spy:",  so it can only be redefined  '  /
-   data texspy ( 316 )   /  '  within that utility (by means of the "set data"  command).                   '  /
-   data texspy ( 317 )   /  'key word no. 29:  "catalog"     ----  ----  ----                                '  /
-   data texspy ( 318 )   /  '  this response to the  "spy:"  prompt will create a new permanent disk file, it'  /
-   data texspy ( 319 )   /  '  will dump a copy of the data case which is presently contained within the     '  /
-   data texspy ( 320 )   /  '  EMTP into that disk file.   the name of this new disk file is user-supplied   '  /
-   data texspy ( 321 )   /  '  (in response to a subsequent prompt for such a name, which must, naturally, be'  /
-   data texspy ( 322 )   /  '  legal for the computer system being used).   the EMTP data case in question   '  /
-   data texspy ( 323 )   /  '  generally will differ from that originally read in using the  "data"  command,'  /
-   data texspy ( 324 )   /  '  of course  (assuming  "edit"  operations have produced alterations).          '  /
-   data texspy ( 325 )   /  'key word no. 30:  "begin"       ----  ----  ----                                '  /
-   data texspy ( 326 )   /  '  this response to the  "spy:"  prompt will abort the current EMTP solution,    '  /
-   data texspy ( 327 )   /  '  and initiate a complete new solution. it is the simulator-stored EMTP data  '  /
-   data texspy ( 328 )   /  '  cards which are used as input for the new solution, and these will usually    '  /
-   data texspy ( 329 )   /  '  have just been modified using  "edit" operations.  the transition is         '  /
-   data texspy ( 330 )   /  '  "instantaneous" for cases which have been put to bed via  "rest"  or  "sleep",'  /
-   data texspy ( 331 )   /  '  or which are cycling the time-step loop.   for execution in earlier overlays, '  /
-   data texspy ( 332 )   /  '  there may be a delay until the present overlay is exited.                     '  /
-   data texspy ( 333 )   /  'key word no. 31:  "step"        ----  ----  ----                                '  /
-   data texspy ( 334 )   /  '  this response to the  "spy:"  prompt represents a request to toggle the binary'  /
-   data texspy ( 335 )   /  '  switch that  forces  a  spy  interrupt at each and every possible opportunity.'  /
-   data texspy ( 336 )   /  '  either  there  are  such  ever-present forced interrupts, or  there  are none.'  /
-   data texspy ( 337 )   /  '  interrupt opportunities exist at the start of each overlay,  at  the start  of'  /
-   data texspy ( 338 )   /  '  each of the four pieces of overlay 16 (the time-step loop),  and  finally, as'  /
-   data texspy ( 339 )   /  '  each new data card is read by input module  "cimage".                         '  /
-   data texspy ( 340 )   /  'key word no. 32:  "debug"       ----  ----  ----                                '  /
-   data texspy ( 341 )   /  '  this response to the  "spy:"  prompt is used only for debugging of interactive'  /
-   data texspy ( 342 )   /  '  EMTP execution itself, in case of faulty operation.   it is not used for cases'  /
-   data texspy ( 343 )   /  '  of suspected EMTP error (do not confuse with  "iprsup"  of the EMTP).  anyway,'  /
-   data texspy ( 344 )   /  '  there will be a subsequent prompt for diagnostic control variable  iprspy.    '  /
-   data texspy ( 345 )   /  'key word no. 33:  "data"       ----  ----  ----                                 '  /
-   data texspy ( 346 )   /  '  this response to the  "spy:"  prompt is appropriate when the user wants to    '  /
-   data texspy ( 347 )   /  '  specify a disk file of EMTP data which is to be solved next.  the program     '  /
-   data texspy ( 348 )   /  '  will then prompt for the desired file name, which will generally be computer- '  /
-   data texspy ( 349 )   /  '  dependent.  a full, legal file name for the computer being used must then be  '  /
-   data texspy ( 350 )   /  '  provided.  before giving the real file name, however, the user could send     '  /
-   data texspy ( 351 )   /  '  "control",  should he want to input only a portion of the disk file, or should'  /
-   data texspy ( 352 )   /  '  it be desired to have the data placed in the EMTP cache with an offset, or    '  /
-   data texspy ( 353 )   /  '  should it be desired to have the  lunit5  usage pointer set to other than the '  /
-   data texspy ( 354 )   /  '  default value of unity (offset zero). a second non-file response is  "spy",  '  /
-   data texspy ( 355 )   /  '  to abort the file-name prompt after the  "control"  definitions (in case the  '  /
-   data texspy ( 356 )   /  '  user only wants to redefine the  lunit5  usage pointer, for example).   a     '  /
-   data texspy ( 357 )   /  '  final point concerns the avoidance of non-existent files (which would result  '  /
-   data texspy ( 358 )   /  '  in an error stop of the EMTP by the operating system).  if in doubt about a   '  /
-   data texspy ( 359 )   /  '  file"s existence, try to  type  it first (the  "type"  command warns of non-  '  /
-   data texspy ( 360 )   /  '  existent files, without any termination of execution).                        '  /
-   data texspy ( 361 )   /  'key word no. 34:  "ramp"        ----  ----  ----                                '  /
-   data texspy ( 362 )   /  '  this response to the  "spy:"  prompt will result in prompts which allow the   '  /
-   data texspy ( 363 )   /  '  user to modify any variables in EMTP common blocks as linear functions of     '  /
-   data texspy ( 364 )   /  '  time.   that is, the the user can ramp the values between beginning and ending'  /
-   data texspy ( 365 )   /  '  limits,  as EMTP simulation time moves between beginning and ending times --- '  /
-   data texspy ( 366 )   /  '  with all control parameters being user-defined.  any variable which can be    '  /
-   data texspy ( 367 )   /  '  seen via the  "examine"  command can also be  ramped.  in specifying parameter'  /
-   data texspy ( 368 )   /  '  values, there are three nested loops. the outer loop is for time, the middle'  /
-   data texspy ( 369 )   /  '  one is for variable values, and the inner one is for variable names.   the    '  /
-   data texspy ( 370 )   /  '  user can stay inside (middle or inner loops) as long as the outer quantity is '  /
-   data texspy ( 371 )   /  '  not altered.   "end" will exit any one level,  and head outward to the next   '  /
-   data texspy ( 372 )   /  '  one.   at the outer-most level, the optional  "show"  command will display all'  /
-   data texspy ( 373 )   /  '  ramps which the user has defined thus far,  while  "end"  or  "spy"  will     '  /
-   data texspy ( 374 )   /  '  return to the  "spy:"  prompt.  actual variable redefinition is handled within'  /
-   data texspy ( 375 )   /  '  module  "analyt"  of overlay 20 of the EMTP, where ramping logic has been     '  /
-   data texspy ( 376 )   /  '  built (this is automatic, as the simulation progresses).                      '  /
-   data texspy ( 377 )   /  'key word no. 35:  "time"        ----  ----  ----                                '  /
-   data texspy ( 378 )   /  '  this response to the  "spy:"  prompt will result in the display of  both  the'  /
-   data texspy ( 379 )   /  '  wall-clock time  (the date, too)  and also  the  current EMTP simulation time'  /
-   data texspy ( 380 )   /  '  parameters (t, tmax, deltat).      '  /
-   data texspy ( 381 )   /  'key word no. 36:  "tek"         ----  ----  ----                                '  /
-   data texspy ( 382 )   /  '  this response to the  "spy:"  prompt allows modification to an ongoing vector-'  /
-   data texspy ( 383 )   /  '  graphic display which is currently  rolling.  yes, the user could simply      '  /
-   data texspy ( 384 )   /  '  regenerate the plot from the beginning (by use of a  "plot"  command following'  /
-   data texspy ( 385 )   /  '  a user-keyed interrupt), but minor changes can often be made more easily, and '  /
-   data texspy ( 386 )   /  '  with less disruption, using  "tek". a subsequent prompt will then list a    '  /
-   data texspy ( 387 )   /  '  menu of alternatives which are available for such "on-the-fly"  rolling       '  /
-   data texspy ( 388 )   /  '  "plot"  tampering.  for completeness, that menu is repeated here:             '  /
-   data texspy ( 389 )   /  '       spy:tek      '  /
-   data texspy ( 390 )   /  '        >< to tamper with the rolling vector plot,  send choice.                '  /
-   data texspy ( 391 )   /  '        >< option (mark, delay, inner, overlap, end, help) :                    '  /
-   data texspy ( 392 )   /  '           mark  ---- for instantaneous marking of curves on tek screen;        '  /
-   data texspy ( 393 )   /  '           delay  --- to control how simultaneous the rolling is to be;         '  /
-   data texspy ( 394 )   /  '           inner  ---- to  call timval (the "inner:" level of ploting);        '  /
-   data texspy ( 395 )   /  '           overlap  -- to modify the percent overlap for new-page plot;         '  /
-   data texspy ( 396 )   /  '           end   ---- for return to  "spy:"  prompt.                            '  /
-   data texspy ( 397 )   /  '  unless the user requests curve identification via  "mark",  the  rolling plot '  /
-   data texspy ( 398 )   /  '  will only have it for the regenerated portion (the overlap from the previous  '  /
-   data texspy ( 399 )   /  '  page, as controlled by  "overlap"). the  "delay"  command allows the user   '  /
-   data texspy ( 400 )   /  '  to control the time-step multiplicity between plotting sessions.  there is a  '  /
-   data texspy ( 401 )   /  '  trade off between solution efficiency (maximized if plotting is infrequent)   '  /
-   data texspy ( 402 )   /  '  and simultaneous observation (maximized if plotting occurs on each new time   '  /
-   data texspy ( 403 )   /  '  step).   so much for the concept.  but the details of counting are in fact a  '  /
-   data texspy ( 404 )   /  '  little different, since it is not time steps, but rather plot points, which   '  /
-   data texspy ( 405 )   /  '  are counted.   only if every solution point becomes a plot point (only if the '  /
-   data texspy ( 406 )   /  '  miscellaneous data parameter  iplot is equal to unity) are these two equal,  '  /
-   data texspy ( 407 )   /  '  note.  so, if  iout = 3  and the user wants to see plotting progress about    '  /
-   data texspy ( 408 )   /  '  every twentieth time-step, he would send "7" in response to the prompt for a'  /
-   data texspy ( 409 )   /  '  multiplicity after his  "delay"  was accepted.   the result would then be     '  /
-   data texspy ( 410 )   /  '  incremental plotting every 21st step (21 = 3*7).   concerning  "overlap",  it '  /
-   data texspy ( 411 )   /  '  is generally recommended that this only be used for terminals without memory, '  /
-   data texspy ( 412 )   /  '  since any percentage greater than zero does increase the plotting burden.   in'  /
-   data texspy ( 413 )   /  '  the case of displays with near-infinite storage (e.g., apollo windows),  it is'  /
-   data texspy ( 414 )   /  '  better to leave the overlap at the default value of zero.   use of  "inner"   '  /
-   data texspy ( 415 )   /  '  both very powerful and potentially very tricky, since it results in a  call to'  /
-   data texspy ( 416 )   /  '  subroutine timval,  which is responsible for the  "inner:"  level of  "plot"  '  /
-   data texspy ( 417 )   /  '  dialogue.   all  "inner:"  level definitions are therefore available to the   '  /
-   data texspy ( 418 )   /  '  user, although effects may or may not be as expected (either trial and error  '  /
-   data texspy ( 419 )   /  '  experience, or understanding of "tpplot" fortran, are required in order to    '  /
-   data texspy ( 420 )   /  '  predict the results of any given operation).   the one big difference is that '  /
-   data texspy ( 421 )   /  '  the use of  "time"  or just  <cr>  do not result in the production of a new   '  /
-   data texspy ( 422 )   /  '  plot.  to return back to the  "tek" prompt from the  "inner:"  prompt,       '  /
-   data texspy ( 423 )   /  '  send  "spy".   as for return to the "spy"  prompt,  either the listed  "end" '  /
-   data texspy ( 424 )   /  '  or  "spy"  will work.    '  /
-   data texspy ( 425 )   /  'key word no. 37:  "branch"      ----  ----  ----                                '  /
-   data texspy ( 426 )   /  '  this response to the  "spy:"  prompt is  issued  for  a  display  of the EMTP'  /
-   data texspy ( 427 )   /  '  branch table.  subsequently send an additional  "extra"  to change to the next'  /
-   data texspy ( 428 )   /  '  sub-table  (as of february 1984, there  are  two),  if  different columns  are'  /
-   data texspy ( 429 )   /  '  desired.  within any one choice as to sub-table,  there is a loop in which the'  /
-   data texspy ( 430 )   /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
-   data texspy ( 431 )   /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
-   data texspy ( 432 )   /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage'  /
-   data texspy ( 433 )   /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
-   data texspy ( 434 )   /  '  and return to the  "spy:"  prompt.  to refresh the heading, use either  "bran"'  /
-   data texspy ( 435 )   /  '  or  "head"  (only 4 characters of  "branch"  or  "heading"  are checked).     '  /
-   data texspy ( 436 )   /  'key word no. 38:  "yform"       ----  ----  ----                                '  /
-   data texspy ( 437 )   /  '  this  response  to  the  "spy:"  prompt  will result in continuous (every time'  /
-   data texspy ( 438 )   /  '  step)  re-formation of  [y],  followed by re-triangularization.   it is turned'  /
-   data texspy ( 439 )   /  '  off (no more [y]-forming)  by sending "noy"  after  "spy:"  prompt.  ???  ???'  /
-   data texspy ( 440 )   /  '  warning:  like  the earlier batch-mode  "modify deltat",  this looks better in'  /
-   data texspy ( 441 )   /  '  theory than  it  does in practice.  for  important elements such as frequency-'  /
-   data texspy ( 442 )   /  '  dependent transmission lines, the original data which is needed to reform  [y]'  /
-   data texspy ( 443 )   /  '  has been destroyed by the solution, so the result  will  be erroneous.  unless'  /
-   data texspy ( 444 )   /  '  the user has a particularly degenerate problem,  and  he is sure that he knows'  /
-   data texspy ( 445 )   /  '  what he is doing, the general recommendation is to avoid all such use.  ??? ??'  /
-   data texspy ( 446 )   /  'key word no. 39:  "noy"         ----  ----  ----                                '  /
-   data texspy ( 447 )   /  '  this response to the  "spy:"  prompt will cancel a preceding  "yform"  request'  /
-   data texspy ( 448 )   /  '  for continuous [y]-formation.    '  /
-   data texspy ( 449 )   /  'key word no. 40:  "factor"      ----  ----  ----                                '  /
-   data texspy ( 450 )   /  '  this  response  to  the  "spy:"  prompt  will result in continuous (every time'  /
-   data texspy ( 451 )   /  '  step) triangularization.   it is turned off  (no more automatic factoring)  by'  /
-   data texspy ( 452 )   /  '  sending  "nof"  in response to the  "spy:"  prompt.                           '  /
-   data texspy ( 453 )   /  'key word no. 41:  "nof"         ----  ----  ----                                '  /
-   data texspy ( 454 )   /  '  this  response  to  the  "spy:"  prompt  will  cancel  a  preceding   "factor"'  /
-   data texspy ( 455 )   /  '  request for the continuous re-triangularization of [y].                       '  /
-   data texspy ( 456 )   /  'key word no. 42:  "rlc"         ----  ----  ----                                '  /
-   data texspy ( 457 )   /  '  this response to the  "spy:"  prompt will produce a display of the EMTP  R-L-C'  /
-   data texspy ( 458 )   /  '  tables.  subsequently  send  an  additional  "extra"  to  change to  the  next'  /
-   data texspy ( 459 )   /  '  sub-table  (as of february 1984, there  are  two),  if  different columns  are'  /
-   data texspy ( 460 )   /  '  desired.  within any one choice as to sub-table,  there is a loop in which the'  /
-   data texspy ( 461 )   /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
-   data texspy ( 462 )   /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
-   data texspy ( 463 )   /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage'  /
-   data texspy ( 464 )   /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
-   data texspy ( 465 )   /  '  and return to the  "spy:"  prompt.  to refresh the heading,  use either  "rlc"'  /
-   data texspy ( 466 )   /  '  or  "head"  (only 4 characters of  "heading"  are checked).                   '  /
-   data texspy ( 467 )   /  'key word no. 43:  "width"       ----  ----  ----                                '  /
-   data texspy ( 468 )   /  '  this response to the  "spy:"  prompt will toggle the output line length  (if  '  /
-   data texspy ( 469 )   /  '  equal to 132 at the time the command is issued, it will be changed to 80,  and'  /
-   data texspy ( 470 )   /  '  vice-versa).  this is for EMTP line printer output (channel lunit6) only.     '  /
-   data texspy ( 471 )   /  'key word no. 44:  "bus"         ----  ----  ----                                '  /
-   data texspy ( 472 )   /  '  this response to the  "spy:"  prompt will produce a display  of  the  EMTP bus'  /
-   data texspy ( 473 )   /  '  vectors.   subsequently  send  an  additional  "extra"  to  change to the next'  /
-   data texspy ( 474 )   /  '  next sub-table (as of february 1984, there are two),  if different columns are'  /
-   data texspy ( 475 )   /  '  desired.  within any one choice as to sub-table,  there is a loop in which the'  /
-   data texspy ( 476 )   /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
-   data texspy ( 477 )   /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
-   data texspy ( 478 )   /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage'  /
-   data texspy ( 479 )   /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
-   data texspy ( 480 )   /  '  and return to the  "spy:"  prompt.  to refresh the heading,  use either  "bus"'  /
-   data texspy ( 481 )   /  '  or  "head"  (only 4 characters of "heading" are checked).                     '  /
-   data texspy ( 482 )   /  'key word no. 45:  "size"        ----  ----  ----                                '  /
-   data texspy ( 483 )   /  '  this response  to  the  "spy:"  prompt  will  produce a display of actual EMTP'  /
-   data texspy ( 484 )   /  '  data requirements  ----  the  "present figure"  list sizes which are  seen  at'  /
-   data texspy ( 485 )   /  '  the end of batch-mode EMTP printout, in the case-summary statistics.         '  /
-   data texspy ( 486 )   /  'key word no. 46:  "limit"       ----  ----  ----                                '  /
-   data texspy ( 487 )   /  '  this response  to  the  "spy:"  prompt  will produce a display of the limiting'  /
-   data texspy ( 488 )   /  '  EMTP table sizes  ----  the  "program limit"  list sizes which are seen at the'  /
-   data texspy ( 489 )   /  '  end of batch-mode EMTP printout,  in the case-summary statistics.             '  /
-   data texspy ( 490 )   /  'key word no. 47:  "iout"        ----  ----  ----                                '  /
-   data texspy ( 491 )   /  '  this response  to  the  "spy:"  prompt  will alter the EMTP printout frequency'  /
-   data texspy ( 492 )   /  '  according  to  the user"s latest desire.   the response will be instantaneous,'  /
-   data texspy ( 493 )   /  '  with  a  later  minor adjustment at the first round step number  (the next one'  /
-   data texspy ( 494 )   /  '  which  is  divisible  by  iout  with zero  remainder).   this command cancels'  /
-   data texspy ( 495 )   /  '  any  previous  batch-mode requests  for  modification  of the output frequency'  /
-   data texspy ( 496 )   /  '  (e.g., the special-request word  "change printout frequency").                '  /
-   data texspy ( 497 )   /  'key word no. 48:  "node"        ----  ----  ----                                '  /
-   data texspy ( 498 )   /  '  this response  to  the  "spy:"  prompt  will yield a question/answer loop with'  /
-   data texspy ( 499 )   /  '  input being a user-supplied 6-character bus name, and output (the spy display)'  /
-   data texspy ( 500 )   /  '  being the corresponding EMTP node number.   after any one node number has been'  /
-   data texspy ( 501 )   /  '  displayed,  the  user can send  "connect"  to obtain a list of all row numbers'  /
-   data texspy ( 502 )   /  '  of all connected branches/switches/nonlinear elements.                        '  /
-   data texspy ( 503 )   /  'key word no. 49:  "nonlin"      ----  ----  ----                                '  /
-   data texspy ( 504 )   /  '  this  response  to  the  "spy:"  prompt  is  issued  for a display of the EMTP'  /
-   data texspy ( 505 )   /  '  nonlinear element table.  subsequently  send an additional  "extra"  to change'  /
-   data texspy ( 506 )   /  '  to the next sub-table (as of february 1984, there are just two),  if different'  /
-   data texspy ( 507 )   /  '  columns are desired.  within any one sub-table,  there is a loop in which  the'  /
-   data texspy ( 508 )   /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
-   data texspy ( 509 )   /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
-   data texspy ( 510 )   /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage'  /
-   data texspy ( 511 )   /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
-   data texspy ( 512 )   /  '  and return to the  "spy:"  prompt.  to refresh the heading, use either  "nonl"'  /
-   data texspy ( 513 )   /  '  or  "head"  (only 4 characters of "nonlin" or "heading" are checked).         '  /
-   data texspy ( 514 )   /  'key word no. 50:  "space"       ----  ----  ----                                '  /
-   data texspy ( 515 )   /  '  this response to the  "spy:"  prompt begins dialogue which can rearrange      '  /
-   data texspy ( 516 )   /  '  storage of either data cards or plot data points.  such use is mandatory if   '  /
-   data texspy ( 517 )   /  '  no additional room for plot data remains (logic of "pltfil" will deny passage '  /
-   data texspy ( 518 )   /  '  until more storage has so been freed, in such a case).  the management of card'  /
-   data texspy ( 519 )   /  '  images will generally be performed only in conjunction with  "edit"  use, to  '  /
-   data texspy ( 520 )   /  '  modify EMTP data.  parameters related to these two storages will be displayed:'  /
-   data texspy ( 521 )   /  '     indbeg --- beginning location (index to /c29b01/) of plot data points;     '  /
-   data texspy ( 522 )   /  '     indbuf --- next free cell (index to /c29b01/) for storage of plot data;    '  /
-   data texspy ( 523 )   /  '     limbuf --- limit on indbuf (end of /c29b01/);                              '  /
-   data texspy ( 524 )   /  '     numdcd --- last card read by EMTP (index to character(8)0 file6 storage)    '  /
-   data texspy ( 525 )   /  '     numcrd --- largest index for card storage in file6 (as read by data);      '  /
-   data texspy ( 526 )   /  '     limcrd --- limiting index for file6 card storage (dimensioned limit).      '  /
-   data texspy ( 527 )   /  '  immediately after this display there will be a choice among the possible      '  /
-   data texspy ( 528 )   /  '  responses  "cards",  "plot",  and  "spy".  the third of these will abort      '  /
-   data texspy ( 529 )   /  '  the command, while the first two select between the two major classes of      '  /
-   data texspy ( 530 )   /  '  space management.    '  /
-   data texspy ( 531 )   /  '       (1) for the  "plot"  case,  the user must next choose among  "write",    '  /
-   data texspy ( 532 )   /  '  "thin",  "delete",  and  "read",  basically.   the first of these writes plot '  /
-   data texspy ( 533 )   /  '  points to disk just as a non-interactive program would, using i/o channel     '  /
-   data texspy ( 534 )   /  '  number lunit4.   the only change is that the time span  [tbeg, tend]  to be   '  /
-   data texspy ( 535 )   /  '  dumped,  as well as the frequency of the output (the effective iplot), are    '  /
-   data texspy ( 536 )   /  '  under interactive control (chosen by responses to subsequent prompts).  the   '  /
-   data texspy ( 537 )   /  '  "thin"  command discards points within the  [tbeg, tend]  window according to '  /
-   data texspy ( 538 )   /  '  a user-specified frequency.  the  "delete"  option destroys all points        '  /
-   data texspy ( 539 )   /  '  (the effective iplot is infinite) within the user-specified time range        '  /
-   data texspy ( 540 )   /  '  [tbeg,  tend].   the  "read"  option is the reverse of  "write",  allowing the'  /
-   data texspy ( 541 )   /  '  restoration of lunit4 disk-stored points to the working interactive memory.   '  /
-   data texspy ( 542 )   /  '  this is done with user-specified frequency within the time range [tbeg, tend].'  /
-   data texspy ( 543 )   /  '  finally, there is a hybrid command  "flush"  which combines  "write"  and     '  /
-   data texspy ( 544 )   /  '  "thin"  (assuming that the user wants to use a common multiplicity for both   '  /
-   data texspy ( 545 )   /  '  operations).  after compacting operations, there will be printout of available'  /
-   data texspy ( 546 )   /  '  free space.  the normal EMTP line printer output (i/o channel lunit6) will    '  /
-   data texspy ( 547 )   /  '  contain a record of the plot-file manipulations, to remind the user of what   '  /
-   data texspy ( 548 )   /  '  he has done.  an extra command is  "auto",  which gives an automatic, full    '  /
-   data texspy ( 549 )   /  '  "flush"  from that point onward.    '  /
-   data texspy ( 550 )   /  '       (2) for the  cards  branch, the user is prompted to choose among  "move",'  /
-   data texspy ( 551 )   /  '  "copy",  and  "blank".   the first of these is for block transfers (leaving   '  /
-   data texspy ( 552 )   /  '  blanks in vacated locations), while the second is for block reproductions     '  /
-   data texspy ( 553 )   /  '  (leaving the original locations unaltered).  the  "blank"  command is to      '  /
-   data texspy ( 554 )   /  '  erase a block of cards.  in all three cases, beginning locations and total    '  /
-   data texspy ( 555 )   /  '  number of cards processed are used to define the blocks involved.             '  /
-   data texspy ( 556 )   /  '       many sub-commands of the large "space"  command allow the abort option  '  /
-   data texspy ( 557 )   /  '  "spy" (to return to the  "spy:"  prompt), or the option of backing up one     '  /
-   data texspy ( 558 )   /  '  level (via  "out").    '  /
-   data texspy ( 559 )   /  'key word no. 51:  "lunit4"      ----  ----  ----                                '  /
-   data texspy ( 560 )   /  '  issue  this  command  to  connect  (fortran open), disconnect (fortran close),'  /
-   data texspy ( 561 )   /  '  position,  or  inspect  the  contents of  the disk file of plot data which is'  /
-   data texspy ( 562 )   /  '  connected  to  i/o unit number  lunit4.   recall that a disk file can be given'  /
-   data texspy ( 563 )   /  '  solution  points  via  the  "disk"  or  "flush"  subcommands  of  the  "space"'  /
-   data texspy ( 564 )   /  '  command.  subcommand choices are as follows: "open",  "close",  "top",  "bot",'  /
-   data texspy ( 565 )   /  '  "next",  "back",  and  "time".   in order,  these shall now                   '  /
-   data texspy ( 566 )   /  '  be summarized:    '  /
-   data texspy ( 567 )   /  '       open -- subsequent prompts will allow for a user-supplied file name      '  /
-   data texspy ( 568 )   /  '               (not to exceed 32 characters), and the  "status"  choice         '  /
-   data texspy ( 569 )   /  '               between  "new"  and  "old"  (vacuous or pre-defined files).      '  /
-   data texspy ( 570 )   /  '       close -- there are no parameters; the distinction between  "keep"        '  /
-   data texspy ( 571 )   /  '                and  "delete"  is implicit (all opened files should be saved).  '  /
-   data texspy ( 572 )   /  '       top  --- to position the lunit4 disk file ready to read the beginning    '  /
-   data texspy ( 573 )   /  '                plot data (for smallest time);                                  '  /
-   data texspy ( 574 )   /  '       bot  --- to position the lunit4 disk file after reading the final plot   '  /
-   data texspy ( 575 )   /  '                data (there is a read until an end-of-file).  certain computers '  /
-   data texspy ( 576 )   /  '                (e.g., vax) allow writeing at this point, so old plot files can '  /
-   data texspy ( 577 )   /  '                be directly added to after such an initial positioning.         '  /
-   data texspy ( 578 )   /  '       next --- to read and display the plot points of the next time instant.   '  /
-   data texspy ( 579 )   /  '                this forward read is fast for all known computers.              '  /
-   data texspy ( 580 )   /  '       back --- to read and display plot points of the preceding time step.     '  /
-   data texspy ( 581 )   /  '                since this uses backspace, be aware that for some computers     '  /
-   data texspy ( 582 )   /  '                (prime, apollo, etc.), this command is internally converted to  '  /
-   data texspy ( 583 )   /  '                a  "top"  and  "time" command which backs up two steps.        '  /
-   data texspy ( 584 )   /  '       time --- to position the lunit4 plot file immediately after having read  '  /
-   data texspy ( 585 )   /  '                points for the first step at or beyond the user-specified time; '  /
-   data texspy ( 586 )   /  'key word no. 52:  "series"      ----  ----  ----                                '  /
-   data texspy ( 587 )   /  '  issue this command in order to modify the values of series R-L-C branches     '  /
-   data texspy ( 588 )   /  '  within the time-step loop.  such usage requires one unused row of both the    '  /
-   data texspy ( 589 )   /  '  branch table (list 2) and the branch-parameter table (list 7) for each series '  /
-   data texspy ( 590 )   /  '  R-L-C branch of interest.  the  "series"  command is coupled to the  "ramp"   '  /
-   data texspy ( 591 )   /  '  command in that  "series"  must be used to select the branches of interest    '  /
-   data texspy ( 592 )   /  '  or potential interest ahead of time, while it is  "ramp"  that actually varies'  /
-   data texspy ( 593 )   /  '  them when the time comes.  this would be for continuous variation (ramping),  '  /
-   data texspy ( 594 )   /  '  which is the most common case of interest.  for step changes (single-time     '  /
-   data texspy ( 595 )   /  '  occurances),  "ramp"  is not used.  in either case,  actual changes to [y]    '  /
-   data texspy ( 596 )   /  '  occur just prior to factoring of [y] in  "subts1"  of overlay 16.  previously,'  /
-   data texspy ( 597 )   /  '  the user must issue a spy call for  "series"  ----   at any point prior to    '  /
-   data texspy ( 598 )   /  '  overlay 12.  this is remembered, so that the EMTP will later automatically    '  /
-   data texspy ( 599 )   /  '  break in the middle of  "over12"  with a message that this is the time to     '  /
-   data texspy ( 600 )   /  '  define the table of series R-L-C branches which might later be tampered with. '  /
-   data texspy ( 601 )   /  '  at the automatic break in  "over12", the user chooses among the commands     '  /
-   data texspy ( 602 )   /  '  "show",  "extra",  "change",  "step", "rewind",  and  "spy".   "show"  will  '  /
-   data texspy ( 603 )   /  '  display the table of series R-L-C branches which have thus far been considered'  /
-   data texspy ( 604 )   /  '  for possible later change,  with  "extra"  yielding an extension to the       '  /
-   data texspy ( 605 )   /  '  display (a second table,  giving starting and next values).   "change"  is the'  /
-   data texspy ( 606 )   /  '  gateway to various further choices  ("data",  "move",  "blank",  "use",       '  /
-   data texspy ( 607 )   /  '  "value",  "end",  and  "spy")  for the definition and manipulation of the     '  /
-   data texspy ( 608 )   /  '  table of  "show".   quickly summarizing these,  "data"  is used to copy series'  /
-   data texspy ( 609 )   /  '  R-L-C branches into the tamper table, while  "move"  will copy from one row of'  /
-   data texspy ( 610 )   /  '  the tamper table to another, and  "blank"  will erase any such row.   "use"   '  /
-   data texspy ( 611 )   /  '  allows the user to toggle the activity status of any entry in the tamper      '  /
-   data texspy ( 612 )   /  '  table,  while  "value"  allows modification of R-L-C parameters in case this  '  /
-   data texspy ( 613 )   /  '  is to be done discontinuously.   "end"  moves outward, back to the preceding  '  /
-   data texspy ( 614 )   /  '  prompt,  while  "spy"  aborts  "show" and returns to the  "spy:"  prompt.    '  /
-   data texspy ( 615 )   /  '  this completes  "change"  usage.   next is  "step",  which is the command for '  /
-   data texspy ( 616 )   /  '  a manual, discontinuous change at the next available opportunity (within one  '  /
-   data texspy ( 617 )   /  '  time step).   "rewind"  will erase the tamper table completely, so it is only '  /
-   data texspy ( 618 )   /  '  recommended if the existing table is unsalvageable.   for details of the      '  /
-   data texspy ( 619 )   /  '  behind the ramping of series R-L-C elements, see vladimir"s article in the    '  /
-   data texspy ( 620 )   /  '  EMTP newsletter, vol. 4, no. 2, november, 1983.                               '  /
-   data texspy ( 621 )   /  'key word no. 53:  "lock"        ----  ----  ----                                '  /
-   data texspy ( 622 )   /  '  issue this command to disable time-sharing between  spy  and the ongoing EMTP '  /
-   data texspy ( 623 )   /  '  simulation.  subsequent cancellation of the command is by  "go".   since this '  /
-   data texspy ( 624 )   /  '  command is absolute, it can be repeated any number of times.   besides this   '  /
-   data texspy ( 625 )   /  '  user-defined  "lock"  command,  there are hidden, internal ones, such as the  '  /
-   data texspy ( 626 )   /  '  one by module  "pltfil"  when plot data space has been exhausted.  but a word '  /
-   data texspy ( 627 )   /  '  of caution:  all of this talk about time-sharing has meaning only for those   '  /
-   data texspy ( 628 )   /  '  computers which allow time-sharing (with type-ahead that is not erased by the '  /
-   data texspy ( 629 )   /  '  user-keyed interrupt).    '  /
-   data texspy ( 630 )   /  'key word no. 54:  "[y]"         ----  ----  ----                                '  /
-   data texspy ( 631 )   /  '  issue this command to display one or more rows of the nodal admittance matrix '  /
-   data texspy ( 632 )   /  '  [y] of the time-step loop.   a subsequent prompt will request the desired row,'  /
-   data texspy ( 633 )   /  '  which may either be specified by bus name (assumed to begin with a letter), or'  /
-   data texspy ( 634 )   /  '  by a node number.  alternate responses are  "spy"  or  "end"  (to return to   '  /
-   data texspy ( 635 )   /  '  the  "spy:"  prompt),  "top"  (to display the row for node 2),  "bot"  (to    '  /
-   data texspy ( 636 )   /  '  display the row for node  kpartb),  and  "next"  or  nothing  (to display the '  /
-   data texspy ( 637 )   /  '  following row).   each nonzero term of the row will be displayed,  next to    '  /
-   data texspy ( 638 )   /  '  the associated column number.   a minus sign applied to the column number is  '  /
-   data texspy ( 639 )   /  '  used to mark the largest column of the row.   in case separate  "examine"     '  /
-   data texspy ( 640 )   /  '  usage might be contemplated,  kks  points to the  (km, ykm)  pairs.           '  /
-   data texspy ( 641 )   /  'key word no. 55:  "[f]"         ----  ----  ----                                '  /
-   data texspy ( 642 )   /  '  issue this command to display one or more rows of the table of factors (the   '  /
-   data texspy ( 643 )   /  '  triangularized [y] of the time-step loop).   display options are generally    '  /
-   data texspy ( 644 )   /  '  identical to the immediately-preceding  "[y]"  command,  except that here     '  /
-   data texspy ( 645 )   /  '  only the upper triangle exists,  a minus sign marks the diagonal entry,  and  '  /
-   data texspy ( 646 )   /  '  kk  is the pointer (which can be observed  via the  "bus"  command).          '  /
-   data texspy ( 647 )   /  'key word no. 55:  "noroll"      ----  ----  ----                                '  /
-   data texspy ( 648 )   /  '  use this command to cancel  rolling character and/or vector plots.   these   '  /
-   data texspy ( 649 )   /  '  began,  it should be recalled,  via "rollc"  and/or  "rollv"  commands       '  /
-   data texspy ( 650 )   /  '  (independent of each other, and also independent of the "tek" setting) at the '  /
-   data texspy ( 651 )   /  '  "inner:"  level of plotting.   the user-keyed interrupt will by itself stop   '  /
-   data texspy ( 652 )   /  '  the rolling only if control is within "chrplt"  or  "tekplt"  plotting       '  /
-   data texspy ( 653 )   /  '  modules when it is spotted.  otherwise, this added manual request is needed.  '  /
-   data texspy ( 654 )   /  '  the only alternative would be to go back into the  "inner:"  level of         '  /
-   data texspy ( 655 )   /  '  plotting to toggle the appropriate switch (via  "rollc"  and/or  "rollv"      '  /
-   data texspy ( 656 )   /  '  requests).    '  /
-   data texspy ( 657 )   /  'key word no. 57:  "open"        ----  ----  ----                                '  /
-   data texspy ( 658 )   /  '  issue this command to  open  a formatted disk file.  a loop will be entered in'  /
-   data texspy ( 659 )   /  '  which there will be a prompt for the next i/o unit number, and the disk       '  /
-   data texspy ( 660 )   /  '  file which is to be connected thereto.  to exit the loop, send a blank line.  '  /
-   data texspy ( 661 )   /  'key word no. 58:  "close"       ----  ----  ----                                '  /
-   data texspy ( 662 )   /  '  issue this command to  close  a disk file.  a loop will be entered in         '  /
-   data texspy ( 663 )   /  '  which there will be a prompt for the next i/o unit number, and the  status    '  /
-   data texspy ( 664 )   /  '  (either  keep  or  delete  are ok). to exit the loop, send a blank line.     '  /
-   data texspy ( 665 )   /  'key word no. 59:  "sm"          ----  ----  ----                                '  /
-   data texspy ( 666 )   /  '  issue this command to display the various electrical, mechanical, and solution'  /
-   data texspy ( 667 )   /  '  parameters of any type-59 synchronous machine (s.m.).  time-sharing by spy    '  /
-   data texspy ( 668 )   /  '  is automatically suspended during this display, due to algorithmic limitations'  /
-   data texspy ( 669 )   /  '  of the type-59 model (examination is only possible as that machine is being   '  /
-   data texspy ( 670 )   /  '  processed within subroutine update, which is called by "subts1" (the first    '  /
-   data texspy ( 671 )   /  '  piece of the time-step loop.  the user can issue the  "sm"  request at any    '  /
-   data texspy ( 672 )   /  '  time, but in fact the EMTP simulation will stop within the processing loop of '  /
-   data texspy ( 673 )   /  '  "update", and allow the user to accept or reject (y or n responses) each      '  /
-   data texspy ( 674 )   /  '  machine in turn.  actually, only  "n" vetos the opportunity (a simple <cr>   '  /
-   data texspy ( 675 )   /  '  will accept the next machine).  once considering any one type-59 s.m., there  '  /
-   data texspy ( 676 )   /  '  are subsequent choices as to which parameters the user wants to see:  "elec"  '  /
-   data texspy ( 677 )   /  '  for electrical parameters,  "mech"  for mechanical parameters, etc.           '  /
-   data texspy ( 678 )   /  '  ?????????   as of 26 feb 84, command is not complete   ?????????????????????  '  /
-   data texspy ( 679 )   /  'key word no. 60:  "honk"        ----  ----  ----                                '  /
-   data texspy ( 680 )   /  '  issue this command to ring the terminal bell (i.e., honk its horn).  there    '  /
-   data texspy ( 681 )   /  '  will then be a prompt for an integer severity level, which should be between  '  /
-   data texspy ( 682 )   /  '  one and ten (zero produces no response, while 10 indicates a disaster).       '  /
-   data texspy ( 683 )   /  'key word no. 61:  "choice"      ----  ----  ----                                '  /
-   data texspy ( 684 )   /  '  issue this command to see output variable names of any of the five classes    '  /
-   data texspy ( 685 )   /  '  making up the EMTP output vector (1=node voltages,  2=branch voltages,  etc.).'  /
-   data texspy ( 686 )   /  '  order of the five classes corresponds to the order of concatenation in the    '  /
-   data texspy ( 687 )   /  '  EMTP output vector;  and within each class, the order corresponds, too.  the  '  /
-   data texspy ( 688 )   /  '  display is dynamic,  so it always reflects the current output variables       '  /
-   data texspy ( 689 )   /  '  (unlike  "choice"  at the  "middle:" level of plotting,  which only displays '  /
-   data texspy ( 690 )   /  '  the original status of overlay 15). '  /
-   data texspy ( 691 )   /  'key word no. 62:  "tacs"        ----  ----  ----                                '  /
-   data texspy ( 692 )   /  '  issue this command as the gateway to concurrent sequential processing (csp),  '  /
-   data texspy ( 693 )   /  '  which is based on special, spy-defined tacs supplemental variable usage.  then'  /
-   data texspy ( 694 )   /  '  one enters a loop over csp control commands.   if  "rewind"  is requested,    '  /
-   data texspy ( 695 )   /  '  all previous definitions are erased, so definitions begin from level zero.  if'  /
-   data texspy ( 696 )   /  '  "source"  is sent,  all following input is assumed to be tacs source cards,   '  /
-   data texspy ( 697 )   /  '  until terminated by an  "end"  card. if  "supplemental"  is sent,  then all '  /
-   data texspy ( 698 )   /  '  following data cards (spy input) is assumed to be tacs supplemental variable/ '  /
-   data texspy ( 699 )   /  '  device data cards,  also until an  "end"  card is encountered.  the subcommand'  /
-   data texspy ( 700 )   /  '  "patch"  allows the user to connect any variables to his tacs sources  (to    '  /
-   data texspy ( 701 )   /  '  define the inputs),  and apply any supplemental variable results anywhere.    '  /
-   data texspy ( 702 )   /  '  the "any" comes from the use of a memory address of the spy commands  "list"  '  /
-   data texspy ( 703 )   /  '  or  "find",  just as  "examine"  or "deposit"  are quite unrestricted.  there'  /
-   data texspy ( 704 )   /  '  will be separate prompts for all such tacs input and output connections.  when'  /
-   data texspy ( 705 )   /  '  all such connections are complete,  "show"  can be used to display a summary  '  /
-   data texspy ( 706 )   /  '  table of all tacs csp input/output connections.   working room for such usage '  /
-   data texspy ( 707 )   /  '  can be controlled by the user in several ways, if there are shortages.  first,'  /
-   data texspy ( 708 )   /  '  if a user wants dummy output channels for printing/plotting, reserve dummy    '  /
-   data texspy ( 709 )   /  '  node voltage outputs with  "chan01" punched in cols. 3-8, and the desired    '  /
-   data texspy ( 710 )   /  '  number punched in columns 9-16 with i8format.   resultant names will be      '  /
-   data texspy ( 711 )   /  '  serialized from the aforementioned root, and added to the output vector at the'  /
-   data texspy ( 712 )   /  '  point of definition (if this card is first, all such dummy names will come    '  /
-   data texspy ( 713 )   /  '  first, before other node voltages). second, there is array dimensioning for  '  /
-   data texspy ( 714 )   /  '  all vectors of the  "choice"  table ---  presently fixed in deck "dekspy", at'  /
-   data texspy ( 715 )   /  '  the moment.  finally, in addition to the familiar tacs table limits, there is '  /
-   data texspy ( 716 )   /  '  an automatic reservation of space for all user-defined tacs csp sources.  this'  /
-   data texspy ( 717 )   /  '  is maximized automatically, within existing tacs dimensions (as assigned by   '  /
-   data texspy ( 718 )   /  '  absolute tacs dimensions, for example).  as usual,  "spy"  will break out of  '  /
-   data texspy ( 719 )   /  '  any loop, in case an abortion is desired.                                     '  /
-   data texspy ( 720 )   /  'key word no. 63:  "wait"        ----  ----  ----                                '  /
-   data texspy ( 721 )   /  '  the response to this spy command will be a prompt for the desired delay       '  /
-   data texspy ( 722 )   /  '  (hibernation) time in seconds.  once this is accepted, the installation-      '  /
-   data texspy ( 723 )   /  '  dependent subroutine tdelay  is called, to return control only after the      '  /
-   data texspy ( 724 )   /  '  requested nap.    '  /
-   data texspy ( 725 )   /  'key word no. 64:  "v-i""        ----  ----  ----                                '  /
-   data texspy ( 726 )   /  '  this spy command is used to examine the list-10 characteristics of all        '  /
-   data texspy ( 727 )   /  '  nonlinear and pseudo-nonlinear elements.  the name  "v-i"  is symbolic        '  /
-   data texspy ( 728 )   /  '  only, since flux-current or resistance-time characteristics are also          '  /
-   data texspy ( 729 )   /  '  included.  immediately upon entry, there will be a display of the number      '  /
-   data texspy ( 730 )   /  '  of nonlinear elements (list 9) and data points of the characteristics         '  /
-   data texspy ( 731 )   /  '  (list 10).  also shown will be a listof options to a pair of free-format     '  /
-   data texspy ( 732 )   /  '  row numbers:    '  /
-   data texspy ( 733 )   /  '     next or <cr>  ---- to display the characteristic of the next element       '  /
-   data texspy ( 734 )   /  '                        of the nonlinear element table.  there is wrap around   '  /
-   data texspy ( 735 )   /  '                        from beginning to end.  no initialization required.     '  /
-   data texspy ( 736 )   /  '     last  ---- to display the characteristic of the preceding element of       '  /
-   data texspy ( 737 )   /  '                the nonlinear element table.  there is wrap around from the     '  /
-   data texspy ( 738 )   /  '                beginning to the end. no initialization is required.           '  /
-   data texspy ( 739 )   /  '     all  --- to display all rows of the list 10 characteristics.               '  /
-   data texspy ( 740 )   /  '     spy, end, or stop ---- to abort display loop, and return to  "spy:"        '  /
-   data texspy ( 741 )   /  '     mode  ---- to toggle the binary switch which selects between a display     '  /
-   data texspy ( 742 )   /  '                by elements (value n8=0), and a display by rows of list 10.     '  /
-   data texspy ( 743 )   /  '                initially, the display by elements, only one at a time, is      '  /
-   data texspy ( 744 )   /  '                assumed.    '  /
-   data texspy ( 745 )   /  '  in case the use inputs a pair of numbers instead of one of these key          '  /
-   data texspy ( 746 )   /  '  words, then the response depends on mode.   for the display by elements,     '  /
-   data texspy ( 747 )   /  '  the first list-9 entry with a characteristic contained within the range       '  /
-   data texspy ( 748 )   /  '  [n1, n2]  is identified, and displayed (where n1 and n2 are the ordered       '  /
-   data texspy ( 749 )   /  '  pair of free-format numbers which the user has inputted.  on the other hand,  '  /
-   data texspy ( 750 )   /  '  with  mode  toggled for the absolute, unlimited display of list 10 rows,      '  /
-   data texspy ( 751 )   /  '  then these rows (within limits of availability) are displayed.                '  /
-   data texspy ( 752 )   /  '  the following plot commands are honored at all three levels (either  "outer:",'  /
-   data texspy ( 753 )   /  '  "middle",  or  "inner:")  of plot dialogue:                                   '  /
-   data texspy ( 754 )   /  '  stop  ---  to abort  "plot"  activity,  and return to the  "spy:"  prompt.    '  /
-   data texspy ( 755 )   /  '  spy   ---  to abort  "plot"  activity,  and return to the  "spy:"  prompt.    '  /
-   data texspy ( 756 )   /  '  in   ----  to transfer one level inward  (either from  "outer"  to  "middle:" '  /
-   data texspy ( 757 )   /  '             or from  "middle"  to  "inner")  in the plot dialogue.             '  /
-   data texspy ( 758 )   /  '  help  ---  to produce the display now being viewed.  if unqualified, messages '  /
-   data texspy ( 759 )   /  '             will be restricted to the level of current operation.  but one     '  /
-   data texspy ( 760 )   /  '             blank and then a qualifier ("all", "outer", "middle", or "inner")  '  /
-   data texspy ( 761 )   /  '             provide the opportunity to see messages of other levels, too.      '  /
-   data texspy ( 762 )   /  '  debug  --  to alter the level of diagnostic printout.  if none is now being   '  /
-   data texspy ( 763 )   /  '             used, this command will turn it on.  in fact, the control is       '  /
-   data texspy ( 764 )   /  '             identical to that used in response to the  "spy:"  prompt (iprspy).'  /
-   data texspy ( 765 )   /  '               < < <  =======   end of any-level  commands   =======  > > >     '  /
-   data texspy ( 766 )   /  '  set data -- to over-ride default data values with user-established choices.   '  /
-   data texspy ( 767 )   /  '              the associated user-defined data file must be pre-stored on disk, '  /
-   data texspy ( 768 )   /  '              and must have the file name  "tpparam.dat".                       '  /
-   data texspy ( 769 )   /  '  tek  ---- to toggle the switch which chooses between character plotting and   '  /
-   data texspy ( 770 )   /  '            vector-graphic (e.g., tektronix) plotting.  the default may be      '  /
-   data texspy ( 771 )   /  '            computer dependent, or come from  "set data"  usage.                '  /
-   data texspy ( 772 )   /  '  column -- to toggle the switch that chooses between 80 and 132-column widths  '  /
-   data texspy ( 773 )   /  '            for character plotting.    '  /
-   data texspy ( 774 )   /  '  set column -- to set character plot widths to any value.  but if either 80 or '  /
-   data texspy ( 775 )   /  '                132 is desired (common choices), use the simpler  "column".     '  /
-   data texspy ( 776 )   /  '               < < <  =======   end of outer-level  commands   =======  > > >   '  /
-   data texspy ( 777 )   /  '  timespan -- to be shown the time range  [t-min, t-max]  of the plot data.     '  /
-   data texspy ( 778 )   /  '  choice -- to produce a tabulation of plotable EMTP variables.   but be very   '  /
-   data texspy ( 779 )   /  '            careful, since the resultant tabulation corresponds to the status   '  /
-   data texspy ( 780 )   /  '            before the time-step loop was entered.  for a dynamic tabulation,   '  /
-   data texspy ( 781 )   /  '            use  "choice"  in response to the  "spy:"  prompt.                  '  /
-   data texspy ( 782 )   /  '  time units -- to specify the integer which characterizes the time units used  '  /
-   data texspy ( 783 )   /  '                in the plotting.  this is just as with batch-mode EMTP plotting,'  /
-   data texspy ( 784 )   /  '                where:  "1"  -- for degrees based on the power frequency;       '  /
-   data texspy ( 785 )   /  '                        "2"  -- for cycles  based on the power frequency;       '  /
-   data texspy ( 786 )   /  '                        "3,4,5"  -- for seconds, milliseconds, and microseconds '  /
-   data texspy ( 787 )   /  '                        "6,7" -- for  "frequency scan"  data cases, using either'  /
-   data texspy ( 788 )   /  '                                 hz or the log to base 10 of hz,  rather than t.'  /
-   data texspy ( 789 )   /  '  x   ----- any garbage character (including blank) represents a request for the'  /
-   data texspy ( 790 )   /  '            program to begin the interrogation for plot variables and labeling. '  /
-   data texspy ( 791 )   /  '            hereafter, in response to the different prompts, several special    '  /
-   data texspy ( 792 )   /  '            key words are applicable (immediately below).  upon the completion  '  /
-   data texspy ( 793 )   /  '            of all such information, there is an automatic transfer to the      '  /
-   data texspy ( 794 )   /  '            "inner:"  level of program dialogue.  but first, options are:       '  /
-   data texspy ( 795 )   /  '    repeat >> to reuse all former plot labels, send  "repeat"  when first asked '  /
-   data texspy ( 796 )   /  '              for label information (which begins with the super title).  for   '  /
-   data texspy ( 797 )   /  '              the first plot, "former labels" are all blank (initialization).   '  /
-   data texspy ( 798 )   /  '    back >>>> to abort input of plot variables, and return to "middle:" prompt. '  /
-   data texspy ( 799 )   /  '    end  >>>> to terminate all indeterminate inputs.  included are the three    '  /
-   data texspy ( 800 )   /  '              classes of plot variables, and lines of case-title text.          '  /
-   data texspy ( 801 )   /  '    last >>>> to terminate all plot-variable input, and begin specifying labels.'  /
-   data texspy ( 802 )   /  '    blank >>> sending nothing (just a carriage return) will usually reuse the   '  /
-   data texspy ( 803 )   /  '              old datum (e.g., node name, or line of case-title text).  old data'  /
-   data texspy ( 804 )   /  '              are usually displayed within parentheses for this reason.         '  /
-   data texspy ( 805 )   /  '    flush >>> to rewind the pointer which counts the lines of case-title text.  '  /
-   data texspy ( 806 )   /  '              the text then remains, to be accepted or overwritten line by line.'  /
-   data texspy ( 807 )   /  '    playback> to display the entire present case title.  this command is legal  '  /
-   data texspy ( 808 )   /  '              at any point before the "end"  which freezes the case title.     '  /
-   data texspy ( 809 )   /  '  label  -- to skip around the plot-variable specification (see "x" above), and '  /
-   data texspy ( 810 )   /  '            begin the input of plot labels.  plot variables remain unchanged.   '  /
-   data texspy ( 811 )   /  '               < < <  =======   end of middle-level  commands   =======  > > >  '  /
-   data texspy ( 812 )   /  '  extrema -- to toggle the switch that decides whether or not variable extrema  '  /
-   data texspy ( 813 )   /  '             of subsequent plots are to be displayed.  such output precedes the '  /
-   data texspy ( 814 )   /  '             associated plot (as does that of  "level"  below).  the program    '  /
-   data texspy ( 815 )   /  '             then pauses before drawing the graph, waiting for the user to send '  /
-   data texspy ( 816 )   /  '             a blank.  if the user wants to skip the plot and return to the     '  /
-   data texspy ( 817 )   /  '             "middle:"  level of dialogue, send  "no plot".                     '  /
-   data texspy ( 818 )   /  '  level -- to toggle the switch that decides whether or not level-triggers for  '  /
-   data texspy ( 819 )   /  '           variables are to be activated.  if such triggers are being turned on,'  /
-   data texspy ( 820 )   /  '           the program will next request a level vector.  the response is using '  /
-   data texspy ( 821 )   /  '           free-format.  the same pause exists as with  "extrema".              '  /
-   data texspy ( 822 )   /  '  smooth -- to change the tolerance which is used to discard plot points.       '  /
-   data texspy ( 823 )   /  '  size   -- to change the length of the time axis of character plots.           '  /
-   data texspy ( 824 )   /  '  show   -- to display the current values of many important plot parameters.    '  /
-   data texspy ( 825 )   /  '  factor -- to specify a new vector of multiplicative scaling factors for plot  '  /
-   data texspy ( 826 )   /  '            variables (the "a" of  z = a*y + b ).   zero is taken to mean unity,'  /
-   data texspy ( 827 )   /  '            and free-format is used. '  /
-   data texspy ( 828 )   /  '  offset -- like  "factor",  only to specify the vector of constants  "b".      '  /
-   data texspy ( 829 )   /  '  rescale-- to return to natural scaling (i.e.,  a=1.0 ,  b=0.0 ) for all plot  '  /
-   data texspy ( 830 )   /  '            variables.  this is used to erase previous  "factor"  or  "offset". '  /
-   data texspy ( 831 )   /  '  limits -- to specify new minimum and maximum values for the vertical axis of  '  /
-   data texspy ( 832 )   /  '            plots.  send  "0,0"  to cancel previous manually-specified limits,  '  /
-   data texspy ( 833 )   /  '            and return to the automatic scaling of the computer.                '  /
-   data texspy ( 834 )   /  '  average-- to change the limit on the number of consecutive oscillations after '  /
-   data texspy ( 835 )   /  '            which the averaging of successive ordinates is to be instituted.    '  /
-   data texspy ( 836 )   /  '  time   -- to specify time-axis limits t-min  and  t-max  of the plot.  this  '  /
-   data texspy ( 837 )   /  '            must be done at least once, for the first plot, unless  "timespan"  '  /
-   data texspy ( 838 )   /  '            was issued at the  "middle:"  level (resulting in full time range). '  /
-   data texspy ( 839 )   /  '  all time--this is a request for a plot over the full time range of the data.  '  /
-   data texspy ( 840 )   /  '            it functions correctly only if  "timespan"  was previously used at  '  /
-   data texspy ( 841 )   /  '            the  "middle:"  level. '  /
-   data texspy ( 842 )   /  '  blank  -- a blank (just a <cr>) is interpreted as a request for a plot using  '  /
-   data texspy ( 843 )   /  '            time-axis scaling as for the preceding plot (or the full range, if  '  /
-   data texspy ( 844 )   /  '            no previous plots existed, but  "timespan"  was ordered).           '  /
-   data texspy ( 845 )   /  '  cursor -- to toggle the switch that indicates whether or not cursor input is  '  /
-   data texspy ( 846 )   /  '            expected after the next vector plot.  when the cursor is switched to'  /
-   data texspy ( 847 )   /  '            "on",  following the plot there will be keyboard input following the'  /
-   data texspy ( 848 )   /  '            positioning of the cursor: '  /
-   data texspy ( 849 )   /  '     p  >>>>> to mark another cursor point (wherever the cursor is sitting)     '  /
-   data texspy ( 850 )   /  '     e  >>>>> to terminate such marking input (end of cursor use, actually).    '  /
-   data texspy ( 851 )   /  '     show >>> to produce a tabulation of all cursor points (previous "p" usage).'  /
-   data texspy ( 852 )   /  '     slope >> to produce  dx,  dy,  f, and  dy/dx  of any pair of points that  '  /
-   data texspy ( 853 )   /  '              the user is interested in.  after the last such  (m,k)  pair of   '  /
-   data texspy ( 854 )   /  '              point numbers which are of interest,  send  "0,0"  to terminate.  '  /
-   data texspy ( 855 )   /  '     end  >>> to terminate all cursor displays, and return to  "inner:"  prompt.'  /
-   data texspy ( 856 )   /  '  x-y plot--to toggle the switch which chooses between regular plotting as a    '  /
-   data texspy ( 857 )   /  '            function of time (the default), and x-y plotting.                   '  /
-   data texspy ( 858 )   /  '  rollv  -- to toggle the switch which produces a  rolling  vector plot.   it is'  /
-   data texspy ( 859 )   /  '            normal to turn on such rolling after the basic plot is in place, and'  /
-   data texspy ( 860 )   /  '            the axis scaling is judged to be appropriate.  then, after  "rollv",'  /
-   data texspy ( 861 )   /  '            the user will normally send "spy"  to return to the  "spy:"  prompt'  /
-   data texspy ( 862 )   /  '            (from which  "go"  will be required to actually make the plot  roll,'  /
-   data texspy ( 863 )   /  '            if  "break"  or  "lock"  were in effect at that point).   should the'  /
-   data texspy ( 864 )   /  '            user wish to cancel a rolling vector plot from spy, send  "noroll"  '  /
-   data texspy ( 865 )   /  '            (which will stop both  rolling  vector and character plots).        '  /
-   data texspy ( 866 )   /  '  rollc  -- to toggle the switch which produces a  rolling  character plot.  see'  /
-   data texspy ( 867 )   /  '            preceding  "rollv"  for details (functioning is comparable).        '  /
-   data texspy ( 868 )   /  '               < < <  =======   end of inner-level  commands   =======  > > >   '  /
+   data texspy (   1 )  /  'key word no.  1:  "heading"     ----  ----  ----                                '  /
+   data texspy (   2 )  /  '  response will be the printing of the previously-defined heading of  "examine",'  /
+   data texspy (   3 )  /  '  followed by current values of all variables (as for the 1st  "examine"  use). '  /
+   data texspy (   4 )  /  'key word no.  2:  "stop"        ----  ----  ----                                '  /
+   data texspy (   5 )  /  '  this command will terminate interactive EMP execution immediately,  by  means '  /
+   data texspy (   6 )  /  '  of a fortran "stop" statement.  There will be no automatic saving  of  tables,'  /
+   data texspy (   7 )  /  '  or  of plot data points before such a termination  (use prior  "sleep"  and/or'  /
+   data texspy (   8 )  /  '  "lunit4"  commands, if such preservation is desired).                         '  /
+   data texspy (   9 )  /  'key word no.  3:  "plot"        ----  ----  ----                                '  /
+   data texspy (  10 )  /  '  issue this command to transfer control to the  "outer:"  prompt of interactive'  /
+   data texspy (  11 )  /  '  emtp plotting (the former separate EMTP crt plotting program  "tpplot").   due'  /
+   data texspy (  12 )  /  '  to the absorbtion into spy,  several changes have been made.  first,  no plot-'  /
+   data texspy (  13 )  /  '  file specification is required of the user  (he should subsequently send  "go"'  /
+   data texspy (  14 )  /  '  if no other outer-level response is desired).   at the  "middle:"  level,  the'  /
+   data texspy (  15 )  /  '  "timespan"  computation is now automatically performed,  internally.   at  any'  /
+   data texspy (  16 )  /  '  level,  "stop"  no longer terminates program execution, but instead it returns'  /
+   data texspy (  17 )  /  '  control to the  "spy:"  prompt.   continuous,  automatic plotting  of  the on-'  /
+   data texspy (  18 )  /  '  going solution  (like a strip-chart) is  based  on the use of either  "rollc" '  /
+   data texspy (  19 )  /  '  (for character plotting)  or  "rollv" (for vector plotting)  as  commands  at '  /
+   data texspy (  20 )  /  '  the  "inner:"  level.   for  a  detailed explanation of all  "plot"  commands,'  /
+   data texspy (  21 )  /  '  send  "help"  at any of the three levels within  "plot".                      '  /
+   data texspy (  22 )  /  'key word no.  4:  "help"        ----  ----  ----                                '  /
+   data texspy (  23 )  /  '  education for the ignorant, such as the user is now being subjected to (joke).'  /
+   data texspy (  24 )  /  '  a  carriage return  <cr>  will  produce text for the next key word  in  order,'  /
+   data texspy (  25 )  /  '  while  a  return  to the  "spy:"  prompt is accomplished by  "spy", or  "end".'  /
+   data texspy (  26 )  /  '  "all"  will loop over  all  explanations  (subject  to  user-keyed interrupt).'  /
+   data texspy (  27 )  /  '  sending  "top"  will rewind to the first message, while  "bot"  will give the '  /
+   data texspy (  28 )  /  '  last.   use  "back"  to back up one message.                                  '  /
+   data texspy (  29 )  /  'key word no.  5:  "examine"     ----  ----  ----                                '  /
+   data texspy (  30 )  /  '  issue this command  to  examine the contents of any EMTP common variables  (of'  /
+   data texspy (  31 )  /  '  solution overlays).   integer  scalars require 6 columns;  all other variables'  /
+   data texspy (  32 )  /  '  require 15.   subsequent prompts willallow  the  user  to specify scalars and '  /
+   data texspy (  33 )  /  '  vector ranges (e.g.,  "kbus(3:8)"  for  cells  3  through  8 of kbus).   "end"'  /
+   data texspy (  34 )  /  '  terminates the list,  resulting  in adisplay of heading and numerical values. '  /
+   data texspy (  35 )  /  '  any later striking of the  "return" key  will  then display current numerical '  /
+   data texspy (  36 )  /  '  values only.   send  "heading"  for a  refresh of the variable names.  for  a '  /
+   data texspy (  37 )  /  '  rolling display,  send  "roll"  (also,  see  separate  instructions  for  this'  /
+   data texspy (  38 )  /  '  command).  for  rolling, the  output vector  is  re-formed at each spy chance,'  /
+   data texspy (  39 )  /  '  but is only output when one or more variables has changed.  to  terminate  the'  /
+   data texspy (  40 )  /  '  roll-loop,  use the regular user-keyed interrupt.                             '  /
+   data texspy (  41 )  /  'key word no.  6:  "deposit"     ----  ----  ----                                '  /
+   data texspy (  42 )  /  '  issue this command to modify the contents of any  EMTP  common  variables  (of'  /
+   data texspy (  43 )  /  '  solution overlays).   subsequent prompts  will  permit  the  user  to  specify'  /
+   data texspy (  44 )  /  '  scalars  and vector ranges  (e.g.,  "kbus(3:8)"  for  cells  3  through  8  of'  /
+   data texspy (  45 )  /  '  kbus).   "end"  terminates the list, returning to the  "spy:"  prompt.  after '  /
+   data texspy (  46 )  /  '  each  variable,  there will be a prompt for the desired new value (free-format'  /
+   data texspy (  47 )  /  '  number),  if no  "="  is used.   the separately-prompted input  is  rigorously'  /
+   data texspy (  48 )  /  '  free-format  (so  that any  i, f, or e-field number is permissible).  but  for'  /
+   data texspy (  49 )  /  '  simple numeric values which  can  be read  using  f15.0,  or  for  text (a6), '  /
+   data texspy (  50 )  /  '  follow the scalar or vector by an equal sign and then the number.  the case of'  /
+   data texspy (  51 )  /  '  alphanumeric  must  not  have imbedded blanks after the  "=",  but numbers can'  /
+   data texspy (  52 )  /  '  (within the span of 15 columns).                                              '  /
+   data texspy (  53 )  /  'key word no.  7:  "switch"      ----  ----  ----                                '  /
+   data texspy (  54 )  /  '  this response to the  "spy:"  prompt is  issued  for  a  display  of the EMTP '  /
+   data texspy (  55 )  /  '  switch  table.   subsequently  send an  additional  "extra"  to change to the '  /
+   data texspy (  56 )  /  '  next sub-table (as of february 1984, there are two),  if different columns are'  /
+   data texspy (  57 )  /  '  desired.  within any one choice as to sub-table,  there is a loop in which the'  /
+   data texspy (  58 )  /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
+   data texspy (  59 )  /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
+   data texspy (  60 )  /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage '  /
+   data texspy (  61 )  /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
+   data texspy (  62 )  /  '  and return to the  "spy:"  prompt.  to refresh the heading, use either  "swit"'  /
+   data texspy (  63 )  /  '  or  "head"  (only 4 characters of "switch" or "heading" are checked).         '  /
+   data texspy (  64 )  /  'key word no.  8:  "append"      ----  ----  ----                                '  /
+   data texspy (  65 )  /  '  this command is the gateway to installation-dependent commands which are non- '  /
+   data texspy (  66 )  /  '  standard,  and which have been installed locally.   the  utpf carries a dummy '  /
+   data texspy (  67 )  /  '  subroutine append,  by  definition. one clean  way  of adding a functional    '  /
+   data texspy (  68 )  /  '  module is at translation time,  using a submod  request.                      '  /
+   data texspy (  69 )  /  'key word no.  9:  "save"        ----  ----  ----                                '  /
+   data texspy (  70 )  /  '  when the EMTP is in the time-step loop, this command will force an exit to    '  /
+   data texspy (  71 )  /  '  overlay 20 upon completion of present time-step.   there,  "katalg"  saves    '  /
+   data texspy (  72 )  /  '  EMTP tables as rapidly as possible (may not be permanent).   the simulation   '  /
+   data texspy (  73 )  /  '  then recommences by an automatic transfer back to the beginning of the        '  /
+   data texspy (  74 )  /  '  time-step loop ("over16").   since plot data points are not part of the       '  /
+   data texspy (  75 )  /  '  saving, if the user wants these to be preserved, too, he must be careful.     '  /
+   data texspy (  76 )  /  '  provided EMTP storage for plot data points does not fill up before the        '  /
+   data texspy (  77 )  /  '  subsequent  restore  operation (to back up time to the  save  point), there   '  /
+   data texspy (  78 )  /  '  is no problem.  otherwise, consider use of  "space"  and  "lunit4"  commands. '  /
+   data texspy (  79 )  /  'key word no. 10:  "restore"     ----  ----  ----                                '  /
+   data texspy (  80 )  /  '  the  "restore"  command is the reverse of  "save".  when within the deltat    '  /
+   data texspy (  81 )  /  '  loop, use of  "restore"  will rapidly transfer to overlay 20.  there, module  '  /
+   data texspy (  82 )  /  '  "katalg" restores former tables, after which control is transferred to spy.   '  /
+   data texspy (  83 )  /  '  possibly the  "space"  and  "lunit4" would also be appropriate, to restore    '  /
+   data texspy (  84 )  /  '  any separately plot files.   also after tables have been restored, the user   '  /
+   data texspy (  85 )  /  '  can modify any EMTP variables  desired,  and exit  "deposit"  with  "end";    '  /
+   data texspy (  86 )  /  '  finally, send  "go"  in response to the  "spy:"  prompt, to transfer back to  '  /
+   data texspy (  87 )  /  '  the top of the time-step loop ("over16").                                     '  /
+   data texspy (  88 )  /  'key word no. 11:  "go"          ----  ----  ----                                '  /
+   data texspy (  89 )  /  '  this command is issued in response to the  "spy:"  prompt to terminate        '  /
+   data texspy (  90 )  /  '  several sequences, such as one which might have begun with  "restore".  in    '  /
+   data texspy (  91 )  /  '  this case, there would be the preceding transfers of control from overlay 16  '  /
+   data texspy (  92 )  /  '  to overlay 20 ("katalg"), and then back to overlay 16 again.  as a second     '  /
+   data texspy (  93 )  /  '  example,  "go"  cancels the  "rest" command.  third, it can be used to        '  /
+   data texspy (  94 )  /  '  begin the EMTP solution following the  "data"  command (for data card input   '  /
+   data texspy (  95 )  /  '  at the beginning of program execution).   finally,  "go"  cancels the         '  /
+   data texspy (  96 )  /  '  suspension   of execution which accompanies the  "sleep"  command.            '  /
+   data texspy (  97 )  /  'key word no. 12:  "echo"        ----  ----  ----                                '  /
+   data texspy (  98 )  /  '  users who are interested in keeping a history of spy commands which are to    '  /
+   data texspy (  99 )  /  '  be issued can use the  "echo"  command.   a subsequent prompt then allows     '  /
+   data texspy ( 100 )  /  '  several choices.  to begin such accumulation, send  "begin";  to end it,      '  /
+   data texspy ( 101 )  /  '  send  "file",  which will result in the dumping of all accumulation onto      '  /
+   data texspy ( 102 )  /  '  disk as a permanent file of the users choice (a subsequent prompt will        '  /
+   data texspy ( 103 )  /  '  ask for the desired file name).   the history consists of 80-column card      '  /
+   data texspy ( 104 )  /  '  images,  stored from the bottom of  file6  upward  (with cell  kspsav         '  /
+   data texspy ( 105 )  /  '  storing the last, and  limcrd  storing the first).  to view the accumulation  '  /
+   data texspy ( 106 )  /  '  to date, use  "show".   when  "file" is used,  not only is a copy sent to     '  /
+   data texspy ( 107 )  /  '  disk, but those in memory are erased. hence, if  echoing  is to continue,     '  /
+   data texspy ( 108 )  /  '  the user must send  "begin"  again, immediately after  "file"  is complete.   '  /
+   data texspy ( 109 )  /  '  in order to erase an erroneous, immediately-preceding command, use  "cancel"  '  /
+   data texspy ( 110 )  /  '  at any point.  this is intercepted by the input routine  "flager",  so is     '  /
+   data texspy ( 111 )  /  '  not a spy command per se.   there will be confirmation of the erasure.        '  /
+   data texspy ( 112 )  /  'key word no. 13:  "find"        ----  ----  ----                                '  /
+   data texspy ( 113 )  /  '  the sending of  "find"  will result in the printing of a heading, followed    '  /
+   data texspy ( 114 )  /  '  by a pause, as  spy  waits for the user to supply a 6-character EMTP symbol   '  /
+   data texspy ( 115 )  /  '  name.   this is a closed loop: after receiving a name,  spy  will display     '  /
+   data texspy ( 116 )  /  '  the memory address, and then wait foranother such symbol.   exit by  "end".   '  /
+   data texspy ( 117 )  /  '  wild cards ("*") of  vax/vms  are honored here, although the candidate        '  /
+   data texspy ( 118 )  /  '  string is limited to eight characters maximum (only the first 8 are read).    '  /
+   data texspy ( 119 )  /  'key word no. 14:  "list"        ----  ----  ----                                '  /
+   data texspy ( 120 )  /  '  this command will result in the printing of a heading, followed by a pause.   '  /
+   data texspy ( 121 )  /  '  at this point the user is in a loop, supplying row numbers (beginning and     '  /
+   data texspy ( 122 )  /  '  ending rows as a pair of free-format integers).   spy responds to each with   '  /
+   data texspy ( 123 )  /  '  a display of those rows of the spy symbol table, and then waits for the next  '  /
+   data texspy ( 124 )  /  '  request.   the sending of  "0,0"  will break out, returning to the  "spy:"    '  /
+   data texspy ( 125 )  /  '  prompt.   the user can interrupt any excessively long display with his keyed  '  /
+   data texspy ( 126 )  /  '  interrupt (details depend upon computer).  instead of  "0,0"  to break out,   '  /
+   data texspy ( 127 )  /  '  "end"  or  "spy:"  can alternatively be used.  sending nothing (just a        '  /
+   data texspy ( 128 )  /  '  carriage return <cr>) is interpreted by spy as a request for "more of the     '  /
+   data texspy ( 129 )  /  '  same" ---- the same number of rows as just displayed, beginning where the     '  /
+   data texspy ( 130 )  /  '  last display left off.   special trickery is required if an argument of  "@"  '  /
+   data texspy ( 131 )  /  '  usage is to respond to the  "list"  prompt,  since a comma must not be used   '  /
+   data texspy ( 132 )  /  '  as the free-format separator (due to confusion with use of the same symbol    '  /
+   data texspy ( 133 )  /  '  for argument separation by "@").  instead, a pounds sign  "#"  must be used   '  /
+   data texspy ( 134 )  /  '  rather than a blank (due to extraction of blanks by  "@"  logic).  finally,   '  /
+   data texspy ( 135 )  /  '  sending  "all"  instead of two row numbers displays the whole table.          '  /
+   data texspy ( 136 )  /  'key word no. 15:  "spy"         ----  ----  ----                                '  /
+   data texspy ( 137 )  /  '  this text, supplied almost anywhere that the program is looking for text,     '  /
+   data texspy ( 138 )  /  '  will cause an internal interruption of whatever was happening, and a return   '  /
+   data texspy ( 139 )  /  '  to the  "spy:"  prompt.   one exception is the  "help"  prompt which is now   '  /
+   data texspy ( 140 )  /  '  being serviced.                                                               '  /
+   data texspy ( 141 )  /  'key word no. 16:  "break"       ----  ----  ----                                '  /
+   data texspy ( 142 )  /  '  this response to the  "spy:"  prompt is appropriate if the user wants the     '  /
+   data texspy ( 143 )  /  '  simulation to continue uninterrupted until some pre-specified time, when a    '  /
+   data texspy ( 144 )  /  '  clean break at the start of "subts1" will be made.  a subsequent prompt will  '  /
+   data texspy ( 145 )  /  '  allow the user to specify the future break time  t-break  in seconds.  if a   '  /
+   data texspy ( 146 )  /  '  minus sign is appended, then the input is taken to be a step number of the    '  /
+   data texspy ( 147 )  /  '  time-step loop, and the program will calculate  t-break   by multiplying by   '  /
+   data texspy ( 148 )  /  '  deltat.  oh, in case "subts1" means nothing to the user, this is the first of '  /
+   data texspy ( 149 )  /  '  four pieces of overlay 16 (the time-step loop).  in case the user sends zero  '  /
+   data texspy ( 150 )  /  '  for  t-break, an added prompt will seek clarification as to which utpf overlay'  /
+   data texspy ( 151 )  /  '  is the desired stopping point (immediately prior to entry).  common usage     '  /
+   data texspy ( 152 )  /  '  involves overlays numbered 6  (after all sources have been read),  12  (when  '  /
+   data texspy ( 153 )  /  '  the   phasor solution is complete), or  16  (the time-step loop).             '  /
+   data texspy ( 154 )  /  'key word no. 17:  "when"        ----  ----  ----                                '  /
+   data texspy ( 155 )  /  '  this response to the  "spy:"  prompt will redefine the EMTP table-handling    '  /
+   data texspy ( 156 )  /  '  time of  "save"  and  "restore" .   that is,  if so defined,  this overrides  '  /
+   data texspy ( 157 )  /  '  the otherwise immediate exit of the time-step loop for table-handling.        '  /
+   data texspy ( 158 )  /  'key word no. 18:  "comment"     ----  ----  ----                                '  /
+   data texspy ( 159 )  /  '  this response to the  "spy:"  prompt will toggle the switch which controls the'  /
+   data texspy ( 160 )  /  '  printing of comment cards ("c ") which may be contained within command files. '  /
+   data texspy ( 161 )  /  '  the default (starting value) is to show comment cards during execution ("@"). '  /
+   data texspy ( 162 )  /  'key word no. 19:  "@?"          ----  ----  ----                                '  /
+   data texspy ( 163 )  /  '  this response to the  "spy:"  prompt will result in the internal  opening  of '  /
+   data texspy ( 164 )  /  '  an arbitary disk file, and the connection of this file as replacement for     '  /
+   data texspy ( 165 )  /  '  keyboard input to spy.  if the file name consists of just a single digit      '  /
+   data texspy ( 166 )  /  '  (?=1-9),  inclspy?.dat  is the disk file name to be used.  reading from the   '  /
+   data texspy ( 167 )  /  '  disk file continues until an end-of-file is hit, at which point the spy input '  /
+   data texspy ( 168 )  /  '  channel is connected once again to the keyboard.  such usage can not be nested'  /
+   data texspy ( 169 )  /  '  (i.e., no such disk file can itself contain an  "@"  statement).   EMTP       '  /
+   data texspy ( 170 )  /  '  comment cards ("c ") are permitted within such disk files, however,  with the '  /
+   data texspy ( 171 )  /  '  "comment"  switch controlling whether or not they are written to the screen   '  /
+   data texspy ( 172 )  /  '  (the default is for such writing).other lines of an executed disk file are    '  /
+   data texspy ( 173 )  /  '  generally not seen by the user as they are read during execution, and neither '  /
+   data texspy ( 174 )  /  '  are the repetitive  "spy:"  prompts. parameters are possible, to substitute   '  /
+   data texspy ( 175 )  /  '  for 8-column   "%%%%%%%%"   fields of the disk file.   blanks are ignored,    '  /
+   data texspy ( 176 )  /  '  and arguments are to be separated by commas.  an opening parenthesis  "("  and'  /
+   data texspy ( 177 )  /  '  a closing parenthesis  ")"  are optional delimiters.   each command line is   '  /
+   data texspy ( 178 )  /  '  limited to 80 columns (no continuation), and a maximum of 10 arguments.   the '  /
+   data texspy ( 179 )  /  '  left-to-right list is applied to the file %-fields from top to bottom, in     '  /
+   data texspy ( 180 )  /  '  order.  the %-fields can be built into any line of the disk file which        '  /
+   data texspy ( 181 )  /  '  is read by  spy  proper (not plotting).   finally, there is the use of a pound'  /
+   data texspy ( 182 )  /  '  sign "#" for reserved blanks, which are otherwise ignored.   the classic case '  /
+   data texspy ( 183 )  /  '  where it is needed is for a response to  "list"  (e.g.,  "2#4");   this is    '  /
+   data texspy ( 184 )  /  '  free-format information, with a comma impossible due to the conflict with "@".'  /
+   data texspy ( 185 )  /  '  although not a part of the interactive  spy  code per se, it should also be   '  /
+   data texspy ( 186 )  /  '  remembered that commands which could be built into  "@"  files can also be    '  /
+   data texspy ( 187 )  /  '  executed as part of the regular EMTP data.  the key to such usage is  "$spy", '  /
+   data texspy ( 188 )  /  '  which is processed by  "cimage"  and/or  "erexit".   if all spy commands are  '  /
+   data texspy ( 189 )  /  '  to be built in-line as part of the lunit5 EMTP input data, then precede such  '  /
+   data texspy ( 190 )  /  '  data by a card reading  "$spy",  with columns 5 onward blank.  in this        '  /
+   data texspy ( 191 )  /  '  case,  "erexit"  reads and removes such data cards, creating special reserved '  /
+   data texspy ( 192 )  /  '  disk files named  spyfile?.dat,  where  "?"  is a single digit between one    '  /
+   data texspy ( 193 )  /  '  and nine (allowing a maximum of nine such distinct groups of spy commands).   '  /
+   data texspy ( 194 )  /  '  the last spy command of each such group is to be followed by  "$endspy"  as a '  /
+   data texspy ( 195 )  /  '  special marker record.  on the other hand, if the user does not care about    '  /
+   data texspy ( 196 )  /  '  unifying all such EMTP data in a single disk file, then a single line of EMTP '  /
+   data texspy ( 197 )  /  '  data,  "$spy, filename",  is all that is required to provide the connection to'  /
+   data texspy ( 198 )  /  '  spy.  in this second card,  filename can be any legal, full file name of the  '  /
+   data texspy ( 199 )  /  '  computer system being considered (if the user supplies the file name, and     '  /
+   data texspy ( 200 )  /  '  puts commands in the disk file, then there is no limit on the number of       '  /
+   data texspy ( 201 )  /  '  such usages.   the role of  "cimage" is to treat  "$spy"  like   "$include".  '  /
+   data texspy ( 202 )  /  'key word no. 20:  "roll"        ----  ----  ----                                '  /
+   data texspy ( 203 )  /  '  this response to the  "spy:"  prompt will result in a "rolling" of previously-'  /
+   data texspy ( 204 )  /  '  defined  "examine"  request.   while this happens, no other spy activity is   '  /
+   data texspy ( 205 )  /  '  permitted (any <cr> will abort the loop, and return to the  "spy:"  prompt).  '  /
+   data texspy ( 206 )  /  '  following  "roll",  the simulation will recommence, with spy called at each   '  /
+   data texspy ( 207 )  /  '  opportunity for a spy break (within frequency  maxflg  of  "dekspy",  which   '  /
+   data texspy ( 208 )  /  '  nominally has the value one, implying four checks per time step).   the very  '  /
+   data texspy ( 209 )  /  '  first check, the heading and current value of the  "examine"  vector will be  '  /
+   data texspy ( 210 )  /  '  displayed;  thereafter, output will be produced if and only if a change in    '  /
+   data texspy ( 211 )  /  '  the output (compared with the previous evaluation) has occurred.              '  /
+   data texspy ( 212 )  /  '  a final thought is about other commands which function much like the  "roll"  '  /
+   data texspy ( 213 )  /  '  commands, although in fact these are not issued at the  "spy:" level.  for    '  /
+   data texspy ( 214 )  /  '  "plot"  use,  at the  "inner:"  level,  "rollc"  will produce continuous      '  /
+   data texspy ( 215 )  /  '  character plotting, while  "rollv"  does the same for vector plotting.   it   '  /
+   data texspy ( 216 )  /  '  is the  "noroll"  command of spy which will cancel either or both of these.   '  /
+   data texspy ( 217 )  /  'key word no. 21:  "type?"       ----  ----  ----                                '  /
+   data texspy ( 218 )  /  '  this response to the  "spy:"  prompt will result in the listing of command    '  /
+   data texspy ( 219 )  /  '  file  inclspy?.dat  of  "@?"  usage. for any specific numerical digit         '  /
+   data texspy ( 220 )  /  '  "?",  just that one file will be listed.   but if symbolic "?" is retained, or'  /
+   data texspy ( 221 )  /  '  if column 5 onward is blank, then all possible  "@?"  files will be listed    '  /
+   data texspy ( 222 )  /  '  in natural order, preceded by an identifying heading.  also, for arbitrary    '  /
+   data texspy ( 223 )  /  '  disk files of card images with names of 2 or more characters, this command    '  /
+   data texspy ( 224 )  /  '  will display them.  "type filename" is the form of this more general          '  /
+   data texspy ( 225 )  /  '  command, where  filename  is any legal file name of 32 or fewer characters.   '  /
+   data texspy ( 226 )  /  '  if no such file exists, there will be a warning message, so this command      '  /
+   data texspy ( 227 )  /  '  can be used to check on the existence of arbitary disk files of card images.  '  /
+   data texspy ( 228 )  /  'key word no. 22:  "verify"      ----  ----  ----                                '  /
+   data texspy ( 229 )  /  '  this response to the  "spy:"  prompt will toggle the switch that controls the '  /
+   data texspy ( 230 )  /  '  echoing of data cards within a disk file which is read via  "@"  usage.  the  '  /
+   data texspy ( 231 )  /  '  default (beginning) setting is to have such echoing.   a related command is   '  /
+   data texspy ( 232 )  /  '  "comment",  which can separately control the display of comment ("c ") cards  '  /
+   data texspy ( 233 )  /  '  as they are encountered during processing of the  "@"  file.  if there is no  '  /
+   data texspy ( 234 )  /  '  echoing of spy data, then comment cards might likewise not be displayed;  or, '  /
+   data texspy ( 235 )  /  '  they can be used as an absolute reference (if they are displayed), to mark the'  /
+   data texspy ( 236 )  /  '  beginning or ending of invisible operations due to no-echoing of "verify".    '  /
+   data texspy ( 237 )  /  'key word no. 23:  "files"       ----  ----  ----                                '  /
+   data texspy ( 238 )  /  '  this  response  to  the  "spy:"  prompt will result in a display of all of the'  /
+   data texspy ( 239 )  /  '  inclspy?.dat  files which exist,  based on the fortran "inquire" operation  at'  /
+   data texspy ( 240 )  /  '  the time program execution began.  an "x"  means that the file exists (in the '  /
+   data texspy ( 241 )  /  '  display),  whereas a blank means that it does not.  there are 9 columns.      '  /
+   data texspy ( 242 )  /  'key word no. 24:  "sleep"       ----  ----  ----                                '  /
+   data texspy ( 243 )  /  '  this response to the  "spy:"  prompt will put the EMTP to sleep in such a way '  /
+   data texspy ( 244 )  /  '  that the simulation can be continued at any later time.  the interactive      '  /
+   data texspy ( 245 )  /  '  "sleep"  command is comparable to the batch-mode use of miscellaneous data    '  /
+   data texspy ( 246 )  /  '  parameter   memsav = 1   for the saving of EMTP tables on disk.  to service a '  /
+   data texspy ( 247 )  /  '  "sleep"  command, spy exits the time-step loop and jumps to  "over20"  for    '  /
+   data texspy ( 248 )  /  '  table dumping to disk.  subsequent awakening is via  "wake",  which reads     '  /
+   data texspy ( 249 )  /  '  EMTP tables back from disk into EMTP memory.  any plot data must be separately'  /
+   data texspy ( 250 )  /  '  and manually provided for by the user (using  "space", "lunit4"),  if it, too,'  /
+   data texspy ( 251 )  /  '  is to be permanently saved.                                                   '  /
+   data texspy ( 252 )  /  'key word no. 25:  "source"      ----  ----  ----                                '  /
+   data texspy ( 253 )  /  '  this response to the  "spy:"  prompt will allow the user to look at either    '  /
+   data texspy ( 254 )  /  '  the electric network or the tacs source table.   there will be a pause after  '  /
+   data texspy ( 255 )  /  '  spy receives  "source",  as it waits to receive either  "tacs"  or  "elec"  as'  /
+   data texspy ( 256 )  /  '  an indication of source-table choice. then  spy  waits for a pair of free-    '  /
+   data texspy ( 257 )  /  '  format integer row numbers, to define the limits of the table display.   a few'  /
+   data texspy ( 258 )  /  '  key words are also accepted here:  "all"  to display entire table,  "end"  or '  /
+   data texspy ( 259 )  /  '  "stop"  or  "spy"  to return to  "spy:"  prompt,  and  "tacs"  or  "elec"  to '  /
+   data texspy ( 260 )  /  '  produce a new table heading (or switch between the two tables).   the tacs    '  /
+   data texspy ( 261 )  /  '  table displays offsets of  "sptacs" which are used with  "deposit/examine",   '  /
+   data texspy ( 262 )  /  '  in case the user wants to redefine such quantities.                           '  /
+   data texspy ( 263 )  /  'key word no. 26:  "edit"        ----  ----  ----                                '  /
+   data texspy ( 264 )  /  '  this response to the  "spy:"  prompt will allow the user to examine and modify'  /
+   data texspy ( 265 )  /  '  card images which are currently stored in memory (see the  "data"  command).  '  /
+   data texspy ( 266 )  /  '  a  "*"  prompt will next appear, at which point vax sos-like editing commands '  /
+   data texspy ( 267 )  /  '  can be issued.  the only bothersome changes of notation are the use of  "#"   '  /
+   data texspy ( 268 )  /  '  in place of vax"s  "!"  (because of in-line comment problems with e/ts),  and '  /
+   data texspy ( 269 )  /  '  use of  "@"  in place of vax"s  "esc" key as a character string delimiter.    '  /
+   data texspy ( 270 )  /  '  for an explanation of sos editing rules, see dec vax-11 user documentation.   '  /
+   data texspy ( 271 )  /  '  examples of printing include:  "*p^:*",  "*p5",  "*p^:18",  "*p5#10",  "*p",  '  /
+   data texspy ( 272 )  /  '  and  "p.-20:."   there also is  "*f" usage,  only with  "@"  replacing  <esc> '  /
+   data texspy ( 273 )  /  '  of  vax/vms  sos.  to exit the  "edit"  command and return to the  "spy:"     '  /
+   data texspy ( 274 )  /  '  prompt, use  "*e"  (analogous to the sos exit).  additional user commands     '  /
+   data texspy ( 275 )  /  '  include  "*d"  (for deletion of lines),  "*r"  (for replacement of lines),    '  /
+   data texspy ( 276 )  /  '  "*i"  (for insertion of new lines), and  "*s"  (for the substitution of one   '  /
+   data texspy ( 277 )  /  '  character string by another).  concerning  "*s",  however, once again  "@"    '  /
+   data texspy ( 278 )  /  '  is used as a delimiter rather than  <esc>,  and no qualifiers (e.g., ",d" for '  /
+   data texspy ( 279 )  /  '  "decide mode") are allowed.   finally, there are special EMTP-designed        '  /
+   data texspy ( 280 )  /  '  commands.   the first of these is  "(8)",  which initiates a search for the   '  /
+   data texspy ( 281 )  /  '  next card which has a non-blank column 80.   after display of this record,    '  /
+   data texspy ( 282 )  /  '  spy awaits a user decision regarding disposition:  <cr>  will leave the card  '  /
+   data texspy ( 283 )  /  '  unchanged and initiate a search for the following one;  digits 0, 1, 2, 3, 4  '  /
+   data texspy ( 284 )  /  '  will result in the punching of this value into column 80 before searching for '  /
+   data texspy ( 285 )  /  '  the next such record (with "0" internally changed to a blank before punching).'  /
+   data texspy ( 286 )  /  '  the  "*"  prompt will reappear automatically when the search hits the bottom  '  /
+   data texspy ( 287 )  /  '  of the file.  or,  "*"  can be reached at any point of the search-display loop'  /
+   data texspy ( 288 )  /  '  by sending  "e" .   even if not in the  "(8)"  loop, column-80 deposits are   '  /
+   data texspy ( 289 )  /  '  possible by use of  "(8),?"  where  "?"  is the desired col.-80 content of the'  /
+   data texspy ( 290 )  /  '  current line.   finally,  the command "*col"  will produce a heading of       '  /
+   data texspy ( 291 )  /  '  column numbers, which is useful when inserting new data records using  "*i" . '  /
+   data texspy ( 292 )  /  '  this ruler heading will be shifted to line up with  "*p"  displays.   if an   '  /
+   data texspy ( 293 )  /  '  unshifted display is desired,  use  "*col8" .                                 '  /
+   data texspy ( 294 )  /  'key word no. 27:  "wake"        ----  ----  ----                                '  /
+   data texspy ( 295 )  /  '  this response to the  "spy:"  prompt will awaken a hibernating solution (one  '  /
+   data texspy ( 296 )  /  '  which was put to bed with an earlier "sleep"  command).   altered program     '  /
+   data texspy ( 297 )  /  '  dimensions are not allowed  (both programs must be dimensioned identically),  '  /
+   data texspy ( 298 )  /  '  just as with the batch-mode  "start again".  the  "wake"  command is the exact'  /
+   data texspy ( 299 )  /  '  interactive equivalent of the batch-mode request  "start again".  there is a  '  /
+   data texspy ( 300 )  /  '  related  "wake4"  command for regeneration of the lunit4 plot-file header     '  /
+   data texspy ( 301 )  /  '  information, in case this is wanted by the user (it is in fact needed, if the '  /
+   data texspy ( 302 )  /  '  "plot"  command is to be used, as of 26 feb 1984).                            '  /
+   data texspy ( 303 )  /  'key word no. 28:  "language"    ----  ----  ----                                '  /
+   data texspy ( 304 )  /  '  this response to the  "spy:"  prompt allows the user to either examine or     '  /
+   data texspy ( 305 )  /  '  modify "spy:"-level command words (e.g., "plot", "data", etc.).  a loop will  '  /
+   data texspy ( 306 )  /  '  be entered, in which there are only 4 legal responses  ("single",  "entire",  '  /
+   data texspy ( 307 )  /  '  "show",  and  "spy")  to the prompt. sending  "single"  will lead to an       '  /
+   data texspy ( 308 )  /  '  inner input loop in which old and new symbol pairs are to be redefined one at '  /
+   data texspy ( 309 )  /  '  a time, terminated by  "end"  (to return to outer  "language"  loop) or  "spy"'  /
+   data texspy ( 310 )  /  '  (to return to the  "spy:"  prompt).  the second outer response,  "entire",    '  /
+   data texspy ( 311 )  /  '  must be followed by an unabridged dictionary of symbols using 10a8 format.    '  /
+   data texspy ( 312 )  /  '  sending the third response  "show"  will result in an unabridged display of   '  /
+   data texspy ( 313 )  /  '  all such current commands.  finally, sending  "spy"  will exit the outer loop,'  /
+   data texspy ( 314 )  /  '  and return to the  "spy:"  prompt.  the language of  "plot"  usage does not   '  /
+   data texspy ( 315 )  /  '  occur at the command level with prompt  "spy:",  so it can only be redefined  '  /
+   data texspy ( 316 )  /  '  within that utility (by means of the "set data"  command).                    '  /
+   data texspy ( 317 )  /  'key word no. 29:  "catalog"     ----  ----  ----                                '  /
+   data texspy ( 318 )  /  '  this response to the  "spy:"  prompt will create a new permanent disk file, it'  /
+   data texspy ( 319 )  /  '  will dump a copy of the data case which is presently contained within the     '  /
+   data texspy ( 320 )  /  '  EMTP into that disk file.   the name of this new disk file is user-supplied   '  /
+   data texspy ( 321 )  /  '  (in response to a subsequent prompt for such a name, which must, naturally, be'  /
+   data texspy ( 322 )  /  '  legal for the computer system being used).   the EMTP data case in question   '  /
+   data texspy ( 323 )  /  '  generally will differ from that originally read in using the  "data"  command,'  /
+   data texspy ( 324 )  /  '  of course  (assuming  "edit"  operations have produced alterations).          '  /
+   data texspy ( 325 )  /  'key word no. 30:  "begin"       ----  ----  ----                                '  /
+   data texspy ( 326 )  /  '  this response to the  "spy:"  prompt will abort the current EMTP solution,    '  /
+   data texspy ( 327 )  /  '  and initiate a complete new solution. it is the simulator-stored EMTP data    '  /
+   data texspy ( 328 )  /  '  cards which are used as input for the new solution, and these will usually    '  /
+   data texspy ( 329 )  /  '  have just been modified using  "edit" operations.  the transition is          '  /
+   data texspy ( 330 )  /  '  "instantaneous" for cases which have been put to bed via  "rest"  or  "sleep",'  /
+   data texspy ( 331 )  /  '  or which are cycling the time-step loop.   for execution in earlier overlays, '  /
+   data texspy ( 332 )  /  '  there may be a delay until the present overlay is exited.                     '  /
+   data texspy ( 333 )  /  'key word no. 31:  "step"        ----  ----  ----                                '  /
+   data texspy ( 334 )  /  '  this response to the  "spy:"  prompt represents a request to toggle the binary'  /
+   data texspy ( 335 )  /  '  switch that  forces  a  spy  interrupt at each and every possible opportunity.'  /
+   data texspy ( 336 )  /  '  either  there  are  such  ever-present forced interrupts, or  there  are none.'  /
+   data texspy ( 337 )  /  '  interrupt opportunities exist at the start of each overlay,  at  the start  of'  /
+   data texspy ( 338 )  /  '  each of the four pieces of overlay 16 (the time-step loop),  and  finally, as '  /
+   data texspy ( 339 )  /  '  each new data card is read by input module  "cimage".                         '  /
+   data texspy ( 340 )  /  'key word no. 32:  "debug"       ----  ----  ----                                '  /
+   data texspy ( 341 )  /  '  this response to the  "spy:"  prompt is used only for debugging of interactive'  /
+   data texspy ( 342 )  /  '  EMTP execution itself, in case of faulty operation.   it is not used for cases'  /
+   data texspy ( 343 )  /  '  of suspected EMTP error (do not confuse with  "iprsup"  of the EMTP).  anyway,'  /
+   data texspy ( 344 )  /  '  there will be a subsequent prompt for diagnostic control variable  iprspy.    '  /
+   data texspy ( 345 )  /  'key word no. 33:  "data"       ----  ----  ----                                 '  /
+   data texspy ( 346 )  /  '  this response to the  "spy:"  prompt is appropriate when the user wants to    '  /
+   data texspy ( 347 )  /  '  specify a disk file of EMTP data which is to be solved next.  the program     '  /
+   data texspy ( 348 )  /  '  will then prompt for the desired file name, which will generally be computer- '  /
+   data texspy ( 349 )  /  '  dependent.  a full, legal file name for the computer being used must then be  '  /
+   data texspy ( 350 )  /  '  provided.  before giving the real file name, however, the user could send     '  /
+   data texspy ( 351 )  /  '  "control",  should he want to input only a portion of the disk file, or should'  /
+   data texspy ( 352 )  /  '  it be desired to have the data placed in the EMTP cache with an offset, or    '  /
+   data texspy ( 353 )  /  '  should it be desired to have the  lunit5  usage pointer set to other than the '  /
+   data texspy ( 354 )  /  '  default value of unity (offset zero). a second non-file response is  "spy",   '  /
+   data texspy ( 355 )  /  '  to abort the file-name prompt after the  "control"  definitions (in case the  '  /
+   data texspy ( 356 )  /  '  user only wants to redefine the  lunit5  usage pointer, for example).   a     '  /
+   data texspy ( 357 )  /  '  final point concerns the avoidance of non-existent files (which would result  '  /
+   data texspy ( 358 )  /  '  in an error stop of the EMTP by the operating system).  if in doubt about a   '  /
+   data texspy ( 359 )  /  '  file"s existence, try to  type  it first (the  "type"  command warns of non-  '  /
+   data texspy ( 360 )  /  '  existent files, without any termination of execution).                        '  /
+   data texspy ( 361 )  /  'key word no. 34:  "ramp"        ----  ----  ----                                '  /
+   data texspy ( 362 )  /  '  this response to the  "spy:"  prompt will result in prompts which allow the   '  /
+   data texspy ( 363 )  /  '  user to modify any variables in EMTP common blocks as linear functions of     '  /
+   data texspy ( 364 )  /  '  time.   that is, the the user can ramp the values between beginning and ending'  /
+   data texspy ( 365 )  /  '  limits,  as EMTP simulation time moves between beginning and ending times --- '  /
+   data texspy ( 366 )  /  '  with all control parameters being user-defined.  any variable which can be    '  /
+   data texspy ( 367 )  /  '  seen via the  "examine"  command can also be  ramped.  in specifying parameter'  /
+   data texspy ( 368 )  /  '  values, there are three nested loops. the outer loop is for time, the middle  '  /
+   data texspy ( 369 )  /  '  one is for variable values, and the inner one is for variable names.   the    '  /
+   data texspy ( 370 )  /  '  user can stay inside (middle or inner loops) as long as the outer quantity is '  /
+   data texspy ( 371 )  /  '  not altered.   "end" will exit any one level,  and head outward to the next   '  /
+   data texspy ( 372 )  /  '  one.   at the outer-most level, the optional  "show"  command will display all'  /
+   data texspy ( 373 )  /  '  ramps which the user has defined thus far,  while  "end"  or  "spy"  will     '  /
+   data texspy ( 374 )  /  '  return to the  "spy:"  prompt.  actual variable redefinition is handled within'  /
+   data texspy ( 375 )  /  '  module  "analyt"  of overlay 20 of the EMTP, where ramping logic has been     '  /
+   data texspy ( 376 )  /  '  built (this is automatic, as the simulation progresses).                      '  /
+   data texspy ( 377 )  /  'key word no. 35:  "time"        ----  ----  ----                                '  /
+   data texspy ( 378 )  /  '  this response to the  "spy:"  prompt will result in the display of  both  the '  /
+   data texspy ( 379 )  /  '  wall-clock time  (the date, too)  and also  the  current EMTP simulation time '  /
+   data texspy ( 380 )  /  '  parameters (t, tmax, deltat).                                                 '  /
+   data texspy ( 381 )  /  'key word no. 36:  "tek"         ----  ----  ----                                '  /
+   data texspy ( 382 )  /  '  this response to the  "spy:"  prompt allows modification to an ongoing vector-'  /
+   data texspy ( 383 )  /  '  graphic display which is currently  rolling.  yes, the user could simply      '  /
+   data texspy ( 384 )  /  '  regenerate the plot from the beginning (by use of a  "plot"  command following'  /
+   data texspy ( 385 )  /  '  a user-keyed interrupt), but minor changes can often be made more easily, and '  /
+   data texspy ( 386 )  /  '  with less disruption, using  "tek". a subsequent prompt will then list a      '  /
+   data texspy ( 387 )  /  '  menu of alternatives which are available for such "on-the-fly"  rolling       '  /
+   data texspy ( 388 )  /  '  "plot"  tampering.  for completeness, that menu is repeated here:             '  /
+   data texspy ( 389 )  /  '       spy:tek                                                                  '  /
+   data texspy ( 390 )  /  '        >< to tamper with the rolling vector plot,  send choice.                '  /
+   data texspy ( 391 )  /  '        >< option (mark, delay, inner, overlap, end, help) :                    '  /
+   data texspy ( 392 )  /  '           mark  ---- for instantaneous marking of curves on tek screen;        '  /
+   data texspy ( 393 )  /  '           delay  --- to control how simultaneous the rolling is to be;         '  /
+   data texspy ( 394 )  /  '           inner  ---- to  call timval (the "inner:" level of ploting);         '  /
+   data texspy ( 395 )  /  '           overlap  -- to modify the percent overlap for new-page plot;         '  /
+   data texspy ( 396 )  /  '           end   ---- for return to  "spy:"  prompt.                            '  /
+   data texspy ( 397 )  /  '  unless the user requests curve identification via  "mark",  the  rolling plot '  /
+   data texspy ( 398 )  /  '  will only have it for the regenerated portion (the overlap from the previous  '  /
+   data texspy ( 399 )  /  '  page, as controlled by  "overlap"). the  "delay"  command allows the user     '  /
+   data texspy ( 400 )  /  '  to control the time-step multiplicity between plotting sessions.  there is a  '  /
+   data texspy ( 401 )  /  '  trade off between solution efficiency (maximized if plotting is infrequent)   '  /
+   data texspy ( 402 )  /  '  and simultaneous observation (maximized if plotting occurs on each new time   '  /
+   data texspy ( 403 )  /  '  step).   so much for the concept.  but the details of counting are in fact a  '  /
+   data texspy ( 404 )  /  '  little different, since it is not time steps, but rather plot points, which   '  /
+   data texspy ( 405 )  /  '  are counted.   only if every solution point becomes a plot point (only if the '  /
+   data texspy ( 406 )  /  '  miscellaneous data parameter  iplot is equal to unity) are these two equal,   '  /
+   data texspy ( 407 )  /  '  note.  so, if  iout = 3  and the user wants to see plotting progress about    '  /
+   data texspy ( 408 )  /  '  every twentieth time-step, he would send "7" in response to the prompt for a  '  /
+   data texspy ( 409 )  /  '  multiplicity after his  "delay"  was accepted.   the result would then be     '  /
+   data texspy ( 410 )  /  '  incremental plotting every 21st step (21 = 3*7).   concerning  "overlap",  it '  /
+   data texspy ( 411 )  /  '  is generally recommended that this only be used for terminals without memory, '  /
+   data texspy ( 412 )  /  '  since any percentage greater than zero does increase the plotting burden.   in'  /
+   data texspy ( 413 )  /  '  the case of displays with near-infinite storage (e.g., apollo windows),  it is'  /
+   data texspy ( 414 )  /  '  better to leave the overlap at the default value of zero.   use of  "inner"   '  /
+   data texspy ( 415 )  /  '  both very powerful and potentially very tricky, since it results in a  call to'  /
+   data texspy ( 416 )  /  '  subroutine timval,  which is responsible for the  "inner:"  level of  "plot"  '  /
+   data texspy ( 417 )  /  '  dialogue.   all  "inner:"  level definitions are therefore available to the   '  /
+   data texspy ( 418 )  /  '  user, although effects may or may not be as expected (either trial and error  '  /
+   data texspy ( 419 )  /  '  experience, or understanding of "tpplot" fortran, are required in order to    '  /
+   data texspy ( 420 )  /  '  predict the results of any given operation).   the one big difference is that '  /
+   data texspy ( 421 )  /  '  the use of  "time"  or just  <cr>  do not result in the production of a new   '  /
+   data texspy ( 422 )  /  '  plot.  to return back to the  "tek" prompt from the  "inner:"  prompt,        '  /
+   data texspy ( 423 )  /  '  send  "spy".   as for return to the "spy"  prompt,  either the listed  "end"  '  /
+   data texspy ( 424 )  /  '  or  "spy"  will work.                                                         '  /
+   data texspy ( 425 )  /  'key word no. 37:  "branch"      ----  ----  ----                                '  /
+   data texspy ( 426 )  /  '  this response to the  "spy:"  prompt is  issued  for  a  display  of the EMTP '  /
+   data texspy ( 427 )  /  '  branch table.  subsequently send an additional  "extra"  to change to the next'  /
+   data texspy ( 428 )  /  '  sub-table  (as of february 1984, there  are  two),  if  different columns  are'  /
+   data texspy ( 429 )  /  '  desired.  within any one choice as to sub-table,  there is a loop in which the'  /
+   data texspy ( 430 )  /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
+   data texspy ( 431 )  /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
+   data texspy ( 432 )  /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage '  /
+   data texspy ( 433 )  /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
+   data texspy ( 434 )  /  '  and return to the  "spy:"  prompt.  to refresh the heading, use either  "bran"'  /
+   data texspy ( 435 )  /  '  or  "head"  (only 4 characters of  "branch"  or  "heading"  are checked).     '  /
+   data texspy ( 436 )  /  'key word no. 38:  "yform"       ----  ----  ----                                '  /
+   data texspy ( 437 )  /  '  this  response  to  the  "spy:"  prompt  will result in continuous (every time'  /
+   data texspy ( 438 )  /  '  step)  re-formation of  [y],  followed by re-triangularization.   it is turned'  /
+   data texspy ( 439 )  /  '  off (no more [y]-forming)  by sending "noy"  after  "spy:"  prompt.  ???  ??? '  /
+   data texspy ( 440 )  /  '  warning:  like  the earlier batch-mode  "modify deltat",  this looks better in'  /
+   data texspy ( 441 )  /  '  theory than  it  does in practice.  for  important elements such as frequency-'  /
+   data texspy ( 442 )  /  '  dependent transmission lines, the original data which is needed to reform  [y]'  /
+   data texspy ( 443 )  /  '  has been destroyed by the solution, so the result  will  be erroneous.  unless'  /
+   data texspy ( 444 )  /  '  the user has a particularly degenerate problem,  and  he is sure that he knows'  /
+   data texspy ( 445 )  /  '  what he is doing, the general recommendation is to avoid all such use.  ??? ??'  /
+   data texspy ( 446 )  /  'key word no. 39:  "noy"         ----  ----  ----                                '  /
+   data texspy ( 447 )  /  '  this response to the  "spy:"  prompt will cancel a preceding  "yform"  request'  /
+   data texspy ( 448 )  /  '  for continuous [y]-formation.                                                 '  /
+   data texspy ( 449 )  /  'key word no. 40:  "factor"      ----  ----  ----                                '  /
+   data texspy ( 450 )  /  '  this  response  to  the  "spy:"  prompt  will result in continuous (every time'  /
+   data texspy ( 451 )  /  '  step) triangularization.   it is turned off  (no more automatic factoring)  by'  /
+   data texspy ( 452 )  /  '  sending  "nof"  in response to the  "spy:"  prompt.                           '  /
+   data texspy ( 453 )  /  'key word no. 41:  "nof"         ----  ----  ----                                '  /
+   data texspy ( 454 )  /  '  this  response  to  the  "spy:"  prompt  will  cancel  a  preceding   "factor"'  /
+   data texspy ( 455 )  /  '  request for the continuous re-triangularization of [y].                       '  /
+   data texspy ( 456 )  /  'key word no. 42:  "rlc"         ----  ----  ----                                '  /
+   data texspy ( 457 )  /  '  this response to the  "spy:"  prompt will produce a display of the EMTP  R-L-C'  /
+   data texspy ( 458 )  /  '  tables.  subsequently  send  an  additional  "extra"  to  change to  the  next'  /
+   data texspy ( 459 )  /  '  sub-table  (as of february 1984, there  are  two),  if  different columns  are'  /
+   data texspy ( 460 )  /  '  desired.  within any one choice as to sub-table,  there is a loop in which the'  /
+   data texspy ( 461 )  /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
+   data texspy ( 462 )  /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
+   data texspy ( 463 )  /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage '  /
+   data texspy ( 464 )  /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
+   data texspy ( 465 )  /  '  and return to the  "spy:"  prompt.  to refresh the heading,  use either  "rlc"'  /
+   data texspy ( 466 )  /  '  or  "head"  (only 4 characters of  "heading"  are checked).                   '  /
+   data texspy ( 467 )  /  'key word no. 43:  "width"       ----  ----  ----                                '  /
+   data texspy ( 468 )  /  '  this response to the  "spy:"  prompt will toggle the output line length  (if  '  /
+   data texspy ( 469 )  /  '  equal to 132 at the time the command is issued, it will be changed to 80,  and'  /
+   data texspy ( 470 )  /  '  vice-versa).  this is for EMTP line printer output (channel lunit6) only.     '  /
+   data texspy ( 471 )  /  'key word no. 44:  "bus"         ----  ----  ----                                '  /
+   data texspy ( 472 )  /  '  this response to the  "spy:"  prompt will produce a display  of  the  EMTP bus'  /
+   data texspy ( 473 )  /  '  vectors.   subsequently  send  an  additional  "extra"  to  change to the next'  /
+   data texspy ( 474 )  /  '  next sub-table (as of february 1984, there are two),  if different columns are'  /
+   data texspy ( 475 )  /  '  desired.  within any one choice as to sub-table,  there is a loop in which the'  /
+   data texspy ( 476 )  /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
+   data texspy ( 477 )  /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
+   data texspy ( 478 )  /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage '  /
+   data texspy ( 479 )  /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
+   data texspy ( 480 )  /  '  and return to the  "spy:"  prompt.  to refresh the heading,  use either  "bus"'  /
+   data texspy ( 481 )  /  '  or  "head"  (only 4 characters of "heading" are checked).                     '  /
+   data texspy ( 482 )  /  'key word no. 45:  "size"        ----  ----  ----                                '  /
+   data texspy ( 483 )  /  '  this response  to  the  "spy:"  prompt  will  produce a display of actual EMTP'  /
+   data texspy ( 484 )  /  '  data requirements  ----  the  "present figure"  list sizes which are  seen  at'  /
+   data texspy ( 485 )  /  '  the end of batch-mode EMTP printout, in the case-summary statistics.          '  /
+   data texspy ( 486 )  /  'key word no. 46:  "limit"       ----  ----  ----                                '  /
+   data texspy ( 487 )  /  '  this response  to  the  "spy:"  prompt  will produce a display of the limiting'  /
+   data texspy ( 488 )  /  '  EMTP table sizes  ----  the  "program limit"  list sizes which are seen at the'  /
+   data texspy ( 489 )  /  '  end of batch-mode EMTP printout,  in the case-summary statistics.             '  /
+   data texspy ( 490 )  /  'key word no. 47:  "iout"        ----  ----  ----                                '  /
+   data texspy ( 491 )  /  '  this response  to  the  "spy:"  prompt  will alter the EMTP printout frequency'  /
+   data texspy ( 492 )  /  '  according  to  the user"s latest desire.   the response will be instantaneous,'  /
+   data texspy ( 493 )  /  '  with  a  later  minor adjustment at the first round step number  (the next one'  /
+   data texspy ( 494 )  /  '  which  is  divisible  by  iout  with zero  remainder).   this command cancels '  /
+   data texspy ( 495 )  /  '  any  previous  batch-mode requests  for  modification  of the output frequency'  /
+   data texspy ( 496 )  /  '  (e.g., the special-request word  "change printout frequency").                '  /
+   data texspy ( 497 )  /  'key word no. 48:  "node"        ----  ----  ----                                '  /
+   data texspy ( 498 )  /  '  this response  to  the  "spy:"  prompt  will yield a question/answer loop with'  /
+   data texspy ( 499 )  /  '  input being a user-supplied 6-character bus name, and output (the spy display)'  /
+   data texspy ( 500 )  /  '  being the corresponding EMTP node number.   after any one node number has been'  /
+   data texspy ( 501 )  /  '  displayed,  the  user can send  "connect"  to obtain a list of all row numbers'  /
+   data texspy ( 502 )  /  '  of all connected branches/switches/nonlinear elements.                        '  /
+   data texspy ( 503 )  /  'key word no. 49:  "nonlin"      ----  ----  ----                                '  /
+   data texspy ( 504 )  /  '  this  response  to  the  "spy:"  prompt  is  issued  for a display of the EMTP'  /
+   data texspy ( 505 )  /  '  nonlinear element table.  subsequently  send an additional  "extra"  to change'  /
+   data texspy ( 506 )  /  '  to the next sub-table (as of february 1984, there are just two),  if different'  /
+   data texspy ( 507 )  /  '  columns are desired.  within any one sub-table,  there is a loop in which  the'  /
+   data texspy ( 508 )  /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
+   data texspy ( 509 )  /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
+   data texspy ( 510 )  /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage '  /
+   data texspy ( 511 )  /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
+   data texspy ( 512 )  /  '  and return to the  "spy:"  prompt.  to refresh the heading, use either  "nonl"'  /
+   data texspy ( 513 )  /  '  or  "head"  (only 4 characters of "nonlin" or "heading" are checked).         '  /
+   data texspy ( 514 )  /  'key word no. 50:  "space"       ----  ----  ----                                '  /
+   data texspy ( 515 )  /  '  this response to the  "spy:"  prompt begins dialogue which can rearrange      '  /
+   data texspy ( 516 )  /  '  storage of either data cards or plot data points.  such use is mandatory if   '  /
+   data texspy ( 517 )  /  '  no additional room for plot data remains (logic of "pltfil" will deny passage '  /
+   data texspy ( 518 )  /  '  until more storage has so been freed, in such a case).  the management of card'  /
+   data texspy ( 519 )  /  '  images will generally be performed only in conjunction with  "edit"  use, to  '  /
+   data texspy ( 520 )  /  '  modify EMTP data.  parameters related to these two storages will be displayed:'  /
+   data texspy ( 521 )  /  '     indbeg --- beginning location (index to /c29b01/) of plot data points;     '  /
+   data texspy ( 522 )  /  '     indbuf --- next free cell (index to /c29b01/) for storage of plot data;    '  /
+   data texspy ( 523 )  /  '     limbuf --- limit on indbuf (end of /c29b01/);                              '  /
+   data texspy ( 524 )  /  '     numdcd --- last card read by EMTP (index to character(8)0 file6 storage)   '  /
+   data texspy ( 525 )  /  '     numcrd --- largest index for card storage in file6 (as read by data);      '  /
+   data texspy ( 526 )  /  '     limcrd --- limiting index for file6 card storage (dimensioned limit).      '  /
+   data texspy ( 527 )  /  '  immediately after this display there will be a choice among the possible      '  /
+   data texspy ( 528 )  /  '  responses  "cards",  "plot",  and  "spy".  the third of these will abort      '  /
+   data texspy ( 529 )  /  '  the command, while the first two select between the two major classes of      '  /
+   data texspy ( 530 )  /  '  space management.                                                             '  /
+   data texspy ( 531 )  /  '       (1) for the  "plot"  case,  the user must next choose among  "write",    '  /
+   data texspy ( 532 )  /  '  "thin",  "delete",  and  "read",  basically.   the first of these writes plot '  /
+   data texspy ( 533 )  /  '  points to disk just as a non-interactive program would, using i/o channel     '  /
+   data texspy ( 534 )  /  '  number lunit4.   the only change is that the time span  [tbeg, tend]  to be   '  /
+   data texspy ( 535 )  /  '  dumped,  as well as the frequency of the output (the effective iplot), are    '  /
+   data texspy ( 536 )  /  '  under interactive control (chosen by responses to subsequent prompts).  the   '  /
+   data texspy ( 537 )  /  '  "thin"  command discards points within the  [tbeg, tend]  window according to '  /
+   data texspy ( 538 )  /  '  a user-specified frequency.  the  "delete"  option destroys all points        '  /
+   data texspy ( 539 )  /  '  (the effective iplot is infinite) within the user-specified time range        '  /
+   data texspy ( 540 )  /  '  [tbeg,  tend].   the  "read"  option is the reverse of  "write",  allowing the'  /
+   data texspy ( 541 )  /  '  restoration of lunit4 disk-stored points to the working interactive memory.   '  /
+   data texspy ( 542 )  /  '  this is done with user-specified frequency within the time range [tbeg, tend].'  /
+   data texspy ( 543 )  /  '  finally, there is a hybrid command  "flush"  which combines  "write"  and     '  /
+   data texspy ( 544 )  /  '  "thin"  (assuming that the user wants to use a common multiplicity for both   '  /
+   data texspy ( 545 )  /  '  operations).  after compacting operations, there will be printout of available'  /
+   data texspy ( 546 )  /  '  free space.  the normal EMTP line printer output (i/o channel lunit6) will    '  /
+   data texspy ( 547 )  /  '  contain a record of the plot-file manipulations, to remind the user of what   '  /
+   data texspy ( 548 )  /  '  he has done.  an extra command is  "auto",  which gives an automatic, full    '  /
+   data texspy ( 549 )  /  '  "flush"  from that point onward.                                              '  /
+   data texspy ( 550 )  /  '       (2) for the  cards  branch, the user is prompted to choose among  "move",'  /
+   data texspy ( 551 )  /  '  "copy",  and  "blank".   the first of these is for block transfers (leaving   '  /
+   data texspy ( 552 )  /  '  blanks in vacated locations), while the second is for block reproductions     '  /
+   data texspy ( 553 )  /  '  (leaving the original locations unaltered).  the  "blank"  command is to      '  /
+   data texspy ( 554 )  /  '  erase a block of cards.  in all three cases, beginning locations and total    '  /
+   data texspy ( 555 )  /  '  number of cards processed are used to define the blocks involved.             '  /
+   data texspy ( 556 )  /  '       many sub-commands of the large "space"  command allow the abort option   '  /
+   data texspy ( 557 )  /  '  "spy" (to return to the  "spy:"  prompt), or the option of backing up one     '  /
+   data texspy ( 558 )  /  '  level (via  "out").                                                           '  /
+   data texspy ( 559 )  /  'key word no. 51:  "lunit4"      ----  ----  ----                                '  /
+   data texspy ( 560 )  /  '  issue  this  command  to  connect  (fortran open), disconnect (fortran close),'  /
+   data texspy ( 561 )  /  '  position,  or  inspect  the  contents of  the disk file of plot data which is '  /
+   data texspy ( 562 )  /  '  connected  to  i/o unit number  lunit4.   recall that a disk file can be given'  /
+   data texspy ( 563 )  /  '  solution  points  via  the  "disk"  or  "flush"  subcommands  of  the  "space"'  /
+   data texspy ( 564 )  /  '  command.  subcommand choices are as follows: "open",  "close",  "top",  "bot",'  /
+   data texspy ( 565 )  /  '  "next",  "back",  and  "time".   in order,  these shall now                   '  /
+   data texspy ( 566 )  /  '  be summarized:                                                                '  /
+   data texspy ( 567 )  /  '       open -- subsequent prompts will allow for a user-supplied file name      '  /
+   data texspy ( 568 )  /  '               (not to exceed 32 characters), and the  "status"  choice         '  /
+   data texspy ( 569 )  /  '               between  "new"  and  "old"  (vacuous or pre-defined files).      '  /
+   data texspy ( 570 )  /  '       close -- there are no parameters; the distinction between  "keep"        '  /
+   data texspy ( 571 )  /  '                and  "delete"  is implicit (all opened files should be saved).  '  /
+   data texspy ( 572 )  /  '       top  --- to position the lunit4 disk file ready to read the beginning    '  /
+   data texspy ( 573 )  /  '                plot data (for smallest time);                                  '  /
+   data texspy ( 574 )  /  '       bot  --- to position the lunit4 disk file after reading the final plot   '  /
+   data texspy ( 575 )  /  '                data (there is a read until an end-of-file).  certain computers '  /
+   data texspy ( 576 )  /  '                (e.g., vax) allow writeing at this point, so old plot files can '  /
+   data texspy ( 577 )  /  '                be directly added to after such an initial positioning.         '  /
+   data texspy ( 578 )  /  '       next --- to read and display the plot points of the next time instant.   '  /
+   data texspy ( 579 )  /  '                this forward read is fast for all known computers.              '  /
+   data texspy ( 580 )  /  '       back --- to read and display plot points of the preceding time step.     '  /
+   data texspy ( 581 )  /  '                since this uses backspace, be aware that for some computers     '  /
+   data texspy ( 582 )  /  '                (prime, apollo, etc.), this command is internally converted to  '  /
+   data texspy ( 583 )  /  '                a  "top"  and  "time" command which backs up two steps.         '  /
+   data texspy ( 584 )  /  '       time --- to position the lunit4 plot file immediately after having read  '  /
+   data texspy ( 585 )  /  '                points for the first step at or beyond the user-specified time; '  /
+   data texspy ( 586 )  /  'key word no. 52:  "series"      ----  ----  ----                                '  /
+   data texspy ( 587 )  /  '  issue this command in order to modify the values of series R-L-C branches     '  /
+   data texspy ( 588 )  /  '  within the time-step loop.  such usage requires one unused row of both the    '  /
+   data texspy ( 589 )  /  '  branch table (list 2) and the branch-parameter table (list 7) for each series '  /
+   data texspy ( 590 )  /  '  R-L-C branch of interest.  the  "series"  command is coupled to the  "ramp"   '  /
+   data texspy ( 591 )  /  '  command in that  "series"  must be used to select the branches of interest    '  /
+   data texspy ( 592 )  /  '  or potential interest ahead of time, while it is  "ramp"  that actually varies'  /
+   data texspy ( 593 )  /  '  them when the time comes.  this would be for continuous variation (ramping),  '  /
+   data texspy ( 594 )  /  '  which is the most common case of interest.  for step changes (single-time     '  /
+   data texspy ( 595 )  /  '  occurances),  "ramp"  is not used.  in either case,  actual changes to [y]    '  /
+   data texspy ( 596 )  /  '  occur just prior to factoring of [y] in  "subts1"  of overlay 16.  previously,'  /
+   data texspy ( 597 )  /  '  the user must issue a spy call for  "series"  ----   at any point prior to    '  /
+   data texspy ( 598 )  /  '  overlay 12.  this is remembered, so that the EMTP will later automatically    '  /
+   data texspy ( 599 )  /  '  break in the middle of  "over12"  with a message that this is the time to     '  /
+   data texspy ( 600 )  /  '  define the table of series R-L-C branches which might later be tampered with. '  /
+   data texspy ( 601 )  /  '  at the automatic break in  "over12", the user chooses among the commands      '  /
+   data texspy ( 602 )  /  '  "show",  "extra",  "change",  "step", "rewind",  and  "spy".   "show"  will   '  /
+   data texspy ( 603 )  /  '  display the table of series R-L-C branches which have thus far been considered'  /
+   data texspy ( 604 )  /  '  for possible later change,  with  "extra"  yielding an extension to the       '  /
+   data texspy ( 605 )  /  '  display (a second table,  giving starting and next values).   "change"  is the'  /
+   data texspy ( 606 )  /  '  gateway to various further choices  ("data",  "move",  "blank",  "use",       '  /
+   data texspy ( 607 )  /  '  "value",  "end",  and  "spy")  for the definition and manipulation of the     '  /
+   data texspy ( 608 )  /  '  table of  "show".   quickly summarizing these,  "data"  is used to copy series'  /
+   data texspy ( 609 )  /  '  R-L-C branches into the tamper table, while  "move"  will copy from one row of'  /
+   data texspy ( 610 )  /  '  the tamper table to another, and  "blank"  will erase any such row.   "use"   '  /
+   data texspy ( 611 )  /  '  allows the user to toggle the activity status of any entry in the tamper      '  /
+   data texspy ( 612 )  /  '  table,  while  "value"  allows modification of R-L-C parameters in case this  '  /
+   data texspy ( 613 )  /  '  is to be done discontinuously.   "end"  moves outward, back to the preceding  '  /
+   data texspy ( 614 )  /  '  prompt,  while  "spy"  aborts  "show" and returns to the  "spy:"  prompt.     '  /
+   data texspy ( 615 )  /  '  this completes  "change"  usage.   next is  "step",  which is the command for '  /
+   data texspy ( 616 )  /  '  a manual, discontinuous change at the next available opportunity (within one  '  /
+   data texspy ( 617 )  /  '  time step).   "rewind"  will erase the tamper table completely, so it is only '  /
+   data texspy ( 618 )  /  '  recommended if the existing table is unsalvageable.   for details of the      '  /
+   data texspy ( 619 )  /  '  behind the ramping of series R-L-C elements, see vladimir"s article in the    '  /
+   data texspy ( 620 )  /  '  EMTP newsletter, vol. 4, no. 2, november, 1983.                               '  /
+   data texspy ( 621 )  /  'key word no. 53:  "lock"        ----  ----  ----                                '  /
+   data texspy ( 622 )  /  '  issue this command to disable time-sharing between  spy  and the ongoing EMTP '  /
+   data texspy ( 623 )  /  '  simulation.  subsequent cancellation of the command is by  "go".   since this '  /
+   data texspy ( 624 )  /  '  command is absolute, it can be repeated any number of times.   besides this   '  /
+   data texspy ( 625 )  /  '  user-defined  "lock"  command,  there are hidden, internal ones, such as the  '  /
+   data texspy ( 626 )  /  '  one by module  "pltfil"  when plot data space has been exhausted.  but a word '  /
+   data texspy ( 627 )  /  '  of caution:  all of this talk about time-sharing has meaning only for those   '  /
+   data texspy ( 628 )  /  '  computers which allow time-sharing (with type-ahead that is not erased by the '  /
+   data texspy ( 629 )  /  '  user-keyed interrupt).                                                        '  /
+   data texspy ( 630 )  /  'key word no. 54:  "[y]"         ----  ----  ----                                '  /
+   data texspy ( 631 )  /  '  issue this command to display one or more rows of the nodal admittance matrix '  /
+   data texspy ( 632 )  /  '  [y] of the time-step loop.   a subsequent prompt will request the desired row,'  /
+   data texspy ( 633 )  /  '  which may either be specified by bus name (assumed to begin with a letter), or'  /
+   data texspy ( 634 )  /  '  by a node number.  alternate responses are  "spy"  or  "end"  (to return to   '  /
+   data texspy ( 635 )  /  '  the  "spy:"  prompt),  "top"  (to display the row for node 2),  "bot"  (to    '  /
+   data texspy ( 636 )  /  '  display the row for node  kpartb),  and  "next"  or  nothing  (to display the '  /
+   data texspy ( 637 )  /  '  following row).   each nonzero term of the row will be displayed,  next to    '  /
+   data texspy ( 638 )  /  '  the associated column number.   a minus sign applied to the column number is  '  /
+   data texspy ( 639 )  /  '  used to mark the largest column of the row.   in case separate  "examine"     '  /
+   data texspy ( 640 )  /  '  usage might be contemplated,  kks  points to the  (km, ykm)  pairs.           '  /
+   data texspy ( 641 )  /  'key word no. 55:  "[f]"         ----  ----  ----                                '  /
+   data texspy ( 642 )  /  '  issue this command to display one or more rows of the table of factors (the   '  /
+   data texspy ( 643 )  /  '  triangularized [y] of the time-step loop).   display options are generally    '  /
+   data texspy ( 644 )  /  '  identical to the immediately-preceding  "[y]"  command,  except that here     '  /
+   data texspy ( 645 )  /  '  only the upper triangle exists,  a minus sign marks the diagonal entry,  and  '  /
+   data texspy ( 646 )  /  '  kk  is the pointer (which can be observed  via the  "bus"  command).          '  /
+   data texspy ( 647 )  /  'key word no. 55:  "noroll"      ----  ----  ----                                '  /
+   data texspy ( 648 )  /  '  use this command to cancel  rolling character and/or vector plots.   these    '  /
+   data texspy ( 649 )  /  '  began,  it should be recalled,  via "rollc"  and/or  "rollv"  commands        '  /
+   data texspy ( 650 )  /  '  (independent of each other, and also independent of the "tek" setting) at the '  /
+   data texspy ( 651 )  /  '  "inner:"  level of plotting.   the user-keyed interrupt will by itself stop   '  /
+   data texspy ( 652 )  /  '  the rolling only if control is within "chrplt"  or  "tekplt"  plotting        '  /
+   data texspy ( 653 )  /  '  modules when it is spotted.  otherwise, this added manual request is needed.  '  /
+   data texspy ( 654 )  /  '  the only alternative would be to go back into the  "inner:"  level of         '  /
+   data texspy ( 655 )  /  '  plotting to toggle the appropriate switch (via  "rollc"  and/or  "rollv"      '  /
+   data texspy ( 656 )  /  '  requests).                                                                    '  /
+   data texspy ( 657 )  /  'key word no. 57:  "open"        ----  ----  ----                                '  /
+   data texspy ( 658 )  /  '  issue this command to  open  a formatted disk file.  a loop will be entered in'  /
+   data texspy ( 659 )  /  '  which there will be a prompt for the next i/o unit number, and the disk       '  /
+   data texspy ( 660 )  /  '  file which is to be connected thereto.  to exit the loop, send a blank line.  '  /
+   data texspy ( 661 )  /  'key word no. 58:  "close"       ----  ----  ----                                '  /
+   data texspy ( 662 )  /  '  issue this command to  close  a disk file.  a loop will be entered in         '  /
+   data texspy ( 663 )  /  '  which there will be a prompt for the next i/o unit number, and the  status    '  /
+   data texspy ( 664 )  /  '  (either  keep  or  delete  are ok). to exit the loop, send a blank line.      '  /
+   data texspy ( 665 )  /  'key word no. 59:  "sm"          ----  ----  ----                                '  /
+   data texspy ( 666 )  /  '  issue this command to display the various electrical, mechanical, and solution'  /
+   data texspy ( 667 )  /  '  parameters of any type-59 synchronous machine (s.m.).  time-sharing by spy    '  /
+   data texspy ( 668 )  /  '  is automatically suspended during this display, due to algorithmic limitations'  /
+   data texspy ( 669 )  /  '  of the type-59 model (examination is only possible as that machine is being   '  /
+   data texspy ( 670 )  /  '  processed within subroutine update, which is called by "subts1" (the first    '  /
+   data texspy ( 671 )  /  '  piece of the time-step loop.  the user can issue the  "sm"  request at any    '  /
+   data texspy ( 672 )  /  '  time, but in fact the EMTP simulation will stop within the processing loop of '  /
+   data texspy ( 673 )  /  '  "update", and allow the user to accept or reject (y or n responses) each      '  /
+   data texspy ( 674 )  /  '  machine in turn.  actually, only  "n" vetos the opportunity (a simple <cr>    '  /
+   data texspy ( 675 )  /  '  will accept the next machine).  once considering any one type-59 s.m., there  '  /
+   data texspy ( 676 )  /  '  are subsequent choices as to which parameters the user wants to see:  "elec"  '  /
+   data texspy ( 677 )  /  '  for electrical parameters,  "mech"  for mechanical parameters, etc.           '  /
+   data texspy ( 678 )  /  '  ?????????   as of 26 feb 84, command is not complete   ?????????????????????  '  /
+   data texspy ( 679 )  /  'key word no. 60:  "honk"        ----  ----  ----                                '  /
+   data texspy ( 680 )  /  '  issue this command to ring the terminal bell (i.e., honk its horn).  there    '  /
+   data texspy ( 681 )  /  '  will then be a prompt for an integer severity level, which should be between  '  /
+   data texspy ( 682 )  /  '  one and ten (zero produces no response, while 10 indicates a disaster).       '  /
+   data texspy ( 683 )  /  'key word no. 61:  "choice"      ----  ----  ----                                '  /
+   data texspy ( 684 )  /  '  issue this command to see output variable names of any of the five classes    '  /
+   data texspy ( 685 )  /  '  making up the EMTP output vector (1=node voltages,  2=branch voltages,  etc.).'  /
+   data texspy ( 686 )  /  '  order of the five classes corresponds to the order of concatenation in the    '  /
+   data texspy ( 687 )  /  '  EMTP output vector;  and within each class, the order corresponds, too.  the  '  /
+   data texspy ( 688 )  /  '  display is dynamic,  so it always reflects the current output variables       '  /
+   data texspy ( 689 )  /  '  (unlike  "choice"  at the  "middle:" level of plotting,  which only displays  '  /
+   data texspy ( 690 )  /  '  the original status of overlay 15).                                           '  /
+   data texspy ( 691 )  /  'key word no. 62:  "tacs"        ----  ----  ----                                '  /
+   data texspy ( 692 )  /  '  issue this command as the gateway to concurrent sequential processing (csp),  '  /
+   data texspy ( 693 )  /  '  which is based on special, spy-defined tacs supplemental variable usage.  then'  /
+   data texspy ( 694 )  /  '  one enters a loop over csp control commands.   if  "rewind"  is requested,    '  /
+   data texspy ( 695 )  /  '  all previous definitions are erased, so definitions begin from level zero.  if'  /
+   data texspy ( 696 )  /  '  "source"  is sent,  all following input is assumed to be tacs source cards,   '  /
+   data texspy ( 697 )  /  '  until terminated by an  "end"  card. if  "supplemental"  is sent,  then all   '  /
+   data texspy ( 698 )  /  '  following data cards (spy input) is assumed to be tacs supplemental variable/ '  /
+   data texspy ( 699 )  /  '  device data cards,  also until an  "end"  card is encountered.  the subcommand'  /
+   data texspy ( 700 )  /  '  "patch"  allows the user to connect any variables to his tacs sources  (to    '  /
+   data texspy ( 701 )  /  '  define the inputs),  and apply any supplemental variable results anywhere.    '  /
+   data texspy ( 702 )  /  '  the "any" comes from the use of a memory address of the spy commands  "list"  '  /
+   data texspy ( 703 )  /  '  or  "find",  just as  "examine"  or "deposit"  are quite unrestricted.  there '  /
+   data texspy ( 704 )  /  '  will be separate prompts for all such tacs input and output connections.  when'  /
+   data texspy ( 705 )  /  '  all such connections are complete,  "show"  can be used to display a summary  '  /
+   data texspy ( 706 )  /  '  table of all tacs csp input/output connections.   working room for such usage '  /
+   data texspy ( 707 )  /  '  can be controlled by the user in several ways, if there are shortages.  first,'  /
+   data texspy ( 708 )  /  '  if a user wants dummy output channels for printing/plotting, reserve dummy    '  /
+   data texspy ( 709 )  /  '  node voltage outputs with  "chan01" punched in cols. 3-8, and the desired     '  /
+   data texspy ( 710 )  /  '  number punched in columns 9-16 with i8format.   resultant names will be       '  /
+   data texspy ( 711 )  /  '  serialized from the aforementioned root, and added to the output vector at the'  /
+   data texspy ( 712 )  /  '  point of definition (if this card is first, all such dummy names will come    '  /
+   data texspy ( 713 )  /  '  first, before other node voltages). second, there is array dimensioning for   '  /
+   data texspy ( 714 )  /  '  all vectors of the  "choice"  table ---  presently fixed in deck "dekspy", at '  /
+   data texspy ( 715 )  /  '  the moment.  finally, in addition to the familiar tacs table limits, there is '  /
+   data texspy ( 716 )  /  '  an automatic reservation of space for all user-defined tacs csp sources.  this'  /
+   data texspy ( 717 )  /  '  is maximized automatically, within existing tacs dimensions (as assigned by   '  /
+   data texspy ( 718 )  /  '  absolute tacs dimensions, for example).  as usual,  "spy"  will break out of  '  /
+   data texspy ( 719 )  /  '  any loop, in case an abortion is desired.                                     '  /
+   data texspy ( 720 )  /  'key word no. 63:  "wait"        ----  ----  ----                                '  /
+   data texspy ( 721 )  /  '  the response to this spy command will be a prompt for the desired delay       '  /
+   data texspy ( 722 )  /  '  (hibernation) time in seconds.  once this is accepted, the installation-      '  /
+   data texspy ( 723 )  /  '  dependent subroutine tdelay  is called, to return control only after the      '  /
+   data texspy ( 724 )  /  '  requested nap.                                                                '  /
+   data texspy ( 725 )  /  'key word no. 64:  "v-i""        ----  ----  ----                                '  /
+   data texspy ( 726 )  /  '  this spy command is used to examine the list-10 characteristics of all        '  /
+   data texspy ( 727 )  /  '  nonlinear and pseudo-nonlinear elements.  the name  "v-i"  is symbolic        '  /
+   data texspy ( 728 )  /  '  only, since flux-current or resistance-time characteristics are also          '  /
+   data texspy ( 729 )  /  '  included.  immediately upon entry, there will be a display of the number      '  /
+   data texspy ( 730 )  /  '  of nonlinear elements (list 9) and data points of the characteristics         '  /
+   data texspy ( 731 )  /  '  (list 10).  also shown will be a listof options to a pair of free-format      '  /
+   data texspy ( 732 )  /  '  row numbers:                                                                  '  /
+   data texspy ( 733 )  /  '     next or <cr>  ---- to display the characteristic of the next element       '  /
+   data texspy ( 734 )  /  '                        of the nonlinear element table.  there is wrap around   '  /
+   data texspy ( 735 )  /  '                        from beginning to end.  no initialization required.     '  /
+   data texspy ( 736 )  /  '     last  ---- to display the characteristic of the preceding element of       '  /
+   data texspy ( 737 )  /  '                the nonlinear element table.  there is wrap around from the     '  /
+   data texspy ( 738 )  /  '                beginning to the end. no initialization is required.            '  /
+   data texspy ( 739 )  /  '     all  --- to display all rows of the list 10 characteristics.               '  /
+   data texspy ( 740 )  /  '     spy, end, or stop ---- to abort display loop, and return to  "spy:"        '  /
+   data texspy ( 741 )  /  '     mode  ---- to toggle the binary switch which selects between a display     '  /
+   data texspy ( 742 )  /  '                by elements (value n8=0), and a display by rows of list 10.     '  /
+   data texspy ( 743 )  /  '                initially, the display by elements, only one at a time, is      '  /
+   data texspy ( 744 )  /  '                assumed.                                                        '  /
+   data texspy ( 745 )  /  '  in case the use inputs a pair of numbers instead of one of these key          '  /
+   data texspy ( 746 )  /  '  words, then the response depends on mode.   for the display by elements,      '  /
+   data texspy ( 747 )  /  '  the first list-9 entry with a characteristic contained within the range       '  /
+   data texspy ( 748 )  /  '  [n1, n2]  is identified, and displayed (where n1 and n2 are the ordered       '  /
+   data texspy ( 749 )  /  '  pair of free-format numbers which the user has inputted.  on the other hand,  '  /
+   data texspy ( 750 )  /  '  with  mode  toggled for the absolute, unlimited display of list 10 rows,      '  /
+   data texspy ( 751 )  /  '  then these rows (within limits of availability) are displayed.                '  /
+   data texspy ( 752 )  /  '  the following plot commands are honored at all three levels (either  "outer:",'  /
+   data texspy ( 753 )  /  '  "middle",  or  "inner:")  of plot dialogue:                                   '  /
+   data texspy ( 754 )  /  '  stop  ---  to abort  "plot"  activity,  and return to the  "spy:"  prompt.    '  /
+   data texspy ( 755 )  /  '  spy   ---  to abort  "plot"  activity,  and return to the  "spy:"  prompt.    '  /
+   data texspy ( 756 )  /  '  in   ----  to transfer one level inward  (either from  "outer"  to  "middle:" '  /
+   data texspy ( 757 )  /  '             or from  "middle"  to  "inner")  in the plot dialogue.             '  /
+   data texspy ( 758 )  /  '  help  ---  to produce the display now being viewed.  if unqualified, messages '  /
+   data texspy ( 759 )  /  '             will be restricted to the level of current operation.  but one     '  /
+   data texspy ( 760 )  /  '             blank and then a qualifier ("all", "outer", "middle", or "inner")  '  /
+   data texspy ( 761 )  /  '             provide the opportunity to see messages of other levels, too.      '  /
+   data texspy ( 762 )  /  '  debug  --  to alter the level of diagnostic printout.  if none is now being   '  /
+   data texspy ( 763 )  /  '             used, this command will turn it on.  in fact, the control is       '  /
+   data texspy ( 764 )  /  '             identical to that used in response to the  "spy:"  prompt (iprspy).'  /
+   data texspy ( 765 )  /  '               < < <  =======   end of any-level  commands   =======  > > >     '  /
+   data texspy ( 766 )  /  '  set data -- to over-ride default data values with user-established choices.   '  /
+   data texspy ( 767 )  /  '              the associated user-defined data file must be pre-stored on disk, '  /
+   data texspy ( 768 )  /  '              and must have the file name  "tpparam.dat".                       '  /
+   data texspy ( 769 )  /  '  tek  ---- to toggle the switch which chooses between character plotting and   '  /
+   data texspy ( 770 )  /  '            vector-graphic (e.g., tektronix) plotting.  the default may be      '  /
+   data texspy ( 771 )  /  '            computer dependent, or come from  "set data"  usage.                '  /
+   data texspy ( 772 )  /  '  column -- to toggle the switch that chooses between 80 and 132-column widths  '  /
+   data texspy ( 773 )  /  '            for character plotting.                                             '  /
+   data texspy ( 774 )  /  '  set column -- to set character plot widths to any value.  but if either 80 or '  /
+   data texspy ( 775 )  /  '                132 is desired (common choices), use the simpler  "column".     '  /
+   data texspy ( 776 )  /  '               < < <  =======   end of outer-level  commands   =======  > > >   '  /
+   data texspy ( 777 )  /  '  timespan -- to be shown the time range  [t-min, t-max]  of the plot data.     '  /
+   data texspy ( 778 )  /  '  choice -- to produce a tabulation of plotable EMTP variables.   but be very   '  /
+   data texspy ( 779 )  /  '            careful, since the resultant tabulation corresponds to the status   '  /
+   data texspy ( 780 )  /  '            before the time-step loop was entered.  for a dynamic tabulation,   '  /
+   data texspy ( 781 )  /  '            use  "choice"  in response to the  "spy:"  prompt.                  '  /
+   data texspy ( 782 )  /  '  time units -- to specify the integer which characterizes the time units used  '  /
+   data texspy ( 783 )  /  '                in the plotting.  this is just as with batch-mode EMTP plotting,'  /
+   data texspy ( 784 )  /  '                where:  "1"  -- for degrees based on the power frequency;       '  /
+   data texspy ( 785 )  /  '                        "2"  -- for cycles  based on the power frequency;       '  /
+   data texspy ( 786 )  /  '                        "3,4,5"  -- for seconds, milliseconds, and microseconds '  /
+   data texspy ( 787 )  /  '                        "6,7" -- for  "frequency scan"  data cases, using either'  /
+   data texspy ( 788 )  /  '                                 hz or the log to base 10 of hz,  rather than t.'  /
+   data texspy ( 789 )  /  '  x   ----- any garbage character (including blank) represents a request for the'  /
+   data texspy ( 790 )  /  '            program to begin the interrogation for plot variables and labeling. '  /
+   data texspy ( 791 )  /  '            hereafter, in response to the different prompts, several special    '  /
+   data texspy ( 792 )  /  '            key words are applicable (immediately below).  upon the completion  '  /
+   data texspy ( 793 )  /  '            of all such information, there is an automatic transfer to the      '  /
+   data texspy ( 794 )  /  '            "inner:"  level of program dialogue.  but first, options are:       '  /
+   data texspy ( 795 )  /  '    repeat >> to reuse all former plot labels, send  "repeat"  when first asked '  /
+   data texspy ( 796 )  /  '              for label information (which begins with the super title).  for   '  /
+   data texspy ( 797 )  /  '              the first plot, "former labels" are all blank (initialization).   '  /
+   data texspy ( 798 )  /  '    back >>>> to abort input of plot variables, and return to "middle:" prompt. '  /
+   data texspy ( 799 )  /  '    end  >>>> to terminate all indeterminate inputs.  included are the three    '  /
+   data texspy ( 800 )  /  '              classes of plot variables, and lines of case-title text.          '  /
+   data texspy ( 801 )  /  '    last >>>> to terminate all plot-variable input, and begin specifying labels.'  /
+   data texspy ( 802 )  /  '    blank >>> sending nothing (just a carriage return) will usually reuse the   '  /
+   data texspy ( 803 )  /  '              old datum (e.g., node name, or line of case-title text).  old data'  /
+   data texspy ( 804 )  /  '              are usually displayed within parentheses for this reason.         '  /
+   data texspy ( 805 )  /  '    flush >>> to rewind the pointer which counts the lines of case-title text.  '  /
+   data texspy ( 806 )  /  '              the text then remains, to be accepted or overwritten line by line.'  /
+   data texspy ( 807 )  /  '    playback> to display the entire present case title.  this command is legal  '  /
+   data texspy ( 808 )  /  '              at any point before the "end"  which freezes the case title.      '  /
+   data texspy ( 809 )  /  '  label  -- to skip around the plot-variable specification (see "x" above), and '  /
+   data texspy ( 810 )  /  '            begin the input of plot labels.  plot variables remain unchanged.   '  /
+   data texspy ( 811 )  /  '               < < <  =======   end of middle-level  commands   =======  > > >  '  /
+   data texspy ( 812 )  /  '  extrema -- to toggle the switch that decides whether or not variable extrema  '  /
+   data texspy ( 813 )  /  '             of subsequent plots are to be displayed.  such output precedes the '  /
+   data texspy ( 814 )  /  '             associated plot (as does that of  "level"  below).  the program    '  /
+   data texspy ( 815 )  /  '             then pauses before drawing the graph, waiting for the user to send '  /
+   data texspy ( 816 )  /  '             a blank.  if the user wants to skip the plot and return to the     '  /
+   data texspy ( 817 )  /  '             "middle:"  level of dialogue, send  "no plot".                     '  /
+   data texspy ( 818 )  /  '  level -- to toggle the switch that decides whether or not level-triggers for  '  /
+   data texspy ( 819 )  /  '           variables are to be activated.  if such triggers are being turned on,'  /
+   data texspy ( 820 )  /  '           the program will next request a level vector.  the response is using '  /
+   data texspy ( 821 )  /  '           free-format.  the same pause exists as with  "extrema".              '  /
+   data texspy ( 822 )  /  '  smooth -- to change the tolerance which is used to discard plot points.       '  /
+   data texspy ( 823 )  /  '  size   -- to change the length of the time axis of character plots.           '  /
+   data texspy ( 824 )  /  '  show   -- to display the current values of many important plot parameters.    '  /
+   data texspy ( 825 )  /  '  factor -- to specify a new vector of multiplicative scaling factors for plot  '  /
+   data texspy ( 826 )  /  '            variables (the "a" of  z = a*y + b ).   zero is taken to mean unity,'  /
+   data texspy ( 827 )  /  '            and free-format is used.                                            '  /
+   data texspy ( 828 )  /  '  offset -- like  "factor",  only to specify the vector of constants  "b".      '  /
+   data texspy ( 829 )  /  '  rescale-- to return to natural scaling (i.e.,  a=1.0 ,  b=0.0 ) for all plot  '  /
+   data texspy ( 830 )  /  '            variables.  this is used to erase previous  "factor"  or  "offset". '  /
+   data texspy ( 831 )  /  '  limits -- to specify new minimum and maximum values for the vertical axis of  '  /
+   data texspy ( 832 )  /  '            plots.  send  "0,0"  to cancel previous manually-specified limits,  '  /
+   data texspy ( 833 )  /  '            and return to the automatic scaling of the computer.                '  /
+   data texspy ( 834 )  /  '  average-- to change the limit on the number of consecutive oscillations after '  /
+   data texspy ( 835 )  /  '            which the averaging of successive ordinates is to be instituted.    '  /
+   data texspy ( 836 )  /  '  time   -- to specify time-axis limits t-min  and  t-max  of the plot.  this   '  /
+   data texspy ( 837 )  /  '            must be done at least once, for the first plot, unless  "timespan"  '  /
+   data texspy ( 838 )  /  '            was issued at the  "middle:"  level (resulting in full time range). '  /
+   data texspy ( 839 )  /  '  all time--this is a request for a plot over the full time range of the data.  '  /
+   data texspy ( 840 )  /  '            it functions correctly only if  "timespan"  was previously used at  '  /
+   data texspy ( 841 )  /  '            the  "middle:"  level.                                              '  /
+   data texspy ( 842 )  /  '  blank  -- a blank (just a <cr>) is interpreted as a request for a plot using  '  /
+   data texspy ( 843 )  /  '            time-axis scaling as for the preceding plot (or the full range, if  '  /
+   data texspy ( 844 )  /  '            no previous plots existed, but  "timespan"  was ordered).           '  /
+   data texspy ( 845 )  /  '  cursor -- to toggle the switch that indicates whether or not cursor input is  '  /
+   data texspy ( 846 )  /  '            expected after the next vector plot.  when the cursor is switched to'  /
+   data texspy ( 847 )  /  '            "on",  following the plot there will be keyboard input following the'  /
+   data texspy ( 848 )  /  '            positioning of the cursor:                                          '  /
+   data texspy ( 849 )  /  '     p  >>>>> to mark another cursor point (wherever the cursor is sitting)     '  /
+   data texspy ( 850 )  /  '     e  >>>>> to terminate such marking input (end of cursor use, actually).    '  /
+   data texspy ( 851 )  /  '     show >>> to produce a tabulation of all cursor points (previous "p" usage).'  /
+   data texspy ( 852 )  /  '     slope >> to produce  dx,  dy,  f, and  dy/dx  of any pair of points that   '  /
+   data texspy ( 853 )  /  '              the user is interested in.  after the last such  (m,k)  pair of   '  /
+   data texspy ( 854 )  /  '              point numbers which are of interest,  send  "0,0"  to terminate.  '  /
+   data texspy ( 855 )  /  '     end  >>> to terminate all cursor displays, and return to  "inner:"  prompt.'  /
+   data texspy ( 856 )  /  '  x-y plot--to toggle the switch which chooses between regular plotting as a    '  /
+   data texspy ( 857 )  /  '            function of time (the default), and x-y plotting.                   '  /
+   data texspy ( 858 )  /  '  rollv  -- to toggle the switch which produces a  rolling  vector plot.   it is'  /
+   data texspy ( 859 )  /  '            normal to turn on such rolling after the basic plot is in place, and'  /
+   data texspy ( 860 )  /  '            the axis scaling is judged to be appropriate.  then, after  "rollv",'  /
+   data texspy ( 861 )  /  '            the user will normally send "spy"  to return to the  "spy:"  prompt '  /
+   data texspy ( 862 )  /  '            (from which  "go"  will be required to actually make the plot  roll,'  /
+   data texspy ( 863 )  /  '            if  "break"  or  "lock"  were in effect at that point).   should the'  /
+   data texspy ( 864 )  /  '            user wish to cancel a rolling vector plot from spy, send  "noroll"  '  /
+   data texspy ( 865 )  /  '            (which will stop both  rolling  vector and character plots).        '  /
+   data texspy ( 866 )  /  '  rollc  -- to toggle the switch which produces a  rolling  character plot.  see'  /
+   data texspy ( 867 )  /  '            preceding  "rollv"  for details (functioning is comparable).        '  /
+   data texspy ( 868 )  /  '               < < <  =======   end of inner-level  commands   =======  > > >   '  /
    data kbegtx (  1 )   /     1   /
    data kbegtx (  2 )   /     4   /
    data kbegtx (  3 )   /     9   /
@@ -7192,6 +7535,8 @@ subroutine sysplt (lunit4)
   !     it is called only by "sysdep", for storage in "dekplt".
   !     separate module needed because "dekplt" has no implicit.
   include 'dekplt.ftn'
+  integer, intent(in) :: lunit4
+  integer l4plot
   l4plot = lunit4
   return
 end subroutine sysplt
@@ -7201,7 +7546,7 @@ end subroutine sysplt
 !
 
 subroutine stopin
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     universal module of interactive emtp (spy of "emtspy").
   !     if non-interactive version, module can be destroyed.  this
   !     module is called only to display erroneous file6(istep), &
@@ -7439,34 +7784,46 @@ subroutine tpplot
   !     for non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
   include 'dekplt.ftn'
+  integer i, k, nexmod, numnam
+  integer iprspy, limcol, maxev, maxew, n1, n4
   save
   if (nexmod .gt. 4) go to 3769
   if (nexmod .ne. 4) go to 1742
   nexmod = 0
-  go to nextsn
+  !go to nextsn
+  select case (nextsn)
+  case (5003)
+     go to 5003
+
+  case (7361)
+     go to 7361
+
+  case (5147)
+     go to 5147
+  end select
 1742 hmax = 0.0
   hmin = 0.0
   ihs = 3
   tmult = 1.0
-  maxev = locint (bx) - locint (ev)
-  maxew = locint (finfin) - locint (ew)
+  maxev = loc (bx) - loc (ev)
+  maxew = loc (finfin) - loc (ew)
   maxew = maxew - 50
   do j = 1, 6
-1751 sext(j) = blan80
+     sext(j) = blan80
   end do
   do i = 1, 20
      aaa(i) = 1.0
      bbb(i) = 0.0
      mmm(i) = 0
      ylevel(i) = 0.0
-1765 slot1(i) = '        '
+     slot1(i) = '        '
   end do
 563 do j = 1, 20
-564  mcurve(j) = mline
+     mcurve(j) = mline
   end do
-1000 write (prom80, 5000)
+1000 write (unit = prom80, fmt = 5000)
 5000 format (' --- Outer :')
-  assign 5003 to nextsn
+  nextsn = 5003
   go to 9800
 5003 buffin = buff77
   kill = 0
@@ -7477,14 +7834,14 @@ subroutine tpplot
   call setrtm
   go to 563
 2757 if (buffin(1 : 8) .ne. debug) go to 7368
-  write (prom80, 7358) iprspy
+  write (unit = prom80, fmt = 7358) iprspy
 7358 format ('  Supply level-number  iprspy  (', i3,  ' ) :')
-  assign 7361 to nextsn
+  nextsn = 7361
   go to 9800
 7361 call frein1 (buff77, iprspy)
   go to 1000
 7368 if (iprspy .lt. 1) go to 3877
-  write (munit6, 3876) buffin
+  write (unit = munit6, fmt = 3876) buffin
 3876 format ('  Buffin vector =', a80)
   call window
 3877 if (buffin(1 : 8) .eq. stop) go to 3818
@@ -7494,7 +7851,7 @@ subroutine tpplot
 7385 format ('  ---- Switch from character to vector-graphic plotting.')
   call window
   go to 7388
-7387 write (munit6, 7386)
+7387 write (unit = munit6, fmt = 7386)
 7386 format ('  ---- Switch from vector-graphic to character plotting')
   call window
 7388 ltek = ltek + 1
@@ -7504,20 +7861,20 @@ subroutine tpplot
   n1 = limcol
   if (n1 .ne. 131) limcol = 131
   if (n1 .ne. 79) limcol =  79
-  write (munit6, 5139)  n1
+  write (unit = munit6, fmt = 5139)  n1
 5139 format ('   Character-plot column width was',  i5, '  columns.')
   call window
-  write (munit6, 5140) limcol
+  write (unit = munit6, fmt = 5140) limcol
 5140 format ('   It is now being toggled to', i5, ' .')
   call window
   go to 1000
 5143 if (buffin(1 : 8) .ne. setcol) go to 5154
-  write (prom80, 5146) limcol
+  write (unit = prom80, fmt = 5146) limcol
 5146 format ('  Supply printer-plot column width (', i4, ' ) :')
-  assign 5147 to nextsn
+  nextsn = 5147
   go to 9800
 5147 call frein1 (buff77, limcol)
-  write (munit6, 5148) limcol
+  write (unit = munit6, fmt = 5148) limcol
 5148 format ('   Confirmation.   New value =', i4, ' .')
   call window
   go to 1000
@@ -7529,33 +7886,33 @@ subroutine tpplot
 5200 newfil = 0
   tstep = -1.0
   rewind l4plot
-  read (l4plot) datepl, tclopl, numnam, numnvo, numbco, numbrn, (buslst(i), i = 1, numnam)
+  read (unit = l4plot) datepl, tclopl, numnam, numnvo, numbco, numbrn, (buslst(i), i = 1, numnam)
   if (iprspy .lt. 2) go to 5739
-  write (munit6, 1001) datepl, tclopl, numnam, numnvo, numbco, numbrn
+  write (unit = munit6, fmt = 1001) datepl, tclopl, numnam, numnvo, numbco, numbrn
 1001 format (' plot-file header info.', 2(1x, 2a4), 4i6)
   call window
   do j = 1, numnam, 10
-     write (munit6, 5733) (buslst(k), k = j, j + 9)
+     write (unit = munit6, fmt = 5733) (buslst(k), k = j, j + 9)
 5733 format (1x, 10a7)
      call window
   end do
-5736 continue
+!5736 continue
 5739 kptplt = numnvo + numbrn
   if (numnvo .gt. 0) read (l4plot) (ibsout(j), j = 1, numnvo)
   if (numbrn .gt. 0) read (l4plot) (ibrnch(j), j = 1, numbrn), (jbrnch(j), j = 1, numbrn)
   if (iprspy .lt. 2) go to 5754
   do j = 1, numnvo, 10
-     write (munit6, 1002) (ibsout(k), k = j, j + 9)
+     write (unit = munit6, fmt = 1002) (ibsout(k), k = j, j + 9)
 1002 format (' Node numbers ibsout:', 10i5)
      call window
   end do
-5742 continue
+!5742 continue
   do j = 1, numbrn, 5
-     write (munit6, 5744) (ibrnch(k), jbrnch(k), k = j, j + 4)
+     write (unit = munit6, fmt = 5744) (ibrnch(k), jbrnch(k), k = j, j + 4)
 5744 format (' Branch node pairs:', 5(2x, 2i4))
      call window
   end do
-5747 continue
+!5747 continue
 5754 numout = numnvo + 2 * numbrn
   nv = numbrn - numbco
   jbegbv = numnvo + 1
@@ -7578,15 +7935,15 @@ subroutine tpplot
   j = j + 1
   go to 1012
 1013 if (iprspy .lt. 2) go to 3769
-  write (munit6, 1014) numout, numnvo, nv, nt2, i
+  write (unit = munit6, fmt = 1014) numout, numnvo, nv, nt2, i
 1014 format (' numout, numnvo, nv, nt2, i =', 5i6)
   call window
   do j = 1, numout, 10
-     write (munit6, 5763) (bbus(m), m = j, j + 9)
+     write (unit = munit6, fmt = 5763) (bbus(m), m = j, j + 9)
 5763 format (1x, 10a6)
      call window
   end do
-5766 continue
+!5766 continue
 3769 call pltvar
   if (nexmod .gt. 0 ) go to 9835
   if (buffin(1 : 4) .eq. 'stop') return
@@ -7597,7 +7954,7 @@ subroutine tpplot
   !     buffer flushing in  #tekplt# .
   if (numtek .gt. 0) call tekplt
 9800 if (iprspy .lt. 1) go to 9817
-  write (munit6, 9807) prom80(1 : 40)
+  write (unit = munit6, fmt = 9807) prom80(1 : 40)
 9807 format (' Exit "tpplot".   prom80(1 : 40) =', a40)
   call window
 9817 nexmod = 4
@@ -7615,6 +7972,8 @@ subroutine helper (n1)
   !     subcommand of the "plot" command of spy.
   include 'dekspy.ftn'
   include 'dekplt.ftn'
+  integer, intent(in) :: n1
+  integer j, n8, n23, n24
   n8 = n1
   if (buffin(5 : 10) .ne. '      ') go to 3618
 3613 k = numkey + n8 + 1
@@ -7638,7 +7997,7 @@ subroutine helper (n1)
      if (texspy(j)(3 : 10) .eq. buffin(6 : 13)) go to 3649
   end do
 3642 continue
-  write (munit6, 3645)
+  write (unit = munit6, fmt = 3645)
 3645 format ('    ? ? ?   Sorry, no such plot command.   Try again ... ')
   call window
   go to 9000
@@ -7646,16 +8005,14 @@ subroutine helper (n1)
   do j = n23 + 1, n24
      if (texspy(j)(1 : 3) .ne. '   ') go to 3658
   end do
-3653 continue
 3658 n24 = j - 1
 3673 do j = n23, n24
-     write (munit6, 3677) texspy(j)
+     write (unit = munit6, fmt = 3677) texspy(j)
 3677 format (a80)
      call window
   end do
-3681 continue
 9000 if (iprspy .lt. 1) go to 9011
-  write (munit6, 9004) n1, n8, n23, n24
+  write (unit = munit6, fmt = 9004) n1, n8, n23, n24
 9004 format (' Exit  "helper".  n1, n8, n23, n24 =', 4i6)
   call window
 9011 return
@@ -7670,19 +8027,47 @@ subroutine pltvar
   !     for non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
   include 'dekplt.ftn'
+  integer ihs, m, mplot, n1, n4, newvec, nexmod
+  real timbeg, timend
   if (iprspy .lt. 1) go to 1003
-  write (munit6, 1002) nexmod
+  write (unit = munit6, fmt = 1002) nexmod
 1002 format (' Enter "pltvar".  nexmod =', i4)
   call window
 1003 if (nexmod .eq. 6) go to 1550
   if (nexmod .ne. 5) go to 1005
   nexmod = 0
-  go to nextsn
+  !  go to nextsn
+  select case (nextsn)
+  case (1048)
+     go to 1048
+
+  case (1052)
+     go to 1052
+
+  case (1165)
+     go to 1165
+
+  case (1887)
+     go to 1887
+
+  case (1892)
+     go to 1892
+
+  case (7342)
+     go to 7342
+
+  case (31169)
+     go to 31169
+
+  case (31882)
+     go to 31882
+  end select
 1005 tolrce = 0.0
   go to 1008
 1053 write (unit = prom80, fmt = 1045)
 1045 format (' --- Middle :')
-  assign 1048 to nextsn
+  !  assign 1048 to nextsn
+  nextsn = 1048
   go to 9800
 1048 buffin = buff77
   if (buffin(1 : 4) .eq. 'stop') return
@@ -7690,7 +8075,8 @@ subroutine pltvar
   if (buffin(1 : 8) .ne. refile) go to 1007
   write (unit = prom80, fmt = 1004)
 1004 format (' File :')
-  assign 1052 to nextsn
+  !  assign 1052 to nextsn
+  nextsn = 1052
   go to 9800
 1052 buffin = buff77
   newfil = 1
@@ -7715,7 +8101,7 @@ subroutine pltvar
 5676 format (' pltbuf(', i6, ':)', 8e14.5)
      call window
   end do
-3214 continue
+!3214 continue
 3218 write (unit = munit6, fmt = 5677) timbeg, timend
 5677 format ('   Time limits are :', 2e14.6)
   call window
@@ -7735,7 +8121,7 @@ subroutine pltvar
 3223 format (1x, 10a7)
      call window
   end do
-3227 continue
+!3227 continue
   i = i + numnvo
   jj = i + nc - 1
   write (unit = munit6, fmt = 1047)
@@ -7748,7 +8134,7 @@ subroutine pltvar
 3232 format (1x, 4(2a7, 3x))
      call window
   end do
-3236 continue
+!3236 continue
   i = i + nc
   write (unit = munit6, fmt = 1051)
 1051 format (' Type-9 entries (branch currents or energies).')
@@ -7759,7 +8145,7 @@ subroutine pltvar
      write (unit = munit6, fmt = 3232) (bbus(ip), ip = j, n13)
      call window
   end do
-3247 continue
+!3247 continue
   go to 1053
 1957 if (buffin(1 : 8) .ne. stop) go to 4423
   kill = 99
@@ -7776,12 +8162,13 @@ subroutine pltvar
   if (buffin(1 : 8) .ne. timeun) go to 1167
 1155 write (unit = prom80, fmt = 1164) ihs
 1164 format ('   Send time-units code (', i2, ' ) :')
-  assign 1165 to nextsn
+  !  assign 1165 to nextsn
+  nextsn = 1165
   go to 9800
 1165 call frein1 (buff77, n4)
   if (n4 .gt. 0) ihs = n4
   if (ihs .gt. 0 .and. ihs .lt. 8) go to 7531
-  write (munit6, 4163)
+  write (unit = munit6, fmt = 4163)
 4163 format ('  ? ? ?  Illegal value.   Try again ...')
   call window
   go to 1155
@@ -7798,11 +8185,13 @@ subroutine pltvar
   jplt = 0
 7338 write (unit = prom80, fmt = 7341) slot1(l)
 7341 format ('   Send node name or end (', a6, ') :')
-  assign 7342 to nextsn
+  !  assign 7342 to nextsn
+  nextsn = 7342
   go to 9800
 7342 textd1 = buff77(1 : 8)
   if (textd1 .eq. lastpl) go to 1175
-7344 if (textd1 .ne. end) go to 7348
+!7344 if (textd1 .ne. end) go to 7348
+  if (textd1 .ne. end) go to 7348
   icp = 8
   brclas = voltag
   go to 1168
@@ -7826,7 +8215,8 @@ subroutine pltvar
   go to 7338
 1168 write (unit = prom80, fmt = 1169) brclas, slot1(l), slot1(l + 1)
 1169 format ('   Send branch ', a7, ' names or end (', a6, ',', a6, ' ) :')
-  assign 31169 to nextsn
+  !  assign 31169 to nextsn
+  nextsn = 31169
   go to 9800
 31169 textd1 = buff77(1 : 6)
   textd2 = buff77(7 : 12)
@@ -7892,7 +8282,8 @@ subroutine pltvar
   go to 1168
 1210 nc = namvar + 1
   do i = nc, 20
-1215 slot1(i) = '        '
+!1215 slot1(i) = '        '
+     slot1(i) = '        '
   end do
   ievsw = 0
   nc = nt2 / 2  -  nv
@@ -7904,7 +8295,8 @@ subroutine pltvar
   kplt = 0
   write (unit = prom80, fmt = 1882) headl(1 : 16)
 1882 format ('   Send super-title (', a16, '...) :')
-  assign 31882 to nextsn
+  !  assign 31882 to nextsn
+  nextsn = 31882
   go to 9800
 31882 alpha = buff77
   if (alpha(1 : 8) .eq. repeat) go to 1550
@@ -7920,7 +8312,8 @@ subroutine pltvar
 1536 nchsup = 0
 1885 write (unit = prom80, fmt = 1886) vertl(1 : 16)
 1886 format ('   Send vertical axis label (', a16, '...) :')
-  assign 1887 to nextsn
+  !  assign 1887 to nextsn
+  nextsn = 1887
   go to 9800
 1887 vertl = buff77
   if (vertl(1 : 8) .eq. repeat) go to 1550
@@ -7936,14 +8329,15 @@ subroutine pltvar
 1888 n3 = numtit + 1
   write (unit = prom80, fmt = 1891) n3, sext(n3)(1 : 16)
 1891 format ('   Send case-title line', i2, ' (', a16, '...) :')
-  assign 1892 to nextsn
+  !  assign 1892 to nextsn
+  nextsn = 1892
   go to 9800
 1892 alpha = buff77
   if (alpha(1 : 8) .ne. flush) go to 1894
   numtit = 0
   go to 1888
 1894 if (alpha(1 : 8) .ne. playba) go to 1896
-  write (munit6, 1895)
+  write (unit = munit6, fmt = 1895)
 1895 format (6x, 'Playback of total title (80a1 format) ...')
   call window
   do ip = 1, numtit
@@ -7951,7 +8345,7 @@ subroutine pltvar
 3264 format (1x, a80)
      call window
   end do
-3267 continue
+!3267 continue
   go to 1888
 1896 if (alpha(1 : 8) .eq. '        ') go to 1899
   if (alpha(1 : 8) .eq. end) go to 1550
@@ -7987,7 +8381,15 @@ subroutine timval
   !     for non-interactive EMTP, this module can be destroyed.
   include 'dekspy.ftn'
   include 'dekplt.ftn'
-  real(8) d1, d3, tolrce, vmin, vmax, din1, din2
+  integer iprspy, n1, nsmplt
+  real(8) d1, d3, d6, d7, denom, din1, din2, disqr, dx, dy, dyold
+  real(8) evbasx, evbasy, evdh, evdp, evh, evp
+  real(8) hdif, hmin, hmax, hpi, hvec
+  real(8) gxmax, gxmin, gymin, gymax
+  real(8) spsave
+  real(8) taxisl, tolrce, tstep, ttlev, ttmax, ttmin
+  real(8) vchnge, vdif, vh, vl, vold, vs, vmin, vminr, vmax, vmaxr, vnew, vvec
+  real(8) yymax, yymin
   maxevk = maxev - 30
   if (iprspy .lt. 1) go to 1549
   write (unit = munit6, fmt = 1386) monitr, limfix, vmin, vmax
@@ -8000,11 +8402,40 @@ subroutine timval
   call window
 1549 if (nexmod .ne. 6) go to 31549
   nexmod = 0
-  go to nextsn
+  !  go to nextsn
+  select case (nextsn)
+  case (1556)
+     go to 1556
+
+  case (2740)
+     go to 2740
+
+  case (4794)
+     go to 4794
+
+  case (4811)
+     go to 4811
+
+  case (31925)
+     go to 31925
+
+  case (31969)
+     goto 31969
+
+  case (42721)
+     go to 42721
+
+  case (43356)
+     go to 43356
+
+  case (52716)
+     go to 52716
+  end select
 31549 if (monitr .eq. 8765) go to 1926
 1550 write (unit = prom80, fmt = 1930)
 1930 format (' --- Inner :')
-  assign 1556 to nextsn
+  !  assign 1556 to nextsn
+  nextsn = 1556
   go to 9800
 1556 buffin = buff77
   !     if ( buffin(1:4) .eq. 'spy ' ) go to 9835   ! exit module
@@ -8031,7 +8462,8 @@ subroutine timval
 42715 if (buffin(1 : 8) .ne. 'span    ') go to 2718
   write (unit = prom80, fmt = 2716)
 2716 format (' Send desired tmax-tmin:')
-  assign 52716 to nextsn
+  !  assign 52716 to nextsn
+  nextsn = 52716
   go to 9800
 52716 call fresp1 (buff77, d3)
 2717 n4 = (indbuf - newvec) / (kptplt + 1)
@@ -8052,7 +8484,8 @@ subroutine timval
   if (mxypl .eq. 0) go to 2724
   write (unit = prom80, fmt = 2721) xytitl(1 : 16)
 2721 format (' Send x-axis label (', a16, '...) :')
-  assign 42721 to nextsn
+  !  assign 42721 to nextsn
+  nextsn = 42721
   go to 9800
 42721 buffin = buff77
   if (buffin(1 : 8) .eq. '        ') go to 2724
@@ -8066,9 +8499,10 @@ subroutine timval
   if (icurse .eq. 2) icurse = 0
   go to 1550
 2733 if (buffin(1 : 8) .ne. debug) go to 2742
-  write (unit = prom80, fmt = 2738)  iprspy
+  write (unit = prom80, fmt = 2738) iprspy
 2738 format ('  Supply level-number  iprspy  (', i3, ' ) :')
-  assign 2740 to nextsn
+!  assign 2740 to nextsn
+  nextsn = 2740
   go to 9800
 2740 call frein1 (buff77, iprspy)
   go to 1550
@@ -8097,14 +8531,16 @@ subroutine timval
 4784 if (buffin(1 : 8) .ne. smooth) go to 4805
   write (unit = prom80, fmt = 4791) tolrce
 4791 format (' Supply new tolerance in inches**2 (', e9.2, ' ) :')
-  assign 4794 to nextsn
+!  assign 4794 to nextsn
+  nextsn = 4794
   go to 9800
 4794 call fresp1 (buff77, tolrce)
   go to 1550
 4805 if (buffin(1 : 8) .ne. size) go to 4823
   write (unit = prom80, fmt = 4808) taxisl
 4808 format (' Supply new time-axis length in inches (', f5.1, ' ) :')
-  assign 4811 to nextsn
+!  assign 4811 to nextsn
+  nextsn = 4811
   go to 9800
 4811 call fresp1 (buff77, d1)
   if (d1 .gt. 2.0) taxisl = d1
@@ -8165,9 +8601,11 @@ subroutine timval
   write (unit = munit6, fmt = 1956)
 1956 format (1x)
   call window
-1957 assign 1958 to nextsn
+!1957 assign 1958 to nextsn
+1957 nextsn = 1958
   go to 9800
-1958 read (buff77, 1959) (aaa(j), j = 1, jplt)
+!1958 read (buff77, 1959) (aaa(j), j = 1, jplt)
+  read (buff77, 1959) (aaa(j), j = 1, jplt)
 1959 format (10e8.0)
   go to 1550
 1960 if (buffin(1 : 8) .ne. offset) go to 1970
@@ -8179,40 +8617,47 @@ subroutine timval
   if (ltek .le. 0) go to 1969
   write (unit = munit6, fmt = 1956)
   call window
-1969 assign 31969 to nextsn
+!1969 assign 31969 to nextsn
+1969 nextsn = 31969
   go to 9800
-31969 read (buff77, 1959) (bbb(j), j = 1, jplt)
+31969 read (unit = buff77, fmt = 1959) (bbb(j), j = 1, jplt)
   go to 1550
 1970 if (buffin(1 : 8) .ne. limits) go to 1980
-  write (prom80, 1973) vmin, vmax
+  write (unit = prom80, fmt = 1973) vmin, vmax
 1973 format ('   Vertical min & max (', 2e12.3, ' ) :')
-  assign 1975 to nextsn
+!  assign 1975 to nextsn
+  nextsn = 1975
   go to 9800
-1975 call fresp2 (buff77, vmin, vmax)
+!1975 call fresp2 (buff77, vmin, vmax)
+  call fresp2 (buff77, vmin, vmax)
   limfix = 1
   if (vmin .eq. 0.0 .and. vmax .eq. 0.0) limfix = 0
   go to 1550
 1980 if (buffin(1 : 8) .ne. averag) go to 1989
-  write (prom80, 1982) nsmplt
+  write (unit = prom80, fmt = 1982) nsmplt
 1982 format ('   Supply consecutive-oscillation limit (', i6, ' ) :')
-  assign 1985 to nextsn
+!  assign 1985 to nextsn
+  nextsn = 1985
   go to 9800
-1985 call frein1 (buff77, n1)
+!1985 call frein1 (buff77, n1)
+  call frein1 (buff77, n1)
   if (n1 .gt. 0) nsmplt = n1
   go to 1550
 1989 if (buffin(1 : 8) .ne. rescal) go to 1992
   limfix = 0
   do j = 1, 20
      aaa(j) = 1.0
-1991 bbb(j) = 0.0
+!1991 bbb(j) = 0.0
+     bbb(j) = 0.0
   end do
   go to 1550
 1992 if (buffin(1 : 8) .ne. time) go to 5618
   din1 = hmin * tmult
   din2 = hmax * tmult
-  write (prom80, 1925) din1, din2
+  write (unit = prom80, fmt = 1925) din1, din2
 1925 format ('   Supply tmin & tmax (', 2e12.3, ' ) :')
-  assign 31925 to nextsn
+!  assign 31925 to nextsn
+  nextsn = 31925
   go to 9800
 31925 call fresp2 (buff77, din1, din2)
   if (din1 .ne. 0.0) go to 1927
@@ -8276,7 +8721,8 @@ subroutine timval
   mmm(j) = 0
   mfake = mfake + 1
 5645 continue
-5649 indexp = newvec - (kptplt + 1)
+!5649 indexp = newvec - (kptplt + 1)
+  indexp = newvec - (kptplt + 1)
   if (iprspy .lt. 1) go to 1940
   write (unit = munit6, fmt = 45649) newvec, kptplt
 45649 format (' Reinitialize pointer:  newvec, kptplt =', 2i9)
@@ -8322,7 +8768,7 @@ subroutine timval
 3336 format (' ev(', i5, ':)=', 8e15.6)
      call window
   end do
-3338 continue
+!3338 continue
 3342 ind1 = indexp - (kptplt + 1)
   if (iprspy .lt. 1)  go to 3343
   write (unit = munit6, fmt = 82205) ind1
@@ -8346,7 +8792,8 @@ subroutine timval
      ew(kk + 1) = ev(k + 1)
      ew(kk + 2) = ev(k + 2)
      k = k + 2
-8310 kk = kk + n8
+!8310 kk = kk + n8
+     kk = kk + n8
   end do
   n7 = n7 + 2
   go to 8303
@@ -8355,7 +8802,8 @@ subroutine timval
   call window
   write (prom80, 3356)
 3356 format (' Send axis limits :')
-  assign 43356 to nextsn
+!  assign 43356 to nextsn
+  nextsn = 43356
   go to 9800
 43356 read (buff77, 1959)  d1, d2, d3, d4
   if (d1 .ne. 0.0) gxmin = d1
@@ -8367,14 +8815,16 @@ subroutine timval
   mfake = mfake / 2
   l = 0
   kk = n8
-8371 do j = 1, jplt, 2
+!8371 do j = 1, jplt, 2
+  do j = 1, jplt, 2
      l = l + 1
      mstart(l) = kk - 4
      ew(kk-3) = gxmin
      ew(kk-2) = gymin
      ew(kk-1) = (gxmax - gxmin) / taxisl
      ew(kk)   = (gymax - gymin) / 8.0
-8376 kk = kk + n8
+!8376 kk = kk + n8
+     kk = kk + n8
   end do
   kk = kk - n8
   jplt = l
@@ -8388,7 +8838,7 @@ subroutine timval
 3361 format (' ew(', i5, ':)=', 8e15.6)
      call window
   end do
-3363 continue
+!3363 continue
   go to 7309
 2218 dx = hpi
   evmx = 0.0
@@ -8426,7 +8876,7 @@ subroutine timval
      end do
 2320 continue
   end do
-2340 continue
+!2340 continue
   if (iprspy .lt. 4) go to 3369
   write (unit = munit6, fmt = 2344)
 2344 format (' After points discard.', 11x, 'evmx', 11x, 'vmax', 11x, 'vmin', 9x, 'finfin', 13x, 'vl', 13x, 'vs')
@@ -8578,7 +9028,7 @@ subroutine timval
      call window
 3235 numpts(i) = (istore - istold) / 2
   end do
-3240 continue
+!3240 continue
 3263 if (kextr .eq. 1) go to 3270
   if (klevl .eq. 1) go to 3288
   go to 7309
@@ -8656,12 +9106,13 @@ end subroutine back14
 !
 
 subroutine setrtm
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module used only for interactive EMTP (service to "emtspy").
   !     For non-interactive EMTP, this module can be destroyed.
   include 'dekspy.ftn'
   include 'dekplt.ftn'
-  real(8) d1, d6
+  integer(8) ip, ivcom, j, jj, n1, n8, n22, n23
+  real(8) d1, d6, d12, fvcom
   save
   lunt15 = 15
   close (unit = lunt15)
@@ -8697,9 +9148,10 @@ subroutine setrtm
 2730 format (' ** Error.   Subset number', i4, '  does not exist.   Try again.')
   call window
   go to 2751
-2732 read (lunt15, 5100) prom80
+2732 read (unit = lunt15, fmt = 5100) prom80
   call fresp2 (prom80, d6, d1)
-  jj = d6
+!  jj = d6
+  jj = int (d6, kind (jj))
   if (jj .eq. 0) go to 2741
   if (jj .gt. n23) n23 = jj
   if (iprspy .lt. 5) go to 2736
@@ -8709,7 +9161,7 @@ subroutine setrtm
 2736 fvcom(jj) = d1
   go to 2732
 2741 read (lunt15, 5100) prom80
-  call frein2(prom80, jj, n1)
+  call frein2 (prom80, jj, n1)
   if (jj .eq. 0) go to 2745
   if (jj .gt. n22) n22 = jj
   if (iprspy .lt. 5) go to 2744
@@ -8736,7 +9188,7 @@ subroutine setrtm
 3413 format (1x, 6e13.4)
      call window
   end do
-3417 continue
+!3417 continue
   write (unit = munit6, fmt = 2754)
 2754 format (' Final integer data ivcom through the last modified cell follows ....')
   call window
@@ -8745,7 +9197,7 @@ subroutine setrtm
 3424 format (1x, 10i7)
      call window
   end do
-3427 continue
+!3427 continue
 2763 close (unit = lunt15, status = 'keep')
   return
 end subroutine setrtm
@@ -8759,9 +9211,11 @@ subroutine chrplt
   !     for non-interactive emtp, this module can be destroyed.
   include 'dekspy.ftn'
   include 'dekplt.ftn'
-  dimension temp(6)
+  integer kzero, limcol, m
+  real d1, d2, d3, dy, temp, temp1, vmax, vmin, vspan
   character(9) kunit6
   character(1) dol(131), letter(20)
+  dimension temp(6)
   save
   data letter(1)  /  'a'  /
   data letter(2)  /  'b'  /
@@ -8786,7 +9240,8 @@ subroutine chrplt
   if (monits .eq. 1) go to 2513
   vspan = vmax - vmin
   d3 = limcol / vspan
-  kzero = -vmin * d3
+!  kzero = -vmin * d3
+  kzero = int (-vmin * d3)
   if (kzero .eq. 0) kzero = 1
   if (kzero .lt. 0) kzero = 0
   kp(1) = 1
@@ -8808,11 +9263,12 @@ subroutine chrplt
 6423 format (' Graph title : ', a80)
      call window
   end do
-6427 continue
+!6427 continue
   if (mxypl .gt. 0) go to 6582
   if (jplt .le. 1) go to 6447
   do k = 2, jplt
-6431 kp(k) = mstart(k - 1) + 5
+!6431 kp(k) = mstart(k - 1) + 5
+     kp(k) = mstart(k - 1) + 5
   end do
 6447 dt = hpi / 6.0
   temp(1) = vmin + dy
@@ -8820,7 +9276,8 @@ subroutine chrplt
   n4 = 6
   if (limcol .le. 79) n4 = 4
   do k = 2, n4
-6449 temp(k) = temp(k - 1) + d2
+!6449 temp(k) = temp(k - 1) + d2
+     temp(k) = temp(k - 1) + d2
   end do
   write (unit = munit6, fmt = 6450) (temp(k), k = 1, n4)
 6450 format (3x, 6(e14.5, 6x))
@@ -8849,7 +9306,8 @@ subroutine chrplt
   if (kwtspy .eq. 1) go to 9000
   if (t .gt. hmax) go to 6582
   do k = 1, limcol
-6478 dol(k) = ' '
+!6478 dol(k) = ' '
+     dol(k) = ' '
   end do
   do k = 1, jplt
      l = kp(k)
@@ -8871,7 +9329,8 @@ subroutine chrplt
 6503 if (d1 .lt. vmax) go to 6508
      dol(limcol) = letter(k)
      go to 6518
-6508 m = (d1 - vmin) * d3
+!6508 m = (d1 - vmin) * d3
+6508 m = int ((d1 - vmin) * d3)
      dol(m) = letter(k)
      if (iprspy .ne. 34) go to 6518
      write (unit = munit6, fmt = 6511) m, dol(m)
@@ -8916,7 +9375,8 @@ subroutine chrplt
   if (kwtspy .eq. 1) go to 9000
   inch = inch + 1
   do k = 1, limcol
-2504 dol(k) = ' '
+!2504 dol(k) = ' '
+     dol(k) = ' '
   end do
 2507 if (ind1 .le. indbuf - kptplt) go to 2513
   go to 9000
@@ -8935,16 +9395,17 @@ subroutine chrplt
 2532 if (d1 .lt. vmax) go to 2537
      dol(limcol) = letter(k)
      go to 2542
-2537 m = (d1 - vmin ) * d3
+!2537 m = (d1 - vmin ) * d3
+2537 m = int ((d1 - vmin ) * d3)
      dol(m) = letter(k)
   end do
 2542 continue
   ind1 = ind1 + kptplt + 1
   go to 2507
-2564 if ( inch  .lt.  6 )   go to 2571
-  write (ansi8, 2569)  t
-2569 format ( 1x, f7.4 )
-  read (ansi8, 2566)  ( dol(ip), ip=1, 8 )
+2564 if (inch .lt. 6) go to 2571
+  write (unit = ansi8, fmt = 2569) t
+2569 format (1x, f7.4)
+  read (unit = ansi8, fmt = 2566)  (dol(ip), ip = 1, 8)
 2566 format ( 8a1 )
   inch = 0
   go to 2574
@@ -8959,11 +9420,13 @@ subroutine chrplt
   call window
 9008 return
 end subroutine chrplt
+
 !
 !     subroutine tekplt.
 !
+
 subroutine tekplt
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   return
 end subroutine tekplt
 
@@ -8972,7 +9435,7 @@ end subroutine tekplt
 !
 
 subroutine flatbd
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module used only for interactive EMTP (service to "emtspy").
   !     For non-interactive emtp, this module can be destroyed.
   !     The one and only use is to provide calcomp copies of what
@@ -8980,15 +9443,25 @@ subroutine flatbd
   !     BPA pseudo-calcomp versatek calls actually used.
   include 'dekspy.ftn'
   include 'dekplt.ftn'
-  real(8) d1, d2
+  integer j, jplt
+  integer maxisx, maxisy, mcurve, mgrid
+  integer mgrid1, mgrid2, mid, mm, msuper, mtit
+  integer n1, n2, n4, n5, n6, n7, n8, numsym
+  real d1, d2, d3, d4, d6, dxgrd1, dxgrd2, dygrd1, dygrd2
+  real fact, fill, fill1, fill2
+  real hmin, hpi, htax
+  real n9, ncut, ncut1, ncut2
+  real sizid, sizsup, siztit, sx, sy, tmult
+  real xid, xmin, xsuper, xtit
+  real yid, ymin, ysuper, ytit
   if (killpl .eq. 0) go to 2005
   call plot (0.0, 0.0, 999)
   return
 2005 d1 = hpi * tmult
-  write (prom80, 2010) d1
+  write (unit = prom80, fmt = 2010) d1
 2010 format (' Send t-axis units/inch (', e12.3, ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) buff77                                ! read a80 character input
+  read (unit = munit5, fmt = 7241) buff77                   ! read a80 character input
   if (buff77(1 : 8) .ne. metric) go to 7236
   fact = .7874
   dxgrd1 = 0.5
@@ -9004,47 +9477,47 @@ subroutine flatbd
           ' a value of  -1  suppresses the printout, and', /, &
           ' values of  1  through  5  are versatek dot', /, &
           ' widths (VAX "calcomp" at BPA is Versatek).')
-  write (prom80, 7240) mtit
+  write (unit = prom80, fmt = 7240) mtit
 7240 format (3x, '80-col. case-title (', i2, ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
 7241 format (a80)
   call frein1 (prom80, n1)                                  ! decode free-field n1
   if (n1 .ne. 0) mtit = n1
-  write (prom80, 7242) maxisx
+  write (unit = prom80, fmt = 7242) maxisx
 7242 format (3x, 'x-axis structure (', i2, ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call frein1 (prom80, n1)                                  ! decode free-field n1
   if (n1 .ne. 0) maxisx = n1
-  write (prom80, 7244) maxisy
+  write (unit = prom80, fmt = 7244) maxisy
 7244 format (3x, 'y-axis structure (', i2, ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241)  prom80
+  read (unit = munit5, fmt = 7241) prom80
   call frein1 (prom80, n1)                                  ! decode free-field n1
   if (n1 .ne. 0) maxisy = n1
-  write (prom80, 7246)  mgrid1
+  write (unit = prom80, fmt = 7246) mgrid1
 7246 format (3x, 'Big background grid (',  i2,  ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call frein1 (prom80, n1)                                  ! decode free-field n1
   if (n1 .ne. 0) mgrid1 = n1
-  write (prom80, 7247) mgrid2
+  write (unit = prom80, fmt = 7247) mgrid2
 7247 format (3x, 'Fine inner grid (', i2, ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call frein1 (prom80, n1)                                  ! decode free-field n1
   if (n1 .ne. 0) mgrid2 = n1
-  write (prom80, 7250) msuper
+  write (unit = prom80, fmt = 7250) msuper
 7250 format (3x, 'Super-title (', i2, ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call frein1 (prom80, n1)                                  ! decode free-field n1
   if (n1 .ne. 0) msuper = n1
-  write (prom80, 7251) mid
+  write (unit = prom80, fmt = 7251) mid
 7251 format (3x, 'Date, time, etc. (', i2, ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call frein1 (prom80, n1)                                  ! decode free-field n1
   if (n1 .ne. 0) mid = n1
   write (unit = munit6, fmt = 7254) (mcurve(j), j = 1, jplt)
@@ -9053,11 +9526,11 @@ subroutine flatbd
   do j = 1, jplt
      if (kp(j) .ne. 0) mcurve(j) = kp(j)
   end do
-7255 continue
+!7255 continue
   go to 2005
 7261 if (buff77(1 : 8) .ne. show) go to 7287
   write (unit = munit6, fmt = 3421) mtit, maxisx, maxisy, mgrid1, mgrid2, msuper, mid
-3421 format ( /,  ' Begin with  #pen#  parameters :'  ,/, &
+3421 format (/, ' Begin with  #pen#  parameters :', /, &
           i5, ' = pen for 80-column case title lines;', /, &
           i5, ' = pen for x-axis structure;', /, &
           i5, ' = pen for y-axis structure;', /, &
@@ -9090,74 +9563,74 @@ subroutine flatbd
   write (unit = munit6, fmt = 7288)
 7288 format (' Respond to each request with revised values.   A blank or zero means no', /, &
           ' change from the value shown within square brackets.')
-  write (prom80, 7291) xtit, ytit, siztit
+  write (unit = prom80, fmt = 7291) xtit, ytit, siztit
 7291 format ('   x, y coordinates and size of 79-char. Title  (', 3f6.2, ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call fresp3 (prom80, d1, d2, d3)                          ! decode free-field
   if (d1 .ne. 0.0) xtit = d1
   if (d2 .ne. 0.0) ytit = d2
   if (d3 .ne. 0.0) siztit = d3
-  write (prom80, 7304) xid, yid, sizid
+  write (unit = prom80, fmt = 7304) xid, yid, sizid
 7304 format ('   Likewise for date, time, etc.  (', 3f6.2,  ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call fresp3 (prom80, d1, d2, d3)                          ! decode free-field
   if (d1 .ne. 0.0) xid = d1
   if (d2 .ne. 0.0) yid = d2
   if (d3 .ne. 0.0) sizid = d3
-  write (prom80, 7309) xsuper, ysuper, sizsup
+  write (unit = prom80, fmt = 7309) xsuper, ysuper, sizsup
 7309 format ('   Likewise for 16-char. super-title  (', 3f6.2,  ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call fresp3 (prom80, d1, d2, d3)                          ! decode free-field
   if (d1 .ne. 0.0) xsuper = d1
   if (d2 .ne. 0.0) ysuper = d2
   if (d3 .ne. 0.0) sizsup = d3
-  write (prom80, 7315) htax
+  write (unit = prom80, fmt = 7315) htax
 7315 format ('   Height of time-axis  (', f6.2, ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call fresp1 (prom80, d1)                                  ! decode free-field d1
   if (d1 .ne. 0.0) htax = d1
-  write (prom80, 7319) fact
+  write (unit = prom80, fmt = 7319) fact
 7319 format ('   Blowup factor.  metric=.7874  (', f6.4,  ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call fresp1 (prom80, d1)                                  ! decode free-field d1
   if (d1 .ne. 0.0) fact = d1
-  write (prom80, 7320) fill1, fill2
+  write (unit = prom80, fmt = 7320) fill1, fill2
 7320 format ('   Fill-in fractions for major and minor grids  (', 2f6.3,  ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call fresp2 (prom80, d1, d2)                              ! decode free-field d1, d2
   if (d1 .ne. 0.0) fill1 = d1
   if (d2 .ne. 0.0) fill2 = d2
-  write (prom80, 7321) ncut1, ncut2
+  write (unit = prom80, fmt = 7321) ncut1, ncut2
 7321 format ('   Number of breaks for major and minor grids  (', i4,  '.0 ',  i4,  '.0 ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call fresp2 (prom80, d1, d2)                              ! decode free-field d1, d2
   if (d1 .ne. 0.0) ncut1 = d1
   if (d2 .ne. 0.0) ncut2 = d2
-  write (prom80, 7322) dxgrd1, dygrd1
+  write (unit = prom80, fmt = 7322) dxgrd1, dygrd1
 7322 format ('   x, y spacing between major grid lines  (', 2f6.3,  ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call fresp2 (prom80, d1, d2)                              ! decode free-field d1, d2
   if (d1 .gt. 0.0) dxgrd1 = d1
   if (d2 .gt. 0.0) dygrd1 = d2
-  write (prom80, 7323) dxgrd2, dygrd2
+  write (unit = prom80, fmt = 7323) dxgrd2, dygrd2
 7323 format ('   x, y spacing between minor grid lines  (', 2f6.3,  ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call fresp2 (prom80, d1, d2)                              ! decode free-field d1, d2
   if (d1 .gt. 0.0) dxgrd2 = d1
   if (d2 .gt. 0.0) dygrd2 = d2
-  write (prom80, 7325) numsym
+  write (unit = prom80, fmt = 7325) numsym
 7325 format ('   Number of marking symbols per curve  (', i3,  ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
-  read (munit5, 7241) prom80
+  read (unit = munit5, fmt = 7241) prom80
   call frein1 (prom80, n2)                                  ! decode free-field n2
   if (n2 .ne. 0) numsym = n2
   go to 2005
@@ -9191,7 +9664,8 @@ subroutine flatbd
   do j = 1, n3
      call symbol (xtit, d2, siztit, sext(n4), 0.0, 80)
      d2 = d2 - fline * siztit
-2113 n4 = n4 + 10
+!2113 n4 = n4 + 10
+     n4 = n4 + 10
   end do
 2114 n1 = 3 * (ihs - 1) + 1
   !     only units of  #seconds#  can be presently honored.
@@ -9201,23 +9675,25 @@ subroutine flatbd
   call newpen (maxisx)
   write (unit = munit6, fmt = 2115)
 2115 format ('   Ready to draw calcomp axes.')
-  if (maxisx .gt. 0) call axis ( 0.0,  htax, horzl(n1),  -24,  d1,  0.0, hmin,  hpi)
+  if (maxisx .gt. 0) call axis (0.0, htax, horzl(n1), -24, d1, 0.0, hmin, hpi)
   call newpen (maxisy)
   if (maxisy .gt. 0) call axis (0.0, 0.0, vertl, nchver, 8., 90., vmin, d2)
-  n8 = d1 / dxgrd1 + 0.5
+!  n8 = d1 / dxgrd1 + 0.5
+  n8 = int (d1 / dxgrd1 + 0.5)
   n9 = 8.0 / dygrd1 + 0.5
   fill = fill1
   ncut = ncut1
   call newpen (mgrid1)
   write (unit = munit6, fmt = 2116)
 2116 format ('   Ready to call calcomp grid number 1.')
-  if ( mgrid1 .gt. 0) call grid (0.0, 0.0, n8, dxgrd1, n9, dygrd1, lmask1)
+  if (mgrid1 .gt. 0) call grid (0.0, 0.0, n8, dxgrd1, n9, dygrd1, lmask1)
   write (unit = munit6, fmt = 2117)
 2117 format ('   Done with calcomp grid number 1.')
   call newpen (mgrid2)
   fill = fill2
   ncut = ncut2
-  n8  =  d1 / dxgrd2 + 0.5
+!  n8  =  d1 / dxgrd2 + 0.5
+  n8 = int (d1 / dxgrd2 + 0.5)
   n9  =  8.0/ dygrd2 + 0.5
   if (mgrid2 .gt. 0) call grid (0.0, 0.0, n8, dxgrd2, n9, dygrd2, lmask2)
   call newpen (msuper)
@@ -9226,14 +9702,14 @@ subroutine flatbd
   if (msuper .gt. 0) call symbol (xsuper, ysuper, sizsup, headl, 0.0, nchsup)
   d6 = yid
   !     encode (18, 2119, alpha(1) )   date1, tclock
-  write (ansi32, 2119) datepl, tclopl
+  write (unit = ansi32, fmt = 2119) datepl, tclopl
 2119 format (2a4, 2x, 2a4)
   call newpen (mid)
   if (mid .eq. -1) go to 2127
   call symbol (xid, d6, sizid, ansi32, 0.0, 18)
   d6 = d6 - fline * sizid
   !     encode (14, 2122, alpha(1) )   icp
-  write (ansi16, 2122) icp
+  write (unit = ansi16, fmt = 2122) icp
 2122 format ('Plot type', i5)
   call symbol (xid, d6, sizid, ansi16, 0.0, 14)
   d6 = d6 - fline * sizid
@@ -9241,12 +9717,12 @@ subroutine flatbd
   n5 = jplt
   if (jplt .gt. 6) n5 = 6
   !     encode (80, 3146, alpha(1) )  ( aaa(j), j=1, n5 )
-  write (buff77, 3146) (aaa(j), j = 1, n5)
+  write (unit = buff77, fmt = 3146) (aaa(j), j = 1, n5)
 3146 format (' factor :', 6e11.3)
   call symbol (xid, d6, sizid, buff77, 0.0, 80)
   d6 = d6 - fline * sizid
   !     encode (80, 3147, alpha(1) )  ( bbb(j), j=1, n5 )
-  write (buff77, 3147) (bbb(j), j = 1, n5)
+  write (unit = buff77, fmt = 3147) (bbb(j), j = 1, n5)
 3147 format (' offset :',  6e11.3)
   call symbol (xid, d6, sizid, buff77, 0.0, 80)
   d6 = d6 - fline * sizid
@@ -9255,20 +9731,21 @@ subroutine flatbd
   n5 = 4
   if (namvar .lt. 4) n5 = namvar
   !     encode (36, 2125, alpha(1) )   ( slot1(j), j=1, n5 )
-  write (buff77, 2125) (slot1(j), j = 1, n5)
+  write (unit = buff77, fmt = 2125) (slot1(j), j = 1, n5)
 2125 format ('names : ',  4a7)
   call symbol (xid, d6, sizid, buff77, 0.0, 36)
   if (namvar .le. 4) go to 2127
   do j = 5, namvar, 4
      n5 = j + 3
      !     encode (36, 2137, alpha(1) )
-     write (buff77, 2137)
+     write (unit = buff77, fmt = 2137)
 2137 format (36x)
      !     encode (36, 2138, alpha(1) )   ( slot1(i), i=j, n5 )
-     write (buff77, 2137)
-2138 format (8x,  4a7)
+     write (unit = buff77, fmt = 2137)
+!2138 format (8x,  4a7)
      d6 = d6 - fline * sizid
-2140 call symbol (xid, d6, sizid, buff77, 0.0, 36)
+!2140 call symbol (xid, d6, sizid, buff77, 0.0, 36)
+     call symbol (xid, d6, sizid, buff77, 0.0, 36)
   end do
 2127 n4 = 0
   do j = 1, jplt
@@ -9280,8 +9757,7 @@ subroutine flatbd
      ew(n5 + 3) = hpi
      n8 = n4 + 2 * n6 + 8
      if (iprsrt .ge. 5) write (unit = munit6, fmt = 3117) j, n4, n5, n6, n7, (ew(mm), mm = n4, n8)
-3117 format (/,  ' Ready to call line.       j      n4      n5      n6      n7', /, &
-          20x, 5i8, /, (1x, 8e15.6))
+3117 format (/, ' Ready to call line.       j      n4      n5      n6      n7', /, 20x, 5i8, /, (1x, 8e15.6))
      call newpen (mcurve(j))
      sx = 1.0 / ew(n5 + 3)
      sy = 1.0 / ew(n5 + 4)
@@ -9297,7 +9773,7 @@ subroutine flatbd
      if (n4 .ge. n5) go to 2132
      n6 = n6 - 1
      if (n6 .gt. 0) go to 8243
-     call symbol (d1, d2, sizid, j, 0.0, -1)
+     call symbol (d1, d2, sizid, char (j), 0.0, -1)
      n6 = n7
 8243 d1 = (ew(n4 + 1) - xmin) * sx
      d2 = (ew(n4 + 2) - ymin) * sy
@@ -9319,18 +9795,20 @@ end subroutine flatbd
 !
 
 subroutine tgrid (ix, iy, nx, idelx, ny, idely, ldash)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module used only for interactive EMTP (service to "emtspy").
   !     for non-interactive EMTP, this module can be destroyed.
   !     Reliance upon Tektronix plot10 makes this installation-
   !     dependent (this is VAX-11 module, actually).
+  integer(4), intent(in) :: idelx, idely, ix, iy, ldash, nx, ny
+  integer(4) j, n1, n2, n3, n8, n9
   if (nx .le. 0) return
   if (ny .le. 0) return
   call movabs (ix, iy)
-  n8 = ix + (nx - 1) * idelx
-  n9 = iy + (ny - 1) * idely
+  n8 = int (ix + (nx - 1) * idelx, kind (n8))
+  n9 = int (iy + (ny - 1) * idely, kind (n9))
   n3 = n9
-  n2 = ix
+  n2 = int (ix, kind (n2))
   do j = 1, nx
      call dshabs (n2, n3, ldash)
      n2 = n2 + idelx

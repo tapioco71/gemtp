@@ -1,18 +1,25 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
 !     file: vardim.for
 !
+
 program vardim
-  implicit  real(8) (a-h, o-z), integer(4) (i-n)
-  integer(4) lunit(15), lstnew
+!  implicit  real(8) (a-h, o-z), integer(4) (i-n)
+!  integer(4) lunit(15), lstnew
+  integer lunit(15), lstnew
   character char, bus2
   character(8) bus1, texta(2), textb(2), cblock, cblser, type
   character(16) ansi16
   character(80) abuff
-  real(8) lphd2, lphase
+!  real(8) lphd2, lphase
+  real lphd2, lphase
   dimension cblock(300), ncbarr(300), cblser(300), jbltyp(300)
   dimension lstnew(99), lstdef(49), type(5, 3), kextra(29)
   dimension char(6), mulvar(5)
+  integer integerdim, realdim
+  data  integerdim / 8 /
+  data  realdim    / 8 /
   data  cblock(  1)  / 'x     ' /, ncbarr(  1)  /  3 /
   data  cblser(  1)  / 'c0b001' /, jbltyp(  1)  / 0 /
   data  cblock(  2)  / 'ykm   ' /, ncbarr(  2)  /  5 /
@@ -586,8 +593,8 @@ program vardim
 4301       continue
            write (unit = lunit(2), fmt = 4190)
 4190       format ('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', / &
-                '!', /, '!     file: newmods.for', /, '!', /, '!', /, '!     subroutine main10.', /, '!')
-           write (lunit(4), "('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', / '!', /, '!     file: labcom.ftn', /, '!', /, '!')")
+                '!', //, '!     file: newmods.f90', /, '!', /, '!')
+           write (unit = lunit(4), fmt = "('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', / '!', /, '!     file: labcom.ftn', /, '!', /, '!')")
            call make_subroutine_comment(lunit(2), 'main10')
            write (unit = lunit(2), fmt = "('subroutine main10', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')")
            do ii = 1, 126
@@ -605,7 +612,7 @@ program vardim
 7243          format (2x, 3a6, a6)
 4101          continue
            end do
-           write (unit = lunit(4), fmt = "('!', /, '! end of file: labcom.ftn', /, '!')")
+           write (unit = lunit(4), fmt = "(/, '!', /, '! end of file: labcom.ftn', /, '!', /)")
            write (unit = lunit(2), fmt = "(2x, 'call subr10')")
            write (unit = lunit(2), fmt = 7297)
 7297       format (2x, 'return')
@@ -663,8 +670,9 @@ program vardim
            if (lstnew(99) .le. 0) lstnew(99) = 1
            ncbarr(127) = 99
            call make_subroutine_comment(lunit(2), 'over29')
-           write (unit = lunit(2), fmt = 4202)
-4202       format ('subroutine over29', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+           write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER29'
+           write (unit = lunit(2), fmt = 4202) realdim, integerdim
+4202       format ('subroutine over29', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
            write (unit = lunit(3), fmt = 8156)
 8156       format (2x, 'return')
            lm = 0
@@ -703,9 +711,11 @@ program vardim
 7274       format (2x, 'call subr', i2, 63x)
            write (unit = lunit(2), fmt = 7297)
            write (unit = lunit(2), fmt = 7298) 'over29'
+           write (unit = lunit(2), fmt = '(a)') '#endif'
            indexm = indexm + 1
            mextra = 5000
            call make_subroutine_comment(lunit(2), 'over31')
+           write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER31'
            write (unit = lunit(2), fmt = 4203)
 4203       format ('subroutine over31', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (unit = lunit(3), fmt = 8156)
@@ -742,9 +752,11 @@ program vardim
            write (unit = lunit(2), fmt = 7274) n18
            write (unit = lunit(2), fmt = 7297)
            write (unit = lunit(2), fmt = 7298) 'over31'
+           write (unit = lunit(2), fmt = '(a)') '#endif'
            lstnew(71) = 500
            if (lstnew(3) .gt. 500) lstnew(71) = lstnew(3)
            call make_subroutine_comment(lunit(2), 'over39')
+           write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER39'
            write (unit = lunit(2), fmt = 4204)
 4204       format ('subroutine over39', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (unit = lunit(3), fmt = 8156)
@@ -781,7 +793,9 @@ program vardim
            write (unit = lunit(2), fmt = 7274) n18
            write (unit = lunit(2), fmt = 7297)
            write (unit = lunit(2), fmt = 7298) 'over39'
+           write (unit = lunit(2), fmt = '(a)') '#endif'
            call make_subroutine_comment(lunit(2), 'fixs10')
+           write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_FIXS10'
            write (unit = lunit(2), fmt = 4205)
 4205       format ('subroutine fixs10', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (unit = lunit(3), fmt = 8156)
@@ -818,6 +832,7 @@ program vardim
            write (unit = lunit(2), fmt = 7274) n18
            write (unit = lunit(2), fmt = 7297)
            write (unit = lunit(2), fmt = 7298) 'fixs10'
+           write (unit = lunit(2), fmt = '(a)') '#endif'
            indexm = indexm + 1
            mextra = 7000
            d1 = (ltlabl + mextra + kextra(indexm)) / mul34
@@ -834,6 +849,7 @@ program vardim
            lstnew(75) = (lstnew(71) * (lstnew(71) + 1)) / 2
            lstnew(76) = 2 * lstnew(71)
            call make_subroutine_comment(lunit(2), 'over44')
+           write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER44'
            write (unit = lunit(2), fmt = 4206)
 4206       format ('subroutine over44', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (unit = lunit(3), fmt = 8156)
@@ -870,9 +886,11 @@ program vardim
            write (unit = lunit(2), fmt = 7274) n18
            write (unit = lunit(2), fmt = 7297)
            write (unit = lunit(2), fmt = 7298) 'over44'
+           write (unit = lunit(2), fmt = '(a)') '#endif'
            indexm = indexm + 1
            mextra = 5000
            call make_subroutine_comment(lunit(2), 'over45')
+           write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER45'
            write (unit = lunit(2), fmt = 4207)
 4207       format ('subroutine over45', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (unit = lunit(3), fmt = 8156)
@@ -909,9 +927,11 @@ program vardim
            write (unit = lunit(2), fmt = 7274) n18
            write (unit = lunit(2), fmt = 7297)
            write (unit = lunit(2), fmt = 7298) 'over45'
+           write (unit = lunit(2), fmt = '(a)') '#endif'
            indexm = indexm + 1
            mextra = 5000
            call make_subroutine_comment(lunit(2), 'over47')
+           write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER47'
            write (unit = lunit(2), fmt = 4208)
 4208       format ('subroutine over47', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (unit = lunit(3), fmt = 8156)
@@ -948,6 +968,7 @@ program vardim
            write (unit = lunit(2), fmt = 7274) n18
            write (unit = lunit(2), fmt = 7297)
            write (unit = lunit(2), fmt = 7298) 'over47'
+           write (unit = lunit(2), fmt = '(a)') '#endif'
            write (unit = lunit(3), fmt = 8156)
            write (unit = lunit(3), fmt = 8234)
 8234       format (' 9900 lsize(1) = locint(bus1) - locint(bus2)')
@@ -963,7 +984,7 @@ program vardim
            end do
 8253       format (a)
 8260       write (unit = lunit(2), fmt = 8258)
-8258       format ('!', /, '! end of file newmods.for', /, '!')
+8258       format (/, '!', /, '! end of file newmods.f90', /, '!')
            write (unit = lunit(6), fmt = 8942) ltlabl
 8942       format (" Normal termination within  'vardim' .   The size of   /label/   equals", i8, '   integer words.', //, 1x)
            go to 9999
@@ -1007,17 +1028,21 @@ program vardim
   end if
 9999 stop
 end program vardim
+
 !
 ! subroutine make_comment.
 !
-subroutine make_subroutine_comment(unit, name)
-  implicit  real(8) (a-h, o-z), integer(4) (i-n)
-  integer(4) unit
-  character(*) name
-  write (unit, 10) trim(name)
-10 format ('!', /, '! subroutine ', a, '.', /, '!')
+
+subroutine make_subroutine_comment(u, n)
+!  implicit  real(8) (a-h, o-z), integer(4) (i-n)
+!  integer(4) unit
+  integer, intent(in) :: u
+  character(*), intent(in) :: n
+  write (unit = u, fmt = 10) trim(n)
+10 format (/, '!', /, '! subroutine ', a, '.', /, '!', /)
   return
 end subroutine make_subroutine_comment
+
 !
 !     end of file: vardim.for
 !

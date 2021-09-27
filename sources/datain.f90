@@ -8,7 +8,7 @@
 !
 
 subroutine datain
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module of interactive EMTP (spy of "emtspy").
   !     If non-interactive version, module can be destroyed.
   !     First EMTP data input, and "spy" choice, are made here.

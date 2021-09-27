@@ -1710,7 +1710,7 @@ subroutine subr31
 !     subroutine axis.
 !
  subroutine axis(xx, yy, title, numch, size, ang, begin, scale)
-   implicit real(8) (a-h, o-z), integer(4) (i-n)
+!   implicit real(8) (a-h, o-z), integer(4) (i-n)
    !     Module  'axis'  was written by W. Scott Meyer of BPA in June of
    !     1976, especially for BPA EMTP usage only.   Anyone having the real
    !     calcomp module of the same name should discard this present
@@ -1719,49 +1719,49 @@ subroutine subr31
    !     by adding two more arguments to the module which is available in
    !     our system library).
    include 'blkcom.ftn'
-   real(8) xx, yy
+   real(8), intent(in) :: xx, yy
    character(8) text1, title
    integer(4) numch
    real(8) size, ang, begin, scale
-   data tic   /  .075  /
-   data ticd2   /  .03  /
-   data hgt1   /  0.2  /
-   data hgt2   /  .15  /
-   data hgt3   /  .12  /
-   data text1   / 6h( 10**     /
-   d1 = abs(begin)
-   d2 = abs( begin + size*scale)
-   if ( d2  .gt.  d1 )   d1 = d2
-   if ( d1  .le.  0.0 )   go to 9000
+   data tic   / .075 /
+   data ticd2 / .03 /
+   data hgt1  / 0.2 /
+   data hgt2  / .15 /
+   data hgt3  / .12 /
+   data text1 / '( 10**' /
+   d1 = abs (begin)
+   d2 = abs (begin + size * scale)
+   if (d2 .gt. d1) d1 = d2
+   if (d1 .le. 0.0) go to 9000
    ndig = 0
-2313 if ( d1  .le.  1.000001 )   go to 2321
+2313 if (d1 .le. 1.000001) go to 2321
    ndig = ndig - 1
    d1 = d1 * 0.1
    go to 2313
-2321 if ( d1  .ge.  .0999999 )   go to 2336
+2321 if (d1 .ge. .0999999) go to 2336
    ndig = ndig + 1
    d1 = d1 * 10.
    go to 2321
-2336 if ( ang    .gt.  0.0 )   go to 2345
-   if ( ndig  .ge.  2 )   go to 2345
-   if ( ndig  .lt.  -3 )   go to 2345
+2336 if (ang .gt. 0.0) go to 2345
+   if (ndig .ge. 2) go to 2345
+   if (ndig .lt. -3) go to 2345
    ndig = 0
-2345 d3 = 10.**ndig
+2345 d3 = 10. ** ndig
    scal1 = scale * d3
    beg1 = begin * d3
-   length = size  +  .000001
-   axmid = size*0.5 - 2.0
+   length = size + .000001
+   axmid = size * 0.5 - 2.0
    d3 = -ndig
-   nchabs = iabs(numch)
-   if ( ang    .gt.  0.0 )   go to 2506
-   call plot ( xx, yy, 3 )
+   nchabs = iabs (numch)
+   if (ang .gt. 0.0) go to 2506
+   call plot (xx, yy, 3)
    xmax = xx + size
-   call plot ( xmax, yy, 2 )
-   d2 = beg1  +  length * scal1
+   call plot (xmax, yy, 2)
+   d2 = beg1 + length * scal1
 2427 d1 = xx + length
-   call plot ( d1, yy+tic, 3 )
-   call plot ( d1, yy-tic, 2 )
-   call number ( d1-0.2, yy-0.3, hgt2, d2, ang, 2 )
+   call plot (d1, yy + tic, 3)
+   call plot (d1, yy - tic, 2)
+   call number (d1 - 0.2, yy - 0.3, hgt2, d2, ang, 2)
    length = length - 1
    d2 = d2 - scal1
    if ( length  .gt.  0 )   go to 2427
@@ -1896,16 +1896,16 @@ subroutine subr31
    include 'blkcom.ftn'
    dimension  kut(131), ktsin(4)
    dimension  max(4), min(4)
-   data  ktsin(1)   /  1ha  /
-   data  ktsin(2)   /  1hb  /
-   data  ktsin(3)   /  1hc  /
-   data  ktsin(4)   /  1hd  /
-   data  kom        /  1h*  /
-   data  kline      /  1h1  /
-   data  klank      /  1h   /
-   data  kxline     /  1h-  /
+   data  ktsin(1)   / 'a' /
+   data  ktsin(2)   / 'b' /
+   data  ktsin(3)   / 'c' /
+   data  ktsin(4)   / 'd' /
+   data  kom        / '*' /
+   data  kline      / '1' /
+   data  klank      / ' ' /
+   data  kxline     / '-' /
    !     burroughs: preserve local variable between module calls:
-   data  kut(1)  / 1h  /
+   data  kut(1)  / ' ' /
    !     burroughs: preserve local variable between module calls:
    data  min(1) / 0 /,    max(1) / 0 /,    k / 0 /
    if ( krv  .eq.  99 )   go to 407

@@ -87,7 +87,7 @@ end subroutine subr44
 !
 subroutine guts44 (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, xtir, xtii, zsurge, dummi, dummr, tixf, &
      work1, ndim, ntri,nsqr2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'deck44.ftn'
   include 'labl44.ftn'
@@ -95,7 +95,7 @@ subroutine guts44 (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
   character(6) chlmfs        ! 9-phase as limit for lmfs test
-  character*80 char80
+  character(80) char80
   character(8) text1, text2, fmetrc, englis, bufsem
   character(8) text3, text4, text5, text6, text7
   character(8) text8, text9
@@ -1805,102 +1805,102 @@ subroutine guts44 (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2
   if (absz(h1).lt.d1) d1=absz(h1)
   go to 604
 605 if (iw .gt. 0) d1=d1/omega
-  d1=sqrtz(d1*2.0)
-  i1=dist/d1+ onehaf
-  i2=1
-  do isec=1,34
-     if (i1.le.i2) go to 608
-606  i2=i2*2
+  d1 = sqrtz(d1 * 2.0)
+  i1 = dist / d1 + onehaf
+  i2 = 1
+  do isec = 1, 34
+     if (i1 .le. i2) go to 608
+606  i2 = i2 * 2
   end do
-  write (lunit6,607)
+  write (unit = lunit6, fmt = 607)
 607 format ('+', 41x, 'Cannot be calculated with number of necessary sections=2**33')
   go to 16
 608 x1 = i2
   i1 = isec - 1
   deltad = dist / x1
   if (metrik .eq. 1) go to 613
-  write (lunit6, 609) i1, deltad
+  write (unit = lunit6, fmt = 609) i1, deltad
 609 format (' Computed by connecting in cascade 2**', i2, ' equal sections of', e13.6, ' miles each.')
   go to 615
 613 deltam = deltad / fmipkm
-  write ( lunit6,614 ) i1, deltam
+  write (unit = lunit6, fmt = 614) i1, deltam
 614 format ('+', 41x, 'computed by connecting in series 2**', i2, ' equal sections of', f9.4, ' km each.')
 615 continue
-  f1=unity/deltad
-  f2=deltad* onehaf
-  if (iw .gt. 0) f2=omega*f2
-  kp=kcirct*(kcirct+1)/2
-  kcir2=kcirct+kcirct
-  if (i1 .eq. 0)  go to 670
-  do i=1,kp
-     r1=f1*gd(i)
-     x1=f1*bd(i)
-     g1=f2*yd(i)
-     d1=x1+g1
-     p(i)=r1
-     z(i)=d1
-     gd(i)=r1+r1
-621  bd(i)=x1+d1
+  f1 = unity / deltad
+  f2 = deltad * onehaf
+  if (iw .gt. 0) f2 = omega * f2
+  kp = kcirct * (kcirct + 1) / 2
+  kcir2 = kcirct + kcirct
+  if (i1 .eq. 0) go to 670
+  do i = 1, kp
+     r1 = f1 * gd(i)
+     x1 = f1 * bd(i)
+     g1 = f2 * yd(i)
+     d1 = x1 + g1
+     p(i) = r1
+     z(i) = d1
+     gd(i) = r1 + r1
+621  bd(i) = x1 + d1
   end do
   !                                  begin of loop for connecting sections
-  icount=0
-622 icount=icount+1
-  if (icount.eq.isec) go to 650
+  icount = 0
+622 icount = icount + 1
+  if (icount .eq. isec) go to 650
   !                                       expanding matrix
-  ip=0
-  i3=kp
-  k=0
-623 k=k+1
+  ip = 0
+  i3 = kp
+  k = 0
+623 k = k + 1
   if (k .gt. kcirct) go to 626
-  i2=i3+kcirct
-  l4=kp+k
-  i=0
-624 i=i+1
-  l1=ip+i
-  l2=i2+i
-  l3=i3+i
-  r1=p(l1)
-  x1=z(l1)
-  h1=r1-gd(l1)
-  h2=x1-bd(l1)
-  p(l2)=r1*2.0
-  z(l2)=x1*2.0
-  p(l3)=h1
-  z(l3)=h2
-  gd(l1)=r1
-  bd(l1)=x1
-  if (i.eq.k) go to 625
-  p(l4)=h1
-  z(l4)=h2
-  l4=l4+i+kcirct
+  i2 = i3 + kcirct
+  l4 = kp + k
+  i = 0
+624 i = i + 1
+  l1 = ip + i
+  l2 = i2 + i
+  l3 = i3 + i
+  r1 = p(l1)
+  x1 = z(l1)
+  h1 = r1 - gd(l1)
+  h2 = x1 - bd(l1)
+  p(l2) = r1 * 2.0
+  z(l2) = x1 * 2.0
+  p(l3) = h1
+  z(l3) = h2
+  gd(l1) = r1
+  bd(l1) = x1
+  if (i .eq. k) go to 625
+  p(l4) = h1
+  z(l4) = h2
+  l4 = l4 + i + kcirct
   go to 624
-  625 ip=ip+k
-  i3=i2+k
+  625 ip = ip + k
+  i3 = i2 + k
   go to 623
-626 call cxred2( p(1), z(1), workr1(1), workr2(1), kcir2, kcirct )
+626 call cxred2 (p(1), z(1), workr1(1), workr2(1), kcir2, kcirct)
   go to 622
   !                                       output of matrices for length
-650 do i=1,kp
-     gd(i)=gd(i)-p(i)
-     bd(i)=bd(i)-z(i)
+650 do i = 1, kp
+     gd(i) = gd(i) - p(i)
+     bd(i) = bd(i) - z(i)
      p(i) = (p(i) - gd(i)) * 2.
 651  z(i) = (z(i) - bd(i)) * 2.
   end do
-673 if (j1516  .gt.  0)  go to 660
-652 if (j13.eq.0) go to 653
+673 if (j1516 .gt. 0) go to 660
+652 if (j13 .eq. 0) go to 653
   !     transfer admittance matrix for equivalent cond. is in gd+j*bd.
-  call output ( ll0, gd(1), bd(1), unity, kcirct, ll7, ll2 )
+  call output (ll0, gd(1), bd(1), unity, kcirct, ll7, ll2)
   !     shunt admittance matrix for equivalent cond. is in p+j*z.
-  call output ( ll0,  p(1),  z(1), unity, kcirct, ll8, ll2 )
-653 if (j14.eq.0) go to 654
+  call output (ll0, p(1), z(1), unity, kcirct, ll8, ll2)
+653 if (j14 .eq. 0) go to 654
   call symm(gd(1), bd(1), unity, kcirct, kk)
   !     transfer admittance matrix for symmetrical comp. is in gd+j*bd.
-  call output ( ll0, gd(1), bd(1), unity, kk, ll7, ll3 )
-  call symm ( p(1), z(1), unity, kcirct, kk )
+  call output (ll0, gd(1), bd(1), unity, kk, ll7, ll3)
+  call symm (p(1), z(1), unity, kcirct, kk)
   !     shunt admittance matrix for symmetrical comp. is in p+j*z.
-  call output ( ll0,  p(1),  z(1), unity, kk, ll8 , ll3 )
-654 if (j1516.eq.0) go to 16
-  do i=1,kp
+  call output (ll0, p(1), z(1), unity, kk, ll8 , ll3)
+654 if (j1516 .eq. 0) go to 16
+  do i = 1, kp
      n1 = 2 * lgdbd + 1 + i
      n2 = i + lgdbd
      gd(i) = -p(n2)
@@ -2076,31 +2076,33 @@ subroutine modal (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   if ( itrnsf .eq. -1 )  go to 459
   if ( lastov .eq. 1 .or. itrnsf .ne. 1)  go to 7011
   ! $$$$  change to zy-matrix i.e. transformation matrix is tv   $$$$
-6999 do i=1,m
-     do j=1,m
-        tempr(i,j)=yzr(j,i)
-        tempi(i,j)=yzi(j,i)
-7001 end do
+6999 do i = 1, m
+     do j = 1, m
+        tempr(i, j) = yzr(j, i)
+        tempi(i, j) = yzi(j, i)
+     end do
+7001 continue
   end do
-  do i=1,m
-     do j=1,m
-        yzr(i,j) = tempr(i,j)
-        yzi(i,j) = tempi(i,j)
-7008 end do
+  do i = 1, m
+     do j = 1, m
+        yzr(i, j) = tempr(i, j)
+        yzi(i, j) = tempi(i, j)
+     end do
+7008 continue
   end do
-  call dceign(yzr,yzi,tvi,tvr,er,ei,m,m,ierror,ll1,ll0,lunit6, iprsup,ndim)
+  call dceign(yzr, yzi, tvi, tvr, er, ei, m, m, ierror, ll1, ll0, lunit6, iprsup, ndim)
   !      write (*,*)(er(i), i=1,m)
   !      write (*,*)(ei(i), i=1,m)
   go to 7012
-7011 call dceign(yzr,yzi,tii,tir,er,ei,m,m,ierror,ll1,ll0,lunit6, iprsup,ndim)
+7011 call dceign(yzr, yzi, tii, tir, er, ei, m, m, ierror, ll1, ll0, lunit6, iprsup, ndim)
   !      write (*,*)(er(i), i=1,m)
   !      write (*,*)(ei(i), i=1,m)
   go to 7072
-7012 kthl=1
-  ping(kthl)=alog1z(freq)
+7012 kthl = 1
+  ping(kthl) = alog1z(freq)
   d55 = 1.0 / freq
   d56 = 1.0 / sqrtz( freq )
-  do i=1,m
+  do i = 1, m
      em=sqrtz( er(i)*er(i)+ei(i)*ei(i) )
      ea=atan2z(ei(i),er(i))
      p(i) = sqrtz(em)
@@ -2890,8 +2892,10 @@ subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi,ndim)
      do j = 1, m
         zr(i,j) = zr(i,j) * s
         zi(i,j) = zi(i,j) * s
-100  end do
-110 end do
+     end do
+!100  continue
+  end do
+!110 continue
   !     :::::::::: for i=low-1 step -1 until 1,
   !                igh+1 step 1 until n do -- ::::::::::
 120 do ii = 1, n
@@ -2907,8 +2911,10 @@ subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi,ndim)
         s = zi(i,j)
         zi(i,j) = zi(k,j)
         zi(k,j) = s
-130  end do
-140 end do
+     end do
+!130  continue
+  end do
+140 continue
 200 return
 end subroutine cbabk2
 !

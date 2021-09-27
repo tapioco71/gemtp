@@ -191,7 +191,7 @@ subroutine over2
   n24 = 0
   if (bus1 .ne. text11) go to 7677
   n1 = ibr + 1
-  call namea6 (bus3, n24)
+  call namea6(bus3, n24)
   namebr(n1) = n24
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 7674) bus3, n1
 7674 format ('+moniker ', '"', a6, '"', ' is for next branch  +', i6, ' .')
@@ -199,7 +199,7 @@ subroutine over2
   if (ibrnam .gt. ibr) go to 7676
   namebr(ibrnam) = 1
   if (nmauto .eq. 0) go to 7675
-  call nmincr (text16, ibrnam)
+  call nmincr(text16, ibrnam)
   n24 = 0
   call namea6 (text16, n24)
   namebr(ibrnam) = n24
@@ -207,7 +207,7 @@ subroutine over2
 7676 go to 3988
 7677 if (bus1 .ne. text13) go to 7682
   n1 = inonl + 1
-  call namea6 (bus3, n24)
+  call namea6(bus3, n24)
   namesw(n1) = n24
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 7679) bus3, n1
 7679 format ('+moniker ', '"', a6, '"', ' is for next nonlinear  +', i6, ' .')
@@ -987,14 +987,14 @@ subroutine over2
   if (bus3 .ne. branch) go to 6835
   n16 = 1
   text15 = bus4
-  call namea6 (text15, n16)
+  call namea6(text15, n16)
   if (n16 .eq. -intinf) go to 6824
   lstat(19) = 6829
   kill = 167
   lstat(14) = n16
   go to 9200
 6824 n16 = 0
-  call namea6 (texta5, n16)
+  call namea6(text5, n16)
   namebr(ibr) = n16
   bus3 = blank
   bus4 = blank

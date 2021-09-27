@@ -4,6 +4,7 @@
 !
 !     real variables precede integer ones          *********************
 !     auxilliary arrays ( size based on no. of windings = 7 )  ********
+  real(8) x1, z
   common /smach/ z(100), x1(36)
 !     spy interface variables *****************************************
   common /smach/ smoutv(15)

@@ -8,7 +8,7 @@
 !
 
 subroutine over1
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'umdeck.ftn'
@@ -17,7 +17,7 @@ subroutine over1
   include 'io.ftn'
   !     %include  '//c/tsu/cables.ins.ftn'
   !     To avoid "insert deck tacsar" here, use small part of it:
-  real(4) r4(1)
+  real r4(1)
   equivalence (volti(1), r4(1))
   character(8) ibusum, kpen
   dimension kpen(1), ibusum(1)
@@ -28,10 +28,10 @@ subroutine over1
   equivalence (moncar(8), jseedr)
   equivalence (moncar(9), kloaep), (moncar(10), mtape)
   equivalence (iprsov(39), nmauto)
-  integer(4) lstacs, lstat
+  integer lstacs, lstat
   character(8) aupper, text1, text2, text6, datexx(2)
   character(8) text3, text4, text5, tcloxx(2)
-  integer(4) locker
+  integer locker
   dimension aupper(14)
   dimension lstacs(8)
   character(80) disk_file
@@ -163,7 +163,7 @@ subroutine over1
   d13 = ltacst
   d13 = d13 / 1600.
   do j = 1, 8
-     lstacs(j) = int (lstacs(j) * d13)
+     lstacs(j) = int (lstacs(j) * d13, kind (lstacs(j)))
   end do
   n1 = -9999
   call copyi (n1, lstat(1), ll60)
@@ -801,11 +801,12 @@ end subroutine str2int
 !
 
 subroutine tacs1c
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     called only by over1 for start again usage
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
+  integer kud1, ndy5, niu
   character(8) alnode
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module tacs1c."')
@@ -894,11 +895,11 @@ end subroutine swmodf
 !
 
 subroutine reques (ls)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'umdeck.ftn'
   include 'dekspy.ftn'
-  integer(4) n1, n2, n8, jpntr, ls
+  integer n1, n2, n8, jpntr, ls
   dimension anglex(1), farray(1)
   equivalence (anglex(1), angle)
   equivalence (moncar(2), kbase), (moncar(3), ltdelt)
@@ -2107,19 +2108,28 @@ end subroutine reques
 ! subroutine strip.
 !
 
-subroutine strip(string, char)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  character char
-  character(*) string
-  character(32) temp
-  j = 1
-  do i = 1, min (32, len (string))
-     if (string(i : i) .ne. char) then
-        temp(j : j) = string(i : i)
-        j = j + 1
-     end if
-  end do
-  string = temp
+subroutine strip (s, c)
+  implicit none
+  character(*), intent(out) :: s
+  character, intent(in) :: c
+  integer i, j
+  character, pointer :: temp(:)
+
+  allocate (temp(len (s)))
+  if (associated (temp)) then
+     j = 1
+     do i = 1, len (s)
+        if (s(i : i) .ne. c) then
+           temp(j : j) = s(i : i)
+           j = j + 1
+        end if
+     end do
+     do i = 1, j - 1
+        s(i : i) = temp(i)
+     end do
+     deallocate (temp)
+     nullify (temp)
+  end if
 end subroutine strip
 
 !
@@ -2127,8 +2137,8 @@ end subroutine strip
 !
 
 subroutine sysdep
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
+  real(16) epdgel, epomeg, epsiln, epsuba, flzero, tenm3, twopi
   common /komthl/ pekexp
   character(8) intbus
   dimension intbus(1)
@@ -2224,7 +2234,7 @@ subroutine sysdep
   !3652 format (2a1, 1x, a1, 4x, a1, 1x, 2a1)
   !call strip(col, ' ')
   temp = tclock(1)(1 : 4) // tclock(2)(1 : 4)
-  call strip(temp, '.')
+  call strip (temp, '.')
   col(9 : 14) = temp
   write (unit = ansi32, fmt = 3668) col(1 : 18)
 3668 format (a18)
@@ -2337,12 +2347,13 @@ end subroutine midov1
 !
 
 subroutine nmincr (texta, n12)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module designed to serialize input root name  texta  with decimal
   !     component number  n12,  encoding only required digits.   It is
   !     assumed that a fortran 77 compiler is being used, and that
   !     "alphanumeric" is translated to something other than  character*6
-  character(8) texta                                        ! input argument carries a6 root name
+  integer, intent(in) :: n12
+  character(8), intent(out) :: texta                        ! input argument carries a6 root name
   character(6) text1, text2                                 ! local character-handling variables
   write (unit = text1, fmt = 4523) n12                      ! encode component number
 4523 format (i6)                                            ! 6-digit format allows number through 999999
@@ -2352,7 +2363,7 @@ subroutine nmincr (texta, n12)
 4552 write (unit = text2, fmt = 4556) texta                 ! transfer input alphanumeric to char*6
 4556 format (a6)                                            ! alphanumeric variables are 6 characters wide
   text2(j : 6) = text1(j : 6)                               ! add component number onto input name
-  read (text2, 4556) texta                                  ! convert back from char*6 to alphanum.
+  read (unit = text2, fmt = 4556) texta                     ! convert back from char*6 to alphanum.
   !     write (*,*)  ' exit "nmincr".   n12 =',  n12,  '   texta =', texta
   return
 end subroutine nmincr
@@ -2362,12 +2373,13 @@ end subroutine nmincr
 !
 
 subroutine tacs1
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
   include 'syncom.ftn'
-  real(8) parsup
+  integer krsblk, kud1, niu, ndy5
+  real parsup
   character(8) stacs, alph, alnode, alnm1, alnm2
   dimension stacs(11), alph(5), dum(3), dumj(13)
   character(8) dumj, sminus, splus, sbn(2)
@@ -2454,7 +2466,8 @@ subroutine tacs1
 4499 d1 = alog1z (fltinf)
   iuty(kiuty + 11) = int (d1 + 0.5)
   !     $$$  input  $$$m13. 364
-  lbstac  =  locf (ismtac(1)) - locf (etac(1))
+!  lbstac  =  locf (ismtac(1)) - locf (etac(1))
+  lbstac = loc (ismtac(1)) - loc (etac(1))
   ntotac = 0
   nsu = 0
   nsudv = lstat(63)
@@ -2911,10 +2924,11 @@ end subroutine tacs1
 !
 
 subroutine tacs1a
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
+  integer nsup
   character(8) alph, dumj
   dimension alph(5), dum(3), dumj(13)
   character(8) text1, text2, text4, sminus, splus, smultp
@@ -3251,7 +3265,14 @@ subroutine tacs1a
      texcol(j) = btmpbf(j)
   end do
 50180 texcol(icurch) = curch1
-  if (isrchl) 50185, 50065, 50010
+  !  if (isrchl) 50185, 50065, 50010
+  if (isrchl .lt. 0) then
+     go to 50185
+  else if (isrchl .eq. 0) then
+     go to 50065
+  else
+     go to 50010
+  end if
   ! :::  out : whole expression has been interpreted  :::
 50185 if (ilst .ne. 0) go to 50190
   ikill1 = 2
@@ -3279,7 +3300,14 @@ subroutine tacs1a
   if (alnm1 .eq. opname(1)) go to 50215
   if (alnm1 .ne. opname(7)) go to 50220
   i1 = i1 - 1
-  if (i1) 50205, 50210, 50220
+  !  if (i1) 50205, 50210, 50220
+  if (i1 .lt. 0) then
+     go to 50205
+  else if (i1 .eq. 0) then
+     go to 50210
+  else
+     go to 50220
+  end if
 50205 ikill1 = 3
   ikill2 = 50205
   go to 50900
@@ -4044,10 +4072,11 @@ end subroutine tacs1a
 !
 
 subroutine tacs1b
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
+  integer kisblk, nuki
   !dimension dumj(13)
   !character(8) dumj, delay
   character(8) delay
@@ -4820,8 +4849,9 @@ end subroutine tacs1b
 !
 
 subroutine expchk (n1, n2, n5)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
+  integer i, j, n3
   character(8) texnum, text1, x, textp, textn
   dimension x(80), texnum(11)
   data text1 / 'e' /
@@ -4873,8 +4903,9 @@ end subroutine expchk
 !
 
 subroutine intchk (n1, n2, n5)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
+  integer n4, n6, n7, n8
   character(8) x
   dimension x(80)
   read (unit = abuff, fmt = 2642) (x(i), i = 1, 80)
@@ -4940,7 +4971,7 @@ end subroutine date44
 !
 
 subroutine pfatch
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   ! This installation-dependent module serves to connect a
   ! file to  i/o  channel  ialter  (/blank/ variable),
   ! based on the file specification contained on last-
@@ -4951,6 +4982,7 @@ subroutine pfatch
   ! Module written specially for  DEC  VAX-11/780 .
   include 'blkcom.ftn'
   include 'dekspy.ftn'
+  integer n4
   character(25) filen
   if (m4plot .ne. 1) go to 4519                             ! not interactive emtp
   write (unit = prom80, fmt = 4504)

@@ -1277,7 +1277,7 @@ end subroutine innr29
 !
 ! subroutine plotng.
 !
-subroutine plotng ( kkrv, kklm )
+subroutine plotng (kkrv, kklm)
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     universal module called only by "innr29" of overlay 29.
   !     some logic is similar to "linplt" of overlay 31.
@@ -1301,75 +1301,76 @@ subroutine plotng ( kkrv, kklm )
   data  kdig(8)   /  1h8  /
   data  kdig(9)   /  1h9  /
   data  kdig(10)  /  1h0  /
-  if ( iprsup .ge. 1 )  write (lunit6, 1349)  kkrv, kklm
-1349 format ( 31h top of "plotng".  kkrv, kklm =,  2i8  )
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 1349) kkrv, kklm
+1349 format (' Top of "plotng".  kkrv, kklm =', 2i8)
   krv = kkrv
   klm = kklm
-  if ( klm .eq. -5678 )  go to 350
-  if ( klm  .gt.  131 )   go to 5831
-  if ( klm .eq. -4321 ) go to 4832
-  if (klm .ge. 0 )   go to 3652
-  write (lunit6, 230)   kut
-230 format ( 1x, 131a1 )
+  if (klm .eq. -5678) go to 350
+  if (klm .gt. 131) go to 5831
+  if (klm .eq. -4321) go to 4832
+  if (klm .ge. 0) go to 3652
+  write (unit = lunit6, fmt = 230) kut
+230 format (1x, 131a1)
 350 do j = 1, 131
 370  kut(j) = klank
   end do
   kut(5) = kdig(1)
   go to 9000
   !     begin code to add curve "krv" to column "klm" of kut(131)
-3652 if ( krv .ne. 2 )  go to 3664
-  if ( kut(47) .eq. klank ) kut(47) = kdig(1)
-3664 if ( krv .ne. 3 )  go to 3671
-  if ( kut(89) .eq. klank ) kut(89) = kdig(1)
-3671 if ( kut(klm) .eq. klank )    go to 3688
-  if ( kut(klm) .eq. kdig(1) )  go to 3688
+3652 if (krv .ne. 2) go to 3664
+  if (kut(47) .eq. klank) kut(47) = kdig(1)
+3664 if (krv .ne. 3) go to 3671
+  if (kut(89) .eq. klank) kut(89) = kdig(1)
+3671 if (kut(klm) .eq. klank) go to 3688
+  if (kut(klm) .eq. kdig(1)) go to 3688
   kut(klm) = kom
   go to 9000
 3688 kut(klm) = ktsin(krv)
   go to 9000
   !     begin code to encode mean closing time stored in tolmat:
 4832 n4 = 6
-  if ( krv .eq. 2 )  n4 = 48
-  if ( krv .eq. 3 )  n4 = 90
+  if (krv .eq. 2) n4 = 48
+  if (krv .eq. 3) n4 = 90
   n5 = n4 + 11
-  if ( iprsup .ge. 1 )  write (lunit6, 4834)  n4, tolmat
-4834 format ( 28h lunt12 write.  n4, tolmat =,  i8, e15.3  )
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4834) n4, tolmat
+4834 format (' lunt12 write.  n4, tolmat =', i8, e15.3)
   rewind lunt12
-  write (lunt12, 4837)  tolmat
-4837 format ( e12.3 )
+  write (unit = lunt12, fmt = 4837) tolmat
+4837 format (e12.3)
   rewind lunt12
-  read  (lunt12, 4844)  ( kut(j), j=n4, n5 )
-4844 format ( 12a1 )
+  read  (unit = lunt12, fmt = 4844) (kut(j), j = n4, n5)
+4844 format (12a1)
   go to 9000
   !     begin code to encode 3-digit klm on right edge of kut:
-5831 if ( krv .eq. 1 )  klm = klm -  5
-  if ( krv .eq. 2 )  klm = klm - 47
-  if ( krv .eq. 3 )  klm = klm - 89
-  if ( klm .lt. 1000 )  go to 5856
-  write (lunit6, 5845)  krv, klm
-5845 format ( 34h too large klm in "plotng".  stop., 13h   krv, klm =,  2i8,  8x, 14hkut(1:131) ... &
-          ,/,  1x, 131a1 )
+5831 if (krv .eq. 1) klm = klm - 5
+  if (krv .eq. 2) klm = klm - 47
+  if (krv .eq. 3) klm = klm - 89
+  if (klm .lt. 1000) go to 5856
+  write (unit = lunit6, fmt = 5845) krv, klm
+5845 format (' Too large klm in "plotng".  Stop.   krv, klm =', 2i8, 8x, 'kut(1:131) ...', /,  1x, 131a1)
 5856 n6 = klm / 100
   n1 = klm - 100 * n6
   n7 = n1 / 10
   n8 = n1 - 10 * n7
-  if ( n7 .eq. 0 )  n7 = 10
-  if ( n8 .eq. 0 )  n8 = 10
+  if (n7 .eq. 0) n7 = 10
+  if (n8 .eq. 0) n8 = 10
   n14 = 120
-  if ( krv .eq. 2 )  n14 = 124
-  if ( krv .eq. 3 )  n14 = 128
-  kut(n14)   =  kdig(n6)
-  kut(n14+1) =  kdig(n7)
-  kut(n14+2) =  kdig(n8)
-  if ( iprsup .ge. 1 ) write (lunit6, 9045)  krv, klm, n14, n6, n7, n8, kut
-9045 format ( 42h encode klm.   krv, klm, n14, n6, n7, n8 =, 6i6,  8x,  15hkut(1:131) ....  ,/,  1x, 131a1  )
-9000 if ( iprsup .ge. 3 ) write (lunit6, 9004)  krv, klm,  kut
-9004 format ( 27h exit "plotng",  krv, klm =,  2i6, 8x,  24hkut(1:131) follows .....  ,/,  1x,  131a1  )
+  if (krv .eq. 2) n14 = 124
+  if (krv .eq. 3) n14 = 128
+  kut(n14) = kdig(n6)
+  kut(n14 + 1) = kdig(n7)
+  kut(n14 + 2) = kdig(n8)
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 9045) krv, klm, n14, n6, n7, n8, kut
+9045 format (' Encode klm.   krv, klm, n14, n6, n7, n8 =', 6i6, 8x, 'kut(1:131) ....', /, 1x, 131a1)
+9000 if (iprsup .ge. 3) write (unit = lunit6, fmt = 9004) krv, klm, kut
+9004 format (' Exit "plotng",  krv, klm =', 2i6, 8x, 'kut(1:131) follows .....', /, 1x, 131a1)
   return
 end subroutine plotng
+
 !
 ! subroutine fltdat.
 !
+
 subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, nmax, lspars )
   implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension  array(maxsq,maxsq), arrsav(maxsq,maxsq)

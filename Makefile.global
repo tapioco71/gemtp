@@ -82,18 +82,23 @@ FORTRAN_FLAGS=	-Wall			\
 		-frepack-arrays		\
 		-c
 
-F90_FLAGS=	-Wall			\
-		-std=gnu		\
-		-fall-intrinsics	\
-		-falign-commons		\
-		-fcheck=all		\
-		-ffree-form		\
-		-fdollar-ok		\
-		-ffree-line-length-0	\
-		-finit-local-zero	\
-		-freorder-blocks	\
-		-frepack-arrays		\
-		-c
+F90_FLAGS=	-Wall				\
+		-std=gnu			\
+		-fall-intrinsics		\
+		-falign-commons			\
+		-fcheck=all			\
+		-ffree-form			\
+		-fdollar-ok			\
+		-ffree-line-length-0		\
+		-finit-local-zero		\
+		-freorder-blocks		\
+		-frepack-arrays			\
+		-fmax-stack-var-size=32768	\
+		-fdefault-integer-8		\
+		-fdefault-real-8		\
+		-cpp				\
+		-c				\
+		-D WITH_OVER20
 
 # objdump most common flags.
 OBJDUMP_FLAGS=	-h	\

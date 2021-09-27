@@ -8,7 +8,7 @@
 !
 
 subroutine ntacs1
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'tacsto.ftn'
   include 'blkcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
   include 'tacsar.ftn'                                      ! wsm + thl manual modification for bpa emtp

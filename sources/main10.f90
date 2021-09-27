@@ -82,11 +82,16 @@ subroutine subr10
      if (m4plot .eq. 1) call emtspy
      if (nchain .eq. 0) nchain = 1
      select case (nchain)
+
+#ifdef WITH_OVER1
      case (1)
         call over1
+#endif
 
+#ifdef WITH_OVER2
      case (2)
         call over2
+#endif
 
      case (3)
         call stoptp
@@ -94,44 +99,71 @@ subroutine subr10
      case (4)
         call stoptp
 
+#ifdef ENABLE_OVER5
      case (5)
         call over5
+#endif
 
+#ifdef WITH_OVER6
      case (6)
         call over6
+#endif
 
+#ifdef WITH_OVER7
      case (7)
         call over7
+#endif
 
+#ifdef WITH_OVER8
      case (8)
         call over8
+#endif
 
+#ifdef WITH_OVER9
      case (9)
         call over9
+#endif
 
+#ifdef WITH_OVER10
      case (10)
         call over10
+#endif
 
+#ifdef WITH_OVER11
      case (11)
         call over11
+#endif
 
+#ifdef WITH_OVER12
      case (12)
         call over12
+#endif
 
+#ifdef WITH_OVER13
      case (13)
         call over13
+#endif
 
+#ifdef WITH_OVER14
      case (14)
         call over14
+#endif
 
+#ifdef WITH_OVER15
      case (15)
         call over15
+#endif
 
+#ifdef WITH_OVER16
      case (16 : 19)
         call over16
+#endif
 
+#ifdef WITH_OVER20
      case (20)
         call over20
+#endif
+
      end select
   end do
 9000 return
@@ -142,7 +174,7 @@ end subroutine subr10
 !
 
 subroutine tapsav (narray, n1, n2, n3)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Near-universal module for dumping or restoring (central memory
   !     vs. disk) of  /label/ .   This does not work for those
   !     computers like Prime and Burroughs where  common  blocks
@@ -150,12 +182,13 @@ subroutine tapsav (narray, n1, n2, n3)
   !     selects between disk or virtual memory (/C29B01/).
   include 'blkcom.ftn'
   include 'deck29.ftn'
-  integer(4) narray
+  integer narray
   dimension narray(1), kpen(2)
   if (iprsup .lt. 1) go to 5840
   n9 = 0
   kpen(2) = 0
-  n4 = locint (narray(1))
+  !  n4 = locint(narray(1))
+  n4 = loc (narray(1))
   write (unit = lunit6, fmt = 5831) n1, n2, n3, kburro, n4
 5831 format (/, " Top of  'tapsav'., '      n1      n2      n3  kburro              n4", /, 18x, 4i8, i16)
   !     following check normally sends VAX EMTP to 6327 (disk is
@@ -208,51 +241,58 @@ end subroutine tapsav
 !
 
 subroutine dgelg (r, a, m, n, eps, ier)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  dimension a(1), r(1)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  integer, intent(out) :: ier
+  real, intent(out) :: a, r
+  real, intent(in) :: eps
+  dimension a(m * m), r(m * n)
+  integer i, j, k, l, lend, lst, mm, nm
+  real piv, pivi, tb, tol
   i = 0
-
-  !     purpose
-  !     to solve a general system of simultaneous linear equations.
-  !     usage
-  !     call dgelg(r,a,m,n,eps,ier)
-  !     description of parameters
-  !     r      - double precision m by n right hand side matrix
-  !     (destroyed). on return r contains the solutions
-  !     of the equations.
-  !     a      - double precision m by m coefficient matrix
-  !     (destroyed).
-  !     m      - the number of equations in the system.
-  !     n      - the number of right hand side vectors.
-  !     eps    - single precision input constant which is used as
-  !     relative tolerance for test on loss of
-  !     significance.
-  !     ier    - resulting error parameter coded as follows
-  !     ier=0  - no error,
-  !     ier=-1 - no result because of m less than 1 or
-  !     pivot element at any elimination step
-  !     equal to 0,
-  !     ier=k  - warning due to possible loss of signifi-
-  !     cance indicated at elimination step k+1,
-  !     where pivot element was less than or
-  !     equal to the internal tolerance eps times
-  !     absolutely greatest element of matrix a.
-  !     remarks
-  !     input matrices r and a are assumed to be stored columnwise
-  !     in m*n resp. m*m successive storage locations. on return
-  !     solution matrix r is stored columnwise too.
-  !     the procedure gives results if the number of equations m is
-  !     greater than 0 and pivot elements at all elimination steps
-  !     are different from 0. however warning ier=k - if given -
-  !     indicates possible loss of significance. in case of a well
-  !     scaled matrix a and appropriate tolerance eps, ier=k may be
-  !     interpreted that matrix a has the rank k. no warning is
-  !     given in case m=1.
-  !     method
-  !     solution is done by means of gauss-elimination with
-  !     complete pivoting.
-  !     intrinsic  absz
-
+  !     Purpose:
+  !             to solve a general system of simultaneous linear equations.
+  !
+  !     Usage:
+  !             call dgelg(r, a, m, n, eps, ier)
+  !
+  !     Description of parameters:
+  !             r      - double precision m by n right hand side matrix
+  !                      (destroyed). On return r contains the solutions
+  !                      of the equations.
+  !             a      - double precision m by m coefficient matrix
+  !                      (destroyed).
+  !             m      - the number of equations in the system.
+  !             n      - the number of right hand side vectors.
+  !             eps    - single precision input constant which is used as
+  !                      relative tolerance for test on loss of
+  !                      significance.
+  !             ier    - resulting error parameter coded as follows
+  !                      ier=0  - no error,
+  !                      ier=-1 - no result because of m less than 1 or
+  !                               pivot element at any elimination step
+  !                               equal to 0,
+  !                      ier=k  - warning due to possible loss of signifi-
+  !                               cance indicated at elimination step k+1,
+  !                               where pivot element was less than or
+  !                               equal to the internal tolerance eps times
+  !                               absolutely greatest element of matrix a.
+  !
+  !     Remarks:
+  !             Input matrices r and a are assumed to be stored columnwise
+  !             in m*n resp. m*m successive storage locations. On return
+  !             solution matrix r is stored columnwise too.
+  !             The procedure gives results if the number of equations m is
+  !             greater than 0 and pivot elements at all elimination steps
+  !             are different from 0. However warning ier=k - if given -
+  !             indicates possible loss of significance. In case of a well
+  !             scaled matrix a and appropriate tolerance eps, ier=k may be
+  !             interpreted that matrix a has the rank k. No warning is
+  !             given in case m=1.
+  !
+  !     Method:
+  !             Solution is done by means of gauss-elimination with
+  !             complete pivoting.
+  !             intrinsic  absz
   if (m .le. 0) go to 23
   !     search for greatest element in matrix a
   ier = 0
@@ -394,21 +434,21 @@ end subroutine matmul
 !
 
 subroutine matvec (aum, yum)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     matrix algebra module used by universal machine (u.m.)
+  real, intent(in) :: aum
+  real, intent(out) :: yum
+  real x
   dimension aum(3, 3), yum(15), x(3)
+  integer n1, n2, n3
   n1 = 3
-  do n2 = 1, n1
-     x(n2) = 0.0
-  end do
+  x(1 : n1) = 0.0
   do n2 = 1, n1
      do n3 = 1, n1
         x(n2) = x(n2) + aum(n2, n3) * yum(n3)
      end do
   end do
-  do n2 = 1, n1
-     yum(n2) = x(n2)
-  end do
+  yum(1 : n1) = x(1 : n1)
   return
 end subroutine matvec
 
@@ -417,7 +457,7 @@ end subroutine matvec
 !
 
 subroutine pltfil(k)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
 
   !     Installation-dependent module which is called for
   !     output-vector dumping by  "subts3"  and  "over20"  if
@@ -429,6 +469,8 @@ subroutine pltfil(k)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'dekspy.ftn'
+  integer, intent(in) :: k
+  integer n17
   save
   data n17 / 0 /                                            ! initialize rolling plot freq count
   if (m4plot .eq. 1) go to 7286                             ! simulator use
@@ -498,13 +540,15 @@ end subroutine pltfil
 !
 
 subroutine pltlu2 (d2, volti)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     called by "tacs2" only, if and only if m4plot .ne. 0
   !     this module is universal for fortran 77 compilers and
   !     computers for which real*4 corresponds to single precision.
+  real, intent(out) :: d2, volti
   dimension volti(1)
   include 'blkcom.ftn'
-  real(4) forbyt(150)
+  integer iofgnd, j, n12
+  real forbyt(150)
   if (iofgnd .gt. 149) call stoptp
   n12 = iofgnd + 1
   read (unit = lunit2) (forbyt(j), j = 1, n12)
@@ -522,18 +566,18 @@ end subroutine pltlu2
 !
 
 subroutine vecrsv (array, n13, n2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module for vector dumping/restoring of "OVER6", "OVER8", etc.
   !     This is universal for virtual computers which chose to
   !     use /C29B01/ space for this, as well as all of "LABCOM".
   !     Also needed are uncounted Hollerith.  Parallel to "VECISV".
   include 'blkcom.ftn'
   include 'deck29.ftn'
-  integer(4) array(*)
-  integer(4), target :: karray
+  integer array(*)
+  integer, target :: karray
   !dimension array(*), farray(*)
   !real(8) farray(1)
-  integer(4), pointer :: farray(:)
+  integer, pointer :: farray(:)
   !equivalence (karray(1), farray(1))
   !     block /veccom/ is shared by "vecrsv" and "vecisv".
   !       ltlabl = 0
@@ -608,7 +652,7 @@ end subroutine vecrsv
 !
 
 subroutine vecisv (karr, n13, n2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module for vector dumping/restoring of "OVER6", "OVER8", etc.
   !     This is universal for virtual computers which chose to
   !     use /C29B01/ space for this, as well as all of "LABCOM".
@@ -616,15 +660,16 @@ subroutine vecisv (karr, n13, n2)
   include 'blkcom.ftn'
   include 'deck29.ftn'
   !real(8) karr, karray, farray
-  integer(4), target :: karray
-  integer(4), pointer :: farray(:)
-  integer(4) karr
+  integer, target :: karray
+  integer, pointer :: farray(:)
+  integer karr
   !dimension farray(3)
   !equivalence (karray(1), farray(1))
   dimension karr(2)
   !     block /VECCOM/ is shared with "VECRSV" (see for more info)
+  integer kntvec
   common /veccom/ kntvec, kofvec(20)
-  if (iprsup .ge. 1) write (lunit6, 1423) n13, n2
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 1423) n13, n2
 1423 format (' Begin "vecisv".  n13, n2 =',  2i8)
   if (n2 .eq. 1) go to 1471
   !     begin code to restore  (karr(k), k=1, n13)  from tank:
@@ -750,15 +795,16 @@ end subroutine vecixx
 !
 
 subroutine namea6 (text1, n24)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   ! module for maintainance of alphanumeric vector texvec of
   ! "labcom".  maxbus of "blkcom" is last used cell.  n24 chooses
   ! mode of use:  0 will add text1, positive will locate it,
   ! and negative will destroy (remove) it.
   include 'blkcom.ftn'
   include 'labcom.ftn'
-  integer(4) n24
-  character(8) text1, text2
+  integer, intent(out) :: n24
+  character(8), intent(in) :: text1
+  character(8) text2
   ! Burroughs: preserve local variable between module calls:
   data n17 / 0 /
   data text2 / 'unused' /
@@ -793,7 +839,7 @@ subroutine namea6 (text1, n24)
   go to 9000
 3455 texvec(j) = text2
   n17 = j
-9000 if (iprsup .ge. 6) write (lunit6, 9004) text1, maxbus, n24, j
+9000 if (iprsup .ge. 6) write (unit = lunit6, fmt = 9004) text1, maxbus, n24, j
 9004 format (' Exit "namea6".  text1, maxbus, n24, j =', 2x, a6, 3i10)
   return
 end subroutine namea6
@@ -803,7 +849,7 @@ end subroutine namea6
 !
 
 subroutine tables
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Utility which is used to both dump and restore EMTP
   !     tables (central memory vs. disk).  Usage is for both
   !     "statistics" (over12, over15, over20) and  "start again"
@@ -829,13 +875,14 @@ subroutine tables
   include 'synmac.ftn'
   !     comment card immediately following "synmac" -------------
   include 'umdeck.ftn'
-  dimension  integx(1)
+  dimension integx(1)
   equivalence (x(1), integx(1))
-  character(8) busone, kpen, itemp
+  integer busone
+  character(8) kpen, itemp
   dimension  busone(1), idistx(1)
   equivalence (bus1, busone(1)), (nenerg, idistx(1))
   dimension kpen(1), itemp(1), jtemp(1), ktemp(1)
-  equivalence (kpen(1), bus1), (itemp(1),busum(1))
+  equivalence (kpen(1), bus1), (itemp(1), busum(1))
   equivalence (jtemp(1), etac(1)), (ktemp(1), z(1))
   equivalence (moncar(2), kbase)
   dimension iprsav(4)
@@ -845,18 +892,20 @@ subroutine tables
   ll2 = 2
   ll4 = 4
   !nword1 = locint (voltbc(1)) - locint (kpen(1))
-  nword1 = locf (voltbc(1)) - locchar (kpen(1))
-  nword2 = locint (idistx(1)) - locint (lunsav(15))
-  n4 = locint (msmout) - locint (z(1)) + 1
-  n5 = locint (lbstac) - locint (etac(1)) + 1
-  if (kbase .eq. 0) nword1 = locint (idistx(1)) - locint (busone(1))
-  n9 = locint (istart) - locint (busum(1)) + 1
+  nword1 = locf(voltbc(1)) - locchar(kpen(1))
+  nword2 = locint(idistx(1)) - locint(lunsav(15))
+!  n4 = locint(msmout) - locint(z(1)) + 1
+  n4 = loc (msmout) - loc (z(1)) + 1
+!  n5 = locint(lbstac) - locint(etac(1)) + 1
+  n5 = loc (lbstac) - loc (etac(1)) + 1
+  if (kbase .eq. 0) nword1 = locint(idistx(1)) - locint(busone(1))
+  !n9 = locint(istart) - locint(busum(1)) + 1
+  n9 = loc (istart) - loc (busum(1)) + 1
   rewind lunit2
   if (nchain .eq. 1) go to 3289
   if (nchain .eq. 20) go to 3289
 3289 if (iprsup .ge. 1) write (lunit6, 2721) n4, n5, nword1, nword2, ltlabl, n9, nchain, lastov, lunit2, t
-2721 format (/, ' Within  "tables" .      n4      n5  nword1  nword2  ltlabl      n9', &
-       '  nchain  lastov  lunit2 ',  14x,  't', /, 19x, 9i8, e15.6)
+2721 format (/, ' Within  "tables" .      n4      n5  nword1  nword2  ltlabl      n9  nchain  lastov  lunit2 ',  14x,  't', /, 19x, 9i8, e15.6)
   if (nchain .eq. 1) go to 5342
   if (memsav .eq. 1016) go to 5342
   if (nchain .lt. lastov) go to 5342
@@ -906,7 +955,7 @@ end subroutine tables
 !
 
 subroutine csup (l)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'tacsar.ftn'
@@ -922,25 +971,25 @@ subroutine csup (l)
   kksup = kjsup  + lstat(65)
   !     2001 if ( iprsup .lt. 6 )  go to 1000
   if (iprsup .lt. 6) go to 1000
-  write (lunit6, 1001) t, nsup, karg, kpar
+  write (unit = lunit6, fmt = 1001) t, nsup, karg, kpar
 1001 format ('0entering subroutine  csup  at  t=', e13.6, /, '0e nsup=', i6, '   karg=', i8, '   kpar=', i6)
-  write (lunit6,1002) (i, ilntab(i + kspvar), insup(i + kjsup), insup(i + kksup), i = 1, nsup)
+  write (unit = lunit6, fmt = 1002) (i, ilntab(i + kspvar), insup(i + kjsup), insup(i + kksup), i = 1, nsup)
 1002 format ('  Number  supvar    jsup    ksup ', /, (4i8))
-  write (lunit6, 1033) karg
+  write (unit = lunit6, fmt = 1033) karg
 1033 format ('  karg = ', i8, /, '       n  iopsup  ifnsup  irgsup    idev     kdj     kdk  ildev1  ildev2')
   do i = 1, nsup
      n1 = insup(kjsup + i)
      if (n1 .lt. 0) go to 2014
      n2 = insup(kksup + i)
-     write (lunit6, 2008) (n,ivarb(n + 1), ivarb(n + 2), ivarb(n + 2), n = n1, n2, 3)
+     write (unit = lunit6, fmt = 2008) (n,ivarb(n + 1), ivarb(n + 2), ivarb(n + 2), n = n1, n2, 3)
 2008 format (4i8)
      go to 2034
 2014 n1 = -n1
-     write (lunit6, 2022 ) n1, ivarb(n1), ivarb(n1 + 1), ivarb(n1 + 2), ivarb(n1 + 3), ivarb(n1 + 4)
+     write (unit = lunit6, fmt = 2022 ) n1, ivarb(n1), ivarb(n1 + 1), ivarb(n1 + 2), ivarb(n1 + 3), ivarb(n1 + 4)
 2022 format (i8, 24x, 5i8)
   end do
 2034 continue
-  if (kpar .ne. 0) write (lunit6,1004) (i, parsup(i + kprsup), i = 1, kpar)
+  if (kpar .ne. 0) write (unit = lunit6, fmt = 1004) (i, parsup(i + kprsup), i = 1, kpar)
 1004 format ('0e', 5x, 'parsup ...', /, (' e', 5(i3, 1x, e15.6, 3x)))
 1000 nnn = kxtcs + nuk + lstat(64)
   i = l
@@ -1608,107 +1657,107 @@ subroutine csup (l)
   a = parsup(ndx2) + d9 *( b - parsup(ndx4) )
   go to 11
   !     ---  time - sequenced  switch  ---
-657 m = ivarb( n1 + 3 )
-  n = ivarb( n1 + 4 )
+657 m = ivarb(n1 + 3)
+  n = ivarb(n1 + 4)
   n3 = int(parsup(nn + 1))
   n4 = int(parsup(nn + 2))
-  if ( n4 .eq. n )  go to 65701
-  if ( n4 .eq. 0 )  n4 = m - 1
+  if (n4 .eq. n) go to 65701
+  if (n4 .eq. 0) n4 = m - 1
   j = n4 + 1
-  ndx1 = kprsup +  j
-  if ( t .lt. parsup(ndx1) )  go to 65701
-  parsup(nn+2) = j
+  ndx1 = kprsup + j
+  if (t .lt. parsup(ndx1)) go to 65701
+  parsup(nn + 2) = j
   n3 = n3 + 1
-  if ( n3 .eq. 2 )  n3 = 0
-  parsup(nn+1) = n3
-65701 if ( n3 .eq. 0 )  go to 11
+  if (n3 .eq. 2) n3 = 0
+  parsup(nn + 1) = n3
+65701 if (n3 .eq. 0) go to 11
   a = b
   go to 11
   !     ---  controlled integrator and counter  ---
-658 if ( ivarb(n1+3) .ne. -9999 )  go to 4658
+658 if (ivarb(n1 + 3) .ne. -9999) go to 4658
   ndx6 = nnn + i
-  a = xtcs( ndx6) + b
+  a = xtcs(ndx6) + b
   go to 11
-4658 n5 = ivarb( n1 + 3 )
-  if ( n5 .eq. 0 )  go to 4721
+4658 n5 = ivarb(n1 + 3)
+  if (n5 .eq. 0) go to 4721
   ndx6 = kxtcs + n5
-  if ( xtcs( ndx6) .gt. 0.0 )  go to 4721
+  if (xtcs(ndx6) .gt. 0.0) go to 4721
   a = 0.0
   parsup(nn) = 0.0
-  n6 = ivarb( n1 + 4 )
-  if ( n6 .eq. 0 )  go to 11
+  n6 = ivarb(n1 + 4)
+  if (n6 .eq. 0) go to 11
   ndx6 = kxtcs + n6
-  a = xtcs( ndx6)
-  parsup(nn) = ( parsup(nn+1) - parsup(nn+2) ) / 2.0  * a
+  a = xtcs(ndx6)
+  parsup(nn) = ( parsup(nn + 1) - parsup(nn + 2) ) / 2.0 * a
   go to 11
-4721 a = ( b + parsup(nn) ) / parsup(nn+1)
-  parsup(nn) = b - parsup(nn+2) * a
+4721 a = (b + parsup(nn)) / parsup(nn + 1)
+  parsup(nn) = b - parsup(nn + 2) * a
   go to 11
   !     ---  simple  derivative  ---
-659 a = ( b - parsup(nn+1) )  *  parsup(nn)
-  parsup(nn+1) = b
+659 a = (b - parsup(nn + 1)) * parsup(nn)
+  parsup(nn + 1) = b
   go to 11
   !     ---  input  if - block  ---
 660 d7 = parsup(nn)
-  n3 = ivarb( n1 + 3 )
-  n4 = ivarb( n1 + 4 )
+  n3 = ivarb(n1 + 3)
+  n4 = ivarb(n1 + 4)
   ndx1 = kxtcs + n4
-  if ( n4 .ne. 0 )  d7 = d7 + xtcs( ndx1)
+  if (n4 .ne. 0) d7 = d7 + xtcs(ndx1)
   ndx1 = kxtcs + n3
-  d7 = xtcs( ndx1) - d7
+  d7 = xtcs(ndx1) - d7
   n = 2
-  if ( d7 .gt. -flzero )  n = 1
-  if ( d7 .gt. +flzero )  n = 0
-  j = ivarb(n1+1) + n
+  if (d7 .gt. -flzero) n = 1
+  if (d7 .gt. +flzero) n = 0
+  j = ivarb(n1 + 1) + n
   ndx2 = kalksu + j
   ndx3 = kksus + j
-  ndx4 = kxtcs + ksus( ndx2)
-  a = xtcs( ndx4)  *  ksus( ndx3)
+  ndx4 = kxtcs + ksus(ndx2)
+  a = xtcs(ndx4)  *  ksus(ndx3)
   go to 11
   !     ---  input  signal  selector  ---
-661 ndx3 = kxtcs + ivarb( n1 + 3 )
-  ndx4 = kxtcs + ivarb( n1 + 4 )
-  d1 = xtcs( ndx4)
-  a = parsup( nn + 1 )
-  if ( d1 .lt. 0.5 )  go to 11
-  a = parsup( nn + 2 )
-  if ( d1 .ge. 6.5 )  go to 11
+661 ndx3 = kxtcs + ivarb(n1 + 3)
+  ndx4 = kxtcs + ivarb(n1 + 4)
+  d1 = xtcs(ndx4)
+  a = parsup(nn + 1)
+  if (d1 .lt. 0.5) go to 11
+  a = parsup(nn + 2)
+  if (d1 .ge. 6.5) go to 11
   a = 0.0
-  if ( d1 .lt. 5.5 )  go to 66110
-  if ( ndx3 .eq. kxtcs )  go to 11
-  a = xtcs( ndx3)
+  if (d1 .lt. 5.5) go to 66110
+  if (ndx3 .eq. kxtcs) go to 11
+  a = xtcs(ndx3)
   go to 11
 66110 j = int(d1 - onehaf)
   j = ivarb(n1+2) - j
   ndx1 = kalksu + j
-  m = ksus( ndx1)
-  if ( m .eq. 0 )  go to 11
+  m = ksus(ndx1)
+  if (m .eq. 0) go to 11
   ndx1 = kxtcs + m
   ndx2 = kksus + j
-  a = xtcs( ndx1)  *  ksus( ndx2)
+  a = xtcs(ndx1) * ksus(ndx2)
   go to 11
   !     ---  track  and  sample  ---
-662 a = parsup( nn + 2 )
-  n = ivarb( n1 + 3 )
-  if ( n .eq. 0 )  go to 66210
+662 a = parsup(nn + 2)
+  n = ivarb(n1 + 3)
+  if (n .eq. 0)  go to 66210
   ndx2 = kxtcs + n
-  if ( xtcs( ndx2) .gt. flzero )  a = b
-66210 n = ivarb( n1 + 4 )
+  if (xtcs(ndx2) .gt. flzero) a = b
+66210 n = ivarb(n1 + 4)
   m = 0
-  if ( n .eq. 0 )  go to 66220
+  if (n .eq. 0) go to 66220
   ndx3 = kxtcs + n
-  if ( xtcs( ndx3) .gt. flzero )  m = 1
-66220 if ( parsup(nn) .eq. 1.0  .or.  m .eq. 0 )  go to 66230
+  if (xtcs(ndx3) .gt. flzero) m = 1
+66220 if (parsup(nn) .eq. 1.0 .or. m .eq. 0) go to 66230
   a = b
   parsup(nn) = 1.0
   go to 66240
-66230 if ( parsup(nn) .eq. 1.0  .and.  m .eq. 0 ) parsup(nn) = 0.0
-66240 parsup(nn+2) = a
+66230 if (parsup(nn) .eq. 1.0 .and. m .eq. 0) parsup(nn) = 0.0
+66240 parsup(nn + 2) = a
   go to 11
   !     ---  instantaneous  min/max  ---
-663 ndx1 = kalksu + ivarb( n1 + 1 )
+663 ndx1 = kalksu + ivarb(n1 + 1)
   k = 2
-66310 if ( ksus( ndx1) .gt. 0 )  go to 66320
+66310 if (ksus(ndx1) .gt. 0) go to 66320
   ndx1 = ndx1 + 1
   k = k + 1
   go to 66310
@@ -1716,85 +1765,85 @@ subroutine csup (l)
   ndx2 = ndx1 - lstat(63)
   d11 = xtcs(ndx4) * ksus(ndx2)
   d10 = d11
-  if ( k .gt. 5 )  go to 66330
+  if (k .gt. 5) go to 66330
   ndx3 = ndx1
   do j = k, 5
      ndx3 = ndx3 + 1
      ndx2 = ndx2 + 1
-     n = ksus( ndx3)
-     if ( n .eq. 0 )  go to 66340
+     n = ksus(ndx3)
+     if (n .eq. 0) go to 66340
      ndx6 = kxtcs + n
      d4 = xtcs(ndx6) * ksus(ndx2)
-     if ( d4 .lt. d10 )   d10 = d4
-     if ( d4 .gt. d11 )   d11 = d4
-     if ( iprsup  .ge.  1 ) write (lunit6, 7234)  k, j, ndx2, ndx3, ndx6, ksus(ndx2), xtcs(ndx6)
+     if (d4 .lt. d10) d10 = d4
+     if (d4 .gt. d11) d11 = d4
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 7234) k, j, ndx2, ndx3, ndx6, ksus(ndx2), xtcs(ndx6)
 7234 format (' Next input; k, j, ndx2, ndx3, ndx6, ksus(ndx2), xtcs(ndx6) =',  6i8, e13.3)
   end do
 66340 continue
 66330 a = d11
-  if ( parsup(nn+1) .ge. 0.0 )  go to 11
+  if (parsup(nn + 1) .ge. 0.0) go to 11
   a = d10
   go to 11
   !     --- min/max tracking, controlled accumulator or couhter ---
-664 ndx4 = kxtcs + ivarb( n1 + 3 )
-  if ( ndx4 .eq. kxtcs )  go to 6641
-  if ( xtcs( ndx4) .le. flzero )  go to 6641
-  a = parsup( nn + 2 )
+664 ndx4 = kxtcs + ivarb(n1 + 3)
+  if (ndx4 .eq. kxtcs) go to 6641
+  if (xtcs(ndx4) .le. flzero) go to 6641
+  a = parsup(nn + 2)
   go to 6643
-6641 ndx5 = kxtcs + ivarb( n1 + 4 )
-  if ( ndx5 .eq. kxtcs )  go to 6642
-  if ( xtcs( ndx5) .le. flzero )  go to 6642
+6641 ndx5 = kxtcs + ivarb(n1 + 4)
+  if (ndx5 .eq. kxtcs) go to 6642
+  if (xtcs( ndx5) .le. flzero) go to 6642
   a = parsup(nn)
   go to 11
-6642 if ( n2 .eq. 16 ) go to 665
+6642 if (n2 .eq. 16) go to 665
   a = parsup(nn)
   rdev1 = parsup( nn + 1 )
-  if ( rdev1 .eq. -1.0  .and.  b .lt. a )  a = b
-  if ( rdev1 .eq. +1.0  .and.  b .gt. a )  a = b
+  if (rdev1 .eq. -1.0 .and. b .lt. a) a = b
+  if (rdev1 .eq. +1.0 .and. b .gt. a) a = b
   go to 6643
 665 a = parsup(nn) + b
 6643 parsup(nn) = a
   go to 11
-666 ivarb(n1+4) = ivarb(n1+4) + 1
-  k = ivarb( n1 + 3 )
-  if ( ivarb(n1+4) .gt. k ) ivarb(n1+4) = 1
-  ndx1 = nn + ivarb( n1 + 4 )
+666 ivarb(n1 + 4) = ivarb(n1 + 4) + 1
+  k = ivarb(n1 + 3)
+  if (ivarb(n1 + 4) .gt. k) ivarb(n1 + 4) = 1
+  ndx1 = nn + ivarb(n1 + 4)
   parsup(ndx1) = b * b
   do ji = 1, k
-     a = a + parsup( nn + ji )
+     a = a + parsup(nn + ji)
   end do
-  a = sqrtz( a * parsup(nn) )
+  a = sqrtz (a * parsup(nn))
   go to 11
-667 j = ivarb( n1 + 1 )
-  k = ivarb( n1 + 2 )
+667 j = ivarb(n1 + 1)
+  k = ivarb(n1 + 2)
   b = 0.0
   do mj = j, k
      n = kksus + mj
-     if ( ksus(n)  .eq.  9 ) go to 1166
+     if (ksus(n) .eq. 9) go to 1166
      m = kalksu + mj
-     bb = xtcs( kxtcs + ksus(m) ) * ksus(n)
+     bb = xtcs(kxtcs + ksus(m)) * ksus(n)
      nj = mj
 1144 nj = nj - 1
      n = n - 1
      m = m - 1
-     if ( nj  .lt.  j ) go to 1155
-     if ( ksus(n)  .ne.  9 ) go to 1155
-     bb = bb * xtcs( kxtcs + ksus(m) )
+     if (nj .lt. j) go to 1155
+     if (ksus(n) .ne. 9) go to 1155
+     bb = bb * xtcs(kxtcs + ksus(m))
      go to 1144
 1155 b = b + bb
   end do
 1166 continue
-  a = b * parsup( nn + 3 )
-  aa = a * parsup( nn )
-  if ( aa .ge. parsup(nn+1) ) go to 6677
-  a = parsup(nn+1) / parsup(nn)
+  a = b * parsup(nn + 3)
+  aa = a * parsup(nn)
+  if (aa .ge. parsup(nn + 1)) go to 6677
+  a = parsup(nn + 1) / parsup(nn)
   go to 11
-6677 if ( aa .le. parsup(nn+2) ) go to 11
-  a = parsup(nn+2) / parsup(nn)
+6677 if ( aa .le. parsup(nn + 2)) go to 11
+  a = parsup(nn + 2) / parsup(nn)
 11 ndx1 = nnn + i
   xtcs(ndx1) = a
-10 i = insup(kinsup+i)
-  if ( i .gt. 0 ) go to 1234
+10 i = insup(kinsup + i)
+  if (i .gt. 0) go to 1234
   !     9999 return
   return
 end subroutine csup

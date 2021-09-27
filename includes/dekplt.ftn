@@ -7,7 +7,9 @@
 !     to variable-length conflict (this is single-precision).
 !  character(8) datepl, tclopl, buslst(1), bbus
 
-  common /cblock/ datepl(2), tclopl(2),  bbus(300)
+  real(8) ev, ew
+  character bbus, buslst(1000)
+  common /cblock/ datepl(2), tclopl(2), bbus(300)
   common /cblock/ tmult, dy, dx, hpi, tstep, gxmin, gxmax
   common /cblock/ ew(15000), finfin, fill, fvcom(50)
   common /cblock/ yymin(20), yymax(20), ttmin(20), ttmax(20)
@@ -15,7 +17,6 @@
   common /cblock/ aaa(20), bbb(20), kp(20), fxref(25), fyref(25)
   !     evnbyt puts buslst on real*8 byte boundary (ibm level 4 error):
   common /cblock/  evnbyt, ev(15000), bx(150), vminr, vmaxr
-  real(8) buslst(1)
   dimension  ibsout(1), ibrnch(1), jbrnch(1)
   equivalence  ( ev(   1), buslst(1) ),  ( ev(1001), ibsout(1) )
   equivalence  ( ev(1301), ibrnch(1) ),  ( ev(1601), jbrnch(1) )
