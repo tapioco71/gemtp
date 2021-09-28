@@ -9,7 +9,9 @@
   !     This deck was added as a quick and dirty fix when we
   !     moved volti, etc. from blkcom to labcom (as part of
   !     variable dimensioning).   Deck is always in memory.
+  real volti, voltk, vim
   common /volpri/ volti(50), voltk(50), vim(50)
+
   !
   !     end of file: volt45.ftn
   !

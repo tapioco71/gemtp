@@ -8,6 +8,7 @@
 !
 
 subroutine datain
+  implicit none
 !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module of interactive EMTP (spy of "emtspy").
   !     If non-interactive version, module can be destroyed.
@@ -77,8 +78,8 @@ subroutine datain
   limcrd = 30000                                            ! present fixed limit on file6 of "dekspy"
   n13 = 0                                                   ! initially assume no debug printout
   ntacs = 0                                                 ! old tacs data format
-  call date44 (date1(1))                                    ! find calendar date and the
-  call time44 (tclock(1))                                   ! time of day for documentation
+  call date44 (date1)                                       ! find calendar date and the
+  call time44 (tclock)                                      ! time of day for documentation
   call initsp                                               ! initialize spy common (digit needed to sort)
 1311 write (unit = lunit6, fmt = 1324)                      ! prompt user at "emtspy" keyboard
 1324 format (' EMTP begins.  Send (spy, $attach, debug, help, module, junk, stop): ')

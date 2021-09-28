@@ -3,6 +3,135 @@
 !     file: main00.f90
 !
 
+!**********************************************************************
+!                                                                     *
+!    --------------- Electromagnetic Transients Program ------------  *
+!                    methods development branch, route eogb           *
+!                    division of system engineering                   *
+!                    Bonneville Power Administration                  *
+!                    P. O. Box 3621                                   *
+!                    Portland, Oregon  97208                          *
+!                    U.S.A.     phone: (503) 230-4404                 *
+!                                                                     *
+!    The fortran comment-card text now being read represents a        *
+!    summary introduction and explanation which applies to a very     *
+!    large program development referred to by the title of            *
+!    'electromagnetic transients program'  (abbreviated  'EMTP' ,     *
+!    or   't.p.'  in the older notation).                             *
+!                                                                     *
+!    In general terms, the purpose of this work is to simulate        *
+!    transient phenomena in power system networks, taking into        *
+!    account traveling waves (electromagnetic transients) on          *
+!    transmission lines, saturation of transformers, nonlinearities   *
+!    of surge arresters, etc.   While not so restricted in theory,    *
+!    the most common program application is for the simulation of     *
+!    switching surges which propagate on power network transmission   *
+!    lines.   for a more detailed explantion of the modeling          *
+!    techniques which are used, the reader is referred to the         *
+!    manual for this program (840 pages for the version dated         *
+!    march, 1983).  ).    while older issues were titled              *
+!    "EMTP user's manual",  beginning in september of 1980            *
+!    this work is now called the  "EMTP rule book" .                  *
+!                                                                     *
+!     The utpf is a large 80-column bcd card-image file, to be used   *
+!     as input to e/t programs.   E/t programs machine translate this *
+!     utpf code into legal fortran for most computer systems of       *
+!     interest (ibm, cdc, univac, honeywell, dec pdp-10, dec vax-11,  *
+!     prime, sel, apollo, hitachi, facom, harris, etc.).              *
+!                                                                     *
+!     In conformity with long-standing bpa policy, as well as the     *
+!    more recent (february 19, 1975) federal freedom of information   *
+!    act, dissemination of these program materials is freely made     *
+!    to any and all interested parties.   a fee to cover reproduction,*
+!    handling, and mailing costs may be assessed against the          *
+!    organization receiving the material, however.   No claim or      *
+!    warranty as to the usefulness, accuracy, fidelity, or            *
+!    completeness of these materials is (or ever has been) in any     *
+!    way expressed or implied.                                        *
+!                                                                     *
+!**********************************************************************
+!
+!    The present module  main00  is always in memory.   It is the
+!    highest level module of a program which has two levels of
+!    overlaying.   It calls primary level overlays only (directly),
+!    based on the value of variable  'nchain' .   The following
+!     legitimate values, and the meaning of the associated overlay
+!     calls, exist .....
+!     1-20.  For overlays 1, 2, ..., 20, which are secondary-level
+!            overlays, a call must be first made to the controlling
+!            primary-level overlay.   Thus for such  'nchain'  values,
+!            control is transfered first to module  main10 .   This
+!            is the only case where calls to overlays are not made
+!            directly.
+!
+!     29.  Completion of statistics (Monte Carlo) study, where variable
+!          maxima of the different case solutions are read off the
+!          disk, and are processed statistically to produce
+!          cumulative distribution functions, etc.
+!
+!     31.  Plot routine, for graphical output of transients.
+!          the program also terminates execution here, usually,
+!          after writing an end-of-information mark on the
+!          plot tape (whether or not the user has plotted anything).
+!
+!     39.  Supporting routine which generates EMTP branch
+!          cards for the frequency-dependent representation of
+!          an untransposed transmission line.   this is the
+!          "marti setup"  code, named after dr. jose marti of
+!          vancouver and caracas (see 1981 ieee pica paper).
+!
+!     41.  Supporting routine which calculates transformer matrices  (R)
+!          and  (L)  from short-circuit and open-circuit data.
+!
+!     42.  Supporting routine which converts an rms voltage vs. current
+!          saturation characteristic into an instantaneous flux vs.
+!          current characteristic.
+!
+!     43.  Supporting routine which calculates weighting functions
+!          a1(t)  and  a2(2)  for the zero-sequence mode of a
+!          distributed line which has frequency-dependent line
+!          constants  r  and  l .
+!
+!     44.  Supporting routine which calculates line constants for
+!          overhead transmission lines by means of carson's formula.
+!          this is a modified version of what was originally (until
+!          january 1975) the completely-separate bpa line-constants
+!          program.
+!
+!     45.  Supporting routine of  'Semlyen setup'  code.   the output
+!          is a group of punched cards, as are required for the EMTP
+!          simulation of a transmission circuit using  semlyen
+!          recursive convolution modeling.
+!
+!     47.  Supporting routine of  'cable constants'  code.   the
+!          primary function is to calculate  (r),  (l),  %  (c)
+!          matrices for a multi-phase system of single-core coaxial
+!          cables.
+!
+!     51.  Printing of introductory paragraph of error-message
+!          termination ('you lose, fella, ... '), plus error-message
+!          texts for  'kill'  codes numbered  1  through  50 .
+!          the exiting linkage is to the last error overlay.
+!
+!     52.  Error message texts for  'kill'  codes numbered  51
+!          the exiting linkage is to the last error overlay.
+!
+!     53.  Error message texts for  'kill'  codes numbered  91
+!          through  150.  the exiting linkage is to the last
+!          error overlay.
+!
+!     54.  Error message texts for  'kill'  codes numbered  151
+!          through  200.   the exiting linkage is to the
+!          last error overlay.
+!
+!     55.  Final error overlay.  messages for  kill = 201
+!          onward are contained, as well as summary statistics
+!          --- table sizes and timing figures for the run.
+!          the exiting linkage is generally to module  over1  (to read
+!          a new data case), but may be to module  over31 (for final
+!          case termination).
+!**********************************************************************
+
 !
 ! program gemtp.
 !
@@ -14,134 +143,6 @@ program gemtp
   include 'blkcom.ftn'
   include 'volt45.ftn'
   include 'io.ftn'
-  !**********************************************************************
-  !                                                                     *
-  !    --------------- Electromagnetic Transients Program ------------  *
-  !                    methods development branch, route eogb           *
-  !                    division of system engineering                   *
-  !                    Bonneville Power Administration                  *
-  !                    P. O. Box 3621                                   *
-  !                    Portland, Oregon  97208                          *
-  !                    U.S.A.     phone: (503) 230-4404                 *
-  !                                                                     *
-  !    The fortran comment-card text now being read represents a        *
-  !    summary introduction and explanation which applies to a very     *
-  !    large program development referred to by the title of            *
-  !    'electromagnetic transients program'  (abbreviated  'EMTP' ,     *
-  !    or   't.p.'  in the older notation).                             *
-  !                                                                     *
-  !    In general terms, the purpose of this work is to simulate        *
-  !    transient phenomena in power system networks, taking into        *
-  !    account traveling waves (electromagnetic transients) on          *
-  !    transmission lines, saturation of transformers, nonlinearities   *
-  !    of surge arresters, etc.   While not so restricted in theory,    *
-  !    the most common program application is for the simulation of     *
-  !    switching surges which propagate on power network transmission   *
-  !    lines.   for a more detailed explantion of the modeling          *
-  !    techniques which are used, the reader is referred to the         *
-  !    manual for this program (840 pages for the version dated         *
-  !    march, 1983).  ).    while older issues were titled              *
-  !    "EMTP user's manual",  beginning in september of 1980            *
-  !    this work is now called the  "EMTP rule book" .                  *
-  !                                                                     *
-  !     The utpf is a large 80-column bcd card-image file, to be used   *
-  !     as input to e/t programs.   E/t programs machine translate this *
-  !     utpf code into legal fortran for most computer systems of       *
-  !     interest (ibm, cdc, univac, honeywell, dec pdp-10, dec vax-11,  *
-  !     prime, sel, apollo, hitachi, facom, harris, etc.).              *
-  !                                                                     *
-  !     In conformity with long-standing bpa policy, as well as the     *
-  !    more recent (february 19, 1975) federal freedom of information   *
-  !    act, dissemination of these program materials is freely made     *
-  !    to any and all interested parties.   a fee to cover reproduction,*
-  !    handling, and mailing costs may be assessed against the          *
-  !    organization receiving the material, however.   No claim or      *
-  !    warranty as to the usefulness, accuracy, fidelity, or            *
-  !    completeness of these materials is (or ever has been) in any     *
-  !    way expressed or implied.                                        *
-  !                                                                     *
-  !**********************************************************************
-  !
-  !    The present module  main00  is always in memory.   It is the
-  !    highest level module of a program which has two levels of
-  !    overlaying.   It calls primary level overlays only (directly),
-  !    based on the value of variable  'nchain' .   The following
-  !     legitimate values, and the meaning of the associated overlay
-  !     calls, exist .....
-  !     1-20.  For overlays 1, 2, ..., 20, which are secondary-level
-  !            overlays, a call must be first made to the controlling
-  !            primary-level overlay.   Thus for such  'nchain'  values,
-  !            control is transfered first to module  main10 .   This
-  !            is the only case where calls to overlays are not made
-  !            directly.
-  !
-  !     29.  Completion of statistics (Monte Carlo) study, where variable
-  !          maxima of the different case solutions are read off the
-  !          disk, and are processed statistically to produce
-  !          cumulative distribution functions, etc.
-  !
-  !     31.  Plot routine, for graphical output of transients.
-  !          the program also terminates execution here, usually,
-  !          after writing an end-of-information mark on the
-  !          plot tape (whether or not the user has plotted anything).
-  !
-  !     39.  Supporting routine which generates EMTP branch
-  !          cards for the frequency-dependent representation of
-  !          an untransposed transmission line.   this is the
-  !          "marti setup"  code, named after dr. jose marti of
-  !          vancouver and caracas (see 1981 ieee pica paper).
-  !
-  !     41.  Supporting routine which calculates transformer matrices  (R)
-  !          and  (L)  from short-circuit and open-circuit data.
-  !
-  !     42.  Supporting routine which converts an rms voltage vs. current
-  !          saturation characteristic into an instantaneous flux vs.
-  !          current characteristic.
-  !
-  !     43.  Supporting routine which calculates weighting functions
-  !          a1(t)  and  a2(2)  for the zero-sequence mode of a
-  !          distributed line which has frequency-dependent line
-  !          constants  r  and  l .
-  !
-  !     44.  Supporting routine which calculates line constants for
-  !          overhead transmission lines by means of carson's formula.
-  !          this is a modified version of what was originally (until
-  !          january 1975) the completely-separate bpa line-constants
-  !          program.
-  !
-  !     45.  Supporting routine of  'Semlyen setup'  code.   the output
-  !          is a group of punched cards, as are required for the EMTP
-  !          simulation of a transmission circuit using  semlyen
-  !          recursive convolution modeling.
-  !
-  !     47.  Supporting routine of  'cable constants'  code.   the
-  !          primary function is to calculate  (r),  (l),  %  (c)
-  !          matrices for a multi-phase system of single-core coaxial
-  !          cables.
-  !
-  !     51.  Printing of introductory paragraph of error-message
-  !          termination ('you lose, fella, ... '), plus error-message
-  !          texts for  'kill'  codes numbered  1  through  50 .
-  !          the exiting linkage is to the last error overlay.
-  !
-  !     52.  Error message texts for  'kill'  codes numbered  51
-  !          the exiting linkage is to the last error overlay.
-  !
-  !     53.  Error message texts for  'kill'  codes numbered  91
-  !          through  150.  the exiting linkage is to the last
-  !          error overlay.
-  !
-  !     54.  Error message texts for  'kill'  codes numbered  151
-  !          through  200.   the exiting linkage is to the
-  !          last error overlay.
-  !
-  !     55.  Final error overlay.  messages for  kill = 201
-  !          onward are contained, as well as summary statistics
-  !          --- table sizes and timing figures for the run.
-  !          the exiting linkage is generally to module  over1  (to read
-  !          a new data case), but may be to module  over31 (for final
-  !          case termination).
-
   character(32) arg
   data ll34                 / 34 /
   data gfortran_stderr_unit / 0 /
@@ -240,16 +241,203 @@ end program gemtp
 #else
 
 program gemtp
+  implicit none
   include 'blkcom.ftn'
   include 'volt45.ftn'
   include 'io.ftn'
-  integer i, options_count
+  integer i, ll34, optscount
   character(32) arg
-  options_count = command_argument_count()
-  do i = 1, iargc()
+  data ll34                 / 34 /
+  data gfortran_stderr_unit / 0 /
+  data gfortran_stdin_unit  / 5 /
+  data gfortran_stdout_unit / 6 /
+  !     unit assignments of "over1" needed earlier by spy:
+  lunit0 = gfortran_stderr_unit
+  lunit1 = 1
+  lunit2 = 2
+  lunit3 = 3
+  lunit4 = 4
+  lunit5 = gfortran_stdin_unit
+  lunit6 = gfortran_stdout_unit
+  lunit7 = 7
+  lunit8 = 8
+  lunit9 = 9
+  lunt10 = 10
+  lunt11 = 11
+  lunt12 = 12
+  lunt13 = 13
+  lunt14 = 14
+  lunt15 = 15
+  llbuff = -3333
+  kol132 = 132
+  nchain = -1
+  lastov = 0
+  kill = 0
+  optscount = command_argument_count()
+  do i = 1, optscount
      call getarg (i, arg)
      write (*, *) arg
   end do
+  do
+     select case (kill)
+     case (0, 9999)
+        call a2001
+
+     case (4372)
+        call a4372
+        call a2001
+
+     case default
+        write (unit = lunit6, fmt = 4367)
+4367    format (' "main00" intercept of "begin" request.')
+        kill = 0
+        numdcd = 0
+        nchain = 1
+        call main10
+     end select
+  end do
+  return
+
+contains
+  subroutine a2001
+    integer n1
+    !
+    n1 = nchain
+    if (n1 .gt. 30) n1 = n1 - 30
+    if (n1 .le. 0) n1 = 1
+    iprsup = iprsov(n1)
+    if (nchain .gt. 20) then
+       call a2010
+       return
+    end if
+    if (nchain .eq. 12 .or. nchain .eq. 2) go to 1983
+    if (nchain .eq. -1) call move0 (iprsov(1), ll34)
+    call erexit
+    nchain = 0
+    if (nchain .gt. 20) return
+1983 call main10
+    return
+  end subroutine a2001
+
+  subroutine a2010
+    if (m4plot .eq. 1) call emtspy
+    if (nchain .le. 29) then
+
+#ifdef WITH_OVER29
+       call over29
+#else
+       call dummy
+#endif
+
+    else if (nchain .le. 31) then
+
+#ifdef WITH_OVER29
+       call over31
+#else
+       call dummy
+#endif
+
+    else if (nchain .le. 39) then
+
+#ifdef WITH_OVER29
+       call over39
+#else
+       call dummy
+#endif
+
+    else if (nchain .le. 41) then
+
+#ifdef WITH_OVER29
+       call over41
+#else
+       call dummy
+#endif
+
+    else if (nchain .le. 42) then
+
+#ifdef WITH_OVER29
+       call over42
+#else
+       call dummy
+#endif
+
+    else if (nchain .le. 44) then
+
+#ifdef WITH_OVER29
+       call over44
+#else
+       call dummy
+#endif
+
+    else if (nchain .le. 45) then
+#ifdef WITH_OVER29
+       call over45
+#else
+       call dummy
+#endif
+
+    else if (nchain .le. 47) then
+
+#ifdef WITH_OVER29
+       call over47
+#else
+       call dummy
+#endif
+
+    else if (nchain .le. 51) then
+
+#ifdef WITH_OVER29
+       call over51
+#else
+       call dummy
+#endif
+
+    else if (nchain .le. 52) then
+
+#ifdef WITH_OVER29
+       call over52
+#else
+       call dummy
+#endif
+
+    else if (nchain .le. 53) then
+
+#ifdef WITH_OVER29
+       call over53
+#else
+       call dummy
+#endif
+
+    else if (nchain .le. 54) then
+
+#ifdef WITH_OVER29
+       call over54
+#else
+       call dummy
+#endif
+
+    else if (nchain .le. 55) then
+
+#ifdef WITH_OVER29
+       call over55
+#else
+       call dummy
+#endif
+
+    end if
+    return
+  end subroutine a2010
+
+  subroutine a4372
+    if (nchain .gt. 51) then
+       call a2001
+       return
+    end if
+    nchain = 51
+    call a2001
+    return
+  end subroutine a4372
+
 end program gemtp
 
 #endif
@@ -259,7 +447,7 @@ end program gemtp
 !
 
 subroutine stoptp
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Temporary stop statements of EMTP have been converted to
   !     "call stoptp", allowing installation-dependent clean up.
   include 'blkcom.ftn'
@@ -326,7 +514,7 @@ end subroutine copya
 !
 
 subroutine erexit
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11   installation-dependent EMTP module.   This is
   !     called by the top of "main00", before any emtp data input.
   include 'blkcom.ftn'
@@ -348,7 +536,7 @@ end subroutine erexit
 !
 
 subroutine runtym (d1, d2)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !    This subroutine returns with the current job-execution time, as
   !    broken down into two categories ....
   !           d1 = central processor job time, in seconds
@@ -377,7 +565,8 @@ end subroutine runtym
 !
 
 subroutine settym
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   integer cputime
   real time
   common /timers/ cputime
@@ -391,42 +580,11 @@ subroutine settym
 end subroutine settym
 
 !
-!     subroutine time44.
-!
-
-subroutine time44(a)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !    The purpose of subroutine  time44  is to interrogate the
-  !    installation clock, and return the wall-clock time through the
-  !    argument of the subroutine.   Eight bcd characters are allowed,
-  !    with the first (left) four characters to be placed in  a(1) ,
-  !    and the final (right) four placed in  a(2) .   A statement like
-  !             write (lunit6, 4041)  a
-  !        4041 format ( 1x, 2a4 )
-  !    thus outputs the wall-clock time as first hours, then minutes,
-  !    and finally seconds, separated by periods (hh.mm.ss) .
-  !    Subroutine  time44  is of course installation dependent.
-  !    Installation-dependent  EMTP  module written for the  DEC
-  !    VAX-11/780.    'time'  is a  DEC  system subroutine which
-  !    returns the wall-clock time as an 8-byte character string.
-  !    This is just what the emtp needs, except that we want periods
-  !    rather than colons, and of course we require  2a4  format.
-  character(10) time
-  character(8) a(2)
-  call date_and_time (time = time)
-  write (unit = a(1), fmt = 2741) time(1:1), time(2:2), time(3:3)
-2741 format (2a1, '.', a1)
-  write (unit = a(2), fmt = 2754) time(4:4), time(5:5), time(6:6)
-2754 format (a1, '.', 2a1)
-  return
-end subroutine time44
-
-!
 !     subroutine cimage.
 !
 
 subroutine cimage
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11  installation-dependent emtp module which serves
   !     to return the next input card.  All systems will substitute.
   include 'blkcom.ftn'
@@ -970,7 +1128,7 @@ end subroutine caterr
 !
 
 function locf (array)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   real(8), intent(in) :: array(*)
   integer(8) locf
   locf = loc (array(1))
@@ -982,7 +1140,7 @@ end function locf
 !
 
 function locint (iarray)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   integer(4), intent(in) :: iarray(*)
   integer(8) locint
   !     Installation-dependent EMTP module.   This is  VAX  version.
@@ -1018,7 +1176,7 @@ end function locstr
 !
 
 function locchar (carray)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   character, intent(in) :: carray(*)
   integer(8) locchar
   !     Installation-dependent EMTP module.   This is  VAX  version.
@@ -1036,7 +1194,7 @@ end function locchar
 !
 
 function rfunl1 (x)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function provides for all real library functions of
   !     a single real argument.   All translations will make a
   !     substitution.
@@ -1109,7 +1267,7 @@ end function rfunl1
 !
 
 subroutine trgwnd (x, d17)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   real, intent(in) :: x
   real, intent(out) :: d17
@@ -1128,7 +1286,7 @@ end subroutine trgwnd
 !
 
 function ifunl1 (d1)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function is to provide neutral names ending in "z"
   !     for all integer library functions of one real argument.
   real, intent(in) :: d1
@@ -1146,7 +1304,7 @@ end function ifunl1
 !
 
 function cfunl1 (x)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   complex(8), intent(in) :: x
   complex(8) cfunl1, cexpz, csqrtz, clogz
   cfunl1 = x
@@ -1170,7 +1328,7 @@ end function cfunl1
 !
 
 function rfunl2 (x, y)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function provides for all real library functions of
   !     two real arguments.  All translations will make a
   !     substitution.
@@ -1206,7 +1364,7 @@ end function rfunl2
 !
 
 function cmplxz (x, y)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function provides for all complex library functions of
   !     two real arguments.  All translations will make a
   !     substitution.
@@ -1222,7 +1380,7 @@ end function cmplxz
 !
 
 function rfunl3 (x)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This function provides for all real library functions of
   !     a single complex argument.   All translations will make a
   !     substitution.
@@ -1250,7 +1408,7 @@ end function rfunl3
 !
 
 subroutine cmultz (ar, ai, br, bi, cr, ci, ksn)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   sr = br * cr - bi * ci
   ai = bi * cr + br * ci
   ar = sr
@@ -1282,7 +1440,7 @@ end subroutine cdivz
 !
 
 function  iabsz (n1)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     One and only integer library function of one integer
   !     argument.    Make entry point if 2nd is used.
   integer, intent(in) :: n1
@@ -1297,7 +1455,7 @@ end function iabsz
 !
 
 function ifunl2 (n1, n2)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Provision for all integer library functions of 2 integer arguments
   integer, intent(in) :: n1, n2
   integer ifunl2, isignz, modz, min0z, max0z
@@ -1468,7 +1626,7 @@ end subroutine mover0
 !
 
 subroutine move (inta, intb, n)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !    Subroutine  move  is identical to the
   !    block-transfer routine  mover  except
   !    that  move  is for integer arrays, while  mover  was for
@@ -1487,16 +1645,14 @@ end subroutine move
 !
 
 subroutine move0 (intb, n)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !    Subroutine  move0  is identical to  the block-zeroing routine
   !    mover0  except that  move0  is for integer arrays, while  mover0
   !    is for floating-point arrays.   There is a difference, on
   !    machines like IBM, where integer words may be shorter than
   !    floating-point words.
-  integer(4) :: intb(*)
-  do i = 1, n
-     intb(i) = 0
-  end do
+  integer :: intb(*)
+  intb(1 : n) = 0
   return
 end subroutine move0
 
@@ -1505,7 +1661,7 @@ end subroutine move0
 !
 
 subroutine addmxd (a, b, c, n)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Subroutine  addmxd  forms matrix   (c) = (a) + b(u)  , where (a),
   !     and (c)  are n by n matrices,  b  is a scalar, and (u) is the
   !     identity matrix.   Array (c) may be the same as (a), if desired.
@@ -1534,7 +1690,7 @@ end subroutine addmxd
 !
 
 subroutine multmx (a, b, c, temp, n)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Subroutine multmx  forms the matrix product   (c) = (a)(b)   where
   !     matrices  (a), (b), and (c)  are all  n by n  square arrays.
   !     Array  'temp'  is a scratch working area of not less than  2n
@@ -1568,7 +1724,7 @@ end subroutine multmx
 !
 
 subroutine frefld (array)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   character(8) text1, chtacs, texbuf(30), texvec(1)
   dimension array(1)
@@ -1600,7 +1756,7 @@ subroutine frefld (array)
 5802 kolbeg = kolbeg + 1
 5805 text1 = texcol(kolbeg)
      if (text1 .ne. chcont) go to 5819
-!     read input card using cimage
+     !     read input card using cimage
      call cimage
      kolbeg = 1
      if (n3 .eq. 0) go to 5805
@@ -1686,7 +1842,7 @@ end subroutine frefld
 !
 
 subroutine freone (d1)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Scalar version of  "frefld"  which enters the utpf with
   !     "m29."  vintage, to satisfy burroughs (see problem b,
   !     section ii, page ecwb-4, vol. x  EMTP memo of 14 feb 1981.)
@@ -1701,7 +1857,7 @@ end subroutine freone
 !
 
 subroutine frenum (text1, n3, d1)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     VAX-11/780  installation-dependent module called only by
   !     the free-format data module  "frefld" .  Purpose is to
   !     convert input characters  (text1(1) ... text1(n3))  into
@@ -1739,7 +1895,7 @@ end subroutine frenum
 !
 
 subroutine packa1 (from, to, kk)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     System-dependent EMTP module  'packa1'  for  VAX-11/780.
   !     Argument  'from'  contains  a1  information which is to be stored
   !     in character position  kk  of argument  'to' .
@@ -1757,7 +1913,7 @@ end subroutine packa1
 !
 
 subroutine packch (from, to, k4or6, nchbeg, nword)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !
   !     This module performs the system-dependent function of packing bcd
   !     characters from  a4  or  a6  words together so as to form a
@@ -1812,7 +1968,7 @@ end subroutine packch
 !
 
 function seedy (atim)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !
   !     This function is designed to take the time of day (wall-clock
   !     time) in bcd form as input, and return the number of seconds
@@ -1840,7 +1996,7 @@ end function seedy
 !
 
 function randnm (x)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !
   !     This is a random number generating function, whose purpose is to
   !     return with a value for a random variable which is uniformly-
@@ -1896,7 +2052,7 @@ end function randnm
 !
 
 function sandnm (x)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This version of  'randnm'  is used for testing of the
   !     statistical overvoltage capability of the emtp only.   It uses
   !     built-in random numbers, so as to produce identical results
@@ -2034,7 +2190,7 @@ end function sandnm
 !
 
 subroutine mult (a, x, y, n, icheck)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     subroutine  'mult'  is used to post-multiply a symmetric matrix
   !     by a vector.
   !     a=matrix,x and y=vectors.if icheck=0   then  y=a*x
@@ -2061,6 +2217,11 @@ subroutine mult (a, x, y, n, icheck)
      y(k) = yy
   end do
 end subroutine mult
+
+subroutine dummy
+  write (unit = *, fmt = *) 'Dummy subroutine called.'
+  return
+end subroutine dummy
 
 !
 !     end of file: main00.for

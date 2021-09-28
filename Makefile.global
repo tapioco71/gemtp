@@ -98,6 +98,7 @@ F90_FLAGS=	-Wall				\
 		-fdefault-real-8		\
 		-cpp				\
 		-c				\
+		-D WITH_MAIN10			\
 		-D WITH_OVER20
 
 # objdump most common flags.

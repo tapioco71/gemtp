@@ -596,7 +596,8 @@ program vardim
                 '!', //, '!     file: newmods.f90', /, '!', /, '!')
            write (unit = lunit(4), fmt = "('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', / '!', /, '!     file: labcom.ftn', /, '!', /, '!')")
            call make_subroutine_comment(lunit(2), 'main10')
-           write (unit = lunit(2), fmt = "('subroutine main10', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')")
+           write (unit = lunit(2), fmt = "('#ifdef WITH_MAIN10')")
+           write (unit = lunit(2), fmt = "('subroutine main10', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')") realdim, integerdim
            do ii = 1, 126
               i = 0 + ii
               n3 = ncbarr(i)
@@ -618,6 +619,7 @@ program vardim
 7297       format (2x, 'return')
            write (unit = lunit(2), fmt = 7298) 'main10'
 7298       format ('end subroutine ', a)
+           write (unit = lunit(2), fmt = '(a)') '#endif'
            ltlabl = mtot
            if (ltlabl .gt. 9999999) go to 9000
            indexm = indexm + 1
@@ -625,10 +627,10 @@ program vardim
            mextra = 4000
            lstnew(98) = ltlabl
            call make_subroutine_comment(lunit(3), 'dimens')
-           write (unit = lunit(3), fmt = 8116)
-8116       format ('subroutine dimens (lsize, nchain, bus1, bus2)', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
-           write (unit = lunit(3), fmt = 8120)
-8120       format (2x, 'integer(4) lsize(80)')
+           write (unit = lunit(3), fmt = 8116) realdim, integerdim
+8116       format ('subroutine dimens (lsize, nchain, bus1, bus2)', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
+           write (unit = lunit(3), fmt = 8120) integerdim
+8120       format (2x, 'integer(', i1, ') lsize(80)')
            write (unit = lunit(3), fmt = 8124)
 8124       format (2x, 'character(8) bus1, bus2')
            write (unit = lunit(3), fmt = 8134)
@@ -716,8 +718,8 @@ program vardim
            mextra = 5000
            call make_subroutine_comment(lunit(2), 'over31')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER31'
-           write (unit = lunit(2), fmt = 4203)
-4203       format ('subroutine over31', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+           write (unit = lunit(2), fmt = 4203) realdim, integerdim
+4203       format ('subroutine over31', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
            write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 31
@@ -757,8 +759,8 @@ program vardim
            if (lstnew(3) .gt. 500) lstnew(71) = lstnew(3)
            call make_subroutine_comment(lunit(2), 'over39')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER39'
-           write (unit = lunit(2), fmt = 4204)
-4204       format ('subroutine over39', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+           write (unit = lunit(2), fmt = 4204) realdim, integerdim
+4204       format ('subroutine over39', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
            write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 39
@@ -971,7 +973,8 @@ program vardim
            write (unit = lunit(2), fmt = '(a)') '#endif'
            write (unit = lunit(3), fmt = 8156)
            write (unit = lunit(3), fmt = 8234)
-8234       format (' 9900 lsize(1) = locint(bus1) - locint(bus2)')
+!8234       format (' 9900 lsize(1) = locint(bus1) - locint(bus2)')
+8234       format (' 9900 lsize(1) = loc (bus1) - loc (bus2)')
            write (unit = lunit(3), fmt = 8156)
            !        write (lunit(3), 8242)
            !8242    format (2x, 'end subroutine dimens')

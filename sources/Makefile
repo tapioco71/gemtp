@@ -123,6 +123,8 @@ ${COMPILER}:
 # Rule for compiling the main program.
 # ${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
 ${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
+${COMPILER}/${TARGET}: ${COMPILER}/date44.o
+${COMPILER}/${TARGET}: ${COMPILER}/time44.o
 ${COMPILER}/${TARGET}: ${COMPILER}/build1.o
 ${COMPILER}/${TARGET}: ${COMPILER}/build2.o
 ${COMPILER}/${TARGET}: ${COMPILER}/calc.o
@@ -167,12 +169,12 @@ ${COMPILER}/${TARGET}: ${COMPILER}/over1.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over11.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over12.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over13.o
-# ${COMPILER}/${TARGET}: ${COMPILER}/over14.o
+${COMPILER}/${TARGET}: ${COMPILER}/over14.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over15.o
 ${COMPILER}/${TARGET}: ${COMPILER}/over16.o
 ${COMPILER}/${TARGET}: ${COMPILER}/over20.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over29.o
-# ${COMPILER}/${TARGET}: ${COMPILER}/over31.o
+${COMPILER}/${TARGET}: ${COMPILER}/over31.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over39.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over41.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over42.o

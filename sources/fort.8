@@ -4,8 +4,8 @@
 !
 
 subroutine dimens (lsize, nchain, bus1, bus2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  integer(4) lsize(80)
+  implicit real(8) (a-h, o-z), integer(8) (i-n)
+  integer(8) lsize(80)
   character(8) bus1, bus2
   if (nchain .ge. 29) go to 2900
   lsize( 1)  =   93002
@@ -38,8 +38,8 @@ subroutine dimens (lsize, nchain, bus1, bus2)
   lsize(28)  =    1080
   n7 = 28 + 1
   lsize(n7) = 9748865
-  bus1 ='  222609'
-  bus2 ='  260921'
+  bus1 ='  132802'
+  bus2 ='  280921'
   return
 2900 if (nchain .gt.  29) go to 3100
   lsize( 1)  =       0
@@ -69,6 +69,6 @@ subroutine dimens (lsize, nchain, bus1, bus2)
   lsize( 1)  =       9
   lsize( 2) =    300
   return
- 9900 lsize(1) = locint(bus1) - locint(bus2)
+ 9900 lsize(1) = loc (bus1) - loc (bus2)
   return
 end subroutine dimens

@@ -492,11 +492,11 @@ subroutine init
   sptr=sptr+1
   go to 9500
 9009 continue
-  !     a=seedz(a)         ! wsm + thl manual modification for bpa emtp
-  call time44 ( atim(1) )   ! wsm + thl manual modification for bpa emtp
-  call runtym ( d1, d2 )    ! wsm + thl manual modification for bpa emtp
-  a = seedy ( atim(1) ) + 1000. * ( d1 + d2 ) ! wsm + thl manual modification for bpa emtp
-  a=randnm ( a )            ! wsm + thl manual modification for bpa emtp
+  !     a=seedz(a)                                                              ! wsm + thl manual modification for bpa emtp
+  call time44 (atim(1))                                                         ! wsm + thl manual modification for bpa emtp
+  call runtym (d1, d2)                                                          ! wsm + thl manual modification for bpa emtp
+  a = seedy (atim(1)) + 1000. * (d1 + d2)                                       ! wsm + thl manual modification for bpa emtp
+  a=randnm ( a )                                                                ! wsm + thl manual modification for bpa emtp
   rsto(base7+10)=pi
   rsto(base7+11)=rinf
   rsto(base7+12)=zero

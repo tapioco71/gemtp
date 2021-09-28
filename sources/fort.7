@@ -9,8 +9,9 @@
 ! subroutine main10.
 !
 
+#ifdef WITH_MAIN10
 subroutine main10
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit real(8) (a-h, o-z), integer(8) (i-n)
   common /c0b001/   x     (   10000 )
   common /c0b002/   ykm   (   20000 )
   common /c0b003/   km    (   20000 )
@@ -142,6 +143,7 @@ subroutine main10
   call subr10
   return
 end subroutine main10
+#endif
 
 !
 ! subroutine over29.
@@ -162,7 +164,7 @@ end subroutine over29
 
 #ifdef WITH_OVER31
 subroutine over31
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit real(8) (a-h, o-z), integer(8) (i-n)
   common /c31b01/   karray(     300 )
   call subr31
   return
@@ -175,7 +177,7 @@ end subroutine over31
 
 #ifdef WITH_OVER39
 subroutine over39
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit real(8) (a-h, o-z), integer(8) (i-n)
   common /c39b01/   xdat  (   10000 )
   call subr39
   return
@@ -239,8 +241,8 @@ end subroutine over47
 !
 
 subroutine dimens (lsize, nchain, bus1, bus2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  integer(4) lsize(80)
+  implicit real(8) (a-h, o-z), integer(8) (i-n)
+  integer(8) lsize(80)
   character(8) bus1, bus2
   if (nchain .ge. 29) go to 2900
   lsize( 1)  =   93002
@@ -273,8 +275,8 @@ subroutine dimens (lsize, nchain, bus1, bus2)
   lsize(28)  =    1080
   n7 = 28 + 1
   lsize(n7) = 9748865
-  bus1 ='  222609'
-  bus2 ='  260921'
+  bus1 ='  132802'
+  bus2 ='  280921'
   return
 2900 if (nchain .gt.  29) go to 3100
   lsize( 1)  =       0
@@ -304,7 +306,7 @@ subroutine dimens (lsize, nchain, bus1, bus2)
   lsize( 1)  =       9
   lsize( 2) =    300
   return
- 9900 lsize(1) = locint(bus1) - locint(bus2)
+ 9900 lsize(1) = loc (bus1) - loc (bus2)
   return
 end subroutine dimens
 

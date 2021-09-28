@@ -3,7 +3,6 @@
 !     file: blkcom.ftn
 !
 
-  equivalence (kunit6, lunit6)
   !     flag-1.   begin class-1  /blank/  variables
   !               (alphanumeric variables, capable of storing  a6  info).
   character(8) bus1, bus2, bus3, bus4, bus5, bus6, texcol
@@ -21,6 +20,15 @@
   !     flag-2.   begin class-2  /blank/  variables
   !               (floating-point numeric usage only, with scalars
   !               preceding arrays).
+  real ci1, ck1, deltat, delta2, freqcs
+  real epsiln, xunits, aincr, xmaxmx
+  real znolim, epszno, epwarn, epstop, t, tolmat
+  real twopi, tmax, omega, copt, xopt, szplt
+  real szbed, sglfir, sigmax,  epsuba,  epdgel,  epomeg
+  real fminfs, delffs, fmaxfs, tenerg, begmax
+  real tenm3, tenm6, unity, onehaf, peaknd
+  real fltinf, flzero, degmin, degmax, statfr, voltbc
+  real flstat, angle, pu, dltinv, speedl
   common ci1, ck1, deltat, delta2, freqcs
   common epsiln, xunits, aincr, xmaxmx
   common znolim(2), epszno, epwarn, epstop, t, tolmat
@@ -33,6 +41,39 @@
   !     flag-3.   begin class-3  /blank/  variables
   !               (integer-numeric usage only, with arrays
   !               preceding scalars).
+  integer moncar
+  integer lunit0, lunit1, lunit2, lunit3, lunit4, lunit5, lunit6, lunit7
+  integer lunit8, lunit9, lunt10, lunt11, lunt12, lunt13, lunt14, lunt15
+  integer nright, nfrfld, kolbeg, max99m
+  integer kprchg, multpr, ipntv, indtv
+  integer lstat, nbyte, lunsav,iprsov
+  integer icheck, iline, inonl, iout, ipunch, iread
+  integer kol132, kunit6, istep, kwtspy,itype, it1, it2, izero
+  integer kcount, istead, ldata, lbrnch
+  integer lexct, lbus, lymat, lswtch, lnonl, lchar, m4plot
+  integer lpast, lsize7, iplot, ncomp, nv, lcomp, numsm
+  integer ifdep, ltails, lfdep, lwt, last, npower, maxpe
+  integer lsiz12, lsmout, limass, iv
+  integer ktrlsw, num99, kpartb, llbuff, kanal, nsmth
+  integer ntcsex, nstacs, maxbus, lastov, ltacst
+  integer lhist, ifx, isubc1, inecho, noutpr
+  integer ktab, jflsos, numdcd, numum, lspcum
+  integer nphcas, ialter, i_char, ktref, memsav, lisoff
+  integer kburro, iaverg, lsiz23, lsiz26, numout, moldat
+  integer lsiz27, lsiz28, ltlabl, iwt, ifdep2, idoubl, ioutin
+  integer ipun, jst, jst1, muntsv, numsub, maxzno
+  integer ifsem, lfsem, iadd, lfd, nexout
+  integer iofgnd, iofbnd, modout, lint
+  integer iftail, ncurr, ioffd, isplot, isprin, maxout
+  integer kill, ivolt, nchain, iprsup
+  integer intinf, kconst, kswtch, it, ntot, ibr
+  integer lsyn,  kssout, loopss
+  integer numref, nword1, nword2, iloaep, lnpin
+  integer ntot1, limstp, indstp, nc
+  integer icat, numnvo, nenerg
+  integer angtpe, nswtpe
+  integer newtac
+  equivalence (kunit6, lunit6)
   common moncar(10)
   common lunit0, lunit1, lunit2, lunit3, lunit4, lunit5, lunit6, lunit7
   common lunit8, lunit9, lunt10, lunt11, lunt12, lunt13, lunt14, lunt15
