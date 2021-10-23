@@ -1,16 +1,22 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over54.for
+! file over54.f90
 !
+
 !
-!     subroutine over54.
+! subroutine over54.
 !
+
 subroutine over54
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
-  include 'blkcom.ftn'
-  include 'volt45.ftn'
+  use blkcom
+  use volt45
+  implicit none
+  !  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'volt45.ftn'
   if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
-4567 format ('  "begin module over54." ')
+4567 format ('  "Begin module over54." ')
   if ( nchain  .ne.  54 )   go to 99999
   n1 = kill - 150
   go to (6151 , 6152, 6153, 6154, 6155, 6156, 6157, 6158, 6159, 6160, 6161 , 6162, 6163, 6164, 6165, 6166, 6167, 6168, 6169, 6170, &
@@ -513,6 +519,7 @@ subroutine over54
   if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
 99999 return
 end subroutine over54
+
 !
-!     end of file: over54.for
+! end of file over54.f90
 !

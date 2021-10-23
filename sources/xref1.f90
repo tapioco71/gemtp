@@ -1,14 +1,17 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: xref1.for
+! file xref1.f90
 !
 
 !
-!     subroutine xref1.
+! subroutine xref1.
 !
 
 subroutine xref1
-  include 'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=from
@@ -1939,6 +1942,7 @@ subroutine xref1
 3280 continue
   go to 9500
 end subroutine xref1
+
 !
-!     end of file: xref1.for
+! end of file xref1.f90
 !

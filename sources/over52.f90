@@ -1,12 +1,16 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over52.for
+! file over52.f90
 !
+
 !
-!     subroutine over52.
+! subroutine over52.
 !
+
 subroutine over52
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit none
+  !  implicit real*8 (a-h, o-z), integer*4 (i-n)
   include 'blkcom.ftn'
   if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
 4567 format ('  "begin module over52." ')
@@ -364,11 +368,14 @@ subroutine over52
 4568 format ( '  "exit  module over52." ')
 99999 return
 end subroutine over52
+
 !
 ! subroutine err87.
 !
-subroutine err87 ( lstat, flstat, lunit6 )
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+
+subroutine err87 (lstat, flstat, lunit6)
+  implicit none
+  !  implicit real*8 (a-h, o-z), integer*4 (i-n)
   dimension lstat(1), flstat(1)
   write (lunit6, 7087)
 7087 format (5x, "Has part of the interactive crt plotting or  'replot'  features of the EMTP,  plot data points are stored on   ",/, &
@@ -377,6 +384,7 @@ subroutine err87 ( lstat, flstat, lunit6 )
           5x, "the EMTP into trouble with the computer operating system (otherwise affectionately known as 'bigger big brother').     ")
   return
 end subroutine err87
+
 !
-!     end of file: over52.for
+! end of file over52.f90
 !

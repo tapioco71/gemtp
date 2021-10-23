@@ -1,20 +1,24 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over39.for
+! file over39.f90
 !
+
 !
-!     subroutine subr39.
+! subroutine subr39.
 !
+
 subroutine subr39
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl39.ftn'
   include 'deck39.ftn'
   dimension lltemp(20)
   equivalence (kdeflt, indtv(1))
-  character(8) text1, text2, text3, text4, text5, text6
-  character(8) text7, text8, text9, text10, text11, text12
-  character(8) texta, textp, text13, text14, text15
+  character(8) :: text1, text2, text3, text4, text5, text6
+  character(8) :: text7, text8, text9, text10, text11, text12
+  character(8) :: texta, textp, text13, text14, text15
   dimension texta(14), textp(14)
   dimension alintp(4100)
   dimension minust(11)
@@ -1449,11 +1453,14 @@ subroutine subr39
   call stoptp
   return
 end subroutine subr39
+
 !
 ! subroutine locsl.
 !
-subroutine locsl (xbeg,xend,alpha,xmid,xcorna,xcornb,erymax)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine locsl (xbeg, xend, alpha, xmid, xcorna, xcornb, erymax)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   d78 = xend - xbeg
@@ -1478,7 +1485,7 @@ subroutine locsl (xbeg,xend,alpha,xmid,xcorna,xcornb,erymax)
   xdelta = d1/(20*jn)
   dxedma = d1/(50*jn)
   !
-  do 260 iter=1,2
+  do iter = 1, 2
      xcorar = xcorna
      xcorbr = xcornb
      xcorna = xcorna-xdelta
@@ -1491,7 +1498,7 @@ subroutine locsl (xbeg,xend,alpha,xmid,xcorna,xcornb,erymax)
         if ( n .eq. 1 )  go to 98
         idefac = 0
         lsign = -1
-98      do j = 1,5
+98      do j = 1, 5
            idefac = idefac+lsign
            xcorna = xcorna+xdelta*lsign
            xcornb = xcornb+xdelta*lsign
@@ -1528,7 +1535,8 @@ subroutine locsl (xbeg,xend,alpha,xmid,xcorna,xcornb,erymax)
 250  xcorna = xcorar+idefop*xdelta
      xcornb = xcorbr+idefop*xdelta
      xdelta = xdelta/4.
-260 end do
+  end do
+260 continue
   !  obtain maximum deviation
   erymax = 0.
   xl1 = xknee(izone)
@@ -1552,11 +1560,14 @@ subroutine locsl (xbeg,xend,alpha,xmid,xcorna,xcornb,erymax)
 300 go to 270
 310 return
 end subroutine locsl
+
 !
 ! subroutine adjpk.
 !
+
 subroutine adjpk
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension fpz1(50),fpz2(50)
   include 'labl39.ftn'
   include 'deck39.ftn'
@@ -1702,11 +1713,14 @@ subroutine adjpk
   call stoptp
   return
 end subroutine adjpk
+
 !
 ! subroutine adjcr.
 !
+
 subroutine adjcr
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   call refh
@@ -1848,11 +1862,14 @@ subroutine adjcr
 460 end do
   return
 end subroutine adjcr
+
 !
 ! subroutine shira.
 !
-subroutine shira (xbeg,xend,fbeg,fend,iter,index,irange)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine shira (xbeg, xend, fbeg, fend, iter, index, irange)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension fpz(50)
   include 'labl39.ftn'
   include 'deck39.ftn'
@@ -1956,11 +1973,14 @@ subroutine shira (xbeg,xend,fbeg,fend,iter,index,irange)
   call stoptp
   return
 end subroutine shira
+
 !
 ! subroutine inran.
 !
-subroutine inran (irange,indx0,indxr1,indxr2,indxr3,indxl1,indxl2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine inran (irange, indx0, indxr1, indxr2, indxr3, indxl1, indxl2)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   id = irange
@@ -1982,11 +2002,14 @@ subroutine inran (irange,indx0,indxr1,indxr2,indxr3,indxl1,indxl2)
   indxl2 = indxv(id)
   return
 end subroutine inran
+
 !
 ! subroutine refh.
 !
+
 subroutine refh
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   xref = xdat(1)
@@ -2024,11 +2047,14 @@ subroutine refh
 170 hreflg = hreflg+yfun39(xref)
   return
 end subroutine refh
+
 !
 ! subroutine ratp.
 !
+
 subroutine ratp (freq,amaglg)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   i2 = ntotra
@@ -2047,12 +2073,14 @@ subroutine ratp (freq,amaglg)
 110  jn = alpha+onehav
      indexz = id
      indexp = indexz+jn
-120  do j=1,jn
+120  do j = 1, jn
         fpole = azepo(indexp+j)
         fzero = azepo(indexz+j)
         amagp = amagp*(fzero**2+freq2)/(fpole**2+freq2)
-130  end do
-100 end do
+     end do
+130  continue
+  end do
+100 continue
 180 amaglg = alog1z(amagp)
   if (iftype.eq.1) go to 170
   id = indxv(ntotra) + 2
@@ -2065,11 +2093,14 @@ subroutine ratp (freq,amaglg)
 170 amaglg = hreflg+amaglg/2.d0
   return
 end subroutine ratp
+
 !
 ! subroutine split.
 !
-subroutine split (xbeg,xend,ycutpu,xcut)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine split (xbeg, xend, ycutpu, xcut)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   dxspli = .1d0
@@ -2113,11 +2144,14 @@ subroutine split (xbeg,xend,ycutpu,xcut)
   xcut = x1+(x-x1)*(ycut-d1)/(yfun39(x)-d1)
   return
 end subroutine split
+
 !
 ! function yfun39.
 !
-function yfun39(x)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+function yfun39 (x)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   if (x.le.xdat(1)) go to 120
@@ -2132,11 +2166,14 @@ function yfun39(x)
 100 yfun39 = ydat(ndata)
 110 return
 end function yfun39
+
 !
 ! function aph.
 !
-function aph(x)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+function aph (x)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl39.ftn'
   include 'deck39.ftn'
   if (x.le.xdat(1)) go to 120
@@ -2150,11 +2187,14 @@ function aph(x)
 100 aph = aphdat(ndata)
 110 return
 end function aph
+
 !
 ! subroutine ftplot.
 !
-subroutine ftplot (icurve,imode,nfitmx)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine ftplot (icurve, imode, nfitmx)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   real(8)       text1,text2,text3,blank,pl
   dimension pl(92)
   include 'labl39.ftn'
@@ -2178,24 +2218,16 @@ subroutine ftplot (icurve,imode,nfitmx)
   dfamp = amax-amin
   if ( nfitmx .gt. 0 )  go to 112   !  ti fitting
   write (lout,8091) imode
-8091 format ( //, 38h printer plot of  yc  fitting for mode,  i3,/, &
-       35h plot of ycmag vs. yceqmag in mhos ,/, &
-       26h plot symbols:   0 = ycmag , &
-       15h    i = yceqmag , &
-       27h    * = intersection point.     )
-  write (lout,8093) amin,amax
-8093 format (/,3x,5hycmag,6x,7hyceqmag,15x,e10.4,74x,e10.4,/,28x,4hfreq,/,35x,2h.1,10(9h........1))
+8091 format (//, ' Printer plot of  yc  fitting for mode', i3, /, ' plot of ycmag vs. yceqmag in mhos', /, ' plot symbols:   0 = ycmag     i = yceqmag     * = intersection point.')
+  write (unit = lout, fmt = 8093) amin, amax
+8093 format (/, 3x, 'ycmag', 6x, 'yceqmag', 15x, e10.4, 74x, e10.4, /, 28x, 'freq', /, 35x, '.1', 10('........1'))
   go to 130
-112 write (lout,114) icurve, imode
-114 format ( //,41h printer plot of  ti  fitting for element, 2i2,/, &
-       27h plot of timag vs. tieqmag  ,/, &
-       26h plot symbols:   0 = timag , &
-       15h    i = tieqmag , &
-       27h    * = intersection point.     )
-  write (lout,116) amin,amax
-116 format (/,3x,5htimag,6x,7htieqmag,15x,e10.4,74x,e10.4,/,28x,4hfreq,/,35x,2h.1,10(9h........1))
+112 write (unit = lout, fmt = 114) icurve, imode
+114 format (//, ' Printer plot of  ti  fitting for element', 2i2, /, ' plot of timag vs. tieqmag', /, ' plot symbols:   0 = timag     i = tieqmag     * = intersection point.')
+  write (unit = lout, fmt = 116) amin, amax
+116 format (/, 3x, 'timag', 6x, 'tieqmag', 15x, e10.4, 74x, e10.4, /, 28x, 'freq', /, 35x, '.1', 10('........1'))
   go to 130
-120 if (iftype.eq.1) go to 122
+120 if (iftype .eq. 1) go to 122
   amin = 0.
   amax = 1.d0
   dfamp = 1.d0
@@ -2204,29 +2236,27 @@ subroutine ftplot (icurve,imode,nfitmx)
   amax = 1.5d0
   dfamp = 1.5d0
 124 write (lout,8095) imode
-8095 format ( //, 38h printer plot of  a1  fitting for mode,  i3,/, &
-       35h plot of a1mag vs. a1eqmag in p.u. ,/, &
-       26h plot symbols:   0 = a1mag , &
-       15h    i = a1eqmag , &
-       27h    * = intersection point.     )
-  write (lout,8097) amin,amax
-8097 format (/, 3x,5ha1mag,6x,7ha1eqmag,15x,e10.4,74x,e10.4,/,28x,4hfreq,/,35x,2h.1,10(9h........1))
+8095 format (//, ' Printer plot of  a1  fitting for mode', i3, /, ' plot of a1mag vs. a1eqmag in p.u.', /, ' plot symbols:   0 = a1mag     i = a1eqmag     * = intersection point.')
+  write (unit = lout, fmt = 8097) amin, amax
+8097 format (/, 3x, 'a1mag', 6x, 'a1eqmag', 15x, e10.4, 74x, e10.4, /, 28x, 'freq', /, 35x, '.1', 10('........1'))
 130 x = xdat(1)-.2d0
 810 x = x+.2d0
-  if (x.gt.xdat(ndata)) go to 850
+  if (x .gt. xdat(ndata)) go to 850
   freq = 10.d0**x
   freq2 = freq**2
   amagp = 1.d0
   if (nzeror.eq.0) go to 825
-  do 820 j=1,nzeror
+  do j = 1, nzeror
      amagp = amagp*(fczr(j)**2+freq2)/(fcpr(j)**2+freq2)
-820 end do
+  end do
+820 continue
 825 amaglg = alog1z(amagp)
   if (iftype.eq.1) go to 840
   j1 = nzeror+1
-  do j=j1,npoler
+  do j = j1, npoler
      amaglg = amaglg-alog1z(fcpr(j)**2+freq2)
-830 end do
+  end do
+830 continue
 840 amaglg = hrflgr+amaglg/2.d0
   ax = 10.d0**yfun39(x)
   amagp = 10.d0**amaglg
@@ -2244,17 +2274,20 @@ subroutine ftplot (icurve,imode,nfitmx)
   go to 810
 850 return
 end subroutine ftplot
+
 !
 !     subroutine misc39.
 !
+
 subroutine misc39
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl39.ftn'
   !     This module is called by "subr39"  of
   !     overlay 39 when new miscellaneous data cards are required
   !     (possibly once for each mode,  in the most extreme case).
-  character(8) text1, text2, text3, text4
+  character(8) :: text1, text2, text3, text4
   dimension itemp(9)
   equivalence (kdeflt, indtv(1))
   data text1 / 'data  ' /
@@ -2274,7 +2307,7 @@ subroutine misc39
   if ( bus1  .ne.  text3 )   go to 2274
   if ( bus3  .ne.  text4 )   go to 2274
   write (kunit6, 2270)
-2270 format (47h+request for default fitting (= 3 blank cards).  )
+2270 format ('+Request for default fitting (= 3 blank cards).')
   call interp
   kdeflt = 1
   !     erase "default" from "abuff" (installation-dependent):
@@ -2318,7 +2351,7 @@ subroutine misc39
   epstol = alog1z ( d13 )**2
   if ( normax  .le.  0 )   normax  = 30
   if ( kdeflt  .eq.  0 ) write (kunit6, 4082)  nexmis,d1,normax,iecode, ifwta,ifplot,ifdat,inelim
-4082 format ( 8h+yc fit.,i3,e8.1,6i3)
+4082 format ('+Yc fit.', i3, e8.1, 6i3)
   call interp
   go to 9900
   !     begin code for miscellaneous param. of a1 fitting
@@ -2338,12 +2371,15 @@ subroutine misc39
 9903 format ( 15h exit "misc39".  )
   return
 end subroutine misc39
+
 !
 !     subroutine defblk.
 !
+
 subroutine defblk (abuff)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  character(160) abuff
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  character(*), intent(out) :: abuff
   !     Almost-universal module for blanking out "abuff" card
   !     image of "default" data card of "marti setup".   The one
   !     and only call is by module "misc39" of overlay 39.   It
@@ -2353,6 +2389,7 @@ subroutine defblk (abuff)
   abuff(16 : 24) = abuff(40 : 48)
   return
 end subroutine defblk
+
 !
-!     end of file: over39.for
+! end of file over39.f90
 !

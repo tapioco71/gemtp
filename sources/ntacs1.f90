@@ -1,21 +1,28 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: ntacs1.for
+! file ntacs1.f90
 !
 
 !
-!     subroutine ntacs1.
+! subroutine ntacs1.
 !
 
 subroutine ntacs1
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'tacsto.ftn'
-  include 'blkcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  include 'tacsar.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  include 'labcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  !equivalence (moncar(71), ltacst), (moncar(83), ntcsex)    ! wsm + thl manual modification for bpa emtp
-  equivalence (lstat (67), maxniu)
-  equivalence (lstat (68), maxnuk)
+  use blkcom
+  use tacsto
+  use tacsar
+  use labcom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'tacsto.ftn'
+  !  include 'blkcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
+  !  include 'tacsar.ftn'                                      ! wsm + thl manual modification for bpa emtp
+  !  include 'labcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
+  !equivalence (moncar(71), ltacst), (moncar(83), ntcsex)      ! wsm + thl manual modification for bpa emtp
+  !  integer(4) :: maxniu, maxnuk
+  !  equivalence (lstat(67), maxniu)
+  !  equivalence (lstat(68), maxnuk)
   ntcsex = 1
   do i = 1, 23
      sptacs(i) = 0.0
@@ -52,5 +59,5 @@ subroutine ntacs1
 end subroutine ntacs1
 
 !
-!     end of file: ntacs1.for
+! end of file ntacs1.f90
 !

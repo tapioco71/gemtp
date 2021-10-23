@@ -2,11 +2,32 @@
   !
   !     file: dekspy.ftn
   !
+
+  !
   !     This deck is used only by interactive execution modules
   !     which begin with "emtspy".  Note "deck29" working space:
+
+  integer iascii, ibegcl, iendcl, imax, imin, inchlp, indbeg, indbuf, indxrp
+  integer intout, iprspy, itexp, ivec
+  integer jjroll, jword
+  integer kar1, kar2, karray, kbegtx, kbreak, kbrser, kerase, kfile5, kilper
+  integer kolout, komadd, konadd, kontac, kopyit, kserlc, kslowr, ksmspy, kspsav
+  integer ksymbl, kverfy, kyramp
+  integer labels, lidnt1, lidnt2, limarr, limbuf, limcrd, linnow, linspn
+  integer lockbr, locout, looprp, lserlc, luntsp
+  integer maxarg, maxflg, memkar, memrmp, mflush, monitr, monits
+!  integer numnam
+  integer munit5
+  integer n10rmp, nbreak, newvec, nexmod, nline, noback, numcrd, numex, numkey
+  integer numrmp, numsym
+  real epskon !, evmx, evmxf
+  real fbegrp, fendrp, fkar1, fkar2
+!  real gymax, gymin
+  real rampcn, rampsl
+  real tbegrp, tbreak, tendrp, tmaxrp, tminrp
   common /c29b01/ karray(3)                                 ! "deck29" stores plot points
   integer locate
-  real(8) pltbuf(1), forbyt(600)                            ! real*4 plot storage
+  real pltbuf(1), forbyt(600)                               ! real*4 plot storage
   equivalence (pltbuf(1), karray(1))                        ! /c29b01/ plot points
   logical logvar                                            ! logical variable for "inquire" usage
   common /spycom/ rampcn(20), rampsl(20), kyramp(20)
@@ -40,7 +61,7 @@
   character(8) ansi8, brobus
   character(16) ansi16
   character(20) bytfnd
-  character(25) col
+  !character(25) col
   character(32) ansi32
   character(35) spycd2
   character(80) bytbuf, buff77, file6, file6b, blan80
@@ -53,6 +74,7 @@
   common /spyf77/ spykwd(75), ansi8, ansi16, ansi32
   common /spyf77/ spycd2, answ80, brobus, munit6
   common /spyf77/ outlin, outsav, heding, texspy(1250)
+
   !
   !     end of file: dekspy.ftn
   !

@@ -1,20 +1,28 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over12.for
+! file over12.f90
 !
 
 !
-!     subroutine over12.
+! subroutine over12.
 !
 
 subroutine over12
+  use blkcom
+  use labcom
+  use tacsar
+  use syncom
+  use space2
+  use dekspy
+  implicit none
   !implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'    ! wsm + thl
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
-  include 'syncom.ftn'
-  include 'space2.ftn'
-  include 'dekspy.ftn'
+  !  include 'blkcom.ftn'    ! wsm + thl
+  !  include 'labcom.ftn'
+  !  include 'tacsar.ftn'
+  !  include 'syncom.ftn'
+  !  include 'space2.ftn'
+  !  include 'dekspy.ftn'
   dimension wk1(1)
   equivalence (semaux(1), wk1(1))
   dimension akey(1), tstat(1)
@@ -22,19 +30,19 @@ subroutine over12
   !     dc-48 had "lastsw" clobbered on 2nd energization; change
   !     dummy usage of this vector to "lastxx" temporarily (12 sep
   dimension lastxx(50)
-  integer(4) cki, ckkjm
-  integer(4) iofcnt, ioftab, irbase, jt, k1, klorow, koff20, koff21, n2, n4, n5
-  integer(4) ncompt, nhalf, nrz, ns2, i, seed, seedr, seedy, tdns, zerofl
-  real(8) adelay, akey, angle, angtpe, azi, azr, bias, bias2
-  real(8) ci, ci1, cik, cj, ck, ck1, cmi, cmr
-  real(8) d1, d2, d22, d7, d8, d9, d14, d18
-  real(8) d0sum, dblpr1, dblpr2, dj, dum9, eh, ej, emtpc, epsiln, esum
-  real(8) fac1, fac2, fac3, fac4, fac5, flstat, frandn
-  real(8) gus1, gus2, h2, h3, hi, nqtt, one
-  real(8) r, ranoff, rll, rng
-  real(8) sconst, sk1i, sk1r, sll, tclose, tdiff, tma
-  real(8) tmb, tmc, tmt, topen, tr, tstbeg, tx, volt, volti, wk1, x, xd, xll, xn
-  real(8) xq, y05, yll, yx
+  integer(4) :: cki, ckkjm
+  integer(4) :: iofcnt, ioftab, irbase, jt, k1, klorow, koff20, koff21, n2, n4, n5
+  integer(4) :: ncompt, nhalf, nrz, ns2, i, seed, seedr, seedy, tdns, zerofl
+  real(8) :: adelay, akey, angle, angtpe, azi, azr, bias, bias2
+  real(8) :: ci, ci1, cik, cj, ck, ck1, cmi, cmr
+  real(8) :: d1, d2, d22, d7, d8, d9, d14, d18
+  real(8) :: d0sum, dblpr1, dblpr2, dj, dum9, eh, ej, emtpc, epsiln, esum
+  real(8) :: fac1, fac2, fac3, fac4, fac5, flstat, frandn
+  real(8) :: gus1, gus2, h2, h3, hi, nqtt, one
+  real(8) :: r, ranoff, rll, rng
+  real(8) :: sconst, sk1i, sk1r, sll, tclose, tdiff, tma
+  real(8) :: tmb, tmc, tmt, topen, tr, tstbeg, tx, volt, volti, wk1, x, xd, xll, xn
+  real(8) :: xq, y05, yll, yx
   dimension cmi(1), cmr(1)
   equivalence (kks(1), cmr(1)), (kknonl(1), cmi(1))
   equivalence (moncar(1), knt), (moncar(2), kbase)
@@ -45,7 +53,7 @@ subroutine over12
   common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7,koff8, koff9, koff10, koff13, koff14, koff15, koff16, koff17
   common /fdqlcl/ koff18, koff19, koff20, koff21, koff22, koff23, koff24,koff25, inoff1, inoff2, inoff3, inoff4, inoff5, nqtt, lcbl
   common /fdqlcl/ lmode, nqtw
-  character(8) atim
+  character(8) :: atim
   dimension atim(2)
   common /systematic/ linsys
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
@@ -211,7 +219,7 @@ subroutine over12
 !  n2 = (3 + mxpair) * ncompt
   n2 = int ((3 + mxpair) * ncompt)
   if (kburro .eq. 1) go to 4093
-  n1 = locint(kswtyp(1)) - locint(irandn(1))
+  n1 = location (kswtyp(1)) - location (irandn(1))
   call move0  (irandn(1), n1)
   go to 4097
 4093 call move0 ( irandn(1), lsiz23 )
@@ -1131,10 +1139,13 @@ end subroutine over12
 !
 
 subroutine dteqiv(ikf, isfd, d2, azr, azi)
+  use blkcom
+  use labcom
+  implicit none
   !implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  real(8) a1, ac1, al1, ar1, arl, ci1, d2, d21, delta2, azi, azr, rmfd, ur
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  real(8) :: a1, ac1, al1, ar1, arl, ci1, d2, d21, delta2, azi, azr, rmfd, ur
   dimension ur(2)
   !     this routine produces the companion model to be inserted into the
   !     tr tables. it also normalizes the l and c data to henry and farad
@@ -1180,11 +1191,12 @@ subroutine dteqiv(ikf, isfd, d2, azr, azi)
 end subroutine dteqiv
 
 !
-!     subroutine reduct.
+! subroutine reduct.
 !
 
 subroutine reduct(a, n, m)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This subroutine can be used for either partial reduction or for
   !     complete inversion of a real  n by n  symmetric matrix  'a' .
   !     Storage for matrix elements is in the implied order   (1,1),
@@ -1241,20 +1253,25 @@ subroutine reduct(a, n, m)
 end subroutine reduct
 
 !
-!     subroutine tacs2.
+! subroutine tacs2.
 !
 
 subroutine  tacs2
+  use blkcom
+  use labcom
+  use tacsar
+  use syncom
+  implicit none
   !implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
-  include 'syncom.ftn'
-  integer(4) j, k, m, n, n2, n5, n6, ud1
-  real(8) a, atcs, awkcs, b, bb, bi, br, d1, d1tttt, d2, d3, d4, d5, d6, d7, d8
-  real(8) dpd, dum9, epsuba, f1, f2, flstat, parsup, pru, prx, real, rima
-  real(8) rsblk, t, volti, xaisav, xar, xarsav, xtcs, xtcsav
-  character(8) dumj, alnode, texnam(5)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'tacsar.ftn'
+  !  include 'syncom.ftn'
+  integer(4) :: j, k, m, n, n2, n5, n6, ud1
+  real(8) :: a, atcs, awkcs, b, bb, bi, br, d1, d1tttt, d2, d3, d4, d5, d6, d7, d8
+  real(8) :: dpd, dum9, epsuba, f1, f2, flstat, parsup, pru, prx, real, rima
+  real(8) :: rsblk, t, volti, xaisav, xar, xarsav, xtcs, xtcsav
+  character(8) :: dumj, alnode, texnam(5)
   dimension dum9(10), dumj(9)
   equivalence (moncar(2), kbase), (moncar(3), ltdelt)
 !1000 if (iprsup .ge. 1) write (lunit6, 1001)  lastov, m4plot
@@ -2661,12 +2678,16 @@ end subroutine tacs2
 !
 
 subroutine csupdc (l)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
-  integer(4) n7, parsup
-  real(8) a, b, xtcs
+  use blkcom
+  use labcom
+  use tacsar
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'tacsar.ftn'
+  integer(4) :: n7, parsup
+  real(8) :: a, b, xtcs
   kjsup = kinsup + lstat(65)
   kksup = kjsup  + lstat(65)
 !2001 if ( iprsup .lt. 6 )  go to 1000
@@ -2816,12 +2837,16 @@ end subroutine csupdc
 !
 
 subroutine csupac (l, omegar)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
-  integer(4) ndx1, nn
-  real(8) a, aa, ai, b, bi, xar
+  use blkcom
+  use lancom
+  use tacsar
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'tacsar.ftn'
+  integer(4) :: ndx1, nn
+  real(8) :: a, aa, ai, b, bi, xar
   kjsup = kinsup + lstat(65)
   kksup = kjsup  + lstat(65)
 !1000 nnn = kxar + nuk + lstat(64)
@@ -2920,14 +2945,19 @@ end subroutine csupac
 !
 
 subroutine premec
+  use blkcom
+  use labcom
+  use tacsar
+  use synmac
+  implicit none
   !implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module is used only by brandwajn (type-59) s.m. model
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
-  include 'synmac.ftn'
-  integer(4) ilk, iprsup, nst
-  real(8) delta2, shp, zyn
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'tacsar.ftn'
+  !  include 'synmac.ftn'
+  integer(4) :: ilk, iprsup, nst
+  real(8) :: delta2, shp, zyn
   !     construct the constant matrices of coefficients  ****************
   imk = 0
   n17 = 0
@@ -3031,7 +3061,8 @@ end subroutine premec
 !
 
 subroutine mul(y, z, xay, l1, m, n)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     multiplication of two matrices stored as vectors by columns
   dimension xay(1), z(1), y(1)
   l = 1
@@ -3062,17 +3093,22 @@ end subroutine mul
 !
 
 subroutine elecyy
+  use blkcom
+  use labcom
+  use tacsar
+  use synmac
+  implicit none
   !implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module is used only by brandwajn (type-59) s.m. model
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
-  include 'synmac.ftn'
-  integer(4) i30, ibr, ids, idt, ilk, imech, ismdat, it, is, ll3, ll7, ll36
-  integer(4) n07
-  real(8) a, acde, acdf, afd, afq, b, b6, cu, d7, elp, etot, idelta, k1
-  real(8) kbus, mbus, ra
-  real(8) rat1, sb, sconst, sf2, sf3, sf4, sf5, sf6, sf7, sf8, sf9, sum, tr, xl
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'tacsar.ftn'
+  !  include 'synmac.ftn'
+  integer(4) :: i30, ibr, ids, idt, ilk, imech, ismdat, it, is, ll3, ll7, ll36
+  integer(4) :: n07
+  real(8) :: a, acde, acdf, afd, afq, b, b6, cu, d7, elp, etot, idelta, k1
+  real(8) :: kbus, mbus, ra
+  real(8) :: rat1, sb, sconst, sf2, sf3, sf4, sf5, sf6, sf7, sf8, sf9, sum, tr, xl
   !     this routine calculates the matrices of the electrical part  *****
   ibr = ibrold
   it = itold
@@ -3432,10 +3468,11 @@ end subroutine elecyy
 ! subroutine reduce.
 !
 
-subroutine reduce(x1,m,n)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  dimension x1(1),a1(20)
-  !     gauss-jordan elimination process performed on a square matrix x
+subroutine reduce (x1, m, n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  dimension x1(1), a1(20)
+  !     Gauss-Jordan elimination process performed on a square matrix x
   !     this routine can also be used for matrix inversion * * * * * * * *
   !     maximum order of matrix x is 20
   j=m
@@ -3471,5 +3508,5 @@ subroutine reduce(x1,m,n)
 end subroutine reduce
 
 !
-!     end of file: over12.for
+! end of file over12.f90
 !

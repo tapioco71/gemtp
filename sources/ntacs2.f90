@@ -1,16 +1,24 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: ntacs2.for
+! file ntacs2.f90
 !
+
 !
-!     subroutine ntacs2.
+! subroutine ntacs2.
 !
+
 subroutine ntacs2
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'tacsto.ftn'
-  include 'blkcom.ftn'      ! wsm + thl manual modification for bpa emtp
-  include 'tacsar.ftn'      ! wsm + thl manual modification for bpa emtp
-  include 'labcom.ftn'      ! wsm + thl manual modification for bpa emtp
+  use tacsto
+  use blkcom
+  use tacsar
+  use labcom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'tacsto.ftn'
+  !  include 'blkcom.ftn'      ! wsm + thl manual modification for bpa emtp
+  !  include 'tacsar.ftn'      ! wsm + thl manual modification for bpa emtp
+  !  include 'labcom.ftn'      ! wsm + thl manual modification for bpa emtp
   !  common  / c0b002 /   ykm   (   1 )    ! wsm + thl manual modification for bpa emtp
   !  common  / c0b063 /   texvec(1000 )    ! wsm + thl manual modification for bpa emtp
   !  character*6  texvec                   ! wsm + thl manual modification for bpa emtp
@@ -24,9 +32,8 @@ subroutine ntacs2
   !  common  / c0b103 /   emtpe (   1 )    ! wsm + thl manual modification for bpa emtp
   !  common  / c0b104 /   emtpf (   1 )    ! wsm + thl manual modification for bpa emtp
   !  equivalence    ( moncar(32), kitacs ),    ( moncar(61),  lswtch )
-  real(8) xtcs
-  character(6) hus1          ! wsm + thl manual modification for bpa emtp
-  character(8) real8
+  character(6) :: hus1          ! wsm + thl manual modification for bpa emtp
+  character(8) :: real8
   if (.not. (niu .gt. 0)) goto 5020
   i5 = kud1
   do i = 1, niu
@@ -104,5 +111,5 @@ subroutine ntacs2
 end subroutine ntacs2
 
 !
-!     end of file: ntacs2.for
+! end of file ntacs2.f90
 !

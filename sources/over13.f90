@@ -1,14 +1,16 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over13.f90
+! file over13.f90
 !
 
 !
-!     subroutine over13.
+! subroutine over13.
 !
 
 subroutine over13
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   dimension cblhst(1)
@@ -25,7 +27,7 @@ subroutine over13
   equivalence (ykm(1), w1(1))
   dimension wk1(1)
   equivalence (semaux(1), wk1(1))
-  character(8) text1, text2
+  character(8) :: text1, text2
   common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7, koff8, koff9, koff10, koff13, koff14, koff15, koff16, koff17, koff18
   common /fdqlcl/ koff19, koff20, koff21, koff22, koff23, koff24, koff25, inoff1, inoff2, inoff3, inoff4, inoff5, nqtt, lcbl, lmode, nqtw
   data text1 / 'parame' /
@@ -181,7 +183,7 @@ subroutine over13
      d12 = onehaf * (d13 + d14)
 760  if (d12 .eq. ci1) go to 7122
      write (unit = lunit6, fmt = 773) i, bus(k), bus(m), ci1, curr(i)
-773  format (/, 10x, 'Note  ---- nonlinear element number', i4, '  is a type-96 hysteretic inductor which is connected', /, &
+773  format (/, 10x, 'Note  ---- Nonlinear element number', i4, '  is a type-96 hysteretic inductor which is connected', /, &
           21x, 'between busses  ',  "'", a6,  "'", '  and  ',  "'", a6, "'", ' .   The initial flux-current point as found by the', /, &
           21x, 'phasor steady-state solution has been observed to lie outside the user-defined major hysteresis loop, however.', /, &
           21x, 'The initial flux is', e14.4, '   and the initial current is', e14.4, ' .    The EMTP shall now alter this')
@@ -1881,11 +1883,12 @@ subroutine over13
 end subroutine over13
 
 !
-!     subroutine fdint.
+! subroutine fdint.
 !
 
 subroutine fdint(ikf, isfd, ibf, omg)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   dimension ur(40), ui(40)
@@ -1993,7 +1996,8 @@ end subroutine fdint
 !
 
 function funp13 (y, x, twopi)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+!  implicit real(8) (a-h, o-z), integer(4) (i-n)
   if (x .ne. 0.0) go to 101
   if (y .ne. 0.0) go to 102
   funp13 = 0.0
@@ -2017,8 +2021,9 @@ end function funp13
 ! subroutine redinv.
 !
 
-subroutine redinv(x1,m,n)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+subroutine redinv (x1, m, n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension x1(1),a1(20)
   !     gauss-jordan elimination process performed on a square matrix x
   !)    this routine can also be used for matrix inversion * * * * * * * *
@@ -2060,12 +2065,13 @@ end subroutine redinv
 !
 
 subroutine last13
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   dimension tailp(1), tailq(1), tailt(1), vim(1)
   equivalence (lstat(14), mdrive), (volt(1), vim(1))
-  double precision dblpr1, dblpr2, dblpr3, dblpr4
+  double precision :: dblpr1, dblpr2, dblpr3, dblpr4
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format (' Begin module "last13".')
   i = ibr + 1
@@ -2988,7 +2994,8 @@ end subroutine last13
 !
 
 subroutine redu13 (a, n, m)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This subroutine can be used for either partial reduction or for
   !     complete inversion of a real  n by n  symmetric matrix  'a' .
   !     Storage for matrix elements is in the implied order   (1,1),
@@ -3045,5 +3052,5 @@ subroutine redu13 (a, n, m)
 end subroutine redu13
 
 !
-!     end of file: over13.f90
+! end of file over13.f90
 !

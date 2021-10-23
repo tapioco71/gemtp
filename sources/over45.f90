@@ -1,12 +1,16 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over45.for
+! file over45.f90
 !
+
 !
-!     subroutine subr45.
+! subroutine subr45.
 !
+
 subroutine subr45
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Code connected to  'semlyen setup'  special request card.
   !)  This overlay is used to calculate
   !)     1)  propagation step response as approximated by an analytic
@@ -23,7 +27,7 @@ subroutine subr45
   include 'labl45.ftn'
   dimension stg(11), si(2)
   dimension lltemp(20)
-  double precision zift(11)
+  double precision :: zift(11)
   equivalence (zift(1), karray(1))
   equivalence (stg(1), karray(1))
   equivalence (indtv(1),npoint)
@@ -79,7 +83,7 @@ subroutine subr45
   lsi = lum + 3*nph2
   lvresp = lsi + nfr1 + 1
   lzift = lvresp / 2 + 1
-  if ( locint(stg(11)) - locint(stg(1)) .eq. locint(zift(11)) - locint(zift(1)) ) lzift = lvresp
+  if (location (stg(11)) - location(stg (1)) .eq. location (zift(11)) - location (zift(1))) lzift = lvresp
   lym = lvresp + ( 3*nph + 3 ) * nfr1 + 2
   lfv = lym + nph2
   lhhm = lfv + npoint
@@ -94,14 +98,17 @@ subroutine subr45
   go to 5655
 9999 return
 end subroutine subr45
+
 !
-!     subroutine guts45.
+! subroutine guts45.
 !
-subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo, xr, xl, xg, xc, um, si, vresp, ymin, fv, hhm, hhn, zcos)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labl45.ftn'
-  include 'volt45.ftn'
+
+subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo, xr, xl, xg, xc, um, si, vresp, ymin, fv, hhm, hhn, zcos)
+  use blkcom
+  use labl45
+  use volt45
+  use index
+  implicit none
   dimension pbuf(11), cq(1), z(1), y(2), zy(1), zya(1), zyb(2)
   dimension zyc(1), zyd(1), cqt(1), q(1), qi(1), g(2), g60(1)
   dimension yo(1), xr(1), xl(1), xg(1), xc(1), um(1), si(5)
@@ -120,24 +127,25 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   equivalence (indtv(3),kfit),(indtv(4),kps),(indtv(5),kyc)
   equivalence (indtv(6),idoc),(indtv(7),iotx),(indtv(8),ioss)
   equivalence (indtv(9),iofl),(indtv(10),npan)
-  character*8 text1, text2, text3, text5, text6
-  character*8 text10, text11, text12
-  character*8 text13, text14, text15, text16, text17
-  double precision den1,den2,hssr,hssi,yssr,yssi,hamp,hang,alnh,w2
-  double precision dd11, zcos(11)
-  data text1 / 6hbranch /
-  data text2   /  6hnew rh  /
-  data text3   /  6ho       /
-  data text5   /  6hold da  /
-  data text6   /  6hta      /
-  data text10 / 6htolera /
-  data text11 / 6hnces   /
-  data text12 / 6hline c /
-  data text13 / 6honstan /
-  data text14 / 6hts     /
-  data text15 / 6hcable  /
-  data text16 / 6hconsta /
-  data text17 / 6hnts    /
+  character(8) :: text1, text2, text3, text5, text6
+  character(8) :: text10, text11, text12
+  character(8) :: text13, text14, text15, text16, text17
+  double precision :: den1,den2,hssr,hssi,yssr,yssi,hamp,hang,alnh,w2
+  double precision :: dd11, zcos(11)
+  !
+  data text1  / 'branch' /
+  data text2  / 'new rh' /
+  data text3  / 'o     ' /
+  data text5  / 'old da' /
+  data text6  / 'ta    ' /
+  data text10 / 'tolera' /
+  data text11 / 'nces  ' /
+  data text12 / 'line c' /
+  data text13 / 'onstan' /
+  data text14 / 'ts    ' /
+  data text15 / 'cable ' /
+  data text16 / 'consta' /
+  data text17 / 'nts   ' /
   ll6 = 6
   if ( lastov  .eq.  1 )   go to 3107
   if ( iprsup  .ge.  1 ) write (lunit6, 3106)  lunit5, ialter, lastov, nss, icheck, iotx, ioss, iofl, ktab, ci1, ck1, voltbc(1), voltk(1), volti(1)
@@ -371,14 +379,14 @@ subroutine guts45(pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, yo
   dmin = ratio - 1.0
   lcosi = 3 * nfrph + 1
   kprec = 1
-  if( locint( pbuf(11)) - locint(pbuf(1)) .eq. locint(zcos(11)) - locint(zcos(1)) ) kprec = 2
+  if (location (pbuf(11)) - location (pbuf(1)) .eq. location (zcos(11)) - location (zcos(1)) ) kprec = 2
   lcosd = lcosi / 2 + 1
   if( kprec .eq. 2 ) lcosd = lcosi
   lift = lcosi + nfr1 * 2 + 1
   if( kprec .eq. 2 ) lift = lcosi + nfr1
   ipunm = ipun / 10
   ipun = ipun - 10 * ipunm
-  if (iotx .gt. 0) write (lunit6,10490) nss
+  if (iotx .gt. 0) write (unit = lunit6, fmt = 10490) nss
 10490 format ('1', 5x, 'Calculation of transformation matrices.  Continuous transposition flag = ', i2)
   !              ***   at the transformation frequency   ***
   if (nss .eq. 1) go to 10520
@@ -1165,11 +1173,14 @@ subroutine cxc(a,b,c,kode)
   end do
   go to 130
 end subroutine cxc
+
 !
 ! subroutine frqdom.
 !
-subroutine frqdom(ioutp, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq,cqt, q, qi, g, g60, yo, xr, xl, xg, xc)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine frqdom (ioutp, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq,cqt, q, qi, g, g60, yo, xr, xl, xg, xc)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !)  this subroutine is used to process line/cable constants data at a
   !)  specific frequency.  the r, l, c matrices (low. tri, col order) are
   !)  read from tape3.  each matrix is a separate record.  the routine can
@@ -1841,11 +1852,14 @@ subroutine frqdom(ioutp, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq,cqt, q, qi, g, g
   go to 13
 9200 return
 end subroutine frqdom
+
 !
 ! subroutine xift.
 !
-function xift(tsp, omegas, funw, cosi)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+function xift (tsp, omegas, funw, cosi)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl45.ftn'
   include 'blkcom.ftn'
   !  this routine calculates the inverse fourier transform of a geometric
@@ -1953,11 +1967,14 @@ function xift(tsp, omegas, funw, cosi)
   if (n1 .gt. 0) n1 = n1 - 1
   return
 end function xift
+
 !
 ! subroutine rise.
 !
-subroutine rise(time, thr, t2, vresp, si, cosi)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine rise (time, thr, t2, vresp, si, cosi)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this routine is used to estimate the time at which the step
   !     response in the time domain is at value 'thr'(0.0 to 1.0).
   !     the initial guess is in 'time' when the  'rise' function is called
@@ -2035,11 +2052,14 @@ subroutine rise(time, thr, t2, vresp, si, cosi)
   lstat(12) = nfit - n1 + 1
   return
 end subroutine rise
+
 !
 !     subroutine tdfit.
 !
-subroutine tdfit(vresp, si, fv, hhm, hhn, cosi)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine tdfit (vresp, si, fv, hhm, hhn, cosi)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This routine calculates the time domain sequence of points
   !     representing the step response in 'fv' by inverse fourier trans-
   !     formation of 'vresp'.  This sequence is then fitted by a least-
@@ -2055,12 +2075,12 @@ subroutine tdfit(vresp, si, fv, hhm, hhn, cosi)
   equivalence (vim(4),pivthr),(vim(7),ft2emx),(vim(9),epspv2)
   equivalence (ipntv(2),niter1),(ipntv(3),niter),(indtv(1),npoint)
   dimension vresp(5), si(5), fv(2), hhm(1), hhn(1)
-  double precision cosi(3)
+  double precision :: cosi(3)
   dimension b(4), db(3,3), hac(3,3), e(4), eold(3), xold(3)
-  character*8 text7, text8, text9
-  data text7  / 6h.      /
-  data text8  / 6h0      /
-  data text9  / 6h*      /
+  character(8) :: text7, text8, text9
+  data text7  / '.     ' /
+  data text8  / '0     ' /
+  data text9  / '*     ' /
   ktdiv = 0
   ktzer = 0
   kcrit = npoint * 0.8
@@ -2485,6 +2505,7 @@ subroutine tdfit(vresp, si, fv, hhm, hhn, cosi)
   call setstd
 9200 return
 end subroutine tdfit
+
 !
-!     end of file: over45.for
+! end of file over45.f90
 !

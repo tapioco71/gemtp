@@ -1,15 +1,16 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: time44.for
+! file time44.f90
 !
 
 !
-!     subroutine time44.
+! subroutine time44.
 !
 
 subroutine time44 (a)
   implicit none
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !    The purpose of subroutine  time44  is to interrogate the
   !    installation clock, and return the wall-clock time through the
   !    argument of the subroutine.   Eight bcd characters are allowed,
@@ -26,15 +27,15 @@ subroutine time44 (a)
   !    This is just what the EMTP needs, except that we want periods
   !    rather than colons, and of course we require  2a4  format.
   character(8), intent(out) :: a(2)
-  character(8) t
+  character(8) :: t
   call date_and_time(time = t)
   write (unit = a(1), fmt = 2741) t(1 : 2), t(3 : 3)
-2741 format (2a1, '.', a1)
+2741 format (a2, '.', a1)
   write (unit = a(2), fmt = 2754) t(4 : 4), t(5 : 6)
-2754 format (a1, '.', 2a1)
+2754 format (a1, '.', a2)
   return
 end subroutine time44
 
 !
-!     end of file: time44.for
+! end of file time44.f90
 !

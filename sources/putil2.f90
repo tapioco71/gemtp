@@ -1,20 +1,23 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: putil2.f90
+! file putil2.f90
 !
 
 !
-!     subroutine putil2.
+! subroutine putil2.
 !
 
 subroutine putil2
-  include  'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include  'tacsto.ftn'
   sptr = sptr - 1
   if (sptr .eq. iptr) go to 910
   isto(sptr) = from
   from = 0
   go to (9200, 9201 , 9202, 9203, 9204, 9205, 9206 , 9207, 9208, 0002, 9210, 9211 , 9212, 9213, 9214), to-9199
-0002 stop 'invalid "to" reference in "putil2".'
+0002 stop 'Invalid "to" reference in "putil2".'
 9500 if (.not. (from .eq. 0)) go to 0001
   from = isto(sptr)
   sptr = sptr + 1
@@ -515,8 +518,8 @@ subroutine putil2
   go to 9204
 9538 from = isto(sptr)
   sptr = sptr + 1
-  b = real (dlog10 (real (rinf, 16)), kind (b))
-  c = real (dlog10 (real (rmargn, 16)), kind (c))
+  b = dlog10 (rinf)
+  c = dlog10 (rmargn)
   e = rsto(rptr - 2) * rsto(rptr - 3)
   if (.not. (e .ge. b)) go to 5391
   a = rinf
@@ -538,5 +541,5 @@ subroutine putil2
 end subroutine putil2
 
 !
-!     end of file: putil2.f90
+! end of file putil2.f90
 !

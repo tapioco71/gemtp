@@ -1,20 +1,92 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: comb.for
+! file comb.f90
 !
 
 !
-!     subroutine comb.
+! subroutine comb.
 !
 
 subroutine comb
-  include  'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
   sptr=sptr-1
   isto(sptr)=from
   from=0
-  goto (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019,&
-       9020, 9021, 9022), to-8999
-  stop 'invalid "to" reference in "comb".'
+  !  goto (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9020, 9021, 9022), to-8999
+  select case (to - 8999)
+  case (1)
+     go to 9000
+
+  case (2)
+     go to 9001
+
+  case (3)
+     go to 9002
+
+  case (4)
+     go to 9003
+
+  case (5)
+     go to 9004
+
+  case (6)
+     go to 9005
+
+  case (7)
+     go to 9006
+
+  case (8)
+     go to 9007
+
+  case (9)
+     go to 9008
+
+  case (10)
+     go to 9009
+
+  case (11)
+     go to 9010
+
+  case (12)
+     go to 9011
+
+  case (13)
+     go to 9012
+
+  case (14)
+     go to 9013
+
+  case (15)
+     go to 9014
+
+  case (16)
+     go to 9015
+
+  case (17)
+     go to 9016
+
+  case (18)
+     go to 9017
+
+  case (19)
+     go to 9018
+
+  case (20)
+     go to 9019
+
+  case (21)
+     go to 9020
+
+  case (22)
+     go to 9021
+
+  case (23)
+     go to 9022
+  end select
+  stop 'Invalid "to" reference in "comb".'
 9500 if(.not.(from.eq.0)) goto 0001
   from=isto(sptr)
   sptr=sptr+1
@@ -72,7 +144,7 @@ subroutine comb
   call xpr1
   a=rsto(rptr)
   rptr=rptr-1
-  ndx3 = idnint(real (a, 16))
+  ndx3 = idnint (a)
   goto 5000
 5001 continue
   ndx3=iinf
@@ -336,7 +408,7 @@ subroutine comb
   call xpr1
   a=rsto(rptr)
   rptr=rptr-1
-  k = idnint (real (a, 16))
+  k = idnint (a)
   goto 5080
 5081 continue
   k=1
@@ -381,7 +453,7 @@ subroutine comb
   call xpr1
   a=rsto(rptr)
   rptr=rptr-1
-  k = idnint (real (a, 16))
+  k = idnint (a)
   goto 5100
 5101 continue
   k=1
@@ -746,7 +818,7 @@ subroutine comb
 5190 continue
   a=rsto(rptr)
   rptr=rptr-1
-  ndx4 = idnint (real (a, 16))
+  ndx4 = idnint (a)
   goto 5180
 5181 continue
   ndx4=1
@@ -1023,7 +1095,7 @@ subroutine comb
   k=isto(ptr5+k1)
   i2=i1+k1
   a=rsto(i2)
-  if (.not. (real (dabs (real (a, 16)), kind (rmargn)) .gt. rmargn)) goto 5321
+  if (.not. (real (dabs (a), kind (rmargn)) .gt. rmargn)) goto 5321
   i3 = ptr2 + (k - 1) * cnt2
   j=k1
 3241 if(.not.(j.lt.cnt2)) goto 3240
@@ -1039,7 +1111,7 @@ subroutine comb
 3230 continue
   i2=i1+i7+1
   a=rsto(i2)
-  if (.not. (real (dabs(real (a, 16)), kind (rmargn)) .gt. rmargn)) goto 5331
+  if (.not. (real (dabs(a), kind (rmargn)) .gt. rmargn)) goto 5331
   a=one/a
   rsto(i2)=a
   j=i7+1
@@ -1457,5 +1529,5 @@ subroutine comb
 end subroutine comb
 
 !
-!     end of file: comb.for
+! end of file comb.f90
 !

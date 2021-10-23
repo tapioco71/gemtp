@@ -1,10 +1,13 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 !
-!     file: synmac.for
+!     file: synmac.ftn
 !
 !     real variables precede integer ones          *********************
 !     auxilliary arrays ( size based on no. of windings = 7 )  ********
-  real(8) x1, z
+  integer itold, ibrold, mfirst, msmout, nsmout, nst
+  real athtw, asqrt3, bdam, bin, damrat, delta6, factom, om2, omdt
+  real radeg, smoutv, sqrt3, sqrt32, thtw, x1
+  real, target :: z
   common /smach/ z(100), x1(36)
 !     spy interface variables *****************************************
   common /smach/ smoutv(15)
@@ -13,6 +16,7 @@
   common /smach/ factom, damrat, delta6, om2, bin, bdam
 !     integer variables      *******************************************
   common /smach/ mfirst, nst, itold, ibrold, nsmout, msmout
+
 !
-!     end of file: synmac.for
+!     end of file: synmac.ftn
 !

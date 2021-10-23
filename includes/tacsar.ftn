@@ -2,7 +2,22 @@
 !
 !     file: tacsar.ftn
 !
+
 !     000000            definition of table names                 000000
+
+  real(8) :: atcs, awkcs
+  integer(4) :: ia, icolcs, ilntab, insup, ioutcs, isblk, iuty, ivarb
+  integer(4) :: jout
+  integer(4) :: kaliu, kalksu, karg, katcs, kawkcs, kcolcs
+  integer(4) :: kinsup, kisblk, kiuty, kivarb, kjout, kksus, klntab, kofsce, koncur
+  integer(4) :: konsce, konsup, kontot, kpar, kprsup, krsblk, kspvar, ksus, kud1
+  integer(4) :: kxar, kxic, kxtcs
+  integer(4) :: niu, nsu, nsudv, nsup, nuk
+  real(8) :: parsup
+  real(8) :: rsblk
+  real(8) :: ud1
+  real(8) :: xar, xtcs
+  !
   dimension isblk(1), insup(170000), jout(1), icolcs(1), ilntab(170000)
   dimension ksus(1), iuty(170000), ivarb(170000)
   dimension rsblk(1), ud1(5000), xtcs(1), atcs(1), xar(1)
@@ -30,6 +45,7 @@
   equivalence (nsup, lstat(55)), (karg, lstat(56))
   equivalence (kpar, lstat(57)), (kxic, lstat(58))
   equivalence (ioutcs, lstat(59)), (nsudv, lstat(60))
+
 !
 !     end file: tacsar.ftn
 !

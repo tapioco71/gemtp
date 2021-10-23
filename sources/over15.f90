@@ -1,17 +1,22 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over15.for
+! file over15.f90
 !
 
 !
-!     subroutine over15.
+! subroutine over15.
 !
 
 subroutine over15
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
+  use blkcom
+  use labcom
+  use tacsar
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'tacsar.ftn'
   include 'syncom.ftn'
   include 'synmac.ftn'
   include 'umdeck.ftn'
@@ -22,10 +27,10 @@ subroutine over15
   equivalence (moncar(1), knt), (moncar(2), kbase)
   equivalence (moncar(3), ltdelt), (moncar(4), isw)
   equivalence (moncar(5), idist), (moncar(6), itest)
-  character*8 aupper, alower, text1, text2, text3
-  character*8 text4, text5, text6, text7
-  character*8 text8, text9, text10, text11, text12
-  character*132 outlin
+  character(8) :: aupper, alower, text1, text2, text3
+  character(8) :: text4, text5, text6, text7
+  character(8) :: text8, text9, text10, text11, text12
+  character(132) :: outlin
   dimension aupper(13), alower(13)
   dimension nsubkm(1)
   equivalence  ( kknonl(1), nsubkm(1) )
@@ -746,9 +751,12 @@ end subroutine over15
 !
 
 subroutine top15
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
+  use blkcom
+  use labcom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
   dimension nsubkm(1)
   equivalence (kknonl(1), nsubkm(1))
   equivalence (lstat(14), knum)
@@ -867,16 +875,20 @@ subroutine top15
 end subroutine top15
 
 !
-!     subroutine smout.
+! subroutine smout.
 !
 
 subroutine smout
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use labcom
+  use synmac
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module is used only by  type 59 s.m.  modeling
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'synmac.ftn'
-  character(8) texta, textb, digit, text1, text2, busvec
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'synmac.ftn'
+  character(8) :: texta, textb, digit, text1, text2, busvec
   dimension texta(15), digit(10), textb(3), busvec(1)
   texta = (/ 'id    ', 'iq    ', 'i0    ', 'if    ', 'ikd   ', 'ig    ', 'ikq   ', 'ia    ', 'ib    ', 'ic    ', 'efd   ', 'mforce', 'mang  ', 'tq gen', 'tq exc' /)
   ! data texta(1)   /6hid    /
@@ -996,14 +1008,18 @@ subroutine smout
 end subroutine smout
 
 !
-!     subroutine uminit.
+! subroutine uminit.
 !
 
 subroutine uminit (n15, reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout, jtype, nodom, jtmtac, histom, &
      omegm, omold, thetam, reamdu, reamds, flxds, flxdr, reamqu,flxqs, flxqr, jcdsat, jcqsat, flxd, flxq, nppair, rotmom, &
      ncld, nclq, jtqout, jomout, jthout, reamqs, epsom, dcoef,kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, &
      umoutp)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use labcom
+  use umdeck
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension reacl(1), gpar(1), fpar(1), hist(1), umcurp(1)
   dimension nodvo1(1), nodvo2(1), jcltac(1), jclout(1)
   dimension jtype(1), nodom(1), jtmtac(1), histom(1)
@@ -1016,9 +1032,9 @@ subroutine uminit (n15, reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, 
   dimension reamqs(1), epsom(1), dcoef(1), kcoil(1)
   dimension voltum(1), anglum(1), nodfum(1), nodmum(1)
   dimension kumout(1), jumout(1), umoutp(1)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'umdeck.ftn'
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'umdeck.ftn'
   dimension nsubkm(1)
   equivalence (kknonl(1), nsubkm(1))
   !  jcltac(kcl and kcl+1) are defined and initialized in umrenu
@@ -1192,5 +1208,5 @@ subroutine uminit (n15, reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, 
 end subroutine uminit
 
 !
-!     end of file: over15.for
+! end of file over15.f90
 !

@@ -1,18 +1,23 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: elec.for
+! file elec.f90
 !
 
 !
-!     subroutine elec.
+! subroutine elec.
 !
 
 subroutine elec
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'tacsto.ftn'
-  include 'blkcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  include 'tacsar.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  include 'labcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
+  use tacsto
+  use blkcom
+  use tacsar
+  use labcom
+  implicit none
+  !  include 'tacsto.ftn'
+  !  include 'blkcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
+  !  include 'tacsar.ftn'                                      ! wsm + thl manual modification for bpa emtp
+  !  include 'labcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
   sptr = sptr - 1
   if (sptr .eq. iptr) go to 910
   isto(sptr) = from
@@ -330,5 +335,5 @@ subroutine elec
 end subroutine elec
 
 !
-!     end of file: elec.for
+! end of file elec.f90
 !

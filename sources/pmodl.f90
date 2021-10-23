@@ -1,14 +1,17 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: pmodl.for
+! file pmodl.f90
 !
 
 !
-!     subroutine pmodl.
+! subroutine pmodl.
 !
 
 subroutine pmodl
-  include 'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
   sptr = sptr - 1
   if (sptr .eq. iptr) go to 910
   isto(sptr)=from
@@ -1681,5 +1684,5 @@ subroutine pmodl
 end subroutine pmodl
 
 !
-!     end of file: pmodl.for
+! end of file pmodl.f90
 !

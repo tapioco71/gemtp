@@ -1,8 +1,10 @@
   !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
   !
-  !     file: deck10.ftn
+  ! file deck10.ftn
   !
-  character fixbu1, fixbu2
+
+  character :: fixbu1, fixbu2
   common /c10b01/   jndex (1)
   common /c10b02/   diagg (1)
   common /c10b03/   diabb (1)
@@ -29,6 +31,7 @@
   common /c10b24/   fixb10(100)
   common /c10b25/   fixb11(100)
   common /c10b26/   kndex (1)
+
   !
-  !     end of file: deck10.ftn
+  ! end of file deck10.ftn
   !

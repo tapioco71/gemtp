@@ -1,14 +1,16 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over51.for
+! file over51.f90
 !
 
 !
-!     subroutine over51.
+! subroutine over51.
 !
 
 subroutine over51
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   if (iprsup .ge. 1) write (lunit6, 4567) kill
 4567 format (' Begin "over51".  kill =', i8)
@@ -26,11 +28,12 @@ subroutine over51
 end subroutine over51
 
 !
-!     subroutine subr51.
+! subroutine subr51.
 !
 
 subroutine subr51
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   dimension kpen(20)
   !     note. --- as the structure of the emtp error overlays change,
@@ -509,5 +512,5 @@ subroutine subr51
 end subroutine subr51
 
 !
-!     file: over51.for
+! file over51.f90
 !

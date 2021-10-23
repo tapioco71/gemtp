@@ -1,27 +1,32 @@
 !-*- mode: f90; syntax: free-format; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over5.f90
+! file over5.f90
 !
 
 !
-!     subroutine over5.
+! subroutine over5.
 !
 
 subroutine over5
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
+  use blkcom
+  use labcom
+  use tacsar
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'tacsar.ftn'
   common /a8sw/ a8sw(400)
   dimension akey(1), tstat(1)
   equivalence (akey(1), adelay(1)), (tstat(1), crit(1))
   equivalence (moncar(1), knt), (moncar(4), isw)
   equivalence (moncar(5), idist), (moncar(6), itest)
   equivalence (moncar(9), kloaep)
-  character(8) text1, text2, text5, text6, text7
-  character(8) text8, text13, text14, text15, text16
-  character(8) text17
-  character(80) buffer
+  character(8) :: text1, text2, text5, text6, text7
+  character(8) :: text8, text13, text14, text15, text16
+  character(8) :: text17
+  character(80) :: buffer
   data text1  / 'name  ' /
   data text2  / 'swt001' /
   data text5  / 'statis' /
@@ -550,21 +555,29 @@ subroutine over5
 end subroutine over5
 
 !
-!     subroutine over5a.
+! subroutine over5a.
 !
 
 subroutine over5a
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
-  include 'synmac.ftn'
-  include 'syncom.ftn'
-  include 'umdeck.ftn'
-  include 'dekspy.ftn'
+  use blkcom
+  use labcom
+  use tacsar
+  use synmac
+  use syncom
+  use umdeck
+  use dekspy
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'tacsar.ftn'
+  !  include 'synmac.ftn'
+  !  include 'syncom.ftn'
+  !  include 'umdeck.ftn'
+  !  include 'dekspy.ftn'
   dimension ispum(1), kpen(4)
   equivalence (spum(1), ispum(1))
-  character(8) text12
+  character(8) :: text12
   data j30 / 1 /
   data text12 / 'typ-16' /
   ll2 = 2
@@ -1096,10 +1109,13 @@ end subroutine over5a
 !
 
 subroutine umoffs
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use umdeck
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   ! overlay-5  u.m.  module called by "over5a".
-  include 'blkcom.ftn'
-  include 'umdeck.ftn'
+  !  include 'blkcom.ftn'
+  !  include 'umdeck.ftn'
   if ( nclfix  .gt.  0 )   go to 1758
   nclfix = 20
   numfix = 3
@@ -1180,7 +1196,13 @@ end subroutine umoffs
 subroutine umdata (reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout,jtype,nodom, jtmtac, histom, omegm, omold, &
      thetam, reamdu, reamds, flxds, flxdr, reamqu, flxqs, flxqr, jcdsat, jcqsat, flxd, flxq, nppair, rotmom, ncld, nclq, &
      jtqout, jomout, jthout, reamqs, epsom, dcoef, kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, umoutp)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use labcom
+  use umdeck
+  use tacsar
+  use syncom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension reacl(1), gpar(1), fpar(1), hist(1),umcurp(1)
   dimension nodvo1(1), nodvo2(1), jcltac(1), jclout(1)
   dimension jtype(1), nodom(1), jtmtac(1), histom(1)
@@ -1199,14 +1221,14 @@ subroutine umdata (reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclou
   common /umlocal/ n7, n8, n9, n10, n11, n12, n14, n15, n16, n17, n18, n19, n20, jr,jf, nexc, kconex, ibrexc, nstan, numasu, nmgen, nmexc
   common /umlocal/ ntypsm, netrun, netrum, nsmtpr, nsmtac, nrsyn, ntorq, mlum, nparum, ngroup, nall, nangre, nexcsw, limasu, lopss2
   common /umlocal/ lopss1, lopss8, lopss9, lopss10, lopss4, nshare
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'umdeck.ftn'
-  include 'tacsar.ftn'
-  include 'syncom.ftn'
-  character(8) texta(101), text3,text4,text5
-  character(8) textm, tesm1, tesm2, tesm3, tesm4, tesm5
-  character(8) tesm6, tesm7, tesm8, tesm9, text6, text7
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'umdeck.ftn'
+  !  include 'tacsar.ftn'
+  !  include 'syncom.ftn'
+  character(8) :: texta(101), text3,text4,text5
+  character(8) :: textm, tesm1, tesm2, tesm3, tesm4, tesm5
+  character(8) :: tesm6, tesm7, tesm8, tesm9, text6, text7
   !. data initialization:
   !     be careful with fpar(kcl) and umcurp(kcl). in umdata and
   !      and in umrenu they are used differently than in solvum.
@@ -2074,13 +2096,19 @@ subroutine umdata (reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclou
 end subroutine umdata
 
 !
-!     subroutine umdatb.
+! subroutine umdatb.
 !
 
 subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld, jtmtac, reamdu, reamds, flxds, flxdr, &
      reamqu, flxqs, flxqr, jcdsat, jcqsat, nppair, rotmom, nclq, jtqout, jthout, reamqs, voltum, anglum, nodfum, nodmum, &
      kumout, jumout, jclout, dcoef, jomout, umoutp)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use labcom
+  use umdeck
+  use tacsar
+  use syncom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension nodvo2(1), jtmtac(1), flxqs(1), rotmom(1)
   dimension reacl(1),gpar(1),fpar(1),nodvo1(1),nodfum(1)
   dimension jcltac(1), jclout(1), jtype(1), nodom(1)
@@ -2096,14 +2124,14 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
   common /umlocal/ n7, n8, n9, n10, n11, n12, n14, n15, n16, n17, n18, n19, n20, jr, jf, nexc, kconex, ibrexc, nstan, numasu, nmgen, nmexc
   common /umlocal/ ntypsm, netrun, netrum, nsmtpr, nsmtac, nrsyn, ntorq, mlum, nparum, ngroup, nall, nangre, nexcsw, limasu, lopss2, lopss1
   common /umlocal/ lopss8, lopss9, lopss10, lopss4, nshare
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'umdeck.ftn'
-  include 'tacsar.ftn'
-  include 'syncom.ftn'
-  character(8) texta(101), text3,text4,text5
-  character(8) textm, tesm1, tesm2, tesm3, tesm4, tesm5
-  character(8) tesm6, tesm7, tesm8, tesm9, text6, text7
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'umdeck.ftn'
+  !  include 'tacsar.ftn'
+  !  include 'syncom.ftn'
+  character(8) :: texta(101), text3,text4,text5
+  character(8) :: textm, tesm1, tesm2, tesm3, tesm4, tesm5
+  character(8) :: tesm6, tesm7, tesm8, tesm9, text6, text7
   data textm / 'more  ' /
   data tesm1, tesm2, tesm3, tesm4, tesm5, tesm6, tesm7, tesm8, tesm9 / 'smdata', 'tolera', 'parame', 'all   ', 'none  ' , 'extend', 'finish', ' part ', 'share ' /
   ! start reading sm type -50 to 59 data input format **********
@@ -3281,27 +3309,33 @@ subroutine umdatb (reacl, gpar, fpar, nodvo1, nodvo2, jcltac, jtype, nodom, ncld
 end subroutine umdatb
 
 !
-!     smdat.
+! subroutine smdat.
 !
 
 subroutine smdat (mtype)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use labcom
+  use tacsar
+  use syncom
+  use synmac
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   ! this module is used only by type-59 brandwajn  s.m.  model
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
-  include 'syncom.ftn'
-  include 'synmac.ftn'
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'tacsar.ftn'
+  !  include 'syncom.ftn'
+  !  include 'synmac.ftn'
   ! the following array is sized 3 (nn4-1) * n50 ( n50 = 50  at pre-
   ! sent ) + nn10 ( no. of class 1 requests <=15 at present> ) ******
   dimension  npbuf(165)
   equivalence (ismdat(22), ipout), (ismdat(23), n56), (ismdat(24), ismold), (ismdat(25), nn10), (ismdat(26), nn4), (ismdat(27), nn14)
   dimension massex(1)
   equivalence (histq(1), massex(1))
-  character(8) text1, text2, text3
-  character(8) text7, text8, text10, text11, text12
-  character(8) text16, text17
-  character(8) text18, text19, text20, text21
+  character(8) :: text1, text2, text3
+  character(8) :: text7, text8, text10, text11, text12
+  character(8) :: text16, text17
+  character(8) :: text18, text19, text20, text21
   data  text1  / 'finish' /
   data  text2  / 'tolera' /
   data  text3  / 'nces  ' /
@@ -4223,7 +4257,8 @@ end subroutine smdat
 !
 
 subroutine smpfit (x, ism, fm, lunit6, noutpr)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module applies only to  s.m.  modeling (both 50, 59).
   !     this module applies only to s.m.  modelling ( both 50 and 59 )
   dimension x(6)
@@ -4254,7 +4289,7 @@ subroutine smpfit (x, ism, fm, lunit6, noutpr)
   go  to  13
 12 if (noutpr .ne. 0) go to 13
   write (unit = lunit6, fmt = 26)
-26 format (5x, ' Note  ----  the last-read data card belongs to a dynamic synchronous machine, for which the parameters', /, &
+26 format (5x, ' Note  ----  The last-read data card belongs to a dynamic synchronous machine, for which the parameters', /, &
         18x, 'are to be mathematically improved within the module "smpfit" of overlay number 5.   The user', /, &
         18x, 'requested this procedure by means of the  "parameter fitting"  card which accompanied the')
   write (unit = lunit6, fmt = 4267)
@@ -4277,5 +4312,5 @@ subroutine smpfit (x, ism, fm, lunit6, noutpr)
 end subroutine smpfit
 
 !
-!     end of file: over5.f90
+! end of file over5.f90
 !

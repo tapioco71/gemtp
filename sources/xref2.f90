@@ -1,14 +1,17 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: xref2.for
+! file xref2.f90
 !
 
 !
-!     subroutine xref2.
+! subroutine xref2.
 !
 
 subroutine xref2
-  include 'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
   sptr = sptr - 1
   if (sptr .eq. iptr) go to 910
   isto(sptr) = from
@@ -931,5 +934,5 @@ subroutine xref2
 end subroutine xref2
 
 !
-!     end of file: xref2.for
+! end of file xref2.f90
 !

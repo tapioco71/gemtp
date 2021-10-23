@@ -1,14 +1,16 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over7.for
+! file over7.f90
 !
 
 !
-!     subroutine over7.
+! subroutine over7.
 !
 
 subroutine over7
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'space2.ftn'
@@ -725,9 +727,9 @@ subroutine over7
 9999 if ( lastov  .gt.  nchain )   go to 9996
   kill=0
   write (lunit6, 9998)
-9998 format (/, ' Warning ---- node renumbering of the transients network has broken down, presumably due to table overflow', /, &
+9998 format (/, ' Warning ---- Node renumbering of the transients network has broken down, presumably due to table overflow', /, &
           ' (i.e., the network is too big and/or too dense for the present EMTP dimensioning).   the next time that the user', /, &
-          ' redimensions the emtp, he is advised to increase the size of list number  5  and/or  8 .   both of these lists', /, &
+          ' redimensions the emtp, he is advised to increase the size of list number  5  and/or  8 .   Both of these lists', /, &
           ' contribute fully (100 per cent) to dependent list number  99,   which is what has actually overflowed at this point.')
   nelim = nelim - 1
   write (lunit6, 9997)  nelim, ntot, ncurr
@@ -755,11 +757,14 @@ subroutine over7
   if ( iprsup  .ge.  1 ) write (lunit6, 4568 )
 99999 return
 end subroutine over7
+
 !
-!     subroutine subscr.
+! subroutine subscr.
 !
+
 subroutine subscr(j, limit, istat, n1)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   !     module used to check out-of-bounds subscripts for "over7"
   !     special n1=99 case is for subscripts which are used only
@@ -772,6 +777,7 @@ subroutine subscr(j, limit, istat, n1)
 9006 format (' Trace.  j, limit, istat, n1 =', 4i8)
   return
 end subroutine subscr
+
 !
-!     end of file: over7.for
+! end of file over7.f90
 !

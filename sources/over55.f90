@@ -1,15 +1,18 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over55.for
+! file over55.f90
 !
 
 !
-!     subroutine over55.
+! subroutine over55.
 !
 
 subroutine over55
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
+  use blkcom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
   equivalence (moncar(4), isw)
   if (iprsup  .ge.  1) write (unit = lunit6, fmt = 4567) kill
 4567 format (' Begin "over55".  kill =', i6)
@@ -155,17 +158,19 @@ subroutine over55
 end subroutine over55
 
 !
-!     subroutine subr55.
+! subroutine subr55.
 !
 
 subroutine subr55
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
+  use blkcom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
   equivalence (moncar(1), knt), (moncar(4), isw)
   equivalence (moncar(10), mtape)
-  character(8) text1, text2, text3, text4, text5
-  character(8) text11, text12, text13, text14, text15
-  character(8) text16, text17, text18, text19
+  character(8) :: text1, text2, text3, text4, text5
+  character(8) :: text11, text12, text13, text14, text15
+  character(8) :: text16, text17, text18, text19
   data text1  / 'begin ' /
   data text2  / 'new   ' /
   data text3  / 'data  ' /
@@ -934,11 +939,13 @@ end subroutine subr55
 !
 
 subroutine statsv
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   return
 end subroutine statsv
+
 !  m99.9999      overlay ( finish, 99999 )
 
 !
-!    end of file: over55.for
+! end of file over55.f90
 !

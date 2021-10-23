@@ -1,23 +1,27 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over8.for
+! file: over8.f90
 !
+
 !
-!     subroutine over8.
+! subroutine over8.
 !
+
 subroutine over8
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'synmac.ftn'
   include 'umdeck.ftn'
   include 'space2.ftn'
   ! %include  '//c/tsu/cables.ftn'
-  real(8) l
+  real(8) :: l
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
-  character(6) chlmfs                                       ! 9-phase as limit for lmfs test
-  character(80) char80
+  character(6) :: chlmfs                                       ! 9-phase as limit for lmfs test
+  character(80) :: char80
   dimension infdli(1)
   equivalence (namebr(1), infdli(1))
   dimension wk1(1)
@@ -28,7 +32,7 @@ subroutine over8
   equivalence (spum(1), ispum(1))
   dimension integx(1)
   equivalence (x(1), integx(1)), (moncar(1), knt)
-  character(6) tempbus
+  character(6) :: tempbus
   ! 1001 if ( iprsup .ge. 1 )
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 101) loopss(1), iv, it, tmax
 101 format (' Top of "over8".   loopss(1) iv, it, tmax =', 3i8, e15.5)
@@ -1123,25 +1127,31 @@ subroutine over8
   !99999return
   return
 end subroutine over8
+
 !
-!     function indblk.
+! function indblk.
 !
-function  indblk(tempbus)
-  character*6  tempbus
-  indblk = index ( tempbus, ' ' )
+
+function indblk(tempbus)
+  implicit none
+  character(6), intent(in) :: tempbus
+  indblk = index (tempbus, ' ')
   return
 end function indblk
+
 !
-!     subroutine frqchk.
+! subroutine frqchk.
 !
+
 subroutine frqchk
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module called in two places by "over8" to determine which
   !     nodes are excited by which sources (subnetwork bounding),
   !     with error stop if there is frequency mixing.
   include 'blkcom.ftn'
   include 'labcom.ftn'
-  if ( iprsup  .ge.  1 ) write (lunit6, 1428)    ntot, kconst, ibr, kswtch, it
+  if (iprsup  .ge.  1) write (unit = lunit6, fmt = 1428) ntot, kconst, ibr, kswtch, it
 1428 format (' Top of "frqchk".    ntot  kconst     ibr  kswtch      it', /, 17x, 8i8)
   !     first determine the phasor frequency of each network node:
   call move0 ( kssfrq(1), ntot )
@@ -1297,18 +1307,21 @@ subroutine frqchk
 9207 format (' Exit "frqchk".')
   return
 end subroutine frqchk
+
 !
 ! subroutine cxred8.
 !
+
 subroutine cxred8(a,c,n,m)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     elimination of variables m+1,...n in symmetric complex matrix with
   !     a=real part, c=imaginary part. a and c are
   !     stored as triangle (1 element for 1.column,2 for 2.column etc.).
   !     result is reduced matrix in columns 1,...m in case of reduction
   !     (m unequal 0) or negative inverse matrix in columns 1,...n in case
   !     of inversion (m=0).
-  dimension a(1),emtpc(1),b(30),d(30)
+  dimension a(1), emtpc(1), b(30), d(30)
   j = n + 1
   w=1.0
   if(m.gt.0) w=-w
@@ -1373,7 +1386,8 @@ end subroutine cxred8
 subroutine umrenu (reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout,jtype,nodom, jtmtac, histom, omegm, omold, &
      thetam, reamdu, reamds, flxds, flxdr, reamqu, flxqs, flxqr, jcdsat, jcqsat, flxd, flxq, nppair, rotmom, ncld, nclq, &
      jtqout, jomout, jthout, reamqs, epsom, dcoef, kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, umoutp )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension reacl(1), gpar(1), fpar(1), hist(1), umcurp(1)
   dimension nodvo1(1), nodvo2(1), jcltac(1), jclout(1)
   dimension jtype(1), nodom(1), jtmtac(1), histom(1)
@@ -2707,13 +2721,14 @@ subroutine umrenu (reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclou
 end subroutine umrenu
 
 !
-!     subroutine umrnu2.
+! subroutine umrnu2.
 !
 
 subroutine umrnu2 (reacl, gpar, fpar, hist, umcurp, nodvo1, jtype, nodom, jtmtac, thetam, imach, reamdu, reamqu, nodvo2, &
      nppair, rotmom, ncld, jcltac, kcl, nclq, epsom, dcoef, kcoil, voltum, anglum, nodfum, nodmum, umoutp)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  real(8) n6, n8
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  real(8) :: n6, n8
   dimension reacl(1), gpar(1), fpar(1), hist(1), umcurp(1)
   dimension nodvo1(1), nodvo2(1), jcltac(1)
   dimension jtype(1), nodom(1), jtmtac(1)
@@ -3472,7 +3487,8 @@ end subroutine umrnu2
 !
 
 subroutine equiv (req, xeq, geq, beq, z, r, tau, w, n)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   dimension req(1), xeq(1), geq(1), beq(1), z(1), r(1), tau(1)
   equivalence (anumr, rzero), (anumx, xzero), (ypos, sinb), (yneg, cosb), (epos, sinhgr), (eneg, sinhgi), (c, cosha), (d, sinha)
@@ -3552,5 +3568,5 @@ subroutine equiv (req, xeq, geq, beq, z, r, tau, w, n)
 end subroutine equiv
 
 !
-!     end of file: over8.for
+! end of file over8.f90
 !

@@ -1,19 +1,28 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over14.for
+! file over14.f90
 !
 
 !
-!     subroutine over14.
+! subroutine over14.
 !
 
 subroutine over14
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  equivalence (moncar(1), knt)
+  use blkcom
+  use labcom
+  use tracom
+  implicit none
+  integer(4) :: i, ibf, ikf, isfd, it2d
+  integer(4) :: j, j0
+  integer(4) :: k, ka, kb, kc, kd
+  integer(4) :: m, mfd, mswtch
+  integer(4) :: n1, n6, n7, n15, n16, ndx1, ndx2
+  real(8) :: d1, d2
+  !  equivalence (moncar(1), knt)
+  !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
-4567 format ('  "begin module over14."')
+4567 format ('  "Begin module over14."')
   !     define "kentnb" and "nbhdsw" vectors for module "switch"
   !     of overlay 16 (called by "subts1") via  "do 2472":
   n6 = 0
@@ -62,7 +71,7 @@ subroutine over14
   d2 = emtpe(k) - emtpe(m)
   if (nltype(i) .ne. -96) go to 73584
   n7 = nonlad(i)
-  curr(i) = cchar(n7+3)
+  curr(i) = n7 + 3
   anonl(i) = gslope(n7)
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 2620) i, n7, curr(i), vnonl(i), anonl(i)
 2620 format (/, ' Type-96 in "over14".       i      n7', 21x, 'curr',  20x, 'vnonl', 20x, 'anonl', /, 21x, 2i8, 3e25.15)
@@ -97,7 +106,7 @@ subroutine over14
      if ( length(ka) .ne. -666 ) go to 401
      kb = ka - 1
      it2 = length(kb)
-     it2 = iabsz( it2 )
+     it2 = iabsz (it2)
      it2d = ka + it2 - 1
      kc = 0
      do kd = kb, it2d
@@ -126,17 +135,44 @@ end subroutine over14
 !
 
 subroutine last14
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  dimension cblhst(1)
-  equivalence  ( cnvhst(1),  cblhst(1) )
-  dimension infdli(1)
-  equivalence  ( namebr(1),  infdli(1) )
-  dimension  wk1(1)
-  equivalence ( semaux(1), wk1(1) )
-  common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7, koff8, koff9, koff10, koff13, koff14, koff15, koff16, koff17, koff18
-  common /fdqlcl/ koff19, koff20, koff21, koff22, koff23, koff24, koff25, inoff1, inoff2, inoff3, inoff4, inoff5, nqtt, lcbl, lmode, nqtw
+  use blkcom
+  use labcom
+  use tracom
+  implicit none
+  integer(4) :: i, i1, iadrs, ibi, ibj, ibrj, icb, icbscn, icu, icucpl, ifd, ihist, ij
+  integer(4) :: ik, inoff1, inoff2, inoff3, inoff4, inoff5, ioff1, ioff2
+  integer(4) :: ioff3, ioff4, ioff5, ioff6, ioff7, ioff8, iq, isecti, iyeq
+  integer(4) :: j, j0, jglnn, jk, jkl
+  integer(4) :: k, kbr, kj, km1, knode, koff1, koff2, koff3, koff4, koff5, koff6
+  integer(4) :: koff7, koff8, koff9, koff10, koff11, koff13, koff14, koff15, koff16
+  integer(4) :: koff17, koff18, koff19, koff20, koff21, koff22, koff23, koff24
+  integer(4) :: koff25, kq, kss
+  integer(4) :: l, lcbl, lmode
+  integer(4) :: m, mabs, mark, marm, mm, mnode, mp
+  integer(4) :: n1, n2, n3, n4, n4j, n5, n6, n7, n9, nk1, nn, nn10, nn11, nn12, nnk
+  integer(4) :: nnn1, nnq1, nnq2, nnq3, np, nphs, nphs2, nq, nq0, nq1, nq2, nq3, nq4
+  integer(4) :: nq5, nq6, nqtt, nqtw, nt, nteq, nticpl
+  real(8) :: apidt, b, cj, d1, d2, d18, dblpr1, dblpr2, dblpr3, dblpr4, dj
+  real(8) :: dyk
+  real(8) :: fac1, fac3, fac4, fac5
+  real(8) :: hj
+  real(8) :: pit2
+  real(8) :: qik, qjk
+  real(8) :: rll
+  real(8) :: sk1i, sk1r, sll, sumd, sume
+  real(8) :: xll
+  real(8) :: yll, yx
+  !  dimension cblhst(1)
+  !  equivalence (cnvhst(1), cblhst(1))
+  !  dimension infdli(1)
+  !  equivalence (namebr(1), infdli(1))
+  !  dimension  wk1(1)
+  !  equivalence (semaux(1), wk1(1))
+  common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7, koff8, koff9
+  common /fdqlcl/ koff10, koff13, koff14, koff15, koff16, koff17, koff18
+  common /fdqlcl/ koff19, koff20, koff21, koff22, koff23, koff24, koff25, inoff1
+  common /fdqlcl/ inoff2, inoff3, inoff4, inoff5, nqtt, lcbl, lmode, nqtw
+  !
   !     beginning of formation of the real admittance matrix (y)
   icucpl = 0
   jglnn = 0
@@ -278,10 +314,10 @@ subroutine last14
         nq6 = nq5 + 1
         if ( sconst(nq2) .ge. 1.e+13 ) go to 1001
         apidt = sconst(nq3) * deltat
-        cj = real (dexp(real (-apidt, 16)), kind (cj))
-        hj = real ((1.d0 - cj) / apidt, kind (hj))
+        cj = dexp(-apidt)
+        hj = (1.d0 - cj) / apidt
         apidt = sconst(nq2) / sconst(nq3)
-        dj = real (apidt * (1.d0 - hj), kind (dj))
+        dj = apidt * (1.d0 - hj)
         sconst(nq4) = -apidt * (cj - hj)
         sconst(nnq2) = cj
         sconst(nnq3) = dj
@@ -292,8 +328,8 @@ subroutine last14
         go to 1002
 1001    jkl = jkl + 1
         if (jkl .eq. 2 ) go to 1004
-        fac1 = sconst(nq3)*deltat/1.e15
-        sconst(n5) = expz(-fac1)
+        fac1 = sconst(nq3) * deltat / 1.e15
+        sconst(n5) = expz (-fac1)
         dblpr2 =  sconst(n5)
         fac3 = sconst(nq3+1) * deltat / 1.e15
         fac4 = sconst(nq3+1) / 1.e15
@@ -689,10 +725,15 @@ end subroutine last14
 ! subroutine qyqtr.
 !
 
-subroutine qyqtr(nphs,dy,q,y)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+subroutine qyqtr (nphs, dy, q, y)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !      insert deck  labcom
-  dimension dy(1)   ,q(1)    ,y(1)
+  integer(4), intent(in) :: nphs
+  real(8), intent(out) :: y(1)
+  real(8), intent(in) :: dy(1), q(1)
+  integer(4) :: i, ij, ik, j, jk, k, km1, n1
+  real(8) :: b, dyk, qik, qjk
   !
   n1 = nphs * (nphs + 1) / 2
   do i = 1, n1
@@ -718,34 +759,33 @@ subroutine qyqtr(nphs,dy,q,y)
   return
 end subroutine qyqtr
 
-!      subroutine qyqtr(nphs,dy,q,y)                                    2
-!      implicit real(8) (a-h, o-z) ,
-!     1      integer(4) (i-n)
-!c      insert deck  labcom                                             3
-!      dimension dy(1)   ,q(1)    ,y(1)                                 4
-!c                                                                      5
-!      n1=nphs*(nphs+1)/2                                               6
-!      do 100 i=1,n1                                                    7
-!      y(i)=0.d0                                                        8
-!100   continue                                                         9
-!c                                                                      0
-!      do 101 k=1,nphs                                                  1
-!      km1=(k-1)*nphs                                                   2
-!      dyk=dy(k)                                                        3
-!      ij=0                                                             4
-!      do 102 j=1,nphs                                                  5
-!      jk=km1+j                                                         6
-!      qjk=q(jk)                                                        7
-!      do 103 i=1,j                                                     8
-!      ij=ij+1                                                          9
-!      ik=km1+i                                                         0
-!      qik=q(ik)                                                        1
-!      b=qik*qjk                                                        2
-!      y(ij)=y(ij)+dyk*b                                                3
-!103   continue                                                         4
-!102   continue                                                         5
-!101   continue                                                         6
-!      return                                                           7
+!      subroutine qyqtr(nphs,dy,q,y)
+!      implicit real(8) (a-h, o-z) ,      integer(4) (i-n)
+!c      insert deck  labcom
+!      dimension dy(1)   ,q(1)    ,y(1)
+!c
+!      n1=nphs*(nphs+1)/2
+!      do 100 i=1,n1
+!      y(i)=0.d0
+!100   continue
+!c
+!      do 101 k=1,nphs
+!      km1=(k-1)*nphs
+!      dyk=dy(k)
+!      ij=0
+!      do 102 j=1,nphs
+!      jk=km1+j
+!      qjk=q(jk)
+!      do 103 i=1,j
+!      ij=ij+1
+!      ik=km1+i
+!      qik=q(ik)
+!      b=qik*qjk
+!      y(ij)=y(ij)+dyk*b
+!103   continue
+!102   continue
+!101   continue
+!      return
 !      end
 
 !
@@ -753,11 +793,18 @@ end subroutine qyqtr
 !
 
 subroutine breqiv (ikf, isfd, ibf)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  dimension  ur(40)
-  !     this routine produces companion model for each branch. it also
+  use blkcom
+  use labcom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  integer(4), intent(out) :: ibf, ikf, isfd
+  integer(4) :: idk, isc, isf, isk, ist, isu, isv
+  integer(4) :: ka, kb
+  real(8) :: a1, a2, ac1, al1, ar, ar1, arl, azi, azr, cz, ur(40)
+  !
+  !     This routine produces companion model for each branch. It also
   !     initializes the current injections for the branches  *   *   *   *
   idk = ikf * 2
   ikf = ikf + 1
@@ -852,14 +899,30 @@ end subroutine breqiv
 !
 
 subroutine past
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use labcom
+  use tacsar
+  use synmac
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module is used by brandwajn (type-59) s.m. model
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
-  include 'synmac.ftn'
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'tacsar.ftn'
+  !  include 'synmac.ftn'
   !     initialization after phasor solution for type-59 s.m.
   !     this routine moves the initial conditions to time '-deltat'
+  integer(4) :: i, i26, i30, i75, ibk, ibl, idelta, idk, idv, ih
+  integer(4) :: iht, ii, ij, ik, ikm, ilk, im, in, iu, ivk, izn, izu
+  integer(4) :: j30, j75, jd30, jdk, je30
+  integer(4) :: k, k31, ka, kb, kbk, kc, kd, ke, kl, kp, ku, kv,kw
+  integer(4) :: m22, m26
+  integer(4) :: n1, n2, n3, n4, n5, n22, nloce, nloce1, nlocg, num2, num4, numask
+  integer(4) :: nwd
+  real(8) :: a1, a2, a3, a4, a5, a6, a11, afd, afq, ako, ap1, ap2
+  real(8) :: c1, c2, c3, cd, cexc, cv0, cz
+  real(8) :: v1, v2, v3
+  !
   ibr = ibrold
   ilk = 0
   in = 1
@@ -1011,7 +1074,7 @@ subroutine past
      if ( iprsup .gt. 1  ) write( lunit6, 6602 )   kv, kl, ( shp(ii), ii = kv, kl )
 6602 format (1x, 'Matrix y from', i6, 2x, 'to', i6, /, ( 2x, 6e20.11))
      !     triangularize an appropriate part of the matrix  'y' ************
-     call bandel( shp( kv ), numask )
+     call bandel (shp(kv), numask)
      ivk = kl + 5 * num2
      ka = iht + 1
      iht = iht + 3 * num2
@@ -1043,7 +1106,7 @@ subroutine past
      if ( iprsup .le. 0 )    go  to   899
      idv = idk + 9
      jdk = idk + 1
-     write( lunit6, 6604 )    ( elp( iu ),  iu = jdk,idv )
+     write (unit = lunit6, fmt = 6604) (elp(iu), iu = jdk, idv)
 6604 format (' at 900.', (/, 6e20.12))
      idv = jd30 + 9
      jdk = jd30 + 1
@@ -1064,14 +1127,19 @@ subroutine past
 end subroutine past
 
 !
-!     subroutine banmul.
+! subroutine banmul.
 !
 
-subroutine banmul(ab, x, y, n)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+subroutine banmul (ab, x, y, n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This module performs postmultiplication of a vector by a tri-
   !     diagonal matrix 'ab'. the results are added to the vector 'y'.
-  dimension ab(1), x(2), y(1)
+  integer(4), intent(in) :: n
+  real(8), intent(out) :: y(1)
+  real(8), intent(in) :: ab(1), x(2)
+  integer(4) :: i, i2, n1
+  real(8) :: d1, d2, d3, s1
   !     initialization **************************************************
   s1 = 0.0
   i2 = 0
@@ -1096,29 +1164,33 @@ end subroutine banmul
 ! subroutine bandel.
 !
 
-subroutine bandel( ab, n )
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+subroutine bandel (ab, n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Triangularization of symmetric tridiagonal matrix 'ab' stored as
   !     a one vector containing diagonals and lower (upper) off-diagonals
   !     each diagonal is followed by an apropriate off-diagonal . There
   !     are altogether  2 * n  entries in the vector 'ab'.
-  dimension ab(1)
+  integer(4), intent(in) :: n
+  real(8), intent(out) :: ab(1)
+  integer(4) :: i2, n2
+  real(8) :: d, e
   !     initialization *************************************************
   n2 = n + n
   i2 = 2
   d = 1.0 / ab(1)
   !     start loop over remaining entries ******************************
-10 ab(i2 - 1) = d
-  e = ab(i2)
-  d = d * e
-  ab(i2) = d
-  i2 = i2 + 2
-  if (i2 .gt. n2) go to 20
-  d = 1.0 / (ab(i2 - 1) - d * e)
-  go to 10
-20 return
+  do
+     ab(i2 - 1) = d
+     e = ab(i2)
+     d = d * e
+     ab(i2) = d
+     i2 = i2 + 2
+     if (i2 .gt. n2) exit
+     d = 1.0 / (ab(i2 - 1) - d * e)
+  end do
 end subroutine bandel
 
 !
-!     end of file: over14.for
+! end of file over14.f90
 !

@@ -1,18 +1,22 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over47.for
+! file over47.f90
 !
+
 !
-!     subroutine subr47.
+! subroutine subr47.
 !
+
 subroutine subr47
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'deck47.ftn'
   include 'labl47.ftn'
   dimension lltemp(20)
   dimension rtg(1), itg(1), ctg(1)
-  complex(16) ctg
+  complex(16) :: ctg
   equivalence (karray(1), itg(1), rtg(1), ctg(1))
   if (iprsup .ge. 1) write (lunit6, 4567)
 4567 format ('  Begin module "subr47".')
@@ -107,22 +111,25 @@ subroutine subr47
   lastov = 47
   return
 end subroutine subr47
+
 !
-!     subroutine guts47.
+! subroutine guts47.
 !
+
 subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4, bi5, hi,  di, gn, rad, wy, zy, yz, sc, qc, &
      dr0, th0, al0, dij, dir, ang, roi, esi, usi, usr, gi, radi, yzn, qn, yo, ys, yc, zs, zc, ze, zp, zpc, a, ai, b, bi, ca, &
      cb, cc, cd, f, ldm, ldn, ldn2, lnq2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl47.ftn'
   include 'volt45.ftn'
-  complex(16) ys(ldn, ldn), yc(ldn, ldn), zs(ldn, ldn), zc(ldn, ldn)
-  complex(16) ze(ldn, ldn), ai(ldn, ldn), bi(ldn, ldn), zp(ldn, ldn)
-  complex(16) zpc(ldn, ldn), a(ldn, ldn),  b(ldn, ldn), yo(ldn, ldn)
-  complex(16) qn( ldn ), cmplxz, cj , f(ldn, ldn2)
-  complex(16) ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn), cd(ldn, ldn)
-  character(8) bufsem, cname, text1, text2, text3, text4
+  complex(16) :: ys(ldn, ldn), yc(ldn, ldn), zs(ldn, ldn), zc(ldn, ldn)
+  complex(16) :: ze(ldn, ldn), ai(ldn, ldn), bi(ldn, ldn), zp(ldn, ldn)
+  complex(16) :: zpc(ldn, ldn), a(ldn, ldn),  b(ldn, ldn), yo(ldn, ldn)
+  complex(16) :: qn( ldn ), cmplxz, cj , f(ldn, ldn2)
+  complex(16) :: ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn), cd(ldn, ldn)
+  character(8) :: bufsem, cname, text1, text2, text3, text4
   dimension bufsem(14)
   dimension ngg(ldn), ncpp(ldm), rad(ldn), yzn(lnq2), wy(ldn)
   dimension sc(ldn,ldn), qc(ldn,ldn), gi(ldn,3)
@@ -564,13 +571,13 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
 170 format(//, 132h------------------------------------------------------------------------------------------------------------------------------------,//,1x)
   if ( isyst  .ne.  0 )   go to 140
   write (lunit6, 180)
-180 format (47h table of overhead untransposed line parameters,/,1x)
+180 format (' Table of overhead untransposed line parameters', /, 1x)
   go to 142
 140 write (lunit6, 182)
-182 format (45h table of overhead transposed line parameters,/,1x)
+182 format (' Table of overhead transposed line parameters', /, 1x)
 142 j1 = npc - ncc
   write (lunit6, 171)  ncc, j1
-171 format(   10x,27htotal number of phase wires,i3,3x,12hground wires ,i3, /, 1x)
+171 format (10x, 'Total number of phase wires', i3, 3x, 'ground wires ', i3, /, 1x)
   do i=1, ncct
      i1 = i + ncct
      im = 4*(i-1) + 1
@@ -949,17 +956,20 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
 2592 format ( /,  17h exit  'subr47' ., 32h  nchain  lunit5  numaki  ialter  ,/,  17x,  4i8  )
   return
 end subroutine guts47
+
 !
 ! subroutine crosa4.
 !
+
 subroutine crosa4 (czy, icont, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  complex(16) czy(ldn,ldn)
-  complex(16) ca(ldn,ldn), cb(ldn,ldn), cc(ldn,ldn), cd(ldn,ldn)
-  complex(16) ce(ldn,ldn), cf(ldn,ldn), cg(ldn,ldn), f(ldn, ldn2)
-  complex(16) cwork1
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  complex(16) :: czy(ldn,ldn)
+  complex(16) :: ca(ldn,ldn), cb(ldn,ldn), cc(ldn,ldn), cd(ldn,ldn)
+  complex(16) :: ce(ldn,ldn), cf(ldn,ldn), cg(ldn,ldn), f(ldn, ldn2)
+  complex(16) :: cwork1
   write ( 6, 1001 )
-1001 format ( 33h  begin module "crosa4".  ******  )
+1001 format ('  Begin module "crosa4".  ******')
   cwork1=0.
   do i=4,6
      cwork1 = cwork1 + czy(i,i)
@@ -999,15 +1009,18 @@ subroutine crosa4 (czy, icont, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
   if(icont.eq.0) call minvn( czy,4,3,0,ldn, ca,cb,cc,cd,ce,cf,cg,f,ldn2 )
   return
 end subroutine crosa4
+
 !
 ! subroutine minvn.
 !
+
 subroutine minvn (cinout, n, l, ix, ldn, ca, cb, cc, cd, cwork1, cwork2, cwork3, f, ldn2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  complex(16) ca(ldn,ldn),cb(ldn,ldn),cc(ldn,ldn),cd(ldn,ldn)
-  complex(16) cwork1(ldn,ldn),cwork2(ldn,ldn),cwork3(ldn,ldn)
-  complex(16) cinout(ldn,ldn), f(ldn, ldn2)
-  nml=n-l
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  complex(16) :: ca(ldn,ldn),cb(ldn,ldn),cc(ldn,ldn),cd(ldn,ldn)
+  complex(16) :: cwork1(ldn,ldn),cwork2(ldn,ldn),cwork3(ldn,ldn)
+  complex(16) :: cinout(ldn,ldn), f(ldn, ldn2)
+  nml = n - l
   call cutmat(cinout,ca,cb,cc,cd,n,l,ldn)
   do i=1,nml
      do j=1,nml
@@ -1067,13 +1080,16 @@ subroutine minvn (cinout, n, l, ix, ldn, ca, cb, cc, cd, cwork1, cwork2, cwork3,
   end do
   return
 end subroutine minvn
+
 !
 ! subroutine cutmat.
 !
-subroutine cutmat(cinput,ca,cb,cc,cd,n,l,ldn)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  complex(16) cinput( ldn, ldn )
-  complex(16) ca(ldn,ldn),cb(ldn,ldn),cc(ldn,ldn),cd(ldn,ldn)
+
+subroutine cutmat (cinput, ca, cb, cc, cd, n, l, ldn)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  complex(16) :: cinput( ldn, ldn )
+  complex(16) :: ca(ldn,ldn),cb(ldn,ldn),cc(ldn,ldn),cd(ldn,ldn)
   do i=1,l
      do j=1,l
         ca(i,j)=cinput(i,j)
@@ -1101,32 +1117,41 @@ subroutine cutmat(cinput,ca,cb,cc,cd,n,l,ldn)
   end do
   return
 end subroutine cutmat
+
 !
-!     subroutine mxmnm.
+! subroutine mxmnm.
 !
+
 subroutine mxmnm (ca, cb, cc, l, m, n, ldn)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  complex(16) ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  complex(16) :: ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn)
   do i = 1, l
      do j = 1, n
         cc(i, j) = 0.
         do k = 1, m
            cc(i,j ) = cc(i, j) + ca(i, k) * cb(k, j)
-30      end do
-20   end do
-10 end do
+        end do
+30      continue
+     end do
+20   continue
+  end do
+10 continue
   return
 end subroutine mxmnm
+
 !
-!     subroutine datout.
+! subroutine datout.
 !
+
 subroutine datout (w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, r, al, c, npk)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'io.ftn'
   !     8.19 data cards punch out subroutine
-  character cha
+  character :: cha
   dimension r(npk), al(npk), c(npk)
-  complex(16) zc(ldn, ldn), yc(ldn, ldn)
+  complex(16) :: zc(ldn, ldn), yc(ldn, ldn)
   lunit6 = gfortran_stdout_unit
   lunit7 = 7
   !     ltype=0 ; output rs
@@ -1236,11 +1261,14 @@ subroutine datout (w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, 
 1411 format(11h$vintage, 0)
   return
 end subroutine datout
+
 !
-!     subroutine cha645.
+! subroutine cha645.
 !
+
 subroutine cha645 (k,k1)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   if(k.le.3.or.k.ge.7) return
   kk=k-3
   go to (10,20,30),kk
@@ -1251,11 +1279,14 @@ subroutine cha645 (k,k1)
 30 k1=5
   return
 end subroutine cha645
+
 !
 ! subroutine cha312.
 !
+
 subroutine cha312 (j, j1)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   go to (10,20,30),j
 10 j1=3
   return
@@ -1264,21 +1295,27 @@ subroutine cha312 (j, j1)
 30 j1=2
   return
 end subroutine cha312
+
 !
 ! subroutine cha444.
 !
+
 subroutine cha444 (k, kk)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   if(k.le.3.or.k.gt.7) return
   kk=4
   return
 end subroutine cha444
+
 !
-!     subroutine pri.
-!!
+! subroutine pri.
+!
+
 subroutine pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  character cha
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  character :: cha
   dimension r(npk),al(npk),c(npk)
   lunit6 = gfortran_stdout_unit
   lunit7 = 7
@@ -1333,11 +1370,14 @@ subroutine pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
 1301 format(i2,a1,3hin ,i2,a1,3hout,i2,12x,3e16.5)
   go to 2000
 end subroutine pri
+
 !
 !     subroutine nyan.
 !
+
 subroutine nyan (itype, npc, nc, ncpp, ngrnd, ncros, npais, ldm)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension ncpp(ldm)
   lunit6 = gfortran_stdout_unit
   if(itype.eq.1) return
@@ -1382,11 +1422,14 @@ subroutine nyan (itype, npc, nc, ncpp, ngrnd, ncros, npais, ldm)
   return
 7000 format('0', 10x, "Errors for a crossbonded cable (ncros.ne.0) when 'npais'='0'.")
 end subroutine nyan
+
 !
 ! subroutine gomen.
 !
+
 subroutine gomen (itype, npc, nx, npais, ncros, irsep, ncpp, ldm)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension ncpp(ldm)
   lunit6 = gfortran_stdout_unit
   if(npais.lt.0) go to 1000
@@ -1469,25 +1512,28 @@ subroutine gomen (itype, npc, nx, npais, ncros, irsep, ncpp, ldm)
   call stoptp
   return
 end subroutine gomen
+
 !
 ! subroutine prcon.
 !
+
 subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, ca, zo, cc, f, ldn, ldn2, lnq2, mrr, nrp)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl47.ftn'
   dimension gn(ldn), an(lnq2)
   dimension tir(20,20), tii(20,20)
   dimension pp1(20,20), pp2(20,20)
   dimension zz(30), ps(30), ping(200), iseq(15),kmax(15)
-  complex(16) pp6(20,20),ee6(15)
-  complex(16) anglec, cjw
-  complex(16) csqrtz
-  complex(16) cmplxz, d1, d2, d3, d4
-  complex(16) ca(ldn, ldn), zo(ldn, ldn), cc(ldn, ldn)
-  complex(16) zc(ldn, ldn), zs(ldn, ldn), ys(ldn, ldn), yc(ldn, ldn)
-  complex(16) a(ldn, ldn), ai(ldn, ldn),  b(ldn, ldn), bi(ldn, ldn)
-  complex(16) yo(ldn, ldn), ze(ldn, ldn), qn(ldn), f(ldn, ldn2)
+  complex(16) :: pp6(20,20),ee6(15)
+  complex(16) :: anglec, cjw
+  complex(16) :: csqrtz
+  complex(16) :: cmplxz, d1, d2, d3, d4
+  complex(16) :: ca(ldn, ldn), zo(ldn, ldn), cc(ldn, ldn)
+  complex(16) :: zc(ldn, ldn), zs(ldn, ldn), ys(ldn, ldn), yc(ldn, ldn)
+  complex(16) :: a(ldn, ldn), ai(ldn, ldn),  b(ldn, ldn), bi(ldn, ldn)
+  complex(16) :: yo(ldn, ldn), ze(ldn, ldn), qn(ldn), f(ldn, ldn2)
   data  iseq  /  15*0  /
   ntol=iprint-1
   cjw = cmplxz ( fzero, w )
@@ -1793,11 +1839,14 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
 2689 format ( /,  16h exit  'prcon' .  )
   return
 end subroutine prcon
+
 !
 ! subroutine unwind.
 !
+
 subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
 !!!!! %include  '//a/tsu/tpplotkom.ins.ftn'
   dimension ping(200),tping(200)
@@ -2117,26 +2166,29 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
 !!!      write(*,*) 'done with unwind '
   return
 end subroutine unwind
+
 !
 ! subroutine zymx.
 !
+
 subroutine zymx( w,nw,isyst,ngrnd, ngg,ncpp, radi,zy,yz,dir,dij,ang,usi,usr,esi,dr0,th0,al0,hi,di,bio,bi1,bi2,bi3,bi4, &
      bi5,al1i,al2i,al3i,dci, nx, yzn,   ys,yc,zp,zpc,zs,ze,zc,ca,cb,cc,cd,f, ldm, ldn, ldn2, lnq2 )
-  implicit real(8) (a-h, o-z),integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z),integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl47.ftn'
-  complex(16)  zpc(ldn, ldn), cmplxz, cjw
-  complex(16)  ys(ldn, ldn), yc(ldn, ldn), zp(ldn, ldn)
-  complex(16)  zs(ldn, ldn), ze(ldn, ldn), zc(ldn, ldn)
-  complex(16)  ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn)
-  complex(16)  cd(ldn, ldn), f(ldn, ldn2)
-  dimension  ngg(ldn), ncpp(ldm), yzn(lnq2)
-  dimension  radi(ldm, 7),  zy(ldn, ldn),  yz(ldn, ldn)
-  dimension  dij(ldm, ldm), ang(ldm, ldm), usi(ldm, 3), usr(ldm, 3)
-  dimension  dir(ldm, ldm), esi(ldm, 3),   dci(ldm),    hi(ldm)
-  dimension  dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm), di(ldn)
-  dimension  bio(ldm), bi1(ldm),bi2(ldm), bi3(ldm), bi4(ldm)
-  dimension  bi5(ldm), al1i(ldm), al2i(ldm), al3i(ldm)
+  complex(16) :: zpc(ldn, ldn), cmplxz, cjw
+  complex(16) :: ys(ldn, ldn), yc(ldn, ldn), zp(ldn, ldn)
+  complex(16) :: zs(ldn, ldn), ze(ldn, ldn), zc(ldn, ldn)
+  complex(16) :: ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn)
+  complex(16) :: cd(ldn, ldn), f(ldn, ldn2)
+  dimension ngg(ldn), ncpp(ldm), yzn(lnq2)
+  dimension radi(ldm, 7),  zy(ldn, ldn),  yz(ldn, ldn)
+  dimension dij(ldm, ldm), ang(ldm, ldm), usi(ldm, 3), usr(ldm, 3)
+  dimension dir(ldm, ldm), esi(ldm, 3),   dci(ldm),    hi(ldm)
+  dimension dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm), di(ldn)
+  dimension bio(ldm), bi1(ldm),bi2(ldm), bi3(ldm), bi4(ldm)
+  dimension bi5(ldm), al1i(ldm), al2i(ldm), al3i(ldm)
   ll0=0
   ll1=1
   nx=ngrnd
@@ -2339,11 +2391,14 @@ subroutine zymx( w,nw,isyst,ngrnd, ngg,ncpp, radi,zy,yz,dir,dij,ang,usi,usr,esi,
 2794 format ( /,  15h exit  'zymx' .  )
   return
 end subroutine zymx
+
 !
 ! subroutine ymatr.
 !
+
 subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, a2, ldm, ldn )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   dimension  a1(ldn,ldn), a2(ldn,ldn), ncpp(ldm)
   dimension  zy(ldn, ldn), yz(ldn, ldn), al0(ldm, ldm)
@@ -2448,11 +2503,14 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
 2876 format ( /,  17h exit  'ymatrx' .,  8h     ncc,  16x,  4hypo1, 17x,  3hes1,  16x,  4halpi,  13x,  7hyz(1,1),13x,  7hyz(1,2)  ,/,  17x,  i8,  5e20.11  )
   return
 end subroutine ymatrx
+
 !
 ! subroutine simp.
 !
+
 subroutine  simp(nw,h,dd,rad,zy,dir,dij,ang,ldm,ldn)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   dimension  rad(ldn), h(ldm), dd(ldn),  zy(ldn, ldn)
   dimension  dir(ldm, ldm), dij(ldm, ldm), ang(ldm, ldm)
@@ -2498,17 +2556,20 @@ subroutine  simp(nw,h,dd,rad,zy,dir,dij,ang,ldm,ldn)
 2948 format ( /,  47h exit  'simp' .   ((zy(i,j), j=1, nw), i=1, nw),/,  ( 1x,  6e20.11 ) )
   return
 end subroutine simp
+
 !
 ! subroutine sczy1.
 !
+
 subroutine  sczy1 ( w,isyst,zy,dir,dij,ang,hi,di,zs,ze,ldm,ldn )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   dimension  zy(ldn, ldn), dir(ldm, ldm), dij(ldm, ldm)
   dimension  ang(ldm, ldm), hi(ldm), di(ldn)
-  complex(16)  zs(ldn, ldn),  ze(ldn, ldn)
-  complex(16)  cjw, xe
-  complex(16)  cmplxz
+  complex(16) :: zs(ldn, ldn),  ze(ldn, ldn)
+  complex(16) :: cjw, xe
+  complex(16) :: cmplxz
   cjw = cmplxz ( fzero, w )
   if ( iprs47  .ge.  1 ) write (logsix, 3027)  isyst, npc, iearth, itypec, roe, u0, w
 3027 format ( /,  17h enter  'sczy1' ., 32h   isyst     npc  iearth  itypec,  17x,  3hroe,  18x,  2hu0, 19x, 1hw, /, 17x, 4i8, 3e20.11 )
@@ -2594,22 +2655,25 @@ subroutine  sczy1 ( w,isyst,zy,dir,dij,ang,hi,di,zs,ze,ldm,ldn )
   if ( iprs47  .ge.  4 ) call print ( zs(1,1), npc, ll0, ldn )
   return
 end subroutine sczy1
+
 !
 ! subroutine sczy2.
 !
-subroutine  sczy2 ( s, ncpp, radi, usi, usr, bio, bi1,bi2, bi3, bi4, bi5, al1i, al2i, al3i, zc, ldm, ldn )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine sczy2 ( s, ncpp, radi, usi, usr, bio, bi1,bi2, bi3, bi4, bi5, al1i, al2i, al3i, zc, ldm, ldn )
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   common /komthl/  pekexp
-  complex(16)  s, ss, s1, s2, s3, s4, s5, s6, s8, su0
-  complex(16)  z11, z12, z2i, z2m, z2o, z23
-  complex(16)  cexpz, cmplxz, csqrtz
-  complex(16)  s0, s7, z3i, z3m, z3o, z34
-  complex(16)  c1, c2,  c3
-  complex(16)  zc(ldn, ldn)
-  dimension  ncpp(ldm), radi(ldm, 7), usi(ldm, 3), usr(ldm, 3)
-  dimension  bio(ldm), bi1(ldm), bi2(ldm), bi3(ldm), bi4(ldm)
-  dimension  bi5(ldm), al1i(ldm), al2i(ldm), al3i(ldm)
+  complex(16) :: s, ss, s1, s2, s3, s4, s5, s6, s8, su0
+  complex(16) :: z11, z12, z2i, z2m, z2o, z23
+  complex(16) :: cexpz, cmplxz, csqrtz
+  complex(16) :: s0, s7, z3i, z3m, z3o, z34
+  complex(16) :: c1, c2,  c3
+  complex(16) :: zc(ldn, ldn)
+  dimension ncpp(ldm), radi(ldm, 7), usi(ldm, 3), usr(ldm, 3)
+  dimension bio(ldm), bi1(ldm), bi2(ldm), bi3(ldm), bi4(ldm)
+  dimension bi5(ldm), al1i(ldm), al2i(ldm), al3i(ldm)
   ll1 = 1
   ll2 = 2
   if ( iprs47  .ge.  1 ) write (logsix, 3107)  npc, s
@@ -2777,14 +2841,17 @@ subroutine  sczy2 ( s, ncpp, radi, usi, usr, bio, bi1,bi2, bi3, bi4, bi5, al1i, 
 3174 format ( /,  16h exit  'sczy2' .   )
   return
 end subroutine sczy2
+
 !
 ! subroutine ptzy1.
 !
+
 subroutine  ptzy1 ( radi, dci, thc, dr0, th0, al0, ldm )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
-  dimension  radi(ldm, 7), dci(ldm), thc(ldm)
-  dimension  dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm)
+  dimension radi(ldm, 7), dci(ldm), thc(ldm)
+  dimension dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm)
   p2=2.*pai
   bp1=radp(1)*sqrtz(u0/rop*usp)
   bp2=radp(2)*sqrtz(u0/rop*usp)
@@ -2833,20 +2900,23 @@ subroutine  ptzy1 ( radi, dci, thc, dr0, th0, al0, ldm )
 3263 format ( /,  63h diagnostic output matrix.    ( (al0(i,j), j=1, npc), i=1, npc)     ,/,  ( 1x,  6e20.11 ) )
   return
 end subroutine ptzy1
+
 !
 ! subroutine ptzy2.
 !
-subroutine ptzy2(s,ncpp,dci,dr0,th0,al0,zp,zpc,ldm,ldn)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine ptzy2 (s, ncpp, dci, dr0, th0, al0, zp, zpc, ldm, ldn)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include  'labl47.ftn'
   common /komthl/ pekexp
-  complex(16)  s, ss, s1, s2, s3, s4, s5, s6, su0
-  complex(16)  cexpz, cmplxz, csqrtz
-  complex(16)  se0, zm, zi, zzo, zzi
-  complex(16)  c1, c2, c3, c4, c5, c6
-  complex(16)  zp(ldn, ldn), zpc(ldn, ldn)
-  dimension  ncpp(ldm),  dci(ldm)
-  dimension  dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm)
+  complex(16) :: s, ss, s1, s2, s3, s4, s5, s6, su0
+  complex(16) :: cexpz, cmplxz, csqrtz
+  complex(16) :: se0, zm, zi, zzo, zzi
+  complex(16) :: c1, c2, c3, c4, c5, c6
+  complex(16) :: zp(ldn, ldn), zpc(ldn, ldn)
+  dimension ncpp(ldm),  dci(ldm)
+  dimension dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm)
   unity = 1.0
   contwo = 2.0
   c3 = cmplxz(usp, fzero)
@@ -2969,23 +3039,25 @@ subroutine ptzy2(s,ncpp,dci,dr0,th0,al0,zp,zpc,ldm,ldn)
 3368 format ( /,  16h exit  'ptzy2' .,  16x,  3husp,  16x,  3hpai, 16x,  3hu2p,  16x,  3he2p,  11x,  8hreal-su0, 11x,  8himag-su0  ,/,  16x,  6e19.10 )
   return
 end subroutine ptzy2
+
 !
 ! subroutine bsikm.
 !
+
 subroutine bsikm (x, kn, bbin, bbkn, ikm, ixa)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
-  complex(16)  bk0, bk1, bi0, bj1, x
-  complex(16)  y, y0, y1, y2, y3, y4, y5, y6, y7, y8
-  complex(16)  cexpz, cmplxz, clogz, csqrtz
-  complex(16)  bbin(kn), bbkn(kn)
+  complex(16) :: bk0, bk1, bi0, bj1, x
+  complex(16) :: y, y0, y1, y2, y3, y4, y5, y6, y7, y8
+  complex(16) :: cexpz, cmplxz, clogz, csqrtz
+  complex(16) :: bbin(kn), bbkn(kn)
   xa=cabsz(x)
   c1 = 3.75
   c2 =  2.
   y = x/cmplxz(c1, fzero)
   if ( iprs47  .ge.  5 ) write (logsix, 3426)  kn, ikm, ixa, x, y, xa
-3426 format ( /,  17h begin  'bsikm' .,  24h      kn     ikm     ixa, 9x,  6hreal-x,  9x,  6himag-x,  9x,  6hreal-y,  9x,  6himag-y, &
-       13x,  2hxa  ,/,  17x,  3i8,  5e15.6  )
+3426 format (/, " Begin  'bsikm' .      kn     ikm     ixa", 9x, 'real-x', 9x, 'imag-x',  9x, 'real-y', 9x, 'imag-y', 13x, 'xa', /, 17x, 3i8, 5e15.6)
   if (xa .gt. c1)  go to 25
   y1 = y * y
   y2=y1*y1
@@ -3055,26 +3127,29 @@ subroutine bsikm (x, kn, bbin, bbkn, ikm, ixa)
 65   bbkn(ikn) = bbkn(ik2) + 2. * ik2 / x * bbkn(ik1)
   end do
 70 if ( iprs47  .ge.  6 ) write (logsix, 3476)  ( l, bbin(l), bbkn(l), l=1, kn )
-3476 format ( /,  18h exit    'bsikm' .,  5x,  3hrow, 11x,  9hreal-bbin,  11x,  9himag-bbin, 11x,  9hreal-bbkn,  11x,  9himag-bbkn,/,  (  18x,  i8,  4e20.11 )  )
+3476 format (/, " Exit    'bsikm' .",  5x, 'row', 11x, 'real-bbin', 11x, 'imag-bbin', 11x, 'real-bbkn', 11x, 'imag-bbkn', /, (18x, i8, 4e20.11))
   return
 end subroutine bsikm
+
 !
 ! subroutine olzy.
 !
-subroutine  olzy( w,ncpp,zy,dij,ang,usi,usr,esi,hi,di,zs,ze,zc,ldm,ldn )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine  olzy (w, ncpp, zy, dij, ang, usi, usr, esi, hi, di, zs, ze, zc, ldm, ldn)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
-  dimension  ncpp(ldm)
-  dimension  zy(ldn, ldn), dij(ldm, ldm), ang(ldm,ldm), di(ldn)
-  dimension  usi(ldm, 3),  usr(ldm, 3),   esi(ldm, 3),  hi(ldm)
-  complex(16)  zs(ldn, ldn), ze(ldn, ldn),  zc(ldn, ldn)
-  complex(16)  cwu, s, ss, xc, xe
-  complex(16)  cmplxz, csqrtz
+  dimension ncpp(ldm)
+  dimension zy(ldn, ldn), dij(ldm, ldm), ang(ldm,ldm), di(ldn)
+  dimension usi(ldm, 3),  usr(ldm, 3),   esi(ldm, 3),  hi(ldm)
+  complex(16) :: zs(ldn, ldn), ze(ldn, ldn),  zc(ldn, ldn)
+  complex(16) :: cwu, s, ss, xc, xe
+  complex(16) :: cmplxz, csqrtz
   s = cmplxz(fzero, w)
   cwu = s * cmplxz(u2p, fzero)
   ss = csqrtz ( s )
   if ( iprs47  .ge.  1 ) write (logsix, 3508)  iearth, ncct, u2p, w, ss
-3508 format ( /,  16h begin  'olzy' .,  16h  iearth    ncct, 17x, 3hu2p, 19x, 1hw, 13x,  7hreal-ss,  13x,  7himag-ss  ,/,  16x,  2i8,  4e20.11 )
+3508 format (/, " Begin  'olzy' .  iearth    ncct", 17x, 'u2p', 19x, 'w', 13x, 'real-ss', 13x, 'imag-ss', /, 16x, 2i8, 4e20.11)
   ll1 = 1
   do i=1, npc
      do j=1, npc
@@ -3124,19 +3199,21 @@ subroutine  olzy( w,ncpp,zy,dij,ang,usi,usr,esi,hi,di,zs,ze,zc,ldm,ldn )
 3554 format ( /,  15h exit  'olzy' .  )
   return
 end subroutine olzy
+
 !
-!     subroutine transp.
+! subroutine transp.
 !
-subroutine transp(yyc, ncpp, ann, jnn, znn, ldm, ldn)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine transp (yyc, ncpp, ann, jnn, znn, ldm, ldn)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
-  real(8) jnn
-  complex(16) cmplxz
-  complex(16) yyc(ldn,ldn), zss, zmm, znn(ldn)
+  real(8) :: jnn
+  complex(16) :: cmplxz
+  complex(16) :: yyc(ldn,ldn), zss, zmm, znn(ldn)
   dimension ncpp(ldm), ann(ldn), jnn(ldn)
   if (iprs47 .ge. 1) write (logsix, 3611)  ncct, yyc(1,1), yyc(1,2)
-3611 format ( /,  " enter  'transp' .,  8h    ncct", 7x,  'real-yyc(1,1)', 7x, 'imag-yyc(1,1)', 7x,  'real-yyc(1,2)', 7x, 'imag-yyc(1,2)', /,  &
-       18x, i8, 4e20.11, /, ' diagnostic input matrix.   yyc(i,j)  for  (i,j)=1, ... i2 .')
+3611 format (/,  " Enter  'transp' .    ncct", 7x,  'real-yyc(1,1)', 7x, 'imag-yyc(1,1)', 7x,  'real-yyc(1,2)', 7x, 'imag-yyc(1,2)', /, 18x, i8, 4e20.11, /, ' diagnostic input matrix.   yyc(i,j)  for  (i,j)=1, ... i2 .')
   i2 = 6
   ll0 = 0
   if ( iprs47  .ge.  4 ) call print ( yyc(1,1), i2, ll0, ldn )
@@ -3198,21 +3275,23 @@ subroutine transp(yyc, ncpp, ann, jnn, znn, ldm, ldn)
 95   end do
 100 end do
   if ( iprs47  .ge.  1 ) write (logsix, 3623)  yyc(1,1), yyc(1,2)
-3623 format ( /,  " exit  'transp' .", 7x,  'real-yyc(1,1)', 7x, 'imag-yyc(1,1)', 7x,  'real-yyc(1,2)', 7x, 'imag-yyc(1,2)', &
-       /, 17x, 4e20.11 , /,' diagnostic output matrix.  yyc(i,j)  for  (i,j)=1, ... i2 .')
+3623 format (/,  " Exit  'transp' .", 7x,  'real-yyc(1,1)', 7x, 'imag-yyc(1,1)', 7x,  'real-yyc(1,2)', 7x, 'imag-yyc(1,2)', /, 17x, 4e20.11 , /,' diagnostic output matrix.  yyc(i,j)  for  (i,j)=1, ... i2 .')
   if (iprs47 .ge. 4) call print(yyc(1, 1), i2, ll0, ldn)
   return
 end subroutine transp
+
 !
 !     subroutine skin47.
 !
-subroutine skin47(b1,b2,ur,cjw,sjw,zcc)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine skin47 (b1, b2, ur, cjw, sjw, zcc)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   common /komthl/ pekexp
-  complex(16)  cjw, sjw, x1, x2, x3, x4, zcc
-  complex(16)  cexpz, cmplxz
-  complex(16)  c1, c2
+  complex(16) :: cjw, sjw, x1, x2, x3, x4, zcc
+  complex(16) :: cexpz, cmplxz
+  complex(16) :: c1, c2
   c1 = cmplxz(u2p, fzero)
   c2 = cmplxz(ur, fzero)
   x1 = cmplxz(b1, fzero) * sjw
@@ -3223,7 +3302,7 @@ subroutine skin47(b1,b2,ur,cjw,sjw,zcc)
   ll2 = 2
   d15 = value1 * value5 / 100.
   if ( iprs47  .ge.  2 ) write (logsix, 3672)  b1, b2, d15, xa, xb
-3672 format ( /,  18h begin  'skin47' .,  18x,  2hb1,  18x,  2hb2, 17x,  3hd15,  18x,  2hxa,  18x,  2hxb  ,/,  18x,  5e20.11  )
+3672 format (/, " Begin  'skin47' .", 18x, 'b1', 18x, 'b2', 17x, 'd15', 18x, 'xa', 18x, 'xb', /, 18x, 5e20.11)
   if (b1 .lt. d15)   go to 30
   xb = cabsz(x1)
   ten = 10.
@@ -3252,16 +3331,19 @@ subroutine skin47(b1,b2,ur,cjw,sjw,zcc)
 3688 format ( /,  17h exit  'skin47' .,  18x,  2hur, 12x,  8hreal-cjw,  12x,  8himag-cjw, 12x,  8hreal-zcc,  12x,  8himag-zcc  ,/,  17x,  5e20.11  )
   return
 end subroutine skin47
+
 !
 ! subroutine zegen.
 !
-subroutine zegen(be1,be2,th,w,xe,isyst)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine zegen (be1, be2, th, w, xe, isyst)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
   common /komthl/ pekexp
-  complex(16)  cj, cjw, x1, x2, xe
-  complex(16)  cexpz, cmplxz, csqrtz
-  complex(16)  c1
+  complex(16) :: cj, cjw, x1, x2, xe
+  complex(16) :: cexpz, cmplxz, csqrtz
+  complex(16) :: c1
   unity = 1.0
   c1 = cmplxz(u2p, fzero)
   cj = cimag1
@@ -3369,15 +3451,21 @@ subroutine zegen(be1,be2,th,w,xe,isyst)
 3782 format ( /,  16h exit  'zegen' ., 17x, 2hp1, 17x, 2hq1, 12x,  7hreal-xe,  12x,  7himag-xe  ,/,  16x,  4e19.10  )
   return
 end subroutine zegen
-subroutine eigen ( cjw, p, n, a, ai, qn, q, xx, yy, ldn )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+!
+! subroutine eigen.
+!
+
+subroutine eigen (cjw, p, n, a, ai, qn, q, xx, yy, ldn)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include  'labl47.ftn'
-  complex(16)  ad, cjw, qi, s, sa
-  complex(16)  cmplxz, csqrtz
-  complex(16)  q(ldn, ldn), xx(ldn, ldn), yy(ldn, ldn)
-  complex(16)  p(ldn, ldn), a(ldn, ldn), ai(ldn, ldn), qn(ldn)
-  complex(16)  c1, c2
+  complex(16) :: ad, cjw, qi, s, sa
+  complex(16) :: cmplxz, csqrtz
+  complex(16) :: q(ldn, ldn), xx(ldn, ldn), yy(ldn, ldn)
+  complex(16) :: p(ldn, ldn), a(ldn, ldn), ai(ldn, ldn), qn(ldn)
+  complex(16) :: c1, c2
   !     eigenvalue calculation subroutine.   'kvalue'  =  iteration limit.
   kvalue = 20
   c1 = cjw/cmplxz(spdlgt, fzero)
@@ -3520,17 +3608,20 @@ subroutine eigen ( cjw, p, n, a, ai, qn, q, xx, yy, ldn )
   if ( iprs47  .ge.  6 ) call print ( a(1,1), n, ll0, ldn )
   return
 end subroutine eigen
+
 !
 ! subroutine zest.
 !
-subroutine  zest ( h1, h2, e, res, omg, s )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine  zest (h1, h2, e, res, omg, s)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
-  complex(16)  qq, bbb, rom, s, sa, s1, s2
-  complex(16)  s3, s5, s6, s8, sp12, sp23, sm12
-  complex(16)  sm23, sq1, sq3, u, u1, u2, z
-  complex(16)  cexpz, cmplxz, csqrtz
-  complex(16)  c1, c2, c3, c4, c5, c6, c7, c8
+  complex(16) :: qq, bbb, rom, s, sa, s1, s2
+  complex(16) :: s3, s5, s6, s8, sp12, sp23, sm12
+  complex(16) :: sm23, sq1, sq3, u, u1, u2, z
+  complex(16) :: cexpz, cmplxz, csqrtz
+  complex(16) :: c1, c2, c3, c4, c5, c6, c7, c8
   toj = u0
   if ( iprs47  .ge.  2 ) write (logsix, 3917)  h1, h2, e, res, omg
 3917 format ( /,  16h enter  'zest' .,  18x,  2hh1,  18x,  2hh2, 19 x,  1he,  17x,  3hres,  17x,  3homg  ,/,  16x,  5e20.11  )
@@ -3673,17 +3764,20 @@ subroutine  zest ( h1, h2, e, res, omg, s )
 3968 format ( /,  15h exit  'zest' .,  17x,  3homg,  14x,  6hvalue2, 14x,  6hreal-s,  14x,  6himag-s  ,/,  15x,  4e20.11  )
   return
 end subroutine zest
+
 !
 ! subroutine minv.
 !
-subroutine minv ( tcmpx, m, f, ldn, ldn2 )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine minv (tcmpx, m, f, ldn, ldn2)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
-  complex(16)  ad, cc, d
+  complex(16) :: ad, cc, d
   include  'labl47.ftn'
-  complex(16)  tcmpx(ldn,ldn), f(ldn, ldn2),  d2,  cmplxz, fnew
-  complex(16)  fident
-  dimension  fr(10,20), fi(10,20), fnew(10,20), fident(10,20)
+  complex(16) :: tcmpx(ldn,ldn), f(ldn, ldn2),  d2,  cmplxz, fnew
+  complex(16) :: fident
+  dimension fr(10,20), fi(10,20), fnew(10,20), fident(10,20)
   d1 = 0.0
   do i=1,m
      do j=1,m
@@ -3731,13 +3825,12 @@ subroutine minv ( tcmpx, m, f, ldn, ldn2 )
      !     1                              k1, n, d9, d1
      if ( d9 .gt. d1 ) go to 60
      write (lunit6, 5706)  m, k1, d9
-5706 format ( /, 106h stop. ---- matrix inversion within subroutine  'minv'  has been suspended, due to failure to find a large     ,/, &
-          12x,  58henough pivot element.   the matrix in question is of order,  i5,  36h ,    with breakdown having occurred     ,/, &
-          12x,  51hwhile working on the elimination of variable number,  i5,   '.   in this columns, the largest real or'       ,/, &
-          12x,  ' imaginary part had absolute value', e14.3,  45h ,   while the applicable near-zero tolerance     )
+5706 format (/, " Stop. ---- Matrix inversion within subroutine  'minv'  has been suspended, due to failure to find a large", /, &
+          12x, ' enough pivot element.   The matrix in question is of order', i5, ' ,    with breakdown having occurred', /, &
+          12x, ' while working on the elimination of variable number', i5, '.   In this columns, the largest real or', /, &
+          12x, ' imaginary part had absolute value', e14.3, ' ,   while the applicable near-zero tolerance')
      write(lunit6, 5707) d1, value2
-5707 format (12x,  11his equal to,   e14.3,   36h .    this latter number is equal to,   e14.3,   20h   times the largest           ,/, &
-          12x,  67helement of the original input matrix (considering absolute values).     )
+5707 format (12x, 'is equal to', e14.3, ' .    This latter number is equal to', e14.3, '   times the largest', /, 12x, 'element of the original input matrix (considering absolute values).')
      stop
 60   if (n .eq. k1)   go to 75
      do j = k1, m1
@@ -3817,21 +3910,24 @@ subroutine minv ( tcmpx, m, f, ldn, ldn2 )
   if ( iprs47  .ge.  7 ) call print ( tcmpx(1,1), m, ll0, ldn )
 150 return
 end subroutine minv
+
 !
 ! subroutine mxm.
 !
-subroutine mxm(xm,yym,c,n,ldn)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine mxm (xm, yym, c, n, ldn)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'labl47.ftn'
-  complex(16)  xm(ldn,ldn), yym(ldn,ldn), c(ldn,ldn)
+  complex(16) :: xm(ldn,ldn), yym(ldn,ldn), c(ldn,ldn)
   if ( iprs47  .ge.  1 ) write (logsix, 4062)  n, xm(1,1), yym(1,1)
-4062 format ( /,  15h enter  'mxm' .,  8h       n, 7x,  13hreal- xm(1,1),  7x,  13himag- xm(1,1), 7x,  13hreal-yym(1,1),  7x,  13himag-yym(1,1)  ,/, &
-          15x,  i8,  4e20.11  ,/, 57h diagnostic left factor.   xm(i,j)  for  (i,j)=1, ... n .  )
+4062 format (/, " Enter  'mxm' .       n", 7x,  'real- xm(1,1)',  7x, 'imag- xm(1,1)', 7x, 'real-yym(1,1)', 7x, 'imag-yym(1,1)', /, &
+          15x, i8, 4e20.11, /, ' diagnostic left factor.   xm(i,j)  for  (i,j)=1, ... n .')
   if ( iprs47  .lt.  8 )   go to 4079
   ll0 = 0
   call print ( xm(1,1), n, ll0, ldn )
   write (logsix, 4073)
-4073 format ( /, 58h diagnostic right factor.  yym(i,j)  for  (i,j)=1, ... n . )
+4073 format (/, ' Diagnostic right factor.  yym(i,j)  for  (i,j)=1, ... n .')
   call print ( yym(1,1), n, ll0, ldn )
 4079 do i=1, n
      do j=1,n
@@ -3842,23 +3938,26 @@ subroutine mxm(xm,yym,c,n,ldn)
      end do
   end do
   if ( iprs47  .ge.  1 ) write (logsix, 4091)  c(1,1), c(1,2)
-4091 format ( /,  14h exit  'mxm' ., 9x,  11hreal-c(1,1),  9x,  11himag-c(1,1), 9x,  11hreal-c(1,2),  9x,  11himag-c(1,2)  ,/, &
-          14x,  4e20.11  ,/, 52h diagnostic product.   c(i,j)  for  (i,j)=1, ... n .   )
+4091 format (/, " Exit  'mxm' .", 9x, 'real-c(1,1)', 9x, 'imag-c(1,1)', 9x, 'real-c(1,2)', 9x, 'imag-c(1,2)', /, &
+          14x, 4e20.11, /, ' diagnostic product.   c(i,j)  for  (i,j)=1, ... n .')
   if ( iprs47  .ge.  8 ) call print ( c(1,1), n, ll0, ldn )
   return
 end subroutine mxm
+
 !
 ! subroutine print.
 !
-subroutine print(c,n,iform,ldn)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine print (c, n, iform, ldn)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl47.ftn'
-  complex(16) c(ldn,ldn)
+  complex(16) :: c(ldn,ldn)
   dimension  workr(8), worki(8)
-  real(8) text1, text2, text3
-  data  text1   /  3hrow  /
-  data  text2   /  3h     /
+  real(8) :: text1, text2, text3
+  data  text1 / 'row' /
+  data  text2 / '   ' /
   nline = ( n + 7 ) / 8
   do i=1, n
      text3 = text2
@@ -3887,9 +3986,10 @@ subroutine print(c,n,iform,ldn)
 4681 end do
 4695 write (lunit6, 4632)  i
   end do
-4632 format ( 1h+, i2, /, 1x )
+4632 format ('+', i2, /, 1x )
   return
 end subroutine print
+
 !
-!     end of file: over47.for
+! end of file over47.f90
 !

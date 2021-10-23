@@ -1,12 +1,19 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: xpr2.for
+! file xpr2.f90
 !
+
 !
-!     subroutine xpr2.
+! subroutine xpr2.
 !
+
 subroutine xpr2
-  include 'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
+  real(8) :: randnm
+  !
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=from
@@ -252,7 +259,7 @@ subroutine xpr2
 5130 continue
   go to 9500
 9005 continue
-  p = real (dmax1 (rmargn, dabs (real (rmargn * b, 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * b))
   if (.not. ((ndx .eq. 3 .and. a .lt. b - p) .or. (ndx .eq. 4 .and. a .le. b + p) .or. (ndx .eq. 5 .and. a .gt. b + p) .or. (ndx .eq. 6 .and. a .ge. b - p) .or. (ndx .eq. 1 .and. a .ge. b - p .and. a .le. b + p) .or. (ndx .eq. 2 .and. (a .lt. b - p .or. a .gt. b + p)))) go to 5161
   c = one
   go to 5160
@@ -319,23 +326,23 @@ subroutine xpr2
 5250 continue
   go to 9500
 9008 continue
-  if (.not. (dabs(real (a, 16)) .lt. rmargn .or. dabs(real (b, 16)) .lt. divzro)) go to 5271
+  if (.not. (dabs(a) .lt. rmargn .or. dabs(b) .lt. divzro)) go to 5271
   c=zero
   go to 5270
 5271 continue
-  c = real (a - dint (real (a / b, 16)) * b, kind (c))
+  c = a - dint (a / b) * b
 5270 continue
   go to 9500
 9009 continue
-  if (.not. (real (dabs (real (a, 16)), kind (rmargn)) .lt. rmargn)) go to 5281
+  if (.not. (dabs (a) .lt. rmargn)) go to 5281
   c=zero
   go to 5280
-5281 if (.not. (real (dabs(real (b, 16)), kind (rmargn)) .lt. rmargn)) go to 5282
+5281 if (.not. (dabs(b) .lt. rmargn)) go to 5282
   c=one
   go to 5280
 5282 if(.not.(a.lt.zero)) go to 5283
-  d = real (dnint (real (b, 16)), kind (d))
-  e = real (dabs (real (d - b, 16)), kind (e))
+  d = dnint (b)
+  e = dabs (d - b)
   if(.not.(e.gt.rmargn)) go to 5871
   stpflg=132
   stpr1=a
@@ -344,7 +351,7 @@ subroutine xpr2
   call errstp
   go to 5870
 5871 continue
-  k = idnint (real (b, 16))
+  k = idnint (b)
   c=a**k
 5870 continue
   go to 5280
@@ -354,7 +361,7 @@ subroutine xpr2
   go to 9500
 9010 continue
   a=rsto(rptr)
-  if (.not. (dabs (real (a, 16)) .lt. divzro)) go to 5291
+  if (.not. (dabs (a) .lt. divzro)) go to 5291
   stpflg=82
   stpr1=a
   continue
@@ -366,7 +373,7 @@ subroutine xpr2
   go to 9500
 9011 continue
   a=rsto(rptr)
-  if (.not. (dabs (real (a, 16)) .lt. divzro)) go to 5301
+  if (.not. (dabs (a) .lt. divzro)) go to 5301
   flg=1
   go to 5300
 5301 continue
@@ -406,7 +413,7 @@ subroutine xpr2
   isto(sptr)=ptr0
   r6=rsto(rptr)
   rptr=rptr-1
-  p = real (dmax1 (rmargn, dabs (real (rmargn * r4, 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * r4))
   if(.not.(r6.lt.r4-p)) go to 5311
   ndx3=-1
   go to 5310
@@ -454,7 +461,7 @@ subroutine xpr2
   sptr=sptr+1
   a=rsto(ptr0+1)
   b=rsto(ptr0+1 +ndx12)
-  p = real (dmax1 (rmargn, dabs (real (rmargn * r6, 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * r6))
   if (.not. ((ndx3 .lt. 0 .and. b .le. r6 + p) .or. (ndx3 .gt. 0 .and. b .ge. r6 - p))) go to 5321
   flg=1
   go to 5320
@@ -463,7 +470,7 @@ subroutine xpr2
 5320 continue
   go to 3101
 3100 continue
-  p = real (dmax1 (rmargn, dabs (real (rmargn * r6, 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * r6))
   if (.not. (flg .eq. 0)) go to 5331
   r5 = rnull
   rptr = rptr + 1
@@ -547,7 +554,7 @@ subroutine xpr2
 9014 continue
   r5=rsto(rptr)
   rptr=rptr-1
-  p = real (dmax1 (rmargn, dabs (real (rmargn * r3, 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * r3))
   if (.not. (r5 .lt. r3 - p)) go to 5341
   stpflg=22
   stpr1=r5
@@ -617,8 +624,8 @@ subroutine xpr2
 9015 continue
   r6=rsto(rptr)
   rptr=rptr-1
-  p = real (dmax1 (rmargn, dabs (real (rmargn * r4, 16))), kind (p))
-  if (.not. (real (dabs (real (r6 - r4, 16)), kind (p)) .le. p .or. real (dabs (real (r2 - r4, 16)), kind (p)) .le. p)) go to 6141
+  p = dmax1 (rmargn, dabs (rmargn * r4))
+  if (.not. (dabs (r6 - r4) .le. p .or. dabs (r2 - r4) .le. p)) go to 6141
   rptr=rptr+1
   if(rptr.eq.rsptr) go to 930
   rsto(rptr)=r3
@@ -670,7 +677,7 @@ subroutine xpr2
   go to 9020
 9508 from=isto(sptr)
   sptr=sptr+1
-  p = real (dmax1 (rmargn, dabs (real (rmargn * r3, 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * r3))
   if (.not. (rsto(ptr0) .le. r3 + p)) go to 5931
   rsto(ptr0)=r3
   go to 5930
@@ -696,7 +703,7 @@ subroutine xpr2
 9016 continue
   r5=rsto(rptr)
   rptr=rptr-1
-  p = real (dmax1 (rmargn, dabs (real (rmargn * r5, 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * r5))
   if (.not. (r5 .lt. r1 - p .or. r5 .gt. r3 + p)) go to 5361
   stpflg=23
   stpr1=r1
@@ -775,15 +782,15 @@ subroutine xpr2
 9017 continue
   r6=rsto(rptr)
   rptr=rptr-1
-  p = real (dmax1 (rmargn, dabs(real (rmargn * r4, 16))), kind (p))
-  if (.not. (real (dabs (real (r6 - r4, 16)), kind (p)) .le. p .or. real (dabs (real (r2 - r4, 16)), kind (p)) .le. p)) go to 5951
+  p = dmax1 (rmargn, dabs(rmargn * r4))
+  if (.not. (dabs (r6 - r4) .le. p .or. dabs (r2 - r4) .le. p)) go to 5951
   rptr=rptr+1
   if(rptr.eq.rsptr) go to 930
   rsto(rptr)=r3
   go to 5950
-5951 if (.not. (dabs (real (r6 - r2, 16)) .le. dmax1 (rmargn, dabs (real (rmargn * r2, 16))))) go to 5952
+5951 if (.not. (dabs (r6 - r2) .le. dmax1 (rmargn, dabs (rmargn * r2)))) go to 5952
   if (.not. (ipol .eq. 0)) go to 6161
-  a = real (r3 - dmax1 (rmargn, dabs (real (rmargn * r3, 16))), kind (a))
+  a = r3 - dmax1 (rmargn, dabs (rmargn * r3))
   rptr = rptr + 1
   if(rptr.eq.rsptr) go to 930
   rsto(rptr)=a
@@ -846,7 +853,7 @@ subroutine xpr2
   go to 9020
 9512 from=isto(sptr)
   sptr=sptr+1
-  p = real (dmax1 (rmargn, dabs (real (rmargn * rsto(ptr0), 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * rsto(ptr0)))
   if (.not. (rsto(ptr0) .ge. r3 - p)) go to 5941
   rsto(ptr0) = r3
   go to 5940
@@ -1012,16 +1019,16 @@ subroutine xpr2
   a=rsto(ptr0)
   b=rsto(k1)
   c=rsto(k1+1)
-  p = real (dmax1 (rmargn, dabs (real (rmargn * b, 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * b))
   if (.not. (a * c .le. zero .or. a * b .le. zero)) go to 6121
   n = 1
   go to 6120
 6121 continue
-  if (.not. (real (dabs(real (a, 16)), kind (p)) .le. p)) go to 6091
+  if (.not. (dabs(a) .le. p)) go to 6091
   n=1
   go to 6090
 6091 continue
-  g = real (dmax1 (g, dabs (dlog10 (dabs (real (a / b, 16))))), kind (g))
+  g = dmax1 (g, dabs (dlog10 (dabs (a / b))))
   n = min0 (n, 2 * idint (6.0d0 / g))
   n = max0 (n, 1)
 6090 continue
@@ -1040,28 +1047,28 @@ subroutine xpr2
   i=i+1
   b=c
   c=rsto(k1+i)
-  p = real (dmax1 (rmargn, dabs (real (rmargn * b, 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * b))
   if (.not. ((c .gt. b .and. i1 .lt. 0) .or. (c .lt. b .and. i1 .gt. 0))) go to 6021
   n = i - 1
   go to 6020
 6021 continue
 6020 continue
-  if (.not. (real (dabs (real (c - b, 16)), kind (p)) .le. p)) go to 6031
+  if (.not. (dabs (c - b) .le. p)) go to 6031
   n=i-1
   go to 6030
 6031 continue
-  g = real (dmax1 (g, dabs (dlog10 (dabs (real ((c - b) / b, 16))))), kind (g))
+  g = dmax1 (g, dabs (dlog10 (dabs ((c - b) / b))))
 6030 continue
   if(.not.(b*c.le.zero)) go to 6101
   n=i-1
   go to 6100
 6101 continue
 6100 continue
-  if (.not. (real (dabs(real (c, 16)), kind (p)) .le. p)) go to 6111
+  if (.not. (dabs(c) .le. p)) go to 6111
   n = i - 1
   go to 6110
 6111 continue
-  g = real (dmax1 (g, dabs (dlog10 (dabs (real (c / b, 16))))), kind (g))
+  g = dmax1 (g, dabs (dlog10 (dabs (c / b))))
 6110 continue
   n=min0(n,2*idint(6.0d0/g))
   n=max0(n,1)
@@ -1244,7 +1251,7 @@ subroutine xpr2
 5860 continue
   a=rsto(ptr6+1)
   if(.not.(ndx.eq.297)) go to 5481
-  c = real (dabs (real (a, 16)), kind (c))
+  c = dabs (a)
   go to 5480
 5481 if(.not.(ndx.eq.299)) go to 5482
   if(.not.(a.lt.zero)) go to 5821
@@ -1254,11 +1261,11 @@ subroutine xpr2
   c=zero
   go to 5820
 5822 continue
-  c = real (dsqrt (real (a, 16)), kind (c))
+  c = dsqrt (a)
 5820 continue
   go to 5480
 5482 if(.not.(ndx.eq.301)) go to 5483
-  c = real (dexp (real (a, 16)), kind (p))
+  c = dexp (a)
   go to 5480
 5483 if(.not.(ndx.eq.303)) go to 5484
   if(.not.(a.lt.zero)) go to 5511
@@ -1268,7 +1275,7 @@ subroutine xpr2
   c=-rinf
   go to 5510
 5512 continue
-  c = real (dlog (real (a, 16)), kind (c))
+  c = dlog (a)
 5510 continue
   go to 5480
 5484 if (.not. (ndx .eq. 305)) go to 5485
@@ -1279,7 +1286,7 @@ subroutine xpr2
   c = -rinf
   go to 5520
 5522 continue
-  c = real (dlog (real (a, 16)) / dlog (real (ten, 16)), kind (c))
+  c = dlog (a) / dlog (ten)
 5520 continue
   go to 5480
 5485 if(.not.(ndx.eq.307)) go to 5486
@@ -1290,11 +1297,11 @@ subroutine xpr2
   c=-rinf
   go to 5530
 5532 continue
-  c = real (dlog (real (a, 16)) / dlog (real (two, 16)), kind (c))
+  c = dlog (a) / dlog (two)
 5530 continue
   go to 5480
 5486 if(.not.(ndx.eq.309)) go to 5487
-  if (.not. (real (dabs(real (a, 16)), kind (divzro)) .le. divzro)) go to 5541
+  if (.not. (dabs(a) .le. divzro)) go to 5541
   stpflg = 5
   go to 5540
 5541 continue
@@ -1316,13 +1323,13 @@ subroutine xpr2
 5550 continue
   go to 5480
 5488 if(.not.(ndx.eq.313)) go to 5489
-  c = real (dint (real (a, 16)), kind (c))
+  c = dint (a)
   go to 5480
 5489 if(.not.(ndx.eq.315)) go to 5490
-  c = real (a - dint (real (a, 16)), kind (c))
+  c = a - dint (a)
   go to 5480
 5490 if(.not.(ndx.eq.317)) go to 5491
-  c = real (dnint (real (a, 16)), kind (c))
+  c = dnint (a)
   go to 5480
 5491 if(.not.(ndx.eq.319)) go to 5492
   if(.not.(a.lt.rmargn)) go to 5561
@@ -1342,16 +1349,16 @@ subroutine xpr2
   c=a *180.0 /pi
   go to 5480
 5494 if(.not.(ndx.eq.325)) go to 5495
-  c=randnm(zero)    !wsm + thl
+  c = randnm (zero)    !wsm + thl
   go to 5480
 5495 if(.not.(ndx.eq.327)) go to 5496
-  c = real (dsin (real (a, 16)), kind (c))
+  c = dsin (a)
   go to 5480
 5496 if(.not.(ndx.eq.329)) go to 5497
-  c = real (dcos (real (a, 16)), kind (c))
+  c = dcos (a)
   go to 5480
 5497 if(.not.(ndx.eq.331)) go to 5498
-  c = real (dtan (real (a, 16)), kind (c))
+  c = dtan (a)
   go to 5480
 5498 if (.not. (ndx .eq. 333)) go to 5499
   if (.not. (a .lt. -one - rmargn)) go to 5571
@@ -1369,7 +1376,7 @@ subroutine xpr2
 5574 continue
 5570 continue
   if (.not. (stpflg .eq. 0)) go to 5581
-  c = real (dasin (real (a, 16)), kind (c))
+  c = dasin (a)
   go to 5580
 5581 continue
 5580 continue
@@ -1390,31 +1397,31 @@ subroutine xpr2
 5594 continue
 5590 continue
   if (.not. (stpflg .eq. 0)) go to 5601
-  c = real (dacos (real (a, 16)), kind (c))
+  c = dacos (a)
   go to 5600
 5601 continue
 5600 continue
   go to 5480
 5500 if(.not.(ndx.eq.337)) go to 5501
-  c = real (datan (real (a, 16)), kind (c))
+  c = datan (a)
   go to 5480
-5501 if(.not.(ndx.eq.339)) go to 5502
-  c = real (dsinh (real (a, 16)), kind (c))
+5501 if (.not. (ndx .eq. 339)) go to 5502
+  c = dsinh (a)
   go to 5480
-5502 if(.not.(ndx.eq.341)) go to 5503
-  c = real (dcosh (real (a, 16)), kind (c))
+5502 if (.not. (ndx .eq. 341)) go to 5503
+  c = dcosh (a)
   go to 5480
-5503 if(.not.(ndx.eq.343)) go to 5504
-  c = real (dtanh (real (a, 16)), kind (c))
+5503 if (.not. (ndx .eq. 343)) go to 5504
+  c = dtanh (a)
   go to 5480
-5504 if(.not.(ndx.eq.345)) go to 5505
+5504 if (.not. (ndx .eq. 345)) go to 5505
   c = rnull
   go to 5480
-5505 if(.not.(ndx.eq.347)) go to 5506
-  if(.not.(a.lt.one-rmargn)) go to 5611
-  stpflg=9
+5505 if (.not. (ndx .eq. 347)) go to 5506
+  if (.not. (a .lt. one-rmargn)) go to 5611
+  stpflg = 9
   go to 5610
-5611 if(.not.(a.lt.one)) go to 5612
+5611 if (.not. (a .lt. one)) go to 5612
   c = zero
   go to 5610
 5612 continue
@@ -1472,7 +1479,7 @@ subroutine xpr2
 5660 continue
   a=rsto(ptr6+1)
   b=rsto(ptr6+2)
-  if (.not. (real (dabs (real (a, 16)), kind (rmargn)) .le. rmargn .and. real (dabs (real (a, 16)), kind (rmargn)) .le. rmargn)) go to 5851
+  if (.not. (dabs (a) .le. rmargn .and. dabs (a) .le. rmargn)) go to 5851
   stpflg=131
   stpr1=a
   stpr2=b
@@ -1481,9 +1488,9 @@ subroutine xpr2
   go to 5850
 5851 continue
 5850 continue
-  c = real (datan (real (a / b, 16)), kind (c))
-  if(.not.(b.lt.zero)) go to 5671
-  if(.not.(c.lt.zero)) go to 5681
+  c = datan (a / b)
+  if (.not. (b .lt. zero)) go to 5671
+  if (.not. (c .lt. zero)) go to 5681
   c=c+pi
   go to 5680
 5681 continue
@@ -1505,11 +1512,11 @@ subroutine xpr2
 5691 continue
 5690 continue
   a = rsto(rptr)
-  a = real (dnint (real (a, 16)), kind (a))
+  a = dnint (a)
   rptr=rptr-1
   b=rsto(rptr)
-  b = real (dnint (real (b, 16)), kind (b))
-  if(.not.(a.lt.zero .or. b.le.zero .or. a.gt.b)) go to 5701
+  b = dnint (b)
+  if (.not. (a .lt. zero .or. b .le. zero .or. a .gt. b)) go to 5701
   stpflg=13
   stpr1=rsto(rptr)
   stpr2=rsto(rptr+1)
@@ -1518,7 +1525,7 @@ subroutine xpr2
   go to 5700
 5701 continue
 5700 continue
-  if(.not.(a.eq.zero .or. a.eq.b)) go to 5711
+  if (.not. (a .eq. zero .or. a .eq. b)) go to 5711
   c=one
   go to 5710
 5711 continue
@@ -1554,11 +1561,11 @@ subroutine xpr2
 5731 continue
 5730 continue
   a=rsto(rptr)
-  a = real (dnint (real (a, 16)), kind (a))
+  a = dnint (a)
   rptr=rptr-1
   b=rsto(rptr)
-  b = real (dnint (real (b, 16)), kind (b))
-  if(.not.(a.lt.zero .or. b.le.zero .or. a.gt.b)) go to 5741
+  b = dnint (b)
+  if (.not. (a .lt. zero .or. b .le. zero .or. a .gt. b)) go to 5741
   stpflg=15
   stpr1=rsto(rptr)
   stpr2=rsto(rptr+1)
@@ -1613,7 +1620,7 @@ subroutine xpr2
   a=a +b*b
   go to 3221
 3220 continue
-  rsto(rptr) = real (dsqrt (real (a, 16)), kind (rsto))
+  rsto(rptr) = dsqrt (a)
   go to 9500
 9029 continue
   a=rsto(rptr)
@@ -2027,6 +2034,7 @@ subroutine xpr2
 5840 continue
   go to 9500
 end subroutine xpr2
+
 !
-!     end of file: xpr2.for
+! end of file xpr2.f90
 !

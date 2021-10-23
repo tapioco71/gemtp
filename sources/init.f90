@@ -1,15 +1,22 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: init.for
+! file init.f90
 !
 
 !
-!     subroutine init.
+! subroutine init.
 !
 
 subroutine init
-  include 'tacsto.ftn'
-  character(8) atim(2)      ! wsm + thl manual modification for bpa emtp
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
+  character(8) :: atim(2)      ! wsm + thl manual modification for bpa emtp
+  real(8) :: d1, d2
+  !
+  real(8) :: seedy, randnm
+  !
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=from
@@ -51,7 +58,7 @@ subroutine init
   go to 5010
 5011 continue
 5010 continue
-  p = real (dmax1 (rmargn, dabs (real (rmargn * b, 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * b))
   if(.not.(a.gt.b+p)) go to 5021
   stpflg=119
   go to 5020
@@ -75,7 +82,7 @@ subroutine init
   c=rsto(base13+8) -r1
   e=r1
   if(.not.(e.gt.b+p)) go to 5051
-  f = real (e / dnint (real (e / b + half, 16)), kind (f))
+  f = e / dnint (e / b + half)
   go to 5050
 5051 continue
   f=e
@@ -624,5 +631,5 @@ subroutine init
 end subroutine init
 
 !
-!     end of file: init.for
+! end of file init.f90
 !

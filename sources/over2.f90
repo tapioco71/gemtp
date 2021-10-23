@@ -1,33 +1,39 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over2.f90
+! file over2.f90
 !
 
 !
-!     subroutine over2.
+! subroutine over2.
 !
 
 subroutine over2
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'dekspy.ftn'
-  include 'labl02.ftn'
+  implicit none
+  use blkcom
+  use labcom
+  use dekspy
+  use labl02
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'dekspy.ftn'
+  !  include 'labl02.ftn'
   !     %include  '//c/tsu/cables.ftn'
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
-  character(6) chlmfs                                       ! 9-phase as limit for lmfs test
-  character(80) char80
-  character(6) chrpad(18)
+  character(6) :: chlmfs                                       ! 9-phase as limit for lmfs test
+  character(80) :: char80
+  character(6) :: chrpad(18)
   dimension wk1(1)
   equivalence (semaux(1), wk1(1))
   dimension infdli(1)
   equivalence (namebr(1), infdli(1))
   dimension icrit(1)
   equivalence (icrit(1), crit(1))
-  character(8) text1, text2, text3, text4, text5, text6
-  character(8) text7, text8, text9, text10, text11, text12
-  character(8) text13, text14, text15, text16, text17
+  character(8) :: text1, text2, text3, text4, text5, text6
+  character(8) :: text7, text8, text9, text10, text11, text12
+  character(8) :: text13, text14, text15, text16, text17
   equivalence (indtv(1), iaddrs), (indtv(2), itranm)
   equivalence (indtv(3), ityold), (indtv(4), ichtr2)
   equivalence (iprsov(39), nmauto)
@@ -1522,16 +1528,20 @@ subroutine over2
 end subroutine over2
 
 !
-!     subroutine fddata.
+! subroutine fddata.
 !
 
 subroutine fddata (ikf, isfd, ibf)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use labl02
+  use blkcom
+  use labcom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   ! overlay 2 module used only for frequency-dependent
   ! representation of generator equivalents.
-  include 'labl02.ftn'
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
+  !  include 'labl02.ftn'
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
   ! this routine reads-in the branch data for the modes  * * * * * * *
   ! i n i t i a l i z e   c o u n t e r s    *   *   *   *   *   *   *
   idk = 2 * ikf
@@ -1600,15 +1610,19 @@ subroutine fddata (ikf, isfd, ibf)
 end subroutine fddata
 
 !
-!     subroutine nonln2.
+! subroutine nonln2.
 !
 
 subroutine nonln2
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'labl02.ftn'
-  character(8) text1, text2, text3
+  use blkcom
+  use labcom
+  use labl02
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'labl02.ftn'
+  character(8) :: text1, text2, text3
   data text1 / 'single' /
   data text2 / ' flash' /
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
@@ -2190,10 +2204,14 @@ end subroutine nonln2
 !
 
 subroutine distr2
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'labl02.ftn'
+  use blkcom
+  use labcom
+  use labl02
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'labl02.ftn'
   dimension cblhst(1)
   equivalence (cnvhst(1), cblhst(1))
   dimension  wk1(1)
@@ -2202,31 +2220,31 @@ subroutine distr2
   equivalence (namebr(1),  infdli(1))
   equivalence (omega, xlong1),  (indtv(4), ichtr2)
   equivalence (indtv(1), iaddrs), (indtv(2), itranm)
-  character(8) text1, text2, text3, text4, text5, textmx
-  character(8) text6, text7, text8, text9, text10, text11
-  character(8) text12, text13, text14
+  character(8) :: text1, text2, text3, text4, text5, textmx
+  character(8) :: text6, text7, text8, text9, text10, text11
+  character(8) :: text12, text13, text14
   dimension textmx(2)
-  data  text2  / '   con' /
-  data  text3  / 'stant ' /
-  data  text4  / 'steady' /
-  data  text5  / ' state' /
-  data  text6  / 'a' /
-  data  text7  / 'b' /
-  data  text8  / 'c' /
-  data  text9  / 'd' /
-  data  text10 / 'e' /
-  data  text11 / 'f' /
-  data  text12 / 'g' /
-  data  text13 / 'h' /
-  data  text14 / 'i' /
-  data  textmx(1) / '+tr(  ' /
-  data  textmx(2) / '+tx(  ' /
+  data text2  / '   con' /
+  data text3  / 'stant ' /
+  data text4  / 'steady' /
+  data text5  / ' state' /
+  data text6  / 'a' /
+  data text7  / 'b' /
+  data text8  / 'c' /
+  data text9  / 'd' /
+  data text10 / 'e' /
+  data text11 / 'f' /
+  data text12 / 'g' /
+  data text13 / 'h' /
+  data text14 / 'i' /
+  data textmx(1) / '+tr(  ' /
+  data textmx(2) / '+tx(  ' /
   !     burroughs: preserve local variable between module calls:
   data ipsem  / 0 /
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module distr2."')
-  n45 = locint (ida)
-  n46 = locint (ifkc)
+  n45 = location (ida)
+  n46 = location (ifkc)
   isecti = 400
   if (iprsup .ge. 4) write (unit = *, fmt = *) ' top distr2.  n45, n46, ida, ifkc =', n45, n46, ida, ifkc
   numaki = 0
@@ -3507,13 +3525,16 @@ subroutine distr2
 end subroutine distr2
 
 !
-!     subroutine over3.
+! subroutine over3.
 !
 
 subroutine over3
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
+  use blkcom
+  use labcom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
   dimension trser(1),txser(1)
   equivalence (trser(1), emtpe(1)), (txser(1), emtpf(1))
   dimension mapcas(1), mapinv(1), node1(1), node2(1)
@@ -3527,7 +3548,7 @@ subroutine over3
   dimension trshun(1), txshun(1), cshun(1)
   equivalence (trshun(1), kk(1)), (txshun(1), kks(1)), (cshun(1), kknonl(1))
   equivalence (iprsov(35), ipoint), (iprsov(36), locz11)
-  character(8) text1, text2, text3, text4, text5, text6, text7
+  character(8) :: text1, text2, text3, text4, text5, text6, text7
   data text1  / 'stop' /
   data text2  / ' cas' /
   data text3  / 'cade' /
@@ -4160,14 +4181,15 @@ end subroutine over3
 !
 
 subroutine cxred (a, c, n, m)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !    Elimination of variables m+1,...n in symmetric complex matrix with
   !    a=real part, c=imaginary part. a and c are
   !    stored as triangle (1 element for 1.column,2 for 2.column etc.).
   !    result is reduced matrix in columns 1,...m in case of reduction
   !    (m unequal 0) or negative inverse matrix in columns 1,...n in case
   !    of inversion (m=0).
-  real(8) a(*), c(*), b(30), d(30)
+  real(8) :: a(*), c(*), b(30), d(30)
   j = n + 1
   w = 1.0
   if (m .gt. 0) w = -w
@@ -4230,11 +4252,15 @@ end subroutine cxred
 !
 
 subroutine over4
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'space1.ftn'
-  dimension  buffin (8)
+  use blkcom
+  use labcom
+  use space1
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'space1.ftn'
+  dimension buffin (8)
   !     frequency dependent line. ********************************
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over4."')
@@ -4548,5 +4574,5 @@ subroutine over4
 end subroutine over4
 
 !
-!     end of file: over2.f90
+! end of file over2.f90
 !

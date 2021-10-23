@@ -1,18 +1,28 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: calsto.for
+! file calsto.f90
 !
 
 !
-!     subroutine calsto.
+! subroutine calsto.
 !
 
 subroutine calsto
-  include 'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
   from = 0
   go to 9000
 9500 if (from .eq. 0) return
-  go to (9501, 9502), from-9500
+  !  go to (9501, 9502), from-9500
+  select case (from - 9500)
+  case (1)
+     go to 9501
+
+  case (2)
+     go to 9502
+  end select
   stop 'Invalid "from" reference in "calsto".'
 9000 continue
   stpflg = 0
@@ -54,8 +64,8 @@ subroutine calsto
   cnt2 = pgsize / intlen
   cnt3 = pgsize / fltlen
   a = (stoflt - 40) * bratio / (split + bratio)
-  rsize = idint (real (a, 16))
-  isize = idint (real (a * split, 16))
+  rsize = idint (a)
+  isize = idint (a * split)
   csize = stocha
   ilen = isize - cnt4 * cnt2
   rlen = stoflt - 40 - cnt5 * cnt3
@@ -346,7 +356,7 @@ subroutine calsto
   call putil2
   a = rsto(rptr)
   rptr = rptr - 1
-  pgsize = idnint (real (a, 16))
+  pgsize = idnint (a)
   go to 5190
 5191 continue
 5190 continue
@@ -382,7 +392,7 @@ subroutine calsto
   call putil2
   a = rsto(rptr)
   rptr = rptr - 1
-  cnt4 = idnint (real (a, 16))
+  cnt4 = idnint (a)
   go to 5230
 5231 continue
 5230 continue
@@ -415,7 +425,7 @@ subroutine calsto
   call putil2
   a = rsto(rptr)
   rptr = rptr - 1
-  cnt5 = idnint (real (a, 16))
+  cnt5 = idnint (a)
   go to 5270
 5271 continue
 5270 continue
@@ -446,5 +456,5 @@ subroutine calsto
 end subroutine calsto
 
 !
-!     end of file: calsto.for
+! end of file calsto.f90
 !

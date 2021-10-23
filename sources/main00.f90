@@ -1,6 +1,7 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: main00.f90
+! file main00.f90
 !
 
 !**********************************************************************
@@ -136,117 +137,14 @@
 ! program gemtp.
 !
 
-#ifdef __BPA_EMTP
-
 program gemtp
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'volt45.ftn'
-  include 'io.ftn'
-  character(32) arg
-  data ll34                 / 34 /
-  data gfortran_stderr_unit / 0 /
-  data gfortran_stdin_unit  / 5 /
-  data gfortran_stdout_unit / 6 /
-  !     unit assignments of "over1" needed earlier by spy:
-  lunit0 = gfortran_stderr_unit
-  lunit1 = 1
-  lunit2 = 2
-  lunit3 = 3
-  lunit4 = 4
-  lunit5 = gfortran_stdin_unit
-  lunit6 = gfortran_stdout_unit
-  lunit7 = 7
-  lunit8 = 8
-  lunit9 = 9
-  lunt10 = 10
-  lunt11 = 11
-  lunt12 = 12
-  lunt13 = 13
-  lunt14 = 14
-  lunt15 = 15
-  llbuff = -3333
-  kol132 = 132
-  nchain = -1
-  lastov = 0
-  kill = 0
-2000 if (kill .eq. 0) go to 2001
-  if (kill .eq. 9999) go to 2001
-  if (kill .ne. 7733) go to 4372
-  write (unit = lunit6, fmt = 4367)
-4367 format (' "main00" intercept of "begin" request.')
-  kill = 0
-  numdcd = 0
-  nchain = 1
-  go to 1983
-4372 if (nchain .gt. 51) go to 2001
-  nchain = 51
-2001 n1 = nchain
-  if (n1 .gt. 30) n1 = n1 - 30
-  if (n1 .le. 0) n1 = 1
-  iprsup = iprsov(n1)
-  if (nchain .gt. 20) go to 2010
-  if (nchain .eq. 12 .or. nchain .eq. 2) go to 1983
-  if (nchain .eq. -1) call move0 (iprsov(1), ll34)
-  call erexit
-  nchain = 0
-  if (nchain .gt. 20) go to 2000
-1983 call main10
-  go to 2000
-2010 if (m4plot .eq. 1) call emtspy
-  if (nchain .gt. 29) go to 2020
-  call over29
-  go to 2000
-2020 if (nchain .gt. 31) go to 2024
-  call over31
-  go to 2000
-2024 if (nchain .gt. 39) go to 2025
-  call over39
-  go to 2000
-2025 if (nchain .gt. 41) go to 2070
-  call over41
-  go to 2000
-2070 if (nchain .gt. 42) go to 2080
-  call over42
-  go to 2000
-2080 if (nchain .gt. 44) go to 2100
-  call over44
-  go to 2000
-2100 if (nchain .gt. 45) go to 2110
-  call over45
-  go to 2000
-2110 if (nchain .gt. 47) go to 2130
-  call over47
-  go to 2000
-2130 if (nchain .gt. 51) go to 2260
-  call over51
-  go to 2000
-2260 if (nchain .gt. 52) go to 2270
-  call over52
-  go to 2000
-2270 if (nchain .gt. 53) go to 2280
-  call over53
-  go to 2000
-2280 if (nchain .gt. 54) go to 2290
-  call over54
-  go to 2000
-2290 if (nchain .gt. 55) go to 2300
-  call over55
-  go to 2000
-2300 write (unit = lunit6, fmt = 9236) nchain
-9236 format (/, ' Illegal nchain in main00.', i8)
-  go to 2000
-end program gemtp
-
-#else
-
-program gemtp
+  use blkcom
   implicit none
-  include 'blkcom.ftn'
+  !  include 'blkcom.ftn'
   include 'volt45.ftn'
   include 'io.ftn'
-  integer i, ll34, optscount
-  character(32) arg
+  integer(4) :: i, ll34, optscount
+  character(32) :: arg
   data ll34                 / 34 /
   data gfortran_stderr_unit / 0 /
   data gfortran_stdin_unit  / 5 /
@@ -331,7 +229,7 @@ contains
 
     else if (nchain .le. 31) then
 
-#ifdef WITH_OVER29
+#ifdef WITH_OVER31
        call over31
 #else
        call dummy
@@ -339,7 +237,7 @@ contains
 
     else if (nchain .le. 39) then
 
-#ifdef WITH_OVER29
+#ifdef WITH_OVER39
        call over39
 #else
        call dummy
@@ -347,7 +245,7 @@ contains
 
     else if (nchain .le. 41) then
 
-#ifdef WITH_OVER29
+#ifdef WITH_OVER41
        call over41
 #else
        call dummy
@@ -355,7 +253,7 @@ contains
 
     else if (nchain .le. 42) then
 
-#ifdef WITH_OVER29
+#ifdef WITH_OVER42
        call over42
 #else
        call dummy
@@ -363,14 +261,14 @@ contains
 
     else if (nchain .le. 44) then
 
-#ifdef WITH_OVER29
+#ifdef WITH_OVER44
        call over44
 #else
        call dummy
 #endif
 
     else if (nchain .le. 45) then
-#ifdef WITH_OVER29
+#ifdef WITH_OVER45
        call over45
 #else
        call dummy
@@ -378,7 +276,7 @@ contains
 
     else if (nchain .le. 47) then
 
-#ifdef WITH_OVER29
+#ifdef WITH_OVER47
        call over47
 #else
        call dummy
@@ -386,7 +284,7 @@ contains
 
     else if (nchain .le. 51) then
 
-#ifdef WITH_OVER29
+#ifdef WITH_OVER51
        call over51
 #else
        call dummy
@@ -394,7 +292,7 @@ contains
 
     else if (nchain .le. 52) then
 
-#ifdef WITH_OVER29
+#ifdef WITH_OVER52
        call over52
 #else
        call dummy
@@ -402,7 +300,7 @@ contains
 
     else if (nchain .le. 53) then
 
-#ifdef WITH_OVER29
+#ifdef WITH_OVER53
        call over53
 #else
        call dummy
@@ -410,7 +308,7 @@ contains
 
     else if (nchain .le. 54) then
 
-#ifdef WITH_OVER29
+#ifdef WITH_OVER54
        call over54
 #else
        call dummy
@@ -418,7 +316,7 @@ contains
 
     else if (nchain .le. 55) then
 
-#ifdef WITH_OVER29
+#ifdef WITH_OVER55
        call over55
 #else
        call dummy
@@ -440,17 +338,17 @@ contains
 
 end program gemtp
 
-#endif
-
 !
 !     subroutine stoptp.
 !
 
 subroutine stoptp
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  implicit none
   !     Temporary stop statements of EMTP have been converted to
   !     "call stoptp", allowing installation-dependent clean up.
-  include 'blkcom.ftn'
+  !  include 'blkcom.ftn'
+  integer(4) :: i, ios
   read (unit = abuff, fmt = 5607, iostat = ios) (texcol(i), i = 1, 80)
 5607 format (80a1)
   if (ios .ne. 0) go to 9000
@@ -465,14 +363,15 @@ end subroutine stoptp
 !
 
 subroutine copyr (d1, to, kk)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Routine which copies the same floating-point word  'd1'  into a
   !     contiguous region of memory ----  'kk'  words in length,
   !     beginning with word  to(1) .
-  real(8) to(*)
-  do i = 1, kk                                              ! do 5431
-     to(i) = d1                                             ! 5431
-  end do
+  real(8), intent(out) :: to(*)
+  integer(4), intent(in) :: kk
+  real(8), intent(in) :: d1
+  to(1 : kk) = d1
   return
 end subroutine copyr
 
@@ -481,14 +380,13 @@ end subroutine copyr
 !
 
 subroutine copyi (n1, ito, kk)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     Routine which copies the same integer word  'n1'  into a
   !     contiguous region of memory ----  'kk'  words in length,
   !     beginning with word  ito(1) .
-  integer(4) ito(*)
-  do i = 1, kk
-     ito(i) = n1
-  end do
+  integer(4), intent(out) :: ito(*)
+  integer(4), intent(in) :: n1, kk
+  ito(1 : kk) = n1
   return
 end subroutine copyi
 
@@ -497,15 +395,15 @@ end subroutine copyi
 !
 
 subroutine copya (text1, text2, kk)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     routine which copies the same alphanumeric word  'text1'  into
   !     a contiguous region of memory ----  'kk'  words in length,
   !     beginning with word  text2(1) .
   !     real(8)         text1, text2
-  character(8) text1, text2(*)
-  do i = 1, kk
-     text2(i) = text1
-  end do
+  integer(4), intent(in) :: kk
+  character(8), intent(out) :: text2(*)
+  character(8), intent(in) :: text1
+  text2(1 : kk)(1 : 8) = text1(1 : 8)
   return
 end subroutine copya
 
@@ -514,13 +412,15 @@ end subroutine copya
 !
 
 subroutine erexit
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  implicit none
   !     VAX-11   installation-dependent EMTP module.   This is
   !     called by the top of "main00", before any emtp data input.
-  include 'blkcom.ftn'
+  !  include 'blkcom.ftn'
   include 'io.ftn'
   !include 'dekspy.ftn'
   !     dimension idum(3)                                   !  dummy vector for ctrl-c handling
+  integer(4) :: kwtvax
   external kwiter                                           ! needed for ctrl-c initialization
   common /comkwt/ kwtvax                                    ! magic block for vax/vms ctrl-c
   lunit6 = gfortran_stdout_unit                             ! for use of "prompt" until fixed tt?? address
@@ -536,7 +436,7 @@ end subroutine erexit
 !
 
 subroutine runtym (d1, d2)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !    This subroutine returns with the current job-execution time, as
   !    broken down into two categories ....
   !           d1 = central processor job time, in seconds
@@ -550,9 +450,9 @@ subroutine runtym (d1, d2)
   !    dollars, or some other measure of job effort, it is easily done.
   !     Include  '[scott]commuk.for' --- share with "settym" in-line:
   common /timers/ cputime
-  real, intent(out) :: d1, d2
-  integer cputime, time
-  real now_cputime
+  real(8), intent(out) :: d1, d2
+  integer(4) :: cputime, time
+  real(8) :: now_cputime
   call cpu_time (now_cputime)
   time = int(1e6 * now_cputime)
   d1 = (time - cputime) / 1e6
@@ -568,7 +468,7 @@ subroutine settym
   implicit none
   !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   integer cputime
-  real time
+  real(8) :: time
   common /timers/ cputime
   call cpu_time (time)
   if (time .eq. -1.0) then
@@ -584,22 +484,27 @@ end subroutine settym
 !
 
 subroutine cimage
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use labcom
+  implicit none
   !     VAX-11  installation-dependent emtp module which serves
   !     to return the next input card.  All systems will substitute.
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  real d11
-  character(8) charc, chtacs, textax, textay, text1, text2
-  character(8) text4, text5, aupper, buff10
-  dimension buff10(10)
-  equivalence (buff10(1), abuff(1 : 1))
-  character(25) filen
-  dimension textax(60), jpntr(201), textay(50), aupper(10)
-  equivalence (aupper(1), texcol(1))
-  dimension xopt(1), copt(1)
-
-  !     burroughs: preserve local variable between module calls:
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  integer(4) :: i, ios, j, jpntr, k, kfile5, l, munit5
+  integer(4) :: n1, n2, n3, n4, n6, n7, n8, n11, n12, n13
+  real(8) :: d1, d11
+  character(8) :: charc, chtacs, textax, textay, text1, text2
+  character(8) :: text4, text5
+  !  character(8) :: buff10
+  character(25) :: filen
+  !
+  !dimension buff10(10)
+  !  equivalence (buff10(1), abuff(1 : 1))
+  dimension textax(60), jpntr(201), textay(50) !, aupper(10)
+  !  equivalence (aupper(1), texcol(1))
+  !dimension xopt(1), copt(1)
+  !     Burroughs: preserve local variable between module calls:
   data n8         / 0 /        ! remember last $-card number
   data charc      / 'c' /
   data text4      / '9' /
@@ -1107,308 +1012,322 @@ end subroutine cimage
 !
 
 subroutine ioerr (naddr)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  integer(4), intent(out) :: naddr
   naddr = 0
   return
 end subroutine ioerr
 
 !
-!     subroutine caterr.
+! subroutine caterr.
 !
 
 subroutine caterr (naddr, koderr)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  integer(4), intent(out) :: koderr, naddr
   naddr = 0
   koderr = 0
   return
 end subroutine caterr
 
-!
-!     function locf.
-!
+! !
+! !     function rfunl1.
+! !
 
-function locf (array)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  real(8), intent(in) :: array(*)
-  integer(8) locf
-  locf = loc (array(1))
-  return
-end function locf
+! real(8) function rfunl1 (x)
+!   use blkcom
+!   implicit none
+!   !     This function provides for all real library functions of
+!   !     a single real argument.   All translations will make a
+!   !     substitution.
+!   !  include 'blkcom.ftn'
+!   real(8), intent(in) :: x
+!   rfunl1 = x
+! end function rfunl1
 
-!
-!     function locint.
-!
+! real(8) function absz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   absz = dabs (x)
+! end function absz
 
-function locint (iarray)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  integer(4), intent(in) :: iarray(*)
-  integer(8) locint
-  !     Installation-dependent EMTP module.   This is  VAX  version.
-  !     function  'LOCINT'  is designed to return the address in memory
-  !     of the argument, as an  INTEGER(4)  word address.   An arbitrary
-  !     constant offset is allowed, since only differences will ever be
-  !     used by the EMTP.   Note vector argument  "iarray"  (which
-  !     is an assumption for all EMTP usage).
-  locint = loc (iarray(1))
-  return
-end function locint
+! real(8) function acosz (x)
+!   real(8), intent(in) :: x
+!   acosz = dacos (x)
+! end function acosz
 
-!
-!     function locstr.
-!
+! real(8) function aintz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   aintz = dint (x)
+!   return
+! end function aintz
 
-function locstr (str)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  character(*), intent(in) :: str
-  integer(8) locstr
-  !     Installation-dependent EMTP module.   This is  VAX  version.
-  !     function  'LOCSTR'  is designed to return the address in memory
-  !     of the argument, as a  CHARACTER(*)  word address.   An arbitrary
-  !     constant offset is allowed, since only differences will ever be
-  !     used by the EMTP.   Note vector argument  "str"  (which is an
-  !     assumption for all EMTP usage).
-  locstr = (loc (str(1 : 1)))
-  return
-end function locstr
+! real(8) function alogz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   alogz = dlog (x)
+! end function alogz
 
-!
-!     function locstr.
-!
+! real(8) function alog1z (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   alog1z = dlog10 (x)
+! end function alog1z
 
-function locchar (carray)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  character, intent(in) :: carray(*)
-  integer(8) locchar
-  !     Installation-dependent EMTP module.   This is  VAX  version.
-  !     function  'LOCCHAR'  is designed to return the address in memory
-  !     of the argument, as a  CHARACTER(*)  word address.   An arbitrary
-  !     constant offset is allowed, since only differences will ever be
-  !     used by the EMTP.   Note vector argument  "carray"  (which
-  !     is an assumption for all EMTP usage).
-  locchar = loc (carray(1)) / 4
-  return
-end function locchar
+! real(8) function asinz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   asinz = dasin (x)
+! end function asinz
 
-!
-!     function rfunl1.
-!
+! real(8) function atanz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   atanz = datan (x)
+! end function atanz
 
-function rfunl1 (x)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     This function provides for all real library functions of
-  !     a single real argument.   All translations will make a
-  !     substitution.
-  include 'blkcom.ftn'
-  real, intent(in) :: x
-  real(16) y
-  real rfunl1
-  rfunl1 = x
-  return
-  entry absz (x)
-  absz = real (dabs (real (x, 16)), kind (absz))
-  return
-  entry acosz (x)
-  acosz = real (dacos (real (x, 16)), kind (acosz))
-  return
-  entry aintz (x)
-  aintz = real (dint (real (x, 16)), kind (aintz))
-  return
-  entry alogz (x)
-  alogz = real (dlog (real (x, 16)), kind (alogz))
-  return
-  entry alog1z (x)
-  alog1z = real (dlog10 (real (x, 16)), kind (alog1z))
-  return
-  entry asinz (x)
-  asinz = real (dasin (real (x, 16)), kind (asinz))
-  return
-  entry atanz (x)
-  atanz = real (datan (real (x, 16)), kind (atanz))
-  return
-  entry cosz (x)
-  cosz = real (dcos (real (x, 16)), kind (cosz))
-  return
-  entry coshz (x)
-  coshz = real (dcosh (real (x, 16)), kind (coshz))
-  return
-  entry cotanz (x)
-  y = dsin (real (x, 16))
-  if (dabs (y) * fltinf .gt. 1.0) go to 4783
-  write (unit = lunit6, fmt = 4761) x
-4761 format (/, " Stop.   Too small argument at  'cotanz'  within 'rfunl1' .", e15.5)
-  call stoptp                                               ! installation-dependent program stop card
-4783 cotanz = real (dcos (real (x, 16)) / y, kind (cotanz))
-  return
-  entry expz (x)
-  if (x .ge. -87) go to 1488
-  expz = 0.0
-  return
-1488 expz = real (dexp (real (x, 16)), kind (expz))
-  return
-  entry sinz (x)
-  sinz = real (dsin (real (x, 16)), kind (sinz))
-  return
-  entry sinhz (x)
-  sinhz = real (dsinh (real (x, 16)), kind (sinhz))
-  return
-  entry sqrtz (x)
-  sqrtz = real (dsqrt (real (x, 16)), kind (sqrtz))
-  return
-  entry tanz (x)
-  tanz = real (dtan (real (x, 16)), kind (tanz))
-  return
-  entry tanhz (x)
-  tanhz = real (dtanh (real (x, 16)), kind (tanhz))
-  return
-end function rfunl1
+! real(8) function cosz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   cosz = dcos (x)
+! end function cosz
+
+! real(8) function coshz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   coshz = dcosh (x)
+! end function coshz
+
+! real(8) function cotanz (x)
+!   use blkcom
+!   implicit none
+!   real(8), intent(in) :: x
+!   real(8) :: y
+!   !
+!   y = dsin (x)
+!   if (dabs (y) * fltinf .gt. 1.0) go to 4783
+!   write (unit = lunit6, fmt = 4761) x
+! 4761 format (/, " Stop.   Too small argument at  'cotanz'  within 'rfunl1' .", e15.5)
+!   call stoptp                                               ! installation-dependent program stop card
+! 4783 cotanz = dcos (x) / y
+!   return
+! end function cotanz
+
+! real(8) function expz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   if (x .ge. -87) go to 1488
+!   expz = 0.0
+!   return
+! 1488 expz = dexp (x)
+! end function expz
+
+! real(8) function sinz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   sinz = dsin (x)
+! end function sinz
+
+! real(8) function sinhz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   sinhz = dsinh (x)
+! end function sinhz
+
+! real(8) function sqrtz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   sqrtz = dsqrt (x)
+! end function sqrtz
+
+! real(8) function tanz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   tanz = dtan (x)
+! end function tanz
+
+! real(8) function tanhz (x)
+!   implicit none
+!   real(8), intent(in) :: x
+!   tanhz = dtanh (x)
+! end function tanhz
 
 !
 ! subroutine trgwnd.
 !
 
 subroutine trgwnd (x, d17)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  real, intent(in) :: x
-  real, intent(out) :: d17
-  integer n13
+  use blkcom
+  implicit none
+  !  include 'blkcom.ftn'
+  real(8), intent(in) :: x
+  real(8), intent(out) :: d17
+  integer(4) :: n13
   d17 = x
-  if (dabs (real (x, 16)) .lt. 25000.) go to 9000
-  n13 = int (x / twopi, kind (n13))
+  if (dabs (x) .lt. 25000.) go to 9000
+  n13 = x / twopi
   d17 = d17 - n13 * twopi
   if (iprsup .ge. 1) write (unit = *, fmt = 3456) nchain, x, d17
 3456 format (' Angle unwind in "trgwnd" called by "rfunl1".   nchain, x, d17 =', i5, 2e25.16)
 9000 return
 end subroutine trgwnd
 
-!
-!     function ifunl1.
-!
+! !
+! ! function ifunl1.
+! !
 
-function ifunl1 (d1)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     This function is to provide neutral names ending in "z"
-  !     for all integer library functions of one real argument.
-  real, intent(in) :: d1
-  integer ifunl1
-  ifunl1 = int (d1, kind (ifunl1))
-  return
+! double precision function ifunl1 (d1)
+!   implicit none
+!   !     This function is to provide neutral names ending in "z"
+!   !     for all integer library functions of one real argument.
+!   real(8), intent(in) :: d1
+!   ifunl1 = d1
+! end function ifunl1
 
-  entry intz (d1)
-  intz = int (dint (real (d1, 16)), kind (intz))
-  return
-end function ifunl1
+! double precision function intz (d1)
+!   implicit none
+!   real(8), intent(in) :: d1
+!   intz = dint (d1)
+! end function intz
 
-!
-! function cfunl1.
-!
+! !
+! ! function cfunl1.
+! !
 
-function cfunl1 (x)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  complex(8), intent(in) :: x
-  complex(8) cfunl1, cexpz, csqrtz, clogz
-  cfunl1 = x
-  return
+! complex(16) function cfunl1 (x)
+!   implicit none
+!   complex(16), intent(in) :: x
+!   cfunl1 = x
+! end function cfunl1
 
-  entry cexpz (x)
-  cexpz = cmplx (cdexp (dcmplx(x)))
-  return
+! complex(16) function cexpz (x)
+!   implicit none
+!   complex(16), intent(in) :: x
+!   !  cexpz = cdexp (x)
+!   cexpz = exp (x)
+! end function cexpz
 
-  entry csqrtz (x)
-  csqrtz = cmplx (cdsqrt (dcmplx(x)))
-  return
+! complex(16) function csqrtz (x)
+!   implicit none
+!   complex(16), intent(in) :: x
+!   !  csqrtz = cdsqrt (x)
+!   csqrtz = sqrt (x)
+! end function csqrtz
 
-  entry clogz (x)
-  clogz = cmplx (cdlog (dcmplx(x)))
-  return
-end function cfunl1
+! complex(16) function clogz (x)
+!   implicit none
+!   complex(16), intent(in) :: x
+!   !  clogz = cdlog (x)
+!   clogz = log (x)
+! end function clogz
 
-!
-! function rfunl2.
-!
+! !
+! ! function rfunl2.
+! !
 
-function rfunl2 (x, y)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     This function provides for all real library functions of
-  !     two real arguments.  All translations will make a
-  !     substitution.
-  real, intent(in) :: x, y
-  real rfunl2
-  rfunl2 = x
-  return
+! real(8) function rfunl2 (x, y)
+!   implicit none
+!   !     This function provides for all real library functions of
+!   !     two real arguments.  All translations will make a
+!   !     substitution.
+!   real(8), intent(in) :: x, y
+!   !
+!   rfunl2 = x + y
+! end function rfunl2
 
-  entry atan2z (x,y)
-  atan2z = 0.0
-  if (x .ne. 0.0 .or. y .ne. 0.0) atan2z = real(datan2(real(x, 16), real(y, 16)), kind (atan2z))
-  return
+! real(8) function atan2z (x,y)
+!   implicit none
+!   real(8), intent(in) :: x, y
+!   !
+!   atan2z = 0.0
+!   if (x .ne. 0.0 .or. y .ne. 0.0) atan2z = datan2(x, y)
+! end function atan2z
 
-  entry signz (x, y)
-  signz = real (dsign (real(x, 16), real(y, 16)), kind (signz))
-  return
+! real(8) function signz (x, y)
+!   implicit none
+!   real(8), intent(in) :: x, y
+!   !
+!   signz = dsign (x, y)
+! end function signz
 
-  entry amodz (x, y)
-  amodz = real (dmod (real(x, 16), real(y, 16)), kind (amodz))
-  return
+! real(8) function amodz (x, y)
+!   implicit none
+!   real(8), intent(in) :: x, y
+!   !
+!   amodz = dmod (x, y)
+! end function amodz
 
-  entry amin1z (x, y)
-  amin1z = real (dmin1 (real(x, 16), real(y, 16)), kind (amin1z))
-  return
+! real(8) function amin1z (x, y)
+!   implicit none
+!   real(8), intent(in) :: x, y
+!   !
+!   amin1z = dmin1 (x, y)
+! end function amin1z
 
-  entry amax1z (x, y)
-  amax1z = real (dmax1 (real (x, 16), real (y, 16)), kind (amax1z))
-  return
-end function rfunl2
+! real(8) function amax1z (x, y)
+!   implicit none
+!   real(8), intent(in) :: x, y
+!   !
+!   amax1z = dmax1 (x, y)
+! end function amax1z
 
-!
-! function cmpxz.
-!
+! !
+! ! function cmpxz.
+! !
 
-function cmplxz (x, y)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     This function provides for all complex library functions of
-  !     two real arguments.  All translations will make a
-  !     substitution.
-  !       VAX module switched to complex*16 (from (8)) in aug 1981
-  real, intent(in) :: x, y
-  complex(16) cmplxz
-  cmplxz = dcmplx (x, y)
-  return
-end function cmplxz
+! complex(16) function cmplxz (x, y)
+!   implicit none
+!   !     This function provides for all complex library functions of
+!   !     two real arguments.  All translations will make a
+!   !     substitution.
+!   !       VAX module switched to complex*16 (from (8)) in aug 1981
+!   real(8), intent(in) :: x, y
+!   cmplxz = dcmplx (x, y)
+! end function cmplxz
 
-!
-! function rfunl3.
-!
+! !
+! ! function rfunl3.
+! !
 
-function rfunl3 (x)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     This function provides for all real library functions of
-  !     a single complex argument.   All translations will make a
-  !     substitution.
-  !       this VAX module became complex*16 (from (8)) in aug 1981
-  complex(8) x
-  real rfunl3
-  rfunl3 = 0.0
-  return
+! real(8) function rfunl3 (x)
+!   implicit none
+!   !     This function provides for all real library functions of
+!   !     a single complex argument.   All translations will make a
+!   !     substitution.
+!   !       this VAX module became complex*16 (from (8)) in aug 1981
+!   complex(8) :: x
+!   rfunl3 = x + 0.0
+! end function rfunl3
 
-  entry aimagz (x)
-  aimagz = real (dimag (dcmplx (x)), kind (aimagz))
-  return
+! real(8) function aimagz (x)
+!   implicit none
+!   complex(8), intent(in) :: x
+!   aimagz = real (dimag (dcmplx (x)), kind (aimagz))
+! end function aimagz
 
-  entry realz (x)
-  realz = real (dreal (dcmplx (x)), kind (realz))
-  return
+! real(8) function realz (x)
+!   implicit none
+!   complex(8), intent(in) :: x
+!   realz = dreal (x)
+! end function realz
 
-  entry cabsz (x)
-  cabsz = real (cdabs (dcmplx (x)), kind (cabsz))
-  return
-end function rfunl3
+! real(8) function cabsz (x)
+!   implicit none
+!   complex(8), intent(in) :: x
+!   cabsz = cdabs (x)
+! end function cabsz
 
 !
 ! subroutine cmultz.
 !
 
 subroutine cmultz (ar, ai, br, bi, cr, ci, ksn)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  integer(4), intent(in) :: ksn
+  real(8), intent(out) :: ar, ai
+  real(8), intent(in) :: br, bi, cr, ci
+  real(8) :: sr
   sr = br * cr - bi * ci
   ai = bi * cr + br * ci
   ar = sr
@@ -1423,7 +1342,11 @@ end subroutine cmultz
 !
 
 subroutine cdivz (ar, ai, br, bi, cr, ci, ksn)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  integer(4), intent(in) :: ksn
+  real(8), intent(out) :: ar, ai
+  real(8), intent(in) :: br, bi, cr, ci
+  real(8) :: fac, sr
   fac = cr * cr + ci * ci
   fac = 1. / fac
   sr = br * fac * cr + bi * fac * ci
@@ -1435,143 +1358,166 @@ subroutine cdivz (ar, ai, br, bi, cr, ci, ksn)
 200 return
 end subroutine cdivz
 
-!
-! function iabsz.
-!
+! !
+! ! function iabsz.
+! !
 
-function  iabsz (n1)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     One and only integer library function of one integer
-  !     argument.    Make entry point if 2nd is used.
-  integer, intent(in) :: n1
-  integer iabs
-  integer iabsz
-  iabsz = iabs (n1)
-  return
-end function iabsz
+! integer(4) function iabsz (n1)
+!   implicit none
+!   !     One and only integer library function of one integer
+!   !     argument.    Make entry point if 2nd is used.
+!   integer(4), intent(in) :: n1
+!   iabsz = iabs (n1)
+! end function iabsz
 
-!
-! function ifunl2.
-!
+! !
+! ! function ifunl2.
+! !
 
-function ifunl2 (n1, n2)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     Provision for all integer library functions of 2 integer arguments
-  integer, intent(in) :: n1, n2
-  integer ifunl2, isignz, modz, min0z, max0z
-  ifunl2 = n1
-  return
+! integer(4) function ifunl2 (n1, n2)
+!   implicit none
+!   !     Provision for all integer library functions of 2 integer arguments
+!   integer(4), intent(in) :: n1, n2
+!   ifunl2 = n1 + n2
+! end function ifunl2
 
-  entry isignz (n1, n2)
-  isignz = isign (n1, n2)
-  return
+! integer(4) function isignz (n1, n2)
+!   implicit none
+!   integer(4), intent(in) :: n1, n2
+!   isignz = isign (n1, n2)
+! end function isignz
 
-  entry modz (n1, n2)
-  modz = mod (n1, n2)
-  return
+! integer(4) function modz (n1, n2)
+!   implicit none
+!   integer(4), intent(in) :: n1, n2
+!   modz = mod (n1, n2)
+! end function modz
 
-  entry min0z (n1, n2)
-  min0z = min0 (n1, n2)
-  return
+! integer(4) function min0z (n1, n2)
+!   implicit none
+!   integer(4), intent(in) :: n1, n2
+!   min0z = min0 (n1, n2)
+! end function min0z
 
-  entry max0z (n1, n2)
-  max0z = max0 (n1, n2)
-  return
-end function ifunl2
+! integer(4) function max0z (n1, n2)
+!   implicit none
+!   integer(4), intent(in) :: n1, n2
+!   max0z = max0 (n1, n2)
+! end function max0z
 
-!
-! subroutine dlibrf.
-!
+! !
+! ! subroutine dlibrf.
+! !
 
-subroutine dlibrf (x, y)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  double precision x, y
-  !     This module serves to provide selected double-precision
-  !     library functions for several places in the program.
-  !     Making this a subroutine rather than a function avoids all
-  !     complications with the module name having a variable type
-  !     associated with it.   It is installation-dependent because of two
-  !     things --- first the use of entry points, and second the use
-  !     of the double-precision declaration (by which is meant double
-  !     the precision of regular floating-point variables of the EMTP).
-  !     Since most byte-organized machines use  real(8)  for other
-  !     variables, this implies  real*16 ,  if available.
-  !     Installation-dependent module coded for  dec vax-11
-  return
+! subroutine dlibrf (x, y)
+!   implicit none
+!   double precision :: x, y
+!   !     This module serves to provide selected double-precision
+!   !     library functions for several places in the program.
+!   !     Making this a subroutine rather than a function avoids all
+!   !     complications with the module name having a variable type
+!   !     associated with it.   It is installation-dependent because of two
+!   !     things --- first the use of entry points, and second the use
+!   !     of the double-precision declaration (by which is meant double
+!   !     the precision of regular floating-point variables of the EMTP).
+!   !     Since most byte-organized machines use  real(8)  for other
+!   !     variables, this implies  real*16 ,  if available.
+!   !     Installation-dependent module coded for  dec vax-11
+!   return
 
-  entry dabsz (x, y)
-  y = dabs (x)
-  return
+!   entry dabsz (x, y)
+!   y = dabs (x)
+!   return
 
-  entry dcosz (x, y)
-  y = dcos (x)
-  return
+!   entry dcosz (x, y)
+!   y = dcos (x)
+!   return
 
-  entry dexpz (x, y)
-  y = dexp (x)
-  return
+!   entry dexpz (x, y)
+!   y = dexp (x)
+!   return
 
-  entry dsinz (x, y)
-  y = dsin (x)
-  return
+!   entry dsinz (x, y)
+!   y = dsin (x)
+!   return
 
-  entry dsqrtz (x, y)
-  y = dsqrt (x)
-  return
+!   entry dsqrtz (x, y)
+!   y = dsqrt (x)
+!   return
 
-  entry dlogz (x, y)
-  y = dlog (x)
-  return
-end subroutine dlibrf
+!   entry dlogz (x, y)
+!   y = dlog (x)
+!   return
+! end subroutine dlibrf
 
-!
-! subroutine dlibr2.
-!
+! !
+! ! subroutine dlibr2.
+! !
 
-subroutine dlibr2 (x, y, z)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  double precision x, y, z
-  !     Installation-dependent module for dec vax-11 computer
-  !     like "dlibrf" (see comments there), only for two inputs
-  return
+! subroutine dlibr2 (x, y, z)
+!   implicit none
+!   double precision :: x, y, z
+!   !     Installation-dependent module for dec vax-11 computer
+!   !     like "dlibrf" (see comments there), only for two inputs
+!   return
 
-  entry datn2z (x, y, z)
-  z = datan2 (x, y)
-  return
-end subroutine dlibr2
+!   entry datn2z (x, y, z)
+!   z = datan2 (x, y)
+!   return
+! end subroutine dlibr2
 
 !
 !     subroutine setmar.
 !
 
-subroutine setmar
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+subroutine setmar (n)
+  implicit none
+  integer(4), intent(out), optional :: n
   !     Subroutine to change page size and eject page for printer plots.
   !     Dummy module since this ontario hydro (univac) trick is unknown.
+  if (present (n)) n = 0
   return
+end subroutine setmar
 
-  entry chrsiz (n)
-  n = 0
+!
+! subroutine chrsiz.
+!
+
+subroutine chrsiz (n)
+  implicit none
+  integer(4), intent(out), optional :: n
+  if (present (n)) n = 0
   !     Entry point for do-nothing mimiced tektronix plot10 of "tekplt"
   return
+end subroutine chrsiz
 
-  entry setplt
+!
+! subroutine setplt.
+!
+
+subroutine setplt
+  implicit none
   !     Entry point to change lines/page to maximum number allowed,
   !     to allow printer plots to be continuous over page boundries.
   !     call system dependant routine to change page size
   !     write (lunit6, 1000 )
   !     1000 format (1h1)
   return
+end subroutine setplt
 
-  entry setstd
+!
+! subroutine setstd.
+!
+
+subroutine setstd
   !     Entry point to restore page limits to standard values.
   !     call system dependant routine to change page size
   !     write (lunit6, 1000 )
   return
-end subroutine setmar
+end subroutine setstd
 
 !
-!     subroutine interp.
+! subroutine interp.
 !
 
 subroutine interp
@@ -1582,10 +1528,10 @@ subroutine interp
 end subroutine interp
 
 !
-!     subroutine mover.
+! subroutine mover.
 !
 
-subroutine mover(a, b, n)
+subroutine mover (a, b, n)
   implicit none
   !    Subroutine  mover  (with entry point mover0) is used for block
   !    transfers between contiguous cells of core storage.   'n'  is the
@@ -1596,81 +1542,80 @@ subroutine mover(a, b, n)
   !             of array  'b'.   for zeroing array  'b' ,  the subroutine
   !             call is made with the first argument explicitely
   !             punched as zero.
-  integer, intent(in) :: n
-  real, intent(in) :: a(*)
-  real, intent(out) :: b(*)
+  integer(4), intent(in) :: n
+  real(8), intent(in) :: a(*)
+  real(8), intent(out) :: b(*)
   b(1 : n) = a(1 : n)
   return
 end subroutine mover
 
 !
-!     subroutine mover0.
+! subroutine mover0.
 !
 
 subroutine mover0 (b, n)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  real(8) :: b(*)
+  implicit none
+  integer(4), intent(in) :: n
+  real(8), intent(out) :: b(*)
   !    Subroutine  mover0  is a block-zeroing routine for floating-point
   !    arrays or variables.   Of the two arguments, the second,  'n' ,
   !    is the number of words of core to be zeroed.   The first argument
   !    specifies the address of the first word of the block of  'n'
   !    words of core which is to be zeroed.
-  do i = 1, n
-     b(i) = 0.0
-  end do
+  b(1 : n) = 0.0
   return
 end subroutine mover0
 
 !
-!     subroutine move.
+! subroutine move.
 !
 
 subroutine move (inta, intb, n)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !    Subroutine  move  is identical to the
   !    block-transfer routine  mover  except
   !    that  move  is for integer arrays, while  mover  was for
   !    floating-point arrays.   There is a difference, of course, on
   !    machines like ibm, where integer words may be shorter than
   !    floating-point words.
-  integer(4) inta(*), intb(*)
-  do i = 1, n
-     intb(i) = inta(i)
-  end do
+  integer(4), intent(out) :: intb(*)
+  integer(4), intent(in) :: inta(*), n
+  intb(1 : n) = inta(1 : n)
   return
 end subroutine move
 
 !
-!     subroutine move0.
+! subroutine move0.
 !
 
 subroutine move0 (intb, n)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !    Subroutine  move0  is identical to  the block-zeroing routine
   !    mover0  except that  move0  is for integer arrays, while  mover0
   !    is for floating-point arrays.   There is a difference, on
   !    machines like IBM, where integer words may be shorter than
   !    floating-point words.
-  integer :: intb(*)
+  integer(4), intent(out) :: intb(*)
+  integer(4), intent(in) :: n
   intb(1 : n) = 0
   return
 end subroutine move0
 
 !
-!     subroutine addmxd.
+! subroutine addmxd.
 !
 
 subroutine addmxd (a, b, c, n)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     Subroutine  addmxd  forms matrix   (c) = (a) + b(u)  , where (a),
   !     and (c)  are n by n matrices,  b  is a scalar, and (u) is the
   !     identity matrix.   Array (c) may be the same as (a), if desired.
   !     See subr.  mult  for symmetric-matric storage scheme assumed.
-  integer, intent(in) :: n
-  real, intent(in) :: a(*)
-  real, intent(out) :: c(*)
-  real, intent(in) :: b
-  integer j, k, l
+  integer(4), intent(in) :: n
+  real(8), intent(in) :: a(*)
+  real(8), intent(out) :: c(*)
+  real(8), intent(in) :: b
+  integer(4) :: j, jt, k, l
   k = 1
   j = 1
   jt = n * (n + 1) / 2
@@ -1686,11 +1631,11 @@ subroutine addmxd (a, b, c, n)
 end subroutine addmxd
 
 !
-!     subroutine multmx.
+! subroutine multmx.
 !
 
 subroutine multmx (a, b, c, temp, n)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     Subroutine multmx  forms the matrix product   (c) = (a)(b)   where
   !     matrices  (a), (b), and (c)  are all  n by n  square arrays.
   !     Array  'temp'  is a scratch working area of not less than  2n
@@ -1698,8 +1643,10 @@ subroutine multmx (a, b, c, temp, n)
   !     the product   (a)(b)   back into  (b) .    See subroutine  'mult'
   !     which is called herein, for details about the storage scheme used
   !     )    for these real, symmetric matrices.
-  integer ii, j
-  real a(*), b(*), c(*), temp(*)
+  integer(4), intent(in) :: n
+  real(8), intent(out) :: b(*), c(*), temp(*)
+  real(8), intent(in) :: a(*)
+  integer(4) :: i, ii, j, l, ll0, m
   l = 0
   ll0 = 0
   ii = 0
@@ -1720,17 +1667,20 @@ subroutine multmx (a, b, c, temp, n)
 end subroutine multmx
 
 !
-!     subroutine frefld.
+! subroutine frefld.
 !
 
 subroutine frefld (array)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  character(8) text1, chtacs, texbuf(30), texvec(1)
+  use blkcom
+  implicit none
+  !  include 'blkcom.ftn'
+  real(8), intent(out) :: array
+  integer(4) :: i, jj, n3, n9
+  character(8) :: text1, chtacs, texbuf(30), texvec(1)
   dimension array(1)
   equivalence (texvec(1), text1)
   data chtacs / 'tacs  ' /
-  integer ll
+  integer(4) :: ll
   if (iprsup .ge. 5) write (unit = lunit6, fmt = 1016) nfrfld, nright, kolbeg
 1016 format (' Top "frefld".  nfrfld, nright, kolbeg =', 3i6)
   if (nright .lt. 0) go to 5913
@@ -1838,14 +1788,16 @@ subroutine frefld (array)
 end subroutine frefld
 
 !
-!     subroutine freone
+! subroutine freone
 !
 
 subroutine freone (d1)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     Scalar version of  "frefld"  which enters the utpf with
   !     "m29."  vintage, to satisfy burroughs (see problem b,
   !     section ii, page ecwb-4, vol. x  EMTP memo of 14 feb 1981.)
+  real(8), intent(out) :: d1
+  real(8) :: array
   dimension array(1)
   call frefld (array(1))
   d1 = array(1)
@@ -1857,15 +1809,18 @@ end subroutine freone
 !
 
 subroutine frenum (text1, n3, d1)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     VAX-11/780  installation-dependent module called only by
   !     the free-format data module  "frefld" .  Purpose is to
   !     convert input characters  (text1(1) ... text1(n3))  into
   !     a floating point number.
   !     real(8)        text1(1), blank
-  character(8) text1(1), blank
-  !     logical*1  texta(30), textb
-  character texta(30), textb
+  integer(4), intent(in) :: n3
+  real(8), intent(out) :: d1
+  character(8), intent(in) :: text1(*)
+  integer(4) :: i, n4, n9
+  character(8) :: blank
+  character(1) :: texta(30), textb
   data blank / '      ' /
   data textb / ' ' /
   n9 = 30
@@ -1891,17 +1846,17 @@ subroutine frenum (text1, n3, d1)
 end subroutine frenum
 
 !
-!     subroutine packa1.
+! subroutine packa1.
 !
 
 subroutine packa1 (from, to, kk)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     System-dependent EMTP module  'packa1'  for  VAX-11/780.
   !     Argument  'from'  contains  a1  information which is to be stored
   !     in character position  kk  of argument  'to' .
   !     For all EMTP usage,  1st 2 arguments must be vectors.
   !     logical*1 from(1), to(6)
-  integer, intent(in) :: kk
+  integer(4), intent(in) :: kk
   character(1), intent(in) :: from
   character(*), intent(out) :: to
   to(kk : kk) = from(1 : 1)
@@ -1909,11 +1864,11 @@ subroutine packa1 (from, to, kk)
 end subroutine packa1
 
 !
-!     subroutine packch.
+! subroutine packch.
 !
 
 subroutine packch (from, to, k4or6, nchbeg, nword)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !
   !     This module performs the system-dependent function of packing bcd
   !     characters from  a4  or  a6  words together so as to form a
@@ -1950,8 +1905,8 @@ subroutine packch (from, to, k4or6, nchbeg, nword)
   !                     word  to(3) .
   logical(1), intent(in) :: from(*)
   logical(1), intent(out) :: to(*)
-  integer, intent(in) :: k4or6, nchbeg, nword
-  integer ichar
+  integer(4), intent(in) :: k4or6, nchbeg, nword
+  integer(4) :: ichar, iword, jchar, kchar
   ichar = nchbeg
   do iword = 1, nword
      do kchar = 1, k4or6
@@ -1964,11 +1919,11 @@ subroutine packch (from, to, k4or6, nchbeg, nword)
 end subroutine packch
 
 !
-!     function seedy.
+! function seedy.
 !
 
-function seedy (atim)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+real(8) function seedy (atim)
+  implicit none
   !
   !     This function is designed to take the time of day (wall-clock
   !     time) in bcd form as input, and return the number of seconds
@@ -1980,7 +1935,7 @@ function seedy (atim)
   !
   !     real(8)          atim
   character(8), intent(in) :: atim(2)
-  real(8) seedy
+  integer(4) :: amin, hour, ihr, imin, imin1, imin10, isec, sec
   read (unit = atim, fmt = 4286) ihr, imin10, imin1, isec
 4286 format (i2, 1x, i1, 4x, i1, 1x, i2)
   imin = imin10 * 10 + imin1
@@ -1988,71 +1943,15 @@ function seedy (atim)
   amin = imin * 60
   sec = isec
   seedy = sec + amin + hour + 1.0
-  return
 end function seedy
 
 !
-!     subroutine randnm.
+! function sandnm.
 !
 
-function randnm (x)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !
-  !     This is a random number generating function, whose purpose is to
-  !     return with a value for a random variable which is uniformly-
-  !     distributed over the interval from zero to unity.
-  !     A typical call is    y = randnm(x)  ,    where  'x'  is a
-  !     floating-point variable which is present only because 'random'
-  !     number-generating algorithms are never truly random, and generally
-  !     require some sort of 'random' initialization to even get started.
-  !     Since such number-generating algorithms are actually cyclic if a
-  !     large enough sampling is taken, it is also desirable to
-  !     re-initialize the algorithm periodically, by means of a 'random'
-  !     external input.   Variable  'x'  is this 'random' input, whose
-  !     purpose is to randomly re-initialize the algorithm, as follows ...
-  !          1.  if  'x'  is identically zero, there is no initialization.
-  !              the next random number is simply returned through the
-  !              function name.
-  !          2.  if  'x'  is positive, the random number generating
-  !              algorithm is to be initialized.   emtp usage has  'x'
-  !              as the wall-clock time in seconds since midnight, an
-  !              integer (though stored in floating-point mode, note).
-  !              in this case, no random number need be returned with the
-  !              function name, since the emtp will not use it.
-  !     if a non-cdc user has access to a random number generating
-  !     function which does not require initialization, he may simply
-  !     ignore  'x' ,   and return the random number through the function
-  !     name every time this module is called.
-  !
-  !     A minus sign appended to variable  'xmaxmx'  of   /blank/  is a
-  !     flag that the user wants to employ the standard table of random
-  !     numbers which is built into module  'sandnm' .
-  !
-  !     Installation-dependent  EMTP  module written for the  dec
-  !     VAX-11/780.    'ran'  is a  dec  system subroutine which
-  !     returns a random number uniformly distributed over  (0, 1) .
-  include 'blkcom.ftn'
-  real, intent(in) :: x
-  integer n14
-  real randnm
-  equivalence (moncar(1), knt)
-  if (xmaxmx .lt. 0.0) go to 7265
-  if (x .eq. 0.0) go to 4213
-  if (knt .gt. 1) go to 9800                                ! skip 2nd or later seed
-  n14 = int (x, kind (n14))
-  if (n14 / 2 * 2 .eq. n14) n14 = n14 + 1
-4213 randnm = ran(int (n14, 4))                                      ! 29 dec 1987, change from  (n1, n2)
-  go to 9800
-7265 randnm = sandnm(x)
-9800 return
-end function randnm
-
-!
-!     function sandnm.
-!
-
-function sandnm (x)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+real(8) function sandnm (x)
+  use blkcom
+  implicit none
   !     This version of  'randnm'  is used for testing of the
   !     statistical overvoltage capability of the emtp only.   It uses
   !     built-in random numbers, so as to produce identical results
@@ -2065,11 +1964,12 @@ function sandnm (x)
   !     is input by the user with negative value, the emtp takes
   !     this to mean that "sandnm" is to be used for random
   !     numbers rather than "randnm" .
-  include 'blkcom.ftn'
-  real, intent(in) :: x
-  real a(100), sandnm
-  equivalence (moncar(1), knt)
-  !     burroughs: preserve local variable between module calls:
+  !  include 'blkcom.ftn'
+  real(8), intent(in) :: x
+  integer(4) :: l, n1
+  real(8) :: a(100)
+  !  equivalence (moncar(1), knt)
+  !     Burroughs: preserve local variable between module calls:
   data l / 0 /
   !     beginning of assignment of random numbers to array  'a' .
   a(  1) =  .1445312506618
@@ -2182,15 +2082,71 @@ function sandnm (x)
 2645 format (/, " Variables in  'sandnm' ,   the random-number generator with 100 built-in numbers.       l     knt  kswtch      n1 ", 14x, 'x', /, 82x, 4i8, e15.5)
   if (n1 .gt. 0) l = l - 100 * n1
   sandnm = a(l)
-  return
 end function sandnm
+
+!
+! function randnm.
+!
+
+real(8) function randnm (x)
+  use blkcom
+  implicit none
+  !
+  !     This is a random number generating function, whose purpose is to
+  !     return with a value for a random variable which is uniformly-
+  !     distributed over the interval from zero to unity.
+  !     A typical call is    y = randnm(x)  ,    where  'x'  is a
+  !     floating-point variable which is present only because 'random'
+  !     number-generating algorithms are never truly random, and generally
+  !     require some sort of 'random' initialization to even get started.
+  !     Since such number-generating algorithms are actually cyclic if a
+  !     large enough sampling is taken, it is also desirable to
+  !     re-initialize the algorithm periodically, by means of a 'random'
+  !     external input.   Variable  'x'  is this 'random' input, whose
+  !     purpose is to randomly re-initialize the algorithm, as follows ...
+  !          1.  if  'x'  is identically zero, there is no initialization.
+  !              the next random number is simply returned through the
+  !              function name.
+  !          2.  if  'x'  is positive, the random number generating
+  !              algorithm is to be initialized.   emtp usage has  'x'
+  !              as the wall-clock time in seconds since midnight, an
+  !              integer (though stored in floating-point mode, note).
+  !              in this case, no random number need be returned with the
+  !              function name, since the emtp will not use it.
+  !     if a non-cdc user has access to a random number generating
+  !     function which does not require initialization, he may simply
+  !     ignore  'x' ,   and return the random number through the function
+  !     name every time this module is called.
+  !
+  !     A minus sign appended to variable  'xmaxmx'  of   /blank/  is a
+  !     flag that the user wants to employ the standard table of random
+  !     numbers which is built into module  'sandnm' .
+  !
+  !     Installation-dependent  EMTP  module written for the  dec
+  !     VAX-11/780.    'ran'  is a  dec  system subroutine which
+  !     returns a random number uniformly distributed over  (0, 1) .
+  !  include 'blkcom.ftn'
+  real(8), intent(in) :: x
+  integer(4) :: n14
+  real(8) :: sandnm
+  !  equivalence (moncar(1), knt)
+  if (xmaxmx .lt. 0.0) go to 7265
+  if (x .eq. 0.0) go to 4213
+  if (knt .gt. 1) go to 9800                                ! skip 2nd or later seed
+  n14 = int (x, kind (n14))
+  if (n14 / 2 * 2 .eq. n14) n14 = n14 + 1
+4213 randnm = ran(n14)                                      ! 29 dec 1987, change from  (n1, n2)
+  go to 9800
+7265 randnm = sandnm (x)
+9800 continue
+end function randnm
 
 !
 ! subroutine mult.
 !
 
 subroutine mult (a, x, y, n, icheck)
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     subroutine  'mult'  is used to post-multiply a symmetric matrix
   !     by a vector.
   !     a=matrix,x and y=vectors.if icheck=0   then  y=a*x
@@ -2199,7 +2155,11 @@ subroutine mult (a, x, y, n, icheck)
   !     matrix a is real, symmetric and stored as upper triangular matrix
   !     in one-dimensional array (1 element for first column, 2 for second
   !     column etc.). y must not be identical with x.
-  real a(1), x(1), y(1)
+  integer(4), intent(in) :: icheck, n
+  real(8), intent(in) :: a(1), x(1)
+  real(8), intent(out) :: y(1)
+  integer(4) :: i, ii, k
+  real(8) :: xx, yy
   ii = 0
   k = 0
   do
@@ -2219,6 +2179,7 @@ subroutine mult (a, x, y, n, icheck)
 end subroutine mult
 
 subroutine dummy
+  implicit none
   write (unit = *, fmt = *) 'Dummy subroutine called.'
   return
 end subroutine dummy

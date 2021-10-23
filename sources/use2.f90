@@ -1,12 +1,17 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: use2.for
+! file use2.f90
 !
+
 !
-!     subroutine use2.
+! subroutine use2.
 !
+
 subroutine use2
-  include  'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include  'tacsto.ftn'
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=from
@@ -18,7 +23,7 @@ subroutine use2
   sptr=sptr+1
   return
 0001 go to (9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 0002, 0002, 0002, 9514, 9515, 9516), from- 9500
-0002 stop 'invalid "from" reference in "use2".'
+0002 stop 'Invalid "from" reference in "use2".'
 910 stpflg=42
   stpi1=iptr
   stpi2=ilen-iptr
@@ -1104,6 +1109,7 @@ subroutine use2
   sptr=sptr+1
   go to 9500
 end subroutine use2
+
 !
-!     end of file: use2.for
+! end of file use2.f90
 !

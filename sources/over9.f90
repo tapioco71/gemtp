@@ -1,23 +1,27 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over9.for
+! file: over9.f90
 !
+
 !
-!     subroutine over9.
+! subroutine over9.
 !
+
 subroutine over9
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit none
+  !  implicit real*8 (a-h, o-z), integer*4 (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'space2.ftn'
   include 'deck10.ftn'
-  character fixbu3
+  character :: fixbu3
   equivalence ( iofkol, iofgnd ), ( iofkor, iofbnd )
   !     following carries "next" among over6, insert, over7, & over9:
   equivalence  ( loopss(11), next )
   locatn(i,j)=(j*j-j)/2+i
   if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
-4567 format ( 23h  "begin module over9." )
+4567 format ('  "Begin module over9."')
   if( iprsup .gt. 0 ) write(lunit6, 1001)  kconst, last
 1001 format ( 36h steady-state phasor solution begins,35h (top of "over9").   kconst, last =,  2i8 )
   if ( istep  .ne. -4567 )  go to 1024
@@ -445,6 +449,7 @@ subroutine over9
 4568 format ( 23h  "exit  module over9." )
 99999 return
 end subroutine over9
+
 !
-!     end of file: over9.for
+! end of file: over9.f90
 !

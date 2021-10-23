@@ -1,21 +1,29 @@
 !-*- Mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over20.for
+! file over20.f90
 !
 
 !
-!     subroutine over20.
+! subroutine over20.
 !
 
 subroutine over20
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  integer cchar, n5, n6, n9, n11, n14, n18
-  real peaknd
-  equivalence (moncar(1), knt), (moncar(2), kbase)
-  equivalence (moncar(3), ltdelt), (moncar(4), isw)
-  equivalence (moncar(10), mtape)
+  use blkcom
+  use labcom
+  use tracom
+  implicit none
+  integer(4) :: i, iold, ipp
+  integer(4) :: k, kn1
+  integer(4) :: l, ll1, ll9, ll10
+  integer(4) :: m
+  integer(4) :: n1, n2, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, ndx1, ndx2
+  integer(4) :: ndx3, npl, nstat
+  real(8) :: a, d1, d2, zero
+  !  equivalence (moncar(1), knt), (moncar(2), kbase)
+  !  equivalence (moncar(3), ltdelt), (moncar(4), isw)
+  !  equivalence (moncar(10), mtape)
+  !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  Begin module "over20".')
   zero = 0.0
@@ -101,7 +109,7 @@ subroutine over20
   m = iabs(mbus(k))
   write (unit = lunit7, fmt = 7020) iold, bus(l), bus(m), ci1, ck1, zero, zero, k
 7020 format (i2, 2a6, 4e15.8, i6)
-  if (n10 .ne. 0) write (lunit6,7021) bus(l), bus(m), ci1, ck1, zero, zero, k
+  if (n10 .ne. 0) write (unit = lunit6, fmt = 7021) bus(l), bus(m), ci1, ck1, zero, zero, k
 7021 format (1x, a6, 1x, a6, 4e13.5, i6)
   go to 7025
 7022 it2 = iabs(length(k))
@@ -286,22 +294,24 @@ subroutine over20
 end subroutine over20
 
 !
-!     subroutine katalg.
+! subroutine katalg.
 !
 
 subroutine katalg
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use dekspy
+  implicit none
   !     VAX-11/780  installation-dependent module which is used
-  !     to honor the miscellaneous data card request for emtp table
+  !     to honor the miscellaneous data card request for EMTP table
   !     saving, for later  "start again"  usage.   A call to the
   !     universal module  "tables"  actually dumps memory onto disk.
   !     Logic associated with other than  memsav=0  or  memsav=1
   !     can generally be ignored by other systems;  it applies
   !     only to rtm (real time monitor) use of BPA VAX.
-  include 'blkcom.ftn'
-  include 'dekspy.ftn'
-  character(132) ansi132
+  character(132) :: ansi132
+  integer(4) :: j, locker
   common /comlock/ locker(2)                                ! share with "over1" only
+  !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 2467) icat, memsav, lunit2, ltlabl
 2467 format (/, ' Enter  "katalg" .    icat  memsav  lunit2  ltlabl', /, 18x, 10i8)
   if (memsav .eq. 0) go to 9800                             ! no table moving at all
@@ -349,17 +359,18 @@ subroutine katalg
 end subroutine katalg
 
 !
-!     subroutine emtspy.
+! subroutine emtspy.
 !
 
 subroutine emtspy
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use dekspy
+  use synmac
+  implicit none
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, convert to dummy module ("return").
-  include 'blkcom.ftn'
-  include 'dekspy.ftn'
-  include 'synmac.ftn'
-  integer komadd, n18
+  integer(4) :: n18
+  !
   save
   data n18 / 0 /
   n18 = n18 + 1
@@ -427,24 +438,30 @@ end subroutine emtspy
 !
 
 subroutine spying
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use labcom
+  use synmac
+  use tacsar
+  use dekspy
+  use indcom
+  implicit none
   !     Module of interactive EMTP only, which services "emtspy".
   !     This is the principle module, called by "emtspy".
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'synmac.ftn'
-  include 'tacsar.ftn'
-  include 'dekspy.ftn'
-  integer i, ibr, imax, imin, inchlp, ind, indxrp, intout, intype, iprspy, j
-  integer k, k1, k2, k3, khead, komadd, kslowr, ksymbl, kyramp
-  integer l, limarr, locout, looprp
-  integer memkar, memrmp
-  integer n1, n2, n23, n4, n5, n6, n7, n8, n9, n10, n10rmp, n12, n13, n14
-  integer n15, n17, n24, nbreak, nchd2, nd13, numcrd, numdcd
-  real d4, d5, d13, d34, fbegrp, fendrp, rampcn, rampsl
-  real tbegrp, tbreak, tendrp, tim1rp, tim2rp, tmax, tmaxrp, tminrp, twhen
-  real val1rp, val2rp
-  character(8) chard7, spytim(2), spdate(2)
+  integer(4) :: i, icomm, idmxxx, ind, intype, ios
+  integer(4) :: j, jwdsav
+  integer(4) :: k, k1, k2, k3, kansav, khead, kp
+  integer(4) :: l
+  integer(4) :: m
+  integer(4) :: n1, n2, n4, n5, n6, n7, n8, n9, n10, n12, n13, n14, n15, n16, n17
+  integer(4) :: n18, n22, n23, n24, n26, n27
+  integer(4) :: n33, nchd2, nd13, next, num2, num3, num5, numask, numbco, numbrn
+  integer(4) :: numnam
+  real(8) :: d1, d2, d3, d4, d5, d6, d8, d13, d34
+  real(8) :: tim1rp, tim2rp, twhen
+  real(8) :: val1rp, val2rp
+  real(8) :: xl
+  character(8) :: chard7, spytim(2), spdate(2)
+  !
   save
   if (iprspy .lt. 1) go to 31006
   write (unit = munit6, fmt = 1006) nchain, jjroll, kbreak, lockbr, nexmod, buff77(1 : 20)
@@ -555,8 +572,7 @@ subroutine spying
   if (kbrser .ne. 2) go to 1009
   jword = 52
   go to 8500
-!1009 memkar = locint (kar1)
-1009 memkar = int (ishft (loc (kar1), -32), kind (memkar))
+1009 memkar = location (kar1)
   if (kfile5 .ne. 2) go to 1240
   kfile5 = 0
   go to 31269
@@ -2086,22 +2102,27 @@ end subroutine spying
 !
 
 subroutine spyink
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use labcom
+  use tacsar
+  use dekspy
+  use indcom
+  use tracom
+  implicit none
   !     Module of interactive emtp only, which services "emtspy".
   !     this is the 2nd half of principle module "spying".
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
-  include 'dekspy.ftn'
-  integer i, indbuf, iout, ip, iascii, inonl, isprin, it
-  integer j, k, kconst, konadd, koncur, kontac, kontot, kprchg, kswtch
-  integer l, lidnt1, lidnt2, limstp, linnow, linspn, litype, lserlc
-  integer m, mmfind, mmhold
-  integer n1, n2, n3, n4, n5, n6, n7, n8, n12, n11, n13, n14, n15, n17, n22
-  integer n23, n43, ndx1, ndx2, ndx4, niu, ntot, numcrd
-  real d8, d14, d17, d18, d24, epskon
-  character(8) d13, text1, text2, d12
+  integer(4) :: i, ip
+  integer(4) :: j, k, kptplt, kud2, kud3
+  integer(4) :: l
+  integer(4) :: m, mmfind, mmhold, mstrng
+  integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n11, n12, n13, n14, n15, n16
+  integer(4) :: n17, n18, n22, n23, n24
+  integer(4) :: n33, n42, n43, n66
+  integer(4) :: n77, ndx1, ndx2, ndx3, ndx4, nsmout, numnv0
+  real(8) :: d8, d14, d15, d17, d18, d24
+  character(8) :: d13, text1, text2, d12
   dimension mmhold(20)
+  !
   save
   data text1 / 'tamper' /
   if (iprspy .lt. 1) go to 1003
@@ -3320,7 +3341,7 @@ subroutine spyink
   call window
   go to 4008
 4094 n15 = n15 + j
-  write (munit6, 4095)  forbyt(1), n15
+  write (unit = munit6, fmt = 4095) forbyt(1), n15
 4095 format ('      Ok, record of  t =',  e15.6, '  just read on try number', i7)
   call window
   go to 4008
@@ -3670,10 +3691,8 @@ subroutine spyink
   if (koncur .eq. 2) call tacs1a
   go to 4738
 4752 if (prom80(1 : 6) .ne. 'patch ') go to 4792
-!  n11 = locint (kar1)
-  n11 = loc (kar1)
-!  n12 = locint (volti)
-  n12 = loc (volti)
+  n11 = location (kar1)
+  n12 = location (volti)
   n13 = (n12 - n11) / 2
   if (iprspy .le. 1) go to 34753
   write (munit6, 4753) n11, n12, n13
@@ -3845,19 +3864,21 @@ subroutine spyink
 end subroutine spyink
 
 !
-!     subroutine initsp.
+! subroutine initsp.
 !
 
 subroutine initsp
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use dekspy
+  implicit none
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive emtp use, this module can be deleted.
   !     Universal initialization module for "spying".   Constants
   !     must be set only once, at the beginning of execution only.
-  include 'blkcom.ftn'
-  include 'dekspy.ftn'
-  integer numkey
-  character(8) textay(75)
+  character(8) :: textay(75)
+  integer(4) :: j, n3
+  real(8) :: tdroll
+  !
   !     next come all possible key-word responses to "spy:" prompt:
   data  textay(1)   /  'heading '  /
   data  textay(2)   /  'stop    '  /
@@ -3928,7 +3949,7 @@ subroutine initsp
   call dimens (memrmp(1), n3, bus1, bus1)
   limbuf = memrmp(2)
   if (iprspy .lt. 1) go to 1144
-  write (munit6, 1143) limbuf
+  write (unit = munit6, fmt = 1143) limbuf
 1143 format (' Near top of "initsp".  limbuf =', i8)
   call window
 1144 lockbr = 1
@@ -3994,17 +4015,18 @@ end subroutine initsp
 !
 
 subroutine flager
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use dekspy
+  implicit none
   !     Module of interactive EMTP only, which services "emtspy".
   !     if no interactive use, convert to dummy module ("return").
   !     VAX-11 installation-dependent EMTP module which serves
   !     to read spy command from munit5 if: 1) ctrl-c interrupt
   !     has occurred, or 2) if  lockbr = 1  upon entry.
-  include 'blkcom.ftn'
-  include 'dekspy.ftn'
-  integer kspsav
+  integer(4) :: ios, kwtvax
   common /comkwt/ kwtvax                                    ! magic block for ctrl-c trapping
-  dimension idum(3)                                         !  dummy vector for ctrl-c handling
+  !  dimension idum(3)                                      !  dummy vector for ctrl-c handling
+  !
   external kwiter                                           ! needed for ctrl-c initialization
   if (iprspy .lt. 10) go to 3456                            ! jump around diagnostic
   write (munit6, 3409) istep, kwtspy, itype, lastov
@@ -4043,7 +4065,7 @@ subroutine flager
 3649 file6(kspsav) = buff77                                 ! accumulate user-keyed spy input
 3650 go to 3651                                             ! exit module with 80-col. buff77 card now read
 3651 if (iprspy .lt. 9) go to 9000
-  write (munit6, 9004) kwtspy, buff77
+  write (unit = munit6, fmt = 9004) kwtspy, buff77
 9004 format (' Exit "flager".  kwtspy =', i4, '   buff77 = ', a80)
   call window                                               ! output of character variable munit6
 9000 return
@@ -4054,14 +4076,15 @@ end subroutine flager
 !
 
 subroutine quiter
-!  implicit real(8) (a-h, o-z),  integer(4) (i-n)
+  use dekspy
+  implicit none
   !     Module of interactive EMTP only, which services "emtspy".
   !     if no interactive use, convert to dummy module ("return").
   !     this module provides a special-purpose connection to the
   !     more general "flager".  Here, we only want to sense a
   !     user-keyed interrupt (no spy input is to be read).
-  include 'dekspy.ftn'
-  integer n24, n25, kfile5, lockbr
+  integer(4) :: n24, n25
+  !
   n24 = lockbr   ! save current time-slicing flag value
   n25 = kfile5   ! save current status of input connection
   lockbr = 0     ! temporarily turn time-sharing on
@@ -4076,7 +4099,9 @@ end subroutine quiter
 !
 
 subroutine honker (klevel)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use dekspy
+  implicit none
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, this module can be deleted.
   !     VAX-11 installation-dependent emtp module which issues
@@ -4089,12 +4114,11 @@ subroutine honker (klevel)
   !     ctrl-g will ring the bell, and the ascii character 7 is
   !     equivalent within a program.  Shortage of 1 bell is due to
   !     carriage control, maybe (see n8 = j + 1, rather than j, below).
-  include 'blkcom.ftn'
-  include 'dekspy.ftn'
-  integer, intent(in) :: klevel
-  integer nd13
-  real d13
-  character(8) spytim(2), spdate(2)
+  integer(4), intent(in) :: klevel
+  integer(4) :: nd13
+  real(8) :: d13
+  character(8) :: spytim(2), spdate(2)
+  !
   d13 = 2.0                                                 ! initialize time delay at two seconds
   call time44 (spytim)                                      ! emtp wall-clock time
   call date44 (spdate)                                      ! emtp date utility
@@ -4120,19 +4144,20 @@ subroutine honker (klevel)
 end subroutine honker
 
 !
-!     subroutine tdelay.
+! subroutine tdelay.
 !
 
 subroutine tdelay (d8)
-!  implicit real(8) (a-h, o-z),  integer(4) (i-n)
+  use blkcom
+  implicit none
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, this module can be deleted.
   !     VAX-11   module designed to stall for  d8  seconds.
   !     Present use of disk writes is temporary only, and should
   !     later be replaced by a less-wasteful, true hibernation.
-  include 'blkcom.ftn'
-  integer, intent(out) :: d8
-  integer j, k, kwtspy, n23
+  !  include 'blkcom.ftn'
+  integer(4), intent(out) :: d8
+  integer(4) :: j, k, n23
   n23 = d8                                                  ! integer number of seconds for hibernation
   do j = 1, n23                                             ! loop once for each second of delay
      do k = 1, 6                                            ! one second = about 6 writes to disk
@@ -4151,46 +4176,49 @@ subroutine tdelay (d8)
 end subroutine tdelay
 
 !
-!     subroutine kwiter.
+! subroutine kwiter.
 !
 
 subroutine kwiter (idum)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use dekspy
+  implicit none
   !     VAX-11  installation-dependent EMTP module which serves
   !     control interactive usage.  if none, destroy the module.
   !     Purpose is to sense user-keyed interrupt, and set flag.
   !     Name "comkwt" is reserved (connected to "controlc.obj")
-  include 'dekspy.ftn'
-  integer, intent(in) :: idum
-  integer kwtvax
+  integer(4), intent(in) :: idum
+  integer(4) :: kwtvax
   common /comkwt/ kwtvax
   dimension idum(3)
+  !
   kwtvax = 1
+  write (unit = *, fmt = *) idum(1 : 3)
   return
 end subroutine kwiter
 
 !
-!     subroutine percnt.
+! subroutine percnt.
 !
 
 subroutine percnt (vbyte, n7)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use dekspy
+  implicit none
   !     Module of interactive emtp usage only, which services "emtspy".
   !     Utility which serves to replace  "%%%%%%%%"  strings of disk
   !     files by parameters of  "@?"  call.   columns 1, ... n7  are
   !     searched, of character vector  "vbyte" .
   !     For non-interactive emtp, this module can be destroyed.
-  include 'dekspy.ftn'
-  integer, intent(in) :: n7
-  integer itexp, j, k
-  character(1) vbyte(1)
+  integer(4), intent(in) :: n7
+  integer(4) :: i, j, k
+  character(1) :: vbyte(1)
+  !
   do k = 1, n7
      if (vbyte(k) .ne. '%') go to 1297
      do j = 1, 7
         if (vbyte(k + j) .ne. '%') go to 1297
      end do
-!1253 continue
-!     we exit  do 1253  with string of 8 "%" beginning in column k
+     !1253 continue
+     !     we exit  do 1253  with string of 8 "%" beginning in column k
      itexp = itexp + 1
      if (itexp .le. maxarg) go to 1284
      write (munit6, 1274) maxarg
@@ -4221,18 +4249,19 @@ end subroutine percnt
 !
 
 subroutine numchk (vbyte, nchar, kill)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use dekspy
+  implicit none
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     This utility serves to scrutinize the input character string
   !     (vbyte(j), j=1, nchar)  to see if it is a legal floating-point
   !     number.   If so,  "kill"  is to be set to zero;  if number is
   !     structurally deficient,  "kill"  is to be set positive.
   !     For non-interactive emtp, this module can be destroyed.
-  include 'dekspy.ftn'
-  integer, intent(in) :: nchar
-  integer, intent(out) :: kill
-  character, intent(in) :: vbyte(*)
-  integer i, ll
+  integer(4), intent(in) :: nchar
+  integer(4), intent(out) :: kill
+  character(1), intent(in) :: vbyte(*)
+  integer(4) :: i, j, kk, koldig, kolexp, kolper, nper, nsign, nume
+  !
   kill = 0
   koldig = 0
   nper = 0
@@ -4283,19 +4312,23 @@ subroutine numchk (vbyte, nchar, kill)
 end subroutine numchk
 
 !
-!     subroutine getnum.
+! subroutine getnum.
 !
 
 subroutine getnum (num)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use dekspy
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
-  include 'dekspy.ftn'
-  integer, intent(out) :: num
-  integer i
-  character(1) c4
+  integer(4), intent(out) :: num
+  integer(4) :: i
+  integer(4) :: j
+  integer(4) :: n1
+  character(1) :: c4
+  !
   if (iprspy .lt. 1) go to 4204
-  write (munit6, 4203) ibegcl, bytbuf(ibegcl:ibegcl)
+  write (unit = munit6, fmt = 4203) ibegcl, bytbuf(ibegcl:ibegcl)
 4203 format (' Begin  "getnum".   ibegcl =', i5, '      bytbuf(ibegcl) =', a1)
   call window
 4204 n1 = 1
@@ -4341,20 +4374,21 @@ subroutine getnum (num)
 end subroutine getnum
 
 !
-!     subroutine movers.
+! subroutine movers.
 !
 
 subroutine movers (from, to, num)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     For non-interactive EMTP, this module can be destroyed.
   integer(4), intent(in) :: num
   character, intent(in) :: from(1:*)
   character, intent(out) :: to(1:*)
-  to(1:num) = from(1:num)
-!  do j = 1, num
-!1763 to(j) = from(j)
-!  end do
+  to(1 : num) = from(1 : num)
+  !  do j = 1, num
+  !1763 to(j) = from(j)
+  !  end do
   return
 end subroutine movers
 
@@ -4363,7 +4397,8 @@ end subroutine movers
 !
 
 subroutine moverl (from, to, num)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     For non-interactive EMTP, this module can be destroyed.
   integer(4), intent(in) :: num
@@ -4378,61 +4413,64 @@ end subroutine moverl
 !
 
 subroutine window
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use dekspy
+  implicit none
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   !     For character*132 spy display channel munit6, this serves
   !     to actually output the line to the spy display device.
   !     VAX-11  installation-dependent emtp module.
-  include 'blkcom.ftn'
-  include 'dekspy.ftn'
-  integer j, k, kverfy
+  integer(4) :: j, k
+  !
   !     temporarily, until we learn how to write to a 2nd crt for
   !     vax/vms, we will just write to lunit6:
-  if (iabs (kverfy) .eq. 34543) go to 9000                  ! no spy windows
-  do j = 1, 132                                             ! search line for right most non-blank
-     k = 133 - j                                            ! reverse index (step from right to left)
-     if (munit6(k : k) .ne. ' ') go to 5621                 ! end of line
+  if (iabs (kverfy) .eq. 34543) go to 9000        ! no spy windows
+  do j = 1, 132                                   ! search line for right most non-blank
+     k = 133 - j                                  ! reverse index (step from right to left)
+     if (munit6(k : k) .ne. ' ') go to 5621       ! end of line
   end do
-5621 write (unit = lunit6, fmt = *) munit6                  ! output nonblank part
+5621 write (unit = lunit6, fmt = *) munit6(1 : k) ! output nonblank part
 9000 return
 end subroutine window
 
 !
-!     subroutine spylin.
+! subroutine spylin.
 !
 
 subroutine spylin
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use dekspy
+  implicit none
   !     Module of interactive emtp usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   !     One blank line is written on spy screen by this module.
-  include 'blkcom.ftn'
-  include 'dekspy.ftn'
-  !     temporarily, until we learn how to write to a 2nd crt for
+  !     Temporarily, until we learn how to write to a 2nd crt for
   !     VAX/VMS, we will just write to lunit6 in universal form:
-!5621 write (unit = lunit6, fmt = 5624)
+  !5621 write (unit = lunit6, fmt = 5624)
   write (unit = lunit6, fmt = 5624)
 5624 format (1x)
 end subroutine spylin
 
 !
-!     subroutine spyout.
+! subroutine spyout.
 !
 
 subroutine spyout(n1, n2)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use labcom
+  use dekspy
+  implicit none
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, this module can be deleted.
   !     Arguments n1 and n2 are node nos., with possible "-" signs.
   !     Purpose is to load and print corresponding names for "output"
-  include 'labcom.ftn'
-  include 'dekspy.ftn'
-  integer, intent(in) :: n1, n2
-  integer k, n11, n12
+  integer(4), intent(in) :: n1, n2
+  integer(4) :: k, n11, n12
   save
-  character(8) text10(10), terra
-  data terra / 'terra ' /
+  character(8) :: text10(10)
+  integer(4) :: j
+  !
+  !  data terra / 'terra ' /
   n11 = n1
   n12 = n2
   !     first check for special initialization or flushing calls:
@@ -4466,18 +4504,19 @@ subroutine spyout(n1, n2)
 end subroutine spyout
 
 !
-!     subroutine examin.
+! subroutine examin.
 !
 
 subroutine examin
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use dekspy
+  implicit none
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     For non-interactive emtp, this module can be destroyed.
   !     This near-universal module serves to build the character*132
   !     output vector outlin of the "examine" command of spy.
   !     Computers with index problems (e.g., prime) need replacement
-  include 'dekspy.ftn'
-  integer intout, iprspy, ivec, jj, n3, n5, n8, n9, n10
+  integer(4) :: jj, n3, n5, n8, n9, n10, n17
+  !
   if (iprspy .lt. 1) go to 1718
   write (unit = munit6, fmt = 1707) numex, imin(1), locout(1)
 1707 format (' Top of "examin".  numex, imin(1), locout(1) =', 3i6)
@@ -4554,7 +4593,8 @@ end subroutine examin
 !
 
 subroutine deposi (ind, intype, n1, n2, d4)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use dekspy
+  implicit none
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     For non-interactive EMTP, this module can be destroyed.
   !     This near-universal module services "deposit", to actually
@@ -4564,12 +4604,11 @@ subroutine deposi (ind, intype, n1, n2, d4)
   !     deposited, and intype gives the mode (1=integer, 0=real).
   !     Bounding subscripts on the deposit are n1 and n2, respectively.
   !     Computers with index problems (e.g., prime) need replacement
-  include 'dekspy.ftn'
-  integer, intent(in) :: ind, intype
-  integer, intent(out) :: n1, n2
-  real, intent(out) :: d4
-  integer memkar, n8, n9, n10
-  real fkar1, fkar2, kar1
+  integer(4), intent(in) :: ind, intype
+  integer(4), intent(out) :: n1, n2
+  real(8), intent(out) :: d4
+  integer(4) :: n8, n9, n10
+  !
   if (iprspy .lt. 1) go to 1846
   write (unit = munit6, fmt = 1707) ind, intype, iascii(ind), d4, ansi8
 1707 format (' Top of "deposi".   ind, intype, iascii(ind), d4, ansi8 =', 3i8, e15.4, 3x, a8)
@@ -4582,7 +4621,7 @@ subroutine deposi (ind, intype, n1, n2, d4)
   if (intype .eq. 0) go to 1880
   n9 = n8 - memkar + n1
   !     enter loop of integer deposits, subscripts n1 through n2:
-1854 kar1(n9) = d4
+1854 kar1(n9) = int (d4, kind (kar1))
   n1 = n1 + 1
   n9 = n9 + 1
   if (n1 .le. n2) go to 1854
@@ -4608,7 +4647,8 @@ end subroutine deposi
 !
 
 subroutine append
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module connected to key word "append" of spy.  others
   !     can perfect and use their own installation-dependent
   !     (and perhaps proprietary) extensions via this module.
@@ -4620,7 +4660,8 @@ end subroutine append
 !
 
 subroutine intpar (max, n1, n2, kill)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use dekspy
+  implicit none
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     this module is designed to extract two free-format row numbers
   !     from  bytbuf(20)  input buffer of common.   These numbers must
@@ -4629,10 +4670,10 @@ subroutine intpar (max, n1, n2, kill)
   !     passed back as  "n1"  and  "n2"  arguments.   if this extraction
   !     was successful,  "kill"  is set to zero;  if it failed,  kill = 1.
   !     for non-interactive emtp, this module can be destroyed.
-  include 'dekspy.ftn'
-  integer, intent(in) :: max
-  integer, intent(out) :: n1, n2, kill
-  integer n22, n33
+  integer(4), intent(in) :: max
+  integer(4), intent(out) :: n1, n2, kill
+  integer(4) :: i, j, n6, n13, n17, n22, n33
+  !
   kill = 0
   !     check for english request "top" (for the top of the file):
   if (bytbuf(1 : 1) .ne. 't') go to 2071
@@ -4718,16 +4759,19 @@ end subroutine intpar
 !
 
 subroutine sosrng (kill)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use dekspy
+  implicit none
   !     Module of interactive EMTP usage only, which services "emtspy".
-  !     this module serves to extract a beginning and ending line number
+  !     This module serves to extract a beginning and ending line number
   !     for sos-like editing operations of  "edit"  command.   These two
   !     integer outputs are  (lidnt1, lidnt2)  of common.   The only
   !     argument is  "kill",  which tells whether the operation was a
   !     success:  "0" means success,  "1" means error.
   !     For non-interactive emtp, this module can be destroyed.
-  include 'dekspy.ftn'
-  integer, intent(out) :: kill
+  integer(4), intent(out) :: kill
+  character(1) :: char2
+  integer(4) :: n1, n12, n13, n24
+  !
   if (iprspy .lt. 1) go to 2615
   write (unit = munit6, fmt = 2613) bytbuf
 2613 format (' Top "sosrange".  bytbuf(a20) =', a20)
@@ -4814,37 +4858,38 @@ subroutine sosrng (kill)
 end subroutine sosrng
 
 !
-!     subroutine movesp.
+! subroutine movesp.
 !
 
 subroutine movesp (from, to, n15)
+  implicit none
   !     Module of interactive EMTP usage only, which services "emtspy".
   !     For non-interactive EMTP, this module can be destroyed.
   !     This routine transfers single-precision from(1 : n15) to
   !     to(1 : n15).  Except for missing implicit, it equals "mover".
-  real, intent(in) :: from(*)
-  real, intent(out) :: to(*)
-  integer, intent(in) :: n15
-  integer j
+  real(8), intent(in) :: from(*)
+  real(8), intent(out) :: to(*)
+  integer(4), intent(in) :: n15
   to(1 : n15) = from(1 : n15)
   return
 end subroutine movesp
 
 !
-!     subroutine prompt.
+! subroutine prompt.
 !
 
 subroutine prompt
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use dekspy
+  implicit none
   !     VAX-11  installation-dependent EMTP module used only
   !     for interactive EMTP ("emtspy").  Input is program
   !     prompt in character(80) variable prom80 of deck "dekspy".
-  !     The prompt must end with colon (":").  then line feed
+  !     The prompt must end with colon (":").  Then line feed
   !     will be suppressed, so subsequent read is to right of ":".
   !     For non-interactive EMTP, this module can be destroyed.
-  include 'blkcom.ftn'
-  include 'dekspy.ftn'
-  integer j, n2
+  integer(4) :: j, n2
+  !
   n2 = 80
   do j = 1, 80
      if (prom80(n2 : n2) .ne. ' ') go to 1426
@@ -4858,19 +4903,20 @@ subroutine prompt
 end subroutine prompt
 
 !
-!     subroutine frefp1.
+! subroutine frefp1.
 !
 
 subroutine frefp1 (ansi, d12)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode a
   !     single floating point number.  The input is character(80)
   !     variable  ansi,  and the output is double precision d12.
   !     For non-interactive EMTP, this module can be destroyed.
   character(80), intent(in) :: ansi
-  real, intent(out) :: d12
-  integer n8
+  real(8), intent(out) :: d12
+  integer(4) :: n8
   n8 = 1
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(e20.0)') d12
@@ -4878,18 +4924,19 @@ subroutine frefp1 (ansi, d12)
 end subroutine frefp1
 
 !
-!     subroutine fresp1.
+! subroutine fresp1.
 !
 
 subroutine fresp1 (ansi, d12)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode one
   !     floating point numbers d12 from character(80) ansi.   This
   !     is identical to "frefp1", except for single precision.
   character(80), intent(in) :: ansi
-  real, intent(out) :: d12
-  integer n8
+  real(8), intent(out) :: d12
+  integer(4) :: n8
   n8 = 1
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(e20.0)') d12
@@ -4897,18 +4944,19 @@ subroutine fresp1 (ansi, d12)
 end subroutine fresp1
 
 !
-!     subroutine frefp2.
+! subroutine frefp2.
 !
 
 subroutine frefp2 (ansi, d12, d13)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode two
   !     floating point numbers d12 and d13 from character(80) ansi.
   !     For non-interactive emtp, this module can be destroyed.
   character(80), intent(in) :: ansi
-  real, intent(out) :: d12, d13
-  integer n8
+  real(8), intent(out) :: d12, d13
+  integer(4) :: n8
   n8 = 2
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(2e20.0)') d12, d13
@@ -4920,14 +4968,14 @@ end subroutine frefp2
 !
 
 subroutine fresp2 (ansi, d12, d13)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode two
   !     floating point numbers d12 and d13 from character(80) ansi.
   !     This is identical to "frefp2", except for single precision.
   character(80), intent(in) :: ansi
-  real, intent(out) :: d12, d13
-  integer n8
+  real(8), intent(out) :: d12, d13
+  integer(4) :: n8
   n8 = 2
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(2e20.0)') d12, d13
@@ -4935,18 +4983,18 @@ subroutine fresp2 (ansi, d12, d13)
 end subroutine fresp2
 
 !
-!     subroutine frefp3.
+! subroutine frefp3.
 !
 
 subroutine frefp3 (ansi, d12, d13, d14)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode three
   !     floating point numbers d12, d13, d14 from character(80) ansi.
   !     For non-interactive EMTP, this module can be destroyed.
   character(80), intent(in) :: ansi
-  real, intent(out) :: d12, d13, d14
-  integer n8
+  real(8), intent(out) :: d12, d13, d14
+  integer(4) :: n8
   n8 = 3
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(3e20.0)') d12, d13, d14
@@ -4954,18 +5002,19 @@ subroutine frefp3 (ansi, d12, d13, d14)
 end subroutine frefp3
 
 !
-!     subroutine fresp3.
+! subroutine fresp3.
 !
 
 subroutine fresp3 (ansi, d12, d13, d14)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode three
   !     floating point numbers d12, d13, d13 from character(8)0 ansi.
   !     This is identical to "frefp3", except for single precision.
   character(80), intent(in) :: ansi
-  real, intent(out) :: d12, d13, d14
-  integer n8
+  real(8), intent(out) :: d12, d13, d14
+  integer(4) :: n8
   n8 = 3
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(3e20.0)') d12, d13, d14
@@ -4973,18 +5022,19 @@ subroutine fresp3 (ansi, d12, d13, d14)
 end subroutine fresp3
 
 !
-!     subroutine frein1.
+! subroutine frein1.
 !
 
 subroutine frein1 (ansi, n12)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode a
   !     single integer number n12 from character(80) input ansi.
   !     For non-interactive EMTP, this module can be destroyed.
   character(80), intent(in) :: ansi
-  integer, intent(out) :: n12
-  integer d12, n8
+  integer(4), intent(out) :: n12
+  integer(4) :: d12, n8
   n8 = 1
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(3e20.0)') d12
@@ -4993,18 +5043,19 @@ subroutine frein1 (ansi, n12)
 end subroutine frein1
 
 !
-!     subroutine frein2.
+! subroutine frein2.
 !
 
 subroutine frein2 (ansi, n12, n13)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode two
   !     integer numbers n12 and n13 from character(80) input ansi.
   !     For non-interactive emtp, this module can be destroyed.
   character(80), intent(in) :: ansi
-  integer, intent(out) :: n12, n13
-  integer d12, d13, n8
+  integer(4), intent(out) :: n12, n13
+  integer(4) :: d12, d13, n8
   n8 = 2
   call frefix (ansi, n8)
   read (unit = ansi, fmt = '(3e20.0)') d12, d13
@@ -5014,11 +5065,12 @@ subroutine frein2 (ansi, n12, n13)
 end subroutine frein2
 
 !
-!     subroutine frefix.
+! subroutine frefix.
 !
 
 subroutine frefix (ansi, n8)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use dekspy
+  implicit none
   !     Universal module used only by interactive EMTP ("emtspy").
   !     For non-interactive use only, it can be destroyed.
   !     This module is called by "frefp1", "frein1", etc. --- all
@@ -5028,10 +5080,10 @@ subroutine frefix (ansi, n8)
   !     death of interactive EMTP execution due to typing error.
   !     Ansi is the input being processed, for n8 numbers.  Upon
   !     exit, ansi will be converted to 4e20.0 fixed-format data.
-  include 'dekspy.ftn'
   character(80) :: ansi, hold
-  integer, intent(in) :: n8
-  integer j, k, kk, n1, n2, n3, n5, n13, n14, n16
+  integer(4), intent(in) :: n8
+  integer(4) :: i, j, k, kk, n1, n2, n3, n5, n13, n14, n16
+  !
   if (iprspy .lt. 3) go to 3582
   write (munit6, 3579) n8, ansi(1 : 40)
 3579 format (' Top of "frefix".  n8 =', i5, '   ansi(1:40) = ', a40)
@@ -5096,2447 +5148,804 @@ subroutine frefix (ansi, n8)
 end subroutine frefix
 
 !
-!     subroutine locatn.
+! subroutine locatn.
 !
 
 subroutine locatn
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'synmac.ftn'
-  include 'tacsar.ftn'
-  include 'umdeck.ftn'
-  include 'dekspy.ftn'
-  include 'fixcom.ftn'
-  locate(   1)  =  loc ( bus1   )
-  locate(   2)  =  loc ( bus2   )
-  locate(   3)  =  loc ( bus3   )
-  locate(   4)  =  loc ( bus4   )
-  locate(   5)  =  loc ( bus5   )
-  locate(   6)  =  loc ( bus6   )
-  locate(   7)  =  loc ( trash  )
-  locate(   8)  =  loc ( blank  )
-  locate(   9)  =  loc ( terra  )
-  locate(  10)  =  loc ( userid )
-  locate(  11)  =  loc ( branch )
-  locate(  12)  =  loc ( copy   )
-  locate(  13)  =  loc ( csepar )
-  locate(  14)  =  loc ( chcont )
-  locate(  15)  =  loc ( texcol )
-  locate(  16)  =  loc ( texta6 )
-  locate(  17)  =  loc ( date1  )
-  locate(  18)  =  loc ( tclock )
-  locate(  19)  =  loc ( vstacs )
-  locate(  20)  =  loc ( abuff  )
-  locate(  21)  =  loc ( ci1    )
-  locate(  22)  =  loc ( ck1    )
-  locate(  23)  =  loc ( deltat )
-  locate(  24)  =  loc ( delta2 )
-  locate(  25)  =  loc ( freqcs )
-  locate(  26)  =  loc ( epsiln )
-  locate(  27)  =  loc ( xunits )
-  locate(  28)  =  loc ( aincr  )
-  locate(  29)  =  loc ( xmaxmx )
-  locate(  30)  =  loc ( znvref )
-  locate(  31)  =  loc ( epszno )
-  locate(  32)  =  loc ( epwarn )
-  locate(  33)  =  loc ( epstop )
-  locate(  34)  =  loc ( t      )
-  locate(  35)  =  loc ( hertz  )
-  locate(  36)  =  loc ( tolmat )
-  locate(  37)  =  loc ( twopi  )
-  locate(  38)  =  loc ( tmax   )
-  locate(  39)  =  loc ( omega  )
-  locate(  40)  =  loc ( copt   )
-  locate(  41)  =  loc ( xopt   )
-  locate(  42)  =  loc ( szplt  )
-  locate(  43)  =  loc ( szbed  )
-  locate(  44)  =  loc ( sglfir )
-  locate(  45)  =  loc ( sigmax )
-  locate(  46)  =  loc ( epsuba )
-  locate(  47)  =  loc ( epdgel )
-  locate(  48)  =  loc ( epomeg )
-  locate(  49)  =  loc ( fminfs )
-  locate(  50)  =  loc ( delffs )
-  locate(  51)  =  loc ( fmaxfs )
-  locate(  52)  =  loc ( tenerg )
-  locate(  53)  =  loc ( begmax )
-  locate(  54)  =  loc ( tenm3  )
-  locate(  55)  =  loc ( tenm6  )
-  locate(  56)  =  loc ( unity  )
-  locate(  57)  =  loc ( onehaf )
-  locate(  58)  =  loc ( peaknd(1) )
-  locate(  59)  =  loc ( fltinf )
-  locate(  60)  =  loc ( flzero )
-  locate(  61)  =  loc ( degmin )
-  locate(  62)  =  loc ( degmax )
-  locate(  63)  =  loc ( statfr )
-  locate(  64)  =  loc ( voltbc )
-  locate(  65)  =  loc ( flstat )
-  locate(  66)  =  loc ( dtnext )
-  locate(  67)  =  loc ( angle  )
-  locate(  68)  =  loc ( pu     )
-  locate(  69)  =  loc ( seedr  )
-  locate(  70)  =  loc ( speedl )
-  locate(  71)  =  loc ( kstart )
-  locate(  72)  =  loc ( knt    )
-  locate(  73)  =  loc ( kbase  )
-  locate(  74)  =  loc ( ltdelt )
-  locate(  75)  =  loc ( unused )
-  locate(  76)  =  loc ( mtape  )
-  locate(  77)  =  loc ( lunit1 )
-  locate(  78)  =  loc ( lunit2 )
-  locate(  79)  =  loc ( lunit3 )
-  locate(  80)  =  loc ( lunit4 )
-  locate(  81)  =  loc ( lunit5 )
-  locate(  82)  =  loc ( lunit6 )
-  locate(  83)  =  loc ( lunit7 )
-  locate(  84)  =  loc ( lunit8 )
-  locate(  85)  =  loc ( lunit9 )
-  locate(  86)  =  loc ( lunt10 )
-  locate(  87)  =  loc ( lunt11 )
-  locate(  88)  =  loc ( lunt12 )
-  locate(  89)  =  loc ( lunt13 )
-  locate(  90)  =  loc ( lunt14 )
-  locate(  91)  =  loc ( lunt15 )
-  locate(  92)  =  loc ( nexout )
-  locate(  93)  =  loc ( nright )
-  locate(  94)  =  loc ( nfrfld )
-  locate(  95)  =  loc ( kolbeg )
-  locate(  96)  =  loc ( kprchg )
-  locate(  97)  =  loc ( multpr )
-  locate(  98)  =  loc ( ipntv  )
-  locate(  99)  =  loc ( indtv  )
-  locate( 100)  =  loc ( lstat  )
-  locate( 101)  =  loc ( nbyte  )
-  locate( 102)  =  loc ( lunsav )
-  locate( 103)  =  loc ( iprsov )
-  locate( 104)  =  loc ( icheck )
-  locate( 105)  =  loc ( unused )
-  locate( 106)  =  loc ( iend   )
-  locate( 107)  =  loc ( iline  )
-  locate( 108)  =  loc ( inonl  )
-  locate( 109)  =  loc ( iold   )
-  locate( 110)  =  loc ( iout   )
-  locate( 111)  =  loc ( iprint )
-  locate( 112)  =  loc ( ipunch )
-  locate( 113)  =  loc ( iread  )
-  locate( 114)  =  loc ( kol132 )
-  locate( 115)  =  loc ( istep  )
-  locate( 116)  =  loc ( unused )
-  locate( 117)  =  loc ( itype  )
-  locate( 118)  =  loc ( it1    )
-  locate( 119)  =  loc ( it2    )
-  locate( 120)  =  loc ( iupper )
-  locate( 121)  =  loc ( izero  )
-  locate( 122)  =  loc ( kcount )
-  locate( 123)  =  loc ( istead )
-  locate( 124)  =  loc ( unused )
-  locate( 125)  =  loc ( ldata  )
-  locate( 126)  =  loc ( lbrnch )
-  locate( 127)  =  loc ( limtxf )
-  locate( 128)  =  loc ( mdebug )
-  locate( 129)  =  loc ( lexct  )
-  locate( 130)  =  loc ( lbus   )
-  locate( 131)  =  loc ( lymat  )
-  locate( 132)  =  loc ( lswtch )
-  locate( 133)  =  loc ( lnonl  )
-  locate( 134)  =  loc ( lchar  )
-  locate( 135)  =  loc ( m4plot )
-  locate( 136)  =  loc ( lpast  )
-  locate( 137)  =  loc ( lsmat  )
-  locate( 138)  =  loc ( iplot  )
-  locate( 139)  =  loc ( ncomp  )
-  locate( 140)  =  loc ( nv     )
-  locate( 141)  =  loc ( lcomp  )
-  locate( 142)  =  loc ( numsm  )
-  locate( 143)  =  loc ( ifdep  )
-  locate( 144)  =  loc ( ltails )
-  locate( 145)  =  loc ( lfdep  )
-  locate( 146)  =  loc ( lwt    )
-  locate( 147)  =  loc ( last   )
-  locate( 148)  =  loc ( npower )
-  locate( 149)  =  loc ( maxpe  )
-  locate( 150)  =  loc ( lpeak  )
-  locate( 151)  =  loc ( nout   )
-  locate( 152)  =  loc ( iv     )
-  locate( 153)  =  loc ( ineof  )
-  locate( 154)  =  loc ( ktrlsw )
-  locate( 155)  =  loc ( num99  )
-  locate( 156)  =  loc ( kpartb )
-  locate( 157)  =  loc ( llbuff )
-  locate( 158)  =  loc ( kanal  )
-  locate( 159)  =  loc ( nsmth  )
-  locate( 160)  =  loc ( ntcsex )
-  locate( 161)  =  loc ( nstacs )
-  locate( 162)  =  loc ( kloaep )
-  locate( 163)  =  loc ( lastov )
-  locate( 164)  =  loc ( ltacst )
-  locate( 165)  =  loc ( lhist  )
-  locate( 166)  =  loc ( ifx    )
-  locate( 167)  =  loc ( ndelta )
-  locate( 168)  =  loc ( idelta )
-  locate( 169)  =  loc ( inecho )
-  locate( 170)  =  loc ( noutpr )
-  locate( 171)  =  loc ( ktab   )
-  locate( 172)  =  loc ( jflsos )
-  locate( 173)  =  loc ( numdcd )
-  locate( 174)  =  loc ( numum  )
-  locate( 175)  =  loc ( lspcum )
-  locate( 176)  =  loc ( nphcas )
-  locate( 177)  =  loc ( locz11 )
-  locate( 178)  =  loc ( locbr1 )
-  locate( 179)  =  loc ( ialter )
-  locate( 180)  =  loc ( i_char )
-  locate( 181)  =  loc ( ktref  )
-  locate( 182)  =  loc ( kph    )
-  locate( 183)  =  loc ( kreqab )
-  locate( 184)  =  loc ( ksat   )
-  locate( 185)  =  loc ( memsav )
-  locate( 186)  =  loc ( lisoff )
-  locate( 187)  =  loc ( lspov4 )
-  locate( 188)  =  loc ( kburro )
-  locate( 189)  =  loc ( iaverg )
-  locate( 190)  =  loc ( lsiz23 )
-  locate( 191)  =  loc ( lsiz26 )
-  locate( 192)  =  loc ( numout )
-  locate( 193)  =  loc ( moldat )
-  locate( 194)  =  loc ( lsiz27 )
-  locate( 195)  =  loc ( ltlabl )
-  locate( 196)  =  loc ( iwt    )
-  locate( 197)  =  loc ( ifdep2 )
-  locate( 198)  =  loc ( idoubl )
-  locate( 199)  =  loc ( ioutin )
-  locate( 200)  =  loc ( ipun   )
-  locate( 201)  =  loc ( jst    )
-  locate( 202)  =  loc ( jst1   )
-  locate( 203)  =  loc ( unused )
-  locate( 204)  =  loc ( numsub )
-  locate( 205)  =  loc ( maxzno )
-  locate( 206)  =  loc ( kalplt )
-  locate( 207)  =  loc ( niomax )
-  locate( 208)  =  loc ( niamax )
-  locate( 209)  =  loc ( ibr1   )
-  locate( 210)  =  loc ( ifsem  )
-  locate( 211)  =  loc ( lfsem  )
-  locate( 212)  =  loc ( iadd   )
-  locate( 213)  =  loc ( lfd    )
-  locate( 214)  =  loc ( laux   )
-  locate( 215)  =  loc ( iofgnd )
-  locate( 216)  =  loc ( iofbnd )
-  locate( 217)  =  loc ( unused )
-  locate( 218)  =  loc ( jseedr )
-  locate( 219)  =  loc ( modout )
-  locate( 220)  =  loc ( iftail )
-  locate( 221)  =  loc ( ipoint )
-  locate( 222)  =  loc ( lpast2 )
-  locate( 223)  =  loc ( ncurr  )
-  locate( 224)  =  loc ( ioffd  )
-  locate( 225)  =  loc ( isplot )
-  locate( 226)  =  loc ( isprin )
-  locate( 227)  =  loc ( maxout )
-  locate( 228)  =  loc ( ipos   )
-  locate( 229)  =  loc ( unused )
-  locate( 230)  =  loc ( unused )
-  locate( 231)  =  loc ( kill   )
-  locate( 232)  =  loc ( ivolt  )
-  locate( 233)  =  loc ( nchain )
-  locate( 234)  =  loc ( iprsup )
-  locate( 235)  =  loc ( unused )
-  locate( 236)  =  loc ( intinf )
-  locate( 237)  =  loc ( kconst )
-  locate( 238)  =  loc ( kswtch )
-  locate( 239)  =  loc ( it     )
-  locate( 240)  =  loc ( ntot   )
-  locate( 241)  =  loc ( ibr    )
-  locate( 242)  =  loc ( lcom10 )
-  locate( 243)  =  loc ( ltrnst )
-  locate( 244)  =  loc ( lsyn   )
-  locate( 245)  =  loc ( kssout )
-  locate( 246)  =  loc ( loopss )
-  locate( 247)  =  loc ( infexp )
-  locate( 248)  =  loc ( numref )
-  locate( 249)  =  loc ( nword1 )
-  locate( 250)  =  loc ( nword2 )
-  locate( 251)  =  loc ( iloaep )
-  locate( 252)  =  loc ( lnpin  )
-  locate( 253)  =  loc ( ntot1  )
-  locate( 254)  =  loc ( limstp )
-  locate( 255)  =  loc ( indstp )
-  locate( 256)  =  loc ( nc     )
-  locate( 257)  =  loc ( unused )
-  locate( 258)  =  loc ( unused )
-  locate( 259)  =  loc ( icat   )
-  locate( 260)  =  loc ( numnvo )
-  locate( 261)  =  loc ( unused )
-  locate( 262)  =  loc ( nenerg )
-  locate( 263)  =  loc ( isw    )
-  locate( 264)  =  loc ( itest  )
-  locate( 265)  =  loc ( idist  )
-  locate( 266)  =  loc ( x      )
-  locate( 267)  =  loc ( ykm    )
-  locate( 268)  =  loc ( km     )
-  locate( 269)  =  loc ( xk     )
-  locate( 270)  =  loc ( xm     )
-  locate( 271)  =  loc ( weight )
-  locate( 272)  =  loc ( iwtent )
-  locate( 273)  =  loc ( con1   )
-  locate( 274)  =  loc ( iskip  )
-  locate( 275)  =  loc ( zinf   )
-  locate( 276)  =  loc ( eta    )
-  locate( 277)  =  loc ( nhist  )
-  locate( 278)  =  loc ( stailm )
-  locate( 279)  =  loc ( stailk )
-  locate( 280)  =  loc ( xmax   )
-  locate( 281)  =  loc ( koutvp )
-  locate( 282)  =  loc ( bnrg   )
-  locate( 283)  =  loc ( sconst )
-  locate( 284)  =  loc ( cnvhst )
-  locate( 285)  =  loc ( sfd    )
-  locate( 286)  =  loc ( qfd    )
-  locate( 287)  =  loc ( semaux )
-  locate( 288)  =  loc ( ibsout )
-  locate( 289)  =  loc ( bvalue )
-  locate( 290)  =  loc ( sptacs )
-  locate( 291)  =  loc ( kswtyp )
-  locate( 292)  =  loc ( modswt )
-  locate( 293)  =  loc ( kbegsw )
-  locate( 294)  =  loc ( lastsw )
-  locate( 295)  =  loc ( kentnb )
-  locate( 296)  =  loc ( nbhdsw )
-  locate( 297)  =  loc ( topen  )
-  locate( 298)  =  loc ( crit   )
-  locate( 299)  =  loc ( kdepsw )
-  locate( 300)  =  loc ( tdns   )
-  locate( 301)  =  loc ( isourc )
-  locate( 302)  =  loc ( energy )
-  locate( 303)  =  loc ( iardub )
-  locate( 304)  =  loc ( ardube )
-  locate( 305)  =  loc ( nonlad )
-  locate( 306)  =  loc ( nonle  )
-  locate( 307)  =  loc ( vnonl  )
-  locate( 308)  =  loc ( curr   )
-  locate( 309)  =  loc ( anonl  )
-  locate( 310)  =  loc ( vecnl1 )
-  locate( 311)  =  loc ( vecnl2 )
-  locate( 312)  =  loc ( brnonl )
-  locate( 313)  =  loc ( vzero  )
-  locate( 314)  =  loc ( ilast  )
-  locate( 315)  =  loc ( nltype )
-  locate( 316)  =  loc ( kupl   )
-  locate( 317)  =  loc ( nlsub  )
-  locate( 318)  =  loc ( cursub )
-  locate( 319)  =  loc ( cchar  )
-  locate( 320)  =  loc ( vchar  )
-  locate( 321)  =  loc ( gslope )
-  locate( 322)  =  loc ( kk     )
-  locate( 323)  =  loc ( c      )
-  locate( 324)  =  loc ( tr     )
-  locate( 325)  =  loc ( tx     )
-  locate( 326)  =  loc ( r      )
-  locate( 327)  =  loc ( nr     )
-  locate( 328)  =  loc ( length )
-  locate( 329)  =  loc ( cik    )
-  locate( 330)  =  loc ( ci     )
-  locate( 331)  =  loc ( ck     )
-  locate( 332)  =  loc ( swname )
-  locate( 333)  =  loc ( ibrnch )
-  locate( 334)  =  loc ( jbrnch )
-  locate( 335)  =  loc ( tstop  )
-  locate( 336)  =  loc ( nonlk  )
-  locate( 337)  =  loc ( nonlm  )
-  locate( 338)  =  loc ( spum   )
-  locate( 339)  =  loc ( kks    )
-  locate( 340)  =  loc ( kknonl )
-  locate( 341)  =  loc ( znonl  )
-  locate( 342)  =  loc ( znonlb )
-  locate( 343)  =  loc ( znonlc )
-  locate( 344)  =  loc ( finit  )
-  locate( 345)  =  loc ( ksub   )
-  locate( 346)  =  loc ( msub   )
-  locate( 347)  =  loc ( isubeg )
-  locate( 348)  =  loc ( litype )
-  locate( 349)  =  loc ( imodel )
-  locate( 350)  =  loc ( kbus   )
-  locate( 351)  =  loc ( mbus   )
-  locate( 352)  =  loc ( kodebr )
-  locate( 353)  =  loc ( cki    )
-  locate( 354)  =  loc ( ckkjm  )
-  locate( 355)  =  loc ( indhst )
-  locate( 356)  =  loc ( kodsem )
-  locate( 357)  =  loc ( brname )
-  locate( 358)  =  loc ( iform  )
-  locate( 359)  =  loc ( node   )
-  locate( 360)  =  loc ( crest  )
-  locate( 361)  =  loc ( time1  )
-  locate( 362)  =  loc ( time2  )
-  locate( 363)  =  loc ( tstart )
-  locate( 364)  =  loc ( sfreq  )
-  locate( 365)  =  loc ( kmswit )
-  locate( 366)  =  loc ( nextsw )
-  locate( 367)  =  loc ( rmfd   )
-  locate( 368)  =  loc ( cikfd  )
-  locate( 369)  =  loc ( imfd   )
-  locate( 370)  =  loc ( tclose )
-  locate( 371)  =  loc ( adelay )
-  locate( 372)  =  loc ( kpos   )
-  locate( 373)  =  loc ( e      )
-  locate( 374)  =  loc ( f      )
-  locate( 375)  =  loc ( kssfrq )
-  locate( 376)  =  loc ( kode   )
-  locate( 377)  =  loc ( kpsour )
-  locate( 378)  =  loc ( volti  )
-  locate( 379)  =  loc ( voltk  )
-  locate( 380)  =  loc ( volt   )
-  locate( 381)  =  loc ( bus    )
-  locate( 382)  =  loc ( eld    )
-  locate( 383)  =  loc ( elaf   )
-  locate( 384)  =  loc ( elf    )
-  locate( 385)  =  loc ( elakd  )
-  locate( 386)  =  loc ( elfkd  )
-  locate( 387)  =  loc ( elkd   )
-  locate( 388)  =  loc ( elq    )
-  locate( 389)  =  loc ( elag   )
-  locate( 390)  =  loc ( elg    )
-  locate( 391)  =  loc ( elakq  )
-  locate( 392)  =  loc ( elgkq  )
-  locate( 393)  =  loc ( elkq   )
-  locate( 394)  =  loc ( el0    )
-  locate( 395)  =  loc ( ra     )
-  locate( 396)  =  loc ( rf     )
-  locate( 397)  =  loc ( rkd    )
-  locate( 398)  =  loc ( rg     )
-  locate( 399)  =  loc ( rkq    )
-  locate( 400)  =  loc ( r0     )
-  locate( 401)  =  loc ( agline )
-  locate( 402)  =  loc ( rat1   )
-  locate( 403)  =  loc ( smoutp )
-  locate( 404)  =  loc ( smoutq )
-  locate( 405)  =  loc ( teg    )
-  locate( 406)  =  loc ( texc   )
-  locate( 407)  =  loc ( cnp    )
-  locate( 408)  =  loc ( a22    )
-  locate( 409)  =  loc ( a12    )
-  locate( 410)  =  loc ( a21    )
-  locate( 411)  =  loc ( ac     )
-  locate( 412)  =  loc ( ai     )
-  locate( 413)  =  loc ( at     )
-  locate( 414)  =  loc ( ah     )
-  locate( 415)  =  loc ( xay    )
-  locate( 416)  =  loc ( cu     )
-  locate( 417)  =  loc ( cv     )
-  locate( 418)  =  loc ( dsat   )
-  locate( 419)  =  loc ( qsat   )
-  locate( 420)  =  loc ( acr    )
-  locate( 421)  =  loc ( ce     )
-  locate( 422)  =  loc ( dsr    )
-  locate( 423)  =  loc ( dsd    )
-  locate( 424)  =  loc ( hico   )
-  locate( 425)  =  loc ( dsm    )
-  locate( 426)  =  loc ( hsp    )
-  locate( 427)  =  loc ( power  )
-  locate( 428)  =  loc ( extrs  )
-  locate( 429)  =  loc ( histq  )
-  locate( 430)  =  loc ( histr  )
-  locate( 431)  =  loc ( yfor   )
-  locate( 432)  =  loc ( zsk    )
-  locate( 433)  =  loc ( y      )
-  locate( 434)  =  loc ( tork   )
-  locate( 435)  =  loc ( temp   )
-  locate( 436)  =  loc ( z      )
-  locate( 437)  =  loc ( x1     )
-  locate( 438)  =  loc ( sqrt3  )
-  locate( 439)  =  loc ( asqrt3 )
-  locate( 440)  =  loc ( sqrt32 )
-  locate( 441)  =  loc ( thtw   )
-  locate( 442)  =  loc ( athtw  )
-  locate( 443)  =  loc ( radeg  )
-  locate( 444)  =  loc ( omdt   )
-  locate( 445)  =  loc ( factom )
-  locate( 446)  =  loc ( damrat )
-  locate( 447)  =  loc ( isat   )
-  locate( 448)  =  loc ( ised   )
-  locate( 449)  =  loc ( iseq   )
-  locate( 450)  =  loc ( imdual )
-  locate( 451)  =  loc ( iconfg )
-  locate( 452)  =  loc ( kmac   )
-  locate( 453)  =  loc ( kexc   )
-  locate( 454)  =  loc ( numas  )
-  locate( 455)  =  loc ( nodma  )
-  locate( 456)  =  loc ( nodmb  )
-  locate( 457)  =  loc ( nodmc  )
-  locate( 458)  =  loc ( jasmit )
-  locate( 459)  =  loc ( jsmtor )
-  locate( 460)  =  loc ( jexcit )
-  locate( 461)  =  loc ( isloc  )
-  locate( 462)  =  loc ( noutsm )
-  locate( 463)  =  loc ( ismout )
-  locate( 464)  =  loc ( mfirst )
-  locate( 465)  =  loc ( limass )
-  locate( 466)  =  loc ( nst    )
-  locate( 467)  =  loc ( itold  )
-  locate( 468)  =  loc ( ibrold )
-  locate( 469)  =  loc ( busum  )
-  locate( 470)  =  loc ( ptheta )
-  locate( 471)  =  loc ( zthevr )
-  locate( 472)  =  loc ( vinp   )
-  locate( 473)  =  loc ( zthevs )
-  locate( 474)  =  loc ( umcur  )
-  locate( 475)  =  loc ( con    )
-  locate( 476)  =  loc ( dumvec )
-  locate( 477)  =  loc ( dummat )
-  locate( 478)  =  loc ( date   )
-  locate( 479)  =  loc ( clock  )
-  locate( 480)  =  loc ( pi     )
-  locate( 481)  =  loc ( sroot2 )
-  locate( 482)  =  loc ( sroot3 )
-  locate( 483)  =  loc ( omegrf )
-  locate( 484)  =  loc ( inpu   )
-  locate( 485)  =  loc ( numbus )
-  locate( 486)  =  loc ( ncltot )
-  locate( 487)  =  loc ( ndum   )
-  locate( 488)  =  loc ( initum )
-  locate( 489)  =  loc ( iureac )
-  locate( 490)  =  loc ( iugpar )
-  locate( 491)  =  loc ( iufpar )
-  locate( 492)  =  loc ( iuhist )
-  locate( 493)  =  loc ( iuumrp )
-  locate( 494)  =  loc ( iunod1 )
-  locate( 495)  =  loc ( iunod2 )
-  locate( 496)  =  loc ( iujclt )
-  locate( 497)  =  loc ( iujclo )
-  locate( 498)  =  loc ( iujtyp )
-  locate( 499)  =  loc ( iunodo )
-  locate( 500)  =  loc ( iujtmt )
-  locate( 501)  =  loc ( iuhism )
-  locate( 502)  =  loc ( iuomgm )
-  locate( 503)  =  loc ( iuomld )
-  locate( 504)  =  loc ( iutham )
-  locate( 505)  =  loc ( iuredu )
-  locate( 506)  =  loc ( iureds )
-  locate( 507)  =  loc ( iuflds )
-  locate( 508)  =  loc ( iufldr )
-  locate( 509)  =  loc ( iurequ )
-  locate( 510)  =  loc ( iuflqs )
-  locate( 511)  =  loc ( iuflqr )
-  locate( 512)  =  loc ( iujcds )
-  locate( 513)  =  loc ( iujcqs )
-  locate( 514)  =  loc ( iuflxd )
-  locate( 515)  =  loc ( iuflxq )
-  locate( 516)  =  loc ( iunppa )
-  locate( 517)  =  loc ( iurotm )
-  locate( 518)  =  loc ( iuncld )
-  locate( 519)  =  loc ( iunclq )
-  locate( 520)  =  loc ( iujtqo )
-  locate( 521)  =  loc ( iujomo )
-  locate( 522)  =  loc ( iujtho )
-  locate( 523)  =  loc ( iureqs )
-  locate( 524)  =  loc ( iuepso )
-  locate( 525)  =  loc ( iudcoe )
-  locate( 526)  =  loc ( iukcoi )
-  locate( 527)  =  loc ( iuvolt )
-  locate( 528)  =  loc ( iuangl )
-  locate( 529)  =  loc ( iunodf )
-  locate( 530)  =  loc ( iunodm )
-  locate( 531)  =  loc ( iukumo )
-  locate( 532)  =  loc ( iujumo )
-  locate( 533)  =  loc ( iuumou )
-  locate( 534)  =  loc ( nclfix )
-  locate( 535)  =  loc ( numfix )
-  locate( 536)  =  loc ( iotfix )
-  locate( 537)  =  loc ( ibsfix )
-  locate( 538)  =  loc ( ksubum )
-  locate( 539)  =  loc ( nsmach )
-  locate( 540)  =  loc ( istart )
-  locate( 541)  =  loc ( karray )
-  locate( 542)  =  loc ( rampcn )
-  locate( 543)  =  loc ( rampsl )
-  locate( 544)  =  loc ( kyramp )
-  locate( 545)  =  loc ( texpar )
-  locate( 546)  =  loc ( fendrp )
-  locate( 547)  =  loc ( tminrp )
-  locate( 548)  =  loc ( tmaxrp )
-  locate( 549)  =  loc ( tbegrp )
-  locate( 550)  =  loc ( tendrp )
-  locate( 551)  =  loc ( fbegrp )
-  locate( 552)  =  loc ( tbreak )
-  locate( 553)  =  loc ( indxrp )
-  locate( 554)  =  loc ( ivec   )
-  locate( 555)  =  loc ( iascii )
-  locate( 556)  =  loc ( numsym )
-  locate( 557)  =  loc ( jjroll )
-  locate( 558)  =  loc ( itexp  )
-  locate( 559)  =  loc ( labels )
-  locate( 560)  =  loc ( maxarg )
-  locate( 561)  =  loc ( kilper )
-  locate( 562)  =  loc ( kfile5 )
-  locate( 563)  =  loc ( kverfy )
-  locate( 564)  =  loc ( ibegcl )
-  locate( 565)  =  loc ( iendcl )
-  locate( 566)  =  loc ( lidnt1 )
-  locate( 567)  =  loc ( lidnt2 )
-  locate( 568)  =  loc ( linnow )
-  locate( 569)  =  loc ( linspn )
-  locate( 570)  =  loc ( numcrd )
-  locate( 571)  =  loc ( munit5 )
-  locate( 572)  =  loc ( indbuf )
-  locate( 573)  =  loc ( indbeg )
-  locate( 574)  =  loc ( mflush )
-  locate( 575)  =  loc ( newvec )
-  locate( 576)  =  loc ( munit6 )
-  locate( 577)  =  loc ( lserlc )
-  locate( 578)  =  loc ( kserlc )
-  locate( 579)  =  loc ( kbrser )
-  locate( 580)  =  loc ( lockbr )
-  locate( 581)  =  loc ( iprspy )
-  locate( 582)  =  loc ( monitr )
-  locate( 583)  =  loc ( monits )
-  locate( 584)  =  loc ( locate )
-  locate( 585)  =  loc ( nline  )
-  locate( 586)  =  loc ( kwtspy )
-  locate( 587)  =  loc ( kbreak )
-  locate( 588)  =  loc ( limbuf )
-  locate( 589)  =  loc ( inchlp )
-  locate( 590)  =  loc ( ksymbl )
-  locate( 591)  =  loc ( kopyit )
-  locate( 592)  =  loc ( kslowr )
-  locate( 593)  =  loc ( limcrd )
-  locate( 594)  =  loc ( looprp )
-  locate( 595)  =  loc ( n10rmp )
-  locate( 596)  =  loc ( memrmp )
-  locate( 597)  =  loc ( kar1   )
-  locate( 598)  =  loc ( kar2   )
-  locate( 599)  =  loc ( numrmp )
-  locate( 600)  =  loc ( luntsp )
-  locate( 601)  =  loc ( logvar )
-  locate( 602)  =  loc ( filext )
-  locate( 603)  =  loc ( symb   )
-  locate( 604)  =  loc ( col    )
-  locate( 605)  =  loc ( bytfnd )
-  locate( 606)  =  loc ( char1  )
-  locate( 607)  =  loc ( symbrp )
-  locate( 608)  =  loc ( chard4 )
-  locate( 609)  =  loc ( bytbuf )
-  locate( 610)  =  loc ( buff77 )
-  locate( 611)  =  loc ( file6b )
-  locate( 612)  =  loc ( file6  )
-  locate( 613)  =  loc ( blan80 )
-  locate( 614)  =  loc ( prom80 )
-  locate( 615)  =  loc ( digit  )
-  locate( 616)  =  loc ( iac    )
-  locate( 617)  =  loc ( idctcs )
-  locate( 618)  =  loc ( ipl    )
-  locate( 619)  =  loc ( ipr    )
-  locate( 620)  =  loc ( ixr    )
-  locate( 621)  =  loc ( jpl    )
-  locate( 622)  =  loc ( jpr    )
-  locate( 623)  =  loc ( kint   )
-  locate( 624)  =  loc ( kout   )
-  locate( 625)  =  loc ( nds    )
-  locate( 626)  =  loc ( nkn    )
-  locate( 627)  =  loc ( nmax   )
-  locate( 628)  =  loc ( nuk    )
-  locate( 629)  =  loc ( kwrite )
-  locate( 630)  =  loc ( kpr    )
-  locate( 631)  =  loc ( kpl    )
-  locate( 632)  =  loc ( mxtacw )
-  locate( 633)  =  loc ( iptacw )
-  locate( 634)  =  loc ( nhst   )
-  locate( 635)  =  loc ( kvin   )
-  locate( 636)  =  loc ( kvou   )
-  locate( 637)  =  loc ( kvxx   )
-  locate( 638)  =  loc ( icsup  )
-  locate( 639)  =  loc ( nxic   )
-  locate( 640)  =  loc ( kksj   )
-  locate( 641)  =  loc ( kksk   )
-  locate( 642)  =  loc ( kkfst  )
-  locate( 643)  =  loc ( kkni   )
-  locate( 644)  =  loc ( kkhst  )
-  locate( 645)  =  loc ( kifls  )
-  locate( 646)  =  loc ( kidum  )
-  locate( 647)  =  loc ( kslim1 )
-  locate( 648)  =  loc ( kslim2 )
-  locate( 649)  =  loc ( kslim3 )
-  locate( 650)  =  loc ( kpac1r )
-  locate( 651)  =  loc ( kpac1i )
-  locate( 652)  =  loc ( kpac2r )
-  locate( 653)  =  loc ( kpac2i )
-  locate( 654)  =  loc ( kalksx )
-  locate( 655)  =  loc ( kilms1 )
-  locate( 656)  =  loc ( kilms2 )
-  locate( 657)  =  loc ( kdumj  )
-  locate( 658)  =  loc ( kdumk  )
-  locate( 659)  =  loc ( kkzj   )
-  locate( 660)  =  loc ( kkzk   )
-  locate( 661)  =  loc ( kiflz  )
-  locate( 662)  =  loc ( kgnz   )
-  locate( 663)  =  loc ( kzlim1 )
-  locate( 664)  =  loc ( kzlim2 )
-  locate( 665)  =  loc ( kalkzx )
-  locate( 666)  =  loc ( kilmz1 )
-  locate( 667)  =  loc ( kilmz2 )
-  locate( 668)  =  loc ( kksus  )
-  locate( 669)  =  loc ( kalksu )
-  locate( 670)  =  loc ( kiuty  )
-  locate( 671)  =  loc ( kud1   )
-  locate( 672)  =  loc ( kud2   )
-  locate( 673)  =  loc ( kud3   )
-  locate( 674)  =  loc ( kud4   )
-  locate( 675)  =  loc ( kud5   )
-  locate( 676)  =  loc ( kaliu  )
-  locate( 677)  =  loc ( ktysup )
-  locate( 678)  =  loc ( kjsup  )
-  locate( 679)  =  loc ( kksup  )
-  locate( 680)  =  loc ( kspvar )
-  locate( 681)  =  loc ( kopsup )
-  locate( 682)  =  loc ( kfnsup )
-  locate( 683)  =  loc ( krgsup )
-  locate( 684)  =  loc ( kprsup )
-  locate( 685)  =  loc ( ktypdv )
-  locate( 686)  =  loc ( kkdj   )
-  locate( 687)  =  loc ( kkdk   )
-  locate( 688)  =  loc ( kgndev )
-  locate( 689)  =  loc ( kdev1  )
-  locate( 690)  =  loc ( kdev2  )
-  locate( 691)  =  loc ( kldev1 )
-  locate( 692)  =  loc ( kldev2 )
-  locate( 693)  =  loc ( kkdus  )
-  locate( 694)  =  loc ( kalkdu )
-  locate( 695)  =  loc ( ktbdev )
-  locate( 696)  =  loc ( kpn    )
-  locate( 697)  =  loc ( kpd    )
-  locate( 698)  =  loc ( kxhst  )
-  locate( 699)  =  loc ( khscr  )
-  locate( 700)  =  loc ( khsci  )
-  locate( 701)  =  loc ( kilim1 )
-  locate( 702)  =  loc ( kilim2 )
-  locate( 703)  =  loc ( krowcs )
-  locate( 704)  =  loc ( krhsde )
-  locate( 705)  =  loc ( kvlim1 )
-  locate( 706)  =  loc ( kvlim2 )
-  locate( 707)  =  loc ( kkxic  )
-  locate( 708)  =  loc ( kawkcs )
-  locate( 709)  =  loc ( kxar   )
-  locate( 710)  =  loc ( kxai   )
-  locate( 711)  =  loc ( kbwkcs )
-  locate( 712)  =  loc ( kxtcs  )
-  locate( 713)  =  loc ( klntab )
-  locate( 714)  =  loc ( klmxic )
-  locate( 715)  =  loc ( kcolcs )
-  locate( 716)  =  loc ( katcs  )
-  locate( 717)  =  loc ( kbtcs  )
-  locate( 718)  =  loc ( kjout  )
-  locate( 719)  =  loc ( kkout  )
-  locate( 720)  =  loc ( kxmncs )
-  locate( 721)  =  loc ( ktxmn  )
-  locate( 722)  =  loc ( kxmxcs )
-  locate( 723)  =  loc ( ktxmx  )
-  locate( 724)  =  loc ( klnout )
-  locate( 725)  =  loc ( ekbuf  )
-  locate( 726)  =  loc ( ektemp )
-  locate( 727)  =  loc ( errchk )
-  locate( 728)  =  loc ( solrsv )
-  locate( 729)  =  loc ( solisv )
-  locate( 730)  =  loc ( nitera )
-  locate( 731)  =  loc ( nekreq )
-  locate( 732)  =  loc ( nekcod )
+  use blkcom
+  use labcom
+  use synmac
+  use tacsar
+  use umdeck
+  use dekspy
+  use fixcom
+  use indcom
+  implicit none
+  integer(4) :: iac, ibr1, icsup, iconfg, idctcs, idelta, iend, imdual
+  integer(4) :: ineof, infexp, iold, ipl, ipos, ipr, iprint, iptacw, isat, ised
+  integer(4) :: iseq, isloc, ixr
+  integer(4) :: jasmit, jexcit, jpl, jpr, jsmtor
+  integer(4) :: kalkdu, kalksx, kalkzx, kalplt, kbtcs, kbwkcs, kdev1, kdev2
+  integer(4) :: kdumj, kdumk, kexc, kfnsup, kgndev, kgnz, khsci, khscr, kidum
+  integer(4) :: kifls, kiflz, kilim1, kilim2, kilms1, kilms2, kilmz1, kilmz2
+  integer(4) :: kint, kjsup, kkdj, kkdk, kkdus, kkfst, kkhst, kkni, kkout
+  integer(4) :: kksj, kksk, kksup, kkxic, kkzj, kkzk, kldev1, kldev2, klmxic
+  integer(4) :: klnout, kmac, kopsup, kout, kpac1i, kpac1r, kpac2i, kpac2r
+  integer(4) :: kpd, kph, kpl, kpn, kpr, kreqab, krgsup, krhsde, krowcs, ksat
+  integer(4) :: kslim1, kslim2, kslim3, kstart, ktbdev, ktxmn, ktxmx, ktypdv
+  integer(4) :: ktysup, kud2, kud3, kud4, kud5, kvin, kvlim1, kvlim2, kvou
+  integer(4) :: kvxx, kwrite, kxai, kxhst, kxmncs, kxmxcs, kzlim1, kzlim2
+  integer(4) :: laux, lcom10, limtxf, locbr1, locz11, lpast2, lpeak, lsmat
+  integer(4) :: lspov4, ltrnst
+  integer(4) :: mdebug, mxtacw
+  integer(4) :: ndelta, nds, nhst, niamax, niomax, nkn
+  integer(4) :: nmax, nodma, nodmb, nodmc, nout, noutsm, numas, nxic
+  real(8) :: power
+  real(8) :: qsat
+  real(8) :: r0, ra, rat1, rf, rg, rkd, rkq
+  real(8) :: seedr, smoutp, smoutq, swname
+  real(8) :: teg, temp, texc, tork
+  real(8) :: unused
+  real(8) :: xay
+  real(8) :: y, yfor
+  real(8) :: znvref, zsk
+  real(8) :: a12, a21, a22, ac, acr, agline, ah, ai, at
+  real(8) :: brname, brnonl
+  real(8) :: c, ce, chard4, cnp, col, cv
+  real(8) :: dsat, dsd, dsm, dsr, dtnext
+  real(8) :: e, el0, elaf, elag, elakd, elakq, eld, elf, elfkd, elg, elgkq, elkd
+  real(8) :: elkq, elq, extrs
+  real(8) :: f
+  real(8) :: hertz, hico, histr, hsp
+  !
+  locate(   1)  =  location ( bus1   )
+  locate(   2)  =  location ( bus2   )
+  locate(   3)  =  location ( bus3   )
+  locate(   4)  =  location ( bus4   )
+  locate(   5)  =  location ( bus5   )
+  locate(   6)  =  location ( bus6   )
+  locate(   7)  =  location ( trash  )
+  locate(   8)  =  location ( blank  )
+  locate(   9)  =  location ( terra  )
+  locate(  10)  =  location ( userid )
+  locate(  11)  =  location ( branch )
+  locate(  12)  =  location ( copy   )
+  locate(  13)  =  location ( csepar )
+  locate(  14)  =  location ( chcont )
+  locate(  15)  =  location ( texcol(1) )
+  locate(  16)  =  location ( texta6(1) )
+  locate(  17)  =  location ( date1(1)  )
+  locate(  18)  =  location ( tclock(1) )
+  locate(  19)  =  location ( vstacs(1) )
+  locate(  20)  =  location ( abuff  )
+  locate(  21)  =  location ( ci1    )
+  locate(  22)  =  location ( ck1    )
+  locate(  23)  =  location ( deltat )
+  locate(  24)  =  location ( delta2 )
+  locate(  25)  =  location ( freqcs )
+  locate(  26)  =  location ( epsiln )
+  locate(  27)  =  location ( xunits )
+  locate(  28)  =  location ( aincr  )
+  locate(  29)  =  location ( xmaxmx )
+  locate(  30)  =  location ( znvref )
+  locate(  31)  =  location ( epszno )
+  locate(  32)  =  location ( epwarn )
+  locate(  33)  =  location ( epstop )
+  locate(  34)  =  location ( t      )
+  locate(  35)  =  location ( hertz  )
+  locate(  36)  =  location ( tolmat )
+  locate(  37)  =  location ( twopi  )
+  locate(  38)  =  location ( tmax   )
+  locate(  39)  =  location ( omega  )
+  locate(  40)  =  location ( copt   )
+  locate(  41)  =  location ( xopt   )
+  locate(  42)  =  location ( szplt  )
+  locate(  43)  =  location ( szbed  )
+  locate(  44)  =  location ( sglfir )
+  locate(  45)  =  location ( sigmax )
+  locate(  46)  =  location ( epsuba )
+  locate(  47)  =  location ( epdgel )
+  locate(  48)  =  location ( epomeg )
+  locate(  49)  =  location ( fminfs )
+  locate(  50)  =  location ( delffs )
+  locate(  51)  =  location ( fmaxfs )
+  locate(  52)  =  location ( tenerg )
+  locate(  53)  =  location ( begmax )
+  locate(  54)  =  location ( tenm3  )
+  locate(  55)  =  location ( tenm6  )
+  locate(  56)  =  location ( unity  )
+  locate(  57)  =  location ( onehaf )
+  locate(  58)  =  location ( peaknd(1) )
+  locate(  59)  =  location ( fltinf )
+  locate(  60)  =  location ( flzero )
+  locate(  61)  =  location ( degmin )
+  locate(  62)  =  location ( degmax )
+  locate(  63)  =  location ( statfr )
+  locate(  64)  =  location ( voltbc )
+  locate(  65)  =  location ( flstat )
+  locate(  66)  =  location ( dtnext )
+  locate(  67)  =  location ( angle  )
+  locate(  68)  =  location ( pu     )
+  locate(  69)  =  location ( seedr  )
+  locate(  70)  =  location ( speedl )
+  locate(  71)  =  location ( kstart )
+  locate(  72)  =  location ( knt    )
+  locate(  73)  =  location ( kbase  )
+  locate(  74)  =  location ( ltdelt )
+  locate(  75)  =  location ( unused )
+  locate(  76)  =  location ( mtape  )
+  locate(  77)  =  location ( lunit1 )
+  locate(  78)  =  location ( lunit2 )
+  locate(  79)  =  location ( lunit3 )
+  locate(  80)  =  location ( lunit4 )
+  locate(  81)  =  location ( lunit5 )
+  locate(  82)  =  location ( lunit6 )
+  locate(  83)  =  location ( lunit7 )
+  locate(  84)  =  location ( lunit8 )
+  locate(  85)  =  location ( lunit9 )
+  locate(  86)  =  location ( lunt10 )
+  locate(  87)  =  location ( lunt11 )
+  locate(  88)  =  location ( lunt12 )
+  locate(  89)  =  location ( lunt13 )
+  locate(  90)  =  location ( lunt14 )
+  locate(  91)  =  location ( lunt15 )
+  locate(  92)  =  location ( nexout )
+  locate(  93)  =  location ( nright )
+  locate(  94)  =  location ( nfrfld )
+  locate(  95)  =  location ( kolbeg )
+  locate(  96)  =  location ( kprchg )
+  locate(  97)  =  location ( multpr )
+  locate(  98)  =  location ( ipntv  )
+  locate(  99)  =  location ( indtv  )
+  locate( 100)  =  location ( lstat  )
+  locate( 101)  =  location ( nbyte  )
+  locate( 102)  =  location ( lunsav )
+  locate( 103)  =  location ( iprsov )
+  locate( 104)  =  location ( icheck )
+  locate( 105)  =  location ( unused )
+  locate( 106)  =  location ( iend   )
+  locate( 107)  =  location ( iline  )
+  locate( 108)  =  location ( inonl  )
+  locate( 109)  =  location ( iold   )
+  locate( 110)  =  location ( iout   )
+  locate( 111)  =  location ( iprint )
+  locate( 112)  =  location ( ipunch )
+  locate( 113)  =  location ( iread  )
+  locate( 114)  =  location ( kol132 )
+  locate( 115)  =  location ( istep  )
+  locate( 116)  =  location ( unused )
+  locate( 117)  =  location ( itype  )
+  locate( 118)  =  location ( it1    )
+  locate( 119)  =  location ( it2    )
+  locate( 120)  =  location ( iupper )
+  locate( 121)  =  location ( izero  )
+  locate( 122)  =  location ( kcount )
+  locate( 123)  =  location ( istead )
+  locate( 124)  =  location ( unused )
+  locate( 125)  =  location ( ldata  )
+  locate( 126)  =  location ( lbrnch )
+  locate( 127)  =  location ( limtxf )
+  locate( 128)  =  location ( mdebug )
+  locate( 129)  =  location ( lexct  )
+  locate( 130)  =  location ( lbus   )
+  locate( 131)  =  location ( lymat  )
+  locate( 132)  =  location ( lswtch )
+  locate( 133)  =  location ( lnonl  )
+  locate( 134)  =  location ( lchar  )
+  locate( 135)  =  location ( m4plot )
+  locate( 136)  =  location ( lpast  )
+  locate( 137)  =  location ( lsmat  )
+  locate( 138)  =  location ( iplot  )
+  locate( 139)  =  location ( ncomp  )
+  locate( 140)  =  location ( nv     )
+  locate( 141)  =  location ( lcomp  )
+  locate( 142)  =  location ( numsm  )
+  locate( 143)  =  location ( ifdep  )
+  locate( 144)  =  location ( ltails )
+  locate( 145)  =  location ( lfdep  )
+  locate( 146)  =  location ( lwt    )
+  locate( 147)  =  location ( last   )
+  locate( 148)  =  location ( npower )
+  locate( 149)  =  location ( maxpe  )
+  locate( 150)  =  location ( lpeak  )
+  locate( 151)  =  location ( nout   )
+  locate( 152)  =  location ( iv     )
+  locate( 153)  =  location ( ineof  )
+  locate( 154)  =  location ( ktrlsw )
+  locate( 155)  =  location ( num99  )
+  locate( 156)  =  location ( kpartb )
+  locate( 157)  =  location ( llbuff )
+  locate( 158)  =  location ( kanal  )
+  locate( 159)  =  location ( nsmth  )
+  locate( 160)  =  location ( ntcsex )
+  locate( 161)  =  location ( nstacs )
+  locate( 162)  =  location ( kloaep )
+  locate( 163)  =  location ( lastov )
+  locate( 164)  =  location ( ltacst )
+  locate( 165)  =  location ( lhist  )
+  locate( 166)  =  location ( ifx    )
+  locate( 167)  =  location ( ndelta )
+  locate( 168)  =  location ( idelta )
+  locate( 169)  =  location ( inecho )
+  locate( 170)  =  location ( noutpr )
+  locate( 171)  =  location ( ktab   )
+  locate( 172)  =  location ( jflsos )
+  locate( 173)  =  location ( numdcd )
+  locate( 174)  =  location ( numum  )
+  locate( 175)  =  location ( lspcum )
+  locate( 176)  =  location ( nphcas )
+  locate( 177)  =  location ( locz11 )
+  locate( 178)  =  location ( locbr1 )
+  locate( 179)  =  location ( ialter )
+  locate( 180)  =  location ( i_char )
+  locate( 181)  =  location ( ktref  )
+  locate( 182)  =  location ( kph    )
+  locate( 183)  =  location ( kreqab )
+  locate( 184)  =  location ( ksat   )
+  locate( 185)  =  location ( memsav )
+  locate( 186)  =  location ( lisoff )
+  locate( 187)  =  location ( lspov4 )
+  locate( 188)  =  location ( kburro )
+  locate( 189)  =  location ( iaverg )
+  locate( 190)  =  location ( lsiz23 )
+  locate( 191)  =  location ( lsiz26 )
+  locate( 192)  =  location ( numout )
+  locate( 193)  =  location ( moldat )
+  locate( 194)  =  location ( lsiz27 )
+  locate( 195)  =  location ( ltlabl )
+  locate( 196)  =  location ( iwt    )
+  locate( 197)  =  location ( ifdep2 )
+  locate( 198)  =  location ( idoubl )
+  locate( 199)  =  location ( ioutin )
+  locate( 200)  =  location ( ipun   )
+  locate( 201)  =  location ( jst    )
+  locate( 202)  =  location ( jst1   )
+  locate( 203)  =  location ( unused )
+  locate( 204)  =  location ( numsub )
+  locate( 205)  =  location ( maxzno )
+  locate( 206)  =  location ( kalplt )
+  locate( 207)  =  location ( niomax )
+  locate( 208)  =  location ( niamax )
+  locate( 209)  =  location ( ibr1   )
+  locate( 210)  =  location ( ifsem  )
+  locate( 211)  =  location ( lfsem  )
+  locate( 212)  =  location ( iadd   )
+  locate( 213)  =  location ( lfd    )
+  locate( 214)  =  location ( laux   )
+  locate( 215)  =  location ( iofgnd )
+  locate( 216)  =  location ( iofbnd )
+  locate( 217)  =  location ( unused )
+  locate( 218)  =  location ( jseedr )
+  locate( 219)  =  location ( modout )
+  locate( 220)  =  location ( iftail )
+  locate( 221)  =  location ( ipoint )
+  locate( 222)  =  location ( lpast2 )
+  locate( 223)  =  location ( ncurr  )
+  locate( 224)  =  location ( ioffd  )
+  locate( 225)  =  location ( isplot )
+  locate( 226)  =  location ( isprin )
+  locate( 227)  =  location ( maxout )
+  locate( 228)  =  location ( ipos   )
+  locate( 229)  =  location ( unused )
+  locate( 230)  =  location ( unused )
+  locate( 231)  =  location ( kill   )
+  locate( 232)  =  location ( ivolt  )
+  locate( 233)  =  location ( nchain )
+  locate( 234)  =  location ( iprsup )
+  locate( 235)  =  location ( unused )
+  locate( 236)  =  location ( intinf )
+  locate( 237)  =  location ( kconst )
+  locate( 238)  =  location ( kswtch )
+  locate( 239)  =  location ( it     )
+  locate( 240)  =  location ( ntot   )
+  locate( 241)  =  location ( ibr    )
+  locate( 242)  =  location ( lcom10 )
+  locate( 243)  =  location ( ltrnst )
+  locate( 244)  =  location ( lsyn   )
+  locate( 245)  =  location ( kssout )
+  locate( 246)  =  location ( loopss )
+  locate( 247)  =  location ( infexp )
+  locate( 248)  =  location ( numref )
+  locate( 249)  =  location ( nword1 )
+  locate( 250)  =  location ( nword2 )
+  locate( 251)  =  location ( iloaep )
+  locate( 252)  =  location ( lnpin  )
+  locate( 253)  =  location ( ntot1  )
+  locate( 254)  =  location ( limstp )
+  locate( 255)  =  location ( indstp )
+  locate( 256)  =  location ( nc     )
+  locate( 257)  =  location ( unused )
+  locate( 258)  =  location ( unused )
+  locate( 259)  =  location ( icat   )
+  locate( 260)  =  location ( numnvo )
+  locate( 261)  =  location ( unused )
+  locate( 262)  =  location ( nenerg )
+  locate( 263)  =  location ( isw    )
+  locate( 264)  =  location ( itest  )
+  locate( 265)  =  location ( idist  )
+  locate( 266)  =  location ( x      )
+  locate( 267)  =  location ( ykm    )
+  locate( 268)  =  location ( km     )
+  locate( 269)  =  location ( xk     )
+  locate( 270)  =  location ( xm     )
+  locate( 271)  =  location ( weight )
+  locate( 272)  =  location ( iwtent )
+  locate( 273)  =  location ( con1   )
+  locate( 274)  =  location ( iskip  )
+  locate( 275)  =  location ( zinf   )
+  locate( 276)  =  location ( eta    )
+  locate( 277)  =  location ( nhist  )
+  locate( 278)  =  location ( stailm )
+  locate( 279)  =  location ( stailk )
+  locate( 280)  =  location ( xmax   )
+  locate( 281)  =  location ( koutvp )
+  locate( 282)  =  location ( bnrg   )
+  locate( 283)  =  location ( sconst )
+  locate( 284)  =  location ( cnvhst )
+  locate( 285)  =  location ( sfd    )
+  locate( 286)  =  location ( qfd    )
+  locate( 287)  =  location ( semaux )
+  locate( 288)  =  location ( ibsout )
+  locate( 289)  =  location ( bvalue )
+  locate( 290)  =  location ( sptacs )
+  locate( 291)  =  location ( kswtyp )
+  locate( 292)  =  location ( modswt )
+  locate( 293)  =  location ( kbegsw )
+  locate( 294)  =  location ( lastsw )
+  locate( 295)  =  location ( kentnb )
+  locate( 296)  =  location ( nbhdsw )
+  locate( 297)  =  location ( topen  )
+  locate( 298)  =  location ( crit   )
+  locate( 299)  =  location ( kdepsw )
+  locate( 300)  =  location ( tdns   )
+  locate( 301)  =  location ( isourc )
+  locate( 302)  =  location ( energy )
+  locate( 303)  =  location ( iardub )
+  locate( 304)  =  location ( ardube )
+  locate( 305)  =  location ( nonlad )
+  locate( 306)  =  location ( nonle  )
+  locate( 307)  =  location ( vnonl  )
+  locate( 308)  =  location ( curr   )
+  locate( 309)  =  location ( anonl  )
+  locate( 310)  =  location ( vecnl1 )
+  locate( 311)  =  location ( vecnl2 )
+  locate( 312)  =  location ( brnonl )
+  locate( 313)  =  location ( vzero  )
+  locate( 314)  =  location ( ilast  )
+  locate( 315)  =  location ( nltype )
+  locate( 316)  =  location ( kupl   )
+  locate( 317)  =  location ( nlsub  )
+  locate( 318)  =  location ( cursub )
+  locate( 319)  =  location ( cchar  )
+  locate( 320)  =  location ( vchar  )
+  locate( 321)  =  location ( gslope )
+  locate( 322)  =  location ( kk     )
+  locate( 323)  =  location ( c      )
+  locate( 324)  =  location ( tr     )
+  locate( 325)  =  location ( tx     )
+  locate( 326)  =  location ( r      )
+  locate( 327)  =  location ( nr     )
+  locate( 328)  =  location ( length )
+  locate( 329)  =  location ( cik    )
+  locate( 330)  =  location ( ci     )
+  locate( 331)  =  location ( ck     )
+  locate( 332)  =  location ( swname )
+  locate( 333)  =  location ( ibrnch )
+  locate( 334)  =  location ( jbrnch )
+  locate( 335)  =  location ( tstop  )
+  locate( 336)  =  location ( nonlk  )
+  locate( 337)  =  location ( nonlm  )
+  locate( 338)  =  location ( spum   )
+  locate( 339)  =  location ( kks    )
+  locate( 340)  =  location ( kknonl )
+  locate( 341)  =  location ( znonl  )
+  locate( 342)  =  location ( znonlb )
+  locate( 343)  =  location ( znonlc )
+  locate( 344)  =  location ( finit  )
+  locate( 345)  =  location ( ksub   )
+  locate( 346)  =  location ( msub   )
+  locate( 347)  =  location ( isubeg )
+  locate( 348)  =  location ( litype )
+  locate( 349)  =  location ( imodel )
+  locate( 350)  =  location ( kbus   )
+  locate( 351)  =  location ( mbus   )
+  locate( 352)  =  location ( kodebr )
+  locate( 353)  =  location ( cki    )
+  locate( 354)  =  location ( ckkjm  )
+  locate( 355)  =  location ( indhst )
+  locate( 356)  =  location ( kodsem )
+  locate( 357)  =  location ( brname )
+  locate( 358)  =  location ( iform  )
+  locate( 359)  =  location ( node   )
+  locate( 360)  =  location ( crest  )
+  locate( 361)  =  location ( time1  )
+  locate( 362)  =  location ( time2  )
+  locate( 363)  =  location ( tstart )
+  locate( 364)  =  location ( sfreq  )
+  locate( 365)  =  location ( kmswit )
+  locate( 366)  =  location ( nextsw )
+  locate( 367)  =  location ( rmfd   )
+  locate( 368)  =  location ( cikfd  )
+  locate( 369)  =  location ( imfd   )
+  locate( 370)  =  location ( tclose )
+  locate( 371)  =  location ( adelay )
+  locate( 372)  =  location ( kpos   )
+  locate( 373)  =  location ( e      )
+  locate( 374)  =  location ( f      )
+  locate( 375)  =  location ( kssfrq )
+  locate( 376)  =  location ( kode   )
+  locate( 377)  =  location ( kpsour )
+  locate( 378)  =  location ( volti  )
+  locate( 379)  =  location ( voltk  )
+  locate( 380)  =  location ( volt   )
+  locate( 381)  =  location ( bus(1)    )
+  locate( 382)  =  location ( eld    )
+  locate( 383)  =  location ( elaf   )
+  locate( 384)  =  location ( elf    )
+  locate( 385)  =  location ( elakd  )
+  locate( 386)  =  location ( elfkd  )
+  locate( 387)  =  location ( elkd   )
+  locate( 388)  =  location ( elq    )
+  locate( 389)  =  location ( elag   )
+  locate( 390)  =  location ( elg    )
+  locate( 391)  =  location ( elakq  )
+  locate( 392)  =  location ( elgkq  )
+  locate( 393)  =  location ( elkq   )
+  locate( 394)  =  location ( el0    )
+  locate( 395)  =  location ( ra     )
+  locate( 396)  =  location ( rf     )
+  locate( 397)  =  location ( rkd    )
+  locate( 398)  =  location ( rg     )
+  locate( 399)  =  location ( rkq    )
+  locate( 400)  =  location ( r0     )
+  locate( 401)  =  location ( agline )
+  locate( 402)  =  location ( rat1   )
+  locate( 403)  =  location ( smoutp )
+  locate( 404)  =  location ( smoutq )
+  locate( 405)  =  location ( teg    )
+  locate( 406)  =  location ( texc   )
+  locate( 407)  =  location ( cnp    )
+  locate( 408)  =  location ( a22    )
+  locate( 409)  =  location ( a12    )
+  locate( 410)  =  location ( a21    )
+  locate( 411)  =  location ( ac     )
+  locate( 412)  =  location ( ai     )
+  locate( 413)  =  location ( at     )
+  locate( 414)  =  location ( ah     )
+  locate( 415)  =  location ( xay    )
+  locate( 416)  =  location ( cu     )
+  locate( 417)  =  location ( cv     )
+  locate( 418)  =  location ( dsat   )
+  locate( 419)  =  location ( qsat   )
+  locate( 420)  =  location ( acr    )
+  locate( 421)  =  location ( ce     )
+  locate( 422)  =  location ( dsr    )
+  locate( 423)  =  location ( dsd    )
+  locate( 424)  =  location ( hico   )
+  locate( 425)  =  location ( dsm    )
+  locate( 426)  =  location ( hsp    )
+  locate( 427)  =  location ( power  )
+  locate( 428)  =  location ( extrs  )
+  locate( 429)  =  location ( histq  )
+  locate( 430)  =  location ( histr  )
+  locate( 431)  =  location ( yfor   )
+  locate( 432)  =  location ( zsk    )
+  locate( 433)  =  location ( y      )
+  locate( 434)  =  location ( tork   )
+  locate( 435)  =  location ( temp   )
+  locate( 436)  =  location ( z      )
+  locate( 437)  =  location ( x1     )
+  locate( 438)  =  location ( sqrt3  )
+  locate( 439)  =  location ( asqrt3 )
+  locate( 440)  =  location ( sqrt32 )
+  locate( 441)  =  location ( thtw   )
+  locate( 442)  =  location ( athtw  )
+  locate( 443)  =  location ( radeg  )
+  locate( 444)  =  location ( omdt   )
+  locate( 445)  =  location ( factom )
+  locate( 446)  =  location ( damrat )
+  locate( 447)  =  location ( isat   )
+  locate( 448)  =  location ( ised   )
+  locate( 449)  =  location ( iseq   )
+  locate( 450)  =  location ( imdual )
+  locate( 451)  =  location ( iconfg )
+  locate( 452)  =  location ( kmac   )
+  locate( 453)  =  location ( kexc   )
+  locate( 454)  =  location ( numas  )
+  locate( 455)  =  location ( nodma  )
+  locate( 456)  =  location ( nodmb  )
+  locate( 457)  =  location ( nodmc  )
+  locate( 458)  =  location ( jasmit )
+  locate( 459)  =  location ( jsmtor )
+  locate( 460)  =  location ( jexcit )
+  locate( 461)  =  location ( isloc  )
+  locate( 462)  =  location ( noutsm )
+  locate( 463)  =  location ( ismout )
+  locate( 464)  =  location ( mfirst )
+  locate( 465)  =  location ( limass )
+  locate( 466)  =  location ( nst    )
+  locate( 467)  =  location ( itold  )
+  locate( 468)  =  location ( ibrold )
+  locate( 469)  =  location ( busum(1)  )
+  locate( 470)  =  location ( ptheta(1, 1) )
+  locate( 471)  =  location ( zthevr(1, 1) )
+  locate( 472)  =  location ( vinp   )
+  locate( 473)  =  location ( zthevs )
+  locate( 474)  =  location ( umcur  )
+  locate( 475)  =  location ( con    )
+  locate( 476)  =  location ( dumvec )
+  locate( 477)  =  location ( dummat(1, 1) )
+  locate( 478)  =  location ( date(1)   )
+  locate( 479)  =  location ( clock  )
+  locate( 480)  =  location ( pi     )
+  locate( 481)  =  location ( sroot2 )
+  locate( 482)  =  location ( sroot3 )
+  locate( 483)  =  location ( omegrf )
+  locate( 484)  =  location ( inpu   )
+  locate( 485)  =  location ( numbus )
+  locate( 486)  =  location ( ncltot )
+  locate( 487)  =  location ( ndum   )
+  locate( 488)  =  location ( initum )
+  locate( 489)  =  location ( iureac )
+  locate( 490)  =  location ( iugpar )
+  locate( 491)  =  location ( iufpar )
+  locate( 492)  =  location ( iuhist )
+  locate( 493)  =  location ( iuumrp )
+  locate( 494)  =  location ( iunod1 )
+  locate( 495)  =  location ( iunod2 )
+  locate( 496)  =  location ( iujclt )
+  locate( 497)  =  location ( iujclo )
+  locate( 498)  =  location ( iujtyp )
+  locate( 499)  =  location ( iunodo )
+  locate( 500)  =  location ( iujtmt )
+  locate( 501)  =  location ( iuhism )
+  locate( 502)  =  location ( iuomgm )
+  locate( 503)  =  location ( iuomld )
+  locate( 504)  =  location ( iutham )
+  locate( 505)  =  location ( iuredu )
+  locate( 506)  =  location ( iureds )
+  locate( 507)  =  location ( iuflds )
+  locate( 508)  =  location ( iufldr )
+  locate( 509)  =  location ( iurequ )
+  locate( 510)  =  location ( iuflqs )
+  locate( 511)  =  location ( iuflqr )
+  locate( 512)  =  location ( iujcds )
+  locate( 513)  =  location ( iujcqs )
+  locate( 514)  =  location ( iuflxd )
+  locate( 515)  =  location ( iuflxq )
+  locate( 516)  =  location ( iunppa )
+  locate( 517)  =  location ( iurotm )
+  locate( 518)  =  location ( iuncld )
+  locate( 519)  =  location ( iunclq )
+  locate( 520)  =  location ( iujtqo )
+  locate( 521)  =  location ( iujomo )
+  locate( 522)  =  location ( iujtho )
+  locate( 523)  =  location ( iureqs )
+  locate( 524)  =  location ( iuepso )
+  locate( 525)  =  location ( iudcoe )
+  locate( 526)  =  location ( iukcoi )
+  locate( 527)  =  location ( iuvolt )
+  locate( 528)  =  location ( iuangl )
+  locate( 529)  =  location ( iunodf )
+  locate( 530)  =  location ( iunodm )
+  locate( 531)  =  location ( iukumo )
+  locate( 532)  =  location ( iujumo )
+  locate( 533)  =  location ( iuumou )
+  locate( 534)  =  location ( nclfix )
+  locate( 535)  =  location ( numfix )
+  locate( 536)  =  location ( iotfix )
+  locate( 537)  =  location ( ibsfix )
+  locate( 538)  =  location ( ksubum )
+  locate( 539)  =  location ( nsmach )
+  locate( 540)  =  location ( istart )
+  locate( 541)  =  location ( karray )
+  locate( 542)  =  location ( rampcn )
+  locate( 543)  =  location ( rampsl )
+  locate( 544)  =  location ( kyramp )
+  locate( 545)  =  location ( texpar(1) )
+  locate( 546)  =  location ( fendrp )
+  locate( 547)  =  location ( tminrp )
+  locate( 548)  =  location ( tmaxrp )
+  locate( 549)  =  location ( tbegrp )
+  locate( 550)  =  location ( tendrp )
+  locate( 551)  =  location ( fbegrp )
+  locate( 552)  =  location ( tbreak )
+  locate( 553)  =  location ( indxrp )
+  locate( 554)  =  location ( ivec   )
+  locate( 555)  =  location ( iascii )
+  locate( 556)  =  location ( numsym )
+  locate( 557)  =  location ( jjroll )
+  locate( 558)  =  location ( itexp  )
+  locate( 559)  =  location ( labels )
+  locate( 560)  =  location ( maxarg )
+  locate( 561)  =  location ( kilper )
+  locate( 562)  =  location ( kfile5 )
+  locate( 563)  =  location ( kverfy )
+  locate( 564)  =  location ( ibegcl )
+  locate( 565)  =  location ( iendcl )
+  locate( 566)  =  location ( lidnt1 )
+  locate( 567)  =  location ( lidnt2 )
+  locate( 568)  =  location ( linnow )
+  locate( 569)  =  location ( linspn )
+  locate( 570)  =  location ( numcrd )
+  locate( 571)  =  location ( munit5 )
+  locate( 572)  =  location ( indbuf )
+  locate( 573)  =  location ( indbeg )
+  locate( 574)  =  location ( mflush )
+  locate( 575)  =  location ( newvec )
+  locate( 576)  =  location ( munit6 )
+  locate( 577)  =  location ( lserlc )
+  locate( 578)  =  location ( kserlc )
+  locate( 579)  =  location ( kbrser )
+  locate( 580)  =  location ( lockbr )
+  locate( 581)  =  location ( iprspy )
+  locate( 582)  =  location ( monitr )
+  locate( 583)  =  location ( monits )
+  locate( 584)  =  location ( locate )
+  locate( 585)  =  location ( nline  )
+  locate( 586)  =  location ( kwtspy )
+  locate( 587)  =  location ( kbreak )
+  locate( 588)  =  location ( limbuf )
+  locate( 589)  =  location ( inchlp )
+  locate( 590)  =  location ( ksymbl )
+  locate( 591)  =  location ( kopyit )
+  locate( 592)  =  location ( kslowr )
+  locate( 593)  =  location ( limcrd )
+  locate( 594)  =  location ( looprp )
+  locate( 595)  =  location ( n10rmp )
+  locate( 596)  =  location ( memrmp )
+  locate( 597)  =  location ( kar1   )
+  locate( 598)  =  location ( kar2   )
+  locate( 599)  =  location ( numrmp )
+  locate( 600)  =  location ( luntsp )
+  locate( 601)  =  location ( logvar )
+  locate( 602)  =  location ( filext(1) )
+  locate( 603)  =  location ( symb(1)   )
+  locate( 604)  =  location ( col    )
+  locate( 605)  =  location ( bytfnd )
+  locate( 606)  =  location ( char1  )
+  locate( 607)  =  location ( symbrp(1) )
+  locate( 608)  =  location ( chard4 )
+  locate( 609)  =  location ( bytbuf )
+  locate( 610)  =  location ( buff77 )
+  locate( 611)  =  location ( file6b(1) )
+  locate( 612)  =  location ( file6(1)  )
+  locate( 613)  =  location ( blan80 )
+  locate( 614)  =  location ( prom80 )
+  locate( 615)  =  location ( digit(1)  )
+  locate( 616)  =  location ( iac    )
+  locate( 617)  =  location ( idctcs )
+  locate( 618)  =  location ( ipl    )
+  locate( 619)  =  location ( ipr    )
+  locate( 620)  =  location ( ixr    )
+  locate( 621)  =  location ( jpl    )
+  locate( 622)  =  location ( jpr    )
+  locate( 623)  =  location ( kint   )
+  locate( 624)  =  location ( kout   )
+  locate( 625)  =  location ( nds    )
+  locate( 626)  =  location ( nkn    )
+  locate( 627)  =  location ( nmax   )
+  locate( 628)  =  location ( nuk    )
+  locate( 629)  =  location ( kwrite )
+  locate( 630)  =  location ( kpr    )
+  locate( 631)  =  location ( kpl    )
+  locate( 632)  =  location ( mxtacw )
+  locate( 633)  =  location ( iptacw )
+  locate( 634)  =  location ( nhst   )
+  locate( 635)  =  location ( kvin   )
+  locate( 636)  =  location ( kvou   )
+  locate( 637)  =  location ( kvxx   )
+  locate( 638)  =  location ( icsup  )
+  locate( 639)  =  location ( nxic   )
+  locate( 640)  =  location ( kksj   )
+  locate( 641)  =  location ( kksk   )
+  locate( 642)  =  location ( kkfst  )
+  locate( 643)  =  location ( kkni   )
+  locate( 644)  =  location ( kkhst  )
+  locate( 645)  =  location ( kifls  )
+  locate( 646)  =  location ( kidum  )
+  locate( 647)  =  location ( kslim1 )
+  locate( 648)  =  location ( kslim2 )
+  locate( 649)  =  location ( kslim3 )
+  locate( 650)  =  location ( kpac1r )
+  locate( 651)  =  location ( kpac1i )
+  locate( 652)  =  location ( kpac2r )
+  locate( 653)  =  location ( kpac2i )
+  locate( 654)  =  location ( kalksx )
+  locate( 655)  =  location ( kilms1 )
+  locate( 656)  =  location ( kilms2 )
+  locate( 657)  =  location ( kdumj  )
+  locate( 658)  =  location ( kdumk  )
+  locate( 659)  =  location ( kkzj   )
+  locate( 660)  =  location ( kkzk   )
+  locate( 661)  =  location ( kiflz  )
+  locate( 662)  =  location ( kgnz   )
+  locate( 663)  =  location ( kzlim1 )
+  locate( 664)  =  location ( kzlim2 )
+  locate( 665)  =  location ( kalkzx )
+  locate( 666)  =  location ( kilmz1 )
+  locate( 667)  =  location ( kilmz2 )
+  locate( 668)  =  location ( kksus  )
+  locate( 669)  =  location ( kalksu )
+  locate( 670)  =  location ( kiuty  )
+  locate( 671)  =  location ( kud1   )
+  locate( 672)  =  location ( kud2   )
+  locate( 673)  =  location ( kud3   )
+  locate( 674)  =  location ( kud4   )
+  locate( 675)  =  location ( kud5   )
+  locate( 676)  =  location ( kaliu  )
+  locate( 677)  =  location ( ktysup )
+  locate( 678)  =  location ( kjsup  )
+  locate( 679)  =  location ( kksup  )
+  locate( 680)  =  location ( kspvar )
+  locate( 681)  =  location ( kopsup )
+  locate( 682)  =  location ( kfnsup )
+  locate( 683)  =  location ( krgsup )
+  locate( 684)  =  location ( kprsup )
+  locate( 685)  =  location ( ktypdv )
+  locate( 686)  =  location ( kkdj   )
+  locate( 687)  =  location ( kkdk   )
+  locate( 688)  =  location ( kgndev )
+  locate( 689)  =  location ( kdev1  )
+  locate( 690)  =  location ( kdev2  )
+  locate( 691)  =  location ( kldev1 )
+  locate( 692)  =  location ( kldev2 )
+  locate( 693)  =  location ( kkdus  )
+  locate( 694)  =  location ( kalkdu )
+  locate( 695)  =  location ( ktbdev )
+  locate( 696)  =  location ( kpn    )
+  locate( 697)  =  location ( kpd    )
+  locate( 698)  =  location ( kxhst  )
+  locate( 699)  =  location ( khscr  )
+  locate( 700)  =  location ( khsci  )
+  locate( 701)  =  location ( kilim1 )
+  locate( 702)  =  location ( kilim2 )
+  locate( 703)  =  location ( krowcs )
+  locate( 704)  =  location ( krhsde )
+  locate( 705)  =  location ( kvlim1 )
+  locate( 706)  =  location ( kvlim2 )
+  locate( 707)  =  location ( kkxic  )
+  locate( 708)  =  location ( kawkcs )
+  locate( 709)  =  location ( kxar   )
+  locate( 710)  =  location ( kxai   )
+  locate( 711)  =  location ( kbwkcs )
+  locate( 712)  =  location ( kxtcs  )
+  locate( 713)  =  location ( klntab )
+  locate( 714)  =  location ( klmxic )
+  locate( 715)  =  location ( kcolcs )
+  locate( 716)  =  location ( katcs  )
+  locate( 717)  =  location ( kbtcs  )
+  locate( 718)  =  location ( kjout  )
+  locate( 719)  =  location ( kkout  )
+  locate( 720)  =  location ( kxmncs )
+  locate( 721)  =  location ( ktxmn  )
+  locate( 722)  =  location ( kxmxcs )
+  locate( 723)  =  location ( ktxmx  )
+  locate( 724)  =  location ( klnout )
+  locate( 725)  =  location ( ekbuf  )
+  locate( 726)  =  location ( ektemp )
+  locate( 727)  =  location ( errchk )
+  locate( 728)  =  location ( solrsv )
+  locate( 729)  =  location ( solisv )
+  locate( 730)  =  location ( nitera )
+  locate( 731)  =  location ( nekreq )
+  locate( 732)  =  location ( nekcod )
   return
 end subroutine locatn
-
-!
-!     data block.
-!
-
-block data
-   include 'dekspy.ftn'
-   data symb(  1) / 'bus1  '/,  ivec(  1) /  0/,  iascii(  1) /1/
-   data symb(  2) / 'bus2  '/,  ivec(  2) /  0/,  iascii(  2) /1/
-   data symb(  3) / 'bus3  '/,  ivec(  3) /  0/,  iascii(  3) /1/
-   data symb(  4) / 'bus4  '/,  ivec(  4) /  0/,  iascii(  4) /1/
-   data symb(  5) / 'bus5  '/,  ivec(  5) /  0/,  iascii(  5) /1/
-   data symb(  6) / 'bus6  '/,  ivec(  6) /  0/,  iascii(  6) /1/
-   data symb(  7) / 'trash '/,  ivec(  7) /  0/,  iascii(  7) /1/
-   data symb(  8) / 'blank '/,  ivec(  8) /  0/,  iascii(  8) /1/
-   data symb(  9) / 'terra '/,  ivec(  9) /  0/,  iascii(  9) /1/
-   data symb( 10) / 'userid'/,  ivec( 10) /  0/,  iascii( 10) /1/
-   data symb( 11) / 'branch'/,  ivec( 11) /  0/,  iascii( 11) /1/
-   data symb( 12) / 'copy  '/,  ivec( 12) /  0/,  iascii( 12) /1/
-   data symb( 13) / 'csepar'/,  ivec( 13) /  0/,  iascii( 13) /1/
-   data symb( 14) / 'chcont'/,  ivec( 14) /  0/,  iascii( 14) /1/
-   data symb( 15) / 'texcol'/,  ivec( 15) /  1/,  iascii( 15) /1/
-   data symb( 16) / 'texta6'/,  ivec( 16) /  1/,  iascii( 16) /1/
-   data symb( 17) / 'date1 '/,  ivec( 17) /  1/,  iascii( 17) /1/
-   data symb( 18) / 'tclock'/,  ivec( 18) /  1/,  iascii( 18) /1/
-   data symb( 19) / 'vstacs'/,  ivec( 19) /  1/,  iascii( 19) /1/
-   data symb( 20) / 'abuff '/,  ivec( 20) /  1/,  iascii( 20) /1/
-   data symb( 21) / 'ci1   '/,  ivec( 21) /  0/,  iascii( 21) /0/
-   data symb( 22) / 'ck1   '/,  ivec( 22) /  0/,  iascii( 22) /0/
-   data symb( 23) / 'deltat'/,  ivec( 23) /  0/,  iascii( 23) /0/
-   data symb( 24) / 'delta2'/,  ivec( 24) /  0/,  iascii( 24) /0/
-   data symb( 25) / 'freqcs'/,  ivec( 25) /  0/,  iascii( 25) /0/
-   data symb( 26) / 'epsiln'/,  ivec( 26) /  0/,  iascii( 26) /0/
-   data symb( 27) / 'xunits'/,  ivec( 27) /  0/,  iascii( 27) /0/
-   data symb( 28) / 'aincr '/,  ivec( 28) /  0/,  iascii( 28) /0/
-   data symb( 29) / 'xmaxmx'/,  ivec( 29) /  0/,  iascii( 29) /0/
-   data symb( 30) / 'znvref'/,  ivec( 30) /  0/,  iascii( 30) /0/
-   data symb( 31) / 'epszno'/,  ivec( 31) /  0/,  iascii( 31) /0/
-   data symb( 32) / 'epwarn'/,  ivec( 32) /  0/,  iascii( 32) /0/
-   data symb( 33) / 'epstop'/,  ivec( 33) /  0/,  iascii( 33) /0/
-   data symb( 34) / 't     '/,  ivec( 34) /  0/,  iascii( 34) /0/
-   data symb( 35) / 'hertz '/,  ivec( 35) /  0/,  iascii( 35) /0/
-   data symb( 36) / 'tolmat'/,  ivec( 36) /  0/,  iascii( 36) /0/
-   data symb( 37) / 'twopi '/,  ivec( 37) /  0/,  iascii( 37) /0/
-   data symb( 38) / 'tmax  '/,  ivec( 38) /  0/,  iascii( 38) /0/
-   data symb( 39) / 'omega '/,  ivec( 39) /  0/,  iascii( 39) /0/
-   data symb( 40) / 'copt  '/,  ivec( 40) /  0/,  iascii( 40) /0/
-   data symb( 41) / 'xopt  '/,  ivec( 41) /  0/,  iascii( 41) /0/
-   data symb( 42) / 'szplt '/,  ivec( 42) /  0/,  iascii( 42) /0/
-   data symb( 43) / 'szbed '/,  ivec( 43) /  0/,  iascii( 43) /0/
-   data symb( 44) / 'sglfir'/,  ivec( 44) /  0/,  iascii( 44) /0/
-   data symb( 45) / 'sigmax'/,  ivec( 45) /  0/,  iascii( 45) /0/
-   data symb( 46) / 'epsuba'/,  ivec( 46) /  0/,  iascii( 46) /0/
-   data symb( 47) / 'epdgel'/,  ivec( 47) /  0/,  iascii( 47) /0/
-   data symb( 48) / 'epomeg'/,  ivec( 48) /  0/,  iascii( 48) /0/
-   data symb( 49) / 'fminfs'/,  ivec( 49) /  0/,  iascii( 49) /0/
-   data symb( 50) / 'delffs'/,  ivec( 50) /  0/,  iascii( 50) /0/
-   data symb( 51) / 'fmaxfs'/,  ivec( 51) /  0/,  iascii( 51) /0/
-   data symb( 52) / 'tenerg'/,  ivec( 52) /  0/,  iascii( 52) /0/
-   data symb( 53) / 'begmax'/,  ivec( 53) /  1/,  iascii( 53) /0/
-   data symb( 54) / 'tenm3 '/,  ivec( 54) /  0/,  iascii( 54) /0/
-   data symb( 55) / 'tenm6 '/,  ivec( 55) /  0/,  iascii( 55) /0/
-   data symb( 56) / 'unity '/,  ivec( 56) /  0/,  iascii( 56) /0/
-   data symb( 57) / 'onehaf'/,  ivec( 57) /  0/,  iascii( 57) /0/
-   data symb( 58) / 'peaknd'/,  ivec( 58) /  1/,  iascii( 58) /0/
-   data symb( 59) / 'fltinf'/,  ivec( 59) /  0/,  iascii( 59) /0/
-   data symb( 60) / 'flzero'/,  ivec( 60) /  0/,  iascii( 60) /0/
-   data symb( 61) / 'degmin'/,  ivec( 61) /  0/,  iascii( 61) /0/
-   data symb( 62) / 'degmax'/,  ivec( 62) /  0/,  iascii( 62) /0/
-   data symb( 63) / 'statfr'/,  ivec( 63) /  0/,  iascii( 63) /0/
-   data symb( 64) / 'voltbc'/,  ivec( 64) /  1/,  iascii( 64) /0/
-   data symb( 65) / 'flstat'/,  ivec( 65) /  1/,  iascii( 65) /0/
-   data symb( 66) / 'dtnext'/,  ivec( 66) /  1/,  iascii( 66) /0/
-   data symb( 67) / 'angle '/,  ivec( 67) /  0/,  iascii( 67) /0/
-   data symb( 68) / 'pu    '/,  ivec( 68) /  0/,  iascii( 68) /0/
-   data symb( 69) / 'seedr '/,  ivec( 69) /  0/,  iascii( 69) /0/
-   data symb( 70) / 'speedl'/,  ivec( 70) /  0/,  iascii( 70) /0/
-   data symb( 71) / 'kstart'/,  ivec( 71) /  0/,  iascii( 71) /0/
-   data symb( 72) / 'knt   '/,  ivec( 72) /  0/,  iascii( 72) /0/
-   data symb( 73) / 'kbase '/,  ivec( 73) /  0/,  iascii( 73) /0/
-   data symb( 74) / 'ltdelt'/,  ivec( 74) /  0/,  iascii( 74) /0/
-   data symb( 75) / 'unused'/,  ivec( 75) /  0/,  iascii( 75) /0/
-   data symb( 76) / 'mtape '/,  ivec( 76) /  0/,  iascii( 76) /0/
-   data symb( 77) / 'lunit1'/,  ivec( 77) /  0/,  iascii( 77) /0/
-   data symb( 78) / 'lunit2'/,  ivec( 78) /  0/,  iascii( 78) /0/
-   data symb( 79) / 'lunit3'/,  ivec( 79) /  0/,  iascii( 79) /0/
-   data symb( 80) / 'lunit4'/,  ivec( 80) /  0/,  iascii( 80) /0/
-   data symb( 81) / 'lunit5'/,  ivec( 81) /  0/,  iascii( 81) /0/
-   data symb( 82) / 'lunit6'/,  ivec( 82) /  0/,  iascii( 82) /0/
-   data symb( 83) / 'lunit7'/,  ivec( 83) /  0/,  iascii( 83) /0/
-   data symb( 84) / 'lunit8'/,  ivec( 84) /  0/,  iascii( 84) /0/
-   data symb( 85) / 'lunit9'/,  ivec( 85) /  0/,  iascii( 85) /0/
-   data symb( 86) / 'lunt10'/,  ivec( 86) /  0/,  iascii( 86) /0/
-   data symb( 87) / 'lunt11'/,  ivec( 87) /  0/,  iascii( 87) /0/
-   data symb( 88) / 'lunt12'/,  ivec( 88) /  0/,  iascii( 88) /0/
-   data symb( 89) / 'lunt13'/,  ivec( 89) /  0/,  iascii( 89) /0/
-   data symb( 90) / 'lunt14'/,  ivec( 90) /  0/,  iascii( 90) /0/
-   data symb( 91) / 'lunt15'/,  ivec( 91) /  0/,  iascii( 91) /0/
-   data symb( 92) / 'nexout'/,  ivec( 92) /  1/,  iascii( 92) /0/
-   data symb( 93) / 'nright'/,  ivec( 93) /  0/,  iascii( 93) /0/
-   data symb( 94) / 'nfrfld'/,  ivec( 94) /  0/,  iascii( 94) /0/
-   data symb( 95) / 'kolbeg'/,  ivec( 95) /  0/,  iascii( 95) /0/
-   data symb( 96) / 'kprchg'/,  ivec( 96) /  1/,  iascii( 96) /0/
-   data symb( 97) / 'multpr'/,  ivec( 97) /  1/,  iascii( 97) /0/
-   data symb( 98) / 'ipntv '/,  ivec( 98) /  1/,  iascii( 98) /0/
-   data symb( 99) / 'indtv '/,  ivec( 99) /  1/,  iascii( 99) /0/
-   data symb(100) / 'lstat '/,  ivec(100) /  1/,  iascii(100) /0/
-   data symb(101) / 'nbyte '/,  ivec(101) /  1/,  iascii(101) /0/
-   data symb(102) / 'lunsav'/,  ivec(102) /  1/,  iascii(102) /0/
-   data symb(103) / 'iprsov'/,  ivec(103) /  1/,  iascii(103) /0/
-   data symb(104) / 'icheck'/,  ivec(104) /  0/,  iascii(104) /0/
-   data symb(105) / 'unused'/,  ivec(105) /  0/,  iascii(105) /0/
-   data symb(106) / 'iend  '/,  ivec(106) /  0/,  iascii(106) /0/
-   data symb(107) / 'iline '/,  ivec(107) /  0/,  iascii(107) /0/
-   data symb(108) / 'inonl '/,  ivec(108) /  0/,  iascii(108) /0/
-   data symb(109) / 'iold  '/,  ivec(109) /  0/,  iascii(109) /0/
-   data symb(110) / 'iout  '/,  ivec(110) /  0/,  iascii(110) /0/
-   data symb(111) / 'iprint'/,  ivec(111) /  0/,  iascii(111) /0/
-   data symb(112) / 'ipunch'/,  ivec(112) /  0/,  iascii(112) /0/
-   data symb(113) / 'iread '/,  ivec(113) /  0/,  iascii(113) /0/
-   data symb(114) / 'kol132'/,  ivec(114) /  0/,  iascii(114) /0/
-   data symb(115) / 'istep '/,  ivec(115) /  0/,  iascii(115) /0/
-   data symb(116) / 'unused'/,  ivec(116) /  0/,  iascii(116) /0/
-   data symb(117) / 'itype '/,  ivec(117) /  0/,  iascii(117) /0/
-   data symb(118) / 'it1   '/,  ivec(118) /  0/,  iascii(118) /0/
-   data symb(119) / 'it2   '/,  ivec(119) /  0/,  iascii(119) /0/
-   data symb(120) / 'iupper'/,  ivec(120) /  0/,  iascii(120) /0/
-   data symb(121) / 'izero '/,  ivec(121) /  0/,  iascii(121) /0/
-   data symb(122) / 'kcount'/,  ivec(122) /  0/,  iascii(122) /0/
-   data symb(123) / 'istead'/,  ivec(123) /  0/,  iascii(123) /0/
-   data symb(124) / 'unused'/,  ivec(124) /  0/,  iascii(124) /0/
-   data symb(125) / 'ldata '/,  ivec(125) /  0/,  iascii(125) /0/
-   data symb(126) / 'lbrnch'/,  ivec(126) /  0/,  iascii(126) /0/
-   data symb(127) / 'limtxf'/,  ivec(127) /  0/,  iascii(127) /0/
-   data symb(128) / 'mdebug'/,  ivec(128) /  0/,  iascii(128) /0/
-   data symb(129) / 'lexct '/,  ivec(129) /  0/,  iascii(129) /0/
-   data symb(130) / 'lbus  '/,  ivec(130) /  0/,  iascii(130) /0/
-   data symb(131) / 'lymat '/,  ivec(131) /  0/,  iascii(131) /0/
-   data symb(132) / 'lswtch'/,  ivec(132) /  0/,  iascii(132) /0/
-   data symb(133) / 'lnonl '/,  ivec(133) /  0/,  iascii(133) /0/
-   data symb(134) / 'lchar '/,  ivec(134) /  0/,  iascii(134) /0/
-   data symb(135) / 'm4plot'/,  ivec(135) /  0/,  iascii(135) /0/
-   data symb(136) / 'lpast '/,  ivec(136) /  0/,  iascii(136) /0/
-   data symb(137) / 'lsmat '/,  ivec(137) /  0/,  iascii(137) /0/
-   data symb(138) / 'iplot '/,  ivec(138) /  0/,  iascii(138) /0/
-   data symb(139) / 'ncomp '/,  ivec(139) /  0/,  iascii(139) /0/
-   data symb(140) / 'nv    '/,  ivec(140) /  0/,  iascii(140) /0/
-   data symb(141) / 'lcomp '/,  ivec(141) /  0/,  iascii(141) /0/
-   data symb(142) / 'numsm '/,  ivec(142) /  0/,  iascii(142) /0/
-   data symb(143) / 'ifdep '/,  ivec(143) /  0/,  iascii(143) /0/
-   data symb(144) / 'ltails'/,  ivec(144) /  0/,  iascii(144) /0/
-   data symb(145) / 'lfdep '/,  ivec(145) /  0/,  iascii(145) /0/
-   data symb(146) / 'lwt   '/,  ivec(146) /  0/,  iascii(146) /0/
-   data symb(147) / 'last  '/,  ivec(147) /  0/,  iascii(147) /0/
-   data symb(148) / 'npower'/,  ivec(148) /  0/,  iascii(148) /0/
-   data symb(149) / 'maxpe '/,  ivec(149) /  0/,  iascii(149) /0/
-   data symb(150) / 'lpeak '/,  ivec(150) /  0/,  iascii(150) /0/
-   data symb(151) / 'nout  '/,  ivec(151) /  0/,  iascii(151) /0/
-   data symb(152) / 'iv    '/,  ivec(152) /  0/,  iascii(152) /0/
-   data symb(153) / 'ineof '/,  ivec(153) /  0/,  iascii(153) /0/
-   data symb(154) / 'ktrlsw'/,  ivec(154) /  1/,  iascii(154) /0/
-   data symb(155) / 'num99 '/,  ivec(155) /  0/,  iascii(155) /0/
-   data symb(156) / 'kpartb'/,  ivec(156) /  0/,  iascii(156) /0/
-   data symb(157) / 'llbuff'/,  ivec(157) /  0/,  iascii(157) /0/
-   data symb(158) / 'kanal '/,  ivec(158) /  0/,  iascii(158) /0/
-   data symb(159) / 'nsmth '/,  ivec(159) /  0/,  iascii(159) /0/
-   data symb(160) / 'ntcsex'/,  ivec(160) /  0/,  iascii(160) /0/
-   data symb(161) / 'nstacs'/,  ivec(161) /  0/,  iascii(161) /0/
-   data symb(162) / 'kloaep'/,  ivec(162) /  0/,  iascii(162) /0/
-   data symb(163) / 'lastov'/,  ivec(163) /  0/,  iascii(163) /0/
-   data symb(164) / 'ltacst'/,  ivec(164) /  0/,  iascii(164) /0/
-   data symb(165) / 'lhist '/,  ivec(165) /  0/,  iascii(165) /0/
-   data symb(166) / 'ifx   '/,  ivec(166) /  0/,  iascii(166) /0/
-   data symb(167) / 'ndelta'/,  ivec(167) /  0/,  iascii(167) /0/
-   data symb(168) / 'idelta'/,  ivec(168) /  0/,  iascii(168) /0/
-   data symb(169) / 'inecho'/,  ivec(169) /  0/,  iascii(169) /0/
-   data symb(170) / 'noutpr'/,  ivec(170) /  0/,  iascii(170) /0/
-   data symb(171) / 'ktab  '/,  ivec(171) /  0/,  iascii(171) /0/
-   data symb(172) / 'jflsos'/,  ivec(172) /  0/,  iascii(172) /0/
-   data symb(173) / 'numdcd'/,  ivec(173) /  0/,  iascii(173) /0/
-   data symb(174) / 'numum '/,  ivec(174) /  0/,  iascii(174) /0/
-   data symb(175) / 'lspcum'/,  ivec(175) /  0/,  iascii(175) /0/
-   data symb(176) / 'nphcas'/,  ivec(176) /  0/,  iascii(176) /0/
-   data symb(177) / 'locz11'/,  ivec(177) /  0/,  iascii(177) /0/
-   data symb(178) / 'locbr1'/,  ivec(178) /  0/,  iascii(178) /0/
-   data symb(179) / 'ialter'/,  ivec(179) /  0/,  iascii(179) /0/
-   data symb(180) / 'i_char'/,  ivec(180) /  0/,  iascii(180) /0/
-   data symb(181) / 'ktref '/,  ivec(181) /  0/,  iascii(181) /0/
-   data symb(182) / 'kph   '/,  ivec(182) /  0/,  iascii(182) /0/
-   data symb(183) / 'kreqab'/,  ivec(183) /  0/,  iascii(183) /0/
-   data symb(184) / 'ksat  '/,  ivec(184) /  0/,  iascii(184) /0/
-   data symb(185) / 'memsav'/,  ivec(185) /  0/,  iascii(185) /0/
-   data symb(186) / 'lisoff'/,  ivec(186) /  0/,  iascii(186) /0/
-   data symb(187) / 'lspov4'/,  ivec(187) /  0/,  iascii(187) /0/
-   data symb(188) / 'kburro'/,  ivec(188) /  0/,  iascii(188) /0/
-   data symb(189) / 'iaverg'/,  ivec(189) /  0/,  iascii(189) /0/
-   data symb(190) / 'lsiz23'/,  ivec(190) /  0/,  iascii(190) /0/
-   data symb(191) / 'lsiz26'/,  ivec(191) /  0/,  iascii(191) /0/
-   data symb(192) / 'numout'/,  ivec(192) /  0/,  iascii(192) /0/
-   data symb(193) / 'moldat'/,  ivec(193) /  0/,  iascii(193) /0/
-   data symb(194) / 'lsiz27'/,  ivec(194) /  0/,  iascii(194) /0/
-   data symb(195) / 'ltlabl'/,  ivec(195) /  0/,  iascii(195) /0/
-   data symb(196) / 'iwt   '/,  ivec(196) /  0/,  iascii(196) /0/
-   data symb(197) / 'ifdep2'/,  ivec(197) /  0/,  iascii(197) /0/
-   data symb(198) / 'idoubl'/,  ivec(198) /  0/,  iascii(198) /0/
-   data symb(199) / 'ioutin'/,  ivec(199) /  0/,  iascii(199) /0/
-   data symb(200) / 'ipun  '/,  ivec(200) /  0/,  iascii(200) /0/
-   data symb(201) / 'jst   '/,  ivec(201) /  0/,  iascii(201) /0/
-   data symb(202) / 'jst1  '/,  ivec(202) /  0/,  iascii(202) /0/
-   data symb(203) / 'unused'/,  ivec(203) /  0/,  iascii(203) /0/
-   data symb(204) / 'numsub'/,  ivec(204) /  0/,  iascii(204) /0/
-   data symb(205) / 'maxzno'/,  ivec(205) /  0/,  iascii(205) /0/
-   data symb(206) / 'kalplt'/,  ivec(206) /  0/,  iascii(206) /0/
-   data symb(207) / 'niomax'/,  ivec(207) /  0/,  iascii(207) /0/
-   data symb(208) / 'niamax'/,  ivec(208) /  0/,  iascii(208) /0/
-   data symb(209) / 'ibr1  '/,  ivec(209) /  0/,  iascii(209) /0/
-   data symb(210) / 'ifsem '/,  ivec(210) /  0/,  iascii(210) /0/
-   data symb(211) / 'lfsem '/,  ivec(211) /  0/,  iascii(211) /0/
-   data symb(212) / 'iadd  '/,  ivec(212) /  0/,  iascii(212) /0/
-   data symb(213) / 'lfd   '/,  ivec(213) /  0/,  iascii(213) /0/
-   data symb(214) / 'laux  '/,  ivec(214) /  0/,  iascii(214) /0/
-   data symb(215) / 'iofgnd'/,  ivec(215) /  0/,  iascii(215) /0/
-   data symb(216) / 'iofbnd'/,  ivec(216) /  0/,  iascii(216) /0/
-   data symb(217) / 'unused'/,  ivec(217) /  0/,  iascii(217) /0/
-   data symb(218) / 'jseedr'/,  ivec(218) /  0/,  iascii(218) /0/
-   data symb(219) / 'modout'/,  ivec(219) /  0/,  iascii(219) /0/
-   data symb(220) / 'iftail'/,  ivec(220) /  0/,  iascii(220) /0/
-   data symb(221) / 'ipoint'/,  ivec(221) /  0/,  iascii(221) /0/
-   data symb(222) / 'lpast2'/,  ivec(222) /  0/,  iascii(222) /0/
-   data symb(223) / 'ncurr '/,  ivec(223) /  0/,  iascii(223) /0/
-   data symb(224) / 'ioffd '/,  ivec(224) /  0/,  iascii(224) /0/
-   data symb(225) / 'isplot'/,  ivec(225) /  0/,  iascii(225) /0/
-   data symb(226) / 'isprin'/,  ivec(226) /  0/,  iascii(226) /0/
-   data symb(227) / 'maxout'/,  ivec(227) /  0/,  iascii(227) /0/
-   data symb(228) / 'ipos  '/,  ivec(228) /  0/,  iascii(228) /0/
-   data symb(229) / 'unused'/,  ivec(229) /  0/,  iascii(229) /0/
-   data symb(230) / 'unused'/,  ivec(230) /  0/,  iascii(230) /0/
-   data symb(231) / 'kill  '/,  ivec(231) /  0/,  iascii(231) /0/
-   data symb(232) / 'ivolt '/,  ivec(232) /  0/,  iascii(232) /0/
-   data symb(233) / 'nchain'/,  ivec(233) /  0/,  iascii(233) /0/
-   data symb(234) / 'iprsup'/,  ivec(234) /  0/,  iascii(234) /0/
-   data symb(235) / 'unused'/,  ivec(235) /  0/,  iascii(235) /0/
-   data symb(236) / 'intinf'/,  ivec(236) /  0/,  iascii(236) /0/
-   data symb(237) / 'kconst'/,  ivec(237) /  0/,  iascii(237) /0/
-   data symb(238) / 'kswtch'/,  ivec(238) /  0/,  iascii(238) /0/
-   data symb(239) / 'it    '/,  ivec(239) /  0/,  iascii(239) /0/
-   data symb(240) / 'ntot  '/,  ivec(240) /  0/,  iascii(240) /0/
-   data symb(241) / 'ibr   '/,  ivec(241) /  0/,  iascii(241) /0/
-   data symb(242) / 'lcom10'/,  ivec(242) /  0/,  iascii(242) /0/
-   data symb(243) / 'ltrnst'/,  ivec(243) /  0/,  iascii(243) /0/
-   data symb(244) / 'lsyn  '/,  ivec(244) /  0/,  iascii(244) /0/
-   data symb(245) / 'kssout'/,  ivec(245) /  0/,  iascii(245) /0/
-   data symb(246) / 'loopss'/,  ivec(246) /  1/,  iascii(246) /0/
-   data symb(247) / 'infexp'/,  ivec(247) /  0/,  iascii(247) /0/
-   data symb(248) / 'numref'/,  ivec(248) /  0/,  iascii(248) /0/
-   data symb(249) / 'nword1'/,  ivec(249) /  0/,  iascii(249) /0/
-   data symb(250) / 'nword2'/,  ivec(250) /  0/,  iascii(250) /0/
-   data symb(251) / 'iloaep'/,  ivec(251) /  0/,  iascii(251) /0/
-   data symb(252) / 'lnpin '/,  ivec(252) /  0/,  iascii(252) /0/
-   data symb(253) / 'ntot1 '/,  ivec(253) /  0/,  iascii(253) /0/
-   data symb(254) / 'limstp'/,  ivec(254) /  0/,  iascii(254) /0/
-   data symb(255) / 'indstp'/,  ivec(255) /  0/,  iascii(255) /0/
-   data symb(256) / 'nc    '/,  ivec(256) /  0/,  iascii(256) /0/
-   data symb(257) / 'unused'/,  ivec(257) /  0/,  iascii(257) /0/
-   data symb(258) / 'unused'/,  ivec(258) /  0/,  iascii(258) /0/
-   data symb(259) / 'icat  '/,  ivec(259) /  0/,  iascii(259) /0/
-   data symb(260) / 'numnvo'/,  ivec(260) /  0/,  iascii(260) /0/
-   data symb(261) / 'unused'/,  ivec(261) /  0/,  iascii(261) /0/
-   data symb(262) / 'nenerg'/,  ivec(262) /  0/,  iascii(262) /0/
-   data symb(263) / 'isw   '/,  ivec(263) /  0/,  iascii(263) /0/
-   data symb(264) / 'itest '/,  ivec(264) /  0/,  iascii(264) /0/
-   data symb(265) / 'idist '/,  ivec(265) /  0/,  iascii(265) /0/
-   data symb(266) / 'x     '/,  ivec(266) /  1/,  iascii(266) /0/
-   data symb(267) / 'ykm   '/,  ivec(267) /  1/,  iascii(267) /0/
-   data symb(268) / 'km    '/,  ivec(268) /  1/,  iascii(268) /0/
-   data symb(269) / 'xk    '/,  ivec(269) /  1/,  iascii(269) /0/
-   data symb(270) / 'xm    '/,  ivec(270) /  1/,  iascii(270) /0/
-   data symb(271) / 'weight'/,  ivec(271) /  1/,  iascii(271) /0/
-   data symb(272) / 'iwtent'/,  ivec(272) /  1/,  iascii(272) /0/
-   data symb(273) / 'con1  '/,  ivec(273) /  1/,  iascii(273) /0/
-   data symb(274) / 'iskip '/,  ivec(274) /  1/,  iascii(274) /0/
-   data symb(275) / 'zinf  '/,  ivec(275) /  1/,  iascii(275) /0/
-   data symb(276) / 'eta   '/,  ivec(276) /  1/,  iascii(276) /0/
-   data symb(277) / 'nhist '/,  ivec(277) /  1/,  iascii(277) /0/
-   data symb(278) / 'stailm'/,  ivec(278) /  1/,  iascii(278) /0/
-   data symb(279) / 'stailk'/,  ivec(279) /  1/,  iascii(279) /0/
-   data symb(280) / 'xmax  '/,  ivec(280) /  1/,  iascii(280) /0/
-   data symb(281) / 'koutvp'/,  ivec(281) /  1/,  iascii(281) /0/
-   data symb(282) / 'bnrg  '/,  ivec(282) /  1/,  iascii(282) /0/
-   data symb(283) / 'sconst'/,  ivec(283) /  1/,  iascii(283) /0/
-   data symb(284) / 'cnvhst'/,  ivec(284) /  1/,  iascii(284) /0/
-   data symb(285) / 'sfd   '/,  ivec(285) /  1/,  iascii(285) /0/
-   data symb(286) / 'qfd   '/,  ivec(286) /  1/,  iascii(286) /0/
-   data symb(287) / 'semaux'/,  ivec(287) /  1/,  iascii(287) /0/
-   data symb(288) / 'ibsout'/,  ivec(288) /  1/,  iascii(288) /0/
-   data symb(289) / 'bvalue'/,  ivec(289) /  1/,  iascii(289) /0/
-   data symb(290) / 'sptacs'/,  ivec(290) /  1/,  iascii(290) /0/
-   data symb(291) / 'kswtyp'/,  ivec(291) /  1/,  iascii(291) /0/
-   data symb(292) / 'modswt'/,  ivec(292) /  1/,  iascii(292) /0/
-   data symb(293) / 'kbegsw'/,  ivec(293) /  1/,  iascii(293) /0/
-   data symb(294) / 'lastsw'/,  ivec(294) /  1/,  iascii(294) /0/
-   data symb(295) / 'kentnb'/,  ivec(295) /  1/,  iascii(295) /0/
-   data symb(296) / 'nbhdsw'/,  ivec(296) /  1/,  iascii(296) /0/
-   data symb(297) / 'topen '/,  ivec(297) /  1/,  iascii(297) /0/
-   data symb(298) / 'crit  '/,  ivec(298) /  1/,  iascii(298) /0/
-   data symb(299) / 'kdepsw'/,  ivec(299) /  1/,  iascii(299) /0/
-   data symb(300) / 'tdns  '/,  ivec(300) /  1/,  iascii(300) /0/
-   data symb(301) / 'isourc'/,  ivec(301) /  1/,  iascii(301) /0/
-   data symb(302) / 'energy'/,  ivec(302) /  1/,  iascii(302) /0/
-   data symb(303) / 'iardub'/,  ivec(303) /  1/,  iascii(303) /0/
-   data symb(304) / 'ardube'/,  ivec(304) /  1/,  iascii(304) /0/
-   data symb(305) / 'nonlad'/,  ivec(305) /  1/,  iascii(305) /0/
-   data symb(306) / 'nonle '/,  ivec(306) /  1/,  iascii(306) /0/
-   data symb(307) / 'vnonl '/,  ivec(307) /  1/,  iascii(307) /0/
-   data symb(308) / 'curr  '/,  ivec(308) /  1/,  iascii(308) /0/
-   data symb(309) / 'anonl '/,  ivec(309) /  1/,  iascii(309) /0/
-   data symb(310) / 'vecnl1'/,  ivec(310) /  1/,  iascii(310) /0/
-   data symb(311) / 'vecnl2'/,  ivec(311) /  1/,  iascii(311) /0/
-   data symb(312) / 'brnonl'/,  ivec(312) /  1/,  iascii(312) /1/
-   data symb(313) / 'vzero '/,  ivec(313) /  1/,  iascii(313) /0/
-   data symb(314) / 'ilast '/,  ivec(314) /  1/,  iascii(314) /0/
-   data symb(315) / 'nltype'/,  ivec(315) /  1/,  iascii(315) /0/
-   data symb(316) / 'kupl  '/,  ivec(316) /  1/,  iascii(316) /0/
-   data symb(317) / 'nlsub '/,  ivec(317) /  1/,  iascii(317) /0/
-   data symb(318) / 'cursub'/,  ivec(318) /  1/,  iascii(318) /0/
-   data symb(319) / 'cchar '/,  ivec(319) /  1/,  iascii(319) /0/
-   data symb(320) / 'vchar '/,  ivec(320) /  1/,  iascii(320) /0/
-   data symb(321) / 'gslope'/,  ivec(321) /  1/,  iascii(321) /0/
-   data symb(322) / 'kk    '/,  ivec(322) /  1/,  iascii(322) /0/
-   data symb(323) / 'c     '/,  ivec(323) /  1/,  iascii(323) /0/
-   data symb(324) / 'tr    '/,  ivec(324) /  1/,  iascii(324) /0/
-   data symb(325) / 'tx    '/,  ivec(325) /  1/,  iascii(325) /0/
-   data symb(326) / 'r     '/,  ivec(326) /  1/,  iascii(326) /0/
-   data symb(327) / 'nr    '/,  ivec(327) /  1/,  iascii(327) /0/
-   data symb(328) / 'length'/,  ivec(328) /  1/,  iascii(328) /0/
-   data symb(329) / 'cik   '/,  ivec(329) /  1/,  iascii(329) /0/
-   data symb(330) / 'ci    '/,  ivec(330) /  1/,  iascii(330) /0/
-   data symb(331) / 'ck    '/,  ivec(331) /  1/,  iascii(331) /0/
-   data symb(332) / 'swname'/,  ivec(332) /  1/,  iascii(332) /1/
-   data symb(333) / 'ibrnch'/,  ivec(333) /  1/,  iascii(333) /0/
-   data symb(334) / 'jbrnch'/,  ivec(334) /  1/,  iascii(334) /0/
-   data symb(335) / 'tstop '/,  ivec(335) /  1/,  iascii(335) /0/
-   data symb(336) / 'nonlk '/,  ivec(336) /  1/,  iascii(336) /0/
-   data symb(337) / 'nonlm '/,  ivec(337) /  1/,  iascii(337) /0/
-   data symb(338) / 'spum  '/,  ivec(338) /  1/,  iascii(338) /0/
-   data symb(339) / 'kks   '/,  ivec(339) /  1/,  iascii(339) /0/
-   data symb(340) / 'kknonl'/,  ivec(340) /  1/,  iascii(340) /0/
-   data symb(341) / 'znonl '/,  ivec(341) /  1/,  iascii(341) /0/
-   data symb(342) / 'znonlb'/,  ivec(342) /  1/,  iascii(342) /0/
-   data symb(343) / 'znonlc'/,  ivec(343) /  1/,  iascii(343) /0/
-   data symb(344) / 'finit '/,  ivec(344) /  1/,  iascii(344) /0/
-   data symb(345) / 'ksub  '/,  ivec(345) /  1/,  iascii(345) /0/
-   data symb(346) / 'msub  '/,  ivec(346) /  1/,  iascii(346) /0/
-   data symb(347) / 'isubeg'/,  ivec(347) /  1/,  iascii(347) /0/
-   data symb(348) / 'litype'/,  ivec(348) /  1/,  iascii(348) /0/
-   data symb(349) / 'imodel'/,  ivec(349) /  1/,  iascii(349) /0/
-   data symb(350) / 'kbus  '/,  ivec(350) /  1/,  iascii(350) /0/
-   data symb(351) / 'mbus  '/,  ivec(351) /  1/,  iascii(351) /0/
-   data symb(352) / 'kodebr'/,  ivec(352) /  1/,  iascii(352) /0/
-   data symb(353) / 'cki   '/,  ivec(353) /  1/,  iascii(353) /0/
-   data symb(354) / 'ckkjm '/,  ivec(354) /  1/,  iascii(354) /0/
-   data symb(355) / 'indhst'/,  ivec(355) /  1/,  iascii(355) /0/
-   data symb(356) / 'kodsem'/,  ivec(356) /  1/,  iascii(356) /0/
-   data symb(357) / 'brname'/,  ivec(357) /  1/,  iascii(357) /1/
-   data symb(358) / 'iform '/,  ivec(358) /  1/,  iascii(358) /0/
-   data symb(359) / 'node  '/,  ivec(359) /  1/,  iascii(359) /0/
-   data symb(360) / 'crest '/,  ivec(360) /  1/,  iascii(360) /0/
-   data symb(361) / 'time1 '/,  ivec(361) /  1/,  iascii(361) /0/
-   data symb(362) / 'time2 '/,  ivec(362) /  1/,  iascii(362) /0/
-   data symb(363) / 'tstart'/,  ivec(363) /  1/,  iascii(363) /0/
-   data symb(364) / 'sfreq '/,  ivec(364) /  1/,  iascii(364) /0/
-   data symb(365) / 'kmswit'/,  ivec(365) /  1/,  iascii(365) /0/
-   data symb(366) / 'nextsw'/,  ivec(366) /  1/,  iascii(366) /0/
-   data symb(367) / 'rmfd  '/,  ivec(367) /  1/,  iascii(367) /0/
-   data symb(368) / 'cikfd '/,  ivec(368) /  1/,  iascii(368) /0/
-   data symb(369) / 'imfd  '/,  ivec(369) /  1/,  iascii(369) /0/
-   data symb(370) / 'tclose'/,  ivec(370) /  1/,  iascii(370) /0/
-   data symb(371) / 'adelay'/,  ivec(371) /  1/,  iascii(371) /0/
-   data symb(372) / 'kpos  '/,  ivec(372) /  1/,  iascii(372) /0/
-   data symb(373) / 'e     '/,  ivec(373) /  1/,  iascii(373) /0/
-   data symb(374) / 'f     '/,  ivec(374) /  1/,  iascii(374) /0/
-   data symb(375) / 'kssfrq'/,  ivec(375) /  1/,  iascii(375) /0/
-   data symb(376) / 'kode  '/,  ivec(376) /  1/,  iascii(376) /0/
-   data symb(377) / 'kpsour'/,  ivec(377) /  1/,  iascii(377) /0/
-   data symb(378) / 'volti '/,  ivec(378) /  1/,  iascii(378) /0/
-   data symb(379) / 'voltk '/,  ivec(379) /  1/,  iascii(379) /0/
-   data symb(380) / 'volt  '/,  ivec(380) /  1/,  iascii(380) /0/
-   data symb(381) / 'bus   '/,  ivec(381) /  1/,  iascii(381) /1/
-   data symb(382) / 'eld   '/,  ivec(382) /  1/,  iascii(382) /0/
-   data symb(383) / 'elaf  '/,  ivec(383) /  1/,  iascii(383) /0/
-   data symb(384) / 'elf   '/,  ivec(384) /  1/,  iascii(384) /0/
-   data symb(385) / 'elakd '/,  ivec(385) /  1/,  iascii(385) /0/
-   data symb(386) / 'elfkd '/,  ivec(386) /  1/,  iascii(386) /0/
-   data symb(387) / 'elkd  '/,  ivec(387) /  1/,  iascii(387) /0/
-   data symb(388) / 'elq   '/,  ivec(388) /  1/,  iascii(388) /0/
-   data symb(389) / 'elag  '/,  ivec(389) /  1/,  iascii(389) /0/
-   data symb(390) / 'elg   '/,  ivec(390) /  1/,  iascii(390) /0/
-   data symb(391) / 'elakq '/,  ivec(391) /  1/,  iascii(391) /0/
-   data symb(392) / 'elgkq '/,  ivec(392) /  1/,  iascii(392) /0/
-   data symb(393) / 'elkq  '/,  ivec(393) /  1/,  iascii(393) /0/
-   data symb(394) / 'el0   '/,  ivec(394) /  1/,  iascii(394) /0/
-   data symb(395) / 'ra    '/,  ivec(395) /  1/,  iascii(395) /0/
-   data symb(396) / 'rf    '/,  ivec(396) /  1/,  iascii(396) /0/
-   data symb(397) / 'rkd   '/,  ivec(397) /  1/,  iascii(397) /0/
-   data symb(398) / 'rg    '/,  ivec(398) /  1/,  iascii(398) /0/
-   data symb(399) / 'rkq   '/,  ivec(399) /  1/,  iascii(399) /0/
-   data symb(400) / 'r0    '/,  ivec(400) /  1/,  iascii(400) /0/
-   data symb(401) / 'agline'/,  ivec(401) /  1/,  iascii(401) /0/
-   data symb(402) / 'rat1  '/,  ivec(402) /  1/,  iascii(402) /0/
-   data symb(403) / 'smoutp'/,  ivec(403) /  1/,  iascii(403) /0/
-   data symb(404) / 'smoutq'/,  ivec(404) /  1/,  iascii(404) /0/
-   data symb(405) / 'teg   '/,  ivec(405) /  1/,  iascii(405) /0/
-   data symb(406) / 'texc  '/,  ivec(406) /  1/,  iascii(406) /0/
-   data symb(407) / 'cnp   '/,  ivec(407) /  1/,  iascii(407) /0/
-   data symb(408) / 'a22   '/,  ivec(408) /  1/,  iascii(408) /0/
-   data symb(409) / 'a12   '/,  ivec(409) /  1/,  iascii(409) /0/
-   data symb(410) / 'a21   '/,  ivec(410) /  1/,  iascii(410) /0/
-   data symb(411) / 'ac    '/,  ivec(411) /  1/,  iascii(411) /0/
-   data symb(412) / 'ai    '/,  ivec(412) /  1/,  iascii(412) /0/
-   data symb(413) / 'at    '/,  ivec(413) /  1/,  iascii(413) /0/
-   data symb(414) / 'ah    '/,  ivec(414) /  1/,  iascii(414) /0/
-   data symb(415) / 'xay   '/,  ivec(415) /  1/,  iascii(415) /0/
-   data symb(416) / 'cu    '/,  ivec(416) /  1/,  iascii(416) /0/
-   data symb(417) / 'cv    '/,  ivec(417) /  1/,  iascii(417) /0/
-   data symb(418) / 'dsat  '/,  ivec(418) /  1/,  iascii(418) /0/
-   data symb(419) / 'qsat  '/,  ivec(419) /  1/,  iascii(419) /0/
-   data symb(420) / 'acr   '/,  ivec(420) /  1/,  iascii(420) /0/
-   data symb(421) / 'ce    '/,  ivec(421) /  1/,  iascii(421) /0/
-   data symb(422) / 'dsr   '/,  ivec(422) /  1/,  iascii(422) /0/
-   data symb(423) / 'dsd   '/,  ivec(423) /  1/,  iascii(423) /0/
-   data symb(424) / 'hico  '/,  ivec(424) /  1/,  iascii(424) /0/
-   data symb(425) / 'dsm   '/,  ivec(425) /  1/,  iascii(425) /0/
-   data symb(426) / 'hsp   '/,  ivec(426) /  1/,  iascii(426) /0/
-   data symb(427) / 'power '/,  ivec(427) /  1/,  iascii(427) /0/
-   data symb(428) / 'extrs '/,  ivec(428) /  1/,  iascii(428) /0/
-   data symb(429) / 'histq '/,  ivec(429) /  1/,  iascii(429) /0/
-   data symb(430) / 'histr '/,  ivec(430) /  1/,  iascii(430) /0/
-   data symb(431) / 'yfor  '/,  ivec(431) /  1/,  iascii(431) /0/
-   data symb(432) / 'zsk   '/,  ivec(432) /  1/,  iascii(432) /0/
-   data symb(433) / 'y     '/,  ivec(433) /  1/,  iascii(433) /0/
-   data symb(434) / 'tork  '/,  ivec(434) /  1/,  iascii(434) /0/
-   data symb(435) / 'temp  '/,  ivec(435) /  1/,  iascii(435) /0/
-   data symb(436) / 'z     '/,  ivec(436) /  1/,  iascii(436) /0/
-   data symb(437) / 'x1    '/,  ivec(437) /  1/,  iascii(437) /0/
-   data symb(438) / 'sqrt3 '/,  ivec(438) /  0/,  iascii(438) /0/
-   data symb(439) / 'asqrt3'/,  ivec(439) /  0/,  iascii(439) /0/
-   data symb(440) / 'sqrt32'/,  ivec(440) /  0/,  iascii(440) /0/
-   data symb(441) / 'thtw  '/,  ivec(441) /  0/,  iascii(441) /0/
-   data symb(442) / 'athtw '/,  ivec(442) /  0/,  iascii(442) /0/
-   data symb(443) / 'radeg '/,  ivec(443) /  0/,  iascii(443) /0/
-   data symb(444) / 'omdt  '/,  ivec(444) /  0/,  iascii(444) /0/
-   data symb(445) / 'factom'/,  ivec(445) /  0/,  iascii(445) /0/
-   data symb(446) / 'damrat'/,  ivec(446) /  0/,  iascii(446) /0/
-   data symb(447) / 'isat  '/,  ivec(447) /  1/,  iascii(447) /0/
-   data symb(448) / 'ised  '/,  ivec(448) /  1/,  iascii(448) /0/
-   data symb(449) / 'iseq  '/,  ivec(449) /  1/,  iascii(449) /0/
-   data symb(450) / 'imdual'/,  ivec(450) /  1/,  iascii(450) /0/
-   data symb(451) / 'iconfg'/,  ivec(451) /  1/,  iascii(451) /0/
-   data symb(452) / 'kmac  '/,  ivec(452) /  1/,  iascii(452) /0/
-   data symb(453) / 'kexc  '/,  ivec(453) /  1/,  iascii(453) /0/
-   data symb(454) / 'numas '/,  ivec(454) /  1/,  iascii(454) /0/
-   data symb(455) / 'nodma '/,  ivec(455) /  1/,  iascii(455) /0/
-   data symb(456) / 'nodmb '/,  ivec(456) /  1/,  iascii(456) /0/
-   data symb(457) / 'nodmc '/,  ivec(457) /  1/,  iascii(457) /0/
-   data symb(458) / 'jasmit'/,  ivec(458) /  1/,  iascii(458) /0/
-   data symb(459) / 'jsmtor'/,  ivec(459) /  1/,  iascii(459) /0/
-   data symb(460) / 'jexcit'/,  ivec(460) /  1/,  iascii(460) /0/
-   data symb(461) / 'isloc '/,  ivec(461) /  1/,  iascii(461) /0/
-   data symb(462) / 'noutsm'/,  ivec(462) /  1/,  iascii(462) /0/
-   data symb(463) / 'ismout'/,  ivec(463) /  1/,  iascii(463) /0/
-   data symb(464) / 'mfirst'/,  ivec(464) /  0/,  iascii(464) /0/
-   data symb(465) / 'limass'/,  ivec(465) /  0/,  iascii(465) /0/
-   data symb(466) / 'nst   '/,  ivec(466) /  0/,  iascii(466) /0/
-   data symb(467) / 'itold '/,  ivec(467) /  0/,  iascii(467) /0/
-   data symb(468) / 'ibrold'/,  ivec(468) /  0/,  iascii(468) /0/
-   data symb(469) / 'busum '/,  ivec(469) /  1/,  iascii(469) /1/
-   data symb(470) / 'ptheta'/,  ivec(470) /  1/,  iascii(470) /0/
-   data symb(471) / 'zthevr'/,  ivec(471) /  1/,  iascii(471) /0/
-   data symb(472) / 'vinp  '/,  ivec(472) /  1/,  iascii(472) /0/
-   data symb(473) / 'zthevs'/,  ivec(473) /  1/,  iascii(473) /0/
-   data symb(474) / 'umcur '/,  ivec(474) /  1/,  iascii(474) /0/
-   data symb(475) / 'con   '/,  ivec(475) /  1/,  iascii(475) /0/
-   data symb(476) / 'dumvec'/,  ivec(476) /  1/,  iascii(476) /0/
-   data symb(477) / 'dummat'/,  ivec(477) /  1/,  iascii(477) /0/
-   data symb(478) / 'date  '/,  ivec(478) /  1/,  iascii(478) /0/
-   data symb(479) / 'clock '/,  ivec(479) /  1/,  iascii(479) /0/
-   data symb(480) / 'pi    '/,  ivec(480) /  0/,  iascii(480) /0/
-   data symb(481) / 'sroot2'/,  ivec(481) /  0/,  iascii(481) /0/
-   data symb(482) / 'sroot3'/,  ivec(482) /  0/,  iascii(482) /0/
-   data symb(483) / 'omegrf'/,  ivec(483) /  0/,  iascii(483) /0/
-   data symb(484) / 'inpu  '/,  ivec(484) /  0/,  iascii(484) /0/
-   data symb(485) / 'numbus'/,  ivec(485) /  0/,  iascii(485) /0/
-   data symb(486) / 'ncltot'/,  ivec(486) /  0/,  iascii(486) /0/
-   data symb(487) / 'ndum  '/,  ivec(487) /  1/,  iascii(487) /0/
-   data symb(488) / 'initum'/,  ivec(488) /  0/,  iascii(488) /0/
-   data symb(489) / 'iureac'/,  ivec(489) /  0/,  iascii(489) /0/
-   data symb(490) / 'iugpar'/,  ivec(490) /  0/,  iascii(490) /0/
-   data symb(491) / 'iufpar'/,  ivec(491) /  0/,  iascii(491) /0/
-   data symb(492) / 'iuhist'/,  ivec(492) /  0/,  iascii(492) /0/
-   data symb(493) / 'iuumrp'/,  ivec(493) /  0/,  iascii(493) /0/
-   data symb(494) / 'iunod1'/,  ivec(494) /  0/,  iascii(494) /0/
-   data symb(495) / 'iunod2'/,  ivec(495) /  0/,  iascii(495) /0/
-   data symb(496) / 'iujclt'/,  ivec(496) /  0/,  iascii(496) /0/
-   data symb(497) / 'iujclo'/,  ivec(497) /  0/,  iascii(497) /0/
-   data symb(498) / 'iujtyp'/,  ivec(498) /  0/,  iascii(498) /0/
-   data symb(499) / 'iunodo'/,  ivec(499) /  0/,  iascii(499) /0/
-   data symb(500) / 'iujtmt'/,  ivec(500) /  0/,  iascii(500) /0/
-   data symb(501) / 'iuhism'/,  ivec(501) /  0/,  iascii(501) /0/
-   data symb(502) / 'iuomgm'/,  ivec(502) /  0/,  iascii(502) /0/
-   data symb(503) / 'iuomld'/,  ivec(503) /  0/,  iascii(503) /0/
-   data symb(504) / 'iutham'/,  ivec(504) /  0/,  iascii(504) /0/
-   data symb(505) / 'iuredu'/,  ivec(505) /  0/,  iascii(505) /0/
-   data symb(506) / 'iureds'/,  ivec(506) /  0/,  iascii(506) /0/
-   data symb(507) / 'iuflds'/,  ivec(507) /  0/,  iascii(507) /0/
-   data symb(508) / 'iufldr'/,  ivec(508) /  0/,  iascii(508) /0/
-   data symb(509) / 'iurequ'/,  ivec(509) /  0/,  iascii(509) /0/
-   data symb(510) / 'iuflqs'/,  ivec(510) /  0/,  iascii(510) /0/
-   data symb(511) / 'iuflqr'/,  ivec(511) /  0/,  iascii(511) /0/
-   data symb(512) / 'iujcds'/,  ivec(512) /  0/,  iascii(512) /0/
-   data symb(513) / 'iujcqs'/,  ivec(513) /  0/,  iascii(513) /0/
-   data symb(514) / 'iuflxd'/,  ivec(514) /  0/,  iascii(514) /0/
-   data symb(515) / 'iuflxq'/,  ivec(515) /  0/,  iascii(515) /0/
-   data symb(516) / 'iunppa'/,  ivec(516) /  0/,  iascii(516) /0/
-   data symb(517) / 'iurotm'/,  ivec(517) /  0/,  iascii(517) /0/
-   data symb(518) / 'iuncld'/,  ivec(518) /  0/,  iascii(518) /0/
-   data symb(519) / 'iunclq'/,  ivec(519) /  0/,  iascii(519) /0/
-   data symb(520) / 'iujtqo'/,  ivec(520) /  0/,  iascii(520) /0/
-   data symb(521) / 'iujomo'/,  ivec(521) /  0/,  iascii(521) /0/
-   data symb(522) / 'iujtho'/,  ivec(522) /  0/,  iascii(522) /0/
-   data symb(523) / 'iureqs'/,  ivec(523) /  0/,  iascii(523) /0/
-   data symb(524) / 'iuepso'/,  ivec(524) /  0/,  iascii(524) /0/
-   data symb(525) / 'iudcoe'/,  ivec(525) /  0/,  iascii(525) /0/
-   data symb(526) / 'iukcoi'/,  ivec(526) /  0/,  iascii(526) /0/
-   data symb(527) / 'iuvolt'/,  ivec(527) /  0/,  iascii(527) /0/
-   data symb(528) / 'iuangl'/,  ivec(528) /  0/,  iascii(528) /0/
-   data symb(529) / 'iunodf'/,  ivec(529) /  0/,  iascii(529) /0/
-   data symb(530) / 'iunodm'/,  ivec(530) /  0/,  iascii(530) /0/
-   data symb(531) / 'iukumo'/,  ivec(531) /  0/,  iascii(531) /0/
-   data symb(532) / 'iujumo'/,  ivec(532) /  0/,  iascii(532) /0/
-   data symb(533) / 'iuumou'/,  ivec(533) /  0/,  iascii(533) /0/
-   data symb(534) / 'nclfix'/,  ivec(534) /  0/,  iascii(534) /0/
-   data symb(535) / 'numfix'/,  ivec(535) /  0/,  iascii(535) /0/
-   data symb(536) / 'iotfix'/,  ivec(536) /  0/,  iascii(536) /0/
-   data symb(537) / 'ibsfix'/,  ivec(537) /  0/,  iascii(537) /0/
-   data symb(538) / 'ksubum'/,  ivec(538) /  0/,  iascii(538) /0/
-   data symb(539) / 'nsmach'/,  ivec(539) /  0/,  iascii(539) /0/
-   data symb(540) / 'istart'/,  ivec(540) /  0/,  iascii(540) /0/
-   data symb(541) / 'karray'/,  ivec(541) /  1/,  iascii(541) /0/
-   data symb(542) / 'rampcn'/,  ivec(542) /  1/,  iascii(542) /0/
-   data symb(543) / 'rampsl'/,  ivec(543) /  1/,  iascii(543) /0/
-   data symb(544) / 'kyramp'/,  ivec(544) /  1/,  iascii(544) /0/
-   data symb(545) / 'texpar'/,  ivec(545) /  1/,  iascii(545) /0/
-   data symb(546) / 'fendrp'/,  ivec(546) /  1/,  iascii(546) /0/
-   data symb(547) / 'tminrp'/,  ivec(547) /  0/,  iascii(547) /0/
-   data symb(548) / 'tmaxrp'/,  ivec(548) /  0/,  iascii(548) /0/
-   data symb(549) / 'tbegrp'/,  ivec(549) /  1/,  iascii(549) /0/
-   data symb(550) / 'tendrp'/,  ivec(550) /  1/,  iascii(550) /0/
-   data symb(551) / 'fbegrp'/,  ivec(551) /  1/,  iascii(551) /0/
-   data symb(552) / 'tbreak'/,  ivec(552) /  0/,  iascii(552) /0/
-   data symb(553) / 'indxrp'/,  ivec(553) /  1/,  iascii(553) /0/
-   data symb(554) / 'ivec  '/,  ivec(554) /  1/,  iascii(554) /0/
-   data symb(555) / 'iascii'/,  ivec(555) /  1/,  iascii(555) /0/
-   data symb(556) / 'numsym'/,  ivec(556) /  0/,  iascii(556) /0/
-   data symb(557) / 'jjroll'/,  ivec(557) /  0/,  iascii(557) /0/
-   data symb(558) / 'itexp '/,  ivec(558) /  0/,  iascii(558) /0/
-   data symb(559) / 'labels'/,  ivec(559) /  1/,  iascii(559) /0/
-   data symb(560) / 'maxarg'/,  ivec(560) /  0/,  iascii(560) /0/
-   data symb(561) / 'kilper'/,  ivec(561) /  0/,  iascii(561) /0/
-   data symb(562) / 'kfile5'/,  ivec(562) /  0/,  iascii(562) /0/
-   data symb(563) / 'kverfy'/,  ivec(563) /  0/,  iascii(563) /0/
-   data symb(564) / 'ibegcl'/,  ivec(564) /  0/,  iascii(564) /0/
-   data symb(565) / 'iendcl'/,  ivec(565) /  0/,  iascii(565) /0/
-   data symb(566) / 'lidnt1'/,  ivec(566) /  0/,  iascii(566) /0/
-   data symb(567) / 'lidnt2'/,  ivec(567) /  0/,  iascii(567) /0/
-   data symb(568) / 'linnow'/,  ivec(568) /  0/,  iascii(568) /0/
-   data symb(569) / 'linspn'/,  ivec(569) /  0/,  iascii(569) /0/
-   data symb(570) / 'numcrd'/,  ivec(570) /  0/,  iascii(570) /0/
-   data symb(571) / 'munit5'/,  ivec(571) /  0/,  iascii(571) /0/
-   data symb(572) / 'indbuf'/,  ivec(572) /  0/,  iascii(572) /0/
-   data symb(573) / 'indbeg'/,  ivec(573) /  0/,  iascii(573) /0/
-   data symb(574) / 'mflush'/,  ivec(574) /  0/,  iascii(574) /0/
-   data symb(575) / 'newvec'/,  ivec(575) /  0/,  iascii(575) /0/
-   data symb(576) / 'munit6'/,  ivec(576) /  0/,  iascii(576) /0/
-   data symb(577) / 'lserlc'/,  ivec(577) /  0/,  iascii(577) /0/
-   data symb(578) / 'kserlc'/,  ivec(578) /  0/,  iascii(578) /0/
-   data symb(579) / 'kbrser'/,  ivec(579) /  0/,  iascii(579) /0/
-   data symb(580) / 'lockbr'/,  ivec(580) /  0/,  iascii(580) /0/
-   data symb(581) / 'iprspy'/,  ivec(581) /  0/,  iascii(581) /0/
-   data symb(582) / 'monitr'/,  ivec(582) /  0/,  iascii(582) /0/
-   data symb(583) / 'monits'/,  ivec(583) /  0/,  iascii(583) /0/
-   data symb(584) / 'locate'/,  ivec(584) /  1/,  iascii(584) /0/
-   data symb(585) / 'nline '/,  ivec(585) /  1/,  iascii(585) /0/
-   data symb(586) / 'kwtspy'/,  ivec(586) /  0/,  iascii(586) /0/
-   data symb(587) / 'kbreak'/,  ivec(587) /  0/,  iascii(587) /0/
-   data symb(588) / 'limbuf'/,  ivec(588) /  0/,  iascii(588) /0/
-   data symb(589) / 'inchlp'/,  ivec(589) /  0/,  iascii(589) /0/
-   data symb(590) / 'ksymbl'/,  ivec(590) /  0/,  iascii(590) /0/
-   data symb(591) / 'kopyit'/,  ivec(591) /  0/,  iascii(591) /0/
-   data symb(592) / 'kslowr'/,  ivec(592) /  0/,  iascii(592) /0/
-   data symb(593) / 'limcrd'/,  ivec(593) /  0/,  iascii(593) /0/
-   data symb(594) / 'looprp'/,  ivec(594) /  1/,  iascii(594) /0/
-   data symb(595) / 'n10rmp'/,  ivec(595) /  1/,  iascii(595) /0/
-   data symb(596) / 'memrmp'/,  ivec(596) /  1/,  iascii(596) /0/
-   data symb(597) / 'kar1  '/,  ivec(597) /  1/,  iascii(597) /0/
-   data symb(598) / 'kar2  '/,  ivec(598) /  1/,  iascii(598) /0/
-   data symb(599) / 'numrmp'/,  ivec(599) /  0/,  iascii(599) /0/
-   data symb(600) / 'luntsp'/,  ivec(600) /  0/,  iascii(600) /0/
-   data symb(601) / 'logvar'/,  ivec(601) /  0/,  iascii(601) /0/
-   data symb(602) / 'filext'/,  ivec(602) /  1/,  iascii(602) /0/
-   data symb(603) / 'symb  '/,  ivec(603) /  1/,  iascii(603) /0/
-   data symb(604) / 'col   '/,  ivec(604) /  1/,  iascii(604) /0/
-   data symb(605) / 'bytfnd'/,  ivec(605) /  0/,  iascii(605) /0/
-   data symb(606) / 'char1 '/,  ivec(606) /  0/,  iascii(606) /0/
-   data symb(607) / 'symbrp'/,  ivec(607) /  1/,  iascii(607) /0/
-   data symb(608) / 'chard4'/,  ivec(608) /  0/,  iascii(608) /0/
-   data symb(609) / 'bytbuf'/,  ivec(609) /  0/,  iascii(609) /0/
-   data symb(610) / 'buff77'/,  ivec(610) /  0/,  iascii(610) /0/
-   data symb(611) / 'file6b'/,  ivec(611) /  1/,  iascii(611) /0/
-   data symb(612) / 'file6 '/,  ivec(612) /  1/,  iascii(612) /0/
-   data symb(613) / 'blan80'/,  ivec(613) /  0/,  iascii(613) /0/
-   data symb(614) / 'prom80'/,  ivec(614) /  0/,  iascii(614) /0/
-   data symb(615) / 'digit '/,  ivec(615) /  1/,  iascii(615) /0/
-   data symb(616) / 'iac   '/,  ivec(616) /  0/,  iascii(616) /0/
-   data symb(617) / 'idctcs'/,  ivec(617) /  0/,  iascii(617) /0/
-   data symb(618) / 'ipl   '/,  ivec(618) /  0/,  iascii(618) /0/
-   data symb(619) / 'ipr   '/,  ivec(619) /  0/,  iascii(619) /0/
-   data symb(620) / 'ixr   '/,  ivec(620) /  0/,  iascii(620) /0/
-   data symb(621) / 'jpl   '/,  ivec(621) /  0/,  iascii(621) /0/
-   data symb(622) / 'jpr   '/,  ivec(622) /  0/,  iascii(622) /0/
-   data symb(623) / 'kint  '/,  ivec(623) /  0/,  iascii(623) /0/
-   data symb(624) / 'kout  '/,  ivec(624) /  0/,  iascii(624) /0/
-   data symb(625) / 'nds   '/,  ivec(625) /  0/,  iascii(625) /0/
-   data symb(626) / 'nkn   '/,  ivec(626) /  0/,  iascii(626) /0/
-   data symb(627) / 'nmax  '/,  ivec(627) /  0/,  iascii(627) /0/
-   data symb(628) / 'nuk   '/,  ivec(628) /  0/,  iascii(628) /0/
-   data symb(629) / 'kwrite'/,  ivec(629) /  0/,  iascii(629) /0/
-   data symb(630) / 'kpr   '/,  ivec(630) /  0/,  iascii(630) /0/
-   data symb(631) / 'kpl   '/,  ivec(631) /  0/,  iascii(631) /0/
-   data symb(632) / 'mxtacw'/,  ivec(632) /  0/,  iascii(632) /0/
-   data symb(633) / 'iptacw'/,  ivec(633) /  0/,  iascii(633) /0/
-   data symb(634) / 'nhst  '/,  ivec(634) /  0/,  iascii(634) /0/
-   data symb(635) / 'kvin  '/,  ivec(635) /  0/,  iascii(635) /0/
-   data symb(636) / 'kvou  '/,  ivec(636) /  0/,  iascii(636) /0/
-   data symb(637) / 'kvxx  '/,  ivec(637) /  0/,  iascii(637) /0/
-   data symb(638) / 'icsup '/,  ivec(638) /  0/,  iascii(638) /0/
-   data symb(639) / 'nxic  '/,  ivec(639) /  0/,  iascii(639) /0/
-   data symb(640) / 'kksj  '/,  ivec(640) /  0/,  iascii(640) /0/
-   data symb(641) / 'kksk  '/,  ivec(641) /  0/,  iascii(641) /0/
-   data symb(642) / 'kkfst '/,  ivec(642) /  0/,  iascii(642) /0/
-   data symb(643) / 'kkni  '/,  ivec(643) /  0/,  iascii(643) /0/
-   data symb(644) / 'kkhst '/,  ivec(644) /  0/,  iascii(644) /0/
-   data symb(645) / 'kifls '/,  ivec(645) /  0/,  iascii(645) /0/
-   data symb(646) / 'kidum '/,  ivec(646) /  0/,  iascii(646) /0/
-   data symb(647) / 'kslim1'/,  ivec(647) /  0/,  iascii(647) /0/
-   data symb(648) / 'kslim2'/,  ivec(648) /  0/,  iascii(648) /0/
-   data symb(649) / 'kslim3'/,  ivec(649) /  0/,  iascii(649) /0/
-   data symb(650) / 'kpac1r'/,  ivec(650) /  0/,  iascii(650) /0/
-   data symb(651) / 'kpac1i'/,  ivec(651) /  0/,  iascii(651) /0/
-   data symb(652) / 'kpac2r'/,  ivec(652) /  0/,  iascii(652) /0/
-   data symb(653) / 'kpac2i'/,  ivec(653) /  0/,  iascii(653) /0/
-   data symb(654) / 'kalksx'/,  ivec(654) /  0/,  iascii(654) /0/
-   data symb(655) / 'kilms1'/,  ivec(655) /  0/,  iascii(655) /0/
-   data symb(656) / 'kilms2'/,  ivec(656) /  0/,  iascii(656) /0/
-   data symb(657) / 'kdumj '/,  ivec(657) /  0/,  iascii(657) /0/
-   data symb(658) / 'kdumk '/,  ivec(658) /  0/,  iascii(658) /0/
-   data symb(659) / 'kkzj  '/,  ivec(659) /  0/,  iascii(659) /0/
-   data symb(660) / 'kkzk  '/,  ivec(660) /  0/,  iascii(660) /0/
-   data symb(661) / 'kiflz '/,  ivec(661) /  0/,  iascii(661) /0/
-   data symb(662) / 'kgnz  '/,  ivec(662) /  0/,  iascii(662) /0/
-   data symb(663) / 'kzlim1'/,  ivec(663) /  0/,  iascii(663) /0/
-   data symb(664) / 'kzlim2'/,  ivec(664) /  0/,  iascii(664) /0/
-   data symb(665) / 'kalkzx'/,  ivec(665) /  0/,  iascii(665) /0/
-   data symb(666) / 'kilmz1'/,  ivec(666) /  0/,  iascii(666) /0/
-   data symb(667) / 'kilmz2'/,  ivec(667) /  0/,  iascii(667) /0/
-   data symb(668) / 'kksus '/,  ivec(668) /  0/,  iascii(668) /0/
-   data symb(669) / 'kalksu'/,  ivec(669) /  0/,  iascii(669) /0/
-   data symb(670) / 'kiuty '/,  ivec(670) /  0/,  iascii(670) /0/
-   data symb(671) / 'kud1  '/,  ivec(671) /  0/,  iascii(671) /0/
-   data symb(672) / 'kud2  '/,  ivec(672) /  0/,  iascii(672) /0/
-   data symb(673) / 'kud3  '/,  ivec(673) /  0/,  iascii(673) /0/
-   data symb(674) / 'kud4  '/,  ivec(674) /  0/,  iascii(674) /0/
-   data symb(675) / 'kud5  '/,  ivec(675) /  0/,  iascii(675) /0/
-   data symb(676) / 'kaliu '/,  ivec(676) /  0/,  iascii(676) /0/
-   data symb(677) / 'ktysup'/,  ivec(677) /  0/,  iascii(677) /0/
-   data symb(678) / 'kjsup '/,  ivec(678) /  0/,  iascii(678) /0/
-   data symb(679) / 'kksup '/,  ivec(679) /  0/,  iascii(679) /0/
-   data symb(680) / 'kspvar'/,  ivec(680) /  0/,  iascii(680) /0/
-   data symb(681) / 'kopsup'/,  ivec(681) /  0/,  iascii(681) /0/
-   data symb(682) / 'kfnsup'/,  ivec(682) /  0/,  iascii(682) /0/
-   data symb(683) / 'krgsup'/,  ivec(683) /  0/,  iascii(683) /0/
-   data symb(684) / 'kprsup'/,  ivec(684) /  0/,  iascii(684) /0/
-   data symb(685) / 'ktypdv'/,  ivec(685) /  0/,  iascii(685) /0/
-   data symb(686) / 'kkdj  '/,  ivec(686) /  0/,  iascii(686) /0/
-   data symb(687) / 'kkdk  '/,  ivec(687) /  0/,  iascii(687) /0/
-   data symb(688) / 'kgndev'/,  ivec(688) /  0/,  iascii(688) /0/
-   data symb(689) / 'kdev1 '/,  ivec(689) /  0/,  iascii(689) /0/
-   data symb(690) / 'kdev2 '/,  ivec(690) /  0/,  iascii(690) /0/
-   data symb(691) / 'kldev1'/,  ivec(691) /  0/,  iascii(691) /0/
-   data symb(692) / 'kldev2'/,  ivec(692) /  0/,  iascii(692) /0/
-   data symb(693) / 'kkdus '/,  ivec(693) /  0/,  iascii(693) /0/
-   data symb(694) / 'kalkdu'/,  ivec(694) /  0/,  iascii(694) /0/
-   data symb(695) / 'ktbdev'/,  ivec(695) /  0/,  iascii(695) /0/
-   data symb(696) / 'kpn   '/,  ivec(696) /  0/,  iascii(696) /0/
-   data symb(697) / 'kpd   '/,  ivec(697) /  0/,  iascii(697) /0/
-   data symb(698) / 'kxhst '/,  ivec(698) /  0/,  iascii(698) /0/
-   data symb(699) / 'khscr '/,  ivec(699) /  0/,  iascii(699) /0/
-   data symb(700) / 'khsci '/,  ivec(700) /  0/,  iascii(700) /0/
-   data symb(701) / 'kilim1'/,  ivec(701) /  0/,  iascii(701) /0/
-   data symb(702) / 'kilim2'/,  ivec(702) /  0/,  iascii(702) /0/
-   data symb(703) / 'krowcs'/,  ivec(703) /  0/,  iascii(703) /0/
-   data symb(704) / 'krhsde'/,  ivec(704) /  0/,  iascii(704) /0/
-   data symb(705) / 'kvlim1'/,  ivec(705) /  0/,  iascii(705) /0/
-   data symb(706) / 'kvlim2'/,  ivec(706) /  0/,  iascii(706) /0/
-   data symb(707) / 'kkxic '/,  ivec(707) /  0/,  iascii(707) /0/
-   data symb(708) / 'kawkcs'/,  ivec(708) /  0/,  iascii(708) /0/
-   data symb(709) / 'kxar  '/,  ivec(709) /  0/,  iascii(709) /0/
-   data symb(710) / 'kxai  '/,  ivec(710) /  0/,  iascii(710) /0/
-   data symb(711) / 'kbwkcs'/,  ivec(711) /  0/,  iascii(711) /0/
-   data symb(712) / 'kxtcs '/,  ivec(712) /  0/,  iascii(712) /0/
-   data symb(713) / 'klntab'/,  ivec(713) /  0/,  iascii(713) /0/
-   data symb(714) / 'klmxic'/,  ivec(714) /  0/,  iascii(714) /0/
-   data symb(715) / 'kcolcs'/,  ivec(715) /  0/,  iascii(715) /0/
-   data symb(716) / 'katcs '/,  ivec(716) /  0/,  iascii(716) /0/
-   data symb(717) / 'kbtcs '/,  ivec(717) /  0/,  iascii(717) /0/
-   data symb(718) / 'kjout '/,  ivec(718) /  0/,  iascii(718) /0/
-   data symb(719) / 'kkout '/,  ivec(719) /  0/,  iascii(719) /0/
-   data symb(720) / 'kxmncs'/,  ivec(720) /  0/,  iascii(720) /0/
-   data symb(721) / 'ktxmn '/,  ivec(721) /  0/,  iascii(721) /0/
-   data symb(722) / 'kxmxcs'/,  ivec(722) /  0/,  iascii(722) /0/
-   data symb(723) / 'ktxmx '/,  ivec(723) /  0/,  iascii(723) /0/
-   data symb(724) / 'klnout'/,  ivec(724) /  0/,  iascii(724) /0/
-   data symb(725) / 'ekbuf '/,  ivec(725) /  1/,  iascii(725) /0/
-   data symb(726) / 'ektemp'/,  ivec(726) /  1/,  iascii(726) /0/
-   data symb(727) / 'errchk'/,  ivec(727) /  0/,  iascii(727) /0/
-   data symb(728) / 'solrsv'/,  ivec(728) /  1/,  iascii(728) /0/
-   data symb(729) / 'solisv'/,  ivec(729) /  1/,  iascii(729) /0/
-   data symb(730) / 'nitera'/,  ivec(730) /  0/,  iascii(730) /0/
-   data symb(731) / 'nekreq'/,  ivec(731) /  0/,  iascii(731) /0/
-   data symb(732) / 'nekcod'/,  ivec(732) /  1/,  iascii(732) /0/
-   data  numsym   / 732 /
-end block data
-
-block data blkhlp
-   include 'dekspy.ftn'
-   data texspy (   1 )  /  'key word no.  1:  "heading"     ----  ----  ----                                '  /
-   data texspy (   2 )  /  '  response will be the printing of the previously-defined heading of  "examine",'  /
-   data texspy (   3 )  /  '  followed by current values of all variables (as for the 1st  "examine"  use). '  /
-   data texspy (   4 )  /  'key word no.  2:  "stop"        ----  ----  ----                                '  /
-   data texspy (   5 )  /  '  this command will terminate interactive EMP execution immediately,  by  means '  /
-   data texspy (   6 )  /  '  of a fortran "stop" statement.  There will be no automatic saving  of  tables,'  /
-   data texspy (   7 )  /  '  or  of plot data points before such a termination  (use prior  "sleep"  and/or'  /
-   data texspy (   8 )  /  '  "lunit4"  commands, if such preservation is desired).                         '  /
-   data texspy (   9 )  /  'key word no.  3:  "plot"        ----  ----  ----                                '  /
-   data texspy (  10 )  /  '  issue this command to transfer control to the  "outer:"  prompt of interactive'  /
-   data texspy (  11 )  /  '  emtp plotting (the former separate EMTP crt plotting program  "tpplot").   due'  /
-   data texspy (  12 )  /  '  to the absorbtion into spy,  several changes have been made.  first,  no plot-'  /
-   data texspy (  13 )  /  '  file specification is required of the user  (he should subsequently send  "go"'  /
-   data texspy (  14 )  /  '  if no other outer-level response is desired).   at the  "middle:"  level,  the'  /
-   data texspy (  15 )  /  '  "timespan"  computation is now automatically performed,  internally.   at  any'  /
-   data texspy (  16 )  /  '  level,  "stop"  no longer terminates program execution, but instead it returns'  /
-   data texspy (  17 )  /  '  control to the  "spy:"  prompt.   continuous,  automatic plotting  of  the on-'  /
-   data texspy (  18 )  /  '  going solution  (like a strip-chart) is  based  on the use of either  "rollc" '  /
-   data texspy (  19 )  /  '  (for character plotting)  or  "rollv" (for vector plotting)  as  commands  at '  /
-   data texspy (  20 )  /  '  the  "inner:"  level.   for  a  detailed explanation of all  "plot"  commands,'  /
-   data texspy (  21 )  /  '  send  "help"  at any of the three levels within  "plot".                      '  /
-   data texspy (  22 )  /  'key word no.  4:  "help"        ----  ----  ----                                '  /
-   data texspy (  23 )  /  '  education for the ignorant, such as the user is now being subjected to (joke).'  /
-   data texspy (  24 )  /  '  a  carriage return  <cr>  will  produce text for the next key word  in  order,'  /
-   data texspy (  25 )  /  '  while  a  return  to the  "spy:"  prompt is accomplished by  "spy", or  "end".'  /
-   data texspy (  26 )  /  '  "all"  will loop over  all  explanations  (subject  to  user-keyed interrupt).'  /
-   data texspy (  27 )  /  '  sending  "top"  will rewind to the first message, while  "bot"  will give the '  /
-   data texspy (  28 )  /  '  last.   use  "back"  to back up one message.                                  '  /
-   data texspy (  29 )  /  'key word no.  5:  "examine"     ----  ----  ----                                '  /
-   data texspy (  30 )  /  '  issue this command  to  examine the contents of any EMTP common variables  (of'  /
-   data texspy (  31 )  /  '  solution overlays).   integer  scalars require 6 columns;  all other variables'  /
-   data texspy (  32 )  /  '  require 15.   subsequent prompts willallow  the  user  to specify scalars and '  /
-   data texspy (  33 )  /  '  vector ranges (e.g.,  "kbus(3:8)"  for  cells  3  through  8 of kbus).   "end"'  /
-   data texspy (  34 )  /  '  terminates the list,  resulting  in adisplay of heading and numerical values. '  /
-   data texspy (  35 )  /  '  any later striking of the  "return" key  will  then display current numerical '  /
-   data texspy (  36 )  /  '  values only.   send  "heading"  for a  refresh of the variable names.  for  a '  /
-   data texspy (  37 )  /  '  rolling display,  send  "roll"  (also,  see  separate  instructions  for  this'  /
-   data texspy (  38 )  /  '  command).  for  rolling, the  output vector  is  re-formed at each spy chance,'  /
-   data texspy (  39 )  /  '  but is only output when one or more variables has changed.  to  terminate  the'  /
-   data texspy (  40 )  /  '  roll-loop,  use the regular user-keyed interrupt.                             '  /
-   data texspy (  41 )  /  'key word no.  6:  "deposit"     ----  ----  ----                                '  /
-   data texspy (  42 )  /  '  issue this command to modify the contents of any  EMTP  common  variables  (of'  /
-   data texspy (  43 )  /  '  solution overlays).   subsequent prompts  will  permit  the  user  to  specify'  /
-   data texspy (  44 )  /  '  scalars  and vector ranges  (e.g.,  "kbus(3:8)"  for  cells  3  through  8  of'  /
-   data texspy (  45 )  /  '  kbus).   "end"  terminates the list, returning to the  "spy:"  prompt.  after '  /
-   data texspy (  46 )  /  '  each  variable,  there will be a prompt for the desired new value (free-format'  /
-   data texspy (  47 )  /  '  number),  if no  "="  is used.   the separately-prompted input  is  rigorously'  /
-   data texspy (  48 )  /  '  free-format  (so  that any  i, f, or e-field number is permissible).  but  for'  /
-   data texspy (  49 )  /  '  simple numeric values which  can  be read  using  f15.0,  or  for  text (a6), '  /
-   data texspy (  50 )  /  '  follow the scalar or vector by an equal sign and then the number.  the case of'  /
-   data texspy (  51 )  /  '  alphanumeric  must  not  have imbedded blanks after the  "=",  but numbers can'  /
-   data texspy (  52 )  /  '  (within the span of 15 columns).                                              '  /
-   data texspy (  53 )  /  'key word no.  7:  "switch"      ----  ----  ----                                '  /
-   data texspy (  54 )  /  '  this response to the  "spy:"  prompt is  issued  for  a  display  of the EMTP '  /
-   data texspy (  55 )  /  '  switch  table.   subsequently  send an  additional  "extra"  to change to the '  /
-   data texspy (  56 )  /  '  next sub-table (as of february 1984, there are two),  if different columns are'  /
-   data texspy (  57 )  /  '  desired.  within any one choice as to sub-table,  there is a loop in which the'  /
-   data texspy (  58 )  /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
-   data texspy (  59 )  /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
-   data texspy (  60 )  /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage '  /
-   data texspy (  61 )  /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
-   data texspy (  62 )  /  '  and return to the  "spy:"  prompt.  to refresh the heading, use either  "swit"'  /
-   data texspy (  63 )  /  '  or  "head"  (only 4 characters of "switch" or "heading" are checked).         '  /
-   data texspy (  64 )  /  'key word no.  8:  "append"      ----  ----  ----                                '  /
-   data texspy (  65 )  /  '  this command is the gateway to installation-dependent commands which are non- '  /
-   data texspy (  66 )  /  '  standard,  and which have been installed locally.   the  utpf carries a dummy '  /
-   data texspy (  67 )  /  '  subroutine append,  by  definition. one clean  way  of adding a functional    '  /
-   data texspy (  68 )  /  '  module is at translation time,  using a submod  request.                      '  /
-   data texspy (  69 )  /  'key word no.  9:  "save"        ----  ----  ----                                '  /
-   data texspy (  70 )  /  '  when the EMTP is in the time-step loop, this command will force an exit to    '  /
-   data texspy (  71 )  /  '  overlay 20 upon completion of present time-step.   there,  "katalg"  saves    '  /
-   data texspy (  72 )  /  '  EMTP tables as rapidly as possible (may not be permanent).   the simulation   '  /
-   data texspy (  73 )  /  '  then recommences by an automatic transfer back to the beginning of the        '  /
-   data texspy (  74 )  /  '  time-step loop ("over16").   since plot data points are not part of the       '  /
-   data texspy (  75 )  /  '  saving, if the user wants these to be preserved, too, he must be careful.     '  /
-   data texspy (  76 )  /  '  provided EMTP storage for plot data points does not fill up before the        '  /
-   data texspy (  77 )  /  '  subsequent  restore  operation (to back up time to the  save  point), there   '  /
-   data texspy (  78 )  /  '  is no problem.  otherwise, consider use of  "space"  and  "lunit4"  commands. '  /
-   data texspy (  79 )  /  'key word no. 10:  "restore"     ----  ----  ----                                '  /
-   data texspy (  80 )  /  '  the  "restore"  command is the reverse of  "save".  when within the deltat    '  /
-   data texspy (  81 )  /  '  loop, use of  "restore"  will rapidly transfer to overlay 20.  there, module  '  /
-   data texspy (  82 )  /  '  "katalg" restores former tables, after which control is transferred to spy.   '  /
-   data texspy (  83 )  /  '  possibly the  "space"  and  "lunit4" would also be appropriate, to restore    '  /
-   data texspy (  84 )  /  '  any separately plot files.   also after tables have been restored, the user   '  /
-   data texspy (  85 )  /  '  can modify any EMTP variables  desired,  and exit  "deposit"  with  "end";    '  /
-   data texspy (  86 )  /  '  finally, send  "go"  in response to the  "spy:"  prompt, to transfer back to  '  /
-   data texspy (  87 )  /  '  the top of the time-step loop ("over16").                                     '  /
-   data texspy (  88 )  /  'key word no. 11:  "go"          ----  ----  ----                                '  /
-   data texspy (  89 )  /  '  this command is issued in response to the  "spy:"  prompt to terminate        '  /
-   data texspy (  90 )  /  '  several sequences, such as one which might have begun with  "restore".  in    '  /
-   data texspy (  91 )  /  '  this case, there would be the preceding transfers of control from overlay 16  '  /
-   data texspy (  92 )  /  '  to overlay 20 ("katalg"), and then back to overlay 16 again.  as a second     '  /
-   data texspy (  93 )  /  '  example,  "go"  cancels the  "rest" command.  third, it can be used to        '  /
-   data texspy (  94 )  /  '  begin the EMTP solution following the  "data"  command (for data card input   '  /
-   data texspy (  95 )  /  '  at the beginning of program execution).   finally,  "go"  cancels the         '  /
-   data texspy (  96 )  /  '  suspension   of execution which accompanies the  "sleep"  command.            '  /
-   data texspy (  97 )  /  'key word no. 12:  "echo"        ----  ----  ----                                '  /
-   data texspy (  98 )  /  '  users who are interested in keeping a history of spy commands which are to    '  /
-   data texspy (  99 )  /  '  be issued can use the  "echo"  command.   a subsequent prompt then allows     '  /
-   data texspy ( 100 )  /  '  several choices.  to begin such accumulation, send  "begin";  to end it,      '  /
-   data texspy ( 101 )  /  '  send  "file",  which will result in the dumping of all accumulation onto      '  /
-   data texspy ( 102 )  /  '  disk as a permanent file of the users choice (a subsequent prompt will        '  /
-   data texspy ( 103 )  /  '  ask for the desired file name).   the history consists of 80-column card      '  /
-   data texspy ( 104 )  /  '  images,  stored from the bottom of  file6  upward  (with cell  kspsav         '  /
-   data texspy ( 105 )  /  '  storing the last, and  limcrd  storing the first).  to view the accumulation  '  /
-   data texspy ( 106 )  /  '  to date, use  "show".   when  "file" is used,  not only is a copy sent to     '  /
-   data texspy ( 107 )  /  '  disk, but those in memory are erased. hence, if  echoing  is to continue,     '  /
-   data texspy ( 108 )  /  '  the user must send  "begin"  again, immediately after  "file"  is complete.   '  /
-   data texspy ( 109 )  /  '  in order to erase an erroneous, immediately-preceding command, use  "cancel"  '  /
-   data texspy ( 110 )  /  '  at any point.  this is intercepted by the input routine  "flager",  so is     '  /
-   data texspy ( 111 )  /  '  not a spy command per se.   there will be confirmation of the erasure.        '  /
-   data texspy ( 112 )  /  'key word no. 13:  "find"        ----  ----  ----                                '  /
-   data texspy ( 113 )  /  '  the sending of  "find"  will result in the printing of a heading, followed    '  /
-   data texspy ( 114 )  /  '  by a pause, as  spy  waits for the user to supply a 6-character EMTP symbol   '  /
-   data texspy ( 115 )  /  '  name.   this is a closed loop: after receiving a name,  spy  will display     '  /
-   data texspy ( 116 )  /  '  the memory address, and then wait foranother such symbol.   exit by  "end".   '  /
-   data texspy ( 117 )  /  '  wild cards ("*") of  vax/vms  are honored here, although the candidate        '  /
-   data texspy ( 118 )  /  '  string is limited to eight characters maximum (only the first 8 are read).    '  /
-   data texspy ( 119 )  /  'key word no. 14:  "list"        ----  ----  ----                                '  /
-   data texspy ( 120 )  /  '  this command will result in the printing of a heading, followed by a pause.   '  /
-   data texspy ( 121 )  /  '  at this point the user is in a loop, supplying row numbers (beginning and     '  /
-   data texspy ( 122 )  /  '  ending rows as a pair of free-format integers).   spy responds to each with   '  /
-   data texspy ( 123 )  /  '  a display of those rows of the spy symbol table, and then waits for the next  '  /
-   data texspy ( 124 )  /  '  request.   the sending of  "0,0"  will break out, returning to the  "spy:"    '  /
-   data texspy ( 125 )  /  '  prompt.   the user can interrupt any excessively long display with his keyed  '  /
-   data texspy ( 126 )  /  '  interrupt (details depend upon computer).  instead of  "0,0"  to break out,   '  /
-   data texspy ( 127 )  /  '  "end"  or  "spy:"  can alternatively be used.  sending nothing (just a        '  /
-   data texspy ( 128 )  /  '  carriage return <cr>) is interpreted by spy as a request for "more of the     '  /
-   data texspy ( 129 )  /  '  same" ---- the same number of rows as just displayed, beginning where the     '  /
-   data texspy ( 130 )  /  '  last display left off.   special trickery is required if an argument of  "@"  '  /
-   data texspy ( 131 )  /  '  usage is to respond to the  "list"  prompt,  since a comma must not be used   '  /
-   data texspy ( 132 )  /  '  as the free-format separator (due to confusion with use of the same symbol    '  /
-   data texspy ( 133 )  /  '  for argument separation by "@").  instead, a pounds sign  "#"  must be used   '  /
-   data texspy ( 134 )  /  '  rather than a blank (due to extraction of blanks by  "@"  logic).  finally,   '  /
-   data texspy ( 135 )  /  '  sending  "all"  instead of two row numbers displays the whole table.          '  /
-   data texspy ( 136 )  /  'key word no. 15:  "spy"         ----  ----  ----                                '  /
-   data texspy ( 137 )  /  '  this text, supplied almost anywhere that the program is looking for text,     '  /
-   data texspy ( 138 )  /  '  will cause an internal interruption of whatever was happening, and a return   '  /
-   data texspy ( 139 )  /  '  to the  "spy:"  prompt.   one exception is the  "help"  prompt which is now   '  /
-   data texspy ( 140 )  /  '  being serviced.                                                               '  /
-   data texspy ( 141 )  /  'key word no. 16:  "break"       ----  ----  ----                                '  /
-   data texspy ( 142 )  /  '  this response to the  "spy:"  prompt is appropriate if the user wants the     '  /
-   data texspy ( 143 )  /  '  simulation to continue uninterrupted until some pre-specified time, when a    '  /
-   data texspy ( 144 )  /  '  clean break at the start of "subts1" will be made.  a subsequent prompt will  '  /
-   data texspy ( 145 )  /  '  allow the user to specify the future break time  t-break  in seconds.  if a   '  /
-   data texspy ( 146 )  /  '  minus sign is appended, then the input is taken to be a step number of the    '  /
-   data texspy ( 147 )  /  '  time-step loop, and the program will calculate  t-break   by multiplying by   '  /
-   data texspy ( 148 )  /  '  deltat.  oh, in case "subts1" means nothing to the user, this is the first of '  /
-   data texspy ( 149 )  /  '  four pieces of overlay 16 (the time-step loop).  in case the user sends zero  '  /
-   data texspy ( 150 )  /  '  for  t-break, an added prompt will seek clarification as to which utpf overlay'  /
-   data texspy ( 151 )  /  '  is the desired stopping point (immediately prior to entry).  common usage     '  /
-   data texspy ( 152 )  /  '  involves overlays numbered 6  (after all sources have been read),  12  (when  '  /
-   data texspy ( 153 )  /  '  the   phasor solution is complete), or  16  (the time-step loop).             '  /
-   data texspy ( 154 )  /  'key word no. 17:  "when"        ----  ----  ----                                '  /
-   data texspy ( 155 )  /  '  this response to the  "spy:"  prompt will redefine the EMTP table-handling    '  /
-   data texspy ( 156 )  /  '  time of  "save"  and  "restore" .   that is,  if so defined,  this overrides  '  /
-   data texspy ( 157 )  /  '  the otherwise immediate exit of the time-step loop for table-handling.        '  /
-   data texspy ( 158 )  /  'key word no. 18:  "comment"     ----  ----  ----                                '  /
-   data texspy ( 159 )  /  '  this response to the  "spy:"  prompt will toggle the switch which controls the'  /
-   data texspy ( 160 )  /  '  printing of comment cards ("c ") which may be contained within command files. '  /
-   data texspy ( 161 )  /  '  the default (starting value) is to show comment cards during execution ("@"). '  /
-   data texspy ( 162 )  /  'key word no. 19:  "@?"          ----  ----  ----                                '  /
-   data texspy ( 163 )  /  '  this response to the  "spy:"  prompt will result in the internal  opening  of '  /
-   data texspy ( 164 )  /  '  an arbitary disk file, and the connection of this file as replacement for     '  /
-   data texspy ( 165 )  /  '  keyboard input to spy.  if the file name consists of just a single digit      '  /
-   data texspy ( 166 )  /  '  (?=1-9),  inclspy?.dat  is the disk file name to be used.  reading from the   '  /
-   data texspy ( 167 )  /  '  disk file continues until an end-of-file is hit, at which point the spy input '  /
-   data texspy ( 168 )  /  '  channel is connected once again to the keyboard.  such usage can not be nested'  /
-   data texspy ( 169 )  /  '  (i.e., no such disk file can itself contain an  "@"  statement).   EMTP       '  /
-   data texspy ( 170 )  /  '  comment cards ("c ") are permitted within such disk files, however,  with the '  /
-   data texspy ( 171 )  /  '  "comment"  switch controlling whether or not they are written to the screen   '  /
-   data texspy ( 172 )  /  '  (the default is for such writing).other lines of an executed disk file are    '  /
-   data texspy ( 173 )  /  '  generally not seen by the user as they are read during execution, and neither '  /
-   data texspy ( 174 )  /  '  are the repetitive  "spy:"  prompts. parameters are possible, to substitute   '  /
-   data texspy ( 175 )  /  '  for 8-column   "%%%%%%%%"   fields of the disk file.   blanks are ignored,    '  /
-   data texspy ( 176 )  /  '  and arguments are to be separated by commas.  an opening parenthesis  "("  and'  /
-   data texspy ( 177 )  /  '  a closing parenthesis  ")"  are optional delimiters.   each command line is   '  /
-   data texspy ( 178 )  /  '  limited to 80 columns (no continuation), and a maximum of 10 arguments.   the '  /
-   data texspy ( 179 )  /  '  left-to-right list is applied to the file %-fields from top to bottom, in     '  /
-   data texspy ( 180 )  /  '  order.  the %-fields can be built into any line of the disk file which        '  /
-   data texspy ( 181 )  /  '  is read by  spy  proper (not plotting).   finally, there is the use of a pound'  /
-   data texspy ( 182 )  /  '  sign "#" for reserved blanks, which are otherwise ignored.   the classic case '  /
-   data texspy ( 183 )  /  '  where it is needed is for a response to  "list"  (e.g.,  "2#4");   this is    '  /
-   data texspy ( 184 )  /  '  free-format information, with a comma impossible due to the conflict with "@".'  /
-   data texspy ( 185 )  /  '  although not a part of the interactive  spy  code per se, it should also be   '  /
-   data texspy ( 186 )  /  '  remembered that commands which could be built into  "@"  files can also be    '  /
-   data texspy ( 187 )  /  '  executed as part of the regular EMTP data.  the key to such usage is  "$spy", '  /
-   data texspy ( 188 )  /  '  which is processed by  "cimage"  and/or  "erexit".   if all spy commands are  '  /
-   data texspy ( 189 )  /  '  to be built in-line as part of the lunit5 EMTP input data, then precede such  '  /
-   data texspy ( 190 )  /  '  data by a card reading  "$spy",  with columns 5 onward blank.  in this        '  /
-   data texspy ( 191 )  /  '  case,  "erexit"  reads and removes such data cards, creating special reserved '  /
-   data texspy ( 192 )  /  '  disk files named  spyfile?.dat,  where  "?"  is a single digit between one    '  /
-   data texspy ( 193 )  /  '  and nine (allowing a maximum of nine such distinct groups of spy commands).   '  /
-   data texspy ( 194 )  /  '  the last spy command of each such group is to be followed by  "$endspy"  as a '  /
-   data texspy ( 195 )  /  '  special marker record.  on the other hand, if the user does not care about    '  /
-   data texspy ( 196 )  /  '  unifying all such EMTP data in a single disk file, then a single line of EMTP '  /
-   data texspy ( 197 )  /  '  data,  "$spy, filename",  is all that is required to provide the connection to'  /
-   data texspy ( 198 )  /  '  spy.  in this second card,  filename can be any legal, full file name of the  '  /
-   data texspy ( 199 )  /  '  computer system being considered (if the user supplies the file name, and     '  /
-   data texspy ( 200 )  /  '  puts commands in the disk file, then there is no limit on the number of       '  /
-   data texspy ( 201 )  /  '  such usages.   the role of  "cimage" is to treat  "$spy"  like   "$include".  '  /
-   data texspy ( 202 )  /  'key word no. 20:  "roll"        ----  ----  ----                                '  /
-   data texspy ( 203 )  /  '  this response to the  "spy:"  prompt will result in a "rolling" of previously-'  /
-   data texspy ( 204 )  /  '  defined  "examine"  request.   while this happens, no other spy activity is   '  /
-   data texspy ( 205 )  /  '  permitted (any <cr> will abort the loop, and return to the  "spy:"  prompt).  '  /
-   data texspy ( 206 )  /  '  following  "roll",  the simulation will recommence, with spy called at each   '  /
-   data texspy ( 207 )  /  '  opportunity for a spy break (within frequency  maxflg  of  "dekspy",  which   '  /
-   data texspy ( 208 )  /  '  nominally has the value one, implying four checks per time step).   the very  '  /
-   data texspy ( 209 )  /  '  first check, the heading and current value of the  "examine"  vector will be  '  /
-   data texspy ( 210 )  /  '  displayed;  thereafter, output will be produced if and only if a change in    '  /
-   data texspy ( 211 )  /  '  the output (compared with the previous evaluation) has occurred.              '  /
-   data texspy ( 212 )  /  '  a final thought is about other commands which function much like the  "roll"  '  /
-   data texspy ( 213 )  /  '  commands, although in fact these are not issued at the  "spy:" level.  for    '  /
-   data texspy ( 214 )  /  '  "plot"  use,  at the  "inner:"  level,  "rollc"  will produce continuous      '  /
-   data texspy ( 215 )  /  '  character plotting, while  "rollv"  does the same for vector plotting.   it   '  /
-   data texspy ( 216 )  /  '  is the  "noroll"  command of spy which will cancel either or both of these.   '  /
-   data texspy ( 217 )  /  'key word no. 21:  "type?"       ----  ----  ----                                '  /
-   data texspy ( 218 )  /  '  this response to the  "spy:"  prompt will result in the listing of command    '  /
-   data texspy ( 219 )  /  '  file  inclspy?.dat  of  "@?"  usage. for any specific numerical digit         '  /
-   data texspy ( 220 )  /  '  "?",  just that one file will be listed.   but if symbolic "?" is retained, or'  /
-   data texspy ( 221 )  /  '  if column 5 onward is blank, then all possible  "@?"  files will be listed    '  /
-   data texspy ( 222 )  /  '  in natural order, preceded by an identifying heading.  also, for arbitrary    '  /
-   data texspy ( 223 )  /  '  disk files of card images with names of 2 or more characters, this command    '  /
-   data texspy ( 224 )  /  '  will display them.  "type filename" is the form of this more general          '  /
-   data texspy ( 225 )  /  '  command, where  filename  is any legal file name of 32 or fewer characters.   '  /
-   data texspy ( 226 )  /  '  if no such file exists, there will be a warning message, so this command      '  /
-   data texspy ( 227 )  /  '  can be used to check on the existence of arbitary disk files of card images.  '  /
-   data texspy ( 228 )  /  'key word no. 22:  "verify"      ----  ----  ----                                '  /
-   data texspy ( 229 )  /  '  this response to the  "spy:"  prompt will toggle the switch that controls the '  /
-   data texspy ( 230 )  /  '  echoing of data cards within a disk file which is read via  "@"  usage.  the  '  /
-   data texspy ( 231 )  /  '  default (beginning) setting is to have such echoing.   a related command is   '  /
-   data texspy ( 232 )  /  '  "comment",  which can separately control the display of comment ("c ") cards  '  /
-   data texspy ( 233 )  /  '  as they are encountered during processing of the  "@"  file.  if there is no  '  /
-   data texspy ( 234 )  /  '  echoing of spy data, then comment cards might likewise not be displayed;  or, '  /
-   data texspy ( 235 )  /  '  they can be used as an absolute reference (if they are displayed), to mark the'  /
-   data texspy ( 236 )  /  '  beginning or ending of invisible operations due to no-echoing of "verify".    '  /
-   data texspy ( 237 )  /  'key word no. 23:  "files"       ----  ----  ----                                '  /
-   data texspy ( 238 )  /  '  this  response  to  the  "spy:"  prompt will result in a display of all of the'  /
-   data texspy ( 239 )  /  '  inclspy?.dat  files which exist,  based on the fortran "inquire" operation  at'  /
-   data texspy ( 240 )  /  '  the time program execution began.  an "x"  means that the file exists (in the '  /
-   data texspy ( 241 )  /  '  display),  whereas a blank means that it does not.  there are 9 columns.      '  /
-   data texspy ( 242 )  /  'key word no. 24:  "sleep"       ----  ----  ----                                '  /
-   data texspy ( 243 )  /  '  this response to the  "spy:"  prompt will put the EMTP to sleep in such a way '  /
-   data texspy ( 244 )  /  '  that the simulation can be continued at any later time.  the interactive      '  /
-   data texspy ( 245 )  /  '  "sleep"  command is comparable to the batch-mode use of miscellaneous data    '  /
-   data texspy ( 246 )  /  '  parameter   memsav = 1   for the saving of EMTP tables on disk.  to service a '  /
-   data texspy ( 247 )  /  '  "sleep"  command, spy exits the time-step loop and jumps to  "over20"  for    '  /
-   data texspy ( 248 )  /  '  table dumping to disk.  subsequent awakening is via  "wake",  which reads     '  /
-   data texspy ( 249 )  /  '  EMTP tables back from disk into EMTP memory.  any plot data must be separately'  /
-   data texspy ( 250 )  /  '  and manually provided for by the user (using  "space", "lunit4"),  if it, too,'  /
-   data texspy ( 251 )  /  '  is to be permanently saved.                                                   '  /
-   data texspy ( 252 )  /  'key word no. 25:  "source"      ----  ----  ----                                '  /
-   data texspy ( 253 )  /  '  this response to the  "spy:"  prompt will allow the user to look at either    '  /
-   data texspy ( 254 )  /  '  the electric network or the tacs source table.   there will be a pause after  '  /
-   data texspy ( 255 )  /  '  spy receives  "source",  as it waits to receive either  "tacs"  or  "elec"  as'  /
-   data texspy ( 256 )  /  '  an indication of source-table choice. then  spy  waits for a pair of free-    '  /
-   data texspy ( 257 )  /  '  format integer row numbers, to define the limits of the table display.   a few'  /
-   data texspy ( 258 )  /  '  key words are also accepted here:  "all"  to display entire table,  "end"  or '  /
-   data texspy ( 259 )  /  '  "stop"  or  "spy"  to return to  "spy:"  prompt,  and  "tacs"  or  "elec"  to '  /
-   data texspy ( 260 )  /  '  produce a new table heading (or switch between the two tables).   the tacs    '  /
-   data texspy ( 261 )  /  '  table displays offsets of  "sptacs" which are used with  "deposit/examine",   '  /
-   data texspy ( 262 )  /  '  in case the user wants to redefine such quantities.                           '  /
-   data texspy ( 263 )  /  'key word no. 26:  "edit"        ----  ----  ----                                '  /
-   data texspy ( 264 )  /  '  this response to the  "spy:"  prompt will allow the user to examine and modify'  /
-   data texspy ( 265 )  /  '  card images which are currently stored in memory (see the  "data"  command).  '  /
-   data texspy ( 266 )  /  '  a  "*"  prompt will next appear, at which point vax sos-like editing commands '  /
-   data texspy ( 267 )  /  '  can be issued.  the only bothersome changes of notation are the use of  "#"   '  /
-   data texspy ( 268 )  /  '  in place of vax"s  "!"  (because of in-line comment problems with e/ts),  and '  /
-   data texspy ( 269 )  /  '  use of  "@"  in place of vax"s  "esc" key as a character string delimiter.    '  /
-   data texspy ( 270 )  /  '  for an explanation of sos editing rules, see dec vax-11 user documentation.   '  /
-   data texspy ( 271 )  /  '  examples of printing include:  "*p^:*",  "*p5",  "*p^:18",  "*p5#10",  "*p",  '  /
-   data texspy ( 272 )  /  '  and  "p.-20:."   there also is  "*f" usage,  only with  "@"  replacing  <esc> '  /
-   data texspy ( 273 )  /  '  of  vax/vms  sos.  to exit the  "edit"  command and return to the  "spy:"     '  /
-   data texspy ( 274 )  /  '  prompt, use  "*e"  (analogous to the sos exit).  additional user commands     '  /
-   data texspy ( 275 )  /  '  include  "*d"  (for deletion of lines),  "*r"  (for replacement of lines),    '  /
-   data texspy ( 276 )  /  '  "*i"  (for insertion of new lines), and  "*s"  (for the substitution of one   '  /
-   data texspy ( 277 )  /  '  character string by another).  concerning  "*s",  however, once again  "@"    '  /
-   data texspy ( 278 )  /  '  is used as a delimiter rather than  <esc>,  and no qualifiers (e.g., ",d" for '  /
-   data texspy ( 279 )  /  '  "decide mode") are allowed.   finally, there are special EMTP-designed        '  /
-   data texspy ( 280 )  /  '  commands.   the first of these is  "(8)",  which initiates a search for the   '  /
-   data texspy ( 281 )  /  '  next card which has a non-blank column 80.   after display of this record,    '  /
-   data texspy ( 282 )  /  '  spy awaits a user decision regarding disposition:  <cr>  will leave the card  '  /
-   data texspy ( 283 )  /  '  unchanged and initiate a search for the following one;  digits 0, 1, 2, 3, 4  '  /
-   data texspy ( 284 )  /  '  will result in the punching of this value into column 80 before searching for '  /
-   data texspy ( 285 )  /  '  the next such record (with "0" internally changed to a blank before punching).'  /
-   data texspy ( 286 )  /  '  the  "*"  prompt will reappear automatically when the search hits the bottom  '  /
-   data texspy ( 287 )  /  '  of the file.  or,  "*"  can be reached at any point of the search-display loop'  /
-   data texspy ( 288 )  /  '  by sending  "e" .   even if not in the  "(8)"  loop, column-80 deposits are   '  /
-   data texspy ( 289 )  /  '  possible by use of  "(8),?"  where  "?"  is the desired col.-80 content of the'  /
-   data texspy ( 290 )  /  '  current line.   finally,  the command "*col"  will produce a heading of       '  /
-   data texspy ( 291 )  /  '  column numbers, which is useful when inserting new data records using  "*i" . '  /
-   data texspy ( 292 )  /  '  this ruler heading will be shifted to line up with  "*p"  displays.   if an   '  /
-   data texspy ( 293 )  /  '  unshifted display is desired,  use  "*col8" .                                 '  /
-   data texspy ( 294 )  /  'key word no. 27:  "wake"        ----  ----  ----                                '  /
-   data texspy ( 295 )  /  '  this response to the  "spy:"  prompt will awaken a hibernating solution (one  '  /
-   data texspy ( 296 )  /  '  which was put to bed with an earlier "sleep"  command).   altered program     '  /
-   data texspy ( 297 )  /  '  dimensions are not allowed  (both programs must be dimensioned identically),  '  /
-   data texspy ( 298 )  /  '  just as with the batch-mode  "start again".  the  "wake"  command is the exact'  /
-   data texspy ( 299 )  /  '  interactive equivalent of the batch-mode request  "start again".  there is a  '  /
-   data texspy ( 300 )  /  '  related  "wake4"  command for regeneration of the lunit4 plot-file header     '  /
-   data texspy ( 301 )  /  '  information, in case this is wanted by the user (it is in fact needed, if the '  /
-   data texspy ( 302 )  /  '  "plot"  command is to be used, as of 26 feb 1984).                            '  /
-   data texspy ( 303 )  /  'key word no. 28:  "language"    ----  ----  ----                                '  /
-   data texspy ( 304 )  /  '  this response to the  "spy:"  prompt allows the user to either examine or     '  /
-   data texspy ( 305 )  /  '  modify "spy:"-level command words (e.g., "plot", "data", etc.).  a loop will  '  /
-   data texspy ( 306 )  /  '  be entered, in which there are only 4 legal responses  ("single",  "entire",  '  /
-   data texspy ( 307 )  /  '  "show",  and  "spy")  to the prompt. sending  "single"  will lead to an       '  /
-   data texspy ( 308 )  /  '  inner input loop in which old and new symbol pairs are to be redefined one at '  /
-   data texspy ( 309 )  /  '  a time, terminated by  "end"  (to return to outer  "language"  loop) or  "spy"'  /
-   data texspy ( 310 )  /  '  (to return to the  "spy:"  prompt).  the second outer response,  "entire",    '  /
-   data texspy ( 311 )  /  '  must be followed by an unabridged dictionary of symbols using 10a8 format.    '  /
-   data texspy ( 312 )  /  '  sending the third response  "show"  will result in an unabridged display of   '  /
-   data texspy ( 313 )  /  '  all such current commands.  finally, sending  "spy"  will exit the outer loop,'  /
-   data texspy ( 314 )  /  '  and return to the  "spy:"  prompt.  the language of  "plot"  usage does not   '  /
-   data texspy ( 315 )  /  '  occur at the command level with prompt  "spy:",  so it can only be redefined  '  /
-   data texspy ( 316 )  /  '  within that utility (by means of the "set data"  command).                    '  /
-   data texspy ( 317 )  /  'key word no. 29:  "catalog"     ----  ----  ----                                '  /
-   data texspy ( 318 )  /  '  this response to the  "spy:"  prompt will create a new permanent disk file, it'  /
-   data texspy ( 319 )  /  '  will dump a copy of the data case which is presently contained within the     '  /
-   data texspy ( 320 )  /  '  EMTP into that disk file.   the name of this new disk file is user-supplied   '  /
-   data texspy ( 321 )  /  '  (in response to a subsequent prompt for such a name, which must, naturally, be'  /
-   data texspy ( 322 )  /  '  legal for the computer system being used).   the EMTP data case in question   '  /
-   data texspy ( 323 )  /  '  generally will differ from that originally read in using the  "data"  command,'  /
-   data texspy ( 324 )  /  '  of course  (assuming  "edit"  operations have produced alterations).          '  /
-   data texspy ( 325 )  /  'key word no. 30:  "begin"       ----  ----  ----                                '  /
-   data texspy ( 326 )  /  '  this response to the  "spy:"  prompt will abort the current EMTP solution,    '  /
-   data texspy ( 327 )  /  '  and initiate a complete new solution. it is the simulator-stored EMTP data    '  /
-   data texspy ( 328 )  /  '  cards which are used as input for the new solution, and these will usually    '  /
-   data texspy ( 329 )  /  '  have just been modified using  "edit" operations.  the transition is          '  /
-   data texspy ( 330 )  /  '  "instantaneous" for cases which have been put to bed via  "rest"  or  "sleep",'  /
-   data texspy ( 331 )  /  '  or which are cycling the time-step loop.   for execution in earlier overlays, '  /
-   data texspy ( 332 )  /  '  there may be a delay until the present overlay is exited.                     '  /
-   data texspy ( 333 )  /  'key word no. 31:  "step"        ----  ----  ----                                '  /
-   data texspy ( 334 )  /  '  this response to the  "spy:"  prompt represents a request to toggle the binary'  /
-   data texspy ( 335 )  /  '  switch that  forces  a  spy  interrupt at each and every possible opportunity.'  /
-   data texspy ( 336 )  /  '  either  there  are  such  ever-present forced interrupts, or  there  are none.'  /
-   data texspy ( 337 )  /  '  interrupt opportunities exist at the start of each overlay,  at  the start  of'  /
-   data texspy ( 338 )  /  '  each of the four pieces of overlay 16 (the time-step loop),  and  finally, as '  /
-   data texspy ( 339 )  /  '  each new data card is read by input module  "cimage".                         '  /
-   data texspy ( 340 )  /  'key word no. 32:  "debug"       ----  ----  ----                                '  /
-   data texspy ( 341 )  /  '  this response to the  "spy:"  prompt is used only for debugging of interactive'  /
-   data texspy ( 342 )  /  '  EMTP execution itself, in case of faulty operation.   it is not used for cases'  /
-   data texspy ( 343 )  /  '  of suspected EMTP error (do not confuse with  "iprsup"  of the EMTP).  anyway,'  /
-   data texspy ( 344 )  /  '  there will be a subsequent prompt for diagnostic control variable  iprspy.    '  /
-   data texspy ( 345 )  /  'key word no. 33:  "data"       ----  ----  ----                                 '  /
-   data texspy ( 346 )  /  '  this response to the  "spy:"  prompt is appropriate when the user wants to    '  /
-   data texspy ( 347 )  /  '  specify a disk file of EMTP data which is to be solved next.  the program     '  /
-   data texspy ( 348 )  /  '  will then prompt for the desired file name, which will generally be computer- '  /
-   data texspy ( 349 )  /  '  dependent.  a full, legal file name for the computer being used must then be  '  /
-   data texspy ( 350 )  /  '  provided.  before giving the real file name, however, the user could send     '  /
-   data texspy ( 351 )  /  '  "control",  should he want to input only a portion of the disk file, or should'  /
-   data texspy ( 352 )  /  '  it be desired to have the data placed in the EMTP cache with an offset, or    '  /
-   data texspy ( 353 )  /  '  should it be desired to have the  lunit5  usage pointer set to other than the '  /
-   data texspy ( 354 )  /  '  default value of unity (offset zero). a second non-file response is  "spy",   '  /
-   data texspy ( 355 )  /  '  to abort the file-name prompt after the  "control"  definitions (in case the  '  /
-   data texspy ( 356 )  /  '  user only wants to redefine the  lunit5  usage pointer, for example).   a     '  /
-   data texspy ( 357 )  /  '  final point concerns the avoidance of non-existent files (which would result  '  /
-   data texspy ( 358 )  /  '  in an error stop of the EMTP by the operating system).  if in doubt about a   '  /
-   data texspy ( 359 )  /  '  file"s existence, try to  type  it first (the  "type"  command warns of non-  '  /
-   data texspy ( 360 )  /  '  existent files, without any termination of execution).                        '  /
-   data texspy ( 361 )  /  'key word no. 34:  "ramp"        ----  ----  ----                                '  /
-   data texspy ( 362 )  /  '  this response to the  "spy:"  prompt will result in prompts which allow the   '  /
-   data texspy ( 363 )  /  '  user to modify any variables in EMTP common blocks as linear functions of     '  /
-   data texspy ( 364 )  /  '  time.   that is, the the user can ramp the values between beginning and ending'  /
-   data texspy ( 365 )  /  '  limits,  as EMTP simulation time moves between beginning and ending times --- '  /
-   data texspy ( 366 )  /  '  with all control parameters being user-defined.  any variable which can be    '  /
-   data texspy ( 367 )  /  '  seen via the  "examine"  command can also be  ramped.  in specifying parameter'  /
-   data texspy ( 368 )  /  '  values, there are three nested loops. the outer loop is for time, the middle  '  /
-   data texspy ( 369 )  /  '  one is for variable values, and the inner one is for variable names.   the    '  /
-   data texspy ( 370 )  /  '  user can stay inside (middle or inner loops) as long as the outer quantity is '  /
-   data texspy ( 371 )  /  '  not altered.   "end" will exit any one level,  and head outward to the next   '  /
-   data texspy ( 372 )  /  '  one.   at the outer-most level, the optional  "show"  command will display all'  /
-   data texspy ( 373 )  /  '  ramps which the user has defined thus far,  while  "end"  or  "spy"  will     '  /
-   data texspy ( 374 )  /  '  return to the  "spy:"  prompt.  actual variable redefinition is handled within'  /
-   data texspy ( 375 )  /  '  module  "analyt"  of overlay 20 of the EMTP, where ramping logic has been     '  /
-   data texspy ( 376 )  /  '  built (this is automatic, as the simulation progresses).                      '  /
-   data texspy ( 377 )  /  'key word no. 35:  "time"        ----  ----  ----                                '  /
-   data texspy ( 378 )  /  '  this response to the  "spy:"  prompt will result in the display of  both  the '  /
-   data texspy ( 379 )  /  '  wall-clock time  (the date, too)  and also  the  current EMTP simulation time '  /
-   data texspy ( 380 )  /  '  parameters (t, tmax, deltat).                                                 '  /
-   data texspy ( 381 )  /  'key word no. 36:  "tek"         ----  ----  ----                                '  /
-   data texspy ( 382 )  /  '  this response to the  "spy:"  prompt allows modification to an ongoing vector-'  /
-   data texspy ( 383 )  /  '  graphic display which is currently  rolling.  yes, the user could simply      '  /
-   data texspy ( 384 )  /  '  regenerate the plot from the beginning (by use of a  "plot"  command following'  /
-   data texspy ( 385 )  /  '  a user-keyed interrupt), but minor changes can often be made more easily, and '  /
-   data texspy ( 386 )  /  '  with less disruption, using  "tek". a subsequent prompt will then list a      '  /
-   data texspy ( 387 )  /  '  menu of alternatives which are available for such "on-the-fly"  rolling       '  /
-   data texspy ( 388 )  /  '  "plot"  tampering.  for completeness, that menu is repeated here:             '  /
-   data texspy ( 389 )  /  '       spy:tek                                                                  '  /
-   data texspy ( 390 )  /  '        >< to tamper with the rolling vector plot,  send choice.                '  /
-   data texspy ( 391 )  /  '        >< option (mark, delay, inner, overlap, end, help) :                    '  /
-   data texspy ( 392 )  /  '           mark  ---- for instantaneous marking of curves on tek screen;        '  /
-   data texspy ( 393 )  /  '           delay  --- to control how simultaneous the rolling is to be;         '  /
-   data texspy ( 394 )  /  '           inner  ---- to  call timval (the "inner:" level of ploting);         '  /
-   data texspy ( 395 )  /  '           overlap  -- to modify the percent overlap for new-page plot;         '  /
-   data texspy ( 396 )  /  '           end   ---- for return to  "spy:"  prompt.                            '  /
-   data texspy ( 397 )  /  '  unless the user requests curve identification via  "mark",  the  rolling plot '  /
-   data texspy ( 398 )  /  '  will only have it for the regenerated portion (the overlap from the previous  '  /
-   data texspy ( 399 )  /  '  page, as controlled by  "overlap"). the  "delay"  command allows the user     '  /
-   data texspy ( 400 )  /  '  to control the time-step multiplicity between plotting sessions.  there is a  '  /
-   data texspy ( 401 )  /  '  trade off between solution efficiency (maximized if plotting is infrequent)   '  /
-   data texspy ( 402 )  /  '  and simultaneous observation (maximized if plotting occurs on each new time   '  /
-   data texspy ( 403 )  /  '  step).   so much for the concept.  but the details of counting are in fact a  '  /
-   data texspy ( 404 )  /  '  little different, since it is not time steps, but rather plot points, which   '  /
-   data texspy ( 405 )  /  '  are counted.   only if every solution point becomes a plot point (only if the '  /
-   data texspy ( 406 )  /  '  miscellaneous data parameter  iplot is equal to unity) are these two equal,   '  /
-   data texspy ( 407 )  /  '  note.  so, if  iout = 3  and the user wants to see plotting progress about    '  /
-   data texspy ( 408 )  /  '  every twentieth time-step, he would send "7" in response to the prompt for a  '  /
-   data texspy ( 409 )  /  '  multiplicity after his  "delay"  was accepted.   the result would then be     '  /
-   data texspy ( 410 )  /  '  incremental plotting every 21st step (21 = 3*7).   concerning  "overlap",  it '  /
-   data texspy ( 411 )  /  '  is generally recommended that this only be used for terminals without memory, '  /
-   data texspy ( 412 )  /  '  since any percentage greater than zero does increase the plotting burden.   in'  /
-   data texspy ( 413 )  /  '  the case of displays with near-infinite storage (e.g., apollo windows),  it is'  /
-   data texspy ( 414 )  /  '  better to leave the overlap at the default value of zero.   use of  "inner"   '  /
-   data texspy ( 415 )  /  '  both very powerful and potentially very tricky, since it results in a  call to'  /
-   data texspy ( 416 )  /  '  subroutine timval,  which is responsible for the  "inner:"  level of  "plot"  '  /
-   data texspy ( 417 )  /  '  dialogue.   all  "inner:"  level definitions are therefore available to the   '  /
-   data texspy ( 418 )  /  '  user, although effects may or may not be as expected (either trial and error  '  /
-   data texspy ( 419 )  /  '  experience, or understanding of "tpplot" fortran, are required in order to    '  /
-   data texspy ( 420 )  /  '  predict the results of any given operation).   the one big difference is that '  /
-   data texspy ( 421 )  /  '  the use of  "time"  or just  <cr>  do not result in the production of a new   '  /
-   data texspy ( 422 )  /  '  plot.  to return back to the  "tek" prompt from the  "inner:"  prompt,        '  /
-   data texspy ( 423 )  /  '  send  "spy".   as for return to the "spy"  prompt,  either the listed  "end"  '  /
-   data texspy ( 424 )  /  '  or  "spy"  will work.                                                         '  /
-   data texspy ( 425 )  /  'key word no. 37:  "branch"      ----  ----  ----                                '  /
-   data texspy ( 426 )  /  '  this response to the  "spy:"  prompt is  issued  for  a  display  of the EMTP '  /
-   data texspy ( 427 )  /  '  branch table.  subsequently send an additional  "extra"  to change to the next'  /
-   data texspy ( 428 )  /  '  sub-table  (as of february 1984, there  are  two),  if  different columns  are'  /
-   data texspy ( 429 )  /  '  desired.  within any one choice as to sub-table,  there is a loop in which the'  /
-   data texspy ( 430 )  /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
-   data texspy ( 431 )  /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
-   data texspy ( 432 )  /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage '  /
-   data texspy ( 433 )  /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
-   data texspy ( 434 )  /  '  and return to the  "spy:"  prompt.  to refresh the heading, use either  "bran"'  /
-   data texspy ( 435 )  /  '  or  "head"  (only 4 characters of  "branch"  or  "heading"  are checked).     '  /
-   data texspy ( 436 )  /  'key word no. 38:  "yform"       ----  ----  ----                                '  /
-   data texspy ( 437 )  /  '  this  response  to  the  "spy:"  prompt  will result in continuous (every time'  /
-   data texspy ( 438 )  /  '  step)  re-formation of  [y],  followed by re-triangularization.   it is turned'  /
-   data texspy ( 439 )  /  '  off (no more [y]-forming)  by sending "noy"  after  "spy:"  prompt.  ???  ??? '  /
-   data texspy ( 440 )  /  '  warning:  like  the earlier batch-mode  "modify deltat",  this looks better in'  /
-   data texspy ( 441 )  /  '  theory than  it  does in practice.  for  important elements such as frequency-'  /
-   data texspy ( 442 )  /  '  dependent transmission lines, the original data which is needed to reform  [y]'  /
-   data texspy ( 443 )  /  '  has been destroyed by the solution, so the result  will  be erroneous.  unless'  /
-   data texspy ( 444 )  /  '  the user has a particularly degenerate problem,  and  he is sure that he knows'  /
-   data texspy ( 445 )  /  '  what he is doing, the general recommendation is to avoid all such use.  ??? ??'  /
-   data texspy ( 446 )  /  'key word no. 39:  "noy"         ----  ----  ----                                '  /
-   data texspy ( 447 )  /  '  this response to the  "spy:"  prompt will cancel a preceding  "yform"  request'  /
-   data texspy ( 448 )  /  '  for continuous [y]-formation.                                                 '  /
-   data texspy ( 449 )  /  'key word no. 40:  "factor"      ----  ----  ----                                '  /
-   data texspy ( 450 )  /  '  this  response  to  the  "spy:"  prompt  will result in continuous (every time'  /
-   data texspy ( 451 )  /  '  step) triangularization.   it is turned off  (no more automatic factoring)  by'  /
-   data texspy ( 452 )  /  '  sending  "nof"  in response to the  "spy:"  prompt.                           '  /
-   data texspy ( 453 )  /  'key word no. 41:  "nof"         ----  ----  ----                                '  /
-   data texspy ( 454 )  /  '  this  response  to  the  "spy:"  prompt  will  cancel  a  preceding   "factor"'  /
-   data texspy ( 455 )  /  '  request for the continuous re-triangularization of [y].                       '  /
-   data texspy ( 456 )  /  'key word no. 42:  "rlc"         ----  ----  ----                                '  /
-   data texspy ( 457 )  /  '  this response to the  "spy:"  prompt will produce a display of the EMTP  R-L-C'  /
-   data texspy ( 458 )  /  '  tables.  subsequently  send  an  additional  "extra"  to  change to  the  next'  /
-   data texspy ( 459 )  /  '  sub-table  (as of february 1984, there  are  two),  if  different columns  are'  /
-   data texspy ( 460 )  /  '  desired.  within any one choice as to sub-table,  there is a loop in which the'  /
-   data texspy ( 461 )  /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
-   data texspy ( 462 )  /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
-   data texspy ( 463 )  /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage '  /
-   data texspy ( 464 )  /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
-   data texspy ( 465 )  /  '  and return to the  "spy:"  prompt.  to refresh the heading,  use either  "rlc"'  /
-   data texspy ( 466 )  /  '  or  "head"  (only 4 characters of  "heading"  are checked).                   '  /
-   data texspy ( 467 )  /  'key word no. 43:  "width"       ----  ----  ----                                '  /
-   data texspy ( 468 )  /  '  this response to the  "spy:"  prompt will toggle the output line length  (if  '  /
-   data texspy ( 469 )  /  '  equal to 132 at the time the command is issued, it will be changed to 80,  and'  /
-   data texspy ( 470 )  /  '  vice-versa).  this is for EMTP line printer output (channel lunit6) only.     '  /
-   data texspy ( 471 )  /  'key word no. 44:  "bus"         ----  ----  ----                                '  /
-   data texspy ( 472 )  /  '  this response to the  "spy:"  prompt will produce a display  of  the  EMTP bus'  /
-   data texspy ( 473 )  /  '  vectors.   subsequently  send  an  additional  "extra"  to  change to the next'  /
-   data texspy ( 474 )  /  '  next sub-table (as of february 1984, there are two),  if different columns are'  /
-   data texspy ( 475 )  /  '  desired.  within any one choice as to sub-table,  there is a loop in which the'  /
-   data texspy ( 476 )  /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
-   data texspy ( 477 )  /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
-   data texspy ( 478 )  /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage '  /
-   data texspy ( 479 )  /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
-   data texspy ( 480 )  /  '  and return to the  "spy:"  prompt.  to refresh the heading,  use either  "bus"'  /
-   data texspy ( 481 )  /  '  or  "head"  (only 4 characters of "heading" are checked).                     '  /
-   data texspy ( 482 )  /  'key word no. 45:  "size"        ----  ----  ----                                '  /
-   data texspy ( 483 )  /  '  this response  to  the  "spy:"  prompt  will  produce a display of actual EMTP'  /
-   data texspy ( 484 )  /  '  data requirements  ----  the  "present figure"  list sizes which are  seen  at'  /
-   data texspy ( 485 )  /  '  the end of batch-mode EMTP printout, in the case-summary statistics.          '  /
-   data texspy ( 486 )  /  'key word no. 46:  "limit"       ----  ----  ----                                '  /
-   data texspy ( 487 )  /  '  this response  to  the  "spy:"  prompt  will produce a display of the limiting'  /
-   data texspy ( 488 )  /  '  EMTP table sizes  ----  the  "program limit"  list sizes which are seen at the'  /
-   data texspy ( 489 )  /  '  end of batch-mode EMTP printout,  in the case-summary statistics.             '  /
-   data texspy ( 490 )  /  'key word no. 47:  "iout"        ----  ----  ----                                '  /
-   data texspy ( 491 )  /  '  this response  to  the  "spy:"  prompt  will alter the EMTP printout frequency'  /
-   data texspy ( 492 )  /  '  according  to  the user"s latest desire.   the response will be instantaneous,'  /
-   data texspy ( 493 )  /  '  with  a  later  minor adjustment at the first round step number  (the next one'  /
-   data texspy ( 494 )  /  '  which  is  divisible  by  iout  with zero  remainder).   this command cancels '  /
-   data texspy ( 495 )  /  '  any  previous  batch-mode requests  for  modification  of the output frequency'  /
-   data texspy ( 496 )  /  '  (e.g., the special-request word  "change printout frequency").                '  /
-   data texspy ( 497 )  /  'key word no. 48:  "node"        ----  ----  ----                                '  /
-   data texspy ( 498 )  /  '  this response  to  the  "spy:"  prompt  will yield a question/answer loop with'  /
-   data texspy ( 499 )  /  '  input being a user-supplied 6-character bus name, and output (the spy display)'  /
-   data texspy ( 500 )  /  '  being the corresponding EMTP node number.   after any one node number has been'  /
-   data texspy ( 501 )  /  '  displayed,  the  user can send  "connect"  to obtain a list of all row numbers'  /
-   data texspy ( 502 )  /  '  of all connected branches/switches/nonlinear elements.                        '  /
-   data texspy ( 503 )  /  'key word no. 49:  "nonlin"      ----  ----  ----                                '  /
-   data texspy ( 504 )  /  '  this  response  to  the  "spy:"  prompt  is  issued  for a display of the EMTP'  /
-   data texspy ( 505 )  /  '  nonlinear element table.  subsequently  send an additional  "extra"  to change'  /
-   data texspy ( 506 )  /  '  to the next sub-table (as of february 1984, there are just two),  if different'  /
-   data texspy ( 507 )  /  '  columns are desired.  within any one sub-table,  there is a loop in which  the'  /
-   data texspy ( 508 )  /  '  user sends a pair of free-format beginning and ending row numbers for display,'  /
-   data texspy ( 509 )  /  '  or  a  key word.  recognized key words here  are  "all"  for the entire table,'  /
-   data texspy ( 510 )  /  '  "top"  for row one,  "bot"  for the last  row,  "next"  or  just  a  carriage '  /
-   data texspy ( 511 )  /  '  return for the following row, and of course  "spy"  to  abort the display loop'  /
-   data texspy ( 512 )  /  '  and return to the  "spy:"  prompt.  to refresh the heading, use either  "nonl"'  /
-   data texspy ( 513 )  /  '  or  "head"  (only 4 characters of "nonlin" or "heading" are checked).         '  /
-   data texspy ( 514 )  /  'key word no. 50:  "space"       ----  ----  ----                                '  /
-   data texspy ( 515 )  /  '  this response to the  "spy:"  prompt begins dialogue which can rearrange      '  /
-   data texspy ( 516 )  /  '  storage of either data cards or plot data points.  such use is mandatory if   '  /
-   data texspy ( 517 )  /  '  no additional room for plot data remains (logic of "pltfil" will deny passage '  /
-   data texspy ( 518 )  /  '  until more storage has so been freed, in such a case).  the management of card'  /
-   data texspy ( 519 )  /  '  images will generally be performed only in conjunction with  "edit"  use, to  '  /
-   data texspy ( 520 )  /  '  modify EMTP data.  parameters related to these two storages will be displayed:'  /
-   data texspy ( 521 )  /  '     indbeg --- beginning location (index to /c29b01/) of plot data points;     '  /
-   data texspy ( 522 )  /  '     indbuf --- next free cell (index to /c29b01/) for storage of plot data;    '  /
-   data texspy ( 523 )  /  '     limbuf --- limit on indbuf (end of /c29b01/);                              '  /
-   data texspy ( 524 )  /  '     numdcd --- last card read by EMTP (index to character(8)0 file6 storage)   '  /
-   data texspy ( 525 )  /  '     numcrd --- largest index for card storage in file6 (as read by data);      '  /
-   data texspy ( 526 )  /  '     limcrd --- limiting index for file6 card storage (dimensioned limit).      '  /
-   data texspy ( 527 )  /  '  immediately after this display there will be a choice among the possible      '  /
-   data texspy ( 528 )  /  '  responses  "cards",  "plot",  and  "spy".  the third of these will abort      '  /
-   data texspy ( 529 )  /  '  the command, while the first two select between the two major classes of      '  /
-   data texspy ( 530 )  /  '  space management.                                                             '  /
-   data texspy ( 531 )  /  '       (1) for the  "plot"  case,  the user must next choose among  "write",    '  /
-   data texspy ( 532 )  /  '  "thin",  "delete",  and  "read",  basically.   the first of these writes plot '  /
-   data texspy ( 533 )  /  '  points to disk just as a non-interactive program would, using i/o channel     '  /
-   data texspy ( 534 )  /  '  number lunit4.   the only change is that the time span  [tbeg, tend]  to be   '  /
-   data texspy ( 535 )  /  '  dumped,  as well as the frequency of the output (the effective iplot), are    '  /
-   data texspy ( 536 )  /  '  under interactive control (chosen by responses to subsequent prompts).  the   '  /
-   data texspy ( 537 )  /  '  "thin"  command discards points within the  [tbeg, tend]  window according to '  /
-   data texspy ( 538 )  /  '  a user-specified frequency.  the  "delete"  option destroys all points        '  /
-   data texspy ( 539 )  /  '  (the effective iplot is infinite) within the user-specified time range        '  /
-   data texspy ( 540 )  /  '  [tbeg,  tend].   the  "read"  option is the reverse of  "write",  allowing the'  /
-   data texspy ( 541 )  /  '  restoration of lunit4 disk-stored points to the working interactive memory.   '  /
-   data texspy ( 542 )  /  '  this is done with user-specified frequency within the time range [tbeg, tend].'  /
-   data texspy ( 543 )  /  '  finally, there is a hybrid command  "flush"  which combines  "write"  and     '  /
-   data texspy ( 544 )  /  '  "thin"  (assuming that the user wants to use a common multiplicity for both   '  /
-   data texspy ( 545 )  /  '  operations).  after compacting operations, there will be printout of available'  /
-   data texspy ( 546 )  /  '  free space.  the normal EMTP line printer output (i/o channel lunit6) will    '  /
-   data texspy ( 547 )  /  '  contain a record of the plot-file manipulations, to remind the user of what   '  /
-   data texspy ( 548 )  /  '  he has done.  an extra command is  "auto",  which gives an automatic, full    '  /
-   data texspy ( 549 )  /  '  "flush"  from that point onward.                                              '  /
-   data texspy ( 550 )  /  '       (2) for the  cards  branch, the user is prompted to choose among  "move",'  /
-   data texspy ( 551 )  /  '  "copy",  and  "blank".   the first of these is for block transfers (leaving   '  /
-   data texspy ( 552 )  /  '  blanks in vacated locations), while the second is for block reproductions     '  /
-   data texspy ( 553 )  /  '  (leaving the original locations unaltered).  the  "blank"  command is to      '  /
-   data texspy ( 554 )  /  '  erase a block of cards.  in all three cases, beginning locations and total    '  /
-   data texspy ( 555 )  /  '  number of cards processed are used to define the blocks involved.             '  /
-   data texspy ( 556 )  /  '       many sub-commands of the large "space"  command allow the abort option   '  /
-   data texspy ( 557 )  /  '  "spy" (to return to the  "spy:"  prompt), or the option of backing up one     '  /
-   data texspy ( 558 )  /  '  level (via  "out").                                                           '  /
-   data texspy ( 559 )  /  'key word no. 51:  "lunit4"      ----  ----  ----                                '  /
-   data texspy ( 560 )  /  '  issue  this  command  to  connect  (fortran open), disconnect (fortran close),'  /
-   data texspy ( 561 )  /  '  position,  or  inspect  the  contents of  the disk file of plot data which is '  /
-   data texspy ( 562 )  /  '  connected  to  i/o unit number  lunit4.   recall that a disk file can be given'  /
-   data texspy ( 563 )  /  '  solution  points  via  the  "disk"  or  "flush"  subcommands  of  the  "space"'  /
-   data texspy ( 564 )  /  '  command.  subcommand choices are as follows: "open",  "close",  "top",  "bot",'  /
-   data texspy ( 565 )  /  '  "next",  "back",  and  "time".   in order,  these shall now                   '  /
-   data texspy ( 566 )  /  '  be summarized:                                                                '  /
-   data texspy ( 567 )  /  '       open -- subsequent prompts will allow for a user-supplied file name      '  /
-   data texspy ( 568 )  /  '               (not to exceed 32 characters), and the  "status"  choice         '  /
-   data texspy ( 569 )  /  '               between  "new"  and  "old"  (vacuous or pre-defined files).      '  /
-   data texspy ( 570 )  /  '       close -- there are no parameters; the distinction between  "keep"        '  /
-   data texspy ( 571 )  /  '                and  "delete"  is implicit (all opened files should be saved).  '  /
-   data texspy ( 572 )  /  '       top  --- to position the lunit4 disk file ready to read the beginning    '  /
-   data texspy ( 573 )  /  '                plot data (for smallest time);                                  '  /
-   data texspy ( 574 )  /  '       bot  --- to position the lunit4 disk file after reading the final plot   '  /
-   data texspy ( 575 )  /  '                data (there is a read until an end-of-file).  certain computers '  /
-   data texspy ( 576 )  /  '                (e.g., vax) allow writeing at this point, so old plot files can '  /
-   data texspy ( 577 )  /  '                be directly added to after such an initial positioning.         '  /
-   data texspy ( 578 )  /  '       next --- to read and display the plot points of the next time instant.   '  /
-   data texspy ( 579 )  /  '                this forward read is fast for all known computers.              '  /
-   data texspy ( 580 )  /  '       back --- to read and display plot points of the preceding time step.     '  /
-   data texspy ( 581 )  /  '                since this uses backspace, be aware that for some computers     '  /
-   data texspy ( 582 )  /  '                (prime, apollo, etc.), this command is internally converted to  '  /
-   data texspy ( 583 )  /  '                a  "top"  and  "time" command which backs up two steps.         '  /
-   data texspy ( 584 )  /  '       time --- to position the lunit4 plot file immediately after having read  '  /
-   data texspy ( 585 )  /  '                points for the first step at or beyond the user-specified time; '  /
-   data texspy ( 586 )  /  'key word no. 52:  "series"      ----  ----  ----                                '  /
-   data texspy ( 587 )  /  '  issue this command in order to modify the values of series R-L-C branches     '  /
-   data texspy ( 588 )  /  '  within the time-step loop.  such usage requires one unused row of both the    '  /
-   data texspy ( 589 )  /  '  branch table (list 2) and the branch-parameter table (list 7) for each series '  /
-   data texspy ( 590 )  /  '  R-L-C branch of interest.  the  "series"  command is coupled to the  "ramp"   '  /
-   data texspy ( 591 )  /  '  command in that  "series"  must be used to select the branches of interest    '  /
-   data texspy ( 592 )  /  '  or potential interest ahead of time, while it is  "ramp"  that actually varies'  /
-   data texspy ( 593 )  /  '  them when the time comes.  this would be for continuous variation (ramping),  '  /
-   data texspy ( 594 )  /  '  which is the most common case of interest.  for step changes (single-time     '  /
-   data texspy ( 595 )  /  '  occurances),  "ramp"  is not used.  in either case,  actual changes to [y]    '  /
-   data texspy ( 596 )  /  '  occur just prior to factoring of [y] in  "subts1"  of overlay 16.  previously,'  /
-   data texspy ( 597 )  /  '  the user must issue a spy call for  "series"  ----   at any point prior to    '  /
-   data texspy ( 598 )  /  '  overlay 12.  this is remembered, so that the EMTP will later automatically    '  /
-   data texspy ( 599 )  /  '  break in the middle of  "over12"  with a message that this is the time to     '  /
-   data texspy ( 600 )  /  '  define the table of series R-L-C branches which might later be tampered with. '  /
-   data texspy ( 601 )  /  '  at the automatic break in  "over12", the user chooses among the commands      '  /
-   data texspy ( 602 )  /  '  "show",  "extra",  "change",  "step", "rewind",  and  "spy".   "show"  will   '  /
-   data texspy ( 603 )  /  '  display the table of series R-L-C branches which have thus far been considered'  /
-   data texspy ( 604 )  /  '  for possible later change,  with  "extra"  yielding an extension to the       '  /
-   data texspy ( 605 )  /  '  display (a second table,  giving starting and next values).   "change"  is the'  /
-   data texspy ( 606 )  /  '  gateway to various further choices  ("data",  "move",  "blank",  "use",       '  /
-   data texspy ( 607 )  /  '  "value",  "end",  and  "spy")  for the definition and manipulation of the     '  /
-   data texspy ( 608 )  /  '  table of  "show".   quickly summarizing these,  "data"  is used to copy series'  /
-   data texspy ( 609 )  /  '  R-L-C branches into the tamper table, while  "move"  will copy from one row of'  /
-   data texspy ( 610 )  /  '  the tamper table to another, and  "blank"  will erase any such row.   "use"   '  /
-   data texspy ( 611 )  /  '  allows the user to toggle the activity status of any entry in the tamper      '  /
-   data texspy ( 612 )  /  '  table,  while  "value"  allows modification of R-L-C parameters in case this  '  /
-   data texspy ( 613 )  /  '  is to be done discontinuously.   "end"  moves outward, back to the preceding  '  /
-   data texspy ( 614 )  /  '  prompt,  while  "spy"  aborts  "show" and returns to the  "spy:"  prompt.     '  /
-   data texspy ( 615 )  /  '  this completes  "change"  usage.   next is  "step",  which is the command for '  /
-   data texspy ( 616 )  /  '  a manual, discontinuous change at the next available opportunity (within one  '  /
-   data texspy ( 617 )  /  '  time step).   "rewind"  will erase the tamper table completely, so it is only '  /
-   data texspy ( 618 )  /  '  recommended if the existing table is unsalvageable.   for details of the      '  /
-   data texspy ( 619 )  /  '  behind the ramping of series R-L-C elements, see vladimir"s article in the    '  /
-   data texspy ( 620 )  /  '  EMTP newsletter, vol. 4, no. 2, november, 1983.                               '  /
-   data texspy ( 621 )  /  'key word no. 53:  "lock"        ----  ----  ----                                '  /
-   data texspy ( 622 )  /  '  issue this command to disable time-sharing between  spy  and the ongoing EMTP '  /
-   data texspy ( 623 )  /  '  simulation.  subsequent cancellation of the command is by  "go".   since this '  /
-   data texspy ( 624 )  /  '  command is absolute, it can be repeated any number of times.   besides this   '  /
-   data texspy ( 625 )  /  '  user-defined  "lock"  command,  there are hidden, internal ones, such as the  '  /
-   data texspy ( 626 )  /  '  one by module  "pltfil"  when plot data space has been exhausted.  but a word '  /
-   data texspy ( 627 )  /  '  of caution:  all of this talk about time-sharing has meaning only for those   '  /
-   data texspy ( 628 )  /  '  computers which allow time-sharing (with type-ahead that is not erased by the '  /
-   data texspy ( 629 )  /  '  user-keyed interrupt).                                                        '  /
-   data texspy ( 630 )  /  'key word no. 54:  "[y]"         ----  ----  ----                                '  /
-   data texspy ( 631 )  /  '  issue this command to display one or more rows of the nodal admittance matrix '  /
-   data texspy ( 632 )  /  '  [y] of the time-step loop.   a subsequent prompt will request the desired row,'  /
-   data texspy ( 633 )  /  '  which may either be specified by bus name (assumed to begin with a letter), or'  /
-   data texspy ( 634 )  /  '  by a node number.  alternate responses are  "spy"  or  "end"  (to return to   '  /
-   data texspy ( 635 )  /  '  the  "spy:"  prompt),  "top"  (to display the row for node 2),  "bot"  (to    '  /
-   data texspy ( 636 )  /  '  display the row for node  kpartb),  and  "next"  or  nothing  (to display the '  /
-   data texspy ( 637 )  /  '  following row).   each nonzero term of the row will be displayed,  next to    '  /
-   data texspy ( 638 )  /  '  the associated column number.   a minus sign applied to the column number is  '  /
-   data texspy ( 639 )  /  '  used to mark the largest column of the row.   in case separate  "examine"     '  /
-   data texspy ( 640 )  /  '  usage might be contemplated,  kks  points to the  (km, ykm)  pairs.           '  /
-   data texspy ( 641 )  /  'key word no. 55:  "[f]"         ----  ----  ----                                '  /
-   data texspy ( 642 )  /  '  issue this command to display one or more rows of the table of factors (the   '  /
-   data texspy ( 643 )  /  '  triangularized [y] of the time-step loop).   display options are generally    '  /
-   data texspy ( 644 )  /  '  identical to the immediately-preceding  "[y]"  command,  except that here     '  /
-   data texspy ( 645 )  /  '  only the upper triangle exists,  a minus sign marks the diagonal entry,  and  '  /
-   data texspy ( 646 )  /  '  kk  is the pointer (which can be observed  via the  "bus"  command).          '  /
-   data texspy ( 647 )  /  'key word no. 55:  "noroll"      ----  ----  ----                                '  /
-   data texspy ( 648 )  /  '  use this command to cancel  rolling character and/or vector plots.   these    '  /
-   data texspy ( 649 )  /  '  began,  it should be recalled,  via "rollc"  and/or  "rollv"  commands        '  /
-   data texspy ( 650 )  /  '  (independent of each other, and also independent of the "tek" setting) at the '  /
-   data texspy ( 651 )  /  '  "inner:"  level of plotting.   the user-keyed interrupt will by itself stop   '  /
-   data texspy ( 652 )  /  '  the rolling only if control is within "chrplt"  or  "tekplt"  plotting        '  /
-   data texspy ( 653 )  /  '  modules when it is spotted.  otherwise, this added manual request is needed.  '  /
-   data texspy ( 654 )  /  '  the only alternative would be to go back into the  "inner:"  level of         '  /
-   data texspy ( 655 )  /  '  plotting to toggle the appropriate switch (via  "rollc"  and/or  "rollv"      '  /
-   data texspy ( 656 )  /  '  requests).                                                                    '  /
-   data texspy ( 657 )  /  'key word no. 57:  "open"        ----  ----  ----                                '  /
-   data texspy ( 658 )  /  '  issue this command to  open  a formatted disk file.  a loop will be entered in'  /
-   data texspy ( 659 )  /  '  which there will be a prompt for the next i/o unit number, and the disk       '  /
-   data texspy ( 660 )  /  '  file which is to be connected thereto.  to exit the loop, send a blank line.  '  /
-   data texspy ( 661 )  /  'key word no. 58:  "close"       ----  ----  ----                                '  /
-   data texspy ( 662 )  /  '  issue this command to  close  a disk file.  a loop will be entered in         '  /
-   data texspy ( 663 )  /  '  which there will be a prompt for the next i/o unit number, and the  status    '  /
-   data texspy ( 664 )  /  '  (either  keep  or  delete  are ok). to exit the loop, send a blank line.      '  /
-   data texspy ( 665 )  /  'key word no. 59:  "sm"          ----  ----  ----                                '  /
-   data texspy ( 666 )  /  '  issue this command to display the various electrical, mechanical, and solution'  /
-   data texspy ( 667 )  /  '  parameters of any type-59 synchronous machine (s.m.).  time-sharing by spy    '  /
-   data texspy ( 668 )  /  '  is automatically suspended during this display, due to algorithmic limitations'  /
-   data texspy ( 669 )  /  '  of the type-59 model (examination is only possible as that machine is being   '  /
-   data texspy ( 670 )  /  '  processed within subroutine update, which is called by "subts1" (the first    '  /
-   data texspy ( 671 )  /  '  piece of the time-step loop.  the user can issue the  "sm"  request at any    '  /
-   data texspy ( 672 )  /  '  time, but in fact the EMTP simulation will stop within the processing loop of '  /
-   data texspy ( 673 )  /  '  "update", and allow the user to accept or reject (y or n responses) each      '  /
-   data texspy ( 674 )  /  '  machine in turn.  actually, only  "n" vetos the opportunity (a simple <cr>    '  /
-   data texspy ( 675 )  /  '  will accept the next machine).  once considering any one type-59 s.m., there  '  /
-   data texspy ( 676 )  /  '  are subsequent choices as to which parameters the user wants to see:  "elec"  '  /
-   data texspy ( 677 )  /  '  for electrical parameters,  "mech"  for mechanical parameters, etc.           '  /
-   data texspy ( 678 )  /  '  ?????????   as of 26 feb 84, command is not complete   ?????????????????????  '  /
-   data texspy ( 679 )  /  'key word no. 60:  "honk"        ----  ----  ----                                '  /
-   data texspy ( 680 )  /  '  issue this command to ring the terminal bell (i.e., honk its horn).  there    '  /
-   data texspy ( 681 )  /  '  will then be a prompt for an integer severity level, which should be between  '  /
-   data texspy ( 682 )  /  '  one and ten (zero produces no response, while 10 indicates a disaster).       '  /
-   data texspy ( 683 )  /  'key word no. 61:  "choice"      ----  ----  ----                                '  /
-   data texspy ( 684 )  /  '  issue this command to see output variable names of any of the five classes    '  /
-   data texspy ( 685 )  /  '  making up the EMTP output vector (1=node voltages,  2=branch voltages,  etc.).'  /
-   data texspy ( 686 )  /  '  order of the five classes corresponds to the order of concatenation in the    '  /
-   data texspy ( 687 )  /  '  EMTP output vector;  and within each class, the order corresponds, too.  the  '  /
-   data texspy ( 688 )  /  '  display is dynamic,  so it always reflects the current output variables       '  /
-   data texspy ( 689 )  /  '  (unlike  "choice"  at the  "middle:" level of plotting,  which only displays  '  /
-   data texspy ( 690 )  /  '  the original status of overlay 15).                                           '  /
-   data texspy ( 691 )  /  'key word no. 62:  "tacs"        ----  ----  ----                                '  /
-   data texspy ( 692 )  /  '  issue this command as the gateway to concurrent sequential processing (csp),  '  /
-   data texspy ( 693 )  /  '  which is based on special, spy-defined tacs supplemental variable usage.  then'  /
-   data texspy ( 694 )  /  '  one enters a loop over csp control commands.   if  "rewind"  is requested,    '  /
-   data texspy ( 695 )  /  '  all previous definitions are erased, so definitions begin from level zero.  if'  /
-   data texspy ( 696 )  /  '  "source"  is sent,  all following input is assumed to be tacs source cards,   '  /
-   data texspy ( 697 )  /  '  until terminated by an  "end"  card. if  "supplemental"  is sent,  then all   '  /
-   data texspy ( 698 )  /  '  following data cards (spy input) is assumed to be tacs supplemental variable/ '  /
-   data texspy ( 699 )  /  '  device data cards,  also until an  "end"  card is encountered.  the subcommand'  /
-   data texspy ( 700 )  /  '  "patch"  allows the user to connect any variables to his tacs sources  (to    '  /
-   data texspy ( 701 )  /  '  define the inputs),  and apply any supplemental variable results anywhere.    '  /
-   data texspy ( 702 )  /  '  the "any" comes from the use of a memory address of the spy commands  "list"  '  /
-   data texspy ( 703 )  /  '  or  "find",  just as  "examine"  or "deposit"  are quite unrestricted.  there '  /
-   data texspy ( 704 )  /  '  will be separate prompts for all such tacs input and output connections.  when'  /
-   data texspy ( 705 )  /  '  all such connections are complete,  "show"  can be used to display a summary  '  /
-   data texspy ( 706 )  /  '  table of all tacs csp input/output connections.   working room for such usage '  /
-   data texspy ( 707 )  /  '  can be controlled by the user in several ways, if there are shortages.  first,'  /
-   data texspy ( 708 )  /  '  if a user wants dummy output channels for printing/plotting, reserve dummy    '  /
-   data texspy ( 709 )  /  '  node voltage outputs with  "chan01" punched in cols. 3-8, and the desired     '  /
-   data texspy ( 710 )  /  '  number punched in columns 9-16 with i8format.   resultant names will be       '  /
-   data texspy ( 711 )  /  '  serialized from the aforementioned root, and added to the output vector at the'  /
-   data texspy ( 712 )  /  '  point of definition (if this card is first, all such dummy names will come    '  /
-   data texspy ( 713 )  /  '  first, before other node voltages). second, there is array dimensioning for   '  /
-   data texspy ( 714 )  /  '  all vectors of the  "choice"  table ---  presently fixed in deck "dekspy", at '  /
-   data texspy ( 715 )  /  '  the moment.  finally, in addition to the familiar tacs table limits, there is '  /
-   data texspy ( 716 )  /  '  an automatic reservation of space for all user-defined tacs csp sources.  this'  /
-   data texspy ( 717 )  /  '  is maximized automatically, within existing tacs dimensions (as assigned by   '  /
-   data texspy ( 718 )  /  '  absolute tacs dimensions, for example).  as usual,  "spy"  will break out of  '  /
-   data texspy ( 719 )  /  '  any loop, in case an abortion is desired.                                     '  /
-   data texspy ( 720 )  /  'key word no. 63:  "wait"        ----  ----  ----                                '  /
-   data texspy ( 721 )  /  '  the response to this spy command will be a prompt for the desired delay       '  /
-   data texspy ( 722 )  /  '  (hibernation) time in seconds.  once this is accepted, the installation-      '  /
-   data texspy ( 723 )  /  '  dependent subroutine tdelay  is called, to return control only after the      '  /
-   data texspy ( 724 )  /  '  requested nap.                                                                '  /
-   data texspy ( 725 )  /  'key word no. 64:  "v-i""        ----  ----  ----                                '  /
-   data texspy ( 726 )  /  '  this spy command is used to examine the list-10 characteristics of all        '  /
-   data texspy ( 727 )  /  '  nonlinear and pseudo-nonlinear elements.  the name  "v-i"  is symbolic        '  /
-   data texspy ( 728 )  /  '  only, since flux-current or resistance-time characteristics are also          '  /
-   data texspy ( 729 )  /  '  included.  immediately upon entry, there will be a display of the number      '  /
-   data texspy ( 730 )  /  '  of nonlinear elements (list 9) and data points of the characteristics         '  /
-   data texspy ( 731 )  /  '  (list 10).  also shown will be a listof options to a pair of free-format      '  /
-   data texspy ( 732 )  /  '  row numbers:                                                                  '  /
-   data texspy ( 733 )  /  '     next or <cr>  ---- to display the characteristic of the next element       '  /
-   data texspy ( 734 )  /  '                        of the nonlinear element table.  there is wrap around   '  /
-   data texspy ( 735 )  /  '                        from beginning to end.  no initialization required.     '  /
-   data texspy ( 736 )  /  '     last  ---- to display the characteristic of the preceding element of       '  /
-   data texspy ( 737 )  /  '                the nonlinear element table.  there is wrap around from the     '  /
-   data texspy ( 738 )  /  '                beginning to the end. no initialization is required.            '  /
-   data texspy ( 739 )  /  '     all  --- to display all rows of the list 10 characteristics.               '  /
-   data texspy ( 740 )  /  '     spy, end, or stop ---- to abort display loop, and return to  "spy:"        '  /
-   data texspy ( 741 )  /  '     mode  ---- to toggle the binary switch which selects between a display     '  /
-   data texspy ( 742 )  /  '                by elements (value n8=0), and a display by rows of list 10.     '  /
-   data texspy ( 743 )  /  '                initially, the display by elements, only one at a time, is      '  /
-   data texspy ( 744 )  /  '                assumed.                                                        '  /
-   data texspy ( 745 )  /  '  in case the use inputs a pair of numbers instead of one of these key          '  /
-   data texspy ( 746 )  /  '  words, then the response depends on mode.   for the display by elements,      '  /
-   data texspy ( 747 )  /  '  the first list-9 entry with a characteristic contained within the range       '  /
-   data texspy ( 748 )  /  '  [n1, n2]  is identified, and displayed (where n1 and n2 are the ordered       '  /
-   data texspy ( 749 )  /  '  pair of free-format numbers which the user has inputted.  on the other hand,  '  /
-   data texspy ( 750 )  /  '  with  mode  toggled for the absolute, unlimited display of list 10 rows,      '  /
-   data texspy ( 751 )  /  '  then these rows (within limits of availability) are displayed.                '  /
-   data texspy ( 752 )  /  '  the following plot commands are honored at all three levels (either  "outer:",'  /
-   data texspy ( 753 )  /  '  "middle",  or  "inner:")  of plot dialogue:                                   '  /
-   data texspy ( 754 )  /  '  stop  ---  to abort  "plot"  activity,  and return to the  "spy:"  prompt.    '  /
-   data texspy ( 755 )  /  '  spy   ---  to abort  "plot"  activity,  and return to the  "spy:"  prompt.    '  /
-   data texspy ( 756 )  /  '  in   ----  to transfer one level inward  (either from  "outer"  to  "middle:" '  /
-   data texspy ( 757 )  /  '             or from  "middle"  to  "inner")  in the plot dialogue.             '  /
-   data texspy ( 758 )  /  '  help  ---  to produce the display now being viewed.  if unqualified, messages '  /
-   data texspy ( 759 )  /  '             will be restricted to the level of current operation.  but one     '  /
-   data texspy ( 760 )  /  '             blank and then a qualifier ("all", "outer", "middle", or "inner")  '  /
-   data texspy ( 761 )  /  '             provide the opportunity to see messages of other levels, too.      '  /
-   data texspy ( 762 )  /  '  debug  --  to alter the level of diagnostic printout.  if none is now being   '  /
-   data texspy ( 763 )  /  '             used, this command will turn it on.  in fact, the control is       '  /
-   data texspy ( 764 )  /  '             identical to that used in response to the  "spy:"  prompt (iprspy).'  /
-   data texspy ( 765 )  /  '               < < <  =======   end of any-level  commands   =======  > > >     '  /
-   data texspy ( 766 )  /  '  set data -- to over-ride default data values with user-established choices.   '  /
-   data texspy ( 767 )  /  '              the associated user-defined data file must be pre-stored on disk, '  /
-   data texspy ( 768 )  /  '              and must have the file name  "tpparam.dat".                       '  /
-   data texspy ( 769 )  /  '  tek  ---- to toggle the switch which chooses between character plotting and   '  /
-   data texspy ( 770 )  /  '            vector-graphic (e.g., tektronix) plotting.  the default may be      '  /
-   data texspy ( 771 )  /  '            computer dependent, or come from  "set data"  usage.                '  /
-   data texspy ( 772 )  /  '  column -- to toggle the switch that chooses between 80 and 132-column widths  '  /
-   data texspy ( 773 )  /  '            for character plotting.                                             '  /
-   data texspy ( 774 )  /  '  set column -- to set character plot widths to any value.  but if either 80 or '  /
-   data texspy ( 775 )  /  '                132 is desired (common choices), use the simpler  "column".     '  /
-   data texspy ( 776 )  /  '               < < <  =======   end of outer-level  commands   =======  > > >   '  /
-   data texspy ( 777 )  /  '  timespan -- to be shown the time range  [t-min, t-max]  of the plot data.     '  /
-   data texspy ( 778 )  /  '  choice -- to produce a tabulation of plotable EMTP variables.   but be very   '  /
-   data texspy ( 779 )  /  '            careful, since the resultant tabulation corresponds to the status   '  /
-   data texspy ( 780 )  /  '            before the time-step loop was entered.  for a dynamic tabulation,   '  /
-   data texspy ( 781 )  /  '            use  "choice"  in response to the  "spy:"  prompt.                  '  /
-   data texspy ( 782 )  /  '  time units -- to specify the integer which characterizes the time units used  '  /
-   data texspy ( 783 )  /  '                in the plotting.  this is just as with batch-mode EMTP plotting,'  /
-   data texspy ( 784 )  /  '                where:  "1"  -- for degrees based on the power frequency;       '  /
-   data texspy ( 785 )  /  '                        "2"  -- for cycles  based on the power frequency;       '  /
-   data texspy ( 786 )  /  '                        "3,4,5"  -- for seconds, milliseconds, and microseconds '  /
-   data texspy ( 787 )  /  '                        "6,7" -- for  "frequency scan"  data cases, using either'  /
-   data texspy ( 788 )  /  '                                 hz or the log to base 10 of hz,  rather than t.'  /
-   data texspy ( 789 )  /  '  x   ----- any garbage character (including blank) represents a request for the'  /
-   data texspy ( 790 )  /  '            program to begin the interrogation for plot variables and labeling. '  /
-   data texspy ( 791 )  /  '            hereafter, in response to the different prompts, several special    '  /
-   data texspy ( 792 )  /  '            key words are applicable (immediately below).  upon the completion  '  /
-   data texspy ( 793 )  /  '            of all such information, there is an automatic transfer to the      '  /
-   data texspy ( 794 )  /  '            "inner:"  level of program dialogue.  but first, options are:       '  /
-   data texspy ( 795 )  /  '    repeat >> to reuse all former plot labels, send  "repeat"  when first asked '  /
-   data texspy ( 796 )  /  '              for label information (which begins with the super title).  for   '  /
-   data texspy ( 797 )  /  '              the first plot, "former labels" are all blank (initialization).   '  /
-   data texspy ( 798 )  /  '    back >>>> to abort input of plot variables, and return to "middle:" prompt. '  /
-   data texspy ( 799 )  /  '    end  >>>> to terminate all indeterminate inputs.  included are the three    '  /
-   data texspy ( 800 )  /  '              classes of plot variables, and lines of case-title text.          '  /
-   data texspy ( 801 )  /  '    last >>>> to terminate all plot-variable input, and begin specifying labels.'  /
-   data texspy ( 802 )  /  '    blank >>> sending nothing (just a carriage return) will usually reuse the   '  /
-   data texspy ( 803 )  /  '              old datum (e.g., node name, or line of case-title text).  old data'  /
-   data texspy ( 804 )  /  '              are usually displayed within parentheses for this reason.         '  /
-   data texspy ( 805 )  /  '    flush >>> to rewind the pointer which counts the lines of case-title text.  '  /
-   data texspy ( 806 )  /  '              the text then remains, to be accepted or overwritten line by line.'  /
-   data texspy ( 807 )  /  '    playback> to display the entire present case title.  this command is legal  '  /
-   data texspy ( 808 )  /  '              at any point before the "end"  which freezes the case title.      '  /
-   data texspy ( 809 )  /  '  label  -- to skip around the plot-variable specification (see "x" above), and '  /
-   data texspy ( 810 )  /  '            begin the input of plot labels.  plot variables remain unchanged.   '  /
-   data texspy ( 811 )  /  '               < < <  =======   end of middle-level  commands   =======  > > >  '  /
-   data texspy ( 812 )  /  '  extrema -- to toggle the switch that decides whether or not variable extrema  '  /
-   data texspy ( 813 )  /  '             of subsequent plots are to be displayed.  such output precedes the '  /
-   data texspy ( 814 )  /  '             associated plot (as does that of  "level"  below).  the program    '  /
-   data texspy ( 815 )  /  '             then pauses before drawing the graph, waiting for the user to send '  /
-   data texspy ( 816 )  /  '             a blank.  if the user wants to skip the plot and return to the     '  /
-   data texspy ( 817 )  /  '             "middle:"  level of dialogue, send  "no plot".                     '  /
-   data texspy ( 818 )  /  '  level -- to toggle the switch that decides whether or not level-triggers for  '  /
-   data texspy ( 819 )  /  '           variables are to be activated.  if such triggers are being turned on,'  /
-   data texspy ( 820 )  /  '           the program will next request a level vector.  the response is using '  /
-   data texspy ( 821 )  /  '           free-format.  the same pause exists as with  "extrema".              '  /
-   data texspy ( 822 )  /  '  smooth -- to change the tolerance which is used to discard plot points.       '  /
-   data texspy ( 823 )  /  '  size   -- to change the length of the time axis of character plots.           '  /
-   data texspy ( 824 )  /  '  show   -- to display the current values of many important plot parameters.    '  /
-   data texspy ( 825 )  /  '  factor -- to specify a new vector of multiplicative scaling factors for plot  '  /
-   data texspy ( 826 )  /  '            variables (the "a" of  z = a*y + b ).   zero is taken to mean unity,'  /
-   data texspy ( 827 )  /  '            and free-format is used.                                            '  /
-   data texspy ( 828 )  /  '  offset -- like  "factor",  only to specify the vector of constants  "b".      '  /
-   data texspy ( 829 )  /  '  rescale-- to return to natural scaling (i.e.,  a=1.0 ,  b=0.0 ) for all plot  '  /
-   data texspy ( 830 )  /  '            variables.  this is used to erase previous  "factor"  or  "offset". '  /
-   data texspy ( 831 )  /  '  limits -- to specify new minimum and maximum values for the vertical axis of  '  /
-   data texspy ( 832 )  /  '            plots.  send  "0,0"  to cancel previous manually-specified limits,  '  /
-   data texspy ( 833 )  /  '            and return to the automatic scaling of the computer.                '  /
-   data texspy ( 834 )  /  '  average-- to change the limit on the number of consecutive oscillations after '  /
-   data texspy ( 835 )  /  '            which the averaging of successive ordinates is to be instituted.    '  /
-   data texspy ( 836 )  /  '  time   -- to specify time-axis limits t-min  and  t-max  of the plot.  this   '  /
-   data texspy ( 837 )  /  '            must be done at least once, for the first plot, unless  "timespan"  '  /
-   data texspy ( 838 )  /  '            was issued at the  "middle:"  level (resulting in full time range). '  /
-   data texspy ( 839 )  /  '  all time--this is a request for a plot over the full time range of the data.  '  /
-   data texspy ( 840 )  /  '            it functions correctly only if  "timespan"  was previously used at  '  /
-   data texspy ( 841 )  /  '            the  "middle:"  level.                                              '  /
-   data texspy ( 842 )  /  '  blank  -- a blank (just a <cr>) is interpreted as a request for a plot using  '  /
-   data texspy ( 843 )  /  '            time-axis scaling as for the preceding plot (or the full range, if  '  /
-   data texspy ( 844 )  /  '            no previous plots existed, but  "timespan"  was ordered).           '  /
-   data texspy ( 845 )  /  '  cursor -- to toggle the switch that indicates whether or not cursor input is  '  /
-   data texspy ( 846 )  /  '            expected after the next vector plot.  when the cursor is switched to'  /
-   data texspy ( 847 )  /  '            "on",  following the plot there will be keyboard input following the'  /
-   data texspy ( 848 )  /  '            positioning of the cursor:                                          '  /
-   data texspy ( 849 )  /  '     p  >>>>> to mark another cursor point (wherever the cursor is sitting)     '  /
-   data texspy ( 850 )  /  '     e  >>>>> to terminate such marking input (end of cursor use, actually).    '  /
-   data texspy ( 851 )  /  '     show >>> to produce a tabulation of all cursor points (previous "p" usage).'  /
-   data texspy ( 852 )  /  '     slope >> to produce  dx,  dy,  f, and  dy/dx  of any pair of points that   '  /
-   data texspy ( 853 )  /  '              the user is interested in.  after the last such  (m,k)  pair of   '  /
-   data texspy ( 854 )  /  '              point numbers which are of interest,  send  "0,0"  to terminate.  '  /
-   data texspy ( 855 )  /  '     end  >>> to terminate all cursor displays, and return to  "inner:"  prompt.'  /
-   data texspy ( 856 )  /  '  x-y plot--to toggle the switch which chooses between regular plotting as a    '  /
-   data texspy ( 857 )  /  '            function of time (the default), and x-y plotting.                   '  /
-   data texspy ( 858 )  /  '  rollv  -- to toggle the switch which produces a  rolling  vector plot.   it is'  /
-   data texspy ( 859 )  /  '            normal to turn on such rolling after the basic plot is in place, and'  /
-   data texspy ( 860 )  /  '            the axis scaling is judged to be appropriate.  then, after  "rollv",'  /
-   data texspy ( 861 )  /  '            the user will normally send "spy"  to return to the  "spy:"  prompt '  /
-   data texspy ( 862 )  /  '            (from which  "go"  will be required to actually make the plot  roll,'  /
-   data texspy ( 863 )  /  '            if  "break"  or  "lock"  were in effect at that point).   should the'  /
-   data texspy ( 864 )  /  '            user wish to cancel a rolling vector plot from spy, send  "noroll"  '  /
-   data texspy ( 865 )  /  '            (which will stop both  rolling  vector and character plots).        '  /
-   data texspy ( 866 )  /  '  rollc  -- to toggle the switch which produces a  rolling  character plot.  see'  /
-   data texspy ( 867 )  /  '            preceding  "rollv"  for details (functioning is comparable).        '  /
-   data texspy ( 868 )  /  '               < < <  =======   end of inner-level  commands   =======  > > >   '  /
-   data kbegtx (  1 )   /     1   /
-   data kbegtx (  2 )   /     4   /
-   data kbegtx (  3 )   /     9   /
-   data kbegtx (  4 )   /    22   /
-   data kbegtx (  5 )   /    29   /
-   data kbegtx (  6 )   /    41   /
-   data kbegtx (  7 )   /    53   /
-   data kbegtx (  8 )   /    64   /
-   data kbegtx (  9 )   /    69   /
-   data kbegtx ( 10 )   /    79   /
-   data kbegtx ( 11 )   /    88   /
-   data kbegtx ( 12 )   /    97   /
-   data kbegtx ( 13 )   /   112   /
-   data kbegtx ( 14 )   /   119   /
-   data kbegtx ( 15 )   /   136   /
-   data kbegtx ( 16 )   /   141   /
-   data kbegtx ( 17 )   /   154   /
-   data kbegtx ( 18 )   /   158   /
-   data kbegtx ( 19 )   /   162   /
-   data kbegtx ( 20 )   /   202   /
-   data kbegtx ( 21 )   /   217   /
-   data kbegtx ( 22 )   /   228   /
-   data kbegtx ( 23 )   /   237   /
-   data kbegtx ( 24 )   /   242   /
-   data kbegtx ( 25 )   /   252   /
-   data kbegtx ( 26 )   /   263   /
-   data kbegtx ( 27 )   /   294   /
-   data kbegtx ( 28 )   /   303   /
-   data kbegtx ( 29 )   /   317   /
-   data kbegtx ( 30 )   /   325   /
-   data kbegtx ( 31 )   /   333   /
-   data kbegtx ( 32 )   /   340   /
-   data kbegtx ( 33 )   /   345   /
-   data kbegtx ( 34 )   /   361   /
-   data kbegtx ( 35 )   /   377   /
-   data kbegtx ( 36 )   /   381   /
-   data kbegtx ( 37 )   /   425   /
-   data kbegtx ( 38 )   /   436   /
-   data kbegtx ( 39 )   /   446   /
-   data kbegtx ( 40 )   /   449   /
-   data kbegtx ( 41 )   /   453   /
-   data kbegtx ( 42 )   /   456   /
-   data kbegtx ( 43 )   /   467   /
-   data kbegtx ( 44 )   /   471   /
-   data kbegtx ( 45 )   /   482   /
-   data kbegtx ( 46 )   /   486   /
-   data kbegtx ( 47 )   /   490   /
-   data kbegtx ( 48 )   /   497   /
-   data kbegtx ( 49 )   /   503   /
-   data kbegtx ( 50 )   /   514   /
-   data kbegtx ( 51 )   /   559   /
-   data kbegtx ( 52 )   /   586   /
-   data kbegtx ( 53 )   /   621   /
-   data kbegtx ( 54 )   /   630   /
-   data kbegtx ( 55 )   /   641   /
-   data kbegtx ( 56 )   /   647   /
-   data kbegtx ( 57 )   /   657   /
-   data kbegtx ( 58 )   /   661   /
-   data kbegtx ( 59 )   /   665   /
-   data kbegtx ( 60 )   /   679   /
-   data kbegtx ( 61 )   /   683   /
-   data kbegtx ( 62 )   /   691   /
-   data kbegtx ( 63 )   /   720   /
-   data kbegtx ( 64 )   /   725   /
-   data kbegtx ( 65 )   /   752   /
-   data kbegtx ( 66 )   /   766   /
-   data kbegtx ( 67 )   /   777   /
-   data kbegtx ( 68 )   /   812   /
-   data kbegtx ( 69 )   /   869   /
-end block data
 
 !
 ! subroutine sysplt.
 !
 
 subroutine sysplt (lunit4)
-  !     module of interactive emtp only, which services "emtspy".
-  !     if no interactive emtp use, this module can be deleted.
-  !     it is called only by "sysdep", for storage in "dekplt".
-  !     separate module needed because "dekplt" has no implicit.
-  include 'dekplt.ftn'
-  integer, intent(in) :: lunit4
-  integer l4plot
+  use dekplt
+  implicit none
+  !     Module of interactive emtp only, which services "emtspy".
+  !     If no interactive emtp use, this module can be deleted.
+  !     It is called only by "sysdep", for storage in "dekplt".
+  !     Separate module needed because "dekplt" has no implicit.
+  integer(4), intent(in) :: lunit4
+  !
   l4plot = lunit4
   return
 end subroutine sysplt
@@ -7546,13 +5955,13 @@ end subroutine sysplt
 !
 
 subroutine stopin
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     universal module of interactive emtp (spy of "emtspy").
-  !     if non-interactive version, module can be destroyed.  this
+  use blkcom
+  use dekspy
+  implicit none
+  !     Universal module of interactive emtp (spy of "emtspy").
+  !     If non-interactive version, module can be destroyed.  This
   !     module is called only to display erroneous file6(istep), &
-  !     prompt user to send a corrected copy.  called by "datain".
-  include 'blkcom.ftn'
-  include 'dekspy.ftn'
+  !     prompt user to send a corrected copy.  Called by "datain".
   write (unit = munit6, fmt = 1218) istep
 1218 format ('   ? ? ?   Trouble with input data.  Last card', ' number',  i5,  '   is in error.')
   call window
@@ -7584,208 +5993,215 @@ end subroutine stopin
 !
 
 subroutine  rtmplt
+  implicit none
   !     module used only for interactive emtp (service to "emtspy").
   !     for non-interactive emtp, this module can be destroyed.
   call tpplot
 end subroutine rtmplt
 
 !
-!     data block blkplt.
+! data block blkplt.
 !
 
-block data blkplt
-   !     module used only for interactive emtp (service to "emtspy").
-   !     for non-interactive emtp, this module can be destroyed.
-   include 'dekspy.ftn'
-   include 'dekplt.ftn'
-   data texfnt  /  'f7x13.b '  /
-   data  xytitl(1 : 24)  /  '                        '  /
-   data  headl(1 : 16)   /  '                '  /
-   data  vertl(1 : 16)   /  '                '  /
-   data  horzl(1)    /  'degrees based on 60 hz  '  /
-   data  horzl(2)    /  'cycles based on 60 hz   '  /
-   data  horzl(3)    /  'seconds                 '  /
-   data  horzl(4)    /  'milliseconds            '  /
-   data  horzl(5)    /  'microseconds            '  /
-   data  horzl(6)    /  'frequency in hertz      '  /
-   data  horzl(7)    /  'log10 frequency in hertz'  /
-   data  horzl(8)    /  '1st variable of x-y pair'  /
-   data  curren     /  'current '  /
-   data  voltag     /  'voltage '  /
-   !     begin command-word definitions.   ^^^^^^  ^^^^^^   ^^^^^^   ^^^^^
-   data  choice     /  'choice  '  /
-   data  stop       /  'stop    '  /
-   data  purge      /  'purge   '  /
-   data  help       /  'help    '  /
-   data  smooth     /  'smooth  '  /
-   data  size       /  'size    '  /
-   data  show       /  'show    '  /
-   data  linezz     /  'line    '  /
-   data  photo      /  'copy    '  /
-   data  end        /  'end     '  /
-   data  repeat     /  'repeat  '  /
-   data  flush      /  'flush   '  /
-   data  playba     /  'playback'  /
-   data  pen        /  'pen     '  /
-   data  multip     /  'factor  '  /
-   data  offset     /  'offset  '  /
-   data  limits     /  'limits  '  /
-   data  time       /  'time    '  /
-   data  timesp     /  'timespan'  /
-   data  debug      /  'debug   '  /
-   data  tek        /  'tek     '  /
-   data  stack      /  'stack   '  /
-   data  printe     /  'printer '  /
-   data  metric     /  'metric  '  /
-   data  alltim     /  'all time'  /
-   data  column     /  'column  '  /
-   data  setcol     /  'set colu'  /
-   data  out        /  'out     '  /
-   data  longer     /  'longer  '  /
-   data  averag     /  'average '  /
-   data  inner      /  'in      '  /
-   data  rescal     /  'rescale '  /
-   data  lastpl     /  'last    '  /
-   data  batch      /  'batch   '  /
-   data  punch      /  'punch   '  /
-   data  extrem     /  'extrema '  /
-   data  level      /  'level   '  /
-   data  noplot     /  'no plot '  /
-   data  messag     /  'message '  /
-   data  timeun     /  'time uni'  /
-   data  label      /  'label   '  /
-   data  cursor     /  'cursor  '  /
-   data  xyplot     /  'x-y plot'  /
-   data  slope      /  'slope   '  /
-   data  back       /  'back    '  /
-   data  refile     /  'refile  '  /
-   data  texblk     /  'blank   '  /
-   data  setdat     /  'set data'  /
-   !     end of command definitions  ^^^^^^   ^^^^^^   ^^^^^^   ^^^^^^
-   data  tolrce     /  8.e-5  /
-   data  finfin     /  1.e12  /
-   data  timbeg     /   0.0   /
-   data  timend     /  1.e20  /
-   data  paplim     /  36.    /
-   data  vs      /  1.0  /
-   data  vl      /  5.0  /
-   data  vh      /  6.0  /
-   data  nsmplt  /  50   /
-   data  kslowr  /   3   /
-   data  limfix  /   0   /
-   data  klevl   /   0   /
-   data  kextr   /   0   /
-   data  jhmsp   /   0   /
-   data  taxisl  /  5.0  /
-   data  mu6std  /  6  /
-   data  htax    /  4.0  /
-   data  limcol  /  79   /
-   data  ltek    /  1   /
-   data  numtek  /   0   /
-   data  inwait  /   1   /
-   !     begin parameters of tektronix screen
-   data  nxinch   /    74   /
-   data  nyinch   /    68   /
-   data  nxoff    /    100  /
-   data  nyoff    /    40   /
-   data  nxvern   /    30   /
-   data  inchpx   /    2    /
-   data  inchpy   /    2    /
-   data  look     /    6    /
-   data  nymax    /   800   /
-   data  nxmax    /   800   /
-   data  lchid    /    2    /
-   data  lchsup   /    1    /
-   data  lchtit   /    2    /
-   data  lchxax   /    0    /
-   data  lchyax   /    0    /
-   data  izgr1    /    0    /
-   data  izgr2    /    0    /
-   data  ldshg1   /    1    /
-   data  ldshg2   /    1    /
-   data  izxax    /    0    /
-   data  izyax    /    0    /
-   data  izid     /    0    /
-   data  iterm    /    2    /
-   data  ltic     /    7    /
-   data  iztit    /    0    /
-   data  nxid6    /   10   /
-   data  nyid6    /   330  /
-   data  nxend    /   512   /
-   data  nyend    /    50   /
-   data  icurse   /    0    /
-   !   data  ichref   /   'p'   /
-   data ichref    /   112   /
-   !   data  ichend   /   'e'   /
-   data ichend    /   101   /
-   data  vaxisl   /   4.0   /
-   data  fxnumv   /   1.5   /
-   data  fxnumh   /   5.0   /
-   data  fxvert   /   0.0   /
-   data  fsymb    /   .83   /
-   data  lsymb    /    1    /
-   data  lchfil   /    0    /
-   data  lchlim   /    0    /
-   data  ibaud    /   960   /
-   !     end parameters of tektronix screen
-   data  lu7plt   /  7  /
-   data  linepr   /  9  /
-   data  mxypl    /  0  /
-   data  numflt   /  0  /
-   data  numtit   /  0  /
-   data  xtit     /  0.5  /
-   data  ytit     /  8.5  /
-   data  siztit   /  .12  /
-   data  xsuper   /  1.0  /
-   data  ysuper   /  9.0  /
-   data  sizsup   /  0.3  /
-   data  nchsup   /   0   /
-   data  nchver   /   0   /
-   data  dxgrd1   /  1.0  /
-   data  dygrd1   /  1.0  /
-   data  dxgrd2   /  0.2  /
-   data  dygrd2   /  0.2  /
-   data  fill1    /  1.0  /
-   data  fill2    /  1.0  /
-   data  ncut1    /   1   /
-   data  ncut2    /   1   /
-   data  maxsym   /   3   /
-   data  fline    /  1.7  /
-   data  sizid    /  .12  /
-   data  xid      /  0.5  /
-   data  yid      /  .75  /
-   data  fact     /  1.0  /
-   data  fhtax    /  0.5  /
-   data  fxsup    /  0.3  /
-   data  fysup    /  -.03 /
-   data  fxtit    /  .10  /
-   data  fytit    /  .15  /
-   data  fxid     /  .05  /
-   data  fyid     /  .10  /
-   data  ftcarr   /  1.0  /
-   data  fvaxtt   /  -7.5  /
-   data  mtit     /  3  /
-   data  maxisx   /  3  /
-   data  maxisy   /  3  /
-   data  mgrid1   /  2  /
-   data  mgrid2   /  1  /
-   data  msuper   /  5  /
-   data  mid      /  3  /
-   data  mline    /  3  /
-   data  killpl   /  0  /
-end block data
+! block data blkplt
+!    use dekspy
+!    use dekplt
+!    implicit none
+!    !     module used only for interactive emtp (service to "emtspy").
+!    !     for non-interactive emtp, this module can be destroyed.
+!    !   include 'dekspy.ftn'
+!    !   include 'dekplt.ftn'
+!    data texfnt  /  'f7x13.b '  /
+!    data  xytitl(1 : 24)  /  '                        '  /
+!    data  headl(1 : 16)   /  '                '  /
+!    data  vertl(1 : 16)   /  '                '  /
+!    data  horzl(1)    /  'degrees based on 60 hz  '  /
+!    data  horzl(2)    /  'cycles based on 60 hz   '  /
+!    data  horzl(3)    /  'seconds                 '  /
+!    data  horzl(4)    /  'milliseconds            '  /
+!    data  horzl(5)    /  'microseconds            '  /
+!    data  horzl(6)    /  'frequency in hertz      '  /
+!    data  horzl(7)    /  'log10 frequency in hertz'  /
+!    data  horzl(8)    /  '1st variable of x-y pair'  /
+!    data  curren     /  'current '  /
+!    data  voltag     /  'voltage '  /
+!    !     begin command-word definitions.   ^^^^^^  ^^^^^^   ^^^^^^   ^^^^^
+!    data  choice     /  'choice  '  /
+!    data  stop       /  'stop    '  /
+!    data  purge      /  'purge   '  /
+!    data  help       /  'help    '  /
+!    data  smooth     /  'smooth  '  /
+!    data  size       /  'size    '  /
+!    data  show       /  'show    '  /
+!    data  linezz     /  'line    '  /
+!    data  photo      /  'copy    '  /
+!    data  end        /  'end     '  /
+!    data  repeat     /  'repeat  '  /
+!    data  flush      /  'flush   '  /
+!    data  playba     /  'playback'  /
+!    data  pen        /  'pen     '  /
+!    data  multip     /  'factor  '  /
+!    data  offset     /  'offset  '  /
+!    data  limits     /  'limits  '  /
+!    data  time       /  'time    '  /
+!    data  timesp     /  'timespan'  /
+!    data  debug      /  'debug   '  /
+!    data  tek        /  'tek     '  /
+!    data  stack      /  'stack   '  /
+!    data  printe     /  'printer '  /
+!    data  metric     /  'metric  '  /
+!    data  alltim     /  'all time'  /
+!    data  column     /  'column  '  /
+!    data  setcol     /  'set colu'  /
+!    data  out        /  'out     '  /
+!    data  longer     /  'longer  '  /
+!    data  averag     /  'average '  /
+!    data  inner      /  'in      '  /
+!    data  rescal     /  'rescale '  /
+!    data  lastpl     /  'last    '  /
+!    data  batch      /  'batch   '  /
+!    data  punch      /  'punch   '  /
+!    data  extrem     /  'extrema '  /
+!    data  level      /  'level   '  /
+!    data  noplot     /  'no plot '  /
+!    data  messag     /  'message '  /
+!    data  timeun     /  'time uni'  /
+!    data  label      /  'label   '  /
+!    data  cursor     /  'cursor  '  /
+!    data  xyplot     /  'x-y plot'  /
+!    data  slope      /  'slope   '  /
+!    data  back       /  'back    '  /
+!    data  refile     /  'refile  '  /
+!    data  texblk     /  'blank   '  /
+!    data  setdat     /  'set data'  /
+!    !     end of command definitions  ^^^^^^   ^^^^^^   ^^^^^^   ^^^^^^
+!    data  tolrce     /  8.e-5  /
+!    data  finfin     /  1.e12  /
+!    data  timbeg     /   0.0   /
+!    data  timend     /  1.e20  /
+!    data  paplim     /  36.    /
+!    data  vs      /  1.0  /
+!    data  vl      /  5.0  /
+!    data  vh      /  6.0  /
+!    data  nsmplt  /  50   /
+!    data  kslowr  /   3   /
+!    data  limfix  /   0   /
+!    data  klevl   /   0   /
+!    data  kextr   /   0   /
+!    data  jhmsp   /   0   /
+!    data  taxisl  /  5.0  /
+!    data  mu6std  /  6  /
+!    data  htax    /  4.0  /
+!    data  limcol  /  79   /
+!    data  ltek    /  1   /
+!    data  numtek  /   0   /
+!    data  inwait  /   1   /
+!    !     begin parameters of tektronix screen
+!    data  nxinch   /    74   /
+!    data  nyinch   /    68   /
+!    data  nxoff    /    100  /
+!    data  nyoff    /    40   /
+!    data  nxvern   /    30   /
+!    data  inchpx   /    2    /
+!    data  inchpy   /    2    /
+!    data  look     /    6    /
+!    data  nymax    /   800   /
+!    data  nxmax    /   800   /
+!    data  lchid    /    2    /
+!    data  lchsup   /    1    /
+!    data  lchtit   /    2    /
+!    data  lchxax   /    0    /
+!    data  lchyax   /    0    /
+!    data  izgr1    /    0    /
+!    data  izgr2    /    0    /
+!    data  ldshg1   /    1    /
+!    data  ldshg2   /    1    /
+!    data  izxax    /    0    /
+!    data  izyax    /    0    /
+!    data  izid     /    0    /
+!    data  iterm    /    2    /
+!    data  ltic     /    7    /
+!    data  iztit    /    0    /
+!    data  nxid6    /   10   /
+!    data  nyid6    /   330  /
+!    data  nxend    /   512   /
+!    data  nyend    /    50   /
+!    data  icurse   /    0    /
+!    !   data  ichref   /   'p'   /
+!    data ichref    /   112   /
+!    !   data  ichend   /   'e'   /
+!    data ichend    /   101   /
+!    data  vaxisl   /   4.0   /
+!    data  fxnumv   /   1.5   /
+!    data  fxnumh   /   5.0   /
+!    data  fxvert   /   0.0   /
+!    data  fsymb    /   .83   /
+!    data  lsymb    /    1    /
+!    data  lchfil   /    0    /
+!    data  lchlim   /    0    /
+!    data  ibaud    /   960   /
+!    !     end parameters of tektronix screen
+!    data  lu7plt   /  7  /
+!    data  linepr   /  9  /
+!    data  mxypl    /  0  /
+!    data  numflt   /  0  /
+!    data  numtit   /  0  /
+!    data  xtit     /  0.5  /
+!    data  ytit     /  8.5  /
+!    data  siztit   /  .12  /
+!    data  xsuper   /  1.0  /
+!    data  ysuper   /  9.0  /
+!    data  sizsup   /  0.3  /
+!    data  nchsup   /   0   /
+!    data  nchver   /   0   /
+!    data  dxgrd1   /  1.0  /
+!    data  dygrd1   /  1.0  /
+!    data  dxgrd2   /  0.2  /
+!    data  dygrd2   /  0.2  /
+!    data  fill1    /  1.0  /
+!    data  fill2    /  1.0  /
+!    data  ncut1    /   1   /
+!    data  ncut2    /   1   /
+!    data  maxsym   /   3   /
+!    data  fline    /  1.7  /
+!    data  sizid    /  .12  /
+!    data  xid      /  0.5  /
+!    data  yid      /  .75  /
+!    data  fact     /  1.0  /
+!    data  fhtax    /  0.5  /
+!    data  fxsup    /  0.3  /
+!    data  fysup    /  -.03 /
+!    data  fxtit    /  .10  /
+!    data  fytit    /  .15  /
+!    data  fxid     /  .05  /
+!    data  fyid     /  .10  /
+!    data  ftcarr   /  1.0  /
+!    data  fvaxtt   /  -7.5  /
+!    data  mtit     /  3  /
+!    data  maxisx   /  3  /
+!    data  maxisy   /  3  /
+!    data  mgrid1   /  2  /
+!    data  mgrid2   /  1  /
+!    data  msuper   /  5  /
+!    data  mid      /  3  /
+!    data  mline    /  3  /
+!    data  killpl   /  0  /
+! end block data
 
 !
-!     subroutine tpplot.
+! subroutine tpplot.
 !
 
 subroutine tpplot
-  !     module used only for interactive emtp (service to "emtspy").
-  !     for non-interactive emtp, this module can be destroyed.
-  include 'dekspy.ftn'
-  include 'dekplt.ftn'
-  integer i, k, nexmod, numnam
-  integer iprspy, limcol, maxev, maxew, n1, n4
+  use dekspy
+  use dekplt
+  use indcom
+  implicit none
+  !     Module used only for interactive emtp (service to "emtspy").
+  !     For non-interactive EMTP, this module can be destroyed.
+  integer(4) :: i, j, k, l, m, numbco, numnam
+  integer(4) :: n1
+  !
   save
   if (nexmod .gt. 4) go to 3769
   if (nexmod .ne. 4) go to 1742
@@ -7805,8 +6221,8 @@ subroutine tpplot
   hmin = 0.0
   ihs = 3
   tmult = 1.0
-  maxev = loc (bx) - loc (ev)
-  maxew = loc (finfin) - loc (ew)
+  maxev = location (bx) - location (ev)
+  maxew = location (finfin) - location (ew)
   maxew = maxew - 50
   do j = 1, 6
      sext(j) = blan80
@@ -7962,18 +6378,20 @@ subroutine tpplot
 end subroutine tpplot
 
 !
-!     subroutine helper.
+! subroutine helper.
 !
 
 subroutine helper (n1)
+  use dekspy
+  use dekplt
+  implicit none
   !     Module used only for interactive EMTP (service to "emtspy").
-  !     for non-interactive EMTP, this module can be destroyed.
+  !     For non-interactive EMTP, this module can be destroyed.
   !     This module does nothing other than service the "help"
   !     subcommand of the "plot" command of spy.
-  include 'dekspy.ftn'
-  include 'dekplt.ftn'
-  integer, intent(in) :: n1
-  integer j, n8, n23, n24
+  integer(4), intent(in) :: n1
+  integer(4) :: j, k, n8, n23, n24
+  !
   n8 = n1
   if (buffin(5 : 10) .ne. '      ') go to 3618
 3613 k = numkey + n8 + 1
@@ -8019,16 +6437,18 @@ subroutine helper (n1)
 end subroutine helper
 
 !
-!     subroutine pltvar.
+! subroutine pltvar.
 !
 
 subroutine pltvar
-  !     module used only for interactive emtp (service to "emtspy").
+  use dekspy
+  use dekplt
+  implicit none
+  !     Module used only for interactive emtp (service to "emtspy").
   !     for non-interactive emtp, this module can be destroyed.
-  include 'dekspy.ftn'
-  include 'dekplt.ftn'
-  integer ihs, m, mplot, n1, n4, newvec, nexmod
-  real timbeg, timend
+  integer(4) :: i, ib, ievsw, il, ip, j, jj, k, kplt, l, m
+  integer(4) :: n1, n3, n4, n13, n14
+  !
   if (iprspy .lt. 1) go to 1003
   write (unit = munit6, fmt = 1002) nexmod
 1002 format (' Enter "pltvar".  nexmod =', i4)
@@ -8373,23 +6793,26 @@ subroutine pltvar
 end subroutine pltvar
 
 !
-!     subroutine timval.
+! subroutine timval.
 !
 
 subroutine timval
+  use dekspy
+  use dekplt
+  implicit none
   !     Module used only for interactive EMTP (service to "emtspy").
   !     for non-interactive EMTP, this module can be destroyed.
-  include 'dekspy.ftn'
-  include 'dekplt.ftn'
-  integer iprspy, n1, nsmplt
-  real(8) d1, d3, d6, d7, denom, din1, din2, disqr, dx, dy, dyold
-  real(8) evbasx, evbasy, evdh, evdp, evh, evp
-  real(8) hdif, hmin, hmax, hpi, hvec
-  real(8) gxmax, gxmin, gymin, gymax
-  real(8) spsave
-  real(8) taxisl, tolrce, tstep, ttlev, ttmax, ttmin
-  real(8) vchnge, vdif, vh, vl, vold, vs, vmin, vminr, vmax, vmaxr, vnew, vvec
-  real(8) yymax, yymin
+  integer(4) :: i, ibase, ip, ipj, ipl, ipontr, iprsup, istold, istore, isw, isww
+  integer(4) :: itimes
+  integer(4) :: j, j1, k, k9, kk, kl, kplt, kpltq, l, maxevk
+  integer(4) :: n1, n4, n5, n7, n8, n13, n16, num
+  real(8) :: a
+  real(8) :: d1, d2, d3, d4, d6, d7, denom, din1, din2, disqr
+  real(8) :: evbasx, evbasy, evdh, evdp, evh, evmx, evmxf, evp
+  real(8) :: gymax, gymin, hdif, hvec
+  real(8) :: spsave
+  real(8) :: vchnge, vdif, vold, vnew, vvec
+  !
   maxevk = maxev - 30
   if (iprspy .lt. 1) go to 1549
   write (unit = munit6, fmt = 1386) monitr, limfix, vmin, vmax
@@ -9088,11 +7511,11 @@ end subroutine timval
 !
 
 subroutine back14
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use dekspy
+  use dekplt
+  implicit none
   !     Module used only for interactive EMTP (service to "emtspy").
   !     For non-interactive emtp, this module can be destroyed.
-  include 'dekspy.ftn'
-  include 'dekplt.ftn'
   if (iprspy .lt. 1) go to 1483
   write (unit = munit6, fmt = 1478) tstep
 1478 format (' Top of  "back14" .   tstep =', e15.5)
@@ -9102,17 +7525,18 @@ subroutine back14
 end subroutine back14
 
 !
-!     subroutine setrtm.
+! subroutine setrtm.
 !
 
 subroutine setrtm
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use dekspy
+  use dekplt
+  implicit none
   !     Module used only for interactive EMTP (service to "emtspy").
   !     For non-interactive EMTP, this module can be destroyed.
-  include 'dekspy.ftn'
-  include 'dekplt.ftn'
-  integer(8) ip, ivcom, j, jj, n1, n8, n22, n23
-  real(8) d1, d6, d12, fvcom
+  integer(4) :: ip, j, jj, lunt15, n1, n2, n22, n23
+  real(8) :: d1, d6
+  !
   save
   lunt15 = 15
   close (unit = lunt15)
@@ -9203,19 +7627,21 @@ subroutine setrtm
 end subroutine setrtm
 
 !
-!     subroutine chrplt.
+! subroutine chrplt.
 !
 
 subroutine chrplt
-  !     module used only for interactive emtp (service to "emtspy").
-  !     for non-interactive emtp, this module can be destroyed.
-  include 'dekspy.ftn'
-  include 'dekplt.ftn'
-  integer kzero, limcol, m
-  real d1, d2, d3, dy, temp, temp1, vmax, vmin, vspan
-  character(9) kunit6
-  character(1) dol(131), letter(20)
+  use dekspy
+  use dekplt
+  implicit none
+  !     Module used only for interactive EMTP (service to "emtspy").
+  !     For non-interactive emtp, this module can be destroyed.
+  integer(4) :: inch, ip, j, j1, k, kzero, kwtspy, l, m, n4
+  real(8) :: d1, d2, d3, din1, din2, dt, idat, t, temp, vspan
+  character(9) :: kunit6
+  character(1) :: dol(131), letter(20)
   dimension temp(6)
+  !
   save
   data letter(1)  /  'a'  /
   data letter(2)  /  'b'  /
@@ -9422,11 +7848,11 @@ subroutine chrplt
 end subroutine chrplt
 
 !
-!     subroutine tekplt.
+! subroutine tekplt.
 !
 
 subroutine tekplt
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   return
 end subroutine tekplt
 
@@ -9435,27 +7861,23 @@ end subroutine tekplt
 !
 
 subroutine flatbd
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use dekspy
+  use dekplt
+  implicit none
   !     Module used only for interactive EMTP (service to "emtspy").
   !     For non-interactive emtp, this module can be destroyed.
   !     The one and only use is to provide calcomp copies of what
   !     is on the screen (for "plot" command of "emtspy"), with
   !     BPA pseudo-calcomp versatek calls actually used.
-  include 'dekspy.ftn'
-  include 'dekplt.ftn'
-  integer j, jplt
-  integer maxisx, maxisy, mcurve, mgrid
-  integer mgrid1, mgrid2, mid, mm, msuper, mtit
-  integer n1, n2, n4, n5, n6, n7, n8, numsym
-  real d1, d2, d3, d4, d6, dxgrd1, dxgrd2, dygrd1, dygrd2
-  real fact, fill, fill1, fill2
-  real hmin, hpi, htax
-  real n9, ncut, ncut1, ncut2
-  real sizid, sizsup, siztit, sx, sy, tmult
-  real xid, xmin, xsuper, xtit
-  real yid, ymin, ysuper, ytit
+  integer(4) :: j
+  integer(4) :: lmask1, lmask2
+  integer(4) :: mm
+  integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8
+  real(8) :: d1, d2, d3, d6
+  real(8) :: n9, sx, sy, xmin, ymin
+  !
   if (killpl .eq. 0) go to 2005
-  call plot (0.0, 0.0, 999)
+  call plot (0.d0, 0.d0, 999)
   return
 2005 d1 = hpi * tmult
   write (unit = prom80, fmt = 2010) d1
@@ -9611,8 +8033,8 @@ subroutine flatbd
   call prompt                                               ! write prom80 with cursor control (no lf)
   read (unit = munit5, fmt = 7241) prom80
   call fresp2 (prom80, d1, d2)                              ! decode free-field d1, d2
-  if (d1 .ne. 0.0) ncut1 = d1
-  if (d2 .ne. 0.0) ncut2 = d2
+  if (d1 .ne. 0.0) ncut1 = int (d1, kind (ncut1))
+  if (d2 .ne. 0.0) ncut2 = int (d2, kind (ncut2))
   write (unit = prom80, fmt = 7322) dxgrd1, dygrd1
 7322 format ('   x, y spacing between major grid lines  (', 2f6.3,  ' ) :')
   call prompt                                               ! write prom80 with cursor control (no lf)
@@ -9649,7 +8071,7 @@ subroutine flatbd
        1x,  11x, 'vmin', 11x, 'vmax', 11x, 'hmin', 11x, 'hmax', 12x, 'hpi', /, 1x, 5e15.6)
   if (numflt .gt. 0) go to 2108
   call plots (0, 0, 0)
-  call plot (1.0, 1.0, -3)
+  call plot (1.d0, 1.d0, -3)
   call factor (fact)
 2108 numflt = numflt + 1
   write (unit = munit6, fmt = 2109)
@@ -9675,9 +8097,9 @@ subroutine flatbd
   call newpen (maxisx)
   write (unit = munit6, fmt = 2115)
 2115 format ('   Ready to draw calcomp axes.')
-  if (maxisx .gt. 0) call axis (0.0, htax, horzl(n1), -24, d1, 0.0, hmin, hpi)
+  if (maxisx .gt. 0) call axis (0.d0, htax, horzl(n1), -24, d1, 0.d0, hmin, hpi)
   call newpen (maxisy)
-  if (maxisy .gt. 0) call axis (0.0, 0.0, vertl, nchver, 8., 90., vmin, d2)
+  if (maxisy .gt. 0) call axis (0.d0, 0.d0, vertl, nchver, 8.d0, 90.d0, vmin, d2)
 !  n8 = d1 / dxgrd1 + 0.5
   n8 = int (d1 / dxgrd1 + 0.5)
   n9 = 8.0 / dygrd1 + 0.5
@@ -9784,24 +8206,25 @@ subroutine flatbd
 2132 n4 = n5 + 4
   end do
   d1 = d1 + 1.0
-  call plot (d1, 0.0, -3)
+  call plot (d1, 0.d0, -3)
   if (iprspy .ge. 1) write (unit = munit6, fmt = 9006)
 9006 format ('   Done with calcomp copy of screen.')
   return
 end subroutine flatbd
 
 !
-!     subroutine tgrid.
+! subroutine tgrid.
 !
 
 subroutine tgrid (ix, iy, nx, idelx, ny, idely, ldash)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     Module used only for interactive EMTP (service to "emtspy").
   !     for non-interactive EMTP, this module can be destroyed.
   !     Reliance upon Tektronix plot10 makes this installation-
   !     dependent (this is VAX-11 module, actually).
   integer(4), intent(in) :: idelx, idely, ix, iy, ldash, nx, ny
-  integer(4) j, n1, n2, n3, n8, n9
+  integer(4) :: j, n2, n3, n4, n8, n9
+  !
   if (nx .le. 0) return
   if (ny .le. 0) return
   call movabs (ix, iy)
@@ -9834,5 +8257,5 @@ subroutine tgrid (ix, iy, nx, idelx, ny, idely, ldash)
 end subroutine tgrid
 
 !
-!     end of file: over20.for
+! end of file over20.f90
 !

@@ -1,17 +1,21 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: inlmfs.f90
+! file inlmfs.f90
 !
 
 !
-!     subroutine inlmfs.
+! subroutine inlmfs.
 !
 
 subroutine inlmfs
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'dekspy.ftn'
-  character(20) arginc(35)
+  use blkcom
+  use dekspy
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'dekspy.ftn'
+  character(20) :: arginc(35)
   dimension kard(200), karg(200), kbeg(200), kend(200)
   dimension ktex(200)
   dimension kolinc(35)
@@ -241,5 +245,5 @@ subroutine inlmfs
 end subroutine inlmfs
 
 !
-!     end of file: inlmfs.f90
+! end of file inlmfs.f90
 !

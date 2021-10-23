@@ -1,14 +1,17 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: pstmt.for
+! file pstmt.f90
 !
 
 !
-!     subroutine pstmt.
+! subroutine pstmt.
 !
 
 subroutine pstmt
-  include  'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include  'tacsto.ftn'
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=from
@@ -2310,5 +2313,5 @@ subroutine pstmt
 end subroutine pstmt
 
 !
-!     end of file: pstmt.for
+! end of file pstmt.f90
 !

@@ -2,7 +2,25 @@
   !
   !     file: umdeck.ftn
   !
-  character(8) busum
+
+  integer ibsfix, initum, inpu, iotfix, istart, iuangl, iudcoe, iuepso !, iufldr
+  integer iuflds, iufldr, iuflqs, iuflxd, iuflxq, iufpar, iugpar
+  integer iuhism, iuhist, iujcds, iujclo, iujclt, iujcqs, iujomo, iujtho
+  integer iujtmt, iuflqr, iujtqo, iujtyp, iujumo, iukcoi, iukumo, iuncld
+  integer iunclq, iunod1, iunod2, iunodf, iunodm, iunodo, iunppa, iuomgm
+  integer iuomld, iureac, iureds, iuredu, iureqs, iurequ, iurotm, iutham
+  integer iuumou, iuumrp, iuvolt
+  integer ksubum
+  integer nclfix, ncltot, ndum, nsmach, numbus, numfix !, niu, nsmachm
+  real clock, con
+  real dummat, dumvec
+  real omegrf
+  real pi, ptheta
+  real sroot2, sroot3
+  real umcur
+  real vinp
+  real zthevr, zthevs
+  character(8) busum, date
   common /umcom/ busum(50), ptheta(3, 3), zthevr(3, 3)
   common /umcom/ vinp(40), zthevs(40), umcur(40), con(10)
   common /umcom/ dumvec(40), dummat(3, 3), date(2), clock(2)

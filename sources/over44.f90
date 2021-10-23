@@ -1,12 +1,16 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over44.for
+! file over44.f90
 !
+
 !
-!     subroutine subr44.
+! subroutine subr44.
 !
+
 subroutine subr44
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'deck44.ftn'
   include 'labl44.ftn'
@@ -82,11 +86,14 @@ subroutine subr44
 4568 format ('  "Exit  module subr44."')
 99999 return
 end subroutine subr44
+
 !
-!     subroutine guts44.
+! subroutine guts44.
 !
+
 subroutine guts44 (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, xtir, xtii, zsurge, dummi, dummr, tixf, &
      work1, ndim, ntri,nsqr2)
+  implicit none
 !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'deck44.ftn'
@@ -94,11 +101,11 @@ subroutine guts44 (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2
   include 'volt45.ftn'
   common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
   common /linemodel/ char80, chlmfs(18)
-  character(6) chlmfs        ! 9-phase as limit for lmfs test
-  character(80) char80
-  character(8) text1, text2, fmetrc, englis, bufsem
-  character(8) text3, text4, text5, text6, text7
-  character(8) text8, text9
+  character(6) :: chlmfs        ! 9-phase as limit for lmfs test
+  character(80) :: char80
+  character(8) :: text1, text2, fmetrc, englis, bufsem
+  character(8) :: text3, text4, text5, text6, text7
+  character(8) :: text8, text9
   dimension bufsem(14), jprmat(16)
   dimension array(1)
   dimension xwc(ntri), xwy(ntri), yzi(ndim,ndim), yzr(ndim,ndim)
@@ -1944,11 +1951,14 @@ subroutine guts44 (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2
   nchain = 51
 9900 return
 end subroutine guts44
+
 !
 ! subroutine punpie.
 !
-subroutine punpie ( kcirct )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine punpie (kcirct)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl44.ftn'
   include 'deck44.ftn'
@@ -1972,12 +1982,15 @@ subroutine punpie ( kcirct )
   if ( iprsup .ge. 1 )  write (*,*) ' exit "punpie".'
   return
 end subroutine punpie
+
 !
-!     subroutine modal.
+! subroutine modal.
 !
+
 subroutine modal (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, xtir, xtii, zsurge, dummi, dummr, tixf, &
      work1, freq, m, iw, dist, metrik, fmipkm, ndim, ntri, nsqr2, itrnsf, kfull, mrr, nrp, ntol, conduc)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl44.ftn'
   include 'deck44.ftn'
@@ -1985,8 +1998,8 @@ subroutine modal (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2,
   common /linemodel/ char80, chlmfs(18)
 
 !  common /linemodel/ kexact, nsolve, fminsv, kbrnum, numrun
-  character(8) text1, text2, text3, text4, text5, text6
-  character(8) text7, text8, text9, text10
+  character(8) :: text1, text2, text3, text4, text5, text6
+  character(8) :: text7, text8, text9, text10
   dimension array(1)
   dimension xwc(ntri), xwy(ntri), yzi(ndim, ndim), yzr(ndim, ndim)
   dimension tii(ndim, ndim), tir(ndim, ndim), tvi(ndim, ndim)
@@ -2602,11 +2615,14 @@ subroutine cominv(a,b,m,freq)
   end do
   go to 130
 end subroutine cominv
+
 !
 ! subroutine dceign.
 !
-subroutine dceign(ar,ai,vi,vr,er,ei,n,nm,ierr,nv,nb,lunit6,iprsup,ndim)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine dceign (ar, ai, vi, vr, er, ei, n, nm, ierr, nv, nb, lunit6, iprsup, ndim)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension ar(ndim,ndim),ai(ndim,ndim),er(ndim),ei(ndim),vi(ndim,ndim),vr(ndim,ndim)
   dimension scale(20),int(20),iord(20)
   if ( iprsup .ge. 1 ) write (*,*) ' top of dceign.  input matrix ar ....'
@@ -2665,11 +2681,14 @@ subroutine dceign(ar,ai,vi,vr,er,ei,n,nm,ierr,nv,nb,lunit6,iprsup,ndim)
 2225 end do
   return
 end subroutine dceign
+
 !
 ! subroutine dceign.
 !
-subroutine cbal(nm,n,ar,ai,low,igh,scale,ndim)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine cbal (nm, n, ar, ai, low, igh, scale, ndim)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension ar(ndim,ndim),ai(ndim,ndim),scale(20)
   !     this subroutine is a translation of the algol procedure
   !     cbalance, which is a complex version of balance,
@@ -2837,11 +2856,14 @@ subroutine cbal(nm,n,ar,ai,low,igh,scale,ndim)
   igh = l
   return
 end subroutine cbal
+
 !
 ! subroutine cbabk2.
 !
-subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi,ndim)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine cbabk2 (nm, n, low, igh, scale, m, zr, zi, ndim)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension scale(20),zr(ndim,ndim),zi(ndim,ndim)
   !     this subroutine is a translation of the algol procedure
   !     cbabk2, which is a complex version of balbak,
@@ -2917,12 +2939,15 @@ subroutine cbabk2(nm,n,low,igh,scale,m,zr,zi,ndim)
 140 continue
 200 return
 end subroutine cbabk2
+
 !
 ! subroutine cmhes.
 !
-subroutine comhes(nm,n,low,igh,ar,ai,int,lunit6,iprsup,ndim,iord)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  dimension ar(ndim,ndim), ai(ndim,ndim), int(20), iord(20)
+
+subroutine comhes (nm, n, low, igh, ar, ai, int, lunit6, iprsup, ndim, iord)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  dimension ar(ndim, ndim), ai(ndim, ndim), int(20), iord(20)
   !     this subroutine is a translation of the algol procedure comhes,
   !     num. math. 12, 349-368(1968) by martin and wilkinson.
   !     handbook for auto. comp., vol.ii-linear algebra, 339-358(1971).
@@ -3042,14 +3067,18 @@ subroutine comhes(nm,n,low,igh,ar,ai,int,lunit6,iprsup,ndim,iord)
 160  end do
      if ( iprsup .ge. 3 ) write (lunit6, 170) m, igh, int(m),(ar(j,m),ai(j,m),j=1,igh)
 170  format (' m, igh and int(m) at 170 are', 3i10, /, ' (ar(j, m), ai(j, m), j = 1, igh), are', /, (1x, 8e15.6))
-180 end do
+  end do
+180 continue
 200 return
 end subroutine comhes
+
 !
 ! subroutine comlr.
 !
-subroutine comlr(nm,n,low,igh,hr,hi,wr,wi,ierr,ndim)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine comlr (nm, n, low, igh, hr, hi, wr, wi, ierr, ndim)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   dimension hr(ndim,ndim),hi(ndim,ndim),wr(ndim),wi(ndim)
   !     this subroutine is a translation of the algol procedure comlr,
@@ -3251,11 +3280,14 @@ subroutine comlr(nm,n,low,igh,hr,hi,wr,wi,ierr,ndim)
 1001 return
   !     :::::::::: last card of comlr ::::::::::
 end subroutine comlr
+
 !
 ! subroutine comlr2.
 !
-subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, iord)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   dimension hr(ndim,ndim),hi(ndim,ndim),wr(ndim),wi(ndim)
   dimension zr(ndim,ndim),zi(ndim,ndim)
@@ -3664,11 +3696,14 @@ subroutine comlr2(nm,n,low,igh,int,hr,hi,zi,zr,wr,wi,ierr,ndim,iord)
 1100 return
   !     :::::::::: last card of comlr2 ::::::::::
 end subroutine comlr2
+
 !
 ! subroutine cxred2.
 !
-subroutine cxred2( a, c, b, d, n, m )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine cxred2 (a, c, b, d, n, m)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !)    elimination of variables m+1,...n in symmetric complex matrix with
   !)    a=real part, c=imaginary part. a and c are
   !)    stored as triangle (1 element for 1.column,2 for 2.column etc.).
@@ -3732,11 +3767,14 @@ subroutine cxred2( a, c, b, d, n, m )
 9 i=ij+k
   go to 5
 end subroutine cxred2
+
 !
 ! subroutine symn.
 !
-subroutine symm(p,z,switch,kcirct,kk)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine symm (p, z, switch, kcirct, kk)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension p(9), z(9)
   dimension ar(3,3),ai(3,3),fr(3),fi(3)
   include 'blkcom.ftn'
@@ -3813,14 +3851,17 @@ subroutine symm(p,z,switch,kcirct,kk)
   z(5)=z(3)
   return
 end subroutine symm
+
 !
 ! subroutine skin.
 !
-subroutine skin (s,r,freq,rf,xf)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine skin (s, r, freq, rf, xf)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl44.ftn'
-  double precision  vsmall
+  double precision :: vsmall
   vsmall = 1.e-37
   call undrfl(jjj)
   s2 = s*s
@@ -3970,20 +4011,27 @@ subroutine skin (s,r,freq,rf,xf)
   if ( jjj .eq. 3 ) z = vsmall
   return
 end subroutine skin
+
 !
 ! subroutine undrfl.
 !
-subroutine undrfl ( n1 )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     dummy imitation of ontario hydro univac module.
+
+subroutine undrfl (n1)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !     dummy imitation of Ontario Hydro UNIVAC module.
+  integer(4), intent(out) :: n1
   n1 = -7654
   return
 end subroutine undrfl
+
 !
 ! subroutine wrte.
 !
-subroutine wrte ( p, i2, i3, iflag, l, unit, lunit6 )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine wrte (p, i2, i3, iflag, l, unit, lunit6)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension p(1),r(10)
   j=0
   do i=i2,i3
@@ -4001,11 +4049,14 @@ subroutine wrte ( p, i2, i3, iflag, l, unit, lunit6 )
 22 format (4x, 9e14.5)
 33 format ('0', i3, 9e14.5)
 end subroutine wrte
+
 !
-!     subroutine redu44.
+! subroutine redu44.
 !
-subroutine redu44 ( a, b, n, m )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine redu44 (a, b, n, m)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !)    Elimination of variables m+1,...n in symmetric matrix a. A is
   !)    stored as triangle (1 element for 1.column,2 for 2.column etc.).
   !)    Result is reduced matrix in columns 1,...m in case of reduction
@@ -4072,17 +4123,20 @@ subroutine redu44 ( a, b, n, m )
 9 i=ij+k
   go to 5
 end subroutine redu44
+
 !
-!     subroutine output.
+! subroutine output.
 !
-subroutine output(metrik, p, z, switch, kmax, is, k2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine output (metrik, p, z, switch, kmax, is, k2)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labl44.ftn'
   dimension p(1), z(1)
-  character*8 txtmi, txtkm, txtunt
-  data txtmi / 6hmiles  /
-  data txtkm / 6h  km    /
+  character(8) :: txtmi, txtkm, txtunt
+  data txtmi / 'miles ' /
+  data txtkm / '  km  ' /
   if ( jpralt  .eq.  0 )   return
   ll1 = 1
   ll2 = 2
@@ -4177,11 +4231,14 @@ subroutine output(metrik, p, z, switch, kmax, is, k2)
   if (kk.eq.3) kk=0
   go to 21
 end subroutine output
+
 !
 ! subroutine outspc.
 !
-subroutine outspc(p, z, kmax, metrik, fmipkm)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+
+subroutine outspc (p, z, kmax, metrik, fmipkm)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension p(9), z(9)
   include 'blkcom.ftn'
   include 'labl44.ftn'
@@ -4213,6 +4270,7 @@ subroutine outspc(p, z, kmax, metrik, fmipkm)
 1121 format (' Mutual impedance  positive= ', f8.5, ' Ohm/km    negative= ', f8.5, ' Ohm/km    zero= ', f8.4, ' Ohm/km')
   return
 end subroutine outspc
+
 !
-!     end of file: over44.for
+! end of file over44.f90
 !

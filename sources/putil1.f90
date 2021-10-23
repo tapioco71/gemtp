@@ -1,12 +1,17 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: putil1.for
+! file putil1.f90
 !
+
 !
-!     subroutine putil1.
+! subroutine putil1.
 !
+
 subroutine putil1
-  include  'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include  'tacsto.ftn'
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=from
@@ -1947,6 +1952,7 @@ subroutine putil1
 6020 continue
   go to 9500
 end subroutine putil1
+
 !
-!     file: putil1.for
+! end of file putil1.f90
 !

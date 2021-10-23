@@ -1,12 +1,17 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: puse.for
+! file puse.f90
 !
+
 !
-!     subroutine puse.
+! subroutine puse.
 !
+
 subroutine puse
-  include 'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
   sptr=sptr-1
   if(sptr.eq.iptr) goto 910
   isto(sptr)=from
@@ -966,6 +971,7 @@ subroutine puse
   sptr=sptr+1
   goto 9500
 end subroutine puse
+
 !
-!     end of file: puse.for
+! end of file puse.f90
 !

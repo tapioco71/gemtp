@@ -1,14 +1,17 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: errstp.for
+! file errstp.f90
 !
 
 !
-!     subroutine errstp.
+! subroutine errstp.
 !
 
 subroutine errstp
-  include 'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
   if (stpl1 .gt. 50) stpl1 = 0
   if (stpl2 .gt. 50) stpl2 = 0
   i1 = isto(ishenv + 61)
@@ -30,11 +33,11 @@ subroutine errstp
        ctbl(stpc1 : stpc1 + stpl1 - 1), ctbl(stpc2 : stpc2 + stpl2 - 1)
 1001 format(1x//, ' in: ',a// ' stop flag # ', i3// ' i1=',i10/ ' i2=',i10/ ' i3=',i10/ ' i4=',i10/ &
        ' i5=', i10// ' r1=', g13.6/ ' r2=',g13.6/ ' r3=',g13.6// ' name1=',a/ ' name2=',a//)
-  write(unit = unit06, fmt = 1002)
-1002 format(/, ' Refer to file drd5:[tacslib]stop.msg for interpretation.')
+  write (unit = unit06, fmt = 1002)
+1002 format (/, ' Refer to file drd5:[tacslib]stop.msg for interpretation.')
   stop 'tacs stop in errstp.'
 end subroutine errstp
 
 !
-!     end of file: errstp.for
+! end of file errstp.f90
 !

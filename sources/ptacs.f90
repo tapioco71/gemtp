@@ -1,14 +1,17 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: ptacs.for
+! file ptacs.f90
 !
 
 !
-!     subroutine ptacs.
+! subroutine ptacs.
 !
 
 subroutine ptacs
-  include  'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include  'tacsto.ftn'
   sptr=sptr-1
   if(sptr.eq.iptr) goto 910
   isto(sptr)=from
@@ -541,7 +544,7 @@ subroutine ptacs
   call putil2
   a=rsto(rptr)
   rptr=rptr-1
-  isto(env+3) = idnint(real (a, 16))
+  isto(env+3) = idnint (a)
   flg1=isto(sptr)
   sptr=sptr+1
   mndx=81
@@ -837,5 +840,5 @@ subroutine ptacs
 end subroutine ptacs
 
 !
-!     end of file: ptacs.for
+! end of file ptacs.f90
 !

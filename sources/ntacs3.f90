@@ -1,22 +1,28 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: ntacs3.for
+! file ntacs3.f90
 !
 
 !
-!     subroutine ntacs3.
+! subroutine ntacs3.
 !
 
 subroutine ntacs3
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'tacsto.ftn'
-  include 'blkcom.ftn'      ! wsm  +  thl manual modification for bpa emtp
-  include 'tacsar.ftn'      ! wsm  +  thl manual modification for bpa emtp
-  include 'labcom.ftn'      ! wsm  +  thl manual modification for bpa emtp
-!  common  / c0b002 /   ykm   (   1 )    ! wsm  +  thl manual modification for bpa emtp
-!  common  / c0b099 /   tclose(   1 )    ! wsm  +  thl manual modification for bpa emtp
-!  common  / c0b101 /   kpos  (   1 )    ! wsm  +  thl manual modification for bpa emtp
-!  common  / c0b103 /   emtpe (   1 )    ! wsm  +  thl manual modification for bpa emtp
+  use tacsto
+  use blkcom
+  use tacsar
+  use labcom
+  implicit none
+  ! implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'tacsto.ftn'
+  !  include 'blkcom.ftn'      ! wsm  +  thl manual modification for bpa emtp
+  !  include 'tacsar.ftn'      ! wsm  +  thl manual modification for bpa emtp
+  !  include 'labcom.ftn'      ! wsm  +  thl manual modification for bpa emtp
+  !  common  / c0b002 /   ykm   (   1 )    ! wsm  +  thl manual modification for bpa emtp
+  !  common  / c0b099 /   tclose(   1 )    ! wsm  +  thl manual modification for bpa emtp
+  !  common  / c0b101 /   kpos  (   1 )    ! wsm  +  thl manual modification for bpa emtp
+  !  common  / c0b103 /   emtpe (   1 )    ! wsm  +  thl manual modification for bpa emtp
   if (.not. (niu .gt. 0)) go to 5000
   i5 = kud1
   do i = 1,niu
@@ -24,7 +30,7 @@ subroutine ntacs3
      xtcs(i2) = flzero
      i1 = iuty(kiuty + i)
      k = int(ud1(i5 + 2))
-     i6 = iabs (int (kpos(k), 8))
+     i6 = iabs (kpos(k))
      i3 = i1-89
      go to(4090, 4091, 4092, 4093, 4080, 4080), i3
 4090 xtcs(i2) = emtpe(k)
@@ -54,5 +60,5 @@ subroutine ntacs3
 end subroutine ntacs3
 
 !
-!     end of file: ntacs3.for
+! end of file ntacs3.f90
 !

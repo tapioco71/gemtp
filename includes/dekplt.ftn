@@ -3,11 +3,40 @@
 !     file: dekplt.ftn
 !
 
-!     Usage is restricted to "plot" function of "emtspy", due
-!     to variable-length conflict (this is single-precision).
-!  character(8) datepl, tclopl, buslst(1), bbus
+  !     Usage is restricted to "plot" function of "emtspy", due
+  !     to variable-length conflict (this is single-precision).
+  !  character(8) datepl, tclopl, buslst(1), bbus
 
-  real(8) ev, ew
+  integer ibaud, ibrnch, ibsout, ichend, ichref, icp, icurse, ihs, inchpx
+  integer inchpy, ind1, indexp, inwait, iprsrt, iterm, ivcom, izgr1, izgr2, izid
+  integer iztit, izxax, izyax
+  integer jbegbc, jbegbv, jbrnch, jchan, jhmsp, jplt, jplt1
+  integer kextr, kill, killpl, klevl, kp, kptplt, kstart
+!  integer l, linpr
+  integer l4plot, labrtm, lchfil, lchid, lchlim, lchsup, lchtit, lchxax
+  integer lchyax, ldshg1, ldshg2, limcol, limfix, look, lsymb, ltic
+  integer lu7plt, linepr, ltek
+  integer maxev, maxew, maxip, maxisx, maxisy, maxsym, mcurve, mfake, mgrid1
+  integer mgrid2, mid, mlevel, mline, mmm, mplot, mstart, msuper, msymbt, mtit
+  integer mu6sav, mu6std, mxypl
+  integer namvar, nc, nchsup, nchver, ncut, ncut1, ncut2, newfil, nolabl, nsmplt
+!  integer numbco
+  integer nt2, numbrn, numflt, numnvo, numout, numpts, numraw, numtek
+  integer numtit, nv, nxend, nxid6, nxinch, nxmax, nxoff, nxvern, nyend, nyid6
+  integer nyinch, nymax, nyoff
+  real aaa, bbb, bx, datepl, dx, dxgrd1, dxgrd2, dy, dygrd1, dygrd2, dyold
+  real ev, evnbyt, ew
+  real fact, fhtax, fill, fill1, fill2, finfin, fline, fsymb, ftcarr, fvaxtt
+  real fvcom, fxid, fxnumh, fxnumv, fxref, fxsup, fxtit, fxvert, fyid, fyref
+  real fysup, fytit
+  real gxmax, gxmin
+  real ha, hmax, hmin, hpi, htax
+  real paplim, papmax
+  real sizid, sizsup, siztit
+  real taxisl, tclopl, timbeg, timend, tmult, tolrce, tstep, ttlev, ttmax, ttmin
+  real vaxisl, vh, vl, vmax, vmaxr, vmin, vminr, vs
+  real xid, xsuper, xtit
+  real yid, ylevel, ysuper, ytit, yymax, yymin
   character bbus, buslst(1000)
   common /cblock/ datepl(2), tclopl(2), bbus(300)
   common /cblock/ tmult, dy, dx, hpi, tstep, gxmin, gxmax
@@ -85,13 +114,13 @@
   equivalence  ( ivcom(57), lchfil ),  ( ivcom(58), lchlim )
   equivalence  ( ivcom(59), mu6std )
   character(80) filnam, alpha, buffin, vertl, headl, sext
-  character(30) file30
+!  character(30) file30
   character(24) xytitl, horzl
   character(8) textd1, textd2
-  character(8) curren, voltag, brclas, char20
+  character(8) curren, voltag, brclas !, char20
   character(8) slot1, date, time
   character(8) ibuff,  ansi, abuf77, anplt
-  !       next type key character key words in common, in order:
+!       next type key character key words in common, in order:
   character(8) choice,   stop,  purge,    out,   help
   character(8) smooth,   size,   show, linezz,   photo
   character(8) repeat,  flush, playba,    pen, multip

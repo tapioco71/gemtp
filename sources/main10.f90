@@ -1,10 +1,7 @@
 !-*- Mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
-!
-!     file: main10.for
-!
 
 !
-!     subroutine subr10.
+! file main10.f90
 !
 
 !
@@ -61,16 +58,22 @@
 !         misc. data parameter  'icat'  is positive.
 !
 
+!
+!     subroutine subr10.
+!
+
 subroutine subr10
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
-  include 'syncom.ftn'
-  include 'umdeck.ftn'
-  !     %include  '//c/tsu/cables.ftn'
+  use blkcom
+  use labcom
+  use tacsar
+  use syncom
+  use umdeck
+  implicit none
+  integer(4) :: iprcbl, n24
+  !
   ktab = 0
-3000 do
+3000 continue
+  do
      if (nchain .gt. 20) go to 9000
      if (kill .eq. 0) go to 1679
      nchain = 51
@@ -170,25 +173,30 @@ subroutine subr10
 end subroutine subr10
 
 !
-!     subroutine tapsav.
+! subroutine tapsav.
 !
 
 subroutine tapsav (narray, n1, n2, n3)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use deck29
+  use indcom
+  implicit none
   !     Near-universal module for dumping or restoring (central memory
   !     vs. disk) of  /label/ .   This does not work for those
   !     computers like Prime and Burroughs where  common  blocks
   !     are not ordered regularly in memory.   Switch "KBURRO"
   !     selects between disk or virtual memory (/C29B01/).
-  include 'blkcom.ftn'
-  include 'deck29.ftn'
-  integer narray
-  dimension narray(1), kpen(2)
+  !  include 'blkcom.ftn'
+  !  include 'deck29.ftn'
+  integer(4), intent(out) :: narray
+  integer(4), intent(in) :: n1, n2, n3
+  integer(4) :: i, j, k, kvecsv, n4, n9, n13
+  dimension narray(1)
+  !
   if (iprsup .lt. 1) go to 5840
   n9 = 0
   kpen(2) = 0
-  !  n4 = locint(narray(1))
-  n4 = loc (narray(1))
+  n4 = location (narray)
   write (unit = lunit6, fmt = 5831) n1, n2, n3, kburro, n4
 5831 format (/, " Top of  'tapsav'., '      n1      n2      n3  kburro              n4", /, 18x, 4i8, i16)
   !     following check normally sends VAX EMTP to 6327 (disk is
@@ -237,17 +245,20 @@ subroutine tapsav (narray, n1, n2, n3)
 end subroutine tapsav
 
 !
-!     subroutine dpelg.
+! subroutine dpelg.
 !
 
 subroutine dgelg (r, a, m, n, eps, ier)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  integer, intent(out) :: ier
-  real, intent(out) :: a, r
-  real, intent(in) :: eps
+  use tracom
+  implicit none
+  integer(4), intent(out) :: ier
+  integer(4), intent(in) :: m, n
+  real(8), intent(out) :: a, r
+  real(8), intent(in) :: eps
   dimension a(m * m), r(m * n)
-  integer i, j, k, l, lend, lst, mm, nm
-  real piv, pivi, tb, tol
+  integer(4) :: i, ii, ist, j, k, l, lend, ll, lst, mm, nm
+  real(8) :: piv, pivi, tb, tol
+  !
   i = 0
   !     Purpose:
   !             to solve a general system of simultaneous linear equations.
@@ -292,7 +303,6 @@ subroutine dgelg (r, a, m, n, eps, ier)
   !     Method:
   !             Solution is done by means of gauss-elimination with
   !             complete pivoting.
-  !             intrinsic  absz
   if (m .le. 0) go to 23
   !     search for greatest element in matrix a
   ier = 0
@@ -300,7 +310,7 @@ subroutine dgelg (r, a, m, n, eps, ier)
   mm = m * m
   nm = n * m
   do l = 1, mm
-     tb = absz(a(l))
+     tb = absz (a(l))
      if (tb .le. piv) go to 3
      piv = tb
      i = l
@@ -405,12 +415,15 @@ subroutine dgelg (r, a, m, n, eps, ier)
 end subroutine dgelg
 
 !
-!     subroutine matmul.
+! subroutine matmul.
 !
 
 subroutine matmul (aum, bum)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     matrix algebra module used by universal machine (u.m.)
+  integer(4) :: n1, n2, n3, n5
+  real(8), intent(out) :: aum, bum
+  real(8) :: cum
   dimension aum(3, 3), bum(3, 3), cum(3, 3)
   n5 = 3
   do n1 = 1, n5
@@ -430,17 +443,17 @@ subroutine matmul (aum, bum)
 end subroutine matmul
 
 !
-!     subroutine matvec.
+! subroutine matvec.
 !
 
 subroutine matvec (aum, yum)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
   !     matrix algebra module used by universal machine (u.m.)
-  real, intent(in) :: aum
-  real, intent(out) :: yum
-  real x
+  real(8), intent(in) :: aum
+  real(8), intent(out) :: yum
+  real(8) :: x
   dimension aum(3, 3), yum(15), x(3)
-  integer n1, n2, n3
+  integer(4) :: n1, n2, n3
   n1 = 3
   x(1 : n1) = 0.0
   do n2 = 1, n1
@@ -453,24 +466,23 @@ subroutine matvec (aum, yum)
 end subroutine matvec
 
 !
-!     subroutine pltfil
+! subroutine pltfil.
 !
 
-subroutine pltfil(k)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-
+subroutine pltfil (k)
+  use blkcom
+  use labcom
+  use dekspy
+  implicit none
   !     Installation-dependent module which is called for
   !     output-vector dumping by  "subts3"  and  "over20"  if
   !     "m4plot" of  /blank/  is nonzero.   This
   !     is alternative to conventional in-line dumping on disk.
   !     Module should be universal for computers using fortran 77
   !     compilers and real*4 variables which give single precision.
-
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'dekspy.ftn'
-  integer, intent(in) :: k
-  integer n17
+  integer(4), intent(in) :: k
+  integer(4) :: j, ll10, n7, n13, n17
+  !
   save
   data n17 / 0 /                                            ! initialize rolling plot freq count
   if (m4plot .eq. 1) go to 7286                             ! simulator use
@@ -481,9 +493,10 @@ subroutine pltfil(k)
 7269 format (' ^^^^^^^^^^^^^^^   Error stop in "pltfil"   ^^^^^^^^^^^^^^', /, ' ^^^^^^  too many output variables (', i3,  &
        ' )  for use real*4 plot file.   limit = 450.')
   call stoptp                                               ! installation-dependent program stop card
-7273 do j = 1, k
-     forbyt(j) = volti(j)
-  end do
+!7273 do j = 1, k
+!     forbyt(j) = volti(j)
+!  end do
+7273 forbyt(1 : k) = volti(1 : k)
   !     following apollo card replaces 2 preceding vax ones:
   !     7273 call vec_$dp_sp ( volti(1), forbyt(1), k )
   write (unit = lunit4) (forbyt(j), j = 1, k)
@@ -536,19 +549,21 @@ subroutine pltfil(k)
 end subroutine pltfil
 
 !
-!     subroutine pltlu2.
+! subroutine pltlu2.
 !
 
 subroutine pltlu2 (d2, volti)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     called by "tacs2" only, if and only if m4plot .ne. 0
   !     this module is universal for fortran 77 compilers and
   !     computers for which real*4 corresponds to single precision.
-  real, intent(out) :: d2, volti
+  real(8), intent(out) :: d2, volti
   dimension volti(1)
-  include 'blkcom.ftn'
-  integer iofgnd, j, n12
-  real forbyt(150)
+  integer j, n12
+  real(8) :: forbyt(150)
+  !
   if (iofgnd .gt. 149) call stoptp
   n12 = iofgnd + 1
   read (unit = lunit2) (forbyt(j), j = 1, n12)
@@ -562,26 +577,25 @@ subroutine pltlu2 (d2, volti)
 end subroutine pltlu2
 
 !
-!     subroutine vecrsv.
+! subroutine vecrsv.
 !
 
 subroutine vecrsv (array, n13, n2)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use deck29
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module for vector dumping/restoring of "OVER6", "OVER8", etc.
   !     This is universal for virtual computers which chose to
   !     use /C29B01/ space for this, as well as all of "LABCOM".
   !     Also needed are uncounted Hollerith.  Parallel to "VECISV".
-  include 'blkcom.ftn'
-  include 'deck29.ftn'
-  integer array(*)
-  integer, target :: karray
-  !dimension array(*), farray(*)
-  !real(8) farray(1)
-  integer, pointer :: farray(:)
-  !equivalence (karray(1), farray(1))
-  !     block /veccom/ is shared by "vecrsv" and "vecisv".
-  !       ltlabl = 0
+  integer(4), intent(out), target :: array(*)
+  integer(4), intent(in) :: n2, n13
+  integer(4), allocatable :: farray(:)
+  integer(4) :: kntvec, kofvec
+  integer(4) :: n4, n14
   common /veccom/ kntvec, kofvec(20)
+  !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 1623) n13, n2, kntvec
 1623 format (' Begin "vecrsv".  n13, n2 =',  2i8, '     kntvec =', i8)
   if (n2 .ne. 0) go to 1638
@@ -594,18 +608,15 @@ subroutine vecrsv (array, n13, n2)
   !     begin code to restore  (array(k), k=1, n13)  from tank:
   kntvec = kntvec + 1
   n4 = kofvec(kntvec)
-  farray => karray(n4 : n4 + n13)
-  if (associated (farray)) then
+  allocate (farray(1 : n13))
+  if (allocated(farray)) then
+     farray(1 : n13) = karray(n4 : n4 + n13)
      if (iprsup .ge. 2 ) write (unit = lunit6, fmt = 1640) kntvec, n4
 1640 format (' Ready to restore.  kntvec, n4 =', 2i10)
      if (n13 .le. 0) go to 9000
-     do k = 1, n13
-        !array(k) = karray(n4)
-        array(k) = farray(k)
-        !n4 = n4 + 1
-     end do
+     array(1 : n13) = farray(1 : n13)
      n4 = n4 + n13
-     nullify (farray)
+     deallocate(farray)
   else
      write (unit = lunit6, fmt = "('Could not associate farray to karray for restore in vecrsv.  Stop.')")
      stop
@@ -619,18 +630,15 @@ subroutine vecrsv (array, n13, n2)
 1673 format (' Initialize kofvec(1) =', i10)
 1674 kntvec = kntvec + 1
   n4 = kofvec(kntvec)
-  farray => karray(n4 : n4 + n13)
-  if (associated (farray)) then
+  allocate(farray(1 : n13))
+  if (allocated(farray)) then
+     farray(1 : n13) = karray(n4 : n4 + n13)
      if (iprsup .ge. 2) write (unit = lunit6, fmt = 1675) kntvec, n4
 1675 format (' Ready to dump.  kntvec, n4 =', 2i10)
      if (n13 .le. 0) go to 1683
-     do k = 1, n13
-        !karray(n4) = array(k)
-        farray(k) = array(k)
-        !n4 = n4 + 1
-     end do
+     farray(1 : n13) = array(1 : n13)
      n4 = n4 + n13
-     nullify (farray)
+     deallocate(farray)
   else
      write (unit = lunit6, fmt = "('Could not associate farray to karray for dump in vecrsv.  Stop.')")
      stop
@@ -648,44 +656,38 @@ subroutine vecrsv (array, n13, n2)
 end subroutine vecrsv
 
 !
-!     subroutine vecisv.
+! subroutine vecisv.
 !
 
 subroutine vecisv (karr, n13, n2)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use deck29
+  implicit none
   !     Module for vector dumping/restoring of "OVER6", "OVER8", etc.
   !     This is universal for virtual computers which chose to
   !     use /C29B01/ space for this, as well as all of "LABCOM".
   !     also needed are uncounted Hollerith.  Parallel to "VECISV".
-  include 'blkcom.ftn'
-  include 'deck29.ftn'
-  !real(8) karr, karray, farray
-  integer, target :: karray
-  integer, pointer :: farray(:)
-  integer karr
-  !dimension farray(3)
-  !equivalence (karray(1), farray(1))
-  dimension karr(2)
+  integer(4), intent(out), target :: karr(2)
+  integer(4), intent(in) :: n13, n2
+  integer(4), allocatable :: farray(:)
   !     block /VECCOM/ is shared with "VECRSV" (see for more info)
-  integer kntvec
+  integer(4) :: kntvec, kofvec, n4, n14
   common /veccom/ kntvec, kofvec(20)
+  !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 1423) n13, n2
 1423 format (' Begin "vecisv".  n13, n2 =',  2i8)
   if (n2 .eq. 1) go to 1471
   !     begin code to restore  (karr(k), k=1, n13)  from tank:
   kntvec = kntvec + 1
   n4 = kofvec(kntvec)
-  farray => karray(n4 : n4 + n13)
-  if (associated (farray)) then
+  allocate (farray(1 : n13))
+  if (allocated(farray)) then
+     farray(1 : n13) = karray(n4 : n4 + n13)
      if (iprsup .ge. 2) write (lunit6, 1428)  kntvec, n4
 1428 format (' Ready to restore.  kntvec, n4 =', 2i10)
-     do k = 1, n13
-        !karr(k) = farray(n4)
-        karr(k) = farray(k)
-        !n4 = n4 + 1
-     end do
+     karr(1 : n13) = farray(1 : n13)
      n4 = n4 + n13
-     nullify (farray)
+     deallocate(farray)
   else
      write (unit = lunit6, fmt = "('Could not associate farray to karray for restore in vecisv.  Stop.')")
      stop
@@ -699,18 +701,15 @@ subroutine vecisv (karr, n13, n2)
 1473 format (' Initialize kofvec(1) =', i10)
 1474 kntvec = kntvec + 1
   n4 = kofvec(kntvec)
-  farray => karray(n4 : n4 + n13)
-  if (associated (farray)) then
+  allocate(farray(1 : n13))
+  if (allocated(farray)) then
+     farray(1 : n13) = karray(n4 : n4 + n13)
      if (iprsup .ge. 1) write (unit = lunit6, fmt = 1475) kntvec, n4
 1475 format (' Ready to dump.  kntvec, n4 =', 2i10)
      kofvec(kntvec) = n4                                    ! correct integer-vector beginning
-     do k = 1, n13
-        !farray(n4) = karr(k)
-        farray(k) = karr(k)
-        !n4 = n4 + 1
-     end do
+     farray(1 : n13) = karr(1 : n13)
      n4 = n4 + n13
-     nullify (farray)
+     deallocate(farray)
      ! if /veccom/ storage exceeded,
      if (kntvec .ge. 20) call stoptp                        ! installation-dependent program stop card
      kofvec(kntvec + 1) = n4
@@ -732,25 +731,31 @@ end subroutine vecisv
 !
 
 subroutine vecrxx (array, n13, n2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  implicit none
   !     Universal (non-virtual) form of module for binary i/o.  If
   !     extracted from UTPF for use, convert name "VECRXX" to "VECRSV"
-  include 'blkcom.ftn'
+  !  include 'blkcom.ftn'
+  integer(4), intent(in) :: n2
+  integer(4), intent(out) :: n13
+  real(8), intent(out) :: array
+  integer(4) :: j, k, n6, n14
   dimension array(2)
+  !
   if (iprsup .ge. 1) write (lunit6, 1575) n13, n2
 1575 format (' Begin "vecrsv".  n13, n2 =', 2i8)
-  if ( n2  .ne.  0 )  go to 1638
+  if (n2 .ne. 0) go to 1638
   !     zero n2 means that we want to position tape for next read:
   if ( n13  .ge.  0 )   go to 1592
   n6 = -n13
-  do   j=1, n6
+  do j = 1, n6
      backspace lunt13
   end do
   go to 9000
 1592 rewind lunt13
-  if ( n13  .eq.  0 )   go to 1612
-  do j=1, n13
-     read (lunt13)  n14
+  if (n13 .eq. 0) go to 1612
+  do j = 1, n13
+     read (unit = lunt13) n14
   end do
 1612 if ( iprsup  .ge.  1 ) write (6, 1613)  n13
 1613 format (' Position magnetic tape.  n13 =', i4)
@@ -768,24 +773,28 @@ subroutine vecrxx (array, n13, n2)
 end subroutine vecrxx
 
 !
-!     subroutine vecixx.
+! subroutine vecixx.
 !
 
 subroutine vecixx (karr, n13, n2)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  implicit none
   !     Universal (non-virtual) form of module for binary i/o.  If
   !     extracted from UTPF for use, convert name "VECIXX" to "VECISV"
-  include 'blkcom.ftn'
-  dimension karr(2)
-  if (iprsup .ge. 1) write (lunit6, 1423) n13, n2
+  !  include 'blkcom.ftn'
+  integer(4), intent(out) :: karr(2)
+  integer(4), intent(in) :: n2, n13
+  integer(4) :: k
+  !
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 1423) n13, n2
 1423 format (' Begin "vecisv".  n13, n2 =', 2i8)
   if (n2 .eq. 1) go to 1471
   !     begin code to restore  (karr(k), k=1, n13)  from tape:
-  read (lunt13) (karr(k), k = 1, n13)
+  read (unit = lunt13) (karr(k), k = 1, n13)
   go to 9000
   !     begin code to dump  (karr(k), k=1, n13)  onto tape:
-1471 write (lunt13) (karr(k), k = 1, n13)
-9000 if (iprsup .ge. 1) write (lunit6, 9007) karr(1), karr(2), karr(n13)
+1471 write (unit = lunt13) (karr(k), k = 1, n13)
+9000 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9007) karr(1), karr(2), karr(n13)
 9007 format (' Exit "vecisv".  karr(1;2;n13) =', 3i10)
   return
 end subroutine vecixx
@@ -795,16 +804,18 @@ end subroutine vecixx
 !
 
 subroutine namea6 (text1, n24)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use labcom
+  implicit none
   ! module for maintainance of alphanumeric vector texvec of
   ! "labcom".  maxbus of "blkcom" is last used cell.  n24 chooses
   ! mode of use:  0 will add text1, positive will locate it,
   ! and negative will destroy (remove) it.
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  integer, intent(out) :: n24
+  integer(4), intent(out) :: n24
   character(8), intent(in) :: text1
-  character(8) text2
+  integer(4) :: j, n17
+  character(8) :: text2
+  !
   ! Burroughs: preserve local variable between module calls:
   data n17 / 0 /
   data text2 / 'unused' /
@@ -845,11 +856,17 @@ subroutine namea6 (text1, n24)
 end subroutine namea6
 
 !
-!     subroutine tables.
+! subroutine tables.
 !
 
 subroutine tables
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  use blkcom
+  use labcom
+  use syncom
+  use synmac
+  use umdeck
+  use indcom
+  implicit none
   !     Utility which is used to both dump and restore EMTP
   !     tables (central memory vs. disk).  Usage is for both
   !     "statistics" (over12, over15, over20) and  "start again"
@@ -858,10 +875,7 @@ subroutine tables
   !     from  "lookie"  which is called by  "subts3"  of  ov16).
   !     Also used by  "restore"  request of rtm, where table
   !     restoration is in  "katalg"  of overlay 20.
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'syncom.ftn'
-  common /comlock/  locker(2)
+  integer(4) :: locker
   !     Note about deck "synmac".   If EMTP s.m. modeling
   !     Brandwajn (type-59), is to be deleted,
   !     then all s.m. subroutines ( smdat, smout, smpfit,
@@ -872,65 +886,63 @@ subroutine tables
   !     place,  and the  "n4 ="  calculation involving "locint"
   !     should be replaced by the simple statements  "n4 = 1" .
   !     comment card immediately preceding "synmac" -------------
-  include 'synmac.ftn'
+  !  include 'synmac.ftn'
   !     comment card immediately following "synmac" -------------
-  include 'umdeck.ftn'
-  dimension integx(1)
-  equivalence (x(1), integx(1))
-  integer busone
-  character(8) kpen, itemp
-  dimension  busone(1), idistx(1)
-  equivalence (bus1, busone(1)), (nenerg, idistx(1))
-  dimension kpen(1), itemp(1), jtemp(1), ktemp(1)
-  equivalence (kpen(1), bus1), (itemp(1), busum(1))
-  equivalence (jtemp(1), etac(1)), (ktemp(1), z(1))
-  equivalence (moncar(2), kbase)
-  dimension iprsav(4)
+  integer(4) :: i, iprsav(4), j
+  integer(4) :: ll1, ll2, ll4
+  integer(4) :: n1, n2, n3, n4, n5, n9, n24
+  !
+  !  equivalence (x(1), integx(1))
+  !  dimension busone(1), idistx(1)
+  !  equivalence (bus1, busone(1)), (nenerg, idistx(1))
+  !  dimension kpen(1), itemp(1), jtemp(1), ktemp(1)
+  !  equivalence (kpen(1), bus1), (itemp(1), busum(1))
+  !  equivalence (jtemp(1), etac(1)), (ktemp(1), z(1))
+  !  equivalence (moncar(2), kbase)
+  !  dimension iprsav(4)
+  common /comlock/ locker(2)
+  !
   !     Burroughs: preserve local variable between module calls:
-  data  iprsav   / 0,0,0,0 /
+  data iprsav / 0, 0, 0, 0 /
   ll1 = 1
   ll2 = 2
   ll4 = 4
-  !nword1 = locint (voltbc(1)) - locint (kpen(1))
-  nword1 = locf(voltbc(1)) - locchar(kpen(1))
-  nword2 = locint(idistx(1)) - locint(lunsav(15))
-!  n4 = locint(msmout) - locint(z(1)) + 1
-  n4 = loc (msmout) - loc (z(1)) + 1
-!  n5 = locint(lbstac) - locint(etac(1)) + 1
-  n5 = loc (lbstac) - loc (etac(1)) + 1
-  if (kbase .eq. 0) nword1 = locint(idistx(1)) - locint(busone(1))
-  !n9 = locint(istart) - locint(busum(1)) + 1
-  n9 = loc (istart) - loc (busum(1)) + 1
+  nword1 = location (voltbc(1)) - location (kpen(1))
+  nword2 = location (idistx(1)) - location (lunsav(15))
+  n4 = location (msmout) - location (z(1)) + 1
+  n5 = location (lbstac) - location (etac(1)) + 1
+  if (kbase .eq. 0) nword1 = location (idistx) - location (busone)
+  n9 = location (istart) - location (busum(1)) + 1
   rewind lunit2
   if (nchain .eq. 1) go to 3289
   if (nchain .eq. 20) go to 3289
-3289 if (iprsup .ge. 1) write (lunit6, 2721) n4, n5, nword1, nword2, ltlabl, n9, nchain, lastov, lunit2, t
+3289 if (iprsup .ge. 1) write (unit = lunit6, fmt = 2721) n4, n5, nword1, nword2, ltlabl, n9, nchain, lastov, lunit2, t
 2721 format (/, ' Within  "tables" .      n4      n5  nword1  nword2  ltlabl      n9  nchain  lastov  lunit2 ',  14x,  't', /, 19x, 9i8, e15.6)
   if (nchain .eq. 1) go to 5342
   if (memsav .eq. 1016) go to 5342
   if (nchain .lt. lastov) go to 5342
-  write (lunit2) locker
-  write (lunit2) (kpen(i), i = 1, nword1)
-  write (lunit2) (iprsov(i), i = 35, nword2)
+  write (unit = lunit2) locker
+  write (unit = lunit2) (kpen(i), i = 1, nword1)
+  write (unit = lunit2) (iprsov(i), i = 35, nword2)
   !     store iprsov(16-19) in iprsav at 1st call to tables from over12
   call move (iprsov(16), iprsav(1), ll4)
-  call tapsav (integx(1), lunit2, ltlabl, ll1)
-  if (numsm .ne. 0) write (lunit2) (ktemp(i), i = 1, n4), (jtemp(i), i = 1, n5)
-  write (lunit2) (itemp(i), i = 1, n9)
+  call tapsav (integx, lunit2, ltlabl, ll1)
+  if (numsm .ne. 0) write (unit = lunit2) (ktemp(i), i = 1, n4), (jtemp(i), i = 1, n5)
+  write (unit = lunit2) (itemp(i), i = 1, n9)
   go to 5359
-5342 read (lunit2) locker
-  if (iprsup .ge. 9) write (lunit6, 66) locker
+5342 read (unit = lunit2) locker
+  if (iprsup .ge. 9) write (unit = lunit6, fmt = 66) locker
 66 format (' After 1st read.  locker =', 2i8)
   n3 = nchain
   n2 = iprsup
   n24 = numdcd
-  read (lunit2) (kpen(i), i = 1, nword1)
-  read (lunit2) (iprsov(i), i = 35, nword2)
-  call tapsav (integx(1), lunit2, ltlabl, ll2)
+  read (unit = lunit2) (kpen(i), i = 1, nword1)
+  read (unit = lunit2) (iprsov(i), i = 35, nword2)
+  call tapsav (integx, lunit2, ltlabl, ll2)
   if (iprsup .ge. 9) write (lunit6, 69) numsm, n4, n5, n9
 69 format (' After tapsav: numsm,n4,n5,n9 =', 4i5)
-  if (numsm .ne. 0) read (lunit2) (ktemp(i), i = 1, n4), (jtemp(i), i = 1, n5)
-  read (lunit2) (itemp(i), i = 1, n9)
+  if (numsm .ne. 0) read (unit = lunit2) (ktemp(i), i = 1, n4), (jtemp(i), i = 1, n5)
+  read (unit = lunit2) (itemp(i), i = 1, n9)
   nchain = n3
   iprsup = n2
   numdcd = n24
@@ -945,22 +957,39 @@ subroutine tables
      iprsov(j + 15) = iprsav(j)
      iprsov(j + 30) = n1
   end do
-5359 if (iprsup .ge. 1) write (lunit6, 5364)
+5359 if (iprsup .ge. 1) write (unit = lunit6, fmt = 5364)
 5364 format (' Exit "tables".')
   return
 end subroutine tables
 
 !
-!     subroutine csup.
+! subroutine csup.
 !
 
 subroutine csup (l)
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'tacsar.ftn'
+  use blkcom
+  use labcom
+  use tacsar
+  use tracom
+  implicit none
+  integer(4), intent(in) :: l
+  integer(4) :: i, i1, i2, idiv, idn, ifl, iop
+  integer(4) :: j, jfl, ji
+  integer(4) :: k, k1, karg, kdev2, kjsup, kksup
+  integer(4) :: m, m1, m2, mj
+  integer(4) :: n, n1, n2, n3, n4, n5, n6, n7, ndx1, ndx2, ndx3, ndx4, ndx5, ndx6
+  integer(4) :: nj, nn, nnn, nop
+  real(8) :: a, aa, acc, amx, arg
+  real(8) :: b, bb
+  real(8) :: d, d1, d2, d4, d5, d7, d8, d9, d10, d11, div
+  real(8) :: g
+  real(8) :: h
+  real(8) :: rdev1
+  real(8) :: zfl
+  real(8) :: randnm
   dimension arg(50), acc(20), amx(20)
   dimension iop(50), ifl(20), idn(20)
+  !
   !     000  b = the argument and later the value of the function,
   !     000      before it is affected by the algebraic operation
   !     000      which will update 'a' .
@@ -1844,10 +1873,9 @@ subroutine csup (l)
   xtcs(ndx1) = a
 10 i = insup(kinsup + i)
   if (i .gt. 0) go to 1234
-  !     9999 return
   return
 end subroutine csup
 
 !
-!     end of file main10.for
+! end of file main10.f90
 !

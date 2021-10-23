@@ -1,23 +1,30 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: tread.f90
+! file tread.f90
 !
 
 !
-!     subroutine tread.
+! subroutine tread.
 !
+
 subroutine tread
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'                     ! wsm + thl manual modification for bpa emtp
-  include 'tacsto.ftn'
-  character(80) dbuff
+  use blkcom
+  use tacsto
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'                     ! wsm + thl manual modification for bpa emtp
+  !  include 'tacsto.ftn'
+  character(80) :: dbuff
   !  equivalence ( moncas(109), noutpr )   ! wsm + thl manual modification for bpa emtp
-  character(6) chvbar
+  character(6) :: chvbar
   !  equivalence ( texta6(17),  chvbar )   ! wsm + thl manual modification for bpa emtp
   !  character*6 chrcom, chrori            ! wsm + thl manual modification for bpa emtp
   !  equivalence ( texta6(23),  chrcom )   ! wsm + thl manual modification for bpa emtp
+  character(1) :: chrcom, chrori
+  !
   chvbar = '|'                             ! wsm + thl manual modification for bpa emtp
-!     9000 continue
+  !     9000 continue
   continue
   ctbl(38 : 38) = char(39)
   ctbl(49 : 49) = char(47)
@@ -211,5 +218,5 @@ subroutine tread
 end subroutine tread
 
 !
-!     end of file: tread.for
+! end of file tread.f90
 !

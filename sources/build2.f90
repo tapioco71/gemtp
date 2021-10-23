@@ -1,23 +1,148 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: build2.for
+! file build2.f90
 !
+
 subroutine build2
-  include 'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
   sptr = sptr - 1
   if (sptr .eq. iptr) go to 910
   isto(sptr) = from
   from = 0
-  go to (9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012 , 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9020, &
-       9021, 9022 , 9023, 9024, 9025, 9026, 9027), to-9001
+  !  go to (9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012 , 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9020, 9021, 9022 , 9023, 9024, 9025, 9026, 9027), to-9001
+  select case (to - 9001)
+  case (1)
+     go to 9002
+
+  case (2)
+     go to 9003
+
+  case (3)
+     go to 9004
+
+  case (4)
+     go to 9005
+
+  case (5)
+     go to 9006
+
+  case (6)
+     go to 9007
+
+  case (7)
+     go to 9008
+
+  case (8)
+     go to 9009
+
+  case (9)
+     go to 9010
+
+  case (10)
+     go to 9011
+
+  case (11)
+     go to 9012
+
+  case (12)
+     go to 9013
+
+  case (13)
+     go to 9014
+
+  case (14)
+     go to 9015
+
+  case (15)
+     go to 9016
+
+  case (16)
+     go to 9017
+
+  case (17)
+     go to 9018
+
+  case (18)
+     go to 9019
+
+  case (19)
+     go to 9020
+
+  case (20)
+     go to 9021
+
+  case (21)
+     go to 9022
+
+  case (22)
+     go to 9023
+
+  case (23)
+     go to 9024
+
+  case (24)
+     go to 9025
+
+  case (25)
+     go to 9026
+
+  case (26)
+     go to 9027
+  end select
   stop 'invalid "to" reference in "build".'
 9500 if (.not. (from .eq. 0)) go to 0001
   from = isto(sptr)
   sptr = sptr + 1
   return
-0001 go to (9523, 9524, 9525, 9526, 9527, 9528, 9529, 9530, 9531, 9532, 9533, 9534, 9535, 9536), from-9522
+  !0001 go to (9523, 9524, 9525, 9526, 9527, 9528, 9529, 9530, 9531, 9532, 9533, 9534, 9535, 9536), from-9522
+0001 select case (from - 9522)
+  case (1)
+     go to 9523
+
+  case (2)
+     go to 9524
+
+  case (3)
+     go to 9525
+
+  case (4)
+     go to 9526
+
+  case (5)
+     go to 9527
+
+  case (6)
+     go to 9528
+
+  case (7)
+     go to 9529
+
+  case (8)
+     go to 9530
+
+  case (9)
+     go to 9531
+
+  case (10)
+     go to 9532
+
+  case (11)
+     go to 9533
+
+  case (12)
+     go to 9534
+
+  case (13)
+     go to 9535
+
+  case (14)
+     go to 9536
+  end select
   !     0002
-  stop 'invalid "from" reference in "build".'
+  stop 'Invalid "from" reference in "build".'
 910 stpflg = 42
   stpi1 = iptr
   stpi2 = ilen - iptr
@@ -477,7 +602,7 @@ subroutine build2
   call xpr1
   a=rsto(rptr)
   rptr=rptr-1
-  cnt4 = idnint (real (a, 16))
+  cnt4 = idnint (a)
   if (.not. (cnt4 .lt. 0 .or. cnt4 .gt. 4)) go to 5241
   stpflg=113
   stpi1=cnt4
@@ -596,7 +721,7 @@ subroutine build2
   call xpr1
   a=rsto(rptr)
   rptr=rptr-1
-  cnt4 = idnint(real (a, 16))
+  cnt4 = idnint (a)
   if (.not. (cnt4 .lt. 0 .or. cnt4 .gt. 4)) go to 5291
   stpflg=114
   stpi1=cnt4
@@ -699,7 +824,7 @@ subroutine build2
   call xpr1
   a=rsto(rptr)
   rptr=rptr-1
-  cnt4 = idnint (real (a, 16))
+  cnt4 = idnint (a)
   cnt3=2*cnt4
   if (.not.(cnt3.eq.0)) go to 5341
   cnt3=1
@@ -1352,6 +1477,7 @@ subroutine build2
   sptr = sptr + 1
   go to 9500
 end subroutine build2
+
 !
-!     end of file: build2.for
+! end of file build2.f90
 !

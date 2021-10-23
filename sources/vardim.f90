@@ -1,438 +1,531 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 
 !
-!     file: vardim.for
+! file vardim.f90
 !
 
+!
+! subroutine make_comment.
+!
+
+module test
+contains
+subroutine make_subroutine_comment (unit, n)
+  implicit none
+  integer(4), intent(in) :: unit
+  character(*), intent(in) :: n
+  write (unit = unit, fmt = 10) trim(n)
+10 format (/, '!', /, '! subroutine ', a, '.', /, '!', /)
+  return
+end subroutine make_subroutine_comment
+
+!
+! subroutine make_implicit_statement.
+!
+
+subroutine make_implicit_statement (unit, mode, realdim, integerdim)
+  implicit none
+  integer(4), intent(in) :: unit, mode
+  integer(4), intent(in), optional :: realdim, integerdim
+  select case (mode)
+  case (0)
+     write (unit = unit, fmt = 10)
+
+  case (1)
+     write (unit = unit, fmt = 20)
+
+  case (2)
+     write (unit = unit, fmt = 30)
+
+  case (3)
+     if (present (realdim) .and. present (integerdim)) then
+        write (unit = unit, fmt = 40) realdim, integerdim
+     else
+        stop
+     end if
+  end select
+  return
+10 format (2x, 'implicit none')
+20 format (2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+30 format (2x, 'implicit real(16) (a-h, o-z), integer(8) (i-n)')
+40 format (2x, 'implicit real(', i2, ') (a-h, o-z), integer(', i2, ') (i-n)')
+end subroutine make_implicit_statement
+
+!
+! subroutine make_include_statement.
+!
+
+subroutine make_include_statement (unit, filename)
+  implicit none
+  integer(4), intent(in) :: unit
+  character(*), intent(in) :: filename
+  write (unit = unit, fmt = 10) filename
+10 format (2x, 'include ', "'", a, "'")
+  return
+end subroutine make_include_statement
+
+!
+! subroutine make_use_statement.
+!
+
+subroutine make_use_statement (unit, modulename)
+  implicit none
+  integer(4), intent(in) :: unit
+  character(*), intent(in) :: modulename
+  write (unit = unit, fmt = 10) modulename
+10 format (2x, 'use ', a)
+  return
+end subroutine make_use_statement
+
+end module test
+
 program vardim
-!  implicit  real(8) (a-h, o-z), integer(4) (i-n)
-!  integer(4) lunit(15), lstnew
-  integer lunit(15), lstnew
-  character char, bus2
-  character(8) bus1, texta(2), textb(2), cblock, cblser, type
-  character(16) ansi16
-  character(80) abuff
-!  real(8) lphd2, lphase
-  real lphd2, lphase
+  use test
+  implicit none
+  integer(4) :: i, ii, implmode, indexm, ios
+  integer(4) :: j, jbltyp
+  integer(4) :: kextra, kk
+  integer(4) :: lm, lstdef, ltlabl, lunit(15), lstnew
+  integer(4) :: m, mextra, mtot, mul34, mulvar
+  integer(4) ::n1, n3, n4, n7, n9, n18, n28, n37, n86, n87, ncbarr, nd, ndate, nh, nm
+  integer(4) :: nonneg, nrec3, ns, ntime, numkex, numlst, ny
+  real(8) :: d1, d2, d3
+  character :: char, bus2
+  character(8) :: bus1, texta(2), textb(2), cblock, cblser
+  character(16) :: type
+  character(16) :: ansi16
+  character(80) :: abuff
+  real(8) :: lphd2, lphase
   dimension cblock(300), ncbarr(300), cblser(300), jbltyp(300)
-  dimension lstnew(99), lstdef(49), type(5, 3), kextra(29)
-  dimension char(6), mulvar(5)
-  integer integerdim, realdim
-  data  integerdim / 8 /
+  dimension lstnew(99), lstdef(49), type(7), kextra(29)
+  dimension char(6), mulvar(7)
+  integer(4) :: integerdim, realdim
+  data  integerdim / 4 /
   data  realdim    / 8 /
-  data  cblock(  1)  / 'x     ' /, ncbarr(  1)  /  3 /
-  data  cblser(  1)  / 'c0b001' /, jbltyp(  1)  / 0 /
-  data  cblock(  2)  / 'ykm   ' /, ncbarr(  2)  /  5 /
-  data  cblser(  2)  / 'c0b002' /, jbltyp(  2)  / 0 /
-  data  cblock(  3)  / 'km    ' /, ncbarr(  3)  /  5 /
-  data  cblser(  3)  / 'c0b003' /, jbltyp(  3)  / 0 /
+  data  cblock(  1)  / 'x     ' /, ncbarr(  1)  / 3 /
+  data  cblser(  1)  / 'c0b001' /, jbltyp(  1)  / 3 /
+  data  cblock(  2)  / 'ykm   ' /, ncbarr(  2)  / 5 /
+  data  cblser(  2)  / 'c0b002' /, jbltyp(  2)  / 3 /
+  data  cblock(  3)  / 'km    ' /, ncbarr(  3)  / 5 /
+  data  cblser(  3)  / 'c0b003' /, jbltyp(  3)  / 6 /
   data  cblock(  4)  / 'xk    ' /, ncbarr(  4)  / 72 /
-  data  cblser(  4)  / 'c0b004' /, jbltyp(  4)  / 0 /
+  data  cblser(  4)  / 'c0b004' /, jbltyp(  4)  / 3 /
   data  cblock(  5)  / 'xm    ' /, ncbarr(  5)  / 72 /
-  data  cblser(  5)  / 'c0b005' /, jbltyp(  5)  / 0 /
+  data  cblser(  5)  / 'c0b005' /, jbltyp(  5)  / 3 /
   data  cblock(  6)  / 'weight' /, ncbarr(  6)  / 14 /
-  data  cblser(  6)  / 'c0b006' /, jbltyp(  6)  / 0 /
+  data  cblser(  6)  / 'c0b006' /, jbltyp(  6)  / 3 /
   data  cblock(  7)  / 'iwtent' /, ncbarr(  7)  / 52 /
-  data  cblser(  7)  / 'c0b007' /, jbltyp(  7)  / 0 /
+  data  cblser(  7)  / 'c0b007' /, jbltyp(  7)  / 6 /
   data  cblock(  8)  / 'con1  ' /, ncbarr(  8)  / 51 /
-  data  cblser(  8)  / 'c0b008' /, jbltyp(  8)  / 0 /
+  data  cblser(  8)  / 'c0b008' /, jbltyp(  8)  / 3 /
   data  cblock(  9)  / 'iskip ' /, ncbarr(  9)  / 13 /
-  data  cblser(  9)  / 'c0b009' /, jbltyp(  9)  / 0 /
+  data  cblser(  9)  / 'c0b009' /, jbltyp(  9)  / 6 /
   data  cblock( 10)  / 'zinf  ' /, ncbarr( 10)  / 13 /
-  data  cblser( 10)  / 'c0b010' /, jbltyp( 10)  / 0 /
+  data  cblser( 10)  / 'c0b010' /, jbltyp( 10)  / 3 /
   data  cblock( 11)  / 'eta   ' /, ncbarr( 11)  / 13 /
-  data  cblser( 11)  / 'c0b011' /, jbltyp( 11)  / 0 /
+  data  cblser( 11)  / 'c0b011' /, jbltyp( 11)  / 3 /
   data  cblock( 12)  / 'nhist ' /, ncbarr( 12)  / 13 /
-  data  cblser( 12)  / 'c0b012' /, jbltyp( 12)  / 0 /
+  data  cblser( 12)  / 'c0b012' /, jbltyp( 12)  / 6 /
   data  cblock( 13)  / 'stailm' /, ncbarr( 13)  / 15 /
-  data  cblser( 13)  / 'c0b013' /, jbltyp( 13)  / 0 /
+  data  cblser( 13)  / 'c0b013' /, jbltyp( 13)  / 3 /
   data  cblock( 14)  / 'stailk' /, ncbarr( 14)  / 15 /
-  data  cblser( 14)  / 'c0b014' /, jbltyp( 14)  / 0 /
+  data  cblser( 14)  / 'c0b014' /, jbltyp( 14)  / 3 /
   data  cblock( 15)  / 'xmax  ' /, ncbarr( 15)  / 58 /
-  data  cblser( 15)  / 'c0b015' /, jbltyp( 15)  / 0 /
+  data  cblser( 15)  / 'c0b015' /, jbltyp( 15)  / 3 /
   data  cblock( 16)  / 'koutvp' /, ncbarr( 16)  / 62 /
-  data  cblser( 16)  / 'c0b016' /, jbltyp( 16)  / 0 /
+  data  cblser( 16)  / 'c0b016' /, jbltyp( 16)  / 6 /
   data  cblock( 17)  / 'bnrg  ' /, ncbarr( 17)  / 18 /
-  data  cblser( 17)  / 'c0b017' /, jbltyp( 17)  / 0 /
+  data  cblser( 17)  / 'c0b017' /, jbltyp( 17)  / 3 /
   data  cblock( 18)  / 'sconst' /, ncbarr( 18)  / 20 /
-  data  cblser( 18)  / 'c0b018' /, jbltyp( 18)  / 0 /
+  data  cblser( 18)  / 'c0b018' /, jbltyp( 18)  / 3 /
   data  cblock( 19)  / 'cnvhst' /, ncbarr( 19)  / 73 /
-  data  cblser( 19)  / 'c0b019' /, jbltyp( 19)  / 0 /
+  data  cblser( 19)  / 'c0b019' /, jbltyp( 19)  / 3 /
   data  cblock( 20)  / 'sfd   ' /, ncbarr( 20)  / 71 /
-  data  cblser( 20)  / 'c0b020' /, jbltyp( 20)  / 0 /
+  data  cblser( 20)  / 'c0b020' /, jbltyp( 20)  / 3 /
   data  cblock( 21)  / 'qfd   ' /, ncbarr( 21)  / 71 /
-  data  cblser( 21)  / 'c0b021' /, jbltyp( 21)  / 0 /
+  data  cblser( 21)  / 'c0b021' /, jbltyp( 21)  / 3 /
   data  cblock( 22)  / 'semaux' /, ncbarr( 22)  / 22 /
-  data  cblser( 22)  / 'c0b022' /, jbltyp( 22)  / 0 /
+  data  cblser( 22)  / 'c0b022' /, jbltyp( 22)  / 3 /
   data  cblock( 23)  / 'ibsout' /, ncbarr( 23)  / 12 /
-  data  cblser( 23)  / 'c0b023' /, jbltyp( 23)  / 0 /
+  data  cblser( 23)  / 'c0b023' /, jbltyp( 23)  / 6 /
   data  cblock( 24)  / 'bvalue' /, ncbarr( 24)  / 12 /
-  data  cblser( 24)  / 'c0b024' /, jbltyp( 24)  / 0 /
+  data  cblser( 24)  / 'c0b024' /, jbltyp( 24)  / 3 /
   data  cblock( 25)  / 'sptacs' /, ncbarr( 25)  / 19 /
-  data  cblser( 25)  / 'c0b025' /, jbltyp( 25)  / 0 /
-  data  cblock( 26)  / 'kswtyp' /, ncbarr( 26)  /  6 /
-  data  cblser( 26)  / 'c0b026' /, jbltyp( 26)  / 0 /
-  data  cblock( 27)  / 'modswt' /, ncbarr( 27)  /  6 /
-  data  cblser( 27)  / 'c0b027' /, jbltyp( 27)  / 0 /
-  data  cblock( 28)  / 'kbegsw' /, ncbarr( 28)  /  6 /
-  data  cblser( 28)  / 'c0b028' /, jbltyp( 28)  / 0 /
-  data  cblock( 29)  / 'lastsw' /, ncbarr( 29)  /  6 /
-  data  cblser( 29)  / 'c0b029' /, jbltyp( 29)  / 0 /
-  data  cblock( 30)  / 'kentnb' /, ncbarr( 30)  /  6 /
-  data  cblser( 30)  / 'c0b030' /, jbltyp( 30)  / 0 /
+  data  cblser( 25)  / 'c0b025' /, jbltyp( 25)  / 3 /
+  data  cblock( 26)  / 'kswtyp' /, ncbarr( 26)  / 6 /
+  data  cblser( 26)  / 'c0b026' /, jbltyp( 26)  / 6 /
+  data  cblock( 27)  / 'modswt' /, ncbarr( 27)  / 6 /
+  data  cblser( 27)  / 'c0b027' /, jbltyp( 27)  / 6 /
+  data  cblock( 28)  / 'kbegsw' /, ncbarr( 28)  / 6 /
+  data  cblser( 28)  / 'c0b028' /, jbltyp( 28)  / 6 /
+  data  cblock( 29)  / 'lastsw' /, ncbarr( 29)  / 6 /
+  data  cblser( 29)  / 'c0b029' /, jbltyp( 29)  / 6 /
+  data  cblock( 30)  / 'kentnb' /, ncbarr( 30)  / 6 /
+  data  cblser( 30)  / 'c0b030' /, jbltyp( 30)  / 6 /
   data  cblock( 31)  / 'nbhdsw' /, ncbarr( 31)  / 63 /
-  data  cblser( 31)  / 'c0b031' /, jbltyp( 31)  / 0 /
+  data  cblser( 31)  / 'c0b031' /, jbltyp( 31)  / 6 /
   data  cblock( 32)  / 'topen ' /, ncbarr( 32)  / 60 /
-  data  cblser( 32)  / 'c0b032' /, jbltyp( 32)  / 0 /
-  data  cblock( 33)  / 'crit  ' /, ncbarr( 33)  /  6 /
-  data  cblser( 33)  / 'c0b033' /, jbltyp( 33)  / 0 /
+  data  cblser( 32)  / 'c0b032' /, jbltyp( 32)  / 3 /
+  data  cblock( 33)  / 'crit  ' /, ncbarr( 33)  / 6 /
+  data  cblser( 33)  / 'c0b033' /, jbltyp( 33)  / 3 /
   data  cblock( 34)  / 'kdepsw' /, ncbarr( 34)  / 60 /
-  data  cblser( 34)  / 'c0b034' /, jbltyp( 34)  / 0 /
-  data  cblock( 35)  / 'tdns  ' /, ncbarr( 35)  /  6 /
-  data  cblser( 35)  / 'c0b035' /, jbltyp( 35)  / 0 /
-  data  cblock( 36)  / 'isourc' /, ncbarr( 36)  /  6 /
-  data  cblser( 36)  / 'c0b036' /, jbltyp( 36)  / 0 /
-  data  cblock( 37)  / 'energy' /, ncbarr( 37)  /  6 /
-  data  cblser( 37)  / 'c0b037' /, jbltyp( 37)  / 0 /
+  data  cblser( 34)  / 'c0b034' /, jbltyp( 34)  / 6 /
+  data  cblock( 35)  / 'tdns  ' /, ncbarr( 35)  / 6 /
+  data  cblser( 35)  / 'c0b035' /, jbltyp( 35)  / 3 /
+  data  cblock( 36)  / 'isourc' /, ncbarr( 36)  / 6 /
+  data  cblser( 36)  / 'c0b036' /, jbltyp( 36)  / 6 /
+  data  cblock( 37)  / 'energy' /, ncbarr( 37)  / 6 /
+  data  cblser( 37)  / 'c0b037' /, jbltyp( 37)  / 3 /
   data  cblock( 38)  / 'iardub' /, ncbarr( 38)  / 63 /
-  data  cblser( 38)  / 'c0b038' /, jbltyp( 38)  / 0 /
+  data  cblser( 38)  / 'c0b038' /, jbltyp( 38)  / 6 /
   data  cblock( 39)  / 'ardube' /, ncbarr( 39)  / 64 /
-  data  cblser( 39)  / 'c0b039' /, jbltyp( 39)  / 0 /
-  data  cblock( 40)  / 'nonlad' /, ncbarr( 40)  /  9 /
-  data  cblser( 40)  / 'c0b040' /, jbltyp( 40)  / 0 /
-  data  cblock( 41)  / 'nonle ' /, ncbarr( 41)  /  9 /
-  data  cblser( 41)  / 'c0b041' /, jbltyp( 41)  / 0 /
-  data  cblock( 42)  / 'vnonl ' /, ncbarr( 42)  /  9 /
-  data  cblser( 42)  / 'c0b042' /, jbltyp( 42)  / 0 /
-  data  cblock( 43)  / 'curr  ' /, ncbarr( 43)  /  9 /
-  data  cblser( 43)  / 'c0b043' /, jbltyp( 43)  / 0 /
-  data  cblock( 44)  / 'anonl ' /, ncbarr( 44)  /  9 /
-  data  cblser( 44)  / 'c0b044' /, jbltyp( 44)  / 0 /
-  data  cblock( 45)  / 'vecnl1' /, ncbarr( 45)  /  9 /
-  data  cblser( 45)  / 'c0b045' /, jbltyp( 45)  / 0 /
-  data  cblock( 46)  / 'vecnl2' /, ncbarr( 46)  /  9 /
-  data  cblser( 46)  / 'c0b046' /, jbltyp( 46)  / 0 /
-  data  cblock( 47)  / 'namenl' /, ncbarr( 47)  /  9 /
-  data  cblser( 47)  / 'c0b047' /, jbltyp( 47)  / 0 /
-  data  cblock( 48)  / 'vzero ' /, ncbarr( 48)  /  9 /
-  data  cblser( 48)  / 'c0b048' /, jbltyp( 48)  / 0 /
-  data  cblock( 49)  / 'ilast ' /, ncbarr( 49)  /  9 /
-  data  cblser( 49)  / 'c0b049' /, jbltyp( 49)  / 0 /
-  data  cblock( 50)  / 'nltype' /, ncbarr( 50)  /  9 /
-  data  cblser( 50)  / 'c0b050' /, jbltyp( 50)  / 0 /
-  data  cblock( 51)  / 'kupl  ' /, ncbarr( 51)  /  9 /
-  data  cblser( 51)  / 'c0b051' /, jbltyp( 51)  / 0 /
-  data  cblock( 52)  / 'nlsub ' /, ncbarr( 52)  /  9 /
-  data  cblser( 52)  / 'c0b052' /, jbltyp( 52)  / 0 /
-  data  cblock( 53)  / 'xoptbr' /, ncbarr( 53)  /  2 /
-  data  cblser( 53)  / 'c0b053' /, jbltyp( 53)  / 0 /
-  data  cblock( 54)  / 'coptbr' /, ncbarr( 54)  /  2 /
-  data  cblser( 54)  / 'c0b054' /, jbltyp( 54)  / 0 /
+  data  cblser( 39)  / 'c0b039' /, jbltyp( 39)  / 3 /
+  data  cblock( 40)  / 'nonlad' /, ncbarr( 40)  / 9 /
+  data  cblser( 40)  / 'c0b040' /, jbltyp( 40)  / 6 /
+  data  cblock( 41)  / 'nonle ' /, ncbarr( 41)  / 9 /
+  data  cblser( 41)  / 'c0b041' /, jbltyp( 41)  / 6 /
+  data  cblock( 42)  / 'vnonl ' /, ncbarr( 42)  / 9 /
+  data  cblser( 42)  / 'c0b042' /, jbltyp( 42)  / 3 /
+  data  cblock( 43)  / 'curr  ' /, ncbarr( 43)  / 9 /
+  data  cblser( 43)  / 'c0b043' /, jbltyp( 43)  / 3 /
+  data  cblock( 44)  / 'anonl ' /, ncbarr( 44)  / 9 /
+  data  cblser( 44)  / 'c0b044' /, jbltyp( 44)  / 3 /
+  data  cblock( 45)  / 'vecnl1' /, ncbarr( 45)  / 9 /
+  data  cblser( 45)  / 'c0b045' /, jbltyp( 45)  / 3 /
+  data  cblock( 46)  / 'vecnl2' /, ncbarr( 46)  / 9 /
+  data  cblser( 46)  / 'c0b046' /, jbltyp( 46)  / 3 /
+  data  cblock( 47)  / 'namenl' /, ncbarr( 47)  / 9 /
+  data  cblser( 47)  / 'c0b047' /, jbltyp( 47)  / 6 /
+  data  cblock( 48)  / 'vzero ' /, ncbarr( 48)  / 9 /
+  data  cblser( 48)  / 'c0b048' /, jbltyp( 48)  / 3 /
+  data  cblock( 49)  / 'ilast ' /, ncbarr( 49)  / 9 /
+  data  cblser( 49)  / 'c0b049' /, jbltyp( 49)  / 6 /
+  data  cblock( 50)  / 'nltype' /, ncbarr( 50)  / 9 /
+  data  cblser( 50)  / 'c0b050' /, jbltyp( 50)  / 6 /
+  data  cblock( 51)  / 'kupl  ' /, ncbarr( 51)  / 9 /
+  data  cblser( 51)  / 'c0b051' /, jbltyp( 51)  / 6 /
+  data  cblock( 52)  / 'nlsub ' /, ncbarr( 52)  / 9 /
+  data  cblser( 52)  / 'c0b052' /, jbltyp( 52)  / 6 /
+  data  cblock( 53)  / 'xoptbr' /, ncbarr( 53)  / 2 /
+  data  cblser( 53)  / 'c0b053' /, jbltyp( 53)  / 3 /
+  data  cblock( 54)  / 'coptbr' /, ncbarr( 54)  / 2 /
+  data  cblser( 54)  / 'c0b054' /, jbltyp( 54)  / 3 /
   data  cblock( 55)  / 'cursub' /, ncbarr( 55)  / 53 /
-  data  cblser( 55)  / 'c0b055' /, jbltyp( 55)  / 0 /
+  data  cblser( 55)  / 'c0b055' /, jbltyp( 55)  / 3 /
   data  cblock( 56)  / 'cchar ' /, ncbarr( 56)  / 10 /
-  data  cblser( 56)  / 'c0b056' /, jbltyp( 56)  / 0 /
+  data  cblser( 56)  / 'c0b056' /, jbltyp( 56)  / 6 /
   data  cblock( 57)  / 'vchar ' /, ncbarr( 57)  / 10 /
-  data  cblser( 57)  / 'c0b057' /, jbltyp( 57)  / 0 /
+  data  cblser( 57)  / 'c0b057' /, jbltyp( 57)  / 3 /
   data  cblock( 58)  / 'gslope' /, ncbarr( 58)  / 10 /
-  data  cblser( 58)  / 'c0b058' /, jbltyp( 58)  / 0 /
-  data  cblock( 59)  / 'ktrans' /, ncbarr( 59)  /  1 /
-  data  cblser( 59)  / 'c0b059' /, jbltyp( 59)  / 0 /
-  data  cblock( 60)  / 'kk    ' /, ncbarr( 60)  /  1 /
-  data  cblser( 60)  / 'c0b060' /, jbltyp( 60)  / 0 /
-  data  cblock( 61)  / 'emtpc ' /, ncbarr( 61)  /  3 /
-  data  cblser( 61)  / 'c0b061' /, jbltyp( 61)  / 0 /
-  data  cblock( 62)  / 'tr    ' /, ncbarr( 62)  /  5 /
-  data  cblser( 62)  / 'c0b062' /, jbltyp( 62)  / 0 /
-  data  cblock( 63)  / 'tx    ' /, ncbarr( 63)  /  5 /
-  data  cblser( 63)  / 'c0b063' /, jbltyp( 63)  / 0 /
-  data  cblock( 64)  / 'r     ' /, ncbarr( 64)  /  3 /
-  data  cblser( 64)  / 'c0b064' /, jbltyp( 64)  / 0 /
-  data  cblock( 65)  / 'nr    ' /, ncbarr( 65)  /  2 /
-  data  cblser( 65)  / 'c0b065' /, jbltyp( 65)  / 0 /
-  data  cblock( 66)  / 'length' /, ncbarr( 66)  /  2 /
-  data  cblser( 66)  / 'c0b066' /, jbltyp( 66)  / 0 /
-  data  cblock( 67)  / 'cik   ' /, ncbarr( 67)  /  2 /
-  data  cblser( 67)  / 'c0b067' /, jbltyp( 67)  / 0 /
-  data  cblock( 68)  / 'ci    ' /, ncbarr( 68)  /  2 /
-  data  cblser( 68)  / 'c0b068' /, jbltyp( 68)  / 0 /
-  data  cblock( 69)  / 'ck    ' /, ncbarr( 69)  /  2 /
-  data  cblser( 69)  / 'c0b069' /, jbltyp( 69)  / 0 /
+  data  cblser( 58)  / 'c0b058' /, jbltyp( 58)  / 3 /
+  data  cblock( 59)  / 'ktrans' /, ncbarr( 59)  / 1 /
+  data  cblser( 59)  / 'c0b059' /, jbltyp( 59)  / 6 /
+  data  cblock( 60)  / 'kk    ' /, ncbarr( 60)  / 1 /
+  data  cblser( 60)  / 'c0b060' /, jbltyp( 60)  / 6 /
+  data  cblock( 61)  / 'emtpc ' /, ncbarr( 61)  / 3 /
+  data  cblser( 61)  / 'c0b061' /, jbltyp( 61)  / 3 /
+  data  cblock( 62)  / 'tr    ' /, ncbarr( 62)  / 5 /
+  data  cblser( 62)  / 'c0b062' /, jbltyp( 62)  / 1 /
+  data  cblock( 63)  / 'tx    ' /, ncbarr( 63)  / 5 /
+  data  cblser( 63)  / 'c0b063' /, jbltyp( 63)  / 3 /
+  data  cblock( 64)  / 'r     ' /, ncbarr( 64)  / 3 /
+  data  cblser( 64)  / 'c0b064' /, jbltyp( 64)  / 3 /
+  data  cblock( 65)  / 'nr    ' /, ncbarr( 65)  / 2 /
+  data  cblser( 65)  / 'c0b065' /, jbltyp( 65)  / 6 /
+  data  cblock( 66)  / 'length' /, ncbarr( 66)  / 2 /
+  data  cblser( 66)  / 'c0b066' /, jbltyp( 66)  / 6 /
+  data  cblock( 67)  / 'cik   ' /, ncbarr( 67)  / 2 /
+  data  cblser( 67)  / 'c0b067' /, jbltyp( 67)  / 3 /
+  data  cblock( 68)  / 'ci    ' /, ncbarr( 68)  / 2 /
+  data  cblser( 68)  / 'c0b068' /, jbltyp( 68)  / 3 /
+  data  cblock( 69)  / 'ck    ' /, ncbarr( 69)  / 2 /
+  data  cblser( 69)  / 'c0b069' /, jbltyp( 69)  / 3 /
   data  cblock( 70)  / 'ismout' /, ncbarr( 70)  / 70 /
-  data  cblser( 70)  / 'c0b070' /, jbltyp( 70)  / 0 /
+  data  cblser( 70)  / 'c0b070' /, jbltyp( 70)  / 6 /
   data  cblock( 71)  / 'elp   ' /, ncbarr( 71)  / 65 /
-  data  cblser( 71)  / 'c0b071' /, jbltyp( 71)  / 0 /
+  data  cblser( 71)  / 'c0b071' /, jbltyp( 71)  / 3 /
   data  cblock( 72)  / 'cu    ' /, ncbarr( 72)  / 66 /
-  data  cblser( 72)  / 'c0b072' /, jbltyp( 72)  / 0 /
+  data  cblser( 72)  / 'c0b072' /, jbltyp( 72)  / 3 /
   data  cblock( 73)  / 'shp   ' /, ncbarr( 73)  / 67 /
-  data  cblser( 73)  / 'c0b073' /, jbltyp( 73)  / 0 /
+  data  cblser( 73)  / 'c0b073' /, jbltyp( 73)  / 3 /
   data  cblock( 74)  / 'histq ' /, ncbarr( 74)  / 68 /
-  data  cblser( 74)  / 'c0b074' /, jbltyp( 74)  / 0 /
+  data  cblser( 74)  / 'c0b074' /, jbltyp( 74)  / 3 /
   data  cblock( 75)  / 'ismdat' /, ncbarr( 75)  / 69 /
-  data  cblser( 75)  / 'c0b075' /, jbltyp( 75)  / 0 /
-  data  cblock( 76)  / 'texvec' /, ncbarr( 76)  /  7 /
+  data  cblser( 75)  / 'c0b075' /, jbltyp( 75)  / 6 /
+  data  cblock( 76)  / 'texvec' /, ncbarr( 76)  / 7 /
   data  cblser( 76)  / 'c0b076' /, jbltyp( 76)  / 5 /
   data  cblock( 77)  / 'ibrnch' /, ncbarr( 77)  / 12 /
-  data  cblser( 77)  / 'c0b077' /, jbltyp( 77)  / 0 /
+  data  cblser( 77)  / 'c0b077' /, jbltyp( 77)  / 6 /
   data  cblock( 78)  / 'jbrnch' /, ncbarr( 78)  / 12 /
-  data  cblser( 78)  / 'c0b078' /, jbltyp( 78)  / 0 /
-  data  cblock( 79)  / 'tstop ' /, ncbarr( 79)  /  4 /
-  data  cblser( 79)  / 'c0b079' /, jbltyp( 79)  / 0 /
-  data  cblock( 80)  / 'nonlk ' /, ncbarr( 80)  /  9 /
-  data  cblser( 80)  / 'c0b080' /, jbltyp( 80)  / 0 /
-  data  cblock( 81)  / 'nonlm ' /, ncbarr( 81)  /  9 /
-  data  cblser( 81)  / 'c0b081' /, jbltyp( 81)  / 0 /
+  data  cblser( 78)  / 'c0b078' /, jbltyp( 78)  / 6 /
+  data  cblock( 79)  / 'tstop ' /, ncbarr( 79)  / 4 /
+  data  cblser( 79)  / 'c0b079' /, jbltyp( 79)  / 3 /
+  data  cblock( 80)  / 'nonlk ' /, ncbarr( 80)  / 9 /
+  data  cblser( 80)  / 'c0b080' /, jbltyp( 80)  / 6 /
+  data  cblock( 81)  / 'nonlm ' /, ncbarr( 81)  / 9 /
+  data  cblser( 81)  / 'c0b081' /, jbltyp( 81)  / 6 /
   data  cblock( 82)  / 'spum  ' /, ncbarr( 82)  / 25 /
-  data  cblser( 82)  / 'c0b082' /, jbltyp( 82)  / 0 /
-  data  cblock( 83)  / 'kks   ' /, ncbarr( 83)  /  1 /
-  data  cblser( 83)  / 'c0b083' /, jbltyp( 83)  / 0 /
+  data  cblser( 82)  / 'c0b082' /, jbltyp( 82)  / 3 /
+  data  cblock( 83)  / 'kks   ' /, ncbarr( 83)  / 1 /
+  data  cblser( 83)  / 'c0b083' /, jbltyp( 83)  / 6 /
   data  cblock( 84)  / 'kknonl' /, ncbarr( 84)  / 57 /
-  data  cblser( 84)  / 'c0b084' /, jbltyp( 84)  / 0 /
+  data  cblser( 84)  / 'c0b084' /, jbltyp( 84)  / 6 /
   data  cblock( 85)  / 'znonl ' /, ncbarr( 85)  / 57 /
-  data  cblser( 85)  / 'c0b085' /, jbltyp( 85)  / 0 /
-  data  cblock( 86)  / 'znonlb' /, ncbarr( 86)  /  1 /
-  data  cblser( 86)  / 'c0b086' /, jbltyp( 86)  / 0 /
-  data  cblock( 87)  / 'znonlc' /, ncbarr( 87)  /  1 /
-  data  cblser( 87)  / 'c0b087' /, jbltyp( 87)  / 0 /
-  data  cblock( 88)  / 'finit ' /, ncbarr( 88)  /  1 /
-  data  cblser( 88)  / 'c0b088' /, jbltyp( 88)  / 0 /
+  data  cblser( 85)  / 'c0b085' /, jbltyp( 85)  / 3 /
+  data  cblock( 86)  / 'znonlb' /, ncbarr( 86)  / 1 /
+  data  cblser( 86)  / 'c0b086' /, jbltyp( 86)  / 3 /
+  data  cblock( 87)  / 'znonlc' /, ncbarr( 87)  / 1 /
+  data  cblser( 87)  / 'c0b087' /, jbltyp( 87)  / 3 /
+  data  cblock( 88)  / 'finit ' /, ncbarr( 88)  / 1 /
+  data  cblser( 88)  / 'c0b088' /, jbltyp( 88)  / 3 /
   data  cblock( 89)  / 'ksub  ' /, ncbarr( 89)  / 53 /
-  data  cblser( 89)  / 'c0b089' /, jbltyp( 89)  / 0 /
+  data  cblser( 89)  / 'c0b089' /, jbltyp( 89)  / 6 /
   data  cblock( 90)  / 'msub  ' /, ncbarr( 90)  / 53 /
-  data  cblser( 90)  / 'c0b090' /, jbltyp( 90)  / 0 /
+  data  cblser( 90)  / 'c0b090' /, jbltyp( 90)  / 6 /
   data  cblock( 91)  / 'isubeg' /, ncbarr( 91)  / 55 /
-  data  cblser( 91)  / 'c0b091' /, jbltyp( 91)  / 0 /
-  data  cblock( 92)  / 'litype' /, ncbarr( 92)  /  2 /
-  data  cblser( 92)  / 'c0b092' /, jbltyp( 92)  / 0 /
-  data  cblock( 93)  / 'imodel' /, ncbarr( 93)  /  2 /
-  data  cblser( 93)  / 'c0b093' /, jbltyp( 93)  / 0 /
-  data  cblock( 94)  / 'kbus  ' /, ncbarr( 94)  /  2 /
-  data  cblser( 94)  / 'c0b094' /, jbltyp( 94)  / 0 /
-  data  cblock( 95)  / 'mbus  ' /, ncbarr( 95)  /  2 /
-  data  cblser( 95)  / 'c0b095' /, jbltyp( 95)  / 0 /
-  data  cblock( 96)  / 'kodebr' /, ncbarr( 96)  /  2 /
-  data  cblser( 96)  / 'c0b096' /, jbltyp( 96)  / 0 /
-  data  cblock( 97)  / 'cki   ' /, ncbarr( 97)  /  2 /
-  data  cblser( 97)  / 'c0b097' /, jbltyp( 97)  / 0 /
-  data  cblock( 98)  / 'ckkjm ' /, ncbarr( 98)  /  2 /
-  data  cblser( 98)  / 'c0b098' /, jbltyp( 98)  / 0 /
-  data  cblock( 99)  / 'indhst' /, ncbarr( 99)  /  2 /
-  data  cblser( 99)  / 'c0b099' /, jbltyp( 99)  / 0 /
-  data  cblock(100)  / 'kodsem' /, ncbarr(100)  /  2 /
-  data  cblser(100)  / 'c0b100' /, jbltyp(100)  / 0 /
+  data  cblser( 91)  / 'c0b091' /, jbltyp( 91)  / 6 /
+  data  cblock( 92)  / 'litype' /, ncbarr( 92)  / 2 /
+  data  cblser( 92)  / 'c0b092' /, jbltyp( 92)  / 6 /
+  data  cblock( 93)  / 'imodel' /, ncbarr( 93)  / 2 /
+  data  cblser( 93)  / 'c0b093' /, jbltyp( 93)  / 6 /
+  data  cblock( 94)  / 'kbus  ' /, ncbarr( 94)  / 2 /
+  data  cblser( 94)  / 'c0b094' /, jbltyp( 94)  / 6 /
+  data  cblock( 95)  / 'mbus  ' /, ncbarr( 95)  / 2 /
+  data  cblser( 95)  / 'c0b095' /, jbltyp( 95)  / 6 /
+  data  cblock( 96)  / 'kodebr' /, ncbarr( 96)  / 2 /
+  data  cblser( 96)  / 'c0b096' /, jbltyp( 96)  / 6 /
+  data  cblock( 97)  / 'cki   ' /, ncbarr( 97)  / 2 /
+  data  cblser( 97)  / 'c0b097' /, jbltyp( 97)  / 3 /
+  data  cblock( 98)  / 'ckkjm ' /, ncbarr( 98)  / 2 /
+  data  cblser( 98)  / 'c0b098' /, jbltyp( 98)  / 3 /
+  data  cblock( 99)  / 'indhst' /, ncbarr( 99)  / 2 /
+  data  cblser( 99)  / 'c0b099' /, jbltyp( 99)  / 6 /
+  data  cblock(100)  / 'kodsem' /, ncbarr(100)  / 2 /
+  data  cblser(100)  / 'c0b100' /, jbltyp(100)  / 6 /
   data  cblock(101)  / 'namebr' /, ncbarr(101)  / 54 /
-  data  cblser(101)  / 'c0b101' /, jbltyp(101)  / 0 /
-  data  cblock(102)  / 'iform ' /, ncbarr(102)  /  4 /
-  data  cblser(102)  / 'c0b102' /, jbltyp(102)  / 0 /
-  data  cblock(103)  / 'node  ' /, ncbarr(103)  /  4 /
-  data  cblser(103)  / 'c0b103' /, jbltyp(103)  / 0 /
-  data  cblock(104)  / 'crest ' /, ncbarr(104)  /  4 /
-  data  cblser(104)  / 'c0b104' /, jbltyp(104)  / 0 /
-  data  cblock(105)  / 'time1 ' /, ncbarr(105)  /  4 /
-  data  cblser(105)  / 'c0b105' /, jbltyp(105)  / 0 /
-  data  cblock(106)  / 'time2 ' /, ncbarr(106)  /  4 /
-  data  cblser(106)  / 'c0b106' /, jbltyp(106)  / 0 /
-  data  cblock(107)  / 'tstart' /, ncbarr(107)  /  4 /
-  data  cblser(107)  / 'c0b107' /, jbltyp(107)  / 0 /
-  data  cblock(108)  / 'sfreq ' /, ncbarr(108)  /  4 /
-  data  cblser(108)  / 'c0b108' /, jbltyp(108)  / 0 /
+  data  cblser(101)  / 'c0b101' /, jbltyp(101)  / 6 /
+  data  cblock(102)  / 'iform ' /, ncbarr(102)  / 4 /
+  data  cblser(102)  / 'c0b102' /, jbltyp(102)  / 6 /
+  data  cblock(103)  / 'node  ' /, ncbarr(103)  / 4 /
+  data  cblser(103)  / 'c0b103' /, jbltyp(103)  / 6 /
+  data  cblock(104)  / 'crest ' /, ncbarr(104)  / 4 /
+  data  cblser(104)  / 'c0b104' /, jbltyp(104)  / 3 /
+  data  cblock(105)  / 'time1 ' /, ncbarr(105)  / 4 /
+  data  cblser(105)  / 'c0b105' /, jbltyp(105)  / 3 /
+  data  cblock(106)  / 'time2 ' /, ncbarr(106)  / 4 /
+  data  cblser(106)  / 'c0b106' /, jbltyp(106)  / 3 /
+  data  cblock(107)  / 'tstart' /, ncbarr(107)  / 4 /
+  data  cblser(107)  / 'c0b107' /, jbltyp(107)  / 3 /
+  data  cblock(108)  / 'sfreq ' /, ncbarr(108)  / 4 /
+  data  cblser(108)  / 'c0b108' /, jbltyp(108)  / 3 /
   data  cblock(109)  / 'kmswit' /, ncbarr(109)  / 60 /
-  data  cblser(109)  / 'c0b109' /, jbltyp(109)  / 0 /
-  data  cblock(110)  / 'nextsw' /, ncbarr(110)  /  6 /
-  data  cblser(110)  / 'c0b110' /, jbltyp(110)  / 0 /
+  data  cblser(109)  / 'c0b109' /, jbltyp(109)  / 6 /
+  data  cblock(110)  / 'nextsw' /, ncbarr(110)  / 6 /
+  data  cblser(110)  / 'c0b110' /, jbltyp(110)  / 6 /
   data  cblock(111)  / 'rmfd  ' /, ncbarr(111)  / 61 /
-  data  cblser(111)  / 'c0b111' /, jbltyp(111)  / 0 /
+  data  cblser(111)  / 'c0b111' /, jbltyp(111)  / 3 /
   data  cblock(112)  / 'cikfd ' /, ncbarr(112)  / 61 /
-  data  cblser(112)  / 'c0b112' /, jbltyp(112)  / 0 /
+  data  cblser(112)  / 'c0b112' /, jbltyp(112)  / 3 /
   data  cblock(113)  / 'imfd  ' /, ncbarr(113)  / 27 /
-  data  cblser(113)  / 'c0b113' /, jbltyp(113)  / 0 /
-  data  cblock(114)  / 'tclose' /, ncbarr(114)  /  6 /
-  data  cblser(114)  / 'c0b114' /, jbltyp(114)  / 0 /
+  data  cblser(113)  / 'c0b113' /, jbltyp(113)  / 6 /
+  data  cblock(114)  / 'tclose' /, ncbarr(114)  / 6 /
+  data  cblser(114)  / 'c0b114' /, jbltyp(114)  / 3 /
   data  cblock(115)  / 'adelay' /, ncbarr(115)  / 60 /
-  data  cblser(115)  / 'c0b115' /, jbltyp(115)  / 0 /
-  data  cblock(116)  / 'kpos  ' /, ncbarr(116)  /  6 /
-  data  cblser(116)  / 'c0b116' /, jbltyp(116)  / 0 /
-  data  cblock(117)  / 'namesw' /, ncbarr(117)  /  6 /
-  data  cblser(117)  / 'c0b117' /, jbltyp(117)  / 0 /
-  data  cblock(118)  / 'emtpe ' /, ncbarr(118)  /  1 /
-  data  cblser(118)  / 'c0b118' /, jbltyp(118)  / 0 /
-  data  cblock(119)  / 'emtpf ' /, ncbarr(119)  /  1 /
-  data  cblser(119)  / 'c0b119' /, jbltyp(119)  / 0 /
-  data  cblock(120)  / 'kssfrq' /, ncbarr(120)  /  1 /
-  data  cblser(120)  / 'c0b120' /, jbltyp(120)  / 0 /
-  data  cblock(121)  / 'kode  ' /, ncbarr(121)  /  1 /
-  data  cblser(121)  / 'c0b121' /, jbltyp(121)  / 0 /
-  data  cblock(122)  / 'kpsour' /, ncbarr(122)  /  1 /
-  data  cblser(122)  / 'c0b122' /, jbltyp(122)  / 0 /
+  data  cblser(115)  / 'c0b115' /, jbltyp(115)  / 3 /
+  data  cblock(116)  / 'kpos  ' /, ncbarr(116)  / 6 /
+  data  cblser(116)  / 'c0b116' /, jbltyp(116)  / 6 /
+  data  cblock(117)  / 'namesw' /, ncbarr(117)  / 6 /
+  data  cblser(117)  / 'c0b117' /, jbltyp(117)  / 6 /
+  data  cblock(118)  / 'emtpe ' /, ncbarr(118)  / 1 /
+  data  cblser(118)  / 'c0b118' /, jbltyp(118)  / 3 /
+  data  cblock(119)  / 'emtpf ' /, ncbarr(119)  / 1 /
+  data  cblser(119)  / 'c0b119' /, jbltyp(119)  / 3 /
+  data  cblock(120)  / 'kssfrq' /, ncbarr(120)  / 1 /
+  data  cblser(120)  / 'c0b120' /, jbltyp(120)  / 6 /
+  data  cblock(121)  / 'kode  ' /, ncbarr(121)  / 1 /
+  data  cblser(121)  / 'c0b121' /, jbltyp(121)  / 6 /
+  data  cblock(122)  / 'kpsour' /, ncbarr(122)  / 1 /
+  data  cblser(122)  / 'c0b122' /, jbltyp(122)  / 6 /
   data  cblock(123)  / 'volti ' /, ncbarr(123)  / 59 /
-  data  cblser(123)  / 'c0b123' /, jbltyp(123)  / 0 /
+  data  cblser(123)  / 'c0b123' /, jbltyp(123)  / 3 /
   data  cblock(124)  / 'voltk ' /, ncbarr(124)  / 26 /
-  data  cblser(124)  / 'c0b124' /, jbltyp(124)  / 0 /
+  data  cblser(124)  / 'c0b124' /, jbltyp(124)  / 3 /
   data  cblock(125)  / 'volt  ' /, ncbarr(125)  / 59 /
-  data  cblser(125)  / 'c0b125' /, jbltyp(125)  / 0 /
-  data  cblock(126)  / 'bus   ' /, ncbarr(126)  /  1 /
+  data  cblser(125)  / 'c0b125' /, jbltyp(125)  / 3 /
+  data  cblock(126)  / 'bus   ' /, ncbarr(126)  / 1 /
   data  cblser(126)  / 'c0b126' /, jbltyp(126)  / 5 /
-  data  cblock(127)  / 'karray' /, ncbarr(127)  /  0 /
-  data  cblser(127)  / 'c29b01' /, jbltyp(127)  / 0 /
+  data  cblock(127)  / 'karray' /, ncbarr(127)  / 0 /
+  data  cblser(127)  / 'c29b01' /, jbltyp(127)  / 6 /
   data  cblock(128)  / 'tp    ' /, ncbarr(128)  / 23 /
-  data  cblser(128)  / 'spac01' /, jbltyp(128)  / 0 /
-  data  cblock(129)  / 'norder' /, ncbarr(129)  /  1 /
-  data  cblser(129)  / 'spac02' /, jbltyp(129)  / 0 /
-  data  cblock(130)  / 'index ' /, ncbarr(130)  /  1 /
-  data  cblser(130)  / 'spac03' /, jbltyp(130)  / 0 /
-  data  cblock(131)  / 'diag  ' /, ncbarr(131)  /  1 /
-  data  cblser(131)  / 'spac04' /, jbltyp(131)  / 0 /
-  data  cblock(132)  / 'diab  ' /, ncbarr(132)  /  1 /
-  data  cblser(132)  / 'spac05' /, jbltyp(132)  / 0 /
-  data  cblock(133)  / 'solr  ' /, ncbarr(133)  /  1 /
-  data  cblser(133)  / 'spac06' /, jbltyp(133)  / 0 /
-  data  cblock(134)  / 'soli  ' /, ncbarr(134)  /  1 /
-  data  cblser(134)  / 'spac07' /, jbltyp(134)  / 0 /
-  data  cblock(135)  / 'ich1  ' /, ncbarr(135)  /  1 /
-  data  cblser(135)  / 'spac08' /, jbltyp(135)  / 0 /
-  data  cblock(136)  / 'bnd   ' /, ncbarr(136)  /  9 /
-  data  cblser(136)  / 'spac09' /, jbltyp(136)  / 0 /
+  data  cblser(128)  / 'spac01' /, jbltyp(128)  / 3 /
+  data  cblock(129)  / 'norder' /, ncbarr(129)  / 1 /
+  data  cblser(129)  / 'spac02' /, jbltyp(129)  / 6 /
+  data  cblock(130)  / 'index ' /, ncbarr(130)  / 1 /
+  data  cblser(130)  / 'spac03' /, jbltyp(130)  / 6 /
+  data  cblock(131)  / 'diag  ' /, ncbarr(131)  / 1 /
+  data  cblser(131)  / 'spac04' /, jbltyp(131)  / 3 /
+  data  cblock(132)  / 'diab  ' /, ncbarr(132)  / 1 /
+  data  cblser(132)  / 'spac05' /, jbltyp(132)  / 3 /
+  data  cblock(133)  / 'solr  ' /, ncbarr(133)  / 1 /
+  data  cblser(133)  / 'spac06' /, jbltyp(133)  / 3 /
+  data  cblock(134)  / 'soli  ' /, ncbarr(134)  / 1 /
+  data  cblser(134)  / 'spac07' /, jbltyp(134)  / 3 /
+  data  cblock(135)  / 'ich1  ' /, ncbarr(135)  / 1 /
+  data  cblser(135)  / 'spac08' /, jbltyp(135)  / 6 /
+  data  cblock(136)  / 'bnd   ' /, ncbarr(136)  / 9 /
+  data  cblser(136)  / 'spac09' /, jbltyp(136)  / 3 /
   data  cblock(137)  / 'iloc  ' /, ncbarr(137)  / 23 /
-  data  cblser(137)  / 'spac10' /, jbltyp(137)  / 0 /
+  data  cblser(137)  / 'spac10' /, jbltyp(137)  / 6 /
   data  cblock(138)  / 'gnd   ' /, ncbarr(138)  / 23 /
-  data  cblser(138)  / 'spac11' /, jbltyp(138)  / 0 /
-  data  cblock(139)  / 'karray' /, ncbarr(139)  /  9 /
-  data  cblser(139)  / 'c31b01' /, jbltyp(139)  / 0 /
+  data  cblser(138)  / 'spac11' /, jbltyp(138)  / 3 /
+  data  cblock(139)  / 'karray' /, ncbarr(139)  / 9 /
+  data  cblser(139)  / 'c31b01' /, jbltyp(139)  / 6 /
   data  cblock(140)  / 'xdat  ' /, ncbarr(140)  / 71 /
-  data  cblser(140)  / 'c39b01' /, jbltyp(140)  / 0 /
+  data  cblser(140)  / 'c39b01' /, jbltyp(140)  / 3 /
   data  cblock(141)  / 'ydat  ' /, ncbarr(141)  / 71 /
-  data  cblser(141)  / 'c39b02' /, jbltyp(141)  / 0 /
+  data  cblser(141)  / 'c39b02' /, jbltyp(141)  / 3 /
   data  cblock(142)  / 'aphdat' /, ncbarr(142)  / 71 /
-  data  cblser(142)  / 'c39b03' /, jbltyp(142)  / 0 /
-  data  cblock(143)  / 'jndex ' /, ncbarr(143)  /  1 /
-  data  cblser(143)  / 'c10b01' /, jbltyp(143)  / 0 /
-  data  cblock(144)  / 'diagg ' /, ncbarr(144)  /  1 /
-  data  cblser(144)  / 'c10b02' /, jbltyp(144)  / 0 /
-  data  cblock(145)  / 'diabb ' /, ncbarr(145)  /  1 /
-  data  cblser(145)  / 'c10b03' /, jbltyp(145)  / 0 /
-  data  cblock(146)  / 'solrsv' /, ncbarr(146)  /  1 /
-  data  cblser(146)  / 'c10b04' /, jbltyp(146)  / 0 /
-  data  cblock(147)  / 'solisv' /, ncbarr(147)  /  1 /
-  data  cblser(147)  / 'c10b05' /, jbltyp(147)  / 0 /
+  data  cblser(142)  / 'c39b03' /, jbltyp(142)  / 3 /
+  data  cblock(143)  / 'jndex ' /, ncbarr(143)  / 1 /
+  data  cblser(143)  / 'c10b01' /, jbltyp(143)  / 6 /
+  data  cblock(144)  / 'diagg ' /, ncbarr(144)  / 1 /
+  data  cblser(144)  / 'c10b02' /, jbltyp(144)  / 3 /
+  data  cblock(145)  / 'diabb ' /, ncbarr(145)  / 1 /
+  data  cblser(145)  / 'c10b03' /, jbltyp(145)  / 3 /
+  data  cblock(146)  / 'solrsv' /, ncbarr(146)  / 1 /
+  data  cblser(146)  / 'c10b04' /, jbltyp(146)  / 3 /
+  data  cblock(147)  / 'solisv' /, ncbarr(147)  / 1 /
+  data  cblser(147)  / 'c10b05' /, jbltyp(147)  / 3 /
   data  cblock(148)  / 'gndd  ' /, ncbarr(148)  / 23 /
-  data  cblser(148)  / 'c10b06' /, jbltyp(148)  / 0 /
+  data  cblser(148)  / 'c10b06' /, jbltyp(148)  / 3 /
   data  cblock(149)  / 'bndd  ' /, ncbarr(149)  / 23 /
-  data  cblser(149)  / 'c10b07' /, jbltyp(149)  / 0 /
-  data  cblock(150)  / 'nekfix' /, ncbarr(150)  /  4 /
-  data  cblser(150)  / 'c10b08' /, jbltyp(150)  / 0 /
-  data  cblock(151)  / 'fxtem1' /, ncbarr(151)  /  4 /
-  data  cblser(151)  / 'c10b09' /, jbltyp(151)  / 0 /
-  data  cblock(152)  / 'fxtem2' /, ncbarr(152)  /  4 /
-  data  cblser(152)  / 'c10b10' /, jbltyp(152)  / 0 /
-  data  cblock(153)  / 'fxtem3' /, ncbarr(153)  /  4 /
-  data  cblser(153)  / 'c10b11' /, jbltyp(153)  / 0 /
-  data  cblock(154)  / 'fxtem4' /, ncbarr(154)  /  4 /
-  data  cblser(154)  / 'c10b12' /, jbltyp(154)  / 0 /
-  data  cblock(155)  / 'fxtem5' /, ncbarr(155)  /  4 /
-  data  cblser(155)  / 'c10b13' /, jbltyp(155)  / 0 /
-  data  cblock(156)  / 'fxtem6' /, ncbarr(156)  /  4 /
-  data  cblser(156)  / 'c10b14' /, jbltyp(156)  / 0 /
-  data  cblock(157)  / 'fixbu1' /, ncbarr(157)  /  4 /
-  data  cblser(157)  / 'c10b15' /, jbltyp(157)  / 0 /
-  data  cblock(158)  / 'fixbu2' /, ncbarr(158)  /  4 /
-  data  cblser(158)  / 'c10b16' /, jbltyp(158)  / 0 /
-  data  cblock(159)  / 'fixbu3' /, ncbarr(159)  /  4 /
-  data  cblser(159)  / 'c10b17' /, jbltyp(159)  / 0 /
-  data  cblock(160)  / 'fixbu4' /, ncbarr(160)  /  4 /
-  data  cblser(160)  / 'c10b18' /, jbltyp(160)  / 0 /
-  data  cblock(161)  / 'fixbu5' /, ncbarr(161)  /  4 /
-  data  cblser(161)  / 'c10b19' /, jbltyp(161)  / 0 /
-  data  cblock(162)  / 'fixbu6' /, ncbarr(162)  /  4 /
-  data  cblser(162)  / 'c10b20' /, jbltyp(162)  / 0 /
-  data  cblock(163)  / 'fixbu7' /, ncbarr(163)  /  4 /
-  data  cblser(163)  / 'c10b21' /, jbltyp(163)  / 0 /
-  data  cblock(164)  / 'fixbu8' /, ncbarr(164)  /  4 /
-  data  cblser(164)  / 'c10b22' /, jbltyp(164)  / 0 /
-  data  cblock(165)  / 'fixbu9' /, ncbarr(165)  /  4 /
-  data  cblser(165)  / 'c10b23' /, jbltyp(165)  / 0 /
-  data  cblock(166)  / 'fixb10' /, ncbarr(166)  /  4 /
-  data  cblser(166)  / 'c10b24' /, jbltyp(166)  / 0 /
-  data  cblock(167)  / 'fixb11' /, ncbarr(167)  /  4 /
-  data  cblser(167)  / 'c10b25' /, jbltyp(167)  / 0 /
-  data  cblock(168)  / 'kndex ' /, ncbarr(168)  /  4 /
-  data  cblser(168)  / 'c10b26' /, jbltyp(168)  / 0 /
-  data  cblock(169)  / 'karray' /, ncbarr(169)  /  9 /
-  data  cblser(169)  / 'c44b01' /, jbltyp(169)  / 0 /
+  data  cblser(149)  / 'c10b07' /, jbltyp(149)  / 3 /
+  data  cblock(150)  / 'nekfix' /, ncbarr(150)  / 4 /
+  data  cblser(150)  / 'c10b08' /, jbltyp(150)  / 6 /
+  data  cblock(151)  / 'fxtem1' /, ncbarr(151)  / 4 /
+  data  cblser(151)  / 'c10b09' /, jbltyp(151)  / 3 /
+  data  cblock(152)  / 'fxtem2' /, ncbarr(152)  / 4 /
+  data  cblser(152)  / 'c10b10' /, jbltyp(152)  / 3 /
+  data  cblock(153)  / 'fxtem3' /, ncbarr(153)  / 4 /
+  data  cblser(153)  / 'c10b11' /, jbltyp(153)  / 3 /
+  data  cblock(154)  / 'fxtem4' /, ncbarr(154)  / 4 /
+  data  cblser(154)  / 'c10b12' /, jbltyp(154)  / 3 /
+  data  cblock(155)  / 'fxtem5' /, ncbarr(155)  / 4 /
+  data  cblser(155)  / 'c10b13' /, jbltyp(155)  / 3 /
+  data  cblock(156)  / 'fxtem6' /, ncbarr(156)  / 4 /
+  data  cblser(156)  / 'c10b14' /, jbltyp(156)  / 3 /
+  data  cblock(157)  / 'fixbu1' /, ncbarr(157)  / 4 /
+  data  cblser(157)  / 'c10b15' /, jbltyp(157)  / 3 /
+  data  cblock(158)  / 'fixbu2' /, ncbarr(158)  / 4 /
+  data  cblser(158)  / 'c10b16' /, jbltyp(158)  / 3 /
+  data  cblock(159)  / 'fixbu3' /, ncbarr(159)  / 4 /
+  data  cblser(159)  / 'c10b17' /, jbltyp(159)  / 3 /
+  data  cblock(160)  / 'fixbu4' /, ncbarr(160)  / 4 /
+  data  cblser(160)  / 'c10b18' /, jbltyp(160)  / 3 /
+  data  cblock(161)  / 'fixbu5' /, ncbarr(161)  / 4 /
+  data  cblser(161)  / 'c10b19' /, jbltyp(161)  / 3 /
+  data  cblock(162)  / 'fixbu6' /, ncbarr(162)  / 4 /
+  data  cblser(162)  / 'c10b20' /, jbltyp(162)  / 3 /
+  data  cblock(163)  / 'fixbu7' /, ncbarr(163)  / 4 /
+  data  cblser(163)  / 'c10b21' /, jbltyp(163)  / 3 /
+  data  cblock(164)  / 'fixbu8' /, ncbarr(164)  / 4 /
+  data  cblser(164)  / 'c10b22' /, jbltyp(164)  / 3 /
+  data  cblock(165)  / 'fixbu9' /, ncbarr(165)  / 4 /
+  data  cblser(165)  / 'c10b23' /, jbltyp(165)  / 3 /
+  data  cblock(166)  / 'fixb10' /, ncbarr(166)  / 4 /
+  data  cblser(166)  / 'c10b24' /, jbltyp(166)  / 3 /
+  data  cblock(167)  / 'fixb11' /, ncbarr(167)  / 4 /
+  data  cblser(167)  / 'c10b25' /, jbltyp(167)  / 3 /
+  data  cblock(168)  / 'kndex ' /, ncbarr(168)  / 4 /
+  data  cblser(168)  / 'c10b26' /, jbltyp(168)  / 6 /
+  data  cblock(169)  / 'karray' /, ncbarr(169)  / 9 /
+  data  cblser(169)  / 'c44b01' /, jbltyp(169)  / 6 /
   data  cblock(170)  / 'p     ' /, ncbarr(170)  / 75 /
-  data  cblser(170)  / 'c44b02' /, jbltyp(170)  / 0 /
+  data  cblser(170)  / 'c44b02' /, jbltyp(170)  / 3 /
   data  cblock(171)  / 'z     ' /, ncbarr(171)  / 75 /
-  data  cblser(171)  / 'c44b03' /, jbltyp(171)  / 0 /
+  data  cblser(171)  / 'c44b03' /, jbltyp(171)  / 3 /
   data  cblock(172)  / 'ic    ' /, ncbarr(172)  / 71 /
-  data  cblser(172)  / 'c44b04' /, jbltyp(172)  / 0 /
+  data  cblser(172)  / 'c44b04' /, jbltyp(172)  / 6 /
   data  cblock(173)  / 'r     ' /, ncbarr(173)  / 71 /
-  data  cblser(173)  / 'c44b05' /, jbltyp(173)  / 0 /
+  data  cblser(173)  / 'c44b05' /, jbltyp(173)  / 3 /
   data  cblock(174)  / 'emptd ' /, ncbarr(174)  / 71 /
-  data  cblser(174)  / 'c44b06' /, jbltyp(174)  / 0 /
+  data  cblser(174)  / 'c44b06' /, jbltyp(174)  / 3 /
   data  cblock(175)  / 'gmd   ' /, ncbarr(175)  / 71 /
-  data  cblser(175)  / 'c44b07' /, jbltyp(175)  / 0 /
+  data  cblser(175)  / 'c44b07' /, jbltyp(175)  / 3 /
   data  cblock(176)  / 'x     ' /, ncbarr(176)  / 71 /
-  data  cblser(176)  / 'c44b08' /, jbltyp(176)  / 0 /
+  data  cblser(176)  / 'c44b08' /, jbltyp(176)  / 3 /
   data  cblock(177)  / 'y     ' /, ncbarr(177)  / 71 /
-  data  cblser(177)  / 'c44b09' /, jbltyp(177)  / 0 /
+  data  cblser(177)  / 'c44b09' /, jbltyp(177)  / 3 /
   data  cblock(178)  / 'tb2   ' /, ncbarr(178)  / 71 /
-  data  cblser(178)  / 'c44b10' /, jbltyp(178)  / 0 /
+  data  cblser(178)  / 'c44b10' /, jbltyp(178)  / 3 /
   data  cblock(179)  / 'itb3  ' /, ncbarr(179)  / 71 /
-  data  cblser(179)  / 'c44b11' /, jbltyp(179)  / 0 /
+  data  cblser(179)  / 'c44b11' /, jbltyp(179)  / 6 /
   data  cblock(180)  / 'workr1' /, ncbarr(180)  / 71 /
-  data  cblser(180)  / 'c44b12' /, jbltyp(180)  / 0 /
+  data  cblser(180)  / 'c44b12' /, jbltyp(180)  / 3 /
   data  cblock(181)  / 'workr2' /, ncbarr(181)  / 71 /
-  data  cblser(181)  / 'c44b13' /, jbltyp(181)  / 0 /
+  data  cblser(181)  / 'c44b13' /, jbltyp(181)  / 3 /
   data  cblock(182)  / 'text  ' /, ncbarr(182)  / 76 /
   data  cblser(182)  / 'c44b14' /, jbltyp(182)  / 5 /
   data  cblock(183)  / 'gd    ' /, ncbarr(183)  / 74 /
-  data  cblser(183)  / 'c44b15' /, jbltyp(183)  / 0 /
+  data  cblser(183)  / 'c44b15' /, jbltyp(183)  / 3 /
   data  cblock(184)  / 'bd    ' /, ncbarr(184)  / 74 /
-  data  cblser(184)  / 'c44b16' /, jbltyp(184)  / 0 /
+  data  cblser(184)  / 'c44b16' /, jbltyp(184)  / 3 /
   data  cblock(185)  / 'yd    ' /, ncbarr(185)  / 74 /
-  data  cblser(185)  / 'c44b17' /, jbltyp(185)  / 0 /
+  data  cblser(185)  / 'c44b17' /, jbltyp(185)  / 3 /
   data  cblock(186)  / 'itbic ' /, ncbarr(186)  / 73 /
-  data  cblser(186)  / 'c44b18' /, jbltyp(186)  / 0 /
+  data  cblser(186)  / 'c44b18' /, jbltyp(186)  / 6 /
   data  cblock(187)  / 'tbr   ' /, ncbarr(187)  / 73 /
-  data  cblser(187)  / 'c44b19' /, jbltyp(187)  / 0 /
+  data  cblser(187)  / 'c44b19' /, jbltyp(187)  / 3 /
   data  cblock(188)  / 'tbd   ' /, ncbarr(188)  / 73 /
-  data  cblser(188)  / 'c44b20' /, jbltyp(188)  / 0 /
+  data  cblser(188)  / 'c44b20' /, jbltyp(188)  / 3 /
   data  cblock(189)  / 'tbg   ' /, ncbarr(189)  / 73 /
-  data  cblser(189)  / 'c44b21' /, jbltyp(189)  / 0 /
+  data  cblser(189)  / 'c44b21' /, jbltyp(189)  / 3 /
   data  cblock(190)  / 'tbx   ' /, ncbarr(190)  / 73 /
-  data  cblser(190)  / 'c44b22' /, jbltyp(190)  / 0 /
+  data  cblser(190)  / 'c44b22' /, jbltyp(190)  / 3 /
   data  cblock(191)  / 'tby   ' /, ncbarr(191)  / 73 /
-  data  cblser(191)  / 'c44b23' /, jbltyp(191)  / 0 /
+  data  cblser(191)  / 'c44b23' /, jbltyp(191)  / 3 /
   data  cblock(192)  / 'tbtb2 ' /, ncbarr(192)  / 73 /
-  data  cblser(192)  / 'c44b24' /, jbltyp(192)  / 0 /
+  data  cblser(192)  / 'c44b24' /, jbltyp(192)  / 3 /
   data  cblock(193)  / 'itbtb3' /, ncbarr(193)  / 73 /
-  data  cblser(193)  / 'c44b25' /, jbltyp(193)  / 0 /
+  data  cblser(193)  / 'c44b25' /, jbltyp(193)  / 6 /
   data  cblock(194)  / 'tbtext' /, ncbarr(194)  / 73 /
   data  cblser(194)  / 'c44b26' /, jbltyp(194)  / 5 /
-  data  cblock(195)  / 'karray' /, ncbarr(195)  /  9 /
-  data  cblser(195)  / 'c45b01' /, jbltyp(195)  / 0 /
-  data  cblock(196)  / 'karray' /, ncbarr(196)  /  9 /
-  data  cblser(196)  / 'c47b01' /, jbltyp(196)  / 0 /
+  data  cblock(195)  / 'karray' /, ncbarr(195)  / 9 /
+  data  cblser(195)  / 'c45b01' /, jbltyp(195)  / 6 /
+  data  cblock(196)  / 'karray' /, ncbarr(196)  / 9 /
+  data  cblser(196)  / 'c47b01' /, jbltyp(196)  / 6 /
   data  char(1)   / 'i' /
   data  char(2)   / 'j' /
   data  char(3)   / 'k' /
   data  char(4)   / 'l' /
   data  char(5)   / 'm' /
   data  char(6)   / 'n' /
-  data  type(1,1)  / 'real(8' /
-  data  type(1,2)  / ')     ' /
-  data  type(1,3)  / '      ' /
-  data  type(2,1)  / 'comple' /
-  data  type(2,2)  / 'x(8)  ' /
-  data  type(2,3)  / '      ' /
-  data  type(3,1)  / 'real(8' /
-  data  type(3,2)  / ')     ' /
-  data  type(3,3)  / '      ' /
-  data  type(4,1)  / 'intege' /
-  data  type(4,2)  / 'r(4)  ' /
-  data  type(4,3)  / '      ' /
-  data  type(5,1)  / 'charac' /
-  data  type(5,2)  / 'ter(8)' /
-  data  type(5,3)  / '      ' /
+
+  ! data  type(1, 1)  / 'real(8' /
+  ! data  type(1, 2)  / ')     ' /
+  ! data  type(1, 3)  / '      ' /
+  ! data  type(2, 1)  / 'comple' /
+  ! data  type(2, 2)  / 'x(8)  ' /
+  ! data  type(2, 3)  / '      ' /
+  ! data  type(3, 1)  / 'real(8' /
+  ! data  type(3, 2)  / ')     ' /
+  ! data  type(3, 3)  / '      ' /
+  ! data  type(4, 1)  / 'intege' /
+  ! data  type(4, 2)  / 'r(4)  ' /
+  ! data  type(4, 3)  / '      ' /
+  ! data  type(5, 1)  / 'charac' /
+  ! data  type(5, 2)  / 'ter(8)' /
+  ! data  type(5, 3)  / '      ' /
+
+  data type(1) / 'real ::         ' /
+  data type(2) / 'complex ::      ' /
+  data type(3) / 'real(8) ::      ' /
+  data type(4) / 'integer ::      ' /
+  data type(5) / 'character(8) :: ' /
+  data type(6) / 'integer(4) ::   ' /
+  data type(7) / 'character ::    ' /
+
+  implmode = 0
   numlst = 28
   lunit(2) = 7
   lunit(3) = 8
@@ -443,6 +536,9 @@ program vardim
   mulvar(2)  =  2
   mulvar(3)  =  2
   mulvar(4)  =  1
+  mulvar(5)  =  1
+  mulvar(6)  =  1
+  mulvar(7)  =  1
   open (unit = lunit(2), iostat = ios, form = 'formatted')
   if (ios .eq. 0) then
      open (unit = lunit(3), iostat = ios, form = 'formatted')
@@ -592,12 +688,13 @@ program vardim
            end do
 4301       continue
            write (unit = lunit(2), fmt = 4190)
-4190       format ('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', / &
-                '!', //, '!     file: newmods.f90', /, '!', /, '!')
-           write (unit = lunit(4), fmt = "('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', / '!', /, '!     file: labcom.ftn', /, '!', /, '!')")
+4190       format ('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', //, '!', /, '! file newmods.f90', /, '!')
+           write (unit = lunit(4), fmt = "('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', //, '!', /, '! file labcom.ftn', /, '!', /)")
            call make_subroutine_comment(lunit(2), 'main10')
            write (unit = lunit(2), fmt = "('#ifdef WITH_MAIN10')")
-           write (unit = lunit(2), fmt = "('subroutine main10', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')") realdim, integerdim
+           write (unit = lunit(2), fmt = 4192)
+4192       format ('subroutine main10')
+           call make_implicit_statement (unit = lunit(2), mode = 0)
            do ii = 1, 126
               i = 0 + ii
               n3 = ncbarr(i)
@@ -608,12 +705,17 @@ program vardim
 7236          format (2x, 'common /', a6, '/   ', a6, '(', i8, ' )')
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4101
-              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
-              write (unit = lunit(4), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
-7243          format (2x, 3a6, a6)
+!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+!              write (unit = lunit(4), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+!7243          format (2x, 3a6, a6)
+              !
+              write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
+              write (unit = lunit(4), fmt = 7243) trim(type(n4)), trim(cblock(i))
+7243          format (2x, a, 1x, a)
+              !
 4101          continue
            end do
-           write (unit = lunit(4), fmt = "(/, '!', /, '! end of file: labcom.ftn', /, '!', /)")
+           write (unit = lunit(4), fmt = "(/, '!', /, '! end of file labcom.ftn', /, '!', /)")
            write (unit = lunit(2), fmt = "(2x, 'call subr10')")
            write (unit = lunit(2), fmt = 7297)
 7297       format (2x, 'return')
@@ -627,12 +729,30 @@ program vardim
            mextra = 4000
            lstnew(98) = ltlabl
            call make_subroutine_comment(lunit(3), 'dimens')
-           write (unit = lunit(3), fmt = 8116) realdim, integerdim
-8116       format ('subroutine dimens (lsize, nchain, bus1, bus2)', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
-           write (unit = lunit(3), fmt = 8120) integerdim
-8120       format (2x, 'integer(', i1, ') lsize(80)')
+!           write (unit = lunit(3), fmt = 8116) realdim, integerdim
+!8116       format ('subroutine dimens (lsize, nchain, bus1, bus2)', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
+           write (unit = lunit(3), fmt = 8116)
+8116       format ('subroutine dimens (lsize, nchain, bus1, bus2)')
+           call make_use_statement (unit = lunit(3), modulename = 'indcom')
+           call make_implicit_statement (unit = lunit(3), mode = implmode)
+           select case (implmode)
+           case (3)
+              write (unit = lunit(3), fmt = "(2x, 'integer, intent(out) :: lsize(80)')")
+              write (unit = lunit(3), fmt = "(2x, 'integer, intent(in) :: nchain')")
+              write (unit = lunit(3), fmt = "(2x, 'integer n7')")
+
+           case (0)
+              write (unit = lunit(3), fmt = 8120) integerdim
+8120          format (2x, 'integer(', i1, '), intent(out) :: lsize(80)')
+              write (unit = lunit(3), fmt = 8121) integerdim
+8121          format (2x, 'integer(', i1, '), intent(in) :: nchain')
+              write (unit = lunit(3), fmt = 8122) integerdim
+8122          format (2x, 'integer(', i1, ') n7')
+           end select
            write (unit = lunit(3), fmt = 8124)
-8124       format (2x, 'character(8) bus1, bus2')
+8124       format (2x, 'character(8), intent(out) :: bus1, bus2')
+!           write (unit = lunit(3), fmt = 8130)
+!8130       format (2x, '!', /, 2x, 'integer(4) :: locint', /, '!')
            write (unit = lunit(3), fmt = 8134)
 8134       format (2x, 'if (nchain .ge. 29) go to 2900')
            do i = 1, numlst
@@ -673,8 +793,17 @@ program vardim
            ncbarr(127) = 99
            call make_subroutine_comment(lunit(2), 'over29')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER29'
-           write (unit = lunit(2), fmt = 4202) realdim, integerdim
-4202       format ('subroutine over29', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
+!           write (unit = lunit(2), fmt = 4202) realdim, integerdim
+!4202       format ('subroutine over29', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
+           write (unit = lunit(2), fmt = 4202)
+4202       format ('subroutine over29')
+           select case (implmode)
+           case (0 : 2)
+              call make_implicit_statement (unit = lunit(2), mode = implmode)
+
+           case (3)
+              call make_implicit_statement (unit = lunit(2), mode = implmode, realdim = realdim, integerdim = integerdim)
+           end select
            write (unit = lunit(3), fmt = 8156)
 8156       format (2x, 'return')
            lm = 0
@@ -705,7 +834,8 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4102
-              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4102       continue
            n18 = 29
@@ -718,8 +848,17 @@ program vardim
            mextra = 5000
            call make_subroutine_comment(lunit(2), 'over31')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER31'
-           write (unit = lunit(2), fmt = 4203) realdim, integerdim
-4203       format ('subroutine over31', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
+!           write (unit = lunit(2), fmt = 4203) realdim, integerdim
+!4203       format ('subroutine over31', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
+           write (unit = lunit(2), fmt = 4203)
+4203       format ('subroutine over31')
+           select case (implmode)
+           case (0 : 2)
+              call make_implicit_statement (unit = lunit(2), mode = implmode)
+
+           case (3)
+              call make_implicit_statement (unit = lunit(2), mode = implmode, realdim = realdim, integerdim = integerdim)
+           end select
            write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 31
@@ -747,7 +886,8 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4103
-              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4103       continue
            n18 = 31
@@ -759,8 +899,17 @@ program vardim
            if (lstnew(3) .gt. 500) lstnew(71) = lstnew(3)
            call make_subroutine_comment(lunit(2), 'over39')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER39'
-           write (unit = lunit(2), fmt = 4204) realdim, integerdim
-4204       format ('subroutine over39', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
+!           write (unit = lunit(2), fmt = 4204) realdim, integerdim
+!4204       format ('subroutine over39', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
+           write (unit = lunit(2), fmt = 4204)
+4204       format ('subroutine over39')
+           select case (implmode)
+           case (0 : 2)
+              call make_implicit_statement (unit = lunit(2), mode = implmode)
+
+           case (3)
+              call make_implicit_statement (unit = lunit(2), mode = implmode, realdim = realdim, integerdim = integerdim)
+           end select
            write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 39
@@ -788,7 +937,8 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4104
-              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4104       continue
            n18 = 39
@@ -798,8 +948,17 @@ program vardim
            write (unit = lunit(2), fmt = '(a)') '#endif'
            call make_subroutine_comment(lunit(2), 'fixs10')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_FIXS10'
+!           write (unit = lunit(2), fmt = 4205)
+!4205       format ('subroutine fixs10', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (unit = lunit(2), fmt = 4205)
-4205       format ('subroutine fixs10', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+4205       format ('subroutine fixs10')
+           select case (implmode)
+           case (0 : 2)
+              call make_implicit_statement (unit = lunit(2), mode = implmode)
+
+           case (3)
+              call make_implicit_statement (unit = lunit(2), mode = implmode, realdim = realdim, integerdim = integerdim)
+           end select
            write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 10
@@ -827,7 +986,8 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if ( n4  .eq.  0 )   go to 4105
-              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4105       continue
            n18 = 10
@@ -852,8 +1012,17 @@ program vardim
            lstnew(76) = 2 * lstnew(71)
            call make_subroutine_comment(lunit(2), 'over44')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER44'
+!           write (unit = lunit(2), fmt = 4206)
+!4206       format ('subroutine over44', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (unit = lunit(2), fmt = 4206)
-4206       format ('subroutine over44', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+4206       format ('subroutine over44')
+           select case (implmode)
+           case (0 : 2)
+              call make_implicit_statement (unit = lunit(2), mode = implmode)
+
+           case (3)
+              call make_implicit_statement (unit = lunit(2), mode = implmode, realdim = realdim, integerdim = integerdim)
+           end select
            write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 44
@@ -881,7 +1050,8 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4106
-              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4106       continue
            n18 = 44
@@ -893,8 +1063,17 @@ program vardim
            mextra = 5000
            call make_subroutine_comment(lunit(2), 'over45')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER45'
+!           write (unit = lunit(2), fmt = 4207)
+!4207       format ('subroutine over45', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (unit = lunit(2), fmt = 4207)
-4207       format ('subroutine over45', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+4207       format ('subroutine over45')
+           select case (implmode)
+           case (0 : 2)
+              call make_implicit_statement (unit = lunit(2), mode = implmode)
+
+           case (3)
+              call make_implicit_statement (unit = lunit(2), mode = implmode, realdim = realdim, integerdim = integerdim)
+           end select
            write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 45
@@ -922,7 +1101,8 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if ( n4  .eq.  0 )   go to 4107
-              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4107       continue
            n18 = 45
@@ -935,7 +1115,15 @@ program vardim
            call make_subroutine_comment(lunit(2), 'over47')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER47'
            write (unit = lunit(2), fmt = 4208)
-4208       format ('subroutine over47', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+!4208       format ('subroutine over47', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+4208       format ('subroutine over47')
+           select case (implmode)
+           case (0 : 2)
+              call make_implicit_statement (unit = lunit(2), mode = implmode)
+
+           case (3)
+              call make_implicit_statement (unit = lunit(2), mode = implmode, realdim = realdim, integerdim = integerdim)
+           end select
            write (unit = lunit(3), fmt = 8156)
            lm = 0
            n86 = 47
@@ -963,7 +1151,8 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if ( n4  .eq.  0 )   go to 4108
-              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4108       continue
            n18 = 47
@@ -973,8 +1162,8 @@ program vardim
            write (unit = lunit(2), fmt = '(a)') '#endif'
            write (unit = lunit(3), fmt = 8156)
            write (unit = lunit(3), fmt = 8234)
-!8234       format (' 9900 lsize(1) = locint(bus1) - locint(bus2)')
-8234       format (' 9900 lsize(1) = loc (bus1) - loc (bus2)')
+
+8234       format (' 9900 lsize(1) = location (bus1) - location (bus2)')
            write (unit = lunit(3), fmt = 8156)
            !        write (lunit(3), 8242)
            !8242    format (2x, 'end subroutine dimens')
@@ -1030,22 +1219,9 @@ program vardim
      close (unit = lunit(4), status = 'keep')
   end if
 9999 stop
+
 end program vardim
 
 !
-! subroutine make_comment.
-!
-
-subroutine make_subroutine_comment(u, n)
-!  implicit  real(8) (a-h, o-z), integer(4) (i-n)
-!  integer(4) unit
-  integer, intent(in) :: u
-  character(*), intent(in) :: n
-  write (unit = u, fmt = 10) trim(n)
-10 format (/, '!', /, '! subroutine ', a, '.', /, '!', /)
-  return
-end subroutine make_subroutine_comment
-
-!
-!     end of file: vardim.for
+! end of file vardim.f90
 !

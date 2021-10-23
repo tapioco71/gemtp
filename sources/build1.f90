@@ -1,6 +1,7 @@
 !-*- Mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file:: build1.for
+! file build1.f90
 !
 
 !
@@ -8,18 +9,31 @@
 !
 
 subroutine build1
-  include 'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
   sptr = sptr-1
   if (sptr .eq. iptr) go to 910
   isto(sptr) = from
   from = 0
-  go to (9000, 9001), to-8999
-  stop 'invalid "to" reference in "build".'
+  !  go to (9000, 9001), to-8999
+  select case (to - 8999)
+  case (1)
+     go to 9000
+
+  case (2)
+     go to 9001
+  end select
+  stop 'Invalid "to" reference in "build".'
 9500 if (.not. (from .eq. 0)) go to 0001
   from = isto(sptr)
   sptr = sptr + 1
   return
-0001 go to (9501), from- 9500
+  !0001 go to (9501), from- 9500
+0001 select case (from - 9500)
+  case (1)
+     go to 9501
+  end select
   stop 'invalid "from" reference in "build".'
 910 stpflg = 42
   stpi1 = iptr
@@ -603,5 +617,5 @@ subroutine build1
 end subroutine build1
 
 !
-!     end of file: build1.for
+! end of file build1.f90
 !

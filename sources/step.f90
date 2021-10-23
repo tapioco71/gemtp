@@ -1,14 +1,17 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: step.for
+! file step.f90
 !
 
 !
-!     subroutine step.
+! subroutine step.
 !
 
 subroutine step
-  include 'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=from
@@ -44,7 +47,7 @@ subroutine step
   call xpr1
   a=rsto(rptr)
   rptr=rptr-1
-  ndx3 = idnint(real (a, 16))
+  ndx3 = idnint (a)
   go to 5000
 5001 continue
   ndx3=iinf
@@ -257,5 +260,5 @@ subroutine step
 end subroutine step
 
 !
-!     end of file: step.for
+! end of file step.f90
 !

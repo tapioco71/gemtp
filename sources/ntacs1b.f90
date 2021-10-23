@@ -1,23 +1,31 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: ntacs1b.for
+! file: ntacs1b.f90
 !
+
 !
-!     subroutine ntacs1b.
+! subroutine ntacs1b.
 !
+
 subroutine ntacs1b
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'tacsto.ftn'
-  include 'blkcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  include 'tacsar.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  include 'labcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
-!  common  / c0b063 /   texvec(1000 )                       ! wsm + thl manual modification for bpa emtp
-!  character*6  texvec                                      ! wsm + thl manual modification for bpa emtp
-  equivalence (lstat(67), maxniu)
-  equivalence (lstat(68), maxnuk)
+  use blkcom
+  use tacsar
+  use tacsto
+  use labcom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'tacsto.ftn'
+  !  include 'blkcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
+  !  include 'tacsar.ftn'                                      ! wsm + thl manual modification for bpa emtp
+  !  include 'labcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
+  !  common  / c0b063 /   texvec(1000 )                       ! wsm + thl manual modification for bpa emtp
+  !  character*6  texvec                                      ! wsm + thl manual modification for bpa emtp
+  !equivalence (lstat(67), maxniu)
+  !equivalence (lstat(68), maxnuk)
 !  equivalence    ( moncar(  5),  ioutcs )                  ! wsm + thl manual modification for bpa emtp
-  character(6) hus1                                         ! wsm + thl manual modification for bpa emtp
-  character(8) real8
+  character(6) :: hus1                                         ! wsm + thl manual modification for bpa emtp
+  character(8) :: real8
   sptr = sptr - 1
   isto(sptr) = env
   env = datenv
@@ -123,6 +131,7 @@ subroutine ntacs1b
   lstat(39) = 30 + 3 * nuk + 8 * niu
   return
 end subroutine ntacs1b
+
 !
-!     end of file: ntacs1b.for
+! end of file ntacs1b.for
 !

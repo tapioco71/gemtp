@@ -1,18 +1,24 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: use1.for
+! file use1.f90
 !
 
 !
-!     subroutine use1.
+! subroutine use1.
 !
 
 subroutine use1
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'tacsto.ftn'
-  include 'blkcom.ftn'  ! wsm + thl
-  include 'tacsar.ftn'  ! wsm + thl
-  include 'labcom.ftn'  ! wsm + thl
+  use tacsto
+  use blkcom
+  use tacsar
+  use labcom
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'tacsto.ftn'
+  !  include 'blkcom.ftn'  ! wsm + thl
+  !  include 'tacsar.ftn'  ! wsm + thl
+  !  include 'labcom.ftn'  ! wsm + thl
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=from
@@ -237,7 +243,7 @@ subroutine use1
   go to 5040
 5041 continue
 5040 continue
-  p = real (dmax1 (rmargn, dabs(real (rmargn * b, 16))), kind (p))
+  p = dmax1 (rmargn, dabs(rmargn * b))
   if (.not. (a .gt. b + p)) go to 5051
   stpflg = 101
   go to 5050
@@ -270,12 +276,12 @@ subroutine use1
 5081 continue
 5080 continue
   if(.not.(e.gt.b+p)) go to 5091
-  f = e / real (dnint (real (e / b + half, 16)), kind (f))
+  f = e / dnint (e / b + half)
   go to 5090
 5091 continue
   f=e
 5090 continue
-  p = real (dmax1 (rmargn, dabs (real (rmargn * g, 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * g))
   if (.not. (f .ge. g - p)) go to 5101
   rsto(base3+2)=g
   rsto(base3+3)=b
@@ -335,7 +341,7 @@ subroutine use1
   go to 5110
 5111 continue
 5110 continue
-  if (.not. (real (dabs(real(d, 16)), kind (rmargn)) .le. rmargn)) go to 5301
+  if (.not. (dabs(d) .le. rmargn)) go to 5301
   d=zero
   go to 5300
 5301 continue
@@ -709,7 +715,7 @@ subroutine use1
   call xpr1
   r3=rsto(rptr)
   rptr=rptr-1
-  if (.not. (real (dabs(real (r3, 16)), kind (rmargn)) .le. rmargn)) go to 5291
+  if (.not. (dabs(r3) .le. rmargn)) go to 5291
   r3=zero
   go to 5290
 5291 continue
@@ -724,7 +730,7 @@ subroutine use1
 5221 continue
   a=one
 5220 continue
-  p = real (dmax1 (rmargn, dabs (real (rmargn * r2, 16))), kind (p))
+  p = dmax1 (rmargn, dabs (rmargn * r2))
   if (.not. ((r1 .lt. r2 - p  .or. r1 .gt. r2 + p) .and. a * r3 .le. zero)) go to 5231
   stpflg=111
   env=isto(sptr)
@@ -913,5 +919,5 @@ subroutine use1
 end subroutine use1
 
 !
-!     end of file: use1.for
+! end of file use1.f90
 !

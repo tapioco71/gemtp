@@ -1,17 +1,21 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over42.for
+! file over42.f90
 !
+
 !
-!     subroutine over42.
+! subroutine over42.
 !
+
 subroutine over42
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   dimension  currr(101), flux(101), sss(90)
   !     the following limit checks overflow of  curr, flux
   if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
-4567 format ( 24h  "begin module over42." )
+4567 format ('  "Begin module over42."')
   maxpt = 101
   pi = twopi / 2.0
   picon = pi / 180.
@@ -316,11 +320,14 @@ subroutine over42
   if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
 99999 return
 end subroutine over42
+
 !
 ! subroutine hysdat.
 !
+
 subroutine hysdat
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include  'blkcom.ftn'
   dimension b(50),h(50),itop(1,4),ibot(1,4)
   !     set the top and bottom pointers.
@@ -493,19 +500,22 @@ subroutine hysdat
   go to 3548
 9200 return
 end subroutine hysdat
+
 !
-!     subroutine arrdat.
+! subroutine arrdat.
 !
+
 subroutine arrdat
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   !     program to perform least-squares fit of straight-line segments to
   !     a set of data points. the number of segments is limited to maxexp
   dimension v(200),c(200),vc(200),cc(200),ck(200)
   dimension nt(100),s(200),bg(200)
   dimension vs(200),nd(2)
-  character*8        text1, text2, text3, text4
-  character*8        text92, text55, textb, textc, textna( 60 )
+  character(8) :: text1, text2, text3, text4
+  character(8) :: text92, text55, textb, textc, textna( 60 )
   data  text1   /  4hgapp    /
   data  text2   /  4hed      /
   data  text3   /  4hgapl    /
@@ -952,11 +962,14 @@ subroutine arrdat
 9200 kill = 1000
 9900 return
 end subroutine arrdat
+
 !
-!     subroutine zinold.
+! subroutine zinold.
 !
+
 subroutine zinold
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module is used to convert old  ("m36." or earlier vintage )
   !     zinc oxide arrester data into the new form as required for the
   !     m37 (and later emtp versions).
@@ -964,11 +977,11 @@ subroutine zinold
   !     not run on systems that do not have those capabilities.
   !     it is assumed that the data case to be processed is a valid one,
   !     i.e., it did execute correctly on the older program versions
-  include  'blkcom.ftn'
+  include 'blkcom.ftn'
   dimension zk(20)
-  character*80 cbuff, bbuff(35)
-  character*30 cblank
-  character*8       text(14)
+  character(80) :: cbuff, bbuff(35)
+  character(30) :: cblank
+  character(8) :: text(14)
   write (lunit6, 3408)
 3408 format ( 40h begin execution of "zinold", to convert, 29h from old to new zno formats.   )
   iarest = 0
@@ -1118,6 +1131,7 @@ subroutine zinold
 620 noutpr = noup
   return
 end subroutine zinold
+
 !
-!     end of file: over42.for
+! end of file over42.f90
 !

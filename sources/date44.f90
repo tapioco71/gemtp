@@ -1,15 +1,16 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: date44.f90
+! file date44.f90
 !
 
 !
-!     subroutine date44.
+! subroutine date44.
 !
 
 subroutine date44 (a)
   implicit none
-!  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !         The purpose of subroutine  date44  is to interrogate the
   !         installation calendar, and return the current date through the
   !         argument of the subroutine.   eight bcd characters are allowed,
@@ -38,5 +39,5 @@ subroutine date44 (a)
 end subroutine date44
 
 !
-!     end of file: date44.f90
+! end of file date44.f90
 !

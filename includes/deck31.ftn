@@ -2,7 +2,10 @@
 !
 !     file: deck31.ftn
 !
+
+  integer karray
   common /c29b01/   karray(3)
+
 !
 !     end of file: deck31.ftn
 !

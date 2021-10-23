@@ -54,7 +54,6 @@ ROOT=..
 # Include path.
 INCLUDE_PATH=	${ROOT}/includes
 
-
 # Library path.
 LIBRARY_PATH=	${ROOT}/libraries
 
@@ -63,13 +62,16 @@ SOURCES_PATH=${ROOT}/sources/
 
 SOURCES=
 
+MODULES=
+
 # Include global definitions.
 include ${ROOT}/Makefile.global
 
 # The default rule.
 all: ${COMPILER}
-all: clear_modules
 all: vardim dimension newmods labcom
+all: clear_modules
+all: modules
 all: ${COMPILER}/${TARGET}
 
 ${TARGET}: ${COMPILER}
@@ -84,6 +86,7 @@ lst: ${COMPILER}/${TARGET}.lst
 
 .PHONY: clean
 # The clean rule.
+clean:	clear_modules
 clean:
 	@if [ 'x${VERBOSE}' = x ];				\
 	then							\
@@ -93,6 +96,7 @@ clean:
 				*.tab.c				\
 				${ROOT}/includes/*.tab.h	\
 				${ROOT}/includes/*~		\
+				*.o				\
 				*.output			\
 				.depend				\
 				fort.*				\
@@ -102,13 +106,14 @@ clean:
 		*.tab.c				\
 		${ROOT}/includes/*.tab.h	\
 		${ROOT}/includes/*~		\
+		*.o				\
 		*.output			\
 		.depend				\
 		fort.*				\
 		${wildcard *~} ${<}
 
 clear_modules:
-	@rm -rf *.mod
+	@rm -rf ${COMPILER}/*.mod
 
 # The rule which creates the .o and executable directory.
 ${COMPILER}:
@@ -122,7 +127,30 @@ ${COMPILER}:
 
 # Rule for compiling the main program.
 # ${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
-${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
+
+# The rule to creates modules.
+modules: ${COMPILER}
+modules: ${COMPILER}/${TARGET}
+
+# Modules.
+${COMPILER}/${TARGET}: ${COMPILER}/blkcom.o
+${COMPILER}/${TARGET}: ${COMPILER}/deck29.o
+${COMPILER}/${TARGET}: ${COMPILER}/deck31.o
+${COMPILER}/${TARGET}: ${COMPILER}/dekspy.o
+${COMPILER}/${TARGET}: ${COMPILER}/dekplt.o
+${COMPILER}/${TARGET}: ${COMPILER}/fixcom.o
+${COMPILER}/${TARGET}: ${COMPILER}/indcom.o
+${COMPILER}/${TARGET}: ${COMPILER}/iocons.o
+${COMPILER}/${TARGET}: ${COMPILER}/labl02.o
+${COMPILER}/${TARGET}: ${COMPILER}/labcom.o
+${COMPILER}/${TARGET}: ${COMPILER}/syncom.o
+${COMPILER}/${TARGET}: ${COMPILER}/synmac.o
+${COMPILER}/${TARGET}: ${COMPILER}/tacsar.o
+${COMPILER}/${TARGET}: ${COMPILER}/tacsto.o
+${COMPILER}/${TARGET}: ${COMPILER}/tracom.o
+${COMPILER}/${TARGET}: ${COMPILER}/umdeck.o
+
+# Codes.
 ${COMPILER}/${TARGET}: ${COMPILER}/date44.o
 ${COMPILER}/${TARGET}: ${COMPILER}/time44.o
 ${COMPILER}/${TARGET}: ${COMPILER}/build1.o
@@ -133,7 +161,6 @@ ${COMPILER}/${TARGET}: ${COMPILER}/comb.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/data.o
 ${COMPILER}/${TARGET}: ${COMPILER}/elec.o
 ${COMPILER}/${TARGET}: ${COMPILER}/errstp.o
-${COMPILER}/${TARGET}: ${COMPILER}/init.o
 ${COMPILER}/${TARGET}: ${COMPILER}/pmodl.o
 ${COMPILER}/${TARGET}: ${COMPILER}/pstmt.o
 ${COMPILER}/${TARGET}: ${COMPILER}/ptacs.o
@@ -151,14 +178,17 @@ ${COMPILER}/${TARGET}: ${COMPILER}/tread.o
 ${COMPILER}/${TARGET}: ${COMPILER}/use1.o
 ${COMPILER}/${TARGET}: ${COMPILER}/use2.o
 ${COMPILER}/${TARGET}: ${COMPILER}/xpr1.o
-${COMPILER}/${TARGET}: ${COMPILER}/xpr2.o
+
 ${COMPILER}/${TARGET}: ${COMPILER}/xref1.o
 ${COMPILER}/${TARGET}: ${COMPILER}/xref2.o
 ${COMPILER}/${TARGET}: ${COMPILER}/main00.o
 ${COMPILER}/${TARGET}: ${COMPILER}/main10.o
+${COMPILER}/${TARGET}: ${COMPILER}/newmods.o
+${COMPILER}/${TARGET}: ${COMPILER}/init.o
 ${COMPILER}/${TARGET}: ${COMPILER}/datain.o
 ${COMPILER}/${TARGET}: ${COMPILER}/calcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/over1.o
+${COMPILER}/${TARGET}: ${COMPILER}/xpr2.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over2.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over5.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over6.o

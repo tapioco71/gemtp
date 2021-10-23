@@ -68,7 +68,8 @@ CPP_FLAGS=	-Wall			\
 		-c
 
 # gfortran flags.
-FORTRAN_FLAGS=	-Wall			\
+FORTRAN_FLAGS=	-O0			\
+		-Wall			\
 		-std=gnu		\
 		-falign-commons		\
 		-fcheck=all		\
@@ -82,10 +83,11 @@ FORTRAN_FLAGS=	-Wall			\
 		-frepack-arrays		\
 		-c
 
-F90_FLAGS=	-Wall				\
+F90_FLAGS=	-O0				\
+		-Wall				\
 		-std=gnu			\
 		-fall-intrinsics		\
-		-falign-commons			\
+		-fno-align-commons		\
 		-fcheck=all			\
 		-ffree-form			\
 		-fdollar-ok			\
@@ -94,12 +96,12 @@ F90_FLAGS=	-Wall				\
 		-freorder-blocks		\
 		-frepack-arrays			\
 		-fmax-stack-var-size=32768	\
-		-fdefault-integer-8		\
-		-fdefault-real-8		\
 		-cpp				\
-		-c				\
-		-D WITH_MAIN10			\
-		-D WITH_OVER20
+		-J${COMPILER}			\
+		-DWITH_MAIN10			\
+		-DWITH_OVER1			\
+		-DWITH_OVER20			\
+		-c
 
 # objdump most common flags.
 OBJDUMP_FLAGS=	-h	\
@@ -200,26 +202,38 @@ ${COMPILER}/%.o: %.f90
 	fi
 	@${FORTRAN} ${F90_FLAGS} ${<} -o ${@}
 
+# Rule for building the midule files.
+${COMPILER}/%.o: ${ROOT}/modules/%.f90
+	@if [ 'x${VERBOSE}' = x ];				\
+	then							\
+		echo " [ F90 MOD ] ${<}";			\
+	else							\
+		echo "${FORTRAN} ${F90_FLAGS} ${<} -o ${@}";	\
+	fi
+	@${FORTRAN} ${F90_FLAGS} ${<} -o ${@}
+
 # Rule for linking the final program file.
 ${COMPILER}/%:
-	@if [ 'x${VERBOSE}' = x ];						\
-	then									\
-		echo " [ LD ] ${@}";						\
-	else									\
-		echo ${CC} 	-Wl,--start-group				\
-				${LD_FLAGS} -o ${@} $(filter %.o %.a, ${^})	\
-				'${LIBGCC}'					\
-				'${LIBGFORTRAN}'				\
-				'${LIBC}'					\
-				'${LIBM}'					\
-				-Wl,--end-group;				\
+	@if [ 'x${VERBOSE}' = x ];					\
+	then								\
+		echo " [ LD ] ${@}";					\
+	else								\
+		echo ${FORTRAN}	-Wl,--start-group			\
+				${LD_FLAGS} 				\
+				-o ${@} $(filter %.o %.a, ${^})		\
+				'${LIBGCC}'				\
+				'${LIBGFORTRAN}'			\
+				'${LIBC}'				\
+				'${LIBM}'				\
+				-Wl,--end-group;			\
 	fi
-	@${FORTRAN} 	-Wl,--start-group			\
-		${LD_FLAGS} -o ${@} $(filter %.o %.a, ${^})	\
-		'${LIBGCC}'					\
-		'${LIBGFORTRAN}'				\
-		'${LIBC}'					\
-		'${LIBM}'					\
+	@${FORTRAN} -Wl,--start-group					\
+		${LD_FLAGS} 						\
+		-o ${@} $(filter %.o %.a, ${^})				\
+		'${LIBGCC}'						\
+		'${LIBGFORTRAN}'					\
+		'${LIBC}'						\
+		'${LIBM}'						\
 		 -Wl,--end-group
 
 # Rule to create a .lst file.

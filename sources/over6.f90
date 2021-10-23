@@ -1,19 +1,25 @@
 !-*- mode: f90; syntax: free-format; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over6.f90
+! file over6.f90
 !
 
 !
-!     subroutine over6.
+! subroutine over6.
 !
 
 subroutine over6
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'syncom.ftn'
-  include 'space2.ftn'
-  character(8) buff
+  use blkcom
+  use labcom
+  use syncom
+  use space2
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'syncom.ftn'
+  !  include 'space2.ftn'
+  character(8) :: buff
   dimension buff(20)
   equivalence (iofkol, iofgnd), (iofkor, iofbnd)
   dimension integx(1)
@@ -75,7 +81,7 @@ subroutine over6
 54180 lstat(24) = kconst
   lstat(23) = it
   it1 = ibr
-  iv  = locint(emtpc(1)) - locint(x(1))
+  iv  = location (emtpc(1)) - location (x(1))
   if (kburro .eq.  1) go to 4802
   last = (iv - 1) / (3 * nbyte(3) / nbyte(4))
   lstat(14) = lsiz23
@@ -178,8 +184,8 @@ subroutine over6
   go to 5204
 5240 go to moon, (5020, 5050, 5085)
 5250 write (unit = lunit6, fmt = 5254)
-5254 format (//, ' list of input elements connected to each bus.', /, 10x, '1) only the physical connections of multiphase lines are shown (capacitive and inductive coupling ignored)', /, &
-          10x, '2) repeated entries imply parallel connections', /, 10x,  '3) sources are omitted, although switches  are included;', /, &
+5254 format (//, ' List of input elements connected to each bus.', /, 10x, '1) Only the physical connections of multiphase lines are shown (capacitive and inductive coupling ignored)', /, &
+          10x, '2) Repeated entries imply parallel connections', /, 10x,  '3) Sources are omitted, although switches  are included;', /, &
           10x, '4) u.m. usage produces extra, internally-defined nodes "um????" (1st 2 letters "um").')
   write (unit = lunit6, fmt = 5261)
 5261 format(' From bus name 1 names of all adjacent busses')
@@ -353,11 +359,12 @@ subroutine over6
 end subroutine over6
 
 !
-!     subroutine rinfin.
+! subroutine rinfin.
 !
 
 subroutine rinfin
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   n3 = 0
@@ -413,14 +420,18 @@ subroutine rinfin
 end subroutine rinfin
 
 !
-!     subroutine insert.
+! subroutine insert.
 !
 
 subroutine insert (irrr, icc)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'space2.ftn'
+  use blkcom
+  use labcom
+  use space2
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  !  include 'blkcom.ftn'
+  !  include 'labcom.ftn'
+  !  include 'space2.ftn'
   ! following carries "next" among over6, insert, over7, & over9:
   equivalence (loopss(11), next)
   if (irrr .le. 1) return
@@ -468,5 +479,5 @@ subroutine insert (irrr, icc)
 end subroutine insert
 
 !
-!     end of file: over6.f90
+! end of file over6.f90
 !

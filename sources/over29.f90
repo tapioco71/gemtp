@@ -1,22 +1,26 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over29.for
+! file over29.f90
 !
+
 !
-!     subroutine subr29.
+! subroutine subr29.
 !
+
 subroutine subr29
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'deck29.ftn'
   include 'labl29.ftn'
-  character*8 text
+  character(8) :: text
   dimension text(1), array(1)
   equivalence (karray(1), text(1), array(1))
   if ( iprsup .ge. 1) write (lunit6, 2371) lswtch, lsiz12, lbus
-2371 format ( 44h at top of "subr29".  lswtch, lsiz12, lbus =, 3i8 )
+2371 format (' At top of "subr29".  lswtch, lsiz12, lbus =', 3i8)
   nvar = lswtch
-  if ( lsiz12  .gt.  lswtch )  nvar = lsiz12
+  if (lsiz12 .gt. lswtch) nvar = lsiz12
   call dimens ( karray(1), nchain, trash, trash )
   do j=1, 9999, 2
      if ( karray(j)  .ne.  0 )   go to 2364
@@ -38,28 +42,28 @@ subroutine subr29
   if ( iprsup  .ge.  2 ) write (lunit6, 2388)  nvar,  ( nbyte(j), j=1, 4 ),  maxo29, &
        iofbus, iofkms, iofkde, iofibr, iofjbr, iofake, &
        ioftst, ioftcl, ioftop, iofarr, n9
-2388 format ( 46h after offset computation.  nvar, nbyte(1:4) =,  5i5, &
-          5x,  8hmaxo29 =,  i8,/, 41h   iofbus  iofkms  iofkde  iofibr  iofjbr, &
-          40h  iofake  ioftst  ioftcl  ioftop  iofarr  ,/, 1x, 10i8 )
-  if ( n9  .lt.  maxo29 )  go to 3462
+2388 format (' After offset computation.  nvar, nbyte(1:4) =', 5i5, &
+          5x, 'maxo29 =', i8, /, '   iofbus  iofkms  iofkde  iofibr  iofjbr', &
+          '  iofake  ioftst  ioftcl  ioftop  iofarr', /, 1x, 10i8)
+  if (n9 .lt. maxo29) go to 3462
   write (lunit6, 3457)  n9, maxo29
-3457 format (/,  48h temporary error stop in "subr29" of overlay 29., &
-          48h   working storage of /c29b01/ ("vardim" output), &
-          20h must equal at least,  i7,   8h   words ,/, 49h to solve the problem, although user-dimensioning, &
-          18h only provided for,  i7,     14h   words (both,  42h integer figures).   redimension the EMTP.    )
+3457 format (/, ' Temporary error stop in "subr29" of overlay 29.', &
+          '   working storage of /c29b01/ ("vardim" output) must equal at least', i7, '   words', /, ' to solve the problem, although user-dimensioning only provided for', i7, '   words (both integer figures).   Redimension the EMTP.')
   call stoptp
-3462 call guts29 ( text(iofbus), karray(iofkms), karray(iofkde), karray(iofibr), karray(iofjbr), array(iofake), &
-          array(ioftst),  array(ioftcl), array(ioftop)  )
-  if ( iprsup  .ge.  1 ) write (lunit6, 3489)  iofarr, kill
-3489 format (  37h at exit of "subr29".  iofarr, kill =,  2i8  )
+3462 call guts29 ( text(iofbus), karray(iofkms), karray(iofkde), karray(iofibr), karray(iofjbr), array(iofake), array(ioftst),  array(ioftcl), array(ioftop))
+  if (iprsup .ge. 1) write (lunit6, 3489)  iofarr, kill
+3489 format (' At exit of "subr29".  iofarr, kill =', 2i8)
   return
 end subroutine subr29
+
 !
 ! subroutine guts29.
 !
+
 subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, topen  )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  character*8 bus
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  character(8) :: bus
   dimension bus(1), kmswit(1), kdepsw(1), ibrnch(1), jbrnch(1)
   dimension akey(1), tstat(1), tclose(1), topen(1)
   include 'blkcom.ftn'
@@ -71,16 +75,16 @@ subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, t
   equivalence  (moncar(5),  idist),   (moncar(6),  itest)
   equivalence  (moncar(9), kloaep)
   dimension  lltemp(20), mmtemp(50)
-  character*8 text1, text2, text3
-  character*8 text5, text6, text7
-  data  text1  / 6hmisc.  /
-  data  text2  / 6hstatis /
-  data  text3  / 6htics d /
-  data  text5  / 6hbegin  /
-  data  text6  / 6hnew da /
-  data  text7  / 6hbndc   /
+  character(8) :: text1, text2, text3
+  character(8) :: text5, text6, text7
+  data  text1  / 'misc. ' /
+  data  text2  / 'statis' /
+  data  text3  / 'tics d' /
+  data  text5  / 'begin ' /
+  data  text6  / 'new da' /
+  data  text7  / 'bndc  ' /
   if ( iprsup  .ge.  1 ) write (lunit6, 4823)  iofbnd, kburro, istep
-4823 format ( 42h top of "guts29".  iofbnd, kburro, istep =, 3i8  )
+4823 format (' Top of "guts29".  iofbnd, kburro, istep =', 3i8)
   n18 =  maxo29 * nbyte(4)/nbyte(3)  -  iofarr
   if ( istep  .ne.  -6633 )  go to 5627
   !     begin "fault data usage" (from "reques" of overlay 1):
@@ -92,9 +96,7 @@ subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, t
   if ( iofbnd .le. 0 )  iofbnd = n2
   if ( iofbnd  .le.  n2 )  go to 4839
   write (6, 4832)  iofbnd, n2
-4832 format (  41h insufficient working space from "vardim", 37h dimensioning to honor user-requested, &
-          34h maximum number of busses equal to,  i5,  2h . ,/,    45h user can rerun with reduced maximum equal to, &
-          i5,     2h .    )
+4832 format (' Insufficient working space from "vardim" dimensioning to honor user-requested maximum number of busses equal to', i5, ' .', /, ' user can rerun with reduced maximum equal to', i5, ' .')
   call stoptp
 4839 n3 = iofbnd**2
   n7 = n3**2
@@ -112,7 +114,7 @@ subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, t
   if ( n8 .lt. loopss(2) ) lspars = n3
   n4 = 2 * iofbnd
   if ( iprsup .ge. 1 ) write (lunit6, 4851)  iofsav, iofsol, iofrhs, iofmat, iofksp,  n3, n4, iofbnd, lspars
-4851 format (  41h iofsav, iofsol, iofrhs, iofmat, iofksp =,  5i6 ,/,    38h array dimensions n3, n4, n2, lspars =,  4i6  )
+4851 format (' iofsav, iofsol, iofrhs, iofmat, iofksp =', 5i6, /, ' array dimensions n3, n4, n2, lspars =', 4i6)
   call fltdat ( array(iofray), array(iofsav), array(iofsol), array(iofrhs), array(iofmat), karray(iofksp), n3, n4, iofbnd, lspars )
   go to 9800
   !     end "fault data usage" servicing;  begin monte carlo:
@@ -156,7 +158,7 @@ subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, t
   n7 = n7 + 1
   if ( n7 .le. 50 )  go to 6272
 6270 write (lunit6, 6271)
-6271 format ( 34h temporary error stop in "guts29"., 32h   overflow  mmtemp(50).   stop.     )
+6271 format (' Temporary error stop in "guts29".   overflow  mmtemp(50).   Stop.')
   call stoptp
 6272 mmtemp(n7) = d7
 6273 go to 6269
@@ -324,17 +326,20 @@ subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, t
 9903 format ( 36h exit "guts29".  kill, nchain, n18 =,  3i6  )
   return
 end subroutine guts29
+
 !
 ! subroutine innr29.
 !
+
 subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibrnch, jbrnch, &
      akey, tstat, tclose, topen  )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension  array(1), ibsout(1), kount(1), kpoint(1)
   dimension  nsum(1), bus(1), kmswit(1), kdepsw(1)
   dimension  ibrnch(1), jbrnch(1), akey(1)
   dimension  tstat(1), tclose(1), topen(1)
-  character*8 bus
+  character(8) :: bus
   include 'blkcom.ftn'
   include 'deck29.ftn'
   include 'labl29.ftn'
@@ -344,8 +349,8 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   equivalence                         (moncar(4),    isw)
   equivalence  (moncar(5),  idist),   (moncar(6),  itest)
   equivalence  (moncar(9), kloaep)
-  character*8 text1, text2, text3, text4, text5, text6
-  character*8 text7, text8, texnam, aupper
+  character(8) :: text1, text2, text3, text4, text5, text6
+  character(8) :: text7, text8, texnam, aupper
   dimension aupper(264)
   data  text1  / 6hmisc.  /
   data  text2  / 6hstatis /
@@ -681,18 +686,14 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
      write (lunit6, 6426)
 6426 format ( ///,1x)
      write (lunit6, 6434 )
-6434 format (' --------------------------------------------------&
-          ------------------------------------------------------------------&
-          --------------- ')
+6434 format (' ----------------------------------------------------------------------------------------------------------------------------------- ')
      if ( iall .eq. 0 )  go to 6464
      write (lunit6, 16434)
 16434 format ( 1x, 13( 10hsummary    ) )
      write (lunit6, 6434 )
      if ( ibropt .ne. 0 )  go to 6439
      write (lunit6, 95)  basev
-95   format(' A distribution of peak overvoltages among all output nodes on the last card having the same base voltage follows.   This', &
-          /, ' statistical distribution is for the maximum of the peaks at all of these output nodes having base voltage = ', &
-          e14.5)
+95   format(' A distribution of peak overvoltages among all output nodes on the last card having the same base voltage follows.   This', /, ' statistical distribution is for the maximum of the peaks at all of these output nodes having base voltage = ', e14.5)
      if (k9 .ne. 0)  ibropt = -1
      go to 68
 6439 write (lunit6, 6440)
@@ -714,14 +715,13 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
      if ( ibropt .eq. -3 )   n16 = 5
      if ( ibropt .eq. -4 )   n16 = 7
      write (lunit6, 3167)   texnam(n16), texnam(n16+1), bus1, bus2, texnam(n16), texnam(n16+1), basev
-3167 format( 34h statistical distribution of peak ,  a6, a1, 13h at branch  ",  a6,  8h"  to  ",  a6, &
-          11h".    base ,  a6, a1, 22h for per-unit output =,  e14.5  )
+3167 format (' Statistical distribution of peak ', a6, a1, ' at branch  "', a6, '"  to  "', a6, '".    Base ', a6, a1, ' for per-unit output =', e14.5)
 68   key = 0
      if ( iprsup  .ge.  1 ) write (lunit6, 69) sxi, total, sxisq, basev, vmax, ainsav
-69   format ( /, 9h at 69     , 6e17.5   )
+69   format (/, ' at 69   ', 6e17.5)
      term2 = sxi * sxi
      term1 = total * sxisq
-     xmean1 = sxi/total
+     xmean1 = sxi / total
      if(total.eq.1.0) go to 100
      xvar1 = (term1-term2)/((total)*(total-1.0))
      if (xvar1 .lt. 0.0)   xvar1 = 0.0
@@ -738,7 +738,7 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
      if ( aincr .lt. 0.0 )  go to 5010
      if(maxint .le. liminc)   go to 5010
      write (lunit6,3)
-3    format (/, ' Notice ----- overvoltage tabulation for this voltage variable can not continue, due to insufficient working ', /, &
+3    format (/, ' Notice ----- Overvoltage tabulation for this voltage variable can not continue, due to insufficient working ', /, &
           14x, "space.   Statistics miscellaneous data parameter  'xmaxmx'  has been exceeded by the peak per unit ", /, &
           14x, 'overvoltage (actually, exceeded by  5.0  times or more).')
      go to 46901
@@ -747,10 +747,10 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
      if ( ibropt .eq. -3 )   n16 = 5
      if ( ibropt .eq. -4 )   n16 = 7
      write (lunit6, 6010)  texnam(n16), texnam(n16+1), texnam(n16), texnam(n16+1)
-6010 format (   2x,  8hinterval, 13x,  a6, a1,  10x, a6, a1,  3h in, 6x, 9hfrequency, 5x, 10hcumulative, 12x, 8hper cent )
+6010 format (2x, 'interval', 13x,  a6, a1,  10x, a6, a1,  ' in', 6x, 'frequency', 5x, 'cumulative', 12x, 'per cent')
      write (lunit6, 6018)
 6018 format (4x, 'number', 9x, 'in per unit', 6x, 'physical units', 6x, '(density)', 6x, 'frequency', 5x, '.ge. current value')
-     do 5050  m =1, maxint
+     do m =1, maxint
         mm=m-1
         if(m.eq.1) mm=1
         nsum(m)=nsum(mm) + kount(m)
@@ -762,7 +762,7 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
         sxifi=sxifi + xifi
         sx2fi=sx2fi + x2fi
         if (iprsup .ge. 1) write (lunit6, 5013)   sxifi, total, sx2fi
-5013    format (/, 8h at 5013, 3e17.5)
+5013    format (/, ' at 5013', 3e17.5)
         r = r * basev
         percen = ((npnerg - nsum(m))/total)*100
         if(nsum(m).gt.0) go to 5011
@@ -782,10 +782,11 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
         go to 5050
 5015    mend = m
         go to 5055
-5050 end do
+     end do
+5050 continue
 5055 write (lunit6,5020) mend,xxi,r,kount(mend),nsum(mend),percen
      if (iprsup .ge. 1) write (lunit6, 5014)   sxifi, total, sx2fi
-5014 format (/, 8h at 5014, 3e17.5)
+5014 format (/, ' at 5014', 3e17.5)
      xmean = sxifi/total
      if ( key .ne. 0 )   go to 5066
      xvar = ((total*sx2fi)-(sxifi*sxifi))/(total*(total-1.0))
@@ -828,17 +829,17 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
 399 write (lunit6, 400)
 400 format (///, 49x, 29h sample curve symbols---a,b,c)
   write (lunit6, 402)
-402 format (49x, 29h theoretical curve symbol---d)
+402 format (49x, ' Theoretical curve symbol---d')
   write (lunit6, 404)
-404 format (49x, 29h common curve symbol--------*)
+404 format (49x, ' Common curve symbol--------*')
   nsw = 0
   nssw = 0
   rewind  lunit3
   if ( iprsup  .ge.  1 ) write (6, 3447)  isw, kswtch, lswtch, ntot
-3447 format ( 27h isw, kswtch, lswtch, not =,  4i6  )
+3447 format (' isw, kswtch, lswtch, not =', 4i6)
   if ( isw  .eq.  4444 ) read (lunit3)  ( bus(i),  i = 1, ntot )
   if ( iprsup  .ge.  1 ) write (lunit6, 406)
-406 format (  37h switch vectors read from  'lunit3' . ,/,  24h     row   bus1     bus2,     11x, 4hakey, 10x, 5htstat,  13x, 2hdt,  2x, 6hkdepsw  )
+406 format (" Switch vectors read from  'lunit3' . ", /, '     row   bus1     bus2', 11x, 'akey', 10x, 'tstat', 13x, 'dt', 2x, 'kdepsw')
   do i=1, kswtch
      j = lswtch + i
      read (lunit3) kmswit(i), kmswit(j), akey(i), tstat(i), topen(j), kdepsw(i)
@@ -896,7 +897,7 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
      ranoff = bias
      if ( itest .eq. 1 )  ranoff = 0.0
      if ( iprsup  .ge.  1 ) write (lunit6, 4629)  kswtch, nenerg, n1, bias, (array(i1) , i1 = n5, n6), (array(i1),i1=m5,m6)
-4629 format ( /,  40h read logical 3.  kswtch  nenerg      n1, 11x, 4hbias, /,  16x, 3i8, e15.5, /, (1x, 8e16.6 ) )
+4629 format (/, ' Read logical 3.  kswtch  nenerg      n1', 11x, 'bias', /, 16x, 3i8, e15.5, /, (1x, 8e16.6 ) )
      do j = 1, nssw
         k = kpoint(j)
         if ( itest .eq. 0  .or. itest .eq. 1 )  go to 2417
@@ -939,11 +940,11 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   bus1 = bus(k1)
   bus2 = bus(k2)
   write (lunit6, 432)  bus1, bus2
-432 format (///, 6x, 9h switch ', a6, 8h'  to  ', a6, 1h')
+432 format (///, 6x, " switch '", a6, "'  to  '", a6, "'")
   if (idist .gt. 0)   go to 436
   if (topen(i + lswtch) .lt. 0.0)   go to 436
   write (lunit6, 434)   fclosc
-434 format (5x, e12.4, 20h switch closings/col)
+434 format (5x, e12.4, ' Switch closings/col')
   go to 440
 436 write (lunit6, 434)   fclosu
 440 write (lunit6, 442)
@@ -951,7 +952,7 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   write (lunit6, 444)  in5, in10, in15, in20, in25, in30
 444 format (10x, i1, 5(3x, i2))
   write(lunit6, 446)
-446 format ( 5x,  31h+----+----+----+----+----+----+   )
+446 format (5x, '+----+----+----+----+----+----+')
   go to 660
 530 k1 = kmswit(i)
   k2 = kmswit(i + lswtch)
@@ -962,19 +963,19 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   bus3 = bus(k3)
   bus4 = bus(k4)
   write (lunit6, 532)  bus1, bus2, bus3, bus4
-532 format (///, 6x, 2(9h switch ', a6, 8h'  to  ', a6, 1h', 12x))
+532 format (///, 6x, 2(" Switch '", a6, "'  to  '", a6, "'", 12x))
   if (idist .gt. 0)   go to 536
   if (topen(i + lswtch) .lt. 0.0)   go to 536
   write (lunit6, 534)   fclosc, fclosc
-534 format ( 5x, 2(e12.4, 20h switch closings/col, 10x))
+534 format ( 5x, 2(e12.4, ' Switch closings/col', 10x))
   go to 540
 536 write (lunit6, 534)   fclosu, fclosu
 540 write (lunit6, 542)
-542 format (17x, 8h columns, 36x, 8h columns)
+542 format (17x, ' Columns', 36x, ' Columns')
   write (lunit6, 544)  in5, in10, in15, in20, in25, in30, in5, in10, in15, in20, in25, in30
 544 format( 10x, i1, 5(3x, i2), 16x, i1, 5(3x, i2))
   write (lunit6, 546)
-546 format (5x, 2(31h+----+----+----+----+----+----+, 11x))
+546 format (5x, 2('+----+----+----+----+----+----+', 11x))
   go to 660
 630 k1 = kmswit(i)
   k2 = kmswit(i + lswtch)
@@ -989,20 +990,20 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   bus5 = bus(k5)
   bus6 = bus(k6)
   write (lunit6, 632)  bus1, bus2, bus3, bus4, bus5, bus6
-632 format (///, 6x, 9h switch ', a6, 8h'  to  ', a6, 1h', 2(12x, 9h switch ', a6, 8h'  to  ', a6, 1h'))
+632 format (///, 6x, " switch '", a6, "'  to  '", a6, "'", 2(12x, " switch '", a6, "'  to  '", a6, "'"))
   if (idist.gt.0)   go to 636
   if (topen(i +lswtch) .lt. 0.0)   go to 636
   write (lunit6, 634)   fclosc, fclosc, fclosc
-634 format (5x, 3(e12.4, 20h switch closings/col, 10x))
+634 format (5x, 3(e12.4, ' Switch closings/col', 10x))
   go to 640
 636 write (lunit6, 634)   fclosu, fclosu, fclosu
 640 write (lunit6, 642)
-642 format (17x, 8h columns, 2(36x, 8h columns))
+642 format (17x, ' Columns', 2(36x, ' Columns'))
   write (lunit6, 644)  in5, in10, in15, in20, in25, in30, in5, in10, in15, in20, in25, in30, &
        in5, in10, in15, in20, in25, in30
 644 format (10x, i1, 5(3x, i2), 2(16x, i1, 5(3x, i2)))
   write (lunit6, 646)
-646 format (5x, 3(31h+----+----+----+----+----+----+, 11x))
+646 format (5x, 3('+----+----+----+----+----+----+', 11x))
 660 do n = 1, nenerg
      l = (n-1) *nssw
      n3 = i + l
@@ -1040,7 +1041,7 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
 668  l2 = 13 + (twdep + deltsu / 2.) / deltsu
      kount2(l2) = kount2(l2) + 1
 669  if (iprsup .ge. 1) write (lunit6, 1669) n4, array(n4), l2, kount2(l2)
-1669 format (55h at 1669 of subr29,n4, array(n4), l2 and kount2(l2) are , 10x, i10, e15.6, 2i10)
+1669 format (' At 1669 of subr29,n4, array(n4), l2 and kount2(l2) are ', 10x, i10, e15.6, 2i10)
 670 end do
   if (iprsup .ge. 1) write (lunit6, 671)  i, i2, i3, topen( i + lswtch ), topen(i2+lswtch), topen(i3+lswtch)
 671 format (21h i, i2, i3 and dt are, 10x, 3i5, 3e15.6)
@@ -1062,7 +1063,7 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
 672  l3 = 13+ (twdep + deltsu/2.) / deltsu
      kount3(l3) = kount3(l3) + 1
 673  if (iprsup .ge. 1) write (lunit6, 674) n5, array(n5), l3, kount3(l3)
-674  format (55h at 674 of subr29, n5, array(n5), l3 and kount3(l3) are , 10x, i10, e15.6, 2i10)
+674  format (' At 674 of subr29, n5, array(n5), l3 and kount3(l3) are ', 10x, i10, e15.6, 2i10)
 675 end do
 700 kurve1 = 1
   kurve2 = 2
@@ -1079,11 +1080,11 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
      kolum1 = 5 + kount1(line)/fclosc + 0.5
      kolnum = 5 + normal(line)
      if (iprsup .ge. 1) write(lunit6, 751)  line, kount1(line), normal(line)
-751  format(/, ' at 751, line, kount1 and normal are', 10x, 3i10)
+751  format(/, ' At 751, line, kount1 and normal are', 10x, 3i10)
      go to 770
 753  kolum1 = 5 + kount1(line)/fclosu + 0.5
      if (iprsup .ge. 1) write (lunit6, 1754)  line, kount1(line)
-1754 format (16h line and kount1, 10x, 2i10)
+1754 format (' Line and kount1', 10x, 2i10)
      kolnum = 35
      go to 770
 754  if (idist .gt. 0)   go to 758
@@ -1093,7 +1094,7 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
      go to 772
 758  kolum2 = 47 + kount2(line)/fclosu + 0.5
      if (iprsup .ge. 1) write (lunit6, 1758)  line, kount2(line)
-1758 format (16h line and kount2, 10x, 2i10)
+1758 format (' Line and kount2', 10x, 2i10)
      kolnum = 77
      go to 772
 759  if(idist .gt. 0)   go to 763
@@ -1103,7 +1104,7 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
      go to 774
 763  kolum3 = 89 + kount3(line)/fclosu + 0.5
      if (iprsup .ge. 1) write (lunit6, 1763)  line, kount3(line)
-1763 format (16h line and kount3, 10x, 2i10)
+1763 format (' Line and kount3', 10x, 2i10)
      kolnum = 119
      go to 774
 770  call  plotng (kurve4, kolnum)
@@ -1136,7 +1137,7 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   if (topen(i3+lswtch) .ne. topen(i+lswtch))   go to 809
   go to 813
 799 write (lunit6,805)
-805 format (3x, 5h time)
+805 format (3x, ' Time')
   if (idist .gt. 0 )   go to 821
   if (topen(i + lswtch) .lt. 0.0) go to 821
   write (lunit6, 825)  deltsc
@@ -1144,10 +1145,10 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   go to 826
 821 write (lunit6, 825)   deltsu
 826 write (lunit6, 865)
-865 format (2x, 9h sec/line)
+865 format (2x, ' sec/line')
   go to 991
 809 write (lunit6, 810)
-810 format (3x, 5h time, 37x, 5h time)
+810 format (3x, ' Time', 37x, ' Time')
   if (idist .gt. 0 )   go to 831
   if (topen(i + lswtch) .lt. 0.0)   go to 831
   write (lunit6, 835)   deltsc, deltsc
@@ -1155,10 +1156,10 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   go to 836
 831 write (lunit6, 835)   deltsu, deltsu
 836 write (lunit6, 875)
-875 format( 2x, 9h sec/line, 34x, 9h sec/line)
+875 format( 2x, ' sec/line', 34x, ' sec/line')
   go to 992
 813 write (lunit6, 814)
-814 format (3x, 5h time, 2(37x, 5h time))
+814 format (3x, ' Time', 2(37x, ' Time'))
   if (idist .gt. 0)   go to 841
   if (topen(i + lswtch)  .lt. 0.0)  go to 841
   write (lunit6, 845)   deltsc, deltsc, deltsc
@@ -1166,7 +1167,7 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   go to 848
 841 write (lunit6, 845)   deltsu, deltsu, deltsu
 848 write (lunit6, 850)
-850 format (2x,  9h sec/line, 2(34x, 9h sec/line))
+850 format (2x,  ' sec/line', 2(34x, ' sec/line'))
   i = i + 3
   go to 1000
 991 i = i + 1
@@ -1274,33 +1275,36 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   nchain = 51
   return
 end subroutine innr29
+
 !
 ! subroutine plotng.
 !
+
 subroutine plotng (kkrv, kklm)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     universal module called only by "innr29" of overlay 29.
   !     some logic is similar to "linplt" of overlay 31.
   include 'blkcom.ftn'
   dimension  kut(131), ktsin(4), kdig(10)
-  !     burroughs: preserve local variable between module calls:
-  data  kut(1)  / 1h  /
-  data  ktsin(1)   /  1ha  /
-  data  ktsin(2)   /  1hb  /
-  data  ktsin(3)   /  1hc  /
-  data  ktsin(4)   /  1hd  /
+  !     Burroughs: preserve local variable between module calls:
+  data  kut(1)  / ' ' /
+  data  ktsin(1) / 'a' /
+  data  ktsin(2) / 'b' /
+  data  ktsin(3) / 'c' /
+  data  ktsin(4) / 'd' /
   data  kom        /  1h*  /
   data  klank      /  1h   /
-  data  kdig(1)   /  1h1  /
-  data  kdig(2)   /  1h2  /
-  data  kdig(3)   /  1h3  /
-  data  kdig(4)   /  1h4  /
-  data  kdig(5)   /  1h5  /
-  data  kdig(6)   /  1h6  /
-  data  kdig(7)   /  1h7  /
-  data  kdig(8)   /  1h8  /
-  data  kdig(9)   /  1h9  /
-  data  kdig(10)  /  1h0  /
+  data  kdig(1)  / '1' /
+  data  kdig(2)  / '2' /
+  data  kdig(3)  / '3' /
+  data  kdig(4)  / '4' /
+  data  kdig(5)  / '5' /
+  data  kdig(6)  / '6' /
+  data  kdig(7)  / '7' /
+  data  kdig(8)  / '8' /
+  data  kdig(9)  / '9' /
+  data  kdig(10) / '0' /
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 1349) kkrv, kklm
 1349 format (' Top of "plotng".  kkrv, kklm =', 2i8)
   krv = kkrv
@@ -1372,13 +1376,14 @@ end subroutine plotng
 !
 
 subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, nmax, lspars )
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  dimension  array(maxsq,maxsq), arrsav(maxsq,maxsq)
-  dimension  soln(maxsq), rhs(maxsq), ymat(nmax,nmax2)
-  dimension  kspars(lspars,lspars)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  dimension array(maxsq,maxsq), arrsav(maxsq,maxsq)
+  dimension soln(maxsq), rhs(maxsq), ymat(nmax,nmax2)
+  dimension kspars(lspars,lspars)
   include 'blkcom.ftn'
-  character*8 texta, textb, text1, text2, chara
-  character*8 charb, charc, charq, text80, text9
+  character(8) :: texta, textb, text1, text2, chara
+  character(8) :: charb, charc, charq, text80, text9
   !     following dimensioned vector with "35" really should be
   !     variably-dimensioned to "iofbnd" user-requested size.  but
   !     it is easier to leave them fixed, bigger than ever needed:
@@ -1462,7 +1467,7 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
      read (unit = abuff, fmt = 5358) text1, text2
 5358 format ( 2x, 12a1 )
      write (lunit6, 5360)  l, rthev(l), xthev(l), n13
-5360 format ( 10h+thevenin.,  i6, 2e13.4, i6  )
+5360 format ('+Thevenin.',  i6, 2e13.4, i6  )
      if ( negate(l) .eq. 0 )  negate(l) = n13
      n4 = 0
      do m=1, 6
@@ -1482,9 +1487,9 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
 5366 end do
 5368 admit(l) = 1.0 / xthev(l)
      if ( iprsup  .ge.  2 )  write (lunit6, 5371) l, rthev(l), xthev(l),   l, (ymat(l,l), l=1, ntot)
-5371 format ( 4h row, i2, 9h.   x/r =, f11.3, 10h   xthev =, f11.3, 5h   y(,   i2, 10h,1:ntot) =,  3e13.5  ,/, 1x,  10e13.5  )
+5371 format (' row', i2, '.   X/R =', f11.3, '   Xthev =', f11.3, '   y(', i2, ',1:ntot) =', 3e13.5, /, 1x, 10e13.5)
 5375 end do
-  !     Next assemble constant part of jacobian in arrsav array.  This
+  !     Next assemble constant part of Jacobian in arrsav array.  This
   !     is top of loop over admittance level (for sequential adjustment
   !     of [y] to minimize shock to newton solution):
 5379 n7 = 0
@@ -1512,9 +1517,9 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
 5408 end do
 5422 end do
   if ( iprsup  .ge.  2 ) write (lunit6, 5425)  ( soln(j), j=1, ntotsq )
-5425 format ( 31h initial guess soln(1:ntotsq) =,   6e15.6  ,/, 1x,  8e15.6 )
+5425 format (' Initial guess soln(1:ntotsq) =', 6e15.6, /, 1x,  8e15.6)
   if ( iprsup  .ge.  2 ) write (lunit6, 5437)
-5437 format ( /,  35h partial constant jacobian follows.  )
+5437 format (/, ' Partial constant Jacobian follows.')
   do i=1, ntotsq
      if ( iprsup  .ge.  3 ) write (lunit6, 5443)  ( arrsav(i,j), j=1, ntotsq )
 5443 format ( 1x, 10e13.5 )
@@ -1548,7 +1553,7 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
            d13 = d13 + ymat(i,j) * soln(n2)
 5492    end do
         if ( iprsup .ge. 6 ) write (lunit6, 5496)  kk, i, n4, n7, n2,  scale, rhs(n7), d13
-5496    format(' below 5492.  kk, i, n4, n7, n2 =', 5i5 ,/, 'scale, rhs(n7), d13 =', 3e15.5)
+5496    format(' Below 5492.  kk, i, n4, n7, n2 =', 5i5 ,/, 'scale, rhs(n7), d13 =', 3e15.5)
         rhs(n7) = rhs(n7) + scale * d13
         if ( i .eq. kk )  go to 5502
         array(n7,n7) = array(n7,n7) + soln(n4)
@@ -1560,7 +1565,7 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
 5502 end do
 5506 end do
   if ( iprsup  .ge.  2 ) write (lunit6, 5517)
-5517 format (/, ' Final jacobian after variable part has been', ' added.  rhs = function evaluation (also done).')
+5517 format (/, ' Final Jacobian after variable part has been added.  rhs = function evaluation (also done).')
   do i=1, ntotsq
      if (iprsup .ge. 4) write (lunit6, 5527) i, rhs(i), (array(i,j), j = 1, ntotsq)
 5527 format (   i3,   7h. rhs =,   e15.6,   18h   y(i,1:ntotsq) =, 6e15.6   ,/,  1x, 8e15.6 )
@@ -1590,7 +1595,7 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
 5549    format(' zero (', i2, ',', i2, '). rhs(i) =', e15.6, '   a(i,1:n9) =', 5e15.6, /, 1x, 8e15.6)
 5561 end do
 5563 if ( iprsup  .ge.  4 ) write (lunit6, 5564)  i, i, array(i,i)
-5564 format ( 39h diagonal ready to be reciprocated,  a(,   i2, 1h,,  i2,   3h) =,   e15.6  )
+5564 format (' Diagonal ready to be reciprocated,  a(', i2, ',',  i2, ') =', e15.6  )
      d4 = 1.0 / array(i,i)
      array(i,i) = 1.0
      if ( i .eq. ntotsq )  go to 5574
@@ -1603,10 +1608,10 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
 5572 end do
 5574 rhs(i) = d4 * rhs(i)
      if ( iprsup  .ge.  3 ) write (lunit6, 5576) i, rhs(i), (array(i,j), j=1, ntotsq)
-5576 format ( 10h final row,   i3,   8h.  rhs =,   e15.6, 18h   a(i,1:ntotsq) =,   5e15.6  ,/,  1x,  8e15.6  )
+5576 format (' Final row', i3, '.  rhs =', e15.6, '   a(i,1:ntotsq) =', 5e15.6, /, 1x, 8e15.6)
 5585 end do
   if ( iprsup  .ge.  2 ) write (lunit6, 5594)
-5594 format ( 44h done with downward, begin backsubstitution.  )
+5594 format (' Done with downward, begin backsubstitution.')
   i = ntotsq
 5614 i = i - 1
   n8 = i + 1
@@ -1616,34 +1621,26 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
 5627 end do
   if ( i .gt. 1 )  go to 5614
   if ( iprsup  .ge.  2 ) write (lunit6, 5697)  ( rhs(j), j=1, ntotsq )
-5697 format ( 28h complete correction vector:, 6e15.6 ,/, 1x, 8e15.6 )
+5697 format (' Complete correction vector:', 6e15.6, /, 1x, 8e15.6)
   d4 = 0.0
   do j=1, ntotsq
      if ( absz( rhs(j) ) .gt. d4 ) d4 = absz( rhs(j) )
 5706 soln(j) = soln(j) + rhs(j)
   end do
   if ( iprsup  .ge.  1 ) write (lunit6, 5714)  niter, d4
-5714 format ( 48h largest correction at newton iteration  niter =, i3,  10h  is  d4 =,   e15.6  )
+5714 format (' Largest correction at Newton iteration  niter =', i3, '  is  d4 =', e15.6)
   if ( iprsup  .ge.  2 ) write (lunit6, 5716)  ( soln(i), i=1, ntotsq )
-5716 format ( 29h corrected solution estimate:, 6e15.6 ,/, 1x, 8e15.6 )
+5716 format (' Corrected solution estimate:', 6e15.6, /, 1x, 8e15.6)
   if ( d4 .lt. epsiln )  go to 5729
 5723 niter = niter + 1
   if ( niter .le. nitmax )  go to 5481
   write (lunit6, 5727)  nitmax,  d4,  scale
-5727 format (  /,  46h ***********  nonconvergence error.  iteration, 35h limit has been reached.   nitmax =,   i3, &
-          /,  26h   peak correction (abs) =,   e15.6,  33h   for admittance level "scale" =,   f6.3 )
+5727 format (/, ' ***********  Nonconvergence error.  Iteration limit has been reached.   nitmax =', i3, /,  '   peak correction (abs) =', e15.6, '   for admittance level "scale" =', f6.3)
   go to 5778
 5729 if ( absz( scale - 1.0 )  .gt.  epsiln )   go to 5782
   !     problem is solved;  only conversion from "y" to "x" remains:
   write (lunit6, 5737)
-5737 format ( /, 44h final generator equivalent impedances, plus, &
-          47h confirmation of original generator parameters., &
-          /,       42h resistance is ignored during the internal, &
-          47h computation, and added as fixed % only at end., &
-          /,       44h x-fault is short circuit reactance computed, &
-          42h after removal of user-flagged generators., &
-          /,  3x, 3hgen,  10x, 5hx-new,  10x, 5hr-new, 8x,  7hx-fault, &
-          9x, 6hx-thev,  7x, 8hx/r-thev  )
+5737 format (/, ' Final generator equivalent impedances, plus confirmation of original generator parameters.', /, ' Resistance is ignored during the internal computation, and added as fixed % only at end.', /, ' X-fault is short circuit reactance computed after removal of user-flagged generators.', /,  3x, 'gen',  10x, 'X-new', 10x, 'R-new', 8x, 'X-fault', 9x, 'X-thev', 7x, 'X/R-thev')
   n18 = 0
   rewind lunit1
   !     next we add y-gen to [y], to calculate short circuit current:
@@ -1692,14 +1689,14 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
      call packa1 ( text9(1), textb(j), n5 )
      if ( ipncom .eq. 0 )  go to 5743
      write (lunit7, 5741)
-5741 format ( 1hc )
+5741 format ('c')
      write (lunit1, 5742)
-5742 format ( 2h c  )
+5742 format (' c')
      n18 = n18 + 1
-5743 if ( ipunch  .eq.  0 ) write (lunit7, 5744)  n6, texta(j), textb(j), rzero(j), xzero(j)
-5744 format ( i2, 1h,,  2( a6, 1h, ),  6x,  3h,,,,  e23.14, 1h,,  e23.14,  6h,,,,,,   )
-     write (lunit1, 5745)  n6, texta(j), textb(j), rzero(j), xzero(j)
-5745 format ( i3, 1h,,  2( a6, 1h, ),  6x,  3h,,,,  e23.14, 1h,,  e23.14,  6h,,,,,,   )
+5743 if (ipunch .eq. 0) write (unit = lunit7, fmt = 5744) n6, texta(j), textb(j), rzero(j), xzero(j)
+5744 format (i2, ',',  2(a6, ','), 6x, ',,,', e23.14, ',', e23.14, ',,,,,,')
+     write (unit = lunit1, fmt = 5745) n6, texta(j), textb(j), rzero(j), xzero(j)
+5745 format (i3, ',', 2(a6, ','), 6x, ',,,', e23.14, ',', e23.14, ',,,,,,')
      n18 = n18 + 1
      n4 = ichara(j)
      n5 = icharb(j)
@@ -1715,28 +1712,27 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
      call packa1 ( text9(1), textb(j), n5 )
      n6 = 53
      if ( ipunch  .eq.  0 ) write (lunit7, 2744)  n6, texta(j), textb(j)
-2744 format ( i2, 1h,,  2( a6, 1h, ),  6x,  10h,,,,,,,,,,   )
-     write (lunit1, 2745)  n6, texta(j), textb(j)
-2745 format ( i3, 1h,,  2( a6, 1h, ),  6x,  10h,,,,,,,,,,   )
+2744 format (i2, ',',  2(a6, ','), 6x, ',,,,,,,,,,')
+     write (unit = lunit1, fmt = 2745)  n6, texta(j), textb(j)
+2745 format (i3, ',', 2(a6, ','), 6x, ',,,,,,,,,,')
      n18 = n18 + 1
 5746 end do
   if ( iprsup .le. 1 )  go to 5764
   if ( lspars .eq. 1 )  go to 5764
   write (lunit6, 5753)
-5753 format ( /,  44h sparsity pattern of triangularized jacobian, 15h follows  .....,  /,  6x,  10h1234567890, &
-          '123456789012345678901234567890123456789012345678901234567890')
+5753 format (/, ' Sparsity pattern of triangularized Jacobian follows  .....', /, 6x, '1234567890123456789012345678901234567890123456789012345678901234567890')
   do k=1, ntotsq
      write (lunit6, 5755)  k,  ( kspars(k,l), l=1, ntotsq )
-5755 format (  i3,   3h : ,   120a1  )
+5755 format (  i3,   ' : ',   120a1  )
 5756 end do
 5764 loop = loop + 1
   write (lunit6, 5443)
   if ( loop .le. 2 )  go to 5286
   if ( ipunch  .ne.  0 )  go to 5778
   write (lunit6, 5767)
-5767 format ( 46h 80-column card images of coupled r-l branches, 47h that may be punched on lunit7 (if ipunch = 0)., &
-          /, 41h 1234567890123456789012345678901234567890, 40h1234567890123456789012345678901234567890, &
-          /, 41h ----------------------------------------, 40h----------------------------------------    )
+5767 format (' 80-column card images of coupled R-L branches that may be punched on lunit7 (if ipunch = 0).', /, &
+          ' 12345678901234567890123456789012345678901234567890123456789012345678901234567890', /, &
+          ' --------------------------------------------------------------------------------')
   rewind lunit1
   do j=1, n18
      read (lunit1, 5770)  text80
@@ -1748,23 +1744,26 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
   if ( scale .gt. 1.0 )  scale = 1.0
   go to 5379
 9900 if ( iprsov(nchain) .ge. 1 ) write (lunit6, 9904)  kill
-9904 format (  23h exit "fltdat".  kill =,  i5  )
+9904 format (' Exit "fltdat".  kill =', i5)
   return
 end subroutine fltdat
+
 !
-!     subroutine statrs.
+! subroutine statrs.
 !
+
 subroutine statrs
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     installation-dependent module of overlay 29,  called only
   !     for  "tabulate energization results"  usage.
   include 'blkcom.ftn'
-  character c1
-  character*20 filn20
-  character filnam
+  character :: c1
+  character(20) :: filn20
+  character :: filnam
   dimension filnam(20)
   equivalence (filn20, filnam(1))
-  data  c1  /  1h   /
+  data c1 / ' ' /
   if ( iprsup  .ge.  1 ) write (lunit6, 1793)  ( lstat(i), i=13, 16 )
 1793 format ( ' top of "statrs" .   lstat(13:16) =',  4i5  )
   write (unit = filnam(1), fmt = 1804) (lstat(i), i = 13, 16)
@@ -1781,6 +1780,7 @@ subroutine statrs
 1822 format (20x, '----  successful  open   of  lunit',  i1,  '  data', ' on disk.   permanent file name = ', 20a1, 2h .   )
 9000 return
 end subroutine statrs
+
 !
-!     end of file: over29.for
+! end of file over29.f90
 !

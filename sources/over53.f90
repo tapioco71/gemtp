@@ -1,15 +1,19 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over53.for
+! file over53.f90
 !
+
 !
-!     subroutine over53.
+! subroutine over53.
 !
+
 subroutine over53
-  implicit real*8 (a-h, o-z), integer*4 (i-n)
+  implicit none
+  !  implicit real*8 (a-h, o-z), integer*4 (i-n)
   include 'blkcom.ftn'
   if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
-4567 format ( ' "begin module over53." ')
+4567 format (' "Begin module over53." ')
   if ( nchain  .ne.  53 )   go to 99999
   n1 = kill - 90
   go to (6091 , 6092, 6093, 6094, 6095, 6096, 6097, 6098, 6099, 6100, 6101, 6102, 6103, 6104, 6105, 6106, 6107, 6108, 6109, 6110, &
@@ -735,9 +739,10 @@ subroutine over53
 6220 lastov = nchain
   nchain = nfrfld + 50
   if ( iprsup  .ge.  1 ) write ( lunit6, 4568 )
-4568 format ( 24h "exit  module over53." )
+4568 format (' "Exit  module over53."')
 99999 return
 end subroutine over53
+
 !
-!     end of file: over53.for
+! end of file over53.f90
 !

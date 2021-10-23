@@ -3,9 +3,13 @@
 !     file: syncom.ftn
 !
 !     this deck contains s.m. storage used by tacs modules.
-  integer(4) etac
-  common /smtacs/ etac(20)
+
+  integer ismtac, ntotac
+  real, dimension(20), target :: etac
+  real lbstac
+  common /smtacs/ etac
   common /smtacs/ ismtac(20), ntotac, lbstac
+
 !
 !     end of file: syncom.ftn
 !

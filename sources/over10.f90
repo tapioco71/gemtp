@@ -1,20 +1,22 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: over10.for
+! file: over10.f90
 !
 
 !
-!     subroutine over10.
+! subroutine over10.
 !
 
 subroutine over10
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   include 'space2.ftn'
   dimension itemp(1)
   equivalence (itemp(1), voltk(1))
-  character(8) fxtem1
+  character(8) :: fxtem1
   locatn(i, j) = (j * j - j) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 2941) ntot, ioffd, loopss(2)
 2941 format (' Top of "over10".   ntot, ioffd, loopss(2) =', 2i8)
@@ -928,11 +930,12 @@ subroutine over10
 end subroutine over10
 
 !
-!     subroutine fxsour.
+! subroutine fxsour.
 !
 
 subroutine fxsour
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     This module of overlay 10 is called only once, if and only
   !     if the data case involves phasor power (p+jq, etc.)
   !     constraints.  This is EMTP load flow of "fix source" request.
@@ -940,7 +943,7 @@ subroutine fxsour
   include 'labcom.ftn'
   include 'space2.ftn'
   include 'deck10.ftn'
-  character(8) fixbu3, fxtem1
+  character(8) :: fixbu3, fxtem1
   dimension vdiff(20)
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 10)
 10 format (/, ' Top of fxsour = load flow module')
@@ -1268,11 +1271,12 @@ subroutine fxsour
 end subroutine fxsour
 
 !
-!     subroutine sseqiv.
+! subroutine sseqiv.
 !
 
 subroutine sseqiv (ikf, isfd, omegal, omegac)
-  implicit real(8) (a-h, o-z), integer(4) (i-n)
+  implicit none
+  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   dimension ur(2), ui(2)
@@ -1323,5 +1327,5 @@ subroutine sseqiv (ikf, isfd, omegal, omegac)
 end subroutine sseqiv
 
 !
-!     end of file: over10.for
+! end of file over10.f90
 !

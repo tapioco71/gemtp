@@ -1,14 +1,17 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+
 !
-!     file: ntacs1.f90
+! file ntacs1a.f90
 !
 
 !
-!     subroutine ntacs1a.
+! subroutine ntacs1a.
 !
 
 subroutine ntacs1a        ! wsm + thl manual modification for bpa emtp
-  include 'tacsto.ftn'
+  use tacsto
+  implicit none
+  !  include 'tacsto.ftn'
   open (unit = unit09, file = 'tacs.tim', status = 'old')
   read (unit = unit09, fmt = 901) ndx0
 901 format (i1)
@@ -25,5 +28,5 @@ subroutine ntacs1a        ! wsm + thl manual modification for bpa emtp
 end subroutine ntacs1a
 
 !
-!     end of file: ntacs1.f90
+! end of file ntacs1a.f90
 !
