@@ -444,6 +444,8 @@ subroutine spying
   use tacsar
   use dekspy
   use indcom
+  use bcdtim
+  use bcddat
   implicit none
   !     Module of interactive EMTP only, which services "emtspy".
   !     This is the principle module, called by "emtspy".
@@ -2108,6 +2110,8 @@ subroutine spyink
   use dekspy
   use indcom
   use tracom
+  use bcdtim
+  use movcop
   implicit none
   !     Module of interactive emtp only, which services "emtspy".
   !     this is the 2nd half of principle module "spying".
@@ -2834,7 +2838,8 @@ subroutine spyink
 3665 call frein1 (buff77, n6)
   limstp = 999999
   if (n6 .le. 0) n6 = 1
-  call copyi (n6, multpr, 5)
+  !  call copyi (n6, multpr, 5)
+  call copy (n6, multpr, 5)
   n7 = istep - 1
   do j = 1, 9999
      n7 = n7 + 1
@@ -4101,6 +4106,8 @@ end subroutine quiter
 subroutine honker (klevel)
   use blkcom
   use dekspy
+  use bcdtim
+  use bcddat
   implicit none
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, this module can be deleted.
@@ -5160,6 +5167,7 @@ subroutine locatn
   use dekspy
   use fixcom
   use indcom
+  use bcdtim
   implicit none
   integer(4) :: iac, ibr1, icsup, iconfg, idctcs, idelta, iend, imdual
   integer(4) :: ineof, infexp, iold, ipl, ipos, ipr, iprint, iptacw, isat, ised
@@ -5209,7 +5217,7 @@ subroutine locatn
   locate(   9)  =  location ( terra  )
   locate(  10)  =  location ( userid )
   locate(  11)  =  location ( branch )
-  locate(  12)  =  location ( copy   )
+  locate(  12)  =  location ( chcopy   )
   locate(  13)  =  location ( csepar )
   locate(  14)  =  location ( chcont )
   locate(  15)  =  location ( texcol(1) )
@@ -6034,7 +6042,7 @@ end subroutine rtmplt
 !    data  size       /  'size    '  /
 !    data  show       /  'show    '  /
 !    data  linezz     /  'line    '  /
-!    data  photo      /  'copy    '  /
+!    data  photo      /  'chcopy  '  /
 !    data  end        /  'end     '  /
 !    data  repeat     /  'repeat  '  /
 !    data  flush      /  'flush   '  /

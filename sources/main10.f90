@@ -167,6 +167,10 @@ subroutine subr10
         call over20
 #endif
 
+     case default
+#ifdef WITH_OVER1
+        call over1
+#endif
      end select
   end do
 9000 return
@@ -186,12 +190,9 @@ subroutine tapsav (narray, n1, n2, n3)
   !     computers like Prime and Burroughs where  common  blocks
   !     are not ordered regularly in memory.   Switch "KBURRO"
   !     selects between disk or virtual memory (/C29B01/).
-  !  include 'blkcom.ftn'
-  !  include 'deck29.ftn'
-  integer(4), intent(out) :: narray
+  integer(4), intent(out) :: narray(1)
   integer(4), intent(in) :: n1, n2, n3
   integer(4) :: i, j, k, kvecsv, n4, n9, n13
-  dimension narray(1)
   !
   if (iprsup .lt. 1) go to 5840
   n9 = 0
@@ -253,9 +254,8 @@ subroutine dgelg (r, a, m, n, eps, ier)
   implicit none
   integer(4), intent(out) :: ier
   integer(4), intent(in) :: m, n
-  real(8), intent(out) :: a, r
+  real(8), intent(out) :: a(m * m), r(m * n)
   real(8), intent(in) :: eps
-  dimension a(m * m), r(m * n)
   integer(4) :: i, ii, ist, j, k, l, lend, ll, lst, mm, nm
   real(8) :: piv, pivi, tb, tol
   !
@@ -555,12 +555,10 @@ end subroutine pltfil
 subroutine pltlu2 (d2, volti)
   use blkcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     called by "tacs2" only, if and only if m4plot .ne. 0
   !     this module is universal for fortran 77 compilers and
   !     computers for which real*4 corresponds to single precision.
-  real(8), intent(out) :: d2, volti
-  dimension volti(1)
+  real(8), intent(out) :: d2, volti(1)
   integer j, n12
   real(8) :: forbyt(150)
   !
@@ -584,7 +582,6 @@ subroutine vecrsv (array, n13, n2)
   use blkcom
   use deck29
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Module for vector dumping/restoring of "OVER6", "OVER8", etc.
   !     This is universal for virtual computers which chose to
   !     use /C29B01/ space for this, as well as all of "LABCOM".
@@ -592,9 +589,9 @@ subroutine vecrsv (array, n13, n2)
   integer(4), intent(out), target :: array(*)
   integer(4), intent(in) :: n2, n13
   integer(4), allocatable :: farray(:)
-  integer(4) :: kntvec, kofvec
+  integer(4) :: kntvec, kofvec(20)
   integer(4) :: n4, n14
-  common /veccom/ kntvec, kofvec(20)
+  !  common /veccom/ kntvec, kofvec(20)
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 1623) n13, n2, kntvec
 1623 format (' Begin "vecrsv".  n13, n2 =',  2i8, '     kntvec =', i8)
@@ -671,8 +668,8 @@ subroutine vecisv (karr, n13, n2)
   integer(4), intent(in) :: n13, n2
   integer(4), allocatable :: farray(:)
   !     block /VECCOM/ is shared with "VECRSV" (see for more info)
-  integer(4) :: kntvec, kofvec, n4, n14
-  common /veccom/ kntvec, kofvec(20)
+  integer(4) :: kntvec, kofvec(20), n4, n14
+  !  common /veccom/ kntvec, kofvec(20)
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 1423) n13, n2
 1423 format (' Begin "vecisv".  n13, n2 =',  2i8)
@@ -727,7 +724,7 @@ subroutine vecisv (karr, n13, n2)
 end subroutine vecisv
 
 !
-!     subroutine vecrxx.
+! subroutine vecrxx.
 !
 
 subroutine vecrxx (array, n13, n2)
@@ -738,15 +735,14 @@ subroutine vecrxx (array, n13, n2)
   !  include 'blkcom.ftn'
   integer(4), intent(in) :: n2
   integer(4), intent(out) :: n13
-  real(8), intent(out) :: array
+  real(8), intent(out) :: array(2)
   integer(4) :: j, k, n6, n14
-  dimension array(2)
   !
-  if (iprsup .ge. 1) write (lunit6, 1575) n13, n2
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 1575) n13, n2
 1575 format (' Begin "vecrsv".  n13, n2 =', 2i8)
   if (n2 .ne. 0) go to 1638
   !     zero n2 means that we want to position tape for next read:
-  if ( n13  .ge.  0 )   go to 1592
+  if (n13 .ge. 0) go to 1592
   n6 = -n13
   do j = 1, n6
      backspace lunt13
@@ -757,18 +753,18 @@ subroutine vecrxx (array, n13, n2)
   do j = 1, n13
      read (unit = lunt13) n14
   end do
-1612 if ( iprsup  .ge.  1 ) write (6, 1613)  n13
+1612 if (iprsup .ge. 1) write (unit = 6, fmt = 1613) n13
 1613 format (' Position magnetic tape.  n13 =', i4)
   n13 = 3
   go to 9000
-1638 if ( n2  .eq.  1 )   go to 1671
+1638 if (n2 .eq. 1) go to 1671
   !     begin code to restore  (array(k), k=1, n13)  from tape:
-  read (lunt13)  ( array(k), k=1, n13 )
+  read (unit = lunt13) (array(k), k = 1, n13)
   go to 9000
   !     begin code to dump  (array(k), k=1, n13)  onto tape:
-1671 write (lunt13)  ( array(k), k=1, n13 )
-9000 if ( iprsup  .ge.  1 ) write (lunit6, 9007)  array(1), array(2), array(n13)
-9007 format (' Exit "vecrsv".  array(1; 2; n13) =',  3e15.6)
+1671 write (unit = lunt13) (array(k), k = 1, n13)
+9000 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9007) array(1), array(2), array(n13)
+9007 format (' Exit "vecrsv".  array(1; 2; n13) =', 3e15.6)
   return
 end subroutine vecrxx
 
@@ -781,7 +777,6 @@ subroutine vecixx (karr, n13, n2)
   implicit none
   !     Universal (non-virtual) form of module for binary i/o.  If
   !     extracted from UTPF for use, convert name "VECIXX" to "VECISV"
-  !  include 'blkcom.ftn'
   integer(4), intent(out) :: karr(2)
   integer(4), intent(in) :: n2, n13
   integer(4) :: k
@@ -806,6 +801,7 @@ end subroutine vecixx
 subroutine namea6 (text1, n24)
   use blkcom
   use labcom
+  use strcom
   implicit none
   ! module for maintainance of alphanumeric vector texvec of
   ! "labcom".  maxbus of "blkcom" is last used cell.  n24 chooses
@@ -828,7 +824,7 @@ subroutine namea6 (text1, n24)
   texvec(n17) = text1
   n24 = n17
   do j = 1, maxbus
-     if (texvec(j) .ne. text2) go to 3428
+     if (to_lower (texvec(j)) .ne. text2) go to 3428
      n17 = j
      go to 9000
 3428 continue
@@ -840,9 +836,8 @@ subroutine namea6 (text1, n24)
   texvec(maxbus) = text1
   n24 = maxbus
   go to 9000
-3438 if (iprsup .ge. 1) write (lunit6, 3442) maxbus, text1, n24
-3442 format ('  +++++  Search of EMTP name vector bus through cell', i5, '   in  "namea6"  shows no match for', /, &
-       '         .', '"', a6, '"', '.   Return -intinf.', i10)
+3438 if (iprsup .ge. 1) write (unit = lunit6, fmt = 3442) maxbus, text1, n24
+3442 format ('  +++++  Search of EMTP name vector bus through cell', i5, '   in  "namea6"  shows no match for', /, '         .', '"', a6, '"', '.   Return -intinf.', i10)
   n24 = -intinf
   go to 9000
 3446 if (n24 .lt. 0) go to 3455
@@ -866,6 +861,7 @@ subroutine tables
   use synmac
   use umdeck
   use indcom
+  use movcop
   implicit none
   !     Utility which is used to both dump and restore EMTP
   !     tables (central memory vs. disk).  Usage is for both
@@ -875,7 +871,7 @@ subroutine tables
   !     from  "lookie"  which is called by  "subts3"  of  ov16).
   !     Also used by  "restore"  request of rtm, where table
   !     restoration is in  "katalg"  of overlay 20.
-  integer(4) :: locker
+  integer(4) :: locker(2)
   !     Note about deck "synmac".   If EMTP s.m. modeling
   !     Brandwajn (type-59), is to be deleted,
   !     then all s.m. subroutines ( smdat, smout, smpfit,
@@ -900,7 +896,7 @@ subroutine tables
   !  equivalence (jtemp(1), etac(1)), (ktemp(1), z(1))
   !  equivalence (moncar(2), kbase)
   !  dimension iprsav(4)
-  common /comlock/ locker(2)
+  !  common /comlock/ locker(2)
   !
   !     Burroughs: preserve local variable between module calls:
   data iprsav / 0, 0, 0, 0 /
@@ -925,7 +921,7 @@ subroutine tables
   write (unit = lunit2) (kpen(i), i = 1, nword1)
   write (unit = lunit2) (iprsov(i), i = 35, nword2)
   !     store iprsov(16-19) in iprsav at 1st call to tables from over12
-  call move (iprsov(16), iprsav(1), ll4)
+  call move (iprsov(16 :), iprsav(1 :), ll4)
   call tapsav (integx, lunit2, ltlabl, ll1)
   if (numsm .ne. 0) write (unit = lunit2) (ktemp(i), i = 1, n4), (jtemp(i), i = 1, n5)
   write (unit = lunit2) (itemp(i), i = 1, n9)
@@ -971,24 +967,22 @@ subroutine csup (l)
   use labcom
   use tacsar
   use tracom
+  use random
   implicit none
   integer(4), intent(in) :: l
-  integer(4) :: i, i1, i2, idiv, idn, ifl, iop
+  integer(4) :: i, i1, i2, idiv, idn(20), ifl(20), iop(50)
   integer(4) :: j, jfl, ji
   integer(4) :: k, k1, karg, kdev2, kjsup, kksup
   integer(4) :: m, m1, m2, mj
   integer(4) :: n, n1, n2, n3, n4, n5, n6, n7, ndx1, ndx2, ndx3, ndx4, ndx5, ndx6
   integer(4) :: nj, nn, nnn, nop
-  real(8) :: a, aa, acc, amx, arg
+  real(8) :: a, aa, acc(20), amx(20), arg(50)
   real(8) :: b, bb
   real(8) :: d, d1, d2, d4, d5, d7, d8, d9, d10, d11, div
   real(8) :: g
   real(8) :: h
   real(8) :: rdev1
   real(8) :: zfl
-  real(8) :: randnm
-  dimension arg(50), acc(20), amx(20)
-  dimension iop(50), ifl(20), idn(20)
   !
   !     000  b = the argument and later the value of the function,
   !     000      before it is affected by the algebraic operation
@@ -1544,9 +1538,7 @@ subroutine csup (l)
   iuty(kiuty + 3) = iuty(kiuty + 3) - 1
   ndx1 = ilntab(kspvar + i)
   write (lunit6, 6504) texvec(ndx1), t, d7, g
-6504 format (' ', 5x, 'Warning. ---- Frequency sensor ', a6, ' has zero crossing at ', e15.6, &
-       ' sec. But new frequency ', /, 21x, 'of', e13.4, ' Hz differs by over fifty percent from the old frequency of ', &
-       e13.4, ' Hz. Reject it.')
+6504 format (' ', 5x, 'Warning. ---- Frequency sensor ', a6, ' has zero crossing at ', e15.6, ' sec. But new frequency ', /, 21x, 'of', e13.4, ' Hz differs by over fifty percent from the old frequency of ', e13.4, ' Hz. Reject it.')
   go to 6507
 6505 parsup(nn) = g
   a = g
@@ -1584,8 +1576,7 @@ subroutine csup (l)
   iuty(kiuty+3) = iuty(kiuty+3) - 1
   ndx6 = ilntab( kspvar + i )
   write (lunit6, 65316)  texvec( ndx6), t
-65316 format (5x, 'Warning.  ----  value of delay became negative for ', "'", a6, "'", ' at time =', e14.6, &
-       ' but lower limit nalue = 0.0 .', /, 21x, 'This message will not be repeated.')
+65316 format (5x, 'Warning.  ----  value of delay became negative for ', "'", a6, "'", ' at time =', e14.6, ' but lower limit nalue = 0.0 .', /, 21x, 'This message will not be repeated.')
 65313 d7 = 0.0
   go to 65310
 65320 if ( d9 .gt. 0.0 )  go to 65330
@@ -1594,96 +1585,93 @@ subroutine csup (l)
 65330 m1 = 0
   j = 0
 65350 j = j + 1
-  if ( d9 .gt. j )  go to 65350
-  if ( j .le. d8 )  m1 = 1
-  if ( j .le. n6 )  go to 65360
-  if ( iuty(kiuty+2) .eq. 0 )  go to 65353
-  iuty(kiuty+3) = iuty(kiuty+3) - 1
-  ndx6 = ilntab( kspvar + i )
+  if (d9 .gt. j) go to 65350
+  if (j .le. d8) m1 = 1
+  if (j .le. n6) go to 65360
+  if (iuty(kiuty+2) .eq. 0) go to 65353
+  iuty(kiuty + 3) = iuty(kiuty + 3) - 1
+  ndx6 = ilntab(kspvar + i)
   d4 = deltat * n6
-  write (lunit6, 65356) d4, texvec( ndx6), t
-65356 format (5x, 'Warning.  ----  value of delay exceeded max. delay value of ', '"', e14.6, '"', ' for ', '"', a6, &
-       '"', ' at time =', e14.6, ' .', / 21x, 'This message will not be repeated.')
+  write (unit = lunit6, fmt = 65356) d4, texvec( ndx6), t
+65356 format (5x, 'Warning.  ----  value of delay exceeded max. delay value of ', '"', e14.6, '"', ' for ', '"', a6, '"', ' at time =', e14.6, ' .', / 21x, 'This message will not be repeated.')
 65353 j = n6
   m1 = 1
 65360 n4 = n7 - j
-  if ( n4 .lt. n5 )  n4 = n4 + n6
+  if (n4 .lt. n5) n4 = n4 + n6
   ndx6 = kprsup + n4
-  a = parsup( ndx6)
-  if ( m1 .eq. 1 )  go to 11
+  a = parsup(ndx6)
+  if (m1 .eq. 1) go to 11
   n3 = n4 + 1
-  if ( n3 .ge.  n5 + n6  )  n3 = n3 - n6
+  if (n3 .ge. n5 + n6) n3 = n3 - n6
   d5 = b
   ndx6 = kprsup + n3
-  if ( j .gt. 1 )  d5 = parsup( ndx6)
-  a = a - ( j - d7 ) * ( a - d5 )
+  if (j .gt. 1) d5 = parsup(ndx6)
+  a = a - (j - d7) * (a - d5)
   go to 11
   !     ---  pulse variable transport delay  ---
-654 m = ivarb( n1 + 3 )
-  d9 = parsup( nn + 1 )
+654 m = ivarb(n1 + 3)
+  d9 = parsup(nn + 1)
   ndx1 = kxtcs  +  m
-  if ( m .ne. 0 )  d9 = d9 + xtcs(ndx1)
+  if (m .ne. 0) d9 = d9 + xtcs(ndx1)
   d = parsup(nn)
-  d7 = parsup( nn + 2 )
-  if ( d7 .eq. -9999. )  go to 65400
-  ndx1 = ilntab( kspvar + i )
-  if ( b .le. 0.0 )   go to 65402
-  if ( iuty(kiuty+3) .eq. 0 ) go to 65402
-  iuty(kiuty+3) = iuty(kiuty+3) - 1
-  write (lunit6, 65401) texvec(ndx1), d9, t
-65401 format (5x, 'Warning. ---- The pulse frequency at the pulse transport delay ', a6, ' is too fast for the present ', /, 21x, &
-       ' delay of ', e13.4, ' sec at simulation time ', e13.4, ' sec. Use device type 53 instead of type 54.', /, 21x, &
-       '******** the answer may be wrong later ********')
+  d7 = parsup(nn + 2)
+  if (d7 .eq. -9999.) go to 65400
+  ndx1 = ilntab(kspvar + i)
+  if (b .le. 0.0d0) go to 65402
+  if (iuty(kiuty + 3) .eq. 0) go to 65402
+  iuty(kiuty + 3) = iuty(kiuty + 3) - 1
+  write (unit = lunit6, fmt = 65401) texvec(ndx1), d9, t
+65401 format (5x, 'Warning. ---- The pulse frequency at the pulse transport delay ', a6, ' is too fast for the present ', /, 21x, ' delay of ', e13.4, ' sec at simulation time ', e13.4, ' sec. Use device type 53 instead of type 54.', /, 21x, '******** the answer may be wrong later ********')
   go to 65402
-65400 if ( b .gt. 0.0  .and.  d .eq. -9999. ) parsup(nn) = t
-  if ( b .le. 0.0  .and.  d .ne. -9999. )  parsup(nn+2) = t
-65402 if ( t .lt. d+d9-10.*flzero  .or.  d .eq. -9999. ) go to 11
-  if ( t .ge. d7+d9-10.*flzero  .and.  d7 .ne. -9999. ) go to 65403
-  a = 1.0
+65400 if (b .gt. 0.0d0 .and. d .eq. -9999.0d0) parsup(nn) = t
+  if (b .le. 0.0d0 .and. d .ne. -9999.0d0) parsup(nn + 2) = t
+65402 if (t .lt. d + d9 - 10.0d0 * flzero .or. d .eq. -9999.0d0) go to 11
+  if (t .ge. d7 + d9 - 10.0d0 * flzero .and. d7 .ne. -9999.0d0) go to 65403
+  a = 1.0d0
   go to 11
-65403 parsup(nn) = -9999.
-  parsup(nn+2) = -9999.
+65403 parsup(nn) = -9999.0d0
+  parsup(nn+2) = -9999.0d0
   go to 11
   !     ---  digitizer  ---
-655 m = ivarb( n1 + 3 )
-  n = ivarb( n1 + 4 )
-  if ( parsup(nn) .ne. 0.0 )  b = b * parsup(nn)
+655 m = ivarb(n1 + 3)
+  n = ivarb(n1 + 4)
+  if (parsup(nn) .ne. 0.0d0) b = b * parsup(nn)
   ndx1 = kprsup +  m
   a = parsup(ndx1)
-  if ( m .eq. n )  go to 11
+  if (m .eq. n) go to 11
   j = m + 1
-  do k= j, n
+  do k = j, n
      m = n - k + j
      ndx1 = kprsup +  m
-     if ( b .ge. parsup(ndx1))  go to 65501
+     if (b .ge. parsup(ndx1)) go to 65501
   end do
   go to 11
 65501 ndx1 = kprsup +  m
   a = parsup(ndx1)
   go to 11
   !     ---  point-by-point non-linearity  ---
-656 m = ivarb( n1 + 3 )
-  n = ivarb( n1 + 4 )
-  if ( parsup(nn) .ne. 0.0 )  b = b * parsup(nn)
+656 m = ivarb(n1 + 3)
+  n = ivarb(n1 + 4)
+  if (parsup(nn) .ne. 0.0d0) b = b * parsup(nn)
   ndx1 = kprsup +  m + 1
   a = parsup(ndx1)
-  if ( n .le. m+1 )  go to 11
-  ndx1 = kprsup +  m
-  if ( b .le. parsup(ndx1))  go to 11
+  if (n .le. m + 1) go to 11
+  ndx1 = kprsup + m
+  if (b .le. parsup(ndx1)) go to 11
   j = m + 2
-  do k=j,n,2
-     ndx1 = kprsup +  k
-     if ( b .le. parsup(ndx1))  go to 65601
+  do k = j, n, 2
+     ndx1 = kprsup + k
+     if (b .le. parsup(ndx1)) go to 65601
   end do
   ndx1 = kprsup +  n
   a = parsup(ndx1)
   go to 11
-65601 ndx1 = kprsup + k+1
-  ndx2 = kprsup + k-1
+65601 ndx1 = kprsup + k + 1
+  ndx2 = kprsup + k - 1
   ndx3 = kprsup + k
-  ndx4 = kprsup + k-2
-  d9 = ( parsup(ndx1)-parsup(ndx2) )/( parsup(ndx3)-parsup(ndx4))
-  a = parsup(ndx2) + d9 *( b - parsup(ndx4) )
+  ndx4 = kprsup + k - 2
+  d9 = (parsup(ndx1) - parsup(ndx2)) / (parsup(ndx3) - parsup(ndx4))
+  a = parsup(ndx2) + d9 * (b - parsup(ndx4))
   go to 11
   !     ---  time - sequenced  switch  ---
 657 m = ivarb(n1 + 3)
@@ -1717,7 +1705,7 @@ subroutine csup (l)
   if (n6 .eq. 0) go to 11
   ndx6 = kxtcs + n6
   a = xtcs(ndx6)
-  parsup(nn) = ( parsup(nn + 1) - parsup(nn + 2) ) / 2.0 * a
+  parsup(nn) = (parsup(nn + 1) - parsup(nn + 2)) / 2.0 * a
   go to 11
 4721 a = (b + parsup(nn)) / parsup(nn + 1)
   parsup(nn) = b - parsup(nn + 2) * a
@@ -1741,23 +1729,23 @@ subroutine csup (l)
   ndx2 = kalksu + j
   ndx3 = kksus + j
   ndx4 = kxtcs + ksus(ndx2)
-  a = xtcs(ndx4)  *  ksus(ndx3)
+  a = xtcs(ndx4) * ksus(ndx3)
   go to 11
   !     ---  input  signal  selector  ---
 661 ndx3 = kxtcs + ivarb(n1 + 3)
   ndx4 = kxtcs + ivarb(n1 + 4)
   d1 = xtcs(ndx4)
   a = parsup(nn + 1)
-  if (d1 .lt. 0.5) go to 11
+  if (d1 .lt. 0.5d0) go to 11
   a = parsup(nn + 2)
-  if (d1 .ge. 6.5) go to 11
+  if (d1 .ge. 6.5d0) go to 11
   a = 0.0
   if (d1 .lt. 5.5) go to 66110
   if (ndx3 .eq. kxtcs) go to 11
   a = xtcs(ndx3)
   go to 11
 66110 j = int(d1 - onehaf)
-  j = ivarb(n1+2) - j
+  j = ivarb(n1 + 2) - j
   ndx1 = kalksu + j
   m = ksus(ndx1)
   if (m .eq. 0) go to 11
@@ -1776,11 +1764,11 @@ subroutine csup (l)
   if (n .eq. 0) go to 66220
   ndx3 = kxtcs + n
   if (xtcs(ndx3) .gt. flzero) m = 1
-66220 if (parsup(nn) .eq. 1.0 .or. m .eq. 0) go to 66230
+66220 if (parsup(nn) .eq. 1.0d0 .or. m .eq. 0) go to 66230
   a = b
-  parsup(nn) = 1.0
+  parsup(nn) = 1.0d0
   go to 66240
-66230 if (parsup(nn) .eq. 1.0 .and. m .eq. 0) parsup(nn) = 0.0
+66230 if (parsup(nn) .eq. 1.0d0 .and. m .eq. 0) parsup(nn) = 0.0d0
 66240 parsup(nn + 2) = a
   go to 11
   !     ---  instantaneous  min/max  ---
@@ -1867,7 +1855,7 @@ subroutine csup (l)
   if (aa .ge. parsup(nn + 1)) go to 6677
   a = parsup(nn + 1) / parsup(nn)
   go to 11
-6677 if ( aa .le. parsup(nn + 2)) go to 11
+6677 if (aa .le. parsup(nn + 2)) go to 11
   a = parsup(nn + 2) / parsup(nn)
 11 ndx1 = nnn + i
   xtcs(ndx1) = a

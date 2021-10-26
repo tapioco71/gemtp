@@ -213,13 +213,13 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
   read (unit = abuff, fmt = 10100) bus1, bus2, noo, npoint, nss, kfit, kps, kyc, ipun, idoc, iotx, ioss, iofl, npan
 10100 format(a6,a2,2i5,6i2,3i6,24x,i3)
   write (kunit6, 10095)  noo, npoint, nss, kfit, kps, kyc, ipun
-10095 format ( 12h+misc. data.,  7i5  )
-  if ( iprsup  .ge.  1 ) write (lunit6, 10097)  noo, npoint, nss, kfit, kps, kyc, ipun, idoc
-10097 format ( /,  20h semlyen misc. data., '     noo  npoint     nss    kfit     kps     kyc    ipun    idoc   ', /,  20x,  8i8  )
-  if ( bus1  .ne.  text5 )   go to 10120
-  if ( bus2  .ne.  text6 )   go to 10120
+10095 format ('+Misc. data.', 7i5)
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 10097) noo, npoint, nss, kfit, kps, kyc, ipun, idoc
+10097 format (/, ' Semlyen misc. data.     noo  npoint     nss    kfit     kps     kyc    ipun    idoc   ', /, 20x, 8i8)
+  if (bus1 .ne. text5) go to 10120
+  if (bus2 .ne. text6) go to 10120
   ialter = 3
-  if ( nss + icheck .eq. 2 ) go to 10132
+  if (nss + icheck .eq. 2) go to 10132
   kill = 182
   lstat(14) = icheck
   lstat(15) = nss
@@ -228,17 +228,17 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
 10132 continue
   read (unit = abuff, fmt = 10130) russ(1), ck1
 10130 format( 48x,2e12.5 )
-  if ( ck1 .eq. 0. ) ck1 = sll
-  if ( russ(1) .eq. ci1 .or. russ(1) .eq. 0. ) go to 10131
+  if (ck1 .eq. 0.) ck1 = sll
+  if (russ(1) .eq. ci1 .or. russ(1) .eq. 0.) go to 10131
   ialter = 2
   ci1 = russ(1)
   go to 10140
 10131 rewind lunit3
   go to 9999
-10120 if ( bus1  .ne.  text2 )   go to 10136
-  if ( bus2  .ne.  text3 )   go to 10136
+10120 if (bus1 .ne. text2) go to 10136
+  if (bus2 .ne. text3) go to 10136
   ialter = 2
-  if ( nss + icheck  .eq.  2 )   go to 10133
+  if (nss + icheck .eq. 2) go to 10133
   kill = 182
   lstat(14) = icheck
   lstat(15) = nss
@@ -246,12 +246,12 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
   go to 9200
 10133 continue
   read (unit = abuff, fmt = 10130) ci1, ck1
-  if ( ck1 .eq. 0. ) ck1 = sll
+  if (ck1 .eq. 0.) ck1 = sll
   go to 10140
 10136 ci1 = -fltinf
   ck1 = -fltinf
-10140 if ( iotx  .ne.  -1 )   go to 1774
-  do i=1, 3
+10140 if (iotx .ne. -1) go to 1774
+  do i = 1, 3
      n7 = 0
      n10 = 0
      !     read input card using cimage
@@ -263,49 +263,49 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
         n9 = 0
         do l=1, 3
            n7 = n7 + 1
-           if ( itemp(n7)  .eq.  0 )   go to 1729
+           if (itemp(n7) .eq. 0) go to 1729
            n9 = n9 + n8
 1729       n8 = n8 / 2
         end do
-1734    n10 = n10 * 10  +  n9
+1734    n10 = n10 * 10 + n9
      end do
-     if ( i  .gt.  1 )   go to 1743
+     if (i .gt. 1) go to 1743
      iotx = n10
-     write (kunit6, 1739)  iotx
-1739 format ( 38h+  'iotx'  components.   octal value =,  i5   )
+     write (unit = kunit6, fmt = 1739) iotx
+1739 format ("+  'iotx'  components.   Octal value =", i5)
      go to 1765
-1743 if ( i  .gt.  2 )   go to 1753
+1743 if (i .gt. 2) go to 1753
      ioss = n10
-     write (kunit6, 1748)  ioss
-1748 format ( 38h+  'ioss'  components.   octal value =,  i5   )
+     write (unit = kunit6, fmt = 1748) ioss
+1748 format ("+  'ioss'  components.   Octal value =", i5)
      go to 1765
 1753 iofl = n10
-     write (kunit6, 1757)  iofl
-1757 format ( 38h+  'iofl'  components.   octal value =,  i5   )
+     write (unit = kunit6, fmt = 1757) iofl
+1757 format ("+  'iofl'  components.   Octal value =", i5)
 1765 end do
-1774 do i=7, 9
+1774 do i = 7, 9
      n1 = iabs(indtv(i))
      n2 = 0
      n3 = 1
-10150 n4 = n1/10
-     n1 = n1 - 10*n4
+10150 n4 = n1 / 10
+     n1 = n1 - 10 * n4
      if (n1 .lt. 8) go to 10160
      kill = 154
-     lstat(13) = i-6
+     lstat(13) = i - 6
      lstat(14) = indtv(i)
      lstat(19) = 10160
      go to 9200
-10160 n2 = n2 + n3*n1
-     n3 = 8*n3
+10160 n2 = n2 + n3 * n1
+     n3 = 8 * n3
      n1 = n4
      if (n1 .gt. 0) go to 10150
      indtv(i) = n2
 10170 end do
   if (ialter .gt. 2) go to 10310
-  if (ialter .eq. 2)  go to 10172
-  if ( lastov  .eq.  1 )   go to 3121
-  if (lastov .eq. 44)  go to 3121
-  if (lastov .eq. 47)  go to 3121
+  if (ialter .eq. 2) go to 10172
+  if (lastov .eq. 1) go to 3121
+  if (lastov .eq. 44) go to 3121
+  if (lastov .eq. 47) go to 3121
 10172 n1 = nchain
   nchain = lastov
   lastov = n1
@@ -313,20 +313,20 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
   !     read input card using cimage.
 3121 call cimage
   read (unit = abuff, fmt = 10020) bus3, bus4, bus5
-  if ( bus3  .ne.  text12 )   go to 3128
-  if ( bus4  .ne.  text13 )   go to 3128
-  if ( bus5  .ne.  text14 )   go to 3128
-  if ( iprsup .ge. 1 ) write (lunit6, 3123)
-3123 format ( 32h transfer to  'line constants' .     )
+  if (bus3 .ne. text12) go to 3128
+  if (bus4 .ne. text13) go to 3128
+  if (bus5 .ne. text14) go to 3128
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 3123)
+3123 format (" Transfer to  'line constants'".)
   kreqab = 0
   lastov = nchain
   nchain = 44
   go to 9900
-3128 if ( bus3  .ne.  text15 )   go to 3136
-  if ( bus4  .ne.  text16 )   go to 3136
-  if ( bus5  .ne.  text17 )   go to 3136
-  write (kunit6, 3132)
-3132 format (  33h+transfer to  'cable constants' .   )
+3128 if (bus3 .ne. text15) go to 3136
+  if (bus4 .ne. text16) go to 3136
+  if (bus5 .ne. text17) go to 3136
+  write (unit = kunit6, fmt = 3132)
+3132 format ("+Transfer to  'cable constants' .")
   kreqab = 1
   lastov = nchain
   nchain = 47
@@ -334,14 +334,14 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
 3136 kill = 187
   lstat(19) = 3136
   go to 9200
-10180 if (nss+icheck .eq. 2) go to 10190
+10180 if (nss + icheck .eq. 2) go to 10190
   kill = 182
   lstat(14) = icheck
   lstat(15) = nss
   lstat(19) = 10190
   go to 9200
-10190 do i=1, icheck
-     if ( volti(i)  .eq.  ci1 )   go to 10200
+10190 do i = 1, icheck
+     if (volti(i) .eq. ci1) go to 10200
      kill = 183
      lstat(13) = i
      lstat(19) = 10200
@@ -353,14 +353,14 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
   rewind lunit3
   n1 = 0
   do n12 = 1, 9999
-     read (lunit2,10290) (pl(i),i=1,14)
-10290 format(13a6,a2)
+     read (unit = lunit2, fmt = 10290) (pl(i),i = 1, 14)
+10290 format (13a6, a2)
      lcin = lcin + 1
-     if ( iprsup  .ge.  1 ) write (lunit6,3148) lcin, (pl(i),i=1,14)
-3148 format ( /, 39h 80-col. card image from 'lunit2' , no.,  i3, 1h.,  13a6,  a2 )
-     if (pl(1) .eq. blank  .and. pl(2) .eq. blank ) n1 = n1 + 1
-     if ( n1 .ge. 1 .and. kreqab .eq. 1) go to 10310
-     if ( n1 .ge. 2 .and. kreqab .eq. 0 ) go to 10310
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 3148) lcin, (pl(i), i = 1, 14)
+3148 format (/, " 80-col. Card image from 'lunit2' , no.", i3, '.', 13a6, a2)
+     if (pl(1) .eq. blank .and. pl(2) .eq. blank ) n1 = n1 + 1
+     if (n1 .ge. 1 .and. kreqab .eq. 1) go to 10310
+     if (n1 .ge. 2 .and. kreqab .eq. 0) go to 10310
 10210 end do
 10310 sll = ck1
   if (npan .gt. 0) xpan = twopi / npan
@@ -399,101 +399,101 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
 10500 iwork = 2
   f = voltk(1)
   w = twopi*f
-  call frqdom ( iotx, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq, cqt, q, qi, g, g60, yo, xr, xl, xg, xc)
-  if ( kill  .gt.  0 )   go to 9200
+  call frqdom (iotx, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq, cqt, q, qi, g, g60, yo, xr, xl, xg, xc)
+  if (kill .gt. 0) go to 9200
   j = 1
   do i=1, n22, 2
      q(j) = cq(i)
      qi(j) = zya(i)
 10510 j= j + 1
   end do
-  if( ipunm .lt. 1 ) go to 10605
+  if(ipunm .lt. 1) go to 10605
   zero = 0.
   do i = 1, nph
-     write(lunit7,6002) ( qi(j), j = i, nphsq, nph )
-6001 write(lunit7,6002) ( zero, j=1, nph )
+     write (unit = lunit7, fmt = 6002) (qi(j), j = i, nphsq, nph)
+6001 write (unit = lunit7, fmt = 6002) (zero, j = 1, nph)
   end do
-6002 format(6f12.9)
+6002 format (6f12.9)
   go to 10605
-10520 k=1
-  do j=1, nph
-     do i=1, nph
+10520 k = 1
+  do j = 1, nph
+     do i = 1, nph
         q(k) = 1.
-        if (i .eq. j .and. i .ne. 1) q(k) =       1 - i
-        if (i .gt. j .and. j .ne. 1) q(k) = 0.
+        if (i .eq. j .and. i .ne. 1) q(k) = 1 - i
+        if (i .gt. j .and. j .ne. 1) q(k) = 0.0d0
 10530   k = k + 1
      end do
 10540 end do
-  do i=1, nphsq, nph
+  do i = 1, nphsq, nph
      k = i + nph - 1
      temp = 0.
-     do j=i, k
-10550   temp = temp + q(j)**2
+     do j = i, k
+10550   temp = temp + q(j) ** 2
      end do
      temp = sqrtz(temp)
-     do j=i, k
+     do j = i, k
         q(j) = q(j)/temp
 10560   qi(j) = q(j)
      end do
 10565 end do
-  iotx = iotx/2
-  n1 = iotx/2
-  if (n1+n1 .eq. iotx) go to 10605
+  iotx = iotx / 2
+  n1 = iotx / 2
+  if (n1 + n1 .eq. iotx) go to 10605
   if (nph .le. 6) go to 5025
-  write (lunit6,5020)
-5020 format(1h0,41x,21hmode to phase voltage   ,/, 42x, 21htransformation matrix       )
-  do i=1, nph
-     write (lunit6,5021) (q(j), j=i, nphsq, nph)
-5021 format(/ (1x,12(2x,f8.6)))
+  write (unit = lunit6, fmt = 5020)
+5020 format ('0', 41x, 'mode to phase voltage', /, 42x, 'transformation matrix')
+  do i = 1, nph
+     write (unit = lunit6, fmt = 5021) (q(j), j = i, nphsq, nph)
+5021 format (/ (1x, 12(2x, f8.6)))
 5022 end do
-  write (lunit6,5023)
-5023 format(1h0,41x,21hmode to phase current   ,/, 42x, 21htransformation matrix   )
-  do i=1, nph
-5024 write (lunit6,5021) (qi(j), j=i, nphsq, nph)
+  write (unit = lunit6, fmt = 5023)
+5023 format ('0', 41x, 'mode to phase current', /, 42x, 'transformation matrix')
+  do i = 1, nph
+5024 write (unit = lunit6, fmt = 5021) (qi(j), j = i, nphsq, nph)
   end do
   go to 10605
-5025 write (lunit6,10570)
-10570 format('0', 21x, 'Mode to phase voltage ', 44x, 'mode to phase current ', /, 22x, 'transformation matrix ', 45x, 'transformation matrix', //)
-  do i=1, nph
-     write (lunit6,10590) (q(j),j=i,nphsq,nph)
-10590 format(65x,1h*/1x,6(2x,f8.6))
-10580 write (kunit6, 10600) (qi(j),j=i,nphsq,nph)
+5025 write (unit = lunit6, fmt = 10570)
+10570 format ('0', 21x, 'Mode to phase voltage ', 44x, 'mode to phase current ', /, 22x, 'transformation matrix ', 45x, 'transformation matrix', //)
+  do i = 1, nph
+     write (unit = lunit6, fmt = 10590) (q(j), j = i, nphsq, nph)
+10590 format (65x, '*',  /, 1x, 6(2x, f8.6))
+10580 write (unit = kunit6, fmt = 10600) (qi(j),j = i, nphsq, nph)
   end do
-10600 format(1h+,64x,1h*,1x,6(2x,f8.6))
+10600 format ('+', 64x, '*', 1x, 6(2x, f8.6))
   !              ***   at the steady-state frequency   ***
 10605 f = voltk(icheck)
-  w = twopi*f
+  w = twopi * f
   iadm = 1
   iss = 1
   ww(iadm) = w
-  if ( ioss  .gt.  0 ) write (lunit6, 10610 )  f
-10610 format (//, ' Calculation of steady-state parameters for frequency = ',  e15.3,  '   Hz.'    )
+  if (ioss .gt. 0) write (unit = lunit6, fmt = 10610) f
+10610 format (//, ' Calculation of steady-state parameters for frequency = ', e15.3, '   Hz.')
   iwork = 896
-  call frqdom ( ioss, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq, cqt, q, qi, g, g60, yo, xr, xl, xg, xc)
-  if ( kill  .gt.  0 )   go to 9200
+  call frqdom (ioss, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq, cqt, q, qi, g, g60, yo, xr, xl, xg, xc)
+  if (kill .gt. 0) go to 9200
   iss = 0
-  do i=1, nph2
+  do i = 1, nph2
 10615 um(i) = yo(i)
   end do
   j = 1
   do i = 1, nph2, 2
      jp1 = j + 1
-     ymin(i) = sqrtz ( y( jp1) / z ( jp1 ) )
-     ymin(i+1) = sll * g(i+1) / w
+     ymin(i) = sqrtz (y(jp1) / z(jp1 ))
+     ymin(i + 1) = sll * g(i + 1) / w
 10616 j = j + nphpi2
   end do
-10620 wo = twopi*voltbc(1)
-  wm = wo*ratio**(nfr-1)
+10620 wo = twopi * voltbc(1)
+  wm = wo * ratio ** (nfr - 1)
   si(nfr1 + 1) = wm * ratio
-  do i=1, 8
-10630 mfrecv(i) = i*nfr/10
+  do i = 1, 8
+10630 mfrecv(i) = i * nfr / 10
   end do
   mfrecv(9) = nfr - 1
   mfrecv(10) = nfr
-  write(lunit6,10640) nfr, ( voltbc(i), i=1,3 )
-10640 format('1', 2x,'no.freq = ', i3, 5x, 'first frequency = ', f10.5, 5x, 'last frequency = ', f10.1, 5x, 'geo. ratio = ', f5.3 )
-  do i=1, nph
-     n1 = i*nfr1 - nfr
+  write (unit = lunit6, fmt = 10640) nfr, (voltbc(i), i = 1, 3)
+10640 format ('1', 2x, 'no.freq = ', i3, 5x, 'first frequency = ', f10.5, 5x, 'last frequency = ', f10.1, 5x, 'geo. ratio = ', f5.3 )
+  do i = 1, nph
+     n1 = i * nfr1 - nfr
 10650 vresp(n1) = ffinp
   end do
   kmin = 640
@@ -503,7 +503,7 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
   jxq = 0
   if (kyc .ne. 3)  go to 3178
   d13 = 2.0 * voltbc(1) * tt
-  jxq  =   - alogz(d13) /  alogz(ratio)
+  jxq = -alogz(d13) / alogz(ratio)
   jxq = jxq + 1
   !     this loop calculates the line step response for both the
   !     propagation function(nfr points) and for the admittance function
@@ -512,37 +512,37 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
   il = 1
   w = wo
   constm = 0.62137
-  if( kreqab .eq. 1 ) constm = 1000.
-  do jm=1, nfr
-     si(jm+1) = w
-     f = w/twopi
+  if (kreqab .eq. 1) constm = 1000.
+  do jm = 1, nfr
+     si(jm + 1) = w
+     f = w / twopi
      !     factor for surpression of the gibb's phenomenon.
      !     note.  1./w factor converts impulse to step response.
-     sif = w*twopi/wm/2.
-     sif = sinz(sif)/sif/w
+     sif = w * twopi / wm / 2.
+     sif = sinz (sif) / sif / w
      if (jm .ne. jxq) go to 10653
      n1 = iofl
      iwork = 640
-     d1 = 1.0/(2.*tt)
-     if (n1 .ne. 0) write (lunit6,10651) d1
-10651 format('1', 10x, 'This frequency is closest(from below) to the natural frequency, f = (speed of light)/(2*length) = ', f10.2, /, 11x, &
-          'it will be used to calculate the constant characteristic admittance for use in the time-step loop convolution.'   )
+     d1 = 1.0 / (2.0d0 * tt)
+     if (n1 .ne. 0) write (unit = lunit6, fmt = 10651) d1
+10651 format ('1', 10x, 'This frequency is closest(from below) to the natural frequency, f = (speed of light)/(2*length) = ', f10.2, /, 11x, &
+          'it will be used to calculate the constant characteristic admittance for use in the time-step loop convolution.')
      ww(1) = w
-     do i=1, nph2
+     do i = 1, nph2
 10652   um(i) = yo(i)
      end do
-     call frqdom ( n1, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq, cqt, q, qi, g, g60, yo, xr, xl, xg, xc)
+     call frqdom (n1, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq, cqt, q, qi, g, g60, yo, xr, xl, xg, xc)
      go to 10656
 10653 iwork = kmin
-     n1 =  0
+     n1 = 0
      if (jm .ne. mfrecv(il)) go to 10655
      n1 = iofl
      iwork = 640
-     if (n1 .ne. 0 .and. jm .ne. 1) write (lunit6,10654)
-10654 format( //, 1x )
-10655 call frqdom ( n1, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq, cqt, q, qi, g, g60, yo, xr, xl, xg, xc )
-     if ( kill  .gt.  0 )   go to 9200
-     if( ipunm .lt. 1 ) go to 10656
+     if (n1 .ne. 0 .and. jm .ne. 1) write (unit = lunit6, fmt = 10654)
+10654 format (//, 1x)
+10655 call frqdom (n1, pbuf, z, y, zy, zya, zyb, zyc, zyd, cq, cqt, q, qi, g, g60, yo, xr, xl, xg, xc)
+     if (kill .gt. 0) go to 9200
+     if (ipunm .lt. 1) go to 10656
      amarti(1) = w
      j = 1
      do i = 1, nph
@@ -550,92 +550,89 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
         amarti(3) = y(j+1) * constm
         amarti(4) = z(j) * constm
         amarti(5) = z(j+1) * constm
-        write(lunit7,6005) amarti
+        write (unit = lunit7, fmt = 6005) amarti
 6004    j = j + nphpi2
      end do
-6005 format( 5e16.9 )
+6005 format (5e16.9)
 10656 ix = jm + 1
      j = 1
      do i = 1, nph2, 2
         jp1 = j + 1
-        ttchk = sqrtz( y(jp1) / z(jp1) )
-        if( ttchk .lt. ymin(i) ) ymin(i) = ttchk
+        ttchk = sqrtz (y(jp1) / z(jp1))
+        if (ttchk .lt. ymin(i)) ymin(i) = ttchk
 10657   j = j + nphpi2
      end do
 10658 do i = 1, nph2, 2
-        d1 = sif * expz(-g(i) * sll)
+        d1 = sif * expz (-g(i) * sll)
         d2 = g(i + 1) * sll
         ttchk = d2 / w
-        if( ttchk .gt. ymin(i+1) ) ymin(i+1) = ttchk
-        vresp(ix) = d1 * cosz( d2 )
+        if (ttchk .gt. ymin(i + 1)) ymin(i + 1) = ttchk
+        vresp(ix) = d1 * cosz (d2)
         n1 = ix + nfrph
-        vresp(n1) = d1 * sinz( d2 )
+        vresp(n1) = d1 * sinz (d2)
         n1 = n1 + nfrph
         vresp(n1) = yo(i)
 10660   ix = ix + nfr1
      end do
-     if (jm .ne. mfrecv(il))go to 10690
+     if (jm .ne. mfrecv(il)) go to 10690
      il = il + 1
-     cst = w/twopi
+     cst = w / twopi
      if (cst .lt. fmed) go to 10670
      iadm = 3
 10670 ww(iadm) = w
      n1 = nph2 * (iadm - 1)
-     do i=1, nph2
+     do i = 1, nph2
         n2 = n1 + i
 10680   um(n2) = yo(i)
      end do
-10690 w = wo * ratio**jm
+10690 w = wo * ratio ** jm
   end do
   w = twopi * voltk(icheck)
   if (iprsup .lt. 3) go to 70140
-  write (lunit6,70550) (i,i=1, nph)
-70550 format ( 1h0, 5x, 'Propagation step response in the frequency domain.' &
-       ,/,  '0',  5x,  5homega,  3( 21x, 5hmode , i2, 6x) &
-       ,/, (11x,  3(21x, 5hmode , i2, 6x)  )  )
+  write (unit = lunit6, fmt = 70550) (i, i = 1, nph)
+70550 format ('0', 5x, 'Propagation step response in the frequency domain.', /, '0', 5x, 'omega',  3(21x, 'mode ', i2, 6x), /, (11x, 3(21x, 'mode ', i2, 6x)))
   jmax = nfrph
-  do i=1, nfr1
-70130 write(lunit6,70510) si(i), ( vresp(n2), vresp(n2+nfrph), n2 = i, jmax, nfr1 )
+  do i = 1, nfr1
+70130 write(unit = lunit6, fmt = 70510) si(i), (vresp(n2), vresp(n2 + nfrph), n2 = i, jmax, nfr1)
   end do
-  if ( kfit .le. 9 .and. kypr .le. 0 ) go to 70140
-  write( lunit6,70131) ( i, i=1,nph )
-70131 format(1h1, 5x, 49hadmittance step response in the frequency domain. ,/, 1h0, 5x, 5homega, 3( 21x, 5hmode ,i2, 6x ) ,/, &
-       ( 11x, 3( 21x, 5hmode ,i2, 6x ) ) )
+  if (kfit .le. 9 .and. kypr .le. 0) go to 70140
+  write (unit = lunit6, fmt = 70131) (i, i = 1, nph)
+70131 format ('1', 5x, 'admittance step response in the frequency domain.', /, '0', 5x, 'omega', 3(21x, 'mode ', i2, 6x), /, (11x, 3(21x, 'mode ', i2, 6x)))
   jmax = 3 * nfrph
   do i = 1, nfr1
      n1 = 2 * nfrph + i
-70551 write(lunit6,70511) si(i), ( vresp(n2), n2 = n1, jmax, nfr1)
+70551 write (unit = lunit6, fmt = 70511) si(i), (vresp(n2), n2 = n1, jmax, nfr1)
   end do
-70511 format( 4x, e12.5, 3( 10x, e13.5, 9x ) ,/, ( 16x, 3( 10x, e13.5, 9x ) ) )
+70511 format (4x, e12.5, 3(10x, e13.5, 9x), /, (16x, 3(10x, e13.5, 9x)))
 70140 continue
-  pi2 = 4./twopi
-  do i=1, 91
+  pi2 = 4. / twopi
+  do i = 1, 91
 70150 pl(i) = blank
   end do
-70510 format ( 4x, e12.5,  6( 2x, e13.5, 2x )   ,/, ( 16x,  6( 2x, e13.5, 2x )  )  )
+70510 format (4x, e12.5, 6(2x, e13.5, 2x), /, (16x, 6(2x, e13.5, 2x)))
   kfys = kfit / 10
   kfps = kfit - 10 * kfys
   if (kfys .eq. 0 .and. kypr .eq. 0) go to 230
   n1 = nfrph + nfrph + 1
-  do i=1, nph2, 2
-     vresp(n1) = yo(i) - vresp(n1+1)
+  do i = 1, nph2, 2
+     vresp(n1) = yo(i) - vresp(n1 + 1)
 200  n1 = n1 + nfr1
   end do
   !     calculate frequency domain sequence used to produce the char-
   !     acteristic admittance step reponse in the time domain
-  do jm=2, nfr1
+  do jm = 2, nfr1
      w = si(jm)
      sif = onehaf * twopi * w / wm
      sif = sinz(sif) / sif / w
      n1 = nfrph + nfrph + jm
-     do i=1, nph2, 2
+     do i = 1, nph2, 2
         vresp(n1) = sif * (yo(i) - vresp(n1))
 210     n1 = n1 + nfr1
      end do
 220 end do
 230 d1 = fltinf
   n1 = 1
-  do i=1, nph
+  do i = 1, nph
      if (d1 .lt. um(n1)) go to 344
      d1 = um(n1)
      kmin = i
@@ -643,29 +640,28 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
   end do
   if (kyc .eq. 1 .or. kyc .eq. 3) kmin = nph + nph
   iy = 2
-  iy3 = 3*iy
+  iy3 = 3 * iy
 240 if (iprsup .le. 5) go to 640
-  write (lunit6,610)
-610 format ( 1h0, 5x, 73hdata for fitting of characteristic admittance exponential approximation.  ,/,  10x,  9hfrequency,  17x, &
-       31h... cmplx. char. admittance ...   )
-  do i=1, nph
+  write (unit = lunit6, fmt = 610)
+610 format ('0', 5x, 'Data for fitting of characteristic admittance exponential approximation.', /, 10x, 'frequency', 17x, '... cmplx. char. admittance ...')
+  do i = 1, nph
      n1 = (i - 1) * nph2 + 1
      n2 = n1 - 1 + nph2
-     d1 = ww(i)/twopi
-620  write (lunit6,630) d1, (um(j),j=n1,n2)
+     d1 = ww(i) / twopi
+620  write (unit = lunit6, fmt = 630) d1, (um(j),j = n1,n2)
   end do
-630 format( /,  1x,  7(5x, e12.5)  ,/,  (18x,  6(5x, e12.5) )  )
-640 write (lunit6,10654)
-  if( ipunm .eq. 2 ) go to 437
+630 format (/, 1x, 7(5x, e12.5), /, (18x, 6(5x, e12.5)))
+640 write (unit = lunit6, fmt = 10654)
+  if (ipunm .eq. 2) go to 437
   !     loop over all modes to calculate(via inverse fourier
   !     transformation)   and fit(via least squares) the propagation step
   !     response in the time domain.
   w = twopi * voltk(icheck)
-  do i1=1, nph
+  do i1 = 1, nph
      lstat(14) = i1
-     write (lunit6,40060) i1
-40060 format(1h1,10x,50hfitting of the propagation step response for mode  ,  i2,  ///  1x)
-     ix = (i1 - 1)*nfr1 + 1
+     write (unit = lunit6, fmt = 40060) i1
+40060 format ('1', 10x, 'fitting of the propagation step response for mode ', i2, ///, 1x)
+     ix = (i1 - 1) * nfr1 + 1
      i2 = i1 + i1
      i3 = 14 * i1
      i4 = nfrph + nfrph + ix
@@ -676,14 +672,14 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
      tstep = tt / noo
      flstat(11) = tstep
      vresp(lift) = vresp(ix)
-     do j=1, nfr
+     do j = 1, nfr
         n1 = ix + j
         n2 = n1 + nfrph
         n3 = lift + j
         sif = tstrt * si(j+1)
         vresp(n3) = vresp(n1) * cosz(sif) + vresp(n2) * sinz(sif)
-        if ( iprsup  .ge. 6 ) write (lunit6, 40002)  j, sif, vresp(n1), vresp(n2), vresp(n3)
-40002   format ( 5x, i10,  4( 5x,  e15.7 )  )
+        if (iprsup .ge. 6) write (unit = lunit6, fmt = 40002) j, sif, vresp(n1), vresp(n2), vresp(n3)
+40002   format (5x, i10, 4(5x, e15.7))
 40020 end do
      ictrl = kps
      if (kfps .eq. 0) go to 40040
@@ -692,8 +688,8 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
      d2 = d1
      d3 = 1. / 3.
      d4 = 2. / 3.
-     call rise( d2, d4, tstep, vresp(i5), si, zcos( lcosd ) )
-     if( kill .le. 0 ) go to 40026
+     call rise (d2, d4, tstep, vresp(i5), si, zcos (lcosd))
+     if (kill .le. 0) go to 40026
      lstat(10) = npoint
      lstat(13) = kfps
      lstat(15) = kfit
@@ -702,24 +698,24 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
      go to 9200
 40026 d1 = d2
      tstep =  4. * d2 / npoint
-     if ( kfps .eq. 1 ) go to 40040
+     if (kfps .eq. 1) go to 40040
      tstep = d2 / 10.
      flstat(11) = tstep
-     call rise( d1, d3, tstep, vresp(i5), si, zcos( lcosd ) )
-     if( kill .le. 0 ) go to 40027
+     call rise (d1, d3, tstep, vresp(i5), si, zcos (lcosd))
+     if (kill .le. 0) go to 40027
      lstat(10) = npoint
      lstat(13) = kfps
      lstat(14) = i1
      lstat(19) = 40027
      flstat(16) = d3
      go to 9200
-40027 tstep = 20. * ( d2 - d1 ) / npoint
+40027 tstep = 20. * (d2 - d1) / npoint
 40040 i5 = lift
-     shifti = expz( - g60(i2 - 1) * sll)
+     shifti = expz (-g60(i2 - 1) * sll)
      d1 = g60(i2) * sll
-     shiftr = shifti * cosz( d1 )
-     shifti = shifti * sinz( d1 )
-     call tdfit( vresp(i5), si, fv, hhm, hhn, zcos( lcosd ) )
+     shiftr = shifti * cosz (d1)
+     shifti = shifti * sinz (d1)
+     call tdfit (vresp(i5), si, fv, hhm, hhn, zcos (lcosd))
      if (kill .gt. 0) go to 9200
      pbuf(i3 - 4) = d
      pbuf(i3 - 3) = x(1)
@@ -729,85 +725,85 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
      !     time domain fitting of the characteristic admittance step
      !     response function
      tstrt = 0.0
-     ffin = yo( i2 - 1 ) - ymin( i2 - 1 )
+     ffin = yo(i2 - 1) - ymin(i2 - 1)
      if (kfys .eq. 1) go to 40070
      !     fitting of characteristic admittance step in the frequency
      !     domain.   two points are used to fit the transform of
      !      yc(i) = y0 + e(1)*exp(-t/b(1))  +  e(2)*exp(-t/b(2))
      !     iteratively.
-     if ( kyc .eq. 0 ) go to 401
+     if (kyc .eq. 0) go to 401
      if (kmin .eq. i1) go to 401
-     pbuf(i3-9) = 0.0
-     pbuf(i3-8) = 1.0
-     pbuf(i3-7) = 0.0
-     pbuf(i3-6) = 1.0
-     pbuf(i3-5) = um(i2 - 1)
-     write (lunit6, 400)  i1, pbuf(i3 - 5)
-400  format ( /, 5x, 5hmode ,  i2, 37hconstant characteristic admittance = , e12.5  )
+     pbuf(i3 - 9) = 0.0d0
+     pbuf(i3 - 8) = 1.0d0
+     pbuf(i3 - 7) = 0.0d0
+     pbuf(i3 - 6) = 1.0d0
+     pbuf(i3 - 5) = um(i2 - 1)
+     write (unit = lunit6, fmt = 400) i1, pbuf(i3 - 5)
+400  format (/, 5x, 'mode ', i2, 'constant characteristic admittance = ', e12.5)
      go to 40090
 401  n1 = i1 + i1
      n2 = n1 + nph2 + nph2
      ygr(1) = um(n2 - 1) - um(n1 - 1)
-     ygr(2) = um(n2    ) - um(n1    )
+     ygr(2) = um(n2) - um(n1)
      ygr(3) = ww(1)
      n1 = n1 + nph2
      ygr(4) = um(n2 - 1) - um(n1 - 1)
-     ygr(5) = um(n2    ) - um(n1    )
+     ygr(5) = um(n2) - um(n1)
      ygr(6) = ww(2)
-     ysurg = ymin ( i2-1 )
+     ysurg = ymin(i2 - 1)
 403  call setplt
-     write( lunit6, 404 ) i1
-404  format ( //// 5x, 46hfitting for characteristic admittance mode no   ,  i2  )
-     if (iprsup .gt. 0) write (lunit6,99887) kmin, n1, n2, kyc, (ygr(j), j=1, 6)
-99887 format(/,5x,51hkmin, n1, n2, kyc, ygr(j), j=1, 6) follow ..... ,/,  4i10, 6e15.8 )
-     do j=1, iy
-        e(j) = 0.0
-        b(j) = 0.0
-        e(j+2) = 1.0
-405     b(j+2) = 1.0
+     write (unit = lunit6, fmt = 404) i1
+404  format (////, 5x, 'Fitting for characteristic admittance mode no ', i2)
+     if (iprsup .gt. 0) write (unit = lunit6, fmt = 99887) kmin, n1, n2, kyc, (ygr(j), j = 1, 6)
+99887 format (/, 5x, 'kmin, n1, n2, kyc, ygr(j), j=1, 6) follow .....', /, 4i10, 6e15.8)
+     do j = 1, iy
+        e(j) = 0.0d0
+        b(j) = 0.0d0
+        e(j+2) = 1.0d0
+405     b(j+2) = 1.0d0
      end do
      iter = 0
 406  iter = iter + 1
      n1 = 1
-     do j=1, iy3, 3
+     do j = 1, iy3, 3
         zr = ygr(j)
-        zi = ygr(j+1)
+        zi = ygr(j + 1)
         n2 = 1
-        do k=1, iy3, 3
-           if ( j  .eq.  k )   go to 407
-           d1 = ygr(j+2) * b(n2)
-           d2 = 1.0  +  d1 * d1
+        do k = 1, iy3, 3
+           if (j .eq. k) go to 407
+           d1 = ygr(j + 2) * b(n2)
+           d2 = 1.0d0 + d1 * d1
            zr = zr + e(n2) / d2
            zi = zi - e(n2) * d1 / d2
 407        n2 = n2 + 1
         end do
-        b(n1) = - zi / ( ygr(j+2) * zr )
-        e(n1) = -(zr * zr  +  zi * zi) / zr
+        b(n1) = - zi / (ygr(j + 2) * zr)
+        e(n1) = -(zr * zr + zi * zi) / zr
 408     n1 = n1 + 1
      end do
-     do j=1, iy
-        if ( absz( (e(j) - e(j+2) ) / e(j+2) )     .gt.   epsyc ) go to 412
-        if ( absz( (b(j) - b(j+2) ) / b(j+2) )     .gt.   epsyc ) go to 412
+     do j = 1, iy
+        if (absz ((e(j) - e(j + 2)) / e(j+2) )     .gt.   epsyc ) go to 412
+        if (absz ((b(j) - b(j + 2)) / b(j+2) )     .gt.   epsyc ) go to 412
 409  end do
      do j=1, iy3, 3
         y(j) = ygr(j)
-        y(j+1) = ygr(j+1)
-        do k=1, iy
-           d1 = ygr(j+2) * b(k)
-           d2 = 1.0 + d1*d1
+        y(j + 1) = ygr(j + 1)
+        do k = 1, iy
+           d1 = ygr(j + 2) * b(k)
+           d2 = 1.0d0 + d1 * d1
            y(j) = y(j) + e(k) / d2
-410        y(j+1) = y(j+1) - e(k) * d1 / d2
+410        y(j + 1) = y(j + 1) - e(k) * d1 / d2
         end do
-        zr = y(j) * y(j) + y(j+1) * y(j+1)
-        if ( sqrtz(zr)  .gt.  epsn )   go to 412
+        zr = y(j) * y(j) + y(j + 1) * y(j + 1)
+        if (sqrtz (zr) .gt. epsn) go to 412
 411  end do
      go to 415
-412  do j=1, iy
+412  do j = 1, iy
         b(j+2) = b(j)
 413     e(j+2) = e(j)
      end do
-     if ( iprsup  .gt.  5 ) write (lunit6, 414)  iter,  ( e(j), b(j), j=1, iy )
-414  format ( /,  20h admittance fitting.,  5x,  i5, 6(5x, e12.5)  )
+     if ( iprsup  .gt.  5 ) write (unit = lunit6, fmt = 414) iter, (e(j), b(j), j = 1, iy)
+414  format (/, ' Admittance fitting.', 5x, i5, 6(5x, e12.5))
      if ( iter  .lt.  nitery )   go to 406
      kill = 155
      lstat(13) = nitery

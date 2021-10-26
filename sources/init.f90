@@ -10,91 +10,148 @@
 
 subroutine init
   use tacsto
+  use bcdtim
+  use bcddat
+  use random
   implicit none
-  !  include 'tacsto.ftn'
   character(8) :: atim(2)      ! wsm + thl manual modification for bpa emtp
   real(8) :: d1, d2
   !
-  real(8) :: seedy, randnm
-  !
-  sptr=sptr-1
-  if(sptr.eq.iptr) go to 910
-  isto(sptr)=from
-  from=0
-  go to (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010), to-8999
-  stop 'Invalid "to" reference in "init".'
-9500 if(.not.(from.eq.0)) go to 0001
-  from=isto(sptr)
-  sptr=sptr+1
+  sptr = sptr - 1
+  if (sptr .eq. iptr) go to 910
+  isto(sptr) = from
+  from = 0
+  !  go to (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010), to-8999
+  select case (to - 8999)
+  case (1)
+     go to 9000
+
+  case (2)
+     go to 9001
+
+  case (3)
+     go to 9002
+
+  case (4)
+     go to 9003
+
+  case (5)
+     go to 9004
+
+  case (6)
+     go to 9005
+
+  case (7)
+     go to 9006
+
+  case (8)
+     go to 9007
+
+  case (9)
+     go to 9008
+
+  case (10)
+     go to 9009
+
+  case (11)
+     go to 9010
+
+  case default
+     stop 'Invalid "to" reference in "init".'
+  end select
+9500 if (.not. (from .eq. 0)) go to 0001
+  from = isto(sptr)
+  sptr = sptr + 1
   return
-0001 go to (9501, 9502, 9503, 9504, 9505, 9506), from - 9500
-  stop 'Invalid "from" reference in "init".'
-910 stpflg=42
-  stpi1=iptr
-  stpi2=ilen-iptr
+  !0001 go to (9501, 9502, 9503, 9504, 9505, 9506), from - 9500
+0001 select case (from - 9500)
+  case (1)
+     go to 9501
+
+  case (2)
+     go to 9502
+
+  case (3)
+     go to 9503
+
+  case (4)
+     go to 9504
+
+  case (5)
+     go to 9505
+
+  case (6)
+     go to 9506
+
+  case default
+     stop 'Invalid "from" reference in "init".'
+  end select
+910 stpflg = 42
+  stpi1 = iptr
+  stpi2 = ilen - iptr
   continue
   call errstp
-930 stpflg=44
-  stpi1=rptr
-  stpi2=rlen-rptr
+930 stpflg = 44
+  stpi1 = rptr
+  stpi2 = rlen - rptr
   continue
   call errstp
 9000 continue
-  to=9004
+  to = 9004
   call calc
-  to=9005
+  to = 9005
   call calc
-  b=rsto(rptr)
-  rptr=rptr-1
-  a=rsto(rptr)
-  rptr=rptr-1
-  if(.not.(a.lt.rmargn)) go to 5001
-  a=zero
+  b = rsto(rptr)
+  rptr = rptr - 1
+  a = rsto(rptr)
+  rptr = rptr - 1
+  if (.not. (a .lt. rmargn)) go to 5001
+  a = zero
   go to 5000
 5001 continue
 5000 continue
-  if(.not.(b.le.rmargn)) go to 5011
-  stpflg=118
+  if (.not. (b .le. rmargn)) go to 5011
+  stpflg = 118
   go to 5010
 5011 continue
 5010 continue
   p = dmax1 (rmargn, dabs (rmargn * b))
-  if(.not.(a.gt.b+p)) go to 5021
-  stpflg=119
+  if (.not. (a .gt. b + p)) go to 5021
+  stpflg = 119
   go to 5020
 5021 continue
 5020 continue
-  if(.not.(stpflg.gt.0)) go to 5031
-  stpr1=b
-  stpr2=a
+  if (.not. (stpflg .gt. 0)) go to 5031
+  stpr1 = b
+  stpr2 = a
   continue
   call errstp
   go to 5030
 5031 continue
 5030 continue
-  if(.not.(a.gt.half*b+p)) go to 5041
-  g=half*b
+  if (.not. (a .gt. half * b + p)) go to 5041
+  g = half * b
   go to 5040
 5041 continue
-  g=a
+  g = a
 5040 continue
-  r1=rsto(base13+6)
-  c=rsto(base13+8) -r1
-  e=r1
-  if(.not.(e.gt.b+p)) go to 5051
+  r1 = rsto(base13 + 6)
+  c = rsto(base13 + 8) - r1
+  e = r1
+  if (.not. (e .gt. b + p)) go to 5051
   f = e / dnint (e / b + half)
   go to 5050
 5051 continue
-  f=e
+  f = e
 5050 continue
-  rsto(base3+2)=g
-  rsto(base3+3)=b
-  rsto(base3+4)=c
-  rsto(base3+5)=r1
-  rsto(base3+6)=f
-  rsto(base3+7)=c-f
-  rsto(base3+8)=c
-  stpt=c
+  rsto(base3 + 2) = g
+  rsto(base3 + 3) = b
+  rsto(base3 + 4) = c
+  rsto(base3 + 5) = r1
+  rsto(base3 + 6) = f
+  rsto(base3 + 7) = c - f
+  rsto(base3 + 8) = c
+  stpt = c
   go to 9500
 9001 continue
   a=rsto(base3+8)
@@ -500,7 +557,7 @@ subroutine init
   go to 9500
 9009 continue
   !     a=seedz(a)                                                              ! wsm + thl manual modification for bpa emtp
-  call time44 (atim(1))                                                         ! wsm + thl manual modification for bpa emtp
+  call time44 (atim)                                                         ! wsm + thl manual modification for bpa emtp
   call runtym (d1, d2)                                                          ! wsm + thl manual modification for bpa emtp
   a = seedy (atim(1)) + 1000. * (d1 + d2)                                       ! wsm + thl manual modification for bpa emtp
   a=randnm ( a )                                                                ! wsm + thl manual modification for bpa emtp

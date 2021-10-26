@@ -12,33 +12,40 @@ subroutine datain
   use blkcom
   use dekspy
   use labcom
-  use io
+  use iocons
+  use bcdtim
+  use bcddat
+  use movcop
+  use strcom
   implicit none
   !     Universal module of interactive EMTP (spy of "emtspy").
   !     If non-interactive version, module can be destroyed.
   !     First EMTP data input, and "spy" choice, are made here.
   !     Module is called only by installation-dependent "erexit".
   integer(4) :: ios, ip, j
-  integer(4) :: k, kard, karg, kbeg, kcut, kend, kexact, kkkdum, kntdum
-  integer(4) :: kntmax, kntold, kolinc, komlev, krdcom, krdoff, ktex
-  integer(4) :: l, lentyp, limarg, ll
-  integer(4) :: m, modarg, munit4
+  integer(4) :: k, kard(200), karg(200), kbeg(200), kcut, kend(200), kexact
+  integer(4) :: kkkdum(35), kntdum, kntmax, kntold, kolinc(35), komlev, krdcom
+  integer(4) :: krdoff, ktex(200)
+  integer(4) :: l, lentyp(36), limarg, ll
+  integer(4) :: m, modarg(35), munit4
   integer(4) :: n, n1, n2, n3, n4, n5, n6, n7, n8, n10, n11, n12, n13, n14, n15
   integer(4) :: n16, n17, n18, n19, n22, n24, n26, nchpre, nchsuf, nn1, nn2
   integer(4) :: nphlmt, nsolve, ntacs, numarg, numhld, numrun, numtyp
   real(8) :: fminsv
-  common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
-  common /linemodel/ char80, chlmfs(18)
-  character(6) :: chlmfs, dumnam
+  !  common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
+  !  common /linemodel/ char80, chlmfs(18)
+  character(6) :: chlmfs(18), dumnam
   character(12) :: typdat(36)
   character(20) :: arginc(35)
   character(32) :: filsav
   character(40) :: prefix, suffix
   character(80) :: char80
   character(80), allocatable :: tank(:)
-  dimension kard(200), karg(200), kbeg(200), kend(200)
-  dimension ktex(200), lentyp(36)
-  dimension kolinc(35), modarg(35), kkkdum(35)
+  !  dimension kard(200), karg(200), kbeg(200), kend(200)
+  !  dimension ktex(200), lentyp(36)
+  !  dimension kolinc(35), modarg(35), kkkdum(35)
+  !
+  data kcut       / 0 /
   data komlev     / -1 /                                   ! default comment level (none)
   data nchpre     / 0 /                                    ! begin with no file name prefix
   data nchsuf     / 0 /                                    ! begin with no file name suffix
@@ -57,21 +64,7 @@ subroutine datain
   data typdat(12) / 'output      ' /, lentyp(12) /  6  /
   data typdat(13) / 'plot        ' /, lentyp(13) /  4  /
   data typdat(14) / 'statistics  ' /, lentyp(14) / 10  /
-  data typdat(15) / 'REQUEST     ' /, lentyp(15)  /  7  /
-  data typdat(16) / 'FUNCTION    ' /, lentyp(16)  /  8  /
-  data typdat(17) / 'TACS SOURCE ' /, lentyp(17)  / 11  /
-  data typdat(18) / 'SUPPLEMENTAL' /, lentyp(18)  / 12  /
-  data typdat(19) / 'TACS OUTPUT ' /, lentyp(19)  / 11  /
-  data typdat(20) / 'TACS INITIAL' /, lentyp(20)  / 12  /
-  data typdat(21) / 'BRANCH      ' /, lentyp(21)  /  6  /
-  data typdat(22) / 'SWITCH      ' /, lentyp(22)  /  6  /
-  data typdat(23) / 'SOURCE      ' /, lentyp(23)  /  6  /
-  data typdat(24) / 'LOAD FLOW   ' /, lentyp(24) /  9  /
-  data typdat(25) / 'INITIAL     ' /, lentyp(25) /  7  /
-  data typdat(26) / 'OUTPUT      ' /, lentyp(26) /  6  /
-  data typdat(27) / 'PLOT        ' /, lentyp(27) /  4  /
-  data typdat(28) / 'STATISTICS  ' /, lentyp(28) / 10  /
-  data numtyp     / 28 /                                    ! total number of data type names
+  data numtyp     / 14 /                                    ! total number of data type names
   data filsav     / '                                '  /   ! for lmfs
   allocate(tank(1 : 1000))
   if (.not. allocated(tank)) then
@@ -84,7 +77,7 @@ subroutine datain
   if (numhld .eq. -8899) stop
   if (numhld .eq. 0) go to 5244
   do j = 1, numhld
-     if ((tank(j)(1 : 19) .eq. 'begin new data case' .or. tank(j)(1 : 19) .eq. 'BEGIN NEW DATA CASE') .and. j .gt. 3) go to 3389
+     if ((to_lower (tank(j)(1 : 19)) .eq. 'begin new data case') .and. j .gt. 3) go to 3389
      file6(j) = tank(j)
   end do
 3389 numcrd = j - 1
@@ -99,8 +92,8 @@ subroutine datain
   if (filsav .eq. '                                ') go to 1712 ! data input assigned from outside
   open (unit = munit5, status = 'old', file = filsav)       ! reuse input for
 1712 if (llbuff .eq. -3333) rewind munit5                   ! generating 2nd & 3rd lmf
-  ! 2nd or later pass, skip
-5244 if (llbuff .ne. -3333 .and. file6(numcrd + 1)(1 : 4) .ne. 'eof ' .and. file6(numcrd + 1)(1 : 4) .ne. 'EOF ') go to 1708 ! keyboard
+                                                            ! 2nd or later pass, skip
+5244 if (llbuff .ne. -3333 .and. to_lower (file6(numcrd + 1)(1 : 4)) .ne. 'eof ') go to 1708 ! keyboard
   kverfy = -4545                                            ! local flag (no windows yet opened)
   limarg = 35                                               ! dimensioned limit on arguments of "module"
   numdcd = 0                                                ! set pointer at zero (no "cimage" calls yet)
@@ -111,7 +104,7 @@ subroutine datain
   call date44 (date1)                                       ! find calendar date and the
   call time44 (tclock)                                      ! time of day for documentation
   call initsp                                               ! initialize spy common (digit needed to sort)
-1311 write (unit = lunit6, fmt = 1324, advance = 'no')      ! prompt user at "emtspy" keyboard
+1311 write (unit = lunit6, fmt = 1324)                      ! prompt user at "emtspy" keyboard
 1324 format (' EMTP begins.  Send (spy, $attach, debug, help, module, junk, stop): ')
   read (unit = munit5, fmt = 1329, iostat = ios) buff77     ! read first card of EMTP data
 1329 format (a80)
@@ -119,12 +112,12 @@ subroutine datain
      write (unit = lunit6, fmt = "(' Could not read from stdin.')")
      stop
   end if
-  if ((buff77(1 : 5) .eq. 'stop ') .or. (buff77(1 : 5) .eq. 'STOP ')) call stoptp
-  if ((buff77(1 : 5) .ne. 'disk ') .and. (buff77(1 : 5) .ne. 'DISK ')) go to 51329
+  if (to_lower (buff77(1 : 5)) .eq. 'stop ') call stoptp
+  if (to_lower (buff77(1 : 5)) .ne. 'disk ') go to 51329
   maxzno = 4545                                             ! signal to apollo "sysdep" for disk lunit6
   go to 1311
-51329 if ((buff77(1 : 7) .eq. '$attach') .or. (buff77(1 : 7) .eq. '$ATTACH')) go to 1347          ! batch mode
-  if ((buff77(1 : 5) .ne. 'junk ') .or. (buff77(1 : 5) .ne. 'JUNK ')) go to 1332
+51329 if (to_lower (buff77(1 : 7)) .eq. '$attach') go to 1347         ! batch mode
+  if (to_lower (buff77(1 : 5)) .ne. 'junk ') go to 1332
   write (unit = lunit6, fmt = 1330)
 1330 format ('   Send root word to over-ride "junk" for spy and plot windows :')
   read (unit = munit5, fmt = 1331) junker                   ! read new window pad name
@@ -134,8 +127,8 @@ subroutine datain
   kverfy = -34543                                           ! flag indicating desire to open windows
   call window                                               ! open 2 extra windows for spy and plot
   kverfy = 0                                                ! erase flag, now that both windows are open
-41332 if ((buff77(1 : 6) .eq. 'module') .or. (buff77(1 : 6) .eq. 'MODULE')) go to 2613
-  if ((buff77(1 : 5) .ne. 'help ') .and. (buff77(1 : 5) .ne. 'HELP ')) go to 1342
+41332 if (to_lower (buff77(1 : 6)) .eq. 'module') go to 2613
+  if (to_lower (buff77(1 : 5)) .ne. 'help ') go to 1342
   write (unit = munit6, fmt = 1333)
 1333 format ('    Greetings, greetings.  Welcome to the wonderful new world of interactive')
   call window                                               ! output of character variable munit6
@@ -149,13 +142,13 @@ subroutine datain
 1336 format ('    see section 9 of the rule book dated June, 1984.  Also see  "Apollo".')
   call window                                               ! output of character variable munit6
   go to 1311
-1342 if (buff77(1 : 6) .ne. 'debug ') go to 1347
+1342 if (to_lower (buff77(1 : 6)) .ne. 'debug ') go to 1347
   n13 = 99                                                  ! change diagnostic printout control to "on"
   go to 1311                                                ! back to prompt for interactive choice again
 1347 iprspy = n13                                           ! diagnostic spy printout (0 or 99)
   iprsup = n13                                              ! diagnostic EMTP printout (0 or 99)
   iprsov(1) = n13                                           ! EMTP diagnostic only thru 1st overlay
-  if ((buff77(1 : 3) .ne. 'spy') .and. (buff77(1 : 3) .ne. 'SPY')) go to 1724                  ! not interactive
+  if (to_lower (buff77(1 : 3)) .ne. 'spy') go to 1724       ! not interactive
   ! begin interactive control sequence, leading to "emtspy":
   m4plot = 1                                                ! set flag remembering use of spy
   write (unit = prom80, fmt = 1357)                         ! build very 1st spy prompt
@@ -171,7 +164,7 @@ subroutine datain
   lunt13 = 5                                                ! initially assume externally-connected data
   numcrd = 1                                                ! so far, we have read one input data card
   file6(1) = buff77                                         ! 1st card image permanently stored
-  if ((buff77(1 : 7) .ne. '$attach') .and. (buff77(1 : 7) .ne. '$ATTACH')) go to 1753
+  if (to_lower (buff77(1 : 7)) .ne. '$attach') go to 1753
   ! "$attach,filename,5" usage requires extraction of name:
   lunt13 = 13                                               ! we will internally connect data to unit 13
   n16 = 0                                                   ! column which begins file name is not yet known
@@ -202,8 +195,8 @@ subroutine datain
   do j = 1, limcrd                                          ! read until an end-of-file detected
      read (unit = lunt13, fmt = 1329, end = 1766) file6(krdoff + j)
      if (kcut .eq. 1) go to 5486
-     if ((file6(krdoff + j)(1 : 2) .eq. 'c ') .or. (file6(krdoff + j)(1 : 2) .eq. 'C ')) krdcom = krdcom + 1
-     if (((file6(krdoff + j)(1 : 19) .ne. 'begin new data case') .and. (file6(krdoff + j)(1 : 19) .ne. 'BEGIN NEW DATA CASE')) .or. j - krdcom .le. 3) go to 1756
+     if (to_lower (file6(krdoff + j)(1 : 2)) .eq. 'c ') krdcom = krdcom + 1
+     if ((to_lower (file6(krdoff + j)(1 : 19)) .ne. 'begin new data case') .or. j - krdcom .le. 3) go to 1756
      kcut = 1
 5486 numhld = numhld + 1
      if (numhld .gt. 1000) then
@@ -213,7 +206,7 @@ subroutine datain
      tank(numhld) = file6(krdoff + j)
      ! if all EMTP data (e.g., "kill codes" use) comes via key
      ! board, it is ended with "eof"; when solved, more keyboard.
-1756 if ((file6(krdoff + j)(1 : 4) .eq. 'eof ') .or. (file6(krdoff + j)(1 : 4) .eq. 'EOF ')) go to 1766
+1756 if (to_lower (file6(krdoff + j)(1 : 4)) .eq. 'eof ') go to 1766
      if (kcut .eq. 0) numcrd = numcrd + 1                   ! another input data card now read
   end do
 1760 write (unit = munit6, fmt = 1761) limcrd
@@ -239,9 +232,9 @@ subroutine datain
      write (unit = munit6, fmt = 31777) j, buff77
 31777 format (' j =', i4, '   next $-card = ', a80)
      call window                                            ! output of character variable munit6
-41777 if ((buff77(1 : 8) .eq. '$include') .or. (buff77(1 : 8) .eq. '$INCLUDE')) go to 1787
+41777 if (to_lower (buff77(1 : 8)) .eq. '$include') go to 1787
      ! only processes ! these limited ! dollar cards
-     if (buff77(1 : 7) .ne. '$prefix' .and. buff77(1 : 7) .ne. '$suffix' .and. buff77(1 : 6) .ne. '$level' .and. buff77(1 : 6) .ne. '$dummy' .and. buff77(1 : 7) .ne. '$PREFIX' .and. buff77(1 : 7) .ne. '$SUFFIX' .and. buff77(1 : 6) .ne. '$LEVEL' .and. buff77(1 : 6) .ne. '$DUMMY') go to 1786
+     if (to_lower (buff77(1 : 7)) .ne. '$prefix' .and. to_lower (buff77(1 : 7)) .ne. '$suffix' .and. to_lower (buff77(1 : 6)) .ne. '$level' .and. to_lower (buff77(1 : 6)) .ne. '$dummy') go to 1786
      k = 8                                                  ! begin searching for file pre/suffix in col. 8
      ! if not blank and not
 1778 if (buff77(k : k) .ne. ' ' .and. buff77(k : k) .ne. ',') go to 1779 ! comma, exit
@@ -249,12 +242,12 @@ subroutine datain
      if (k .lt. 80) go to 1778                              !  back to check new column k
      k = 10                                                 ! pretend pre/suffix name begins in column 10
      l = 4                                                  ! pretend pre/suffix name is 5 characters long
-     if ((buff77(5 : 7) .eq. 'fix') .or. (buff77(5 : 7) .eq. 'FIX')) go to 31779              ! $pre/suffix
+     if (to_lower (buff77(5 : 7)) .eq. 'fix') go to 31779   ! $pre/suffix
      istep = j                                              ! blank common communication of card number
      call stopin                                            ! allow user to correct erroneous card j
      if (kill .gt. 0) go to 9200                            ! on our way to "over51"
      go to 1777                                             !  return to re-process corrected card j
-1779 if (buff77(1 : 7) .ne. '$prefix' .and. buff77(1 : 7) .ne. '$suffix' .and. buff77(1 : 7) .ne. '$PREFIX' .and. buff77(1 : 7) .ne. '$SUFFIX') go to 1783
+1779 if (to_lower (buff77(1 : 7)) .ne. '$prefix' .and. to_lower (buff77(1 : 7)) .ne. '$suffix') go to 1783
      l = index (buff77(k :), ' ')                           ! one col. past end of name
      m = index (buff77(k :), ',')                           ! col. of comma, if any
      ! if there is a trailing comma, and
@@ -262,18 +255,18 @@ subroutine datain
      if (m .ne. 0 .and. m .lt. l) l = m                     ! it bounds user-supplied name;  bound is "l"
      l = l - 1                                              ! index for final character of prefix/suffix
 31779 n5 = k - 1 + l                                        ! end of pre/suffix relative to col. 1
-     if ((buff77(1 : 7) .ne. '$prefix') .and. (buff77(1 : 7) .ne. '$PREFIX')) go to 1782
+     if (to_lower (buff77(1 : 7)) .ne. '$prefix') go to 1782
      prefix = buff77(k : n5)                                ! permanent storage of name prefix
      nchpre = l                                             ! length of file name prefix now stored
      go to 1785                                             ! done processing $prefix card; make comment
 1782 suffix = buff77(k : n5)                                ! permanent storage of name suffix
      nchsuf = l                                             ! length of file name suffix now stored
      go to 1785                                             ! done processing $suffix card; make comment
-1783 if ((buff77(1 : 6) .ne. '$level') .and. (buff77(1 : 6) .ne. '$LEVEL')) go to 1784
+1783 if (to_lower (buff77(1 : 6)) .ne. '$level') go to 1784
      prom80 = buff77(k : 80)                                ! transfer numerical part of card
      call frein1 (prom80, komlev)                           ! decode komlev from prom80
      go to 1785                                             ! done processing $level card;  make comment
-1784 if ((buff77(1 : 6) .ne. '$dummy') .and. (buff77(1 : 6) .ne. '$DUMMY')) go to 1786
+1784 if (to_lower (buff77(1 : 6)) .ne. '$dummy') go to 1786
      dumnam(1 : 3) = buff77(k : k + 2)                      ! store new 3-char root name
      ansi8(1 : 3) = buff77(k + 3 : k + 5)                   ! transfer digits to cell 1
      read (unit = ansi8, fmt = 31784) kntdum                ! re-initialize serialization
@@ -404,9 +397,9 @@ subroutine datain
   kntold = kntdum                                           ! save serialize index at start of file
   do k = n18, limcrd                                        ! read $include records until eof
      read (unit = lunt13, fmt = 1329, end = 1828) buff77    ! next data card
-     if ((buff77(1 : 4) .eq. '$eof') .or. (buff77(1 : 4) .eq. '$EOF')) go to 1828              ! effective eof
+     if (to_lower (buff77(1 : 4)) .eq. '$eof') go to 1828   ! effective eof
      if (buff77(1 : 1) .eq. '/') n5 = 1                     ! yes, 1 or more "/"
-     if ((buff77(1 : 1) .ne. 'c') .and. (buff77(1 : 1) .ne. 'C')) go to 4247                 ! accept non-com.
+     if (to_lower (buff77(1 : 1)) .ne. 'c') go to 4247      ! accept non-com.
      do  l = 1, 10                                          ! see if col. 2 is one of 10 digits
         if (buff77(2 : 2) .eq. digit(l)) go to 4244         ! yes, digit
      end do                                                 ! end  do 4241  loop to check if col. 2 is digit
@@ -417,7 +410,7 @@ subroutine datain
 4247 j = j + 1                                              ! accept this data card; do not discard it
      file6(j) = buff77                                      ! transfer buffer to regular storage
      ! comment cards can have no
-     if ((buff77(1 : 1) .eq. 'c') .or. (buff77(1 : 1) .eq. 'C')) go to 4273                 ! arguments, so bypass the check for usage
+     if (to_lower (buff77(1 : 1)) .eq. 'c') go to 4273      ! arguments, so bypass the check for usage
      n20 = n20 + 1                                          ! no. of countable $include card just read
      if (iprspy .lt. 3) go to 4249                          ! jump around diagnostic
      write (unit = munit6, fmt = 4248) n20, n24, kard(n24)
@@ -463,7 +456,7 @@ subroutine datain
 4259 read (unit = munit5, fmt = 4260) arginc(n4)            ! read revised argument
 4260 format (a20)
      ! if user surrenders,
-     if ((arginc(n4)(1 : 5) .eq. 'stop ' ) .or. (arginc(n4)(1 : 5) .eq. 'STOP ' )) call stoptp      ! installation-dependent program stop card
+     if (to_lower (arginc(n4)(1 : 5)) .eq. 'stop ') call stoptp       ! installation-dependent program stop card
 4261 n = n2                                                 ! initialize destination address at right edge
      if (iprspy .lt. 4) go to 34261                         ! jump around diagnostic
      write (unit = munit6, fmt = 24261) arginc(n4)
@@ -508,7 +501,7 @@ subroutine datain
   do m = n19, limcrd                                        ! copy lower cards back as k+1,..
      j = j + 1                                              ! destination index for next data card copied
      file6(j) = file6(m)
-     if ((file6(j)(1 : 8) .eq. '$include') .or. (file6(j)(1 : 8) .eq. '$INCLUDE')) go to 1841
+     if (to_lower (file6(j)(1 : 8)) .eq. '$include') go to 1841
   end do
   numcrd = j                                                ! new number of cards making up data case
   n22 = n22 + 1                                             ! increment pass number of $include removal
@@ -527,7 +520,7 @@ subroutine datain
   n17 = 0                                                   ! so far, no data-sorting requests ("/") found
   do
      if (j .gt. numcrd) go to 2415                          ! done with $spy cards
-     if ((file6(j)(1 : 8) .ne. '$spy    ') .and. (file6(j)(1 : 8) .ne. '$SPY    ')) go to 2378
+     if (to_lower (file6(j)(1 : 8)) .ne. '$spy    ') go to 2378
      n7 = n7 + 1
      ! if over 9 such $spy usages, then
      if (n7 .gt. 9) call stoptp                             ! installation-dependent program stop card
@@ -541,7 +534,7 @@ subroutine datain
      call window                                            ! output of character variable munit6
 2353 open (unit = lunt13, status = 'new', file = ansi32)
      do k = j + 1, numcrd
-        if ((file6(k)(1 : 7) .ne. '$spyend') .and. (file6(k)(1 : 7) .ne. '$SPYEND')) go to 2361
+        if (to_lower (file6(k)(1 : 7)) .ne. '$spyend') go to 2361
         close (unit = lunt13)
         n24 = k - j
         do l = k + 1, numcrd
@@ -555,7 +548,7 @@ subroutine datain
 2361    write (unit = lunt13, fmt = 1329) file6(k)
      end do
 2378 if (file6(j)(1 : 1) .eq. '/') n17 = 1                  ! sorting needed
-     if ((file6(j)(1 : 8) .ne. 'tacs old') .and. (file6(j)(1 : 8) .ne. 'TACS OLD')) go to 2410
+     if (to_lower (file6(j)(1 : 8)) .ne. 'tacs old') go to 2410
      ntacs = 2                                              ! flag for old tacs data w/o '/' cards
      file6(j)(1 : 2) = 'c '
 2410 j = j + 1
@@ -577,9 +570,9 @@ subroutine datain
      ! if previous "/" usage is
      if (kpsour(n12 - 1) .eq. 0) kpsour(n12 - 1) = j - 1    ! unbounded, then remember last card
 2420 do k = 1, numtyp                                       ! check for each possible data class name
-        if (file6(j)(2 : 13) .eq. typdat(k)) go to 2428     ! yes, found it
+        if (to_lower (file6(j)(2 : 13)) .eq. typdat(k)) go to 2428     ! yes, found it
      end do                                                 ! end  do 2421  loop to identify name after "/"
-     if ((file6(j)(2 : 10) .ne. 'tacs data') .and. (file6(j)(2 : 10) .ne. 'TACS DATA')) go to 2424
+     if (to_lower (file6(j)(2 : 10)) .ne. 'tacs data') go to 2424
      k = 6                                                  ! set 'tacs data' to 'tacs initial' if
      ntacs = 1                                              ! new tacs data format used.
      go to 2428                                             !  ntacs set to 1 if tacs with new format
@@ -597,7 +590,7 @@ subroutine datain
      ! & last "/" not yet ended,
      ! and card is blank,
 2431 if (n12 .ge. 1) then
-        if (kpsour(n12) .eq. 0 .and. ((file6(j)(1 : 6) .eq. 'blank ') .or. (file6(j)(1 : 6) .eq. 'BLANK '))) then
+        if (kpsour(n12) .eq. 0 .and. to_lower (file6(j)(1 : 6)) .eq. 'blank ') then
            kpsour(n12) = j - 1                              ! then bound last "/" usage
         end if
      end if
@@ -629,7 +622,7 @@ subroutine datain
   end do                                                    ! label 12438
 12448 if (kode(l) .gt. 3) go to 12458
   do ll = nn1, nn2                                          ! for tacs sources, convert
-     if (file6(ll)(1 : 1) .eq. '$' .or. file6(ll)(1 : 1) .eq. '9' .or. file6(ll)(1 : 1) .eq. 'c') go to 12456
+     if (file6(ll)(1 : 1) .eq. '$' .or. file6(ll)(1 : 1) .eq. '9' .or. to_lower (file6(ll)(1 : 1)) .eq. 'c') go to 12456
      if (file6(ll)(2 : 2) .ne. '1')  go to 12450            ! type '01'
      file6(ll)(1 : 1) = '1'                                 ! to '11',  '02' to '14', '03' to
      go to 12456                                            ! '23' and '04' to '24'
@@ -660,11 +653,11 @@ subroutine datain
   n8 = 0                                                    ! initialize "/" index to remove possible garbage
   n24 = numcrd                                              ! initialize destination address (1 b4 1st)
   j = 0                                                     ! initialize card number of original data done
-  if ((file6(1)(1 : 9) .ne. 'c $attach') .and. (file6(1)(1 : 9) .ne. 'C $ATTACH')) go to 2445
+  if (to_lower (file6(1)(1 : 9)) .ne. 'c $attach') go to 2445
   n24 = n24 + 1                                             ! increment destination address past this
   file6(n24) = file6(1)                                     ! transfer case-marker card below
   j = 1                                                     ! update number of original data cards now done
-2445 if ((file6(j + 1)(1 : 16) .ne. 'begin new data c') .and. (file6(j + 1)(1 : 16) .ne. 'BEGIN NEW DATA C')) go to 2446
+2445 if (to_lower (file6(j + 1)(1 : 16)) .ne. 'begin new data c') go to 2446
   n24 = n24 + 1                                             ! increment destination address past this
   file6(n24) = file6(j + 1)                                 ! transfer case-marker card below
   j = j + 1                                                 ! update number of original data cards now done
@@ -686,14 +679,14 @@ subroutine datain
 2460 if (n11 .eq. 0) go to 2462                             ! no "/initial" to be added
   n8 = 11                                                   ! index for "initial", data which we now add
   go to 2472                                                ! jump to the insertion of this class-11 data
-2462 if ((file6(j)(1 : 6) .ne. 'blank ') .and. (file6(j)(1 : 6) .ne. 'BLANK ')) go to 2493          ! not end of class
+2462 if (to_lower (file6(j)(1 : 6)) .ne. 'blank ') go to 2493         ! not end of class
   if (iprspy .lt. 2) go to 2465                             ! jump around diagnostic
   write (unit = munit6, fmt = 2464) j
 2464 format (' Blank card recognized.  j =', i6)
   call window                                               ! output of character variable munit6
 2465 do k = 1, numtyp                                       ! search class table to identify data type
      n8 = lentyp(k)                                         ! number of characters in k-th key word
-     n14 = index (file6(j), typdat(k)(1 : n8))              ! search for keyword k
+     n14 = index (to_lower (file6(j)), typdat(k)(1 : n8))              ! search for keyword k
      if (n14 .gt. 0) go to 2469                             ! yes, one of our data classes foun
   end do                                                    ! end  do 2464  loop seeking to identify blank card
   n14 = index (file6(j), 'tacs data')
@@ -761,7 +754,8 @@ subroutine datain
   n11 = limcrd + 1                                          ! initialize destination address 1 past bottom
   n13 = 0                                                   ! initialize count of card being considered next
   n4 = 1                                                    ! temporary integer variable storage for unity
-  call copyi (n4, modarg(1), limarg)                        ! initialize mode
+  !  call copyi (n4, modarg(1), limarg)                        ! initialize mode
+  call copy (n4, modarg(1 :), limarg)                         ! initialize mode
   go to 2628                                                ! jump into loop over all input cards n13
 2621 n11 = n11 - 1                                          ! next destination address (store from bottom up)
   file6(n11) = buff77                                       ! copy non-declaration card down below
@@ -769,7 +763,7 @@ subroutine datain
   if (n13 .gt. numcrd) go to 2703                           ! done processing all cards
   buff77 = file6(n13)                                       ! copy input card into working storage
   ! skip over any card ! not "arg" or "dum"
-  if (buff77(1 : 3) .ne. 'arg' .and. buff77(1 : 3) .ne. 'dum' .and. buff77(1 : 3) .ne. 'num' .and. buff77(1 : 3) .ne. 'ARG' .and. buff77(1 : 3) .ne. 'DUM' .and. buff77(1 : 3) .ne. 'NUM') go to 2621 ! or "num"
+  if (to_lower (buff77(1 : 3)) .ne. 'arg' .and. to_lower (buff77(1 : 3)) .ne. 'dum' .and. to_lower (buff77(1 : 3)) .ne. 'num') go to 2621 ! or "num"
   k = 4
   n8 = n8 + 1                                               ! one more declaration pushed to top of vector
   file6(n8) = buff77                                        ! store declaration after last such card
@@ -784,7 +778,7 @@ subroutine datain
   l = l + 1                                                 ! move one byte to right in search for right edge
   if (l .le. 80) go to 2656                                 ! loop back to try this new column
 2664 l = l - 1                                              ! right edge of argument is one byte to left of bound
-  if ((buff77(1 : 3) .ne. 'num') .and. (buff77(1 : 3) .ne. 'NUM')) go to 2687
+  if (to_lower (buff77(1 : 3)) .ne. 'num') go to 2687
   do m = 1, numarg                                          ! search existing argument list for this one
      n6 = l - k + 1                                         ! number of characters in argument just identified
      if (kolinc(m) .ne. n6) go to 2672                      ! wrong length; skip it
@@ -805,7 +799,7 @@ subroutine datain
   call stoptp                                               ! installation-dependent program stop card
 2692 arginc(numarg) = buff77(k : l)                         ! store newly-identified argument
   kolinc(numarg) = l - k + 1                                ! byte length of argument
-  if ((buff77(1 : 3) .eq. 'dum') .or. (buff77(1 : 3) .eq. 'dum')) kkkdum(numarg) = 1
+  if (to_lower (buff77(1 : 3)) .eq. 'dum') kkkdum(numarg) = 1
 2695 k = l + 1                                              ! next left edge could be 1 beyond present right edge
   go to 2637                                                ! loop back to identify next argument of buff77
 2703 n11 = n11 - 1                                          ! next destination address for $eof we create
@@ -835,10 +829,10 @@ subroutine datain
   do n17 = n11, limcrd                                      ! process all non-declation cards
      n16 = n16 - 1                                          ! reverse-indexed location of next non-decl. card
      buff77 = file6(n16)                                    ! transfer card to scalar working storage
-     if ((buff77(1 : 1) .eq. 'c') .or. (buff77(1 : 1) .eq. 'C')) go to 2766                 ! skip comment cards
+     if (to_lower (buff77(1 : 1)) .eq. 'c') go to 2766                 ! skip comment cards
      n13 = n13 + 1                                          ! present card has this active card number in file
      if (buff77(1 : 1) .eq. '/') go to 2766                 ! skip sorting commands
-     if ((buff77(1 : 4) .eq. '$eof') .or. (buff77(1 : 4) .eq. '$EOF')) go to 2772              ! effective file end
+     if (to_lower (buff77(1 : 4)) .eq. '$eof') go to 2772   ! effective file end
      do j = 1, numarg                                       ! check present card for each argument
         l = 1                                               ! begin search for string in column 1 of buff77
         n15 = kolinc(j)                                     ! number of characters in the j-th argument
@@ -912,7 +906,7 @@ subroutine datain
 9800 if (ntacs .ne. 2) go to 9002
   k = 1                                                     ! begin to convert tacs data without '/' cards
   do j = 1, numcrd
-     if (file6(j)(1 : 5) .ne. 'blank' .and. file6(j)(1 : 5) .ne. 'BLANK' .and. file6(j)(1 : 80) .ne. blan80(1 : 80)) go to 3005
+     if (to_lower (file6(j)(1 : 5)) .ne. 'blank' .and. file6(j)(1 : 80) .ne. blan80(1 : 80)) go to 3005
      k = k + 1                                              ! counter for tacs data types
      if (k .ge. 6) go to 9002                               ! done with all 5 data types
      file6(j)(1 : 2) = 'c '                                 ! convert blank card to comment card
@@ -924,34 +918,34 @@ subroutine datain
         go to 3500
 
      case (2)
-        if (file6(j)(1 : 1) .eq. 'c' .or. file6(j)(1 : 1) .eq. 'C' .or. file6(j)(1 : 1) .eq. '9' .or. file6(j)(1 : 1) .eq. '$') go to 3500
+        if (to_lower (file6(j)(1 : 1)) .eq. 'c' .or. file6(j)(1 : 1) .eq. '9' .or. file6(j)(1 : 1) .eq. '$') go to 3500
         if (file6(j)(2 : 2) .ne. '1') go to 3022
-        file6(j)(1 : 1) = '1'                                  ! to convert tacs source cards:
-        go to 3500                                             ! type ' 1' to '11', ' 2' to '14'
+        file6(j)(1 : 1) = '1'                               ! to convert tacs source cards:
+        go to 3500                                          ! type ' 1' to '11', ' 2' to '14'
 
      case (3)
         go to 3500
 
      case (4)
         if (file6(j)(1 : 1) .ne. ' ') go to 3500
-        file6(j)(1 : 2) = '33'                                 !convert type '  ' to '33'
-        go to 3500                                             !for tacs output variables
+        file6(j)(1 : 2) = '33'                              !convert type '  ' to '33'
+        go to 3500                                          !for tacs output variables
 
      case (5)
         if (file6(j)(1 : 1) .ne. ' ') go to 3500
-        file6(j)(1 : 2) = '77'                                 !convert type '  ' to '77'
+        file6(j)(1 : 2) = '77'                              !convert type '  ' to '77'
      end select
 3022 if (file6(j)(2 : 2) .ne. '2') go to 3024
-     file6(j)(1 : 2) = '14'                                    ! ' 3' to '23', and ' 4' to '24'
+     file6(j)(1 : 2) = '14'                                 ! ' 3' to '23', and ' 4' to '24'
      go to 3500
 3024 file6(j)(1 : 1) = '2'
      go to 3500
   end do
-3500 continue                                                  !for tacs initial condition cards
-9002 if (iprsup .lt. 1) go to 9007                             ! jump around diagnostic
+3500 continue                                               !for tacs initial condition cards
+9002 if (iprsup .lt. 1) go to 9007                          ! jump around diagnostic
   write (unit = munit6, fmt = 9004) numcrd, limcrd, kill
 9004 format (' Exit "datain".   numcrd, limcrd, kill =', 3i8)
-  call window                                                  ! output of character variable munit6
+  call window                                               ! output of character variable munit6
 9007 if (allocated (tank)) deallocate (tank)
   return
 end subroutine datain

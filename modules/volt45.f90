@@ -13,8 +13,8 @@
 !     variable dimensioning).   Deck is always in memory.
 
 module volt45
-  real volti, voltk, vim
-  common /volpri/ volti(50), voltk(50), vim(50)
+  real(8) ::  volti(50), voltk(50), vim(50)
+  !  common /volpri/ volti(50), voltk(50), vim(50)
 end module volt45
 
 !

@@ -14,11 +14,6 @@ subroutine over16
   use umdeck
   use tacsar
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !  include 'blkcom.ftn'
-  !  include 'labcom.ftn'
-  !  include 'umdeck.ftn'
-  !  include 'tacsar.ftn'
   !  dimension xx(1)
   !  equivalence (xk(1), xx(1))
   !  dimension ispum(1)
@@ -80,6 +75,7 @@ subroutine subts1
   use umdeck
   use dekspy
   use tracom
+  use movcop
   implicit none
   integer(4) :: i, i1, ii, iit1, ip, isss, j, j11, jj
   integer(4) :: k, k1, k9899, knode
@@ -87,14 +83,14 @@ subroutine subts1
   integer(4) :: m, m1, mk, mnode
   integer(4) :: n, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15
   integer(4) :: n17, n18, n19, ndx1, ndx2, ndx3, nn1, nn15, nwarn
-  real(8) :: a, a8sw, acheck, ai, bi
+  real(8) :: a, a8sw(400), acheck, ai, bi
   real(8) :: d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15, d16
   real(8) :: delti, didt
   real(8) :: gus1, gus2, gus3, gus4
   real(8) :: swcold(100)
   real(8) :: tcl, timswt
   real(8) :: vsl
-  common /a8sw/ a8sw(400)
+  !  common /a8sw/ a8sw
   !dimension nsubkm(1), swcold(100)
   !  equivalence (spum(1),  ispum(1)),  (kknonl(1),  nsubkm(1))
   !  equivalence (moncar(1),    knt),       (moncar(2),  kbase)
@@ -137,12 +133,10 @@ subroutine subts1
 3780 continue
   !                                   checking switch-positions for change
   if ( iprsup  .ge.  3 ) write (lunit6, 8253)  lastov, kbase, ntot, kpartb, ncomp, t, tenerg, deltat
-8253 format ( /, 39h more scalars.  lastov,   kbase    ntot, 16h  kpartb   ncomp,  14x,  1ht, 9x, 6htenerg, &
-       9x,  6hdeltat  ,/,  14x,  5i8,  3e15.6  )
-  if ( iprsup  .lt.  4 )  go to 1326
-  write (lunit6, 1314)
-1314 format ( /, 39h switch table at beginning of 'subts1'. ,/,40h     row    kpos    bus1    bus2  kswtyp, &
-       9x, 6htclose, 9x, 6hadelay, 10x, 5htopen, 11x, 4hcrit )
+8253 format (/, ' More scalars.  lastov,   kbase    ntot  kpartb   ncomp', 14x, 't', 9x, 'tenerg', 9x, 'deltat', /, 14x, 5i8, 3e15.6)
+  if (iprsup .lt. 4) go to 1326
+  write (unit = lunit6, fmt = 1314)
+1314 format (/, " Switch table at beginning of 'subts1'.", /, '     row    kpos    bus1    bus2  kswtyp', 9x, 'tclose', 9x, 'adelay', 10x, 'topen', 11x, 'crit')
   do k = 1, kswtch
      ndx1 = lswtch + k
 !3333 write (unit = lunit6, fmt = 4444) k, kpos(k), kmswit(k), kmswit(ndx1), kswtyp(k), tclose(k), adelay(k), topen(k), crit(k)
@@ -366,9 +360,8 @@ subroutine subts1
      if ( k1 .eq. 8890 )  bus3 = text5
      if ( k1 .eq. 8891 )  bus3 = text6
      if ( iprsup  .eq. 7 ) write (lunit6, 7218)  i, n, m, n1, n2, n3, n4, i1, m1, d1, bus1, bus2
-7218 format ( /,  1x,  32h       i       n       m      n1, 40h      n2      n3      n4      i1      m1,  13x, &
-          2hd1,  16h    bus1    bus2   ,/,  1x,  9i8,  e15.6,  4x,  2a8 )
-     if ( iprsup .eq. 7 ) write (6,*) ' n5, k1, n13, swcold(n13) =',n5, k1, n13, swcold(n13)
+7218 format (/, 1x, '       i       n       m      n1      n2      n3      n4      i1      m1', 13x, 'd1    bus1    bus2', /, 1x, 9i8, e15.6, 4x, 2a8)
+     if (iprsup .eq. 7) write (unit = 6, fmt = *) ' n5, k1, n13, swcold(n13) =',n5, k1, n13, swcold(n13)
      !     ------  check  open/close  clamping  ------
      if ( n5 .eq. 0 )  go to 301
      ndx1 = kxtcs + n5
@@ -880,7 +873,8 @@ subroutine subts1
   if ( ktrlsw(1) .gt. 0 ) call switch
   if (kanal .eq. 2) call last14
   !       &&&&&&&&&& enter retriangularization of complete (y)
-  call move0 ( kssfrq(1), ntot )
+  !  call move0 ( kssfrq(1), ntot )
+  call move0 (kssfrq(1 :), ntot)
   ii = 0
   l = 1
   go to 2290
@@ -1043,7 +1037,8 @@ subroutine subts1
   j11 = 0
   if (  ncomp .le. 0 )  go to 2616
   j11 = ntot * ncomp
-  call mover0 ( znonl(1), j11 )
+  !  call mover0 ( znonl(1), j11 )
+  call move0 (znonl(1 :), j11)
   if (  inonl .eq. num99 )  go to 2321
   do i=1,inonl
      if ( nltype(i) .lt. 0 )  go to 2320
@@ -1107,7 +1102,8 @@ subroutine subts1
 2450 if ( iprsup  .ge.  2 ) write (lunit6, 2341)  ( znonl(k), k=1, j11 )
 2341 format ( /, 25h (znonl(k), k=1, j11) ...  ,/, ( 1x,  8e16.6 )  )
 2500 if ( ii.eq.1) go to 2550
-  call mover0 ( voltbc(1), ncomp )
+  !  call mover0 ( voltbc(1), ncomp )
+  call move0 (voltbc(1 :), ncomp)
 2510 ii=ii-1
   k=km(ii)
   if ( k.lt.0) go to 2520
@@ -1154,8 +1150,9 @@ subroutine subts1
 2600 end do
 2616 if (  iprsup .ge. 2 ) write (lunit6, 2603)  ( znonl(i), i=1, j11 )
 2603 format ( /,  26h znonl after soln, at 2318  ,/, ( 1x, 8e15.5 ) )
-  call mover ( finit(1), emtpf(1), ntot )
-  if ( kswtch .eq. 0 ) go to 5000
+  !  call mover ( finit(1), emtpf(1), ntot )
+  call move (finit(1 :), emtpf(1 :), ntot)
+  if (kswtch .eq. 0) go to 5000
   do i=1, kswtch
      k1 = kdepsw( lswtch + i )
      if ( k1.ne.8888 .and. k1.ne.8890 .and. k1.ne.8891 ) go to 8801
@@ -1322,15 +1319,15 @@ end subroutine yserlc
 subroutine switch
   use blkcom
   use labcom
+  use movcop
   implicit none
-  !  include 'blkcom.ftn'
-  !  include 'labcom.ftn'
   integer(4) :: i, j, j1, j2, jj, k, k1, k2, k3, k4, k7, kk2
   integer(4) :: l1, l2, l3, l4, l5, ll, ll2
   integer(4) :: m, m1, m2, m3, m4, m5, m6, m7, m9, mm, mo
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n12, n13, n14, n15, n16
   integer(4) :: n17, n18, n19, ndx1, ndx2, nless, nmax, nmin, nn, nover, numb
   !  equivalence (ktrlsw(1), n20)
+  !
   !     overlay-16 module called by "subts1" if and only if one or more
   !     switches has just changed status (if ktrlsw(1) .gt. 0).   the
   !     purpose is to update nextsw vector that gives order of switch
@@ -1401,15 +1398,18 @@ subroutine switch
   if (ktrlsw(6) .eq. 0) go to 3605
   !     begin simple, brute-force switch logic of "simple switch logic"
   !     special-request card (see emtp rule book):
-  call move0 (kbegsw(1), kswtch)
-  call move0 (kode(1), ntot)
+  !  call move0 (kbegsw(1), kswtch)
+  call move0 (kbegsw(1 :), kswtch)
+  !  call move0 (kode(1), ntot)
+  call move0 (kode(1 :), ntot)
   j = ktrlsw(4)
   if ( j .le. 0 )  go to 3478
   !     enter loop around nextsw, as we note closed switches using kbegsw:
 3473 kbegsw(j) = 1
   j = iabs ( nextsw(j) )
   if ( j .ne. ktrlsw(4) )  go to 3473
-3478 call move0 ( nextsw(1), kswtch )
+  !3478 call move0 ( nextsw(1), kswtch )
+3478 call move0 (nextsw(1 :), kswtch)
   n18 = ktrlsw(2)
   do ll=1, n20
      j = modswt(ll)
@@ -1424,7 +1424,8 @@ subroutine switch
   ktrlsw(2) = n18
   if ( n18 .gt. 0 ) go to 3487
   ktrlsw(4) = 0
-  call move0( nextsw(1), kswtch )
+  !  call move0( nextsw(1), kswtch )
+  call move0 (nextsw(1 :), kswtch)
   go to 4457
 3487 n13 = 0
   n3 = 0
@@ -1433,8 +1434,8 @@ subroutine switch
   !     calculation.   we execute this loop until n13 = n18 (until all
   !     closed switches have been properly ordered in nextsw:
 3488 do i=1, kswtch
-     if ( kbegsw(i) .eq. 0 )  go to 3580
-     if ( nextsw(i) .ne. 0 )  go to 3580
+     if (kbegsw(i) .eq. 0) go to 3580
+     if (nextsw(i) .ne. 0) go to 3580
      k = kmswit(i)
      ndx1 = lswtch + i
      m = kmswit(ndx1)
@@ -1443,7 +1444,7 @@ subroutine switch
      jj = 0
      mm = 0
      n9 = 0
-     if ( k .ne. 1   .and. k .le. kpartb ) go to 3491
+     if (k .ne. 1 .and. k .le. kpartb) go to 3491
      !     known-voltage node k must be dropped from consideration:
      jj = 1
      n9 = n9 + 1
@@ -1452,33 +1453,33 @@ subroutine switch
      mm = 1
      n9 = n9 + 1
 3493 if ( n1 .gt. n2 )  go to 3506
-     do ll=n1, n2
+     do ll = n1, n2
         j = nbhdsw(ll)
-        if ( kbegsw(j) .eq. 0 )  go to 3503
-        if ( nextsw(j) .ne. 0 )  go to 3503
+        if (kbegsw(j) .eq. 0) go to 3503
+        if (nextsw(j) .ne. 0) go to 3503
         ndx2 = lswtch + j
-        if ( jj .gt. 0 )  go to 3497
-        if ( k .ne. kmswit(j)   .and. k .ne. kmswit(ndx2) ) go to 3497
+        if (jj .gt. 0) go to 3497
+        if (k .ne. kmswit(j) .and. k .ne. kmswit(ndx2)) go to 3497
         jj = 1
         go to 3501
-3497    if ( mm .gt. 0 )  go to 3503
-        if ( m .ne. kmswit(j)  .and. m .ne. kmswit(ndx2) ) go to 3503
+3497    if (mm .gt. 0) go to 3503
+        if (m .ne. kmswit(j) .and. m .ne. kmswit(ndx2)) go to 3503
         mm = 1
 3501    n9 = n9 + 1
-        if ( n9 .eq. 2 )  go to 3580
+        if (n9 .eq. 2) go to 3580
 3503 end do
      !     we drop out of above  do 3503  loop only if one side of switch #i
      !     can be used for kcl calculation of switch current:
-3506 if ( n13 .gt. 0 ) nextsw(n17) = i * nextsw(n17)
+3506 if (n13 .gt. 0) nextsw(n17) = i * nextsw(n17)
      n17 = i
-     if ( jj .gt. 0 )  go to 3511
+     if (jj .gt. 0) go to 3511
      nextsw(i) = 1
      go to 3518
 3511 nextsw(i) = -1
 3518 n13 = n13 + 1
-     if ( n13 .eq. 1 )  n14 = i
-     if ( kode(k) .ne. 0 )  go to 3528
-     if ( kode(m) .ne. 0 )  go to 3528
+     if (n13 .eq. 1) n14 = i
+     if (kode(k) .ne. 0) go to 3528
+     if (kode(m) .ne. 0) go to 3528
      !     switch now closing is connected to no other closed switches, so
      !     each end points to the other (trivial kode change):
      kode(k) = m
@@ -1521,10 +1522,10 @@ subroutine switch
 3564 format ( 30h complete processing of switch,  i5  )
 3580 end do
   if ( iprsup  .ge.  1 ) write (lunit6, 3584)  n13, n17
-3584 format ( 47h done another pass of all switches.  n13, n17 =,2i5)
+3584 format (' Done another pass of all switches.  n13, n17 =',2i5)
   if ( n13 .gt. n3 )  go to 3591
-  write (lunit6, 3587)
-3587 format ( 47h temporary error stop in "switch" at s.n. 3587.  )
+  write (unit = lunit6, fmt = 3587)
+3587 format (' Temporary error stop in "switch" at s.n. 3587.')
   call stoptp
 3591 n3 = n13
   if ( n13 .lt. n18 )  go to 3488
@@ -1979,6 +1980,7 @@ subroutine  tacs3
   use tacsar
   use syncom
   use tracom
+  use movcop
   implicit none
   integer(4) :: i, i1, i2, i3
   integer(4) :: j, j1, jcm
@@ -1989,20 +1991,20 @@ subroutine  tacs3
   integer(4) :: ndy5, niunrs, nn, nuki, nukr
   real(8) :: b, d1, ppp, pru, prx
   !
-  if ( iprsup  .ge.  1 ) write ( lunit6, 4567 )
-4567 format ( 23h  "begin module tacs3." )
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
+4567 format ('  "Begin module tacs3."')
   niunrs = iuty( kiuty + 1 )
   kjsup = kinsup + lstat(65)
   kksup = kjsup  + lstat(65)
   ma1 = iuty(kiuty+7)
   ma2 = iuty(kiuty+8)
   if ( iprsup  .lt.  2 )   go to 3219
-  write (lunit6, 3213)  ioutcs, isprin, isplot, limstp, iout
-3213 format (   40h  ioutcs  isprin  isplot  limstp    iout ,/,  5i8 )
-  write (lunit6, 3214) ktab, niu, nuk, nenerg, iuty(kiuty+11)
-3214 format ( 40h    ktab     niu     nuk  nenerg  infexp  ,/, 1x, i7, 12i8)
-  write (lunit6, 3215)  t, twopi, fltinf, xopt, copt
-3215 format ( 1x, 14x, 1ht,  10x, 5htwopi, 9x, 6hfltinf, 11x, 4hxopt,  11x, 4hcopt   ,/, 1x, 8e15.6  )
+  write (unit = lunit6, fmt = 3213)  ioutcs, isprin, isplot, limstp, iout
+3213 format ('  ioutcs  isprin  isplot  limstp    iout', /,  5i8)
+  write (unit = lunit6, fmt = 3214) ktab, niu, nuk, nenerg, iuty(kiuty + 11)
+3214 format ('    ktab     niu     nuk  nenerg  infexp', /, 1x, i7, 12i8)
+  write (unit = lunit6, fmt = 3215) t, twopi, fltinf, xopt, copt
+3215 format (1x, 14x, 't', 10x, 'twopi', 9x, 'fltinf', 11x, 'xopt',  11x, 'copt', /, 1x, 8e15.6)
   !                                       $$$  update  input  sources  $$$
 3219 if ( nchain  .eq.  18 )  go to 900
   ndx1 = kxtcs + nuk + 1
@@ -2234,12 +2236,13 @@ subroutine  tacs3
      n = n - 6
      parsup(n) = (parsup(n+2)*pru-parsup(n+3)*prx+parsup(n+6))/2.0
      go to 2840
-311  if ( iprsup  .ge.  4 ) write (lunit6, 2020)  i, ( parsup(n+4), n = jcm, j, 6 )
-2020 format( 10h  function, i6, 6h  hst , 7e14.6 )
+311  if ( iprsup  .ge.  4 ) write (unit = lunit6, fmt = 2020) i, (parsup(n + 4), n = jcm, j, 6)
+2020 format ('  Function', i6, '  hst', 7e14.6)
 3111 end do
   ndx1 = kxtcs + nuk + lstat(64) + 1
   ndx2 = ndx1 + lstat(68)
-  call mover ( xtcs(ndx1), xtcs(ndx2), nsup )
+  !  call mover ( xtcs(ndx1), xtcs(ndx2), nsup )
+  call move (xtcs(ndx1 :), xtcs(ndx2 :), nsup)
 340 return
   !                                                  $$$  termination  $$$
 900 l = nuk + lstat(64) + konsup + 1
@@ -2257,6 +2260,7 @@ subroutine subts2
   use blkcom
   use labcom
   use tracom
+  use movcop
   implicit none
   integer(4) :: i, i1, i1p1, i1p2, iadrs, ibf, ii, ik, ik1, ikf, iklim, im, im1, ind
   integer(4) :: inoff1, inoff2, inoff3, inoff4, inoff5, isecti, isfd
@@ -2304,13 +2308,12 @@ subroutine subts2
   !  equivalence (semaux(1), wk1(1))
   !  dimension infdli(1)
   !  equivalence (namebr(1), infdli(1))
-  common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7, koff8, koff9
-  common /fdqlcl/ koff10, koff13, koff14, koff15, koff16, koff17, koff18, koff19
-  common /fdqlcl/ koff20, koff21, koff22, koff23, koff24, koff25
-  common /fdqlcl/ inoff1, inoff2, inoff3, inoff4, inoff5, nqtt, lcbl
-  common /fdqlcl/ lmode, nqtw
+  !  common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7, koff8, koff9
+  !  common /fdqlcl/ koff10, koff13, koff14, koff15, koff16, koff17, koff18, koff19
+  !  common /fdqlcl/ koff20, koff21, koff22, koff23, koff24, koff25
+  !  common /fdqlcl/ inoff1, inoff2, inoff3, inoff4, inoff5, nqtt, lcbl
+  !  common /fdqlcl/ lmode, nqtw
   !
-  !     intrinsic  iabsz, absz
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 3445) (emtpf(j), j = 1, ntot )
 3445 format ( ' Top  subts2.  emtpf(1:ntot) follows ...', /, (1x, 8e16.7))
   nmodal = kcount
@@ -2350,7 +2353,8 @@ subroutine subts2
   call mult(emtpc(n3), volti, ci(k), it2, llm1)
   call mult(emtpc(n3), voltk, ck(k), it2, llm1)
   if (kodebr(k) .le. 0) go to 3530
-  call mover( cik(k), volti(1), it2 )
+  !  call mover( cik(k), volti(1), it2 )
+  call move (cik(k :), volti(1 :), it2)
   call mult( x(n3), volt(1), volti(1), it2, ll1 )
   call mult( r(n3), volti(1), cik(k), it2, llm1 )
   do i = 1, 10
@@ -2361,7 +2365,8 @@ subroutine subts2
 !73529 continue
   go to 3535
 3531 call fdcinj( ikf, isfd, ibf)
-  call mover( volt(1), cik(k), it2 )
+  !  call mover( volt(1), cik(k), it2 )
+  call move (volt(1 :), cik(k :), it2)
   go to 3535
 3530 call mult( x(n3), cik(k), volt(1), it2, ll1 )
   call mult( r(n3), volt(1), cik(k), it2, llm1 )
@@ -2388,8 +2393,8 @@ subroutine subts2
   ck1 = ck(k)
   it1 = iabs(i)
   cap = emtpc(it1)
-  if ( iprsup .ge. 3 ) write (lunit6, *)  ' it1, n1, n2, k, i, t =', it1, n1, n2, k, i, t
-  if ( iprsup  .ge.  3 ) write (lunit6,5432) x(it1), emtpe(n1), emtpe(n2), cik(k), r(it1)
+  if (iprsup .ge. 3) write (unit = lunit6, fmt = *)  ' it1, n1, n2, k, i, t =', it1, n1, n2, k, i, t
+  if (iprsup .ge. 3) write (unit = lunit6, fmt = 5432) x(it1), emtpe(n1), emtpe(n2), cik(k), r(it1)
 5432 format (' x(it1), emtpe(n1), emtpe(n2), cik(k), r(it1) = ', 5e18.10, /)
   if (i.lt.0) go to 1170
   if (t.gt.tmax) go to 1105
@@ -3787,8 +3792,9 @@ subroutine update
   use synmac
   use dekspy
   use tracom
+  use movcop
   implicit none
-  !     this module is used only by brandwajn (type-59) s.m. model
+  !     This module is used only by brandwajn (type-59) s.m. model
   integer(4) :: i, i26, i30, i75, ib, ibu, icnt, idelta, ids, idsat, ies, ifs, ij, ik
   integer(4) :: ik1, ikn, ikp, ikv, ikw, ilk, im, ip, ipout, isd, ispdr, isq, itq, iu
   integer(4) :: iy, iz, izy
@@ -3812,7 +3818,7 @@ subroutine update
   !  dimension massex(1)
   !  equivalence ( histq(1), massex(1) )
   !
-  !     this routine adjusts the current sources to be injected into
+  !     This routine adjusts the current sources to be injected into
   !     the equivalent pi-circuits * * * * * * * * * * * * * * * * * * * *
   if (iprsup  .ge.  1) write (unit = lunit6, fmt = 4099)
 4099 format ('  "Begin module update."')
@@ -4270,7 +4276,8 @@ subroutine update
      sf5 = - ( elp(i75+45) * x1( 6 ) + elp(i75+46) * x1( 7 ) )
      x1( 1 ) = acd + sf4
      x1( 2 ) = acq + sf5
-     call mover( x1( ll1 ), cu( ikn ), ll7 )
+     !     call mover( x1( ll1 ), cu( ikn ), ll7 )
+     call move (x1(ll1 :), cu(ikn :), ll7)
      !     add correction terms( account for assymetry)     *****************
      !     sf4 = sf4 - ac( il ) * acur1       !no d-axis correction term
      sf5 = sf5 - elp( i75+52 ) * acur2
@@ -4363,9 +4370,10 @@ subroutine update
   end do
   nexmod = 0
   ll3 = 3
-  call move0 ( ksmspy(1), ll3 )
-  if ( iprsup  .gt.  0 ) write ( lunit6, 4111 )
-4111 format ( 24h  "exit  module update." )
+  !  call move0 ( ksmspy(1), ll3 )
+  call move0 (ksmspy(1 :), ll3)
+  if (iprsup  .gt.  0) write (unit = lunit6, fmt = 4111)
+4111 format ('  "Exit  module update."')
   return
 end subroutine update
 
@@ -4378,6 +4386,7 @@ subroutine increm (ilk, sf3)
   use labcom
   use tacsar
   use synmac
+  use movcop
   implicit none
   integer(4), intent(in) :: ilk
   real(8), intent(out) :: sf3
@@ -4389,19 +4398,17 @@ subroutine increm (ilk, sf3)
   real(8) :: a, acde, acdf, asd, b, etot
   real(8) :: sb, sf4, sf5, sf6, sf7, sum
   !
+  !
   !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     this module is used only by brandwajn (type-59) s.m. model
-  !  include 'blkcom.ftn'
-  !  include 'labcom.ftn'
-  !  include 'tacsar.ftn'
-  !  include 'synmac.ftn'
   if (iprsup  .ge.  1) write (unit = lunit6, fmt = 6000)
 6000 format ('  "Begin module increm."')
   i30 = 30 * ilk - 29
   write (unit = lunit6, fmt = 6001) ilk, ismdat(i30 + 9), ismdat(i30 + 10)
 6001 format (' ***', 10x, 'Machine no.', i6, 10x, 'begin operation on segments no.', 2x, 2i10)
   ll36 = 36
-  call mover0(z(1), ll36)
+  !  call mover0(z(1), ll36)
+  call move0 (z(1 :), ll36)
   acde = 1.0
   acdf = 1.0
   i26 = 101 * ilk - 100
@@ -4461,20 +4468,21 @@ subroutine increm (ilk, sf3)
 !407  write ( lunit6, 6004 )    k, ( z(i), i = n1, n2 )
      write (unit = lunit6, fmt = 6004) k, (z(i), i = n1, n2)
   end do
-208 call mover( z(1), x1( 1 ), ll36 )
+  !208 call mover( z(1), x1( 1 ), ll36 )
+208 call move (z(1 :), x1(1 :), ll36)
   ll7 = 6
   ll3 = 2
   call redusm( x1( 1 ), ll7, ll3 )
-  if ( iprsup .le. 0 )   go  to  210
-  write ( lunit6, 6003 )   ilk
-6003 format ( /, 23h reduced network model., i10 )
+  if (iprsup .le. 0) go  to  210
+  write (unit = lunit6, fmt = 6003) ilk
+6003 format (/, ' Reduced network model.', i10)
   do k = 1, 6
      n1 = ( k - 1 ) * 6 + 1
      n2 = n1 + 5
 !409  write ( lunit6, 6004 )   k, ( x1(i), i = n1, n2 )
      write (unit = lunit6, fmt = 6004) k, (x1(i), i = n1, n2)
   end do
-6004 format (/, ' new column', i6, /, (1x, 7e17.8))
+6004 format (/, ' New column', i6, /, (1x, 7e17.8))
 210 a = x1( 1 )
   b = x1( 8 )
   sf6 = a
@@ -4732,6 +4740,7 @@ subroutine subts3
   use syncom
   use synmac
   use tracom
+  use movcop
   implicit none
   integer(4) :: i, i1, i2, ii, j, j8, k, l, ll2, ll6, ll8
   integer(4) :: ll10, m, mpower
@@ -4756,7 +4765,7 @@ subroutine subts3
   !  include 'synmac.ftn'
   !  dimension vsmout(1)
   !  equivalence (ismout(1), vsmout(1))
-  !     intrinsic  absz, cosz, expz
+  !
   ll2 = 2
   ll6 = 6
   ll8 = 8
@@ -4810,7 +4819,8 @@ subroutine subts3
   volti(k) = emtpe(i)
   go to 1600
 1610 k = ntot
-  call mover (emtpe(ll2), volti(ll2), ntot1)
+  !  call mover (emtpe(ll2), volti(ll2), ntot1)
+  call move (emtpe(ll2 :), volti(ll2 :), ntot1)
 1630 if (nc .eq. 0) go to 1642
   nodev = k
   do i = 1, nc
@@ -4853,7 +4863,8 @@ subroutine subts3
 54270 format (/, ' at 54270', 4i10, 5e15.4)
   end do
 54280 if (nsmout .eq. 0) go to 54284
-  call mover (vsmout(msmout + 1), volti(k + 1), nsmout )
+  !  call mover (vsmout(msmout + 1), volti(k + 1), nsmout )
+  call move (vsmout(msmout + 1 :), volti(k + 1 :), nsmout)
   k = k + nsmout
 54284 if (ioutcs .eq. 0) go to 1650
   do j8 = 1, ioutcs
@@ -4862,7 +4873,8 @@ subroutine subts3
      volti(k) = xtcs(ndx1)
   end do
 1650 if (numout .eq. 0) go to 1643
-  call mover (spum(iuumou), volti(k + 1), numout)
+  !  call mover (spum(iuumou), volti(k + 1), numout)
+  call move (spum(iuumou :), volti(k + 1 :), numout)
   k = k + numout
 1643 if (k .gt. 1) go to 1647
   kill = 44
@@ -4942,7 +4954,8 @@ subroutine subts3
   write (kunit6, 2241)
 2241 format ( 42h+another input card for type 1-10 sources.,7h   end.    )
   iread=0
-1247 call mover0 ( voltbc(1), ll10 )
+  !1247 call mover0 ( voltbc(1), ll10 )
+1247 call move0 (voltbc(1 :), ll10)
 11247 call interp
   if ( nstacs  .eq.  0 ) go to 11248
   do j = 1, nstacs
@@ -5036,7 +5049,8 @@ subroutine subts3
   go to 1250
   !                                         elimination process on right s
   !                                         solve for v = [y] ** -1 * i
-1300 call mover ( emtpf(1), emtpe(1), kpartb )
+  !1300 call mover ( emtpf(1), emtpe(1), kpartb )
+1300 call move ( emtpf(1 :), emtpe(1 :), kpartb )
   n1 = 1
 1301 emtpe(n1) = 0.0
   if ( kode(n1) .le. n1 )   go to 1302
@@ -5045,8 +5059,8 @@ subroutine subts3
 1302 do j = 2, kpartb
      if ( kode(j) .eq. 0 ) go to 1303
      k = kode(j)
-     if ( k .gt. kpartb )  go to 1303
-     if ( k .gt. j ) emtpe(k) = emtpe(k) + emtpe(j)
+     if (k .gt. kpartb) go to 1303
+     if (k .gt. j) emtpe(k) = emtpe(k) + emtpe(j)
 1303 end do
   ii=1
   if ( iprsup .lt. 4 )   go  to  1410
@@ -5206,6 +5220,7 @@ subroutine zincox (ns)
   use labcom
   use dekspy
   use tracom
+  use movcop
   implicit none
   integer(4), intent(in) :: ns
   integer(4) :: ibk, ichr, ier, ik, il, il1, ils, ind, inl, iofzni, iofznr, ist, ityp
@@ -5370,12 +5385,14 @@ subroutine zincox (ns)
 3657    n11 = n11 + 1
      end do
   end do
-  call mover ( volt(1), volti(1), n5 )
-  if ( iprsup  .ge.  5 ) write (lunit6, 3668)  ( volt(l), l=1, n5 )
-3668 format (     20h collapsed  (zthev):,  7e15.5  )
+  !  call mover ( volt(1), volti(1), n5 )
+  call mover (volt(1 :), volti(1 :), n5)
+  if (iprsup .ge. 5) write (unit = lunit6, fmt = 3668) (volt(l), l = 1, n5)
+3668 format (' Collapsed  (Zthev):', 7e15.5)
 3674 continue
-  !     enter newton loop for zno arresters (not user fortran):
-  call mover0 ( volt(1), n5 )
+  !     enter Newton loop for zno arresters (not user fortran):
+  !  call mover0 ( volt(1), n5 )
+  call move0 (volt(1 :), n5)
   ndx17r = iofznr + n17
   ndx17i = iofzni + n17
   n10 = 1
@@ -5406,14 +5423,14 @@ subroutine zincox (ns)
   flstat(15) = t
   iprsup = 9
   if ( m4plot  .ne.  1 )  go  to  3415
-  write (munit6, 3688)
-3688 format (  37h   ? ? ?   singular jacobian.  newton,19h iteration stopped.    )
+  write (unit = munit6, fmt = 3688)
+3688 format ('   ? ? ?   Singular Jacobian.  Newton iteration stopped.')
   call window
-3691 write ( munit6, 3692 )
-3692 format(  39h trouble in  "zincox".  kill  lstat(19),27h   ier  niter            d3  )
+3691 write (unit = munit6, fmt = 3692)
+3692 format (' Trouble in  "zincox".  kill  lstat(19)   ier  niter            d3')
   call window
-  write (munit6, 3696)  kill, lstat(19), ier, niter, d3
-3696 format ( 22x, i6, i11, i6, i7, e14.5 )
+  write (unit = munit6, fmt = 3696) kill, lstat(19), ier, niter, d3
+3696 format (22x, i6, i11, i6, i7, e14.5)
   call window
   do il = 1, n7
      inl = nsubkm(m5 + 3)
@@ -5422,42 +5439,44 @@ subroutine zincox (ns)
   end do
   call honker (ll10)
 3711 write (unit = prom80, fmt = 3712)
-3712 format ( ' send remedy (spy, solve, look, stop) :' )
+3712 format ( ' Send remedy (spy, solve, look, stop) :' )
   call prompt
   lockbr = 1
   call flager
-  read (buff77, 3719)  bus1
-3719 format ( a6 )
+  read (unit = buff77, fmt = 3719) bus1
+3719 format (a6)
   kill = 0
   if (bus1 .ne. text1) go to 3726
   call spying
   go to 3711
-3726 if ( bus1 .eq. text2 )  go to 3415
+3726 if (bus1 .eq. text2)  go to 3415
   if ( bus1 .eq. text3 ) call stoptp
   if ( bus1 .ne. text4 ) go to 3752
   write (prom80, 3731)
-3731 format ( ' send diagnostic level iprsup (i2 format) :' )
+3731 format ( ' Send diagnostic level iprsup (i2 format) :' )
   call prompt
-  read (buff77, 3734)  iprsup
-3734 format ( i2 )
+  read (unit = buff77, fmt = 3734) iprsup
+3734 format (i2)
   go to 3711
 3752 go to 3711
 3693 d3 = fltinf
-  call mover ( volt(1), volti(1), n5 )
+  !  call mover ( volt(1), volti(1), n5 )
+  call move (volt(1 :), volti(1 :), n5)
 3474 niter = niter + 1
   n11 = 1
-  call mover0 ( fold(ndx1r), n17 )
+  !  call mover0 ( fold(ndx1r), n17 )
+  call move0 (fold(ndx1r :), n17)
   ndx2 = iofzni
   m2 = 0
   do l=1, n7
      ndx2 = ndx2 + 1
      m2 = m2 + 2
-     if ( ksing(ndx2)  .eq.  -1 )   go to 3482
+     if (ksing(ndx2) .eq. -1) go to 3482
      n13 = l
-     if ( ksing(ndx2)  .gt.  0 )   n13 = ksing(ndx2)
+     if (ksing(ndx2) .gt. 0) n13 = ksing(ndx2)
      ndx3 = n13 + iofzni
      n14 = kindep(ndx3)
-     n10 = ( n14 - 1 ) * n17  +  n13
+     n10 = (n14 - 1) * n17  +  n13
      inl = nsubkm( m5+3 )
      ityp = nsubkm( m5+4 )
      ils = ilast( inl )
@@ -5603,18 +5622,19 @@ subroutine zincox (ns)
   n4 = nsubkm( n6+3 )
   if ( iprsup  .ge.  3 ) write (lunit6, 3511)  n4, niter, d3
 3511 format (24h subsystems 1st arrester, i3, 5x, 7hniter =, i3, 5x,  11hmax del-v =,  e13.4  )
-  call mover ( volti(1), volt(1), n5 )
+  !  call mover ( volti(1), volt(1), n5 )
+  call mover (volti(1 :), volt(1 :), n5 )
   d35 = d3
   if ( niter  .le.  maxzno )   go to 3474
   if ( d3  .le.  epwarn )   go to 3522
-  write (lunit6, 3517)  ns, d3
-3517 format (   12h subsystem =,  i3, 47h  iteration limit.   largest abs(dv / znvref) =, e12.3 )
+  write (unit = lunit6, fmt = 3517)  ns, d3
+3517 format (' Subsystem =', i3, '  iteration limit.   Largest abs(dV / Znvref) =', e12.3)
   if ( d3  .le.  epstop )   go to 3522
   kill = 212
   lstat(19) = 3522
   if ( m4plot .ne. 1 )  go to 3686
-  write (munit6, 3519)
-3519 format (  42h   ? ? ?   non-converged newton iteration., 18h   limit  maxzno =,  i5,  10h  reached.  )
+  write (unit = munit6, fmt = 3519)
+3519 format ('   ? ? ?   Non-converged newton iteration.   limit  maxzno =', i5, '  reached.')
   call window
   go to 3691
 3522 ndx2 = iofzni
@@ -5831,6 +5851,7 @@ end subroutine analyt
 
 subroutine  arrest (a, b, srt, svt, carst)
   use blkcom
+  use movcop
   implicit none
   !   number   variable                description
   !    a(1)       k        valve block resistance constant
@@ -5878,7 +5899,8 @@ subroutine  arrest (a, b, srt, svt, carst)
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 20) (a(i), b(i), i = 1, 20)
 20 format((1x, 8e16.6))
   if (b(6) .gt. 0) go to 100
-  call mover0(b(2), ll8)
+  !  call mover0(b(2), ll8)
+  call move0 (b(2 :), ll8)
   b(6) = 1.0
 100 continue
   !  test polarity of arrester voltage

@@ -8,10 +8,10 @@
 
 module syncom
   implicit none
-  integer(4) :: ismtac, lbstac, ntotac
+  integer(4) :: ismtac(20), lbstac, ntotac
   real(8), dimension(20) :: etac
-  common /smtacs/ etac
-  common /smtacs/ ismtac(20), ntotac, lbstac
+  !  common /smtacs/ etac
+  !  common /smtacs/ ismtac(20), ntotac, lbstac
   ! equivalences friend zone.
   ! from main10
   integer(4) :: jtemp(1)

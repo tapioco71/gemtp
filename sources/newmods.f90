@@ -134,7 +134,7 @@ subroutine main10
   common /c0b061/   emtpc (   10000 )
   real(8) :: emtpc
   common /c0b062/   tr    (   20000 )
-  real :: tr
+  real(8) :: tr
   common /c0b063/   tx    (   20000 )
   real(8) :: tx
   common /c0b064/   r     (   10000 )
@@ -534,8 +534,8 @@ subroutine dimens (lsize, nchain, bus1, bus2)
   lsize(28)  =    1080
   n7 = 28 + 1
   lsize(n7) = 9844967
-  bus1 ='  212253'
-  bus2 ='  221021'
+  bus1 ='  172612'
+  bus2 ='  261021'
   return
 2900 if (nchain .gt.  29) go to 3100
   lsize( 1)  =       0

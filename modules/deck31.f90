@@ -5,8 +5,8 @@
 !
 
 module deck31
-  integer karray
-  common /c29b01/ karray(3)
+  integer(4) :: karray(3)
+  !  common /c29b01/ karray(3)
   ! equivalences friend zone.
   ! from over31:
   character(8) :: buslst(1)

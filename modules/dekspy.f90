@@ -9,74 +9,74 @@
 !     which begin with "emtspy".  Note "deck29" working space:
 
 module dekspy
-  integer(4) :: iascii, ibegcl, iendcl, imax, imin, inchlp, indbeg, indbuf, indxrp
-  integer(4) :: intout, iprspy, itexp, ivec
+  integer(4) :: iascii(1000), ibegcl, iendcl, imax(55), imin(55), inchlp
+  integer(4) :: indbeg, indbuf, indxrp(20), intout(55), iprspy, itexp
+  integer(4) :: ivec(1000)
   integer(4) :: jjroll, jword
-  integer(4) :: kar1, kar2, karray, kbegtx, kbreak, kbrser, kerase, kfile5, kilper
-  integer(4) :: kolout, komadd, konadd, kontac, kopyit, kserlc, kslowr, ksmspy, kspsav
-  integer(4) :: ksymbl, kverfy, kyramp
-  integer(4) :: labels, lidnt1, lidnt2, limarr, limbuf, limcrd, linnow, linspn
-  integer(4) :: lockbr, locout, looprp, lserlc, luntsp
-  integer(4) :: maxarg, maxflg, memkar, memrmp, mflush, monitr, monits
+  integer(4) :: kar1(1), kar2(2), karray(3), kbegtx(85), kbreak, kbrser, kerase, kfile5
+  integer(4) :: kilper, kolout, komadd, konadd(14), kontac(14), kopyit, kserlc
+  integer(4) :: kslowr, ksmspy(3), kspsav, ksymbl, kverfy, kyramp(20)
+  integer(4) :: labels(15), lidnt1, lidnt2, limarr(4), limbuf, limcrd, linnow
+  integer(4) :: linspn, locate(1000), lockbr, locout(55), looprp(20), lserlc
+  integer(4) :: luntsp
+  integer(4) :: maxarg, maxflg, memkar, memrmp(20), mflush, monitr, monits
 !  integer(4) :: numnam
   integer(4) :: munit5
-  integer(4) :: n10rmp, nbreak, newvec, nexmod, nline, noback, numcrd, numex, numkey
+  integer(4) :: n10rmp(20), nbreak, newvec, nexmod, nline(1000), noback, numcrd, numex, numkey
   integer(4) :: numrmp, numsym
-  real(8) :: epskon !, evmx, evmxf
-  real(8) :: fbegrp, fendrp, fkar1, fkar2
+  real(8) :: epskon(20) !, evmx, evmxf
+  real(8) :: fbegrp(20), fendrp(20), fkar1, fkar2
 !  real(8) :: gymax, gymin
-  real(8) :: rampcn, rampsl
-  real(8) :: tbegrp, tbreak, tendrp, tmaxrp, tminrp
-  common /c29b01/ karray(3)                                 ! "deck29" stores plot points
-  integer(4) :: locate
-  real(8) :: pltbuf(1), forbyt(600)                               ! real*4 plot storage
-  equivalence (pltbuf(1), karray(1))                        ! /c29b01/ plot points
-  logical :: logvar                                         ! logical variable for "inquire" usage
-  common /spycom/ rampcn(20), rampsl(20), kyramp(20)
-  common /spycom/ fendrp(20), tminrp, tmaxrp
-  common /spycom/ tbegrp(20), tendrp(20), fbegrp(20)
-  common /spycom/ tbreak, epskon(14)
+  real(8) :: rampcn(20), rampsl(20)
+  real(8) :: tbegrp(20), tbreak, tendrp(20), tmaxrp, tminrp
+  !  common /c29b01/ karray(3)                    ! "deck29" stores plot points
+  real(8) :: pltbuf(1), forbyt(600)               ! real*4 plot storage
+  equivalence (pltbuf(1), karray(1))              ! /c29b01/ plot points
+  logical :: logvar                               ! logical variable for "inquire" usage
+  ! common /spycom/ rampcn(20), rampsl(20), kyramp(20)
+  ! common /spycom/ fendrp(20), tminrp, tmaxrp
+  ! common /spycom/ tbegrp(20), tendrp(20), fbegrp(20)
+  ! common /spycom/ tbreak, epskon(14)
   !     end reals, next come integers, in new common block:
-  common /spykom/ indxrp(20), ivec(1000), iascii(1000)
-  common /spykom/ numsym,  jjroll, itexp, labels(15)
-  common /spykom/ maxarg, kilper, kfile5, kverfy, jword
-  common /spykom/ ibegcl, iendcl, lidnt1, lidnt2, nbreak
-  common /spykom/ linnow, linspn, numcrd, munit5, numkey
-  common /spykom/ indbuf, indbeg, mflush, newvec, maxflg
-  common /spykom/ kspsav, memkar, noback, ksmspy(3)
-  common /spykom/ lserlc, kserlc, kbrser, lockbr, kerase
-  common /spykom/ komadd
-  common /spykom/ iprspy,  monitr, monits, locate(1000)
-  common /spykom/ nline(1000),  kbreak, limbuf, kolout
-  common /spykom/ limarr(4), imin(55), imax(55), numex
-  common /spykom/ locout(55), intout(55), nexmod, nextsn
-  common /spykom/ inchlp, ksymbl, kopyit, kslowr, limcrd
-  common /spykom/ looprp(20), n10rmp(20), memrmp(20)
-  common /spykom/ kontac(14), konadd(14), kbegtx(85)
-  common /spykom/ kar1(1), kar2(2), numrmp, luntsp, logvar
+  ! common /spykom/ indxrp(20), ivec(1000), iascii(1000)
+  ! common /spykom/ numsym,  jjroll, itexp, labels(15)
+  ! common /spykom/ maxarg, kilper, kfile5, kverfy, jword
+  ! common /spykom/ ibegcl, iendcl, lidnt1, lidnt2, nbreak
+  ! common /spykom/ linnow, linspn, numcrd, munit5, numkey
+  ! common /spykom/ indbuf, indbeg, mflush, newvec, maxflg
+  ! common /spykom/ kspsav, memkar, noback, ksmspy(3)
+  ! common /spykom/ lserlc, kserlc, kbrser, lockbr, kerase
+  ! common /spykom/ komadd
+  ! common /spykom/ iprspy,  monitr, monits, locate(1000)
+  ! common /spykom/ nline(1000),  kbreak, limbuf, kolout
+  ! common /spykom/ limarr(4), imin(55), imax(55), numex
+  ! common /spykom/ locout(55), intout(55), nexmod, nextsn
+  !  common /spykom/ inchlp, ksymbl, kopyit, kslowr, limcrd
+  ! common /spykom/ looprp(20), n10rmp(20), memrmp(20)
+  ! common /spykom/ kontac(14), konadd(14), kbegtx(85)
+  !  common /spykom/ kar1(1), kar2(2), numrmp, luntsp, logvar
   dimension fkar1(1), fkar2(1)
   equivalence (kar1, fkar1), (kar2, fkar2)
   !     character*1 char1, filbyt(1), col, filext, digit
   integer(4) nextsn
-  character char1, filext, digit
-  character(8) symb, symbrp, junker, texpar, spykwd
+  character char1, filext(10), digit(10)
+  character(8) symb(1000), symbrp(20), junker, texpar(10), spykwd(75)
   character(8) ansi8, brobus
   character(16) ansi16
   character(20) bytfnd
   !character(25) col
   character(32) ansi32
   character(35) spycd2
-  character(80) bytbuf, buff77, file6, file6b, blan80
-  character(80) prom80, answ80, texspy, abufsv
+  character(80) bytbuf, buff77, file6(3000), file6b(20), blan80
+  character(80) prom80, answ80, texspy(1250), abufsv
   character(132) munit6, outlin, outsav, heding
-  common /spyf77/ filext(10), symb(1000)
-  common /spyf77/ bytfnd, char1, symbrp(20), abufsv, junker
-  common /spyf77/ bytbuf, buff77, file6b(20), file6(30000)
-  common /spyf77/ blan80, prom80, digit(10), texpar(10)
-  common /spyf77/ spykwd(75), ansi8, ansi16, ansi32
-  common /spyf77/ spycd2, answ80, brobus, munit6
-  common /spyf77/ outlin, outsav, heding, texspy(1250)
-
+  !  common /spyf77/ filext(10), symb(1000)
+  !  common /spyf77/ bytfnd, char1, symbrp(20), abufsv, junker
+  !  common /spyf77/ bytbuf, buff77, file6b(20), file6(30000)
+  !  common /spyf77/ blan80, prom80, digit(10), texpar(10)
+  !  common /spyf77/ spykwd(75), ansi8, ansi16, ansi32
+  !  common /spyf77/ spycd2, answ80, brobus, munit6
+  !  common /spyf77/ outlin, outsav, heding, texspy(1250)
    data symb(  1) / 'bus1  '/,  ivec(  1) /  0/,  iascii(  1) /1/
    data symb(  2) / 'bus2  '/,  ivec(  2) /  0/,  iascii(  2) /1/
    data symb(  3) / 'bus3  '/,  ivec(  3) /  0/,  iascii(  3) /1/
@@ -1749,7 +1749,6 @@ module dekspy
    data kbegtx ( 67 )   /   777   /
    data kbegtx ( 68 )   /   812   /
    data kbegtx ( 69 )   /   869   /
-
    data  kslowr  /   3   /
  end module dekspy
 

@@ -12,6 +12,7 @@ subroutine over14
   use blkcom
   use labcom
   use tracom
+  use movcop
   implicit none
   integer(4) :: i, ibf, ikf, isfd, it2d
   integer(4) :: j, j0
@@ -49,7 +50,8 @@ subroutine over14
   isfd = 0
   ibf = 0
   ikf = 0
-  call mover0 (finit(1), ntot)
+  !  call mover0 (finit(1), ntot)
+  call move0 (finit(1 :), ntot)
   if (iprsup .gt. 0) write (unit = lunit6, fmt = 4286) inonl, nv, ibr, it, ntot, nenerg, knt, fltinf, flzero, omega, delta2, deltat
 4286 format (/, " Various scalars at beginning of  'last14' .", /, 1x, '   inonl      nv     ibr      it    ntot  nenerg     knt', 9x, 'fltinf', 9x, 'flzero', 10x, 'omega', 9x, 'delta2', 9x, 'deltat', /, 1x, 7i8, 5e15.6)
   i = inonl
@@ -138,6 +140,7 @@ subroutine last14
   use blkcom
   use labcom
   use tracom
+  use movcop
   implicit none
   integer(4) :: i, i1, iadrs, ibi, ibj, ibrj, icb, icbscn, icu, icucpl, ifd, ihist, ij
   integer(4) :: ik, inoff1, inoff2, inoff3, inoff4, inoff5, ioff1, ioff2
@@ -168,10 +171,10 @@ subroutine last14
   !  equivalence (namebr(1), infdli(1))
   !  dimension  wk1(1)
   !  equivalence (semaux(1), wk1(1))
-  common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7, koff8, koff9
-  common /fdqlcl/ koff10, koff13, koff14, koff15, koff16, koff17, koff18
-  common /fdqlcl/ koff19, koff20, koff21, koff22, koff23, koff24, koff25, inoff1
-  common /fdqlcl/ inoff2, inoff3, inoff4, inoff5, nqtt, lcbl, lmode, nqtw
+  !  common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7, koff8, koff9
+  !  common /fdqlcl/ koff10, koff13, koff14, koff15, koff16, koff17, koff18
+  !  common /fdqlcl/ koff19, koff20, koff21, koff22, koff23, koff24, koff25, inoff1
+  !  common /fdqlcl/ inoff2, inoff3, inoff4, inoff5, nqtt, lcbl, lmode, nqtw
   !
   !     beginning of formation of the real admittance matrix (y)
   icucpl = 0
@@ -186,7 +189,8 @@ subroutine last14
   l = 1
   !                                       establishing l-th y-row from bra
 600 l=l+1
-  call mover0 ( emtpf(1), ntot )
+  !  call mover0 ( emtpf(1), ntot )
+  call move0 (emtpf(1 :), ntot)
   k=1
 620 n1=kbus(k)
   it2=length(k)
@@ -501,7 +505,8 @@ subroutine last14
 6920 it2 = iabs(kodebr(k))
   n1 = int (cik(k), kind (n1))
   do i = 1, it2
-     if (n1 .gt. 0) call mover0(volt(1), it2)
+     !     if (n1 .gt. 0) call mover0(volt(1), it2)
+     if (n1 .gt. 0) call move0 (volt(1 :), it2)
      n9 = k + i - 1
      if (-kbus(n9) .ne. l) go to 13010
      n3 = 1
@@ -662,7 +667,8 @@ subroutine last14
   go to 9900
 894 if ( l  .lt.  kpartb )   go to 600
   kks(1) = kss
-  call move0 ( kpsour(1), ntot )
+  !  call move0 ( kpsour(1), ntot )
+  call move0 (kpsour(1 :), ntot)
   l = 1
   mp = 1000
 202 if ( mp .gt. ntot )  go to 1000

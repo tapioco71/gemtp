@@ -51,8 +51,11 @@ LINKER_SCRIPT=
 # Root path for the project.
 ROOT=..
 
-# Include path.
-INCLUDE_PATH=	${ROOT}/includes
+# Includes path.
+INCLUDES_PATH=	${ROOT}/includes
+
+# Modules path.
+MODULES_PATH=	${ROOT}/modules
 
 # Library path.
 LIBRARY_PATH=	${ROOT}/libraries
@@ -68,11 +71,12 @@ MODULES=
 include ${ROOT}/Makefile.global
 
 # The default rule.
+
 all: ${COMPILER}
 all: vardim dimension newmods labcom
-all: clear_modules
-all: modules
 all: ${COMPILER}/${TARGET}
+
+# Other rules.
 
 ${TARGET}: ${COMPILER}
 ${TARGET}: ${COMPILER}/${TARGET}
@@ -136,12 +140,14 @@ modules: ${COMPILER}/${TARGET}
 ${COMPILER}/${TARGET}: ${COMPILER}/blkcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/deck29.o
 ${COMPILER}/${TARGET}: ${COMPILER}/deck31.o
+${COMPILER}/${TARGET}: ${COMPILER}/deck47.o
 ${COMPILER}/${TARGET}: ${COMPILER}/dekspy.o
 ${COMPILER}/${TARGET}: ${COMPILER}/dekplt.o
 ${COMPILER}/${TARGET}: ${COMPILER}/fixcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/indcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/iocons.o
 ${COMPILER}/${TARGET}: ${COMPILER}/labl02.o
+${COMPILER}/${TARGET}: ${COMPILER}/labl47.o
 ${COMPILER}/${TARGET}: ${COMPILER}/labcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/syncom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/synmac.o
@@ -149,10 +155,14 @@ ${COMPILER}/${TARGET}: ${COMPILER}/tacsar.o
 ${COMPILER}/${TARGET}: ${COMPILER}/tacsto.o
 ${COMPILER}/${TARGET}: ${COMPILER}/tracom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/umdeck.o
+${COMPILER}/${TARGET}: ${COMPILER}/bcddat.o
+${COMPILER}/${TARGET}: ${COMPILER}/bcdtim.o
+${COMPILER}/${TARGET}: ${COMPILER}/movcop.o
+${COMPILER}/${TARGET}: ${COMPILER}/strcom.o
+${COMPILER}/${TARGET}: ${COMPILER}/volt45.o
+${COMPILER}/${TARGET}: ${COMPILER}/random.o
 
 # Codes.
-${COMPILER}/${TARGET}: ${COMPILER}/date44.o
-${COMPILER}/${TARGET}: ${COMPILER}/time44.o
 ${COMPILER}/${TARGET}: ${COMPILER}/build1.o
 ${COMPILER}/${TARGET}: ${COMPILER}/build2.o
 ${COMPILER}/${TARGET}: ${COMPILER}/calc.o
@@ -211,16 +221,16 @@ ${COMPILER}/${TARGET}: ${COMPILER}/over31.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over44.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over45.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over47.o
-# ${COMPILER}/${TARGET}: ${COMPILER}/over51.o
+${COMPILER}/${TARGET}: ${COMPILER}/over51.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over52.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over53.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/over54.o
-# ${COMPILER}/${TARGET}: ${COMPILER}/over55.o
+${COMPILER}/${TARGET}: ${COMPILER}/over55.o
 # ${COMPILER}/${TARGET}: ${COMPILER}/inlmfs.o
 
 # Rule for compiling vardim program.
-${COMPILER}/${VARDIM}: ${COMPILER}/date44.o
-${COMPILER}/${VARDIM}: ${COMPILER}/time44.o
+${COMPILER}/${VARDIM}: ${COMPILER}/bcddat.o
+${COMPILER}/${VARDIM}: ${COMPILER}/bcdtim.o
 ${COMPILER}/${VARDIM}: ${COMPILER}/${VARDIM}.o
 
 dimension:
@@ -263,11 +273,11 @@ labcom:
 		then							\
 			echo " [ LABCOM ] ";				\
 		else							\
-			echo "cp fort.9 ${INCLUDE_PATH}/labcom.ftn";	\
+			echo "cp fort.9 ${MODULES_PATH}/labcom.f90";	\
 		fi;							\
-		cp fort.9 ${INCLUDE_PATH}/labcom.ftn;			\
+		cp fort.9 ${MODULES_PATH}/labcom.f90;			\
 	else								\
-		echo "Cannot create labcom.ftn.";			\
+		echo "Cannot create labcom.f90.";			\
 	fi
 
 # Rule to create a list file.

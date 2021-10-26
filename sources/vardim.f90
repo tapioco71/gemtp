@@ -9,77 +9,133 @@
 !
 
 module test
+  implicit none
+
+  !
+  ! Variable type definition.
+  !
+
+  type variable
+     character(32) :: name
+     character(32) :: options
+     integer(4) :: kind
+     integer(4) :: dimension
+  end type variable
+
 contains
-subroutine make_subroutine_comment (unit, n)
-  implicit none
-  integer(4), intent(in) :: unit
-  character(*), intent(in) :: n
-  write (unit = unit, fmt = 10) trim(n)
-10 format (/, '!', /, '! subroutine ', a, '.', /, '!', /)
-  return
-end subroutine make_subroutine_comment
+  subroutine make_subroutine_comment (unit, n)
+    implicit none
+    integer(4), intent(in) :: unit
+    character(*), intent(in) :: n
+    write (unit = unit, fmt = 10) trim(n)
+10  format (/, '!', /, '! subroutine ', a, '.', /, '!', /)
+    return
+  end subroutine make_subroutine_comment
 
-!
-! subroutine make_implicit_statement.
-!
+  !
+  ! subroutine make_implicit_statement.
+  !
 
-subroutine make_implicit_statement (unit, mode, realdim, integerdim)
-  implicit none
-  integer(4), intent(in) :: unit, mode
-  integer(4), intent(in), optional :: realdim, integerdim
-  select case (mode)
-  case (0)
-     write (unit = unit, fmt = 10)
+  subroutine make_implicit_statement (unit, mode, realdim, integerdim)
+    implicit none
+    integer(4), intent(in) :: unit, mode
+    integer(4), intent(in), optional :: realdim, integerdim
+    select case (mode)
+    case (0)
+       write (unit = unit, fmt = 10)
 
-  case (1)
-     write (unit = unit, fmt = 20)
+    case (1)
+       write (unit = unit, fmt = 20)
 
-  case (2)
-     write (unit = unit, fmt = 30)
+    case (2)
+       write (unit = unit, fmt = 30)
 
-  case (3)
-     if (present (realdim) .and. present (integerdim)) then
-        write (unit = unit, fmt = 40) realdim, integerdim
-     else
-        stop
-     end if
-  end select
-  return
-10 format (2x, 'implicit none')
-20 format (2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
-30 format (2x, 'implicit real(16) (a-h, o-z), integer(8) (i-n)')
-40 format (2x, 'implicit real(', i2, ') (a-h, o-z), integer(', i2, ') (i-n)')
-end subroutine make_implicit_statement
+    case (3)
+       if (present (realdim) .and. present (integerdim)) then
+          write (unit = unit, fmt = 40) realdim, integerdim
+       else
+          stop
+       end if
+    end select
+    return
+10  format (2x, 'implicit none')
+20  format (2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+30  format (2x, 'implicit real(16) (a-h, o-z), integer(8) (i-n)')
+40  format (2x, 'implicit real(', i2, ') (a-h, o-z), integer(', i2, ') (i-n)')
+  end subroutine make_implicit_statement
 
-!
-! subroutine make_include_statement.
-!
+  !
+  ! subroutine make_include_statement.
+  !
 
-subroutine make_include_statement (unit, filename)
-  implicit none
-  integer(4), intent(in) :: unit
-  character(*), intent(in) :: filename
-  write (unit = unit, fmt = 10) filename
-10 format (2x, 'include ', "'", a, "'")
-  return
-end subroutine make_include_statement
+  subroutine make_include_statement (unit, filename)
+    implicit none
+    integer(4), intent(in) :: unit
+    character(*), intent(in) :: filename
+    write (unit = unit, fmt = 10) filename
+10  format (2x, 'include ', "'", a, "'")
+    return
+  end subroutine make_include_statement
 
-!
-! subroutine make_use_statement.
-!
+  !
+  ! subroutine make_use_statement.
+  !
 
-subroutine make_use_statement (unit, modulename)
-  implicit none
-  integer(4), intent(in) :: unit
-  character(*), intent(in) :: modulename
-  write (unit = unit, fmt = 10) modulename
-10 format (2x, 'use ', a)
-  return
-end subroutine make_use_statement
+  subroutine make_use_statement (unit, modulename)
+    implicit none
+    integer(4), intent(in) :: unit
+    character(*), intent(in) :: modulename
+    write (unit = unit, fmt = 10) modulename
+10  format (2x, 'use ', a)
+    return
+  end subroutine make_use_statement
+
+  !
+  ! subroutine make_variable_declaration.
+  !
+
+  subroutine make_variable_declaration (unit, var, types)
+    implicit none
+    character(*), intent(in) :: types(:)
+    integer(4), intent(in) :: unit
+    type (variable), intent(in) :: var
+    if (var%dimension > 0) then
+       write (unit = unit, fmt = 10) trim (types(var%kind)), trim (var%name), var%dimension
+10     format (2x, a, 1x, a, '(', i2, ')')
+    else
+       write (unit = unit, fmt = 20) trim (types(var%kind)), trim (var%name), var%dimension
+20     format (2x, a, 1x, a)
+    end if
+  end subroutine make_variable_declaration
+
+  !
+  ! subroutine make_equivalence_declaration.
+  !
+
+  subroutine make_equivalence_declaration (unit, varname1, dim1, varname2, dim2)
+    implicit none
+    character(*), intent(in) :: varname1, varname2
+    integer(4), intent(in) :: unit
+    integer(4), intent(in), optional :: dim1, dim2
+    write (unit = unit, fmt = 10, advance = 'no') trim (varname1)
+10  format (2x, 'equivalence', 1x, '(', a)
+    if (present (dim1)) then
+       write (unit = unit, fmt = 20, advance = 'no') dim1
+20     format ('(', i2, ')')
+    end if
+    write (unit = unit, fmt = 30, advance = 'no') trim (varname2)
+30  format (',', 1x, a)
+    if (present (dim2)) then
+       write (unit = unit, fmt = 40) dim2
+40     format ('(', i2, '))')
+    end if
+  end subroutine make_equivalence_declaration
 
 end module test
 
 program vardim
+  use bcdtim
+  use bcddat
   use test
   implicit none
   integer(4) :: i, ii, implmode, indexm, ios
@@ -100,6 +156,8 @@ program vardim
   dimension lstnew(99), lstdef(49), type(7), kextra(29)
   dimension char(6), mulvar(7)
   integer(4) :: integerdim, realdim
+  type (variable) :: modvars(20)
+  !
   data  integerdim / 4 /
   data  realdim    / 8 /
   data  cblock(  1)  / 'x     ' /, ncbarr(  1)  / 3 /
@@ -225,7 +283,7 @@ program vardim
   data  cblock( 61)  / 'emtpc ' /, ncbarr( 61)  / 3 /
   data  cblser( 61)  / 'c0b061' /, jbltyp( 61)  / 3 /
   data  cblock( 62)  / 'tr    ' /, ncbarr( 62)  / 5 /
-  data  cblser( 62)  / 'c0b062' /, jbltyp( 62)  / 1 /
+  data  cblser( 62)  / 'c0b062' /, jbltyp( 62)  / 3 /
   data  cblock( 63)  / 'tx    ' /, ncbarr( 63)  / 5 /
   data  cblser( 63)  / 'c0b063' /, jbltyp( 63)  / 3 /
   data  cblock( 64)  / 'r     ' /, ncbarr( 64)  / 3 /
@@ -539,6 +597,65 @@ program vardim
   mulvar(5)  =  1
   mulvar(6)  =  1
   mulvar(7)  =  1
+  !
+  modvars(1)%name = 'integx'
+  modvars(1)%options = ''
+  modvars(1)%kind = 6
+  modvars(1)%dimension = 1
+  modvars(2)%name = 'infdli'
+  modvars(2)%options = ''
+  modvars(2)%kind = 6
+  modvars(2)%dimension = 1
+  modvars(3)%name = 'ispum'
+  modvars(3)%options = ''
+  modvars(3)%kind = 6
+  modvars(3)%dimension = 1
+  modvars(4)%name = 'kindep'
+  modvars(4)%options = ''
+  modvars(4)%kind = 6
+  modvars(4)%dimension = 1
+  modvars(5)%name = 'ksing'
+  modvars(5)%options = ''
+  modvars(5)%kind = 6
+  modvars(5)%dimension = 1
+  modvars(6)%name = 'massex'
+  modvars(6)%options = ''
+  modvars(6)%kind = 6
+  modvars(6)%dimension = 1
+  modvars(7)%name = 'nsubkm'
+  modvars(7)%options = ''
+  modvars(7)%kind = 6
+  modvars(7)%dimension = 1
+  modvars(8)%name = 'fold'
+  modvars(8)%options = ''
+  modvars(8)%kind = 3
+  modvars(8)%dimension = 1
+  modvars(9)%name = 'volta'
+  modvars(9)%options = ''
+  modvars(9)%kind = 3
+  modvars(9)%dimension = 1
+  modvars(10)%name = 'vsmout'
+  modvars(10)%options = ''
+  modvars(10)%kind = 3
+  modvars(10)%dimension = 1
+  modvars(11)%name = 'wk1'
+  modvars(11)%options = ''
+  modvars(11)%kind = 3
+  modvars(11)%dimension = 1
+  modvars(12)%name = 'xx'
+  modvars(12)%options = ''
+  modvars(12)%kind = 3
+  modvars(12)%dimension = 1
+  modvars(13)%name = 'r4'
+  modvars(13)%options = ''
+  modvars(13)%kind = 3
+  modvars(13)%dimension = 1
+  modvars(14)%name = 'cblhst'
+  modvars(14)%options = ''
+  modvars(14)%kind = 3
+  modvars(14)%dimension = 1
+
+  !
   open (unit = lunit(2), iostat = ios, form = 'formatted')
   if (ios .eq. 0) then
      open (unit = lunit(3), iostat = ios, form = 'formatted')
@@ -689,7 +806,9 @@ program vardim
 4301       continue
            write (unit = lunit(2), fmt = 4190)
 4190       format ('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', //, '!', /, '! file newmods.f90', /, '!')
-           write (unit = lunit(4), fmt = "('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', //, '!', /, '! file labcom.ftn', /, '!', /)")
+           write (unit = lunit(4), fmt = "('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', //, '!', /, '! file labcom.f90', /, '!', /)")
+           write (unit = lunit(4), fmt = 7244)
+7244       format ('module labcom', /, 2x, 'use blkcom')
            call make_subroutine_comment(lunit(2), 'main10')
            write (unit = lunit(2), fmt = "('#ifdef WITH_MAIN10')")
            write (unit = lunit(2), fmt = 4192)
@@ -705,9 +824,9 @@ program vardim
 7236          format (2x, 'common /', a6, '/   ', a6, '(', i8, ' )')
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4101
-!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
-!              write (unit = lunit(4), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
-!7243          format (2x, 3a6, a6)
+              !              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              !              write (unit = lunit(4), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              !7243          format (2x, 3a6, a6)
               !
               write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
               write (unit = lunit(4), fmt = 7243) trim(type(n4)), trim(cblock(i))
@@ -715,7 +834,28 @@ program vardim
               !
 4101          continue
            end do
-           write (unit = lunit(4), fmt = "(/, '!', /, '! end of file labcom.ftn', /, '!', /)")
+           !
+           do ii = 1, 14
+              call make_variable_declaration (unit = lunit(4), var = modvars(ii), types = type)
+           end do
+           !
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'xk', dim1 = 1, varname2 = 'xx', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'spum', dim1 = 1, varname2 = 'ispum', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'kknonl', dim1 = 1, varname2 = 'nsubkm', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'semaux', dim1 = 1, varname2 = 'wk1', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'namebr', dim1 = 1, varname2 = 'infdli', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'ismout', dim1 = 1, varname2 = 'vsmout', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'histq', dim1 = 1, varname2 = 'massex', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'volti', dim1 = 1, varname2 = 'volta', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'ksing', dim1 = 1, varname2 = 'cchar', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'kindep', dim1 = 1, varname2 = 'gslope', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'fold', dim1 = 1, varname2 = 'vchar', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'r4', dim1 = 1, varname2 = 'volti', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'cnvhst', dim1 = 1, varname2 = 'cblhst', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'x', dim1 = 1, varname2 = 'integx', dim2 = 1)
+           write (unit = lunit(4), fmt = 7245)
+7245       format ('end module labcom')
+           write (unit = lunit(4), fmt = "(/, '!', /, '! end of file labcom.f90', /, '!', /)")
            write (unit = lunit(2), fmt = "(2x, 'call subr10')")
            write (unit = lunit(2), fmt = 7297)
 7297       format (2x, 'return')
@@ -729,8 +869,8 @@ program vardim
            mextra = 4000
            lstnew(98) = ltlabl
            call make_subroutine_comment(lunit(3), 'dimens')
-!           write (unit = lunit(3), fmt = 8116) realdim, integerdim
-!8116       format ('subroutine dimens (lsize, nchain, bus1, bus2)', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
+           !           write (unit = lunit(3), fmt = 8116) realdim, integerdim
+           !8116       format ('subroutine dimens (lsize, nchain, bus1, bus2)', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
            write (unit = lunit(3), fmt = 8116)
 8116       format ('subroutine dimens (lsize, nchain, bus1, bus2)')
            call make_use_statement (unit = lunit(3), modulename = 'indcom')
@@ -751,8 +891,8 @@ program vardim
            end select
            write (unit = lunit(3), fmt = 8124)
 8124       format (2x, 'character(8), intent(out) :: bus1, bus2')
-!           write (unit = lunit(3), fmt = 8130)
-!8130       format (2x, '!', /, 2x, 'integer(4) :: locint', /, '!')
+           !           write (unit = lunit(3), fmt = 8130)
+           !8130       format (2x, '!', /, 2x, 'integer(4) :: locint', /, '!')
            write (unit = lunit(3), fmt = 8134)
 8134       format (2x, 'if (nchain .ge. 29) go to 2900')
            do i = 1, numlst
@@ -793,8 +933,8 @@ program vardim
            ncbarr(127) = 99
            call make_subroutine_comment(lunit(2), 'over29')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER29'
-!           write (unit = lunit(2), fmt = 4202) realdim, integerdim
-!4202       format ('subroutine over29', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
+           !           write (unit = lunit(2), fmt = 4202) realdim, integerdim
+           !4202       format ('subroutine over29', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
            write (unit = lunit(2), fmt = 4202)
 4202       format ('subroutine over29')
            select case (implmode)
@@ -834,7 +974,7 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4102
-!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              !              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
               write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4102       continue
@@ -848,8 +988,8 @@ program vardim
            mextra = 5000
            call make_subroutine_comment(lunit(2), 'over31')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER31'
-!           write (unit = lunit(2), fmt = 4203) realdim, integerdim
-!4203       format ('subroutine over31', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
+           !           write (unit = lunit(2), fmt = 4203) realdim, integerdim
+           !4203       format ('subroutine over31', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
            write (unit = lunit(2), fmt = 4203)
 4203       format ('subroutine over31')
            select case (implmode)
@@ -886,7 +1026,7 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4103
-!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              !              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
               write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4103       continue
@@ -899,8 +1039,8 @@ program vardim
            if (lstnew(3) .gt. 500) lstnew(71) = lstnew(3)
            call make_subroutine_comment(lunit(2), 'over39')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER39'
-!           write (unit = lunit(2), fmt = 4204) realdim, integerdim
-!4204       format ('subroutine over39', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
+           !           write (unit = lunit(2), fmt = 4204) realdim, integerdim
+           !4204       format ('subroutine over39', /, 2x, 'implicit real(', i1, ') (a-h, o-z), integer(', i1, ') (i-n)')
            write (unit = lunit(2), fmt = 4204)
 4204       format ('subroutine over39')
            select case (implmode)
@@ -937,7 +1077,7 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4104
-!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              !              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
               write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4104       continue
@@ -948,8 +1088,8 @@ program vardim
            write (unit = lunit(2), fmt = '(a)') '#endif'
            call make_subroutine_comment(lunit(2), 'fixs10')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_FIXS10'
-!           write (unit = lunit(2), fmt = 4205)
-!4205       format ('subroutine fixs10', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+           !           write (unit = lunit(2), fmt = 4205)
+           !4205       format ('subroutine fixs10', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (unit = lunit(2), fmt = 4205)
 4205       format ('subroutine fixs10')
            select case (implmode)
@@ -986,7 +1126,7 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if ( n4  .eq.  0 )   go to 4105
-!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              !              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
               write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4105       continue
@@ -1012,8 +1152,8 @@ program vardim
            lstnew(76) = 2 * lstnew(71)
            call make_subroutine_comment(lunit(2), 'over44')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER44'
-!           write (unit = lunit(2), fmt = 4206)
-!4206       format ('subroutine over44', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+           !           write (unit = lunit(2), fmt = 4206)
+           !4206       format ('subroutine over44', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (unit = lunit(2), fmt = 4206)
 4206       format ('subroutine over44')
            select case (implmode)
@@ -1050,7 +1190,7 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if (n4 .eq. 0) go to 4106
-!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              !              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
               write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4106       continue
@@ -1063,8 +1203,8 @@ program vardim
            mextra = 5000
            call make_subroutine_comment(lunit(2), 'over45')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER45'
-!           write (unit = lunit(2), fmt = 4207)
-!4207       format ('subroutine over45', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+           !           write (unit = lunit(2), fmt = 4207)
+           !4207       format ('subroutine over45', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
            write (unit = lunit(2), fmt = 4207)
 4207       format ('subroutine over45')
            select case (implmode)
@@ -1101,7 +1241,7 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if ( n4  .eq.  0 )   go to 4107
-!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              !              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
               write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4107       continue
@@ -1115,7 +1255,7 @@ program vardim
            call make_subroutine_comment(lunit(2), 'over47')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER47'
            write (unit = lunit(2), fmt = 4208)
-!4208       format ('subroutine over47', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
+           !4208       format ('subroutine over47', /, 2x, 'implicit real(8) (a-h, o-z), integer(4) (i-n)')
 4208       format ('subroutine over47')
            select case (implmode)
            case (0 : 2)
@@ -1151,7 +1291,7 @@ program vardim
               write (unit = lunit(2), fmt = 7236) cblser(i), cblock(i), nonneg
               n4 = jbltyp(i)
               if ( n4  .eq.  0 )   go to 4108
-!              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
+              !              write (unit = lunit(2), fmt = 7243) (type(n4, j), j = 1, 3), trim(cblock(i))
               write (unit = lunit(2), fmt = 7243) trim(type(n4)), trim(cblock(i))
            end do
 4108       continue

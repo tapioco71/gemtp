@@ -11,9 +11,11 @@
 subroutine over55
   use blkcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !  include 'blkcom.ftn'
-  equivalence (moncar(4), isw)
+  integer(4) :: i, k, kilsav
+  real(8) :: d1, d2, d3, d4, d6, d7
+  real(8) :: hmin
+  !
+  !  equivalence (moncar(4), isw)
   if (iprsup  .ge.  1) write (unit = lunit6, fmt = 4567) kill
 4567 format (' Begin "over55".  kill =', i6)
   kilsav = kill
@@ -27,8 +29,7 @@ subroutine over55
 6634 format (/, ' Actual list sizes for preceding solution:', /, '   size  1-10:', 10i6, /, '   size 11-20:', 10i6, /, '   size 21-on:', 10i6)
   go to 6645
 6639 write (unit = lunit6, fmt = 6554)
-6554 format (/, ' Core storage figures for preceding data case now completed.  ---------------------------------------', 2x, 'present', 3x, 'program', /, &
-          ' a value of  -9999 indicates default, with no figure available.', 41x, 'figure', 5x, 'limit (name)')
+6554 format (/, ' Core storage figures for preceding data case now completed.  ---------------------------------------', 2x, 'present', 3x, 'program', /, ' a value of  -9999 indicates default, with no figure available.', 41x, 'figure', 5x, 'limit (name)')
   write (unit = lunit6, fmt = 38021) lstat(21), lbus
 38021 format (5x, 'Size list 1.   Number of network nodes.', 56x, 2i10, ' (lbus)')
   write (unit = lunit6, fmt = 38022) lstat(22), lbrnch
@@ -137,8 +138,8 @@ subroutine over55
   d4 = d1 + d4
   if (kol132 .eq. 132) write (unit = lunit6, fmt = 38009) flstat(11), flstat(12), d1
 38009 format (5x, "'deltat'-change restart time  .......", 58x, 3f10.3, /, 101x, '-----------------------------')
-  d2 = 0.0
-  d3 = 0.0
+  d2 = 0.0d0
+  d3 = 0.0d0
   do i = 1, 12, 2
      d2 = d2 + flstat(i)
 38011 d3 = d3 + flstat(i + 1)
@@ -158,19 +159,52 @@ subroutine over55
 end subroutine over55
 
 !
+! subroutine a4012.
+!
+
+subroutine a4012
+  use blkcom
+  implicit none
+4012 write (unit = lunit6, fmt = 4112)
+4112 format (5x, 'Sorry, no special advice available. ')
+end subroutine a4012
+
+!
+! subrotuine a7214.
+!
+
+subroutine a7412
+  use blkcom
+  implicit none
+7412 write (unit = lunit6, fmt = 7512) lstat(13), bus1, bus2
+7512 format (5x, 'by way of component identification, there are', i5, '   coupled elements which are being solved simultaneously, with', /, 5x, 'the first of these (in order of data input) connecting node  ',  "'", a6, "'", '  to node  ',  "'", a6, "'", ' .   The first element is ')
+  write (unit = lunit6, fmt = 7612) lstat(15), lstat(14), lstat(16), t
+7612 format (5x,  'located in row',  i5,'   of the nonlinear element table,   while the last is in row number', i5,   ' .', /, 5x,   'a rank of',  i5, '   exists for  (zthev) ,   and the simulation time is',  e13.5,  ' sec. ')
+  write (unit = lunit6, fmt = 7712)
+7712 format (5x,  'Possible ameliorative actions include a decrease in time-step size "deltat", or an increase in the iteration', /, 5x,  'limit "maxzno", or an increase in the divergence tolerance "epstop" . ')
+end subroutine a7412
+
+!
 ! subroutine subr55.
 !
 
 subroutine subr55
   use blkcom
+  use tracom
+  use bcdtim
+  use strcom
+  use random
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !  include 'blkcom.ftn'
-  equivalence (moncar(1), knt), (moncar(4), isw)
-  equivalence (moncar(10), mtape)
+  !  equivalence (moncar(1), knt), (moncar(4), isw)
+  !  equivalence (moncar(10), mtape)
   character(8) :: text1, text2, text3, text4, text5
   character(8) :: text11, text12, text13, text14, text15
   character(8) :: text16, text17, text18, text19
+  integer(4) :: i, i1, j, kilsav
+  integer(4) :: n1, n2, n3, n4, n5, n6, n9, n13, n15
+  real(8) :: d1, d7, d11, d12
+  real(8) :: seed
+  !
   data text1  / 'begin ' /
   data text2  / 'new   ' /
   data text3  / 'data  ' /
@@ -193,13 +227,9 @@ subroutine subr55
   select case (n1)
   case (1)
 6201 write (unit = lunit6, fmt = 7201) lstat(16)
-7201 format (5x, 'The last-read data card is a request for the further (continued) solution of a previously-solved emtp data',/, &
-          5x, "case.   The   'restart'   request specifies a permanent file in which is stored   /blank/   and   /label/ .",/, &
-          5x, 'but EMTP dimensioning of the present program version is not identical to that for the version which created the',/, &
-          5x, 'permanent file.   Specifically, the total length of   /label/   for the file-creating program was', i8, '   integer ')
+7201 format (5x, 'The last-read data card is a request for the further (continued) solution of a previously-solved emtp data',/, 5x, "case.   The   'restart'   request specifies a permanent file in which is stored   /blank/   and   /label/ .",/, 5x, 'but EMTP dimensioning of the present program version is not identical to that for the version which created the',/, 5x, 'permanent file.   Specifically, the total length of   /label/   for the file-creating program was', i8, '   integer ')
      write (unit = lunit6, fmt = 7301) ltlabl
-7301 format (5x,  'words, while the corresponding present figure is', i8,   ' .    Any such discrepancy is illegal.   As a',/, &
-          5x, 'general rule, the user is counseled to use the same program version for both operations, thereby guaranteeing success. ')
+7301 format (5x,  'words, while the corresponding present figure is', i8,   ' .    Any such discrepancy is illegal.   As a',/, 5x, 'general rule, the user is counseled to use the same program version for both operations, thereby guaranteeing success. ')
      go to 6550
 
   case (2)
@@ -207,44 +237,26 @@ subroutine subr55
 
   case (3)
 6203 write (unit = lunit6, fmt = 7203)
-7203 format (5x, 'The data case now being solved involves one or more type-96 hysteretic inductors.   Fine.   However, no',/, &
-          5x, 'steady-state phasor solution for initial conditions was requested by the user.   This combination is permitted',/, &
-          5x, "only if the simulation begins as the continuation of a previously-halted run (with field  'tstart'  of the",/, &
-          5x, 'floating-point miscellaneous data card punched positive).   The data case under consideration does not satisfy these',/, &
-          5x, 'restrictions, so solution shall be stopped. ')
+7203 format (5x, 'The data case now being solved involves one or more type-96 hysteretic inductors.   Fine.   However, no',/, 5x, 'steady-state phasor solution for initial conditions was requested by the user.   This combination is permitted',/, 5x, "only if the simulation begins as the continuation of a previously-halted run (with field  'tstart'  of the", /, 5x, 'floating-point miscellaneous data card punched positive).   The data case under consideration does not satisfy these', /, 5x, 'restrictions, so solution shall be stopped. ')
      go to 6550
 
   case (4)
 6204 write (unit = lunit6, fmt = 7204) flstat(14), flstat(15)
-7204 format (5x, 'The last-inputted EMTP component was a type-96 hysteretic inductor.   Columns  27-32  and  33-38  of the',/, &
-          5x, "branch card are to be punched with  'i-steady'  and   'psi-steady' ,   respectively.   But values",  e14.4,  '   and',/, &
-          5x,  e14.4, '   were read for these two variables, which represents a point in the current-flux plane that lies outside',/, &
-          5x, 'the user-defined major hysteresis loop.   the EMTP does not allow such sloppiness (even though the ratio may be',/, &
-          5x,  'correct).   Define a point within the loop, and try again. ')
+7204 format (5x, 'The last-inputted EMTP component was a type-96 hysteretic inductor.   Columns  27-32  and  33-38  of the', /, 5x, "branch card are to be punched with  'i-steady'  and   'psi-steady' ,   respectively.   But values",  e14.4,  '   and', /, 5x,  e14.4, '   were read for these two variables, which represents a point in the current-flux plane that lies outside', /, 5x, 'the user-defined major hysteresis loop.   the EMTP does not allow such sloppiness (even though the ratio may be', /, 5x,  'correct).   Define a point within the loop, and try again. ')
      go to 6550
 
   case (5)
 6205 write (unit = lunit6, fmt = 7205) flstat(16), flstat(17)
-7205 format (5x, 'The last-inputted EMTP component was a type-96 hysteretic inductor.   Columns  39-44  of the branch card are',/, &
-          5x, 'to be punched with a residual (remnant) flux value.   But a value of',  e14.4,   '   was read for this, which',/, &
-          5x, 'exceeds (in absolute value) the flux of the user-inputted major hysteresis loop at zero current.   This latter flux',/, &
-          6 5x,  'value is',  e14.4,   ' .   The result is a current-flux point which lies outside the major hysteresis loop, which',/, &
-          5x, 'is impossible.   Punch a legal residual flux value in columns  39-44 ,   and try again. '   )
+7205 format (5x, 'The last-inputted EMTP component was a type-96 hysteretic inductor.   Columns  39-44  of the branch card are', /, 5x, 'to be punched with a residual (remnant) flux value.   But a value of',  e14.4,   '   was read for this, which', /, 5x, 'exceeds (in absolute value) the flux of the user-inputted major hysteresis loop at zero current.   This latter flux', /, 6 5x,  'value is',  e14.4,   ' .   The result is a current-flux point which lies outside the major hysteresis loop, which', /, 5x, 'is impossible.   Punch a legal residual flux value in columns  39-44 ,   and try again. ')
      go to 6550
 
   case (6)
 6206 write (unit = lunit6, fmt = 7206)
-7206 format (5x, "The user is trying to combine  'statistics'  or  'systematic'  results using the   'tabulate energization results'",/, &
-          5x, 'feature.   But not all of the partial results are compatible.   Files previously attached and read have the',/, &
-          5x, 'following characteristic parameters ... ')
+7206 format (5x, "The user is trying to combine  'statistics'  or  'systematic'  results using the   'tabulate energization results'", /, 5x, 'feature.   But not all of the partial results are compatible.   Files previously attached and read have the', /, 5x, 'following characteristic parameters ... ')
      write (unit = lunit6, fmt = 7306) (lstat(i), i = 11, 13), bus2
-7306 format (10x,  i5, ' = ntot    (number of electric network nodes)',/, &
-          10x, i5, ' = nstat   (number of output variables) ',/, &
-          10x, i5, ' = kswtch  (number of switches)',/, &
-          9x, a6, ' = bus(ntot)  (name of last network node). ')
+7306 format (10x,  i5, ' = ntot    (number of electric network nodes)', /, 10x, i5, ' = nstat   (number of output variables) ', /, 10x, i5, ' = kswtch  (number of switches)', /, 9x, a6, ' = bus(ntot)  (name of last network node). ')
      write (unit = lunit6, fmt = 7406) lstat(17)
-7406 format (5x, 'On the other hand, the most recently attached file, number',  i5,  '   in order of user specification, has',/, &
-          5x, 'the following different characteristics ... ')
+7406 format (5x, 'On the other hand, the most recently attached file, number', i5, '   in order of user specification, has', /, 5x, 'the following different characteristics ... ')
      write (unit = lunit6, fmt = 7306) ntot, lstat(14), kswtch, bus1
      write (unit = lunit6, fmt = 7506)
 7506 format (5x, 'never try to combine results which belong to differently-structured problems, as in this data case. ')
@@ -252,10 +264,7 @@ subroutine subr55
 
   case (7)
 6207 write (unit = lunit6, fmt = 7207) tmax, tenerg
-7207 format (5x, "This data case has  'statistics'  switches, but it is highly improbable that any would ever close.   The",/, &
-          5x, "termination time  'tmax'  of the simulation equals", e14.4, ' ,   while all random switch-closing times',/, &
-          5x, 'exceed',  e14.4, '   seconds with  3*sigma  probability.   Such a waste of computer resources will not be tolerated.',/, &
-          5x,  "Either increase  'tmax'  beyond this latter figure, or appropriately decrease the closing times. ")
+7207 format (5x, "This data case has  'statistics'  switches, but it is highly improbable that any would ever close.   The", /, 5x, "termination time  'tmax'  of the simulation equals", e14.4, ' ,   while all random switch-closing times', /, 5x, 'exceed',  e14.4, '   seconds with  3*sigma  probability.   Such a waste of computer resources will not be tolerated.', /, 5x,  "Either increase  'tmax'  beyond this latter figure, or appropriately decrease the closing times. ")
      go to 6550
 
   case (8)
@@ -263,94 +272,73 @@ subroutine subr55
 
   case (9)
 6209 write (unit = lunit6, fmt = 7209) epsiln, lstat(17)
-7209 format (5x, 'The jacobian matrix for a Newton solution of zinc-oxide arresters has been found to be singular.',/, &
-          5x, "the tolerance  'epsiln'  equals", e12.3,  ' ,   while the iteration count is', i5,   ' . ')
-     go to 7412
+7209 format (5x, 'The jacobian matrix for a Newton solution of zinc-oxide arresters has been found to be singular.', /, 5x, "the tolerance  'epsiln'  equals", e12.3, ' ,   while the iteration count is', i5,   ' . ')
+  !     go to 7412
+     call a7412
 
   case (10)
 6210 write (unit = lunit6, fmt = 7210) lstat(14)
-7210 format (5x, 'The initialization of a saturated synchronous machine has failed to converge. the machine in question',/, &
-          5x, 'had the following number', 2x, i6 )
+7210 format (5x, 'The initialization of a saturated synchronous machine has failed to converge. the machine in question', /, 5x, 'had the following number', 2x, i6 )
      go to 6550
 
   case (11)
 6211 write (unit = lunit6, fmt = 7211) lstat(14), flstat(13), flstat(14), flstat(15)
-7211 format (5x, 'The program was inputting data for synchronous machine no.', i8, 'a non-positive set of saturation data', /, &
-          5x, 'for one of the axis has been detected.   The read in data follow below this line ........',/, &
-          10x, 3e20.8, /, 5x, "in a case of an unsaturated s.m. this kill-code is caused by a nonspecified value of parameter 'agline' . ")
+7211 format (5x, 'The program was inputting data for synchronous machine no.', i8, 'a non-positive set of saturation data', /, 5x, 'for one of the axis has been detected.   The read in data follow below this line ........', /, 10x, 3e20.8, /, 5x, "in a case of an unsaturated s.m. this kill-code is caused by a nonspecified value of parameter 'agline' . ")
      go to 6550
 
   case (12)
 6212 write (unit = lunit6, fmt = 7212) maxzno, epstop, flstat(14)
-7212 format (5x,  'a rigorous solution for one or more zinc-oxide arresters has failed.   up to',  i5, "   iterations (variable 'maxzno')",/, &
-          5x, 'were allowed to drive the current residuals below',   e12.4, "   amperes (tolerance 'epstop').",/, &
-          5x, 'but',   e13.4, '   amperes remain for a problem equation, so the Newton iteration has diverged. '    )
-7412 write (unit = lunit6, fmt = 7512) lstat(13), bus1, bus2
-7512 format (5x,  'by way of component identification,', &
-          ' there are',   i5, '   coupled elements which are being solved simultaneously, with',/, &
-          5x,  'the first of these (in order of data input) connecting node  ',  "'", a6, "'", '  to node  ',  "'", a6, "'", ' .   The first element is ')
-     write (unit = lunit6, fmt = 7612) lstat(15), lstat(14), lstat(16), t
-7612 format (5x,  'located in row',  i5,'   of the nonlinear element table,   while the last is in row number', i5,   ' .',/, &
-          5x,   'a rank of',  i5, '   exists for  (zthev) ,   and the simulation time is',  e13.5,  ' sec. ')
-     write (unit = lunit6, fmt = 7712)
-7712 format (5x,  'Possible ameliorative actions include a decrease in time-step size "deltat", or an increase in the iteration',/, &
-          5x,  'limit "maxzno", or an increase in the divergence tolerance "epstop" . ')
+7212 format (5x,  'a rigorous solution for one or more zinc-oxide arresters has failed.   up to',  i5, "   iterations (variable 'maxzno')", /, 5x, 'were allowed to drive the current residuals below',   e12.4, "   amperes (tolerance 'epstop').", /, 5x, 'but',   e13.4, '   amperes remain for a problem equation, so the Newton iteration has diverged. ')
+     call a7412
+     ! 7412 write (unit = lunit6, fmt = 7512) lstat(13), bus1, bus2
+     ! 7512 format (5x, 'by way of component identification, there are', i5, '   coupled elements which are being solved simultaneously, with', /, 5x, 'the first of these (in order of data input) connecting node  ',  "'", a6, "'", '  to node  ',  "'", a6, "'", ' .   The first element is ')
+     !      write (unit = lunit6, fmt = 7612) lstat(15), lstat(14), lstat(16), t
+     ! 7612 format (5x,  'located in row',  i5,'   of the nonlinear element table,   while the last is in row number', i5,   ' .', /, 5x,   'a rank of',  i5, '   exists for  (zthev) ,   and the simulation time is',  e13.5,  ' sec. ')
+     !      write (unit = lunit6, fmt = 7712)
+     ! 7712 format (5x,  'Possible ameliorative actions include a decrease in time-step size "deltat", or an increase in the iteration', /, 5x,  'limit "maxzno", or an increase in the divergence tolerance "epstop" . ')
      go to 6550
 
   case (13)
 6213 write (unit = lunit6, fmt = 7213) lstat(15), lstat(16)
-7213 format (5x,  'While reading  zno  arrester data cards, a structural (numbering) defect was found.   This is for',/, &
-          5x,  'nonlinear element number',  i5, '   which corresponds to arrester number',  i5, ' . ')
+7213 format (5x,  'While reading  Zno  arrester data cards, a structural (numbering) defect was found.   This is for', /, 5x,  'nonlinear element number', i5, '   which corresponds to arrester number',  i5, ' . ')
      write (unit = lunit6, fmt = 8213) lstat(17), lstat(16)
 8213 format (5x,  ' The read-in identification number', i8,   3x,  'does not agree with the arrester number equal to',  i8,  ' . ' )
      go to 6550
 
   case (14)
 6214 write (unit = lunit6, fmt = 7214) bus1
-7214 format (5x,  'The EMTP is in the process of reading the data associated with the  tacs  device',/, &
-          5x, ' identified by the 6-character (output) name ', "'", a6, "'", ' . ' )
+7214 format (5x,  'The EMTP is in the process of reading the data associated with the  tacs  device', /, 5x, ' identified by the 6-character (output) name ', "'", a6, "'", ' . ' )
      write (unit = lunit6, fmt = 7314)
-7314 format (5x, 'This is a type-58 device defined by the following transfer function:', //, &
-          10x, 'gain / ( d0 +  d1 * s  )', //, &
-          5x, 'the denominator of this function is presently found to have a value of   0.0  ,  thus creating', /, &
-          5x, 'a singularity in the system.   In effect, this denominator is internally transformed ')
+7314 format (5x, 'This is a type-58 device defined by the following transfer function:', //, 10x, 'gain / ( d0 +  d1 * s  )', //, 5x, 'the denominator of this function is presently found to have a value of   0.0  ,  thus creating', /, 5x, 'a singularity in the system.   In effect, this denominator is internally transformed ')
      write (unit = lunit6, fmt = 7414) deltat
-7414 format (5x, 'by the trapezoidal rule of implicit integration into the expression:', //, 10x, '( d0  +  d1 * 2.0 / deltat  )', //, &
-          5x, 'with the value of deltat = ', e14.6 ,/, 5x, 'correct this situation by changing either  d0,  d1,  or  deltat . ')
+7414 format (5x, 'by the trapezoidal rule of implicit integration into the expression:', //, 10x, '( d0  +  d1 * 2.0 / deltat  )', //, 5x, 'with the value of deltat = ', e14.6 ,/, 5x, 'correct this situation by changing either  d0,  d1,  or  deltat . ')
      go to 6550
 
   case (15)
 6215 write (unit = lunit6, fmt = 7214) bus1
      write (unit = lunit6, fmt = 7215)
-7215 format (5x,  'This  type-60  if-device  recognizes  3  and only  3  separate input signals.', //, 5x, 'of the  5  fields available for defining the inputs', /, &
-          10x, 'each one of the first three must be non-blank  (columns 11 - 33 )', /, 10x, 'and the two remaining fields must be left blank  ( columns 35 - 49 ) ')
+7215 format (5x,  'This  type-60  if-device  recognizes  3  and only  3  separate input signals.', //, 5x, 'of the  5  fields available for defining the inputs', /, 10x, 'each one of the first three must be non-blank  (columns 11 - 33 )', /, 10x, 'and the two remaining fields must be left blank  ( columns 35 - 49 ) ')
      go to 6550
 
   case (16)
 6216 write (unit = lunit6, fmt = 7214) bus1
      write (unit = lunit6, fmt = 7216)
-7216 format (5x,  'This  type-61  device  selects as output  one of the possibly  8  connected inputs', /, &
-          5x, "depending on the value of another tacs variable called 'selector signal'. ")
+7216 format (5x,  'This  type-61  device  selects as output  one of the possibly  8  connected inputs', /, 5x, "depending on the value of another tacs variable called 'selector signal'. ")
      write (unit = lunit6, fmt = 7316)
-7316 format (5x, 'However, the user has neglected to identify the name of the tacs variable that is to serve this purpose.', /, &
-          5x, 'The user should specify this selector signal in the  6-character field of columns  75 - 80  . ')
+7316 format (5x, 'However, the user has neglected to identify the name of the tacs variable that is to serve this purpose.', /, 5x, 'The user should specify this selector signal in the  6-character field of columns  75 - 80  . ')
      go to 6550
 
   case (17)
 6217 write (unit = lunit6, fmt = 7214) bus1
      write (unit = lunit6, fmt = 7217) lstat(17)
-7217 format (5x, 'This  type-', i2, '  min/max  device  will identify either maxima or minima, depending on', /, &
-          5x,'the numerical value read in columns 57 - 62  of the data card. ')
+7217 format (5x, 'This  type-', i2, '  min/max  device  will identify either maxima or minima, depending on', /, 5x,'the numerical value read in columns 57 - 62  of the data card. ')
      write (unit = lunit6, fmt = 7317) flstat(14)
-7317 format (5x, 'this value must be typed as either', /, 10x, '   +1.0  to indicate that a maximum is to be calculated,', /, &
-          10x, 'or -1.0   -     -      -    minimum    -     -     -   .', //, 5x, 'The present value was read as ', f13.6)
+7317 format (5x, 'this value must be typed as either', /, 10x, '   +1.0  to indicate that a maximum is to be calculated,', /, 10x, 'or -1.0   -     -      -    minimum    -     -     -   .', //, 5x, 'The present value was read as ', f13.6)
      go to 6550
 
   case (18)
 6218 write (unit = lunit6, fmt = 7218) bus1
-7218 format (5x,  'The program was reading the user-defined free-format fortran expression', /, &
-          5x, 'for the tacs variable identified by the  6-character name ', "'", a6, "'", ' ,', /, &
-          5x, 'when the following illegal situation was detected: ')
+7218 format (5x,  'The program was reading the user-defined free-format fortran expression', /, 5x, 'for the tacs variable identified by the  6-character name ', "'", a6, "'", ' ,', /, 5x, 'when the following illegal situation was detected: ')
      i1 = lstat(17)
      !if (i1 .gt. 6) go to 62180
      select case (i1)
@@ -371,8 +359,7 @@ subroutine subr55
 
      case (4)
 62184   write (unit = lunit6, fmt = 72184) bus2
-72184   format (10x, 'The operator ', "'", a6, "'", ' is the last element of this fortran expression.', /, &
-             10x, "Isn't there an argument missing ... ")
+72184   format (10x, 'The operator ', "'", a6, "'", ' is the last element of this fortran expression.', /, 10x, "Isn't there an argument missing ... ")
         go to 6550
 
      case (5)
@@ -397,8 +384,7 @@ subroutine subr55
 
      case (9)
 62189   write (unit = lunit6, fmt = 72189) bus2, bus3
-72189   format (10x, 'This expression is not homogeneous.',/, 10x, 'The two operators upon which this condition was detected are', /, &
-             15x, "'", a6, "'", ' and ', "'", a6, "'", ' . ')
+72189   format (10x, 'This expression is not homogeneous.',/, 10x, 'The two operators upon which this condition was detected are', /, 15x, "'", a6, "'", ' and ', "'", a6, "'", ' . ')
         go to 6550
 
      case (10)
@@ -418,8 +404,7 @@ subroutine subr55
 
      case (13)
 62193   write (unit = lunit6, fmt = 72193) lstat( 16)
-72193   format ( 10x, 'The numerical argument ending in column ',  i2,/, &
-             10x, 'contains more than one decimal point. ')
+72193   format ( 10x, 'The numerical argument ending in column ', i2, /, 10x, 'contains more than one decimal point. ')
         go to 6550
      end select
      !     go to (62181, 62182, 62183, 62184, 62185, 62186), i1
@@ -433,9 +418,7 @@ subroutine subr55
 
   case (20)
 6220 write (unit = lunit6, fmt = 7220) last, lstat(15), ibr
-7220 format (5x, ' Overflow of steady-state table space.   List 23 tables are sized at',  i6, '   words,   which is insufficient for',/, &
-          5x, 'even just the formation of  (y),  to say nothing of later triangularization.   Overflow has occurred after only',  i5,/, &
-          5x, 'branches have been processed, out of a total of',  i5,   ' . '  )
+7220 format (5x, ' Overflow of steady-state table space.   List 23 tables are sized at',  i6, '   words,   which is insufficient for', /, 5x, 'even just the formation of  (Y),  to say nothing of later triangularization.   Overflow has occurred after only',  i5, /, 5x, 'branches have been processed, out of a total of', i5, ' . ')
      go to 6550
 
   case (21)
@@ -445,15 +428,12 @@ subroutine subr55
 
   case (22)
 6222 write (unit = lunit6, fmt = 7222) lstat(14), bus1, bus2, lstat(15)
-7222 format (5x, 'The steady-state solution is for two or more frequencies which are not separated.   Trouble was spotted at branch number',  i5,/, &
-          5x, 'which connects bus  "',  a6, '"  with bus  "',  a6,  '" .   One source of conflict is in row',  i5 )
+7222 format (5x, 'The steady-state solution is for two or more frequencies which are not separated.   Trouble was spotted at branch number',  i5, /, 5x, 'which connects bus  "',  a6, '"  with bus  "',  a6,  '" .   One source of conflict is in row', i5)
      go to 6550
 
   case (23)
 6223 write (unit = lunit6, fmt = 7223) lstat(14), bus1, bus2, lstat(15), lstat(16)
-7223 format (5x, 'The steady-state solution is for two or more frequencies which are not separated.   Trouble was spotted at switch number',  i5   ,/, &
-          5x,  'which connects bus  "',  a6, '"  with bus  "',  a6,  '" .   The left is excited by source number',  i5,/, &
-          5x, 'while the right is excited by source number',  i6,  ' . ' )
+7223 format (5x, 'The steady-state solution is for two or more frequencies which are not separated.   Trouble was spotted at switch number', i5, /, 5x,  'which connects bus  "', a6, '"  with bus  "',  a6,  '" .   The left is excited by source number', i5, /, 5x, 'while the right is excited by source number', i6, ' . ')
      go to 6550
 
   case (24)
@@ -463,15 +443,9 @@ subroutine subr55
 
   case (25)
 6225 write (unit = lunit6, fmt = 7225) lstat(14), lstat(15)
-7225 format (5x, 'The user has overflowed storage within the cable connstants supporting program.   For the current program', /, &
-          5x, 'version, one is limited to cases having not over', i4 , ' conductors or ', i4, ' cables( the storage for a three', /, &
-          5x, 'phase transmission line is equal to 5 cables if it has 2 ground wires.  Storage for the arrays in question has', /, &
-          5x, 'been optimally (and dynamically) allocated so as to use as much of the EMTP core storage as is available.   It thus', /, &
-          5x, 'is not the fault of the cable-constants supporting program itself, but rather of the overall EMTP dimensioning, that', /, &
-          5x, 'this data case must be rejected.   Go procure or make another program version which has more total tabular ')
+7225 format (5x, 'The user has overflowed storage within the cable connstants supporting program.   For the current program', /, 5x, 'version, one is limited to cases having not over', i4 , ' conductors or ', i4, ' cables( the storage for a three', /, 5x, 'phase transmission line is equal to 5 cables if it has 2 ground wires.  Storage for the arrays in question has', /, 5x, 'been optimally (and dynamically) allocated so as to use as much of the EMTP core storage as is available.   It thus', /, 5x, 'is not the fault of the cable-constants supporting program itself, but rather of the overall EMTP dimensioning, that', /, 5x, 'this data case must be rejected.   Go procure or make another program version which has more total tabular ')
      write (unit = lunit6, fmt = 7182)
-7182 format (5x, 'storage space, and try the job over again.   Remember, the cable constants calculation requires the storage', /, &
-          5x, 'of full matrices, so memory requirements go up approximately as the square of the number of conductors. ')
+7182 format (5x, 'storage space, and try the job over again.   Remember, the cable constants calculation requires the storage', /, 5x, 'of full matrices, so memory requirements go up approximately as the square of the number of conductors. ')
      go to 6550
 
   case (26 : 41)
@@ -511,122 +485,66 @@ subroutine subr55
   call spying
 6645 if (kill .gt. 1) go to 4092
   write (unit = lunit6, fmt = 3391) lstat
-3391 format (/, ' For   kill = 1   error stops, program maintenance may sometimes wish to inspect the contents of error-', /, &
-          " interface vectors  'lstat'  and  'flstat' .   These follow ....", //, "vector  'lstat'", /, (1x, 10i13))
+3391 format (/, ' For   kill = 1   error stops, program maintenance may sometimes wish to inspect the contents of error-', /, " interface vectors  'lstat'  and  'flstat' .   These follow ....", //, "vector  'lstat'", /, (1x, 10i13))
   write (unit = lunit6, fmt = 3392) flstat
 3392 format (/, " Vector  'flstat'", /, (1x, 10e13.4))
   n1 = lstat(16)
   write (unit = lunit6, fmt = 4000) n1
-4000 format (/, ' of course maybe the user would like some suggestions as to why the table in question (list number , i2, 1h)', /, &
-          ' has overflowed.   If so, read on, good buddy.   the EMTP has a long-established policy of meritorious and laudable',/, &
-          ' cooperation in the form of crystal-clear diagnostic messages, such as the following ..... ')
+4000 format (/, ' of course maybe the user would like some suggestions as to why the table in question (list number , i2, 1h)', /, ' has overflowed.   If so, read on, good buddy.   the EMTP has a long-established policy of meritorious and laudable', /, ' cooperation in the form of crystal-clear diagnostic messages, such as the following ..... ')
   if (n1 .eq. 99) go to 4499
   select case (n1)
   case (1)
 4001 write (unit = lunit6, fmt = 4101)
-4101 format (5x, "Network nodes are of course defined by the user's branch and switch cards, by the names which identify the ",/, &
-          5x, "two ends of the element (fields  'bus1'  and  'bus2'  of the data card, columns 3-14).   In addition, there are  ",/, &
-          5x, 'several less-obvious ways in which nodes are added to the bus table ....',/, &
-          8x, '1.  Switched-r elements (type-92) and switched-l elements (type 93) each create one internal node for every',/, &
-          12x,'such element. ')
+4101 format (5x, "Network nodes are of course defined by the user's branch and switch cards, by the names which identify the ", /, 5x, "two ends of the element (fields  'bus1'  and  'bus2'  of the data card, columns 3-14).   In addition, there are  ", /, 5x, 'several less-obvious ways in which nodes are added to the bus table ....', /, 8x, '1.  Switched-r elements (type-92) and switched-l elements (type 93) each create one internal node for every', /, 12x,'such element. ')
      write (unit = lunit6, fmt = 4201)
-4201 format (8x, '2.  Ground (blank node name) always has an entry in the bus list.', /, &
-          8x, "3.  Each single-phase saturable transformer component adds one node (node name  'bustop' ,  columns 39-44 of the", /, &
-          12x, "card bearing the request word 'transformer ' in columns 53-14).", /, &
-          8x, "4.  Each three-phase saturable transformer component adds one node (node name 'bus3ph', read from columns 27-32", /, &
-          12x, "of the card bearing the request word 'transformer three phase ' in columns 3-26).   This is a 4-th word, in " )
+4201 format (8x, '2.  Ground (blank node name) always has an entry in the bus list.', /, 8x, "3.  Each single-phase saturable transformer component adds one node (node name  'bustop' ,  columns 39-44 of the", /, 12x, "card bearing the request word 'transformer ' in columns 53-14).", /, 8x, "4.  Each three-phase saturable transformer component adds one node (node name 'bus3ph', read from columns 27-32", /, 12x, "of the card bearing the request word 'transformer three phase ' in columns 3-26).   This is a 4-th word, in ")
      write (unit = lunit6, fmt = 4301)
 4301 format (12x, 'Addition to the 3 which are added under point 3, for a 3-phase transformer. ' )
      go to 4099
 
   case (2)
 4002 write (unit = lunit6, fmt = 4102)
-4102 format (5x, 'Network branches are of course defined directly by the user as he inputs branch data.   Yet the counting of',/, &
-          5x, 'entries in this linear branch table has some subtle points which are worthy of the following detailed comment ....',/, &
-          8x, '1.  True nonlinear elements (type codes 92 or 93) or the continuous time-varying resistance element (type 91)',/, &
-          12x, 'never contribute to the linear branch table.   These elements are pulled outside of the network, and are handled',/, &
-          12x,  'by compensation. ')
+4102 format (5x, 'Network branches are of course defined directly by the user as he inputs branch data.   Yet the counting of', /, 5x, 'entries in this linear branch table has some subtle points which are worthy of the following detailed comment ....', /, 8x, '1.  True nonlinear elements (type codes 92 or 93) or the continuous time-varying resistance element (type 91)', /, 12x, 'never contribute to the linear branch table.   These elements are pulled outside of the network, and are handled', /, 12x,  'by compensation. ')
      write (unit = lunit6, fmt = 4202)
-4202 format (8x, '2.  Switched-resistance elements (type-92) each contribute one entry to the linear branch table.   Switched-', /, &
-          12x, 'inductance elements (type 93) contribute two entries apiece.', /, &
-          8x, '3.  Each type-99 pseudo-nonlinear resistance element contributes an entry, unless it is paralleled by another', /, &
-          12x, 'linear branch.   These added very-high-impedance branches show up with a card image and data interpretation', /, &
-          12x, 'almost as though the user had inputted the resistor himself. ')
+4202 format (8x, '2.  Switched-resistance elements (type-92) each contribute one entry to the linear branch table.   Switched-', /, 12x, 'inductance elements (type 93) contribute two entries apiece.', /, 8x, '3.  Each type-99 pseudo-nonlinear resistance element contributes an entry, unless it is paralleled by another', /, 12x, 'linear branch.   These added very-high-impedance branches show up with a card image and data interpretation', /, 12x, 'almost as though the user had inputted the resistor himself. ')
      write (unit = lunit6, fmt = 4302)
-4302 format (8x, '4.  Each n-winding single-phase saturable transformer component always internally sets up   2(n-1) + 1   branches', /, &
-          12x, "for everything but the magnetizing branch.   For the latter, a nonzero magnetizing resistance (field  'rmag' ,", /, &
-          12x, 'columns 45-50 of the transformer request card) will add an entry, as will a saturation characteristic defined', /, &
-          12x, 'by exactly one point.   A 3-phase saturable-transformer component contributes only in that it consists of 3', /, &
-          12x,  'single-phase units as just detailed. ')
+4302 format (8x, '4.  Each n-winding single-phase saturable transformer component always internally sets up   2(n-1) + 1   branches', /, 12x, "for everything but the magnetizing branch.   For the latter, a nonzero magnetizing resistance (field  'rmag' ,", /, 12x, 'columns 45-50 of the transformer request card) will add an entry, as will a saturation characteristic defined', /, 12x, 'by exactly one point.   A 3-phase saturable-transformer component contributes only in that it consists of 3', /, 12x,  'single-phase units as just detailed. ')
      go to 4099
 
   case (3)
 4003 write (unit = lunit6, fmt = 4103)
-4103 format (5x, 'The R, L, C tables store floating-point resistance, inductance, and capacitance parameter values associated', /, &
-          5x, 'with lumped-parameter elements.   Although such values are inputted on branch cards (mostly), the user should not', /, &
-          5x, 'confuse the present parameter storage with the branch-table storage of list 2.   Contributions to the present', /, &
-          5x, 'list-3 table by different EMTP components are as follows, assuming no usage of the reference-branch or reference-', /, &
-          5x,  'component idea ..... ')
+4103 format (5x, 'The R, L, C tables store floating-point resistance, inductance, and capacitance parameter values associated', /, 5x, 'with lumped-parameter elements.   Although such values are inputted on branch cards (mostly), the user should not', /, 5x, 'confuse the present parameter storage with the branch-table storage of list 2.   Contributions to the present', /, 5x, 'list-3 table by different EMTP components are as follows, assuming no usage of the reference-branch or reference-', /, 5x,  'component idea ..... ')
      write (unit = lunit6, fmt = 4203)
-4203 format (8x,  '1.  Each uncoupled series r-l-c branch contributes one entry.     ', /, &
-          8x, '2.  Each n-phase pi-circuit component, or each n-phase mutually-coupled r-l component, contributes   n(n+1)/2', /, &
-          12x, 'entries.', /, &
-          8x, '3.  Each single-phase n-winding saturable-transformer component contributes   3n-2   entries, at least.   If', /, &
-          12x, "magnetizing resistance  'rmag'  is used, add another entry.   If the transformer is actually linear, with finite-", /, &
-          12x,  'slope magnetization characteristic, add another entry. ')
+4203 format (8x,  '1.  Each uncoupled series r-l-c branch contributes one entry.', /, 8x, '2.  Each n-phase pi-circuit component, or each n-phase mutually-coupled r-l component, contributes   n(n+1)/2', /, 12x, 'entries.', /, 8x, '3.  Each single-phase n-winding saturable-transformer component contributes   3n-2   entries, at least.   If', /, 12x, "magnetizing resistance  'rmag'  is used, add another entry.   If the transformer is actually linear, with finite-", /, 12x,  'slope magnetization characteristic, add another entry. ')
      write (unit = lunit6, fmt = 4303)
-4303 format (8x, '4.  A 3-phase saturable transformer has the aforementioned entries in the table for the three single-phase' , /, &
-          12x,  'transformers which are sub-components of it.   In addition, there are always   3   extra entries.', /, &
-          8x, '5.  If a network uses one or more type-99 pseudo-nonlinear resistance elements which is not paralleled by another', /, &
-          12x, 'lumped-parameter branch, one entry is added to the table (for all such elements, not for each one).', /, &
-          8x, '6.  Each switched-resistance element (type-92 switch card) contributes one entry. ')
+4303 format (8x, '4.  A 3-phase saturable transformer has the aforementioned entries in the table for the three single-phase', /, 12x,  'transformers which are sub-components of it.   In addition, there are always   3   extra entries.', /, 8x, '5.  If a network uses one or more type-99 pseudo-nonlinear resistance elements which is not paralleled by another', /, 12x, 'lumped-parameter branch, one entry is added to the table (for all such elements, not for each one).', /, 8x, '6.  Each switched-resistance element (type-92 switch card) contributes one entry. ')
      write (unit = lunit6, fmt = 4403)
-4403 format (8x, '7.  Each switched-inductance element (type-93 switch card) contributes two entries.' , /, &
-          8x, '8.  Each  type-16  source element (simplified  ac/dc  converter representation) contributes two entries.', /, &
-          8x, "9.  Each distributed-parameter transmission circuit contributes     n * (n + 1) / 2    entries, where  'n'  is ")
+4403 format (8x, '7.  Each switched-inductance element (type-93 switch card) contributes two entries.', /, 8x, '8.  Each  type-16  source element (simplified  ac/dc  converter representation) contributes two entries.', /, 8x, "9.  Each distributed-parameter transmission circuit contributes     n * (n + 1) / 2    entries, where  'n'  is ")
      write (unit = lunit6, fmt = 4503)
-4503 format (12x, "the number of phases of the line.   In case of such overflow, the  'present figure'   will not include these.", /, &
-          5x, 'where reference-branch or reference-component ideas are used, there generally is no contribution at all to the', /, &
-          5x, 'R, L, C tables.   In this case, the program simply makes reference to previously-stored (and hence previously-', /, &
-          5x, 'counted) data values. ' )
+4503 format (12x, "the number of phases of the line.   In case of such overflow, the  'present figure'   will not include these.", /, 5x, 'where reference-branch or reference-component ideas are used, there generally is no contribution at all to the', /, 5x, 'R, L, C tables.   In this case, the program simply makes reference to previously-stored (and hence previously-', /, 5x, 'counted) data values. ' )
      go to 4099
 
   case (4)
 4004 write (unit = lunit6, fmt = 4104)
-4104 format (5x, 'Counting the number of entries in the source table (size of list 4) is quite simple, as per the following', /, &
-          5x, 'rules ....', /, 8x, '1.  Each conventional source component (type code 1 through 14, punched in columns 1-2 of the source card)', /, &
-          12x, 'contributes one entry.', /, 8x, '2.  Each type-15 source component (the simplified ac/dc converter model, neglecting ripple on the dc side)', /, &
-          12x, 'contributes two entries. ')
+4104 format (5x, 'Counting the number of entries in the source table (size of list 4) is quite simple, as per the following', /, 5x, 'rules ....', /, 8x, '1.  Each conventional source component (type code 1 through 14, punched in columns 1-2 of the source card)', /, 12x, 'contributes one entry.', /, 8x, '2.  Each type-15 source component (the simplified ac/dc converter model, neglecting ripple on the dc side)', /, 12x, 'contributes two entries. ')
      write (unit = lunit6, fmt = 4204)
-4204 format (8x, '3.  Each 3-phase dynamic synchronous-machine component (type codes 21, 22, 23 punched in columns 1-2 of', /, &
-          12x, 'consecutive source cards) contributes three entries.', /, &
-          8x, '4.  Each switched-resistance element (type code 92 punched in columns 1-2 of the switch card) contributes 2 entries. ')
+4204 format (8x, '3.  Each 3-phase dynamic synchronous-machine component (type codes 21, 22, 23 punched in columns 1-2 of', /, 12x, 'consecutive source cards) contributes three entries.', /, 8x, '4.  Each switched-resistance element (type code 92 punched in columns 1-2 of the switch card) contributes 2 entries. ')
      go to 4099
 
   case (5)
 4005 write (unit = lunit6, fmt = 4105)
-4105 format (5x, 'list 5 ostensibly gives the size of the table-of-factors storage (l-u decomposition) for the triangularized', /, &
-          5x, 'real equivalent nodal admittance matrix  (y)  of the time-step loop.   At each time-step, the real matrix equations', /, &
-          5x, ' (y)v = i   are solved for real node-voltage vector  v ,  by means of a repeat solution using the table of factors.', /, &
-          5x, 'Because  (y)  is symmetric, only the upper-triangular factors (including the diagonal) are stored.   There is only', /, &
-          5x, 'one integer word and one floating-point word for each factor, it will be noted (see below).   Node ordering ')
+4105 format (5x, 'list 5 ostensibly gives the size of the table-of-factors storage (l-u decomposition) for the triangularized', /, 5x, 'real equivalent nodal admittance matrix  (y)  of the time-step loop.   At each time-step, the real matrix equations', /, 5x, ' (y)v = i   are solved for real node-voltage vector  v ,  by means of a repeat solution using the table of factors.', /, 5x, 'Because  (y)  is symmetric, only the upper-triangular factors (including the diagonal) are stored.   There is only', /, 5x, 'one integer word and one floating-point word for each factor, it will be noted (see below).   Node ordering ')
      if (lstat(13) .eq. 1) write (unit = lunit6, fmt = 4805) lstat(14), kpartb
-4805 format (5x, 'beginning with "m32." versions,  list 7 storage of (ybb/ybc) is being destroyed,  and the full (y) is added', /, &
-          5x, 'to the bottom of list 5 (fills from the bottom up).   But space ran out before the storage of (y) is finished.   Only', /, &
-          i8, '   rows are done,  out of a total of', i4,  ' ,   and factoring has not yet even begun. ')
+4805 format (5x, 'beginning with "m32." versions,  list 7 storage of (Ybb/Ybc) is being destroyed,  and the full (y) is added', /, 5x, 'to the bottom of list 5 (fills from the bottom up).   But space ran out before the storage of (y) is finished.   Only', /, i8, '   rows are done,  out of a total of', i4,  ' ,   and factoring has not yet even begun. ')
      if (lstat(13) .eq. 2) write (unit = lunit6, fmt = 4905) lstat(15), kpartb
-4905 format (5x, 'beginning with "m32." versions,  list 7 storage of (ybb/ybc) is being destroyed,  and the full (y) is added', /, &
-          5x, 'to the bottom of list 5 (fills from the bottom up).   The downward-growing factors spilled over onto (y) at row', /, &
-          i8, '   of the triangularization,  whereas we must reach row kpartb =',  i4, '   to end successfully. ')
+4905 format (5x, 'beginning with "m32." versions,  list 7 storage of (Ybb/Ybc) is being destroyed,  and the full (y) is added', /, 5x, 'to the bottom of list 5 (fills from the bottom up).   The downward-growing factors spilled over onto (y) at row', /, i8, '   of the triangularization,  whereas we must reach row kpartb =',  i4, '   to end successfully. ')
      write (unit = lunit6, fmt = 4205)
 4205 format (5x, 'The order of elimination (node renumbering) is constrained only in that nodes of known voltage are forced last. ')
      go to 4099
 
   case (6)
 4006 write (unit = lunit6, fmt = 4106)
-4106 format (5x, 'Switches are completely straightforward, being defined only by switch cards.   One entry in the switch table', /, &
-          5x, "is created for every switch card, whether it is for an ordinary switch ('itype'  of columns 1-2 equal to zero),", /, &
-          5x, "a switched resistance element ('itype' = 92), or a switched-inductance element ('itype' = 93). ")
+4106 format (5x, 'Switches are completely straightforward, being defined only by switch cards.   One entry in the switch table', /, 5x, "is created for every switch card, whether it is for an ordinary switch ('itype'  of columns 1-2 equal to zero),", /, 5x, "a switched resistance element ('itype' = 92), or a switched-inductance element ('itype' = 93). ")
      go to 4099
      ! ???????????   list 7 is presently unused   ????????????????
 
@@ -637,55 +555,32 @@ subroutine subr55
 
   case (8)
 4008 write (unit = lunit6, fmt = 4108)
-4108 format (5x, 'Past-history points for distributed-parameter representation of transmission lines are stored in modal form,', /, &
-          5x, 'always.   Each mode requires storage, where there are as many modes as there are coupled conductors (e.g., a double', /, &
-          5x, 'circuit line has 6 modes.).   A constant-parameter (frequency-independent) mode contributes    tau/deltat    entries,', /, &
-          5x, "where  'tau'  is the modal travel-time of the line,  'deltat'  is the time-step size, and the division involves " )
-  write (unit = lunit6, fmt = 4208)
-4208 format (5x, 'integer truncation followed by the addition of unity.   For a frequency-dependent mode, more past-history', /, &
-          5x, "than this is needed, enough to perform the  a2(t)  convolution.   In the preceding formula, take  'tau'  to be the", /, &
-          5x,  "time  't2'  at which the exponential tail on  a2(t)  begins (typically 3 travel-times or so). ")
+4108 format (5x, 'Past-history points for distributed-parameter representation of transmission lines are stored in modal form,', /, 5x, 'always.   Each mode requires storage, where there are as many modes as there are coupled conductors (e.g., a double', /, 5x, 'circuit line has 6 modes.).   A constant-parameter (frequency-independent) mode contributes    tau/deltat    entries,', /, 5x, "where  'tau'  is the modal travel-time of the line,  'deltat'  is the time-step size, and the division involves " )
+     write (unit = lunit6, fmt = 4208)
+4208 format (5x, 'integer truncation followed by the addition of unity.   For a frequency-dependent mode, more past-history', /, 5x, "than this is needed, enough to perform the  a2(t)  convolution.   In the preceding formula, take  'tau'  to be the", /, 5x,  "time  't2'  at which the exponential tail on  a2(t)  begins (typically 3 travel-times or so). ")
      go to 4099
 
   case (9)
 4009 write (unit = lunit6, fmt = 4109)
-4109 format (5x, 'Entries in the nonlinear-element table are created by the following element types .... ', /, &
-          8x, '1.  Piecewise-linear time-varying resistance elements  R(t) ,   branch-type 91.', /, &
-          8x, '2.  True nonlinear  v-i  characteristic, branch-type 92.', /, &
-          8x, '3.  True nonlinear inductance element, branch-type 93.', /, &
-          8x, '4.  Staircase time-varying resistance element  R(t) ,   branch-type 97. ')
+4109 format (5x, 'Entries in the nonlinear-element table are created by the following element types .... ', /, 8x, '1.  Piecewise-linear time-varying resistance elements  R(t) ,   branch-type 91.', /, 8x, '2.  True nonlinear  v-i  characteristic, branch-type 92.', /, 8x, '3.  True nonlinear inductance element, branch-type 93.', /, 8x, '4.  Staircase time-varying resistance element  R(t) ,   branch-type 97. ')
      write (unit = lunit6, fmt = 4209)
-4209 format (8x, '5.  Pseudo-nonlinear inductance element, branch-type 98.', /, &
-          8x, '6.  Pseudo-nonlinear  v-i  characteristic, branch-type 99.', /, &
-          5x, 'Every element falling into this classification contributes one entry to list 9. ')
+4209 format (8x, '5.  Pseudo-nonlinear inductance element, branch-type 98.', /, 8x, '6.  Pseudo-nonlinear  v-i  characteristic, branch-type 99.', /, 5x, 'Every element falling into this classification contributes one entry to list 9. ')
      go to 4099
 
   case (10)
 4010 write (unit = lunit6, fmt = 4110)
-4110 format (5x, 'This list-10 storage applies to all characteristics which are defined as pairs of coordinates, terminated by', /, &
-          5x, 'a  9999-card.   Each pair of coordinates so seen on the input-data listing contributes one entry to list 10.', /, &
-          5x, 'but note carefully the wording of this rule.   it is only the ones which are actually seen visually on the data', /, &
-          5x, 'listing (use of the reference-branch procedure adds nothing to list 10, and will not be seen on the data listing. ')
+4110 format (5x, 'This list-10 storage applies to all characteristics which are defined as pairs of coordinates, terminated by', /, 5x, 'a  9999-card.   Each pair of coordinates so seen on the input-data listing contributes one entry to list 10.', /, 5x, 'but note carefully the wording of this rule.   it is only the ones which are actually seen visually on the data', /, 5x, 'listing (use of the reference-branch procedure adds nothing to list 10, and will not be seen on the data listing. ')
      write (unit = lunit6, fmt = 4210)
-4210 format (/, 5x, 'A second contributor to the list-10 storage requirement is the type-94 nonlinear element component (surge', /, &
-          5x, 'arrester with current limiting gap).   Each such surge arrester which does not use the reference-branch option', /, &
-          5x, 'adds  18  entries to the list-10 storage requirement.   for each surge arrester which does use the reference-branch', /, &
-          5x, 'procedure, there is a contribution of  11  entries to the list-10 storage requirement. ')
+4210 format (/, 5x, 'A second contributor to the list-10 storage requirement is the type-94 nonlinear element component (surge', /, 5x, 'arrester with current limiting gap).   Each such surge arrester which does not use the reference-branch option', /, 5x, 'adds  18  entries to the list-10 storage requirement.   for each surge arrester which does use the reference-branch', /, 5x, 'procedure, there is a contribution of  11  entries to the list-10 storage requirement. ')
      write (lunit6, 4310)
 4310 format (/, 5x, 'Finally, if you have zno surge arresters in the case, four addtional cells are required for each of the zno arresters. ')
      go to 4099
 
   case (11)
 4011 write (unit = lunit6, fmt = 4111)
-4111 format (5x, 'branch-output quantities are generated by column-80 punches on branch cards and on switch cards.   Each punch', /, &
-          5x, "of  '1'  or  '2'  (branch current or branch voltage) contributes one entry to list 11.   Punches of  '3'  (for", /, &
-          5x, "branch current and voltage) or  '4'  (for branch power and energy) contribute two entries each, to list 11.", /, &
-          5x, 'node-voltage outputs which are specified individually, one at a time, ----- i.e., by punching 6-character node ')
+4111 format (5x, 'branch-output quantities are generated by column-80 punches on branch cards and on switch cards.   Each punch', /, 5x, "of  '1'  or  '2'  (branch current or branch voltage) contributes one entry to list 11.   Punches of  '3'  (for", /, 5x, "branch current and voltage) or  '4'  (for branch power and energy) contribute two entries each, to list 11.", /, 5x, 'node-voltage outputs which are specified individually, one at a time, ----- i.e., by punching 6-character node ')
      write (unit = lunit6, fmt = 4211)
-4211 format (5x, 'names in the  13a6  field of the node-voltage output-specification card ----- are likewise limited by list 11.', /, &
-          5x, 'If the user has requested the automatic output of every node voltage instead of this selective output (by means', /, &
-          5x, "of a  '1'  punched in column 2 of the aforementioned card), this list-11 limit does not apply to node voltage ", /, &
-          5x, 'outputs. ')
+4211 format (5x, 'names in the  13a6  field of the node-voltage output-specification card ----- are likewise limited by list 11.', /, 5x, 'If the user has requested the automatic output of every node voltage instead of this selective output (by means', /, 5x, "of a  '1'  punched in column 2 of the aforementioned card), this list-11 limit does not apply to node voltage ", /, 5x, 'outputs. ')
      go to 4099
 
   case (12)
@@ -695,26 +590,16 @@ subroutine subr55
 
   case (13)
 4013 write (unit = lunit6, fmt = 4113)
-4113 format (5x, "Every continuously-transposed distributed-parameter transmission-line component (branch type-code  'itype'  of ", /, &
-          5x, 'columns 1-2 equal to  -1,  -2,  etc.) represents a possible contribution to list 13.   Each line mode which is', /, &
-          5x, "modelled as being frequency-dependent (variable  'ipunch'  of columns 53-54 equal to  -1 )  contributes one entry ", /, &
-          5x, 'to list 13.   Generally this will only be for the zero-sequence mode (the first card of the group), if at all. ')
+4113 format (5x, "Every continuously-transposed distributed-parameter transmission-line component (branch type-code  'itype'  of ", /, 5x, 'columns 1-2 equal to  -1,  -2,  etc.) represents a possible contribution to list 13.   Each line mode which is', /, 5x, "modelled as being frequency-dependent (variable  'ipunch'  of columns 53-54 equal to  -1 )  contributes one entry ", /, 5x, 'to list 13.   Generally this will only be for the zero-sequence mode (the first card of the group), if at all. ')
      go to 4099
 
   case (14)
 4014 write (unit = lunit6, fmt = 4114)
-4114 format (5x, 'Frequency-dependent representation for a mode of a distributed-parameter transmission line is requested by a', /, &
-          5x, "value of  -1  punched in field  'ipunch'  (columns 53-54) of the associated branch card.   Assuming that the", /, &
-          5x, 'reference-branch procedure is not used, the input of weighting functions  a1(t)  and  a2(t)  follows.   The number', /, &
-          5x, 'of points on these input cards is irrelevant, and is in no way related to the size of list 14.   Instead, the ')
+4114 format (5x, 'Frequency-dependent representation for a mode of a distributed-parameter transmission line is requested by a', /, 5x, "value of  -1  punched in field  'ipunch'  (columns 53-54) of the associated branch card.   Assuming that the", /, 5x, 'reference-branch procedure is not used, the input of weighting functions  a1(t)  and  a2(t)  follows.   The number', /, 5x, 'of points on these input cards is irrelevant, and is in no way related to the size of list 14.   Instead, the ')
      write (unit = lunit6, fmt = 4214)
-4214 format (5x, 'list-14 storage depends upon both the time-span of the weighting functions, and also upon the time-step size', /, &
-          5x, "'deltat' ,  as follows.   Let  't1'  be the time span from the nonzero beginning of  a1(t)  (at about one travel", /, &
-          5x, "time) to where its exponential tail begins (typically about two travel times).   also, define  't2'  to be the", /, &
-          5x, 'time at which the exponential tail of  a2(t)  begins (typically about three travel times).   Then the storage')
+4214 format (5x, 'list-14 storage depends upon both the time-span of the weighting functions, and also upon the time-step size', /, 5x, "'deltat' ,  as follows.   Let  't1'  be the time span from the nonzero beginning of  a1(t)  (at about one travel", /, 5x, "time) to where its exponential tail begins (typically about two travel times).   also, define  't2'  to be the", /, 5x, 'time at which the exponential tail of  a2(t)  begins (typically about three travel times).   Then the storage')
      write (unit = lunit6, fmt = 4314)
-4314 format (5x, 'requirement in list 14 is given by the relation  np = (t1 + t2) / deltat  .     Lines which use the', /, &
-          5x, 'reference-branch procedure require no list-14 storage, note. ')
+4314 format (5x, 'requirement in list 14 is given by the relation  np = (t1 + t2) / deltat  .     Lines which use the', /, 5x, 'reference-branch procedure require no list-14 storage, note. ')
      go to 4099
 
   case (15)
@@ -726,9 +611,10 @@ subroutine subr55
      go to 4099
 
   case (16 : 18)
-4016 go to 4012
-4017 go to 4012
-4018 go to 4012
+     !4016 go to 4012
+     !4017 go to 4012
+     !4018 go to 4012
+     call a4012
 
   case (19)
 4019 write (unit = lunit6, fmt = 4119)
@@ -750,10 +636,11 @@ subroutine subr55
      go to 9000
 
   case (20 : 23)
-4020 go to 4012
-4021 go to 4012
-4022 go to 4012
-4023 go to 4012
+     !4020 go to 4012
+     !4021 go to 4012
+     !4022 go to 4012
+     !4023 go to 4012
+     call a4012
 
   case (24)
 4024 n9 = lcomp * lbus / ntot
@@ -767,7 +654,8 @@ subroutine subr55
      go to 4099
 
   case (25)
-4025 go to 4012
+     !4025 go to 4012
+     call a4012
 
   case (26)
 4026 if (lstat(13) .eq. 0) go to 4226
@@ -780,33 +668,23 @@ subroutine subr55
      go to 4099
 
   case (27 : 29)
-4027 go to 4012
-4028 go to 4012
-4029 go to 4012
+     !4027 go to 4012
+     !4028 go to 4012
+     !4029 go to 4012
+     call a4012
   end select
 
-!  go to (4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019, &
-!       4020, 4021, 4022, 4023, 4024, 4025, 4026, 4027, 4028, 4029), n1
+  !  go to (4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019, &
+  !       4020, 4021, 4022, 4023, 4024, 4025, 4026, 4027, 4028, 4029), n1
 
 4499 write (unit = lunit6, fmt = 4199)
-4199 format (5x, 'Both network node-renumbering (transient and also steady-state) and the steady-state phasor solution make use', /, &
-          5x, 'of three very large arrays which overlay most of the labeled-common storage space (the data of which is preserved', /, &
-          5x, 'on logical 4 during these calculations).   This is a dynamically-dimensioned table, then, which is sized to use', /, &
-          5x, 'all available space (perhaps 2/3 of labeled common).   In particular, this working area includes all of the ')
+4199 format (5x, 'Both network node-renumbering (transient and also steady-state) and the steady-state phasor solution make use', /, 5x, 'of three very large arrays which overlay most of the labeled-common storage space (the data of which is preserved', /, 5x, 'on logical 4 during these calculations).   This is a dynamically-dimensioned table, then, which is sized to use', /, 5x, 'all available space (perhaps 2/3 of labeled common).   In particular, this working area includes all of the ')
   write (unit = lunit6, fmt = 4299)
-4299 format (5x, 'generally-large storage for lists 5 and 8.   Increasing the dimensions of either of these two lists will directly', /, &
-          5x, '(and without any loss) increase the size of list 99.   It might be mentioned that the steady-state phasor', /, &
-          5x, 'manipulations (renumbering, solution) will almost always provide the limiting difficulty.   This is because', /, &
-          5x, 'sparsity of the steady-state phasor network is generally worse than for the time-step-loop network, due to the ')
+4299 format (5x, 'generally-large storage for lists 5 and 8.   Increasing the dimensions of either of these two lists will directly', /, 5x, '(and without any loss) increase the size of list 99.   It might be mentioned that the steady-state phasor', /, 5x, 'manipulations (renumbering, solution) will almost always provide the limiting difficulty.   This is because', /, 5x, 'sparsity of the steady-state phasor network is generally worse than for the time-step-loop network, due to the ')
   write (unit = lunit6, fmt = 4399)
-4399 format (5x, 'difference in treatment of distributed-parameter lines.   For steady-state solution, equivalent branches', /, &
-          5x, "interconnect every terminal node of the line, while the two ends are disconnected by Bergeron's method for the" , /, &
-          5x, 'time-step-loop network.   double-circuit (6-conductor) lines are particularly nasty in the steady-state, then,', /, &
-          5x, 'having 12 terminal nodes which are all interconnected by equivalent branches. ')
+4399 format (5x, 'difference in treatment of distributed-parameter lines.   For steady-state solution, equivalent branches', /, 5x, "interconnect every terminal node of the line, while the two ends are disconnected by Bergeron's method for the" , /, 5x, 'time-step-loop network.   double-circuit (6-conductor) lines are particularly nasty in the steady-state, then,', /, 5x, 'having 12 terminal nodes which are all interconnected by equivalent branches. ')
 4099 write (unit = lunit6, fmt = 4098)
-4098 format (/, ' in order to effectively trade memory space among the different tables, one must know how many arrays there', /, &
-          ' are in each table (effectively).   The following tabulation shows the effective multiplicity associated with each', /, &
-          ' independent list ----- those lists whose lengths are under user  control by means of EMTP variable dimensioning. ')
+4098 format (/, ' in order to effectively trade memory space among the different tables, one must know how many arrays there', /, ' are in each table (effectively).   The following tabulation shows the effective multiplicity associated with each', /, ' independent list ----- those lists whose lengths are under user  control by means of EMTP variable dimensioning. ')
   write (unit = lunit6, fmt = 4096)
 4096 format (5x, '-------------1----------------------------------------------------------------------------------------------------')
   write (unit = lunit6, fmt = 4095) (i, i = 1, 25)
@@ -815,22 +693,20 @@ subroutine subr55
   write (unit = lunit6, fmt = 4093)
 4093 format (5x, 'loating pt. 1   6   5   3   6   1  12   2   2   8   3   1   4   8   1   2   2   0   6   1   1  24   2   1   #   *   1 ')
   write (unit = lunit6, fmt = 4097)
-4097 format (5x, 'Integer      1   4   7   0   2   1  10   0   0  11   0   3   0   4   0   0   1  10   2   0   0   0   0   0   0   0', /, &
-          5x, 'total        1  10  12   3   8   2  22   2   2  19   3   4   4  12   1   2   1  16   3   1  24   2   1   #   *   1 ')
+4097 format (5x, 'Integer      1   4   7   0   2   1  10   0   0  11   0   3   0   4   0   0   1  10   2   0   0   0   0   0   0   0', /, 5x, 'total        1  10  12   3   8   2  22   2   2  19   3   4   4  12   1   2   1  16   3   1  24   2   1   #   *   1 ')
   write (unit = lunit6, fmt = 4096)
   write (unit = lunit6, fmt = 4091)
-4091 format (3x,  '# --- used only for virtual machines (Burroughs, Prime, VAX, Apollo, etc.)   others can ignore this list.', /, &
-          3x, '* --- rather than count list 24 itself, add the value to the floating-point and total counts for lists 1 and 6. ')
+4091 format (3x,  '# --- used only for virtual machines (Burroughs, Prime, VAX, Apollo, etc.)   others can ignore this list.', /, 3x, '* --- rather than count list 24 itself, add the value to the floating-point and total counts for lists 1 and 6. ')
 4092 write (unit = lunit6, fmt = 5315)
 5315 format (' ')
   write (unit = lunit6, fmt = 5314)
 5314 format (25x, "Caution.   Be skeptical of above  'present figure'  entries, due to abnormal termination of case. ")
   write (unit = lunit6, fmt = 5316)
-5316 format (' ----------------------------------------------------------------------------------------------------------------------------------- ')
+5316 format (1x, 132('-'))
   do  i = 1, 2
 6512 write (unit = lunit6, fmt = 5320)
   end do
-5320 format (' error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error/error ')
+5320 format (1x, 22(' error/'))
   write (unit = lunit6, fmt = 5316)
   if (kilsav .eq. 92) go to 6767
   !     lunit5 = mtape
@@ -847,16 +723,16 @@ subroutine subr55
   call freone (d1)
   nright = 0
   if (nfrfld .ne. 1) go to 6743
-  if (texta6(1) .eq. text5) go to 6754
-  if (texta6(1) .eq. text13) go to 6764
+  if (to_lower (texta6(1)) .eq. text5) go to 6754
+  if (to_lower (texta6(1)) .eq. text13) go to 6764
   if (texta6(1) .eq. text19) go to 6771
 6743 if (nfrfld .ne. 4) go to 6770
-  if (texta6(4) .ne. text4) go to 6770
-  if (texta6(3) .ne. text3) go to 6770
-  if (texta6(2) .ne. text2) go to 6760
-  if (texta6(1) .ne. text1) go to 6760
+  if (to_lower (texta6(4)) .ne. text4) go to 6770
+  if (to_lower (texta6(3)) .ne. text3) go to 6770
+  if (to_lower (texta6(2)) .ne. text2) go to 6760
+  if (to_lower (texta6(1)) .ne. text1) go to 6760
 6754 write (unit = kunit6, fmt = 6755)
-6755 format ('+marker card preceding new data case.')
+6755 format ('+Marker card preceding new data case.')
   call interp
   if (n6 .lt. 5) go to 6758
   n6 = n6 - 4
@@ -868,10 +744,10 @@ subroutine subr55
   nchain = 1
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568) 4568
   go to 9000
-6760 if (texta6(2) .ne. text12) go to 6770
-  if (texta6(1) .ne. text11) go to 6770
+6760 if (to_lower (texta6(2)) .ne. text12) go to 6770
+  if (to_lower (texta6(1)) .ne. text11) go to 6770
 6764 write (unit = kunit6, fmt = 6765)
-6765 format ('+marker card following last data case.')
+6765 format ('+Marker card following last data case.')
   call interp
 6767 kill = 9999
   lastov = nchain
@@ -879,15 +755,15 @@ subroutine subr55
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568) kill
   go to 9000
 6770 if (nfrfld .ne. 5) go to 6773
-  if (texta6(1) .ne. text14) go to 6773
-  if (texta6(2) .ne. text15) go to 6773
-  if (texta6(3) .ne. text16) go to 6773
-  if (texta6(4) .ne. text17) go to 6773
-  if (texta6(5) .ne. text18) go to 6773
+  if (to_lower (texta6(1)) .ne. text14) go to 6773
+  if (to_lower (texta6(2)) .ne. text15) go to 6773
+  if (to_lower (texta6(3)) .ne. text16) go to 6773
+  if (to_lower (texta6(4)) .ne. text17) go to 6773
+  if (to_lower (texta6(5)) .ne. text18) go to 6773
 6771 if (nenerg .eq. 0) go to 6773
   if (knt .le. 1) go to 6773
   write (unit = kunit6, fmt = 6772)
-6772 format ('+request for statistics salvage.')
+6772 format ('+Request for statistics salvage.')
   call interp
   if (jflsos .gt. 0) go to 6773
   d7 = -9999.
@@ -906,7 +782,7 @@ subroutine subr55
   if (n1 .lt. 0) iprsup = 9
   !     find random integer  'n1'  between zero and 999.
   call runtym (d11, d12)
-  seed = seedy(tclock(1)) + 1000. * (d11 + d12)
+  seed = seedy (tclock(1)) + 1000. * (d11 + d12)
   n13 = alog1z (seed) + epsiln
   n13 = n13 - 2
   seed = seed / 10. ** n13
@@ -923,7 +799,7 @@ subroutine subr55
   call statsv
   go to 6740
 6773 if (noutpr .eq. 0) write (unit = kunit6, fmt = 6775)
-6775 format ('+card ignored in search for new-case beginning.')
+6775 format ('+Card ignored in search for new-case beginning.')
   n6 = n6 + 1
   if (n6 .lt. 5) go to 6769
   if (noutpr .eq. 1) go to 6769
@@ -940,7 +816,6 @@ end subroutine subr55
 
 subroutine statsv
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   return
 end subroutine statsv
 

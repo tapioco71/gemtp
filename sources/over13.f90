@@ -10,7 +10,6 @@
 
 subroutine over13
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   include 'blkcom.ftn'
   include 'labcom.ftn'
   dimension cblhst(1)

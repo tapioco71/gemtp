@@ -1,7 +1,7 @@
 !-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 
 !
-! file: over10.f90
+! file over10.f90
 !
 
 !
@@ -9,14 +9,14 @@
 !
 
 subroutine over10
+  use blkcom
+  use labcom
+  use space2
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'space2.ftn'
   dimension itemp(1)
   equivalence (itemp(1), voltk(1))
   character(8) :: fxtem1
+  !
   locatn(i, j) = (j * j - j) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 2941) ntot, ioffd, loopss(2)
 2941 format (' Top of "over10".   ntot, ioffd, loopss(2) =', 2i8)
@@ -1275,12 +1275,12 @@ end subroutine fxsour
 !
 
 subroutine sseqiv (ikf, isfd, omegal, omegac)
+  use blkcom
+  use labcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
   dimension ur(2), ui(2)
   equivalence (volti(1), ur(1)), (voltk(1), ui(1))
+  !
   !     this routine produces a s.s. equivalent of the branches.this
   !     equivalent is inserted into the tr and tx tables *   *   *   *   *
   idk = 2 * ikf

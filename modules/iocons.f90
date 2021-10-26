@@ -1,16 +1,15 @@
 !-*- Mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 
 !
-! file io.f90
+! file iocons.f90
 !
 
-module io
-  integer(4) gfortran_stderr_unit, gfortran_stdin_unit, gfortran_stdout_unit
-  common /iospace/ gfortran_stderr_unit
-  common /iospace/ gfortran_stdin_unit
-  common /iospace/ gfortran_stdout_unit
-end module io
+module iocons
+  integer(4), parameter :: gfortran_stderr_unit = 0
+  integer(4), parameter :: gfortran_stdin_unit = 5
+  integer(4), parameter :: gfortran_stdout_unit = 6
+end module iocons
 
 !
-! end of file io.f90
+! end of file iocons.f90
 !

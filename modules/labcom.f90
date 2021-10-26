@@ -6,7 +6,6 @@
 
 module labcom
   use blkcom
-  implicit none
   common /c0b001/   x     (   10000 )
   real(8) :: x
   common /c0b002/   ykm   (   20000 )
@@ -259,30 +258,34 @@ module labcom
   real(8) :: volt
   common /c0b126/   bus   (   93002 )
   character(8) :: bus
-  ! Equivalences friend zone:
-  ! from main10
-  integer(4) :: integx(1)
-  equivalence (x(1), integx(1))
-  ! from over1
-  real(8) :: r4(1)
-  equivalence (r4(1), volti(1))
-  ! from over14
-  real(8) :: cblhst(1)
-  equivalence (cnvhst(1), cblhst(1))
-  ! from over16
-  integer(4) :: infdli(1), ispum(1), kindep(1), ksing(1), massex(1), nsubkm(1)
-  real(8) :: fold(1), volta(1), vsmout(1), wk1(1), xx(1)
-  equivalence (xk(1), xx(1))
-  equivalence (spum(1), ispum(1))
-  equivalence (kknonl(1), nsubkm(1))
-  equivalence (semaux(1), wk1(1))
-  equivalence (namebr(1), infdli(1))
-  equivalence (ismout(1), vsmout(1))
-  equivalence (histq(1), massex(1))
-  equivalence (volti(1), volta(1))
-  equivalence (ksing(1), cchar(1))
-  equivalence (kindep(1), gslope(1))
-  equivalence (fold(1), vchar(1))
+  integer(4) :: integx( 1)
+  integer(4) :: infdli( 1)
+  integer(4) :: ispum( 1)
+  integer(4) :: kindep( 1)
+  integer(4) :: ksing( 1)
+  integer(4) :: massex( 1)
+  integer(4) :: nsubkm( 1)
+  real(8) :: fold( 1)
+  real(8) :: volta( 1)
+  real(8) :: vsmout( 1)
+  real(8) :: wk1( 1)
+  real(8) :: xx( 1)
+  real(8) :: r4( 1)
+  real(8) :: cblhst( 1)
+  equivalence (xk( 1), xx( 1))
+  equivalence (spum( 1), ispum( 1))
+  equivalence (kknonl( 1), nsubkm( 1))
+  equivalence (semaux( 1), wk1( 1))
+  equivalence (namebr( 1), infdli( 1))
+  equivalence (ismout( 1), vsmout( 1))
+  equivalence (histq( 1), massex( 1))
+  equivalence (volti( 1), volta( 1))
+  equivalence (ksing( 1), cchar( 1))
+  equivalence (kindep( 1), gslope( 1))
+  equivalence (fold( 1), vchar( 1))
+  equivalence (r4( 1), volti( 1))
+  equivalence (cnvhst( 1), cblhst( 1))
+  equivalence (x( 1), integx( 1))
 end module labcom
 
 !

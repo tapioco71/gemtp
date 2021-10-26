@@ -12,44 +12,47 @@ module dekplt
   use dekspy
   implicit none
   integer(4) :: ibaud, ibrnch, ibsout, ichend, ichref, icp, icurse, ihs, inchpx
-  integer(4) :: inchpy, ind1, indexp, inwait, iprsrt, iterm, ivcom, izgr1, izgr2, izid
+  integer(4) :: inchpy, ind1, indexp, inwait, iprsrt, iterm, ivcom(60), izgr1, izgr2, izid
   integer(4) :: iztit, izxax, izyax
   integer(4) :: jbegbc, jbegbv, jbrnch, jchan, jhmsp, jplt, jplt1
-  integer(4) :: kextr, kill, killpl, klevl, kp, kptplt, kstart
+  integer(4) :: kextr, kill, killpl, klevl, kp(20), kptplt, kstart(20)
 !  integer(4) :: l, linpr
-  integer(4) :: l4plot, labrtm, lchfil, lchid, lchlim, lchsup, lchtit, lchxax
+  integer(4) :: l4plot, labrtm(20), lchfil, lchid, lchlim, lchsup, lchtit, lchxax
   integer(4) :: lchyax, ldshg1, ldshg2, limcol, limfix, look, lsymb, ltic
   integer(4) :: lu7plt, linepr, ltek
-  integer(4) :: maxev, maxew, maxip, maxisx, maxisy, maxsym, mcurve, mfake, mgrid1
-  integer(4) :: mgrid2, mid, mlevel, mline, mmm, mplot, mstart, msuper, msymbt, mtit
+  integer(4) :: maxev, maxew, maxip, maxisx, maxisy, maxsym, mcurve(20), mfake, mgrid1
+  integer(4) :: mgrid2, mid, mlevel(20), mline, mmm(20), mplot(20), mstart(20)
+  integer(4) :: msuper, msymbt(20), mtit
   integer(4) :: mu6sav, mu6std, mxypl
   integer(4) :: namvar, nc, nchsup, nchver, ncut, ncut1, ncut2, newfil, nolabl, nsmplt
 !  integer(4) :: numbco
-  integer(4) :: nt2, numbrn, numflt, numnvo, numout, numpts, numraw, numtek
+  integer(4) :: nt2, numbrn, numflt, numnvo, numout, numpts(20), numraw, numtek
   integer(4) :: numtit, nv, nxend, nxid6, nxinch, nxmax, nxoff, nxvern, nyend, nyid6
   integer(4) :: nyinch, nymax, nyoff
-  real(8) :: aaa, bbb, bx, datepl, dx, dxgrd1, dxgrd2, dy, dygrd1, dygrd2, dyold
-  real(8) :: ev, evnbyt, ew
+  real(8) :: aaa(20), bbb(20), bx(150), datepl(2), dx, dxgrd1, dxgrd2, dy, dygrd1
+  real(8) :: dygrd2, dyold(20)
+  real(8) :: ev(15000), evnbyt, ew(15000)
   real(8) :: fact, fhtax, fill, fill1, fill2, finfin, fline, fsymb, ftcarr, fvaxtt
-  real(8) :: fvcom, fxid, fxnumh, fxnumv, fxref, fxsup, fxtit, fxvert, fyid, fyref
+  real(8) :: fvcom(50), fxid, fxnumh, fxnumv, fxref(25), fxsup, fxtit, fxvert, fyid, fyref(25)
   real(8) :: fysup, fytit
   real(8) :: gxmax, gxmin
   real(8) :: ha, hmax, hmin, hpi, htax
   real(8) :: paplim, papmax
   real(8) :: sizid, sizsup, siztit
-  real(8) :: taxisl, tclopl, timbeg, timend, tmult, tolrce, tstep, ttlev, ttmax, ttmin
+  real(8) :: taxisl, tclopl(2), timbeg, timend, tmult, tolrce, tstep, ttlev(20)
+  real(8) :: ttmax(20), ttmin(20)
   real(8) :: vaxisl, vh, vl, vmax, vmaxr, vmin, vminr, vs
   real(8) :: xid, xsuper, xtit
-  real(8) :: yid, ylevel, ysuper, ytit, yymax, yymin
-  character bbus, buslst(1000)
-  common /cblock/ datepl(2), tclopl(2), bbus(300)
-  common /cblock/ tmult, dy, dx, hpi, tstep, gxmin, gxmax
-  common /cblock/ ew(15000), finfin, fill, fvcom(50)
-  common /cblock/ yymin(20), yymax(20), ttmin(20), ttmax(20)
-  common /cblock/ ylevel(20), ttlev(20), dyold(20), mlevel(20)
-  common /cblock/ aaa(20), bbb(20), kp(20), fxref(25), fyref(25)
+  real(8) :: yid, ylevel(20), ysuper, ytit, yymax(20), yymin(20)
+  character :: bbus(300), buslst(1000)
+  !  common /cblock/ datepl(2), tclopl(2), bbus(300)
+  !  common /cblock/ tmult, dy, dx, hpi, tstep, gxmin, gxmax
+  !  common /cblock/ ew(15000), finfin, fill, fvcom(50)
+  !  common /cblock/ yymin(20), yymax(20), ttmin(20), ttmax(20)
+  !  common /cblock/ ylevel(20), ttlev(20), dyold(20), mlevel(20)
+  !  common /cblock/ aaa(20), bbb(20), kp(20), fxref(25), fyref(25)
   !     evnbyt puts buslst on real*8 byte boundary (ibm level 4 error):
-  common /cblock/  evnbyt, ev(15000), bx(150), vminr, vmaxr
+  !  common /cblock/  evnbyt, ev(15000), bx(150), vminr, vmaxr
   dimension  ibsout(1), ibrnch(1), jbrnch(1)
   equivalence  ( ev(   1), buslst(1) ),  ( ev(1001), ibsout(1) )
   equivalence  ( ev(1301), ibrnch(1) ),  ( ev(1601), jbrnch(1) )
@@ -76,17 +79,17 @@ module dekplt
   equivalence  ( fvcom(41), fxnumv ),  ( fvcom(42), fxnumh )
   equivalence  ( fvcom(43), fvaxtt ),  ( fvcom(44), fxvert )
   equivalence  ( fvcom(45), fsymb  ),  ( fvcom(46), paplim )
-  common /cblock/ mmm(20), mstart(20), numpts(20), killpl
-  common /cblock/ kstart(20)
-  common /cblock/ mplot(20), jhmsp, jchan, labrtm(20)
-  common /cblock/ jplt, icp, icurse, mxypl, indexp, ind1
-  common /cblock/ numflt, ncut, numtek, newfil, mu6sav
-  common /cblock/ mcurve(20), namvar, mfake, numraw
-  common /cblock/ nchsup, nchver, maxev, kptplt
-  common /cblock/ numnvo, nv, nc, numbrn, numout
-  common /cblock/ jplt1, jbegbv, jbegbc, limfix, nt2
-  common /cblock/ maxew,   maxip, msymbt(20)
-  common /cblock/ l4plot, ivcom(60)
+  !  common /cblock/ mmm(20), mstart(20), numpts(20), killpl
+  !  common /cblock/ kstart(20)
+  !  common /cblock/ mplot(20), jhmsp, jchan, labrtm(20)
+  !  common /cblock/ jplt, icp, icurse, mxypl, indexp, ind1
+  !  common /cblock/ numflt, ncut, numtek, newfil, mu6sav
+  !  common /cblock/ mcurve(20), namvar, mfake, numraw
+  !  common /cblock/ nchsup, nchver, maxev, kptplt
+  !  common /cblock/ numnvo, nv, nc, numbrn, numout
+  !  common /cblock/ jplt1, jbegbv, jbegbc, limfix, nt2
+  !  common /cblock/ maxew,   maxip, msymbt(20)
+  !  common /cblock/ l4plot, ivcom(60)
   equivalence  ( ivcom( 1),  klevl ),  ( ivcom( 2),  kextr )
   equivalence  ( ivcom( 3),    ihs ),  ( ivcom( 4), lu7plt )
   equivalence  ( ivcom( 5), iprsrt ),  ( ivcom( 6), limcol )
@@ -117,13 +120,13 @@ module dekplt
   equivalence  ( ivcom(55), inwait ),  ( ivcom(56), nolabl )
   equivalence  ( ivcom(57), lchfil ),  ( ivcom(58), lchlim )
   equivalence  ( ivcom(59), mu6std )
-  character(80) filnam, alpha, buffin, vertl, headl, sext
+  character(80) filnam, alpha, buffin, vertl, headl, sext(6)
 !  character(30) file30
-  character(24) xytitl, horzl
+  character(24) xytitl, horzl(8)
   character(8) textd1, textd2
   character(8) curren, voltag, brclas !, char20
-  character(8) slot1, date, time
-  character(8) ibuff,  ansi, abuf77, anplt
+  character(8) slot1(20), date, time
+  character(8) ibuff(20),  ansi, abuf77(10), anplt(60)
 !       next type key character key words in common, in order:
   character(8) choice,   stop,  purge,    out,   help
   character(8) smooth,   size,   show, linezz,   photo
@@ -135,11 +138,11 @@ module dekplt
   character(8) messag,    end, timesp,  label, timeun
   character(8) cursor, xyplot,  slope,   back, refile
   character(8) texblk, setdat, texfnt
-  common /pltans/ abuf77(10), ansi, ibuff(20), texfnt
-  common /pltans/ sext(6), headl, vertl, buffin
-  common /pltans/ slot1(20), horzl(8), date, time
-  common /pltans/ textd1, textd2, curren, voltag, brclas
-  common /pltans/ filnam, alpha, xytitl, anplt(60)
+  !  common /pltans/ abuf77(10), ansi, ibuff(20), texfnt
+  !  common /pltans/ sext(6), headl, vertl, buffin
+  !  common /pltans/ slot1(20), horzl(8), date, time
+  !  common /pltans/ textd1, textd2, curren, voltag, brclas
+  !  common /pltans/ filnam, alpha, xytitl, anplt(60)
   equivalence ( anplt( 1), choice ),  ( anplt( 2),   stop )
   equivalence ( anplt( 3),  purge ),  ( anplt( 4),    out )
   equivalence ( anplt( 5),   help ),  ( anplt( 6), smooth )
@@ -344,7 +347,6 @@ module dekplt
    data  mid      /  3  /
    data  mline    /  3  /
    data  killpl   /  0  /
-
 end module dekplt
 
 !

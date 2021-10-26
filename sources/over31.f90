@@ -12,8 +12,9 @@ subroutine subr31
   use blkcom
   use deck31
   use tracom
+  use bcdtim
+  use movcop
   implicit none
-  !  include  'blkcom.ftn'
   !     flag-1.   begin class-1  /blank/  variables
   !     flag-2.   begin class-2  /blank/  variables
   !               (floating-point numeric usage only, with scalars
@@ -21,7 +22,6 @@ subroutine subr31
   !     flag-3.   begin class-3  /blank/  variables
   !               (integer-numeric usage only, with arrays
   !                preceding scalars).
-  !  include 'deck31.ftn'
   integer(4) :: i, ialf, ib, ibase, icp, iend, ihs, il, indx, intd8
   integer(4) :: intd9, iofbus, iofibr, iofjbr, iovfl, ip1, ipl, ipl1, ipl2, ipontr
   integer(4) :: istore, isww, iswx, itimes, itp
@@ -61,7 +61,7 @@ subroutine subr31
   !     declaration2   long1, long2, long3, jhmsp
   !     declaration2   mmmin1, mm0, mm1, mm2, mm3, mm4, mm6
   !     declaration2   mm7, mm8, mm9, mm11, mm13
-  common /ldec31/  kalcom
+  !  common /ldec31/  kalcom
   !  dimension array(1), evdoub(1)
   dimension intd8(150), intd9(150),  bxsing(150)
   dimension arch10(2), mulplt(5), blanka(1), busvec(6)
@@ -81,6 +81,7 @@ subroutine subr31
   !  equivalence (karray(1), array(1), ev(1), buslst(1), evdoub(1), ibsout(1), ibrnch(1), jbrnch(1))
   !  equivalence (busvec(1), bus1)
   !  equivalence (moncar(2), kbase)
+  !
   data text1      / 'print ' /
   data text2      / 'head o' /
   data text3      / 'n     ' /
@@ -426,7 +427,8 @@ subroutine subr31
   write (unit = kunit6, fmt = 1155)
 1155 format ('+Plot case-title text.')
   go to 1050
-1160 call copya ( blank, slot(1), mm8 )
+  !1160 call copya ( blank, slot(1), mm8 )
+1160 call copy (blank, slot(1 :), mm8)
   jslot = 3
   if (kolbeg .gt. 0) go to 7402
   read (unit = abuff, fmt = 1180) itp, icp, ihs, hpi, hmin, hmax, vmin, vmax, (slot(j), j = 1, 4), bus1, bus2, bus3, bus4, bus5, bus6
@@ -846,7 +848,8 @@ subroutine subr31
 2117 format (/, ' before read of plot points.       k    jplt      n9  maxevk', /, 28x, 4i8, /, &
        "'", 'mplot', "'",  'vector follows.', 16i5)
   ndx1 = 2 * linlim
-  call mover0 ( ev(1), ndx1 )
+  !  call mover0 ( ev(1), ndx1 )
+  call move0 (ev(1 :), ndx1)
 2115 if ( m4plot  .eq.  0 )   go to 2102
   read (unit = lunit4) tsing, (bxsing(j), j = 1, k)
   tstep = tsing

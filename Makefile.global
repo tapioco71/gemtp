@@ -83,24 +83,25 @@ FORTRAN_FLAGS=	-O0			\
 		-frepack-arrays		\
 		-c
 
-F90_FLAGS=	-O0				\
-		-Wall				\
-		-std=gnu			\
-		-fall-intrinsics		\
-		-fno-align-commons		\
-		-fcheck=all			\
+#F90_FLAGS=	-O0				\
+#		-Wall				\
+#		-std=gnu			\
+#		-fcheck=all			\
+#		-finit-local-zero		\
+#		-freorder-blocks		\
+#		-frepack-arrays			\
+#		-cpp				\
+
+F90_FLAGS=	-cpp				\
 		-ffree-form			\
-		-fdollar-ok			\
 		-ffree-line-length-0		\
-		-finit-local-zero		\
-		-freorder-blocks		\
-		-frepack-arrays			\
-		-fmax-stack-var-size=32768	\
-		-cpp				\
+		-fcheck=all			\
 		-J${COMPILER}			\
 		-DWITH_MAIN10			\
 		-DWITH_OVER1			\
 		-DWITH_OVER20			\
+		-DWITH_OVER51			\
+		-DWITH_OVER55			\
 		-c
 
 # objdump most common flags.
@@ -221,19 +222,11 @@ ${COMPILER}/%:
 		echo ${FORTRAN}	-Wl,--start-group			\
 				${LD_FLAGS} 				\
 				-o ${@} $(filter %.o %.a, ${^})		\
-				'${LIBGCC}'				\
-				'${LIBGFORTRAN}'			\
-				'${LIBC}'				\
-				'${LIBM}'				\
 				-Wl,--end-group;			\
 	fi
 	@${FORTRAN} -Wl,--start-group					\
 		${LD_FLAGS} 						\
 		-o ${@} $(filter %.o %.a, ${^})				\
-		'${LIBGCC}'						\
-		'${LIBGFORTRAN}'					\
-		'${LIBC}'						\
-		'${LIBM}'						\
 		 -Wl,--end-group
 
 # Rule to create a .lst file.

@@ -10,36 +10,33 @@
 
 subroutine xpr2
   use tacsto
+  use random
   implicit none
-  !  include 'tacsto.ftn'
-  real(8) :: randnm
   !
-  sptr=sptr-1
-  if(sptr.eq.iptr) go to 910
-  isto(sptr)=from
-  from=0
-  go to (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, &
-       9020, 9021, 9022, 9023, 9024, 9025, 9026, 9027, 9028, 9029, 9030, 9031, 9032, 9033, 9034, 9035, 9036, 9037), to-8999
+  sptr = sptr - 1
+  if (sptr .eq. iptr) go to 910
+  isto(sptr) = from
+  from = 0
+  go to (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9020, 9021, 9022, 9023, 9024, 9025, 9026, 9027, 9028, 9029, 9030, 9031, 9032, 9033, 9034, 9035, 9036, 9037), to-8999
   stop 'invalid "to" reference in "xpr2".'
 9500 if(.not.(from.eq.0)) go to 0001
-  from=isto(sptr)
-  sptr=sptr+1
+  from = isto(sptr)
+  sptr = sptr + 1
   return
- 0001 go to (9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 9511, 9512, 9513, 9514, 9515, 9516, 9517, 9518, 9519, &
-           9520, 9521, 9522, 9523, 9524, 9525, 9526, 9527, 9528, 9529), from-9500
+ 0001 go to (9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 9511, 9512, 9513, 9514, 9515, 9516, 9517, 9518, 9519, 9520, 9521, 9522, 9523, 9524, 9525, 9526, 9527, 9528, 9529), from-9500
   stop 'invalid "from" reference in "xpr2".'
-910 stpflg=42
-  stpi1=iptr
-  stpi2=ilen-iptr
+910 stpflg = 42
+  stpi1 = iptr
+  stpi2 = ilen - iptr
   continue
   call errstp
-930 stpflg=44
-  stpi1=rptr
-  stpi2=rlen-rptr
+930 stpflg = 44
+  stpi1 = rptr
+  stpi2 = rlen - rptr
   continue
   call errstp
 9000 continue
-  rptr=rptr-xprcnt
+  rptr = rptr - xprcnt
   k=ndx6-ndx4+1
   if(.not.(k.lt.1)) go to 5001
   stpflg=29
