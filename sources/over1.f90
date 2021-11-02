@@ -4,28 +4,35 @@
 ! file over1.f90
 !
 
+module komthl
+  implicit none
+  real(8) :: pekexp
+end module komthl
+
 !
 ! subroutine over1.
 !
 
 subroutine over1
+  use comlock
   use blkcom
   use labcom
-  use umdeck
-  use labl02
+  use umcom
+  use com2
   use dekspy
   use indcom
   use iocons
   use bcdtim
   use bcddat
   use movcop
+  use strcom
   implicit none
   !     %include  '//c/tsu/cables.ins.ftn'
   !     To avoid "insert deck tacsar" here, use small part of it:
   integer(4) :: i, iadqq, ijk, ios, ip, iswent, iy, j
   integer(4) :: k, kswpe4
   integer(4) :: ll1, ll6, ll8, ll11, ll20, ll24, ll25, ll30, ll40, ll60, ll64, ll80
-  integer(4) :: locker(2), lstacs(8), lu2, lu6, lunt77
+  integer(4) :: lstacs(8), lu2, lu6, lunt77
   integer(4) :: n5, n6, n7, n8, n9, n12, n14, n15, n18, n19, n23, nfdbr, nfdhst, nfdph
   integer(4) :: nfdpol, ngroup, niunrs, nk, ntlin, nturn, num888, numnam
   integer(4) :: numbco, numbrn
@@ -46,7 +53,6 @@ subroutine over1
   !  equivalence (iprsov(39), nmauto)
   !  dimension aupper(14)
   !  dimension lstacs(8)
-  !  common /comlock/ locker(2)
   !
   !     default list sizes for tacs proportioning of emtp list 19.
   data text2 / 'name  ' /
@@ -287,8 +293,7 @@ subroutine over1
   go to 15
 6452 write (unit = lunit6, fmt = 83044) locker
 83044 format (' Associated user documentation is the 864-page EMTP rule book dated  June, 1984.   Version M43.   Vardim time/date =', 2i7)
-  write (unit = lunit6, fmt = 5241) ltlabl, lbus, lbrnch, ldata, lexct, lymat, lswtch, lsize7, lpast, lnonl, lchar, lsmout, &
-       lsiz12, lfdep, lwt, ltails, limass, lsyn, maxpe, ltacst, lfsem, lfd, lhist, lsiz23, lcomp, lspcum, lsiz26, lsiz27, lsiz28
+  write (unit = lunit6, fmt = 5241) ltlabl, lbus, lbrnch, ldata, lexct, lymat, lswtch, lsize7, lpast, lnonl, lchar, lsmout, lsiz12, lfdep, lwt, ltails, limass, lsyn, maxpe, ltacst, lfsem, lfd, lhist, lsiz23, lcomp, lspcum, lsiz26, lsiz27, lsiz28
 5241 format (' Independent list limits follow. Total length of /label/  equals ', i8, '  integer words.', 3x, 6i6, /, (1x, 21i6, i5))
   write (unit = lunit6, fmt = 83049)
   write (unit = lunit6, fmt = 83047) (i, i = 1, 8)
@@ -516,8 +521,8 @@ subroutine over1
   go to 15
   !     begin processing floating point misc. data card ....
 2843 if (noutpr .ne. 0 .and. iprsup .gt. 0) noutpr = 0
-  xopt(1) = statfr
-  copt(1) = statfr
+  xopt = statfr
+  copt = statfr
   kolbeg = n9
   if (kolbeg .gt. 0) go to 4201
   call expchk (ll1, ll80, ll8)
@@ -540,7 +545,7 @@ subroutine over1
 4205 format ('+Misc. data.', 3e12.3)
   if (iofbnd .ne. 33666) go to 4206
   nchain = 41
-  xopt(1) = d1
+  xopt = d1
   go to 9800
   !     read input card using cimage.
 4206 call cimage
@@ -614,18 +619,14 @@ subroutine over1
   nchain = 29
   go to 9800
 600 if (d1 .eq. 0.0) go to 6260
-  if (d1 .eq. xopt(1)) go to 6260
-  if (noutpr .eq. 0) write (unit = lunit6, fmt = 6255) xopt(1), d1
-6255 format (' ----- Warning. Nonzero misc. data  parameter "xopt" differs from the  power frequency of ', f8.2, ' . This is unusual.', /, &
-       7x, 'A value of ', e13.4, ' was read from columns 17-24 of the data card just read. Execution will continue using', /, &
-       7x, 'this value, as suspicious as it seems to the EMTP.')
-6260 xopt(1) = d1
+  if (d1 .eq. xopt) go to 6260
+  if (noutpr .eq. 0) write (unit = lunit6, fmt = 6255) xopt, d1
+6255 format (' ----- Warning. Nonzero misc. data  parameter "xopt" differs from the  power frequency of ', f8.2, ' . This is unusual.', /, 7x, 'A value of ', e13.4, ' was read from columns 17-24 of the data card just read. Execution will continue using', /, 7x, 'this value, as suspicious as it seems to the EMTP.')
+6260 xopt = d1
   if (d2 .eq. 0.0) go to 6265
-  if (d2 .eq. copt(1)) go to 6265
+  if (d2 .eq. copt) go to 6265
   if (noutpr .eq. 0) write (unit = lunit6, fmt = 6256) copt, d2
-6256 format (' ----- Warning. Nonzero misc. data parameter "copt" differs from the power frequency of', f8.2, &
-       ' .   This is unusual.', /, 7x,  'A value of', e13.4, ' was read from columns 25-32 of the data card just read.   Execution will continue using', /, &
-       7x, 'this value, as suspicious as it seems to the EMTP.')
+6256 format (' ----- Warning. Nonzero misc. data parameter "copt" differs from the power frequency of', f8.2, ' .   This is unusual.', /, 7x,  'A value of', e13.4, ' was read from columns 25-32 of the data card just read.   Execution will continue using', /, 7x, 'this value, as suspicious as it seems to the EMTP.')
 6265 copt = d2
   if (d3 .gt. 0.0) epsiln = d3
   if (tolmat .le. 0.0) tolmat = epsiln
@@ -684,7 +685,7 @@ subroutine over1
   if (ktref .ne. -7777) go to 4312
   ktref = 0
   go to 15
-4312 if (iprsup .ge. 1) write (unit = lunit6, fmt = 4258) deltat, tmax, xopt(1), copt(1), epsiln, tolmat
+4312 if (iprsup .ge. 1) write (unit = lunit6, fmt = 4258) deltat, tmax, xopt, copt, epsiln, tolmat
 4258 format (10x, 'deltat', 11x, 'tmax', 11x, 'xopt', 11x, 'copt', 9x, 'epsiln', 9x, 'tolmat', /, 1x, 6e15.5, /, 1x)
   if (iprsup .le. 0) go to 4266
   if (nenerg .eq. 0) go to 4266
@@ -694,7 +695,7 @@ subroutine over1
   ifdep = 0
   go to 15
 4269 xunits = 1000.
-  if (xopt(1) .gt. 0.0) xunits = twopi * xopt(1)
+  if (xopt .gt. 0.0) xunits = twopi * xopt
   ntot=1
   maxbus = 0
   n23 = 0
@@ -725,10 +726,10 @@ subroutine over1
   !read (unit = abuff(1), fmt = 3245) (aupper(i), i = 1, 14)
   read (unit = abuff, fmt = 3245) (aupper(i), i = 1, 14)
 3245 format (13a6, a2)
-  if (aupper(1) .eq. text1) go to 2697
-  if (aupper(1) .eq. text3) go to 2697
-  if (aupper(1) .eq. text4) go to 2699
-  if (aupper(1) .ne. text6) go to 7722
+  if (to_lower (aupper(1)) .eq. text1) go to 2697
+  if (to_lower (aupper(1)) .eq. text3) go to 2697
+  if (to_lower (aupper(1)) .eq. text4) go to 2699
+  if (to_lower (aupper(1)) .ne. text6) go to 7722
   write (unit = kunit6, fmt = 5389)
 5389 format (' Begin tacs. ==========================')
   newtac = 1
@@ -787,19 +788,6 @@ subroutine over1
 end subroutine over1
 
 !
-! subroutine str2int.
-!
-
-subroutine str2int(str, int, stat)
-  implicit none
-  ! Arguments
-  character(len = *), intent(in) :: str
-  integer(4), intent(out) :: int
-  integer(4), intent(out) :: stat
-  read (unit = str, fmt = *, iostat = stat) int
-end subroutine str2int
-
-!
 ! subroutine tacs1c.
 !
 
@@ -853,6 +841,7 @@ subroutine swmodf
   use blkcom
   use labcom
   use tracom
+  use strcom
   implicit none
   !     called only by over1 for start again usage
   !  include 'blkcom.ftn'
@@ -878,7 +867,7 @@ subroutine swmodf
 3131 format (' No such switch, the card will be discarded')
   go to 209
 3510 if (it2 .ne. 0 .or. kswtyp(msw) .ne. 0) go to 209
-  if (bus4 .ne. text14) go to 7218
+  if (to_lower (bus4) .ne. text14) go to 7218
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 1218)
 1218 format ('+Permanently-closed switch used for metering.')
   gus3 = -1.0
@@ -906,8 +895,10 @@ end subroutine swmodf
 !
 
 subroutine reques (ls)
+  use systematic
+  use linemodel
   use blkcom
-  use umdeck
+  use umcom
   use dekspy
   use tracom
   use bcdtim
@@ -915,14 +906,13 @@ subroutine reques (ls)
   use strcom
   use random
   implicit none
-  integer(4) :: i, ip, j, k, kbrnum, kexact
-  integer(4) :: l, linsys, ll1, ll8, ll16, ll25, ll32, ll33, ll40, ll48, ll49, ll56
+  integer(4) :: i, ip, j, k, kbrnum
+  integer(4) :: l, ll1, ll8, ll16, ll25, ll32, ll33, ll40, ll48, ll49, ll56
   integer(4) :: ll80, ls
   integer(4) :: m
-  integer(4) :: n1, n2, n3, n4, n5, n7, n8, n9, n13, n14, nphlmt, nsolve
-  integer(4) :: numrun
+  integer(4) :: n1, n2, n3, n4, n5, n7, n8, n9, n13, n14
   integer(4) :: jpntr
-  real(8) :: d1, d2, d7, d8, d13, deltfs, farray(1), fltin, fminsv
+  real(8) :: d1, d2, d7, d8, d13, deltfs, farray(1), fltin
   real(8) :: seed, statr
   real(8) :: znvref
   !  dimension anglex(1), farray(1)
@@ -930,12 +920,7 @@ subroutine reques (ls)
   !  equivalence (moncar(2), kbase), (moncar(3), ltdelt)
   !  equivalence (iprsov(39), nmauto)
   character(8) textax, textay
-  !  common /systematic/ linsys
   dimension textax(300), jpntr(100), textay(100), ls(*)
-  !  common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
-  !  common /linemodel/ char80, chlmfs(18)
-  character(6) :: chlmfs(18)                      ! 9-phase as limit for lmfs test
-  character(80) :: char80
   !
   ! $$$$$       special-request word no. 1.   'xformer'                         $$$$$
   data textay(1)   / 'x     ' /
@@ -2163,14 +2148,13 @@ end subroutine strip
 !
 
 subroutine sysdep
+  use komthl
   use blkcom
   use dekspy
   use bcdtim
   use bcddat
   implicit none
   integer(4) :: n7
-  real(8) :: pekexp
-  !  common /komthl/ pekexp
   !  dimension intbus(1)
   !  equivalence (intbus(1), bus1)
   logical(1) :: od
@@ -2411,7 +2395,7 @@ subroutine tacs1
   use blkcom
   use labcom
   use tacsar
-  use syncom
+  use smtacs
   use tracom
   use indcom
   implicit none

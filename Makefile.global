@@ -96,10 +96,25 @@ F90_FLAGS=	-cpp				\
 		-ffree-form			\
 		-ffree-line-length-0		\
 		-fcheck=all			\
+		-finit-local-zero		\
 		-J${COMPILER}			\
 		-DWITH_MAIN10			\
 		-DWITH_OVER1			\
+		-DWITH_OVER2			\
+		-DWITH_OVER5			\
+		-DWITH_OVER6			\
+		-DWITH_OVER7			\
+		-DWITH_OVER8			\
+		-DWITH_OVER9			\
+		-DWITH_OVER10			\
+		-DWITH_OVER11			\
+		-DWITH_OVER12			\
+		-DWITH_OVER13			\
 		-DWITH_OVER20			\
+		-DWITH_OVER31			\
+		-DWITH_OVER41			\
+		-DWITH_OVER44			\
+		-DWITH_OVER47			\
 		-DWITH_OVER51			\
 		-DWITH_OVER55			\
 		-c

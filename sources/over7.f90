@@ -9,34 +9,36 @@
 !
 
 subroutine over7
+  use blkcom
+  use labcom
+  use space2
+  use movcop
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
-  include 'space2.ftn'
-  real(8), target :: emtpe
-  real(8), pointer :: ndex(:)
   !dimension lorder(1), ndex(20)
-  dimension lorder(15)
+  !  dimension lorder(15)
   !equivalence (ich2(1), lorder(1)), (emtpe(1), ndex(1))
-  equivalence (ich2(1), lorder(1))
-  equivalence (iofkol, iofgnd), (iofkor, iofbnd)
+  !  equivalence (ich2(1), lorder(1))
+  !  equivalence (iofkol, iofgnd), (iofkor, iofbnd)
   !     following carries "next" among over6, insert, over7, & over9:
-  equivalence (loopss(11), next)
-  if (iprsup .ge. 1) write (lunit6, 4567)
+  !  equivalence (loopss(11), next)
+  integer(4) :: i, ib, icon, ii, ischm, ist, isubs1, isubs2
+  integer(4) :: j, jb, jbs, jbt, js, jsub
+  integer(4) :: k, kb, ks
+  integer(4) :: l, ll0, lastxx, ls
+  integer(4) :: m, mext
+  integer(4) :: n1, n2, n13, ncn, ndx1, nelim, nz
+  real(8) :: td
+  real(8) :: zzza
+  real(8), pointer :: ndex(:)
+  !
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over7."')
-  ndex => emtpe(:)
-  if (.not. associated (ndex)) then
-     write (unit = lunit6, fmt = "('Could not associate ndex to emtpe in over7.  Stop.')")
-     stop
-  end if
   ischm = 2
   if(iprsup .lt. 4) go to 4054
   write (unit = lunit6, fmt = 4050) ischm, ntot, next, iofkol, iofkor, ncurr
 4050 format (/, " Scalars upon entry into renumbering,  'over7' .ischm    ntot    next  iofkol  iofkor   ncurr  ", /, 50x, 6i8)
   write (unit = lunit6, fmt = 4053)
-4053 format (" Integer arrays upon entry into renumbering,  'over7' .  ", /,  &
-          '     row   kolum  korder   kownt     loc   kode kbus    mbus      nr  length   bus1     bus2')
+4053 format (" Integer arrays upon entry into renumbering,  'over7' .  ", /,  '     row   kolum  korder   kownt     loc   kode kbus    mbus      nr  length   bus1     bus2')
   do i = 1, next
      n1 = i + iofkol
      n2 = i + iofkor
@@ -45,11 +47,16 @@ subroutine over7
 4055 format (12i8)
 4057 end do
 4054 ioffd = 0
-  td = 0.0
-  zzza = 0.0
+  td = 0.0d0
+  zzza = 0.0d0
   lastxx = last
   ! n1 = lbus + 1  // use lbus, not this n1,  in following:
-  call move0 (ndex(1), lbus)
+  ndex => emtpe(1 :)
+  if (.not. associated (ndex)) then
+     write (unit = lunit6, fmt = "('Could no associate ndex to emtpe.  Stop.')")
+     call stoptp
+  end if
+  call move0 (ndex(1 :), lbus)
   nz = ncurr
   i = 0
 140 i = i + 1
@@ -170,9 +177,7 @@ subroutine over7
   if (norder(1) .eq. 1) go to 14
   if (noutpr .eq. 0) write (unit = lunit6, fmt = 47881) (norder(i), i = 1, ntot)
   if (iprsup .gt. 0) write (unit = lunit6, fmt = 6045)
-6045 format (' Note ---- the preceding printout shows that ground was not renumbered first in the transient-network renumbering.', /, &
-          11x, 'We will swap the new numbers between ground and whatever node was renumbered first, in order to get a legitimate', /, &
-          11x, 'numbering for the rest of the emtp calculations.')
+6045 format (' Note ---- The preceding printout shows that ground was not renumbered first in the transient-network renumbering.', /, 11x, 'We will swap the new numbers between ground and whatever node was renumbered first, in order to get a legitimate', /, 11x, 'numbering for the rest of the emtp calculations.')
   do i = 1, ntot
      if (norder(i) .eq. 1) go to 32
 26 end do
@@ -191,7 +196,7 @@ subroutine over7
      if (kode(k) .eq. 0) go to 73775
      do l = 1, kconst
         if (iprsup .ge. 3) write (unit = lunit6, fmt = 6049) i, k, kode(k), n1, j, l, node(l), tstart(l)
-6049    format (' at 6049 of "over7".  i, k, kode(k), etc. =', 7i8, e20.10)
+6049    format (' At 6049 of "over7".  i, k, kode(k), etc. =', 7i8, e20.10)
         ! s.m.  source node must precede regular voltage source nodes.
         ! alter renumbering map to produce this, if  tstart  .eq.  -9988.
         if (tstart(l) .ne. -9988.) go to 6051
@@ -470,12 +475,12 @@ subroutine over7
 720 mext = next
   !     if (next .eq. lastxx)   go to 725       "725 go to 375"
   if (next .eq. lastxx)   go to 375
-  isubs1 =  iofkor+next
-  call subscr ( next, lsiz23, 720, 1 )
+  isubs1 =  iofkor + next
+  call subscr (next, lsiz23, 720, 1)
   next = korder(isubs1)
   icon = icon +1
-  isubs1 =  iofkor+ib
-  call subscr ( ib,   lsiz23, 720, 2 )
+  isubs1 =  iofkor + ib
+  call subscr (ib, lsiz23, 720, 2 )
   ib = korder(isubs1)
   go to 730
   ! 725 go to 375    convert  "go to 725"  to  "go to 375"
@@ -504,15 +509,15 @@ subroutine over7
   ib = korder(isubs1)
 780 isubs1 =  iofkol+next
   isubs2 =  iofkol+ib
-  call subscr ( next, lsiz23, 780, 1 )
-  call subscr ( ib,   lsiz23, 780, 2 )
+  call subscr (next, lsiz23, 780, 1)
+  call subscr (ib, lsiz23, 780, 2)
   kolum(isubs1)      = kolum(isubs2)
-  isubs1 =  iofkor+jb
-  call subscr ( jb,   lsiz23, 780, 3 )
+  isubs1 = iofkor + jb
+  call subscr (jb, lsiz23, 780, 3)
   korder(isubs1)    = next
   go to 680
-790 if (ischm .ne. 2)   go to 270
-  if( kownt(j) .eq. (-1) )  go to 270
+790 if (ischm .ne. 2) go to 270
+  if (kownt(j) .eq. (-1)) go to 270
   ! 800 if (icon) 810, 270, 830
   ! 810 if (kownt(j) +icon .ge. ncn)   go to 830
 800 if ( icon  .eq.  0 )   go to 270
@@ -535,27 +540,27 @@ subroutine over7
   m = kownt(j) +icon
   go to 860
 850 k = ich1(j)
-  call subscr ( j, lbus, 850, 1 )
-  call subscr ( k, lbus, 850, 99 )
-  if ( k  .gt.  0 )   ich2(k) = 0
+  call subscr (j, lbus, 850, 1)
+  call subscr (k, lbus, 850, 99)
+  if (k .gt. 0) ich2(k) = 0
   m = kownt(j)
   jsub = m + 1
-  call subscr ( jsub, lbus, 850, 3 )
+  call subscr (jsub, lbus, 850, 3)
   ndex(m+1) = k
   m = m +icon
 860 kownt(j) = m
-  call subscr ( j,    lbus, 860, 1 )
+  call subscr (j, lbus, 860, 1)
   jsub = m + 1
-  call subscr ( jsub, lbus, 860, 2 )
-  k =  ndex(m+1)
+  call subscr (jsub, lbus, 860, 2)
+  k = ndex(m + 1)
   ndex(m+1) = j
   ich1(j) = k
-  call subscr ( k,    lbus, 860, 99 )
-  if ( k  .gt.  0 )   ich2(k) = j
+  call subscr (k, lbus, 860, 99)
+  if (k .gt. 0) ich2(k) = j
   ich2(j) = 0
   go to 270
 1110 js = loc(i)
-  call subscr ( i, lbus, 1110, 1 )
+  call subscr (i, lbus, 1110, 1)
   go to 1130
 1120 isubs1 =  iofkor+js
   call subscr ( js, lsiz23, 1120, 1 )
@@ -727,25 +732,17 @@ subroutine over7
 9999 if ( lastov  .gt.  nchain )   go to 9996
   kill=0
   write (lunit6, 9998)
-9998 format (/, ' Warning ---- Node renumbering of the transients network has broken down, presumably due to table overflow', /, &
-          ' (i.e., the network is too big and/or too dense for the present EMTP dimensioning).   the next time that the user', /, &
-          ' redimensions the emtp, he is advised to increase the size of list number  5  and/or  8 .   Both of these lists', /, &
-          ' contribute fully (100 per cent) to dependent list number  99,   which is what has actually overflowed at this point.')
+9998 format (/, ' Warning ---- Node renumbering of the transients network has broken down, presumably due to table overflow', /, ' (i.e., the network is too big and/or too dense for the present EMTP dimensioning).   the next time that the user', /, ' redimensions the emtp, he is advised to increase the size of list number  5  and/or  8 .   Both of these lists', /, ' contribute fully (100 per cent) to dependent list number  99,   which is what has actually overflowed at this point.')
   nelim = nelim - 1
   write (lunit6, 9997)  nelim, ntot, ncurr
-9997 format (1x, i4, ' Nodes out of total of  ', i4, ' were renumbered before breakdown in the renumbering overlay.', /, &
-          ' Had we made it to', i6, '   nodes, the operation would have terminated normally (since the remaining ones', /, &
-          ' are always forced last without regard to sparsity considerations).')
+9997 format (1x, i4, ' Nodes out of total of  ', i4, ' were renumbered before breakdown in the renumbering overlay.', /, ' Had we made it to', i6, '   nodes, the operation would have terminated normally (since the remaining ones', /, ' are always forced last without regard to sparsity considerations).')
   do i = 1, ntot
      if ( norder(i)  .gt.  0 )   go to 2236
      nelim = nelim + 1
      norder(i) = nelim
 2236 end do
   write (lunit6, 2240)
-2240 format (/, ' Anyway, the EMTP will try to continue with execution of this data case, as best it can.   Nodes which were', /, &
-          ' not renumbered before the overflow limit was reached will now simply be renumbered in their original relative', /, &
-          ' order, without regard to sparsity considerations.   Recall that the original node order comes from the order of data', /, &
-          ' input (the order in which node names are encountered, as the EMTP data cards are read).')
+2240 format (/, ' Anyway, the EMTP will try to continue with execution of this data case, as best it can.   Nodes which were', /, ' not renumbered before the overflow limit was reached will now simply be renumbered in their original relative', /, ' order, without regard to sparsity considerations.   Recall that the original node order comes from the order of data', /, ' input (the order in which node names are encountered, as the EMTP data cards are read).')
   write (lunit6, 2241)  ( norder(i), i=1, ntot )
 2241 format (' The final renumbering map   (norder(i), i = 1, ntot) will then appear as follows ....', /, (1x, 20i6))
   write (lunit6, 2247)
@@ -755,25 +752,27 @@ subroutine over7
   lastov = nchain
   nchain = 51
   if ( iprsup  .ge.  1 ) write (lunit6, 4568 )
-99999 return
+99999 if (associated (ndex)) nullify (ndex)
+  return
 end subroutine over7
 
 !
 ! subroutine subscr.
 !
 
-subroutine subscr(j, limit, istat, n1)
+subroutine subscr (j, limit, istat, n1)
+  use blkcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  !     module used to check out-of-bounds subscripts for "over7"
+  !     Module used to check out-of-bounds subscripts for "over7"
   !     special n1=99 case is for subscripts which are used only
   !     if positive (wsm changes to walker's code).
+  integer(4), intent(in) :: j, istat, limit, n1
+  !
   if (j .ge. 1 .and. j .le. limit) go to 9000
   if (j .le. 0 .and. n1 .eq. 99) go to 9000
-  write (lunit6, 1487)  j, limit, istat, n1
-1487 format (' out-of-bounds subscript =', i6, ' .   limit =', i6, ' .   Bbelow s.n.', i6, '   with sequence no.', i2, ' .')
-9000 if (iprsup .ge. 99) write (lunit6, 9006)  j, limit, istat, n1
+  write (unit = lunit6, fmt = 1487) j, limit, istat, n1
+1487 format (' Out-of-bounds subscript =', i6, ' .   limit =', i6, ' .   Below s.n.', i6, '   with sequence no.', i2, ' .')
+9000 if (iprsup .ge. 99) write (unit = lunit6, fmt = 9006) j, limit, istat, n1
 9006 format (' Trace.  j, limit, istat, n1 =', 4i8)
   return
 end subroutine subscr

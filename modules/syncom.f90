@@ -6,7 +6,7 @@
 
 ! This deck contains s.m. storage used by tacs modules.
 
-module syncom
+module smtacs
   implicit none
   integer(4) :: ismtac(20), lbstac, ntotac
   real(8), dimension(20) :: etac
@@ -16,7 +16,7 @@ module syncom
   ! from main10
   integer(4) :: jtemp(1)
   equivalence (jtemp(1), etac(1))
-end module syncom
+end module smtacs
 
 !
 ! end of file syncom.f90

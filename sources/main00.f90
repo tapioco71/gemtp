@@ -133,20 +133,25 @@
 !          case termination).
 !**********************************************************************
 
+module timers
+  implicit none
+  integer(4) :: cputime
+end module timers
+
 !
 ! program gemtp.
 !
 
 program gemtp
   use blkcom
-  use volt45
+  use volpri
   use iocons
   use movcop
   implicit none
   integer(4) :: i, ll34, optscount
   character(32) :: arg
   !
-  data ll34                 / 34 /
+  data ll34 / 34 /
   !     unit assignments of "over1" needed earlier by spy:
   lunit0 = gfortran_stderr_unit
   lunit1 = 1
@@ -202,14 +207,14 @@ contains
     iprsup = iprsov(n1)
     if (nchain .gt. 20) then
        call a2010
-       return
+    else
+       if (nchain .eq. 12 .or. nchain .eq. 2) go to 1983
+       if (nchain .eq. -1) call move0 (iprsov, ll34)
+       call erexit
+       nchain = 0
+       if (nchain .gt. 20) return
+1983   call main10
     end if
-    if (nchain .eq. 12 .or. nchain .eq. 2) go to 1983
-    if (nchain .eq. -1) call move0 (iprsov, ll34)
-    call erexit
-    nchain = 0
-    if (nchain .gt. 20) return
-1983 call main10
     return
   end subroutine a2001
 
@@ -356,16 +361,16 @@ end subroutine stoptp
 !
 
 subroutine erexit
+  use comkwt
   use blkcom
   use iocons
   implicit none
   !     VAX-11   installation-dependent EMTP module.   This is
   !     called by the top of "main00", before any emtp data input.
   !     dimension idum(3)                                   !  dummy vector for ctrl-c handling
-  integer(4) :: kwtvax
+
   external kwiter                                           ! needed for ctrl-c initialization
   !
-  !  common /comkwt/ kwtvax                                 ! magic block for vax/vms ctrl-c
   !
   lunit6 = gfortran_stdout_unit                             ! for use of "prompt" until fixed tt?? address
   muntsv(2) = 49                                            ! alternate munit5 unit number of spy
@@ -380,6 +385,7 @@ end subroutine erexit
 !
 
 subroutine runtym (d1, d2)
+  use timers
   implicit none
   !    This subroutine returns with the current job-execution time, as
   !    broken down into two categories ....
@@ -393,9 +399,8 @@ subroutine runtym (d1, d2)
   !    summary printout.   Hence if one wants to convert time into
   !    dollars, or some other measure of job effort, it is easily done.
   !     Include  '[scott]commuk.for' --- share with "settym" in-line:
-  !  common /timers/ cputime
   real(8), intent(out) :: d1, d2
-  integer(4) :: cputime, time
+  integer(4) :: time
   real(8) :: now_cputime
   !
   call cpu_time (now_cputime)
@@ -410,11 +415,9 @@ end subroutine runtym
 !
 
 subroutine settym
+  use timers
   implicit none
-  integer(4) :: cputime
   real(8) :: time
-  !
-  !  common /timers/ cputime
   !
   call cpu_time (time)
   if (time .eq. -1.0) then
@@ -924,12 +927,14 @@ subroutine cimage
 6000 call stoptp                                            ! installation-dependent program stop card
   !               *****    request no. 21.   "units"        *****  *****
 6100 nfrfld = 1
-  call frefld (xopt)
-  call frefld (copt)
+  !  call frefld (xopt)
+  call freone (xopt)
+  !  call frefld (copt)
+  call freone (copt)
   if (noutpr .eq. 0) write (unit = lunit6, fmt = 6114) xopt, copt
 6114 format ('+New  xopt, copt =', 2e14.4)
   xunits = 1000.
-  if (xopt(1) .gt. 0.0) xunits = twopi * xopt(1)
+  if (xopt .gt. 0.0) xunits = twopi * xopt
   go to 1000
   !     additional key-word code goes below.
 4000 write (unit = lunit6, fmt = 4006)
@@ -947,8 +952,8 @@ subroutine cimage
   return
   entry ibrinc
   ibr = ibr + 1
-  xoptbr(ibr) = xopt(1)
-  coptbr(ibr) = copt(1)
+  xoptbr(ibr) = xopt
+  coptbr(ibr) = copt
   return
 end subroutine cimage
 

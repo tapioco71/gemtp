@@ -298,6 +298,7 @@ end subroutine over20
 !
 
 subroutine katalg
+  use comlock
   use blkcom
   use dekspy
   implicit none
@@ -309,8 +310,7 @@ subroutine katalg
   !     can generally be ignored by other systems;  it applies
   !     only to rtm (real time monitor) use of BPA VAX.
   character(132) :: ansi132
-  integer(4) :: j, locker
-  common /comlock/ locker(2)                                ! share with "over1" only
+  integer(4) :: j
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 2467) icat, memsav, lunit2, ltlabl
 2467 format (/, ' Enter  "katalg" .    icat  memsav  lunit2  ltlabl', /, 18x, 10i8)
@@ -365,7 +365,7 @@ end subroutine katalg
 subroutine emtspy
   use blkcom
   use dekspy
-  use synmac
+  use smach
   implicit none
   !     Module of interactive EMTP only, which services "emtspy".
   !     If no interactive use, convert to dummy module ("return").
@@ -440,7 +440,7 @@ end subroutine emtspy
 subroutine spying
   use blkcom
   use labcom
-  use synmac
+  use smach
   use tacsar
   use dekspy
   use indcom
@@ -456,7 +456,7 @@ subroutine spying
   integer(4) :: m
   integer(4) :: n1, n2, n4, n5, n6, n7, n8, n9, n10, n12, n13, n14, n15, n16, n17
   integer(4) :: n18, n22, n23, n24, n26, n27
-  integer(4) :: n33, nchd2, nd13, next, num2, num3, num5, numask, numbco, numbrn
+  integer(4) :: n33, nchd2, nd13, num2, num3, num5, numask, numbco, numbrn
   integer(4) :: numnam
   real(8) :: d1, d2, d3, d4, d5, d6, d8, d13, d34
   real(8) :: tim1rp, tim2rp, twhen
@@ -4020,6 +4020,7 @@ end subroutine initsp
 !
 
 subroutine flager
+  use comkwt
   use blkcom
   use dekspy
   implicit none
@@ -4028,13 +4029,12 @@ subroutine flager
   !     VAX-11 installation-dependent EMTP module which serves
   !     to read spy command from munit5 if: 1) ctrl-c interrupt
   !     has occurred, or 2) if  lockbr = 1  upon entry.
-  integer(4) :: ios, kwtvax
-  common /comkwt/ kwtvax                                    ! magic block for ctrl-c trapping
+  integer(4) :: ios
   !  dimension idum(3)                                      !  dummy vector for ctrl-c handling
   !
   external kwiter                                           ! needed for ctrl-c initialization
   if (iprspy .lt. 10) go to 3456                            ! jump around diagnostic
-  write (munit6, 3409) istep, kwtspy, itype, lastov
+  write (unit = munit6, fmt = 3409) istep, kwtspy, itype, lastov
 3409 format (' Top flager.  istep, kwtspy, itype, lastov =', 4i6)
   call window                                               ! output of character variable munit6
 3456 if (lastov .ne. 9911) go to 3614                       ! not "pltfil" overflow
@@ -4077,7 +4077,7 @@ subroutine flager
 end subroutine flager
 
 !
-!     subroutine quiter.
+! subroutine quiter.
 !
 
 subroutine quiter
@@ -4100,7 +4100,7 @@ subroutine quiter
 end subroutine quiter
 
 !
-!     subroutine honker.
+! subroutine honker.
 !
 
 subroutine honker (klevel)
@@ -4126,7 +4126,7 @@ subroutine honker (klevel)
   real(8) :: d13
   character(8) :: spytim(2), spdate(2)
   !
-  d13 = 2.0                                                 ! initialize time delay at two seconds
+  d13 = 2.0d0                                               ! initialize time delay at two seconds
   call time44 (spytim)                                      ! emtp wall-clock time
   call date44 (spdate)                                      ! emtp date utility
   buff77(1 : 1) = char(7)                                   ! ascii "7" = ctrl-g of keyboard = 1 bell
@@ -4187,16 +4187,14 @@ end subroutine tdelay
 !
 
 subroutine kwiter (idum)
+  use comkwt
   use dekspy
   implicit none
   !     VAX-11  installation-dependent EMTP module which serves
   !     control interactive usage.  if none, destroy the module.
   !     Purpose is to sense user-keyed interrupt, and set flag.
   !     Name "comkwt" is reserved (connected to "controlc.obj")
-  integer(4), intent(in) :: idum
-  integer(4) :: kwtvax
-  common /comkwt/ kwtvax
-  dimension idum(3)
+  integer(4), intent(in) :: idum(3)
   !
   kwtvax = 1
   write (unit = *, fmt = *) idum(1 : 3)
@@ -4215,44 +4213,44 @@ subroutine percnt (vbyte, n7)
   !     files by parameters of  "@?"  call.   columns 1, ... n7  are
   !     searched, of character vector  "vbyte" .
   !     For non-interactive emtp, this module can be destroyed.
+  character(*), intent(out) :: vbyte
   integer(4), intent(in) :: n7
   integer(4) :: i, j, k
-  character(1) :: vbyte(1)
   !
   do k = 1, n7
-     if (vbyte(k) .ne. '%') go to 1297
+     if (vbyte(k : k) .ne. '%') go to 1297
      do j = 1, 7
-        if (vbyte(k + j) .ne. '%') go to 1297
+        if (vbyte(k + j : k + j) .ne. '%') go to 1297
      end do
      !1253 continue
      !     we exit  do 1253  with string of 8 "%" beginning in column k
      itexp = itexp + 1
      if (itexp .le. maxarg) go to 1284
-     write (munit6, 1274) maxarg
+     write (unit = munit6, fmt = 1274) maxarg
 1274 format (' ????  Trouble.  "@?"  Usage only defined', i4, '   arguments, while the disk')
      call window
-     write (munit6, 1275)
+     write (unit = munit6, fmt = 1275)
 1275 format ('                 File has more  %-strings.   Trouble detected in following:')
      call window
-     write (munit6, 1277) (vbyte(i), i = 1, n7)
+     write (unit = munit6, fmt = 1277) (vbyte(i : i), i = 1, n7)
 1277 format ('              >>>', 80a1)
      call window
      kilper = 1
      go to 1313
 1284 ansi8 = texpar(itexp)
-     read (ansi8, 1296) (vbyte(k + j - 1), j = 1, 8)
+     read (unit = ansi8, fmt = 1296) (vbyte(k + j - 1 : k + j - 1), j = 1, 8)
 1296 format (80a1)
   end do
 1297 continue
   if (kverfy .ne. 0) go to 1313
-  write (munit6, 1306) (vbyte(j), j = 1, n7)
+  write (unit = munit6, fmt = 1306) (vbyte(j : j), j = 1, n7)
 1306 format (' @>>>', 80a1)
   call window
 1313 return
 end subroutine percnt
 
 !
-!     subroutine numchk.
+! subroutine numchk.
 !
 
 subroutine numchk (vbyte, nchar, kill)
@@ -4379,41 +4377,6 @@ subroutine getnum (num)
   call window
 4294 return
 end subroutine getnum
-
-!
-! subroutine movers.
-!
-
-subroutine movers (from, to, num)
-  implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     Module of interactive EMTP usage only, which services "emtspy".
-  !     For non-interactive EMTP, this module can be destroyed.
-  integer(4), intent(in) :: num
-  character, intent(in) :: from(1:*)
-  character, intent(out) :: to(1:*)
-  to(1 : num) = from(1 : num)
-  !  do j = 1, num
-  !1763 to(j) = from(j)
-  !  end do
-  return
-end subroutine movers
-
-!
-!     subroutine moverl.
-!
-
-subroutine moverl (from, to, num)
-  implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     Module of interactive EMTP usage only, which services "emtspy".
-  !     For non-interactive EMTP, this module can be destroyed.
-  integer(4), intent(in) :: num
-  real(8), intent(in) :: from(*)
-  real(8), intent(out) :: to(*)
-  to(1 : num) = from(1 : num)
-  return
-end subroutine moverl
 
 !
 !     subroutine window.
@@ -5161,9 +5124,9 @@ end subroutine frefix
 subroutine locatn
   use blkcom
   use labcom
-  use synmac
+  use smach
   use tacsar
-  use umdeck
+  use umcom
   use dekspy
   use fixcom
   use indcom
@@ -5183,7 +5146,7 @@ subroutine locatn
   integer(4) :: kslim1, kslim2, kslim3, kstart, ktbdev, ktxmn, ktxmx, ktypdv
   integer(4) :: ktysup, kud2, kud3, kud4, kud5, kvin, kvlim1, kvlim2, kvou
   integer(4) :: kvxx, kwrite, kxai, kxhst, kxmncs, kxmxcs, kzlim1, kzlim2
-  integer(4) :: laux, lcom10, limtxf, locbr1, locz11, lpast2, lpeak, lsmat
+  integer(4) :: laux, lcom10, limtxf, locbr1, lpast2, lpeak, lsmat
   integer(4) :: lspov4, ltrnst
   integer(4) :: mdebug, mxtacw
   integer(4) :: ndelta, nds, nhst, niamax, niomax, nkn

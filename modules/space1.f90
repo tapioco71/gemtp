@@ -5,8 +5,10 @@
 !
 
 module space1
-  common /spac01/   tp(1)
-  dimension tim1(1), tim2(1), ap(1), a1p(1), a2p(2)
+  implicit none
+  real(8) :: a1p(1), a2p(3), ap(1)
+  real(8) :: tim1(1), tim2(1), tp(1)
+  !  common /spac01/   tp(1)
   equivalence (tp(1), tim1(1), tim2(1), ap(1), a1p(1), a2p(1))
 end module space1
 

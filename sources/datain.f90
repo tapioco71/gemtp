@@ -9,6 +9,7 @@
 !
 
 subroutine datain
+  use linemodel
   use blkcom
   use dekspy
   use labcom
@@ -23,23 +24,19 @@ subroutine datain
   !     First EMTP data input, and "spy" choice, are made here.
   !     Module is called only by installation-dependent "erexit".
   integer(4) :: ios, ip, j
-  integer(4) :: k, kard(200), karg(200), kbeg(200), kcut, kend(200), kexact
+  integer(4) :: k, kard(200), karg(200), kbeg(200), kcut, kend(200)
   integer(4) :: kkkdum(35), kntdum, kntmax, kntold, kolinc(35), komlev, krdcom
   integer(4) :: krdoff, ktex(200)
   integer(4) :: l, lentyp(36), limarg, ll
   integer(4) :: m, modarg(35), munit4
   integer(4) :: n, n1, n2, n3, n4, n5, n6, n7, n8, n10, n11, n12, n13, n14, n15
   integer(4) :: n16, n17, n18, n19, n22, n24, n26, nchpre, nchsuf, nn1, nn2
-  integer(4) :: nphlmt, nsolve, ntacs, numarg, numhld, numrun, numtyp
-  real(8) :: fminsv
-  !  common /linemodel/ kexact, nsolve, fminsv, numrun, nphlmt
-  !  common /linemodel/ char80, chlmfs(18)
-  character(6) :: chlmfs(18), dumnam
+  integer(4) :: ntacs, numarg, numhld, numtyp
+  character(6) :: dumnam
   character(12) :: typdat(36)
   character(20) :: arginc(35)
   character(32) :: filsav
   character(40) :: prefix, suffix
-  character(80) :: char80
   character(80), allocatable :: tank(:)
   !  dimension kard(200), karg(200), kbeg(200), kend(200)
   !  dimension ktex(200), lentyp(36)

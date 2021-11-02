@@ -197,22 +197,28 @@ contains
     cmplxz = dcmplx (x, y)
   end function cmplxz
 
-  real(8) function aimagz (x)
+  function aimagz (x) result(valueOut)
     implicit none
-    complex(8), intent(in) :: x
-    aimagz = real (dimag (dcmplx (x)), kind (aimagz))
+    complex(16), intent(in) :: x
+    real(8) :: valueOut
+    !
+    valueOut = imag (x)
   end function aimagz
 
-  real(8) function realz (x)
+  function realz (x) result(valueOut)
     implicit none
-    complex(8), intent(in) :: x
-    realz = dreal (x)
+    complex(16), intent(in) :: x
+    real(8) :: valueOut
+    !
+    valueOut = real (x)
   end function realz
 
-  real(8) function cabsz (x)
+  function cabsz (x) result(valueOut)
     implicit none
-    complex(8), intent(in) :: x
-    cabsz = cdabs (x)
+    complex(16), intent(in) :: x
+    real(8) :: valueOut
+    !
+    valueOut = abs (x)
   end function cabsz
 
   !     This module serves to provide selected double-precision

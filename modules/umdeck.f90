@@ -4,8 +4,9 @@
 ! file umdeck.f90
 !
 
-module umdeck
+module umcom
   implicit none
+  character(8) :: busum(50), date(2)
   integer(4) :: ibsfix, initum, inpu, iotfix, istart, iuangl, iudcoe, iuepso !, iufldr
   integer(4) :: iuflds, iufldr, iuflqs, iuflxd, iuflxq, iufpar, iugpar
   integer(4) :: iuhism, iuhist, iujcds, iujclo, iujclt, iujcqs, iujomo, iujtho
@@ -23,7 +24,6 @@ module umdeck
   real(8) :: umcur(40)
   real(8) :: vinp(40)
   real(8) :: zthevr(3, 3), zthevs(40)
-  character(8) :: busum(50), date(2)
   !  common /umcom/ busum(50), ptheta(3, 3), zthevr(3, 3)
   !  common /umcom/ vinp(40), zthevs(40), umcur(40), con(10)
   !  common /umcom/ dumvec(40), dummat(3, 3), date(2), clock(2)
@@ -47,8 +47,8 @@ module umdeck
   ! equivalences friend zone
   ! from main00
   integer(4) :: itemp(8 * 50)
-  equivalence (itemp, busum)
-end module umdeck
+  equivalence (itemp(1), busum(1))
+end module umcom
 
 !
 ! end of file umdeck.f90

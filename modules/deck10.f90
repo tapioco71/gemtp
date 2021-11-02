@@ -7,7 +7,6 @@
 module deck10
   implicit none
 
-  character :: fixbu1, fixbu2
   ! common /c10b01/ jndex (1)
   ! common /c10b02/ diagg (1)
   ! common /c10b03/ diabb (1)
@@ -35,6 +34,8 @@ module deck10
   ! common /c10b25/ fixb11(100)
   ! common /c10b26/ kndex (1)
 
+  character(8) :: fixbu1(100), fixbu2(100), fixbu3(100)
+  character(10) :: fxtem1(100)
   integer(4) :: jndex(1)
   integer(4) :: kndex (1)
   integer(4) :: nekfix(1)
@@ -44,15 +45,6 @@ module deck10
   real(8) :: solisv(1)
   real(8) :: gndd(1)
   real(8) :: bndd(1)
-  real(8) :: fxtem1(100)
-  real(8) :: fxtem2(100)
-  real(8) :: fxtem3(100)
-  real(8) :: fxtem4(100)
-  real(8) :: fxtem5(100)
-  real(8) :: fxtem6(100)
-  real(8) :: fixbu1(1)
-  real(8) :: fixbu2(1)
-  real(8) :: fixbu3(100)
   real(8) :: fixbu4(100)
   real(8) :: fixbu5(100)
   real(8) :: fixbu6(100)
@@ -61,6 +53,11 @@ module deck10
   real(8) :: fixbu9(100)
   real(8) :: fixb10(100)
   real(8) :: fixb11(100)
+  real(8) :: fxtem2(100)
+  real(8) :: fxtem3(100)
+  real(8) :: fxtem4(100)
+  real(8) :: fxtem5(100)
+  real(8) :: fxtem6(100)
 
 end module deck10
 

@@ -10,9 +10,9 @@
 
 module strcom
   implicit none
-  
+
 contains
-  
+
   function to_upper (strIn) result(strOut)
     ! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
     ! Original author: Clive Page
@@ -30,7 +30,7 @@ contains
        end if
     end do
   end function to_upper
-  
+
   function to_lower (strIn) result(strOut)
     implicit none
     character(len = *), intent(in) :: strIn
@@ -46,5 +46,19 @@ contains
        end if
     end do
   end function to_lower
-  
+
+  !
+  ! subroutine str2int.
+  !
+
+  subroutine str2int (str, int, stat)
+    implicit none
+    character(len = *), intent(in) :: str
+    integer(4), intent(out) :: int
+    integer(4), intent(out) :: stat
+    !
+    read (unit = str, fmt = 10, iostat = stat) int
+10  format (i8)
+  end subroutine str2int
+
 end module strcom

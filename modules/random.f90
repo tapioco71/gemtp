@@ -12,7 +12,7 @@ contains
   !
   ! function seedy.
   !
-  
+
   function seedy (atim) result(s)
     implicit none
     !
@@ -34,13 +34,13 @@ contains
     hour = ihr * 3600
     amin = imin * 60
     sec = isec
-    s = sec + amin + hour + 1.0
+    s = sec + amin + hour + 1.0d0
   end function seedy
 
   !
   ! function sandnm.
   !
-  
+
   function sandnm (x) result(s)
     implicit none
     !     This version of  'randnm'  is used for testing of the

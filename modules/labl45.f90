@@ -4,7 +4,7 @@
 ! file labl45.f90
 !
 
-module labl45
+module com45
   implicit none
   character(8) :: pl(91)
   integer(4) :: ictrl, i1, iss, iwork, ix
@@ -18,7 +18,7 @@ module labl45
   !  common /com45/ d, x(3), dplu, dmin, ictrl, i1
   !  common /com45/ iwork, nph, nph2, nphpi2, n22, nphsq, ntri
   !  common /com45/ iss, nfr, nfr1, ix, kreqab
-end module labl45
+end module com45
 
 !
 ! end of file labl45.f90

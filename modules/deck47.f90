@@ -4,11 +4,17 @@
 ! file deck47.f90
 !
 
-module deck47
+module c29b01
   implicit none
   !common /c29b01/ karray(3)
   integer(4) :: karray(3)
-end module deck47
+  ! equivalences friend zone.
+  ! from over 47
+  integer(4) :: itg(1)
+  real(8) :: rtg(1)
+  complex(16) :: ctg(1)
+  equivalence (karray(1), itg(1), rtg(1), ctg(1))
+end module c29b01
 
 !
 ! end of file deck47.f90

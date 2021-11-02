@@ -4,6 +4,17 @@
 ! file blkcom.f90
 !
 
+module comthl
+  !  common /comthl/ angtpe, nswtpe
+  integer(4) :: nswtpe
+  real(8) :: angtpe
+end module comthl
+
+module comld
+  !  common /comld/ newtac
+  integer(4) :: newtac
+end module comld
+
 module blkcom
   implicit none
   !     flag-1.   begin class-1  /blank/  variables
@@ -27,7 +38,7 @@ module blkcom
   real(8) :: ci1, ck1, deltat, delta2, freqcs
   real(8) :: xunits, aincr, xmaxmx
   real(8) :: znolim(2), epstop, t, tolmat
-  real(8) :: tmax, omega, copt(1), xopt(1), szplt
+  real(8) :: tmax, omega, copt, xopt, szplt
   real(8) :: szbed, sigmax
   real(8) :: fminfs, delffs, fmaxfs, tenerg, begmax(6)
   real(8) :: unity, onehaf
@@ -72,7 +83,7 @@ module blkcom
   integer(4) :: lexct, lbus, lymat, lswtch, lnonl, lchar, m4plot
   integer(4) :: lpast, lsize7, iplot, ncomp, nv, lcomp, numsm
   integer(4) :: ifdep, ltails, lfdep, lwt, last, npower, maxpe
-  integer(4) :: lsiz12, lsmout, limass, iv
+  integer(4) :: lsiz12, lsmout, limass, locz11, iv
   integer(4) :: ktrlsw(8), num99, kpartb, llbuff, kanal, nsmth
   integer(4) :: ntcsex, nstacs, maxbus, lastov, ltacst
   integer(4) :: lhist, ifx, isubc1, inecho, noutpr
@@ -147,9 +158,13 @@ module blkcom
   equivalence (aupper(1), texcol(1))
   ! from main10
   character(8) :: busone(1)
-  integer(4) :: idistx(1)
-  equivalence (bus1, busone(1))
+  integer(4) :: idistx(1), iprsav(4)
   equivalence (idistx(1), nenerg)
+  equivalence (busone(1), idistx(1))
+  equivalence (bus1, busone(1))
+  equivalence (nenerg, idistx(1))
+  equivalence (kpen(1), bus1)
+  equivalence (moncar(2), kbase)
   ! from over1
   integer(4) :: idist, isw, itest, intbus(1), jseedr, kbase, kloaep, kpen(5)
   integer(4) :: ltdelt, mtape, nmauto
@@ -167,7 +182,16 @@ module blkcom
   equivalence (iprsov(39), nmauto)
   equivalence (bus1, kpen(1))
   equivalence (intbus(1), bus1)
-  ! from over 16
+  ! from over2
+  equivalence (iprsov(36), locz11)
+  ! from over7
+  integer(4) :: iofkol, iofkor, next
+  equivalence (loopss(11), next)
+  equivalence (iofkol, iofgnd)
+  equivalence (iofkor, iofbnd)
+  ! from over10
+
+  ! from over16
   integer(4) :: ipoint, iupper, n20
   equivalence (iprsov(35), ipoint)
   equivalence (iprsov(36), iupper)

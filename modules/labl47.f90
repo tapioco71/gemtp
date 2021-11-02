@@ -4,7 +4,7 @@
 ! file labl47.f90
 !
 
-module labl47
+module com47
   implicit none
   !  common /com47/  bin(20), bkn(20), cimag1, creal1, czero, ypo
   !     end of complex variables
@@ -33,8 +33,8 @@ module labl47
   real(8) :: spdlgt
   real(8) :: u0, u2p, usp
   real(8) :: value1, value2, value3, value4, value5, valu14
-  complex(16) bin(20), bkn(20), cimag1, creal1, czero, ypo
-end module labl47
+  complex(16) :: bin(20), bkn(20), cimag1, creal1, czero, ypo
+end module com47
 
 !
 ! end of file labl47.f90

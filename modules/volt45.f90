@@ -12,10 +12,10 @@
 !     moved volti, etc. from blkcom to labcom (as part of
 !     variable dimensioning).   Deck is always in memory.
 
-module volt45
+module volpri
   real(8) ::  volti(50), voltk(50), vim(50)
   !  common /volpri/ volti(50), voltk(50), vim(50)
-end module volt45
+end module volpri
 
 !
 ! end of file volt45.f90

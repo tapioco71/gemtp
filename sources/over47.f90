@@ -10,13 +10,28 @@
 
 subroutine subr47
   use blkcom
-  use deck47
-  use labl47
+  use c29b01
+  use com47
+  use tracom
   implicit none
-  dimension lltemp(20)
-  dimension rtg(1), itg(1), ctg(1)
-  complex(16) :: ctg
-  equivalence (karray(1), itg(1), rtg(1), ctg(1))
+  !  dimension lltemp(20)
+  !  dimension rtg(1), itg(1), ctg(1)
+  integer(4) :: lltemp(20)
+  !  complex(16) :: ctg
+  !
+  !  equivalence (karray(1), itg(1), rtg(1), ctg(1))
+  !
+  integer(4) :: iof01, iof02, iof03, iof04, iof05, iof06, iof07, iof08, iof09
+  integer(4) :: iof10, iof11, iof12, iof13, iof14, iof15, iof16, iof17, iof18
+  integer(4) :: iof19, iof20, iof21, iof22, iof23, iof24, iof25, iof26, iof27
+  integer(4) :: iof28, iof29, iof30, iof31, iof32, iof33, iof34, iof35, iof36
+  integer(4) :: iof37, iof38, iof39, iof40, iof41, iof42, iof43, iof44, iof45
+  integer(4) :: iof46, iof47, iof48, iof49, iof50, iof51, iof52, iof53
+  integer(4) :: ldm, ldn, ldn2, lmq, lnq, lnq2, loq
+  integer(4) :: n7, n8, n13
+  real(8) :: cc
+  real(8) :: dd
+  real(8) :: ppa, ppb
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  Begin module "subr47".')
@@ -35,7 +50,7 @@ subroutine subr47
   cc = (sqrtz (cc) - ppb) / ppa
   ldm = cc
   ldn = cc * dd
-  if (iprsup .gt. 0)  write (unit = lunit6, fmt = 2000) ldm, ldn
+  if (iprsup .gt. 0) write (unit = lunit6, fmt = 2000) ldm, ldn
 2000 format ('  The cable number is limited to ', i4, /, '  the conductor number is limited to ',  i4)
   ldn2 = ldn + ldn
   lmq = ldm * ldm
@@ -44,7 +59,7 @@ subroutine subr47
   loq = 3 * ldm
   iof01 = 1
   iof02 = iof01 + ldn
-  iof03 = ( iof02 + ldm ) * nbyte(4) / nbyte(3) + 2
+  iof03 = (iof02 + ldm) * nbyte(4) / nbyte(3) + 2
   iof04 = iof03 + ldm
   iof05 = iof04 + ldm
   iof06 = iof05 + ldm
@@ -113,13 +128,71 @@ end subroutine subr47
 
 subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi4, bi5, hi,  di, gn, rad, wy, zy, yz, sc, qc, dr0, th0, al0, dij, dir, ang, roi, esi, usi, usr, gi, radi, yzn, qn, yo, ys, yc, zs, zc, ze, zp, zpc, a, ai, b, bi, ca, cb, cc, cd, f, ldm, ldn, ldn2, lnq2)
   use blkcom
-  use labl47
-  use volt45
+  use com47
+  use volpri
+  use indcom
+  use tracom
   implicit none
+  integer(4), intent(in) :: ldm
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: ldn2
+  integer(4), intent(in) :: lnq2
+  integer(4), intent(out) :: ncpp
+  integer(4), intent(out) :: ngg
+  real(8), intent(in) :: al0
+  real(8), intent(out) :: al1i
+  real(8), intent(out) :: al2i
+  real(8), intent(out) :: al3i
+  real(8), intent(in) :: ang
+  real(8), intent(out) :: bi1
+  real(8), intent(out) :: bi2
+  real(8), intent(out) :: bi3
+  real(8), intent(out) :: bi4
+  real(8), intent(out) :: bi5
+  real(8), intent(out) :: bio
+  real(8), intent(out) :: dci
+  real(8), intent(out) :: di
+  real(8), intent(in) :: dij
+  real(8), intent(in) :: dir
+  real(8), intent(out) :: dr0
+  real(8), intent(out) :: esi
+  real(8), intent(out) :: gi
+  real(8), intent(in) :: gn
+  real(8), intent(out) :: hi
+  real(8), intent(in) :: qc
+  real(8), intent(out) :: rad
+  real(8), intent(out) :: radi
+  real(8), intent(out) :: roi
+  real(8), intent(in) :: sc
+  real(8), intent(in) :: th0
+  real(8), intent(out) :: thc
+  real(8), intent(out) :: usi
+  real(8), intent(out) :: usr
+  real(8), intent(in) :: wy
+  real(8), intent(out) :: yz
+  real(8), intent(in) :: yzn
+  real(8), intent(in) :: zy
+  integer(4) :: i, i1, iii, ik, im, in, in1, ips, irsep, isyst, itrnsf
+  integer(4) :: j, j1, j2, j3, j13, j14, jdx1, jdx2, jn, jnc, junit4
+  integer(4) :: k, kgc, kkk, kpd
+  integer(4) :: l0, l1, l5save, ldisfr, lines, liu, lnq1
+  integer(4) :: mispun, mrr
+  integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, ncmod, ngrnd, nki, nkj
+  integer(4) :: npipe, npk, nrp, nw, nx, nz
+  real(8) :: anpais
+  real(8) :: cczero
+  real(8) :: d0, d1, d9, d13, dist
+  real(8) :: factor, fdecad, freq, freqs, freqsv
+  real(8) :: pkkk
+  real(8) :: rlimit, roe3, roe4, rsg, rtio, rzero
+  real(8) :: spl2
+  real(8) :: ten, three
+  real(8) :: w
+  real(8) :: xmajor, xtotal, xzero
   complex(16) :: ys(ldn, ldn), yc(ldn, ldn), zs(ldn, ldn), zc(ldn, ldn)
   complex(16) :: ze(ldn, ldn), ai(ldn, ldn), bi(ldn, ldn), zp(ldn, ldn)
   complex(16) :: zpc(ldn, ldn), a(ldn, ldn),  b(ldn, ldn), yo(ldn, ldn)
-  complex(16) :: qn( ldn ), cmplxz, cj , f(ldn, ldn2)
+  complex(16) :: qn(ldn), cj, f(ldn, ldn2)
   complex(16) :: ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn), cd(ldn, ldn)
   character(8) :: bufsem, cname, text1, text2, text3, text4
   dimension bufsem(14)
@@ -721,100 +794,103 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   nz = ncc
   if (itypec .ne. 3)   go to 1710
   nw = npp
-  if (npp) 1750, 1750, 1711
-1710 write (lunit6, 915)  (di(i), i=1, npc)
-1711 write (lunit6, 917) freq, ik, ips
-  write (lunit6, 913)  roe
+  !  if (npp) 1750, 1750, 1711
+  if (npp .le. 0) then
+     go to 1750
+  else
+     go to 1711
+  end if
+1710 write (unit = lunit6, fmt = 915) (di(i), i = 1, npc)
+1711 write (unit = lunit6, fmt = 917) freq, ik, ips
+  write (unit = lunit6, fmt = 913) roe
   if (iearth .ne. 99)   go to 700
-  write (lunit6,916) dep1,dep2,roe,roe3,roe4,htoj2,htoj3,htoj4, hyud2, hyud3, hyud4
-700 if ( iprsup  .ge.  3 )  write (lunit6, 1714) (i, rad(i), radp(i), di(i), hi(i), i=1, nw)
-1714 format ( /,   25h before call to  'simp' .,  7x,  1hi, 12x,  3hrad,  11x,  4hradp,  13x,  2hdd,  14x,  1hh  ,/, ( 25x,  i8,  4e15.6 )  )
-  if(npais.eq.0) go to 610
-  write(lunit6,919) cname
+  write (unit = lunit6, fmt = 916) dep1, dep2, roe, roe3, roe4, htoj2, htoj3, htoj4, hyud2, hyud3, hyud4
+700 if (iprsup .ge. 3)  write (unit = lunit6, fmt = 1714) (i, rad(i), radp(i), di(i), hi(i), i = 1, nw)
+1714 format (/, " Before call to  'simp' .", 7x, 'i', 12x, 'rad', 11x, 'radp', 13x, 'dd', 14x, 'h', /, (25x, i8, 4e15.6))
+  if (npais .eq. 0) go to 610
+  write (unit = lunit6, fmt = 919) cname
   go to 615
-610 if(ncros.eq.0) go to 714
-615 if(itypec.ne.1) go to 620
-  write(lunit6,920) xtotal,xmajor,npais
+610 if (ncros .eq. 0) go to 714
+615 if (itypec .ne. 1) go to 620
+  write (unit = lunit6, fmt = 920) xtotal, xmajor, npais
   go to 714
-620 if(npais.gt.0 .and. ncros.eq.0) go to 625
-  write(lunit6,921) xtotal,xmajor,npais,rsg
+620 if (npais .gt. 0 .and. ncros .eq. 0) go to 625
+  write (unit = lunit6, fmt = 921) xtotal, xmajor, npais, rsg
   go to 630
-625 write(lunit6,922) xtotal,xmajor,npais
-630 if(ncros.ne.0) write(lunit6,923)
-  if(npais.lt.0) write(lunit6,924)
-  if(npais.gt.0) write(lunit6,925)
+625 write (unit = lunit6, fmt = 922) xtotal, xmajor, npais
+630 if (ncros .ne. 0) write (unit = lunit6, fmt = 923)
+  if (npais .lt. 0) write (unit = lunit6, fmt = 924)
+  if (npais .gt. 0) write (unit = lunit6, fmt = 925)
 919 format('0', 10x, 'Data cards by pi-circuit modeling are punched out for the following specifications ; node name ', a1, "'" )
 920 format(10x, 'Total length of overhead line =', e12.5, /, 10x, 'length of one pi-section = ', e12.5, 3x, 'number of pi sections = ', i3)
-921 format(10x, 'Total length of cable = ', e12.5, /, 10x, 'length of one major section = ', e12.5, 3x, 'number of major sections = ', i3, /, 10x, &
-       'sheath grounding resistance at major section ; ', e12.5)
-922 format(10x, 'Total lrngth of cable = ', e12.5, /, 10x, 'length of one major section =  ', e12.5, 3x, 'number of major sections = ', i3   )
+921 format(10x, 'Total length of cable = ', e12.5, /, 10x, 'length of one major section = ', e12.5, 3x, 'number of major sections = ', i3, /, 10x, 'sheath grounding resistance at major section ; ', e12.5)
+922 format(10x, 'Total lrngth of cable = ', e12.5, /, 10x, 'length of one major section =  ', e12.5, 3x, 'number of major sections = ', i3)
 923 format(10x, 'The cable is crossbonded.   ')
 924 format(10x, 'Discrete pi-circuit modeling  ')
 925 format(10x, 'Homogeneous pi-circuit modeling   ')
 714 call simp (nw, hi, di, rad, zy, dir, dij, ang, ldm, ldn )
-  if (kill .ge. 1)   go to 9200
-  if ( iprsup  .lt.  3 )   go to 1750
-  write (lunit6, 1719)  nw, nz, isyst, itypec, iearth, npc, ncc
-1719 format ( /, 24h after call to  'simp' .,56h      nw      nz   isyst  itypec  iearth     npc     ncc  ,/,24x,  7i8  )
-  write (lunit6, 1721)  (  ( zy(i,j), j=1, nw),  i=1, nw )
-1721 format ( /, 30h ((zy(i,j), j=1, nw), i=1, nw)  ,/, ( 1x, 8e15.8) )
-1750 call ymatrx(isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, yzn(1), yzn(lnq1), ldm, ldn)
   if (kill .ge. 1) go to 9200
-  if (iprsup .ge. 3) write (lunit6, 1723)  ((yz(i, j), j = 1, nz), i = 1, nz)
-1723 format ( /,  58h ((yz(i,j), j=1, nz), i=1, nz)   after call to  'ymatrx' .  ,/,  ( 1x,  8e15.8 )   )
-  do i=1, nz
-     do j=1, nz
-        if ( j  .lt.  i )   go to 702
-        ys(i,j) = cmplxz(yz(i,j), fzero)
-        ys(j,i) = ys(i,j)
+  if (iprsup .lt. 3) go to 1750
+  write (unit = lunit6, fmt = 1719) nw, nz, isyst, itypec, iearth, npc, ncc
+1719 format (/, " After call to  'simp' .      nw      nz   isyst  itypec  iearth     npc     ncc", /, 24x, 7i8)
+  write (unit = lunit6, fmt = 1721) ((zy(i, j), j = 1, nw), i = 1, nw)
+1721 format (/, ' ((zy(i,j), j=1, nw), i=1, nw)', /, (1x, 8e15.8))
+1750 call ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, yzn(1), yzn(lnq1), ldm, ldn)
+  if (kill .ge. 1) go to 9200
+  if (iprsup .ge. 3) write (unit = lunit6, fmt = 1723) ((yz(i, j), j = 1, nz), i = 1, nz)
+1723 format (/, " ((yz(i,j), j=1, nz), i=1, nz)   after call to  'ymatrx' .", /, (1x, 8e15.8))
+  do i = 1, nz
+     do j = 1, nz
+        if (j .lt. i) go to 702
+        ys(i, j) = cmplxz (yz(i, j), fzero)
+        ys(j, i) = ys(i, j)
 702  end do
   end do
-  call minv ( ys, nz, f, ldn, ldn2 )
-  if (kill .ge. 1)   go to 9200
-  if (itypec .ne. 1)   go to 703
-  if (isyst .eq. 2) call transp(ys, ncpp, yzn(1), yzn(ldn2), ca, ldm, ldn)
-  if (kill .ge. 1)   go to 9200
-703 do i=1, nz
-     do j=1, nz
-        if ( j  .lt.  i )   go to 705
-        yz(i,j)  =  realz ( ys(i,j) )
-        yz(j,i) = yz(i,j)
+  call minv (ys, nz, f, ldn, ldn2)
+  if (kill .ge. 1) go to 9200
+  if (itypec .ne. 1) go to 703
+  if (isyst .eq. 2) call transp (ys, ncpp, yzn(1 :), yzn(ldn2 :), ca, ldm, ldn)
+  if (kill .ge. 1) go to 9200
+703 do i = 1, nz
+     do j = 1, nz
+        if (j .lt. i) go to 705
+        yz(i, j) = realz (ys(i, j))
+        yz(j, i) = yz(i, j)
 705  end do
   end do
-  nx=ngrnd
-  if(npais.ge.0 .and. ncros.ne.0) nx=4
-  if(npais.ne.0) call gomen(itypec,npc,nx,npais,ncros,irsep,ncpp,ldm)
-  if ( iprsup  .ge.  3 ) write (lunit6, 2457)  ( ( yz(i,j), j=1, nz), i=1, nz )
-2457 format (/, " in  'subr47' ,   capacitance.   ( (yz(i,j), j=1, nz), i=1, nz )    ", /, (1x, 6e20.11))
+  nx = ngrnd
+  if (npais .ge. 0 .and. ncros .ne. 0) nx = 4
+  if (npais .ne. 0) call gomen (itypec, npc, nx, npais, ncros, irsep, ncpp, ldm)
+  if (iprsup .ge. 3) write (unit = lunit6, fmt = 2457) ((yz(i, j), j = 1, nz), i = 1, nz)
+2457 format (/, " in  'subr47' ,   capacitance.   ( (yz(i,j), j=1, nz), i=1, nz )", /, (1x, 6e20.11))
   iprint = 0
 9003 continue
-706 if ( ck1  .ne.  -fltinf )   go to 7446
-  if ( dist  .le.  0.0 )   go to 7446
+706 if (ck1 .ne. -fltinf) go to 7446
+  if (dist .le. 0.0d0) go to 7446
   ck1 = dist
-7446 if ( ci1  .ne.  -fltinf )   go to 7449
-  if ( roe     .le.  0.0 )   go to 7449
+7446 if (ci1 .ne. -fltinf) go to 7449
+  if (roe .le. 0.0d0) go to 7449
   ci1 = roe
-7449 if ( ialter  .eq.  2 ) roe    = ci1
+7449 if (ialter .eq. 2) roe = ci1
   iii = 0
   kkk = 1
-  if ( iprsup  .ge.  1 ) write (lunit6, 2469)  nz, ik, ialter, iprsup, roe, ci1, ck1, dist, yz(1,1), yz(1,2)
-2469 format ( /, 40h in  'subr47' ,   done with capacitance., 32h      nz      ik  ialter  iprsup  ,/, 40x,  4i8  ,/,  1x,  17x,  3hroe,  17x,  3hci1, &
-       17x,  3hck1,  16x,  4hdist,  13x,  7hyz(1,1),  13x,  7hyz(1,2) ,/,  1x,  6e20.11  )
-  if ( ik  .gt.  0 )   go to 7456
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 2469) nz, ik, ialter, iprsup, roe, ci1, ck1, dist, yz(1, 1), yz(1, 2)
+2469 format (/, " In  'subr47' ,   done with capacitance.      nz      ik  ialter  iprsup", /, 40x, 4i8, /, 1x, 17x, 'roe', 17x, 'ci1', 17x, 'ck1', 16x, 'dist', 13x, 'yz(1,1)', 13x, 'yz(1,2)', /, 1x, 6e20.11)
+  if (ik .gt. 0) go to 7456
   iprint = iprint + 1
-  if ( lastov .ne. 39 )  go to 7451
-  if ( iprint .gt. 1 )  go to 7451
+  if (lastov .ne. 39) go to 7451
+  if (iprint .gt. 1) go to 7451
   kmode = 1
   l1 = 1
   l0 = 0
   d9 = dist * tenm3
 !!!   write (*,*)  ' %%-- guts47 write on  lunit9.',
 !!!   1             '    dist, d9, =',  dist, d9,
-  write (lunit9)  l1, l1, d9, l0, itrnsf
-7451 if ( ialter  .ne.  1 )   go to 3007
+  write (unit = lunit9) l1, l1, d9, l0, itrnsf
+7451 if (ialter .ne. 1) go to 3007
   volti(iprint) = roe
   voltk(iprint) = freq
-  if ( iprint  .le.  ldisfr )   go to 3007
+  if (iprint .le. ldisfr) go to 3007
   kill = 170
   lstat(14) = ldisfr
   lstat(19) = 7456
@@ -954,12 +1030,23 @@ end subroutine guts47
 
 subroutine crosa4 (czy, icont, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  complex(16) :: czy(ldn,ldn)
-  complex(16) :: ca(ldn,ldn), cb(ldn,ldn), cc(ldn,ldn), cd(ldn,ldn)
-  complex(16) :: ce(ldn,ldn), cf(ldn,ldn), cg(ldn,ldn), f(ldn, ldn2)
+  integer(4), intent(in) :: icont
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: ldn2
+  complex(16), intent(out) :: czy(ldn, ldn)
+  complex(16), intent(in) :: ca(ldn, ldn)
+  complex(16), intent(in) :: cb(ldn, ldn)
+  complex(16), intent(in) :: cc(ldn, ldn)
+  complex(16), intent(in) :: cd(ldn, ldn)
+  complex(16), intent(in) :: ce(ldn, ldn)
+  complex(16), intent(in) :: cf(ldn, ldn)
+  complex(16), intent(in) :: cg(ldn, ldn)
+  complex(16), intent(in) :: f(ldn, ldn2)
+  integer(4) :: i
+  integer(4) :: j
   complex(16) :: cwork1
-  write ( 6, 1001 )
+  !
+  write (unit = 6, fmt = 1001)
 1001 format ('  Begin module "crosa4".  ******')
   cwork1=0.
   do i=4,6
@@ -1007,24 +1094,38 @@ end subroutine crosa4
 
 subroutine minvn (cinout, n, l, ix, ldn, ca, cb, cc, cd, cwork1, cwork2, cwork3, f, ldn2)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  complex(16) :: ca(ldn,ldn),cb(ldn,ldn),cc(ldn,ldn),cd(ldn,ldn)
-  complex(16) :: cwork1(ldn,ldn),cwork2(ldn,ldn),cwork3(ldn,ldn)
-  complex(16) :: cinout(ldn,ldn), f(ldn, ldn2)
+  integer(4), intent(in) :: ix
+  integer(4), intent(in) :: l
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: ldn2
+  integer(4), intent(in) :: n
+  complex(16), intent(in) :: ca(ldn, ldn)
+  complex(16), intent(in) :: cb(ldn, ldn)
+  complex(16), intent(in) :: cc(ldn, ldn)
+  complex(16), intent(in) :: cd(ldn, ldn)
+  complex(16), intent(out) :: cinout(ldn, ldn)
+  complex(16), intent(out) :: cwork1(ldn, ldn)
+  complex(16), intent(in) :: cwork2(ldn, ldn)
+  complex(16), intent(in) :: cwork3(ldn, ldn)
+  complex(16), intent(in) :: f(ldn, ldn2)
+  integer(4) :: i, ipl
+  integer(4) :: j, jpl
+  integer(4) :: nml
+  !
   nml = n - l
-  call cutmat(cinout,ca,cb,cc,cd,n,l,ldn)
-  do i=1,nml
-     do j=1,nml
-        cwork1(i,j)=cd(i,j)
+  call cutmat (cinout, ca, cb, cc, cd, n, l, ldn)
+  do i = 1, nml
+     do j = 1, nml
+        cwork1(i, j) = cd(i, j)
 10   end do
   end do
-  call minv(cwork1,nml,f,ldn,ldn2)
-  call mxmnm(cwork1,cc,cwork2,nml,nml,l,ldn)
-  call mxmnm(cb,cwork2,cwork1,l,nml,l,ldn)
-  do i=1,l
-     do j=1,l
-        cwork1(i,j)=ca(i,j)-cwork1(i,j)
-        cinout(i,j)=cwork1(i,j)
+  call minv (cwork1, nml, f, ldn, ldn2)
+  call mxmnm (cwork1, cc, cwork2, nml, nml, l, ldn)
+  call mxmnm (cb, cwork2, cwork1, l, nml, l, ldn)
+  do i = 1, l
+     do j =1, l
+        cwork1(i, j) = ca(i, j) - cwork1(i, j)
+        cinout(i, j) = cwork1(i, j)
 20   end do
   end do
   if(ix.eq.1) return
@@ -1078,32 +1179,41 @@ end subroutine minvn
 
 subroutine cutmat (cinput, ca, cb, cc, cd, n, l, ldn)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  complex(16) :: cinput( ldn, ldn )
-  complex(16) :: ca(ldn,ldn),cb(ldn,ldn),cc(ldn,ldn),cd(ldn,ldn)
-  do i=1,l
-     do j=1,l
-        ca(i,j)=cinput(i,j)
+  integer(4), intent(in) :: l
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: n
+  complex(16), intent(out) :: ca(ldn, ldn)
+  complex(16), intent(out) :: cb(ldn, ldn)
+  complex(16), intent(out) :: cc(ldn, ldn)
+  complex(16), intent(out) :: cd(ldn, ldn)
+  complex(16), intent(in) :: cinput(ldn, ldn)
+  integer(4) :: i, ipl
+  integer(4) :: j, jpl
+  integer(4) :: nml
+  !
+  do i = 1, l
+     do j = 1, l
+        ca(i, j) = cinput(i, j)
 10   end do
   end do
-  nml=n-l
-  do i=1,l
-     do j=1,nml
-        jpl=j+l
-        cb(i,j)=cinput(i,jpl)
+  nml = n - l
+  do i = 1, l
+     do j = 1, nml
+        jpl = j + l
+        cb(i, j) = cinput(i, jpl)
 20   end do
   end do
-  do i=1,nml
-     do j=1,l
-        ipl=i+l
-        cc(i,j)=cinput(ipl,j)
+  do i = 1, nml
+     do j = 1 ,l
+        ipl = i + l
+        cc(i, j) = cinput(ipl, j)
 30   end do
   end do
-  do i=1,nml
-     do j=1,nml
-        ipl=i+l
-        jpl=j+l
-        cd(i,j)=cinput(ipl,jpl)
+  do i = 1, nml
+     do j = 1, nml
+        ipl = i + l
+        jpl = j + l
+        cd(i, j) = cinput(ipl, jpl)
 40   end do
   end do
   return
@@ -1115,8 +1225,17 @@ end subroutine cutmat
 
 subroutine mxmnm (ca, cb, cc, l, m, n, ldn)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  complex(16) :: ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn)
+  integer(4), intent(in) :: l
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: m
+  integer(4), intent(in) :: n
+  complex(16), intent(in) :: ca(ldn, ldn)
+  complex(16), intent(in) :: cb(ldn, ldn)
+  complex(16), intent(out) :: cc(ldn, ldn)
+  integer(4) :: i
+  integer(4) :: j
+  integer(4) :: k
+  !
   do i = 1, l
      do j = 1, n
         cc(i, j) = 0.
@@ -1136,13 +1255,33 @@ end subroutine mxmnm
 !
 
 subroutine datout (w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, r, al, c, npk)
+  use iocons
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'io.ftn'
   !     8.19 data cards punch out subroutine
-  character :: cha
-  dimension r(npk), al(npk), c(npk)
-  complex(16) :: zc(ldn, ldn), yc(ldn, ldn)
+  character(1), intent(in) :: cha
+  integer(4), intent(in) :: irsep
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: nncros
+  integer(4), intent(in) :: npais
+  integer(4), intent(in) :: npk
+  integer(4), intent(in) :: nub6
+  real(8), intent(out) :: al(npk)
+  real(8), intent(out) :: c(npk)
+  real(8), intent(out) :: r(npk)
+  real(8), intent(in) :: rs
+  real(8), intent(in) :: xmajor
+  real(8), intent(in) :: w
+  complex(16), intent(in) :: yc(ldn, ldn)
+  complex(16), intent(in) :: zc(ldn, ldn)
+  integer(4) :: i, i1, ipri
+  integer(4) :: j, j1
+  integer(4) :: k, k1, k2, kk, kstep, kstop
+  integer(4) :: l, ltype, lunit6, lunit7
+  integer(4) :: mtype
+  integer(4) :: ncros, ntype, nub3
+  real(8) :: xleng
+  !
   lunit6 = gfortran_stdout_unit
   lunit7 = 7
   !     ltype=0 ; output rs
@@ -1151,105 +1290,105 @@ subroutine datout (w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, 
   !     ntype=1 ; non-crossbonded cable
   !     mtype=0 ; all sheathes are conected
   !     mtype=1 ; all sheathes are not conected
-  ncros=iabs(npais)
-  ltype=0
-  if(npais.gt.0.and.nncros.eq.0) ltype=1
-  ntype=1
-  if(npais.lt.0.and.nncros.ne.0) ntype=0
-  mtype=irsep
-  if(npais.gt.0.and.nncros.eq.0) mtype=1
-  nub3=3
-  if(ntype.eq.1) nub3=1
-  l=0
-  xleng=xmajor
-  if(ntype.eq.0) xleng=xleng/3.
-  do i=1,nub6
-     do j=1,nub6
-        if(j.gt.i) go to 400
-        l=l+1
-        r(l)=realz(zc(i,j))*xleng
-        al(l)=aimagz(zc(i,j))/w*xleng*1.e3
-        c(l)=aimagz(yc(i,j))/w*xleng*1.e6
+  ncros = iabs (npais)
+  ltype = 0
+  if (npais .gt. 0 .and. nncros .eq. 0) ltype = 1
+  ntype = 1
+  if (npais .lt. 0 .and. nncros .ne. 0) ntype = 0
+  mtype = irsep
+  if (npais .gt. 0 .and. nncros .eq. 0) mtype = 1
+  nub3 = 3
+  if (ntype .eq. 1) nub3 = 1
+  l = 0
+  xleng = xmajor
+  if (ntype .eq. 0) xleng = xleng / 3.0d0
+  do i = 1, nub6
+     do j = 1, nub6
+        if (j .gt. i) go to 400
+        l = l + 1
+        r(l) = realz (zc(i, j)) * xleng
+        al(l) = aimagz (zc(i, j)) / w * xleng * 1.0e3
+        c(l) = aimagz (yc(i, j)) / w * xleng * 1.0e6
 400  end do
   end do
-  write(lunit6,1400)
-  write(lunit7,1401)
-1400 format(1h ,11h$vintage, 1)
-1401 format(11h$vintage, 1)
-  l=0
-  if(ltype.eq.1) go to 610
-  kstep=1
-  kk=nub6/2+1
-  if(nub6.eq.4) kk=4
-  kstop=(nub6+1)/2+1
-  if(mtype.ne.0) kstop=nub6
-  if(nub6.eq.4) kstop=4
-  if(nub6.eq.7.and.mtype.eq.0) kstop=4
-  do k=kk,kstop,kstep
-     write(lunit6,1300) cha,k,rs
-     write(lunit7,1301) cha,k,rs
+  write (unit = lunit6, fmt = 1400)
+  write (unit = lunit7, fmt = 1401)
+1400 format (1x, '$vintage, 1')
+1401 format ('$vintage, 1')
+  l = 0
+  if (ltype .eq. 1) go to 610
+  kstep = 1
+  kk = nub6 / 2 + 1
+  if (nub6 .eq. 4) kk = 4
+  kstop = (nub6 + 1) / 2 + 1
+  if (mtype .ne. 0) kstop = nub6
+  if (nub6 .eq. 4) kstop = 4
+  if (nub6 .eq. 7 .and. mtype .eq. 0) kstop = 4
+  do k = kk, kstop, kstep
+     write (unit = lunit6, fmt = 1300) cha, k, rs
+     write (unit = lunit7, fmt = 1301) cha, k, rs
 900 end do
-1300 format(1h ,2x,a1,3hin ,i2,18x,e16.5)
-1301 format(2x,a1,3hin ,i2,18x,e16.5)
+1300 format (' ', 2x, a1, 'in ', i2, 18x, e16.5)
+1301 format (2x, a1, 'in ', i2, 18x, e16.5)
 610 continue
   !     i ; number of major section
   !     j ; number of minor section
   !     k ; number of phase
-  do i=1,ncros
-     do j=1,nub3
-        do k=1,nub6
+  do i = 1, ncros
+     do j = 1, nub3
+        do k = 1, nub6
            !     following two statements are for the third minor section
-           k2=k
-           if(mtype.eq.1) go to 910
-           if(j.eq.3.or.ntype.eq.1) call cha444(k,k2)
+           k2 = k
+           if (mtype .eq. 1) go to 910
+           if (j .eq. 3 .or. ntype .eq. 1) call cha444(k, k2)
 910        continue
            !     following two statements are for crossbonding
-           k1=k
-           if(j.ne.1) call cha645(k,k1)
+           k1 = k
+           if (j .ne. 1) call cha645(k, k1)
            !     following one statement is for the first minor section
-           if(j.eq.1.and.mtype.ne.1) call cha444(k,k1)
+           if (j .eq. 1 .and. mtype .ne. 1) call cha444(k, k1)
            !     following two statements are for seriese conection of
            !     major section
-           j1=j
-           if(ntype.ne.1) call cha312(j,j1)
+           j1 = j
+           if (ntype .ne. 1) call cha312(j, j1)
            !     following two statements are for sending end
-           i1=i
-           if(j.eq.1) i1=i-1
-           ipri=1
-           if(i1.eq.0) ipri=2
-           if(i.ne.ncros) go to 700
-           if(ntype.eq.1.or.j.eq.3) ipri=3
+           i1 = i
+           if (j .eq. 1) i1 = i - 1
+           ipri = 1
+           if (i1 .eq. 0) ipri = 2
+           if (i .ne. ncros) go to 700
+           if (ntype .eq. 1 .or. j .eq. 3) ipri = 3
            !     ipri=1 ;
            !     ipri=2 ; sending end
            !     ipri=3 ; recieving end
 700        continue
-           if(ncros .eq. 1 .and. ntype .eq. 1) ipri = 4
-           call pri(i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c,npk)
+           if (ncros .eq. 1 .and. ntype .eq. 1) ipri = 4
+           call pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c,npk)
 300     end do
 200  end do
-     if(ltype.eq.1) go to 100
-     j=3
-     if(ntype.eq.1) j=1
-     if(i.eq.ncros) go to 2010
-     do k=kk,kstop,kstep
-        write(lunit6,2000) cha,i,j,k,cha,k
-        write(lunit7,2001) cha,i,j,k,cha,k
+     if (ltype .eq. 1) go to 100
+     j = 3
+     if (ntype .eq. 1) j = 1
+     if (i .eq. ncros) go to 2010
+     do k = kk, kstop, kstep
+        write (unit = lunit6, fmt = 2000) cha, i, j, k, cha, k
+        write (unit = lunit7, fmt = 2001) cha, i, j, k, cha, k
 920  end do
-2000 format(1h ,2x,a1,i2,i1,i2,6x,a1,3hin ,i2)
-2001 format(2x,a1,i2,i1,i2,6x,a1,3hin ,i2)
+2000 format (' ', 2x, a1, i2, i1, i2, 6x, a1, 'in ', i2)
+2001 format (2x, a1, i2, i1, i2, 6x, a1, 'in ', i2)
      go to 100
 2010 continue
-     do 930 k=kk,kstop,kstep
-        write(lunit6,2100) cha,k,cha,k
-        write(lunit7,2101) cha,k,cha,k
+     do 930 k = kk, kstop, kstep
+        write (unit = lunit6, fmt = 2100) cha, k, cha, k
+        write (unit = lunit7, fmt = 2101) cha, k, cha, k
 930  end do
-2100 format(1h ,2x,a1,3hout,i2,6x,a1,3hin ,i2)
-2101 format(2x,a1,3hout,i2,6x,a1,3hin ,i2)
+2100 format (' ', 2x, a1, 'out', i2, 6x, a1, 'in ', i2)
+2101 format (2x, a1, 'out', i2, 6x, a1, 'in ', i2)
 100 end do
-  write(lunit6,1410)
-  write(lunit7,1411)
-1410 format(1h ,11h$vintage, 0)
-1411 format(11h$vintage, 0)
+  write (unit = lunit6, fmt = 1410)
+  write (unit = lunit7, fmt = 1411)
+1410 format (' ', '$vintage, 0')
+1411 format ('$vintage, 0')
   return
 end subroutine datout
 
@@ -1257,17 +1396,28 @@ end subroutine datout
 ! subroutine cha645.
 !
 
-subroutine cha645 (k,k1)
+subroutine cha645 (k, k1)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  if(k.le.3.or.k.ge.7) return
-  kk=k-3
-  go to (10,20,30),kk
-10 k1=6
-  return
-20 k1=4
-  return
-30 k1=5
+  integer(4), intent(in) :: k
+  integer(4), intent(out) :: k1
+  integer(4) :: kk
+  !
+  if (k .le. 3 .or. k .ge. 7) return
+  kk = k - 3
+  !  go to (10,20,30),kk
+  select case (kk)
+  case (1)
+     !10   k1 = 6
+     k1 = 6
+
+  case (2)
+     !20   k1 = 4
+     k1 = 4
+
+  case (3)
+     !30   k1 = 5
+     k1 = 5
+  end select
   return
 end subroutine cha645
 
@@ -1277,13 +1427,25 @@ end subroutine cha645
 
 subroutine cha312 (j, j1)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  go to (10,20,30),j
-10 j1=3
-  return
-20 j1=1
-  return
-30 j1=2
+  integer(4), intent(out) :: j1
+  integer(4), intent(in) :: j
+  !
+!   go to (10,20,30),j
+! 10 j1=3
+!   return
+! 20 j1=1
+!   return
+! 30 j1=2
+  select case (j)
+  case (1)
+     j1 = 3
+
+  case (2)
+     j1 = 1
+
+  case (3)
+     j1 = 2
+  end select
   return
 end subroutine cha312
 
@@ -1293,9 +1455,11 @@ end subroutine cha312
 
 subroutine cha444 (k, kk)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  if(k.le.3.or.k.gt.7) return
-  kk=4
+  integer(4), intent(in) :: k
+  integer(4), intent(out) :: kk
+  !
+  if (k .le. 3 .or. k .gt. 7) return
+  kk = 4
   return
 end subroutine cha444
 
@@ -1304,35 +1468,48 @@ end subroutine cha444
 !
 
 subroutine pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
+  use iocons
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  character :: cha
-  dimension r(npk),al(npk),c(npk)
+  character(1), intent(in) :: cha
+  integer(4), intent(in) :: i
+  integer(4), intent(in) :: i1
+  integer(4), intent(in) :: ipri
+  integer(4), intent(in) :: j
+  integer(4), intent(in) :: j1
+  integer(4), intent(in) :: k
+  integer(4), intent(in) :: k1
+  integer(4), intent(in) :: k2
+  integer(4), intent(out) :: l
+  integer(4), intent(in) :: npk
+  real(8), intent(in) :: al(npk)
+  real(8), intent(in) :: c(npk)
+  real(8), intent(in) :: r(npk)
+  integer(4) :: ll, lunit6, lunit7
+  !
   lunit6 = gfortran_stdout_unit
   lunit7 = 7
-  go to (10, 20, 30, 40),ipri
 10 continue
   if (k .ne. 1) go to 15
-  write(lunit6,1000) k,cha,i1,j1,k1,cha,i,j,k2,cha,cha
-  write(lunit7,1001) k,cha,i1,j1,k1,cha,i,j,k2,cha,cha
-1000 format(1h ,i2,a1,i2,i1,i2,a1,i2,i1,i2,a1,5hin  1,a1,5h 11 1)
-1001 format(i2,a1,i2,i1,i2,a1,i2,i1,i2,a1,5hin  1,a1,5h 11 1)
+  write (unit = lunit6, fmt = 1000) k, cha, i1, j1, k1, cha, i, j, k2, cha, cha
+  write (unit = lunit7, fmt = 1001) k, cha, i1, j1, k1, cha, i, j, k2, cha, cha
+1000 format (' ', i2, a1, i2, i1, i2, a1, i2, i1, i2, a1, 'in  1', a1, ' 11 1')
+1001 format (i2, a1, i2, i1, i2, a1, i2, i1, i2, a1, 'in  1', a1, ' 11 1')
   return
 15 continue
-  write(lunit6,1010) k,cha,i1,j1,k1,cha,i,j,k2
-  write(lunit7,1011) k,cha,i1,j1,k1,cha,i,j,k2
-1010 format(1h ,i2,a1,i2,i1,i2,a1,i2,i1,i2)
-1011 format(i2,a1,i2,i1,i2,a1,i2,i1,i2)
+  write (unit = lunit6, fmt = 1010) k, cha, i1, j1, k1, cha, i, j, k2
+  write (unit = lunit7, fmt = 1011) k, cha, i1, j1, k1, cha, i, j, k2
+1010 format (' ', i2, a1, i2, i1, i2, a1, i2, i1, i2)
+1011 format (i2, a1, i2, i1, i2, a1, i2, i1, i2)
   return
 20 continue
-  l=l+1
-  write(lunit6,1100) k,cha,k1,cha,i,j,k2,r(l),al(l),c(l)
-  write(lunit7,1101) k,cha,k1,cha,i,j,k2,r(l),al(l),c(l)
-1100 format(1h ,i2,a1,3hin ,i2,a1,i2,i1,i2,12x,3e16.5)
-1101 format(i2,a1,3hin ,i2,a1,i2,i1,i2,12x,3e16.5)
+  l = l + 1
+  write (unit = lunit6, fmt = 1100) k, cha, k1, cha, i, j, k2, r(l), al(l), c(l)
+  write (unit = lunit7, fmt = 1101) k, cha, k1, cha, i, j, k2, r(l), al(l), c(l)
+1100 format (' ', i2, a1, 'in ', i2, a1, i2, i1, i2, 12x, 3e16.5)
+1101 format (i2, a1, 'in ', i2, a1, i2, i1, i2, 12x, 3e16.5)
 2000 continue
-  if(k.eq.1) return
-  do ll=2,k
+  if (k .eq. 1) return
+  do ll = 2, k
      l=l+1
      write(lunit6,1110) r(l),al(l),c(l)
      write(lunit7,1111) r(l),al(l),c(l)
@@ -1363,52 +1540,55 @@ subroutine pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
 end subroutine pri
 
 !
-!     subroutine nyan.
+! subroutine nyan.
 !
 
 subroutine nyan (itype, npc, nc, ncpp, ngrnd, ncros, npais, ldm)
+  use iocons
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  dimension ncpp(ldm)
+  integer(4), intent(in) :: itype
+  integer(4), intent(in) :: ldm
+  integer(4), intent(in) :: nc
+  integer(4), intent(in) :: ncpp(ldm)
+  integer(4), intent(in) :: ncros
+  integer(4), intent(in) :: ngrnd
+  integer(4), intent(in) :: npais
+  integer(4), intent(in) :: npc
+  !  dimension ncpp(ldm)
+  integer(4) :: i
+  integer(4) :: lunit6
+  integer(4) :: nwork
+  !
   lunit6 = gfortran_stdout_unit
-  if(itype.eq.1) return
-  if(ncros.eq.0) return
-  if(npc.ne.3) go to 9000
-  do i=1,3
-     if(ncpp(i).eq.1.or.ncpp(i).gt.3) go to 9100
+  if (itype .eq. 1) return
+  if (ncros .eq. 0) return
+  if (npc .ne. 3) go to 9000
+  do i = 1, 3
+     if(ncpp(i) .eq. 1 .or. ncpp(i) .gt. 3) go to 9100
 100 end do
-  nwork=6+ngrnd
-  if(nwork.ne.nc) go to 9200
-  if(ncpp(1).le.ncpp(2).and.ncpp(2).le.ncpp(3)) return
+  nwork = 6 + ngrnd
+  if (nwork .ne. nc) go to 9200
+  if (ncpp(1) .le. ncpp(2) .and. ncpp(2) .le. ncpp(3)) return
   go to 9300
 9000 continue
-  write(lunit6,7000)
-  write(lunit6,8000)
-8000 format(1h0,10x,31hnumber of phases should be '3'.)
+  write (unit = lunit6, fmt = 7000)
+  write (unit = lunit6, fmt = 8000)
+8000 format ('0', 10x, "Number of phases should be '3'.")
   call stoptp
 9100 continue
-  write(lunit6,7000)
-  write(lunit6,8100)
-8100 format('0', 10x, 'number of conductors in one phase should', "be '2' (core and sheath) with 'ngrnd'='0", &
-       "' for an sc cable and 'ngrnd'='1' for a /", ' ', 10x, "pt cable, of '3' (core, sheath and armor", &
-       ") with 'ngrnd'='3, considering the fact ", 'that all the 3-phase cables have the    /' &
-       ' ', 10x, 'same configuration.                     ')
+  write (unit = lunit6, fmt = 7000)
+  write (unit = lunit6, fmt = 8100)
+8100 format('0', 10x, 'number of conductors in one phase should', "be '2' (core and sheath) with 'ngrnd'='0", "' for an sc cable and 'ngrnd'='1' for a /", ' ', 10x, "pt cable, of '3' (core, sheath and armor", ") with 'ngrnd'='3, considering the fact ", 'that all the 3-phase cables have the    /' ' ', 10x, 'same configuration.')
   call stoptp
 9200 continue
-  write(lunit6,7000)
-  write(lunit6,8200)
-8200 format('0', 10x, "In the case of 'npais.ge.0 .and. ncros.ne.0', the final number of conductors  ",/,11x, &
-       "considering grounded conductors reduction should be '6'.", /, 11x, &
-       "'ngrnd' should be '3' for an sc cable with armor and '1' for a pt cable.  If a 3-phase sc cable with armor is enclosed  ",/, &
-       ' ', 10x, 'within a pipe (i.e., pt cable), please,  neglect the pipe, i.e., regard as an sc ', &
-       "cable with 'ngrand'='3', considering the", /, ' ', 10x, 'fact that all the 3-phase cables have   the same configuration.                 ')
+  write (unit = lunit6, fmt = 7000)
+  write (unit = lunit6, fmt = 8200)
+8200 format('0', 10x, "In the case of 'npais.ge.0 .and. ncros.ne.0', the final number of conductors  ",/,11x, "considering grounded conductors reduction should be '6'.", /, 11x, "'ngrnd' should be '3' for an sc cable with armor and '1' for a pt cable.  If a 3-phase sc cable with armor is enclosed  ",/, ' ', 10x, 'within a pipe (i.e., pt cable), please,  neglect the pipe, i.e., regard as an sc ', "cable with 'ngrand'='3', considering the", /, ' ', 10x, 'fact that all the 3-phase cables have   the same configuration.')
   call stoptp
 9300 continue
-  write(lunit6,7000)
-  write(lunit6,8300)
-8300 format('0',10x, 'Eeach cable of a 3-phase cable system has the same configuration in general. If not, please arrange the data cards as    ', /, &
-       ' ', 10x, 'follows : first comes a cable of which the number of conductors is smallest, second comes a cable of the second smallest', /, &
-       ' ', 10x, 'number of conductors,.... Please check your data.')
+  write (unit = lunit6, fmt = 7000)
+  write (unit = lunit6, fmt = 8300)
+8300 format('0',10x, 'Eeach cable of a 3-phase cable system has the same configuration in general. If not, please arrange the data cards as', /, ' ', 10x, 'follows : first comes a cable of which the number of conductors is smallest, second comes a cable of the second smallest', /, ' ', 10x, 'number of conductors,.... Please check your data.')
   call stoptp
   return
 7000 format('0', 10x, "Errors for a crossbonded cable (ncros.ne.0) when 'npais'='0'.")
@@ -1419,87 +1599,90 @@ end subroutine nyan
 !
 
 subroutine gomen (itype, npc, nx, npais, ncros, irsep, ncpp, ldm)
+  use iocons
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  dimension ncpp(ldm)
+  integer(4), intent(in) :: irsep
+  integer(4), intent(in) :: itype
+  integer(4), intent(in) :: ldm
+  integer(4), intent(in) :: ncpp(ldm)
+  integer(4), intent(in) :: ncros
+  integer(4), intent(in) :: npais
+  integer(4), intent(in) :: npc
+  integer(4), intent(in) :: nx
+  !  dimension ncpp(ldm)
+  integer(4) :: i
+  integer(4) :: lunit6
+  !
   lunit6 = gfortran_stdout_unit
-  if(npais.lt.0) go to 1000
-  if(ncros.ne.0) go to 1200
-  if(irsep.eq.0) return
+  if (npais .lt. 0) go to 1000
+  if (ncros .ne. 0) go to 1200
+  if (irsep .eq. 0) return
   go to 9120
-1000 if(ncros.eq.0) go to 1100
-  if(nx.lt.6.or.nx.gt.7) go to 9010
-1200 if(npc.ne.3) go to 9020
-  do i=1,3
-     if(ncpp(i).eq.1.or.ncpp(i).gt.3) go to 9030
+1000 if (ncros .eq. 0) go to 1100
+  if (nx .lt. 6 .or. nx .gt. 7) go to 9010
+1200 if (npc .ne. 3) go to 9020
+  do i = 1, 3
+     if (ncpp(i) .eq. 1 .or. ncpp(i) .gt. 3) go to 9030
 100 end do
-  if(ncpp(1).gt.ncpp(2).or.ncpp(2).gt.ncpp(3)) go to 9040
-  if(nx.eq.6) return
-  if(npais.le.0 .or. ncros.eq.0) go to 200
-  if(nx.eq.4) return
-200 if(ncpp(2).eq.2) return
+  if (ncpp(1) .gt. ncpp(2) .or. ncpp(2) .gt. ncpp(3)) go to 9040
+  if (nx .eq. 6) return
+  if (npais .le. 0 .or. ncros .eq. 0) go to 200
+  if (nx .eq. 4) return
+200 if (ncpp(2) .eq. 2) return
   go to 9110
-1100 if(nx.gt.7) go to 9050
-  if(nx.ge.6) go to 1200
-  if(nx.eq.2) go to 1300
-  if(nx.eq.3) go to 1400
+1100 if (nx .gt. 7) go to 9050
+  if (nx .ge. 6) go to 1200
+  if (nx .eq. 2) go to 1300
+  if (nx .eq. 3) go to 1400
   go to 9060
-1400 if(irsep.eq.0) go to 9070
-  if(npc.ne.1) go to 9080
+1400 if (irsep .eq. 0) go to 9070
+  if (npc .ne. 1) go to 9080
   return
-1300 if(npc.ne.1) go to 9090
+1300 if (npc .ne. 1) go to 9090
   return
 9010 continue
-  write(lunit6,8010)
-8010 format('0', 10x, "In the case of 'npais.lt.0.and.ncros.ne.0' the final number of conductors including grounded conductors reduction should", / &
-       ' ', 10x, "be 6 or 7, i.e., 'total number of conductors of the cable system'-'ngrnd'='6' or, '7', but 'ngrnd' should be '1' for a pt", / &
-       ' ' ,10x, 'cable.                                  ')
+  write (unit = lunit6, fmt = 8010)
+8010 format ('0', 10x, "In the case of 'npais.lt.0.and.ncros.ne.0' the final number of conductors including grounded conductors reduction should", / ' ', 10x, "be 6 or 7, i.e., 'total number of conductors of the cable system'-'ngrnd'='6' or, '7', but 'ngrnd' should be '1' for a pt", / ' ' ,10x, 'cable.')
   call stoptp
 9020 continue
-  write(lunit6,8020)
-8020 format(1h0,10x,40hnumber of phases should be '3'.         )
+  write (unit = lunit6, fmt = 8020)
+8020 format ('0', 10x, "Number of phases should be '3'.")
   call stoptp
 9030 continue
-  write(lunit6,8030)
-8030 format(1h0,10x,40hnumber of conductors in one phase should, 40 h be '2' (core and sheath) with 'ngrnd'=', 40 h0' for an sc cable and 'ngrnd'='1' for a/ &
-       1 h ,10x,40hpt cable, or '3' (core, sheath and armor, 40 h) with 'ngrnd'='3' for an sc cable.     )
+  write (unit = lunit6, fmt = 8030)
+8030 format ('0', 10x, "Number of conductors in one phase should be '2' (core and sheath) with 'ngrnd'='0' for an sc cable and 'ngrnd'='1' for a", /, 1x, 10x, "pt cable, or '3' (core, sheath and armor) with 'ngrnd'='3' for an sc cable.")
   call stoptp
 9040 continue
-  write(lunit6,8040)
-8040 format('0', 10x, 'Eeach cable of a 3-phase cable system has the same configuration in general. If not, please arrange the data cards as    ', / &
-       ' ', 10x, 'follows : first comes a cable of which the number of conductors is smallest, second comes a cable of the second smallest ', / &
-       ' ', 10x, 'number of conductors,.... Please check your data                                ')
+  write (unit = lunit6, fmt = 8040)
+8040 format ('0', 10x, 'Eeach cable of a 3-phase cable system has the same configuration in general. If not, please arrange the data cards as', / 1x, 10x, 'follows : first comes a cable of which the number of conductors is smallest, second comes a cable of the second smallest ', /, 1x, 10x, 'number of conductors,.... Please check your data')
   call stoptp
 9050 continue
-  write(lunit6,8050)
-8050 format('0', 10x, "In the case of 'npais.lt.0', the final number of conductors including grounded conductors reduction should not be       ", / &
-       ' ', 10x, "greater than '7'. Please check your data.")
+  write (unit = lunit6, fmt = 8050)
+8050 format ('0', 10x, "In the case of 'npais.lt.0', the final number of conductors including grounded conductors reduction should not be", /, 1x, 10x, "greater than '7'. Please check your data.")
   call stoptp
 9060 continue
-  write(lunit6,8060)
-8060 format('0', 10x, "In the case of 'npais.lt.0', the final number of conductors including grounded conductors reduction should not be '1' or", / &
-       ' ', 10x, "'4' or '5'. Please check your data.            ")
+  write (unit = lunit6, fmt = 8060)
+8060 format('0', 10x, "In the case of 'npais.lt.0', the final number of conductors including grounded conductors reduction should not be '1' or", /, 1x, 10x, "'4' or '5'. Please check your data.")
   call stoptp
 9070 continue
-  write(lunit6,8070)
-8070 format('0', 10x, "In this case, it should not be 'irsep=0', please change 'irsep=1'                 ")
+  write (unit = lunit6, fmt = 8070)
+8070 format('0', 10x, "In this case, it should not be 'irsep=0', please change 'irsep=1'")
   call stoptp
 9080 continue
-  write(lunit6,8080)
+  write (unit = lunit6, fmt = 8080)
 8080 format('0', 10x, "In this case, number of phases (npc) shohuld only be '1'. Please check your data.")
   call stoptp
 9090 continue
-  write(lunit6,8090)
-8090 format('0', 10x, "Sorry, in the case of 'npais.lt.0', a two phase cable (npc=2) consisting only of core or consisting of core and sheath  ", / &
-       ' ', 10x, 'can not be dealt with. Please check your data.                                   ')
+  write (unit = lunit6, fmt = 8090)
+8090 format ('0', 10x, "Sorry, in the case of 'npais.lt.0', a two phase cable (npc=2) consisting only of core or consisting of core and sheath  ", /, 1x, 10x, 'can not be dealt with. Please check your data.')
   call stoptp
 9110 continue
-  write(lunit6,8110)
-8110 format(' ', 10x, "In this case, ncpp(2) should be '2'. Please check your data.                       ")
+  write (unit = lunit6, fmt = 8110)
+8110 format (1x, 10x, "In this case, ncpp(2) should be '2'. Please check your data.")
   call stoptp
 9120 continue
-  write(lunit6,8120)
-8120 format('0', 10x, "In the case of 'npais.gt.0.and.ncro,34 hs.eq.0', it should not be 'irsep=1,', please change 'irsep=0'.        ")
+  write (unit = lunit6, fmt = 8120)
+8120 format ('0', 10x, "In the case of 'npais.gt.0.and.ncro,34 hs.eq.0', it should not be 'irsep=1,', please change 'irsep=0'.")
   call stoptp
   return
 end subroutine gomen
@@ -1509,10 +1692,9 @@ end subroutine gomen
 !
 
 subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, ca, zo, cc, f, ldn, ldn2, lnq2, mrr, nrp)
+  use blkcom
+  use com47
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labl47.ftn'
   dimension gn(ldn), an(lnq2)
   dimension tir(20,20), tii(20,20)
   dimension pp1(20,20), pp2(20,20)
@@ -1525,6 +1707,7 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
   complex(16) :: zc(ldn, ldn), zs(ldn, ldn), ys(ldn, ldn), yc(ldn, ldn)
   complex(16) :: a(ldn, ldn), ai(ldn, ldn),  b(ldn, ldn), bi(ldn, ldn)
   complex(16) :: yo(ldn, ldn), ze(ldn, ldn), qn(ldn), f(ldn, ldn2)
+  !
   data  iseq  /  15*0  /
   ntol=iprint-1
   cjw = cmplxz ( fzero, w )
@@ -2162,24 +2345,62 @@ end subroutine unwind
 ! subroutine zymx.
 !
 
-subroutine zymx( w,nw,isyst,ngrnd, ngg,ncpp, radi,zy,yz,dir,dij,ang,usi,usr,esi,dr0,th0,al0,hi,di,bio,bi1,bi2,bi3,bi4, &
-     bi5,al1i,al2i,al3i,dci, nx, yzn,   ys,yc,zp,zpc,zs,ze,zc,ca,cb,cc,cd,f, ldm, ldn, ldn2, lnq2 )
+subroutine zymx (w, nw, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, usi, usr, esi, dr0, th0, al0, hi, di, bio, bi1, bi2, bi3, bi4, bi5, al1i, al2i, al3i, dci, nx, yzn, ys, yc, zp, zpc, zs, ze, zc, ca, cb, cc, cd, f, ldm, ldn, ldn2, lnq2)
+  use blkcom
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z),integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labl47.ftn'
-  complex(16) :: zpc(ldn, ldn), cmplxz, cjw
+  integer(4), intent(in) :: isyst
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: ldn2
+  integer(4), intent(in) :: ldm
+  integer(4), intent(in) :: lnq2
+  integer(4), intent(in) :: ngg(ldn)
+  integer(4), intent(in) :: ncpp(ldm)
+  integer(4), intent(in) :: ngrnd
+  integer(4), intent(out) :: nx
+  integer(4), intent(in) :: nw
+  real(8), intent(in) :: al0(ldm, ldm)
+  real(8), intent(in) :: al1i(ldm)
+  real(8), intent(in) :: al2i(ldm)
+  real(8), intent(in) :: al3i(ldm)
+  real(8), intent(in) :: ang(ldm, ldm)
+  real(8), intent(in) :: bio(ldm)
+  real(8), intent(in) :: bi1(ldm)
+  real(8), intent(in) :: bi2(ldm)
+  real(8), intent(in) :: bi3(ldm)
+  real(8), intent(in) :: bi4(ldm)
+  real(8), intent(in) :: bi5(ldm)
+  real(8), intent(in) :: dci(ldm)
+  real(8), intent(in) :: di(ldn)
+  real(8), intent(in) :: dij(ldm, ldm)
+  real(8), intent(in) :: dir(ldm, ldm)
+  real(8), intent(in) :: dr0(ldm, ldm)
+  real(8), intent(in) :: esi(ldm, 3)
+  real(8), intent(in) :: hi(ldm)
+  real(8), intent(in) :: radi(ldm, 7)
+  real(8), intent(in) :: th0(ldm, ldm)
+  real(8), intent(in) :: usi(ldm, 3)
+  real(8), intent(in) :: usr(ldm, 3)
+  real(8), intent(in) :: w
+  real(8), intent(in) :: yz(ldn, ldn)
+  real(8), intent(out) :: yzn(lnq2)
+  real(8), intent(in) :: zy(ldn, ldn)
+  integer(4) :: i
+  integer(4) :: j
+  integer(4) :: k
+  integer(4) :: l, ll0, ll1, ll2
+  integer(4) :: mdx, mdy
+  integer(4) :: n1, n2
+  real(8) :: c1
+  real(8) :: d1, d2, d3, d4
+  real(8) :: freq
+  complex(16) :: zpc(ldn, ldn), cjw
   complex(16) :: ys(ldn, ldn), yc(ldn, ldn), zp(ldn, ldn)
   complex(16) :: zs(ldn, ldn), ze(ldn, ldn), zc(ldn, ldn)
   complex(16) :: ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn)
   complex(16) :: cd(ldn, ldn), f(ldn, ldn2)
-  dimension ngg(ldn), ncpp(ldm), yzn(lnq2)
-  dimension radi(ldm, 7),  zy(ldn, ldn),  yz(ldn, ldn)
-  dimension dij(ldm, ldm), ang(ldm, ldm), usi(ldm, 3), usr(ldm, 3)
-  dimension dir(ldm, ldm), esi(ldm, 3),   dci(ldm),    hi(ldm)
-  dimension dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm), di(ldn)
-  dimension bio(ldm), bi1(ldm),bi2(ldm), bi3(ldm), bi4(ldm)
-  dimension bi5(ldm), al1i(ldm), al2i(ldm), al3i(ldm)
+  !
   ll0=0
   ll1=1
   nx=ngrnd
@@ -2246,7 +2467,7 @@ subroutine zymx( w,nw,isyst,ngrnd, ngg,ncpp, radi,zy,yz,dir,dij,ang,usi,usr,esi,
   if ( ngg(i)  .lt.  1 )  go to 1966
   mdx = i + 1
   do j = 1, nw
-1931 yzn(j) = realz(zc(i, j))
+1931 yzn(j) = realz (zc(i, j))
   end do
   do j = mdx, nx
      mdy = j - 1
@@ -2274,9 +2495,16 @@ subroutine zymx( w,nw,isyst,ngrnd, ngg,ncpp, radi,zy,yz,dir,dij,ang,usi,usr,esi,
   nx = nx - 1
 1966 if ( i  .gt.  1 )  go to 1945
   if (itypec .ne. 1)   go to 300
-  if (nw-nx) 890, 340, 310
+  !  if (nw-nx) 890, 340, 310
+  if (nw - nx .lt. 0) then
+     go to 890
+  else if (nw - nx .eq. 0) then
+     go to 340
+  else
+     go to 310
+  end if
 300 if(nx .eq. nw)  go to 350
-310 call minvn(zc,nw,nx,ll1,ldn,ca,cb,cc,cd,ze,zp,zpc,f,ldn2)
+310 call minvn (zc, nw, nx, ll1, ldn, ca, cb, cc, cd, ze, zp, zpc, f, ldn2)
   if(itypec .ne. 1) go to 350
   if (kill .ge. 1)   go to 9200
   go to 340
@@ -2287,8 +2515,8 @@ subroutine zymx( w,nw,isyst,ngrnd, ngg,ncpp, radi,zy,yz,dir,dij,ang,usi,usr,esi,
   if (numaki .lt. 9 )  go to 90
 350 if(ncros.eq.0 .or. npais.lt.0) go to 890
   nx=4
-  call crosa4( zc,ll0,ldn,ca,cb,cc,cd,ze,zp,zpc,f,ldn2 )
-  call crosa4( yc,ll1,ldn,ca,cb,cc,cd,ze,zp,zpc,f,ldn2 )
+  call crosa4 (zc, ll0, ldn, ca, cb, cc, cd, ze, zp, zpc, f, ldn2)
+  call crosa4 (yc, ll1, ldn, ca, cb, cc, cd, ze, zp, zpc, f, ldn2)
 890 n1 = nx
   n2 = 2 * n1 * n1
   k = 1
@@ -2387,111 +2615,128 @@ end subroutine zymx
 ! subroutine ymatr.
 !
 
-subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, a2, ldm, ldn )
+subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, a2, ldm, ldn)
+  use com47
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl47.ftn'
-  dimension  a1(ldn,ldn), a2(ldn,ldn), ncpp(ldm)
-  dimension  zy(ldn, ldn), yz(ldn, ldn), al0(ldm, ldm)
-  dimension  esi(ldm, 3), al1i(ldm), al2i(ldm), al3i(ldm)
-  do i=1,ldn
-     do j=1,ldn
-        a1(i,j) = 0.0
-        a2(i,j) = 0.0
-        yz(i,j) = 0.0
+  integer(4), intent(in) :: isyst
+  integer(4), intent(in) :: ldm
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: lunit6
+  integer(4), intent(in) :: ncpp(ldm)
+  real(8), intent(out) :: a1(ldn, ldn)
+  real(8), intent(out) :: a2(ldn, ldn)
+  real(8), intent(in) :: al0(ldm, ldm)
+  real(8), intent(in) :: al1i(ldm)
+  real(8), intent(in) :: al2i(ldm)
+  real(8), intent(in) :: al3i(ldm)
+  real(8), intent(in) :: esi(ldm, 3)
+  real(8), intent(out) :: yz(ldn, ldn)
+  real(8), intent(out) :: zy(ldn, ldn)
+  !  dimension  a1(ldn,ldn), a2(ldn,ldn), ncpp(ldm)
+  !  dimension  zy(ldn, ldn), yz(ldn, ldn), al0(ldm, ldm)
+  !  dimension  esi(ldm, 3), al1i(ldm), al2i(ldm), al3i(ldm)
+  integer(4) :: i, i1, i2
+  integer(4) :: j, j1, j2
+  real(8) :: ypo1
+  !
+  do i = 1, ldn
+     do j = 1, ldn
+        a1(i, j) = 0.0d0
+        a2(i, j) = 0.0d0
+        yz(i, j) = 0.0d0
 10   end do
   end do
-  if ( iprs47  .ge.  1 ) write (lunit6, 1719)  isyst, np2, itypec, npc, npp
-1719 format ( /,  28h at beginning of  'ymatrx' .,40h   isyst     np2  itypec     npc     npp    ,/,28x,  5i8  )
-  if ( iprs47  .ge.  2 ) write (lunit6, 1724)  ( i, ncpp(i), al1i(i), al2i(i), al3i(i), esi(i,1), esi(i,2), esi(i,3), i=1, 10)
-1724 format ( /,  5x,  3hrow,  4x,  4hncpp,  11x,  4hal1i, 11x,4hal2i,11x,  4hal3i,  7x,  8hesi(i,1),  7x,  8hesi(i,2),7x,8hesi(i,3),/, ( 1x, i7, i8, 6e15.6 )   )
-  if(itypec .eq. 3 )  go to 25
-  if(isyst.eq.-1) go to 25
-  do i=1,npc
-     do j=1,npc
-        if(j.lt.i) go to 15
-        yz(i,j)=zy(i,j)
-        yz(j,i)=zy(i,j)
+  if (iprs47 .ge. 1) write (unit = lunit6, fmt = 1719) isyst, np2, itypec, npc, npp
+1719 format (/, " At beginning of  'ymatrx' .   isyst     np2  itypec     npc     npp", /, 28x,  5i8)
+  if (iprs47 .ge. 2) write (unit = lunit6, fmt = 1724) (i, ncpp(i), al1i(i), al2i(i), al3i(i), esi(i,1), esi(i,2), esi(i,3), i = 1, 10)
+1724 format (/, 5x, 'row', 4x, 'ncpp', 11x, 'al1i', 11x, 'al2i', 11x, 'al3i', 7x, 'esi(i,1)', 7x,  'esi(i,2)', 7x, 'esi(i,3)', /, (1x, i7, i8, 6e15.6))
+  if (itypec .eq. 3) go to 25
+  if (isyst .eq. -1) go to 25
+  do i = 1, npc
+     do j = 1, npc
+        if(j .lt. i) go to 15
+        yz(i, j) = zy(i, j)
+        yz(j, i) = zy(i, j)
 15   end do
   end do
-  if( itypec .eq. 1 ) go to 200
-  do i=1,ncc
-     i1=i
-     if(i.gt.npc) i1=i-npc
-     if(i.gt.npc2) i1=i-npc2
-     do j=1,ncc
-        if(j.lt.i) go to 20
-        j1=j
-        if(j.gt.npc) j1=j-npc
-        if(j.gt.npc2) j1=j-npc2
-        yz(i,j)=zy(i1,j1)
-        yz(j,i)=yz(i,j)
+  if (itypec .eq. 1) go to 200
+  do i = 1, ncc
+     i1 = i
+     if (i .gt. npc) i1 = i - npc
+     if (i .gt. npc2) i1 = i - npc2
+     do j = 1, ncc
+        if (j .lt. i) go to 20
+        j1 = j
+        if (j .gt. npc) j1 = j - npc
+        if(j .gt. npc2) j1 = j - npc2
+        yz(i, j) = zy(i1, j1)
+        yz(j, i) = yz(i, j)
 20   end do
   end do
-25 do i=1,npc
-     i1=i+npc
-     i2=i+npc2
-     if( i2 .gt. ncc )  go to 35
-     a1(i2,i2)=al3i(i)/esi(i,3)
-     a1(i2,i)=a1(i2,i2)
-     a1(i,i2)=a1(i2,i2)
-     a1(i1,i2)=a1(i2,i2)
-     a1(i2,i1)=a1(i2,i2)
-35   if(ncpp(i).eq.1) i1=i
-     if(i1.gt.npc2) go to 39
-     a1(i1,i1)=al2i(i)/esi(i,2)+a1(i2,i2)
-     a1(i1,i)=a1(i1,i1)
-     a1(i,i1)=a1(i1,i1)
-39   a1(i,i)=a1(i1,i1)+al1i(i)/esi(i,1)
+25 do i = 1, npc
+     i1 = i + npc
+     i2 = i + npc2
+     if (i2 .gt. ncc) go to 35
+     a1(i2, i2) = al3i(i) / esi(i, 3)
+     a1(i2, i) = a1(i2, i2)
+     a1(i, i2) = a1(i2, i2)
+     a1(i1, i2) = a1(i2, i2)
+     a1(i2, i1) = a1(i2, i2)
+35   if (ncpp(i) .eq. 1) i1 = i
+     if (i1 .gt. npc2) go to 39
+     a1(i1, i1) = al2i(i) / esi(i, 2) + a1(i2, i2)
+     a1(i1, i) = a1(i1, i1)
+     a1(i, i1) = a1(i1, i1)
+39   a1(i, i) = a1(i1, i1) + al1i(i) / esi(i, 1)
 40 end do
-  if( itypec .eq. 3 )  go to 60
-  do i=1,ncc
-     do j=1,ncc
-        if(j.lt.i) go to 50
-        yz(i,j)=yz(i,j)+a1(i,j)
-        yz(j,i)=yz(i,j)
+  if (itypec .eq. 3) go to 60
+  do i = 1, ncc
+     do j = 1, ncc
+        if (j .lt. i) go to 50
+        yz(i, j) = yz(i, j) + a1(i, j)
+        yz(j, i) = yz(i, j)
 50   end do
   end do
   go to 200
-60 ypo1 = 0.0
-  if(npp.ne.0) ypo1 = alpi / es2
-  if(npp.eq.0) zy(1,1)=0.
-  if(isyst.ne.-1) ypo1 = ypo1 + zy(1,1)
-  do i=1,npc
-     i1=i+npc
-     i2=i+npc2
-     do j=1,npc
-        j1=j+npc
-        j2=j+npc2
-        a2(i,j)=al0(i,j)/es1
-        if(ncpp(i).eq.1) go to 65
-        a2(i1,j)=a2(i,j)
-        a2(i1,j1)=a2(i,j)
-65      if(ncpp(j).eq.1) go to 70
-        a2(i,j1)=a2(i,j)
-        if(ncpp(i).eq.2) go to 67
-        a2(i2,j)=a2(i,j)
-        a2(i2,j1)=a2(i,j)
-        a2(i2,j2)=a2(i,j)
-67      if(ncpp(j).eq.2) go to 70
-        a2(i,j2)=a2(i,j)
-        a2(i1,j2)=a2(i,j)
+60 ypo1 = 0.0d0
+  if (npp .ne. 0) ypo1 = alpi / es2
+  if (npp .eq. 0) zy(1, 1) = 0.0d0
+  if (isyst.ne.-1) ypo1 = ypo1 + zy(1,1)
+  do i = 1, npc
+     i1 = i + npc
+     i2 = i + npc2
+     do j = 1, npc
+        j1 = j + npc
+        j2 = j + npc2
+        a2(i, j) = al0(i, j) / es1
+        if (ncpp(i) .eq. 1) go to 65
+        a2(i1, j) = a2(i, j)
+        a2(i1, j1) = a2(i, j)
+65      if (ncpp(j) .eq. 1) go to 70
+        a2(i, j1) = a2(i, j)
+        if (ncpp(i) .eq. 2) go to 67
+        a2(i2, j) = a2(i, j)
+        a2(i2, j1) = a2(i, j)
+        a2(i2, j2) = a2(i, j)
+67      if (ncpp(j) .eq. 2) go to 70
+        a2(i, j2) = a2(i, j)
+        a2(i1, j2) = a2(i, j)
 70   end do
 80 end do
-  do i=1,ncc
+  do i = 1, ncc
      if(npp.eq.0) go to 85
-     a1(i,ncc) = 0.
-     a1(ncc,i) = 0.
-     a2(i,ncc) = 0.
-     a2(ncc,i) = 0.
-85   do j=1,ncc
-        if(j.lt.i) go to 90
-        yz(i,j)=a1(i,j)+a2(i,j)+ypo1
-        yz(j,i)=yz(i,j)
+     a1(i, ncc) = 0.0d0
+     a1(ncc, i) = 0.0d0
+     a2(i, ncc) = 0.0d0
+     a2(ncc, i) = 0.0d0
+85   do j = 1, ncc
+        if (j .lt. i) go to 90
+        yz(i, j) = a1(i, j) + a2(i, j) + ypo1
+        yz(j, i) = yz(i, j)
 90   end do
   end do
-200 if ( iprs47  .ge.  1 ) write (logsix, 2876)  ncc, ypo1, es1, alpi, yz(1,1), yz(1,2)
-2876 format ( /,  17h exit  'ymatrx' .,  8h     ncc,  16x,  4hypo1, 17x,  3hes1,  16x,  4halpi,  13x,  7hyz(1,1),13x,  7hyz(1,2)  ,/,  17x,  i8,  5e20.11  )
+200 if (iprs47 .ge. 1) write (unit = logsix, fmt = 2876) ncc, ypo1, es1, alpi, yz(1, 1), yz(1, 2)
+2876 format (/, " Exit  'ymatrx' .     ncc", 16x, 'ypo1', 17x, 'es1', 16x, 'alpi', 13x, 'yz(1,1)', 13x, 'yz(1,2)', /, 17x, i8, 5e20.11)
   return
 end subroutine ymatrx
 
@@ -2499,52 +2744,67 @@ end subroutine ymatrx
 ! subroutine simp.
 !
 
-subroutine  simp(nw,h,dd,rad,zy,dir,dij,ang,ldm,ldn)
+subroutine simp (nw, h, dd, rad, zy, dir, dij, ang, ldm, ldn)
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl47.ftn'
-  dimension  rad(ldn), h(ldm), dd(ldn),  zy(ldn, ldn)
-  dimension  dir(ldm, ldm), dij(ldm, ldm), ang(ldm, ldm)
-  if ( iprs47  .ge.  1 ) write (logsix, 2924)  nw, itypec, h(1), dd(1), dd(2), rad(1), radp(3)
-2924 format ( /,  16h enter  'simp' .,  16h      nw  itypec, 16x,  4hh(1),  15x,  5hdd(1),  15x,  5hdd(2),  14x,  6hrad(1), 13x,  7hradp(3)  ,/,  16x,  2i8,  5e20.11 )
-  do i=1, nw
-     do j=1, nw
-        dij(i,j) = 0.0
-        dir(i,j) = 0.0
-        ang(i,j) = 0.0
-5       zy(i,j) = 0.0
+  integer(4), intent(in) :: ldm
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: nw
+  real(8), intent(out) :: ang(ldm, ldm)
+  real(8), intent(in) :: dd(ldn)
+  real(8), intent(out) :: dij(ldm, ldm)
+  real(8), intent(out) :: dir(ldm, ldm)
+  real(8), intent(in) :: h(ldm)
+  real(8), intent(in) :: rad(ldn)
+  real(8), intent(out) :: zy(ldn, ldn)
+  !  dimension  rad(ldn), h(ldm), dd(ldn),  zy(ldn, ldn)
+  !  dimension  dir(ldm, ldm), dij(ldm, ldm), ang(ldm, ldm)
+  integer(4) :: i
+  integer(4) :: j
+  real(8) :: r, r1, r2
+  real(8) :: v
+  !
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 2924) nw, itypec, h(1), dd(1), dd(2), rad(1), radp(3)
+2924 format (/, " Enter  'simp' .      nw  itypec", 16x, 'h(1)', 15x, 'dd(1)', 15x, 'dd(2)', 14x, 'rad(1)', 13x, 'radp(3)', /, 16x, 2i8, 5e20.11)
+  do i = 1, nw
+     do j = 1, nw
+        dij(i, j) = 0.0d0
+        dir(i, j) = 0.0d0
+        ang(i, j) = 0.0d0
+5       zy(i, j) = 0.0d0
      end do
   end do
-  do i=1,nw
+  do i = 1, nw
      r = rad(i)
-     if ( itypec  .eq.  3 )   r = radp(3)
-     do j=1,nw
-        if (i .ge. j)   go to 15
+     if (itypec .eq. 3) r = radp(3)
+     do j = 1, nw
+        if (i .ge. j) go to 15
         v = dd(i) - dd(j)
         r1 = h(i) - h(j)
-        r2 = absz ( h(i) + h(j) )
-        ang(i,j) = atanz(absz(v)/r2)
-        ang(j,i)=ang(i,j)
-        v = v*v
+        r2 = absz (h(i) + h(j))
+        ang(i, j) = atanz (absz (v) / r2)
+        ang(j, i) = ang(i, j)
+        v = v * v
         r1 = r1 * r1
         r2 = r2 * r2
-        dij(i,j) = sqrtz(v + r2)
-        dij(j,i)=dij(i,j)
-        dir(i,j) = sqrtz(v + r1)
-        dir(j,i)=dir(i,j)
+        dij(i, j) = sqrtz (v + r2)
+        dij(j, i) = dij(i, j)
+        dir(i, j) = sqrtz (v + r1)
+        dir(j, i) = dir(i, j)
         go to 20
-15      if (i .gt. j)   go to 30
-        ang(i,j) = 0.
-        dij(i,j) = 2. * absz ( h(i) )
-        dir(i,j) = r
-20      zy(i,j) = alogz( dij(i,j)/dir(i,j) )
-        zy(j,i)=zy(i,j)
+15      if (i .gt. j) go to 30
+        ang(i, j) = 0.0d0
+        dij(i, j) = 2.0d0 * absz (h(i))
+        dir(i, j) = r
+20      zy(i, j) = alogz (dij(i, j) / dir(i, j))
+        zy(j, i) = zy(i, j)
 30   end do
   end do
-  if ( iprs47  .ge.  1 ) write (logsix, 2936)  dir(1,2), dij(1,2), v, zy(1,1), zy(1,2)
-2936 format ( /,  15h exit  'simp' .,  12x,  8hdir(1,2), 12x,  8hdij(1,2),  19x,  1hv,  13x,  7hzy(1,1), 13x,  7hzy(1,2)  ,/,  15x,  5e20.11 )
-  if ( iprs47  .ge.  5 ) write (logsix, 2948)  ( ( zy(i,j), j=1, nw ),  i=1, nw )
-2948 format ( /,  47h exit  'simp' .   ((zy(i,j), j=1, nw), i=1, nw),/,  ( 1x,  6e20.11 ) )
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 2936) dir(1, 2), dij(1, 2), v, zy(1, 1), zy(1, 2)
+2936 format (/, " Exit  'simp' .", 12x, 'dir(1,2)', 12x, 'dij(1,2)', 19x, 'v', 13x, 'zy(1,1)', 13x, 'zy(1,2)', /, 15x, 5e20.11)
+  if (iprs47 .ge. 5) write (unit = logsix, fmt = 2948) ((zy(i, j), j = 1, nw), i = 1, nw)
+2948 format (/, " Exit  'simp' .   ((zy(i,j), j=1, nw), i=1, nw)", /, (1x, 6e20.11))
   return
 end subroutine simp
 
@@ -2552,98 +2812,116 @@ end subroutine simp
 ! subroutine sczy1.
 !
 
-subroutine  sczy1 ( w,isyst,zy,dir,dij,ang,hi,di,zs,ze,ldm,ldn )
+subroutine  sczy1 (w, isyst, zy, dir, dij, ang, hi, di, zs, ze, ldm, ldn)
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl47.ftn'
-  dimension  zy(ldn, ldn), dir(ldm, ldm), dij(ldm, ldm)
-  dimension  ang(ldm, ldm), hi(ldm), di(ldn)
-  complex(16) :: zs(ldn, ldn),  ze(ldn, ldn)
+  integer(4), intent(in) :: isyst
+  integer(4), intent(in) :: ldm
+  integer(4), intent(in) :: ldn
+  real(8), intent(in) :: ang(ldm, ldm)
+  real(8), intent(in) :: di(ldm)
+  real(8), intent(in) :: dij(ldm, ldm)
+  real(8), intent(in) :: dir(ldm, ldm)
+  real(8), intent(in) :: hi(ldm)
+  real(8), intent(in) :: w
+  real(8), intent(in) :: zy(ldn, ldn)
+  complex(16), intent(out) :: ze(ldn, ldn)
+  complex(16), intent(out) :: zs(ldn, ldn)
+  !  dimension  zy(ldn, ldn), dir(ldm, ldm), dij(ldm, ldm)
+  !  dimension  ang(ldm, ldm), hi(ldm), di(ldn)
+  integer(4) :: i, i1
+  integer(4) :: j, j1
+  integer(4) :: ll0
+  real(8) :: be1, be2
+  real(8) :: c1, c2
+  real(8) :: d12
+  real(8) :: th
   complex(16) :: cjw, xe
-  complex(16) :: cmplxz
-  cjw = cmplxz ( fzero, w )
-  if ( iprs47  .ge.  1 ) write (logsix, 3027)  isyst, npc, iearth, itypec, roe, u0, w
-3027 format ( /,  17h enter  'sczy1' ., 32h   isyst     npc  iearth  itypec,  17x,  3hroe,  18x,  2hu0, 19x, 1hw, /, 17x, 4i8, 3e20.11 )
-  c2 = u2p * zy(1,1)
-  if(itypec .eq. 3) go to 50
-  if(isyst.eq.-1) go to 35
+  !
+  cjw = cmplxz (fzero, w)
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 3027) isyst, npc, iearth, itypec, roe, u0, w
+3027 format (/, " Enter  'sczy1' .   isyst     npc  iearth  itypec", 17x, 'roe', 18x, 'u0', 19x, 'w', /, 17x, 4i8, 3e20.11)
+  c2 = u2p * zy(1, 1)
+  if (itypec .eq. 3) go to 50
+  if (isyst.eq.-1) go to 35
   do i = 1, npc
-     do j=1,npc
-        c1 = u2p * zy(i,j)
-33      zs(i,j) = cjw * cmplxz ( c1, fzero )
+     do j = 1,npc
+        c1 = u2p * zy(i, j)
+33      zs(i, j) = cjw * cmplxz (c1, fzero)
      end do
   end do
-35 do i=1,npc
-     do j=1,npc
-        if(j.lt.i) go to 40
-        if ( iearth  .eq.  99 )   go to 37
-        be1=dir(i,j)*sqrtz(u0/roe)
-        if(isyst.ne.-1) be1=0.
-        be2=dij(i,j)*sqrtz(u0/roe)
-        th=ang(i,j)
-        call zegen(be1,be2,th,w,xe,isyst)
+35 do i = 1, npc
+     do j = 1, npc
+        if (j .lt. i) go to 40
+        if (iearth .eq. 99) go to 37
+        be1 = dir(i, j) * sqrtz (u0 / roe)
+        if (isyst .ne. -1) be1 = 0.0d0
+        be2 = dij(i, j) * sqrtz (u0 / roe)
+        th = ang(i, j)
+        call zegen (be1, be2, th, w, xe, isyst)
         go to 38
-37      d12 = absz( di(j) - di(i) )
-        call zest ( hi(i), hi(j), d12, roe, w, xe )
-38      ze(i,j) = xe
-        ze(j,i)=xe
+37      d12 = absz (di(j) - di(i))
+        call zest (hi(i), hi(j), d12, roe, w, xe)
+38      ze(i, j) = xe
+        ze(j, i) = xe
 40   end do
   end do
-  if ( iprs47  .ge.  2 ) write (logsix, 3039)
-3039 format ( /,  44h diagnostic within  'sczy1' ,   ze(i,j)  for, 18h(i,j)=1, ... npc .    )
+  if (iprs47 .ge. 2) write (unit = logsix, fmt = 3039)
+3039 format (/, " Diagnostic within  'sczy1' ,   ze(i,j)  for(i,j)=1, ... npc .")
   ll0 = 0
-  if ( iprs47  .ge.  4 ) call print ( ze(1,1), npc, ll0, ldn )
-  if( npc .eq. ncc ) go to 90
-  if (isyst .eq. -1)  go to  45
-  do i=1, ncc
-     do j=1, ncc
-        if (j .lt. i)  go to 43
+  if (iprs47 .ge. 4) call print (ze(1, 1), npc, ll0, ldn)
+  if (npc .eq. ncc) go to 90
+  if (isyst .eq. -1) go to  45
+  do i = 1, ncc
+     do j = 1, ncc
+        if (j .lt. i) go to 43
         i1 = i
         j1 = j
-        if (i1 .gt. npc2)  i1=i-npc2
-        if (i1 .gt. npc)  i1=i-npc
-        if(j1 .gt. npc2)  j1=j-npc2
-        if (j1 .gt. npc)  j1=j-npc
-        zs(i,j) = zs(i1,j1)
-        zs(j,i) = zs(i,j)
+        if (i1 .gt. npc2) i1 = i - npc2
+        if (i1 .gt. npc) i1 = i - npc
+        if(j1 .gt. npc2) j1 = j - npc2
+        if (j1 .gt. npc) j1 = j - npc
+        zs(i, j) = zs(i1, j1)
+        zs(j, i) = zs(i, j)
 43   end do
   end do
-45 do i=1,ncc
-     do j=1,ncc
-        if (j .lt. i)  go to 47
+45 do i = 1, ncc
+     do j = 1, ncc
+        if (j .lt. i) go to 47
         i1 = i
         j1 = j
-        if (i1 .gt. npc2)  i1=i-npc2
-        if (i1 .gt. npc)  i1=i-npc
-        if(j1 .gt. npc2)  j1=j-npc2
-        if (j1 .gt. npc)  j1=j-npc
-        ze(i,j) = ze(i1, j1)
-        ze(j,i) = ze(i,j)
+        if (i1 .gt. npc2) i1 = i - npc2
+        if (i1 .gt. npc) i1 = i - npc
+        if (j1 .gt. npc2) j1 = j - npc2
+        if (j1 .gt. npc) j1 = j - npc
+        ze(i, j) = ze(i1, j1)
+        ze(j, i) = ze(i, j)
 47   end do
   end do
   go to 90
-50 if(isyst.eq.-1) go to 60
-  if(npp.eq.0) go to 90
-  do i=1,ncc
-     do j=1,ncc
-        if(j.lt.i) go to 55
-        zs(i,j) = cjw * cmplxz(c2, fzero)
-        zs(j,i)=zs(i,j)
+50 if (isyst .eq. -1) go to 60
+  if (npp .eq. 0) go to 90
+  do i = 1, ncc
+     do j = 1, ncc
+        if (j .lt. i) go to 55
+        zs(i, j) = cjw * cmplxz (c2, fzero)
+        zs(j, i) = zs(i, j)
 55   end do
   end do
-60 be1=dir(1,1)*sqrtz(u0/roe)
-  if(isyst.ne.-1) be1=0.
-  be2=dij(1,1)*sqrtz(u0/roe)
-  th=ang(1,1)
-  call zegen(be1,be2,th,w,xe,isyst)
-  do i=1,ncc
-     do j=1,ncc
-70      ze(i,j)=xe
+60 be1 = dir(1, 1) * sqrtz (u0 / roe)
+  if (isyst .ne. -1) be1 = 0.0d0
+  be2 = dij(1, 1) * sqrtz (u0 / roe)
+  th = ang(1, 1)
+  call zegen (be1, be2, th, w, xe, isyst)
+  do i = 1, ncc
+     do j = 1, ncc
+70      ze(i, j) = xe
      end do
   end do
-90 if ( iprs47  .ge.  2 ) write (logsix, 3056)  xe
-3056 format ( /,  45h diagnostic at exit  'sczy1' .   zs(i,j)  for, 33h  (i,j)=1, ... npc .    real-xe =,  e20.11, 4x,  9himag-xe =,  e20.11 )
-  if ( iprs47  .ge.  4 ) call print ( zs(1,1), npc, ll0, ldn )
+90 if (iprs47 .ge. 2) write (unit = logsix, fmt = 3056) xe
+3056 format (/, " Diagnostic at exit  'sczy1' .   zs(i,j)  for  (i,j)=1, ... npc .    real-xe =", e20.11, 4x, 'imag-xe =', e20.11)
+  if (iprs47 .ge. 4) call print (zs(1, 1), npc, ll0, ldn)
   return
 end subroutine sczy1
 
@@ -2651,185 +2929,203 @@ end subroutine sczy1
 ! subroutine sczy2.
 !
 
-subroutine sczy2 ( s, ncpp, radi, usi, usr, bio, bi1,bi2, bi3, bi4, bi5, al1i, al2i, al3i, zc, ldm, ldn )
+subroutine sczy2 (s, ncpp, radi, usi, usr, bio, bi1,bi2, bi3, bi4, bi5, al1i, al2i, al3i, zc, ldm, ldn)
+  use komthl
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl47.ftn'
-  common /komthl/  pekexp
-  complex(16) :: s, ss, s1, s2, s3, s4, s5, s6, s8, su0
+  integer(4), intent(in) :: ldm
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: ncpp(ldm)
+  complex(16), intent(in) :: s
+  complex(16), intent(out) :: zc(ldn, ldn)
+  real(8), intent(in) :: al1i(ldm)
+  real(8), intent(in) :: al2i(ldm)
+  real(8), intent(in) :: al3i(ldm)
+  real(8), intent(in) :: bio(ldm)
+  real(8), intent(in) :: bi1(ldm)
+  real(8), intent(in) :: bi2(ldm)
+  real(8), intent(in) :: bi3(ldm)
+  real(8), intent(in) :: bi4(ldm)
+  real(8), intent(in) :: bi5(ldm)
+  real(8), intent(in) :: radi(ldm, 7)
+  real(8), intent(in) :: usi(ldm, 3)
+  real(8), intent(in) :: usr(ldm, 3)
+  integer(4) :: i, i1, i2, ido, inm, ixa
+  integer(4) :: ll1, ll2
+  real(8) :: al1, al2, al3
+  real(8) :: b0, b1, b2, b3, b4, b5
+  real(8) :: d1, d2, d3
+  real(8) :: xa
+  complex(16) :: ss, s1, s2, s3, s4, s5, s6, s8, su0
   complex(16) :: z11, z12, z2i, z2m, z2o, z23
-  complex(16) :: cexpz, cmplxz, csqrtz
   complex(16) :: s0, s7, z3i, z3m, z3o, z34
   complex(16) :: c1, c2,  c3
-  complex(16) :: zc(ldn, ldn)
-  dimension ncpp(ldm), radi(ldm, 7), usi(ldm, 3), usr(ldm, 3)
-  dimension bio(ldm), bi1(ldm), bi2(ldm), bi3(ldm), bi4(ldm)
-  dimension bi5(ldm), al1i(ldm), al2i(ldm), al3i(ldm)
+  !  dimension ncpp(ldm), radi(ldm, 7), usi(ldm, 3), usr(ldm, 3)
+  !  dimension bio(ldm), bi1(ldm), bi2(ldm), bi3(ldm), bi4(ldm)
+  !  dimension bi5(ldm), al1i(ldm), al2i(ldm), al3i(ldm)
   ll1 = 1
   ll2 = 2
-  if ( iprs47  .ge.  1 ) write (logsix, 3107)  npc, s
-3107 format ( /,  17h enter  'sczy2' .,  8h     npc,  14x,  6hreal-s,14x,  6himag-s  ,/,  17x,  i8,  2e20.11 )
-1001 inm=0
-  do i=1,npc
-     b0=bio(i)
-     b1=bi1(i)
-     b2=bi2(i)
-     b3=bi3(i)
-     b4=bi4(i)
-     b5=bi5(i)
-     al1=al1i(i)
-     al2=al2i(i)
-     al3=al3i(i)
-     ss=csqrtz(s)
-     c1 = cmplxz(b0, fzero)
-     s0=c1*ss
-     c1 = cmplxz(b1, fzero)
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 3107) npc, s
+3107 format (/, " Enter  'sczy2' .     npc", 14x, 'real-s', 14x, 'imag-s', /, 17x, i8, 2e20.11)
+1001 inm = 0
+  do i = 1, npc
+     b0 = bio(i)
+     b1 = bi1(i)
+     b2 = bi2(i)
+     b3 = bi3(i)
+     b4 = bi4(i)
+     b5 = bi5(i)
+     al1 = al1i(i)
+     al2 = al2i(i)
+     al3 = al3i(i)
+     ss = csqrtz (s)
+     c1 = cmplxz (b0, fzero)
+     s0 = c1 * ss
+     c1 = cmplxz (b1, fzero)
      s1 = c1 * ss
-     c1 = cmplxz(b2, fzero)
-     s2=c1*ss
-     c1 = cmplxz(b3, fzero)
-     s3=c1*ss
-     c1 = cmplxz(u2p, fzero)
-     su0=s*c1
-     if ( iprs47  .ge.  2 ) write (logsix, 3124)  i, b0, su0, s0
-3124 format ( /,  20h re-loop over  'i' .,  8h       i,  18x,  2hb0,12x,  8hreal-su0,  12x,  8himag-su0,  13x,  7hreal-s0,13x,  7himag-s0  ,/,  19x,  i8,  5e20.11 )
-     c1 = cmplxz (usr(i,1), fzero)
-     ixa=0
-     xa=cabsz(s0)
-     if(radi(i,1).le.0.) xa=cabsz(s1)
-     if(xa.gt.10.) ixa=1
-     call bsikm(s1,ll2,bin,bkn,ll1,ixa)
-     if(radi(i,1).gt.0. ) go to 15
-     z11=su0/s1*bin(1)/bin(2)*c1
+     c1 = cmplxz (b2, fzero)
+     s2 = c1 * ss
+     c1 = cmplxz (b3, fzero)
+     s3 = c1 * ss
+     c1 = cmplxz (u2p, fzero)
+     su0 = s * c1
+     if (iprs47 .ge. 2) write (unit = logsix, fmt = 3124) i, b0, su0, s0
+3124 format (/, " Re-loop over  'i' .       i", 18x, 'b0', 12x, 'real-su0', 12x, 'imag-su0', 13x, 'real-s0', 13x, 'imag-s0', /, 19x, i8, 5e20.11)
+     c1 = cmplxz (usr(i, 1), fzero)
+     ixa = 0
+     xa = cabsz (s0)
+     if (radi(i, 1) .le. 0.0d0) xa =cabsz (s1)
+     if (xa .gt. 10.0d0) ixa = 1
+     call bsikm (s1, ll2, bin, bkn, ll1, ixa)
+     if (radi(i, 1) .gt. 0.0d0) go to 15
+     z11 = su0 / s1 * bin(1) / bin(2) * c1
      go to 25
-15   s4=bin(1)
-     s5=bin(2)
-     s6=bkn(1)
-     z12=bkn(2)
-     call bsikm(s0,ll2,bin,bkn,ll1,ixa)
-     if (ixa .gt. 0)  go to 20
+15   s4 = bin(1)
+     s5 = bin(2)
+     s6 = bkn(1)
+     z12 = bkn(2)
+     call bsikm (s0, ll2, bin, bkn, ll1, ixa)
+     if (ixa .gt. 0) go to 20
      ss = s5 * bkn(2) - z12 * bin(2)
-     z11=su0/s1*(bkn(2)*s4+s6*bin(2))/ss*c1
+     z11 = su0 / s1 * (bkn(2) * s4 + s6 * bin(2)) / ss * c1
      go to 25
-20   ss=s1-s0
-     if(cabsz(ss) .gt. pekexp ) go to 23
-     ss=cexpz(ss)
-     s7=s5*bkn(2)*ss-z12*bin(2)/ss
-     z11=su0/s1*(bkn(2)*s4*ss+s6*bin(2)/ss)/s7*c1
+20   ss = s1 - s0
+     if (cabsz (ss) .gt. pekexp) go to 23
+     ss = cexpz (ss)
+     s7 = s5 * bkn(2) * ss - z12 * bin(2) / ss
+     z11 = su0 / s1 * (bkn(2) * s4 * ss + s6 * bin(2) / ss) / s7 * c1
      go to 25
-23   z11=su0/s1*s4/s5*c1
-25   d1 = usi(i,1)*al1
-     c1 = cmplxz(d1, fzero)
-     z12=su0*c1
+23   z11 = su0 / s1 * s4 / s5 * c1
+25   d1 = usi(i, 1) * al1
+     c1 = cmplxz (d1, fzero)
+     z12 = su0 * c1
      z2i = czero
      z2m = czero
      z2o = czero
-     d1 = usi(i,2) * al2
-     c1 = cmplxz(d1, fzero)
+     d1 = usi(i, 2) * al2
+     c1 = cmplxz (d1, fzero)
      z23 = su0 * c1
-     if ( iprs47  .ge.  3 ) write (logsix, 3136)  ixa, ncpp(i), radi(i,1), z11, z12
-3136 format ( /,  1x,  16h     ixa ncpp(i),  11x,  9hradi(i,1), 12x,  8hreal-z11,  12x,  8himag-z11, 12x,  8hreal-z12,  12x,  8himag-z12  ,/,  1x,  2i8,  5e20.11 )
+     if (iprs47 .ge. 3) write (unit = logsix, fmt = 3136) ixa, ncpp(i), radi(i,1), z11, z12
+3136 format (/, 1x, '     ixa ncpp(i)', 11x, 'radi(i,1)', 12x, 'real-z11', 12x, 'imag-z11', 12x,  'real-z12', 12x, 'imag-z12', /, 1x, 2i8, 5e20.11)
      z3i = czero
      z3m = czero
      z3o = czero
-     d1 = usi(i,3) * al3
-     c1 = cmplxz(d1, fzero)
+     d1 = usi(i, 3) * al3
+     c1 = cmplxz (d1, fzero)
      z34 = su0 * c1
-     if(ncpp(i).eq.1) go to 90
-     ido=2
-28   ixa=0
-     xa=cabsz(s2)
-     if(xa.gt.10) ixa=1
-     call bsikm(s2,ll2,bin,bkn,ll1,ixa)
-     s4=bin(1)
-     s5=bin(2)
-     s1=bkn(1)
-     s0=bkn(2)
-     call bsikm(s3,ll2,bin,bkn,ll1,ixa)
-     c1 = cmplxz(usr(i,ido), fzero)
+     if (ncpp(i) .eq. 1) go to 90
+     ido = 2
+28   ixa = 0
+     xa = cabsz (s2)
+     if (xa .gt. 10) ixa = 1
+     call bsikm (s2, ll2, bin, bkn, ll1, ixa)
+     s4 = bin(1)
+     s5 = bin(2)
+     s1 = bkn(1)
+     s0 = bkn(2)
+     call bsikm (s3, ll2, bin, bkn, ll1, ixa)
+     c1 = cmplxz (usr(i, ido), fzero)
      if (ixa .gt. 0)  go to 35
      ss = bin(2) * s0 - s5 * bkn(2)
-     s7=su0/s2*(s4*bkn(2)+s1*bin(2))/ss*c1
-     s8=su0/s3*(bin(1)*s0+bkn(1)*s5)/ss*c1
+     s7 = su0 / s2 * (s4 * bkn(2) + s1 * bin(2)) / ss * c1
+     s8 = su0 / s3 * (bin(1) * s0 + bkn(1) * s5) / ss * c1
      go to 40
-35   s6=s3-s2
-     if(cabsz(s6) .gt. pekexp ) go to 42
-     s6=cexpz(s6)
-     ss=bin(2)*s0*s6-s5*bkn(2)/s6
-     s7=su0/s2*(s4*bkn(2)/s6+s1*bin(2)*s6)/ss*c1
-     s8=su0/s3*(bin(1)*s0*s6+bkn(1)*s5/s6)/ss*c1
+35   s6 = s3 - s2
+     if (cabsz (s6) .gt. pekexp) go to 42
+     s6 = cexpz (s6)
+     ss = bin(2) * s0 * s6 - s5 * bkn(2) / s6
+     s7 = su0 / s2 * (s4 * bkn(2) / s6 + s1 * bin(2) * s6) / ss * c1
+     s8 = su0 / s3 * (bin(1) * s0 * s6 + bkn(1) * s5 / s6) / ss * c1
 40   if (ido .ne. 2 ) go to 41
-     d1 = u2p*radi(i,3)/radi(i,4)/b2/b2*usr(i,2)
-     c2 = cmplxz(d1, fzero)
+     d1 = u2p * radi(i, 3) / radi(i, 4) / b2 / b2 * usr(i, 2)
+     c2 = cmplxz (d1, fzero)
      z2m = c2 / ss
      go to 44
-41   d1 = u2p*radi(i,5)/radi(i,6)/b4/b4*usr(i,3)
-     c2 = cmplxz(d1, fzero)
-     if (ido .eq. 3)  z3m = c2/ss
+41   d1 = u2p * radi(i, 5) / radi(i, 6) / b4 / b4 * usr(i, 3)
+     c2 = cmplxz (d1, fzero)
+     if (ido .eq. 3) z3m = c2 / ss
      go to 44
-42   s7=su0/s2*s1/s0*c1
-     s8=su0/s3*bin(1)/bin(2)*c1
+42   s7 = su0 / s2 * s1 / s0 * c1
+     s8 = su0 / s3 * bin(1) / bin(2) * c1
      z2m = czero
      z3m = czero
-44   if ( iprs47  .ge.  3 ) write (logsix, 3148)  z2i, z2o, z2m, z23
-3148 format ( /,  1x, 8x,  8hreal-z2i,  8x,  8himag-z2i, 8x,  8hreal-z2o,  8x,  8himag-z2o, 8x,  8hreal-z2m,  8x, &
-          8himag-z2m, 8x,  8hreal-z23,  8x,  8himag-z23  ,/,  1x,  8e16.7  )
-     if ( ido  .eq.  3 )   go to 60
-     z2i=s7
-     z2o=s8
+44   if (iprs47 .ge. 3) write (unit = logsix, fmt = 3148) z2i, z2o, z2m, z23
+3148 format (/, 1x, 8x, 'real-z2i', 8x, 'imag-z2i', 8x, 'real-z2o', 8x, 'imag-z2o', 8x, 'real-z2m', 8x, 'imag-z2m', 8x, 'real-z23', 8x, 'imag-z23', /, 1x, 8e16.7)
+     if (ido .eq. 3) go to 60
+     z2i = s7
+     z2o = s8
      z3i = czero
      z3m = czero
      z3o = czero
      z34 = czero
-     if(ncpp(i).eq.2) go to 90
-     ss=csqrtz(s)
-     c1 = cmplxz(b4, fzero)
-     s2=c1*ss
-     c1 = cmplxz(b5, fzero)
-     s3 = c1*ss
-     ido=3
+     if (ncpp(i) .eq. 2) go to 90
+     ss = csqrtz (s)
+     c1 = cmplxz (b4, fzero)
+     s2 = c1 * ss
+     c1 = cmplxz (b5, fzero)
+     s3 = c1 * ss
+     ido = 3
      go to 28
-60   z3i=s7
-     z3o=s8
-90   s1=z11+z12+z2i
-     s2=z2o+z23+z3i
-     s3=z3o+z34
-     s4=s3-2.*z3m
-     s5=s3-z3m
-     s6=s2+s4
-     s7=s6-z2m
+60   z3i = s7
+     z3o = s8
+90   s1 = z11 + z12 + z2i
+     s2 = z2o + z23 + z3i
+     s3 = z3o + z34
+     s4 = s3 - 2.0d0 * z3m
+     s5 = s3 - z3m
+     s6 = s2 + s4
+     s7 = s6 - z2m
      s8 = cimag1
-     d1 = aimagz(s5)
-     d2 = aimagz(s6)
-     d3 = aimagz(s7)
-     c1 = cmplxz(d1, fzero)
-     c2 = cmplxz(d2, fzero)
-     c3 = cmplxz(d3, fzero)
-     if(realz(s5) .lt. 0.) s5=s8*c1
-     if(realz(s6) .lt. 0.) s6=s8*c2
-     if(realz(s7) .lt. 0.) s7=s8*c3
-     zc(i,i)=s1+s2-2.*z2m+s4
-     if(ncpp(i).eq.1) go to 100
-     i1=i+npc
-     if(i1.gt.npc2) go to 100
-     zc(i1,i1)=s6
-     zc(i,i1)=s7
-     zc(i1,i)=s7
-     if(ncpp(i).eq.2) go to 100
-     i1=i+npc2
-     zc(i1,i1)=s3
-     zc(i1,i)=s5
-     zc(i,i1)=s5
-     i2=i+npc
-     zc(i1,i2)=s5
-     zc(i2,i1)=s5
-     if ( iprs47  .ge.  3 ) write (logsix, 3159)  s1, s2, zc(i,i), zc(i,i1)
-3159 format (/,  " Store  'zc'  values.", 13x, 'real-s1', 13x, 'imag-s1', 13x, 'real-s2', 13x, 'imag-s2', /, 21x, 4e20.11  ,/, &
-          8x, 'real-zc(i,i)', 8x, 'imag-zc(i,i)', 7x, 'real-zc(i,i1)', 7x, 'imag-zc(i,i1)  ',/, &
-          1x,  4e20.11 )
+     d1 = aimagz (s5)
+     d2 = aimagz (s6)
+     d3 = aimagz (s7)
+     c1 = cmplxz (d1, fzero)
+     c2 = cmplxz (d2, fzero)
+     c3 = cmplxz (d3, fzero)
+     if (realz (s5) .lt. 0.0d0) s5 = s8 * c1
+     if (realz (s6) .lt. 0.0d0) s6 = s8 * c2
+     if (realz (s7) .lt. 0.0d0) s7 = s8 * c3
+     zc(i, i) = s1 + s2 - 2.0d0 * z2m + s4
+     if (ncpp(i) .eq. 1) go to 100
+     i1 = i + npc
+     if (i1 .gt. npc2) go to 100
+     zc(i1, i1) = s6
+     zc(i, i1) = s7
+     zc(i1, i) = s7
+     if (ncpp(i) .eq. 2) go to 100
+     i1 = i + npc2
+     zc(i1, i1) = s3
+     zc(i1, i) = s5
+     zc(i, i1) = s5
+     i2 = i + npc
+     zc(i1, i2) = s5
+     zc(i2, i1) = s5
+     if (iprs47 .ge. 3) write (unit = logsix, fmt = 3159) s1, s2, zc(i, i), zc(i, i1)
+3159 format (/,  " Store  'zc'  values.", 13x, 'real-s1', 13x, 'imag-s1', 13x, 'real-s2', 13x, 'imag-s2', /, 21x, 4e20.11, /, 8x, 'real-zc(i,i)', 8x, 'imag-zc(i,i)', 7x, 'real-zc(i,i1)', 7x, 'imag-zc(i,i1)', /, 1x, 4e20.11)
 100 end do
-  if ( iprs47  .ge.  1 ) write (logsix, 3174)
-3174 format ( /,  16h exit  'sczy2' .   )
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 3174)
+3174 format (/, " Exit  'sczy2' .")
   return
 end subroutine sczy2
 
@@ -2837,26 +3133,48 @@ end subroutine sczy2
 ! subroutine ptzy1.
 !
 
-subroutine  ptzy1 ( radi, dci, thc, dr0, th0, al0, ldm )
+subroutine  ptzy1 (radi, dci, thc, dr0, th0, al0, ldm)
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl47.ftn'
-  dimension radi(ldm, 7), dci(ldm), thc(ldm)
-  dimension dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm)
-  p2=2.*pai
-  bp1=radp(1)*sqrtz(u0/rop*usp)
-  bp2=radp(2)*sqrtz(u0/rop*usp)
-  if ( iprs47  .ge.  1 ) write (logsix, 3238)  npp, npc, bp1, bp2, radp(3)
-3238 format ( /,  17h begin  'ptzy1' .,  16h     npp     npc, 17x,  3hbp1,  17x,  3hbp2,  13x,  7hradp(3)  ,/, &
-       17x,  2i8,  3e20.11 )
-  if (npp .eq. 0)   go to 5
-  alpi=alogz(radp(3)/radp(2))
+  integer(4) :: ldm
+  real(8), intent(out) :: al0(ldm, ldm)
+  real(8), intent(in) :: dci(ldm)
+  real(8), intent(out) :: dr0(ldm, ldm)
+  real(8), intent(in) :: radi(ldm, 7)
+  real(8), intent(out) :: th0(ldm, ldm)
+  real(8), intent(in) :: thc(ldm)
+  !  dimension radi(ldm, 7), dci(ldm), thc(ldm)
+  !  dimension dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm)
+  integer(4) :: i
+  integer(4) :: j
+  integer(4) :: k
+  integer(4) :: n
+  real(8) :: ak
+  real(8) :: cn
+  real(8) :: dkl
+  real(8) :: p2
+  !
+  p2 = 2.0d0 * pai
+  bp1 = radp(1) * sqrtz (u0 / rop * usp)
+  bp2 = radp(2) * sqrtz (u0 / rop * usp)
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 3238) npp, npc, bp1, bp2, radp(3)
+3238 format (/, " Begin  'ptzy1' .     npp     npc", 17x, 'bp1', 17x, 'bp2', 13x, 'radp(3)', /, 17x, 2i8, 3e20.11)
+  if (npp .eq. 0) go to 5
+  alpi = alogz (radp(3) / radp(2))
   go to 8
-5 alpi = 0.0
-8 do i=1, npc
-     do j=1,npc
-        dr0(i,j)=dci(i)*dci(j)/radp(1)**2
-        if(i-j) 10,20,50
+5 alpi = 0.0d0
+8 do i = 1, npc
+     do j = 1, npc
+        dr0(i, j) = dci(i) * dci(j) / radp(1) ** 2
+        !        if(i-j) 10,20,50
+        if (i - j .lt. 0) then
+           go to 10
+        else if (i - j .eq. 0) then
+           go to 20
+        else
+           go to 50
+        end if
 10      th0(i,j)=(thc(j)-thc(i))*pai/180.
         if(th0(i,j).gt.p2) th0(i,j)=th0(i,j)-p2
         dkl = sqrtz(dci(i)**2+dci(j)**2-2.*dci(i)*dci(j)*cosz(th0(i,j)))
@@ -2876,19 +3194,18 @@ subroutine  ptzy1 ( radi, dci, thc, dr0, th0, al0, ldm )
         if (i .eq. j)   go to 70
         if (j .lt. i)   go to 70
         if (dci(i) * dci(j) .lt. 1.0e-6)   go to 65
-        do k=1, n
+        do k = 1, n
            ak = k
-           cn = dr0(i,j) **k * cosz(ak * th0(i,j)) / ak + cn
+           cn = dr0(i, j) ** k * cosz (ak * th0(i, j)) / ak + cn
 60      end do
-65      al0(i,j) = al0(i,j) - cn
-        al0(j,i) = al0(i,j)
+65      al0(i, j) = al0(i, j) - cn
+        al0(j, i) = al0(i, j)
 70   end do
   end do
-  if ( iprs47  .ge.  1 ) write (logsix, 3256)  dkl, cn, alpi, al0(1,1), al0(1,2)
-3256 format ( /,  16h exit  'ptzy1' .,  17x,  3hdkl,  18x,  2hcn, 16x,  4halpi,  12x,  8hal0(1,1),  12x,  8hal0(1,2)  ,/, &
-       16x,  5e20.11 )
-  if ( iprs47  .ge.  4 ) write (logsix, 3263)  ( (al0(i,j), j=1, npc), i=1, npc )
-3263 format ( /,  63h diagnostic output matrix.    ( (al0(i,j), j=1, npc), i=1, npc)     ,/,  ( 1x,  6e20.11 ) )
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 3256) dkl, cn, alpi, al0(1, 1), al0(1, 2)
+3256 format (/, " Exit  'ptzy1' .", 17x, 'dkl', 18x, 'cn', 16x, 'alpi', 12x, 'al0(1,1)', 12x, 'al0(1,2)', /, 16x, 5e20.11)
+  if (iprs47 .ge. 4) write (unit = logsix, fmt = 3263) ((al0(i, j), j = 1, npc), i = 1, npc)
+3263 format (/, ' Diagnostic output matrix.    ( (al0(i,j), j=1, npc), i=1, npc)', /, (1x, 6e20.11))
   return
 end subroutine ptzy1
 
@@ -2897,23 +3214,42 @@ end subroutine ptzy1
 !
 
 subroutine ptzy2 (s, ncpp, dci, dr0, th0, al0, zp, zpc, ldm, ldn)
+  use komthl
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include  'labl47.ftn'
-  common /komthl/ pekexp
-  complex(16) :: s, ss, s1, s2, s3, s4, s5, s6, su0
-  complex(16) :: cexpz, cmplxz, csqrtz
+  integer(4), intent(in) :: ldm
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: ncpp(ldm)
+  real(8), intent(in) :: al0(ldm, ldm)
+  real(8), intent(in) :: dci(ldm)
+  real(8), intent(in) :: dr0(ldm, ldm)
+  real(8), intent(in) :: th0(ldm, ldm)
+  complex(16), intent(in) :: s
+  integer(4) :: i, i1, i2, ixa
+  integer(4) :: j, j1, j2
+  integer(4) :: k, k1, kn
+  integer(4) :: ll0, ll1, ll3
+  integer(4) :: nbess, nc1
+  real(8) :: ak
+  real(8) :: c8, c9, ck
+  real(8) :: contwo
+  real(8) :: d1, d2
+  real(8) :: unity
+  real(8) :: xa
+  complex(16) :: ss, s1, s2, s3, s4, s5, s6, su0
   complex(16) :: se0, zm, zi, zzo, zzi
   complex(16) :: c1, c2, c3, c4, c5, c6
   complex(16) :: zp(ldn, ldn), zpc(ldn, ldn)
-  dimension ncpp(ldm),  dci(ldm)
-  dimension dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm)
-  unity = 1.0
-  contwo = 2.0
-  c3 = cmplxz(usp, fzero)
-  c4 = cmplxz(contwo, fzero)
-  c8 = rop/2./pai/radp(1)/radp(2)
-  c6 = cmplxz(c8, fzero)
+  !  dimension ncpp(ldm), dci(ldm)
+  !  dimension dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm)
+  !
+  unity = 1.0d0
+  contwo = 2.0d0
+  c3 = cmplxz (usp, fzero)
+  c4 = cmplxz (contwo, fzero)
+  c8 = rop / 2.0d0 / pai / radp(1) / radp(2)
+  c6 = cmplxz (c8, fzero)
   ll1 = 1
   ll3 = 3
   nbess=19
@@ -2965,7 +3301,7 @@ subroutine ptzy2 (s, ncpp, dci, dr0, th0, al0, zp, zpc, ldm, ldn)
         do k=1,nbess
            k1=k+1
            ak=k
-           ck=dr0(i,j)**k*cosz(ak*th0(i,j))
+           ck = dr0(i, j) ** k * cosz (ak * th0(i, j))
            c1 = cmplxz(ck, fzero)
            c9 = ak * (usp + 1.)
            c2 = cmplxz(c9, fzero)
@@ -3036,70 +3372,77 @@ end subroutine ptzy2
 !
 
 subroutine bsikm (x, kn, bbin, bbkn, ikm, ixa)
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl47.ftn'
+  integer(4), intent(in) :: ikm
+  integer(4), intent(in) :: ixa
+  integer(4), intent(in) :: kn
+  complex(16), intent(out) :: bbin(kn)
+  complex(16), intent(out) :: bbkn(kn)
+  integer(4) :: ik1, ik2, ikn
+  integer(4) :: l
+  real(8) :: c1, c2
+  real(8) :: xa
   complex(16) :: bk0, bk1, bi0, bj1, x
   complex(16) :: y, y0, y1, y2, y3, y4, y5, y6, y7, y8
-  complex(16) :: cexpz, cmplxz, clogz, csqrtz
-  complex(16) :: bbin(kn), bbkn(kn)
-  xa=cabsz(x)
-  c1 = 3.75
-  c2 =  2.
-  y = x/cmplxz(c1, fzero)
-  if ( iprs47  .ge.  5 ) write (logsix, 3426)  kn, ikm, ixa, x, y, xa
+  !
+  xa = cabsz (x)
+  c1 = 3.75d0
+  c2 =  2.0d0
+  y = x / cmplxz (c1, fzero)
+  if (iprs47 .ge. 5) write (unit = logsix, fmt = 3426) kn, ikm, ixa, x, y, xa
 3426 format (/, " Begin  'bsikm' .      kn     ikm     ixa", 9x, 'real-x', 9x, 'imag-x',  9x, 'real-y', 9x, 'imag-y', 13x, 'xa', /, 17x, 3i8, 5e15.6)
   if (xa .gt. c1)  go to 25
   y1 = y * y
-  y2=y1*y1
-  y3=y2*y1
-  y4=y3*y1
-  y5=y4*y1
-  y6=y5*y1
-  bi0=1.+3.5156229*y1+3.0899424*y2+1.2067492*y3+0.2659732*y4+0.0360768 *y5+0.0045813*y6
-  bj1=x*(0.5+0.87890594*y1+0.51498869*y2+0.15084934*y3+0.02658733*y4+0.00301532*y5+0.00032411*y6)
+  y2 = y1 * y1
+  y3 = y2 * y1
+  y4 = y3 * y1
+  y5 = y4 * y1
+  y6 = y5 * y1
+  bi0 = 1.0d0 + 3.5156229d0 * y1 + 3.0899424d0 * y2 + 1.2067492d0 * y3 + 0.2659732d0 * y4 + 0.0360768d0 * y5 + 0.0045813d0 * y6
+  bj1 = x * (0.5d0 + 0.87890594d0 * y1 + 0.51498869d0 * y2 + 0.15084934d0 * y3 + 0.02658733d0 * y4 + 0.00301532d0 * y5 + 0.00032411d0 * y6)
   go to 29
-25 y0=csqrtz(x)
-  if(ixa.ne.1) y0=y0*cexpz(-x)
-  y1=1./y
-  y2=y1/y
-  y3=y2/y
-  y4=y3/y
-  y5=y4/y
-  y6=y5/y
-  y7=y6/y
-  y8=y7/y
-  bi0=(0.39894228+0.01328592*y1+0.00225319*y2-0.00157565*y3+0.00916281*y4-0.02057706*y5+0.02635537*y6-0.01647633*y7+0.00392377*y8)/y0
-  bj1=(0.39894228-0.03988024*y1-0.00362018*y2+0.00163801*y3-0.01031555*y4+0.02282967*y5-0.02895312*y6+0.01787654*y7-0.00420059*y8)/y0
-29 if (xa .gt. c2)  go to 35
-  y = x/cmplxz(c2, fzero)
-  y0=clogz(y)
-  y1=y*y
-  y2=y1*y1
-  y3=y2*y1
-  y4=y3*y1
-  y5=y4*y1
-  y6=y5*y1
-  bk0=-y0*bi0-0.57721566+0.42278420*y1+0.23069756*y2+0.03488590*y3+0.00262698*y4+0.00010750*y5+0.00000740*y6
-  bk1=y0*bj1+(1.+0.15443144*y1-0.67278579*y2-0.18156897*y3-0.01919402*y4-0.00110404*y5-0.00004686*y6)/x
+25 y0 = csqrtz (x)
+  if (ixa .ne. 1) y0 = y0 * cexpz (-x)
+  y1 = 1.0d0 / y
+  y2 = y1 / y
+  y3 = y2 / y
+  y4 = y3 / y
+  y5 = y4 / y
+  y6 = y5 / y
+  y7 = y6 / y
+  y8 = y7 / y
+  bi0 = (0.39894228d0 + 0.01328592d0 * y1 + 0.00225319d0 * y2 - 0.00157565d0 * y3 + 0.00916281d0 * y4 - 0.02057706d0 * y5 + 0.02635537d0 * y6 - 0.01647633d0 * y7 + 0.00392377d0 * y8) / y0
+  bj1 = (0.39894228d0 - 0.03988024d0 * y1 - 0.00362018d0 * y2 + 0.00163801d0 * y3 - 0.01031555d0 * y4 + 0.02282967d9 * y5 - 0.02895312d0 * y6 + 0.01787654d0 * y7 - 0.00420059d0 * y8) / y0
+29 if (xa .gt. c2) go to 35
+  y = x / cmplxz (c2, fzero)
+  y0 = clogz (y)
+  y1 = y * y
+  y2 = y1 * y1
+  y3 = y2 * y1
+  y4 = y3 * y1
+  y5 = y4 * y1
+  y6 = y5 * y1
+  bk0 = -y0 * bi0 - 0.57721566d0 + 0.42278420d0 * y1 + 0.23069756d0 * y2 + 0.03488590d0 * y3 + 0.00262698d0 * y4 + 0.00010750d0 * y5 + 0.00000740d0 * y6
+  bk1 = y0 * bj1 + (1.0d0 + 0.15443144d0 * y1 - 0.67278579d0 * y2 - 0.18156897d0 * y3 - 0.01919402d0 * y4 - 0.00110404d0 * y5 - 0.00004686d0 * y6) / x
   go to 40
-35 y = cmplxz(c2, fzero) / x
-  y0=csqrtz(x)
-  if(ixa.ne.1) y0=y0*cexpz(x)
-  y1=y*y
-  y2=y1*y
-  y3=y2*y
-  y4=y3*y
-  y5=y4*y
-  bk0=(1.25331414-0.07832358*y+0.02189568*y1-0.01062446*y2+0.00587872*y3-0.00251540*y4+0.00053208*y5)/y0
-  bk1=(1.25331414+0.23498619*y-0.03655620*y1+0.01504268*y2-0.00780353*y3+0.00325614*y4-0.00068245*y5)/y0
+35 y = cmplxz (c2, fzero) / x
+  y0 = csqrtz (x)
+  if (ixa .ne. 1) y0 = y0 * cexpz (x)
+  y1 = y * y
+  y2 = y1 * y
+  y3 = y2 * y
+  y4 = y3 * y
+  y5 = y4 * y
+  bk0 = (1.25331414d0 - 0.07832358d0 * y + 0.02189568d0 * y1 - 0.01062446d0 * y2 + 0.00587872d0 * y3 - 0.00251540d0 * y4 + 0.00053208d0 * y5) / y0
+  bk1 = (1.25331414d0 + 0.23498619d0 * y - 0.03655620d0 * y1 + 0.01504268d0 * y2 - 0.00780353d0 * y3 + 0.00325614d0 * y4 - 0.00068245d0 * y5) / y0
 40 bbin(1) = bi0
-  bbin(2)=bj1
-  bbkn(1)=bk0
-  bbkn(2)=bk1
-  if ( iprs47  .ge.  5 ) write (logsix, 3452)  bi0, bj1, bk0, bk1
-3452 format ( /,  9h scalars.,7x,  8hreal-bi0,  7x,  8himag-bi0,7x,  8hreal-bj1,  7x,  8himag-bj1, &
-       7x,  8hreal-bk0,  7x,  8himag-bk0,7x,  8hreal-bk1,  7x,  8himag-bk1  ,/,  9x,  8e15.6  )
+  bbin(2) = bj1
+  bbkn(1) = bk0
+  bbkn(2) = bk1
+  if (iprs47 .ge. 5) write (unit = logsix, fmt = 3452) bi0, bj1, bk0, bk1
+3452 format (/, ' scalars.', 7x, 'real-bi0', 7x, 'imag-bi0', 7x, 'real-bj1', 7x, 'imag-bj1', 7x,  'real-bk0', 7x, 'imag-bk0', 7x, 'real-bk1', 7x, 'imag-bk1', /, 9x, 8e15.6)
   if(ikm.eq.1) go to 70
   do ikn=3,kn
      bbin(ikn) = creal1
@@ -3127,67 +3470,85 @@ end subroutine bsikm
 !
 
 subroutine  olzy (w, ncpp, zy, dij, ang, usi, usr, esi, hi, di, zs, ze, zc, ldm, ldn)
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl47.ftn'
-  dimension ncpp(ldm)
-  dimension zy(ldn, ldn), dij(ldm, ldm), ang(ldm,ldm), di(ldn)
-  dimension usi(ldm, 3),  usr(ldm, 3),   esi(ldm, 3),  hi(ldm)
-  complex(16) :: zs(ldn, ldn), ze(ldn, ldn),  zc(ldn, ldn)
+  integer(4), intent(in) :: ldm
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: ncpp(ldm)
+  real(8), intent(in) :: ang(ldm, ldm)
+  real(8), intent(in) :: di(ldn)
+  real(8), intent(in) :: dij(ldm, ldm)
+  real(8), intent(in) :: esi(ldm, 3)
+  real(8), intent(in) :: hi(ldm)
+  real(8), intent(in) :: usi(ldm, 3)
+  real(8), intent(in) :: usr(ldm, 3)
+  real(8), intent(in) :: w
+  real(8), intent(in) :: zy(ldn, ldn)
+  !  dimension ncpp(ldm)
+  integer(4) :: i, im
+  integer(4) :: j, j1, j2, jnc
+  integer(4) :: k
+  integer(4) :: ll0, ll1
+  real(8) :: b1, b2
+  real(8) :: d12
+  real(8) :: ur
+  real(8) :: zero
+  complex(16) :: zs(ldn, ldn), ze(ldn, ldn), zc(ldn, ldn)
   complex(16) :: cwu, s, ss, xc, xe
-  complex(16) :: cmplxz, csqrtz
-  s = cmplxz(fzero, w)
+  !
+  s = cmplxz (fzero, w)
   cwu = s * cmplxz(u2p, fzero)
-  ss = csqrtz ( s )
-  if ( iprs47  .ge.  1 ) write (logsix, 3508)  iearth, ncct, u2p, w, ss
+  ss = csqrtz (s)
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 3508) iearth, ncct, u2p, w, ss
 3508 format (/, " Begin  'olzy' .  iearth    ncct", 17x, 'u2p', 19x, 'w', 13x, 'real-ss', 13x, 'imag-ss', /, 16x, 2i8, 4e20.11)
   ll1 = 1
-  do i=1, npc
-     do j=1, npc
-        if ( j  .lt.  i )   go to 20
-        zs(i,j) = cwu * cmplxz(zy(i,j), fzero)
-        zs(j, i) = zs(i,j)
-        if ( iearth  .eq.  99 )   go to 15
-        b1 = dij(i,j) * sqrtz ( u0 / roe )
-        b2 = ang(i,j)
-        zero = 0.0
-        call zegen ( zero, b1, b2, w, xe, ll1)
+  do i = 1, npc
+     do j = 1, npc
+        if (j .lt. i) go to 20
+        zs(i, j) = cwu * cmplxz (zy(i, j), fzero)
+        zs(j, i) = zs(i, j)
+        if (iearth .eq. 99) go to 15
+        b1 = dij(i, j) * sqrtz (u0 / roe)
+        b2 = ang(i, j)
+        zero = 0.0d0
+        call zegen (zero, b1, b2, w, xe, ll1)
         go to 18
-15      d12 = absz( di(j) - di(i) )
-        call zest (hi(i), hi(j), d12, roe, w, xe )
-18      ze(i,j) = xe
-        ze(j,i) = xe
+15      d12 = absz (di(j) - di(i))
+        call zest (hi(i), hi(j), d12, roe, w, xe)
+18      ze(i, j) = xe
+        ze(j, i) = xe
 20   end do
   end do
-  if ( iprs47  .ge.  2 ) write (logsix, 3523)  ncct, npc, u0, roe
-3523 format (63h diagnostic within  'olzy' .   ze(i,j)  for  (i,j)=1, ... npc.,  5x,  16h    ncct     npc,  13x,  2hu0,  12x,  3hroe  ,/,68x,  2i8,  2e15.6  )
+  if (iprs47 .ge. 2) write (unit = logsix, fmt = 3523) ncct, npc, u0, roe
+3523 format (" Diagnostic within  'olzy' .   ze(i,j)  for  (i,j)=1, ... npc.", 5x, '    ncct     npc', 13x, 'u0', 12x, 'roe', /, 68x, 2i8, 2e15.6)
   ll0 = 0
-  if ( iprs47  .ge.  4 ) call print ( ze(1,1), npc, ll0, ldn )
+  if (iprs47 .ge. 4) call print (ze(1, 1), npc, ll0, ldn)
   jnc = 1
   do j = 1, 2
-     do i=1, ncct
-        im = 4*(i-1) + 1
+     do i = 1, ncct
+        im = 4 * (i - 1) + 1
         j1 = im + j + 1
         j1 = ncpp(j1)
-        if ( j1  .eq.  0 )   go to 40
-        b1 = usi(i,j)
-        b2 = esi(i,j)
-        ur=usr(i,j)
-        call skin47 (b1,b2,ur,s,ss,xc)
+        if (j1 .eq. 0) go to 40
+        b1 = usi(i, j)
+        b2 = esi(i, j)
+        ur = usr(i, j)
+        call skin47 (b1, b2, ur, s, ss, xc)
         xc = xc / j1
         j1 = im + j - 1
         j1 = ncpp(j1)
         j2 = j1 + jnc - 1
-        do k=jnc, j2
-35         zc(k,k) = xc
+        do k = jnc, j2
+35         zc(k, k) = xc
         end do
-        if ( iprs47  .ge.  6 ) write (logsix, 3541)  j, i, jnc, j2, j1, xc
-3541    format ( /, 33h inside  (j,i)  loop of  'olzy' ., 40h       j       i     jnc      j2      j1,  13x,  7hreal-xc, 13x,  7himag-xc  ,/,  33x,  5i8,  2e20.11  )
+        if (iprs47 .ge. 6) write (unit = logsix, fmt = 3541) j, i, jnc, j2, j1, xc
+3541    format (/, " Inside  (j,i)  loop of  'olzy' .       j       i     jnc      j2      j1", 13x, 'real-xc', 13x, 'imag-xc', /, 33x, 5i8, 2e20.11)
         jnc = j2 + 1
 40   end do
   end do
-  if ( iprs47  .ge.  1 ) write (logsix, 3554)
-3554 format ( /,  15h exit  'olzy' .  )
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 3554)
+3554 format (/, " Exit  'olzy' .")
   return
 end subroutine olzy
 
@@ -3196,99 +3557,135 @@ end subroutine olzy
 !
 
 subroutine transp (yyc, ncpp, ann, jnn, znn, ldm, ldn)
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl47.ftn'
-  real(8) :: jnn
-  complex(16) :: cmplxz
-  complex(16) :: yyc(ldn,ldn), zss, zmm, znn(ldn)
-  dimension ncpp(ldm), ann(ldn), jnn(ldn)
-  if (iprs47 .ge. 1) write (logsix, 3611)  ncct, yyc(1,1), yyc(1,2)
+  integer(4), intent(in) :: ldm
+  integer(4), intent(in) :: ldn
+  integer(4), intent(out) :: jnn(ldn)
+  integer(4), intent(in) :: ncpp(ldm)
+  real(8), intent(out) :: ann(ldn)
+  complex(16), intent(out) :: yyc(ldn, ldn)
+  complex(16) :: zss, zmm, znn(ldn)
+  !  dimension ncpp(ldm), ann(ldn), jnn(ldn)
+  integer(4) :: i, i2
+  integer(4) :: j, j1
+  integer(4) :: k, k1
+  integer(4) :: l, ll0
+  real(8) :: amm, ass
+  real(8) :: dnn
+  !
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 3611) ncct, yyc(1, 1), yyc(1, 2)
 3611 format (/,  " Enter  'transp' .    ncct", 7x,  'real-yyc(1,1)', 7x, 'imag-yyc(1,1)', 7x,  'real-yyc(1,2)', 7x, 'imag-yyc(1,2)', /, 18x, i8, 4e20.11, /, ' diagnostic input matrix.   yyc(i,j)  for  (i,j)=1, ... i2 .')
   i2 = 6
   ll0 = 0
-  if ( iprs47  .ge.  4 ) call print ( yyc(1,1), i2, ll0, ldn )
+  if (iprs47 .ge. 4) call print (yyc(1, 1), i2, ll0, ldn)
   i2 = 0
-  do 100 k=1, ncct
-     k1 = (k-1)*4 + 1
+  do 100 k = 1, ncct
+     k1 = (k - 1) * 4 + 1
      j1 = i2 + 1
      i2 = ncpp(k1) + i2
      jnn(k) = j1
      zss = czero
-     ass = 0.0
+     ass = 0.0d0
      zmm = czero
-     amm = 0.0
-     do i=1, ncct
+     amm = 0.0d0
+     do i = 1, ncct
         znn(i) = czero
-        ann(i) = 0.0
+        ann(i) = 0.0d0
 5    end do
-     do 45  i=1, i2
-        do 40  j=j1, i2
-           if ( i  .lt.  j1 )   go to 20
-           if ( j - i )   40,  10,  15
-10         zss = zss + yyc(i,j)
-           ass = ass + 1.0
+     do 45  i = 1, i2
+        do 40  j = j1, i2
+           if (i .lt. j1) go to 20
+           !           if ( j - i )   40,  10,  15
+           if (j - i .lt. 0) then
+              go to 40
+           else if (j - i .eq. 0) then
+              go to 10
+           else
+              go to 15
+           end if
+10         zss = zss + yyc(i, j)
+           ass = ass + 1.0d0
            go to 40
-15         zmm = zmm + yyc(i,j)
-           amm = amm + 1.0
+15         zmm = zmm + yyc(i, j)
+           amm = amm + 1.0d0
            go to 40
-20         if ( k  .eq.  1 )   go to 40
-           dnn =  ( j - jnn(k) ) / ( jnn(k) - 1 )
-           if ( dnn  .lt.  1.0 )   dnn = 0.0
-           l = dnn + 1.0
-           znn(l) = znn(l) + yyc(i,j)
-           ann(l) = ann(l) + 1.0
+20         if (k .eq. 1) go to 40
+           dnn = (j - jnn(k)) / (jnn(k) - 1)
+           if (dnn .lt. 1.0d0) dnn = 0.0d0
+           l = dnn + 1.0d0
+           znn(l) = znn(l) + yyc(i, j)
+           ann(l) = ann(l) + 1.0d0
 40      end do
 45   end do
-     zss = zss/cmplxz(ass, fzero)
-     zmm = zmm/ cmplxz(amm, fzero)
+     zss = zss / cmplxz (ass, fzero)
+     zmm = zmm / cmplxz (amm, fzero)
      k1 = k - 1
-     if ( k1  .le.  0 )   go to 55
-     do 50  i=1, k1
-        znn(i) = znn(i) / cmplxz(ann(i), fzero)
+     if (k1 .le. 0) go to 55
+     do 50  i = 1, k1
+        znn(i) = znn(i) / cmplxz (ann(i), fzero)
 50   end do
-55   do i=1, i2
-        do j=j1, i2
-           if ( j  .lt.  i )   go to 90
-           if ( i  .lt.  j1 )   go to 70
-           if ( j - i )   90,  60,  65
-60         yyc(i,j) = zss
+55   do i = 1, i2
+        do j = j1, i2
+           if (j .lt. i) go to 90
+           if (i .lt. j1) go to 70
+           !           if ( j - i )   90,  60,  65
+           if (j - i .lt. 0) then
+              go to 90
+           else if (j - i .eq. 0) then
+              go to 60
+           else
+              go to 65
+           end if
+60         yyc(i, j) = zss
            go to 90
-65         yyc(i,j) = zmm
+65         yyc(i, j) = zmm
            go to 85
-70         if ( k  .eq.  1 )   go to 85
-           dnn = ( j - jnn(k) ) / ( jnn(k) - 1 )
-           if ( dnn  .lt.  1.0 )   dnn = 0.0
-           l = dnn + 1.0
-           yyc(i,j) = znn(l)
-85         yyc(j,i) = yyc(i,j)
+70         if (k .eq. 1) go to 85
+           dnn = (j - jnn(k)) / (jnn(k) - 1)
+           if (dnn .lt. 1.0d0) dnn = 0.0d0
+           l = dnn + 1.0d0
+           yyc(i, j) = znn(l)
+85         yyc(j, i) = yyc(i, j)
 90      end do
 95   end do
 100 end do
-  if ( iprs47  .ge.  1 ) write (logsix, 3623)  yyc(1,1), yyc(1,2)
-3623 format (/,  " Exit  'transp' .", 7x,  'real-yyc(1,1)', 7x, 'imag-yyc(1,1)', 7x,  'real-yyc(1,2)', 7x, 'imag-yyc(1,2)', /, 17x, 4e20.11 , /,' diagnostic output matrix.  yyc(i,j)  for  (i,j)=1, ... i2 .')
-  if (iprs47 .ge. 4) call print(yyc(1, 1), i2, ll0, ldn)
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 3623) yyc(1, 1), yyc(1, 2)
+3623 format (/, " Exit  'transp' .", 7x, 'real-yyc(1,1)', 7x, 'imag-yyc(1,1)', 7x,  'real-yyc(1,2)', 7x, 'imag-yyc(1,2)', /, 17x, 4e20.11 , /,' diagnostic output matrix.  yyc(i,j)  for  (i,j)=1, ... i2 .')
+  if (iprs47 .ge. 4) call print (yyc(1, 1), i2, ll0, ldn)
   return
 end subroutine transp
 
 !
-!     subroutine skin47.
+! subroutine skin47.
 !
 
 subroutine skin47 (b1, b2, ur, cjw, sjw, zcc)
+  use komthl
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl47.ftn'
-  common /komthl/ pekexp
-  complex(16) :: cjw, sjw, x1, x2, x3, x4, zcc
-  complex(16) :: cexpz, cmplxz
+  real(8), intent(in) :: b1
+  real(8), intent(in) :: b2
+  real(8), intent(in) :: ur
+  complex(16), intent(in) :: cjw
+  complex(16), intent(in) :: sjw
+  complex(16), intent(out) :: zcc
+  integer(4) :: ixa
+  integer(4) :: ll1, ll2
+  real(8) :: d1, d15
+  real(8) :: ten
+  real(8) :: xa, xb
+  complex(16) :: x1, x2, x3, x4
   complex(16) :: c1, c2
+  !
   c1 = cmplxz(u2p, fzero)
   c2 = cmplxz(ur, fzero)
   x1 = cmplxz(b1, fzero) * sjw
   x2 = cmplxz(b2, fzero) * sjw
   ixa = 0
-  xa = cabsz(x2)
+  xa = cabsz (x2)
   ll1 = 1
   ll2 = 2
   d15 = value1 * value5 / 100.
@@ -3328,118 +3725,137 @@ end subroutine skin47
 !
 
 subroutine zegen (be1, be2, th, w, xe, isyst)
+  use komthl
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl47.ftn'
-  common /komthl/ pekexp
+  integer(4), intent(in) :: isyst
+  real(8), intent(in) :: be1
+  real(8), intent(in) :: be2
+  real(8), intent(in) :: th
+  real(8), intent(in) :: w
+  integer(4) :: i, iter, ixa
+  integer(4) :: ll1, ll2
+  real(8) :: a1, a2, a3, a4
+  real(8) :: b1, b2, b3, b4, bn
+  real(8) :: cn, cs1, cs2, cs3, cs4
+  real(8) :: d1, dn
+  real(8) :: e, en, euc, evennn
+  real(8) :: fn
+  real(8) :: p1
+  real(8) :: q1
+  real(8) :: r1, r2
+  real(8) :: sn, sq2, ss1, ss2
+  real(8) :: t, t1, t2, t3, t4, t5, t6, t7, t8
+  real(8) :: unity
+  real(8) :: verbin
+  real(8) :: xa, xa1
   complex(16) :: cj, cjw, x1, x2, xe
-  complex(16) :: cexpz, cmplxz, csqrtz
   complex(16) :: c1
-  unity = 1.0
-  c1 = cmplxz(u2p, fzero)
+  !
+  unity = 1.0d0
+  c1 = cmplxz (u2p, fzero)
   cj = cimag1
-  euc = 2./value4
-  d1 = 2.0
-  sq2 = sqrtz(d1)
+  euc = 2.0d0 / value4
+  d1 = 2.0d0
+  sq2 = sqrtz (d1)
   ll1 = 1
   ll2 = 2
-  if (isyst .ge. 0)   go to 140
-  cjw = cj * cmplxz(w, fzero)
-  xe=csqrtz(cjw)
-  x1 = cmplxz(be1, fzero) * xe
-  x2 = cmplxz(be2, fzero) * xe
-  ixa=0
-  xa=cabsz(x2)
-  if(xa.gt.10.) ixa=1
-  call bsikm(x1,ll2,bin,bkn,ll1,ixa)
-  xe=bkn(1)
-  if(xa.gt.100.) go to 130
-  call bsikm(x2,ll2,bin,bkn,ll1,ixa)
-  if (ixa .gt. 0)   go to 120
+  if (isyst .ge. 0) go to 140
+  cjw = cj * cmplxz (w, fzero)
+  xe = csqrtz (cjw)
+  x1 = cmplxz (be1, fzero) * xe
+  x2 = cmplxz (be2, fzero) * xe
+  ixa = 0
+  xa = cabsz (x2)
+  if (xa .gt. 10.0d0) ixa = 1
+  call bsikm (x1, ll2, bin, bkn, ll1, ixa)
+  xe = bkn(1)
+  if (xa .gt. 100.0d0) go to 130
+  call bsikm (x2, ll2, bin, bkn, ll1, ixa)
+  if (ixa .gt. 0) go to 120
 110 xe = cjw * c1 * (xe - bkn(1))
   go to 5
-120 xe=cjw*c1 *(xe-bkn(1) /cexpz(x2-x1))/cexpz(x1)
+120 xe = cjw * c1 * (xe - bkn(1) / cexpz (x2 - x1)) / cexpz(x1)
   go to 5
-130 xa1=cabsz(x1)
-  if(xa1 .gt. pekexp ) go to 140
-  xe = cjw * c1 * xe/cexpz(x1)
+130 xa1 = cabsz (x1)
+  if (xa1 .gt. pekexp) go to 140
+  xe = cjw * c1 * xe / cexpz (x1)
   go to 5
 140 xe = czero
-5 e = be2 * sqrtz ( w )
-  if ( iprs47  .ge.  2 ) write (logsix, 3741)  isyst, ixa, be1, be2, xa, th, xa1, xe, w,e
-3741 format ( /,  18h within  'zegen' .,  16h   isyst     ixa, 16x,  3hbe1,  16x,  3hbe2,  17x,  2hxa,  17x,  2hth, &
-       16x,  3hxa1  ,/,  18x,  2i8,  5e19.10  ,/,  1x, 13x,  7hreal-xe,  13x,  7himag-xe, &
-       19x, 1hw, 19x, 1he,/, 1x, 4e20.11 )
-  if ( e  .gt.  5.)   go to 60
+5 e = be2 * sqrtz (w)
+  if (iprs47 .ge. 2) write (unit = logsix, fmt = 3741) isyst, ixa, be1, be2, xa, th, xa1, xe, w,e
+3741 format (/, " Within  'zegen' .   isyst     ixa", 16x, 'be1', 16x, 'be2', 17x, 'xa', 17x, 'th', 16x, 'xa1', /, 18x, 2i8, 5e19.10, /, 1x, 13x, 'real-xe', 13x, 'imag-xe', 19x, 'w', 19x, 'e', /, 1x, 4e20.11)
+  if (e .gt. 5.0d0) go to 60
   r2 = e ** 4
-  r1=r2/16.
-  sn = e**2/8.
-  bn=r1/12.
-  cn = e/3.
-  dn=5./4.
-  en = e**3/45.
-  fn=5./3.
-  iter=11
-  if(e.ge.1. ) iter=21
+  r1 = r2 / 16.0d0
+  sn = e ** 2 / 8.0d0
+  bn = r1 / 12.0d0
+  cn = e / 3.0d0
+  dn = 5.0d0 / 4.0d0
+  en = e ** 3 / 45.0d0
+  fn = 5.0d0 / 3.0d0
+  iter = 11
+  if (e .ge. 1.0d0) iter = 21
   iter = 21
-15 do i=1,iter
-     t=i-1
-     t1=t*2.
-     t2=t*4.
-     cs1=cosz((t2+2.)*th)
-     ss1=sinz((t2+2.)*th)
-     cs2=cosz((t2+4.)*th)
-     ss2=sinz((t2+4.)*th)
-     cs3=cosz((t2+1.)*th)
-     cs4=cosz((t2+3.)*th)
-     if (i.gt. 1)   go to 30
+15 do i = 1, iter
+     t = i - 1
+     t1 = t * 2.0d0
+     t2 = t * 4.0d0
+     cs1 = cosz ((t2 + 2.0d0) * th)
+     ss1 = sinz ((t2 + 2.0d0) * th)
+     cs2 = cosz ((t2 + 4.0d0) * th)
+     ss2 = sinz ((t2 + 4.0d0) * th)
+     cs3 = cosz ((t2 + 1.0d0) * th)
+     cs4 = cosz ((t2 + 3.0d0) * th)
+     if (i .gt. 1) go to 30
      a1 = sn * cs1
-     a2=sn*ss1
-     a3=bn*cs2
-     a4=bn*ss2
-     b1=cn*cs3
-     b2=dn*a1
-     b3=en*cs4
-     b4=fn*a3
+     a2 = sn * ss1
+     a3 = bn * cs2
+     a4 = bn * ss2
+     b1 = cn * cs3
+     b2 = dn * a1
+     b3 = en * cs4
+     b4 = fn * a3
      evennn = a1 + a2 + a3 + a4 + b1 + b2 + b3 + b4
      go to 50
-30   t3=-t1*(t1+1.)**2*(t1+2.)
-     t4=-(t1+1.)*(t1+2.)**2*(t1+3.)
-     t5=-(t2-1.)*(t2+1.)**2*(t2+3.)
-     t6=1./t2+1./(t1+1.)+1./(t1+2.)-1./(t2+4.)
-     t7=-(t2+1.)*(t2+3.)**2*(t2+5.)
-     t8=1./(t2+2.)+1./(t1+2.)+1./(t1+3.)-1./(t2+6.)
-     sn=sn*r1/t3
-     bn=bn*r1/t4
-     cn=cn*r2/t5
-     dn=dn+t6
-     en=en*r2/t7
-     fn=fn+t8
-     a1=a1+sn*cs1
-     a2=a2+sn*ss1
-     a3=a3+bn*cs2
-     a4=a4+bn*ss2
-     b1=b1+cn*cs3
-     b2=b2+dn*sn*cs1
-     b3=b3+en*cs4
-     b4=b4+fn*bn*cs2
+30   t3 = -t1 * (t1 + 1.0d0) ** 2 * (t1 + 2.0d0)
+     t4 = -(t1 + 1.0d0) * (t1 + 2.0d0) ** 2 * (t1 + 3.0d0)
+     t5 = -(t2 - 1.0d0) * (t2 + 1.0d0) ** 2 * (t2 + 3.0d0)
+     t6 = 1.0d0 / t2 + 1.0d0 / (t1 + 1.0d0) + 1.0d0 / (t1 + 2.0d0) - 1.0d0 / (t2 + 4.0d0)
+     t7 = -(t2 + 1.0d0) * (t2 + 3.0d0) ** 2 * (t2 + 5.0d0)
+     t8 = 1.0d0 / (t2 + 2.0d0) + 1.0d0 / (t1 + 2.0d0) + 1.0d0 / (t1 + 3.0d0) - 1.0d0 / (t2 + 6.0d0)
+     sn = sn * r1 / t3
+     bn = bn * r1 / t4
+     cn = cn * r2 / t5
+     dn = dn + t6
+     en = en * r2 / t7
+     fn = fn + t8
+     a1 = a1 + sn * cs1
+     a2 = a2 + sn * ss1
+     a3 = a3 + bn * cs2
+     a4 = a4 + bn * ss2
+     b1 = b1 + cn * cs3
+     b2 = b2 + dn * sn * cs1
+     b3 = b3 + en * cs4
+     b4 = b4 + fn * bn * cs2
      verbin = evennn
      evennn = a1 + a2 + a3 + a4 + b1 + b2 + b3 + b4
-     if ((1.-verbin/evennn)*(1.-verbin/evennn) .lt. 1.e-12) go to 888
+     if ((1.0d0 - verbin / evennn) * (1.0d0 - verbin / evennn) .lt. 1.0e-12) go to 888
 50 end do
 888 continue
-  p1=pai*(1.-a3)/4.+a1*alogz(euc/e) + th*a2 + b2 + sq2*(b3-b1)
-  q1=0.5+(1.-a3)*alogz(euc/e)-th*a4-pai*a1/4.-b4+sq2*(b1+b3)
+  p1 = pai * (1.0d0 - a3) / 4.0d0 + a1 * alogz (euc / e) + th * a2 + b2 + sq2 * (b3 - b1)
+  q1 = 0.5d0 + (1.0d0 - a3) * alogz (euc / e) - th * a4 - pai * a1 / 4.0d0 - b4 + sq2 * (b1 + b3)
   go to 70
-60 cs1=sq2*cosz(th)
-  cs2=cosz(2.*th)*2.
-  cs3=sq2*cosz(3.*th)
-  cs4=3.*sq2*cosz(5.*th)
-  p1=(cs1+(cs4/e**3+cs3/e-cs2)/e)/e
-  q1=(cs1+(cs4/e**2-cs3)/e**2)/e
-70 xe = cmplxz(w,fzero) * c1 * (cmplxz(p1,fzero) + cj * cmplxz(q1, fzero)) + xe
-  if ( iprs47  .ge.  2 ) write (logsix, 3782)  p1, q1, xe
-3782 format ( /,  16h exit  'zegen' ., 17x, 2hp1, 17x, 2hq1, 12x,  7hreal-xe,  12x,  7himag-xe  ,/,  16x,  4e19.10  )
+60 cs1 = sq2 * cosz (th)
+  cs2 = cosz (2.0d0 * th) * 2.0d0
+  cs3 = sq2 * cosz (3.0d0 * th)
+  cs4 = 3.0d0 * sq2 * cosz (5.0d0 * th)
+  p1 = (cs1 + (cs4 / e ** 3 + cs3 / e - cs2) / e) / e
+  q1 = (cs1 + (cs4 / e ** 2 - cs3) / e ** 2) / e
+70 xe = cmplxz (w, fzero) * c1 * (cmplxz (p1, fzero) + cj * cmplxz (q1, fzero)) + xe
+  if (iprs47 .ge. 2) write (unit = logsix, fmt = 3782) p1, q1, xe
+3782 format (/, " Exit  'zegen' .", 17x, 'p1', 17x, 'q1', 12x, 'real-xe', 12x, 'imag-xe', /, 16x, 4e19.10)
   return
 end subroutine zegen
 
@@ -3480,7 +3896,12 @@ subroutine eigen (cjw, p, n, a, ai, qn, q, xx, yy, ldn)
   l=0
 15 l=l+1
   iq=0
-  if(l-n) 20,90,90
+  !  if(l-n) 20,90,90
+  if (l - n .lt. 0) then
+     go to 20
+  else if (l - n .ge. 0) then
+     go to 90
+  end if
 20 iq=iq+1
   if(iq.le. kvalue ) go to 25
   iq=iq-1
@@ -3605,154 +4026,179 @@ end subroutine eigen
 !
 
 subroutine  zest (h1, h2, e, res, omg, s)
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl47.ftn'
-  complex(16) :: qq, bbb, rom, s, sa, s1, s2
+  real(8), intent(in) :: e
+  real(8), intent(in) :: h1
+  real(8), intent(in) :: h2
+  real(8), intent(in) :: omg
+  real(8), intent(in) :: res
+  complex(16), intent(out) :: s
+  integer(4) :: jd, jjj
+  integer(4) :: kn
+  integer(4) :: l
+  integer(4) :: n
+  real(8) :: ab
+  real(8) :: bp
+  real(8) :: c9, contwo
+  real(8) :: d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, dx, dx2
+  real(8) :: h1ph2, hkr
+  real(8) :: omg2
+  real(8) :: r, ram, ram2, rmax, rmin
+  real(8) :: toj
+  real(8) :: v5
+  real(8) :: yud
+  complex(16) :: qq, bbb, rom, sa, s1, s2
   complex(16) :: s3, s5, s6, s8, sp12, sp23, sm12
   complex(16) :: sm23, sq1, sq3, u, u1, u2, z
-  complex(16) :: cexpz, cmplxz, csqrtz
   complex(16) :: c1, c2, c3, c4, c5, c6, c7, c8
+  !
   toj = u0
-  if ( iprs47  .ge.  2 ) write (logsix, 3917)  h1, h2, e, res, omg
-3917 format ( /,  16h enter  'zest' .,  18x,  2hh1,  18x,  2hh2, 19 x,  1he,  17x,  3hres,  17x,  3homg  ,/,  16x,  5e20.11  )
-  hkr = spdlgt**2
-  yud=1./toj/hkr
-  h1ph2=h1+h2
-  ab = 10. * e/h1ph2
-  omg2=omg*omg
-  d1 = toj * omg/res
-  rom = cmplxz(fzero, d1)
-  bp=pai/2.
-  rmax=0.
+  if (iprs47 .ge. 2) write (unit = logsix, fmt = 3917) h1, h2, e, res, omg
+3917 format (/, " Enter  'zest' .", 18x, 'h1', 18x, 'h2', 19 x, 'e', 17x, 'res', 17x, 'omg', /,  16x, 5e20.11)
+  hkr = spdlgt ** 2
+  yud =1.0d0 / toj / hkr
+  h1ph2 = h1 + h2
+  ab = 10.0d0 * e / h1ph2
+  omg2 = omg * omg
+  d1 = toj * omg / res
+  rom = cmplxz (fzero, d1)
+  bp = pai / 2.0d0
+  rmax = 0.0d0
   s = czero
-  l=2
-  ram=0.
-700 ram2=ram*ram
-  d2 = ram2 + omg2 * (1. - htoj2 * hyud2)/hkr
+  l = 2
+  ram = 0.0d0
+700 ram2 = ram * ram
+  d2 = ram2 + omg2 * (1.0d0 - htoj2 * hyud2) / hkr
   c1 = cmplxz(d2, fzero)
-  c2 = rom * cmplxz(htoj2, fzero)
-  s1 = csqrtz(c1 + c2)
-  d3 = ram2 + omg2 * (1. - htoj3 * hyud3)/hkr
-  c3 = cmplxz(d3, fzero)
-  c4 = cmplxz(alf1, fzero) * rom * cmplxz(htoj3, fzero)
-  s2 = csqrtz(c3 + c4)
-  d4 = ram2 + omg2 * (1. - htoj4 * hyud4)/hkr
-  c5 = cmplxz(d4, fzero)
-  c6 = cmplxz(alf2, fzero) * rom * cmplxz(htoj4, fzero)
-  s3 = csqrtz(c5 + c6)
-  s6=s2
-  s5=s1
-  d5 = 1./htoj2/toj
+  c2 = rom * cmplxz (htoj2, fzero)
+  s1 = csqrtz (c1 + c2)
+  d3 = ram2 + omg2 * (1.0d0 - htoj3 * hyud3) / hkr
+  c3 = cmplxz (d3, fzero)
+  c4 = cmplxz (alf1, fzero) * rom * cmplxz (htoj3, fzero)
+  s2 = csqrtz (c3 + c4)
+  d4 = ram2 + omg2 * (1.0d0 - htoj4 * hyud4) / hkr
+  c5 = cmplxz (d4, fzero)
+  c6 = cmplxz (alf2, fzero) * rom * cmplxz (htoj4, fzero)
+  s3 = csqrtz (c5 + c6)
+  s6 = s2
+  s5 = s1
+  d5 = 1.0d0 / htoj2 / toj
   s1 = s1 * cmplxz(d5, fzero)
-  d6 = 1./htoj3/toj
-  s2 = s2 * cmplxz(d6, fzero)
-  d7 = 1./htoj4/toj
+  d6 = 1.0d0 / htoj3 / toj
+  s2 = s2 * cmplxz (d6, fzero)
+  d7 = 1.0d0 / htoj4 / toj
   s3 = s3 * cmplxz(d7, fzero)
-  s8 = cmplxz(toj, fzero) * s1
-  sp12=s1+s2
-  sp23=s2+s3
-  sm12=s1-s2
-  d8 = 2.*( dep1 - dep2)
-  c7 = cmplxz(d8,fzero)
-  sm23 = (s2 - s3) * cexpz(s6 * c7)
-  d9 = -2. * dep1
-  c8 = cmplxz(d9, fzero)
-  bbb = cexpz(s5 * c8)
-  d10 = expz(-h1ph2 * ram) * cosz(e * ram)
-  contwo = 2.0
-  z=cmplxz(fzero,contwo )*(sp12*sp23+sm12*sm23+bbb*(sm12*sp23+sp12 * sm23)) * cmplxz(d10, fzero)/((cmplxz(ram, fzero) +s8) * &
-       (sp12*sp23+sm12* sm23) + (cmplxz(ram,fzero) - s8) * bbb*(sm12*sp23+sp12*sm23))
-  if ( iprs47  .ge.  5 ) write (logsix, 3928)  l, bp, ab, ram, rmax, z
-3928 format ( /,  1x,  8h       l,  18x,  2hbp,  18x,  2hab, 17x,  3hram,  16x,  4hrmax,  14x,  6hreal-z,  14x,  6himag-z,/,  1x,  i8,  6e20.11  )
-  go to (702,701),l
-701 u1=z
-  jd=50
+  s8 = cmplxz (toj, fzero) * s1
+  sp12 = s1 + s2
+  sp23 = s2 + s3
+  sm12 = s1 - s2
+  d8 = 2.0d0 * (dep1 - dep2)
+  c7 = cmplxz (d8, fzero)
+  sm23 = (s2 - s3) * cexpz (s6 * c7)
+  d9 = -2.0d0 * dep1
+  c8 = cmplxz (d9, fzero)
+  bbb = cexpz (s5 * c8)
+  d10 = expz (-h1ph2 * ram) * cosz (e * ram)
+  contwo = 2.0d0
+  z = cmplxz (fzero, contwo) * (sp12 * sp23 + sm12 * sm23 + bbb * (sm12 * sp23 + sp12 * sm23)) * cmplxz (d10, fzero) / ((cmplxz (ram, fzero) + s8) * (sp12 * sp23 + sm12 * sm23) + (cmplxz (ram,fzero) - s8) * bbb * (sm12 * sp23 + sp12 * sm23))
+  if (iprs47 .ge. 5) write (unit = logsix, fmt = 3928) l, bp, ab, ram, rmax, z
+3928 format (/, 1x, '       l', 18x, 'hbp', 18x, 'ab', 17x, 'ram', 16x, 'rmax', 14x, 'real-z', 14x, 'imag-z', /, 1x, i8, 6e20.11)
+  !  go to (702,701),l
+  select case (l)
+  case (1)
+     go to 702
+
+  case (2)
+     go to 701
+  end select
+701 u1 = z
+  jd = 50
   go to 650
 600 u1 = czero
-650 if (bp .lt. ab)   go to 300
+650 if (bp .lt. ab) go to 300
   jd = 100
-  rmin=rmax
-  rmax=10./h1ph2
-  l=1
-  ram=rmax
+  rmin = rmax
+  rmax = 10.0d0 / h1ph2
+  l = 1
+  ram = rmax
   go to 700
-702 u2=z
+702 u2 = z
   go to 210
-300 rmin=rmax
-  rmax=bp/e
-  bp=bp+pai
+300 rmin = rmax
+  rmax = bp / e
+  bp = bp + pai
   u2 = czero
-210 jjj=1
-  qq=u1+u2
-  n=123
-  dx=rmax-rmin
-  d11 = dx/2.
-  sq1 = qq * cmplxz(d11, fzero)
-  if ( iprs47  .ge.  6 ) write (logsix, 3943)  dx, htoj2, rmin, omg2, toj, value5, qq
-3943 format ( /,  1x,  14x,  2hdx,  11x,  5hhtoj2,  12x,  4hrmin, 12x,  4homg2,  13x,  3htoj,  10x,  6hvalue5,  9x,  7hreal-qq, 9x,  7himag-qq  ,/,  1x,  8e16.7  )
-75 dx2=dx
-  dx=dx/2.0
-  ram=rmin+dx
-  n=2*n
-  if(jjj.eq.1) n=1
-  jjj=100
-  do kn=1,n
-     ram2=ram*ram
-     d2 = ram2 + omg2 * (1. - htoj2 * hyud2)/hkr
-     c1 = cmplxz(d2, fzero)
+210 jjj = 1
+  qq = u1 + u2
+  n = 123
+  dx = rmax - rmin
+  d11 = dx / 2.0d0
+  sq1 = qq * cmplxz (d11, fzero)
+  if (iprs47 .ge. 6) write (unit = logsix, fmt = 3943) dx, htoj2, rmin, omg2, toj, value5, qq
+3943 format (/, 1x, 14x, 'dx', 11x, 'htoj2', 12x, 'rmin', 12x, 'omg2', 13x, 'toj', 10x, 'value5', 9x, 'real-qq', 9x, 'imag-qq', /, 1x, 8e16.7)
+75 dx2 = dx
+  dx = dx / 2.0d0
+  ram = rmin + dx
+  n = 2 * n
+  if (jjj .eq. 1) n = 1
+  jjj = 100
+  do kn = 1, n
+     ram2 = ram * ram
+     d2 = ram2 + omg2 * (1.0d0 - htoj2 * hyud2) / hkr
+     c1 = cmplxz (d2, fzero)
      c2 = rom * cmplxz(htoj2, fzero)
-     s1 = csqrtz(c1 + c2)
-     d3 = ram2 + omg2 * (1. - htoj3 * hyud3)/hkr
-     c3 = cmplxz(d3, fzero)
-     c4 = cmplxz(alf1, fzero) * rom * cmplxz(htoj3, fzero)
-     s2 = csqrtz(c3 + c4)
-     d4 = ram2 + omg2 * (1. - htoj4 * hyud4)/hkr
-     c5 = cmplxz(d4, fzero)
-     c6 = cmplxz(alf2, fzero) * rom * cmplxz(htoj4, fzero)
-     s3 = csqrtz(c5 + c6)
-     s6=s2
-     s5=s1
-     d5 = 1./htoj2/toj
-     s1 = s1 * cmplxz(d5, fzero)
-     d6 = 1./htoj3/toj
-     s2 = s2 * cmplxz(d6, fzero)
-     d7 = 1./htoj4/toj
-     s3 = s3 * cmplxz(d7, fzero)
-     s8 = cmplxz(toj, fzero) * s1
-     sp12=s1+s2
-     sp23=s2+s3
-     sm12=s1-s2
-     d8 = 2.*( dep1 - dep2)
-     c7 = cmplxz(d8,fzero)
-     sm23 = (s2 - s3) * cexpz(s6 * c7)
-     d9 = -2. * dep1
-     c8 = cmplxz(d9, fzero)
-     bbb = cexpz(s5 * c8)
-     d10 = expz(-h1ph2 * ram) * cosz(e * ram)
-     z=cmplxz(fzero,contwo)*(sp12*sp23+sm12*sm23+bbb*(sm12*sp23+sp12*sm23))*cmplxz(d10, fzero)/((cmplxz(ram, fzero) +s8)*&
-          (sp12*sp23+sm12*sm23)+(cmplxz(ram,fzero) - s8) * bbb*(sm12*sp23+sp12*sm23))
-     ram=ram+dx2
-     u=2.*z
-77   qq=qq+u
+     s1 = csqrtz (c1 + c2)
+     d3 = ram2 + omg2 * (1.0d0 - htoj3 * hyud3) / hkr
+     c3 = cmplxz (d3, fzero)
+     c4 = cmplxz (alf1, fzero) * rom * cmplxz (htoj3, fzero)
+     s2 = csqrtz (c3 + c4)
+     d4 = ram2 + omg2 * (1.0d0 - htoj4 * hyud4) / hkr
+     c5 = cmplxz (d4, fzero)
+     c6 = cmplxz (alf2, fzero) * rom * cmplxz (htoj4, fzero)
+     s3 = csqrtz (c5 + c6)
+     s6 = s2
+     s5 = s1
+     d5 = 1.0d0 / htoj2 / toj
+     s1 = s1 * cmplxz (d5, fzero)
+     d6 = 1.0d0 / htoj3 / toj
+     s2 = s2 * cmplxz (d6, fzero)
+     d7 = 1.0d0 / htoj4 / toj
+     s3 = s3 * cmplxz (d7, fzero)
+     s8 = cmplxz (toj, fzero) * s1
+     sp12 = s1 + s2
+     sp23 = s2 + s3
+     sm12 = s1 - s2
+     d8 = 2.0d0 * (dep1 - dep2)
+     c7 = cmplxz (d8, fzero)
+     sm23 = (s2 - s3) * cexpz (s6 * c7)
+     d9 = -2.0d0 * dep1
+     c8 = cmplxz (d9, fzero)
+     bbb = cexpz (s5 * c8)
+     d10 = expz (-h1ph2 * ram) * cosz (e * ram)
+     z = cmplxz (fzero, contwo) * (sp12 * sp23 + sm12 * sm23 + bbb * (sm12 * sp23 + sp12 * sm23)) * cmplxz (d10, fzero) / ((cmplxz (ram, fzero) + s8) * (sp12 * sp23 + sm12 * sm23) + (cmplxz (ram, fzero) - s8) * bbb * (sm12 * sp23 + sp12 * sm23))
+     ram = ram + dx2
+     u = 2.0d0 * z
+77   qq = qq + u
   end do
-  d12 = dx/2.
-  sq3 = qq * cmplxz(d12, fzero)
+  d12 = dx / 2.0d0
+  sq3 = qq * cmplxz (d12, fzero)
   sa = sq1 - sq3
-  r = cabsz(sa)/cabsz(sq3)
-  v5 = value5 * .5
-  if ( iprs47  .ge.  24 ) write (logsix, 3956)  n, r, dx, ram, qq
-3956 format ( /,  13h bottom loop.,  8h       n,  19x,  1hr, 18x,  2hdx,  17x,  3hram,  13x,  7hreal-qq,  13x,  7himag-qq,/,  13x,  i8,  5e20.11  )
-  if ( r .le. v5)   go to 50
+  r = cabsz (sa) / cabsz (sq3)
+  v5 = value5 * 0.5d0
+  if (iprs47 .ge. 24) write (unit = logsix, fmt = 3956) n, r, dx, ram, qq
+3956 format (/, ' Bottom loop.       n', 19x, 'r', 18x, 'dx', 17x, 'ram', 13x, 'real-qq', 13x,  'imag-qq', /, 13x, i8, 5e20.11)
+  if (r .le. v5) go to 50
   sq1 = sq3
   go to 75
 50 s = s + sq3
-  if(jd.eq.100) go to 55
+  if (jd .eq. 100) go to 55
   go to 600
-55 c9 = .5 * u0/ pai
-  s = s * cmplxz(omg, fzero) * cmplxz(c9, fzero)
-  if ( iprs47  .ge.  2 ) write (logsix, 3968)  omg, value2, s
-3968 format ( /,  15h exit  'zest' .,  17x,  3homg,  14x,  6hvalue2, 14x,  6hreal-s,  14x,  6himag-s  ,/,  15x,  4e20.11  )
+55 c9 = 0.5d0 * u0 / pai
+  s = s * cmplxz (omg, fzero) * cmplxz (c9, fzero)
+  if (iprs47 .ge. 2) write (unit = logsix, fmt = 3968) omg, value2, s
+3968 format (/, " Exit  'zest' .", 17x, 'omg', 14x, 'value2', 14x, 'real-s', 14x, 'imag-s', /, 15x, 4e20.11)
   return
 end subroutine zest
 
@@ -3761,124 +4207,136 @@ end subroutine zest
 !
 
 subroutine minv (tcmpx, m, f, ldn, ldn2)
+  use blkcom
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: ldn2
+  integer(4), intent(in) :: m
+  complex(16), intent(out) :: tcmpx(ldn, ldn)
+  complex(16), intent(in) :: f(ldn, ldn2)
+  !  dimension fr(10,20), fi(10,20), fnew(10,20), fident(10,20)
+  integer(4) :: i, i2
+  integer(4) :: j, j1
+  integer(4) :: k, k1
+  integer(4) :: ll0
+  integer(4) :: m1
+  integer(4) :: n
+  real(8) :: adi, adr
+  real(8) :: cci, ccr
+  real(8) :: d1, d5, d6, d9, d14, d16, d18, d19, d22, d23, di, dr
+  real(8) :: fnew(10, 20), fr(10, 20), fi(10, 20)
+  complex(16) :: d2
   complex(16) :: ad, cc, d
-  include  'labl47.ftn'
-  complex(16) :: tcmpx(ldn,ldn), f(ldn, ldn2),  d2,  cmplxz, fnew
-  complex(16) :: fident
-  dimension fr(10,20), fi(10,20), fnew(10,20), fident(10,20)
-  d1 = 0.0
-  do i=1,m
-     do j=1,m
-        d2 = tcmpx(i,j)
-        if ( cabsz ( d2 ) .gt. d1)   d1 = cabsz(d2)
-        fr(i,j) = realz ( d2 )
-4       fi(i,j) = aimagz ( d2 )
+  complex(16) :: fident(10, 20)
+  !
+  d1 = 0.0d0
+  do i = 1, m
+     do j = 1, m
+        d2 = tcmpx(i, j)
+        if (cabsz (d2) .gt. d1) d1 = cabsz (d2)
+        fr(i, j) = realz (d2)
+4       fi(i, j) = aimagz (d2)
      end do
   end do
   !!!!    4 f(i,j) = d2
   d1 = d1 * value2
-  if ( iprs47  .ge.  1 ) write(logsix, 4005) m, value2, d1, f(1, 1)
-4005 format ( /,  16h start  'minv' .,  8h       m,  14x,  6hvalue6, 18x,  2hd1,  9x,  11hreal-f(1,1),  9x,  11himag-f(1,1)  ,/, &
-          16x,  i8,  4e20.11  ,/, 47h diagnostic   tcmpx(i,j)  for  (i,j)=1, ... m .    )
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 4005) m, value2, d1, f(1, 1)
+4005 format (/, " Start  'minv' .       m", 14x, 'value6', 18x, 'd1', 9x, 'real-f(1,1)', 9x, 'imag-f(1,1)', /, 16x, i8, 4e20.11, /, ' diagnostic   tcmpx(i,j)  for  (i,j)=1, ... m .')
   ll0 = 0
-  if ( iprs47  .ge.  7 ) call print ( tcmpx(1,1), m, ll0, ldn )
-  do i=1, m
-     j1=m+1
-     m1=m*2
+  if (iprs47 .ge. 7) call print (tcmpx(1, 1), m, ll0, ldn)
+  do i = 1, m
+     j1 = m + 1
+     m1 = m * 2
      do j = j1, m1
-        if ((j-m) .eq. i)   go to 20
+        if ((j - m) .eq. i) go to 20
 !!!!     f(i,j) = czero
-        fr(i,j) = 0.0
-        fi(i,j) = 0.0
+        fr(i, j) = 0.0d0
+        fi(i, j) = 0.0d0
         go to 25
 !!!!  20 f(i,j) = creal1
-20      fr(i,j) = 1.0
-        fi(i,j) = 0.0
+20      fr(i, j) = 1.0d0
+        fi(i, j) = 0.0d0
 25   end do
 30 end do
-  do 115  k1 =1, m
-     d9 = 0.0
-     n=k1
+  do 115  k1 = 1, m
+     d9 = 0.0d0
+     n = k1
      do i2 = k1, m
         !!!!     bx=cabsz(f(i2,k1))
         !!!!     if (bx .le. d9)   go to 50
-        d18 = absz ( fr(i2,k1) )
-        d19 = absz ( fi(i2,k1) )
-        if ( d18 .lt. d19 ) d18 = d19
-        if ( d18 .le. d9 )  go to 50
+        d18 = absz (fr(i2, k1))
+        d19 = absz (fi(i2, k1))
+        if (d18 .lt. d19) d18 = d19
+        if (d18 .le. d9) go to 50
         d9 = d18
-        n=i2
+        n = i2
 50   end do
      !      write (*,*) ' next variable.  k1, n, d9, d1 =',
      !     1                              k1, n, d9, d1
-     if ( d9 .gt. d1 ) go to 60
-     write (lunit6, 5706)  m, k1, d9
-5706 format (/, " Stop. ---- Matrix inversion within subroutine  'minv'  has been suspended, due to failure to find a large", /, &
-          12x, ' enough pivot element.   The matrix in question is of order', i5, ' ,    with breakdown having occurred', /, &
-          12x, ' while working on the elimination of variable number', i5, '.   In this columns, the largest real or', /, &
-          12x, ' imaginary part had absolute value', e14.3, ' ,   while the applicable near-zero tolerance')
-     write(lunit6, 5707) d1, value2
+     if (d9 .gt. d1) go to 60
+     write (unit = lunit6, fmt = 5706) m, k1, d9
+5706 format (/, " Stop. ---- Matrix inversion within subroutine  'minv'  has been suspended, due to failure to find a large", /, 12x, ' enough pivot element.   The matrix in question is of order', i5, ' ,    with breakdown having occurred', /, 12x, ' while working on the elimination of variable number', i5, '.   In this columns, the largest real or', /, 12x, ' imaginary part had absolute value', e14.3, ' ,   while the applicable near-zero tolerance')
+     write (unit = lunit6, fmt = 5707) d1, value2
 5707 format (12x, 'is equal to', e14.3, ' .    This latter number is equal to', e14.3, '   times the largest', /, 12x, 'element of the original input matrix (considering absolute values).')
      stop
-60   if (n .eq. k1)   go to 75
+60   if (n .eq. k1) go to 75
      do j = k1, m1
         !!!!     cc=f(k1,j)
-        ccr = fr(k1,j)
-        cci = fi(k1,j)
-        !!!!     f(k1,j)=f(n,j)
-        fr(k1,j) = fr(n,j)
-        fi(k1,j) = fi(n,j)
+        ccr = fr(k1, j)
+        cci = fi(k1, j)
+!!!!     f(k1,j)=f(n,j)
+        fr(k1, j) = fr(n, j)
+        fi(k1, j) = fi(n, j)
 !!!!   70 f(n,j)=cc
-        fr(n,j) = ccr
-70      fi(n,j) = cci
+        fr(n, j) = ccr
+70      fi(n, j) = cci
      end do
-75   do i=1,m
-        if (i.eq. k1)   go to 100
+75   do i = 1, m
+        if (i .eq. k1) go to 100
 !!!!     d = f(i,k1)
-        dr = fr(i,k1)
-        di = fi(i,k1)
-        do j=k1, m1
+        dr = fr(i, k1)
+        di = fi(i, k1)
+        do j = k1, m1
 !!!!  f(i,j) = f(i,j) - d/f(k1,k1) * f(k1,j)
-           d14 = fr(k1,k1)**2 + fi(k1,k1)**2
-           d22 = dr * fr(k1,k1) + di * fi(k1,k1)
-           d23 = di * fr(k1,k1) - dr * fi(k1,k1)
-           d5 = d22 * fr(k1,j) - d23 * fi(k1,j)
-           d6 = d22 * fi(k1,j) + d23 * fr(k1,j)
-           fr(i,j) = fr(i,j) - d5 / d14
-           fi(i,j) = fi(i,j) - d6 / d14
+           d14 = fr(k1, k1) ** 2 + fi(k1, k1) ** 2
+           d22 = dr * fr(k1, k1) + di * fi(k1, k1)
+           d23 = di * fr(k1, k1) - dr * fi(k1, k1)
+           d5 = d22 * fr(k1, j) - d23 * fi(k1, j)
+           d6 = d22 * fi(k1, j) + d23 * fr(k1, j)
+           fr(i, j) = fr(i, j) - d5 / d14
+           fi(i, j) = fi(i, j) - d6 / d14
            !      write (*,*) ' revise f(i,j).  i, j, k1, f(i,j) =',
            !     1                              i, j, k1, fr(i,j), fi(i,j)
 95      end do
 100  end do
 !!!!     ad = f(k1, k1)
-     adr = fr(k1,k1)
-     adi = fi(k1,k1)
-     d14 = adr**2 + adi**2
+     adr = fr(k1, k1)
+     adi = fi(k1, k1)
+     d14 = adr ** 2 + adi ** 2
      adr = adr / d14
      adi = -adi / d14
-     do j=k1, m1
+     do j = k1, m1
         !!!! 110 f(k1,j) = f(k1,j)/ad
-        d16  =     fr(k1,j) * adr - fi(k1,j) * adi
-        fi(k1,j) = fr(k1,j) * adi + fi(k1,j) * adr
-110     fr(k1,j) = d16
+        d16 = fr(k1, j) * adr - fi(k1, j) * adi
+        fi(k1, j) = fr(k1, j) * adi + fi(k1, j) * adr
+110     fr(k1, j) = d16
      end do
      !  110 write (*,*) ' new  f(k1,j).   k1, j, fr(k1,j), fi(k1,j) =',
      !     1                              k1, j, fr(k1,j), fi(k1,j)
 115 end do
   do i = 1, m
-     do j=1,m
-        j1=j+m
-325     fnew(i,j) = cmplxz ( fr(i,j1), fi(i,j1) )
+     do j = 1, m
+        j1 = j + m
+325     fnew(i, j) = cmplxz (fr(i, j1), fi(i, j1))
      end do
   end do
   do i = 1, m
-     do j=1, m
-        fident(i,j) = czero
-        do k=1, m
-288        fident(i,j) = fident(i,j) + tcmpx(i,k) * fnew(k,j)
+     do j = 1, m
+        fident(i, j) = czero
+        do k = 1, m
+288        fident(i, j) = fident(i, j) + tcmpx(i, k) * fnew(k, j)
         end do
 625  end do
   end do
@@ -3886,19 +4344,18 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
   !      do 725  i = 1, m
   !  725 write (*,*) ' row', i, ( fident(i,j), j=1, m )
   do i = 1, m
-     do j=1,m
-        j1=j+m
+     do j = 1, m
+        j1 = j + m
 !!!! 125 tcmpx(i,j) = f(i,j1)
-125     tcmpx(i,j) = cmplxz ( fr(i,j1), fi(i,j1) )
+125     tcmpx(i, j) = cmplxz (fr(i, j1), fi(i, j1))
      end do
   end do
   !  125 write (*,*) ' transfer.',
   !     1  ' i, j, j1, fr(i,j1), fi(i,j1), tcmpx(i,j) =',
   !     2    i, j, j1, fr(i,j1), fi(i,j1), tcmpx(i,j)
-  if ( iprs47  .ge.  1 ) write (logsix, 4027)  tcmpx(1,1), tcmpx(1,2)
-4027 format ( /,  24h exit  'minv'  normally., 5x,15hreal-tcmpx(1,1),  5x,  15himag-tcmpx(1,1),5x,15hreal-tcmpx(1,2),  5x,  15himag-tcmpx(1,2)  ,/, &
-          24x,  4e20.11  ,/,55h diagnostic inverse.   tcmpx(i,j)  for  (i,j)=1, ... m.  )
-  if ( iprs47  .ge.  7 ) call print ( tcmpx(1,1), m, ll0, ldn )
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 4027) tcmpx(1,1), tcmpx(1, 2)
+4027 format (/, " Exit  'minv'  normally.", 5x, 'real-tcmpx(1,1)', 5x, 'imag-tcmpx(1,1)', 5x, 'real-tcmpx(1,2)', 5x, 'imag-tcmpx(1,2)', /, 24x, 4e20.11, /, ' diagnostic inverse.   tcmpx(i,j)  for  (i,j)=1, ... m.')
+  if (iprs47 .ge. 7) call print (tcmpx(1, 1), m, ll0, ldn)
 150 return
 end subroutine minv
 
@@ -3907,31 +4364,29 @@ end subroutine minv
 !
 
 subroutine mxm (xm, yym, c, n, ldn)
+  use com47
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl47.ftn'
   complex(16) :: xm(ldn,ldn), yym(ldn,ldn), c(ldn,ldn)
-  if ( iprs47  .ge.  1 ) write (logsix, 4062)  n, xm(1,1), yym(1,1)
-4062 format (/, " Enter  'mxm' .       n", 7x,  'real- xm(1,1)',  7x, 'imag- xm(1,1)', 7x, 'real-yym(1,1)', 7x, 'imag-yym(1,1)', /, &
-          15x, i8, 4e20.11, /, ' diagnostic left factor.   xm(i,j)  for  (i,j)=1, ... n .')
-  if ( iprs47  .lt.  8 )   go to 4079
+  !
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 4062) n, xm(1, 1), yym(1, 1)
+4062 format (/, " Enter  'mxm' .       n", 7x,  'real- xm(1,1)',  7x, 'imag- xm(1,1)', 7x, 'real-yym(1,1)', 7x, 'imag-yym(1,1)', /, 15x, i8, 4e20.11, /, ' diagnostic left factor.   xm(i,j)  for  (i,j)=1, ... n .')
+  if (iprs47 .lt. 8) go to 4079
   ll0 = 0
-  call print ( xm(1,1), n, ll0, ldn )
-  write (logsix, 4073)
+  call print (xm(1, 1), n, ll0, ldn)
+  write (unit = logsix, fmt = 4073)
 4073 format (/, ' Diagnostic right factor.  yym(i,j)  for  (i,j)=1, ... n .')
-  call print ( yym(1,1), n, ll0, ldn )
-4079 do i=1, n
-     do j=1,n
-        c(i,j)=czero
-        do k=1,n
-10         c(i,j) = c(i,j) + xm(i,k) * yym(k,j)
+  call print (yym(1, 1), n, ll0, ldn)
+4079 do i = 1, n
+     do j = 1, n
+        c(i, j) = czero
+        do k = 1, n
+10         c(i, j) = c(i, j) + xm(i, k) * yym(k, j)
         end do
      end do
   end do
-  if ( iprs47  .ge.  1 ) write (logsix, 4091)  c(1,1), c(1,2)
-4091 format (/, " Exit  'mxm' .", 9x, 'real-c(1,1)', 9x, 'imag-c(1,1)', 9x, 'real-c(1,2)', 9x, 'imag-c(1,2)', /, &
-          14x, 4e20.11, /, ' diagnostic product.   c(i,j)  for  (i,j)=1, ... n .')
-  if ( iprs47  .ge.  8 ) call print ( c(1,1), n, ll0, ldn )
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 4091) c(1, 1), c(1, 2)
+4091 format (/, " Exit  'mxm' .", 9x, 'real-c(1,1)', 9x, 'imag-c(1,1)', 9x, 'real-c(1,2)', 9x, 'imag-c(1,2)', /, 14x, 4e20.11, /, ' diagnostic product.   c(i,j)  for  (i,j)=1, ... n .')
+  if (iprs47 .ge. 8) call print (c(1, 1), n, ll0, ldn)
   return
 end subroutine mxm
 
@@ -3940,32 +4395,44 @@ end subroutine mxm
 !
 
 subroutine print (c, n, iform, ldn)
+  use blkcom
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labl47.ftn'
-  complex(16) :: c(ldn,ldn)
-  dimension  workr(8), worki(8)
-  real(8) :: text1, text2, text3
-  data  text1 / 'row' /
-  data  text2 / '   ' /
-  nline = ( n + 7 ) / 8
-  do i=1, n
+  integer(4), intent(in) :: iform
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: n
+  complex(16), intent(in) :: c(ldn,ldn)
+  !  dimension  workr(8), worki(8)
+  character(8) :: text1, text2, text3
+  integer(4) :: i, im, in
+  integer(4) :: j
+  integer(4) :: k
+  integer(4) :: l
+  integer(4) :: m
+  integer(4) :: nline
+  real(8) :: d18, d19
+  real(8) :: worki(8), workr(8)
+  !
+  data text1 / 'row' /
+  data text2 / '   ' /
+  nline = (n + 7) / 8
+  do i = 1, n
      text3 = text2
      im = -7
-     do k=1, nline
+     do k = 1, nline
         im = im + 8
         in = im + 7
-        if ( in  .gt.  n )   in = n
+        if (in .gt. n) in = n
         l = 0
-        do j=im, in
+        do j = im, in
            l = l + 1
-           workr(l) = realz( c(i,j) )
-4617       worki(l) = aimagz( c(i,j) )
+           workr(l) = realz (c(i, j))
+4617       worki(l) = aimagz (c(i, j))
         end do
-        if ( k  .eq.  nline ) text3 = text1
-        if ( iform  .eq.  1 )   go to 4658
-        write (lunit6, 4649)  text3,  ( workr(m), m=1, l )
+        if (k .eq. nline) text3 = text1
+        if (iform .eq. 1) go to 4658
+        write (unit = lunit6, fmt = 4649) text3, (workr(m), m = 1, l)
 4649    format ( 1x, a3, 8e16.7  )
         write (lunit6, 4651)  ( worki(m), m=1, l )
 4651    format ( 4x, 8e16.7 )

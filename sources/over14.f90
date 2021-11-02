@@ -137,24 +137,22 @@ end subroutine over14
 !
 
 subroutine last14
+  use fdqlcl
   use blkcom
   use labcom
   use tracom
   use movcop
   implicit none
   integer(4) :: i, i1, iadrs, ibi, ibj, ibrj, icb, icbscn, icu, icucpl, ifd, ihist, ij
-  integer(4) :: ik, inoff1, inoff2, inoff3, inoff4, inoff5, ioff1, ioff2
+  integer(4) :: ik, ioff1, ioff2
   integer(4) :: ioff3, ioff4, ioff5, ioff6, ioff7, ioff8, iq, isecti, iyeq
   integer(4) :: j, j0, jglnn, jk, jkl
-  integer(4) :: k, kbr, kj, km1, knode, koff1, koff2, koff3, koff4, koff5, koff6
-  integer(4) :: koff7, koff8, koff9, koff10, koff11, koff13, koff14, koff15, koff16
-  integer(4) :: koff17, koff18, koff19, koff20, koff21, koff22, koff23, koff24
-  integer(4) :: koff25, kq, kss
-  integer(4) :: l, lcbl, lmode
+  integer(4) :: k, kbr, kj, km1, knode, koff11, kq, kss
+  integer(4) :: l
   integer(4) :: m, mabs, mark, marm, mm, mnode, mp
-  integer(4) :: n1, n2, n3, n4, n4j, n5, n6, n7, n9, nk1, nn, nn10, nn11, nn12, nnk
+  integer(4) :: n1, n2, n3, n4, n4j, n5, n6, n7, n9, nk1, nn, nn11, nn12, nnk
   integer(4) :: nnn1, nnq1, nnq2, nnq3, np, nphs, nphs2, nq, nq0, nq1, nq2, nq3, nq4
-  integer(4) :: nq5, nq6, nqtt, nqtw, nt, nteq, nticpl
+  integer(4) :: nq5, nq6, nt, nteq, nticpl
   real(8) :: apidt, b, cj, d1, d2, d18, dblpr1, dblpr2, dblpr3, dblpr4, dj
   real(8) :: dyk
   real(8) :: fac1, fac3, fac4, fac5
@@ -171,12 +169,8 @@ subroutine last14
   !  equivalence (namebr(1), infdli(1))
   !  dimension  wk1(1)
   !  equivalence (semaux(1), wk1(1))
-  !  common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7, koff8, koff9
-  !  common /fdqlcl/ koff10, koff13, koff14, koff15, koff16, koff17, koff18
-  !  common /fdqlcl/ koff19, koff20, koff21, koff22, koff23, koff24, koff25, inoff1
-  !  common /fdqlcl/ inoff2, inoff3, inoff4, inoff5, nqtt, lcbl, lmode, nqtw
   !
-  !     beginning of formation of the real admittance matrix (y)
+  !     Beginning of formation of the real admittance matrix (y)
   icucpl = 0
   jglnn = 0
   isecti = 400
@@ -192,7 +186,7 @@ subroutine last14
   !  call mover0 ( emtpf(1), ntot )
   call move0 (emtpf(1 :), ntot)
   k=1
-620 n1=kbus(k)
+620 n1 = kbus(k)
   it2=length(k)
   if ( iprsup  .ge.  6 ) write (lunit6, 607)  l, ntot, k, n1, it1, it2, ibr, kss
 607 format (/, ' at 607.       l    ntot       k      n1  it1     it2     ibr     kss', /, 8x, 8i8)
@@ -808,7 +802,7 @@ subroutine breqiv (ikf, isfd, ibf)
   integer(4), intent(out) :: ibf, ikf, isfd
   integer(4) :: idk, isc, isf, isk, ist, isu, isv
   integer(4) :: ka, kb
-  real(8) :: a1, a2, ac1, al1, ar, ar1, arl, azi, azr, cz, ur(40)
+  real(8) :: a1, a2, ac1, al1, ar, ar1, arl, azi, azr, cz
   !
   !     This routine produces companion model for each branch. It also
   !     initializes the current injections for the branches  *   *   *   *
@@ -908,15 +902,10 @@ subroutine past
   use blkcom
   use labcom
   use tacsar
-  use synmac
+  use smach
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     this module is used by brandwajn (type-59) s.m. model
-  !  include 'blkcom.ftn'
-  !  include 'labcom.ftn'
-  !  include 'tacsar.ftn'
-  !  include 'synmac.ftn'
-  !     initialization after phasor solution for type-59 s.m.
+  !     This module is used by Brandwajn (type-59) s.m. model
+  !     Initialization after phasor solution for type-59 s.m.
   !     this routine moves the initial conditions to time '-deltat'
   integer(4) :: i, i26, i30, i75, ibk, ibl, idelta, idk, idv, ih
   integer(4) :: iht, ii, ij, ik, ikm, ilk, im, in, iu, ivk, izn, izu

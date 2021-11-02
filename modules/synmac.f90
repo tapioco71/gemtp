@@ -7,7 +7,7 @@
 !     real variables precede integer ones          *********************
 !     auxilliary arrays ( size based on no. of windings = 7 )  ********
 
-module synmac
+module smach
   implicit none
   integer(4) :: itold, ibrold, mfirst, msmout, nsmout, nst
   real(8) :: athtw, asqrt3, bdam, bin, damrat, delta6, factom, om2, omdt
@@ -24,7 +24,7 @@ module synmac
   ! from main10
   integer(4) :: ktemp(1)
   equivalence (ktemp(1), z(1))
-end module synmac
+end module smach
 
 !
 ! end of file synmac.f90

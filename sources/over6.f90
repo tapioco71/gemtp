@@ -11,21 +11,27 @@
 subroutine over6
   use blkcom
   use labcom
-  use syncom
+  use smtacs
   use space2
+  use indcom
+  use movcop
+  use veccom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !  include 'blkcom.ftn'
-  !  include 'labcom.ftn'
-  !  include 'syncom.ftn'
-  !  include 'space2.ftn'
-  character(8) :: buff
-  dimension buff(20)
-  equivalence (iofkol, iofgnd), (iofkor, iofbnd)
-  dimension integx(1)
-  equivalence (x(1), integx(1))
+  character(8) :: buff(20)
+  integer(4) :: i, icas, il, ipass, ir, isubs1
+  integer(4) :: j, j1, j2, jleft, jtest
+  integer(4) :: k
+  integer(4) :: l, l1, l2, l3, lleft, ltest
+  integer(4) :: m, moon
+  integer(4) :: n1, n2, n3, n7, n9, n11, n17, n22, ndx1, ndx2, nz
+  real(8) :: d1
+  !  dimension buff(20)
+  !  equivalence (iofkol, iofgnd), (iofkor, iofbnd)
+  !  dimension integx(1)
+  !  equivalence (x(1), integx(1))
   ! following carries "next" among over6, insert, over7, & over9:
-  equivalence (loopss(11), next)
+  !  equivalence (loopss(11), next)
+  !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over6."')
   ntot1 = ntot - 1
@@ -107,28 +113,28 @@ subroutine over6
   call vecisv (length, ibr, n11)
   ktrlsw(7) = it
   ktrlsw(8) = ibr
-  call move0 (kolum(1), ibr)
+  call move0 (kolum(1 :), ibr)
   !     output network-connectivity table if so requested (idoubl=1).
   if (idoubl .le. 0) go to 5324
-  call move0 (loc(1), ntot)
+  call move0 (loc(1 :), ntot)
   next = 1
   i = 1
-5010 do while (i .le. ibr)
-!5010 if (i .gt. ibr) go to 5040
-     k = iabs (kbus(i))
-     m = iabs (mbus(i))
-     if (bus(k) .eq. trash) go to 5020
-     if (bus(m) .eq. trash) go to 5020
-     assign 5020 to moon
-     go to 5200
+5010 if (i .gt. ibr) go to 5040
+  k = iabs (kbus(i))
+  m = iabs (mbus(i))
+  if (bus(k) .eq. trash) go to 5020
+  if (bus(m) .eq. trash) go to 5020
+  !     assign 5020 to moon
+  moon = 5020
+  go to 5200
 5020 i = i + 1
-     ! go to 5010
-  end do
+  go to 5010
 5040 i = 1
 5045 if (i .gt. inonl) go to 5060
   k = iabs (nonlk(i))
   m = iabs (nonlm(i))
-  assign 5050 to moon
+  !  assign 5050 to moon
+  moon = 5050
   go to 5200
 5050 i = i + 1
   go to 5045
@@ -142,7 +148,8 @@ subroutine over6
   k = iabs (node(ltest + 1))
 5080 if (bus(k) .eq. trash) go to 5085
   if (bus(m) .eq. trash) go to 5085
-  assign 5085 to moon
+  !  assign 5085 to moon
+  moon = 5085
   go to 5200
 5085 i = i + 1
   go to 5065
@@ -182,11 +189,19 @@ subroutine over6
   k = m
   m = ipass
   go to 5204
-5240 go to moon, (5020, 5050, 5085)
+  !5240 go to moon, (5020, 5050, 5085)
+5240 select case (moon)
+  case (5020)
+     go to 5020
+
+  case (5050)
+     go to 5050
+
+  case (5085)
+     go to 5085
+  end select
 5250 write (unit = lunit6, fmt = 5254)
-5254 format (//, ' List of input elements connected to each bus.', /, 10x, '1) Only the physical connections of multiphase lines are shown (capacitive and inductive coupling ignored)', /, &
-          10x, '2) Repeated entries imply parallel connections', /, 10x,  '3) Sources are omitted, although switches  are included;', /, &
-          10x, '4) u.m. usage produces extra, internally-defined nodes "um????" (1st 2 letters "um").')
+5254 format (//, ' List of input elements connected to each bus.', /, 10x, '1) Only the physical connections of multiphase lines are shown (capacitive and inductive coupling ignored)', /, 10x, '2) Repeated entries imply parallel connections', /, 10x,  '3) Sources are omitted, although switches  are included;', /, 10x, '4) u.m. usage produces extra, internally-defined nodes "um????" (1st 2 letters "um").')
   write (unit = lunit6, fmt = 5261)
 5261 format(' From bus name 1 names of all adjacent busses')
   write (unit = lunit6, fmt = 5266)
@@ -262,8 +277,8 @@ subroutine over6
   go to 40013
 5351 next = 1
   nz = 0
-  call move0 (loc(1), ntot)
-  call move0 (kownt(1), ntot)
+  call move0 (loc(1 :), ntot)
+  call move0 (kownt(1 :), ntot)
   i = 1
 41001 l = iabs (length(i))
   ! if (kodsem(i) .ne. 0 .and. imodel(i) .ne. -2
@@ -363,12 +378,18 @@ end subroutine over6
 !
 
 subroutine rinfin
+  use blkcom
+  use labcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labcom.ftn'
+  integer(4) :: i
+  integer(4) :: j, j1, j2
+  integer(4) :: k
+  integer(4) :: m
+  integer(4) :: n1, n2, n3, n7
+  real(8) :: d1
+  !
   n3 = 0
-  d1 = 1.0 / (100. * flzero)
+  d1 = 1.0d0 / (100.0d0 * flzero)
   ! 1st remove minus sign of "kpartb" if present as flag
   ! indicating "renumber bypass".   then redefine value of
   ! this lofty resistance if user had a "high resistance"
@@ -428,12 +449,13 @@ subroutine insert (irrr, icc)
   use labcom
   use space2
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !  include 'blkcom.ftn'
-  !  include 'labcom.ftn'
-  !  include 'space2.ftn'
-  ! following carries "next" among over6, insert, over7, & over9:
-  equivalence (loopss(11), next)
+  integer(4), intent(in) :: irrr, icc
+  integer(4) :: i, ic, ir, irn, irr, isubs1
+  integer(4) :: j
+  integer(4) :: n1, n2
+  real(8) :: d1
+  ! Following carries "next" among over6, insert, over7, & over9:
+  !  equivalence (loopss(11), next)
   if (irrr .le. 1) return
   if (icc .le. 1) return
   if (irrr .eq. icc) return

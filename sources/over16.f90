@@ -11,7 +11,7 @@
 subroutine over16
   use blkcom
   use labcom
-  use umdeck
+  use umcom
   use tacsar
   implicit none
   !  dimension xx(1)
@@ -69,10 +69,11 @@ end subroutine over16
 !
 
 subroutine subts1
+  use a8swmod
   use blkcom
   use labcom
   use tacsar
-  use umdeck
+  use umcom
   use dekspy
   use tracom
   use movcop
@@ -83,14 +84,13 @@ subroutine subts1
   integer(4) :: m, m1, mk, mnode
   integer(4) :: n, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15
   integer(4) :: n17, n18, n19, ndx1, ndx2, ndx3, nn1, nn15, nwarn
-  real(8) :: a, a8sw(400), acheck, ai, bi
+  real(8) :: a, acheck, ai, bi
   real(8) :: d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15, d16
   real(8) :: delti, didt
   real(8) :: gus1, gus2, gus3, gus4
   real(8) :: swcold(100)
   real(8) :: tcl, timswt
   real(8) :: vsl
-  !  common /a8sw/ a8sw
   !dimension nsubkm(1), swcold(100)
   !  equivalence (spum(1),  ispum(1)),  (kknonl(1),  nsubkm(1))
   !  equivalence (moncar(1),    knt),       (moncar(2),  kbase)
@@ -1219,14 +1219,10 @@ subroutine yserlc
   use labcom
   use dekspy
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     module of interactive emtp only, associated with "emtspy".
   !     non-interactive versions can replace by a dummy module.
   !     this module is called only by "subts1" of overlay 16.
-  !  include 'blkcom.ftn'
-  !  include 'labcom.ftn'
-  !  include 'dekspy.ftn'
-  !     burroughs: preserve local variable between module calls:
+  !     Burroughs: preserve local variable between module calls:
   integer(4) :: ixcopt, j, n1, n2, n3, n4, n8, n9, ndx1, ndx2
   real(8) :: ccon, d23, d33, d44, gus1, gus2, xcon
   !
@@ -1240,8 +1236,8 @@ subroutine yserlc
   if (ixcopt .gt. 0)  go  to  3000
   ccon = 1.0 / ( deltat * 500000. )
   xcon = ccon * 1000.
-  if (xopt(1) .gt. 0.0) xcon = xcon * 1000.0 / (twopi * xopt(1))
-  if (copt(1) .gt. 0.0) ccon = ccon / (twopi * copt(1))
+  if (xopt .gt. 0.0) xcon = xcon * 1000.0 / (twopi * xopt)
+  if (copt .gt. 0.0) ccon = ccon / (twopi * copt)
   ixcopt = 1
 3000 do j=1, lserlc
      ndx1 = ibr + j
@@ -1974,11 +1970,11 @@ end subroutine switch
 ! subroutine tacs3.
 !
 
-subroutine  tacs3
+subroutine tacs3
   use blkcom
   use labcom
   use tacsar
-  use syncom
+  use smtacs
   use tracom
   use movcop
   implicit none
@@ -2257,28 +2253,27 @@ end subroutine tacs3
 !
 
 subroutine subts2
+  use fdqlcl
   use blkcom
   use labcom
   use tracom
   use movcop
   implicit none
   integer(4) :: i, i1, i1p1, i1p2, iadrs, ibf, ii, ik, ik1, ikf, iklim, im, im1, ind
-  integer(4) :: inoff1, inoff2, inoff3, inoff4, inoff5, isecti, isfd
+  integer(4) :: isecti, isfd
   integer(4) :: it21, itauo
   integer(4) :: j, j1, j2, j3, j4, jf, jfdep2, jgl, jkl, jm, jq, jql
   integer(4) :: k, ka, kaa, kbb, kcc, kf, kfdep2, kh, ki, kktau
-  integer(4) :: koff1, koff2, koff3, koff4, koff5, koff6, koff7,koff8, koff9, koff10
-  integer(4) :: koff11, koff12, koff13, koff14, koff15, koff16, koff17, koff18, koff19
-  integer(4) :: koff20, koff21, koff22, koff23, koff24, koff25, kq, kqk0, kst, ktau
+  integer(4) :: koff11, koff12, kq, kqk0, kst, ktau
   integer(4) :: ky
-  integer(4) :: l, lbound, lcbl, lj, lj1, ll0, ll1, llm1, lmode
+  integer(4) :: l, lbound, lj, lj1, ll0, ll1, llm1
   integer(4) :: msign
   integer(4) :: n1, n2, n2p, n3, n4, n5, n6, n7, n8, n9, n10, n11
   integer(4) :: n31, n32, n33, n34, n41, ndelt
   integer(4) :: ndx1, ndx2, nk1, nk2, nk3, nk4, nk5, nkkk1, nkll, nky, nkyw, nmodal
-  integer(4) :: nn1, nn2, nn3, nn4, nn5, nn6, nn7, nn8, nn9, nn10, nn11
-  integer(4) :: nn17, nnq1, nnq2, nnq3, nq0k, nq4, nq5, nq6, nqtt
-  integer(4) :: nqtw, nra, nra3, nraz1, nraz2, nraz3, nrf, nrz, nrz2, nrz3, nteq
+  integer(4) :: nn1, nn2, nn3, nn5, nn6, nn7, nn8, nn9, nn11
+  integer(4) :: nn17, nnq1, nnq2, nnq3, nq0k, nq4, nq5, nq6
+  integer(4) :: nra, nra3, nraz1, nraz2, nraz3, nrf, nrz, nrz2, nrz3, nteq
   integer(4) :: nterm
   real(8) :: a, aikd, aimd, bm5, bm5tau, bm5tdt, c1, c2, cap
   real(8) :: d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12
@@ -2308,11 +2303,6 @@ subroutine subts2
   !  equivalence (semaux(1), wk1(1))
   !  dimension infdli(1)
   !  equivalence (namebr(1), infdli(1))
-  !  common /fdqlcl/ koff1, koff2, koff3, koff4, koff5, koff6, koff7, koff8, koff9
-  !  common /fdqlcl/ koff10, koff13, koff14, koff15, koff16, koff17, koff18, koff19
-  !  common /fdqlcl/ koff20, koff21, koff22, koff23, koff24, koff25
-  !  common /fdqlcl/ inoff1, inoff2, inoff3, inoff4, inoff5, nqtt, lcbl
-  !  common /fdqlcl/ lmode, nqtw
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 3445) (emtpf(j), j = 1, ntot )
 3445 format ( ' Top  subts2.  emtpf(1:ntot) follows ...', /, (1x, 8e16.7))
@@ -3690,7 +3680,7 @@ subroutine fdcinj (ikf, isfd, ibf)
   !
   integer(4) :: idk, isc, isf, isk, ist, isu, isv
   integer(4) :: ka, kb
-  real(8) :: ar, azi, azr, cz, un, ur(40)
+  real(8) :: ar, azi, azr, cz, un
   !
   !  dimension  ur(40)
   !     this routine updates the current injections for the individual
@@ -3715,7 +3705,7 @@ subroutine fdcinj (ikf, isfd, ibf)
   if ( iprsup .gt. 0 ) write ( lunit6, 3 ) ikf, ( ur(ka), ka = 1, it2 )
 3 format(37h modal voltages in fdcinj for set no.,i6,/, (2x,6e21.11))
   !     process first the 'zero' sequence data   *   *   *   *   *   *   *
-  ar = 0.
+  ar = 0.0d0
   ist = isf
   isu = isfd + imfd(idk+1) * 5
   isv = ibf - 2
@@ -3788,15 +3778,15 @@ subroutine update
   use blkcom
   use labcom
   use tacsar
-  use syncom
-  use synmac
+  use smtacs
+  use smach
   use dekspy
   use tracom
   use movcop
   implicit none
   !     This module is used only by brandwajn (type-59) s.m. model
   integer(4) :: i, i26, i30, i75, ib, ibu, icnt, idelta, ids, idsat, ies, ifs, ij, ik
-  integer(4) :: ik1, ikn, ikp, ikv, ikw, ilk, im, ip, ipout, isd, ispdr, isq, itq, iu
+  integer(4) :: ik1, ikn, ikp, ikv, ikw, ilk, im, ip, isd, ispdr, isq, itq, iu
   integer(4) :: iy, iz, izy
   integer(4) :: j30, j75, jmset, jmset1, jt, juk
   integer(4) :: k, k1, ka, kag, kag2, kb, kc, kd, kmset, ksex, ksg
@@ -4385,7 +4375,7 @@ subroutine increm (ilk, sf3)
   use blkcom
   use labcom
   use tacsar
-  use synmac
+  use smach
   use movcop
   implicit none
   integer(4), intent(in) :: ilk
@@ -4735,10 +4725,10 @@ end subroutine redu17
 subroutine subts3
   use blkcom
   use labcom
-  use umdeck
+  use umcom
   use tacsar
-  use syncom
-  use synmac
+  use smtacs
+  use smach
   use tracom
   use movcop
   implicit none
@@ -6026,8 +6016,8 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, &
   use blkcom
   use labcom
   use tacsar
-  use syncom
-  use umdeck
+  use smtacs
+  use umcom
   use tracom
   implicit none
   integer(4), intent(out) :: jtype
@@ -7767,7 +7757,7 @@ end subroutine lineqs
 subroutine subts4
   use blkcom
   use labcom
-  use umdeck
+  use umcom
   implicit none
   !  implicit real(8) (a-h, o-z),  integer(4) (i-n)
   !  include 'blkcom.ftn'

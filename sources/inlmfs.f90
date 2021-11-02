@@ -11,17 +11,24 @@
 subroutine inlmfs
   use blkcom
   use dekspy
+  use strcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !  include 'blkcom.ftn'
-  !  include 'dekspy.ftn'
   character(20) :: arginc(35)
-  dimension kard(200), karg(200), kbeg(200), kend(200)
-  dimension ktex(200)
-  dimension kolinc(35)
+  !  dimension kard(200), karg(200), kbeg(200), kend(200)
+  !  dimension ktex(200)
+  !  dimension kolinc(35)
   !     character*80  answ80,  file6(500)
   !     character*1  char1, digit(10)
   !     logical  logvar
+  integer(4) :: incdat, ip
+  integer(4) :: j
+  integer(4) :: k, kard(200), karg(200), kbeg(200), keybrd, kend(200), kolinc(35)
+  integer(4) :: komlev, ktex(200)
+  integer(4) :: l
+  integer(4) :: m
+  integer(4) :: n, n1, n2, n3, n4, n5, n6, n7, n8, n12, n13, n14, n15, n16, n18
+  integer(4) :: n19, n24, n26
+  !
   data komlev / -1 /
   if (buff77(1 : 1) .eq. '$') go to 1788                    !1st time in for $include
   n16 = kard(200)
@@ -113,7 +120,7 @@ subroutine inlmfs
   n26 = n18 + 1
   if (iprspy .lt. 5) go to 4224
   write (unit = munit6, fmt = 4223) l, n12, n13, n14, n26
-4223 format (' done with argument.  l, n12, n13, n14, n26 =', 8i6)
+4223 format (' Done with argument.  l, n12, n13, n14, n26 =', 8i6)
   call window
 4224 go to 4203
 4226 kard(1) = 999999
@@ -137,11 +144,11 @@ subroutine inlmfs
 4232 format (4x, 25i3)
   if (iprspy .lt. 1) go to 4235
   write (unit = munit6, fmt = 4233) n6
-4233 format (' done reading argument usage vectors.  n4 =', i5)
+4233 format (' Done reading argument usage vectors.  n4 =', i5)
   call window
 4235 if (iprspy .lt. 5) go to 4238
   write (unit = munit6, fmt = 4236)
-4236 format (' vectors kard, karg, kbeg, kend, ktext(1:25) ...')
+4236 format (' Vectors kard, karg, kbeg, kend, ktext(1:25) ...')
   call window
   write (unit = munit6, fmt = 4237) (kard(k), k = 1, n5)
   call window
@@ -161,7 +168,7 @@ subroutine inlmfs
   do k = n18, limcrd
      read (unit = lunt13, fmt = 1329, end = 1828) buff77
 1329 format (a80)
-     if (buff77(1 : 1) .ne. 'c') go to 4247
+     if (to_lower (buff77(1 : 1)) .ne. 'c') go to 4247
      do l = 1, 10
         if (buff77(2 : 2) .eq. digit(l)) go to 4244
      end do
@@ -172,7 +179,7 @@ subroutine inlmfs
      buff77(2 : 2) = ' '
 4247 j = j + 1
      file6(j) = buff77
-     if (buff77(1 : 1) .eq. 'c') go to 4273
+     if (to_lower (buff77(1 : 1)) .eq. 'c') go to 4273
      n20 = n20 + 1
      if (iprspy .lt. 3) go to 4249
      write (unit = munit6, fmt = 4248) n20, n24, kard(n24)
@@ -185,13 +192,12 @@ subroutine inlmfs
      n3 = kolinc(n4)
      if (n4 .le. n16) go to 34250
      write (unit = lunit6, fmt = 4250) n24, n4, n16
-4250 format ('   ? ? ? ?   Error stop at s.n. 4250 of "datain".   Insufficient number of $include arguments.', /, &
-          '             n24, n4, n16 =', 3i8)
+4250 format ('   ? ? ? ?   Error stop at s.n. 4250 of "datain".   Insufficient number of $include arguments.', /, '             n24, n4, n16 =', 3i8)
      call stoptp
 34250 if (n2 - n1 .ne. n3 - 1 .and. ktex(n24) .eq. 1) go to 4253
      if (n2 - n1 .ge. n3 - 1) go to 4261
 4253 write (unit = munit6, fmt = 4254) n4, n20
-4254 format ('   +++ argument',  i4,  '   length-mismatch error.   used on card', i4, ' .')
+4254 format ('   +++ Argument',  i4,  '   length-mismatch error.   used on card', i4, ' .')
      call window
      write (unit = munit6, fmt = 4255) n24, n1, n2, n3
 4255 format ('       n24 =', i4, '    kbeg, kend =', 2i4, '    length from $include =', i4, ' .')
