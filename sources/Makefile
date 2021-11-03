@@ -137,8 +137,17 @@ modules: ${COMPILER}
 modules: ${COMPILER}/${TARGET}
 
 # Modules.
+${COMPILER}/${TARGET}: ${COMPILER}/linemodel.o
+${COMPILER}/${TARGET}: ${COMPILER}/systematic.o
 ${COMPILER}/${TARGET}: ${COMPILER}/blkcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/labcom.o
+${COMPILER}/${TARGET}: ${COMPILER}/tracom.o
+${COMPILER}/${TARGET}: ${COMPILER}/bcddat.o
+${COMPILER}/${TARGET}: ${COMPILER}/bcdtim.o
+${COMPILER}/${TARGET}: ${COMPILER}/movcop.o
+${COMPILER}/${TARGET}: ${COMPILER}/strcom.o
+${COMPILER}/${TARGET}: ${COMPILER}/random.o
+${COMPILER}/${TARGET}: ${COMPILER}/volt45.o
 ${COMPILER}/${TARGET}: ${COMPILER}/deck10.o
 ${COMPILER}/${TARGET}: ${COMPILER}/deck29.o
 ${COMPILER}/${TARGET}: ${COMPILER}/deck31.o
@@ -151,19 +160,13 @@ ${COMPILER}/${TARGET}: ${COMPILER}/indcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/iocons.o
 ${COMPILER}/${TARGET}: ${COMPILER}/labl02.o
 ${COMPILER}/${TARGET}: ${COMPILER}/labl44.o
+${COMPILER}/${TARGET}: ${COMPILER}/ovr44c.o
 ${COMPILER}/${TARGET}: ${COMPILER}/labl47.o
 ${COMPILER}/${TARGET}: ${COMPILER}/syncom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/synmac.o
 ${COMPILER}/${TARGET}: ${COMPILER}/tacsar.o
 ${COMPILER}/${TARGET}: ${COMPILER}/tacsto.o
-${COMPILER}/${TARGET}: ${COMPILER}/tracom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/umdeck.o
-${COMPILER}/${TARGET}: ${COMPILER}/bcddat.o
-${COMPILER}/${TARGET}: ${COMPILER}/bcdtim.o
-${COMPILER}/${TARGET}: ${COMPILER}/movcop.o
-${COMPILER}/${TARGET}: ${COMPILER}/strcom.o
-${COMPILER}/${TARGET}: ${COMPILER}/volt45.o
-${COMPILER}/${TARGET}: ${COMPILER}/random.o
 ${COMPILER}/${TARGET}: ${COMPILER}/space1.o
 ${COMPILER}/${TARGET}: ${COMPILER}/space2.o
 ${COMPILER}/${TARGET}: ${COMPILER}/veccom.o
@@ -172,8 +175,6 @@ ${COMPILER}/${TARGET}: ${COMPILER}/fdqlcl.o
 ${COMPILER}/${TARGET}: ${COMPILER}/kwtvax.o
 ${COMPILER}/${TARGET}: ${COMPILER}/comlock.o
 ${COMPILER}/${TARGET}: ${COMPILER}/a8sw.o
-${COMPILER}/${TARGET}: ${COMPILER}/linemodel.o
-${COMPILER}/${TARGET}: ${COMPILER}/systematic.o
 
 # EMTP Code.
 ${COMPILER}/${TARGET}: ${COMPILER}/build1.o

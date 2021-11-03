@@ -139,11 +139,11 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   integer(4), intent(in) :: lnq2
   integer(4), intent(out) :: ncpp
   integer(4), intent(out) :: ngg
-  real(8), intent(in) :: al0
+  real(8), intent(out) :: al0
   real(8), intent(out) :: al1i
   real(8), intent(out) :: al2i
   real(8), intent(out) :: al3i
-  real(8), intent(in) :: ang
+  real(8), intent(out) :: ang
   real(8), intent(out) :: bi1
   real(8), intent(out) :: bi2
   real(8), intent(out) :: bi3
@@ -152,26 +152,26 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   real(8), intent(out) :: bio
   real(8), intent(out) :: dci
   real(8), intent(out) :: di
-  real(8), intent(in) :: dij
-  real(8), intent(in) :: dir
+  real(8), intent(out) :: dij
+  real(8), intent(out) :: dir
   real(8), intent(out) :: dr0
   real(8), intent(out) :: esi
   real(8), intent(out) :: gi
-  real(8), intent(in) :: gn
+  real(8), intent(out) :: gn
   real(8), intent(out) :: hi
   real(8), intent(in) :: qc
   real(8), intent(out) :: rad
   real(8), intent(out) :: radi
   real(8), intent(out) :: roi
   real(8), intent(in) :: sc
-  real(8), intent(in) :: th0
+  real(8), intent(out) :: th0
   real(8), intent(out) :: thc
   real(8), intent(out) :: usi
   real(8), intent(out) :: usr
   real(8), intent(in) :: wy
   real(8), intent(out) :: yz
-  real(8), intent(in) :: yzn
-  real(8), intent(in) :: zy
+  real(8), intent(out) :: yzn
+  real(8), intent(out) :: zy
   integer(4) :: i, i1, iii, ik, im, in, in1, ips, irsep, isyst, itrnsf
   integer(4) :: j, j1, j2, j3, j13, j14, jdx1, jdx2, jn, jnc, junit4
   integer(4) :: k, kgc, kkk, kpd
@@ -631,8 +631,8 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
         jnc = j2 + 1
 135  end do
 136 end do
-  write (lunit6, 170)
-170 format(//, 132h------------------------------------------------------------------------------------------------------------------------------------,//,1x)
+  write (unit = lunit6, fmt = 170)
+170 format (//, 132('-'), //, 1x)
   if ( isyst  .ne.  0 )   go to 140
   write (lunit6, 180)
 180 format (' Table of overhead untransposed line parameters', /, 1x)
@@ -788,7 +788,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   if ( iprsup  .ge.  2 ) write (lunit6, 2441)  ( i, bi1(i), bi2(i), bi3(i), al1i(i), al2i(i), i=1, npc )
 2441 format ( /, 75h derived vectors of length  'npc'  in  'subr47' , as matrix grunt begins.  ,/,  1x,  5x,  3hrow,  17x,  3hbi1, &
        17x,  3hbi2,  17x,  3hbi3,  16x,  4hal1i,  16x,  4hal2i  ,/, ( 1x,  i8,  5e20.11 )  )
-  if (itypec .eq. 3) call ptzy1(radi,dci,thc,dr0,th0,al0,ldm)
+  if (itypec .eq. 3) call ptzy1 (radi, dci, thc, dr0, th0, al0, ldm)
   if (kill .ge. 1)   go to 9200
   nw = npc
   nz = ncc
@@ -943,7 +943,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   if (kill .ge. 1)   go to 9200
   if (kmode .eq. 0)   go to 750
   ktab = nx
-  call prcon( w, nx, zc,zs,ys,yc,yo,qn,gn,ze,a,ai,b,bi, yzn, ca, cb, cc, f, ldn, ldn2, lnq2, mrr, nrp )
+  call prcon (w, nx, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, yzn, ca, cb, cc, f, ldn, ldn2, lnq2, mrr, nrp)
   if (kill .ge. 1)   go to 9200
   if (lastov .ne. 43)   go to 750
   if (ipunch .eq. 0)   go to 750
@@ -1034,13 +1034,13 @@ subroutine crosa4 (czy, icont, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
   integer(4), intent(in) :: ldn
   integer(4), intent(in) :: ldn2
   complex(16), intent(out) :: czy(ldn, ldn)
-  complex(16), intent(in) :: ca(ldn, ldn)
-  complex(16), intent(in) :: cb(ldn, ldn)
-  complex(16), intent(in) :: cc(ldn, ldn)
-  complex(16), intent(in) :: cd(ldn, ldn)
-  complex(16), intent(in) :: ce(ldn, ldn)
-  complex(16), intent(in) :: cf(ldn, ldn)
-  complex(16), intent(in) :: cg(ldn, ldn)
+  complex(16), intent(out) :: ca(ldn, ldn)
+  complex(16), intent(out) :: cb(ldn, ldn)
+  complex(16), intent(out) :: cc(ldn, ldn)
+  complex(16), intent(out) :: cd(ldn, ldn)
+  complex(16), intent(out) :: ce(ldn, ldn)
+  complex(16), intent(out) :: cf(ldn, ldn)
+  complex(16), intent(out) :: cg(ldn, ldn)
   complex(16), intent(in) :: f(ldn, ldn2)
   integer(4) :: i
   integer(4) :: j
@@ -1078,7 +1078,7 @@ subroutine crosa4 (czy, icont, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
         czy(j,i) = czy(i,j)
 60   end do
   end do
-  if(icont.eq.0) call minvn( czy,6,3,0,ldn,ca,cb,cc,cd,ce,cf,cg,f,ldn2 )
+  if (icont .eq. 0) call minvn (czy, 6, 3, 0, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
   do j = 1,3
      czy(4,j) = czy(4,j) + czy(5,j) + czy(6,j)
      czy(j,4) = czy(j,4) + czy(j,5) + czy(j,6)
@@ -1099,14 +1099,14 @@ subroutine minvn (cinout, n, l, ix, ldn, ca, cb, cc, cd, cwork1, cwork2, cwork3,
   integer(4), intent(in) :: ldn
   integer(4), intent(in) :: ldn2
   integer(4), intent(in) :: n
-  complex(16), intent(in) :: ca(ldn, ldn)
-  complex(16), intent(in) :: cb(ldn, ldn)
-  complex(16), intent(in) :: cc(ldn, ldn)
-  complex(16), intent(in) :: cd(ldn, ldn)
+  complex(16), intent(out) :: ca(ldn, ldn)
+  complex(16), intent(out) :: cb(ldn, ldn)
+  complex(16), intent(out) :: cc(ldn, ldn)
+  complex(16), intent(out) :: cd(ldn, ldn)
   complex(16), intent(out) :: cinout(ldn, ldn)
   complex(16), intent(out) :: cwork1(ldn, ldn)
-  complex(16), intent(in) :: cwork2(ldn, ldn)
-  complex(16), intent(in) :: cwork3(ldn, ldn)
+  complex(16), intent(out) :: cwork2(ldn, ldn)
+  complex(16), intent(out) :: cwork3(ldn, ldn)
   complex(16), intent(in) :: f(ldn, ldn2)
   integer(4) :: i, ipl
   integer(4) :: j, jpl
@@ -1135,7 +1135,7 @@ subroutine minvn (cinout, n, l, ix, ldn, ca, cb, cc, cd, cwork1, cwork2, cwork3,
         cinout(i,j)=cwork1(i,j)
 30   end do
   end do
-  call mxmnm(cwork2,cwork1,cwork3,nml,l,l,ldn)
+  call mxmnm (cwork2, cwork1, cwork3, nml, l, l, ldn)
   do i=1,nml
      do j=1,l
         ipl=i+l
@@ -1694,15 +1694,42 @@ end subroutine gomen
 subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, ca, zo, cc, f, ldn, ldn2, lnq2, mrr, nrp)
   use blkcom
   use com47
+  use tracom
   implicit none
-  dimension gn(ldn), an(lnq2)
-  dimension tir(20,20), tii(20,20)
-  dimension pp1(20,20), pp2(20,20)
-  dimension zz(30), ps(30), ping(200), iseq(15),kmax(15)
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: ldn2
+  integer(4), intent(in) :: lnq2
+  integer(4), intent(out) :: mrr
+  integer(4), intent(in) :: nconpw
+  integer(4), intent(in) :: nrp
+  real(8), intent(out) :: an(lnq2)
+  real(8), intent(out) :: gn(ldn)
+  real(8), intent(in) :: w
+  !  dimension gn(ldn), an(lnq2)
+  !  dimension tir(20,20), tii(20,20)
+  !  dimension pp1(20,20), pp2(20,20)
+  !  dimension zz(30), ps(30), ping(200), iseq(15),kmax(15)
+  integer(4) :: i, i1, icorr, iseq(15), iz
+  integer(4) :: j
+  integer(4) :: k, kmax(15), kthl
+  integer(4) :: ll1, ll2
+  integer(4) :: n1, npc1, ntol
+  real(8) :: a1, aa, acomi, acomr, aii, air, alpha
+  real(8) :: bb, beta
+  real(8) :: d18, d19, d55, d56, da, db, deg, dv
+  real(8) :: ea, em
+  real(8) :: fout
+  real(8) :: pp1(20, 20), pp2(20, 20), ping(200), ps(30)
+  real(8) :: spdtol
+  real(8) :: tir(20, 20), tii(20, 20)
+  real(8) :: u1, u2
+  real(8) :: vmode
+  real(8) :: w1
+  real(8) :: ychara, ycharm, yoi, yor, ysi, ysr
+  real(8) :: zoi, zor, zsi, zsr, zz(30)
   complex(16) :: pp6(20,20),ee6(15)
   complex(16) :: anglec, cjw
-  complex(16) :: csqrtz
-  complex(16) :: cmplxz, d1, d2, d3, d4
+  complex(16) :: d1, d2, d3, d4
   complex(16) :: ca(ldn, ldn), zo(ldn, ldn), cc(ldn, ldn)
   complex(16) :: zc(ldn, ldn), zs(ldn, ldn), ys(ldn, ldn), yc(ldn, ldn)
   complex(16) :: a(ldn, ldn), ai(ldn, ldn),  b(ldn, ldn), bi(ldn, ldn)
@@ -1715,8 +1742,8 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
 2624 format (/, " Enter  'prcon' .  nconpw  numaki", 13x, 'value1', 13x, 'value3', 16x, 'pai', 11x, 'real-cjw',  11x, 'imag-cjw', /, 17x, 2i8, 5e19.10)
   ll1 = 1
   ll2 = 2
-  call mxm(zc,yc,zs,nconpw,ldn)
-  call eigen( cjw,zs,nconpw,  a,ai,qn,ca,zo,cc,ldn  )
+  call mxm (zc, yc, zs, nconpw, ldn)
+  call eigen (cjw, zs, nconpw, a, ai, qn, ca, zo, cc, ldn)
 !!!!  *****
   if (kill .gt. 1)   go to 9200
   if (itypec .ne. 2)  go to 75
@@ -1725,7 +1752,7 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
   icorr = 0
   npc1 = npc + 1
   do i = npc1, npc2
-     if (realz(qn(i)) .gt. 0.)  go to 65
+     if (realz (qn(i)) .gt. 0.)  go to 65
      i1 = i + 1
      if (i1 .gt. npc2)  i1 = i - 1
      if (i1 .le. npc)  go to 65
@@ -1756,15 +1783,15 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
   write(*,*) ' after #71 '
   call minv( a, nconpw, f, ldn, ldn2 )
 75 continue
-  do iz=1,30
-     ps(iz)=0.
-     zz(iz)=0.
+  do iz = 1, 30
+     ps(iz) = 0.0d0
+     zz(iz) = 0.0d0
 388 end do
-  do i=1,nconpw
+  do i = 1, nconpw
      an(i) = value3 * realz(qn(i))
      gn(i) = w / aimagz( qn(i) )
-     if (an(i) .lt. 0.)  go to 50
-     a1 = 1.05
+     if (an(i) .lt. 0.0d0)  go to 50
+     a1 = 1.05d0
      spdtol = spdlgt * a1
      if (gn(i) .gt. spdtol)  go to 50
      if (gn(i) .lt. spdlgt)  go to 55
@@ -1796,10 +1823,10 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
   do i=1,nconpw
      !     em=(realz(qn(i)))**2 + (aimagz(qn(i)))**2
      !     ea=2.0*atan2z( aimag(qn(i)),real(qn(i)) )
-     em=sqrtz((realz(qn(i)**2))**2 + (aimagz(qn(i)**2))**2)
-     ea=atan2z( aimagz(qn(i)**2),realz(qn(i)**2) )
-     db=value3*realz(qn(i))
-     vmode=w/aimagz(qn(i))
+     em = sqrtz ((realz (qn(i) ** 2)) ** 2 + (aimagz (qn(i) ** 2)) ** 2)
+     ea = atan2z (aimagz (qn(i) ** 2), realz(qn(i) ** 2))
+     db = value3 * realz (qn(i))
+     vmode = w / aimagz (qn(i))
 5601 continue
      ping(kthl+1) = em*d55
      ping(kthl+2) = ea/(twopi/360.)
@@ -1808,7 +1835,7 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
      kthl = kthl + 4
 5603 continue
 5600 end do
-  call unwind( ping,kthl,mrr,nrp,ntol,iseq )
+  call unwind (ping, kthl, mrr, nrp, ntol, iseq)
   do i=1,nconpw
      ee6(i)=qn(i)**2
      do j=1,nconpw
@@ -2019,21 +2046,42 @@ end subroutine prcon
 !
 
 subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
+  use blkcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
 !!!!! %include  '//a/tsu/tpplotkom.ins.ftn'
-  dimension ping(200),tping(200)
-  dimension ps(30),zz(30)
-  dimension bom(180),vfreq(3), kuid(15), kuse(15)
-  dimension iseq(15), iseqa(15), iseqt(15), iold(15)
-  dimension sb(60), tt(4), tzz(30), tps(30)
+  integer(4), intent(out) :: iseq(15)
+  integer(4), intent(in) :: kthl
+  integer(4), intent(out) :: mrr
+  integer(4), intent(in) :: nrp
+  integer(4), intent(in) :: ntol
+  real(8), intent(out) :: ping(200)
+  ! dimension ping(200),tping(200)
+  !  dimension ps(30),zz(30)
+  !  dimension bom(180),vfreq(3), kuid(15), kuse(15)
+  !  dimension iseq(15), iseqa(15), iseqt(15), iold(15)
+  !  dimension sb(60), tt(4), tzz(30), tps(30)
+  integer(4) :: i, ib, ic, im, ip, iq, iseqa(15), iseqt(15), iold(15)
+  integer(4) :: j, jb, jbeg
+  integer(4) :: kk, kpt, ku, kuid(15), kunf, kuse(15)
+  integer(4) :: l, li
+  integer(4) :: mu
+  integer(4) :: ny
+  real(8) :: ai, aj
+  real(8) :: bom(180)
+  real(8) :: chf
+  real(8) :: d1, d2
+  real(8) :: ps(30)
+  real(8) :: sai, saj, sb(60), smi1, smi2, smj1, smj2
+  real(8) :: tping(200), tps(30), tt(4), tzz(30)
+  real(8) :: vfreq(3)
+  real(8) :: zz(30)
+  !
   data bom  / 180 * 0.0d0 /
   data kunf / 0 /
   !      write(*,*) ' change order ? 1 (for yes) or 2 (for no)'
   !      read(*,*) ny
-  if ( iprsup .ge. 1 ) write(*,*) ' beginning of unwind.   kthl, mrr, nrp, ntol =', kthl, mrr, nrp, ntol
-  ny=2
+  if (iprsup .ge. 1) write (unit = *, fmt = *) ' Beginning of unwind.   kthl, mrr, nrp, ntol =', kthl, mrr, nrp, ntol
+  ny = 2
   !      if(ny .eq. 2) go to 3800
   !      do 3802 i=1,15
   !      iseqa(i)=i
@@ -2045,18 +2093,18 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   !      read(*,3801) (iseqa(k), k=1,15)
   ! 3801 format( 15i3 )
   ! 3800 continue
-  if ((ntol.gt.1).or.(nrp.eq.0)) go to 1050
-  do i=1,15
-     iseq(i)=i
-     iold(i)=i
+  if ((ntol .gt. 1) .or. (nrp .eq. 0)) go to 1050
+  do i = 1, 15
+     iseq(i) = i
+     iold(i) = i
 1051 end do
-  do i=1,180
-     bom(i)=0.0
+  do i = 1, 180
+     bom(i) = 0.0d0
 1052 end do
 1050 continue
-  if (iseq(1).ne.0) go to 10
-  do i=1,15
-     iseq(i)=i
+  if (iseq(1) .ne. 0) go to 10
+  do i = 1, 15
+     iseq(i) = i
 1001 end do
   !!      write(*,*)
   !!     1 ' identical eigenvalues ? 1 (for  yes) or 2 (for no)'
@@ -2067,51 +2115,51 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   !!      read(*,4801) (kuid(k), k=1,15)
   !! 4801 format( 15i3 )
 10 continue
-  do i=1,3
-     vfreq(i)=0.
+  do i = 1, 3
+     vfreq(i) = 0.0d0
 1002 end do
   !!    ****  read data from 'ping' vector  ****
-  kpt=kthl-1
-  li=kpt/4
-  vfreq(3)=vfreq(2)
-  vfreq(2)=vfreq(1)
-  vfreq(1)=ping(1)
-  do i=1,kpt+1
-     tping(i)=ping(i)
+  kpt = kthl - 1
+  li = kpt / 4
+  vfreq(3) = vfreq(2)
+  vfreq(2) = vfreq(1)
+  vfreq(1) = ping(1)
+  do i = 1, kpt + 1
+     tping(i) = ping(i)
 1006 end do
-  do l=1,li
-     do im=1,4
-        ping(4*l-im+2)=tping(4*iseq(l)-im+2)
+  do l = 1, li
+     do im = 1, 4
+        ping(4 * l - im + 2) = tping(4 * iseq(l) - im + 2)
 1008 end do
-     iold(l)=iseq(l)
+     iold(l) = iseq(l)
 1007 end do
-  do i=1,kpt
-     bom(i+2*kpt)=bom(i+kpt)
-     bom(i+kpt)=bom(i)
-     bom(i)=ping(i+1)
+  do i = 1, kpt
+     bom(i + 2 * kpt) = bom(i + kpt)
+     bom(i + kpt) = bom(i)
+     bom(i) = ping(i + 1)
 1003 end do
-  if (ntol .lt. 2)  return
+  if (ntol .lt. 2) return
   !!     **** begin to smooth ****
   !!  ** initialization **
 !!!!!      do 88 l=1, 15
 !!!!!      iseq(l) = l
 !!!!!   88 continue
-  do 601 i=1,kpt
+  do 601 i = 1, kpt
 !!!!!      sb(i)=bom(i)
-     sb(i)=tping(i+1)
+     sb(i) = tping(i + 1)
 601 end do
-  ic=0
-  iq=0
-  if ( iprsup .ge. 1 )  write (*, *) '  *****  li, kpt =',  li, kpt
-99 if (ic .gt. li*(li-1) ) go to 12
-  if ( iq .eq. 1 ) go to 12
-  iq=1
-  do l=1,li
-     do im=1, 4
-        bom(4*l-im+1) = sb(4*iseq(l)-im+1)
+  ic = 0
+  iq = 0
+  if (iprsup .ge. 1)  write (unit = *, fmt = *) '  *****  li, kpt =',  li, kpt
+99 if (ic .gt. li * (li - 1)) go to 12
+  if (iq .eq. 1) go to 12
+  iq = 1
+  do l = 1, li
+     do im = 1, 4
+        bom(4 * l - im + 1) = sb(4 * iseq(l) - im + 1)
 702  end do
 701 end do
-  if ( iprsup .ge. 1 ) write (*,*) ' beginning  bom(1:4*li) =',  ( bom(ip), ip=1, 4*li )
+  if (iprsup .ge. 1) write (unit = *, fmt = *) ' Beginning  bom(1:4*li) =', (bom(ip), ip = 1, 4 * li)
   !   * process the data between freq, freq-1 & freq-2 *
   do j=2, kpt-2, 4
      do i=j+4, kpt-2, 4
@@ -3562,9 +3610,9 @@ subroutine transp (yyc, ncpp, ann, jnn, znn, ldm, ldn)
   implicit none
   integer(4), intent(in) :: ldm
   integer(4), intent(in) :: ldn
-  integer(4), intent(out) :: jnn(ldn)
   integer(4), intent(in) :: ncpp(ldm)
   real(8), intent(out) :: ann(ldn)
+  real(8), intent(out) :: jnn(ldn)
   complex(16), intent(out) :: yyc(ldn, ldn)
   complex(16) :: zss, zmm, znn(ldn)
   !  dimension ncpp(ldm), ann(ldn), jnn(ldn)
@@ -3864,160 +3912,169 @@ end subroutine zegen
 !
 
 subroutine eigen (cjw, p, n, a, ai, qn, q, xx, yy, ldn)
+  use blkcom
+  use com47
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include  'labl47.ftn'
-  complex(16) :: ad, cjw, qi, s, sa
-  complex(16) :: cmplxz, csqrtz
-  complex(16) :: q(ldn, ldn), xx(ldn, ldn), yy(ldn, ldn)
-  complex(16) :: p(ldn, ldn), a(ldn, ldn), ai(ldn, ldn), qn(ldn)
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: n
+  complex(16), intent(out) :: a(ldn, ldn)
+  complex(16), intent(out) :: ai(ldn, ldn)
+  complex(16), intent(in) :: cjw
+  complex(16), intent(out) :: q(ldn, ldn)
+  complex(16), intent(out) :: qn(ldn)
+  complex(16), intent(out) :: p(ldn, ldn)
+  complex(16), intent(out) :: xx(ldn, ldn)
+  complex(16), intent(out) :: yy(ldn, ldn)
+  integer(4) :: i, i1, i2, im, iq
+  integer(4) :: j
+  integer(4) :: k, kvalue
+  integer(4) :: l, ll0
+  real(8) :: d1, d2, dm, dx
+  real(8) :: r
+  real(8) :: znvref
+  complex(16) :: ad, qi, s, sa
   complex(16) :: c1, c2
-  !     eigenvalue calculation subroutine.   'kvalue'  =  iteration limit.
+  !     Eigenvalue calculation subroutine.   'kvalue'  =  iteration limit.
   kvalue = 20
-  c1 = cjw/cmplxz(spdlgt, fzero)
-  c2 = cmplxz(unity, fzero)
+  c1 = cjw / cmplxz (spdlgt, fzero)
+  c2 = cmplxz (unity, fzero)
   qi = c2 / c1
   qi = qi * qi
-  if ( iprs47  .ge.  1 ) write (logsix, 3806)  n, cjw, qi
-3806 format ( /,  17h enter  'eigen' .,  8h       n,12x, 8hreal-cjw,  12x,  8himag-cjw,13x, 7hreal-qi,   13x,  7himag-qi  ,/, &
-       17x, i8,  4e20.11  ,/,  1x  )
-  do i=1,n
-     do j=1,n
-4       p(i,j)=p(i,j)*qi
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 3806) n, cjw, qi
+3806 format (/, "Enter  'eigen' .       n", 12x, 'real-cjw', 12x, 'imag-cjw', 13x, 'real-qi', 13x, 'imag-qi', /, 17x, i8, 4e20.11, /, 1x)
+  do i = 1, n
+     do j = 1, n
+4       p(i, j) = p(i, j) * qi
      end do
 5    p(i, i) = p(i, i) - c2
   end do
-  do i=1,n
-     do j=1,n
-10      q(i,j)=p(i,j)
+  do i = 1, n
+     do j = 1, n
+10      q(i, j) = p(i, j)
      end do
   end do
-  l=0
-15 l=l+1
-  iq=0
+  l = 0
+15 l = l + 1
+  iq = 0
   !  if(l-n) 20,90,90
   if (l - n .lt. 0) then
      go to 20
   else if (l - n .ge. 0) then
      go to 90
   end if
-20 iq=iq+1
-  if(iq.le. kvalue ) go to 25
-  iq=iq-1
-  write(lunit6,902) iq
-902 format(5x, "Warning ; a higher accuracy can't be, achieved by this computer.", /, &
-       5x, 'eigen values   1 vectors at itteration iq= ', i3, ' is adopted.    ')
+20 iq = iq + 1
+  if (iq .le. kvalue) go to 25
+  iq = iq - 1
+  write (unit = lunit6, fmt = 902) iq
+902 format (5x, "Warning ; a higher accuracy can't be, achieved by this computer.", /, 5x, 'eigen values   1 vectors at itteration iq= ', i3, ' is adopted.')
   go to 63
-25 do i=1,n
-     do j=1,n
-        xx(i,j) = q(i,j)
-30      yy(i,j) = q(i,j)
+25 do i = 1, n
+     do j = 1, n
+        xx(i, j) = q(i, j)
+30      yy(i, j) = q(i, j)
      end do
   end do
-  do i=1,n
-     do j=1,n
-        q(i,j)=czero
-        do k=1,n
-35         q(i,j) = q(i,j) + xx(i,k) * yy(k,j)
+  do i = 1, n
+     do j = 1, n
+        q(i, j) = czero
+        do k = 1, n
+35         q(i, j) = q(i, j) + xx(i, k) * yy(k, j)
         end do
      end do
   end do
-  dm=0.
-  do i=1,n
-     dx=cabsz(q(i,i))
-     if(dx.le.dm) go to 40
-     dm=dx
-     im=i
+  dm = 0.0d0
+  do i = 1, n
+     dx = cabsz (q(i, i))
+     if (dx .le. dm) go to 40
+     dm = dx
+     im = i
 40 end do
-  qi=1./q(im,im)
-  do i=1,n
-     do j=1,n
-45      q(i,j)=q(i,j)*qi
+  qi = 1.0d0 / q(im, im)
+  do i = 1, n
+     do j = 1, n
+45      q(i, j) = q(i, j) * qi
      end do
   end do
-  dm=0.
-  do i=1,n
-     if(i.eq.im) go to 50
-     dx=cabsz(q(i,im))
-     if(dx.le.dm) go to 50
-     dm=dx
-     i1=i
-     i2=im
+  dm = 0.0d0
+  do i = 1, n
+     if (i .eq. im) go to 50
+     dx = cabsz (q(i, im))
+     if (dx .le. dm) go to 50
+     dm = dx
+     i1 = i
+     i2 = im
 50 end do
-  if (dm .ne. 0.)   go to 60
-  do i=1, n
-     if(i.eq.im) go to 59
-     dx=cabsz(q(im,i))
-     if(dx.le.dm) go to 59
-     dm=dx
-     i1=im
-     i2=i
+  if (dm .ne. 0.0d0) go to 60
+  do i = 1, n
+     if (i .eq. im) go to 59
+     dx = cabsz (q(im, i))
+     if (dx .le. dm) go to 59
+     dm = dx
+     i1 = im
+     i2 = i
 59 end do
 60 sa = q(im, im) / q(i1, i2)
   s = xx(im, im) / xx(i1, i2)
-  r = cabsz(s / sa)
+  r = cabsz (s / sa)
   d1 = 50.* epsiln
   !     non-64-bit complex math redefines tolerance in "sysdep":
-  if ( znvref .ne. 0.0 )  d1 = 50. * znvref
+  if (znvref .ne. 0.0d0) d1 = 50.0d0 * znvref
   d2 = r - unity
-  if ( iprs47  .ge.  31 ) write (logsix, 3827)  l, iq, kvalue, d2, d1
-3827 format (  42h done another iteration.   l, iq, kvalue =, 3i8,  10x,  8hd2, d1 =,  2e15.6  )
-  if (absz(d2) .gt. d1)   go to 20
-63 do i=1,n
-     a(i,l)=q(i,im)
-65   ai(l,i)=q(im,i)
+  if (iprs47 .ge. 31) write (unit = logsix, fmt = 3827) l, iq, kvalue, d2, d1
+3827 format (' Done another iteration.   l, iq, kvalue =', 3i8, 10x,  'd2, d1 =', 2e15.6)
+  if (absz (d2) .gt. d1) go to 20
+63 do i = 1, n
+     a(i, l) = q(i, im)
+65   ai(l, i) = q(im, i)
   end do
-  ad=czero
-  do i=1,n
-70   ad=ad+p(im,i)*q(i,im)
+  ad = czero
+  do i = 1, n
+70   ad = ad + p(im, i) * q(i, im)
   end do
-  qn(l)=ad/q(im,im)
-  ad=czero
-  do i=1,n
-75   ad=ad+ai(l,i)*a(i,l)
+  qn(l) = ad / q(im, im)
+  ad = czero
+  do i = 1, n
+75   ad = ad + ai(l, i) * a(i, l)
   end do
-  ad=1./ad
-  do i=1,n
-80   ai(l,i)=ad*ai(l,i)
+  ad = 1.0d0 / ad
+  do i = 1, n
+80   ai(l, i) = ad * ai(l, i)
   end do
-  do i=1,n
-     do j=1,n
-        q(i,j)=p(i,j)-a(i,l)*qn(l)*ai(l,j)
-85      p(i,j)=q(i,j)
+  do i = 1, n
+     do j = 1, n
+        q(i, j) = p(i, j) - a(i, l) * qn(l) * ai(l, j)
+85      p(i, j) = q(i, j)
      end do
   end do
-  if ( iprs47  .ge.  7 ) write (logsix, 3842)  l, qn(l), ad
-3842 format (  21h eigenvalue finished.,  8h       l, 10x,  10hreal-qn(l),  10x,  10himag-qn(l), 13x,  7hreal-ad,  13x,  7himag-ad  ,/, &
-       21x,  i8,  4e20.11  ,/,  1x  )
+  if (iprs47 .ge. 7) write (unit = logsix, fmt = 3842) l, qn(l), ad
+3842 format (' Eigenvalue finished.       l', 10x, 'real-qn(l)', 10x, 'imag-qn(l)', 13x,  'real-ad',  13x, 'imag-ad', /, 21x, i8, 4e20.11, /, 1x)
   go to 15
-90 dm=0.
-  do i=1,n
-     dx=cabsz(p(i,i))
-     if(dx.le.dm) go to 95
-     dm=dx
-     im=i
+90 dm = 0.0d0
+  do i = 1, n
+     dx = cabsz (p(i, i))
+     if (dx .le. dm) go to 95
+     dm = dx
+     im = i
 95 end do
-  ad=czero
-  do i=1,n
-     ad=ad+p(im,i)*p(i,im)
-98   a(i,l)=p(i,im)/p(im,im)
+  ad = czero
+  do i = 1, n
+     ad = ad + p(im, i) * p(i, im)
+98   a(i, l) = p(i, im) / p(im, im)
   end do
-  qn(l)=ad/p(im,im)
-  do i=1,n
-100  ai(l,i)=p(im,i)/qn(l)
+  qn(l) = ad / p(im, im)
+  do i = 1, n
+100  ai(l, i) = p(im, i) / qn(l)
   end do
-  do i=1,n
-110  qn(i) = c1 * csqrtz(c2 + qn(i))
+  do i = 1, n
+110  qn(i) = c1 * csqrtz (c2 + qn(i))
   end do
-9200 if ( iprs47  .ge.  3 ) write (logsix, 3854)  dm, spdlgt, p(im,im), ( qn(i), i=1, n )
-3854 format ( /, 35h done all eigenvalues in  'eigen' ., 18x,  2hdm,  14x,  6hspdlgt,  7x,  13hreal-p(im,im), &
-       7x,  13himag-p(im,im)  ,/,  35x,  4e20.11,   /, 49h complex eigenvalues  (qn(i), i=1, n)  follow ...  ,/, &
-       ( 1x,  6e20.11 )  )
-  if ( iprs47  .ge.  1 ) write (logsix, 3867)
-3867 format ( /,  88h diagnostic upon exit  'eigen' .   matrix of eigenvectors  a(i,l)  for  (i,l)=1, ... n .    )
+9200 if (iprs47 .ge. 3) write (unit = logsix, fmt = 3854) dm, spdlgt, p(im, im), (qn(i), i = 1, n)
+3854 format (/, " Done all eigenvalues in  'eigen' .", 18x,  'dm', 14x, 'spdlgt', 7x, 'real-p(im,im)', 7x, 'imag-p(im,im)', /, 35x, 4e20.11, /, ' complex eigenvalues  (qn(i), i=1, n)  follow ...', /, (1x, 6e20.11))
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 3867)
+3867 format (/, " Diagnostic upon exit  'eigen' .   Matrix of eigenvectors  a(i,l)  for  (i,l)=1, ... n .")
   ll0 = 0
-  if ( iprs47  .ge.  6 ) call print ( a(1,1), n, ll0, ldn )
+  if (iprs47 .ge. 6) call print (a(1, 1), n, ll0, ldn)
   return
 end subroutine eigen
 
@@ -4366,7 +4423,15 @@ end subroutine minv
 subroutine mxm (xm, yym, c, n, ldn)
   use com47
   implicit none
-  complex(16) :: xm(ldn,ldn), yym(ldn,ldn), c(ldn,ldn)
+  integer(4), intent(in) :: ldn
+  integer(4), intent(in) :: n
+  complex(16), intent(in) :: xm(ldn, ldn)
+  complex(16), intent(in) :: yym(ldn, ldn)
+  complex(16), intent(out) :: c(ldn, ldn)
+  integer(4) :: i
+  integer(4) :: j
+  integer(4) :: k
+  integer(4) :: ll0
   !
   if (iprs47 .ge. 1) write (unit = logsix, fmt = 4062) n, xm(1, 1), yym(1, 1)
 4062 format (/, " Enter  'mxm' .       n", 7x,  'real- xm(1,1)',  7x, 'imag- xm(1,1)', 7x, 'real-yym(1,1)', 7x, 'imag-yym(1,1)', /, 15x, i8, 4e20.11, /, ' diagnostic left factor.   xm(i,j)  for  (i,j)=1, ... n .')

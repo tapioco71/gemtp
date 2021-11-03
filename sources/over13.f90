@@ -118,12 +118,12 @@ end module over13mod
 
 subroutine over13
   use over13mod
-  use over44mod, only: cominv
   use fdqlcl
   use blkcom
   use labcom
   use tracom
   use movcop
+  use ovr44c, only: cominv
   implicit none
   !  dimension cblhst(1)
   !  equivalence (cnvhst(1), cblhst(1))
