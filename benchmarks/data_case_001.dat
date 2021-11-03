@@ -1,0 +1,25 @@
+begin new data case
+c ----dt<---tmax................................................................
+ 200.e-6  50.e-3
+c -Iprnt<--Iplot<-Idoubl<-KssOut<-MaxOut                <===Icat
+      25       1       1       0       0                       0
+c Bus-->Bus-->Bus-->Bus--><----R<----L<----C                                   0
+  load                        .1    1.                                         0
+blank end of circuit data......................................................:
+c Bus-->Bus--><--Tclose<----Topen<-------Ie                                    0
+  src   load      1.e-3     9999.         0                                    1
+blank end of switch data.......................................................:
+c
+c Bus--><I<Amplitude<Frequency<--T0|Phi0<---0=Phi0<-Ignore-><---Tstart<----Tstop
+14src             1.       50.         0        0.                 -1.     9999.
+blank end of source data.......................................................:
+c Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->
+  src   load
+blank end ouf output requests..................................................:
+c
+c Plot request Data.............................................................
+  Figure 3.9(c): Output Plot for Switch Current
+c VV<-|<--|<--|<---|---|Bus-->Bus-->Bus-->Bus-->Heading-------->Vert axis------>
+ 194 5. 0.0 50. -4.   4.src   load              RL Energization Amps
+blank end of plot request data.................................................:
+blank end of all cases
