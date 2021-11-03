@@ -110,6 +110,8 @@ F90_FLAGS=	-cpp				\
 		-DWITH_OVER11			\
 		-DWITH_OVER12			\
 		-DWITH_OVER13			\
+		-DWITH_OVER14			\
+		-DWITH_OVER15			\
 		-DWITH_OVER20			\
 		-DWITH_OVER31			\
 		-DWITH_OVER41			\

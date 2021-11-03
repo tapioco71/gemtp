@@ -11,29 +11,28 @@
 subroutine over15
   use blkcom
   use labcom
-  use tacsar
+  use smtacs
+  use smach
+  use umcom
+  use space2
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !  include 'blkcom.ftn'
-  !  include 'labcom.ftn'
-  !  include 'tacsar.ftn'
-  include 'syncom.ftn'
-  include 'synmac.ftn'
-  include 'umdeck.ftn'
-  include 'space2.ftn'
-  dimension ispum(1)
+  !  dimension ispum(1)
+  real(8) :: d2
+  real(8) :: sm
   equivalence (d2, sm)
-  equivalence (spum(1), ispum(1))
-  equivalence (moncar(1), knt), (moncar(2), kbase)
-  equivalence (moncar(3), ltdelt), (moncar(4), isw)
-  equivalence (moncar(5), idist), (moncar(6), itest)
-  character(8) :: aupper, alower, text1, text2, text3
+  !  equivalence (spum(1), ispum(1))
+  !  equivalence (moncar(1), knt), (moncar(2), kbase)
+  !  equivalence (moncar(3), ltdelt), (moncar(4), isw)
+  !  equivalence (moncar(5), idist), (moncar(6), itest)
+  character(8) :: text1, text2, text3
   character(8) :: text4, text5, text6, text7
   character(8) :: text8, text9, text10, text11, text12
   character(132) :: outlin
-  dimension aupper(13), alower(13)
-  dimension nsubkm(1)
-  equivalence  ( kknonl(1), nsubkm(1) )
+  !  dimension aupper(13), alower(13)
+  !  dimension nsubkm(1)
+  !  equivalence  ( kknonl(1), nsubkm(1) )
+  integer(4) :: moon
+  !
   data  text1   / 'tacs  ' /
   data  text4   / 'normal' /
   data  text5   / '      ' /
@@ -47,7 +46,7 @@ subroutine over15
   !     transfer to  "top15"  for front end of overlay 15.
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over15."')
-  call move0 (kssfrq(1), ntot)
+  call move0 (kssfrq(1 :), ntot)
   call top15
   if (kill .gt. 0) go to 9200
   go to 3038
@@ -61,7 +60,7 @@ subroutine over15
   numnvo = ntot1
   ivolt = ijk
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 3045)
-3045 format ('+request for output of all node voltages.')
+3045 format ('+Request for output of all node voltages.')
   call interp
   if (aupper(1) .eq. blank) go to 3094
   go to 1030
@@ -73,20 +72,18 @@ subroutine over15
 4671 format (8x, i8)
   if (n13 + ntot .le. lbus .and. n13 .gt. 0) go to 4682
 4675 write (unit = lunit6, fmt = 4676) n13, ntot, lbus
-4676 format ('   = = =  no, too many dummy node voltage', ' output channels for emtp dimensions.', /, &
-          '          n13 + ntot .gt. lbus,   where   n13,',' ntot, lbus =', 3i8, '     If execution is', /, &
-          '          interactive,  deposit  revised  n13', '  value in  istep  at next spy break.')
+4676 format ('   = = =  No, too many dummy node voltage output channels for emtp dimensions.', /, 'n13 + ntot .gt. lbus,   where   n13, ntot, lbus =', 3i8, '     If execution is', /, '          interactive,  deposit  revised  n13  value in  istep  at next spy break.')
   call spying
   n13 = istep
   istep = 0
 4682 if (noutpr .eq. 0) write (unit = kunit6, fmt = 4683) n13
-4683 format ('+dummy node voltage output number', i8)
+4683 format ('+Dummy node voltage output number', i8)
   do j = 1, n13
      call nmincr (text12, j)
      bus(ntot + j) = text12
      numnvo = numnvo + 1
      if (numnvo .gt. lsiz12) go to 4675
-     emtpe(ntot + j) = 0.0
+     emtpe(ntot + j) = 0.0d0
 4687 ibsout(numnvo) = ntot + j
   end do
   go to 1030
@@ -552,7 +549,8 @@ subroutine over15
   aupper(m) = bus(j)
   alower(m) = blank
   if (m .lt. 9) go to 3158
-  assign 3152 to moon
+  !  assign 3152 to moon
+  moon = 3152
 3126 if (noutpr .ne. 0) go to 7113
   if (n1 .eq. 1) write (unit = lunit6, fmt = 3131) (aupper(i), i = 1, 9)
 3131 format (/, 15x, 9(7x, a6))
@@ -579,7 +577,8 @@ subroutine over15
   alower(m) = bus(j)
   if (j .eq. 1) alower(m) = terra
   if (m .lt. 9) go to 3169
-  assign 3166 to moon
+  !  assign 3166 to moon
+  moon = 3166
   go to 3126
 3166 m = 0
 3169 if (k .lt. ncsave) go to 3164
@@ -593,7 +592,8 @@ subroutine over15
   aupper(m) = texvec(l)
   alower(m) = texvec(j)
   if (m .lt. 9) go to 3191
-  assign 3188 to moon
+  !  assign 3188 to moon
+  moon = 3188
   go to 3126
 3188 m = 0
 3191 if (k .lt. nsmout) go to 3182
@@ -606,7 +606,8 @@ subroutine over15
   ndx1 = ilntab(klntab + ndx1)
   alower(m) = texvec(ndx1)
   if (m .lt. 9) go to 3199
-  assign 3197 to moon
+  !  assign 3197 to moon
+  moon = 3197
   go to 3126
 3197 m = 0
 3199 if (k .lt. ioutcs) go to 3195
@@ -621,7 +622,8 @@ subroutine over15
   aupper(m) = busum(l)
   alower(m) = busum(j)
   if (m .lt. 9) go to 8641
-  assign 8637 to moon
+  !  assign 8637 to moon
+  moon = 8637
   go to 3126
 8637 m = 0
 8641 if (k .lt. numout) go to 8634
@@ -630,7 +632,8 @@ subroutine over15
   aupper(m) = blank
   alower(m) = blank
   if(m .lt. 9) go to 3171
-  assign 3177 to moon
+  !  assign 3177 to moon
+  moon = 3177
   go to 3126
 3177 kcount = nv
   lunit6 = lunit6save
@@ -754,12 +757,9 @@ subroutine top15
   use blkcom
   use labcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !  include 'blkcom.ftn'
-  !  include 'labcom.ftn'
-  dimension nsubkm(1)
-  equivalence (kknonl(1), nsubkm(1))
-  equivalence (lstat(14), knum)
+  !  dimension nsubkm(1)
+  !  equivalence (kknonl(1), nsubkm(1))
+  !  equivalence (lstat(14), knum)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 752) nenerg, ibr, kswtch, inonl
 752 format (/, ' Enter  "top15" .  nenerg     ibr  kswtch   inonl', /, 17x, 5i8)
   knum = 1
@@ -881,13 +881,9 @@ end subroutine top15
 subroutine smout
   use blkcom
   use labcom
-  use synmac
+  use smach
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     this module is used only by  type 59 s.m.  modeling
-  !  include 'blkcom.ftn'
-  !  include 'labcom.ftn'
-  !  include 'synmac.ftn'
+  !     This module is used only by  type 59 s.m.  modeling
   character(8) :: texta, textb, digit, text1, text2, busvec
   dimension texta(15), digit(10), textb(3), busvec(1)
   texta = (/ 'id    ', 'iq    ', 'i0    ', 'if    ', 'ikd   ', 'ig    ', 'ikq   ', 'ia    ', 'ib    ', 'ic    ', 'efd   ', 'mforce', 'mang  ', 'tq gen', 'tq exc' /)
@@ -1017,9 +1013,8 @@ subroutine uminit (n15, reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, 
      umoutp)
   use blkcom
   use labcom
-  use umdeck
+  use umcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension reacl(1), gpar(1), fpar(1), hist(1), umcurp(1)
   dimension nodvo1(1), nodvo2(1), jcltac(1), jclout(1)
   dimension jtype(1), nodom(1), jtmtac(1), histom(1)
@@ -1035,8 +1030,8 @@ subroutine uminit (n15, reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, 
   !  include 'blkcom.ftn'
   !  include 'labcom.ftn'
   !  include 'umdeck.ftn'
-  dimension nsubkm(1)
-  equivalence (kknonl(1), nsubkm(1))
+  !  dimension nsubkm(1)
+  !  equivalence (kknonl(1), nsubkm(1))
   !  jcltac(kcl and kcl+1) are defined and initialized in umrenu
   !  jcltac(kcl+2) is defined here. it is zero unless a set of
   !     of max 3 um's sharing a common mech netw is dealt with.

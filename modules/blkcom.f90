@@ -152,7 +152,7 @@ module blkcom
   equivalence (lstat(68), maxnuk)
   ! from main00
   integer(4) :: knt
-  character(8) :: buff10(10), aupper(14)
+  character(8) :: buff10(10), aupper(14), alower(14)
   equivalence (buff10(1), abuff)
   equivalence (moncar(1), knt)
   equivalence (aupper(1), texcol(1))
