@@ -58,6 +58,82 @@
 !         misc. data parameter  'icat'  is positive.
 !
 
+module savcom
+  implicit none
+
+contains
+
+  !
+  ! subroutine tapsav.
+  !
+
+  subroutine tapsav (narray, n1, n2, n3)
+    use blkcom
+    use deck29
+    use indcom
+    implicit none
+    !     Near-universal module for dumping or restoring (central memory
+    !     vs. disk) of  /label/ .   This does not work for those
+    !     computers like Prime and Burroughs where  common  blocks
+    !     are not ordered regularly in memory.   Switch "KBURRO"
+    !     selects between disk or virtual memory (/C29B01/).
+    integer(4), intent(out) :: narray(:)
+    integer(4), intent(in) :: n1, n2, n3
+    integer(4) :: i, j, k, kvecsv, n4, n9, n13
+    !
+    if (iprsup .lt. 1) go to 5840
+    n9 = 0
+    kpen(2) = 0
+    n4 = location (narray)
+    write (unit = lunit6, fmt = 5831) n1, n2, n3, kburro, n4
+5831 format (/, " Top of  'tapsav'., '      n1      n2      n3  kburro              n4", /, 18x, 4i8, i16)
+    !     following check normally sends VAX EMTP to 6327 (disk is
+    !     only wanted for table saving within a simulation for
+    !     test purposes):
+5840 if (kburro .eq. 1) go to 6327
+5448 if (n3 .gt. 1) go to 5891
+    write (unit = n1) (narray(i), i = 1, n2)
+    go to 9000
+5891 read (unit = n1) (narray(i), i = 1, n2)
+    go to 9000
+6327 if (nchain .eq. 20 .and. memsav .eq. 1) go to 5448
+    if (nchain .eq. 1) go to 5448
+    if (nchain .eq. 6 .or. nchain .eq. 8) go to 9000
+    !     Preceding "if" branches will send  "memsav=1"  table
+    !     saving of overlay 20 and  "start again"  table restoring
+    !     of overlay 1 to disk, always.   This is for permanent
+    !     (disk) storage.   "statistics"  and  "systematic"  data
+    !     cases, on the other hand, shall dump to  /c29b01/ .
+    !     First 50 cells of /c29b01/ (karray) are saved for rtm use.
+    n13 = 29
+    call dimens (kpen, n13, trash, trash)
+    kvecsv = 2 * (it + it + ibr + ntot + ioffd) + kswtch + lhist
+    n9 = ltlabl + kvecsv * nbyte(3) / nbyte(4)
+    if (n9 .lt. kpen(2) + 50) go to 6342
+    write (unit = lunit6, fmt = 6335) n2, kpen(2), n9, nchain
+6335 format (' Error stop in "tapsav".  Overflow of /c29b01/ storage.  n2, kpen(2) =', 2i8, &
+         '     needed storage n9 =,  i8     ', /, ' memory requirement in integer words for virtual  ', &
+         ' computer implementation of tapsav.   Storage must ', /, ' provide for all of --/label/--( deck "labcom" ),   ', &
+         ' the several usages of "vecrsv" and "vecisv"(over6-11),  ', ' plus 50 extra cells.   ', /, ' nchain =', i5)
+    call stoptp
+6342 j = 50
+    if (n3 .gt. 1) go to 6352
+    do k = 1, n2
+       j = j + 1
+       karray(j) = narray(k)
+    end do
+    go to 9000
+6352 do k = 1, n2
+       j = j + 1
+       narray(k) = karray(j)
+    end do
+9000 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9003) n9, kpen(2)
+9003 format (' Exit "tapsav".   n9, kpen(2) =', 2i8)
+    return
+  end subroutine tapsav
+
+end module savcom
+
 !
 !     subroutine subr10.
 !
@@ -204,75 +280,6 @@ subroutine subr10
   end do
 9000 return
 end subroutine subr10
-
-!
-! subroutine tapsav.
-!
-
-subroutine tapsav (narray, n1, n2, n3)
-  use blkcom
-  use deck29
-  use indcom
-  implicit none
-  !     Near-universal module for dumping or restoring (central memory
-  !     vs. disk) of  /label/ .   This does not work for those
-  !     computers like Prime and Burroughs where  common  blocks
-  !     are not ordered regularly in memory.   Switch "KBURRO"
-  !     selects between disk or virtual memory (/C29B01/).
-  integer(4), intent(out) :: narray(1)
-  integer(4), intent(in) :: n1, n2, n3
-  integer(4) :: i, j, k, kvecsv, n4, n9, n13
-  !
-  if (iprsup .lt. 1) go to 5840
-  n9 = 0
-  kpen(2) = 0
-  n4 = location (narray)
-  write (unit = lunit6, fmt = 5831) n1, n2, n3, kburro, n4
-5831 format (/, " Top of  'tapsav'., '      n1      n2      n3  kburro              n4", /, 18x, 4i8, i16)
-  !     following check normally sends VAX EMTP to 6327 (disk is
-  !     only wanted for table saving within a simulation for
-  !     test purposes):
-5840 if (kburro .eq. 1) go to 6327
-5448 if (n3 .gt. 1) go to 5891
-  write (unit = n1) (narray(i), i = 1, n2)
-  go to 9000
-5891 read (unit = n1) (narray(i), i = 1, n2)
-  go to 9000
-6327 if (nchain .eq. 20 .and. memsav .eq. 1) go to 5448
-  if (nchain .eq. 1) go to 5448
-  if (nchain .eq. 6 .or. nchain .eq. 8) go to 9000
-  !     Preceding "if" branches will send  "memsav=1"  table
-  !     saving of overlay 20 and  "start again"  table restoring
-  !     of overlay 1 to disk, always.   This is for permanent
-  !     (disk) storage.   "statistics"  and  "systematic"  data
-  !     cases, on the other hand, shall dump to  /c29b01/ .
-  !     First 50 cells of /c29b01/ (karray) are saved for rtm use.
-  n13 = 29
-  call dimens (kpen, n13, trash, trash)
-  kvecsv = 2 * (it + it + ibr + ntot + ioffd) + kswtch + lhist
-  n9 = ltlabl + kvecsv * nbyte(3) / nbyte(4)
-  if (n9 .lt. kpen(2) + 50) go to 6342
-  write (unit = lunit6, fmt = 6335) n2, kpen(2), n9, nchain
-6335 format (' Error stop in "tapsav".  Overflow of /c29b01/ storage.  n2, kpen(2) =', 2i8, &
-       '     needed storage n9 =,  i8     ', /, ' memory requirement in integer words for virtual  ', &
-       ' computer implementation of tapsav.   Storage must ', /, ' provide for all of --/label/--( deck "labcom" ),   ', &
-       ' the several usages of "vecrsv" and "vecisv"(over6-11),  ', ' plus 50 extra cells.   ', /, ' nchain =', i5)
-  call stoptp
-6342 j = 50
-  if (n3 .gt. 1) go to 6352
-  do k = 1, n2
-     j = j + 1
-     karray(j) = narray(k)
-  end do
-  go to 9000
-6352 do k = 1, n2
-     j = j + 1
-     narray(k) = karray(j)
-  end do
-9000 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9003) n9, kpen(2)
-9003 format (' Exit "tapsav".   n9, kpen(2) =', 2i8)
-  return
-end subroutine tapsav
 
 !
 ! subroutine dpelg.
@@ -522,9 +529,9 @@ subroutine pltfil (k)
 7269 format (' ^^^^^^^^^^^^^^^   Error stop in "pltfil"   ^^^^^^^^^^^^^^', /, ' ^^^^^^  too many output variables (', i3,  &
        ' )  for use real*4 plot file.   limit = 450.')
   call stoptp                                               ! installation-dependent program stop card
-!7273 do j = 1, k
-!     forbyt(j) = volti(j)
-!  end do
+  !7273 do j = 1, k
+  !     forbyt(j) = volti(j)
+  !  end do
 7273 forbyt(1 : k) = volti(1 : k)
   !     following apollo card replaces 2 preceding vax ones:
   !     7273 call vec_$dp_sp ( volti(1), forbyt(1), k )
@@ -664,6 +671,7 @@ end subroutine namea6
 !
 
 subroutine tables
+  use savcom
   use comlock
   use blkcom
   use labcom

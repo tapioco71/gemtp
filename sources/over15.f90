@@ -183,7 +183,7 @@ contains
        !  end code section ............................................
 7305   j = j + 1
        if (j .le. n6) go to 1111
-       !  the following condition is needed for the last node-pair
+       !  The following condition is needed for the last node-pair
        !    to be compensated for this subnetwork. this condition is
        !    to be inserted for all the other subnetworks.
        if (n16 .eq. 1) nsubkm(n15) = isubeg(numsub)
@@ -208,7 +208,7 @@ contains
        go to 2222
 2323   if (n16 .eq. 1) nsubkm(n15) = isubeg(numsub)
        if (n8 .gt. ncomp) ncomp = n8
-       !  compensation of excit network for 4 or more coils ***********
+       !  Compensation of excit network for 4 or more coils ***********
        !    note : in this case they will all be single-phase comp
        n8 = 0
        if (n7 .le. 6) go to 7319
@@ -227,7 +227,7 @@ contains
 7318   j = j + 1
        go to 3333
 3434   if (n8 .gt. ncomp) ncomp = n8
-       !  compensation of mech network ********************************
+       !  Compensation of mech network ********************************
 7319   n8 = 0
        if (jtmtac(k) .ne. 0) go to 7328
        if (nshare .eq. 1) go to 7328
@@ -241,7 +241,7 @@ contains
        nsubkm(n15+1) = nodom(numcom)
        nsubkm(n15+2) = 1
        go to 6868
-       !  compensation of higher numbered um if mechanically connected
+       !  Compensation of higher numbered um if mechanically connected
 7322   if (nshare .eq. 0) go to 7325
        if (nshare .eq. -1) go to 7324
        nshare = 0
@@ -483,10 +483,10 @@ subroutine over15
 8288 continue
   if (l .eq. 0) go to 3081
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 3072)
-3072 format ('+card of bus names for node-voltage output.')
+3072 format ('+Card of bus names for node-voltage output.')
   go to 1030
 3081 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54167)
-54167 format ('+blank card ending node names for voltage output.')
+54167 format ('+Blank card ending node names for voltage output.')
   call interp
   if (nenerg .eq. 0) go to 3094
   write (unit = lunit6, fmt = 637) nenerg
@@ -503,8 +503,7 @@ subroutine over15
 1324 format (" The user can select either uniform or normal distributions, based on the value of parameter  'idist'  of columns", /, ' 17-24 of the special statistics misc. data card.   The following is a listing of switches whose closing times are', /, ' to be statistically varied, along with the associated mean and standard deviation for the distribution, as requested by the user.')
   if (xmaxmx .lt. 0.0) write (unit = lunit6, fmt = 1325) xmaxmx
 1325 format (' The user punched statistics miscellaneous data parameter  xmaxmx =',  e12.3, &
-       ' ,   with the negative value representing   ', /, ' a request for use of the 100 built-in random, numbers.   As such, the answer is really', &
-       ' deterministic, then (a second solution     ', /, ' on any computer should give the same answer).')
+       ' ,   with the negative value representing   ', /, ' a request for use of the 100 built-in random, numbers.   As such, the answer is really deterministic, then (a second solution', /, ' on any computer should give the same answer).')
   go to 1336
 1329 text2 = text8
   text3 = text9
@@ -512,15 +511,9 @@ subroutine over15
   text2 = text10
   text3 = text11
 8329 write (unit = lunit6, fmt = 1330) text2, text3
-1330 format (' (parameter  "nenerg"  of columns 65-72 of the 2nd misc. data card).', /, &
-       " closing times for the specially-flagged switches (with  'systematic'  punched in columns 55-64) are varied", /, &
-       1x, 'regularly between minimum and maximum times, with a uniform increment in between for each switch.   The following', /, &
-       1x, 'is a listing of the switches whose closing times are to be systematically varied for this data case.   Also tabulated   ', /, &
-       1x, 'are the associated ', a6, a1, '  closing times and step-increment sizes for the, switches, exactly as was read from the switch cards.')
+1330 format (' (parameter  "nenerg"  of columns 65-72 of the 2nd misc. data card).', /, " closing times for the specially-flagged switches (with  'systematic'  punched in columns 55-64) are varied", /, 1x, 'regularly between minimum and maximum times, with a uniform increment in between for each switch.   The following', /, 1x, 'is a listing of the switches whose closing times are to be systematically varied for this data case.   Also tabulated   ', /, 1x, 'are the associated ', a6, a1, '  closing times and step-increment sizes for the, switches, exactly as was read from the switch cards.')
 1336 write (unit = lunit6, fmt = 1338)
-1338 format (/, 10x, 'entry', 4x, 'switch', 6x, 'from', 8x, 'to', 9x, 'columns 15-24', 8x, 'columns 25-34', &
-       7x, 'reference switch no.', /, 5x,  2(4x, 'number'),  2(7x, 'bus'), 10x, '(in seconds)', 9x, '(in seconds)', &
-       5x, '(0 implies independence)')
+1338 format (/, 10x, 'entry', 4x, 'switch', 6x, 'from', 8x, 'to', 9x, 'columns 15-24', 8x, 'columns 25-34', 7x, 'reference switch no.', /, 5x,  2(4x, 'number'),  2(7x, 'bus'), 10x, '(in seconds)', 9x, '(in seconds)', 5x, '(0 implies independence)')
   n1 = 0
   do i = 1, kswtch
      if (absz (adelay(i)) .ne. 44444.) go to 1352
@@ -545,9 +538,7 @@ subroutine over15
 3094 nc = nv
   if (iprsup .lt. 3) go to 7436
   write (unit = lunit6, fmt = 7427)
-7427 format (/, ' Mixture of integer arrays in over15.   Only the longest column(s) will not have garbage at the ends.', /, &
-       12x, 'row', 5x, 'bus1 ', 6x, 'bus2  ', 4x, 'kswtyp', 6x, 'kpos', 6x, 'node', 4x, 'isourc', 6x, 'kbus', 6x, 'mbus', 5x, &
-       'nonlk', 5x, 'nonlm')
+7427 format (/, ' Mixture of integer arrays in over15.   Only the longest column(s) will not have garbage at the ends.', /, 12x, 'row', 5x, 'bus1 ', 6x, 'bus2  ', 4x, 'kswtyp', 6x, 'kpos', 6x, 'node', 4x, 'isourc', 6x, 'kbus', 6x, 'mbus', 5x, 'nonlk', 5x, 'nonlm')
   n2 = kswtch
   if (kconst .gt. n2) n2 = kconst
   if (ibr .gt. n2) n2 = ibr

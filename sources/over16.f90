@@ -4722,12 +4722,12 @@ subroutine subts3
   integer(4) :: ll10, m, mpower
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n13, n14, n15, ndx1
   integer(4) :: nn15, nodev
-  real(8) :: a, a2, d1, d2, d4, delti, fchar, gus1, gus2, gus3, gus4, h1, h2
+  real(8) :: a, a2, d1, d2, d4, delti, fchar(20), gus1, gus2, gus3, gus4, h1, h2
   real(8) :: sdlat, sk, sm
   real(8) :: ts, tz1
   real(8) :: vdiff, vsl, vsr, vzero2
   real(8) :: yx
-  dimension fchar(20)
+  !  dimension fchar(20)
   !  dimension xx(1), volta(1)
   !  dimension nsubkm(1)
   !  equivalence (kknonl(1), nsubkm(1))
@@ -4821,7 +4821,7 @@ subroutine subts3
   do i = 1, npower
      mpower = maxpe + i
      j = koutvp(i)
-     if ( j .gt. 0 )  go to 54262
+     if (j .gt. 0) go to 54262
      j = -j
      n1 = ibrnch(j)
      d4 = emtpe(n1)
@@ -4829,14 +4829,14 @@ subroutine subts3
 54262 d4 = bvalue(j)
 54265 l = koutvp(mpower)
      d1 = d4 * bvalue(l)
-     bnrg(i) = bnrg(i) + d1*deltat
+     bnrg(i) = bnrg(i) + d1 * deltat
      if (istep .eq. 0) bnrg(i) = delta2 * d1
      d2 = bnrg(i) - d1 * delta2
      n5 = j + nodev
      n6 = l + nodev
      volti(n5) = d1
      volti(n6) = d2
-     if (istep .le. 5 .and. iprsup .ge. 2) write (unit = lunit6, fmt = 54270) i, k, j, l, d1, d2, bnrg(i), d4, bvalue+(l)
+     if (istep .le. 5 .and. iprsup .ge. 2) write (unit = lunit6, fmt = 54270) i, k, j, l, d1, d2, bnrg(i), d4, bvalue + (l)
 54270 format (/, ' at 54270', 4i10, 5e15.4)
   end do
 54280 if (nsmout .eq. 0) go to 54284
@@ -4862,80 +4862,80 @@ subroutine subts3
   if ( m4plot  .eq.  0 )   go to 1648
   call pltfil ( k )
   go to 1649
-1648 write (lunit4) (volti(i),i=1,k)
+1648 write (unit = lunit4) (volti(i), i = 1, k)
 1649 isplot = iplot
-1653 if ( isprin .gt. 0 )  go to 1654
-  if (kbase .ge. 2)   go to 1654
+1653 if (isprin .gt. 0) go to 1654
+  if (kbase .ge. 2) go to 1654
   n1 = k
-  if ( n1 .gt. 10 )  n1 = 10
-  if ( istep  .gt.  99999 )   istep = istep - 100000
-  if ( t  .ge.  unity )   go to 48
-  if ( deltat  .lt.  tenm6 )   go to 48
-  write (lunit6, 37)  istep, ( volti(i), i=1, n1 )
-37 format ( 1x, i5,  f9.6, 9e13.6 )
+  if (n1 .gt. 10) n1 = 10
+  if (istep .gt. 99999) istep = istep - 100000
+  if (t .ge. unity) go to 48
+  if (deltat .lt. tenm6) go to 48
+  write (unit = lunit6, fmt = 37) istep, (volti(i), i = 1, n1)
+37 format (1x, i5, f9.6, 9e13.6)
   go to 56
-48 if ( istep  .le.  9999 )   go to 39
-  write (lunit6, 51)  istep,  ( volti(i), i=1, n1 )
-51 format ( 1x, i5, e9.3, 9e13.6 )
+48 if (istep .le. 9999) go to 39
+  write (unit = lunit6, fmt = 51) istep, (volti(i), i = 1, n1)
+51 format (1x, i5, e9.3, 9e13.6)
   go to 56
-39 write (lunit6, 40)  istep,  ( volti(i), i=1, n1 )
-40 format ( 1x,  i4,  e10.3,  9e13.6  )
-56 if ( k  .gt.  n1 ) write (lunit6, 87437)  ( volti(i), i=11, k )
-87437 format ( 15x, 9e13.6 )
+39 write (unit = lunit6, fmt = 40) istep, (volti(i), i = 1, n1)
+40 format (1x, i4, e10.3, 9e13.6)
+56 if (k .gt. n1) write (unit = lunit6, fmt = 87437) (volti(i), i = 11, k)
+87437 format (15x, 9e13.6)
   isprin = iout
-1654 if ( begmax(1) .eq. 0.0 ) go to 1660
-  if ( t .lt. begmax(maxout) )  go to 1660
-  !     now update extrema vector  "xmax" .   there are 4
+1654 if (begmax(1) .eq. 0.0d0) go to 1660
+  if (t .lt. begmax(maxout)) go to 1660
+  !     Now update extrema vector  "xmax" .   there are 4
   !     partitions of size of list 12:  (xmax, tmax, xmin, tmin).
-  do i=2, k
+  do i = 2, k
      l = i - 1
      ndx1 = 2 * lsiz12 + l
-     if (volti(i)  .ge.  xmax(ndx1) )  go to 4655
+     if (volti(i) .ge. xmax(ndx1)) go to 4655
      xmax(ndx1) = volti(i)
      ndx1 = ndx1 + lsiz12
      xmax(ndx1) = t
-4655 if ( volti(i)  .le.  xmax(l)  )  go to 1655
+4655 if (volti(i) .le. xmax(l)) go to 1655
      xmax(l) = volti(i)
      ndx1 = lsiz12 + l
      xmax(ndx1) = t
   end do
 1655 continue
-  if ( iprsup .ge. 2 ) write (lunit6, 1656)  ( xmax(i), i=1, l )
-1656 format( /,  16h xmax(i) at 1656   ,/, ( 1x, 8e15.4 ) )
-1660 if ( n7  .eq.  0 ) go to 1661
-  if ( memsav  .eq.  0 ) go to 8000
+  if (iprsup .ge. 2) write (unit = lunit6, fmt = 1656) (xmax(i), i = 1, l)
+1656 format (/, ' xmax(i) at 1656', /, (1x, 8e15.4))
+1660 if (n7 .eq. 0) go to 1661
+  if (memsav .eq. 0) go to 8000
 1661 istep = istep + 1
   t = t + deltat
-  if ( t .gt. begmax(maxout+1) )   maxout = maxout + 2
+  if (t .gt. begmax(maxout + 1)) maxout = maxout + 2
   isplot = isplot - 1
   isprin = isprin - 1
-  if ( t .lt. sptacs(29) ) go to 1945
+  if (t .lt. sptacs(29)) go to 1945
   sptacs(29) = fltinf
-  iuty(kiuty+3) = iuty(kiuty+2)
-1945 if ( iprsup  .ge.  4 ) write (lunit6, 7342)  k, ibr,  ( emtpf(i), i=1, ntot )
+  iuty(kiuty + 3) = iuty(kiuty + 2)
+1945 if (iprsup .ge. 4) write (unit = lunit6, fmt = 7342) k, ibr, (emtpf(i), i = 1, ntot)
 7342 format (/, ' k, ibr =', 2i6, 10x, '(emtpf(i), i=1, ntot )  follow ...', /, (1x, 8e16.7))
   !                                 constant voltages and currents
-  i=0
+  i = 0
   if (iread.eq.0) go to 1247
   !     read input card using cimage.
   call cimage
-  if ( nchain  .eq.  16 )   go to 9999
-  write (kunit6, 54169)
-54169 format( 42h+another input card for type 1-10 sources.  )
-  if ( kolbeg  .gt.  0 )   go to 7823
+  if (nchain .eq. 16) go to 9999
+  write (unit = kunit6, fmt = 54169)
+54169 format ('+Another input card for type 1-10 sources.')
+  if (kolbeg .gt. 0) go to 7823
   read (unit = abuff, fmt = 10) (voltbc(j), j = 1, 10)
-10 format(10e8.0)
+10 format (10e8.0)
   go to 7825
 7823 nfrfld = 10
   call frefld ( voltbc(1) )
-7825 if ( voltbc(1)  .ne.  9999. )   go to 11247
-  write (kunit6, 2241)
-2241 format ( 42h+another input card for type 1-10 sources.,7h   end.    )
-  iread=0
+7825 if (voltbc(1) .ne. 9999.0d0) go to 11247
+  write (unit = kunit6, fmt = 2241)
+2241 format ('+Another input card for type 1-10 sources.   End.')
+  iread = 0
   !1247 call mover0 ( voltbc(1), ll10 )
 1247 call move0 (voltbc(1 :), ll10)
 11247 call interp
-  if ( nstacs  .eq.  0 ) go to 11248
+  if (nstacs .eq. 0) go to 11248
   do j = 1, nstacs
      n1 = ichar (vstacs(j)(1 : 1))
      if (n1  .eq.  0) go to 21247
@@ -4944,177 +4944,176 @@ subroutine subts3
   end do
 21247 continue
 11248 if (kanal .gt. 0) call analyt
-  if ( kill  .gt.  0 )   go to 9200
-1249 i=i+1
-  if (i.gt.kconst) go to 1300
-  if ( iprsup  .ge.  4 ) write (lunit6, 7356)  i, kconst,  ( emtpf(m), m=1, ntot )
+  if (kill .gt. 0) go to 9200
+1249 do
+     i = i + 1
+     if (i .gt. kconst) go to 1300
+     if (iprsup .ge. 4) write (unit = lunit6, fmt = 7356) i, kconst,  (emtpf(m), m = 1, ntot)
 7356 format (/, ' i, kconst =',  2i6, 10x, '(emtpf(i), i=1, ntot )  follow ...', /, (1x, 8e16.7))
-  n1=node(i)
-  n2=iabs(n1)
-  n3=iform(i)
-  if ( n3  .ne.  17 )  go to 7362
-  n8 = int (sfreq(i), kind (n8))
-  ndx1 = kxtcs  +  n8
-  crest(i+1) = crest(i) * xtcs(ndx1)
-  go to 1249
-7362 if ( n3 .ne. 18 )   go to 7368
+     n1 = node(i)
+     n2 = iabs (n1)
+     n3 = iform(i)
+     if (n3 .ne. 17) go to 7362
+     n8 = int (sfreq(i), kind (n8))
+     ndx1 = kxtcs + n8
+     crest(i + 1) = crest(i) * xtcs(ndx1)
+  end do
+7362 if (n3 .ne. 18) go to 7368
   !     following code is for ideal transformer and source:
   n14 = int (time1(i), kind (n14))
   emtpf(n14) = yx
   go to 1249
-7368 if (n3.ne.16) go to 1251
-  j=i+1
-  n4=iabs(node(j))
-  gus1=emtpe(n2)-emtpe(n4)
-  n3=iform(j)
+7368 if (n3 .ne. 16) go to 1251
+  j = i + 1
+  n4 = iabs (node(j))
+  gus1 = emtpe(n2) - emtpe(n4)
+  n3 = iform(j)
   gus2 = time1(j)
   gus3 = time2(j)
-  ck1=crest(j+1)-tstop(i)*gus1
-  gus4=sfreq(j)
-  sfreq(j)=tstart(j)+crest(j)-ck1
-  if (sfreq(j).gt.gus3) go to 1256
-  if (sfreq(j).lt.gus2) go to 1257
-  tstop(j)=(sfreq(j)-gus4)/delta2-tstop(j)
-  iform(j)=1
-1258 tstart(j)  =  sfreq(i)*ck1  +  time1(i)*sfreq(j)  +  tstart(i)*tstop(j)
-  yx = crest(i)+tstart(j)
-  emtpf(n4)=emtpf(n4)-yx
-  crest(j+1)=yx
-  i=j
+  ck1 = crest(j + 1) - tstop(i) * gus1
+  gus4 = sfreq(j)
+  sfreq(j) = tstart(j) + crest(j) - ck1
+  if (sfreq(j) .gt. gus3) go to 1256
+  if (sfreq(j) .lt. gus2) go to 1257
+  tstop(j) = (sfreq(j) - gus4) / delta2 - tstop(j)
+  iform(j) = 1
+1258 tstart(j) = sfreq(i) * ck1 + time1(i) * sfreq(j) + tstart(i) * tstop(j)
+  yx = crest(i) + tstart(j)
+  emtpf(n4) = emtpf(n4) - yx
+  crest(j + 1) = yx
+  i = j
   go to 1250
-1256 sfreq(j)=gus3
-  tstop(j)=0.
-  iform(j)=2
+1256 sfreq(j) = gus3
+  tstop(j) = 0.0d0
+  iform(j) = 2
   go to 1258
-1257 sfreq(j)=gus2
-  tstop(j)=0.
-  iform(j)=3
+1257 sfreq(j) = gus2
+  tstop(j) = 0.0d0
+  iform(j) = 3
   go to 1258
-1251 yx=0.
-  ts=t-tstart(i)
-  if (ts.lt.0.) go to 1250
-  if (t.ge.tstop(i)) go to 1250
-  k=iabs(n3)
-  if (k.eq.14) go to 1270
-  if (k.eq.15) go to 1286
-  if ( k  .lt.  60 )   go to 1387
+1251 yx = 0.0d0
+  ts = t - tstart(i)
+  if (ts .lt. 0.0d0) go to 1250
+  if (t .ge. tstop(i)) go to 1250
+  k = iabs (n3)
+  if (k .eq. 14) go to 1270
+  if (k .eq. 15) go to 1286
+  if (k .lt. 60) go to 1387
   n8 = int (sfreq(i), kind (n8))
-  ndx1 = kxtcs  + n8
+  ndx1 = kxtcs + n8
   yx = xtcs(ndx1)
   go to 1250
 1387 yx = crest(i)
-  if (k.ge.12) go to 1280
-  if (k.lt.11) yx=voltbc(k)
-1250 if (n1.gt.0) go to 1260
-  emtpf(n2)=emtpf(n2)+yx
+  if (k .ge. 12) go to 1280
+  if (k .lt. 11) yx = voltbc(k)
+1250 if (n1 .gt. 0) go to 1260
+  emtpf(n2) = emtpf(n2) + yx
   go to 1249
-1260 if (n3.lt.0)  yx=yx+emtpe(n2)
-  emtpe(n2)=yx
+1260 if (n3 .lt. 0) yx = yx + emtpe(n2)
+  emtpe(n2) = yx
   go to 1249
-1270 yx = crest(i) * cosz(sfreq(i) * ts + time1(i))
-  if ( iprsup .lt. 3 )  go to 1250
-  write (lunit6, 1273)  i, kconst, n1, n2, n3, node(i), iform(i), &
-       t, tstart(i), tstop(i), crest(i), sfreq(i), ts, &
-       time1(i),yx,emtpf(n2),emtpe(n2)
-1273 format( /, 9h at 1273   , 7i12, //, ( 1x, 6e20.8 ) )
+1270 yx = crest(i) * cosz (sfreq(i) * ts + time1(i))
+  if (iprsup .lt. 3) go to 1250
+  write (unit = lunit6, fmt = 1273) i, kconst, n1, n2, n3, node(i), iform(i), t, tstart(i), tstop(i), crest(i), sfreq(i), ts, time1(i), yx, emtpf(n2), emtpe(n2)
+1273 format (/, ' At 1273   ', 7i12, //, (1x, 6e20.8))
   go to 1250
 1280 if (ts .ge. time1(i)) go to 1285
   yx = ts / time1(i) * yx
   go to 1250
-1285 if (k.eq.12) go to 1250
+1285 if (k .eq. 12) go to 1250
   yx = yx + sfreq(i) * (ts - time1(i))
   go to 1250
-1286 yx = crest(i) * (expz(sfreq(i) * ts) - expz(time1(i) * ts) )
+1286 yx = crest(i) * (expz(sfreq(i) * ts) - expz(time1(i) * ts))
   go to 1250
   !                                         elimination process on right s
   !                                         solve for v = [y] ** -1 * i
   !1300 call mover ( emtpf(1), emtpe(1), kpartb )
-1300 call move ( emtpf(1 :), emtpe(1 :), kpartb )
+1300 call move (emtpf(1 :), emtpe(1 :), kpartb)
   n1 = 1
-1301 emtpe(n1) = 0.0
-  if ( kode(n1) .le. n1 )   go to 1302
+1301 emtpe(n1) = 0.0d0
+  if (kode(n1) .le. n1) go to 1302
   n1 = kode(n1)
   go to 1301
 1302 do j = 2, kpartb
-     if ( kode(j) .eq. 0 ) go to 1303
+     if (kode(j) .eq. 0) go to 1303
      k = kode(j)
      if (k .gt. kpartb) go to 1303
      if (k .gt. j) emtpe(k) = emtpe(k) + emtpe(j)
   end do
 1303 continue
-  ii=1
-  if ( iprsup .lt. 4 )   go  to  1410
+  ii = 1
+  if (iprsup .lt. 4) go to 1410
   write (unit = lunit6, fmt = 41300)  ( emtpe(l), l=1, ntot )
 41300 format(/, ' emtpe(l), l=1, ntot  at begin repeat soln.', /, (1x, 5e25.15))
   write (unit = lunit6, fmt = 51300)  ( l, km(l), ykm(l), l=1, iupper )
-51300 format( /, ' Table of factors used.  l, km(l), ykm(l)', /, (2i10, e30.20, 5x, 2i10, e30.20))
-1410 if ( ii .gt. iupper ) go to 1450
+51300 format (/, ' Table of factors used.  l, km(l), ykm(l)', /, (2i10, e30.20, 5x, 2i10, e30.20))
+1410 if (ii .gt. iupper) go to 1450
   l = iabs (km(ii))
   a = emtpe(l)
   emtpe(l) = a*ykm(ii)
   j = kk(l)
-1420 ii=ii+1
-  if ( ii .gt. j ) go to 1410
-  k=km(ii)
-  if ( k .gt. kpartb )   go to  1420
+1420 ii = ii + 1
+  if (ii .gt. j) go to 1410
+  k = km(ii)
+  if (k .gt. kpartb) go to  1420
   emtpe(k) = emtpe(k) - a * ykm(ii)
   go to 1420
-1450 if (iprsup .ge. 5) write (lunit6, 5203) (emtpe(k), k = 1, ntot)
+1450 if (iprsup .ge. 5) write (unit = lunit6, fmt = 5203) (emtpe(k), k = 1, ntot)
 5203 format (' After downward,  ( emtpe(k), k = 1, ntot )  follow ...', /, (1x, 8e16.8))
   !                                               backsubstitution
   l = ntot
   go to 5211
 1500 if ( ii .eq. 1 ) go to 1550
-  a=0.
-1510 ii=ii-1
-  k=km(ii)
-  if (k.lt.0) go to 1520
-  a=a-emtpe(k)*ykm(ii)
+  a = 0.0d0
+1510 ii = ii - 1
+  k = km(ii)
+  if (k .lt. 0) go to 1520
+  a = a - emtpe(k) * ykm(ii)
   go to 1510
-1520 l=iabs(k)
+1520 l = iabs (k)
   emtpe(l) = emtpe(l) + a
-5211 if ( kode(l) .eq. 0 ) go to 5218
-  if ( kode(l) .gt. l ) go to 5218
+5211 if (kode(l) .eq. 0) go to 5218
+  if (kode(l).gt.l) go to 5218
   j = l
-  n5 = kode ( j )
+  n5 = kode (j)
 5214 emtpe(n5) = emtpe(j)
   j = n5
   n5 = kode(j)
-  if ( n5 .ne. l ) go to 5214
-5218 if ( l .le. kpartb ) go to 1500
+  if (n5 .ne. l) go to 5214
+5218 if (l .le. kpartb) go to 1500
   l = l - 1
   go to 5211
-1550 if ( inonl .eq. num99 )  go to 1570
-  do i=1,inonl
-     if ( nltype(i) .lt. 0 )  go to 1559
+1550 if (inonl .eq. num99) go to 1570
+  do i = 1, inonl
+     if (nltype(i) .lt. 0) go to 1559
      nn15 = nlsub(i)
      n15 = isubeg(nn15)
-     if ( n15  .le. 0 )  go to 1559
-     if ( nsubkm(n15+4) .eq. 0 ) go to 3534
-     if ( nsubkm(n15+3) .ne. i ) go to 1559
+     if (n15 .le. 0) go to 1559
+     if (nsubkm(n15 + 4) .eq. 0) go to 3534
+     if (nsubkm(n15 + 3) .ne. i) go to 1559
      !     perform simultaneous  zno  solution in  "zincox" .
-     call zincox ( nn15 )
-     if ( kill  .gt.  0 )   go to 9200
+     call zincox (nn15)
+     if (kill .gt. 0) go to 9200
      go to 1559
-3534 i1=nonlad(i)
-     i2=nonle(i)
-     k=nonlk(i)
-     l=iabs(nonlm(i))
-     a2=anonl(i)
-     n1=ilast(i)
-     vzero2=emtpe(k)-emtpe(l)
-     if ( nltype(i)  .eq.  94 )   go to 1521
-     i2=iabs(i2)
-     vzero2=     vzero2*delta2 +vnonl(i)
+3534 i1 = nonlad(i)
+     i2 = nonle(i)
+     k = nonlk(i)
+     l = iabs (nonlm(i))
+     a2 = anonl(i)
+     n1 = ilast(i)
+     vzero2 = emtpe(k) - emtpe(l)
+     if (nltype(i) .eq. 94) go to 1521
+     i2 = iabs (i2)
+     vzero2= vzero2 * delta2 + vnonl(i)
      vdiff = vzero2 - vzero(i)
      vzero(i) = vzero2
-     if (vdiff .lt. 0.0) go to 3400
-     if (vdiff .eq. 0.0) go to 1555
-     vsl = vzero2 + a2*cchar(n1)
-     h1=vsl-vchar(n1)
+     if (vdiff .lt. 0.0d0) go to 3400
+     if (vdiff .eq. 0.0d0) go to 1555
+     vsl = vzero2 + a2 * cchar(n1)
+     h1 = vsl - vchar(n1)
      go to 3800
-3100 n1=n1+1
-     if (n1.lt.i2) go to 3200
+3100 n1 = n1 + 1
+     if (n1 .lt. i2) go to 3200
      lstat(19) = 3100
 4296 kill = 35
      flstat(13) = a2
@@ -5125,38 +5124,38 @@ subroutine subts3
      bus1 = bus(k)
      bus2 = bus(l)
      go to 9200
-3200 h1=h2
-3800 vsr=vzero2+a2*cchar(n1+1)
-     h2=vsr-vchar(n1+1)
-     if (h1*h2.gt.0.) go to 3100
-3300 delti=absz(h1)*(cchar(n1+1)-cchar(n1))/(absz(h1)+absz(h2))
-     curr(i)=cchar(n1)+delti
+3200 h1 = h2
+3800 vsr = vzero2 + a2 * cchar(n1 + 1)
+     h2 = vsr - vchar(n1 + 1)
+     if (h1 * h2 .gt. 0.0d0) go to 3100
+3300 delti = absz (h1) * (cchar(n1 + 1) - cchar(n1)) / (absz (h1) + absz (h2))
+     curr(i) = cchar(n1) + delti
      go to 1555
-3500 n1=n1-1
-     if (n1.ge.i1) go to 3475
+3500 n1 = n1 - 1
+     if (n1 .ge. i1) go to 3475
      lstat(19) = 3500
      go to 4296
-3400 vsr=vzero2+a2*cchar(n1+1)
-     h2=vsr-vchar(n1+1)
+3400 vsr = vzero2 + a2 * cchar(n1 + 1)
+     h2 = vsr - vchar(n1 + 1)
      go to 3450
-3475 h2=h1
-3450 vsl=vzero2+a2*cchar(n1)
-     h1=vsl-vchar(n1)
+3475 h2 = h1
+3450 vsl = vzero2 + a2 * cchar(n1)
+     h1 = vsl - vchar(n1)
      !     if (h1*h2) 3300,3300,3500
      if ((h1 * h2) .le. 0) then
         go to 3300
      else
         go to 3500
      end if
-1555 ilast(i)=n1
+1555 ilast(i) = n1
      go to 8259
-1521 i1=iabs(i1)
-     vzero(i)=vzero2
-     if ( iprsup  .ge.  2 ) write (lunit6, 1524)  i, nonle(i), i1, i2, vnonl(i), vchar(i2+5), vzero2
-1524 format (/,  32h aep arres. at 1524 of 'subts3'., 4i10, 3e20.6 )
-     if ( vchar(i2+5)  .ne.  0.0 )   go to 1561
-     if (absz(vnonl(i)).gt.absz(vzero2)) go to 8259
-     tz1=t-deltat
+1521 i1 = iabs(i1)
+     vzero(i) = vzero2
+     if (iprsup .ge. 2) write (unit = lunit6, fmt = 1524) i, nonle(i), i1, i2, vnonl(i), vchar(i2 + 5), vzero2
+1524 format (/, " aep arres. at 1524 of 'subts3'.", 4i10, 3e20.6)
+     if (vchar(i2 + 5) .ne.  0.0d0) go to 1561
+     if (absz (vnonl(i)) .gt. absz (vzero2)) go to 8259
+     tz1 = t - deltat
      write (unit = lunit6, fmt = 1562) bus(k), bus(l), tz1
 1562 format (60x, 'arrester ', "'", a6, "'", ' to ', "'", a6, "'", '  flashover at time', e13.5, '  sec.')
 1561 vchar(i2) = vzero2
@@ -5165,16 +5164,16 @@ subroutine subts3
      end do
      call arrest (fchar(i1), vchar(i2), anonl(i), vzero2, curr(i))
      if (vchar(i2 + 5) .ne. 0.0) go to 8259
-     tz1=t-deltat
-     write (lunit6,1563) bus(k),bus(l),tz1, vchar(i1+8)
+     tz1 = t - deltat
+     write (unit = lunit6, fmt = 1563) bus(k), bus(l), tz1, vchar(i1 + 8)
 1563 format (60x, 'arrester ', "'", a6, "'", ' to ', "'", a6, "'", '   cleared  at time', e13.5, '  sec.', /, 70x, 'per unit energy dissipated =', e14.6)
-     !     next assign compensation current for non-zno  compensation
+     !     Next assign compensation current for non-zno  compensation
      !     elements.  this is used in  "subts4"  superposition.
 8259 n8 = n15 / 5 + 1
      cursub(n8) = curr(i)
      emtpf(k) = emtpf(k) - curr(i)
      emtpf(l) = emtpf(l) + curr(i)
-     if ( iprsup  .ge.  4 ) write (unit = lunit6, fmt = 8261) i, nltype(i), nn15, n8, k, l, curr(i), emtpf(k), emtpf(l)
+     if (iprsup .ge. 4) write (unit = lunit6, fmt = 8261) i, nltype(i), nn15, n8, k, l, curr(i), emtpf(k), emtpf(l)
 8261 format (' n.l. elem. current.', 6i10, 3e15.6)
   end do
 1559 continue
@@ -5202,6 +5201,7 @@ subroutine zincox (ns)
   use dekspy
   use tracom
   use movcop
+  use strcom
   implicit none
   integer(4), intent(in) :: ns
   integer(4) :: ibk, ichr, ier, ik, il, il1, ils, ind, inl, iofzni, iofznr, ist, ityp
@@ -5428,14 +5428,14 @@ subroutine zincox (ns)
   read (unit = buff77, fmt = 3719) bus1
 3719 format (a6)
   kill = 0
-  if (bus1 .ne. text1) go to 3726
+  if (to_lower (bus1) .ne. text1) go to 3726
   call spying
   go to 3711
-3726 if (bus1 .eq. text2)  go to 3415
-  if ( bus1 .eq. text3 ) call stoptp
-  if ( bus1 .ne. text4 ) go to 3752
-  write (prom80, 3731)
-3731 format ( ' Send diagnostic level iprsup (i2 format) :' )
+3726 if (to_lower (bus1) .eq. text2)  go to 3415
+  if (to_lower (bus1) .eq. text3) call stoptp
+  if (to_lower (bus1) .ne. text4) go to 3752
+  write (unit = prom80, fmt = 3731)
+3731 format (' Send diagnostic level iprsup (i2 format) :')
   call prompt
   read (unit = buff77, fmt = 3734) iprsup
 3734 format (i2)
@@ -5459,10 +5459,10 @@ subroutine zincox (ns)
      ndx3 = n13 + iofzni
      n14 = kindep(ndx3)
      n10 = (n14 - 1) * n17  +  n13
-     inl = nsubkm( m5+3 )
-     ityp = nsubkm( m5+4 )
-     ils = ilast( inl )
-     if ( ityp .eq. 1 )  go  to  41
+     inl = nsubkm(m5 + 3)
+     ityp = nsubkm(m5 + 4)
+     ils = ilast(inl)
+     if (ityp .eq. 1) go to 41
      !     process piecewise linear and time varying resistances************
      if ( ils .gt. 0 )  go to  254
      d4 = voltk( m2 )

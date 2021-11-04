@@ -9,7 +9,7 @@
 ! function indblk.
 !
 
-module over8com
+module ovr8com
   implicit none
 
 contains
@@ -34,7 +34,8 @@ contains
     use umcom
     use tracom
     implicit none
-    integer(4), intent(out) :: nodvo1(:), nodvo2(:)
+    integer(4), intent(out) :: nodvo1(:)
+    integer(4), intent(out) :: nodvo2(:)
     integer(4), intent(out) :: jcltac(:)
     integer(4), intent(in) :: jclout(:)
     integer(4), intent(out) :: jtype(:)
@@ -2454,7 +2455,7 @@ contains
     return
   end subroutine equiv
 
-end module over8com
+end module ovr8com
 
 !
 ! subroutine over8.
@@ -2469,7 +2470,8 @@ subroutine over8
   use tracom
   use veccom
   use movcop
-  use over8com
+  use savcom
+  use ovr8com
   implicit none
   ! %include  '//c/tsu/cables.ftn'
   !  dimension infdli(1)
@@ -2521,7 +2523,7 @@ subroutine over8
   if (tmax .le. 0.0 .and. nchain .gt. lastov) go to 40014
   n7 = 2
   rewind lunit2
-  call tapsav (integx(1), lunit2, iv, n7)
+  call tapsav (integx(1 :), lunit2, iv, n7)
   n12 = 0
   call vecrsv (volt(1 :), n12, n12)
   n12 = ktrlsw(7)
@@ -2564,10 +2566,10 @@ subroutine over8
 4141 do i = 1, ibr
      k = kbus(i)
      m = mbus(i)
-     l = iabs(k)
+     l = iabs (k)
      kbus(i) = norder(l)
      if( k .lt. 0 )  kbus(i) = - kbus(i)
-     l = iabs(m)
+     l = iabs (m)
      mbus(i) = norder(l)
      if( m .lt. 0 )  mbus(i) = - mbus(i)
   end do
@@ -2592,8 +2594,7 @@ subroutine over8
   end do
 3456 continue
   if (iprsup .gt. 1) write (unit = lunit6, fmt = 73825)  kpartb, ntot
-73825 format (//, ' Final renumbering maps.  kpartb= ', i5, 5x, 'ntot=', i3, /, 9x, 'i', 4x, 'bus(i)', 3x, 'norder(i)', 5x, &
-       'ich1(i)', 5x, 'kode(i)')
+73825 format (//, ' Final renumbering maps.  kpartb= ', i5, 5x, 'ntot=', i3, /, 9x, 'i', 4x, 'bus(i)', 3x, 'norder(i)', 5x, 'ich1(i)', 5x, 'kode(i)')
   if (iprsup .gt. 1) write (unit = lunit6, fmt = 73826) (i, bus(i), norder(i), ich1(i), kode(i), i = 1, ntot)
 73826 format (i10, 4x, a6, 3i12)
   if (kswtch.lt.1) go to 40017
@@ -2767,7 +2768,7 @@ subroutine over8
   !      if ( kexact .eq. 88333  .and. nsolve .eq. 0)  kbrnum = k
   if ( kodsem(k) .eq. 0  .or. im1 .eq. -2 )  go to 5136
   if ( im1 .eq. -4 )  go to 1536
-  it2 = iabs(kodebr(k))
+  it2 = iabs (kodebr(k))
   !  Formation of phase symmetric pi matrices for components reperesented
   !  by recursive convolution.  for lumped elements the steady-state modal
   !  values of the symmetric pi are stored in sconst(j+0 ... j+3).  for
@@ -2785,14 +2786,14 @@ subroutine over8
   n5 = it2 * it2
   n3 = n1 + n5
   n4 = n3 + n5
-  write (lunit6, 8001) cik(k)
+  write (unit = lunit6, fmt = 8001) cik(k)
 8001 format (//, 5x, 'sfd(', f4.0, ') ...', /)
   do i = 1, it2
      n2 = i + n1
      write (lunit6, 8002) i, (sfd(j), j=n2, n3, it2)
 8002 format (/, 2x, i5, 8(1x, e15.7), /, (7x, 8(1x, e15.7)))
      n2 = i + n3
-     write (lunit6, 8003) (sfd(j), j=n2, n4, it2)
+     write (unit = lunit6, fmt = 8003) (sfd(j), j=n2, n4, it2)
 8003 format (7x, 8(1x, e15.7))
   end do
 8004 continue
@@ -2800,7 +2801,7 @@ subroutine over8
 8005 format (///, 5x, 'qfd(', f4.0, ') ...', /)
   do i = 1, it2
      n2 = i + n1
-     write (lunit6, 8002) i, (qfd(j), j=n2, n3, it2)
+     write (unit = lunit6, fmt = 8002) i, (qfd(j), j=n2, n3, it2)
      n2 = i + n3
      write (unit = lunit6, fmt = 8003) (qfd(j), j=n2, n4, it2)
   end do
@@ -3820,7 +3821,7 @@ subroutine frqchk
   do k=1, kconst
      kpsour(k) = -kpsour(k)
   end do
-  if ( iprsup  .ge.  2 ) write (lunit6, 1482)  ( kpsour(j), j=1, kconst )
+  if (iprsup .ge. 2) write (unit = lunit6, fmt = 1482) (kpsour(j), j = 1, kconst)
   !     9200 if (kill .ne. 222) go to 9202
   if (kill .ne. 222) go to 9202
   lstat(19) = 1462
@@ -3836,7 +3837,7 @@ subroutine frqchk
   bus2 = bus4
   lstat(15) = n18
   lstat(16) = n19
-9204 if (iprsup .ge. 1) write (lunit6, 9207)
+9204 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9207)
 9207 format (' Exit "frqchk".')
   return
 end subroutine frqchk

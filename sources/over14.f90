@@ -44,7 +44,7 @@ subroutine over14
      end do
 2461 continue
   end do
-  kentnb(kswtch+1) = n6 + 1
+  kentnb(kswtch + 1) = n6 + 1
 2483 continue
   !     initialize counters for the -666 branches    *   *   *   *   *   *
   isfd = 0
@@ -64,7 +64,7 @@ subroutine over14
   anonl(i) = -1.0d0 / fltinf
 73572 k = nonlk(i)
   n1 = nonlm(i)
-  m = iabs(n1)
+  m = iabs (n1)
   n15 = k
   if (n15 .eq. 1) n15 = m
   n16 = iabs (kssfrq(n15))
@@ -81,15 +81,15 @@ subroutine over14
 73584 if (nltype(i) .ne. -98) go to 73574
   nonle(i) = -nonle(i)
   j0 = nonlad(i)
-  anonl(i) = gslope(j0) * ( d1/delta2 - d2 )
+  anonl(i) = gslope(j0) * (d1 / delta2 - d2)
 73585 k = nonlk(i)
-  m = iabs( nonlm(i) )
+  m = iabs (nonlm(i))
   finit(m) = finit(m) + anonl(i)
   finit(k) = finit(k) - anonl(i)
   if (iprsup .gt. 0) write (unit = lunit6, fmt = 594) i, k, m, j0, (finit(j), j = 1, ntot)
 594 format (/, ' finit(j), j=1, ntot at 594 of main14.   ', 4i10, /, (1x, 5e25.15))
 73574 i = i - 1
-73577 if ( i .gt. 0 )  go to 73571
+73577 if (i .gt. 0) go to 73571
   if (inonl .gt. 0  .and. iprsup .gt. 0) write (unit = lunit6, fmt = 73578) (i, nonlk(i), nonlm(i), nltype(i), nonlad(i), nonle(i), ilast(i), vnonl(i), curr(i), anonl(i), vzero(i), i = 1, inonl)
 73578 format (/,  ' Nonlinear-element table before  (y)  formation, in over14.', /, 7x, 'row', 5x, 'nonlk', 5x, 'nonlm', 4x, 'nltype', 4x, 'nonlad', 5x, 'nonle', 5x, 'ilast', 10x, 'vnonl', 11x, 'curr', 10x, 'anonl', 10x, 'vzero', /, (7i10, 4e15.5))
   call last14

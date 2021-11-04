@@ -1535,6 +1535,7 @@ program vardim
            write (unit = lunit(2), fmt = 4192)
 4192       format ('subroutine main10')
            call make_implicit_statement (unit = lunit(2), mode = 0)
+           call make_implicit_statement (unit = lunit(4), mode = 0)
            do ii = 1, 126
               i = 0 + ii
               n3 = modvars(i)%dimension

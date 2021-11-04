@@ -210,15 +210,18 @@ subroutine over2
   nrecur = 0
   model = 0
   if (lastov .eq. 4) go to 100
-  do i = 1, lfsem
-     sconst(i) = 0.0
-  end do
-  do i = 1, lbrnch
-     imodel(i) = 0
-  end do
-  do i = 1, lbrnch
-     litype(i) = 0
-  end do
+  ! do i = 1, lfsem
+  !    sconst(i) = 0.0d0
+  ! end do
+  ! do i = 1, lbrnch
+  !    imodel(i) = 0
+  ! end do
+  ! do i = 1, lbrnch
+  !    litype(i) = 0
+  ! end do
+  call move0 (sconst(1 :), lfsem)
+  call move0 (imodel(1 :), lbrnch)
+  call move0 (litype(1 :), lbrnch)
   iaddrs = 1
 100 it2 = it + 2
   if (kill .gt. 0) go to 9200

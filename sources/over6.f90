@@ -16,6 +16,7 @@ subroutine over6
   use indcom
   use movcop
   use veccom
+  use savcom
   implicit none
   character(8) :: buff(20)
   integer(4) :: i, icas, il, ipass, ir, isubs1
@@ -103,7 +104,7 @@ subroutine over6
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 55414) kburro, iv, last
 55414 format (/, ' In "over6", kburro =', i3, ' .   Compute iv, last =', 2i8)
   rewind lunit2
-  call tapsav (integx(1), lunit2, iv, n11)
+  call tapsav (integx(1 :), lunit2, iv, n11)
   n17 = 0
   call vecrsv (volt, n17, n17)
   call vecrsv (emtpc, it, n11)

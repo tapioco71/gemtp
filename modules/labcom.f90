@@ -6,6 +6,7 @@
 
 module labcom
   use blkcom
+  implicit none
   real(8) :: x(   10000)
   real(8) :: ykm(   20000)
   integer(4) :: km(   20000)

@@ -4,7 +4,7 @@
 ! file over13.f90
 !
 
-module over13mod
+module ovr13mod
   implicit none
 
 contains
@@ -110,14 +110,14 @@ contains
 110 continue
   end function funp13
 
-end module over13mod
+end module ovr13mod
 
 !
 ! subroutine over13.
 !
 
 subroutine over13
-  use over13mod
+  use ovr13mod
   use fdqlcl
   use blkcom
   use labcom
@@ -224,14 +224,14 @@ subroutine over13
      go to 2025
 2024 nr(i) = lpast + kv
      it2 = length(i)
-     phs2 = it2 * it2
-     do j = 1, phs2
+     nphs2 = it2 * it2
+     do j = 1, nphs2
         jpl = jpl + wk1(koff20 + kv)
         kv = kv + 1
      end do
 2022 continue
      go to 2023
-2025 nr(i) = lpast + 2*jpl + 1
+2025 nr(i) = lpast + 2 * jpl + 1
   end do
 2023 continue
 4202 continue
@@ -2900,11 +2900,20 @@ subroutine last13
   case (14340)
      go to 14340
 
+  case (14390)
+     go to 14390
+
   case (14470)
      go to 14470
 
+  case (14520)
+     go to 14520
+
   case (14580)
      go to 14580
+
+  case (14630)
+     go to 14630
   end select
   ! Semlyen exponential convolution initialization
 14800 n10 = 4
