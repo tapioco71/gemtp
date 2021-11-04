@@ -45,7 +45,8 @@ subroutine over7
      ndx1 = lswtch + i
      write (unit = lunit6, fmt = 4055) i, kolum(n1), korder(n2), kownt(i), loc(i), kode(i), kbus(i), mbus(i), nr(i), length(i), kmswit(i), kmswit(ndx1)
 4055 format (12i8)
-4057 end do
+  end do
+4057 continue
 4054 ioffd = 0
   td = 0.0d0
   zzza = 0.0d0
@@ -110,7 +111,8 @@ subroutine over7
      n2 = ii + iofkor
      write (unit = lunit6, fmt = 4064) ii, kolum(n1), korder(n2), kownt(ii), loc(ii), ich1(ii), ich2(ii), ndex(ii)
 4064 format (22x, 8i8)
-4066 end do
+  end do
+4066 continue
 222 j = ich1(i)
   call subscr (i, lbus, 222, 1)
   ndex(ncn+1) = j
@@ -132,7 +134,8 @@ subroutine over7
      n2 = i + iofkor
      if (iprsup  .ge.  3) write (unit = lunit6, fmt = 5233) i, norder(i), index(i), iloc(i), lorder(i), kownt(i), loc(i), kolum(n1), korder(n2)
 5233 format (50x, 9i8)
-5235 end do
+  end do
+5235 continue
   if (ioffd .le. 0) go to 233
   do i = 1, ioffd
      call subscr (i, lsiz23, 5235, 1)
@@ -162,7 +165,8 @@ subroutine over7
      call subscr (j, lsiz23, 235, 1)
      j = korder(isubs1)
      go to 234
-236 end do
+  end do
+236 continue
 5236 index(ntot + 1) = ioffd + 1
   jsub = ntot + 1
   call subscr (jsub, lbus, 5236, 1)
@@ -180,7 +184,8 @@ subroutine over7
 6045 format (' Note ---- The preceding printout shows that ground was not renumbered first in the transient-network renumbering.', /, 11x, 'We will swap the new numbers between ground and whatever node was renumbered first, in order to get a legitimate', /, 11x, 'numbering for the rest of the emtp calculations.')
   do i = 1, ntot
      if (norder(i) .eq. 1) go to 32
-26 end do
+  end do
+26 continue
   call stoptp
 32 norder(i) = norder(1)
   norder(1) = 1
@@ -201,13 +206,15 @@ subroutine over7
         ! alter renumbering map to produce this, if  tstart  .eq.  -9988.
         if (tstart(l) .ne. -9988.) go to 6051
         if (node(l) .eq. k) go to 73775
-6051 end do
+     end do
+6051 continue
 2318 n1 = n1 + 1
      norder(n1) = k
      go to 73780
 73775 j = j + 1
      ich1(j) = k
-73780 end do
+  end do
+73780 continue
   kpartb = j
   if (n1 .le. 0) go to 73820
   do i = 1, n1
@@ -740,8 +747,9 @@ subroutine over7
      if ( norder(i)  .gt.  0 )   go to 2236
      nelim = nelim + 1
      norder(i) = nelim
-2236 end do
-  write (lunit6, 2240)
+  end do
+2236 continue
+  write (unit = lunit6, fmt = 2240)
 2240 format (/, ' Anyway, the EMTP will try to continue with execution of this data case, as best it can.   Nodes which were', /, ' not renumbered before the overflow limit was reached will now simply be renumbered in their original relative', /, ' order, without regard to sparsity considerations.   Recall that the original node order comes from the order of data', /, ' input (the order in which node names are encountered, as the EMTP data cards are read).')
   write (lunit6, 2241)  ( norder(i), i=1, ntot )
 2241 format (' The final renumbering map   (norder(i), i = 1, ntot) will then appear as follows ....', /, (1x, 20i6))

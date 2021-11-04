@@ -175,7 +175,6 @@ subroutine over41
   use tracom
   use strcom
   implicit none
-  character(1) :: alower(20)
   character(8) :: text1(3), text2(3), text3(3), t1, t2, t3
   character(8) :: text6, text7(3), text8(3), text9
   character(8) :: text10, text11, text12, typec(20)

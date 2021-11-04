@@ -4039,7 +4039,8 @@ subroutine over3
      write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
      istart = istart + 9
      if (idumy .gt. 9) go to 76633
-76632 end do
+  end do
+76632 continue
 76630 continue
   call cxred (caslnr, caslnx, npos2 + nredct, npos2)
   if (iprsup .lt. 9) go to 76650
@@ -4057,7 +4058,8 @@ subroutine over3
      write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
      istart = istart + 9
      if (idumy .gt. 9) go to 76659
-76656 end do
+  end do
+76656 continue
 76650 continue
   istart = locatn (npos2, npos2) + 1
   iend = locatn (npos3, npos3)
@@ -4172,7 +4174,8 @@ subroutine over3
      caslnx(nnpos) = caslnx(nnpos) + yshunx
      node1(jbr) = -node1(jbr)
      node2(jbr) = -node2(jbr)
-76451 end do
+  end do
+76451 continue
   nredct=0
   do i = 1, nphcas
      npos = locatn (npos2 + i - 1, npos2 + i - 1)
@@ -4186,7 +4189,8 @@ subroutine over3
      lstat(12) = -i
      go to 9200
 6470 nredct = nredct + 1
-76461 end do
+  end do
+76461 continue
   if (iprsup .lt. 9) go to 76640
   write (unit = lunit6, fmt = 76605)
   write (unit = lunit6, fmt = 76634)
@@ -4202,7 +4206,8 @@ subroutine over3
      write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
      istart = istart + 9
      if (idumy .gt. 9) go to 76638
-76636 end do
+  end do
+76636 continue
 76640 continue
   call cxred (caslnr, caslnx, npos2 + nredct, npos2)
   if (iprsup .lt. 9) go to 76651
@@ -4220,7 +4225,8 @@ subroutine over3
      write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
      istart = istart + 9
      if (idumy .gt. 9) go to 76660
-76657 end do
+  end do
+76657 continue
 76651 continue
   istart = locatn(npos2, npos2) + 1
   iend = locatn(npos3, npos3)
@@ -4281,7 +4287,8 @@ subroutine over3
      write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
      istart = istart + 9
      if (idumy .gt. 9) go to 76639
-76637 end do
+  end do
+76637 continue
 76641 continue
   call cxred (caslnr, caslnx, npos3, npos2)
   if (iprsup .lt. 9) go to 76652
@@ -4299,7 +4306,8 @@ subroutine over3
      write (unit = lunit6, fmt = 76604) (caslnx(ii), ii = istart, iend)
      istart = istart + 9
      if (idumy .gt. 9) go to 76661
-76658 end do
+  end do
+76658 continue
 76652 continue
   istart = locatn (npos2, npos2) + 1
   iend = locatn (npos3, npos3)
@@ -4338,7 +4346,8 @@ subroutine over3
 76604 format (1x, 9e13.5)
      istart = istart + 9
      if (idumy .gt. 9) go to 76603
-76602 end do
+  end do
+76602 continue
 100 lastov = nchain
   nchain = 2
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)

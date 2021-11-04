@@ -471,7 +471,8 @@ subroutine over13
 4463 if (k .gt. 0) go to 7005
   do k = 2, ntot
      if (bus(k).eq.bus1) go to 552
-551 end do
+  end do
+551 continue
   kill = 31
   lstat(19) = 551
   go to 9200
@@ -680,7 +681,8 @@ subroutine over13
   go to 544
 7361 do i = n1, n2
      if (cchar(i) .gt. ci1) go to 574
-573 end do
+  end do
+573 continue
   kill = 34
   lstat(19) = 573
   flstat(16) = ci1
@@ -768,7 +770,8 @@ subroutine over13
      if (iprsup .gt. 0) write (unit = lunit6, fmt = 5333) i, sconst(nn5), sconst(n6), nn5, n6
 5333 format (9x, i5, 1x, 2e14.5, 1x, 1x, i6, 1x, i6)
      ivbr = ivbr + 1
-1003 end do
+  end do
+1003 continue
   ! single phase and constant q
   ! evaluate im' = q**-1 * im
   ! ik' = q**-1 * ik
@@ -1318,7 +1321,8 @@ subroutine over13
 4334    format (1x, i3, 2x, i3, 6e16.7, /, 9x, 6e16.7)
         if (jkl .eq. 1) go to 1028
 5486    jkl = 0
-1028 end do
+     end do
+1028 continue
      wk1(koff3 + ka) = sumkr
      wk1(koff4 + ka) = summr
      ka = ka + 1

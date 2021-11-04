@@ -1367,8 +1367,18 @@ program vardim
   modvars(235)%kind = 1
   modvars(235)%dimension = 40
 
+  modvars(236)%name = 'cmi'
+  modvars(236)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(236)%kind = 1
+  modvars(236)%dimension = 1
+
+  modvars(237)%name = 'cmr'
+  modvars(237)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(237)%kind = 1
+  modvars(237)%dimension = 1
+
   !
-  modvarc = 35
+  modvarc = 37
   !
   open (unit = lunit(2), iostat = ios, form = 'formatted')
   if (ios .eq. 0) then
@@ -1580,6 +1590,8 @@ program vardim
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'volt', dim1 = 1, varname2 = modvars(233)%name, dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'volti', dim1 = 1, varname2 = 'ur', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'voltk', dim1 = 1, varname2 = 'ui', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'kks', dim1 = 1, varname2 = 'cmr', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'kknonl', dim1 = 1, varname2 = 'cmi', dim2 = 1)
            write (unit = lunit(4), fmt = 7245)
 7245       format ('end module labcom')
            write (unit = lunit(4), fmt = "(/, '!', /, '! end of file labcom.f90', /, '!', /)")

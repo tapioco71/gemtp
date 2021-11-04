@@ -62,7 +62,8 @@ subroutine over10
      iloc(ic) = ib
      ib = iloc(ia)
      go to 3005
-3009 end do
+  end do
+3009 continue
   n1 = 1 + iofgnd
   n2 = 1 + iofbnd
   call move0 (gnd(n1 :), ioffd)
@@ -517,9 +518,9 @@ subroutine over10
         end do
 43420   istart = index(nrow2)
         istop = index(nrow2 + 1) - 1
-        do 43410 iy = istart, istop
+        do iy = istart, istop
            if (nrow1 .eq. iloc(iy)) go to 43404
-43410   end do
+        end do
 43404   nnpos = locatn (ix, ixx) + locy11
         isubs1 = iofgnd + iy
         gnd(isubs1) = gnd(isubs1) + tr(nnpos)
@@ -578,7 +579,8 @@ subroutine over10
         isubs1 = iofbnd + iy
         bnd(isubs1) = bnd(isubs1) + tx(nnpos)
      end do
-43407 end do
+  end do
+43407 continue
   i = i + nphcas
 3490 if (i .le. ibr) go to 3080
   !
@@ -622,7 +624,8 @@ subroutine over10
      kode(il) = in
      j = il
      if (j .ne. i) go to 4530
-4570 end do
+  end do
+4570 continue
   do i = 1, ntot
      j = kode(i)
      if (j .ge. i) go to 4820
@@ -665,7 +668,8 @@ subroutine over10
         j = l
      end do
      kode(j) = itemp(1)
-4820 end do
+  end do
+4820 continue
   call move0 (solr(1 :), n14)
   call move0 (soli(1 :), n14)
   if (numsub .le. 0) go to 4905
@@ -700,7 +704,8 @@ subroutine over10
      if (l .ge. n7) go to 4892
      n1 = n1 + ntot
      go to 4863
-4892 end do
+  end do
+4892 continue
 4905 n1 = 2 * lbus
   if (kconst .eq. 0) go to 4977
   do i = 1, kconst
@@ -727,7 +732,8 @@ subroutine over10
      soli(k) = soli(j)
      k = kode(k)
      go to 4979
-4976 end do
+  end do
+4976 continue
 4977 nl = 0
 4972 n12 = nl + 1
   n13 = nl + ntot
@@ -1038,8 +1044,10 @@ subroutine fxsour
      do ixx = 1, kconst
         if (iabs(node(ixx)) .ne. i) go to 1039
         if (crest(ixx) .ne. 0) fxtem6(mm) = 1.0 / crest(ixx)
-1039 end do
-1030 end do
+     end do
+1039 continue
+  end do
+1030 continue
   call move (solr(1 :), solrsv(1 :), n14)
   call move (soli(1 :), solisv(1 :), n14)
   go to 3466
@@ -1123,7 +1131,8 @@ subroutine fxsour
         qsum = qsum + fxtem3(k)
         nekn1 = nekn1 + 1
         if (nekn1 .eq. 3) go to 7272
-7030 end do
+     end do
+7030 continue
      if (nekn1 .ne. 0) go to 7272
      write (unit = lunit6, fmt = 7032) i
 7032 format (' Error in table, node name on fix source card does not fit any node name on source cards', /, ' fix source number', i4, ' will be ignored')
@@ -1229,7 +1238,8 @@ subroutine fxsour
 7777    if (iprsup .ge. 4) write (unit = lunit6, fmt = 8800) fxtem1(mm), solr(nekn4), soli(nekn4), solrsv(nekn4), solisv(nekn4)
 8800    format (' busname, solr(nekn4), soli(nekn4)', a6, 2e16.6, '   the new value is ',  2e16.6)
      end do
-7010 end do
+  end do
+7010 continue
   if (nekstp .eq. 1) go to 2121
   if (nflknt .gt. 0) go to 2222
 2121 write (unit = lunit6, fmt = 3333) (vdiff(k), k = 1, npp)
@@ -1293,7 +1303,8 @@ subroutine fxsour
 3500    format (1x, i5, i6, 1x, a6, e17.6, f11.4, e18.6, e17.6)
         go to 3000
 3739    write (unit = lunit6, fmt = 3500) nfix, i, bus(i), crest(nfix), fxtem4(j)
-3000 end do
+     end do
+3000 continue
      go to (2345, 3456, 3300), n
 2345 bus1 = fixbu2(m)
      n = 2
@@ -1301,7 +1312,8 @@ subroutine fxsour
 3456 bus1 = fixbu3(m)
      n = 3
      go to 1199
-3300 end do
+  end do
+3300 continue
   if (iprsup .le. 0) go to 9000
   call runtym (cc1, cc2)
   write (unit = lunit6, fmt = 8484) cc1, cc2

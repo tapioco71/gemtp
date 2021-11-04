@@ -172,7 +172,7 @@ subroutine over12
   integer(4) :: ns1, ns2, nwww
   real(8) :: a, akey(1), az, azi, azr
   real(8) :: bias, bias2, bnrz
-  real(8) :: cj, cmi, cmr, cz
+  real(8) :: cj, cz
   real(8) :: d1, d2, d22, d7, d8, d9, d14, d18
   real(8) :: d0sum, dblpr1, dblpr2, dblpr3, dblpr4, dj, dum9, eh, ej, esum
   real(8) :: fac1, fac2, fac3, fac4, fac5, fsigma
@@ -185,8 +185,9 @@ subroutine over12
   real(8) :: xd, xll, xn, xq
   real(8) :: y05, yll, yx
   real(8) :: zerofl
-  dimension cmi(1), cmr(1)
-  !  equivalence (kks(1), cmr(1)), (kknonl(1), cmi(1))
+  !  dimension cmi(1), cmr(1)
+  !  equivalence (kks(1), cmr(1))
+  !  equivalence (kknonl(1), cmi(1))
   !  equivalence (moncar(1), knt), (moncar(2), kbase)
   !  equivalence (moncar(3), ltdelt), (moncar(4), isw)
   !  equivalence (moncar(5), idist), (moncar(6),itest)
@@ -1396,7 +1397,8 @@ subroutine  tacs2
      xtcs(ndx1+4) = ud1(ndy5+3)
      xtcs(ndx1+5) = twopi * ud1( ndy5 + 3 )
      go to 6224
-6223 end do
+  end do
+6223 continue
   !                                               $$$  steady - state  $$$
 6224 d1tttt = t
   n1tttt = istep
@@ -1480,7 +1482,8 @@ subroutine  tacs2
      !     parsup(ndx1+1) = parsup(ndx2+1) + f1 * parsup(ndx1+1)
      parsup(ndx1 + 1) = int(parsup(ndx2 + 1) + f1 * parsup(ndx1 + 1))
      go to 4072
-215 end do
+  end do
+215 continue
   !     ******  t a c s   s o u r c e s   90  and  91  ******
   if ( iprsup  .ge.  1 ) write (lunit6, 6523)  ( vstacs(i), i=1, nstacs )
 6523 format ( /,  40h (vstacs(i), i=1, nstacs)  in  'tacs2' .   ,/, ( 1x, 10e13.4 ) )
@@ -1607,8 +1610,9 @@ subroutine  tacs2
 4414 format ( 8h  pd    , 8e15.6 )
      n2 = n2 - 6
      write ( lunit6, 4416 ) ( parsup(n+2), n = n1, n2, 6 )
-4416 format( 8h  hst   , 8e15.6 )
-238 end do
+4416 format ('  hst   ', 8e15.6)
+  end do
+238 continue
 271 kxic = kivarb
   if ( nsup  .eq.  0 )  go to 2222
   do i = 1, nsup
@@ -1626,10 +1630,11 @@ subroutine  tacs2
      end do
      n = kxtcs + nuk + i + lstat(64)
      xtcs(n) = sqrtz( b * parsup(nn) )
-2121 end do
-2222 if ( iprsup .lt. 1  .and.  kssout .eq. 0 ) go to 2566
-  write ( lunit6, 4949 )
-4949 format( /, 42h tacs dc steady-state solution follows ...,/,  5( 3x,  6h-name-,   11x, 5hvalue  )  )
+  end do
+2121 continue
+2222 if (iprsup .lt. 1 .and. kssout .eq. 0) go to 2566
+  write (unit = lunit6, fmt = 4949)
+4949 format (/, ' TACS dc steady-state solution follows ...', /, 5(3x, '-name-', 11x, 'value')  )
   mtot = ioutcs
   if ( kssout .eq. 1 )  mtot = ktab
   j1 = nuk + niu
@@ -1647,8 +1652,9 @@ subroutine  tacs2
      write (lunit6, 4737) (texnam(ip), volti(ip), ip=1, n14)
 4737 format( 5( 3x, a6, e16.7 ) )
      n14 = 0
-4848 end do
-  if ( n14 .gt. 0 ) write (lunit6, 4737) (texnam(ip), volti(ip), ip=1, n14)
+  end do
+4848 continue
+  if ( n14 .gt. 0 ) write (unit = lunit6, fmt = 4737) (texnam(ip), volti(ip), ip=1, n14)
 2566 if ( lastov  .gt.  1 )   go to 256
   n = 9
   if ( ioutcs .lt. 9 )  n = ioutcs
@@ -1720,9 +1726,10 @@ subroutine  tacs2
            awkcs(ndx1) = -rsblk(nuks+1) * ksus(ndx3)
         end do
         go to 221
-222  end do
-221  if ( iprsup  .ge.  4 ) write (lunit6, 2021) i, (j, awkcs(kawkcs+j), j=1, ktab)
-2021 format ( 5h0row , i3, (1x, 6(i3, 2h: , e13.6,2x) ) )
+     end do
+222  continue
+221  if (iprsup .ge. 4) write (unit = lunit6, fmt = 2021) i, (j, awkcs(kawkcs + j), j = 1, ktab)
+2021 format ('0row ', i3, (1x, 6(i3, ': ', e13.6,2x)))
      !                                    $$$  triangularize  each  row  $$$
      d1 = awkcs( kawkcs + i )
      if ( d1  .eq.  0.0 )   go to 7261
@@ -1750,7 +1757,8 @@ subroutine  tacs2
         ndx4 = katcs  + k1
         awkcs(ndx1) = awkcs(ndx1)  -  awkcs(ndx3)*atcs(ndx4)
         go to 263
-262  end do
+     end do
+262  continue
 261  ndx1 = kawkcs + i
      d2 = awkcs(ndx1)
      if ( absz(d2/d1)   .gt.   epsiln )   go to 265
@@ -1784,8 +1792,10 @@ subroutine  tacs2
         jlk = isblk( kisblk + j * 8 )
         if ( j .le. i  .and.  jlk .ne. 0 )   go to 268
         atcs(ndx1) = atcs(ndx1) * awkcs(ndx3)
-268  end do
-260 end do
+     end do
+268  continue
+  end do
+260 continue
   if (iprsup .le. 1) go to 250
   write (unit = lunit6, fmt = 2023) ia, (isblk(kisblk + n * 8), n = 1, nuk)
 2023 format ('0', /, ' ia=', i4, 8x, 'next is irowcs(1,2,...,nuk)/(1x,30i4)')
@@ -1822,7 +1832,8 @@ subroutine  tacs2
 662  parsup(nn + 2) = xtcs(kxtcs + j)
      go to  5051
 664  parsup(nn) = xtcs(kxtcs + j)
-5051 end do
+  end do
+5051 continue
 25050 if ( idctcs .eq. 1 )  go to 6513
   if ( ntcsex+nstacs  .le.  0 )   go to 6513
   t = d1tttt
@@ -1870,11 +1881,13 @@ subroutine  tacs2
         bb = bb * xtcs( kxtcs + ksus(m) )
         go to 1144
 1155    b = b + bb
-1166 end do
+     end do
+1166 continue
      parsup(nn+3) = 1.0 / b
      ndx1 = kxtcs + nuk + lstat(64) + i
      xtcs(ndx1) = 1.0
-5457 end do
+  end do
+5457 continue
   go to 9000
 6513 continue
   if (niu .lt. niunrs) go to 505
@@ -1938,7 +1951,8 @@ subroutine  tacs2
      go to 512
 513  xtcs(ndxi) = xtcs(ndxi) * (t - ud1(ndy5+4)) / ud1(ndy5+3)
      if ( absz(xtcs(ndxi)) .le. 10.*flzero ) xtcs(ndxi) = 0.0
-500 end do
+  end do
+500 continue
 505 l = iuty( kiuty + 4 )
   if ( t  .gt.  0.0 ) go to 5555
   !555 if ( l  .gt.  0 ) call csupdc(l)
@@ -2053,7 +2067,8 @@ subroutine  tacs2
      if ( defr .gt. critia ) ipass = 1
      go to 3088
 3077 if ( l  .gt.  0 )  call csup(l)
-3088 end do
+  end do
+3088 continue
   if ( ipass .eq. 1 .and. iuty(kiuty+9) .eq. 1 ) go to 505
   !                                                       $$$  output  $$$
 3177 if ( t.eq.0.0  .and.  iac.eq.1 )  go to 4066
@@ -2080,7 +2095,8 @@ subroutine  tacs2
      n7 = n7 + 1
      if (n7 .eq. n5+n6) n7 = n5
      ivarb(n1+4) = n7
-1010 end do
+  end do
+1010 continue
   if ( ioutcs  .eq.  0 )   go to 310
   if ( t .gt. deltat )  go to 335
   if ( t .gt. 0.0 ) go to 3335
@@ -2119,7 +2135,8 @@ subroutine  tacs2
      xar(ndx2) = atcs(ndx1)
      ndx4 = kawkcs + i
 3333 awkcs(ndx4) = t
-318 end do
+  end do
+318 continue
 3318 if ( istep  .lt.  limstp )   go to 4321
   isprin = 0
   iout = multpr(indstp)
@@ -2220,7 +2237,8 @@ subroutine  tacs2
            ma4 = i2
         end do
         go to 2345
-3456 end do
+     end do
+3456 continue
 2345 pru = 0.0
      do m=j,k
         n = ksus( kalksu + m )
@@ -2230,7 +2248,8 @@ subroutine  tacs2
            if ( ivarb(i3) .ne. n1 ) go to 6789
            n = n + lstat(68)
            go to 5678
-6789    end do
+        end do
+6789    continue
 5678    ndx1 = kxtcs  + n
         ndx2 = kksus  + m
         pru = pru + xtcs(ndx1) * ksus(ndx2)
@@ -2258,8 +2277,9 @@ subroutine  tacs2
      parsup(n) = (parsup(n+2)*pru-parsup(n+3)*prx+parsup(n+6))/2.0
      go to 2840
 311  if ( iprsup  .ge.  4 )  write ( lunit6, 2020 ) i, ( parsup(n+4), n = jcm, j, 6 )
-2020 format( 10h  function , i5, 6h  hst , 7e14.6 )
-3111 end do
+2020 format ('  function ', i5, '  hst ', 7e14.6)
+  end do
+3111 continue
   ndx1 = kxtcs + nuk + lstat(64) + 1
   ndx2 = ndx1 + lstat(68)
   call move (xtcs(ndx1 :), xtcs(ndx2 :), nsup)
@@ -2344,8 +2364,10 @@ subroutine  tacs2
 13000      n1 = 1
            xar(ndx3) = xar(ndx3)  +  parsup(k) * d1
            xar(ndx4) = xar(ndx4)  +  parsup(k+1) * d1
-3332    end do
-3002 end do
+        end do
+3332    continue
+     end do
+3002 continue
      if ( iprsup  .le.  1 )   go to 3004
      write (lunit6, 1372)  nuk, ( i, isblk(nuki+3),isblk(nuki+2),xar(kxar+i), xar(kxai+i),xar(kxar+nuk+i), xar(kxai+nuk+i), i = 1,  nuk )
 1372 format ( /, 46h 'tacs2' tables before ac steady-state.  nuk =,i4, /, 1x, 24h     row    kfst     kni, 10x, 5hxar-1, 10x, &
@@ -2402,7 +2424,8 @@ subroutine  tacs2
               awkcs(ndx1) = 0.0
            end do
            go to 3221
-3222    end do
+        end do
+3222    continue
 3221    if ( iprsup  .ge.  2 ) write (lunit6, 43219)  i, j, ia, ktab, nuk, j1, k1
 43219   format (/, ' at 43219', '       i       j      ia    ktab       nuk      j1      k1   ',/, 9x, 7i8)
         if ( iprsup  .ge.  2 ) write (lunit6, 2022) i, (j, awkcs(kawkcs+j), awkcs(kbwkcs+j),j = 1, ktab )
@@ -2444,7 +2467,8 @@ subroutine  tacs2
            ndx1 = kcolcs + k1
            j = icolcs(ndx1)
            go to 3264
-3262    end do
+        end do
+3262    continue
 3261    ndx1 = kawkcs + i
         ndx2 = kbwkcs + i
         d2 = awkcs(ndx1)**2  +  awkcs(ndx2)**2
@@ -2538,7 +2562,8 @@ subroutine  tacs2
         xar(ndx2) = d1 * sinz (d2)
 3030    if (iprsup .ge. 1)  write (unit = lunit6, fmt = 13001) i, j, idctcs, niu, xar(ndx3), xar(ndx2)
 13001   format (1x, 4i8, 2e15.6)
-3020 end do
+     end do
+3020 continue
      if (iprsup .ge. 1) write (unit = lunit6, fmt = 13020) (xar(kxar + i), xar(kxai + i), i = 1, ktab)
 13020 format (/, ' (xar(i), xai(i), i=1, ktab)', /, (1x, 8e16.6))
 3412 ite = ite + 1
@@ -2589,7 +2614,8 @@ subroutine  tacs2
         if ( critia .lt. epslon ) critia = epslon
         if ( defr .le. critia .and. defi .le. critia ) go to 7224
         ipass = 1
-7224 end do
+     end do
+7224 continue
      if ( ipass .eq. 1 .and. iuty(kiuty+9) .eq. 1 ) go to 3412
 3618 if ( iprsup .lt. 1  .and.  kssout .eq. 0 ) go to 2389
      write ( lunit6, 1357 ) freqhz
@@ -2611,7 +2637,8 @@ subroutine  tacs2
         if ( amax .gt. 0.0 ) angl = picon * atan2z( rima, real )
         write (lunit6, 2489) texvec(i1), real, rima, amax, angl
 2489    format ( 2x, a6, 3e16.6, f16.6 )
-2378 end do
+     end do
+2378 continue
 2389 ndx1 = kxtcs + lstat(68)
      do i = 1, ktab
         ndx2 = ndx1 + i
@@ -2681,7 +2708,8 @@ subroutine  tacs2
 33033      format ( 57x, 2e20.6 )
 3034       parsup(ndy1-1) = parsup(ndy1-1) + atcs(ndx1)
         end do
-3032 end do
+     end do
+3032 continue
      if ( nsup .eq. 0 )  go to 8888
      do i=1, nsup
         n1 = - insup( kjsup + i )
@@ -2711,7 +2739,8 @@ subroutine  tacs2
            !7039       parsup(ndx1) = parsup(ndx1) + br*cosz(a*j) + bi*sinz(a*j)
            parsup(ndx1) = parsup(ndx1) + br * cosz(a * j) + bi * sinz(a * j)
         end do
-7037 end do
+     end do
+7037 continue
 8888 ite = 0
   end do
   mdy5 = kud1 - 5
@@ -2738,8 +2767,9 @@ subroutine  tacs2
         ndy1 = ndy1 + 6
      end do
      if ( iprsup .gt. 2 ) write ( lunit6, 6890 ) j, ( parsup(n), n = ndy0, ndy1, 6 )
-6890 format ( 11h  function , i5, 6h  hst , 7e14.6  )
-6678 end do
+6890 format ('  function ', i5, '  hst ', 7e14.6)
+  end do
+6678 continue
   nukr = krsblk - 4
   do i=1, nuk
      nukr = nukr + 4
@@ -2750,7 +2780,8 @@ subroutine  tacs2
      iuty(kiuty+3) = iuty(kiuty+3) - 1
      if ( noutpr  .eq.  0 ) write ( lunit6, 3040 ) texvec(ndx1)
 3040 format( 26h0warning.  tacs variable ', a6,  76h' is allowed to operate outside its limits during the steady-state solution. /1x)
-3035 end do
+  end do
+3035 continue
   go to 317
 9000 if ( iprsup  .ge.  1 ) write (lunit6, 6518)   istep, nchain, ioutcs, t
 6518 format ( /,  16h exit  'tacs2' ., 24h   istep  nchain  ioutcs,  14x,  1ht  ,/, &
@@ -2799,7 +2830,8 @@ subroutine csupdc (l)
 2014 n1 = -n1
      write (unit = lunit6, fmt = 2022) n1, ivarb(n1), ivarb(n1 + 1), ivarb(n1 + 2), ivarb(n1 + 3), ivarb(n1 + 4)
 2022 format (i8, 24x, 5i8)
-2034 end do
+  end do
+2034 continue
   if (kpar .ne. 0) write (unit = lunit6, fmt = 1004) (i, parsup(i + kprsup), i = 1, kpar)
 1004 format ('0e', 5x, 'parsup ...', /, (' e ', 5(i3, 1x, e15.6, 3x)))
 1000 nnn = kxtcs + nuk + lstat(64)

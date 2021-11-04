@@ -59,14 +59,16 @@ subroutine over9
      do k = 1, kconst
         k1 = iabs (node(k))
         if (bus(k1) .eq. texvec(1)) go to 3131
-1016 end do
+     end do
+1016 continue
      n1 = 1
      kconst = kconst + 1
      crest(kconst) = (fixbu7(i) + fixbu9(i)) * 0.5d0
      time1(kconst) = (fixbu4(i) + fixbu6(i)) * twopi / 720.0d0
 1911 do j = 2, ntot
         if (bus(j) .eq. texvec(1)) go to 5757
-4949 end do
+     end do
+4949 continue
      kill = 500
      go to 9999
 5757 node(kconst) = j
@@ -91,7 +93,8 @@ subroutine over9
      do k = 1, kconst
         k1 = iabs (node(k))
         if (bus(k1) .eq. fixbu2(i)) go to 3333
-1036 end do
+     end do
+1036 continue
      n1 = 2
      kconst = kconst + 1
      crest(kconst) = crest(kconst - 1)
@@ -102,19 +105,22 @@ subroutine over9
      do k = 1, kconst
         k1 = iabs (node(k))
         if (bus(k1) .eq. fixbu3(i)) go to 3535
-1056 end do
+     end do
+1056 continue
      n1 = 3
      kconst = kconst + 1
      crest(kconst) = crest(kconst-1)
      time1(kconst) = time1(kconst-1) - twopi / 3.0d0
      go to 1911
-3535 end do
+  end do
+3535 continue
 1024 if (kconst .eq. 0) go to 1034
   do i = 1, kconst
      if (iabs (iform(i)) .ne. 14) go to 1030
      if (tstart(i) .ge. 0.0d0) go to 1030
      go to 1050
-1030 end do
+  end do
+1030 continue
 1034 write (unit = lunit6, fmt = 1041)
 1041 format (/, ' Comment ---- No sinusoidal sources requested for steady-state solution.   Thus this solution is bypassed.')
   lastov = nchain
@@ -345,7 +351,8 @@ subroutine over9
      write (unit = lunit6, fmt = 2101) bus(jj)
 2101 format (/, " Note. ---- Node '", a6, "' has both voltage and current sources on it.   The current source has no effect", /, 12x, 'on the solution, then, and could be omitted.')
      node(i) = node(i) - ii
-2110 end do
+  end do
+2110 continue
 2113 if (kswtch .eq. 0) go to 3000
   do ii = 1, kswtch
      if (adelay(ii) .eq. -44444.0d0) go to 2523
@@ -454,7 +461,8 @@ subroutine over9
      go to 2540
 2710 i = iabs (kode(i))
      if (i .ne. j) go to 2530
-2730 end do
+  end do
+2730 continue
   if (iprsup .gt. 0) write (unit = lunit6, fmt = 47889) next, last
 47889 format (/, " At end of  'over9' ,  just before steady-state renumbering,      ", i5, ' of total of  ', i5, ' cells of kolum, korder are filled')
 3000 icas = 1

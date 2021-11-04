@@ -168,6 +168,8 @@ module labcom
   real(8) :: vim(       1)
   real(8) :: ur(      40)
   real(8) :: ui(      40)
+  real(8) :: cmi(       1)
+  real(8) :: cmr(       1)
   equivalence (xk( 1), xx( 1))
   equivalence (spum( 1), ispum( 1))
   equivalence (kknonl( 1), nsubkm( 1))
@@ -202,6 +204,8 @@ module labcom
   equivalence (volt( 1), vim( 1))
   equivalence (volti( 1), ur( 1))
   equivalence (voltk( 1), ui( 1))
+  equivalence (kks( 1), cmr( 1))
+  equivalence (kknonl( 1), cmi( 1))
 end module labcom
 
 !

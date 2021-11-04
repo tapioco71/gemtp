@@ -1,4 +1,4 @@
-!-*- mode: f90; syntax: free-format; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
+!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-
 
 !
 ! file over6.f90
@@ -56,7 +56,8 @@ subroutine over6
      go to 54155
 54154 if (n2 .ne. k) go to 54155
      if (n1 .eq. m) go to 54174
-54155 end do
+  end do
+54155 continue
   ibr = ibr + 1
   if (ibr .le. lbrnch) go to 4716
   lstat(19) = 4716
@@ -258,14 +259,16 @@ subroutine over6
      n9 = n9 + 1
      norder(i) = n9
      ich1(n9) = i
-5345 end do
+  end do
+5345 continue
   do i = 2, ntot
      if (kode(i) .eq. 0) go to 5346
      if (tstart(i) .ne. -9988.) go to 5346
      n9 = n9 + 1
      norder(i) = n9
      ich1(n9) = i
-5346 end do
+  end do
+5346 continue
   kpartb = n9
   do i = 2, ntot
      if (kode(i) .eq. 0) go to 5348
@@ -273,7 +276,8 @@ subroutine over6
      n9 = n9 + 1
      norder(i) = n9
      ich1(n9) = i
-5348 end do
+  end do
+5348 continue
   go to 40013
 5351 next = 1
   nz = 0
@@ -296,14 +300,16 @@ subroutine over6
      do j2 = l2, l3
         call insert (k, iabs (kbus(j2)))
         call insert (m, iabs (mbus(j2)))
-40014 end do
+     end do
+40014 continue
   end do
   if (kbus(i) .lt. 0) go to 40004
   do j1 = i, l3
      k = iabs (kbus(j1))
      do j2 = i, l3
         call insert (k, iabs (mbus(j2)))
-40024 end do
+     end do
+40024 continue
   end do
 40004 if (kill .eq. 0) go to 5372
   lstat(19) = 5372
@@ -317,7 +323,8 @@ subroutine over6
      k = nonlk(i)
      m = iabs (nonlm(i))
      call insert (k, m)
-73530 end do
+  end do
+73530 continue
 73535 continue
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 1335) nz, iofkol, iofkor
 1335 format (/, " In  'over6' ,   nz, iofkol, iofkor =", 3i10, /, 1x, '   row            kode           kolum           koder           kownt')
@@ -326,20 +333,23 @@ subroutine over6
      ir = i + iofkor
      if (iprsup .ge. 3) write (unit = lunit6, fmt = 1337) i, kode(i), kolum(il), korder(ir), kownt(i)
 1337 format (i6, 4i16)
-1339 end do
+  end do
+1339 continue
   if (kswtch .lt. 1) go to 40015
   do i = 1, kswtch
      ndx2 = lswtch + i
      k = kmswit(i)
      m = kmswit(ndx2)
      call insert (k, m)
-40005 end do
+  end do
+40005 continue
 40015 do i = 2, ntot
      if (kode(i) .eq. 0) go to 40006
      if (kownt(i) .eq. (-1)) go to 40006
      nz = nz + 1
      kownt(i) = -1
-40006 end do
+  end do
+40006 continue
   kownt(1) = 0
   if (kill .eq. 0) go to 5379
   lstat(19) = 5379
@@ -409,7 +419,8 @@ subroutine rinfin
      go to 54155
 54154 if (n2 .ne. k) go to 54155
      if (n1 .eq. m) go to 54174
-54155 end do
+  end do
+54155 continue
   ibr = ibr + 1
   if (ibr .le. lbrnch) go to 4716
   lstat(19) = 4716
