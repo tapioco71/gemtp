@@ -746,7 +746,7 @@ subroutine over2
 54041 format (/, ' n.l. elem arrays.', /, 6x, 'row', 3x, 'nonlk', 3x, 'nonlm', 2x, 'nltype', 2x, 'nonlad', 3x, 'nonle', 10x, 'anonl', 10x, 'vzero', 10x, 'vchar', 9x, 'gslope', 10x, 'cchar', /, (1x, 6i8, 5e15.5))
   write (unit = lunit6, fmt = 64041) (modswt(i), kmswit(i), isourc(i), nextsw(i), icrit(i), kpos(i), tclose(i), topen(i), i = 1, kswtch)
 64041 format (/, ' Switch arrays with xformer info.', /, 11x, 'modswt', 4x, 'kmswit', 4x, 'isourc', 4x, 'nextsw', 5x, 'icrit', 6x, 'kpos', 9x, 'tclose', 9x, ' topen', /, (7x, 6i10, 2e15.5))
-  write (unit = lunit6, fmt = 74041) (i, tr(i), tx(i), emtpc(i), i = 1, it)
+  write (unit = lunit6, fmt = 74041) (i, tr(i), tx(i), c(i), i = 1, it)
 74041 format (/, ' Lumped param storage tr, tx, c', /, (1x, i10, 3e20.6))
 84041 if (n1 .ne. 1) go to 4005
   if (n2 .ne. 1) go to 4005
@@ -775,7 +775,7 @@ subroutine over2
   tr(it) = yzero
   ideal = it
   call move0 (tx(it :), ll3)
-  call move0 (emtpc(it :), ll3)
+  call move0 (c(it :), ll3)
   it = it + 1
   call ibrinc
   nr(ibr) = it
@@ -832,25 +832,25 @@ subroutine over2
   if (ioutmg .gt. 0) mbus(ibr) = -mbus(ibr)
   go to 44035
 4044 continue
-  read (unit = abuff, fmt = 4046) tr(it), tx(it), emtpc(it), iout
+  read (unit = abuff, fmt = 4046) tr(it), tx(it), c(it), iout
 4046 format (26x, 3e6.2, 35x, i1)
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 54047) itype, tr(it), tx(it), emtpc(it)
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 54047) itype, tr(it), tx(it), c(it)
 54047 format ('+Winding', i2, '. ',  3e12.4)
   i = it + 1
   call move0 (tr(i :), ll2)
   call move0 (tx(i :), ll2)
-  call move0 (emtpc(i :), ll2)
-  if (emtpc(it) .gt. 0.0d0) go to 4047
+  call move0 (c(i :), ll2)
+  if (c(it) .gt. 0.0d0) go to 4047
   kill = 52
   lstat(19) = 4047
   lstat(16) = 3
   go to 9200
 4047 if (ksat .gt. 2) go to 4070
-  turn1 = emtpc(it)
+  turn1 = c(it)
   if (kph .eq. 2) yzero = 2.0d0 * yzero / turn1 ** 2
   kpos(kswtch) = n2
   tclose(kswtch) = turn1
-  emtpc(it) = 0.0
+  c(it) = 0.0
   if (tr(it) .ne. 0.0) go to 4049
   if (tx(it) .ne. 0.0) go to 4049
   lstat(19) = 4049
@@ -919,9 +919,9 @@ subroutine over2
 4068 if (itype .lt. icrit(ktref)) go to 100
   ktref = 0
   go to 100
-4070 d1 = emtpc(it) / turn1
+4070 d1 = c(it) / turn1
   if (ksat .gt. 3) go to 4073
-  topen(kswtch) = emtpc(it)
+  topen(kswtch) = c(it)
   if (kph .le. 2) go to 4073
   if (topen(kswtch) .ne. topen(kswtch - 1)) go to 24054
 4073 if (tx(it) .ne. 0.0) go to 4071
@@ -929,7 +929,7 @@ subroutine over2
   lstat(19) = 4071
   lstat(16) = 2
   go to 9200
-4071 emtpc(it) = 0.0
+4071 c(it) = 0.0
   tx(it) = tx(it) / xunits
   cut1 = 1.0d0 / tx(it)
   cut2 = cut1 * d1
@@ -1016,7 +1016,7 @@ subroutine over2
   if (itype .gt. 50 .and. itype .le. 90) go to 64117
   if (kolbeg .gt. 0) go to 132
   if (moldat .gt. 0) go to 64117
-  read (unit = abuff, fmt = 64114, iostat = ios) (tr(i), tx(i), emtpc(i), i = it, it2)
+  read (unit = abuff, fmt = 64114, iostat = ios) (tr(i), tx(i), c(i), i = it, it2)
 64114 format (26x, 9e6.2)
   go to 64117
 132 kolbeg = 27
@@ -1026,7 +1026,7 @@ subroutine over2
   do i = it, it2
      tr(i) = voltbc(n9)
      tx(i) = voltbc(n9 + 1)
-     emtpc(i) = voltbc(n9 + 2)
+     c(i) = voltbc(n9 + 2)
      n9 = n9 + 3
   end do
 64117 if (kph .eq. 0) go to 4115
@@ -1054,7 +1054,7 @@ subroutine over2
      tx(i) = voltbc(n9 + 1)
      n9 = n9 + 2
   end do
-4246 call move0 (emtpc(it :), n8)
+4246 call move0 (c(it :), n8)
 144 if (itype .gt. 2 .and. itype .le. 50) go to 143
   read (unit = abuff, fmt = 142) iout
 142 format (79x, i1)
@@ -1168,10 +1168,10 @@ subroutine over2
   if (kreqab .gt. 0) kodebr(ibr) = 1
   if (moldat .eq. 0) go to 171
   if (kolbeg .gt. 0) go to 171
-  read (unit = abuff, fmt = 8331) tr(it), tx(it), emtpc(it)
+  read (unit = abuff, fmt = 8331) tr(it), tx(it), c(it)
 171 if (noutpr .ne. 0) go to 5411
   if (itrans .gt. 0) go to 54108
-  write (unit = kunit6, fmt = 54777) tr(it), tx(it), emtpc(it)
+  write (unit = kunit6, fmt = 54777) tr(it), tx(it), c(it)
 54777 format ('+1st of pi-ckt.', 1x, 3e11.3)
   go to 5411
 54108 write (unit = kunit6, fmt = 54109) tr(it), tx(it)
@@ -1189,14 +1189,14 @@ subroutine over2
   do it32 = it, it2
      !     read input card using cimage.
      if (it32 .gt. it) call cimage
-     read (unit = abuff, fmt = 8331) tr(it32), tx(it32), emtpc(it32)
+     read (unit = abuff, fmt = 8331) tr(it32), tx(it32), c(it32)
 8331 format (26x, 3e16.0)
      if (noutpr .ne. 0) go to 8346
      if (it32 .gt. it) go to 8338
-     write (unit = kunit6, fmt = 8335) itype, tr(it32), tx(it32), emtpc(it32)
+     write (unit = kunit6, fmt = 8335) itype, tr(it32), tx(it32), c(it32)
 8335 format ('+phase', i3, 3e13.4)
      go to 8346
-8338 write (unit = kunit6, fmt = 8341) tr(it32), tx(it32), emtpc(it32)
+8338 write (unit = kunit6, fmt = 8341) tr(it32), tx(it32), c(it32)
 8341 format ('+', 3x, 'cont.', 3e13.4)
   end do
 8346 continue
@@ -1226,7 +1226,7 @@ subroutine over2
   tx(it + 1) = d6
 47634 if (itrans .gt. 0) go to 21693
   it3 = it + 1
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 54104) tr(it), tx(it), emtpc(it), tr(it3), tx(it3)
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 54104) tr(it), tx(it), c(it), tr(it3), tx(it3)
 54104 format ('+', 5e10.3)
   go to 21694
 21693 it3 = itype + (it - 1)
@@ -1255,11 +1255,11 @@ subroutine over2
      tx(i) = voltbc(n9 + 1)
      n9 = n9 + 2
   end do
-4256 call move0 (emtpc(it3 :), n8)
+4256 call move0 (c(it3 :), n8)
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 54104) tr(it3), tx(it3), tr(it3 + 1), tx(it3 + 1), tr(it32)
   go to 169
 168 if (kolbeg .gt. 0) go to 4262
-  read (unit = abuff, fmt = 2) (tr(i), tx(i), emtpc(i), i = it3, it32)
+  read (unit = abuff, fmt = 2) (tr(i), tx(i), c(i), i = it3, it32)
   go to 4264
 4262 nfrfld = 3 * (it32 - it3 + 1)
   kolbeg = 27
@@ -1268,13 +1268,13 @@ subroutine over2
   do i = it3, it32
      tr(i) = voltbc(n9)
      tx(i) = voltbc(n9 + 1)
-     emtpc(i) = voltbc(n9 + 2)
+     c(i) = voltbc(n9 + 2)
      n9 = n9 + 3
   end do
 4264 i = it3
   if (it32 .gt. i) i = i + 1
   n3 = i
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 54104) tr(it3), tx(it3), emtpc(it3), tr(n3), tx(n3)
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 54104) tr(it3), tx(it3), c(it3), tr(n3), tx(n3)
 169 if (it32 .eq. it2) go to 163
   it3 = it3 + 3
   go to 165
@@ -1309,10 +1309,10 @@ subroutine over2
   icheck = 1
   if (moldat .eq. 0) go to 8371
   if (kolbeg .gt. 0) go to 8371
-  read (unit = abuff, fmt = 8331) tr(it), tx(it), emtpc(it)
-8371 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54107) tr(it), tx(it), emtpc(it)
+  read (unit = abuff, fmt = 8331) tr(it), tx(it), c(it)
+8371 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54107) tr(it), tx(it), c(it)
 54107 format ('+Series R-L-C.', 2x, 3e11.3)
-8383 d1 = absz (tr(it)) + absz (tx(it)) + absz (emtpc(it))
+8383 d1 = absz (tr(it)) + absz (tx(it)) + absz (c(it))
   if (d1 .ne. 0.0d0) go to 4220
   kill = 4
   lstat(19) = 5411
@@ -1643,7 +1643,7 @@ subroutine over2
 208 format (/, " Branch-table integer vectors at end  'over2' .", /, '     row    kbus    mbus      nr  kodebr  length  kodsem indhst  litype  imodel  namebr', /, (11i8))
   write (unit = lunit6, fmt = 209) (k, bus(k), ci(k), ck(k), cik(k), cki(k), ckkjm(k), k = 1, ibr)
 209 format (/, 5x, 'row', 7x, 'bus', 13x, 'ci', 13x, 'ck', 12x, 'cik', 12x, 'cki', 10x, 'ckkjm', /, (i8, 4x, a6, 5e15.6))
-  write (unit = lunit6, fmt = 2584) (i, tr(i), tx(i), r(i), emtpc(i), i = 1, it)
+  write (unit = lunit6, fmt = 2584) (i, tr(i), tx(i), r(i), c(i), i = 1, it)
 2584 format (/, ' Rows 1 through it of parameters follow:', /, 7x, 'row',  13x, 'tr',  13x, 'tx',  14x, 'r',  14x, 'c', /, (i10, 4e15.5))
   go to 9900
 9000 lstat(16) = iprint
@@ -1779,7 +1779,7 @@ subroutine nonln2
   lstat(19) = 6862
   if (inonl .gt. lnonl) go to 9000
   if (moldat .eq. 0) go to 4236
-  read (unit = abuff, fmt = 5432) tr(it), tx(it), emtpc(it), tr(it + 1)
+  read (unit = abuff, fmt = 5432) tr(it), tx(it), c(it), tr(it + 1)
 5432 format (26x, 4e12.0)
 4236 if (bus3 .ne. branch) go to 6874
   n16 = 1
@@ -1810,7 +1810,7 @@ subroutine nonln2
 185 curr(inonl) = 0.0d0
   if (itype .eq. 94) go to 270
   if (itype .ne. 99) go to 73412
-  d3 = emtpc(it)
+  d3 = c(it)
   if (moldat .gt. 0) go to 4257
   read (unit = abuff, fmt = 73400) d3
 73400 format (38x, e6.0)
@@ -1849,34 +1849,34 @@ subroutine nonln2
   nonlad(inonl) = ichar + 1
   ilast(inonl) = nonlad(inonl) + 6
   num99 = num99 + 1
-  vecnl1(inonl) = emtpc(it)
+  vecnl1(inonl) = c(it)
   if (n3 * n4 .eq. 1) go to 4736
   ichar = ichar + 6
   nonle(inonl) = -ichar
   go to 182
-4736 if (noutpr .eq. 0) write (unit = kunit6, fmt = 4738) tr(it), tx(it), emtpc(it)
+4736 if (noutpr .eq. 0) write (unit = kunit6, fmt = 4738) tr(it), tx(it), c(it)
 4738 format ('+Hysteresis.', 3e12.4)
 4741 continue
   if (n3 .ne. 1 .or. n4 .ne. 1) go to 182
   if (itype .eq. 93 .and. noutpr .eq. 0) write (unit = kunit6, fmt = 54113) tr(it), tx(it)
 54113 format ('+N.l. inductance, type 93.', 2x, 2e11.3)
   if (itype .gt. 91) go to 19
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 54114) tr(it), emtpc(it)
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 54114) tr(it), c(it)
 54114 format ('+Time-varying R, type 91.', 3x, 2e11.3)
-  if (emtpc(it) .eq. 3333.0d0) go  to 12
+  if (c(it) .eq. 3333.0d0) go  to 12
   kill = 5
   lstat(19) = 20
   go to 9999
 12 nltype(inonl) = 923
   go to 21
 19 if (itype .ne. 92) go to 80
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 54115)  tr(it), tx(it), emtpc(it)
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 54115)  tr(it), tx(it), c(it)
 54115 format ('+Gap, type 92.', 1x, 3e11.3)
   if (tr(it) .ne. 5555.0d0) go to 20
   kill = 28
   lstat(19) = 20
   go to 9999
-20 if (emtpc(it) .eq. 4444.0d0 .or. emtpc(it) .eq. 5555.0d0) go to 21
+20 if (c(it) .eq. 4444.0d0 .or. c(it) .eq. 5555.0d0) go to 21
   kill = 5
   lstat(19) = 20
   go to 9999
@@ -1897,7 +1897,7 @@ subroutine nonln2
 23 ck1 = -fltinf
   a2 = 0.0d0
   vzero(inonl) = d4
-  if (emtpc(it) .eq. 4444.0d0) go to 40
+  if (c(it) .eq. 4444.0d0) go to 40
   ! enter zno data code**********************************************
   if (d2 .gt. 0.0d0) go to 25
   kill = 28
@@ -2275,10 +2275,10 @@ subroutine nonln2
   vzero(inonl) = vzero(i)
   anonl(inonl) = anonl(i)
   if (itype .ne. 91) go to 72
-  if (emtpc(it) .ne. 3333.) lstat(19) = 269
+  if (c(it) .ne. 3333.) lstat(19) = 269
   go to 73
 72 if (itype .ne. 92) go to 100
-73 if (emtpc(it) .ne. 4444. .and. emtpc(it) .ne. 5555.) lstat( 19 ) = 269
+73 if (c(it) .ne. 4444. .and. c(it) .ne. 5555.) lstat( 19 ) = 269
   if (lstat(19) .eq. 269) go to 4230
   vnonl(inonl) = vnonl(i)
   vecnl1(inonl) = vecnl1(i)
@@ -2294,14 +2294,14 @@ subroutine nonln2
   call move0 (vchar(iaw :), ll9)
   if (tx(it) .eq. 0.0) tx(it) = 1.0
   vchar(ichar + 10) = tx(it)
-  if (emtpc(it) .eq. 0.0) emtpc(it) = 1.0
-  vchar(ichar + 11) = emtpc(it)
+  if (c(it) .eq. 0.0) c(it) = 1.0
+  vchar(ichar + 11) = c(it)
   if (n3 .ne. 1) go to 4271
   if (n4 .eq. 1) go to 3271
 4271 ichar = ichar + 11
   go to 182
 3271 nonlad(inonl) = -iaw
-  if (noutpr .eq. 0) write (unit = kunit6, fmt = 2271) tr(it), tx(it), emtpc(it)
+  if (noutpr .eq. 0) write (unit = kunit6, fmt = 2271) tr(it), tx(it), c(it)
 2271 format ('+Type-94 arrester.', e10.3, 2e11.4)
   if (ichar + 18 .gt. lchar) go to 1270
   j = 1
@@ -3707,7 +3707,7 @@ subroutine over3
   use redcom
   implicit none
   !  dimension trser(1),txser(1)
-  !  equivalence (trser(1), emtpe(1)), (txser(1), emtpf(1))
+  !  equivalence (trser(1), e(1)), (txser(1), f(1))
   !  dimension mapcas(1), mapinv(1), node1(1), node2(1)
   !  equivalence (volti(1), node1(1)), (voltk(1), node2(1))
   !  equivalence (volt(1), mapinv(1))
@@ -3778,7 +3778,7 @@ subroutine over3
   if (copt .eq. 0.0d0) freqc = 1000000.0d0
   do i = locz11, locznn
      tx(i) = freqcs * tx(i) / freqx
-     emtpc(i) = freqcs * emtpc(i) / (2.0 * freqc)
+     c(i) = freqcs * c(i) / (2.0 * freqc)
   end do
   call cxred (tr(locz11 :), tx(locz11 :), nphcas, ll0)
   do i = locz11, locznn
@@ -3800,7 +3800,7 @@ subroutine over3
         if (mapcas(i) .gt. mapcas(j)) npos = locatn(mapcas(j), mapcas(i)) + locz11 - 1
         nnpos = locatn(i, j)
         caslnr(nnpos) = tr(npos) / dsectj
-        caslnx(nnpos) = tx(npos) / dsectj + emtpc(npos) * dsectj
+        caslnx(nnpos) = tx(npos) / dsectj + c(npos) * dsectj
         nnpos = locatn(i, j + nphcas)
         caslnr(nnpos) = -tr(npos) / dsectj
         caslnx(nnpos) = -tx(npos) / dsectj
@@ -3810,7 +3810,7 @@ subroutine over3
         caslnx(nnpos) = -tx(npos) / dsectj
 76433   nnpos = locatn(i + nphcas, j + nphcas)
         caslnr(nnpos) = tr(npos) / dsectj
-76432   caslnx(nnpos) = tx(npos) / dsectj + emtpc(npos) * dsectj
+76432   caslnx(nnpos) = tx(npos) / dsectj + c(npos) * dsectj
      end do
   end do
 76521 multip = multip - 1
@@ -3898,14 +3898,14 @@ subroutine over3
      iend = istart + idumy - 1
      !     read input card using cimage.
      call cimage
-     read (unit = abuff, fmt = 76518) itype, (tr(j), tx(j), emtpc(j), j = istart, iend)
+     read (unit = abuff, fmt = 76518) itype, (tr(j), tx(j), c(j), j = istart, iend)
 76518 format (i2, 24x, 9e6.2)
      if (i .gt. 1) go to 5264
-     if (noutpr .eq. 0) write (unit = kunit6, fmt = 54777) tr(istart), tx(istart), emtpc(istart)
+     if (noutpr .eq. 0) write (unit = kunit6, fmt = 54777) tr(istart), tx(istart), c(istart)
 54777 format ('+1st of pi-ckt.', 1x, 3e11.3)
      go to 5271
 5264 idumy = istart + 1
-     if (noutpr .eq. 0) write (unit = kunit6, fmt = 54104) tr(idumy), tx(idumy), emtpc(idumy), tr(idumy + 1), tx(idumy + 1)
+     if (noutpr .eq. 0) write (unit = kunit6, fmt = 54104) tr(idumy), tx(idumy), c(idumy), tr(idumy + 1), tx(idumy + 1)
 54104 format ('+', 5e10.3)
 5271 istart = iend + 1
      idumy = i
@@ -3915,17 +3915,17 @@ subroutine over3
      if (idumy .gt. 3) iend = istart + 2
      !     read input card using cimage.
      call cimage
-     read (unit = abuff, fmt = 76519) (tr(j), tx(j), emtpc(j), j = istart, iend)
+     read (unit = abuff, fmt = 76519) (tr(j), tx(j), c(j), j = istart, iend)
 76519 format (26x, 9e6.2)
      iendd = iend
      if (idumy .gt. 3) iendd = istart + 1
-     if (noutpr .eq. 0) write (unit = kunit6, fmt = 54104) tr(istart), tx(istart), emtpc(istart), tr(istart + 1), tx(istart + 1)
+     if (noutpr .eq. 0) write (unit = kunit6, fmt = 54104) tr(istart), tx(istart), c(istart), tr(istart + 1), tx(istart + 1)
      istart = iend + 1
      go to 76520
 76517 end do
   do i = locz11, locznn
      tx(i) = freqcs * tx(i) / freqx
-     emtpc(i) = freqcs * emtpc(i) / (2.0 * freqc)
+     c(i) = freqcs * c(i) / (2.0 * freqc)
   end do
   call cxred (tr(locz11 :), tx(locz11 :), nphcas, ll0)
   do i = locz11, locznn
@@ -4262,7 +4262,7 @@ subroutine over3
         if (mapcas(i) .gt. mapcas(j)) npos = locatn (mapcas(j), mapcas(i)) + locz11 - 1
         nnpos=locatn (i + nphcas, j + nphcas)
         caslnr(nnpos) = tr(npos) / dsectj
-        caslnx(nnpos) = tx(npos) / dsectj + emtpc(npos) * dsectj
+        caslnx(nnpos) = tx(npos) / dsectj + c(npos) * dsectj
         nnpos = locatn (i + nphcas, j + npos2)
         caslnr(nnpos) = -tr(npos) / dsectj
         caslnx(nnpos) = -tx(npos) / dsectj
@@ -4272,7 +4272,7 @@ subroutine over3
         caslnx(nnpos) = -tx(npos) / dsectj
 76466   nnpos = locatn (i + npos2, j + npos2)
         caslnr(nnpos) = tr(npos) / dsectj + caslnr(nnpos)
-76465   caslnx(nnpos) = tx(npos) / dsectj + emtpc(npos) * dsectj + caslnx(nnpos)
+76465   caslnx(nnpos) = tx(npos) / dsectj + c(npos) * dsectj + caslnx(nnpos)
      end do
   end do
   if (iprsup .lt. 9) go to 76641
@@ -4328,7 +4328,7 @@ subroutine over3
      j = i - locz11 + 1
      tr(i) = caslnr(j)
      tx(i) = caslnx(j)
-76601 emtpc(i) = 0.0
+76601 c(i) = 0.0d0
   end do
   do i = ipoint, ibr
 76610 kodebr(i) = -2

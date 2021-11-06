@@ -197,6 +197,14 @@ subroutine over12
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over12."')
+  ll0 = size (transfer (kks, cmr))
+  allocate (cmr(ll0))
+  cmr = transfer (kks, cmr)
+  if (.not. allocated (cmr)) then
+     write (unit = lunit6, fmt = 4500) ll0
+4500 format (' Could no allocate cmr space (', i8, ').  Stop.')
+     call stoptp
+  end if
   nph = 0
   nqtt = 0
   nqtw = 0
@@ -782,7 +790,7 @@ subroutine over12
   call elecyy
   call premec
 901 if (it .eq. 0) go to 433
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 65435) (tr(i), tx(i), r(i), emtpc(i), i = 1, it)
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 65435) (tr(i), tx(i), r(i), c(i), i = 1, it)
 65435 format (/, ' Lumped-element branch-parameter values in "over12", prior to processing.', /, 18x, 'tr', 18x, 'tx', 19x, 'R', 19x, 'C', /, (1x, 4e20.10))
   k = 1
 5527 j = length(k)
@@ -824,14 +832,14 @@ subroutine over12
   end do
 904 continue
 905 do i = n1, n2
-     emtpc(i) = emtpc(i) * ci1
+     c(i) = c(i) * ci1
      x(i) = tr(i) + tx(i) * d22
      tx(i) = -x(i)
   end do
 5539 k = k + j
   if (k .le. ibr) go to 5527
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 5543) (x(i), emtpc(i), i = 1, it)
-5543 format ( /, ' (X(i), emtpc(i), i=1, it)   after conversion to  R + 2*L/deltat .', /, (1x, 8e16.7))
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 5543) (x(i), c(i), i = 1, it)
+5543 format ( /, ' (X(i), c(i), i=1, it)   after conversion to  R + 2*L/deltat .', /, (1x, 8e16.7))
 433 if (kswtch .eq. 0) go to 430
   if (iprsup .ge. 1) go to 455
   go to 477
@@ -861,16 +869,16 @@ subroutine over12
      if (n15 .eq. 1) n15 = n2
      n16 = iabs (kssfrq(n15))
      omega = twopi * sfreq(n16)
-     ck1 = (emtpf(nn1) - emtpf(n2)) / omega
+     ck1 = (f(nn1) - f(n2)) / omega
      if (noutpr .eq. 0) write (unit = lunit6, fmt = 427) bus(nn1), bus(n2), ck1
 427  format (' Initial flux in coil ', "'", a6, "'", ' to ', "'", a6, "'", ' =', e13.5)
-     ck(icheck) = ck1 - (emtpe(nn1) - emtpe(n2)) * delta2
+     ck(icheck) = ck1 - (e(nn1) - e(n2)) * delta2
      if (absz (ck1) .gt. topen(k) .and. noutpr .eq. 0) write (unit = lunit6, fmt = 426)
 426  format (' Warning.  Assumption that AC steady state has fundamental frequency only is questionable with preceding flux outside linear region')
   end do
 422 continue
-  !     inversion of matrices of coupled
-  !     presetting tables for lossle
+  !     Inversion of matrices of coupled
+  !     Presetting tables for lossle
 430 k = 1
   itadd = it + 1
   n1 = ibr+1
@@ -882,7 +890,7 @@ subroutine over12
   iprint = 8
 500 if (kbus(k) .lt. 0) go to 535
   it2 = length(k)
-  if(it2 .lt. 0) go to 520
+  if (it2 .lt. 0) go to 520
   i = nr(k)
   if (it2 .le. 1) go to 510
   if (kodebr(k) .le. 0) go to 4460
@@ -924,12 +932,12 @@ subroutine over12
   if (n2 .le. it2) go to 501
   go to 520
 530 i = iabs(i)
-  gus1 = emtpc(i)
+  gus1 = c(i)
   if (gus1 .ne. 0.0d0) gus1 = 1.0d0 / gus1
   gus2 = 1.0d0 / (x(i) + gus1)
   r(i) = gus2 * (tr(i) * 2.0d0 - x(i) + gus1)
   x(i) = gus2
-  emtpc(i) = gus1
+  c(i) = gus1
   go to 520
 535 it2 = iabs(length(k))
   if (kodsem(k) .eq. 0 .or. imodel(k) .eq. -2) go to 5349
@@ -1264,7 +1272,8 @@ subroutine over12
   lstat(18) = 12
 9800 if ( iprsup  .ge.  1 )  write ( lunit6, 4568 )
 4568 format (' exit module "over12".')
-99999 return
+99999 if (allocated (cmr)) deallocate (cmr)
+  return
 end subroutine over12
 
 !
@@ -1928,7 +1937,7 @@ subroutine  tacs2
      if ( n1 .gt. 93 )  go to 500
      n2 = n1 - 89
      go to ( 502, 508, 504, 506), n2
-502  if (ud1(ndy5 + 1) .eq. 1.0) xtcs(ndxi) = emtpe(k)
+502  if (ud1(ndy5 + 1) .eq. 1.0) xtcs(ndxi) = e(k)
      go to 500
 504  xtcs(ndxi) = etac( k)
      go to 500
@@ -2549,8 +2558,8 @@ subroutine  tacs2
         go to 3020
 3001    k = ud1(ndy5 + 2)
         if (ndxi .eq. 91) go to 3131
-        xar(ndx3) = emtpe( k)
-        xar(ndx2) = emtpf( k)
+        xar(ndx3) = e(k)
+        xar(ndx2) = f(k)
         go to 3030
 3131    if (nextsw(k) .ne. 87) go to 3020
         xar(ndx3) = tclose(k)
@@ -3520,7 +3529,7 @@ subroutine elecyy
      it=it+1
      tr(it)=a
      tx(it)=0.0
-     emtpc(it)=0.0
+     c(it)=0.0
      length( ibr+1 ) = 3
      nr( ibr+1 ) = it
      cik( ibr+1 ) = 0.0
@@ -3538,11 +3547,11 @@ subroutine elecyy
      cik( ibr+2 ) = 0.0
      tr(it)=b
      tx(it)=0.0
-     emtpc(it)=0.0
+     c(it)=0.0
      it=it+1
      tr(it)=a
      tx(it)=0.0
-     emtpc(it)=0.0
+     c(it)=0.0
      it=it+1
      kbus( ibr+3 ) = ismdat( j30+4 )
      mbus( ibr+3 ) = ismdat( j30+7 )
@@ -3554,22 +3563,22 @@ subroutine elecyy
      ibr = ibr + 3
      tr(it)=b
      tx(it)=0.0
-     emtpc(it)=0.0
+     c(it)=0.0
      it=it+1
      tr(it)=b
-     tx(it)=0.0
-     emtpc(it)=0.0
-     it=it+1
-     tr(it)=a
-     tx(it)=0.0
-     emtpc(it)=0.0
+     tx(it) = 0.0
+     c(it) = 0.0d0
+     it = it + 1
+     tr(it) = a
+     tx(it) = 0.0d0
+     c(it) = 0.0d0
      if( iprsup .lt. 1 )  go  to  1408
      ll1 = ibr - 2
      write( lunit6, 6706 )  ( nr( i ), i = ll1, ibr )
 6706 format( 8x, 5i10 )
-     write( lunit6, 6706 )  ( length( i ), i = ll1, ibr )
+     write (unit = lunit6, fmt = 6706) (length(i), i = ll1, ibr)
      ll1 = it - 5
-     write( lunit6, 6707 )  ( tr( i ), i = ll1, it )
+     write (unit = lunit6, fmt = 6707) (tr(i), i = ll1, it)
 6707 format( 3x, 8e15.7 )
 1408 a = 1.0 / sum
      b = 1.0 / etot

@@ -94,12 +94,12 @@ subroutine xpr1
 3011 if(.not.(i.lt.cnt0)) go to 3010
   i=i +1
   if(.not.(rsto(ptr0+i).gt.rmargn)) go to 5011
-  a=one
+  tacs_a = one
   go to 5010
 5011 continue
-  a=zero
+  tacs_a = zero
 5010 continue
-  rsto(ptr0+i)=a
+  rsto(ptr0+i) = tacs_a
   go to 3011
 3010 continue
   go to 5000
@@ -178,37 +178,37 @@ subroutine xpr1
   rptr=rptr-cnt3
   ndx=isto(env+2)
   if(.not.(cnt2.eq.1)) go to 5031
-  a=rsto(ptr2+1)
+  tacs_a = rsto(ptr2+1)
   i=0
 3031 if(.not.(i.lt.cnt3)) go to 3030
   i=i+1
-  b=rsto(rptr+i)
-  c=zero
+  tacs_b = rsto(rptr+i)
+  tacs_c = zero
   to=9005
   call xpr2
-  rsto(ptr2+i)=c
+  rsto(ptr2+i) = tacs_c
   go to 3031
 3030 continue
   cnt2=cnt3
   go to 5030
 5031 if(.not.(cnt3.eq.1)) go to 5032
-  b=rsto(rptr+1)
+  tacs_b = rsto(rptr+1)
   i=0
 3041 if(.not.(i.lt.cnt2)) go to 3040
   i=i+1
-  a=rsto(ptr2+i)
-  c=zero
+  tacs_a = rsto(ptr2+i)
+  tacs_c = zero
   to=9005
   call xpr2
-  rsto(ptr2+i)=c
+  rsto(ptr2+i) = tacs_c
   go to 3041
 3040 continue
   go to 5030
 5032 continue
-  c=zero
+  tacs_c = zero
   if(.not.(cnt2.ne.cnt3)) go to 5041
   if(.not.(ndx.eq.2)) go to 5051
-  c=one
+  tacs_c = one
   go to 5050
 5051 continue
 5050 continue
@@ -218,10 +218,10 @@ subroutine xpr1
   k=1
 3051 if(.not.(k.gt.0 .and. i.lt.cnt2))go to 3050
   i=i+1
-  a=rsto(ptr2+i)
-  b=rsto(rptr+i)
-  p = dmax1 (rmargn, dabs (rmargn * b))
-  if (.not. (a .lt. b - p .or. a .gt. b + p)) go to 5061
+  tacs_a = rsto(ptr2+i)
+  tacs_b = rsto(rptr+i)
+  p = dmax1 (rmargn, dabs (rmargn * tacs_b))
+  if (.not. (tacs_a .lt. tacs_b - p .or. tacs_a .gt. tacs_b + p)) go to 5061
   k = 0
   go to 5060
 5061 continue
@@ -229,12 +229,12 @@ subroutine xpr1
   go to 3051
 3050 continue
   if(.not.((k.gt.0 .and. ndx.eq.1) .or. (k.eq.0 .and. ndx.eq.2))) go to 5071
-  c=one
+  tacs_c = one
   go to 5070
 5071 continue
 5070 continue
 5040 continue
-  rsto(ptr2+1)=c
+  rsto(ptr2+1) = tacs_c
   cnt2=1
 5030 continue
   rptr=ptr2+cnt2
@@ -299,12 +299,12 @@ subroutine xpr1
   rptr=rptr-xprcnt
   i=0
   if(.not.(xprcnt.eq.1)) go to 5091
-  a=rsto(rptr+1)
-  p = dmax1 (rmargn, dabs (rmargn * a))
+  tacs_a = rsto(rptr+1)
+  p = dmax1 (rmargn, dabs (rmargn * tacs_a))
 3071 if(.not.(i.lt.cnt3)) go to 3070
   i=i+1
-  if(.not.(rsto(ptr3+i).lt.a-p .and. rsto(ptr3+i).ne.rnull)) go to 5101
-  rsto(ptr3+i)=a
+  if (.not. (rsto(ptr3 + i) .lt. tacs_a - p .and. rsto(ptr3 + i) .ne. rnull)) go to 5101
+  rsto(ptr3 + i) = tacs_a
   go to 5100
 5101 continue
 5100 continue
@@ -324,10 +324,10 @@ subroutine xpr1
 5111 continue
 3081 if(.not.(i.lt.cnt3)) go to 3080
   i = i + 1
-  a = rsto(rptr+i)
-  p = dmax1 (rmargn, dabs (rmargn * a))
-  if (.not. (rsto(ptr3 + i) .lt. a - p .and. rsto(ptr3 + i) .ne. rnull)) go to 5121
-  rsto(ptr3+i)=a
+  tacs_a = rsto(rptr + i)
+  p = dmax1 (rmargn, dabs (rmargn * tacs_a))
+  if (.not. (rsto(ptr3 + i) .lt. tacs_a - p .and. rsto(ptr3 + i) .ne. rnull)) go to 5121
+  rsto(ptr3 + i) = tacs_a
   go to 5120
 5121 continue
 5120 continue
@@ -351,12 +351,12 @@ subroutine xpr1
   rptr=rptr-xprcnt
   i=0
   if(.not.(xprcnt.eq.1)) go to 5141
-  a=rsto(rptr+1)
-  p = dmax1 (rmargn, dabs (rmargn * a))
+  tacs_a = rsto(rptr+1)
+  p = dmax1 (rmargn, dabs (rmargn * tacs_a))
 3091 if (.not. (i .lt. cnt3)) go to 3090
   i = i + 1
-  if (.not. (rsto(ptr3 + i) .gt. a + p .and. rsto(ptr3 + i) .ne. rnull)) go to 5151
-  rsto(ptr3 + i) = a
+  if (.not. (rsto(ptr3 + i) .gt. tacs_a + p .and. rsto(ptr3 + i) .ne. rnull)) go to 5151
+  rsto(ptr3 + i) = tacs_a
   go to 5150
 5151 continue
 5150 continue
@@ -376,10 +376,10 @@ subroutine xpr1
 5161 continue
 3101 if(.not.(i.lt.cnt3)) go to 3100
   i=i+1
-  a=rsto(rptr+i)
-  p = dmax1 (rmargn, dabs(rmargn * a))
-  if (.not. (rsto(ptr3 + i) .gt. a + p .and. rsto(ptr3 + i) .ne. rnull)) go to 5171
-  rsto(ptr3 + i) = a
+  tacs_a = rsto(rptr+i)
+  p = dmax1 (rmargn, dabs(rmargn * tacs_a))
+  if (.not. (rsto(ptr3 + i) .gt. tacs_a + p .and. rsto(ptr3 + i) .ne. rnull)) go to 5171
+  rsto(ptr3 + i) = tacs_a
   go to 5170
 5171 continue
 5170 continue
@@ -466,10 +466,10 @@ subroutine xpr1
   rptr=rptr -cnt6
   i=0
   if(.not.(cnt5.eq.1)) go to 5201
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
 3131 if(.not.(i.lt.cnt6)) go to 3130
   i=i+1
-  b=rsto(rptr+i)
+  tacs_b = rsto(rptr+i)
   if(.not.(ndx1.eq.3)) go to 5211
   to=9008
   call xpr2
@@ -478,16 +478,16 @@ subroutine xpr1
   to=9009
   call xpr2
 5210 continue
-  rsto(ptr5+i)=c
+  rsto(ptr5+i) = tacs_c
   go to 3131
 3130 continue
   cnt5=cnt6
   go to 5200
 5201 if(.not.(cnt6.eq.1)) go to 5202
-  b=rsto(rptr+1)
+  tacs_b = rsto(rptr+1)
 3141 if(.not.(i.lt.cnt5)) go to 3140
   i=i+1
-  a=rsto(ptr5+i)
+  tacs_a = rsto(ptr5+i)
   if(.not.(ndx1.eq.3)) go to 5221
   to=9008
   call xpr2
@@ -496,7 +496,7 @@ subroutine xpr1
   to=9009
   call xpr2
 5220 continue
-  rsto(ptr5+i)=c
+  rsto(ptr5+i) = tacs_c
   go to 3141
 3140 continue
   go to 5200
@@ -522,14 +522,14 @@ subroutine xpr1
   i=0
 3151 if(.not.(i.lt.cnt5)) go to 3150
   i=i+1
-  a=rsto(ptr5+i)
+  tacs_a = rsto(ptr5+i)
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   to=9010
   call xpr2
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr=rptr-1
-  rsto(ptr5+i)=a
+  rsto(ptr5+i) = tacs_a
   go to 3151
 3150 continue
   go to 5240
@@ -598,21 +598,21 @@ subroutine xpr1
   i=0
 3171 if(.not.(i.lt.cnt6)) go to 3170
   i=i+1
-  a=rsto(ptr6+i)
-  if(.not.(k.eq.1)) go to 5271
-  if(.not.(a.gt.rmargn)) go to 5281
-  a=zero
+  tacs_a = rsto(ptr6+i)
+  if (.not. (k .eq. 1)) go to 5271
+  if (.not. (tacs_a .gt. rmargn)) go to 5281
+  tacs_a = zero
   go to 5280
 5281 continue
-  a=one
+  tacs_a = one
 5280 continue
   go to 5270
-5271 if(.not.(k.eq.2)) go to 5272
-  a=-a
+5271 if (.not. (k .eq. 2)) go to 5272
+  tacs_a = -tacs_a
   go to 5270
 5272 continue
 5270 continue
-  rsto(ptr6+i)=a
+  rsto(ptr6+i) = tacs_a
   go to 3171
 3170 continue
   go to 5260
@@ -658,19 +658,19 @@ subroutine xpr1
   go to 5290
 5291 if(.not.(ndx1.eq.8 .or. ndx1.eq.9)) go to 5292
   k=isto(base5+ndx5)
-  a=rsto(base3+k)
+  tacs_a = rsto(base3+k)
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   go to 5290
 5292 if(.not.(ndx5.lt.0)) go to 5293
-  a=rsto(base7-ndx5)
-  if(.not.(a.eq.rnull .and. ndx5.ne.-20)) go to 5301
-  stpflg=83
+  tacs_a = rsto(base7-ndx5)
+  if (.not. (tacs_a .eq. rnull .and. ndx5 .ne. -20)) go to 5301
+  stpflg = 83
   go to 5300
 5301 continue
 5300 continue
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   go to 5290
 5293 continue
   sptr=sptr-1
@@ -836,14 +836,14 @@ subroutine xpr1
   go to 5360
 5361 continue
 5360 continue
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr=rptr-1
-  ndx4 = idnint (a)
+  ndx4 = idnint (tacs_a)
   if (.not. (ndx4 .lt. ndx2 .or. ndx4 .gt. ndx3)) go to 5371
-  stpflg=19
-  stpi1=ndx4
-  stpi2=ndx2
-  stpi3=ndx3
+  stpflg = 19
+  stpi1 = ndx4
+  stpi2 = ndx2
+  stpi3 = ndx3
   continue
   call errstp
   go to 5370
@@ -904,9 +904,9 @@ subroutine xpr1
   go to 9000
 9521 from=isto(sptr)
   sptr=sptr+1
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr=rptr-1
-  ipol = idnint (a)
+  ipol = idnint (tacs_a)
   go to 5410
 5411 continue
   ipol=1
@@ -1082,14 +1082,14 @@ subroutine xpr1
   ptr0=rptr
   to=9033
   call xpr2
-  a=rsto(ptr0+1)
-  b=rsto(ptr0+1 +ndx12)
+  tacs_a = rsto(ptr0+1)
+  tacs_b = rsto(ptr0+1 +ndx12)
   p = dmax1 (rmargn, dabs (rmargn * r5))
-  if(.not.(a.le.r5+p)) go to 5481
-  flg=1
+  if (.not. (tacs_a .le. r5 + p)) go to 5481
+  flg = 1
   go to 5480
 5481 continue
-  ndx4=ndx2
+  ndx4 = ndx2
 5480 continue
   go to 3181
 3180 continue
@@ -1104,16 +1104,16 @@ subroutine xpr1
   go to 9014
 9527 from=isto(sptr)
   sptr=sptr+1
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr=rptr-1
   rsto(base7+1)=rsto(rptr)
   rptr=rptr-1
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   go to 5490
-5491 if(.not.(a.ge.r5-p)) go to 5492
-  rptr=rptr+1
-  rsto(rptr)=b
+5491 if (.not. (tacs_a .ge. r5 - p)) go to 5492
+  rptr = rptr + 1
+  rsto(rptr) = tacs_b
   go to 5490
 5492 continue
   ndx4=ndx1
@@ -1189,9 +1189,9 @@ subroutine xpr1
   go to 9024
 9528 from=isto(sptr)
   sptr=sptr+1
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr=rptr-1
-  b=rsto(rptr)
+  tacs_b = rsto(rptr)
   rptr=rptr-1
   r4=rsto(rptr)
   rptr=rptr-1
@@ -1201,9 +1201,9 @@ subroutine xpr1
   rptr=rptr-1
   r1=rsto(rptr)
   rptr=rptr-1
-  d=b*r4 +a
+  tacs_d = tacs_b * r4 + tacs_a
   rptr=rptr+1
-  rsto(rptr)=d
+  rsto(rptr) = tacs_d
   ptr3=isto(sptr)
   ptr2=isto(sptr+1)
   ptr1=isto(sptr+2)
@@ -1276,9 +1276,9 @@ subroutine xpr1
   xprndx=isto(env+1)
   if(.not.(xprndx.eq.0)) go to 5541
   if(.not.(ndx1.eq.1)) go to 5551
-  a=rnull
+  tacs_a = rnull
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   go to 5550
 5551 continue
   stpflg=16
@@ -1311,9 +1311,9 @@ subroutine xpr1
   sptr=sptr+1
   if(.not.(ndx.eq.325)) go to 6021
   cnt=1
-  a=rnull
+  tacs_a = rnull
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   go to 6020
 6021 continue
 6020 continue
@@ -1367,12 +1367,12 @@ subroutine xpr1
 3211 if(.not.(env.gt.0)) go to 3210
   cnt1=cnt1+1
   if(.not.(cnt1.gt.cnt)) go to 5581
-  a=rnull
+  tacs_a = rnull
   go to 5580
 5581 continue
-  a=rsto(ptr6+cnt1)
+  tacs_a = rsto(ptr6+cnt1)
 5580 continue
-  if(.not.(a.eq.rnull)) go to 5591
+  if (.not. (tacs_a .eq. rnull)) go to 5591
   stpl2=isto(env+1)
   stpc2=isto(env+2)
   xprndx=isto(env+6)
@@ -1451,8 +1451,8 @@ subroutine xpr1
 5631 continue
 5630 continue
   if(.not.(cnt.eq.2)) go to 5641
-  b=rsto(ptr6+2)
-  ipol = idnint (b)
+  tacs_b = rsto(ptr6+2)
+  ipol = idnint (tacs_b)
   go to 5640
 5641 continue
   ipol=1
@@ -1476,30 +1476,30 @@ subroutine xpr1
   go to 5650
 5651 continue
 5650 continue
-  b = rsto(rptr)
+  tacs_b = rsto(rptr)
   rptr = rptr - 1
-  p = dmax1 (rmargn, dabs (rmargn * b))
-  a = rsto(ptr6 + 1)
-  if (.not. (a .gt. b + p)) go to 5661
-  stpflg=26
-  stpr1=a
-  stpr2=b
+  p = dmax1 (rmargn, dabs (rmargn * tacs_b))
+  tacs_a = rsto(ptr6 + 1)
+  if (.not. (tacs_a .gt. tacs_b + p)) go to 5661
+  stpflg = 26
+  stpr1 = tacs_a
+  stpr2 = tacs_b
   continue
   call errstp
   go to 5660
 5661 continue
 5660 continue
-  if(.not.(a.ge.b-p)) go to 5671
-  xprndx=isto(env+3)
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9537
+  if (.not. (tacs_a .ge. tacs_b - p)) go to 5671
+  xprndx = isto(env + 3)
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9537
   go to 9000
-9537 from=isto(sptr)
-  sptr=sptr+1
-  if(.not.(xprcnt.gt.1)) go to 5681
-  stpflg=117
-  stpi1=xprcnt
+9537 from = isto(sptr)
+  sptr = sptr + 1
+  if (.not. (xprcnt .gt. 1)) go to 5681
+  stpflg = 117
+  stpi1 = xprcnt
   continue
   call errstp
   go to 5680
@@ -1507,30 +1507,30 @@ subroutine xpr1
 5680 continue
   go to 5670
 5671 continue
-  flg=0
-  ndx1=isto(env+1)
-3231 if(.not.(ndx1.gt.0 .and. flg.eq.0)) go to 3230
-  env=ndx1
-  xprndx=isto(env+2)
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9538
+  flg = 0
+  ndx1 = isto(env + 1)
+3231 if (.not. (ndx1 .gt. 0 .and. flg .eq. 0)) go to 3230
+  env = ndx1
+  xprndx = isto(env + 2)
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9538
   go to 9000
-9538 from=isto(sptr)
-  sptr=sptr+1
-  if(.not.(xprcnt.gt.1)) go to 5691
-  stpflg=117
-  stpi1=xprcnt
+9538 from = isto(sptr)
+  sptr = sptr + 1
+  if (.not. (xprcnt .gt. 1)) go to 5691
+  stpflg = 117
+  stpi1 = xprcnt
   continue
   call errstp
   go to 5690
 5691 continue
 5690 continue
-  b=rsto(rptr)
+  tacs_b = rsto(rptr)
   rptr=rptr-1
-  p = dmax1 (rmargn, dabs (rmargn * b))
-  a = rsto(ptr6 + 1)
-  if(.not. (a .ge. b - p)) go to 5701
+  p = dmax1 (rmargn, dabs (rmargn * tacs_b))
+  tacs_a = rsto(ptr6 + 1)
+  if (.not. (tacs_a .ge. tacs_b - p)) go to 5701
   flg = 1
   go to 5700
 5701 continue
@@ -1538,26 +1538,26 @@ subroutine xpr1
 5700 continue
   go to 3231
 3230 continue
-  if(.not.(flg.eq.0)) go to 5711
-  stpflg=27
-  stpr1=a
-  stpr2=b
+  if (.not. (flg .eq. 0)) go to 5711
+  stpflg = 27
+  stpr1 = tacs_a
+  stpr2 = tacs_b
   continue
   call errstp
   go to 5710
 5711 continue
 5710 continue
-  if(.not.(a.le.b+p .or. ipol.eq.0)) go to 5721
-  xprndx=isto(env+3)
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9539
+  if (.not. (tacs_a .le. tacs_b + p .or. ipol .eq. 0)) go to 5721
+  xprndx = isto(env + 3)
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9539
   go to 9000
-9539 from=isto(sptr)
-  sptr=sptr+1
-  if(.not.(xprcnt.gt.1)) go to 5731
-  stpflg=117
-  stpi1=xprcnt
+9539 from = isto(sptr)
+  sptr = sptr + 1
+  if (.not. (xprcnt .gt. 1)) go to 5731
+  stpflg = 117
+  stpi1 = xprcnt
   continue
   call errstp
   go to 5730
@@ -1565,184 +1565,184 @@ subroutine xpr1
 5730 continue
   go to 5720
 5721 continue
-  ndx1=isto(env+0)
-  sptr=sptr-1
-  isto(sptr)=ptr0
-  ptr0=rptr+1
-  sptr=sptr-1
-  isto(sptr)=ptr1
-  sptr=sptr-1
-  isto(sptr)=ptr2
-  sptr=sptr-1
-  isto(sptr)=cnt
-  cnt=0
-  rptr=rptr+1
-  rsto(rptr)=a
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9540
+  ndx1 = isto(env + 0)
+  sptr = sptr - 1
+  isto(sptr) = ptr0
+  ptr0 = rptr + 1
+  sptr = sptr - 1
+  isto(sptr) = ptr1
+  sptr = sptr - 1
+  isto(sptr) = ptr2
+  sptr = sptr - 1
+  isto(sptr) = cnt
+  cnt = 0
+  rptr = rptr + 1
+  rsto(rptr) = tacs_a
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9540
   go to 9018
-9540 from=isto(sptr)
-  sptr=sptr+1
-  to=9020
+9540 from = isto(sptr)
+  sptr = sptr + 1
+  to = 9020
   call xpr2
-  rptr=ptr6+1
-  rsto(rptr)=rsto(ptr0)
-  cnt=isto(sptr)
-  ptr2=isto(sptr+1)
-  ptr1=isto(sptr+2)
-  ptr0=isto(sptr+3)
-  sptr=sptr+4
+  rptr = ptr6 + 1
+  rsto(rptr) = rsto(ptr0)
+  cnt = isto(sptr)
+  ptr2 = isto(sptr + 1)
+  ptr1 = isto(sptr + 2)
+  ptr0 = isto(sptr + 3)
+  sptr = sptr + 4
 5720 continue
 5670 continue
-  env=isto(sptr)
-  sptr=sptr+1
-  flg=isto(sptr)
-  ndx1=isto(sptr+1)
-  ipol=isto(sptr+2)
-  sptr=sptr+3
+  env = isto(sptr)
+  sptr = sptr + 1
+  flg = isto(sptr)
+  ndx1 = isto(sptr + 1)
+  ipol = isto(sptr + 2)
+  sptr = sptr + 3
   go to 9500
 9018 continue
-  i1=2*ipol+1
-  if(.not.(i1.eq.1)) go to 5741
-  i1=2
+  i1 = 2 * ipol + 1
+  if (.not. (i1 .eq. 1)) go to 5741
+  i1 = 2
   go to 5740
 5741 continue
 5740 continue
-  ptr1=rptr
-  ptr2=rptr+i1
-  rptr=ptr2+i1
-  cnt=0
-3241 if(.not.(ndx1.gt.0 .and. cnt.lt.i1)) go to 3240
-  cnt=cnt+1
-  env=ndx1
-  xprndx=isto(env+2)
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9541
+  ptr1 = rptr
+  ptr2 = rptr + i1
+  rptr = ptr2 + i1
+  cnt = 0
+3241 if (.not. (ndx1 .gt. 0 .and. cnt .lt. i1)) go to 3240
+  cnt = cnt + 1
+  env = ndx1
+  xprndx = isto(env + 2)
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9541
   go to 9000
-9541 from=isto(sptr)
-  sptr=sptr+1
-  if(.not.(xprcnt.gt.1)) go to 5751
-  stpflg=117
-  stpi1=xprcnt
+9541 from = isto(sptr)
+  sptr = sptr + 1
+  if (.not. (xprcnt .gt. 1)) go to 5751
+  stpflg = 117
+  stpi1 = xprcnt
   continue
   call errstp
   go to 5750
 5751 continue
 5750 continue
-  b=rsto(rptr)
-  rptr=rptr-1
-  rsto(ptr1+cnt)=b
-  xprndx=isto(env+3)
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9542
+  tacs_b = rsto(rptr)
+  rptr = rptr - 1
+  rsto(ptr1 + cnt) = tacs_b
+  xprndx = isto(env + 3)
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9542
   go to 9000
-9542 from=isto(sptr)
-  sptr=sptr+1
-  if(.not.(xprcnt.gt.1)) go to 5761
-  stpflg=117
-  stpi1=xprcnt
+9542 from = isto(sptr)
+  sptr = sptr + 1
+  if (.not. (xprcnt .gt. 1)) go to 5761
+  stpflg = 117
+  stpi1 = xprcnt
   continue
   call errstp
   go to 5760
 5761 continue
 5760 continue
-  c=rsto(rptr)
-  rptr=rptr-1
-  rsto(ptr2+cnt)=c
-  ndx1=isto(env+1)
+  tacs_c = rsto(rptr)
+  rptr = rptr - 1
+  rsto(ptr2 + cnt) = tacs_c
+  ndx1 = isto(env + 1)
   go to 3241
 3240 continue
   go to 9500
 9019 continue
-  stpflg=95
+  stpflg = 95
   continue
   call errstp
   go to 9500
 9020 continue
-  if(.not.(ndx1.gt.0)) go to 5771
-  xprndx=ndx1
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9543
+  if (.not. (ndx1 .gt. 0)) go to 5771
+  xprndx = ndx1
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9543
   go to 9000
-9543 from=isto(sptr)
-  sptr=sptr+1
-  if(.not.(xprcnt.gt.1)) go to 5781
-  stpflg=90
-  stpi1=xprcnt
+9543 from = isto(sptr)
+  sptr = sptr + 1
+  if (.not. (xprcnt .gt. 1)) go to 5781
+  stpflg = 90
+  stpi1 = xprcnt
   continue
   call errstp
   go to 5780
 5781 continue
 5780 continue
-  a=rsto(rptr)
-  rptr=rptr-1
-  ndx4 = idnint (a)
-  if(.not.(ndx2.gt.0)) go to 5791
-  xprndx=ndx2
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9544
+  tacs_a = rsto(rptr)
+  rptr = rptr - 1
+  ndx4 = idnint (tacs_a)
+  if (.not. (ndx2 .gt. 0)) go to 5791
+  xprndx = ndx2
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9544
   go to 9000
-9544 from=isto(sptr)
-  sptr=sptr+1
-  if(.not.(xprcnt.gt.1)) go to 5801
-  stpflg=91
-  stpi1=xprcnt
+9544 from = isto(sptr)
+  sptr = sptr + 1
+  if (.not. (xprcnt .gt. 1)) go to 5801
+  stpflg = 91
+  stpi1 = xprcnt
   continue
   call errstp
   go to 5800
 5801 continue
 5800 continue
-  a=rsto(rptr)
-  rptr=rptr-1
-  ndx6 = idnint (a)
+  tacs_a = rsto(rptr)
+  rptr = rptr - 1
+  ndx6 = idnint (tacs_a)
   go to 5790
 5791 continue
-  ndx6=ndx4
+  ndx6 = ndx4
 5790 continue
   go to 5770
 5771 continue
-  ndx4=1
-  ndx6=1
+  ndx4 = 1
+  ndx6 = 1
 5770 continue
   go to 9500
 9021 continue
-  xprndx=ndx1
-  if(.not.(xprndx.gt.0)) go to 5811
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9545
+  xprndx = ndx1
+  if (.not. (xprndx .gt. 0)) go to 5811
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9545
   go to 9000
-9545 from=isto(sptr)
-  sptr=sptr+1
-  rptr=rptr-xprcnt
-  a=rsto(rptr+1)
-  p = dmax1 (rmargn, dabs (rmargn * a))
-  if(.not.(rsto(rptr).lt.a-p .and. rsto(rptr).ne.rnull)) go to 5821
-  rsto(rptr)=a
+9545 from = isto(sptr)
+  sptr = sptr + 1
+  rptr = rptr - xprcnt
+  tacs_a = rsto(rptr + 1)
+  p = dmax1 (rmargn, dabs (rmargn * tacs_a))
+  if (.not. (rsto(rptr) .lt. tacs_a - p .and. rsto(rptr) .ne. rnull)) go to 5821
+  rsto(rptr) = tacs_a
   go to 5820
 5821 continue
 5820 continue
   go to 5810
 5811 continue
 5810 continue
-  xprndx=ndx2
-  if(.not.(xprndx.gt.0)) go to 5831
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9546
+  xprndx = ndx2
+  if (.not. (xprndx .gt. 0)) go to 5831
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9546
   go to 9000
-9546 from=isto(sptr)
-  sptr=sptr+1
-  rptr=rptr-xprcnt
-  a=rsto(rptr+1)
-  p = dmax1 (rmargn, dabs (rmargn * a))
-  if (.not. (rsto(rptr) .gt. a + p .and. rsto(rptr) .ne. rnull)) go to 5841
-  rsto(rptr) = a
+9546 from = isto(sptr)
+  sptr = sptr + 1
+  rptr = rptr - xprcnt
+  tacs_a = rsto(rptr + 1)
+  p = dmax1 (rmargn, dabs (rmargn * tacs_a))
+  if (.not. (rsto(rptr) .gt. tacs_a + p .and. rsto(rptr) .ne. rnull)) go to 5841
+  rsto(rptr) = tacs_a
   go to 5840
 5841 continue
 5840 continue
@@ -1751,75 +1751,75 @@ subroutine xpr1
 5830 continue
   go to 9500
 9022 continue
-  sptr=sptr-1
-  isto(sptr)=flg
-  flg=0
-  xprndx=ndx1
-  if(.not.(xprndx.gt.0)) go to 5851
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9547
+  sptr = sptr - 1
+  isto(sptr) = flg
+  flg = 0
+  xprndx = ndx1
+  if (.not. (xprndx .gt. 0)) go to 5851
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9547
   go to 9000
-9547 from=isto(sptr)
-  sptr=sptr+1
-  rptr=rptr-xprcnt
-  a=rsto(rptr+1)
-  p = dmax1 (rmargn, dabs (rmargn * a))
-  if (.not. (rsto(rptr) .lt. a - p .and. rsto(rptr) .ne. rnull)) go to 5861
+9547 from = isto(sptr)
+  sptr = sptr + 1
+  rptr = rptr - xprcnt
+  tacs_a = rsto(rptr + 1)
+  p = dmax1 (rmargn, dabs (rmargn * tacs_a))
+  if (.not. (rsto(rptr) .lt. tacs_a - p .and. rsto(rptr) .ne. rnull)) go to 5861
   flg = 1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   go to 5860
 5861 continue
 5860 continue
   go to 5850
 5851 continue
 5850 continue
-  xprndx=ndx2
-  if(.not.(xprndx.gt.0)) go to 5871
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9548
+  xprndx = ndx2
+  if (.not. (xprndx .gt. 0)) go to 5871
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9548
   go to 9000
-9548 from=isto(sptr)
-  sptr=sptr+1
-  rptr=rptr-xprcnt
-  a=rsto(rptr+1)
-  p = dmax1 (rmargn, dabs (rmargn * a))
-  if (.not. (rsto(rptr) .gt. a + p .and. rsto(rptr) .ne. rnull)) go to 5881
+9548 from = isto(sptr)
+  sptr = sptr + 1
+  rptr = rptr - xprcnt
+  tacs_a = rsto(rptr + 1)
+  p = dmax1 (rmargn, dabs (rmargn * tacs_a))
+  if (.not. (rsto(rptr) .gt. tacs_a + p .and. rsto(rptr) .ne. rnull)) go to 5881
   flg = 1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   go to 5880
 5881 continue
 5880 continue
   go to 5870
 5871 continue
 5870 continue
-  if(.not.(flg.gt.0)) go to 5891
-  isto(ptr3+4)=1
+  if (.not. (flg .gt. 0)) go to 5891
+  isto(ptr3 + 4) = 1
   go to 5890
 5891 continue
 5890 continue
-  flg=isto(sptr)
-  sptr=sptr+1
+  flg = isto(sptr)
+  sptr = sptr + 1
   go to 9500
 9023 continue
-  sptr=sptr-1
-  isto(sptr)=flg
-  flg=0
-  xprndx=ndx1
-  if(.not.(xprndx.gt.0)) go to 5901
-  sptr=sptr-1
-  isto(sptr)=from
-  from=9549
+  sptr = sptr - 1
+  isto(sptr) = flg
+  flg = 0
+  xprndx = ndx1
+  if (.not. (xprndx .gt. 0)) go to 5901
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 9549
   go to 9000
-9549 from=isto(sptr)
-  sptr=sptr+1
-  rptr=rptr-xprcnt
-  a=rsto(rptr+1)
-  p = dmax1 (rmargn, dabs (rmargn * a))
-  if(.not.(rsto(rptr).lt.a-p .and. rsto(rptr).ne.rnull)) go to 5911
-  flg=1
-  rsto(rptr)=a
+9549 from = isto(sptr)
+  sptr = sptr + 1
+  rptr = rptr - xprcnt
+  tacs_a = rsto(rptr + 1)
+  p = dmax1 (rmargn, dabs (rmargn * tacs_a))
+  if (.not. (rsto(rptr) .lt. tacs_a - p .and. rsto(rptr) .ne. rnull)) go to 5911
+  flg = 1
+  rsto(rptr) = tacs_a
   go to 5910
 5911 continue
 5910 continue
@@ -1835,11 +1835,11 @@ subroutine xpr1
 9550 from=isto(sptr)
   sptr=sptr+1
   rptr=rptr-xprcnt
-  a=rsto(rptr+1)
-  p = dmax1 (rmargn, dabs (rmargn * a))
-  if(.not.(rsto(rptr).gt.a+p .and. rsto(rptr).ne.rnull)) go to 5931
-  flg=1
-  rsto(rptr)=a
+  tacs_a = rsto(rptr+1)
+  p = dmax1 (rmargn, dabs (rmargn * tacs_a))
+  if (.not. (rsto(rptr) .gt. tacs_a + p .and. rsto(rptr) .ne. rnull)) go to 5931
+  flg = 1
+  rsto(rptr) = tacs_a
   go to 5930
 5931 continue
 5930 continue
@@ -1863,9 +1863,9 @@ subroutine xpr1
   go to 9025
 9551 from=isto(sptr)
   sptr=sptr+1
-  f=one
+  tacs_f = one
   i0=ptr1+ndx+2
-  e=rsto(i0)
+  tacs_e = rsto(i0)
   j1=i0+ndx
   i2=ndx+2
   i1=rptr
@@ -1874,63 +1874,63 @@ subroutine xpr1
   i=i+1
   i2=i2-1
   i1=i1+i2
-  a=f/(e-rsto(i0+i))
-  rsto(rptr+i)=a
-  rsto(i1)=a
+  tacs_a = tacs_f / (tacs_e - rsto(i0 + i))
+  rsto(rptr + i) = tacs_a
+  rsto(i1) = tacs_a
   go to 3251
 3250 continue
-  b=rsto(ptr1+2)
-  r1=rsto(ptr1+1) +b*rsto(rptr+1)
-  r2=-b*rsto(rptr+ndx+1)*rsto(j1+1)
-  i2=ndx+2
-  i1=rptr
-  j=1
-3261 if(.not.(j.lt.ndx)) go to 3260
-  j=j+1
-  f=f+one
-  e=rsto(i0+j-1)
-  i2=i2-1
-  i1=i1+i2
-  i4=i2
-  i3=i1
-  i=j-1
-3271 if(.not.(i.lt.ndx)) go to 3270
-  i=i+1
-  i4=i4-1
-  i3=i3+i4
-  a=f/(e-rsto(i0+i))
-  rsto(i3)=a*rsto(i3)
-  rsto(i1-j+i+1)=a *rsto(i1)
-  i6=ndx+2
-  i5=rptr
-  k=-1
-3281 if(.not.(k.lt.j-2)) go to 3280
-  k=k+1
-  b=rsto(i5-k+i)
-  b=a*(rsto(i5-k+j-1) -b)
-  rsto(i5-k+i)=b
-  i6=i6-1
-  i5=i5+i6
+  tacs_b = rsto(ptr1+2)
+  r1 = rsto(ptr1 + 1) + tacs_b * rsto(rptr + 1)
+  r2 = -tacs_b * rsto(rptr + ndx + 1) * rsto(j1 + 1)
+  i2 = ndx + 2
+  i1 = rptr
+  j = 1
+3261 if (.not. (j .lt. ndx)) go to 3260
+  j = j + 1
+  tacs_f = tacs_f + one
+  tacs_e = rsto(i0 + j - 1)
+  i2 = i2 - 1
+  i1 = i1 + i2
+  i4 = i2
+  i3 = i1
+  i = j - 1
+3271 if (.not. (i .lt. ndx)) go to 3270
+  i = i + 1
+  i4 = i4 - 1
+  i3 = i3 + i4
+  tacs_a = tacs_f / (tacs_e - rsto(i0 + i))
+  rsto(i3) = tacs_a * rsto(i3)
+  rsto(i1 - j + i + 1) = tacs_a * rsto(i1)
+  i6 = ndx + 2
+  i5 = rptr
+  k = -1
+3281 if (.not. (k .lt. j - 2)) go to 3280
+  k = k + 1
+  tacs_b = rsto(i5 - k + i)
+  tacs_b = tacs_a * (rsto(i5 - k + j - 1) - tacs_b)
+  rsto(i5 - k + i) = tacs_b
+  i6 = i6 - 1
+  i5 = i5 + i6
   go to 3281
 3280 continue
   go to 3271
 3270 continue
-  a=rsto(ptr1+j+1)
-  r1=r1 +a*rsto(rptr+j)
-  b=zero
-  c=one
-  i6=ndx+2
-  i5=rptr
-  k=0
-3291 if(.not.(k.lt.j)) go to 3290
-  k=k+1
-  i6=i6-1
-  i5=i5+i6
-  c=-c
-  b=b +c*rsto(i5-k+j)*rsto(j1+k)
+  tacs_a = rsto(ptr1 + j + 1)
+  r1 = r1 + tacs_a * rsto(rptr + j)
+  tacs_b = zero
+  tacs_c = one
+  i6 = ndx + 2
+  i5 = rptr
+  k = 0
+3291 if (.not. (k .lt. j)) go to 3290
+  k = k + 1
+  i6 = i6 - 1
+  i5 = i5 + i6
+  tacs_c = -tacs_c
+  tacs_b = tacs_b + tacs_c * rsto(i5 - k + j) * rsto(j1 + k)
   go to 3291
 3290 continue
-  r2=r2 +b*a
+  r2 = r2 + tacs_b * tacs_a
   go to 3261
 3260 continue
   rptr=ptr1+2
@@ -1959,9 +1959,9 @@ subroutine xpr1
 9553 from=isto(sptr)
   sptr=sptr+1
 5950 continue
-  a=rsto(base3+8)
+  tacs_a = rsto(base3+8)
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   sptr=sptr-1
   isto(sptr)=env
   env=useenv
@@ -1977,9 +1977,9 @@ subroutine xpr1
   go to 5960
 5961 continue
 5960 continue
-  a=rsto(i0+k)
+  tacs_a = rsto(i0+k)
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   go to 3301
 3300 continue
   i0=isto(ptr3)
@@ -1994,9 +1994,9 @@ subroutine xpr1
   go to 5970
 5971 continue
 5970 continue
-  a=rsto(i0+k)
+  tacs_a = rsto(i0+k)
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   go to 3311
 3310 continue
   env=isto(sptr)
@@ -2026,53 +2026,53 @@ subroutine xpr1
 9554 from=isto(sptr)
   sptr=sptr+1
   rptr=rptr-xprcnt
-  a=rsto(rptr+1)
+  tacs_a = rsto(rptr+1)
   go to 5980
 5981 continue
-  a=one
+  tacs_a = one
 5980 continue
   if(.not.(isto(env+1).eq.2)) go to 5991
-  a=-a
+  tacs_a = -tacs_a
   go to 5990
 5991 continue
 5990 continue
-  i=ptr0+isto(env+2)
-  rsto(i)=rsto(i) +a
-  env=isto(env+0)
+  i = ptr0 + isto(env + 2)
+  rsto(i) = rsto(i) + tacs_a
+  env = isto(env + 0)
   go to 3331
 3330 continue
-  env=isto(sptr)
-  sptr=sptr+1
-  ptr0=isto(sptr)
-  sptr=sptr+1
+  env = isto(sptr)
+  sptr = sptr + 1
+  ptr0 = isto(sptr)
+  sptr = sptr + 1
   go to 9500
 9027 continue
-  a=zero
+  tacs_a = zero
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   if(.not.(ndx.eq.1)) go to 6001
-  a=one
+  tacs_a = one
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   go to 6000
 6001 continue
   rptr=rptr+1
-  rsto(rptr)=a
-  a=one
+  rsto(rptr) = tacs_a
+  tacs_a = one
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
 6000 continue
   go to 9500
 9028 continue
-  a=half*rsto(base3+6)
+  tacs_a = half*rsto(base3+6)
   rptr=rptr+1
-  rsto(rptr)=a
+  rsto(rptr) = tacs_a
   i3=isto(ptr3+2)
   i4=isto(ptr3)
   i5=isto(ptr2)
-  b=rsto(i5) +rsto(i4+i3)*a
-  rptr=rptr+1
-  rsto(rptr)=b
+  tacs_b = rsto(i5) + rsto(i4 + i3) * tacs_a
+  rptr = rptr + 1
+  rsto(rptr) = tacs_b
   go to 9500
 end subroutine xpr1
 

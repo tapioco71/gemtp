@@ -73,10 +73,8 @@ subroutine over10
   ia = ntot
   if (ia .lt. ibr) ia = ibr
   if (ia .lt. it) ia = it
-  if (iprsup .ge. 3) write (unit = lunit6, fmt = 1139) (i, norder(i), index(i), iloc(i), kbus(i), kode(i), mbus(i), nr(i), kodebr(i), length(i), &
-       tr(i), tx(i), emtpc(i), i=1, ia )
-1139 format (//, ' Arrays at beginning of  over10 .', /, 5x, 'row', 2x, 'norder', 3x, 'index', 4x, 'iloc', &
-          4x, 'kbus', 4x, 'kode', 4x, 'mbus', 6x, 'nr', 2x, 'kodebr', 2x, 'length', 13x, 'tr', 13x, 'tx', 14x, 'c', /, (10i8, 3e15.4))
+  if (iprsup .ge. 3) write (unit = lunit6, fmt = 1139) (i, norder(i), index(i), iloc(i), kbus(i), kode(i), mbus(i), nr(i), kodebr(i), length(i), tr(i), tx(i), c(i), i = 1, ia)
+1139 format (//, ' Arrays at beginning of  over10 .', /, 5x, 'row', 2x, 'norder', 3x, 'index', 4x, 'iloc', 4x, 'kbus', 4x, 'kode', 4x, 'mbus', 6x, 'nr', 2x, 'kodebr', 2x, 'length', 13x, 'tr', 13x, 'tx', 14x, 'c', /, (10i8, 3e15.4))
   !     initialize counters for the -666 branches  * * * * * * * * * * * *
   ikf = 0
   isfd = 0
@@ -128,8 +126,8 @@ subroutine over10
   im = ig
 3140 ia = index(im)
   if (nr(i) .ge. 0) go to 3220
-  if (emtpc(j) .eq. 0.0) go to 3164
-  xx = tx(j) * omegal - 1.0 / (emtpc(j) * omegac)
+  if (c(j) .eq. 0.0) go to 3164
+  xx = tx(j) * omegal - 1.0 / (c(j) * omegac)
   go to 3168
 3164 xx = tx(j) * omegal
 3168 dd = rr * rr + xx * xx
@@ -163,7 +161,7 @@ subroutine over10
   gnd(isubs1) = gnd(isubs1) - gg
   isubs1 = iofbnd + ia
   bnd(isubs1) = bnd(isubs1) - bb
-  bb = bb + emtpc(j) * omegac
+  bb = bb + c(j) * omegac
   if (kbus(i) .lt. 0) gg = gg + r(j)
 3280 diag(im) = diag(im) + gg
   diab(im) = diab(im) + bb
@@ -187,7 +185,7 @@ subroutine over10
   lstat(14) = nt
   go to 9999
   !        for case of [a], [b], 1st form unsymmetric  [q] = -[b] + jw[u]:
-3504 call move (tr(is :), emtpf(1 :), jt)
+3504 call move (tr(is :), f(1 :), jt)
   n = is + jt - 1
   do j = is, n
      tr(j) = -tx(j)
@@ -227,13 +225,13 @@ subroutine over10
      if (iprsup .ge. 3) write (unit = lunit6, fmt = 3524) i, kbus(i), mbus(i), j, l, tr(l), tx(l)
 3524 format(' at 3524    ', 5i10, 2e20.8)
      if (j .ne. n) go to 3530
-     emtpe(m) = tr(l) ** 2  + tx(l) ** 2
+     e(m) = tr(l) ** 2  + tx(l) ** 2
      m = m + 1
      n = n + m
 3530 l = l + 1
   end do
   xa = tr(is) * tr(is) + tx(is) * tx(is)
-  if (xa .gt. tolmat * emtpe(1)) go to 3570
+  if (xa .gt. tolmat * e(1)) go to 3570
   n = 1
 3560 kill = 18
   lstat(19) = 3560
@@ -244,7 +242,7 @@ subroutine over10
   bus2 = bus(n2)
   flstat(13) = tolmat
   flstat(12) = xa
-  flstat(11) = emtpe(n)
+  flstat(11) = e(n)
   go to 9999
 3570 tr(is) = tr(is) / xa
   tx(is) = -tx(is) / xa
@@ -297,7 +295,7 @@ subroutine over10
      xr = solr(m+1) - vr
      xi = soli(m+1) - vi
      xa = xr * xr + xi * xi
-     if (xa .lt. tolmat * emtpe(n)) go to 3560
+     if (xa .lt. tolmat * e(n)) go to 3560
      xtr = xr / xa
      xti = -xi / xa
      je = ne
@@ -328,10 +326,10 @@ subroutine over10
   ll = is + jt - 1
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 3506) (tr(j), tx(j), j = is, ll)
 3506 format (/, ' at 3506.   cmr + j cmi after  inversion', /, (1x, 8e16.6))
-  call multmx (tr(is), emtpf(1), emtpe(1), solr(1), nt)
-  call move (emtpe(1 :), tr(is :), jt)
-  call multmx (tx(is), emtpf(1), emtpe(1), solr(1), nt)
-  call move (emtpe(1 :), tx(is :), jt)
+  call multmx (tr(is), f(1), e(1), solr(1), nt)
+  call move (e(1 :), tr(is :), jt)
+  call multmx (tx(is), f(1), e(1), solr(1), nt)
+  call move (e(1 :), tx(is :), jt)
   l = is + jt - 1
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 3511) (j, tr(j), tx(j), j = is, l)
 3511 format (/, ' At 3511.   final Y-branch in tr, tx', /, 9x, 'j', 15x, 'tr(j)', 15x, 'tx(j)', /, (1x, i9, 2e20.8))
@@ -362,7 +360,7 @@ subroutine over10
   go to 4040
 4020 diag(na1) = diag(na1) + tr(k) * 2.0
   if (kbus(i) .lt. 0) diag(na1) = diag(na1) + r(k) * 2.0
-  diab(na1) = diab(na1) + tx(k) * 2.0 + emtpc(k) * 2.0 * omegac
+  diab(na1) = diab(na1) + tx(k) * 2.0 + c(k) * 2.0 * omegac
   go to 4110
 4030 mna1b1 = nb1
   mxa1b1 = na1
@@ -378,7 +376,7 @@ subroutine over10
   isubs1 =  iofgnd + l
   gnd(isubs1) = gnd(isubs1) + tr(k)
   isubs1 = iofbnd + l
-  bnd(isubs1) = bnd(isubs1) + tx(k) + emtpc(k) * omegac
+  bnd(isubs1) = bnd(isubs1) + tx(k) + c(k) * omegac
   isubs1 = iofgnd + l
   if (kbus(i) .lt. 0) gnd(isubs1) = gnd(isubs1) + r(k)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = *) ' below 4080. l, bnd(isubs1) =', l, bnd(isubs1)
@@ -438,7 +436,7 @@ subroutine over10
   go to 4370
 4350 diag(na2) = diag(na2) + tr(k) * 2.0
   if (kbus(i) .lt. 0) diag(na2) = diag(na2) + r(k) * 2.0
-  diab(na2) = diab(na2) + tx(k) * 2.0 + emtpc(k) * 2.0 * omegac
+  diab(na2) = diab(na2) + tx(k) * 2.0 + c(k) * 2.0 * omegac
   go to 3430
 4360 mna2b2 = nb2
   mxa2b2 = na2
@@ -454,11 +452,11 @@ subroutine over10
   isubs1 = iofgnd + l
   gnd(isubs1) = gnd(isubs1) + tr(k)
   isubs1 = iofbnd + l
-  bnd(isubs1) = bnd(isubs1) + tx(k) + emtpc(k) * omegac
+  bnd(isubs1) = bnd(isubs1) + tx(k) + c(k) * omegac
   isubs1 = iofgnd + l
   if (kbus(i) .lt. 0) gnd(isubs1) = gnd(isubs1) + r(k)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = *) ' below 4410.   l, bnd(isubs1) =', l, bnd(isubs1)
-  if (iprsup .ge. 1 .and. l .eq. 1) write (unit = lunit6, fmt = *) ' k, tx(k), emtpc(k), omegac =', k, tx(k), emtpc(k), omegac
+  if (iprsup .ge. 1 .and. l .eq. 1) write (unit = lunit6, fmt = *) ' k, tx(k), c(k), omegac =', k, tx(k), c(k), omegac
   go to 3430
   !                                                      end of [y] buding
 3340 n1 = na2 - na1
@@ -484,7 +482,7 @@ subroutine over10
   gnd(isubs1) = gnd(isubs1) - gg
   isubs1 = iofbnd + ia
   bnd(isubs1) = bnd(isubs1) - bb
-  bb = bb + emtpc(k) * omegac
+  bb = bb + c(k) * omegac
   if (kbus(i) .lt. 0) gg = gg + r(k)
   diag(im) = diag(im) + gg
   diab(im) = diab(im) + bb
@@ -587,7 +585,7 @@ subroutine over10
   !                                                    end of [y] building
   !
   do i = 1, ntot
-     emtpe(i) = diag(i) ** 2 + diab(i) ** 2
+     e(i) = diag(i) ** 2 + diab(i) ** 2
      if (kode(i) .gt. 0) kode(i) = -kode(i)
   end do
   n3 = 1
@@ -758,7 +756,7 @@ subroutine over10
   yy = diag(i) * diag(i) + diab(i) * diab(i)
   if (iprsup .ge. 6) write (unit = lunit6, fmt = 5023) i, ncurr, index(i), index(i + 1), diag(i), diab(i)
 5023 format (' New row  i  of steady-state elimination.', 7x, 'i', 3x, 'ncurr', 4x, 'index(i)', 2x, 'index(i + 1)', 8x, 'diag(i)', 8x, 'diab(i)', /, 41x, 2i8, 2i12, 2e20.10)
-  if (yy .gt. tolmat * emtpe(i)) go to 5045
+  if (yy .gt. tolmat * e(i)) go to 5045
   do n23 = 1, ntot
      if (norder(n23) .eq. i) go to 5043
   end do
@@ -766,7 +764,7 @@ subroutine over10
   lstat(19) = 5042
   lstat(16) = i
   go to 9999
-5043 write (unit = lunit6, fmt = 5041) bus(n23), emtpe(i), yy, tolmat
+5043 write (unit = lunit6, fmt = 5041) bus(n23), e(i), yy, tolmat
 5041 format (/, ' Caution. ---- During Y-matrix elimination for steady-state solution voltages, a near-zero diagonal element', /, 15x, 'for node ', "'", a6,  "'", ' exists just before reciprocation. Using magnitudes squared for all 3 quantities, we have', /, 15x, 'original diagonal value =', e12.3, ',   questionable value =', e12.3, ',   tolerance ratio =', e12.3, '.', /, 15x, 'The node in question may be connected to other nodes, forming a subnetwork.   But the subnetwork has no (or')
   write (unit = lunit6, fmt = 5044)
 5044 format (15x, 'very weak) path to ground or other known-voltage node in the steady-state.   Solution voltages of this', /, 15x, 'subnetwork will all be set to zero.')
@@ -1069,8 +1067,8 @@ subroutine fxsour
   vdiff(npp) = 0.0d0
   if (ncurr .le. 0) ncurr = 1
   do ip = 1, ntot
-     emtpe(ip) = 0.0d0
-     emtpf(ip) = 0.0d0
+     e(ip) = 0.0d0
+     f(ip) = 0.0d0
   end do
   i = 1
 7350 if (i .gt. ntot) go to 7390
@@ -1078,18 +1076,18 @@ subroutine fxsour
   vi = soli(i)
   jj = index(i)
   kkk = index(i + 1)
-  emtpe(i) = emtpe(i) + diagg(i) * vr - diabb(i) * vi
-  emtpf(i) = emtpf(i) + diagg(i) * vi + diabb(i) * vr
+  e(i) = e(i) + diagg(i) * vr - diabb(i) * vi
+  f(i) = f(i) + diagg(i) * vi + diabb(i) * vr
   go to 7370
 7360 jj = jj + 1
 7370 if (jj .ge. kkk) go to 7380
   j = iloc(jj)
   der = gndd(jj) * vr - bndd(jj) * vi
   dei = gndd(jj) * vi + bndd(jj) * vr
-  emtpe(j) = emtpe(j) + der
-  emtpf(j) = emtpf(j) + dei
-  emtpe(i) = emtpe(i) + gndd(jj) * solr(j) - bndd(jj) * soli(j)
-  emtpf(i) = emtpf(i) + gndd(jj) * soli(j) + bndd(jj) * solr(j)
+  e(j) = e(j) + der
+  f(j) = f(j) + dei
+  e(i) = e(i) + gndd(jj) * solr(j) - bndd(jj) * soli(j)
+  f(i) = f(i) + gndd(jj) * soli(j) + bndd(jj) * solr(j)
   go to 7360
 7380 i = i + 1
   go to 7350
@@ -1098,16 +1096,16 @@ subroutine fxsour
   if (i .eq. norder(1)) go to 7440
   j = kode(i)
   if (j .le. i) go to 7410
-  emtpe(j) = emtpe(i) + emtpe(j)
-  emtpf(j) = emtpf(i) + emtpf(j)
+  e(j) = e(i) + e(j)
+  f(j) = f(i) + f(j)
   go to 7440
   !     begin calculation of  p,q,v for voltage sources
 7410 nekcc = nekcc + 1
   fxtem5(nekcc) = sqrtz (solr(i) ** 2 + soli(i) ** 2)
   fxtem4(nekcc) = 0.0
   if (fxtem5(nekcc) .gt. 0.0) fxtem4(nekcc) = picon * atan2z (soli(i), solr(i))
-  fxtem2(nekcc) = (solr(i) * emtpe(i) + soli(i) * emtpf(i)) * onehaf
-  fxtem3(nekcc) = (soli(i) * emtpe(i) - solr(i) * emtpf(i)) * onehaf
+  fxtem2(nekcc) = (solr(i) * e(i) + soli(i) * f(i)) * onehaf
+  fxtem3(nekcc) = (soli(i) * e(i) - solr(i) * f(i)) * onehaf
   if (iprsup .gt. 8) write (unit = lunit6, fmt = 1050) fxtem1(nekcc), fxtem2(nekcc), fxtem3(nekcc), fxtem4(nekcc), fxtem5(nekcc)
 1050 format (' bus, P, Q, angle, V(peak)', a6, 2x, 4e13.4)
 7440 i = i + 1

@@ -736,7 +736,7 @@ contains
           length(ibr) = 1
           nr(ibr) = -it
           tr(it) = 0.0
-          emtpc(it) = 0.0
+          c(it) = 0.0
           d1 = reacl(kcl + 2)
           if (d1 .gt. reacl(kcl + 1)) d1 = reacl(kcl + 1)
           if (jtype(n1) .lt. 3) go to 966
@@ -778,10 +778,10 @@ contains
        kbus(ibr) = nodom(n1)
        mbus(ibr) = ntot
        tr(it) = epsiln
-       emtpc(it) = 0.0
+       c(it) = 0.0
        tx(it) = 0.0
-       if (iprsup .ge. 1) write (unit = lunit6, fmt = 80980) mbus(ibr), kbus(ibr), ibr, it, tr(it), emtpc(it)
-80980  format (' ********* Potential speed cap : mbus =', i6, ' kbus =', i6, ' ibr =', i6, ' it =', i6, ' tr(it) =', e14.5, ' emtpc =', e14.5)
+       if (iprsup .ge. 1) write (unit = lunit6, fmt = 80980) mbus(ibr), kbus(ibr), ibr, it, tr(it), c(it)
+80980  format (' ********* Potential speed cap : mbus =', i6, ' kbus =', i6, ' ibr =', i6, ' it =', i6, ' tr(it) =', e14.5, ' c =', e14.5)
        ! creation of sources to represent im excitation coils for
        ! steady-state initialization (accommodates kpsour use):
        if (jtype(n1) .lt. 3) go to 990
@@ -1089,7 +1089,7 @@ contains
     itexc = it
     ! note : tr(it=itexc) will be changed later to 0.5 * rf
     tx(it) = 0.0
-    emtpc(it) = 0.0
+    c(it) = 0.0
     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17080) mbus(ibr), kbus(ibr), ibr, it
 17080 format (' ********* Series field resist.', 23x, i4, 4x, i4, 4x, i4, 4x, i4)
     call ibrinc
@@ -1100,7 +1100,7 @@ contains
     nr(ibr) = - it
     tr(it) = epsiln
     tx(it) = 0.0
-    emtpc(it) = 0.0
+    c(it) = 0.0
     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17082) mbus(ibr),kbus(ibr),ibr,it
 17082 format (' ********* Parall field resist.', 23x, i4, 4x, i4, 4x, i4, 4x, i4)
     ! shorting damper and eddy current coils
@@ -1409,7 +1409,7 @@ contains
        nr(ibr) = - it
        tr(it) = 1.0d+8
        tx(it) = 0.0
-       emtpc(it) = 0.0
+       c(it) = 0.0
        if (iprsup .ge. 1) write (unit = lunit6, fmt = 17531) mbus(ibr), kbus(ibr), ibr, it
 17531  format (' ********* High power resist.', 25x, i4, 4x, i4, 4x, i4, 4x, i4)
     end do
@@ -1425,7 +1425,7 @@ contains
     tr(it) = rnum
     if (xopt .eq. 0.0) tx(it) = xnum * 1.0d+3
     if (xopt .ne. 0.0) tx(it) = xnum * twopi * xopt
-    emtpc(it) = 0.0
+    c(it) = 0.0
     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17539) mbus(ibr), kbus(ibr), ibr, it
 17539 format (' ********* Neutral impedance', 26x, i4, 4x, i4, 4x, i4, 4x, i4)
     !  set 0.5*rf for external exciter resistance:
@@ -1538,8 +1538,8 @@ contains
        tr(it) = 0.0
        tx(it) = 0.0
        ! the following factor of d10=1.0d+6 is due to micro f or mho.
-       emtpc(it) = d10 * d10 * hjum / 23.73
-       if (copt .ne. 0.0) emtpc(it) = emtpc(it) * copt * twopi
+       c(it) = d10 * d10 * hjum / 23.73
+       if (copt .ne. 0.0) c(it) = c(it) * copt * twopi
        if (iprsup .ge. 1) write (unit = lunit6, fmt = 17605) mlum, mbus(ibr), kbus(ibr), ibr, it
 17605  format (' ********* Mass branch nr.', i3, 25x, i4, 4x, i4, 4x, i4, 4x, i4)
        ! creating spring element :
@@ -1557,7 +1557,7 @@ contains
        d1 = d10 * spring / 0.73756
        if (xopt .eq. 0.0) tx(it) = 1.0d+3 / d1
        if (xopt .ne. 0.0) tx(it) = twopi * xopt / d1
-       emtpc(it) = 0.0
+       c(it) = 0.0
        if (iprsup .ge. 1) write (unit = lunit6, fmt = 17606) mbus(ibr), kbus(ibr), ibr, it
 17606  format (' ********* Spring branch', 30x, i4, 4x, i4, 4x, i4, 4x, i4)
        umoutp(n6) = 1.0/d1
@@ -1592,7 +1592,7 @@ contains
        nr(ibr) = - it
        tr(it) = 0.73756 / dsynum
        tx(it) = 0.0
-       emtpc(it) = 0.0
+       c(it) = 0.0
        if (iprsup .ge. 1) write (unit = lunit6, fmt = 17616) mlum, mbus(ibr), kbus(ibr), ibr, it
 17616  format (' ********* Synchr. damping branch for mass nr.', i3, 5x, i4, 4x, i4, 4x, i4, 4x, i4)
        ! creating mutual damping :
@@ -1607,7 +1607,7 @@ contains
        nr(ibr) = - it
        tr(it) = 0.73756/dmutum
        tx(it) = 0.0
-       emtpc(it) = 0.0
+       c(it) = 0.0
        if (iprsup .ge. 1) write (unit = lunit6, fmt = 17626) mbus(ibr), kbus(ibr), ibr, it
 17626  format (' ********* Mutual damping branch', 22x, i4, 4x, i4, 4x, i4, 4x, i4)
        if (spring .eq. 0.0) go to 17628
@@ -1625,7 +1625,7 @@ contains
        nr(ibr) = - it
        tr(it) = 0.73756 / dabsum
        tx(it) = 0.0
-       emtpc(it) = 0.0
+       c(it) = 0.0
        if (iprsup .ge. 1) write (unit = lunit6, fmt = 17638) mlum, mbus(ibr), kbus(ibr), ibr, it
 17638  format (' ********* Abslt damping branch for mass nr.', i3, 7x, i4, 4x, i4, 4x, i4, 4x, i4)
        ! storing applied torque distribution factors distrf in
@@ -1756,7 +1756,7 @@ contains
     nr(ibr) = -it
     tr(it) = 1.0
     tx(it) = 0.0
-    emtpc(it) = 0.0
+    c(it) = 0.0
     if (iprsup .ge. 1) write (unit = lunit6, fmt = 17748) mbus(ibr), kbus(ibr), ibr, it
 17748 format (' ********* Small series resist for apll gen torque', 4x, i4, 4x, i4, 4x, i4, 4x, i4)
     go to 17800
@@ -2860,7 +2860,7 @@ subroutine over5a
      it = it + 1
      tr(it) = volti(j)
      tx(it) = 0.0
-     emtpc(it) = 0.0
+     c(it) = 0.0
      r(it) = 0.0
      ibr = ibr + 1
      kbus(ibr) = kpen(j)
@@ -2870,7 +2870,7 @@ subroutine over5a
      it = it + 1
      tr(it) = -volti(j)
      tx(it) = 0.0
-     emtpc(it) = 0.0
+     c(it) = 0.0
      r(it) = 0.0
   end do
 6343 continue
@@ -3093,7 +3093,7 @@ subroutine over5a
   if (reps .eq. 0.0) reps = sqrtz (epsiln)
   tr(it) = reps
   tx(it) = 0.0
-  emtpc(it) = 0.0
+  c(it) = 0.0
   nr(ibr) = -it
   k = ntot
   node(kconst) = -k
@@ -3112,7 +3112,7 @@ subroutine over5a
 2344 iprint = 4
   nr(ibr) = -it
   length(ibr) = 1
-  emtpc(it) = 0.
+  c(it) = 0.
   tr(it) = gus3
   tx(it) = 0.
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 340) gus3
@@ -3251,7 +3251,7 @@ subroutine over5a
   tr(1) = 1.e10
   tx(1) = 0.0
   r(1) = 0.0
-  emtpc(1) = 0.0
+  c(1) = 0.0
 2436 if (iprsup .lt. 3) go to 1416
   write (unit = lunit6, fmt = 12416)
 12416 format (/, ' Switch table vectors', /, '     row   bus1     bus2    kpos  kdepsm  isourc  kswtyp', 9x, 'tclose', 9x, 'adelay', 10x, 'topen', 11x, 'crit')
@@ -3265,7 +3265,7 @@ subroutine over5a
 13416 format (/, ' Branch table vectors', /, '       row      kbus      mbus        nr    length    kodebr    kodsem', /, (7i10))
   write (unit = lunit6, fmt = 14416) (i, iform(i), node(i), crest(i), time1(i), tstart(i), sfreq(i), i = 1, kconst)
 14416 format (/, ' Source table vectors', /, '       row     iform node', 15x, 'crest', 15x, 'time1', 14x, 'tstart', 15x, 'sfreq', /, (3i10, 4e20.10))
-  write (unit = lunit6, fmt = 2584) (i, tr(i), tx(i), r(i), emtpc(i), i = 1, it)
+  write (unit = lunit6, fmt = 2584) (i, tr(i), tx(i), r(i), c(i), i = 1, it)
 2584 format (/, ' Rows 1 through it of parameters follow: ', /, 7x, 'row', 13x, 'tr', 13x, 'tx', 14x, 'R', 14x, 'C', /, (i10, 4e15.5))
 1416 if (iprsup .ge. 1) write (unit = lunit6, fmt = 1417) kconst, ibr, inonl, kswtch, istead, omega, xopt, copt, twopi
 1417 format (/, ' Normal exit "over5a".  kconst     ibr   inonl  kswtch  istead', 8x, 'omega', 9x, 'xopt', 9x, 'copt', 8x, 'twopi', /, 22x, 5i8, 4e13.4)
@@ -3883,7 +3883,7 @@ subroutine smdat (mtype)
      nr(ibr) = -it
      tr(it) = 1.0
      tx(it) = 0.0
-     emtpc(it) = 0.0
+     c(it) = 0.0
   end do
   it = it + 3
   ! read output specification card. ismout is array of output flags.

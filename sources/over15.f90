@@ -362,7 +362,7 @@ subroutine over15
      bus(ntot + j) = text12
      numnvo = numnvo + 1
      if (numnvo .gt. lsiz12) go to 4675
-     emtpe(ntot + j) = 0.0d0
+     e(ntot + j) = 0.0d0
 4687 ibsout(numnvo) = ntot + j
   end do
   go to 1030
@@ -950,7 +950,7 @@ subroutine over15
      go to 8710
 8695 if (tclose(i) .gt. 0.0) go to 8693
      if (iabs (kpos(i)) .ne. 10) go to 8284
-     if (absz (emtpe(k) - emtpe(m)) .lt. topen(i)) go to 8710
+     if (absz (e(k) - e(m)) .lt. topen(i)) go to 8710
 8284 if (kbase .eq. 2) go to 8702
      write (unit = lunit6, fmt = 8699) bus(k), bus(m), tclose(i)
 8699 format (' ***                       ', 15x, 33x, 'switch ', '"', a6, '"', ' to ', '"', a6, '"', ' closed after', e12.5, ' sec.')
@@ -1094,7 +1094,7 @@ subroutine top15
      tstop(k + 1) = 0.
      n3 = iabs (node(k))
      n2 = iabs (node(k + 1))
-     gus4 = emtpe(n3) - emtpe(n2)
+     gus4 = e(n3) - e(n2)
      gus3 = crest(k + 2) - gus4 * tstop(k)
      gus1 = gus3
      if (iform(k + 1) .gt. 1) gus1 = ck1

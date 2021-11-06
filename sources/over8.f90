@@ -1413,8 +1413,8 @@ contains
        !     for jm gt jcltac(kcl+1) .
 13170  if (nshare .ne. 10) go to 13370
        n2 = int(fpar(kcl + 2))
-       emtpc(n2) = 1.0d+8
-       if (copt .ne. 0.0) emtpc(itcap) = emtpc(itcap)*copt*twopi
+       c(n2) = 1.0d+8
+       if (copt .ne. 0.0) c(itcap) = c(itcap)*copt*twopi
        tr(n2) = 0.0
        kconst = kconst + 1
        if ( kconst .le. lexct )  go to 6784
@@ -1811,7 +1811,7 @@ contains
           nr(ibr) = -it
           tr(it) = epsiln
           tx(it) = 0.0
-          emtpc(it) = 0.0
+          c(it) = 0.0
           if (n1 .eq. 3) hist(kcl) = ibr
           !  load-flow preparation of main inductance of im type-4 :
           !  note : after completion of processing the load-flow, these
@@ -2119,7 +2119,7 @@ contains
           length(ibr) = 1
           nr(ibr) = - it
           tr(it) = 1.0/(gpar(kcl+4) * slip)
-          emtpc(it) = 0.0
+          c(it) = 0.0
           tx(it) = reacl(kcl+4) * 1.0d+3
           if (xopt .ne. 0.0) tx(it) = reacl(kcl+4) * twopi * xopt
           if (iprsup .ge. 1) write(lunit6,2208) kbus(ibr),mbus(ibr),ibr,it,tr(it),tx(it)
@@ -2144,7 +2144,7 @@ contains
           length(ibr) = 1
           nr(ibr) = - it
           tr(it) = 0.0
-          emtpc(it) = 0.0
+          c(it) = 0.0
           if (jtype(k) .ne. 3) go to 2227
           tr(it) = epsiln
           tx(it) = 0.0
@@ -2269,14 +2269,13 @@ contains
     !     of inversion (m=0).
     integer(4), intent(in) :: n, m
     real(8), intent(out) :: a(:)
-    real(8), intent(in) :: c(:)
+    real(8), intent(out) :: c(:)
     integer(4) :: i, i1, i2, ij, ik
     integer(4) :: j
     integer(4) :: k
     integer(4) :: l
     real(8) :: b(30)
     real(8) :: d(30)
-    real(8) :: emtpc(1)
     real(8) :: g1, g2
     real(8) :: h1, h2
     real(8) :: w
@@ -2290,7 +2289,7 @@ contains
 3   j = j - 1
     if (j .eq. m) return
     h1 = a(ij)
-    g1 = emtpc(ij)
+    g1 = c(ij)
     x = 1.0d0  / (h1 * h1 + g1 * g1)
     h1 = -h1 * x
     g1 = g1 * x
@@ -2309,7 +2308,7 @@ contains
     if (k .eq. j) go to 7
     i = ik + j
 5   h2 = a(i)
-    g2 = emtpc(i)
+    g2 = c(i)
     b(k) = h2 * h1 - g2 * g1
     d(k) = h2 * g1 + g2 * h1
     !                                   begin i-loop
@@ -2320,18 +2319,18 @@ contains
        x = b(l)
        y = d(l)
        a(i) = a(i) + x * h2 - y * g2
-6      emtpc(i) = emtpc(i) + x * g2 + y * h2
+6      c(i) = c(i) + x * g2 + y * h2
     end do
     if (k .lt. j) go to 4
     i = ik + j
     a(i) = b(k)
-    emtpc(i) = d(k)
+    c(i) = d(k)
     go to 4
     !                                   end i-loop
 7   i=ij
     do l = 1, j
        i=i+1
-       emtpc(i)=d(l)
+       c(i)=d(l)
 8      a(i)=b(l)
     end do
     go to 4
@@ -2527,7 +2526,7 @@ subroutine over8
   n12 = 0
   call vecrsv (volt(1 :), n12, n12)
   n12 = ktrlsw(7)
-  call vecrsv (emtpc(1 :), n12, n7)
+  call vecrsv (c(1 :), n12, n7)
   call vecrsv (tr(1 : ), n12, n7)
   call vecrsv (tx(1 :), n12, n7)
   call vecrsv (r(1 :), n12, n7)
@@ -3061,15 +3060,15 @@ subroutine over8
         tr(itadd) = d3
         tx(itadd) = d4 * d2
         r(itadd) = d5
-        emtpc(itadd) = d6 * h3
+        c(itadd) = d6 * h3
         itadd = itadd + 1
      end do
 8120 continue
      if (iprsup .lt. 6) go to 8130
      n3 = itadd - 1
      n4 = nr(ii)
-     write (lunit6, 8125) n4, nr(ii), ii, (tr(j), tx(j), r(j), emtpc(j), j = n4, n3)
-8125 format (//, 5x, 'n4 = ', i4, 5x, 'nr(ii) = ', i4, 5x, 'ii = ', i4, 5x, '(tr(j), tx(j), r(j), emtpc(j), j=n3, n4)  ....', /, (8(1x, e15.8)))
+     write (lunit6, 8125) n4, nr(ii), ii, (tr(j), tx(j), r(j), c(j), j = n4, n3)
+8125 format (//, 5x, 'n4 = ', i4, 5x, 'nr(ii) = ', i4, 5x, 'ii = ', i4, 5x, '(tr(j), tx(j), r(j), c(j), j=n3, n4)  ....', /, (8(1x, e15.8)))
   end do
 8130 continue
   it2 = 1
@@ -3393,7 +3392,7 @@ subroutine over8
         ! *** calculation of pi circuit parameters (only upper part of symmetric
         !     matrix is calculated)
         r(itadd)=gus3
-        emtpc(itadd)=gus4
+        c(itadd)=gus4
         tr(itadd)=gus1
         tx(itadd)=gus2
         if ( iprsup .ge. 1 ) write (lunit6, 1462) itadd,  gus3, gus4, gus1, gus2
@@ -3414,7 +3413,7 @@ subroutine over8
   do i = n3, n4
      tr(i) = -tr(i)
      tx(i) = -tx(i) * d2
-465  emtpc(i) = emtpc(i) * h3
+465  c(i) = c(i) * h3
   end do
   it2 = 0
   go to 407
@@ -3489,7 +3488,7 @@ subroutine over8
   nn2 = itadd - 1
   do iqy=1, nn1
      r(nn2+iqy) = 0.d0
-     emtpc(nn2+iqy) = 0.0d0
+     c(nn2+iqy) = 0.0d0
   end do
 1008 continue
   do kqy=1,it2
@@ -3509,7 +3508,7 @@ subroutine over8
            br = qrik * qrjk - qiik * qijk
            bi = qrik * qijk + qiik * qrjk
            r(nn2+ij) = r(nn2+ij) + dyrk * br - dyik * bi
-           emtpc(nn2+ij) = emtpc(nn2+ij) + dyrk * bi + dyik * br
+           c(nn2+ij) = c(nn2+ij) + dyrk * bi + dyik * br
         end do
 1037    continue
      end do
@@ -3545,7 +3544,7 @@ subroutine over8
   end do
 1017 continue
   it0 = it2 * ( it2 + 1 ) / 2
-  if (iprsup .ge. 3) write (unit = lunit6, fmt = 5284) (i, tr(i), tx(i), r(i), emtpc(i), i = itadd, itadd + it0)
+  if (iprsup .ge. 3) write (unit = lunit6, fmt = 5284) (i, tr(i), tx(i), r(i), c(i), i = itadd, itadd + it0)
 5284 format ( 7x, 'row', 13x, 'tr', 13x, 'tx', 14x, 'r',  14x, 'c', /, (i10, 4e15.5))
   do ik = 1, it2
      nr(k) = itadd + ( ik - 1 ) * ik / 2
@@ -3560,7 +3559,7 @@ subroutine over8
   if(i.lt.0) go to 407
   n2=i+it2*(it2+1)/2-1
   do l = i, n2
-     emtpc(l) = emtpc(l) * onehaf
+     c(l) = c(l) * onehaf
   end do
 407 k=k+it2
 393 if ( k .le. ibr ) go to 401
@@ -3570,7 +3569,7 @@ subroutine over8
   j0 = itadd - 1
   if ( lastov .eq. nchain - 1  .or.  iprsup .ge. 1 ) write (lunit6, 47884)  i, j0
 47884 format (' pi-equiv branches of distrib lines in tr, tx, etc. between limits    ', 2i6)
-  if ( iprsup  .ge.  3 ) write (lunit6, 2584)  ( i, tr(i), tx(i), r(i), emtpc(i), i=1, j0 )
+  if ( iprsup  .ge.  3 ) write (lunit6, 2584)  ( i, tr(i), tx(i), r(i), c(i), i=1, j0 )
 2584 format (7x, 'row', 13x, 'tr', 13x, 'tx', 14x, 'r', 14x, 'c', /, (i10, 4e15.5))
   if(inonl.eq.0) go to 414
   if ( noutpr  .eq.  0 ) write(lunit6,406)
@@ -3616,9 +3615,9 @@ subroutine over8
      tr(itadd) = 1.0 / gslope(l)
      tx(itadd) = 0.0
      go to 65468
-65464 tr(itadd) = 0.0
-     tx(itadd)=anonl(i)/vzero(i)*d2
-65468 emtpc(itadd) = 0.0
+65464 tr(itadd) = 0.0d0
+     tx(itadd) = anonl(i) / vzero(i) * d2
+65468 c(itadd) = 0.0d0
      itadd=itadd+1
   end do
 413 continue

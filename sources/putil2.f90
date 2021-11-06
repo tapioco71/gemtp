@@ -25,7 +25,7 @@ subroutine putil2
 0001 go to (9501, 9502, 9503, 9504, 9505, 9506, 9507, 0003, 0003, 0003, 0003, 0003, 9513, 9514, 9515, 9516, 9517, 9518, 9519,&
           9520, 9521, 9522, 9523, 0003, 0003, 0003, 0003, 0003, 0003, 0003, 9531, 9532, 9533, 9534, 9535, 9536, 9537, 9538),&
           from-9500
-0003 stop 'invalid "from" reference in "putil2".'
+0003 stop 'Invalid "from" reference in "putil2".'
 910 stpflg = 42
   stpi1 = iptr
   stpi2 = ilen - iptr
@@ -373,11 +373,11 @@ subroutine putil2
 9213 continue
   k = base2 + isto(base1 + 53)
   i = -1
-  a = -one
+  tacs_a = -one
   mflg = 0
 3111 if (.not. (i .lt. 9 .and. mflg .eq. 0)) go to 3110
   i = i + 1
-  a = a + one
+  tacs_a = tacs_a + one
   if (.not. (csto(k + i) .eq. csto(dptr + 1))) go to 5301
   mflg = 1
   go to 5300
@@ -388,7 +388,7 @@ subroutine putil2
   if (.not. (mflg .gt. 0)) go to 5311
   dptr = dptr + 1
   rptr = rptr + 1
-  rsto(rptr) = a
+  rsto(rptr) = tacs_a
   go to 5310
 5311 continue
 5310 continue
@@ -412,9 +412,9 @@ subroutine putil2
 9531 from = isto(sptr)
   sptr = sptr + 1
   if (.not. (mflg .gt. 0)) go to 5321
-  a = rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr = rptr - 1
-  rsto(rptr) = real (10.0d0 * rsto(rptr) + a, kind (rsto))
+  rsto(rptr) = 10.0d0 * rsto(rptr) + tacs_a
   go to 5320
 5321 continue
   lpflg = 0
@@ -440,10 +440,10 @@ subroutine putil2
 9533 from = isto(sptr)
   sptr = sptr + 1
   if (.not. (mflg .gt. 0)) go to 5341
-  a = rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr = rptr - 1
   rsto(rptr - 1) = 0.1 * rsto(rptr - 1)
-  rsto(rptr) = rsto(rptr) + rsto(rptr - 1) * a
+  rsto(rptr) = rsto(rptr) + rsto(rptr - 1) * tacs_a
   go to 5340
 5341 continue
   lpflg = 0
@@ -497,9 +497,9 @@ subroutine putil2
 9537 from = isto(sptr)
   sptr = sptr + 1
   if (.not. (mflg .gt. 0)) go to 5381
-  a = rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr = rptr - 1
-  rsto(rptr - 3) = real (10.0d0 * rsto(rptr - 3) + a, kind (rsto))
+  rsto(rptr - 3) = 10.0d0 * rsto(rptr - 3) + tacs_a
   go to 5380
 5381 continue
   lpflg = 0
@@ -518,25 +518,25 @@ subroutine putil2
   go to 9204
 9538 from = isto(sptr)
   sptr = sptr + 1
-  b = dlog10 (rinf)
-  c = dlog10 (rmargn)
-  e = rsto(rptr - 2) * rsto(rptr - 3)
-  if (.not. (e .ge. b)) go to 5391
-  a = rinf
+  tacs_b = dlog10 (rinf)
+  tacs_c = dlog10 (rmargn)
+  tacs_e = rsto(rptr - 2) * rsto(rptr - 3)
+  if (.not. (tacs_e .ge. tacs_b)) go to 5391
+  tacs_a = rinf
   go to 5390
-5391 if (.not. (e .le. c)) go to 5392
-  a = zero
+5391 if (.not. (tacs_e .le. tacs_c)) go to 5392
+  tacs_a = zero
   go to 5390
 5392 continue
-  a = real (rsto(rptr) * (10.0d0 ** e), kind (a))
+  tacs_a = rsto(rptr) * (10.0d0 ** tacs_e)
 5390 continue
   if (.not. (flg1 .gt. 0)) go to 5401
-  a = -a
+  tacs_a = -tacs_a
   go to 5400
 5401 continue
 5400 continue
   rptr = rptr - 3
-  rsto(rptr) = a
+  rsto(rptr) = tacs_a
   go to 9500
 end subroutine putil2
 

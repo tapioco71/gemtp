@@ -7,7 +7,7 @@
 subroutine build2
   use tacsto
   implicit none
-  !  include 'tacsto.ftn'
+  !
   sptr = sptr - 1
   if (sptr .eq. iptr) go to 910
   isto(sptr) = from
@@ -260,8 +260,8 @@ subroutine build2
   k=isto(base5+ndx5+1)
 3151 if (.not.(i.gt.k)) go to 3150
   i=i-1
-  a=rsto(base3+i)
-  rsto(base3+i+i1)=a
+  tacs_a = rsto(base3+i)
+  rsto(base3 + i + i1) = tacs_a
   go to 3151
 3150 continue
   i=ndx5
@@ -279,8 +279,8 @@ subroutine build2
   i=ndx7+1
 3171 if (.not.(i.gt.1)) go to 3170
   i=i-1
-  a=rsto(i0+i)
-  rsto(i0+i+i2)=a
+  tacs_a = rsto(i0 + i)
+  rsto(i0 + i + i2) = tacs_a
   go to 3171
 3170 continue
   go to 5180
@@ -600,9 +600,9 @@ subroutine build2
   xprndx=isto(env+2)
   to=9000
   call xpr1
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr=rptr-1
-  cnt4 = idnint (a)
+  cnt4 = idnint (tacs_a)
   if (.not. (cnt4 .lt. 0 .or. cnt4 .gt. 4)) go to 5241
   stpflg=113
   stpi1=cnt4
@@ -719,12 +719,12 @@ subroutine build2
   xprndx=isto(env+2)
   to=9000
   call xpr1
-  a=rsto(rptr)
-  rptr=rptr-1
-  cnt4 = idnint (a)
+  tacs_a = rsto(rptr)
+  rptr = rptr - 1
+  cnt4 = idnint (tacs_a)
   if (.not. (cnt4 .lt. 0 .or. cnt4 .gt. 4)) go to 5291
-  stpflg=114
-  stpi1=cnt4
+  stpflg = 114
+  stpi1 = cnt4
   continue
   call errstp
   go to 5290
@@ -822,29 +822,29 @@ subroutine build2
   if (.not.(xprndx.gt.0)) go to 5331
   to=9000
   call xpr1
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr=rptr-1
-  cnt4 = idnint (a)
-  cnt3=2*cnt4
-  if (.not.(cnt3.eq.0)) go to 5341
-  cnt3=1
+  cnt4 = idnint (tacs_a)
+  cnt3 = 2 * cnt4
+  if (.not. (cnt3 .eq. 0)) go to 5341
+  cnt3 = 1
   go to 5340
 5341 continue
 5340 continue
   if (.not. (cnt4 .lt. 0 .or. cnt4 .gt. 4)) go to 5351
-  stpflg=112
-  k=isto(env+1)
-  stpl1=isto(base1+k+1)
-  stpc1=base2+isto(base1+k)
-  sptr=sptr-1
-  if (sptr.eq.iptr) go to 910
-  isto(sptr)=env
-  env=isto(env+2)
-  stpl2=isto(env+7)
-  stpc2=isto(env+8)
-  env=isto(sptr)
-  sptr=sptr+1
-  stpi1=cnt4
+  stpflg = 112
+  k = isto(env+1)
+  stpl1 = isto(base1 + k + 1)
+  stpc1 = base2 + isto(base1 + k)
+  sptr = sptr - 1
+  if (sptr .eq. iptr) go to 910
+  isto(sptr) = env
+  env = isto(env + 2)
+  stpl2 = isto(env + 7)
+  stpc2 = isto(env + 8)
+  env = isto(sptr)
+  sptr = sptr + 1
+  stpi1 = cnt4
   continue
   call errstp
   go to 5350

@@ -2377,9 +2377,9 @@ subroutine nmincr (texta, n12)
   write (unit = text1, fmt = 4523) n12            ! encode component number
 4523 format (i6)                                  ! 6-digit format allows number through 999999
   do j = 1, 6                                     ! search for first non-blank in encoded number
-     if (text1(j : j) .ne. ' ') go to 4552        !  if nonblank, exit
+     if (text1(j : j) .ne. ' ') exit              !  if nonblank, exit
   end do                                          ! end  do 4538  loop to find non-blank left edge
-4552 write (unit = text2, fmt = 4556) texta       ! transfer input alphanumeric to char*6
+  write (unit = text2, fmt = 4556) texta          ! transfer input alphanumeric to char*6
 4556 format (a6)                                  ! alphanumeric variables are 6 characters wide
   text2(j : 6) = text1(j : 6)                     ! add component number onto input name
   read (unit = text2, fmt = 4556) texta           ! convert back from char*6 to alphanum.

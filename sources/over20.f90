@@ -87,10 +87,10 @@ subroutine over20
           ' Begin with all node voltages.', /, 3(21x, 'node'), /, 19x, 'number', 21x, 'name', &
           18x, 'voltage')
   do k = 2, ntot
-     if (n10 .ne. 0) write (unit = lunit6, fmt = 7012) bus(k), emtpe(k), zero, k
+     if (n10 .ne. 0) write (unit = lunit6, fmt = 7012) bus(k), e(k), zero, k
 7012 format(' ', a6, 2e13.5, 41x, i6)
-!7010 write (unit = lunit7, fmt = 7011) kcount, bus(k), emtpe(k), zero, zero, k
-     write (unit = lunit7, fmt = 7011) kcount, bus(k), emtpe(k), zero, zero, k
+!7010 write (unit = lunit7, fmt = 7011) kcount, bus(k), e(k), zero, zero, k
+     write (unit = lunit7, fmt = 7011) kcount, bus(k), e(k), zero, zero, k
   end do
 7011 format (i2, a6, 3e15.8, 21x, i6)
   if (n10 .ne. 0) write (unit = lunit6, fmt = 7013)
@@ -2749,7 +2749,7 @@ subroutine spyink
      if (kwtspy .eq. 0) go to 3497
      kwtspy = 0
      go to 3462
-3497 write (munit6, 3503) i, tr(i), tx(i), r(i), emtpc(i), x(i)
+3497 write (munit6, 3503) i, tr(i), tx(i), r(i), c(i), x(i)
 3503 format (1x, i3, 5e14.5)
      call window
   end do
@@ -2784,7 +2784,7 @@ subroutine spyink
 3572 if (n33 .eq. 1) write (prom80, 3578)
 3578 format ('  row', 8x, 'finit', 6x, 'znonl-a kknonl', 6x, 'znonl-b kknonl', 6x, 'znonl-c kknonl', ' :')
   if (n33 .eq. 0) write (prom80, 3588)
-3588 format (' node  name  kode  kssfrq    kk     kks', 12x, 'emtpe(i)', 12x, 'emtpf(i) :')
+3588 format (' node  name  kode  kssfrq    kk     kks', 12x, 'e(i)', 12x, 'f(i) :')
   go to 3562
 3590 if (bytbuf(1 : 4) .eq. spykwd(44)(1 : 4) .or. bytbuf(1 : 4) .eq. spykwd(1)(1 : 4)) go to 3572
   !     we get here if no known key word;  extract integer pair.   this
@@ -2796,7 +2796,7 @@ subroutine spyink
      if (kwtspy .eq. 0) go to 3597
      kwtspy = 0
      go to 3562
-3597 if (n33 .eq. 0) write (munit6, 3603) i, bus(i), kode(i), kssfrq(i), kk(i), kks(i), emtpe(i), emtpf(i)
+3597 if (n33 .eq. 0) write (munit6, 3603) i, bus(i), kode(i), kssfrq(i), kk(i), kks(i), e(i), f(i)
 3603 format (1x, i4,  2x, a6,  i4, i8, i6, i8, 2e16.6)
      n22 = ntot + i
      n23 = ntot + n22
@@ -3401,7 +3401,7 @@ subroutine spyink
      ndx1 = n42 + j
      if ( kbus(ndx1) .eq. 0 )  go to 4192
      ndx2 = n43 + j
-     write (munit6, 4191)  cki(ndx1), ckkjm(ndx1), r(ndx2), tr(ndx2), tx(ndx2), emtpc(ndx2)
+     write (munit6, 4191)  cki(ndx1), ckkjm(ndx1), r(ndx2), tr(ndx2), tx(ndx2), c(ndx2)
 4191 format (1x, 6e13.4)
      call window
   end do
@@ -3449,7 +3449,7 @@ subroutine spyink
   tr(n14) = tr(n13)
   tx(n14) = tx(n13)
   r(n14)  = r(n13)
-  emtpc(n14)  = emtpc(n13)
+  c(n14)  = c(n13)
   go to 4216
 4223 if ( ansi32(1:5) .ne. 'data ' )  go to 4232
 4225 write (prom80, 4217)
@@ -3468,17 +3468,17 @@ subroutine spyink
   call namea6 ( text1, n24 )
   namebr(n14) = n24
   litype(n14) = n13
-  n13 = iabs ( nr(n13) )
-  cki(n14)   = tr(n13)
+  n13 = iabs (nr(n13))
+  cki(n14) = tr(n13)
   ckkjm(n14) = tx(n13)
-  ci(n14)    = tr(n13)
-  ck(n14)    = tx(n13)
-  cik(n14)   = emtpc(n13)
-  n14 = n14 - n42 + n43
-  tr(n14)    = tr(n13)
-  tx(n14)    = tx(n13)
-  emtpc(n14) = emtpc(n13)
-  r(n14)     = emtpc(n13)
+  ci(n14) = tr(n13)
+  ck(n14) = tx(n13)
+  cik(n14) = c(n13)
+  n14 = n14 -n42 + n43
+  tr(n14) = tr(n13)
+  tx(n14) = tx(n13)
+  c(n14) = c(n13)
+  r(n14)= c(n13)
   go to 4225
 4232 if ( ansi32(1:5) .ne. 'blank' )  go to 4245
 4235 write (prom80, 4236)
@@ -5162,11 +5162,10 @@ subroutine locatn
   real(8) :: znvref, zsk
   real(8) :: a12, a21, a22, ac, acr, agline, ah, ai, at
   real(8) :: brname, brnonl
-  real(8) :: c, ce, chard4, cnp, col, cv
+  real(8) :: ce, chard4, cnp, col, cv
   real(8) :: dsat, dsd, dsm, dsr, dtnext
-  real(8) :: e, el0, elaf, elag, elakd, elakq, eld, elf, elfkd, elg, elgkq, elkd
+  real(8) :: el0, elaf, elag, elakd, elakq, eld, elf, elfkd, elg, elgkq, elkd
   real(8) :: elkq, elq, extrs
-  real(8) :: f
   real(8) :: hertz, hico, histr, hsp
   !
   locate(   1)  =  location ( bus1   )

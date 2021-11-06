@@ -11,7 +11,7 @@
 subroutine use2
   use tacsto
   implicit none
-  !  include  'tacsto.ftn'
+  !
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=from
@@ -104,7 +104,7 @@ subroutine use2
   go to 5010
 5011 continue
 5010 continue
-  a=rsto(rptr+1)
+  tacs_a = rsto(rptr+1)
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=env
@@ -118,7 +118,7 @@ subroutine use2
   isto(i1+2)=1
   i3=isto(i1)
   if(.not.(xprcnt.eq.1)) go to 5021
-  rsto(i3)=a
+  rsto(i3)= tacs_a
   go to 5020
 5021 continue
   rsto(i3)=rsto(rptr+i)
@@ -386,10 +386,10 @@ subroutine use2
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=ndx6
-  a=zero
+  tacs_a = zero
   rptr=rptr+1
   if(rptr.eq.rsptr) go to 930
-  rsto(rptr)=a
+  rsto(rptr)= tacs_a
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=env
@@ -401,10 +401,10 @@ subroutine use2
   call xpr1
   go to 5080
 5081 continue
-  a=one
+  tacs_a = one
   rptr=rptr+1
   if(rptr.eq.rsptr) go to 930
-  rsto(rptr)=a
+  rsto(rptr)= tacs_a
 5080 continue
   if(.not.(isto(env+1).eq.2)) go to 5091
   rsto(rptr)=-rsto(rptr)
@@ -426,15 +426,15 @@ subroutine use2
   call xpr2
   env=isto(sptr)
   sptr=sptr+1
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr=rptr-1
   k=base3 +isto(base5+ndx5)-isto(base4+ndx5) +ndx4
-  rsto(rptr)=rsto(rptr) +a*rsto(k)
+  rsto(rptr) = rsto(rptr) + tacs_a * rsto(k)
   go to 5100
 5101 continue
-  a=rsto(rptr)
-  rptr=rptr-1
-  rsto(rptr)=rsto(rptr) +a
+  tacs_a = rsto(rptr)
+  rptr = rptr - 1
+  rsto(rptr) = rsto(rptr) + tacs_a
 5100 continue
   env=isto(env+0)
   go to 3031
@@ -513,16 +513,16 @@ subroutine use2
   sptr=sptr+1
   to=9024
   call xpr1
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr=rptr-1
-  b=rsto(rptr)
+  tacs_b = rsto(rptr)
   rptr=rptr-1
   i0=base3 +isto(base5+ndx5)-isto(base4+ndx5) +ndx4
-  c=rsto(i0)
-  d=b*c +a
+  tacs_c = rsto(i0)
+  tacs_d = tacs_b * tacs_c + tacs_a
   rptr=rptr+1
   if(rptr.eq.rsptr) go to 930
-  rsto(rptr)=d
+  rsto(rptr) = tacs_d
   ndx1=isto(env+5)
   ndx2=isto(env+6)
   to=9021
@@ -634,24 +634,24 @@ subroutine use2
 5130 continue
   if(.not.(i1.eq.1)) go to 5141
   i2=isto(ptr2)
-  a=rsto(i2)
+  tacs_a = rsto(i2)
   rptr=rptr+1
   if(rptr.eq.rsptr) go to 930
-  rsto(rptr)=a
+  rsto(rptr)= tacs_a
   go to 5140
 5141 continue
   to=9028
   call xpr1
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr=rptr-1
-  b=rsto(rptr)
+  tacs_b = rsto(rptr)
   rptr=rptr-1
   i0=base3 +isto(base5+ndx5)-isto(base4+ndx5) +ndx4
-  c=rsto(i0)
-  d=b*c +a
+  tacs_c = rsto(i0)
+  tacs_d = tacs_b * tacs_c + tacs_a
   rptr=rptr+1
   if(rptr.eq.rsptr) go to 930
-  rsto(rptr)=d
+  rsto(rptr) = tacs_d
 5140 continue
   ndx1=isto(env+7)
   ndx2=isto(env+8)
@@ -754,10 +754,10 @@ subroutine use2
   env=isto(sptr)
   sptr=sptr+1
   k=isto(base5+ndx5)-isto(base4+ndx5)+ndx4
-  a=rsto(base3+k)
+  tacs_a = rsto(base3+k)
   rptr=rptr+1
   if(rptr.eq.rsptr) go to 930
-  rsto(rptr)=a
+  rsto(rptr)= tacs_a
   go to 5260
 5261 continue
 5260 continue
@@ -788,10 +788,10 @@ subroutine use2
   ptr1=rptr
   to=9024
   call xpr1
-  b=rsto(ptr1+1)
+  tacs_b = rsto(ptr1+1)
   rptr=rptr+1
   if(rptr.eq.rsptr) go to 930
-  rsto(rptr)=b
+  rsto(rptr)= tacs_b
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=flg
@@ -807,12 +807,12 @@ subroutine use2
 5190 continue
   flg=isto(sptr)
   sptr=sptr+1
-  c=rsto(rptr)
+  tacs_c = rsto(rptr)
   rptr=rptr-1
-  a=rsto(ptr1+2)
-  e=rsto(ptr1)
-  rptr=ptr1
-  rsto(rptr)=(e-a)*c
+  tacs_a = rsto(ptr1+2)
+  tacs_e = rsto(ptr1)
+  rptr = ptr1
+  rsto(rptr) = (tacs_e - tacs_a) * tacs_c
   ndx1=isto(env+6)
   ndx2=isto(env+7)
   to=9022
@@ -933,16 +933,16 @@ subroutine use2
   sptr=sptr+1
   to=9024
   call xpr1
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr=rptr-1
-  b=rsto(rptr)
+  tacs_b = rsto(rptr)
   rptr=rptr-1
   i0=base3 +isto(base5+ndx5)-isto(base4+ndx5) +ndx4
-  c=rsto(i0)
-  d=b*c +a
+  tacs_c = rsto(i0)
+  tacs_d = tacs_b * tacs_c + tacs_a
   rptr=rptr+1
   if(rptr.eq.rsptr) go to 930
-  rsto(rptr)=d
+  rsto(rptr) = tacs_d
   ndx=isto(env+2)
   ptr1=rptr
   ptr2=isto(env+9)
@@ -975,10 +975,10 @@ subroutine use2
   if(.not.(ndx7.eq.2)) go to 5251
   to=9024
   call xpr1
-  b=rsto(ptr1+1)
+  tacs_b = rsto(ptr1+1)
   rptr=rptr+1
   if(rptr.eq.rsptr) go to 930
-  rsto(rptr)=b
+  rsto(rptr) = tacs_b
   sptr=sptr-1
   if(sptr.eq.iptr) go to 910
   isto(sptr)=flg
@@ -995,12 +995,12 @@ subroutine use2
 5200 continue
   flg=isto(sptr)
   sptr=sptr+1
-  c=rsto(rptr)
+  tacs_c = rsto(rptr)
   rptr=rptr-1
-  a=rsto(ptr1+2)
-  e=rsto(ptr1)
+  tacs_a = rsto(ptr1+2)
+  tacs_e = rsto(ptr1)
   rptr=ptr1
-  rsto(rptr)=(e-a)*c
+  rsto(rptr) = (tacs_e - tacs_a) * tacs_c
   ndx1=isto(env+6)
   ndx2=isto(env+7)
   to=9022
@@ -1079,15 +1079,15 @@ subroutine use2
   to=9000
   call xpr1
   rptr=rptr-xprcnt
-  a=rsto(rptr+1)
+  tacs_a = rsto(rptr+1)
   write(cbuff(cnt1+1:cnt1+15),1001)
 1001 format('               ')
-  write(cbuff(cnt1+1:cnt1+15),1002) a
-1002 format(g15.8)
-  k=cnt1
-  i=0
-3071 if(.not.(i.lt.15)) go to 3070
-  i=i+1
+  write (unit = cbuff(cnt1+1:cnt1+15), fmt = 1002) tacs_a
+1002 format (g15.8)
+  k = cnt1
+  i = 0
+3071 if (.not. (i .lt. 15)) go to 3070
+  i = i + 1
   if(.not.(cbuff(cnt1+i:cnt1+i).ne.csto(64))) go to 5231
   k=k+1
   cbuff(k:k)=cbuff(cnt1+i:cnt1+i)

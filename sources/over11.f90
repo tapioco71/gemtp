@@ -333,24 +333,24 @@ subroutine over11
      iy = ib + ix - 1
      nrow1 = kbus(iy)
      nrow1 = norder(nrow1)
-     emtpe(ix) = solr(nrow1)
-     emtpf(ix) = soli(nrow1)
+     e(ix) = solr(nrow1)
+     f(ix) = soli(nrow1)
      nrow1 = mbus(iy)
      nrow1 = norder(nrow1)
      n1 = ix + nphcas
-     emtpe(n1) = solr(nrow1)
-     emtpf(n1) = soli(nrow1)
+     e(n1) = solr(nrow1)
+     f(n1) = soli(nrow1)
   end do
 7001 continue
-  call mult (tx(jb), emtpf(1), diag(1), ll2 * nphcas, ll0)
-  call mult (tr(jb), emtpe(1), diag(1), ll2 * nphcas, llm1)
-  call mult (tr(jb), emtpf(1), diab(1), ll2 * nphcas, ll0)
-  call mult (tx(jb), emtpe(1), diab(1), ll2 * nphcas, ll1)
+  call mult (tx(jb), f(1), diag(1), ll2 * nphcas, ll0)
+  call mult (tr(jb), e(1), diag(1), ll2 * nphcas, llm1)
+  call mult (tr(jb), f(1), diab(1), ll2 * nphcas, ll0)
+  call mult (tx(jb), e(1), diab(1), ll2 * nphcas, ll1)
   if (kssout .ne. 1 .and. kssout .ne. 3) go to 7003
   do ix = 1, nphcas
      iy = ib + ix - 1
      iz = ix + nphcas
-     call ssout (iy, emtpe(ix), emtpf(ix), emtpe(iz), emtpf(iz), diag(ix), diab(ix), diag(iz), diab(iz))
+     call ssout (iy, e(ix), f(ix), e(iz), f(iz), diag(ix), diab(ix), diag(iz), diab(iz))
   end do
 7003 ib = ib + nphcas
   go to 6010
@@ -360,8 +360,8 @@ subroutine over11
   in = norder(in)
   jn = iabs (mbus(ib))
   jn = norder(jn)
-  if (emtpc(jb) .eq. 0.0d0) go to 6044
-  xx = tx(jb) * omegal - 1.0d0 / (emtpc(jb) * omegac)
+  if (c(jb) .eq. 0.0d0) go to 6044
+  xx = tx(jb) * omegal - 1.0d0 / (c(jb) * omegac)
   go to 6048
 6044 xx = tx(jb) * omegal
 6048 dd = tr(jb) * tr(jb) +xx * xx
@@ -377,7 +377,7 @@ subroutine over11
   curik = rd * dei + xd * der
   ci(ib) = -currk
   ck(ib) = 0.0d0
-  if (emtpc(jb) .ne. 0.0d0) ck(ib) = curik / (emtpc(jb) * omegac)
+  if (c(jb) .ne. 0.0d0) ck(ib) = curik / (c(jb) * omegac)
   currm = -currk
   curim = -curik
   if (kssout .eq. 1 .or. kssout .eq. 3) call ssout (ib, erk, eik, erm, eim, currk, curik, currm, curim)
@@ -406,7 +406,7 @@ subroutine over11
   dei = eik - eim
   ctr = yr * der - yi * dei
   cti = yr * dei + yi * der
-  yis = emtpc(jb) * omegac
+  yis = c(jb) * omegac
   if (kbus(ib) .ge. 0) go to 6076
   yrs = r(jb)
   csr = yrs * erk - yis * eik
@@ -420,7 +420,7 @@ subroutine over11
   currm = csr - ctr
   curim = csi - cti
   r(jb) = currm
-  emtpc(jb) = curim
+  c(jb) = curim
   go to 6078
 6076 cik(ib) = ctr
   currk = -yis * eik
@@ -455,7 +455,7 @@ subroutine over11
   ja = norder(ja)
   der = solr(ia) - solr(ja)
   dei = soli(ia) - soli(ja)
-  csr = omegac * emtpc(ld)
+  csr = omegac * c(ld)
   ctr = ctr + tr(ld) * der - tx(ld) * dei
   cti = cti + tr(ld) * dei + tx(ld) * der
   clir = clir - csr * soli(ia)
@@ -482,7 +482,7 @@ subroutine over11
   ja = norder(ja)
   der = solr(ia) - solr(ja)
   dei = soli(ia) - soli(ja)
-  csr = omegac * emtpc(kd)
+  csr = omegac * c(kd)
   ctr = ctr + tr(kd) * der - tx(kd) * dei
   cti = cti + tr(kd) * dei + tx(kd) * der
   clir = clir - csr * soli(ia)
@@ -504,7 +504,7 @@ subroutine over11
   tr(ldd) = currk
   tx(ldd) = curik
   r(ldd) = currm
-  emtpc(ldd) = curim
+  c(ldd) = curim
   go to 6166
 6164 cik(ib) = ctr
   ci(ib) = clir
@@ -523,15 +523,15 @@ subroutine over11
   call vecrsv (gnd(iofgnd + 1 :), ioffd, n1)
   call vecrsv (bnd(iofbnd + 1 :), ioffd, n1)
   if (ncurr .le. 0) ncurr = 1
-  call move0 (emtpe(1 :), ntot)
-  call move0 (emtpf(1 :), ntot)
+  call move0 (e(1 :), ntot)
+  call move0 (f(1 :), ntot)
   do i=1, ntot
      vr = solr(i)
      vi = soli(i)
      jj = index(i)
      kkk = index(i+1)
-     emtpe(i) = emtpe(i) + diag(i) * vr - diab(i) * vi
-     emtpf(i) = emtpf(i) + diag(i) * vi + diab(i) * vr
+     e(i) = e(i) + diag(i) * vr - diab(i) * vi
+     f(i) = f(i) + diag(i) * vi + diab(i) * vr
      go to 7370
 7360 jj = jj + 1
 7370 if (jj .ge. kkk) go to 7380
@@ -540,17 +540,17 @@ subroutine over11
      isubs2 = iofbnd + jj
      der = gnd(isubs1) * vr - bnd(isubs2) * vi
      dei = gnd(isubs1) * vi + bnd(isubs2) * vr
-     emtpe(j) = emtpe(j) + der
-     emtpf(j) = emtpf(j) + dei
-     emtpe(i) = emtpe(i) + gnd(isubs1) * solr(j) - bnd(isubs2) * soli(j)
-     emtpf(i) = emtpf(i) + gnd(isubs1) * soli(j) + bnd(isubs2) * solr(j)
+     e(j) = e(j) + der
+     f(j) = f(j) + dei
+     e(i) = e(i) + gnd(isubs1) * solr(j) - bnd(isubs2) * soli(j)
+     f(i) = f(i) + gnd(isubs1) * soli(j) + bnd(isubs2) * solr(j)
      go to 7360
   end do
 7380 continue
   if (kssout .eq. 0) go to 7394
   d26 = 0.0d0
   do i = 1, ntot
-     d26 = d26 + emtpe(i) * solr(i) + emtpf(i) * soli(i)
+     d26 = d26 + e(i) * solr(i) + f(i) * soli(i)
   end do
   d26 = d26 * onehaf
   write (unit = lunit6, fmt = 2008) d26
@@ -562,8 +562,8 @@ subroutine over11
      if (iabs (iform(i)) .ne. 14) go to 6009
      kt = iabs (node(i))
      k = norder(kt)
-     emtpe(k) = emtpe(k) - crest(i) * cosz (time1(i))
-     emtpf(k) = emtpf(k) - crest(i) * sinz (time1(i))
+     e(k) = e(k) - crest(i) * cosz (time1(i))
+     f(k) = f(k) - crest(i) * sinz (time1(i))
   end do
 6009 continue
   call move0 (nextsw(1 :), kswtch)
@@ -611,16 +611,16 @@ subroutine over11
 4533 continue
      if (iprsup .ge. 4) write (unit = lunit6, fmt = 5515) i, k, n13
 5515 format (' Current.  i, k, n13 =', 3i8)
-     tclose(i) = emtpe(n13)
-     energy(i) = emtpf(n13)
-     emtpe(n13) = 0.0d0
-     emtpf(n13) = 0.0d0
+     tclose(i) = e(n13)
+     energy(i) = f(n13)
+     e(n13) = 0.0d0
+     f(n13) = 0.0d0
      nextsw(i) = 87
      n8 = n8 + 1
      n5 = 1
      if (n13 .eq. m) m = k
-     emtpe(m) = emtpe(m) + tclose(i)
-     emtpf(m) = emtpf(m) + energy(i)
+     e(m) = e(m) + tclose(i)
+     f(m) = f(m) + energy(i)
      m = norder(mt)
      if (n13 .eq. m) go to 7657
      tclose(i) = -tclose(i)
@@ -695,14 +695,14 @@ subroutine over11
      j = norder(k)
      index(j) = k
   end do
-  if (iprsup .ge. 3) write (unit = lunit6, fmt = 7401) (i, norder(i), index(i), kode(i), emtpe(i), emtpf(i), diag(i), diab(i), i = 1, ntot)
+  if (iprsup .ge. 3) write (unit = lunit6, fmt = 7401) (i, norder(i), index(i), kode(i), e(i), f(i), diag(i), diab(i), i = 1, ntot)
 7401 format (/, 1x, '     row  norder   index    kode', 14x, 'e',  14x, 'f',  11x, 'diag', 11x, 'diab', /, (1x, 4i8, 4e15.6))
   i = ncurr + 1
 7405 if (i .gt. ntot) go to 7456
   j = kode(i)
   if (j .le. i) go to 7410
-  emtpe(j) = emtpe(j) + emtpe(i)
-  emtpf(j) = emtpf(j) + emtpf(i)
+  e(j) = e(j) + e(i)
+  f(j) = f(j) + f(i)
   go to 7440
 7410 l = 1
   kkk = index(i)
@@ -723,7 +723,7 @@ subroutine over11
   bus5 = aupper(l)
   ib = -1
   rd = 1.0d0
-  call ssout (ib, solr(i), soli(i), rd, rd, emtpe(i), emtpf(i), rd, rd)
+  call ssout (ib, solr(i), soli(i), rd, rd, e(i), f(i), rd, rd)
 7440 i = i + 1
   go to 7405
 7456 if (loopss(1) .le. 0) go to 7452
@@ -742,8 +742,8 @@ subroutine over11
   if (kill .gt.  0) go to 9800
 6207 do i = 1, ntot
      j = norder(i)
-     emtpe(i) = solr(j)
-6210 emtpf(i) = soli(j)
+     e(i) = solr(j)
+6210 f(i) = soli(j)
   end do
   if (iprsup .gt. 0) write (unit = lunit6, fmt = 5581)
 5581 format (' Steady-state phasor network solution now complete.')
@@ -804,8 +804,8 @@ subroutine over11
   if (numnvo .eq. 0) go to 8100
   do k = 1, numnvo
      i = jch2(k)
-     h1 = emtpe(i)
-     h2 = emtpf(i)
+     h1 = e(i)
+     h2 = f(i)
      a = sqrtz (h1 ** 2 + h2 ** 2)
      gus1 = h1
      if (a .eq. 0.0d0) gus1 = 1.0d0
@@ -850,13 +850,13 @@ subroutine over11
      h2 = tx(n2)
      go to 8108
 8107 h2 = tx(n2) * d2
-     a = emtpc(n2)
+     a = c(n2)
      if (a .gt. 0.0d0) h2 = h2 - h3 / a
      a = h1 ** 2 + h2 ** 2
      gus1 = h1 / a
      gus2 = -h2 / a
-     gus3 = emtpe(n1) - emtpe(icheck)
-     gus4 = emtpf(n1) - emtpf(icheck)
+     gus3 = e(n1) - e(icheck)
+     gus4 = f(n1) - f(icheck)
      h1 = gus1 * gus3 - gus2 * gus4
      h2 = gus1 * gus4 + gus2 * gus3
 8108 a = sqrtz (h1 ** 2 + h2 ** 2)
@@ -873,8 +873,8 @@ subroutine over11
   do i=1, nv
      n1 = ibrnch(i)
      n2 = jbrnch(i)
-     d1 = emtpe(n1) - emtpe(n2)
-     d2 = emtpf(n1) - emtpf(n2)
+     d1 = e(n1) - e(n2)
+     d2 = f(n1) - f(n2)
      d3 = sqrtz (d1 ** 2 + d2 ** 2)
      d4 = d1
      if (d3 .eq. 0.0d0) d4 = 1.0d0
@@ -1175,24 +1175,24 @@ subroutine smint
      if (l .le. ia) go to 3
      ia = l
      go to 2
-3    car = emtpe(ia)
-     cai = emtpf(ia)
+3    car = e(ia)
+     cai = f(ia)
      ib = ismdat(j30 + 3)
      ib = norder(ib)
 4    l = kode(ib)
      if (l .le. ib) go to 5
      ib = l
      go to 4
-5    cbr = emtpe(ib)
-     cbi = emtpf(ib)
+5    cbr = e(ib)
+     cbi = f(ib)
      ic = ismdat(j30 + 4)
      ic = norder(ic)
 6    l = kode(ic)
      if (l .le. ic) go to 7
      ic = l
      go to 6
-7    ccr = emtpe(ic)
-     cci = emtpf(ic)
+7    ccr = e(ic)
+     cci = f(ic)
      !     compute positive sequence currents    ****************************
      z(karc + 1) = car
      z(karc + 2) = cai

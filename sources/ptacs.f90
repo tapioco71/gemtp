@@ -542,9 +542,9 @@ subroutine ptacs
 5250 continue
   to=9214
   call putil2
-  a=rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr=rptr-1
-  isto(env+3) = idnint (a)
+  isto(env+3) = idnint (tacs_a)
   flg1=isto(sptr)
   sptr=sptr+1
   mndx=81

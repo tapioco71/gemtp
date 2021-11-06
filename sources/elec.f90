@@ -149,17 +149,17 @@ subroutine elec
 5021 continue
 5020 continue
   if (.not.(ndx0.le.rptr)) go to 5031
-  a=rsto(ndx0)
-  write(unit08,804) a
-804 format('& ',g13.6)
+  tacs_a = rsto(ndx0)
+  write (unit = unit08, fmt = 804) tacs_a
+804 format ('& ',g13.6)
   go to 5030
 5031 continue
-  a=zero
-  write(unit08,805)
+  tacs_a = zero
+  write (unit = unit08, fmt = 805)
 805 format('&              ')
 5030 continue
   k=isto(env+6)
-  xtcs(kxtcs+k)=a
+  xtcs(kxtcs+k)= tacs_a
   ndx0=isto(sptr)
   sptr=sptr+1
   go to 9500

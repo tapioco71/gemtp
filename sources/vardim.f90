@@ -494,7 +494,7 @@ program vardim
   modvars(60)%kind       = 4
   modvars(60)%dimension  = 1
 
-  modvars(61)%name       = 'emtpc'
+  modvars(61)%name       = 'c'
   modvars(61)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(61)%kind       = 1
   modvars(61)%dimension  = 3
@@ -605,7 +605,7 @@ program vardim
   modvars(82)%dimension  = 25
 
   modvars(83)%name       = 'kks'
-  modvars(83)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(83)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(83)%kind       = 4
   modvars(83)%dimension  = 1
 
@@ -779,12 +779,12 @@ program vardim
   modvars(117)%kind       = 4
   modvars(117)%dimension  = 6
 
-  modvars(118)%name       = 'emtpe'
+  modvars(118)%name       = 'e'
   modvars(118)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(118)%kind       = 1
   modvars(118)%dimension  = 1
 
-  modvars(119)%name       = 'emtpf'
+  modvars(119)%name       = 'f'
   modvars(119)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(119)%kind       = 1
   modvars(119)%dimension  = 1
@@ -1059,7 +1059,7 @@ program vardim
   modvars(173)%kind       = 1
   modvars(173)%dimension  = 71
 
-  modvars(174)%name       = 'emptd'
+  modvars(174)%name       = 'd'
   modvars(174)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(174)%kind       = 1
   modvars(174)%dimension  = 71
@@ -1343,9 +1343,9 @@ program vardim
   modvars(230)%dimension = 1
 
   modvars(231)%name = 'txshun'
-  modvars(231)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(231)%options(1 : 4) = (/ 'dimension(:)', 'allocatable ', '            ', '            ' /)
   modvars(231)%kind = 1
-  modvars(231)%dimension = 1
+  modvars(231)%dimension = 0
 
   modvars(232)%name = 'cshun'
   modvars(232)%options(1 : 4) = (/ '', '', '', '' /)
@@ -1373,12 +1373,22 @@ program vardim
   modvars(236)%dimension = 1
 
   modvars(237)%name = 'cmr'
-  modvars(237)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(237)%options(1 : 4) = (/ 'dimension(:)', 'allocatable ', '            ', '            ' /)
   modvars(237)%kind = 1
-  modvars(237)%dimension = 1
+  modvars(237)%dimension = 0
+
+  modvars(238)%name = 'emtpe'
+  modvars(238)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(238)%kind = 1
+  modvars(238)%dimension = 200
+
+  modvars(239)%name = 'emtpf'
+  modvars(239)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(239)%kind = 1
+  modvars(239)%dimension = 200
 
   !
-  modvarc = 37
+  modvarc = 39
   !
   open (unit = lunit(2), iostat = ios, form = 'formatted')
   if (ios .eq. 0) then
@@ -1534,6 +1544,7 @@ program vardim
            write (unit = lunit(2), fmt = "('#ifdef WITH_MAIN10')")
            write (unit = lunit(2), fmt = 4192)
 4192       format ('subroutine main10')
+           call make_use_statement (unit = lunit(2), modulename = 'labcom')
            call make_implicit_statement (unit = lunit(2), mode = 0)
            call make_implicit_statement (unit = lunit(4), mode = 0)
            do ii = 1, 126
@@ -1545,7 +1556,7 @@ program vardim
               if (n4 .ne. 0) then
                  tempvar = modvars(i)
                  tempvar%dimension = nonneg
-                 call make_variable_declaration (lunit(2), tempvar, types)
+                 !                 call make_variable_declaration (lunit(2), tempvar, types)
                  call make_variable_declaration (lunit(4), tempvar, types)
               end if
            end do
@@ -1571,7 +1582,7 @@ program vardim
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'cnvhst', dim1 = 1, varname2 = 'cblhst', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'x', dim1 = 1, varname2 = 'integx', dim2 = 1)
            !           call make_equivalence_declaration (unit = lunit(4), varname1 = 'trser', dim1 = 1, varname2 = 'emtpe', dim2 = 1)
-           call make_equivalence_declaration (unit = lunit(4), varname1 = 'txser', dim1 = 1, varname2 = 'emtpf', dim2 = 1)
+           call make_equivalence_declaration (unit = lunit(4), varname1 = 'txser', dim1 = 1, varname2 = 'f', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'volti', dim1 = 1, varname2 = 'node1', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'voltk', dim1 = 1, varname2 = 'node2', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'volt', dim1 = 1, varname2 = 'mapinv', dim2 = 1)
@@ -1580,7 +1591,7 @@ program vardim
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'caslnx', dim1 = 1, varname2 = 'xm', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'cser', dim1 = 1, varname2 = 'kode', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'trshun', dim1 = 1, varname2 = 'kk', dim2 = 1)
-           call make_equivalence_declaration (unit = lunit(4), varname1 = 'txshun', dim1 = 1, varname2 = 'kks', dim2 = 1)
+           !           call make_equivalence_declaration (unit = lunit(4), varname1 = 'txshun', dim1 = 1, varname2 = 'kks', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'cshun', dim1 = 1, varname2 = 'kknonl', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'ismdat', dim1 = 22, varname2 = 'ipout')
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'ismdat', dim1 = 23, varname2 = 'n56')
@@ -1591,7 +1602,7 @@ program vardim
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'volt', dim1 = 1, varname2 = modvars(233)%name, dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'volti', dim1 = 1, varname2 = 'ur', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'voltk', dim1 = 1, varname2 = 'ui', dim2 = 1)
-           call make_equivalence_declaration (unit = lunit(4), varname1 = 'kks', dim1 = 1, varname2 = 'cmr', dim2 = 1)
+           !           call make_equivalence_declaration (unit = lunit(4), varname1 = 'kks', dim1 = 1, varname2 = 'cmr', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'kknonl', dim1 = 1, varname2 = 'cmi', dim2 = 1)
            write (unit = lunit(4), fmt = 7245)
 7245       format ('end module labcom')

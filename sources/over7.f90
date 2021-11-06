@@ -16,7 +16,7 @@ subroutine over7
   implicit none
   !dimension lorder(1), ndex(20)
   !  dimension lorder(15)
-  !equivalence (ich2(1), lorder(1)), (emtpe(1), ndex(1))
+  !equivalence (ich2(1), lorder(1)), (e(1), ndex(1))
   !  equivalence (ich2(1), lorder(1))
   !  equivalence (iofkol, iofgnd), (iofkor, iofbnd)
   !     following carries "next" among over6, insert, over7, & over9:
@@ -52,9 +52,9 @@ subroutine over7
   zzza = 0.0d0
   lastxx = last
   ! n1 = lbus + 1  // use lbus, not this n1,  in following:
-  ndex => emtpe(1 :)
+  ndex => e(1 :)
   if (.not. associated (ndex)) then
-     write (unit = lunit6, fmt = "('Could no associate ndex to emtpe.  Stop.')")
+     write (unit = lunit6, fmt = "('Could not associate ndex to e.  Stop.')")
      call stoptp
   end if
   call move0 (ndex(1 :), lbus)

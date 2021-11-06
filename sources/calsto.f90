@@ -63,9 +63,9 @@ subroutine calsto
 5060 continue
   cnt2 = pgsize / intlen
   cnt3 = pgsize / fltlen
-  a = (stoflt - 40) * bratio / (split + bratio)
-  rsize = idint (a)
-  isize = idint (a * split)
+  tacs_a = (stoflt - 40) * bratio / (split + bratio)
+  rsize = idint (tacs_a)
+  isize = idint (tacs_a * split)
   csize = stocha
   ilen = isize - cnt4 * cnt2
   rlen = stoflt - 40 - cnt5 * cnt3
@@ -354,9 +354,9 @@ subroutine calsto
   ndx0 = 2
   to = 9214
   call putil2
-  a = rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr = rptr - 1
-  pgsize = idnint (a)
+  pgsize = idnint (tacs_a)
   go to 5190
 5191 continue
 5190 continue
@@ -390,9 +390,9 @@ subroutine calsto
   ndx0 = 3
   to = 9214
   call putil2
-  a = rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr = rptr - 1
-  cnt4 = idnint (a)
+  cnt4 = idnint (tacs_a)
   go to 5230
 5231 continue
 5230 continue
@@ -423,9 +423,9 @@ subroutine calsto
   ndx0 = 4
   to = 9214
   call putil2
-  a = rsto(rptr)
+  tacs_a = rsto(rptr)
   rptr = rptr - 1
-  cnt5 = idnint (a)
+  cnt5 = idnint (tacs_a)
   go to 5270
 5271 continue
 5270 continue
