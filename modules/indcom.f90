@@ -6,6 +6,7 @@
 
 module indcom
   implicit none
+  
   interface location
      module procedure loci, locia, locim, locf, locfa, locfm, locchar, locchara, loclog, locloga
   end interface location
@@ -15,40 +16,45 @@ contains
   ! function loci.
   !
 
-  integer(4) function loci (i)
+  function loci (i) result (valueOut)
     implicit none
     integer(4), intent(in) :: i
-    integer(4) :: word
+    integer(4) :: valueOut, word
     integer(8) :: address
+    !
     address = loc (i)
     word = int (ibits (address, 0, 32), kind (word))
-    loci = ibclr (ishft (word, -2), 31)
+    valueOut = ibclr (ishft (word, -2), 31)
   end function loci
 
   !
   ! function locia.
   !
 
-  integer(4) function locia (iarray)
+  function locia (iarray) result (valueOut)
     implicit none
-    integer(4), intent(in) :: iarray(*)
+    integer(4), intent(in) :: iarray(:)
     !     Installation-dependent EMTP module.   This is  VAX  version.
     !     function  'LOCINT'  is designed to return the address in memory
     !     of the argument, as an  INTEGER(4)  word address.   An arbitrary
     !     constant offset is allowed, since only differences will ever be
     !     used by the EMTP.   Note vector argument  "iarray"  (which
     !     is an assumption for all EMTP usage).
-    locia = loci (iarray(1))
+    integer(4) :: valueOut
+    !
+    valueOut = loci (iarray(1))
   end function locia
 
   !
   ! function locia.
   !
 
-  integer(4) function locim (imatrix)
+  function locim (imatrix) result (valueOut)
     implicit none
     integer(4), intent(in) :: imatrix(:, :)
-    locim = loci (imatrix(1, 1))
+    integer(4) :: valueOut
+    !
+    valueOut = loci (imatrix(1, 1))
   end function locim
 
 
@@ -56,89 +62,93 @@ contains
   ! function locf.
   !
 
-  integer(4) function locf (f)
+  function locf (f) result (valueOut)
     implicit none
     real(8), intent(in) :: f
-    integer(4) :: word
+    integer(4) :: valueOut, word
     integer(8) :: address
     !
     address = loc (f)
     word = int (ibits (address, 0, 32), kind (word))
-    locf = ibclr (ishft (word, -3), 31)
+    valueOut = ibclr (ishft (word, -3), 31)
   end function locf
 
   !
   ! function locfa.
   !
 
-  integer(4) function locfa (farray)
+  function locfa (farray) result (valueOut)
     implicit none
-    real(8), intent(in) :: farray(*)
+    real(8), intent(in) :: farray(:)
+    integer(4) :: valueOut
     !
-    locfa = locf (farray(1))
+    valueOut = locf (farray(1))
   end function locfa
 
   !
   ! function locfm.
   !
 
-  integer(4) function locfm (fmatrix)
+  function locfm (fmatrix) result (valueOut)
     implicit none
     real(8), intent(in) :: fmatrix(:, :)
+    integer(4) :: valueOut
     !
-    locfm = locf (fmatrix(1, 1))
+    valueOut = locf (fmatrix(1, 1))
   end function locfm
 
   !
   ! function locchar.
   !
 
-  integer(4) function locchar (ch)
+  function locchar (ch) result (valueOut)
     implicit none
     character(*), intent(in) :: ch
-    integer(4) :: word
+    integer(4) :: valueOut, word
     integer(8) :: address
     !
     address = loc (ch(1 : 1))
     word = int (ibits (address, 0, 32), kind (word))
-    locchar = ibclr (word, 31)
+    valueOut = ibclr (word, 31)
   end function locchar
 
   !
   ! function locchara
   !
 
-  integer(4) function locchara (cha)
+  function locchara (cha) result (valueOut)
     implicit none
     character(*), intent(in) :: cha(:)
+    integer(4) :: valueOut
     !
-    locchara = locchar (cha(1))
+    valueOut = locchar (cha(1))
   end function locchara
 
   !
   ! function loclog
   !
 
-  integer(4) function loclog (l)
+  function loclog (l) result (valueOut)
     implicit none
     logical, intent(in) :: l
-    integer(4) :: word
+    integer(4) :: valueOut, word
     integer(8) :: address
     !
     address = loc (l)
     word = int (ibits (address, 0, 32), kind (word))
-    loclog = ibclr (word, 31)
+    valueOut = ibclr (word, 31)
   end function loclog
 
   !
   ! function loclog
   !
 
-  integer(4) function locloga (larray)
+  function locloga (larray) result (valueOut)
     implicit none
     logical, intent(in) :: larray(:)
+    integer(4) :: valueOut
     !
-    locloga = loclog (larray(1))
+    valueOut = loclog (larray(1))
   end function locloga
 
 end module indcom

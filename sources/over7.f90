@@ -79,8 +79,8 @@ subroutine over7
 170 nz = nz + 1
   norder(i) = nz
   call subscr (i, lbus, 170, 1)
-180 if ( i  .lt.  ntot )   go to 140
-  if( nz .eq. ntot )  go to 190
+180 if (i .lt. ntot) go to 140
+  if (nz .eq. ntot) go to 190
   lstat(19) = 190
   nelim = 0
   go to 453
@@ -88,7 +88,7 @@ subroutine over7
   ! next delete obviously zero-cell zeroing of vectors:
   nelim = 1
 200 continue
-  if (ncn  .ge.  lbus) go to 220
+  if (ncn .ge. lbus) go to 220
   jsub = ncn + 1
   call subscr (jsub, lbus, 200, 1)
   if (ndex(ncn + 1) .ne. 0) go to 220
@@ -115,7 +115,7 @@ subroutine over7
 4066 continue
 222 j = ich1(i)
   call subscr (i, lbus, 222, 1)
-  ndex(ncn+1) = j
+  ndex(ncn + 1) = j
   jsub = ncn + 1
   call subscr (jsub, lbus, 222, 2)
   if (j .gt. 0) ich2(j) = 0
@@ -127,7 +127,7 @@ subroutine over7
      call subscr (j, lbus, 229, 1)
 231  lorder(j) = i
   end do
-  if( iprsup .ge. 3 ) write (unit = lunit6, fmt = 5231)
+  if (iprsup .ge. 3) write (unit = lunit6, fmt = 5231)
 5231 format (/, " Final renumbering arrays at the end of  'over7' .    row  norder   index    iloc  lorder   kownt     loc   kolum    korder")
   do i = 1, 20
      n1 = i + iofkol
@@ -308,7 +308,7 @@ subroutine over7
   lstat(19) = 375
   lstat(16) = last
   lstat(15) = nelim
-  if (iprsup  .ge.  1) write (unit = lunit6, fmt = 4568)
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
   go to 9999
 380 if (jbt .eq. 0) go to 400
 390 isubs1 = iofkor + jbt
@@ -316,7 +316,7 @@ subroutine over7
   korder(isubs1) = mext
   go to 410
 400 loc(j) = mext
-  call subscr ( j, lbus, 400, 1 )
+  call subscr (j, lbus, 400, 1)
 410 isubs1 = iofkor + ib
   call subscr (ib, lsiz23, 410, 1)
   ib = korder(isubs1)
@@ -374,60 +374,60 @@ subroutine over7
   if (korder(isubs1) .eq. 0) go to 700
 530 jbs = jb
   isubs1 = iofkor+jb
-  call subscr ( jb, lsiz23, 530, 1 )
+  call subscr (jb, lsiz23, 530, 1)
   jb = korder(isubs1)
   go to 310
 540 if (jbs .eq. 0)   go to 580
-550 isubs1 =  iofkor+jbs
-  isubs2 =  iofkor+jb
-  call subscr ( jbs, lsiz23, 550, 1 )
-  call subscr ( jb,  lsiz23, 550, 2 )
-  korder(isubs1)     = korder(isubs2)
-  isubs1 =  iofkor+lastxx
-  call subscr ( lastxx, lsiz23, 550, 3 )
-  korder(isubs1)        = jb
+550 isubs1 = iofkor + jbs
+  isubs2 =  iofkor + jb
+  call subscr (jbs, lsiz23, 550, 1)
+  call subscr (jb, lsiz23, 550, 2)
+  korder(isubs1) = korder(isubs2)
+  isubs1 = iofkor + lastxx
+  call subscr (lastxx, lsiz23, 550, 3)
+  korder(isubs1) = jb
   lastxx = jb
-560 isubs1 =  iofkor+jb
-  call subscr ( jb, lsiz23, 560, 1 )
-  if (korder(isubs1)    .ne. 0)   go to 575
+560 isubs1 = iofkor + jb
+  call subscr (jb, lsiz23, 560, 1)
+  if (korder(isubs1) .ne. 0) go to 575
 570 jb = jbs
   go to 700
-575 isubs1 =  iofkor+jb
-  call subscr ( jb, lsiz23, 575, 1 )
+575 isubs1 = iofkor + jb
+  call subscr (jb, lsiz23, 575, 1)
   jb = korder(isubs1)
   go to 310
-580 isubs1 =  iofkor+lastxx
-  call subscr ( lastxx, lsiz23, 580, 1 )
-  korder(isubs1)        = jb
+580 isubs1 = iofkor + lastxx
+  call subscr (lastxx, lsiz23, 580, 1)
+  korder(isubs1) = jb
   lastxx = jb
-  isubs1 =  iofkor+jb
-  call subscr ( jb, lsiz23, 580, 2 )
-  if (korder(isubs1)    .eq. 0)   go to 600
-590 isubs1 =  iofkor+jb
-  call subscr ( jb, lsiz23, 590, 1 )
-  call subscr ( j,  lbus,   590, 2 )
+  isubs1 = iofkor + jb
+  call subscr (jb, lsiz23, 580, 2)
+  if (korder(isubs1) .eq. 0) go to 600
+590 isubs1 =  iofkor + jb
+  call subscr (jb, lsiz23, 590, 1)
+  call subscr (j, lbus, 590, 2)
   loc(j) = korder(isubs1)
-  isubs1 =  iofkor+jb
+  isubs1 = iofkor + jb
   jb = korder(isubs1)
   go to 310
-600 isubs1 =  iofkol+ib
-  call subscr ( ib, lsiz23, 600, 1 )
-  if (kolum(isubs1)    .eq. j)   go to 620
+600 isubs1 = iofkol + ib
+  call subscr (ib, lsiz23, 600, 1)
+  if (kolum(isubs1) .eq. j) go to 620
 610 loc(j) = next
-  call subscr ( j, lbus, 610, 1 )
+  call subscr (j, lbus, 610, 1)
   jb = next
   mext = next
   !     if (next .eq. lastxx)   go to 615
   if (next .eq. lastxx)   go to 375
-  isubs1 =  iofkor+next
-  call subscr ( next, lsiz23, 610, 2 )
+  isubs1 = iofkor + next
+  call subscr (next, lsiz23, 610, 2)
   next = korder(isubs1)
-  icon = icon +1
-  isubs1 =  iofkol+jb
-  isubs2 =  iofkol+ib
-  call subscr ( jb, lsiz23, 610, 3 )
-  call subscr ( ib, lsiz23, 610, 4 )
-  kolum(isubs1)    = kolum(isubs2)
+  icon = icon + 1
+  isubs1 = iofkol + jb
+  isubs2 = iofkol + ib
+  call subscr (jb, lsiz23, 610, 3)
+  call subscr (ib, lsiz23, 610, 4)
+  kolum(isubs1) = kolum(isubs2)
   !     go to 650     eliminate "continue";  use next line:
   go to 660
   ! 615 go to 375    there was only one transfer to 615

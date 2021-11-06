@@ -589,11 +589,16 @@ subroutine over10
      if (kode(i) .gt. 0) kode(i) = -kode(i)
   end do
   n3 = 1
-  call vecrsv (tclose(1 :), kswtch, n3)
-  call vecrsv (diag(1 :), ntot, n3)
-  call vecrsv (diab(1 :), ntot, n3)
-  call vecrsv (gnd(iofgnd + 1 :), ioffd, n3)
-  call vecrsv (bnd(iofbnd + 1 :), ioffd, n3)
+  !  call vecrsv (tclose(1 :), kswtch, n3)
+  call vecsav (tclose, kswtch, n3)
+  !  call vecrsv (diag(1 :), ntot, n3)
+  call vecsav (diag, ntot, n3)
+  !  call vecrsv (diab(1 :), ntot, n3)
+  call vecsav (diab, ntot, n3)
+  !  call vecrsv (gnd(iofgnd + 1 :), ioffd, n3)
+  call vecsav (gnd(iofgnd + 1 :), ioffd, n3)
+  !  call vecrsv (bnd(iofbnd + 1 :), ioffd, n3)
+  call vecsav (bnd(iofbnd + 1 :), ioffd, n3)
   n12 = -4
   n15 = 0
   call vecrsv(volt, n12, n15)

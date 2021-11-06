@@ -30,20 +30,20 @@ subroutine over6
   !  equivalence (iofkol, iofgnd), (iofkor, iofbnd)
   !  dimension integx(1)
   !  equivalence (x(1), integx(1))
-  ! following carries "next" among over6, insert, over7, & over9:
+  !  following carries "next" among over6, insert, over7, & over9:
   !  equivalence (loopss(11), next)
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over6."')
   ntot1 = ntot - 1
   n3 = 0
-  d1 = 1.0 / (100. * flzero)
+  d1 = 1.0d0 / (100.0d0 * flzero)
   ! 1st remove minus sign of "kpartb" if present as flag
-  ! indicating "renumber bypass".   then redefine value of
+  ! indicating "renumber bypass".   Then redefine value of
   ! this lofty resistance if user had a "high resistance"
   ! request (known by n7 .ne. default value of 1000 in over1):
   n7 = iabs (kpartb)
-  if (n7 .lt. 1000) d1 = 10.0 ** n7
+  if (n7 .lt. 1000) d1 = 10.0d0 ** n7
   i = inonl
 54147 if (i .eq. 0) go to 54180
   if (nltype(i) .gt. 0) go to 54174
@@ -72,8 +72,8 @@ subroutine over6
   j2 = m
   it = it + 1
   tr(it) = d1
-  tx(it) = 0.0
-  c(it) = 0.0
+  tx(it) = 0.0d0
+  c(it) = 0.0d0
 54162 nr(ibr) = -it
   length(ibr) = 1
   if (n3 .gt. 0) length(ibr) = -1
@@ -106,13 +106,20 @@ subroutine over6
   rewind lunit2
   call tapsav (integx(1 :), lunit2, iv, n11)
   n17 = 0
-  call vecrsv (volt, n17, n17)
-  call vecrsv (c, it, n11)
-  call vecrsv (tr, it, n11)
-  call vecrsv (tx, it, n11)
-  call vecrsv (r, it, n11)
-  call vecisv (nr, ibr, n11)
-  call vecisv (length, ibr, n11)
+  !  call vecrsv (volt, n17, n17)
+  call vecsav (volt, n17, n17)
+  !  call vecrsv (c, it, n11)
+  call vecsav (c, it, n11)
+  !  call vecrsv (tr, it, n11)
+  call vecsav (tr, it, n11)
+  !  call vecrsv (tx, it, n11)
+  call vecsav (tx, it, n11)
+  !  call vecrsv (r, it, n11)
+  call vecsav (r, it, n11)
+  !  call vecisv (nr, ibr, n11)
+  call vecsav (nr, ibr, n11)
+  !  call vecisv (length, ibr, n11)
+  call vecsav (length, ibr, n11)
   ktrlsw(7) = it
   ktrlsw(8) = ibr
   call move0 (kolum(1 :), ibr)

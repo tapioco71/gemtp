@@ -9,10 +9,88 @@ module veccom
   use deck29
   implicit none
   integer(4) :: kntvec, kofvec(20)
-  
+
+#ifdef SAVE_TO_DISK
+  interface vecsav
+     module procedure vecrxx, vecixx
+  end interface vecsav
+#else
+  interface vecsav
+     module procedure vecrsv, vecisv
+  end  interface vecsav
+#endif
+
 contains
 
+#ifdef SAVE_TO_DISK
+  !
+  ! subroutine vecrxx.
+  !
 
+  subroutine vecrxx (array, n13, n2)
+    implicit none
+    !     Universal (non-virtual) form of module for binary i/o.  If
+    !     extracted from UTPF for use, convert name "VECRXX" to "VECRSV"
+    integer(4), intent(in) :: n2
+    integer(4), intent(out) :: n13
+    real(8), intent(out) :: array(2)
+    integer(4) :: j, k, n6, n14
+    !
+    if (iprsup .ge. 1) write (unit = lunit6, fmt = 1575) n13, n2
+1575 format (' Begin "vecrsv".  n13, n2 =', 2i8)
+    if (n2 .ne. 0) go to 1638
+    !     zero n2 means that we want to position tape for next read:
+    if (n13 .ge. 0) go to 1592
+    n6 = -n13
+    do j = 1, n6
+       backspace lunt13
+    end do
+    go to 9000
+1592 rewind lunt13
+    if (n13 .eq. 0) go to 1612
+    do j = 1, n13
+       read (unit = lunt13) n14
+    end do
+1612 if (iprsup .ge. 1) write (unit = 6, fmt = 1613) n13
+1613 format (' Position magnetic tape.  n13 =', i4)
+    n13 = 3
+    go to 9000
+1638 if (n2 .eq. 1) go to 1671
+    !     begin code to restore  (array(k), k=1, n13)  from tape:
+    read (unit = lunt13) (array(k), k = 1, n13)
+    go to 9000
+    !     begin code to dump  (array(k), k=1, n13)  onto tape:
+1671 write (unit = lunt13) (array(k), k = 1, n13)
+9000 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9007) array(1), array(2), array(n13)
+9007 format (' Exit "vecrsv".  array(1; 2; n13) =', 3e15.6)
+    return
+  end subroutine vecrxx
+
+  !
+  ! subroutine vecixx.
+  !
+
+  subroutine vecixx (karr, n13, n2)
+    implicit none
+    !     Universal (non-virtual) form of module for binary i/o.  If
+    !     extracted from UTPF for use, convert name "VECIXX" to "VECISV"
+    integer(4), intent(out) :: karr(2)
+    integer(4), intent(in) :: n2, n13
+    integer(4) :: k
+    !
+    if (iprsup .ge. 1) write (unit = lunit6, fmt = 1423) n13, n2
+1423 format (' Begin "vecisv".  n13, n2 =', 2i8)
+    if (n2 .eq. 1) go to 1471
+    !     begin code to restore  (karr(k), k=1, n13)  from tape:
+    read (unit = lunt13) (karr(k), k = 1, n13)
+    go to 9000
+    !     begin code to dump  (karr(k), k=1, n13)  onto tape:
+1471 write (unit = lunt13) (karr(k), k = 1, n13)
+9000 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9007) karr(1), karr(2), karr(n13)
+9007 format (' Exit "vecisv".  karr(1;2;n13) =', 3i10)
+    return
+  end subroutine vecixx
+#else
   !
   ! subroutine vecrsv.
   !
@@ -159,80 +237,10 @@ contains
 9007 format (' Exit "vecisv".  iarray(1; 2; n13) =', 3i10)
     if (iprsup .ge. 2) write (unit = lunit6, fmt = 9011) kofvec
 9011 format (' kofvec =', 20i6)
-    if (associated (temp)) nullify (temp)
     return
   end subroutine vecisv
-
-  !
-  ! subroutine vecrxx.
-  !
-
-  subroutine vecrxx (array, n13, n2)
-    use blkcom
-    implicit none
-    !     Universal (non-virtual) form of module for binary i/o.  If
-    !     extracted from UTPF for use, convert name "VECRXX" to "VECRSV"
-    integer(4), intent(in) :: n2
-    integer(4), intent(out) :: n13
-    real(8), intent(out) :: array(2)
-    integer(4) :: j, k, n6, n14
-    !
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 1575) n13, n2
-1575 format (' Begin "vecrsv".  n13, n2 =', 2i8)
-    if (n2 .ne. 0) go to 1638
-    !     zero n2 means that we want to position tape for next read:
-    if (n13 .ge. 0) go to 1592
-    n6 = -n13
-    do j = 1, n6
-       backspace lunt13
-    end do
-    go to 9000
-1592 rewind lunt13
-    if (n13 .eq. 0) go to 1612
-    do j = 1, n13
-       read (unit = lunt13) n14
-    end do
-1612 if (iprsup .ge. 1) write (unit = 6, fmt = 1613) n13
-1613 format (' Position magnetic tape.  n13 =', i4)
-    n13 = 3
-    go to 9000
-1638 if (n2 .eq. 1) go to 1671
-    !     begin code to restore  (array(k), k=1, n13)  from tape:
-    read (unit = lunt13) (array(k), k = 1, n13)
-    go to 9000
-    !     begin code to dump  (array(k), k=1, n13)  onto tape:
-1671 write (unit = lunt13) (array(k), k = 1, n13)
-9000 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9007) array(1), array(2), array(n13)
-9007 format (' Exit "vecrsv".  array(1; 2; n13) =', 3e15.6)
-    return
-  end subroutine vecrxx
-
-  !
-  ! subroutine vecixx.
-  !
-
-  subroutine vecixx (karr, n13, n2)
-    use blkcom
-    implicit none
-    !     Universal (non-virtual) form of module for binary i/o.  If
-    !     extracted from UTPF for use, convert name "VECIXX" to "VECISV"
-    integer(4), intent(out) :: karr(2)
-    integer(4), intent(in) :: n2, n13
-    integer(4) :: k
-    !
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 1423) n13, n2
-1423 format (' Begin "vecisv".  n13, n2 =', 2i8)
-    if (n2 .eq. 1) go to 1471
-    !     begin code to restore  (karr(k), k=1, n13)  from tape:
-    read (unit = lunt13) (karr(k), k = 1, n13)
-    go to 9000
-    !     begin code to dump  (karr(k), k=1, n13)  onto tape:
-1471 write (unit = lunt13) (karr(k), k = 1, n13)
-9000 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9007) karr(1), karr(2), karr(n13)
-9007 format (' Exit "vecisv".  karr(1;2;n13) =', 3i10)
-    return
-  end subroutine vecixx
-
+#endif
+  
 end module veccom
 
 

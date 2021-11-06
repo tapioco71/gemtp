@@ -111,10 +111,7 @@ contains
     n9 = ltlabl + kvecsv * nbyte(3) / nbyte(4)
     if (n9 .lt. kpen(2) + 50) go to 6342
     write (unit = lunit6, fmt = 6335) n2, kpen(2), n9, nchain
-6335 format (' Error stop in "tapsav".  Overflow of /c29b01/ storage.  n2, kpen(2) =', 2i8, &
-         '     needed storage n9 =,  i8     ', /, ' memory requirement in integer words for virtual  ', &
-         ' computer implementation of tapsav.   Storage must ', /, ' provide for all of --/label/--( deck "labcom" ),   ', &
-         ' the several usages of "vecrsv" and "vecisv"(over6-11),  ', ' plus 50 extra cells.   ', /, ' nchain =', i5)
+6335 format (' Error stop in "tapsav".  Overflow of /c29b01/ storage.  n2, kpen(2) =', 2i8, '     needed storage n9 =,  i8     ', /, ' memory requirement in integer words for virtual   computer implementation of tapsav.   Storage must ', /, ' provide for all of --/label/--( deck "labcom" ),    the several usages of "vecrsv" and "vecisv"(over6-11),  ', ' plus 50 extra cells.   ', /, ' nchain =', i5)
     call stoptp
 6342 j = 50
     if (n3 .gt. 1) go to 6352

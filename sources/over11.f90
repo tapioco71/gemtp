@@ -518,10 +518,14 @@ subroutine over11
   ib = ib + 1
   go to 6095
 6200 n1 = 2
-  call vecrsv (diag(1 :), ntot, n1)
-  call vecrsv (diab(1 :), ntot, n1)
-  call vecrsv (gnd(iofgnd + 1 :), ioffd, n1)
-  call vecrsv (bnd(iofbnd + 1 :), ioffd, n1)
+  !  call vecrsv (diag(1 :), ntot, n1)
+  call vecsav (diag, ntot, n1)
+  !  call vecrsv (diab(1 :), ntot, n1)
+  call vecsav (diab, ntot, n1)
+  !  call vecrsv (gnd(iofgnd + 1 :), ioffd, n1)
+  call vecsav (gnd(iofgnd + 1 :), ioffd, n1)
+  !  call vecrsv (bnd(iofbnd + 1 :), ioffd, n1)
+  call vecsav (bnd(iofbnd + 1 :), ioffd, n1)
   if (ncurr .le. 0) ncurr = 1
   call move0 (e(1 :), ntot)
   call move0 (f(1 :), ntot)
