@@ -10,7 +10,7 @@
 
 subroutine over10
   use blkcom
-  use labcom
+  use labcom, only: bus, c, coptbr, crest, e, f, iform, imodel, isubeg, kbus, kode, kodebr, kodsem, kssfrq, ksub, length, mbus, msub, node, nr, r, sfreq, tclose, time1, tr, tstart, tx, volt, volti, voltk, xoptbr
   use space2
   use umcom
   use movcop
@@ -19,15 +19,14 @@ subroutine over10
   implicit none
   !  dimension itemp(1)
   !  equivalence (itemp(1), voltk(1))
-  character(8) :: fxtem1
   integer(4) :: i, ib, ic, iendd, ig, ii, ik, ikf, il, im, in, is, isfd
   integer(4) :: istop, isubs1, isubs2, isubs3, isubs4, itp, ix, ix2, ixx, iy
   integer(4) :: j, ja, jc, je, jj, jk, js, jt
   integer(4) :: k, ka, kb, ke, kkk, kmm, ky
-  integer(4) :: l, la, lb, lc, lk, ll, locy11
+  integer(4) :: l, la, lb, lc, lk, ll, locatn(20, 20), locy11
   integer(4) :: m, mk, mna1b1, mna1b2, mna2b1, mna2b2, mxa1b1, mxa1b2, mxa2b1
   integer(4) :: mxa2b2
-  integer(4) :: n, n1, n2, n3, n4, n5, n7, n10, n12, n13, n14, n15, n16, n23
+  integer(4) :: n, n1, n2, n3, n5, n7, n10, n12, n13, n14, n15, n16, n23
   integer(4) :: na1, na2, nb1, nb2, ne, nl, nnpos, nrow1, nrow2, nt
   real(8) :: azi, azr
   real(8) :: bb, bj
@@ -40,6 +39,8 @@ subroutine over10
   real(8) :: vi, vr, vvi, vvr
   real(8) :: xa, xi, xr, xti, xtr, xx
   real(8) :: yy
+  !
+  itemp = transfer (voltk, itemp)
   !
   locatn(i, j) = (j * j - j) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 2941) ntot, ioffd, loopss(2)
@@ -1345,7 +1346,7 @@ subroutine sseqiv (ikf, isfd, omegal, omegac)
   !     equivalent is inserted into the tr and tx tables *   *   *   *   *
   integer(4), intent(out) :: ikf, isfd
   real(8), intent(in) :: omegac, omegal
-  integer(4) :: idk, ifk, isf, ist, isu
+  integer(4) :: idk, isf, ist, isu
   integer(4) :: ka, kb, kc
   real(8) :: ac1, al1, ar1, arl, azi, azr
   real(8) :: den

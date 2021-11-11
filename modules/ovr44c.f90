@@ -76,7 +76,7 @@ contains
     l = 0
     do i = i1, i2
        l = l + 1
-6      a(i) = a(i) + b(l) * h2
+       a(i) = a(i) + b(l) * h2
     end do
     if (k .lt. j) go to 4
     i = ik + j
@@ -86,7 +86,7 @@ contains
 7   i = ij
     do l = 1, j
        i = i + 1
-8      a(i) = b(l)
+       a(i) = b(l)
     end do
     go to 4
     !                                   end k-loop
@@ -112,7 +112,7 @@ contains
     j = 0
     do i = i2, i3
        j = j + 1
-30     r(j) = p(i) * unit
+       r(j) = p(i) * unit
     end do
     !  goto (1,2,3),iflag
     select case (iflag)
@@ -213,7 +213,7 @@ contains
 339    format ('0', 11x, 'One half of shunt impedance matrix (Ohms)')
     end select
     !5 go to (320,321,322),k2
-5   select case (k2)
+    select case (k2)
     case (1)
        write (unit = lunit6, fmt = 309)
 309    format ('+', 53x, 'For the system of physical conductors')
@@ -334,7 +334,7 @@ contains
        x = b(l)
        y = d(l)
        a(i) = a(i) + x * h2 - y * g2
-6      c(i) = c(i) + x * g2 + y * h2
+       c(i) = c(i) + x * g2 + y * h2
     end do
     if (k .lt. j) go to 4
     i = ik + j
@@ -346,7 +346,7 @@ contains
     do l = 1, j
        i = i + 1
        c(i) = d(l)
-8      a(i) = b(l)
+       a(i) = b(l)
     end do
     go to 4
     !                                   end k-loop
@@ -378,13 +378,13 @@ contains
     !
     epspv2 = 1.0d-16
     do i = 1, m
-110    ij(i) = 0
+       ij(i) = 0
     end do
     nph2 = m + m
     n22 = 2 * m * m
     nphpi2 = nph2 + 2
     do j=1, n22
-120    b(j) = a(j)
+       b(j) = a(j)
     end do
     l = 0
 130 l = l + 1
@@ -535,7 +535,7 @@ contains
     if ( iw .eq. 1 ) c = c / d13
     do i=1,mm
        xwc(i) = xwc(i) * c
-27     xwy(i)=-xwc(i)
+       xwy(i)=-xwc(i)
     end do
     call redu44 (xwy(1 :), workr1(1 :), m, ll0)
     !    Const. [t], Marti setup will bypass the exact diagonalization
@@ -561,7 +561,7 @@ contains
        if (n .lt. k) n = k
        n = n * (n - 3) / 2 + j + k
        er(j) = p(n)
-50     ei(j) = z(n)
+       ei(j) = z(n)
     end do
     ! **** the k-th column of r+xwl is stored
     i = 0
@@ -576,7 +576,7 @@ contains
        cc = xwy(n)
        if (lastov .eq. 1) conduc = 0.0d0
        cr = cr + cc * er(j) + conduc * ei(j)
-1      cl = cl - cc * ei(j) + conduc * er(j)
+       cl = cl - cc * ei(j) + conduc * er(j)
     end do
     ! **** the element of row i and column k of yz is obtained
     yzr(i, k) = cl
@@ -596,14 +596,12 @@ contains
           tempr(i, j) = yzr(j, i)
           tempi(i, j) = yzi(j, i)
        end do
-7001   continue
     end do
     do i = 1, m
        do j = 1, m
           yzr(i, j) = tempr(i, j)
           yzi(i, j) = tempi(i, j)
        end do
-7008   continue
     end do
     call dceign(yzr, yzi, tvi, tvr, er, ei, m, m, ierror, ll1, ll0, lunit6, iprsup, ndim)
     !      write (*,*)(er(i), i=1,m)
@@ -638,7 +636,7 @@ contains
     do i = 1, m
        write (lunit6,59) ( tvr(i,j), j=1,m )
        write ( lunit6,59) ( tvi(i,j), j=1,m )
-2411 end do
+    end do
 5602 if (kexact .eq. 88333) go to 5620
     call unwind (ping, kthl, mrr, nrp, ntol, iseq)
     if ( iprsup .lt. 1 )  go to 5605
@@ -653,7 +651,7 @@ contains
           ! $$$$  use tv  $$$$
           pp1(i,j)=tvr(i,j)
           pp2(i,j)=tvi(i,j)
-5613   end do
+       end do
     end do
     do i=1,m
        p(i)=ee1(iseq(i))
@@ -662,7 +660,7 @@ contains
           ! $$$$ use tv  $$$$
           tvr(i,j)=pp1(i,iseq(j))
           tvi(i,j)=pp2(i,iseq(j))
-5612   end do
+       end do
     end do
     ! $$$$ new code to get ti from tv-t $$$$
 5620 ll=1
@@ -671,25 +669,25 @@ contains
           tixf(ll)=tvr(i,j)
           tixf(ll+1)=tvi(i,j)
           ll=ll+2
-7003   end do
-7002 end do
+       end do
+    end do
     call cominv (tixf(1 :), work1(1 :), m, freq)
     ll = 1
-7766 if (iprsup .ge. 3) write (unit = lunit6, fmt = *) ' Before do 7004.  m, ndim, freq =', m, ndim, freq
+    if (iprsup .ge. 3) write (unit = lunit6, fmt = *) ' Before do 7004.  m, ndim, freq =', m, ndim, freq
     do j = 1, m
        do i = 1, m
           tir(i, j) = work1(ll)
           tii(i, j) = work1(ll+1)
           ll = ll + 2
-7005   end do
-7004 end do
+       end do
+    end do
     if (kexact .eq. 88333) go to 7072
     do i = 1, m
        do j = 1, m
           pp1(i, j) = sqrtz ((tir(i, j)) ** 2 + (tii(i, j)) ** 2)
           pp2(i, j) = atan2z (tii(i, j), tir(i, j))
-5621   end do
-5611 end do
+       end do
+    end do
     !
     if (ntol .ne. 1) go to 5812
     do j = 1, m
@@ -698,7 +696,7 @@ contains
           if (pp1(i, j) .le. pp1(kmax(j), j)) go to 5802
           kmax(j) = i
 5802   end do
-5801 end do
+    end do
     write (unit = lunit9) (kmax(j), j = 1, m)
 5812 do j = 1, m
        if (pp1(kmax(j), j) .eq. 0.0d0) go to 5614
@@ -713,16 +711,16 @@ contains
           if (pp2(i, j) .gt. twopi / 2.0d0) pp2(i, j) = pp2(i, j) - twopi
           if (pp2(i, j) .lt.-twopi / 2.0d0) pp2(i, j) = pp2(i, j) + twopi
           if (iprsup .ge. 3) write (unit = *, fmt = *) 'Just before 5624, i, j, pp1(i,j), pp2(i,j)', i, j, pp1(i, j), pp2(i, j)
-5624   end do
+       end do
 5614 end do
     !!    ** fix the error of using  ti as tv  **
     do i = 1, m
        do j = 1, m
           tir(i, j) = (pp1(i, j)) * cosz (pp2(i, j))
           tii(i, j) = (pp1(i, j)) * sinz (pp2(i, j))
-6001   end do
+       end do
     end do
-7120 if (iprsup .ge. 1) write (unit = lunit6, fmt = 400) freq, ((tir(i, j), tii(i, j), j = 1, m), i = 1, m)
+    if (iprsup .ge. 1) write (unit = lunit6, fmt = 400) freq, ((tir(i, j), tii(i, j), j = 1, m), i = 1, m)
 400 format (' At ', e12.5, 'Hz, eigenvectors tir and tii after scaling are', /, (1x, 8e15.6))
 7072 if (ierror .eq. 0) go to 463
     kill = 221
@@ -735,7 +733,7 @@ contains
           call cimage
           read (unit = abuff, fmt = 469) (tir(j, ibk), tii(j, ibk), ibk = i, ij)
 469       format (6e13.0)
-462    end do
+       end do
     end do
     !     !   $$$$ skip the rotation and normalization  for freq-dep [t] ??
 463 if (lastov .eq. 39 .and. itrnsf .eq. 1 .or. kexact .eq. 88333) go to 2500
@@ -746,11 +744,11 @@ contains
     write (unit = lunit6, fmt = 39)
     do  k = 1, m
        write (unit = lunit6, fmt = 9) (tir(k, j), j = 1, m)
-1472 end do
+    end do
     write (unit = lunit6, fmt = 60)
     do k = 1, m
        write (unit = lunit6, fmt = 9) (tii(k, j), j = 1, m)
-1482 end do
+    end do
 88  continue
     do j = 1, m
        cr = 0.0d0
@@ -758,26 +756,26 @@ contains
        do  i = 1, m
           fnorm = fnorm + (tir(i, j) ** 2 - tii(i, j) ** 2)
           cr = cr + tir(i, j) * tii(i, j)
-466    end do
+       end do
        cr = -2.0d0 * cr
        theta = atan2z (cr, fnorm) / 2.0d0
        cr = cosz (theta)
        cl = sinz (theta)
        do i = 1, m
           tir(i, j) = tir(i, j) * cr - tii(i, j) * cl
-467       tii(i, j) = 0.0d0
+          tii(i, j) = 0.0d0
        end do
-465 end do
+    end do
 464 do i = 1, m
        fnorm = 0.0d0
        do j = 1, m
-26        fnorm = fnorm + tir(j, i) ** 2 + tii(j, i) ** 2
+          fnorm = fnorm + tir(j, i) ** 2 + tii(j, i) ** 2
        end do
        fnorm = 1.0d0 / sqrtz (fnorm)
        do j = 1, m
           tii(j, i) = tii(j, i) * fnorm
           tir(j, i) = tir(j, i) * fnorm
-5      end do
+       end do
     end do
     ! $$$$  calculation of tv from ti  $$$$
 2500 ll = 1
@@ -786,8 +784,8 @@ contains
           tixf(ll) = tir(i, j)
           tixf(ll + 1) = tii(i, j)
           ll = ll + 2
-6003   end do
-6002 end do
+       end do
+    end do
     call cominv (tixf(1 :), work1(1 :), m, freq)
     ll = 1
     do j = 1, m
@@ -795,8 +793,8 @@ contains
           tvr(i, j) = work1(ll)
           tvi(i, j) = work1(ll + 1)
           ll = ll + 2
-6005   end do
-6004 end do
+       end do
+    end do
     !!    ** now, we have both ti and tv **
     if (iprsup .ge. 1) write (unit = lunit6, fmt = 403) ((tvr(i, j), tvi(i, j), j = 1, m), i = 1, m)
 403 format (' Eigenvectors tvr and tvi are', /, (1x, 8e15.6))
@@ -813,7 +811,7 @@ contains
 8771   format (13a6, a2)
        write (unit = lunit7, fmt = 8772) (texta6(i), i = 1, 13)
 8772   format ('c ', 13a6)
-8774 end do
+    end do
 8775 write (unit = lunit7, fmt = 28)
 28  format ('$vintage, 1')
     ! ****** to get modal y *********
@@ -822,18 +820,18 @@ contains
           !     $$$ now, using tv to get ymode $$$
           xtir(j) = tvr(j, i)
           xtii(j) = tvi(j, i)
-41     end do
+       end do
        call mult (xwy, xtir, dummi, m, ll0)
        b = 0.0d0
        call mult (xwy, xtii, dummr, m, ll0)
        ! *** xwy  is j(wc) ******
        do j = 1, m
           dummr(j) = -dummr(j)
-3141   end do
+       end do
        do j = 1, m
           dummi(j) = dummi(j) + conduc * xtii(j)
           dummr(j) = dummr(j) + conduc * xtir(j)
-3151   end do
+       end do
        g = 0.0d0
        do ig = 1, m
           c = dummr(ig)
@@ -841,7 +839,7 @@ contains
           xa = xtir(ig)
           xb = xtii(ig)
           b = b + xa * d1 + xb * c
-43        g = g + xa * c - xb * d1
+          g = g + xa * c - xb * d1
        end do
        if (iprsup .ge. 1) write (unit = lunit6, fmt = *) ' Modal admittance ym for mode ', i, g, b
 44     format (//, ' mode   resistance  reactance  susceptance surge impedance(Ohm)          velocity  attenuation')
@@ -896,14 +894,14 @@ contains
                 k = kk1 * j + ki1
                 cr = cr + er(j)*tixf(k) - ei(j)*tixf(k+1)
                 ci = ci + er(j)*tixf(k+1) + ei(j)*tixf(k)
-2600         end do
+             end do
              dummr(l) = cr
              dummi(l) = ci
-2700      end do
+          end do
           zr = zr + tixf(kk)*dummr(jj) - tixf(kk+1)*dummi(jj)
           zi = zi + tixf(kk)*dummi(jj) + tixf(kk+1)*dummr(jj)
-2800   end do
-2899   dr = zr * g - zi * b
+       end do
+       dr = zr * g - zi * b
        di = zr * b + zi * g
        em = sqrtz( dr*dr + di*di )
        gamma = sqrtz( em )
@@ -911,11 +909,11 @@ contains
        ym=sqrtz( g**2 + b**2 )
        ya=atan2z( b, g )
        go to 1232
-2900   g=ei(i)/dumm1
-       b=-er(i)/dumm1
-58     format (2x, 10e11.4)
-2950   zsurge(i)=sqrtz(b/dumm1)
-       cc=sqrtz(g**2+b**2)
+2900   g = ei(i) / dumm1
+       b = -er(i) / dumm1
+       !58     format (2x, 10e11.4)
+       zsurge(i) = sqrtz (b / dumm1)
+       cc = sqrtz (g ** 2 + b ** 2)
        theta=atan2z(-g,b)*onehaf
        zcharr=sqrtz(cc/dumm1)
        zchari=zcharr*sinz(theta)
@@ -966,7 +964,7 @@ contains
           tixf(ll) = tir(ij,j)
           work1(ll) = tii(ij,j)
           ll = ll + 1
-115    end do
+       end do
     end do
     n9sq = m * m
     write (lunit9) ( tixf(k),k=1,n9sq), (work1(k),k=1,n9sq)
@@ -982,7 +980,7 @@ contains
           dd=tii(j,i)
           tir(j,i)=cc*c-dd*d1
           tii(j,i)=cc*d1+dd*c
-37     end do
+       end do
     end do
     ! ***** end of rotation of ti matrix for k.c.lee's const.param.*******
 39  format (//, '      Real components, row by row')
@@ -993,7 +991,7 @@ contains
     do k=1,m
        write (lunit6,9)(tir(k,j),j=1,m)
 59     format (6f12.8)
-57  end do
+    end do
     write (lunit6,60)
 60  format (//, '     Imaginary components, row by row')
     do k=1,m
@@ -1008,10 +1006,10 @@ contains
 1204 end do
     if ( lastov .eq. 39 )  go to 9900
     ! to get zsurge matrix in phase domain
-75  do i=1,m
-       c = 1./zsurge(i)
-       do j=1,m
-80        yzr(i,j)=tir(j,i) * c
+    do i = 1, m
+       c = 1.0d0 / zsurge(i)
+       do j = 1, m
+          yzr(i, j) = tir(j, i) * c
        end do
     end do
     n=0
@@ -1019,10 +1017,10 @@ contains
        do k=1,i
           c = 0.0
           do j=1,m
-81           c=c-tir(i,j)*yzr(j,k)
+             c = c - tir(i, j) * yzr(j, k)
           end do
-          n=n+1
-82        xwc(n)=c
+          n = n + 1
+          xwc(n) = c
        end do
     end do
     call redu44 (xwc(1 :), workr1(1 :), m, ll0)
@@ -1033,7 +1031,7 @@ contains
     do i = 1, m
        k = n + i - 1
        write (unit = lunit6, fmt = 9) (xwc(j), j = n, k)
-84     n = n + i
+       n = n + i
     end do
     go to 9900
 9200 lstat(18) = nchain
@@ -1053,6 +1051,7 @@ contains
     use tracom
     use indcom
     use movcop
+    use freedom
     implicit none
     integer(4), intent(in) :: ndim
     integer(4), intent(in) :: nsqr2
@@ -1079,8 +1078,8 @@ contains
     character(8) :: text1, text2, fmetrc, englis, bufsem(14)
     character(8) :: text3, text4, text5, text6, text7
     character(8) :: text8, text9
-    integer(4) :: i, i1, i2, i3, i4, i5, icount, idebug, iii, ik, imax, imodal, ip, iprint, ips
-    integer(4) :: isec, isegm, isn, itrnsf, iw, ix
+    integer(4) :: i, i1, i2, i3, i4, i5, icount, idebug, idist, iii, ik, imax
+    integer(4) :: imodal, ip, iprint, ips, isec, isegm, isn, isw, itrnsf, iw, ix
     integer(4) :: j, jprmat(16), j1516, j1, j2, j2out, j4out, j3, j4, j5, j56
     integer(4) :: j5out, j6, j6out, j7, j8, j8out, j9, j9out, j10, j11, j12, j13
     integer(4) :: j14, j15, j16, j17, jb, jj, jm, jp, jspecl
@@ -1202,7 +1201,7 @@ contains
     do i = 3, 30
        isn = (-1) ** ((i - 1) / 2)
        bcars(i) = -bcars(i - 2) / (i * i + 2. * i) * isn
-6603   dcars(i) = bcars(i) * pi / 4.
+       dcars(i) = bcars(i) * pi / 4.
     end do
     ccars(1) = unity / sqrt2
     ccars(3) = ccars(1)
@@ -1210,12 +1209,12 @@ contains
     ccars(7) = -45. * onehaf * sqrt2
     do i = 1, 29, 2
        if (i .gt. 8) ccars(i) = 0.0
-64     dcars(i) = ccars(i)
+       dcars(i) = ccars(i)
     end do
     dcars(3) = -dcars(3)
     dcars(7) = -dcars(7)
     do i = 4, 30, 2
-46     ccars(i) = ccars(i - 2) + unity / i + unity / (i + 2.)
+       ccars(i) = ccars(i - 2) + unity / i + unity / (i + 2.)
     end do
     fbe(1) = 16.
     fbed(1) = -4.
@@ -1227,7 +1226,7 @@ contains
        fbed(i) = fbe(i) / (2. * i + 2.) * isn
        d1 = d1 + unity / i
        fke(i) = fbe(i) * d1
-811    fked(i - 1) = fke(i) * i / 32.
+       fked(i - 1) = fke(i) * i / 32.
     end do
     fked(14) = 0.0
     valu9=fke(1)/32.
@@ -1264,7 +1263,7 @@ contains
 3866 format (/, ' at 3866 ', 3e25.15)
 2   m = 1
     do i = 1, 40
-13866  brname(i) = blank
+       brname(i) = blank
     end do
     mspedb = 0
     muntrn = 0
@@ -1274,7 +1273,6 @@ contains
     rewind lunt13
     !     read input card using cimage
 7403 call cimage
-7413 continue
     read (unit = abuff, fmt = 4230) bus1
     if (bus1 .ne. text2) go to 37403
     !     optional "branch" card, which species  a6  branch names
@@ -1325,7 +1323,7 @@ contains
     go to 7403
 5029 do j = 1, 14
        if (bufsem(j)  .ne.  blank) go to 4251
-7436 end do
+    end do
     write (kunit6, 4244)
 4244 format ('+Blank card terminating line-constants cases.')
     call interp
@@ -1367,14 +1365,14 @@ contains
     go to 8715
 8712 nfrfld = 1
     call freone (d11)
-    itbic(i) = d11
-    call frefld (tbtb2(i))
-    call frefld (tbr(i))
+    itbic(i) = int (d11)
+    call frefld (tbtb2(i :))
+    call frefld (tbr(i :))
     call freone (d11)
-    itbtb3(i) = d11
-    call frefld (tbg(i))
-    call frefld (tbd(i))
-    call frefld (tbx(i))
+    itbtb3(i) = int (d11)
+    call frefld (tbg(i :))
+    call frefld (tbd(i :))
+    call frefld (tbx(i :))
     call freone (h1)
     call freone (h2)
     call freone (d8)
@@ -1384,7 +1382,7 @@ contains
     nright = 0
     tbtext(i) = texta6(1)
     call freone (d11)
-    i3 = d11
+    i3 = int (d11)
     if (kill .gt. 0) go to 9200
     go to 4235
 8715 if (i .eq. 1) go to 4320
@@ -1491,7 +1489,7 @@ contains
        jb = itbtb3(k)
        if (jb .lt. 2) tbg(k) = (tbg(k) + fspac) / fmipkm
        if (jb .eq. 2) tbg(k) = tbg(k) * finpcm
-982 end do
+    end do
 981 call move0 (ic(1 :), lphase)
     ktot = 0
     kcirct = 0
@@ -1544,8 +1542,7 @@ contains
     rewind lunt13
     read (unit = abuff, fmt = 4230) bufsem
     if (ialter .ne. 2) write (lunit2, 4230) bufsem
-    read (unit = abuff, fmt = 17) rearth, freq, corr, j1, j2, j3, j4, j5, j6, j7, j8, j9, j10, &
-         j11, j12, iw, dist, j13, j14, j15, j16, isegm, mutual, ik, ips, j17, imodal, itrnsf, conduc
+    read (unit = abuff, fmt = 17) rearth, freq, corr, j1, j2, j3, j4, j5, j6, j7, j8, j9, j10, j11, j12, iw, dist, j13, j14, j15, j16, isegm, mutual, ik, ips, j17, imodal, itrnsf, conduc
 17  format (f8.2, f10.2, f10.6, i2, 5i1, i2, 5i1, i2, f8.3, i2, 5i1, 3i3, 2i2, e8.2)
     if (metrik .eq. 1) conduc = conduc / fmipkm
     if (conduc .eq. 0) conduc = 3.22d-9
@@ -1553,8 +1550,8 @@ contains
     if (mtrnsp .eq. 1 .or. mspedb .eq. 1) imodal = 0
     if (kexact .ne. 88333) go to 3168
     freq = fminfs
-    ik = alog1z (fmaxfs / fminfs) + epsiln
-    ips = valu14 / alogz (-delffs) + epsiln
+    ik = int (alog1z (fmaxfs / fminfs) + epsiln)
+    ips = int (valu14 / alogz (-delffs) + epsiln)
     distsv = dist
     go to 217
 3168 if (lastov .eq. 1 .or. imodal .eq. 1) go to 217
@@ -1617,7 +1614,7 @@ contains
     if (ialter .eq. 0) go to 3729
     do jj = 1, 16
        if (jprmat (jj) .ne. 0) go to 13721
-3721 end do
+    end do
     jpralt = 0
     if (ialter .eq. 3) go to 13723
 3723 jprmat(5) = 1
@@ -1632,7 +1629,7 @@ contains
 7454 format (/, ' New frequency card.  iprint  ldisfr  ialter', /, 20x, 3i8)
     do jj = 1, 16
        if (jprmat (jj) .ne. 0) go to 3733
-3731 end do
+    end do
     go to 33316
 3733 if (freq .eq. 0.0) freq = statfr
     if (ik .gt. 0)   go to 7456
@@ -1696,7 +1693,7 @@ contains
     freq = fdecad
     do i = 1, ntol * ktab
        backspace lunit9
-8804 end do
+    end do
     ntol = 0
     go to 16
 8800 go to 33316
@@ -1817,7 +1814,7 @@ contains
 50  k=k+1
     if (k .gt. kfull) go to 56
     i=k-kcirct
-    i=ic(i)
+    i = ic(i)
     if (i.eq.0) go to 50
     i2=i*(i-1)/2
     k2=k*(k-1)/2
@@ -1864,7 +1861,7 @@ contains
 100 f2 = omega * valu3
     imax = 30
     if (corr .eq. 0.0d0 .or. rearth .eq. 0.0d0) imax = -1
-    if (corr .gt. corchk) imax = corr - onehaf
+    if (corr .gt. corchk) imax = int (corr - onehaf)
     if (imax .gt. 31) imax = 30
     read (unit = lunt13) (p(i), i = 1, ip)
     !     segmented, 1, vax e/t can skip translation of rewind:
@@ -1964,7 +1961,7 @@ contains
        xm = xm + dcars(i5) * cs
        h1 = cs * s2 + sn * c2
        cs = cs * c2 - sn * s2
-1006   sn = h1
+       sn = h1
     end do
     !                      end carson series for mutual impedance if z .gt. 5.
 126 p(ip) = rm * f2
@@ -2022,7 +2019,7 @@ contains
     do i5 = 1, 7, 2
        r1 = r1 + ccars(i5) * cs
        xs = xs + dcars(i5) * cs
-2006   cs = cs * c2
+       cs = cs * c2
     end do
     !                      End Carson series for self impedance if z .gt. 5.0
 127 r1 = r1 * f2
@@ -2099,7 +2096,7 @@ contains
        kount = kount + 1
 8100   if (texta6(1) .eq. blank .and. texta6(2) .eq. blank) n5 = n5 + 1
        if (n5 .ge. 1) go to 8777
-8774 end do
+    end do
 8777 if (ialter .le. 0) go to 3734
     if (lastov .eq. 39) go to 3734
     write (unit = lunit3) (p(jj), jj = 1, kp)
@@ -2114,7 +2111,7 @@ contains
 203 if (j56 .eq. 0) go to 600
     do i = 1, kp
        p(i) = -p(i)
-204    z(i) = -z(i)
+       z(i) = -z(i)
     end do
     call cxred2 (p(1 :), z(1 :), workr1(1 :), workr2(1 :), kcirct, ll0)
     !     Inverted impedance matrix for equivalent phase conductors is in
@@ -2123,7 +2120,7 @@ contains
     if (idist .eq. 0) go to 207
     do i = 1, kp
        gd(i) = p(i)
-206    bd(i) = z(i)
+       bd(i) = z(i)
     end do
 207 if (j12 .eq. 0 .or. kcirct .lt. 2) go to 600
     call symm (p(1 :), z(1 :), unity, kcirct, kk)
@@ -2139,7 +2136,7 @@ contains
     rewind lunt13
 251 do i = 1, ip
        p(i) = -p(i)
-252    z(i) = -z(i)
+       z(i) = -z(i)
     end do
     call cxred2 (p(1 :), z(1 :), workr1(1 :), workr2(1 :), kfull, ll0)
     !     Inverted impedance matrix for physical conductors is in p(1),...
@@ -2220,7 +2217,7 @@ contains
        if (n55 .ge. 15) jm = jm + 3
        do jp = jm, n55 - 1
           roff = roff + p(jp)
-5025      xoff = xoff + z(jp)
+          xoff = xoff + z(jp)
        end do
 5028   n55 = n55 + i + 1
 5030 end do
@@ -2233,10 +2230,10 @@ contains
        j = n55 + 1
        do i = j, j + 2
           rcoup = rcoup + p(i)
-5040      xcoup = xcoup + z(i)
+          xcoup = xcoup + z(i)
        end do
        n55 = n55 + jp
-5050 end do
+    end do
     rcoup = rcoup / 9
     xcoup = xcoup / 9
     xtir(1) = rdiag + 2 * roff + 3 * rcoup
@@ -2276,7 +2273,7 @@ contains
     do i = 1, 3
        zsurge(i) = sqrtz (xtii(i) / dummi(i))
        er(i) = d13 / sqrtz (xtii(i) * dummi(i))
-5081 end do
+    end do
     if (iprsup .ge. 1) write (unit = lunit6, fmt = *) ' zsurge, er = ', (zsurge(i), er(i), i = 1, 3)
     do i = 1, kcirct
        if (i .gt. 1) go to 5082
@@ -2303,9 +2300,9 @@ contains
        xdiag = xdiag + z(n55)
        do jp = n55 - i + 1, n55 - 1
           roff = roff + p(jp)
-479       xoff = xoff + z(jp)
+          xoff = xoff + z(jp)
        end do
-478    n55 = n55 + i + 1
+       n55 = n55 + i + 1
     end do
     rdiag = rdiag / kcirct
     xdiag = xdiag / kcirct
@@ -2325,7 +2322,7 @@ contains
     do i = 1, 2
        zsurge(i) = sqrtz (xtii(i) / dummi(i))
        er(i) = d13 / sqrtz(xtii(i) * dummi(i))
-5092 end do
+    end do
     do i = 1, kcirct
        if (i .gt. 2) go to 1473
        write (unit = lunit7, fmt = 140) i, brname(2 * i - 1), brname(2 * i), xtir(i), zsurge(i), er(i), dist
@@ -2407,7 +2404,7 @@ contains
     xpos = xpos * fmipkm
 13037 write (unit = lunit9) rpos, xpos, freq
 13039 if (ik .gt. 0) go to 3006
-3010 vol = omega / beto
+    vol = omega / beto
     alphao = alphao * valu5
     alpha1 = alpha1 * valu5
     v1l = omega / bet1
@@ -2441,22 +2438,22 @@ contains
           dummr(k) = 1.0d0
           if (i .eq. j .and. i .ne. 1) dummr(k) = 1 - i
           if (i .gt. j .and. j .ne. 1) dummr(k) = 0.0d0
-5955      k = k + 1
+          k = k + 1
        end do
-5960 end do
+    end do
     do i =1, n9sq, kcirct
        k = i + kcirct - 1
        temp = 0.0d0
        do j = i, k
-5965      temp = temp + dummr(j) ** 2
+          temp = temp + dummr(j) ** 2
        end do
        temp = sqrtz (temp)
        do  j = i, k
           tixf(n1) = dummr(j) / temp
           work1(n1) = 0.0d0
-5968      n1 = n1 + 1
+          n1 = n1 + 1
        end do
-5970 end do
+    end do
     go to 9994
 9540 d1 = 2.0d0
     d2 = 6.0d0
@@ -2502,7 +2499,7 @@ contains
 15999  tixf(n1) = -d1 * d4
 25960  work1(n1) = 0.0d0
        n1 = n1 + 1
-25965 end do
+    end do
 9994 write (unit = lunit9) (tixf(i), i = 1, n9sq), (work1(i), i = 1, n9sq)
 9996 if (j56 .eq. 0) go to 600
     read (unit = lunt13) (p(i), z(i), i = 1, kp)
@@ -2523,7 +2520,7 @@ contains
 4444 format (/, ' At 4444.  iw, ip, ll0, ll1=', 4i10)
     if (iw .eq. 0) i2 = i2 + 1
     do i = 1, ip
-371    z(i) = -p(i)
+       z(i) = -p(i)
     end do
     call redu44 (z(1 :), workr1(1 :), kfull, ll0)
     if (kill .gt. 0) go to 9200
@@ -2538,7 +2535,7 @@ contains
     if (iprsup .ge. 1) write (unit = *, fmt = *) ' At s.n. 38,  p(1) =', p(1)
     if (imodal .le. 0) go to 403
     do i = 1, kp
-404    xwc(i) = p(i)
+       xwc(i) = p(i)
     end do
 403 if (iw .eq. 0) i2 = i2 + 1
     if (j2out .gt. 0) call output (metrik, p(1 :), z(1 :), switch, kcirct, i2, ll2)
@@ -2565,7 +2562,7 @@ contains
 39  i2 = 3
     if (iw .eq. 0) i2 = i2 + 1
     do i = 1, kp
-391    p(i) = -p(i)
+       p(i) = -p(i)
     end do
     call redu44 (p(1 :), workr1(1 :), kcirct, ll0)
     if (kill .gt. 0) go to 9200
@@ -2590,9 +2587,9 @@ contains
        if (n55 .ge. 15) jm = jm + 3
        do jp = jm, n55 - 1
           coff = coff + p(jp)
-5125   end do
+       end do
 5128   n55 = n55 + i + 1
-5130 end do
+    end do
     cdiag = cdiag / 6
     coff = coff / 6
     if (iprsup .ge. 1) write (unit = lunit6, fmt = *) ' cdiag, coff are ', cdiag, coff
@@ -2601,9 +2598,9 @@ contains
        j = n55 + 1
        do i = j, j + 2
           ccoup = ccoup + p(i)
-5140   end do
+       end do
        n55 = n55 + jp
-5150 end do
+    end do
     ccoup = ccoup / 9
     dummi(1) = cdiag + 2 * coff + 3 * ccoup
     dummi(2) = dummi(1) - 6 * ccoup
@@ -2613,15 +2610,15 @@ contains
     d13 = twopi * freq
     do i = 1,3
        dummi(i) = dummi(i) * d13
-1260 end do
+    end do
     go to 1378
 5190 if (kcirct .lt. 2) go to 1379
     do i = 1, kcirct
        cdiag = cdiag + p(n55)
        do jp = n55 - i + 1, n55 - 1
-379       coff = coff + p(jp)
+          coff = coff + p(jp)
        end do
-378    n55 = n55 + i + 1
+       n55 = n55 + i + 1
     end do
     cdiag = cdiag / kcirct
     coff = coff / (kcirct * (kcirct - 1) / 2)
@@ -2646,7 +2643,7 @@ contains
 7428 format (/, ' Output  (c)  for Semlyen.', /, (1x, 8e16.4))
 3741 if (idist .eq. 0) go to 393
     do i = 1, kp
-392    yd(i) = p(i)
+       yd(i) = p(i)
     end do
 393 if (j6 .eq. 0 .or. kcirct .lt. 2) go to 80
     call symm (p(1), z(1), switch, kcirct, kk)
@@ -2820,11 +2817,11 @@ contains
     go to 604
 605 if (iw .gt. 0) d1=d1/omega
     d1 = sqrtz(d1 * 2.0)
-    i1 = dist / d1 + onehaf
+    i1 = int (dist / d1 + onehaf)
     i2 = 1
     do isec = 1, 34
        if (i1 .le. i2) go to 608
-606    i2 = i2 * 2
+       i2 = i2 * 2
     end do
     write (unit = lunit6, fmt = 607)
 607 format ('+', 41x, 'Cannot be calculated with number of necessary sections=2**33')
@@ -2854,7 +2851,7 @@ contains
        p(i) = r1
        z(i) = d1
        gd(i) = r1 + r1
-621    bd(i) = x1 + d1
+       bd(i) = x1 + d1
     end do
     !                                  begin of loop for connecting sections
     icount = 0
@@ -2898,7 +2895,7 @@ contains
        gd(i) = gd(i) - p(i)
        bd(i) = bd(i) - z(i)
        p(i) = (p(i) - gd(i)) * 2.0d0
-651    z(i) = (z(i) - bd(i)) * 2.0d0
+       z(i) = (z(i) - bd(i)) * 2.0d0
     end do
 673 if (j1516 .gt. 0) go to 660
 652 if (j13 .eq. 0) go to 653
@@ -2920,7 +2917,7 @@ contains
        gd(i) = -p(n2)
        bd(i) = -z(n2)
        p(i) = -p(n1)
-655    z(i) = -z(n1)
+       z(i) = -z(n1)
     end do
     call cxred2 (gd(1 :), bd(1 :), workr1(1 :), workr2(1 :), kcirct, ll0)
     call cxred2 (p(1 :), z(1 :), workr1(1 :), workr2(1 :), kcirct, ll0)
@@ -2949,7 +2946,7 @@ contains
        p(i) = 0.0d0
        z(i) = f2 * yd(i)
        gd(i) = f1 * gd(i)
-671    bd(i) = f1 * bd(i)
+       bd(i) = f1 * bd(i)
     end do
     go to 673
 9200 lstat(18) = nchain

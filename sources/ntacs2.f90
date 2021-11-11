@@ -69,7 +69,7 @@ subroutine ntacs2
   do i = 1, niu
      i2 = kxtcs + nuk + i
      i1 = iuty(kiuty + i)
-     k = ud1(i5 + 2)
+     k = int (ud1(i5 + 2))
      i3 = i1 - 89
      !     go to (4090, 4091, 4092, 4093, 4094, 4095), i3
      select case (i3)

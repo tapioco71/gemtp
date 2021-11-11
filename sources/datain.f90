@@ -9,7 +9,6 @@
 !
 
 subroutine datain
-  use linemodel
   use blkcom
   use dekspy
   use labcom
@@ -18,6 +17,7 @@ subroutine datain
   use bcddat
   use movcop
   use strcom
+  use linemodel
   implicit none
   !     Universal module of interactive EMTP (spy of "emtspy").
   !     If non-interactive version, module can be destroyed.
@@ -30,7 +30,7 @@ subroutine datain
   integer(4) :: l, lentyp(36), limarg, ll
   integer(4) :: m, modarg(35), munit4
   integer(4) :: n, n1, n2, n3, n4, n5, n6, n7, n8, n10, n11, n12, n13, n14, n15
-  integer(4) :: n16, n17, n18, n19, n22, n24, n26, nchpre, nchsuf, nn1, nn2
+  integer(4) :: n16, n17, n18, n19, n20, n22, n24, n26, nchpre, nchsuf, nn1, nn2
   integer(4) :: ntacs, numarg, numhld, numtyp
   character(6) :: dumnam
   character(12) :: typdat(36)

@@ -56,7 +56,7 @@ subroutine subr47
   end if
   n8 = nchain
   if ( kburro .eq. 1) n8 = 29
-1000 call dimens (lltemp(1), n8, trash, trash)
+  call dimens (lltemp(1), n8, trash, trash)
   n7 = lltemp(2) * nbyte(4) / nbyte(3)
   cc = 2 * nbyte(2)
   ppa = nbyte(3)
@@ -67,8 +67,8 @@ subroutine subr47
   cc = n7 - 50
   cc = 2.0d0 * ppa * cc + ppb * ppb
   cc = (sqrtz (cc) - ppb) / ppa
-  ldm = cc
-  ldn = cc * dd
+  ldm = int (cc)
+  ldn = int (cc * dd)
   if (iprsup .gt. 0) write (unit = lunit6, fmt = 2000) ldm, ldn
 2000 format ('  The cable number is limited to ', i4, /, '  the conductor number is limited to ',  i4)
   ldn2 = ldn + ldn
@@ -214,7 +214,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   complex(16) :: ys(ldn, ldn), yc(ldn, ldn), zs(ldn, ldn), zc(ldn, ldn)
   complex(16) :: ze(ldn, ldn), ai(ldn, ldn), bi(ldn, ldn), zp(ldn, ldn)
   complex(16) :: zpc(ldn, ldn), a(ldn, ldn),  b(ldn, ldn), yo(ldn, ldn)
-  complex(16) :: qn(ldn), cj, f(ldn, ldn2)
+  complex(16) :: qn(ldn), f(ldn, ldn2)
   complex(16) :: ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn), cd(ldn, ldn)
   character(8) :: bufsem, cname, text1, text2, text3, text4
   dimension bufsem(14)
@@ -367,15 +367,15 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
      read (unit = abuff, fmt = 901) (roi(i, j), usr(i, j), j = 1, 2)
      write (unit = kunit6, fmt = 1240)
 1240 format ('+Resistivity & permeability of phase & gd. wires.')
-13 end do
-  ncc= 0
+  end do
+  ncc = 0
   npc = 0
-  do i=1, ncct
-     im = 4*(i-1) + 1
+  do i = 1, ncct
+     im = 4 * (i - 1) + 1
      in = im + 1
-     ncc= ncc+ ncpp(im)
-     npc=npc + ncpp(im) + ncpp(in)
-15 end do
+     ncc = ncc + ncpp(im)
+     npc = npc + ncpp(im) + ncpp(in)
+  end do
   np2 = npc
   lines = ( npc + 1) / 2
   im = -1
@@ -492,8 +492,8 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
      go to 3239
 3235 if (radi(i,5) .ne. 0.) go to 3237
      radi(i,5)=radi(i,4) + 100.*epsiln
-23235 usi(i,2) = 1.0
-     esi(i,2) = 1.0
+     usi(i,2) = 1.0d0
+     esi(i,2) = 1.0d0
 3237 radi(i,6) = radi(i,5)
      radi(i,7) = radi(i,6)
      usr(i,3) = 1.0
@@ -536,7 +536,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   lstat(19) = 85
   go to 9200
 1945 do i = 1, ncc
-1960 ngg(i) = 0
+     ngg(i) = 0
   end do
   if ( ngrnd  .le.  3 )  go to 3983
   call cimage
@@ -593,7 +593,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   xtotal=xmajor*anpais
   if(npais.eq.0) xtotal=xmajor
   if(npais.ge.0) call nyan(itypec,npc,ncc,ncpp,ngrnd,ncros,npais,ldm)
-96 if (itypec .ne. 1)   go to 200
+  if (itypec .ne. 1) go to 200
   !     overhead line data outputs & precal.
   jnc = 1
   do i=1, ncct
@@ -608,10 +608,10 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
         d0 = dr0(i,j)/sinz(pai/in)
         usi(i,j) = radi(i,j2)
         in1 = in - 1
-        do k=1, in1
-110        usi(i,j)=usi(i,j)*d0*sinz(pai/in*k)
+        do k = 1, in1
+           usi(i, j) = usi(i, j) * d0 * sinz (pai / in * k)
         end do
-        usi(i1,j)=usi(i,j)**(1./in)
+        usi(i1, j) = usi(i, j) ** (1.0d0 / in)
         go to 120
 111     usi (i1, j) = radi(i,j2)
 120  end do
@@ -638,21 +638,21 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
 124     gi(i,j) = roi(i,j)/pai/(radi(i,j2)**2 - radi(i,j1)**2)
         !     1          /ncpp(im+j+1)
 125  end do
-130 end do
-  do j=1,2
-     do i=1,ncct
-        i1=i+ncct
-        im=4*(i-1)+1
-        j1=im+j-1
+  end do
+  do j = 1, 2
+     do i = 1, ncct
+        i1 = i + ncct
+        im = 4 * (i - 1) + 1
+        j1 = im + j - 1
         j1 = ncpp(j1)
-        if(j1.eq.0) go to 135
+        if (j1 .eq. 0) go to 135
         j2 = j1 + jnc - 1
-        do k=jnc,j2
-133        rad(k)=usi(i1,j)
+        do k = jnc, j2
+           rad(k) = usi(i1, j)
         end do
         jnc = j2 + 1
 135  end do
-136 end do
+  end do
   write (unit = lunit6, fmt = 170)
 170 format (//, 132('-'), //, 1x)
   if ( isyst  .ne.  0 )   go to 140
@@ -664,7 +664,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
 142 j1 = npc - ncc
   write (lunit6, 171)  ncc, j1
 171 format (10x, 'Total number of phase wires', i3, 3x, 'ground wires ', i3, /, 1x)
-  do i=1, ncct
+  do i = 1, ncct
      i1 = i + ncct
      im = 4*(i-1) + 1
      j1 = im + 1
@@ -679,9 +679,9 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
 148  write(lunit6,186) (roi(i,j),j=1,2),(usr(i,j),j=1,2),(gi(i,j),j=1,2)
 186  format ( 10x,  31hresistivity(ohm-m) | phase wire, e11.4,  3x,  11hground wire,  e11.4,  /,  10x,23hrelative permeability |, 8x,  f11.4,  14x,  f11.4,  /, &
           10x,  22hdc resistance(ohm/m) |,  9x,  e11.4,14x,  e11.4  )
-150 end do
-  do i=1, npc
-160  hi(i) = (2. * dci(i) + thc(i) ) / 3.
+  end do
+  do i = 1, npc
+     hi(i) = (2.0d0 * dci(i) + thc(i) ) / 3.0d0
   end do
   write (lunit6, 165)  (i, hi(i), i=1, npc)
 165 format(10x, 29heffective height of the line , 5(i5, f12.5))
@@ -703,9 +703,9 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   !     cable data outputs and precalculation
 200 do i=1,npc
      rad(i) = radi(i,7)
-     do j=1,3
-        gi(i,j) = speedl/sqrtz(esi(i,j))
-210  end do
+     do j = 1, 3
+        gi(i, j) = speedl / sqrtz (esi(i, j))
+     end do
   end do
   write (lunit6, 170)
   if (isyst .ge. 0)   go to 211
@@ -770,7 +770,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
      jn=ncpp(i)
      write (lunit6, 284) i, (j, radi(i,j), j=1, 7)
 284  format(10x,5hphase,i2,1x,17hboundary radii  | ,/10x,7(i3,e13.5))
-217  write (lunit6, 285)  (roi(i, j), j =1,3), (usr(i, j), j=1,3),(j,usi(i,j),esi(i,j),gi(i,j),j=1,jn)
+     write (unit = lunit6, fmt = 285) (roi(i, j), j = 1, 3), (usr(i, j), j = 1, 3), (j, usi(i, j), esi(i, j), gi(i, j), j = 1, jn)
   end do
 285 format (18x, 'resistivity(Ohm-m)| core', e12.5, 3x, 'sheath', e12.5, 3x, 'armor', e12.5, /, 18x, 'relative permeability |  ', &
        f12.5, 9x, f12.5, 8x, f12.5, /, 3(18x, 'insulator', i2, '| (relative) permeability', f6.2,3x, &
@@ -803,7 +803,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
      bi4(i)=radi(i,5)*sqrtz(u0/roi(i,3)*usr(i,3))
      bi5(i)=radi(i,6)*sqrtz(u0/roi(i,3)*usr(i,3))
      al3i(i) = alogz(radi(i,7) / radi(i,6) )
-230 end do
+  end do
   if (iprs47 .gt. 1) write (lunit6, 2437)  npc, ncc, npp, ncct, numaki, lastov, ipunch, ialter, iearth, itypec, isyst, kmode, izflag, iyflag
 2437 format ( /,  18h various integers., 40h     npc     ncc     npp    ncct  numaki, 40h  lastov  ipunch  ialter  iearth  itypec, &
        32h   isyst   kmode  izflag  iyflag  ,/,  18x,  14i8  )
@@ -954,7 +954,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   if (numaki .eq. 1)   freqs = freq
   call zymx( w,nz,isyst,ngrnd, ngg,ncpp, radi,zy,yz,dir,dij, ang,usi,usr,esi,dr0,th0,al0,hi,di,bio,bi1,bi2,bi3,bi4,bi5, &
        al1i,al2i,al3i,dci,  nx, yzn,    ys,yc,zp,zpc,zs,ze,zc,ca,cb,cc,cd,f,  ldm, ldn, ldn2, lnq2 )
-800 if(npais.eq.0) go to 810
+  if(npais.eq.0) go to 810
   write(lunit6,951)
   npk = lnq2 / 3
   nki = npk + 1
@@ -993,7 +993,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   do i=1,(iprint-1)*ktab
      backspace lunit9
      write (*,*) ' guts47.  backspace lunit 9.  iprint, i = ', iprint
-9004 end do
+  end do
   do 9005 i=1,(iprint-1)
      backspace junit4
 9005 end do
@@ -1002,7 +1002,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   go to 9003
 9002 continue
   !     read input card using cimage
-2899 call cimage
+  call cimage
   read (unit = abuff, fmt = 4230) bufsem
   if ( ialter  .ne.  2 ) write (lunit2, 4230)  bufsem
   read (unit = abuff, fmt = 902) d9, freq, ik, ips, dist, j13, j14
@@ -1031,8 +1031,8 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   alf1 = roe/roe3
   alf2 = roe/roe4
   go to 706
-929 write (kunit6, 930)
-930 format ( 40h+blank card terminating frequency cards.  )
+929 write (unit = kunit6, fmt = 930)
+930 format ('+Blank card terminating frequency cards.')
   call interp
   write (lunit6, 4239)
 4239 format ( ///,  1x )
@@ -1073,11 +1073,11 @@ subroutine crosa4 (czy, icont, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
   cwork1=0.
   do i=4,6
      cwork1 = cwork1 + czy(i,i)
-10 end do
+  end do
   cwork1 = cwork1/3.
-  do i=4,6
-     czy(i,i) = cwork1
-20 end do
+  do i = 4, 6
+     czy(i, i) = cwork1
+  end do
   cwork1 = czy(4,5) + czy(4,6) + czy(5,6)
   cwork1 = cwork1/3.
   czy(4,5) = cwork1
@@ -1087,12 +1087,12 @@ subroutine crosa4 (czy, icont, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
      cwork1 = 0.
      do j = 4,6
         cwork1 = cwork1 + czy(i,j)
-40   end do
+     end do
      cwork1 = cwork1/3.
      do j = 4,6
         czy(i,j) = cwork1
-50   end do
-30 end do
+     end do
+  end do
   do i = 1,6
      do j = 1,6
         if(i.le.3.and.j.le.3) go to 60
@@ -1104,7 +1104,7 @@ subroutine crosa4 (czy, icont, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
   do j = 1,3
      czy(4,j) = czy(4,j) + czy(5,j) + czy(6,j)
      czy(j,4) = czy(j,4) + czy(j,5) + czy(j,6)
-70 end do
+  end do
   czy(4,4) = czy(4,4) + czy(5,4) + czy(6,4) + czy(4,5) + czy(5,5) + czy(6,5) + czy(4,6) + czy(5,6) + czy(6,6)
   if(icont.eq.0) call minvn( czy,4,3,0,ldn, ca,cb,cc,cd,ce,cf,cg,f,ldn2 )
   return
@@ -1139,7 +1139,7 @@ subroutine minvn (cinout, n, l, ix, ldn, ca, cb, cc, cd, cwork1, cwork2, cwork3,
   do i = 1, nml
      do j = 1, nml
         cwork1(i, j) = cd(i, j)
-10   end do
+     end do
   end do
   call minv (cwork1, nml, f, ldn, ldn2)
   call mxmnm (cwork1, cc, cwork2, nml, nml, l, ldn)
@@ -1148,26 +1148,26 @@ subroutine minvn (cinout, n, l, ix, ldn, ca, cb, cc, cd, cwork1, cwork2, cwork3,
      do j =1, l
         cwork1(i, j) = ca(i, j) - cwork1(i, j)
         cinout(i, j) = cwork1(i, j)
-20   end do
+     end do
   end do
   if(ix.eq.1) return
   call minv(cwork1,l,f,ldn,ldn2)
   do i=1,l
      do j=1,l
         cinout(i,j)=cwork1(i,j)
-30   end do
+     end do
   end do
   call mxmnm (cwork2, cwork1, cwork3, nml, l, l, ldn)
   do i=1,nml
      do j=1,l
         ipl=i+l
         cinout(ipl,j)=-cwork3(i,j)
-40   end do
+     end do
   end do
   do i=1,l
      do j=1,l
         cwork1(i,j)=ca(i,j)
-50   end do
+     end do
   end do
   call minv(cwork1,l,f,ldn,ldn2)
   call mxmnm(cwork1,cb,cwork2,l,l,nml,ldn)
@@ -1175,7 +1175,7 @@ subroutine minvn (cinout, n, l, ix, ldn, ca, cb, cc, cd, cwork1, cwork2, cwork3,
   do i=1,nml
      do j=1,nml
         cwork1(i,j)=cd(i,j)-cwork1(i,j)
-60   end do
+     end do
   end do
   call minv(cwork1,nml,f,ldn,ldn2)
   do i=1,nml
@@ -1183,14 +1183,14 @@ subroutine minvn (cinout, n, l, ix, ldn, ca, cb, cc, cd, cwork1, cwork2, cwork3,
         ipl=i+l
         jpl=j+l
         cinout(ipl,jpl)=cwork1(i,j)
-70   end do
+     end do
   end do
   call mxmnm(cwork2,cwork1,cwork3,l,nml,nml,ldn)
   do i=1,l
      do j=1,nml
         jpl=j+l
         cinout(i,jpl)=-cwork3(i,j)
-80   end do
+     end do
   end do
   return
 end subroutine minvn
@@ -1216,27 +1216,27 @@ subroutine cutmat (cinput, ca, cb, cc, cd, n, l, ldn)
   do i = 1, l
      do j = 1, l
         ca(i, j) = cinput(i, j)
-10   end do
+     end do
   end do
   nml = n - l
   do i = 1, l
      do j = 1, nml
         jpl = j + l
         cb(i, j) = cinput(i, jpl)
-20   end do
+     end do
   end do
   do i = 1, nml
      do j = 1 ,l
         ipl = i + l
         cc(i, j) = cinput(ipl, j)
-30   end do
+     end do
   end do
   do i = 1, nml
      do j = 1, nml
         ipl = i + l
         jpl = j + l
         cd(i, j) = cinput(ipl, jpl)
-40   end do
+     end do
   end do
   return
 end subroutine cutmat
@@ -1264,11 +1264,8 @@ subroutine mxmnm (ca, cb, cc, l, m, n, ldn)
         do k = 1, m
            cc(i,j ) = cc(i, j) + ca(i, k) * cb(k, j)
         end do
-30      continue
      end do
-20   continue
   end do
-10 continue
   return
 end subroutine mxmnm
 
@@ -1349,7 +1346,7 @@ subroutine datout (w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, 
   do k = kk, kstop, kstep
      write (unit = lunit6, fmt = 1300) cha, k, rs
      write (unit = lunit7, fmt = 1301) cha, k, rs
-900 end do
+  end do
 1300 format (' ', 2x, a1, 'in ', i2, 18x, e16.5)
 1301 format (2x, a1, 'in ', i2, 18x, e16.5)
 610 continue
@@ -1386,8 +1383,8 @@ subroutine datout (w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, 
 700        continue
            if (ncros .eq. 1 .and. ntype .eq. 1) ipri = 4
            call pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c,npk)
-300     end do
-200  end do
+        end do
+     end do
      if (ltype .eq. 1) go to 100
      j = 3
      if (ntype .eq. 1) j = 1
@@ -1395,7 +1392,7 @@ subroutine datout (w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, 
      do k = kk, kstop, kstep
         write (unit = lunit6, fmt = 2000) cha, i, j, k, cha, k
         write (unit = lunit7, fmt = 2001) cha, i, j, k, cha, k
-920  end do
+     end do
 2000 format (' ', 2x, a1, i2, i1, i2, 6x, a1, 'in ', i2)
 2001 format (2x, a1, i2, i1, i2, 6x, a1, 'in ', i2)
      go to 100
@@ -1510,7 +1507,7 @@ subroutine pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
   !
   lunit6 = gfortran_stdout_unit
   lunit7 = 7
-10 continue
+  continue
   if (k .ne. 1) go to 15
   write (unit = lunit6, fmt = 1000) k, cha, i1, j1, k1, cha, i, j, k2, cha, cha
   write (unit = lunit7, fmt = 1001) k, cha, i1, j1, k1, cha, i, j, k2, cha, cha
@@ -1523,7 +1520,7 @@ subroutine pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
 1010 format (' ', i2, a1, i2, i1, i2, a1, i2, i1, i2)
 1011 format (i2, a1, i2, i1, i2, a1, i2, i1, i2)
   return
-20 continue
+  continue
   l = l + 1
   write (unit = lunit6, fmt = 1100) k, cha, k1, cha, i, j, k2, r(l), al(l), c(l)
   write (unit = lunit7, fmt = 1101) k, cha, k1, cha, i, j, k2, r(l), al(l), c(l)
@@ -1537,14 +1534,13 @@ subroutine pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
      write(lunit7,1111) r(l),al(l),c(l)
 1110 format(1h ,26x,3e16.5)
 1111 format(26x,3e16.5)
-100 end do
+  end do
   return
-30 continue
-  if(k.ne.1) go to 35
-  write(lunit6,1200) k,cha,i1,j1,k1,cha,k2,cha,cha
-  write(lunit7,1201) k,cha,i1,j1,k1,cha,k2,cha,cha
-1200 format(1h ,i2,a1,i2,i1,i2,a1,3hout,i2,a1,5hin  1,a1,5h 11 1)
-1201 format(i2,a1,i2,i1,i2,a1,3hout,i2,a1,5hin  1,a1,5h 11 1)
+  if (k .ne. 1) go to 35
+  write (unit = lunit6, fmt = 1200) k, cha, i1, j1, k1, cha, k2, cha, cha
+  write (unit = lunit7, fmt = 1201) k, cha, i1, j1, k1, cha, k2, cha, cha
+1200 format (' ',i2, a1, i2, i1, i2, a1, 'out', i2, a1, 'in  1', a1, ' 11 1')
+1201 format (i2, a1, i2, i1, i2, a1, 'out', i2, a1, 'in  1', a1, ' 11 1')
   return
 35 continue
   write(lunit6,1210) k,cha,i1,j1,k1,cha,k2
@@ -1552,7 +1548,6 @@ subroutine pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
 1210 format(1h ,i2,a1,i2,i1,i2,a1,3hout,i2)
 1211 format(i2,a1,i2,i1,i2,a1,3hout,i2)
   return
-40 continue
   l = l + 1
   write(lunit6,1300) k,cha,k1,cha,k2,r(l),al(l),c(l)
   write(lunit7,1301) k,cha,k1,cha,k2,r(l),al(l),c(l)
@@ -1586,8 +1581,8 @@ subroutine nyan (itype, npc, nc, ncpp, ngrnd, ncros, npais, ldm)
   if (ncros .eq. 0) return
   if (npc .ne. 3) go to 9000
   do i = 1, 3
-     if(ncpp(i) .eq. 1 .or. ncpp(i) .gt. 3) go to 9100
-100 end do
+     if (ncpp(i) .eq. 1 .or. ncpp(i) .gt. 3) go to 9100
+  end do
   nwork = 6 + ngrnd
   if (nwork .ne. nc) go to 9200
   if (ncpp(1) .le. ncpp(2) .and. ncpp(2) .le. ncpp(3)) return
@@ -1645,7 +1640,7 @@ subroutine gomen (itype, npc, nx, npais, ncros, irsep, ncpp, ldm)
 1200 if (npc .ne. 3) go to 9020
   do i = 1, 3
      if (ncpp(i) .eq. 1 .or. ncpp(i) .gt. 3) go to 9030
-100 end do
+  end do
   if (ncpp(1) .gt. ncpp(2) .or. ncpp(2) .gt. ncpp(3)) go to 9040
   if (nx .eq. 6) return
   if (npais .le. 0 .or. ncros .eq. 0) go to 200
@@ -1747,11 +1742,10 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
   real(8) :: u1, u2
   real(8) :: vmode
   real(8) :: w1
-  real(8) :: ychara, ycharm, yoi, yor, ysi, ysr
+  real(8) :: ychara, ycharm, yoi, yor, ysi
   real(8) :: zoi, zor, zsi, zsr, zz(30)
   complex(16) :: pp6(20,20),ee6(15)
-  complex(16) :: anglec, cjw
-  complex(16) :: d1, d2, d3, d4
+  complex(16) :: cjw
   complex(16) :: ca(ldn, ldn), zo(ldn, ldn), cc(ldn, ldn)
   complex(16) :: zc(ldn, ldn), zs(ldn, ldn), ys(ldn, ldn), yc(ldn, ldn)
   complex(16) :: a(ldn, ldn), ai(ldn, ldn),  b(ldn, ldn), bi(ldn, ldn)
@@ -1782,46 +1776,46 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
 61   qn(i) = qn(i1)
      icorr = 1
      write(lunit6, 901)  i
-901  format (1h0, 42hmodifications of modal quantities for mode, i2, 10h are made. /)
+901  format ('0modifications of modal quantities for mode', i2, ' are made.', /)
      go to 65
 63   i1 = i + 2
      if (i1 .gt. npc2)  i1 = i - 2
      if (realz(qn(i1)) .gt. 0.)  go to 61
 65 end do
   if (icorr .eq. 0)  go to 75
-  do i=npc1, npc2
+  do i = npc1, npc2
      i1 = i - npc
-     do j=1, npc2
+     do j = 1, npc2
         ai(i,j) = czero
         if (i1.eq.j)  ai(i,j) = creal1
         if(i .eq. j)  ai(i,j) = -creal1
-700  end do
-  end do
-  do i=1,nconpw
-     do j=1, nconpw
-71      a(i,j) = ai(i,j)
      end do
   end do
-  write(*,*) ' after #71 '
-  call minv( a, nconpw, f, ldn, ldn2 )
+  do i = 1, nconpw
+     do j = 1, nconpw
+        a(i, j) = ai(i, j)
+     end do
+  end do
+  write (unit = *, fmt = *) ' after #71 '
+  call minv (a, nconpw, f, ldn, ldn2)
 75 continue
   do iz = 1, 30
      ps(iz) = 0.0d0
      zz(iz) = 0.0d0
-388 end do
+  end do
   do i = 1, nconpw
      an(i) = value3 * realz(qn(i))
      gn(i) = w / aimagz( qn(i) )
      if (an(i) .lt. 0.0d0)  go to 50
      a1 = 1.05d0
      spdtol = spdlgt * a1
-     if (gn(i) .gt. spdtol)  go to 50
-     if (gn(i) .lt. spdlgt)  go to 55
+     if (gn(i) .gt. spdtol) go to 50
+     if (gn(i) .lt. spdlgt) go to 55
      gn(i) = spdlgt
-     write(lunit6, 961)
+     write (unit = lunit6, fmt = 961)
 961  format (1h0, 10x, 33hmodification for imag(q) is made.  //, 1x)
      go to 55
-50   write(lunit6, 962)
+50   write (unit = lunit6, fmt = 962)
 962  format ('0', 10x, 'Conductor impedance may include numerical errors.  ', /, &
           11x, 'The correct solutions for modes showing errors can be given by the very last mode.  ', //, 1x)
 55   continue
@@ -1834,131 +1828,131 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
         if ( iprint .gt. 1 )  go to 60
         tir(i,j) = realz(b(i,j))
         tii(i,j) = aimagz(b(i,j))
-60   end do
-600  continue
-1960 end do
-  if (ntol.eq.0 .or. lastov .ne. 39) go to 5602
-  kthl=1
-  ping(kthl)=alog1z(w/twopi)
-  d55 = 1.0 /(w/twopi)
-  d56 = 1.0 / sqrtz( w/twopi )
-  do i=1,nconpw
+     end do
+60   continue
+  end do
+  if (ntol .eq. 0 .or. lastov .ne. 39) go to 5602
+  kthl = 1
+  ping(kthl) = alog1z (w / twopi)
+  d55 = 1.0d0 / (w / twopi)
+  d56 = 1.0d0 / sqrtz (w / twopi)
+  do i = 1, nconpw
      !     em=(realz(qn(i)))**2 + (aimagz(qn(i)))**2
      !     ea=2.0*atan2z( aimag(qn(i)),real(qn(i)) )
      em = sqrtz ((realz (qn(i) ** 2)) ** 2 + (aimagz (qn(i) ** 2)) ** 2)
      ea = atan2z (aimagz (qn(i) ** 2), realz(qn(i) ** 2))
      db = value3 * realz (qn(i))
      vmode = w / aimagz (qn(i))
-5601 continue
      ping(kthl+1) = em*d55
      ping(kthl+2) = ea/(twopi/360.)
      ping(kthl+3) = vmode
      ping(kthl+4) = db*d56
      kthl = kthl + 4
-5603 continue
-5600 end do
+  end do
   call unwind (ping, kthl, mrr, nrp, ntol, iseq)
-  do i=1,nconpw
-     ee6(i)=qn(i)**2
-     do j=1,nconpw
-        pp6(i,j)=a(i,j)
-5613 end do
+  do i = 1, nconpw
+     ee6(i) = qn(i) ** 2
+     do j = 1, nconpw
+        pp6(i, j) = a(i, j)
+     end do
   end do
-  do i=1,nconpw
-     qn(i) = csqrtz( ee6(iseq(i)) )
-     do j=1,nconpw
-        a(i,j)=pp6(i,iseq(j))
-5612 end do
+  do i = 1,nconpw
+     qn(i) = csqrtz (ee6(iseq(i)))
+     do j = 1, nconpw
+        a(i, j) = pp6(i, iseq(j))
+     end do
   end do
-  do i=1,nconpw
-     do j=1,nconpw
-        ai(i,j)=a(i,j)
-5701 end do
+  do i = 1, nconpw
+     do j = 1, nconpw
+        ai(i, j) = a(i, j)
+     end do
   end do
-  if ( iprsup .ge. 1 ) write(*,*) ' prcon after s.n. 5701.   [a]  follows ....'
-  do i=1,nconpw
-     if ( iprsup .ge. 1 ) write(*,*) (a(i,j), j=1,nconpw)
-7801 end do
-  call minv( ai, nconpw, f, ldn, ldn2 )
-  if ( iprsup .ge. 1 ) write(*,*) ' after "minv".   [ai]  follows ..... '
-  do i=1,nconpw
-     if ( iprsup .ge. 1 ) write(*,*) (ai(i,j), j=1,nconpw)
-7802 end do
-  do i=1,nconpw
-     do j=1,nconpw
-        pp1(j,i)=sqrtz( (realz(ai(i,j)))**2+(aimagz(ai(i,j)))**2 )
-        pp2(j,i)=atan2z( aimagz(ai(i,j)) , realz(ai(i,j)) )
-5621 end do
-5611 end do
-  if ( ntol.eq.1 ) go to 5800
+  if (iprsup .ge. 1) write (unit = *, fmt = *) ' prcon after s.n. 5701.   [a]  follows ....'
+  do i = 1, nconpw
+     if (iprsup .ge. 1) write (unit = *, fmt = *) (a(i,j), j = 1, nconpw)
+  end do
+  call minv (ai, nconpw, f, ldn, ldn2)
+  if (iprsup .ge. 1) write (unit = *, fmt = *) ' after "minv".   [ai]  follows ..... '
+  do i = 1, nconpw
+     if (iprsup .ge. 1) write (unit = *, fmt = *) (ai(i, j), j = 1, nconpw)
+  end do
+  do i = 1, nconpw
+     do j = 1, nconpw
+        pp1(j, i) = sqrtz ((realz (ai(i, j))) ** 2 + (aimagz (ai(i, j))) ** 2)
+        pp2(j, i) = atan2z (aimagz (ai(i, j)), realz (ai(i, j)))
+     end do
+  end do
+  if (ntol .eq. 1) go to 5800
   go to 5810
 5800 continue
-  do j=1,nconpw
-     kmax(j)=1
-     do i=1,nconpw
-        if ( pp1(i,j) .le. pp1(kmax(j),j) ) go to 5802
-        kmax(j)=i
-5802 end do
-5801 end do
-  write (lunit9)  (kmax(j),j=1,nconpw)
+  do j = 1, nconpw
+     kmax(j) = 1
+     do i = 1, nconpw
+        if (pp1(i, j) .le. pp1(kmax(j), j)) go to 5802
+        kmax(j) = i
+     end do
+5802 continue
+  end do
+  write (unit = lunit9)  (kmax(j), j = 1, nconpw)
 5810 continue
-  if ( iprsup .ge. 1 ) write (*, *) ' prcon.  use normalization cells kmax(1:nconpw) =', ( kmax(i), i=1,nconpw )
-  do j=1,nconpw
-     if ( pp1(kmax(j),j) .eq. 0.0 ) go to 5614
-     dv=1.0/pp1(kmax(j),j)
-     da=pp2(kmax(j),j)
-     do i=1,nconpw
-        pp1(i,j)=pp1(i,j)*dv
-        pp2(i,j)=pp2(i,j)-da
+  if (iprsup .ge. 1) write (unit = *, fmt = *) ' prcon.  use normalization cells kmax(1:nconpw) =', (kmax(i), i = 1, nconpw)
+  do j = 1, nconpw
+     if (pp1(kmax(j), j) .eq. 0.0d0) go to 5614
+     dv = 1.0d0 / pp1(kmax(j), j)
+     da = pp2(kmax(j), j)
+     do i = 1, nconpw
+        pp1(i, j) = pp1(i, j) * dv
+        pp2(i, j) = pp2(i, j) - da
         !     *** to keep angles within principal value region
-        if ( pp2(i,j) .gt. twopi/2. )  pp2(i,j)=pp2(i,j) - twopi
-        if ( pp2(i,j) .lt.-twopi/2. )  pp2(i,j)=pp2(i,j) + twopi
-        if (iprsup .ge. 3) write(*,*) 'just before 5624, i, j, pp1(i,j), pp2(i,j)', i, j, pp1(i,j), pp2(i,j)
-5624 end do
-5614 end do
+        if (pp2(i, j) .gt. twopi / 2.0d0) pp2(i, j) = pp2(i, j) - twopi
+        if (pp2(i, j) .lt. -twopi / 2.0d0) pp2(i, j) = pp2(i, j) + twopi
+        if (iprsup .ge. 3) write (unit = *, fmt = *) 'just before 5624, i, j, pp1(i,j), pp2(i,j)', i, j, pp1(i,j), pp2(i,j)
+     end do
+  end do
+5614 continue
   fout = w / twopi
   !   ******************** temporary diagnostic ************
-  if ( iprsup .ge. 0 ) write (*, *) ' prcon.  freq =',  fout, '     pp1 follow : '
-  do i=1,nconpw
-     if ( iprsup .ge. 0 ) write (*, *) ( pp1(i,j), j=1, nconpw )
-7701 end do
-  if ( iprsup .ge. 0 ) write (*, *) ' pp2  follow ... '
-  do 7702 i=1,nconpw
-     if ( iprsup .ge. 0 ) write (*, *) ( pp2(i,j), j=1,nconpw )
-7702 end do
-  do i=1,nconpw
-     do j=1,nconpw
-        u1= (pp1(i,j))*cosz(pp2(i,j))
-        u2= (pp1(i,j))*sinz(pp2(i,j))
-        ai(j,i)=cmplxz(u1,u2)
-6004 end do
+  if (iprsup .ge. 0) write (unit = *, fmt = *) ' prcon.  freq =',  fout, '     pp1 follow : '
+  do i = 1, nconpw
+     if (iprsup .ge. 0) write (unit = *, fmt = *) (pp1(i, j), j = 1, nconpw)
   end do
-  do j=1,nconpw
-     do i=1,nconpw
-        a(i,j)=ai(i,j)
-6002 end do
+  if (iprsup .ge. 0) write (unit = *, fmt = *) ' pp2  follow ... '
+  do i = 1, nconpw
+     if (iprsup .ge. 0) write (unit = *, fmt = *) (pp2(i, j), j = 1, nconpw)
   end do
-  call minv ( a, nconpw, f, ldn, ldn2 )
-  do i=1, nconpw
-     do j=1, nconpw
-        bi(i,j)=a(j,i)
-        b(i,j)=ai(j,i)
-6003 end do
+  do i = 1, nconpw
+     do j = 1, nconpw
+        u1 = (pp1(i, j)) * cosz (pp2(i, j))
+        u2 = (pp1(i, j)) * sinz (pp2(i, j))
+        ai(j, i) = cmplxz(u1, u2)
+     end do
+  end do
+  do j = 1, nconpw
+     do i = 1, nconpw
+        a(i, j) = ai(i, j)
+     end do
+  end do
+  call minv (a, nconpw, f, ldn, ldn2)
+  do i = 1, nconpw
+     do j = 1, nconpw
+        bi(i, j) = a(j, i)
+        b(i, j) = ai(j, i)
+     end do
   end do
 5602 continue
-  do i=1, nconpw
-     do j=1, nconpw
-        aii = aimagz ( ai(i,j) )
-        air = realz  ( ai(i,j) )
-        d18 = cabsz ( ai(i,j) )
-        deg = atan2z ( aii, air ) * 180.0 / pai
-        ze(i,j) = cmplxz ( d18, deg )
-        acomi = aimagz ( a(i,j) )
-        acomr = realz ( a(i,j) )
-        d19 = cabsz ( a(i,j) )
-        deg = atan2z ( acomi, acomr ) * 180.0 / pai
-        ys(i,j) = cmplxz ( d19, deg )
-1470 end do
+  do i = 1, nconpw
+     do j = 1, nconpw
+        aii = aimagz (ai(i, j))
+        air = realz (ai(i, j))
+        d18 = cabsz (ai(i, j))
+        deg = atan2z (aii, air) * 180.0d0 / pai
+        ze(i, j) = cmplxz (d18, deg)
+        acomi = aimagz (a(i, j))
+        acomr = realz (a(i, j))
+        d19 = cabsz (a(i, j))
+        deg = atan2z (acomi, acomr) * 180.0d0 / pai
+        ys(i, j) = cmplxz (d19, deg)
+     end do
   end do
   if ( numaki .gt. 3 )  go to 5673
   write (lunit6, 2953)
@@ -2036,7 +2030,7 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
   call mxm(a,zo,ca,nconpw,ldn)
   call mxm(ca,bi,ze,nconpw,ldn)
   call print(ze,nconpw ,ll1,ldn)
-85 write (lunit6, 305)
+  write (unit = lunit6, fmt = 305)
 305 format(//, 53x, 27h table of modal quantities.)
   write (lunit6, 315)
 315 format(//, 11x, 'modal', 4x, 'propagation', 7x, 'modal impedance', 12x, 'modal', 6x, 'charac. imp., natural mode', 4x, &
@@ -2053,7 +2047,7 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
      yoi     = aimagz(yo(i,i))
      write (lunit6, 325)  i, an(i), gn(i), zsr, zsi, ysi, zor, zoi, yor, yoi
 325  format(/, 1x, i3, 3x, 2e12.5, 1x, 3e14.6, 2(1x, 2e14.6) )
-205 end do
+  end do
   write (lunit6, 335)
 335 format ( ///,  1x )
   go to 9900
@@ -2092,11 +2086,9 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   real(8) :: bom(180)
   real(8) :: chf
   real(8) :: d1, d2
-  real(8) :: ps(30)
   real(8) :: sai, saj, sb(60), smi1, smi2, smj1, smj2
-  real(8) :: tping(200), tps(30), tt(4), tzz(30)
+  real(8) :: tping(200), tt(4)
   real(8) :: vfreq(3)
-  real(8) :: zz(30)
   !
   data bom  / 180 * 0.0d0 /
   data kunf / 0 /
@@ -2119,15 +2111,15 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   do i = 1, 15
      iseq(i) = i
      iold(i) = i
-1051 end do
+  end do
   do i = 1, 180
      bom(i) = 0.0d0
-1052 end do
+  end do
 1050 continue
   if (iseq(1) .ne. 0) go to 10
   do i = 1, 15
      iseq(i) = i
-1001 end do
+  end do
   !!      write(*,*)
   !!     1 ' identical eigenvalues ? 1 (for  yes) or 2 (for no)'
   !!      read(*,*) lwh
@@ -2139,7 +2131,7 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
 10 continue
   do i = 1, 3
      vfreq(i) = 0.0d0
-1002 end do
+  end do
   !!    ****  read data from 'ping' vector  ****
   kpt = kthl - 1
   li = kpt / 4
@@ -2148,18 +2140,18 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   vfreq(1) = ping(1)
   do i = 1, kpt + 1
      tping(i) = ping(i)
-1006 end do
+  end do
   do l = 1, li
      do im = 1, 4
         ping(4 * l - im + 2) = tping(4 * iseq(l) - im + 2)
-1008 end do
+     end do
      iold(l) = iseq(l)
-1007 end do
+  end do
   do i = 1, kpt
      bom(i + 2 * kpt) = bom(i + kpt)
      bom(i + kpt) = bom(i)
      bom(i) = ping(i + 1)
-1003 end do
+  end do
   if (ntol .lt. 2) return
   !!     **** begin to smooth ****
   !!  ** initialization **
@@ -2179,8 +2171,8 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   do l = 1, li
      do im = 1, 4
         bom(4 * l - im + 1) = sb(4 * iseq(l) - im + 1)
-702  end do
-701 end do
+     end do
+  end do
   if (iprsup .ge. 1) write (unit = *, fmt = *) ' Beginning  bom(1:4*li) =', (bom(ip), ip = 1, 4 * li)
   !   * process the data between freq, freq-1 & freq-2 *
   do j=2, kpt-2, 4
@@ -2220,14 +2212,15 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
         iq=0
         t=iseq( (j+2)/4 )
         iseq( (j+2)/4 ) = iseq( (i+2)/4 )
-        iseq( (i+2)/4 ) = t
+        iseq( (i+2)/4 ) = int (t)
         do im=1,4
            tt(im) = bom(j+im-2)
            bom(j+im-2) = bom(i+im-2)
            bom(i+im-2) = tt(im)
-401     end do
-102  end do
-101 end do
+        end do
+     end do
+102  continue
+  end do
   ic=ic + 1
   go to 99
 12 continue
@@ -2241,16 +2234,16 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   do l=1,li
      do im=1, 4
         bom(4*l-im+1) = sb(4*iseq(l)-im+1)
-9702 end do
-9701 end do
+     end do
+  end do
   !   * test the slope change of vel *
-  do jb=1,li
-     jbeg=jb*4-1
-     aj=0.
-     if((bom(jbeg+kpt)-bom(jbeg+2*kpt)) .eq. 0.) aj=1.0e-12
-     saj=(bom(jbeg)-bom(jbeg+kpt))/((bom(jbeg+kpt)-bom(jbeg+2*kpt))+aj)
-     if ( abs( saj - 1 ) .gt. 0.5 ) go to 8001
-8901 end do
+  do jb = 1, li
+     jbeg = jb * 4 - 1
+     aj = 0.0d0
+     if ((bom(jbeg + kpt) - bom(jbeg + 2 * kpt)) .eq. 0.0d0) aj = 1.0e-12
+     saj = (bom(jbeg) - bom(jbeg + kpt)) / ((bom(jbeg + kpt) - bom(jbeg + 2 * kpt)) + aj)
+     if (abs (saj - 1) .gt. 0.5d0) go to 8001
+  end do
   go to 812
 8001 do j=jbeg, kpt-1, 4
      do i=j+4, kpt-1, 4
@@ -2287,15 +2280,15 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
         !     1 go to 8142
         !     789012345678901234567890123456789012345678901234567890123456789012
         !   * switching *
-        iq=0
-        t=iseq(jb)
+        iq = 0
+        t = iseq(jb)
         iseq(jb) = iseq(ib)
-        iseq(ib) = t
-        do im=1,4
-           tt(im) = bom(j+im-3)
-           bom(j+im-3) = bom(i+im-3)
-           bom(i+im-3) = tt(im)
-8401    end do
+        iseq(ib) = int (t)
+        do im = 1, 4
+           tt(im) = bom(j + im - 3)
+           bom(j + im - 3) = bom(i + im - 3)
+           bom(i + im - 3) = tt(im)
+        end do
         ! 8112 write(*,*) vfreq(1), i,j, 'stop 1'
         !      go to 8102
         ! 8122 write(*,*) vfreq(1), i,j, 'stop 2'
@@ -2304,29 +2297,31 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
         !      go to 8102
         ! 8142 write(*,*) vfreq(1), i,j, 'stop 4'
         !      go to 8102
-8102 end do
-8101 end do
-  ic=ic+1
+     end do
+8102 continue
+  end do
+  ic = ic + 1
   go to 899
 812 continue
   !   * check the equality between two eigenvalues *
-  if(nrp.eq.1) go to 2030
-  ku=0
-  kunf=0
-  do j=1, kpt-3, 4
-     mu=0
-     do i=j+4, kpt-3, 4
-        if((abs(bom(j)-bom(i)).gt.abs(bom(j)*1e-6)).or.(abs(bom(j+1)-bom(i+1)).gt.abs(bom(j+1)*1e-6)))go to 1005
+  if (nrp .eq. 1) go to 2030
+  ku = 0
+  kunf = 0
+  do j = 1, kpt - 3, 4
+     mu = 0
+     do i = j + 4, kpt - 3, 4
+        if ((abs (bom(j) - bom(i)) .gt. abs (bom(j) * 1e-6)) .or. (abs (bom(j + 1) - bom(i + 1)) .gt. abs (bom(j + 1) * 1e-6))) go to 1005
         if((abs(bom(j+kpt)-bom(i+kpt)).gt.abs(bom(j+kpt)*1e-6)).or. (abs(bom(j+1+kpt)-bom(i+1+kpt)).gt.abs(bom(j+1+kpt)*1e-6))) go to 1005
 !!!!      if((bom(j).ne.bom(i)).or.(bom(j+1).ne.bom(i+1))) go to 1005
 !!!!      if((bom(j+kpt).ne.bom(i+kpt)).or.
 !!!!     1 (bom(j+1+kpt).ne.bom(i+1+kpt))) go to 1005
-        kunf=1
-        mu=1
-        kuid(ku+1)=(i+3)/4
-        ku=ku+1
-1005 end do
-     if(mu.eq.0) go to 1004
+        kunf = 1
+        mu = 1
+        kuid(ku + 1) = (i + 3) / 4
+        ku = ku + 1
+     end do
+1005 continue
+     if (mu .eq. 0) go to 1004
      kuid(ku+1)=(j+3)/4
      ku=ku+1
      if ( iprsup .ge. 1 ) write (*,*) ' identical eigenvalues.   j, ku, kuid(1:ku) =', j, ku, ( kuid(ip), ip=1, ku )
@@ -2335,67 +2330,68 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   mrr=mrr+1
   go to 2000
 2030 continue
-  do i=1,ku
-     kk=ku-i
-     do j=1,kk
-        if ( kuid(j).lt.kuid(j+1) ) go to 2008
-        t=kuid(j)
-        kuid(j)=kuid(j+1)
-        kuid(j+1)=t
-2008 end do
-     kuse(i)=i
-2007 end do
-  write(*,*) ' kuid after sorting : ',(kuid(i),i=1,ku)
-  do i=1,ku
-     kk=ku-i
-     do j=1,kk
-        if ( iold(kuid(j)) .lt. iold(kuid(j+1)) ) go to 2003
-        t=iold(kuid(j))
-        iold(kuid(j))=iold(kuid(j+1))
-        iold(kuid(j+1))=t
-        t=kuse(j)
-        kuse(j)=kuse(j+1)
-        kuse(j+1)=t
+  do i = 1, ku
+     kk = ku - i
+     do j = 1, kk
+        if (kuid(j) .lt. kuid(j + 1)) go to 2008
+        t = kuid(j)
+        kuid(j) = kuid(j + 1)
+        kuid(j + 1) = int (t)
+     end do
+2008 continue
+     kuse(i) = i
+  end do
+  write (unit = *, fmt = *) ' kuid after sorting : ',(kuid(i), i = 1, ku)
+  do i = 1, ku
+     kk = ku - i
+     do j = 1, kk
+        if (iold(kuid(j)) .lt. iold(kuid(j + 1))) go to 2003
+        t = iold(kuid(j))
+        iold(kuid(j)) = iold(kuid(j + 1))
+        iold(kuid(j + 1)) = int (t)
+        t = kuse(j)
+        kuse(j) = kuse(j + 1)
+        kuse(j+1) = int (t)
 2003 end do
-2002 end do
-  do i=1,ku
-     kk=ku-i
-     do j=1,kk
-        if ( iseq(kuid(j)) .lt. iseq(kuid(j+1)) ) go to 2012
-        t=iseq(kuid(j))
-        iseq(kuid(j))=iseq(kuid(j+1))
-        iseq(kuid(j+1))=t
-2012 end do
-2011 end do
-  do l=1,li
-     iseqt(l)=iseq(l)
-2010 end do
-  do i=1,ku
-     iseq(kuid(kuse(i)))=iseqt(kuid(i))
-2020 end do
-15 continue
+  end do
+  do i = 1, ku
+     kk = ku - i
+     do j = 1, kk
+        if (iseq(kuid(j)) .lt. iseq(kuid(j + 1))) go to 2012
+        t = iseq(kuid(j))
+        iseq(kuid(j)) = iseq(kuid(j + 1))
+        iseq(kuid(j + 1)) = int (t)
+     end do
+2012 continue
+  end do
+  do l = 1, li
+     iseqt(l) = iseq(l)
+  end do
+  do i = 1, ku
+     iseq(kuid(kuse(i))) = iseqt(kuid(i))
+  end do
   !   * re-ordering, if necessary *
-2000 if ( ny .eq. 2 ) go to 2004
-  if ( vfreq(1) .ne. chf ) go to 2004
-  do l=1,li
-     iseqt(l)=iseq(l)
-500 end do
-  do l=1,li
+2000 if (ny .eq. 2) go to 2004
+  if (vfreq(1) .ne. chf) go to 2004
+  do l = 1, li
+     iseqt(l) = iseq(l)
+  end do
+  do l = 1, li
      iseq(l) = iseqt(iseqa(l))
-501 end do
+  end do
+  continue
 2004 continue
-  do l=1,li
-     do im=1, 4
-        bom(4*l-im+1) = sb(4*iseq(l)-im+1)
-2006 end do
-2005 end do
-  if ( iprsup .ge. 1 ) write(*,*) ' end of unwind.  vfreq(1) =',  vfreq(1)
-  if ( iprsup .ge. 1 ) write(*,*) ' end of unwind.   iseq(1:li) =', (iseq(l),l=1,li)
-  if ( iprsup .ge. 1 ) write(*,*) ' end of unwind.   kthl, mrr, nrp, ntol =', kthl, mrr, nrp, ntol
-11 continue
-  do i=1,kpt
-     ping(i+1)=bom(i)
-2001 end do
+  do l = 1, li
+     do im = 1, 4
+        bom(4 * l - im + 1) = sb(4 * iseq(l) - im + 1)
+     end do
+  end do
+  if (iprsup .ge. 1) write (unit = *, fmt = *) ' end of unwind.  vfreq(1) =',  vfreq(1)
+  if (iprsup .ge. 1) write (unit = *, fmt = *) ' end of unwind.   iseq(1:li) =', (iseq(l),l=1,li)
+  if (iprsup .ge. 1) write (unit = *, fmt = *) ' end of unwind.   kthl, mrr, nrp, ntol =', kthl, mrr, nrp, ntol
+  do i = 1, kpt
+     ping(i + 1) = bom(i)
+  end do
   !!    **  reorder the modal quantities  **
 !!!!      do 1009 i=1,2*li
 !!!!      tzz(i)=zz(i)
@@ -2474,18 +2470,18 @@ subroutine zymx (w, nw, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, us
   ll0=0
   ll1=1
   nx=ngrnd
-  do i=1, ldn
-     do j=1, ldn
-        ys(i,j) = czero
-        yc(i,j) = czero
-        zp(i,j) = czero
-        zpc(i,j) = czero
-        zs(i,j) = czero
-        zc(i,j) = czero
-5       ze(i,j) = czero
+  do i = 1, ldn
+     do j = 1, ldn
+        ys(i, j) = czero
+        yc(i, j) = czero
+        zp(i, j) = czero
+        zpc(i, j) = czero
+        zs(i, j) = czero
+        zc(i, j) = czero
+        ze(i, j) = czero
      end do
   end do
-  cjw = cmplxz ( fzero, w )
+  cjw = cmplxz (fzero, w)
   ll2 = 2
   if ( iprs47  .ge.  1 ) write (logsix, 2706)  nw, isyst, np2, itypec, numaki, npc, ncc, izflag, iyflag, w
 2706 format ( /,  16h begin  'zymx' .,  24h      nw   isyst     np2, 48h  itypec  numaki     npc     ncc  izflag  iyflag, 19x, 1hw, /, 16x, 9i8, e20.11 )
@@ -2528,7 +2524,7 @@ subroutine zymx (w, nw, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, us
      do j=1, nw
         c1 = e2p * yz(i,j)
         yc(i,j) = cjw * cmplxz(c1, fzero)
-250     zc(i,j)=zc(i,j)+ze(i,j)+zs(i,j)+zp(i,j)+zpc(i,j)
+        zc(i, j) = zc(i, j) + ze(i, j) + zs(i, j) + zp(i, j) + zpc(i, j)
      end do
   end do
   if(itypec .eq. 1 .and. nenerg .ne. 0)  go to 335
@@ -2537,30 +2533,30 @@ subroutine zymx (w, nw, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, us
   if ( ngg(i)  .lt.  1 )  go to 1966
   mdx = i + 1
   do j = 1, nw
-1931 yzn(j) = realz (zc(i, j))
+     yzn(j) = realz (zc(i, j))
   end do
   do j = mdx, nx
      mdy = j - 1
      do k = 1, nw
         yc(mdy, k) = yc(j, k)
-1933    zc(mdy, k) = zc(j, k)
+        zc(mdy, k) = zc(j, k)
      end do
   end do
   do j = 1, nw
-1937 zc(nx, j) = cmplxz(yzn(j),fzero)
+     zc(nx, j) = cmplxz(yzn(j),fzero)
   end do
   do j = 1, nw
-1939 yzn(j) = realz(zc(j, i))
+     yzn(j) = realz(zc(j, i))
   end do
   do j = mdx, nx
      mdy = j - 1
      do k = 1, nw
         yc(k, mdy) = yc(k, j)
-1941    zc(k, mdy) = zc(k, j)
+        zc(k, mdy) = zc(k, j)
      end do
   end do
   do j = 1, nw
-1943 zc(j, nx) = cmplxz(yzn(j),fzero)
+     zc(j, nx) = cmplxz (yzn(j), fzero)
   end do
   nx = nx - 1
 1966 if ( i  .gt.  1 )  go to 1945
@@ -2596,8 +2592,8 @@ subroutine zymx (w, nw, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, us
         l = k + 1
         yzn(l) = aimagz(yc(i,j))
         k = l + 1
-894  end do
-898 end do
+     end do
+  end do
   write (lunit3) (yzn(i), i=1, n2)
   if (iprsup .lt. 1) go to 1983
   freq = w / twopi
@@ -2610,8 +2606,8 @@ subroutine zymx (w, nw, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, us
         l = k + 1
         yzn(l) = aimagz(zc(i,j))
         k = l + 1
-1919 end do
-1918 end do
+     end do
+  end do
   write (lunit3) (yzn(i), i=1, n2)
   if (iprsup .lt. 1) go to 90
   freq = w / twopi
@@ -2636,7 +2632,7 @@ subroutine zymx (w, nw, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, us
 !!!      sing(k+1) = d1            ! store resistance in real*4 vector
 !!!!      sing(k+2) = d2            ! store inductance in real*4 vector
 !!!!      k = k + 2          !  advance index to last-stored number
-140     zc(i,j) = cmplxz(d1, d2)
+        zc(i, j) = cmplxz (d1, d2)
      end do
   end do
 !!!!      write (junit4) ( sing(j), j=1, k ) ! output vector written to
@@ -2649,7 +2645,7 @@ subroutine zymx (w, nw, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, us
      do j=1, nx
         d1 = realz(zc(i,j))
         d2 = aimagz( zc(i,j) )  *  w
-4908    zc(i,j) = cmplxz(d1, d2)
+        zc(i, j) = cmplxz(d1, d2)
      end do
   end do
 150 if (iyflag .eq. 0)   go to 160
@@ -2663,16 +2659,16 @@ subroutine zymx (w, nw, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, us
      do j=1, nx
         d3 = realz(yc(i,j))
         d4 = aimagz( yc(i,j) ) / w
-180     yc(i,j) = cmplxz(d3,d4)
+        yc(i, j) = cmplxz (d3, d4)
      end do
   end do
   call print (yc, nx, ll2, ldn)
   !     now restore  'yc'  to admittance in  do 4928  loop below.
-  do i=1, nx
-     do j=1, nx
+  do i = 1, nx
+     do j = 1, nx
         d1 = realz(yc(i,j))
-        d2 = aimagz( yc(i,j) ) * w
-4928    yc(i,j) = cmplxz(d1, d2)
+        d2 = aimagz (yc(i, j)) * w
+        yc(i, j) = cmplxz (d1, d2)
      end do
   end do
 9200 continue
@@ -2714,7 +2710,7 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
         a1(i, j) = 0.0d0
         a2(i, j) = 0.0d0
         yz(i, j) = 0.0d0
-10   end do
+     end do
   end do
   if (iprs47 .ge. 1) write (unit = lunit6, fmt = 1719) isyst, np2, itypec, npc, npp
 1719 format (/, " At beginning of  'ymatrx' .   isyst     np2  itypec     npc     npp", /, 28x,  5i8)
@@ -2758,7 +2754,7 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
      a1(i1, i) = a1(i1, i1)
      a1(i, i1) = a1(i1, i1)
 39   a1(i, i) = a1(i1, i1) + al1i(i) / esi(i, 1)
-40 end do
+  end do
   if (itypec .eq. 3) go to 60
   do i = 1, ncc
      do j = 1, ncc
@@ -2792,7 +2788,7 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
         a2(i, j2) = a2(i, j)
         a2(i1, j2) = a2(i, j)
 70   end do
-80 end do
+  end do
   do i = 1, ncc
      if(npp.eq.0) go to 85
      a1(i, ncc) = 0.0d0
@@ -2842,7 +2838,7 @@ subroutine simp (nw, h, dd, rad, zy, dir, dij, ang, ldm, ldn)
         dij(i, j) = 0.0d0
         dir(i, j) = 0.0d0
         ang(i, j) = 0.0d0
-5       zy(i, j) = 0.0d0
+        zy(i, j) = 0.0d0
      end do
   end do
   do i = 1, nw
@@ -2918,7 +2914,7 @@ subroutine  sczy1 (w, isyst, zy, dir, dij, ang, hi, di, zs, ze, ldm, ldn)
   do i = 1, npc
      do j = 1,npc
         c1 = u2p * zy(i, j)
-33      zs(i, j) = cjw * cmplxz (c1, fzero)
+        zs(i, j) = cjw * cmplxz (c1, fzero)
      end do
   end do
 35 do i = 1, npc
@@ -2986,7 +2982,7 @@ subroutine  sczy1 (w, isyst, zy, dir, dij, ang, hi, di, zs, ze, ldm, ldn)
   call zegen (be1, be2, th, w, xe, isyst)
   do i = 1, ncc
      do j = 1, ncc
-70      ze(i, j) = xe
+        ze(i, j) = xe
      end do
   end do
 90 if (iprs47 .ge. 2) write (unit = logsix, fmt = 3056) xe
@@ -3038,7 +3034,7 @@ subroutine sczy2 (s, ncpp, radi, usi, usr, bio, bi1,bi2, bi3, bi4, bi5, al1i, al
   ll2 = 2
   if (iprs47 .ge. 1) write (unit = logsix, fmt = 3107) npc, s
 3107 format (/, " Enter  'sczy2' .     npc", 14x, 'real-s', 14x, 'imag-s', /, 17x, i8, 2e20.11)
-1001 inm = 0
+  inm = 0
   do i = 1, npc
      b0 = bio(i)
      b1 = bi1(i)
@@ -3267,7 +3263,7 @@ subroutine  ptzy1 (radi, dci, thc, dr0, th0, al0, ldm)
         do k = 1, n
            ak = k
            cn = dr0(i, j) ** k * cosz (ak * th0(i, j)) / ak + cn
-60      end do
+        end do
 65      al0(i, j) = al0(i, j) - cn
         al0(j, i) = al0(i, j)
 70   end do
@@ -3376,7 +3372,7 @@ subroutine ptzy2 (s, ncpp, dci, dr0, th0, al0, zp, zpc, ldm, ldn)
            c9 = ak * (usp + 1.)
            c2 = cmplxz(c9, fzero)
            zi = zi + c1/ (c2 + s1 * bkn(k)/bkn(k1))
-20      end do
+        end do
 21      c5 = cmplxz(al0(i,j), fzero)
         zp(i,j)=su0*(c3*c4*zi + c5)
         zp(j,i)=zp(i,j)
@@ -3516,19 +3512,19 @@ subroutine bsikm (x, kn, bbin, bbkn, ikm, ixa)
   if(ikm.eq.1) go to 70
   do ikn=3,kn
      bbin(ikn) = creal1
-45   bbkn(ikn) = creal1
+     bbkn(ikn) = creal1
   end do
   if(ikm.eq.3) go to 60
   do ikn = 3, kn
      ik1=ikn-1
      ik2=ikn-2
-55   bbin(ikn) = bbin(ik2) - 2. *ik2 / x * bbin(ik1)
+     bbin(ikn) = bbin(ik2) - 2.0d0 * ik2 / x * bbin(ik1)
   end do
   if(ikm.eq.2) go to 70
 60 do ikn=3,kn
      ik1=ikn-1
      ik2=ikn-2
-65   bbkn(ikn) = bbkn(ik2) + 2. * ik2 / x * bbkn(ik1)
+     bbkn(ikn) = bbkn(ik2) + 2.0d0 * ik2 / x * bbkn(ik1)
   end do
 70 if ( iprs47  .ge.  6 ) write (logsix, 3476)  ( l, bbin(l), bbkn(l), l=1, kn )
 3476 format (/, " Exit    'bsikm' .",  5x, 'row', 11x, 'real-bbin', 11x, 'imag-bbin', 11x, 'real-bbkn', 11x, 'imag-bbkn', /, (18x, i8, 4e20.11))
@@ -3610,7 +3606,7 @@ subroutine  olzy (w, ncpp, zy, dij, ang, usi, usr, esi, hi, di, zs, ze, zc, ldm,
         j1 = ncpp(j1)
         j2 = j1 + jnc - 1
         do k = jnc, j2
-35         zc(k, k) = xc
+           zc(k, k) = xc
         end do
         if (iprs47 .ge. 6) write (unit = logsix, fmt = 3541) j, i, jnc, j2, j1, xc
 3541    format (/, " Inside  (j,i)  loop of  'olzy' .       j       i     jnc      j2      j1", 13x, 'real-xc', 13x, 'imag-xc', /, 33x, 5i8, 2e20.11)
@@ -3651,7 +3647,7 @@ subroutine transp (yyc, ncpp, ann, jnn, znn, ldm, ldn)
   ll0 = 0
   if (iprs47 .ge. 4) call print (yyc(1, 1), i2, ll0, ldn)
   i2 = 0
-  do 100 k = 1, ncct
+  do k = 1, ncct
      k1 = (k - 1) * 4 + 1
      j1 = i2 + 1
      i2 = ncpp(k1) + i2
@@ -3663,9 +3659,9 @@ subroutine transp (yyc, ncpp, ann, jnn, znn, ldm, ldn)
      do i = 1, ncct
         znn(i) = czero
         ann(i) = 0.0d0
-5    end do
-     do 45  i = 1, i2
-        do 40  j = j1, i2
+     end do
+     do i = 1, i2
+        do j = j1, i2
            if (i .lt. j1) go to 20
            !           if ( j - i )   40,  10,  15
            if (j - i .lt. 0) then
@@ -3684,11 +3680,12 @@ subroutine transp (yyc, ncpp, ann, jnn, znn, ldm, ldn)
 20         if (k .eq. 1) go to 40
            dnn = (j - jnn(k)) / (jnn(k) - 1)
            if (dnn .lt. 1.0d0) dnn = 0.0d0
-           l = dnn + 1.0d0
+           l = int (dnn + 1.0d0)
            znn(l) = znn(l) + yyc(i, j)
            ann(l) = ann(l) + 1.0d0
-40      end do
-45   end do
+        end do
+40      continue
+     end do
      zss = zss / cmplxz (ass, fzero)
      zmm = zmm / cmplxz (amm, fzero)
      k1 = k - 1
@@ -3715,12 +3712,13 @@ subroutine transp (yyc, ncpp, ann, jnn, znn, ldm, ldn)
 70         if (k .eq. 1) go to 85
            dnn = (j - jnn(k)) / (jnn(k) - 1)
            if (dnn .lt. 1.0d0) dnn = 0.0d0
-           l = dnn + 1.0d0
+           l = int (dnn + 1.0d0)
            yyc(i, j) = znn(l)
 85         yyc(j, i) = yyc(i, j)
-90      end do
-95   end do
-100 end do
+        end do
+90      continue
+     end do
+  end do
   if (iprs47 .ge. 1) write (unit = logsix, fmt = 3623) yyc(1, 1), yyc(1, 2)
 3623 format (/, " Exit  'transp' .", 7x, 'real-yyc(1,1)', 7x, 'imag-yyc(1,1)', 7x,  'real-yyc(1,2)', 7x, 'imag-yyc(1,2)', /, 17x, 4e20.11 , /,' diagnostic output matrix.  yyc(i,j)  for  (i,j)=1, ... i2 .')
   if (iprs47 .ge. 4) call print (yyc(1, 1), i2, ll0, ldn)
@@ -3844,7 +3842,7 @@ subroutine zegen (be1, be2, th, w, xe, isyst)
   if (xa .gt. 100.0d0) go to 130
   call bsikm (x2, ll2, bin, bkn, ll1, ixa)
   if (ixa .gt. 0) go to 120
-110 xe = cjw * c1 * (xe - bkn(1))
+  xe = cjw * c1 * (xe - bkn(1))
   go to 5
 120 xe = cjw * c1 * (xe - bkn(1) / cexpz (x2 - x1)) / cexpz(x1)
   go to 5
@@ -3868,7 +3866,7 @@ subroutine zegen (be1, be2, th, w, xe, isyst)
   iter = 11
   if (e .ge. 1.0d0) iter = 21
   iter = 21
-15 do i = 1, iter
+  do i = 1, iter
      t = i - 1
      t1 = t * 2.0d0
      t2 = t * 4.0d0
@@ -3967,13 +3965,13 @@ subroutine eigen (cjw, p, n, a, ai, qn, q, xx, yy, ldn)
 3806 format (/, "Enter  'eigen' .       n", 12x, 'real-cjw', 12x, 'imag-cjw', 13x, 'real-qi', 13x, 'imag-qi', /, 17x, i8, 4e20.11, /, 1x)
   do i = 1, n
      do j = 1, n
-4       p(i, j) = p(i, j) * qi
+        p(i, j) = p(i, j) * qi
      end do
-5    p(i, i) = p(i, i) - c2
+     p(i, i) = p(i, i) - c2
   end do
   do i = 1, n
      do j = 1, n
-10      q(i, j) = p(i, j)
+        q(i, j) = p(i, j)
      end do
   end do
   l = 0
@@ -3994,14 +3992,14 @@ subroutine eigen (cjw, p, n, a, ai, qn, q, xx, yy, ldn)
 25 do i = 1, n
      do j = 1, n
         xx(i, j) = q(i, j)
-30      yy(i, j) = q(i, j)
+        yy(i, j) = q(i, j)
      end do
   end do
   do i = 1, n
      do j = 1, n
         q(i, j) = czero
         do k = 1, n
-35         q(i, j) = q(i, j) + xx(i, k) * yy(k, j)
+           q(i, j) = q(i, j) + xx(i, k) * yy(k, j)
         end do
      end do
   end do
@@ -4015,7 +4013,7 @@ subroutine eigen (cjw, p, n, a, ai, qn, q, xx, yy, ldn)
   qi = 1.0d0 / q(im, im)
   do i = 1, n
      do j = 1, n
-45      q(i, j) = q(i, j) * qi
+        q(i, j) = q(i, j) * qi
      end do
   end do
   dm = 0.0d0
@@ -4048,25 +4046,25 @@ subroutine eigen (cjw, p, n, a, ai, qn, q, xx, yy, ldn)
   if (absz (d2) .gt. d1) go to 20
 63 do i = 1, n
      a(i, l) = q(i, im)
-65   ai(l, i) = q(im, i)
+     ai(l, i) = q(im, i)
   end do
   ad = czero
   do i = 1, n
-70   ad = ad + p(im, i) * q(i, im)
+     ad = ad + p(im, i) * q(i, im)
   end do
   qn(l) = ad / q(im, im)
   ad = czero
   do i = 1, n
-75   ad = ad + ai(l, i) * a(i, l)
+     ad = ad + ai(l, i) * a(i, l)
   end do
   ad = 1.0d0 / ad
   do i = 1, n
-80   ai(l, i) = ad * ai(l, i)
+     ai(l, i) = ad * ai(l, i)
   end do
   do i = 1, n
      do j = 1, n
         q(i, j) = p(i, j) - a(i, l) * qn(l) * ai(l, j)
-85      p(i, j) = q(i, j)
+        p(i, j) = q(i, j)
      end do
   end do
   if (iprs47 .ge. 7) write (unit = logsix, fmt = 3842) l, qn(l), ad
@@ -4082,16 +4080,16 @@ subroutine eigen (cjw, p, n, a, ai, qn, q, xx, yy, ldn)
   ad = czero
   do i = 1, n
      ad = ad + p(im, i) * p(i, im)
-98   a(i, l) = p(i, im) / p(im, im)
+     a(i, l) = p(i, im) / p(im, im)
   end do
   qn(l) = ad / p(im, im)
   do i = 1, n
-100  ai(l, i) = p(im, i) / qn(l)
+     ai(l, i) = p(im, i) / qn(l)
   end do
   do i = 1, n
-110  qn(i) = c1 * csqrtz (c2 + qn(i))
+     qn(i) = c1 * csqrtz (c2 + qn(i))
   end do
-9200 if (iprs47 .ge. 3) write (unit = logsix, fmt = 3854) dm, spdlgt, p(im, im), (qn(i), i = 1, n)
+  if (iprs47 .ge. 3) write (unit = logsix, fmt = 3854) dm, spdlgt, p(im, im), (qn(i), i = 1, n)
 3854 format (/, " Done all eigenvalues in  'eigen' .", 18x,  'dm', 14x, 'spdlgt', 7x, 'real-p(im,im)', 7x, 'imag-p(im,im)', /, 35x, 4e20.11, /, ' complex eigenvalues  (qn(i), i=1, n)  follow ...', /, (1x, 6e20.11))
   if (iprs47 .ge. 1) write (unit = logsix, fmt = 3867)
 3867 format (/, " Diagnostic upon exit  'eigen' .   Matrix of eigenvectors  a(i,l)  for  (i,l)=1, ... n .")
@@ -4259,7 +4257,7 @@ subroutine  zest (h1, h2, e, res, omg, s)
      z = cmplxz (fzero, contwo) * (sp12 * sp23 + sm12 * sm23 + bbb * (sm12 * sp23 + sp12 * sm23)) * cmplxz (d10, fzero) / ((cmplxz (ram, fzero) + s8) * (sp12 * sp23 + sm12 * sm23) + (cmplxz (ram, fzero) - s8) * bbb * (sm12 * sp23 + sp12 * sm23))
      ram = ram + dx2
      u = 2.0d0 * z
-77   qq = qq + u
+     qq = qq + u
   end do
   d12 = dx / 2.0d0
   sq3 = qq * cmplxz (d12, fzero)
@@ -4305,10 +4303,9 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
   real(8) :: adi, adr
   real(8) :: cci, ccr
   real(8) :: d1, d5, d6, d9, d14, d16, d18, d19, d22, d23, di, dr
-  real(8) :: fnew(10, 20), fr(10, 20), fi(10, 20)
+  real(8) :: fr(10, 20), fi(10, 20)
   complex(16) :: d2
-  complex(16) :: ad, cc, d
-  complex(16) :: fident(10, 20)
+  complex(16) :: fident(10, 20), fnew(10, 20)
   !
   d1 = 0.0d0
   do i = 1, m
@@ -4316,7 +4313,7 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
         d2 = tcmpx(i, j)
         if (cabsz (d2) .gt. d1) d1 = cabsz (d2)
         fr(i, j) = realz (d2)
-4       fi(i, j) = aimagz (d2)
+        fi(i, j) = aimagz (d2)
      end do
   end do
   !!!!    4 f(i,j) = d2
@@ -4337,8 +4334,9 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
 !!!!  20 f(i,j) = creal1
 20      fr(i, j) = 1.0d0
         fi(i, j) = 0.0d0
-25   end do
-30 end do
+     end do
+25   continue
+  end do
   do 115  k1 = 1, m
      d9 = 0.0d0
      n = k1
@@ -4370,7 +4368,7 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
         fi(k1, j) = fi(n, j)
 !!!!   70 f(n,j)=cc
         fr(n, j) = ccr
-70      fi(n, j) = cci
+        fi(n, j) = cci
      end do
 75   do i = 1, m
         if (i .eq. k1) go to 100
@@ -4388,7 +4386,7 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
            fi(i, j) = fi(i, j) - d6 / d14
            !      write (*,*) ' revise f(i,j).  i, j, k1, f(i,j) =',
            !     1                              i, j, k1, fr(i,j), fi(i,j)
-95      end do
+        end do
 100  end do
 !!!!     ad = f(k1, k1)
      adr = fr(k1, k1)
@@ -4400,7 +4398,7 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
         !!!! 110 f(k1,j) = f(k1,j)/ad
         d16 = fr(k1, j) * adr - fi(k1, j) * adi
         fi(k1, j) = fr(k1, j) * adi + fi(k1, j) * adr
-110     fr(k1, j) = d16
+        fr(k1, j) = d16
      end do
      !  110 write (*,*) ' new  f(k1,j).   k1, j, fr(k1,j), fi(k1,j) =',
      !     1                              k1, j, fr(k1,j), fi(k1,j)
@@ -4408,16 +4406,16 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
   do i = 1, m
      do j = 1, m
         j1 = j + m
-325     fnew(i, j) = cmplxz (fr(i, j1), fi(i, j1))
+        fnew(i, j) = cmplxz (fr(i, j1), fi(i, j1))
      end do
   end do
   do i = 1, m
      do j = 1, m
         fident(i, j) = czero
         do k = 1, m
-288        fident(i, j) = fident(i, j) + tcmpx(i, k) * fnew(k, j)
+           fident(i, j) = fident(i, j) + tcmpx(i, k) * fnew(k, j)
         end do
-625  end do
+     end do
   end do
   !      write (*,*) ' minv, [a]*[a]-1  follows.   m =',  m
   !      do 725  i = 1, m
@@ -4426,7 +4424,7 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
      do j = 1, m
         j1 = j + m
 !!!! 125 tcmpx(i,j) = f(i,j1)
-125     tcmpx(i, j) = cmplxz (fr(i, j1), fi(i, j1))
+        tcmpx(i, j) = cmplxz (fr(i, j1), fi(i, j1))
      end do
   end do
   !  125 write (*,*) ' transfer.',
@@ -4435,7 +4433,7 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
   if (iprs47 .ge. 1) write (unit = logsix, fmt = 4027) tcmpx(1,1), tcmpx(1, 2)
 4027 format (/, " Exit  'minv'  normally.", 5x, 'real-tcmpx(1,1)', 5x, 'imag-tcmpx(1,1)', 5x, 'real-tcmpx(1,2)', 5x, 'imag-tcmpx(1,2)', /, 24x, 4e20.11, /, ' diagnostic inverse.   tcmpx(i,j)  for  (i,j)=1, ... m.')
   if (iprs47 .ge. 7) call print (tcmpx(1, 1), m, ll0, ldn)
-150 return
+  return
 end subroutine minv
 
 !
@@ -4467,7 +4465,7 @@ subroutine mxm (xm, yym, c, n, ldn)
      do j = 1, n
         c(i, j) = czero
         do k = 1, n
-10         c(i, j) = c(i, j) + xm(i, k) * yym(k, j)
+           c(i, j) = c(i, j) + xm(i, k) * yym(k, j)
         end do
      end do
   end do
@@ -4498,7 +4496,6 @@ subroutine print (c, n, iform, ldn)
   integer(4) :: l
   integer(4) :: m
   integer(4) :: nline
-  real(8) :: d18, d19
   real(8) :: worki(8), workr(8)
   !
   data text1 / 'row' /
@@ -4515,7 +4512,7 @@ subroutine print (c, n, iform, ldn)
         do j = im, in
            l = l + 1
            workr(l) = realz (c(i, j))
-4617       worki(l) = aimagz (c(i, j))
+           worki(l) = aimagz (c(i, j))
         end do
         if (k .eq. nline) text3 = text1
         if (iform .eq. 1) go to 4658
@@ -4529,7 +4526,7 @@ subroutine print (c, n, iform, ldn)
         write (lunit6, 4661)  ( worki(m), m=1, l )
 4661    format ( 4x, 8f16.7  )
 4681 end do
-4695 write (lunit6, 4632)  i
+     write (unit = lunit6, fmt = 4632) i
   end do
 4632 format ('+', i2, /, 1x )
   return

@@ -27,7 +27,7 @@ subroutine inlmfs
   integer(4) :: l
   integer(4) :: m
   integer(4) :: n, n1, n2, n3, n4, n5, n6, n7, n8, n12, n13, n14, n15, n16, n18
-  integer(4) :: n19, n24, n26
+  integer(4) :: n19, n20, n24, n26
   !
   data komlev / -1 /
   if (buff77(1 : 1) .eq. '$') go to 1788                    !1st time in for $include
@@ -53,7 +53,7 @@ subroutine inlmfs
   answ80(1 : n7) = buff77(n26 : k - 1)
   n8 = n7
   answ80(n8 + 1 : 80) = blan80(n8 + 1 : 80)
-1811 l = numcrd
+  l = numcrd
   n19 = limcrd
   j = numdcd
   !       write (*,*) ' move line con..  j, numcrd =',  j, numcrd
@@ -61,10 +61,10 @@ subroutine inlmfs
      !      write (*,*) ' next line constants card.   m, file6(m) =',
      !    1                                           m, file6(m)
      file6(n19) = file6(m)
-1816 n19 = n19 - 1
+     n19 = n19 - 1
   end do
   !     n19 = n19 + 1
-1819 write (unit = lunit6, fmt = 1820) j, answ80(1 : n8)
+  write (unit = lunit6, fmt = 1820) j, answ80(1 : n8)
 1820 format ('   --- thl pass.  card =', i4, '.   Ready to open $include =', a)
   inquire (file = answ80(1 : n8), exist = logvar)
   if (logvar) go to 2294
@@ -82,7 +82,6 @@ subroutine inlmfs
      ! if not "," or blank,
      if (buff77(l : l) .ne. ',' .and. buff77(l : l) .ne. ' ') go to 4208 ! argument starts
   end do
-4205 continue                                               ! end  do 4205  loop;  col. "l" not argument
   go to 4226                                                ! all arguments found; now use them
 2006 write (unit = *, fmt = *) ' continuation next.   n13, n16, keybrd, incdat, l =', n13, n16, keybrd, incdat, l
   kard(200) = n16                                           ! save n16 when '$$' card is read
@@ -130,7 +129,6 @@ subroutine inlmfs
   do l = 1, 25
      if (kbeg(l) .eq. 0) go to 4230
   end do
-4229 continue
   n1 = n1 + 25
   if (n1 .le. 175) go to 4228
   call stoptp
@@ -172,7 +170,6 @@ subroutine inlmfs
      do l = 1, 10
         if (buff77(2 : 2) .eq. digit(l)) go to 4244
      end do
-4241 continue
      go to 4247
 4244 if (l .eq. 10) l = 0
      if (l .gt. komlev) go to 4273
@@ -239,7 +236,7 @@ subroutine inlmfs
   j = j + 1
   file6(j) = buff77
   n13 = limcrd + 1
-1833 do m = n19, limcrd
+  do m = n19, limcrd
      j = j + 1
      n13 = n13 - 1
      file6(j) = file6(n13)

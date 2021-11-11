@@ -58,6 +58,7 @@ contains
     !  include 'blkcom.ftn'
     real(8), intent(in) :: x
     integer(4) :: l, n1
+    integer(4), pointer :: knt
     real(8) :: a(100), s
     !  equivalence (moncar(1), knt)
     !
@@ -174,6 +175,7 @@ contains
 2645 format (/, " Variables in  'sandnm' ,   the random-number generator with 100 built-in numbers.       l     knt  kswtch      n1 ", 14x, 'x', /, 82x, 4i8, e15.5)
     if (n1 .gt. 0) l = l - 100 * n1
     s = a(l)
+    if (associated (knt)) nullify (knt)
   end function sandnm
 
   !

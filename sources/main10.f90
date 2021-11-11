@@ -668,8 +668,6 @@ end subroutine namea6
 !
 
 subroutine tables
-  use savcom
-  use comlock
   use blkcom
   use labcom
   use smtacs
@@ -677,6 +675,8 @@ subroutine tables
   use umcom
   use indcom
   use movcop
+  use savcom
+  use comlock
   implicit none
   !     Utility which is used to both dump and restore EMTP
   !     tables (central memory vs. disk).  Usage is for both
@@ -697,26 +697,29 @@ subroutine tables
   !     should be replaced by the simple statements  "n4 = 1" .
   !     comment card immediately preceding "synmac" -------------
   !     comment card immediately following "synmac" -------------
-  integer(4) :: i, j
+  integer(4) :: i, iprsav(4)
+  integer(4) :: j
   integer(4) :: ll1, ll2, ll4
   integer(4) :: n1, n2, n3, n4, n5, n9, n24
   !
-  !  equivalence (x(1), integx(1))
   !  dimension busone(1), idistx(1)
-  !  equivalence (bus1, busone(1)), (nenerg, idistx(1))
   !  dimension kpen(1), itemp(1), jtemp(1), ktemp(1)
+  !  dimension iprsav(4)
+  !
+  !  equivalence (x(1), integx(1))
+  !  equivalence (bus1, busone(1)), (nenerg, idistx(1))
   !  equivalence (kpen(1), bus1), (itemp(1), busum(1))
   !  equivalence (jtemp(1), etac(1)), (ktemp(1), z(1))
   !  equivalence (moncar(2), kbase)
-  !  dimension iprsav(4)
   !
   !     Burroughs: preserve local variable between module calls:
+  !
   iprsav(1 : 4) = (/ 0, 0, 0, 0 /)
   ll1 = 1
   ll2 = 2
   ll4 = 4
   nword1 = location (voltbc(1)) - location (kpen(1))
-  nword2 = location (idistx(1)) - location (lunsav(15))
+  nword2 = location (idistx) - location (lunsav(15))
   n4 = location (msmout) - location (z) + 1
   n5 = location (lbstac) - location (etac) + 1
   if (kbase .eq. 0) nword1 = location (idistx) - location (busone)

@@ -27,10 +27,13 @@ subroutine over6
   integer(4) :: n1, n2, n3, n7, n9, n11, n17, n22, ndx1, ndx2, nz
   real(8) :: d1
   !  dimension buff(20)
-  !  equivalence (iofkol, iofgnd), (iofkor, iofbnd)
   !  dimension integx(1)
+  !
+  !  equivalence (iofkol, iofgnd), (iofkor, iofbnd)
   !  equivalence (x(1), integx(1))
-  !  following carries "next" among over6, insert, over7, & over9:
+
+  !  Following carries "next" among over6, insert, over7, & over9:
+
   !  equivalence (loopss(11), next)
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
@@ -104,7 +107,7 @@ subroutine over6
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 55414) kburro, iv, last
 55414 format (/, ' In "over6", kburro =', i3, ' .   Compute iv, last =', 2i8)
   rewind lunit2
-  call tapsav (integx(1 :), lunit2, iv, n11)
+  call tapsav (integx, lunit2, iv, n11)
   n17 = 0
   !  call vecrsv (volt, n17, n17)
   call vecsav (volt, n17, n17)
@@ -251,7 +254,7 @@ subroutine over6
 5324 if (tmax .gt. 0.0) go to 5344
   do i = 1, ntot
      ich1(i) = i
-5340 norder(i) = i
+     norder(i) = i
   end do
   go to 40013
   ! renumber nodes based on sparsity of coeff matrix of transient
@@ -309,7 +312,6 @@ subroutine over6
         call insert (k, iabs (kbus(j2)))
         call insert (m, iabs (mbus(j2)))
      end do
-40014 continue
   end do
   if (kbus(i) .lt. 0) go to 40004
   do j1 = i, l3
@@ -317,7 +319,6 @@ subroutine over6
      do j2 = i, l3
         call insert (k, iabs (mbus(j2)))
      end do
-40024 continue
   end do
 40004 if (kill .eq. 0) go to 5372
   lstat(19) = 5372
@@ -342,7 +343,6 @@ subroutine over6
      if (iprsup .ge. 3) write (unit = lunit6, fmt = 1337) i, kode(i), kolum(il), korder(ir), kownt(i)
 1337 format (i6, 4i16)
   end do
-1339 continue
   if (kswtch .lt. 1) go to 40015
   do i = 1, kswtch
      ndx2 = lswtch + i
@@ -350,7 +350,6 @@ subroutine over6
      m = kmswit(ndx2)
      call insert (k, m)
   end do
-40005 continue
 40015 do i = 2, ntot
      if (kode(i) .eq. 0) go to 40006
      if (kownt(i) .eq. (-1)) go to 40006
@@ -405,7 +404,7 @@ subroutine rinfin
   integer(4) :: m
   integer(4) :: n1, n2, n3, n7
   real(8) :: d1
-  !
+ !
   n3 = 0
   d1 = 1.0d0 / (100.0d0 * flzero)
   ! 1st remove minus sign of "kpartb" if present as flag
@@ -470,11 +469,11 @@ subroutine insert (irrr, icc)
   implicit none
   integer(4), intent(in) :: irrr, icc
   integer(4) :: i, ic, ir, irn, irr, isubs1
-  integer(4) :: j
   integer(4) :: n1, n2
-  real(8) :: d1
   ! Following carries "next" among over6, insert, over7, & over9:
+  !
   !  equivalence (loopss(11), next)
+  !
   if (irrr .le. 1) return
   if (icc .le. 1) return
   if (irrr .eq. icc) return

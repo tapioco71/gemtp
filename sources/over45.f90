@@ -1003,8 +1003,8 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
   do i=1, 14
      if (vstacs(i) .ne. blank)  go to 516
 450 end do
-  write (kunit6, 470)
-470 format ( 43h+blank card terminating   'semlyen setup' .   )
+  write (unit = kunit6, fmt = 470)
+470 format ("+Blank card terminating   'semlyen setup' .")
   call interp
   nchain = 51
   ialter = 0

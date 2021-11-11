@@ -83,20 +83,16 @@ FORTRAN_FLAGS=	-O0			\
 		-frepack-arrays		\
 		-c
 
-#F90_FLAGS=	-O0				\
-#		-Wall				\
-#		-std=gnu			\
-#		-fcheck=all			\
-#		-finit-local-zero		\
-#		-freorder-blocks		\
-#		-frepack-arrays			\
-#		-cpp				\
+#		-fmax-stack-var-size=100000000	\
 
-F90_FLAGS=	-cpp				\
+F90_FLAGS=	-O0				\
+		-Wall				\
+		-cpp				\
 		-ffree-form			\
 		-ffree-line-length-0		\
 		-fcheck=all			\
 		-finit-local-zero		\
+		-fno-automatic			\
 		-J${COMPILER}			\
 		-DWITH_MAIN10			\
 		-DWITH_OVER1			\

@@ -5,7 +5,7 @@
 !
 
 module umlocal
-  use blkcom, only: n20
+  use blkcom
   implicit none
   character(8) :: texta(101)
   integer(4) :: ibrexc
@@ -28,6 +28,7 @@ module umlocal
   real(8) :: xlum, xnum, xqgum, xqkqum
   real(8) :: xqppum, xqpum, xqum
   real(8) :: zlsbum
+  save
 end module umlocal
 
 module umdat
@@ -105,14 +106,13 @@ contains
     !  dimension kumout(1), jumout(1), umoutp(1)
     character(8) :: text3, text4, text5
     character(8) :: textm, tesm1, tesm2, tesm3, tesm4, tesm5
-    character(8) :: tesm6, tesm7, tesm8, tesm9, text6, text7
+    character(8) :: tesm6, tesm7, tesm8, tesm9
     integer(4) :: j
     integer(4) :: kcl
-    integer(4) :: n13
-    integer(4) :: ncldq, ndx1, ntacb, numoui
+    integer(4) :: n13, n20, ncldq, ndx1, ntacb, numoui
     real(8) :: d10
-
     real(8) :: rppair
+    !
     !. data initialization:
     !     be careful with fpar(kcl) and umcurp(kcl). in umdata and
     !      and in umrenu they are used differently than in solvum.
@@ -149,7 +149,7 @@ contains
     go to 9600
     ! . busum adjustment due to variable numfix :
 40  do n1 = 1, numfix
-42     busum(n1) = texta(n1)
+       busum(n1) = texta(n1)
     end do
     do n1 = 1, 28
        n2 = n1 + numfix
@@ -188,7 +188,7 @@ contains
 102 format ('+um power coil interfacing by prediction')
     go to 150
 105 if (noutpr .eq. 0) write (unit = kunit6, fmt = 110)
-110 format ('+um fully compensated')
+110 format ('+Um fully compensated')
     ! read (lunit5,203) jtype(n1),ncld(n1),nclq(n1),jtqout(n1),
     ! vjomout(n1),jthout(n1),bum3(n1),bum4(n1),nppair(n1),
     ! vrotmom(n1),dcoef(n1),epsom(n1),omegm(n1),reamdu(n1),
@@ -203,7 +203,7 @@ contains
     if (text4 .ne. blank) go to 3202
     if (text5 .ne. blank) go to 3202
     if (noutpr .eq. 0) write (unit = kunit6, fmt = 1001)
-1001 format ('+blank card ending class-1 um data cards')
+1001 format ('+Blank card ending class-1 um data cards')
     go to 11202
     ! data input for m31 and older versions ***********************
     !. user2 : mach-table input for m31 and older
@@ -216,7 +216,7 @@ contains
     if (text4 .ne. blank) go to 3202
     if (text5 .ne. blank) go to 3202
     if (noutpr .eq. 0) write (unit = kunit6, fmt = 2202)
-2202 format ('+blank card ending machine table.')
+2202 format ('+Blank card ending machine table.')
     go to 300
 3202 numum = numum + 1
     if (iprsup .ge. 1) write (unit = lunit6, fmt = 170) numum
@@ -247,7 +247,6 @@ contains
        ndx1 = ilntab(klntab + j)
        if (bus4 .eq. texvec(ndx1)) go to 209
     end do
-207 continue
     if (bus4 .eq. blank) go to 213
     write (unit = lunit6, fmt = 3207) bus4
 3207 format (/, ' Error stop.   The TACS name  "bus4" on the last-read card is unrecognized.   bus4=', a6)
@@ -357,7 +356,7 @@ contains
     if (text5 .ne. blank) go to 4303
     if (ncltot .lt. n5) go to 4303
     if (noutpr .eq. 0) write (kunit6, 4302)
-4302 format ('+blank card ending coil table.')
+4302 format ('+Blank card ending coil table.')
     go to 500
 4303 ncltot = ncltot + 1
     fpar(ncltot) = 0.0
@@ -383,7 +382,6 @@ contains
 305    n13 = n11 * n12
        if (n13 .ne. 0) go to 307
     end do
-306 continue
     if (n11 .eq. 0) write (unit = lunit6, fmt = 3206) bus1
 3206 format (/, ' Error stop.  Just-read coil card bears illegal node name:', a6)
     if (n12 .eq. 0) write (unit = lunit6, fmt = 3206) bus2
@@ -394,7 +392,6 @@ contains
        ndx1 = ilntab(klntab + j)
        if (bus6 .eq. texvec(ndx1)) go to 311
     end do
-309 continue
     write (unit = lunit6, fmt = 3207) bus6
     go to 9600
 311 ndx1 = kxtcs + j
@@ -412,7 +409,7 @@ contains
     if (text4 .ne. blank) go to 13202
     if (text5 .ne. blank) go to 13202
     if (noutpr .eq. 0) write (unit = kunit6, fmt = 12202)
-12202 format ('+blank card ending um data.')
+12202 format ('+Blank card ending um data.')
     go to 500
 13202 numum = numum + 1
     if (numum .le. numfix) go to 17000
@@ -465,7 +462,6 @@ contains
        ndx1 = ilntab(klntab + j)
        if (bus4 .eq. texvec(ndx1)) go to 10209
     end do
-10207 continue
     if (bus4 .eq. blank) go to 10213
     write (unit = lunit6, fmt = 13207) bus4
 13207 format (/, ' Error stop.   The TACS name  "bus4" on the last-read card is', /, ' unrecognized.   bus4=', a6)
@@ -632,7 +628,6 @@ contains
 13305  n13 = n11 * n12
        if (n13 .ne. 0) go to 13307
     end do
-13306 continue
     if (n11 .eq. 0) write (unit = lunit6, fmt = 13206) bus1
 13206 format (/, ' Error stop.  Just-read coil card bears illegal node name:', a6)
     if (n12 .eq. 0) write (unit = lunit6, fmt = 13206) bus2
@@ -643,7 +638,6 @@ contains
        ndx1 = ilntab( klntab + j )
        if (bus6 .eq. texvec(ndx1)) go to 13311
     end do
-13309 continue
     write (unit = lunit6, fmt = 13207)  bus6
     go to 9600
 13311 ndx1 = kxtcs + j
@@ -657,7 +651,6 @@ contains
 500 do n1 = 1, ncltot
        if (gpar(n1) .ne. 0.0) gpar(n1) = 1.0 / gpar(n1)
     end do
-502 continue
     if (istep .ne. -4567) go to 80510
     if (initum .eq. 1) go to 80510
     write (unit = lunit6, fmt = 80502)
@@ -721,7 +714,7 @@ contains
           ! preparing shift of leakage inductances of power coils *******
           ! note : the EMTP address it of these shifted inductances
           !        are stored in fpar(kcl).
-961       if (nodvo1(n3) .eq. nodvo2(n3)) go to 980
+          if (nodvo1(n3) .eq. nodvo2(n3)) go to 980
           ! create new node behind leakage inductance. this node
           ! becomes the new um power node.
           ntot = ntot + 1
@@ -901,9 +894,8 @@ contains
        n7 = numout + 3 + n6
        umoutp(n7) = umoutp(n6)
     end do
-18000 continue
     do n5 = 1,numout
-18002  umoutp(n5) = 0.0
+       umoutp(n5) = 0.0d0
     end do
     n5 = numout + nsmtac + 3
     umoutp(numout+3) = n5
@@ -945,7 +937,7 @@ contains
     implicit none
     character(8) :: text3, text4, text5
     character(8) :: textm, tesm1, tesm2, tesm3, tesm4, tesm5
-    character(8) :: tesm6, tesm7, tesm8, tesm9, text6, text7
+    character(8) :: tesm6, tesm7, tesm8, tesm9
     integer(4), intent(out) :: jcdsat(:)
     integer(4), intent(out) :: jclout(:)
     integer(4), intent(out) :: jcltac(:)
@@ -994,7 +986,7 @@ contains
     integer(4) :: j
     integer(4) :: kswexc, kswsta
     integer(4) :: mjm
-    integer(4) :: n1iu, ndx1, ndy5
+    integer(4) :: n20, n1iu, ndx1, ndy5
     integer(4) :: niunrs, nk
     integer(4) :: ntacb, ntotst, num
     real(8) :: d10, d11, d12, distr1
@@ -1004,7 +996,7 @@ contains
     data textm / 'more  ' /
     data tesm1, tesm2, tesm3, tesm4, tesm5, tesm6, tesm7, tesm8, tesm9 / 'smdata', 'tolera', 'parame', 'all   ', 'none  ' , 'extend', 'finish', ' part ', 'share ' /
     ! start reading sm type -50 to 59 data input format **********
-17040 initum = 1
+    initum = 1
     nsmach = numum
     n1 = numum
     jtype(n1) = 13
@@ -1108,10 +1100,9 @@ contains
        nodvo1(ncltot + n5) = 1
        nodvo2(ncltot + n5) = 1
     end do
-17090 continue
     ! *************************** read class 2 sm type-59 data
     ! nstan = 1 is a flag for standard manufacturer data
-17100 nstan = 0
+    nstan = 0
     call cimage
     read (unit = abuff, fmt = 17102) text3
 17102 format (a6)
@@ -1131,7 +1122,7 @@ contains
 17200 n2 = 0
     read (unit = abuff, fmt = 17210) numasu, nmgen, nmexc, n20, d17, rmvaum, rkvum, agldum, s1um, s2um
 17210 format (3i2, i4, f6.0, 14x, 5e10.6)
-    if (numasu .eq. 0) numasu = d17
+    if (numasu .eq. 0) numasu = int (d17)
     if (noutpr .eq. 0) write (unit = kunit6, fmt = 17212)  numum
 17212 format ('+um -', i3, '   sm-59 class 3, general parameters')
     ! zlsbum is the stator base inductance, if multiplied with
@@ -1143,7 +1134,7 @@ contains
     jcdsat(n1) = 0
     if (agldum .lt. 0.0) jcdsat(n1) = 1
     if (agldum .lt. 0.0) agldum = - agldum
-17214 nppair(n1) = n20/2
+    nppair(n1) = n20/2
     n5 = 2
     n6 = nppair(n1) * n5
     if (n6 .eq. n20) go to 17218
@@ -1309,7 +1300,7 @@ contains
     gpar(ncltot + 3) = gpar(ncltot + 1)
     d1 = zlsbum * rotmom(n1)
     do n5 = 1, 7
-17432  gpar(ncltot + n5) = gpar(ncltot + n5) * d1
+       gpar(ncltot + n5) = gpar(ncltot + n5) * d1
     end do
     reamdu(n1) = xdfum
     reamqu(n1) = xqkqum
@@ -1397,7 +1388,6 @@ contains
        bus(ntot) = texta(numum + 60)
 17520  nodvo2(n6) = n7
     end do
-17530 continue
     ! create high resistances in parallel over coils if
     if (loopss(8) .ne. 0) go to 17536
     do n5 = 1, 3
@@ -1413,7 +1403,6 @@ contains
        if (iprsup .ge. 1) write (unit = lunit6, fmt = 17531) mbus(ibr), kbus(ibr), ibr, it
 17531  format (' ********* High power resist.', 25x, i4, 4x, i4, 4x, i4, 4x, i4)
     end do
-17532 continue
     ! insertion of neutral impedance
 17536 if (d1 .eq. 0.0) go to 17540
     call ibrinc
@@ -1488,7 +1477,7 @@ contains
     ntot = ntot + 2 * numasu
     n6 = ntotst + 1
     do n5 = n6, ntot
-17577  kode(n5) = 0
+       kode(n5) = 0
     end do
     ! nsmtpr is to store the value of nsmtac of the previous mach.
     ! nsmtac is the total nr of variables to be passed to tacs.
@@ -1513,7 +1502,7 @@ contains
     ! first, second and third cell same as voltages
     ! fourth cell = angle history, angle part
     ! fifth cell = angle history, omega*deltat/2 part
-17580 do n5 = 1, numasu
+    do n5 = 1, numasu
        if (n5 .eq. 1 .and. jtmtac(n1) .eq. 0) go to 17582
        call cimage
 17582  n17 = 0
@@ -1649,7 +1638,6 @@ contains
        n8 = ntotst + n5 + 1
        bus(n7) = bus(n8)
     end do
-17670 continue
 17672 n7 = ntotst + 2*numasu
     bus(n7) = trash
     if (numum .gt. 5) go to 17700
@@ -1746,7 +1734,6 @@ contains
        if (iprsup .ge. 1) write (unit = lunit6, fmt = 17738) kmswit(kswtch), kmswit(ndx1), kswtch, lswtch
 17738  format (' ********* Torque sensor switch', 23x, i4, 4x, i4, 20x, i4, 4x, i4)
     end do
-17740 continue
     ! create small series resistance for applied torque to um mass
 17742 call ibrinc
     it = it + 1
@@ -1860,7 +1847,6 @@ contains
        if (jumout(i) .eq. n2) jumout(i) = 3
        if (jumout(i) .eq. 0) jumout(i) = n3
     end do
-17797 continue
     go to 17774
 97797 do i = 1, 12
        n15 = ndum(i)
@@ -1914,7 +1900,6 @@ contains
        ndx1 = ilntab( klntab + n5 )
        if (bus1 .eq. texvec(ndx1)) go to 17827
     end do
-17825 continue
     write (unit = lunit6, fmt = 17826) bus1
 17826 format (/, ' Error stop.   Just-read card requesting control by TACS, bears unrecognized', /, ' TACS name :', a6)
     go to 9600
@@ -2073,7 +2058,6 @@ contains
        ndx1 = ilntab( klntab + n10 )
        if (bus1 .eq. texvec(ndx1)) go to 17890
     end do
-17882 continue
     write (unit = lunit6, fmt = 17826) bus1
     go to 9600
     ! set type-14 sources for applied torques :
@@ -2104,7 +2088,6 @@ contains
        if (iprsup .ge. 1) write (unit = lunit6, fmt = 17896) node(kconst), kconst, sfreq(kconst)
 17896  format (' ********* Applied torque source', 22x, i4, 44x, i4, e14.5)
     end do
-17898 continue
 17899 if (n19 .eq. 0) go to 17900
     go to 17810
     ! ********************* finish statements of sm type-59 data
@@ -2134,7 +2117,6 @@ contains
        umoutp(n3) = umoutp(n4)
        if (n4 .gt. n7) umoutp(n4) = 0.0
     end do
-17950 continue
     if (nparum .ne. 0) go to 17951
     if (iprsup .lt. 3) go to 17958
 17951 write (unit = lunit6, fmt = 17952) n1, reamdu(n1), reamds(n1), reamqu(n1), reamqs(n1), flxds(n1), flxqs(n1)
@@ -2173,15 +2155,17 @@ end module umdat
 !
 
 subroutine over5
-  use a8swmod
   use blkcom
   use labcom
   use tacsar
   use tracom
   use strcom
   use movcop
+  use a8swmod
+  use freedom
   implicit none
   !  dimension akey(1), tstat(1)
+  !
   !  equivalence (akey(1), adelay(1)), (tstat(1), crit(1))
   !  equivalence (moncar(1), knt), (moncar(4), isw)
   !  equivalence (moncar(5), idist), (moncar(6), itest)
@@ -2197,11 +2181,11 @@ subroutine over5
   integer(4) :: mk, mpower
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n24, n98, n99, ndx1, ndx2, ndx3
   integer(4) :: ndx4, ndxi, ndxj, ndxk
-  real(8) :: a, abc, adube, adube1, adube2, adube3, akey(1), atemp
+  real(8) :: a, abc, adube1, adube2, adube3, atemp
   real(8) :: d1, d2
   real(8) :: gus3, gus4
   real(8) :: ssigma, ststat
-  real(8) :: targ, timchk, tstat(1)
+  real(8) :: targ, timchk
   !
   data text1  / 'name  ' /
   data text2  / 'swt001' /
@@ -2245,14 +2229,14 @@ subroutine over5
      do j = n3, n4
         d1 = d1 + weight(j)
      end do
-6664 write (unit = lunit6, fmt = 6671) i, iskip(i), iwtent(i), eta(i), zinf(i), con1(i), con1(ip2), con1(ip3), d1
+     write (unit = lunit6, fmt = 6671) i, iskip(i), iwtent(i), eta(i), zinf(i), con1(i), con1(ip2), con1(ip3), d1
   end do
 6671 format (1x, i4, 2i8, 6e15.6)
   do i = 1, ifdep
      n1 = ifdep + i
      n2 = 2 * lfdep + n1
      n3 = 4 * lfdep + n1
-1983 write (unit = lunit6, fmt = 6678) n1, iwtent(n1), con1(n1), con1(n2), con1(n3)
+     write (unit = lunit6, fmt = 6678) n1, iwtent(n1), con1(n1), con1(n2), con1(n3)
   end do
 6678 format (1x, i4, 8x, i8, 10x, 3e15.6)
 6693 continue
@@ -2278,32 +2262,37 @@ subroutine over5
 35 format (i2, 2a6, 4e10.0, a6, a4, 2a6, 2x, 2i1)
   go to 3506
 3503 nfrfld = 1
-  call frefld (voltbc(1))
-  it2 = voltbc(1)
+  !  call frefld (voltbc)
+  call free (voltbc)
+  it2 = int (voltbc(1))
   nright = -1
   nfrfld = 2
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   nright = 0
   bus1 = texta6(1)
   bus2 = texta6(2)
   nfrfld = 4
-  call frefld (voltbc(1))
+  !  call frefld (voltbc)
+  call free(voltbc)
   gus3 = voltbc(1)
   gus4 = voltbc(2)
   ck1 = voltbc(3)
   a = voltbc(4)
   nright = -2
   nfrfld = 3
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   nright = 0
   bus3 = texta6(1)
   bus4 = texta6(2)
   bus5 = texta6(3)
   bus6 = texta6(4)
   nfrfld = 2
-  call frefld (voltbc(1))
-  jdube1 = voltbc(1)
-  j = voltbc(2)
+  !  call frefld (voltbc)
+  call free (voltbc)
+  jdube1 = int (voltbc(1))
+  j = int (voltbc(2))
 3506 if (bus1 .ne. blank) go to 3510
   if (bus2 .eq. blank) go to 213
 3510 kswtch = kswtch + 1
@@ -2334,7 +2323,6 @@ subroutine over5
      if (bus1 .eq. bus(i)) n1 = i
      if (bus2 .eq. bus(i)) n2 = i
   end do
-210 continue
   iprint = 1
   if (n1 .ne. 0) go to 211
   ntot = ntot + 1
@@ -2403,7 +2391,6 @@ subroutine over5
      ndx1 = ilntab(klntab + i)
      if (bus5 .eq. texvec(ndx1)) go to 261
   end do
-258 continue
 259 kill = 147
   lstat(19) = 259
   go to 9200
@@ -2414,7 +2401,6 @@ subroutine over5
      ndx1 = ilntab(klntab + i)
      if (bus6 .eq. texvec(ndx1)) go to 267
   end do
-266 continue
 265 kill = 119
   lstat(19) = 265
   go to 9200
@@ -2494,7 +2480,7 @@ subroutine over5
 36 format ('+Switch.', 2x, 4e10.2)
   if (a .eq. 0.0) go to 220
   if (atemp .eq. 3333.) go to 220
-222 adelay(kswtch) = absz (gus4)
+  adelay(kswtch) = absz (gus4)
 220 kmswit(kswtch) = n1
   ndx2 = kswtch + lswtch
   kmswit(ndx2) = n2
@@ -2564,9 +2550,8 @@ subroutine over5
      if (bus5 .eq. bus(i)) n5 = i
      if (bus6 .eq. bus(i)) n6 = i
   end do
-240 continue
   if (n5 * n6 .eq. 1) go to 225
-241 n7 = kswtch - 1
+  n7 = kswtch - 1
   if (n7 .le. 0) go to 7245
   do i = 1, n7
      if (n5 .ne. kmswit(i)) go to 245
@@ -2639,7 +2624,7 @@ subroutine over5
   end do
 8211 continue
 8299 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54133)
-54133 format ('+blank card terminating switch cards.')
+54133 format ('+Blank card terminating switch cards.')
   call move0 (ipntv(1 :), ll10)
   if (tenerg .ge. 1.e+19) go to 1642
   if (tenerg .lt. tmax) go to 1642
@@ -2665,7 +2650,7 @@ subroutine over5
      bus2 = bus(n2)
      go to 9200
 500  if (nenerg .gt. 0) go to 510
-     n1 = n1 * tdns(i)
+     n1 = int (n1 * tdns(i))
 510  ipntv(numref) = i
      if (kloaep .ne. i) go to  625
      iloaep = numref
@@ -2682,7 +2667,7 @@ subroutine over5
      if (absz (akey(i)) .ne. 44444.) go to 520
      if (kdepsw(i) .ne. 0) go to 520
      j = j + 1
-     ipntv(j) = tdns(i)
+     ipntv(j) = int (tdns(i))
   end do
 520 continue
   go to 9200
@@ -2743,6 +2728,7 @@ subroutine over5a
   use tracom
   use movcop
   use umdat
+  use freedom
   implicit none
   !  dimension ispum(1), kpen(4)
   !  equivalence (spum(1), ispum(1))
@@ -2754,7 +2740,7 @@ subroutine over5a
   integer(4) :: m, machfl
   integer(4) :: n1, n2, n3, n14, n2mach, ndx1, ndx2
   real(8) :: a
-  real(8) :: d1, d2, d5, dcfreq
+  real(8) :: d1, d2, dcfreq
   real(8) :: gus2, gus3, gus4
   real(8) :: h1, h2, h3
   real(8) :: reps
@@ -2889,15 +2875,23 @@ subroutine over5a
   read (unit = abuff, fmt = 6304) n2, bus1
   nfrfld = 1
   nright = 6
-  call freone (h2)
-  n1 = h2
-  call freone (a)
-  call freone (d1)
-  call freone (gus2)
-  call freone (h1)
-  call freone (h2)
-  call freone (gus3)
-  call freone (gus4)
+  !  call freone (h2)
+  call free (h2)
+  n1 = int (h2)
+  !  call freone (a)
+  call free (a)
+  !  call freone (d1)
+  call free (d1)
+  !  call freone (gus2)
+  call free (gus2)
+  !  call freone (h1)
+  call free (h1)
+  !  call freone (h2)
+  call free (h2)
+  !  call freone (gus3)
+  call free (gus3)
+  !  call freone (gus4)
+  call free (gus4)
 314 smang = gus2
   if (n2 .gt. 0) go to 4568
   if (bus1 .ne. blank) go to 4562
@@ -2919,7 +2913,8 @@ subroutine over5a
   go to 7646
 7642 nfrfld = 1
   nright = -1
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   nright = 0
   bus1 = texta6(1)
 7646 smang = smang - 120.
@@ -2974,7 +2969,6 @@ subroutine over5a
 317 do i = 1, ntot
      if (bus1 .eq. bus(i)) go to 330
   end do
-320 continue
   lstat(19) = 320
 4258 kill = 12
   return
@@ -2985,7 +2979,6 @@ subroutine over5a
      ndx1 = ilntab(klntab + m)
      if (bus1 .eq. texvec(ndx1)) go to 3435
   end do
-3429 continue
   lstat(19) = 3429
   go to 4249
 3435 sfreq(kconst) = m
@@ -3021,22 +3014,32 @@ subroutine over5a
 4255 format (2x, a6, i2, 6e10.6, 9x, i1)
   go to 7658
 7653 nfrfld = 1
-  call frefld (voltbc)
-  n3 = voltbc(1)
+  !  call frefld (voltbc)
+  call free (voltbc)
+  n3 = int (voltbc(1))
   nright = -1
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   nright = 0
   bus1 = texta6(1)
-  call frefld (voltbc)
-  n3 = voltbc(1)
-  call freone (a )
-  call freone (gus2 )
-  call frefld (time1(kconst))
-  call frefld (tstart(kconst))
-  call freone (reps)
-  call freone (dcfreq)
-  call frefld (voltbc)
-  loutbr = voltbc(1)
+  !  call frefld (voltbc)
+  call free (voltbc)
+  n3 = int (voltbc(1))
+  !  call freone (a)
+  call free (a)
+  !  call freone (gus2)
+  call free (gus2)
+  !  call frefld (time1(kconst :))
+  call free (time1(kconst :))
+  !  call frefld (tstart(kconst :))
+  call free (tstart(kconst :))
+  !  call freone (reps)
+  call free (reps)
+  !  call freone (dcfreq)
+  call free (dcfreq)
+  !  call frefld (voltbc)
+  call free (voltbc)
+  loutbr = int (voltbc(1))
 7658 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54137)
 54137 format ('+second dc simulator card.')
   if (dcfreq .eq. 0.) dcfreq = tenm3
@@ -3045,7 +3048,6 @@ subroutine over5a
   do k = 1, ntot
      if (bus1 .eq. bus(k)) go to 342
   end do
-341 continue
   lstat(19) = 341
   go to 4258
 342 n3 = 4
@@ -3190,7 +3192,7 @@ subroutine over5a
 336 kode(i) = -i
   go to 331
 400 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54139)
-54139 format ('+blank card terminating source cards.')
+54139 format ('+Blank card terminating source cards.')
   if (numsm .gt. 0) mfirst = ismdat(24)
   call interp
   if (kconst .le. 1) go to 4145
@@ -3258,7 +3260,7 @@ subroutine over5a
   if (kswtch .le. 0) go to 2428
   do i = 1, kswtch
      ndx2 = lswtch + i
-2406 write (unit = lunit6, fmt = 2426) i, kmswit(i), kmswit(ndx2), kpos(i), kdepsw(i), isourc(i), kswtyp(i), tclose(i), adelay(i), topen(i), crit(i)
+     write (unit = lunit6, fmt = 2426) i, kmswit(i), kmswit(ndx2), kpos(i), kdepsw(i), isourc(i), kswtyp(i), tclose(i), adelay(i), topen(i), crit(i)
   end do
 2426 format (7i8, 4e15.6)
 2428 write (unit = lunit6, fmt = 13416) (i, kbus(i), mbus(i), nr(i), length(i), kodebr(i), kodsem(i), i = 1, ibr)
@@ -3305,7 +3307,7 @@ subroutine umoffs
   iufpar = iugpar + nclfix
   iuhist = iufpar + nclfix
   iuumrp = iuhist + nclfix
-  iunod1 = (iuumrp + nclfix) / d5 + 1
+  iunod1 = int ((iuumrp + nclfix) / d5) + 1
   iunod2 = iunod1 + nclfix
   iujclt = iunod2 + nclfix
   iujclo = iujclt + nclfix
@@ -3313,7 +3315,7 @@ subroutine umoffs
   ! step over all machine-table vectors next.
   iunodo = iujtyp + numfix
   iujtmt = iunodo + numfix
-  iuhism = (iujtmt + numfix) * d5 + 1
+  iuhism = int ((iujtmt + numfix) * d5) + 1
   iuomgm = iuhism + numfix
   iuomld = iuomgm + numfix
   iutham = iuomld + numfix
@@ -3324,29 +3326,29 @@ subroutine umoffs
   iurequ = iufldr + numfix
   iuflqs = iurequ + numfix
   iuflqr = iuflqs + numfix
-  iujcds = (iuflqr + numfix) / d5 + 1
+  iujcds = int ((iuflqr + numfix) / d5) + 1
   iujcqs = iujcds + numfix
-  iuflxd = (iujcqs + numfix) * d5 + 1
+  iuflxd = int ((iujcqs + numfix) * d5) + 1
   iuflxq = iuflxd + numfix
-  iunppa = (iuflxq + numfix) / d5 + 1
-  iurotm = (iunppa + numfix) * d5 + 1
-  iuncld = (iurotm + numfix) / d5 + 1
+  iunppa = int ((iuflxq + numfix) / d5) + 1
+  iurotm = int ((iunppa + numfix) * d5) + 1
+  iuncld = int ((iurotm + numfix) / d5) + 1
   iunclq = iuncld + numfix
   iujtqo = iunclq + numfix
   iujomo = iujtqo + numfix
   iujtho = iujomo + numfix
-  iureqs = (iujtho + numfix) * d5 + 1
+  iureqs = int ((iujtho + numfix) * d5) + 1
   iuepso = iureqs + numfix
   iudcoe = iuepso + numfix
-  iukcoi = (iudcoe + numfix) / d5 + 1
-  iuvolt = (iukcoi + numfix) * d5 + 1
+  iukcoi = int ((iudcoe + numfix) / d5) + 1
+  iuvolt = int ((iukcoi + numfix) * d5) + 1
   iuangl = iuvolt + numfix
-  iunodf = (iuangl + numfix) / d5 + 1
+  iunodf = int ((iuangl + numfix) / d5) + 1
   iunodm = iunodf + numfix
   iukumo = iunodm + numfix
   ! step over all output-table vectors next.
   iujumo = iukumo + iotfix
-  iuumou = (iujumo + iotfix) * d5 + 1
+  iuumou = int ((iujumo + iotfix) * d5) + 1
   ! finally, step over last vector, and check for overflow.
   n5 = iuumou + ibsfix
   lstat(45) = n5
@@ -3377,13 +3379,16 @@ subroutine smdat (mtype)
   use indcom
   use tracom
   use movcop
+  use strcom
+  use freedom
   implicit none
   ! This module is used only by type-59 brandwajn  s.m.  model
   ! The following array is sized 3 (nn4-1) * n50 ( n50 = 50  at pre-
   ! sent ) + nn10 ( no. of class 1 requests <=15 at present> ) ******
   !  dimension  npbuf(165)
-  !  equivalence (ismdat(22), ipout), (ismdat(23), n56), (ismdat(24), ismold), (ismdat(25), nn10), (ismdat(26), nn4), (ismdat(27), nn14)
   !  dimension massex(1)
+  !
+  !  equivalence (ismdat(22), ipout), (ismdat(23), n56), (ismdat(24), ismold), (ismdat(25), nn10), (ismdat(26), nn4), (ismdat(27), nn14)
   !  equivalence (histq(1), massex(1))
   integer(4), intent(in) :: mtype
   character(8) :: text1, text2, text3
@@ -3397,7 +3402,7 @@ subroutine smdat (mtype)
   integer(4) :: k, k1, k2, kflag
   integer(4) :: m, m1, mloc
   integer(4) :: n2, n3, n4, n6, n7, n8, n9, n11, n14, n16, n17, n18, n19, n21
-  integer(4) :: n30, n50, n55, n167, n3671, ndwqa, nqwqa, ndx1, ndy5, nfirst, niunrs
+  integer(4) :: n30, n50, n55, n167, n3671, ndwqa, ndx1, ndy5, nfirst, niunrs
   integer(4) :: np, num2, num3, num4, num5, numask
   real(8) :: a, ad1, ad2, aglin, aq1, aq2
   real(8) :: b6
@@ -3412,6 +3417,7 @@ subroutine smdat (mtype)
   real(8) :: tdop, tdopp, tqop, tqopp
   real(8) :: xd, xq, xdp, xdpp, xl, xqp, xqpp
   real(8) :: zb, zb1, zb3
+  !
   data  text1  / 'finish' /
   data  text2  / 'tolera' /
   data  text3  / 'nces  ' /
@@ -3468,7 +3474,7 @@ subroutine smdat (mtype)
   d8 = d8 / nbyte(4)
   om2 = d8
   d8 = mfirst * d8 - 1.0
-  mfirst = d8
+  mfirst = int (d8)
 123 jk = numsm
   ism = 0
   fm = -2.0d0
@@ -3490,7 +3496,8 @@ subroutine smdat (mtype)
   nright = -2
   n11 = kolbeg
   kolbeg = 1
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   nright = 0
   ! check for key word   'tolerances'  (or  't' ).
   if (texta6(1) .eq. text19) go to 7103
@@ -3501,11 +3508,15 @@ subroutine smdat (mtype)
 3609 format (10x, 3e10.0, 10x, i10)
   go to 7105
 7104 nfrfld = 1
-  call freone (d1)
-  call freone (d2)
-  call freone (d3)
-  call frefld (voltbc(1))
-  n9 = voltbc(1)
+  !  call freone (d1)
+  call free (d1)
+  !  call freone (d2)
+  call free (d2)
+  !  call freone (d3)
+  call free (d3)
+  !  call frefld (voltbc)
+  call free (voltbc)
+  n9 = int (voltbc(1))
 7105 if (d1 .gt. 0.0) epsuba = d1
   if (d2 .gt. 0.0) epomeg = d2
   if (d3 .gt. 0.0) epdgel = d3
@@ -3524,7 +3535,8 @@ subroutine smdat (mtype)
 6011 format (24x, e8.0)
   go to 7110
 7109 nfrfld = 1
-  call freone (fm)
+  !  call freone (fm)
+  call free (fm)
 7110 if (fm .gt. 1.0) go to 152
   ism = 1
   go to 153
@@ -3560,19 +3572,27 @@ subroutine smdat (mtype)
 5 format (3i2, i4, 7e10.6)
   go to 7114
 7113 nfrfld = 4
-  call frefld (voltbc(1))
-  ismdat(i30 + 11) = voltbc(1)
-  ismdat(i30 + 12) = voltbc(2)
-  ismdat(i30 + 13) = voltbc(3)
-  np = voltbc(4)
+  !  call frefld (voltbc)
+  call free (voltbc)
+  ismdat(i30 + 11) = int (voltbc(1))
+  ismdat(i30 + 12) = int (voltbc(2))
+  ismdat(i30 + 13) = int (voltbc(3))
+  np = int (voltbc(4))
   nfrfld = 1
-  call freone (sm3)
-  call freone (sm4)
-  call freone (rmva)
-  call freone (rkv)
-  call freone (aglin)
-  call freone (dab)
-  call freone (dac)
+  !  call freone (sm3)
+  call free (sm3)
+  !  call freone (sm4)
+  call free (sm4)
+  !  call freone (rmva)
+  call free (rmva)
+  !  call freone (rkv)
+  call free (rkv)
+  !  call freone (aglin)
+  call free (aglin)
+  !  call freone (dab)
+  call free (dab)
+  !  call freone (dac)
+  call free (dac)
 7114 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3619) ismdat(i30 + 11), ismdat(i30 + 12), ismdat(i30 + 13), np, sm3, sm4
 3619 format ('+  4th s.m. card.', 4i4, 2f7.3)
   elp(i26 + 25) = np / 2
@@ -3581,7 +3601,7 @@ subroutine smdat (mtype)
   elp(i26 + 28) = sm3
   elp(i26 + 29) = sm4
   numask = ismdat(i30 + 11)
-300 if (numask .lt. 0) go to 306
+  if (numask .lt. 0) go to 306
   iln = ismold * 12
   ismold = ismold + numask
   if (ismold .le. limass) go to 8
@@ -3606,7 +3626,7 @@ subroutine smdat (mtype)
 154 format ('+  q-axis', f7.3, 3f10.4)
   ! read input card using cimage.
   call cimage
-5564 zb = (rkv ** 2) / rmva
+  zb = (rkv ** 2) / rmva
   ! if ( idelta  .eq.  1  )  zb = 3.d0 * zb
   emf = rkv / (tenm3 * aglin)
   if (fm .le. -1.0) go to 100
@@ -3614,14 +3634,22 @@ subroutine smdat (mtype)
   read (unit = abuff, fmt = 6) ra, xl, xd, xq, xdp, xqp, xdpp, xqpp
 6 format (8e10.6)
   go to 7125
-7124 call freone (ra)
-  call freone (xl)
-  call freone (xd)
-  call freone (xq)
-  call freone (xdp)
-  call freone (xqp)
-  call freone (xdpp)
-  call freone (xqpp)
+  !7124 call freone (ra)
+7124 call free (ra)
+  !  call freone (xl)
+  call free (xl)
+  !  call freone (xd)
+  call free (xd)
+  !  call freone (xq)
+  call free (xq)
+  !  call freone (xdp)
+  call free (xdp)
+  !  call freone (xqp)
+  call free (xqp)
+  !  call freone (xdpp)
+  call free (xdpp)
+  !  call freone (xqpp)
+  call free (xqpp)
 7125 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3628) ra, xl, xd
 3628 format ('+  5th s.m. card.', 3f10.4)
   ! check for an error in reactance values ***************************
@@ -3659,13 +3687,20 @@ subroutine smdat (mtype)
   read (unit = abuff, fmt = 30) tdop, tqop, tdopp, tqopp, el2, r1, el1
 30 format (7e10.6, 9x, i1)
   go to 7137
-7136 call freone (tdop)
-  call freone (tqop)
-  call freone (tdopp)
-  call freone (tqopp)
-  call freone (el2)
-  call freone (r1)
-  call freone (el1)
+  !7136 call freone (tdop)
+7136 call free (tdop)
+  !  call freone (tqop)
+  call free (tqop)
+  !  call freone (tdopp)
+  call free (tdopp)
+  !  call freone (tqopp)
+  call free (tqopp)
+  !  call freone (el2)
+  call free (el2)
+  !  call freone (r1)
+  call free (r1)
+  !  call freone (el1)
+  call free (el1)
 7137 if (noutpr  .eq.  0) write (unit = kunit6, fmt = 3637) tdop, tqop, tdopp
 3637 format ('+  6th s.m. card.', 3f10.4)
   ! process manufacturer's data ,start with the d-axis **************
@@ -3817,19 +3852,26 @@ subroutine smdat (mtype)
      read (unit = abuff, fmt = 36) mloc, extrs, hico, dsr, dsm, hsp, dsd
 36   format (i2, 8x, 6e10.6)
      go to 7145
-7144 call frefld (voltbc(1))
+     !7144 call frefld (voltbc)
+7144 call free (voltbc)
      if (kill .gt. 0) go to 9999
-     mloc = voltbc(1)
+     mloc = int (voltbc(1))
      nfrfld = 1
-     call freone (extrs)
-     call freone (hico)
-     call freone (dsr)
-     call freone (dsm)
-     call freone (hsp)
-     call freone (dsd)
+     !     call freone (extrs)
+     call free (extrs)
+     !     call freone (hico)
+     call free (hico)
+     !     call freone (dsr)
+     call free (dsr)
+     !     call freone (dsm)
+     call free (dsm)
+     !     call freone (hsp)
+     call free (hsp)
+     !     call freone (dsd)
+     call free (dsd)
 7145 if (mloc .gt. 0 .and. mloc .le. numask) go to 7146
      n167 = 7145
-7147 kill = 181
+     kill = 181
      lstat(19) = n167
      lstat(18) = nchain
      lstat(15) = mloc
@@ -3848,7 +3890,7 @@ subroutine smdat (mtype)
   end do
   if (numask .eq. 1) smext = 1.0
   if (absz (smext) .gt. flzero) go to 410
-420 kill = 107
+  kill = 107
   lstat(19) = 420
   go to 9999
 410 il2 = ib2 + numask
@@ -3903,7 +3945,6 @@ subroutine smdat (mtype)
   do ij = 1, 41
      if (voltbc(ij) .ne. 0.0) go to 1983
   end do
-1500 continue
   if (noutpr .eq. 0)  write (unit = kunit6, fmt = 1700)
 1700 format ('+ blank card terminating mass cards.')
   ! read input card using cimage
@@ -3927,71 +3968,84 @@ subroutine smdat (mtype)
 7220 continue
   read (unit = abuff, fmt = 3657) (voltbc(i), i = 1, nn14)
 3657 format (2x, 2f1.0, 4x, 12f6.0)
-  ioutr = voltbc( 1 )
-  iall = voltbc( 2 )
-  if ( ioutr .gt. 0  .and.  ioutr .le. (nn4+1) )  go  to  7221
-  write (lunit6,3658) ioutr
+  ioutr = int (voltbc(1))
+  iall = int (voltbc(2))
+  if (ioutr .gt. 0 .and. ioutr .le. (nn4 + 1)) go to 7221
+  write (unit = lunit6, fmt = 3658) ioutr
 3658 format (1x, 10('*'),  '  Warning  ', 10('*'), 3x, ' Request for nonexistent output class ',i4, '  neglected.')
   go to 7219
-7221 if ( noutpr .eq. 0 ) write (kunit6, 3659)  ioutr
+7221 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3659) ioutr
 3659 format ('+', 2x, ' Output request card for class ', i4)
-7222 go to (7230, 7240, 7240, 7250, 7210), ioutr
+  !7222 go to (7230, 7240, 7240, 7250, 7210), ioutr
+  select case (ioutr)
+  case (1)
+     go to 7230
+
+  case (2, 3)
+     go to 7240
+
+  case (4)
+     go to 7250
+
+  case (5)
+     go to 7210
+  end select
   !     process flags for outputs after the s.s. solution  ***************
 7210 n16 = 2
   ivar = 0
   do ipl = 3, nn14
-     n6 = voltbc( ipl )
-     if ( iall .eq. 0 )  go to 7213
+     n6 = int (voltbc(ipl))
+     if (iall .eq. 0) go to 7213
      n6 = ipl - 2
      go to 7212
-7213 if ( n6 .gt. -1  .and.  n6 .le. n16 )  go  to  7212
-     write (lunit6,3662) n6, ioutr, k, n16
+7213 if (n6 .gt. -1 .and. n6 .le. n16) go to 7212
+     write (unit = lunit6, fmt = 3662) n6, ioutr, k, n16
      go to 7211
-7212 if ( n6 .eq. 0 )   go   to  7211
+7212 if (n6 .eq. 0) go to 7211
      ivar = ivar + 1
-     if ( ivar .gt. n16 )  go  to  7219
+     if (ivar .gt. n16) go to 7219
      kflag = i26 + n6
-     elp( kflag+25 ) = n6
+     elp(kflag + 25) = n6
   end do
 7211 continue
   go to 7219
 7230 n16 = nn10 - iexc
   n21 = 0
 7231 n17 = n8 + ioutr
-  n21 = ismdat( n17 ) + n21
-  if (  iall .gt. 0 )  go  to  7238
+  n21 = ismdat(n17) + n21
+  if (iall .gt. 0) go to 7238
   do il = 3, nn14
-     n6 = voltbc( il )
-     if ( n6 .le. n16  .and.  n6 .gt. -1 )  go to 7233
-     write (lunit6,3662) n6,ioutr,k,n16
+     n6 = int (voltbc(il))
+     if (n6 .le. n16 .and. n6 .gt. -1) go to 7233
+     write (unit = lunit6, fmt = 3662) n6, ioutr, k, n16
 3662 format (1x, 10('*'), '  Warning  ', 10('*'), 3x, ' Request for nonexistent variable', i4, ' in class', i3, ' of s.m. no. ', i3, ' discarded.', /, ' in this class the above s.m. can have numbers between 1(one) and', i4)
      go to 7232
-7233 if ( n6 .eq. 0 )  go to 7232
+7233 if (n6 .eq. 0) go to 7232
      ism = ism + 1
      n21 = n21 + 1
-     ismdat( n17 ) = ismdat( n17 ) + 1
-     npbuf( n21 ) = n6
+     ismdat(n17) = ismdat(n17) + 1
+     npbuf(n21) = n6
      !     remove duplicate requsts. put all request in an ascending order
-     ipl = ismdat( n17 )  -  1
-     if ( ipl .lt. 1 )  go to 7232
+     ipl = ismdat(n17) - 1
+     if (ipl .lt. 1) go to 7232
      ijn = n21
      do ijk = 1, ipl
         ijl = ijn - 1
-        if ( npbuf(ijl) .lt. npbuf(ijn) ) go to 7232
-        if ( npbuf(ijl) .eq. npbuf(ijn) ) go to 7245
-        n30 = npbuf( ijl )
-        npbuf( ijl ) = npbuf( ijn )
-        npbuf( ijn ) = n30
-7242    ijn = ijn - 1
+        if (npbuf(ijl) .lt. npbuf(ijn)) go to 7232
+        if (npbuf(ijl) .eq. npbuf(ijn)) go to 7245
+        n30 = npbuf(ijl)
+        npbuf(ijl) = npbuf(ijn)
+        npbuf(ijn) = n30
+        ijn = ijn - 1
      end do
      go to 7232
      !     discard duplicate request ****************************************
-7245 write (lunit6, 7223 ) npbuf(ijn), ioutr
+7245 write (unit = lunit6, fmt = 7223) npbuf(ijn), ioutr
 7223 format (1x, 10('*'), '  Warning  ', 10('*'), 3x, ' duplicate request', i5, '  in class', i5, '  discarded.')
      ism = ism - 1
-     ismdat( n17 ) = ismdat( n17 ) - 1
+     ismdat(n17) = ismdat(n17) - 1
      do ijk = ijn, ipl
-7246    npbuf( ijk ) = npbuf( ijk+1 )
+        npbuf(ijk) = npbuf(ijk + 1)
      end do
   end do
 7232 continue
@@ -4014,7 +4068,6 @@ subroutine smdat (mtype)
      n21 = n21 + 1
      npbuf(n21) = il
   end do
-7237 continue
   go to 7234
 7240 n16 = numask
   n21 = nn10 + (ioutr-2) * numask
@@ -4029,7 +4082,7 @@ subroutine smdat (mtype)
   jkm = -1
   ij = 1
 1125 if (ij .eq. 13 .or. ij .eq. 23 .or. ij .eq. 33) go to 1999
-1130 n6 = voltbc(ij)
+1130 n6 = int (voltbc(ij))
   if ( n6 .gt. -1  .and.  n6 .le. 2 )  go to 1155
   write ( lunit6, 1133 )  ij, n6
 1133 format (1x, 10('*'), '  Warning  ', 10('*'), /, '  The output request in column', i4,  '  discarded  because of the wrong number', i4, /, '  the correct number should be 1 or 2 .')
@@ -4044,10 +4097,9 @@ subroutine smdat (mtype)
   if ( ij  .eq.  11 )  jkn = 7
   do jk = 1, 3
      n21 = n21 + 1
-     ismdat( n17 ) = ismdat( n17 ) + 1
+     ismdat(n17) = ismdat( n17 ) + 1
      npbuf(n21) = jk + jkn
   end do
-1277 continue
   if (ij .eq. 3) go to 1950
 1299 ij = ij - 3
   go to 1130
@@ -4081,7 +4133,7 @@ subroutine smdat (mtype)
         ipout = ipout + 1
         n21 = n21  + 1
         ip1 = ip1 + 3
-7253    ismout( ip1 ) = npbuf( n21 )
+        ismout( ip1 ) = npbuf( n21 )
      end do
 7252 n21 = (il-1) * numask + nn10
   end do
@@ -4101,111 +4153,112 @@ subroutine smdat (mtype)
      go to 2185
 2183 nfrfld = 1
      if ( kill  .gt.  0 )   go to 9999
-     call freone ( d11 )
-     n3 = d11
+     !     call freone (d11)
+     call free (d11)
+     n3 = int (d11)
      nfrfld = -2
-     call freone ( d1 )
+     !     call freone (d1)
+     call free (d1)
      bus6 = texta6(1)
      bus5 = texta6(2)
      nfrfld = 1
-     call freone( d11 )
-     iv = d11
+     !     call freone( d11 )
+     call free (d11)
+     iv = int (d11)
      nfrfld = 0
-2185 if ( bus6  .ne.  text1 )   go to 3674
+2185 if (to_lower (bus6) .ne. text1) go to 3674
      n2 = ntotac - n2
-     if ( noutpr  .ne.  0 )   go to 7841
-     if ( bus3  .ne.  text16 ) write (kunit6, 3671)  n2
+     if (noutpr .ne. 0) go to 7841
+     if (to_lower (bus3) .ne. text16 ) write (unit = kunit6, fmt = 3671)  n2
 3671 format ('  End of', i3, '  TACS interface variables.')
      if ( bus5  .eq.  text16 ) write (kunit6, 6743)  n2
 6743 format ('+  end of', i3, '  TACS interface variables.  Parallel')
 7841 ismdat( i30+14 ) = n2
      go to 205
-3674 if ( n3  .ne.  71 )   go to 5431
-     if ( noutpr  .eq.  0 ) write (kunit6, 3670)  bus6
+3674 if (n3 .ne. 71) go to 5431
+     if (noutpr .eq. 0) write (unit = kunit6, fmt = 3670) bus6
 3670 format ('+  TACS controlled excitation.  ', '"', a6, "'", ' . ')
      do m = 1, ktab
-        ndx1 = ilntab( klntab+m )
-        if ( bus6  .eq.  texvec(ndx1) )   go to 3672
+        ndx1 = ilntab(klntab + m)
+        if (bus6 .eq. texvec(ndx1)) go to 3672
      end do
-3676 continue
      n3671 = 3676
      go to 5448
-3672 ismdat( i30+15 ) = m
+3672 ismdat(i30 + 15) = m
      go to 204
-5431 if (n3 .ne. 72)   go to 5460
+5431 if (n3 .ne. 72) go to 5460
      if (noutpr .eq. 0) write (unit = kunit6, fmt = 5436) bus6
 5436 format ('+  TACS controlled mechanical torque. ', '"', a6, '"', ' . ')
      n3671 = 5434
-     if ( i72 .gt. 0 )   go to  5434
+     if (i72 .gt. 0) go to 5434
      i72 = 1
-     ismdat( i30+16 ) = mfirst
+     ismdat(i30 + 16) = mfirst
      !     check for possible overflow *************************************
      nfirst = mfirst - numask
      nsmout = 5 * ismold
-     d8 = nsmout * om2 + 1.0
-     nsmout = d8
-     if ( nfirst .ge. nsmout )    go to 5432
+     d8 = nsmout * om2 + 1.0d0
+     nsmout = int (d8)
+     if (nfirst .ge. nsmout) go to 5432
      kill = 1
-     lstat( 19 ) = 5432
-     lstat( 16 ) = 16
+     lstat(19) = 5432
+     lstat(16) = 16
      go to 9999
 5432 do m = 1, numask
         m1 = mfirst - m
-5433    massex( m1 ) = 0
+        massex(m1) = 0
      end do
      m1 = mfirst
      mfirst = nfirst
      nfirst = m1
-5434 if ( iv .le. 0 .or. iv .gt. numask )  go to 5448
+5434 if (iv .le. 0 .or. iv .gt. numask) go to 5448
      m1 = nfirst - iv
      do m = 1, ktab
         ndx1 = ilntab( klntab+m )
-        if ( bus6  .eq.  texvec(ndx1) )   go to 5455
+        if (bus6 .eq. texvec(ndx1)) go to 5455
      end do
-5442 continue
      n3671 = 5442
 5448 kill = 190
-     lstat( 19 ) = n3671
-     lstat( 14 ) = n3
-     lstat( 15 ) = iv
+     lstat(19) = n3671
+     lstat(14) = n3
+     lstat(15) = iv
      go to 9999
-5455 massex( m1 ) = m
+5455 massex(m1) = m
      go to 204
-5460 if ( noutpr  .eq.  0 ) write (kunit6, 3675)  n3, bus6, iv
+5460 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3675) n3, bus6, iv
 3675 format ('+  Auxiliary s.m. input to TACS.', i3, " '",  a6,  "'", i3)
      lstat(17) = 1
      lstat(19) = 5461
      if (iv .gt. 0) go to 5461
      go  to  202
-5461 if ( n3 .ne. 74  .and.  n3 .ne. 73 )  go to  202
+5461 if (n3 .ne. 74 .and. n3 .ne. 73) go to 202
      !     load address of bus6 into tacs array 'ud1' **********************
      ndy5 = kud1
      do ip = niunrs, niu
-        ndx1 = ilntab( kaliu+ip )
-        m1 = iuty( kiuty+ip )
-        if ( m1 .ne. 92 )   go to 5481
-        if ( bus6 .ne. texvec( ndx1 ) )  go to 5481
-        go  to  5482
+        ndx1 = ilntab(kaliu + ip)
+        m1 = iuty(kiuty + ip)
+        if (m1 .ne. 92) go to 5481
+        if (bus6 .ne. texvec(ndx1)) go to 5481
+        go to 5482
 5481    ndy5 = ndy5 + 5
      end do
-     lstat( 17 ) = -1
-     lstat( 19 ) = 5481
+     lstat(17) = -1
+     lstat(19) = 5481
      go to 202
-5482 ud1( ndy5+2 ) = ntotac + 1
-5462 if ( n3 .eq. 74 )    go  to  5463
-     lstat( 19 ) = 5462
-     if ( iv .gt. n19 )   go  to  202
-     if ( ismdat( i30+13 ) .ne. 0  )   go  to  5463
-     if ( iv .eq. 15 )    go  to  202
+5482 ud1(ndy5 + 2) = ntotac + 1
+     if (n3 .eq. 74) go to 5463
+     lstat(19) = 5462
+     if (iv .gt. n19) go to 202
+     if (ismdat(i30 + 13) .ne. 0) go  to  5463
+     if (iv .eq. 15) go to 202
      iv = -iv
      go  to  5464
-5463 lstat( 19 ) = 5463
-     if ( iv .gt. n18 )   go  to  202
+5463 lstat(19) = 5463
+     if (iv .gt. n18) go to 202
 5464 ntotac = ntotac + 1
-     lstat( 19 ) = 5464
-     if ( ntotac  .gt.  lbstac )  go  to  202
-     ismtac( ntotac ) = iv
-     if ( iprsup  .ge.  2 ) write ( lunit6, 3678 )    ntotac, ( ismtac( n6 ), n6 = 1, ntotac )
+     lstat(19) = 5464
+     if (ntotac .gt. lbstac) go to 202
+     ismtac(ntotac) = iv
+     if (iprsup  .ge.  2 ) write (unit = lunit6, fmt = 3678)    ntotac, (ismtac(n6), n6 = 1, ntotac)
 3678 format (/, ' ntotac =', i4, ' .   (ismtac(j), j = 1, ntotac) follows.', /, (12(1x, i5)))
      go to 204
 202  kill = 108
@@ -4218,7 +4271,7 @@ subroutine smdat (mtype)
 204 continue
 205 if (bus5 .ne. text16) go to 99
   ism = 0
-  fm = -2.0
+  fm = -2.0d0
   go to 1
 99 if (iprsup .le. 0) go to 4793
   write (unit = lunit6, fmt = 4703) numsm, kconst, rmva, rkv, aglin
@@ -4236,7 +4289,6 @@ subroutine smdat (mtype)
      write (unit = lunit6, fmt = 4738) k, ismdat(k1 - 21), elp(n4 - 3), elp(n4 - 1), elp(n4 - 2), elp(n4), elp(n4 - 4), elp(n4 - 6)
 4738 format (/, ' row', 11x, 'isat', 10x, 'sat10', 9x, 'qsat10', 10x, 'sat12', 9x, 'qsat12', 11x, 'rat1', 9x, 'agline', /, (1x, i3, 10x, i2, 3x, 6e15.6))
   end do
-8259 continue
   n2 = 0
   do k = 1, nst
      num2 = ismdat( 30*k-18 ) * 2
@@ -4244,7 +4296,7 @@ subroutine smdat (mtype)
      n2 = n2 + num2 + 1
      write (unit = lunit6, fmt = 4723) (shp(k2), k2 = n2, n3)
 4723 format (/, " 'shfdat' storage cells follow ............", /, (1x, 8e16.7))
-8260 n2 = n3 + num2 * 2
+     n2 = n3 + num2 * 2
   end do
 4793 return
 100 continue
@@ -4253,12 +4305,18 @@ subroutine smdat (mtype)
   if (kolbeg .gt. 0) go to 7313
   read (unit = abuff, fmt = 105) elf, elaf, elfkd, xd, elakd, elkd
   go to 7314
-7313 call freone (elf)
-  call freone (elaf)
-  call freone (elfkd)
-  call freone (xd)
-  call freone (elakd)
-  call freone (elkd)
+  !7313 call freone (elf)
+7313 call free (elf)
+  !  call freone (elaf)
+  call free (elaf)
+  !  call freone (elfkd)
+  call free (elfkd)
+  !  call freone (xd)
+  call free (xd)
+  !  call freone (elakd)
+  call free (elakd)
+  !  call freone (elkd)
+  call free (elkd)
 7314 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3628) elf, elaf, elfkd
   ! read input card using cimage.
   call cimage
@@ -4266,12 +4324,18 @@ subroutine smdat (mtype)
   read (unit = abuff, fmt = 105) elg, elag, elgkq, xq, elakq, elkq
 105 format (6e10.6, 19x, i1)
   go to 7328
-7327 call freone (elg)
-  call freone (elag)
-  call freone (elgkq)
-  call freone (xq)
-  call freone (elakq)
-  call freone (elkq)
+  !7327 call freone (elg)
+7327 call free (elg)
+  !  call freone (elag)
+  call free (elag)
+  !  call freone (elgkq)
+  call free (elgkq)
+  !  call freone (xq)
+  call free (xq)
+  !  call freone (elakq)
+  call free (elakq)
+  !  call freone (elkq)
+  call free (elkq)
 7328 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3637) elg, elag, elgkq
   ! read input card using cimage.
   call cimage
@@ -4279,14 +4343,22 @@ subroutine smdat (mtype)
   read (unit = abuff, fmt = 110) el2, ra, rf, rkd, rg, rkq, r1, el1
 110 format (8e10.6)
   go to 7236
-7235 call freone (el2)
-  call freone (ra)
-  call freone (rf)
-  call freone (rkd)
-  call freone (rg)
-  call freone (rkq)
-  call freone (r1)
-  call freone (el1)
+  !7235 call freone (el2)
+7235 call free (el2)
+  !  call freone (ra)
+  call free (ra)
+  !  call freone (rf)
+  call free (rf)
+  !  call freone (rkd)
+  call free (rkd)
+  !  call freone (rg)
+  call free (rg)
+  !  call freone (rkq)
+  call free (rkq)
+  !  call freone (r1)
+  call free (r1)
+  !  call freone (el1)
+  call free (el1)
 7236 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3687)  el2, ra, rf
 3687 format ('+  7th s.m. card.', 3f10.4)
   elp(i26) = xd * zb
@@ -4338,7 +4410,7 @@ subroutine smpfit (x, ism, fm, lunit6, noutpr)
   real(8) :: a, b, c, d
   real(8) :: d1
   real(8) :: f1, f2, f3, f4
-  real(8) :: h1, h2, h3
+  real(8) :: h2, h3
   real(8) :: u, u2
   !
   !     Unimproved parameters ( resistances )    *   *   *   *   *   *   *

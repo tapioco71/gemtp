@@ -5,8 +5,12 @@
 !
 
 module ovr15c
+  use blkcom
+  use labcom
+  use umcom
   implicit none
-
+  save
+  
 contains
 
   !
@@ -14,9 +18,6 @@ contains
   !
 
   subroutine uminit (n15, reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout, jtype, nodom, jtmtac, histom, omegm, omold, thetam, reamdu, reamds, flxds, flxdr, reamqu,flxqs, flxqr, jcdsat, jcqsat, flxd, flxq, nppair, rotmom, ncld, nclq, jtqout, jomout, jthout, reamqs, epsom, dcoef,kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, umoutp)
-    use blkcom
-    use labcom
-    use umcom
     implicit none
     integer(4), intent(in) :: jcdsat(:)
     integer(4), intent(in) :: jcqsat(:)
@@ -64,6 +65,7 @@ contains
     real(8), intent(in) :: umcurp(:)
     real(8), intent(in) :: umoutp(:)
     real(8), intent(in) :: voltum(:)
+    !
     !  dimension reacl(1), gpar(1), fpar(1), hist(1), umcurp(1)
     !  dimension nodvo1(1), nodvo2(1), jcltac(1), jclout(1)
     !  dimension jtype(1), nodom(1), jtmtac(1), histom(1)
@@ -78,6 +80,7 @@ contains
     !  dimension kumout(1), jumout(1), umoutp(1)
     !  dimension nsubkm(1)
     !  equivalence (kknonl(1), nsubkm(1))
+    !
     integer(4) :: j
     integer(4) :: k, kcl
     integer(4) :: mark, mars, mm
@@ -109,7 +112,7 @@ contains
 7302 format (/, ' Begin  "uminit" . ksubum =', i4)
     !  ncomp is the max number of compensated phases per subnetwork.
     !  n8 is used to determine the value of this ncomp.
-7000 do k = 1, numum
+    do k = 1, numum
        kcl = kcoil(k)
        jcltac(kcl + 2) = 0
        n2 = jcltac(kcl)
@@ -121,7 +124,7 @@ contains
        if (n4 .eq. k) jcltac(kcl+2) = k
     end do
 7010 continue
-7020 do k = 1, numum
+    do k = 1, numum
        kcl = kcoil(k)
        nshare = jcltac(kcl) + jcltac(kcl + 1)
        if (nshare .ne. 0) nshare = 1
@@ -153,7 +156,7 @@ contains
 1010   if (mark .eq. 0 .or. mark .eq. numsub) go to 1515
        if (mark .lt. ntot) go to 7777
        do mm = 2, kpartb
-1314      if (kpsour(mm) .eq. mark) kpsour(mm) = numsub
+          if (kpsour(mm) .eq. mark) kpsour(mm) = numsub
        end do
 1515   if (num .gt. 0) go to 1616
        num = 1
@@ -218,7 +221,7 @@ contains
 3333   if (j .gt. n6) go to 3434
        if (nodvo1(j) .eq. nodvo2(j)) go to 7318
        if (n16 .eq. 0) go to 7316
-7315   numsub = numsub + 1
+       numsub = numsub + 1
        isubeg(numsub) = n15 + 5
 7316   n15 = n15 + 5
        n8 = 1
@@ -260,7 +263,6 @@ contains
        if (n8 .gt. ncomp) ncomp = n8
 7328   if (n16 .eq. 0)  numsub = numsub - 1
     end do
-7330 continue
 9800 if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
 4568 format ('  "Exit  module uminit."')
     return
@@ -273,7 +275,6 @@ end module ovr15c
 !
 
 subroutine over15
-  use ovr15c
   use blkcom
   use labcom
   use smtacs
@@ -284,33 +285,32 @@ subroutine over15
   use tracom
   use bcdtim
   use movcop
+  use ovr15c
   implicit none
-  !  dimension ispum(1)
-  integer(4) :: i, i3, ichar, ijk, ik, ip, iprint
-  integer(4) :: j, jk
-  integer(4) :: k, k1, kprsta, kswpe4
-  integer(4) :: l, lunit6save
-  integer(4) :: m, mpower, mpr
-  integer(4) :: n1, n2, n3, n4, n5, n6, n8, n9, n11, n12, n13, n14, n15, n16
-  integer(4) :: n17, n18, n19, n23, n44, ndx1, ndx2, ndx4, nk1, nk2, ntacs
-  integer(4) :: ncsave, numbco
-  real(8) :: a
-  real(8) :: d1, d2, d6, d11
-  real(8) :: gus1, gus2, gus3, gus4
-  real(8) :: sm
-  equivalence (d2, sm)
-  !  equivalence (spum(1), ispum(1))
-  !  equivalence (moncar(1), knt), (moncar(2), kbase)
-  !  equivalence (moncar(3), ltdelt), (moncar(4), isw)
-  !  equivalence (moncar(5), idist), (moncar(6), itest)
   character(8) :: text1, text2, text3
   character(8) :: text4, text5, text6, text7
   character(8) :: text8, text9, text10, text11, text12
   character(132) :: outlin
+  integer(4) :: i, i3, ichar, ijk, ik, ip, iprint
+  integer(4) :: j, jk
+  integer(4) :: k, k1, kprsta, kswpe4
+  integer(4) :: l, lunit6save
+  integer(4) :: m, moon, mpower, mpr
+  integer(4) :: n1, n2, n3, n4, n5, n6, n8, n9, n11, n12, n13, n14, n15, n16
+  integer(4) :: n17, n18, n19, n23, n44, ndx1, ndx2, ndx4, nk1, nk2, ntacs
+  integer(4) :: ncsave, numbco
+  real(8) :: d1, d2, d6, d11
+  real(8) :: sm
+  equivalence (d2, sm)
+  !  dimension ispum(1)
   !  dimension aupper(13), alower(13)
   !  dimension nsubkm(1)
-  !  equivalence  ( kknonl(1), nsubkm(1) )
-  integer(4) :: moon
+  !
+  !  equivalence (spum(1), ispum(1))
+  !  equivalence (moncar(1), knt), (moncar(2), kbase)
+  !  equivalence (moncar(3), ltdelt), (moncar(4), isw)
+  !  equivalence (moncar(5), idist), (moncar(6), itest)
+  !  equivalence (kknonl(1), nsubkm(1))
   !
   data  text1   / 'tacs  ' /
   data  text4   / 'normal' /
@@ -325,7 +325,7 @@ subroutine over15
   !     transfer to  "top15"  for front end of overlay 15.
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over15."')
-  call move0 (kssfrq(1 :), ntot)
+  call move0 (kssfrq, ntot)
   call top15
   if (kill .gt. 0) go to 9200
   go to 3038
@@ -363,7 +363,7 @@ subroutine over15
      numnvo = numnvo + 1
      if (numnvo .gt. lsiz12) go to 4675
      e(ntot + j) = 0.0d0
-4687 ibsout(numnvo) = ntot + j
+     ibsout(numnvo) = ntot + j
   end do
   go to 1030
 !!!!  4693 do 8288 i = 1, 13
@@ -404,7 +404,6 @@ subroutine over15
      do ik = 2, ntot
         if( bus1 .eq. bus(ik) )  go to 3056
      end do
-3052 continue
      if (noutpr .eq. 0) write (unit = lunit6, fmt = 3053) bus1
 3053 format (5x, 'Request for voltage output of nonexistent node ', "'", a6, "'", ' will be ignored.')
      go to 8288
@@ -424,17 +423,14 @@ subroutine over15
         ip = namebr(j)
         if (texvec(ip) .eq. aupper(i)) go to 8231
      end do
-8222 continue
      do j = 1, inonl
         ip = namenl(j)
         if (texvec(ip) .eq. aupper(i)) go to 8233
      end do
-8225 continue
      do j = 1, kswtch
         ip = namesw(j)
         if (texvec(ip) .eq. aupper(i)) go to 8235
      end do
-8227 continue
      write (unit = lunit6, fmt = 8229 )
 8229 format ('     Request for branch output of nonexistent branch will be ignored')
      go to 8288
@@ -545,7 +541,7 @@ subroutine over15
   if (inonl .gt. n2) n2 = inonl
   do k = 1, n2
      ndx1 = lswtch + k
-7431 write (unit = lunit6, fmt = 7432) k, kmswit(k), kmswit(ndx1), kswtyp(k), kpos(k), node(k), isourc(k), kbus(k), mbus(k), nonlk(k), nonlm(k)
+     write (unit = lunit6, fmt = 7432) k, kmswit(k), kmswit(ndx1), kswtyp(k), kpos(k), node(k), isourc(k), kbus(k), mbus(k), nonlk(k), nonlm(k)
   end do
 7432 format (5x, 11i10)
 7436 iprint = 11
@@ -707,7 +703,7 @@ subroutine over15
      ndx1 = n17 + i
      ndx2 = n19 + i
      ibrnch(nc) = ispum(ndx1) + n8
-3221 jbrnch(nc) = ispum(ndx2) + n8
+     jbrnch(nc) = ispum(ndx2) + n8
   end do
 3224 numbco = nc - nv
   lstat(31) = nc
@@ -734,7 +730,7 @@ subroutine over15
      ndx1 = lsiz12 + ndx1
      xmax(ndx1) = fltinf
      ndx1 = lsiz12 + ndx1
-1064 xmax(ndx1) = 0.0
+     xmax(ndx1) = 0.0d0
   end do
 1061 call runtym (d1, d2)
   limstp = kprchg(indstp)
@@ -805,7 +801,7 @@ subroutine over15
   n1 = 0
   if (nenerg .ne. 0) n1 = 1
   kprsta = 1
-  if (nenerg.gt.0) kprsta = 0
+  if (nenerg .gt. 0) kprsta = 0
   go to 3152
 3119 k = k + 1
   j = k + 1
@@ -925,7 +921,7 @@ subroutine over15
   do ip = 1, 99999
      read (unit = 79, fmt = 8927, end = 8644) outlin
 8927 format (a132)
-8936 write (unit = lunit6, fmt = 8927) outlin
+     write (unit = lunit6, fmt = 8927) outlin
   end do
 8644 if (kswtch .le. 0) go to 8719
   n11 = 0
@@ -991,7 +987,7 @@ subroutine over15
 710 if (iprsup .ge. 1) write (unit = lunit6, fmt = 1077) kprchg, multpr
 1077 format (/, ' Begin del-t loop at 1077.  kprchg, multpr=', /, (1x, 12i10))
   call move0 (nextsw(1 :), kswtch)
-1079 if (iprsup .ge. 1) write (unit = lunit6, fmt = 76101) (i, iform(i), node(i), crest(i), time1(i), time2(i), tstart(i), sfreq(i), i = 1, kconst)
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 76101) (i, iform(i), node(i), crest(i), time1(i), time2(i), tstart(i), sfreq(i), i = 1, kconst)
 76101 format (/, ' Source table.', /, 5x, 'row', 3x, 'iform', 4x, 'node', 10x, 'crest', 10x, 'time1', 10x, 'time2', 9x, 'tstart', 10x, 'sfreq', /, (3i8, 5e15.6))
   if (iprsup .gt. 0) write (unit = lunit6, fmt = 73899)
 73899 format (/, ' n.l. elem table upon entering time-step loop', /, 5x, 'row', 2x, 'nltype', 3x, 'nonlk', 3x, 'nonlm', 2x, 'nonlad', 2x, 'nonle', 9x, 'vecnl1', 3x, 'anonl', 4x, 'curr', 8x, 'vnonl')
@@ -1044,11 +1040,13 @@ subroutine top15
   use tracom
   use movcop
   implicit none
+  !
   !  dimension nsubkm(1)
   !  equivalence (kknonl(1), nsubkm(1))
   !  equivalence (lstat(14), knum)
+  !
   integer(4) :: i, il
-  integer(4) :: k, kntbr, knum
+  integer(4) :: k, kntbr
   integer(4) :: l
   integer(4) :: mark
   integer(4) :: n2, n3, n15, nn1, nn15, nn16, numc
@@ -1073,7 +1071,7 @@ subroutine top15
   a = 1.0d0
   if (ci1.lt.0.) a = ck1
   if (ck(i) .ge. 0.0) go to 25903
-  l = cik(i)
+  l = int (cik(i))
   a = 1.0 / eta(l)
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 24903) i, l, k, a, ck1, ci(i)
 24903 format (/, ' freq dep  2 / m * z  at 24903   ', 3i10, 3e20.6)
@@ -1088,7 +1086,7 @@ subroutine top15
      if (iform(k) .eq. 17) crest(k) = crest(k + 1)
      if (iabs (iform(k)) .ne. 14) go to 902
      sfreq(k) = sfreq(k) * twopi
-     if (tstart(k) .lt. 0.) tstart(k) = 0.
+     if (tstart(k) .lt. 0.0) tstart(k) = 0.0d0
 902  if (iabs (iform(k)) .ne. 16) go to 906
      ck1 = tstop(k + 1)
      tstop(k + 1) = 0.
@@ -1117,11 +1115,11 @@ subroutine top15
   if (inonl .eq. 0) go to 9200
   call move0 (cursub(1 :), inonl)
   call move (kpsour(1 :), kssfrq(1 :), ntot)
-7209 do k = 1, inonl
+  do k = 1, inonl
      nlsub(k) = 0
      if (nltype(k) .lt. 0) go to 7248
      n15 = n15 + 5
-7234 nsubkm(n15) = n15
+     nsubkm(n15) = n15
      nsubkm(n15 + 1) = nonlk(k)
      nsubkm(n15 + 2) = iabs (nonlm(k))
      nsubkm(n15 + 3) = k
@@ -1135,7 +1133,7 @@ subroutine top15
      nlsub(k) = numsub
      if (mark .eq. 0) go to 6789
      do il = 2, kpartb
-1234    if (kssfrq(il) .eq. mark) kssfrq(il) = numsub
+        if (kssfrq(il) .eq. mark) kssfrq(il) = numsub
      end do
      go to 6789
 7777 kill = 229
@@ -1163,7 +1161,6 @@ subroutine top15
   do k = 2, kpartb
      if (kssfrq(k) .gt. ntot) kssfrq(k) = 0
   end do
-7251 continue
   if (iprsup .ge. 7) write (unit = *, fmt = *) ' after tamper..  kssfrq(1 : ntot) =', (kssfrq(k), k = 1, ntot)
   call move (kssfrq(1 :), kpsour(1 :), ntot)
 9200 call move0 (kode(1 :), ntot)
@@ -1188,7 +1185,7 @@ subroutine smout
   character(8) :: text1, text2, texta(15), textb(3)
   !  dimension texta(15), digit(10), textb(3), busvec(1)
   integer(4) :: i, i5, i30, icnt, ip, ip1
-  integer(4) :: jb, jk, jk1, jout
+  integer(4) :: jb, jk, jk1
   integer(4) :: l, ll5, ll6
   integer(4) :: m
   integer(4) :: n, n1, n2, n5, n6, n7, n10, n15
@@ -1268,7 +1265,7 @@ subroutine smout
         text2 = texta(m)
         jb = 0
         call namea6 (text2, jb)
-4178    ismout(jk1) = jb
+        ismout(jk1) = jb
      end do
 21   do n7 = 1, 3
         i5 = i5 + 1
@@ -1293,7 +1290,7 @@ subroutine smout
            jb = 0
            text2 = busvec(1)
            call namea6 (text2, jb)
-4217       ismout(jk1) = jb
+           ismout(jk1) = jb
         end do
      end do
 4224 continue
@@ -1309,7 +1306,7 @@ subroutine smout
   nsmout = jk
   d12 = nbyte(4)
   d12 = (3 * nsmout) * d12 / nbyte(3)
-  msmout = d12 + 1.0
+  msmout = int (d12 + 1.0d0)
   return
 end subroutine smout
 

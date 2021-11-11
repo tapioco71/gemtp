@@ -9,10 +9,10 @@
 !
 
 subroutine ntacs3
-  use tacsto
   use blkcom
   use tacsar
   use labcom
+  use tacsto
   implicit none
   !  common  / c0b002 /   ykm   (   1 )    ! wsm  +  thl manual modification for bpa emtp
   !  common  / c0b099 /   tclose(   1 )    ! wsm  +  thl manual modification for bpa emtp
@@ -24,7 +24,7 @@ subroutine ntacs3
      i2 = kxtcs + nuk + i
      xtcs(i2) = flzero
      i1 = iuty(kiuty + i)
-     k = ud1(i5 + 2)
+     k = int (ud1(i5 + 2))
      i6 = iabs (kpos(k))
      i3 = i1-89
      !     go to(4090, 4091, 4092, 4093, 4080, 4080), i3
@@ -50,8 +50,6 @@ subroutine ntacs3
      end select
      i5 = i5 + 5
   end do
-4080 continue
-5000 continue
   etime = t
   to = 9000
   call elec

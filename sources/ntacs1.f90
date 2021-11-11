@@ -14,18 +14,14 @@ subroutine ntacs1
   use tacsar
   use labcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !  include 'tacsto.ftn'
-  !  include 'blkcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  !  include 'tacsar.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  !  include 'labcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  !equivalence (moncar(71), ltacst), (moncar(83), ntcsex)      ! wsm + thl manual modification for bpa emtp
+  !equivalence (moncar(71), ltacst), (moncar(83), ntcsex)
   !  integer(4) :: maxniu, maxnuk
   !  equivalence (lstat(67), maxniu)
   !  equivalence (lstat(68), maxnuk)
+  !
   ntcsex = 1
   do i = 1, 23
-     sptacs(i) = 0.0
+     sptacs(i) = 0.0d0
   end do
 !  lstat(48)=0    ! wsm + thl manual modification for bpa emtp
 !  moncar(32)=0       ! wsm + thl manual modification for bpa emtp

@@ -14,18 +14,13 @@ subroutine ntacs1b
   use tacsto
   use labcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !  include 'tacsto.ftn'
-  !  include 'blkcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  !  include 'tacsar.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  !  include 'labcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  !  common  / c0b063 /   texvec(1000 )                       ! wsm + thl manual modification for bpa emtp
-  !  character*6  texvec                                      ! wsm + thl manual modification for bpa emtp
-  !equivalence (lstat(67), maxniu)
-  !equivalence (lstat(68), maxnuk)
-!  equivalence    ( moncar(  5),  ioutcs )                  ! wsm + thl manual modification for bpa emtp
-  character(6) :: hus1                                         ! wsm + thl manual modification for bpa emtp
+  !  character*6  texvec
+  !  equivalence (lstat(67), maxniu)
+  !  equivalence (lstat(68), maxnuk)
+  !  equivalence    ( moncar(  5),  ioutcs )
+  character(6) :: hus1
   character(8) :: real8
+  !
   sptr = sptr - 1
   isto(sptr) = env
   env = datenv

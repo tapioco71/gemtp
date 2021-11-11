@@ -26,7 +26,7 @@ subroutine over14
 4567 format ('  "Begin module over14."')
   !     define "kentnb" and "nbhdsw" vectors for module "switch"
   !     of overlay 16 (called by "subts1") via  "do 2472":
-1310 n6 = 0
+  n6 = 0
   if (kswtch .le. 0) go to 2483
   mswtch = lswtch * 3
   do j = 1, kswtch
@@ -43,7 +43,6 @@ subroutine over14
         nbhdsw(n6) = i
      end do
   end do
-2472 continue
   kentnb(kswtch + 1) = n6 + 1
 2483 continue
   !     initialize counters for the -666 branches    *   *   *   *   *   *
@@ -132,11 +131,11 @@ end subroutine over14
 !
 
 subroutine last14
-  use fdqlcl
   use blkcom
   use labcom
   use tracom
   use movcop
+  use fdqlcl
   implicit none
   integer(4) :: i, i1, iadrs, ibi, ibj, ibrj, icb, icbscn, icu, icucpl, ifd, ihist, ij
   integer(4) :: ik, ioff1, ioff2
@@ -147,7 +146,7 @@ subroutine last14
   integer(4) :: m, mabs, mark, marm, mm, mnode, mp
   integer(4) :: n1, n2, n3, n4, n4j, n5, n6, n7, n9, nk1, nn, nn11, nn12, nnk
   integer(4) :: nnn1, nnq1, nnq2, nnq3, np, nphs, nphs2, nq, nq0, nq1, nq2, nq3, nq4
-  integer(4) :: nq5, nq6, nt, nteq, nticpl
+  integer(4) :: nq5, nq6, nteq, nticpl
   real(8) :: apidt, b, cj, d1, d2, d18, dblpr1, dblpr2, dblpr3, dblpr4, dj
   real(8) :: dyk
   real(8) :: fac1, fac3, fac4, fac5
@@ -158,11 +157,13 @@ subroutine last14
   real(8) :: sk1i, sk1r, sll, sumd, sume
   real(8) :: xll
   real(8) :: yll, yx
+  !
   !  dimension cblhst(1)
-  !  equivalence (cnvhst(1), cblhst(1))
   !  dimension infdli(1)
-  !  equivalence (namebr(1), infdli(1))
   !  dimension  wk1(1)
+  !
+  !  equivalence (cnvhst(1), cblhst(1))
+  !  equivalence (namebr(1), infdli(1))
   !  equivalence (semaux(1), wk1(1))
   !
   !     Beginning of formation of the real admittance matrix (y)
@@ -262,7 +263,7 @@ subroutine last14
   stop
 5337 lcbl = 0
   lmode = 0
-8893 koff21 = koff20 + nqtt
+  koff21 = koff20 + nqtt
   koff22 = koff21 + lbrnch
   koff23 = koff22 + nqtw
   koff24 = koff23 + nqtw
@@ -284,14 +285,14 @@ subroutine last14
   nq0 = infdli(inoff1 + kq)
   nnq1 = infdli(inoff3 + kq)
   do iq = 1, nphs2
-     nteq = wk1(koff20 + icb)
+     nteq = int (wk1(koff20 + icb))
      sume = 0.0d0
      sumd = sconst(nq1)
      if (iprsup .gt. 0) write (unit = *, fmt = 4839)
 4839 format('  i  nteq  nnq1  nnq2  nnq3   nq4   nq5   nq6        qk0(i)    cj(ntermq)    dj(ntermq)    ej(ntermq)      sumdj(i)      sumej(i)')
      jkl = 0
      icbscn = lhist + icb
-     nticpl = cblhst(icbscn)
+     nticpl = int (cblhst(icbscn))
      icucpl = icucpl + nticpl
      icucpl  = icucpl * 3
      nk1 = lhist + ifd + icucpl - nticpl * 3
@@ -618,7 +619,7 @@ subroutine last14
   if (kconst .le. 1) go to 2813
   do i = 2, kconst
      if (iform(i) .ne. 18) go to 2808
-     n6 = time1(i)
+     n6 = int (time1(i))
      if (n6 .eq. l) go to 4308
   end do
 2808 continue

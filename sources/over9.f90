@@ -22,11 +22,11 @@ subroutine over9
   integer(4) :: i, icas, ii, ik, il, istate, isubs1, isubs2, iswbob
   integer(4) :: j, j1, jbrt, jj, jsw
   integer(4) :: k, k1, kf
-  integer(4) :: l, lastm1
+  integer(4) :: l, lastm1, locatn(20, 20)
   integer(4) :: m, ma
   integer(4) :: n1, ndx1, ndx2, ndx3, nk, nkr, nx
   !
-  locatn(i, j) = (j * j - j) / 2 + i
+  locatn(i, j) = j * (j - 1) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over9."')
   if(iprsup .gt. 0) write (unit = lunit6, fmt = 1001) kconst, last
@@ -60,7 +60,6 @@ subroutine over9
         k1 = iabs (node(k))
         if (bus(k1) .eq. texvec(1)) go to 3131
      end do
-1016 continue
      n1 = 1
      kconst = kconst + 1
      crest(kconst) = (fixbu7(i) + fixbu9(i)) * 0.5d0
@@ -68,7 +67,6 @@ subroutine over9
 1911 do j = 2, ntot
         if (bus(j) .eq. texvec(1)) go to 5757
      end do
-4949 continue
      kill = 500
      go to 9999
 5757 node(kconst) = j
@@ -94,7 +92,6 @@ subroutine over9
         k1 = iabs (node(k))
         if (bus(k1) .eq. fixbu2(i)) go to 3333
      end do
-1036 continue
      n1 = 2
      kconst = kconst + 1
      crest(kconst) = crest(kconst - 1)
@@ -106,7 +103,6 @@ subroutine over9
         k1 = iabs (node(k))
         if (bus(k1) .eq. fixbu3(i)) go to 3535
      end do
-1056 continue
      n1 = 3
      kconst = kconst + 1
      crest(kconst) = crest(kconst-1)
@@ -222,7 +218,7 @@ subroutine over9
   lastm1 = last - 1
   do i = next, lastm1
      isubs1 =  iofkor+i
-1570 korder(isubs1) = i + 1
+     korder(isubs1) = i + 1
   end do
   isubs1 = iofkor + last
   korder(isubs1) = 0
@@ -474,7 +470,7 @@ subroutine over9
   lstat(18) = 9
 9990 if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
 4568 format ('  "Exit  module over9." ')
-99999 return
+  return
 end subroutine over9
 
 !

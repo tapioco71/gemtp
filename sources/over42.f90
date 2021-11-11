@@ -36,90 +36,97 @@ subroutine over42
 10 format ( 3e8.0, 2i8 )
   go to 2105
 2103 nfrfld = 1
-  call freone ( freq )
-  call freone ( vbase )
-  call freone ( pbase )
-  call freone ( d11 )
+  !  call freone (freq)
+  call free (freq)
+  !  call freone (vbase)
+  call free (vbase)
+  !  call freone (pbase)
+  call free (pbase)
+  !  call freone (d11)
+  call free (d11)
   ipnch = d11
-  call freone ( d11 )
+  !  call freone (d11)
+  call free (d11)
   kthird = d11
-  if ( kill  .gt.  0 )   go to 9200
-2105 if ( freq  .eq.  0.0 )   go to 2050
-  if ( freq  .ne.  88. )   go to 7219
+  if (kill .gt. 0) go to 9200
+2105 if (freq .eq. 0.0d0) go to 2050
+  if (freq .ne. 88.0d0) go to 7219
   !     connect with routine written by prof. ned mohan of the
   !     university of minnesota.   this generates the current
   !     vs. flux points needed for  type-96  hysteretic inductor
   !     modeling.
-  write (kunit6, 7215)
-7215 format ( 34h+freq=88 requests hysteresis data.  )
+  write (unit = kunit6, fmt = 7215)
+7215 format ('+freq=88 requests hysteresis data.')
   call hysdat
-  if ( kill  .gt.  0 )   go to 9200
+  if (kill .gt. 0) go to 9200
   go to 5
-7219 if ( freq  .ne.  77. )   go to 7228
+7219 if (freq .ne. 77.0d0) go to 7228
   !     connect with routine written by dr. vladimir brandwajn
   !     of ontario hydro.  this generates emtp data cards for
   !     zno  surge arresters using least squares fitting.
-  write (kunit6, 7221)
-7221 format ( 39h+freq=77 requests  zno  data generator.  )
+  write (unit = kunit6, fmt = 7221)
+7221 format ('+freq=77 requests  Zno  data generator.')
   call arrdat
-  if ( kill  .gt.  0 )   go to 9200
+  if (kill .gt. 0) go to 9200
   go to 5
-7228 write (kunit6, 15)  freq, vbase, pbase, ipnch
-15 format ( 13h+misc. const.  ,  2x, 3e10.3, i5  )
-  if ( freq  .eq.  -1. )   go to 19
-  if ( vbase  .gt.  0.0 )   go to 18
+7228 write (unit = kunit6, fmt = 15) freq, vbase, pbase, ipnch
+15 format ('+Misc. const.  ', 2x, 3e10.3, i5)
+  if (freq .eq. -1.0d0) go to 19
+  if (vbase .gt. 0.0d0) go to 18
 16 kill = 90
   flstat(14) = vbase
   flstat(15) = pbase
   lstat(19) = 16
   go to 9200
-18 if ( pbase  .le.  0.0 )   go to 16
-  flux(1)=0.0
-  currr(1)=0.0
+18 if (pbase .le. 0.0d0) go to 16
+  flux(1) = 0.0d0
+  currr(1) = 0.0d0
   omegah = twopi * freq
   vfact = sq2 * vbase / omegah
-  cfact=pbase*1000.0/vbase
+  cfact = pbase * 1000.0d0 / vbase
   dltat = picon
   slope1 = fltinf
-  c1old = 0.0
-  vold = 0.0
+  c1old = 0.0d0
+  vold = 0.0d0
   go to 20
-19 if ( pbase  .le.  0.0 )   pbase = 1.0
-  if ( vbase  .le.  0.0 )   vbase = 1.0
+19 if (pbase .le. 0.0d0) pbase = 1.0d0
+  if (vbase .le. 0.0d0) vbase = 1.0d0
   vfact = pbase
   cfact = vbase
-  c1old = - 1.0/fltinf
+  c1old = - 1.0d0 / fltinf
   n = 0
   !     read input card using cimage
 20 call cimage
-  if ( kolbeg  .gt.  0 )   go to 2113
+  if (kolbeg .gt. 0) go to 2113
   read (unit = abuff, fmt = 23) c1, v
-23 format ( 2e16.0 )
+23 format (2e16.0)
   go to 2115
 2113 nfrfld = 1
-  call freone ( c1 )
-  if ( c1  .eq.  9999. )   go to 2115
-  call freone ( v )
-  if ( kill  .gt.  0 )   go to 9200
-2115 if ( c1  .eq.  9999. )   go to 100
-  if ( freq  .gt.  0.0 )   go to 41
-  write (kunit6, 38)  c1, v
-38 format ( 14h+(i, l) point.  , 2x, 2e13.5  )
+  !  call freone (c1)
+  call free (c1)
+  if (c1 .eq. 9999.0d0)   go to 2115
+  !  call freone ( v )
+  call free (v)
+  if ( kill .gt. 0) go to 9200
+2115 if (c1 .eq. 9999.0d0) go to 100
+  if (freq .gt. 0.0d0) go to 41
+  write (unit = kunit6, fmt = 38) c1, v
+38 format ('+(i, l) point.  ', 2x, 2e13.5)
   go to 49
-41 write (kunit6, 45)  c1, v
-45 format ( 14h+(i, v) point.  ,  2x, 2e13.5  )
+41 write (unit = kunit6, fmt = 45) c1, v
+45 format ('+(i, v) point.  ', 2x, 2e13.5)
 49 n = n + 1
-  if( n .le. maxpt )  go to 70
+  if (n .le. maxpt) go to 70
   kill = 69
   lstat(12) = maxpt
   lstat(19) = 70
   go to 9200
-70 if ( freq  .gt.  0.0 )   go to 74
-  if ( c1  .le.  c1old )   go to 75
-  if ( v  .le.  0.0 )   go to 75
+70 if (freq .gt. 0.0d0) go to 74
+  if (c1 .le. c1old) go to 75
+  if (v .le. 0.0d0) go to 75
   go to 90
-74 if ( v  .gt.  vold )   go to 80
-75 lstat(12) = n-1
+74 if (v .gt. vold) go to 80
+75 lstat(12) = n - 1
   flstat(13) = c1
   flstat(14) = c1old
   flstat(15) = v
@@ -129,14 +136,12 @@ subroutine over42
   go to 9200
 80 if( c1 .le. c1old )  go to 75
   slope2  =  (v-vold) / (c1-c1old)
-  if ( slope1  .ge.  slope2 )   go to 90
-  write(lunit6,82)
-82 format(/, ' ************************************************************************************************************************ ', /, 1x)
-  write(lunit6,86)
-86 format(' Warning.  The last data point causes the v-i curve to deviate from the expected convex form.  That is the slope  ', /, &
-        ' of this section is greater than that of the previous section.  Although this is not considered an error, this    ', /, &
-        ' condition warrents double checking the data for accuracy. ')
-  write(lunit6,82)
+  if (slope1 .ge. slope2) go to 90
+  write (unit = lunit6, fmt = 82)
+82 format (/, ' ************************************************************************************************************************ ', /, 1x)
+  write (unit = lunit6, fmt = 86)
+86 format(' Warning.  The last data point causes the v-i curve to deviate from the expected convex form.  That is the slope  ', /, ' of this section is greater than that of the previous section.  Although this is not considered an error, this    ', /, ' condition warrents double checking the data for accuracy. ')
+  write (unit = lunit6, fmt = 82)
 90 slope1=slope2
   c1old=c1
   vold = v
@@ -306,8 +311,8 @@ subroutine over42
 1029 write (lunit6, 1031)
 1031 format ( //,1x)
   go to 5
-2050 write (kunit6, 2055)
-2055 format ( 45h+blank card terminating all saturation cases.    )
+2050 write (unit = kunit6, fmt = 2055)
+2055 format ('+Blank card terminating all saturation cases.')
   call interp
   lastov = nchain
   nchain = 51
@@ -445,12 +450,13 @@ subroutine hysdat
   if ( itype  .ne.  0 )     go to 3645
   if ( level  .ne.  0 )     go to 3645
   if ( ipunch .ne.  0 )     go to 3645
-  write (kunit6, 3622)
-3622 format ( 45h+blank card ending hysteresis-curve requests.  )
+  write (unit = kunit6, fmt = 3622)
+3622 format ('+Blank card ending hysteresis-curve requests.')
   call interp
   go to 9200
 3628 nfrfld = 3
-  call frefld ( voltbc(1) )
+  !  call frefld (voltbc(1))
+  call free (voltbc)
   itype = voltbc(1)
   level = voltbc(2)
   ipunch = voltbc(3)
@@ -473,30 +479,32 @@ subroutine hysdat
 160 format ( 10e8.0 )
   go to 3695
 3682 nfrfld = 1
-  call freone ( cursat )
-  call freone ( flxsat )
-  if ( kill  .gt.  0 )   go to 9200
-3695 write (kunit6, 3703)  cursat, flxsat
-3703 format ( 17h+cursat, flxsat =,  2e13.4 )
-  n1=itop(itype,level)
-  n2=ibot(itype,level)
-  scalef=flxsat/b(n2-1)
-  scalei=cursat/h(n2-1)
+  !  call freone (cursat)
+  call free (cursat)
+  !  call freone (flxsat)
+  call free (flxsat)
+  if (kill .gt. 0) go to 9200
+3695 write (unit = kunit6, fmt = 3703) cursat, flxsat
+3703 format ('+cursat, flxsat =', 2e13.4)
+  n1 = itop(itype, level)
+  n2 = ibot(itype, level)
+  scalef = flxsat / b(n2 - 1)
+  scalei = cursat / h(n2 - 1)
   !     rescale the loop and write to the punch unit.
-  write (lunit6, 3718)
-3718 format ( /, 20x,  39hderived type-96 characteristic follows:, /,  20x,  9x,   7hcurrent,  12x,  4hflux  )
-  do i=n1,n2
-     h(i)=scalei*h(i)
-     b(i)=scalef*b(i)
-     write (lunit6,175) h(i),b(i)
-175  format ( 20x,  2e16.7 )
-     if ( ipunch  .eq.  0 ) write (lunit7, 178)  h(i), b(i)
-178  format ( 2e16.8 )
+  write (unit = lunit6, fmt = 3718)
+3718 format (/, 20x, 'Derived type-96 characteristic follows:', /, 20x, 9x, 'current', 12x, 'flux')
+  do i = n1, n2
+     h(i) = scalei * h(i)
+     b(i) = scalef * b(i)
+     write (unit = lunit6, fmt = 175) h(i), b(i)
+175  format (20x, 2e16.7)
+     if (ipunch .eq. 0) write (unit = lunit7, fmt = 178) h(i), b(i)
+178  format (2e16.8)
 200 end do
-  d1 = 9999.
-  write (lunit6, 175)  d1
-  if ( ipunch  .eq.  0 ) write (lunit7, 178)  d1
-  write (lunit6, 175)
+  d1 = 9999.0d0
+  write (unit = lunit6, fmt = 175) d1
+  if (ipunch .eq. 0) write (unit = lunit7, fmt = 178) d1
+  write (unit = lunit6, fmt = 175)
   go to 3548
 9200 return
 end subroutine hysdat
@@ -559,8 +567,8 @@ subroutine arrdat
   read (unit = abuff, fmt = 1220) nexp, iphase, d66, iprzno, vref, vflash
 1220 format( 2i12, e12.0, i12, 2e12.0 )
   if( nexp .ne. 0 .or. iphase .ne. 0 )  go  to  1232
-  write (kunit6, 1226)
-1226 format (  32h+blank card ends arrester cases.   )
+  write (unit = kunit6, fmt = 1226)
+1226 format ('+Blank card ends arrester cases.')
   go to 9900
 1232 write (kunit6, 1235) nexp,iphase,iprzno,vref,vflash
 1235 format( 10h+arrester., 3i4, 2e12.3 )
@@ -683,8 +691,8 @@ subroutine arrdat
   f = f + b * b
   g = g + a * b
   go  to  1520
-1620 write (kunit6, 1621)
-1621 format ( 32h+blank card ends characteristic.   )
+1620 write (unit = kunit6, fmt = 1621)
+1621 format ('+Blank card ends characteristic.')
   call interp
   if ( iprzno  .ge.  2 ) write (lunit6, 1622)  ( c(ip), v(ip), ip=n6, nk )
 1622 format (' Input data after conversion to a log-log plane  ==================  ', /, 23x,  7hcurrent, &

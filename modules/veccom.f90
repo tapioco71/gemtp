@@ -103,7 +103,7 @@ contains
     !     Also needed are uncounted Hollerith.  Parallel to "VECISV".
     real(8), intent(inout), target :: farray(:)
     integer(4), intent(in) :: n2, n13
-    integer(4) :: k, n4, n5, n14
+    integer(4) :: k, n4, n14
     integer(4), pointer :: temp(:)
     !  common /veccom/ kntvec, kofvec(20)
     !
@@ -148,7 +148,7 @@ contains
     temp => karray(n4 :)
     if (associated (temp)) then
        do k = 1, n13
-          temp(k) = farray(k)
+          temp(k) = transfer (farray(k), temp(k))
           n4 = n4 + 1
        end do
        nullify (temp)

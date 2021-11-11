@@ -202,7 +202,7 @@ contains
     complex(16), intent(in) :: x
     real(8) :: valueOut
     !
-    valueOut = imag (x)
+    valueOut = real (imag (x), kind (valueOut))
   end function aimagz
 
   function realz (x) result(valueOut)
@@ -210,7 +210,7 @@ contains
     complex(16), intent(in) :: x
     real(8) :: valueOut
     !
-    valueOut = real (x)
+    valueOut = real (x, kind (valueOut))
   end function realz
 
   function cabsz (x) result(valueOut)
@@ -218,7 +218,7 @@ contains
     complex(16), intent(in) :: x
     real(8) :: valueOut
     !
-    valueOut = abs (x)
+    valueOut = real (abs (x), kind (valueOut))
   end function cabsz
 
   !     This module serves to provide selected double-precision

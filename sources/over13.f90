@@ -6,7 +6,8 @@
 
 module ovr13mod
   implicit none
-
+  save
+  
 contains
 
   !
@@ -26,7 +27,7 @@ contains
     !     of inversion (m=0).
     real(8), intent(out) :: a(:)
     integer(4), intent(in) :: m, n
-    integer(4) :: i, i0, i1, i2, ij, ik
+    integer(4) :: i, i1, i2, ij, ik
     integer(4) :: j
     integer(4) :: k
     integer(4) :: l
@@ -61,7 +62,7 @@ contains
     l = 0
     do i = i1, i2
        l = l + 1
-6      a(i) = a(i) + b(l) * h2
+       a(i) = a(i) + b(l) * h2
     end do
     if (k .lt. j) go to 4
     i = ik + j
@@ -71,7 +72,7 @@ contains
 7   i = ij
     do l = 1, j
        i = i + 1
-8      a(i) = b(l)
+       a(i) = b(l)
     end do
     go to 4
     !                                   end k-loop
@@ -117,30 +118,34 @@ end module ovr13mod
 !
 
 subroutine over13
-  use ovr13mod
-  use fdqlcl
   use blkcom
   use labcom
   use tracom
   use movcop
   use ovr44c, only: cominv
+  use freedom
+  use strcom
+  use ovr13mod
+  use fdqlcl
   implicit none
   !  dimension cblhst(1)
-  !  equivalence (cnvhst(1), cblhst(1))
-  !  dimension infdli(1)
-  !  equivalence (namebr(1), infdli(1))
   !  dimension cmr(1), cmi(1), vim(1)
-  !  equivalence (volt(1), vim(1))
-  !  equivalence (kks(1), cmr(1)), (kknonl(1), cmi(1))
+  !  dimension infdli(1)
   !  dimension ekreal(50), ekimag(50), emreal(50), emimag(50)
   !  dimension closev(50), farv(50), closei(50), fari(50)
-  !  equivalence (lstat(14), mdrive)
   !  dimension w1(1)
-  !  equivalence (ykm(1), w1(1))
   !  dimension wk1(1)
+  !
+  !  equivalence (cnvhst(1), cblhst(1))
+  !  equivalence (namebr(1), infdli(1))
+  !  equivalence (volt(1), vim(1))
+  !  equivalence (kks(1), cmr(1)), (kknonl(1), cmi(1))
+  !  equivalence (lstat(14), mdrive)
+  !  equivalence (ykm(1), w1(1))
   !  equivalence (semaux(1), wk1(1))
+  !
   character(8) :: text1, text2
-  integer(4) :: i, i1, iaddrs, iadrs, ibadd, ibf, icbr, idt, ier, ifa, ifd
+  integer(4) :: i, i1, iadrs, ibadd, ibf, icbr, idt, ier, ifa, ifd
   integer(4) :: iflag, ikf, ii, iip, im, ioff1, ioff2, ioff3, ioff4, ioff5
   integer(4) :: ioff6, ioff7, ioff8, ip, ipp, iprcbl, iprint, iq, iqa, isd
   integer(4) :: isd1, isecti, isfd, itadd, itam, ivbr, ix, iy, iz
@@ -148,12 +153,12 @@ subroutine over13
   integer(4) :: k, ka, kadt, kcbl, kf, kj, kmode, kmv, koff11, koff12, kq, kqk
   integer(4) :: kqv, kqvq, kv, kvd, ky
   integer(4) :: l, la, lg, lj, lj1, ll, ll0, ll1, lq, lqv
-  integer(4) :: m, marti, mdrive
+  integer(4) :: m, marti
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15
-  integer(4) :: n16, n17, n18, n19, ndx1, ndx2, nk1, nk7, nk8, nkp, nl, nl1
+  integer(4) :: n16, n17, n18, n19, n20, ndx1, ndx2, nk1, nk7, nk8, nkp, nl, nl1
   integer(4) :: nn17, nn5, nn6, nphs, nphs2, nq1, nq2, nq3, nra, nrf, nrz, ns1
   integer(4) :: ntaui, nteq
-  real(8) :: a, absfk, absfm, ai, aki, akr, amagk, amak, amagm, angk, angm, aph
+  real(8) :: a, absfk, absfm, ai, aki, akr, amagk, amagm, angk, angm, aph
   real(8) :: api, apr, ar
   real(8) :: bi3, bi4
   real(8) :: c2i, c2r, c3i, c3r, ccc3, ccc4, closev(50), farv(50), closei(50)
@@ -166,7 +171,7 @@ subroutine over13
   real(8) :: gus1, gus3, gus4
   real(8) :: h1, h2, hf
   real(8) :: omegs1, omg
-  real(8) :: phf, phfk, phfm, phs2
+  real(8) :: phf, phfk, phfm
   real(8) :: steady, sumki, sumkr, summi, summr
   real(8) :: taua, taui, tpi
   real(8) :: vi1, vi2, vr1, vr2, vsl, vsli, vsr, vsri
@@ -198,7 +203,7 @@ subroutine over13
      ck(i) = 0.
   end do
 540 continue
-541 call move0 (e(1 :), ntot)
+  call move0 (e(1 :), ntot)
   call move0 (f(1 :), ntot)
   call move0 (kode(1 :), ntot)
   call move0 (xk(1 :), lpast)
@@ -229,7 +234,6 @@ subroutine over13
         jpl = jpl + wk1(koff20 + kv)
         kv = kv + 1
      end do
-2022 continue
      go to 2023
 2025 nr(i) = lpast + 2 * jpl + 1
   end do
@@ -432,7 +436,8 @@ subroutine over13
   read (unit = abuff, fmt = 7011) ivolt
   go to 4625
 4623 nfrfld = 1
-  call freone (d11)
+  !  call freone (d11)
+  call free (d11)
   ivolt = d11
 4625 if (ivolt .le. 1) go to 590
   mdrive = 1
@@ -452,12 +457,16 @@ subroutine over13
 4633 k = ivolt
   nright = -1
   nfrfld = 1
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   bus1 = texta6(1)
   nright = 0
-  call freone (a)
-  call freone (ci1)
-  call freone (ck1)
+  !  call freone (a)
+  call free (a)
+  !  call freone (ci1)
+  call free (ci1)
+  !  call freone (ck1)
+  call free (ck1)
 4635 if (iprint .eq. 0) go to 54157
   if (iprint .eq. 0) write (unit = * , fmt = *) 'over13-cable.    ck1, tpi=', ck1, tpi
   winic = ck1 * tpi
@@ -472,7 +481,6 @@ subroutine over13
   do k = 2, ntot
      if (bus(k).eq.bus1) go to 552
   end do
-551 continue
   kill = 31
   lstat(19) = 551
   go to 9200
@@ -490,16 +498,22 @@ subroutine over13
 4643 ll = ivolt
   nright = -1
   nfrfld = 2
-  call freone ( d1 )
+  !  call freone (d1)
+  call free (d1)
   bus1 = texta6(1)
   bus2 = texta6(2)
   nright = 0
   nfrfld = 1
-  call freone (ci1)
-  call freone (ck1)
-  call freone (a)
-  call freone (d2)
-  call freone (d7)
+  !  call freone (ci1)
+  call free (ci1)
+  !  call freone (ck1)
+  call free (ck1)
+  !  call freone (a)
+  call free (a)
+  !  call freone (d2)
+  call free (d2)
+  !  call freone (d7)
+  call free (d7)
   k = d7
 4645 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54159) ci1, ck1, a
 54159 format ('+linear i.', 4x, 3e12.4)
@@ -561,17 +575,23 @@ subroutine over13
      read (unit = abuff, fmt = 7020) n2, bus1, bus2, cik(i), ci(i), ck(i)
      go to 4655
 4653 nfrfld = 1
-     call freone (d11)
+     !     call freone (d11)
+     call free (d11)
      n2 = d11
      nright = -1
-     call freone (d1)
+     !     call freone (d1)
+     call free (d1)
      bus1 = texta6(1)
-     call freone (d1)
+     !     call freone (d1)
+     call free (d1)
      bus2 = texta6(1)
      nright = 0
-     call frefld (cik(i))
-     call frefld (ci(i))
-     call frefld (ck(i))
+     !     call frefld (cik(i :))
+     call free (cik(i :))
+     !     call frefld (ci(i :))
+     call free (ci(i :))
+     !     call frefld (ck(i :))
+     call free (ck(i :))
 4655 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54159) cik(i), ci(i), ck(i)
      if (bus(l) .eq. bus1 .and. bus(m) .eq. bus2) go to 569
      kill = 32
@@ -581,19 +601,18 @@ subroutine over13
      ck1 = e(m)
      nkp = l
      l = i - k + 1
-     volti(l) = -ci1 / 2.0
-     voltk(l) = -ck1 / 2.0
+     volti(l) = -ci1 / 2.0d0
+     voltk(l) = -ck1 / 2.0d0
      volt(l) = ck1 - ci1
      if (length(k + 1) .eq. -666) voltk(l) = f(m) - f(nkp)
   end do
-566 continue
   if (kodebr(k) .le. 0) go to 567
   call mult(x(n3), volt(1), cik(k), it2, ll1)
   l = k
   do i = 1, it2
      if (iprsup .ge. 3) write (unit = lunit6, fmt = 38567) i, volt(i), cik(l)
 38567 format (/, ' At 38567, init  i(t-deltat) ....   ', i10, 2e25.15)
-38568 l = l + 1
+     l = l + 1
   end do
   go to 28567
 567 call mult (tx(n3), volt, cik(k), it2, ll1)
@@ -614,15 +633,18 @@ subroutine over13
 4663 k = ivolt
   nright = -1
   nfrfld = 2
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   bus1 = texta6(1)
   bus2 = texta6(2)
   nright = 0
   nfrfld = 1
-  call freone (ci1)
-  call freone (ck1)
+  !  call freone (ci1)
+  call free (ci1)
+  !  call freone (ck1)
+  call free (ck1)
 4665 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54162) ci1, ck1
-54162 format ('+nonlin. branch init cond.', 2x, 2e11.3)
+54162 format ('+Nonlin. branch init cond.', 2x, 2e11.3)
   do k = 1, inonl
      l = nonlk(k)
      m = iabs (nonlm(k))
@@ -682,7 +704,6 @@ subroutine over13
 7361 do i = n1, n2
      if (cchar(i) .gt. ci1) go to 574
   end do
-573 continue
   kill = 34
   lstat(19) = 573
   flstat(16) = ci1
@@ -694,7 +715,7 @@ subroutine over13
   vr1 = vchar(n1)
   curr1 = cchar(n1)
   curr(k) = ci1
-3 ci1 = vr1 + (vchar(i) - vr1) * (ci1 - curr1) / (cchar(i) - curr1)
+  ci1 = vr1 + (vchar(i) - vr1) * (ci1 - curr1) / (cchar(i) - curr1)
   if (ck1 .ne. 0.) ci1 = ck1
   vnonl(k) = ci1 - (e(l) - e(m)) * delta2
   go to 544
@@ -728,7 +749,7 @@ subroutine over13
   !
 60006 it2 = iabs (n4)
   aph = it2
-30006 nl = litype(k)
+  nl = litype(k)
   if (istead .eq. 0) go to 60005
   n5 = nl - 1
   iy = k
@@ -771,7 +792,6 @@ subroutine over13
 5333 format (9x, i5, 1x, 2e14.5, 1x, 1x, i6, 1x, i6)
      ivbr = ivbr + 1
   end do
-1003 continue
   ! single phase and constant q
   ! evaluate im' = q**-1 * im
   ! ik' = q**-1 * ik
@@ -832,12 +852,10 @@ subroutine over13
         nq2 = nq2 + 1
         nq3 = nq3 + 1
      end do
-801  continue
      nq1 = nq1 + 2 * nteq + 1
      kqv = kqv + 1
      kqvq = kqvq + 1
   end do
-609 continue
   j1 = litype(k)
   jadd = j - 1 + nphs2
   if (iprsup .ge. 2) write (unit = lunit6, fmt = *) 'Following are qr(k) by rows____________'
@@ -853,7 +871,6 @@ subroutine over13
      if (iprcbl .gt. 0) write (unit = lunit6, fmt = *) '  aimr(i)=-aimr(i) , aimi(i)=-aimi(i) ', r(icbr), c(icbr)
      icbr = icbr + 1
   end do
-821 continue
   !
   !        invert matrix q
   !
@@ -878,7 +895,6 @@ subroutine over13
      ll = ll + 2
      kq = kq + 1
   end do
-7002 continue
   call cominv (wk1(koff24 + 1 :), wk1(koff25 + 1 :), it2, 60.0d0)
   t = 0.0000000d0
   kq = infdli(inoff1+k)
@@ -890,7 +906,6 @@ subroutine over13
      ll = ll + 2
      kq = kq + 1
   end do
-7004 continue
   kmv = k
   itam = itadd
   ! kq = infdli(inoff1+k)
@@ -905,7 +920,6 @@ subroutine over13
      w1(ioff7 + kmv - 1 + im) = 0.0d0
      w1(ioff8 + kmv - 1 + im) = 0.0d0
   end do
-1070 continue
   do jm = 1, it2
      do im = 1, it2
         w1(ioff1 + kmv - 1 + im) = w1(ioff1 + kmv - 1 + im) + qfd(kq) * r(itam) - sfd(kq) * c(itam)
@@ -917,10 +931,8 @@ subroutine over13
 4333    format (1x, i2, 3x, i2, 3x, i3, 10e11.4)
         kq = kq + 1
      end do
-1072 continue
      itam = itam + 1
   end do
-1071 continue
   ! call mvecc(qfd(kq),sfd(kq),tr(itadd),tx(itadd),it2,
   ! 1    w1( ioff7 + k ), w1( ioff8 + k ) )         !modal current ik'=
   icbr = itadd
@@ -929,7 +941,6 @@ subroutine over13
      c(icbr) = -c(icbr)
      icbr = icbr + 1
   end do
-8214 continue
   !
   ! evaluate:   im'(to-dt)  ,  ik'(to-dt)
   !
@@ -951,7 +962,6 @@ subroutine over13
      if (iprsup .gt. 0) write (unit = lunit6, fmt = *) '   aim5dt,      aik5dt ', sconst(nn5), sconst(n6)
      kadt = kadt + 1
   end do
-101 continue
   ! evaluate    vm'    vk'
   !             vmj'   vkj'
   ka = k
@@ -963,7 +973,6 @@ subroutine over13
      cnvhst(n4 + 8) = 0.
      ka = ka + 1
   end do
-9874 continue
   kvd = k
   kv = infdli(inoff1 + k)
   nq1 = infdli(inoff2 + k)
@@ -1021,7 +1030,6 @@ subroutine over13
            nq2 = nq2 + 1
            nq3 = nq3 + 1
         end do
-1020    continue
         nq1 = nq1 + 2 * nteq + 1
         if (iprsup .gt. 0) write (unit = lunit6, fmt = 5433) iv, jv, cnvhst(n4 + 5), cnvhst(n4 + 7)
         cnvhst(n4 + 7) = cnvhst(n4 + 7) + sumkr
@@ -1049,13 +1057,11 @@ subroutine over13
            lj = lj + 1
            lj1 = lj1 + 1
         end do
-104     continue
         lj = lj + nteq
         n7 = n7 + 1
         if (iv .eq. it2) n7 = n7 - it2
         kv = kv + 1
      end do
-103  continue
      phf = atan2z (cnvhst(n4 + 6), cnvhst(n4 + 5))
      hf = sqrtz (cnvhst(n4 + 5) ** 2 + cnvhst(n4 + 6) ** 2)
      wk1(koff1 + kvd) = hf * cosz (wdt + phf)
@@ -1066,7 +1072,6 @@ subroutine over13
      !     1            wk1(koff1+kvd), wk1(koff2+kvd)
      kvd = kvd + 1
   end do
-102 continue
   !
   !        evaluate:    gmj = ycj' * vm'   gkj' = ycj' * vk'
   !                     fk = gk + ik'
@@ -1157,7 +1162,6 @@ subroutine over13
 5444 format ('ky, bmr5(ky), bmi5, fkr5, fki5=', 1x, i2,2x, 4e14.5)
      ky = ky + 1
   end do
-106 continue
   !
   !        evaluate:     imj(to-dt)  ikj(to-dt)
   !
@@ -1216,7 +1220,6 @@ subroutine over13
            nq2 = nq2 + 1
            nq3 = nq3 + 1
         end do
-3020    continue
         nq1 = nq1 + 2 * nteq + 1
         nteq = wk1(koff20 + kq)
         lj1 = lj + nteq
@@ -1230,14 +1233,11 @@ subroutine over13
            lj = lj + 1
            lj1 = lj1 + 1
         end do
-116     continue
         kq = kq + 1
         lj = lj + nteq
      end do
-1180 continue
      ka = ka + 1
   end do
-1109 continue
   !
   !        evaluate:   fmj' = a1j * fk'  => fmj'(to), fm'(to)
   !                    bkj' = a1j * bm'  => bkj'(to), bk'(to)
@@ -1329,7 +1329,6 @@ subroutine over13
      if (iprsup .gt. 0) write (unit = lunit6, fmt = *) ' fmj = a1j * fk; bkj = a1j * bm'
      if (iprsup .gt. 0) write (unit = lunit6, fmt = *)' sumkr, jsumki, summr, jsummi ', sumkr,  sumki, summr,  summi
   end do
-1112 continue
   !
   !        fill up history vectors: bm'(history)
   !                                 fk'(history)
@@ -1363,7 +1362,6 @@ subroutine over13
         wk1(koff12 + i) = amagm * dcos (wd + angm)
         wd = wd + wdt
      end do
-100  continue
      wk1(koff11+ntaui) = amagk * dcos (-omega * taui + angk)
      wk1(koff12+ntaui) = amagm * dcos (-omega * taui + angm)
      if (iprsup .gt. 0) write (unit = lunit6, fmt = 80150) ntaui
@@ -1376,7 +1374,6 @@ subroutine over13
      koff12 = koff12 + ntaui
      koff11 = koff12
   end do
-1115 continue
   kcbl = koff11
   if (koff11 .lt. lhist) go to 6258
   write (unit = lunit6, fmt = 5340) lhist, koff11
@@ -1389,7 +1386,7 @@ subroutine over13
   !
 60001 it2 = iabs (n4)
   aph = it2
-60003 nl = litype(k)
+  nl = litype(k)
   if (istead .eq. 0) go to 60005
   !     initial conditions from steady-state
   !        convert to mode quantities
@@ -1397,7 +1394,7 @@ subroutine over13
   j = nl -1
   do i = 1, n9
      j = j + 1
-6259 volt(i) =  qfd(j)
+     volt(i) =  qfd(j)
   end do
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 3438) (volt(l), l = 1, n9)
 3438 format (/, ' matrix [t] follows.  volt(1 : n9) ....', /, (1x, 5e25.16))
@@ -1406,7 +1403,7 @@ subroutine over13
   n12 = it2 + 1
   do l = 1, it2
      volti(n10) = 1.0
-3465 n10 = n10 + n12
+     n10 = n10 + n12
   end do
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 3466) (volti(l), l = 1, n9)
 3466 format (' unit matrix.  volti(1 : n9) ...', /, (1x, 5e25.16))
@@ -1471,7 +1468,6 @@ subroutine over13
         n6 = nn5 + nrz
         sconst(n6) = csr * czire - csri * cziim
      end do
-81105 continue
      if (iprsup .lt. 1) go to 81108
      write (unit = lunit6, fmt = 81106) i
 81106 format (/, " Initialization of history vectors of Marti's branch", i4, '  node k, node m partial equiv. voltages')
@@ -1501,7 +1497,6 @@ subroutine over13
         xk(ix) = absfk * cosz ((-nrf + ii) * omegs1 * deltat + phfk)
         xm(ix) = absfm * cosz ((-nrf + ii) * omegs1 * deltat + phfm)
      end do
-81110 continue
      if (iprsup .lt. 1) go to 81113
      j1 = ix - nrf + 1
      write (unit = lunit6, fmt = 81112) j1, ix
@@ -1524,7 +1519,6 @@ subroutine over13
         n8 = n7 + nra
         sconst(n8) = d2 * ckreal - d3 * ckimag
      end do
-81115 continue
      if (iprsup .lt. 1) go to 63593
      j1 = n7 - nra + 1
      j2 = n8 - nra + 1
@@ -1534,7 +1528,6 @@ subroutine over13
 63593 k = k + 1
      itadd = itadd + 1
   end do
-63594 continue
   itadd = itadd + it2 * (it2 - 1) / 2
   it1 = 0
   k = k - 1
@@ -1554,7 +1547,7 @@ subroutine over13
   omegs1 = 0.0
   if (n4 .ge. 0) go to 61594
   ! multiphase lines
-60010 ix = itadd
+  ix = itadd
   do i1 = 2, it2
      ii = k + i1 - 1
      if (nr(ii) .lt. 0) it1 = 1
@@ -1575,7 +1568,6 @@ subroutine over13
      f(l) = 0.0
      f(m) = 0.0
   end do
-60011 continue
   marti = 1
   go to 61594
 578 curr1 = ci1
@@ -1589,7 +1581,7 @@ subroutine over13
   vi1 = f(n1)
   vr2 = e(n2)
   vi2 = f(n2)
-580 it2 = iabsz (n4)
+  it2 = iabsz (n4)
   yx = it2
   gus3 = vr1
   bi3 = vi1
@@ -1613,8 +1605,7 @@ subroutine over13
 34572 format (/, ' next conductor.       i       l       m       k', /, 16x, 4i8, /, &
           16x, 14x, 'yx', 11x, 'ci(k)', 12x, 'e(l)', 12x, 'e(m)', 10x, 'tr(ii)', 11x, 'r(ii)', /, 16x, 6e16.7)
   end do
-34560 continue
-591 iprint = 3
+  iprint = 3
   itadd = isd
   nl1 = nl + it2 * it2 - 1
   do i = 1, it2
@@ -1646,7 +1637,6 @@ subroutine over13
      emreal(i) = e(l)
      emimag(i) = f(l)
   end do
-593 continue
   if (iprsup .lt. 1) go to 1594
   n2 = itadd - 1
   write (unit = lunit6, fmt = 1593) nl, isd, n2, it2
@@ -1659,13 +1649,12 @@ subroutine over13
      ii = k + jj - 1
      if (ck(ii) .lt. 0.0) go to 21594
   end do
-11594 continue
   go to 4594
 21594 n9 = it2 * it2
   j = nl -1
   do i = 1, n9
      j = j + 1
-2594 volt(i) =  qfd(j)
+     volt(i) =  qfd(j)
   end do
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 3438) (volt(l), l = 1, n9)
   call move0 (voltk(1 :), n9)
@@ -1673,7 +1662,7 @@ subroutine over13
   n12 = it2 + 1
   do l = 1, it2
      voltk(n10) = 1.0
-8465 n10 = n10 + n12
+     n10 = n10 + n12
   end do
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 3467) (voltk(l), l = 1, n9)
 3467 format (' unit maxtrix.  voltk(1 : n9) ...', /, (1x, 5e25.16))
@@ -1697,14 +1686,12 @@ subroutine over13
         csr = csr + h2 * tr(n7)
         n7 = n7 + 1
      end do
-2595 continue
      closev(i) = vsr
      farv(i) = vsl
      closei(i) = csr
      fari(i) = csl
      n7 = isd
   end do
-3594 continue
   !**** complex voltage & current vectors are stored in ekreal,ekimag,
   !     emreal,emimag and tr,tx,r,c
 4594 n6 = isd - 1
@@ -1716,10 +1703,10 @@ subroutine over13
            jip = n5 + j
            iip = n5 + i
            gus1 = gus1 + qfd(jip) * volti(ip) * qfd(iip)
-596        n5 = n5 + it2
+           n5 = n5 + it2
         end do
         n6 = n6 + 1
-595     x(n6) = gus1
+        x(n6) = gus1
      end do
   end do
   if (iprsup .ge. 3) write (unit = lunit6, fmt = 1595) isd, n6, (x(i), i = isd, n6)
@@ -1749,7 +1736,7 @@ subroutine over13
         vsl = vsl + h1 * ekreal(j)
         vsli = vsli + h1 * ekimag(j)
         vsr = vsr + h1 * emreal(j)
-598     vsri = vsri + h1 * emimag(j)
+        vsri = vsri + h1 * emimag(j)
      end do
      volti(i) = sqrtz (vsl * vsl + vsli * vsli) * a
      if (volti(i) .eq. 0.) vsl = 1.
@@ -1757,10 +1744,10 @@ subroutine over13
      voltk(i) = sqrtz (vsr * vsr + vsri * vsri) * a
      if (voltk(i) .eq. 0.) vsr = 1.
      ndx1 = lsiz26 + i
-597  vim(ndx1) = atan2z (vsri, vsr)
+     vim(ndx1) = atan2z (vsri, vsr)
   end do
   ! *** end of transformation for initial conditions
-592 ii = length(k + 1)
+  ii = length(k + 1)
   if (length(k) .gt. 0) ii = length(k)
   itadd = itadd + it2 * (it2 - 1) / 2
   if (istead .le. 0) itadd = it + 1
@@ -1789,7 +1776,7 @@ subroutine over13
      d2 = h2 * cosz (gus1 + ck1)
      gus1 = gus1 + steady
      xk(n1) = a
-582  xm(n1) = d2
+     xm(n1) = d2
   end do
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 44582) k, kbus(k), mbus(k), ii, n2, it2, (xk(n1), xm(n1), n1 = ii, n2)
 44582 format (/, ' one mode past history  (xk(j), xm(j), j = ii, n2)  follows.       k kbus(k) mbus(k)      ii      n2     it2', /, &
@@ -1880,18 +1867,25 @@ subroutine over13
      go to 4695
 4693 nfrfld = 1
      kolbeg = 1
-     call freone (d11)
+     !     call freone (d11)
+     call free (d11)
      n3 = d11
      nright = -1
-     call freone (d1)
+     !     call freone (d1)
+     call free (d1)
      bus1 = texta6(1)
-     call freone (d1)
+     !     call freone (d1)
+     call free (d1)
      bus2 = texta6(1)
      nright = 0
-     call frefld (tr(itadd))
-     call frefld (tx(itadd))
-     call frefld (r(itadd))
-     call frefld (c(itadd))
+     !     call frefld (tr(itadd :))
+     call free (tr(itadd :))
+     !     call frefld (tx(itadd :))
+     call free (tx(itadd :))
+     !     call frefld (r(itadd :))
+     call free (r(itadd :))
+     !     call frefld (c(itadd :))
+     call free (c(itadd :))
 4695 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54159) tr(itadd), tx(itadd), r(itadd)
      if (bus1 .eq. bus(l) .and. bus2 .eq. bus(m) .and. n3 .eq. 3) go to 5767
 5766 lstat(19) = 5766
@@ -1903,21 +1897,24 @@ subroutine over13
      read (unit = abuff, fmt = 7020) n3, bus1, bus2
      go to 4705
 4703 nfrfld = 1
-     call freone (d11)
+     !     call freone (d11)
+     call free (d11)
      n3 = d11
      nright = -1
-     call freone (d1)
+     !     call freone (d1)
+     call free (d1)
      bus1 = texta6(1)
-     call freone (d1)
+     !     call freone (d1)
+     call free (d1)
      bus2 = texta6(1)
      nright = 0
-4705 if (bus1 .ne. text1) go to 5755
-     if (bus2 .ne. text2) go to 5755
+4705 if (to_lower (bus1) .ne. text1) go to 5755
+     if (to_lower (bus2) .ne. text2) go to 5755
      if (n3 .ne. i) go to 5766
      read (unit = abuff, fmt = 5764) ci1, ck1, a, d2
-5764 format(14x,4e15.8)
+5764 format (14x,4e15.8)
      write (unit = kunit6, fmt = 5761) ci1, ck1, d2
-5761 format ('+modal z and y.', 3e11.4)
+5761 format ('+Modal z and y.', 3e11.4)
      ! read input card using cimage
      call cimage
      n3 = iabs (indhst(ii))
@@ -1933,7 +1930,6 @@ subroutine over13
 5862 do i = k, n11
      if (indhst(i) .gt. 0) indhst(i) = - indhst(i)
   end do
-5808 continue
   itadd = itadd + it2 * (it2 + 1) / 2
 5809 if ( cki(k) .lt. 0.0) go to 5810
   k = k + 1
@@ -1947,23 +1943,32 @@ subroutine over13
   go to 4715
 4713 nfrfld = 1
   nright = -1
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   bus1 = texta6(1)
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   bus2 = texta6(1)
   nright = 0
-  call freone (d11)
+  !  call freone (d11)
+  call free (d11)
   n1 = d11
-  call freone (d11)
+  !  call freone (d11)
+  call free (d11)
   n2 = d11
-  call freone (d11)
+  !  call freone (d11)
+  call free (d11)
   n3 = d11
-  call freone (d1)
-  call freone (d2)
-  call freone (d3)
-  call freone (d4)
+  !  call freone (d1)
+  call free (d1)
+  !  call freone (d2)
+  call free (d2)
+  !  call freone (d3)
+  call free (d3)
+  !  call freone (d4)
+  call free (d4)
 4715 if (noutpr .eq. 0) write (unit = kunit6, fmt = 5620)  n1, n2, n3, d1
-5620 format ('+switch init. cond.', 3i6, e13.4)
+5620 format ('+Switch init. cond.', 3i6, e13.4)
   do k = 1, kswtch
      l = iabs (kmswit(k))
      ndx1 = lswtch + k
@@ -2019,7 +2024,7 @@ subroutine over13
   lstat(18) = lastov
 9800 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9806)
 9806 format (' Exit module  "over13".')
-99999 return
+  return
 end subroutine over13
 
 !
@@ -2039,7 +2044,6 @@ subroutine fdint (ikf, isfd, ibf, omg)
   real(8) :: ac1, ai, al1, ar, ar1, arl, aui, aur, azi, azr
   real(8) :: cz
   real(8) :: den
-  real(8) :: w1
   !  dimension ur(40), ui(40)
   !     this routine initializes a)capacitor voltages, b)branch currents**
   !
@@ -2094,7 +2098,6 @@ subroutine fdint (ikf, isfd, ibf, omg)
      cikfd(isv + 2) = -aui * ac1
      isv = isv + 2
   end do
-5 continue
   ibf = isv
   isfd = isu
   ist = isfd + 1
@@ -2130,10 +2133,9 @@ subroutine fdint (ikf, isfd, ibf, omg)
         cikfd(isw + 1) = aur
         ! calculate capacitor voltage  *   *   *   *   *   *   *   *   *   *
         cikfd(isw + 2) = -aui * ac1
-7       isw = isw + isk
+        isw = isw + isk
      end do
   end do
-8 continue
   ibf = ibf + (it2 - 1) * isk
   isfd = isu
   if (iprsup .gt. 0) write (unit = lunit6, fmt = 9) isc, ibf, (cikfd(ka), ka = isc, ibf)
@@ -2184,7 +2186,7 @@ subroutine redinv (x1, m, n)
   if (k .le. m) go to 4
   do k = 1, m
      n9 = nk + k
-5    x1(n9) = a1(k) * c
+     x1(n9) = a1(k) * c
   end do
   x1(ik) = c
   j = j - 1
@@ -2204,21 +2206,23 @@ subroutine last13
   use tracom
   use movcop
   implicit none
+  !
   !  equivalence (lstat(14), mdrive), (volt(1), vim(1))
+  !
   integer(4) :: i, i0, i1, i2, i3, i4, i5, i6, i7, i8, i10, i11, iflag, ii, iq2
   integer(4) :: iq3, itadd
   integer(4) :: j
   integer(4) :: k
   integer(4) :: l
-  integer(4) :: mdrive, moon, mxstrt
+  integer(4) :: moon, mxstrt
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n15, n16, n23, ndx1
   real(8) :: d1, d2, d3, d4, d5, d5save, d6, d7, d8, d9, d10, d11, d12, d13, d14
   real(8) :: d15, d16, d17, d18, d19, d1save, d20, d21, d22, dthaf, dxp, dxq
-  real(8) :: eeeta, ekreal, ekimag, emimag, emreal, eoutk, eoutm
+  real(8) :: eeeta, eoutk, eoutm
   real(8) :: fac
   real(8) :: resi, resr
   real(8) :: soutk, soutm, spole, steady, stype
-  real(8) :: tailp(1), tailq(1), tailt(1), tdi, tdr, tii, tir, tni, tnr, tri
+  real(8) :: tdi, tdr, tii, tir, tni, tnr, tri
   real(8) :: trisum, trr, trrsum
   real(8) :: w, wdthaf, wfac, wpole, wshz
   double precision :: dblpr1, dblpr2, dblpr3, dblpr4
@@ -2227,7 +2231,7 @@ subroutine last13
 4567 format (' Begin module "last13".')
   i = ibr + 1
 610 i = i - 1
-620 if (i .le. 0) go to 650
+  if (i .le. 0) go to 650
   if (kbus(i) .ge. 0 .or. kodsem(i) .eq. 0) go to 610
   if (imodel(i) .eq. -2) go to 610
   if (imodel(i) .eq. -4) go to 610
@@ -2335,7 +2339,6 @@ subroutine last13
         n1 = n1 + 1
         n2 = n2 + 1
      end do
-14020 continue
      if (kodsem(i) .lt. 0) go to 14050
      ii = k + i - 1
      n5 = -indhst(ii)
@@ -2438,7 +2441,6 @@ subroutine last13
         n7 = n7 + 1
         n8 = n8 + 1
      end do
-14070 continue
   end do
 14080 continue
   if (iprsup .lt. 6) go to 14085
@@ -2463,7 +2465,6 @@ subroutine last13
      write (unit = lunit6, fmt = 14083) volti(l), vim(ndx1), semaux(n2), semaux(n3), semaux(n4), semaux(n5), semaux(n6), semaux(n7)
 14083 format (9x, 8e15.7)
   end do
-14084 continue
 14085 if (iflag .eq. 1) go to 14100
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 14090)
 14090 format (//, 5x, 'Table of discrepancies between the results of time-domain convolution(anlaytic) and steady-state phasor solution.', //, &
@@ -2515,7 +2516,6 @@ subroutine last13
      n8 = n7 + j
      xk(n8) = d1 * cosz(d3) - d2 * sinz(d3)
   end do
-14140 continue
   go to 14290
 14150 nr(k) = - mxstrt
   if (iline .lt. mxstrt + n6) iline = mxstrt + n6
@@ -2536,7 +2536,6 @@ subroutine last13
      n8 = n7 + j
      xm(n8) = d1 * cosz(d3) - d2 * sinz(d3)
   end do
-14180 continue
   go to 14290
   ! allocate and initialize past history for propagation convolutions.
 14190 n5 = ci(k)
@@ -2581,7 +2580,6 @@ subroutine last13
      xk(n8) = d1 * d5 - d2 * d6
      xm(n8) = d3 * d5 - d4 * d6
   end do
-14240 continue
   ! allocate and initialize past history for char. admittance convolution
 14250 n5 = ck(k)
   if (n5 .ge. 0) go to 14290
@@ -2614,7 +2612,6 @@ subroutine last13
      xk(n8) = d1 * d5 - d2 * d6
      xm(n8) = d3 * d5 - d4 * d6
   end do
-14280 continue
 14290 n3 = kodsem(k)
   if (n3 .gt. 0) go to 14430
   ! initialize history term of lumped element parallel capacitor
@@ -2827,12 +2824,12 @@ subroutine last13
   n4 = n4 + 2 * ci(k) - 2
 14683 n3 = n3 - ck(k) - ck(k)
   n4 = n4 + 2
-  if (ck(k) .lt. 0.0) go to 14684
-  n3 = n3 + 6 * ck(k)
-  n4 = n4 + 2 * ck(k) - 2
+  if (ck(k) .lt. 0.0d0) go to 14684
+  n3 = int (n3 + 6 * ck(k))
+  n4 = int (n4 + 2 * ck(k) - 2)
 14684 n5 = nr(k)
   n6 = n5 + length(k) - 1
-  if (ck(k) .lt. 0.0) n6 = n6 + sconst(n3 - 1) / deltat + 2.0
+  if (ck(k) .lt. 0.0) n6 = n6 + int (sconst(n3 - 1) / deltat + 2.0d0)
   write (unit = lunit6, fmt = 14998) n5, n6, (xk(l), l = n5, n6)
   write (unit = lunit6, fmt = 14997) n5, n6, (xm(l), l = n5, n6)
 14685 write (unit = lunit6, fmt = 14996) n1, n3, (sconst(l), l = n1, n3)
@@ -2921,7 +2918,7 @@ subroutine last13
   dxq = 0.0d0
   if (iabs (i0) .le. 1) go to 14810
   d7 = eeeta / deltat
-  n7 = d7
+  n7 = int (d7)
   dxq = d7 - n7
   dxp = unity - dxq
   n10 = 5
@@ -3207,7 +3204,7 @@ subroutine last13
   lstat(19) = 1423
 9200 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9207) kill, lstat(19)
 9207 format (' Exit  module "last13".  kill, lstat(19) =', 2i8)
-9999 return
+  return
 end subroutine last13
 
 !

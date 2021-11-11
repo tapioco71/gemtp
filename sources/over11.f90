@@ -6,6 +6,7 @@
 
 module over11mod
   implicit none
+  save
 
 contains
 
@@ -88,11 +89,9 @@ contains
     integer(4) :: i26, iw, iwd, iwd1, iwd2
     integer(4) :: j
     integer(4) :: k
-    integer(4) :: mk, mkj, mkmj
-    integer(4) :: n, n5, nb, nk
-    real(8) :: a1, a2, a3, a4, a5, a18, a19, acde, acdf, adeld, ax(9), ay(9)
+    integer(4) :: n, nb, nk
+    real(8) :: a1, a2, a3, a4, a5, a18, a19, acde, acdf, ax(9), ay(9)
     real(8) :: cni, cnr
-    real(8) :: sb, sf5, sf6, sf7
     real(8) :: tra2
     real(8) :: vnr(3), vni(3)
     !
@@ -150,7 +149,7 @@ contains
        end do
 14     if (iprsup .gt. 1) write (unit = lunit6, fmt = 25) j, a3, a4
 25     format ('  Negative sequence correction for winding number j =', i5, '   of the d-axis.  a3, a4 follow:', /, 2x, 2e25.15)
-4      sci(nk) = a4
+       sci(nk) = a4
     end do
     !     process the q - axis     *   *   *   *   *   *   *   *   *   *   *
     iwd2 = 2
@@ -191,7 +190,7 @@ contains
        do k = 1, iwd
           nb = nb + iwd
           a3 = a3 + ax(nb) * vnr(k) - ay(nb) * vni(k)
-10        a4 = a4 + ax(nb) * vni(k) + ay(nb) * vnr(k)
+          a4 = a4 + ax(nb) * vni(k) + ay(nb) * vnr(k)
        end do
 15     if (iprsup .gt. 1) write (unit = lunit6, fmt = 26) j, a3, a4
 26     format ('  Negative sequence correction for winding number j =', i5, '   of the q-axis.  a3, a4 follow:', /, 2x, 2e25.15)
@@ -224,9 +223,9 @@ subroutine over11
   character(6) :: text1, text2, text3, text4, text5, text6
   integer(4) :: i, ib, ibf, ihalf, ij, ijk, ik, in, ip, iq, isubs1, isubs2, ix
   integer(4) :: iy, iz
-  integer(4) :: j, ja, jb, jch2(1), jj, jn, jpp, js, jtemp
+  integer(4) :: j, ja, jb, jj, jn, jpp, js, jtemp
   integer(4) :: k, k1, kd, kib, kkk, kt
-  integer(4) :: l, ld, ldd, ll0, ll1, ll2, llm1, ltemp
+  integer(4) :: l, ld, ldd, ll0, ll1, ll2, llm1, locatn(20, 20), ltemp
   integer(4) :: m, mib, mk, mt
   integer(4) :: n1, n2, n5, n6, n7, n8, n9, n13, n15, n16, n18, n19, n22, n28
   integer(4) :: n29, n71, n74, n77, n78, n85, n899, ndum, ndx1, ndx2, ndx3, ndx4
@@ -244,7 +243,7 @@ subroutine over11
   real(8) :: rd, react
   real(8) :: sfrold
   real(8) :: vi, vr
-  real(8) :: xd, xx
+  real(8) :: xd, xxx
   real(8) :: yi, yis, yr, yrs, yy
   !  equivalence  ( volt(1), vim(1) ),  ( imfd(1), jch2(1) )
   !  equivalence  ( moncar(1), knt )
@@ -282,7 +281,6 @@ subroutine over11
         ndx1 = ndx1 + 1
         if (sfreq(m) .eq. vim(ndx1)) go to 1854
      end do
-1841 continue
 1846 n6 = n6 + 1
      ndx1 = lsiz26 + n6
      vim(ndx1) = sfreq(m)
@@ -341,7 +339,6 @@ subroutine over11
      e(n1) = solr(nrow1)
      f(n1) = soli(nrow1)
   end do
-7001 continue
   call mult (tx(jb), f(1), diag(1), ll2 * nphcas, ll0)
   call mult (tr(jb), e(1), diag(1), ll2 * nphcas, llm1)
   call mult (tr(jb), f(1), diab(1), ll2 * nphcas, ll0)
@@ -361,12 +358,12 @@ subroutine over11
   jn = iabs (mbus(ib))
   jn = norder(jn)
   if (c(jb) .eq. 0.0d0) go to 6044
-  xx = tx(jb) * omegal - 1.0d0 / (c(jb) * omegac)
+  xxx = tx(jb) * omegal - 1.0d0 / (c(jb) * omegac)
   go to 6048
-6044 xx = tx(jb) * omegal
-6048 dd = tr(jb) * tr(jb) +xx * xx
+6044 xxx = tx(jb) * omegal
+6048 dd = tr(jb) * tr(jb) + xxx * xxx
   rd = tr(jb) / dd
-  xd = -xx / dd
+  xd = -xxx / dd
   erk = solr(in)
   eik = soli(in)
   erm = solr(jn)
@@ -382,7 +379,7 @@ subroutine over11
   curim = -curik
   if (kssout .eq. 1 .or. kssout .eq. 3) call ssout (ib, erk, eik, erm, eim, currk, curik, currm, curim)
   cik(ib) = 0.0d0
-6050 ib = ib + 1
+  ib = ib + 1
   go to 6010
 6060 if (l .gt. 1) go to 6080
   !              Single  pi  section  calculations
@@ -631,7 +628,7 @@ subroutine over11
      energy(i) = -energy(i)
 7657 k1 = kdepsw( lswtch + i )
      if (k1 .ne. 8888) go to 8657
-     mk = -adelay(i)
+     mk = int (-adelay(i))
      if (mk .le. 0.0d0) go to 8657
      num = kssfrq(kt)
      ang = twopi * sfreq(num) * deltat
@@ -747,7 +744,7 @@ subroutine over11
 6207 do i = 1, ntot
      j = norder(i)
      e(i) = solr(j)
-6210 f(i) = soli(j)
+     f(i) = soli(j)
   end do
   if (iprsup .gt. 0) write (unit = lunit6, fmt = 5581)
 5581 format (' Steady-state phasor network solution now complete.')
@@ -769,7 +766,6 @@ subroutine over11
      bus1 = aupper(k)
      if (bus1 .ne. blank) go to 6847
   end do
-6842 continue
   write (unit = lunit6, fmt = 5416)
 5416 format ('+Blank card ending node names for voltage output.')
   go to 8102
@@ -782,7 +778,6 @@ subroutine over11
   do i = 2, ntot
      if (bus1 .eq. bus(i)) go to 7043
   end do
-7041 continue
   write (unit = lunit6, fmt = 7042) bus1
 7042 format (5x, "Requested output for nonexistent node  '", a6, "'  will be ignored.")
   go to 7040
@@ -883,7 +878,7 @@ subroutine over11
      d4 = d1
      if (d3 .eq. 0.0d0) d4 = 1.0d0
      d5 = atan2z (d2, d4) * 360.0d0 / twopi
-8115 write (unit = lunit6, fmt = 8116) bus(n1), bus(n2), d3, d5, d1, d2
+     write (unit = lunit6, fmt = 8116) bus(n1), bus(n2), d3, d5, d1, d2
   end do
 8116 format (6x, a6, 6x, a6, e20.8, f15.6, 2e20.8)
 8120 if (fmaxfs .eq. 0.0d0) go to 7481
@@ -931,16 +926,13 @@ subroutine over11
   do jj = 1, ltemp
      write (unit = lunit4) (jch2(i), jch2(i), i = 1, numnvo)
   end do
-7474 continue
   do jj = 1, ltemp
      write (unit = lunit4) (jch2(i), jch2(i), i = 1, numnvo)
   end do
-7475 continue
   write (unit = lunit4) (jch2(i), jch2(i), i = 1, n74)
   do jj = 1, ltemp
      write (unit = lunit4) (n8, n9, i = 1, numnvo), (n18, n19, i = 1, numnvo)
   end do
-7476 continue
   write (unit = lunit4) (n28, n29, i = 1, n74), (n28, n29, i = 1, n74)
   if (iprsup .ge. 1 ) write (unit = lunit6, fmt = 7477) n5, n6, n7, n8, n9, numnvo, (jch2(i), i = 1, numnvo)
 7477 format (/, ' lunit4 header record.      n5      n6      n7      n8      n9  numnvo', /, 22x,  6i8,  5x, '(jch2(i), i=1, numnvo)  follow ...', /, (1x, 20i6))
@@ -963,7 +955,7 @@ subroutine over11
      volti(ip + 1) = fshold (ihalf + k)
      volti(ip + 2) = fshold (ihalf + k + 1)
      k = k + 2
-3040 ip = ip + 2
+     ip = ip + 2
   end do
 3075 do i = 1, numnvo
      volti(ip + 1) = solr(i)
@@ -990,7 +982,7 @@ subroutine over11
   call pltfil (ip)
   go to 7462
 3010 jtemp = knt
-  if (nsolve .eq. 1 .and. knt .eq. 1) n899 = alogz (fmaxfs / fminsv) / alogz (-delffs) + 2.5d0
+  if (nsolve .eq. 1 .and. knt .eq. 1) n899 = int (alogz (fmaxfs / fminsv) / alogz (-delffs) + 2.5d0)
   if (nsolve .eq. 1) jtemp = knt + n899
   n77 = 4 * numnvo
   ik = (jtemp - 1) * n77
@@ -1071,7 +1063,6 @@ subroutine over11
         if (iprsup .ge. 3) write (unit = lunit6, fmt = *) ' fshold for % error:', jpp, (fshold(jpp + m), m = 1, 2)
         jpp = jpp + 2
      end do
-3098 continue
   end do
 3100 continue
   go to 9900
@@ -1084,7 +1075,6 @@ subroutine over11
   do i = 1, 13
      if (aupper(i) .ne. blank) go to 8123
   end do
-8139 continue
   write (unit = lunit6, fmt = 8124)
 8124 format ('+Blank card terminating plot spec. cards.')
   go to 9205
@@ -1111,7 +1101,7 @@ subroutine over11
   lstat(18) = 11
 9900 if (iprsup  .ge.  1) write (unit = lunit6, fmt = 4568)
 4568 format ('  "Exit  module over11."')
-99999 return
+  return
 end subroutine over11
 
 !
@@ -1130,18 +1120,18 @@ subroutine smint
   use over11mod
   implicit none
   !     This module is used only by Brandwajn (type-59) s.m. model
-  character(8) :: text1, text4
+  character(8) :: text1
   integer(4) :: i, i26, i30, i75, ib, ic, idd, idelta, ii, iiter, ik, il, ilb
   integer(4) :: ilk, ilmass, ilstor, in, ineg, ipb, ipp, isact
   integer(4) :: j, j30, jmset
   integer(4) :: k, k1, k14, karc, kmset, ksm
   integer(4) :: l, lmset
-  integer(4) :: n1, n2, n3, n4, n5, n6, n7, n9, n10, n12, n15, n21, n31, n33, nloce
+  integer(4) :: n1, n2, n3, n4, n5, n6, n7, n9, n10, n12, n15, n20, n21, n31, n33, nloce
   integer(4) :: nloce1, nlocg, nlocg1, num1, num2, num4, num6, numask, nwd
-  real(8) :: a, ac1, ac2, acde, acdf, acee, acef, adeld, adk, adl, adm, ads, ang
+  real(8) :: a, ac1, ac2, acde, acdf, acee, acef, adeld, adk, adl, adm, ads
   real(8) :: aimia1, aip, ajj, akm, akn, arp, aye, ayr
   real(8) :: b, b1, b2, b6, bs
-  real(8) :: c1, ca, ca1, caang, caang1, cai, camag, camag1, camneg, can, clii
+  real(8) :: c1, ca, ca1, caang, caang1, cai, camag, camag1, camneg, can
   real(8) :: caneg, car, cazer, cb, cb2, cbi, cbr, cc2, cci, ccr, ci0, cid, cid1
   real(8) :: cif, cif1, cig, cikd, cikq, ciq, ciq1, cmneg, cmzer, cs, cz
   real(8) :: d1, d2, d3, d4, d5, d6, d7, d8, d20, d22, ds
@@ -1453,7 +1443,7 @@ subroutine smint
      !     time step even for an unsaturated machine  ***********************
      elp(i75 + 2) = acde
      elp(i75 + 3) = acdf
-106  cid = cid + x1(1)
+     cid = cid + x1(1)
      cu(n33 + 8) = cid
      can = can - 2.0d0 * omdt
      if (ineg .eq. 2) cu(n33 + 8) = cid1 + camneg * sinz (can)
@@ -1731,7 +1721,7 @@ subroutine smint
         adm  =  shp(n15 + numask)
         adk  =  shp(n15 + num2)
         ads  =  shp(n15 + 3 * numask)
-1160    write (unit = lunit6, fmt = 6264) ajj, adl, ads, adm, adk
+        write (unit = lunit6, fmt = 6264) ajj, adl, ads, adm, adk
      end do
 6264 format (1x, e21.7, 5x, 2e20.7, 2e30.7)
 1201 if (elp(i75 + 1) .eq. 0.0d0) go to 1218
@@ -1809,7 +1799,6 @@ subroutine smint
         write (unit = lunit6, fmt = 6278) d4,  ii
 6278    format (15x, f12.7, 4x, "'theta'  for mass no.", i3)
      end do
-2026 continue
      !     print angular velocities
      write (unit = lunit6, fmt = 6279)
 6279 format (/, ' Angular velocities of rotor masses, in units of (rad/sec) .')
@@ -1819,7 +1808,6 @@ subroutine smint
         write (unit = lunit6, fmt = 6280) d4, i
 6280    format (15x , f12.7, 4x, "'omega'  for mass no.", i3)
      end do
-2255 continue
      if ( num1 .eq. 0 )  go  to  1218
      !     print shaft torques
      write (unit = lunit6, fmt = 6281)
@@ -1834,7 +1822,6 @@ subroutine smint
         write (unit = lunit6, fmt = 6282)  ajj, i, i, n1
 6282    format (16x, e15.7, 4x, "'t", i2, "' --- Torque on shaft between mass", i3, '  and mass', i3)
      end do
-2460 continue
 1218 ilmass = ilmass + numask
      ilstor = ilstor + num6
      n33 = n33 + nwd
@@ -1843,13 +1830,11 @@ subroutine smint
      if (in .lt. ilk) go to 11
      j30 = j30 + 30
   end do
-900 continue
   !     erase synchronous machines from source tables  * * * * * * * * * *
   do i = 1, kconst
      j = i
      if (tstart(i) .eq. -9988.0d0) go to 915
   end do
-911 continue
   go to 918
 915 kconst = j - 1
 918 if (iprsup .ge. 1) write (unit = lunit6, fmt = 6284) kconst
@@ -1872,7 +1857,7 @@ subroutine slope (sft, ssld, ssad, acee)
   real(8) :: sb, sf4, sf5, sf6, sf7
   !
   adeld = sft / ssld - 0.9d0
-  n5 = 10.0d0 * adeld
+  n5 = int (10.0d0 * adeld)
   n5 = (n5 + 1) / 2
   sb = n5
   sb = sb  * 0.1d0
@@ -1898,8 +1883,6 @@ subroutine ssout (l, erk, eik, erm, eim, currk, curik, currm, curim)
   real(8), intent(in) :: eik, eim, erk, erm
   integer(4) :: k
   integer(4) :: m
-  real(8) :: a, a8sw, ac1, ac2, acde, acdf, acee, acef, adeld, adk, adl, adm
-  real(8) :: ads, aimia1, aip, ajj, akm, akn
   real(8) :: cak, cam, cmk, cmm
   real(8) :: picon, pk, ploss, pm
   real(8) :: qk, qloss, qm
@@ -1965,7 +1948,7 @@ subroutine ssout (l, erk, eik, erm, eim, currk, curik, currm, curim)
   !     Begin code for branch flows (80 or 132 columns):
 2040 if (kol132 .eq. 132) go to 2045
   !     Begin special code dedicated to 80-col. branch flow:
-3224 write (unit = lunit6, fmt = 3225) bus1, vk, vm, cmk, pk
+  write (unit = lunit6, fmt = 3225) bus1, vk, vm, cmk, pk
 3225 format (/, 1x, a6, 13x, 4e15.7)
   write (unit = lunit6, fmt = 3229) bus2, thk, thm, cak, qk
 3229 format (14x, a6, 3f15.4, e15.7)
@@ -1980,7 +1963,7 @@ subroutine ssout (l, erk, eik, erm, eim, currk, curik, currm, curim)
   write (unit = lunit6, fmt = 2054) bus2, erm, vm, currm, cmm, pm
 2054 format (/, 15x, a6, 3(5x, 2e15.7))
   write (unit = lunit6, fmt = 2052) eim, thm, curim, cam, qm
-3278 write (unit = lunit6, fmt = 2052)
+  write (unit = lunit6, fmt = 2052)
 4500 return
 end subroutine ssout
 

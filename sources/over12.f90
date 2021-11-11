@@ -6,7 +6,8 @@
 
 module over12mod
   implicit none
-
+  save
+  
 contains
 
   !
@@ -139,9 +140,6 @@ end module over12mod
 !
 
 subroutine over12
-  use over12mod
-  use fdqlcl
-  use systematic
   use blkcom
   use labcom
   use tacsar
@@ -153,13 +151,19 @@ subroutine over12
   use random
   use movcop
   use bcdtim
+  use comthl
+  use over12mod
+  use fdqlcl
+  use systematic
   implicit none
-  !  dimension wk1(1)
-  !  equivalence (semaux(1), wk1(1))
   !  dimension akey(1), tstat(1)
+  !  dimension wk1(1)
+  !
+  !  equivalence (semaux(1), wk1(1))
   !  equivalence (akey(1), adelay(1)), (tstat(1), crit(1))
   !     dc-48 had "lastsw" clobbered on 2nd energization; change
   !     dummy usage of this vector to "lastxx" temporarily (12 sep
+  character(8) :: atim(2)
   integer(4) :: i, ii, ikf, ilorow, iofcnt, ioftab, ip, iprint, iprout, iq
   integer(4) :: irbase, isecti, isfd, itadd
   integer(4) :: j, j1, jgl, jglnn, jlk, jt
@@ -170,22 +174,23 @@ subroutine over12
   integer(4) :: ncompt, ndx1, ndx2, ndx3, ndx4, ndx5, ndxi, nhalf, ni, nj, nk1
   integer(4) :: nn1, nn8, nn9, nn11, nn12, nn13, nn15, npair, nph, nra, nrz
   integer(4) :: ns1, ns2, nwww
-  real(8) :: a, akey(1), az, azi, azr
-  real(8) :: bias, bias2, bnrz
-  real(8) :: cj, cz
+  real(8) :: a, az, azi, azr
+  real(8) :: bias, bias2
+  real(8) :: cz
   real(8) :: d1, d2, d22, d7, d8, d9, d14, d18
-  real(8) :: d0sum, dblpr1, dblpr2, dblpr3, dblpr4, dj, dum9, eh, ej, esum
+  real(8) :: dblpr1, dblpr2, dblpr3, dblpr4, dum9, eh
   real(8) :: fac1, fac2, fac3, fac4, fac5, fsigma
   real(8) :: gus1, gus2, h2, h3, hi, one
   real(8) :: ranoff, rll, rng
   real(8) :: secfrq, seed, seedr, sk1i, sk1r, sll, sumdt
-  real(8) :: tdiff, timev, tma, tmb, tmc, tmean, tmt, total, tstat(1), tstati
+  real(8) :: tdiff, timev, tma, tmb, tmc, tmean, tmt, total, tstati
   real(8) :: tstatj, tstbeg
   real(8) :: window
   real(8) :: xd, xll, xn, xq
-  real(8) :: y05, yll, yx
+  real(8) :: yll, yx
   real(8) :: zerofl
   !  dimension cmi(1), cmr(1)
+  !
   !  equivalence (kks(1), cmr(1))
   !  equivalence (kknonl(1), cmi(1))
   !  equivalence (moncar(1), knt), (moncar(2), kbase)
@@ -193,18 +198,9 @@ subroutine over12
   !  equivalence (moncar(5), idist), (moncar(6),itest)
   !  equivalence (moncar(8), jseedr)
   !  equivalence (moncar(9), kloaep), (moncar(10), mtape)
-  character(8) :: atim(2)
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over12."')
-  ll0 = size (transfer (kks, cmr))
-  allocate (cmr(ll0))
-  cmr = transfer (kks, cmr)
-  if (.not. allocated (cmr)) then
-     write (unit = lunit6, fmt = 4500) ll0
-4500 format (' Could no allocate cmr space (', i8, ').  Stop.')
-     call stoptp
-  end if
   nph = 0
   nqtt = 0
   nqtw = 0
@@ -441,7 +437,7 @@ subroutine over12
      angle = ranoff * 360.0d0 * statfr
      go to 1620
 1619 bias2 = ranoff
-     angtpe = ranoff * 360. * statfr
+     angtpe = ranoff * 360.0d0 * statfr
   end do
 1620 continue
 1646 do ksw = 1, kswtch
@@ -1270,10 +1266,9 @@ subroutine over12
 9200 lastov = 12
   nchain = 51
   lstat(18) = 12
-9800 if ( iprsup  .ge.  1 )  write ( lunit6, 4568 )
-4568 format (' exit module "over12".')
-99999 if (allocated (cmr)) deallocate (cmr)
-  return
+9800 if (iprsup .ge. 1)  write (unit = lunit6, fmt = 4568)
+4568 format (' Exit module "over12".')
+99999 return
 end subroutine over12
 
 !
@@ -1359,16 +1354,17 @@ subroutine  tacs2
   real(8) :: a, amax, angl
   real(8) :: b, bb, bi, br
   real(8) :: critia
-  real(8) :: d1, d1tttt, d2, d3, d4, d5, d6, d7, d8, defi, defr, dpd, dum9
+  real(8) :: d1, d1tttt, d2, d3, d4, d5, d6, d7, d8, defi, defr, dpd, dum9(10)
   real(8) :: epslon
   real(8) :: f1, f2, freqhz
   real(8) :: omegar
   real(8) :: picon, pru, prx
   real(8) :: real, rima
   real(8) :: xaisav, xarsav, xtcsav
-  character(8) :: dumj, alnode, texnam(5)
-  dimension dum9(10), dumj(9)
+  character(8) :: dumj(9), texnam(5)
+  !
   !  equivalence (moncar(2), kbase), (moncar(3), ltdelt)
+  !
   !1000 if (iprsup .ge. 1) write (lunit6, 1001)  lastov, m4plot
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 1001) lastov, m4plot
 1001 format (' enter "tacs2".  lastov, m4plot =', 2i6)
@@ -1933,7 +1929,7 @@ subroutine  tacs2
      if ( iac .eq. 1  .and.  n1 .eq. 14 )  go to 500
      if ( n1 .ge. 90  .and.  t .gt. 0.0 )  go to 500
      if ( n1 .lt. 90 )  go to 501
-     k = ud1(ndy5 + 2)
+     k = int (ud1(ndy5 + 2))
      if ( n1 .gt. 93 )  go to 500
      n2 = n1 - 89
      go to ( 502, 508, 504, 506), n2
@@ -2326,7 +2322,7 @@ subroutine  tacs2
   lstat(32) = ioutcs
   nenerg = 0
   kbase = 0
-  begmax(1) = 0.0
+  begmax(1) = 0.0d0
   ipunch = 0
   go to 9000
   !                                           $$$  ac  steady - state  $$$
@@ -2556,7 +2552,7 @@ subroutine  tacs2
         if (ndxi .eq. 14) go to 3003
         if (ndxi .eq. 90 .or. ndxi .eq. 91) go to 3001
         go to 3020
-3001    k = ud1(ndy5 + 2)
+3001    k = int (ud1(ndy5 + 2))
         if (ndxi .eq. 91) go to 3131
         xar(ndx3) = e(k)
         xar(ndx2) = f(k)
@@ -2953,14 +2949,14 @@ subroutine csupdc (l)
   a = parsup(ndx2) + d9 * (b - parsup(ndx4))
   go to 11
   !     ---  input  if - block  ---
-660 n7 = parsup(nn + 1)
+660 n7 = int (parsup(nn + 1))
   if (n7 .lt. 1 .or. n7 .gt. 3) go to 10
   j = ivarb(n1 + 1) - n7 + 3
   ndx4 = kxtcs + ksus(kalksu + j)
   a = xtcs(ndx4) * ksus(kksus + j)
   go to 11
   !     ---  input  signal  selector  ---
-661 n7 = parsup(nn)
+661 n7 = int (parsup(nn))
   if (n7 .le. 0 .or. n7 .gt. 8) go to 10
   !  go to ( 6611, 6611, 6611, 6611, 6611, 6616, 6617, 6618 ), n7
   select case (n7)
@@ -3317,13 +3313,13 @@ end subroutine mul
 !
 
 subroutine elecyy
-  use over12mod
   use blkcom
   use labcom
   use tacsar
   use smach
   use tracom
   use movcop
+  use over12mod
   implicit none
   !     This module is used only by brandwajn (type-59) s.m. model
   integer(4) :: i, i26, i30, i75, ibk, ibl, idelta, ids, idt, ii, ik, ilk, imech, in, is, iu

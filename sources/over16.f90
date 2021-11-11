@@ -14,10 +14,12 @@ subroutine over16
   use umcom
   use tacsar
   implicit none
+  !
   !  dimension xx(1)
-  !  equivalence (xk(1), xx(1))
   !  dimension ispum(1)
+  !  equivalence (xk(1), xx(1))
   !  equivalence  (spum(1), ispum(1))
+  !
   integer(4) :: n1
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
@@ -25,7 +27,7 @@ subroutine over16
   if (numum .eq. 0) go to 2450
   if (lastov .eq. 1) go to 2450
   if (lastov .eq. 20) go to 2450
-  call solvum (spum(iureac), spum(iugpar), spum(iufpar), spum(iuhist), spum(iuumrp), ispum(iunod1), ispum(iunod2), ispum(iujclt), ispum(iujclo), ispum(iujtyp), ispum(iunodo), ispum(iujtmt), spum(iuhism), spum(iuomgm), spum(iuomld), spum(iutham), spum(iuredu), spum(iureds), spum(iuflds), spum(iufldr), spum(iurequ), spum(iuflqs), spum(iuflqr), ispum(iujcds), ispum(iujcqs), spum(iuflxd), spum(iuflxq), ispum(iunppa), spum(iurotm), ispum(iuncld), ispum(iunclq), ispum(iujtqo), ispum(iujomo), ispum(iujtho), spum(iureqs), spum(iuepso), spum(iudcoe), ispum(iukcoi), spum(iuvolt), spum(iuangl), ispum(iunodf), ispum(iunodm), ispum(iukumo), ispum(iujumo), spum(iuumou))
+  call solvum (spum(iureac :), spum(iugpar :), spum(iufpar :), spum(iuhist :), spum(iuumrp :), ispum(iunod1 :), ispum(iunod2 :), ispum(iujclt :), ispum(iujclo :), ispum(iujtyp :), ispum(iunodo :), ispum(iujtmt :), spum(iuhism :), spum(iuomgm :), spum(iuomld :), spum(iutham :), spum(iuredu :), spum(iureds :), spum(iuflds :), spum(iufldr :), spum(iurequ :), spum(iuflqs :), spum(iuflqr :), ispum(iujcds :), ispum(iujcqs :), spum(iuflxd :), spum(iuflxq :), ispum(iunppa :), spum(iurotm :), ispum(iuncld :), ispum(iunclq :), ispum(iujtqo :), ispum(iujomo :), ispum(iujtho :), spum(iureqs :), spum(iuepso :), spum(iudcoe :), ispum(iukcoi :), spum(iuvolt :), spum(iuangl :), ispum(iunodf :), ispum(iunodm :), ispum(iukumo :), ispum(iujumo :), spum(iuumou :))
 2450 do
      if (kill .eq. 0) go to 2468
      nchain = 51
@@ -72,7 +74,11 @@ subroutine subts1
   use movcop
   use strcom
   implicit none
-  integer(4) :: i, i1, ii, iit1, ip, isss, j, j11, jj
+  character(8) :: text1, text2, text3, text4, text5, text6
+  character(8) :: text7, text8, text9
+  character(8) :: text10, text11, text12, text13
+  integer(4) :: i, i1, ii, iit1, ip, isss
+  integer(4) :: j, j11, jj
   integer(4) :: k, k1, k9899, knode
   integer(4) :: l, ll10
   integer(4) :: m, m1, mk, mnode
@@ -85,13 +91,12 @@ subroutine subts1
   real(8) :: swcold(100)
   real(8) :: tcl, timswt
   real(8) :: vsl
-  !dimension nsubkm(1), swcold(100)
+  !
+  !  dimension nsubkm(1), swcold(100)
+  !
   !  equivalence (spum(1),  ispum(1)),  (kknonl(1),  nsubkm(1))
   !  equivalence (moncar(1),    knt),       (moncar(2),  kbase)
   !  equivalence (iprsov(35), ipoint),  (iprsov(36), iupper)
-  character(8) :: text1, text2, text3, text4, text5, text6
-  character(8) :: text7, text8, text9
-  character(8) :: text10, text11, text12, text13
   !
   data text1  / 'valve ' /
   data text2  / 'diode ' /
@@ -111,7 +116,7 @@ subroutine subts1
 548 format (' Begin 1st piece of time-step loop.   istep  isprin', '  isplot  kswtch   inonl   num99  iupper     knt  nenerg', /, 35x, 10i8)
   if (numsm .gt. 0) call update
   if (kswtch .le. 0) kcount = nv
-1000 if (kswtch .le. 0) go to 1009
+  if (kswtch .le. 0) go to 1009
   if (istep .gt. 0) go to 3780
   !     add code for random opening with current margin (from over5):
   ndx1 = lswtch + 1
@@ -305,7 +310,7 @@ subroutine subts1
   !     If u.m. imitation of s.m. modeling (loopss(1)=6644),  then
   !     go back into solvum to pass machine quantities (including
   !     just-calculated torque in tclose of switch) to tacs:
-1009 if (loopss(1) .eq. 6644) call solvum (spum(iureac), spum(iugpar), spum(iufpar), spum(iuhist), spum(iuumrp), ispum(iunod1), ispum(iunod2), ispum(iujclt), ispum(iujclo), ispum(iujtyp), ispum(iunodo), ispum(iujtmt), spum(iuhism), spum(iuomgm), spum(iuomld), spum(iutham), spum(iuredu), spum(iureds), spum(iuflds), spum(iufldr), spum(iurequ), spum(iuflqs), spum(iuflqr), ispum(iujcds), ispum(iujcqs), spum(iuflxd), spum(iuflxq), ispum(iunppa), spum(iurotm), ispum(iuncld), ispum(iunclq), ispum(iujtqo), ispum(iujomo), ispum(iujtho), spum(iureqs), spum(iuepso), spum(iudcoe), ispum(iukcoi), spum(iuvolt), spum(iuangl), ispum(iunodf), ispum(iunodm), ispum(iukumo), ispum(iujumo), spum(iuumou))
+1009 if (loopss(1) .eq. 6644) call solvum (spum(iureac :), spum(iugpar :), spum(iufpar :), spum(iuhist :), spum(iuumrp :), ispum(iunod1 :), ispum(iunod2 :), ispum(iujclt :), ispum(iujclo :), ispum(iujtyp :), ispum(iunodo :), ispum(iujtmt :), spum(iuhism :), spum(iuomgm :), spum(iuomld :), spum(iutham :), spum(iuredu :), spum(iureds :), spum(iuflds :), spum(iufldr :), spum(iurequ :), spum(iuflqs :), spum(iuflqr :), ispum(iujcds :), ispum(iujcqs :), spum(iuflxd :), spum(iuflxq :), ispum(iunppa :), spum(iurotm :), ispum(iuncld :), ispum(iunclq :), ispum(iujtqo :), ispum(iujomo :), ispum(iujtho :), spum(iureqs :), spum(iuepso :), spum(iudcoe :), ispum(iukcoi :), spum(iuvolt :), spum(iuangl :), ispum(iunodf :), ispum(iunodm :), ispum(iukumo :), ispum(iujumo :), spum(iuumou :))
   if (kill .gt. 0) go to 9200
 !!!!  write (*,*) ' tacs?  ktab, istep, newtac =',  ktab, istep, newtac
   if (ktab .le. 0 .or. istep .le. 0) go to 3865
@@ -450,7 +455,7 @@ subroutine subts1
      j = 0
      if (nltype(i) .ne. -96) go to 7642
      n6 = nonlad(i)
-     n7 = cchar(n6)
+     n7 = int (cchar(n6))
      n9 = ilast(i)
      n10 = n9 + n7 - 1
      n12 = n6 + 2
@@ -485,7 +490,7 @@ subroutine subts1
      end do
 1123 continue
      cchar(n12) = n10 + 1
-1125 n13 = cchar(n12) + n7 + 1
+1125 n13 = int (cchar(n12)) + n7 + 1
      d9 = vchar(n13) * cchar(n6 + 3) + cchar(n13)
      d10 = d8 - d9
      !     Compare available distance and normal operation distance
@@ -520,7 +525,7 @@ subroutine subts1
      end do
 1140 continue
      cchar(n12) = n10 + 1
-1141 n13 = cchar(n12) + n7 + 1
+1141 n13 = int (cchar(n12)) + n7 + 1
      d9 = vchar(n13) * cchar(n6 + 3) - cchar(n13)
      d10 = d9 - d8
      !     compare available distance and normal operation distance
@@ -569,7 +574,7 @@ subroutine subts1
      end do
 1701 continue
      cchar(n12) = n10 + 1
-1710 n13 = cchar(n12) + n7 + 1
+1710 n13 = int (cchar(n12)) + n7 + 1
      d9 = vchar(n13) * gslope(n6 + 4) + cchar(n13)
      d6 = vchar(n6 + 4) - d9
 1575 do n11 = n9, n10
@@ -579,7 +584,7 @@ subroutine subts1
      end do
 1750 continue
      cchar(n12) = n10 + 1
-1760 n13 = cchar(n12) + n7 + 1
+1760 n13 = int (cchar(n12)) + n7 + 1
      d10 = vchar(n13) * vchar(n6 + 3) + cchar(n13)
      d11 = vchar(n6 + 2) - d10
      do n11 = n9, n10
@@ -619,7 +624,7 @@ subroutine subts1
      end do
 1600 continue
      cchar(n12) = n10 + 1
-1610 n13 = cchar(n12) + n7 + 1
+1610 n13 = int (cchar(n12)) + n7 + 1
      d9 = vchar(n13) * gslope(n6 + 4) - cchar(n13)
      d6 = d9 - vchar(n6 + 4)
 1515 do n11 = n9, n10
@@ -629,7 +634,7 @@ subroutine subts1
      end do
 1650 continue
      cchar(n12) = n10 + 1
-1660 n13 = cchar(n12) + n7 + 1
+1660 n13 = int (cchar(n12)) + n7 + 1
      d10 = vchar(n13) * vchar(n6 + 3) - cchar(n13)
      d11 = d10 - vchar(n6 + 2)
      do n11 = n9, n10
@@ -677,7 +682,7 @@ subroutine subts1
 1705 vchar(n6) = (d12 - d13) / (vchar(n6 + 4) - vchar(n6 + 5))
      vchar(n6 + 1) = d12 - vchar(n6) * vchar(n6 + 4)
      if (cchar(n6 + 1) .eq. 1) go to 1312
-1212 n14 = cchar(n12)
+1212 n14 = int (cchar(n12))
      n13 = n14 + n7 + 1
      if (cchar(n6 + 5) .eq. 1 ) go to 1213
      d13 = gslope(n14) * (1.0d0 + vchar(n6))
@@ -688,7 +693,7 @@ subroutine subts1
 1213 d13 = vchar(n13)
      d14 = cchar(n13)
      go to 1315
-1312 n14 = cchar(n12)
+1312 n14 = int (cchar(n12))
      n13 = n14 + n7 + 1
      if (cchar(n6 + 5) .eq. 1) go to 1313
      d13 = gslope(n14) * (1.0d0 - vchar(n6))
@@ -1157,7 +1162,7 @@ subroutine subts1
   end do
 8801 continue
   !              Call to solvum if no compensation of um power circuits :
-5000 if (loopss(8) .eq. 3) call solvum (spum(iureac), spum(iugpar), spum(iufpar), spum(iuhist), spum(iuumrp), ispum(iunod1), ispum(iunod2), ispum(iujclt), ispum(iujclo), ispum(iujtyp), ispum(iunodo), ispum(iujtmt), spum(iuhism), spum(iuomgm), spum(iuomld), spum(iutham), spum(iuredu), spum(iureds), spum(iuflds), spum(iufldr), spum(iurequ), spum(iuflqs), spum(iuflqr), ispum(iujcds), ispum(iujcqs), spum(iuflxd), spum(iuflxq), ispum(iunppa), spum(iurotm), ispum(iuncld), ispum(iunclq), ispum(iujtqo), ispum(iujomo),  ispum(iujtho), spum(iureqs), spum(iuepso), spum(iudcoe), ispum(iukcoi), spum(iuvolt), spum(iuangl), ispum(iunodf),  ispum(iunodm), ispum(iukumo), ispum(iujumo), spum(iuumou))
+5000 if (loopss(8) .eq. 3) call solvum (spum(iureac :), spum(iugpar :), spum(iufpar :), spum(iuhist :), spum(iuumrp :), ispum(iunod1 :), ispum(iunod2 :), ispum(iujclt :), ispum(iujclo :), ispum(iujtyp :), ispum(iunodo :), ispum(iujtmt :), spum(iuhism :), spum(iuomgm :), spum(iuomld :), spum(iutham :), spum(iuredu :), spum(iureds :), spum(iuflds :), spum(iufldr :), spum(iurequ :), spum(iuflqs :), spum(iuflqr :), ispum(iujcds :), ispum(iujcqs :), spum(iuflxd :), spum(iuflxq :), ispum(iunppa :), spum(iurotm :), ispum(iuncld :), ispum(iunclq :), ispum(iujtqo :), ispum(iujomo :),  ispum(iujtho :), spum(iureqs :), spum(iuepso :), spum(iudcoe :), ispum(iukcoi :), spum(iuvolt :), spum(iuangl :), ispum(iunodf :),  ispum(iunodm :), ispum(iukumo :), ispum(iujumo :), spum(iuumou :))
   if (kill .gt. 0) go to 9200
   if (iprsup .gt. 2) write (unit = lunit6, fmt = 3992) (e(i), f(i), i = 1, ntot)
 3992 format (/, ' (e(i), f(i), i=1, ntot)   at the end of the first piece of the time-step loop.', /, (1x, 10e13.3))
@@ -1301,7 +1306,7 @@ subroutine switch
   integer(4) :: l1, l2, l3, l4, l5, ll, ll2
   integer(4) :: m, m1, m2, m3, m4, m5, m6, m7, m9, mm, mo
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n12, n13, n14, n15, n16
-  integer(4) :: n17, n18, n19, ndx1, ndx2, nless, nmax, nmin, nn, nover, numb
+  integer(4) :: n17, n18, n19, n20, ndx1, ndx2, nless, nmax, nmin, nn, nover, numb
   !  equivalence (ktrlsw(1), n20)
   !
   !     Overlay-16 module called by "subts1" if and only if one or more
@@ -2284,8 +2289,10 @@ subroutine subts2
   real(8) :: xmn4, xxik, xxik1, xxim, xxim1
   real(8) :: yk, ym, yx
   !     %include  '//c/tsu/cables.ins.ftn'
+  !
   equivalence (h1, sk), (d2, sm)
   !  equivalence (iprsov(35), ipoint)
+  !
   !  wk1( koff1 + k ) << vm5dt( k ); wk1( koff2 + k ) << vk5dt( k )
   !  wk1( koff3 + k ) <<<  fm5( k ); wk1( koff4 + k ) <<<  bk5( k )
   !  wk1( koff5 + k ) <<<  vk5( k ); wk1( koff6 + k ) <<<  vm5( k )
@@ -2295,8 +2302,9 @@ subroutine subts2
   !  wk1( koff15 + k ) <<<  hk( k ); wk1( koff16 + k )<<<   hm( k )
   !  wk1( koff17 + k ) <<<vkdt( k ); wk1( koff18 + k ) <<<vmdt( k )
   !  dimension wk1(1)
-  !  equivalence (semaux(1), wk1(1))
   !  dimension infdli(1)
+  !
+  !  equivalence (semaux(1), wk1(1))
   !  equivalence (namebr(1), infdli(1))
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 3445) (f(j), j = 1, ntot )
@@ -3787,13 +3795,19 @@ subroutine update
   real(8) :: s1, sf4, sf5, spdd, spdn, sum
   real(8) :: tsc, tsd
   real(8) :: v1, v2, v3
+  !
   !  dimension vsmout(1)
-  !  equivalence (ismout(1), vsmout(1))
   !  dimension massex(1)
+  !
+  !  equivalence (ismout(1), vsmout(1))
   !  equivalence ( histq(1), massex(1) )
   !
   !     This routine adjusts the current sources to be injected into
   !     the equivalent pi-circuits * * * * * * * * * * * * * * * * * * * *
+  !
+  massex = transfer (histq, massex)
+  vsmout = transfer (ismout, vsmout)
+  !
   if (iprsup  .ge.  1) write (unit = lunit6, fmt = 4099)
 4099 format ('  "Begin module update."')
   !     initialize counters     ******************************************
@@ -4077,30 +4091,30 @@ subroutine update
         n5 = ismout( ipout )
         go to (8201,8201,8201,8201,8201,8201,8201,8202,8203,8204,8205,8206,8206,8208,8209,8207 ), n5
 8201    l = n5  + n8
-        vsmout( icnt ) = cu( l )
+        vsmout(icnt) = cu(l)
         go to 8200
-8202    vsmout( icnt ) = d6
+8202    vsmout(icnt) = d6
         go to 8200
-8203    vsmout( icnt ) = d7
+8203    vsmout(icnt) = d7
         go to 8200
-8204    vsmout( icnt ) = d8
+8204    vsmout(icnt) = d8
         go to 8200
-8205    vsmout( icnt ) = q3
+8205    vsmout(icnt) = q3
         go to 8200
-8206    sf4 = a3 * elp( i26+21 ) + c1 + c2
-        sf5 = ( a4 * elp( i26+21 ) + c3 + c4 ) * elp( i75+4 )
-        if ( n5 .eq. 13 ) go to 8207
-        vsmout( icnt ) = sqrtz( sf4**2 + sf5**2 )
+8206    sf4 = a3 * elp(i26 + 21) + c1 + c2
+        sf5 = (a4 * elp(i26 + 21) + c3 + c4) * elp(i75 + 4)
+        if (n5 .eq. 13) go to 8207
+        vsmout(icnt) = sqrtz (sf4 ** 2 + sf5 ** 2)
         go to 8200
-8207    vsmout( icnt ) = atan2z( sf5, sf4 )
+8207    vsmout(icnt) = atan2z (sf5, sf4)
         go to 8200
-8208    vsmout( icnt ) = cd
+8208    vsmout(icnt) = cd
         go to 8200
-8209    vsmout( icnt ) = cexc
+8209    vsmout(icnt) = cexc
      end do
 8200 continue
-8215 n9 = ismdat( i30+18 )
-     if ( n9 .eq. 0 )  go  to  8225
+8215 n9 = ismdat(i30 + 18)
+     if (n9 .eq. 0) go to 8225
      d9 = acb / cz
      do ka = 1, n9
         ipout =  ipout  + 3
@@ -4717,9 +4731,13 @@ subroutine subts3
   use smach
   use tracom
   use movcop
+  use freedom
   implicit none
-  integer(4) :: i, i1, i2, ii, j, j8, k, l, ll2, ll6, ll8
-  integer(4) :: ll10, m, mpower
+  integer(4) :: i, i1, i2, ii
+  integer(4) :: j, j8
+  integer(4) :: k
+  integer(4) :: l, ll2, ll6, ll8, ll10
+  integer(4) :: m, mpower
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n13, n14, n15, ndx1
   integer(4) :: nn15, nodev
   real(8) :: a, a2, d1, d2, d4, delti, fchar(20), gus1, gus2, gus3, gus4, h1, h2
@@ -4727,19 +4745,17 @@ subroutine subts3
   real(8) :: ts, tz1
   real(8) :: vdiff, vsl, vsr, vzero2
   real(8) :: yx
+  !
   !  dimension fchar(20)
   !  dimension xx(1), volta(1)
   !  dimension nsubkm(1)
+  !  dimension vsmout(1)
+  !
   !  equivalence (kknonl(1), nsubkm(1))
   equivalence (h1, sk), (d2, sm)
-  !
   !  equivalence (xk(1), xx(1)), (volti(1), volta(1))
   !  equivalence (moncar(2), kbase)
   !  equivalence (iprsov(36), iupper)
-  !  include 'tacsar.ftn'
-  !  include 'syncom.ftn'
-  !  include 'synmac.ftn'
-  !  dimension vsmout(1)
   !  equivalence (ismout(1), vsmout(1))
   !
   ll2 = 2
@@ -4927,7 +4943,8 @@ subroutine subts3
 10 format (10e8.0)
   go to 7825
 7823 nfrfld = 10
-  call frefld ( voltbc(1) )
+  !  call frefld (voltbc)
+  call free (voltbc)
 7825 if (voltbc(1) .ne. 9999.0d0) go to 11247
   write (unit = kunit6, fmt = 2241)
 2241 format ('+Another input card for type 1-10 sources.   End.')
@@ -5203,6 +5220,7 @@ subroutine zincox (ns)
   use movcop
   use strcom
   implicit none
+  character(8) :: text1, text2, text3, text4
   integer(4), intent(in) :: ns
   integer(4) :: ibk, ichr, ier, ik, il, il1, ils, ind, inl, iofzni, iofznr, ist, ityp
   integer(4) :: j, jb
@@ -5215,14 +5233,15 @@ subroutine zincox (ns)
   real(8) :: d3, d4, d5, d6, d11, d12, d35
   real(8) :: gap
   real(8) :: znvref
+  !
+  !  dimension nsubkm(1)
   !  dimension fold(1)
   !  dimension ksing(1), kindep(1)
+  !
   !  equivalence (ksing(1), cchar(1))
   !  equivalence (kindep(1), gslope(1))
   !  equivalence (fold(1), vchar(1))
-  !  dimension nsubkm(1)
   !  equivalence (kknonl(1), nsubkm(1))
-  character(8) :: text1, text2, text3, text4
   !
   data  text1 / 'spy   ' /
   data  text2 / 'solve ' /
@@ -6004,12 +6023,7 @@ end subroutine arrest
 ! subroutine solvnum.
 !
 
-subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, &
-     jclout, jtype,nodom, jtmtac, histom, omegm, omold, thetam, &
-     reamdu, reamds, flxds, flxdr, reamqu, flxqs, flxqr, &
-     jcdsat, jcqsat, flxd, flxq, nppair, rotmom, ncld, &
-     nclq, jtqout, jomout, jthout, reamqs, epsom, dcoef, &
-     kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, umoutp)
+subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, jclout, jtype,nodom, jtmtac, histom, omegm, omold, thetam, reamdu, reamds, flxds, flxdr, reamqu, flxqs, flxqr, jcdsat, jcqsat, flxd, flxq, nppair, rotmom, ncld, nclq, jtqout, jomout, jthout, reamqs, epsom, dcoef, kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, umoutp)
   use blkcom
   use labcom
   use tacsar
@@ -6035,7 +6049,7 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, &
   real(8), intent(in) :: reamdu, reamds, rotmom
   integer(4) :: inpust, itol, itolto, jm, jacob
   integer(4) :: kcl, kcld1, kclde, kcle, kclq1, kclqe, kconex
-  integer(4) :: mshare, n2, n3, n4, n9, n13, n14, n15, n16, n19, ncl, nclcom, ncurpr
+  integer(4) :: mshare, n2, n3, n4, n9, n13, n14, n15, n16, n19, n20, ncl, nclcom, ncurpr
   integer(4) :: nexc, nitrom, nmexc, noutst, nshare, ntyp59, nxout
   real(8) :: betad1, betaq, curmd, curmq, curmt, curum1, curum2, curum3
   real(8) :: d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d15, d16, d17
@@ -7769,14 +7783,17 @@ subroutine subts4
   use labcom
   use umcom
   implicit none
+  !
   !  dimension xx(1)
   !  dimension nsubkm(1)
+  !  dimension ispum(1)
+  !
   !  equivalence (kknonl(1), nsubkm(1))
   !  equivalence (xk(1), xx(1))
-  !  dimension ispum(1)
   !  equivalence (spum(1), ispum(1))
   !  equivalence (moncar(1), knt), (moncar(2), kbase)
   !  equivalence (moncar(9), kloaep)
+  !
   integer(4) :: k
   integer(4) :: m
   integer(4) :: n1, n4, n8, n15
@@ -7784,7 +7801,7 @@ subroutine subts4
   if (iprsup.ge.6) write (unit = lunit6, fmt = 1000) kswtch, inonl, num99, ncomp, ntot
 1000 format (' Top "subts4". kswtch, inonl, num99, ncomp, ntot =',  10i8)
   if (numum .le. 0) go to 1742
-  call solvum (spum(iureac), spum(iugpar), spum(iufpar), spum(iuhist), spum(iuumrp), ispum(iunod1), ispum(iunod2), ispum(iujclt), ispum(iujclo), ispum(iujtyp), ispum(iunodo), ispum(iujtmt), spum(iuhism), spum(iuomgm), spum(iuomld), spum(iutham), spum(iuredu), spum(iureds), spum(iuflds), spum(iufldr), spum(iurequ), spum(iuflqs), spum(iuflqr), ispum(iujcds), ispum(iujcqs), spum(iuflxd), spum(iuflxq), ispum(iunppa), spum(iurotm), ispum(iuncld), ispum(iunclq), ispum(iujtqo), ispum(iujomo), ispum(iujtho), spum(iureqs), spum(iuepso), spum(iudcoe), ispum(iukcoi), spum(iuvolt), spum(iuangl), ispum(iunodf), ispum(iunodm), ispum(iukumo), ispum(iujumo), spum(iuumou))
+  call solvum (spum(iureac :), spum(iugpar :), spum(iufpar :), spum(iuhist :), spum(iuumrp :), ispum(iunod1 :), ispum(iunod2 :), ispum(iujclt :), ispum(iujclo :), ispum(iujtyp :), ispum(iunodo :), ispum(iujtmt :), spum(iuhism :), spum(iuomgm :), spum(iuomld :), spum(iutham :), spum(iuredu :), spum(iureds :), spum(iuflds :), spum(iufldr :), spum(iurequ :), spum(iuflqs :), spum(iuflqr :), ispum(iujcds :), ispum(iujcqs :), spum(iuflxd :), spum(iuflxq :), ispum(iunppa :), spum(iurotm :), ispum(iuncld :), ispum(iunclq :), ispum(iujtqo :), ispum(iujomo :), ispum(iujtho :), spum(iureqs :), spum(iuepso :), spum(iudcoe :), ispum(iukcoi :), spum(iuvolt :), spum(iuangl :), ispum(iunodf :), ispum(iunodm :), ispum(iukumo :), ispum(iujumo :), spum(iuumou :))
   if (kill .gt. 0) go to 9200
 1742 if (ncomp .le. 0) go to 1570
   if (iprsup .ge. 6) write (unit = lunit6, fmt = 1554) (k, kknonl(k), e(k), znonl(k), k = 2, ntot)

@@ -27,7 +27,7 @@ subroutine subr44
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module subr44."')
-  length = size( (transfer (karray(1 :), stg)))
+  length = size ((transfer (karray(1 :), stg)))
   allocate (stg (length))
   stg = transfer (karray(1 :), stg)
   if (.not. allocated(stg)) then
@@ -40,7 +40,7 @@ subroutine subr44
   call dimens (lltemp(1), n8, trash, trash)
   do j = 1, 9999, 2
      if (lltemp(j) .eq. 0) go to 5636
-1003 end do
+  end do
   write (unit = lunit6, fmt = 5632) lltemp(1), kburro, nchain
 5632 format (' Temp error stop in "subr44".', 3i8)
   call stoptp
@@ -127,9 +127,9 @@ subroutine punpie (kcirct)
 5201    format (i2, 2a6, 12x, 3e16.5)
         if (kk .ne. j) write (unit = lunit7, fmt = 6201) p(kk), z(kk), yd(kk)
 6201    format (26x, 3e16.5)
-7201 end do
+     end do
      j = k + 1
-8201 end do
+  end do
   write (unit = lunit7, fmt = 2201)
 2201 format ('$vintage, 0')
   if (iprsup .ge. 1)  write (unit = *, fmt = *) ' Exit "punpie".'
@@ -168,11 +168,11 @@ subroutine dceign (ar, ai, vi, vr, er, ei, n, nm, ierr, nv, nb, lunit6, iprsup, 
   if (iprsup .ge. 1) write (unit = *, fmt = *) ' Top of dceign.  Input matrix ar ....'
   do i = 1, n
      if (iprsup .ge. 1) write (unit = *, fmt = *) (ar(i, j), j = 1, n)
-2222 end do
+  end do
   if (iprsup .ge. 1) write (unit = *, fmt = *) '                 input matrix ai ....'
   do i = 1, n
      if (iprsup .ge. 1) write (unit = *, fmt = *) (ai(i, j), j = 1, n)
-2223 end do
+  end do
   if (n .gt. nm) go to 90
   low = 1
   nupp = n
@@ -214,11 +214,11 @@ subroutine dceign (ar, ai, vi, vr, er, ei, n, nm, ierr, nv, nb, lunit6, iprsup, 
   write (unit = *, fmt = *) 'output matrix ar '
   do i = 1, n
      write (unit = *, fmt = *) (ar(i, j), j = 1, n)
-2224 end do
+  end do
   write (unit = *, fmt = *) 'output matrix ai '
   do i = 1, n
      write (unit = *, fmt = *) (ai(i, j), j = 1, n)
-2225 end do
+  end do
   return
 end subroutine dceign
 
@@ -331,7 +331,7 @@ subroutine cbal (nm, n, ar, ai, low, igh, scale, ndim)
      f = ai(i,j)
      ai(i,j) = ai(i,m)
      ai(i,m) = f
-30 end do
+  end do
   do i = k, n
      f = ar(j,i)
      ar(j,i) = ar(m,i)
@@ -339,7 +339,7 @@ subroutine cbal (nm, n, ar, ai, low, igh, scale, ndim)
      f = ai(j,i)
      ai(j,i) = ai(m,i)
      ai(m,i) = f
-40 end do
+  end do
 50 go to (80,130), iexc
   !     :::::::::: search for rows isolating an eigenvalue
   !                and push them down ::::::::::
@@ -371,7 +371,7 @@ subroutine cbal (nm, n, ar, ai, low, igh, scale, ndim)
 170 end do
   !     :::::::::: now balance the submatrix in rows k to l ::::::::::
   do i = k, l
-180  scale(i) = 1.0
+     scale(i) = 1.0
   end do
   !     :::::::::: iterative loop for norm reduction ::::::::::
 190 noconv = 0
@@ -406,12 +406,13 @@ subroutine cbal (nm, n, ar, ai, low, igh, scale, ndim)
      do j = k, n
         ar(i,j) = ar(i,j) * g
         ai(i,j) = ai(i,j) * g
-250  end do
+     end do
      do j = 1, l
         ar(j,i) = ar(j,i) * f
         ai(j,i) = ai(j,i) * f
-260  end do
-270 end do
+     end do
+  end do
+270 continue
   if (noconv .eq. 1) go to 190
 280 low = k
   igh = l
@@ -498,7 +499,7 @@ subroutine cbabk2 (nm, n, low, igh, scale, m, zr, zi, ndim)
      i = ii
      if (i .ge. low .and. i .le. igh) go to 140
      if (i .lt. low) i = low - ii
-     k = scale(i)
+     k = int (scale(i))
      if (k .eq. i) go to 140
      do j = 1, m
         s = zr(i,j)
@@ -590,7 +591,7 @@ subroutine comhes (nm, n, low, igh, ar, ai, int, lunit6, iprsup, ndim, iord)
   epscmh = 1.e-15
   do i = 1, 20
      iord(i) = i
-121 end do
+  end do
   la = igh - 1
   kp1 = low + 1
   if (iprsup .ge. 3 ) write (unit = lunit6, fmt = 20) igh, low, la, kp1
@@ -623,7 +624,7 @@ subroutine comhes (nm, n, low, igh, ar, ai, int, lunit6, iprsup, ndim, iord)
         yi = ai(i, j)
         ai(i, j) = ai(m, j)
         ai(m, j) = yi
-110  end do
+     end do
      do j = 1, igh
         yr = ar(j, i)
         ar(j, i) = ar(j, m)
@@ -631,7 +632,7 @@ subroutine comhes (nm, n, low, igh, ar, ai, int, lunit6, iprsup, ndim, iord)
         yi = ai(j, i)
         ai(j, i) = ai(j, m)
         ai(j, m) = yi
-120  end do
+     end do
      !     :::::::::: end interchange ::::::::::
      !  130    if (xr .lt. d13 .and. xi .lt. d13)  go to 180
      !!  130    if (absz(xr) .lt. d13 .and. absz(xi) .lt. d13)  go to 180
@@ -653,12 +654,13 @@ subroutine comhes (nm, n, low, igh, ar, ai, int, lunit6, iprsup, ndim, iord)
         do j = m, n
            ar(i, j) = ar(i, j) - yr * ar(m, j) + yi * ai(m, j)
            ai(i, j) = ai(i, j) - yr * ai(m, j) - yi * ar(m, j)
-140     end do
+        end do
         do j = 1, igh
            ar(j, m) = ar(j, m) + yr * ar(j, i) - yi * ai(j, i)
            ai(j, m) = ai(j, m) + yr * ai(j, i) + yi * ar(j, i)
-150     end do
-160  end do
+        end do
+     end do
+160  continue
      if (iprsup .ge. 3) write (unit = lunit6, fmt = 170) m, igh, int(m), (ar(j, m), ai(j, m), j = 1, igh)
 170  format (' m, igh and int(m) at 170 are', 3i10, /, ' (ar(j, m), ai(j, m), j = 1, igh), are', /, (1x, 8e15.6))
   end do
@@ -772,7 +774,7 @@ subroutine comlr (nm, n, low, igh, hr, hi, wr, wi, ierr, ndim)
      l = ien + low - ll
      if (l .eq. low) go to 300
      if (absz(hr(l,l-1)) + absz(hi(l,l-1)) .le. epmach * (absz(hr(l-1,l-1)) + absz(hi(l-1,l-1)) + absz(hr(l,l)) + absz(hi(l,l)))) go to 300
-260 end do
+  end do
   !     :::::::::: form shift ::::::::::
 300 if (l .eq. ien) go to 660
   if (its .eq. 30) go to 1000
@@ -806,7 +808,7 @@ subroutine comlr (nm, n, low, igh, hr, hi, wr, wi, ierr, ndim)
 340 do i = low, ien
      hr(i,i) = hr(i,i) - sr
      hi(i,i) = hi(i,i) - si
-360 end do
+  end do
   tr = tr + sr
   ti = ti + si
   its = its + 1
@@ -825,7 +827,7 @@ subroutine comlr (nm, n, low, igh, hr, hi, wr, wi, ierr, ndim)
      zzr = xr
      xr = absz(hr(m-1,m-1)) + absz(hi(m-1,m-1))
      if (yr .le. epmach * zzr / yi * (zzr + xr + xi)) go to 420
-380 end do
+  end do
   !     :::::::::: triangular decomposition h=l*r ::::::::::
 420 mp1 = m + 1
   do i = mp1, ien
@@ -843,7 +845,7 @@ subroutine comlr (nm, n, low, igh, hr, hi, wr, wi, ierr, ndim)
         zzi = hi(im1,j)
         hi(im1,j) = hi(i,j)
         hi(i,j) = zzi
-440  end do
+     end do
      d1 = yr ** 2 + yi ** 2
      d2 = ( xr*yr + xi*yi ) / d1
      d3 = ( yr*xi - xr*yi ) / d1
@@ -860,8 +862,8 @@ subroutine comlr (nm, n, low, igh, hr, hi, wr, wi, ierr, ndim)
      do j = i, ien
         hr(i,j) = hr(i,j) - zzr * hr(im1,j) + zzi * hi(im1,j)
         hi(i,j) = hi(i,j) - zzr * hi(im1,j) - zzi * hr(im1,j)
-500  end do
-520 end do
+     end do
+  end do
   !     :::::::::: composition r*l=h ::::::::::
   do j = mp1, ien
      xr = hr(j,j-1)
@@ -878,12 +880,12 @@ subroutine comlr (nm, n, low, igh, hr, hi, wr, wi, ierr, ndim)
         zzi = hi(i,j-1)
         hi(i,j-1) = hi(i,j)
         hi(i,j) = zzi
-540  end do
+     end do
 580  do i = l, j
         hr(i,j-1) = hr(i,j-1) + xr * hr(i,j) - xi * hi(i,j)
         hi(i,j-1) = hi(i,j-1) + xr * hi(i,j) + xi * hr(i,j)
-600  end do
-640 end do
+     end do
+  end do
   go to 240
   !     :::::::::: a root found ::::::::::
 660 wr(ien) = hr(ien,ien) + tr
@@ -1021,7 +1023,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         zr(i,j) = 0.0
         zi(i,j) = 0.0
         if (i .eq. j) zr(i,j) = 1.0
-100  end do
+     end do
   end do
   !     :::::::::: form the matrix of accumulated transformations
   !                from the information left by comhes ::::::::::
@@ -1034,7 +1036,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
      do k = ip1, igh
         zr(k,i) = hr(k,i-1)
         zi(k,i) = hi(k,i-1)
-120  end do
+     end do
      j = int(i)
      if (i .eq. j) go to 160
      do k = i, igh
@@ -1042,7 +1044,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         zi(i,k) = zi(j,k)
         zr(j,k) = 0.0
         zi(j,k) = 0.0
-140  end do
+     end do
      zr(j,i) = 1.0
 160 end do
   if (iprsup .ge. 3) write (lunit6, 170) ((zr(i, j), zi(i, j), j = 1, igh), i = 1, igh)
@@ -1066,7 +1068,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
      l = ien + low - ll
      if (l .eq. low) go to 300
      if (absz(hr(l,l-1)) + absz(hi(l,l-1)) .le. epmach * (absz(hr(l-1,l-1)) + absz(hi(l-1,l-1)) + absz(hr(l,l)) + absz(hi(l,l)))) go to 300
-260 end do
+  end do
   !     :::::::::: form shift ::::::::::
 300 if (l .eq. ien) go to 660
   if (its .eq. itsmax ) go to 1000
@@ -1107,7 +1109,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
      hi(i,i) = hi(i,i) - si
      if ( iprsup .ge. 3 ) write (lunit6, 350) i, sr, si, hr(i,i),hi(i,i)
 350  format (' i, sr, si, hr(i,i), and hi(i,i) at 350 are', /, 10x, i8, 4e15.6)
-360 end do
+  end do
   tr = tr + sr
   ti = ti + si
   its = its + 1
@@ -1130,7 +1132,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
      if ( iprsup .ge. 3 ) write (lunit6, 375) mm, yr, zzr, yi, xr, xi, epmach
 375  format (' at 375, mm, yr, zzr, yi, xr, xi and epmach are', /, 10x, i8, 6e15.6)
      if (yr .le. epmach * zzr / yi * (zzr + xr + xi)) go to 420
-380 end do
+  end do
   !     :::::::::: triangular decomposition h=l*r ::::::::::
 420 mp1 = m + 1
   do i = mp1, ien
@@ -1148,13 +1150,12 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         zzi = hi(im1,j)
         hi(im1,j) = hi(i,j)
         hi(i,j) = zzi
-440  end do
+     end do
      !     it=iord(i)
      ittemp = iord(i)
      iord(i) = iord(im1)
      !     iord(im1) = it
      iord(im1) = ittemp
-441  continue
      d1 = yr ** 2 + yi ** 2
      d2 = ( xr*yr + xi*yi ) / d1
      d3 = ( yr*xi - xr*yi ) / d1
@@ -1171,10 +1172,10 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
      do j = i, n
         hr(i,j) = hr(i,j) - zzr * hr(im1,j) + zzi * hi(im1,j)
         hi(i,j) = hi(i,j) - zzr * hi(im1,j) - zzi * hr(im1,j)
-500  end do
+     end do
      if ( iprsup .ge. 3 ) write (lunit6, 510) i,n, (hr(i,j), hi(i,j), j=1,n)
 510  format (' At 510, (hr(i, j), hi(i, j), j = 1, n) for i =', i8, ', and n = ', i8, 2x, 'are', /, (1x, 8e15.6))
-520 end do
+  end do
   !     :::::::::: composition r*l=h ::::::::::
   do j = mp1, ien
      xr = hr(j,j-1)
@@ -1191,7 +1192,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         zzi = hi(i,j-1)
         hi(i,j-1) = hi(i,j)
         hi(i,j) = zzi
-540  end do
+     end do
      do i = low, igh
         zzr = zr(i,j-1)
         zr(i,j-1) = zr(i,j)
@@ -1199,19 +1200,19 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         zzi = zi(i,j-1)
         zi(i,j-1) = zi(i,j)
         zi(i,j) = zzi
-560  end do
+     end do
 580  do i = 1, j
         hr(i,j-1) = hr(i,j-1) + xr * hr(i,j) - xi * hi(i,j)
         hi(i,j-1) = hi(i,j-1) + xr * hi(i,j) + xi * hr(i,j)
-600  end do
+     end do
      !     :::::::::: accumulate transformations ::::::::::
      do i = low, igh
         zr(i,j-1) = zr(i,j-1) + xr * zr(i,j) - xi * zi(i,j)
         zi(i,j-1) = zi(i,j-1) + xr * zi(i,j) + xi * zr(i,j)
-620  end do
+     end do
      if ( iprsup .ge. 3 ) write ( lunit6, 630) j, low, igh, (hr(i,j),hi(i,j),i=1,j), (zr(i,j),zi(i,j),i=low,igh)
 630  format (' j, low and igh at 630 are', 3i8, ' (hr(i, j), hi(i, j), i = 1, j) and (zr(i, j), zi(i, j), i = low, igh) are', /, (1x, 8e15.6))
-640 end do
+  end do
   go to 240
   !     :::::::::: a root found ::::::::::
 660 hr(ien,ien) = hr(ien,ien) + tr
@@ -1227,14 +1228,14 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
      j = iord(id)
      umr(j) = wr(id)
      umi(j) = wi(id)
-671 end do
+  end do
   !     :::::::::: all roots found.  backsubstitute to find
   !                vectors of upper triangular form ::::::::::
   fnorm = 0.0
   do i = 1, n
      do j = i, n
         fnorm = fnorm + absz(hr(i,j)) + absz(hi(i,j))
-720  end do
+     end do
   end do
   hr(1,1) = fnorm
   if (n .eq. 1 .or. fnorm .eq. 0.0) go to 1001
@@ -1254,7 +1255,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         do j = ip1, ienm1
            zzr = zzr + hr(i,j) * hr(j,ien) - hi(i,j) * hi(j,ien)
            zzi = zzi + hr(i,j) * hi(j,ien) + hi(i,j) * hr(j,ien)
-740     end do
+        end do
 760     yr = xr - wr(i)
         yi = xi - wi(i)
         if (yr .eq. 0.0 .and. yi .eq. 0.0) yr = epmach * fnorm
@@ -1265,8 +1266,8 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         hi(i,ien) = d3
         if ( iprsup .ge. 3 ) write (lunit6, 770)  nn,n,ien,ii,i,ienm1,zzr,zzi,yr,yi,d2,d3, hr(i,ien),hi(i,ien)
 770     format (' nn, n, ien, ii, i, ienm1, zzr, zzi, yr, yi, d2, d3, hr(i, ien) and hi(i,ien) at 770 are', /, 1x, 6i5, 8e12.5)
-780  end do
-800 end do
+     end do
+  end do
   !     :::::::::: end backsubstitution ::::::::::
   ienm1 = n - 1
   !     :::::::::: vectors of isolated roots ::::::::::
@@ -1276,8 +1277,9 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
      do j = ip1, n
         zr(i,j) = hr(i,j)
         zi(i,j) = hi(i,j)
-820  end do
-840 end do
+     end do
+  end do
+840 continue
   !     :::::::::: multiply by transformation matrix to give
   !                vectors of original full matrix.
   !                for j=n step -1 until low+1 do -- ::::::::::
@@ -1292,12 +1294,12 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         do k = low, m
            zzr = zzr + zr(i,k) * hr(k,j) - zi(i,k) * hi(k,j)
            zzi = zzi + zr(i,k) * hi(k,j) + zi(i,k) * hr(k,j)
-860     end do
+        end do
         zr(i,j) = zzr
         zi(i,j) = zzi
         if (iprsup .ge. 3 ) write (lunit6, 870) jj, j, m, zr(i,j),zi(i,j)
 870     format (' At the end of do 880 loop, jj, j,  m, zr(i, j) and zi(i, j) are', 5x, 3i8, 2e15.6)
-880  end do
+     end do
   end do
   go to 1001
   !     :::::::::: set error -- no convergence to an
@@ -1307,44 +1309,44 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
 !!!!      do 1002 i=low, igh
 !!!!      wr(i) = umr(i)
 !!!!      wi(i) = umi(i)
-1002 continue
   !!     ** sorting the eigenvalues with magnitude **
   !!        also reordering the eigenvector
-  do i=1,20
-     lseq(i)=i
-1003 end do
-  do i=1,n
-     vtr(i)=wr(i)
-     vti(i)=wi(i)
-     do j=1,n
-        ppr(i,j)=zr(i,j)
-        ppi(i,j)=zi(i,j)
-1004 end do
+  do i = 1, 20
+     lseq(i) = i
+  end do
+  do i = 1, n
+     vtr(i) = wr(i)
+     vti(i) = wi(i)
+     do j = 1, n
+        ppr(i, j) = zr(i, j)
+        ppi(i, j) = zi(i, j)
+     end do
   end do
   do i=1,n
      eim(i) = wr(i)*wr(i) + wi(i)*wi(i)
-1005 end do
-  do j=1, n
-     l=n-j
-     do i=1, l
-        if ( eim(i) .ge. eim(i+1) ) go to 1007
-        t=eim(i)
-        eim(i)=eim(i+1)
-        eim(i+1)=t
-        t=lseq(i)
-        lseq(i)=lseq(i+1)
-        lseq(i+1)=t
-1007 end do
-1006 end do
-  do i=1,n
-     wr(i)=vtr(lseq(i))
-     wi(i)=vti(lseq(i))
-     do j=1,n
-        zr(i,j)=ppr(i,lseq(j))
-        zi(i,j)=ppi(i,lseq(j))
-1009 end do
-1008 end do
-1100 return
+  end do
+  do j = 1, n
+     l = n - j
+     do i = 1, l
+        if (eim(i) .ge. eim(i + 1)) go to 1007
+        t = eim(i)
+        eim(i) = eim(i + 1)
+        eim(i + 1) = t
+        t = lseq(i)
+        lseq(i) = lseq(i + 1)
+        lseq(i + 1) = int (t)
+     end do
+1007 continue
+  end do
+  do i = 1, n
+     wr(i) = vtr(lseq(i))
+     wi(i) = vti(lseq(i))
+     do j = 1, n
+        zr(i, j) = ppr(i, lseq(j))
+        zi(i, j) = ppi(i, lseq(j))
+     end do
+  end do
+  return
   !     :::::::::: last card of comlr2 ::::::::::
 end subroutine comlr2
 
@@ -1368,7 +1370,7 @@ subroutine symm (p, z, switch, kcirct, kk)
   integer(4) :: k, ki, kold
   integer(4) :: l, l2, l3
   integer(4) :: m
-  real(8) :: aaa1, ai(3, 3), ar(3, 3)
+  real(8) :: ai(3, 3), ar(3, 3)
   real(8) :: f1, f2, fi(3), fr(3)
   real(8) :: valu7
   !
@@ -1398,7 +1400,7 @@ subroutine symm (p, z, switch, kcirct, kk)
      f1 = f1 + fi(i) * (z(l3) - z(l2))
      f2 = f2 + z(l) + fr(i) * (z(l2) + z(l3))
 68   ar(i, k) = f1
-681  ai(i, k) = f2
+     ai(i, k) = f2
   end do
   if (k .eq. 3) go to 69
   l = l + kold + k
@@ -1411,7 +1413,7 @@ subroutine symm (p, z, switch, kcirct, kk)
      if (ki .lt. j) go to 71
      if (i .gt. k) go to 73
 71   p(m) = (ar(i, 1) + fr(k) * (ar(i, 2) + ar(i, 3)) + fi(k) * (ai(i, 3) - ai(i, 2))) / 3.0d0
-72   z(m) = (ai(i, 1) + fr(k) * (ai(i, 2) + ai(i, 3)) + fi(k) * (ar(i, 2) - ar(i, 3))) / 3.0d0
+     z(m) = (ai(i, 1) + fr(k) * (ai(i, 2) + ai(i, 3)) + fi(k) * (ar(i, 2) - ar(i, 3))) / 3.0d0
   end do
 73 if (k .eq. 3) go to 74
   l = l + kold + k
@@ -1550,7 +1552,7 @@ subroutine skin (s, r, freq, rf, xf)
      if (iback.eq.2) go to 102
      gei = gei+fke(k)*z
 102  z = z*x2
-103  ialt = -ialt
+     ialt = -ialt
   end do
   beid = beid*x
   berd = berd*x
@@ -1594,7 +1596,7 @@ subroutine skin (s, r, freq, rf, xf)
      gerd = gerd-phir
      geid = geid-phii
 202  ialt = -ialt
-203  z = z*x2
+     z = z*x2
   end do
   xl=x* sqrt2
   if (qremb .lt. 1.0)  go to 204

@@ -152,41 +152,41 @@ subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, t
   if ( n8  .eq.  9999 )   go to 6294
   go to 6227
 6263 nfrfld = 1
-6269 call freone ( d7 )
-  if ( d7  .eq.  9999. )   go to 6282
-  if ( d7  .eq.  0.0 )   go to 6273
+  !6269 call freone ( d7 )
+6269 call free (d7)
+  if (d7 .eq. 9999.0d0) go to 6282
+  if (d7 .eq. 0.0d0) go to 6273
   n7 = n7 + 1
-  if ( n7 .le. 50 )  go to 6272
-6270 write (lunit6, 6271)
+  if (n7 .le. 50) go to 6272
+6270 write (unit = lunit6, fmt = 6271)
 6271 format (' Temporary error stop in "guts29".   overflow  mmtemp(50).   Stop.')
   call stoptp
 6272 mmtemp(n7) = d7
 6273 go to 6269
-6282 do i=1, 9
+6282 do i = 1, 9
 6286 lltemp(i) = mmtemp(i)
   end do
-  write (kunit6, 6249)  ( lltemp(i), i=1, 9 )
-6294 do m=1, n7
+  write (unit = kunit6, fmt = 6249) (lltemp(i), i = 1, 9)
+6294 do m = 1, n7
      n13 = mmtemp(m)
      n2 = n13/100
      n5 = n13 - 100 * n2
      n3 = n5 / 10
-     n4 = n5 - 10*n3
-     if ( iprsup  .ge.  1 ) write(lunit6, 6299) m, n7, n13, n2, n3, n4, lunit3, lunit6, lunit9
-6299 format ( /, 33h in  'guts29' ,  ready to attach., 40h       m      n7     n13      n2      n3, &
-          32h      n4  lunit3  lunit6  lunit9  ,/,  33x,  9i8  )
+     n4 = n5 - 10 * n3
+     if (iprsup .ge. 1) write (unit = lunit6, fmt = 6299) m, n7, n13, n2, n3, n4, lunit3, lunit6, lunit9
+6299 format (/, " in  'guts29' ,  ready to attach.       m      n7     n13      n2      n3      n4  lunit3  lunit6  lunit9", /, 33x, 9i8)
      lstat(14) = n2
      lstat(15) = n3
      lstat(16) = n4
      lstat(13) = 9
      call statrs
-     read(lunit1)  ntot, neni
-     read(lunit1) pu
-     npni = iabsz(neni)
+     read (unit = lunit1) ntot, neni
+     read (unit = lunit1) pu
+     npni = iabsz (neni)
      nenerg = nenerg + neni
-     npnerg = iabsz(nenerg)
-     if ( iprsup  .ge.  3 ) write(lunit6, 1848)  ntot, neni
-1848 format (/,  34h after 2-integer read from lunit1., 16h    ntot    neni,/, 34x, 2i8)
+     npnerg = iabsz (nenerg)
+     if (iprsup .ge. 3) write (unit = lunit6, fmt = 1848) ntot, neni
+1848 format (/, ' after 2-integer read from lunit1.    ntot    neni', /, 34x, 2i8)
      nexout(m) = ntot
      if (m .ne. 1)  go to 260
      write(lunit9)  ntot
@@ -474,52 +474,55 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   go to 4725
 4723 nfrfld = 1
   kolbeg = 1
-  call freone ( d11 )
+  !  call freone (d11)
+  call free (d11)
   ibropt = d11
-  call freone ( basev )
+  !  call freone (basev)
+  call free (basev)
   nright = -1
   nfrfld = 11
-  call freone ( d1 )
+  !  call freone (d1)
+  call free (d1)
   nright = 0
-  do k=n11, n22
+  do k = n11, n22
 4724 aupper(k) = texta6(k)
   end do
 4725 if ( aupper (n22) .ne. text8 ) go to 4727
   n22 = n22 - 1
-  write (kunit6, 9615)
-9615 format ( 43h+  continued dice request.  see last card:       )
+  write (unit = kunit6, fmt = 9615)
+9615 format ('+  Continued dice request.  See last card:')
   go to 16543
-4727 vmaxsv = 0.0
+4727 vmaxsv = 0.0d0
   vminsv = fltinf
   iall = 0
-  totmax = 0.0
-  if ( ibropt .lt. 0 )  go to 7612
-  if ( ibropt  .ne.  1 )  go to 1725
+  totmax = 0.0d0
+  if (ibropt .lt. 0) go to 7612
+  if (ibropt .ne. 1) go to 1725
   kill = 91
   lstat(19) = 1725
   go to 9200
 1725 kend = n22
 7611 ivolt = 0
-  mpr=0
-  kfl=0
+  mpr = 0
+  kfl = 0
   go to 1615
 7612 continue
   kend = n22
   go to 7611
-1615 if ( ibropt .eq. 0  .or.  ibropt .eq. -1 ) go to 7615
-  if ( basev .eq. 0 )  basev = 1.0
-  if ( ibropt .eq. -2 )   n16 = 3
-  if ( ibropt .eq. -3 )   n16 = 5
-  if ( ibropt .eq. -4 )   n16 = 7
-  write (kunit6, 4615)  texnam(10), texnam(n16), texnam(n16+1)
-4615 format ( 23h+statistical output of , a6, 1x, a6, a1, e13.4 )
+1615 if (ibropt .eq. 0  .or.  ibropt .eq. -1) go to 7615
+  if (basev .eq. 0 )  basev = 1.0
+  if (ibropt .eq. -2) n16 = 3
+  if (ibropt .eq. -3) n16 = 5
+  if (ibropt .eq. -4) n16 = 7
+  write (kunit6, 4615) texnam(10), texnam(n16), texnam(n16 + 1)
+4615 format ('+Statistical output of ', a6, 1x, a6, a1, e13.4)
   go to 2800
-7615 if ( basev .eq. 0.0 ) go to 7616
-  if ( basev  .eq.  pu )   go to 7640
+7615 if (basev .eq. 0.0d0) go to 7616
+  if (basev .eq. pu) go to 7640
   n16 = 1
-  if ( ibropt .ge. 0 )   n17 =  9
-  if ( ibropt .lt. 0 )   n17 = 10
-  write (kunit6, 4615)  texnam(n17), texnam(n16), texnam(n16+1)
+  if (ibropt .ge. 0) n17 =  9
+  if (ibropt .lt. 0) n17 = 10
+  write (unit = kunit6, fmt = 4615) texnam(n17), texnam(n16), texnam(n16 + 1)
   go to 2800
 7616 basev = pu
   mpr=1
@@ -535,7 +538,7 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   write (kunit6, 4615)  texnam(n17), texnam(n16), texnam(n16+1), basev
   go to 7615
 7635 write (kunit6, 7636)
-7636 format(48h+blank card terminating statistics output cards.  )
+7636 format('+Blank card terminating statistics output cards.')
   call interp
   kbase = 28
   if ( n13 .eq. 1 )  go to 2800
@@ -1411,9 +1414,9 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
   call cimage
   read (unit = abuff, fmt = 5306) nitmax, n13, epsiln, percen, ipunch, ipncom, bus1, bus2, bus3, bus4
 5306 format ( 2i8, 2e8.0, 2i8, 4x, 4a1 )
-  if ( nitmax .gt. 0   .or. epsiln  .gt.  0.0 ) go to 5311
-  write (lunit6, 5308)
-5308 format ( 38h+blank card terminates "fdu" subcases.   )
+  if (nitmax .gt. 0 .or. epsiln .gt. 0.0d0) go to 5311
+  write (unit = lunit6, fmt = 5308)
+5308 format ('+Blank card terminates "fdu" subcases.')
   go to 9900
 5311 write (lunit6, 5314)  nitmax, n13, epsiln, percen, ipncom, bus1, bus2, bus3, bus4
 5314 format (  6h+misc.,  2i5, 2e12.3, i4,  1x,  4a1  )
@@ -1448,8 +1451,8 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
   ymat(k,k) = ymat(k,k) + d6
   ymat(m,m) = ymat(m,m) + d6
   go to 5321
-5347 write (lunit6, 5348)
-5348 format ( 35h+blank card terminating line cards.   )
+5347 write (unit = lunit6, fmt = 5348)
+5348 format ('+Blank card terminating line cards.')
   ntot2 = 2 * ntot
   if ( iprsup  .ge.  2 ) write (lunit6, 5354)  ntot
 5354 format (   36h admittance matrix follows.   ntot =,  i3  )

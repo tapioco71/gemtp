@@ -90,7 +90,6 @@ contains
     integer(4) :: k
     integer(4) :: l
     integer(4) :: nnn
-    real(8) :: a10
     real(8) :: w
     double precision :: a(100), b(100), c(100), d(100)
     double precision :: g1, g2, h1, h2, x, y
@@ -98,7 +97,7 @@ contains
     nnn = n * (n + 1) / 2
     do j = 1, nnn
        a(j) = as(j)
-50     c(j) = cs(j)
+       c(j) = cs(j)
     end do
     j = n + 1
     w = 1.0d0
@@ -137,7 +136,7 @@ contains
        x = b(l)
        y = d(l)
        a(i) = a(i) + x * h2 - y * g2
-6      c(i) = c(i) + x * g2 + y * h2
+       c(i) = c(i) + x * g2 + y * h2
     end do
     if (k .lt. j) go to 4
     i = ik + j
@@ -149,7 +148,7 @@ contains
     do l = 1, j
        i = i + 1
        c(i) = d(l)
-8      a(i) = b(l)
+       a(i) = b(l)
     end do
     go to 4
     !                                   end k-loop
@@ -158,7 +157,7 @@ contains
     !     nnn = n * (n+1) / 2 ! defined at top, so unneded here. wsm
 60  do j = 1, nnn
        as(j) = a(j)
-70     cs(j) = c(j)
+       cs(j) = c(j)
     end do
     return
   end subroutine cxred1
@@ -174,6 +173,7 @@ subroutine over41
   use blkcom
   use tracom
   use strcom
+  use freedom
   implicit none
   character(8) :: text1(3), text2(3), text3(3), t1, t2, t3
   character(8) :: text6, text7(3), text8(3), text9
@@ -185,7 +185,7 @@ subroutine over41
   integer(4) :: m
   integer(4) :: n, n1, n4
   real(8) :: ai, ar
-  real(8) :: cii, cmag, cr, cur1
+  real(8) :: cii, cmag, cr
   real(8) :: d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14
   real(8) :: henry(20)
   real(8) :: ohm(20)
@@ -251,7 +251,7 @@ subroutine over41
   if (statfr .gt. 0.0d0) go to 7122
 5 do i = 1, 3
      text7(i) = blank
-3854 text8(i) = blank
+     text8(i) = blank
   end do
   !     Read input card using cimage
 3857 call cimage
@@ -273,7 +273,8 @@ subroutine over41
   go to 1735
 1733 nfrfld = 6
   nright = -1
-  call freone ( d1 )
+  !  call freone (d1)
+  call free (d1)
   nright = 0
   if (iprsup  .ge.  1) write (unit = lunit6, fmt = 4568)
 4568 format ('  "Exit  module over41."')
@@ -291,12 +292,16 @@ subroutine over41
 6 format (i1, e9.0, e10.0, i10)
   go to 1745
 1743 nfrfld = 1
-  call freone (d11)
-  iwind = d11
-  call freone (cmag)
-  call freone (pmag)
-  call freone (d11)
-  ipunch = d11
+  !  call freone (d11)
+  call free (d11)
+  iwind = int (d11)
+  !  call freone (cmag)
+  call free (cmag)
+  !  call freone (pmag)
+  call free (pmag)
+  !  call freone (d11)
+  call free (d11)
+  ipunch = int (d11)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
   if (kill .gt. 0) go to 99999
 1745 if (iwind .eq. 2) go to 7
@@ -323,10 +328,14 @@ subroutine over41
 10   format (5e10.0)
      go to 1755
 1753 nfrfld = 1
-     call freone (vtap)
-     call freone (ploss)
-     call freone (z)
-     call freone (pratg)
+     !     call freone (vtap)
+     call free (vtap)
+     !     call freone (ploss)
+     call free (ploss)
+     !     call freone (z)
+     call free (z)
+     !     call freone (pratg)
+     call free (pratg)
      if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
      if (kill .gt. 0) go to 99999
 1755 write (unit = kunit6, fmt = 3904) vtap, ploss, z, pratg
@@ -341,12 +350,12 @@ subroutine over41
      xik(i) = sqrtz (z ** 2 / 10000.0d0 - resist ** 2) / pratg
      if (z .lt. 0.0d0) xik(i) = -xik(i)
      rsum = rsum + rik(i)
-30   xsum = xsum + xik(i)
+     xsum = xsum + xik(i)
   end do
   write (unit = lunit6, fmt = 15) iwind, cmag, pmag
 15 format (/, ' Single-phase', i2, "-winding transformer.   'imagn' = ", f8.5, ' per cent based on ', f8.3, ' MVA', /, ' voltage across winding ', 15x, 'losses  impedance based on ', /, 9x, '(kV)', 26x, '(kW)   (per cent) (MVA)')
   do i = 1, 3
-3907 write (unit = lunit6, fmt = 20) text1(i), v(i), text2(i), text3(i), temp1(i), temp2(i), temp3(i)
+     write (unit = lunit6, fmt = 20) text1(i), v(i), text2(i), text3(i), temp1(i), temp2(i), temp3(i)
   end do
 20 format (1x, a6, f7.2, 6x, a6, ' to ', a6, f8.2, f10.4, f10.3)
   cmag = cmag * pmag / 300.0d0
@@ -460,7 +469,7 @@ subroutine over41
      if (xx(i) .lt. 0.0d0) write (unit = lunit6, fmt = 155)
 155  format (' Input data looks suspicious, because one or more inductances is negative.')
      call round (rr(i))
-150  call round (xx(i))
+     call round (xx(i))
   end do
   write (unit = lunit6, fmt = 160)
 160 format (' Repeat of preceding calculation, only this time the starting point will be the impedance matrix with all', /, ' elements rounded to five decimal digits.')
@@ -472,11 +481,16 @@ subroutine over41
   read (unit = abuff, fmt = 10) v1, v2, ploss, z, pratg
   go to 1765
 1763 nfrfld = 1
-  call freone (v1)
-  call freone (v2)
-  call freone (ploss)
-  call freone (z)
-  call freone (pratg)
+  !  call freone (v1)
+  call free (v1)
+  !  call freone (v2)
+  call free (v2)
+  !  call freone (ploss)
+  call free (ploss)
+  !  call freone (z)
+  call free (z)
+  !  call freone (pratg)
+  call free (pratg)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
   if (kill .gt. 0) go to 99999
 1765 write (unit = kunit6, fmt = 3904) v1, v2, ploss, z
@@ -559,7 +573,6 @@ subroutine over41
      write (unit = kunit6, fmt = 7171) i, ohm(i), henry(i), volt(i)
 7171 format ('+  Winding', i2, '. ', 3e12.4)
   end do
-7172 continue
   lstat(19) = 7175
   lstat(14) = 3
   go to 9000
@@ -596,7 +609,7 @@ subroutine over41
 7234    format (1x,  a2,  2a6,  12x,  2(e22.13, 1x, a1),  1x,  a1,  6x)
         bus1 = blank
         bus2 = blank
-7245    text6 = blank
+        text6 = blank
      end do
 7253 d12 = d11 ** 2
      volti(i) = d12 * d9
@@ -608,7 +621,6 @@ subroutine over41
      write (unit = lunit6, fmt = 7265) text6, bus1, bus2, d13, csepar, d14, (csepar, m = 1, 5)
 7265 format (1x, a2, 2a6, 12x, 2(e22.13, 1x, a1), 1x, 5a1, 2x)
   end do
-7274 continue
   write (unit = lunit6, fmt = 4271)
   write (unit = lunit6, fmt = 7277) (i, ohm(i), henry(i), volti(i), voltk(i), i = 1, iwind)
 7277 format (' Components which are added to form diagonals of the matrix.   Computer word-length should be able to accurately', /, ' handle this addition without the leakage being lost in the roundoff.   If not, the resulting  (r)  and  (l)  are of', /, ' questionable value for purposes of EMTP simulation.   Column 1 is to be added to column 3,   and column 2  is', /, ' to be added to column 4 to produce the diagonals.', /, 7x, 'row', 11x, 'leakage R', 6x, 'leakage L or X', 12x, 'magnetizing R', 6x, 'magnet. L or X', 16x, /, (i10, 2e20.10, 5x, 2e20.10))
@@ -689,7 +701,6 @@ subroutine crdchg
         if (card(39 : 44) .eq. ' 3333.') go to 200
         write (unit = lunit6, fmt = 625) card
 625     format (' Type-91:  piece-wise linear resistor', 14x, '1', a80)
-1000    continue
         write (unit = 7, fmt = 1175) card(1 : 78)
 1175    format ('c ', a78)
         write (unit = 7, fmt = 1100) card(1 : 26), card(80 : 80)
@@ -850,7 +861,6 @@ subroutine crdchg
      write (unit = lunit6, fmt = 10100) card
 10100 format (1x, a80)
   end do
-10150 continue
 10200 stop
 end subroutine crdchg
 
@@ -876,8 +886,7 @@ subroutine fltopt (d8, n14)
   integer(4) :: j
   integer(4) :: k
   integer(4) :: n3, n4, n5, n7, n15, n17, n18
-  real(8) :: a, a1, a2, a3, aq, az
-  real(8) :: b
+  real(8) :: a
   real(8) :: d9
   !
   if (iprsup .ge. 1) write (unit = *, fmt = *) ' Top "fltopt".  d8, n14 =', d8, n14
@@ -1066,10 +1075,10 @@ subroutine round (x)
   !
   a = absz (x)
   if (a .eq. 0.0d0) go to 1492
-  i10 = alog1z (a)
+  i10 = int (alog1z (a))
   a10 = 10.0d0 ** (i10 - 5)
   a = a / a10
-  n1 = a + 0.5d0
+  n1 = int (a + 0.5d0)
   a = n1
   a = a * a10
   if (x .lt. 0.0d0) a = -a
@@ -1131,7 +1140,7 @@ subroutine bctran
   !  common /newt1/ rwin(10), zhl, zht, zlt, k, m, idelt, logsix
   data maxit / 200 /
   logsix = lunit6
-  err = flzero * 10.0d0
+  err = int (flzero * 10.0d0)
   aq = unity / 3.0d0
   d1 = 3.0d0
   othree = unity / sqrtz (d1)
@@ -1157,7 +1166,7 @@ subroutine bctran
   k1 = iwin - 1
   in = (iwin * k1) / 2
   do j = 1, in
-155  nad(j) = 0
+     nad(j) = 0
   end do
   do k = 1, iwin
      !     read input card using cimage.
@@ -1169,11 +1178,11 @@ subroutine bctran
      m5 = (m1 - 1) * 6
      do i = 1, 6
         m5 = m5 + 1
-860     name(m5) = iname(i)
+        name(m5) = iname(i)
      end do
      rwin(m1) = zo * aq / z1 ** 2
      rwin2(k) = 0.0d0
-11   v(m1) = othree / z1
+     v(m1) = othree / z1
   end do
   write (unit = lunit6, fmt = 4008) itest, iput
 4008 format (' Excitation test made from winding', i3, '. Magn. impedance placed across winding', i3)
@@ -1217,7 +1226,7 @@ subroutine bctran
 20 if (i .eq. 0) go to 15
   do m = 1, i
      if (kb(m) .eq. ibg .and. ke(m) .eq. ien) go to 300
-35 end do
+  end do
 15 i = i + 1
   kb(i) = ibg
   ke(i) = ien
@@ -1287,7 +1296,7 @@ subroutine bctran
 802 do j = 1, in
      if (kb(j) .eq. k3 .and. ke(j) .eq. kdelta) kk2 = j
      if (kb(j) .eq. m1 .and. ke(j) .eq. mdelta) kk3 = j
-805 end do
+  end do
   if (kk2 .eq. 0 .or. kk3 .eq. 0) go to 830
   if (iad .gt. 0) go to 222
   k3 = k
@@ -1352,7 +1361,7 @@ subroutine bctran
   nad(kk2) = 0
   go to 800
 888 do j = 1, in
-156  nad(j) = 0
+     nad(j) = 0
   end do
   !     End  of  input  data  processing *********************************
   if (nn1 .eq. 0) go to 154
@@ -1410,7 +1419,7 @@ subroutine bctran
      q = v(i) ** 2
      b = gexs * iwin / q
      bb = gexm * iwin / q
-856  write (unit = lunit6, fmt = 857) i, b, bb
+     write (unit = lunit6, fmt = 857) i, b, bb
   end do
 857 format (i6, e28.6, e21.6)
   go to 153
@@ -1484,7 +1493,7 @@ subroutine bctran
      dm3 = xp(l)
      dm4 = xo(l) * h22
      zs(i) = zs(i) + dm3 * h2 + 2.0d0 * dm4
-6    zm(i) = zm(i) + dm3 * h22 + xo(l) * h2 + dm4
+     zm(i) = zm(i) + dm3 * h22 + xo(l) * h2 + dm4
   end do
   if (k .lt. j) go to 44
   i = ik + j
@@ -1495,7 +1504,7 @@ subroutine bctran
   do l = 1, j
      i = i + 1
      zs(i) = xp(l)
-81   zm(i) = xo(l)
+     zm(i) = xo(l)
   end do
   go to 44
 99 i = ij + k
@@ -1517,7 +1526,7 @@ subroutine bctran
      zs(i) = zs(i) - a
      zm(i) = zm(i) - b
      r = r - a
-49   s = s - b
+     s = s - b
   end do
 48 j = j + 1
   n2 = n2 + 1
@@ -1528,7 +1537,7 @@ subroutine bctran
   b = 0.0d0
   do i = n1, n2
      a = a - zs(i)
-52   b = b - zm(i)
+     b = b - zm(i)
   end do
   n2 = n2 + 1
   zs(n2) = a
@@ -1545,7 +1554,7 @@ subroutine bctran
   do i = 1, iwin
      nn1 = nn1 + i
      zs(nn1) = zs(nn1) + bexs * a
-202  zm(nn1) = zm(nn1) + bexm * a
+     zm(nn1) = zm(nn1) + bexm * a
   end do
 203 m = 0
   do k = 1, iwin
@@ -1554,11 +1563,11 @@ subroutine bctran
         m = m + 1
         c = v(i) * a
         zs(m) = zs(m) * c
-72      zm(m) = zm(m) * c
+        zm(m) = zm(m) * c
      end do
-71 end do
+  end do
   iss = 0
-716 if (iprint .gt. 0) go to 752
+  if (iprint .gt. 0) go to 752
   write (unit = lunit6, fmt = 715)
 715 format ('0 branch data - resistance matrix (Ohms) and inverse inductance matrix (1/Henries)')
   if (iss .le. 0) go to 730
@@ -1568,7 +1577,7 @@ subroutine bctran
   icount = 0
   if (nphase .eq. 1 )  ib = iwin
 952 do i = 1, ib
-508  rout(i) = 0.0d0
+     rout(i) = 0.0d0
   end do
   do i = 1, iwin
      a = rwin(i) / v(i) ** 2
@@ -1577,14 +1586,14 @@ subroutine bctran
      iw2 = iwin + iw1
      rout(iw1) = a
      rout(iw2) = a
-502 end do
+  end do
   do ii = 1, ib
      ip = (ii - 1) / iwin + 1
      iw = ii - ((ii - 1) / iwin) * iwin
      nf = (iw - 1) * 6 + (ip - 1) * 2 + 1 + icount
      nt = nf + 1
      do i = 1, ib
-708     y(i) = 0.0d0
+        y(i) = 0.0d0
      end do
      do jj = 1, ii
         jp = (jj - 1) / iwin + 1
@@ -1610,7 +1619,7 @@ subroutine bctran
      write (unit = lunit7, fmt = 725) ii50, name(nf), name(nt), (rout(i), y(i), i = 1, ii)
 725  format (i2, 2a6, 12x, 2e16.10)
 724  rout(ii) = 0.0d0
-706 end do
+  end do
   if (nphase .ne. 1) icount = 5
   icount = icount + 2
   if (icount .le. 4) go to 952
@@ -1625,9 +1634,9 @@ subroutine bctran
      do i = 1, k
         m = m + 1
         zs(m) = -zs(m) * freq
-504     zm(m) = -zm(m) * freq
+        zm(m) = -zm(m) * freq
      end do
-505 end do
+  end do
   iss = 1
   go to 506
 120 write (unit = lunit6, fmt = 121) iwin

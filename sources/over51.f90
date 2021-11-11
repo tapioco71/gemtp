@@ -25,7 +25,7 @@ subroutine over51
   nchain = 55
 4536 if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
 4568 format (' Exit module "over51".')
-99999 return
+  return
 end subroutine over51
 
 !
@@ -73,7 +73,7 @@ subroutine subr51
   write (unit = lunit6, fmt =  5316)
 5316 format (1x, 132('-'))
   do i = 1, 2
-5319 write (unit = lunit6, fmt = 5320)
+     write (unit = lunit6, fmt = 5320)
   end do
 5320 format (1x, 22('error/'))
   write (unit = lunit6, fmt = 5316)

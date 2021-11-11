@@ -95,8 +95,9 @@ subroutine subr39
   nright = -2
   n4 = kolbeg
   kolbeg = 1
-  call freone ( d1 )
-  if ( kill  .gt.  0 )   go to 9200
+  !  call freone (d1)
+  call free (d1)
+  if (kill .gt. 0) go to 9200
   nright = 0
   if ( texta6(1)  .ne.  text11 )   go to 7618
   !     optional "branch" card giving pairs of node names
@@ -118,12 +119,13 @@ subroutine subr39
 7622 format ( 24x,  e8.0 )
   go to 7624
 7623 nfrfld = 1
-  call freone ( dist )
-7624 if ( metrik  .eq.  0   .and.  n13  .ne.  8765 ) dist = dist * 1.60935
-  write (kunit6, 7625) dist
-7625 format ('+same line, but with new length =', f9.2,   '  km.'   )
+  !  call freone (dist)
+  call free (dist)
+7624 if (metrik .eq. 0 .and. n13 .ne. 8765) dist = dist * 1.60935d0
+  write (unit = kunit6, fmt = 7625) dist
+7625 format ('+Same line, but with new length =', f9.2,   '  km.'   )
   go to 4040
-4042 if(texta6(1).ne.text9) go to 4043
+4042 if (to_lower (texta6(1)) .ne. text9) go to 4043
   if(texta6(2).ne.text10) go to 4043
   !     temporary new rho area - to be completed later, someday
 4043 if ( texta6(1) .ne. text14 )  go to 8819
@@ -138,7 +140,7 @@ subroutine subr39
      if ( texta(k)  .ne.  blank )  go to 4044
 1023 end do
   write (kunit6, 1719)
-1719 format ('+blank card ending Marti setup' )
+1719 format ('+Blank card ending Marti setup' )
   call interp
   go to 9200
   !     check for key word  'line constants'  (or  'lc' ).

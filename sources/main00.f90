@@ -135,7 +135,8 @@
 
 module timers
   implicit none
-  integer(4) :: cputime
+  real(8) :: cputime
+  save
 end module timers
 
 !
@@ -148,8 +149,7 @@ program gemtp
   use iocons
   use movcop
   implicit none
-  integer(4) :: i, ll34, optscount
-  character(32) :: arg
+  integer(4) :: ll34
   !
   data ll34 / 34 /
   !     unit assignments of "over1" needed earlier by spy:
@@ -174,11 +174,6 @@ program gemtp
   nchain = -1
   lastov = 0
   kill = 0
-  optscount = command_argument_count()
-  do i = 1, optscount
-     call getarg (i, arg)
-     write (*, *) arg
-  end do
   do
      if (kill .eq. 0) then
         call a2001
@@ -347,7 +342,7 @@ subroutine stoptp
   !     "call stoptp", allowing installation-dependent clean up.
   integer(4) :: i, ios
   !
-  read (unit = abuff, fmt = 5607, iostat = ios) (texcol(i), i = 1, 80)
+  read (unit = abuff(1), fmt = 5607, iostat = ios) (texcol(i), i = 1, 80)
 5607 format (80a1)
   if (ios .ne. 0) go to 9000
   if (nchain .eq. 31 .and. lastov .eq. 1 .and. kill .eq. 9999) go to 9000
@@ -361,16 +356,15 @@ end subroutine stoptp
 !
 
 subroutine erexit
-  use comkwt
   use blkcom
   use iocons
+  use comkwt
   implicit none
   !     VAX-11   installation-dependent EMTP module.   This is
   !     called by the top of "main00", before any emtp data input.
   !     dimension idum(3)                                   !  dummy vector for ctrl-c handling
 
   external kwiter                                           ! needed for ctrl-c initialization
-  !
   !
   lunit6 = gfortran_stdout_unit                             ! for use of "prompt" until fixed tt?? address
   muntsv(2) = 49                                            ! alternate munit5 unit number of spy
@@ -436,6 +430,7 @@ subroutine cimage
   use blkcom
   use labcom
   use strcom
+  use freedom
   implicit none
   !     VAX-11  installation-dependent emtp module which serves
   !     to return the next input card.  All systems will substitute.
@@ -444,14 +439,14 @@ subroutine cimage
   real(8) :: d1, d11
   character(8) :: charc, chtacs, textax(60), textay(50), text1, text2
   character(8) :: text4, text5
-  !  character(8) :: buff10
   character(25) :: filen
+  !  dimension xopt(1), copt(1)
+  !  dimension buff10(10)
+  !  dimension textax(60), jpntr(201), textay(50), aupper(10)
   !
-  !dimension buff10(10)
-  !  equivalence (buff10(1), abuff(1 : 1))
-  !dimension textax(60), jpntr(201), textay(50), aupper(10)
+  !  equivalence (buff10(1), abuff(1))
   !  equivalence (aupper(1), texcol(1))
-  !dimension xopt(1), copt(1)
+  !
   !     Burroughs: preserve local variable between module calls:
   data n8         / 0 /        ! remember last $-card number
   data charc      / 'c' /
@@ -579,52 +574,35 @@ subroutine cimage
   if (n11 .ne. 0) go to 1000
   if (kol132 .eq. 132) write (unit = lunit6, fmt = 3015) buff10
 3015 format (' Comment card.', 37x, '|', 10a8)
-  !if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) (abuff(j), j = 1, 4)
-  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) abuff(1 : 29)
-  !3016 format (' Comment card.', 37x, '1', 3a8, a5)
-3016 format (' Comment card.', 37x, '|', a29)
+  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) (abuff(j), j = 1, 4)
+  !  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) abuff(1 : 29)
+3016 format (' Comment card.', 37x, '1', 3a8, a5)
+!3016 format (' Comment card.', 37x, '|', a29)
   go to 1000
 3034 if (noutpr .ne. 0) go to 3035
   if (kol132 .eq. 132) write (unit = lunit6, fmt = 3006) buff10
 3006 format (51x, '|', 10a8)
-  !if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) (abuff(j), j = 1, 4)
-  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) abuff(1 : 29)
-  !3007 format (51x, '1', a24, a5)
-3007 format (51x, '1', a29)
+  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) (abuff(j), j = 1, 4)
+3007 format (51x, '1', 3a8, a5)
 3035 if (n13 .gt. 0) go to 3011
-  !print 3009, numdcd, (abuff(i), i = 1, 9)
-  print 3009, numdcd, abuff(1 : 72)
-  !3009 format (1x, i5, ' :', 9a8)
-3009 format (1x, i5, ' :', a72)
+  print 3009, numdcd, (abuff(i), i = 1, 9)
+3009 format (1x, i5, ' :', 9a8)
   n13 = n12
 3011 n13 = n13 - 1
-  !read (unit = abuff(1), fmt = 3037) text2
-  read (unit = abuff, fmt = 3037) text2
+  read (unit = abuff(1), fmt = 3037) text2
 3037 format (a6)
   if (text2 .ne. text5) go to 3040
   if (n8 .eq. 6) go to 3044
-  ! do i = 1, 10
-  !    abuff(i) = blank
-  ! end do
-  abuff(1 : 80) = blank
+  do i = 1, 10
+     abuff(i) = blank
+  end do
   go to 3233
 3040 if (chcont .eq. text4) go to 3233
-  ! do i = 1, 10
-  !    read (unit = abuff(i), fmt = 3041, iostat = ios) (texcol((i - 1) * 8 + j), j = 1, 8)
-  ! end do
-  read (unit = abuff, fmt = 3041, iostat = ios) (texcol(j), j = 1, 80)
-  !3041 format (8a1)
+  read (unit = abuff(1), fmt = 3041, iostat = ios) texcol
 3041 format (80a1)
-  !  if (ios .ne. 0) then
-  !     write (unit = lunit6, fmt = "('Could not read from abuff.  Stop.')")
-  !     stop
-  !  end if
   !     Dan Goldsworthy had trouble with $listoff within $include
   !     which was within tacs supplemental variables.  wsm+thl
-  !      if ( abuff(1) .ne. 8h$listoff   .and.
-  !     1     abuff(1) .ne. 8h$liston  )   go to 3042
-  !  if (abuff(1) .ne. '$listoff' .and. abuff(1) .ne. '$liston') go to 3042
-  if (abuff(1 : 8) .ne. '$listoff' .and. abuff(1 : 8) .ne. '$liston') go to 3042
+  if (to_lower (abuff(1)) .ne. '$listoff' .and. to_lower (abuff(1)) .ne. '$liston') go to 3042
   go to 3246
   !     chcont is 'tacs' if cimage called from within tacs fortran express
 3042 if (chcont .eq. chtacs) go to 3233
@@ -644,7 +622,8 @@ subroutine cimage
 3246 kolbeg = 2
   !     3251 nright = -2
   nright = -2
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 3281) nfrfld, texta6(1), texta6(2)
 3281 format (/, ' nfrfld =', i8, 5x, 'texta6 =', 2a7)
   nright = 0
@@ -744,7 +723,8 @@ subroutine cimage
 4200 text1 = textax(2)
 4206 n2 = lunit7
 4209 nfrfld = 1
-  call freone (d11)
+  !  call freone (d11)
+  call free (d11)
   n1 = int (d11)
   !     4225 if ( n1 .le. 0 ) n1 = n2
   if (n1 .le. 0) n1 = n2
@@ -805,10 +785,12 @@ subroutine cimage
   k = 80
 4536 kolbeg = k + 1
   nfrfld = 1
-  call freone (d11)
+  !  call freone (d11)
+  call free (d11)
   n7 = int (d11)
   if (n8 .ne. 4) go to 4557
-  call freone (d11)
+  !  call freone (d11)
+  call free (d11)
   n6 = int (d11)
 4557 if (n6 .eq. 0) n6 = lunit7
   if (n8 .eq. 5) n7 = munit5                                ! $spy uses this channel
@@ -860,7 +842,8 @@ subroutine cimage
   !               *****    request no. 10.   "new epsiln"   *****  *****
 5000 nfrfld = 1
   d1 = epsiln
-  call freone (epsiln)
+  !  call freone (epsiln)
+  call free (epsiln)
   if (noutpr .eq. 0) write (unit = lunit6, fmt = 5017) d1, epsiln
 5017 format ('+Epsiln change.  old, new =', 2e11.2)
   go to 1000
@@ -893,7 +876,8 @@ subroutine cimage
   go to 1000
   !               *****    request no. 15.   "vintage"      *****  *****
 5500 nfrfld = 1
-  call freone (d11)
+  !  call freone (d11)
+  call free (d11)
   moldat = int (d11)
   if (noutpr .eq. 0) write (unit = lunit6, fmt = 5518) moldat
 5518 format ('+New moldat =', i4, 5x, '(data vintage)')
@@ -912,7 +896,8 @@ subroutine cimage
   call stoptp                                               ! installation-dependent program stop card
   !               *****    request no. 18.   "watch5"       *****  *****
 5800 nfrfld = 1
-  call freone (d11)
+  !  call freone (d11)
+  call free (d11)
   n12 = int (d11)
   n13 = n12
   if (noutpr .eq. 0) write (unit = lunit6, fmt = 5812) n12
@@ -928,9 +913,9 @@ subroutine cimage
   !               *****    request no. 21.   "units"        *****  *****
 6100 nfrfld = 1
   !  call frefld (xopt)
-  call freone (xopt)
+  call free (xopt)
   !  call frefld (copt)
-  call freone (copt)
+  call free (copt)
   if (noutpr .eq. 0) write (unit = lunit6, fmt = 6114) xopt, copt
 6114 format ('+New  xopt, copt =', 2e14.4)
   xunits = 1000.
@@ -995,7 +980,7 @@ subroutine trgwnd (x, d17)
   !
   d17 = x
   if (dabs (x) .lt. 25000.) go to 9000
-  n13 = x / twopi
+  n13 = int (x / twopi)
   d17 = d17 - n13 * twopi
   if (iprsup .ge. 1) write (unit = *, fmt = 3456) nchain, x, d17
 3456 format (' Angle unwind in "trgwnd" called by "rfunl1".   nchain, x, d17 =', i5, 2e25.16)
@@ -1174,188 +1159,6 @@ subroutine multmx (a, b, c, temp, n)
   end do
   return
 end subroutine multmx
-
-!
-! subroutine frefld.
-!
-
-subroutine frefld (array)
-  use blkcom
-  implicit none
-  real(8), intent(out) :: array
-  integer(4) :: i, jj, n3, n9
-  character(8) :: text1, chtacs, texbuf(30), texvec(1)
-  dimension array(1)
-  equivalence (texvec(1), text1)
-  !
-  data chtacs / 'tacs  ' /
-  integer(4) :: ll
-  if (iprsup .ge. 5) write (unit = lunit6, fmt = 1016) nfrfld, nright, kolbeg
-1016 format (' Top "frefld".  nfrfld, nright, kolbeg =', 3i6)
-  if (nright .lt. 0) go to 5913
-  do jj = 1, nfrfld
-     if (kolbeg .le. 80) go to 5600
-     lstat(19) = 5600
-     go to 9200
-5600 n3 = 0
-     go to 5805
-5603 if (chcont .eq. chtacs) go to 5614
-     if (text1 .eq. blank) go to 5802
-     if (text1 .ne. csepar) go to 5623
-5609 kolbeg = kolbeg + 1
-     go to 5827
-5614 if (text1 .ne. csepar) go to 5623
-     if (text1 .eq. blank) go to 5802
-     go to 5609
-5623 if (n3 .lt. 30) go to 5627
-     lstat(19) = 5623
-     go to 9200
-5627 n3 = n3 + 1
-     texbuf(n3) = text1
-5802 kolbeg = kolbeg + 1
-5805 text1 = texcol(kolbeg)
-     if (text1 .ne. chcont) go to 5819
-     !     read input card using cimage
-     call cimage
-     kolbeg = 1
-     if (n3 .eq. 0) go to 5805
-     go to 5827
-5819 if (kolbeg .le. 80) go to 5603
-5827 if (n3 .gt. 0) go to 5829
-     array(jj) = 0.0
-     go to 5831
-5829 call frenum (texbuf(1), n3, array(jj))
-5831 if (iprsup .ge. 5) write (unit = lunit6, fmt = 5837) jj, kolbeg, n3, array(jj)
-5837 format (/, ' "frefld" number.      jj  kolbeg      n3', 21x,  'array(jj)', /, 17x, 3i8, e30.20)
-  end do
-  go to 9900
-5913 if (nright .lt. -1) go to 6036
-  do jj = 1, nfrfld
-     texta6(jj) = blank
-     ll = 0
-     if (kolbeg .le. 80) go to 5920
-     lstat(19) = 5920
-     go to 9200
-5920 text1 = texcol(kolbeg)
-     kolbeg = kolbeg + 1
-     if (chcont .eq. chtacs) go to 5928
-     if (text1 .eq. blank) go to 5923
-     if (text1 .eq. csepar) go to 5948
-5921 if (ll .le. 6) go to 5922
-     lstat(19) = 5922
-     go to 9200
-5928 if (text1 .eq. csepar) go to 5948
-     if (text1 .eq. blank) go to 5923
-     go to 5921
-5922 ll = ll + 1
-     call packa1 (texvec(1), texta6(jj), ll)
-5923 if (kolbeg .le. 80) go to 5920
-  end do
-5948 continue
-  go to 9900
-6036 ll = 0
-  jj = 0
-  go to 6054
-6042 jj = jj + 1
-  if (jj .gt. 10) go to 6072
-  texta6(jj) = blank
-  ll = 0
-6048 do
-     text1 = texcol(kolbeg)
-     if (chcont .eq. chtacs) go to 6051
-     if (text1 .eq. blank) go to 6054
-     if (text1 .eq. csepar) go to 6072
-     go to 6052
-6051 if (text1 .eq. csepar) go to 6072
-     if (text1 .eq. blank) go to 6054
-6052 if (ll .eq. 6) go to 6042
-     ll = ll + 1
-     call packa1 (texvec(1), texta6(jj), ll)
-     kolbeg = kolbeg + 1
-  end do
-6054 n9 = kolbeg
-  do i = kolbeg, 80
-     if (texcol(i) .ne. blank) go to 6067
-  end do
-  kolbeg = 79
-  go to 6072
-6067 kolbeg = i
-  if (kolbeg - n9 .le. 2) go to 6069
-  if (jj .gt. 0) go to 6072
-6069 if (texcol(kolbeg) .ne. csepar ) go to 6042
-6072 nfrfld = jj
-  kolbeg = kolbeg + 1
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 6083) jj, ll, kolbeg, texcol
-6083 format (/, ' Keyword near "frefld" exit.      jj      ll  kolbeg', /, 28x, 3i8, /, (' texcol =', 30a4))
-  go to 9900
-9200 kill = 166
-  if (iprsup .ge. 0) write (unit = lunit6, fmt = 9207) lstat(19), nchain, lastov, kolbeg, nfrfld, nright
-9207 format (/, " Error stop within  'frefld' .", 6i8, /, 1x)
-  lstat(18) = -1
-9900 if (iprsup .ge. 2) write (unit = lunit6, fmt = 9901) kill, kolbeg, array(1)
-9901 format (' Exit "frefld".  kill, kolbeg, array(1) =', i6, e20.10)
-  return
-end subroutine frefld
-
-!
-! subroutine freone
-!
-
-subroutine freone (d1)
-  implicit none
-  !     Scalar version of  "frefld"  which enters the utpf with
-  !     "m29."  vintage, to satisfy burroughs (see problem b,
-  !     section ii, page ecwb-4, vol. x  EMTP memo of 14 feb 1981.)
-  real(8), intent(out) :: d1
-  real(8) :: array(1)
-  !  dimension array(1)
-  !
-  call frefld (array(1))
-  d1 = array(1)
-  return
-end subroutine freone
-
-!
-! subroutine frenum.
-!
-
-subroutine frenum (text1, n3, d1)
-  implicit none
-  !     VAX-11/780  installation-dependent module called only by
-  !     the free-format data module  "frefld" .  Purpose is to
-  !     convert input characters  (text1(1) ... text1(n3))  into
-  !     a floating point number.
-  !     real(8)        text1(1), blank
-  integer(4), intent(in) :: n3
-  real(8), intent(out) :: d1
-  character(8), intent(in) :: text1(*)
-  integer(4) :: i, n4, n9
-  character(8) :: blank
-  character(1) :: texta(30), textb
-  !
-  data blank / '      ' /
-  data textb / ' ' /
-  n9 = 30
-  n4 = n3 + 1
-  do i = 1, n3
-     n4 = n4 - 1
-     if (text1(n4) .eq. blank) go to 4718
-     if (n9 .ge. 2) go to 4711
-     write (unit = 6, fmt = 4706)
-4706 format (/, ' Error stop in "frenum".   There are 33 or more characters in a free-format number on last data card.')
-     call stoptp                                            ! installation-dependent program stop card
-4711 write (unit = texta(n9), fmt = 4712) text1(n4)
-4712 format (80a1)
-     n9 = n9 - 1
-  end do
-4718 continue
-  do i = 1, n9
-     texta(i) = textb
-  end do
-  read (unit = texta(1), fmt = 4732) d1
-4732 format (e30.0)
-  return
-end subroutine frenum
 
 !
 ! subroutine packa1.

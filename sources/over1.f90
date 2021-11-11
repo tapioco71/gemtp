@@ -14,7 +14,6 @@ end module komthl
 !
 
 subroutine over1
-  use comlock
   use blkcom
   use labcom
   use umcom
@@ -26,9 +25,15 @@ subroutine over1
   use bcddat
   use movcop
   use strcom
+  use freedom
+  use comlock
   implicit none
   !     %include  '//c/tsu/cables.ins.ftn'
   !     To avoid "insert deck tacsar" here, use small part of it:
+  character(8) :: text1, text2, text6, datexx(2)
+  character(8) :: text3, text4, text5, tcloxx(2)
+  character(80) :: disk_file
+  character(132) :: ansi132
   integer(4) :: i, iadqq, ijk, ios, ip, iswent, iy, j
   integer(4) :: k, kswpe4
   integer(4) :: ll1, ll6, ll8, ll11, ll20, ll24, ll25, ll30, ll40, ll60, ll64, ll80
@@ -37,13 +42,11 @@ subroutine over1
   integer(4) :: nfdpol, ngroup, niunrs, nk, ntlin, nturn, num888, numnam
   integer(4) :: numbco, numbrn
   real(8) :: d1, d2, d3, d4, d7, d8, d12, d13, ddd, znvref
-  character(8) :: text1, text2, text6, datexx(2)
-  character(8) :: text3, text4, text5, tcloxx(2)
-  character(80) :: disk_file
-  character(132) :: ansi132
+  !  dimension kpen(1), ibusum(1)
+  !  dimension aupper(14)
+  !  dimension lstacs(8)
   !
   !  equivalence (volti(1), r4(1))
-  !  dimension kpen(1), ibusum(1)
   !  equivalence (bus1, kpen(1)), (busum(1), ibusum(1))
   !  equivalence (moncar(1), knt), (moncar(2), kbase)
   !  equivalence (moncar(4), isw)
@@ -51,10 +54,9 @@ subroutine over1
   !  equivalence (moncar(8), jseedr)
   !  equivalence (moncar(9), kloaep), (moncar(10), mtape)
   !  equivalence (iprsov(39), nmauto)
-  !  dimension aupper(14)
-  !  dimension lstacs(8)
   !
   !     default list sizes for tacs proportioning of emtp list 19.
+  !
   data text2 / 'name  ' /
   data text6 / 'copy  ' /
   data text1 / 'tacs o' /
@@ -190,8 +192,7 @@ subroutine over1
   !  call copyi (n1, lstat(1), ll60)
   call copy (n1, lstat(1 :), ll60)
   call sysdep
-  !  call mover0 (flstat, ll20)
-  flstat(1 : ll20) = 0.0
+  call move0 (flstat, ll20)
   call runtym (d1, d2)
   flstat(1) = flstat(1) - d1
   flstat(2) = flstat(2) - d2
@@ -311,12 +312,14 @@ subroutine over1
      nright = -2
      n9 = kolbeg
      kolbeg = 1
-     read (unit = abuff, fmt = '(80a1)', iostat = ios) (texcol(j), j = 1, 80)
+     read (unit = abuff(1), fmt = 3246, iostat = ios) texcol
+3246 format (80a1)
      if (ios .ne. 0) then
         write (unit = lunit6, fmt = "('Could not read from abuff.  Stop.')")
         stop
      end if
-     call freone (d1)
+     !     call freone (d1)
+     call free (d1)
 3247 nright = 0
      if (n9 .eq. -intinf) kolbeg = n9
      if (nfrfld .gt. 0) go to 3280
@@ -443,9 +446,12 @@ subroutine over1
 2872 nfrfld = 1
   call freone (d3)
   n3 = int (d3)
-  call freone (d7)
-  call freone (d8)
-  call freone (ddd)
+  !  call freone (d7)
+  call free (d7)
+  !  call freone (d8)
+  call free (d8)
+  !  call freone (ddd)
+  call free (ddd)
 2875 if (n3 .eq. 9999) go to 2879
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 2876)  n3, d7, d8
 2876 format ('+Altered switch.', i4, 2e13.4)
@@ -483,7 +489,8 @@ subroutine over1
   read (unit = abuff, fmt = 5) (lstacs(i), i = 1, 8)
   go to 7050
 7030 nfrfld = 10
-  call frefld (voltbc)
+  !  call frefld (voltbc)
+  call free (voltbc)
   do i = 1, 8
      lstacs(i) = int (voltbc(i))
   end do
@@ -502,7 +509,8 @@ subroutine over1
   read (unit = abuff, fmt = 3415) (voltbc(i), i = 1, 10)
   go to 7130
 7120 nfrfld = 10
-  call frefld (voltbc)
+  !  call frefld (voltbc)
+  call free (voltbc)
 7130 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7140) voltbc(1), voltbc(2), voltbc(3)
 7140 format ('+Relative list sizes.', 3e9.2)
   d1 = 0.0
@@ -527,20 +535,26 @@ subroutine over1
   if (kolbeg .gt. 0) go to 4201
   call expchk (ll1, ll80, ll8)
   if (kill .gt. 0) go to 9200
-  !read (unit = abuff(1), fmt = 3415, iostat = ios) deltat, tmax, d1, d2, d3, tolmat, t
-  read (unit = abuff, fmt = 3415, iostat = ios) deltat, tmax, d1, d2, d3, tolmat, t
+  read (unit = abuff(1), fmt = 3415, iostat = ios) deltat, tmax, d1, d2, d3, tolmat, t
 3415 format (10e8.0)
-  if (t .eq. 0.0) t = 0.0
+  if (t .eq. 0.0) t = 0.0d0
   go to 4202
 4201 nfrfld = 1
   nright = 0
-  call freone (deltat)
-  call freone (tmax)
-  call freone (d1)
-  call freone (d2)
-  call freone (d3)
-  call freone (tolmat)
-  call freone (t)
+  !  call freone (deltat)
+  call free (deltat)
+  !  call freone (tmax)
+  call free (tmax)
+  !  call freone (d1)
+  call free (d1)
+  !  call freone (d2)
+  call free (d2)
+  !  call freone (d3)
+  call free (d3)
+  !  call freone (tolmat)
+  call free (tolmat)
+  !  call freone (t)
+  call free (t)
 4202 if (noutpr .eq. 0) write (unit = kunit6, fmt = 4205) deltat, tmax, d1
 4205 format ('+Misc. data.', 3e12.3)
   if (iofbnd .ne. 33666) go to 4206
@@ -552,11 +566,12 @@ subroutine over1
   if (kolbeg .gt. 0) go to 4207
   call intchk (ll1, ll80, ll8)
   if (kill .gt. 0) go to 9200
-  read (unit = abuff, fmt = 5, iostat = ios) iout, iplot, idoubl, kssout, maxout, ipun, memsav, icat, n1, n2
+  read (unit = abuff(1), fmt = 5, iostat = ios) iout, iplot, idoubl, kssout, maxout, ipun, memsav, icat, n1, n2
 5 format (10i8)
   go to 4208
 4207 nfrfld = 10
-  call frefld (voltbc(1))
+  !  call frefld (voltbc)
+  call free (voltbc)
   iout = int (voltbc(1))
   iplot = int (voltbc(2))
   idoubl = int (voltbc(3))
@@ -587,25 +602,33 @@ subroutine over1
   call intchk (ll1, ll24, ll8)
   call expchk (ll25, ll64, ll8)
   if (kill .gt. 0) go to 9200
-  read (unit = abuff, fmt = 620, iostat = ios) isw, itest, idist, aincr, xmaxmx, degmin, degmax, d4, sigmax, jseedr
+  read (unit = abuff(1), fmt = 620, iostat = ios) isw, itest, idist, aincr, xmaxmx, degmin, degmax, d4, sigmax, jseedr
 620 format (3i8, 6f8.0, i8)
   go to 624
 623 nfrfld = 3
-  call frefld (voltbc(1))
+  !  call frefld (voltbc)
+  call free (voltbc)
   isw = int (voltbc(1))
   itest = int (voltbc(2))
   idist = int (voltbc(3))
   nfrfld = 1
-  call freone (aincr)
-  call freone (xmaxmx)
-  call freone (degmin)
-  call freone (degmax)
-  call freone (d4)
-  call freone (sigmax)
-  call frefld (voltbc(1))
+  !  call freone (aincr)
+  call free (aincr)
+  !  call freone (xmaxmx)
+  call free (xmaxmx)
+  !  call freone (degmin)
+  call free (degmin)
+  !  call freone (degmax)
+  call free (degmax)
+  !  call freone (d4)
+  call free (d4)
+  !  call freone (sigmax)
+  call free (sigmax)
+  !  call frefld (voltbc)
+  call free (voltbc)
   jseedr = int (voltbc(1))
 624 if (noutpr .eq.  0) write (unit = kunit6, fmt = 630, advance = 'no') isw, itest, idist, aincr
-  !630 format ('+statistics data.', 3i8, f9.4, $)
+  !630 format ('+Statistics data.', 3i8, f9.4, $)
 630 format ('+Statistics data.', 3i8, f9.4)
   if (xmaxmx .eq. 0.0) xmaxmx = 2.0
   if (aincr .eq. 0.0) aincr = unity / 20.
@@ -668,7 +691,8 @@ subroutine over1
 4211 format (10i8)
   go to 4219
 4217 nfrfld = 10
-  call frefld (voltbc(1))
+  !  call frefld (voltbc)
+  call free (voltbc)
   j = 1
   do i = 1, 5
      kprchg(i) = int (voltbc(j))
@@ -723,8 +747,7 @@ subroutine over1
   lstat(39) = 137
   !     read input card using cimage
 2691 call cimage
-  !read (unit = abuff(1), fmt = 3245) (aupper(i), i = 1, 14)
-  read (unit = abuff, fmt = 3245) (aupper(i), i = 1, 14)
+  read (unit = abuff(1), fmt = 3245) (aupper(i), i = 1, 14)
 3245 format (13a6, a2)
   if (to_lower (aupper(1)) .eq. text1) go to 2697
   if (to_lower (aupper(1)) .eq. text3) go to 2697
@@ -746,14 +769,12 @@ subroutine over1
   if (ntcsex .eq. 0) go to 22699
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 32699)
 32699 format ('+TACS hybrid setup.  TACS data cards follow.')
-  !read (unit = abuff(1), fmt = 1984) lstat(52)
-  read (unit = abuff, fmt = 1984) lstat(52)
+  read (unit = abuff(1), fmt = 1984) lstat(52)
 1984 format (18x, i2)
   go to 2691
 22699 if (noutpr .eq. 0) write (unit = kunit6, fmt = 42699)
 42699 format ('+TACS stand-alone setup.  Data cards follow.')
-  !read (unit = abuff(1), fmt = 1984) lstat(52)
-  read (unit = abuff, fmt = 1984) lstat(52)
+  read (unit = abuff(1), fmt = 1984) lstat(52)
   go to 2691
 4281 if (n1 .eq. 0) go to 4284
   !  call move (lstacs(1), lstat(61), ll8)
@@ -805,7 +826,7 @@ subroutine tacs1c
   character(8) :: alnode
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module tacs1c."')
-  read (unit = abuff, fmt = 187) n, alnode, dum1, dum3, dum2, ijk, prx, pru
+  read (unit = abuff(1), fmt = 187) n, alnode, dum1, dum3, dum2, ijk, prx, pru
 187 format (i2, a6, 2x, 3e10.0, 14x, i6, 2e10.0)
   if (niu .lt. 12) go to 2868
   ndy5 = kud1 - 5
@@ -854,7 +875,7 @@ subroutine swmodf
   data text15 / 'closed' /
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format (' Begin module "swmodf".')
-  read (unit = abuff, fmt = 35) it2, bus1, bus2, gus3, gus4, ck1, a, jk, bus4, bus5, bus6, jdu, j
+  read (unit = abuff(1), fmt = 35) it2, bus1, bus2, gus3, gus4, ck1, a, jk, bus4, bus5, bus6, jdu, j
 35 format (i2, 2a6, 4e10.0, i6, a4, 2a6, 2x, 2i1)
   do msw = 1, kswtch
      k = kmswit(msw)
@@ -905,6 +926,7 @@ subroutine reques (ls)
   use movcop
   use strcom
   use random
+  use freedom
   implicit none
   integer(4) :: i, ip, j, k, kbrnum
   integer(4) :: l, ll1, ll8, ll16, ll25, ll32, ll33, ll40, ll48, ll49, ll56
@@ -1369,11 +1391,11 @@ subroutine reques (ls)
      case (3)
         ! $$$$$    special-request word no. 3.   'type99 limit'            $$$$$
         if (kolbeg .gt. 0) go to 3352
-        !read (unit = abuff(1), fmt = 2642) max99m
-        read (unit = abuff, fmt = 2642) max99m
+        read (unit = abuff(1), fmt = 2642) max99m
         go to 3354
 3352    nfrfld = 1
-        call freone (d1)
+        !        call freone (d1)
+        call free (d1)
         max99m = int (d1, kind (max99m))
 3354    if (noutpr .eq. 0) write (unit = kunit6, fmt = 3355) max99m
 3355    format ('+Redefine type-99 message limit to', i6)
@@ -1406,11 +1428,11 @@ subroutine reques (ls)
      case (7)
         ! $$$$$    special-request word no. 7.   'postprocess plot file'   $$$$$
         if (kolbeg .gt. 0)   go to 3375
-        !read (unit = abuff(1), fmt = 2642) iofbnd
-        read (unit = abuff, fmt = 2642) iofbnd
+        read (unit = abuff(1), fmt = 2642) iofbnd
         go to 3379
 3375    nfrfld = 1
-        call freone (d1)
+        !        call freone (d1)
+        call free (d1)
         iofbnd = int (d1)
 3379    write (unit = kunit6, fmt = 3382) iofbnd
 3382    format ('+Postprocess.  iplot =', i6)
@@ -1438,7 +1460,8 @@ subroutine reques (ls)
 2605    format (32x, e8.0)
         go to 2612
 2608    nfrfld = 1
-        call freone (szplt)
+        !        call freone (szplt)
+        call free (szplt)
 2612    if (noutpr .eq. 0) write (unit = kunit6, fmt = 2614) szplt
 2614    format ('+New plotter paper-height limit.', 2x, e13.3)
         go to 15
@@ -1451,7 +1474,8 @@ subroutine reques (ls)
         read (unit = abuff, fmt = 2642) lnpin
         go to 2631
 2628    nfrfld = 1
-        call frefld (voltbc(1))
+        !        call frefld (voltbc)
+        call free (voltbc)
         lnpin = voltbc(1)
 2631    if (noutpr .eq. 0 ) write (unit = kunit6, fmt = 2634) lnpin
 2634    format ('+New printer spacing, lines/distance =', 2x, i8)
@@ -1466,7 +1490,8 @@ subroutine reques (ls)
 2642    format (32x, 6i8)
         go to 2646
 2644    nfrfld = 1
-        call frefld (voltbc(1))
+        !        call frefld (voltbc)
+        call free (voltbc)
         modout = int (voltbc(1), kind (modout))
 2646    if (modout .le. 0) modout = 3
         if (noutpr .eq. 0) write (unit = kunit6, fmt = 2648) modout
@@ -1489,11 +1514,11 @@ subroutine reques (ls)
      case (13)
         !     $$$$$ special-request word no. 13.   'limit on plot oscillations'
         if (kolbeg .gt. 0) go to 2671
-        !read (unit = abuff(1), fmt = 2642) nsmth
-        read (unit = abuff, fmt = 2642) nsmth
+        read (unit = abuff(1), fmt = 2642) nsmth
         go to 2673
 2671    nfrfld = 1
-        call frefld (voltbc)
+        !        call frefld (voltbc)
+        call free (voltbc)
         nsmth = int (voltbc(1), kind (nsmth))
 2673    if (noutpr .eq. 0) write (unit = kunit6, fmt = 2675) nsmth
 2675    format ('+Change successive oscillation limit.', 2x, i8)
@@ -1504,12 +1529,12 @@ subroutine reques (ls)
         if (noutpr .eq. 0) write (unit = kunit6, fmt = 2682)
 2682    format ('+TACS names controlling type 1-10 EMTP sources.')
         if (kolbeg .gt. 0) go to 2683
-        !read (unit = abuff(1), fmt = 2685) (vstacs(k), k = 1, 10)
-        read (unit = abuff, fmt = 2685) (vstacs(k), k = 1, 10)
+        read (unit = abuff(1), fmt = 2685) (vstacs(k), k = 1, 10)
 2685    format (20x, 10a6)
         go to 2686
 2683    nright = -2
-        call freone (d1)
+        !        call freone (d1)
+        call free (d1)
         do j = 1, 10
            vstacs(j) = texta6(j)
         end do
@@ -1571,8 +1596,7 @@ subroutine reques (ls)
 
      case (22)
         ! $$$$$    special-request word no. 22.   'free format'            $$$$$
-        !read (unit = abuff(1), fmt = 2796) bus4, bus5
-        read (unit = abuff, fmt = 2796) bus4, bus5
+        read (unit = abuff(1), fmt = 2796) bus4, bus5
 2796    format (16x, a1, 7x, a1)
         if (noutpr .eq. 0) write (unit = kunit6, fmt = 2801) bus4, bus5
 2801    format ('+Free-field characters.   ', a1, '   and   ', a1, ' .')
@@ -1583,12 +1607,12 @@ subroutine reques (ls)
      case (23)
         ! $$$$$    special-request word no. 23.   'diagnostic'             $$$$$
         if (kolbeg .gt. 0) go to 2814
-        !read (unit = abuff(1), fmt = 2811) (iprsov(k), k = 1, 30)
-        read (unit = abuff, fmt = 2811) (iprsov(k), k = 1, 30)
+        read (unit = abuff(1), fmt = 2811) (iprsov(k), k = 1, 30)
 2811    format (20x, 30i2)
         go to 2816
 2814    nfrfld = 30
-        call frefld (voltbc(1))
+        !        call frefld (voltbc)
+        call free (voltbc)
         if (kill .gt. 0) go to 9200
         do  k = 1, 30
            iprsov(k) = int (voltbc(k))
@@ -1601,11 +1625,11 @@ subroutine reques (ls)
      case (24)
         ! $$$$$    special-request word no. 24.   'power frequency'        $$$$$
         if (kolbeg .gt. 0) go to 2820
-        !read (unit = abuff(1), fmt = 2605) statr
-        read (unit = abuff, fmt = 2605) statr
+        read (unit = abuff(1), fmt = 2605) statr
         go to 2822
 2820    nfrfld = 1
-        call freone (statfr)
+        !        call freone (statfr)
+        call free (statfr)
 2822    if (noutpr .eq. 0) write (unit = kunit6, fmt = 2824) statfr
 2824    format ('+Redefined power frequency =', e12.3, '  Hz.')
         go to 15
@@ -1620,12 +1644,12 @@ subroutine reques (ls)
      case (26)
           ! $$$$$    special-request word no. 26.   'user identification'  $$$$$
         if (kolbeg .gt. 0) go to 4661
-        !read (unit = abuff(1), fmt = 4658) userid
-        read (unit = abuff, fmt = 4658) userid
+        read (unit = abuff(1), fmt = 4658) userid
 4658    format (24x, 8a6)
         go to 4664
 4661    nright = -2
-        call freone (d1)
+        !        call freone (d1)
+        call free (d1)
         nright = 0
         userid = texta6(1)
 4664    if (noutpr .eq. 0) write (unit = kunit6, fmt = 4667) userid
@@ -1650,7 +1674,8 @@ subroutine reques (ls)
         n9 = kolbeg
         kolbeg = 1
         nright = -2
-        call freone (d1)
+        !        call freone (d1)
+        call free (d1)
         n1 = jpntr(5)
         n2 = jpntr(6) - 1
         k = 0
@@ -1668,12 +1693,12 @@ subroutine reques (ls)
         ! $$$$$    special-request word no. 29.   'kill codes'             $$$$$
         ipntv(1) = -8888
         if (kolbeg .gt. 0) go to 4724
-        !read (unit = abuff(1), fmt = 4721) kill, ipntv(2)
-        read (unit = abuff, fmt = 4721) kill, ipntv(2)
+        read (unit = abuff(1), fmt = 4721) kill, ipntv(2)
 4721    format (32x, 2i8)
         go to 4726
 4724    nfrfld = 2
-        call frefld (voltbc(1))
+        !        call frefld (voltbc)
+        call free (voltbc)
         kill = int (voltbc(1))
         ipntv(2) = int (voltbc(2))
 4726    write (unit = kunit6, fmt = 4728) kill, ipntv(2)
@@ -1698,13 +1723,13 @@ subroutine reques (ls)
         ! $$$$$    special-request word no. 30.   'high resistance'        $$$$$
         n7 = kpartb
         if (kolbeg .gt. 0) go to 4735
-        !read (unit = abuff(1), fmt = 4721) kpartb
-        read (unit = abuff, fmt = 4721) kpartb
+        read (unit = abuff(1), fmt = 4721) kpartb
         call intchk (ll33, ll40, ll8)
         if (kill .gt. 0) go to 9200
         go to 4737
 4735    nfrfld = 1
-        call frefld (voltbc(1))
+        !        call frefld (voltbc)
+        call free (voltbc)
         kpartb = int (voltbc(1))
 4737    d1 = 10.0 ** kpartb
         if (noutpr .eq. 0) write (unit = kunit6, fmt = 4739) d1
@@ -1742,12 +1767,12 @@ subroutine reques (ls)
      case (35)
         ! $$$$$ special request-word no. 35.  'statistics output salvage'  $$$$$
         if (kolbeg .gt. 0) go to 7193
-        !read (unit = abuff(1), fmt = 7191) jflsos
-        read (unit = abuff, fmt = 7191) jflsos
+        read (unit = abuff(1), fmt = 7191) jflsos
 7191    format (29x, i3)
         go to 7195
 7193    nfrfld = 1
-        call freone (d1)
+        !        call freone (d1)
+        call free (d1)
         jflsos = int (d1)
 7195    if (jflsos .gt. 0) go to 7199
         !     find random integer  'jflsos'  between zero and 999.
@@ -1785,11 +1810,11 @@ subroutine reques (ls)
      case (39)
         ! $$$$$ special request-word no. 39.   'redefine tolerance epsiln' $$$$$
         if (kolbeg .gt. 0) go to 7217
-        !read (unit = abuff(1), fmt = 2605) epsiln
-        read (unit = abuff, fmt = 2605) epsiln
+        read (unit = abuff(1), fmt = 2605) epsiln
         go to 7223
 7217    nfrfld = 1
-        call freone (epsiln)
+        !        call freone (epsiln)
+        call free (epsiln)
 7223    write (unit = kunit6, fmt = 7226) epsiln
 7226    format ("+Misc. data constant  'epsiln' .", e12.3)
         go to 15
@@ -1804,18 +1829,17 @@ subroutine reques (ls)
      case (41)
         ! $$$$$  special request-word no. 41.   'begin peak value search'  $$$$$
         if (kolbeg .gt. 0) go to 7247
-        !read (unit = abuff(1), fmt = 2605) begmax(2)
-        read (unit = abuff, fmt = 2605) begmax(2)
+        read (unit = abuff(1), fmt = 2605) begmax(2)
         go to 7249
 7247    nfrfld = 1
-        call frefld (begmax(2))
+        !        call frefld (begmax(2 :))
+        call free (begmax(2 :))
 7249    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7252) begmax(2)
 7252    format ('+Extrema calc. begins at', e13.4, '  seconds.')
         if (begmax(2) .ne. -1.) go to 15
         !     read input data card using cimage
         call cimage
-        !read (unit = abuff(1), fmt = 7253) (begmax(ip), ip = 2, 6)
-        read (unit = abuff, fmt = 7253) (begmax(ip), ip = 2, 6)
+        read (unit = abuff(1), fmt = 7253) (begmax(ip), ip = 2, 6)
 7253    format (10e8.0)
         if (noutpr .eq. 0) write (unit = kunit6, fmt = 7254) (begmax(ip), ip = 2, 5)
 7254    format ('+(t1, t2):', 4e10.2)
@@ -1824,11 +1848,11 @@ subroutine reques (ls)
      case (42)
         ! $$$$$  special request-word no. 42.   'time of dice roll'        $$$$$
         if (kolbeg .gt. 0) go to 7255
-        !read (unit = abuff(1), fmt = 2605) tenerg
-        read (unit = abuff, fmt = 2605) tenerg
+        read (unit = abuff(1), fmt = 2605) tenerg
         go to 7261
 7255    nfrfld = 1
-        call freone (tenerg)
+        !        call freone (tenerg)
+        call free (tenerg)
 7261    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7262) tenerg
 7262    format ('+Statistics table-saving time =', e12.3, '  sec. ')
         go to 15
@@ -1836,11 +1860,12 @@ subroutine reques (ls)
      case (43)
           ! $$$$$  special request-word no. 43.   'zinc oxide'             $$$$$
         if (kolbeg .gt. 0) go to 7266
-        read (unit = abuff, fmt = 7264) n13, (flstat(m), m = 15, 19)
+        read (unit = abuff(1), fmt = 7264) n13, (flstat(m), m = 15, 19)
 7264    format (16x, i8, 5e8.0)
         go to 7268
 7266    nfrfld = 6
-        call frefld (flstat(14))
+        !        call frefld (flstat(14 :))
+        call free (flstat(14 :))
         n13 = int (flstat(14))
 7268    if (n13 .gt. 0)  maxzno = n13
         if (flstat(15) .gt. 0.0) epszno = flstat(15)
@@ -1862,12 +1887,12 @@ subroutine reques (ls)
      case (45)
         ! $$$$$  special request-word no. 45.   'absolute u.m. dimensions' $$$$$
         if (kolbeg .gt. 0) go to 7279
-        !read (unit = abuff(1), fmt = 7276) nclfix, numfix, iotfix, ibsfix
-        read (unit = abuff, fmt = 7276) nclfix, numfix, iotfix, ibsfix
+        read (unit = abuff(1), fmt = 7276) nclfix, numfix, iotfix, ibsfix
 7276    format (32x, 6i8)
         go to 7282
 7279    nfrfld = 4
-        call frefld (voltbc)
+        !        call frefld (voltbc)
+        call free (voltbc)
         nclfix = int (voltbc(1))
         numfix = int (voltbc(2))
         iotfix = int (voltbc(3))
@@ -1884,11 +1909,11 @@ subroutine reques (ls)
      case (46)
         ! $$$$$  special request-word no. 46.   'relative u.m. dimensions' $$$$$
         if (kolbeg .gt. 0) go to 7298
-        !read (unit = abuff(1), fmt = 7276) (voltbc(k), k = 1, 4)
-        read (unit = abuff, fmt = 7276) (voltbc(k), k = 1, 4)
+        read (unit = abuff(1), fmt = 7276) (voltbc(k), k = 1, 4)
         go to 7303
 7298    nfrfld = 4
-        call frefld (voltbc(1))
+        !        call frefld (voltbc)
+        call free (voltbc)
 7303    d1 = 0.0
         do j = 1, 4
            d1 = d1 + voltbc(j)
@@ -1926,11 +1951,11 @@ subroutine reques (ls)
      case (48)
         ! $$$ special request-word no. 48.   'alternate diagnostic printout' $$$
         if (kolbeg .gt. 0) go to 7322
-        !read (unit = abuff(1), fmt = 2642) (iprsov(j + 30), j = 1, 4)
-        read (unit = abuff, fmt = 2642) (iprsov(j + 30), j = 1, 4)
+        read (unit = abuff(1), fmt = 2642) (iprsov(j + 30), j = 1, 4)
         go to 7329
 7322    nfrfld = 4
-        call frefld (voltbc(1))
+        !        call frefld (voltbc)
+        call free (voltbc)
         do j = 1, 4
            iprsov(j + 30) = int (voltbc(j))
         end do
@@ -1941,12 +1966,12 @@ subroutine reques (ls)
      case (49)
         ! $$$$$  special request-word no. 49.   'tacs warn limit'          $$$$$
         if (kolbeg .gt. 0) go to 7334
-        !read (unit = abuff(1), fmt = 2582) lstat(51), pu
-        read (unit = abuff, fmt = 2582) lstat(51), pu
+        read (unit = abuff(1), fmt = 2582) lstat(51), pu
 2582    format (16x, i8, e8.0)
         go to 7335
 7334    nfrfld = 2
-        call frefld (voltbc(1))
+        !        call frefld (voltbc)
+        call free (voltbc)
         lstat(51) = int (voltbc(1))
         pu = voltbc(2)
 7335    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7336) lstat(51), pu
@@ -1997,11 +2022,11 @@ subroutine reques (ls)
      case (56)
         ! $$$$$  special request-word no. 56.   'fault data usage'         $$$$$
         if (kolbeg .gt. 0) go to 7379
-        !read (unit = abuff(1), fmt = 2642) iofbnd
-        read (unit = abuff, fmt = 2642) iofbnd
+        read (unit = abuff(1), fmt = 2642) iofbnd
         go to 7382
 7379    nfrfld = 1
-        call frefld (voltbc(1))
+        !        call frefld (voltbc)
+        call free (voltbc)
         iofbnd = int (voltbc(1))
 7382    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7385)
 7385    format ('+Request for generator equivalents.')
@@ -2020,11 +2045,11 @@ subroutine reques (ls)
         ! $$$$$  special request-word no. 58.   'user supplied             $$$$$
         ! $$$$$  switch times'                                             $$$$$
         if (kolbeg .gt. 0) go to 7396
-        !read (unit = abuff(1), fmt = 2642) n14
-        read (unit = abuff, fmt = 2642) n14
+        read (unit = abuff(1), fmt = 2642) n14
         go to 7402
 7396    nfrfld = 1
-        call frefld (voltbc(1))
+        !        call frefld (voltbc)
+        call free (voltbc)
         n14 = int (voltbc(1))
 7402    moncar(7) = n14
         if (n14 .eq. 0) moncar(7) = 24
@@ -2069,12 +2094,12 @@ subroutine reques (ls)
   call expchk (ll25, ll48, ll8)
   call intchk (ll49, ll56, ll8)
   if (kill .gt. 0) go to 9200
-  !read (unit = abuff(1), fmt = 2779) fminfs, deltfs, fmaxfs, n8
-  read (unit = abuff, fmt = 2779) fminfs, deltfs, fmaxfs, n8
+  read (unit = abuff(1), fmt = 2779) fminfs, deltfs, fmaxfs, n8
 2779 format (24x, 3e8.0, i8)
   go to 2776
 2773 nfrfld = 4
-  call frefld (voltbc(1))
+  !  call frefld (voltbc)
+  call free (voltbc)
   fminfs = voltbc(1)
   delffs = voltbc(2)
   fmaxfs = voltbc(3)
@@ -2162,6 +2187,7 @@ subroutine sysdep
   character(18) :: colxxx
   character(8) :: busnm1, busnm2, busnm3, text1, text2, temp
   character :: lettra, lettrb, lettrc !, colxxx(18)
+  integer(4) :: j
   !
   !     first 5 characters of file name "col" are reserved
   !     for explicit directory (e.g., "[plt]" ), if desired.
@@ -2294,23 +2320,21 @@ subroutine sysdep
   entry nextcard
   !     This entry is used only for interactive EMTP.  it gets
   !     next card image from memory rather than unit 5.
-  n7 = numdcd + 1                                           ! next data card is right after last
-1472 if (iprspy .lt. 5) go to 1486                          ! jump around diagnostic
+  n7 = numdcd + 1                                 ! next data card is right after last
+1472 if (iprspy .lt. 5) go to 1486                ! jump around diagnostic
   write (unit = munit6, fmt = 1477) n7, file6(n7)
 1477 format (' in "nextcard":', i5, 1x, a80)
-  call window                                               ! output of character variable munit6
-1486 if (n7 .le. numcrd) go to 1488                         ! at least 1 card remains
+  call window                                     ! output of character variable munit6
+1486 if (n7 .le. numcrd) go to 1488               ! at least 1 card remains
   write (unit = lunit6, fmt = 1483) numcrd
 1483 format ('   ****  ****   Data crisis.   Last card has been read.   numcrd =', i6 ,/, 'Use "data" command of spy to read in next block of data.')
-  if (m4plot .ne. 1)  go to 9000                            ! set kill, then exit
-  call emtspy                                               ! allow user to change data card storage
-  go to 1472                                                ! loop back for another try at reading
-  !1488 read (unit = file6(n7), fmt = 1489) (abuff(j), j = 1, 10)
-1488 read (unit = file6(n7), fmt = 1489) abuff
-  !1489 format (10a8)
-1489 format (a80)
-  go to 9200                                                ! exit module with new card image in abuff
-9000 kill = 7654                                            ! positive kill is eof flag in "cimage"
+  if (m4plot .ne. 1)  go to 9000                  ! set kill, then exit
+  call emtspy                                     ! allow user to change data card storage
+  go to 1472                                      ! loop back for another try at reading
+1488 read (unit = file6(n7), fmt = 1489) (abuff(j), j = 1, 10)
+1489 format (10a8)
+  go to 9200                                      ! exit module with new card image in abuff
+9000 kill = 7654                                  ! positive kill is eof flag in "cimage"
 9200 return
 end subroutine sysdep
 
@@ -2398,6 +2422,7 @@ subroutine tacs1
   use smtacs
   use tracom
   use indcom
+  use freedom
   implicit none
   integer(4) :: i, ij, ijk, is, isour
   integer(4) :: j, j1, j2, jr
@@ -2519,8 +2544,7 @@ subroutine tacs1
 100 call cimage
 2210 if (kill .gt. 0) go to 9000
   if (kolbeg .gt. 0) go to 6574
-  !read (unit = abuff(1), fmt = 176) n
-  read (unit = abuff, fmt = 176) n
+  read (unit = abuff(1), fmt = 176) n
 176 format (i2)
 1234 if (n .eq. 88 .or. n .eq. 98 .or. n .eq. 99) go to 113
   if (n .eq. 33) go to 2222
@@ -2528,19 +2552,19 @@ subroutine tacs1
   if (n .gt. 10 .and. n .lt. 25) go to 1066
   if (n .gt. 89 .and. n .lt. 94) go to 1066
   if (kolbeg .gt. 0 ) go to 1111
-  !read (unit = abuff(1), fmt = 177) (dumj(i), i = 1, 5)
-  read (unit = abuff, fmt = 177) (dumj(i), i = 1, 5)
-  !read (unit = abuff(1), fmt = 178) n, alnode, (alph(i), i = 1, 5), (dum(i), i = 1, 3), alnm1, alnm2
-  read (unit = abuff, fmt = 178) n, alnode, (alph(i), i = 1, 5), (dum(i), i = 1, 3), alnm1, alnm2
+  read (unit = abuff(1), fmt = 177) (dumj(i), i = 1, 5)
+  read (unit = abuff(1), fmt = 178) n, alnode, (alph(i), i = 1, 5), (dum(i), i = 1, 3), alnm1, alnm2
 177 format (10x, 5(1x, a6, 1x))
 178 format (i2, a6, 2x, 5(a1, 7x), 3e6.0, 2a6)
   go to 6590
 6574 nfrfld = 1
-  call frefld (voltbc(1))
+  !  call frefld (voltbc)
+  call free (voltbc)
   n = int (voltbc(1))
   go to 1234
 1111 nright = -1
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   alnode = texta6(1)
   do i = 1, 5
 6576 bus1 = texcol(kolbeg)
@@ -2554,7 +2578,8 @@ subroutine tacs1
      go to 6581
 6578 alph(i) = bus1
      kolbeg = kolbeg + 1
-6581 call freone (d1)
+     !6581 call freone (d1)
+6581 call free (d1)
      dumj(i) = texta6(1)
      go to 6587
 6584 alph(i) = blank
@@ -2564,10 +2589,12 @@ subroutine tacs1
 6587 continue
   nright = 0
   nfrfld = 3
-  call frefld (dum(1))
+  !  call frefld (dum)
+  call free (dum)
   nright = -1
   nfrfld = 2
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   alnm1 = texta6(1)
   alnm2 = texta6(2)
   nright = 0
@@ -2706,14 +2733,14 @@ subroutine tacs1
      ndx1 = kprsup + j2
      if (kolbeg .gt. 0) go to 6514
      ndx2 = kprsup + kpar
-     !read (unit = abuff(1), fmt = 181) (parsup(i), i = ndx1, ndx2, 6)
-     read (unit = abuff, fmt = 181) (parsup(i), i = ndx1, ndx2, 6)
+     read (unit = abuff(1), fmt = 181) (parsup(i), i = ndx1, ndx2, 6)
 181  format (8e10.0)
      go to 6517
 6514 nfrfld = 1
      n22 = n + 1
      do is = 1, n22
-        call frefld (parsup(ndx1))
+        !        call frefld (parsup(ndx1 :))
+        call free (parsup(ndx1 :))
         ndx1 = ndx1 + 6
      end do
      ndx1 = kprsup + j2
@@ -2802,16 +2829,17 @@ subroutine tacs1
   go to  4444
 1066 if (kill .gt. 0) go to 9000
   if (kolbeg .gt. 0) go to 6534
-  !read (unit = abuff(1), fmt = 187) n, alnode, dum(1), dum(3), dum(2), prx, pru
-  read (unit = abuff, fmt = 187) n, alnode, dum(1), dum(3), dum(2), prx, pru
+  read (unit = abuff(1), fmt = 187) n, alnode, dum(1), dum(3), dum(2), prx, pru
 187 format (i2, a6, 2x, 3e10.0, 20x, 2e10.0)
   go to 6537
 6534 nright = -1
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   alnode = texta6(1)
   nright = 0
   nfrfld = 5
-  call frefld (voltbc(1))
+  !  call frefld (voltbc)
+  call free (voltbc)
   dum(1) = voltbc(1)
   dum(3) = voltbc(2)
   dum(2) = voltbc(3)
@@ -2848,8 +2876,8 @@ subroutine tacs1
 168 format ('  Type 90 source ', '"', a6, '"', ' is not a recognizable node name in EMTP. The card will be discard')
   go to 8579
 1091 if (n1 .ne. 91 .and. n1 .ne. 93) go to 1092
-  do j = 1,kswtch
-     k = iabs(kmswit(j))
+  do j = 1, kswtch
+     k = iabs (kmswit(j))
      ndx2 = lswtch + j
      m = iabs (kmswit(ndx2))
      if (alnode .eq. bus(k)) go to 479
@@ -2872,13 +2900,13 @@ subroutine tacs1
   lstat(19) = 8107
   go to 9000
 2222 if (kolbeg .gt. 0) go to 6554
-  !read (unit = abuff(1), fmt = 190) (dumj(i), i = 1, 13)
-  read (unit = abuff, fmt = 190) (dumj(i), i = 1, 13)
+  read (unit = abuff(1), fmt = 190) (dumj(i), i = 1, 13)
 190 format (2x, 13a6)
   go to 6557
 6554 nfrfld = 13
   nright = -1
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   nright = 0
   do i = 1, 13
      dumj(i) = texta6(i)
@@ -2907,16 +2935,17 @@ subroutine tacs1
   lstat(17) = 8
   go to 9000
 3333 if (kolbeg .gt. 0) go to 6564
-  !read (unit = abuff(1), fmt = 195) alnode, prx
-  read (unit = abuff, fmt = 195) alnode, prx
+  read (unit = abuff(1), fmt = 195) alnode, prx
 195 format (2x, a6, 2x, e10.0)
   go to 6567
 6564 nfrfld = 1
   nright = -1
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   alnode = texta6(1)
   nright = 0
-  call freone (prx)
+  !  call freone (prx)
+  call free (prx)
 6567 if (alnode .ne. blank) go to 3838
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 4455)
 4455 format ('+Ignore the illegal card.')
@@ -2956,10 +2985,12 @@ subroutine tacs1a
   use labcom
   use tacsar
   use movcop
+  use freedom
   implicit none
   integer(4) :: i, i1, i2, i3, i4, iargel, icurch, iel, iflpnt, ifree, ifst, ifstch
   integer(4) :: ikill1, ikill2, ilgcl, ilglph, ilgnum, ilst, ilst1, isrchl, itmpbf
-  integer(4) :: j, j1, j2, k, k1, k2, k3, k4, karg, kjsup, kksup, m, moon, mpar
+  integer(4) :: j, j1, j2
+  integer(4) :: k, k1, k2, k3, k4, karg, kjsup, kksup, m, moon, mpar
   integer(4) :: n, n1, n6, n23, ndx1, ndx6
   real(8) :: argel, d1, d9, d10, dum, pru, prx
   character(8) :: alph, dumj
@@ -3080,8 +3111,7 @@ subroutine tacs1a
 4567 format ('  "Begin module tacs1a."')
   kjsup = kinsup + lstat(65)
   kksup = kjsup  + lstat(65)
-  !read (unit = abuff(1), fmt = 180) n, alnode, m
-  read (unit = abuff, fmt = 180) n, alnode, m
+  read (unit = abuff(1), fmt = 180) n, alnode, m
 180 format (i2, a6, i2)
   nsup = nsup + 1
   if (nsup .le. lstat(65)) go to 2515
@@ -3096,8 +3126,7 @@ subroutine tacs1a
   ilntab(ndx1) = n23
   insup(kinsup + nsup) = 0
   if (m .ne. 0) go to 10700
-  !read (unit = abuff(1), fmt = 12516) alnm1
-  read (unit = abuff, fmt = 12516) alnm1
+  read (unit = abuff(1), fmt = 12516) alnm1
 12516 format (10x, a1)
   if (alnm1 .ne. eqlsgn) go to 12517
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 1251)
@@ -3268,7 +3297,8 @@ subroutine tacs1a
   nright = 0
   kolbeg = ifstch
   iargel = iargel + 1
-  call frefld (argel(iargel))
+  !  call frefld (argel(iargel :))
+  call free (argel(iargel :))
   ilst = ilst + 1
   iel(ilst) = -ilst - 1
   el(ilst) = char (iargel)
@@ -3279,7 +3309,8 @@ subroutine tacs1a
 50160 nfrfld = 1
   nright = -1
   kolbeg = ifstch
-  call freone (d1)
+  !  call freone (d1)
+  call free (d1)
   ilst = ilst + 1
   iel(ilst) = ilst + 1
   el(ilst) = texta6(1)
@@ -3761,10 +3792,7 @@ subroutine tacs1a
   ! ***  * * * * * * * * * * * * * * * * * * * * * * *  ***
 12517 if (noutpr .eq. 0) write (unit = kunit6, fmt = 9304)
 9304 format ('+TACS supplemental variable')
-  ! read (unit = abuff(1), fmt = 18001) prx, alph(1), dumj(1), dumj(6), alph(2), dumj(2), dumj(7), alph(3), dumj(3), pru, alph(4), &
-  ! dumj(4), dumj(9), alph(5), dumj(5), dumj(10)
-  read (unit = abuff, fmt = 18001) prx, alph(1), dumj(1), dumj(6), alph(2), dumj(2), dumj(7), alph(3), dumj(3), pru, alph(4), &
-       dumj(4), dumj(9), alph(5), dumj(5), dumj(10)
+  read (unit = abuff(1), fmt = 18001) prx, alph(1), dumj(1), dumj(6), alph(2), dumj(2), dumj(7), alph(3), dumj(3), pru, alph(4), dumj(4), dumj(9), alph(5), dumj(5), dumj(10)
 18001 format (10x, e10.0, 2(a1, a5, a6), a1, a5, e6.0, 2(a1, a5, a6))
   ndx1 = kjsup + nsup
   insup(ndx1) = karg + 3
@@ -3857,10 +3885,7 @@ subroutine tacs1a
   go to 9000
 10700 if (noutpr .eq. 0) write (unit = kunit6, fmt = 19305) m
 19305 format ('+TACS supplemental device type ', i2)
-  ! read (unit = abuff(1), fmt = 18002) alph(1), dumj(1), alph(2), dumj(2), alph(3), dumj(3), alph(4), dumj(4), alph(5), dumj(5), &
-  ! (dum(i), i = 1, 3), alnm1, alnm2
-  read (unit = abuff, fmt = 18002) alph(1), dumj(1), alph(2), dumj(2), alph(3), dumj(3), alph(4), dumj(4), alph(5), dumj(5), &
-       (dum(i), i = 1, 3), alnm1, alnm2
+  read (unit = abuff(1), fmt = 18002) alph(1), dumj(1), alph(2), dumj(2), alph(3), dumj(3), alph(4), dumj(4), alph(5), dumj(5), (dum(i), i = 1, 3), alnm1, alnm2
 18002 format (10x, 5(a1, a6, 1x), 3e6.0, 2a6)
   if (m .ge. 50) go to 10701
   kill = 134
@@ -4014,15 +4039,16 @@ subroutine tacs1a
   ! read input card using cimage
 10711 call cimage
   if (kolbeg .gt. 0) go to 6544
-  ! read (unit = abuff(1), fmt = 10712) prx, pru
-  read (unit = abuff, fmt = 10712) prx, pru
+  read (unit = abuff(1), fmt = 10712) prx, pru
 10712 format (2e16.0)
   go to 6547
 6544 nfrfld = 1
-  call frefld (voltbc(1))
+  !  call frefld (voltbc)
+  call free (voltbc)
   prx = voltbc(1)
   if (prx .eq. 9999.) go to 10713
-  call frefld (voltbc(1))
+  !  call frefld (voltbc)
+  call free (voltbc)
   pru = voltbc(1)
 6547 if (prx .eq. 9999.) go to 10713
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 10715) prx, pru

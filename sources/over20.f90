@@ -4,7 +4,7 @@
 ! file over20.f90
 !
 
-
+!
 ! subroutine over20.
 !
 
@@ -12,6 +12,7 @@ subroutine over20
   use blkcom
   use labcom
   use tracom
+  use comthl
   implicit none
   integer(4) :: i, iold, ipp
   integer(4) :: k, kn1
@@ -20,6 +21,7 @@ subroutine over20
   integer(4) :: n1, n2, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, ndx1, ndx2
   integer(4) :: ndx3, npl, nstat
   real(8) :: a, d1, d2, zero
+  !
   !  equivalence (moncar(1), knt), (moncar(2), kbase)
   !  equivalence (moncar(3), ltdelt), (moncar(4), isw)
   !  equivalence (moncar(10), mtape)
@@ -55,13 +57,12 @@ subroutine over20
   if (kbase .eq. 2 .and. aincr .lt. 55.0) go to 3614
   if (begmax(1) .le. 0.0) go to 3614
   write (lunit6, 8002) (xmax(l), l = 1, k)
-8002 format (/, ' Maxima and minima which occurred during the simulation follow.   The order and column positioning are the', /, &
-          ' same as for the regular printed output vs. time.', /, ' Variable maxima :', /, (15x, 9e13.6))
-  !     extrema vector  "xmax"  actually has four partitions,
+8002 format (/, ' Maxima and minima which occurred during the simulation follow.   The order and column positioning are the', /, ' same as for the regular printed output vs. time.', /, ' Variable maxima :', /, (15x, 9e13.6))
+  !     Extrema vector  "xmax"  actually has four partitions,
   !     each the size of list 12:  (xmax, tmax, xmin, tmin) .
   ndx1 = lsiz12 + 1
   ndx2 = lsiz12 + k
-  write (lunit6, 8003)  (xmax(l), l = ndx1, ndx2)
+  write (unit = lunit6, fmt = 8003) (xmax(l), l = ndx1, ndx2)
 8003 format (' Times of maxima :', /, (15x, 9e13.6))
   ndx1 = ndx1 + lsiz12
   ndx2 = ndx2 + lsiz12
@@ -83,9 +84,7 @@ subroutine over20
   kcount = 2
   iold = 3
   if (n10 .ne. 0) write (unit = lunit6, fmt = 7009) t
-7009 format (/, ' Printout of the saving of terminal conditions for all components, at time', e15.7, '   seconds.', /, &
-          ' Begin with all node voltages.', /, 3(21x, 'node'), /, 19x, 'number', 21x, 'name', &
-          18x, 'voltage')
+7009 format (/, ' Printout of the saving of terminal conditions for all components, at time', e15.7, '   seconds.', /, ' Begin with all node voltages.', /, 3(21x, 'node'), /, 19x, 'number', 21x, 'name', 18x, 'voltage')
   do k = 2, ntot
      if (n10 .ne. 0) write (unit = lunit6, fmt = 7012) bus(k), e(k), zero, k
 7012 format(' ', a6, 2e13.5, 41x, i6)
@@ -94,10 +93,7 @@ subroutine over20
   end do
 7011 format (i2, a6, 3e15.8, 21x, i6)
   if (n10 .ne. 0) write (unit = lunit6, fmt = 7013)
-7013 format (/, " Linear branch table state variables ( 'currents' ) follow.", /, &
-          7x,  'row', 9x, "'from' node", 11x, "'to' node", 9x, &
-          'linear branch parameters, identified by the Fortran vector storage', /,  9x, 'i', 8x, 'bus(kbus(i))', 8x, &
-          'bus(mbus(i))', 19x, 'cik(i)', 20x, 'ci(i)', 20x, 'ck(i)')
+7013 format (/, " Linear branch table state variables ( 'currents' ) follow.", /, 7x,  'row', 9x, "'from' node", 11x, "'to' node", 9x, 'linear branch parameters, identified by the Fortran vector storage', /,  9x, 'i', 8x, 'bus(kbus(i))', 8x, 'bus(mbus(i))', 19x, 'cik(i)', 20x, 'ci(i)', 20x, 'ck(i)')
   k = 1
 7014 it2 = 1
   if (kbus(k) .lt. 0) go to 7024
@@ -146,13 +142,13 @@ subroutine over20
      n7 = n5 + 2
      n8 = n5 + 3
      write (unit = lunit7, fmt = 7020) iold, bus(n1), bus(n2), vchar(n7), cchar(n8)
-     n9 = cchar(n6)
-     n11 = cchar(n7)
+     n9 = int (cchar(n6))
+     n11 = int (cchar(n7))
      write (unit = lunit7, fmt = 7018) n9, n11, (vchar(ipp), ipp = n5, n8)
 7018 format (2i10, 4e15.8)
      n12 = n5 + 4
      n13 = n5 + 5
-     n14 = cchar(n12)
+     n14 = int (cchar(n12))
      write (unit = lunit7, fmt = 7026) n14, vchar(n12), vchar(n13), gslope(n12), gslope(n13)
 7026 format (i10 , 4e15.8)
      if (n10 .eq. 0) go to 7035
@@ -170,8 +166,7 @@ subroutine over20
 7035 continue
 9207 if (kswtch .eq. 0) go to 4020
   if (n10 .ne. 0) write (unit = lunit6, fmt = 7348)
-7348 format (/, ' Status variables for switches follow.', /, 1x,  'bus(l)', 1x, 'bus(m)', 3x, 'kpos(k)',  2x, &
-          ' kode(l)', 2x, ' kode(m)', 14x, 'tclose', 14x, 'adelay', 14x, 'energy', 16x, 'crit')
+7348 format (/, ' Status variables for switches follow.', /, 1x,  'bus(l)', 1x, 'bus(m)', 3x, 'kpos(k)',  2x, ' kode(l)', 2x, ' kode(m)', 14x, 'tclose', 14x, 'adelay', 14x, 'energy', 16x, 'crit')
   do k = 1, kswtch
      l = iabs (kmswit(k))
      kn1 = lswtch + k
@@ -239,33 +234,18 @@ subroutine over20
   write (unit = lunit6, fmt = 659)
 659 format (1x, 131('-'))
   write (unit = lunit6, fmt = 616) nenerg
-616 format (" Simulation of all  'nenerg' =", i4, '  energizations is now complete, and the EMTP is ready to begin statistical', /, &
-         ' processing of the voltage solutions.   But before doing so, two cautions about discretization of continuous', /, &
-         ' variables are probably appropriate to mention at this point.', /, 5x,  &
-         '1.  The switch closing times which are printed along with peak voltages of each energization are only desired', /, &
-         9x, 'times, just as with all such times which are punched on data cards which define switches upon data input.   Since')
+616 format (" Simulation of all  'nenerg' =", i4, '  energizations is now complete, and the EMTP is ready to begin statistical', /, ' processing of the voltage solutions.   But before doing so, two cautions about discretization of continuous', /, ' variables are probably appropriate to mention at this point.', /, 5x, '1.  The switch closing times which are printed along with peak voltages of each energization are only desired', /, 9x, 'times, just as with all such times which are punched on data cards which define switches upon data input.   Since')
   write (unit = lunit6, fmt = 644)
-644 format (9x, "time is discretized in multiples of time-step-size 'deltat' ,   actual closure will occur at the first discrete", /, &
-         9x,  'step which does not precede the requested time.', /, 5x, &
-         '2.  In the tabulation of voltage distributions which follow, an arbitrary decision had to be made concerning the', /, &
-         9x, "column which is labeled  'frequency' .    The continuous variable voltage has been discretized, divided into", /, &
-         9x, "compartments of size  'aincr'  (read from columns 25-32 of the special statistics misc. data card).   For an entry")
+644 format (9x, "time is discretized in multiples of time-step-size 'deltat' ,   actual closure will occur at the first discrete", /, 9x,  'step which does not precede the requested time.', /, 5x, '2.  In the tabulation of voltage distributions which follow, an arbitrary decision had to be made concerning the', /, 9x, "column which is labeled  'frequency' .    The continuous variable voltage has been discretized, divided into", /, 9x, "compartments of size  'aincr'  (read from columns 25-32 of the special statistics misc. data card).   For an entry")
   write (unit = lunit6, fmt = 648)
-648 format (9x, "Which is printed in a row marked as being for voltage  'vrow' ,   the associated compartment contains all", /, &
-         9x, "voltages  'v'  which satisfy       vrow  .le.  v  .lt.  (vrow + aincr)  .", /, &
-         5x, '3.  floating-point counting (t = t + deltat) is used to increment time.   Switching times which are an exact multiple', /, &
-         9x, 'of the time-step thus are ambiguous;  different computers may switch one step later, then.')
+648 format (9x, "Which is printed in a row marked as being for voltage  'vrow' ,   the associated compartment contains all", /, 9x, "voltages  'v'  which satisfy       vrow  .le.  v  .lt.  (vrow + aincr)  .", /, 5x, '3.  floating-point counting (t = t + deltat) is used to increment time.   Switching times which are an exact multiple', /, 9x, 'of the time-step thus are ambiguous;  different computers may switch one step later, then.')
   if (ltdelt .le. 0) go to 7314
   write (unit = lunit6, fmt = 7305)
 7305 format (//, 1x)
   write (unit = lunit6, fmt = 7304)
 7304 format (' ***********************************************************   Look, look   ************************************************************')
   write (unit = lunit6, fmt = 7309) ltdelt
-7309 format (/, ' During this run, a total of', i4,  '  random switch closings less than time zero were generated by the random  ',/, &
-          ' number generator.   But the EMTP has no way of handling such closures.   All such illegal closing times were converted  ',/, &
-          ' to time zero (they should show up in the printout that way) for simulation purposes.   The implications of this   ',/, &
-          ' modification should be understood by the user.   If in any doubt, the user is strongly advised to seek experienced   ',/, &
-          ' counsel on this subject. ', /, 1x)
+7309 format (/, ' During this run, a total of', i4,  '  random switch closings less than time zero were generated by the random  ',/, ' number generator.   But the EMTP has no way of handling such closures.   All such illegal closing times were converted  ', /, ' to time zero (they should show up in the printout that way) for simulation purposes.   The implications of this   ', /, ' modification should be understood by the user.   If in any doubt, the user is strongly advised to seek experienced   ',/, ' counsel on this subject. ', /, 1x)
   write (unit = lunit6, fmt = 7304)
   write (unit = lunit6, fmt = 7305)
 7314 write (unit = lunit6, fmt = 659)
@@ -279,7 +259,7 @@ subroutine over20
   go to 99999
 9800 if (m4plot .ne. 1) go to 9810
   if (kbase .eq. 1) go to 9810
-  !     vax simulator return to "over16" after table-saving:
+  !     VAX simulator return to "over16" after table-saving:
   lastov = nchain
   nchain = 16
   if (iprsup .ge. 1) write (lunit6, 4568)
@@ -353,8 +333,8 @@ subroutine katalg
   newvec = karray(3)
   write (unit = lunit6, fmt = 2642)
 2642 format (' Restoration complete, user can now begin  depositing  EMTP  variables via  spy .')
-  memsav = 0     !  ?????????????  table changes done.
-9700 kbreak = 1   ! lock flag for "emtspy" dialogue in "over16"
+  memsav = 0        !  ?????????????  table changes done.
+9700 kbreak = 1     ! lock flag for "emtspy" dialogue in "over16"
 9800 return
 end subroutine katalg
 
@@ -371,7 +351,6 @@ subroutine emtspy
   !     If no interactive use, convert to dummy module ("return").
   integer(4) :: n18
   !
-  save
   data n18 / 0 /
   n18 = n18 + 1
   if (n18 .lt. maxflg) go to 9008
@@ -455,8 +434,8 @@ subroutine spying
   integer(4) :: l
   integer(4) :: m
   integer(4) :: n1, n2, n4, n5, n6, n7, n8, n9, n10, n12, n13, n14, n15, n16, n17
-  integer(4) :: n18, n22, n23, n24, n26, n27
-  integer(4) :: n33, nchd2, nd13, num2, num3, num5, numask, numbco, numbrn
+  integer(4) :: n18, n22, n23, n24, n26, n27, n33, nchd2, nd13, num2
+  integer(4) :: num3, num5, numask, numbco, numbrn
   integer(4) :: numnam
   real(8) :: d1, d2, d3, d4, d5, d6, d8, d13, d34
   real(8) :: tim1rp, tim2rp, twhen
@@ -464,7 +443,6 @@ subroutine spying
   real(8) :: xl
   character(8) :: chard7, spytim(2), spdate(2)
   !
-  save
   if (iprspy .lt. 1) go to 31006
   write (unit = munit6, fmt = 1006) nchain, jjroll, kbreak, lockbr, nexmod, buff77(1 : 20)
 1006 format ('  Enter "spying".  nchain, jjroll, kbreak, lockbr, nexmod =', 5i5, '    buff77(1 : 20) =', a20)
