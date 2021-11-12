@@ -232,7 +232,7 @@ subroutine over6
   if (m .eq. 1) buff(ipass) = terra
   if (ipass .lt. 15) go to 5285
 5277 write (unit = lunit6, fmt = 5278) bus5, (buff(m), m = 1, ipass)
-5278 format (9x, a6, '1', 15(a6, '*'))
+5278 format (9x, a6, '|', 15(a6, '*'))
   bus5 = blank
   ipass = 0
   if (ltest .eq. 0) go to 5294

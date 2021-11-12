@@ -19,12 +19,13 @@ module blkcom
   implicit none
   !     flag-1.   begin class-1  /blank/  variables
   !               (alphanumeric variables, capable of storing  a6  info).
-  character(8) :: buff10(10), busone(1)
-  character(8) :: bus1, bus2, bus3, bus4, bus5, bus6, texcol(160)
+  !  character(8) :: buff10(10)
+  character(8) :: busone(1)
+  character(8) :: bus1, bus2, bus3, bus4, bus5, bus6, texcol(80)
   character(8) :: trash, blank, terra, userid, branch, chcopy
   character(8) :: chcont, csepar
   character(8) :: vstacs(24), texta6(15)
-  character(8) :: abuff(10)
+  character(80), target :: abuff
   !
   ! common abuff
   ! common bus1, bus2, bus3, bus4, bus5, bus6
@@ -116,7 +117,7 @@ module blkcom
   real(8) :: xlong1
   !
   equivalence (anglex(1), angle)
-  equivalence (buff10(1), abuff(1))
+  !  equivalence (buff10(1), abuff(1))
   equivalence (aupper(1), texcol(1))
   equivalence (bus1, busone(1))
   equivalence (bus1, kpen(1))

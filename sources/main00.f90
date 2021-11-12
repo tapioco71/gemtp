@@ -342,7 +342,7 @@ subroutine stoptp
   !     "call stoptp", allowing installation-dependent clean up.
   integer(4) :: i, ios
   !
-  read (unit = abuff(1), fmt = 5607, iostat = ios) (texcol(i), i = 1, 80)
+  read (unit = abuff, fmt = 5607, iostat = ios) (texcol(i), i = 1, 80)
 5607 format (80a1)
   if (ios .ne. 0) go to 9000
   if (nchain .eq. 31 .and. lastov .eq. 1 .and. kill .eq. 9999) go to 9000
@@ -440,6 +440,7 @@ subroutine cimage
   character(8) :: charc, chtacs, textax(60), textay(50), text1, text2
   character(8) :: text4, text5
   character(25) :: filen
+  character(80), pointer :: buff10
   !  dimension xopt(1), copt(1)
   !  dimension buff10(10)
   !  dimension textax(60), jpntr(201), textay(50), aupper(10)
@@ -447,6 +448,8 @@ subroutine cimage
   !  equivalence (buff10(1), abuff(1))
   !  equivalence (aupper(1), texcol(1))
   !
+  !
+  buff10 => abuff
   !     Burroughs: preserve local variable between module calls:
   data n8         / 0 /        ! remember last $-card number
   data charc      / 'c' /
@@ -557,52 +560,66 @@ subroutine cimage
   if (iprsup .ge. 10) write (unit = lunit6, fmt = 987) lunit5, lunit6, noutpr, numdcd
 987 format (' Begin cimage.  lunit5, lunit6, noutpr, numdcd =', 4i5)
 1000 if (m4plot .eq. 1) call emtspy                         ! interactive usage
-  if (lunit5 .gt. 0) read (unit = lunit5, fmt = 3000, end = 4000) (buff10(i), i = 1, 10)
-3000 format (10a8)
+  !  if (lunit5 .gt. 0) read (unit = lunit5, fmt = 3000, end = 4000) (buff10(i), i = 1, 10)
+  !3000 format (10a8)
+  if (lunit5 .gt. 0) read (unit = lunit5, fmt = 3000, end = 4000) buff10
+3000 format (a80)
   if (lunit5 .le. 0) call nextcard
   if (kill .gt. 0) go to 4000                               ! "nextcard" eof jump
   if (lunsav(5) .ne. -5) numdcd = numdcd + 1
   read (unit = abuff, fmt = 3012, iostat = ios) text1, text2
 3012 format (2a1)
   if (ios .ne. 0) then
-     write (unit = lunit6, fmt = "('Could not read from abuff.  Stop.')")
-     stop
+     write (unit = lunit6, fmt = "('Could not read from abuff. cimage line 3012.  Stop.')")
+     call stoptp
   end if
   if (text1 .ne. charc) go to 3034
   if (text2 .ne. blank) go to 3034
 1036 if (noutpr .ne. 0) go to 1000
   if (n11 .ne. 0) go to 1000
+  !  if (kol132 .eq. 132) write (unit = lunit6, fmt = 3015) buff10
+  !3015 format (' Comment card.', 37x, '|', 10a8)
   if (kol132 .eq. 132) write (unit = lunit6, fmt = 3015) buff10
-3015 format (' Comment card.', 37x, '|', 10a8)
-  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) (abuff(j), j = 1, 4)
-  !  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) abuff(1 : 29)
-3016 format (' Comment card.', 37x, '1', 3a8, a5)
-!3016 format (' Comment card.', 37x, '|', a29)
+3015 format (' Comment card.', 37x, '|', a89)
+  !  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) (abuff(j), j = 1, 4)
+  !3016 format (' Comment card.', 37x, '1', 3a8, a5)
+  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) abuff
+3016 format (' Comment card.', 37x, '1', a29)
   go to 1000
 3034 if (noutpr .ne. 0) go to 3035
+  !  if (kol132 .eq. 132) write (unit = lunit6, fmt = 3006) (buff10(i), i = 1, 10)
+  !3006 format (51x, '|', 10a8)
   if (kol132 .eq. 132) write (unit = lunit6, fmt = 3006) buff10
-3006 format (51x, '|', 10a8)
-  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) (abuff(j), j = 1, 4)
-3007 format (51x, '1', 3a8, a5)
+3006 format (51x, '|', a80)
+  !  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) (abuff(j), j = 1, 4)
+  !3007 format (51x, '1', 3a8, a5)
+  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) abuff
+3007 format (51x, '1', a29)
 3035 if (n13 .gt. 0) go to 3011
-  print 3009, numdcd, (abuff(i), i = 1, 9)
-3009 format (1x, i5, ' :', 9a8)
+  !  print 3009, numdcd, (abuff(i), i = 1, 9)
+  !3009 format (1x, i5, ' :', 9a8)
+  print 3009, numdcd, abuff(1 : 72)
+3009 format (1x, i5, ' :', a72)
   n13 = n12
 3011 n13 = n13 - 1
-  read (unit = abuff(1), fmt = 3037) text2
+  read (unit = abuff, fmt = 3037) text2
 3037 format (a6)
   if (text2 .ne. text5) go to 3040
   if (n8 .eq. 6) go to 3044
-  do i = 1, 10
-     abuff(i) = blank
-  end do
+  !  do i = 1, 10
+  !     abuff(i) = blank
+  !  end do
+  abuff(1 : 80) = blank
   go to 3233
 3040 if (chcont .eq. text4) go to 3233
-  read (unit = abuff(1), fmt = 3041, iostat = ios) texcol
+  !  read (unit = abuff(1), fmt = 3041, iostat = ios) texcol
+  !3041 format (80a1)
+  read (unit = abuff, fmt = 3041, iostat = ios) texcol
 3041 format (80a1)
   !     Dan Goldsworthy had trouble with $listoff within $include
   !     which was within tacs supplemental variables.  wsm+thl
-  if (to_lower (abuff(1)) .ne. '$listoff' .and. to_lower (abuff(1)) .ne. '$liston') go to 3042
+  !  if (to_lower (abuff(1)) .ne. '$listoff' .and. to_lower (abuff(1)) .ne. '$liston') go to 3042
+  if (to_lower (abuff(1 : 8)) .ne. '$listoff' .and. to_lower (abuff(1 : 8)) .ne. '$liston') go to 3042
   go to 3246
   !     chcont is 'tacs' if cimage called from within tacs fortran express
 3042 if (chcont .eq. chtacs) go to 3233

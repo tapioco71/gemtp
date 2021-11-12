@@ -82,7 +82,7 @@ module labcom
   real(8) :: shp(    1008)
   real(8) :: histq(     504)
   integer(4) :: ismdat(     120)
-  character(8) :: texvec(    4000)
+  character(8), target :: texvec(    4000)
   integer(4) :: ibrnch(     900)
   integer(4) :: jbrnch(     900)
   real(8) :: tstop(     100)

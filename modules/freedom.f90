@@ -22,14 +22,16 @@ contains
     use labcom
     implicit none
     real(8), intent(out) :: array(:)
-    integer(4) :: i, jj, n3, n9
-    character(8) :: text1, chtacs, texbuf(30)
+    character(8) :: chtacs, texbuf(30)
+    integer(4) :: i, jj, ll, n3, n9
+    character(8), pointer :: text1
+    !
     !  dimension array(1)
     !  equivalence (texvec(1), text1)
-    save
+    !
     !
     data chtacs / 'tacs  ' /
-    integer(4) :: ll
+    text1 => texvec(1)
     if (iprsup .ge. 5) write (unit = lunit6, fmt = 1016) nfrfld, nright, kolbeg
 1016 format (' Top "frefld".  nfrfld, nright, kolbeg =', 3i6)
     if (nright .lt. 0) go to 5913

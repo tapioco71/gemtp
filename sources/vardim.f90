@@ -570,7 +570,7 @@ program vardim
   modvars(75)%dimension  = 69
 
   modvars(76)%name       = 'texvec'
-  modvars(76)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(76)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(76)%kind       = 3
   modvars(76)%dimension  = 7
 
