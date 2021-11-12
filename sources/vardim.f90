@@ -780,7 +780,7 @@ program vardim
   modvars(117)%dimension  = 6
 
   modvars(118)%name       = 'e'
-  modvars(118)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(118)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(118)%kind       = 1
   modvars(118)%dimension  = 1
 
@@ -810,7 +810,7 @@ program vardim
   modvars(123)%dimension  = 59
 
   modvars(124)%name       = 'voltk'
-  modvars(124)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(124)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(124)%kind       = 1
   modvars(124)%dimension  = 26
 
@@ -1375,49 +1375,49 @@ program vardim
   modvars(236)%kind = 1
   modvars(236)%dimension = 1
 
-  modvars(237)%name = 'ndex'
+  ! modvars(237)%name = 'ndex'
+  ! modvars(237)%options(1 : 4) = (/ '', '', '', '' /)
+  ! modvars(237)%kind = 4
+  ! modvars(237)%dimension = 20
+
+  modvars(237)%name = 'vim'
   modvars(237)%options(1 : 4) = (/ '', '', '', '' /)
-  modvars(237)%kind = 4
-  modvars(237)%dimension = 20
+  modvars(237)%kind = 1
+  modvars(237)%dimension = 1
 
-  modvars(238)%name = 'vim'
+  modvars(238)%name = 'jch2'
   modvars(238)%options(1 : 4) = (/ '', '', '', '' /)
-  modvars(238)%kind = 1
-  modvars(238)%dimension = 1
+  modvars(238)%kind = 4
+  modvars(238)%dimension = 20
 
-  modvars(239)%name = 'jch2'
+  modvars(239)%name = 'nsubkm'
   modvars(239)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(239)%kind = 4
-  modvars(239)%dimension = 20
+  modvars(239)%dimension = 1
 
-  modvars(240)%name = 'nsubkm'
+  modvars(240)%name = 'vsmout'
   modvars(240)%options(1 : 4) = (/ '', '', '', '' /)
-  modvars(240)%kind = 4
+  modvars(240)%kind = 1
   modvars(240)%dimension = 1
 
-  modvars(241)%name = 'vsmout'
+  modvars(241)%name = 'ksing'
   modvars(241)%options(1 : 4) = (/ '', '', '', '' /)
-  modvars(241)%kind = 1
+  modvars(241)%kind = 4
   modvars(241)%dimension = 1
 
-  modvars(242)%name = 'ksing'
+  modvars(242)%name = 'kindep'
   modvars(242)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(242)%kind = 4
   modvars(242)%dimension = 1
 
-  modvars(243)%name = 'kindep'
+  modvars(243)%name = 'fold'
   modvars(243)%options(1 : 4) = (/ '', '', '', '' /)
-  modvars(243)%kind = 4
+  modvars(243)%kind = 1
   modvars(243)%dimension = 1
-
-  modvars(244)%name = 'fold'
-  modvars(244)%options(1 : 4) = (/ '', '', '', '' /)
-  modvars(244)%kind = 1
-  modvars(244)%dimension = 1
 
   !
 
-  modvarc = 44
+  modvarc = 43
 
   !
 
@@ -1600,7 +1600,7 @@ program vardim
            !
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'imfd', dim1 = 1, varname2 = 'jch2', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'volt', dim1 = 1, varname2 = 'vim', dim2 = 1)
-           call make_equivalence_declaration (unit = lunit(4), varname1 = 'e', dim1 = 1, varname2 = 'ndex', dim2 = 1)
+           !           call make_equivalence_declaration (unit = lunit(4), varname1 = 'e', dim1 = 1, varname2 = 'ndex', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'tstat', dim1 = 1, varname2 = 'crit', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'akey', dim1 = 1, varname2 = 'adelay', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'icrit', dim1 = 1, varname2 = 'crit', dim2 = 1)
@@ -1621,7 +1621,7 @@ program vardim
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'trser', dim1 = 1, varname2 = 'emtpe', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'txser', dim1 = 1, varname2 = 'f', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'volti', dim1 = 1, varname2 = 'node1', dim2 = 1)
-           call make_equivalence_declaration (unit = lunit(4), varname1 = 'voltk', dim1 = 1, varname2 = 'node2', dim2 = 1)
+           !           call make_equivalence_declaration (unit = lunit(4), varname1 = 'voltk', dim1 = 1, varname2 = 'node2', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'volt', dim1 = 1, varname2 = 'mapinv', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'mapcas', dim1 = 1, varname2 = 'ykm', dim2 = 1)
            !           call make_equivalence_declaration (unit = lunit(4), varname1 = 'caslnr', dim1 = 1, varname2 = 'xk', dim2 = 1)
@@ -1638,7 +1638,7 @@ program vardim
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'ismdat', dim1 = 27, varname2 = 'nn14')
            !           call make_equivalence_declaration (unit = lunit(4), varname1 = 'volt', dim1 = 1, varname2 = modvars(233)%name, dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'volti', dim1 = 1, varname2 = 'ur', dim2 = 1)
-           call make_equivalence_declaration (unit = lunit(4), varname1 = 'voltk', dim1 = 1, varname2 = 'ui', dim2 = 1)
+           !           call make_equivalence_declaration (unit = lunit(4), varname1 = 'voltk', dim1 = 1, varname2 = 'ui', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'kks', dim1 = 1, varname2 = 'cmr', dim2 = 1)
            call make_equivalence_declaration (unit = lunit(4), varname1 = 'kknonl', dim1 = 1, varname2 = 'cmi', dim2 = 1)
            write (unit = lunit(4), fmt = 7245)

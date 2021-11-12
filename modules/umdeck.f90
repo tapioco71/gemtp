@@ -29,9 +29,9 @@ module umcom
 
   ! Equivalences.
 
-  integer(4) :: itemp(8 * 50), ibusum(1)
-  equivalence (itemp(1), busum(1))
-  equivalence (busum(1), ibusum(1))
+  !  integer(4) :: itemp(8 * 50), ibusum(1)
+  !  equivalence (itemp(1), busum(1))
+  !  equivalence (busum(1), ibusum(1))
 end module umcom
 
 !

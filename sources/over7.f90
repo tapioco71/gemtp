@@ -27,12 +27,17 @@ subroutine over7
   integer(4) :: i, ib, icon, ii, ischm, ist, isubs1, isubs2
   integer(4) :: j, jb, jbs, jbt, js, jsub
   integer(4) :: k, kb, ks
-  integer(4) :: l, lastxx, ls
+  integer(4) :: l, lastxx, ll0, ls
   integer(4) :: m, mext
   integer(4) :: n1, n2, n13, ncn, ndx1, nelim, nz
   real(8) :: td
   real(8) :: zzza
   !
+  integer(4), allocatable :: ndex(:)
+  !
+  ll0 = size (transfer (e, ndex))
+  allocate (ndex(ll0))
+  ndex = transfer (e, ndex)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over7."')
   ischm = 2
@@ -53,7 +58,7 @@ subroutine over7
   zzza = 0.0d0
   lastxx = last
   ! n1 = lbus + 1  // use lbus, not this n1,  in following:
-  call move0 (ndex(1 :), lbus)
+  call move0 (ndex, lbus)
   nz = ncurr
   i = 0
 140 i = i + 1
@@ -83,13 +88,13 @@ subroutine over7
 190 ncn = 0
   ! next delete obviously zero-cell zeroing of vectors:
   nelim = 1
-200 continue
-  if (ncn .ge. lbus) go to 220
-  jsub = ncn + 1
-  call subscr (jsub, lbus, 200, 1)
-  if (ndex(ncn + 1) .ne. 0) go to 220
-  ncn = ncn +1
-  go to 200
+200 do
+     if (ncn .ge. lbus) exit
+     jsub = ncn + 1
+     call subscr (jsub, lbus, 200, 1)
+     if (ndex(ncn + 1) .ne. 0) exit
+     ncn = ncn +1
+  end do
 220 if (ncurr .lt. nelim)   go to 229
   jsub = ncn + 1
   call subscr (jsub, lbus, 220, 1)
@@ -753,7 +758,11 @@ subroutine over7
   lastov = nchain
   nchain = 51
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
-99999 return
+99999 if (allocated (ndex)) then
+     e = transfer (ndex, e)
+     deallocate (ndex)
+  end if
+  return
 end subroutine over7
 
 !

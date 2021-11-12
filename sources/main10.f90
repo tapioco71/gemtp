@@ -702,6 +702,8 @@ subroutine tables
   integer(4) :: ll1, ll2, ll4
   integer(4) :: n1, n2, n3, n4, n5, n9, n24
   !
+  integer(4), allocatable :: itemp(:)
+  !
   !  dimension busone(1), idistx(1)
   !  dimension kpen(1), itemp(1), jtemp(1), ktemp(1)
   !  dimension iprsav(4)
@@ -713,6 +715,9 @@ subroutine tables
   !  equivalence (moncar(2), kbase)
   !
   !     Burroughs: preserve local variable between module calls:
+  !
+  allocate (itemp(8 * 50))
+  itemp = transfer (busum, itemp)
   !
   iprsav(1 : 4) = (/ 0, 0, 0, 0 /)
   ll1 = 1
@@ -770,6 +775,10 @@ subroutine tables
   end do
 5359 if (iprsup .ge. 1) write (unit = lunit6, fmt = 5364)
 5364 format (' Exit "tables".')
+  if (allocated (itemp)) then
+     busum = transfer (itemp, busum)
+     deallocate (itemp)
+  end if
   return
 end subroutine tables
 

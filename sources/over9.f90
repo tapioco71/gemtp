@@ -22,11 +22,11 @@ subroutine over9
   integer(4) :: i, icas, ii, ik, il, istate, isubs1, isubs2, iswbob
   integer(4) :: j, j1, jbrt, jj, jsw
   integer(4) :: k, k1, kf
-  integer(4) :: l, lastm1, locatn(20, 20)
+  integer(4) :: l, lastm1
   integer(4) :: m, ma
   integer(4) :: n1, ndx1, ndx2, ndx3, nk, nkr, nx
   !
-  locatn(i, j) = j * (j - 1) / 2 + i
+  !locatn(i, j) = j * (j - 1) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over9."')
   if(iprsup .gt. 0) write (unit = lunit6, fmt = 1001) kconst, last

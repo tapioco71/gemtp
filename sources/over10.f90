@@ -17,8 +17,10 @@ subroutine over10
   use tracom
   use veccom
   implicit none
+  !
   !  dimension itemp(1)
   !  equivalence (itemp(1), voltk(1))
+  !
   integer(4) :: i, ib, ic, iendd, ig, ii, ik, ikf, il, im, in, is, isfd
   integer(4) :: istop, isubs1, isubs2, isubs3, isubs4, itp, ix, ix2, ixx, iy
   integer(4) :: j, ja, jc, je, jj, jk, js, jt
@@ -40,9 +42,11 @@ subroutine over10
   real(8) :: xa, xi, xr, xti, xtr, xx
   real(8) :: yy
   !
-  itemp = transfer (voltk, itemp)
+  integer(4), allocatable :: itemp(:)
   !
-  locatn(i, j) = (j * j - j) / 2 + i
+  allocate (itemp(8 * 50))
+  itemp = transfer (voltk, itemp)
+  !locatn(i, j) = (j * j - j) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 2941) ntot, ioffd, loopss(2)
 2941 format (' Top of "over10".   ntot, ioffd, loopss(2) =', 2i8)
   n14 = ntot + loopss(2)
@@ -956,7 +960,11 @@ subroutine over10
   nchain = 51
   lstat(18) = 10
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
-99999 return
+99999 if (allocated (itemp)) then
+     voltk = transfer (itemp, voltk)
+     deallocate (itemp)
+  end if
+  return
 end subroutine over10
 
 !

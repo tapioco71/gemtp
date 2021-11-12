@@ -257,7 +257,7 @@ subroutine over11
   data text5 / 'pctmag' /
   data text6 / 'pctang' /
   data nfsout / 0 /
-  locatn(i, j) = (j * j - j) / 2 + i
+  !  locatn(i, j) = (j * j - j) / 2 + i
   ll2 = 2
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over11.')
