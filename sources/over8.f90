@@ -2486,6 +2486,10 @@ subroutine over8
   real(8) :: xi1, xi2, xr1, xr2
   real(8) :: ychara, ycharm, yneg, ypos
   !
+  real(8), pointer :: vim(:)
+  !
+  vim(1 :) => volt(1 :)
+  !
   ! 1001 if ( iprsup .ge. 1 )
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 101) loopss(1), iv, it, tmax
 101 format (' Top of "over8".   loopss(1) iv, it, tmax =', 3i8, e15.5)

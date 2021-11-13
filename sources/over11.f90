@@ -250,6 +250,10 @@ subroutine over11
   !      Preceding "jch2" uses "imfd" just for "frequency scan".
   !      as such, there must be no freq-depend sources present.
   !
+  real(8), pointer :: vim(:)
+  !
+  vim(1 :) => volti(1 :)
+  !
   data text1 / 'mag   ' /
   data text2 / 'angle ' /
   data text3 / 'real  ' /

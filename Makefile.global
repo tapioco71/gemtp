@@ -135,17 +135,21 @@ LD_FLAGS=
 # Makedepend flags.
 MAKEDEPEND_FLAGS=	-- ${CC_FLAGS} -- ${SOURCES}
 
-INCLUDE_PATH =	${ROOT}/includes
+# Project-wide includes directory.
+INCLUDES_PATH =	${ROOT}/includes
+
+# Project-wide libraries directory.
+LIBRARIES_PATH = ${ROOT}/libraries
 
 # Add the include file paths to AS_FLAGS, CC_FLAGS and CPP_FLAGS.
-AS_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
-CC_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
-CPP_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
-FORTRAN_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
-F90_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDE_PATH}}}
+AS_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDES_PATH}}}
+CC_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDES_PATH}}}
+CPP_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDES_PATH}}}
+FORTRAN_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDES_PATH}}}
+F90_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDES_PATH}}}
 
 # Add the library path to LD_FLAGS.
-LD_FLAGS+=${patsubst %,-L%,${subst :, ,${LIBRARY_PATH}}}
+LD_FLAGS+=${patsubst %,-L%,${subst :, ,${LIBRARIES_PATH}}}
 
 # Location of libgcc.a, libc.a and libm.a
 LIBGCC=${shell ${CC} -print-file-name=libgcc.a}
@@ -236,12 +240,18 @@ ${COMPILER}/%:
 		echo ${FORTRAN}	-Wl,--start-group			\
 				${LD_FLAGS} 				\
 				-o ${@} $(filter %.o %.a, ${^})		\
-				-Wl,--end-group;			\
+				-Wl,--end-group				\
+				'${LIBM}'				\
+				'${LIBGCC}'				\
+				'${LIBC}';				\
 	fi
 	@${FORTRAN} -Wl,--start-group					\
 		${LD_FLAGS} 						\
 		-o ${@} $(filter %.o %.a, ${^})				\
-		 -Wl,--end-group
+		 -Wl,--end-group					\
+		'${LIBM}'						\
+		'${LIBGCC}'						\
+		'${LIBC}'
 
 # Rule to create a .lst file.
 ${COMPILER}/%.lst:

@@ -110,6 +110,7 @@ subroutine over2
   implicit none
   !     %include  '//c/tsu/cables.ftn'
   character(6) :: chrpad(18)
+  !
   !  dimension wk1(1)
   !  dimension infdli(1)
   !  dimension icrit(1)
@@ -117,15 +118,18 @@ subroutine over2
   !  equivalence (semaux(1), wk1(1))
   !  equivalence (namebr(1), infdli(1))
   !  equivalence (icrit(1), crit(1))
+  !
   character(8) :: text1, text2, text3, text4, text5, text6
   character(8) :: text7, text8, text9, text10, text11, text12
   character(8) :: text13, text14, text15, text16, text17
+  !
   !  equivalence (indtv(1), iaddrs), (indtv(2), itranm)
   !  equivalence (indtv(3), ityold), (indtv(4), ichtr2)
   !  equivalence (iprsov(39), nmauto)
   !     character*6   char6
   !     character*26  alphan
   !     data alphan  / 'abcdefghijklmnopqrstuvwxyz' /
+  !
   integer(4) :: i, ibf, ibr2, ibr3, ibrnam, ibrter, icas, ichar
   integer(4) :: ideal, idumy, iend, ifk, ii, iihst, ikf, iml, inew, inoff1
   integer(4) :: inoff2, inoff3, inoff4, inoff5, inonam, interm, iold, ios
@@ -146,6 +150,14 @@ subroutine over2
   real(8) :: rmag
   real(8) :: temp, turn1
   real(8) :: yzero
+  !
+  integer(4), pointer :: icrit(:)
+  integer(4), pointer :: infdli(:)
+  real(8), pointer :: wk1(:)
+  !
+  icrit(1 :) => crit(1 :)
+  infdli(1 :) => namebr(1 :)
+  wk1(1 :) => semaux(1 :)
   !
   data text1   / 'stop c' /
   data text2   / 'ascade' /
@@ -2407,6 +2419,12 @@ subroutine distr2
   real(8) :: tauo
   real(8) :: xlong, xsum
   real(8) :: ysum
+  !
+  real(8), pointer :: cblhst(:)
+  real(8), pointer :: wk1(:)
+  !
+  cblhst(1 :) => cnvhst(1 :)
+  wk1(1 :) => semaux(1 :)
   !
   data text2  / '   con' /
   data text3  / 'stant ' /

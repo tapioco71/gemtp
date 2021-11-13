@@ -66,7 +66,7 @@ module blkcom
   integer(4) :: lunsav(15)
   integer(4) :: multpr(5)
   integer(4) :: nright, nfrfld, kolbeg, max99m
-  integer(4) :: lstat(80)
+  integer(4), target :: lstat(80)
   integer(4) :: moncar(10)
   integer(4) :: nbyte(6)
   integer(4) :: ia
@@ -111,7 +111,8 @@ module blkcom
   integer(4) :: jseedr
   integer(4) :: kloaep, knum
   integer(4) :: locz11, ltdelt
-  integer(4) :: maxniu, maxnuk, mdrive, mtape
+  integer(4) :: maxniu, maxnuk, mtape
+  !  integer(4) :: mdrive
   integer(4) :: next, nmauto
   real(8) :: anglex(1)
   real(8) :: xlong1
@@ -135,10 +136,10 @@ module blkcom
   equivalence (kpen(1), bus1)
   equivalence (kunit6, lunit6)
   equivalence (loopss(11), next)
-  equivalence (lstat(14), knum)
-  equivalence (lstat(14), mdrive)
-  equivalence (lstat(67), maxniu)
-  equivalence (lstat(68), maxnuk)
+  !  equivalence (lstat(14), knum)
+  !  equivalence (lstat(14), mdrive)
+  !  equivalence (lstat(67), maxniu)
+  !  equivalence (lstat(68), maxnuk)
   equivalence (moncar(1), knt)
   equivalence (moncar(2), kbase)
   equivalence (moncar(3), ltdelt)
