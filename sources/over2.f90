@@ -123,8 +123,10 @@ subroutine over2
   character(8) :: text7, text8, text9, text10, text11, text12
   character(8) :: text13, text14, text15, text16, text17
   !
-  !  equivalence (indtv(1), iaddrs), (indtv(2), itranm)
-  !  equivalence (indtv(3), ityold), (indtv(4), ichtr2)
+  !  equivalence (indtv(1), iaddrs)
+  !  equivalence (indtv(2), itranm)
+  !  equivalence (indtv(3), ityold)
+  !  equivalence (indtv(4), ichtr2)
   !  equivalence (iprsov(39), nmauto)
   !     character*6   char6
   !     character*26  alphan
@@ -140,7 +142,7 @@ subroutine over2
   integer(4) :: koff6, koff7, koff8, koff9, koff10, koff13, koff14, koff15
   integer(4) :: koff16, koff17, koff18, koff19, koff20, kph, kq, kq1
   integer(4) :: kreqab, ksat
-  integer(4) :: l, ll, ll2, ll3, ll9
+  integer(4) :: l, ll, ll0, ll2, ll3, ll9
   integer(4) :: m, mpower, mread2, mxphas
   integer(4) :: n, n5, n6, n8, n9, n9sq, n14, n16, n24, ncoil, ncount, nfir, nfscan, nkq
   integer(4) :: nn11, nn13, nn17, nnn1, nodtop, np, nphs, nphs2, nphsu
@@ -151,11 +153,23 @@ subroutine over2
   real(8) :: temp, turn1
   real(8) :: yzero
   !
-  integer(4), pointer :: icrit(:)
+  integer(4), pointer :: iaddrs
+  integer(4), pointer :: ichtr2
+  integer(4), allocatable :: icrit(:)
   integer(4), pointer :: infdli(:)
+  integer(4), pointer :: itranm
+  integer(4), pointer :: ityold
+  integer(4), pointer :: nmauto
   real(8), pointer :: wk1(:)
   !
-  icrit(1 :) => crit(1 :)
+  iaddrs => indtv(1)
+  itranm => indtv(2)
+  ityold => indtv(3)
+  ichtr2 => indtv(4)
+  nmauto => iprsov(39)
+!  ll0 = size (transfer (crit, icrit))
+!  allocate (icrit(ll0))
+  icrit = transfer (crit, icrit)
   infdli(1 :) => namebr(1 :)
   wk1(1 :) => semaux(1 :)
   !
@@ -2393,8 +2407,10 @@ subroutine distr2
   !  equivalence (cnvhst(1), cblhst(1))
   !  equivalence (semaux(1), wk1(1))
   !  equivalence (namebr(1), infdli(1))
-  !  equivalence (omega, xlong1), (indtv(4), ichtr2)
-  !  equivalence (indtv(1), iaddrs), (indtv(2), itranm)
+  !  equivalence (omega, xlong1)
+  !  equivalence (indtv(4), ichtr2)
+  !  equivalence (indtv(1), iaddrs)
+  !  equivalence (indtv(2), itranm)
   !
   character(8) :: text1, text2, text3, text4, text5, textmx(2)
   character(8) :: text6, text7, text8, text9, text10, text11
@@ -2417,14 +2433,22 @@ subroutine distr2
   real(8) :: h1, h2, h3
   real(8) :: pdt, pdt0
   real(8) :: tauo
-  real(8) :: xlong, xsum
+  real(8) :: xlong, xlong1, xsum
   real(8) :: ysum
   !
+  integer(4), pointer :: iaddrs
+  integer(4), pointer :: ichtr2
+  integer(4), pointer :: infdli(:)
+  integer(4), pointer :: itranm
   real(8), pointer :: cblhst(:)
   real(8), pointer :: wk1(:)
   !
+  infdli(1 :) => namebr(1 :)
   cblhst(1 :) => cnvhst(1 :)
   wk1(1 :) => semaux(1 :)
+  iaddrs => indtv(1)
+  itranm => indtv(2)
+  ichtr2 => indtv(4)
   !
   data text2  / '   con' /
   data text3  / 'stant ' /
@@ -3748,14 +3772,20 @@ subroutine over3
   !  dimension cser(1)
   !  dimension trshun(1), txshun(1), cshun(1)
   !
-  !  equivalence (trser(1), e(1)), (txser(1), f(1))
-  !  equivalence (volti(1), node1(1)), (voltk(1), node2(1))
+  !  equivalence (trser(1), e(1))
+  !  equivalence (txser(1), f(1))
+  !  equivalence (volti(1), node1(1))
+  !  equivalence (voltk(1), node2(1))
   !  equivalence (volt(1), mapinv(1))
   !  equivalence (mapcas(1), ykm(1))
-  !  equivalence (caslnr(1), xk(1)), (caslnx(1), xm(1))
+  !  equivalence (caslnr(1), xk(1))
+  !  equivalence (caslnx(1), xm(1))
   !  equivalence (cser(1), kode(1))
-  !  equivalence (trshun(1), kk(1)), (txshun(1), kks(1)), (cshun(1), kknonl(1))
-  !  equivalence (iprsov(35), ipoint), (iprsov(36), locz11)
+  !  equivalence (trshun(1), kk(1))
+  !  equivalence (txshun(1), kks(1))
+  !  equivalence (cshun(1), kknonl(1))
+  !  equivalence (iprsov(35), ipoint)
+  !  equivalence (iprsov(36), locz11)
   character(8) :: text1, text2, text3, text4, text5, text6, text7
   integer(4) :: i, icas, idumy, idumy2, iend, iendd, ii, iph, iphase, istart
   integer(4) :: j, jbr
@@ -3766,6 +3796,11 @@ subroutine over3
   real(8) :: freqc, freqx
   real(8) :: ymag2, yserr, yserx, yshunr, yshunx
   !
+  integer(4), pointer :: ipoint
+  integer(4), pointer :: locz11
+  !
+  ipoint => iprsov(35)
+  locz11 => iprsov(36)
   data text1  / 'stop' /
   data text2  / ' cas' /
   data text3  / 'cade' /

@@ -29,13 +29,21 @@ subroutine over6
   !  dimension buff(20)
   !  dimension integx(1)
   !
-  !  equivalence (iofkol, iofgnd), (iofkor, iofbnd)
+  !  equivalence (iofkol, iofgnd)
+  !  equivalence (iofkor, iofbnd)
   !  equivalence (x(1), integx(1))
 
   !  Following carries "next" among over6, insert, over7, & over9:
 
   !  equivalence (loopss(11), next)
   !
+  integer(4), pointer :: iofkol
+  integer(4), pointer :: iofkor
+  integer(4), pointer :: next
+  !
+  iofkol => iofgnd
+  iofkor => iofbnd
+  next => loopss(11)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over6."')
   ntot1 = ntot - 1
@@ -474,6 +482,9 @@ subroutine insert (irrr, icc)
   !
   !  equivalence (loopss(11), next)
   !
+  integer(4), pointer :: next
+  !
+  next => loopss(11)
   if (irrr .le. 1) return
   if (icc .le. 1) return
   if (irrr .eq. icc) return

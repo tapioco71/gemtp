@@ -2166,9 +2166,12 @@ subroutine over5
   implicit none
   !  dimension akey(1), tstat(1)
   !
-  !  equivalence (akey(1), adelay(1)), (tstat(1), crit(1))
-  !  equivalence (moncar(1), knt), (moncar(4), isw)
-  !  equivalence (moncar(5), idist), (moncar(6), itest)
+  !  equivalence (akey(1), adelay(1))
+  !  equivalence (tstat(1), crit(1))
+  !  equivalence (moncar(1), knt)
+  !  equivalence (moncar(4), isw)
+  !  equivalence (moncar(5), idist)
+  !  equivalence (moncar(6), itest)
   !  equivalence (moncar(9), kloaep)
   character(8) :: text1, text2, text5, text6, text7
   character(8) :: text8, text13, text14, text15, text16
@@ -2187,6 +2190,21 @@ subroutine over5
   real(8) :: ssigma, ststat
   real(8) :: targ, timchk
   !
+  integer(4), pointer :: idist
+  integer(4), pointer :: isw
+  integer(4), pointer :: itest
+  integer(4), pointer :: kloaep
+  integer(4), pointer :: knt
+  real(8), pointer :: adelay1(:)
+  real(8), pointer :: tstat(:)
+  !
+  adelay1(1 :) => akey(1 :)
+  tstat(1 :) => crit(1 :)
+  knt => moncar(1)
+  isw => moncar(4)
+  idist => moncar(5)
+  itest => moncar(6)
+  kloaep => moncar(9)
   data text1  / 'name  ' /
   data text2  / 'swt001' /
   data text5  / 'statis' /
@@ -2513,7 +2531,7 @@ subroutine over5
   if (to_lower (bus4) .eq. text6) go to 3360
 3260 if (to_lower (bus3) .ne. text7) go to 605
   if (to_lower (bus4) .ne. text8) go to 605
-  sigmax = 0.0
+  sigmax = 0.0d0
   idist = 0
   if (nenerg .lt. 0)  go to 615
   kill = 141
@@ -3382,13 +3400,18 @@ subroutine smdat (mtype)
   use strcom
   use freedom
   implicit none
-  ! This module is used only by type-59 brandwajn  s.m.  model
+  ! This module is used only by type-59 Brandwajn  s.m.  model
   ! The following array is sized 3 (nn4-1) * n50 ( n50 = 50  at pre-
   ! sent ) + nn10 ( no. of class 1 requests <=15 at present> ) ******
   !  dimension  npbuf(165)
   !  dimension massex(1)
   !
-  !  equivalence (ismdat(22), ipout), (ismdat(23), n56), (ismdat(24), ismold), (ismdat(25), nn10), (ismdat(26), nn4), (ismdat(27), nn14)
+  !  equivalence (ismdat(22), ipout)
+  !  equivalence (ismdat(23), n56)
+  !  equivalence (ismdat(24), ismold)
+  !  equivalence (ismdat(25), nn10)
+  !  equivalence (ismdat(26), nn4)
+  !  equivalence (ismdat(27), nn14)
   !  equivalence (histq(1), massex(1))
   integer(4), intent(in) :: mtype
   character(8) :: text1, text2, text3
@@ -3417,6 +3440,7 @@ subroutine smdat (mtype)
   real(8) :: tdop, tdopp, tqop, tqopp
   real(8) :: xd, xq, xdp, xdpp, xl, xqp, xqpp
   real(8) :: zb, zb1, zb3
+  !
   !
   data  text1  / 'finish' /
   data  text2  / 'tolera' /

@@ -21,6 +21,13 @@ subroutine ntacs1b
   character(6) :: hus1
   character(8) :: real8
   !
+  integer(4), pointer :: ioutcs
+  integer(4), pointer :: maxniu
+  integer(4), pointer :: maxnuk
+  !
+  maxniu => lstat(67)
+  maxnuk => lstat(68)
+  ioutcs => moncar(5)
   sptr = sptr - 1
   isto(sptr) = env
   env = datenv

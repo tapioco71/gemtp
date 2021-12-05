@@ -1378,17 +1378,16 @@ end subroutine plotng
 ! subroutine fltdat.
 !
 
-subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, nmax, lspars )
+subroutine fltdat (array, arrsav, soln, rhs, ymat, kspars, maxsq, nmax2, nmax, lspars)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  dimension array(maxsq,maxsq), arrsav(maxsq,maxsq)
-  dimension soln(maxsq), rhs(maxsq), ymat(nmax,nmax2)
+  use blkcom
+  dimension array(maxsq, maxsq), arrsav(maxsq, maxsq)
+  dimension soln(maxsq), rhs(maxsq), ymat(nmax, nmax2)
   dimension kspars(lspars,lspars)
-  include 'blkcom.ftn'
   character(8) :: texta, textb, text1, text2, chara
   character(8) :: charb, charc, charq, text80, text9
-  !     following dimensioned vector with "35" really should be
-  !     variably-dimensioned to "iofbnd" user-requested size.  but
+  !     Following dimensioned vector with "35" really should be
+  !     variably-dimensioned to "iofbnd" user-requested size.  But
   !     it is easier to leave them fixed, bigger than ever needed:
   dimension  rthev(35),  output(35), negate(35), xthev(35)
   dimension  texta(35), textb(35), rzero(35), xzero(35)
@@ -1746,7 +1745,7 @@ subroutine fltdat ( array,  arrsav,  soln,  rhs,  ymat, kspars,   maxsq, nmax2, 
 5782 scale = scale + percen
   if ( scale .gt. 1.0 )  scale = 1.0
   go to 5379
-9900 if ( iprsov(nchain) .ge. 1 ) write (lunit6, 9904)  kill
+9900 if (iprsov(nchain) .ge. 1) write (unit = lunit6, fmt = 9904) kill
 9904 format (' Exit "fltdat".  kill =', i5)
   return
 end subroutine fltdat

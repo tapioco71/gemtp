@@ -15,11 +15,11 @@ subroutine over7
   use movcop
   implicit none
   !  dimension lorder(1), ndex(20)
-  !  dimension lorder(15)
   !
-  !  equivalence (ich2(1), lorder(1)), (e(1), ndex(1))
+  !  equivalence (e(1), ndex(1))
   !  equivalence (ich2(1), lorder(1))
-  !  equivalence (iofkol, iofgnd), (iofkor, iofbnd)
+  !  equivalence (iofkol, iofgnd)
+  !  equivalence (iofkor, iofbnd)
   !
   !  Following carries "next" among over6, insert, over7, & over9:
   !
@@ -33,11 +33,19 @@ subroutine over7
   real(8) :: td
   real(8) :: zzza
   !
+  integer(4), pointer :: iofkol
+  integer(4), pointer :: iofkor
+  integer(4), pointer :: lorder(:)
   integer(4), allocatable :: ndex(:)
+  integer(4), pointer :: next
   !
   ll0 = size (transfer (e, ndex))
   allocate (ndex(ll0))
   ndex = transfer (e, ndex)
+  lorder(1 :) => ich2(1 :)
+  iofkol => iofgnd
+  iofkor => iofbnd
+  next => loopss(11)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over7."')
   ischm = 2

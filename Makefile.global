@@ -53,6 +53,12 @@ OBJCOPY=${shell which objcopy}
 OBJDUMP=${shell which objdump}
 MAKEDEPEND=${shell which makedepend}
 
+# Project-wide includes directory.
+INCLUDES_PATH =	${ROOT}/includes
+
+# Project-wide libraries directory.
+LIBRARIES_PATH = ${ROOT}/libraries
+
 # Assembler flags.
 AS_FLAGS=	-Wall			\
 		-al			\
@@ -65,6 +71,7 @@ CC_FLAGS=	-Wall			\
 
 # g++ flags.
 CPP_FLAGS=	-Wall			\
+		-I${INCLUDES_PATH}	\
 		-c
 
 # gfortran flags.
@@ -134,12 +141,6 @@ LD_FLAGS=
 
 # Makedepend flags.
 MAKEDEPEND_FLAGS=	-- ${CC_FLAGS} -- ${SOURCES}
-
-# Project-wide includes directory.
-INCLUDES_PATH =	${ROOT}/includes
-
-# Project-wide libraries directory.
-LIBRARIES_PATH = ${ROOT}/libraries
 
 # Add the include file paths to AS_FLAGS, CC_FLAGS and CPP_FLAGS.
 AS_FLAGS+=${patsubst %,-I%,${subst :, ,${INCLUDES_PATH}}}
@@ -213,8 +214,7 @@ ${COMPILER}/%.o: %.for
 
 # Rule for building the object file from each fortran 90 source files.
 ${COMPILER}/%.o: %.f90
-	@if [ 'x${VERBOSE}' = x ];				\
-	then							\
+	@if [ 'x${VERBOSE}' = x ]; then				\
 		echo " [ F90 ] ${<}";				\
 	else							\
 		echo "${FORTRAN} ${F90_FLAGS} ${<} -o ${@}";	\
@@ -232,26 +232,34 @@ ${COMPILER}/%.o: ${ROOT}/modules/%.f90
 	@${FORTRAN} ${F90_FLAGS} ${<} -o ${@}
 
 # Rule for linking the final program file.
-${COMPILER}/%:
-	@if [ 'x${VERBOSE}' = x ];					\
-	then								\
+${COMPILER}/%: %.f90
+	@if [ 'x${VERBOSE}' = x ]; then					\
 		echo " [ LD ] ${@}";					\
 	else								\
 		echo ${FORTRAN}	-Wl,--start-group			\
 				${LD_FLAGS} 				\
 				-o ${@} $(filter %.o %.a, ${^})		\
-				-Wl,--end-group				\
-				'${LIBM}'				\
-				'${LIBGCC}'				\
-				'${LIBC}';				\
+				-Wl,--end-group;			\
 	fi
 	@${FORTRAN} -Wl,--start-group					\
 		${LD_FLAGS} 						\
 		-o ${@} $(filter %.o %.a, ${^})				\
-		 -Wl,--end-group					\
-		'${LIBM}'						\
-		'${LIBGCC}'						\
-		'${LIBC}'
+		-Wl,--end-group
+
+# Rule for linking the final program file.
+${COMPILER}/%: %.cpp
+	@if [ 'x${VERBOSE}' = x ]; then				\
+		echo " [ LD ] ${@}";				\
+	else							\
+		echo ${CPP} -Wl,--start-group			\
+				${LD_FLAGS}			\
+				-o ${@} $(filter %.o %.a, ${^})	\
+				-Wl,--end-group;		\
+	fi
+	@${CPP}	-Wl,--start-group				\
+		${LD_FLAGS} 					\
+		-o ${@} $(filter %.o %.a, ${^})			\
+		-Wl,--end-group
 
 # Rule to create a .lst file.
 ${COMPILER}/%.lst:

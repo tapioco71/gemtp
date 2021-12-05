@@ -16,34 +16,18 @@ subroutine over53
 4567 format (' "Begin module over53." ')
   if ( nchain  .ne.  53 )   go to 99999
   n1 = kill - 90
-  go to (6091 , 6092, 6093, 6094, 6095, 6096, 6097, 6098, 6099, 6100, 6101, 6102, 6103, 6104, 6105, 6106, 6107, 6108, 6109, 6110, &
-       6111, 6112, 6113, 6114, 6115, 6116, 6117, 6118, 6119, 6120, 6121, 6122, 6123, 6124, 6125, 6126, 6127, 6128, 6129, 6130, &
-       6131, 6132, 6133, 6134, 6135, 6136, 6137, 6138, 6139, 6140, 6141, 6142, 6143, 6144, 6145, 6146, 6147, 6148, 6149, 6150, &
-       6220 ) , n1
-6091 write (lunit6, 7091)
-7091 format (5x, "The data case now in its final stages of input is for a statistical overvoltage study, since field  'nenerg'",/, &
-       5x, 'of columns 65-72 of the 2nd miscellaneous data card was punched with a positive number.   Yet the last-read data',/, &
-       5x, "card requests the output of all network node voltages, by means of the  '1'  punched in column 2.   But the EMTP",/, &
-       5x, 'does not allow this complete voltage output for statistical overvoltage studies.   If the user really wants to look ')
-  write (lunit6, 7191)
-7191 format (5x, 'at every node voltage in such a study, he must request each such output individually, using the selective',/, &
-       5x,  'node voltage output option. ')
-6092 write (lunit6, 7092)
-7092 format (5x, "The EMTP logic has just attempted to read another data card by means of a call to subroutine  'cimage' .",/, &
-       5x, 'But no more data is to be found on logical unit number 5.   An end-of-file mark has been encountered upon attempting',/, &
-       5x, 'to read from this unit.   execution must be stopped, since data which is required for continuation of the study',/, &
-       5x,  'simply does not exist. ')
+  go to (6091 , 6092, 6093, 6094, 6095, 6096, 6097, 6098, 6099, 6100, 6101, 6102, 6103, 6104, 6105, 6106, 6107, 6108, 6109, 6110, 6111, 6112, 6113, 6114, 6115, 6116, 6117, 6118, 6119, 6120, 6121, 6122, 6123, 6124, 6125, 6126, 6127, 6128, 6129, 6130, 6131, 6132, 6133, 6134, 6135, 6136, 6137, 6138, 6139, 6140, 6141, 6142, 6143, 6144, 6145, 6146, 6147, 6148, 6149, 6150, 6220), n1
+6091 write (unit = lunit6, fmt = 7091)
+7091 format (5x, "The data case now in its final stages of input is for a statistical overvoltage study, since field  'nenerg'",/, 5x, 'of columns 65-72 of the 2nd miscellaneous data card was punched with a positive number.   Yet the last-read data',/, 5x, "card requests the output of all network node voltages, by means of the  '1'  punched in column 2.   But the EMTP",/, 5x, 'does not allow this complete voltage output for statistical overvoltage studies.   If the user really wants to look ')
+  write (unit = lunit6, fmt = 7191)
+7191 format (5x, 'at every node voltage in such a study, he must request each such output individually, using the selective',/, 5x,  'node voltage output option. ')
+6092 write (unit = lunit6, fmt = 7092)
+7092 format (5x, "The EMTP logic has just attempted to read another data card by means of a call to subroutine  'cimage' .",/, 5x, 'But no more data is to be found on logical unit number 5.   An end-of-file mark has been encountered upon attempting',/, 5x, 'to read from this unit.   execution must be stopped, since data which is required for continuation of the study',/, 5x,  'simply does not exist. ')
   go to 6220
-6093 write (lunit6, 7093)
-7093 format (5x, 'The last-read data card is for one phase (mode) of a distributed-parameter transmission line.   But one or more',/, &
-       5x, 'of the parameter values read therefrom makes the data illegal.   The four fields of columns 27-50 are not all',/, &
-       5x, 'blank, so this mode data is not taken by the EMTP to be a request for a copy of the parameters of the preceding mode.',/, &
-       5x, 'Hence columns 27-32 must be punched with mode resistance per unit length, columns 33-44 must be punched for the ')
-  write (lunit6, 7193)  flstat(14), flstat(15)
-7193 format (5x, 'mode inductance and capacitance (possibly disguized, in terms of surge impedance, propagation speed, or',/, &
-       5x, 'travel time), and finally, columns 45-50 must contain the line length.   Now one or both of the two fields which',/, &
-       5x, "equally divide columns 33-44 is non-positive, which is illegal.   Values read from the user's card for these",/, &
-       5x, 'two fields were',    e14.4 ,   ' and',   e14.4 , ' ,   respectively.   Remember, zero inductance or ')
+6093 write (unit = lunit6, fmt = 7093)
+7093 format (5x, 'The last-read data card is for one phase (mode) of a distributed-parameter transmission line.   But one or more',/, 5x, 'of the parameter values read therefrom makes the data illegal.   The four fields of columns 27-50 are not all',/, 5x, 'blank, so this mode data is not taken by the EMTP to be a request for a copy of the parameters of the preceding mode.',/, 5x, 'Hence columns 27-32 must be punched with mode resistance per unit length, columns 33-44 must be punched for the ')
+  write (unit = lunit6, fmt = 7193) flstat(14), flstat(15)
+7193 format (5x, 'mode inductance and capacitance (possibly disguized, in terms of surge impedance, propagation speed, or',/, 5x, 'travel time), and finally, columns 45-50 must contain the line length.   Now one or both of the two fields which',/, 5x, "equally divide columns 33-44 is non-positive, which is illegal.   Values read from the user's card for these",/, 5x, 'two fields were',    e14.4 ,   ' and',   e14.4 , ' ,   respectively.   Remember, zero inductance or ')
   write (lunit6, 7293)
 7293 format (5x, "capacitance (the case when  'iline'  is zero)  is illegal because it implies infinite velocity of propagation.",/, &
        5x, 'Similar absurdities result for the other two forms of disguizing inductance and capacitance, it can readily be',/, &
@@ -198,11 +182,8 @@ subroutine over53
 6103 if(lstat(12).gt.0)write(lunit6,7103)lstat(12)
 7103 format (5x, 'Possible loss of significance in elimination step ', 1x, i4, 1x, 'in subroutine dgelg',/)
   go to 6220
-6104 write (lunit6, 7104)  iprsov(37), lstat(12)
-7104 format (5x, 'the data case now being solved involves one or more dynamic synchronous machine (s.m.) source components.',/, &
-       5x, "The associated equations (Park's or Blondel's) are nonlinear, and must be solved by an iterative procedure at",/, &
-       5x,  'each time step.   This iteration has failed to converge within the iteration limit of',  i5, ' ,   for dynamic',/, &
-       5x,  's.m. number',  i5, "  (in order of input).   The iteration limit is variable  'niomax' ,   which can be ")
+6104 write (unit = lunit6, fmt = 7104) iprsov(37), lstat(12)
+7104 format (5x, 'the data case now being solved involves one or more dynamic synchronous machine (s.m.) source components.',/, 5x, "The associated equations (Park's or Blondel's) are nonlinear, and must be solved by an iterative procedure at",/, 5x,  'each time step.   This iteration has failed to converge within the iteration limit of',  i5, ' ,   for dynamic',/, 5x,  's.m. number',  i5, "  (in order of input).   The iteration limit is variable  'niomax' ,   which can be ")
   write (lunit6, 7204)  bus1, epomeg, flstat(14)
 7204 format (5x, "re-defined during the s.m. data input, using a  'tolerances'  special-request card.   The s.m. in question has",/, &
        5x,  "phase 'a' connected to bus  ",  "'", a6,  "'", " .   The unachieved tolerance is variable  'epomeg' ,   which has value",/, &

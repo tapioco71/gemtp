@@ -245,14 +245,19 @@ subroutine over11
   real(8) :: vi, vr
   real(8) :: xd, xxx
   real(8) :: yi, yis, yr, yrs, yy
-  !  equivalence  ( volt(1), vim(1) ),  ( imfd(1), jch2(1) )
-  !  equivalence  ( moncar(1), knt )
+  !  equivalence (volt(1), vim(1))
+  !  equivalence (imfd(1), jch2(1))
+  !  equivalence (moncar(1), knt)
   !      Preceding "jch2" uses "imfd" just for "frequency scan".
   !      as such, there must be no freq-depend sources present.
   !
+  integer(4), pointer :: imfd(:)
+  integer(4), pointer :: knt
   real(8), pointer :: vim(:)
   !
   vim(1 :) => volti(1 :)
+  imfd(1 :) => jch2(1 :)
+  knt => moncar(1)
   !
   data text1 / 'mag   ' /
   data text2 / 'angle ' /

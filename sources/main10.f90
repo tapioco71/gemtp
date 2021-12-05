@@ -87,7 +87,7 @@ contains
     n4 = location (narray)
     write (unit = lunit6, fmt = 5831) n1, n2, n3, kburro, n4
 5831 format (/, " Top of  'tapsav'., '      n1      n2      n3  kburro              n4", /, 18x, 4i8, i16)
-    !     following check normally sends VAX EMTP to 6327 (disk is
+    !     Following check normally sends VAX EMTP to 6327 (disk is
     !     only wanted for table saving within a simulation for
     !     test purposes):
 5840 if (kburro .eq. 1) go to 6327
@@ -709,15 +709,22 @@ subroutine tables
   !  dimension iprsav(4)
   !
   !  equivalence (x(1), integx(1))
-  !  equivalence (bus1, busone(1)), (nenerg, idistx(1))
-  !  equivalence (kpen(1), bus1), (itemp(1), busum(1))
-  !  equivalence (jtemp(1), etac(1)), (ktemp(1), z(1))
+  !  equivalence (bus1, busone(1))
+  !  equivalence (nenerg, idistx(1))
+  !  equivalence (kpen(1), bus1)
+  !  equivalence (itemp(1), busum(1))
+  !  equivalence (jtemp(1), etac(1))
+  !  equivalence (ktemp(1), z(1))
   !  equivalence (moncar(2), kbase)
+  !
+  integer(4), pointer :: idistx
+  integer(4), pointer :: kbase
   !
   !     Burroughs: preserve local variable between module calls:
   !
-  allocate (itemp(8 * 50))
-  itemp = transfer (busum, itemp)
+  idistx => nenerg
+  itemp(1 :) = transfer (busum(1 :), itemp(1 :))
+  kbase => moncar(2)
   !
   iprsav(1 : 4) = (/ 0, 0, 0, 0 /)
   ll1 = 1
@@ -775,10 +782,6 @@ subroutine tables
   end do
 5359 if (iprsup .ge. 1) write (unit = lunit6, fmt = 5364)
 5364 format (' Exit "tables".')
-  if (allocated (itemp)) then
-     busum = transfer (itemp, busum)
-     deallocate (itemp)
-  end if
   return
 end subroutine tables
 

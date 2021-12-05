@@ -224,6 +224,9 @@ contains
     real(8) :: r
     !  equivalence (moncar(1), knt)
     !
+    integer(4), pointer :: knt
+    !
+    knt => moncar(1)
     if (xmaxmx .lt. 0.0) go to 7265
     if (x .eq. 0.0) go to 4213
     if (knt .gt. 1) go to 9800                                ! skip 2nd or later seed

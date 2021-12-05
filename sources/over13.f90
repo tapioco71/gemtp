@@ -173,15 +173,17 @@ subroutine over13
   real(8) :: steady, sumki, sumkr, summi, summr
   real(8) :: taua, taui, tpi
   real(8) :: vi1, vi2, vr1, vr2, vsl, vsli, vsr, vsri
-  real(8) :: w1(1), wd, wdt, winic
+  real(8) :: wd, wdt, winic
   real(8) :: yx
   !
+  integer(4), pointer :: infdli(:)
   integer(4), pointer :: mdrive
   real(8), pointer :: cblhst(:)
   real(8), pointer :: vim(:)
   real(8), pointer :: w1(:)
   real(8), pointer :: wk1(:)
   !
+  infdli(1 :) => namebr(1 :)
   cblhst(1 :) => cnvhst(1 :)
   mdrive => lstat(14)
   vim(1 :) => volt(1 :)

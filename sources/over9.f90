@@ -16,15 +16,24 @@ subroutine over9
   use tracom
   use movcop
   implicit none
-  !  equivalence ( iofkol, iofgnd ), ( iofkor, iofbnd )
-  !     following carries "next" among over6, insert, over7, & over9:
-  !  equivalence  ( loopss(11), next )
+  !  equivalence (iofkol, iofgnd)
+  !  equivalence (iofkor, iofbnd)
+  !     Following carries "next" among over6, insert, over7, & over9:
+  !  equivalence (loopss(11), next)
   integer(4) :: i, icas, ii, ik, il, istate, isubs1, isubs2, iswbob
   integer(4) :: j, j1, jbrt, jj, jsw
   integer(4) :: k, k1, kf
   integer(4) :: l, lastm1
   integer(4) :: m, ma
   integer(4) :: n1, ndx1, ndx2, ndx3, nk, nkr, nx
+  !
+  integer(4), pointer :: iofkol
+  integer(4), pointer :: iofkor
+  integer(4), pointer :: next
+  !
+  iofkol => iofgnd
+  iofkor => iofbnd
+  next => loopss(11)
   !
   !locatn(i, j) = j * (j - 1) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)

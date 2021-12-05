@@ -199,6 +199,10 @@ subroutine over12
   !  equivalence (moncar(8), jseedr)
   !  equivalence (moncar(9), kloaep), (moncar(10), mtape)
   !
+  real(8), pointer :: wk1(:)
+  !
+  wk1(1 :) => semaux(1 :)
+  !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over12."')
   nph = 0
@@ -1050,7 +1054,7 @@ subroutine over12
      sconst(n7) = -fac2 * (sconst(n5) - hi)
      sconst(n8) = sconst(n8) + sconst(n7)
      sconst(n9) = sconst(n9) + sconst(n6)
-     wk1(koff21+k) = sconst(n9)
+     wk1(koff21 + k) = sconst(n9)
      if (iprsup .gt. 0) write(unit = *, fmt = 5487) j, nrz, sconst(n5), sconst(n6), sconst(n7), sconst(n8), sconst(n9)
 5487 format(' j,nrz,cj,dj,ej,esum,d0sum=y05', /, 1x, i3, 2x, i3, 3x, e14.5, 3x, e14.5, 3x, e14.5, 3x, e14.5, 3x, e14.5)
   end do

@@ -1955,8 +1955,8 @@ subroutine switch
   write (lunit6, 3452)  ( lastsw(i), i=1, kswtch )
   write (lunit6, 3453)  ( kbegsw(i), i=1, kswtch )
   write (lunit6, 3454)  ( kode(i), i=1, ntot )
-4465 if ( iprsup  .ge.  1 ) write (lunit6, 4468)
-4468 format ( 15h exit "switch".  )
+4465 if (iprsup .ge. 1) write (unit = lunit6, fmt = 4468)
+4468 format (' Exit "switch".')
   return
 end subroutine switch
 
@@ -2306,6 +2306,12 @@ subroutine subts2
   !
   !  equivalence (semaux(1), wk1(1))
   !  equivalence (namebr(1), infdli(1))
+  !
+  integer(4), pointer :: ipoint
+  real(8), pointer :: wk1(:)
+  !
+  ipoint => iprsov(35)
+  wk1(1 :) => semaux(1 :)
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 3445) (f(j), j = 1, ntot )
 3445 format ( ' Top  subts2.  f(1:ntot) follows ...', /, (1x, 8e16.7))
@@ -3665,9 +3671,6 @@ subroutine fdcinj (ikf, isfd, ibf)
   use blkcom
   use labcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !  include 'blkcom.ftn'
-  !  include 'labcom.ftn'
   integer(4), intent(out) :: ikf, ibf, isfd
   !
   integer(4) :: idk, isc, isf, isk, ist, isu, isv
@@ -3995,8 +3998,7 @@ subroutine update
      if ( ispdr .le. iprsov(37) )  go to 200
      if ( spdd .gt. epomeg )  go  to  920
      write ( lunit6, 4105 )   ilk, istep, iprsov(37)
-4105 format( 2x, 7hwarning,2x,  15(1h*), /,2x, 35hlack of convergence for machine no., i5, 2x, 11hon step no., i10, &
-          /,  ' iteration limit  iprsov(37) =',  i10  )
+4105 format (2x, 'Warning', 2x, 15('*'), /, 2x, 'Lack of convergence for machine no.', i5, 2x, 'On step no.', i10, /,  ' iteration limit  iprsov(37) =', i10)
      go to 204
 920  lstat(19) = 206
      lstat(18) = nchain
@@ -4006,16 +4008,16 @@ subroutine update
      lstat(12) = ilk
      kill = 104
      return
-208  if ( iprsup .eq. 0 )  go to  50
-     write ( lunit6, 4106 )   spdn, histq(ksex), cd, cexc
-4106 format( 6x, 23hafter speed calculation, 5x, 5hrotor, 13x,7hexciter, 17x, 3hteg, 16x, 4htexc, /, 20x, 4e20.12 )
+208  if (iprsup .eq. 0) go to  50
+     write (unit = lunit6, fmt = 4106) spdn, histq(ksex), cd, cexc
+4106 format (6x, 'After speed calculation', 5x, 'rotor', 13x, 'exciter', 17x, 'teg', 16x, 'texc', /, 20x, 4e20.12)
      !     load internal machine variables into tacs variable 'etac' *******
-50   if ( n22spy .ne. -1 )  go to 51
-     ksmspy( 2 ) = ilk
+50   if (n22spy .ne. -1) go to 51
+     ksmspy(2) = ilk
      call emtspy
-     if ( ksmspy( 1 ) .eq. -1 )  go to 51
-     if ( ksmspy( 1 ) .eq. 2 )  n22spy = 0
-     if ( n22spy .eq. 0 )   go to 51
+     if (ksmspy(1) .eq. -1) go to 51
+     if (ksmspy(1) .eq. 2) n22spy = 0
+     if (n22spy .eq. 0) go to 51
      smoutv( 1 ) = d6
      smoutv( 2 ) = d7
      smoutv( 3 ) = d8
@@ -4390,7 +4392,7 @@ subroutine increm (ilk, sf3)
   !
   !
   !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     this module is used only by brandwajn (type-59) s.m. model
+  !     this module is used only by Brandwajn (type-59) s.m. model
   if (iprsup  .ge.  1) write (unit = lunit6, fmt = 6000)
 6000 format ('  "Begin module increm."')
   i30 = 30 * ilk - 29
@@ -4629,7 +4631,7 @@ subroutine bansol (ab, x, n)
   integer(4), intent(in) :: n
   real(8), intent(out) :: x(1)
   real(8), intent(in) :: ab(1)
-  !  dimension ab( 1 ), x( 1 )
+  !  dimension ab(1), x(1)
   !
   integer(4) :: i1, i2
   real(8) :: d
@@ -4758,6 +4760,11 @@ subroutine subts3
   !  equivalence (iprsov(36), iupper)
   !  equivalence (ismout(1), vsmout(1))
   !
+  integer(4), pointer :: iupper
+  real(8), pointer :: xx(:)
+  !
+  iupper => iprsov(36)
+  xx(1 :) => xk(1 :)
   ll2 = 2
   ll6 = 6
   ll8 = 8
@@ -5891,15 +5898,15 @@ subroutine  arrest (a, b, srt, svt, carst)
   !    b(9)       wt       accumulated energy since flashover
   !    b(10)      fv       voltage division factor
   !    b(11)      fi       current division factor
-  real(8), intent(out) :: b
-  real(8), intent(in) :: a
+  real(8), intent(out) :: b(20)
+  real(8), intent(in) :: a(20)
   real(8) :: srt, svt, carst
   integer(4) :: i, isign, ll8
   real(8) :: art, avt, be, cb, cg, cip, curr, d1, dfdi, dfdv, f0, f1, f2, gi, rb, ylb
   real(8) :: vblock, vgap
   real(8) :: wx
   real(8) :: yg
-  dimension a(20), b(20)
+  !  dimension a(20), b(20)
   !
   ll8 = 8
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 20) (a(i), b(i), i = 1, 20)
@@ -5983,7 +5990,7 @@ subroutine  arrest (a, b, srt, svt, carst)
   yg=(-dfdv+2.0/deltat)/dfdi
   cg=b(2) *(-dfdv-2.0/deltat)/dfdi-b(3) +gi
   art=1.0/ylb+rb+1.0/yg
-  vblock=-cb/ylb
+  vblock = -cb / ylb
   vgap=-(cg+gi)/yg
   avt=vblock+be+vgap
   if (isign.lt.0) svt=-svt
@@ -5995,27 +6002,27 @@ subroutine  arrest (a, b, srt, svt, carst)
   if (b(6) .gt.1.5) go to 91
   cip = (curr + b(3)) * onehaf
   if (curr .gt. a(6)) cip = a(6)
-  b(7) =b(7) +a(5)*cip*deltat
+  b(7) = b(7) + a(5) * cip * deltat
   go to 92
 91 if (b(6) .gt.3.5) go to 92
-  b(5)=b(5)+ (vgap*curr+b(2)*b(3)) * delta2
-92 b(4)=b(3)
-  b(3)=carst
-  b(2)=vgap
-  b(1)=b(10)*(avt+art*curr)
-  b(8)=vblock+curr/ylb
-  if (isign.gt.0) go to 94
-  b(3)=-b(3)
-  b(1)=-b(1)
-  carst=-carst
+  b(5) = b(5) + (vgap * curr + b(2) * b(3)) * delta2
+92 b(4) = b(3)
+  b(3) = carst
+  b(2) = vgap
+  b(1) = b(10) * (avt + art * curr)
+  b(8) = vblock + curr / ylb
+  if (isign .gt. 0) go to 94
+  b(3) = -b(3)
+  b(1) = -b(1)
+  carst = -carst
 94 b(9) = b(9) + b(1) * b(3) * deltat
   go to 5681
-93 b(6)=0.0
-  b(3)=0.0
-  b(1)=0.0
-  carst=0.0
-5681 if ( iprsup  .ge.  2 )  write (lunit6, 5684)  art, avt, carst,  ( a(i), b(i), i=1, 20 )
-5684 format ( /, 19h at end  'arrest' ., 12x, 3hart, 12x, 3havt, 10x, 5hcarst, /, 19x, 3e15.6, /,  (1x, 8e16.6)  )
+93 b(6) = 0.0
+  b(3) = 0.0
+  b(1) = 0.0
+  carst = 0.0
+5681 if (iprsup .ge. 2)  write (unit = lunit6, fmt = 5684) art, avt, carst, (a(i), b(i), i = 1, 20)
+5684 format (/, " At end  'arrest' .", 12x, 'art', 12x, 'avt', 10x, 'carst', /, 19x, 3e15.6, /,  (1x, 8e16.6)  )
   return
 end subroutine arrest
 
