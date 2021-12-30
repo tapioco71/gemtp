@@ -16,10 +16,12 @@ subroutine over9
   use tracom
   use movcop
   implicit none
+  !
   !  equivalence (iofkol, iofgnd)
   !  equivalence (iofkor, iofbnd)
   !     Following carries "next" among over6, insert, over7, & over9:
   !  equivalence (loopss(11), next)
+  !
   integer(4) :: i, icas, ii, ik, il, istate, isubs1, isubs2, iswbob
   integer(4) :: j, j1, jbrt, jj, jsw
   integer(4) :: k, k1, kf
@@ -27,15 +29,8 @@ subroutine over9
   integer(4) :: m, ma
   integer(4) :: n1, ndx1, ndx2, ndx3, nk, nkr, nx
   !
-  integer(4), pointer :: iofkol
-  integer(4), pointer :: iofkor
-  integer(4), pointer :: next
-  !
-  iofkol => iofgnd
-  iofkor => iofbnd
-  next => loopss(11)
-  !
   !locatn(i, j) = j * (j - 1) / 2 + i
+  !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over9."')
   if(iprsup .gt. 0) write (unit = lunit6, fmt = 1001) kconst, last
@@ -134,9 +129,9 @@ subroutine over9
 1050 continue
   next = 1
   jbrt = last
-  isubs1 =  iofkor+1
+  isubs1 = iofkor + 1
   call move0 (korder(isubs1 :) , jbrt)
-  call move0 (loc(1 :), ntot)
+  call move0 (loca(1 :), ntot)
   i = 1
   go to 1160
 1150 i = ii + 1
@@ -149,7 +144,7 @@ subroutine over9
   j = i
   go to 1250
 1220 j = j + 1
-  if (iswbob.eq.0) go to 1320
+  if (iswbob .eq. 0) go to 1320
   if (j .gt. ii) go to 1330
 1250 k = iabs (kbus(j))
 1260 if (k .eq. 0) go to 1220
@@ -174,10 +169,10 @@ subroutine over9
 1370 if (l .gt. ii) go to 1220
   m = iabs (mbus(l))
   if (m .eq. k  .or. m .lt. 1) go to 1360
-1400 kf = loc(k)
+1400 kf = loca(k)
   if (kf .eq. 0) go to 1420
   go to 1440
-1420 loc(k) = next
+1420 loca(k) = next
   go to 1480
 1430 isubs1 = iofkor + kf
   kf = korder(isubs1)
@@ -209,10 +204,11 @@ subroutine over9
 
   case (2)
      go to 1360
+
   end select
 1500 do i = 2,  ntot
      ik = 0
-     il = loc(i)
+     il = loca(i)
 1530 if (il .eq. 0) go to 1550
      ik = ik + 1
      isubs1 = iofkor + il
@@ -226,7 +222,7 @@ subroutine over9
 1554 format (/, " (kownt(i), i=1, ntot)   in  'over9' ,  after branch table has been put into steady-state renumbering arrays.", /, (1x, 20i6))
   lastm1 = last - 1
   do i = next, lastm1
-     isubs1 =  iofkor+i
+     isubs1 = iofkor + i
      korder(isubs1) = i + 1
   end do
   isubs1 = iofkor + last
@@ -368,7 +364,7 @@ subroutine over9
      j = kmswit(ndx3)
      if (i .gt. j) i = j
 2530 j = iabs (kode(i))
-2540 l = loc(i)
+2540 l = loca(i)
      if (l .ne. 0) go to 2560
      isubs1 = iofkor + next
      nx = korder(isubs1)
@@ -376,7 +372,7 @@ subroutine over9
      kolum(isubs1) = j
      isubs1 = iofkor + next
      korder(isubs1) = 0
-     loc(i) = next
+     loca(i) = next
      next = nx
      if (kode(i) .ge. 0) kownt(i) = 1
      go to 2610
@@ -412,7 +408,7 @@ subroutine over9
      kolum(isubs1) = j
      next = nx
 2600 if (kownt(i) .ne. (-1)) kownt(i) = kownt(i) + 1
-2610 l = loc(j)
+2610 l = loca(j)
      if (l .ne. 0) go to 2630
      isubs1 = iofkor + next
      nx = korder(isubs1)
@@ -420,7 +416,7 @@ subroutine over9
      kolum(isubs1) = i
      isubs1 = iofkor + next
      korder(isubs1) = 0
-     loc(j) = next
+     loca(j) = next
      next = nx
      if (kode(j) .ge. 0) kownt(j) = 1
      go to 2690

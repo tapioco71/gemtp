@@ -25,7 +25,6 @@ end subroutine main10
 #ifdef WITH_OVER29
 subroutine over29
   implicit none
-  integer(4) :: karray( 9942869)
   real(8) :: tp(   30000)
   integer(4) :: norder(   93002)
   integer(4) :: index(   93002)
@@ -49,7 +48,6 @@ end subroutine over29
 #ifdef WITH_OVER31
 subroutine over31
   implicit none
-  integer(4) :: karray(     300)
   call subr31
   return
 end subroutine over31
@@ -116,31 +114,31 @@ end subroutine fixs10
 subroutine over44
   implicit none
   integer(4) :: karray(     300)
-  real(8) :: p(  111628)
-  real(8) :: z(  111628)
-  integer(4) :: ic(     472)
-  real(8) :: r(     472)
-  real(8) :: d(     472)
-  real(8) :: gmd(     472)
-  real(8) :: x(     472)
-  real(8) :: y(     472)
-  real(8) :: tb2(     472)
-  integer(4) :: itb3(     472)
-  real(8) :: workr1(     472)
-  real(8) :: workr2(     472)
-  character(8) :: text(     944)
-  real(8) :: gd(   28015)
-  real(8) :: bd(   28015)
-  real(8) :: yd(   28015)
-  integer(4) :: itbic(     473)
-  real(8) :: tbr(     473)
-  real(8) :: tbd(     473)
-  real(8) :: tbg(     473)
-  real(8) :: tbx(     473)
-  real(8) :: tby(     473)
-  integer(4) :: tbtb2(     473)
-  integer(4) :: itbtb3(     473)
-  character(8) :: tbtext(     473)
+  real(8) :: p(  109746)
+  real(8) :: z(  109746)
+  integer(4) :: ic(     468)
+  real(8) :: r(     468)
+  real(8) :: d(     468)
+  real(8) :: gmd(     468)
+  real(8) :: x(     468)
+  real(8) :: y(     468)
+  real(8) :: tb2(     468)
+  integer(4) :: itb3(     468)
+  real(8) :: workr1(     468)
+  real(8) :: workr2(     468)
+  character(8) :: text(     936)
+  real(8) :: gd(   27509)
+  real(8) :: bd(   27509)
+  real(8) :: yd(   27509)
+  integer(4) :: itbic(     469)
+  real(8) :: tbr(     469)
+  real(8) :: tbd(     469)
+  real(8) :: tbg(     469)
+  real(8) :: tbx(     469)
+  real(8) :: tby(     469)
+  integer(4) :: tbtb2(     469)
+  integer(4) :: itbtb3(     469)
+  character(8) :: tbtext(     469)
   call subr44
   return
 end subroutine over44
@@ -213,23 +211,19 @@ subroutine dimens (lsize, nchain, bus1, bus2)
   lsize(27)  =     600
   lsize(28)  =    1080
   n7 = 28 + 1
-  lsize(n7) = 9942869
-  bus1 ='  220529'
-  bus2 ='   51221'
+  lsize(n7) = 9763165
+  bus1 ='  202949'
+  bus2 ='  291221'
   return
 2900 if (nchain .gt.  29) go to 3100
-  lsize( 1)  =       0
-  lsize( 2) =9942869
-  lsize( 3)  =      23
-  lsize( 4) =  30000
-  lsize( 5)  =       1
-  lsize( 6) =  93002
-  lsize( 7)  =       9
-  lsize( 8) =    300
+  lsize( 1)  =      23
+  lsize( 2) =  30000
+  lsize( 3)  =       1
+  lsize( 4) =  93002
+  lsize( 5)  =       9
+  lsize( 6) =    300
   return
 3100 if (nchain .gt.  31) go to 3900
-  lsize( 1)  =       9
-  lsize( 2) =    300
   return
 3900 if (nchain .gt.  39) go to 1000
   lsize( 1)  =      71
@@ -247,15 +241,15 @@ subroutine dimens (lsize, nchain, bus1, bus2)
   lsize( 1)  =       9
   lsize( 2) =    300
   lsize( 3)  =      75
-  lsize( 4) = 111628
+  lsize( 4) = 109746
   lsize( 5)  =      71
-  lsize( 6) =    472
+  lsize( 6) =    468
   lsize( 7)  =      76
-  lsize( 8) =    944
+  lsize( 8) =    936
   lsize( 9)  =      74
-  lsize(10) =  28015
+  lsize(10) =  27509
   lsize(11)  =      73
-  lsize(12) =    473
+  lsize(12) =    469
   return
 4500 if (nchain .gt.  45) go to 4700
   lsize( 1)  =       9

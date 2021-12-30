@@ -2190,21 +2190,6 @@ subroutine over5
   real(8) :: ssigma, ststat
   real(8) :: targ, timchk
   !
-  integer(4), pointer :: idist
-  integer(4), pointer :: isw
-  integer(4), pointer :: itest
-  integer(4), pointer :: kloaep
-  integer(4), pointer :: knt
-  real(8), pointer :: adelay1(:)
-  real(8), pointer :: tstat(:)
-  !
-  adelay1(1 :) => akey(1 :)
-  tstat(1 :) => crit(1 :)
-  knt => moncar(1)
-  isw => moncar(4)
-  idist => moncar(5)
-  itest => moncar(6)
-  kloaep => moncar(9)
   data text1  / 'name  ' /
   data text2  / 'swt001' /
   data text5  / 'statis' /

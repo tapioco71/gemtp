@@ -447,11 +447,6 @@ subroutine cimage
   !  equivalence (buff10(1), abuff(1))
   !  equivalence (aupper(1), texcol(1))
   !
-  character(80), pointer :: buff10
-  real(8), pointer :: aupper(:)
-  !
-  aupper(1 :) = transfer (texcol(1 :), aupper(1 :));
-  buff10 => abuff
   !     Burroughs: preserve local variable between module calls:
   data n8         / 0 /        ! remember last $-card number
   data charc      / 'c' /

@@ -37,8 +37,7 @@ subroutine over16
 2468 if (m4plot .eq. 1) call emtspy
      n1 = nchain - 15
      iprsup = iprsov(nchain)
-     !     if (n1 .gt. 4) exit
-     !     if (n1 .le. 0) exit
+     if ((n1 .gt. 4) .or. (n1 .le. 0)) exit
      select case (n1)
      case (1)
         call subts1
@@ -52,8 +51,6 @@ subroutine over16
      case (4)
         call subts4
 
-     case default
-        exit
      end select
   end do
   return
@@ -94,9 +91,12 @@ subroutine subts1
   !
   !  dimension nsubkm(1), swcold(100)
   !
-  !  equivalence (spum(1),  ispum(1)),  (kknonl(1),  nsubkm(1))
-  !  equivalence (moncar(1),    knt),       (moncar(2),  kbase)
-  !  equivalence (iprsov(35), ipoint),  (iprsov(36), iupper)
+  !  equivalence (spum(1), ispum(1))
+  !  equivalence (kknonl(1), nsubkm(1))
+  !  equivalence (moncar(1), knt)
+  !  equivalence (moncar(2), kbase)
+  !  equivalence (iprsov(35), ipoint)
+  !  equivalence (iprsov(36), iupper)
   !
   data text1  / 'valve ' /
   data text2  / 'diode ' /
@@ -2306,12 +2306,6 @@ subroutine subts2
   !
   !  equivalence (semaux(1), wk1(1))
   !  equivalence (namebr(1), infdli(1))
-  !
-  integer(4), pointer :: ipoint
-  real(8), pointer :: wk1(:)
-  !
-  ipoint => iprsov(35)
-  wk1(1 :) => semaux(1 :)
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 3445) (f(j), j = 1, ntot )
 3445 format ( ' Top  subts2.  f(1:ntot) follows ...', /, (1x, 8e16.7))
@@ -4755,16 +4749,12 @@ subroutine subts3
   !
   !  equivalence (kknonl(1), nsubkm(1))
   equivalence (h1, sk), (d2, sm)
-  !  equivalence (xk(1), xx(1)), (volti(1), volta(1))
+  !  equivalence (xk(1), xx(1))
+  !  equivalence (volti(1), volta(1))
   !  equivalence (moncar(2), kbase)
   !  equivalence (iprsov(36), iupper)
   !  equivalence (ismout(1), vsmout(1))
   !
-  integer(4), pointer :: iupper
-  real(8), pointer :: xx(:)
-  !
-  iupper => iprsov(36)
-  xx(1 :) => xk(1 :)
   ll2 = 2
   ll6 = 6
   ll8 = 8

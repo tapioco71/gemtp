@@ -232,7 +232,7 @@ ${COMPILER}/%.o: ${ROOT}/modules/%.f90
 	@${FORTRAN} ${F90_FLAGS} ${<} -o ${@}
 
 # Rule for linking the final program file.
-${COMPILER}/%: %.f90
+${COMPILER}/%:
 	@if [ 'x${VERBOSE}' = x ]; then					\
 		echo " [ LD ] ${@}";					\
 	else								\
@@ -244,21 +244,6 @@ ${COMPILER}/%: %.f90
 	@${FORTRAN} -Wl,--start-group					\
 		${LD_FLAGS} 						\
 		-o ${@} $(filter %.o %.a, ${^})				\
-		-Wl,--end-group
-
-# Rule for linking the final program file.
-${COMPILER}/%: %.cpp
-	@if [ 'x${VERBOSE}' = x ]; then				\
-		echo " [ LD ] ${@}";				\
-	else							\
-		echo ${CPP} -Wl,--start-group			\
-				${LD_FLAGS}			\
-				-o ${@} $(filter %.o %.a, ${^})	\
-				-Wl,--end-group;		\
-	fi
-	@${CPP}	-Wl,--start-group				\
-		${LD_FLAGS} 					\
-		-o ${@} $(filter %.o %.a, ${^})			\
 		-Wl,--end-group
 
 # Rule to create a .lst file.

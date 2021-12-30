@@ -30,7 +30,6 @@ subroutine over1
   implicit none
   !     %include  '//c/tsu/cables.ins.ftn'
   !     To avoid "insert deck tacsar" here, use small part of it:
-  character(8) :: aupper(14)
   character(8) :: text1, text2, text6, datexx(2)
   character(8) :: text3, text4, text5, tcloxx(2)
   character(80) :: disk_file
@@ -38,9 +37,9 @@ subroutine over1
   integer(4) :: i, iadqq, ijk, ios, ip, iswent, iy, j
   integer(4) :: k, kswpe4
   integer(4) :: ll1, ll6, ll8, ll11, ll20, ll24, ll25, ll30, ll40, ll60, ll64, ll80
-  integer(4) :: lstacs(8), ltacst, lu2, lu6, lunt77
+  integer(4) :: lstacs(8), lu2, lu6, lunt77
   integer(4) :: n5, n6, n7, n8, n9, n12, n14, n15, n18, n19, n23, nfdbr, nfdhst, nfdph
-  integer(4) :: nfdpol, ngroup, niunrs, nk, ntcsex, ntlin, nturn, num888, numnam
+  integer(4) :: nfdpol, ngroup, niunrs, nk, ntlin, nturn, num888, numnam
   integer(4) :: numbco, numbrn
   real(8) :: d1, d2, d3, d4, d7, d8, d12, d13, ddd, znvref
   !  dimension kpen(1), ibusum(1)
@@ -62,27 +61,6 @@ subroutine over1
   !
   !     default list sizes for tacs proportioning of emtp list 19.
   !
-  integer(4), pointer :: idist
-  integer(4), pointer :: isw
-  integer(4), pointer :: itest
-  integer(4), pointer :: jseedr
-  integer(4), pointer :: kbase
-  integer(4), pointer :: kloaep
-  integer(4), pointer :: knt
-  integer(4), pointer :: mtape
-  integer(4), pointer :: nmauto
-  real(8), pointer :: r4(:)
-  !
-  knt => moncar(1)
-  kbase => moncar(2)
-  isw => moncar(4)
-  idist => moncar(5)
-  itest => moncar(6)
-  jseedr => moncar(8)
-  kloaep => moncar(9)
-  mtape => moncar(10)
-  nmauto => iprsov(39)
-  r4(1 :) => volti(1 :)
   data text2 / 'name  ' /
   data text6 / 'copy  ' /
   data text1 / 'tacs o' /
@@ -980,15 +958,6 @@ subroutine reques
   !  equivalence (moncar(3), ltdelt)
   !  equivalence (iprsov(39), nmauto)
   !
-  integer(4), pointer :: kbase
-  integer(4), pointer :: ltdelt
-  integer(4), pointer :: nmauto
-  real(8), pointer :: anglex
-  !
-  anglex => angle
-  kbase => moncar(2)
-  ltdelt => moncar(3)
-  nmauto => iprsov(39)
   ! $$$$$       special-request word no. 1.   'xformer'                         $$$$$
   data textay(1)   / 'x     ' /
   data jpntr(1)    / 1 /
@@ -2231,7 +2200,6 @@ subroutine sysdep
   character(18) :: colxxx
   character(8) :: busnm1, busnm2, busnm3, text1, text2, temp
   character :: lettra, lettrb, lettrc !, colxxx(18)
-  integer(4) :: ltacst
   integer(4) :: n7
   !
   !     first 5 characters of file name "col" are reserved
@@ -2398,9 +2366,6 @@ subroutine midov1
   integer(4) :: j, n4
   !  equivalence (moncar(3), ltdelt)
   !
-  integer(4), pointer :: ltdelt
-  !
-  ltdelt => moncar(3)
   ! if interactive execution (spy),
   ! and if not Monte Carlo study,
   if (m4plot .eq. 1 .and. nenerg .eq. 0) tmax = fltinf      ! set end-time of study to infinity
@@ -2476,10 +2441,10 @@ subroutine tacs1
   implicit none
   character(8) :: stacs(11), alph(5), alnode, alnm1, alnm2
   character(8) :: dumj(33), sminus, splus, sbn(2)
-  integer(4) :: i, ij, ijk, ioutcs, is, isour
+  integer(4) :: i, ij, ijk, is, isour
   integer(4) :: j, j1, j2, jr
   integer(4) :: k, karg, kbtcs, kbwkcs, kcc, kjsup, kksup, kxai
-  integer(4) :: ll0, ll1, ll2, ll3, ltacst
+  integer(4) :: ll0, ll1, ll2, ll3
   integer(4) :: m, mm
   integer(4) :: n, n1, n2, n3, n22, n23, ndx1, ndx2, ndx3, ndx5, ndy5, niunrs, nuki
   integer(4) :: nukr
@@ -4189,7 +4154,7 @@ subroutine tacs1b
   use bcdtim
   use movcop
   implicit none
-  integer(4) :: i, ij, ij9, ijk, infir, inlst, ioutcs, irr, is, isour, iuser, izs
+  integer(4) :: i, ij, ij9, ijk, infir, inlst, irr, is, isour, iuser, izs
   integer(4) :: j, j1, j2, j8, j11, j12, j13, jc, jj, jjj, jk, jk1, jk2, jl, jm, jn
   integer(4) :: jni, jr
   integer(4) :: k, k1, k2, karg, kargsa, kbtcs, kbwkcs, kint, kjsup, kksup, kxai
@@ -4198,7 +4163,7 @@ subroutine tacs1b
   integer(4) :: m, mc, min, mins, mjump, mkk, mm, mmm, mnp, mpk, mpp, mpq
   integer(4) :: n, n1, n2, n3, n4, n6, n11, n12, n23, namexm, namin, namout, namsbk
   integer(4) :: namsup, ndx1, ndx2, ndx3, ndxb, ndy, nexd, nfun, ngp, nik, nivarb
-  integer(4) :: nj, nkn, nn, nnn, nom, np, np1, nq, nstep, ntcsex, nuki, nukj, nukjl, nukk
+  integer(4) :: nj, nkn, nn, nnn, nom, np, np1, nq, nstep, nuki, nukj, nukjl, nukk
   integer(4) :: nukl, nukm, nukn, nukq, nukr
   real(8) :: dn
   !dimension dumj(13)

@@ -137,7 +137,8 @@ subroutine over13
   !  equivalence (cnvhst(1), cblhst(1))
   !  equivalence (namebr(1), infdli(1))
   !  equivalence (volt(1), vim(1))
-  !  equivalence (kks(1), cmr(1)), (kknonl(1), cmi(1))
+  !  equivalence (kks(1), cmr(1))
+  !  equivalence (kknonl(1), cmi(1))
   !  equivalence (lstat(14), mdrive)
   !  equivalence (ykm(1), w1(1))
   !  equivalence (semaux(1), wk1(1))
@@ -175,20 +176,6 @@ subroutine over13
   real(8) :: vi1, vi2, vr1, vr2, vsl, vsli, vsr, vsri
   real(8) :: wd, wdt, winic
   real(8) :: yx
-  !
-  integer(4), pointer :: infdli(:)
-  integer(4), pointer :: mdrive
-  real(8), pointer :: cblhst(:)
-  real(8), pointer :: vim(:)
-  real(8), pointer :: w1(:)
-  real(8), pointer :: wk1(:)
-  !
-  infdli(1 :) => namebr(1 :)
-  cblhst(1 :) => cnvhst(1 :)
-  mdrive => lstat(14)
-  vim(1 :) => volt(1 :)
-  w1(1 :) => ykm(1 :)
-  wk1(1 :) => semaux(1 :)
   !
   data text1 / 'parame' /
   data text2 / 'ters  ' /
@@ -2238,12 +2225,6 @@ subroutine last13
   real(8) :: trisum, trr, trrsum
   real(8) :: w, wdthaf, wfac, wpole, wshz
   double precision :: dblpr1, dblpr2, dblpr3, dblpr4
-  !
-  integer(4), pointer :: mdrive
-  real(8), pointer :: vim(:)
-  !
-  mdrive => lstat(14)
-  vim(1 :) => volt(1 :)
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format (' Begin module "last13".')

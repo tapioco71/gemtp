@@ -717,14 +717,7 @@ subroutine tables
   !  equivalence (ktemp(1), z(1))
   !  equivalence (moncar(2), kbase)
   !
-  integer(4), pointer :: idistx
-  integer(4), pointer :: kbase
-  !
   !     Burroughs: preserve local variable between module calls:
-  !
-  idistx => nenerg
-  itemp(1 :) = transfer (busum(1 :), itemp(1 :))
-  kbase => moncar(2)
   !
   iprsav(1 : 4) = (/ 0, 0, 0, 0 /)
   ll1 = 1

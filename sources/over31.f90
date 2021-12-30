@@ -10,6 +10,7 @@
 
 subroutine subr31
   use blkcom
+  use labcom, only : buslst, ibsout, ibrnch, jbrnch, karray
   use deck31
   use tracom
   use bcdtim
@@ -167,12 +168,12 @@ subroutine subr31
   if (kburro .eq. 1) long1 = 29
   call dimens (lltemp(1), long1, trash, trash)
   do i = 1, 9999, 2
-     if (lltemp(i) .ne. 0) go to 5654
+     if (lltemp(i) .ne. 0) exit
      maxev = lltemp(i + 1) * nbyte(6) / nbyte(5)
      go to 5655
-     end do
-5654 continue
-  call stoptp
+  end do
+  !  call stoptp
+  goto 9200
 5655 maxev = maxev - 8
   c1e12 = 1.e36
   !     The following variables are used as floating-point arguments of
@@ -256,7 +257,7 @@ subroutine subr31
   ialf = 0
   !     read input card using cimage
 1050 call cimage
-  read (unit = abuff, fmt = 1060) itp, aupper
+  read (unit = abuff, fmt = 1060) itp, (aupper(i), i = 1, 13)
 1060 format (i2, 13a6)
   if (iplot .lt. 0) go to 1070
   if (lunit4 .le. 0) go to 1070

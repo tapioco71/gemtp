@@ -5,15 +5,15 @@
 !
 
 module deck31
-  integer(4) :: karray(3)
+  ! integer(4) :: karray(3)
   !  common /c29b01/ karray(3)
   ! equivalences friend zone.
   ! from over31:
-  character(8) :: buslst(1)
-  integer(4) :: ibsout(1), ibrnch(1)
-  integer(4) :: jbrnch(1)
+  !character(8) :: buslst(1)
+  !integer(4) :: ibsout(1), ibrnch(1)
+  !integer(4) :: jbrnch(1)
   real(8) :: array(1), ev(2), evdoub(2)
-  equivalence (karray(1), array(1), ev(1), buslst(1), evdoub(1), ibsout(1), ibrnch(1), jbrnch(1))
+  !equivalence (karray(1), array(1), ev(1), buslst(1), evdoub(1), ibsout(1), ibrnch(1), jbrnch(1))
 end module deck31
 
 !

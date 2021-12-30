@@ -280,6 +280,7 @@ end subroutine over20
 subroutine katalg
   use comlock
   use blkcom
+  use labcom, only : karray
   use dekspy
   implicit none
   !     VAX-11/780  installation-dependent module which is used
@@ -5686,7 +5687,7 @@ subroutine locatn
   locate( 538)  =  location ( ksubum )
   locate( 539)  =  location ( nsmach )
   locate( 540)  =  location ( istart )
-  locate( 541)  =  location ( karray )
+  locate( 541)  =  location ( karray(1) )
   locate( 542)  =  location ( rampcn )
   locate( 543)  =  location ( rampsl )
   locate( 544)  =  location ( kyramp )

@@ -10,7 +10,7 @@ module ovr15c
   use umcom
   implicit none
   save
-  
+
 contains
 
   !
@@ -1054,11 +1054,6 @@ subroutine top15
   real(8) :: gus1, gus2, gus3, gus4
   real(8) :: h1, h2
   !
-  integer(4), pointer :: knum
-  integer(4), pointer :: nsubkm(:)
-  !
-  knum => lstat(14)
-  nsubkm(1 :) => kknonl(1 :)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 752) nenerg, ibr, kswtch, inonl
 752 format (/, ' Enter  "top15" .  nenerg     ibr  kswtch   inonl', /, 17x, 5i8)
   knum = 1

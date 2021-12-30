@@ -13,7 +13,7 @@ module dekspy
   integer(4) :: indbeg, indbuf, indxrp(20), intout(55), iprspy, itexp
   integer(4) :: ivec(1000)
   integer(4) :: jjroll, jword
-  integer(4) :: kar1(1), kar2(2), karray(3), kbegtx(85), kbreak, kbrser, kerase, kfile5
+  integer(4) :: kar1(1), kar2(2), kbegtx(85), kbreak, kbrser, kerase, kfile5
   integer(4) :: kilper, kolout, komadd, konadd(14), kontac(14), kopyit, kserlc
   integer(4) :: kslowr, ksmspy(3), kspsav, ksymbl, kverfy, kyramp(20)
   integer(4) :: labels(15), lidnt1, lidnt2, limarr(4), limbuf, limcrd, linnow
@@ -31,7 +31,7 @@ module dekspy
   real(8) :: tbegrp(20), tbreak, tendrp(20), tmaxrp, tminrp
   !  common /c29b01/ karray(3)                    ! "deck29" stores plot points
   real(8) :: pltbuf(1), forbyt(600)               ! real*4 plot storage
-  equivalence (pltbuf(1), karray(1))              ! /c29b01/ plot points
+  !  equivalence (pltbuf(1), karray(1))              ! /c29b01/ plot points
   logical :: logvar                               ! logical variable for "inquire" usage
   ! common /spycom/ rampcn(20), rampsl(20), kyramp(20)
   ! common /spycom/ fendrp(20), tminrp, tmaxrp

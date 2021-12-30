@@ -153,26 +153,6 @@ subroutine over2
   real(8) :: temp, turn1
   real(8) :: yzero
   !
-  integer(4), pointer :: iaddrs
-  integer(4), pointer :: ichtr2
-  integer(4), allocatable :: icrit(:)
-  integer(4), pointer :: infdli(:)
-  integer(4), pointer :: itranm
-  integer(4), pointer :: ityold
-  integer(4), pointer :: nmauto
-  real(8), pointer :: wk1(:)
-  !
-  iaddrs => indtv(1)
-  itranm => indtv(2)
-  ityold => indtv(3)
-  ichtr2 => indtv(4)
-  nmauto => iprsov(39)
-!  ll0 = size (transfer (crit, icrit))
-!  allocate (icrit(ll0))
-  icrit = transfer (crit, icrit)
-  infdli(1 :) => namebr(1 :)
-  wk1(1 :) => semaux(1 :)
-  !
   data text1   / 'stop c' /
   data text2   / 'ascade' /
   data text3   / 'use ab' /
@@ -2436,20 +2416,6 @@ subroutine distr2
   real(8) :: xlong, xlong1, xsum
   real(8) :: ysum
   !
-  integer(4), pointer :: iaddrs
-  integer(4), pointer :: ichtr2
-  integer(4), pointer :: infdli(:)
-  integer(4), pointer :: itranm
-  real(8), pointer :: cblhst(:)
-  real(8), pointer :: wk1(:)
-  !
-  infdli(1 :) => namebr(1 :)
-  cblhst(1 :) => cnvhst(1 :)
-  wk1(1 :) => semaux(1 :)
-  iaddrs => indtv(1)
-  itranm => indtv(2)
-  ichtr2 => indtv(4)
-  !
   data text2  / '   con' /
   data text3  / 'stant ' /
   data text4  / 'steady' /
@@ -3796,11 +3762,6 @@ subroutine over3
   real(8) :: freqc, freqx
   real(8) :: ymag2, yserr, yserx, yshunr, yshunx
   !
-  integer(4), pointer :: ipoint
-  integer(4), pointer :: locz11
-  !
-  ipoint => iprsov(35)
-  locz11 => iprsov(36)
   data text1  / 'stop' /
   data text2  / ' cas' /
   data text3  / 'cade' /

@@ -24,6 +24,7 @@ subroutine over7
   !  Following carries "next" among over6, insert, over7, & over9:
   !
   !  equivalence (loopss(11), next)
+  !
   integer(4) :: i, ib, icon, ii, ischm, ist, isubs1, isubs2
   integer(4) :: j, jb, jbs, jbt, js, jsub
   integer(4) :: k, kb, ks
@@ -33,19 +34,6 @@ subroutine over7
   real(8) :: td
   real(8) :: zzza
   !
-  integer(4), pointer :: iofkol
-  integer(4), pointer :: iofkor
-  integer(4), pointer :: lorder(:)
-  integer(4), allocatable :: ndex(:)
-  integer(4), pointer :: next
-  !
-  ll0 = size (transfer (e, ndex))
-  allocate (ndex(ll0))
-  ndex = transfer (e, ndex)
-  lorder(1 :) => ich2(1 :)
-  iofkol => iofgnd
-  iofkor => iofbnd
-  next => loopss(11)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over7."')
   ischm = 2
@@ -58,7 +46,7 @@ subroutine over7
      n1 = i + iofkol
      n2 = i + iofkor
      ndx1 = lswtch + i
-     write (unit = lunit6, fmt = 4055) i, kolum(n1), korder(n2), kownt(i), loc(i), kode(i), kbus(i), mbus(i), nr(i), length(i), kmswit(i), kmswit(ndx1)
+     write (unit = lunit6, fmt = 4055) i, kolum(n1), korder(n2), kownt(i), loca(i), kode(i), kbus(i), mbus(i), nr(i), length(i), kmswit(i), kmswit(ndx1)
 4055 format (12i8)
   end do
 4054 ioffd = 0
@@ -69,26 +57,29 @@ subroutine over7
   call move0 (ndex, lbus)
   nz = ncurr
   i = 0
-140 i = i + 1
-  if (ischm .eq. 3) go to 1510
-  j = kownt(i)
-  call subscr (i, lbus, 150, 1)
-  if (j .eq. (-1)) go to 170
-155 k =  int (ndex(j + 1))
-  jsub = j + 1
-  call subscr (jsub, lbus, 155, 1)
-  ich1(i) = k
-  call subscr (i, lbus, 155, 2)
-  if (k .gt. 0) ich2(k) = i
-  call subscr (k, lbus, 155, 99)
-  ndex(j + 1) = i
-  ich2(i) = 0
-  norder(i) = 0
-  go to 180
-170 nz = nz + 1
-  norder(i) = nz
-  call subscr (i, lbus, 170, 1)
-180 if (i .lt. ntot) go to 140
+140 do
+     i = i + 1
+     if (ischm .eq. 3) go to 1510
+     j = kownt(i)
+     call subscr (i, lbus, 150, 1)
+     if (j .eq. (-1)) go to 170
+155  k =  int (ndex(j + 1))
+     jsub = j + 1
+     call subscr (jsub, lbus, 155, 1)
+     ich1(i) = k
+     call subscr (i, lbus, 155, 2)
+     if (k .gt. 0) ich2(k) = i
+     call subscr (k, lbus, 155, 99)
+     ndex(j + 1) = i
+     ich2(i) = 0
+     norder(i) = 0
+     go to 180
+170  nz = nz + 1
+     norder(i) = nz
+     call subscr (i, lbus, 170, 1)
+     !180  if (i .lt. ntot) go to 140
+180  if (i .ge. ntot) exit
+  end do
   if (nz .eq. ntot) go to 190
   lstat(19) = 190
   nelim = 0
@@ -118,7 +109,7 @@ subroutine over7
   do ii = 1, 15
      n1 = ii + iofkol
      n2 = ii + iofkor
-     write (unit = lunit6, fmt = 4064) ii, kolum(n1), korder(n2), kownt(ii), loc(ii), ich1(ii), ich2(ii), ndex(ii)
+     write (unit = lunit6, fmt = 4064) ii, kolum(n1), korder(n2), kownt(ii), loca(ii), ich1(ii), ich2(ii), ndex(ii)
 4064 format (22x, 8i8)
   end do
 222 j = ich1(i)
@@ -140,7 +131,7 @@ subroutine over7
   do i = 1, 20
      n1 = i + iofkol
      n2 = i + iofkor
-     if (iprsup  .ge.  3) write (unit = lunit6, fmt = 5233) i, norder(i), index(i), iloc(i), lorder(i), kownt(i), loc(i), kolum(n1), korder(n2)
+     if (iprsup  .ge.  3) write (unit = lunit6, fmt = 5233) i, norder(i), index(i), iloc(i), lorder(i), kownt(i), loca(i), kolum(n1), korder(n2)
 5233 format (50x, 9i8)
   end do
   if (ioffd .le. 0) go to 233
@@ -157,7 +148,7 @@ subroutine over7
      index(i) = ioffd +1
      k = lorder(i)
      call subscr (k, lbus, 233, 2)
-     j = loc(k)
+     j = loca(k)
 234  if (j .eq. 0)   go to 236
      call subscr (j, lsiz23, 234, 1)
      isubs1 = iofkol + j
@@ -245,8 +236,8 @@ subroutine over7
 240 nelim = nelim +1
   if (ischm .eq. 1) go to 200
   call subscr (i, lbus, 240, 1)
-  if (loc(i) .eq. 0)   go to 200
-  ist = loc(i)
+  if (loca(i) .eq. 0)   go to 200
+  ist = loca(i)
   call subscr (i, lbus, 260, 1)
   jst = ist
   go to 290
@@ -261,7 +252,7 @@ subroutine over7
   isubs1 = iofkol + jst
   j = kolum(isubs1)
   call subscr (j, lbus, 290, 2)
-  jb = loc(j)
+  jb = loca(j)
   icon = -1
   jbs = 0
   if (jb .eq. 0) go to 200
@@ -321,7 +312,7 @@ subroutine over7
   call subscr (jbt, lsiz23, 390, 1)
   korder(isubs1) = mext
   go to 410
-400 loc(j) = mext
+400 loca(j) = mext
   call subscr (j, lbus, 400, 1)
 410 isubs1 = iofkor + ib
   call subscr (ib, lsiz23, 410, 1)
@@ -361,7 +352,7 @@ subroutine over7
   go to 790
 490 isubs1 = iofkor + jb
   call subscr (jb, lsiz23, 490, 1)
-  loc(j) = korder(isubs1)
+  loca(j) = korder(isubs1)
   call subscr (j, lbus, 490, 2)
   go to 790
 500 isubs1 = iofkol + jb
@@ -412,14 +403,14 @@ subroutine over7
   isubs1 =  iofkor + jb
   call subscr (jb, lsiz23, 590, 1)
   call subscr (j, lbus, 590, 2)
-  loc(j) = korder(isubs1)
+  loca(j) = korder(isubs1)
   isubs1 = iofkor + jb
   jb = korder(isubs1)
   go to 310
 600 isubs1 = iofkol + ib
   call subscr (ib, lsiz23, 600, 1)
   if (kolum(isubs1) .eq. j) go to 620
-610 loc(j) = next
+610 loca(j) = next
   call subscr (j, lbus, 610, 1)
   jb = next
   mext = next
@@ -441,7 +432,7 @@ subroutine over7
   call subscr (ib, lsiz23, 620, 1)
   ib = korder(isubs1)
   if (ib .ne. 0)   go to 610
-  loc(j) = 0
+  loca(j) = 0
   call subscr (j, lbus, 640, 1)
   go to 790
   ! 650 continue      eliminate "continue" not end of do loop
@@ -572,7 +563,7 @@ subroutine over7
   if (k .gt. 0) ich2(k) = j
   ich2(j) = 0
   go to 270
-1110 js = loc(i)
+1110 js = loca(i)
   call subscr (i, lbus, 1110, 1)
   go to 1130
 1120 isubs1 =  iofkor + js
@@ -585,7 +576,7 @@ subroutine over7
   j = kolum(isubs1)
   call subscr (j, lbus, 1150, 2)
   if (kownt(j) .lt. 0)   go to 1120
-  ks = loc(j)
+  ks = loca(j)
   ls = ks
   go to 1170
 1160 isubs1 = iofkor + ks
@@ -599,7 +590,7 @@ subroutine over7
   k = kolum(isubs1)
   jb = ls
   call subscr (k, lbus, 1190, 2)
-  kb = loc(k)
+  kb = loca(k)
 1200 isubs1 =  iofkol + jb
   isubs2 = iofkol + kb
   !     if (kolum(isubs1)    -kolum(isubs2)   ) 1210, 1250, 1270
@@ -684,7 +675,7 @@ subroutine over7
 1510 icon = 0
   call subscr (i,lbus, 1510, 1)
   if (kownt(i) .lt. 0) go to 170
-  ks = loc(i)
+  ks = loca(i)
   ls = ks
 1520 if (ks .ne. 0) go to 1540
   j = icon / 2
@@ -695,7 +686,7 @@ subroutine over7
   call subscr (ks, lsiz23, 1540, 1)
   k = kolum(isubs1)
   jb = ls
-  kb = loc(k)
+  kb = loca(k)
   call subscr (k,  lbus, 1540, 2)
 1550 isubs1 = iofkol + jb
   isubs2 = iofkol + kb
@@ -766,11 +757,7 @@ subroutine over7
   lastov = nchain
   nchain = 51
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
-99999 if (allocated (ndex)) then
-     e = transfer (ndex, e)
-     deallocate (ndex)
-  end if
-  return
+99999 return
 end subroutine over7
 
 !

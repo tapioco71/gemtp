@@ -8,7 +8,7 @@ module space2
   implicit none
   integer(4) :: index(40)
   integer(4) :: ich1(15)
-  integer(4), target :: ich2(15)
+  integer(4) :: ich2(15)
   integer(4) :: irandn(3)
   integer(4) :: iloc(40)
   !  common /spac01/ bnd (1)
@@ -36,16 +36,16 @@ module space2
   integer(4) :: norder(20)
 
   integer(4) :: kolum(30000), korder(30000), kownt(15)
-  integer(4) :: loc(15)
+  integer(4) :: loca(15)
   real(8) :: frandn(3)
 
   ! Equivalences
 
-  !  integer(4) :: lorder(15)
+  integer(4) :: lorder(15)
   !
   !  equivalence (diag(1), ich2(1))
-  !  equivalence (ich2(1), lorder(1))
-  equivalence (diab(1), loc(1))
+  equivalence (ich2(1), lorder(1))
+  equivalence (diab(1), loca(1))
   equivalence (solr(1), kownt(1))
   equivalence (bnd(1), korder(1))
   equivalence (gnd(1), kolum(1))

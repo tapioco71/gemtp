@@ -7,7 +7,7 @@
 module over12mod
   implicit none
   save
-  
+
 contains
 
   !
@@ -193,15 +193,15 @@ subroutine over12
   !
   !  equivalence (kks(1), cmr(1))
   !  equivalence (kknonl(1), cmi(1))
-  !  equivalence (moncar(1), knt), (moncar(2), kbase)
-  !  equivalence (moncar(3), ltdelt), (moncar(4), isw)
-  !  equivalence (moncar(5), idist), (moncar(6),itest)
+  !  equivalence (moncar(1), knt)
+  !  equivalence (moncar(2), kbase)
+  !  equivalence (moncar(3), ltdelt)
+  !  equivalence (moncar(4), isw)
+  !  equivalence (moncar(5), idist)
+  !  equivalence (moncar(6), itest)
   !  equivalence (moncar(8), jseedr)
-  !  equivalence (moncar(9), kloaep), (moncar(10), mtape)
-  !
-  real(8), pointer :: wk1(:)
-  !
-  wk1(1 :) => semaux(1 :)
+  !  equivalence (moncar(9), kloaep)
+  !  equivalence (moncar(10), mtape)
   !
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over12."')
@@ -1346,6 +1346,7 @@ subroutine  tacs2
   use tracom
   use movcop
   implicit none
+  character(8) :: dumj(9), texnam(5)
   integer(4) :: i, i1, i2, i3, i30, iac, idctcs, ilk, ip, ipass, ite
   integer(4) :: j, j1, j2, jcm, jlk, jmset
   integer(4) :: k, k1, k2, k3, kbtcs, kbwkcs, kh, kj, kjsup, kksup, krowcs
@@ -1365,9 +1366,9 @@ subroutine  tacs2
   real(8) :: picon, pru, prx
   real(8) :: real, rima
   real(8) :: xaisav, xarsav, xtcsav
-  character(8) :: dumj(9), texnam(5)
   !
-  !  equivalence (moncar(2), kbase), (moncar(3), ltdelt)
+  !  equivalence (moncar(2), kbase)
+  !  equivalence (moncar(3), ltdelt)
   !
   !1000 if (iprsup .ge. 1) write (lunit6, 1001)  lastov, m4plot
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 1001) lastov, m4plot

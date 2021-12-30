@@ -24,14 +24,11 @@ contains
     real(8), intent(out) :: array(:)
     character(8) :: chtacs, texbuf(30)
     integer(4) :: i, jj, ll, n3, n9
-    character(8), pointer :: text1
     !
     !  dimension array(1)
     !  equivalence (texvec(1), text1)
     !
-    !
     data chtacs / 'tacs  ' /
-    text1 => texvec(1)
     if (iprsup .ge. 5) write (unit = lunit6, fmt = 1016) nfrfld, nright, kolbeg
 1016 format (' Top "frefld".  nfrfld, nright, kolbeg =', 3i6)
     if (nright .lt. 0) go to 5913
@@ -42,21 +39,21 @@ contains
 5600   n3 = 0
        go to 5805
 5603   if (chcont .eq. chtacs) go to 5614
-       if (text1 .eq. blank) go to 5802
-       if (text1 .ne. csepar) go to 5623
+       if (texvec1 .eq. blank) go to 5802
+       if (texvec1 .ne. csepar) go to 5623
 5609   kolbeg = kolbeg + 1
        go to 5827
-5614   if (text1 .ne. csepar) go to 5623
-       if (text1 .eq. blank) go to 5802
+5614   if (texvec1 .ne. csepar) go to 5623
+       if (texvec1 .eq. blank) go to 5802
        go to 5609
 5623   if (n3 .lt. 30) go to 5627
        lstat(19) = 5623
        go to 9200
 5627   n3 = n3 + 1
-       texbuf(n3) = text1
+       texbuf(n3) = texvec1
 5802   kolbeg = kolbeg + 1
-5805   text1 = texcol(kolbeg)
-       if (text1 .ne. chcont) go to 5819
+5805   texvec1 = texcol(kolbeg)
+       if (texvec1 .ne. chcont) go to 5819
        !     read input card using cimage
        call cimage
        kolbeg = 1
@@ -78,16 +75,16 @@ contains
        if (kolbeg .le. 80) go to 5920
        lstat(19) = 5920
        go to 9200
-5920   text1 = texcol(kolbeg)
+5920   texvec1 = texcol(kolbeg)
        kolbeg = kolbeg + 1
        if (chcont .eq. chtacs) go to 5928
-       if (text1 .eq. blank) go to 5923
-       if (text1 .eq. csepar) go to 5948
+       if (texvec1 .eq. blank) go to 5923
+       if (texvec1 .eq. csepar) go to 5948
 5921   if (ll .le. 6) go to 5922
        lstat(19) = 5922
        go to 9200
-5928   if (text1 .eq. csepar) go to 5948
-       if (text1 .eq. blank) go to 5923
+5928   if (texvec1 .eq. csepar) go to 5948
+       if (texvec1 .eq. blank) go to 5923
        go to 5921
 5922   ll = ll + 1
        call packa1 (texvec(1), texta6(jj), ll)
@@ -103,13 +100,13 @@ contains
     texta6(jj) = blank
     ll = 0
     do
-       text1 = texcol(kolbeg)
+       texvec1 = texcol(kolbeg)
        if (chcont .eq. chtacs) go to 6051
-       if (text1 .eq. blank) go to 6054
-       if (text1 .eq. csepar) go to 6072
+       if (texvec1 .eq. blank) go to 6054
+       if (texvec1 .eq. csepar) go to 6072
        go to 6052
-6051   if (text1 .eq. csepar) go to 6072
-       if (text1 .eq. blank) go to 6054
+6051   if (texvec1 .eq. csepar) go to 6072
+       if (texvec1 .eq. blank) go to 6054
 6052   if (ll .eq. 6) go to 6042
        ll = ll + 1
        call packa1 (texvec(1), texta6(jj), ll)

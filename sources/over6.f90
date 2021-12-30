@@ -37,13 +37,6 @@ subroutine over6
 
   !  equivalence (loopss(11), next)
   !
-  integer(4), pointer :: iofkol
-  integer(4), pointer :: iofkor
-  integer(4), pointer :: next
-  !
-  iofkol => iofgnd
-  iofkor => iofbnd
-  next => loopss(11)
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
 4567 format ('  "Begin module over6."')
   ntot1 = ntot - 1
@@ -136,7 +129,7 @@ subroutine over6
   call move0 (kolum(1 :), ibr)
   !     output network-connectivity table if so requested (idoubl=1).
   if (idoubl .le. 0) go to 5324
-  call move0 (loc(1 :), ntot)
+  call move0 (loca(1 :), ntot)
   next = 1
   i = 1
 5010 if (i .gt. ibr) go to 5040
@@ -175,10 +168,10 @@ subroutine over6
   go to 5065
 5200 if (k .gt. ntot .or. m .gt. ntot) go to 5240
   ipass = 0
-5204 lleft = loc(k)
+5204 lleft = loca(k)
   if (lleft .gt. 0) go to 5214
   ltest = 0
-5208 loc(k) = next
+5208 loca(k) = next
   go to 5235
 5214 isubs1 = iofkol + lleft
   jleft = kolum(isubs1)
@@ -229,9 +222,9 @@ subroutine over6
   n22 = kwtspy
   ipass = 0
   k = 2
-5268 if (loc(k) .eq. 0) go to 5294
+5268 if (loca(k) .eq. 0) go to 5294
   bus5 = bus(k)
-5270 ltest = loc(k)
+5270 ltest = loca(k)
   if (ltest .eq. 0) go to 5294
 5272 isubs1 = iofkol + ltest
   m = kolum(isubs1)
@@ -300,7 +293,7 @@ subroutine over6
   go to 40013
 5351 next = 1
   nz = 0
-  call move0 (loc(1 :), ntot)
+  call move0 (loca(1 :), ntot)
   call move0 (kownt(1 :), ntot)
   i = 1
 41001 l = iabs (length(i))
@@ -482,9 +475,6 @@ subroutine insert (irrr, icc)
   !
   !  equivalence (loopss(11), next)
   !
-  integer(4), pointer :: next
-  !
-  next => loopss(11)
   if (irrr .le. 1) return
   if (icc .le. 1) return
   if (irrr .eq. icc) return
@@ -493,13 +483,13 @@ subroutine insert (irrr, icc)
   ir = irrr
   irr = irrr
   ic = icc
-99 irn = loc(ir)
+99 irn = loca(ir)
   if (irn .eq. 0) go to 1
   n2 = irn + iofgnd
   n1 = ic - kolum(n2)
   if (n1 .gt. 0) go to 2
   if (n1 .eq. 0) go to 5
-1 loc(ir) = next
+1 loca(ir) = next
   go to 4
 2 ir = irn
   isubs1 = iofbnd + ir

@@ -251,14 +251,6 @@ subroutine over11
   !      Preceding "jch2" uses "imfd" just for "frequency scan".
   !      as such, there must be no freq-depend sources present.
   !
-  integer(4), pointer :: imfd(:)
-  integer(4), pointer :: knt
-  real(8), pointer :: vim(:)
-  !
-  vim(1 :) => volti(1 :)
-  imfd(1 :) => jch2(1 :)
-  knt => moncar(1)
-  !
   data text1 / 'mag   ' /
   data text2 / 'angle ' /
   data text3 / 'real  ' /
@@ -543,18 +535,19 @@ subroutine over11
      e(i) = e(i) + diag(i) * vr - diab(i) * vi
      f(i) = f(i) + diag(i) * vi + diab(i) * vr
      go to 7370
-7360 jj = jj + 1
-7370 if (jj .ge. kkk) go to 7380
-     j = iloc(jj)
-     isubs1 = iofgnd + jj
-     isubs2 = iofbnd + jj
-     der = gnd(isubs1) * vr - bnd(isubs2) * vi
-     dei = gnd(isubs1) * vi + bnd(isubs2) * vr
-     e(j) = e(j) + der
-     f(j) = f(j) + dei
-     e(i) = e(i) + gnd(isubs1) * solr(j) - bnd(isubs2) * soli(j)
-     f(i) = f(i) + gnd(isubs1) * soli(j) + bnd(isubs2) * solr(j)
-     go to 7360
+7360 do
+        jj = jj + 1
+7370    if (jj .ge. kkk) go to 7380
+        j = iloc(jj)
+        isubs1 = iofgnd + jj
+        isubs2 = iofbnd + jj
+        der = gnd(isubs1) * vr - bnd(isubs2) * vi
+        dei = gnd(isubs1) * vi + bnd(isubs2) * vr
+        e(j) = e(j) + der
+        f(j) = f(j) + dei
+        e(i) = e(i) + gnd(isubs1) * solr(j) - bnd(isubs2) * soli(j)
+        f(i) = f(i) + gnd(isubs1) * soli(j) + bnd(isubs2) * solr(j)
+     end do
   end do
 7380 continue
   if (kssout .eq. 0) go to 7394

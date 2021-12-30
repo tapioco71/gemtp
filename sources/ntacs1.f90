@@ -14,20 +14,12 @@ subroutine ntacs1
   use tacsar
   use labcom
   implicit none
-  !equivalence (moncar(71), ltacst), (moncar(83), ntcsex)
+  !  equivalence (moncar(71), ltacst)
+  !  equivalence (moncar(83), ntcsex)
   !  integer(4) :: maxniu, maxnuk
   !  equivalence (lstat(67), maxniu)
   !  equivalence (lstat(68), maxnuk)
   !
-  integer(4), pointer :: ltacst
-  integer(4), pointer :: maxniu
-  integer(4), pointer :: maxnuk
-  integer(4), pointer :: ntcsex
-  !
-  ltacst => moncar(71)
-  ntcsex => moncar(83)
-  maxniu => lstat(67)
-  maxnuk => lstat(68)
   ntcsex = 1
   do i = 1, 23
      sptacs(i) = 0.0d0

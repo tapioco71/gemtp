@@ -12,7 +12,7 @@
 module ovr8com
   implicit none
   save
-  
+
 contains
 
   function indblk (tempbus) result(ind)
@@ -2485,16 +2485,6 @@ subroutine over8
   real(8) :: sinha, sinhgi, sinhgr
   real(8) :: xi1, xi2, xr1, xr2
   real(8) :: ychara, ycharm, yneg, ypos
-  !
-  integer(4), pointer :: infdli(:)
-  integer(4), pointer :: knt
-  real(8), pointer :: vim(:)
-  real(8), pointer :: wk1(:)
-  !
-  infdli(1 :) => namebr(1 :)
-  vim(1 :) => volt(1 :)
-  wk1(1 :) => semaux(1 :)
-  knt => moncar(1)
   !
   ! 1001 if ( iprsup .ge. 1 )
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 101) loopss(1), iv, it, tmax
