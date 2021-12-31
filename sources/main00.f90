@@ -125,10 +125,10 @@
 !          through  200.   the exiting linkage is to the
 !          last error overlay.
 !
-!     55.  Final error overlay.  messages for  kill = 201
+!     55.  Final error overlay.  Messages for  kill = 201
 !          onward are contained, as well as summary statistics
 !          --- table sizes and timing figures for the run.
-!          the exiting linkage is generally to module  over1  (to read
+!          The exiting linkage is generally to module  over1  (to read
 !          a new data case), but may be to module  over31 (for final
 !          case termination).
 !**********************************************************************
@@ -144,6 +144,7 @@ end module timers
 !
 
 program gemtp
+  use iso_fortran_env, only: int32
   use blkcom
   use volpri
   use iocons
@@ -153,13 +154,13 @@ program gemtp
   !
   data ll34 / 34 /
   !     unit assignments of "over1" needed earlier by spy:
-  lunit0 = gfortran_stderr_unit
+  lunit0 = 0
   lunit1 = 1
   lunit2 = 2
   lunit3 = 3
   lunit4 = 4
-  lunit5 = gfortran_stdin_unit
-  lunit6 = gfortran_stdout_unit
+  lunit5 = 5
+  lunit6 = 6
   lunit7 = 7
   lunit8 = 8
   lunit9 = 9
@@ -215,112 +216,105 @@ contains
 
   subroutine a2010
     if (m4plot .eq. 1) call emtspy
-    if (nchain .gt. 29) then
-       if (nchain .gt. 31) then
-          if (nchain .gt. 39) then
-             if (nchain .gt. 41) then
-                if (nchain .gt. 42) then
-                   if (nchain .gt. 44) then
-                      if (nchain .gt. 45) then
-                         if (nchain .gt. 47) then
-                            if (nchain .gt. 51) then
-                               if (nchain .gt. 52) then
-                                  if (nchain .gt. 53) then
-                                     if (nchain .gt. 54) then
-                                        if (nchain .gt. 55) then
-                                           write (unit = lunit6, fmt = 9236) nchain
-9236                                       format (/, ' Illegal nchain in main00.', i8)
-                                        else
-#ifdef WITH_OVER55
-                                           call over55
-#else
-                                           call dummy
-#endif
-                                        end if
-                                     else
-#ifdef WITH_OVER54
-                                        call over54
-#else
-                                        call dummy
-#endif
-                                     end if
-                                  else
-#ifdef WITH_OVER53
-                                     call over53
-#else
-                                     call dummy
-#endif
-                                  end if
-                               else
-#ifdef WITH_OVER52
-                                  call over52
-#else
-                                  call dummy
-#endif
-                               end if
-                            else
-#ifdef WITH_OVER51
-                               call over51
-#else
-                               call dummy
-#endif
-                            end if
-                         else
-#ifdef WITH_OVER47
-                            call over47
-#else
-                            call dummy
-#endif
-                         end if
-                      else
-#ifdef WITH_OVER45
-                         call over45
-#else
-                         call dummy
-#endif
-                      end if
-                   else
-#ifdef WITH_OVER44
-                      call over44
-#else
-                      call dummy
-#endif
-                   end if
-                else
-#ifdef WITH_OVER42
-                   call over42
-#else
-                   call dummy
-#endif
-                end if
-             else
-#ifdef WITH_OVER41
-                call over41
-#else
-                call dummy
-#endif
-             end if
-          else
-#ifdef WITH_OVER39
-             call over39
-#else
-             call dummy
-#endif
-          end if
-       else
-#ifdef WITH_OVER31
-          call over31
-#else
-          call dummy
-#endif
-       end if
-    else
+    select case (nchain)
+    case (29)
 #ifdef WITH_OVER29
        call over29
 #else
        call dummy
 #endif
-    end if
+
+    case (31)
+#ifdef WITH_OVER31
+       call over31
+#else
+       call dummy
+#endif
+
+    case (39)
+#ifdef WITH_OVER39
+       call over39
+#else
+       call dummy
+#endif
+
+    case (41)
+#ifdef WITH_OVER41
+       call over41
+#else
+       call dummy
+#endif
+
+    case (42)
+#ifdef WITH_OVER42
+       call over42
+#else
+       call dummy
+#endif
+
+    case (44)
+#ifdef WITH_OVER44
+       call over44
+#else
+       call dummy
+#endif
+
+    case (45)
+#ifdef WITH_OVER45
+       call over45
+#else
+       call dummy
+#endif
+
+    case (47)
+#ifdef WITH_OVER47
+       call over47
+#else
+       call dummy
+#endif
+
+    case (51)
+#ifdef WITH_OVER51
+       call over51
+#else
+       call dummy
+#endif
+
+    case (52)
+#ifdef WITH_OVER52
+       call over52
+#else
+       call dummy
+#endif
+
+    case (53)
+#ifdef WITH_OVER53
+       call over53
+#else
+       call dummy
+#endif
+
+    case (54)
+#ifdef WITH_OVER54
+       call over54
+#else
+       call dummy
+#endif
+
+    case (55)
+#ifdef WITH_OVER55
+       call over55
+#else
+       call dummy
+#endif
+
+    case default
+       write (unit = lunit6, fmt = 9236) nchain
+9236   format (/, ' Illegal nchain in main00.', i8)
+       call stoptp
+
+    end select
+
   end subroutine a2010
 
   subroutine a4372
@@ -364,13 +358,13 @@ subroutine erexit
   !     called by the top of "main00", before any emtp data input.
   !     dimension idum(3)                                   !  dummy vector for ctrl-c handling
 
-  external kwiter                                           ! needed for ctrl-c initialization
+  external kwiter                                 ! needed for ctrl-c initialization
   !
-  lunit6 = gfortran_stdout_unit                             ! for use of "prompt" until fixed tt?? address
-  muntsv(2) = 49                                            ! alternate munit5 unit number of spy
-  kwtvax = 0                                                ! set flag corresponding to no ctrl-c usage
-  !      call enable_ctrl_c ( kwiter, idum(1) )             ! initialize ctrl-c
-  call datain                                               ! read data in, process $include, spy, etc.
+  lunit6 = 6                                      ! for use of "prompt" until fixed tt?? address
+  muntsv(2) = 49                                  ! alternate munit5 unit number of spy
+  kwtvax = 0                                      ! set flag corresponding to no ctrl-c usage
+  !      call enable_ctrl_c ( kwiter, idum(1) )   ! initialize ctrl-c
+  call datain                                     ! read data in, process $include, spy, etc.
   return
 end subroutine erexit
 
@@ -557,8 +551,6 @@ subroutine cimage
   if (iprsup .ge. 10) write (unit = lunit6, fmt = 987) lunit5, lunit6, noutpr, numdcd
 987 format (' Begin cimage.  lunit5, lunit6, noutpr, numdcd =', 4i5)
 1000 if (m4plot .eq. 1) call emtspy                         ! interactive usage
-  !  if (lunit5 .gt. 0) read (unit = lunit5, fmt = 3000, end = 4000) (buff10(i), i = 1, 10)
-  !3000 format (10a8)
   if (lunit5 .gt. 0) read (unit = lunit5, fmt = 3000, end = 4000) buff10
 3000 format (a80)
   if (lunit5 .le. 0) call nextcard
@@ -574,27 +566,17 @@ subroutine cimage
   if (text2 .ne. blank) go to 3034
 1036 if (noutpr .ne. 0) go to 1000
   if (n11 .ne. 0) go to 1000
-  !  if (kol132 .eq. 132) write (unit = lunit6, fmt = 3015) buff10
-  !3015 format (' Comment card.', 37x, '|', 10a8)
   if (kol132 .eq. 132) write (unit = lunit6, fmt = 3015) buff10
-3015 format (' Comment card.', 37x, '|', a89)
-  !  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) (abuff(j), j = 1, 4)
-  !3016 format (' Comment card.', 37x, '1', 3a8, a5)
+3015 format (' Comment card.', 37x, '|', a80)
   if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) abuff
-3016 format (' Comment card.', 37x, '1', a29)
+3016 format (' Comment card.', 37x, '1', a20)
   go to 1000
 3034 if (noutpr .ne. 0) go to 3035
-  !  if (kol132 .eq. 132) write (unit = lunit6, fmt = 3006) (buff10(i), i = 1, 10)
-  !3006 format (51x, '|', 10a8)
-  if (kol132 .eq. 132) write (unit = lunit6, fmt = 3006) buff10
-3006 format (51x, '|', a80)
-  !  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) (abuff(j), j = 1, 4)
-  !3007 format (51x, '1', 3a8, a5)
-  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007) abuff
-3007 format (51x, '1', a29)
+  if (kol132 .eq. 132) write (unit = lunit6, fmt = 3006, advance = 'no') buff10, achar (13)
+3006 format (51x, '|', a80, a1)
+  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007, advance = 'no') abuff, achar (13)
+3007 format (51x, '1', a29, a1)
 3035 if (n13 .gt. 0) go to 3011
-  !  print 3009, numdcd, (abuff(i), i = 1, 9)
-  !3009 format (1x, i5, ' :', 9a8)
   print 3009, numdcd, abuff(1 : 72)
 3009 format (1x, i5, ' :', a72)
   n13 = n12
@@ -615,7 +597,6 @@ subroutine cimage
 3041 format (80a1)
   !     Dan Goldsworthy had trouble with $listoff within $include
   !     which was within tacs supplemental variables.  wsm+thl
-  !  if (to_lower (abuff(1)) .ne. '$listoff' .and. to_lower (abuff(1)) .ne. '$liston') go to 3042
   if (to_lower (abuff(1 : 8)) .ne. '$listoff' .and. to_lower (abuff(1 : 8)) .ne. '$liston') go to 3042
   go to 3246
   !     chcont is 'tacs' if cimage called from within tacs fortran express

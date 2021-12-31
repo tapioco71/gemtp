@@ -6,6 +6,7 @@
 
 module bcddat
   implicit none
+  character(4) :: date1(2)
 
 contains
 
@@ -32,7 +33,7 @@ contains
     !     VAX-11/780.    'idate'  is a  dec  system subroutine which
     !     returns the month, day, and year (of century) as three  integer*2
     !     numerical values.
-    character(8), dimension(:), intent(out) :: a
+    character(4), dimension(:), intent(out) :: a
     character(8) :: date
     call date_and_time (date = date)
     write (unit = a(1), fmt = 10) date(7 : 8), date(5 : 5)

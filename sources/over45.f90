@@ -147,11 +147,10 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
   data text16 / 'consta' /
   data text17 / 'nts   ' /
   ll6 = 6
-  if ( lastov  .eq.  1 )   go to 3107
-  if ( iprsup  .ge.  1 ) write (lunit6, 3106)  lunit5, ialter, lastov, nss, icheck, iotx, ioss, iofl, ktab, ci1, ck1, voltbc(1), voltk(1), volti(1)
-3106 format (/,  " At beginning of 'over45' .  lunit5  ialter  lastov     nss  icheck    iotx    ioss    iofl    ktab", /, &
-       27x,  9i8, /, 13x, 3hci1, 12x, 3hck1, 6x, 9hvoltbc(1), 7x, 8hvoltk(1), 7x, 8hvolti(1),    /, 1x, 5e15.6     )
-  if ( ialter  .eq.  3 )   go to 10140
+  if (lastov .eq. 1) go to 3107
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 3106) lunit5, ialter, lastov, nss, icheck, iotx, ioss, iofl, ktab, ci1, ck1, voltbc(1), voltk(1), volti(1)
+3106 format (/,  " At beginning of 'over45' .  lunit5  ialter  lastov     nss  icheck    iotx    ioss    iofl    ktab", /, 27x,  9i8, /, 13x, 'ci1', 12x, 'ck1', 6x, 'voltbc(1)', 7x, 'voltk(1)', 7x, 'volti(1)', /, 1x, 5e15.6)
+  if (ialter .eq. 3) go to 10140
   go to 10180
   !     default definition of  'tolerances'  parameters.
 3107 eps = 0.5d-4

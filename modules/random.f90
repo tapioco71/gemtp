@@ -24,7 +24,7 @@ contains
     !     with the first four characters of   'hh.mm.ss'   assumed to be
     !     in  atim(1) ,  and the last four in  atim(2) .
     !
-    character(8), intent(in) :: atim(2)
+    character(4), intent(in) :: atim(2)
     integer(4) :: amin, hour, ihr, imin, imin1, imin10, isec, sec
     real(8) :: s
     !

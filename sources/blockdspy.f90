@@ -7,7 +7,6 @@
 module blkhlp
   use dekspy
   block data blkhlp
-     !   include 'dekspy.ftn'
      data texspy (   1 ) / 'key word no.  1:  "heading"     ----  ----  ----                                ' /
      data texspy (   2 ) / '  Response will be the printing of the previously-defined heading of  "examine",' /
      data texspy (   3 ) / '  followed by current values of all variables (as for the 1st  "examine"  use). ' /

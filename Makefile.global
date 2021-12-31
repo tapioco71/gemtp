@@ -100,6 +100,7 @@ F90_FLAGS=	-O0				\
 		-fcheck=all			\
 		-finit-local-zero		\
 		-fno-automatic			\
+		-fbackslash			\
 		-J${COMPILER}			\
 		-DWITH_MAIN10			\
 		-DWITH_OVER1			\

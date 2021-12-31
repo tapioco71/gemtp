@@ -1042,7 +1042,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   lastov=nchain
   nchain=51
 9900 if ( iprsup  .ge.  1 ) write (lunit6, 2592)  nchain, lunit5, numaki, ialter
-2592 format ( /,  17h exit  'subr47' ., 32h  nchain  lunit5  numaki  ialter  ,/,  17x,  4i8  )
+2592 format (/, " Exit  'subr47' .  nchain  lunit5  numaki  ialter", /, 17x, 4i8)
   return
 end subroutine guts47
 
@@ -1301,7 +1301,7 @@ subroutine datout (w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, 
   integer(4) :: ncros, ntype, nub3
   real(8) :: xleng
   !
-  lunit6 = gfortran_stdout_unit
+  lunit6 = 6
   lunit7 = 7
   !     ltype=0 ; output rs
   !     ltype=1 ; not output rs
@@ -1505,7 +1505,7 @@ subroutine pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c, npk)
   real(8), intent(in) :: r(npk)
   integer(4) :: ll, lunit6, lunit7
   !
-  lunit6 = gfortran_stdout_unit
+  lunit6 = 6
   lunit7 = 7
   continue
   if (k .ne. 1) go to 15
@@ -1576,7 +1576,7 @@ subroutine nyan (itype, npc, nc, ncpp, ngrnd, ncros, npais, ldm)
   integer(4) :: lunit6
   integer(4) :: nwork
   !
-  lunit6 = gfortran_stdout_unit
+  lunit6 = 6
   if (itype .eq. 1) return
   if (ncros .eq. 0) return
   if (npc .ne. 3) go to 9000
@@ -1630,7 +1630,7 @@ subroutine gomen (itype, npc, nx, npais, ncros, irsep, ncpp, ldm)
   integer(4) :: i
   integer(4) :: lunit6
   !
-  lunit6 = gfortran_stdout_unit
+  lunit6 = 6
   if (npais .lt. 0) go to 1000
   if (ncros .ne. 0) go to 1200
   if (irsep .eq. 0) return

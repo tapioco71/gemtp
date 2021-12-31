@@ -429,6 +429,8 @@ subroutine spying
   implicit none
   !     Module of interactive EMTP only, which services "emtspy".
   !     This is the principle module, called by "emtspy".
+  character(4) :: spytim(2), spdate(2)
+  character(8) :: chard7
   integer(4) :: i, icomm, idmxxx, ind, intype, ios
   integer(4) :: j, jwdsav
   integer(4) :: k, k1, k2, k3, kansav, khead, kp
@@ -442,7 +444,6 @@ subroutine spying
   real(8) :: tim1rp, tim2rp, twhen
   real(8) :: val1rp, val2rp
   real(8) :: xl
-  character(8) :: chard7, spytim(2), spdate(2)
   !
   if (iprspy .lt. 1) go to 31006
   write (unit = munit6, fmt = 1006) nchain, jjroll, kbreak, lockbr, nexmod, buff77(1 : 20)
@@ -2089,8 +2090,10 @@ subroutine spyink
   use dekspy
   use indcom
   use tracom
+  use bcddat
   use bcdtim
   use movcop
+  use strcom
   implicit none
   !     Module of interactive emtp only, which services "emtspy".
   !     this is the 2nd half of principle module "spying".
@@ -3236,27 +3239,27 @@ subroutine spyink
   go to 9800
 4029 open (unit = lunit4, status = buff77, file = ansi32, form = 'unformatted' )
   go to 4008
-4036 if ( buff77(1:4) .ne. 'top ' )  go to 4051
+4036 if (buff77(1:4) .ne. 'top ') go to 4051
 4037 rewind lunit4
-  read (lunit4)  date1, tclock, n1, n2, n3, n4
-  if ( nchain .le. 16  .or. nchain .gt. 20 ) go to 4044
-  if ( n2 .eq. numnvo  .and. n3 .eq. nc-nv   .and. n4 .eq. nc )  go to 4044
-  write (munit6, 4038)
-4038 format ( '   ++++  Error.  Inconsistent lunit4 plot file.  Automatic close.  Try again.')
+  read (unit = lunit4) date1, tclock, n1, n2, n3, n4
+  if (nchain .le. 16 .or. nchain .gt. 20) go to 4044
+  if (n2 .eq. numnvo .and. n3 .eq. nc-nv .and. n4 .eq. nc) go to 4044
+  write (unit = munit6, fmt = 4038)
+4038 format ('   ++++  Error.  Inconsistent lunit4 plot file.  Automatic close.  Try again.')
   call window
-  write (munit6, 4039)  date1, tclock, n1, n2, n3, n4
-4039 format ('         date1, tclock =', 2( 1x, 2a4), 5x, 'n1:n4 =', 4i8)
+  write (unit = munit6, fmt = 4039) date1, tclock, n1, n2, n3, n4
+4039 format ('         date1, tclock =', 2(1x, 2a4), 5x, 'n1:n4 =', 4i8)
   call window
-  close (lunit4)
+  close (unit = lunit4)
   go to 4008
-4044 if ( n2 .gt. 0 )  read (lunit4)  n5
-  if ( n4 .gt. 0 )  read (lunit4)  n6
+4044 if (n2 .gt. 0) read (unit = lunit4) n5
+  if (n4 .gt. 0) read (unit = lunit4) n6
   kptplt = numnvo + nc
-  if ( buff77(1:5) .eq. 'time ' ) go to 24085
+  if (to_lower (buff77(1 : 5)) .eq. 'time ') go to 24085
   go to 4008
-4051 if ( buff77(1:4) .ne. 'bot ' )  go to 4068
+4051 if (to_lower (buff77(1 : 4)) .ne. 'bot ') go to 4068
   n15 = 0
-  do k=1, 100
+  do k = 1, 100
      do j = 1, 1000
 !4053    read (lunit4, end=4062)  forbyt(1)
         read (unit = lunit4, end = 4062) forbyt(1)
@@ -3269,58 +3272,58 @@ subroutine spyink
 !4059 continue
   go to 4008
 4062 n15 = n15 + j
-  write (munit6, 4063)  forbyt(1), n15
+  write (unit = munit6, fmt = 4063) forbyt(1), n15
 4063 format ('       Ok, at end lunit4.  t-end =', e15.6, '   steps taken =', i8)
   call window
   go to 4008
-4068 if ( buff77(1:4) .ne. 'next' )  go to 4079
-!4069 read (lunit4, end=4075)  ( forbyt(j), j=1, kptplt+1 )
+4068 if (to_lower (buff77(1 : 4)) .ne. 'next') go to 4079
+  !4069 read (lunit4, end=4075)  ( forbyt(j), j=1, kptplt+1 )
   read (unit = lunit4, end = 4075) (forbyt(j), j = 1, kptplt + 1)
   write (unit = munit6, fmt = 4071) (forbyt(j), j = 1, kptplt + 1)
 4071 format (1x, 10e13.4)
   call window
-  if ( forbyt(1) .lt. d24 )  d24 = forbyt(1)
+  if (forbyt(1) .lt. d24) d24 = forbyt(1)
   go to 4008
-4075 write (munit6, 4076)
+4075 write (unit = munit6, fmt = 4076)
 4076 format ('     ===   Sorry,  no more  lunit4  data.   eof hit.')
   call window
   go to 4008
-4079 if ( buff77(1:4) .ne. 'back' )  go to 4083
-  if ( noback .ne. 1 )  go to 4082
-  write (munit6, 4080)
+4079 if (to_lower (buff77(1 : 4)) .ne. 'back') go to 4083
+  if (noback .ne. 1)  go to 4082
+  write (unit = munit6, fmt = 4080)
 4080 format ('    Ok,  but wait for  "top"  and  "time"  using  t = t - 2*deltat')
   call window
-  buff77(1:5) = 'time '
+  buff77(1 : 5) = 'time '
   d8 = forbyt(1) - 2 * deltat
   go to 4037
 4082 backspace lunit4
-  read (lunit4, end=4075)   ( forbyt(j), j=1, kptplt+1 )
-  write (munit6, 4071)      ( forbyt(j), j=1, kptplt+1 )
+  read (unit = lunit4, end = 4075) (forbyt(j), j = 1, kptplt + 1)
+  write (unit = munit6, fmt = 4071) (forbyt(j), j = 1, kptplt + 1)
   call window
-  if ( forbyt(1) .gt. d24 ) backspace lunit4
+  if (forbyt(1) .gt. d24) backspace lunit4
   go to 4008
-4083 if ( buff77(1:4) .ne. 'time' )  go to 4098
-  write (prom80, 4084)  forbyt(1)
+4083 if (to_lower (buff77(1 : 4)) .ne. 'time') go to 4098
+  write (unit = prom80, fmt = 4084) forbyt(1)
 4084 format ('       Send desired time [',  e15.6,  ' ] :')
   !  assign 4085 to nextsn
   nextsn = 4085
   go to 9800
-4085 call frefp1 ( buff77, d8 )
+4085 call frefp1 (buff77, d8)
 24085 n15 = 0
   do k = 1, 100
      do j = 1, 1000
-        read (lunit4, end = 4090) forbyt(1)
+        read (unit = lunit4, end = 4090) forbyt(1)
         if (forbyt(1) .ge. d8) go to 4094
      end do
 !4086 continue
      n15 = n15 + 1000
-     write (munit6, 4056)  n15
+     write (unit = munit6, fmt = 4056) n15
      call window
   end do
 !4089 continue
   go to 4008
 4090 n15 = n15 + j
-  write (munit6, 4091)   n15
+  write (unit = munit6, fmt = 4091) n15
 4091 format ('      ? ? ?   Search fails with eof after', i8, '   steps.')
   call window
   go to 4008
@@ -3330,33 +3333,33 @@ subroutine spyink
   call window
   go to 4008
   !     put any later operation choices here and below:
-4098 write (munit6, 2796)
+4098 write (unit = munit6, fmt = 2796)
   call window
   go to 4008
   !     $$$$$$$  key word no. 52:  "series"   $$$$  $$$$  $$$$  $$$$  $$$$
-4163 if ( nchain .le. 11 ) kbrser = 1
+4163 if (nchain .le. 11) kbrser = 1
   n42 = lstat(22)
   n43 = lstat(23)
-  if ( kbrser .ne. 2 )  go to 4165
-  write (munit6, 4164)
+  if (kbrser .ne. 2) go to 4165
+  write (unit = munit6, fmt = 4164)
 4164 format ('   @ @ @ @ @ @   Ok, guy, this is the "over12" break for "series" usage.')
   call window
   kbrser = 0
-4165 write (prom80, 4166)
+4165 write (unit = prom80, fmt = 4166)
 4166 format ('  Operation (show, extra, change, step, rewind) :')
   !  assign 4169 to nextsn
   nextsn = 4169
   go to 9800
-4169 ansi32 = buff77(1:32)
-  if ( ansi32(1:6) .ne. 'rewind' )  go to 4172
+4169 ansi32 = buff77(1 : 32)
+  if (to_lower (ansi32(1 : 6)) .ne. 'rewind') go to 4172
   kserlc = 0
   lserlc = 0
   go to 4165
-4172 if (ansi32(1:5) .ne. 'show ')  go to 4184
+4172 if (to_lower (ansi32(1 : 5)) .ne. 'show ')  go to 4184
   write (unit = munit6, fmt = 4174)
 4174 format ('  Memory:  list-2 ---', 2i5, '     list-3 ---', 2i5, '    lserlc =', i4)
   call window
-  write (munit6, 4175)  n42, lbrnch, n43, ldata, lserlc
+  write (unit = munit6, fmt = 4175) n42, lbrnch, n43, ldata, lserlc
 4175 format (' num row use  bus-k  bus-m   name ????', 5x, 'present-R', 5x, 'present-L',  5x, 'present-C')
   call window
   do j = 1, lserlc
@@ -3372,48 +3375,48 @@ subroutine spyink
   end do
 4180 continue
   go to 4165
-4184 if ( ansi32(1:5) .ne. 'extra' )  go to 4197
-  write (munit6, 4187)
+4184 if (to_lower (ansi32(1 : 5)) .ne. 'extra') go to 4197
+  write (unit = munit6, fmt = 4187)
 4187 format (4x, 'starting-R', 3x, 'starting-L', 3x, 'starting-C', 7x, 'next-R', 7x, 'next-L', 7x, 'next-C')
   call window
-  do j=1, lserlc
+  do j = 1, lserlc
      ndx1 = n42 + j
-     if ( kbus(ndx1) .eq. 0 )  go to 4192
+     if (kbus(ndx1) .eq. 0) go to 4192
      ndx2 = n43 + j
-     write (munit6, 4191)  cki(ndx1), ckkjm(ndx1), r(ndx2), tr(ndx2), tx(ndx2), c(ndx2)
+     write (unit = munit6, fmt = 4191) cki(ndx1), ckkjm(ndx1), r(ndx2), tr(ndx2), tx(ndx2), c(ndx2)
 4191 format (1x, 6e13.4)
      call window
   end do
 4192 continue
   go to 4165
-4197 if ( ansi32(1:5) .ne. 'step ' )  go to 4211
+4197 if (to_lower (ansi32(1 : 5)) .ne. 'step ') go to 4211
   kserlc = 1
   go to 4165
-4211 if ( ansi32(1:6) .ne. 'change' )  go to 4165
-4214 write (prom80, 4215)
+4211 if (to_lower (ansi32(1 : 6)) .ne. 'change') go to 4165
+4214 write (unit = prom80, fmt = 4215)
 4215 format ('    Change type (data, move, blank, use, value,', ' end) :')
   !  assign 34215 to nextsn
   nextsn = 34215
   go to 9800
 34215 ansi32 = buff77(1:32)
-  if ( ansi32(1:4) .eq. 'end ' ) go to 4165
-  if ( ansi32(1:6) .eq. 'series')go to 4165
-  if ( ansi32(1:5) .ne. 'move ' )  go to 4223
-4216 write (prom80, 4217)
+  if (to_lower (ansi32(1 : 4)) .eq. 'end ') go to 4165
+  if (to_lower (ansi32(1 : 6)) .eq. 'series') go to 4165
+  if (to_lower (ansi32(1 : 5)) .ne. 'move ')  go to 4223
+4216 write (unit = prom80, fmt = 4217)
 4217 format ('    Send  n-from, n-to (1, 2, ...) :')
   !  assign 4219 to nextsn
   nextsn = 4219
   go to 9800
-4219 bytbuf = buff77(1:20)
-  if ( bytbuf(1:4) .eq. 'end ' ) go to 4214
-  call frein2(bytbuf, n13, n14)
-  if ( n14 .gt. lserlc )  lserlc = n14
+4219 bytbuf = buff77(1 : 20)
+  if (bytbuf(1 : 4) .eq. 'end ') go to 4214
+  call frein2 (bytbuf, n13, n14)
+  if (n14 .gt. lserlc) lserlc = n14
   n13 = n13 + n42
   n14 = n14 + n42
-  kbus(n14) =  kbus(n13)
-  mbus(n14) =  mbus(n13)
+  kbus(n14) = kbus(n13)
+  mbus(n14) = mbus(n13)
   n24 = 0
-  call namea6 ( text1, n24 )
+  call namea6 (text1, n24)
   namebr(n14) = n24
   litype(n14) = litype(n13)
   imodel(n14) = imodel(n13)
@@ -3430,21 +3433,21 @@ subroutine spyink
   r(n14)  = r(n13)
   c(n14)  = c(n13)
   go to 4216
-4223 if ( ansi32(1:5) .ne. 'data ' )  go to 4232
-4225 write (prom80, 4217)
+4223 if (to_lower (ansi32(1 : 5)) .ne. 'data ') go to 4232
+4225 write (unit = prom80, fmt = 4217)
   !  assign 4227 to nextsn
   nextsn = 4227
   go to 9800
-4227 bytbuf = buff77(1:20)
-  if ( bytbuf(1:4) .eq. 'end ' ) go to 4214
-  call frein2(bytbuf, n13, n14)
-  if ( n14 .gt. lserlc )  lserlc = n14
+4227 bytbuf = buff77(1 : 20)
+  if (to_lower (bytbuf(1 : 4)) .eq. 'end ') go to 4214
+  call frein2 (bytbuf, n13, n14)
+  if (n14 .gt. lserlc) lserlc = n14
   n14 = n14 + n42
-  kbus(n14) = iabs ( kbus(n13) )
-  mbus(n14) = iabs ( mbus(n13) )
+  kbus(n14) = iabs (kbus(n13))
+  mbus(n14) = iabs (mbus(n13))
   nr(n14) = 0
   n24 = 0
-  call namea6 ( text1, n24 )
+  call namea6 (text1, n24)
   namebr(n14) = n24
   litype(n14) = n13
   n13 = iabs (nr(n13))
@@ -3453,45 +3456,45 @@ subroutine spyink
   ci(n14) = tr(n13)
   ck(n14) = tx(n13)
   cik(n14) = c(n13)
-  n14 = n14 -n42 + n43
+  n14 = n14 - n42 + n43
   tr(n14) = tr(n13)
   tx(n14) = tx(n13)
   c(n14) = c(n13)
   r(n14)= c(n13)
   go to 4225
-4232 if ( ansi32(1:5) .ne. 'blank' )  go to 4245
-4235 write (prom80, 4236)
+4232 if (to_lower (ansi32(1 : 5)) .ne. 'blank') go to 4245
+4235 write (unit = prom80, fmt = 4236)
 4236 format ('    Send n-beg and n-end line numbers :')
   !  assign 4237 to nextsn
   nextsn = 4237
   go to 9800
 !4237 bytbuf = buff77(1 : 20)
   bytbuf = buff77(1 : 20)
-  if (bytbuf(1 : 4) .eq. 'end ') go to 4214
-  call frein2(bytbuf, n13, n14)
+  if (to_lower (bytbuf(1 : 4)) .eq. 'end ') go to 4214
+  call frein2 (bytbuf, n13, n14)
   if (n14 .lt. lserlc) go to 4239
   lserlc = n13 - 1
   go to 4235
-4239 do j=n13, n14
+4239 do j = n13, n14
 !4241 kbus(j+n42) = 0
      kbus(j + n42) = 0
   end do
   go to 4235
-4245 if ( ansi32(1:4) .ne. 'use ' )  go to 4256
-  write (munit6, 4248)  ( nr(j+n42), j=1, lserlc )
+4245 if (to_lower (ansi32(1 : 4)) .ne. 'use ') go to 4256
+  write (unit = munit6, fmt = 4248) (nr(j + n42), j = 1, lserlc)
 4248 format ('    nr:', 10i7)
   call window
-4251 write (prom80, 4253)
+4251 write (unit = prom80, fmt = 4253)
 4253 format ('    Send number to toggle (0=end) :')
   !  assign 4254 to nextsn
   nextsn = 4254
   go to 9800
-4254 if ( buff77(1:4) .eq. 'end ' ) go to 4214
-  call frein1 ( buff77, n6 )
-  if ( n6 .le. 0 )  go to 4214
+4254 if (to_lower (buff77(1 : 4)) .eq. 'end ') go to 4214
+  call frein1 (buff77, n6)
+  if (n6 .le. 0) go to 4214
   n7 = n6 + n42
   nr(n7) = nr(n7) + 1
-  if ( nr(n7) .ge. 2 )  nr(n7) = 0
+  if (nr(n7) .ge. 2) nr(n7) = 0
   go to 4251
   !     place any additional subcommands here:
 4256 go to 4214
@@ -3500,29 +3503,29 @@ subroutine spyink
   go to 1240
   !     $$$$$$$  key word no. 54:  "[y]"      $$$$  $$$$  $$$$  $$$$  $$$$
 4471 j = 1
-4473 write (prom80, 4474)
+4473 write (unit = prom80, fmt = 4474)
 4474 format ('   Send row name or number (end) :')
   !  assign 54474 to nextsn
   nextsn = 54474
   go to 9800
 54474 prom80 = buff77
-  if ( prom80(1:4) .eq. 'end ' ) go to 1240
-  if ( prom80(1:6) .ne. '      '  .and. prom80(1:6) .ne. 'next  ' )  go to 4475
+  if (to_lower (prom80(1 : 4)) .eq. 'end ') go to 1240
+  if (prom80(1 : 6) .ne. '      '  .and. to_lower (prom80(1 : 6)) .ne. 'next  ') go to 4475
   j = j + 1
   go to 4494
-4475 if ( prom80(1:4) .ne. 'top ' ) go to 4476
+4475 if (to_lower (prom80(1 : 4)) .ne. 'top ') go to 4476
   j = 2
   go to 4494
-4476 if ( prom80(1:4) .ne. 'bot ' ) go to  4477
+4476 if (to_lower (prom80(1 : 4)) .ne. 'bot ') go to 4477
   j = -9999
   go to 4494
 4477 do j = 1, 10
-     if (prom80(1:1) .eq. digit(j)) go to 4491
+     if (prom80(1 : 1) .eq. digit(j)) go to 4491
   end do
 !4478 continue
-  read (prom80, 1380)  text2
+  read (unit = prom80, fmt = 1380) text2
 1380 format (a6)
-  do j=1, kpartb
+  do j = 1, kpartb
      if (text2 .eq. bus(j)) go to 4494
   end do
 !4483 continue
@@ -3531,14 +3534,14 @@ subroutine spyink
 4487 format ('  %% %% == ++  Sorry, no such row.  Try again.')
   call window
   go to 4473
-4491 call frein1 ( prom80, j )
-4494 if ( answ80(1:3) .eq. '[f]' ) go to 4515
-  if ( j .le. 1 )  j = kpartb
-  if ( j .gt. kpartb )  j = 2
+4491 call frein1 (prom80, j)
+4494 if (answ80(1 : 3) .eq. '[F]') go to 4515
+  if (j .le. 1) j = kpartb
+  if (j .gt. kpartb) j = 2
   n17 = kks(j) - 1
-  n16 = kks(j+1)
-  if ( j .eq. kpartb )  n16 = kks(1)
-  write (munit6, 4496)  j, bus(j), n16, n17
+  n16 = kks(j + 1)
+  if (j .eq. kpartb) n16 = kks(1)
+  write (unit = munit6, fmt = 4496) j, bus(j), n16, n17
 4496 format (' row',  i4, '   name = ', a6, '   limits =', 2i5, '    nonzero  (m, ykm)  follow ....')
   call window
   do l = n16, n17, 4
@@ -3552,10 +3555,10 @@ subroutine spyink
   go to 4473
   !     $$$$$$$  key word no. 55:  "[f]"      $$$$  $$$$  $$$$  $$$$  $$$$
 4512 go to 4473
-4515 if ( j .le. 1 )  j = kpartb
-  if ( j .gt. kpartb )  j = 2
-  n17 = kk(j-1) + 1
-  write (munit6, 4521)  j, bus(j), n17, kk(j)
+4515 if (j .le. 1) j = kpartb
+  if (j .gt. kpartb) j = 2
+  n17 = kk(j - 1) + 1
+  write (unit = munit6, fmt = 4521) j, bus(j), n17, kk(j)
 4521 format (' row', i4, '   name = ', a6, '   limits =', 2i5, '    nonzero  (m, fkm)  follow ....')
   call window
   do l = n17, kk(j), 4
@@ -3572,38 +3575,38 @@ subroutine spyink
   write (munit6, 4566)
 4566 format (6x, '===  Cancel previous rolling printer plot.')
   call window
-4571 if ( monitr .eq. 0 ) go to 1240
+4571 if (monitr .eq. 0) go to 1240
   monitr = 0
-  write (munit6, 4573)
+  write (unit = munit6, fmt = 4573)
 4573 format (6x, '===  Cancel previous rolling vector plot.')
   call window
   go to 1240
   !     $$$$$$$  key word no. 61:  "choice"   $$$$  $$$$  $$$$  $$$$  $$$$
 4592 n17 = nc - nv
   n24 = numnvo + nc + nsmout + ioutcs + numout
-  write (munit6, 4595)  n24
+  write (unit = munit6, fmt = 4595) n24
 4595 format ('     Total number of EMTP outputs (sum of 5 classes) =', i5)
   call window
-  write (munit6, 4596)
+  write (unit = munit6, fmt = 4596)
 4596 format ( '     Ordered class limits :   numnvo      nv   nc-nv  nsmout  ioutcs   numout')
   call window
-  write (munit6, 4597) numnvo, nv, n17, nsmout, ioutcs, numout
+  write (unit = munit6, fmt = 4597) numnvo, nv, n17, nsmout, ioutcs, numout
 4597 format (28x, 6i8)
   call window
-  write (munit6, 4608) numnvo
+  write (unit = munit6, fmt = 4608) numnvo
 4608 format ('     Selective node voltage outputs (cells  1  through', i3, ' ) :')
   call window
-  do j=1, numnvo, 7
+  do j = 1, numnvo, 7
      n17 = j + 6
-     if ( n17 .gt. numnv0 )  n17 = numnvo
-     write (munit6, 4609)  ( bus(ibsout(m)), m=j, n17 )
+     if (n17 .gt. numnv0) n17 = numnvo
+     write (unit = munit6, fmt = 4609) (bus(ibsout(m)), m = j, n17)
 4609 format (7x, 10a7)
      call window
   end do
 !4611 continue
   n7 = numnvo + 1
   n8 = numnvo + nv
-  if ( n8 .lt. n7 )  go to 4631
+  if (n8 .lt. n7) go to 4631
   write (unit = munit6, fmt = 4615) n7, n8
 4615 format ('     Branch voltage node-name pairs (cells', i3, '  through', i3, ' ) :')
   call window
@@ -5109,6 +5112,7 @@ subroutine locatn
   use dekspy
   use fixcom
   use indcom
+  use bcddat
   use bcdtim
   implicit none
   integer(4) :: iac, ibr1, icsup, iconfg, idctcs, idelta, iend, imdual

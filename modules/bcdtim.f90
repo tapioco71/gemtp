@@ -7,7 +7,7 @@
 module bcdtim
   implicit none
 
-  character(8) :: date1(2), tclock(2)
+  character(4) :: tclock(2)
 
 contains
 
@@ -32,7 +32,7 @@ contains
     !    returns the wall-clock time as an 8-byte character string.
     !    This is just what the EMTP needs, except that we want periods
     !    rather than colons, and of course we require  2a4  format.
-    character(8), dimension(:), intent(out) :: a
+    character(4), dimension(:), intent(out) :: a
     character(8) :: time
     call date_and_time(time = time)
     write (unit = a(1), fmt = 10) time(1 : 2), time(3 : 3)

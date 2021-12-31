@@ -142,7 +142,7 @@ subroutine over2
   integer(4) :: koff6, koff7, koff8, koff9, koff10, koff13, koff14, koff15
   integer(4) :: koff16, koff17, koff18, koff19, koff20, kph, kq, kq1
   integer(4) :: kreqab, ksat
-  integer(4) :: l, ll, ll0, ll2, ll3, ll9
+  integer(4) :: l, ll, ll2, ll3, ll9
   integer(4) :: m, mpower, mread2, mxphas
   integer(4) :: n, n5, n6, n8, n9, n9sq, n14, n16, n24, ncoil, ncount, nfir, nfscan, nkq
   integer(4) :: nn11, nn13, nn17, nnn1, nodtop, np, nphs, nphs2, nphsu

@@ -270,21 +270,21 @@ subroutine subr39
   !   == prepare images of punch file ==
   kount = 0
   rewind lunit1
-  if ( ipunch  .eq.  0 ) write (lunit7, 8769) tclock, date1
-8769 format ('c    punched card output of "jmarti setup" which began at',  2x,  2a4,  2x,  2a4  )
-  if ( ipunch .ne. 0 )  go to 8789
-  if ( imodal .eq. 1 ) write (lunit7, 8770)
-8770 format ('c   ***** untransposed jmarti line segment ******'    )
-  if ( imodal .eq. 0 .and. mspedb .eq. 0) write (lunit7, 8780)
-8780 format ('c   *****  transposed jmarti line segment  ******'    )
-  if ( imodal .eq. 0 .and. mspedb .eq. 1) write (lunit7, 8785)
-8785 format ('c   ***** special double circuit transposed jmarti line segment ******'           )
+  if (ipunch .eq. 0) write (unit = lunit7, fmt = 8769) tclock, date1
+8769 format ('c    Punched card output of "jmarti setup" which began at', 2x, 2a4, 2x, 2a4)
+  if (ipunch .ne. 0)  go to 8789
+  if (imodal .eq. 1) write (unit = lunit7, fmt = 8770)
+8770 format ('c   ***** Untransposed jmarti line segment ******')
+  if (imodal .eq. 0 .and. mspedb .eq. 0) write (unit = lunit7, fmt = 8780)
+8780 format ('c   *****  Transposed jmarti line segment  ******')
+  if (imodal .eq. 0 .and. mspedb .eq. 1) write (unit = lunit7, fmt = 8785)
+8785 format ('c   ***** Special double circuit transposed jmarti line segment ******')
 8789 rewind lunit2
   n5 = 0
-  if ( jdatcs .gt. 0 )  go to 8777
-  do n12=1, 9999
-     read (lunit2, 8771)  ( texta6(i), i=1, 14 )
-8771 format ( 13a6, a2 )
+  if (jdatcs .gt. 0) go to 8777
+  do n12 = 1, 9999
+     read (unit = lunit2, fmt = 8771) (texta6(i), i = 1, 14)
+8771 format (13a6, a2)
      if ( ipunch  .eq.  0 ) write (lunit7, 8772) (texta6(i), i = 1, 13)
 8772 format ( 'c ',  13a6 )
      if (idebug.eq.0) go to 8100

@@ -194,7 +194,7 @@ contains
     ! vrotmom(n1),dcoef(n1),epsom(n1),omegm(n1),reamdu(n1),
     ! vjcdsat(n1),reamds(n1),flxds(n1),flxdr(n1),thetam(n1),
     ! vreamqu(n1),jcqsat(n1),reamqs(n1),flxqs(n1),flxqr(n1),noread
-203 format (3i2, 3i1, 2a6, i2, 3e14.5, /, 2e14.5, i1, 3e14.5, /, 2e14.5, i1, 3e14.5,i1)
+    !203 format (3i2, 3i1, 2a6, i2, 3e14.5, /, 2e14.5, i1, 3e14.5, /, 2e14.5, i1, 3e14.5,i1)
     ! decision on m31 or m32 data input ***************************
     ! with m32 , the input is modular.
 150 call cimage

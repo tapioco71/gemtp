@@ -13,6 +13,7 @@ subroutine subr31
   use labcom, only : buslst, ibsout, ibrnch, jbrnch, karray
   use deck31
   use tracom
+  use bcddat
   use bcdtim
   use movcop
   use strcom
@@ -81,9 +82,11 @@ subroutine subr31
   dimension text14(2), text16(2)
   dimension lltemp(20)
   equivalence (tstep, xin(1)), (bx(1), xin(2))
+  !
   !  equivalence (karray(1), array(1), ev(1), buslst(1), evdoub(1), ibsout(1), ibrnch(1), jbrnch(1))
   !  equivalence (busvec(1), bus1)
   !  equivalence (moncar(2), kbase)
+  !
   !
   data text1      / 'print ' /
   data text2      / 'head o' /
@@ -504,7 +507,7 @@ subroutine subr31
   d1 = hmin + hmax + vploff
   if (d1 .le. szplt) go to 11182
   write (unit = lunit6, fmt = 11181) hmin, hmax, d1, szplt
-11181 format (5x, 'Note ---- the requested bottom margin of ', e9.3, ' and graph height of ', e9.3, ' requires a total', /, 5x, 'paper height of ', e9.3, '.  This is greater than the height specified in =call paprsz=, which is ', e9.3, /, 5x, 'the requested values will be ignored and the last specified (or default if no height values were ever given)', /, 5x, 'will be used.')
+11181 format (5x, 'Note ---- The requested bottom margin of ', e9.3, ' and graph height of ', e9.3, ' requires a total', /, 5x, 'paper height of ', e9.3, '.  This is greater than the height specified in =call paprsz=, which is ', e9.3, /, 5x, 'the requested values will be ignored and the last specified (or default if no height values were ever given)', /, 5x, 'will be used.')
   if (taxmax .gt. 0.0d0) write (unit = lunit6, fmt = 21181) vploff
 21181 format (5x, 'Actually, the just-quoted paper height is the paper height minus the offset height of ', e13.4, '   for', /, 5x, 'the one or more graphs which have already been drawn vertically below the upcoming plot.   The user should not', /, 5x, 'increase vertical dimensions unless he is at the bottom of the paper, or unless he is sure that he has sufficient', /, 5x, 'vertical space left on the paper for at least one more plot.   The size adjustment remains cancelled.')
   go to 1050
@@ -670,10 +673,10 @@ subroutine subr31
   if (numnvo .gt. limbin) go to 34231
   if (nc .le. limbin) go to 44231
 34231 write (unit = lunit6, fmt = 24231) limbin, numnvo, nc
-24231 format (/, ' overflow error stop in  ', "'", 'subr31', "'", '.  limbin  numnvo      nc', /,  35x, 3i8)
+24231 format (/, ' Overflow error stop in  ', "'", 'subr31', "'", '.  limbin  numnvo      nc', /,  35x, 3i8)
   call stoptp
 44231 if (iprsup .ge. 1) write (unit = lunit6, fmt = 4231) date1, tclock, numnam, numbco, nc, (buslst(j), j = 1, numnam)
-4231 format (/, ' first third of plot-file header info read from logical 4 in subr31.', 7x, 'date1(2)', 6x, 'tclock(2)', '  numnam  numbco      nc', /, 68x, 7x, 2a4, 7x, 2a4, 3i8, /, ( ' (buslst(j), j=1, numnam)',  1x, 10a7))
+4231 format (/, ' First third of plot-file header info read from logical 4 in subr31.', 7x, 'date1(2)', 6x, 'tclock(2)', '  numnam  numbco      nc', /, 68x, 7x, 2a4, 7x, 2a4, 3i8, /, ( ' (buslst(j), j=1, numnam)',  1x, 10a7))
   iofibr = numnvo
   iofjbr = numnvo + nc
   iofbus = numnvo + 2 * nc
@@ -834,7 +837,7 @@ subroutine subr31
   n9 = 0
   if (xyplot(1) .ne. 0 .or. nfour .ne. 0) n9 = 1
   if (iprsup .ge. 2) write (unit = lunit6, fmt = 2117) k, jplt, n9, maxevk, mplot
-2117 format (/, ' before read of plot points.       k    jplt      n9  maxevk', /, 28x, 4i8, /, "'", 'mplot', "'",  'vector follows.', 16i5)
+2117 format (/, ' Before read of plot points.       k    jplt      n9  maxevk', /, 28x, 4i8, /, "'", 'mplot', "'",  'vector follows.', 16i5)
   ndx1 = 2 * linlim
   !  call mover0 ( ev(1), ndx1 )
   call move0 (ev(1 :), ndx1)

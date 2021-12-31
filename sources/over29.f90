@@ -189,66 +189,66 @@ subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, t
 1848 format (/, ' after 2-integer read from lunit1.    ntot    neni', /, 34x, 2i8)
      nexout(m) = ntot
      if (m .ne. 1)  go to 260
-     write(lunit9)  ntot
-260  read (lunit1)  date1, tclock, ivolt, n6, ndx1, ndx2, n16, nsmout, ioutcs, numout, n18, numnvo, numbco, nc, kswtch
+     write(unit = lunit9) ntot
+260  read (unit = lunit1) date1, tclock, ivolt, n6, ndx1, ndx2, n16, nsmout, ioutcs, numout, n18, numnvo, numbco, nc, kswtch
      nv = nc - numbco
-     if ( m .ne. 1 )  go to 270
-     write (lunit9)  date1, tclock, ivolt, n6, ndx1, ndx2, n16, nsmout, ioutcs, numout, n18, numnvo, numbco, nc, kswtch
+     if (m .ne. 1) go to 270
+     write (unit = lunit9) date1, tclock, ivolt, n6, ndx1, ndx2, n16, nsmout, ioutcs, numout, n18, numnvo, numbco, nc, kswtch
 270  j1 = ntot + 1
      j2 = ntot + n6
      j3 = j2 + ndx1
      j4 = j2 + ndx2
      j5 = j4 + 1
      j6 = j4 + n16
-     read (lunit1)  (bus(i), i=1, ntot), (bus(i),i=j1,j2), ( bus(i),i=j3,j4), (bus(i), i=j5,j6 )
-     if ( m .ne. 1 )  go to 275
-     write (lunit9)  (bus(i), i=1, ntot), (bus(i),i=j1,j2), ( bus(i),i=j3,j4), (bus(i), i=j5,j6 )
-275  if ( iprsup .ge. 1 ) write (lunit6, 3207)  nc,  nsmout, ioutcs, ivolt, ndx1, ndx2,n16, numout,n18,numnvo,numbco,nc
-3207 format ( 27h integers written on lunit9, 5x, 12i8 )
+     read (unit = lunit1) (bus(i), i = 1, ntot), (bus(i),i = j1, j2), (bus(i), i = j3, j4), (bus(i), i = j5, j6)
+     if (m .ne. 1) go to 275
+     write (unit = lunit9) (bus(i), i = 1, ntot), (bus(i), i = j1, j2), (bus(i), i = j3, j4), (bus(i), i = j5, j6)
+275  if (iprsup .ge. 1) write (unit = lunit6, fmt = 3207) nc, nsmout, ioutcs, ivolt, ndx1, ndx2, n16, numout, n18, numnvo, numbco, nc
+3207 format (' Integers written on lunit9', 5x, 12i8)
      texta6(m) = bus(ntot)
-     if ( ivolt  .ne.  1 )   go to 4103
-     read (lunit1)   ( m13, i=2, ntot )
-     if ( m .ne. 1 )  go to 4104
-     write (lunit9)   ( i, i=2, ntot )
+     if (ivolt .ne. 1) go to 4103
+     read (unit = lunit1) (m13, i = 2, ntot)
+     if (m .ne. 1) go to 4104
+     write (unit = lunit9) (i, i = 2, ntot)
      go to 4104
-4103 if( numnvo .gt. 0 ) read (lunit1)  ( karray(i), i=1, numnvo )
-     if ( m .ne. 1 )  go to 4104
-     if( numnvo .gt. 0 ) write (lunit9)  ( karray(i), i=1, numnvo )
-4104 if(nc .gt. 0) read (lunit1) (ibrnch(i), i = 1, nc), (jbrnch(i), i = 1, nc)
-     if ( m .ne. 1 )  go to 285
-     if( nc .gt. 0 ) write (lunit9)  (ibrnch(i), i = 1, nc), (jbrnch(i), i = 1, nc)
+4103 if (numnvo .gt. 0) read (unit = lunit1) (karray(i), i = 1, numnvo)
+     if (m .ne. 1) go to 4104
+     if (numnvo .gt. 0) write (unit = lunit9)  (karray(i), i = 1, numnvo)
+4104 if (nc .gt. 0) read (unit = lunit1) (ibrnch(i), i = 1, nc), (jbrnch(i), i = 1, nc)
+     if (m .ne. 1) go to 285
+     if (nc .gt. 0) write (unit = lunit9) (ibrnch(i), i = 1, nc), (jbrnch(i), i = 1, nc)
 285  nstat = nc + numnvo
-     if ( m .eq. 1 )  lstat(32) = nstat
+     if (m .eq. 1) lstat(32) = nstat
      ipntv(m) = nstat
      indtv(m) = kswtch
      if (m .eq. 1)  go to 310
      n2 = m - 1
-     if (nexout(m) .ne. nexout(n2) ) go to 9200
-     if (texta6(m) .ne. texta6(n2) ) go to 9200
-     if ( ipntv(m) .ne. ipntv(n2) ) go to 9200
-     if (indtv(m) .ne. indtv(n2) ) go to 9200
-310  do jj=1, npni
-        read (lunit1)  ( voltbc(j), j=1, nstat )
-        if (iprsup .ge. 3) write (lunit6, 1310)   ( voltbc(j), j=1, nstat )
-1310    format ( 22h  voltbc  from lunit1., /, (1x, 8e15.6) )
-        write (lunit9)  ( voltbc(j),  j=1, nstat )
+     if (nexout(m) .ne. nexout(n2)) go to 9200
+     if (texta6(m) .ne. texta6(n2)) go to 9200
+     if (ipntv(m) .ne. ipntv(n2)) go to 9200
+     if (indtv(m) .ne. indtv(n2)) go to 9200
+310  do jj = 1, npni
+        read (unit = lunit1) (voltbc(j), j = 1, nstat)
+        if (iprsup .ge. 3) write (unit = lunit6, fmt = 1310) (voltbc(j), j = 1, nstat)
+1310    format ('  voltbc  from lunit1.', /, (1x, 8e15.6))
+        write (unit = lunit9) (voltbc(j), j = 1, nstat)
 320  end do
 330  lstat(13) = 3
      call statrs
      do i=1, kswtch
         j = lswtch + i
-        read (lunit1) kmswit(i),kmswit(j),akey(i),tstat(i), topen(j), kdepsw(i)
+        read (unit = lunit1) kmswit(i), kmswit(j), akey(i), tstat(i), topen(j), kdepsw(i)
         if (m .ne. 1)  go to 340
-        write(lunit3) kmswit(i),kmswit(j),akey(i),tstat(i), topen(j), kdepsw(i)
+        write (unit = lunit3) kmswit(i), kmswit(j), akey(i), tstat(i), topen(j), kdepsw(i)
 340  end do
-     read (lunit1) kloaep
-     if ( m .ne. 1 )   go to 410
-     write (lunit3)  kloaep
-410  do jj=1, npni
-        read(lunit1)  ranoff, (tclose(i), i=1, kswtch)
-        write(lunit3)  ranoff, (tclose(i), i=1, kswtch)
-        read(lunit1)  ranoff, (topen(i), i=1, kswtch)
-        write(lunit3)  ranoff, (topen(i), i=1, kswtch)
+     read (unit = lunit1) kloaep
+     if (m .ne. 1) go to 410
+     write (unit = lunit3) kloaep
+410  do jj = 1, npni
+        read (unit = lunit1) ranoff, (tclose(i), i = 1, kswtch)
+        write (unit = lunit3) ranoff, (tclose(i), i = 1, kswtch)
+        read (unit = lunit1) ranoff, (topen(i), i = 1, kswtch)
+        write (unit = lunit3) ranoff, (topen(i), i = 1, kswtch)
 420  end do
 1320 end do
   lstat(13) = 0
@@ -269,22 +269,22 @@ subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, t
 9620 format ( 24x, 2e8.0 )
   if ( d1 .ne. 0.0 )  aincr = d1
   if ( d2 .ne. 0.0 )  xmaxmx = d2
-  write (kunit6, 9630)   itest, idist, aincr, xmaxmx
-9630 format ( 17h+statistics data., 2i7, 2f9.4 )
+  write (unit = kunit6, fmt = 9630) itest, idist, aincr, xmaxmx
+9630 format ('+Statistics data.', 2i7, 2f9.4)
   go to 6315
   !     check for "begin new data case" or "bndc" card:
 6369 continue
   read (unit = abuff, fmt = 1605) bus1, bus2, bus3, bus4
-1605 format ( 13a6 )
-  if ( bus1 .eq. text5  .and.  bus2 .eq. text6 )  go to 16379
-  if ( bus1 .eq. text7  .and.  bus2 .eq. blank )  go to 16379
-  if ( bus1 .eq. blank  .and. bus2 .eq. blank  .and. kbase .eq. 28 )  go to 16379
+1605 format (13a6)
+  if (bus1 .eq. text5  .and.  bus2 .eq. text6) go to 16379
+  if (bus1 .eq. text7  .and.  bus2 .eq. blank) go to 16379
+  if (bus1 .eq. blank  .and. bus2 .eq. blank .and. kbase .eq. 28) go to 16379
   go to 6379
-16379 write (kunit6, 1608)
-1608 format( 44h+new-case marker card bounds this-case data. )
+16379 write (unit = kunit6, fmt = 1608)
+1608 format ('+New-case marker card bounds this-case data.')
   go to 9900
 6379 ntemp = nstat
-  if ( nstat .lt. kswtch)  ntemp = kswtch
+  if (nstat .lt. kswtch) ntemp = kswtch
   narray = iabs(nenerg) * (ntemp + 1 ) * 2
   if ( aincr .ge. 0.0 )  go to 6389
   liminc = absz(aincr)
@@ -296,10 +296,9 @@ subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, t
   iofpnt = iofkou + liminc
   iofnsu = iofpnt + liminc
   n2 = iofnsu + liminc - 1
-  if ( iprsup  .ge.  1 ) write (lunit6, 5672)  maxo29, nstat, kswtch, nenerg, numnvo, nc, liminc, n2, xmaxmx, aincr
-5672 format ( /,  20h before call innr29., 32h  maxo29   nstat  kswtch  nenerg, &
-          32h  numnvo      nc  liminc      n2,  9x,  6hxmaxmx,  10x,  5haincr  ,/,  20x,  8i8,  2e15.6  )
-  if ( n2  .le.  maxo29 )   go to 20
+  if (iprsup .ge. 1) write (unit = lunit6, fmt = 5672) maxo29, nstat, kswtch, nenerg, numnvo, nc, liminc, n2, xmaxmx, aincr
+5672 format (/, ' Before call innr29.  maxo29   nstat  kswtch  nenerg,   numnvo      nc  liminc      n2',  9x,  'xmaxmx',  10x, 'aincr', /, 20x, 8i8, 2e15.6)
+  if (n2 .le. maxo29) go to 20
   kill=88
   lstat(15) = n2
   lstat(16) = maxo29
@@ -307,10 +306,10 @@ subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, t
   lstat(14) = liminc
   lstat(19) = 20
   go to 9800
-20 call innr29 ( array(iofarr), karray(iofibs), karray(iofkou), karray(iofpnt), karray(iofnsu), &
+20 call innr29 (array(iofarr), karray(iofibs), karray(iofkou), karray(iofpnt), karray(iofnsu), &
         bus(1), kmswit(1), kdepsw(1), ibrnch(1), jbrnch(1), akey(1), tstat(1), tclose(1), topen(1)  )
-  if ( kbase .eq. 29 )  go to 6319
-  if ( kbase .eq. 28 )  go to 6315
+  if (kbase .eq. 29) go to 6319
+  if (kbase .eq. 28) go to 6315
 9200 kill = 206
   bus1 = texta6(m)
   bus2 = texta6(n2)
@@ -322,8 +321,8 @@ subroutine guts29  ( bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, t
 9800 lstat(18) = nchain
   lastov = nchain
   nchain = 51
-9900 if ( iprsup  .ge.  1 ) write (lunit6, 9903)  kill, nchain, n18
-9903 format ( 36h exit "guts29".  kill, nchain, n18 =,  3i6  )
+9900 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9903) kill, nchain, n18
+9903 format (' Exit "guts29".  kill, nchain, n18 =', 3i6)
   return
 end subroutine guts29
 
@@ -331,18 +330,16 @@ end subroutine guts29
 ! subroutine innr29.
 !
 
-subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibrnch, jbrnch, &
-     akey, tstat, tclose, topen  )
+subroutine innr29 (array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibrnch, jbrnch, akey, tstat, tclose, topen)
+  use blkcom
+  use deck29
+  use labl29
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension  array(1), ibsout(1), kount(1), kpoint(1)
   dimension  nsum(1), bus(1), kmswit(1), kdepsw(1)
   dimension  ibrnch(1), jbrnch(1), akey(1)
   dimension  tstat(1), tclose(1), topen(1)
   character(8) :: bus
-  include 'blkcom.ftn'
-  include 'deck29.ftn'
-  include 'labl29.ftn'
   dimension  kount1(25), kount2(25), kount3(25)
   dimension  normal(25), itemp(264), texnam(10)
   equivalence  (moncar(1),    knt),   (moncar(2),  kbase)
@@ -352,24 +349,24 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   character(8) :: text1, text2, text3, text4, text5, text6
   character(8) :: text7, text8, texnam, aupper
   dimension aupper(264)
-  data  text1  / 6hmisc.  /
-  data  text2  / 6hstatis /
-  data  text3  / 6htics d /
-  data  text4  / 6hata    /
-  data  text5  / 6hbegin  /
-  data  text6  / 6hnew da /
-  data  text7  / 6hbndc   /
-  data  text8  / 6h cont. /
-  data  texnam(1)   /  6hvoltag  /
-  data  texnam(2)   /  6he       /
-  data  texnam(3)   /  6hcurren  /
-  data  texnam(4)   /  6ht       /
-  data  texnam(5)   /  6h power  /
-  data  texnam(6)   /  6h        /
-  data  texnam(7)   /  6henergy  /
-  data  texnam(8)   /  6h        /
-  data  texnam(9)   /  6h node   /
-  data  texnam(10)  /  6hbranch  /
+  data  text1  / 'misc. ' /
+  data  text2  / 'statis' /
+  data  text3  / 'tics d' /
+  data  text4  / 'ata   ' /
+  data  text5  / 'begin ' /
+  data  text6  / 'new da' /
+  data  text7  / 'bndc  ' /
+  data  text8  / ' cont.' /
+  data  texnam(1)   / 'voltag' /
+  data  texnam(2)   / 'e     ' /
+  data  texnam(3)   / 'curren' /
+  data  texnam(4)   / 't     ' /
+  data  texnam(5)   / ' power' /
+  data  texnam(6)   / '      ' /
+  data  texnam(7)   / 'energy' /
+  data  texnam(8)   / '      ' /
+  data  texnam(9)   / ' node ' /
+  data  texnam(10)  / 'branch' /
   data normal(1), normal(2), normal(3),normal(4) / 0, 0, 0, 0 /
   data normal(5), normal(6), normal(7), normal(8) / 1, 2, 4, 8 /
   data normal(9),normal(10),normal(11),normal(12) / 12,18,24,28 /
@@ -377,8 +374,8 @@ subroutine innr29 ( array, ibsout, kount, kpoint, nsum, bus, kmswit, kdepsw, ibr
   data normal(17), normal(18), normal(19), normal(20) / 12,8,4,2 /
   data normal(21), normal(22), normal(23), normal(24) / 1, 0, 0, 0 /
   data normal(25) / 0 /
-4380 if ( iprsup .ge. 1 ) write (lunit6, 4381)  isw, lastov, lunit9
-4381 format ( 40h top of "innr29".  isw, lastov, lunit9 =,  3i8 )
+4380 if (iprsup .ge. 1) write (unit = lunit6, fmt = 4381) isw, lastov, lunit9
+4381 format (' Top of "innr29".  isw, lastov, lunit9 =', 3i8)
   llm1 = -1
   jdummy = 999
   in1 = 1

@@ -215,6 +215,7 @@ subroutine over11
   use space2
   use dekspy
   use tracom
+  use bcddat
   use bcdtim
   use movcop
   use veccom
@@ -915,8 +916,11 @@ subroutine over11
   if (kexact .eq. 88333) lstat(32) = n85 + n71
   begmax(1) = 0.0d0
   rewind lunit4
-  if (kexact .ne. 88333) write (unit = lunit4) date1, tclock, n7, n6, n5, n85, (bus(i), i = 1, ntot), text1, text2, text3, text4
-  if (kexact .eq. 88333) write (unit = lunit4) date1, tclock, n7, n6, n5 + n71, n85 + n71, (bus(i), i = 1, ntot), text1, text2, text3, text4, text5, text6
+  if (kexact .ne. 88333) then
+     write (unit = lunit4) date1, tclock, n7, n6, n5, n85, (bus(i), i = 1, ntot), text1, text2, text3, text4
+  else
+     write (unit = lunit4) date1, tclock, n7, n6, n5 + n71, n85 + n71, (bus(i), i = 1, ntot), text1, text2, text3, text4, text5, text6
+  end if
   n8 = ntot + 1
   n9 = ntot + 2
   n18 = ntot + 3

@@ -185,7 +185,8 @@ program vardim
   integer(4) :: nonneg, nrec3, ns, ntime, numkex, numlst, ny
   real(8) :: d1, d2, d3
   character :: char(6), bus2
-  character(8) :: bus1, texta(2), textb(2)
+  character(4) :: texta(2), textb(2)
+  character(8) :: bus1
   !  character(8) :: cblock(300), cblser(300)
   character(16) :: types(4)
   character(16) :: ansi16
