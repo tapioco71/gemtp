@@ -37,7 +37,7 @@ subroutine over6
 
   !  equivalence (loopss(11), next)
   !
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over6."')
   ntot1 = ntot - 1
   n3 = 0
@@ -83,9 +83,9 @@ subroutine over6
   if (n3 .gt. 0) length(ibr) = -1
   n7 = -nltype(i)
   if (n7 .ne. 98) n7 = 99
-  if (noutpr .eq. 0 .and. n3 .gt. 0) write (unit = lunit6, fmt = 54164) n7, i, bus(k), bus(m), bus(j1), bus(j2)
+  if (noutpr .eq. 0 .and. n3 .gt. 0) write (unit = lunit(6), fmt = 54164) n7, i, bus(k), bus(m), bus(j1), bus(j2)
 54164 format (' High res. added by EMTP across type-', i2, ' elem.', i3,  1x,  2x, '1 0', 4a6)
-  if (n3 .eq. 0 .and. noutpr .eq. 0) write (unit = lunit6, fmt = 54165) n7, i, bus(k), bus(m), tr(it)
+  if (n3 .eq. 0 .and. noutpr .eq. 0) write (unit = lunit(6), fmt = 54165) n7, i, bus(k), bus(m), tr(it)
 54165 format (' High res. added by EMTP across type-', i2, ' elem.', i3, 1x, 2x, '1 0', 2a6, 12x, e6.1)
   n3 = 1
 54174 i = i - 1
@@ -105,10 +105,10 @@ subroutine over6
   iofgnd = 0
   iofbnd = 0
 4803 n11 = 1
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 55414) kburro, iv, last
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 55414) kburro, iv, last
 55414 format (/, ' In "over6", kburro =', i3, ' .   Compute iv, last =', 2i8)
-  rewind lunit2
-  call tapsav (integx, lunit2, iv, n11)
+  rewind lunit(2)
+  call tapsav (integx, lunit(2), iv, n11)
   n17 = 0
   !  call vecrsv (volt, n17, n17)
   call vecsav (volt, n17, n17)
@@ -213,11 +213,11 @@ subroutine over6
   case (5085)
      go to 5085
   end select
-5250 write (unit = lunit6, fmt = 5254)
+5250 write (unit = lunit(6), fmt = 5254)
 5254 format (//, ' List of input elements connected to each bus.', /, 10x, '1) Only the physical connections of multiphase lines are shown (capacitive and inductive coupling ignored)', /, 10x, '2) Repeated entries imply parallel connections', /, 10x,  '3) Sources are omitted, although switches  are included;', /, 10x, '4) u.m. usage produces extra, internally-defined nodes "um????" (1st 2 letters "um").')
-  write (unit = lunit6, fmt = 5261)
+  write (unit = lunit(6), fmt = 5261)
 5261 format(' From bus name 1 names of all adjacent busses')
-  write (unit = lunit6, fmt = 5266)
+  write (unit = lunit(6), fmt = 5266)
 5266 format(' --------------+----------------------------------------------------------------------------------------------------------')
   n22 = kwtspy
   ipass = 0
@@ -232,7 +232,7 @@ subroutine over6
   buff(ipass) = bus(m)
   if (m .eq. 1) buff(ipass) = terra
   if (ipass .lt. 15) go to 5285
-5277 write (unit = lunit6, fmt = 5278) bus5, (buff(m), m = 1, ipass)
+5277 write (unit = lunit(6), fmt = 5278) bus5, (buff(m), m = 1, ipass)
 5278 format (9x, a6, '|', 15(a6, '*'))
   bus5 = blank
   ipass = 0
@@ -249,8 +249,8 @@ subroutine over6
   bus5 = terra
   k = 1
   go to 5270
-5320 write (unit = lunit6, fmt = 5266)
-  write (unit = lunit6, fmt = 1337)
+5320 write (unit = lunit(6), fmt = 5266)
+  write (unit = lunit(6), fmt = 1337)
   if (n22 .ge. 2) kwtspy = 1
 5324 if (tmax .gt. 0.0) go to 5344
   do i = 1, ntot
@@ -260,7 +260,7 @@ subroutine over6
   go to 40013
   ! renumber nodes based on sparsity of coeff matrix of transient
   ! network solution.
-5344 if (iprsup .gt. 0) write (unit = lunit6, fmt = 73524) (bus(i), i = 1, ntot)
+5344 if (iprsup .gt. 0) write (unit = lunit(6), fmt = 73524) (bus(i), i = 1, ntot)
 73524 format (/, ' Bus names', /, (1x, 10a12))
   if (kpartb .gt. 0) go to 5351
   ! negative sign on "kpartb" is for "renumber bypass":
@@ -336,12 +336,12 @@ subroutine over6
   end do
 73530 continue
 73535 continue
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 1335) nz, iofkol, iofkor
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1335) nz, iofkol, iofkor
 1335 format (/, " In  'over6' ,   nz, iofkol, iofkor =", 3i10, /, 1x, '   row            kode           kolum           koder           kownt')
   do i = 1, 10
      il = i + iofkol
      ir = i + iofkor
-     if (iprsup .ge. 3) write (unit = lunit6, fmt = 1337) i, kode(i), kolum(il), korder(ir), kownt(i)
+     if (iprsup .ge. 3) write (unit = lunit(6), fmt = 1337) i, kode(i), kolum(il), korder(ir), kownt(i)
 1337 format (i6, 4i16)
   end do
   if (kswtch .lt. 1) go to 40015
@@ -373,7 +373,7 @@ subroutine over6
   isubs1 = iofkor + last
   korder(isubs1) = 0
   icas = 0
-  if (iprsup .ge. 2) write (unit = lunit6, fmt = 54230) next, last, ntot, kswtch, kconst, nv, ibr, inonl,  npower, it, istead, num99,  nz, iv
+  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 54230) next, last, ntot, kswtch, kconst, nv, ibr, inonl,  npower, it, istead, num99,  nz, iv
 54230 format (/, " Scalars at end of  'over6' .", /, '    Next    last    ntot  kswtch  kconst      nv     ibr   inonl  npower      it  istead   num99      nz      iv', /, 1x, 14i8)
   ncurr = ntot - nz
   lastov = nchain
@@ -381,12 +381,12 @@ subroutine over6
   go to 9988
 40013 lastov = nchain
   nchain = nchain + 2
-  if (iprsup  .ge.  1) write (unit = lunit6, fmt = 4568)
+  if (iprsup  .ge.  1) write (unit = lunit(6), fmt = 4568)
   go to 99999
 9200 lastov = nchain
   lstat(18) = 6
   nchain = 51
-9988 if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
+9988 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
 4568 format ('  "Exit  module over6."')
 99999 return
 end subroutine over6
@@ -449,9 +449,9 @@ subroutine rinfin
   if (n3 .gt. 0) length(ibr) = -1
   n7 = -nltype(i)
   if (n7 .ne. 98) n7 = 99
-  if (noutpr .eq. 0 .and. n3 .gt. 0) write (unit = lunit6, fmt = 54164) n7, i, bus(k), bus(m), bus(j1), bus(j2)
+  if (noutpr .eq. 0 .and. n3 .gt. 0) write (unit = lunit(6), fmt = 54164) n7, i, bus(k), bus(m), bus(j1), bus(j2)
 54164 format (' High res. added by EMTP across type-', i2, ' elem.', i3, 1x, 2x, '1 0', 4a6)
-  if (n3 .eq. 0 .and. noutpr .eq. 0) write (unit = lunit6, fmt = 54165) n7, i, bus(k), bus(m), tr(it)
+  if (n3 .eq. 0 .and. noutpr .eq. 0) write (unit = lunit(6), fmt = 54165) n7, i, bus(k), bus(m), tr(it)
 54165 format (' High res. added by EMTP across type-', i2, ' elem.', i3, 1x, 2x, '1 0', 2a6, 12x, e6.1)
   n3 = 1
 54174 i = i - 1

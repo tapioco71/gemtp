@@ -68,7 +68,7 @@ contains
     x(1) = a3 + dx
     go to 2
 10  kcode = 5
-    write (unit = lunit6, fmt = 12) k, m, kcode
+    write (unit = lunit(6), fmt = 12) k, m, kcode
 12  format (' Modification of zero sequence short-circuit test between', i3, ' and', i3, ' not possible. Error code =', i3)
     call stoptp
 1   return
@@ -223,7 +223,7 @@ subroutine over41
   data typec(18) / '68    ' /
   data typec(19) / '69    ' /
   data typec(20) / '70    ' /
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ( '  "Begin module over41."')
   if ( iofbnd .ne. 33666 ) go to 4574
   call crdchg
@@ -276,7 +276,7 @@ subroutine over41
   !  call freone (d1)
   call free (d1)
   nright = 0
-  if (iprsup  .ge.  1) write (unit = lunit6, fmt = 4568)
+  if (iprsup  .ge.  1) write (unit = lunit(6), fmt = 4568)
 4568 format ('  "Exit  module over41."')
   if (kill .gt. 0) go to 99999
   text7(1) = texta6(1)
@@ -302,7 +302,7 @@ subroutine over41
   !  call freone (d11)
   call free (d11)
   ipunch = int (d11)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
   if (kill .gt. 0) go to 99999
 1745 if (iwind .eq. 2) go to 7
   if (iwind .eq. 3) go to 7
@@ -312,7 +312,7 @@ subroutine over41
   call interp
 3872 lastov = nchain
   nchain = 51
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
   go to 99999
 7 write (unit = kunit6, fmt = 3892) iwind, cmag, pmag, ipunch
 3892 format ('+New device.', i6, 2e12.3, i7)
@@ -336,7 +336,7 @@ subroutine over41
      call free (z)
      !     call freone (pratg)
      call free (pratg)
-     if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
+     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
      if (kill .gt. 0) go to 99999
 1755 write (unit = kunit6, fmt = 3904) vtap, ploss, z, pratg
 3904 format ('+Wind.', 4e11.3)
@@ -352,10 +352,10 @@ subroutine over41
      rsum = rsum + rik(i)
      xsum = xsum + xik(i)
   end do
-  write (unit = lunit6, fmt = 15) iwind, cmag, pmag
+  write (unit = lunit(6), fmt = 15) iwind, cmag, pmag
 15 format (/, ' Single-phase', i2, "-winding transformer.   'imagn' = ", f8.5, ' per cent based on ', f8.3, ' MVA', /, ' voltage across winding ', 15x, 'losses  impedance based on ', /, 9x, '(kV)', 26x, '(kW)   (per cent) (MVA)')
   do i = 1, 3
-     write (unit = lunit6, fmt = 20) text1(i), v(i), text2(i), text3(i), temp1(i), temp2(i), temp3(i)
+     write (unit = lunit(6), fmt = 20) text1(i), v(i), text2(i), text3(i), temp1(i), temp2(i), temp3(i)
   end do
 20 format (1x, a6, f7.2, 6x, a6, ' to ', a6, f8.2, f10.4, f10.3)
   cmag = cmag * pmag / 300.0d0
@@ -391,52 +391,52 @@ subroutine over41
   cr = -cii * ar - cr * ai
   cii = cmag / vtap
   if (cii .gt. absz (cr) * epsiln) go to 65
-62 write (unit = lunit6, fmt = 61) epsiln, cii, cr
+62 write (unit = lunit(6), fmt = 61) epsiln, cii, cr
 61 format (/, ' Problem.  ----  admittance matrix for transformer is too close to being singular to be invertible.   Hence', /, 17x, 'the inversion will be skipped.   Parameters which document this breakdown follow.', /, 20x, 9x, 'epsiln', 12x,  'cii',  13x, 'cr' , /, 20x, 3e15.6)
   go to 600
 65 xx(ki) = cr + cii
   go to 40
 70 call cxred1 (rr(1 :), xx(1 :), ll3, ll0)
-75 write (unit = lunit6, fmt = 90)
+75 write (unit = lunit(6), fmt = 90)
 90 format (/, " Impedance matrix as required for EMTP studies (with  'X'  in Ohms at the power frequency)", /, 3(14x, 'R', 14x, 'X'))
   i = 0
   n = 1
 95 i = i + 1
   if (i .gt. iwind) go to 110
   ki = n + i - 1
-  write (unit = lunit6, fmt = 100) text1(i), (rr(k), xx(k), k = n, ki)
+  write (unit = lunit(6), fmt = 100) text1(i), (rr(k), xx(k), k = n, ki)
 100 format(' ', a6, 6e15.7)
   n = n + i
   go to 95
-110 write (unit = lunit6, fmt = 113)
+110 write (unit = lunit(6), fmt = 113)
 113 format (/, 1x)
 120 format (' Warning. ----- If nothing is connected to windings which are delta-connected, either add capacitances or ground', /, 16x, 'one terminal of the delta.   Otherwise the delta connection is floating, with voltage indeterminate.')
   if (ipunch .gt. 0) go to 4273
-  write (unit = lunit6, fmt = 4201) (i, i = 1, 8)
+  write (unit = lunit(6), fmt = 4201) (i, i = 1, 8)
 4201 format (//, ' 80-column card-image listing of punched-card output follows (type-51-53 EMTP branch cards).', /, 1x, 80('-'), /, 1x, 8(9x, i1), /, 1x, 8(9x, '0'), /, 1x, 80('-'))
   do i = 1, iwind
      if (i .gt. 1) go to 4228
-     write (unit = lunit7, fmt = 4219) text7(i), text8(i), rr(1), xx(1)
+     write (unit = lunit(7), fmt = 4219) text7(i), text8(i), rr(1), xx(1)
 4219 format ('51,', a6, ',', a6, ',  ,  ,   ', 2(e22.13, ' ,'), 1x, ',,,, ')
-     write (unit = lunit6, fmt = 4220) text7(i), text8(i), rr(1), xx(1)
+     write (unit = lunit(6), fmt = 4220) text7(i), text8(i), rr(1), xx(1)
 4220 format (1x, '51,', a6, ',', a6, ',  ,  ,   ', 2(e22.13, ' ,'), 1x, ',,,, ')
      go to 4270
 4228 if (i .gt. 2) go to 4238
-     write (unit = lunit7, fmt = 4229) text7(i), text8(i), rr(2), xx(2), rr(3), xx(3)
+     write (unit = lunit(7), fmt = 4229) text7(i), text8(i), rr(2), xx(2), rr(3), xx(3)
 4229 format ('52,', a6, ',', a6, ',  ,  ,   ', e22.13, ' ,', e22.13, ' $', /, 26x, 2(e22.13, ' ,'), 1x, ',,,, ')
-     write (unit = lunit6, fmt = 4230) text7(i), text8(i), rr(2), xx(2), rr(3), xx(3)
+     write (unit = lunit(6), fmt = 4230) text7(i), text8(i), rr(2), xx(2), rr(3), xx(3)
 4230 format (1x, '52,', a6, ',', a6, ',  ,  ,   ', e22.13, ' ,', e22.13, ' $', /, 27x, 2(e22.13, ' ,'), 1x, ',,,, ')
      go to 4270
-4238 write (unit = lunit7, fmt = 4239) text7(i), text8(i), (rr(j), xx(j), j = 4, 6)
+4238 write (unit = lunit(7), fmt = 4239) text7(i), text8(i), (rr(j), xx(j), j = 4, 6)
 4239 format ('53,', a6, ',', a6, ',  ,  ,   ', e22.13, ' ,', e22.13, ' $', /, 26x, e22.13, ' ,', e22.13, ' $', /, 26x, 2(e22.13, ' ,'), 1x, ',,,, ')
-     write (unit = lunit6, fmt = 4240) text7(i), text8(i), ( rr(j), xx(j), j = 4, 6)
+     write (unit = lunit(6), fmt = 4240) text7(i), text8(i), ( rr(j), xx(j), j = 4, 6)
 4240 format (1x, '53,', a6, ',', a6, ',  ,  ,   ', e22.13, ' ,', e22.13, ' $', /, 27x, e22.13, ' ,', e22.13, ' $', /, 27x, 2(e22.13, ' ,'), 1x, ',,,, ')
   end do
 4270 continue
-  write (unit = lunit6, fmt = 4271)
+  write (unit = lunit(6), fmt = 4271)
 4271 format (1x, 80('-'), //, 1x)
 4273 ichck = 0
-  write (unit = lunit6, fmt = 130)
+  write (unit = lunit(6), fmt = 130)
 130 format (/, ' Short-circuit input impedances which are obtained from the just-printed impedance matrix, by reverse', /, ' computation.   This is sort of a check on the computation.')
 135 ar = rr(2) ** 2 - xx(2) ** 2
   ai = 2.0d0 * rr(2) * xx(2)
@@ -446,7 +446,7 @@ subroutine over41
   cr = rr(1) - ar * rsum + ai * xsum
   cii = xx(1) - ar * xsum - ai * rsum
   if (iwind .eq. 2) go to 145
-  write (unit = lunit6, fmt = 140) text2(1), text3(1), cr, cii
+  write (unit = lunit(6), fmt = 140) text2(1), text3(1), cr, cii
 140 format (1x, a6, ' to ', a6, 2f15.5)
   cr = rr(6) ** 2 + xx(6) ** 2
   rsum = rr(6) / cr
@@ -455,23 +455,23 @@ subroutine over41
   ai = 2.0d0 * rr(4) * xx(4)
   cr = rr(1) - ar * rsum + ai * xsum
   cii = xx(1) - ar * xsum - ai * rsum
-  write (unit = lunit6, fmt = 140) text2(2), text3(2), cr, cii
+  write (unit = lunit(6), fmt = 140) text2(2), text3(2), cr, cii
   ar = rr(5) ** 2 - xx(5) ** 2
   ai = 2.0d0 * rr(5) * xx(5)
   cr = rr(3) - ar * rsum + ai * xsum
   cii = xx(3) - ar * xsum - ai * rsum
-  write (unit = lunit6, fmt = 140) text2(3), text3(3), cr, cii
+  write (unit = lunit(6), fmt = 140) text2(3), text3(3), cr, cii
   go to 146
-145 write (unit = lunit6, fmt = 140) text1(1), text1(3), cr, cii
+145 write (unit = lunit(6), fmt = 140) text1(1), text1(3), cr, cii
 146 if (ichck .gt. 0) go to 600
   j = (iwind - 1) * 3
   do i = 1, j
-     if (xx(i) .lt. 0.0d0) write (unit = lunit6, fmt = 155)
+     if (xx(i) .lt. 0.0d0) write (unit = lunit(6), fmt = 155)
 155  format (' Input data looks suspicious, because one or more inductances is negative.')
      call round (rr(i))
      call round (xx(i))
   end do
-  write (unit = lunit6, fmt = 160)
+  write (unit = lunit(6), fmt = 160)
 160 format (' Repeat of preceding calculation, only this time the starting point will be the impedance matrix with all', /, ' elements rounded to five decimal digits.')
   ichck = 1
   go to 135
@@ -491,12 +491,12 @@ subroutine over41
   call free (z)
   !  call freone (pratg)
   call free (pratg)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
   if (kill .gt. 0) go to 99999
 1765 write (unit = kunit6, fmt = 3904) v1, v2, ploss, z
   call interp
-  write (unit = lunit6, fmt = 15) iwind, cmag, pmag
-  write (unit = lunit6, fmt = 20) text1(1), v1, text1(1), text1(3), ploss, z, pratg
+  write (unit = lunit(6), fmt = 15) iwind, cmag, pmag
+  write (unit = lunit(6), fmt = 20) text1(1), v1, text1(1), text1(3), ploss, z, pratg
   text1(2) = t3
   cmag = cmag  * pmag / 200.0d0
   rsum = ploss / (pratg * 1000.0d0)
@@ -520,7 +520,7 @@ subroutine over41
   xx(3) = (cmag - ai) / vtap
   call cxred1 (rr(1 :), xx(1 :), ll2, ll0)
   go to 75
-600 write (unit = lunit6, fmt = 601)
+600 write (unit = lunit(6), fmt = 601)
 601 format (/, 1x)
   go to 5
   !     Begin code for the conversion of saturable  'transformer'
@@ -578,7 +578,7 @@ subroutine over41
   go to 9000
 7175 write (unit = kunit6, fmt = 7178)
 7178 format ('+Data card for following transformer, if any.')
-  write (unit = lunit6, fmt = 7182) iwind, statfr, xopt, d4, d5
+  write (unit = lunit(6), fmt = 7182) iwind, statfr, xopt, d4, d5
 7182 format (//,' Saturable transformer input data is now complete. Relevant scalar parameters may be summarized as follows ...' , /, 1x, i19, '  =  number of transformer windings ', /, e20.6, '  =  power frequency in Hz (equivalence will be exact at this frequency)', /, e20.6, "  =  'xopt'  (EMTP inductance/reactance specification parameter)", /, e20.8, '  =  assumed linear magnetizing inductance in H', /, e20.8, '  =  magnetizing reactance at the power frequency in Ohms')
   if (d3 .gt. 0.0d0) go to 7206
   d9 = 0.0d0
@@ -591,7 +591,7 @@ subroutine over41
   d10 = d6 * d4 / d8
 7216 if (xopt .eq. 0.0d0) d10 = d10 * 1000.0d0 / omega
   if (xopt .gt. 0.0d0) d10 = d10 * xopt / statfr
-  write (unit = lunit6, fmt = 4201) (i, i = 1, 8)
+  write (unit = lunit(6), fmt = 4201) (i, i = 1, 8)
   do i = 1, iwind
      n1 = i - 1
      d11 = volt(i) / volt(1)
@@ -603,9 +603,9 @@ subroutine over41
         d12 = d11 * volt(j) / volt(1)
         d13 = d12 * d9
         d14 = d12 * d10
-        write (unit = lunit7, fmt = 7231) text6, bus1, bus2, d13, csepar, d14, chcont
+        write (unit = lunit(7), fmt = 7231) text6, bus1, bus2, d13, csepar, d14, chcont
 7231    format (a2,  2a6,  12x,  2(e22.13, 1x, a1),  1x,  a1,  6x)
-        write (unit = lunit6, fmt = 7234) text6, bus1, bus2, d13, csepar, d14, chcont
+        write (unit = lunit(6), fmt = 7234) text6, bus1, bus2, d13, csepar, d14, chcont
 7234    format (1x,  a2,  2a6,  12x,  2(e22.13, 1x, a1),  1x,  a1,  6x)
         bus1 = blank
         bus2 = blank
@@ -616,17 +616,17 @@ subroutine over41
      voltk(i) = d12 * d10
      d13 = ohm(i) + volti(i)
      d14 = henry(i) + voltk(i)
-     write (unit = lunit7, fmt = 7262) text6, bus1, bus2, d13, csepar, d14, (csepar, m = 1, 5)
+     write (unit = lunit(7), fmt = 7262) text6, bus1, bus2, d13, csepar, d14, (csepar, m = 1, 5)
 7262 format (a2, 2a6, 12x, 2(e22.13, 1x, a1), 1x, 5a1, 2x)
-     write (unit = lunit6, fmt = 7265) text6, bus1, bus2, d13, csepar, d14, (csepar, m = 1, 5)
+     write (unit = lunit(6), fmt = 7265) text6, bus1, bus2, d13, csepar, d14, (csepar, m = 1, 5)
 7265 format (1x, a2, 2a6, 12x, 2(e22.13, 1x, a1), 1x, 5a1, 2x)
   end do
-  write (unit = lunit6, fmt = 4271)
-  write (unit = lunit6, fmt = 7277) (i, ohm(i), henry(i), volti(i), voltk(i), i = 1, iwind)
+  write (unit = lunit(6), fmt = 4271)
+  write (unit = lunit(6), fmt = 7277) (i, ohm(i), henry(i), volti(i), voltk(i), i = 1, iwind)
 7277 format (' Components which are added to form diagonals of the matrix.   Computer word-length should be able to accurately', /, ' handle this addition without the leakage being lost in the roundoff.   If not, the resulting  (r)  and  (l)  are of', /, ' questionable value for purposes of EMTP simulation.   Column 1 is to be added to column 3,   and column 2  is', /, ' to be added to column 4 to produce the diagonals.', /, 7x, 'row', 11x, 'leakage R', 6x, 'leakage L or X', 12x, 'magnetizing R', 6x, 'magnet. L or X', 16x, /, (i10, 2e20.10, 5x, 2e20.10))
   read (unit = abuff, fmt = 7284) (aupper(i), i = 1, 14)
 7284 format (13a6, a2)
-  write (unit = lunit6, fmt = 7288)  ( aupper(i), i=1, 14 )
+  write (unit = lunit(6), fmt = 7288)  ( aupper(i), i=1, 14 )
 7288 format (///, ' Another saturable transformer has now been successfully converted to  (r), (l)  format.   that computation', /, ' is now complete.  The EMTP now begins to process the following case (if any) by re-listing the last-read data', /, ' card (which did not belong to the last case, recall).', /, 1x, 131('-'), /, '+', 50x, '1', /, 51x, '1', 13a6, a2)
   read (unit = abuff, fmt = 7281) bus5
 7281 format (2x, a6)
@@ -638,7 +638,7 @@ subroutine over41
 9200 lstat(18) = nchain
   lastov = nchain
   nchain = 51
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
 99999 return
 end subroutine over41
 
@@ -672,9 +672,9 @@ subroutine crdchg
   blanks = ' '
   work = ' '
   !
-  write (unit = lunit6, fmt = 20)
+  write (unit = lunit(6), fmt = 20)
 20 format (' This code will read data types 91-switched resistor, 92-switched resistance, and 93-switched inductor.')
-  write (unit = lunit6, fmt = 26)
+  write (unit = lunit(6), fmt = 26)
 26 format (" The data will be converted, formated, and written out to meet the new EMTP rule book's requirements.")
   !
   !open(unit = 7, status = 'new', err = 40)
@@ -699,13 +699,13 @@ subroutine crdchg
      !
      if (card(1 : 2) .eq. '91') then
         if (card(39 : 44) .eq. ' 3333.') go to 200
-        write (unit = lunit6, fmt = 625) card
+        write (unit = lunit(6), fmt = 625) card
 625     format (' Type-91:  piece-wise linear resistor', 14x, '1', a80)
         write (unit = 7, fmt = 1175) card(1 : 78)
 1175    format ('c ', a78)
         write (unit = 7, fmt = 1100) card(1 : 26), card(80 : 80)
 1100    format (a26, 12x, ' 3333.', 37x, a1)
-        write (unit = lunit9, fmt = 1150) card(1 : 26), card(80 : 80)
+        write (unit = lunit(9), fmt = 1150) card(1 : 26), card(80 : 80)
 1150    format (a26, 12x, ' 3333.', 37x, a1)
         !
         work(1 : 25) = blanks(1 : 19)//card(27 : 32)
@@ -714,7 +714,7 @@ subroutine crdchg
 1160    format ('c', 18x, 'vstart')
         write (unit = 7, fmt = 1200) work
 1200    format (a80)
-        write (unit = lunit9, fmt = 1225) work
+        write (unit = lunit(9), fmt = 1225) work
 1225    format (a80)
         !
         write (unit = 7, fmt = 1185)
@@ -733,9 +733,9 @@ subroutine crdchg
 1415       format ('c ', a78)
            write (unit = 7, fmt = 1413) work
 1413       format (a80)
-           write (unit = lunit6, fmt = 1300) card(1 : 32), work
+           write (unit = lunit(6), fmt = 1300) card(1 : 32), work
 1300       format (1x, 'Characteristics', a32, 3x, '1', a80)
-           write (unit = lunit9, fmt = 1325) work
+           write (unit = lunit(9), fmt = 1325) work
 1325       format (a80)
            !
            go to 1250
@@ -760,7 +760,7 @@ subroutine crdchg
      !     *** case '92' ***
      !
      if (card(1 : 2) .eq. '92') then
-        write (unit = lunit6, fmt = 650) card
+        write (unit = lunit(6), fmt = 650) card
 650     format (' Type-92:  switched resistance', 21x, '1', a80)
         work = ' '
         write (unit = 7, fmt = 3100) card(1 : 78)
@@ -780,10 +780,10 @@ subroutine crdchg
 3400    format ('c', 8x, 'current', 12x, 'volt', 50x)
         write (unit = 7, fmt = 3500) card(35 : 44)
 3500    format (7x, '0.0000001', 6x, a10, 50x)
-        write (unit = lunit9, fmt = 3525) card(3 : 14), work(1 : 6), ansi32(27 : 32), work(13 : 79), card(80 : 80)
+        write (unit = lunit(9), fmt = 3525) card(3 : 14), work(1 : 6), ansi32(27 : 32), work(13 : 79), card(80 : 80)
 3525    format ('99', a12, 12x, a6, 6x, '     2', a6, a30, a1)
         !
-        write (unit = lunit9, fmt = 3535) card(35 : 44)
+        write (unit = lunit(9), fmt = 3535) card(35 : 44)
 3535    format (7x, '0.0000001', 6x, a10, 50x)
         !
         read (unit = card(15 : 24), fmt = 3550) resist
@@ -797,9 +797,9 @@ subroutine crdchg
 3650    format (a64)
         write (unit = 7, fmt = 3700)
 3700    format (12x, '9999')
-        write (unit = lunit9, fmt = 3725) work(13 : 80)
+        write (unit = lunit(9), fmt = 3725) work(13 : 80)
 3725    format (a64)
-        write (unit = lunit9, fmt = 3750)
+        write (unit = lunit(9), fmt = 3750)
 3750    format (12x, '9999')
         go to 700
      end if
@@ -807,7 +807,7 @@ subroutine crdchg
      !     *** case '93' ***
      !
      if (card(1 : 2) .eq. '93') then
-        write (unit = lunit6, fmt = 675) card
+        write (unit = lunit(6), fmt = 675) card
 675     format (' Type-93:  switched inductance', 21x, '1', a80)
         work = ' '
         write (unit = 7, fmt = 5025) card(1 : 78)
@@ -826,7 +826,7 @@ subroutine crdchg
         call fltopt (ys, n6)
         write (unit = 7, fmt = 5250) card(3 : 14), ansi32(27 : 32), card(80 : 80)
 5250    format ('98', a12, 12x, '   1.0', a6, 42x, a1)
-        write (unit = lunit9, fmt = 5275) card(3 : 14), ansi32(27 : 32), card(80 : 80)
+        write (unit = lunit(9), fmt = 5275) card(3 : 14), ansi32(27 : 32), card(80 : 80)
 5275    format ('98', a12, 12x, '   1.0', a6, 42x, a1)
         write (unit = 7, fmt = 5150)
 5150    format ('c', 8x, 'current', 12x, 'flux', 50x)
@@ -841,24 +841,24 @@ subroutine crdchg
 5450    format (a32, 47x)
         write (unit = 7, fmt = 5500)
 5500    format (12x, '9999', 65x)
-        write (unit = lunit9, fmt = 5600) work(23 : 38), card(45 : 54)
+        write (unit = lunit(9), fmt = 5600) work(23 : 38), card(45 : 54)
 5600    format (a16, 6x, a10, 47x)
-        write (unit = lunit9, fmt = 5700) work(39 : 70)
+        write (unit = lunit(9), fmt = 5700) work(39 : 70)
 5700    format (a32, 47x)
-        write (unit = lunit9, fmt = 5800)
+        write (unit = lunit(9), fmt = 5800)
 5800    format (12x, '9999', 65x)
      end if
      !
   end do
 700 continue
   !
-10000 rewind lunit9
-  write (unit = lunit6, fmt = 425)
+10000 rewind lunit(9)
+  write (unit = lunit(6), fmt = 425)
 425 format (/, 27x, 'Sequential list of punched output.', /, 81('-'), /, 1x, '         1         2         3         4         5         6         7         8', /, 1x, '12345678901234567890123456789012345678901234567890123456789012345678901234567890', /, 1x, 81('-'), /, 1x)
   do i = 1, 9999
-     read(unit = lunit9, fmt = 10050, end = 10200) card
+     read(unit = lunit(9), fmt = 10050, end = 10200) card
 10050 format (a80)
-     write (unit = lunit6, fmt = 10100) card
+     write (unit = lunit(6), fmt = 10100) card
 10100 format (1x, a80)
   end do
 10200 stop
@@ -1014,7 +1014,7 @@ subroutine store (i, j, n, d2r, d2x, d1r, d1x)
   integer(4) :: k1, k2, k16, kij, km1, km2, km3, km4, km5, km6
   real(8) :: br, bx
   !
-  if (iprsup .ge. 5) write (unit = lunit6, fmt = 2472) i, j, n, d2r, d2x, d1r, d1x
+  if (iprsup .ge. 5) write (unit = lunit(6), fmt = 2472) i, j, n, d2r, d2x, d1r, d1x
 2472 format (' i, j, n, d2r, d2x, d1r, d1x =', 3i5, 4e18.8)
   kij = j + i * (i - 1) / 2
   k1 = (n + i - 1) * (n + i) / 2 + n + j
@@ -1139,7 +1139,7 @@ subroutine bctran
   !
   !  common /newt1/ rwin(10), zhl, zht, zlt, k, m, idelt, logsix
   data maxit / 200 /
-  logsix = lunit6
+  logsix = lunit(6)
   err = int (flzero * 10.0d0)
   aq = unity / 3.0d0
   d1 = 3.0d0
@@ -1157,9 +1157,9 @@ subroutine bctran
   bexm = bexs
   ratzer = ratpos
   gexm = gexs
-  write (unit = lunit6, fmt = 37)
+  write (unit = lunit(6), fmt = 37)
 37 format (' Three phase bank consists of single phase units')
-36 write (unit = lunit6, fmt = 4004) iwin, freq, iprint, bexs, ratpos, gexs, bexm, ratzer, gexm
+36 write (unit = lunit(6), fmt = 4004) iwin, freq, iprint, bexs, ratpos, gexs, bexm, ratzer, gexm
 4004 format ('0', i6, '-Winding transformer. freq.=', f6.2, 'Hz', 10x, 'output option =', i3, //, 27x, 'Exciting current(percent) rating(MVA) excitation loss(kW)', /, ' pos. seq.', f13.5, f18.2, f19.4, /, ' Zero seq.', f13.5, f18.2, f19.4, /, 1x, 'Winding no. voltage(kV)   R(Ohm)', 16x, 'Node name pairs for legs i, ii, iii')
   hfreq = freq
   freq = freq * twopi
@@ -1173,7 +1173,7 @@ subroutine bctran
      call cimage
      read (unit = abuff, fmt = 701) m1, z1, zo, (iname(i), i = 1, 6)
 701  format (i3, 2e10.2, 1x, 6a6)
-     write (unit = lunit6, fmt = 4009) m1, z1, zo, (iname(i), i = 1, 6)
+     write (unit = lunit(6), fmt = 4009) m1, z1, zo, (iname(i), i = 1, 6)
 4009 format (' ', i6, f16.3, f10.5, 6(4x, a6))
      m5 = (m1 - 1) * 6
      do i = 1, 6
@@ -1184,7 +1184,7 @@ subroutine bctran
      rwin2(k) = 0.0d0
      v(m1) = othree / z1
   end do
-  write (unit = lunit6, fmt = 4008) itest, iput
+  write (unit = lunit(6), fmt = 4008) itest, iput
 4008 format (' Excitation test made from winding', i3, '. Magn. impedance placed across winding', i3)
   gexs = gexs * ethree
   gexm = gexm * ethree
@@ -1202,7 +1202,7 @@ subroutine bctran
   nn2 = itest
 12 i = 0
   if (nn1 .le. 0 .and. nn2 .gt. 0) go to 320
-  write (unit = lunit6, fmt = 4005)
+  write (unit = lunit(6), fmt = 4005)
 4005 format ('0', 24x, 'positive sequence', 25x, 'zero sequence', 10x, ' closed delta', /, ' from  to  load loss(kw)  impedance(percent)  rating(MVA)   impedance(percent) rating(MVA)', 5x, 'in')
   !     Read input card using cimage.
 25 call cimage
@@ -1214,7 +1214,7 @@ subroutine bctran
   idelt = 0
   xzero = xpos
   ratzer = ratpos
-38 write (unit = lunit6, fmt = 4007) ibg, ien, h1, xpos, ratpos, xzero, ratzer, idelt
+38 write (unit = lunit(6), fmt = 4007) ibg, ien, h1, xpos, ratpos, xzero, ratzer, idelt
 4007 format (' ', 2i4, 2f15.5, f17.2, f16.5, f14.2, 7x, i3)
   if (ibg .eq. ien) go to 300
   if (ibg .gt. iwin .or. ien .gt. iwin) go to 300
@@ -1256,19 +1256,19 @@ subroutine bctran
   xo(i) = -sqrtz (xzero)
   go to 25
 10 if (in .ne. i) go to 310
-  write (unit = lunit6, fmt = 901) iloss
+  write (unit = lunit(6), fmt = 901) iloss
 901 format (' iloss =', i3)
   if (iloss .eq. 0) go to 303
   if (iwin .gt. 3) go to 303
   do i = 1, iwin
      b = rwin2(i)
      if (b.gt. 0.0d0) go to 181
-     write (unit = lunit6, fmt = 890) i, b
+     write (unit = lunit(6), fmt = 890) i, b
 890  format (' Resistance of winding ', i3, ' was calculated as ', e15.6, /, 'and is set equal to zero')
      b = 0.0d0
 181  rwin(i) = b
   end do
-  write (unit = lunit6, fmt = 182)
+  write (unit = lunit(6), fmt = 182)
 182 format(' Resistance matrix values calculated from load losses')
   !     Process input data to account for the closed delta effect in the
   !     zero  sequence  short-circuit tests******************************
@@ -1351,11 +1351,11 @@ subroutine bctran
   zhl = a / b
   if (zhl .lt. 0.0d0) go to 950
   zhl = sqrtz (zhl) * rmva(i)
-  write (unit = lunit6, fmt = 172) k, m, idelt, zhl
+  write (unit = lunit(6), fmt = 172) k, m, idelt, zhl
   xo(i) = -b1 - b2
   nad(i) = 0
   if (k2 .eq. 0) go to 800
-  write (unit = lunit6, fmt = 173) k, idelt, k, m, m, idelt
+  write (unit = lunit(6), fmt = 173) k, idelt, k, m, m, idelt
 173 format ('0input value of zero sequence short-circuit impedance from', i3, ' to', i3, ' is ignored and set equal to value from', i3, ' to', i3, /, 'because both impedances must be equal if there are closed deltas in', i3, ' and', i3)
   xo(kk2) = -b1 - b3
   nad(kk2) = 0
@@ -1374,7 +1374,7 @@ subroutine bctran
 158 h1 = (gexs ** 2 + bexs ** 2) * a
   if (gexs .ge. h1) go to 845
   gexs = h1
-  write (unit = lunit6, fmt = 846) gexs
+  write (unit = lunit(6), fmt = 846) gexs
 846 format ('0pos. seq. excitation losses raised to', e15.6, ' MW')
 845 h1 = gexs ** 2 + bexs ** 2
   if (h1 .lt. epsiln) go to 157
@@ -1386,7 +1386,7 @@ subroutine bctran
 157 h1 = (gexm ** 2 + bexm ** 2) * a
   if (gexm .ge. h1) go to 847
   gexm = h1
-  write (unit = lunit6, fmt = 848) gexm
+  write (unit = lunit(6), fmt = 848) gexm
 848 format ('0zero seq. excitation losses raised to', e15.6, ' MW')
 847 h1 = gexm ** 2 + bexm ** 2
   if (h1 .lt. epsiln) go to 154
@@ -1395,11 +1395,11 @@ subroutine bctran
   ww = h11 ** 2 + h1 ** 2
   gexm = h11 / ww
   bexm = h1 / ww
-154 write (unit = lunit6, fmt = 853)
+154 write (unit = lunit(6), fmt = 853)
 853 format ('0', 15x, 'Shunt resistances for representation of excitation losses%')
   if (gexm .ge. gexs)  go to 861
   gexm = gexs
-  write (unit = lunit6, fmt = 862)
+  write (unit = lunit(6), fmt = 862)
 862 format (' Zero sequence shunt resistance reduced to be equal to positive sequence value.')
 861 if (absz (gexm) .lt. epsiln .or. absz (gexs) .lt. epsiln) go to 852
   gexm = gexs / gexm
@@ -1410,20 +1410,20 @@ subroutine bctran
   q = v(iput) ** 2
   b = gexs / q
   bb = gexm / q
-  write (unit = lunit6, fmt = 855) iput, b, bb
+  write (unit = lunit(6), fmt = 855) iput, b, bb
 855 format (' Place shunt resistance matrix across winding', i3, ' with R(self/Ohm)=', e15.6, 5x, ' and R(mutual/Ohm)=', e15.6)
   go to 153
-854 write (unit = lunit6, fmt = 858)
+854 write (unit = lunit(6), fmt = 858)
 858 format (' Place shunt resistance matrix across all terminals with the following values%', /, 'winding no.', 10x, 'R(self/Ohm)', 10x, 'R(mutual/Ohm)')
   do i = 1, iwin
      q = v(i) ** 2
      b = gexs * iwin / q
      bb = gexm * iwin / q
-     write (unit = lunit6, fmt = 857) i, b, bb
+     write (unit = lunit(6), fmt = 857) i, b, bb
   end do
 857 format (i6, e28.6, e21.6)
   go to 153
-852 write (unit = lunit6, fmt = 859)
+852 write (unit = lunit(6), fmt = 859)
 859 format (' Leave off, because series resistances already produce losses which are greater than input values of excitation losses.')
 153 continue
   do i = 1, in
@@ -1568,10 +1568,10 @@ subroutine bctran
   end do
   iss = 0
   if (iprint .gt. 0) go to 752
-  write (unit = lunit6, fmt = 715)
+  write (unit = lunit(6), fmt = 715)
 715 format ('0 branch data - resistance matrix (Ohms) and inverse inductance matrix (1/Henries)')
   if (iss .le. 0) go to 730
-506 write (unit = lunit6, fmt = 709) hfreq
+506 write (unit = lunit(6), fmt = 709) hfreq
 709 format('0 branch data - resistance matrix (Ohms) and reactance matrix (Ohms) at', f6.2, ' Hz')
 730 ib = 3 * iwin
   icount = 0
@@ -1609,14 +1609,14 @@ subroutine bctran
 705  end do
      ii50 = ii
      if (ii .eq. 1) go to 722
-     write (unit = lunit6, fmt = 721) ii50, name(nf), name(nt), (rout(i), y(i), i = 1, ii)
+     write (unit = lunit(6), fmt = 721) ii50, name(nf), name(nt), (rout(i), y(i), i = 1, ii)
 721  format (' ', i2, 2a6, 12x, 2e17.10, /, (' ', 26x, 2e17.10))
-     write (unit = lunit7, fmt = 726) ii50, name(nf), name(nt), (rout(i), y(i), i = 1, ii)
+     write (unit = lunit(7), fmt = 726) ii50, name(nf), name(nt), (rout(i), y(i), i = 1, ii)
 726  format (i2, 2a6, 12x, 2e16.10, /, (26x, 2e16.10))
      go to 724
-722  write (unit = lunit6, fmt = 723) ii50, name(nf), name(nt), (rout(i), y(i), i = 1, ii)
+722  write (unit = lunit(6), fmt = 723) ii50, name(nf), name(nt), (rout(i), y(i), i = 1, ii)
 723  format (' ', i2, 2a6, 12x, 2e17.10)
-     write (unit = lunit7, fmt = 725) ii50, name(nf), name(nt), (rout(i), y(i), i = 1, ii)
+     write (unit = lunit(7), fmt = 725) ii50, name(nf), name(nt), (rout(i), y(i), i = 1, ii)
 725  format (i2, 2a6, 12x, 2e16.10)
 724  rout(ii) = 0.0d0
   end do
@@ -1639,32 +1639,32 @@ subroutine bctran
   end do
   iss = 1
   go to 506
-120 write (unit = lunit6, fmt = 121) iwin
+120 write (unit = lunit(6), fmt = 121) iwin
 121 format (' Number of windings =', i3)
   call stoptp
-300 write (unit = lunit6, fmt = 309) ibg, ien
+300 write (unit = lunit(6), fmt = 309) ibg, ien
 309 format (' ', 2i3, ' Wrong winding numbers')
   call stoptp
-301 write (unit = lunit6, fmt = 302) ibg, ien
+301 write (unit = lunit(6), fmt = 302) ibg, ien
 302 format (' Load losses or winding resistances too large', 2i3)
   call stoptp
-303 write (unit = lunit6, fmt = 304)
+303 write (unit = lunit(6), fmt = 304)
 304 format (' Resistance matrix values are those which were read in')
   go to 19
-310 write (unit = lunit6, fmt = 311) i, in
+310 write (unit = lunit(6), fmt = 311) i, in
 311 format (' only', i3, ' short-circuit tests specified but', i3, ' are needed')
   call stoptp
-320 write (unit = lunit6, fmt = 321) itest, iput
+320 write (unit = lunit(6), fmt = 321) itest, iput
 321 format (' either itest =', i3, ' or iput =', i3, ' not permitted')
   call stoptp
-110 write (unit = lunit6, fmt = 101) j
+110 write (unit = lunit(6), fmt = 101) j
 101 format (' diagonal element in row', i3, ' close to zero')
   call stoptp
-830 write (unit = lunit6, fmt = 840) idelt, k, m
+830 write (unit = lunit(6), fmt = 840) idelt, k, m
 840 format (' idelta=', i2, ' wrong in short-circuit test between', i3, ' and', i3)
   call stoptp
 832 kcode = 1
-835 write (unit = lunit6, fmt = 834) k, m, kcode
+835 write (unit = lunit(6), fmt = 834) k, m, kcode
   call stoptp
 833 kcode = 2
   go to 835
@@ -1674,7 +1674,7 @@ subroutine bctran
   !     go to 835   pacific power: unreachable s.n. 839.  wsm.
 950 kcode = 5
   go to 835
-850 write (unit = lunit6, fmt = 851)
+850 write (unit = lunit(6), fmt = 851)
 851 format (' p.u. excitation loss larger than p.u. exciting current (either in pos. or zero sequence)')
 834 format (' Modification of zero sequence short-circuit test between', i3, ' and', i3, ' not possible. Error code =', i3)
 312 call stoptp

@@ -2,12 +2,12 @@ begin new data case
 c RL.............................................Figure 3.9(a)..................
 c Energization of a trivial RL circuit.                                        |
 c ----dt<---tmax...............................................................|
- 100.e-6  50.e-3
+ 200.e-6  50.e-3
 c -Iprnt<--Iplot<-Idoubl<-KssOut<-MaxOut<---Ipun<-Memsav<---Icat
       25       1       1       0       0                       0
 c
 c Circuit data..................................................................
-c Bus-->Bus-->Bus-->Bus--><----R<----L                                         0
+c Bus-->Bus-->Bus-->Bus--><----R<----L<----C                                   0
   load                        .1    1.                                         0
 blank End of circuit data......................................................|
 c
@@ -28,7 +28,14 @@ blank End of output requests...................................................|
 c
 c Plot request Data.............................................................
   Figure 3.9(c): Output for Switch Current
+c  ______Graph type: 4(volts) 8(branch volts) 9(currents)                      |
+c | _____Units: 1(deg) 2(cyc) 3(sec) 4(msec) 5(microsec)                       |
+c ||   _________Units per inch                                                 |
+c ||  |    _____Plot starting time                                             |
+c ||  |   |    _Plot stopping time                                             |
+c ||  |   |   |     _____Value at bottom of vertical axis (optional)           |
+c ||  |   |   |    |     Value at top of vertical axis (optional)              |
 c VV<-|<--|<--|<---|---|Bus-->Bus-->Bus-->Bus-->Heading-------->Vert axis------>
  194 5. 0.0 50. -4.   4.src   load              RL Energization Amps
-blank End of Plot Request Data..................................................
-blank End of All Cases
+blank End of Plot Request Data.................................................|
+blank End of All Cases                                                         |

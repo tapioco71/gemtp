@@ -41,7 +41,7 @@ subroutine ntacs2
      do j = 2, ntot
         if (real8 .eq. bus(j)) go to 4018 ! wsm + thl manual modification for bpa emtp
      end do
-     write (unit = lunit6, fmt = 601) hus1, hus1
+     write (unit = lunit(6), fmt = 601) hus1, hus1
 601  format(' tacs2 -- as found in a TACS input', /, 'the EMTP function "v(', a6, ')" or "imssv(', a6,')"', /, '          refers to a non-existing node name', /, '          in the electrical network.')
      call stoptp
 4012 if (i1 .ne. 91 .and. i1 .ne. 93 .and. i1 .ne. 95) goto 4010
@@ -54,7 +54,7 @@ subroutine ntacs2
         if (real8 .eq. bus(k) .or. real8 .eq. bus(m)) go to 4018 ! wsm + thl manual modification for bpa emtp
      end do
 !4030 continue
-     write (unit = lunit6, fmt = 602) hus1, hus1, hus1
+     write (unit = lunit(6), fmt = 602) hus1, hus1, hus1
 602  format(' tacs2 -- as found in a TACS input', /, '          the EMTP function "i(',      a6, ')"', /, '                         or "switch(', a6, ')"', /, '                         or "imssi(',  a6, ')"', /, '          refers to a non-existing switch name or node name', /, '          in the electrical network.')
      call stoptp
 4018 ud1(i5 + 2) = j

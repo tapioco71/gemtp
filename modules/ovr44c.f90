@@ -40,7 +40,7 @@ contains
     w = unity
     if (m .gt. 0) w = -w
     ij = n * j / 2
-    if (iprsup  .ge.  4) write (unit = lunit6, fmt = 2692) n, m, ij,  (a(k), k = 1, ij)
+    if (iprsup  .ge.  4) write (unit = lunit(6), fmt = 2692) n, m, ij,  (a(k), k = 1, ij)
 2692 format (/, " At start of  'redu44' .       n       m      ij  ", /, 24x, 3i8, /, ' (a(k), k = 1, ij)  follow ....', /, (1x, 8e16.7))
 3   j = j - 1
     if (j .eq. m) return
@@ -165,74 +165,74 @@ contains
     if (metrik .eq. 1) txtunt = txtkm
     if (metrik .eq. 1) unit = 5280.0d0 * 12.0d0 * 2.54d0 / 100000.0d0
     check = switch
-    write (unit = lunit6, fmt = 66)
+    write (unit = lunit(6), fmt = 66)
 66  format ('0')
     !  go to (305, 306, 307, 308, 332, 333, 336, 337, 340, 341), is
     select case (is)
     case (1)
-       write (unit = lunit6, fmt = 301) txtunt
+       write (unit = lunit(6), fmt = 301) txtunt
 301    format ('0', 12x, 'Inverted capacitance matrix (daraf-', a4, ')')
 
     case (2)
-       write (unit = lunit6, fmt = 302) txtunt
+       write (unit = lunit(6), fmt = 302) txtunt
 302    format ('0', 14x, 'Inverted susceptance matrix (Ohm-', a4, ')')
 
     case (3)
-       write (unit = lunit6, fmt = 303) txtunt
+       write (unit = lunit(6), fmt = 303) txtunt
 303    format ('0', 21x, 'Capacitance matrix (Farad/',a4, ')')
        unit = 1.0d0 / unit
 
     case (4)
-       write (unit = lunit6, fmt = 304) txtunt
+       write (unit = lunit(6), fmt = 304) txtunt
 304    format ('0', 23x, 'Susceptance matrix (mho/', a4, ')')
        unit = 1.0d0 / unit
 
     case (5)
-       write (unit = lunit6, fmt = 330) txtunt
+       write (unit = lunit(6), fmt = 330) txtunt
 330    format ('0', 16x, 'Inverted impedance matrix (mho-', a4, ')')
 
     case (6)
-       write (unit = lunit6, fmt = 331) txtunt
+       write (unit = lunit(6), fmt = 331) txtunt
 331    format ('0', 25x, 'Impedance matrix (Ohm/', a4, ')')
        unit = 1.0d0 / unit
 
     case (7)
-       write (unit = lunit6, fmt = 334)
+       write (unit = lunit(6), fmt = 334)
 334    format ('0', 19x, 'Transfer admittance matrix (mhos)')
 
     case (8)
-       write (unit = lunit6, fmt = 335)
+       write (unit = lunit(6), fmt = 335)
 335    format ('0', 16x, 'Twice shunt admittance matrix (mhos)')
 
     case (9)
-       write (unit = lunit6, fmt = 338)
+       write (unit = lunit(6), fmt = 338)
 338    format ('0', 20x, 'Transfer impedance matrix (Ohms)')
 
     case (10)
-       write (unit = lunit6, fmt = 339)
+       write (unit = lunit(6), fmt = 339)
 339    format ('0', 11x, 'One half of shunt impedance matrix (Ohms)')
     end select
     !5 go to (320,321,322),k2
     select case (k2)
     case (1)
-       write (unit = lunit6, fmt = 309)
+       write (unit = lunit(6), fmt = 309)
 309    format ('+', 53x, 'For the system of physical conductors')
 
     case (2)
-       write (unit = lunit6, fmt = 310)
+       write (unit = lunit(6), fmt = 310)
 310    format ('+', 53x, 'For the system of equivalent phase conductors')
        go to 6
 
     case (3)
-       write (unit = lunit6, fmt = 311)
+       write (unit = lunit(6), fmt = 311)
 311    format ('+', 53x, 'For the symmetrical components of the equivalent phase conductors')
     end select
 6   if (k2 .eq. 3) go to 3
-    write (unit = lunit6, fmt = 312)
+    write (unit = lunit(6), fmt = 312)
 312 format (' ', 30x, 'Rows and columns proceed in same order as sorted input')
 4   k = 0
-    if (is .eq. 8) write (unit = lunit6, fmt = 350)
-    if (is .eq.10) write (unit = lunit6, fmt = 350)
+    if (is .eq. 8) write (unit = lunit(6), fmt = 350)
+    if (is .eq.10) write (unit = lunit(6), fmt = 350)
 350 format (' Sum of two equal shunt admittances at both terminals or its inverse, printed to conform to transients program input format')
     kk = 0
     ki = 0
@@ -244,8 +244,8 @@ contains
     ki = ki + k
 7   if (i3 .gt. ki) i3=ki
     if (icount .eq. 0) go to 8
-    call wrte (p(1 :), i2, i3, ll1, l, unit, lunit6)
-10  if (check .gt. 0.0d0) call wrte (z(1 :), i2, i3, ll2, l, unit, lunit6)
+    call wrte (p(1 :), i2, i3, ll1, l, unit, lunit(6))
+10  if (check .gt. 0.0d0) call wrte (z(1 :), i2, i3, ll2, l, unit, lunit(6))
     if (i3 .eq. ki) go to 1
     i2 = i3 + 1
     i3 = i2 + 8
@@ -253,13 +253,13 @@ contains
 8   icount = 1
     if (k2 .eq. 3) go to 20
     l = k
-21  call wrte (p(1 :), i2, i3, ll3, l, unit, lunit6)
+21  call wrte (p(1 :), i2, i3, ll3, l, unit, lunit(6))
     go to 10
 3   if (kmax .eq. 2) go to 400
-    write (unit = lunit6, fmt = 313)
+    write (unit = lunit(6), fmt = 313)
 313 format (' ', 25x, 'Rows proceed in sequence 0,1,2, 0,1,2 etc. and columns proceed in sequence 0,2,1, 0,2,1 etc.')
     go to 4
-400 write (unit = lunit6, fmt = 401)
+400 write (unit = lunit(6), fmt = 401)
 401 format (' ', 38x, 'This is a two-phase line. Rows and columns proceed in sequence 0,1')
     if (is .le. 4) check = -1.0d0
     go to 4
@@ -525,11 +525,11 @@ contains
     if (itrnsf .eq. 1  .and. nfreq .eq. 1) return
     if (itrnsf .eq. 1  .and. nfreq .eq. 2) return
     if (lastov .eq. 39 .and. nfreq .eq. 2) return
-100 if ( iprsup .ge. 1 ) write (lunit6,*) ' top of modal.   ndim =',  ndim
+100 if ( iprsup .ge. 1 ) write (lunit(6),*) ' top of modal.   ndim =',  ndim
     ll0 = 0
     mm=m*(m+1)/2
     c=unity
-    if (iprsup .ge. 1 ) write (lunit6, 300) m, mm, (p(i),z(i), i=1, mm)
+    if (iprsup .ge. 1 ) write (lunit(6), 300) m, mm, (p(i),z(i), i=1, mm)
 300 format (' At the top of modal, m and mm are', 2i10, /, ' (p(i), z (i), i = 1, mm) are', /, (1x, 8e15.6))
     d13 = twopi * freq
     if ( iw .eq. 1 ) c = c / d13
@@ -543,13 +543,13 @@ contains
     if (nfreq .ne. 1  .and.  lastov .eq. 39 .and. itrnsf .ne. 1) go to 2520
     if (lastov .eq. 39 .and. nfreq .eq. 3) go to 7030
     if (kexact .eq. 88333) go to 7030
-    write (unit = lunit6, fmt = 45) freq
-    write (unit = lunit6, fmt = 44)
+    write (unit = lunit(6), fmt = 45) freq
+    write (unit = lunit(6), fmt = 44)
     if (metrik .eq. 1) go to 7029
-    write (unit = lunit6, fmt = 65)
+    write (unit = lunit(6), fmt = 65)
     go to 7030
 7029 continue
-    write (unit = lunit6, fmt = 7031)
+    write (unit = lunit(6), fmt = 7031)
 7030 continue
 45  format (//, ' Modal parameters at freq = ', e13.5, ' Hz')
     ! ***** create y * z matrix from array from lcp main
@@ -581,7 +581,7 @@ contains
     ! **** the element of row i and column k of yz is obtained
     yzr(i, k) = cl
     yzi(i, k) = cr
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 350) i, k, yzr(i, k), yzi(i, k)
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 350) i, k, yzr(i, k), yzi(i, k)
 350 format ('       i       k       yzr(i,k)       yzi(i,k)', /, 2i8, 2e15.6)
     if (i .lt. m)go to 2
     ! **** yz is obtained in order of (1,1),(2,1),...,(1,2),(2,2),columnwise
@@ -603,11 +603,11 @@ contains
           yzi(i, j) = tempi(i, j)
        end do
     end do
-    call dceign(yzr, yzi, tvi, tvr, er, ei, m, m, ierror, ll1, ll0, lunit6, iprsup, ndim)
+    call dceign(yzr, yzi, tvi, tvr, er, ei, m, m, ierror, ll1, ll0, lunit(6), iprsup, ndim)
     !      write (*,*)(er(i), i=1,m)
     !      write (*,*)(ei(i), i=1,m)
     go to 7012
-7011 call dceign(yzr, yzi, tii, tir, er, ei, m, m, ierror, ll1, ll0, lunit6, iprsup, ndim)
+7011 call dceign(yzr, yzi, tii, tir, er, ei, m, m, ierror, ll1, ll0, lunit(6), iprsup, ndim)
     !      write (*,*)(er(i), i=1,m)
     !      write (*,*)(ei(i), i=1,m)
     go to 7072
@@ -632,16 +632,16 @@ contains
        kthl = kthl + 4
 5600 end do
     if ( iprsup .lt. 1 )  go to 5602
-    write (lunit6,*) ' tv before unwind. '
+    write (lunit(6),*) ' tv before unwind. '
     do i = 1, m
-       write (lunit6,59) ( tvr(i,j), j=1,m )
-       write ( lunit6,59) ( tvi(i,j), j=1,m )
+       write (lunit(6),59) ( tvr(i,j), j=1,m )
+       write ( lunit(6),59) ( tvi(i,j), j=1,m )
     end do
 5602 if (kexact .eq. 88333) go to 5620
     call unwind (ping, kthl, mrr, nrp, ntol, iseq)
     if ( iprsup .lt. 1 )  go to 5605
-    write (lunit6, *) ' iseq after unwind are, ', (iseq(i),i=1,m)
-    write (lunit6, *) ' ping after unwind are, ', (ping(i),i=1,kthl)
+    write (lunit(6), *) ' iseq after unwind are, ', (iseq(i),i=1,m)
+    write (lunit(6), *) ' ping after unwind are, ', (ping(i),i=1,kthl)
 5605 continue
     ! $$$$  begin the process of eigenvectors  $$$$
     do i=1,m
@@ -673,7 +673,7 @@ contains
     end do
     call cominv (tixf(1 :), work1(1 :), m, freq)
     ll = 1
-    if (iprsup .ge. 3) write (unit = lunit6, fmt = *) ' Before do 7004.  m, ndim, freq =', m, ndim, freq
+    if (iprsup .ge. 3) write (unit = lunit(6), fmt = *) ' Before do 7004.  m, ndim, freq =', m, ndim, freq
     do j = 1, m
        do i = 1, m
           tir(i, j) = work1(ll)
@@ -697,7 +697,7 @@ contains
           kmax(j) = i
 5802   end do
     end do
-    write (unit = lunit9) (kmax(j), j = 1, m)
+    write (unit = lunit(9)) (kmax(j), j = 1, m)
 5812 do j = 1, m
        if (pp1(kmax(j), j) .eq. 0.0d0) go to 5614
        dv = 1.0d0 / pp1(kmax(j), j)
@@ -720,7 +720,7 @@ contains
           tii(i, j) = (pp1(i, j)) * sinz (pp2(i, j))
        end do
     end do
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 400) freq, ((tir(i, j), tii(i, j), j = 1, m), i = 1, m)
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 400) freq, ((tir(i, j), tii(i, j), j = 1, m), i = 1, m)
 400 format (' At ', e12.5, 'Hz, eigenvectors tir and tii after scaling are', /, (1x, 8e15.6))
 7072 if (ierror .eq. 0) go to 463
     kill = 221
@@ -739,15 +739,15 @@ contains
 463 if (lastov .eq. 39 .and. itrnsf .eq. 1 .or. kexact .eq. 88333) go to 2500
     if (itrnsf .eq. -9 .or. itrnsf .eq. -1) go to 464
     if (iprsup .lt. 4) go to 88
-    write (unit = lunit6, fmt = 1462)
+    write (unit = lunit(6), fmt = 1462)
 1462 format (' Current transformation matrix before zeroing the imaginary part:')
-    write (unit = lunit6, fmt = 39)
+    write (unit = lunit(6), fmt = 39)
     do  k = 1, m
-       write (unit = lunit6, fmt = 9) (tir(k, j), j = 1, m)
+       write (unit = lunit(6), fmt = 9) (tir(k, j), j = 1, m)
     end do
-    write (unit = lunit6, fmt = 60)
+    write (unit = lunit(6), fmt = 60)
     do k = 1, m
-       write (unit = lunit6, fmt = 9) (tii(k, j), j = 1, m)
+       write (unit = lunit(6), fmt = 9) (tii(k, j), j = 1, m)
     end do
 88  continue
     do j = 1, m
@@ -796,23 +796,23 @@ contains
        end do
     end do
     !!    ** now, we have both ti and tv **
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 403) ((tvr(i, j), tvi(i, j), j = 1, m), i = 1, m)
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 403) ((tvr(i, j), tvi(i, j), j = 1, m), i = 1, m)
 403 format (' Eigenvectors tvr and tvi are', /, (1x, 8e15.6))
     if (lastov .eq. 39 .and. itrnsf .ne. 1) go to 166
     if (lastov .ne. 1) go to 2520
-    write (unit = lunit7, fmt = 8769) tclock, date1
+    write (unit = lunit(7), fmt = 8769) tclock, date1
 8769 format ("!    Punched output of K. C. Lee's line which began at ", 2x, 2a4, 2x, 2a4)
-    write (unit = lunit7, fmt = 8770) freq
+    write (unit = lunit(7), fmt = 8770) freq
 8770 format ( "c  ***** Untransposed K. C. Lee line segment calculated at ", 2x, e10.3,  ' Hz. *****')
-    rewind lunit2
+    rewind lunit(2)
     n5 = kfull + nfreq + 1
     do n12 = 1, n5
-       read (unit = lunit2, fmt = 8771, end = 8775) (texta6(i), i = 1, 14)
+       read (unit = lunit(2), fmt = 8771, end = 8775) (texta6(i), i = 1, 14)
 8771   format (13a6, a2)
-       write (unit = lunit7, fmt = 8772) (texta6(i), i = 1, 13)
+       write (unit = lunit(7), fmt = 8772) (texta6(i), i = 1, 13)
 8772   format ('c ', 13a6)
     end do
-8775 write (unit = lunit7, fmt = 28)
+8775 write (unit = lunit(7), fmt = 28)
 28  format ('$vintage, 1')
     ! ****** to get modal y *********
 2520 do i = 1, m
@@ -841,7 +841,7 @@ contains
           b = b + xa * d1 + xb * c
           g = g + xa * c - xb * d1
        end do
-       if (iprsup .ge. 1) write (unit = lunit6, fmt = *) ' Modal admittance ym for mode ', i, g, b
+       if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' Modal admittance ym for mode ', i, g, b
 44     format (//, ' mode   resistance  reactance  susceptance surge impedance(Ohm)          velocity  attenuation')
 65     format ('          Ohm/mile    Ohm/mile   S/mile        real     imag       lossless     mile/sec  neper/mile')
 7031   format ('          Ohm/km      Ohm/km     S/km         real     imag      lossless     km/sec     neper/km')
@@ -930,9 +930,9 @@ contains
        vmode = vmode / fmipkm
        cc = cc * fmipkm
        d9 = d9 * fmipkm
-137    write (lunit6,33)i,g,b,dumm1,zcharr,zchari,zsurge(i),vmode,cc
+137    write (lunit(6),33)i,g,b,dumm1,zcharr,zchari,zsurge(i),vmode,cc
        distm = -dist
-       if ( m  .lt.  10     .and.     lastov  .eq.  1 ) write (lunit7,140) i, brname(2*i-1), brname(2*i), g,zsurge(i),vmode,distm,m
+       if ( m  .lt.  10     .and.     lastov  .eq.  1 ) write (lunit(7),140) i, brname(2*i-1), brname(2*i), g,zsurge(i),vmode,distm,m
 140    format ('-', i1, 2a6, 12x, 4e12.5, ' 1', 2x, i1)
        if ( m .ge. 10  .and.  lastov .eq. 1)  go to 141
        go to 40
@@ -945,17 +945,17 @@ contains
        if ( m .eq. 16 )  text1 = text8
        if ( m .eq. 17 )  text1 = text9
        if ( m .eq. 18 )  text1 = text10
-       if ( i .le. 9 ) write (lunit7,143) i, brname(2*i-1), brname(2*i), g,zsurge(i),vmode,distm,text1
+       if ( i .le. 9 ) write (lunit(7),143) i, brname(2*i-1), brname(2*i), g,zsurge(i),vmode,distm,text1
 143    format ('-', i1, 2a6, 12x, 4e12.5, ' 1', 2x, a1)
-       if ( i  .gt.  9 ) write (lunit7,145) i, brname(2*i-1), brname(2*i), g,zsurge(i),vmode,distm,text1
+       if ( i  .gt.  9 ) write (lunit(7),145) i, brname(2*i-1), brname(2*i), g,zsurge(i),vmode,distm,text1
 145    format (i2, 2a6, 12x, 4e12.5, ' 1', 2x, a1)
        go to 40
-155    write (lunit9) d13,ycharm,ychara,alpha,beta
-       if ( iprsup .ge. 1 ) write (lunit6, 158) d13, i, ycharm,ychara,alpha,beta
+155    write (lunit(9)) d13,ycharm,ychara,alpha,beta
+       if ( iprsup .ge. 1 ) write (lunit(6), 158) d13, i, ycharm,ychara,alpha,beta
 158    format (' at ', e12.5,' Hz,ycharm,ychara,alpha,beta for mode',  i5, ' are', 5x, 4e12.5)
        if ( kexact .eq. 88333 )  go to 40
        if ( itrnsf .ne. 1 )  go to 40
-       write (lunit9) (pp1(j,i),pp2(j,i), j=1,m )
+       write (lunit(9)) (pp1(j,i),pp2(j,i), j=1,m )
 40  end do
     if ( kexact .ne. 88333 )  go to 119
     ll = 1
@@ -967,9 +967,9 @@ contains
        end do
     end do
     n9sq = m * m
-    write (lunit9) ( tixf(k),k=1,n9sq), (work1(k),k=1,n9sq)
+    write (lunit(9)) ( tixf(k),k=1,n9sq), (work1(k),k=1,n9sq)
     go to 9900
-119 if ( lastov .eq. 1 )  write (lunit7,240)
+119 if ( lastov .eq. 1 )  write (lunit(7),240)
 240 format ('$vintage, 0')
     if ( nfreq .ne. 1  .and.  lastov .eq. 39 )  go to 9900
     do i=1,m
@@ -984,25 +984,25 @@ contains
     end do
     ! ***** end of rotation of ti matrix for k.c.lee's const.param.*******
 39  format (//, '      Real components, row by row')
-166 write (lunit6,66)
+166 write (lunit(6),66)
 66  format (////, ' Eigenvector matrix ti for current transformation i (phase) = ti * i(mode)')
-    write (lunit6,39)
+    write (lunit(6),39)
 9   format (2x, 6e12.5)
     do k=1,m
-       write (lunit6,9)(tir(k,j),j=1,m)
+       write (lunit(6),9)(tir(k,j),j=1,m)
 59     format (6f12.8)
     end do
-    write (lunit6,60)
+    write (lunit(6),60)
 60  format (//, '     Imaginary components, row by row')
     do k=1,m
-       write (lunit6,9)(tii(k,j),j=1,m)
+       write (lunit(6),9)(tii(k,j),j=1,m)
     end do
     do i =1, m
        if ( lastov .eq. 39 )  go to 161
-       write (lunit7,59) ( tir(i,j), j=1,m )
-       write (lunit7,59) ( tii(i,j), j=1,m )
+       write (lunit(7),59) ( tir(i,j), j=1,m )
+       write (lunit(7),59) ( tii(i,j), j=1,m )
        go to 1204
-161    write (lunit9)   (tir(i,j), tii(i,j), j=1, m )
+161    write (lunit(9))   (tir(i,j), tii(i,j), j=1, m )
 1204 end do
     if ( lastov .eq. 39 )  go to 9900
     ! to get zsurge matrix in phase domain
@@ -1025,12 +1025,12 @@ contains
     end do
     call redu44 (xwc(1 :), workr1(1 :), m, ll0)
     if (kill .ne. 0) go to 9200
-    write (unit = lunit6, fmt = 83)
+    write (unit = lunit(6), fmt = 83)
 83  format (/,' Phase domain zsurge (real; the imag. of ti ignored)')
     n = 1
     do i = 1, m
        k = n + i - 1
-       write (unit = lunit6, fmt = 9) (xwc(j), j = n, k)
+       write (unit = lunit(6), fmt = 9) (xwc(j), j = n, k)
        n = n + i
     end do
     go to 9900
@@ -1139,16 +1139,16 @@ contains
     mfrqpr = 0
     if (kexact .ne. 88333) go to 423
     nfqpl1 = 0
-    close (unit = lunit2, status = 'delete')
-    !open (unit = lunit2, status = 'scratch', form = 'formatted')
-    open (unit = lunit2, form = 'formatted')
-423 rewind  lunit9
-    rewind lunit2
-    rewind lunit3
-    rewind lunt13
+    close (unit = lunit(2), status = 'delete')
+    !open (unit = lunit(2), status = 'scratch', form = 'formatted')
+    open (unit = lunit(2), form = 'formatted')
+423 rewind lunit(9)
+    rewind lunit(2)
+    rewind lunit(3)
+    rewind lunit(13)
     if (ialter .ne. 2) go to 7407
-    l5save = lunit5
-    lunit5 = lunit2
+    l5save = lunit(5)
+    lunit(5) = lunit(2)
 7407 ldisfr = location (flstat(1)) - location (voltbc(1))
     metrik = 0
     finpcm = unity / 2.5400d0
@@ -1254,12 +1254,12 @@ contains
     fked(18) =  .00003380d0
     fked(19) = -.00000240d0
     fked(20) = -.00000320d0
-    if (iprsup .ge. 2) write (lunit6, 333) (fbe(i), i = 1, 20), (fbed(i), i = 1, 20), (fke(i), i = 1, 20), (fked(i), i = 1, 20), (bcars(i), i = 1, 30), &
+    if (iprsup .ge. 2) write (lunit(6), 333) (fbe(i), i = 1, 20), (fbed(i), i = 1, 20), (fke(i), i = 1, 20), (fked(i), i = 1, 20), (bcars(i), i = 1, 30), &
          (dcars(i), i = 1, 30), (ccars(i), i = 1, 30)
 333 format (1x, 'data fbe', /, /, 4(1x, 5e25.15, /), /, ' data fbed', /, /, 4(1x, 5e25.15, /), /, ' data fke', /, /, 4(1x,5e25.15, /), /, &
          ' data fked', /, /, 4(1x, 5e25.15, /), /, ' data bcars', /, /, 6(1x, 5e25.15, /), /, ' data dcars', /, /, 6(1x, 5e25.15, /), &
          /, ' data ccars', /, /, 6(1x, 5e25.15, /), /, 1x)
-    if (iprsup .ge. 1) write (lunit6, 3866) pi, picon, sqrt2
+    if (iprsup .ge. 1) write (lunit(6), 3866) pi, picon, sqrt2
 3866 format (/, ' at 3866 ', 3e25.15)
 2   m = 1
     do i = 1, 40
@@ -1269,8 +1269,8 @@ contains
     muntrn = 0
     mtrnsp = 0
     !     segmented, 1, vax e/t can skip translation of rewind:
-    if (lastov .eq. 1) rewind lunit2
-    rewind lunt13
+    if (lastov .eq. 1) rewind lunit(2)
+    rewind lunit(13)
     !     read input card using cimage
 7403 call cimage
     read (unit = abuff, fmt = 4230) bus1
@@ -1286,7 +1286,7 @@ contains
 37403 continue
     read (unit = abuff, fmt = 4230) bufsem
 4230 format (13a6, a2)
-    if (ialter .ne. 2) write (lunit2, 4230) bufsem
+    if (ialter .ne. 2) write (lunit(2), 4230) bufsem
     bus1 = bufsem(1)
     if (bus1 .ne. fmetrc) goto 4258
     metrik = 1
@@ -1331,20 +1331,20 @@ contains
     n1 = lastov
     lastov = nchain
     nchain = n1
-    if (ialter .eq. 2) lunit5 = l5save
+    if (ialter .eq. 2) lunit(5) = l5save
     if (ipunch .eq. 0) go to 7496
     d1 = 0.0
-    write (lunit9) d1, d1, d1
-    if (iprsup .ge. 1 .or. lastov .eq. 39 ) write (lunit6, 14244) d1, d1, d1, ipunch
+    write (lunit(9)) d1, d1, d1
+    if (iprsup .ge. 1 .or. lastov .eq. 39 ) write (lunit(6), 14244) d1, d1, d1, ipunch
 14244 format (' Last record on unit9', 3e15.6, /, 1x, 'ipunch =', i10)
     !     segmented, 1, vax e/t can skip translation of rewind:
-    rewind lunit9
+    rewind lunit(9)
 7496 go to 9900
 7439 lastov = nchain
     nchain = 51
     go to 9900
     !     segmented, 1, vax e/t can skip translation of rewind:
-4251 rewind lunt13
+4251 rewind lunit(13)
     ik = 0
     if (bus1 .ne. text1) go to 4260
     write (kunit6, 4257)
@@ -1358,7 +1358,7 @@ contains
     !     read input card using cimage
     call cimage
     read (unit = abuff, fmt = 4230) bufsem
-    if (ialter .ne. 2 ) write (lunit2, 4230) bufsem
+    if (ialter .ne. 2 ) write (lunit(2), 4230) bufsem
 4164 if (kolbeg .gt. 0) go to 8712
     read (unit = abuff, fmt = 11) itbic(i), tbtb2(i), tbr(i),itbtb3(i),tbg(i),tbd(i), tbx(i), h1, h2, d8, d9, tbtext(i), i3
 11  format (i3, f5.4, f8.5, i2, 2f8.5, 3f8.3, f8.5, f6.2, a6, i2)
@@ -1477,7 +1477,7 @@ contains
     go to 9200
     !                                         sorting of conductor data
 6   tbd(i) = 0.0
-    if (iprsup .ge. 1) write (lunit6, 3625) (itbic(k), itbtb3(k), tbtb2(k), tbr(k), tbg(k), tbd(k), tbx(k), tby(k), tbtext(k), k = 1, i)
+    if (iprsup .ge. 1) write (lunit(6), 3625) (itbic(k), itbtb3(k), tbtb2(k), tbr(k), tbg(k), tbd(k), tbx(k), tby(k), tbtext(k), k = 1, i)
 3625 format (//, ' Unsorted conductor table', /, (1x, 2i6, 6e15.5, 5x, a6))
     !              '      '      '    convert from si units for calculation.
     if (metrik .ne. 1) goto 981
@@ -1539,9 +1539,9 @@ contains
     !     read input card using cimage
 33316 call cimage
     !     segmented, 1, vax e/t can skip translation of rewind:
-    rewind lunt13
+    rewind lunit(13)
     read (unit = abuff, fmt = 4230) bufsem
-    if (ialter .ne. 2) write (lunit2, 4230) bufsem
+    if (ialter .ne. 2) write (lunit(2), 4230) bufsem
     read (unit = abuff, fmt = 17) rearth, freq, corr, j1, j2, j3, j4, j5, j6, j7, j8, j9, j10, j11, j12, iw, dist, j13, j14, j15, j16, isegm, mutual, ik, ips, j17, imodal, itrnsf, conduc
 17  format (f8.2, f10.2, f10.6, i2, 5i1, i2, 5i1, i2, f8.3, i2, 5i1, 3i3, 2i2, e8.2)
     if (metrik .eq. 1) conduc = conduc / fmipkm
@@ -1625,7 +1625,7 @@ contains
 13723 jprmat (6) = 1
     jprmat(9) = 1
 3729 kkk = 0
-    if (iprsup .ge. 1) write (lunit6, 7454) iprint, ldisfr, ialter
+    if (iprsup .ge. 1) write (lunit(6), 7454) iprint, ldisfr, ialter
 7454 format (/, ' New frequency card.  iprint  ldisfr  ialter', /, 20x, 3i8)
     do jj = 1, 16
        if (jprmat (jj) .ne. 0) go to 3733
@@ -1671,9 +1671,9 @@ contains
     ktab = kcirct
     nmode = 2
     if (kcirct .lt. 2)  nmode = 1
-    if (iprsup .ge. 1) write (lunit6, 7457) icheck, ktab, (voltbc(jj), jj = 1, 3)
+    if (iprsup .ge. 1) write (lunit(6), 7457) icheck, ktab, (voltbc(jj), jj = 1, 3)
 7457 format (/, ' Logarithmic frequency.  icheck    ktab', 8x,  'volt(1)', 8x, 'volt(2)', 8x, 'volt(3)', /, 23x, 2i8, 3e15.6)
-    if (mfrqpr .gt. 0) write (lunit6, 3004)
+    if (mfrqpr .gt. 0) write (lunit(6), 3004)
     go to 3006
 3005 iii = iii + 1
 !!!!      if ( iii  .ge.  ik )   go to 33316
@@ -1692,7 +1692,7 @@ contains
     nrp = 1
     freq = fdecad
     do i = 1, ntol * ktab
-       backspace lunit9
+       backspace lunit(9)
     end do
     ntol = 0
     go to 16
@@ -1702,7 +1702,7 @@ contains
 3006 pkkk = kkk
     freq = fdecad * expz (pkkk * factor)
     iprint = iprint + 1
-    if (iprsup .ge. 1) write (lunit6, 23006) iprint, kkk, iii, freq, ci1, ck1
+    if (iprsup .ge. 1) write (lunit(6), 23006) iprint, kkk, iii, freq, ci1, ck1
 23006 format (/, ' Next logarithmically-spaced frequency.  iprint     kkk     iii', 11x, 'freq', 12x, 'ci1', 12x, 'ck1', /, 39x, 3i8, 3e15.6)
     if (kkk .gt. ips) go to 3005
     if (freq + epsiln .lt. fmaxfs .or. kexact .ne. 88333) go to 8806
@@ -1710,13 +1710,13 @@ contains
 8806 kkk = kkk + 1
 3007 omega = twopi * freq
     if (ik .gt. 0) go to 3008
-    write (lunit6, 4)
+    write (lunit(6), 4)
 4   format (//, ' Line-conductor table after sorting and initial processing.', /, 1x, &
          'table', 3x, 'phase', 3x, 'skin effect', 4x, 'resistance', 3x, 'reactance-data specification', 5x, &
          'diameter', 3x, 'horizontal', 3x, 'avg height', 3x, 'conductor')
 8   format (3x, 'row', 2x, 'number', 8x, 'r-type', 4x, 'r (ohm/mi)', 3x, 'x-type', 6x, 'x(ohm/mi) or gmr', 5x, '(inches)', 5x, 'x (feet)', 5x, 'y (feet)', 8x, 'name')
-    if (metrik .eq. 0) write (lunit6, 8)
-    if (metrik .eq. 1) write (lunit6, 9)
+    if (metrik .eq. 0) write (lunit(6), 8)
+    if (metrik .eq. 1) write (lunit(6), 9)
 9   format (3x, 'row', 2x, 'number', 8x, 'r-type', 4x, 'r (ohm/km)', 3x, 'x-type', 6x, 'x(ohm/km) or gmr', 5x, '(  cm  )', 5x, 'x (mtrs)', 5x, 'y (mtrs)', 8x, 'name')
 3008 idist = 1
     if (dist .eq. 0.0 .and. ipunch .ne. 44) go to 4271
@@ -1749,9 +1749,9 @@ contains
     jb = itb3(j)
     if (jb .lt. 2) gmdj = gmdj * fmipkm - fspac
     if (jb .eq. 2) gmdj = gmdj / finpcm
-    write (lunit6, 22) k, ic(j), tb2(j), rj, jb, gmdj, dj, xj, yj, text(j)
+    write (lunit(6), 22) k, ic(j), tb2(j), rj, jb, gmdj, dj, xj, yj, text(j)
     goto 225
-221 write (lunit6, 22) k, ic(j), tb2(j), r(j), itb3(j), gmd(j), d(j), x(j), y(j), text(j)
+221 write (lunit(6), 22) k, ic(j), tb2(j), r(j), itb3(j), gmd(j), d(j), x(j), y(j), text(j)
 22  format (1x, i5, i8, 2f14.5, i9, f22.6, f13.5, 2f13.3, 6x, a6)
 225 if (itb3(j) .ne. 4) go to 222
     if (tb2(j) .gt. 0.) go to 224
@@ -1788,19 +1788,19 @@ contains
     go to 9200
 30  if (kkk .gt. 0 .and. lastov .ne. 1) go to 3020
     if (jspecl .eq. 0) go to 7025
-    write (lunit6, 25) rearth, freq, corr
+    write (lunit(6), 25) rearth, freq, corr
 25  format (//, '0following matrices are for earth resistivity=', f8.2, ' Ohm-m and frequency=', f13.2, ' Hz. correction factor=', f10.6)
 7025 if (kkk .gt. 1) go to 3020
-    if (isegm .gt. 0) write (lunit6,12345)
+    if (isegm .gt. 0) write (lunit(6),12345)
 12345 format (' ', 30x, '************Earth wires will be segmented************')
-    if (ik .gt. 0) write (lunit6,3004)
+    if (ik .gt. 0) write (lunit(6),3004)
 3004 format ('0', 6x, '-----------------Zero sequence-----------------', 13x, '---------------Positive sequence---------------', /, 4x, &
          'alpha', 8x, 'beta', 8x, 'R', 8x, 'L(milli-', 4x, 'C(micro-', 6x, 'alpha', 8x, 'beta', 8x, 'R', 8x, 'L(milli-', 4x, 'C(micro-', 4x, 'frequency', /, &
          ' neper/mile  radian/mile  Ohm/mile  Henry/mile) Farad/mile)  neper/mile  radian/mile  Ohm/mile   Henry/mile) Farad/mile)', 5x, 'Hz')
-3020 write (lunt13) (z(i), i = 1, ip)
-    if (iprsup .ge. 2) write (lunit6, 4427) (z(i), i = 1, ip)
+3020 write (lunit(13)) (z(i), i = 1, ip)
+    if (iprsup .ge. 2) write (lunit(6), 4427) (z(i), i = 1, ip)
 4427 format (/, ' at 4427.  (z(i), i = 1, ip) .', /, (1x, 8e16.6))
-    if (iprsup .ge. 1) write (lunit6, 4428) j1, j4, kcirct, j2, j3, j56, kfull
+    if (iprsup .ge. 1) write (lunit(6), 4428) j1, j4, kcirct, j2, j3, j56, kfull
 4428 format (/, ' at 4428.', 7i12)
     !
     !                                   reductions and inversions p-matrix
@@ -1854,7 +1854,7 @@ contains
     j56 = j8 + j9 + j11 + j12 + idist
     if (j56 + j7 + j10 .eq. 0) go to 600
     !     segmented, 1, vax e/t can skip translation of rewind:
-    rewind lunt13
+    rewind lunit(13)
     k = 0
     if (rearth .eq. 0.0d0) go to 100
     f1 = valu2 * sqrtz (freq / rearth)
@@ -1863,9 +1863,9 @@ contains
     if (corr .eq. 0.0d0 .or. rearth .eq. 0.0d0) imax = -1
     if (corr .gt. corchk) imax = int (corr - onehaf)
     if (imax .gt. 31) imax = 30
-    read (unit = lunt13) (p(i), i = 1, ip)
+    read (unit = lunit(13)) (p(i), i = 1, ip)
     !     segmented, 1, vax e/t can skip translation of rewind:
-    rewind lunt13
+    rewind lunit(13)
     ip = 0
 120 k = k + 1
     if (k .gt. kfull) go to 200
@@ -1966,7 +1966,7 @@ contains
     !                      end carson series for mutual impedance if z .gt. 5.
 126 p(ip) = rm * f2
     z(ip) = xm * f2
-    if (iprsup .ge. 4) write (unit = lunit6, fmt = 4439) i, k, kfull, kcirct, i5, ip, p(ip), z(ip)
+    if (iprsup .ge. 4) write (unit = lunit(6), fmt = 4439) i, k, kfull, kcirct, i5, ip, p(ip), z(ip)
 4439 format (' At 4439 ', 6i10, 2e16.6)
     go to 123
 124 if (imax .lt. 0) go to 128
@@ -2025,7 +2025,7 @@ contains
 127 r1 = r1 * f2
 128 z(ip) = xs * f2
     p(ip) = r1
-    if (iprsup .ge. 4) write (unit = lunit6, fmt = 4440) i, k, kfull, kcirct, i5, ip, p(ip), z(ip)
+    if (iprsup .ge. 4) write (unit = lunit(6), fmt = 4440) i, k, kfull, kcirct, i5, ip, p(ip), z(ip)
 4440 format (' At 4440 ', 6i10, 2e16.6)
     go to 120
 150 xs = g1 / f2
@@ -2038,7 +2038,7 @@ contains
     !     impedance matrix for physical conductors is in p(1),...p(ip) (real
     !     part) and z(1)....z(ip) (imaginary part).
 200 if (j7 .gt. 0) call output (metrik, p(1 :), z(1 :), unity, kfull, ll6, ll1)
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 4434) j7, j10, j56, kcirct, j8, mutual, j11, j12, idist, j9, kp, j2, j3, j5, j6
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4434) j7, j10, j56, kcirct, j8, mutual, j11, j12, idist, j9, kp, j2, j3, j5, j6
 4434 format (/, ' at 4234.   misc. integers.', /, (1x, 10i12))
     if (j10 .gt. 0) go to 250
     if (j56 .eq. 0) go to 600
@@ -2050,14 +2050,14 @@ contains
     if (j8out .gt. 0) call output (metrik, p(1 :), z(1 :), unity, kcirct, ll6, ll2)
     if (ipunch .ne. 44) go to 8202
     call punpie (kcirct)
-8202 if (iprsup .ge. 1) write (unit = lunit6, fmt = 3202) imodal, dist
+8202 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3202) imodal, dist
 3202 format (' imodal, dist =', i5, e17.5)
     if (lastov .ne. 39) go to 3203
     if (nfreq .ne. 1) go to 3203
     !     "Marti setup" assumes distance in kilometers is on 9:
     distkm = dist / fmipkm
-    write (unit = lunit9) imodal, metrik, distkm, mspedb, itrnsf
-    if (iprsup  .gt.  1) write (unit = lunit6, fmt = *) ' mspedb written on lunit9 =', mspedb
+    write (unit = lunit(9)) imodal, metrik, distkm, mspedb, itrnsf
+    if (iprsup  .gt.  1) write (unit = lunit(6), fmt = *) ' mspedb written on lunit(9) =', mspedb
 3203 if (imodal .le. 0) go to 2202
     if (lastov .eq. 1 .and. itrnsf .ne. -1 .and. itrnsf .ne. -9) itrnsf = 0
     n8 = kfull
@@ -2074,24 +2074,24 @@ contains
 2202 if (lastov .eq. 39 .or. lastov .eq. 45 .or. imodal .ne. 0) go to 8777
     if (kexact .eq. 88333) go to 45454
     kount = 0
-    rewind lunit1
-    if (ipunch .eq. 0) write (unit = lunit7, fmt = 8769) tclock, date1
+    rewind lunit(1)
+    if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8769) tclock, date1
 8769 format ('c   Punched card output of transposed line which began at ', 2x, 2a4, 2x, 2a4)
     if (ipunch .ne. 0) go to 8770
-    if (imodal .eq. 0 .and. mspedb .eq. 0) write (unit = lunit7, fmt = 8780) freq
+    if (imodal .eq. 0 .and. mspedb .eq. 0) write (unit = lunit(7), fmt = 8780) freq
 8780 format ('c   ***** Transposed K. C. Lee line segment calculated at', 2x, e10.3, ' Hz. *****')
-    if (imodal .eq. 0 .and. mspedb .eq. 1) write (unit = lunit7, fmt = 8785) freq
+    if (imodal .eq. 0 .and. mspedb .eq. 1) write (unit = lunit(7), fmt = 8785) freq
 8785 format ('c **** Special double circuit transposed line calculated at', 2x, e10.3, ' Hz. ****')
-8770 rewind lunit2
+8770 rewind lunit(2)
     n5 = 0
     !     if ( jdatcs  .gt.  0 )  go to 8777
     do n12 = 1, 9999
-       read (unit = lunit2, fmt = 8771) (texta6(i), i = 1, 14)
+       read (unit = lunit(2), fmt = 8771) (texta6(i), i = 1, 14)
 8771   format (13a6, a2)
-       if (ipunch .eq. 0) write (unit = lunit7, fmt = 8772) (texta6(i), i = 1, 13)
+       if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8772) (texta6(i), i = 1, 13)
 8772   format ('c ', 13a6)
        if (idebug .eq. 0) go to 8100
-       write (unit = lunit1, fmt = 8773) (texta6(i), i = 1, 14)
+       write (unit = lunit(1), fmt = 8773) (texta6(i), i = 1, 14)
 8773   format (' c ', 13a6, a2)
        kount = kount + 1
 8100   if (texta6(1) .eq. blank .and. texta6(2) .eq. blank) n5 = n5 + 1
@@ -2099,10 +2099,10 @@ contains
     end do
 8777 if (ialter .le. 0) go to 3734
     if (lastov .eq. 39) go to 3734
-    write (unit = lunit3) (p(jj), jj = 1, kp)
-    write (unit = lunit3) (z(jj), jj = 1, kp)
+    write (unit = lunit(3)) (p(jj), jj = 1, kp)
+    write (unit = lunit(3)) (z(jj), jj = 1, kp)
     if (iprsup .eq. 0) go to 3734
-    write (unit = lunit6, fmt = 7423) kp, (p(jj), jj = 1, kp), (z(jj), jj = 1, kp)
+    write (unit = lunit(6), fmt = 7423) kp, (p(jj), jj = 1, kp), (z(jj), jj = 1, kp)
 7423 format (/, ' Output of  (R)  and  (L)  for Semlyen,    ', i6, '  cells each.', /, (1x, 8e16.4))
 3734 if (mutual .gt. 0) call outspc (p(1 :), z(1 :), kcirct, metrik, fmipkm)
     j56 = j11 + j12 + idist
@@ -2131,9 +2131,9 @@ contains
     call output (metrik, p(1 :), z(1 :), unity, kk, ll5, ll3)
     go to 600
 250 if (j56 .eq. 0) go to 251
-    write (unit = lunt13) (p(i), z(i), i = 1, ip)
+    write (unit = lunit(13)) (p(i), z(i), i = 1, ip)
     !     segmented, 1, vax e/t can skip translation of rewind:
-    rewind lunt13
+    rewind lunit(13)
 251 do i = 1, ip
        p(i) = -p(i)
        z(i) = -z(i)
@@ -2143,14 +2143,14 @@ contains
     !     p(ip) (real part) and z(1),...z(ip) (imaginary part).
     call output (metrik, p(1 :), z(1 :), unity, kfull, ll5, ll1)
     if (j56 .eq. 0) go to 600
-    read (unit = lunt13) (p(i), z(i), i = 1, ip)
+    read (unit = lunit(13)) (p(i), z(i), i = 1, ip)
     !     Segmented, 1, vax e/t can skip translation of rewind:
-    rewind lunt13
+    rewind lunit(13)
     go to 201
 253 if (j56 .eq. 0) go to 254
-    write (unit = lunt13) (p(i), z(i), i = 1, kp)
+    write (unit = lunit(13)) (p(i), z(i), i = 1, kp)
     !     Segmented, 1, vax e/t can skip translation of rewind:
-    rewind lunt13
+    rewind lunit(13)
 254 go to 45454
     !  254 if ( lastov .eq. 39  .or.
     !     1          kcirct  .gt.  3 ) go to 45454
@@ -2262,34 +2262,34 @@ contains
 5053 continue
     do i = 1, kcirct
        if (i .gt. 2) go to 5058
-       write (unit = lunit9) d13, zsurge(i), theta2(i), er(i), ei(i)
+       write (unit = lunit(9)) d13, zsurge(i), theta2(i), er(i), ei(i)
        go to 5060
-5058   write (unit = lunit9) d13, zsurge(3), theta2(3), er(3), ei(3)
+5058   write (unit = lunit(9)) d13, zsurge(3), theta2(3), er(3), ei(3)
 5060 end do
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 5065) freq, kcirct, (zsurge(i), theta2(i), er(i), ei(i), i = 1, 3)
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 5065) freq, kcirct, (zsurge(i), theta2(i), er(i), ei(i), i = 1, 3)
 5065 format ('  at 5065, freq,kcirct,zsurge,theta2,er,ei are: ', /, e10.3, i3, 12e9.2)
     go to 9998
-5080 write (unit = lunit7, fmt = 228)
+5080 write (unit = lunit(7), fmt = 228)
     do i = 1, 3
        zsurge(i) = sqrtz (xtii(i) / dummi(i))
        er(i) = d13 / sqrtz (xtii(i) * dummi(i))
     end do
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = *) ' zsurge, er = ', (zsurge(i), er(i), i = 1, 3)
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' zsurge, er = ', (zsurge(i), er(i), i = 1, 3)
     do i = 1, kcirct
        if (i .gt. 1) go to 5082
-       write (unit = lunit7, fmt = 140) i, brname(2 * i - 1), brname(2 * i), xtir(i), zsurge(i), er(i), dist
+       write (unit = lunit(7), fmt = 140) i, brname(2 * i - 1), brname(2 * i), xtir(i), zsurge(i), er(i), dist
        go to 5088
 5082   if (i .gt. 2) go to 5084
-       write (unit = lunit7, fmt = 140) i, brname(2 * i - 1), brname(2 * i), xtir(3), zsurge(3), er(3), dist
+       write (unit = lunit(7), fmt = 140) i, brname(2 * i - 1), brname(2 * i), xtir(3), zsurge(3), er(3), dist
        go to 5088
 5084   if (i .gt. 3) go to 5086
-       write (unit = lunit7, fmt = 140) i, brname(2 * i - 1), brname(2 * i), xtir(2), zsurge(2), er(2), dist
+       write (unit = lunit(7), fmt = 140) i, brname(2 * i - 1), brname(2 * i), xtir(2), zsurge(2), er(2), dist
        go to 5088
-5086   if (i .le. 9) write (unit = lunit7, fmt = 1475) i, brname(2 * i - 1), brname(2 * i)
-       if (i .gt. 9) write (unit = lunit7, fmt = 9475) i, brname(2 * i - 1), brname(2 * i)
+5086   if (i .le. 9) write (unit = lunit(7), fmt = 1475) i, brname(2 * i - 1), brname(2 * i)
+       if (i .gt. 9) write (unit = lunit(7), fmt = 9475) i, brname(2 * i - 1), brname(2 * i)
 9475   format (i2, 2a6)
 5088 end do
-    write (unit = lunit7, fmt = 29)
+    write (unit = lunit(7), fmt = 29)
     go to 9998
 5059 xtir(1) = p(1)
     xtii(1) = z(1)
@@ -2316,8 +2316,8 @@ contains
     xtii(2) = xdiag - xoff
     if (lastov .eq. 39 .or. lastov .eq. 45 .or. kexact .eq. 88333) go to 480
     if (iprsup .lt. 1) go to 1228
-    write (unit = lunit6, fmt = *) ' gmode,xtir, xtii, , dummi =', gmode, (xtir(i), xtii(i), dummi(i), i = 1, 2)
-1228 write (unit = lunit7, fmt = 228)
+    write (unit = lunit(6), fmt = *) ' gmode,xtir, xtii, , dummi =', gmode, (xtir(i), xtii(i), dummi(i), i = 1, 2)
+1228 write (unit = lunit(7), fmt = 228)
 228 format ('$vintage, 1')
     do i = 1, 2
        zsurge(i) = sqrtz (xtii(i) / dummi(i))
@@ -2325,14 +2325,14 @@ contains
     end do
     do i = 1, kcirct
        if (i .gt. 2) go to 1473
-       write (unit = lunit7, fmt = 140) i, brname(2 * i - 1), brname(2 * i), xtir(i), zsurge(i), er(i), dist
+       write (unit = lunit(7), fmt = 140) i, brname(2 * i - 1), brname(2 * i), xtir(i), zsurge(i), er(i), dist
 140    format ('-', i1, 2a6, 12x, 4e12.5, ' 1', 2x)
        go to 1480
-1473   if (i .le. 9) write (unit = lunit7, fmt = 1475) i, brname(2 * i - 1), brname(2 * i)
-       if (i .gt. 9) write (unit = lunit7, fmt = 9475) i, brname(2 * i - 1), brname(2 * i)
+1473   if (i .le. 9) write (unit = lunit(7), fmt = 1475) i, brname(2 * i - 1), brname(2 * i)
+       if (i .gt. 9) write (unit = lunit(7), fmt = 9475) i, brname(2 * i - 1), brname(2 * i)
 1475   format ('-', i1, 2a6)
 1480 end do
-    write (unit = lunit7, fmt = 29)
+    write (unit = lunit(7), fmt = 29)
 29  format ('$vintage, 0')
     go to 256
 480 do i = 1, nmode
@@ -2352,11 +2352,11 @@ contains
 5093 end do
     do i = 1, kcirct
        if (i .gt. 1) go to 5098
-       write (unit = lunit9) d13, zsurge(i), theta2(i), er(i), ei(i)
+       write (unit = lunit(9)) d13, zsurge(i), theta2(i), er(i), ei(i)
        go to 5094
-5098   write (unit = lunit9) d13, zsurge(2), theta2(2), er(2), ei(2)
+5098   write (unit = lunit(9)) d13, zsurge(2), theta2(2), er(2), ei(2)
 5094 end do
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 5095) freq, kcirct, (zsurge(i), theta2(i), er(i), ei(i), i = 1, 2)
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 5095) freq, kcirct, (zsurge(i), theta2(i), er(i), ei(i), i = 1, 2)
 5095 format ('  At 5095, freq,kcirct,zsurge,theta2,er,ei are: ', /, e10.3, i3, 8e12.3)
     go to 9998
 2254 rzero1 = rzero
@@ -2371,28 +2371,28 @@ contains
     xpos = xpos * zo
     yzero = yzero * z1
     ypos = ypos * z1
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 13012) ipunch
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13012) ipunch
 13012 format (' At 13012, ipunch =', i10)
     if (ipunch .eq. 0 .or. ipunch .eq. 44) go to 13039
     if (ipunch .ne. 1) go to 13011
-    write (unit = lunit7, fmt = 3011) alphao, beto, alpha1, bet1, freq
+    write (unit = lunit(7), fmt = 3011) alphao, beto, alpha1, bet1, freq
 3011 format (5e15.5)
     go to 13039
-13011 if (mfrqpr .gt. 0) write (unit = lunit6, fmt = 3012) alphao, beto, rzero, xzero, yzero, alpha1, bet1, rpos, xpos, ypos, freq
+13011 if (mfrqpr .gt. 0) write (unit = lunit(6), fmt = 3012) alphao, beto, rzero, xzero, yzero, alpha1, bet1, rpos, xpos, ypos, freq
 3012 format (1x, e11.4, 9e12.4, e12.5)
     if (ipunch .ne. 2) go to 13019
-    write (unit = lunit7, fmt = 13015) rzero, xzero, freq
+    write (unit = lunit(7), fmt = 13015) rzero, xzero, freq
 13015 format (3e16.8)
     go to 13039
 13019 if (ipunch .ne. 3) go to 13024
-    write (unit = lunit7, fmt = 13015) rpos, xpos, freq
+    write (unit = lunit(7), fmt = 13015) rpos, xpos, freq
     go to 13039
 13024 if (ipunch .ne. 88) go to 13031
     if (metrik .eq. 0) go to 13026
     rzero = rzero * fmipkm
     xzero = xzero * fmipkm
-13026 write (unit = lunit9) rzero, xzero, freq
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 23024) rzero, xzero, freq
+13026 write (unit = lunit(9)) rzero, xzero, freq
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 23024) rzero, xzero, freq
 23024 format (' Rzero, Xzero and freq on unit9', 3e15.6)
     go to 13039
 13031 if (ipunch .eq. 89) go to 13035
@@ -2402,7 +2402,7 @@ contains
 13035 if (metrik .eq. 0) go to 13037
     rpos = rpos * fmipkm
     xpos = xpos * fmipkm
-13037 write (unit = lunit9) rpos, xpos, freq
+13037 write (unit = lunit(9)) rpos, xpos, freq
 13039 if (ik .gt. 0) go to 3006
     vol = omega / beto
     alphao = alphao * valu5
@@ -2411,7 +2411,7 @@ contains
     waveo = twopi / beto
     wave1 = twopi / bet1
     if (metrik .eq. 1) go to 9992
-    write (unit = lunit6, fmt = 9991) zso, zsodrg, alphao, vol, waveo, rzero, xzero1, yzero1, zs1, zs1drg, alpha1, v1l, wave1, rpos, xpos1, ypos1
+    write (unit = lunit(6), fmt = 9991) zso, zsodrg, alphao, vol, waveo, rzero, xzero1, yzero1, zs1, zs1drg, alpha1, v1l, wave1, rpos, xpos1, ypos1
 9991 format ('0sequence', 6x, 'surge impedance', 7x, 'attenuation   velocity    wavelength   resistance    reactance   susceptance', /, 9x, 'magnitude(Ohm) angle(degr.)   dB/mile      miles/s       miles Ohm/mile     Ohm/mile     mho/mile', /, '   zero  ', 8e13.5, /, ' positive', 8e13.5)
     go to 9998
 9992 alphao = alphao * fmipkm
@@ -2426,7 +2426,7 @@ contains
     xpos1 = xpos1 * fmipkm
     yzero1 = yzero1 * fmipkm
     ypos1 = ypos1 * fmipkm
-    write (unit = lunit6, fmt = 9993) zso, zsodrg, alphao, vol, waveo, rzero1, xzero1, yzero1, zs1, zs1drg, alpha1, v1l, wave1, rpos1, xpos1, ypos1
+    write (unit = lunit(6), fmt = 9993) zso, zsodrg, alphao, vol, waveo, rzero1, xzero1, yzero1, zs1, zs1drg, alpha1, v1l, wave1, rpos1, xpos1, ypos1
 9993 format ('0sequence', 6x, 'surge impedance', 7x, 'attenuation   velocity    wavelength   resistance    reactance   susceptance', /, 9x, 'magnitude(Ohm) angle(degr.)    dB/km         km/s          km Ohm/km       Ohm/km       mho/km ', /, '   zero  ', 8e13.5, /, ' positive', 8e13.5)
 9998 if (kexact .ne. 88333) go to 9996
     n1 = 1
@@ -2500,11 +2500,11 @@ contains
 25960  work1(n1) = 0.0d0
        n1 = n1 + 1
     end do
-9994 write (unit = lunit9) (tixf(i), i = 1, n9sq), (work1(i), i = 1, n9sq)
+9994 write (unit = lunit(9)) (tixf(i), i = 1, n9sq), (work1(i), i = 1, n9sq)
 9996 if (j56 .eq. 0) go to 600
-    read (unit = lunt13) (p(i), z(i), i = 1, kp)
+    read (unit = lunit(13)) (p(i), z(i), i = 1, kp)
     !     segmented, 1, vax e/t can skip translation of rewind:
-    rewind lunt13
+    rewind lunit(13)
     go to 203
     !                          End of routines for z-printing and inversions
     !
@@ -2516,7 +2516,7 @@ contains
     call output (metrik, p(1 :), z(1 :), switch, kfull, i2, ll1)
     go to 31
 37  i2 = 3
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 4444) iw, ip, ll0, ll1
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4444) iw, ip, ll0, ll1
 4444 format (/, ' At 4444.  iw, ip, ll0, ll1=', 4i10)
     if (iw .eq. 0) i2 = i2 + 1
     do i = 1, ip
@@ -2539,13 +2539,13 @@ contains
     end do
 403 if (iw .eq. 0) i2 = i2 + 1
     if (j2out .gt. 0) call output (metrik, p(1 :), z(1 :), switch, kcirct, i2, ll2)
-    if (iprsup .ge. 4) write (unit = lunit6, fmt = 2654) j3, kcirct, j56, kp, iw, i2, j2, (p(i), i = 1, kp)
+    if (iprsup .ge. 4) write (unit = lunit(6), fmt = 2654) j3, kcirct, j56, kp, iw, i2, j2, (p(i), i = 1, kp)
 2654 format (/, " Before 'C'-matrix call to  'symm' .      j3  kcirct     j56      kp,      iw      i2      j2", /, 36x, 7i8, /, ' (p(i), i = 1, kp)  follow ....', /, (1x, 8e16.7))
     if (j3 .eq. 0 .or. kcirct .lt. 2) go to 33
     if (j56 .eq. 0) go to 40
-    write (unit = lunt13) (p(i), i = 1, kp)
+    write (unit = lunit(13)) (p(i), i = 1, kp)
     !     Segmented, 1, vax e/t can skip translation of rewind:
-    rewind lunt13
+    rewind lunit(13)
 40  call symm (p(1 :), z(1 :), switch, kcirct, kk)
     i2 = 1
     if (iw .eq. 0) i2 = i2 + 1
@@ -2556,8 +2556,8 @@ contains
     !     number of equivalent conductor being a multiple of 3.
     if (ik .le. 0) call output (metrik, p(1 :), z(1 :), unity, kk, i2, ll3)
     if (j56 .eq. 0) go to 33
-    read (unit = lunt13) d1
-    read (unit = lunt13) (p(i),i = 1, kp)
+    read (unit = lunit(13)) d1
+    read (unit = lunit(13)) (p(i),i = 1, kp)
     go to 33
 39  i2 = 3
     if (iw .eq. 0) i2 = i2 + 1
@@ -2571,10 +2571,10 @@ contains
     if (imodal .eq. 1) go to 1378
     if (iprsup .lt. 1) go to 5124
     write (unit = *, fmt = *) ' Ready for [c] avg.  p(1:6) =', (p(i), i = 1, 6)
-    write (unit = lunit6, fmt = *) ' Begin averaging of capacitance.'
-    write (unit = lunit6, fmt = *) ' 1st diagonal,  p(1) =', p(1)
-    write (unit = lunit6, fmt = *) ' 1st off-diagonal,  p(2) =', p(2)
-    write (unit = lunit6, fmt = *) ' =======  iw, kcirct, freq =', iw, kcirct, freq
+    write (unit = lunit(6), fmt = *) ' Begin averaging of capacitance.'
+    write (unit = lunit(6), fmt = *) ' 1st diagonal,  p(1) =', p(1)
+    write (unit = lunit(6), fmt = *) ' 1st off-diagonal,  p(2) =', p(2)
+    write (unit = lunit(6), fmt = *) ' =======  iw, kcirct, freq =', iw, kcirct, freq
 5124 cdiag = 0
     coff = 0
     n55 = 1
@@ -2592,7 +2592,7 @@ contains
     end do
     cdiag = cdiag / 6
     coff = coff / 6
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = *) ' cdiag, coff are ', cdiag, coff
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' cdiag, coff are ', cdiag, coff
     n55 = 6
     do jp = 4, 6
        j = n55 + 1
@@ -2605,7 +2605,7 @@ contains
     dummi(1) = cdiag + 2 * coff + 3 * ccoup
     dummi(2) = dummi(1) - 6 * ccoup
     dummi(3) = cdiag - coff
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = *) ' At 5150, dummi =', (dummi(i), i = 1, 3)
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' At 5150, dummi =', (dummi(i), i = 1, 3)
     if (iw .eq. 0) go to 1378
     d13 = twopi * freq
     do i = 1,3
@@ -2636,10 +2636,10 @@ contains
 1378 if (j5out .gt. 0) call output (metrik, p(1 :), z(1 :), switch, kcirct, i2, ll2)
     zero = 0.0d0
     if (ialter .le. 0) go to 3741
-    write (unit = lunit3) (zero, jj = 1, kp)
-    write (unit = lunit3) (p(jj), jj = 1, kp)
+    write (unit = lunit(3)) (zero, jj = 1, kp)
+    write (unit = lunit(3)) (p(jj), jj = 1, kp)
     if (iprsup .le. 0) go to 3741
-    write (unit = lunit6, fmt = 7428) (p(jj), jj = 1, kp)
+    write (unit = lunit(6), fmt = 7428) (p(jj), jj = 1, kp)
 7428 format (/, ' Output  (c)  for Semlyen.', /, (1x, 8e16.4))
 3741 if (idist .eq. 0) go to 393
     do i = 1, kp
@@ -2665,13 +2665,13 @@ contains
     cpos = cpos / omega
 394 if (ipunch .ne. 88)  go to 395
     if (metrik .eq. 1) czero = czero * fmipkm
-    write (lunit9) czero
-    if (iprsup .ge. 1) write (lunit6, 98765) czero
+    write (lunit(9)) czero
+    if (iprsup .ge. 1) write (lunit(6), 98765) czero
 98765 format (' Czero on unit9', e15.6)
     go to 396
 395 if (metrik .eq. 1) cpos = cpos * fmipkm
-    write (lunit9) cpos
-    if (iprsup .ge. 1) write (lunit6, 397) cpos
+    write (lunit(9)) cpos
+    if (iprsup .ge. 1) write (lunit(6), 397) cpos
 397 format (' Cpos on unit9', e15.6)
 396 liu = 1
 399 yzero = p(1)
@@ -2711,7 +2711,7 @@ contains
     !     read input card using cimage
 504 call cimage
     read (unit = abuff, fmt = 4230) bufsem
-    if (ialter .ne. 2) write (lunit2, 4230) bufsem
+    if (ialter .ne. 2) write (unit = lunit(2), fmt = 4230) bufsem
     read (unit = abuff, fmt = 11) i1, y1, r1, i2, g1, d1, x1, h1, h2, d8, d9, bus1, i3
     if (i1 .ne. 0) go to 4423
     if (y1 .ne. 0) go to 4423
@@ -2795,15 +2795,15 @@ contains
     j1516=j15+j16
     if (j13+j14+j1516.eq.0) go to 16
     if ( metrik .eq. 1 ) go to 610
-    write (lunit6,601) dist
+    write (lunit(6),601) dist
 601 format (/, ' Matrices for line length =', e13.6, ' miles.')
     go to 612
 610 distm = dist / fmipkm
-    write ( lunit6,611 ) distm
+    write ( lunit(6),611 ) distm
 611 format (/, ' Matrices for line length =', f8.3, ' km.')
 612 continue
     if (idist.eq.1) go to 603
-    write (lunit6,602) kcirct
+    write (lunit(6),602) kcirct
 602 format ('+', 41x, 'Cannot be calculated with number of equivalent conductors=', i3)
     go to 16
 603 ip=0
@@ -2823,18 +2823,18 @@ contains
        if (i1 .le. i2) go to 608
        i2 = i2 * 2
     end do
-    write (unit = lunit6, fmt = 607)
+    write (unit = lunit(6), fmt = 607)
 607 format ('+', 41x, 'Cannot be calculated with number of necessary sections=2**33')
     go to 16
 608 x1 = i2
     i1 = isec - 1
     deltad = dist / x1
     if (metrik .eq. 1) go to 613
-    write (unit = lunit6, fmt = 609) i1, deltad
+    write (unit = lunit(6), fmt = 609) i1, deltad
 609 format (' Computed by connecting in cascade 2**', i2, ' equal sections of', e13.6, ' miles each.')
     go to 615
 613 deltam = deltad / fmipkm
-    write (unit = lunit6, fmt = 614) i1, deltam
+    write (unit = lunit(6), fmt = 614) i1, deltam
 614 format ('+', 41x, 'computed by connecting in series 2**', i2, ' equal sections of', f9.4, ' km each.')
 615 continue
     f1 = unity / deltad
@@ -2950,7 +2950,7 @@ contains
     end do
     go to 673
 9200 lstat(18) = nchain
-    if (ialter .eq. 2) lunit5 = l5save
+    if (ialter .eq. 2) lunit(5) = l5save
     lastov = nchain
     nchain = 51
 9900 return

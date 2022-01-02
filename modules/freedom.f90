@@ -17,11 +17,11 @@ contains
   ! subroutine frefld.
   !
 
-  subroutine frefld (array)
+  subroutine frefld (a)
     use blkcom
     use labcom
     implicit none
-    real(8), intent(out) :: array(:)
+    real(8), intent(out) :: a(:)
     character(8) :: chtacs, texbuf(30)
     integer(4) :: i, jj, ll, n3, n9
     !
@@ -29,7 +29,7 @@ contains
     !  equivalence (texvec(1), text1)
     !
     data chtacs / 'tacs  ' /
-    if (iprsup .ge. 5) write (unit = lunit6, fmt = 1016) nfrfld, nright, kolbeg
+    if (iprsup .ge. 5) write (unit = lunit(6), fmt = 1016) nfrfld, nright, kolbeg
 1016 format (' Top "frefld".  nfrfld, nright, kolbeg =', 3i6)
     if (nright .lt. 0) go to 5913
     do jj = 1, nfrfld
@@ -61,10 +61,10 @@ contains
        go to 5827
 5819   if (kolbeg .le. 80) go to 5603
 5827   if (n3 .gt. 0) go to 5829
-       array(jj) = 0.0
+       a(jj) = 0.0
        go to 5831
-5829   call frenum (texbuf(1), n3, array(jj))
-5831   if (iprsup .ge. 5) write (unit = lunit6, fmt = 5837) jj, kolbeg, n3, array(jj)
+5829   call frenum (texbuf(1), n3, a(jj))
+5831   if (iprsup .ge. 5) write (unit = lunit(6), fmt = 5837) jj, kolbeg, n3, a(jj)
 5837   format (/, ' "frefld" number.      jj  kolbeg      n3', 21x,  'array(jj)', /, 17x, 3i8, e30.20)
     end do
     go to 9900
@@ -124,14 +124,14 @@ contains
 6069 if (texcol(kolbeg) .ne. csepar ) go to 6042
 6072 nfrfld = jj
     kolbeg = kolbeg + 1
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 6083) jj, ll, kolbeg, texcol
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 6083) jj, ll, kolbeg, texcol
 6083 format (/, ' Keyword near "frefld" exit.      jj      ll  kolbeg', /, 28x, 3i8, /, (' texcol =', 30a4))
     go to 9900
 9200 kill = 166
-    if (iprsup .ge. 0) write (unit = lunit6, fmt = 9207) lstat(19), nchain, lastov, kolbeg, nfrfld, nright
+    if (iprsup .ge. 0) write (unit = lunit(6), fmt = 9207) lstat(19), nchain, lastov, kolbeg, nfrfld, nright
 9207 format (/, " Error stop within  'frefld' .", 6i8, /, 1x)
     lstat(18) = -1
-9900 if (iprsup .ge. 2) write (unit = lunit6, fmt = 9901) kill, kolbeg, array(1)
+9900 if (iprsup .ge. 2) write (unit = lunit(6), fmt = 9901) kill, kolbeg, a(1)
 9901 format (' Exit "frefld".  kill, kolbeg, array(1) =', i6, e20.10)
     return
   end subroutine frefld

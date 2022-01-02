@@ -74,7 +74,7 @@ contains
     !
     y = dsin (x)
     if (dabs (y) * fltinf .gt. 1.0) go to 4783
-    write (unit = lunit6, fmt = 4761) x
+    write (unit = lunit(6), fmt = 4761) x
 4761 format (/, " Stop.   Too small argument at  'cotanz'  within 'rfunl1' .", e15.5)
     call stoptp                                               ! installation-dependent program stop card
 4783 cotanz = dcos (x) / y

@@ -85,7 +85,7 @@ contains
     n9 = 0
     kpen(2) = 0
     n4 = location (narray)
-    write (unit = lunit6, fmt = 5831) n1, n2, n3, kburro, n4
+    write (unit = lunit(6), fmt = 5831) n1, n2, n3, kburro, n4
 5831 format (/, " Top of  'tapsav'., '      n1      n2      n3  kburro              n4", /, 18x, 4i8, i16)
     !     Following check normally sends VAX EMTP to 6327 (disk is
     !     only wanted for table saving within a simulation for
@@ -110,7 +110,7 @@ contains
     kvecsv = 2 * (it + it + ibr + ntot + ioffd) + kswtch + lhist
     n9 = ltlabl + kvecsv * nbyte(3) / nbyte(4)
     if (n9 .lt. kpen(2) + 50) go to 6342
-    write (unit = lunit6, fmt = 6335) n2, kpen(2), n9, nchain
+    write (unit = lunit(6), fmt = 6335) n2, kpen(2), n9, nchain
 6335 format (' Error stop in "tapsav".  Overflow of /c29b01/ storage.  n2, kpen(2) =', 2i8, '     needed storage n9 =,  i8     ', /, ' memory requirement in integer words for virtual   computer implementation of tapsav.   Storage must ', /, ' provide for all of --/label/--( deck "labcom" ),    the several usages of "vecrsv" and "vecisv"(over6-11),  ', ' plus 50 extra cells.   ', /, ' nchain =', i5)
     call stoptp
 6342 j = 50
@@ -124,7 +124,7 @@ contains
        j = j + 1
        narray(k) = karray(j)
     end do
-9000 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9003) n9, kpen(2)
+9000 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 9003) n9, kpen(2)
 9003 format (' Exit "tapsav".   n9, kpen(2) =', 2i8)
     return
   end subroutine tapsav
@@ -522,7 +522,7 @@ subroutine pltfil (k)
   !     We pass here with m4plot=2,  indicating disk storage,  but
   !     single-precision (real*4) numbers only:
   if (k .le. 450 ) go to 7273
-  write (unit = lunit6, fmt = 7269) k
+  write (unit = lunit(6), fmt = 7269) k
 7269 format (' ^^^^^^^^^^^^^^^   Error stop in "pltfil"   ^^^^^^^^^^^^^^', /, ' ^^^^^^  too many output variables (', i3,  &
        ' )  for use real*4 plot file.   limit = 450.')
   call stoptp                                               ! installation-dependent program stop card
@@ -532,9 +532,9 @@ subroutine pltfil (k)
 7273 forbyt(1 : k) = volti(1 : k)
   !     following apollo card replaces 2 preceding vax ones:
   !     7273 call vec_$dp_sp ( volti(1), forbyt(1), k )
-  write (unit = lunit4) (forbyt(j), j = 1, k)
+  write (unit = lunit(4)) (forbyt(j), j = 1, k)
   go to 9000                                                ! exit module after possible diagnostic
-7286 if (iprsup .ge. 3) write (unit = lunit6, fmt = 7301) indbuf, mflush, k, limbuf, newvec, numcrd, (volti(j), j = 1, 10)
+7286 if (iprsup .ge. 3) write (unit = lunit(6), fmt = 7301) indbuf, mflush, k, limbuf, newvec, numcrd, (volti(j), j = 1, 10)
 7301 format (' Top of "pltfil".  indbuf, mflush, k, limbuf, newvec, numcrd =', 6i10, /, 1x, 10e13.4)
   n7 = 0
   if (indbuf .gt. 0) go to 7308                             ! not very 1st step
@@ -546,7 +546,7 @@ subroutine pltfil (k)
   indbuf = indbeg                                           ! reset plot storage at beginning
   newvec = indbuf + 1                                       ! plot data begins after data cards
 7308 if (indbuf + k .le. limbuf) go to 7374                 ! not full yet
-  write (unit = lunit6, fmt = 7311) indbuf, limbuf
+  write (unit = lunit(6), fmt = 7311) indbuf, limbuf
   write (unit = munit6, fmt = 7311) indbuf, limbuf
 7311 format ('   % % % % % %   Suspended simulation;  plot data space exhausted;  use spy.   indbuf, limbuf =', 2i8)
   call window                                               ! output of character variable munit6
@@ -576,7 +576,7 @@ subroutine pltfil (k)
   call timval                                               ! regenerate plot, with right half on left
   monitr = 1                                                ! plot regenerated, so turn off request flag
 7396 if (monits .ne. 0) call chrplt                         ! rolling character plot
-9000 if (iprsup .ge. 4) write (lunit6, 9004)
+9000 if (iprsup .ge. 4) write (unit = lunit(6), fmt = 9004)
 9004 format (' Exit "pltfil".')
   return
 end subroutine pltfil
@@ -597,12 +597,12 @@ subroutine pltlu2 (d2, volti)
   !
   if (iofgnd .gt. 149) call stoptp
   n12 = iofgnd + 1
-  read (unit = lunit2) (forbyt(j), j = 1, n12)
+  read (unit = lunit(2)) (forbyt(j), j = 1, n12)
   d2 = forbyt(1)
   do j = 1, iofgnd
      volti(j) = forbyt(j + 1)
   end do
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 1978) d2, volti(1), volti(iofgnd)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1978) d2, volti(1), volti(iofgnd)
 1978 format (' Exit "pltlu2".  d2, volti(1, iofgnd) =', 3e14.5)
   return
 end subroutine pltlu2
@@ -649,7 +649,7 @@ subroutine namea6 (text1, n24)
   texvec(maxbus) = text1
   n24 = maxbus
   go to 9000
-3438 if (iprsup .ge. 1) write (unit = lunit6, fmt = 3442) maxbus, text1, n24
+3438 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3442) maxbus, text1, n24
 3442 format ('  +++++  Search of EMTP name vector bus through cell', i5, '   in  "namea6"  shows no match for', /, '         .', '"', a6, '"', '.   Return -intinf.', i10)
   n24 = -intinf
   go to 9000
@@ -658,7 +658,7 @@ subroutine namea6 (text1, n24)
   go to 9000
 3455 texvec(j) = text2
   n17 = j
-9000 if (iprsup .ge. 6) write (unit = lunit6, fmt = 9004) text1, maxbus, n24, j
+9000 if (iprsup .ge. 6) write (unit = lunit(6), fmt = 9004) text1, maxbus, n24, j
 9004 format (' Exit "namea6".  text1, maxbus, n24, j =', 2x, a6, 3i10)
   return
 end subroutine namea6
@@ -729,36 +729,36 @@ subroutine tables
   n5 = location (lbstac) - location (etac) + 1
   if (kbase .eq. 0) nword1 = location (idistx) - location (busone)
   n9 = location (istart) - location (busum) + 1
-  rewind lunit2
+  rewind lunit(2)
   if (nchain .eq. 1) go to 3289
   if (nchain .eq. 20) go to 3289
-3289 if (iprsup .ge. 1) write (unit = lunit6, fmt = 2721) n4, n5, nword1, nword2, ltlabl, n9, nchain, lastov, lunit2, t
+3289 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2721) n4, n5, nword1, nword2, ltlabl, n9, nchain, lastov, lunit(2), t
 2721 format (/, ' Within  "tables" .      n4      n5  nword1  nword2  ltlabl      n9  nchain  lastov  lunit2 ',  14x,  't', /, 19x, 9i8, e15.6)
   if (nchain .eq. 1) go to 5342
   if (memsav .eq. 1016) go to 5342
   if (nchain .lt. lastov) go to 5342
-  write (unit = lunit2) locker
-  write (unit = lunit2) (kpen(i), i = 1, nword1)
-  write (unit = lunit2) (iprsov(i), i = 35, nword2)
+  write (unit = lunit(2)) locker
+  write (unit = lunit(2)) (kpen(i), i = 1, nword1)
+  write (unit = lunit(2)) (iprsov(i), i = 35, nword2)
   !     store iprsov(16-19) in iprsav at 1st call to tables from over12
   call move (iprsov(16 :), iprsav(1 :), ll4)
-  call tapsav (integx, lunit2, ltlabl, ll1)
-  if (numsm .ne. 0) write (unit = lunit2) (ktemp(i), i = 1, n4), (jtemp(i), i = 1, n5)
-  write (unit = lunit2) (itemp(i), i = 1, n9)
+  call tapsav (integx, lunit(2), ltlabl, ll1)
+  if (numsm .ne. 0) write (unit = lunit(2)) (ktemp(i), i = 1, n4), (jtemp(i), i = 1, n5)
+  write (unit = lunit(2)) (itemp(i), i = 1, n9)
   go to 5359
-5342 read (unit = lunit2) locker
-  if (iprsup .ge. 9) write (unit = lunit6, fmt = 66) locker
+5342 read (unit = lunit(2)) locker
+  if (iprsup .ge. 9) write (unit = lunit(6), fmt = 66) locker
 66 format (' After 1st read.  locker =', 2i8)
   n3 = nchain
   n2 = iprsup
   n24 = numdcd
-  read (unit = lunit2) (kpen(i), i = 1, nword1)
-  read (unit = lunit2) (iprsov(i), i = 35, nword2)
-  call tapsav (integx, lunit2, ltlabl, ll2)
-  if (iprsup .ge. 9) write (lunit6, 69) numsm, n4, n5, n9
+  read (unit = lunit(2)) (kpen(i), i = 1, nword1)
+  read (unit = lunit(2)) (iprsov(i), i = 35, nword2)
+  call tapsav (integx, lunit(2), ltlabl, ll2)
+  if (iprsup .ge. 9) write (unit = lunit(6), fmt = 69) numsm, n4, n5, n9
 69 format (' After tapsav: numsm,n4,n5,n9 =', 4i5)
-  if (numsm .ne. 0) read (unit = lunit2) (ktemp(i), i = 1, n4), (jtemp(i), i = 1, n5)
-  read (unit = lunit2) (itemp(i), i = 1, n9)
+  if (numsm .ne. 0) read (unit = lunit(2)) (ktemp(i), i = 1, n4), (jtemp(i), i = 1, n5)
+  read (unit = lunit(2)) (itemp(i), i = 1, n9)
   nchain = n3
   iprsup = n2
   numdcd = n24
@@ -773,7 +773,7 @@ subroutine tables
      iprsov(j + 15) = iprsav(j)
      iprsov(j + 30) = n1
   end do
-5359 if (iprsup .ge. 1) write (unit = lunit6, fmt = 5364)
+5359 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 5364)
 5364 format (' Exit "tables".')
   return
 end subroutine tables
@@ -814,25 +814,25 @@ subroutine csup (l)
   kksup = kjsup  + lstat(65)
   !     2001 if ( iprsup .lt. 6 )  go to 1000
   if (iprsup .lt. 6) go to 1000
-  write (unit = lunit6, fmt = 1001) t, nsup, karg, kpar
+  write (unit = lunit(6), fmt = 1001) t, nsup, karg, kpar
 1001 format ('0entering subroutine  csup  at  t=', e13.6, /, '0e nsup=', i6, '   karg=', i8, '   kpar=', i6)
-  write (unit = lunit6, fmt = 1002) (i, ilntab(i + kspvar), insup(i + kjsup), insup(i + kksup), i = 1, nsup)
+  write (unit = lunit(6), fmt = 1002) (i, ilntab(i + kspvar), insup(i + kjsup), insup(i + kksup), i = 1, nsup)
 1002 format ('  Number  supvar    jsup    ksup ', /, (4i8))
-  write (unit = lunit6, fmt = 1033) karg
+  write (unit = lunit(6), fmt = 1033) karg
 1033 format ('  karg = ', i8, /, '       n  iopsup  ifnsup  irgsup    idev     kdj     kdk  ildev1  ildev2')
   do i = 1, nsup
      n1 = insup(kjsup + i)
      if (n1 .lt. 0) go to 2014
      n2 = insup(kksup + i)
-     write (unit = lunit6, fmt = 2008) (n,ivarb(n + 1), ivarb(n + 2), ivarb(n + 2), n = n1, n2, 3)
+     write (unit = lunit(6), fmt = 2008) (n,ivarb(n + 1), ivarb(n + 2), ivarb(n + 2), n = n1, n2, 3)
 2008 format (4i8)
      go to 2034
 2014 n1 = -n1
-     write (unit = lunit6, fmt = 2022 ) n1, ivarb(n1), ivarb(n1 + 1), ivarb(n1 + 2), ivarb(n1 + 3), ivarb(n1 + 4)
+     write (unit = lunit(6), fmt = 2022 ) n1, ivarb(n1), ivarb(n1 + 1), ivarb(n1 + 2), ivarb(n1 + 3), ivarb(n1 + 4)
 2022 format (i8, 24x, 5i8)
   end do
 2034 continue
-  if (kpar .ne. 0) write (unit = lunit6, fmt = 1004) (i, parsup(i + kprsup), i = 1, kpar)
+  if (kpar .ne. 0) write (unit = lunit(6), fmt = 1004) (i, parsup(i + kprsup), i = 1, kpar)
 1004 format ('0e', 5x, 'parsup ...', /, (' e', 5(i3, 1x, e15.6, 3x)))
 1000 nnn = kxtcs + nuk + lstat(64)
   i = l
@@ -1357,7 +1357,7 @@ subroutine csup (l)
   if (iuty(kiuty + 3) .eq. 0) go to 6507
   iuty(kiuty + 3) = iuty(kiuty + 3) - 1
   ndx1 = ilntab(kspvar + i)
-  write (lunit6, 6504) texvec(ndx1), t, d7, g
+  write (unit = lunit(6), fmt = 6504) texvec(ndx1), t, d7, g
 6504 format (' ', 5x, 'Warning. ---- Frequency sensor ', a6, ' has zero crossing at ', e15.6, ' sec. But new frequency ', /, 21x, 'of', e13.4, ' Hz differs by over fifty percent from the old frequency of ', e13.4, ' Hz. Reject it.')
   go to 6507
 6505 parsup(nn) = g
@@ -1395,7 +1395,7 @@ subroutine csup (l)
   if ( iuty(kiuty+3) .eq. 0 )  go to 65313
   iuty(kiuty+3) = iuty(kiuty+3) - 1
   ndx6 = ilntab( kspvar + i )
-  write (lunit6, 65316)  texvec( ndx6), t
+  write (unit = lunit(6), fmt = 65316) texvec( ndx6), t
 65316 format (5x, 'Warning.  ----  value of delay became negative for ', "'", a6, "'", ' at time =', e14.6, ' but lower limit nalue = 0.0 .', /, 21x, 'This message will not be repeated.')
 65313 d7 = 0.0
   go to 65310
@@ -1412,7 +1412,7 @@ subroutine csup (l)
   iuty(kiuty + 3) = iuty(kiuty + 3) - 1
   ndx6 = ilntab(kspvar + i)
   d4 = deltat * n6
-  write (unit = lunit6, fmt = 65356) d4, texvec( ndx6), t
+  write (unit = lunit(6), fmt = 65356) d4, texvec( ndx6), t
 65356 format (5x, 'Warning.  ----  value of delay exceeded max. delay value of ', '"', e14.6, '"', ' for ', '"', a6, '"', ' at time =', e14.6, ' .', / 21x, 'This message will not be repeated.')
 65353 j = n6
   m1 = 1
@@ -1440,7 +1440,7 @@ subroutine csup (l)
   if (b .le. 0.0d0) go to 65402
   if (iuty(kiuty + 3) .eq. 0) go to 65402
   iuty(kiuty + 3) = iuty(kiuty + 3) - 1
-  write (unit = lunit6, fmt = 65401) texvec(ndx1), d9, t
+  write (unit = lunit(6), fmt = 65401) texvec(ndx1), d9, t
 65401 format (5x, 'Warning. ---- The pulse frequency at the pulse transport delay ', a6, ' is too fast for the present ', /, 21x, ' delay of ', e13.4, ' sec at simulation time ', e13.4, ' sec. Use device type 53 instead of type 54.', /, 21x, '******** the answer may be wrong later ********')
   go to 65402
 65400 if (b .gt. 0.0d0 .and. d .eq. -9999.0d0) parsup(nn) = t
@@ -1613,7 +1613,7 @@ subroutine csup (l)
      d4 = xtcs(ndx6) * ksus(ndx2)
      if (d4 .lt. d10) d10 = d4
      if (d4 .gt. d11) d11 = d4
-     if (iprsup .ge. 1) write (unit = lunit6, fmt = 7234) k, j, ndx2, ndx3, ndx6, ksus(ndx2), xtcs(ndx6)
+     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 7234) k, j, ndx2, ndx3, ndx6, ksus(ndx2), xtcs(ndx6)
 7234 format (' Next input; k, j, ndx2, ndx3, ndx6, ksus(ndx2), xtcs(ndx6) =',  6i8, e13.3)
   end do
 66340 continue

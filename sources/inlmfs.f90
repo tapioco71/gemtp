@@ -64,17 +64,17 @@ subroutine inlmfs
      n19 = n19 - 1
   end do
   !     n19 = n19 + 1
-  write (unit = lunit6, fmt = 1820) j, answ80(1 : n8)
+  write (unit = lunit(6), fmt = 1820) j, answ80(1 : n8)
 1820 format ('   --- thl pass.  card =', i4, '.   Ready to open $include =', a)
   inquire (file = answ80(1 : n8), exist = logvar)
   if (logvar) go to 2294
-  write (unit = lunit6, fmt = 5823) answ80(1 : n8)
+  write (unit = lunit(6), fmt = 5823) answ80(1 : n8)
 5823 format (/, ' Trouble with special  $include that is to service line model frequency scan.', /, &
           ' Halt in  inlmfs  called by  over2.  Bye, bye!' )
   stop
 2294 prom80 = file6(j)
   file6(j) = 'c '//prom80(1:78)
-  open (unit = lunt13, status = 'old', file = answ80(1 : n8))
+  open (unit = lunit(13), status = 'old', file = answ80(1 : n8))
   n16 = 0
   n26 = k + 1
 4203 do l = n26, 80                                         ! search cols. n26-80 for nonblank
@@ -125,20 +125,20 @@ subroutine inlmfs
 4226 kard(1) = 999999
   n1 = 0
   if (n16 .eq. 0) go to 4239
-4228 read (unit = lunt13, fmt = 4232) (kbeg(l), l = 1, 25)
+4228 read (unit = lunit(13), fmt = 4232) (kbeg(l), l = 1, 25)
   do l = 1, 25
      if (kbeg(l) .eq. 0) go to 4230
   end do
   n1 = n1 + 25
   if (n1 .le. 175) go to 4228
   call stoptp
-4230 rewind lunt13
+4230 rewind lunit(13)
   n6 = n1 + l - 1
-  read (unit = lunt13, fmt = 4232) (kard(k), k = 1, n6)
-  read (unit = lunt13, fmt = 4232) (karg(k), k = 1, n6)
-  read (unit = lunt13, fmt = 4232) (kbeg(k), k = 1, n6)
-  read (unit = lunt13, fmt = 4232) (kend(k), k = 1, n6)
-  read (unit = lunt13, fmt = 4232) (ktex(k), k = 1, n6)
+  read (unit = lunit(13), fmt = 4232) (kard(k), k = 1, n6)
+  read (unit = lunit(13), fmt = 4232) (karg(k), k = 1, n6)
+  read (unit = lunit(13), fmt = 4232) (kbeg(k), k = 1, n6)
+  read (unit = lunit(13), fmt = 4232) (kend(k), k = 1, n6)
+  read (unit = lunit(13), fmt = 4232) (ktex(k), k = 1, n6)
 4232 format (4x, 25i3)
   if (iprspy .lt. 1) go to 4235
   write (unit = munit6, fmt = 4233) n6
@@ -164,7 +164,7 @@ subroutine inlmfs
   n24 = 1
   n18 = j + 1
   do k = n18, limcrd
-     read (unit = lunt13, fmt = 1329, end = 1828) buff77
+     read (unit = lunit(13), fmt = 1329, end = 1828) buff77
 1329 format (a80)
      if (to_lower (buff77(1 : 1)) .ne. 'c') go to 4247
      do l = 1, 10
@@ -188,7 +188,7 @@ subroutine inlmfs
      n4 = karg(n24)
      n3 = kolinc(n4)
      if (n4 .le. n16) go to 34250
-     write (unit = lunit6, fmt = 4250) n24, n4, n16
+     write (unit = lunit(6), fmt = 4250) n24, n4, n16
 4250 format ('   ? ? ? ?   Error stop at s.n. 4250 of "datain".   Insufficient number of $include arguments.', /, '             n24, n4, n16 =', 3i8)
      call stoptp
 34250 if (n2 - n1 .ne. n3 - 1 .and. ktex(n24) .eq. 1) go to 4253
@@ -226,7 +226,7 @@ subroutine inlmfs
   end do
 4273 continue
   stop
-1828 close (unit = lunt13, status = 'keep')
+1828 close (unit = lunit(13), status = 'keep')
   if (iprspy .lt. 1) go to 1832
   write (unit = munit6, fmt = 1831) j, n19
 1831 format (' Done with disk file (close).  j, n19 =', 2i8)

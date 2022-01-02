@@ -25,6 +25,7 @@ end subroutine main10
 #ifdef WITH_OVER29
 subroutine over29
   implicit none
+  integer(4) :: karray( 9762865)
   real(8) :: tp(   30000)
   integer(4) :: norder(   93002)
   integer(4) :: index(   93002)
@@ -48,6 +49,7 @@ end subroutine over29
 #ifdef WITH_OVER31
 subroutine over31
   implicit none
+  integer(4) :: karray(     300)
   call subr31
   return
 end subroutine over31
@@ -127,9 +129,9 @@ subroutine over44
   real(8) :: workr1(     468)
   real(8) :: workr2(     468)
   character(8) :: text(     936)
-  real(8) :: gd(   27509)
-  real(8) :: bd(   27509)
-  real(8) :: yd(   27509)
+  real(8) :: gd(   27508)
+  real(8) :: bd(   27508)
+  real(8) :: yd(   27508)
   integer(4) :: itbic(     469)
   real(8) :: tbr(     469)
   real(8) :: tbd(     469)
@@ -211,19 +213,23 @@ subroutine dimens (lsize, nchain, bus1, bus2)
   lsize(27)  =     600
   lsize(28)  =    1080
   n7 = 28 + 1
-  lsize(n7) = 9763165
-  bus1 ='  213147'
-  bus2 ='  311221'
+  lsize(n7) = 9762865
+  bus1 ='  170244'
+  bus2 ='   20122'
   return
 2900 if (nchain .gt.  29) go to 3100
-  lsize( 1)  =      23
-  lsize( 2) =  30000
-  lsize( 3)  =       1
-  lsize( 4) =  93002
-  lsize( 5)  =       9
-  lsize( 6) =    300
+  lsize( 1)  =       0
+  lsize( 2) =9762865
+  lsize( 3)  =      23
+  lsize( 4) =  30000
+  lsize( 5)  =       1
+  lsize( 6) =  93002
+  lsize( 7)  =       9
+  lsize( 8) =    300
   return
 3100 if (nchain .gt.  31) go to 3900
+  lsize( 1)  =       9
+  lsize( 2) =    300
   return
 3900 if (nchain .gt.  39) go to 1000
   lsize( 1)  =      71
@@ -247,7 +253,7 @@ subroutine dimens (lsize, nchain, bus1, bus2)
   lsize( 7)  =      76
   lsize( 8) =    936
   lsize( 9)  =      74
-  lsize(10) =  27509
+  lsize(10) =  27508
   lsize(11)  =      73
   lsize(12) =    469
   return

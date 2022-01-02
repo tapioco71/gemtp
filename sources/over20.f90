@@ -26,7 +26,7 @@ subroutine over20
   !  equivalence (moncar(3), ltdelt), (moncar(4), isw)
   !  equivalence (moncar(10), mtape)
   !
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  Begin module "over20".')
   zero = 0.0
   ll1 = 1
@@ -34,13 +34,13 @@ subroutine over20
   ll10 = 10
   call runtym (d1, d2)
   n10 = 1
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 1324) iplot, nenerg, kbase, m4plot,  mtape, icat, lstat(32), t, aincr
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1324) iplot, nenerg, kbase, m4plot,  mtape, icat, lstat(32), t, aincr
 1324 format (/, 1x, '   iplot  nenerg  kbase  m4plot   mtape    icat lstat32', 14x, 't', 10x, 'aincr', /, 1x, 7i8, 2e15.5)
-  if (max99m .lt. 0) write (unit = lunit6, fmt = 9345) max99m
+  if (max99m .lt. 0) write (unit = lunit(6), fmt = 9345) max99m
 9345 format (' ++++  Number of suppressed type-99 flashover or clearing messages is negative of', i7)
   if (peaknd(1) .eq. 0.0) go to 5019
   n6 = int (peaknd(3), kind (n6))
-  write (unit = lunit6, fmt = 5011) peaknd(1), peaknd(2), bus(n6)
+  write (unit = lunit(6), fmt = 5011) peaknd(1), peaknd(2), bus(n6)
 5011 format (8x, 'Overall simulation peak node voltage =', e15.6, ' .   Time (sec) =', e14.5, ' .   bus = ', "'", a6, "'", ' .')
 5019 k = lstat(32) + 1
   if (iplot .lt. 0) go to 8005
@@ -48,7 +48,7 @@ subroutine over20
   if (m4plot .eq. 0) go to 5022
   call pltfil (k)
   go to 8005
-5022 write (lunit4) (volti(i), i = 1, k)
+5022 write (lunit(4)) (volti(i), i = 1, k)
 8005 if (icat .gt. 0 .or. memsav .gt. 0) call katalg
   close (unit = 79)
   k = lstat(32)
@@ -56,43 +56,43 @@ subroutine over20
   !      'aincr' is set to be greater than or equal to '55.0'.
   if (kbase .eq. 2 .and. aincr .lt. 55.0) go to 3614
   if (begmax(1) .le. 0.0) go to 3614
-  write (lunit6, 8002) (xmax(l), l = 1, k)
+  write (unit = lunit(6), fmt = 8002) (xmax(l), l = 1, k)
 8002 format (/, ' Maxima and minima which occurred during the simulation follow.   The order and column positioning are the', /, ' same as for the regular printed output vs. time.', /, ' Variable maxima :', /, (15x, 9e13.6))
   !     Extrema vector  "xmax"  actually has four partitions,
   !     each the size of list 12:  (xmax, tmax, xmin, tmin) .
   ndx1 = lsiz12 + 1
   ndx2 = lsiz12 + k
-  write (unit = lunit6, fmt = 8003) (xmax(l), l = ndx1, ndx2)
+  write (unit = lunit(6), fmt = 8003) (xmax(l), l = ndx1, ndx2)
 8003 format (' Times of maxima :', /, (15x, 9e13.6))
   ndx1 = ndx1 + lsiz12
   ndx2 = ndx2 + lsiz12
-  write (unit = lunit6, fmt = 8004) (xmax(l), l = ndx1, ndx2)
+  write (unit = lunit(6), fmt = 8004) (xmax(l), l = ndx1, ndx2)
 8004 format (' Variable minima :', /, (15x, 9e13.6))
   ndx1 = ndx1 + lsiz12
   ndx2 = ndx2 + lsiz12
-  write (unit = lunit6, fmt = 18005)  (xmax(l), l = ndx1, ndx2)
+  write (unit = lunit(6), fmt = 18005)  (xmax(l), l = ndx1, ndx2)
 18005 format (' Times of minima :', /, (15x, 9e13.6))
 3614 if (nenerg .ne. 0) go to 605
   flstat(9) = d1
   flstat(10) = d2
-  if (begmax(1) .ne. 0.0 .and. begmax(2) .ne. 0.0) write (lunit6, 8006) begmax(2)
+  if (begmax(1) .ne. 0.0 .and. begmax(2) .ne. 0.0) write (unit = lunit(6), fmt = 8006) begmax(2)
 8006 format (56x, 'Search for extrema began at time', e15.6, '   sec.')
-  write (unit = lunit6, fmt = 8007)
+  write (unit = lunit(6), fmt = 8007)
 8007 format (1x)
   if (ipunch .le. 0) go to 9800
 !5759 kcount = 2
   kcount = 2
   iold = 3
-  if (n10 .ne. 0) write (unit = lunit6, fmt = 7009) t
+  if (n10 .ne. 0) write (unit = lunit(6), fmt = 7009) t
 7009 format (/, ' Printout of the saving of terminal conditions for all components, at time', e15.7, '   seconds.', /, ' Begin with all node voltages.', /, 3(21x, 'node'), /, 19x, 'number', 21x, 'name', 18x, 'voltage')
   do k = 2, ntot
-     if (n10 .ne. 0) write (unit = lunit6, fmt = 7012) bus(k), e(k), zero, k
+     if (n10 .ne. 0) write (unit = lunit(6), fmt = 7012) bus(k), e(k), zero, k
 7012 format(' ', a6, 2e13.5, 41x, i6)
 !7010 write (unit = lunit7, fmt = 7011) kcount, bus(k), e(k), zero, zero, k
-     write (unit = lunit7, fmt = 7011) kcount, bus(k), e(k), zero, zero, k
+     write (unit = lunit(7), fmt = 7011) kcount, bus(k), e(k), zero, zero, k
   end do
 7011 format (i2, a6, 3e15.8, 21x, i6)
-  if (n10 .ne. 0) write (unit = lunit6, fmt = 7013)
+  if (n10 .ne. 0) write (unit = lunit(6), fmt = 7013)
 7013 format (/, " Linear branch table state variables ( 'currents' ) follow.", /, 7x,  'row', 9x, "'from' node", 11x, "'to' node", 9x, 'linear branch parameters, identified by the Fortran vector storage', /,  9x, 'i', 8x, 'bus(kbus(i))', 8x, 'bus(mbus(i))', 19x, 'cik(i)', 20x, 'ci(i)', 20x, 'ck(i)')
   k = 1
 7014 it2 = 1
@@ -103,9 +103,9 @@ subroutine over20
   if (ci1 .eq. 0. .and. ck1 .eq. 0.) go to 7025
   l = kbus(k)
   m = iabs(mbus(k))
-  write (unit = lunit7, fmt = 7020) iold, bus(l), bus(m), ci1, ck1, zero, zero, k
+  write (unit = lunit(7), fmt = 7020) iold, bus(l), bus(m), ci1, ck1, zero, zero, k
 7020 format (i2, 2a6, 4e15.8, i6)
-  if (n10 .ne. 0) write (unit = lunit6, fmt = 7021) bus(l), bus(m), ci1, ck1, zero, zero, k
+  if (n10 .ne. 0) write (unit = lunit(6), fmt = 7021) bus(l), bus(m), ci1, ck1, zero, zero, k
 7021 format (1x, a6, 1x, a6, 4e13.5, i6)
   go to 7025
 7022 it2 = iabs(length(k))
@@ -113,14 +113,14 @@ subroutine over20
   do i = k, it1
      n1 = kbus(i)
      n2 = iabs(mbus(i))
-     if (n10 .ne. 0) write (lunit6,7021) bus(n1),bus(n2), cik(i), ci(i), ck(i), zero,i
-!7023 write (unit = lunit7, fmt = 7020) iold, bus(n1), bus(n2), cik(i), ci(i), ck(i), zero, i
-     write (unit = lunit7, fmt = 7020) iold, bus(n1), bus(n2), cik(i), ci(i), ck(i), zero, i
+     if (n10 .ne. 0) write (unit = lunit(6), fmt = 7021) bus(n1), bus(n2), cik(i), ci(i), ck(i), zero, i
+!7023 write (unit = lunit(7), fmt = 7020) iold, bus(n1), bus(n2), cik(i), ci(i), ck(i), zero, i
+     write (unit = lunit(7), fmt = 7020) iold, bus(n1), bus(n2), cik(i), ci(i), ck(i), zero, i
   end do
   go to 7025
 7024 n1 = iabsz (kbus(k))
   n2 = iabsz (mbus(k))
-  write (unit = lunit6, fmt = 70241) bus(n1), bus(n2)
+  write (unit = lunit(6), fmt = 70241) bus(n1), bus(n2)
 70241 format ('  ****  Warning.   ****   No currents will be punched for the distributed line connecting nodes  ', '"', a6,  '"', '  and  ', '"', a6, '"', ' . ')
   it2 = length(k)
   if (it2 .lt. 0) it2 = -it2
@@ -129,7 +129,7 @@ subroutine over20
 7025 k = k + it2
   if (k .le. ibr) go to 7014
   if (inonl .eq. 0) go to 9207
-  if (n10 .ne. 0) write (lunit6, 4688)
+  if (n10 .ne. 0) write (unit = lunit(6), fmt = 4688)
 4688 format (/, ' Nonlinear element table state variables follow.')
   iold = 4
   do k = 1, inonl
@@ -141,31 +141,31 @@ subroutine over20
      n6 = n5 + 1
      n7 = n5 + 2
      n8 = n5 + 3
-     write (unit = lunit7, fmt = 7020) iold, bus(n1), bus(n2), vchar(n7), cchar(n8)
+     write (unit = lunit(7), fmt = 7020) iold, bus(n1), bus(n2), vchar(n7), cchar(n8)
      n9 = int (cchar(n6))
      n11 = int (cchar(n7))
-     write (unit = lunit7, fmt = 7018) n9, n11, (vchar(ipp), ipp = n5, n8)
+     write (unit = lunit(7), fmt = 7018) n9, n11, (vchar(ipp), ipp = n5, n8)
 7018 format (2i10, 4e15.8)
      n12 = n5 + 4
      n13 = n5 + 5
      n14 = int (cchar(n12))
-     write (unit = lunit7, fmt = 7026) n14, vchar(n12), vchar(n13), gslope(n12), gslope(n13)
+     write (unit = lunit(7), fmt = 7026) n14, vchar(n12), vchar(n13), gslope(n12), gslope(n13)
 7026 format (i10 , 4e15.8)
      if (n10 .eq. 0) go to 7035
-     write (unit = lunit6, fmt = 7021) k, bus(n1), bus(n2), vchar(n7), cchar(n8)
-     write (unit = lunit6, fmt = 7019) n9, n11, (vchar(ipp), ipp = n5, n8)
+     write (unit = lunit(6), fmt = 7021) k, bus(n1), bus(n2), vchar(n7), cchar(n8)
+     write (unit = lunit(6), fmt = 7019) n9, n11, (vchar(ipp), ipp = n5, n8)
 7019 format (1x, i10, 2x, i10, 4(3x, e15.8))
-     write (unit = lunit6, fmt = 7027)  n14, vchar(n13), vchar(n14), gslope(n12), gslope(n13)
+     write (unit = lunit(6), fmt = 7027)  n14, vchar(n13), vchar(n14), gslope(n12), gslope(n13)
 7027 format (1x, i10 , 4(3x, e15.8))
      go to 7035
 7031 a = curr(k)
      if (a .eq. 0.) go to 7035
-     write (unit = lunit7, fmt = 7020) iold, bus(n1), bus(n2), a
-     if (n10 .ne. 0) write (unit = lunit6, fmt = 7021) bus(n1), bus(n2), a
+     write (unit = lunit(7), fmt = 7020) iold, bus(n1), bus(n2), a
+     if (n10 .ne. 0) write (unit = lunit(6), fmt = 7021) bus(n1), bus(n2), a
   end do
 7035 continue
 9207 if (kswtch .eq. 0) go to 4020
-  if (n10 .ne. 0) write (unit = lunit6, fmt = 7348)
+  if (n10 .ne. 0) write (unit = lunit(6), fmt = 7348)
 7348 format (/, ' Status variables for switches follow.', /, 1x,  'bus(l)', 1x, 'bus(m)', 3x, 'kpos(k)',  2x, ' kode(l)', 2x, ' kode(m)', 14x, 'tclose', 14x, 'adelay', 14x, 'energy', 16x, 'crit')
   do k = 1, kswtch
      l = iabs (kmswit(k))
@@ -173,10 +173,10 @@ subroutine over20
      m = iabs (kmswit(kn1))
      npl = nextsw(k)
      if (npl .ne. 0) npl = 87
-     write (unit = lunit7, fmt = 4003) bus(l), bus(m), kpos(k), kode(l), kode(m), tclose(k), adelay(k), energy(k), crit(k), npl
+     write (unit = lunit(7), fmt = 4003) bus(l), bus(m), kpos(k), kode(l), kode(m), tclose(k), adelay(k), energy(k), crit(k), npl
 4003 format (' 5', 2a6, 3i4, 4e13.6, /, 14x, i4)
      if (n10 .eq. 0) go to 4010
-     write (unit = lunit6, fmt = 4004) bus(l), bus(m), kpos(k), kode(l), kode(m), tclose(k), adelay(k), energy(k), crit(k), nextsw(k)
+     write (unit = lunit(6), fmt = 4004) bus(l), bus(m), kpos(k), kode(l), kode(m), tclose(k), adelay(k), energy(k), crit(k), nextsw(k)
 4004 format (1x, a6, 1x, a6, 3i10, 4e20.10, /, 14x, i10)
   end do
 4010 continue
@@ -192,84 +192,84 @@ subroutine over20
      xmax(ndx3) = xmax(ndx2)
   end do
 8010 continue
-  if (iprsup .gt. 0) write (unit = lunit6, fmt = 8903) isw, nstat, knt, nenerg, (xmax(i), i = 1, nstat)
+  if (iprsup .gt. 0) write (unit = lunit(6), fmt = 8903) isw, nstat, knt, nenerg, (xmax(i), i = 1, nstat)
 8903 format (' isw, nstat, knt, nenerg = ', 4i10, /, ' (xmax(i), i=1, nstat) =', /, 6(5x,e15.8))
   knt = knt + 1
-  write (unit = lunit9) (xmax(l), l = 1, nstat)
+  write (unit = lunit(9)) (xmax(l), l = 1, nstat)
   if (begmax(1) .eq. 0.0) go to 627
   if (nstat .le. 9) go to 609
   if (nenerg .lt. 0) go to 612
   if (nswtpe .le. 1) go to 1610
-  write (unit = lunit6, fmt = 1510) angle, angtpe, (xmax(l), l = 1, ll9)
+  write (unit = lunit(6), fmt = 1510) angle, angtpe, (xmax(l), l = 1, ll9)
 1510 format (1x, f6.2, 1x, f6.2, 1x, 9e13.6)
   go to 611
-1610 write (unit = lunit6, fmt = 617) angle, (xmax(l), l = 1, ll9)
-611 write (unit = lunit6, fmt = 618) (xmax(l), l = ll10, nstat)
+1610 write (unit = lunit(6), fmt = 617) angle, (xmax(l), l = 1, ll9)
+611 write (unit = lunit(6), fmt = 618) (xmax(l), l = ll10, nstat)
   go to 624
-612 write (unit = lunit6, fmt = 618) (xmax(l), l = 1, ll9)
+612 write (unit = lunit(6), fmt = 618) (xmax(l), l = 1, ll9)
   go to 611
 609 if (nenerg .lt. 0) go to 614
   if (nswtpe .le. 1) go to 1620
-  write (unit = lunit6, fmt = 1510) angle, angtpe, (xmax(l), l = 1, nstat)
+  write (unit = lunit(6), fmt = 1510) angle, angtpe, (xmax(l), l = 1, nstat)
   go to 624
-1620 write (unit = lunit6, fmt = 617) angle, (xmax(l), l = 1, nstat)
+1620 write (unit = lunit(6), fmt = 617) angle, (xmax(l), l = 1, nstat)
   go to 624
-614 write (unit = lunit6, fmt = 618) (xmax(l), l = 1, nstat)
+614 write (unit = lunit(6), fmt = 618) (xmax(l), l = 1, nstat)
 617 format (1x, f9.4, 5x, 9e13.6)
 618 format (15x, 9e13.6)
 624 ndx1 = lsiz12 + 1
   ndx2 = lsiz12 + nstat
-  if (begmax(1) .gt. 0.0) write (unit = lunit6, fmt = 8003) (xmax(l), l = ndx1, ndx2)
+  if (begmax(1) .gt. 0.0) write (unit = lunit(6), fmt = 8003) (xmax(l), l = ndx1, ndx2)
 627 if (knt .gt. iabs (nenerg)) go to 610
   lastov = nchain
   nchain = 12
-  if (iprsup .ge. 1) write (lunit6, 4568)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
 4568 format ('  Exit "over20".')
   go to 99999
-610 write (unit = lunit6, fmt = 654)
+610 write (unit = lunit(6), fmt = 654)
 654 format (//, 1x)
-  lunit5 = mtape
+  lunit(5) = mtape
   !     reset numdcd counter if it is not a omit base case
   if (lstat(15) .ne. intinf) numdcd = numdcd - ipntv(11)
-  write (unit = lunit6, fmt = 659)
+  write (unit = lunit(6), fmt = 659)
 659 format (1x, 131('-'))
-  write (unit = lunit6, fmt = 616) nenerg
+  write (unit = lunit(6), fmt = 616) nenerg
 616 format (" Simulation of all  'nenerg' =", i4, '  energizations is now complete, and the EMTP is ready to begin statistical', /, ' processing of the voltage solutions.   But before doing so, two cautions about discretization of continuous', /, ' variables are probably appropriate to mention at this point.', /, 5x, '1.  The switch closing times which are printed along with peak voltages of each energization are only desired', /, 9x, 'times, just as with all such times which are punched on data cards which define switches upon data input.   Since')
-  write (unit = lunit6, fmt = 644)
+  write (unit = lunit(6), fmt = 644)
 644 format (9x, "time is discretized in multiples of time-step-size 'deltat' ,   actual closure will occur at the first discrete", /, 9x,  'step which does not precede the requested time.', /, 5x, '2.  In the tabulation of voltage distributions which follow, an arbitrary decision had to be made concerning the', /, 9x, "column which is labeled  'frequency' .    The continuous variable voltage has been discretized, divided into", /, 9x, "compartments of size  'aincr'  (read from columns 25-32 of the special statistics misc. data card).   For an entry")
-  write (unit = lunit6, fmt = 648)
+  write (unit = lunit(6), fmt = 648)
 648 format (9x, "Which is printed in a row marked as being for voltage  'vrow' ,   the associated compartment contains all", /, 9x, "voltages  'v'  which satisfy       vrow  .le.  v  .lt.  (vrow + aincr)  .", /, 5x, '3.  floating-point counting (t = t + deltat) is used to increment time.   Switching times which are an exact multiple', /, 9x, 'of the time-step thus are ambiguous;  different computers may switch one step later, then.')
   if (ltdelt .le. 0) go to 7314
-  write (unit = lunit6, fmt = 7305)
+  write (unit = lunit(6), fmt = 7305)
 7305 format (//, 1x)
-  write (unit = lunit6, fmt = 7304)
+  write (unit = lunit(6), fmt = 7304)
 7304 format (' ***********************************************************   Look, look   ************************************************************')
-  write (unit = lunit6, fmt = 7309) ltdelt
+  write (unit = lunit(6), fmt = 7309) ltdelt
 7309 format (/, ' During this run, a total of', i4,  '  random switch closings less than time zero were generated by the random  ',/, ' number generator.   But the EMTP has no way of handling such closures.   All such illegal closing times were converted  ', /, ' to time zero (they should show up in the printout that way) for simulation purposes.   The implications of this   ', /, ' modification should be understood by the user.   If in any doubt, the user is strongly advised to seek experienced   ',/, ' counsel on this subject. ', /, 1x)
-  write (unit = lunit6, fmt = 7304)
-  write (unit = lunit6, fmt = 7305)
-7314 write (unit = lunit6, fmt = 659)
+  write (unit = lunit(6), fmt = 7304)
+  write (unit = lunit(6), fmt = 7305)
+7314 write (unit = lunit(6), fmt = 659)
   flstat(9) = d1
   flstat(10) = d2
   lastov = nchain
   nchain = 29
   flstat(7) = flstat(7) + d1
   flstat(8) = flstat(8) + d2
-  if (iprsup .ge. 1) write (lunit6, 4568)
+  if (iprsup .ge. 1) write (lunit(6), 4568)
   go to 99999
 9800 if (m4plot .ne. 1) go to 9810
   if (kbase .eq. 1) go to 9810
   !     VAX simulator return to "over16" after table-saving:
   lastov = nchain
   nchain = 16
-  if (iprsup .ge. 1) write (lunit6, 4568)
+  if (iprsup .ge. 1) write (lunit(6), 4568)
   go to 99999
 9810 if (lastov .gt. nchain) go to 9850
   flstat(7) = flstat(7) + d1
   flstat(8) = flstat(8) + d2
 9850 lastov = nchain
   nchain = 31
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
 99999 return
 end subroutine over20
 
@@ -293,46 +293,46 @@ subroutine katalg
   character(132) :: ansi132
   integer(4) :: j
   !
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 2467) icat, memsav, lunit2, ltlabl
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2467) icat, memsav, lunit(2), ltlabl
 2467 format (/, ' Enter  "katalg" .    icat  memsav  lunit2  ltlabl', /, 18x, 10i8)
   if (memsav .eq. 0) go to 9800                             ! no table moving at all
   ! if interactive emtp control, then
   if (m4plot .eq. 1) tmax = fltinf                          ! make end-time of simulation infinite
   if (memsav .eq. 1016)   go to 2634                        ! "restore"   use
-  write (unit = lunit6, fmt = 2472)
+  write (unit = lunit(6), fmt = 2472)
 2472 format (/, 20x, '----- "memsav = 1  represents', ' request for table dumping on disk.')
-  close (unit = lunit2)
-  open (unit = lunit2, status = 'new', form = 'unformatted', file = 'tptables.bin')
+  close (unit = lunit(2))
+  open (unit = lunit(2), status = 'new', form = 'unformatted', file = 'tptables.bin')
   call tables
-  write (unit = lunit2) locker
+  write (unit = lunit(2)) locker
   rewind 79
   do j = 1, 9999
      read (unit = 79, fmt = 2474, end = 2479) ansi132
 2474 format (a132)
-!2476 write (unit = lunit2) ansi132
-     write (unit = lunit2) ansi132
+!2476 write (unit = lunit(2)) ansi132
+     write (unit = lunit(2)) ansi132
   end do
-2479 close (unit = lunit2, status = 'keep')
+2479 close (unit = lunit(2), status = 'keep')
   karray(1) = indbuf
   karray(2) = mflush
   karray(3) = newvec
-  write (unit = lunit6, fmt = 2483) ltlabl
+  write (unit = lunit(6), fmt = 2483) ltlabl
 2483 format (26x, 'Successful saving of EMTP tables as file  "tptables.bin" .    ltlabl  =', i8)
   if (memsav .eq. 1) go to 9800                             ! exit module (no spy)
   go to 9700                                                ! exit module after "emtspy" linkage set
   !     following code services  "restore"  of  "emtspy".  memory
   !     is restored from dumping of previous "sleep" or "save":
-2634 write (unit = lunit6, fmt = 2637) ltlabl
+2634 write (unit = lunit(6), fmt = 2637) ltlabl
 2637 format (' Begin EMTP table restoration.  ltlabl =', i7,  ' .  Wait for completion.')
-  close (unit = lunit2)
-  open (unit = lunit2, status = 'old', form = 'unformatted', file = 'tptables.bin')
+  close (unit = lunit(2))
+  open (unit = lunit(2), status = 'old', form = 'unformatted', file = 'tptables.bin')
   call tables
-  close (unit = lunit2, status = 'keep')
+  close (unit = lunit(2), status = 'keep')
   !     next, for rtm use, restore key "ovdrivkom.for" variables:
   indbuf = karray(1)
   mflush = karray(2)
   newvec = karray(3)
-  write (unit = lunit6, fmt = 2642)
+  write (unit = lunit(6), fmt = 2642)
 2642 format (' Restoration complete, user can now begin  depositing  EMTP  variables via  spy .')
   memsav = 0        !  ?????????????  table changes done.
 9700 kbreak = 1     ! lock flag for "emtspy" dialogue in "over16"
@@ -748,7 +748,7 @@ subroutine spying
   case (24)    ! sleep
      go to 2591
 
-  case (25 : 26, 42 : 56, 61 : 62)    ! source, edit, rlc, width, bus, size, limit, iout, node, nonlin, space, lunit4, series, lock, [y], [f], noroll, choice, tacs
+  case (25 : 26, 42 : 56, 61 : 62)    ! source, edit, rlc, width, bus, size, limit, iout, node, nonlin, space, lunit(4), series, lock, [y], [f], noroll, choice, tacs
      go to 8500
 
   case (27)    ! wake
@@ -830,7 +830,7 @@ subroutine spying
 !       3174,   3256,   3357,   3381,   3394,   3406,   8500, &
 !      width   bus     size    limit   iout    node    nonlin         (43-49)
 !       8500,   8500,   8500,   8500,   8500,   8500,   8500, &
-!      space   lunit4  series  lock    [y]     [f]     noroll         (50-56)
+!      space   lunit(4)  series  lock    [y]     [f]     noroll         (50-56)
 !       8500,   8500,   8500,   8500,   8500,   8500,   8500, &
 !      open    close   sm      honk    choice  tacs    wait           (57-63)
 !       3568,   3584,   3606,   3623,   8500,   8500,   3644), jword
@@ -1428,12 +1428,12 @@ subroutine spying
 32604 format ('     Begin  "wake"  processing.')
   call window
   if (n13 .ne. 1) go to 2611
-  !     regenerate header of plot file attached to unit lunit4:
+  !     regenerate header of plot file attached to unit lunit(4):
   write (unit = munit6, fmt = 2605)
 2605 format ('    Start regenerating lunit4 header.')
   call window
-  rewind lunit4
-  read (unit = lunit4) date1, tclock, numnam, numnvo, numbco, numbrn
+  rewind lunit(4)
+  read (unit = lunit(4)) date1, tclock, numnam, numnvo, numbco, numbrn
   if (lbus .ge. numnam .and. lsiz12 .ge. numnvo .and. lbrnch .ge. numbrn) go to 2608
   write (unit = munit6, fmt = 2606)
 2606 format ('   $$$$  Overflow.  EMTP list sizes are too small to regenerate the header information of the plot file.')
@@ -1442,14 +1442,14 @@ subroutine spying
 2607 format ('       Abort this command.  sorry.   numnam, numnvo, numbrn =', 3i5)
   call window
   go to 1240
-2608 rewind lunit4
-  read (unit = lunit4) date1, tclock, numnam, numnvo, numbco, numbrn, (bus(j), j = 1, numnam)
-  if (numnvo .gt. 0) read (lunit4) (ibsout(j), j = 1, numnvo)
-  if (numbrn .gt. 0) read (lunit4) (kbus(j), mbus(j), j = 1, numbrn)
-  rewind lunit4
-  write (unit = lunit4) date1, tclock, numnam, numnvo, numbco, numbrn, (bus(j), j = 1, numnam)
-  if (numnvo .gt. 0) write (lunit4) (ibsout(j), j = 1, numnvo)
-  if (numbrn .gt. 0) write (lunit4) (kbus(j), mbus(j), j = 1, numbrn)
+2608 rewind lunit(4)
+  read (unit = lunit(4)) date1, tclock, numnam, numnvo, numbco, numbrn, (bus(j), j = 1, numnam)
+  if (numnvo .gt. 0) read (lunit(4)) (ibsout(j), j = 1, numnvo)
+  if (numbrn .gt. 0) read (lunit(4)) (kbus(j), mbus(j), j = 1, numbrn)
+  rewind lunit(4)
+  write (unit = lunit(4)) date1, tclock, numnam, numnvo, numbco, numbrn, (bus(j), j = 1, numnam)
+  if (numnvo .gt. 0) write (lunit(4)) (ibsout(j), j = 1, numnvo)
+  if (numbrn .gt. 0) write (lunit(4)) (kbus(j), mbus(j), j = 1, numbrn)
 2611 call runtym (d1, d2)
   call pfatch
   call tables
@@ -1544,8 +1544,8 @@ subroutine spying
   write (unit = munit6, fmt = 2985) n12, n13, n14, n15
 2985 format (' Prepare to open.  n12, n13, n14, n15 =', 4i8)
   call window
-32985 close (unit = lunt14)
-  open (unit = lunt14, status = 'unknown', file = ansi32, iostat = ios)
+32985 close (unit = lunit(14))
+  open (unit = lunit(14), status = 'unknown', file = ansi32, iostat = ios)
   if (ios .ne. 0) then
      write (unit = *, fmt = "('Could not open file ', a32)") ansi32
      call stoptp
@@ -1556,9 +1556,9 @@ subroutine spying
   call window
 2987 do l = 1, n13
      if (l .ge. n12) go to 2988
-     read (unit = lunt14, fmt = 2991) ansi8
+     read (unit = lunit(14), fmt = 2991) ansi8
      go to 2994
-2988 read (unit = lunt14, fmt = 2991, end = 2998) file6(n14)
+2988 read (unit = lunit(14), fmt = 2991, end = 2998) file6(n14)
 2991 format (a80)
      if (file6(n14)(1 : 4) .eq. 'eof ') go to 2998
      n14 = n14 + 1
@@ -1582,7 +1582,7 @@ subroutine spying
   write (unit = munit6, fmt = 3004)
 3004 format ('  ? ? ? ? ?   Warning.  Data file is empty.   Did user misspell the file name?')
   call window
-3006 close (unit = lunt14)
+3006 close (unit = lunit(14))
   numdcd = n15
   go to 1240
   !     $$$$$$$  key word no. 34:  "ramp"     $$$$  $$$$  $$$$  $$$$  $$$$
@@ -1823,7 +1823,7 @@ subroutine spying
   go to 1240
   !     $$$$$$$  service 7:switch, 25:source, 26:edit, 28:language,
   !              42:rlc, 43:width, 44:bus, 45:size, 46:limit,
-  !              47:iout, 48:node, 49:nonlin, 50:space, 51:lunit4,
+  !              47:iout, 48:node, 49:nonlin, 50:space, 51:lunit(4),
   !              52:series, 53:lock, 54:[y], 55:[f], 56:noroll
 8500 call spyink
   if (nexmod .ne. 0) go to 9803
@@ -2305,7 +2305,7 @@ subroutine spyink
 !       9999 ,   9999,   9999,   9999,   9999,   9999,   3456, &
 !      width    bus    size   limit    iout    node   nonlin  (43-49)
 !       3526 ,   3541,   3635,   3647,   3662,   3684,   3752, &
-!      space  lunit4  series   lock     [y]     [f]   noroll  (50-56)
+!      space  lunit(4)  series   lock     [y]     [f]   noroll  (50-56)
 !       3842 ,   4002,   4163,   4436,   4471,   4512,   4563, &
 !      open    close  unlock   honk   choice   tacs    wait   (57-63)
 !       9999 ,   9999,   9999,   9999,   4592,   4716,   9999), jword
@@ -3086,10 +3086,10 @@ subroutine spyink
   go to 1240
 3886 if (n77 .ne. 4 .and. n77 .ne. 5) go to 3904
   mflush = mflush + 1
-  write (lunit6, 3891) mflush, n6, n4, d17, d18
+  write (unit = lunit(6), fmt = 3891) mflush, n6, n4, d17, d18
 3891 format ('   ++++  Begin plot-data copy from memory to disk.   mflush, n6, n4, tbeg, tend =', i3, 2i8, 2e14.5)
   go to 3906
-3904 write (lunit6, 3905) n4, d17, d18
+3904 write (unit = lunit(6), fmt = 3905) n4, d17, d18
 3905 format ('   ****  Begin thinning of plot data points, to reduce memory burden.   n4, tbeg, tend =', i10, 2e14.5)
 3906 ip = 0
   n8 = n13 + kptplt
@@ -3100,7 +3100,7 @@ subroutine spyink
      if (ip .lt. n4) go to 3908
      ip = 0
      if (n77 .ne. 4 .and. n77 .ne. 5) go to 3907
-     write (lunit4) (pltbuf(m), m = n13, n8)
+     write (lunit(4)) (pltbuf(m), m = n13, n8)
      if (n77 .eq. 4 ) go to 3908
 3907 call movesp (pltbuf(n13), pltbuf(n6), n22)
      n6 = n6 + n22
@@ -3116,18 +3116,18 @@ subroutine spyink
   iascii(1000) = n13 - n6
   if (n77 .ne. 5) go to 3914
   n5 = limbuf - indbuf
-  write (lunit6, 3913) n5
+  write (unit = lunit(6), fmt = 3913) n5
 3913 format (9x, 'Completed "flush", leaving', i8, '  free cells for new plot points.')
   if (mflush .ge. 1000) go to 1240
 3914 go to 3857
   !     begin "read" servicing (plot data goes disk to memory):
-3915 write (prom80, 3916)
+3915 write (unit = prom80, fmt = 3916)
 3916 format ('      Destination (0--start; 1--as now) :')
   !  assign 3917 to nextsn
   nextsn = 3917
   go to 9800
 3917 prom80 = buff77
-  call frein1 ( prom80, n3 )
+  call frein1 (prom80, n3)
   n13 = indbuf
   if (n3 .eq. 0) n13 = indbeg
   ip = 0
@@ -3136,15 +3136,15 @@ subroutine spyink
   do j = 1, 999999
      ip = ip + 1
      if (ip .ge. n4) go to 3919
-     read (lunit4, end = 3926) d15
+     read (unit = lunit(4), end = 3926) d15
      if (d15 .gt. d18) go to 3928
      go to 3921
-3919 read (lunit4, end = 3926) (pltbuf(l), l = n13, n8)
+3919 read (unit = lunit(4), end = 3926) (pltbuf(l), l = n13, n8)
      if (pltbuf(n13) .gt. d18) go to 3934
      n11 = n11 + 1
 3921 n8 = n8 + n22
      if (n8 .le. limbuf) go to 3925
-     write (munit6, 3923) pltbuf(n13)
+     write (unit = munit6, fmt = 3923) pltbuf(n13)
 3923 format ('   ###  Squish.  Memory space for plot data has run out after storing t=', e14.5)
      call window
      go to 3928
@@ -3153,7 +3153,7 @@ subroutine spyink
   j = 999999
   go to 3928
 3926 write (munit6, 3927)  d18
-3927 format ('     EOF during read (lunit4).  Quit search for tend =', e13.4)
+3927 format ('     EOF during read (lunit(4)).  Quit search for tend =', e13.4)
   call window
 3928 indbuf = n13
   n6 = limbuf - indbuf
@@ -3162,7 +3162,7 @@ subroutine spyink
   call window
   go to 3857
   !     begin "cards" servicing (file6 character storage):
-3934 write (prom80, 3937)
+3934 write (unit = prom80, fmt = 3937)
 3937 format ('   Choose operation (move, blank, out, space) :')
   !  assign 3938 to nextsn
   nextsn = 3938
@@ -3171,7 +3171,7 @@ subroutine spyink
   if (buff77(1 : 6) .eq. 'space ') go to 3851
   n66 = 0
   if (buff77(1 : 6) .eq. 'blank ') n66 = 1
-  write (prom80, 3941)
+  write (unit = prom80, fmt = 3941)
 3941 format ('      Number of cards to be handled :')
   !  assign 3942 to nextsn
   nextsn = 3942
@@ -3179,7 +3179,7 @@ subroutine spyink
 3942 call frein1 (buff77, n11)
   if (n11 .le. 0) go to 3851
   if (n66 .eq. 1) go to 3955
-  write (prom80, 3944)
+  write (unit = prom80, fmt = 3944)
 3944 format ('      Card addresses n-from and n-to :')
   !  assign 3947 to nextsn
   nextsn = 3947
@@ -3193,7 +3193,7 @@ subroutine spyink
      n18 = n18 + 1
   end do
   go to 3934
-3955 write (prom80, 3956)
+3955 write (unit = prom80, fmt = 3956)
 3956 format ('      Card address :')
   !  assign 3959 to nextsn
   nextsn = 3959
@@ -3210,38 +3210,38 @@ subroutine spyink
 4002 forbyt(1) = -fltinf
   kptplt = lstat(32)
   d24 = fltinf
-4008 write (prom80, 4010)
+4008 write (unit = prom80, fmt = 4010)
 4010 format ('   Operation (open, close, top, bot, next, back, time) :')
   !  assign 4011 to nextsn
   nextsn = 4011
   go to 9800
 4011 if (buff77(1 : 5) .ne. 'close') go to 4022
-  write (prom80, 4013)
+  write (unit = prom80, fmt = 4013)
 4013 format ('     Save permanently? (y or n) :')
   !  assign 4016 to nextsn
   nextsn = 4016
   go to 9800
 4016 ansi8 = 'keep'
   if (buff77(1 : 1) .eq. 'n') ansi8 = 'delete'
-  close (unit = lunit4, status = ansi8)
+  close (unit = lunit(4), status = ansi8)
   go to 4008
-4022 if ( buff77(1:5) .ne. 'open ' )  go to 4036
-  write (prom80, 4025)
+4022 if (buff77(1 : 5) .ne. 'open ' )  go to 4036
+  write (unit = prom80, fmt = 4025)
 4025 format ('     Desired disk file name :')
   !  assign 4026 to nextsn
   nextsn = 4026
   go to 9800
-4026 ansi32 = buff77(1:32)
-  write (prom80, 4028)
+4026 ansi32 = buff77(1 : 32)
+  write (unit = prom80, fmt = 4028)
 4028 format ('     Desired status (new, old) :')
   !  assign 4029 to nextsn
   nextsn = 4029
   go to 9800
-4029 open (unit = lunit4, status = buff77, file = ansi32, form = 'unformatted' )
+4029 open (unit = lunit(4), status = buff77, file = ansi32, form = 'unformatted' )
   go to 4008
-4036 if (buff77(1:4) .ne. 'top ') go to 4051
-4037 rewind lunit4
-  read (unit = lunit4) date1, tclock, n1, n2, n3, n4
+4036 if (buff77(1 : 4) .ne. 'top ') go to 4051
+4037 rewind lunit(4)
+  read (unit = lunit(4)) date1, tclock, n1, n2, n3, n4
   if (nchain .le. 16 .or. nchain .gt. 20) go to 4044
   if (n2 .eq. numnvo .and. n3 .eq. nc-nv .and. n4 .eq. nc) go to 4044
   write (unit = munit6, fmt = 4038)
@@ -3250,10 +3250,10 @@ subroutine spyink
   write (unit = munit6, fmt = 4039) date1, tclock, n1, n2, n3, n4
 4039 format ('         date1, tclock =', 2(1x, 2a4), 5x, 'n1:n4 =', 4i8)
   call window
-  close (unit = lunit4)
+  close (unit = lunit(4))
   go to 4008
-4044 if (n2 .gt. 0) read (unit = lunit4) n5
-  if (n4 .gt. 0) read (unit = lunit4) n6
+4044 if (n2 .gt. 0) read (unit = lunit(4)) n5
+  if (n4 .gt. 0) read (unit = lunit(4)) n6
   kptplt = numnvo + nc
   if (to_lower (buff77(1 : 5)) .eq. 'time ') go to 24085
   go to 4008
@@ -3261,8 +3261,8 @@ subroutine spyink
   n15 = 0
   do k = 1, 100
      do j = 1, 1000
-!4053    read (lunit4, end=4062)  forbyt(1)
-        read (unit = lunit4, end = 4062) forbyt(1)
+!4053    read (lunit(4), end=4062)  forbyt(1)
+        read (unit = lunit(4), end = 4062) forbyt(1)
      end do
      n15 = n15 + 1000
      write (unit = munit6, fmt = 4056) n15
@@ -3277,8 +3277,8 @@ subroutine spyink
   call window
   go to 4008
 4068 if (to_lower (buff77(1 : 4)) .ne. 'next') go to 4079
-  !4069 read (lunit4, end=4075)  ( forbyt(j), j=1, kptplt+1 )
-  read (unit = lunit4, end = 4075) (forbyt(j), j = 1, kptplt + 1)
+  !4069 read (lunit(4), end=4075)  ( forbyt(j), j=1, kptplt+1 )
+  read (unit = lunit(4), end = 4075) (forbyt(j), j = 1, kptplt + 1)
   write (unit = munit6, fmt = 4071) (forbyt(j), j = 1, kptplt + 1)
 4071 format (1x, 10e13.4)
   call window
@@ -3296,11 +3296,11 @@ subroutine spyink
   buff77(1 : 5) = 'time '
   d8 = forbyt(1) - 2 * deltat
   go to 4037
-4082 backspace lunit4
-  read (unit = lunit4, end = 4075) (forbyt(j), j = 1, kptplt + 1)
+4082 backspace lunit(4)
+  read (unit = lunit(4), end = 4075) (forbyt(j), j = 1, kptplt + 1)
   write (unit = munit6, fmt = 4071) (forbyt(j), j = 1, kptplt + 1)
   call window
-  if (forbyt(1) .gt. d24) backspace lunit4
+  if (forbyt(1) .gt. d24) backspace lunit(4)
   go to 4008
 4083 if (to_lower (buff77(1 : 4)) .ne. 'time') go to 4098
   write (unit = prom80, fmt = 4084) forbyt(1)
@@ -3312,7 +3312,7 @@ subroutine spyink
 24085 n15 = 0
   do k = 1, 100
      do j = 1, 1000
-        read (unit = lunit4, end = 4090) forbyt(1)
+        read (unit = lunit(4), end = 4090) forbyt(1)
         if (forbyt(1) .ge. d8) go to 4094
      end do
 !4086 continue
@@ -3663,16 +3663,16 @@ subroutine spyink
   go to 4734
 4726 if (prom80(1 : 6) .ne. 'supple') go to 4752
   koncur = 2
-4734 n23 = lunit5
-  lunit5 = munit5
+4734 n23 = lunit(5)
+  lunit(5) = munit5
   !     read input data card using cimage.
 4738 call cimage
   read (unit = abuff, fmt = 2788) ansi8
   if (ansi8(1 : 4) .ne. 'end ') go to 4741
-  lunit5 = int (n23, kind (lunit5))
+  lunit(5) = int (n23, kind (lunit(5)))
   go to 4716
 4741 if (ansi8(1 : 4) .ne. 'spy ') go to 4745
-  lunit5 = int (n23, kind (lunit5))
+  lunit(5) = int (n23, kind (lunit(5)))
   go to 1240
 4745 if (koncur .eq. 1) call tacs1
   if (koncur .eq. 2) call tacs1a
@@ -4106,7 +4106,7 @@ subroutine honker (klevel)
   integer(4), intent(in) :: klevel
   integer(4) :: nd13
   real(8) :: d13
-  character(8) :: spytim(2), spdate(2)
+  character(4) :: spytim(2), spdate(2)
   !
   d13 = 2.0d0                                               ! initialize time delay at two seconds
   call time44 (spytim)                                      ! emtp wall-clock time
@@ -4382,7 +4382,7 @@ subroutine window
      k = 133 - j                                  ! reverse index (step from right to left)
      if (munit6(k : k) .ne. ' ') go to 5621       ! end of line
   end do
-5621 write (unit = lunit6, fmt = *) munit6(1 : k) ! output nonblank part
+5621 write (unit = lunit(6), fmt = *) munit6(1 : k) ! output nonblank part
 9000 return
 end subroutine window
 
@@ -4400,7 +4400,7 @@ subroutine spylin
   !     Temporarily, until we learn how to write to a 2nd crt for
   !     VAX/VMS, we will just write to lunit6 in universal form:
   !5621 write (unit = lunit6, fmt = 5624)
-  write (unit = lunit6, fmt = 5624)
+  write (unit = lunit(6), fmt = 5624)
 5624 format (1x)
 end subroutine spylin
 
@@ -4850,7 +4850,7 @@ subroutine prompt
   return
   !     following lunit6 should really go to 2nd screen ("window")
   !1426 write (lunit6, '(a, $)') prom80(1 : n2)                ! ",$" is DEC magic to hold cursor
-1426 write (unit = lunit6, fmt = '(a)', advance = 'no') prom80(1 : n2)
+1426 write (unit = lunit(6), fmt = '(a)', advance = 'no') prom80(1 : n2)
   return
 end subroutine prompt
 
@@ -5227,21 +5227,21 @@ subroutine locatn
   locate(  74)  =  location ( ltdelt )
   locate(  75)  =  location ( unused )
   locate(  76)  =  location ( mtape  )
-  locate(  77)  =  location ( lunit1 )
-  locate(  78)  =  location ( lunit2 )
-  locate(  79)  =  location ( lunit3 )
-  locate(  80)  =  location ( lunit4 )
-  locate(  81)  =  location ( lunit5 )
-  locate(  82)  =  location ( lunit6 )
-  locate(  83)  =  location ( lunit7 )
-  locate(  84)  =  location ( lunit8 )
-  locate(  85)  =  location ( lunit9 )
-  locate(  86)  =  location ( lunt10 )
-  locate(  87)  =  location ( lunt11 )
-  locate(  88)  =  location ( lunt12 )
-  locate(  89)  =  location ( lunt13 )
-  locate(  90)  =  location ( lunt14 )
-  locate(  91)  =  location ( lunt15 )
+  locate(  77)  =  location ( lunit(1) )
+  locate(  78)  =  location ( lunit(2) )
+  locate(  79)  =  location ( lunit(3) )
+  locate(  80)  =  location ( lunit(4) )
+  locate(  81)  =  location ( lunit(5) )
+  locate(  82)  =  location ( lunit(6) )
+  locate(  83)  =  location ( lunit(7) )
+  locate(  84)  =  location ( lunit(8) )
+  locate(  85)  =  location ( lunit(9) )
+  locate(  86)  =  location ( lunit(10) )
+  locate(  87)  =  location ( lunit(11) )
+  locate(  88)  =  location ( lunit(12) )
+  locate(  89)  =  location ( lunit(13) )
+  locate(  90)  =  location ( lunit(14) )
+  locate(  91)  =  location ( lunit(15) )
   locate(  92)  =  location ( nexout )
   locate(  93)  =  location ( nright )
   locate(  94)  =  location ( nfrfld )

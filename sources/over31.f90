@@ -10,7 +10,7 @@
 
 subroutine subr31
   use blkcom
-  use labcom, only : buslst, ibsout, ibrnch, jbrnch, karray
+  use labcom, only : buslst, ibsout, ibrnch, jbrnch, karray, ev
   use deck31
   use tracom
   use bcddat
@@ -26,8 +26,21 @@ subroutine subr31
   !     flag-3.   begin class-3  /blank/  variables
   !               (integer-numeric usage only, with arrays
   !                preceding scalars).
-  integer(4) :: i, ialf, ib, ibase, icp, iend, ihs, il, indx, intd8
-  integer(4) :: intd9, iofbus, iofibr, iofjbr, iovfl, ip1, ipl, ipl1, ipl2, ipontr
+  character(8) :: arch10(2), alpha(52)
+  character(8) :: blanka(1), busvec(6)
+  character(8) :: cstxt
+  character(8) :: daytim
+  character(8) :: headl(3), horzl(4)
+  character(8) :: pltle
+  character(8) :: sext(13), slot(8)
+  character(8) :: text1, text2, text3, text4, text5, text6, text7, text8
+  character(8) :: text9, text10, text11, text12, text13, text14, text15
+  character(8) :: text16, text18, text19, text20, text22, text23, text24
+  character(8) :: text25, text26, text27, text28, text29, text30, text31
+  character(8) :: text32, text33, textax
+  character(8) :: vertl(3)
+  integer(4) :: i, ialf, ib, ibase, icp, iend, ihs, il, indx, intd8(150)
+  integer(4) :: intd9(150), iofbus, iofibr, iofjbr, iovfl, ip1, ipl, ipl1, ipl2, ipontr
   integer(4) :: istore, isww, iswx, itimes, itp
   integer(4) :: j, j1, j2, jalf, jbegbc, jchar, jcnt, jcol, jdumy, jend, jhms
   integer(4) :: jhmsp, jk, jovfl, jplt, jplt2, jpntr, jpts, jsl, jslot, jstp
@@ -37,40 +50,34 @@ subroutine subr31
   integer(4) :: ll24, ll78, llmin1, llmin3, lltemp, lnck, lnflg, long1, long2, long3
   integer(4) :: lplt
   integer(4) :: m, maxev, maxevk, mdpt, mhoriz, mm0, mm1, mm2, mm3, mm4, mm6, mm7, mm8
-  integer(4) :: mm9, mm11, mm13, mmmin1, mpage, mplot, mrgn, mulplt
+  integer(4) :: mm9, mm11, mm13, mmmin1, mpage, mplot(4), mrgn, mulplt(5)
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, ncrv, ndx1, nfour
   integer(4) :: numbco, numbvo, numnam
-  real(8) :: a, c1e12, countp
-  real(8) :: bxsing, flong1, tstep, xyplot, xin, bx, fl90
+  real(8) :: a
+  real(8) :: c1e12, countp
+  real(8) :: bxsing(150), tstep, xyplot, xin, bx(150), fl90
   real(8) :: d1, d2, d3, d4, d4fact, d5, d6, d7, d8, d9, d23, denom, disqr, dlen
   real(8) :: dstrt, dx, dxl, dxl2, dy, dyl
   real(8) :: enumr, evbasx, evbasy, evp, evdh, evdp, evh, evmx, evmxf, expnt
-  real(8) :: fl10, fl1p5, fl2p5, fl3, fl3p5, fltwo, fourth
+  real(8) :: fl10, fl1p5, fl2p5, fl3, fl3p5, flong1, fltwo, fourth
   real(8) :: ha, half, hdif, hgt1, hgt2, hhi, hhpt, hlo, hmax, hmin, hms, hpi
   real(8) :: hpil, hpt, hvec
-  real(8) :: one, ricp, stp, taxmax, term, tmult, tolrce, tsing, xyshor
+  real(8) :: one, ricp
+  real(8) :: stp
+  real(8) :: taxmax, term, tmult, tolrce, tsing, xyshor
   real(8) :: vchnge, vdif, vh, vhs, vhs1, vmax, vmaxl, vmaxr, vmin, vminl, vminr, vnew
   real(8) :: vold, vploff, vrtnum, vs, vsnew, vvec, zero
-  character(8) :: daytim, textax, sext
-  character(8) :: slot, alpha, headl, vertl, blanka, busvec
-  character(8) :: text1, text2, text3, text4, text5, text6, text7
-  character(8) :: text8, cstxt, pltle, horzl
-  character(8) :: text9, text10, text11, text12, text13
-  character(8) :: text14, text15, text16, arch10
-  character(8) :: text18, text19, text20
-  character(8) :: text22, text23, text24, text25, text26
-  character(8) :: text27, text28, text29
-  character(8) :: text30, text31, text32, text33
+  !
   !     declaration2   intd8, intd9, maxev, karray, lltemp
   !     declaration2   long1, long2, long3, jhmsp
   !     declaration2   mmmin1, mm0, mm1, mm2, mm3, mm4, mm6
   !     declaration2   mm7, mm8, mm9, mm11, mm13
   !  common /ldec31/  kalcom
   !  dimension array(1), evdoub(1)
-  dimension intd8(150), intd9(150),  bxsing(150)
-  dimension arch10(2), mulplt(5), blanka(1), busvec(6)
-  dimension alpha(52), mplot(4), headl(3), vertl(3)
-  dimension bx(1), slot(8), horzl(4), sext(13)
+  !  dimension intd8(150), intd9(150),  bxsing(150)
+  !  dimension arch10(2), mulplt(5), blanka(1), busvec(6)
+  !  dimension alpha(52), mplot(4), headl(3), vertl(3)
+  !  dimension bx(150), slot(8), horzl(4), sext(13)
   !  dimension buslst(1)
   !  dimension ibsout(1)
   !  dimension ibrnch(1), jbrnch(1)
@@ -175,8 +182,7 @@ subroutine subr31
      maxev = lltemp(i + 1) * nbyte(6) / nbyte(5)
      go to 5655
   end do
-  !  call stoptp
-  goto 9200
+  call stoptp
 5655 maxev = maxev - 8
   c1e12 = 1.e36
   !     The following variables are used as floating-point arguments of
@@ -229,7 +235,7 @@ subroutine subr31
   !     dimension of buffer integer arrays   'intd8'  and  'intd9' .
   limbin = 150
   jdumy = 999
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 962) llbuff, kill, lnpin, nsmth, szbed, szplt,  date1, tclock
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 962) llbuff, kill, lnpin, nsmth, szbed, szplt,  date1, tclock
 962 format (/, "  Begin  'subr31' .  llbuff    kill   lnpin   nsmth", 10x, 'szbed', 10x, 'szplt', 5x, 'date1', 4x, 'tclock', /, 18x, 4i8, 2e15.5, 2(2x, 2a4))
   do j = 1, 4
      kpen(j) = 1
@@ -250,11 +256,11 @@ subroutine subr31
      pltle(j) = blank
   end do
   countp = 0.0d0
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 982)  sext
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 982)  sext
 982 format (/, " Vector  'sext'  as  13a6 .", 13a6, /, 1x, 13a6)
   !     segmented, 1, vax e/t can skip translation of rewind:
-1000 rewind lunit4
-  if (iout .ge. 2) write (unit = lunit6, fmt = 1005)
+1000 rewind lunit(4)
+  if (iout .ge. 2) write (unit = lunit(6), fmt = 1005)
 1005 format (///, 1x)
   tstep = 0.0d0
   ialf = 0
@@ -263,7 +269,7 @@ subroutine subr31
   read (unit = abuff, fmt = 1060) itp, (aupper(i), i = 1, 13)
 1060 format (i2, 13a6)
   if (iplot .lt. 0) go to 1070
-  if (lunit4 .le. 0) go to 1070
+  if (lunit(4) .le. 0) go to 1070
   if (to_lower (aupper(1)) .ne. text15) go to 10452
   mpage = 1
   go to 1050
@@ -406,7 +412,7 @@ subroutine subr31
   if (kalcom .eq. 0) go to 2720
   n8 = -6666
   go to 2656
-1106 if (iplot .ge. 0 .and. lunit4 .gt. 0) go to 1120
+1106 if (iplot .ge. 0 .and. lunit(4) .gt. 0) go to 1120
   write (unit = kunit6, fmt = 1108)
 1108 format ('+Plot card ignored in quest for start of new case.')
   go to 1050
@@ -417,7 +423,7 @@ subroutine subr31
 1126 ialf = ialf + 13
   call packch (aupper(1), alpha(ialf - 12), mm6, mm1, mm13)
   j1 = ialf - 12
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 126) (alpha(j), j = j1, ialf)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 126) (alpha(j), j = j1, ialf)
 126 format (' At 1126 packed subtitle text.', /, 1x, 13a10)
   k = 0
   do j = j1, ialf
@@ -428,7 +434,7 @@ subroutine subr31
 1140 format ('+Plot subtitle card.')
   go to 1050
 1550 call packch (aupper(1), sext(1), mm6, mm1, mm13)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 155) sext
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 155) sext
 155 format (' At 1550 packed case title text.', /, 1x, 13a10)
   do j = 1, 13
      cstxt(j) = aupper(j)
@@ -496,7 +502,7 @@ subroutine subr31
   write (unit = kunit6, fmt = 80) ihs
 80 format ("+Graph separation card.   'ksep' =", i3 )
   if (ihs .ge. 2) go to 82
-  write (unit = lunit6, fmt = 81) ihs, mrgn
+  write (unit = lunit(6), fmt = 81) ihs, mrgn
 81 format (' The specified graph separation of ', i2, ' inches is considered too small and is reset to ', i1, ' inches. ')
   ihs = mrgn
 82 mrgn = ihs
@@ -506,9 +512,9 @@ subroutine subr31
 1181 format ('+Graph size adjustment card.', 2e11.3)
   d1 = hmin + hmax + vploff
   if (d1 .le. szplt) go to 11182
-  write (unit = lunit6, fmt = 11181) hmin, hmax, d1, szplt
+  write (unit = lunit(6), fmt = 11181) hmin, hmax, d1, szplt
 11181 format (5x, 'Note ---- The requested bottom margin of ', e9.3, ' and graph height of ', e9.3, ' requires a total', /, 5x, 'paper height of ', e9.3, '.  This is greater than the height specified in =call paprsz=, which is ', e9.3, /, 5x, 'the requested values will be ignored and the last specified (or default if no height values were ever given)', /, 5x, 'will be used.')
-  if (taxmax .gt. 0.0d0) write (unit = lunit6, fmt = 21181) vploff
+  if (taxmax .gt. 0.0d0) write (unit = lunit(6), fmt = 21181) vploff
 21181 format (5x, 'Actually, the just-quoted paper height is the paper height minus the offset height of ', e13.4, '   for', /, 5x, 'the one or more graphs which have already been drawn vertically below the upcoming plot.   The user should not', /, 5x, 'increase vertical dimensions unless he is at the bottom of the paper, or unless he is sure that he has sufficient', /, 5x, 'vertical space left on the paper for at least one more plot.   The size adjustment remains cancelled.')
   go to 1050
 11182 vsnew = hmin - vs
@@ -536,19 +542,19 @@ subroutine subr31
   write (unit = kunit6, fmt = 1189) vmin
 1189 format ('+Redefinition of smoothing tolerance.', 2x, e10.2)
   d1 = 0.1d0
-  if (vmin .gt. d1) write (unit = lunit6, fmt = 1190) vmin
+  if (vmin .gt. d1) write (unit = lunit(6), fmt = 1190) vmin
 1190 format (' ****WARNING****  Requested smoothing tolerance of ', e11.3, ' may cause inaccurate plot.')
   go to 1050
 1195 if (icp .eq. 8) go to 7412
   if (icp .eq. 9) go to 7412
   if (icp .gt. 0 .and. icp .le. 4) go to 7412
-  write (unit = lunit6, fmt = 7407) icp
+  write (unit = lunit(6), fmt = 7407) icp
 7407 format (' Illegal plot-variable type code  "icp" =', i3, ' .   This plot request is cancelled.')
   go to 1000
 7412 call packch (busvec(1), headl(1), mm6, mm1, mm2)
   call packch (busvec(3), headl(1), mm4, mm13, mm1)
   call packch (busvec(4), vertl(1), mm6, mm1, mm3)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 1196) headl, vertl
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1196) headl, vertl
 1196 format (' At 1195 packed plot title text.', 3a10, /, ' at 1195 packed vert axis label.', 3a10 )
   if (jslot .ne. 3) go to 4589
   write (unit = kunit6, fmt = 1182)  hpi, hmin, hmax
@@ -579,23 +585,23 @@ subroutine subr31
 21192 if (hpi .le. 0.0d0) go to 1193
   if (hmax .le. 0.0d0) go to 1193
   if (hmax .gt. hmin) go to 1197
-1193 write (unit = lunit6, fmt = 1194) hpi, hmin, hmax
+1193 write (unit = lunit(6), fmt = 1194) hpi, hmin, hmax
 1194 format (5x, 'Plot card error.   Time-axis specification is illegal.   This plot request is being skipped.', /, 20x, 3e15.5)
   go to 1000
 1197 d1 = (hmax - hmin) / hpi
   hpil = hpi
   if (iout .eq. 2) go to 1227
   if (d1 .le. szbed) go to 1227
-  write (unit = lunit6, fmt = 1224) hpi, hmin, hmax, d1
+  write (unit = lunit(6), fmt = 1224) hpi, hmin, hmax, d1
 1224 format (5x, 'note ----- a time scale of ', e13.4, ' was read from columns 5-7 of the preceding plot-request card.', /, 5x, 'together with the requested minimum of ', e13.4, ' units (read from columns 8-11) and the requested', /, 5x, 'maximum of ', e13.4, ' units (read from columns 12-15), this implies a plot of length ', e13.4)
-  write (unit = lunit6, fmt = 1225) szbed
+  write (unit = lunit(6), fmt = 1225) szbed
 1225 format ('+', 106x, ', which exceeds', /, 5x, 'the currently imposed flat-bed limit of ', e13.4, ' inches.  The scale on the time axis will be changed by the EMTP so', /, 5x, 'that the specified range covers exactly 12 inches of paper.   If the user has questions, call program maintenance.')
   hpi = (hmax - hmin) / 12.0d0
 1227 if (iout .eq. 1) go to 1229
   if (d1 .ge. 3.0d0) go to 1229
-  write (unit = lunit6, fmt = 1224) hpi, hmin, hmax, d1
+  write (unit = lunit(6), fmt = 1224) hpi, hmin, hmax, d1
   hmax = 3.0d0 * hpi + hmin
-  write (unit = lunit6, fmt = 1228) hmax
+  write (unit = lunit(6), fmt = 1228) hmax
 1228 format ('+', 106x, ', which is considered', /, 5x, 'too short for the requested lineprinter plot.  The requested maximum will be reset by the t. p. to ', e13.6, /, 5x, 'to give a plot length of 3 inches.')
 1229 countp = countp + 1.0d0
   kikoy = 0
@@ -606,7 +612,7 @@ subroutine subr31
 1220 vmaxr = vmin + (vmax - vmin) * (vh - vs) / vhs
   vminr = vmin - (vmax - vmin) * vs / vhs
 21220 if (ihs .ge. 1 .and. ihs .le. 7) go to 1230
-  write (unit = lunit6, fmt = 1221) ihs
+  write (unit = lunit(6), fmt = 1221) ihs
 1221 format (5x, 'The number specifying the units on the horizontal scale, punched in column 4 of the plot request card, must be', /, 5x, 'between 1 and 7 (inclusive).  The number read from the last such card was', i2, '.', /, 5x, 'this plot request is cancelled.')
   go to 1000
 !1230 go to (1240, 1260, 1280, 1300, 1320, 1280, 1280) , ihs
@@ -642,7 +648,7 @@ subroutine subr31
   if (xyplot(1) .gt. 0.0d0) ihs = 8
   j = 4 * (ihs - 1) + 1
   call packch (textax(j), horzl(1), mm6, mm1, mm4)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 1341) horzl
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1341) horzl
 1341 format (' At 1341 packed time axis label.', 3a10)
   if (vmin .ge. 0.0d0) go to 1460
   if (vmax .le. 0.0d0) go to 1480
@@ -651,7 +657,7 @@ subroutine subr31
 1460 ha = 0.0d0
   go to 1500
 1480 ha = vhs
-1500 read (unit = lunit4) date1, tclock, (intd8(j), j = 1, 4)
+1500 read (unit = lunit(4)) date1, tclock, (intd8(j), j = 1, 4)
   numnam = intd8(1)
   numnvo = intd8(2)
   numbco = intd8(3)
@@ -668,38 +674,38 @@ subroutine subr31
   mulplt(2) = 0
   mulplt(3) = 0
   !     segmented, 1, vax e/t can skip translation of rewind:
-1523 rewind lunit4
-  read (unit = lunit4) date1, tclock, (intd8(j), j = 1, 4), (buslst(j), j = 1, numnam)
+1523 rewind lunit(4)
+  read (unit = lunit(4)) date1, tclock, (intd8(j), j = 1, 4), (buslst(j), j = 1, numnam)
   if (numnvo .gt. limbin) go to 34231
   if (nc .le. limbin) go to 44231
-34231 write (unit = lunit6, fmt = 24231) limbin, numnvo, nc
+34231 write (unit = lunit(6), fmt = 24231) limbin, numnvo, nc
 24231 format (/, ' Overflow error stop in  ', "'", 'subr31', "'", '.  limbin  numnvo      nc', /,  35x, 3i8)
   call stoptp
-44231 if (iprsup .ge. 1) write (unit = lunit6, fmt = 4231) date1, tclock, numnam, numbco, nc, (buslst(j), j = 1, numnam)
+44231 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4231) date1, tclock, numnam, numbco, nc, (buslst(j), j = 1, numnam)
 4231 format (/, ' First third of plot-file header info read from logical 4 in subr31.', 7x, 'date1(2)', 6x, 'tclock(2)', '  numnam  numbco      nc', /, 68x, 7x, 2a4, 7x, 2a4, 3i8, /, ( ' (buslst(j), j=1, numnam)',  1x, 10a7))
   iofibr = numnvo
   iofjbr = numnvo + nc
   iofbus = numnvo + 2 * nc
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 1525) iofibr, iofjbr, iofbus
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1525) iofibr, iofjbr, iofbus
 1525 format (/, ' offsets.  iofibr  iofjbr  iofbus', /, 9x, 3i8)
   j = numnam
 4224 n4 = j + iofbus
   buslst(n4) = buslst(j)
   j = j - 1
   if (j .gt. 0) go to 4224
-  if (numnvo .gt. 0) read (unit = lunit4) (intd8(j), j = 1, numnvo)
+  if (numnvo .gt. 0) read (unit = lunit(4)) (intd8(j), j = 1, numnvo)
   do j = 1, numnvo
      ibsout(j) = intd8(j)
   end do
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 64225) numnvo, (ibsout(j), j = 1, numnvo)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 64225) numnvo, (ibsout(j), j = 1, numnvo)
 64225 format (/, ' numnvo=', i4, 10x, '(ibsout(j), j=1, numnvo)  follow ....', /, (1x, 20i6))
   n1 = numnvo + 1
   n2 = numnvo + nc
   n5 = n1 + nc
   n6 = n2 + nc
   if (nc .eq. 0) go to 54224
-  read (unit = lunit4) (intd8(j), j = 1, nc), (intd9(j), j = 1, nc)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4219) (intd8(j), j = 1, nc), (intd9(j), j = 1, nc)
+  read (unit = lunit(4)) (intd8(j), j = 1, nc), (intd9(j), j = 1, nc)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4219) (intd8(j), j = 1, nc), (intd9(j), j = 1, nc)
 4219 format (/, ' (intd8(j), j = 1, nc), (intd9(j), j = 1, nc)', /, (1x, 20i6))
   n11 = n1
   n12 = n5
@@ -710,17 +716,17 @@ subroutine subr31
      n12 = n12 + 1
   end do
   if (iprsup .lt. 1) go to 54224
-  write (unit = lunit6, fmt = 4222) n1, n2
+  write (unit = lunit(6), fmt = 4222) n1, n2
 4222 format (' n1=', i10, 'n2=', i10, /, ' ibrnch(j) and jbrnch(j+nc), j=n1, n2 at 4222....')
   do j = n1, n2
      n6 = j + nc
-     write (unit = lunit6, fmt = 64223) ibrnch(j), jbrnch(n6)
+     write (unit = lunit(6), fmt = 64223) ibrnch(j), jbrnch(n6)
   end do
 64223 format (1x, 2i10)
 54224 call packch (date1(1), daytim(1), mm4, mm1, mm2)
   call packch (blanka(1), daytim(1), mm4, mm9, mm1)
   call packch (tclock(1), daytim(1), mm4, mm11, mm2)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4223) daytim
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4223) daytim
 4223 format (' At 4223 packed daytim.', 8a10)
   numbvo = nc - numbco
   i = 0
@@ -734,9 +740,9 @@ subroutine subr31
   k = 0
 1600 k = k + 1
   if (k .le. numnvo) go to 1640
-  write (unit = lunit6, fmt = 1620) slot(i)
+  write (unit = lunit(6), fmt = 1620) slot(i)
 1620 format (5x, 'bus name =', a6, '= of the user=s last-read plot card is not the name of a bus having node voltage', /, 5x, 'output.   Hence this field will be ignored by the EMTP (treated as if it had been blank).')
-  write(unit = lunit6, fmt = 1621)
+  write(unit = lunit(6), fmt = 1621)
 1621 format (5x, 'The user is reminded that correct spelling and the consistent positioning of all blanks within the data', /, 5x, 'fields of width 6 for all bus names is required.')
 1627 slot(i) = blank
   go to 1560
@@ -767,12 +773,12 @@ subroutine subr31
      il = nc + 1
      n1 = numnvo + jbegbc
 1740 if (ib.lt.il) go to 1780
-     write (unit = lunit6, fmt = 1760) slot(i), slot(i + 1)
+     write (unit = lunit(6), fmt = 1760) slot(i), slot(i + 1)
 1760 format (5x, 'The user=s last-read plot card requests a plot for a branch-variable which is identified by terminal', /, 5x, 'names =', a6, '= and =', a6, '=.   But the EMTP cannot find this requested variable in the list of output', /, 5x, 'variables, so this particular plot request must be ignored.')
-     write (unit = lunit6, fmt = 1621)
-     write (unit = lunit6, fmt = 1763)
+     write (unit = lunit(6), fmt = 1621)
+     write (unit = lunit(6), fmt = 1763)
 1763 format (5x, 'Also, the user should be reminded that branch-output requests are made using column-80 punches on the', /, 5x, 'branch cards in question.   The user should double-check that he really has requested the output variable which', /, 5x, 'he is trying to plot (and which got him in trouble).   One common error is to request only branch-current output', /, 5x, '(a 1-punch in column 80) and then try to plot branch voltage ---- or vice versa.   Finally, the user should check', /, 5x, 'that branch output is even possible for the component in question, since column-80 punches may be ignored if the')
-     write (unit = lunit6, fmt = 1764)
+     write (unit = lunit(6), fmt = 1764)
 1764 format (5x, 'component in question does not provide for such output.   Any branch-output request for a multi-phase', /, 5x,  'distributed line falls into this class, it will be noted.')
      slot(i) = blank
      slot(i + 1) = blank
@@ -781,7 +787,7 @@ subroutine subr31
      n8 = ib + iofjbr
      n2 = ibrnch(n7) + iofbus
      n3 = jbrnch(n8) + iofbus
-     if (iprsup .ge. 1) write (unit = lunit6, fmt = 1781) n2, n3, buslst(n2), buslst(n3)
+     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1781) n2, n3, buslst(n2), buslst(n3)
 1781 format (' At 1780', 2i10, 5x, 2a8)
      if (slot(i) .ne. buslst(n2)) go to 1800
      if (slot(i + 1) .ne. buslst(n3)) go to 1820
@@ -803,12 +809,12 @@ subroutine subr31
   if (jplt .eq. 0) go to 1900
   jslot = jslot + 1
 1880 if (iprsup .eq. 0) go to 1929
-  write (unit = lunit6, fmt = 1883) jplt, (slot(i), i = 1, jslot)
+  write (unit = lunit(6), fmt = 1883) jplt, (slot(i), i = 1, jslot)
 1883 format (/, ' At 1883 of ov31. ', i10, /, (1x, a6))
-  write (unit = lunit6, fmt = 1884) (mplot(i), i = 1, 4)
+  write (unit = lunit(6), fmt = 1884) (mplot(i), i = 1, 4)
 1884 format (4i10)
   go to 1929
-1900 write (unit = lunit6, fmt = 1920)
+1900 write (unit = lunit(6), fmt = 1920)
 1920 format (5x, 'No valid plot-variable name or names was punched on the user=s last-read plot card.   Hence the EMTP will', /, 5x, 'ignore this plot card completely, and go on to read the next one (fun and games continue).')
   go to 1000
 1929 k = numnvo + nc
@@ -817,7 +823,7 @@ subroutine subr31
   maxevk = maxevk * nbyte(4) / nbyte(5)
   j = jplt2 + 4 * jplt
   if (maxevk .ge. j) go to 1935
-  write (unit = lunit6, fmt = 1930) maxevk, j
+  write (unit = lunit(6), fmt = 1930) maxevk, j
 1930 format (5x, ' *** The plotting array ev has been dimensioned such that the working size is ', i10, '.  This is less than', i10, /, 5x, 'which is the size required for this plot.  This request is cancelled.')
   go to 1000
 1935 kpl = 0
@@ -828,7 +834,7 @@ subroutine subr31
   vmaxl = 0.0d0
   vminl = 0.0d0
   !     segmented, 1, vax e/t can skip translation of rewind:
-  rewind lunt13
+  rewind lunit(13)
   do j = 1, jplt
      iswx(j) = 0
      evh(j) = 0.0d0
@@ -836,19 +842,19 @@ subroutine subr31
   end do
   n9 = 0
   if (xyplot(1) .ne. 0 .or. nfour .ne. 0) n9 = 1
-  if (iprsup .ge. 2) write (unit = lunit6, fmt = 2117) k, jplt, n9, maxevk, mplot
+  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 2117) k, jplt, n9, maxevk, mplot
 2117 format (/, ' Before read of plot points.       k    jplt      n9  maxevk', /, 28x, 4i8, /, "'", 'mplot', "'",  'vector follows.', 16i5)
   ndx1 = 2 * linlim
   !  call mover0 ( ev(1), ndx1 )
   call move0 (ev(1 :), ndx1)
 2115 if (m4plot .eq. 0) go to 2102
-  read (unit = lunit4) tsing, (bxsing(j), j = 1, k)
+  read (unit = lunit(4)) tsing, (bxsing(j), j = 1, k)
   tstep = tsing
   do j = 1, k
      bx(j) = bxsing(j)
   end do
   go to 2105
-2102 read (unit = lunit4) tstep, (bx(j), j = 1, k)
+2102 read (unit = lunit(4)) tstep, (bx(j), j = 1, k)
 2105 if (tstep .eq. -9999. .or. tstep .gt. hmax) go to 2200
   if (tstep .lt. hmin) go to 2115
   do j = 1, jplt
@@ -876,17 +882,17 @@ subroutine subr31
 2200 iend = 1
   if (lastov .eq. 1) tmax = ev(kpl - 1)
   if (kplt .ne. 0) go to 2210
-  write (unit = lunit6, fmt = 2205) hmin, hmax
+  write (unit = lunit(6), fmt = 2205) hmin, hmax
 2205 format (' No plot points found between the requested time limits ', e12.3, ' to ', e12.3,    ' .   This plot request cancelled.')
   go to 1000
 2210 if (iprsup .eq. 0) go to 2215
   jk = kplt / jplt2
-  write (unit = lunit6, fmt = 2211) jk
+  write (unit = lunit(6), fmt = 2211) jk
 2211 format (/, ' at 2211, after reading from 4, the number of points per curve are', i10)
   if (iprsup .lt. 3) go to 2215
   j1 = 8
   if (iprsup .gt. 39) j1 = kpl
-  write (unit = lunit6, fmt = 2213) (ev(j), j = 1, j1)
+  write (unit = lunit(6), fmt = 2213) (ev(j), j = 1, j1)
 2213 format (/, ' ev(j) plot points.', /, (1x, 10e13.4))
 2215 if (xyplot(1) .gt. 0.0d0) go to 2540
   if (nfour .eq. 0) go to 7682
@@ -904,9 +910,9 @@ subroutine subr31
         itimes(j) = itimes(j) + 1
         if (itimes(j) .le. nsmth) go to 2260
         iswx(j) = 1
-        write (unit = lunit6, fmt = 2220) j, ev(i - 1), nsmth
+        write (unit = lunit(6), fmt = 2220) j, ev(i - 1), nsmth
 2220    format (5x, 'While scanning the data points for curves of the last-read plot card, a need for smoothing of curve number', /, 5x, i2, ' beyond time ', e12.4, ' seconds has been determined.   At this point,', i3, ' successive, uninterrupted,', /, 5x, 'alternating relative maxima and relative minima have been observed.   This is taken as a sign of a spurious', /, 5x, 'mathematical oscillation, something which should not exist physically (at least not for an intelligent user', /, 5x, 'who has picked the time-step size =deltat= and the output frequency "iplot" properly).   At this point, the')
-        write (unit = lunit6, fmt = 2221)
+        write (unit = lunit(6), fmt = 2221)
 2221    format (5x, 'omniscient and omnipotent EMTP (otherwise affectionately referred to as =big brother= by those users', /, 5x, 'who are accustomed to his modus operandi) has decided to smooth this curve for all later time.   This smoothing', /, 5x, 'involves simply the averaging of successive ordinates in the output file of plot-variable points for this curve,', /, 5x, 'before plotting beyond this point in time.')
 2240    ip1 = i + jplt2
         if (ip1 .le. kpl) go to 2241
@@ -937,7 +943,7 @@ subroutine subr31
 2320 continue
   end do
   if (iovfl .eq. 0) go to 2350
-  write (unit = lunt13) (ev(j), j = 1, kpl)
+  write (unit = lunit(13)) (ev(j), j = 1, kpl)
   if (iend .eq. 1) go to 2350
   kpl = 0
   go to 2115
@@ -945,11 +951,11 @@ subroutine subr31
   if (iout .eq. 1) go to 2346
   if (vmaxl .ne. 0.0d0) go to 2346
   if (vminl .ne. 0.0d0) go to 2346
-  write (unit = lunit6, fmt = 2345)
+  write (unit = lunit(6), fmt = 2345)
 2345 format (/, ' Abort this plot request, because all variables are identically zero over the requested time span.')
   go to 1000
 2346 jstp = int (stp, kind (jstp))
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 2342) jplt, kplt, vmax, vmin, evmx, vminr, vmaxr
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2342) jplt, kplt, vmax, vmin, evmx, vminr, vmaxr
 2342 format (/, ' Plot parameters at 2342. ', 2i10, 5e15.5)
   if (vmax .ne. c1e12 .or. vmin .ne. (-c1e12)) go to 2540
   if (kikoy .eq. 99) go to 2540
@@ -998,9 +1004,9 @@ subroutine subr31
      long1 = long1 + 2
   end do
   jchar = long1
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 2569) aupper
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2569) aupper
 2569 format (' At 2569 packed node names.', 8a10)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4100) tolrce
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4100) tolrce
 4100 format (' Tolerance=', e12.6)
   if (xyplot(1) .eq. 0.0d0) go to 2570
   !     if ( iout  .eq.  1 )   go to 12581  vb removal (june 82)
@@ -1014,7 +1020,7 @@ subroutine subr31
   dxl2 = dxl / 2.0
   dyl = (vmaxl - vminl) / 130.
   if (kikoy .eq. 99) dyl = (vmax - vmin) / 130.0d0
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 2571) dxl, vmaxl, vminl, dyl
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2571) dxl, vmaxl, vminl, dyl
 2571 format (' At 2580', 4e15.6)
   jpts = kplt / jplt2
   if (jpts .lt. linlim) jpts = linlim
@@ -1025,41 +1031,41 @@ subroutine subr31
   kpl = kplt
   jovfl = iovfl
   lnck = 0
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 2583) ipl1, ipl2
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2583) ipl1, ipl2
 2583 format (' At 2580, ipl1,2', 2i10)
   if (iout .eq. 1) go to 12581
   if (lnflg .eq. 1) go to 3260
-  if (mpage .eq. 1) write (unit = lunit6, fmt = 3179)
+  if (mpage .eq. 1) write (unit = lunit(6), fmt = 3179)
 3179 format ('1')
-  if (mpage .eq. 0) write (unit = lunit6, fmt = 3180)
+  if (mpage .eq. 0) write (unit = lunit(6), fmt = 3180)
 3180 format (////, 1x)
   if (bus1 .ne. blank) go to 3190
   if (bus2 .ne. blank) go to 3190
   if (bus3 .ne. blank) go to 3190
   go to 3205
-3190 write (unit = lunit6, fmt = 3200) bus1, bus2, bus3
+3190 write (unit = lunit(6), fmt = 3200) bus1, bus2, bus3
 3200 format (58x, 2a6, a4, //, 1x)
 3205 do j = 1, 13
      if (cstxt(j) .ne. blank) go to 3207
   end do
   go to 3209
-3207 write (unit = lunit6, fmt = 3208) cstxt
+3207 write (unit = lunit(6), fmt = 3208) cstxt
 3208 format (27x, 13a6, /, 1x)
 3209 if (ialf .eq. 0) go to 3212
   do j = 1, ialf, 13
      j1 = j + 12
-     write (unit = lunit6, fmt = 3211) (pltle(k), k = j, j1)
+     write (unit = lunit(6), fmt = 3211) (pltle(k), k = j, j1)
 3211 format (27x, 13a6)
      do k = j, j1
         pltle(k) = blank
      end do
   end do
 3212 j = int (countp, kind (j))
-  write (unit = lunit6, fmt = 3220) date1, tclock, j, icp, slot
+  write (unit = lunit(6), fmt = 3220) date1, tclock, j, icp, slot
 3220 format (/, 1x, 2a4, 2x, 2a4, 6x, i2, /, ' plot type', 5x, i1, /,  ' node names', 5x, 8(a6, 3x), /, 1x)
   k = 4 * ( ihs - 1 )  +  1
   j1 = k + 3
-  write (unit = lunit6, fmt = 3230) (textax(j), j = k, j1)
+  write (unit = lunit(6), fmt = 3230) (textax(j), j = k, j1)
 3230 format (1x, 4a6, /, 1x)
   d1 = abs (vmaxl)
   d2 = abs (vminl)
@@ -1078,11 +1084,11 @@ subroutine subr31
   d1 = d1 * 10.0d0
   go to 43232
 3235 if (k .ne. 0) go to 3237
-  write (unit = lunit6, fmt = 3236) bus4, bus5, bus6
+  write (unit = lunit(6), fmt = 3236) bus4, bus5, bus6
 3236 format (51x, 2a6, a4)
   expnt = 1.0
   go to 3240
-3237 write (unit = lunit6, fmt = 3238) bus4, bus5, bus6, k
+3237 write (unit = lunit(6), fmt = 3238) bus4, bus5, bus6, k
 3238 format (51x, 2a6, a4, '  (  x 10**(', i3, ')  )')
   k = - k
   expnt = 10.0d0 ** k
@@ -1092,7 +1098,7 @@ subroutine subr31
      vrtnum(j) = d3 * expnt
      d3 = d3 + (dyl * 10.0d0)
   end do
-  write (unit = lunit6, fmt = 3255) vrtnum
+  write (unit = lunit(6), fmt = 3255) vrtnum
 3255 format (f7.3, f8.3, f9.3, 10f10.3, f8.3)
   long1 = jdumy
   call linplt (mm0, long1)
@@ -1115,7 +1121,7 @@ subroutine subr31
   n4 = maxevk - n3
   n11 = kpl * nbyte(5) / nbyte(4)
   if (n4 .gt. n11) go to 2739
-  write (unit = lunit6, fmt = 2734) n11, maxevk, n3, kpl
+  write (unit = lunit(6), fmt = 2734) n11, maxevk, n3, kpl
 2734 format (5x, ' x-y printer plot cancelled due to insufficient working space.', 4i8)
   go to 2819
 2739 n5 = n11 + 1
@@ -1172,7 +1178,7 @@ subroutine subr31
 2816 end do
 2819 d1 = 1.0d0 / d1
   d2 = 1.0d0 / d2
-  write (unit = lunit6, fmt = 2822) d1, d2
+  write (unit = lunit(6), fmt = 2822) d1, d2
 2822 format (' Just-completed x-y plot: dx/line =', e14.6, 5x, 'dy/column =', e14.6)
   !     x-y printer plot ends here.   &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
   if (iout .eq. 2) go to 1000
@@ -1221,9 +1227,9 @@ subroutine subr31
   go to 2600
 2620 if (xyplot(1) .eq. 0.0d0) go to 3496
   n7 = kpl / 2
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 3413) kpl, jplt, ev(1), ev(2)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3413) kpl, jplt, ev(1), ev(2)
 3413 format (/, " Before call to  'scale'  for  x-y  plot.     kpl    jplt",  11x, 'x(1)', 11x,  'y(1)', /, 41x,  2i8,  2e15.6)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 3416) xyplot
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3416) xyplot
 3416 format (/, " Vector  'xyplot'  follows ...", /, 1x, 8e15.5)
   !     now transfer to single-precision vector for calcomp
   !     calls.   xyplot  interfaced with  "frefld", recall.
@@ -1242,7 +1248,7 @@ subroutine subr31
 3426 call scale (ev(2), xyshor(4), n7, ll2, xyshor(7))
 3429 d4 = ev(kpl + 3)
   d5 = ev(kpl + 4)
-  if (iprsup .ge. 2) write (unit = lunit6, fmt = 3432) ev(kpl + 1), ev(kpl + 2), d4, d5, ev(1), ev(2)
+  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 3432) ev(kpl + 1), ev(kpl + 2), d4, d5, ev(1), ev(2)
 3432 format (/, ' Scaling parameters.', 9x, 'x-bias', 9x, 'y-bias', 10x, 'dx/in', 10x, 'dy/in',  11x, 'x(1)', 11x, 'y(1)', /, 20x, 6e15.6)
   do i = 1, jplt, 2
      n5 = kpl + i
@@ -1253,7 +1259,7 @@ subroutine subr31
      ev(n5 + 1) = d5
   end do
   n5 = n5 + 1
-  if (iprsup .ge. 2) write (unit = lunit6, fmt = 3440)  (ev(i), i = kpl, n5)
+  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 3440)  (ev(i), i = kpl, n5)
 3440 format (/, ' (ev(i), i=kpl, n5)  ....', /, (1x, 10e13.4))
   call axis (zero, zero, horzl(1), ll24, xyshor(1), zero, ev(kpl + 1), d4)
   call axis (zero, zero, vertl(1), ll16, xyshor(4), fl90, ev(kpl + 2), d5)
@@ -1269,7 +1275,7 @@ subroutine subr31
   do  i=1, jplt, 2
      n12 = n12 + 1
      call newpen (kpen(n12))
-     if (iprsup .ge. 2) write (unit = lunit6, fmt = 3444) i, j, jplt, n5
+     if (iprsup .ge. 2) write (unit = lunit(6), fmt = 3444) i, j, jplt, n5
 3444 format (/, " Ready to call  'line'  again.       i       j    jplt      n5", /, 30x, 4i8)
      call line (ev(i), ev(i + 1), n5, jplt, j, i)
   end do
@@ -1308,10 +1314,10 @@ subroutine subr31
   !     &&&&&&&&&&&&&&&&&   remove  call mover0  &&&&&&&&&&&&&
   if (iovfl .eq. 0) go to 5980
   !     segmented, 1, vax e/t can skip translation of rewind:
-  rewind lunt13
+  rewind lunit(13)
   iend = maxevk
-  read (unit = lunt13) (ev(j), j = 1, iend)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 5979) iend
+  read (unit = lunit(13)) (ev(j), j = 1, iend)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 5979) iend
 5979 format (' ev read from logical 9', i10)
 5980 if (iout .eq. 1) go to 5981
   if (lnflg .eq. 1) go to 3115
@@ -1322,7 +1328,7 @@ subroutine subr31
   end do
   hlo = hpt - dxl2
   hhi = hpt + dxl2
-3010 if (iprsup .ge. 5) write (unit = lunit6, fmt = 3015)  hlo, hpt, hhi, tmax
+3010 if (iprsup .ge. 5) write (unit = lunit(6), fmt = 3015)  hlo, hpt, hhi, tmax
 3015 format (13x, 'hlo', 12x, 'hpt', 12x, 'hhi', 11x, 'tmax', /, 1x, 4e15.6)
   do i = ipl1, ipl2
      kold = 0
@@ -1340,14 +1346,14 @@ subroutine subr31
      long2 = klm
      call linplt (long1, long2)
      kold = klm
-     if (iprsup .ge. 5) write (unit = lunit6, fmt = 3035) j, ev(j), ev(j + 1), i,klm
+     if (iprsup .ge. 5) write (unit = lunit(6), fmt = 3035) j, ev(j), ev(j + 1), i,klm
 3035 format (' At 3040 ', i10, 2e15.6, 2i10)
 3040 jpntr(i) = jpntr(i) + jplt2
      d4 = tmax - evp
      if (d4 .gt. 0.0d0) go to 3020
      jend = 1
 3100 end do
-  if (iprsup .ge. 6) write (unit = lunit6, fmt = 13100) lnck, jpts, lcnt, lnpin, jcol, jovfl, jend, mdpt, ipl1, ipl2, llmin1
+  if (iprsup .ge. 6) write (unit = lunit(6), fmt = 13100) lnck, jpts, lcnt, lnpin, jcol, jovfl, jend, mdpt, ipl1, ipl2, llmin1
 13100 format (1x, '    lnck    jpts    lcnt   lnpin    jcol   jovfl    jend    mdpt    ipl1    ipl2  llmin1', /, 1x, 11i8)
   if (jend .eq. 1) go to 3103
   do j = ipl1, ipl2
@@ -1396,13 +1402,13 @@ subroutine subr31
   go to 3010
 3111 if (iout .eq. 2) go to 3112
   lnflg = 1
-  write (unit = lunit6, fmt = 310)
+  write (unit = lunit(6), fmt = 310)
 310 format (' ****The number of lines printed for this plot request now exceeds the total number of data points.')
-  write (unit = lunit6, fmt = 311)
+  write (unit = lunit(6), fmt = 311)
 311 format (' ****Since calcomp plot was also specified, only printer plot is cancelled for this request.')
   go to 3115
-3112 write (unit = lunit6, fmt = 310)
-  write (unit = lunit6, fmt = 312)
+3112 write (unit = lunit(6), fmt = 310)
+  write (unit = lunit(6), fmt = 312)
 312 format (' ****Since only printer plot was specified, this plot request is cancelled.')
   go to 1000
 3115 if (iout .eq. 2) go to 2645
@@ -1438,7 +1444,7 @@ subroutine subr31
      term = hdif * hdif + vdif * vdif
      enumr = hvec * hdif + vvec * vdif
      disqr = term - enumr * enumr / denom
-     if (ipontr .le. 10000 .and. i .eq. 1 .and. iprsup .ge. 5) write (unit = lunit6, fmt = 16030) i, istore, ipontr, ev(ipontr), evbasx, dx, vnew, evbasy, dy, denom, enumr, disqr, hdif, vdif, hvec, vvec, term
+     if (ipontr .le. 10000 .and. i .eq. 1 .and. iprsup .ge. 5) write (unit = lunit(6), fmt = 16030) i, istore, ipontr, ev(ipontr), evbasx, dx, vnew, evbasy, dy, denom, enumr, disqr, hdif, vdif, hvec, vvec, term
 16030 format (/, ' At 16030  ', 3i10, 6e15.5, /, (1x, 8e15.5))
      if (disqr .gt. tolrce) go to 6040
      vchnge = vnew - vold
@@ -1458,7 +1464,7 @@ subroutine subr31
      ev(j1) = dx
      ev(j1 + 1) = dy
   end do
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 2630) (kpltq(i), i = ipl1, ipl2)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2630) (kpltq(i), i = ipl1, ipl2)
 2630 format (/, ' At 2630,after smoothing, the number of points per curve are', /, 10x, 4i10)
   d6 = vhs - fourth * (1.0d0 + mulplt(3))
   d9 = d6 + hgt1 / 2.0d0
@@ -1483,7 +1489,7 @@ subroutine subr31
      vhs1 = vhs1 - half
      go to 2642
 7452 d7 = dlen + 0.5d0
-     if (iprsup .ge. 1) write (unit = lunit6, fmt = 7502) ipl, icp, mulplt, taxmax, vhs, d6, slot
+     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 7502) ipl, icp, mulplt, taxmax, vhs, d6, slot
 7502 format (/, ' Legend.     ipl     icp', /, 8x,  6i8,  3e20.6, /, (1x, 20a6))
      d8 = n5
      call number (d7, d6, hgt1, d8, zero, llmin1)
@@ -1507,8 +1513,8 @@ subroutine subr31
   if (kpl .eq. 0) go to 2650
   iend = kpl
   if (iend .gt. maxevk) iend = maxevk
-  read (unit = lunt13) (ev(j), j = 1, iend)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 5979) iend
+  read (unit = lunit(13)) (ev(j), j = 1, iend)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 5979) iend
   j1 = kpl - iend
   if (j1 .eq. 0) jovfl = 0
   go to 5980
@@ -1524,7 +1530,7 @@ subroutine subr31
 2651 long1 = 1
   long2 = 75
   call linplt (long1, long2)
-  write (unit = lunit6, fmt = 2652)
+  write (unit = lunit(6), fmt = 2652)
 2652 format (/, ' End of graph.', /, 1x)
   if (iout .eq. 2) go to 2680
 2653 d7 = vh + 1.0d0
@@ -1615,7 +1621,7 @@ subroutine series (nfour, kpl, jplt, maxevk)
   d2 = evdoub(n2)  - evdoub(1)
   if (d1 * d2 .gt. 0.0d0) go to 3175
   if (absz (d1) .gt. absz (d2)) n2 = n2 - 1
-  write (unit = lunit6, fmt = 3168) kpl, n2, evdoub(n2 + 1)
+  write (unit = lunit(6), fmt = 3168) kpl, n2, evdoub(n2 + 1)
 3168 format (/, ' Back up final time from point number', i5, '   to point number', i5, ' ,   so that signal will be nearly periodic.', /, ' The following unused point, which has value closest to point number 1, equals ', e15.6)
   kpl = n2
   go to 3184
@@ -1624,22 +1630,22 @@ subroutine series (nfour, kpl, jplt, maxevk)
 3184 n4 = kpl / 2  + 2
   n1 = kpl + 2 * n4
   if (n1 .le. maxevk) go to 3209
-  write (unit = lunit6, fmt = 3203) n1, maxevk
+  write (unit = lunit(6), fmt = 3203) n1, maxevk
 3203 format (/, ' Sorry, no fourier series is possible due to lack of emtp table space.', i8, '   Floating-point cells are needed,', /, ' while only', i8, '   are available.   On to next request.')
   go to 9000
 3209 ioffa = kpl
   ioffb = kpl + n4
   if (kpl .ge. 2) go to 3216
-  write (unit = lunit6, fmt = 3213) kpl
+  write (unit = lunit(6), fmt = 3213) kpl
 3213 format (/, ' Sorry, no fourier series is possible due to lack of data.   The number of data points found is only', i5,'  .', /, ' Two or more are needed. On to the next request.')
   go to 9000
 3216 if (jplt .eq. 1) go to 3226
-  write (unit = lunit6, fmt = 3219) jplt
+  write (unit = lunit(6), fmt = 3219) jplt
 3219 format (/, ' Sorry, no fourier series is possible due to the naming of', i4, '   variables.   Only one is allowed.  On to next request.')
   go to 9000
-3226 write (unit = lunit6, fmt = 3231) kpl, evdoub(1), evdoub(2), evdoub(kpl - 1), evdoub(kpl)
+3226 write (unit = lunit(6), fmt = 3231) kpl, evdoub(1), evdoub(2), evdoub(kpl - 1), evdoub(kpl)
 3231 format (/, ' Begin fourier series calculation using ', i6, '   equidistant points.   Beginning two points =', /, 2e20.10, 9x, 'ending two points =', 2e20.10)
-  if (iprsup .ge. 2) write (unit = lunit6, fmt = 3238) (evdoub(j), j = 1, kpl)
+  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 3238) (evdoub(j), j = 1, kpl)
 3238 format (/, ' List of all data points follows ....', /, (1x, 10e13.4))
   pi = twopi * onehaf
   an = kpl
@@ -1678,7 +1684,7 @@ subroutine series (nfour, kpl, jplt, maxevk)
      sp = c1 * sp + s1 * cp
      cp = ap
   end do
-  write (unit = lunit6, fmt = 4317)
+  write (unit = lunit(6), fmt = 4317)
 4317 format (/, ' Coefficients of resultant fourier series, with  "complex amplitude"  being the square root', /, ' of the sum of the squares of the two preceding entries.   The final column applies to this amplitude.', /, 2x, 'harmonic', 14x, 'cosine', 16x, 'sine', 13x, 'complex', 9x, 'fraction of', /, 4x, 'number', 9x, 'coefficient', 9x, 'coefficient', 11x, 'amplitude', 9x, 'fundamental')
   ndx1 = ioffa
   ndx2 = ioffb
@@ -1691,10 +1697,10 @@ subroutine series (nfour, kpl, jplt, maxevk)
      d5 = evdoub(ndx1) ** 2 + evdoub(ndx2) ** 2
      d6 = sqrtz (d5)
      d4 = d6 / d7
-     write (unit = lunit6, fmt = 4345) l, evdoub(ndx1), evdoub(ndx2), d6, d4
+     write (unit = lunit(6), fmt = 4345) l, evdoub(ndx1), evdoub(ndx2), d6, d4
   end do
 4345 format (1x, i9, 3e20.10, f20.8)
-  write (unit = lunit6, fmt = 4352)
+  write (unit = lunit(6), fmt = 4352)
 4352 format (//, 1x)
 9000 return
 end subroutine series
@@ -1842,7 +1848,7 @@ subroutine axis (xx, yy, title, numch, size, ang, begin, scale)
   d1 = d1 + 0.4d0
   call symbol (d4, d1, hgt1, ')', ang, 1)
 2569 return
-9000 write (unit = lunit6, fmt = 9006)
+9000 write (unit = lunit(6), fmt = 9006)
 9006 format (//, " Error stop within bpa cdc module  'axis'  of overlay 31.     Go see program maintenance at once.")
   call stoptp
 end subroutine axis
@@ -1970,10 +1976,10 @@ subroutine linplt (krv, klm)
   do j = 1, 131, 10
      kut(j) = kline
   end do
-  write (unit = lunit6, fmt = 230) kut
+  write (unit = lunit(6), fmt = 230) kut
 230 format (1x, 131a1)
   kut(1 : 131) = kxline
-  write (unit = lunit6, fmt = 250) kut
+  write (unit = lunit(6), fmt = 250) kut
 250 format ('+', 131a1)
   go to 350
 300 if (krv .eq. 77) go to 334
@@ -1995,9 +2001,9 @@ subroutine linplt (krv, klm)
 330 continue
 334 if (k .eq. 0) go to 340
   k = 0
-  write (unit = lunit6, fmt = 250) kut
+  write (unit = lunit(6), fmt = 250) kut
   go to 350
-340 write (unit = lunit6, fmt = 230) kut
+340 write (unit = lunit(6), fmt = 230) kut
 350 do j = 1, 4
      max(j) = 1
      min(j) = 132

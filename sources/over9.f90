@@ -31,9 +31,9 @@ subroutine over9
   !
   !locatn(i, j) = j * (j - 1) / 2 + i
   !
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over9."')
-  if(iprsup .gt. 0) write (unit = lunit6, fmt = 1001) kconst, last
+  if(iprsup .gt. 0) write (unit = lunit(6), fmt = 1001) kconst, last
 1001 format (' Steady-state phasor solution begins (top of "over9").   kconst, last =', 2i8)
   if (istep .ne. -4567) go to 1024
   nkr = 0
@@ -53,7 +53,7 @@ subroutine over9
 1984 format ('+Fix.', 4e11.3)
   go to 1111
 9393 kill = 227
-  write (unit = lunit6, fmt = 8944) nkr
+  write (unit = lunit(6), fmt = 8944) nkr
 8944 format (' The number of fix sources', i5, 2x, ' should be less than the number of all sources')
   go to 9999
 2200 lstat(69) = nkr
@@ -121,7 +121,7 @@ subroutine over9
      go to 1050
   end do
 1030 continue
-1034 write (unit = lunit6, fmt = 1041)
+1034 write (unit = lunit(6), fmt = 1041)
 1041 format (/, ' Comment ---- No sinusoidal sources requested for steady-state solution.   Thus this solution is bypassed.')
   lastov = nchain
   nchain = 12
@@ -218,7 +218,7 @@ subroutine over9
   end do
   !     prevent vax i/o interrupt on kownt(1) garbage (nov, 81):
   if (iabs (kownt(1)) .gt. 99999) kownt(1) = 0
-  if (iprsup .ge. 3) write (unit = lunit6, fmt = 1554) (kownt(i), i = 1, ntot)
+  if (iprsup .ge. 3) write (unit = lunit(6), fmt = 1554) (kownt(i), i = 1, ntot)
 1554 format (/, " (kownt(i), i=1, ntot)   in  'over9' ,  after branch table has been put into steady-state renumbering arrays.", /, (1x, 20i6))
   lastm1 = last - 1
   do i = next, lastm1
@@ -296,7 +296,7 @@ subroutine over9
   k = 10000
   go to 1870
 1940 i = 1
-  if (iprsup .ge. 3) write (unit = lunit6, fmt = 1943) (kode(k), node(k), k = 1, ntot)
+  if (iprsup .ge. 3) write (unit = lunit(6), fmt = 1943) (kode(k), node(k), k = 1, ntot)
 1943 format (/, " (kode(i), node(i), i=1, ntot)   after steady-state switch-chain setup in  'over9' .", /, (1x, 20i6))
   k = 0
 1950 if (iabs (iform(i)) .ne. 14) go to 2040
@@ -304,7 +304,7 @@ subroutine over9
   if (tstart(i) .ne. 5432.0d0) go to 1972
   !     current source treated as voltage source for s.s. :
   j = iabs (node(i))
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 1967) i, k, j, kode(j), kownt(j)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1967) i, k, j, kode(j), kownt(j)
 1967 format (' Charge. i, k, j, kode(j), kownt(j) =', 5i6)
   go to 1980
 1972 if (tstart(i) .ge. 0.0d0) go to 2040
@@ -318,7 +318,7 @@ subroutine over9
   go to 2040
 2000 istate = 2000
   jj = node(i)
-  write (unit = lunit6, fmt = 2001) bus(jj)
+  write (unit = lunit(6), fmt = 2001) bus(jj)
 2001 format (/,  " Notice. ---- Two or more sinusoidal voltage sources are present on node '", a6,  "' during the steady-state  ", /, 14x, "solution.   As per the user's manual, these voltages will all be added together to get a total node value.")
   go to 2040
 2010 j = l
@@ -333,7 +333,7 @@ subroutine over9
   j = 1
   go to 1980
 2050 ncurr = ntot - k
-  if (iprsup .ge. 3) write (unit = lunit6, fmt = 2052) (kownt(i), i = 1, ntot)
+  if (iprsup .ge. 3) write (unit = lunit(6), fmt = 2052) (kownt(i), i = 1, ntot)
 2052 format (/, " (kownt(i), i=1, ntot)   in  'over9' ,  after known voltage nodes are forced last.", /, (1x, 20i6))
   i = 3 * lbus
   if (i .lt. intinf) go to 2054
@@ -349,7 +349,7 @@ subroutine over9
      if (node(i) .gt. 0) go to 2110
      if (kode(j) .ge. 0) go to 2110
      jj = iabs (node(i))
-     write (unit = lunit6, fmt = 2101) bus(jj)
+     write (unit = lunit(6), fmt = 2101) bus(jj)
 2101 format (/, " Note. ---- Node '", a6, "' has both voltage and current sources on it.   The current source has no effect", /, 12x, 'on the solution, then, and could be omitted.')
      node(i) = node(i) - ii
   end do
@@ -464,7 +464,7 @@ subroutine over9
      if (i .ne. j) go to 2530
   end do
 2730 continue
-  if (iprsup .gt. 0) write (unit = lunit6, fmt = 47889) next, last
+  if (iprsup .gt. 0) write (unit = lunit(6), fmt = 47889) next, last
 47889 format (/, " At end of  'over9' ,  just before steady-state renumbering,      ", i5, ' of total of  ', i5, ' cells of kolum, korder are filled')
 3000 icas = 1
   lastov = nchain
@@ -473,7 +473,7 @@ subroutine over9
 9999 lastov = nchain
   nchain = 51
   lstat(18) = 9
-9990 if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
+9990 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
 4568 format ('  "Exit  module over9." ')
   return
 end subroutine over9

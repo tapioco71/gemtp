@@ -150,26 +150,14 @@ program gemtp
   use iocons
   use movcop
   implicit none
+  integer(4) :: i
   integer(4) :: ll34
   !
   data ll34 / 34 /
   !     unit assignments of "over1" needed earlier by spy:
-  lunit0 = 0
-  lunit1 = 1
-  lunit2 = 2
-  lunit3 = 3
-  lunit4 = 4
-  lunit5 = 5
-  lunit6 = 6
-  lunit7 = 7
-  lunit8 = 8
-  lunit9 = 9
-  lunt10 = 10
-  lunt11 = 11
-  lunt12 = 12
-  lunt13 = 13
-  lunt14 = 14
-  lunt15 = 15
+  do i = 0, 15
+     lunit(i) = i
+  end do
   llbuff = -3333
   kol132 = 132
   nchain = -1
@@ -183,7 +171,7 @@ program gemtp
      else if (kill .ne. 7733) then
         call a4372
      else
-        write (unit = lunit6, fmt = 4367)
+        write (unit = lunit(6), fmt = 4367)
 4367    format (' "main00" intercept of "begin" request.')
         kill = 0
         numdcd = 0
@@ -309,7 +297,7 @@ contains
 #endif
 
     case default
-       write (unit = lunit6, fmt = 9236) nchain
+       write (unit = lunit(6), fmt = 9236) nchain
 9236   format (/, ' Illegal nchain in main00.', i8)
        call stoptp
 
@@ -340,7 +328,7 @@ subroutine stoptp
 5607 format (80a1)
   if (ios .ne. 0) go to 9000
   if (nchain .eq. 31 .and. lastov .eq. 1 .and. kill .eq. 9999) go to 9000
-  write (unit = lunit6, fmt = 5623) nchain, lastov, (texcol(i), i = 1, 80)
+  write (unit = lunit(6), fmt = 5623) nchain, lastov, (texcol(i), i = 1, 80)
 5623 format (/, ' Temporary error stop in "stoptp".   nchain, lastov =', 2i5, 5x, 'last-read card image abuff follows ....', /, 80a1)
 9000 stop
 end subroutine stoptp
@@ -360,7 +348,7 @@ subroutine erexit
 
   external kwiter                                 ! needed for ctrl-c initialization
   !
-  lunit6 = 6                                      ! for use of "prompt" until fixed tt?? address
+  lunit(6) = 6                                      ! for use of "prompt" until fixed tt?? address
   muntsv(2) = 49                                  ! alternate munit5 unit number of spy
   kwtvax = 0                                      ! set flag corresponding to no ctrl-c usage
   !      call enable_ctrl_c ( kwiter, idum(1) )   ! initialize ctrl-c
@@ -548,33 +536,33 @@ subroutine cimage
   data n12        / 99999 /
   data n13        / 99999 /
   n6 = 0
-  if (iprsup .ge. 10) write (unit = lunit6, fmt = 987) lunit5, lunit6, noutpr, numdcd
+  if (iprsup .ge. 10) write (unit = lunit(6), fmt = 987) lunit(5), lunit(6), noutpr, numdcd
 987 format (' Begin cimage.  lunit5, lunit6, noutpr, numdcd =', 4i5)
-1000 if (m4plot .eq. 1) call emtspy                         ! interactive usage
-  if (lunit5 .gt. 0) read (unit = lunit5, fmt = 3000, end = 4000) buff10
+1000 if (m4plot .eq. 1) call emtspy               ! interactive usage
+     if (lunit(5) .gt. 0) read (unit = lunit(5), fmt = 3000, end = 4000) buff10
 3000 format (a80)
-  if (lunit5 .le. 0) call nextcard
-  if (kill .gt. 0) go to 4000                               ! "nextcard" eof jump
-  if (lunsav(5) .ne. -5) numdcd = numdcd + 1
-  read (unit = abuff, fmt = 3012, iostat = ios) text1, text2
+     if (lunit(5) .le. 0) call nextcard
+     if (kill .gt. 0) go to 4000                  ! "nextcard" eof jump
+     if (lunsav(5) .ne. -5) numdcd = numdcd + 1
+     read (unit = abuff, fmt = 3012, iostat = ios) text1, text2
 3012 format (2a1)
-  if (ios .ne. 0) then
-     write (unit = lunit6, fmt = "('Could not read from abuff. cimage line 3012.  Stop.')")
-     call stoptp
-  end if
-  if (text1 .ne. charc) go to 3034
-  if (text2 .ne. blank) go to 3034
+     if (ios .ne. 0) then
+        write (unit = lunit(6), fmt = "('Could not read from abuff. cimage line 3012.  Stop.')")
+        call stoptp
+     end if
+     if (text1 .ne. charc) go to 3034
+     if (text2 .ne. blank) go to 3034
 1036 if (noutpr .ne. 0) go to 1000
-  if (n11 .ne. 0) go to 1000
-  if (kol132 .eq. 132) write (unit = lunit6, fmt = 3015) buff10
+     if (n11 .ne. 0) go to 1000
+     if (kol132 .eq. 132) write (unit = lunit(6), fmt = 3015) buff10
 3015 format (' Comment card.', 37x, '|', a80)
-  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3016) abuff
+     if (kol132 .ne. 132) write (unit = lunit(6), fmt = 3016) abuff
 3016 format (' Comment card.', 37x, '1', a20)
   go to 1000
 3034 if (noutpr .ne. 0) go to 3035
-  if (kol132 .eq. 132) write (unit = lunit6, fmt = 3006, advance = 'no') buff10, achar (13)
+  if (kol132 .eq. 132) write (unit = lunit(6), fmt = 3006, advance = 'no') buff10, achar (13)
 3006 format (51x, '|', a80, a1)
-  if (kol132 .ne. 132) write (unit = lunit6, fmt = 3007, advance = 'no') abuff, achar (13)
+  if (kol132 .ne. 132) write (unit = lunit(6), fmt = 3007, advance = 'no') abuff, achar (13)
 3007 format (51x, '1', a29, a1)
 3035 if (n13 .gt. 0) go to 3011
   print 3009, numdcd, abuff(1 : 72)
@@ -603,7 +591,7 @@ subroutine cimage
 3042 if (chcont .eq. chtacs) go to 3233
   if (texcol(1) .eq. chcont) go to 3246
   if (n8 .ne. 6) go to 1144
-3044 if (noutpr .eq. 0) write (unit = lunit6, fmt = 3045)
+3044 if (noutpr .eq. 0) write (unit = lunit(6), fmt = 3045)
 3045 format ('+Comment card (implicit).')
   go to 1000
 1144 do k = 1, 80
@@ -619,14 +607,14 @@ subroutine cimage
   nright = -2
   !  call freone (d1)
   call free (d1)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 3281) nfrfld, texta6(1), texta6(2)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3281) nfrfld, texta6(1), texta6(2)
 3281 format (/, ' nfrfld =', i8, 5x, 'texta6 =', 2a7)
   nright = 0
   do i = 1, 200
      n1 = jpntr(i)
      n2 = jpntr(i + 1) - 1
      if (n2 .lt. 0) go to 3319
-     if (iprsup .ge. 35) write (unit = lunit6, fmt = 3285) i, (textax(j), j = n1, n2)
+     if (iprsup .ge. 35) write (unit = lunit(6), fmt = 3285) i, (textax(j), j = n1, n2)
 3285 format (' Special-request word', i4, ' .', 10a6)
      if (textax(n1) .eq. blank) go to 3306
      l = 0
@@ -636,7 +624,7 @@ subroutine cimage
         l = l + 1
         if (texta6(l) .ne. textax(j)) go to 3306
      end do
-     if (iprsup .ge. 2) write (unit = lunit6, fmt = 3292) i, n8, texta6(1), textay(i)
+     if (iprsup .ge. 2) write (unit = lunit(6), fmt = 3292) i, n8, texta6(1), textay(i)
 3292 format (/, ' key-word found.  i, n8 =', 2i5, 5x, 'texta6, textay =', 2a7)
 3294 if (n8 .ne. 6) go to 3301
      if (i .ne. 7) go to 1036
@@ -708,7 +696,7 @@ subroutine cimage
      end select
 3306 if (to_lower (texta6(1)) .eq. textay(i)) go to 3294
   end do
-3319 write (unit = lunit6, fmt = 3230)
+3319 write (unit = lunit(6), fmt = 3230)
 3230 format (' Illegal $-card.   Stop at s.n. 3319 of "cimage" .')
   call stoptp                                               ! installation-dependent program stop card
   !               *****    request no. 1.    "$attach"      *****  *****
@@ -716,7 +704,7 @@ subroutine cimage
   go to 4506
   !               *****    request no. 2.    "$punch"       *****  *****
 4200 text1 = textax(2)
-4206 n2 = lunit7
+4206 n2 = lunit(7)
 4209 nfrfld = 1
   !  call freone (d11)
   call free (d11)
@@ -724,7 +712,7 @@ subroutine cimage
   !     4225 if ( n1 .le. 0 ) n1 = n2
   if (n1 .le. 0) n1 = n2
   if (n8 .eq. 8) go to 4817
-  if (noutpr .eq. 0) write (unit = lunit6, fmt = 4231) n1, text1
+  if (noutpr .eq. 0) write (unit = lunit(6), fmt = 4231) n1, text1
 4231 format ('+Copy file', i4, '   to ', a6, ' .')
   !     segmented, 1, vax e/t can skip translation of rewind:
   rewind n1
@@ -733,8 +721,8 @@ subroutine cimage
      !     because DEC Fortran does not honor the CDC  "punch"  statement
      !     (to directly punch cards), i write to unit 7 as next best
      !     thing.  wsm.  Jan, 1980.
-     if (n8 .eq. 2 ) write (unit = lunit7, fmt = 3000) aupper
-     if (n8 .eq. 3 ) write (unit = lunit6, fmt = 4238) k, aupper
+     if (n8 .eq. 2 ) write (unit = lunit(7), fmt = 3000) aupper
+     if (n8 .eq. 3 ) write (unit = lunit(6), fmt = 4238) k, aupper
 4238 format (20x, 'record', i5, ' .  1', 10a8)
   end do
   !     segmented, 1, VAX e/t can skip translation of rewind:
@@ -787,19 +775,19 @@ subroutine cimage
   !  call freone (d11)
   call free (d11)
   n6 = int (d11)
-4557 if (n6 .eq. 0) n6 = lunit7
+4557 if (n6 .eq. 0) n6 = lunit(7)
   if (n8 .eq. 5) n7 = munit5                                ! $spy uses this channel
   if (n7 .gt. 0) go to 4570
   do  k = 1, 15
      if (lunsav(k) .le. 0) go to 4568
   end do
-  write (unit = lunit6, fmt = 4565)
+  write (unit = lunit(6), fmt = 4565)
 4565 format (/, 10(' error,'))
-  write (unit = lunit6, fmt = 4566) lunsav
+  write (unit = lunit(6), fmt = 4566) lunsav
 4566 format (5x, ' All i/o channels occupied.  Kill run at  s.n. 4566  of  "cimage" .', /, 20i5)
   call stoptp                                               ! installation-dependent program stop card
 4568 n7 = k
-4570 if (noutpr .eq. 0) write (unit = lunit6, fmt = 4572) text1, filen, n7
+4570 if (noutpr .eq. 0) write (unit = lunit(6), fmt = 4572) text1, filen, n7
 4572 format ('+', a6, ' file:', 25a1, ' unit =', i3)
   if (n8 .eq. 4) go to 4423
   if (n8 .eq. 9) go to 4907
@@ -811,25 +799,25 @@ subroutine cimage
   if (n8 .eq. 5) call spying                                ! process $spy command file
   go to 1000
   !               *****    request no. 6.    "$disable"     *****  *****
-4600 if (noutpr .eq. 0) write (unit = lunit6, fmt = 4612)
+4600 if (noutpr .eq. 0) write (unit = lunit(6), fmt = 4612)
 4612 format ('+Begin data to be ignored.')
   go to 1000
   !               *****    request no. 7.    "$enable"      *****  *****
-4700 if (noutpr .eq. 0) write (unit = lunit6, fmt = 4714)
+4700 if (noutpr .eq. 0) write (unit = lunit(6), fmt = 4714)
 4714 format ('+End of data to be ignored.')
   go to 1000
   !               *****    request no. 8.    "$return"      *****  *****
-4800 n2 = lunit4
+4800 n2 = lunit(4)
   go to 4209
 4817 close (unit = n1)
-  if (noutpr .eq. 0) write (unit = lunit6, fmt = 4823) n1
+  if (noutpr .eq. 0) write (unit = lunit(6), fmt = 4823) n1
 4823 format ('+Close file on unit', i3, ' .')
-  if (n1 .ne. lunit5) go to 1000
+  if (n1 .ne. lunit(5)) go to 1000
   noutpr = 1
   go to 1000
   !               *****    request no. 9.    "$newfile"     *****  *****
 4900 text1 = 'newfil'
-  n2 = lunit4
+  n2 = lunit(4)
   go to 4506
   !     4907 open (unit=n7, type='new', form='unformatted', name=filen )
 4907 open (unit = n7, status = 'new', form = 'unformatted', file = filen)
@@ -839,7 +827,7 @@ subroutine cimage
   d1 = epsiln
   !  call freone (epsiln)
   call free (epsiln)
-  if (noutpr .eq. 0) write (unit = lunit6, fmt = 5017) d1, epsiln
+  if (noutpr .eq. 0) write (unit = lunit(6), fmt = 5017) d1, epsiln
 5017 format ('+Epsiln change.  old, new =', 2e11.2)
   go to 1000
   !               *****    request no. 11.   "delete"       *****  *****
@@ -858,15 +846,15 @@ subroutine cimage
 5219 go to 1000
   !               *****    request no. 13.   "listoff"      *****  *****
 5300 if (noutpr .ne. 0) go to 5324
-  write (unit = lunit6, fmt = 5307) numdcd
+  write (unit = lunit(6), fmt = 5307) numdcd
 5307 format ('+Turn off input listing at card', i5)
   noutpr = 1
 5324 go to 1000
   !               *****    request no. 14.   "liston"       *****  *****
-5400 write (unit = lunit6, fmt = 5404)
+5400 write (unit = lunit(6), fmt = 5404)
 5404 format (51x, '1$liston')
   noutpr = 0
-  write (unit = lunit6, fmt = 5412) numdcd
+  write (unit = lunit(6), fmt = 5412) numdcd
 5412 format ('+Turn on input listing at card', i5)
   go to 1000
   !               *****    request no. 15.   "vintage"      *****  *****
@@ -874,19 +862,19 @@ subroutine cimage
   !  call freone (d11)
   call free (d11)
   moldat = int (d11)
-  if (noutpr .eq. 0) write (unit = lunit6, fmt = 5518) moldat
+  if (noutpr .eq. 0) write (unit = lunit(6), fmt = 5518) moldat
 5518 format ('+New moldat =', i4, 5x, '(data vintage)')
   go to 1000
   !               *****    request no. 16.   "oldfile"      *****  *****
 5600 text1 = 'oldfil'
-  n2 = lunit2
+  n2 = lunit(2)
   go to 4506
 5608 close (unit = n7)
   !     open (unit=n7, type='old', form='unformatted', name=filen )
   open (unit = n7, status = 'old', form = 'unformatted', file = filen)
   go to 1000
   !               *****    request no. 17.   "stop"         *****  *****
-5700 write (unit = lunit6, fmt = 5706)
+5700 write (unit = lunit(6), fmt = 5706)
 5706 format ('+Stop execution immediately in "cimage".')
   call stoptp                                               ! installation-dependent program stop card
   !               *****    request no. 18.   "watch5"       *****  *****
@@ -895,13 +883,13 @@ subroutine cimage
   call free (d11)
   n12 = int (d11)
   n13 = n12
-  if (noutpr .eq. 0) write (unit = lunit6, fmt = 5812) n12
+  if (noutpr .eq. 0) write (unit = lunit(6), fmt = 5812) n12
 5812 format ('+Paint input data on screen.', i8)
   go to 1000
   !               *****    request no. 19.   "comment"      *****  *****
 5900 n11 = n11 + 1
   if (n11 .ge. 2) n11 = 0
-  if (noutpr .eq. 0) write (unit = lunit6, fmt = 5917) n11
+  if (noutpr .eq. 0) write (unit = lunit(6), fmt = 5917) n11
 5917 format ('+Toggle comment card destruction flag.', i8)
   go to 1000
 6000 call stoptp                                            ! installation-dependent program stop card
@@ -911,13 +899,13 @@ subroutine cimage
   call free (xopt)
   !  call frefld (copt)
   call free (copt)
-  if (noutpr .eq. 0) write (unit = lunit6, fmt = 6114) xopt, copt
+  if (noutpr .eq. 0) write (unit = lunit(6), fmt = 6114) xopt, copt
 6114 format ('+New  xopt, copt =', 2e14.4)
   xunits = 1000.
   if (xopt .gt. 0.0) xunits = twopi * xopt
   go to 1000
   !     additional key-word code goes below.
-4000 write (unit = lunit6, fmt = 4006)
+4000 write (unit = lunit(6), fmt = 4006)
 4006 format (/, 1x, 85('='), /, ' End of file encounted in "cimage" while attempting to read another data card.   Stop.', /, 1x, 85('='))
   call stoptp   ! installation-dependent program stop card
   !     unique exit of module, possibly after echoing card image:
@@ -1059,7 +1047,7 @@ subroutine setplt
   !     Entry point to change lines/page to maximum number allowed,
   !     to allow printer plots to be continuous over page boundries.
   !     call system dependant routine to change page size
-  !     write (lunit6, 1000 )
+  !     write (lunit(6), 1000 )
   !     1000 format (1h1)
   return
 end subroutine setplt
@@ -1071,7 +1059,7 @@ end subroutine setplt
 subroutine setstd
   !     Entry point to restore page limits to standard values.
   !     call system dependant routine to change page size
-  !     write (lunit6, 1000 )
+  !     write (lunit(6), 1000 )
   return
 end subroutine setstd
 

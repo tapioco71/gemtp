@@ -101,21 +101,21 @@ subroutine datain
   call date44 (date1)                                       ! find calendar date and the
   call time44 (tclock)                                      ! time of day for documentation
   call initsp                                               ! initialize spy common (digit needed to sort)
-1311 write (unit = lunit6, fmt = 1324)                      ! prompt user at "emtspy" keyboard
+1311 write (unit = lunit(6), fmt = 1324)                      ! prompt user at "emtspy" keyboard
 1324 format (' EMTP begins.  Send (spy, $attach, debug, help, module, junk, stop): ')
   read (unit = munit5, fmt = 1329, iostat = ios) buff77     ! read first card of EMTP data
 1329 format (a80)
   if (ios .ne. 0) then
-     write (unit = lunit6, fmt = "(' Could not read from stdin.')")
+     write (unit = lunit(6), fmt = "(' Could not read from stdin.')")
      stop
   end if
   if (to_lower (buff77(1 : 5)) .eq. 'stop ') call stoptp
   if (to_lower (buff77(1 : 5)) .ne. 'disk ') go to 51329
-  maxzno = 4545                                             ! signal to apollo "sysdep" for disk lunit6
+  maxzno = 4545                                             ! signal to apollo "sysdep" for disk lunit(6)
   go to 1311
 51329 if (to_lower (buff77(1 : 7)) .eq. '$attach') go to 1347         ! batch mode
   if (to_lower (buff77(1 : 5)) .ne. 'junk ') go to 1332
-  write (unit = lunit6, fmt = 1330)
+  write (unit = lunit(6), fmt = 1330)
 1330 format ('   Send root word to over-ride "junk" for spy and plot windows :')
   read (unit = munit5, fmt = 1331) junker                   ! read new window pad name
   buff77(1 : 8) = 'spy     '                                ! implied command next serviced
@@ -158,12 +158,12 @@ subroutine datain
   go to 1774                                                ! jump to $include removal, then exit module
   ! begin non-interactive variable initialization:
 1724 m4plot = 2                                             ! not interactive, and use real*4 lunit4 plots
-  lunt13 = 5                                                ! initially assume externally-connected data
+  lunit(13) = 5                                                ! initially assume externally-connected data
   numcrd = 1                                                ! so far, we have read one input data card
   file6(1) = buff77                                         ! 1st card image permanently stored
   if (to_lower (buff77(1 : 7)) .ne. '$attach') go to 1753
   ! "$attach,filename,5" usage requires extraction of name:
-  lunt13 = 13                                               ! we will internally connect data to unit 13
+  lunit(13) = 13                                               ! we will internally connect data to unit 13
   n16 = 0                                                   ! column which begins file name is not yet known
   do j = 9, 40                                              ! search for 2nd comma in these columns
      ! if nonblank column,
@@ -178,19 +178,19 @@ subroutine datain
   ansi32(1 : n14) = buff77(n16 : j - 1)                     ! transfer disk file name
   ansi32(n14 + 1 : 32) = blan80(n14 + 1 : 32)               ! blank out remainder
   filsav = ansi32(1 : 32)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 1752) ansi32
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1752) ansi32
 1752 format (' Extracted file name ansi32(1 : 32) =', a32)
   inquire (file = ansi32, exist = logvar)                   ! ask if file exists
   if (.not. logvar) go to 1736                              ! illegal file; reprompt
   spycd2(1 : 32) = ansi32                                   ! save file name for prime "erexit"
-  open (unit = lunt13, status = 'old', file = ansi32)
+  open (unit = lunit(13), status = 'old', file = ansi32)
   file6(1) = 'c ' // buff77(1 : 78)                         ! make $attach into comment
   kcut = 0
 1753 continue
   krdoff = numcrd
   krdcom = 0
   do j = 1, limcrd                                          ! read until an end-of-file detected
-     read (unit = lunt13, fmt = 1329, end = 1766) file6(krdoff + j)
+     read (unit = lunit(13), fmt = 1329, end = 1766) file6(krdoff + j)
      if (kcut .eq. 1) go to 5486
      if (to_lower (file6(krdoff + j)(1 : 2)) .eq. 'c ') krdcom = krdcom + 1
      if ((to_lower (file6(krdoff + j)(1 : 19)) .ne. 'begin new data case') .or. j - krdcom .le. 3) go to 1756
@@ -210,14 +210,14 @@ subroutine datain
 1761 format ('  & & & & &   Input buffer overflow.  Limit =', i6, '.   Reject this data, and reprompt ....')
   call window                                               ! output of character variable munit6
   ! if this was $attach usage, then
-  if (lunt13 .eq. 13) go to 1311                            ! loop back to start anew the data input
+  if (lunit(13) .eq. 13) go to 1311                            ! loop back to start anew the data input
   call stoptp                                               ! installation-dependent program stop card
 1766 numcrd = numcrd + 1
   write (unit = munit6, fmt = 1767) numcrd
 1767 format (' Done reading disk file into EMTP cache.   numcrd =', i5, '  cards.')
   call window                                               ! output of character variable munit6
   ! if internally-connected file, then
-  if(lunt13 .ne. 5) close (unit = lunt13, status = 'keep')  ! disconnect it
+  if(lunit(13) .ne. 5) close (unit = lunit(13), status = 'keep')  ! disconnect it
 1774 n22 = 1                                                ! initialize pass number of $include processing
   n13 = 1                                                   ! 1st $include might be 1st data card (do 1786)
   ! begin loop to replace next presently-visible $include :
@@ -305,13 +305,13 @@ subroutine datain
      n19 = n19 - 1                                          ! corresponding card destination address
   end do
   n19 = n19 + 1                                             ! remember 1st card of copy stored below
-1819 write (unit = lunit6, fmt = 1820) n22, j, answ80(1 : n8)
+1819 write (unit = lunit(6), fmt = 1820) n22, j, answ80(1 : n8)
 1820 format ('   --- Pass', i3,  ',  card =', i4,'.   Ready to open $include =', a)
   inquire (file = answ80(1 : n8), exist = logvar)           ! file exists?
   if (.not. logvar) go to 1794                              ! illegal name correction
   prom80 = file6(j)                                         ! temp storage b4 2-byte shift
   file6(j) = 'c ' // prom80(1 : 78)                         ! make into a comment card
-  open (unit = lunt13, status = 'old', file = answ80(1 : n8))
+  open (unit = lunit(13), status = 'old', file = answ80(1 : n8))
   n16 = 0                                                   ! so far, no arguments of $include are known
   n26 = k + 1                                               ! point to "," or " " ending file name
 4203 do l = n26, 80                                         ! search cols. n26-80 for nonblank
@@ -350,7 +350,7 @@ subroutine datain
 4226 kard(1) = 999999                                       ! assume no arguments (this is bound)
   n1 = 0                                                    ! initialize offset for pointer vector reads below
   if (n16 .eq. 0) go to 4239                                ! skip argument pointers
-4228 read (unit = lunt13, fmt = 4232) (kbeg(l), l = 1, 25)  ! read next card
+4228 read (unit = lunit(13), fmt = 4232) (kbeg(l), l = 1, 25)  ! read next card
   do l = 1, 25                                              ! search i3 replacement fields for blank
      if (kbeg(l) .eq. 0) go to 4230                         ! yes, bound is found
   end do                                                    ! end  do 4229  loop to bound replacements
@@ -358,13 +358,13 @@ subroutine datain
   if (n1 .le. 175) go to 4228                               ! still room for 25 more
   ! overflow.  199 is max number of replacements, temporarily
   call stoptp                                               ! installation-dependent program stop card
-4230 rewind lunt13                                          ! rewind $include file, to start again
+4230 rewind lunit(13)                                          ! rewind $include file, to start again
   n6 = n1 + l - 1                                           ! number of effective argument usages
-  read (unit = lunt13, fmt = 4232) (kard(k), k = 1, n6)     ! card nos. used
-  read (unit = lunt13, fmt = 4232) (karg(k), k = 1, n6)     ! arguments used
-  read (unit = lunt13, fmt = 4232) (kbeg(k), k = 1, n6)     ! col. no. start
-  read (unit = lunt13, fmt = 4232) (kend(k), k = 1, n6)     ! col. no. ending
-  read (unit = lunt13, fmt = 4232) (ktex(k), k = 1, n6)     ! alphanum. flag
+  read (unit = lunit(13), fmt = 4232) (kard(k), k = 1, n6)     ! card nos. used
+  read (unit = lunit(13), fmt = 4232) (karg(k), k = 1, n6)     ! arguments used
+  read (unit = lunit(13), fmt = 4232) (kbeg(k), k = 1, n6)     ! col. no. start
+  read (unit = lunit(13), fmt = 4232) (kend(k), k = 1, n6)     ! col. no. ending
+  read (unit = lunit(13), fmt = 4232) (ktex(k), k = 1, n6)     ! alphanum. flag
 4232 format (4x, 25i3)
   if (iprspy .lt. 1) go to 4235                             ! jump around diagnostic
   write (unit = munit6, fmt = 4233) n6
@@ -393,7 +393,7 @@ subroutine datain
   kntmax = 0                                                ! initialize maximum counter for dummy names
   kntold = kntdum                                           ! save serialize index at start of file
   do k = n18, limcrd                                        ! read $include records until eof
-     read (unit = lunt13, fmt = 1329, end = 1828) buff77    ! next data card
+     read (unit = lunit(13), fmt = 1329, end = 1828) buff77    ! next data card
      if (to_lower (buff77(1 : 4)) .eq. '$eof') go to 1828   ! effective eof
      if (buff77(1 : 1) .eq. '/') n5 = 1                     ! yes, 1 or more "/"
      if (to_lower (buff77(1 : 1)) .ne. 'c') go to 4247      ! accept non-com.
@@ -419,7 +419,7 @@ subroutine datain
      n4 = karg(n24)                                         ! index number of argument being used
      n3 = kolinc(n4)                                        ! length of argument being substituted
      if (n4 .le. n16) go to 34250                           ! legal argument request
-     write (unit = lunit6, fmt = 4250) n24, n4, n16
+     write (unit = lunit(6), fmt = 4250) n24, n4, n16
 4250 format ('   ? ? ? ?   Error stop at s.n. 4250 of "datain".   Insufficient number of $include arguments.', /, '             n24, n4, n16 =', 3i8)
      call stoptp                                            ! installation-dependent program stop card
 34250 if (n4 .gt. 0) go to 4252                             ! use argument of $include
@@ -483,7 +483,7 @@ subroutine datain
   end do
 4273 continue                                               ! end  do 4273  loop reading all file cards
   go to 1760                                                ! stop after message about buffer overflow
-1828 close (unit = lunt13, status = 'keep')
+1828 close (unit = lunit(13), status = 'keep')
   if (iprspy .lt. 1) go to 1832                             ! jump around diagnostic
   write (unit = munit6, fmt = 1831) j, n19
 1831 format (' Done with disk file (close).  j, n19 =', 2i8)
@@ -529,10 +529,10 @@ subroutine datain
      write (unit = munit6, fmt = 2354) ansi32
 2354 format (' Prepare to open for $spy.  ansi32 =', a32)
      call window                                            ! output of character variable munit6
-2353 open (unit = lunt13, status = 'new', file = ansi32)
+2353 open (unit = lunit(13), status = 'new', file = ansi32)
      do k = j + 1, numcrd
         if (to_lower (file6(k)(1 : 7)) .ne. '$spyend') go to 2361
-        close (unit = lunt13)
+        close (unit = lunit(13))
         n24 = k - j
         do l = k + 1, numcrd
            file6(l - n24) = file6(l)
@@ -542,7 +542,7 @@ subroutine datain
 2358    format (' Done with upward shift.  n24, j, numcrd =', 3i8 )
         call window                                         ! output of character variable munit6
         go to 2378
-2361    write (unit = lunt13, fmt = 1329) file6(k)
+2361    write (unit = lunit(13), fmt = 1329) file6(k)
      end do
 2378 if (file6(j)(1 : 1) .eq. '/') n17 = 1                  ! sorting needed
      if (to_lower (file6(j)(1 : 8)) .ne. 'tacs old') go to 2410
@@ -556,7 +556,7 @@ subroutine datain
   n10 = 0                                                   ! no class-10 ("load flow") usage found so far
   n11 = 0                                                   ! no class-11 ("initial")   usage found so far
   n12 = 0                                                   ! initialize number of data class ("/") cards found
-  if (iprsup .ge. 9) write (unit = lunit6, fmt = 2416) (j, file6(j), j = 1, numcrd)
+  if (iprsup .ge. 9) write (unit = lunit(6), fmt = 2416) (j, file6(j), j = 1, numcrd)
 2416 format (' Entire input file as we start sorting ...', /, (i5, a80))
   do j = 1, numcrd                                          ! search each data card for "/" usage
 2418 if (file6(j)(1 : 1) .ne. '/') go to 2431               ! skip non-"/" card
@@ -879,24 +879,24 @@ subroutine datain
 2787 format (' Send output file name for final $include file :')
   call prompt
   read (unit = munit5, fmt = 1329) buff77
-  open (unit = lunt13, status = 'new', file = buff77)
-  rewind lunt13
+  open (unit = lunit(13), status = 'new', file = buff77)
+  rewind lunit(13)
   ansi8(1 : 4) = 'kard'
-  write (unit = lunt13, fmt = 2791) ansi8(1 : 4), (kard(j), j = 1, n20)
+  write (unit = lunit(13), fmt = 2791) ansi8(1 : 4), (kard(j), j = 1, n20)
   ansi8(1 : 4) = 'karg'
-  write (unit = lunt13, fmt = 2791) ansi8(1 : 4), (karg(j), j = 1, n20)
+  write (unit = lunit(13), fmt = 2791) ansi8(1 : 4), (karg(j), j = 1, n20)
   ansi8(1 : 4) = 'kbeg'
-  write (unit = lunt13, fmt = 2791) ansi8(1 : 4), (kbeg(j), j = 1, n20)
+  write (unit = lunit(13), fmt = 2791) ansi8(1 : 4), (kbeg(j), j = 1, n20)
   ansi8(1 : 4) = 'kend'
-  write (unit = lunt13, fmt = 2791) ansi8(1 : 4), (kend(j), j = 1, n20)
+  write (unit = lunit(13), fmt = 2791) ansi8(1 : 4), (kend(j), j = 1, n20)
   ansi8(1 : 4) = 'ktex'
-  write (unit = lunt13, fmt = 2791) ansi8(1 : 4), (ktex(j), j = 1, n20)
+  write (unit = lunit(13), fmt = 2791) ansi8(1 : 4), (ktex(j), j = 1, n20)
 2791 format (a4, 25i3, /, (4x, 25i3))
   do j = n11, limcrd                                        ! next, dump all input data cards
-     write (unit = lunt13, fmt = 2802) file6(limcrd + n11 - j)
+     write (unit = lunit(13), fmt = 2802) file6(limcrd + n11 - j)
   end do
 2802 format (a80)
-  close (unit = lunt13)
+  close (unit = lunit(13))
   go to 1311                                                ! back to original prompt at start of emtp execution
 9200 nchain = 51                                            ! head for error overlays, for "kill" message
   lstat(18) = -1                                            ! overlay number presently being executed

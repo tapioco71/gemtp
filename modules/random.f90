@@ -171,7 +171,7 @@ contains
     go to 2632
 2614 l = l + 1
 2632 n1 = (l - 1) / 100
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 2645) l, knt, kswtch, n1, x
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2645) l, knt, kswtch, n1, x
 2645 format (/, " Variables in  'sandnm' ,   the random-number generator with 100 built-in numbers.       l     knt  kswtch      n1 ", 14x, 'x', /, 82x, 4i8, e15.5)
     if (n1 .gt. 0) l = l - 100 * n1
     s = a(l)

@@ -107,19 +107,19 @@ contains
     integer(4), pointer :: temp(:)
     !  common /veccom/ kntvec, kofvec(20)
     !
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 1623) n13, n2, kntvec
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1623) n13, n2, kntvec
 1623 format (' Begin "vecrsv".  n13, n2 =',  2i8, '     kntvec =', i8)
     if (n2 .ne. 0) go to 1638
     if (n13 .ge. 0) kntvec = n13
     if (n13 .lt. 0) kntvec = kntvec + n13
-    if (iprsup .ge. 2) write (unit = lunit6, fmt = 1629) n13
+    if (iprsup .ge. 2) write (unit = lunit(6), fmt = 1629) n13
 1629 format (' Initialization of kntvec.  n13 =', i10)
     go to 9000
 1638 if (n2 .eq. 1) go to 1671
     !     begin code to restore  (array(k), k=1, n13)  from tank:
     kntvec = kntvec + 1
     n4 = kofvec(kntvec)
-    if (iprsup .ge. 2) write (unit = lunit6, fmt = 1640) kntvec, n4
+    if (iprsup .ge. 2) write (unit = lunit(6), fmt = 1640) kntvec, n4
 1640 format (' Ready to restore.  kntvec, n4 =', 2i10)
     if (n13 .le. 0) go to 9000
     temp => karray(n4 :)
@@ -129,7 +129,7 @@ contains
        end do
        nullify (temp)
     else
-       write (unit = lunit6, fmt = 1645)
+       write (unit = lunit(6), fmt = 1645)
 1645   format ('Could not associate a temp pointer to karray.  Stop.')
        call stoptp
     end if
@@ -138,11 +138,11 @@ contains
 1671 if (kntvec .gt. 0) go to 1674
     n14 = nbyte(3) / nbyte(4)                                 ! relative lengths  real/integer
     kofvec(1) = (ltlabl + 1) / n14 + 51                       ! begin storage
-    if (iprsup .ge. 2) write (unit = lunit6, fmt = 1673) kofvec(1)
+    if (iprsup .ge. 2) write (unit = lunit(6), fmt = 1673) kofvec(1)
 1673 format (' Initialize kofvec(1) =', i10)
 1674 kntvec = kntvec + 1
     n4 = kofvec(kntvec)
-    if (iprsup .ge. 2) write (unit = lunit6, fmt = 1675) kntvec, n4
+    if (iprsup .ge. 2) write (unit = lunit(6), fmt = 1675) kntvec, n4
 1675 format (' Ready to dump.  kntvec, n4 =', 2i10)
     if (n13 .le. 0) go to 1683
     temp => karray(n4 :)
@@ -153,18 +153,18 @@ contains
        end do
        nullify (temp)
     else
-       write (unit = lunit6, fmt = 1680)
+       write (unit = lunit(6), fmt = 1680)
 1680   format ('Could not associate a temp pointer to karray.  Stop.')
        call stoptp
     end if
     ! if /veccom/ storage exceeded,
 1683 if (kntvec .ge. 20) call stoptp                        ! installation-dependent program stop card
     kofvec(kntvec + 1) = n4
-    if (iprsup .ge. 2) write (unit = lunit6, fmt = 1687) kofvec(kntvec + 1)
+    if (iprsup .ge. 2) write (unit = lunit(6), fmt = 1687) kofvec(kntvec + 1)
 1687 format (' Define  kofvec(kntvec + 1) =', i10)
-9000 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9007) farray(1), farray(2), farray(n13)
+9000 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 9007) farray(1), farray(2), farray(n13)
 9007 format (' Exit "vecrsv".  farray(1; 2; n13) =', 3e15.6)
-    if (iprsup .ge. 2) write (unit = lunit6, fmt = 9011) kofvec
+    if (iprsup .ge. 2) write (unit = lunit(6), fmt = 9011) kofvec
 9011 format (' kofvec =', 20i6)
     return
   end subroutine vecrsv
@@ -186,13 +186,13 @@ contains
     integer(4), pointer :: temp(:)
     !  common /veccom/ kntvec, kofvec(20)
     !
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 1423) n13, n2
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1423) n13, n2
 1423 format (' Begin "vecisv".  n13, n2 =',  2i8)
     if (n2 .eq. 1) go to 1471
     !     begin code to restore  (karr(k), k=1, n13)  from tank:
     kntvec = kntvec + 1
     n4 = kofvec(kntvec)
-    if (iprsup .ge. 2) write (unit = lunit6, fmt = 1428) kntvec, n4
+    if (iprsup .ge. 2) write (unit = lunit(6), fmt = 1428) kntvec, n4
 1428 format (' Ready to restore.  kntvec, n4 =', 2i10)
     temp => karray(n4 :)
     if (associated (temp)) then
@@ -201,7 +201,7 @@ contains
        end do
        nullify (temp)
     else
-       write (unit = lunit6, fmt = 1430)
+       write (unit = lunit(6), fmt = 1430)
 1430   format ('Could not associate a temp pointer to karray.  Stop.')
        call stoptp
     end if
@@ -210,11 +210,11 @@ contains
 1471 if (kntvec .gt. 0) go to 1474
     n14 = nbyte(3) / nbyte(4)                                 ! relative lengths  real/integer
     kofvec(1) = (ltlabl + 1) / n14 + 51
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 1473) kofvec(1)
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1473) kofvec(1)
 1473 format (' Initialize kofvec(1) =', i10)
 1474 kntvec = kntvec + 1
     n4 = kofvec(kntvec)
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 1475) kntvec, n4
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1475) kntvec, n4
 1475 format (' Ready to dump.  kntvec, n4 =', 2i10)
     kofvec(kntvec) = n4
     temp => karray(n4 :)
@@ -225,22 +225,20 @@ contains
        end do
        nullify (temp)
     else
-       write (unit = lunit6, fmt = 1480)
+       write (unit = lunit(6), fmt = 1480)
 1480   format ('Could not associate a temp pointer to karray.  Stop.')
        call stoptp
     end if
     if (kntvec .ge. 20) call stoptp
     kofvec(kntvec + 1) = n4
-    if (iprsup .ge. 1) write (unit = lunit6, fmt = 1482) kofvec(kntvec + 1)
+    if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1482) kofvec(kntvec + 1)
 1482 format (' Define kofvec(kntvec+1) =', i10)
-9000 if (iprsup .ge. 1) write (unit = lunit6, fmt = 9007) iarray(1), iarray(2), iarray(n13)
+9000 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 9007) iarray(1), iarray(2), iarray(n13)
 9007 format (' Exit "vecisv".  iarray(1; 2; n13) =', 3i10)
-    if (iprsup .ge. 2) write (unit = lunit6, fmt = 9011) kofvec
+    if (iprsup .ge. 2) write (unit = lunit(6), fmt = 9011) kofvec
 9011 format (' kofvec =', 20i6)
     return
   end subroutine vecisv
 #endif
-  
+
 end module veccom
-
-

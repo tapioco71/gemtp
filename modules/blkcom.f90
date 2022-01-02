@@ -20,11 +20,10 @@ module blkcom
   !     flag-1.   begin class-1  /blank/  variables
   !               (alphanumeric variables, capable of storing  a6  info).
   !  character(8) :: buff10(10)
-  character(1) :: texcol(80)
+  character(1) :: texcol(80), chcont, csepar
   character(8) :: busone(1)
   character(8) :: bus1, bus2, bus3, bus4, bus5, bus6
   character(8) :: trash, blank, terra, userid, branch, chcopy
-  character(8) :: chcont, csepar
   character(8) :: vstacs(24), texta6(15)
   character(80) :: abuff, buff10
   !
@@ -64,8 +63,9 @@ module blkcom
   integer(4) :: indtv(10)
   integer(4) :: ipntv(11)
   integer(4) :: kprchg(6)
-  integer(4) :: lunit0, lunit1, lunit2, lunit3, lunit4, lunit5, lunit6, lunit7
-  integer(4) :: lunit8, lunit9, lunt10, lunt11, lunt12, lunt13, lunt14, lunt15
+  integer(4) :: lunit(0:15)
+!  integer(4) :: lunit0, lunit1, lunit2, lunit3, lunit4, lunit5, lunit6, lunit7
+!  integer(4) :: lunit8, lunit9, lunit10, lunit11, lunit12, lunit13, lunit14, lunit15
   integer(4) :: lunsav(15)
   integer(4) :: multpr(5)
   integer(4) :: nright, nfrfld, kolbeg, max99m

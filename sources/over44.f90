@@ -25,13 +25,13 @@ subroutine subr44
   !  equivalence (stg(1), karray(1))
   !     list-zero "karray" is always 1st, and maybe "over29":
   !
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4567)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module subr44."')
   length = size ((transfer (karray(1 :), stg)))
   allocate (stg (length))
   stg = transfer (karray(1 :), stg)
   if (.not. allocated(stg)) then
-     write (unit = lunit6, fmt = 100)
+     write (unit = lunit(6), fmt = 100)
 100  format (' Could not associate stg to karray.  Stop.')
      call stoptp
   end if
@@ -41,7 +41,7 @@ subroutine subr44
   do j = 1, 9999, 2
      if (lltemp(j) .eq. 0) go to 5636
   end do
-  write (unit = lunit6, fmt = 5632) lltemp(1), kburro, nchain
+  write (unit = lunit(6), fmt = 5632) lltemp(1), kburro, nchain
 5632 format (' Temp error stop in "subr44".', 3i8)
   call stoptp
 5636 n7 = lltemp(j + 1) * nbyte(4) / nbyte(3)
@@ -95,7 +95,7 @@ subroutine subr44
   nchain = 51
   go to 99999
 10 call guts44 (stg(iofarr :), stg(iofxwc :), stg(iofxwy :), stg(iofyzr :), stg(iofyzi :), stg(ioftii :), stg(ioftir :), stg(ioftvi :), stg(ioftvr :), stg(iofer :), stg(iofei :), stg(iofthe :), stg(iofxtr :), stg(iofxti :), stg(iofzsu :), stg(iofdum :), stg(iofdur :), stg(ioftix :), stg(iofwor :), ndim, ntri, nsqr2)
-  if (iprsup .ge. 1) write (unit = lunit6, fmt = 4568)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
 4568 format ('  "Exit  module subr44."')
 99999 if (allocated (stg)) deallocate (stg)
   return
@@ -116,21 +116,21 @@ subroutine punpie (kcirct)
   integer(4) :: k, kk
   !
   if (iprsup .ge. 1)  write (unit = *, fmt = *) ' Top "punpie".'
-  write (unit = lunit7, fmt = 1201)
+  write (unit = lunit(7), fmt = 1201)
 1201 format ('$vintage, 1')
   j = 1
   do i = 1, kcirct
      k = i + j - 1
      do kk = j, k
         yd(kk) = yd(kk) / tenm6
-        if (kk .eq. j) write (unit = lunit7, fmt = 5201) i, brname(2*i-1), brname(2*i), p(kk), z(kk), yd(kk)
+        if (kk .eq. j) write (unit = lunit(7), fmt = 5201) i, brname(2*i-1), brname(2*i), p(kk), z(kk), yd(kk)
 5201    format (i2, 2a6, 12x, 3e16.5)
-        if (kk .ne. j) write (unit = lunit7, fmt = 6201) p(kk), z(kk), yd(kk)
+        if (kk .ne. j) write (unit = lunit(7), fmt = 6201) p(kk), z(kk), yd(kk)
 6201    format (26x, 3e16.5)
      end do
      j = k + 1
   end do
-  write (unit = lunit7, fmt = 2201)
+  write (unit = lunit(7), fmt = 2201)
 2201 format ('$vintage, 0')
   if (iprsup .ge. 1)  write (unit = *, fmt = *) ' Exit "punpie".'
   return
@@ -1047,7 +1047,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
      end do
      zr(j,i) = 1.0
 160 end do
-  if (iprsup .ge. 3) write (lunit6, 170) ((zr(i, j), zi(i, j), j = 1, igh), i = 1, igh)
+  if (iprsup .ge. 3) write (unit = lunit(6), fmt = 170) ((zr(i, j), zi(i, j), j = 1, igh), i = 1, igh)
 170 format (' After do 160 loop in comlr2, ((zr(i, j), zi(i, j), j = 1, igh), i = 1, igh) are', /, (1x, 8e15.6))
   !     :::::::::: store roots isolated by cbal ::::::::::
 180 do i = 1, n
@@ -1078,7 +1078,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
   si = hi(ien,ien)
   xr = hr(ienm1,ien) * hr(ien,ienm1) - hi(ienm1,ien) * hi(ien,ienm1)
   xi = hr(ienm1,ien) * hi(ien,ienm1) + hi(ienm1,ien) * hr(ien,ienm1)
-  if ( iprsup .ge. 3) write (lunit6, 305) sr, si, xr, xi
+  if ( iprsup .ge. 3) write (lunit(6), 305) sr, si, xr, xi
 305 format (' sr, si, xr and xi at 305 are', 4e15.6)
   if (xr .eq. 0.0 .and. xi .eq. 0.0) go to 340
   yr = (hr(ienm1,ienm1) - sr) * onehaf
@@ -1096,7 +1096,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
 310 d1 = (yr+zzr) **2 + (yi+zzi) **2
   d2 = ( xr*(yr+zzr) + xi*(yi+zzi) ) / d1
   d3 = ( xi*(yr+zzr) - xr*(yi+zzi) ) / d1
-  if ( iprsup .ge. 3 ) write (lunit6, 315) yr, yi, zzr, zzi, d2,d3
+  if ( iprsup .ge. 3 ) write (lunit(6), 315) yr, yi, zzr, zzi, d2,d3
 315 format (' yr, yi, zzr, zzi and d2,d3 at 315 are', 6e15.6)
   sr = sr - d2
   si = si - d3
@@ -1107,7 +1107,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
 340 do i = low, ien
      hr(i,i) = hr(i,i) - sr
      hi(i,i) = hi(i,i) - si
-     if ( iprsup .ge. 3 ) write (lunit6, 350) i, sr, si, hr(i,i),hi(i,i)
+     if ( iprsup .ge. 3 ) write (lunit(6), 350) i, sr, si, hr(i,i),hi(i,i)
 350  format (' i, sr, si, hr(i,i), and hi(i,i) at 350 are', /, 10x, i8, 4e15.6)
   end do
   tr = tr + sr
@@ -1118,7 +1118,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
   xr = absz(hr(ienm1,ienm1)) + absz(hi(ienm1,ienm1))
   yr = absz(hr(ien,ienm1)) + absz(hi(ien,ienm1))
   zzr = absz(hr(ien,ien)) + absz(hi(ien,ien))
-  if ( iprsup .ge. 3 ) write (lunit6, 370) xr, yr, zzr
+  if ( iprsup .ge. 3 ) write (lunit(6), 370) xr, yr, zzr
 370 format (' xr, yr, and zzr at 370 are', 3e15.6)
   !     :::::::::: for m=ien-1 step -1 until l do -- ::::::::::
   do mm = l, ienm1
@@ -1129,7 +1129,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
      xi = zzr
      zzr = xr
      xr = absz(hr(m-1,m-1)) + absz(hi(m-1,m-1))
-     if ( iprsup .ge. 3 ) write (lunit6, 375) mm, yr, zzr, yi, xr, xi, epmach
+     if ( iprsup .ge. 3 ) write (lunit(6), 375) mm, yr, zzr, yi, xr, xi, epmach
 375  format (' at 375, mm, yr, zzr, yi, xr, xi and epmach are', /, 10x, i8, 6e15.6)
      if (yr .le. epmach * zzr / yi * (zzr + xr + xi)) go to 420
   end do
@@ -1173,7 +1173,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         hr(i,j) = hr(i,j) - zzr * hr(im1,j) + zzi * hi(im1,j)
         hi(i,j) = hi(i,j) - zzr * hi(im1,j) - zzi * hr(im1,j)
      end do
-     if ( iprsup .ge. 3 ) write (lunit6, 510) i,n, (hr(i,j), hi(i,j), j=1,n)
+     if ( iprsup .ge. 3 ) write (lunit(6), 510) i,n, (hr(i,j), hi(i,j), j=1,n)
 510  format (' At 510, (hr(i, j), hi(i, j), j = 1, n) for i =', i8, ', and n = ', i8, 2x, 'are', /, (1x, 8e15.6))
   end do
   !     :::::::::: composition r*l=h ::::::::::
@@ -1210,7 +1210,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         zr(i,j-1) = zr(i,j-1) + xr * zr(i,j) - xi * zi(i,j)
         zi(i,j-1) = zi(i,j-1) + xr * zi(i,j) + xi * zr(i,j)
      end do
-     if ( iprsup .ge. 3 ) write ( lunit6, 630) j, low, igh, (hr(i,j),hi(i,j),i=1,j), (zr(i,j),zi(i,j),i=low,igh)
+     if ( iprsup .ge. 3 ) write ( lunit(6), 630) j, low, igh, (hr(i,j),hi(i,j),i=1,j), (zr(i,j),zi(i,j),i=low,igh)
 630  format (' j, low and igh at 630 are', 3i8, ' (hr(i, j), hi(i, j), i = 1, j) and (zr(i, j), zi(i, j), i = low, igh) are', /, (1x, 8e15.6))
   end do
   go to 240
@@ -1220,7 +1220,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
   hi(ien,ien) = hi(ien,ien) + ti
   wi(ien) = hi(ien,ien)
   ien = ienm1
-  if ( iprsup .ge. 3 ) write (lunit6, 670) ien,hr(ien,ien),hi(ien,ien),wr(ien),wi(ien)
+  if ( iprsup .ge. 3 ) write (lunit(6), 670) ien,hr(ien,ien),hi(ien,ien),wr(ien),wi(ien)
 670 format ('     ien    hr(ien, ien)    hi(ien, ien)       wr(ien)      wi(ien)', /, i8, 4e15.6)
   go to 220
 680 continue
@@ -1264,7 +1264,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         d3 = ( yr*zzi - yi*zzr ) / d1
         hr(i,ien) = d2
         hi(i,ien) = d3
-        if ( iprsup .ge. 3 ) write (lunit6, 770)  nn,n,ien,ii,i,ienm1,zzr,zzi,yr,yi,d2,d3, hr(i,ien),hi(i,ien)
+        if ( iprsup .ge. 3 ) write (lunit(6), 770)  nn,n,ien,ii,i,ienm1,zzr,zzi,yr,yi,d2,d3, hr(i,ien),hi(i,ien)
 770     format (' nn, n, ien, ii, i, ienm1, zzr, zzi, yr, yi, d2, d3, hr(i, ien) and hi(i,ien) at 770 are', /, 1x, 6i5, 8e12.5)
      end do
   end do
@@ -1297,7 +1297,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         end do
         zr(i,j) = zzr
         zi(i,j) = zzi
-        if (iprsup .ge. 3 ) write (lunit6, 870) jj, j, m, zr(i,j),zi(i,j)
+        if (iprsup .ge. 3 ) write (lunit(6), 870) jj, j, m, zr(i,j),zi(i,j)
 870     format (' At the end of do 880 loop, jj, j,  m, zr(i, j) and zi(i, j) are', 5x, 3i8, 2e15.6)
      end do
   end do
@@ -1491,7 +1491,7 @@ subroutine skin (s, r, freq, rf, xf)
   if (s .lt. tenm6) go to 5
   q2 = r2 * s2
   if (s2 .lt. 0.8d0) go to 11
-  if (q2 .le. 64.0d0 .and. r2 .gt. 64.0d0) write (unit = lunit6, fmt = 10) q2, r2
+  if (q2 .le. 64.0d0 .and. r2 .gt. 64.0d0) write (unit = lunit(6), fmt = 10) q2, r2
 10 format (' Results from subroutine skin unreliable with mq**2= ', f9.4, ' and mr**2= ', f9.4)
 11 if (q2 .gt. 64.0) qremb=sqrtz(q2) * sqrt2
   x = sqrtz (q2)
@@ -1520,7 +1520,7 @@ subroutine skin (s, r, freq, rf, xf)
   f = a*geid + b*gerd + aremb*beid + bremb*berd
 7 e2f2 = e**2 + f**2
   s2 =  x * s3 * onehaf / e2f2
-  if (iprsup .ge. 1) write (lunit6, 320)  e, f, e2f2, s2
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 320)  e, f, e2f2, s2
 320 format (' e, f,  e2f2, and s2 at 320', 4e16.6)
   rf = (-h*e+g*f)*s2
   xf = (g*e+h*f)*s2
@@ -1662,7 +1662,7 @@ subroutine outspc (p, z, kmax, metrik, fmipkm)
   real(8) :: c0, c1, c2
   !
   if (kmax .eq. 4) go to 999
-  write (unit = lunit6, fmt = 222)
+  write (unit = lunit(6), fmt = 222)
 222 format (/, ' Special output for mutuals not applicable to this case')
   return
 999 aa = valu7 * (z(8) - z(9))
@@ -1679,13 +1679,13 @@ subroutine outspc (p, z, kmax, metrik, fmipkm)
   c1 = sqrtz (a1 ** 2 + b1 ** 2)
   c2 = sqrtz (a2 ** 2 + b2 ** 2)
   if (metrik .eq. 1) go to 1120
-  write (unit = lunit6, fmt = 1111) c1, c2, c0
+  write (unit = lunit(6), fmt = 1111) c1, c2, c0
 1111 format (' Mutual impedance  positive= ', f8.5, ' Ohm/mile  negative= ', f8.5, ' Ohm/mile  zero= ', f8.4, ' Ohm/mile')
   return
 1120 c1 = c1 * fmipkm
   c2 = c2 * fmipkm
   c0 = c0 * fmipkm
-  write (unit = lunit6, fmt = 1121) c1, c2, c0
+  write (unit = lunit(6), fmt = 1121) c1, c2, c0
 1121 format (' Mutual impedance  positive= ', f8.5, ' Ohm/km    negative= ', f8.5, ' Ohm/km    zero= ', f8.4, ' Ohm/km')
   return
 end subroutine outspc
