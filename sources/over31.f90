@@ -27,7 +27,7 @@ subroutine subr31
   !               (integer-numeric usage only, with arrays
   !                preceding scalars).
   character(8) :: arch10(2), alpha(52)
-  character(8) :: blanka(1), busvec(6)
+  character(8) :: blanka(1)
   character(8) :: cstxt
   character(8) :: daytim
   character(8) :: headl(3), horzl(4)
@@ -55,7 +55,7 @@ subroutine subr31
   integer(4) :: numbco, numbvo, numnam
   real(8) :: a
   real(8) :: c1e12, countp
-  real(8) :: bxsing(150), tstep, xyplot, xin, bx(150), fl90
+  real(8) :: bxsing(150), tstep, xyplot, bx(150), fl90
   real(8) :: d1, d2, d3, d4, d4fact, d5, d6, d7, d8, d9, d23, denom, disqr, dlen
   real(8) :: dstrt, dx, dxl, dxl2, dy, dyl
   real(8) :: enumr, evbasx, evbasy, evp, evdh, evdp, evh, evmx, evmxf, expnt
@@ -67,6 +67,7 @@ subroutine subr31
   real(8) :: taxmax, term, tmult, tolrce, tsing, xyshor
   real(8) :: vchnge, vdif, vh, vhs, vhs1, vmax, vmaxl, vmaxr, vmin, vminl, vminr, vnew
   real(8) :: vold, vploff, vrtnum, vs, vsnew, vvec, zero
+  real(8) :: xin(150)
   !
   !     declaration2   intd8, intd9, maxev, karray, lltemp
   !     declaration2   long1, long2, long3, jhmsp
@@ -81,7 +82,7 @@ subroutine subr31
   !  dimension buslst(1)
   !  dimension ibsout(1)
   !  dimension ibrnch(1), jbrnch(1)
-  dimension xin(150)
+  !  dimension xin(150)
   dimension daytim(3), textax(32), xyplot(9)
   dimension iswx(4), evh(4), evdh(4), isww(4), itimes(4), kpltq(4)
   dimension cstxt(13), pltle(52), xyshor(8)
@@ -173,6 +174,7 @@ subroutine subr31
   data ll18       / 18 /
   data ll24       / 24 /
   data ll78       / 78 /
+  data mplot / 1, 1, 1, 1 /
   blanka(1) = blank
   long1 = nchain
   if (kburro .eq. 1) long1 = 29
@@ -395,9 +397,16 @@ subroutine subr31
 7674 format ('+Fourier series ended.  Back to plots.')
   maxevk = maxevk * nbyte(3) / nbyte(5)
   go to 1050
-7679 if (itp .eq. 0) go to 1070
-  if (itp .eq. 1) go to 1160
-  if (itp .eq. 2) go to 1550
+7679 select case (itp)
+  case (0)
+     go to 1070
+
+  case (1)
+     go to 1160
+
+  case (2)
+     go to 1550
+  end select
   lstat(16) = itp
   kill = 76
   lstat(19) = 1070
@@ -754,17 +763,16 @@ subroutine subr31
   if (jplt .lt. i) go to 1627
   go to 1560
 1660 do j = 1, jslot, 2
-     if (slot(j) .eq. blank .and. slot(j + 1) .eq. blank) go to 1680
+     if (slot(j) .eq. blank .and. slot(j + 1) .eq. blank) exit
      slot(jplt + 1) = slot(j)
      slot(jplt + 2) = slot(j + 1)
      jplt = jplt + 2
   end do
-1680 continue
   if (jplt .eq. 0) go to 1900
   lplt = 0
   jbegbc = numbvo + 1
   do i = 1, jplt, 2
-     if (icp.eq.9) go to 1720
+     if (icp .eq. 9) go to 1720
      ib = 1
      il = jbegbc
      n1 = numnvo + 1
@@ -772,36 +780,37 @@ subroutine subr31
 1720 ib = jbegbc
      il = nc + 1
      n1 = numnvo + jbegbc
-1740 if (ib.lt.il) go to 1780
-     write (unit = lunit(6), fmt = 1760) slot(i), slot(i + 1)
-1760 format (5x, 'The user=s last-read plot card requests a plot for a branch-variable which is identified by terminal', /, 5x, 'names =', a6, '= and =', a6, '=.   But the EMTP cannot find this requested variable in the list of output', /, 5x, 'variables, so this particular plot request must be ignored.')
-     write (unit = lunit(6), fmt = 1621)
-     write (unit = lunit(6), fmt = 1763)
-1763 format (5x, 'Also, the user should be reminded that branch-output requests are made using column-80 punches on the', /, 5x, 'branch cards in question.   The user should double-check that he really has requested the output variable which', /, 5x, 'he is trying to plot (and which got him in trouble).   One common error is to request only branch-current output', /, 5x, '(a 1-punch in column 80) and then try to plot branch voltage ---- or vice versa.   Finally, the user should check', /, 5x, 'that branch output is even possible for the component in question, since column-80 punches may be ignored if the')
-     write (unit = lunit(6), fmt = 1764)
-1764 format (5x, 'component in question does not provide for such output.   Any branch-output request for a multi-phase', /, 5x,  'distributed line falls into this class, it will be noted.')
-     slot(i) = blank
-     slot(i + 1) = blank
-     go to 1860
-1780 n7 = ib + iofibr
-     n8 = ib + iofjbr
-     n2 = ibrnch(n7) + iofbus
-     n3 = jbrnch(n8) + iofbus
-     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1781) n2, n3, buslst(n2), buslst(n3)
-1781 format (' At 1780', 2i10, 5x, 2a8)
-     if (slot(i) .ne. buslst(n2)) go to 1800
-     if (slot(i + 1) .ne. buslst(n3)) go to 1820
-     !               node pair found - sign correct
-     mplot(lplt + 1) = n1
-     go to 1840
-1800 if (slot(i + 1) .ne. buslst(n2)) go to 1820
-     if (slot(i) .ne. buslst(n3)) go to 1820
-     !               node pair found - sign negative
-     mplot(lplt + 1) = -n1
-     go to 1840
-1820 ib = ib + 1
-     n1 = n1 + 1
-     go to 1740
+1740 do
+        if (ib .lt. il) go to 1780
+        write (unit = lunit(6), fmt = 1760) slot(i), slot(i + 1)
+1760    format (5x, 'The user=s last-read plot card requests a plot for a branch-variable which is identified by terminal', /, 5x, 'names =', a6, '= and =', a6, '=.   But the EMTP cannot find this requested variable in the list of output', /, 5x, 'variables, so this particular plot request must be ignored.')
+        write (unit = lunit(6), fmt = 1621)
+        write (unit = lunit(6), fmt = 1763)
+1763    format (5x, 'Also, the user should be reminded that branch-output requests are made using column-80 punches on the', /, 5x, 'branch cards in question.   The user should double-check that he really has requested the output variable which', /, 5x, 'he is trying to plot (and which got him in trouble).   One common error is to request only branch-current output', /, 5x, '(a 1-punch in column 80) and then try to plot branch voltage ---- or vice versa.   Finally, the user should check', /, 5x, 'that branch output is even possible for the component in question, since column-80 punches may be ignored if the')
+        write (unit = lunit(6), fmt = 1764)
+1764    format (5x, 'component in question does not provide for such output.   Any branch-output request for a multi-phase', /, 5x,  'distributed line falls into this class, it will be noted.')
+        slot(i) = blank
+        slot(i + 1) = blank
+        goto 1860
+1780    n7 = ib + iofibr
+        n8 = ib + iofjbr
+        n2 = ibrnch(n7) + iofbus
+        n3 = jbrnch(n8) + iofbus
+        if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1781) n2, n3, buslst(n2), buslst(n3)
+1781    format (' At 1780', 2i10, 5x, 2a8)
+        if (slot(i) .ne. buslst(n2)) go to 1800
+        if (slot(i + 1) .ne. buslst(n3)) go to 1820
+        !               node pair found - sign correct
+        mplot(lplt + 1) = n1
+        go to 1840
+1800    if (slot(i + 1) .ne. buslst(n2)) go to 1820
+        if (slot(i) .ne. buslst(n3)) go to 1820
+        !               node pair found - sign negative
+        mplot(lplt + 1) = -n1
+        go to 1840
+1820    ib = ib + 1
+        n1 = n1 + 1
+     end do
 1840 lplt = lplt + 1
   end do
 1860 continue

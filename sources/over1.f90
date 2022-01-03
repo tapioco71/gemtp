@@ -400,7 +400,7 @@ subroutine over1
   write (unit = *, fmt = *) ' After kbus, mbus.'
   write (unit = lunit(4)) date1, tclock, numnam, numnvo, numbco, numbrn, (bus(j), j = 1, n8), (texvec(j), j = 1, num888)
   write (unit = *, fmt = 3899) date1, tclock
-3899 format (' over1, lunit(4) date and time =', 2a4, 2x, 2a4)
+3899 format (' over1, lunit4 date and time =', 2a4, 2x, 2a4)
   if (numnvo .gt. 0) write (unit = lunit(4)) (ibsout(j), j = 1, numnvo)
   if (numbrn .gt. 0) write (unit = lunit(4)) (kbus(j), mbus(j), j = 1, numbrn)
   n18 = numnvo + numbrn + 1
@@ -2626,14 +2626,14 @@ subroutine sysdep
   !     according to 1st appearance (size of vardim output):
   ltlabl = ltlabl + 2 * (3000 - ltacst)
   ltacst = 3000
-1359 statfr = 60.
+1359 statfr = 60.0d0
   kburro = 1
   pekexp = 43
-  szplt = 10.
-  szbed = 72.
-  epsuba = 1.d-16
-  epomeg = 1.d-15
-  epdgel = 1.d-16
+  szplt = 10.0d0
+  szbed = 72.0d0
+  epsuba = 1.0d-16
+  epomeg = 1.0d-15
+  epdgel = 1.0d-16
   iprsov(37) = 10
   lnpin = 6
   nsmth = 50

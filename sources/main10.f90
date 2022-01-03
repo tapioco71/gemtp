@@ -43,7 +43,7 @@
 !     15. final setup operations before time-step loop.
 !     16. first quarter of time-step loop (checking for changes of
 !         switches and pseudo-nonlinear elements, retriangularization
-!         of  Ybb  and calculation of thevenin impedance vectors).
+!         of  Ybb  and calculation of Thevenin impedance vectors).
 !     17. second quarter of time-step loop (branch-table history
 !         updating, addition of branch contributions to nodal
 !         injected current vector  i ).

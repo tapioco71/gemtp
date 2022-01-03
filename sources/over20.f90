@@ -7589,11 +7589,16 @@ subroutine chrplt
   implicit none
   !     Module used only for interactive EMTP (service to "emtspy").
   !     For non-interactive emtp, this module can be destroyed.
-  integer(4) :: inch, ip, j, j1, k, kzero, kwtspy, l, m, n4
-  real(8) :: d1, d2, d3, din1, din2, dt, idat, t, temp, vspan
   character(9) :: kunit6
   character(1) :: dol(131), letter(20)
-  dimension temp(6)
+  integer(4) :: inch, ip
+  integer(4) :: j, j1
+  integer(4) :: k, kwtspy, kzero
+  integer(4) :: l
+  integer(4) :: m
+  integer(4) :: n4
+  real(8) :: d1, d2, d3, din1, din2, dt, idat, t, temp(6), vspan
+  !  dimension temp(6)
   !
   save
   data letter(1)  /  'a'  /
@@ -7663,11 +7668,11 @@ subroutine chrplt
   call window
   if (limcol .le. 79) go to 6453
   write (unit = munit6, fmt = 6451)
-6451 format (1x, '1---------1---------1---------1---------1---------1---------1---------1---------1---------1---------1---------1---------1---------1')
+6451 format (1x, 13('1', 9('-')))
   call window
   go to 6456
 6453 write (unit = munit6, fmt = 6454)
-6454 format (1x, '1---------1---------1---------1---------1---------1---------1---------1---------1')
+6454 format (1x, 8('1', 9('-')))
   call window
 6456 if (iprspy .lt. 1) go to 6460
   write (unit = munit6, fmt = 6458)
@@ -7728,7 +7733,7 @@ subroutine chrplt
 6543 format (1x, 131a1)
   call window
   go to 6559
-6548 if (t .le. 9.999999) write (kunit6, 6553) t
+6548 if (t .le. 9.999999) write (unit = kunit6, fmt = 6553) t
 6553 format (' ', f8.6)
   if (t .ge. 10.0) write (kunit6, 6554) t
 6554 format (' ', f8.5)

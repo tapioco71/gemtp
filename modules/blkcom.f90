@@ -91,23 +91,23 @@ module blkcom
   integer(4) :: lsiz27, lsiz28, ltlabl, iwt, ifdep2, idoubl, ioutin
   integer(4) :: ipun, jst, jst1, muntsv(2), numsub, maxzno
   integer(4) :: ifsem, lfsem, iadd, lfd, nexout
-  integer(4) :: iofgnd
-  integer(4) :: iofbnd
+  integer(4) :: ibr, icat, iftail, intinf, iofbnd, ioffd, iofgnd, iprsup, isplot
+  integer(4) :: isprin, it, ivolt
   integer(4) :: modout, lint
-  integer(4) :: iftail, ncurr, ioffd, isplot, isprin, maxout
-  integer(4) :: kill, ivolt, nchain, iprsup
-  integer(4) :: intinf, kconst, kswtch, it, ntot, ibr
-  integer(4) :: lsyn,  kssout
-  integer(4) :: loopss(13)
+  integer(4) :: ncurr, maxout
+  integer(4) :: nchain
+  integer(4) :: kconst, kswtch, ntot
+  integer(4) :: kill, kssout
+  integer(4) :: lsyn, loopss(13)
   integer(4) :: numref, nword1, nword2, iloaep
   integer(4) :: ntot1, limstp, indstp, nc
-  integer(4) :: icat, numnvo
-  integer(4) :: nenerg
+  integer(4) :: nenerg, numnvo
   integer(4) :: swtpe
   integer(4) :: newtac, niu, nsu, nsudv, nsup, nuk
   real(8) :: lnpin
 
   ! Equivalences
+  character(1) :: busvec(6)
   character(8) :: alower(14), aupper(14)
   integer(4) :: iaddrs
   integer(4) :: ichtr2
@@ -161,7 +161,7 @@ module blkcom
   equivalence (iprsov(39), nmauto)
   equivalence (nenerg, idistx(1))
   !  equivalence (kpen(1), bus1)
-  !  equivalence (kunit6, lunit6)
+  equivalence (kunit6, lunit(6))
   equivalence (loopss(11), next)
   equivalence (lstat(14), knum)
   equivalence (lstat(14), mdrive)
@@ -179,7 +179,7 @@ module blkcom
   equivalence (moncar(10), mtape)
   equivalence (moncar(83), ntcsex)
   !  equivalence (omega, xlong1)
-
+  equivalence (busvec(1), bus1)
   ! data
 
   data terra / 'terra ' /

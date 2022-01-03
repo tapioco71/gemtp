@@ -1181,7 +1181,6 @@ subroutine smout
   use smach
   implicit none
   !     This module is used only by  type 59 s.m.  modeling
-  character(8) :: busvec(1)
   character(8) :: digit(10)
   character(8) :: text1, text2, texta(15), textb(3)
   !  dimension texta(15), digit(10), textb(3), busvec(1)

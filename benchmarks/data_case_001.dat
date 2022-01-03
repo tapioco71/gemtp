@@ -2,10 +2,10 @@ begin new data case
 c RL.............................................Figure 3.9(a)..................
 c Energization of a trivial RL circuit.                                        |
 c ----dt<---tmax...............................................................|
- 200.e-6  50.e-3
-c -Iprnt<--Iplot<-Idoubl<-KssOut<-MaxOut<---Ipun<-Memsav<---Icat
-      25       1       1       0       0                       0
-c
+ 200.e-6  50.e-3                                                                
+c -Iprnt<--Iplot<-Idoubl<-KssOut<-MaxOut<---Ipun<-Memsav<---Icat                
+      25       1       1       0       0                       0                
+c                                                                               
 c Circuit data..................................................................
 c Bus-->Bus-->Bus-->Bus--><----R<----L<----C                                   0
   load                        .1    1.                                         0
@@ -15,19 +15,19 @@ c Switch data...................................................................
 c Bus-->Bus--><---Tclose<----Topen<-------Ie                                   0
   src   load       1.e-3     9999.         0                                   1
 blank End of switch data.......................................................|
-c
+c                                                                               
 c Source data...................................................................
 c Bus--><I<Amplitude<Frequency<--T0|Phi0<---0=Phi0<-Ignore-><---Tstart<----Tstop
 14src             1.       50.         0        0.                 -1.     9999.
 blank End source data..........................................................|
-c
-c Nodal Output Request Data....................................................|
+c                                                                               
+c Nodal Output Request Data.....................................................
 c Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->
-  src   load
+  src   load                                                                    
 blank End of output requests...................................................|
-c
+c                                                                               
 c Plot request Data.............................................................
-  Figure 3.9(c): Output for Switch Current
+  Figure 3.9(c): Output for Switch Current                                      
 c  ______Graph type: 4(volts) 8(branch volts) 9(currents)                      |
 c | _____Units: 1(deg) 2(cyc) 3(sec) 4(msec) 5(microsec)                       |
 c ||   _________Units per inch                                                 |
@@ -36,6 +36,6 @@ c ||  |   |    _Plot stopping time                                             |
 c ||  |   |   |     _____Value at bottom of vertical axis (optional)           |
 c ||  |   |   |    |     Value at top of vertical axis (optional)              |
 c VV<-|<--|<--|<---|---|Bus-->Bus-->Bus-->Bus-->Heading-------->Vert axis------>
- 194 5. 0.0 50. -4.   4.src   load              RL Energization Amps
+ 194 5. 0.0 50. -4.   4.src   load              RL Energization Amps            
 blank End of Plot Request Data.................................................|
-blank End of All Cases                                                         |
+blank End of All Cases                                                          

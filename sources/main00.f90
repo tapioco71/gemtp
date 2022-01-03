@@ -71,7 +71,7 @@
 !          cumulative distribution functions, etc.
 !
 !     31.  Plot routine, for graphical output of transients.
-!          the program also terminates execution here, usually,
+!          The program also terminates execution here, usually,
 !          after writing an end-of-information mark on the
 !          plot tape (whether or not the user has plotted anything).
 !

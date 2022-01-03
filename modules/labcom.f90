@@ -180,9 +180,9 @@ module labcom
   real(8) :: fold(   93002)
   real(8) :: w1(   93002)
   character(8) :: texvec1
-  character(8) :: buslst(   93002)
+  character(8) :: buslst(    3000)
   integer(4) :: karray(   93002)
-  real(8) :: ev(   93002)
+  real(8) :: ev(    3000)
   real(8) :: array(   93002)
   real(8) :: evdoub(   93002)
   !

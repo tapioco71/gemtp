@@ -1466,27 +1466,27 @@ program vardim
   modvars(247)%name = 'buslst'
   modvars(247)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(247)%kind = 3
-  modvars(247)%dimension = 1
+  modvars(247)%dimension = 2
 
   modvars(248)%name       = 'karray'
   modvars(248)%options(1 : 4) = (/ '', '', '', '' /)
-  modvars(248)%kind       = 4
-  modvars(248)%dimension  = 1
+  modvars(248)%kind      = 4
+  modvars(248)%dimension = 1
 
   modvars(249)%name       = 'ev'
   modvars(249)%options(1 : 4) = (/ '', '', '', '' /)
-  modvars(249)%kind       = 1
-  modvars(249)%dimension  = 1
+  modvars(249)%kind      = 1
+  modvars(249)%dimension = 2
 
   modvars(250)%name       = 'array'
   modvars(250)%options(1 : 4) = (/ '', '', '', '' /)
-  modvars(250)%kind       = 1
-  modvars(250)%dimension  = 1
+  modvars(250)%kind      = 1
+  modvars(250)%dimension = 1
 
   modvars(251)%name       = 'evdoub'
   modvars(251)%options(1 : 4) = (/ '', '', '', '' /)
-  modvars(251)%kind       = 1
-  modvars(251)%dimension  = 1
+  modvars(251)%kind      = 1
+  modvars(251)%dimension = 1
 
   open (unit = lunit(2), iostat = ios, form = 'formatted')
   if (ios .eq. 0) then
@@ -1937,35 +1937,35 @@ program vardim
            lstnew(98) = ltlabl
            call make_subroutine_comment(lunit(3), 'dimens')
            write (unit = lunit(3), fmt = 8116)
-8116       format ('subroutine dimens (lsize, nchain, bus1, bus2)')
+8116       format ('subroutine dimens (ls, n, b1, b2)')
            call make_use_statement (unit = lunit(3), modulename = 'indcom')
            call make_implicit_statement (unit = lunit(3), mode = implmode)
            select case (implmode)
            case (3)
-              write (unit = lunit(3), fmt = "(2x, 'integer, intent(out) :: lsize(80)')")
-              write (unit = lunit(3), fmt = "(2x, 'integer, intent(in) :: nchain')")
+              write (unit = lunit(3), fmt = "(2x, 'integer, intent(out) :: ls(80)')")
+              write (unit = lunit(3), fmt = "(2x, 'integer, intent(in) :: n')")
               write (unit = lunit(3), fmt = "(2x, 'integer n7')")
 
            case (0)
               write (unit = lunit(3), fmt = 8120) integerdim
-8120          format (2x, 'integer(', i1, '), intent(out) :: lsize(80)')
+8120          format (2x, 'integer(', i1, '), intent(out) :: ls(80)')
               write (unit = lunit(3), fmt = 8121) integerdim
-8121          format (2x, 'integer(', i1, '), intent(in) :: nchain')
+8121          format (2x, 'integer(', i1, '), intent(in) :: n')
               write (unit = lunit(3), fmt = 8122) integerdim
 8122          format (2x, 'integer(', i1, ') n7')
            end select
            write (unit = lunit(3), fmt = 8124)
-8124       format (2x, 'character(8), intent(out) :: bus1, bus2')
+8124       format (2x, 'character(8), intent(out) :: b1, b2')
            write (unit = lunit(3), fmt = 8134)
-8134       format (2x, 'if (nchain .ge. 29) go to 2900')
+8134       format (2x, 'if (n .ge. 29) go to 2900')
            do i = 1, numlst
               write (unit = lunit(3), fmt = 8143) i, lstnew(i)
            end do
-8143       format (2x, 'lsize(', i2, ')  =', i8)
+8143       format (2x, 'ls(', i2, ')  =', i8)
            write (unit = lunit(3), fmt = 8155) numlst
 8155       format (2x, 'n7 =', i3, ' + 1')
            write (unit = lunit(3), fmt = 8159) ltlabl
-8159       format (2x, 'lsize(n7) =', i8)
+8159       format (2x, 'ls(n7) =', i8)
            nrec3 = numlst + 7
            call time44 (texta)
            call date44 (textb)
@@ -1976,7 +1976,7 @@ program vardim
            ntime = 10000 * nh + 100 * nm + ns
            ndate = 10000 * nm + 100 * nd + ny
            write (unit = lunit(3), fmt = 3684) ntime, ndate
-3684       format (2x, 'bus1 =', "'", i8, "'", /, 2x, 'bus2 =', "'", i8, "'")
+3684       format (2x, 'b1 =', "'", i8, "'", /, 2x, 'b2 =', "'", i8, "'")
            mtot = 0
            do i = 127, 138
               n9 = modvars(i)%dimension
@@ -2011,9 +2011,9 @@ program vardim
            n87 = 31
            write (unit = lunit(3), fmt = 8158) n86, n86, n87
            nrec3 = nrec3 + 2
-8158       format (i2.2, '00 if (nchain .gt.', i4, ') go to ', i2.2, '00')
+8158       format (i2.2, '00 if (n .gt.', i4, ') go to ', i2.2, '00')
            do ii = 1, 12
-              i = modvara  +  ii
+              i = modvara + ii
               n3 = modvars(i)%dimension
               if (ii .eq. 1) go to 4502
               n7 = ii - 1
@@ -2026,7 +2026,7 @@ program vardim
               write (lunit(3), 8143) lm, n28
               lm = lm + 1
               write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
-4769          format (2x, 'lsize(', i2, ') =', i7)
+4769          format (2x, 'ls(', i2, ') =', i7)
               nrec3 = nrec3 + 2
 4602          continue
               nonneg = lstnew(n3)
@@ -2353,7 +2353,7 @@ program vardim
            write (unit = lunit(3), fmt = 8156)
            write (unit = lunit(3), fmt = 8234)
 
-8234       format (' 9900 lsize(1) = location (bus1) - location (bus2)')
+8234       format (' 9900 ls(1) = location (b1) - location (b2)')
            write (unit = lunit(3), fmt = 8156)
            write (unit = lunit(3), fmt = 7298) 'dimens'
            nrec3 = nrec3 + 4
