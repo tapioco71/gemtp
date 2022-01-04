@@ -1148,6 +1148,54 @@ contains
   end subroutine lpo
 
   !
+  ! subroutine tacses.
+  !
+
+  subroutine tacses
+    ! $$$$$    special-request word no. 14.   'tacs emtp sources'                 $$$$$
+    implicit none
+    integer(4) :: j
+    real(8) :: d1
+    !
+    if (noutpr .eq. 0) write (unit = kunit6, fmt = 2682)
+2682 format ('+TACS names controlling type 1-10 EMTP sources.')
+    if (kolbeg .gt. 0) go to 2683
+    read (unit = abuff, fmt = 2685) (vstacs(j), j = 1, 10)
+2685 format (20x, 10a6)
+    go to 2686
+2683 nright = -2
+    !        call freone (d1)
+    call free (d1)
+    do j = 1, 10
+       vstacs(j) = texta6(j)
+    end do
+2686 nstacs = 10
+2687 if (vstacs(nstacs) .ne. blank) go to 2690
+    nstacs = nstacs - 1
+    if (nstacs .gt. 0) go to 2687
+2690 return
+  end subroutine tacses
+
+  !
+  ! subroutine cblcnsts.
+  !
+
+  subroutine cblcnsts (z)
+    ! $$$$$    special-request word no. 18.   'cable constants'                   $$$$$
+    implicit none
+    real(8), intent (out) :: z
+    real(8) :: d13
+    !
+    read (unit = abuff, fmt = 2732) d13, ktrlsw(3)
+2732 format (48x, e8.0, i8)
+    if (d13 .gt. 0.0d0) z = d13
+    if (noutpr .eq. 0) write (unit = kunit6, fmt = 2726) ktrlsw(3)
+2726 format ('+Transfer to "cable constants".  type =', i6)
+    nchain = 47
+    return
+  end subroutine cblcnsts
+
+  !
   ! subroutine diagnostic.
   !
 
@@ -1256,6 +1304,78 @@ contains
 7254 format ('+(t1, t2):', 4e10.2)
 9200 return
   end subroutine begpeak
+
+  !
+  ! subroutine zno.
+  !
+
+  subroutine zno
+    ! $$$$$  special request-word no. 43.   'zinc oxide'                          $$$$$
+    implicit none
+    integer(4) :: m
+    integer(4) :: n13
+    !
+    if (kolbeg .gt. 0) go to 7266
+    read (unit = abuff, fmt = 7264) n13, (flstat(m), m = 15, 19)
+7264 format (16x, i8, 5e8.0)
+    go to 7268
+7266 nfrfld = 6
+    !        call frefld (flstat(14 :))
+    call free (flstat(14 :))
+    n13 = int (flstat(14))
+7268 if (n13 .gt. 0)  maxzno = n13
+    if (flstat(15) .gt. 0.0) epszno = flstat(15)
+    if (flstat(16) .gt. 0.0) epwarn = flstat(16)
+    if (flstat(17) .gt. 0.0) epstop = flstat(17)
+    if (flstat(18) .gt. 0.0) znolim(1) = flstat(18)
+    if (flstat(19) .gt. 0.0) znolim(2) = flstat(19)
+    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7270) maxzno, epszno, epwarn, epstop
+7270 format ('+ZnO const.', i4, 3e11.3)
+    return
+  end subroutine zno
+
+  !
+  ! subroutine peakvm.
+  !
+
+  subroutine peakvm
+    ! $$$$$  special request-word no. 44.   'peak voltage' monitor'    $$$$$
+    implicit none
+    !
+    peaknd(1) = flzero
+    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7273)
+7273 format ('+Overall problem peak node voltage.')
+    return
+  end subroutine peakvm
+
+  !
+  ! subroutine absumdim.
+  !
+
+  subroutine absumdim
+    ! $$$$$  special request-word no. 45.   'absolute u.m. dimensions' $$$$$
+    implicit none
+    !
+    if (kolbeg .gt. 0) go to 7279
+    read (unit = abuff, fmt = 7276) nclfix, numfix, iotfix, ibsfix
+7276 format (32x, 6i8)
+    go to 7282
+7279 nfrfld = 4
+    !        call frefld (voltbc)
+    call free (voltbc)
+    nclfix = int (voltbc(1))
+    numfix = int (voltbc(2))
+    iotfix = int (voltbc(3))
+    ibsfix = int (voltbc(4))
+7282 if (nclfix .gt. 0) go to 7284
+    nclfix = 20
+    numfix = 3
+    iotfix = 50
+    ibsfix = 60
+7284 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7287) nclfix, numfix, iotfix, ibsfix
+7287 format ('+U.M. table sizes.', 4i6)
+    return
+  end subroutine absumdim
 
   !
   ! subroutine relumdim
@@ -1423,6 +1543,23 @@ contains
   end subroutine outwdth
 
   !
+  ! subroutine modswl.
+  !
+
+  subroutine modswl
+    ! $$$$$  special request-word no. 55.   'modify switch logic                  $$$$$
+    implicit none
+    integer(4) :: n7
+    !
+    n7 = ktrlsw(6) + 1
+    if (n7 .ge. 2) n7 = 0
+    ktrlsw(6) = n7
+    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7374) n7
+7374 format ('+Request for altered logic.  ktrlsw(6) =', i2)
+    return
+  end subroutine modswl
+
+  !
   ! subroutine faultdu.
   !
 
@@ -1443,6 +1580,20 @@ contains
     nchain = 29
     return
   end subroutine faultdu
+
+  !
+  ! subroutine fixsrc.
+  !
+
+  subroutine fixsrc
+    ! $$$$$  special request-word no. 57.   'fix source'               $$$$$
+    implicit none
+    !
+    istep = -4567
+    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7388)
+7388 format ('+Declaration of desired load flow use.')
+    return
+  end subroutine fixsrc
 
   !
   ! subroutine usersst.
@@ -2048,23 +2199,8 @@ subroutine reques
 
      case (14)
         ! $$$$$    special-request word no. 14.   'tacs emtp sources'      $$$$$
-        if (noutpr .eq. 0) write (unit = kunit6, fmt = 2682)
-2682    format ('+TACS names controlling type 1-10 EMTP sources.')
-        if (kolbeg .gt. 0) go to 2683
-        read (unit = abuff, fmt = 2685) (vstacs(j), j = 1, 10)
-2685    format (20x, 10a6)
-        go to 2686
-2683    nright = -2
-        !        call freone (d1)
-        call free (d1)
-        do j = 1, 10
-           vstacs(j) = texta6(j)
-        end do
-2686    nstacs = 10
-2687    if (vstacs(nstacs) .ne. blank) go to 2690
-        nstacs = nstacs - 1
-        if (nstacs .gt. 0) go to 2687
-2690    go to 15
+        call tacses
+        go to 15
 
      case (15)
         ! $$$$$    special-request word no. 15.   'start again'            $$$$$
@@ -2087,12 +2223,7 @@ subroutine reques
 
      case (18)
         ! $$$$$    special-request word no. 18.   'cable constants'        $$$$$
-        read (unit = abuff, fmt = 2732) d13, ktrlsw(3)
-2732    format (48x, e8.0, i8)
-        if (d13 .gt. 0.0) znvref = d13
-        if (noutpr .eq. 0) write (unit = kunit6, fmt = 2726) ktrlsw(3)
-2726    format ('+Transfer to "cable constants".  type =', i6)
-        nchain = 47
+        call cblcnsts (znvref)
         go to 5617
 
      case (19)
@@ -2328,52 +2459,18 @@ subroutine reques
         go to 15
 
      case (43)
-          ! $$$$$  special request-word no. 43.   'zinc oxide'             $$$$$
-        if (kolbeg .gt. 0) go to 7266
-        read (unit = abuff, fmt = 7264) n13, (flstat(m), m = 15, 19)
-7264    format (16x, i8, 5e8.0)
-        go to 7268
-7266    nfrfld = 6
-        !        call frefld (flstat(14 :))
-        call free (flstat(14 :))
-        n13 = int (flstat(14))
-7268    if (n13 .gt. 0)  maxzno = n13
-        if (flstat(15) .gt. 0.0) epszno = flstat(15)
-        if (flstat(16) .gt. 0.0) epwarn = flstat(16)
-        if (flstat(17) .gt. 0.0) epstop = flstat(17)
-        if (flstat(18) .gt. 0.0) znolim(1) = flstat(18)
-        if (flstat(19) .gt. 0.0) znolim(2) = flstat(19)
-        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7270) maxzno, epszno, epwarn, epstop
-7270    format ('+ZnO const.', i4, 3e11.3)
+        ! $$$$$  special request-word no. 43.   'zinc oxide'               $$$$$
+        call zno
         go to 15
 
      case (44)
         ! $$$$$  special request-word no. 44.   'peak voltage' monitor'    $$$$$
-        peaknd(1) = flzero
-        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7273)
-7273    format ('+Overall problem peak node voltage.')
+        call peakvm
         go to 15
 
      case (45)
         ! $$$$$  special request-word no. 45.   'absolute u.m. dimensions' $$$$$
-        if (kolbeg .gt. 0) go to 7279
-        read (unit = abuff, fmt = 7276) nclfix, numfix, iotfix, ibsfix
-7276    format (32x, 6i8)
-        go to 7282
-7279    nfrfld = 4
-        !        call frefld (voltbc)
-        call free (voltbc)
-        nclfix = int (voltbc(1))
-        numfix = int (voltbc(2))
-        iotfix = int (voltbc(3))
-        ibsfix = int (voltbc(4))
-7282    if (nclfix .gt. 0) go to 7284
-        nclfix = 20
-        numfix = 3
-        iotfix = 50
-        ibsfix = 60
-7284    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7287) nclfix, numfix, iotfix, ibsfix
-7287    format ('+U.M. table sizes.', 4i6)
+        call absumdim
         go to 15
 
      case (46)
@@ -2419,11 +2516,7 @@ subroutine reques
 
      case (55)
         ! $$$$$  special request-word no. 55.   'modify switch logic       $$$$$
-        n7 = ktrlsw(6) + 1
-        if (n7 .ge. 2) n7 = 0
-        ktrlsw(6) = n7
-        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7374) n7
-7374    format ('+Request for altered logic.  ktrlsw(6) =', i2)
+        call modswl
         go to 15
 
      case (56)
@@ -2433,9 +2526,7 @@ subroutine reques
 
      case (57)
         ! $$$$$  special request-word no. 57.   'fix source'               $$$$$
-        istep = -4567
-        if (noutpr .eq. 0) write (unit = kunit6, fmt = 7388)
-7388    format ('+Declaration of desired load flow use.')
+        call fixsrc
         go to 15
 
      case (58)
@@ -2463,7 +2554,6 @@ subroutine reques
         goto 5617
 
      end select
-
 3306 if (to_lower (texta6(1)) .eq. textay(i)) go to 3294
   end do
   !     control will never reach  "stop"  which follows.
@@ -2582,7 +2672,7 @@ subroutine sysdep
   col(1 : 18) = colxxx(1 : 18)
   lunit(2) = 19
   lunit(4) = 20
-  call sysplt (lunit(4))                            ! define l4plot=lunit(4) for "dekplt"
+  call sysplt (lunit(4))                          ! define l4plot=lunit(4) for "dekplt"
   luntsp = 14                                     ! the catalog command of "spying" uses this
   mflush = 0
   if (m4plot .eq. 1) go to 1355
@@ -2660,7 +2750,7 @@ subroutine sysdep
   call strip (ansi32, ' ')
   if (iprsup .ge. 1 ) write (unit = lunit(6), fmt = 3672) ansi32
 3672 format (/,  ' in  #sysdep# ,   ansi32 =',  a32)
-  open (unit = lunit(4), action = 'readwrite', status = 'replace', file = ansi32, form = 'unformatted')
+  open (unit = lunit(4), action = 'readwrite', status = 'new', file = ansi32, form = 'unformatted')
   inquire (unit = lunit(4), opened = od)
   if (od .neqv. .true.) then
      write (unit = lunit(6), fmt = "('Could not open ', a25, ' .  Exiting.')") ansi32
@@ -2748,8 +2838,8 @@ subroutine midov1
 5910 write (unit = ansi16, fmt = 5914) n4, (lstat(j), j = 14, 16)
 5914 format ('st', i1, 'log', 3i1, '.dat', 3x)
   open (unit = n4, status = 'new', file = ansi16, form = 'unformatted')
-  if (n4 .eq. lunit(9)) go to 4271                  ! both opened, so exit
-  n4 = lunit(9)                                     ! switch to second of two i/o channels
+  if (n4 .eq. lunit(9)) go to 4271                ! both opened, so exit
+  n4 = lunit(9)                                   ! switch to second of two i/o channels
   go to 5910
 4271 if (nenerg .eq. 0) go to 5933
   !     "statisitics"  requires formatted writes to unit 12, which
@@ -2862,12 +2952,8 @@ subroutine tacs1
   kaliu = klntab
   kspvar = kaliu + lstat(64)
   if (iprsup .lt. 2) go to 7811
-  write (unit = lunit(6), fmt = 703) n1, kisblk, krsblk, kksus , kalksu, kiuty , kud1  , kinsup, kivarb, kprsup, kawkcs, kxar, kxtcs, &
-       klntab, katcs , kcolcs, kjout
-703 format ('  Use cells  n1 = ',  i8 ,/, '  kisblk = ', i5, '  krsblk = ', i5, '  kksus  = ',i5, &
-       '  kalksu = ', i5, '  kiuty  = ',i5, '  kud1   = ', i5, '  kinsup = ', i5, '  kivarb = ', i5 ,/, &
-       '  kprsup = ',i5, '  kawkcs = ', i5, '  kxar   = ', i5, '  kxtcs  = ', i5, '  klntab = ', i5, '  katcs  = ', i5, &
-       '  kcolcs = ', i5, '  kjout  = ', i5, /)
+  write (unit = lunit(6), fmt = 703) n1, kisblk, krsblk, kksus, kalksu, kiuty, kud1, kinsup, kivarb, kprsup, kawkcs, kxar, kxtcs, klntab, katcs, kcolcs, kjout
+703 format ('  Use cells  n1 = ', i8, /, '  kisblk = ', i5, '  krsblk = ', i5, '  kksus  = ',i5, '  kalksu = ', i5, '  kiuty  = ',i5, '  kud1   = ', i5, '  kinsup = ', i5, '  kivarb = ', i5, /, '  kprsup = ', i5, '  kawkcs = ', i5, '  kxar   = ', i5, '  kxtcs  = ', i5, '  klntab = ', i5, '  katcs  = ', i5, '  kcolcs = ', i5, '  kjout  = ', i5, /)
 7811 lstat(39) = n1
   koncur = 0
   if (n1 .lt. ltacst) go to 781
@@ -2876,10 +2962,10 @@ subroutine tacs1
   lstat(16) = 19
   go to 9000
 781 do i = 1, 8
-     lstat( i) = lstat(i + 60)
+     lstat(i) = lstat(i + 60)
   end do
   do i = 30, ltacst
-     parsup(i) = 0.0
+     parsup(i) = 0.0d0
   end do
   isour = lstat(4)
   do i = 1, isour
@@ -3011,8 +3097,7 @@ subroutine tacs1
   kill = 115
   lstat(19) = 118
   if (noutpr .eq. 0) write (unit = lunit(6), fmt = 163)
-163 format ('0limit.  Dimensions in TACS have not been set to accept an order greater than  7.                                   ', /, &
-       'It is suggested to break this monstruous block into a set of smaller ones in cascade.')
+163 format ('0limit.  Dimensions in TACS have not been set to accept an order greater than  7.', /, 'It is suggested to break this monstruous block into a set of smaller ones in cascade.')
 7433 bus1 = alnode
   lstat(14) = n
   go to 9000
@@ -3237,7 +3322,7 @@ subroutine tacs1
   ud1(ndy5 + 1) = dum(1)
   ud1(ndy5 + 2) = dum(2)
   if (n .ne. 14) go to 8108
-  ud1(ndy5 + 2) = dum(2) * twopi / 360.
+  ud1(ndy5 + 2) = dum(2) * twopi / 360.0d0
 8108 if (n .ne. 23) go to 8109
   if (ud1(ndy5 + 2) .lt. deltat) ud1(ndy5 + 2) = deltat
 8109 continue

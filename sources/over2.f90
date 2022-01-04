@@ -227,9 +227,9 @@ subroutine over2
   ! do i = 1, lbrnch
   !    litype(i) = 0
   ! end do
-  call move0 (sconst(1 :), lfsem)
-  call move0 (imodel(1 :), lbrnch)
-  call move0 (litype(1 :), lbrnch)
+  call move0 (sconst, lfsem)
+  call move0 (imodel, lbrnch)
+  call move0 (litype, lbrnch)
   iaddrs = 1
 100 it2 = it + 2
   if (kill .gt. 0) go to 9200
@@ -246,12 +246,12 @@ subroutine over2
 3989 mread2 = 1
   read (unit = abuff, fmt = 2005) char80
 2005 format (a)
-  if (to_lower (char80(1 : 8)) .ne. 'no. of p') go to 2100             ! not lmfs case
+  if (to_lower (char80(1 : 8)) .ne. 'no. of p') go to 2100  ! not lmfs case
   do jk = 16, 80
      if (char80(jk : jk) .ne. ' ') go to 2008
   end do
   write (unit = lunit(6), fmt = 2006)
-2006 format (' No integer value (format i1) was inputted for number of phases in this lmfs case, run will be aborted. Stop.')
+2006 format (' No integer value (format i1) was inputted for number of phases in this LMFS case, run will be aborted. Stop.')
   stop
 2008 read (unit = char80(jk : jk), fmt = 2189) nphlmt
 2189 format (i1)
@@ -261,7 +261,7 @@ subroutine over2
   read (unit = abuff, fmt = 2005) char80
   if (to_lower (char80(1 : 7)) .eq. 'sending') go to 2020
   write (unit = lunit(6), fmt = 2015)
-2015 format ('  Card of sending end nodes:  of this lmfs case is not inputted, and case is to be aborted. Stop.')
+2015 format ('  Card of sending end nodes:  of this LMFS case is not inputted, and case is to be aborted. Stop.')
   stop
 2020 read (unit = abuff, fmt = 2025) (chlmfs(jk), jk = 1, nphlmt)
 2025 format (18x, 9a6)
@@ -278,7 +278,7 @@ subroutine over2
   read (unit = abuff, fmt = 2005) char80
   if (to_lower (char80(1 : 9)) .eq. 'receiving') go to 2040
   write (unit = lunit(6), fmt = 2038)
-2038 format ('  Card of receiving end nodes: of this lmfs case is not inputted, and case is to be aborted. Stop.')
+2038 format ('  Card of receiving end nodes: of this LMFS case is not inputted, and case is to be aborted. Stop.')
   stop
 2040 read (unit = abuff, fmt = 2045) (chlmfs(jk), jk = nphlmt + 1, 2 * nphlmt)
 2045 format (20x, 9a6)
@@ -291,14 +291,10 @@ subroutine over2
   stop
 2050 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2055)
 2055 format ('+Receiving end node names (9a6 format)')
-  go to 100                                                 ! end of three "/" cards for lmfs data case
+  go to 100                                       ! end of three "/" cards for lmfs data case
 2100 if (kolbeg .gt. 0) go to 6618
-  read (unit = abuff, fmt = 1, iostat = ios) itype, bus1, bus2, bus3, bus4
+  read (unit = abuff, fmt = 1) itype, bus1, bus2, bus3, bus4
 1 format (i2, 4a6, 9e6.2)
-  if (ios .ne. 0) then
-     write (unit = lunit(6), fmt = "(' Could not read from abuff.  over2 line 1.  Stop.')")
-     call stoptp
-  end if
   go to 6621
 6618 nfrfld = 1
   !  call frefld (voltbc)
