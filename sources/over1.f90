@@ -1682,10 +1682,9 @@ subroutine reques
   use requests
   implicit none
   character(8) :: textax(300), textay(100)
-  integer(4) :: i, ip, j, jpntr(100), k, kbrnum
+  integer(4) :: i, j, jpntr(100), kbrnum
   integer(4) :: l, ll1, ll8, ll16, ll25, ll32, ll33, ll40, ll48, ll49, ll56
   integer(4) :: ll80
-  integer(4) :: m
   integer(4) :: n1, n2, n3, n7, n8, n13
   real(8) :: d1, d2, d7, d8, deltfs, farray(1), fltin
   real(8) :: seed
@@ -2253,8 +2252,8 @@ subroutine reques
 2796    format (16x, a1, 7x, a1)
         if (noutpr .eq. 0) write (unit = kunit6, fmt = 2801) bus4, bus5
 2801    format ('+Free-field characters.   ', a1, '   and   ', a1, ' .')
-        if (bus4 .ne. blank) csepar = bus4
-        if (bus5 .ne. blank) chcont = bus5
+        if (bus4 .ne. blank) csepar = bus4(1 : 1)
+        if (bus5 .ne. blank) chcont = bus5(1 : 1)
         go to 15
 
      case (23)
@@ -2651,10 +2650,10 @@ subroutine sysdep
   !  dimension intbus(1)
   !  equivalence (intbus(1), bus1)
   logical(1) :: od
-  character(25) :: col
+  character(1) :: lettra, lettrb, lettrc, text1, text2
+  character(8) :: busnm1, busnm2, busnm3, temp
   character(18) :: colxxx
-  character(8) :: busnm1, busnm2, busnm3, text1, text2, temp
-  character :: lettra, lettrb, lettrc !, colxxx(18)
+  character(25) :: col
   integer(4) :: n7
   !
   !     first 5 characters of file name "col" are reserved
@@ -2764,7 +2763,7 @@ subroutine sysdep
   tenm3 = 1.d-3
   unity = 1.d0
   onehaf = 0.5d0
-  intinf = 10000000
+  intinf = huge (0)
   nbyte(1) = 2
   nbyte(2) = 2
   !     znvref = 1.e-6  ! 32-bit "complex" in "cable constants"
@@ -3452,22 +3451,24 @@ subroutine tacs1a
   use movcop
   use freedom
   implicit none
+  character(1) :: chdolr, comma, csprch, curch, curch1
+  character(1) :: ch9, cha, che, chd, chn, cho, cht, chq, chl, chg, chr
+  character(1) :: eqlsgn
+  character(8) :: alph
+  character(8) :: contch, chdum1, chdum2
+  character(8) :: dumj
+  character(8) :: text1, text2, text4, sminus, splus, smultp
+  character(8) :: supfn, supop, text5, text6, text7
+  character(8) :: alnode, alnm1, alnm2, atmpbf
+  character(8) :: el, alnrcl, sepch, opname, btmpbf
   integer(4) :: i, i1, i2, i3, i4, iargel, icurch, iel, iflpnt, ifree, ifst, ifstch
   integer(4) :: ikill1, ikill2, ilgcl, ilglph, ilgnum, ilst, ilst1, isrchl, itmpbf
   integer(4) :: j, j1, j2
   integer(4) :: k, k1, k2, k3, k4, karg, kjsup, kksup, m, moon, mpar
   integer(4) :: n, n1, n6, n23, ndx1, ndx6
   real(8) :: argel, d1, d9, d10, dum, pru, prx
-  character(8) :: alph, dumj
   dimension alph(5), dum(3), dumj(13)
-  character(8) :: text1, text2, text4, sminus, splus, smultp
-  character(8) :: supfn, supop, text5, text6, text7
-  character(8) :: alnode, alnm1, alnm2, atmpbf
   dimension supfn( 35), supop( 6)
-  character(8) :: el, alnrcl, sepch, opname, btmpbf
-  character(8) :: csprch, curch, curch1, contch, chdum1, chdum2
-  character(8) :: eqlsgn, ch9, chdolr, comma, che, chd
-  character(8) :: cha, chn, cho, cht, chq, chl, chg, chr
   dimension el(100), alnrcl(10), sepch(8), opname(18)
   dimension atmpbf(20), btmpbf(80)
   dimension argel(100)
@@ -3509,20 +3510,20 @@ subroutine tacs1a
   data opname(16) / '**    ' /
   data opname(17) / '+     ' /
   data opname(18) / '-     ' /
-  data eqlsgn / '=     ' /
-  data chdolr / '$     ' /
-  data ch9    / '9     ' /
-  data  che   / 'e' /
-  data  chd   / 'd' /
-  data  comma / ',' /
-  data  cha   / 'a' /
-  data  chn   / 'n' /
-  data  cho   / 'o' /
-  data  cht   / 't' /
-  data  chq   / 'q' /
-  data  chl   / 'l' /
-  data  chg   / 'g' /
-  data  chr   / 'r' /
+  data eqlsgn / '=' /
+  data chdolr / '$' /
+  data ch9    / '9' /
+  data che    / 'e' /
+  data chd    / 'd' /
+  data comma  / ',' /
+  data cha    / 'a' /
+  data chn    / 'n' /
+  data cho    / 'o' /
+  data cht    / 't' /
+  data chq    / 'q' /
+  data chl    / 'l' /
+  data chg    / 'g' /
+  data chr    / 'r' /
   data supfn( 1) / '     ' /
   data supfn( 2) / 'and. ' /
   data supfn( 3) / 'or.  ' /
@@ -3558,12 +3559,12 @@ subroutine tacs1a
   data supfn(33) / 'sign ' /
   data supfn(34) / 'not  ' /
   data supfn(35) / 'ran  ' /
-  data supop( 1) / '+    ' /
-  data supop( 2) / '-    ' /
-  data supop( 3) / '*    ' /
-  data supop( 4) / '/    ' /
-  data supop( 5) / '0    ' /
-  data supop( 6) / '.    ' /
+  data supop(1) / '+' /
+  data supop(2) / '-' /
+  data supop(3) / '*' /
+  data supop(4) / '/' /
+  data supop(5) / '0' /
+  data supop(6) / '.' /
   data  text4    / 'countr' /
   data  text5    / 'input ' /
   data  text6    / 'output' /

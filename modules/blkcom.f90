@@ -20,10 +20,12 @@ module blkcom
   !     flag-1.   begin class-1  /blank/  variables
   !               (alphanumeric variables, capable of storing  a6  info).
   !  character(8) :: buff10(10)
-  character(1) :: texcol(80), chcont, csepar
+  character(1) :: blank
+  character(1) :: chcont, csepar
+  character(1) :: texcol(80)
   character(8) :: busone(1)
   character(8) :: bus1, bus2, bus3, bus4, bus5, bus6
-  character(8) :: trash, blank, terra, userid, branch, chcopy
+  character(8) :: trash, terra, userid, branch, chcopy
   character(8) :: vstacs(24), texta6(15)
   character(80) :: abuff, buff10
   !
@@ -61,22 +63,12 @@ module blkcom
   !               (integer-numeric usage only, with arrays
   !               preceding scalars).
 
-  integer(4) :: indtv(10)
-  integer(4) :: ipntv(11)
-  integer(4) :: kprchg(6)
-  integer(4) :: lunit(0:15)
-!  integer(4) :: lunit0, lunit1, lunit2, lunit3, lunit4, lunit5, lunit6, lunit7
-!  integer(4) :: lunit8, lunit9, lunit10, lunit11, lunit12, lunit13, lunit14, lunit15
-  integer(4) :: lunsav(15)
-  integer(4) :: multpr(5)
-  integer(4) :: nright, nfrfld, kolbeg, max99m
-  integer(4) :: lstat(80)
-  integer(4) :: moncar(90)
-  integer(4) :: nbyte(6)
-  integer(4) :: ia
-  integer(4) :: iprsov(39)
   integer(4) :: icheck, iline, inonl, iout, ipunch, iread, istep, itype, it1
-  integer(4) :: it2, izero
+  integer(4) :: ia, indtv(10), ipntv(11), iprsov(39), it2, izero
+  integer(4) :: kprchg(6)
+  integer(4) :: lstat(80), lunit(0 : 15), lunsav(0 : 15)
+  integer(4) :: max99m, moncar(90), multpr(5)
+  integer(4) :: nbyte(6), nright, nfrfld, kolbeg
   integer(4) :: kol132, kpar, kpen(5), kunit6, kwtspy, kxic
   integer(4) :: kcount, istead, ldata, lbrnch
   integer(4) :: lexct, lbus, lymat, lswtch, lnonl, lchar, m4plot
