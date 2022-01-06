@@ -292,7 +292,7 @@ subroutine over15
   character(8) :: text4, text5, text6, text7
   character(8) :: text8, text9, text10, text11, text12
   character(132) :: outlin
-  integer(4) :: i, i3, ichar, ijk, ik, ip, iprint
+  integer(4) :: i, i3, ijk, ik, ip, iprint
   integer(4) :: j, jk
   integer(4) :: k, k1, kprsta, kswpe4
   integer(4) :: l, lunit6save
@@ -999,7 +999,7 @@ subroutine over15
   i = i + 1
   go to 73900
 73902 i = 1
-73903 if (i .gt. ichar) go to 1000
+73903 if (i .gt. i_char) go to 1000
   if (iprsup .gt. 1) write (unit = lunit(6), fmt = 73904) i, gslope(i), cchar(i), vchar(i)
 73904 format (' n.l. char at 73904 of main14.   ', i10, 3e15.5)
   i = i + 1

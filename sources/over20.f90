@@ -3733,7 +3733,7 @@ subroutine spyink
      kontac(n14) = ndx1
      konadd(n14) = n7
 !     epskon(n14) = ichar(d13)
-     epskon(n14) = ichar(d13(1:1))
+     epskon(n14) = ichar (d13(1:1))
      go to 4776
   end do
 4785 continue
@@ -3760,7 +3760,7 @@ subroutine spyink
   !     $$$$$$$  key word no. 64:  "v-i"      $$$$  $$$$  $$$$  $$$$  $$$$
 4823 n17 = 0
   n8 = 0
-  write (munit6, 4825) inonl, i_char
+  write (unit = munit6, fmt = 4825) inonl, i_char
 4825 format (' lists 9, 10 =', 2i4, '      (next, <cr>, last, all, mode).')
   call window
 4824 write (prom80, 4827)

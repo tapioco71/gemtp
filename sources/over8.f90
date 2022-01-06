@@ -2456,7 +2456,7 @@ subroutine over8
   !  equivalence (spum(1), ispum(1))
   !  equivalence (x(1), integx(1))
   !  equivalence (moncar(1), knt)
-  integer(4) :: i, ichar, ii, iip, ij, iji, ik, ikq, im1, initum, inoff1, inoff2
+  integer(4) :: i, ii, iip, ij, iji, ik, ikq, im1, initum, inoff1, inoff2
   integer(4) :: ip, iprint, iqy, isecti, istart, it0, itadd, iuangl, iudcoe
   integer(4) :: iuepso, iufldr, iuflds, iuflqr, iuflqs, iuflxd, iuflxq, iufpar
   integer(4) :: iugpar, iuhism, iuhist, iujcds, iujclt, iujcqs, iujomo
@@ -3536,7 +3536,7 @@ subroutine over8
   if (iprsup .le. 1) go to 4265
   write (unit = lunit(6), fmt = 4261) (i, namenl(i), nltype(i), nonlk(i), nonlm(i), nonlad(i), nonle(i), ilast(i), vnonl(i),curr(i), anonl(i), vzero(i), i = 1, inonl)
 4261 format (/, ' nonlinear element table.', /, ' row  namenl  nltype   nonlk   nonlm  nonlad   nonle   ilast', 10x, 'vnonl', 11x, 'curr', 10x, 'anonl', 10x, 'vzero', /, (1x, i3, 7i8, 4e15.6))
-  write (unit = lunit(6), fmt = 4262) (i, cchar(i), vchar(i), gslope(i),i = 1, ichar)
+  write (unit = lunit(6), fmt = 4262) (i, cchar(i), vchar(i), gslope(i),i = 1, i_char)
 4262 format (/, ' Nonlinear element characteristics.     row', 10x, 'cchar', 10x, 'vchar', 9x, 'gslope', /, (35x, i8, 3e15.6))
 4265 iprint = 2
   do i = 1, inonl

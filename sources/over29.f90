@@ -9,14 +9,14 @@
 !
 
 subroutine subr29
+  use blkcom
+  use deck29
+  use labl29
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'deck29.ftn'
-  include 'labl29.ftn'
   character(8) :: text
   dimension text(1), array(1)
   equivalence (karray(1), text(1), array(1))
+  !
   if ( iprsup .ge. 1) write (lunit6, 2371) lswtch, lsiz12, lbus
 2371 format (' At top of "subr29".  lswtch, lsiz12, lbus =', 3i8)
   nvar = lswtch

@@ -1686,9 +1686,9 @@ subroutine reques
   integer(4) :: l, ll1, ll8, ll16, ll25, ll32, ll33, ll40, ll48, ll49, ll56
   integer(4) :: ll80
   integer(4) :: m
-  integer(4) :: n1, n2, n3, n4, n5, n7, n8, n9, n13, n14
-  real(8) :: d1, d2, d7, d8, d13, deltfs, farray(1), fltin
-  real(8) :: seed, statr
+  integer(4) :: n1, n2, n3, n7, n8, n13
+  real(8) :: d1, d2, d7, d8, deltfs, farray(1), fltin
+  real(8) :: seed
   real(8) :: znvref
   !
   !  dimension textax(300), jpntr(100), textay(100)

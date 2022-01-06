@@ -1205,14 +1205,14 @@ subroutine packch (from, to, k4or6, nchbeg, nword)
   logical(1), intent(in) :: from(*)
   logical(1), intent(out) :: to(*)
   integer(4), intent(in) :: k4or6, nchbeg, nword
-  integer(4) :: ichar, iword, jchar, kchar
+  integer(4) :: i_char, iword, j_char, k_char
   !
-  ichar = nchbeg
+  i_char = nchbeg
   do iword = 1, nword
-     do kchar = 1, k4or6
-        jchar = (iword - 1) * 8 + kchar
-        to(ichar) = from(jchar)
-        ichar = ichar + 1
+     do k_char = 1, k4or6
+        j_char = (iword - 1) * 8 + k_char
+        to(i_char) = from(j_char)
+        i_char = i_char + 1
      end do
   end do
   return

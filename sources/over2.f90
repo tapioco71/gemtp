@@ -132,7 +132,7 @@ subroutine over2
   !     character*26  alphan
   !     data alphan  / 'abcdefghijklmnopqrstuvwxyz' /
   !
-  integer(4) :: i, ibf, ibr2, ibr3, ibrnam, ibrter, icas, ichar
+  integer(4) :: i, ibf, ibr2, ibr3, ibrnam, ibrter, icas
   integer(4) :: ideal, idumy, iend, ifk, ii, iihst, ikf, iml, inew, inoff1
   integer(4) :: inoff2, inoff3, inoff4, inoff5, inonam, interm, iold, ios
   integer(4) :: ioutmg, ips1, iref, isec, isecti, isfd, isgfd, iprint, it3, it32
@@ -694,11 +694,11 @@ subroutine over2
   anonl(inonl) = tx(it)
   ci1 = 0.0
   ck1 = 0.0
-  nonlad(inonl) = ichar + 1
+  nonlad(inonl) = i_char + 1
   itype = 98
   nltype(inonl) = -98
   curr(inonl) = 1.0d0
-  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 4014) ksat, it, ichar, ntot, it3, inonl
+  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 4014) ksat, it, i_char, ntot, it3, inonl
 4014 format(/, ' At 4014', 7i10)
   lstat(18) = 187
   go to 186
@@ -742,11 +742,11 @@ subroutine over2
   go to 4067
 4041 if (kph .eq. 4) kph = 0
   if (iprsup .lt. 3) go to 84041
-  write (unit = lunit(6), fmt = 34041) kswtch, ibr, it, inonl, ichar
+  write (unit = lunit(6), fmt = 34041) kswtch, ibr, it, inonl, i_char
 34041 format (/, ' Done with sat. xformer at 34041.  kswtch, ibr, it, inonl, ichar=  ', 5i10)
   write (unit = lunit(6), fmt = 44041) (i, kbus(i), mbus(i), nr(i), length(i), kodebr(i), bus(i), i = 1, ibr)
 44041 format(/, ' Linear branch table.', /, 13x, 'row', 11x, 'kbus', 11x, 'mbus', 13x, 'nr', 9x, 'length', 9x, 'kodebr', 12x, 'bus', /, (1x, 6i15, a15))
-  n = ichar
+  n = i_char
   if (inonl .gt. n) n = inonl
   write (unit = lunit(6), fmt = 54041) (i, nonlk(i), nonlm(i), nltype(i), nonlad(i), nonle(i), anonl(i), vzero(i), vchar(i), gslope(i), cchar(i), i = 1, n)
 54041 format (/, ' n.l. elem arrays.', /, 6x, 'row', 3x, 'nonlk', 3x, 'nonlm', 2x, 'nltype', 2x, 'nonlad', 3x, 'nonle', 10x, 'anonl', 10x, 'vzero', 10x, 'vchar', 9x, 'gslope', 10x, 'cchar', /, (1x, 6i8, 5e15.5))
@@ -796,7 +796,7 @@ subroutine over2
   keepb = ntot
 64033 modswt(kswtch) = ibr + 1
   kodebr(ibr) = 1
-  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 54033) yzero, kswtch, ibr, it, inonl, ichar, kph, ksat, ideal, keepb, keept, ntot, nodtop, n1, n2
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 54033) yzero, kswtch, ibr, it, inonl, i_char, kph, ksat, ideal, keepb, keept, ntot, nodtop, n1, n2
 54033 format (/, ' Ideal xformer interconnect, at 54033.  yzero =', e15.6, 5i12, /, (1x, 10i12))
   go to 4034
 4033 nr(ibr) = ideal
@@ -888,9 +888,9 @@ subroutine over2
   go to 9200
 4054 ncoil = -nonle(inonl) - it3
   if (ncoil .gt. 0) go to 4056
-  ichar = it3 - 1
+  i_char = it3 - 1
   inonl = inonl - 1
-  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 4053) it, ibr, ichar, inonl, kswtch, ncoil, ksat, kph
+  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 4053) it, ibr, i_char, inonl, kswtch, ncoil, ksat, kph
 4053 format (/, ' mag. br. not actually n.l., at 4053.', /, 1x, 8i15)
   if (ncoil .lt. 0) go to 100
   tx(it) = delta2 / gslope(it3) * xunits
@@ -1769,7 +1769,7 @@ subroutine nonln2
   use freedom
   implicit none
   character(8) :: text1, text2, text3
-  integer(4) :: i, iaw, ibk, icard, ichar, ichr, ii, iprint, iseg
+  integer(4) :: i, iaw, ibk, icard, ichr, ii, iprint, iseg
   integer(4) :: j, jb, jk
   integer(4) :: ll9
   integer(4) :: n6, n7, n10, n11, n12, n14, n15, n16, n17
@@ -1862,13 +1862,13 @@ subroutine nonln2
 73417 format ('+Type-97 R(t).', 10x, 2e12.4)
 73418 if (itype .ne. 96) go to 4741
   nltype(inonl) = -96
-  nonlad(inonl) = ichar + 1
+  nonlad(inonl) = i_char + 1
   ilast(inonl) = nonlad(inonl) + 6
   num99 = num99 + 1
   vecnl1(inonl) = c(it)
   if (n3 * n4 .eq. 1) go to 4736
-  ichar = ichar + 6
-  nonle(inonl) = -ichar
+  i_char = i_char + 6
+  nonle(inonl) = -i_char
   go to 182
 4736 if (noutpr .eq. 0) write (unit = kunit6, fmt = 4738) tr(it), tx(it), c(it)
 4738 format ('+Hysteresis.', 3e12.4)
@@ -1896,7 +1896,7 @@ subroutine nonln2
   kill = 5
   lstat(19) = 20
   go to 9999
-21 iprint = ichar + 1
+21 iprint = i_char + 1
   nonlad(inonl) = iprint
   iprint = 10
   !     read cards using cimage
@@ -1933,8 +1933,8 @@ subroutine nonln2
   if (d3 .eq. fltinf) iseg = 1
   if (iseg .eq. 2) vnonl(inonl) = d3 * d2
   do ibk = 1, iseg
-     ichar = ichar + 1
-     ichr = ichar
+     i_char = i_char + 1
+     ichr = i_char
      icard = 0
 29   icard = icard + 1
      ! read cards using cimage
@@ -1951,14 +1951,14 @@ subroutine nonln2
      !     call freone (d4)
      call free (d4)
 31   if (d2 .eq. 9999.0d0) go to 37
-     ichar = ichar + 1
-     if (ichar .le. lchar) go to 36
+     i_char = i_char + 1
+     if (i_char .le. lchar) go to 36
      lstat(19) = 36
      go to 9000
 36   continue
-     cchar(ichar) = d2
-     gslope(ichar) = d3
-     vchar(ichar) = d4
+     cchar(i_char) = d2
+     gslope(i_char) = d3
+     vchar(i_char) = d4
      if (noutpr .eq. 0) write (unit = kunit6, fmt = 59) d2, d3, d4
 59   format ('+Breakpoint', 4x, 3e11.4)
      go to 29
@@ -1968,13 +1968,13 @@ subroutine nonln2
      lstat(19) = 37
      go to 9999
 38   if (noutpr .eq. 0) write (unit = kunit6, fmt = 54118)
-     if (ibk .eq. 1) ilast(inonl) = ichar
+     if (ibk .eq. 1) ilast(inonl) = i_char
      ! calculate initial ( linear ) slope
      d11 = cchar(ichr + 1) * (vchar(ichr + 1) ** gslope(ichr + 1))
      cchar(ichr) = d11 / (vchar(ichr + 1) * anonl(inonl))
      vchar(ichr) = 0.0
   end do
-  nonle(inonl) = ichar
+  nonle(inonl) = i_char
   nltype(inonl) = 921
   go to 100
   ! enter code for piecewise linear and time varying resistance******
@@ -2011,13 +2011,13 @@ subroutine nonln2
   kill = 5
   lstat(19) = 49
   go to 9999
-51 ichar = ichar + 1
-  if (ichar .le. lchar) go  to  52
+51 i_char = i_char + 1
+  if (i_char .le. lchar) go  to  52
   lstat(19) = 51
   go to 9000
-52 vchar(ichar) = d3 + a2 * d2
+52 vchar(i_char) = d3 + a2 * d2
   ck1 = d3
-  cchar(ichar) = d2
+  cchar(i_char) = d2
   go to 47
 53 if (icard .gt. 2) go  to  54
   kill = 28
@@ -2029,29 +2029,29 @@ subroutine nonln2
   ichr = nonlad(inonl)
   if (itype .eq. 91) go to 74
   d5 = absz (vchar(ichr))
-  d3 = absz (vchar(ichar))
+  d3 = absz (vchar(i_char))
   if (d5 .gt. d3)  d3 = d5
   anonl(inonl) = d3
   ! determine whether only upper half of data specified *************
   if (vchar(ichr) .gt. 0.0 .and. cchar(ichr) .gt. 0.0) go to 55
   go to 74
   ! add ( 0.0, 0.0 ) point to the user's data ***********************
-55 jk = ichar + 1
+55 jk = i_char + 1
   if (jk .le. lchar) go to 70
   lstat(19) = 55
   go to 9000
-70 do jb = ichr, ichar
+70 do jb = ichr, i_char
      vchar(jk) = vchar(jk - 1)
      cchar(jk) = cchar(jk - 1)
      jk = jk - 1
   end do
   vchar(ichr) = 0.0
   cchar(ichr) = 0.0
-  ichar = ichar + 1
+  i_char = i_char + 1
 74 ichr = ichr + 1
-  do jb = ichr, ichar
+  do jb = ichr, i_char
      d5 = cchar(jb) - cchar(jb - 1)
-     if (jb .eq. ichar .and. vchar(jb) .eq. vchar(jb - 1)) go to 77
+     if (jb .eq. i_char .and. vchar(jb) .eq. vchar(jb - 1)) go to 77
      d5 = d5 / (vchar(jb) - vchar(jb - 1))
      go to 78
 77   d5 = 0.0d0
@@ -2059,8 +2059,8 @@ subroutine nonln2
      gslope(jb - 1) = d5
      cchar(jb - 1) = d6
   end do
-  ichar = ichar - 1
-  nonle(inonl) = ichar
+  i_char = i_char - 1
+  nonle(inonl) = i_char
   if (itype .eq. 91) go to 76
   if (vchar(ichr - 1) .lt. 0.0) vchar(ichr - 1) = -fltinf
   ilast(inonl) = 1
@@ -2073,9 +2073,9 @@ subroutine nonln2
 80 ci1 = -fltinf
 73420 ck1 = ci1
   if (itype .ne. 96) go to 73421
-  ichar = ichar + 7
+  i_char = i_char + 7
   go to 73422
-73421 iprint = ichar + 1
+73421 iprint = i_char + 1
   nonlad(inonl) = iprint
 73422 iprint = 10
   !     read input card using cimage.
@@ -2103,21 +2103,21 @@ subroutine nonln2
 4227 if (xlong .ge. ck1) go to 4226
   if (itype .eq. 97) go to 4226
   go to 4224
-4226 ichar = ichar + 1
-  if (ichar .le. lchar) go to 6472
+4226 i_char = i_char + 1
+  if (i_char .le. lchar) go to 6472
   iprint = 10
   lstat(19) = 4226
   go to 9000
 6472 d3 = d2 - ci1
   d4 = xlong - ck1
   if (itype .ne. 99) go to 73430
-  gslope(ichar) = d3 / d4
-  cchar(ichar) = ci1 - gslope(ichar) * ck1
+  gslope(i_char) = d3 / d4
+  cchar(i_char) = ci1 - gslope(i_char) * ck1
   go to 73436
 73430 if (itype .ne. 98) go to 73437
   d1 = d4 / d3
-  gslope(ichar) = delta2 / d1
-  cchar(ichar) = ck1 - d1 * ci1
+  gslope(i_char) = delta2 / d1
+  cchar(i_char) = ck1 - d1 * ci1
   go to 73436
 73437 if (itype .ne. 97) go to 73441
   if (xlong .gt. 0.0) go to 7344
@@ -2125,30 +2125,30 @@ subroutine nonln2
   lstat(19) = 7344
   flstat(16) = xlong
   go to 9999
-7344 gslope(ichar) = 1.0 / xlong
+7344 gslope(i_char) = 1.0 / xlong
 73441 if (itype .ne. 96) go to 73442
-  cchar(ichar) = d2
-  vchar(ichar) = xlong
+  cchar(i_char) = d2
+  vchar(i_char) = xlong
   c1 = d2
   ck1 = xlong
-  if (iprsup .ge. 4) write (unit = lunit(6), fmt = 4232) ichar, inonl, nonlad(inonl), d2, xlong
-4232 format (/, ' Type-96  point.   ichar   inonl', 3x, 'nonlad(inonl)', 13x, 'd2', 10x, 'xlong', /, 16x,  2i8,  8x,  i8, 2e15.6)
+  if (iprsup .ge. 4) write (unit = lunit(6), fmt = 4232) i_char, inonl, nonlad(inonl), d2, xlong
+4232 format (/, ' Type-96  point.   i_char   inonl', 3x, 'nonlad(inonl)', 13x, 'd2', 10x, 'xlong', /, 16x,  2i8,  8x,  i8, 2e15.6)
   go to 187
-73442 cchar(ichar) = d2
+73442 cchar(i_char) = d2
 73436 ci1 = d2
   ck1 = xlong
-  vchar(ichar) = xlong
+  vchar(i_char) = xlong
   go to 187
 189 if (itype .ne. 96) go to 4758
   n11 = nonlad(inonl)
   n12 = ilast(inonl)
-  cchar(n12) = -cchar(ichar - 1)
-  vchar(n12) = -vchar(ichar - 1)
-  cchar(n11) = ichar - ilast(inonl)
+  cchar(n12) = -cchar(i_char - 1)
+  vchar(n12) = -vchar(i_char - 1)
+  cchar(n11) = i_char - ilast(inonl)
   n13 = int (cchar(n11))
   ! calculate the slope and intercept for major hysteresis loop
   ! segments,  for  type-96  pseudononlinear element.
-  n14 = ichar + 2
+  n14 = i_char + 2
   n15 = n14 + n13 - 1
   do n16 = n14, n15
      n17 = n16 - n13 - 1
@@ -2157,16 +2157,16 @@ subroutine nonln2
      gslope(n17) = 1.0d0 / vchar(n16)
      gslope(n16) = -cchar(n16) / vchar(n16)
   end do
-  n16 = ichar + n13 + 1
-  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 4234) inonl, ichar, n11, n13, tr(it), vecnl1(inonl), anonl(inonl)
-4234 format (/, ' Process type-96.   inonl   ichar     n11     n13', 14x, 'tr(it)', 7x, 'vecnl1(inonl)', 8x, 'anonl(inonl)', /, 17x, 4i8, 3e20.11)
-  cchar(ichar + 1) = -cchar(n16)
-  vchar(ichar + 1) = vchar(n16)
-  gslope(n12) = gslope(ichar)
-  gslope(ichar + 1) = -gslope(n16)
-  ichar = ichar + n13 + 1
-  if (iprsup .ge. 3) write (unit = lunit(6), fmt = 4239) ichar, (cchar(j), vchar(j), gslope(j), j = n11, ichar)
-4239 format (/, ' ichar =', i3, 5x, '(cchar(j), vchar(j), gslope(j), j = n11, ichar)  follow ...', /, (1x, 6e20.11))
+  n16 = i_char + n13 + 1
+  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 4234) inonl, i_char, n11, n13, tr(it), vecnl1(inonl), anonl(inonl)
+4234 format (/, ' Process type-96.   inonl   i_char     n11     n13', 14x, 'tr(it)', 7x, 'vecnl1(inonl)', 8x, 'anonl(inonl)', /, 17x, 4i8, 3e20.11)
+  cchar(i_char + 1) = -cchar(n16)
+  vchar(i_char + 1) = vchar(n16)
+  gslope(n12) = gslope(i_char)
+  gslope(i_char + 1) = -gslope(n16)
+  i_char = i_char + n13 + 1
+  if (iprsup .ge. 3) write (unit = lunit(6), fmt = 4239) i_char, (cchar(j), vchar(j), gslope(j), j = n11, i_char)
+4239 format (/, ' i_char =', i3, 5x, '(cchar(j), vchar(j), gslope(j), j = n11, i_char)  follow ...', /, (1x, 6e20.11))
   ! handling of steady-state current and flux conditions.
 5309 n12 = ilast(inonl)
   n13 = nonlad(inonl)
@@ -2249,8 +2249,8 @@ subroutine nonln2
   flstat(17) = d9
   go to 9999
 4758 if (n3 * n4 .ne. 1) go to 100
-  nonle(inonl) = ichar
-  if (ichar .le. lchar) go to 4763
+  nonle(inonl) = i_char
+  if (i_char .le. lchar) go to 4763
   lstat(19) = 4758
   iprint = 10
   go to 9000
@@ -2266,7 +2266,7 @@ subroutine nonln2
 54127 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54118)
 54118 format ('+Special termination-of-points card.')
   if (itype .ne. 93 .and. itype .ne. 96 .and. itype .ne. 98) go to 100
-  nonle(inonl) = -ichar
+  nonle(inonl) = -i_char
   vnonl(inonl) = 0.
   go to 100
 182 ii = inonl - 1
@@ -2310,35 +2310,35 @@ subroutine nonln2
   ilast(inonl) = ilast(i)
   nltype(inonl) = nltype(i)
   go to 100
-270 if (ichar + 11 .le. lchar) go to 271
+270 if (i_char + 11 .le. lchar) go to 271
 1270 iprint = 10
   lstat(19) = 270
   go to 9000
-271 iaw = ichar + 1
+271 iaw = i_char + 1
   nonle(inonl) = iaw
   call move0 (vchar(iaw :), ll9)
   if (tx(it) .eq. 0.0) tx(it) = 1.0
-  vchar(ichar + 10) = tx(it)
+  vchar(i_char + 10) = tx(it)
   if (c(it) .eq. 0.0) c(it) = 1.0
-  vchar(ichar + 11) = c(it)
+  vchar(i_char + 11) = c(it)
   if (n3 .ne. 1) go to 4271
   if (n4 .eq. 1) go to 3271
-4271 ichar = ichar + 11
+4271 i_char = i_char + 11
   go to 182
 3271 nonlad(inonl) = -iaw
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 2271) tr(it), tx(it), c(it)
 2271 format ('+Type-94 arrester.', e10.3, 2e11.4)
-  if (ichar + 18 .gt. lchar) go to 1270
+  if (i_char + 18 .gt. lchar) go to 1270
   j = 1
   ii = 4
   !     read input card using cimage
   call cimage
-  n6 = j + ichar
-  n7 = ii + ichar
+  n6 = j + i_char
+  n7 = ii + i_char
   read (unit = abuff, fmt = 1272) (cchar(i), i = n6, n7)
 1272 format (5e16.0)
   ii = 3
-  n7 = ii + ichar
+  n7 = ii + i_char
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 2272) j, ii, (cchar(i), i = n6, n7)
 2272 format ('+consts. ', i2, '-', i2, '.', 3e11.3)
   do j = 5, 17, 3
@@ -2346,16 +2346,16 @@ subroutine nonln2
      if (ii .gt. 18) ii = 18
      !     read input card using cimage
      call cimage
-     n6 = j + ichar
-     n7 = ii + ichar
+     n6 = j + i_char
+     n7 = ii + i_char
      read (unit = abuff, fmt = 1272) (cchar(i), i = n6, n7)
      if (noutpr .eq. 0) write (unit = kunit6, fmt = 2272)  j, ii, (cchar(i), i = n6, n7)
   end do
-  ichar = ichar + 18
+  i_char = i_char + 18
 100 go to 9999
 9000 lstat(16) = iprint
   kill = 1
-9999 if (iprsup .ge. 3 .or. kill .gt. 0) write (unit = lunit(6), fmt = 9998)  kill, inonl, num99, ichar, itype
+9999 if (iprsup .ge. 3 .or. kill .gt. 0) write (unit = lunit(6), fmt = 9998)  kill, inonl, num99, i_char, itype
 9998 format (/, ' Exit  "nonln2" .    kill   inonl   num99   ichar   itype', /, 17x, 10i8)
   lstat(18) = 0
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)

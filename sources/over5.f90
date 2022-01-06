@@ -2177,7 +2177,7 @@ subroutine over5
   character(8) :: text8, text13, text14, text15, text16
   character(8) :: text17
   character(80) :: buffer
-  integer(4) :: i, ichar, idube1, idube2, idube3, ios, ip, ip2, ip3, iprint
+  integer(4) :: i, idube1, idube2, idube3, ios, ip, ip2, ip3, iprint
   integer(4) :: j, jdube1, jk
   integer(4) :: kpass, kswt2
   integer(4) :: ll10, lsw2
@@ -2204,7 +2204,7 @@ subroutine over5
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  Begin module "over5".')
   lstat(29) = inonl
-  lstat(30) = ichar
+  lstat(30) = i_char
   lstat(33) = ifdep
   lstat(34) = jst
   lstat(40) = ifsem
@@ -2689,7 +2689,7 @@ subroutine over5
 643 lstat(21) = ntot
   lstat(26) = kswtch
   lstat(38) = npower
-  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 8025) ibr, inonl, kswtch, nv, npower, ntot, it, ifdep, num99, ichar, knt
+  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 8025) ibr, inonl, kswtch, nv, npower, ntot, it, ifdep, num99, i_char, knt
 8025 format (/, " Misc. scalars, in  'over5'  after completing switch input.", /, 1x, '     ibr   inonl  kswtch      nv  npower ntot      it   ifdep   num99   ichar     knt', /, 1x, 11i8)
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 8026) (koutvp(i), i = 1, npower)
 8026 format (/, ' koutvp, koutie', /, (1x, 10i10))
