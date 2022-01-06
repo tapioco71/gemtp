@@ -160,12 +160,12 @@ module labcom
   real(8) :: cshun(   93002)
   real(8) :: wk1(   93002)
   real(8) :: cblhst(   93002)
-  real(8) :: ui(       1)
+  real(8) :: ui(     460)
   real(8) :: trser(   93002)
   real(8) :: txser(   93002)
   real(8) :: xx(   93002)
   real(8) :: r4(   93002)
-  real(8) :: ur(       1)
+  real(8) :: ur(     460)
   real(8) :: caslnr(   93002)
   integer(4) :: integx(   93002)
   real(8) :: akey(   93002)
@@ -185,6 +185,10 @@ module labcom
   real(8) :: ev(    3000)
   real(8) :: array(   93002)
   real(8) :: evdoub(   93002)
+  integer(4) :: itg(   93002)
+  real(8) :: rtg(   93002)
+  complex(16) :: ctg(   93002)
+  real(8) :: stg(   93002)
   !
   equivalence (imfd( 1), jch2( 1))
   equivalence (volt( 1), vim( 1))
@@ -232,6 +236,8 @@ module labcom
   equivalence (ykm( 1), w1( 1))
   equivalence (texvec( 1), texvec1)
   equivalence (karray( 1), array( 1), ev( 1), buslst( 1), evdoub( 1), ibsout( 1), ibrnch( 1), jbrnch( 1))
+  equivalence (karray( 1), itg( 1), rtg( 1), ctg( 1))
+  equivalence (karray( 1), itg( 1))
 end module labcom
 
 !

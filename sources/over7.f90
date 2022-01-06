@@ -28,7 +28,7 @@ subroutine over7
   integer(4) :: i, ib, icon, ii, ischm, ist, isubs1, isubs2
   integer(4) :: j, jb, jbs, jbt, js, jsub
   integer(4) :: k, kb, ks
-  integer(4) :: l, lastxx, ll0, ls
+  integer(4) :: l, lastxx, ls
   integer(4) :: m, mext
   integer(4) :: n1, n2, n13, ncn, ndx1, nelim, nz
   real(8) :: td
@@ -57,30 +57,29 @@ subroutine over7
   call move0 (ndex, lbus)
   nz = ncurr
   i = 0
-140 do
-     i = i + 1
-     if (ischm .eq. 3) go to 1510
-     j = kownt(i)
-     call subscr (i, lbus, 150, 1)
-     if (j .eq. (-1)) go to 170
-155  k =  int (ndex(j + 1))
-     jsub = j + 1
-     call subscr (jsub, lbus, 155, 1)
-     ich1(i) = k
-     call subscr (i, lbus, 155, 2)
-     if (k .gt. 0) ich2(k) = i
-     call subscr (k, lbus, 155, 99)
-     ndex(j + 1) = i
-     ich2(i) = 0
-     norder(i) = 0
-     go to 180
-170  nz = nz + 1
-     norder(i) = nz
-     call subscr (i, lbus, 170, 1)
-     !180  if (i .lt. ntot) go to 140
-180  if (i .ge. ntot) exit
-  end do
-  if (nz .eq. ntot) go to 190
+  140 i = i + 1
+  if (ischm .eq. 3) go to 1510
+  j = kownt(i)
+  call subscr (i, lbus, 150, 1)
+  if (j .eq. (-1)) go to 170
+155 k =  int (ndex(j + 1))
+  jsub = j + 1
+  call subscr (jsub, lbus, 155, 1)
+  ich1(i) = k
+  call subscr (i, lbus, 155, 2)
+  if (k .gt. 0) ich2(k) = i
+  call subscr (k, lbus, 155, 99)
+  ndex(j + 1) = i
+  ich2(i) = 0
+  norder(i) = 0
+  go to 180
+170 nz = nz + 1
+  norder(i) = nz
+  call subscr (i, lbus, 170, 1)
+  !180  if (i .lt. ntot) go to 140
+180 if (i .ge. ntot) go to 220
+  go to 140
+220 if (nz .eq. ntot) go to 190
   lstat(19) = 190
   nelim = 0
   go to 453
@@ -94,7 +93,7 @@ subroutine over7
      if (ndex(ncn + 1) .ne. 0) exit
      ncn = ncn +1
   end do
-220 if (ncurr .lt. nelim)   go to 229
+  if (ncurr .lt. nelim)   go to 229
   jsub = ncn + 1
   call subscr (jsub, lbus, 220, 1)
   i = int (ndex(ncn + 1))

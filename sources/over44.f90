@@ -10,6 +10,7 @@
 
 subroutine subr44
   use blkcom
+  use labcom
   use deck44
   use com44
   use ovr44c
@@ -18,23 +19,15 @@ subroutine subr44
   integer(4) :: ioftvi, ioftvr, iofwor, iofxti, iofxtr, iofxwc, iofxwy, iofyzi, iofyzr
   integer(4) :: iofzsu
   integer(4) :: j
-  integer(4) :: length, lltemp(20)
+  integer(4) :: lltemp(20)
   integer(4) :: n3, n5, n7, n8, ndim, nsqr, nsqr2, ntri
-  real(8), allocatable :: stg(:)
+  !
   !  dimension stg(1)
   !  equivalence (stg(1), karray(1))
   !     list-zero "karray" is always 1st, and maybe "over29":
   !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module subr44."')
-  length = size ((transfer (karray(1 :), stg)))
-  allocate (stg (length))
-  stg = transfer (karray(1 :), stg)
-  if (.not. allocated(stg)) then
-     write (unit = lunit(6), fmt = 100)
-100  format (' Could not associate stg to karray.  Stop.')
-     call stoptp
-  end if
   n8 = nchain
   if (kburro .eq. 1) n8 = 29
   call dimens (lltemp(1), n8, trash, trash)
@@ -97,8 +90,7 @@ subroutine subr44
 10 call guts44 (stg(iofarr :), stg(iofxwc :), stg(iofxwy :), stg(iofyzr :), stg(iofyzi :), stg(ioftii :), stg(ioftir :), stg(ioftvi :), stg(ioftvr :), stg(iofer :), stg(iofei :), stg(iofthe :), stg(iofxtr :), stg(iofxti :), stg(iofzsu :), stg(iofdum :), stg(iofdur :), stg(ioftix :), stg(iofwor :), ndim, ntri, nsqr2)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
 4568 format ('  "Exit  module subr44."')
-99999 if (allocated (stg)) deallocate (stg)
-  return
+99999 return
 end subroutine subr44
 
 !

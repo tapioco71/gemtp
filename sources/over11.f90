@@ -226,7 +226,7 @@ subroutine over11
   integer(4) :: iy, iz
   integer(4) :: j, ja, jb, jj, jn, jpp, js, jtemp
   integer(4) :: k, k1, kd, kib, kkk, kt
-  integer(4) :: l, ld, ldd, ll0, ll1, ll2, llm1, locatn(20, 20), ltemp
+  integer(4) :: l, ld, ldd, ll0, ll1, ll2, llm1, ltemp
   integer(4) :: m, mib, mk, mt
   integer(4) :: n1, n2, n5, n6, n7, n8, n9, n13, n15, n16, n18, n19, n22, n28
   integer(4) :: n29, n71, n74, n77, n78, n85, n899, ndum, ndx1, ndx2, ndx3, ndx4
@@ -536,7 +536,7 @@ subroutine over11
      e(i) = e(i) + diag(i) * vr - diab(i) * vi
      f(i) = f(i) + diag(i) * vi + diab(i) * vr
      go to 7370
-7360 do
+     do
         jj = jj + 1
 7370    if (jj .ge. kkk) go to 7380
         j = iloc(jj)

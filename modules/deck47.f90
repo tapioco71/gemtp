@@ -7,12 +7,9 @@
 module c29b01
   implicit none
   !common /c29b01/ karray(3)
-  integer(4), target :: karray(3)
+  !  integer(4), target :: karray(3)
   ! equivalences friend zone.
   ! from over 47
-  integer(4), pointer :: itg(:)
-  real(8), dimension(:), allocatable :: rtg
-  complex(16), dimension(:), allocatable :: ctg
   !  equivalence (karray(1), itg(1), rtg(1), ctg(1))
 end module c29b01
 

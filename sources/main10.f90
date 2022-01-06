@@ -621,7 +621,7 @@ subroutine namea6 (text1, n24)
   ! mode of use:  0 will add text1, positive will locate it,
   ! and negative will destroy (remove) it.
   integer(4), intent(out) :: n24
-  character(8), intent(in) :: text1
+  character(1), intent(in) :: text1
   integer(4) :: j, n17
   character(8) :: text2
   !

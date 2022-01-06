@@ -205,8 +205,14 @@ program vardim
   use bcddat
   use test
   implicit none
-  integer(4), parameter :: modvara = 126, modvarc = 51
+  integer(4), parameter :: modvara = 126, modvarc = 55
   !
+  character :: char(6), bus2
+  character(4) :: texta(2), textb(2)
+  character(8) :: bus1
+  character(16) :: types(5)
+  character(16) :: ansi16
+  character(80) :: abuff
   integer(4) :: i, ii, implmode, indexm, ios
   integer(4) :: j
   !  integer(4) :: jbltyp
@@ -217,13 +223,7 @@ program vardim
   !  integer(4) :: ncbarr(300)
   integer(4) :: nonneg, nrec3, ns, ntime, numkex, numlst, ny
   real(8) :: d1, d2, d3
-  character :: char(6), bus2
-  character(4) :: texta(2), textb(2)
-  character(8) :: bus1
   !  character(8) :: cblock(300), cblser(300)
-  character(16) :: types(4)
-  character(16) :: ansi16
-  character(80) :: abuff
   real(8) :: lphd2, lphase
   !  dimension cblock(300), ncbarr(300), cblser(300), jbltyp(300)
   integer(4) :: integerdim, realdim
@@ -232,6 +232,12 @@ program vardim
   !
   integerdim = 4
   realdim = 8
+  !
+  data types(1) / 'real(8)' /
+  data types(2) / 'complex(8)' /
+  data types(3) / 'character(8)' /
+  data types(4) / 'integer(4)' /
+  data types(5) / 'complex(16)' /
   !
   modvars(1)%name       = 'x'
   modvars(1)%options(1 : 4) = (/ '', '', '', '' /)
@@ -1221,11 +1227,6 @@ program vardim
   data char(5) / 'm' /
   data char(6) / 'n' /
 
-  data types(1) / 'real(8)' /
-  data types(2) / 'complex(8)' /
-  data types(3) / 'character(8)' /
-  data types(4) / 'integer(4)' /
-
   implmode = 0
   numlst = 28
   lunit(2 : 6) = (/ 7, 8, 9, 5, 6 /)
@@ -1366,7 +1367,7 @@ program vardim
   modvars(227)%name = 'ui'
   modvars(227)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(227)%kind = 1
-  modvars(227)%dimension = 40
+  modvars(227)%dimension = 14 ! 40
 
   modvars(228)%name = 'trser'
   modvars(228)%options(1 : 4) = (/ '', '', '', '' /)
@@ -1391,7 +1392,7 @@ program vardim
   modvars(232)%name = 'ur'
   modvars(232)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(232)%kind = 1
-  modvars(232)%dimension = 40
+  modvars(232)%dimension = 14 ! 40
 
   modvars(233)%name = 'caslnr'
   modvars(233)%options(1 : 4) = (/ '', '', '', '' /)
@@ -1487,6 +1488,26 @@ program vardim
   modvars(251)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(251)%kind      = 1
   modvars(251)%dimension = 1
+
+  modvars(252)%name       = 'itg'
+  modvars(252)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(252)%kind      = 4
+  modvars(252)%dimension = 1
+
+  modvars(253)%name       = 'rtg'
+  modvars(253)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(253)%kind      = 1
+  modvars(253)%dimension = 1
+
+  modvars(254)%name       = 'ctg'
+  modvars(254)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(254)%kind      = 5
+  modvars(254)%dimension = 1
+
+  modvars(255)%name       = 'stg'
+  modvars(255)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(255)%kind      = 1
+  modvars(255)%dimension = 1
 
   open (unit = lunit(2), iostat = ios, form = 'formatted')
   if (ios .eq. 0) then
@@ -1919,6 +1940,20 @@ program vardim
            equivlist(8)%variable = modvars(78)    ! jbrnch(1)
            equivlist(8)%index = 1
            call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 8))
+           equivlist(1)%variable = modvars(127)   ! karray(1)
+           equivlist(1)%index = 1
+           equivlist(2)%variable = modvars(252)   ! itg(1)
+           equivlist(2)%index = 1
+           equivlist(3)%variable = modvars(253)   ! rtg(1)
+           equivlist(3)%index = 1
+           equivlist(4)%variable = modvars(254)   ! ctg(1)
+           equivlist(4)%index = 1
+           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 4))
+           equivlist(1)%variable = modvars(127)   ! karray(1)
+           equivlist(1)%index = 1
+           equivlist(4)%variable = modvars(255)   ! stg(1)
+           equivlist(4)%index = 1
+           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
            !
            write (unit = lunit(4), fmt = 7245)
 7245       format ('end module labcom')

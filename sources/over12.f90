@@ -163,7 +163,7 @@ subroutine over12
   !  equivalence (akey(1), adelay(1)), (tstat(1), crit(1))
   !     dc-48 had "lastsw" clobbered on 2nd energization; change
   !     dummy usage of this vector to "lastxx" temporarily (12 sep
-  character(8) :: atim(2)
+  character(4) :: atim(2)
   integer(4) :: i, ii, ikf, ilorow, iofcnt, ioftab, ip, iprint, iprout, iq
   integer(4) :: irbase, isecti, isfd, itadd
   integer(4) :: j, j1, jgl, jglnn, jlk, jt
@@ -396,7 +396,7 @@ subroutine over12
   end do
 4120 continue
 409 if (nenerg .lt. 0)   go to 188
-  call time44 (atim(1 :))
+  call time44 (atim)
   call runtym (d1, d2)
   !  seed = seedy(atim(1)) + 1000. * (d1 + d2)
   seed = int (seedy (atim(1 :)) + 1000.0d0 * (d1 + d2))
