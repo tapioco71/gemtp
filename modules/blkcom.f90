@@ -36,7 +36,9 @@ module blkcom
   !     flag-2.   begin class-2  /blank/  variables
   !               (floating-point numeric usage only, with scalars
   !               preceding arrays).
-
+  !
+  real(8), parameter :: fltinf = huge (0.0), flzero = tiny (0.0)
+  !
   real(8) :: ci1, ck1
   real(8) :: deltat, delta2
   real(8) :: freqcs
@@ -46,12 +48,11 @@ module blkcom
   real(8) :: szbed, sigmax
   real(8) :: fminfs, delffs, fmaxfs, tenerg, begmax(6)
   real(8) :: unity, onehaf
-  real(8) :: fltinf, degmin, degmax, statfr, voltbc(50)
+  real(8) :: degmin, degmax, statfr, voltbc(50)
   real(8) :: flstat(20)
   real(8) :: angle
   real(8) :: pu, dltinv, speedl
   real(8) :: epsuba, epomeg, epdgel, epsiln, epszno, epwarn
-  real(8) :: flzero
   real(8) :: peaknd(3)
   real(8) :: sglfir
   real(8) :: tenm3, tenm6, twopi

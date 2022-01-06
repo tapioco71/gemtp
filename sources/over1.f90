@@ -2771,8 +2771,8 @@ subroutine sysdep
   !     following zero definition is redundant.
   ktrlsw(6) = 0                                             ! use "= 1" if simple logic is desired
   nbyte(3) = 2
-  fltinf = 1.0d+20
-  flzero = 1.0d-12
+!  fltinf = 1.0d+20
+!  flzero = 1.0d-12
   epsiln = 1.0d-8
   twopi = 6.28318530717958647692d+00
   userid = blank
