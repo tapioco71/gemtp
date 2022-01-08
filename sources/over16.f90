@@ -122,12 +122,11 @@ subroutine subts1
   ndx1 = lswtch + 1
   do j = 1, kswtch
      ndx1 = ndx1 - 1
-     if (crit(ndx1) .eq. 0.0d0) go to 3756
+     if (crit(ndx1) .eq. 0.0d0) cycle
      if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3752) j, crit(j), crit(ndx1), topen(j)
 3752 format (' Random open, set crit.  j, crit(j), crit(ndx1), topen(j) =', i6, 3e15.5)
      crit(j) = crit(ndx1)
   end do
-3756 continue
 3780 continue
   !                                   checking switch-positions for change
   if (iprsup .ge. 3) write (unit = lunit(6), fmt = 8253) lastov, kbase, ntot, kpartb, ncomp, t, tenerg, deltat
@@ -301,12 +300,11 @@ subroutine subts1
   go to 1221
 1227 kcount = nv
   do k = 1, kswtch
-     if (kpos(k) .ge. 0) go to 1239
+     if (kpos(k) .ge. 0) cycle
      kcount = kcount + 1
      bvalue(kcount) = tclose(k)
      if (nextsw(k) .eq. 0) bvalue(kcount) = 0.0d0
   end do
-1239 continue
   !     If u.m. imitation of s.m. modeling (loopss(1)=6644),  then
   !     go back into solvum to pass machine quantities (including
   !     just-calculated torque in tclose of switch) to tacs:
@@ -323,7 +321,7 @@ subroutine subts1
   do i = 1, kswtch
      k1 = kdepsw(lswtch + i)
      if (k1 .eq. 8888 .or. k1 .eq. 8891) go to 4718
-     if (k1 .ne. 8890) go to 801
+     if (k1 .ne. 8890) cycle
      n13 = n13 + 1
      if (n13 .le. 100) go to 4718
      write (unit = 6, fmt = *) ' Overflow triac storage in subts1.  Stop.'
@@ -354,14 +352,14 @@ subroutine subts1
      if (iprsup .eq. 7) write (unit = lunit(6), fmt = *) ' ndx1, xtcs(ndx1) =',  ndx1, xtcs(ndx1)
      if (xtcs( ndx1) .lt. -flzero * 10.0d0)  go to 809
      if (xtcs( ndx1) .le. +flzero * 10.0d0)  go to 803
-     if (m1 .eq. 2) go to 801
+     if (m1 .eq. 2) cycle
      go to 808
 809  if (m1 .eq. 2) go to 805
-     go to 801
-301  if (k1 .eq. 8891) go to 801
-     if (k1 .eq. 8890 .and. n .eq. 0) go to 801
+     cycle
+301  if (k1 .eq. 8891) cycle
+     if (k1 .eq. 8890 .and. n .eq. 0) cycle
 803  if (k1 .eq. 8891) go to 809
-     if (n .eq. 0 .and. k1 .eq. 8890) go to 801
+     if (n .eq. 0 .and. k1 .eq. 8890) cycle
      if (m1 .ne. 2) go to 804
      !                                         ------  was closed  ------
      d5 = tclose(i)
@@ -387,16 +385,16 @@ subroutine subts1
      a8sw(mk + 5) = t + d5 * deltat / delti + a8sw(mk + 4) * a8sw(mk + 2)
      go to 788
 871  a8sw(mk + 6) = d5
-     go to 801
+     cycle
 888  if (k1 .ne. 8890) go to 4761
      ndx3 = kxtcs + n
      if (iprsup .eq. 7) write (unit = 6, fmt = *) ' check  xtcs(ndx3) =',  xtcs(ndx3)
-     if (xtcs(ndx3) .gt. 10.0d0 * flzero) go to 801
+     if (xtcs(ndx3) .gt. 10.0d0 * flzero) cycle
      d14 = d5 * swcold(n13)
      swcold(n13) = d5
      if (d14 .lt. 0.0d0) go to 805
      d5 = absz (d5)
-4761 if (d5 .ge. ardube(ndx2)) go to 801
+4761 if (d5 .ge. ardube(ndx2)) cycle
      !                                               ------  opening  ------
 805  j = 5
      if (m .lt. 0) j = -j
@@ -407,10 +405,10 @@ subroutine subts1
      if (ialter .eq. 0) ialter = 1
      if (i1 .ne. 0) write (unit = lunit(6), fmt = 806) bus3, bus1, bus2, text3, t
 806  format (51x, a6, " '", a6, "' to '", a6, "' ", a6, 'g after', e12.5, ' sec.')
-     if (istep .gt. 1 .or. k1 .ne. 8888) go to 801
+     if (istep .gt. 1 .or. k1 .ne. 8888) cycle
      write (unit = lunit(6), fmt = 1128)
 1128 format (/, 26x, 94('='), /, 10x, 'Warning.  ----  The just-opened valve or diode was closed during the steady-state phasor solution', /, 26x, 'for initial conditions.   But the resulting current at time zero was from cathode to anode, so', /, 26x,  "opening occurred on time-step number one.   The user might consider removing  'closed'  from", /, 26x,  'columns  55-60  of the associated switch card.', /, 26x, 94('='), /, 1x)
-     go to 801
+     cycle
      !     ------  was open  ------
 804  ardube(i) = ardube(i) + deltat
      if (ardube(i) .gt. d1) ardube(i) = -fltinf
@@ -418,14 +416,14 @@ subroutine subts1
      ndx1 = lswtch + i
      if (iprsup .eq. 7) write (unit = 6, fmt = *) ' ndx1, ardube(i), d1, d5, ardube(ndx1) =', ndx1, ardube(i), d1, d5, ardube(ndx1)
      if (k1 .eq. 8890) d5 = absz (d5)
-     if (d5 .lt. ardube(ndx1)) go to 801
+     if (d5 .lt. ardube(ndx1)) cycle
      if (k1 .eq. 8890) go to 807
      if (ardube(i) .lt. 0.0d0) go to 807
      ardube(i) = -fltinf
      go to 808
 807  if (n .eq. 0) go to 808
      ndx1 = kxtcs + n
-     if (xtcs(ndx1) .le. flzero * 10.0d0) go to 801
+     if (xtcs(ndx1) .le. flzero * 10.0d0) cycle
      !     ------  closing  ------
 808  j = 2
      if (m .lt. 0) j = -j
@@ -435,7 +433,6 @@ subroutine subts1
      if (ialter .eq. 0)  ialter = 1
      if (i1 .ne. 0 ) write (unit = lunit(6), fmt = 806)  bus3, bus1, bus2, text4, t
   end do
-801 continue
   ktrlsw(1) = n19
   !     ------------------------------------------------------------------
 800 continue
@@ -484,11 +481,10 @@ subroutine subts1
      !     operating point
      d8 = vnonl(i) + d7
      do n11 = n9, n10
-        if (cchar(n6 + 3) .gt. cchar(n11)) go to 1123
+        if (cchar(n6 + 3) .gt. cchar(n11)) cycle
         cchar(n12) = n11
         go to 1125
      end do
-1123 continue
      cchar(n12) = n10 + 1
 1125 n13 = int (cchar(n12)) + n7 + 1
      d9 = vchar(n13) * cchar(n6 + 3) + cchar(n13)
@@ -497,19 +493,17 @@ subroutine subts1
      if (d7 .le. (d10 + flzero)) go to 1119
      cchar(n6 + 5) = 1
 1127 do n11 = n9, n10
-        if (vnonl(i) .gt. vchar(n11)) go to 1130
+        if (vnonl(i) .gt. vchar(n11)) cycle
         cchar(n12) = n11
         go to 1212
      end do
-1130 continue
      cchar(n12) = n10 + 1
      go to 1212
 1119 do n11 = n9, n10
-        if (-d8 .gt. vchar(n11)) go to 1120
+        if (-d8 .gt. vchar(n11)) cycle
         cchar(n12) = n11
         go to 1212
      end do
-1120 continue
      cchar(n12) = n10 + 1
      go to 1212
      !     We are on an upper with no reversal.
@@ -519,11 +513,10 @@ subroutine subts1
      !     operating point
      d8 = vnonl(i) - d7
      do n11 = n9, n10
-        if (-cchar(n6 + 3) .gt. cchar(n11)) go to 1140
+        if (-cchar(n6 + 3) .gt. cchar(n11)) cycle
         cchar(n12) = n11
         go to 1141
      end do
-1140 continue
      cchar(n12) = n10 + 1
 1141 n13 = int (cchar(n12)) + n7 + 1
      d9 = vchar(n13) * cchar(n6 + 3) - cchar(n13)
@@ -532,19 +525,17 @@ subroutine subts1
      if (d7 .le. (d10 + flzero)) go to 1149
      cchar(n6 + 5) = 1
 1147 do n11 = n9, n10
-        if (-vnonl(i) .gt. vchar(n11)) go to 1148
+        if (-vnonl(i) .gt. vchar(n11)) cycle
         cchar(n12) = n11
         go to 1312
      end do
-1148 continue
      cchar(n12) = n10 + 1
      go to 1312
 1149 do n11 = n9, n10
-        if (d8 .gt. vchar(n11)) go to 1150
+        if (d8 .gt. vchar(n11)) cycle
         cchar(n12) = n11
         go to 1312
      end do
-1150 continue
      cchar(n12) = n10 + 1
      go to 1312
      !     The previous point was a reversal point on hysteresis trajectory.
@@ -568,31 +559,28 @@ subroutine subts1
      d6 = 0.0d0
      go to 1575
 1581 do n11 = n9, n10
-        if (gslope(n6 + 4) .gt. cchar(n11)) go to 1701
+        if (gslope(n6 + 4) .gt. cchar(n11)) cycle
         cchar(n12) = n11
         go to 1710
      end do
-1701 continue
      cchar(n12) = n10 + 1
 1710 n13 = int (cchar(n12)) + n7 + 1
      d9 = vchar(n13) * gslope(n6 + 4) + cchar(n13)
      d6 = vchar(n6 + 4) - d9
 1575 do n11 = n9, n10
-        if (vchar(n6 + 3) .gt. cchar(n11)) go to 1750
+        if (vchar(n6 + 3) .gt. cchar(n11)) cycle
         cchar(n12) = n11
         go to 1760
      end do
-1750 continue
      cchar(n12) = n10 + 1
 1760 n13 = int (cchar(n12)) + n7 + 1
      d10 = vchar(n13) * vchar(n6 + 3) + cchar(n13)
      d11 = vchar(n6 + 2) - d10
      do n11 = n9, n10
-        if (gslope(n6 + 5) .gt. cchar(n11)) go to 1800
+        if (gslope(n6 + 5) .gt. cchar(n11)) cycle
         n14 = n11
         go to 1810
      end do
-1800 continue
      n14 = n10 + 1
 1810 n14 = n14 + n7 + 1
      d10 = vchar(n14) * gslope(n6 + 5) + cchar(n14)
@@ -618,31 +606,28 @@ subroutine subts1
      d6 = 0.0d0
      go to 1515
 1591 do n11 = n9, n10
-        if (-gslope(n6 + 4) .gt. cchar(n11)) go to 1600
+        if (-gslope(n6 + 4) .gt. cchar(n11)) cycle
         cchar(n12) = n11
         go to 1610
      end do
-1600 continue
      cchar(n12) = n10 + 1
 1610 n13 = int (cchar(n12)) + n7 + 1
      d9 = vchar(n13) * gslope(n6 + 4) - cchar(n13)
      d6 = d9 - vchar(n6 + 4)
 1515 do n11 = n9, n10
-        if (-vchar(n6 + 3) .gt. cchar(n11)) go to 1650
+        if (-vchar(n6 + 3) .gt. cchar(n11)) cycle
         cchar(n12) = n11
         go to 1660
      end do
-1650 continue
      cchar(n12) = n10 + 1
 1660 n13 = int (cchar(n12)) + n7 + 1
      d10 = vchar(n13) * vchar(n6 + 3) - cchar(n13)
      d11 = d10 - vchar(n6 + 2)
      do n11 = n9, n10
-        if (-gslope(n6 + 5) .gt. cchar(n11)) go to 1850
+        if (-gslope(n6 + 5) .gt. cchar(n11)) cycle
         n14 = n11
         go to 1860
      end do
-1850 continue
      n14 = n10 + 1
 1860 n14 = n14 + n7 + 1
      d10 = vchar(n14) * gslope(n6 + 5) - cchar(n14)
@@ -853,11 +838,10 @@ subroutine subts1
      max99m = max99m - 1
      if (max99m .ge. 0 .or. iprsup .ge. 3) write (unit = lunit(6), fmt = 73953) bus(k), bus(m), t, it1
 73953 format (20x, 'Type-99 n.l. v-i from ', a6, "' to '", a6, "'", ' at t=', e12.4, ' begins operation on segment', i4, '.')
-73960 if (nonlm(i) .gt. 0) go to 3990
+73960 if (nonlm(i) .gt. 0) cycle
      kcount = kcount + 1
      bvalue(kcount) = gus2
   end do
-3990 continue
 3991 continue
   if (m4plot .eq. 1) call yserlc
   if (ialter .eq. 0) go to 2616
@@ -1027,18 +1011,17 @@ subroutine subts1
   call move0 (znonl(1 :), j11)
   if (inonl .eq. num99) go to 2321
   do i = 1, inonl
-     if (nltype(i) .lt. 0) go to 2320
-     if (nltype(i) .gt. 920) go to 2320
+     if (nltype(i) .lt. 0) cycle
+     if (nltype(i) .gt. 920) cycle
      vzero(i) = -fltinf
      n1 = nonlad(i)
      ilast(i) = iabs (n1)
      if (n1 .lt. 0) vzero(i) = 0.0d0
   end do
-2320 continue
 2321 do n2 = 1, numsub
      n1 = 0
      l = isubeg(n2)
-     if (l .le. 0) go to 2322
+     if (l .le. 0) cycle
 2306 d8 = -1.0d0
      j = nsubkm(l + 1)
      do n10 = 1, 2
@@ -1054,11 +1037,10 @@ subroutine subts1
         j = nsubkm(l + 2)
      end do
      l = nsubkm(l)
-     if (l .eq. isubeg(n2)) go to 2322
+     if (l .eq. isubeg(n2)) cycle
      n1 = n1 + ntot
      go to 2306
   end do
-2322 continue
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 2318) (znonl(i), i = 1, j11)
 2318 format (/, ' (znonl(1:j11) before solution, at 1313.', /, (1x, 8e15.5))
   ii = 1
@@ -1125,8 +1107,8 @@ subroutine subts1
   !             find differences of columns of inverse for nonlinearities
 2550 if (inonl .le. num99) go to 2616
   do i = 1, inonl
-     if (nltype(i) .lt. 0) go to 2600
-     if (nltype(i) .gt. 920) go to 2600
+     if (nltype(i) .lt. 0) cycle
+     if (nltype(i) .gt. 920) cycle
      n1 = nonlk(i)
      n2 = iabs (nonlm(i))
      a = znonl(n1) - znonl(n2)
@@ -1136,7 +1118,6 @@ subroutine subts1
      a = a * delta2
 2561 anonl(i) = a
   end do
-2600 continue
 2616 if (iprsup .ge. 2) write (unit = lunit(6), fmt = 2603) (znonl(i), i = 1, j11)
 2603 format (/, ' znonl after soln, at 2318', /, (1x, 8e15.5))
   !  call mover ( finit(1), f(1), ntot )
@@ -1144,13 +1125,13 @@ subroutine subts1
   if (kswtch .eq. 0) go to 5000
   do i = 1, kswtch
      k1 = kdepsw(lswtch + i)
-     if (k1 .ne. 8888 .and. k1 .ne. 8890 .and. k1.ne.8891) go to 8801
+     if (k1 .ne. 8888 .and. k1 .ne. 8890 .and. k1.ne.8891) cycle
      mk = int (-adelay(i), kind (mk))
-     if (mk .le. 0) go to 8801
+     if (mk .le. 0) cycle
      m = iabs (kpos(i))
-     if (m .ne. 5) go to 8801
+     if (m .ne. 5) cycle
      ndx2 = lswtch + lswtch + i
-     if (ardube(ndx2) .ne. 9999.0d0) go to 8801
+     if (ardube(ndx2) .ne. 9999.0d0) cycle
      n1 = kmswit(i)
      n2 = kmswit( lswtch + i )
      bi = exp ((a8sw(mk + 5) - t - deltat) / a8sw(mk + 4))
@@ -1160,7 +1141,6 @@ subroutine subts1
      if (ai .le. a8sw(mk + 7)) ardube(ndx2) = 0.0d0
      if (bi .le. 0.0001d0 .and. a8sw(mk + 7) .eq. 0.0d0) ardube(ndx2) = 0.0d0
   end do
-8801 continue
   !              Call to solvum if no compensation of um power circuits :
 5000 if (loopss(8) .eq. 3) call solvum (spum(iureac :), spum(iugpar :), spum(iufpar :), spum(iuhist :), spum(iuumrp :), ispum(iunod1 :), ispum(iunod2 :), ispum(iujclt :), ispum(iujclo :), ispum(iujtyp :), ispum(iunodo :), ispum(iujtmt :), spum(iuhism :), spum(iuomgm :), spum(iuomld :), spum(iutham :), spum(iuredu :), spum(iureds :), spum(iuflds :), spum(iufldr :), spum(iurequ :), spum(iuflqs :), spum(iuflqr :), ispum(iujcds :), ispum(iujcqs :), spum(iuflxd :), spum(iuflxq :), ispum(iunppa :), spum(iurotm :), ispum(iuncld :), ispum(iunclq :), ispum(iujtqo :), ispum(iujomo :),  ispum(iujtho :), spum(iureqs :), spum(iuepso :), spum(iudcoe :), ispum(iukcoi :), spum(iuvolt :), spum(iuangl :), ispum(iunodf :),  ispum(iunodm :), ispum(iukumo :), ispum(iujumo :), spum(iuumou :))
   if (kill .gt. 0) go to 9200
@@ -1226,8 +1206,8 @@ subroutine yserlc
   ixcopt = 1
 3000 do j = 1, lserlc
      ndx1 = ibr + j
-     if (kbus(ndx1) .eq. 0) go to 8276
-     if (nr(ndx1) .eq. 0) go to 8276
+     if (kbus(ndx1) .eq. 0) cycle
+     if (nr(ndx1) .eq. 0) cycle
      nr(ndx1) = 0
      ndx2 = it + j
      n1 = litype(ndx1)
@@ -1266,7 +1246,7 @@ subroutine yserlc
 4114 if (iprsup .ge. 3) write (unit = lunit(6), fmt = 4116) j, n8, n9, d23
 4116 format (' next [y] change.  j, n8, n9, d23 =', 3i8, e14.5)
      if (n8 .eq. 1) go to  5231
-     if (n8 .gt. kpartb) go to 8276
+     if (n8 .gt. kpartb) cycle
      n3 = kks(n8)
 5217 n3 = n3 - 1
      n4 = iabs (km(n3))
@@ -1276,7 +1256,7 @@ subroutine yserlc
 5224 if (n4 .ne. n9) go to  5217
      ykm(n3) = ykm(n3) - d23
      go to 5238
-5231 if (n9 .gt. kpartb) go to  8276
+5231 if (n9 .gt. kpartb) cycle
 5238 if (n9 .gt. kpartb) go to  5252
      n1 = kks(n9)
 5244 n1 = n1 - 1
@@ -1289,7 +1269,6 @@ subroutine yserlc
      go to 5244
 5252 if (ialter .eq. 0) ialter = 1
   end do
-8276 continue
 9000 return
 end subroutine yserlc
 
@@ -1398,11 +1377,10 @@ subroutine switch
      j = -j
      kbegsw(j) = 0
      n18 = n18 - 1
-     go to 3485
+     cycle
 3482 kbegsw(j) = 1
      n18 = n18 + 1
   end do
-3485 continue
   ktrlsw(2) = n18
   if (n18 .gt. 0) go to 3487
   ktrlsw(4) = 0
@@ -1437,20 +1415,19 @@ subroutine switch
 3493 if (n1 .gt. n2) go to 3506
      do ll = n1, n2
         j = nbhdsw(ll)
-        if (kbegsw(j) .eq. 0) go to 3503
-        if (nextsw(j) .ne. 0) go to 3503
+        if (kbegsw(j) .eq. 0) cycle
+        if (nextsw(j) .ne. 0) cycle
         ndx2 = lswtch + j
         if (jj .gt. 0) go to 3497
         if (k .ne. kmswit(j) .and. k .ne. kmswit(ndx2)) go to 3497
         jj = 1
         go to 3501
-3497    if (mm .gt. 0) go to 3503
-        if (m .ne. kmswit(j) .and. m .ne. kmswit(ndx2)) go to 3503
+3497    if (mm .gt. 0) cycle
+        if (m .ne. kmswit(j) .and. m .ne. kmswit(ndx2)) cycle
         mm = 1
 3501    n9 = n9 + 1
         if (n9 .eq. 2) go to 3580
      end do
-3503 continue
      !     we drop out of above  do 3503  loop only if one side of switch #i
      !     can be used for kcl calculation of switch current:
 3506 if (n13 .gt. 0) nextsw(n17) = i * nextsw(n17)
@@ -1503,8 +1480,8 @@ subroutine switch
      !     we reach 3563 with kode correctly modified to reflect added switch
 3563 if (iprsup .ge. 3) write (unit = lunit(6), fmt = 3564)  i
 3564 format (' Complete processing of switch',  i5)
-  end do
 3580 continue
+  end do
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3584) n13, n17
 3584 format (' Done another pass of all switches.  n13, n17 =',2i5)
   if (n13 .gt. n3) go to 3591
@@ -1523,7 +1500,7 @@ subroutine switch
   !     %%%%%       along with this block of sophisticated code.
   !     begin by opening all switches so ordered (negative modswt):
 3605 do ll = 1, n20
-     if (modswt(ll) .gt. 0) go to 4100
+     if (modswt(ll) .gt. 0) cycle
      n17 = -modswt(ll)
      k = kmswit(n17)
      ndx1 = lswtch + n17
@@ -1546,20 +1523,19 @@ subroutine switch
      n9 = 0
      do i = n1, n2
         n7 = nbhdsw(i)
-        if (nextsw(n7) .eq. 0) go to 3641
+        if (nextsw(n7) .eq. 0) cycle
         ndx2 = lswtch + n7
         if (jj .gt. 0) go to 3627
         if (k .ne. kmswit(n7) .and. k .ne. kmswit(ndx2)) go to 3627
         jj = 1
         n9 = n9 + 1
         go to 3635
-3627    if (mm .gt. 0) go to 3641
-        if (m .ne. kmswit(n7) .and. m .ne. kmswit(ndx2)) go to 3641
+3627    if (mm .gt. 0) cycle
+        if (m .ne. kmswit(n7) .and. m .ne. kmswit(ndx2)) cycle
         mm = 1
         n9 = n9 + 1
 3635    if (n9 .eq. 2) go to 3750
      end do
-3641 continue
      !     we fall out bottom of  do 3641  only if switch n17 is at end of
      !     radial.   this is finger-switch, with simple logic.    begin
      !     by finding node n16 which is out at end of radial:
@@ -1618,8 +1594,8 @@ subroutine switch
      n2 = kentnb(m3 + 1) - 1
      do i = n1, n2
         n7 = nbhdsw(i)
-        if (nextsw(n7) .eq. 0) go to 3774
-        if (kbegsw(n7) .eq. 2) go to 3774
+        if (nextsw(n7) .eq. 0) cycle
+        if (kbegsw(n7) .eq. 2) cycle
         k1 = kmswit(n7)
         k2 = kmswit(n7 + lswtch)
         jj = j1
@@ -1628,7 +1604,6 @@ subroutine switch
         if (mm .eq. jj) mm = j2
         go to  3788
      end do
-3774 continue
      !     processing switches which are no processed switch connected
      kode(j1) = j2
      kode(j2) = j1
@@ -1703,10 +1678,9 @@ subroutine switch
      if (iprsup .ge. 2) write (unit = lunit(6), fmt = 4096) ll, n17, k, m
 4096 format (' Done with another opening.  ll, n17, k, m =', 10i5)
   end do
-4100 continue
   !     next close all switches so ordered (positive modswt):
   do ll = 1, n20
-     if (modswt(ll) .lt. 0) go to 4450
+     if (modswt(ll) .lt. 0) cycle
      n17 = modswt(ll)
      k = kmswit(n17)
      ndx1 = lswtch + n17
@@ -1718,7 +1692,7 @@ subroutine switch
      if (n2 .lt. n1) go to 4120
      do i = n1, n2
         n7 = nbhdsw(i)
-        if (nextsw(n7) .eq. 0) go to 4118
+        if (nextsw(n7) .eq. 0) cycle
         ndx2 = lswtch + n7
         if (n4 .gt. 0) go to 4113
         jj = n7
@@ -1727,13 +1701,12 @@ subroutine switch
         if (k .eq. kmswit(ndx2)) n5 = m
         n4 = k
         if (n4 .eq. n5) n4 = m
-        go to 4118
-4113    if (kmswit(n7) .ne. n5 .and. kmswit(ndx2) .ne. n5) go to 4118
+        cycle
+4113    if (kmswit(n7) .ne. n5 .and. kmswit(ndx2) .ne. n5) cycle
         !     we have found group 2 switch (connected to node n5):
         mm = n7
         go to 4126
      end do
-4118 continue
      if (n4 .gt. 0) go to 4300
      !     no connected switches which are closed is easy special case:
 4120 kode(k) = m
@@ -1906,8 +1879,8 @@ subroutine switch
      numb = 0
      do i = n1, n2
         k7 = nbhdsw(i)
-        if ( nextsw(k7) .eq. 0 ) go to 4380
-        if (kbegsw(k7) .ne. 2) go to 4380
+        if (nextsw(k7) .eq. 0) cycle
+        if (kbegsw(k7) .ne. 2) cycle
         k3 = kmswit(k7)
         k4 = kmswit( lswtch + k7 )
         if ( j1 .eq. 1 ) go to 4372
@@ -1915,15 +1888,14 @@ subroutine switch
         j1 = 1
         numb = numb+1
         go to 4376
-4372    if ( j2 .eq. 1 ) go to 4380
-        if (k2 .ne. k3 .and. k2 .ne. k4) go to 4380
+4372    if (j2 .eq. 1) cycle
+        if (k2 .ne. k3 .and. k2 .ne. k4) cycle
         j2 = 1
         numb = numb+1
-4376    if (numb .ne. 2) go to 4380
+4376    if (numb .ne. 2) cycle
         m3 = n3
         go to 4384
      end do
-4380 continue
      kk2 = kk2 + 1
      if (m4 .ne. 0) go to 4382
      ktrlsw(4) = n3
@@ -1948,7 +1920,6 @@ subroutine switch
      if ( iprsup  .ge.  2 ) write (lunit(6), 4264)  ll, n17, k, m
 4264 format (' Done with another closure.  ll, n17, k, m =', 10i5)
   end do
-4450 continue
   !     %%%%%%%%%%%%%%%%%%%  end   deletable sophisticated logic  %%%%%%%%
 4457 if ( iprsup  .lt.  2 )   go to 4465
   write (lunit(6), 3451)  ( nextsw(i), i=1, kswtch )
@@ -2053,22 +2024,21 @@ subroutine tacs3
   ndy5 = ndy5 + 5
   if ( i  .le.  konsce )  go to 3456
 505 if ( iprsup  .lt.  6 )  go to 3030
-  write ( lunit(6), 3241 )
-3241 format ( /,  21h tables in  'tacs3' .  ,/, 5x, 3hrow, 4x, 4hiuty, 6x, 2hiu, 4x, 4hkpos, 14x, 1he, 12x, 3hud1, 12x, 3hud2, 12x, 3hud3, 9x, 6htclose, 11x, 4hxtcs )
+  write (unit = lunit(6), fmt = 3241)
+3241 format (/, " Tables in  'tacs3' .", /, 5x, 'row', 4x, 'iuty', 6x, 'iu', 4x, 'kpos', 14x, 'e', 12x, 'ud1', 12x, 'ud2', 12x, 'ud3', 9x, 'tclose', 11x, 'xtcs')
   ndx5 = kud1 - 5
   do k = 1, konsce
      ndx1 = ilntab( kaliu + k )
-     if (  k  .gt.  11 )  go to 4848
-     write ( lunit(6), 3344 ) k, iuty(kiuty+k), texvec(ndx1), kpos(k), e(k), tclose(k), xtcs(kxtcs+nuk+k)
-3344 format ( 2i8, 2x, a6, i8, e15.6, 45x, 2e15.6 )
-     go to 4040
+     if (k .gt. 11) go to 4848
+     write (unit = lunit(6), fmt = 3344) k, iuty(kiuty + k), texvec(ndx1), kpos(k), e(k), tclose(k), xtcs(kxtcs + nuk + k)
+3344 format (2i8, 2x, a6, i8, e15.6, 45x, 2e15.6)
+     cycle
 4848 ndx5 = ndx5 + 5
      write ( lunit(6), 3244 ) k,iuty(k+kiuty),texvec(ndx1),kpos(k),e(k),ud1(ndx5+1), ud1(ndx5+2),ud1(ndx5+3),tclose(k),xtcs(kxtcs+nuk+k)
 3244 format (  2i8, 2x, a6, i8, 6e15.6  )
   end do
-4040 continue
-3030 l = iuty( kiuty + 4 )
-  if ( l .gt. 0 ) call csup( l )
+3030 l = iuty(kiuty + 4)
+  if (l .gt. 0) call csup(l)
   !                                                 $$$  form  rhside  $$$
   ndx1 = nuk * 4
   do i = 4, ndx1, 4
@@ -2078,16 +2048,15 @@ subroutine tacs3
   nuki = kisblk - 8
   do i = 1, nuk
      nuki = nuki + 8
-     if ( isblk(nuki+2)  .eq.  1 )  go to 304
+     if (isblk(nuki + 2) .eq. 1) cycle
      k = kprsup + isblk(nuki+3) + 4
      j = krsblk + isblk(nuki+4) * 4
      rsblk(j) = rsblk(j) + parsup(k)
   end do
-304 continue
   !                                          $$$  forward  on  rhside  $$$
   nuki = kisblk - 8
   nukr = krsblk - 4
-  do i=1,nuk
+  do i = 1, nuk
      nuki = nuki + 8
      nukr = nukr + 4
      m = isblk(nuki+8)
@@ -2104,7 +2073,7 @@ subroutine tacs3
   mm = 1
   nuki = kisblk + 8 * nuk
   nukr = krsblk + 4 * nuk
-  do i=1,nuk
+  do i = 1, nuk
      nuki = nuki - 8
      nukr = nukr - 4
      j = nuk + 1 - i
@@ -2133,27 +2102,24 @@ subroutine tacs3
      if ( iuty(kiuty+3)  .eq.  0 )  go to 308
      ndx1 = ilntab( klntab + j )
      write (lunit(6), 198)  texvec(ndx1), t
-198  format(5x, 'Warning. ---- the variable limits which apply to the tacs function block with (output) name  ', a6,  "'  have",  /, &
-          19x,  83hcriss-crossed.   that is, the upper limit is now less than the lower limit, at time,   e14.5,  10h  seconds.    ,/, &
-          19x, 105halthough the simulation will continue, strange results might be expected (be skeptical).   there shall be     ,/, &
-          19x,  85hno warning message for any subsequent criss-crossing of the limits of any tacs block.      )
-     iuty(kiuty+3) = iuty(kiuty+3) - 1
-308  l = isblk( nuki + 7 )
-     if ( l .gt. 0 )  call csup( l )
+198  format(5x, 'Warning. ---- the variable limits which apply to the tacs function block with (output) name  ', a6,  "'  have",  /, 19x, 'criss-crossed.   That is, the upper limit is now less than the lower limit, at time', e14.5, '  seconds.', /, 19x, 'Although the simulation will continue, strange results might be expected (be skeptical).   There shall be', /, 19x, 'no warning message for any subsequent criss-crossing of the limits of any TACS block.')
+     iuty(kiuty + 3) = iuty(kiuty + 3) - 1
+308  l = isblk(nuki + 7)
+     if (l .gt. 0) call csup(l)
   end do
-!3088 continue
+  !3088 continue
   !                                                       $$$  output  $$$
-!317 do i =1, nsup
+  !317 do i =1, nsup
   do i = 1, nsup
      n1 = -insup(kjsup + i)
-     if (n1 .lt. 0) go to 1010
-     if (insup(kksup + i) .ne. 53) go to 1010
+     if (n1 .lt. 0) cycle
+     if (insup(kksup + i) .ne. 53) cycle
      j = ivarb(n1 + 1)
      k = ivarb(n1 + 2)
-     b = 0.0
+     b = 0.0d0
      do n = j, k
         m = ksus(kalksu + n)
-!601     b = b + xtcs(kxtcs+m) * ksus(kksus+n)
+        !601     b = b + xtcs(kxtcs+m) * ksus(kksus+n)
         b = b + xtcs(kxtcs + m) * ksus(kksus + n)
      end do
      nn = ivarb(n1)
@@ -2166,24 +2132,23 @@ subroutine tacs3
      if (n7 .eq. n5+n6) n7 = n5
      ivarb(n1+4) = n7
   end do
-1010 continue
-  if ( t  .gt.  tmax )  go to 9900
+  if (t .gt. tmax) go to 9900
   !                                                  $$$  update  hst  $$$
-  if ( nuk  .eq.  0 )  go to 340
+  if (nuk .eq. 0) go to 340
   nuki = kisblk - 8
   nukr = krsblk - 4
   do i = 1, nuk
      nuki = nuki + 8
      nukr = nukr + 4
-     if ( isblk(nuki+2)  .eq.  1 ) go to 3111
+     if (isblk(nuki + 2) .eq. 1) cycle
      l = isblk( nuki + 4 )
      prx = xtcs( kxtcs + l )
      j = iabs( isblk(nuki+1) )
      k = iabs( isblk(nuki+9) ) - 1
-     if (  i  .eq.  nuk )  k = nsu
-     if ( isblk(nuki+1) .gt. 0 )  go to 2345
+     if (i .eq. nuk) k = nsu
+     if (isblk(nuki + 1) .gt. 0) go to 2345
      do i1 = ma1, ma2
-        if ( ivarb(i1) .ne. -i )  go to 5656
+        if (ivarb(i1) .ne. -i) exit
         ma3 = i1 + 1
         do i2 = ma3, ma2
            if ( ivarb(i2) .lt. 0 ) go to 2345
@@ -2192,22 +2157,19 @@ subroutine tacs3
         end do
         go to 2345
      end do
-5656 continue
-2345 pru = 0.0
-     do m=j,k
+2345 pru = 0.0d0
+     do m = j, k
         n = ksus( kalksu + m )
         if ( isblk(nuki+1) .gt. 0 ) go to 5678
         n1 = n - lstat(64) - nuk
         do i3 = ma3, ma4
-           if ( ivarb(i3) .ne. n1 ) go to 6789
+           if (ivarb(i3) .ne. n1) cycle
            n = n + lstat(68)
            go to 5678
         end do
-6789    continue
 5678    ndx1 = kxtcs  + n
         pru = pru + xtcs(ndx1) * ksus( kksus + m )
      end do
-!312  continue
      jcm = kprsup + isblk( nuki + 3 )
      k = isblk( nuki + 2 ) - 1
      j = jcm + 6 * k - 2
@@ -2229,12 +2191,11 @@ subroutine tacs3
 2840 if ( k .eq. 1 )  go to 311
      k = k - 1
      n = n - 6
-     parsup(n) = (parsup(n+2)*pru-parsup(n+3)*prx+parsup(n+6))/2.0
+     parsup(n) = (parsup(n + 2) * pru - parsup(n + 3) * prx + parsup(n + 6)) / 2.0d0
      go to 2840
 311  if ( iprsup  .ge.  4 ) write (unit = lunit(6), fmt = 2020) i, (parsup(n + 4), n = jcm, j, 6)
 2020 format ('  Function', i6, '  hst', 7e14.6)
   end do
-3111 continue
   ndx1 = kxtcs + nuk + lstat(64) + 1
   ndx2 = ndx1 + lstat(68)
   !  call mover ( xtcs(ndx1), xtcs(ndx2), nsup )
@@ -2242,9 +2203,9 @@ subroutine tacs3
 340 return
   !                                                  $$$  termination  $$$
 900 l = nuk + lstat(64) + konsup + 1
-  call csup( l )
-9900 if ( iprsup  .ge.  1 ) write (lunit(6), 901)
-901 format( /,  44h normal termination of run within  'tacs3' .   )
+  call csup(l)
+9900 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 901)
+901 format (/, " Normal termination of run within  'tacs3' .")
   return
 end subroutine tacs3
 
@@ -2565,10 +2526,9 @@ subroutine subts2
         jql = jql + 6
 2002    if (iprsup .gt. 0) write (unit = *, fmt = 5333) ky, nrz, sconst(n5), sconst(n1), sconst(n8), wk1(koff13 + ky), wk1(koff14 + ky), wk1(koff5 + ky), wk1(koff2+ ky), sconst(nn6), wk1(koff6 + ky) ,wk1(koff3 + ky), wk1(koff4 + ky), sconst(n7), sconst(n6), sconst(nn5), gmt, gkt
 5333    format (1x, i2, 3x, i2, 16e9.3)
-        if (jkl .eq. 1) go to 4009
+        if (jkl .eq. 1) cycle
 2001    jkl = 0
      end do
-4009 continue
      !        evaluate im'(t) = fm'(t) - gm(t)
      !                 ik'(t) = -bk'(t) + gk(t)
      !      aim5(ky)=fm5(ky)-gmt                          !fm5() = a1*fk' fro
@@ -2664,12 +2624,11 @@ subroutine subts2
 116 kcc = koff25 + 288
   koff11 = koff25 + 288
   do i = 1, ibr
-     if (kodsem(i) .eq. 0.0d0 .or. imodel(i) .ne. -4) go to 1097
+     if (kodsem(i) .eq. 0.0d0 .or. imodel(i) .ne. -4) cycle
      kktau = indhst(i)
      nterm = int (cnvhst(kktau) / deltat + 1, kind (nterm))
      kcc = kcc + 2 * nterm
   end do
-1097 continue
   wk1(kcc + 1) = 68556311.00d0
   ka = k
   if (lmode .eq. 4) koff11  = lcbl
@@ -3878,7 +3837,7 @@ subroutine update
      cv3 = ( v1 + v2 + v3 ) * asqrt3
      a5 = - ( cv3 - cu( ikn+2 ) ) * elp( i26+17 )
      if ( iprsup .gt. 0 ) write ( lunit(6), 4102 )  d6, d7, d8
-4102 format( 21h for time "t-deltat"., 18x, 2hd6, 18x, 2hd7, 18x, 2hd8, /, 21x, 3e20.11 )
+4102 format (' For time "t-deltat".', 18x, 'd6', 18x, 'd7', 18x, 'd8', /, 21x, 3e20.11)
      !     transform phase variables to park"s coordinates  * * * * * * * * *
      cz = elp( i26+26 )
      czt = cz * tenm6
@@ -4142,7 +4101,6 @@ subroutine update
         n5 = m + numask
         vsmout(icnt) = shp(mp + numask) * (histq(m) - histq(m + 1)) + shp(mp) * (histq(n5) - histq(n5 + 1))
      end do
-!8239 continue
      !     predict new rotor angle and speed. calculate also constant terms
      !     for the iteration loop in the next time-step   * * * * * * * * * *
 209  s1 = 0.0
@@ -4168,7 +4126,6 @@ subroutine update
         d11 = d31
         d12 = d32
      end do
-!210  continue
      s1 = s1 + shp( ik+1 ) * d11
 211  histq( izy+1 ) = histq( izy+1 ) +  shp( ik+3 ) * d12  +  s1
 !212  kc = n22
@@ -4252,10 +4209,10 @@ subroutine update
      x1( 6 ) = elp(i75+29)*a4 + elp(i75+30)*c3 + elp(i75+31)*c4
      x1( 7 ) = elp(i75+32)*a4 + elp(i75+33)*c3 + elp(i75+34)*c4
      if ( iprsup .lt. 1 )   go   to  952
-     write ( lunit(6), 4108 )   ilk, acd, acq, ( x1( itq ), itq = 3, 7 )
-4108 format( 2x, 29h at 16 history terms mach no., i5,/,(2x,6e19.11))
-     write ( lunit(6), 4109 )  acur1, acur2
-4109 format( 2x, 26h predicted stator currents, 2x, 2e25.12 )
+     write (unit = lunit(6), fmt = 4108) ilk, acd, acq, (x1(itq), itq = 3, 7)
+4108 format (2x, ' At 16 history terms mach no.', i5, /, (2x, 6e19.11))
+     write (unit = lunit(6), fmt = 4109) acur1, acur2
+4109 format (2x, ' Predicted stator currents', 2x, 2e25.12)
 952  x1( 4 ) = x1( 4 ) - ( q3*damrat + q4 )
      !     account for the influence of  rotor circuits  *   *   *   *   *
      sf4 = - ( elp(i75+43) * x1( 4 ) + elp(i75+44) * x1( 5 ) )
@@ -4763,13 +4720,12 @@ subroutine subts3
   if (begmax(maxout) .gt. t) go to 1003
   d1 = absz (peaknd(1))
   do j = 2, ntot
-     if (absz (e(j)) .le. d1) go to 1002
+     if (absz (e(j)) .le. d1) cycle
      peaknd(1) = e(j)
      d1 = absz (e(j))
      peaknd(2) = t
      peaknd(3) = j
   end do
-1002 continue
 1003 if (istep .lt. limstp) go to 12
   isprin = 0
   iout = multpr(indstp)
@@ -4907,12 +4863,11 @@ subroutine subts3
      xmax(ndx1) = volti(i)
      ndx1 = ndx1 + lsiz12
      xmax(ndx1) = t
-4655 if (volti(i) .le. xmax(l)) go to 1655
+4655 if (volti(i) .le. xmax(l)) cycle
      xmax(l) = volti(i)
      ndx1 = lsiz12 + l
      xmax(ndx1) = t
   end do
-1655 continue
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 1656) (xmax(i), i = 1, l)
 1656 format (/, ' xmax(i) at 1656', /, (1x, 8e15.4))
 1660 if (n7 .eq. 0) go to 1661
@@ -4929,7 +4884,7 @@ subroutine subts3
 7342 format (/, ' k, ibr =', 2i6, 10x, '(f(i), i=1, ntot )  follow ...', /, (1x, 8e16.7))
   !                                 constant voltages and currents
   i = 0
-  if (iread.eq.0) go to 1247
+  if (iread .eq. 0) go to 1247
   !     read input card using cimage.
   call cimage
   if (nchain .eq. 16) go to 9999
@@ -4952,11 +4907,10 @@ subroutine subts3
   if (nstacs .eq. 0) go to 11248
   do j = 1, nstacs
      n1 = ichar (vstacs(j)(1 : 1))
-     if (n1  .eq.  0) go to 21247
+     if (n1 .eq. 0) cycle
      ndx1 = kxtcs  + n1
      voltbc(j) = xtcs(ndx1)
   end do
-21247 continue
 11248 if (kanal .gt. 0) call analyt
   if (kill .gt. 0) go to 9200
 1249 do
@@ -5049,12 +5003,11 @@ subroutine subts3
   n1 = kode(n1)
   go to 1301
 1302 do j = 2, kpartb
-     if (kode(j) .eq. 0) go to 1303
+     if (kode(j) .eq. 0) cycle
      k = kode(j)
-     if (k .gt. kpartb) go to 1303
+     if (k .gt. kpartb) cycle
      if (k .gt. j) e(k) = e(k) + e(j)
   end do
-1303 continue
   ii = 1
   if (iprsup .lt. 4) go to 1410
   write (unit = lunit(6), fmt = 41300)  ( e(l), l=1, ntot )
@@ -5099,16 +5052,16 @@ subroutine subts3
   go to 5211
 1550 if (inonl .eq. num99) go to 1570
   do i = 1, inonl
-     if (nltype(i) .lt. 0) go to 1559
+     if (nltype(i) .lt. 0) cycle
      nn15 = nlsub(i)
      n15 = isubeg(nn15)
-     if (n15 .le. 0) go to 1559
+     if (n15 .le. 0) cycle
      if (nsubkm(n15 + 4) .eq. 0) go to 3534
-     if (nsubkm(n15 + 3) .ne. i) go to 1559
+     if (nsubkm(n15 + 3) .ne. i) cycle
      !     perform simultaneous  zno  solution in  "zincox" .
      call zincox (nn15)
      if (kill .gt. 0) go to 9200
-     go to 1559
+     cycle
 3534 i1 = nonlad(i)
      i2 = nonle(i)
      k = nonlk(i)
@@ -5190,7 +5143,6 @@ subroutine subts3
      if (iprsup .ge. 4) write (unit = lunit(6), fmt = 8261) i, nltype(i), nn15, n8, k, l, curr(i), f(k), f(l)
 8261 format (' n.l. elem. current.', 6i10, 3e15.6)
   end do
-1559 continue
   if (iprsup .ge. 3) write (unit = lunit(6), fmt = 1571) (curr(i), i = 1, inonl)
 1571 format (/, ' n.l. element,  curr(i), i=1, inonl   ', 6e15.5)
 1570 lastov = nchain
@@ -5364,11 +5316,10 @@ subroutine zincox (ns)
 40 n17 = 0
   do l = ndx1i, ndx7i
      kindep(l) = 0
-     if ( ksing(l)  .ne.  0 )   go to 3645
+     if (ksing(l) .ne. 0) cycle
      n17 = n17 + 1
      kindep(l) = n17
   end do
-3645 continue
   if (n17 .eq. 0) go to 3522
   if (n17 .eq. n7) go to 3674
   !     Collapse zthevenin (remove zero and dependent rows )
@@ -5499,11 +5450,10 @@ subroutine zincox (ns)
      go to 253
 251  ibk = nonle( inl )
      do jb = ils, ibk
-        if ( d5 .gt. vchar( jb ) )  go to 252
+        if (d5 .gt. vchar(jb)) cycle
         ik = jb - 1
         go to 253
      end do
-252  continue
      ik = ibk
      !     segment has been determined**************************************
 253  ilast( inl ) = -ik
@@ -5532,11 +5482,10 @@ subroutine zincox (ns)
      !     start scan of segment boundaries*********************************
 55   ist = ist + 1
      do jb = ist, ind
-        if ( vchar( jb )  .lt.  d5 )  go  to  60
+        if (vchar(jb) .lt. d5) cycle
         ik = jb - 1
         go to 65
      end do
-60   continue
      ik = ind
      !     segment has been determined**************************************
 65   azm = cchar( ik )
@@ -5669,11 +5618,10 @@ subroutine zincox (ns)
      go to 353
 351  ibk = nonle( inl )
      do jb = ils, ibk
-        if ( d3 .gt. vchar( jb ) )  go to 352
+        if (d3 .gt. vchar(jb)) cycle
         ik = jb - 1
         go to 353
      end do
-352  continue
      ik = ibk
      !     segment has been determined*************************************
 353  ilast( inl ) = -ik
@@ -5698,11 +5646,10 @@ subroutine zincox (ns)
      !     start scan of segment boundaries*********************************
 155  ist = ist + 1
      do jb = ist, ind
-        if ( vchar( jb )  .lt.  d5 )  go  to  160
+        if (vchar(jb) .lt. d5) cycle
         ik = jb - 1
         go to 165
      end do
-160  continue
      ik = ind
      !     segment has been determined**************************************
 165  azm = cchar( ik )
@@ -5786,10 +5733,10 @@ subroutine analyt
   if ( numrmp  .le.  0 )   go to 1847
   if ( t .lt. tminrp )  go to 1830
   if ( t .gt. tmaxrp + deltat )  go to 1830
-  do j=1, numrmp
-     if ( t .lt. tbegrp(j) )  go to 1762
-     if ( t .gt. tendrp(j) + deltat )  go to 1762
-     if ( kyramp(j) .ne. 1 )  go to 1656
+  do j = 1, numrmp
+     if (t .lt. tbegrp(j)) cycle
+     if (t .gt. tendrp(j) + deltat) cycle
+     if (kyramp(j) .ne. 1) go to 1656
      kserlc = 1
      n17 = indxrp(j)
      nr(n17) =1
@@ -5806,26 +5753,25 @@ subroutine analyt
 1758 n4 = memrmp(j)
      if ( n10rmp(j) .ne. 0 )  go to 1748
      fkar1(n4) = d6
-     go to 1762
+     cycle
 1748 fkar2(n4) = d6
      if ( iprspy  .ge.  1 ) write (lunit(6), 1769) j, n4, t, d6
 1769 format ( ' Done next ramp in "analyt".  j, n4, t, d6 =',2i8,  2e15.6  )
   end do
-1762 continue
-1830 if ( iprspy  .ge.  1 ) write (lunit(6), 1833)  t, tminrp, tmaxrp
-1833 format ( ' exit "analyt".  t, tminrp, tmaxrp =', 3e15.6  )
+1830 if (iprspy .ge. 1) write (unit = lunit(6), fmt = 1833) t, tminrp, tmaxrp
+1833 format ( ' Exit "analyt".  t, tminrp, tmaxrp =', 3e15.6)
   go to 9000
 1847 if ( kanal  .ne.  2 )  go to 1942
   if ( n16  .eq.  5678 ) go to 9000
   write ( munit6, 1854 )
 1854 format ( '   ###  warning.   [y] is being re-formed', ' each deltat, but there is no ramping.'   )
   call window
-  write (prom80, 1855)
+  write (unit = prom80, fmt = 1855)
 1855 format (  '                   is it ok to continue', ' (one and only chance if "y")? :'  )
   call prompt
-  read ( munit5, 1863 )  buff77(1:1)
+  read (unit =  munit5, fmt = 1863) buff77(1 : 1)
 1863 format ( a1 )
-  if ( buff77(1:1)  .ne.  'y' )  go to 1868
+  if (buff77(1 : 1)  .ne.  'y') go to 1868
   n16 = 5678
   go to 9000
 1868 lockbr = 1
@@ -5904,7 +5850,7 @@ subroutine  arrest (a, b, srt, svt, carst)
   if (b(6) .gt. 0) go to 100
   !  call mover0(b(2), ll8)
   call move0 (b(2 :), ll8)
-  b(6) = 1.0
+  b(6) = 1.0d0
 100 continue
   !  test polarity of arrester voltage
   isign=1
@@ -6272,14 +6218,13 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, jclo
 1004 tau = omegrf * t
      !  injection of predicted um power current to f array in subts1.
      if (loopss(8) .ne. 3) go to 1100
-     if (iprsup .ge. 1) write (lunit(6),1006) jm
-1006 format(/, ' *************************************** Injection of predicted power-coil currents for um number', i4, ' :', /, &
-          ' ***************************************', 2x, 'nodvo1', 5x, 'f(nodvo1)', 2x, 'nodvo2', 5x, 'f(nodvo2)')
-     do n1 = 1,3
+     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1006) jm
+1006 format(/, ' *************************************** Injection of predicted power-coil currents for um number', i4, ' :', /, ' ***************************************', 2x, 'nodvo1', 5x, 'f(nodvo1)', 2x, 'nodvo2', 5x, 'f(nodvo2)')
+     do n1 = 1, 3
         n2 = 3 * (numum + jm - 1) + n1
         n3 = kcoil(jm) - 1 + n1
         n4 = nodvo1(n3)
-        if (n4 .eq. nodvo2(n3)) go to 1030
+        if (n4 .eq. nodvo2(n3)) cycle
         if (n4 .le. 1) go to 1010
         f(n4) = f(n4) + umcurp(n2)
 1010    n5 = nodvo2(n3)
@@ -6292,10 +6237,9 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, jclo
         if (iprsup .ge. 1) write (lunit(6),1022) n3,n4,d4,n5,d5
 1022    format (' ********* coil number', i4, ' :', 14x, i6, e14.5, 2x, i6, e14.5)
      end do
-1030 continue
      if (jm .eq. numum) loopss(8) = 1
      if (jm .eq. numum) go to 21000
-     go to 99999
+     cycle
      !     ncurpr is set to 1 on initiation of prediction calculation
      !     of um power voltages if power circuits are not compensated
 1100 ncurpr = 0
@@ -7623,7 +7567,7 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, jclo
      !      step if no compensation for power coils.
      !      umcurp(1) to store zero current
      !      umcurp(3numum:6numum) to store vpi/rp for next time-step.
-18000 if (loopss(8) .ne. 1) go to 99999
+18000 if (loopss(8) .ne. 1) cycle
      ncurpr = 1
      d19 = gpar(kcl) * fpar(kcl)
      d20 = gpar(kcl) * reacl(kcl)
@@ -7685,11 +7629,10 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, jclo
      n2 = n1 + 2
      if (iprsup .ge. 1) write (lunit(6),18132) n1,n2,(umcurp(n3),n3=n1,n2)
 18132 format(5x, 8h umcurp(,i3,1h:,i3,3h) :,3(3x,e14.5))
-     if (jm .ne. numum) go to 99999
+     if (jm .ne. numum) cycle
      loopss(8) = 3
      !. continuation of machine do-loop:
   end do
-99999 continue
   !  start second mach do-loop in case a set of um's sharing
   !   a common mechanical network is present :
   !30000 if (mshare .eq. 0) go to 20000
@@ -7697,7 +7640,7 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, jclo
   do jm = 1,numum
      kcl = kcoil(jm)
      nshare = jcltac(kcl) + jcltac(kcl+1)
-     if (nshare .eq. 0) go to 30010
+     if (nshare .eq. 0) cycle
      !  predicting torques of higher numbered um's in the set :
      !    note : fpar(kcl+2) is tqgen at time t
      !    now predict tqgen for next time-step (for t+deltat)
@@ -7705,11 +7648,10 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, jclo
      if (istart .eq. 0) voltum(jm) = fpar(kcl+2)
      anglum(jm) = fpar(kcl+2)
      !  setting  cursub for tqgen of higher numbered um's in set :
-     if (jcltac(kcl+2) .ge. 0) go to 30010
+     if (jcltac(kcl+2) .ge. 0) cycle
      n1 = - jcltac(kcl+2)
      cursub(n1) = fpar(kcl+2)
   end do
-30010 continue
 20000 istart = istart + 1
 21000 if (iprsup  .ge.  1) write (unit = lunit(6), fmt = 7892)  istart,loopss(1),loopss(8),numum,t
 7892 format (/, ' Exit  "solvum" .  istart loopss1 loopss8   numum', 13x, 't', /, 17x, 4i8, e14.5, /)
@@ -7739,7 +7681,6 @@ subroutine lineqs (aum, yum)
      end do
      bum(n10, n6) = yum(n10)
   end do
-!20 continue
   ! start gaussian elimination
   do n1 = 1,n5
      n2 = n1 + 1
@@ -7754,19 +7695,16 @@ subroutine lineqs (aum, yum)
         n11 = n6 - n8
         bum(n10, n11) = 0.0
      end do
-!40   continue
   end do
   ! calculation of solution
 50 do n10 = 1,n5
      n7 = n5 + 1 - n10
-     yum(n7) = bum(n7,n6)/bum(n7,n7)
+     yum(n7) = bum(n7, n6) / bum(n7, n7)
      do n12 = 1,n5
         n13 = n7 + n12
-        if (n13 .gt. n5) go to 70
-!60      yum(n7) = yum(n7)-bum(n7,n13)*yum(n13)/bum(n7,n7)
+        if (n13 .gt. n5) cycle
         yum(n7) = yum(n7) - bum(n7, n13) * yum(n13) / bum(n7, n7)
      end do
-70   continue
   end do
   return
 end subroutine lineqs
@@ -7805,7 +7743,7 @@ subroutine subts4
 1554 format (' n.l. element comp.   k, kknonl, e, znonl   ', 2i10, 2e20.8)
   do k = 2, ntot
      n1 = kpsour(k)
-     if (n1 .eq. 0) go to 1560
+     if (n1 .eq. 0) cycle
      n15 = isubeg(n1)
      n4 = k
 1111 m = n15 / 5 + 1
@@ -7818,7 +7756,6 @@ subroutine subts4
      if (iprsup .ge. 7) write (unit = lunit(6), fmt = 1558) k, n1, n15, e(k), cursub(n8), znonl(k)
 1558 format (' row super.       k      n1     n15', 14x, 'e', 9x, 'cursub', 10x, 'znonl' ,/, 11x, 3i8, 3e15.6)
   end do
-1560 continue
 1570 if (ialter .eq. 1) ialter = 0
   if (iprsup .gt. 6) write (unit = lunit(6), fmt = 1571) (e(k), k = 1, ntot)
 1571 format (//, ' Vector e(k) at 1571, immediately after calc', /, (1x, 5e25.15))
