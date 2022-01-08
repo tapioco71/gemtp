@@ -193,15 +193,14 @@ subroutine over13
   ibf = 0
   ikf = 0
   isfd = 0
-  fzero = 0.0
+  fzero = 0.0d0
   if (istead .gt. 0) go to 546
   do i = 1, ibr
-     if (kbus(i) .lt. 0) go to 540
-     ci(i) = 0.
-     cik(i) = 0.
-     ck(i) = 0.
+     if (kbus(i) .lt. 0) cycle
+     ci(i) = 0.0d0
+     cik(i) = 0.0d0
+     ck(i) = 0.0d0
   end do
-540 continue
   call move0 (e(1 :), ntot)
   call move0 (f(1 :), ntot)
   call move0 (kode(1 :), ntot)
@@ -221,9 +220,9 @@ subroutine over13
   if (imodel(k) .ne. -4) go to 4202
   jpl = 0
   do i = 1, ibr
-     if (kodsem(i) .eq.0) go to 2023
+     if (kodsem(i) .eq. 0) cycle
      kv = infdli(inoff1 + i)
-     if (kv .eq. 0) go to 2023
+     if (kv .eq. 0) cycle
      if (kv .eq. 1) go to 2024
      go to 2025
 2024 nr(i) = lpast + kv
@@ -233,10 +232,9 @@ subroutine over13
         jpl = jpl + wk1(koff20 + kv)
         kv = kv + 1
      end do
-     go to 2023
+     cycle
 2025 nr(i) = lpast + 2 * jpl + 1
   end do
-2023 continue
 4202 continue
   if (kill .gt. 0) go to 9200
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 110) k, ibr, kbus(k), nr(k), istead, kodebr(k)
@@ -255,7 +253,7 @@ subroutine over13
   ibadd = ibr
   do i = 1, inonl
      if (nltype(i) .ne. -99) go to 3684
-     if (anonl(i) .ge. 0.0) go to 523
+     if (anonl(i) .ge. 0.0d0) cycle
      anonl(i) = -anonl(i)
      k = nonlk(i)
      m = iabs (nonlm(i))
@@ -267,9 +265,9 @@ subroutine over13
      if (noutpr .eq. 0) write (unit = lunit(6), fmt = 3671) bus(k), bus(m), d6
 3671 format (' type-99 element from ', "'", a6,  "'", ' to ', "'", a6,  "'", ' has initial condition voltage of', e15.6, &
           '   which is beyond segment-1 breakpoint.', /, 70x, 'The user should expect spurious transients at time zero.')
-3676 go to 523
+3676 cycle
 3684 j0 = nonle(i)
-     if (j0 .gt. 0) go to 523
+     if (j0 .gt. 0) cycle
      if (nltype(i) .eq. -98) curr(i) = 1.0
      k = nonlk(i)
      m = iabs (nonlm(i))
@@ -310,11 +308,10 @@ subroutine over13
 730  n18 = n10 + 1
      n19 = n12 - 1
      do n14 = n18, n19
-        if (curr(i) .gt. cchar(n14)) go to 740
+        if (curr(i) .gt. cchar(n14)) cycle
         n15 = n14
         go to 745
      end do
-740  continue
 745  n16 = n15 + n11 + 1
      d13 = vchar(n16) * curr(i) + cchar(n16)
      do n14 = n18, n19
@@ -414,16 +411,15 @@ subroutine over13
      if (iprsup .ge. 3) write (unit = lunit(6), fmt = 4295) n13, (ipp, cchar(ipp), vchar(ipp), gslope(ipp), ipp = n6, n8)
 4295 format (/, ' Done type-96 init.', 5x, 'n13 =', i4, /, 7x, 'row', 15x, 'cchar', 15x, 'vchar', 14x, 'gslope', /, (1x, i9, 3e20.11))
      go to 7117
-7115 if (anonl(i) .eq. 0.0) go to 523
+7115 if (anonl(i) .eq. 0.0d0) cycle
 7117 if (noutpr .eq. 0) write (unit = lunit(6), fmt = 427) bus(k), bus(m), ci1
 427  format (' Initial flux in coil ', "'", a6, "'", ' to ', "'", a6, "'", ' =', e13.5)
      if (absz (ci1) .gt. absz (anonl(i)) .and. noutpr .eq. 0) write (unit = lunit(6), fmt = 426)
 426  format (' Warning.  Assumption that AC steady state has fundamental frequency only is questionable with preceding flux outside linear region')
      vnonl(i) = ci1 - (e(k) - e(m)) * delta2
-     if (nltype(i) .ne. -98) go to 523
-     if (vnonl(i) .lt. 0.0) curr(i) = -1.0
+     if (nltype(i) .ne. -98) cycle
+     if (vnonl(i) .lt. 0.0) curr(i) = -1.0d0
   end do
-523 continue
 545 istead = 0
   iprint = -1
   itadd = it + 1
@@ -521,12 +517,11 @@ subroutine over13
      l = kbus(k)
      ll = iabs (l)
      m = iabs (mbus(k))
-     if (bus(ll) .ne. bus1) go to 554
-     if (bus(m) .ne. bus2) go to 554
+     if (bus(ll) .ne. bus1) cycle
+     if (bus(m) .ne. bus2) cycle
      if (l .lt. 0) go to 575
      go to 560
   end do
-554 continue
   kill = 32
   lstat(19) = 554
   go to 9200
@@ -647,10 +642,9 @@ subroutine over13
   do k = 1, inonl
      l = nonlk(k)
      m = iabs (nonlm(k))
-     if (bus(l) .ne. bus1) go to 571
+     if (bus(l) .ne. bus1) cycle
      if (bus(m) .eq. bus2) go to 572
   end do
-571 continue
   kill = 33
   lstat(19) = 571
   go to 9200
@@ -1092,7 +1086,7 @@ subroutine over13
      do ii = 1, nrz
         n2 = n1 + ii
         n3 = n2 + nrz
-        if (absz (sconst(n2)) .ge. 1.e+13) go to 5326
+        if (absz (sconst(n2)) .ge. 1.0e+13) go to 5326
         d1 = sconst(n3) ** 2 + omega ** 2
         czire = sconst(n2) * sconst(n3) / d1
         cziim = - sconst(n2) * omega / d1
@@ -1107,7 +1101,7 @@ subroutine over13
         ddd3 = (akr * apr + aki * (omega + api)) / djk3
         !     ddd4 = ( aki * apr - akr * ( omega + api ) ) / djk3
         czire = 2 * ddd3
-        cziim = 0.
+        cziim = 0.0d0
 5328    continue
         w1(ioff3 + ii) = czire*cnvhst(n4 + 7) - cziim * cnvhst(n4 + 8)
         w1(ioff4 + ii) = czire*cnvhst(n4 + 8) + cziim * cnvhst(n4 + 7)
@@ -1119,10 +1113,9 @@ subroutine over13
         summi = summi + w1(ioff6 + ii)
         if (iprsup .gt. 0) write (unit = lunit(6), fmt = 5343) n1, ii, n2, n3, sconst(n2), sconst(n3)
 5343    format (1x, 'n1, ii, n2, n3, ypi, yki=', 1x, i6, 2x, i6, 3x, i6, 3x, i6, 3x, 2e14.5)
-        if (jkl .eq. 1) go to 2020
+        if (jkl .eq. 1) cycle
 5327    jkl = 0
      end do
-2020 continue
      if (iprsup .gt. 0) write (unit = lunit(6), fmt = *) 'The voltage vm & vk. summr, summi, sumkr, sumki', summr, summi, sumkr, sumki
      !
      !        evaluate:   gmj(to-dt)
@@ -1136,7 +1129,7 @@ subroutine over13
         nn5 = n1 + 5 * nrz + 5 * nra + 4 + 2 + 2 + lg + 1 + nn17
         n6 = nn5 + nrz
         n2 = n1 + lg
-        if (absz (sconst(n2)) .ge. 1.e+13) jkl = jkl + 1
+        if (absz (sconst(n2)) .ge. 1.0e+13) jkl = jkl + 1
         if (jkl .eq. 2) go to 5829
         phf = atan2z (w1(ioff6 + lg), w1(ioff5 + lg))
         hf = dsqrt (w1(ioff5 + lg) ** 2 + w1(ioff6 + lg) ** 2)
@@ -1146,10 +1139,9 @@ subroutine over13
         sconst(n6) = hf * dcos (wdt + phf)
         if (iprsup .gt. 0) write (unit = lunit(6), fmt = 5943) ky, kodsem(ky), nrz, nra, nn5, n6, sconst(nn5), sconst(n6)
 5943    format (1x, i5, 8x, i6, 5x, i6, 7x, i6, 2x, i6, 2x, i6, 2e14.5)
-        if (jkl .eq. 1) go to 107
+        if (jkl .eq. 1) cycle
 5829    jkl = 0
      end do
-107  continue
      !
      !        evaluate:   bm'
      !
@@ -1318,10 +1310,9 @@ subroutine over13
         if (iprsup .gt. 0) write (unit = lunit(6), fmt = 4334) nk7, nra, sconst(n3), sconst(n2), czire, cziim, cnvhst(n4 + 11), cnvhst(n4 + 12), &
              cnvhst(n4 + 9), cnvhst(n4 + 10), sconst(nn5), sconst(nn6), sumkr, summr
 4334    format (1x, i3, 2x, i3, 6e16.7, /, 9x, 6e16.7)
-        if (jkl .eq. 1) go to 1028
+        if (jkl .eq. 1) cycle
 5486    jkl = 0
      end do
-1028 continue
      wk1(koff3 + ka) = sumkr
      wk1(koff4 + ka) = summr
      ka = ka + 1
@@ -1440,12 +1431,11 @@ subroutine over13
         csri = csri + h2 * c(n8)
         n7 = n7 + 1
         n8 = n8 + 1
-        if (i .ne. 1) go to 62595
-        if (iprsup .le. 5) go to 62595
+        if (i .ne. 1) cycle
+        if (iprsup .le. 5) cycle
         write (unit = lunit(6), fmt = 72595) j, e(n1), f(n1), e(n2), f(n2), tr(n8), tx(n8), r(n8), c(n8)
 72595   format(/, " Initial phase values, Marti's branch", i4, 8e11.4)
      end do
-62595 continue
      if (iprsup .ge. 5) write (unit = lunit(6), fmt = 72597) i, vsl, vsli, vsr, vsri, csl, csli, csr, csri
 72597 format(/, " Initial modal values, Marti's branch", i4, 8e11.4)
      omegs1 = omega
@@ -1907,8 +1897,8 @@ subroutine over13
      call free (d1)
      bus2 = texta6(1)
      nright = 0
-4705 if (to_lower (bus1) .ne. text1) go to 5755
-     if (to_lower (bus2) .ne. text2) go to 5755
+4705 if (to_lower (bus1) .ne. text1) cycle
+     if (to_lower (bus2) .ne. text2) cycle
      if (n3 .ne. i) go to 5766
      read (unit = abuff, fmt = 5764) ci1, ck1, a, d2
 5764 format (14x,4e15.8)
@@ -1924,7 +1914,6 @@ subroutine over13
      cnvhst(n3 + 3) = d2
      cnvhst(n3 + 4) = steady / deltat
   end do
-5755 continue
   itadd = it + 1
 5862 do i = k, n11
      if (indhst(i) .gt. 0) indhst(i) = - indhst(i)
@@ -1972,10 +1961,9 @@ subroutine over13
      l = iabs (kmswit(k))
      ndx1 = lswtch + k
      m = iabs (kmswit(ndx1))
-     if (bus1 .ne. bus(l)) go to 5630
+     if (bus1 .ne. bus(l)) cycle
      if (bus2 .eq. bus(m)) go to 5640
   end do
-5630 continue
   kill = 31
   lstat(19) = 5630
   go to 9200
@@ -1997,17 +1985,16 @@ subroutine over13
   ! transfer control to 2nd half of overlay 13, in "last13".
 590 if (marti .eq. 1) go to 4590
   do kj = 1, ibr
-     if (imodel(kj) .ne. -2) go to 3590
+     if (imodel(kj) .ne. -2) cycle
      n4 = indhst(kj)
-     nrf = cnvhst(n4) / deltat + 2.
+     nrf = cnvhst(n4) / deltat + 2.0d0
      nr(kj) = iline + 1
      iline = iline + 1 + nrf
-     if (iline .le. lpast) go to 3590
+     if (iline .le. lpast) cycle
      iprint = 8
      lstat(19) = 3590
      go to 9000
   end do
-3590 continue
 4590 call last13
   if (kill .gt. 0) go to 9200
   lastov = nchain
@@ -2383,7 +2370,7 @@ subroutine last13
      semaux(n6) = d7
      n6 = n6 + it2
      semaux(n6) = d8
-     if (kodsem(i) .lt. 0) go to 14080
+     if (kodsem(i) .lt. 0) cycle
      n6 = n6 + it2
      semaux(n6) = d9
      n6 = n6 + it2
@@ -2400,7 +2387,7 @@ subroutine last13
      semaux(n6) = d15
      n6 = n6 + it2
      semaux(n6) = d16
-     go to 14080
+     cycle
 14060 n6 = -kbus(ii)
      volt(k) = e(n9)
      volti(k) = f(n9)
@@ -2417,7 +2404,7 @@ subroutine last13
      semaux(n6) = r(n9)
      n6 = n6 + it2
      semaux(n6) = c(n9)
-     if (kodsem(i) .lt. 0) go to 14080
+     if (kodsem(i) .lt. 0) cycle
      n7 = -cik(ii) + (k - 1) * it2
      n8 = n8 + it2 * it2
      do j=1, it2
@@ -2441,7 +2428,6 @@ subroutine last13
         n8 = n8 + 1
      end do
   end do
-14080 continue
   if (iprsup .lt. 6) go to 14085
   write (unit = lunit(6), fmt = 14081) d17, d18
 14081 format(///, 5x, 'Characteristic impedance of last mode = ', e15.7, '+ j*', e15.7, //, 5x, 'mode', 6x, 'k-voltage', 6x, &
@@ -2854,7 +2840,7 @@ subroutine last13
 14710 do j = n3, n5, 2
      d15 = dthaf * sconst(j + 1)
      if (kodebr(k) .gt. 0) sconst(j + 1) = d15
-     if (itadd .lt. 0 .or. indhst(k) .ge. 0) go to 14730
+     if (itadd .lt. 0 .or. indhst(k) .ge. 0) cycle
      d8 = w * sconst(j)
      d7 = cosz ( d8 )
      d8 = sinz ( d8 )
@@ -2870,7 +2856,6 @@ subroutine last13
      d14 = d8
      d16 = d15
   end do
-14730 continue
   if (itadd .lt. 0) go to 14750
   if (indhst(k) .le. 0) go to 14740
   cnvhst(n4) = 0.0
@@ -2938,7 +2923,7 @@ subroutine last13
      stype = sconst(j)
      !     if (stype) 14940, 14820, 14830
      if (stype .lt. 0) then
-        go to 14940
+        cycle
      else if (stype .eq. 0) then
         go to 14820
      else
@@ -2955,12 +2940,12 @@ subroutine last13
      cnvhst(n4) = 0.0
      cnvhst(n4+1) = 0.0
      n4 = n4 + 2
-     if (indhst(k) .ge. 0) go to 14940
+     if (indhst(k) .ge. 0) cycle
      cnvhst(n4-2) = d1*d11
      d3 = d3 + d1*d11
      cnvhst(n4-1) = d5*d11
      d4 = d4 + d5*d11
-     go to 14940
+     cycle
 14826 d9  = d11 * d7
      d10 = 0.0
      go to 14840
@@ -2991,10 +2976,7 @@ subroutine last13
      n7 = - kbus(n8)
      n8 = iabs (mbus(n8))
      write (unit = lunit(6), fmt = 14860) bus(n7), bus(n8), n1, n2, i0, d17, d18, flzero
-14860 format (//, " Warning...  The Taylor's series used to calculate the Semlyen convolution coeffiecient connected between ", '"' a6, '"', &
-          ' and ', "'", a6, "'", /, 13x, 'has failed to converge.  The matrix entry is (', i2, ',', i2,  '), type ', i2, &
-          '.  Relative error is ', e15.8, ' and ', e12.5, '.', / ,13x,'The convergence tollerance is ', e12.5, &
-          ".  Computation will continue using the 'dexpz / dsinz / dcosz' routines.")
+14860 format (//, " Warning...  The Taylor's series used to calculate the Semlyen convolution coeffiecient connected between ", '"' a6, '"', ' and ', "'", a6, "'", /, 13x, 'has failed to converge.  The matrix entry is (', i2, ',', i2,  '), type ', i2, '.  Relative error is ', e15.8, ' and ', e12.5, '.', / ,13x,'The convergence tollerance is ', e12.5, ".  Computation will continue using the 'dexpz / dsinz / dcosz' routines.")
      go to 14880
 14870 n7 = n8
      n8 = n8 * (n6 + 1)
@@ -3075,20 +3057,20 @@ subroutine last13
      sconst(n9 + 2) = dxp * d16
      sconst(n9 + 3) = dxq * d16 + dxp * d17
      sconst(n9 + 4) = dxq * d17
-14900 if (itadd .lt. 0) go to 14940
+14900 if (itadd .lt. 0) cycle
      if (indhst(k) .lt. 0) go to 14920
      cnvhst(n4) = 0.0
      n4 = n4 + 1
      if (i0 .lt. 0) go to 14910
      cnvhst(n4) = 0.0
      n4 = n4 + 1
-14910 if (stype .le. 0.0) go to 14940
+14910 if (stype .le. 0.0) cycle
      cnvhst(n4) = 0.0
      n4 = n4 + 1
-     if (i0 .lt. 0) go to 14940
+     if (i0 .lt. 0) cycle
      cnvhst(n4) = 0.0
      n4 = n4 + 1
-     go to 14940
+     cycle
 14920 wfac = tenm6
      wshz = w*wfac
      spole = d7*wfac
@@ -3131,7 +3113,7 @@ subroutine last13
 14927 format (' d21 reset to ', e15.8, ' to correct output m error = ', e15.8)
 14928 cnvhst(n4) = d21 - cnvhst(n4)
      n4 = n4 + 1
-14930 if (stype .le. 0.0) go to 14940
+14930 if (stype .le. 0.0) cycle
      trrsum = trrsum + trr
      trisum = trisum + tri
      d3 = d3 + d15
@@ -3144,13 +3126,12 @@ subroutine last13
 14932 format (' Values of d16, tir, tii, d16 before d16 update', 4e17.8)
      cnvhst(n4) = d16 - cnvhst(n4)
      n4 = n4 + 1
-     if (i0 .lt. 0) go to 14940
+     if (i0 .lt. 0) cycle
      d4 = d4 + d21
      d22 = tir * d5 + tii * d6
      cnvhst(n4) = d22 - cnvhst(n4)
      n4 = n4 + 1
   end do
-14940 continue
   !  go to moon, (14390, 14520, 14630)
   select case (moon)
   case (14390)
