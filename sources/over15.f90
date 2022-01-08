@@ -112,18 +112,17 @@ contains
 7302 format (/, ' Begin  "uminit" . ksubum =', i4)
     !  ncomp is the max number of compensated phases per subnetwork.
     !  n8 is used to determine the value of this ncomp.
-    do k = 1, numum
+7000 do k = 1, numum
        kcl = kcoil(k)
        jcltac(kcl + 2) = 0
        n2 = jcltac(kcl)
        n3 = jcltac(kcl + 1)
        n4 = k
-       if (n2 .eq. 0 .and. n3 .eq. 0) go to 7010
+       if (n2 .eq. 0 .and. n3 .eq. 0) continue
        if (n2 .ne. 0 .and. n2 .lt. n4) n4 = n2
        if (n3 .ne. 0 .and. n3 .lt. n4) n4 = n3
        if (n4 .eq. k) jcltac(kcl+2) = k
     end do
-7010 continue
     do k = 1, numum
        kcl = kcoil(k)
        nshare = jcltac(kcl) + jcltac(kcl + 1)
@@ -377,7 +376,7 @@ subroutine over15
         bus1 = aupper(i + jk - 1)
 !!!!  write (*,*) ' ready to check next name.  jk, bus1 =',  jk, bus1
         do ip = 1, ntot
-           if (bus1 .ne. bus(ip)) go to 2801
+           if (bus1 .ne. bus(ip)) cycle
 !!!!  write (*,*) ' match found.   jk, ip =',  jk, ip
            if (jk .eq. 1) ibrnch(nv + 1) = ip
            if (jk .eq. 2) jbrnch(nv + 1) = ip
@@ -387,14 +386,13 @@ subroutine over15
 !!!! 1            ' jbrnch(nv) =',   nv, ibrnch(nv), jbrnch(nv)
            go to 4962
         end do
-2801    continue
         if (noutpr .eq. 0) write (unit = lunit(6), fmt = 6925) bus1
 6925    format (5x, 'ignore v-branch request involving nonexistent node  "', a6, '"')
         go to 4962
+5183    continue
      end do
-5183 continue
-  end do
 4962 continue
+  end do
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 3872)
 3872 format ('+Card of name pairs for branch voltages.')
   go to 1030
@@ -513,7 +511,7 @@ subroutine over15
 1338 format (/, 10x, 'entry', 4x, 'switch', 6x, 'from', 8x, 'to', 9x, 'columns 15-24', 8x, 'columns 25-34', 7x, 'reference switch no.', /, 5x,  2(4x, 'number'),  2(7x, 'bus'), 10x, '(in seconds)', 9x, '(in seconds)', 5x, '(0 implies independence)')
   n1 = 0
   do i = 1, kswtch
-     if (absz (adelay(i)) .ne. 44444.0d0) go to 1352
+     if (absz (adelay(i)) .ne. 44444.0d0) cycle
      l = iabs (kmswit(i))
      ndx1 = lswtch + i
      m = iabs (kmswit(ndx1))
@@ -522,7 +520,6 @@ subroutine over15
      write (unit = lunit(6), fmt = 1346) n1, i, bus(l), bus(m), crit(i), d1, kdepsw(i)
 1346 format (5x, 2i10, 2(4x, a6), 2f21.6, 6x, i10)
   end do
-1352 continue
   if (nenerg .lt. 0) go to 1373
   write (unit = lunit(6), fmt = 1371) degmin, degmax, statfr
 1371 format (" Now in addition to switch-time variation caused by each switch's own distribution, there is the added random", /, " delay which is the same for all switches, refered to by the term 'reference angle'.   Distribution for this", /, ' angle is uniform over the time interval from', e14.5, ' to', e14.5, ' degrees based on', e13.3, ' Hz', /, " frequency.   This was all specified by the user using fields  'degmin' ,  'degmax' ,  and  'statfr'  (cols. 41-64)", /, ' of the special statistics misc. data card.')
@@ -556,7 +553,7 @@ subroutine over15
 8026 format (/, ' koutvp or koutie', /, (1x, 10i10))
   do k = 1, kswtch
      n3 = kpos(k)
-     if (n3 .ge. 0) go to 907
+     if (n3 .ge. 0) cycle
      nc = nc + 1
      lstat(19) = 907
      if (nc .gt. lsiz12) go to 9000
@@ -568,20 +565,18 @@ subroutine over15
 8028 format (/, ' at 8028 ', 4i10)
      do i = 1, npower
         mpower = maxpe + i
-        if (koutvp(i) .gt. 0) go to 5438
+        if (koutvp(i) .gt. 0) cycle
         if (koutvp(mpower) .eq. k) go to 4385
      end do
-5438 continue
-     go to 907
+     cycle
 4385 koutvp(mpower) = - nc
   end do
-907 continue
 912 if (inonl .eq. 0) go to 8411
   do k = 1, inonl
      icheck = nonlm(k)
      if (iprsup .gt. 3) write (unit = lunit(6), fmt = 8029) k, icheck, nc
 8029 format (/, ' at 8029 ', 3i10)
-     if (icheck .ge. 0) go to 909
+     if (icheck .ge. 0) cycle
      nc = nc + 1
      lstat(19) = 8029
      if (nc .gt. lsiz12) go to 9000
@@ -589,15 +584,13 @@ subroutine over15
      jbrnch(nc) = -icheck
      do i = 1, npower
         mpower = maxpe + i
-        if (koutvp(i) .lt. 0) go to 5439
-        if (koutvp(mpower) .ge. 0) go to 5439
+        if (koutvp(i) .lt. 0) cycle
+        if (koutvp(mpower) .ge. 0) cycle
         if (koutvp(mpower) .eq. -k) go to 4398
      end do
-5439 continue
-     go to 909
+     cycle
 4398 koutvp(mpower) = -(1000 + nc)
   end do
-909 continue
   !     bring "n15" of "top15" out into "over15" using "nfrfld"
 8411 n15 = nfrfld
   if (numum .gt. 0) call uminit (n15, spum(iureac :), spum(iugpar :), spum(iufpar :), spum(iuhist :), spum(iuumrp :), ispum(iunod1 :), ispum(iunod2 :), ispum(iujclt :), ispum(iujclo :), ispum(iujtyp :), ispum(iunodo :), ispum(iujtmt :), spum(iuhism :), spum(iuomgm :), spum(iuomld :), spum(iutham :), spum(iuredu :), spum(iureds :), spum(iuflds :), spum(iufldr :), spum(iurequ :), spum(iuflqs :), spum(iuflqr :), ispum(iujcds :), ispum(iujcqs :), spum(iuflxd :), spum(iuflxq :), ispum(iunppa :), spum(iurotm :), ispum(iuncld :), ispum(iunclq :), ispum(iujtqo :), ispum(iujomo :), ispum(iujtho :), spum(iureqs :), spum(iuepso :), spum(iudcoe :), ispum(iukcoi :), spum(iuvolt :), spum(iuangl :), ispum(iunodf :), ispum(iunodm :), ispum(iukumo :), ispum(iujumo :), spum(iuumou :))
@@ -626,7 +619,7 @@ subroutine over15
      icheck = mbus(k)
      if (iprsup .ge. 3) write (unit = lunit(6), fmt = 8030) k, icheck, nc
 8030 format (' at 8030 of "over15", k, icheck, nc =', 3i6)
-     if (icheck .ge. 0) go to 911
+     if (icheck .ge. 0) cycle
      nc = nc + 1
      lstat(19) = 8030
      if (nc .gt. lsiz12) go to 9000
@@ -634,22 +627,19 @@ subroutine over15
      jbrnch(nc) = -icheck
      do i = 1, npower
         mpower = maxpe + i
-        if (koutvp(i) .le. 0) go to 5540
+        if (koutvp(i) .le. 0) cycle
         if (koutvp(mpower) .eq. k) go to 5415
      end do
-5540 continue
-     go to 911
+     cycle
 5415 koutvp(mpower) = -nc
   end do
-911 continue
   do i = 1, npower
      mpr = maxpe + i
-     if (koutvp(mpr) .ge. 0) go to 5507
+     if (koutvp(mpr) .ge. 0) cycle
      n44 = iabs (koutvp(mpr))
      if (n44 .gt. 1000) n44 = n44 - 1000
      koutvp(mpr) = n44
   end do
-5507 continue
   lstat(31) = nc
   if (ktab .gt. 0) go to 4752
   ioutcs = 0
@@ -955,13 +945,12 @@ subroutine over15
      if (n8 .lt. 0) kpos(i) = -2
      n11 = n11 + 1
      modswt(n11) = i
-8710 if (kpos(i) .ge. 0) go to 8713
+8710 if (kpos(i) .ge. 0) cycle
      kcount = kcount + 1
      bvalue(kcount) = d6
      if (iprsup .ge. 1) write (unit = lunit(6), fmt = 8712) kcount, bvalue(kcount)
 8712 format (' kcount, bvalue(kcount) =', i8, e15.6)
   end do
-8713 continue
   ktrlsw(1) = n11
 8719 nc = ncsave
   if (kbase .ne. 2 .and. kbase .ne. intinf) go to 710
@@ -969,10 +958,10 @@ subroutine over15
   n6 = 0
   do k1 = 1, kswtch
      if (iabs (kpos(k1)) .eq. 2) go to 4208
-     if (adelay(k1) .ne. 44444.0d0) go to 4216
+     if (adelay(k1) .ne. 44444.0d0) cycle
      volti(n6 + 1) = tclose(k1)
      go to 4213
-4208 if (adelay(k1) .ne. -44444.0d0) go to 4216
+4208 if (adelay(k1) .ne. -44444.0d0) cycle
      volti(n6 + 1) = topen(k1)
 4213 n6 = n6 + 1
      if (n6 .lt. 2 * lsiz26) go to 4215
@@ -981,7 +970,6 @@ subroutine over15
      go to 9200
 4215 nextsw(n6) = k1
   end do
-4216 continue
   write (unit = lunit(6), fmt = 701) knt, (nextsw(k1), volti(k1), k1 = 1, n6)
 701 format (/, 32x, 'Random switching times for energization number', i4, /, (32x, 5(i4, e16.6)))
 710 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1077) kprchg, multpr
@@ -1084,7 +1072,7 @@ subroutine top15
      if (iabs (iform(k)) .ne. 14) go to 902
      sfreq(k) = sfreq(k) * twopi
      if (tstart(k) .lt. 0.0) tstart(k) = 0.0d0
-902  if (iabs (iform(k)) .ne. 16) go to 906
+902  if (iabs (iform(k)) .ne. 16) cycle
      ck1 = tstop(k + 1)
      tstop(k + 1) = 0.
      n3 = iabs (node(k))
@@ -1106,7 +1094,6 @@ subroutine top15
      time2(k + 1) = h2
      tstart(k + 1) = sfreq(k) * gus3 + time1(k) * gus2
   end do
-906 continue
 912 n15 = -4
   numsub = 0
   if (inonl .eq. 0) go to 9200
@@ -1114,7 +1101,7 @@ subroutine top15
   call move (kpsour(1 :), kssfrq(1 :), ntot)
   do k = 1, inonl
      nlsub(k) = 0
-     if (nltype(k) .lt. 0) go to 7248
+     if (nltype(k) .lt. 0) cycle
      n15 = n15 + 5
      nsubkm(n15) = n15
      nsubkm(n15 + 1) = nonlk(k)
@@ -1153,7 +1140,6 @@ subroutine top15
 6789 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 7241) k,  numsub, n15, ncomp, isubeg(numsub)
 7241 format ('  k, numsub, n15, ncomp, isubeg(numsub) =', 5i8)
   end do
-7248 continue
   if (iprsup .ge. 7) write (unit = *, fmt = *) ' top15.  kssfrq(1:ntot) =', (kssfrq(k), k = 1, ntot)
   do k = 2, kpartb
      if (kssfrq(k) .gt. ntot) kssfrq(k) = 0
@@ -1213,7 +1199,7 @@ subroutine smout
      n = i
      i5 = i30 + 17
      n15 = ismdat( i5 )
-     if (n15 .lt. 0) go to  3648
+     if (n15 .lt. 0) cycle
      l = 5
      busvec(1) = text1
      if (n1 .gt. 0) call packa1 (digit(n1), busvec(1), l)
@@ -1239,7 +1225,7 @@ subroutine smout
 21   do n7 = 1, 3
         i5 = i5 + 1
         n15 = ismdat(i5)
-        if (n15 .eq. 0) go to 4224
+        if (n15 .eq. 0) cycle
         do l = 1, n15
            ip1 = ip1 + 3
            n6 = ismout(ip1)
@@ -1262,14 +1248,12 @@ subroutine smout
            ismout(jk1) = jb
         end do
      end do
-4224 continue
-     if (jk .le. lsmout) go to 3648
+     if (jk .le. lsmout) cycle
      kill = 1
      lstat(19) = 4224
      lstat(16) = 11
      return
   end do
-3648 continue
   if (iprsup .ge. 3) write (unit = lunit(6), fmt = 4240) (i, ismout(3 * i), ismout(3 * i - 1), i = 1, jk)
 4240 format (/, ' (i, jsmout(i), ksmout(i), i = 1, jk)', /, (1x, 10(3i4, 1x)))
   nsmout = jk
