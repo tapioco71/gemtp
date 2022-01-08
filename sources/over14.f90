@@ -415,7 +415,7 @@ subroutine last14
      it1 = it1 + 1
      if (-kbus(it1) .eq. l) go to 684
      if (iabs (mbus(it1)) .eq. l) go to 685
-     go to 683
+     cycle
 684  j0 = 0
 685  ibrj = k
      do ibj = 1, it2
@@ -427,7 +427,6 @@ subroutine last14
         ibrj = ibrj + 1
      end do
   end do
-683 continue
   it1 = it1 + 1
   go to 640
 !
@@ -483,11 +482,10 @@ subroutine last14
   !     to recover the array ci
   n2 = k + it2 - 1
   do i = k, n2
-     if (ck(i) .ge. 0.0d0) go to 31690
+     if (ck(i) .ge. 0.0d0) cycle
      j = int (cik(i), kind (j))
      ci(i) = ci(i) * eta(j)
   end do
-31690 continue
   go to 640
 6920 it2 = iabs (kodebr(k))
   n1 = int (cik(k), kind (n1))
@@ -499,7 +497,7 @@ subroutine last14
      n3 = 1
      d1 = 1.0d0
      go to 13020
-13010 if (iabs (mbus(n9)) .ne. l) go to 13200
+13010 if (iabs (mbus(n9)) .ne. l) cycle
      n3 = - 1
      d1 = 1.0d0
      if (kodsem(k) .lt. 0) d1 = -1.0d0
@@ -530,10 +528,10 @@ subroutine last14
 13060 d2 = d2 + sconst(n6 + 1)
      go to 13110
 13070 n7 = n6 + 4 * (n7 - 1)
-     do j=n6, n7, 4
-!        if (sconst(j)) 13100, 13090, 13080
+     do j = n6, n7, 4
+        !        if (sconst(j)) 13100, 13090, 13080
         if (sconst(j) .lt. 0) then
-           go to 13100
+           cycle
         else if (sconst(j) .eq. 0) then
            go to 13090
         else
@@ -542,7 +540,6 @@ subroutine last14
 13080   d2 = d2 + sconst(j + 2)
 13090   d2 = d2 + sconst(j + 2)
      end do
-13100 continue
 13110 if (iprsup .ge. 6) write (lunit(6), 13115) k, l, i, n9, n3, n4, n5, n6, n7, d2
 13115 format (' at 13110.      k       l       i      n9      n3       n4      n5      n6      n7                d2', /, 10x, 9i8, 5x, e15.7)
      if (n1 .lt. 0) go to 13120
@@ -578,7 +575,6 @@ subroutine last14
      end do
 13190 if (n3 .gt. 0) go to 13010
   end do
-13200 continue
   it2 = 1
 13210 if (cki(k) .lt. 0.0) go to 640
   k = k + 1
@@ -624,25 +620,23 @@ subroutine last14
 4108 format (' Node  ', '"',  a,  '"', '  has no connected linear branches.   Add (to ground) g =', e13.4, /, 1x)
 4308 if (num99 .le. 0) go to 73620
   do i = 1, inonl
-     if (nltype(i) .gt. 0) go to 73610
+     if (nltype(i) .gt. 0) cycle
      k = nonlk(i)
      m = iabs (nonlm(i))
      if (k .ne. l) go to 73600
      if (f(m) .eq. 0.0d0) f(m) = 1.0d0 / fltinf
-     go to 73610
-73600 if (m .ne. l) go to 73610
+     cycle
+73600 if (m .ne. l) cycle
      if (f(k) .eq. 0.0d0) f(k) = 1.0d0 / fltinf
   end do
-73610 continue
 73620 if (iprsup .ge. 4) write (unit = lunit(6), fmt = 783) bus(l), (f(i), i = 1, ntot)
 783 format (' node  ', '"',  a6,  '"', '  row of (y) ....', /, (1x, 5e25.15))
   do i = 2, ntot
-     if (f(i) .eq. 0.0d0) go to 885
+     if (f(i) .eq. 0.0d0) cycle
      kss = kss - 1
      km(kss) = i
      ykm(kss) = f(i)
   end do
-885 continue
   km(kss) = -km(kss)
   if (iprsup .gt. 0) write (unit = lunit(6), fmt = 73647) l, kks(l), kss, inonl, num99
 73647 format (' End of storage of row of (y), at 73647.   ', 5i10)
@@ -685,26 +679,24 @@ subroutine last14
 5000 if (km(j) .gt. 0) go to 3000
   if (l .lt. kpartb) go to 1000
   do np = 1, inonl
-     if (nltype(np) .lt. 0) go to 6868
+     if (nltype(np) .lt. 0) cycle
      mark = kpsour(nonlk(np))
-     if (mark .eq. 0) go to 6868
+     if (mark .eq. 0) cycle
      marm = kpsour(iabs (nonlm(np)))
-     if (marm .eq. 0 .or. marm .eq. mark) go to 6868
+     if (marm .eq. 0 .or. marm .eq. mark) cycle
      do nq = 2, ntot
         if (kpsour(nq) .eq. marm) kpsour(nq) = mark
      end do
   end do
-6868 continue
   do mm = 1, kswtch
      knode = kpsour(kmswit(mm))
      mnode = kpsour(kmswit(mm + lswtch))
-     if (knode .eq. mnode) go to 5800
-     if (knode .eq. 0 .or. mnode .eq. 0) go to 5800
+     if (knode .eq. mnode) cycle
+     if (knode .eq. 0 .or. mnode .eq. 0) cycle
      do nn = 2, ntot
         if (kpsour(nn) .eq. mnode) kpsour(nn) = knode
      end do
   end do
-5800 continue
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 903) kpartb, ntot, (kpsour(i), i = 1, ntot)
 903 format (/, ' kpartb, ntot =, 2i10', /, ' kpsour cells folow........', /, (1x, 20i6))
   lstat(27) = kss
@@ -955,11 +947,10 @@ subroutine past
            elp(idk + kp) = ykm(n4)
            n5 = kp + jd30
            ismdat(n5) = n4
-           go to  15
+           cycle
 14         n4 = n4 - 1
            go  to  12
         end do
-15      continue
      end do
      ap1 = 0.0d0
      ap2 = 0.0d0
