@@ -344,11 +344,10 @@ subroutine dgelg (r, a, m, n, eps, ier)
   nm = n * m
   do l = 1, mm
      tb = absz (a(l))
-     if (tb .le. piv) go to 3
+     if (tb .le. piv) cycle
      piv = tb
      i = l
   end do
-3 continue
   tol = eps * piv
   !     a(i) is pivot element. piv contains the absolute value of a(i).
   !     start elimination loop
@@ -404,11 +403,10 @@ subroutine dgelg (r, a, m, n, eps, ier)
            ll = l - j
            a(l) = a(l) + pivi * a(ll)
            tb = absz (a(l))
-           if (tb .le. piv) go to 15
+           if (tb .le. piv) cycle
            piv = tb
            i = l
         end do
-15      continue
         do l = k, nm, m
            ll = l + j
            r(ll) = r(ll) + pivi * r(l)
@@ -439,7 +437,6 @@ subroutine dgelg (r, a, m, n, eps, ier)
         r(j) = r(k)
         r(k) = tb
      end do
-     return
   end do
 22 return
   !     error return
@@ -637,10 +634,9 @@ subroutine namea6 (text1, n24)
   texvec(n17) = text1
   n24 = n17
   do j = 1, maxbus
-     if (texvec(j) .ne. text2) go to 3428
+     if (texvec(j) .ne. text2) cycle
      n17 = j
      go to 9000
-3428 continue
   end do
   n17 = 0
   go to 9000
@@ -701,8 +697,6 @@ subroutine tables
   integer(4) :: j
   integer(4) :: ll1, ll2, ll4
   integer(4) :: n1, n2, n3, n4, n5, n9, n24
-  !
-  integer(4), allocatable :: itemp(:)
   !
   !  dimension busone(1), idistx(1)
   !  dimension kpen(1), itemp(1), jtemp(1), ktemp(1)
@@ -826,12 +820,11 @@ subroutine csup (l)
      n2 = insup(kksup + i)
      write (unit = lunit(6), fmt = 2008) (n,ivarb(n + 1), ivarb(n + 2), ivarb(n + 2), n = n1, n2, 3)
 2008 format (4i8)
-     go to 2034
+     cycle
 2014 n1 = -n1
      write (unit = lunit(6), fmt = 2022 ) n1, ivarb(n1), ivarb(n1 + 1), ivarb(n1 + 2), ivarb(n1 + 3), ivarb(n1 + 4)
 2022 format (i8, 24x, 5i8)
   end do
-2034 continue
   if (kpar .ne. 0) write (unit = lunit(6), fmt = 1004) (i, parsup(i + kprsup), i = 1, kpar)
 1004 format ('0e', 5x, 'parsup ...', /, (' e', 5(i3, 1x, e15.6, 3x)))
 1000 nnn = kxtcs + nuk + lstat(64)
@@ -1083,7 +1076,7 @@ subroutine csup (l)
         go to 5010
 
      case (2)
-        go to 5025
+        cycle
 
      case (3)
         go to 5015
@@ -1094,15 +1087,14 @@ subroutine csup (l)
      !     :: numerical argument
 5010 ndx4 = kprsup + i2
      arg(k) = parsup(ndx4)
-     go to 5025
+     cycle
      !     :: tacs variable
 5015 ndx4 = kxtcs + i2
      arg(k) = xtcs(ndx4)
-     go to 5025
+     cycle
      !     :: fortran tacs function
 5020 arg(k) = i2
   end do
-5025 continue
   !     :::  calculate value of fortran expression  :::
   zfl = 10.0 * flzero
   jfl = 1
@@ -1608,7 +1600,7 @@ subroutine csup (l)
      ndx3 = ndx3 + 1
      ndx2 = ndx2 + 1
      n = ksus(ndx3)
-     if (n .eq. 0) go to 66340
+     if (n .eq. 0) cycle
      ndx6 = kxtcs + n
      d4 = xtcs(ndx6) * ksus(ndx2)
      if (d4 .lt. d10) d10 = d4
@@ -1616,7 +1608,6 @@ subroutine csup (l)
      if (iprsup .ge. 1) write (unit = lunit(6), fmt = 7234) k, j, ndx2, ndx3, ndx6, ksus(ndx2), xtcs(ndx6)
 7234 format (' Next input; k, j, ndx2, ndx3, ndx6, ksus(ndx2), xtcs(ndx6) =',  6i8, e13.3)
   end do
-66340 continue
 66330 a = d11
   if (parsup(nn + 1) .ge. 0.0) go to 11
   a = d10
@@ -1656,7 +1647,7 @@ subroutine csup (l)
   b = 0.0
   do mj = j, k
      n = kksus + mj
-     if (ksus(n) .eq. 9) go to 1166
+     if (ksus(n) .eq. 9) cycle
      m = kalksu + mj
      bb = xtcs(kxtcs + ksus(m)) * ksus(n)
      nj = mj
@@ -1669,7 +1660,6 @@ subroutine csup (l)
      go to 1144
 1155 b = b + bb
   end do
-1166 continue
   a = b * parsup(nn + 3)
   aa = a * parsup(nn)
   if (aa .ge. parsup(nn + 1)) go to 6677

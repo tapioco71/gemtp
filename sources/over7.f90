@@ -148,13 +148,13 @@ subroutine over7
      k = lorder(i)
      call subscr (k, lbus, 233, 2)
      j = loca(k)
-234  if (j .eq. 0)   go to 236
+234  if (j .eq. 0) cycle
      call subscr (j, lsiz23, 234, 1)
      isubs1 = iofkol + j
      k = kolum(isubs1)
      call subscr (k, lbus, 234, 2)
      l = norder(k)
-     if (i .gt. l)   go to 235
+     if (i .gt. l) go to 235
      ioffd = ioffd + 1
      call subscr (ioffd, lsiz23, 234, 3)
      iloc(ioffd) = l
@@ -163,7 +163,6 @@ subroutine over7
      j = korder(isubs1)
      go to 234
   end do
-236 continue
 5236 index(ntot + 1) = ioffd + 1
   jsub = ntot + 1
   call subscr (jsub, lbus, 5236, 1)
@@ -200,17 +199,15 @@ subroutine over7
 6049    format (' At 6049 of "over7".  i, k, kode(k), etc. =', 7i8, e20.10)
         ! s.m.  source node must precede regular voltage source nodes.
         ! alter renumbering map to produce this, if  tstart  .eq.  -9988.
-        if (tstart(l) .ne. -9988.) go to 6051
+        if (tstart(l) .ne. -9988.0d0) cycle
         if (node(l) .eq. k) go to 73775
      end do
-6051 continue
      n1 = n1 + 1
      norder(n1) = k
-     go to 73780
+     cycle
 73775 j = j + 1
      ich1(j) = k
   end do
-73780 continue
   kpartb = j
   if (n1 .le. 0) go to 73820
   do i = 1, n1
@@ -740,11 +737,10 @@ subroutine over7
   write (unit = lunit(6), fmt = 9997) nelim, ntot, ncurr
 9997 format (1x, i4, ' Nodes out of total of  ', i4, ' were renumbered before breakdown in the renumbering overlay.', /, ' Had we made it to', i6, '   nodes, the operation would have terminated normally (since the remaining ones', /, ' are always forced last without regard to sparsity considerations).')
   do i = 1, ntot
-     if (norder(i) .gt. 0) go to 2236
+     if (norder(i) .gt. 0) cycle
      nelim = nelim + 1
      norder(i) = nelim
   end do
-2236 continue
   write (unit = lunit(6), fmt = 2240)
 2240 format (/, ' Anyway, the EMTP will try to continue with execution of this data case, as best it can.   Nodes which were', /, ' not renumbered before the overflow limit was reached will now simply be renumbered in their original relative', /, ' order, without regard to sparsity considerations.   Recall that the original node order comes from the order of data', /, ' input (the order in which node names are encountered, as the EMTP data cards are read).')
   write (unit = lunit(6), fmt = 2241) (norder(i), i = 1, ntot)

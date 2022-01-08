@@ -1203,15 +1203,14 @@ subroutine over2
      if (it32 .gt. it) call cimage
      read (unit = abuff, fmt = 8331) tr(it32), tx(it32), c(it32)
 8331 format (26x, 3e16.0)
-     if (noutpr .ne. 0) go to 8346
+     if (noutpr .ne. 0) cycle
      if (it32 .gt. it) go to 8338
      write (unit = kunit6, fmt = 8335) itype, tr(it32), tx(it32), c(it32)
 8335 format ('+phase', i3, 3e13.4)
-     go to 8346
+     cycle
 8338 write (unit = kunit6, fmt = 8341) tr(it32), tx(it32), c(it32)
 8341 format ('+', 3x, 'cont.', 3e13.4)
   end do
-8346 continue
   go to 163
 8352 if (itype .ne. 3) go to 47634
   d3 = absz (tr(it)) + absz (tx(it)) + absz (tr(it + 1)) + absz (tx(it + 1)) + absz(tr(it + 2)) + absz(tx(it + 2))
@@ -2176,20 +2175,18 @@ subroutine nonln2
   ! make sure that the user-specified point lies within the major
   ! hysteresis loop.
   do n15 = n12, n14
-     if (tr(it) .gt. cchar(n15)) go to 5310
+     if (tr(it) .gt. cchar(n15)) cycle
      n16 = n15
      go to 5313
   end do
-5310 continue
   n16 = n14 + 1
 5313 n17 = n16 + n13 + 1
   d7 = vchar(n17) * tr(it) + cchar(n17) - flzero
   do n15 = n12, n14
-     if (-tr(it) .gt. cchar(n15)) go to 5320
+     if (-tr(it) .gt. cchar(n15)) cycle
      n16 = n15
      go to 5323
   end do
-5320 continue
   n16 = n14 + 1
 5323 n17 = n16 + n13 + 1
   d8 = -vchar(n17) * (-tr(it)) - cchar(n17) + flzero
@@ -2206,22 +2203,20 @@ subroutine nonln2
 5330 d12 = 0.7d0
   anonl(inonl) = d12 * vchar(n14)
   do n15 = n12, n14
-     if (cchar(n15) .lt. 0.0) go to 5340
+     if (cchar(n15) .lt. 0.0) cycle
      n16 = n15
      go to 5343
   end do
-5340 continue
   n16 = n14 + 1
 5343 n17 = n16 + n13 + 1
   d9 = -cchar(n17)
   d12 = 0.3d0
   d10 = anonl(inonl) - d12 * d9
   do n15 = n12, n14
-     if (d10 .gt. vchar(n15)) go to 5350
+     if (d10 .gt. vchar(n15)) cycle
      n16 = n15
      go to 5353
   end do
-5350 continue
   n16 = n14 + 1
 5353 n17 = n16 + n13 + 1
   vzero(inonl) = gslope(n16) * d10 + gslope(n17)
@@ -2231,11 +2226,10 @@ subroutine nonln2
   !     make sure that the user-specified residual flux is within the
   !     major hysteresis loop.
 5360 do n15 = n12, n14
-     if (cchar(n15) .lt. 0.0) go to 5370
+     if (cchar(n15) .lt. 0.0) cycle
      n16 = n15
      go to 5373
   end do
-5370 continue
   n16 = n14 +1
 5373 n17 = n16 + n13 + 1
   d9 = -cchar(n17)
@@ -2277,13 +2271,12 @@ subroutine nonln2
 21696 format ('+Reference branch.   Copy  ', '"', a6,  '"', ' to ', '"', a6, '"')
   do i = 1, ii
      if (bus3 .eq. chcopy) go to 6881
-     if (nonlk(i) .ne. n3) go to 183
-     if (iabs (nonlm(i)) .ne. n4) go to 183
+     if (nonlk(i) .ne. n3) cycle
+     if (iabs (nonlm(i)) .ne. n4) cycle
      go to 184
 6881 n13 = namenl(i)
      if (bus4 .eq. texvec(n13)) go to 184
   end do
-183 continue
   lstat(19) = 183
 4230 kill = 6
   go to 9999
@@ -2632,9 +2625,8 @@ subroutine distr2
      sconst(i + 1) = voltbc(n11 + 1)
      sconst(i + 2) = voltbc(n11 + 2)
      n11 = n11 + 3
-     if (sconst(i) .ge. 0.0) go to 8254
+     if (sconst(i) .ge. 0.0) cycle
   end do
-8254 continue
   n8 = n9 + 1
   n9 = n9 + n10
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 8260) n8, n9, voltbc(1), voltbc(2)
@@ -2707,9 +2699,8 @@ subroutine distr2
      sconst(i + 1) = voltbc(n11 + 1)
      sconst(i + 2) = voltbc(n11 + 2)
      n11 = n11 + 3
-     if (sconst(i) .ge. 0.0) go to 8324
+     if (sconst(i) .ge. 0.0) cycle
   end do
-8324 continue
   n8 = n9 + 1
   n9 = n9 + n10
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 8330) n8, n9, voltbc(1), voltbc(2)
@@ -2932,10 +2923,9 @@ subroutine distr2
   xsum = 0.0d0
   ysum = 0.0d0
   do jj = n11, n12
-     if (sconst(jj) * deltat .lt. pdt) go to 40000
+     if (sconst(jj) * deltat .lt. pdt) cycle
      go to 40001
   end do
-40000 continue
   go to 40007
 40001 if (jj .eq. n11) jj = jj + 1
   if (jj .eq. n12) go to 40007
@@ -3225,10 +3215,9 @@ subroutine distr2
   xsum = 0.
   ysum = 0.
   do jj = n11, n12
-     if (sconst(jj) * deltat .lt. pdt) go to 50000
+     if (sconst(jj) * deltat .lt. pdt) cycle
      go to 50001
   end do
-50000 continue
   go to 50007
 50001 if (jj .eq. n11) jj = jj + 1
   if (jj .eq. n12) go to 50007
@@ -3548,9 +3537,9 @@ subroutine distr2
   do i = 1, ip
      call cimage
      if (ipsem .le. 3) go to 2113
-     if (i .le. ipsem * 2) go to 2008
+     if (i .le. ipsem * 2) cycle
      go to 2114
-2113 if (i .le. ipsem) go to 2008
+2113 if (i .le. ipsem) cycle
 2114 if (ipsem .eq. 6) nrowt = 6
      if (ipsem .eq. 6) go to 2014
      if (ipsem .gt. 3 .and. jkl .eq. 0) nrowt = 6
@@ -3580,12 +3569,10 @@ subroutine distr2
         kl = 0
         ifqq = ifqq + 3
         ifq = ifqq
-        go to 2007
+        cycle
 2015    ifq = ifq + ipsem * 3
      end do
-2007 continue
   end do
-2008 continue
   ifq = ifqt + ipsem ** 2 * 3
   nn13 = ifq - 1
   ifq = nn13 + (nn13 - ifsem - nphs2 ) * 3 / 2 + 2 * nphs2
@@ -3939,7 +3926,7 @@ subroutine over3
 5271 istart = iend + 1
      idumy = i
 76520 idumy = idumy - 3
-     if (idumy .le. 0) go to 76517
+     if (idumy .le. 0) cycle
      iend = istart + idumy - 1
      if (idumy .gt. 3) iend = istart + 2
      !     read input card using cimage.
@@ -3951,7 +3938,7 @@ subroutine over3
      if (noutpr .eq. 0) write (unit = kunit6, fmt = 54104) tr(istart), tx(istart), c(istart), tr(istart + 1), tx(istart + 1)
      istart = iend + 1
      go to 76520
-76517 end do
+  end do
   do i = locz11, locznn
      tx(i) = freqcs * tx(i) / freqx
      c(i) = freqcs * c(i) / (2.0 * freqc)

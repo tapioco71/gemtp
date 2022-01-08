@@ -214,14 +214,13 @@ subroutine last14
         f(n4) = f(n4) - yx
         if (iprsup .ge. 9) write (unit = lunit(6), fmt = 746) n3, n4, n2, kodebr(k), yx, c(n2), f(n3), f(n4)
 746     format (' Coupled elem adds to (y).  n3, n4, n2, kodebr(k), yx, c(n2), f(n3), f(n4) =', 4i10, /, 1x, 4e25.15)
-        go to 750
+        exit
 760     n3 = mbus(n2)
         n4 = kbus(n2)
         go to 730
 770     n2 = n1 + j
         go to 740
      end do
-750  continue
 630  it1 = it1 + 1
   end do
 640 k = k + it2
@@ -353,10 +352,9 @@ subroutine last14
         sconst(nq6) = sume
 1002    if (iprsup .gt. 0) write (unit = *, fmt = 145) i, nteq, nnq1, nnq2, nnq3, nq4, nq5, nq6, sconst(nq1), sconst(nnq2), sconst(nnq3), sconst(nq4), sconst(nq5), sconst(nq6)
 145     format (1x, i2, 3x, i3, 2x, i4, 2x, i4, 2x, i4, 2x, i4, 2x, i4, 2x, i4, 6e14.5)
-        if (jkl .eq. 1) go to 100
+        if (jkl .eq. 1) exit
 1004    jkl = 0
      end do
-100  continue
      nnq1 = nq6
      nq1 = nq3 + 1
      icb = icb + 1
@@ -440,11 +438,10 @@ subroutine last14
   if (it2 .lt. 0) it2 = 1
   n2 = k + it2 - 1
   do i = k, n2
-     if (ck(i) .ge. 0.0d0) go to 21690
+     if (ck(i) .ge. 0.0d0) exit
      j = int (cik(i), kind (j))
      ci(i) = ci(i) / eta(j)
   end do
-21690 continue
   it1 = k
   j0 = k
   do i = 1, it2
@@ -588,15 +585,15 @@ subroutine last14
   go to 13210
 780 if (num99 .le. 0) go to 2801
   do i = 1, inonl
-     if (nltype(i) .gt. 0) go to 2793
+     if (nltype(i) .gt. 0) exit
      if (nltype(i) .eq. -98 .or. nltype(i) .eq. -96) go to 2781
-     if (anonl(i) .ge. 0.0d0)  go to 2793
+     if (anonl(i) .ge. 0.0d0) exit
 2781 k = nonlk(i)
      m = iabs (nonlm(i))
      if (k .ne. l) go to 2784
      n4 = m
      go to 2786
-2784 if (m .ne. l) go to 2793
+2784 if (m .ne. l) exit
      n4 = k
 2786 if (nltype(i) .ne. -96) go to 2787
      n3 = nonlad(i) + 1
@@ -605,7 +602,7 @@ subroutine last14
      f(n4) = f(n4) - yx
      if (iprsup .ge. 2) write (unit = lunit(6), fmt = 2790) i, k, m, l, n4, yx, f(l), f(n4)
 2790 format (/, ' Type-96 g added to row of y.  ', 5i10, /, 3e25.15)
-     go to 2793
+     exit
 2787 n3 = nonlad(i)
      yx = gslope(n3)
      f(l) = f(l) + yx
@@ -613,20 +610,18 @@ subroutine last14
      if (iprsup .ge. 2) write (unit = lunit(6), fmt = 2789) i, k, m, l, n4, yx, f(l), f(n4)
 2789 format (/, ' Type-98 g added to row of (y).  ', 5i10, /, 3e25.15)
   end do
-2793 continue
 2801 kks(l) = kss
   if (f(l) .ne. 0.0d0) go to 4308
   if (kconst .le. 1) go to 2813
   do i = 2, kconst
-     if (iform(i) .ne. 18) go to 2808
+     if (iform(i) .ne. 18) exit
      n6 = int (time1(i))
      if (n6 .eq. l) go to 4308
   end do
-2808 continue
   !     Connect high resistance to ground for nonzero diagonal:
 2813 f(l) = epsiln
-  write (unit = lunit(6), fmt = 4108) bus(l), epsiln
-4108 format (' Node  ', '"',  a6,  '"', '  has no connected linear branches.   Add (to ground) g =', e13.4, /, 1x)
+  write (unit = lunit(6), fmt = 4108) trim (bus(l)), epsiln
+4108 format (' Node  ', '"',  a,  '"', '  has no connected linear branches.   Add (to ground) g =', e13.4, /, 1x)
 4308 if (num99 .le. 0) go to 73620
   do i = 1, inonl
      if (nltype(i) .gt. 0) go to 73610

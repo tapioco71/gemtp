@@ -287,6 +287,7 @@ subroutine over15
   use bcdtim
   use movcop
   use ovr15c
+  use strcom
   implicit none
   character(8) :: text1, text2, text3
   character(8) :: text4, text5, text6, text7
@@ -345,14 +346,14 @@ subroutine over15
   if (aupper(1) .eq. blank) go to 3094
   go to 1030
 8211 l = 0
-  if (aupper(1) .ne. text12) go to 4693
+  if (to_lower (aupper(1)) .ne. text12) go to 4693
   !     honor "chan01" in cols. 3-8 by building dummy node voltage
   !     channels with names "chan01", "chan02", etc.:
   read (unit = abuff, fmt = 4671) n13
 4671 format (8x, i8)
-  if (n13 + ntot .le. lbus .and. n13 .gt. 0) go to 4682
+  if (((n13 + ntot) .le. lbus) .and. (n13 .gt. 0)) go to 4682
 4675 write (unit = lunit(6), fmt = 4676) n13, ntot, lbus
-4676 format ('   = = =  No, too many dummy node voltage output channels for emtp dimensions.', /, 'n13 + ntot .gt. lbus,   where   n13, ntot, lbus =', 3i8, '     If execution is', /, '          interactive,  deposit  revised  n13  value in  istep  at next spy break.')
+4676 format ('   = = =  No, too many dummy node voltage output channels for EMTP dimensions.', /, 'n13 + ntot .gt. lbus,   where   n13, ntot, lbus =', 3i8, '     If execution is', /, '          interactive,  deposit  revised  n13  value in  istep  at next spy break.')
   call spying
   n13 = istep
   istep = 0
@@ -371,7 +372,7 @@ subroutine over15
 4693 if (ijk .ne. -5) go to 1830
 !!!!  write (*,*) ' begin search for branch voltages.   nv =', nv
   do i = 1, 11, 2
-     if (aupper(i) .eq. blank .and. aupper(i + 1) .eq. blank) go to 4962
+     if ((aupper(i) .eq. blank) .and. (aupper(i + 1) .eq. blank)) go to 4962
      do jk = 1, 2
         bus1 = aupper(i + jk - 1)
 !!!!  write (*,*) ' ready to check next name.  jk, bus1 =',  jk, bus1
@@ -395,23 +396,23 @@ subroutine over15
   end do
 4962 continue
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 3872)
-3872 format ('+card of name pairs for branch voltages.')
+3872 format ('+Card of name pairs for branch voltages.')
   go to 1030
 1830 do i = 1, 13
      if (ijk .lt. 0) go to 8215
      bus1 = aupper(i)
-     if (bus1 .eq. blank) go to 8288
+     if (bus1 .eq. blank) exit
      l = 1
      do ik = 2, ntot
-        if( bus1 .eq. bus(ik) )  go to 3056
+        if (bus1 .eq. bus(ik)) go to 3056
      end do
-     if (noutpr .eq. 0) write (unit = lunit(6), fmt = 3053) bus1
-3053 format (5x, 'Request for voltage output of nonexistent node ', "'", a6, "'", ' will be ignored.')
-     go to 8288
+     if (noutpr .eq. 0) write (unit = lunit(6), fmt = 3053) trim (bus1)
+3053 format (5x, 'Request for voltage output of nonexistent node ', "'", a, "'", ' will be ignored.')
+     exit
 3056 if (ivolt .eq. 1) go to 8888
      numnvo = numnvo + 1
      ibsout(numnvo) = ik
-     if (numnvo .le. lsiz12) go to 8288
+     if (numnvo .le. lsiz12) exit
      iprint = 11
      lstat(19) = 3056
      go to 9000
@@ -419,7 +420,7 @@ subroutine over15
 8899 format (' There has been the request for all node voltage output, so this request will be ignored.')
      go to 1030
 8215 l = 1
-     if (aupper(i) .eq. blank) go to 8288
+     if (aupper(i) .eq. blank) exit
      do j = 1, ibr
         ip = namebr(j)
         if (texvec(ip) .eq. aupper(i)) go to 8231
@@ -434,7 +435,7 @@ subroutine over15
      end do
      write (unit = lunit(6), fmt = 8229 )
 8229 format ('     Request for branch output of nonexistent branch will be ignored')
-     go to 8288
+     exit
 8311 iprint = 11
      lstat(19) = 8237
      go to 9000
@@ -455,7 +456,7 @@ subroutine over15
      nk1 = nonlk(j)
      nk2 = iabs (nonlm(j))
      if (ijk .ne. -2) nonlm(j) = -nk2
-8237 if (ijk .gt. -2) go to 8288
+8237 if (ijk .gt. -2) exit
      nv = nv + 1
      if (nv .gt. lsiz12) go to 8311
      if (ijk .ge. -3) go to 8260
@@ -473,11 +474,10 @@ subroutine over15
      if (iabs (nltype(j)) .ne. 99) go to 8262
      ibrnch(nv) = nk2
      jbrnch(nv) = nk1
-     go to 8288
+     exit
 8262 ibrnch(nv) = nk1
      jbrnch(nv) = nk2
   end do
-8288 continue
   if (l .eq. 0) go to 3081
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 3072)
 3072 format ('+Card of bus names for node-voltage output.')
@@ -513,7 +513,7 @@ subroutine over15
 1338 format (/, 10x, 'entry', 4x, 'switch', 6x, 'from', 8x, 'to', 9x, 'columns 15-24', 8x, 'columns 25-34', 7x, 'reference switch no.', /, 5x,  2(4x, 'number'),  2(7x, 'bus'), 10x, '(in seconds)', 9x, '(in seconds)', 5x, '(0 implies independence)')
   n1 = 0
   do i = 1, kswtch
-     if (absz (adelay(i)) .ne. 44444.) go to 1352
+     if (absz (adelay(i)) .ne. 44444.0d0) go to 1352
      l = iabs (kmswit(i))
      ndx1 = lswtch + i
      m = iabs (kmswit(ndx1))
@@ -772,8 +772,7 @@ subroutine over15
   n4 = ncsave - nv
   if (kol132 .eq. 132) go to 6637
   write (unit = lunit(6), fmt = 6632) numnvo, nv, n4, nsmout, ioutcs
-6632 format (' Time-step loop begins.  Number of node voltages, branch voltages, currents, tacs', /, &
-       ' variables, and s.m. variables are :', 5i6)
+6632 format (' Time-step loop begins.  Number of node voltages, branch voltages, currents, TACS', /, ' variables, and s.m. variables are :', 5i6)
   go to 6645
 6637 write (unit = lunit(6), fmt = 3108) k
 3108 format (/, ' Column headings for the', i4, '  EMTP output variables follow.   These are ordered according to the five', /, ' possible EMTP output-variable classes, as follows ....')
@@ -949,8 +948,8 @@ subroutine over15
      if (iabs (kpos(i)) .ne. 10) go to 8284
      if (absz (e(k) - e(m)) .lt. topen(i)) go to 8710
 8284 if (kbase .eq. 2) go to 8702
-     write (unit = lunit(6), fmt = 8699) bus(k), bus(m), tclose(i)
-8699 format (' ***                       ', 15x, 33x, 'switch ', '"', a6, '"', ' to ', '"', a6, '"', ' closed after', e12.5, ' sec.')
+     write (unit = lunit(6), fmt = 8699) trim (bus(k)), trim (bus(m)), tclose(i)
+8699 format (' ***                       ', 15x, 33x, 'switch ', '"', a, '"', ' to ', '"', a, '"', ' closed after', e12.5, ' sec.')
 8702 n8 = kpos(i)
      kpos(i) = 2
      if (n8 .lt. 0) kpos(i) = -2
@@ -970,10 +969,10 @@ subroutine over15
   n6 = 0
   do k1 = 1, kswtch
      if (iabs (kpos(k1)) .eq. 2) go to 4208
-     if (adelay(k1) .ne. 44444.) go to 4216
-     volti(n6+1) = tclose(k1)
+     if (adelay(k1) .ne. 44444.0d0) go to 4216
+     volti(n6 + 1) = tclose(k1)
      go to 4213
-4208 if (adelay(k1) .ne. -44444.) go to 4216
+4208 if (adelay(k1) .ne. -44444.0d0) go to 4216
      volti(n6 + 1) = topen(k1)
 4213 n6 = n6 + 1
      if (n6 .lt. 2 * lsiz26) go to 4215
@@ -983,7 +982,7 @@ subroutine over15
 4215 nextsw(n6) = k1
   end do
 4216 continue
-  write (unit = lunit(6), fmt = 701) knt, (nextsw(k1), volti(k1), k1 = 1, n6 )
+  write (unit = lunit(6), fmt = 701) knt, (nextsw(k1), volti(k1), k1 = 1, n6)
 701 format (/, 32x, 'Random switching times for energization number', i4, /, (32x, 5(i4, e16.6)))
 710 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1077) kprchg, multpr
 1077 format (/, ' Begin del-t loop at 1077.  kprchg, multpr=', /, (1x, 12i10))
@@ -1008,10 +1007,7 @@ subroutine over15
   n1 = 2 * modout
   if (modout .eq. 0) go to 9999
   if (noutpr .eq. 0) write (unit = lunit(6), fmt = 1006) n1, modout
-1006 format (/, 10x, 'Remember ---- what are labeled as the initial', i3,  '  branch-output currents are in reality', /, &
-       24x, 'modal voltages at the two ends of the last distributed-parameter line of the data case being solved.', /, &
-       24x, 'The first', i3, "  mode voltages at the  'bus1'  end all come first, followed by all the corresponding", /, &
-       24x, "entries for the  'bus2'  end of the line.", /, 1x)
+1006 format (/, 10x, 'Remember ---- what are labeled as the initial', i3,  '  branch-output currents are in reality', /, 24x, 'modal voltages at the two ends of the last distributed-parameter line of the data case being solved.', /, 24x, 'The first', i3, "  mode voltages at the  'bus1'  end all come first, followed by all the corresponding", /, 24x, "entries for the  'bus2'  end of the line.", /, 1x)
   go to 9999
 1009 if (kbase .eq. intinf) kbase = 2
   if (kbase .eq. 2 .and. tenerg .lt. 0.0) call tables
@@ -1181,8 +1177,9 @@ subroutine smout
   use smach
   implicit none
   !     This module is used only by  type 59 s.m.  modeling
+  character(6) :: text1
   character(8) :: digit(10)
-  character(8) :: text1, text2, texta(15), textb(3)
+  character(8) :: text2, texta(15), textb(3)
   !  dimension texta(15), digit(10), textb(3), busvec(1)
   integer(4) :: i, i5, i30, icnt, ip, ip1
   integer(4) :: jb, jk, jk1
@@ -1191,39 +1188,11 @@ subroutine smout
   integer(4) :: n, n1, n2, n5, n6, n7, n10, n15
   real(8) :: d12
   !
-  texta = (/ 'id    ', 'iq    ', 'i0    ', 'if    ', 'ikd   ', 'ig    ', 'ikq   ', 'ia    ', 'ib    ', 'ic    ', 'efd   ', 'mforce', 'mang  ', 'tq gen', 'tq exc' /)
-  ! data texta(1)   /6hid    /
-  ! data texta(2)   /6hiq    /
-  ! data texta(3)   /6hi0    /
-  ! data texta(4)   /6hif    /
-  ! data texta(5)   /6hikd   /
-  ! data texta(6)   /6hig    /
-  ! data texta(7)   /6hikq   /
-  ! data texta(8)   /6hia    /
-  ! data texta(9)   /6hib    /
-  ! data texta(10)  /6hic    /
-  ! data texta(11)  /6hefd   /
-  ! data texta(12)  /6hmforce/
-  ! data texta(13)  /6hmang  /
-  ! data texta(14)  /6htq gen/
-  ! data texta(15)  /6htq exc/
-  textb = (/ 'ang   ', 'vel   ', 'tor   ' /)
-  ! data  textb(1)   /  6hang     /
-  ! data  textb(2)   /  6hvel     /
-  ! data  textb(3)   /  6htor     /
-  digit = (/ '1     ', '2     ', '3     ', '4     ', '5     ', '6     ', '7     ', '8     ', '9     ', '0     ' /)
-  ! data  digit(1)    /  6h1       /
-  ! data  digit(2)    /  6h2       /
-  ! data  digit(3)    /  6h3       /
-  ! data  digit(4)    /  6h4       /
-  ! data  digit(5)    /  6h5       /
-  ! data  digit(6)    /  6h6       /
-  ! data  digit(7)    /  6h7       /
-  ! data  digit(8)    /  6h8       /
-  ! data  digit(9)    /  6h9       /
-  ! data  digit(10)   /  6h0       /
-  text1 = 'mach  '
-  !data  text1   /  6hmach    /
+  data texta  / 'id    ', 'iq    ', 'i0    ', 'if    ', 'ikd   ', 'ig    ', 'ikq   ', 'ia    ', 'ib    ', 'ic    ', 'efd   ', 'mforce', 'mang  ', 'tq gen', 'tq exc' /
+  data textb  / 'ang   ', 'vel   ', 'tor   ' /
+  data digit  / '1     ', '2     ', '3     ', '4     ', '5     ', '6     ', '7     ', '8     ', '9     ', '0     ' /
+  data text1  / 'mach  ' /
+  !
   ll5 = 5
   ll6 = 6
   nsmout = 0

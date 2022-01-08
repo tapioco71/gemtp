@@ -763,8 +763,8 @@ subroutine cimage
      n4 = n4 + 1
      !     encode (1, 3041, filen(n4))  texcol(k)
      write (unit = filen(n4 :), fmt = 3041) texcol(k)
-  end do
 4532 continue
+  end do
   k = 80
 4536 kolbeg = k + 1
   nfrfld = 1
@@ -1095,12 +1095,11 @@ subroutine addmxd (a, b, c, n)
   jt = n * (n + 1) / 2
   do l = 1, jt
      c(l) = a(l)
-     if(l .lt. k) go to 3010
+     if(l .lt. k) cycle
      c(l) = c(l) + b
      j = j + 1
      k = k + j
   end do
-3010 continue
   return
 end subroutine addmxd
 

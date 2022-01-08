@@ -293,8 +293,8 @@ subroutine over11
      lstat(19) = 1854
      lstat(17) = 26
      go to 9800
-  end do
 1854 continue
+  end do
   if (kol132 .eq. 132) write (unit = lunit(6), fmt = 6003) vim(lsiz26 + 1)
 6003 format (//, ' Sinusoidal steady state solution, branch by branch.  All flows are away from bus, and real part, magnitude, or p', /, ' is printed above the imaginary part, the angle, or q.   First solution frequency =', e18.9, '   Hertz.')
   if (kol132 .ne. 132) write (unit = lunit(6), fmt = 6004) vim(lsiz26 + 1)
@@ -549,8 +549,8 @@ subroutine over11
         e(i) = e(i) + gnd(isubs1) * solr(j) - bnd(isubs2) * soli(j)
         f(i) = f(i) + gnd(isubs1) * soli(j) + bnd(isubs2) * solr(j)
      end do
-  end do
 7380 continue
+  end do
   if (kssout .eq. 0) go to 7394
   d26 = 0.0d0
   do i = 1, ntot
@@ -561,30 +561,28 @@ subroutine over11
 2008 format (/, 8x, 'Total network loss "ploss" by summing nodal injections =', e20.10)
 7394 if (kswtch .le. 0) go to 7396
   do i = 1, kconst
-     if (node(i) .gt. 0) go to 6009
-     if (tstart(i) .ge. 0) go to 6009
-     if (iabs (iform(i)) .ne. 14) go to 6009
+     if (node(i) .gt. 0) cycle
+     if (tstart(i) .ge. 0) cycle
+     if (iabs (iform(i)) .ne. 14) cycle
      kt = iabs (node(i))
      k = norder(kt)
      e(k) = e(k) - crest(i) * cosz (time1(i))
      f(k) = f(k) - crest(i) * sinz (time1(i))
   end do
-6009 continue
   call move0 (nextsw(1 :), kswtch)
   call move0 (energy(1 :), kswtch)
   do i = 1, kswtch
-     if (adelay(i) .eq. 44444.0d0) go to 6111
+     if (adelay(i) .eq. 44444.0d0) cycle
      if (tclose(i) .lt. 0.0d0) nextsw(i) = 88
   end do
-6111 continue
   n8 = 0
 8516 n9 = 0
   n5 = 0
   do i = 1, kswtch
-     if (nextsw(i) .eq. 87) go to 8657
+     if (nextsw(i) .eq. 87) cycle
      if (nextsw(i) .eq. 88) go to 8521
      n9 = n9 + 1
-     go to 8657
+     cycle
 8521 kt = kmswit(i)
      k = norder(kt)
      ndx5 = lswtch + i
@@ -593,8 +591,8 @@ subroutine over11
      n13 = k
 4511 if (n13 .eq. norder(1)) go to 4544
      do j = 1, kswtch
-        if (nextsw(j) .lt. 88) go to 4522
-        if (i .eq. j) go to 4522
+        if (nextsw(j) .lt. 88) cycle
+        if (i .eq. j) cycle
         nt1 = kmswit(j)
         n1 = norder(nt1)
         ndx3 = lswtch + j
@@ -603,16 +601,14 @@ subroutine over11
         if (n13 .eq. n1) go to 4544
         if (n13 .eq. n2) go to 4544
      end do
-4522 continue
      do j = 1, kconst
-        if (node(j) .lt. 0) go to 4533
+        if (node(j) .lt. 0) cycle
         js = norder(node(j))
-        if (js .ne. n13) go to 4533
-        if (tstart(j) .ge. 0.0d0) go to 4533
-        if (iabs (iform(j)) .ne. 14)  go to 4533
+        if (js .ne. n13) cycle
+        if (tstart(j) .ge. 0.0d0) cycle
+        if (iabs (iform(j)) .ne. 14) cycle
         go to 4544
      end do
-4533 continue
      if (iprsup .ge. 4) write (unit = lunit(6), fmt = 5515) i, k, n13
 5515 format (' Current.  i, k, n13 =', 3i8)
      tclose(i) = e(n13)
@@ -630,18 +626,17 @@ subroutine over11
      tclose(i) = -tclose(i)
      energy(i) = -energy(i)
 7657 k1 = kdepsw( lswtch + i )
-     if (k1 .ne. 8888) go to 8657
+     if (k1 .ne. 8888) cycle
      mk = int (-adelay(i))
-     if (mk .le. 0.0d0) go to 8657
+     if (mk .le. 0.0d0) cycle
      num = kssfrq(kt)
      ang = twopi * sfreq(num) * deltat
      a8sw(mk + 6) = tclose(i) * cosz(ang) - energy(i) * sinz(ang)
-     go to 8657
-4544 if (n13 .eq. m) go to 8657
+     cycle
+4544 if (n13 .eq. m) cycle
      n13 = m
      go to 4511
   end do
-8657 continue
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 5525) n5, n8, n9
 5525 format (' Below 8657.  n5, n8, n9 =', 3i8)
   if (n5 .eq. 0) go to 8669
@@ -675,20 +670,19 @@ subroutine over11
 8692 format (5x, 2a10, 3e18.8, f13.4, 2e18.8)
      if (kol132 .eq. 80) write (unit = lunit(6), fmt = 8693) bus(k), bus(m), tclose(i), energy(i), d4, d5
 8693 format (1x, a6, 2x, a6, 3e16.7, f16.6)
-     go to 8713
+     cycle
 8695 if (adelay(i) .eq. 44444.0d0) go to 8703
      if (tclose(i) .gt. 0.0d0) go to 8703
      if (kol132 .eq. 132) write (unit = lunit(6), fmt = 8699) bus(k), bus(m)
 8699 format (5x, 2a10, 2(5x, 'close at t=0+ '))
      if (kol132 .eq. 80) write (unit = lunit(6), fmt = 8700) bus(k), bus(m)
 8700 format (1x, a6, 2x, a6, 2(5x, 'close at t=0+ '))
-     go to 8713
+     cycle
 8703 if (kol132 .eq. 132) write (unit = lunit(6), fmt = 8705) bus(k), bus(m)
 8705 format (5x, 2a10, 4(10x, 'open', 6x), 8x, 'open')
      if (kol132 .eq. 80) write (unit = lunit(6), fmt = 8706) bus(k), bus(m)
 8706 format (1x, a6, 2x, a6, 3(12x, 'open'))
   end do
-8713 continue
 8715 ktrlsw(1) = 8877
 7396 if (kssout .le. 0) go to 8350
   if (kol132 .eq. 132) write (unit = lunit(6), fmt = 7343)
@@ -818,7 +812,7 @@ subroutine over11
      soli(k) = ck1
      voltk(k) = h1
      volt(k) = h2
-     if (k .lt. lsiz26) go to 8105
+     if (k .lt. lsiz26) cycle
      write (unit = lunit(6), fmt = 9104) lsiz26
 9104 format (/, ' Permanent error stop due to overflow of list-26 vectors "voltk", "volt".', i8)
      kill = 1
@@ -826,13 +820,12 @@ subroutine over11
      lstat(17) = 26
      go to 9800
   end do
-8105 continue
 8100 if (fmaxfs .gt. 0.0d0) go to 8120
   write (unit = lunit(6), fmt = 8106)
 8106 format (/, ' EMTP branch-current output follows', /, 8x, 'from', 10x, 'to', 11x, 'magnitude', 7x, 'angle in', 16x, 'real', 11x, 'imaginary', /, 9x, 'bus', 9x, 'bus', 11x, 'of phasor', 8x, 'degrees', 2(16x, 'part'))
   do i = 1, ibr
      icheck = mbus(i)
-     if (icheck .ge. 0) go to 8110
+     if (icheck .ge. 0) cycle
      n1 = kbus(i)
      n2 = iabs (nr(i))
      h1 = tr(n2)
@@ -868,11 +861,10 @@ subroutine over11
      write (unit = lunit(6), fmt = 8109) bus(n1), bus(icheck), a, ck1, h1, h2
 8109 format (6x, a6,  6x, a6, e20.8, f15.6, 2e20.8)
   end do
-8110 continue
   if (nv .eq. 0) go to 8120
   write (unit = lunit(6), fmt = 8111)
 8111 format (/, ' EMTP branch-voltage output follows (column-80 punches only)', /, 8x, 'from', 10x, 'to', 11x, 'magnitude', 7x, 'angle in', 16x, 'real', 11x, 'imaginary', /,  9x, 'bus', 9x, 'bus', 11x, 'of phasor', 8x, 'degrees', 2(16x, 'part'))
-  do i=1, nv
+  do i = 1, nv
      n1 = ibrnch(i)
      n2 = jbrnch(i)
      d1 = e(n1) - e(n2)
@@ -1048,7 +1040,7 @@ subroutine over11
      fminfs = fminfs * (-delffs)
      !     n22 = jmod (i - 1, iout)
      n22 = mod (i - 1, iout)
-     if (n22 .ne. 0) go to 3100    !  thl, 10/30/89
+     if (n22 .ne. 0) cycle    !  thl, 10/30/89
 3086 ijk = ijk + 1
      if (ijk .gt. 101) go to 9900
      do j = 1, numnvo
@@ -1070,7 +1062,6 @@ subroutine over11
         jpp = jpp + 2
      end do
   end do
-3100 continue
   go to 9900
 7481 icheck = 0
   if (kexact .eq. 88333 .and. nsolve .eq. 1) go to 3080
@@ -1628,44 +1619,43 @@ subroutine smint
         jmset = -jmset
         if (jmset .gt. 7) go to 1680
         etac(lmset) = cu(n33 + jmset)
-        go to 955
+        cycle
 1680    if (jmset .gt. 8) go to 1681
         etac(lmset) = vd
-        go to 955
+        cycle
 1681    if (jmset .gt. 9) go to 1682
         etac(lmset) = vq
-        go to 955
+        cycle
 1682    if (jmset .gt. 10) go to 1683
         etac(lmset) = (var + vbr + vcr) * asqrt3
-        go to 955
+        cycle
 1683    if (jmset .gt. 11) go to 1684
         etac(lmset) = vf
-        go to 955
+        cycle
 1684    if (jmset .gt. 12) go to 1685
         etac(lmset) = sft
-        go to 955
+        cycle
 1685    if (jmset .gt. 13) go to 1686
         etac(lmset) = atan2z (sf3, sf2)
-        go to 955
+        cycle
 1686    if (jmset .gt. 14) go to 1687
         etac(lmset) = d22
-        go to 955
+        cycle
 1687    if (jmset .gt. 15) go to 1688
         etac(lmset) = q22
-        go to 955
+        cycle
 1688    if (jmset .eq. 17) go to 1689
         etac(lmset) = ac1
-        go to 955
+        cycle
 1689    etac(lmset) = ac2
-        go to 955
+        cycle
 1696    if (jmset .gt. num2) go to 1697
         n9 = ilstor + jmset
         etac(lmset) = histq(n9)
-        go to 955
+        cycle
 1697    jmset = ilstor + jmset + num2
         etac(lmset) = histq(jmset)
      end do
-955  continue
      !     the following routine prints info requested by user which exists
      !     immediately after machine initialization
 970  bus4 = text1

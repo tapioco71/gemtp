@@ -79,18 +79,17 @@ contains
        kolbeg = kolbeg + 1
        if (chcont .eq. chtacs) go to 5928
        if (texvec1 .eq. blank) go to 5923
-       if (texvec1 .eq. csepar) go to 5948
+       if (texvec1 .eq. csepar) cycle
 5921   if (ll .le. 6) go to 5922
        lstat(19) = 5922
        go to 9200
-5928   if (texvec1 .eq. csepar) go to 5948
+5928   if (texvec1 .eq. csepar) cycle
        if (texvec1 .eq. blank) go to 5923
        go to 5921
 5922   ll = ll + 1
        call packa1 (texvec(1), texta6(jj), ll)
 5923   if (kolbeg .le. 80) go to 5920
     end do
-5948 continue
     go to 9900
 6036 ll = 0
     jj = 0
@@ -178,16 +177,15 @@ contains
     n4 = n3 + 1
     do i = 1, n3
        n4 = n4 - 1
-       if (text1(n4) .eq. blank) go to 4718
+       if (text1(n4) .eq. blank) cycle
        if (n9 .ge. 2) go to 4711
        write (unit = 6, fmt = 4706)
 4706   format (/, ' Error stop in "frenum".   There are 33 or more characters in a free-format number on last data card.')
-       call stoptp                                            ! installation-dependent program stop card
+       call stoptp                                ! installation-dependent program stop card
 4711   write (unit = texta(n9), fmt = 4712) text1(n4)
 4712   format (80a1)
        n9 = n9 - 1
     end do
-4718 continue
     do i = 1, n9
        texta(i) = textb
     end do

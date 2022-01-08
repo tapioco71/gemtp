@@ -61,4 +61,33 @@ contains
 10  format (i8)
   end subroutine str2int
 
+  !
+  ! subroutine strip.
+  !
+
+  subroutine strip (s, c)
+    implicit none
+    character(*), intent(inout) :: s
+    character, intent(in) :: c
+    !
+    integer(4) :: i, j
+    character, pointer :: temp(:)
+  !
+  allocate (temp(len (s)))
+  if (associated (temp)) then
+     j = 1
+     do i = 1, len (s)
+        if (s(i : i) .ne. c) then
+           temp(j : j) = s(i : i)
+           j = j + 1
+        end if
+     end do
+     do i = 1, j - 1
+        s(i : i) = temp(i)
+     end do
+     deallocate (temp)
+     nullify (temp)
+  end if
+end subroutine strip
+
 end module strcom

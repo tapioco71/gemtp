@@ -112,15 +112,14 @@ subroutine over9
      crest(kconst) = crest(kconst-1)
      time1(kconst) = time1(kconst-1) - twopi / 3.0d0
      go to 1911
-  end do
 3535 continue
+  end do
 1024 if (kconst .eq. 0) go to 1034
   do i = 1, kconst
-     if (iabs (iform(i)) .ne. 14) go to 1030
-     if (tstart(i) .ge. 0.0d0) go to 1030
+     if (iabs (iform(i)) .ne. 14) cycle
+     if (tstart(i) .ge. 0.0d0) cycle
      go to 1050
   end do
-1030 continue
 1034 write (unit = lunit(6), fmt = 1041)
 1041 format (/, ' Comment ---- No sinusoidal sources requested for steady-state solution.   Thus this solution is bypassed.')
   lastov = nchain
@@ -343,22 +342,21 @@ subroutine over9
 2054 ii = 2 * lbus
   if (kconst .eq. 0) go to 2113
   do i = 1, kconst
-     if (iabs (iform(i)) .ne. 14) go to 2110
-     if (tstart(i) .ge. 0.0d0) go to 2110
+     if (iabs (iform(i)) .ne. 14) cycle
+     if (tstart(i) .ge. 0.0d0) cycle
      j = iabs (node(i))
-     if (node(i) .gt. 0) go to 2110
-     if (kode(j) .ge. 0) go to 2110
+     if (node(i) .gt. 0) cycle
+     if (kode(j) .ge. 0) cycle
      jj = iabs (node(i))
      write (unit = lunit(6), fmt = 2101) bus(jj)
 2101 format (/, " Note. ---- Node '", a6, "' has both voltage and current sources on it.   The current source has no effect", /, 12x, 'on the solution, then, and could be omitted.')
      node(i) = node(i) - ii
   end do
-2110 continue
 2113 if (kswtch .eq. 0) go to 3000
   do ii = 1, kswtch
      if (adelay(ii) .eq. -44444.0d0) go to 2523
-     if (tclose(ii) .ge. 0.0d0) go to 2730
-     if (adelay(ii) .eq. 44444.0d0) go to 2730
+     if (tclose(ii) .ge. 0.0d0) cycle
+     if (adelay(ii) .eq. 44444.0d0) cycle
 2523 i = kmswit(ii)
      ndx3 = lswtch + ii
      j = kmswit(ndx3)
@@ -463,7 +461,6 @@ subroutine over9
 2710 i = iabs (kode(i))
      if (i .ne. j) go to 2530
   end do
-2730 continue
   if (iprsup .gt. 0) write (unit = lunit(6), fmt = 47889) next, last
 47889 format (/, " At end of  'over9' ,  just before steady-state renumbering,      ", i5, ' of total of  ', i5, ' cells of kolum, korder are filled')
 3000 icas = 1

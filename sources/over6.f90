@@ -58,11 +58,10 @@ subroutine over6
      n2 = iabs (mbus(j))
      if (n1 .ne. k) go to 54154
      if (n2 .eq. m) go to 54174
-     go to 54155
-54154 if (n2 .ne. k) go to 54155
+     cycle
+54154 if (n2 .ne. k) cycle
      if (n1 .eq. m) go to 54174
   end do
-54155 continue
   ibr = ibr + 1
   if (ibr .le. lbrnch) go to 4716
   lstat(19) = 4716
@@ -267,29 +266,26 @@ subroutine over6
   norder(1) = 1
   n9 = 1
   do i = 2, ntot
-     if (kode(i) .lt. 0) go to 5345
+     if (kode(i) .lt. 0) cycle
      n9 = n9 + 1
      norder(i) = n9
      ich1(n9) = i
   end do
-5345 continue
   do i = 2, ntot
-     if (kode(i) .eq. 0) go to 5346
-     if (tstart(i) .ne. -9988.) go to 5346
+     if (kode(i) .eq. 0) cycle
+     if (tstart(i) .ne. -9988.0d0) cycle
      n9 = n9 + 1
      norder(i) = n9
      ich1(n9) = i
   end do
-5346 continue
   kpartb = n9
   do i = 2, ntot
-     if (kode(i) .eq. 0) go to 5348
-     if (tstart(i) .eq. -9988.) go to 5348
+     if (kode(i) .eq. 0) cycle
+     if (tstart(i) .eq. -9988.0d0) cycle
      n9 = n9 + 1
      norder(i) = n9
      ich1(n9) = i
   end do
-5348 continue
   go to 40013
 5351 next = 1
   nz = 0
@@ -329,12 +325,11 @@ subroutine over6
   if (i .le. ibr) go to 41001
   if (num99 .le. 0) go to 73535
   do i = 1, inonl
-     if (nltype(i) .gt. 0) go to 73530
+     if (nltype(i) .gt. 0) cycle
      k = nonlk(i)
      m = iabs (nonlm(i))
      call insert (k, m)
   end do
-73530 continue
 73535 continue
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1335) nz, iofkol, iofkor
 1335 format (/, " In  'over6' ,   nz, iofkol, iofkor =", 3i10, /, 1x, '   row            kode           kolum           koder           kownt')
@@ -352,12 +347,11 @@ subroutine over6
      call insert (k, m)
   end do
 40015 do i = 2, ntot
-     if (kode(i) .eq. 0) go to 40006
-     if (kownt(i) .eq. (-1)) go to 40006
+     if (kode(i) .eq. 0) cycle
+     if (kownt(i) .eq. (-1)) cycle
      nz = nz + 1
      kownt(i) = -1
   end do
-40006 continue
   kownt(1) = 0
   if (kill .eq. 0) go to 5379
   lstat(19) = 5379
@@ -424,11 +418,10 @@ subroutine rinfin
      n2 = iabs (mbus(j))
      if (n1 .ne. k) go to 54154
      if (n2 .eq. m) go to 54174
-     go to 54155
-54154 if (n2 .ne. k) go to 54155
+     cycle
+54154 if (n2 .ne. k) cycle
      if (n1 .eq. m) go to 54174
   end do
-54155 continue
   ibr = ibr + 1
   if (ibr .le. lbrnch) go to 4716
   lstat(19) = 4716

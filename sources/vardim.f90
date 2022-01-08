@@ -205,7 +205,7 @@ program vardim
   use bcddat
   use test
   implicit none
-  integer(4), parameter :: modvara = 126, modvarc = 55
+  integer(4), parameter :: modvara = 126, modvarc = 56
   !
   character :: char(6), bus2
   character(4) :: texta(2), textb(2)
@@ -1509,6 +1509,12 @@ program vardim
   modvars(255)%kind      = 1
   modvars(255)%dimension = 1
 
+  modvars(256)%name       = 'itemp'
+  modvars(256)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(256)%kind      = 4
+  modvars(256)%dimension = 9
+
+
   open (unit = lunit(2), iostat = ios, form = 'formatted')
   if (ios .eq. 0) then
      open (unit = lunit(3), iostat = ios, form = 'formatted')
@@ -1952,6 +1958,11 @@ program vardim
            equivlist(1)%variable = modvars(127)   ! karray(1)
            equivlist(1)%index = 1
            equivlist(4)%variable = modvars(255)   ! stg(1)
+           equivlist(4)%index = 1
+           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           equivlist(1)%variable = modvars(124)   ! voltk(1)
+           equivlist(1)%index = 1
+           equivlist(4)%variable = modvars(256)   ! itemp(1)
            equivlist(4)%index = 1
            call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
            !

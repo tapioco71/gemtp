@@ -881,11 +881,10 @@ subroutine swmodf
 35 format (i2, 2a6, 4e10.0, i6, a4, 2a6, 2x, 2i1)
   do msw = 1, kswtch
      k = kmswit(msw)
-     if (bus(k) .ne. bus1) go to 3535
+     if (bus(k) .ne. bus1) cycle
      m = kmswit(msw + lswtch)
      if (bus(m) .eq. bus2) go to 3510
   end do
-3535 continue
   write (unit = lunit(6), fmt = 3131)
 3131 format (' No such switch, the card will be discarded')
   go to 209
@@ -2609,34 +2608,6 @@ subroutine reques
 end subroutine reques
 
 !
-! subroutine strip.
-!
-
-subroutine strip (s, c)
-  implicit none
-  character(*), intent(out) :: s
-  character, intent(in) :: c
-  integer(4) :: i, j
-  character, pointer :: temp(:)
-  !
-  allocate (temp(len (s)))
-  if (associated (temp)) then
-     j = 1
-     do i = 1, len (s)
-        if (s(i : i) .ne. c) then
-           temp(j : j) = s(i : i)
-           j = j + 1
-        end if
-     end do
-     do i = 1, j - 1
-        s(i : i) = temp(i)
-     end do
-     deallocate (temp)
-     nullify (temp)
-  end if
-end subroutine strip
-
-!
 ! subroutine sysdep.
 !
 
@@ -2646,6 +2617,7 @@ subroutine sysdep
   use dekspy
   use bcdtim
   use bcddat
+  use strcom
   implicit none
   !  dimension intbus(1)
   !  equivalence (intbus(1), bus1)
@@ -3046,12 +3018,11 @@ subroutine tacs1
      !6581 call freone (d1)
 6581 call free (d1)
      dumj(i) = texta6(1)
-     go to 6587
+     cycle
 6584 alph(i) = blank
      dumj(i) = blank
      kolbeg = kolbeg + 1
   end do
-6587 continue
   nright = 0
   nfrfld = 3
   !  call frefld (dum)
@@ -3065,7 +3036,7 @@ subroutine tacs1
   nright = 0
 6590 n1 = 0
   do i = 1, 5
-     if (dumj(i) .eq. blank) go to 136
+     if (dumj(i) .eq. blank) cycle
      if (alph(i) .eq. sminus) go to 135
      if (alph(i) .eq. splus) go to 135
      kill = 137
@@ -3077,7 +3048,6 @@ subroutine tacs1
      go to 9000
 135  n1 = 1
   end do
-136 continue
   if (n1 .gt. 0) go to 139
   if (alnode .ne. blank) go to 139
   if (n .ne. 1) go to 1399
@@ -3117,7 +3087,7 @@ subroutine tacs1
   isblk(nuki+4) = 0
   n1 = 0
   do i = 1, 5
-     if (dumj(i) .eq. blank) go to 7413
+     if (dumj(i) .eq. blank) cycle
      n1 = n1 + 1
      nsu = nsu + 1
      if (nsu .le. nsudv) go to 8102
@@ -3134,20 +3104,18 @@ subroutine tacs1
      ndx1 = kksus  + nsu
      ksus(ndx1) = 1
      if (alph(i) .eq. sminus) ksus(ndx1) = -1
-     if (i .eq. 5) go to 7413
+     if (i .eq. 5) cycle
      mm = i + 1
      do ij = mm, 5
-        if (dumj(i) .ne. dumj(ij)) go to 7418
+        if (dumj(i) .ne. dumj(ij)) cycle
         dumj(ij) = blank
         ksus(ndx1) = ksus(ndx1) + 1
         if (alph(ij) .eq. sminus) ksus(ndx1) = ksus(ndx1) - 2
      end do
-7418 continue
-     if (ksus(ndx1) .ne. 0) go to 7413
+     if (ksus(ndx1) .ne. 0) cycle
      nsu = nsu - 1
      n1  =  n1 - 1
   end do
-7413 continue
   if (n1 .gt. 0) go to 7420
   kill = 136
   ndx1 = int (atcs(katcs + nuk))
@@ -3217,16 +3185,15 @@ subroutine tacs1
      if (parsup(ndx1) .eq. 0.0) go to 119
      parsup(ndx1) = parsup(ndx1) * dum(1)
      parsup(ndx1 + 2) = parsup(ndx1)
-     go to 102
-119  if (i .ne. kpar - 3 .and. i .ne. j) go to 102
-     if (parsup(ndx1 + 1) .ne. 0.0) go to 102
+     cycle
+119  if (i .ne. kpar - 3 .and. i .ne. j) cycle
+     if (parsup(ndx1 + 1) .ne. 0.0) cycle
      kill = 116
      lstat(19) = 119
      lstat(17) = 0
      if (i .eq. j .and. i .ne. kpar - 3) lstat(17) = 1
      go to 7433
   end do
-102 continue
   go to 100
 101 konsce = niu
   konsup = nsup
@@ -3262,12 +3229,11 @@ subroutine tacs1
      n1 = ilntab(kaliu + n)
      if (n .gt. 11) go to 2121
      write (unit = lunit(6), fmt = 2306) n, texvec(n1)
-     go to 2323
+     cycle
 2121 ndx5 = ndx5 + 5
      write (unit = lunit(6), fmt = 2306) n, texvec(n1), iuty(kiuty + n), ud1(ndx5 + 1), ud1(ndx5 + 2), ud1(ndx5 + 3),  ud1(ndx5 + 4), ud1(ndx5 + 5)
 2306 format (1x, i3, 1x, a8, i6, 5e15.6)
   end do
-2323 continue
   if (nsup .eq. 0) go to 4444
   write (unit = lunit(6), fmt = 2007) nsup, (n, ilntab(kspvar + n), insup(kjsup + n), insup(kksup + n), n = 1, nsup)
 2007 format ('0 nsup=', i6, /, 8x, '  supvar    jsup    ksup', /, (4i8))
@@ -3279,12 +3245,11 @@ subroutine tacs1
      n2 = insup(kksup + i)
      write (unit = lunit(6), fmt = 2008) (n, ivarb(n + 1), ivarb(n + 2), ivarb(n + 2), n = n1, n2, 3)
 2008 format (4i8)
-     go to 2034
+     cycle
 2014 n1 = -n1
      write (unit = lunit(6), fmt = 2022) n1, ivarb(n1), ivarb(n1 + 1), ivarb(n1 + 2), ivarb(n1 + 3), ivarb(n1 + 4)
 2022 format (i8, 24x, 5i8)
   end do
-2034 continue
   if ( kpar .ne. 0 ) write (unit = lunit(6), fmt = 2009) kpar, (parsup(kprsup + n), n = 1, kpar)
 2009 format ('  kpar=', i8, 6x, 'parsup as follows:', /, (8e16.6))
   n22 = nsudv + 1
@@ -3377,7 +3342,7 @@ subroutine tacs1
   end do
 6557 jr = 0
   do i = 1, 13
-     if (dumj(i) .eq. blank) go to 1199
+     if (dumj(i) .eq. blank) cycle
      ioutcs = ioutcs + 1
      if (ioutcs .gt. lstat(68)) go to 4466
      jr = 1
@@ -3387,7 +3352,6 @@ subroutine tacs1
      ndx1 = kjout + ioutcs
      jout(ndx1) = n23
   end do
-1199 continue
   if (jr .eq. 1) go to 3535
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 4455)
 3535 if (noutpr .eq. 0) write (unit = kunit6, fmt = 154)
@@ -4277,14 +4241,14 @@ subroutine tacs1a
      ! Yet following burroughs patch produces fatal VAX error:
      ! if ( .not. (alph(i) .is. blank) )   go to 12601
      if (i .eq. 3) go to 12602
-     if (dumj(i + 5) .eq. blank) go to 125
+     if (dumj(i + 5) .eq. blank) cycle
      if (i .ne. 1) go to 12603
      alph(1) = splus
      go to 12700
 12603 lstat(14) = 1
      bus1 = dumj(i + 5)
      go to 12610
-12602 if (pru .eq. 0.0) go to 125
+12602 if (pru .eq. 0.0) cycle
      lstat(14) = 2
      flstat(16) = pru
      go to 12610
@@ -4320,14 +4284,13 @@ subroutine tacs1a
      text2 = dumj(i + 5)
      call namea6 (text2, n23)
      ivarb(karg + 3) = n23
-     go to 125
+     cycle
 12710 ivarb(karg + 1) = - ivarb(karg + 1)
      kpar = kpar + 1
      ivarb(karg + 3) = kpar
      ndx1 = kprsup + kpar
      parsup(ndx1) = pru
   end do
-125 continue
   ndx1 = kksup + nsup
   insup(ndx1) = karg
 12599 continue
@@ -4375,7 +4338,7 @@ subroutine tacs1a
   n1 = 0
   do i = 1, 5
      if (m .eq. 61 .or. m .eq. 63) go to 1107
-     if (dumj(i) .eq. blank) go to 1071
+     if (dumj(i) .eq. blank) cycle
      n1 = n1 + 1
 1107 if (nsudv .gt. nsu) go to 1072
      kill = 122
@@ -4394,7 +4357,6 @@ subroutine tacs1a
      if (alph(i) .eq. smultp) ksus(ndx1) = 9
      nsudv = nsudv - 1
   end do
-1071 continue
   if (n1 .gt. 0) go to 1073
   if (m .eq. 61 .or. m .eq. 63) go to 1073
   kill = 135
@@ -4698,21 +4660,19 @@ subroutine tacs1b
      end do
      do k = 1, nsup
         ndx2 = kspvar + k
-        if (namin .ne. ilntab(ndx2)) go to 1920
+        if (namin .ne. ilntab(ndx2)) cycle
         if (insup(kinsup + k) .ne. 0) go to 1940
         go to 1950
      end do
-1920 continue
      do k = 1, nuk
         namsbk = int (atcs(katcs + k))
-        if (namin .ne. namsbk) go to 1919
+        if (namin .ne. namsbk) cycle
         ndx1 = kisblk + k * 8 - 4
         if (isblk(ndx1) .gt. 0) go to 1940
         go to 1950
      end do
-1919 continue
-  end do
 1940 continue
+  end do
 1983 mpk = 1
 6677 ndxb = ndxb - 1
   isblk(nuki + 4) = ndxb
@@ -4724,7 +4684,7 @@ subroutine tacs1b
   mmm = 0
   mm = mc
   do is = mm, nsup
-     if (insup(kinsup + is) .ne. 0) go to 1980
+     if (insup(kinsup + is) .ne. 0) cycle
      n1 = insup(kjsup + is)
      n3 = insup(kksup + is)
      n2 = iabs(n3)
@@ -4742,18 +4702,16 @@ subroutine tacs1b
 2973 namsup = ksus(kalksu + j)
 1853 do k = 1, nuk
         namsbk = int (atcs(katcs + k))
-        if (namsbk .ne. namsup) go to 1951
+        if (namsbk .ne. namsup) cycle
         ndx1 = kisblk + k * 8 - 4
         if (isblk(ndx1) .gt. 0) go to 1959
         go to 1990
      end do
-1951 continue
      do k = 1, nsup
-        if (ilntab(kspvar + k) .ne. namsup) go to 1953
+        if (ilntab(kspvar + k) .ne. namsup) cycle
         if (insup(kinsup + k) .ne. 0) go to 1959
         go to 1990
      end do
-1953 continue
 1959 j = j + nstep
      if (j .le. k2) go to 1973
      if (n1 .gt. 0) go to 1978
@@ -4774,17 +4732,16 @@ subroutine tacs1b
 4949 nnn = is
      insup(kinsup + is) = -1
      mins = mins + 1
-     go to 1980
+     cycle
 1970 if (n2 .eq. 53 .and. ivarb(nn + 3) .eq. 1) go to 1978
      nn = - n1
      k2 = ivarb(nn + 2)
      j = ivarb(nn + 1)
      go to 1973
-1990 if (jjj .eq. 1) go to 1980
+1990 if (jjj .eq. 1) cycle
      jjj = 1
      mc = is
   end do
-1980 continue
   if (mmm .eq. 1 .and. mins .lt. nsup) go to 4646
 1950 if (iuser .eq. 9999) go to 2555
   if (ndxb .eq. 1) go to 2254
@@ -4875,7 +4832,7 @@ subroutine tacs1b
 1996 nuki = kisblk - 8
   do i = 1, nuk
      nuki = nuki + 8
-     if (isblk(nuki + 4) .ge. 0) go to 1414
+     if (isblk(nuki + 4) .ge. 0) cycle
      namout = int (atcs(katcs + i))
      np =  1
      atcs(kbtcs + np) = namout
@@ -4910,9 +4867,9 @@ subroutine tacs1b
         if (isblk(nukj + 6) .gt. 0) go to 1429
         irr = isblk(nukl + 8)
         if (irr .eq. 1 .and. namsbk .eq. namout) go to 777
-        if (namsbk .eq. namout) go to 1421
+        if (namsbk .eq. namout) cycle
         if (isblk(nukj + 4) .lt. 0 .or. irr .eq. 1) isblk(nukj + 6) = 1
-        if (isblk(nukj + 6) .lt. 0) go to 1421
+        if (isblk(nukj + 6) .lt. 0) cycle
         if (nik .eq. 1)  go to 1474
         nik = 1
         nq = nq + 1
@@ -4920,7 +4877,7 @@ subroutine tacs1b
         atcs(kbtcs + nq) = namsbk
         if (isblk(nukj + 6) .eq. 0) isblk(nukj + 6) = -1
 1474    isblk(nukq + 8) = isblk(nukj + 6)
-        if (isblk(nukj + 6) .lt. 0) go to 1421
+        if (isblk(nukj + 6) .lt. 0) cycle
         if (isblk(nukj + 4) .lt. 0) go to 1616
         go to 1429
 1616    mnp = mnp + 1
@@ -4930,7 +4887,6 @@ subroutine tacs1b
 1425    l = l + 1
         if (l .le. np) go to 1423
      end do
-1421 continue
 1429 j = j + 1
      if (j .le. nuk) go to 1427
      if (nq .eq. np) go to 1714
@@ -4952,22 +4908,20 @@ subroutine tacs1b
         nukm = nukm + 8
         icolcs(mkk + jj) = isblk(nukm + 5)
      end do
-     go to 1414
+     cycle
 1814 jk1 = mkk + 1
      ijk = 0
      nukm = kisblk - 8
      do jj = 1, mnp
         nukm = nukm + 8
         do jk = jk1, jk2
-           if (icolcs(jk) .ne. isblk(nukm + 5)) go to 1861
+           if (icolcs(jk) .ne. isblk(nukm + 5)) cycle
            if (jj .eq. 1) go to 1878
            isblk(nukm + 5) = 0
            ijk = ijk + 1
-           go to 1840
+           exit
         end do
-1861    continue
      end do
-1840 continue
      if (ijk .ne. 0) go to 1888
      mkk = mkk - mnp
      nukk = kisblk - 3
@@ -4975,23 +4929,22 @@ subroutine tacs1b
         nukk = nukk + 8
         icolcs(mkk + jl) = isblk(nukk)
      end do
-     go to 1414
-1878 if (mnp .eq. 1) go to 1414
+     cycle
+1878 if (mnp .eq. 1) cycle
      jjj = jk
      nukjl = kisblk - 8
      do jl = 2, mnp
         nukjl = nukjl + 8
         do jm = jk1, jk2
-           if (icolcs(jm) .ne. isblk(nukjl+5)) go to 1897
+           if (icolcs(jm) .ne. isblk(nukjl+5)) cycle
            if (jm .gt. jjj) go to 1898
            jjj = jm
            go to 1898
         end do
-1897    continue
         call stoptp
+1898    continue
      end do
-1898 continue
-     if (jjj .eq. jk) go to 1414
+     if (jjj .eq. jk) cycle
      mnp = icolcs(jk)
      nnn = jk - jjj
      do jn = 1, nnn
@@ -4999,19 +4952,17 @@ subroutine tacs1b
         icolcs(jni) = icolcs(jni - 1)
      end do
      icolcs(jjj) = mnp
-     go to 1414
+     cycle
 1888 mkk = mkk - mnp + ijk
      mjump = mkk
      nukm = kisblk - 8
      do jl = 1,mnp
         nukm = nukm + 8
-        if (isblk(nukm + 5) .eq. 0) go to 1893
+        if (isblk(nukm + 5) .eq. 0) cycle
         mjump = mjump + 1
         icolcs(mjump) = isblk(nukm + 5)
      end do
-1893 continue
   end do
-1414 continue
   if (mkk .eq. 0) go to 8811
 1997 mkk = mkk + 1
   if (mkk .gt. jk2) go to 8811
@@ -5026,8 +4977,8 @@ subroutine tacs1b
      namin = ksus(kalksu + j1)
      do j2 = 1, nsup
         ndx2 = kspvar + j2
-        if (namin .ne. ilntab(ndx2)) go to 4667
-        if (insup(kinsup + j2) .ne. 0) go to 4556
+        if (namin .ne. ilntab(ndx2)) cycle
+        if (insup(kinsup + j2) .ne. 0) exit
         if (nom .gt. 0) go to 4343
         nom = 1
         kargsa = kargsa + 1
@@ -5036,16 +4987,14 @@ subroutine tacs1b
 4343    kargsa = kargsa + 1
         ivarb(kargsa) = j2
         iuty(kiuty+8) = kargsa
-        if (kargsa - kivarb .lt. lstat(66)) go to 4556
+        if (kargsa - kivarb .lt. lstat(66)) exit
         kill = 122
         lstat(19) = 4343
         lstat(16) = lstat(66)
         lstat(17) = 6
         go to 9000
      end do
-4667 continue
   end do
-4556 continue
   i = 0
   go to 6677
 8811 ngp = 0
@@ -5053,15 +5002,14 @@ subroutine tacs1b
   nukj = kisblk - 8
   do jj = 1, nuk
      nukj = nukj + 8
-     if (isblk(nukj + 4) .gt. 0) go to 8822
+     if (isblk(nukj + 4) .gt. 0) cycle
      ij9 = iabs(isblk(nukj + 9))
      if (jj .eq. nuk) ij9 = nsu + 1
      ij = ij9 - iabs (isblk(nukj + 1))
-     if (ij .le. ngp) go to 8822
+     if (ij .le. ngp) cycle
      ngp = ij
      nfun = jj
   end do
-8822 continue
   nuki = kisblk + nfun * 8 - 8
   go to 4141
 2254 if (mins .lt. nsup) go to 9200
@@ -5093,8 +5041,8 @@ subroutine tacs1b
   k1 = k
   if (k .lt. 0) k = -k
   do n = j, k, 3
-     if (ivarb(n + 1) .lt. 0) go to 2113
-     if (k1 .lt. 0 .and. ivarb(n + 1) .ne. 1) go to 2113
+     if (ivarb(n + 1) .lt. 0) cycle
+     if (k1 .lt. 0 .and. ivarb(n + 1) .ne. 1) cycle
      nivarb = ivarb(n + 3)
      do m = 1, ktab
         ndx2 = klntab + m
@@ -5107,7 +5055,6 @@ subroutine tacs1b
      go to 9000
 2175 ivarb(n + 3) = m
   end do
-2113 continue
   go to 2111
 2116 j = - j
   if (ivarb(j + 4) .gt. 1) go to 7162
@@ -5145,7 +5092,7 @@ subroutine tacs1b
      ndx1 = kalksu + n
      if (ksus(ndx1) .ne. 1) go to 1171
      ksus(ndx1) = 0
-     go to 1170
+     cycle
 1171 do m = 1, ktab
         ndx2 = klntab + m
         if (ksus(ndx1) .eq. ilntab(ndx2)) go to 1199
@@ -5157,7 +5104,6 @@ subroutine tacs1b
      go to 9000
 1199 ksus(ndx1) = m
   end do
-1170 continue
   if (k .ne. 50) go to 2111
   nn = ivarb(j)
   mm = kxtcs + nuk + i + lstat(64)
@@ -5176,13 +5122,12 @@ subroutine tacs1b
           '  This is not allowed.    The looped supplemental blocks are as follows :')
   j = 0
   do i = 1, nsup
-     if (insup(kinsup + i) .ne. 0) go to 9208
+     if (insup(kinsup + i) .ne. 0) cycle
      j = j + 1
      ndx1 = ilntab(kspvar + i)
      write (unit = lunit(6), fmt = 9204) j, texvec(ndx1)
 9204 format ('  ********', 2x, i5, 4x, a6, '  ********')
   end do
-9208 continue
   go to 9000
 21100 do i = 1, nsu
      ndx3 = kalksu + i
@@ -5225,7 +5170,7 @@ subroutine tacs1b
         n6 = int (awkcs(kawkcs + i))
         go to 51
 50      n6 = int (awkcs(kbwkcs + i))
-51      if (n6 .eq. 1) go to 20
+51      if (n6 .eq. 1) cycle
         do j = 1, ktab
            if (n6 .eq. ilntab(klntab + j)) go to 40
         end do
@@ -5234,20 +5179,18 @@ subroutine tacs1b
         bus6 = texvec(n6)
         lstat(14) = l
         lstat(19) = 30
-        write (unit = lunit(6), fmt = 99) bus6, bus1
-99      format (' Error.  Name of limit  ', a6, '  at block = ', a6, '  is unidentifiable.')
+        write (unit = lunit(6), fmt = 99) trim (bus6), trim (bus1)
+99      format (' Error.  Name of limit  ', a, '  at block = ', a, '  is unidentifiable.')
         go to 9000
 40      if (l .eq. 2) go to 41
         isblk(nukm + 5) = j
-        go to 20
+        cycle
 41      isblk(nukm + 6) = j
      end do
-20   continue
-     if (xar(kxar + i) .eq. 0.0 .and. xar(kxai + i) .eq. 0.0) go to 10
+     if (xar(kxar + i) .eq. 0.0 .and. xar(kxai + i) .eq. 0.0) cycle
      rsblk(nukr + 2) = xar(kxar + i)
      rsblk(nukr + 3) = xar(kxai + i)
   end do
-10 continue
   if (iprsup .lt. 2) go to 1006
   write (unit = lunit(6), fmt = 2007)
 2007 format ('         n    ifls   ilim1   ilim2   nuksp')
@@ -5268,12 +5211,11 @@ subroutine tacs1b
      n2 = insup(kksup + i)
      write (unit = lunit(6), fmt = 2008) (n, ivarb(n + 1), ivarb(n + 2), ivarb(n + 2), n = n1, n2, 3)
 2008 format (4i8)
-     go to 2034
+     cycle
 2014 n1 = -n1
      write (unit = lunit(6), fmt = 2022) n1, ivarb(n1), ivarb(n1 + 1), ivarb(n1 + 2), ivarb(n1 + 3), ivarb(n1 + 4)
 2022 format (i8, 24x, 5i8)
   end do
-2034 continue
   if (nsudv .lt. lstat(63)) write (unit = lunit(6), fmt = 2015) (n, ksus(kalksu + n), ksus(kksus + n), n = nsudv + 1, lstat(63))
 2015 format ('0', 11x, 'alksu    ksus', /, (1x, 3i8))
 1012 write (unit = lunit(6), fmt = 2017) ktab, (n, ilntab(klntab + n), n = 1, ktab)
@@ -5284,21 +5226,19 @@ subroutine tacs1b
   min = nuk + niu
   nkn = nuk + lstat(64)
   do k = 1, ktab
-     if (k .gt. min .and. k .le. nkn) go to 2046
+     if (k .gt. min .and. k .le. nkn) cycle
      ndx1 = klntab + k
      n6 = ilntab(klntab + k)
      n1 = k + 1
      do j = n1, ktab
         ndx1 = klntab + j
-        if (ilntab(ndx1) .ne. n6) go to 2045
+        if (ilntab(ndx1) .ne. n6) cycle
         n2 = n2 + 1
         bus6 = texvec(n6)
-        write (unit = lunit(6), fmt = 2041) k, j, bus6
-2041    format (/, ' Entries number', i5, '   and',  i5, '   of the tacs name-vector both have contents  ', "'", a6,  "'", ' .')
+        write (unit = lunit(6), fmt = 2041) k, j, trim (bus6)
+2041    format (/, ' Entries number', i5, '   and',  i5, '   of the TACS name-vector both have contents  ', "'", a,  "'", ' .')
      end do
-2045 continue
   end do
-2046 continue
   if (n2 .eq. 0) go to 2072
   kill = 189
   lstat(15) = n2
@@ -5310,12 +5250,11 @@ subroutine tacs1b
   n1 = nuk + niu
   n2 = nuk + lstat(64)
   do i = 1, ktab
-     if (i .gt. n1 .and. i .le. n2) go to 157
+     if (i .gt. n1 .and. i .le. n2) cycle
      ioutcs = ioutcs + 1
      ndx1 = kjout  + ioutcs
      jout(ndx1) = i
   end do
-157 continue
   go to 3072
 153 jr = 0
   if (ioutcs .le. 0) go to 3712
@@ -5324,15 +5263,13 @@ subroutine tacs1b
      do j = 1, ktab
         if (j8 .eq. ilntab(klntab + j)) go to 229
      end do
-     if (noutpr .eq. 0) write (unit = lunit(6), fmt = 232) texvec(j8)
-232  format (/, '   The user has requested a tacs variable named "', a6, '" for output purposes. But this is a non-existant tacs', /, &
-          ' variable, so the request will be disregarded.')
-     go to 109
+     if (noutpr .eq. 0) write (unit = lunit(6), fmt = 232) trim (texvec(j8))
+232  format (/, '   The user has requested a tacs variable named "', a, '" for output purposes. But this is a non-existant tacs', /, ' variable, so the request will be disregarded.')
+     cycle
 229  jr = jr + 1
      ndx1 = kjout + jr
      jout(ndx1) = j
   end do
-109 continue
 3712 ioutcs = jr
   if (ioutcs .gt. 0) go to 111
   if (tmax .le. 0.0) go to 111
@@ -5355,13 +5292,12 @@ subroutine tacs1b
      do k = 1, ktab
         if (j8 .eq. ilntab(klntab + k)) go to 412
      end do
-     write (unit = lunit(6), fmt = 7686) texvec(j8)
-7686 format (' $$$$$ Ignore the initial condition card since no such name ( ', "'", a6, "'", ' ) in the TACS table $$$$$')
-     go to 4111
+     write (unit = lunit(6), fmt = 7686) trim (texvec(j8))
+7686 format (' $$$$$ Ignore the initial condition card since no such name ( ', "'", a, "'", ' ) in the TACS table $$$$$')
+     cycle
 412  jr = jr + 1
      xtcs(kxtcs + k) = xtcs(kxtcs2 + i)
   end do
-4111 continue
   !  call mover0 (xtcs(kxtcs2 + 1), kxic)
   call move0 (xtcs(kxtcs2 + 1 :), kxic)
   kxic = jr
@@ -5424,10 +5360,9 @@ subroutine expchk (n1, n2, n5)
         do k = 1, 11
            if (x(n3) .eq. texnum(k)) key = k
         end do
-        go to 2621
+        cycle
 2620    if (x(n3) .eq. textp .or. x(n3) .eq. textn) go to 2622
      end do
-2621 continue
      go to 2625
 2622 n4 = i + n5 - 1
      do l = 1, 10
@@ -5438,8 +5373,8 @@ subroutine expchk (n1, n2, n5)
      lstat(15) = n4
      lstat(19) = 2624
      return
-  end do
 2625 continue
+  end do
   return
 end subroutine expchk
 
@@ -5459,14 +5394,14 @@ subroutine intchk (n1, n2, n5)
 2642 format (80a1)
   n6 = n1 - 1
   do i = n1, n2
-     if (x(i) .eq. blank) go to 2648
+     if (x(i) .eq. blank) cycle
      n7 = i - n6
      n8 = n7 / n5
      n3 = n8 * n5
-     if (n3 .eq. n7) go to 2648
+     if (n3 .eq. n7) cycle
      n4 = n6 + (n8 + 1) * n5
      if (n4 .gt. n2) go to 2645
-     if (x(n4) .ne. blank) go to 2648
+     if (x(n4) .ne. blank) cycle
 2645 kill = 98
      lstat(14) = i
      lstat(15) = n4
@@ -5474,7 +5409,6 @@ subroutine intchk (n1, n2, n5)
      lstat(19) = 2642
      return
   end do
-2648 continue
   return
 end subroutine intchk
 
@@ -5511,13 +5445,12 @@ subroutine pfatch
   write (unit = filen(1 : 25), fmt = 4523)
 4523 format (25x)
   do k = kolbeg, 80
-     if(texcol(k) .eq. blank) go to 4532
+     if(texcol(k) .eq. blank) cycle
      if(texcol(k) .eq. csepar) go to 4536
      n4 = n4 + 1
      write (unit = filen(n4 : 25), fmt = 3041) texcol(k)
 3041 format (80a1)
   end do
-4532 continue
 4536 nfrfld = 1
   kolbeg = k + 1
   n7 = ialter

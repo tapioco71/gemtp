@@ -189,6 +189,7 @@ module labcom
   real(8) :: rtg(   93002)
   complex(16) :: ctg(   93002)
   real(8) :: stg(   93002)
+  integer(4) :: itemp(     300)
   !
   equivalence (imfd( 1), jch2( 1))
   equivalence (volt( 1), vim( 1))
@@ -238,6 +239,7 @@ module labcom
   equivalence (karray( 1), array( 1), ev( 1), buslst( 1), evdoub( 1), ibsout( 1), ibrnch( 1), jbrnch( 1))
   equivalence (karray( 1), itg( 1), rtg( 1), ctg( 1))
   equivalence (karray( 1), itg( 1))
+  equivalence (voltk( 1), itg( 1))
 end module labcom
 
 !

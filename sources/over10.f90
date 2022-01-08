@@ -10,7 +10,7 @@
 
 subroutine over10
   use blkcom
-  use labcom, only: bus, c, coptbr, crest, e, f, iform, imodel, isubeg, kbus, kode, kodebr, kodsem, kssfrq, ksub, length, mbus, msub, node, nr, r, sfreq, tclose, time1, tr, tstart, tx, volt, volti, voltk, xoptbr
+  use labcom, only: bus, c, coptbr, crest, e, f, iform, imodel, isubeg, kbus, kode, kodebr, kodsem, kssfrq, ksub, length, mbus, msub, node, nr, r, sfreq, tclose, time1, tr, tstart, tx, volt, volti, voltk, xoptbr, itemp
   use space2
   use umcom
   use movcop
@@ -42,10 +42,6 @@ subroutine over10
   real(8) :: xa, xi, xr, xti, xtr, xx
   real(8) :: yy
   !
-  integer(4), allocatable :: itemp(:)
-  !
-  allocate (itemp(8 * 50))
-  itemp = transfer (voltk, itemp)
   !locatn(i, j) = (j * j - j) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2941) ntot, ioffd, loopss(2)
 2941 format (' Top of "over10".   ntot, ioffd, loopss(2) =', 2i8)
@@ -57,7 +53,7 @@ subroutine over10
      ia = index(i)
      go to 3003
 3002 ia = ia + 1
-3003 if (ia .eq. index(i + 1)) go to 3009
+3003 if (ia .eq. index(i + 1)) cycle
      ib = iloc(ia)
      ic = ia
 3005 ic = ic +1
@@ -68,7 +64,6 @@ subroutine over10
      ib = iloc(ia)
      go to 3005
   end do
-3009 continue
   n1 = 1 + iofgnd
   n2 = 1 + iofbnd
   call move0 (gnd(n1 :), ioffd)
@@ -560,7 +555,7 @@ subroutine over10
      diag(nrow1) = diag(nrow1) + tr(nnpos)
      diab(nrow1) = diab(nrow1) + tx(nnpos)
      ix2 = ix + 1
-     if (ix2 .gt. nphcas) go to 43407
+     if (ix2 .gt. nphcas) cycle
      do ixx = ix2, nphcas
         n2 = ixx + i - 1
         nrow2 = mbus(n2)
@@ -583,7 +578,6 @@ subroutine over10
         bnd(isubs1) = bnd(isubs1) + tx(nnpos)
      end do
   end do
-43407 continue
   i = i + nphcas
 3490 if (i .le. ibr) go to 3080
   !
@@ -622,7 +616,7 @@ subroutine over10
      n2 = n2 + 1
   end do
 4517 do i = 1, ntot
-     if (kode(i) .gt. 0) go to 4570
+     if (kode(i) .gt. 0) cycle
      j = i
      im = -kode(j)
 4530 if (im .gt. 0 ) in = norder(im)
@@ -633,14 +627,13 @@ subroutine over10
      j = il
      if (j .ne. i) go to 4530
   end do
-4570 continue
   do i = 1, ntot
      j = kode(i)
-     if (j .ge. i) go to 4820
+     if (j .ge. i) cycle
 4610 j = kode(j)
      n1 = j - i
      if (n1 .lt. 0) go to 4610
-     if (n1 .eq. 0) go to 4820
+     if (n1 .eq. 0) cycle
      j = i
      k = 0
 4640 k = k + 1
@@ -660,14 +653,13 @@ subroutine over10
         do n = 1, kmm
            n1 = itemp(n) - itemp(n + 1)
            if (n1 .gt. 0) go to 4740
-           if (n1 .lt. 0) go to 4750
+           if (n1 .lt. 0) cycle
            lstat(19) = 4740
            go to 3112
 4740       itp = itemp(n)
            itemp(n) = itemp(n + 1)
            itemp(n + 1) = itp
         end do
-4750    continue
      end do
      j = itemp(1)
      do m = 2, k
@@ -677,7 +669,6 @@ subroutine over10
      end do
      kode(j) = itemp(1)
   end do
-4820 continue
   call move0 (solr(1 :), n14)
   call move0 (soli(1 :), n14)
   if (numsub .le. 0) go to 4905
@@ -709,21 +700,20 @@ subroutine over10
         j = msub(l)
      end do
      l = l + 1
-     if (l .ge. n7) go to 4892
+     if (l .ge. n7) cycle
      n1 = n1 + ntot
      go to 4863
   end do
-4892 continue
 4905 n1 = 2 * lbus
   if (kconst .eq. 0) go to 4977
   do i = 1, kconst
      j = node(i)
-     if (iabs (iform(i)) .ne.14) go to 4976
+     if (iabs (iform(i)) .ne.14) cycle
      if (tstart(i) .eq. 5432.) go to 4975
-     if (tstart(i).ge. 0.0) go to 4976
+     if (tstart(i).ge. 0.0) cycle
      if (j .ge. -n1) go to 4975
      node(i) = node(i) + n1
-     go to 4976
+     cycle
 4975 if (iform(i + 1) .eq. 18) j = int (time1(i + 1))
      j = iabs(j)
      j = norder(j)
@@ -733,15 +723,14 @@ subroutine over10
 1999 format (/, ' i, j, node(i), kode(j), crest(i), time1(i)', 4i4, 2e18.6)
      if (iprsup .ge. 5) write (unit = lunit(6), fmt = 1497) isubs1, isubs2, isubs3, isubs4, n1, n2, n3, ia, ja, ii, jj, kkk, iy, ib, ix
 1497 format (15i8)
-     if (j .le. ncurr) go to 4976
+     if (j .le. ncurr) cycle
      k = kode(j)
-4979 if (k .eq. j) go to 4976
+4979 if (k .eq. j) cycle
      solr(k) = solr(j)
      soli(k) = soli(j)
      k = kode(k)
      go to 4979
   end do
-4976 continue
 4977 nl = 0
 4972 n12 = nl + 1
   n13 = nl + ntot
@@ -960,11 +949,7 @@ subroutine over10
   nchain = 51
   lstat(18) = 10
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
-99999 if (allocated (itemp)) then
-     voltk = transfer (itemp, voltk)
-     deallocate (itemp)
-  end if
-  return
+99999 return
 end subroutine over10
 
 !
@@ -1047,19 +1032,17 @@ subroutine fxsour
   end do
   mm = 0
   do jj = np, ntot
-     if (jj .eq. norder(1)) go to 1030
-     if (kode(jj) .gt. jj) go to 1030
+     if (jj .eq. norder(1)) cycle
+     if (kode(jj) .gt. jj) cycle
      i = jndex(jj)
      mm = mm + 1
      fxtem1(mm) = bus(i)
      kndex(mm) = i
      do ixx = 1, kconst
-        if (iabs(node(ixx)) .ne. i) go to 1039
+        if (iabs(node(ixx)) .ne. i) cycle
         if (crest(ixx) .ne. 0) fxtem6(mm) = 1.0 / crest(ixx)
      end do
-1039 continue
   end do
-1030 continue
   call move (solr(1 :), solrsv(1 :), n14)
   call move (soli(1 :), solisv(1 :), n14)
   go to 3466
@@ -1138,13 +1121,12 @@ subroutine fxsour
      do k = 1, nekcc
         if (fxtem1(k) .eq. fixbu1(i)) go to 7171
         if (fxtem1(k) .eq. fixbu2(i)) go to 7171
-        if (fxtem1(k) .ne. fixbu3(i)) go to 7030
+        if (fxtem1(k) .ne. fixbu3(i)) cycle
 7171    psum = psum + fxtem2(k)
         qsum = qsum + fxtem3(k)
         nekn1 = nekn1 + 1
         if (nekn1 .eq. 3) go to 7272
      end do
-7030 continue
      if (nekn1 .ne. 0) go to 7272
      write (unit = lunit(6), fmt = 7032) i
 7032 format (' Error in table, node name on fix source card does not fit any node name on source cards', /, ' fix source number', i4, ' will be ignored')
@@ -1250,8 +1232,8 @@ subroutine fxsour
 7777    if (iprsup .ge. 4) write (unit = lunit(6), fmt = 8800) fxtem1(mm), solr(nekn4), soli(nekn4), solrsv(nekn4), solisv(nekn4)
 8800    format (' busname, solr(nekn4), soli(nekn4)', a6, 2e16.6, '   the new value is ',  2e16.6)
      end do
-  end do
 7010 continue
+  end do
   if (nekstp .eq. 1) go to 2121
   if (nflknt .gt. 0) go to 2222
 2121 write (unit = lunit(6), fmt = 3333) (vdiff(k), k = 1, npp)
@@ -1299,24 +1281,23 @@ subroutine fxsour
   do m = 1, nkr
      bus1 = fixbu1(m)
      n = 1
-1199 if (bus1 .eq. blank) go to 3300
+1199 if (bus1 .eq. blank) cycle
      do j = 1, nekcc
-        if (fxtem1(j) .ne. bus1) go to 3000
+        if (fxtem1(j) .ne. bus1) cycle
         i = kndex(j)
         do nfix = 1, kconst
            if (iabs (node(nfix)) .eq. i) go to 3939
         end do
-        go to 3000
+        cycle
 3939    crest(nfix) = fxtem5(j)
         time1(nfix) = fxtem4(j) / picon
-        if (iprsup .lt. 9 .and. nprint .ne. 1) go to 3000
+        if (iprsup .lt. 9 .and. nprint .ne. 1) cycle
         if (n .gt. 1) go to 3739
         write (unit = lunit(6), fmt = 3500) nfix, i, bus(i), crest(nfix), fxtem4(j), fixb10(m), fixb11(m)
 3500    format (1x, i5, i6, 1x, a6, e17.6, f11.4, e18.6, e17.6)
-        go to 3000
+        cycle
 3739    write (unit = lunit(6), fmt = 3500) nfix, i, bus(i), crest(nfix), fxtem4(j)
      end do
-3000 continue
      go to (2345, 3456, 3300), n
 2345 bus1 = fixbu2(m)
      n = 2
@@ -1324,8 +1305,8 @@ subroutine fxsour
 3456 bus1 = fixbu3(m)
      n = 3
      go to 1199
-  end do
 3300 continue
+  end do
   if (iprsup .le. 0) go to 9000
   call runtym (cc1, cc2)
   write (unit = lunit(6), fmt = 8484) cc1, cc2

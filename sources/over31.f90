@@ -782,8 +782,8 @@ subroutine subr31
      n1 = numnvo + jbegbc
 1740 do
         if (ib .lt. il) go to 1780
-        write (unit = lunit(6), fmt = 1760) slot(i), slot(i + 1)
-1760    format (5x, 'The user=s last-read plot card requests a plot for a branch-variable which is identified by terminal', /, 5x, 'names =', a6, '= and =', a6, '=.   But the EMTP cannot find this requested variable in the list of output', /, 5x, 'variables, so this particular plot request must be ignored.')
+        write (unit = lunit(6), fmt = 1760) trim (slot(i)), trim (slot(i + 1))
+1760    format (5x, 'The user=s last-read plot card requests a plot for a branch-variable which is identified by terminal', /, 5x, 'names =', a, '= and =', a, '=.   But the EMTP cannot find this requested variable in the list of output', /, 5x, 'variables, so this particular plot request must be ignored.')
         write (unit = lunit(6), fmt = 1621)
         write (unit = lunit(6), fmt = 1763)
 1763    format (5x, 'Also, the user should be reminded that branch-output requests are made using column-80 punches on the', /, 5x, 'branch cards in question.   The user should double-check that he really has requested the output variable which', /, 5x, 'he is trying to plot (and which got him in trouble).   One common error is to request only branch-current output', /, 5x, '(a 1-punch in column 80) and then try to plot branch voltage ---- or vice versa.   Finally, the user should check', /, 5x, 'that branch output is even possible for the component in question, since column-80 punches may be ignored if the')
