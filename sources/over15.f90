@@ -118,7 +118,7 @@ contains
        n2 = jcltac(kcl)
        n3 = jcltac(kcl + 1)
        n4 = k
-       if (n2 .eq. 0 .and. n3 .eq. 0) continue
+       if (n2 .eq. 0 .and. n3 .eq. 0) cycle
        if (n2 .ne. 0 .and. n2 .lt. n4) n4 = n2
        if (n3 .ne. 0 .and. n3 .lt. n4) n4 = n3
        if (n4 .eq. k) jcltac(kcl+2) = k
@@ -386,8 +386,8 @@ subroutine over15
 !!!! 1            ' jbrnch(nv) =',   nv, ibrnch(nv), jbrnch(nv)
            go to 4962
         end do
-        if (noutpr .eq. 0) write (unit = lunit(6), fmt = 6925) bus1
-6925    format (5x, 'Ignore V-branch request involving nonexistent node  "', a6, '"')
+        if (noutpr .eq. 0) write (unit = lunit(6), fmt = 6925) trim (bus1)
+6925    format (5x, 'Ignore V-branch request involving nonexistent node  "', a, '"')
         go to 4962
 5183    continue
      end do
@@ -433,7 +433,7 @@ subroutine over15
      end do
      write (unit = lunit(6), fmt = 8229 )
 8229 format ('     Request for branch output of nonexistent branch will be ignored')
-     exit
+     cycle
 8311 iprint = 11
      lstat(19) = 8237
      go to 9000
@@ -465,14 +465,14 @@ subroutine over15
      if (jk .eq. 3333) koutvp(npower) = -nv
      koutvp(mpower) = j
      if (jk .eq. 2222) koutvp(mpower) = -j
-     if (jk .eq. 3333 .and. kswpe4 .eq. 0) kswpe4 = npower
+     if ((jk .eq. 3333) .and. (kswpe4 .eq. 0)) kswpe4 = npower
      if (iprsup .gt. 2) write (unit = lunit(6), fmt = 8244) npower, maxpe, koutvp(npower), koutvp(mpower)
 8244 format (/, ' Power output request', 4i10)
 8260 if (jk .ne. 2222 .or. nk1 .le. nk2) go to 8262
      if (iabs (nltype(j)) .ne. 99) go to 8262
      ibrnch(nv) = nk2
      jbrnch(nv) = nk1
-     exit
+     cycle
 8262 ibrnch(nv) = nk1
      jbrnch(nv) = nk2
   end do
@@ -545,7 +545,7 @@ subroutine over15
 7436 iprint = 11
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 8025) ibr, inonl, kswtch, nv, npower
 8025 format (/, ' at 8025 ', 5i10)
-  if (kswtch.eq.0) go to 912
+  if (kswtch .eq. 0) go to 912
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 8026) (koutvp(l), l = 1, npower)
   ndx1 = maxpe + 1
   ndx2 = maxpe + npower
@@ -562,7 +562,7 @@ subroutine over15
      ndx2 = lswtch + k
      jbrnch(nc) = iabs (kmswit(ndx2))
      if (iprsup .ge. 4)  write (unit = lunit(6), fmt = 8028) k, nc, n3, n2
-8028 format (/, ' at 8028 ', 4i10)
+8028 format (/, ' At 8028 ', 4i10)
      do i = 1, npower
         mpower = maxpe + i
         if (koutvp(i) .gt. 0) cycle
@@ -733,7 +733,7 @@ subroutine over15
 300 if (iplot .lt. 0) isplot = intinf
   lunit6save = lunit(6)
   lunit(6) = 79
-  open (unit = 79, status = 'scratch')
+  open (unit = lunit(6), status = 'scratch', form = 'formatted')
   if (nenerg .ne. 0 .and. kbase .ne. intinf) go to 54242
   flstat(5) = flstat(5) + d1
   flstat(6) = flstat(6) + d2
@@ -822,17 +822,18 @@ subroutine over15
   case (3166)
      go to 3166
 
+  case (3177)
+     go to 3177
+
   case (3188)
      go to 3188
 
   case (3197)
      go to 3197
 
-  case (3177)
-     go to 3177
-
   case (8637)
      go to 8637
+
   end select
 3152 m = 0
 3158 if (k .lt. numnvo) go to 3119
@@ -901,7 +902,7 @@ subroutine over15
 3171 m = m + 1
   aupper(m) = blank
   alower(m) = blank
-  if(m .lt. 9) go to 3171
+  if (m .lt. 9) go to 3171
   !  assign 3177 to moon
   moon = 3177
   go to 3126
@@ -921,20 +922,20 @@ subroutine over15
      m = kmswit(ndx4)
      d6 = tclose(i)
      if (ktrlsw(1) .eq. 8877) go to  8688
-     d6 = 0.0
-     if (tclose(i) .gt. 0.0) go to  8710
-     if (tclose(i) .eq. 0.0) go to 8695
-     tclose(i) = 0.0
+     d6 = 0.0d0
+     if (tclose(i) .gt. 0.0d0) go to  8710
+     if (tclose(i) .eq. 0.0d0) go to 8695
+     tclose(i) = 0.0d0
      go to 8689
 8688 if (nextsw(i) .ne. 87) go to 8695
-8689 d11 = 0.0
+8689 d11 = 0.0d0
      if (kbase .eq. 2) go to 8702
-     write (unit = lunit(6), fmt = 8692) tclose(i), bus(k), bus(m), d11
-8692 format (' ***          phasor i(0) =', e15.7, 33x, 'switch ', '"', a6,  '"', ' to ', '"', a6, '"', ' closed after', e12.5, ' sec.')
+     write (unit = lunit(6), fmt = 8692) tclose(i), trim (bus(k)), trim (bus(m)), d11
+8692 format (' ***          phasor i(0) =', e15.7, 33x, 'switch ', '"', a,  '"', ' to ', '"', a, '"', ' closed after', e12.5, ' sec.')
      go to 8702
-8693 d6 = 0.0
+8693 d6 = 0.0d0
      go to 8710
-8695 if (tclose(i) .gt. 0.0) go to 8693
+8695 if (tclose(i) .gt. 0.0d0) go to 8693
      if (iabs (kpos(i)) .ne. 10) go to 8284
      if (absz (e(k) - e(m)) .lt. topen(i)) go to 8710
 8284 if (kbase .eq. 2) go to 8702
@@ -998,7 +999,7 @@ subroutine over15
 1006 format (/, 10x, 'Remember ---- what are labeled as the initial', i3,  '  branch-output currents are in reality', /, 24x, 'modal voltages at the two ends of the last distributed-parameter line of the data case being solved.', /, 24x, 'The first', i3, "  mode voltages at the  'bus1'  end all come first, followed by all the corresponding", /, 24x, "entries for the  'bus2'  end of the line.", /, 1x)
   go to 9999
 1009 if (kbase .eq. intinf) kbase = 2
-  if (kbase .eq. 2 .and. tenerg .lt. 0.0) call tables
+  if ((kbase .eq. 2) .and. (tenerg .lt. 0.0d0)) call tables
   ltdelt = 0
   go to 9999
 9000 lstat(16) = iprint
@@ -1163,9 +1164,8 @@ subroutine smout
   use smach
   implicit none
   !     This module is used only by  type 59 s.m.  modeling
-  character(6) :: text1
   character(8) :: digit(10)
-  character(8) :: text2, texta(15), textb(3)
+  character(8) :: text1, text2, texta(15), textb(3)
   !  dimension texta(15), digit(10), textb(3), busvec(1)
   integer(4) :: i, i5, i30, icnt, ip, ip1
   integer(4) :: jb, jk, jk1

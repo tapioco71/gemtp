@@ -692,12 +692,11 @@ contains
        ! making sure that power coils are not tacs controlled :
        do n2 = 1, 3
           n3 = kcl - 1 + n2
-          if (jcltac(n3) .eq. 0) go to 958
+          if (jcltac(n3) .eq. 0) cycle
           write (unit = lunit(6), fmt = 952) n1
 952       format (/, ' Error stop. um number', i4, ' is provided with TACS controlled sources on the power side. This is only allowed for the coils on', /, ' the excitation side. TACS control of power side coils is to be done through the network which is connected to these coils.')
           call stoptp
        end do
-958    continue
        if (initum .eq. 0) go to 990
        do n2 = 1, 3
           n3 = kcl - 1 + n2

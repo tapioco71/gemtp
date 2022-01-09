@@ -35,9 +35,9 @@ subroutine over14
      ndx1 = lswtch + j
      m = kmswit(ndx1)
      do i = 1, kswtch
-        if (i .eq. j) exit
+        if (i .eq. j) cycle
         ndx2 = lswtch + i
-        if (k .ne. kmswit(i) .and. k .ne. kmswit(ndx2) .and. m .ne. kmswit(i) .and. m .ne. kmswit(ndx2)) exit
+        if (k .ne. kmswit(i) .and. k .ne. kmswit(ndx2) .and. m .ne. kmswit(i) .and. m .ne. kmswit(ndx2)) cycle
         n6 = n6 + 1
         if (n6 .gt. mswtch) go to  1983
         nbhdsw(n6) = i
@@ -100,7 +100,7 @@ subroutine over14
   if (ibr .lt. 2) go to 99999
   !     Variables    *   *   *   *   *   *   *   *   *   *   *   *   *   *
   do ka = 2, ibr
-     if (length(ka) .ne. -666) exit
+     if (length(ka) .ne. -666) cycle
      kb = ka - 1
      it2 = length(kb)
      it2 = iabsz (it2)
@@ -214,7 +214,7 @@ subroutine last14
         f(n4) = f(n4) - yx
         if (iprsup .ge. 9) write (unit = lunit(6), fmt = 746) n3, n4, n2, kodebr(k), yx, c(n2), f(n3), f(n4)
 746     format (' Coupled elem adds to (y).  n3, n4, n2, kodebr(k), yx, c(n2), f(n3), f(n4) =', 4i10, /, 1x, 4e25.15)
-        exit
+        cycle
 760     n3 = mbus(n2)
         n4 = kbus(n2)
         go to 730
@@ -352,7 +352,7 @@ subroutine last14
         sconst(nq6) = sume
 1002    if (iprsup .gt. 0) write (unit = *, fmt = 145) i, nteq, nnq1, nnq2, nnq3, nq4, nq5, nq6, sconst(nq1), sconst(nnq2), sconst(nnq3), sconst(nq4), sconst(nq5), sconst(nq6)
 145     format (1x, i2, 3x, i3, 2x, i4, 2x, i4, 2x, i4, 2x, i4, 2x, i4, 2x, i4, 6e14.5)
-        if (jkl .eq. 1) exit
+        if (jkl .eq. 1) cycle
 1004    jkl = 0
      end do
      nnq1 = nq6
@@ -437,7 +437,7 @@ subroutine last14
   if (it2 .lt. 0) it2 = 1
   n2 = k + it2 - 1
   do i = k, n2
-     if (ck(i) .ge. 0.0d0) exit
+     if (ck(i) .ge. 0.0d0) cycle
      j = int (cik(i), kind (j))
      ci(i) = ci(i) / eta(j)
   end do
@@ -581,15 +581,15 @@ subroutine last14
   go to 13210
 780 if (num99 .le. 0) go to 2801
   do i = 1, inonl
-     if (nltype(i) .gt. 0) exit
+     if (nltype(i) .gt. 0) cycle
      if (nltype(i) .eq. -98 .or. nltype(i) .eq. -96) go to 2781
-     if (anonl(i) .ge. 0.0d0) exit
+     if (anonl(i) .ge. 0.0d0) cycle
 2781 k = nonlk(i)
      m = iabs (nonlm(i))
      if (k .ne. l) go to 2784
      n4 = m
      go to 2786
-2784 if (m .ne. l) exit
+2784 if (m .ne. l) cycle
      n4 = k
 2786 if (nltype(i) .ne. -96) go to 2787
      n3 = nonlad(i) + 1
@@ -598,7 +598,7 @@ subroutine last14
      f(n4) = f(n4) - yx
      if (iprsup .ge. 2) write (unit = lunit(6), fmt = 2790) i, k, m, l, n4, yx, f(l), f(n4)
 2790 format (/, ' Type-96 g added to row of y.  ', 5i10, /, 3e25.15)
-     exit
+     cycle
 2787 n3 = nonlad(i)
      yx = gslope(n3)
      f(l) = f(l) + yx
@@ -610,7 +610,7 @@ subroutine last14
   if (f(l) .ne. 0.0d0) go to 4308
   if (kconst .le. 1) go to 2813
   do i = 2, kconst
-     if (iform(i) .ne. 18) exit
+     if (iform(i) .ne. 18) cycle
      n6 = int (time1(i))
      if (n6 .eq. l) go to 4308
   end do

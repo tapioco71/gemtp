@@ -93,9 +93,9 @@ FORTRAN_FLAGS=	-O0			\
 #		-fmax-stack-var-size=100000000	\
 
 F90_FLAGS=	-Og				\
-		-gstabs+			\
 		-Wall				\
 		-cpp				\
+		-fPIC				\
 		-ffree-form			\
 		-ffree-line-length-0		\
 		-fcheck=all			\
@@ -169,8 +169,8 @@ ifeq (${DEBUG},1)
 AS_FLAGS	+=	-ggdb
 CC_FLAGS	+=	-ggdb
 CPP_FLAGS	+=	-ggdb
-FORTRAN_FLAGS	+=	-ggdb
-F90_FLAGS	+=	-ggdb
+FORTRAN_FLAGS	+=	-ggdb3
+F90_FLAGS	+=	-ggdb3
 endif
 
 # Rule for building the object file from each assembly source files.

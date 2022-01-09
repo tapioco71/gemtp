@@ -408,7 +408,7 @@ subroutine over1
   do j = 1, 99999
      read (unit = lunt77, end = 6539) (r4(k), k = 1, n18)
      if (iprsup .eq. 7 .or. iprsup .gt. 9) write (unit = *, fmt = *) ' j, r4(1) =', j, r4(1)
-     if (r4(1) .eq. -9999.) go to 6539
+     if (r4(1) .eq. -9999.0d0) exit
      write (unit = lunit(4)) (r4(k), k = 1, n18)
   end do
 6539 write (unit = *, fmt = *) ' Done transferring lunt77 to lunit(4).  j =', j
@@ -457,7 +457,7 @@ subroutine over1
 2879 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2882)
 2882 format ('+Terminator for switch closing times.')
   read (unit = lunit(2)) locker
-  do j = 1, 9999
+  do j = 1, 99999
      read (unit = lunit(2), end = 2479) ansi132
 2474 format (a132)
      write (unit = lunit(6), fmt = 2474) ansi132
@@ -483,7 +483,7 @@ subroutine over1
   !  call frefld (voltbc)
   call free (voltbc)
   do i = 1, 8
-     lstacs(i) = int (voltbc(i))
+     lstacs(i) = int (voltbc(i), kind (lstacs(i)))
   end do
 7050 if (lstacs(1) .lt. 5) lstacs(1) = 5
   if (noutpr .eq. 0 ) write (unit = kunit6, fmt = 7060) lstacs(1), lstacs(2), lstacs(3)
@@ -504,7 +504,7 @@ subroutine over1
   call free (voltbc)
 7130 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7140) voltbc(1), voltbc(2), voltbc(3)
 7140 format ('+Relative list sizes.', 3e9.2)
-  d1 = 0.0
+  d1 = 0.0d0
   do i = 1, 8
      d1 = d1 + voltbc(i)
   end do
@@ -2835,19 +2835,19 @@ subroutine nmincr (texta, n12)
   !     assumed that a fortran 77 compiler is being used, and that
   !     "alphanumeric" is translated to something other than  character*6
   integer(4), intent(in) :: n12
-  character(8), intent(out) :: texta              ! input argument carries a6 root name
-  character(6) :: text1, text2                    ! local character-handling variables
+  character(8), intent(out) :: texta            ! input argument carries a6 root name
+  character(6) :: text1, text2                  ! local character-handling variables
   integer(4) :: j
   !
-  write (unit = text1, fmt = 4523) n12            ! encode component number
-4523 format (i6)                                  ! 6-digit format allows number through 999999
-  do j = 1, 6                                     ! search for first non-blank in encoded number
-     if (text1(j : j) .ne. ' ') exit              !  if nonblank, exit
-  end do                                          ! end  do 4538  loop to find non-blank left edge
-  write (unit = text2, fmt = 4556) texta          ! transfer input alphanumeric to char*6
-4556 format (a6)                                  ! alphanumeric variables are 6 characters wide
-  text2(j : 6) = text1(j : 6)                     ! add component number onto input name
-  read (unit = text2, fmt = 4556) texta           ! convert back from char*6 to alphanum.
+  write (unit = text1, fmt = 4523) n12          ! encode component number
+4523 format (i6)                                ! 6-digit format allows number through 999999
+  do j = 1, 6                                   ! search for first non-blank in encoded number
+     if (text1(j : j) .ne. ' ') exit            !  if nonblank, exit
+  end do                                        ! end  do 4538  loop to find non-blank left edge
+  write (unit = text2, fmt = 4556) texta        ! transfer input alphanumeric to char*6
+4556 format (a6)                                ! alphanumeric variables are 6 characters wide
+  text2(j : 6) = text1(j : 6)                   ! add component number onto input name
+  read (unit = text2, fmt = 4556) texta         ! convert back from char*6 to alphanum.
   !     write (*,*)  ' exit "nmincr".   n12 =',  n12,  '   texta =', texta
   return
 end subroutine nmincr

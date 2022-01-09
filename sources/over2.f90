@@ -1629,10 +1629,9 @@ subroutine over2
   nchain = 5
   ktrlsw(3) = 0
   do i = 1, ibr
-     if (litype(i) .ge. 0) go to 1642
+     if (litype(i) .ge. 0) cycle
      litype(i) = -litype(i)
   end do
-1642 continue
 8675 ibrnam = ibrnam + 1
   if (ibrnam .gt. ibr) go to 8680
   namebr(ibrnam) = 1
@@ -3698,7 +3697,7 @@ subroutine distr2
 9000 lstat(16) = iprint
   kill = 1
 9999 if (iprsup .ge. 3) write (unit = lunit(6), fmt = 9998) kill, nchain, lstat(18), ibr, ifsem
-9998 format (/, ' exit  "distr2" .    kill  nchain lstat18     ibr   ifsem ', /, 17x, 10i8)
+9998 format (/, ' Exit  "distr2" .    kill  nchain lstat18     ibr   ifsem ', /, 17x, 10i8)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
 4568 format ('  "Exit  module distr2."')
   return
@@ -3972,18 +3971,18 @@ subroutine over3
   nredct = nphcas
   do iph = 1, nphcas
      iphase = mapcas(iph)
-     if (trser(iphase) .eq. 0.0 .and. txser(iphase) .eq. 0.0 .and. cser(iphase) .eq. 0.0) go to 76438
-     if (trser(iphase) .eq. 999999.) go to 76441
-     if (cser(iphase) .eq. 0.0) go to 76439
-     ymag2 = trser(iphase) ** 2 + (freqcs * txser(iphase) / freqx - 1.0 / (freqcs * cser(iphase) / freqc)) ** 2
+     if ((trser(iphase) .eq. 0.0d0) .and. (txser(iphase) .eq. 0.0d0) .and. (cser(iphase) .eq. 0.0d0)) go to 76438
+     if (trser(iphase) .eq. 999999.0d0) go to 76441
+     if (cser(iphase) .eq. 0.0d0) go to 76439
+     ymag2 = trser(iphase) ** 2 + (freqcs * txser(iphase) / freqx - 1.0d0 / (freqcs * cser(iphase) / freqc)) ** 2
      yserr = trser(iphase) / ymag2
-     yserx = (-freqcs * txser(iphase) / freqx + 1.0 / (freqcs * cser(iphase) / freqc)) / ymag2
+     yserx = (-freqcs * txser(iphase) / freqx + 1.0d0 / (freqcs * cser(iphase) / freqc)) / ymag2
      go to 76440
 76439 yserr = trser(iphase) / (trser(iphase) ** 2 + (freqcs * txser(iphase) / freqx) ** 2)
      yserx = (-freqcs * txser(iphase) / freqx) / (trser(iphase) ** 2 + (freqcs * txser(iphase) / freqx) ** 2)
      go to 76440
-76441 yserr = 0.0
-     yserx = 0.0
+76441 yserr = 0.0d0
+     yserx = 0.0d0
 76440 nnpos = locatn(iph + nphcas, iph + nphcas)
      caslnr(nnpos) = yserr
      caslnx(nnpos) = yserx
@@ -3993,7 +3992,7 @@ subroutine over3
      nnpos = locatn(iph + nphcas + nredct, iph + nphcas + nredct)
      caslnr(nnpos) = caslnr(nnpos) + yserr
      caslnx(nnpos) = caslnx(nnpos) + yserx
-     go to 76442
+     cycle
 76438 idumy = nphcas + iph
      do i = 1, idumy
         nnpos = locatn(i, idumy)
@@ -4042,7 +4041,6 @@ subroutine over3
      end do
      nredct = nredct - 1
   end do
-76442 continue
   if (iprsup .lt. 9) go to 76630
   write (unit = lunit(6), fmt = 76605)
   write (unit = lunit(6), fmt = 76631)
@@ -4139,7 +4137,7 @@ subroutine over3
      caslnr(nnpos) = caslnr(nnpos) + yshunr
      caslnx(nnpos) = caslnx(nnpos) + yshunx
      node2(jbr) = -node2(jbr)
-     go to 76451
+     cycle
 76454 if (node1(jbr) .eq. 0 .or. node2(jbr) .eq. 0) go to 76457
      idumy = node1(jbr)
      idumy2 = node2(jbr)
@@ -4157,13 +4155,13 @@ subroutine over3
      nnpos = locatn (nrow2, nrow2)
      caslnr(nnpos) = caslnr(nnpos) + yshunr
      caslnx(nnpos) = caslnx(nnpos) + yshunx
-     go to 76451
+     cycle
 76457 idumy = node1(jbr) + node2(jbr)
      nrow1 = nphcas + mapinv(idumy)
      nnpos = locatn(nrow1, nrow1)
      caslnr(nnpos) = caslnr(nnpos) + yshunr
      caslnx(nnpos) = caslnx(nnpos) + yshunx
-     go to 76451
+     cycle
 76455 node1(jbr) = -node1(jbr)
      node2(jbr) = -node2(jbr)
      if (node1(jbr) .eq. 0 .or. node2(jbr) .eq. 0) go to 76460
@@ -4184,7 +4182,7 @@ subroutine over3
      caslnx(nnpos) = caslnx(nnpos) + yshunx
      node1(jbr) = -node1(jbr)
      node2(jbr) = -node2(jbr)
-     go to 76451
+     cycle
 76460 nrow1 = npos2 + node1(jbr) + node2(jbr)
      nnpos = locatn (nrow1, nrow1)
      caslnr(nnpos) = caslnr(nnpos) + yshunr
@@ -4192,22 +4190,20 @@ subroutine over3
      node1(jbr) = -node1(jbr)
      node2(jbr) = -node2(jbr)
   end do
-76451 continue
-  nredct=0
+  nredct = 0
   do i = 1, nphcas
      npos = locatn (npos2 + i - 1, npos2 + i - 1)
      nnpos = locatn (npos2 + i, npos2 + i)
-     ymag2 =absz (caslnr(nnpos)) + absz (caslnx(nnpos))
-     if (ymag2 .eq. 0.0) go to 76461
+     ymag2 = absz (caslnr(nnpos)) + absz (caslnx(nnpos))
+     if (ymag2 .eq. 0.0d0) cycle
      ymag2 = absz (caslnr(npos)) + absz (caslnx(npos))
-     if (ymag2 .ne. 0.0) go to 6470
+     if (ymag2 .ne. 0.0d0) go to 6470
      lstat(19) = 6470
      kill = 60
      lstat(12) = -i
      go to 9200
 6470 nredct = nredct + 1
   end do
-76461 continue
   if (iprsup .lt. 9) go to 76640
   write (unit = lunit(6), fmt = 76605)
   write (unit = lunit(6), fmt = 76634)

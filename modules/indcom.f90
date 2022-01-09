@@ -6,7 +6,7 @@
 
 module indcom
   implicit none
-  
+
   interface location
      module procedure loci, locia, locim, locf, locfa, locfm, locchar, locchara, loclog, locloga
   end interface location

@@ -315,11 +315,10 @@ subroutine over13
 745  n16 = n15 + n11 + 1
      d13 = vchar(n16) * curr(i) + cchar(n16)
      do n14 = n18, n19
-        if (-curr(i) .gt. cchar(n14)) go to 750
+        if (-curr(i) .gt. cchar(n14)) cycle
         n15 = n14
         go to 755
      end do
-750  continue
 755  n16 = n15 + n11 + 1
      d14 = vchar(n16) * curr(i) - cchar(n16)
      if (d14 + flzero .ge. ci1 .and. ci1 .ge. d13 - flzero) go to 7122
@@ -354,11 +353,10 @@ subroutine over13
      cchar(n12) = n15 +n7
      go to 1312
 1895 do n11 = n15, n10
-        if (gslope(n6 + 4) .gt. cchar(n11)) go to 1900
+        if (gslope(n6 + 4) .gt. cchar(n11)) cycle
         cchar(n12) = n11
         go to 1910
      end do
-1900 continue
      cchar(n12) = n10 + 1
 1910 n13 = cchar(n12) + n7 + 1
      d9 = vchar(n13) * gslope(n6 + 4) + cchar(n13)
@@ -376,11 +374,10 @@ subroutine over13
      cchar(n12) = n15 + n7
      go to 1212
 1945 do n11 = n15, n10
-        if (-gslope(n6 + 4) .gt. cchar(n11)) go to 1950
+        if (-gslope(n6 + 4) .gt. cchar(n11)) cycle
         cchar(n12) = n11
         go to 1960
      end do
-1950 continue
      cchar(n12) = n10 + 1
 1960 n13 = cchar(n12) + n7 + 1
      d9 = vchar(n13) * gslope(n6 + 4) - cchar(n13)
@@ -1980,7 +1977,7 @@ subroutine over13
   read (unit = abuff, fmt = 5656) nextsw(k)
 5656 format (14x, i4)
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 5643) nextsw(k)
-5643 format ('+  continue.  nextsw = ', i4)
+5643 format ('+  Continue.  nextsw = ', i4)
   go to 544
   ! transfer control to 2nd half of overlay 13, in "last13".
 590 if (marti .eq. 1) go to 4590
