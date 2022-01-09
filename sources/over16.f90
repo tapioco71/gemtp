@@ -110,13 +110,15 @@ subroutine subts1
   data text11 / 'pass  ' /
   data text12 / 'stop  ' /
   data text13 / 'ykk   ' /
-  !     burroughs: preserve local variable between module calls:
+  !     Burroughs: preserve local variable between module calls:
   data nwarn / 0 /
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 548) istep, isprin, isplot, kswtch, inonl, num99, iupper, knt, nenerg
 548 format (' Begin 1st piece of time-step loop.   istep  isprin', '  isplot  kswtch   inonl   num99  iupper     knt  nenerg', /, 35x, 10i8)
   if (numsm .gt. 0) call update
-  if (kswtch .le. 0) kcount = nv
-  if (kswtch .le. 0) go to 1009
+  if (kswtch .le. 0) then
+     kcount = nv
+     go to 1009
+  end if
   if (istep .gt. 0) go to 3780
   !     add code for random opening with current margin (from over5):
   ndx1 = lswtch + 1

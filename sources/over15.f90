@@ -387,7 +387,7 @@ subroutine over15
            go to 4962
         end do
         if (noutpr .eq. 0) write (unit = lunit(6), fmt = 6925) bus1
-6925    format (5x, 'ignore v-branch request involving nonexistent node  "', a6, '"')
+6925    format (5x, 'Ignore V-branch request involving nonexistent node  "', a6, '"')
         go to 4962
 5183    continue
      end do
@@ -399,18 +399,18 @@ subroutine over15
 1830 do i = 1, 13
      if (ijk .lt. 0) go to 8215
      bus1 = aupper(i)
-     if (bus1 .eq. blank) exit
+     if (bus1 .eq. blank) cycle
      l = 1
      do ik = 2, ntot
         if (bus1 .eq. bus(ik)) go to 3056
      end do
      if (noutpr .eq. 0) write (unit = lunit(6), fmt = 3053) trim (bus1)
 3053 format (5x, 'Request for voltage output of nonexistent node ', "'", a, "'", ' will be ignored.')
-     exit
+     cycle
 3056 if (ivolt .eq. 1) go to 8888
      numnvo = numnvo + 1
      ibsout(numnvo) = ik
-     if (numnvo .le. lsiz12) exit
+     if (numnvo .le. lsiz12) cycle
      iprint = 11
      lstat(19) = 3056
      go to 9000
@@ -418,7 +418,7 @@ subroutine over15
 8899 format (' There has been the request for all node voltage output, so this request will be ignored.')
      go to 1030
 8215 l = 1
-     if (aupper(i) .eq. blank) exit
+     if (aupper(i) .eq. blank) cycle
      do j = 1, ibr
         ip = namebr(j)
         if (texvec(ip) .eq. aupper(i)) go to 8231
@@ -454,7 +454,7 @@ subroutine over15
      nk1 = nonlk(j)
      nk2 = iabs (nonlm(j))
      if (ijk .ne. -2) nonlm(j) = -nk2
-8237 if (ijk .gt. -2) exit
+8237 if (ijk .gt. -2) cycle
      nv = nv + 1
      if (nv .gt. lsiz12) go to 8311
      if (ijk .ge. -3) go to 8260
@@ -569,7 +569,7 @@ subroutine over15
         if (koutvp(mpower) .eq. k) go to 4385
      end do
      cycle
-4385 koutvp(mpower) = - nc
+4385 koutvp(mpower) = -nc
   end do
 912 if (inonl .eq. 0) go to 8411
   do k = 1, inonl
@@ -777,7 +777,7 @@ subroutine over15
   write (unit = lunit(6), fmt = 3118) ioutcs
 3118 format (3x, 'final', i4, "  output variables belong to  'TACS'  (note internally-added upper name of pair).")
   write (unit = lunit(6), fmt = 3122)
-3122 format (' Branch power  consumption (power  flow, if a switch) is treated like a branch voltage for this grouping|', /, ' branch energy consumption (energy flow, if a switch) is treated like a branch current for this grouping.')
+3122 format (' Branch power  consumption (power  flow, if a switch) is treated like a branch voltage for this grouping|', /, ' Branch energy consumption (energy flow, if a switch) is treated like a branch current for this grouping.')
 6645 if (iprsup .le. 0) go to 54242
   if (npower .le. 0) go to 54242
   write (unit = lunit(6), fmt = 3112) (ibrnch(i), jbrnch(i), i = 1, nc)
@@ -814,7 +814,7 @@ subroutine over15
   if (kprsta .eq. 0) write (unit = lunit(6), fmt = 8145) (alower(i), i = 1, 9)
 8145 format ('  ref. angle  ', 9(7x, a6))
   kprsta = 1
-  !7113 go to (3152, 3166, 3188, 3197, 3177, 8637) moon
+  !7113 go to moon, (3152, 3166, 3188, 3197, 3177, 8637)
 7113 select case (moon)
   case (3152)
      go to 3152

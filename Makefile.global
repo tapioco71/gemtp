@@ -93,6 +93,7 @@ FORTRAN_FLAGS=	-O0			\
 #		-fmax-stack-var-size=100000000	\
 
 F90_FLAGS=	-Og				\
+		-gstabs+			\
 		-Wall				\
 		-cpp				\
 		-ffree-form			\
