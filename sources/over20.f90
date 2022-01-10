@@ -3945,7 +3945,7 @@ subroutine initsp
   digit(8) = '8'
   digit(9) = '9'
   digit(10) = '0'
-  call locatn
+  call locating
   do j = 1, 9
      filext(j) = ' '
      write (ansi32, 1283)          j
@@ -5066,10 +5066,10 @@ subroutine frefix (ansi, n8)
 end subroutine frefix
 
 !
-! subroutine locatn.
+! subroutine locating.
 !
 
-subroutine locatn
+subroutine locating
   use blkcom
   use labcom
   use smach
@@ -5850,7 +5850,7 @@ subroutine locatn
   locate( 731)  =  location ( nekreq )
   locate( 732)  =  location ( nekcod )
   return
-end subroutine locatn
+end subroutine locating
 
 !
 ! subroutine sysplt.

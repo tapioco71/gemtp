@@ -64,7 +64,7 @@ module blkcom
   integer(4) :: icheck, iline, inonl, iout, ipunch, iread, istep, itype, it1
   integer(4) :: ia, indtv(10), ipntv(11), iprsov(39), it2, izero
   integer(4) :: kprchg(6)
-  integer(4) :: lstat(80), lunit(0 : 15), lunsav(0 : 15)
+  integer(4) :: locatn(0:20, 0:20), lstat(80), lunit(0 : 15), lunsav(0 : 15)
   integer(4) :: max99m, moncar(90), multpr(5)
   integer(4) :: nbyte(6), nright, nfrfld, kolbeg
   integer(4) :: kol132, kpar, kpen(5), kunit6, kwtspy, kxic

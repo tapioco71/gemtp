@@ -25,7 +25,7 @@ subroutine over10
   integer(4) :: istop, isubs1, isubs2, isubs3, isubs4, itp, ix, ix2, ixx, iy
   integer(4) :: j, ja, jc, je, jj, jk, js, jt
   integer(4) :: k, ka, kb, ke, kkk, kmm, ky
-  integer(4) :: l, la, lb, lc, lk, ll, locatn(20, 20), locy11
+  integer(4) :: l, la, lb, lc, lk, ll, locy11
   integer(4) :: m, mk, mna1b1, mna1b2, mna2b1, mna2b2, mxa1b1, mxa1b2, mxa2b1
   integer(4) :: mxa2b2
   integer(4) :: n, n1, n2, n3, n5, n7, n10, n12, n13, n14, n15, n16, n23
@@ -42,7 +42,7 @@ subroutine over10
   real(8) :: xa, xi, xr, xti, xtr, xx
   real(8) :: yy
   !
-  !locatn(i, j) = (j * j - j) / 2 + i
+  locatn(i, j) = (j * j - j) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2941) ntot, ioffd, loopss(2)
 2941 format (' Top of "over10".   ntot, ioffd, loopss(2) =', 2i8)
   n14 = ntot + loopss(2)
@@ -56,7 +56,7 @@ subroutine over10
 3003 if (ia .eq. index(i + 1)) cycle
      ib = iloc(ia)
      ic = ia
-3005 ic = ic +1
+3005 ic = ic + 1
      if (ic .eq. index(i + 1)) go to 3002
      if (ib .le. iloc(ic)) go to 3005
      iloc(ia) = iloc(ic)
@@ -86,9 +86,9 @@ subroutine over10
   xopt = xoptbr(i)
   copt = coptbr(i)
   d3 = tenm3
-  d4 = unity / 1000000.
-  if (xopt .gt. 0.0) d3 = 1.0 / (twopi * xopt)
-  if (copt .gt. 0.0) d4 = d4 / (twopi * copt)
+  d4 = unity / 1000000.0d0
+  if (xopt .gt. 0.0d0) d3 = 1.0d0 / (twopi * xopt)
+  if (copt .gt. 0.0d0) d4 = d4 / (twopi * copt)
   omltem = d3 * twopi
   omctem = d4 * twopi
   if (ic .eq. 1) ic = iabs (mbus(i))
@@ -127,7 +127,7 @@ subroutine over10
 3140 ia = index(im)
   if (nr(i) .ge. 0) go to 3220
   if (c(j) .eq. 0.0) go to 3164
-  xx = tx(j) * omegal - 1.0 / (c(j) * omegac)
+  xx = tx(j) * omegal - 1.0d0 / (c(j) * omegac)
   go to 3168
 3164 xx = tx(j) * omegal
 3168 dd = rr * rr + xx * xx
@@ -169,7 +169,7 @@ subroutine over10
   diab(in) = diab(in) + bb
 3283 i = i + 1
   go to 3490
-3300 is = iabs(nr(i))
+3300 is = iabs (nr(i))
   nt = iabs (length(i))
   if (length(i) .lt. 0) go to 3320
   jt = nt * (nt + 1) / 2
@@ -221,9 +221,9 @@ subroutine over10
   end do
 10 do j = 1, jt
      if (kodebr(i) .le. 0) tx(l) = tx(l) * omegal
-     if (kodsem(i) .ne. 0 .and. imodel(i) .ne. -2) tx(l) = tx(l) * omegal
+     if ((kodsem(i) .ne. 0) .and. (imodel(i) .ne. -2)) tx(l) = tx(l) * omegal
      if (iprsup .ge. 3) write (unit = lunit(6), fmt = 3524) i, kbus(i), mbus(i), j, l, tr(l), tx(l)
-3524 format(' at 3524    ', 5i10, 2e20.8)
+3524 format(' At 3524    ', 5i10, 2e20.8)
      if (j .ne. n) go to 3530
      e(m) = tr(l) ** 2  + tx(l) ** 2
      m = m + 1
@@ -519,7 +519,7 @@ subroutine over10
         do iy = istart, istop
            if (nrow1 .eq. iloc(iy)) go to 43404
         end do
-43404   nnpos = locatn (ix, ixx) + locy11
+43404   nnpos = locatn(ix, ixx) + locy11
         isubs1 = iofgnd + iy
         gnd(isubs1) = gnd(isubs1) + tr(nnpos)
         isubs1 = iofbnd + iy
@@ -540,7 +540,7 @@ subroutine over10
         do iy = istart, istop
            if (nrow1 .eq. iloc(iy)) go to 43406
         end do
-43406   nnpos = locatn (ix, ixx + nphcas) + locy11
+43406   nnpos = locatn(ix, ixx + nphcas) + locy11
         isubs1 = iofgnd + iy
         gnd(isubs1) = gnd(isubs1) + tr(nnpos)
         isubs1 = iofbnd + iy
@@ -572,7 +572,7 @@ subroutine over10
            if (nrow1 .eq. iloc(iy)) go to 43409
         end do
 43409   nnpos = locatn(ix + nphcas, ixx + nphcas) + locy11
-        isubs1 =  iofgnd+iy
+        isubs1 = iofgnd + iy
         gnd(isubs1) = gnd(isubs1) + tr(nnpos)
         isubs1 = iofbnd + iy
         bnd(isubs1) = bnd(isubs1) + tx(nnpos)

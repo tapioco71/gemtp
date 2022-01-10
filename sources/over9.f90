@@ -29,8 +29,7 @@ subroutine over9
   integer(4) :: m, ma
   integer(4) :: n1, ndx1, ndx2, ndx3, nk, nkr, nx
   !
-  !locatn(i, j) = j * (j - 1) / 2 + i
-  !
+  locatn(i, j) = j * (j - 1) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over9."')
   if(iprsup .gt. 0) write (unit = lunit(6), fmt = 1001) kconst, last
@@ -79,7 +78,6 @@ subroutine over9
      iform(kconst) = 14
      tstop(kconst) = 1.0d0
      tstart(kconst) = -1.0d0
-     !     go to ( 3131, 3333, 3535 ), n1
      select case (n1)
      case (1)
         go to 3131
@@ -129,7 +127,7 @@ subroutine over9
   next = 1
   jbrt = last
   isubs1 = iofkor + 1
-  call move0 (korder(isubs1 :) , jbrt)
+  call move0 (korder(isubs1 :), jbrt)
   call move0 (loca(1 :), ntot)
   i = 1
   go to 1160
@@ -138,7 +136,7 @@ subroutine over9
   ii = i + iabs (length(i)) - 1
   !      if (kodsem(i) .ne. 0  .and. imodel(i) .ne. -2
   !     1                      .and. imodel(i) .ne. -4)
-  if (kodsem(i) .ne. 0 .and. imodel(i) .ge. 0) ii = i + iabs (kodebr(i)) - 1
+  if ((kodsem(i) .ne. 0) .and. (imodel(i) .ge. 0)) ii = i + iabs (kodebr(i)) - 1
   iswbob = 1
   j = i
   go to 1250
@@ -153,7 +151,7 @@ subroutine over9
 1280 l = l + 1
 1290 if (l .gt. ii) go to 1350
   m = iabs (kbus(l))
-  if (m .eq. k  .or.  m .eq. 0) go to 1280
+  if ((m .eq. k) .or. (m .eq. 0)) go to 1280
   go to 1400
 1320 if (j .gt. ii) go to 1150
   go to 1340
@@ -167,7 +165,7 @@ subroutine over9
 1360 l = l + 1
 1370 if (l .gt. ii) go to 1220
   m = iabs (mbus(l))
-  if (m .eq. k  .or. m .lt. 1) go to 1360
+  if ((m .eq. k) .or. (m .lt. 1)) go to 1360
 1400 kf = loca(k)
   if (kf .eq. 0) go to 1420
   go to 1440
@@ -196,7 +194,6 @@ subroutine over9
   lstat(15) = i
   go to 9999
 1495 next = next + 1
-  !1490 go to (1280, 1360),jsw
 1490 select case (jsw)
   case (1)
      go to 1280

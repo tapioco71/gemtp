@@ -3730,7 +3730,7 @@ subroutine over3
   character(8) :: text1, text2, text3, text4, text5, text6, text7
   integer(4) :: i, icas, idumy, idumy2, iend, iendd, ii, iph, iphase, istart
   integer(4) :: j, jbr
-  integer(4) :: ll0, ll3, locatn(0 : 3, 0 : 3), locznn
+  integer(4) :: ll0, ll3, locznn
   integer(4) :: mbr, mbr1, msect, mser, multip
   integer(4) :: nnpos, npos, npos2, npos3, nredct, nrow1, nrow2
   real(8) :: dsectj
@@ -3741,6 +3741,7 @@ subroutine over3
   data text2  / ' cas' /
   data text3  / 'cade' /
   data text4  / '    ' /
+  !
   locatn(i, j) = (j * j - j) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over3."')
