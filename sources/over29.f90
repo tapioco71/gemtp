@@ -1684,8 +1684,10 @@ subroutine fltdat (array, arrsav, soln, rhs, ymat, kspars, maxsq, nmax2, nmax, l
      n4 = ichara(j)
      n5 = icharb(j)
      text9(1) = chara
-     call packa1 ( text9(1), texta(j), n4 )
-     call packa1 ( text9(1), textb(j), n5 )
+     !     call packa1 ( text9(1), texta(j), n4 )
+     call pack (text9(1), texta(j), n4)
+     !     call packa1 ( text9(1), textb(j), n5 )
+     call pack (text9(1), textb(j), n5)
      if ( ipncom .eq. 0 )  go to 5743
      write (lunit7, 5741)
 5741 format ('c')
@@ -1700,15 +1702,19 @@ subroutine fltdat (array, arrsav, soln, rhs, ymat, kspars, maxsq, nmax2, nmax, l
      n4 = ichara(j)
      n5 = icharb(j)
      text9(1) = charb
-     call packa1 ( text9(1), texta(j), n4 )
-     call packa1 ( text9(1), textb(j), n5 )
+     !     call packa1 ( text9(1), texta(j), n4 )
+     call pack (text9(1), texta(j), n4)
+     !     call packa1 ( text9(1), textb(j), n5 )
+     call pack (text9(1), textb(j), n5)
      n6 = 52
      if ( ipunch  .eq.  0 ) write (lunit7, 5744)  n6, texta(j), textb(j), d7, output(j)
      write (lunit1, 5745)  n6, texta(j), textb(j), d7, output(j)
      n18 = n18 + 1
      text9(1) = charc
-     call packa1 ( text9(1), texta(j), n4 )
-     call packa1 ( text9(1), textb(j), n5 )
+     !     call packa1 ( text9(1), texta(j), n4 )
+     call pack (text9(1), texta(j), n4)
+     !     call packa1 ( text9(1), textb(j), n5 )
+     call pack (text9(1), textb(j), n5)
      n6 = 53
      if ( ipunch  .eq.  0 ) write (lunit7, 2744)  n6, texta(j), textb(j)
 2744 format (i2, ',',  2(a6, ','), 6x, ',,,,,,,,,,')

@@ -18,6 +18,7 @@ subroutine subr31
   use movcop
   use strcom
   use freedom
+  use pckcom
   implicit none
   !     flag-1.   begin class-1  /blank/  variables
   !     flag-2.   begin class-2  /blank/  variables
@@ -175,6 +176,7 @@ subroutine subr31
   data ll24       / 24 /
   data ll78       / 78 /
   data mplot / 1, 1, 1, 1 /
+  !
   blanka(1) = blank
   long1 = nchain
   if (kburro .eq. 1) long1 = 29
@@ -251,7 +253,8 @@ subroutine subr31
   long3 = 1
   do i = 1, 13
      cstxt(i) = blank
-     call packch (blanka(1), sext(1), long1, long2, long3)
+     !     call packch (blanka(1), sext(1), long1, long2, long3)
+     call pack (blanka(1), sext(1), long1, long2, long3)
      long2 = long2 + 6
   end do
   do j = 1, 52
@@ -430,7 +433,8 @@ subroutine subr31
 1122 format ('+Overflow subtitle card discarded.')
   go to 1050
 1126 ialf = ialf + 13
-  call packch (aupper(1), alpha(ialf - 12), mm6, mm1, mm13)
+  !  call packch (aupper(1), alpha(ialf - 12), mm6, mm1, mm13)
+  call pack (aupper(1), alpha(ialf - 12), mm6, mm1, mm13)
   j1 = ialf - 12
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 126) (alpha(j), j = j1, ialf)
 126 format (' At 1126 packed subtitle text.', /, 1x, 13a10)
@@ -442,7 +446,8 @@ subroutine subr31
   write (unit = kunit6, fmt = 1140)
 1140 format ('+Plot subtitle card.')
   go to 1050
-1550 call packch (aupper(1), sext(1), mm6, mm1, mm13)
+  !1550 call packch (aupper(1), sext(1), mm6, mm1, mm13)
+1550 call pack (aupper(1), sext(1), mm6, mm1, mm13)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 155) sext
 155 format (' At 1550 packed case title text.', /, 1x, 13a10)
   do j = 1, 13
@@ -560,9 +565,12 @@ subroutine subr31
   write (unit = lunit(6), fmt = 7407) icp
 7407 format (' Illegal plot-variable type code  "icp" =', i3, ' .   This plot request is cancelled.')
   go to 1000
-7412 call packch (busvec(1), headl(1), mm6, mm1, mm2)
-  call packch (busvec(3), headl(1), mm4, mm13, mm1)
-  call packch (busvec(4), vertl(1), mm6, mm1, mm3)
+  !7412 call packch (busvec(1), headl(1), mm6, mm1, mm2)
+7412 call pack (busvec(1), headl(1), mm6, mm1, mm2)
+  !  call packch (busvec(3), headl(1), mm4, mm13, mm1)
+  call pack (busvec(3), headl(1), mm4, mm13, mm1)
+  !  call packch (busvec(4), vertl(1), mm6, mm1, mm3)
+  call pack (busvec(4), vertl(1), mm6, mm1, mm3)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1196) headl, vertl
 1196 format (' At 1195 packed plot title text.', 3a10, /, ' at 1195 packed vert axis label.', 3a10 )
   if (jslot .ne. 3) go to 4589
@@ -656,7 +664,8 @@ subroutine subr31
   mhoriz = -22
   if (xyplot(1) .gt. 0.0d0) ihs = 8
   j = 4 * (ihs - 1) + 1
-  call packch (textax(j), horzl(1), mm6, mm1, mm4)
+  !  call packch (textax(j), horzl(1), mm6, mm1, mm4)
+  call pack (textax(j), horzl(1), mm6, mm1, mm4)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1341) horzl
 1341 format (' At 1341 packed time axis label.', 3a10)
   if (vmin .ge. 0.0d0) go to 1460
@@ -732,9 +741,12 @@ subroutine subr31
      write (unit = lunit(6), fmt = 64223) ibrnch(j), jbrnch(n6)
   end do
 64223 format (1x, 2i10)
-54224 call packch (date1(1), daytim(1), mm4, mm1, mm2)
-  call packch (blanka(1), daytim(1), mm4, mm9, mm1)
-  call packch (tclock(1), daytim(1), mm4, mm11, mm2)
+  !54224 call packch (date1(1), daytim(1), mm4, mm1, mm2)
+54224 call pack (date1(1), daytim(1), mm4, mm1, mm2)
+  !  call packch (blanka(1), daytim(1), mm4, mm9, mm1)
+  call pack (blanka(1), daytim(1), mm4, mm9, mm1)
+  !  call packch (tclock(1), daytim(1), mm4, mm11, mm2)
+  call pack (tclock(1), daytim(1), mm4, mm11, mm2)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4223) daytim
 4223 format (' At 4223 packed daytim.', 8a10)
   numbvo = nc - numbco
@@ -1007,9 +1019,11 @@ subroutine subr31
   if (icp .ge. 8) jsl = jplt2
   do i = 1, jsl
      if (slot(i) .eq. blank) slot(i) = terra
-     call packch (slot(i), aupper(1), mm6, long1, mm1)
+     !     call packch (slot(i), aupper(1), mm6, long1, mm1)
+     call pack (slot(i), aupper(1), mm6, long1, mm1)
      long1 = long1 + 6
-     call packch (blanka(1), aupper(1), mm4, long1, mm1)
+     !     call packch (blanka(1), aupper(1), mm4, long1, mm1)
+     call pack (blanka(1), aupper(1), mm4, long1, mm1)
      long1 = long1 + 2
   end do
   jchar = long1
@@ -1221,11 +1235,13 @@ subroutine subr31
   go to 5963
 2593 call symbol (half, half, hgt1, daytim(1), zero, ll18)
   call number (fl3, half, hgt1, countp, zero, llmin1)
-  call packch (text14(1), arch10(1), mm6, mm1, mm2)
+  !  call packch (text14(1), arch10(1), mm6, mm1, mm2)
+  call pack (text14(1), arch10(1), mm6, mm1, mm2)
   call symbol (half, fourth, hgt1, arch10(1) , zero, ll10)
   ricp = icp
   call number (fltwo, fourth, hgt1, ricp, zero, llmin1)
-  call packch (text16(1), arch10(1), mm6, mm1, mm2)
+  !  call packch (text16(1), arch10(1), mm6, mm1, mm2)
+  call pack (text16(1), arch10(1), mm6, mm1, mm2)
   call symbol (half, zero, hgt1, arch10(1), zero, ll10)
   call symbol (fltwo, zero, hgt1, aupper(1), zero, jchar)
 5962 vhs1 = d7 - half

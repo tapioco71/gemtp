@@ -79,6 +79,7 @@ subroutine over1
   data ll60  / 60 /
   data ll64  / 64 /
   data ll80  / 80 /
+  !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over1."')
   lstacs(1) = 20
@@ -113,7 +114,7 @@ subroutine over1
      lunit(i) = i
   end do
   speedl = 2.997925d8
-  peaknd(1) = 0.0
+  peaknd(1) = 0.0d0
   kburro = 0
   ! assign default relative precision for 6 EMTP variable types.
   ! 1 --- alphanumeric              2 --- complex

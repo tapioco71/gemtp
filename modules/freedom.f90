@@ -20,6 +20,7 @@ contains
   subroutine frefld (a)
     use blkcom
     use labcom
+    use pckcom
     implicit none
     real(8), intent(out) :: a(:)
     character(8) :: chtacs, texbuf(30)
@@ -87,7 +88,8 @@ contains
        if (texvec1 .eq. blank) go to 5923
        go to 5921
 5922   ll = ll + 1
-       call packa1 (texvec(1), texta6(jj), ll)
+       !       call packa1 (texvec(1), texta6(jj), ll)
+       call pack (texvec(1 :), texta6(jj :), ll)
 5923   if (kolbeg .le. 80) go to 5920
     end do
     go to 9900
@@ -108,7 +110,8 @@ contains
        if (texvec1 .eq. blank) go to 6054
 6052   if (ll .eq. 6) go to 6042
        ll = ll + 1
-       call packa1 (texvec(1), texta6(jj), ll)
+       !       call packa1 (texvec(1), texta6(jj), ll)
+       call pack (texvec(1 :), texta6(jj :), ll)
        kolbeg = kolbeg + 1
     end do
 6054 n9 = kolbeg

@@ -1172,6 +1172,7 @@ subroutine smout
   use blkcom
   use labcom
   use smach
+  use pckcom
   implicit none
   !     This module is used only by  type 59 s.m.  modeling
   character(8) :: digit(10)
@@ -1212,11 +1213,13 @@ subroutine smout
      if (n15 .lt. 0) cycle
      l = 5
      busvec(1) = text1
-     if (n1 .gt. 0) call packa1 (digit(n1), busvec(1), l)
+     !     if (n1 .gt. 0) call packa1 (digit(n1), busvec(1), l)
+     if (n1 .gt. 0) call pack (digit(n1 :), busvec(1 :), l)
      l = l + 1
      n10 = n2
      if (n10 .eq. 0) n10 = 10
-     call packa1 (digit(n10), busvec(1), l)
+     !     call packa1 (digit(n10), busvec(1), l)
+     call pack (digit(n10 :), busvec(1 :), l)
      text2 = busvec(1)
      icnt = 0
      call namea6 (text2, icnt)
@@ -1243,12 +1246,15 @@ subroutine smout
            n6 = n6 - 10 * n5
            busvec(1) = textb(n7)
            if (n5 .gt. 0) go to 4206
-           call packa1 (digit(n6), busvec(1), ll5)
+           !           call packa1 (digit(n6), busvec(1), ll5)
+           call pack (digit(n6 :), busvec(1 :), ll5)
            go to 4215
-4206       call packa1 (digit(n5), busvec(1), ll5)
+           !4206       call packa1 (digit(n5), busvec(1), ll5)
+4206       call pack (digit(n5 :), busvec(1 :), ll5)
            n10 = n6
            if (n10 .eq. 0) n10 = 10
-           call packa1 (digit(n10), busvec(1), ll6)
+           !           call packa1 (digit(n10), busvec(1), ll6)
+           call pack (digit(n10 :), busvec(1 :), ll6)
 4215       jk = jk + 1
            jk1 = jk1 + 3
            ismout(jk1 - 1) = icnt

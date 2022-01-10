@@ -382,7 +382,7 @@ subroutine runtym (d1, d2)
   call cpu_time (now_cputime)
   time = int(1e6 * now_cputime)
   d1 = (time - cputime) / 1e6
-  d2 = 0.0
+  d2 = 0.0d0
   return
 end subroutine runtym
 
@@ -396,7 +396,7 @@ subroutine settym
   real(8) :: time
   !
   call cpu_time (time)
-  if (time .eq. -1.0) then
+  if (time .eq. -1.0d0) then
      write (unit = 6, fmt = *) 'Error, no timer unit available!'
   else
      cputime = 1e6 * time
@@ -535,7 +535,7 @@ subroutine cimage
   data n11        / 0 /
   data n12        / 99999 /
   data n13        / 99999 /
-  n6 = 0
+  !
   if (iprsup .ge. 10) write (unit = lunit(6), fmt = 987) lunit(5), lunit(6), noutpr, numdcd
 987 format (' Begin cimage.  lunit5, lunit6, noutpr, numdcd =', 4i5)
 1000 if (m4plot .eq. 1) call emtspy               ! interactive usage
@@ -546,16 +546,12 @@ subroutine cimage
      if (lunsav(5) .ne. -5) numdcd = numdcd + 1
      read (unit = abuff, fmt = 3012, iostat = ios) text1, text2
 3012 format (2a1)
-     if (ios .ne. 0) then
-        write (unit = lunit(6), fmt = "('Could not read from abuff. cimage line 3012.  Stop.')")
-        call stoptp
-     end if
      if (text1 .ne. charc) go to 3034
      if (text2 .ne. blank) go to 3034
 1036 if (noutpr .ne. 0) go to 1000
      if (n11 .ne. 0) go to 1000
      if (kol132 .eq. 132) write (unit = lunit(6), fmt = 3015) buff10
-3015 format (' Comment card.', 37x, '|', a80)
+3015 format (' Comment card.', 37x, '1', a80)
      if (kol132 .ne. 132) write (unit = lunit(6), fmt = 3016) abuff
 3016 format (' Comment card.', 37x, '1', a20)
   go to 1000
@@ -585,7 +581,7 @@ subroutine cimage
 3041 format (80a1)
   !     Dan Goldsworthy had trouble with $listoff within $include
   !     which was within tacs supplemental variables.  wsm+thl
-  if (to_lower (abuff(1 : 8)) .ne. '$listoff' .and. to_lower (abuff(1 : 8)) .ne. '$liston') go to 3042
+  if ((to_lower (abuff(1 : 8)) .ne. '$listoff') .and. (to_lower (abuff(1 : 8)) .ne. '$liston')) go to 3042
   go to 3246
   !     chcont is 'tacs' if cimage called from within tacs fortran express
 3042 if (chcont .eq. chtacs) go to 3233
@@ -603,9 +599,7 @@ subroutine cimage
 3237 kolbeg = 1
   go to 7014
 3246 kolbeg = 2
-  !     3251 nright = -2
   nright = -2
-  !  call freone (d1)
   call free (d1)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3281) nfrfld, texta6(1), texta6(2)
 3281 format (/, ' nfrfld =', i8, 5x, 'texta6 =', 2a7)
@@ -706,10 +700,8 @@ subroutine cimage
 4200 text1 = textax(2)
 4206 n2 = lunit(7)
 4209 nfrfld = 1
-  !  call freone (d11)
   call free (d11)
-  n1 = int (d11)
-  !     4225 if ( n1 .le. 0 ) n1 = n2
+  n1 = int (d11, kind (n1))
   if (n1 .le. 0) n1 = n2
   if (n8 .eq. 8) go to 4817
   if (noutpr .eq. 0) write (unit = lunit(6), fmt = 4231) n1, text1
@@ -742,9 +734,8 @@ subroutine cimage
      read (unit = n6, fmt = 3000, end = 4436) aupper
      write (unit = n7, fmt = 3000) aupper
   end do
-  !     4436 close ( unit=n7,  dispose='save' )
 4436 close (unit = n7, status = 'keep')
-  !     segmented, 1, vax e/t can skip translation of rewind:
+  !     Segmented, 1, VAX e/t can skip translation of rewind:
   rewind n6
   go to 1000
   !               *****    request no. 5.    "$spy"         *****  *****
@@ -757,24 +748,21 @@ subroutine cimage
   write (unit = filen(1 : 25), fmt = 4523)
 4523 format (25x)
   do k = kolbeg, 80
-     if (texcol(k) .eq. blank) go to 4532
+     if (texcol(k) .eq. blank) cycle
      if (texcol(k) .eq. csepar) go to 4536
      if (texcol(k) .eq. '(') go to 4536
      n4 = n4 + 1
      !     encode (1, 3041, filen(n4))  texcol(k)
      write (unit = filen(n4 :), fmt = 3041) texcol(k)
-4532 continue
   end do
   k = 80
 4536 kolbeg = k + 1
   nfrfld = 1
-  !  call freone (d11)
   call free (d11)
-  n7 = int (d11)
+  n7 = int (d11, kind (n7))
   if (n8 .ne. 4) go to 4557
-  !  call freone (d11)
   call free (d11)
-  n6 = int (d11)
+  n6 = int (d11, kind (n6))
 4557 if (n6 .eq. 0) n6 = lunit(7)
   if (n8 .eq. 5) n7 = munit5                                ! $spy uses this channel
   if (n7 .gt. 0) go to 4570
@@ -825,7 +813,6 @@ subroutine cimage
   !               *****    request no. 10.   "new epsiln"   *****  *****
 5000 nfrfld = 1
   d1 = epsiln
-  !  call freone (epsiln)
   call free (epsiln)
   if (noutpr .eq. 0) write (unit = lunit(6), fmt = 5017) d1, epsiln
 5017 format ('+Epsiln change.  old, new =', 2e11.2)
@@ -833,9 +820,7 @@ subroutine cimage
   !               *****    request no. 11.   "delete"       *****  *****
 5100 text1 = 'delete'
   go to 4506
-  !     5106 open ( unit=n7, type='old', name=filen )
 5106 open (unit = n7, status = 'old', file = filen)
-  !     close( unit=n7, dispose='delete' )
   close (unit = n7, status = 'delete')
   go to 1000
   !               *****    request no. 12.   "monitor"      *****  *****
@@ -859,9 +844,8 @@ subroutine cimage
   go to 1000
   !               *****    request no. 15.   "vintage"      *****  *****
 5500 nfrfld = 1
-  !  call freone (d11)
   call free (d11)
-  moldat = int (d11)
+  moldat = int (d11, kind (moldat))
   if (noutpr .eq. 0) write (unit = lunit(6), fmt = 5518) moldat
 5518 format ('+New moldat =', i4, 5x, '(data vintage)')
   go to 1000
@@ -870,7 +854,6 @@ subroutine cimage
   n2 = lunit(2)
   go to 4506
 5608 close (unit = n7)
-  !     open (unit=n7, type='old', form='unformatted', name=filen )
   open (unit = n7, status = 'old', form = 'unformatted', file = filen)
   go to 1000
   !               *****    request no. 17.   "stop"         *****  *****
@@ -879,9 +862,8 @@ subroutine cimage
   call stoptp                                               ! installation-dependent program stop card
   !               *****    request no. 18.   "watch5"       *****  *****
 5800 nfrfld = 1
-  !  call freone (d11)
   call free (d11)
-  n12 = int (d11)
+  n12 = int (d11, kind (n12))
   n13 = n12
   if (noutpr .eq. 0) write (unit = lunit(6), fmt = 5812) n12
 5812 format ('+Paint input data on screen.', i8)
@@ -895,14 +877,12 @@ subroutine cimage
 6000 call stoptp                                            ! installation-dependent program stop card
   !               *****    request no. 21.   "units"        *****  *****
 6100 nfrfld = 1
-  !  call frefld (xopt)
   call free (xopt)
-  !  call frefld (copt)
   call free (copt)
   if (noutpr .eq. 0) write (unit = lunit(6), fmt = 6114) xopt, copt
 6114 format ('+New  xopt, copt =', 2e14.4)
-  xunits = 1000.
-  if (xopt .gt. 0.0) xunits = twopi * xopt
+  xunits = 1000.0d0
+  if (xopt .gt. 0.0d0) xunits = twopi * xopt
   go to 1000
   !     additional key-word code goes below.
 4000 write (unit = lunit(6), fmt = 4006)
@@ -910,6 +890,7 @@ subroutine cimage
   call stoptp   ! installation-dependent program stop card
   !     unique exit of module, possibly after echoing card image:
 7014 if (inecho .eq. 0) return
+
   entry cecho
   !     "statistics" over12 echos lunit5 card images of base case
   !     (read in over13, over15, maybe subts3, subr31) so each
@@ -918,6 +899,7 @@ subroutine cimage
   if (nchain .le. 15) ipntv(11) = ipntv(11) + 1
   write (unit = inecho, fmt = 3000) buff10
   return
+
   entry ibrinc
   ibr = ibr + 1
   xoptbr(ibr) = xopt
@@ -1135,87 +1117,11 @@ subroutine multmx (a, b, c, temp, n)
      end do
      m = n + 1
      call mult (a, temp(1 :), temp(m :), n, ll0)
-     !     call mover (temp(m), c(ii + 1), j)
      call move (temp(m :), c(ii + 1 :), j)
      ii = ii + j
   end do
   return
 end subroutine multmx
-
-!
-! subroutine packa1.
-!
-
-subroutine packa1 (from, to, kk)
-  implicit none
-  !     System-dependent EMTP module  'packa1'  for  VAX-11/780.
-  !     Argument  'from'  contains  a1  information which is to be stored
-  !     in character position  kk  of argument  'to' .
-  !     For all EMTP usage,  1st 2 arguments must be vectors.
-  !     logical*1 from(1), to(6)
-  integer(4), intent(in) :: kk
-  character(1), intent(in) :: from
-  character(*), intent(out) :: to
-  !
-  to(kk : kk) = from(1 : 1)
-  return
-end subroutine packa1
-
-!
-! subroutine packch.
-!
-
-subroutine packch (from, to, k4or6, nchbeg, nword)
-  implicit none
-  !
-  !     This module performs the system-dependent function of packing bcd
-  !     characters from  a4  or  a6  words together so as to form a
-  !     contiguous string of characters without extra blank fill.   For
-  !     example, cdc has a 60-bit word which stores 10 bcd characters (6
-  !     bits to a character).   With plot alphanumeric text read under  a6
-  !     format control, the right-most four characters of such words will
-  !     be blank-filled by the system.   IBM's eight characters in an
-  !     eight-byte word pose an analogous problem.   Since the  calcomp
-  !     plotting subroutine calls which appear in
-  !     the calling module require contiguous character strings, output
-  !     text must be compressed so as to remove the word-length-dependent
-  !     blank fill.   The present subroutine is called by the plotting
-  !     code to perform this function.   Meaning of the subroutine
-  !     arguments is as follows ......
-  !      nword ----- the number of words which are to have their bcd
-  !                  characters extracted, and packed into  a character
-  !                  string.   this is a positive integer.
-  !      from(1)  ----- the first of  'nword'  words  whose bcd contents
-  !                     are to be packed.
-  !      k4or6  ----- equal to either  4  or  6 ,  whichever is the number
-  !                   of characters of bcd information which is stored in
-  !                   the words   (from(i), i=1, nword) .
-  !      to(1)  ----- the active bcd characters of   (from(i), i=1, nword)
-  !                   are to be packed as a contiguous string of
-  !                   characters beginning with character position
-  !                   'nchbeg'  of word  to(1) .
-  !      nchbeg  -----  the character position of word  to(1)  where the
-  !                     contiguous string of bcd characters is to begin.
-  !                     normally  'nchbeg'  is between  1  and  10 ,
-  !                     although larger positive values are allowed.
-  !                     for example, a value of  27  means that the cdc
-  !                     character insertion begins in position  7  of
-  !                     word  to(3) .
-  logical(1), intent(in) :: from(*)
-  logical(1), intent(out) :: to(*)
-  integer(4), intent(in) :: k4or6, nchbeg, nword
-  integer(4) :: i_char, iword, j_char, k_char
-  !
-  i_char = nchbeg
-  do iword = 1, nword
-     do k_char = 1, k4or6
-        j_char = (iword - 1) * 8 + k_char
-        to(i_char) = from(j_char)
-        i_char = i_char + 1
-     end do
-  end do
-  return
-end subroutine packch
 
 !
 ! subroutine mult.
