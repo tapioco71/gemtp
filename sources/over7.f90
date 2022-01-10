@@ -96,7 +96,7 @@ subroutine over7
   if (ncurr .lt. nelim)   go to 229
   jsub = ncn + 1
   call subscr (jsub, lbus, 220, 1)
-  i = int (ndex(ncn + 1))
+  i = int (ndex(ncn + 1), kind (i))
   index(nelim) = ioffd + 1
   call subscr (nelim, lbus, 220, 2)
   if (iprsup .le. 25) go to 222
@@ -177,7 +177,7 @@ subroutine over7
   if (norder(1) .eq. 1) go to 14
   if (noutpr .eq. 0) write (unit = lunit(6), fmt = 47881) (norder(i), i = 1, ntot)
   if (iprsup .gt. 0) write (unit = lunit(6), fmt = 6045)
-6045 format (' Note ---- The preceding printout shows that ground was not renumbered first in the transient-network renumbering.', /, 11x, 'We will swap the new numbers between ground and whatever node was renumbered first, in order to get a legitimate', /, 11x, 'numbering for the rest of the emtp calculations.')
+6045 format (' Note ---- The preceding printout shows that ground was not renumbered first in the transient-network renumbering.', /, 11x, 'We will swap the new numbers between ground and whatever node was renumbered first, in order to get a legitimate', /, 11x, 'numbering for the rest of the EMTP calculations.')
   do i = 1, ntot
      if (norder(i) .eq. 1) go to 32
   end do

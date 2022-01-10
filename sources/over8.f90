@@ -2459,40 +2459,30 @@ subroutine over8
 101 format (' Top of "over8".   loopss(1) iv, it, tmax =', 3i8, e15.5)
   isecti = 400
   n7 = 1
-  if (tmax .le. 0.0 .and. nchain .gt. lastov) go to 40014
+  if ((tmax .le. 0.0d0) .and. (nchain .gt. lastov)) go to 40014
   n7 = 2
   rewind lunit(2)
   call tapsav (integx, lunit(2), iv, n7)
   n12 = 0
-  ! call vecrsv (volt(1 :), n12, n12)
   call vecsav (volt, n12, n12)
   n12 = ktrlsw(7)
-  !  call vecrsv (c(1 :), n12, n7)
   call vecsav (c, n12, n7)
-  !  call vecrsv (tr(1 : ), n12, n7)
   call vecsav (tr, n12, n7)
-  !  call vecrsv (tx(1 :), n12, n7)
   call vecsav (tx, n12, n7)
-  !  call vecrsv (r(1 :), n12, n7)
   call vecsav (r, n12, n7)
   n12 = ktrlsw(8)
-  !  call vecisv (nr(1 :), n12, n7)
   call vecsav (nr, n12, n7)
-  !  call vecisv (length(1 :), n12, n7)
   call vecsav (length, n12, n7)
-  if (numum .eq. 0 .or. lastov .lt. nchain) go to 6123
+  if ((numum .eq. 0) .or. (lastov .lt. nchain)) go to 6123
   if (loopss(1) .eq. 7766) go to 6121
-  !  call vecisv(kssfrq(1 :), ntot, n7)
-  call vecsav(kssfrq, ntot, n7)
-  !  call vecisv(kpsour(1 :), ntot, n7)
-  call vecsav(kpsour, ntot, n7)
+  call vecsav (kssfrq, ntot, n7)
+  call vecsav (kpsour, ntot, n7)
   go to 6123
 6121 m7 = 0
   m8 = 8
-  !  call vecrsv (volt, m8, m7)
   call vecsav (volt, m8, m7)
   !6123 if (ktrlsw(5) .eq. 1 .and. lastov .gt. nchain) call vecrsv (cnvhst, lhist, n7)
-6123 if (ktrlsw(5) .eq. 1 .and. lastov .gt. nchain) call vecsav (cnvhst, lhist, n7)
+6123 if ((ktrlsw(5) .eq. 1) .and. (lastov .gt. nchain)) call vecsav (cnvhst, lhist, n7)
   if (loopss(1) .ne. 7766) go to 3489
   !     back from "over11" after final phasor solution, so exit:
   lastov = nchain
@@ -2581,20 +2571,17 @@ subroutine over8
      end do
      j30 = j30 + 30
   end do
-40014 if (numum .eq. 0 .or. nchain .lt. lastov) go to 6666
+40014 if ((numum .eq. 0) .or. (nchain .lt. lastov)) go to 6666
   call frqchk
   n20 = 0
-  if (istart .eq. 0 .and. loopss(10) .eq. 0) n20 = 1
-  if (n20 .eq. 1 .and. initum .eq. 0) n20 = 2
-  if (numum .gt. 0 .and. n20 .eq. 1) kill = 0
+  if ((istart .eq. 0) .and. (loopss(10) .eq. 0)) n20 = 1
+  if ((n20 .eq. 1) .and. (initum .eq. 0)) n20 = 2
+  if ((numum .gt. 0) .and. (n20 .eq. 1)) kill = 0
   if (kill .gt. 0) go to 9200
   m7 = 1
-  !  call vecisv (kssfrq(1 :), ntot, m7)
   call vecsav (kssfrq, ntot, m7)
-  !  call vecisv (kpsour(1 :), ntot, m7)
   call vecsav (kpsour, ntot, m7)
 6666 if (nchain .gt. lastov) go to 2236
-  !  call vecrsv (tclose, kswtch, n7)
   call vecsav (tclose, kswtch, n7)
   n12 = -1
   if (ktrlsw(5) .eq. 1) n12 = -2
@@ -2632,7 +2619,7 @@ subroutine over8
   lastov = nchain
   nchain = 1    ! program generated 2nd & 3rd lmfs data
   go to 9600
-2240 begmax(1) = 0.0
+2240 begmax(1) = 0.0d0
   lastov = nchain
   nchain = 20
   call runtym(d1,d2)
@@ -2686,13 +2673,13 @@ subroutine over8
   im1 = imodel(k)
   if (nsolve .lt. 1) go to 40002
   if (k .ne. 1) go to 40002
-  if (kexact .eq. 88333 .and. fminfs .eq. fminsv .and.  nsolve .eq. 1) rewind lunit(9)
+  if ((kexact .eq. 88333) .and. (fminfs .eq. fminsv) .and.  (nsolve .eq. 1)) rewind lunit(9)
   do i = 1, it2
      read (unit = lunit(9)) dum, ycharm, ychara, alpha, beta
      if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) 'f,ycharm,ychara,alpha,beta=', dum,ycharm,ychara,alpha,beta
      ypos = expz (alpha)
      yneg = 1.0d0 / ypos
-     cosha = 0.5d0 * ( ypos + yneg)
+     cosha = 0.5d0 * (ypos + yneg)
      sinha = cosha - yneg
      sinhgr = sinha * cosz (beta)
      sinhgi = cosha * sinz (beta)
@@ -2714,7 +2701,7 @@ subroutine over8
 40002 length(k) = it2
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' over8.  k, imodel(k), it2, omega, h3, d2 =', k, imodel(k), it2, omega, h3, d2
   !      if ( kexact .eq. 88333  .and. nsolve .eq. 0)  kbrnum = k
-  if (kodsem(k) .eq. 0 .or. im1 .eq. -2) go to 5136
+  if ((kodsem(k) .eq. 0) .or. (im1 .eq. -2)) go to 5136
   if (im1 .eq. -4) go to 1536
   it2 = iabs (kodebr(k))
   !  Formation of phase symmetric pi matrices for components reperesented
@@ -2730,7 +2717,7 @@ subroutine over8
   !  s(q) is the mode to phase voltage(current) transformation matrix.
   !  note.  transpose(s) = q**(-1)
   if (iprsup .lt. 6) go to 8009
-  n1 = int (absz (cik(k)) - 1.0d0)
+  n1 = int (absz (cik(k)) - 1.0d0, kind (n1))
   n5 = it2 * it2
   n3 = n1 + n5
   n4 = n3 + n5
@@ -2762,7 +2749,6 @@ subroutine over8
      n3 = int(ci(ii))
      d1 = 0.0d0
      d2 = 0.0d0
-     !     if (n3) 8300, 8400, 8200
      if (n3 .lt. 0) then
         go to 8300
      else if (n3 .eq. 0) then
@@ -2773,7 +2759,6 @@ subroutine over8
 8200 if (iprsup .ge. 9) write (unit = lunit(6), fmt = 8201) n1, n2, n3, sconst(n2), sconst(n2+1), sconst(n2+2), d1, d2
 8201 format (' n1, n2, n3, sconst(n2 ... n2+2), d1, d2 = ', 3i10, /, 5(1x, e15.8))
      if (n3 .le. 0) go to 8250
-     !     if (sconst(n2)) 8210, 8220, 8230
      if (sconst(n2) .lt. 0) then
         go to 8210
      else if (sconst(n2) .eq. 0) then
@@ -2801,20 +2786,20 @@ subroutine over8
      d8 = d5 * d8 + d6 * d7
      d7 = d9
      d6 = d6 + omega
-     d9 = expz( - d5 * cnvhst(n1 - 1))
+     d9 = expz(-d5 * cnvhst(n1 - 1))
      d10 = - d9 * sinz(d6 * cnvhst(n1 - 1))
      d9 = d9 * cosz(d6 * cnvhst(n1 - 1))
      d13 = d5 * d5 + d6 * d6
      d11 = (d9 * d5 + d10 * d6) / d13
-     d12 = (- d9 * d6 + d10 * d5) / d13
+     d12 = (-d9 * d6 + d10 * d5) / d13
      d1 = d1 + d7 * d11 - d8 * d12
      d2 = d2 + d7 * d12 + d8 * d11
      go to 8200
 8250 d4 = d1 * d1 + d2 * d2
      d3 = d1 / d4
-     d4 = - d2 / d4
+     d4 = -d2 / d4
      go to 8400
-8300 d5 = 0.0
+8300 d5 = 0.0d0
 8310 if (iprsup .ge. 9) write (unit = lunit(6), fmt = 8311) n2, n3, sconst(n2), sconst(n2+1), d5, d6, d1, d2
 8311 format ('  n2, n3, sconst(n2 ... n2+1), d5, d6, d1, d2 = ', 2i10, /, 6(1x, e15.8))
      if (n3 .ge. 0) go to 8320
@@ -2832,10 +2817,9 @@ subroutine over8
      d4 = d1 * d1 + d2 * d2
      d3 = d2 / d4
      d4 = - d1 / d4
-8400 n3 = int(ck(ii))
+8400 n3 = int(ck(ii), kind (n3))
      d1 = 0.0d0
      d2 = 0.0d0
-     !     if (n3) 8500, 8700, 8420
      if (n3 .lt. 0) then
         go to 8500
      else if (n3 .eq. 0) then
@@ -2843,9 +2827,8 @@ subroutine over8
      else
         go to 8420
      end if
-8420 if (iprsup .ge. 9) write (unit = lunit(6), fmt = 8201) n1, n2, n3, sconst(n2), sconst(n2+1), sconst(n2+2), d1, d2
+8420 if (iprsup .ge. 9) write (unit = lunit(6), fmt = 8201) n1, n2, n3, sconst(n2), sconst(n2 + 1), sconst(n2 + 2), d1, d2
      if (n3 .le. 0) go to 8470
-     !     if (sconst(n2)) 8430, 8440, 8450
      if (sconst(n2) .lt. 0) then
         go to 8430
      else if (sconst(n2) .eq. 0) then
@@ -2874,7 +2857,7 @@ subroutine over8
      d6 = d6 + omega
      d9 = d5 * d5 + d6 * d6
      d1 = d1 + (d11 * d5 + d12 * d6) / d9
-     d2 = d2 + (- d11 * d6 + d12 * d5) / d9
+     d2 = d2 + (-d11 * d6 + d12 * d5) / d9
      go to 8420
 8470 n3 = iabs (kodsem(ii))
      d1 = d1 + sconst(n3)
@@ -2899,7 +2882,7 @@ subroutine over8
      d2 = sconst(n3) - (d2 - d5 * sinz(d6)) / omega
      d10 = d1 * d1 + d2 * d2
      d9 = d2 / d10
-     d10 = - d1 / d10
+     d10 = -d1 / d10
 8600 cnvhst(n1 + 0) = d9 * d9 - d10 * d10
      cnvhst(n1 + 1) = 2.0d0 * d9 * d10
      cnvhst(n1 + 2) = unity
@@ -2907,7 +2890,7 @@ subroutine over8
      cnvhst(n1 + 4) = omega
      go to 8070
 8700 continue
-     if (absz(cnvhst(n1 + 4) - omega) .lt. 0.0001d0) go to 8020
+     if (absz (cnvhst(n1 + 4) - omega) .lt. 0.0001d0) go to 8020
      n2 = -kbus(ii)
      n3 = iabs (mbus(ii))
      write (unit = lunit(6), fmt = 8010) bus(n2), bus(n3), i, cnvhst(n1 + 4), omega
@@ -2927,7 +2910,7 @@ subroutine over8
      d6 = onehaf * d4 / d5
      go to 8050
 8040 d6 = sqrtz ((-d3 + d5) * onehaf)
-     if (d4 .ge. 0.0) go to 18050
+     if (d4 .ge. 0.0d0) go to 18050
      dtemp = -d6
      d5 = onehaf * d4 / dtemp
      go to 8050
@@ -2953,17 +2936,17 @@ subroutine over8
      volti(i) = d9 * d6 + d10 * d5
      d3 = onehaf * (d3 + d3 / d11) - unity
      d4 = onehaf * (d4 - d4 / d11)
-     d11 = volt(i) ** 2  + volti(i) ** 2
-     voltk(i) = (volt(i) * d3  +  volti(i) * d4) / d11
+     d11 = volt(i) ** 2 + volti(i) ** 2
+     voltk(i) = (volt(i) * d3 + volti(i) * d4) / d11
      ndx1 = lsiz26 + i
      vim(ndx1) = (volt(i) * d4  -  volti(i) * d3) / d11
 8080 if (iprsup .le. 6) cycle
-     n2 = - kbus(ii)
+     n2 = -kbus(ii)
      n3 = iabs(mbus(ii))
      write (unit = lunit(6), fmt = 8085) bus(n2), bus(n3), ii, n1, cnvhst(n1 + 0), cnvhst(n1 + 1), cnvhst(n1 + 2), cnvhst(n1 + 3), cnvhst(n1 + 4), d3, d4, d5, d6, d7, d8, d9, d10, volt(i), volti(i), voltk(i), vim(ndx1)
 8085 format (/, 5x, a6, ' to ', a6, 5x, 'br. index = ', i3, 5x, 'n1 = ', i3, /, 1x, 'cnvhst(n1) ... cnvhst(n1+4) =  ', 5(1x, e15.7), /, 1x, 'd3, d4, d5, d6, d7, d8 =  ', 6(1x, e15.7), /, 1x, 'd9, d10, volt, volti, voltk, vim =   ', 6(1x, e15.7))
   end do
-  n1 = int (absz (cik(k)) - 1.0d0)
+  n1 = int (absz (cik(k)) - 1.0d0, kind (n1))
   n2 = n1 + it2 * it2
   n6 = 4 * it2
   do i = 1, it2
@@ -3045,12 +3028,12 @@ subroutine over8
         if (jgl .lt. 2) gjl = 56789.0d0
         if (jgl .ge. 2) gjl = 98765.0d0
         if (jgl .eq. 2) jgl = 0
-        if (absz (sconst(n4)) .ge. 0.1e15 .and. gjl .eq. 98765.0d0) cycle
+        if ((absz (sconst(n4)) .ge. 0.1e15) .and. (gjl .eq. 98765.0d0)) cycle
         d1 = sconst(n4)
-        dd1 = sconst(n4+1)
+        dd1 = sconst(n4 + 1)
         n5 = npz + n4
         dd2 = sconst(n5)
-        dd3 = sconst(n5+1)
+        dd3 = sconst(n5 + 1)
         dd3 = dd3 + omega
         d3 = dd2 ** 2 + dd3 ** 2
         d1 = d1 * dd2 + dd1 * dd3
@@ -3255,7 +3238,7 @@ subroutine over8
      n12 = iabs (mbus(j))
      j1 = n8 + 1
      j2 = n8 + 4
-     if (iprsup  .ge. 2) write (unit = lunit(6), fmt = 10007)  bus(n11), bus(n12), (cnvhst(l), l = j1, j2), d4
+     if (iprsup .ge. 2) write (unit = lunit(6), fmt = 10007)  bus(n11), bus(n12), (cnvhst(l), l = j1, j2), d4
 10007 format (' ', a6, 5x, a6, 5x, 2f15.10, 5x, 2f15.10, 5x, f15.10)
      d9 = cnvhst(n8 + 3) ** 2 + cnvhst(n8 + 4) ** 2
      csihre = cnvhst(n8 + 3) * (1 / d9 - 1.0d0) * onehaf
@@ -3527,7 +3510,7 @@ subroutine over8
      length(ibr) = 1
      kbus(ibr) = nonlk(i)
      mbus(ibr) = iabs (nonlm(i))
-     if (nltype(i) .ne. -97 .and. nltype(i) .ne. -99) go to 65464
+     if ((nltype(i) .ne. -97) .and. (nltype(i) .ne. -99)) go to 65464
      l = nonlad(i)
      tr(itadd) = 1.0d0 / gslope(l)
      tx(itadd) = 0.0d0
@@ -3541,7 +3524,7 @@ subroutine over8
   nchain = nchain + 1
   lstat(23) = itadd - 1
   lstat(22) = ibr
-  if (fmaxfs .gt. 0.0d0 .and. knt .gt. 1) go to 9600
+  if ((fmaxfs .gt. 0.0d0) .and. (knt .gt. 1)) go to 9600
   go to 8900
 9500 if (kconst .lt. lexct) go to 1517
   !     temporary error stop --- unable to add another source.
@@ -3550,7 +3533,7 @@ subroutine over8
   call stoptp
 1517 n13 = kconst + 1
   sfreq(n13) = 1.0d0
-  call copyi (n13, kssfrq(1 :), ntot)
+  call copy (n13, kssfrq(1 :), ntot)
   if (tmax .gt. -delta2) go to 1534
   kill = 74
   lstat(19) = 1517
