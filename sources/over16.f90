@@ -454,12 +454,12 @@ subroutine subts1
      j = 0
      if (nltype(i) .ne. -96) go to 7642
      n6 = nonlad(i)
-     n7 = int (cchar(n6))
+     n7 = int (cchar(n6), kind (n7))
      n9 = ilast(i)
      n10 = n9 + n7 - 1
      n12 = n6 + 2
      vnonl(i) = vnonl(i) + vsl * delta2
-     cchar(n6 + 3) = int (vsl * gslope(n6 + 1) + gslope(n6))
+     cchar(n6 + 3) = int (vsl * gslope(n6 + 1) + gslope(n6), kind (cchar(n6 + 3)))
      gus2 = cchar(n6 + 3)
      if ((cchar(n6 + 4) .lt. 0) .and. (vsl .gt. flzero)) cchar(n6 + 4) = 0
      if (iprsup .ge. 2) write (unit = lunit(6), fmt = 4317) i, n6, n7, n9, vnonl(i), gus2, vsl
@@ -488,7 +488,7 @@ subroutine subts1
         go to 1125
      end do
      cchar(n12) = n10 + 1
-1125 n13 = int (cchar(n12)) + n7 + 1
+1125 n13 = int (cchar(n12), kind (n13)) + n7 + 1
      d9 = vchar(n13) * cchar(n6 + 3) + cchar(n13)
      d10 = d8 - d9
      !     Compare available distance and normal operation distance
@@ -520,7 +520,7 @@ subroutine subts1
         go to 1141
      end do
      cchar(n12) = n10 + 1
-1141 n13 = int (cchar(n12)) + n7 + 1
+1141 n13 = int (cchar(n12), kind (n13)) + n7 + 1
      d9 = vchar(n13) * cchar(n6 + 3) - cchar(n13)
      d10 = d9 - d8
      !     compare available distance and normal operation distance
@@ -566,7 +566,7 @@ subroutine subts1
         go to 1710
      end do
      cchar(n12) = n10 + 1
-1710 n13 = int (cchar(n12)) + n7 + 1
+1710 n13 = int (cchar(n12), kind (n13)) + n7 + 1
      d9 = vchar(n13) * gslope(n6 + 4) + cchar(n13)
      d6 = vchar(n6 + 4) - d9
 1575 do n11 = n9, n10
@@ -575,7 +575,7 @@ subroutine subts1
         go to 1760
      end do
      cchar(n12) = n10 + 1
-1760 n13 = int (cchar(n12)) + n7 + 1
+1760 n13 = int (cchar(n12), kind (n13)) + n7 + 1
      d10 = vchar(n13) * vchar(n6 + 3) + cchar(n13)
      d11 = vchar(n6 + 2) - d10
      do n11 = n9, n10

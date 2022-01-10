@@ -82,7 +82,7 @@ subroutine over6
   if (n3 .gt. 0) length(ibr) = -1
   n7 = -nltype(i)
   if (n7 .ne. 98) n7 = 99
-  if (noutpr .eq. 0 .and. n3 .gt. 0) write (unit = lunit(6), fmt = 54164) n7, i, bus(k), bus(m), bus(j1), bus(j2)
+  if ((noutpr .eq. 0) .and. (n3 .gt. 0)) write (unit = lunit(6), fmt = 54164) n7, i, bus(k), bus(m), bus(j1), bus(j2)
 54164 format (' High res. added by EMTP across type-', i2, ' elem.', i3,  1x,  2x, '1 0', 4a6)
   if (n3 .eq. 0 .and. noutpr .eq. 0) write (unit = lunit(6), fmt = 54165) n7, i, bus(k), bus(m), tr(it)
 54165 format (' High res. added by EMTP across type-', i2, ' elem.', i3, 1x, 2x, '1 0', 2a6, 12x, e6.1)
@@ -109,19 +109,12 @@ subroutine over6
   rewind lunit(2)
   call tapsav (integx, lunit(2), iv, n11)
   n17 = 0
-  !  call vecrsv (volt, n17, n17)
   call vecsav (volt, n17, n17)
-  !  call vecrsv (c, it, n11)
   call vecsav (c, it, n11)
-  !  call vecrsv (tr, it, n11)
   call vecsav (tr, it, n11)
-  !  call vecrsv (tx, it, n11)
   call vecsav (tx, it, n11)
-  !  call vecrsv (r, it, n11)
   call vecsav (r, it, n11)
-  !  call vecisv (nr, ibr, n11)
   call vecsav (nr, ibr, n11)
-  !  call vecisv (length, ibr, n11)
   call vecsav (length, ibr, n11)
   ktrlsw(7) = it
   ktrlsw(8) = ibr

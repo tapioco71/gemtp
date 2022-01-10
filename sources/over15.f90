@@ -103,6 +103,7 @@ contains
     !                 and hence single-phase comp as usual.
     !     nshare = 10 : compensation of common mech netwrk to be
     !                   conducted with the lowest numbered um.
+    !
     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module uminit."')
     istart = 0
@@ -143,8 +144,8 @@ contains
 6666   n8 = n8 + 1
        n15 = n15 + 5
        nsubkm(n15) = n15 + 5
-6767   nsubkm(n15+1) = nodvo1(j)
-       nsubkm(n15+2) = nodvo2(j)
+6767   nsubkm(n15 + 1) = nodvo1(j)
+       nsubkm(n15 + 2) = nodvo2(j)
        ! code section repeatedly called for each compensated node-pair:
 6868   nsubkm(n15 + 3) = -k
        nsubkm(n15 + 4) = mars
