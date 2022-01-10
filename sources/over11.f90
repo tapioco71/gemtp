@@ -518,18 +518,14 @@ subroutine over11
   ib = ib + 1
   go to 6095
 6200 n1 = 2
-  !  call vecrsv (diag(1 :), ntot, n1)
   call vecsav (diag, ntot, n1)
-  !  call vecrsv (diab(1 :), ntot, n1)
   call vecsav (diab, ntot, n1)
-  !  call vecrsv (gnd(iofgnd + 1 :), ioffd, n1)
   call vecsav (gnd(iofgnd + 1 :), ioffd, n1)
-  !  call vecrsv (bnd(iofbnd + 1 :), ioffd, n1)
   call vecsav (bnd(iofbnd + 1 :), ioffd, n1)
   if (ncurr .le. 0) ncurr = 1
   call move0 (e(1 :), ntot)
   call move0 (f(1 :), ntot)
-  do i=1, ntot
+  do i = 1, ntot
      vr = solr(i)
      vi = soli(i)
      jj = index(i)
@@ -750,7 +746,7 @@ subroutine over11
 5504 format (' (bus(i), i=1, ntot)  in  over11.', /, (1x, 10a8))
   if (tmax .gt. 0.0d0) go to 9700
   if (fmaxfs .eq. 0.0d0) go to 7027
-  if (knt .eq. 1 .and. nsolve .eq. 0) go to 7027
+  if ((knt .eq. 1) .and. (nsolve .eq. 0)) go to 7027
   go to 8102
 7027 numnvo = 0
   !     Read input card using cimage.
@@ -789,7 +785,7 @@ subroutine over11
   call stoptp
 7050 write (unit = lunit(6), fmt = 54166)
 54166 format ('+Request for output of all node voltages.')
-  if (ntot1 .gt. lsiz27 .or. ntot1 .gt. lsiz12) go to 8080
+  if ((ntot1 .gt. lsiz27) .or. (ntot1 .gt. lsiz12)) go to 8080
   do i = 2, ntot
      jch2(i - 1) = i
   end do
@@ -1065,7 +1061,7 @@ subroutine over11
   end do
   go to 9900
 7481 icheck = 0
-  if (kexact .eq. 88333 .and. nsolve .eq. 1) go to 3080
+  if ((kexact .eq. 88333) .and. (nsolve .eq. 1)) go to 3080
   !     read input card using cimage
 8121 call cimage
   read (unit = abuff, fmt = 8134) aupper
@@ -1143,6 +1139,7 @@ subroutine smint
   real(8) :: xl
   !
   data  text1 / '  1st ' /
+  !
   karc = 0
   lmset = 0
   n10 = 0

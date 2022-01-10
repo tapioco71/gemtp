@@ -273,7 +273,7 @@ subroutine over12
   if (jflsos .gt. 0) write (unit = lunit(9)) pu
   inecho = lunit(12)
   rewind lunit(12)
-13010 if (kbase .ge. 2 .and. kbase .ne. intinf) go to 156
+13010 if ((kbase .ge. 2) .and. (kbase .ne. intinf)) go to 156
   if (ktab .eq. 0) go to 156
   indstp = 1
   write (unit = *, fmt = *) ' over12 ready for TACS.  newtac =', newtac
@@ -309,7 +309,7 @@ subroutine over12
 7263 nenerg = 0
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4624) knt, kbase, kloaep, mtape
   if (iprsup .ge. 4) write (unit = lunit(6), fmt = 76) kswtch, kloaep, (kdepsw(ip), ip = 1, ll6)
-76 format (/, ' at 76', 2i10, /, 1x, 6i5)
+76 format (/, ' At 76', 2i10, /, 1x, 6i5)
   do j = 1, kswtch
      if (absz (akey(j)) .ne. 44444.0d0) cycle
      n = kdepsw(j)
@@ -346,9 +346,9 @@ subroutine over12
   end do
   write (unit = lunit(3)) kloaep
   !  ncompt = 2 * (sigmax / aincr + flzero)
-  ncompt = int (2 * (sigmax / aincr + flzero))
+  ncompt = int (2 * (sigmax / aincr + flzero), kind (ncompt))
   !  nhalf = ncompt / 2
-  nhalf = int (ncompt / 2)
+  nhalf = int (ncompt / 2, kind (nhalf))
   n3 = 0
   do i = 1, kswtch
      if (absz (akey(i)) .ne. 44444.0d0) cycle
@@ -359,7 +359,7 @@ subroutine over12
   ioftab = n4 * 3 * ncompt
   mxpair = n3 * (n3 - 1) / 2
   !  n2 = (3 + mxpair) * ncompt
-  n2 = int ((3 + mxpair) * ncompt)
+  n2 = int ((3 + mxpair) * ncompt, kind (n2))
   if (kburro .eq. 1) go to 4093
   n1 = location (kswtyp(1)) - location (irandn(1))
   call move0 (irandn(1 :), n1)
@@ -385,18 +385,16 @@ subroutine over12
   lstat(16) = n3
   go to 9200
 4100 do l = 1, ncompt
-     if (l .gt. nhalf)   go to 4110
-     frandn(l) = - aincr * (nhalf - l)
+     if (l .gt. nhalf) go to 4110
+     frandn(l) = -aincr * (nhalf - l)
      cycle
 4110 frandn(l) = aincr * (l - nhalf)
   end do
-409 if (nenerg .lt. 0)   go to 188
+409 if (nenerg .lt. 0) go to 188
   call time44 (atim)
   call runtym (d1, d2)
-  !  seed = seedy(atim(1)) + 1000. * (d1 + d2)
-  seed = int (seedy (atim(1 :)) + 1000.0d0 * (d1 + d2))
-  !  seed = 2.0 * seed
-  seed = int (2.0d0 * seed, kind (seed))
+  seed = seedy (atim(1 :)) + 1000.0d0 * (d1 + d2)
+  seed = 2.0d0 * seed
   if (jseedr .ge. nenerg) seed = seedr
   d8 = randnm (seed)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 646) knt, kswtch, jseedr, nenerg, itest, idist, seed, d8

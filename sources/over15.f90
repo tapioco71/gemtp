@@ -324,7 +324,8 @@ subroutine over15
   data  text10  / 'minimu' /
   data  text11  / 'm     ' /
   data  text12  / 'chan01' /
-  !     transfer to  "top15"  for front end of overlay 15.
+  !
+  !     Transfer to  "top15"  for front end of overlay 15.
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over15."')
   call move0 (kssfrq, ntot)
@@ -379,9 +380,17 @@ subroutine over15
         do ip = 1, ntot
            if (bus1 .ne. bus(ip)) cycle
 !!!!  write (*,*) ' match found.   jk, ip =',  jk, ip
-           if (jk .eq. 1) ibrnch(nv + 1) = ip
-           if (jk .eq. 2) jbrnch(nv + 1) = ip
-           if (jk .eq. 1) go to 5183
+           select case (jk)
+           case (1)
+              ibrnch(nv + 1) = ip
+              go to 5183
+
+           case (2)
+              jbrnch(nv + 1) = ip
+           end select
+           !if (jk .eq. 1) ibrnch(nv + 1) = ip
+           !if (jk .eq. 2) jbrnch(nv + 1) = ip
+           !if (jk .eq. 1) go to 5183
            nv = nv + 1
 !!!!  write (*,*) ' done assigning v-branch out.   nv, ibrnch(nv),',
 !!!! 1            ' jbrnch(nv) =',   nv, ibrnch(nv), jbrnch(nv)
