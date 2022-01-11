@@ -547,15 +547,15 @@ subroutine cimage
 1036 if (noutpr .ne. 0) go to 1000
      if (n11 .ne. 0) go to 1000
      if (kol132 .eq. 132) write (unit = lunit(6), fmt = 3015) buff10
-3015 format (' Comment card.', 37x, '1', a80)
+3015 format (' Comment card.', 37x, '|', a80)
      if (kol132 .ne. 132) write (unit = lunit(6), fmt = 3016) abuff
-3016 format (' Comment card.', 37x, '1', a20)
+3016 format (' Comment card.', 37x, '|', a20)
   go to 1000
 3034 if (noutpr .ne. 0) go to 3035
   if (kol132 .eq. 132) write (unit = lunit(6), fmt = 3006, advance = 'no') buff10, achar (13)
 3006 format (51x, '|', a80, a1)
   if (kol132 .ne. 132) write (unit = lunit(6), fmt = 3007, advance = 'no') abuff, achar (13)
-3007 format (51x, '1', a29, a1)
+3007 format (51x, '|', a29, a1)
 3035 if (n13 .gt. 0) go to 3011
   print 3009, numdcd, abuff(1 : 72)
 3009 format (1x, i5, ' :', a72)

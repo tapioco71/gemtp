@@ -1,4 +1,4 @@
-begin new data case
+begin new data case                                                             
 c RL.............................................Figure 3.9(a)..................
 c Energization of a trivial RL circuit.                                        |
 c ----dt<---tmax...............................................................|
@@ -19,7 +19,7 @@ c
 c Source data...................................................................
 c Bus--><I<Amplitude<Frequency<--T0|Phi0<---0=Phi0<-Ignore-><---Tstart<----Tstop
 14src             1.       50.         0        0.                 -1.     9999.
-blank End source data..........................................................|
+blank End of source data.......................................................|
 c                                                                               
 c Nodal Output Request Data.....................................................
 c Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->

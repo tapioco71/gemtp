@@ -1062,13 +1062,13 @@ subroutine top15
   ci1 = ci(i)
   !      if (kodsem(i) .ne. 0 .and. imodel(i) .ne. -2)  go to 309
   ! 309  if (kodsem(i) .ne. 0 .and. imodel(i) .ne. -4)  go to 903
-  if (kodsem(i) .ne. 0 .and. imodel(i) .ge. 0)  go to 903
+  if ((kodsem(i) .ne. 0) .and. (imodel(i) .ge. 0))  go to 903
   ck1 = absz (ck(i))
   a = 1.0d0
   if (ci1.lt.0.) a = ck1
-  if (ck(i) .ge. 0.0) go to 25903
-  l = int (cik(i))
-  a = 1.0 / eta(l)
+  if (ck(i) .ge. 0.0d0) go to 25903
+  l = int (cik(i), kind (l))
+  a = 1.0d0 / eta(l)
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 24903) i, l, k, a, ck1, ci(i)
 24903 format (/, ' freq dep  2 / m * z  at 24903   ', 3i10, 3e20.6)
 25903 ci(i) = ci(i) * (a + ck1)
@@ -1096,10 +1096,10 @@ subroutine top15
      ck1 = gus2 / time1(k) + gus1 * sfreq(k) / crest(k + 1)
      h1 = time1(k + 1) * tstop(k) - crest(k)
      h2 = tstart(k + 1) * tstop(k) - crest(k)
-     crest(k) = crest(k) + 2.0 * ck1
-     sfreq(k) = 1.0 - 2.0 * sfreq(k) / crest(k + 1)
-     time1(k) = 1.0 - 2.0 / time1(k)
-     crest(k + 1) = 2.0 * ck1
+     crest(k) = crest(k) + 2.0d0 * ck1
+     sfreq(k) = 1.0d0 - 2.0d0 * sfreq(k) / crest(k + 1)
+     time1(k) = 1.0d0 - 2.0d0 / time1(k)
+     crest(k + 1) = 2.0d0 * ck1
      sfreq(k + 1) = gus2
      time1(k + 1) = h1
      time2(k + 1) = h2
