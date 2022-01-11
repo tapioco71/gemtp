@@ -20,9 +20,11 @@ module blkcom
   !     flag-1.   begin class-1  /blank/  variables
   !               (alphanumeric variables, capable of storing  a6  info).
   !  character(8) :: buff10(10)
+  character(1) :: blank
   character(1) :: chcont, csepar
   character(1) :: texcol(80)
-  character(8) :: blank, busone(1), bus1, bus2, bus3, bus4, bus5, bus6
+  !  character(8) :: blank
+  character(8) :: busone(1), bus1, bus2, bus3, bus4, bus5, bus6
   character(8) :: trash, terra, userid, branch, chcopy
   character(8) :: vstacs(24), texta6(15)
   character(80) :: abuff, buff10
@@ -98,7 +100,7 @@ module blkcom
   real(8) :: lnpin
 
   ! Equivalences
-  character(1) :: busvec(6)
+  character(8) :: busvec(6)
   character(8) :: alower(14), aupper(14)
   integer(4) :: iaddrs
   integer(4) :: ichtr2

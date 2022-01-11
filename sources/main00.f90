@@ -616,7 +616,7 @@ subroutine cimage
      if (n3 .ne. nfrfld) go to 3306
      do j = n1, n2
         l = l + 1
-        if (texta6(l) .ne. textax(j)) go to 3306
+        if (to_lower (texta6(l)) .ne. textax(j)) go to 3306
      end do
      if (iprsup .ge. 2) write (unit = lunit(6), fmt = 3292) i, n8, texta6(1), textay(i)
 3292 format (/, ' key-word found.  i, n8 =', 2i5, 5x, 'texta6, textay =', 2a7)

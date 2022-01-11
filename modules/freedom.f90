@@ -30,6 +30,7 @@ contains
     !  equivalence (texvec(1), text1)
     !
     data chtacs / 'tacs  ' /
+    !
     if (iprsup .ge. 5) write (unit = lunit(6), fmt = 1016) nfrfld, nright, kolbeg
 1016 format (' Top "frefld".  nfrfld, nright, kolbeg =', 3i6)
     if (nright .lt. 0) go to 5913
@@ -89,7 +90,7 @@ contains
        go to 5921
 5922   ll = ll + 1
        !       call packa1 (texvec(1), texta6(jj), ll)
-       call pack (texvec(1 :), texta6(jj :), ll)
+       call pack (texvec, texta6(jj), ll)
 5923   if (kolbeg .le. 80) go to 5920
     end do
     go to 9900
@@ -110,8 +111,8 @@ contains
        if (texvec1 .eq. blank) go to 6054
 6052   if (ll .eq. 6) go to 6042
        ll = ll + 1
-       !       call packa1 (texvec(1), texta6(jj), ll)
-       call pack (texvec(1 :), texta6(jj :), ll)
+       !call packa1 (texvec(1), texta6(jj), ll)
+       call pack (texvec, texta6(jj), ll)
        kolbeg = kolbeg + 1
     end do
 6054 n9 = kolbeg

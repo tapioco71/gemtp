@@ -6,7 +6,7 @@
 
 module pckcom
   implicit none
-  
+
   interface pack
      module procedure packa1, packch
   end interface pack
@@ -15,7 +15,7 @@ contains
   !
   ! subroutine packa1.
   !
-  
+
   subroutine packa1 (from, to, kk)
     implicit none
     !     System-dependent EMTP module  'packa1'  for  VAX-11/780.
@@ -24,10 +24,10 @@ contains
     !     For all EMTP usage,  1st 2 arguments must be vectors.
     !     logical*1 from(1), to(6)
     character(*), intent(in) :: from(:)
-    character(*), intent(out) :: to(:)
+    character(8), intent(out) :: to
     integer(4), intent(in) :: kk
     !
-    to(kk : kk) = from(1 : 1)
+    to(kk : kk) = from(1)(1 : 8)
     return
   end subroutine packa1
 

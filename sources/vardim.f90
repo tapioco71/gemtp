@@ -210,7 +210,7 @@ program vardim
   character :: char(6), bus2
   character(4) :: texta(2), textb(2)
   character(8) :: bus1
-  character(16) :: types(5)
+  character(16) :: types(6)
   character(16) :: ansi16
   character(80) :: abuff
   integer(4) :: i, ii, implmode, indexm, ios
@@ -238,6 +238,7 @@ program vardim
   data types(3) / 'character(8)' /
   data types(4) / 'integer(4)' /
   data types(5) / 'complex(16)' /
+  data types(6) / 'character(1)' /
   !
   modvars(1)%name       = 'x'
   modvars(1)%options(1 : 4) = (/ '', '', '', '' /)

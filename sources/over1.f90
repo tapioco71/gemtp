@@ -5251,9 +5251,9 @@ subroutine expchk (n1, n2, n5)
   use blkcom
   implicit none
   integer(4), intent(in) :: n1, n2, n5
+  character(1) :: texnum(11), text1, textp, textn, x(80)
   integer(4) :: i, j, k, key, l, n3, n4
-  character(8) :: texnum, text1, x, textp, textn
-  dimension x(80), texnum(11)
+  !  dimension x(80), texnum(11)
   !
   data text1 / 'e' /
   data textp / '+' /
