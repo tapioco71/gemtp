@@ -150,14 +150,10 @@ program gemtp
   use iocons
   use movcop
   implicit none
-  integer(4) :: i
   integer(4) :: ll34
   !
   data ll34 / 34 /
-  !     unit assignments of "over1" needed earlier by spy:
-  do i = 0, 15
-     lunit(i) = i
-  end do
+  !
   llbuff = -3333
   kol132 = 132
   nchain = -1
