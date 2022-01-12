@@ -22,6 +22,8 @@ subroutine over14
   real(8) :: d1, d2
   !  equivalence (moncar(1), knt)
   !
+  integer(4), pointer :: knt => moncar(1)
+  !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over14."')
   !     define "kentnb" and "nbhdsw" vectors for module "switch"
@@ -785,7 +787,7 @@ subroutine breqiv (ikf, isfd, ibf)
   use labcom
   implicit none
   integer(4), intent(out) :: ibf, ikf, isfd
-  integer(4) :: idk, isc, isf, isk, ist, isu, isv
+  integer(4) :: idk, isc, isf, isk, ist, isu, isv, isw
   integer(4) :: ka, kb
   real(8) :: a1, a2, ac1, al1, ar, ar1, arl, azi, azr, cz
   !

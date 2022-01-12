@@ -153,6 +153,12 @@ subroutine over2
   real(8) :: temp, turn1
   real(8) :: yzero
   !
+  integer(4), pointer :: ichtr2 => indtv(4)
+  integer(4), pointer :: iaddrs => indtv(1)
+  integer(4), pointer :: itranm => indtv(2)
+  integer(4), pointer :: ityold => indtv(3)
+  integer(4), pointer :: nmauto => iprsov(39)
+  !
   data text1   / 'stop c' /
   data text2   / 'ascade' /
   data text3   / 'use ab' /
@@ -2397,6 +2403,10 @@ subroutine distr2
   real(8) :: xlong, xlong1, xsum
   real(8) :: ysum
   !
+  integer(4), pointer :: iaddrs => indtv(1)
+  integer(4), pointer :: ichtr2 => indtv(4)
+  integer(4), pointer :: itranm => indtv(2)
+  !
   data text2  / '   con' /
   data text3  / 'stant ' /
   data text4  / 'steady' /
@@ -2414,6 +2424,7 @@ subroutine distr2
   data textmx(2) / '+tx(  ' /
   !     Burroughs: preserve local variable between module calls:
   data ipsem  / 0 /
+  !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module distr2."')
   n45 = location (ida)
@@ -3737,11 +3748,19 @@ subroutine over3
   real(8) :: freqc, freqx
   real(8) :: ymag2, yserr, yserx, yshunr, yshunx
   !
+  integer(4), pointer :: ipoint => iprsov(35)
+  integer(4), pointer :: locz11 => iprsov(36)
+  real(8), pointer :: caslnr(:) => xk(1 :)
+  real(8), allocatable :: txshun(:)
+  !
   data text1  / 'stop' /
   data text2  / ' cas' /
   data text3  / 'cade' /
   data text4  / '    ' /
   !
+  ll0 = size (transfer (kks, txshun))
+  allocate (txshun(ll0))
+  txshun = transfer (kks, txshun)
   locatn(i, j) = (j * j - j) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over3."')
@@ -4359,7 +4378,11 @@ subroutine over3
   nchain = 51
   lstat(18) = 3
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
-99999 return
+99999 if (allocated (txshun)) then
+     kks = transfer (txshun, kks)
+     deallocate (txshun)
+  end if
+  return
 end subroutine over3
 
 !

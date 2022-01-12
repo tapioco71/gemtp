@@ -36,11 +36,12 @@ subroutine over1
   integer(4) :: i, iadqq, ijk, ios, ip, iswent, iy, j
   integer(4) :: k, kswpe4
   integer(4) :: ll1, ll6, ll8, ll11, ll20, ll24, ll25, ll30, ll40, ll60, ll64, ll80
-  integer(4) :: lstacs(8), lu2, lu6, lunt77
+  integer(4) :: lstacs(8), ltacst, lu2, lu6, lunt77
   integer(4) :: n5, n6, n7, n8, n9, n12, n14, n15, n18, n19, n23, nfdbr, nfdhst, nfdph
-  integer(4) :: nfdpol, ngroup, niunrs, nk, ntlin, nturn, num888, numnam
+  integer(4) :: nfdpol, ngroup, niunrs, nk, ntcsex, ntlin, nturn, num888, numnam
   integer(4) :: numbco, numbrn
   real(8) :: d1, d2, d3, d4, d7, d8, d12, d13, ddd, znvref
+  !
   !  dimension kpen(1), ibusum(1)
   !  dimension aupper(14)
   !  dimension lstacs(8)
@@ -59,6 +60,16 @@ subroutine over1
   !  equivalence (iprsov(39), nmauto)
   !
   !     default list sizes for tacs proportioning of emtp list 19.
+  !
+  integer(4), pointer :: idist
+  integer(4), pointer :: isw
+  integer(4), pointer :: itest
+  integer(4), pointer :: jseedr
+  integer(4), pointer :: kbase
+  integer(4), pointer :: kloaep
+  integer(4), pointer :: knt
+  integer(4), pointer :: nmauto
+  integer(4), pointer :: mtape
   !
   data text2 / 'name  ' /
   data text6 / 'copy  ' /
@@ -79,6 +90,16 @@ subroutine over1
   data ll60  / 60 /
   data ll64  / 64 /
   data ll80  / 80 /
+  !
+  knt => moncar(1)
+  kbase => moncar(2)
+  isw => moncar(4)
+  idist => moncar(5)
+  itest => moncar(6)
+  jseedr => moncar(8)
+  kloaep => moncar(9)
+  mtape => moncar(10)
+  nmauto => iprsov(39)
   !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over1."')
@@ -779,7 +800,7 @@ subroutine tacs1c
   use labcom
   use tacsar
   implicit none
-  !     called only by over1 for start again usage
+  !     Called only by over1 for start again usage
   integer(4) :: i, ijk, ndy5, n, ndx1
   real(8) ::  dum1, dum2, dum3, pru, prx
   character(8) :: alnode
@@ -824,13 +845,14 @@ subroutine swmodf
   use tracom
   use strcom
   implicit none
-  !     called only by over1 for start again usage
+  !     Called only by over1 for start again usage
   integer(4) :: ijk, j, jdu, jk, k, m, msw
   real(8) :: a, gus3, gus4
   character(8) :: text14, text15
   !
   data text14 / 'ing   ' /
   data text15 / 'closed' /
+  !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format (' Begin module "swmodf".')
   read (unit = abuff, fmt = 35) it2, bus1, bus2, gus3, gus4, ck1, a, jk, bus4, bus5, bus6, jdu, j
@@ -977,9 +999,10 @@ contains
   ! subroutine ppf.
   !
 
-  subroutine ppf (farray)
+  subroutine ppf (farray, ltdelt)
     ! $$$$$       special-request word no. 7.   'postprocess plot file'           $$$$$
     implicit none
+    integer(4), intent(out) :: ltdelt
     real(8), intent (out) :: farray(:)
     integer(4) :: k, n1, n2, n3, n4, n5, n13
     real(8) :: d1
@@ -1653,6 +1676,10 @@ subroutine reques
   !  equivalence (moncar(3), ltdelt)
   !  equivalence (iprsov(39), nmauto)
   !
+  integer(4), pointer :: kbase => moncar(2)
+  integer(4), pointer :: ltdelt => moncar(3)
+  integer(4), pointer :: nmauto => iprsov(39)
+  !
   ! $$$$$       special-request word no. 1.   'xformer'                         $$$$$
   data textay(1)   / 'x     ' /
   data jpntr(1)    / 1 /
@@ -2111,7 +2138,7 @@ subroutine reques
 
      case (7)
         ! $$$$$    special-request word no. 7.   'postprocess plot file'   $$$$$
-        call ppf (farray)
+        call ppf (farray, ltdelt)
         go to 15
 
      case (8)
@@ -2578,6 +2605,7 @@ subroutine sysdep
   character(8) :: busnm1, busnm2, busnm3, temp
   character(18) :: colxxx
   character(25) :: col
+  integer(4) :: ltacst
   integer(4) :: n7
   !
   !     first 5 characters of file name "col" are reserved
@@ -2743,6 +2771,8 @@ subroutine midov1
   !
   !  equivalence (moncar(3), ltdelt)
   !
+  integer(4), pointer :: ltdelt => moncar(3)
+  !
   ! if interactive execution (spy),
   ! and if not Monte Carlo study,
   if (m4plot .eq. 1 .and. nenerg .eq. 0) tmax = fltinf      ! set end-time of study to infinity
@@ -2818,10 +2848,10 @@ subroutine tacs1
   implicit none
   character(8) :: stacs(11), alph(5), alnode, alnm1, alnm2
   character(8) :: dumj(33), sminus, splus, sbn(2)
-  integer(4) :: i, ij, ijk, is, isour
+  integer(4) :: i, ij, ijk, ioutcs, is, isour
   integer(4) :: j, j1, j2, jr
   integer(4) :: k, karg, kbtcs, kbwkcs, kcc, kjsup, kksup, kxai
-  integer(4) :: ll0, ll1, ll2, ll3
+  integer(4) :: ll0, ll1, ll2, ll3, ltacst
   integer(4) :: m, mm
   integer(4) :: n, n1, n2, n3, n22, n23, ndx1, ndx2, ndx3, ndx5, ndy5, niunrs, nuki
   integer(4) :: nukr
@@ -2844,6 +2874,7 @@ subroutine tacs1
   data sminus    / '-' /
   data sbn(1)    / 'num.  ' /
   data sbn(2)    / 'den.  ' /
+  !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module tacs1."')
   if (iprsup .gt. 0) write (unit = lunit(6), fmt = 701) ltacst, (lstat(i), i = 61, 68)
@@ -4490,7 +4521,7 @@ subroutine tacs1b
   use movcop
   implicit none
   character(8) :: delay
-  integer(4) :: i, ij, ij9, ijk, infir, inlst, irr, is, isour, iuser, izs
+  integer(4) :: i, ij, ij9, ijk, infir, inlst, ioutcs, irr, is, isour, iuser, izs
   integer(4) :: j, j1, j2, j8, j11, j12, j13, jc, jj, jjj, jk, jk1, jk2, jl, jm, jn
   integer(4) :: jni, jr
   integer(4) :: k, k1, k2, karg, kargsa, kbtcs, kbwkcs, kint, kjsup, kksup, kxai
@@ -4499,7 +4530,7 @@ subroutine tacs1b
   integer(4) :: m, mc, min, mins, mjump, mkk, mm, mmm, mnp, mpk, mpp, mpq
   integer(4) :: n, n1, n2, n3, n4, n6, n11, n12, n23, namexm, namin, namout, namsbk
   integer(4) :: namsup, ndx1, ndx2, ndx3, ndxb, ndy, nexd, nfun, ngp, nik, nivarb
-  integer(4) :: nj, nkn, nn, nnn, nom, np, np1, nq, nstep, nuki, nukj, nukjl, nukk
+  integer(4) :: nj, nkn, nn, nnn, nom, np, np1, nq, nstep, ntcsex, nuki, nukj, nukjl, nukk
   integer(4) :: nukl, nukm, nukn, nukq, nukr
   real(8) :: dn
   !dimension dumj(13)

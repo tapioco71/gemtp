@@ -2165,6 +2165,12 @@ subroutine over5
   real(8) :: ssigma, ststat
   real(8) :: targ, timchk
   !
+  integer(4), pointer :: idist => moncar(5)
+  integer(4), pointer :: isw => moncar(4)
+  integer(4), pointer :: itest => moncar(6)
+  integer(4), pointer :: kloaep => moncar(9)
+  integer(4), pointer :: knt => moncar(1)
+  !
   data text1  / 'name  ' /
   data text2  / 'swt001' /
   data text5  / 'statis' /
@@ -2710,7 +2716,7 @@ subroutine over5a
   integer(4) :: i, iprint
   integer(4) :: j, j30
   integer(4) :: k, k13, kpu
-  integer(4) :: ll2, ll3, ll4, loutbr
+  integer(4) :: ll0, ll2, ll3, ll4, loutbr
   integer(4) :: m, machfl
   integer(4) :: n1, n2, n3, n14, n2mach, ndx1, ndx2
   real(8) :: a
@@ -2721,8 +2727,14 @@ subroutine over5a
   real(8) :: smamp, smang, smangl
   real(8) :: yx
   !
+  integer(4), allocatable :: ispum(:)
+  !
   data j30 / 1 /
   data text12 / 'typ-16' /
+  !
+  ll0 = size (transfer (spum, ispum))
+  allocate (ispum(ll0))
+  ispum = transfer (spum, ispum)
   ll2 = 2
   ll3 = 3
   ll4 = 4
@@ -3203,7 +3215,7 @@ subroutine over5a
   lstat(13) = n1
   lstat(14) = n1 - n2
   lstat(19) = 433
-  return
+  go to 9999
 437 if (n2 .eq. 0) go to 447
   write (unit = lunit(6), fmt = 441) kconst, n1, n2
 441 format (/, " Notice  ----  this  'frequency scan'  data case contains", i5, '   EMTP sources, of which', i5, '   are', /, 15x, "sinusoidal (type-code 14).   But of these sinusoidal sources, not all have field  'tstart'  of columns", /, 15x, '61-70 punched negative (which would indicate that such a source is present during the steady-state', /, 15x, 'phasor solutions).   There were',  i5, '   exceptions of this sort.   The user is reminded that only')
@@ -3245,7 +3257,11 @@ subroutine over5a
   go to 9999
 9000 lstat(16) = iprint
   kill = 1
-9999 return
+9999 if (allocated (ispum)) then
+     spum = transfer (ispum, spum)
+     deallocate (ispum)
+  end if
+  return
 end subroutine over5a
 
 !
@@ -3392,6 +3408,12 @@ subroutine smdat (mtype)
   real(8) :: xd, xq, xdp, xdpp, xl, xqp, xqpp
   real(8) :: zb, zb1, zb3
   !
+  integer(4), pointer :: ipout => ismdat(22)
+  integer(4), pointer :: ismold => ismdat(24)
+  integer(4), pointer :: massex(:)
+  integer(4), pointer :: nn14 => ismdat(27)
+  integer(4), pointer :: n56 => ismdat(23)
+  integer(4), pointer :: nn4 => ismdat(26)
   !
   data  text1  / 'finish' /
   data  text2  / 'tolera' /
@@ -3407,7 +3429,9 @@ subroutine smdat (mtype)
   data  text20 / 'pf    ' /
   data  text21 / 'dc    ' /
   data  text16 / ' part ' /
-  if (iprsup  .ge.  1) write (unit = lunit(6), fmt = 4567)
+  !
+  massex = transfer (histq, massex)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module smdat."')
   ! define no. of outputs in class 1 (nn10) and no. of classes (nn4)**
   nn10 = 15

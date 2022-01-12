@@ -86,6 +86,8 @@ contains
     integer(4) :: mark, mars, mm
     integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n16, nclcom, nshare, num, numcom
     !
+    integer(4), pointer :: nsubkm(:) => kknonl(1 :)
+    !
     !  jcltac(kcl and kcl+1) are defined and initialized in umrenu
     !  jcltac(kcl+2) is defined here. it is zero unless a set of
     !     of max 3 um's sharing a common mech netw is dealt with.
@@ -293,10 +295,10 @@ subroutine over15
   character(8) :: text4, text5, text6, text7
   character(8) :: text8, text9, text10, text11, text12
   character(132) :: outlin
-  integer(4) :: i, i3, ijk, ik, ip, iprint
+  integer(4) :: i, i3, ijk, ik, ioutcs, ip, iprint
   integer(4) :: j, jk
   integer(4) :: k, k1, kprsta, kswpe4
-  integer(4) :: l, lunit6save
+  integer(4) :: l, ll0, lunit6save
   integer(4) :: m, moon, mpower, mpr
   integer(4) :: n1, n2, n3, n4, n5, n6, n8, n9, n11, n12, n13, n14, n15, n16
   integer(4) :: n17, n18, n19, n23, n44, ndx1, ndx2, ndx4, nk1, nk2, ntacs
@@ -314,6 +316,15 @@ subroutine over15
   !  equivalence (moncar(5), idist), (moncar(6), itest)
   !  equivalence (kknonl(1), nsubkm(1))
   !
+  integer(4), pointer :: idist => moncar(5)
+  integer(4), allocatable :: ispum(:)
+  integer(4), pointer :: isw => moncar(4)
+  integer(4), pointer :: itest => moncar(6)
+  integer(4), pointer :: kbase => moncar(2)
+  integer(4), pointer :: knt => moncar(1)
+  integer(4), pointer :: ltdelt => moncar(3)
+  integer(4), pointer :: nsubkm(:) => kknonl(1 :)
+  !
   data  text1   / 'tacs  ' /
   data  text4   / 'normal' /
   data  text5   / '      ' /
@@ -325,6 +336,9 @@ subroutine over15
   data  text11  / 'm     ' /
   data  text12  / 'chan01' /
   !
+  ll0 = size (transfer (spum, ispum))
+  allocate (ispum(ll0))
+  ispum = transfer (spum, ispum)
   !     Transfer to  "top15"  for front end of overlay 15.
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over15."')
@@ -338,7 +352,7 @@ subroutine over15
 3038 continue
   read (unit = abuff, fmt = 3043) ijk, (aupper(i), i = 1, 13)
 3043 format (i2, 13a6)
-  if (ijk .ne.  1) go to 8211
+  if (ijk .ne. 1) go to 8211
   numnvo = ntot1
   ivolt = ijk
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 3045)
@@ -1023,7 +1037,11 @@ subroutine over15
 9999 lastov = nchain
   nchain = nchain + 1
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
-99999 return
+99999 if (allocated (ispum)) then
+     spum = transfer (ispum, spum)
+     deallocate (ispum)
+  end if
+  return
 end subroutine over15
 
 !
@@ -1049,6 +1067,9 @@ subroutine top15
   real(8) :: a
   real(8) :: gus1, gus2, gus3, gus4
   real(8) :: h1, h2
+  !
+  integer(4), pointer :: knum => lstat(14)
+  integer(4), pointer :: nsubkm(:) => kknonl(1 :)
   !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 752) nenerg, ibr, kswtch, inonl
 752 format (/, ' Enter  "top15" .  nenerg     ibr  kswtch   inonl', /, 17x, 5i8)

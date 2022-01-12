@@ -155,7 +155,7 @@ subroutine over13
   integer(4) :: m, marti
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15
   integer(4) :: n16, n17, n18, n19, n20, ndx1, ndx2, nk1, nk7, nk8, nkp, nl, nl1
-  integer(4) :: nn17, nn5, nn6, nphs, nphs2, nq1, nq2, nq3, nra, nrf, nrz, ns1
+  integer(4) :: nn17, nn4, nn5, nn6, nphs, nphs2, nq1, nq2, nq3, nra, nrf, nrz, ns1
   integer(4) :: ntaui, nteq
   real(8) :: a, absfk, absfm, ai, aki, akr, amagk, amagm, angk, angm, aph
   real(8) :: api, apr, ar
@@ -176,6 +176,8 @@ subroutine over13
   real(8) :: vi1, vi2, vr1, vr2, vsl, vsli, vsr, vsri
   real(8) :: wd, wdt, winic
   real(8) :: yx
+  !
+  integer(4), pointer :: mdrive => lstat(14)
   !
   data text1 / 'parame' /
   data text2 / 'ters  ' /
@@ -2022,7 +2024,7 @@ subroutine fdint (ikf, isfd, ibf, omg)
   integer(4), intent(out) :: ikf
   integer(4), intent(out) :: isfd
   real(8), intent(in) :: omg
-  integer(4) :: i, idk, isc, isk, ist, isu, isv
+  integer(4) :: i, idk, isc, isk, ist, isu, isv, isw
   integer(4) :: ka, kb
   real(8) :: ac1, ai, al1, ar, ar1, arl, aui, aur, azi, azr
   real(8) :: cz
@@ -2209,6 +2211,8 @@ subroutine last13
   real(8) :: trisum, trr, trrsum
   real(8) :: w, wdthaf, wfac, wpole, wshz
   double precision :: dblpr1, dblpr2, dblpr3, dblpr4
+  !
+  integer(4), pointer :: mdrive => lstat(14)
   !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format (' Begin module "last13".')

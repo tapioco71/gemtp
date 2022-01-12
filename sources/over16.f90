@@ -20,8 +20,15 @@ subroutine over16
   !  equivalence (xk(1), xx(1))
   !  equivalence  (spum(1), ispum(1))
   !
+  integer(4) :: ll0
   integer(4) :: n1
   !
+  integer(4), allocatable :: ispum(:)
+  real(8), pointer :: xx(:) => xk(1 :)
+  !
+  ll0 = size (transfer (spum, ispum))
+  allocate (ispum(ll0))
+  ispum = transfer (spum, ispum)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  Begin module "over16".')
   if (numum .eq. 0) go to 2450
@@ -53,6 +60,10 @@ subroutine over16
 
      end select
   end do
+  if (allocated (ispum)) then
+     spum = transfer (ispum, spum)
+     deallocate (ispum)
+  end if
   return
 end subroutine over16
 
@@ -77,7 +88,7 @@ subroutine subts1
   integer(4) :: i, i1, ii, iit1, ip, isss
   integer(4) :: j, j11, jj
   integer(4) :: k, k1, k9899, knode
-  integer(4) :: l, ll10
+  integer(4) :: l, ll0, ll10
   integer(4) :: m, m1, mk, mnode
   integer(4) :: n, n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15
   integer(4) :: n17, n18, n19, ndx1, ndx2, ndx3, nn1, nn15, nwarn
@@ -98,6 +109,13 @@ subroutine subts1
   !  equivalence (iprsov(35), ipoint)
   !  equivalence (iprsov(36), iupper)
   !
+  integer(4), pointer :: ipoint => iprsov(35)
+  integer(4), allocatable :: ispum(:)
+  integer(4), pointer :: iupper => iprsov(36)
+  integer(4), pointer :: kbase => moncar(2)
+  integer(4), pointer :: knt => moncar(1)
+  integer(4), pointer :: nsubkm(:) => kknonl(1 :)
+  !
   data text1  / 'valve ' /
   data text2  / 'diode ' /
   data text3  / 'openin' /
@@ -112,6 +130,10 @@ subroutine subts1
   data text13 / 'ykk   ' /
   !     Burroughs: preserve local variable between module calls:
   data nwarn / 0 /
+  !
+  ll0 = size (transfer (spum, ispum))
+  allocate (ispum(ll0))
+  ispum = transfer (spum, ispum)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 548) istep, isprin, isplot, kswtch, inonl, num99, iupper, knt, nenerg
 548 format (' Begin 1st piece of time-step loop.   istep  isprin', '  isplot  kswtch   inonl   num99  iupper     knt  nenerg', /, 35x, 10i8)
   if (numsm .gt. 0) call update
@@ -1173,7 +1195,11 @@ subroutine subts1
   nchain = 51
 9900 if (iprsup .ge. 1)  write (unit = lunit(6), fmt = 9903) kill, lstat(19)
 9903 format (' Exit "subts1".  kill, lstat(19) =', 2i8)
-!99999 return
+  !99999 return
+  if (allocated (ispum)) then
+     spum = transfer (ispum, spum)
+     deallocate (ispum)
+  end if
   return
 end subroutine subts1
 
@@ -1196,6 +1222,7 @@ subroutine yserlc
   data  ixcopt  / 0 /
   data  xcon  / 0.0d0 /
   data  ccon  / 0.0d0 /
+  !
   if (iprsup .ge. 4) write (unit = lunit(6), fmt = 8234) lserlc, kserlc, kpartb, ialter
 8234 format (' Top of "yserlc".  lserlc, kserlc kpartb, ialter =', 4i8)
   if (lserlc .le. 0) go to 9000
@@ -1335,6 +1362,7 @@ subroutine switch
   !     for cases with few switches,  this is a case of overkill,  and
   !     a user who is short of memory might want to eliminate most of
   !     this subroutine.  such is possible (see above s.n. 3459).
+  !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3444) ktrlsw
 3444 format (' Top of "switch".  ktrlsw vector =', 10i7)
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 3447) (modswt(j), j = 1, n20)
@@ -1945,7 +1973,7 @@ subroutine tacs3
   use tracom
   use movcop
   implicit none
-  integer(4) :: i, i1, i2, i3
+  integer(4) :: i, i1, i2, i3, ioutcs
   integer(4) :: j, j1, jcm
   integer(4) :: k, k1, kjsup, kksup
   integer(4) :: l
@@ -2234,7 +2262,7 @@ subroutine subts2
   integer(4) :: n1, n2, n2p, n3, n4, n5, n6, n7, n8, n9, n10, n11
   integer(4) :: n31, n32, n33, n34, n41, ndelt
   integer(4) :: ndx1, ndx2, nk1, nk2, nk3, nk4, nk5, nkkk1, nkll, nky, nkyw, nmodal
-  integer(4) :: nn1, nn2, nn3, nn5, nn6, nn7, nn8, nn9, nn11
+  integer(4) :: nn1, nn2, nn3, nn4, nn5, nn6, nn7, nn8, nn9, nn11
   integer(4) :: nn17, nnq1, nnq2, nnq3, nq0k, nq4, nq5, nq6
   integer(4) :: nra, nra3, nraz1, nraz2, nraz3, nrf, nrz, nrz2, nrz3, nteq
   integer(4) :: nterm
@@ -2269,6 +2297,8 @@ subroutine subts2
   !
   !  equivalence (semaux(1), wk1(1))
   !  equivalence (namebr(1), infdli(1))
+  !
+  integer(4), pointer :: ipoint => iprsov(35)
   !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3445) (f(j), j = 1, ntot )
 3445 format ( ' Top  subts2.  f(1:ntot) follows ...', /, (1x, 8e16.7))
@@ -3734,9 +3764,9 @@ subroutine update
   use tracom
   use movcop
   implicit none
-  !     This module is used only by brandwajn (type-59) s.m. model
+  !     This module is used only by Brandwajn (type-59) s.m. model
   integer(4) :: i, i26, i30, i75, ib, ibu, icnt, idelta, ids, idsat, ies, ifs, ij, ik
-  integer(4) :: ik1, ikn, ikp, ikv, ikw, ilk, im, ip, isd, ispdr, isq, itq, iu
+  integer(4) :: ik1, ikn, ikp, ikv, ikw, ilk, im, ip, ipout, isd, ispdr, isq, itq, iu
   integer(4) :: iy, iz, izy
   integer(4) :: j30, j75, jmset, jmset1, jt, juk
   integer(4) :: k, k1, ka, kag, kag2, kb, kc, kd, kmset, ksex, ksg
@@ -3763,9 +3793,11 @@ subroutine update
   !     This routine adjusts the current sources to be injected into
   !     the equivalent pi-circuits * * * * * * * * * * * * * * * * * * * *
   !
+  integer(4), pointer :: massex(:)
+  real(8), pointer :: vsmout(:)
+  !
   massex = transfer (histq, massex)
   vsmout = transfer (ismout, vsmout)
-  !
   if (iprsup  .ge.  1) write (unit = lunit(6), fmt = 4099)
 4099 format ('  "Begin module update."')
   !     initialize counters     ******************************************
@@ -4688,10 +4720,10 @@ subroutine subts3
   use movcop
   use freedom
   implicit none
-  integer(4) :: i, i1, i2, ii
+  integer(4) :: i, i1, i2, ii, ioutcs
   integer(4) :: j, j8
   integer(4) :: k
-  integer(4) :: l, ll2, ll6, ll8, ll10
+  integer(4) :: l, ll0, ll2, ll6, ll8, ll10
   integer(4) :: m, mpower
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n13, n14, n15, ndx1
   integer(4) :: nn15, nodev
@@ -4714,6 +4746,16 @@ subroutine subts3
   !  equivalence (iprsov(36), iupper)
   !  equivalence (ismout(1), vsmout(1))
   !
+  integer(4), pointer :: iupper => iprsov(36)
+  integer(4), pointer :: kbase => moncar(2)
+  integer(4), pointer :: nsubkm(:) => kknonl(1 :)
+  real(8), pointer :: volta(:) => volti(1 :)
+  real(8), allocatable :: vsmout(:)
+  real(8), pointer :: xx(:) => xk(1 :)
+  !
+  ll0 = size (transfer (ismout, vsmout))
+  allocate (vsmout(ll0))
+  vsmout = transfer (ismout, vsmout)
   ll2 = 2
   ll6 = 6
   ll8 = 8
@@ -5012,9 +5054,9 @@ subroutine subts3
   end do
   ii = 1
   if (iprsup .lt. 4) go to 1410
-  write (unit = lunit(6), fmt = 41300)  ( e(l), l=1, ntot )
+  write (unit = lunit(6), fmt = 41300)  (e(l), l = 1, ntot)
 41300 format(/, ' e(l), l=1, ntot  at begin repeat soln.', /, (1x, 5e25.15))
-  write (unit = lunit(6), fmt = 51300)  ( l, km(l), ykm(l), l=1, iupper )
+  write (unit = lunit(6), fmt = 51300)  (l, km(l), ykm(l), l = 1, iupper)
 51300 format (/, ' Table of factors used.  l, km(l), ykm(l)', /, (2i10, e30.20, 5x, 2i10, e30.20))
 1410 if (ii .gt. iupper) go to 1450
   l = iabs (km(ii))
@@ -5156,7 +5198,9 @@ subroutine subts3
 9200 lstat(18) = 18
   lastov = nchain
   nchain = 51
-9999 return
+9999 ismout = transfer (vsmout, ismout)
+  if (allocated (vsmout)) deallocate (vsmout)
+  return
 end subroutine subts3
 
 !
@@ -5194,6 +5238,8 @@ subroutine zincox (ns)
   !  equivalence (fold(1), vchar(1))
   !  equivalence (kknonl(1), nsubkm(1))
   !
+  integer(4), pointer :: nsubkm(:) => kknonl(1 :)
+  !
   data  text1 / 'spy   ' /
   data  text2 / 'solve ' /
   data  text3 / 'stop  ' /
@@ -5203,8 +5249,8 @@ subroutine zincox (ns)
   iofznr = iabsz (iofznr)
   d12 = nbyte(3)
   d12 = iofznr * d12 / nbyte(4)
-  iofzni = int (d12 + 1.0, kind (iofzni))
-  if ( iprsup  .gt.  0 ) write (lunit(6), 918) ns, iofznr, iofzni, lchar
+  iofzni = int (d12 + 1.0d0, kind (iofzni))
+  if (iprsup .gt. 0) write (unit = lunit(6), fmt = 918) ns, iofznr, iofzni, lchar
 918 format (' Top of  "zincox" .', 3x, ' ns, iofznr, iofzni, lchar =', 4i8)
   n6 = isubeg( ns )
 3415 n5 = 1
@@ -5215,23 +5261,23 @@ subroutine zincox (ns)
   n7 = 0
   do j = 1, 99999
      n7 = n7 + 1
-     n10 = nsubkm( n8 )
-     if ( n10 .le. n8 )   go to 20
+     n10 = nsubkm(n8)
+     if (n10 .le. n8) go to 20
      n8 = n10
   end do
   !     check for table overflow****************************************
 20 n18 = n8
   ndx7r = iofznr + n7
-  if ( ndx7r .le. lchar )  go to 3422
-  write (lunit(6), 3416)  n7, iofznr
-3416 format ( /,  22h overflow in "zincox".,   i5,40h coupled arresters, if added to iofznr =, i5,19h overflow list 10. )
+  if (ndx7r .le. lchar) go to 3422
+  write (unit = lunit(6), fmt = 3416) n7, iofznr
+3416 format (/, ' Overflow in "zincox".', i5, ' coupled arresters, if added to iofznr =', i5, ' overflow list 10.')
   kill = 1
   lstat(19) = 3422
   lstat(16) = 10
   go to 4567
-3422 if ( n7**2  .lt.  lsiz26 )   go to 3424
-  write (lunit(6), 3423)  n7
-3423 format ( /,  22h overflow in "zincox".,   i5,49h coupled arresters, if squared, overflow list 26. )
+3422 if (n7 ** 2 .lt. lsiz26) go to 3424
+  write (unit = lunit(6), fmt = 3423) n7
+3423 format (/, ' Overflow in "zincox".', i5, ' coupled arresters, if squared, overflow list 26.')
   kill = 1
   lstat(19) = 3424
   lstat(16) = 26
@@ -5916,22 +5962,22 @@ subroutine  arrest (a, b, srt, svt, carst)
   go to 99
   !  region (4) branches --- t3 to t4
 260 continue
-  f1=a(8)*(a(16)-b(2))
-  f2=a(10)+a(17)*b(3)**2
-  f0=f1/f2
-  dfdv=-a(8)/f2
-  dfdi=-2.0*a(17)*f1*b(3)/f2**2
+  f1 = a(8) * (a(16) - b(2))
+  f2 = a(10) + a(17) * b(3) ** 2
+  f0 = f1 / f2
+  dfdv = -a(8) / f2
+  dfdi = -2.0d0 * a(17) * f1 * b(3) / f2 ** 2
   go to 99
 99 continue
-  if (dfdi.eq.0) dfdi= epsiln
-  gi=b(3) +(dfdv*b(2) -f0)/dfdi
-  yg=(-dfdv+2.0/deltat)/dfdi
-  cg=b(2) *(-dfdv-2.0/deltat)/dfdi-b(3) +gi
-  art=1.0/ylb+rb+1.0/yg
+  if (dfdi .eq. 0) dfdi = epsiln
+  gi = b(3) + (dfdv * b(2) - f0) / dfdi
+  yg = (-dfdv + 2.0d0 / deltat) / dfdi
+  cg = b(2) * (-dfdv - 2.0d0 / deltat) / dfdi - b(3) + gi
+  art = 1.0d0 / ylb + rb + 1.0d0 / yg
   vblock = -cb / ylb
-  vgap=-(cg+gi)/yg
-  avt=vblock+be+vgap
-  if (isign.lt.0) svt=-svt
+  vgap = -(cg + gi) / yg
+  avt = vblock + be + vgap
+  if (isign .lt. 0) svt = -svt
   !  correct arrester internal node voltages
   carst=(svt-avt*b(10))/(art*b(10)/b(11)-srt)
   curr = carst / b(11)
@@ -5960,7 +6006,7 @@ subroutine  arrest (a, b, srt, svt, carst)
   b(1) = 0.0
   carst = 0.0
 5681 if (iprsup .ge. 2)  write (unit = lunit(6), fmt = 5684) art, avt, carst, (a(i), b(i), i = 1, 20)
-5684 format (/, " At end  'arrest' .", 12x, 'art', 12x, 'avt', 10x, 'carst', /, 19x, 3e15.6, /,  (1x, 8e16.6)  )
+5684 format (/, " At end  'arrest' .", 12x, 'art', 12x, 'avt', 10x, 'carst', /, 19x, 3e15.6, /,  (1x, 8e16.6))
   return
 end subroutine arrest
 
@@ -7463,13 +7509,13 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, jclo
         hist(n1) = hist(n1) + d1
      end do
      !. stator(excit)-hist for special dm:
-     if (con(8) .ne. 1.0) go to 15150
-     hist(kcl+3) = hist(kcl+3) + con(8)*d13*d10*umcur(3)
-     d9 = (zthev + rd2) * d13/selta2
-     hist(kcl+3) = hist(kcl+3) - con(8)*d9*umcur(4)
-15150 if (con(7) .ne. 1.0) go to 15200
-     hist(kcl+3) = hist(kcl+3) + con(7)*d13*zthev*umcur(3)
-     d9 = zthev * d13/selta2
+     if (con(8) .ne. 1.0d0) go to 15150
+     hist(kcl + 3) = hist(kcl + 3) + con(8) * d13 * d10 * umcur(3)
+     d9 = (zthev + rd2) * d13 / selta2
+     hist(kcl + 3) = hist(kcl + 3) - con(8) * d9 * umcur(4)
+15150 if (con(7) .ne. 1.0d0) go to 15200
+     hist(kcl + 3) = hist(kcl + 3) + con(7) * d13 * zthev * umcur(3)
+     d9 = zthev * d13 / selta2
      hist(kcl+3) = hist(kcl+3) - con(7)*d9*umcur(4)
      !. stator(excit)-hist for um = type 4 (c3im):
 15200 if (con(6) .eq. 0.0) go to 15210
@@ -7510,7 +7556,7 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, jclo
      !. output statements for um:
 16000 n1 = istart + jm - 1
      if (n1 .ne. 0) go to 16008
-     if ( iprsup .ge. 1 ) write (lunit(6),16005)
+     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 16005)
 16005 format ('0-------------------------------------------------')
      go to 16016
 16008 if (istart .ne. 0) go to 16012
@@ -7521,34 +7567,34 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, jclo
      !16014 if (istart .ne. itolto) go to 16100
      if (istart .ne. itolto) go to 16100
      if (jm .gt. 1) go to 16020
-16016 if (iprsup .ge. 2 ) write (lunit(6),16005)
-     if (iprsup .ge. 2 ) write (lunit(6),16017) t, ncomp
-16017 format(7h0time =,e14.5,36h***************************  ncomp =,  i3  )
+16016 if (iprsup .ge. 2) write (unit = lunit(6), fmt = 16005)
+     if (iprsup .ge. 2) write (unit = lunit(6), fmt = 16017) t, ncomp
+16017 format ('0time =', e14.5, '***************************  ncomp =', i3)
 16020 if (jm .eq. numum) itol = istart
      !. momentary test output :
-     if ( iprsup  .ge.  2 ) write (lunit(6),16052)
-16052 format(18h0*** test output :)
-     if ( iprsup  .ge.  3 ) write (lunit(6),16054) (umcur(n1),n1=1,3)
-16054 format(10h0umcur(1)=,e14.5,2x,9humcur(2)=,e14.5,2x,9humcur(3)=,e14.5)
-     if (con(6) .ne. 1.0) go to 16056
-     if ( iprsup  .ge.  3 ) write (lunit(6),16055) (umcur(n1),n1=4,6)
-16055 format(10h umcur(4)=,e14.5,2x,9humcur(5)=,e14.5,2x,9humcur(6)=,e14.5)
-16056 if ( iprsup  .ge.  2 ) write (lunit(6),16057) flxd(jm),flxq(jm),nitrom
-16057 format(10h     flxd=,e14.5,2x,9h    flxq=,e14.5,2x,9h  nitrom=,i3)
+     if (iprsup .ge. 2) write (unit = lunit(6), fmt = 16052)
+16052 format ('0*** test output :')
+     if (iprsup .ge. 3) write (unit = lunit(6), fmt = 16054) (umcur(n1), n1 = 1, 3)
+16054 format ('0umcur(1)=', e14.5, 2x, 'umcur(2)=', e14.5, 2x, 'umcur(3)=', e14.5)
+     if (con(6) .ne. 1.0d0) go to 16056
+     if (iprsup .ge. 3) write (unit = lunit(6), fmt = 16055) (umcur(n1), n1 = 4, 6)
+16055 format (' umcur(4)=', e14.5, 2x, 'umcur(5)=', e14.5, 2x, 'umcur(6)=', e14.5)
+16056 if (iprsup .ge. 2) write (unit = lunit(6), fmt = 16057) flxd(jm), flxq(jm), nitrom
+16057 format ('     flxd=', e14.5, 2x, '    flxq=', e14.5, 2x, '  nitrom=', i3)
      n2 = kcl + ncl - 1
      if (istart .gt. 1) go to 16077
-     if ( iprsup .le. 3 ) go to 16077
-     write (lunit(6),16060) (nodvo1(n1),n1=kcl,n2)
-     write (lunit(6),16061) (nodvo2(n1),n1=kcl,n2)
-     write (lunit(6),16062) nodom(jm)
-16060 format(9h0nodvo1 :,3x,15i4)
-16061 format(9h nodvo2 :,3x,15i4)
-16062 format(9h nodom  :,3x,15i4)
-16077 if (iprsup .ge. 2) write (lunit(6),16078) zthevm
-16078 format(10h0zthevm = ,e14.5)
-     if (iprsup .ge. 2) write (lunit(6),16080) ((zthevr(n1,n2),n2=1,3),n1=1,3)
-16080 format(13h0zthevr(3,3):,3x,3e14.5/(16x,3e14.5))
-     if (iprsup .ge. 2) write (lunit(6),16082) ((zths3(n1,n2),n2=1,3),n1=1,3)
+     if (iprsup .le. 3) go to 16077
+     write (unit = lunit(6), fmt = 16060) (nodvo1(n1), n1 = kcl, n2)
+     write (unit = lunit(6), fmt = 16061) (nodvo2(n1), n1 = kcl, n2)
+     write (unit = lunit(6), fmt = 16062) nodom(jm)
+16060 format ('0nodvo1 :', 3x, 15i4)
+16061 format (' nodvo2 :', 3x, 15i4)
+16062 format (' nodom  :', 3x, 15i4)
+16077 if (iprsup .ge. 2) write (unit = lunit(6), fmt = 16078) zthevm
+16078 format ('0zthevm = ', e14.5)
+     if (iprsup .ge. 2) write (unit = lunit(6), fmt = 16080) ((zthevr(n1, n2), n2 = 1, 3), n1 = 1, 3)
+16080 format ('0zthevr(3,3):', 3x, 3e14.5, /, (16x, 3e14.5))
+     if (iprsup .ge. 2) write (unit = lunit(6), fmt = 16082) ((zths3(n1, n2), n2 = 1, 3), n1 = 1, 3)
 16082 format(12h0zths3(3,3):,3x,3e14.5/(15x,3e14.5))
      !. end momentary
      !  final statements of machine do-loop *************************
@@ -7594,16 +7640,16 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, jclo
      if (istart .ne. 0) go to 18020
      flxdmh = flxd(jm)
      flxqmh = flxq(jm)
-     umcurp(n1+1) = 0.0
-     hist(kcl) = 0.0
-     hist(kcl+1) = flxdd
-     hist(kcl+2) = flxqq
+     umcurp(n1 + 1) = 0.0d0
+     hist(kcl) = 0.0d0
+     hist(kcl + 1) = flxdd
+     hist(kcl + 2) = flxqq
      !      linear prediction of fluxes :
-18020 flxddp = 2.0*flxdd - hist(kcl+1)
-     flxqqp = 2.0*flxqq - hist(kcl+2)
+18020 flxddp = 2.0d0 * flxdd - hist(kcl + 1)
+     flxqqp = 2.0d0 * flxqq - hist(kcl + 2)
      !       calculation of vpi/rp for next time-step
      !     dumvec(1) = d20 * (umcurp(n1+1) - umcur(1))/seltat
-     dumvec(1) = 0.0
+     dumvec(1) = 0.0d0
      !     d1 = (hist(kcl+1) - flxdd)/seltat
      d1 = (flxdmh - flxd(jm))/seltat
      dumvec(2) = (d1 - omegrf*flxqqp) * gpar(kcl+1)
@@ -7616,17 +7662,16 @@ subroutine solvum (reacl, gpar, fpar, hist, umcurp, nodvo1, nodvo2, jcltac, jclo
      hist(kcl+2) = flxqq
      !18030 thetae = tau + deltat*omegrf
      thetae = tau + deltat*omegrf
-     thetae = thetae * (1.0-con(1)-con(4))
+     thetae = thetae * (1.0d0 - con(1) - con(4))
      if (inpu .eq. 1) thetae = omegrf * thetae
      go to 12200
 18100 do n1 = 1,3
-        n2 = 3 * (numum+jm-1) + n1
+        n2 = 3 * (numum + jm - 1) + n1
         !18120    umcurp(n2) = dumvec(n1)
         umcurp(n2) = dumvec(n1)
      end do
-     if (iprsup .ge. 1) write (lunit(6),18130) jm
-18130 format(/,39h **************************************, 42h predicted a,b,c power voltages/resistance, &
-          32h for next time-step of um number, i4, 2h :)
+     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 18130) jm
+18130 format (/, ' ************************************** Predicted A,B,C power voltages/resistance for next time-step of um number', i4, ' :')
      n1 = 3 * (numum + jm - 1) + 1
      n2 = n1 + 2
      if (iprsup .ge. 1) write (lunit(6),18132) n1,n2,(umcurp(n3),n3=n1,n2)
@@ -7666,7 +7711,6 @@ end subroutine solvum
 
 subroutine lineqs (aum, yum)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   real(8), intent(out) :: yum(15)
   real(8), intent(in) :: aum(3, 3)
   !
@@ -7732,9 +7776,20 @@ subroutine subts4
   !  equivalence (moncar(9), kloaep)
   !
   integer(4) :: k
+  integer(4) :: ll0
   integer(4) :: m
   integer(4) :: n1, n4, n8, n15
   !
+  integer(4), allocatable :: ispum(:)
+  integer(4), pointer :: kbase => moncar(2)
+  integer(4), pointer :: kloaep => moncar(9)
+  integer(4), pointer :: knt => moncar(1)
+  integer(4), pointer :: nsubkm(:) => kknonl(1 :)
+  real(8), pointer :: xx(:) => xk(1 :)
+  !
+  ll0 = size (transfer (spum, ispum))
+  allocate (ispum(ll0))
+  ispum = transfer (spum, ispum)
   if (iprsup.ge.6) write (unit = lunit(6), fmt = 1000) kswtch, inonl, num99, ncomp, ntot
 1000 format (' Top "subts4". kswtch, inonl, num99, ncomp, ntot =',  10i8)
   if (numum .le. 0) go to 1742
@@ -7773,13 +7828,17 @@ subroutine subts4
   if (memsav .ne. 0) go to 1613
 1611 lastov = nchain
   nchain = 16
-  return
+  go to 9999
 1613 lastov = nchain
   nchain = 20
-  return
+  go to 9999
 9200 lastov = nchain
   lstat(18) = nchain
   nchain = 51
+9999 if (allocated (ispum)) then
+     spum = transfer (ispum, spum)
+     deallocate (ispum)
+  end if
   return
 end subroutine subts4
 

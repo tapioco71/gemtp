@@ -20,6 +20,11 @@ subroutine ntacs1
   !  equivalence (lstat(67), maxniu)
   !  equivalence (lstat(68), maxnuk)
   !
+  integer(4), pointer :: ltacst => moncar(71)
+  integer(4), pointer :: maxniu => lstat(67)
+  integer(4), pointer :: maxnuk => lstat(68)
+  integer(4), pointer :: ntcsex => moncar(83)
+  !
   ntcsex = 1
   do i = 1, 23
      sptacs(i) = 0.0d0

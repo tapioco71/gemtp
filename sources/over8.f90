@@ -2455,6 +2455,12 @@ subroutine over8
   real(8) :: xi1, xi2, xr1, xr2
   real(8) :: ychara, ycharm, yneg, ypos
   !
+  integer(4), allocatable :: ispum(:)
+  integer(4), pointer :: knt => moncar(1)
+  !
+  ll0 = size (transfer (spum, ispum))
+  allocate (ispum(ll0))
+  ispum = transfer (spum, ispum)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 101) loopss(1), iv, it, tmax
 101 format (' Top of "over8".   loopss(1) iv, it, tmax =', 3i8, e15.5)
   isecti = 400
@@ -3556,6 +3562,10 @@ subroutine over8
 9600 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1786) nchain, kconst, kill, itadd, fmaxfs
 1786 format (' Exit "over8".    nchain, kconst, kill, itadd, fmaxfs =', 4i8, e14.4)
   !99999return
+  if (allocated (ispum)) then
+     spum = transfer (ispum, spum)
+     deallocate (ispum)
+  end if
   return
 end subroutine over8
 

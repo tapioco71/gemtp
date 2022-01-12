@@ -713,6 +713,10 @@ subroutine tables
   !
   !     Burroughs: preserve local variable between module calls:
   !
+  integer(4), pointer :: kbase
+  !
+  kbase => moncar(2)
+  !
   iprsav(1 : 4) = (/ 0, 0, 0, 0 /)
   ll1 = 1
   ll2 = 2

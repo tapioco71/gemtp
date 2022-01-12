@@ -96,6 +96,7 @@ subroutine subr31
   !  equivalence (busvec(1), bus1)
   !  equivalence (moncar(2), kbase)
   !
+  integer(4), pointer :: kbase => moncar(2)
   !
   data text1      / 'print ' /
   data text2      / 'head o' /

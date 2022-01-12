@@ -11,11 +11,16 @@
 subroutine over55
   use blkcom
   implicit none
-  integer(4) :: i, k, kilsav
+  integer(4) :: i
+  integer(4) :: k, kilsav
+  integer(4) :: ltacst
   real(8) :: d1, d2, d3, d4, d6, d7
   real(8) :: hmin
   !
   !  equivalence (moncar(4), isw)
+  !
+  integer(4), pointer :: isw => moncar(4)
+  !
   if (iprsup  .ge.  1) write (unit = lunit(6), fmt = 4567) kill
 4567 format (' Begin "over55".  kill =', i6)
   kilsav = kill
@@ -205,6 +210,10 @@ subroutine subr55
   integer(4) :: n1, n2, n3, n4, n5, n6, n9, n13, n15
   real(8) :: d1, d7, d11, d12
   real(8) :: seed
+  !
+  integer(4), pointer :: isw => moncar(4)
+  integer(4), pointer :: knt => moncar(1)
+  integer(4), pointer :: mtape => moncar(10)
   !
   data text1  / 'begin ' /
   data text2  / 'new   ' /

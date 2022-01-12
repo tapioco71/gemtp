@@ -28,9 +28,13 @@ subroutine subr45
   dimension stg(11), si(2)
   dimension lltemp(20)
   double precision :: zift(11)
+  !
   equivalence (zift(1), karray(1))
   equivalence (stg(1), karray(1))
-  equivalence (indtv(1),npoint)
+  equivalence (indtv(1), npoint)
+  !
+  integer(4), pointer :: npoint => indtv(1)
+  !
   if (lastov .eq. 1) go to 20
   nph = ktab
   ntri = nph*(nph + 1)/2
@@ -146,6 +150,7 @@ subroutine guts45 (pbuf, cq, z, y, zy, zya, zyb, zyc, zyd, cqt, q, qi, g, g60, y
   data text15 / 'cable ' /
   data text16 / 'consta' /
   data text17 / 'nts   ' /
+  !
   ll6 = 6
   if (lastov .eq. 1) go to 3107
   if (iprsup .ge. 1) write (unit = lunit6, fmt = 3106) lunit5, ialter, lastov, nss, icheck, iotx, ioss, iofl, ktab, ci1, ck1, voltbc(1), voltk(1), volti(1)

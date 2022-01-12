@@ -172,7 +172,7 @@ subroutine over12
   integer(4) :: m, mxpair
   integer(4) :: n, n1, n2, n3, n4, n5, n6, n7, n8, n9, n15, n16, n17, n24
   integer(4) :: ncompt, ndx1, ndx2, ndx3, ndx4, ndx5, ndxi, nhalf, ni, nj, nk1
-  integer(4) :: nn1, nn8, nn9, nn11, nn12, nn13, nn15, npair, nph, nra, nrz
+  integer(4) :: nn1, nn8, nn9, nn11, nn12, nn13, nn14, nn15, npair, nph, nra, nrz
   integer(4) :: ns1, ns2, nwww
   real(8) :: a, az, azi, azr
   real(8) :: bias, bias2
@@ -202,6 +202,16 @@ subroutine over12
   !  equivalence (moncar(8), jseedr)
   !  equivalence (moncar(9), kloaep)
   !  equivalence (moncar(10), mtape)
+  !
+  integer(4), pointer :: idist => moncar(5)
+  integer(4), pointer :: isw => moncar(4)
+  integer(4), pointer :: itest => moncar(6)
+  integer(4), pointer :: jseedr => moncar(8)
+  integer(4), pointer :: kbase => moncar(2)
+  integer(4), pointer :: kloaep => moncar(9)
+  integer(4), pointer :: knt => moncar(1)
+  integer(4), pointer :: ltdelt => moncar(3)
+  integer(4), pointer :: mtape => moncar(10)
   !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over12."')
@@ -1326,7 +1336,7 @@ subroutine  tacs2
   use movcop
   implicit none
   character(8) :: dumj(9), texnam(5)
-  integer(4) :: i, i1, i2, i3, i30, iac, idctcs, ilk, ip, ipass, ite
+  integer(4) :: i, i1, i2, i3, i30, iac, idctcs, ilk, ioutcs, ip, ipass, ite
   integer(4) :: j, j1, j2, jcm, jlk, jmset
   integer(4) :: k, k1, k2, k3, kbtcs, kbwkcs, kh, kj, kjsup, kksup, krowcs
   integer(4) :: kxai
@@ -1334,7 +1344,7 @@ subroutine  tacs2
   integer(4) :: m, ma1, ma2, ma3, ma4, mdy5, mj, mjm, mk, mm, mrm, mtot
   integer(4) :: n, n1, n1tttt, n2, n3, n5, n6, n7, n14, n22, n33, ndx1, ndx2
   integer(4) :: ndx3, ndx4, ndx5, ndx6, ndxi, ndxj, ndy0, ndy1, ndy2, ndy5
-  integer(4) :: niunrs, nj, nkk, nkk1, nn, nuki, nukj, nukr, nuks
+  integer(4) :: niunrs, nj, nkk, nkk1, nn, ntcsex, nuki, nukj, nukr, nuks
   real(8) :: a, amax, angl
   real(8) :: b, bb, bi, br
   real(8) :: critia
@@ -1348,6 +1358,9 @@ subroutine  tacs2
   !
   !  equivalence (moncar(2), kbase)
   !  equivalence (moncar(3), ltdelt)
+  !
+  integer(4), pointer :: kbase => moncar(2)
+  integer(4), pointer :: ltdelt => moncar(3)
   !
   !1000 if (iprsup .ge. 1) write (lunit(6), 1001)  lastov, m4plot
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1001) lastov, m4plot

@@ -521,6 +521,7 @@ contains
     data text9  / 'h' /
     data text10 / 'i' /
     data iseq   / 15 * 0 /
+    !
     if (kexact .eq. 88333) go to 100
     if (itrnsf .eq. 1  .and. nfreq .eq. 1) return
     if (itrnsf .eq. 1  .and. nfreq .eq. 2) return

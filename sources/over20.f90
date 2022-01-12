@@ -26,6 +26,12 @@ subroutine over20
   !  equivalence (moncar(3), ltdelt), (moncar(4), isw)
   !  equivalence (moncar(10), mtape)
   !
+  integer(4), pointer :: isw => moncar(4)
+  integer(4), pointer :: kbase => moncar(2)
+  integer(4), pointer :: knt => moncar(1)
+  integer(4), pointer :: ltdelt => moncar(3)
+  integer(4), pointer :: mtape => moncar(10)
+  !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  Begin module "over20".')
   zero = 0.0
@@ -2087,9 +2093,9 @@ subroutine spyink
   implicit none
   !     Module of interactive emtp only, which services "emtspy".
   !     this is the 2nd half of principle module "spying".
-  integer(4) :: i, ip
+  integer(4) :: i, ioutcs, ip
   integer(4) :: j, k, kptplt, kud2, kud3
-  integer(4) :: l
+  integer(4) :: l, ltacst
   integer(4) :: m, mmfind, mmhold, mstrng
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n11, n12, n13, n14, n15, n16
   integer(4) :: n17, n18, n22, n23, n24
@@ -5081,25 +5087,25 @@ subroutine locating
   use bcddat
   use bcdtim
   implicit none
-  integer(4) :: iac, ibr1, icsup, iconfg, idctcs, idelta, iend, imdual
-  integer(4) :: ineof, infexp, iold, ipl, ipos, ipr, iprint, iptacw, isat, ised
-  integer(4) :: iseq, isloc, ixr
-  integer(4) :: jasmit, jexcit, jpl, jpr, jsmtor
-  integer(4) :: kalkdu, kalksx, kalkzx, kalplt, kbtcs, kbwkcs, kdev1, kdev2
+  integer(4) :: iac, ibr1, icsup, iconfg, idctcs, idelta, idist, iend, imdual
+  integer(4) :: ineof, infexp, iold, ipl, ipoint, ipos, ipr, iprint, iptacw, isat, ised
+  integer(4) :: iseq, isloc, isw, itest, iupper, ixr
+  integer(4) :: jasmit, jexcit, jpl, jpr, jseedr, jsmtor
+  integer(4) :: kalkdu, kalksx, kalkzx, kalplt, kbase, kbtcs, kbwkcs, kdev1, kdev2
   integer(4) :: kdumj, kdumk, kexc, kfnsup, kgndev, kgnz, khsci, khscr, kidum
   integer(4) :: kifls, kiflz, kilim1, kilim2, kilms1, kilms2, kilmz1, kilmz2
   integer(4) :: kint, kjsup, kkdj, kkdk, kkdus, kkfst, kkhst, kkni, kkout
   integer(4) :: kksj, kksk, kksup, kkxic, kkzj, kkzk, kldev1, kldev2, klmxic
-  integer(4) :: klnout, kmac, kopsup, kout, kpac1i, kpac1r, kpac2i, kpac2r
+  integer(4) :: klnout, kloaep, kmac, knt, kopsup, kout, kpac1i, kpac1r, kpac2i, kpac2r
   integer(4) :: kpd, kph, kpl, kpn, kpr, kreqab, krgsup, krhsde, krowcs, ksat
   integer(4) :: kslim1, kslim2, kslim3, kstart, ktbdev, ktxmn, ktxmx, ktypdv
   integer(4) :: ktysup, kud2, kud3, kud4, kud5, kvin, kvlim1, kvlim2, kvou
   integer(4) :: kvxx, kwrite, kxai, kxhst, kxmncs, kxmxcs, kzlim1, kzlim2
-  integer(4) :: laux, lcom10, limtxf, locbr1, lpast2, lpeak, lsmat
-  integer(4) :: lspov4, ltrnst
-  integer(4) :: mdebug, mxtacw
+  integer(4) :: laux, lcom10, limtxf, locbr1, locz11, lpast2, lpeak, lsmat
+  integer(4) :: lspov4, ltacst, ltdelt, ltrnst
+  integer(4) :: mdebug, mtape, mxtacw
   integer(4) :: ndelta, nds, nhst, niamax, niomax, nkn
-  integer(4) :: nmax, nodma, nodmb, nodmc, nout, noutsm, numas, nxic
+  integer(4) :: nmax, nodma, nodmb, nodmc, nout, noutsm, ntcsex, numas, nxic
   real(8) :: power
   real(8) :: qsat
   real(8) :: r0, ra, rat1, rf, rg, rkd, rkq

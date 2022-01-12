@@ -1108,7 +1108,7 @@ subroutine bctran
   character(8) :: name(60), iname(6)
   integer(4) :: err
   integer(4) :: i, i1, i2, iad, iagain, ib, ibg, icount, ie, ien, ii
-  integer(4) :: ii50, ij, ik, iloss, imagn, in, ip, iprint, iput, iss, iw, iw1
+  integer(4) :: ii50, ij, ik, iloss, imagn, in, ip, iprint, iput, iss, itest, iw, iw1
   integer(4) :: iw2, iwin
   integer(4) :: j, jj, jp, jw
   integer(4) :: k1, k2, k3, kcode, kdelta, kk2, kk3

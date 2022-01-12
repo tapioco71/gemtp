@@ -62,10 +62,14 @@ module blkcom
   !               preceding scalars).
 
   integer(4) :: icheck, iline, inonl, iout, ipunch, iread, istep, itype, it1
-  integer(4) :: ia, indtv(10), ipntv(11), iprsov(39), it2, izero
+  integer(4) :: ia, ipntv(11), it2, izero
+  integer(4), target :: indtv(10)
+  integer(4), target :: iprsov(39)
   integer(4) :: kprchg(6)
-  integer(4) :: locatn(0:20, 0:20), lstat(80), lunit(0 : 15), lunsav(0 : 15)
-  integer(4) :: max99m, moncar(90), multpr(5)
+  integer(4) :: locatn(0:20, 0:20), lunit(0 : 15), lunsav(0 : 15)
+  integer(4), target :: lstat(80)
+  integer(4) :: max99m, multpr(5)
+  integer(4), target :: moncar(90)
   integer(4) :: nbyte(6), nright, nfrfld, kolbeg
   integer(4) :: kol132, kpar, kpen(5), kunit6, kwtspy, kxic
   integer(4) :: kcount, istead, ldata, lbrnch
@@ -100,34 +104,34 @@ module blkcom
   ! Equivalences
   character(8) :: busvec(6)
   character(8) :: alower(14), aupper(14)
-  integer(4) :: iaddrs
-  integer(4) :: ichtr2
-  integer(4) :: idist
+  !  integer(4) :: iaddrs
+  !  integer(4) :: ichtr2
+  !  integer(4) :: idist
   integer(4) :: idistx(1)
   integer(4) :: iofkol
   integer(4) :: iofkor
-  integer(4) :: ioutcs
-  integer(4) :: ipoint
-  integer(4) :: isw
-  integer(4) :: itest
-  integer(4) :: itranm
-  integer(4) :: ityold
-  integer(4) :: iupper
-  integer(4) :: jseedr
-  integer(4) :: kbase
-  integer(4) :: kloaep
-  integer(4) :: knt
-  integer(4) :: knum
-  integer(4) :: locz11
-  integer(4) :: ltacst
-  integer(4) :: ltdelt
-  integer(4) :: maxniu
-  integer(4) :: maxnuk
-  integer(4) :: mdrive
-  integer(4) :: mtape
+  !  integer(4) :: ioutcs
+  !  integer(4) :: ipoint
+  !  integer(4) :: isw
+  !  integer(4) :: itest
+  !  integer(4) :: itranm
+  !  integer(4) :: ityold
+  !  integer(4) :: iupper
+  !  integer(4) :: jseedr
+  !  integer(4) :: kbase
+  !  integer(4) :: kloaep
+  !  integer(4) :: knt
+  !  integer(4) :: knum
+  !  integer(4) :: locz11
+  !  integer(4) :: ltacst
+  !  integer(4) :: ltdelt
+  !  integer(4) :: maxniu
+  !  integer(4) :: maxnuk
+  !  integer(4) :: mdrive
+  !  integer(4) :: mtape
   integer(4) :: next
-  integer(4) :: nmauto
-  integer(4) :: ntcsex
+  !  integer(4) :: nmauto
+  !  integer(4) :: ntcsex
   ! integer(4) :: idistx(1), iofkol, iofkor
   ! integer(4) :: iaddrs, ichtr2, itranm, ityold, iupper
   ! integer(4) :: jseedr
@@ -140,35 +144,35 @@ module blkcom
   !  equivalence (aupper(1), texcol(1))
   equivalence (bus1, busone(1))
   ! equivalence (bus1, kpen(1))
-  equivalence (indtv(1), iaddrs)
-  equivalence (indtv(2), itranm)
-  equivalence (indtv(3), ityold)
-  equivalence (indtv(4), ichtr2)
+  !  equivalence (indtv(1), iaddrs)
+  !  equivalence (indtv(2), itranm)
+  !  equivalence (indtv(3), ityold)
+  !  equivalence (indtv(4), ichtr2)
   equivalence (iofkol, iofgnd)
   equivalence (iofkor, iofbnd)
-  equivalence (iprsov(35), ipoint)
-  equivalence (iprsov(36), iupper)
-  equivalence (iprsov(36), locz11)
-  equivalence (iprsov(39), nmauto)
-  equivalence (nenerg, idistx(1))
+  !  equivalence (iprsov(35), ipoint)
+  !  equivalence (iprsov(36), iupper)
+  !  equivalence (iprsov(36), locz11)
+  !  equivalence (iprsov(39), nmauto)
+  !  equivalence (nenerg, idistx(1))
   !  equivalence (kpen(1), bus1)
   equivalence (kunit6, lunit(6))
   equivalence (loopss(11), next)
-  equivalence (lstat(14), knum)
-  equivalence (lstat(14), mdrive)
-  equivalence (lstat(67), maxniu)
-  equivalence (lstat(68), maxnuk)
-  equivalence (moncar(1), knt)
-  equivalence (moncar(2), kbase)
-  equivalence (moncar(3), ltdelt)
-  equivalence (moncar(4), isw)
-  equivalence (moncar(5), idist)
-  equivalence (moncar(5), ioutcs)
-  equivalence (moncar(6), itest)
-  equivalence (moncar(8), jseedr)
-  equivalence (moncar(9), kloaep)
-  equivalence (moncar(10), mtape)
-  equivalence (moncar(83), ntcsex)
+  !  equivalence (lstat(14), knum)
+  !  equivalence (lstat(14), mdrive)
+  !  equivalence (lstat(67), maxniu)
+  !  equivalence (lstat(68), maxnuk)
+  !  equivalence (moncar(1), knt)
+  !  equivalence (moncar(2), kbase)
+  !  equivalence (moncar(3), ltdelt)
+  !  equivalence (moncar(4), isw)
+  !  equivalence (moncar(5), idist)
+  !  equivalence (moncar(5), ioutcs)
+  !  equivalence (moncar(6), itest)
+  !  equivalence (moncar(8), jseedr)
+  !  equivalence (moncar(9), kloaep)
+  !  equivalence (moncar(10), mtape)
+  !  equivalence (moncar(83), ntcsex)
   !  equivalence (omega, xlong1)
   equivalence (busvec(1), bus1)
   ! data
