@@ -241,7 +241,7 @@ program vardim
   data types(6) / 'character(1)' /
   !
   modvars(1)%name       = 'x'
-  modvars(1)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(1)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(1)%kind       = 1
   modvars(1)%dimension  = 3
 
@@ -331,7 +331,7 @@ program vardim
   modvars(18)%dimension  = 20
 
   modvars(19)%name       = 'cnvhst'
-  modvars(19)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(19)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(19)%kind       = 1
   modvars(19)%dimension  = 73
 
@@ -346,7 +346,7 @@ program vardim
   modvars(21)%dimension  = 71
 
   modvars(22)%name       = 'semaux'
-  modvars(22)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(22)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(22)%kind       = 1
   modvars(22)%dimension  = 22
 
@@ -401,7 +401,7 @@ program vardim
   modvars(32)%dimension  = 60
 
   modvars(33)%name       = 'crit'
-  modvars(33)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(33)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(33)%kind       = 1
   modvars(33)%dimension  = 6
 
@@ -741,7 +741,7 @@ program vardim
   modvars(100)%dimension  = 2
 
   modvars(101)%name       = 'namebr'
-  modvars(101)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(101)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(101)%kind       = 4
   modvars(101)%dimension  = 54
 
@@ -1240,7 +1240,7 @@ program vardim
   modvars(201)%kind = 1
   modvars(201)%dimension = 1
 
-  modvars(202)%name = 'infdli'
+  modvars(202)%name = 'temp_infdli'
   modvars(202)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(202)%kind = 4
   modvars(202)%dimension = 1
@@ -1255,7 +1255,7 @@ program vardim
   modvars(204)%kind = 1
   modvars(204)%dimension = 1
 
-  modvars(205)%name = 'cmr'
+  modvars(205)%name = 'temp_cmr'
   modvars(205)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(205)%kind = 1
   modvars(205)%dimension = 1
@@ -1300,7 +1300,7 @@ program vardim
   modvars(213)%kind = 4
   modvars(213)%dimension = 1
 
-  modvars(214)%name = 'icrit'
+  modvars(214)%name = 'temp_icrit'
   modvars(214)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(214)%kind = 4
   modvars(214)%dimension = 1
@@ -1355,12 +1355,12 @@ program vardim
   modvars(224)%kind = 1
   modvars(224)%dimension = 1
 
-  modvars(225)%name = 'wk1'
+  modvars(225)%name = 'temp_wk1'
   modvars(225)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(225)%kind = 1
   modvars(225)%dimension = 1
 
-  modvars(226)%name = 'cblhst'
+  modvars(226)%name = 'temp_cblhst'
   modvars(226)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(226)%kind = 1
   modvars(226)%dimension = 1
@@ -1400,7 +1400,7 @@ program vardim
   modvars(233)%kind = 1
   modvars(233)%dimension = 1
 
-  modvars(234)%name = 'integx'
+  modvars(234)%name = 'temp_integx'
   modvars(234)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(234)%kind = 4
   modvars(234)%dimension = 1
@@ -1415,7 +1415,7 @@ program vardim
   modvars(236)%kind = 1
   modvars(236)%dimension = 1
 
-  modvars(237)%name = 'ndex'
+  modvars(237)%name = 'temp_ndex'
   modvars(237)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(237)%kind = 4
   modvars(237)%dimension = 1
@@ -1719,12 +1719,12 @@ program vardim
            equivlist(1)%index = 1
            equivlist(2)%variable = modvars(237)   ! ndex(1)
            equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
            equivlist(1)%variable = modvars(33)    ! crit(1)
            equivlist(1)%index = 1
            equivlist(2)%variable = modvars(236)   ! tstat(1)
            equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
            equivlist(1)%variable = modvars(115)   ! adelay(1)
            equivlist(1)%index = 1
            equivlist(2)%variable = modvars(235)   ! akey(1)
@@ -1734,7 +1734,7 @@ program vardim
            equivlist(1)%index = 1
            equivlist(2)%variable = modvars(214)   ! icrit(1)
            equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
            equivlist(1)%variable = modvars(4)     ! xk(1)
            equivlist(1)%index = 1
            equivlist(2)%variable = modvars(230)   ! xx(1)
@@ -1754,12 +1754,12 @@ program vardim
            equivlist(1)%index = 1
            equivlist(2)%variable = modvars(225)   ! wk1(1)
            equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
            equivlist(1)%variable = modvars(101)   ! namebr(1)
            equivlist(1)%index = 1
            equivlist(2)%variable = modvars(202)   ! infdli(1)
            equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
            equivlist(1)%variable = modvars(70)    ! ismout(1)
            equivlist(1)%index = 1
            equivlist(2)%variable = modvars(241)   ! vsmout(1)
@@ -1799,12 +1799,12 @@ program vardim
            equivlist(1)%index = 1
            equivlist(2)%variable = modvars(226)   ! cblhst(1)
            equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
            equivlist(1)%variable = modvars(1)     ! x(1)
            equivlist(1)%index = 1
            equivlist(2)%variable = modvars(234)   ! integx(1)
            equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
            equivlist(1)%variable = modvars(204)   ! emtpe(1)
            equivlist(1)%index = 1
            equivlist(2)%variable = modvars(228)   ! trser(1)

@@ -34,6 +34,12 @@ subroutine over7
   real(8) :: td
   real(8) :: zzza
   !
+  integer(4), pointer :: lorder(:) => ich2(1 :)
+  integer(4), allocatable :: ndex(:)
+  integer(4), pointer :: next => loopss(11)
+  !
+  allocate (ndex(20))
+  ndex = transfer (e, ndex)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over7."')
   ischm = 2
@@ -752,7 +758,11 @@ subroutine over7
   lastov = nchain
   nchain = 51
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
-99999 return
+99999 if (allocated (ndex)) then
+     e = transfer (ndex, e)
+     deallocate (ndex)
+  end if
+  return
 end subroutine over7
 
 !

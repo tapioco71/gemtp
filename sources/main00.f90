@@ -188,7 +188,7 @@ contains
     if (nchain .gt. 20) then
        call a2010
     else
-       if (nchain .eq. 12 .or. nchain .eq. 2) go to 1983
+       if ((nchain .eq. 12) .or. (nchain .eq. 2)) go to 1983
        if (nchain .eq. -1) call move0 (iprsov, ll34)
        call erexit
        nchain = 0
@@ -323,7 +323,7 @@ subroutine stoptp
   read (unit = abuff, fmt = 5607, iostat = ios) (texcol(i), i = 1, 80)
 5607 format (80a1)
   if (ios .ne. 0) go to 9000
-  if (nchain .eq. 31 .and. lastov .eq. 1 .and. kill .eq. 9999) go to 9000
+  if ((nchain .eq. 31) .and. (lastov .eq. 1) .and. (kill .eq. 9999)) go to 9000
   write (unit = lunit(6), fmt = 5623) nchain, lastov, (texcol(i), i = 1, 80)
 5623 format (/, ' Temporary error stop in "stoptp".   nchain, lastov =', 2i5, 5x, 'last-read card image abuff follows ....', /, 80a1)
 9000 stop

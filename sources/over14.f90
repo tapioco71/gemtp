@@ -169,6 +169,11 @@ subroutine last14
   !  equivalence (semaux(1), wk1(1))
   !
   !     Beginning of formation of the real admittance matrix (y)
+  !
+  integer(4), pointer :: infdli(:) => namebr(1 :)
+  real(8), pointer :: cblhst(:) => cnvhst(1 :)
+  real(8), pointer :: wk1(:) => semaux(1 :)
+  !
   icucpl = 0
   jglnn = 0
   isecti = 400

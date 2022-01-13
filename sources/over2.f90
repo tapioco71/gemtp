@@ -110,6 +110,9 @@ subroutine over2
   implicit none
   !     %include  '//c/tsu/cables.ftn'
   character(6) :: chrpad(18)
+  character(8) :: text1, text2, text3, text4, text5, text6
+  character(8) :: text7, text8, text9, text10, text11, text12
+  character(8) :: text13, text14, text15, text16, text17
   !
   !  dimension wk1(1)
   !  dimension infdli(1)
@@ -118,11 +121,6 @@ subroutine over2
   !  equivalence (semaux(1), wk1(1))
   !  equivalence (namebr(1), infdli(1))
   !  equivalence (icrit(1), crit(1))
-  !
-  character(8) :: text1, text2, text3, text4, text5, text6
-  character(8) :: text7, text8, text9, text10, text11, text12
-  character(8) :: text13, text14, text15, text16, text17
-  !
   !  equivalence (indtv(1), iaddrs)
   !  equivalence (indtv(2), itranm)
   !  equivalence (indtv(3), ityold)
@@ -142,7 +140,7 @@ subroutine over2
   integer(4) :: koff6, koff7, koff8, koff9, koff10, koff13, koff14, koff15
   integer(4) :: koff16, koff17, koff18, koff19, koff20, kph, kq, kq1
   integer(4) :: kreqab, ksat
-  integer(4) :: l, ll, ll2, ll3, ll9
+  integer(4) :: l, ll, ll0, ll2, ll3, ll9
   integer(4) :: m, mpower, mread2, mxphas
   integer(4) :: n, n5, n6, n8, n9, n9sq, n14, n16, n24, ncoil, ncount, nfir, nfscan, nkq
   integer(4) :: nn11, nn13, nn17, nnn1, nodtop, np, nphs, nphs2, nphsu
@@ -154,10 +152,13 @@ subroutine over2
   real(8) :: yzero
   !
   integer(4), pointer :: ichtr2 => indtv(4)
+  integer(4), allocatable :: icrit(:)
   integer(4), pointer :: iaddrs => indtv(1)
+  integer(4), pointer :: infdli(:) => namebr(1 :)
   integer(4), pointer :: itranm => indtv(2)
   integer(4), pointer :: ityold => indtv(3)
   integer(4), pointer :: nmauto => iprsov(39)
+  real(8), pointer :: wk1(:) => semaux(1 :)
   !
   data text1   / 'stop c' /
   data text2   / 'ascade' /
@@ -179,6 +180,9 @@ subroutine over2
   data inonam  / 0 /
   data nfscan  / 0 /
   !
+  ll0 = size (transfer (crit, icrit))
+  allocate (icrit(ll0))
+  icrit = transfer (crit, icrit)
   if (lastov .ne. 44) go to 2000
   k = nphlmt  + 1                                           ! ready for next branch, lmfs case
   ibr = nphlmt
@@ -1665,6 +1669,10 @@ subroutine over2
   lstat(18) = 2
 9900 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 9906) ibr, inonl, ntot, kill
 9906 format (' Exit module "over2".     ibr   inonl    ntot    kill', /, 21x, 10i8)
+  if (allocated (icrit)) then
+     crit = transfer (icrit, crit)
+     deallocate (icrit)
+  end if
   return
 end subroutine over2
 
@@ -2405,7 +2413,10 @@ subroutine distr2
   !
   integer(4), pointer :: iaddrs => indtv(1)
   integer(4), pointer :: ichtr2 => indtv(4)
+  integer(4), pointer :: infdli(:) => namebr(1 :)
   integer(4), pointer :: itranm => indtv(2)
+  real(8), pointer :: cblhst(:) => cnvhst(1 :)
+  real(8), pointer :: wk1(:) => semaux(1 :)
   !
   data text2  / '   con' /
   data text3  / 'stant ' /

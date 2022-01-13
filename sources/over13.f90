@@ -177,10 +177,18 @@ subroutine over13
   real(8) :: wd, wdt, winic
   real(8) :: yx
   !
+  integer(4), pointer :: infdli(:) => namebr(1 :)
   integer(4), pointer :: mdrive => lstat(14)
+  real(8), pointer :: cblhst(:) => cnvhst(1 :)
+  real(8), allocatable :: cmr(:)
+  real(8), pointer :: wk1(:) => semaux(1 :)
   !
   data text1 / 'parame' /
   data text2 / 'ters  ' /
+  !
+  ll0 = size (transfer (kks, cmr))
+  allocate (cmr(ll0))
+  cmr = transfer (kks, cmr)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567) istead, ibr, ntot
 4567 format (' Begin module "over13".  istead     ibr    ntot', /, 23x, 8i8)
   jglnn = 0
@@ -889,7 +897,7 @@ subroutine over13
   end do
   call cominv (wk1(koff24 + 1 :), wk1(koff25 + 1 :), it2, 60.0d0)
   t = 0.0000000d0
-  kq = infdli(inoff1+k)
+  kq = infdli(inoff1 + k)
   kq = litype(k)
   ll = 1
   do ifd = 1, nphs2
@@ -2009,6 +2017,10 @@ subroutine over13
   lstat(18) = lastov
 9800 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 9806)
 9806 format (' Exit module  "over13".')
+  if (allocated (cmr)) then
+     kks = transfer (cmr, kks)
+     deallocate (cmr)
+  end if
   return
 end subroutine over13
 

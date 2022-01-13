@@ -35,7 +35,7 @@ end subroutine over51
 subroutine subr51
   use blkcom
   implicit none
-  integer(4) :: i, j, ksat
+  integer(4) :: i, j, kpen(5), ksat
   real(8) :: d1, vmin, vmax
   !
   !     Note. --- As the structure of the EMTP error overlays change,

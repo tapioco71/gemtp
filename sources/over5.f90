@@ -2727,7 +2727,8 @@ subroutine over5a
   real(8) :: smamp, smang, smangl
   real(8) :: yx
   !
-  integer(4), allocatable :: ispum(:)
+  integer(4), allocatable, target :: ispum(:)
+  integer(4), pointer :: kpen(:)
   !
   data j30 / 1 /
   data text12 / 'typ-16' /
@@ -2735,6 +2736,7 @@ subroutine over5a
   ll0 = size (transfer (spum, ispum))
   allocate (ispum(ll0))
   ispum = transfer (spum, ispum)
+  kpen(1 :) => ispum(1 :)
   ll2 = 2
   ll3 = 3
   ll4 = 4

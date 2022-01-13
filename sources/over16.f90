@@ -2282,7 +2282,6 @@ subroutine subts2
   !     %include  '//c/tsu/cables.ins.ftn'
   !
   equivalence (h1, sk), (d2, sm)
-  !  equivalence (iprsov(35), ipoint)
   !
   !  wk1( koff1 + k ) << vm5dt( k ); wk1( koff2 + k ) << vk5dt( k )
   !  wk1( koff3 + k ) <<<  fm5( k ); wk1( koff4 + k ) <<<  bk5( k )
@@ -2295,10 +2294,13 @@ subroutine subts2
   !  dimension wk1(1)
   !  dimension infdli(1)
   !
+  !  equivalence (iprsov(35), ipoint)
   !  equivalence (semaux(1), wk1(1))
   !  equivalence (namebr(1), infdli(1))
   !
+  integer(4), pointer :: infdli(:) => namebr(1 :)
   integer(4), pointer :: ipoint => iprsov(35)
+  real(8), pointer :: wk1(:) => semaux(1 :)
   !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3445) (f(j), j = 1, ntot )
 3445 format ( ' Top  subts2.  f(1:ntot) follows ...', /, (1x, 8e16.7))

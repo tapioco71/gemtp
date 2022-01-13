@@ -79,7 +79,10 @@ contains
     !     selects between disk or virtual memory (/C29B01/).
     integer(4), intent(out) :: narray(:)
     integer(4), intent(in) :: n1, n2, n3
-    integer(4) :: i, j, k, kvecsv, n4, n9, n13
+    integer(4) :: i
+    integer(4) :: j
+    integer(4) :: k, kpen(5), kvecsv
+    integer(4) :: n4, n9, n13
     !
     if (iprsup .lt. 1) go to 5840
     n9 = 0
@@ -695,7 +698,7 @@ subroutine tables
   !     comment card immediately following "synmac" -------------
   integer(4) :: i, iprsav(4)
   integer(4) :: j
-  integer(4) :: ll1, ll2, ll4
+  integer(4) :: ll0, ll1, ll2, ll4
   integer(4) :: n1, n2, n3, n4, n5, n9, n24
   !
   !  dimension busone(1), idistx(1)
@@ -713,10 +716,15 @@ subroutine tables
   !
   !     Burroughs: preserve local variable between module calls:
   !
-  integer(4), pointer :: kbase
+  character(1), pointer :: busone => bus1(1 : 1)
+  integer(4), pointer :: idistx => nenerg
+  integer(4), allocatable :: integx(:)
+  integer(4), pointer :: kbase => moncar(2)
+  integer(4), allocatable :: kpen(:)
   !
-  kbase => moncar(2)
-  !
+  ll0 = size (transfer (x, integx))
+  allocate (integx(ll0))
+  integx = transfer (x, integx)
   iprsav(1 : 4) = (/ 0, 0, 0, 0 /)
   ll1 = 1
   ll2 = 2
@@ -773,6 +781,10 @@ subroutine tables
   end do
 5359 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 5364)
 5364 format (' Exit "tables".')
+  if (allocated (integx)) then
+     x = transfer (integx, x)
+     deallocate (integx)
+  end if
   return
 end subroutine tables
 

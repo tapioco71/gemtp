@@ -156,11 +156,6 @@ subroutine over12
   use fdqlcl
   use systematic
   implicit none
-  !  dimension akey(1), tstat(1)
-  !  dimension wk1(1)
-  !
-  !  equivalence (semaux(1), wk1(1))
-  !  equivalence (akey(1), adelay(1)), (tstat(1), crit(1))
   !     dc-48 had "lastsw" clobbered on 2nd energization; change
   !     dummy usage of this vector to "lastxx" temporarily (12 sep
   character(4) :: atim(2)
@@ -190,7 +185,12 @@ subroutine over12
   real(8) :: yll, yx
   real(8) :: zerofl
   !  dimension cmi(1), cmr(1)
+  !  dimension akey(1), tstat(1)
+  !  dimension wk1(1)
   !
+  !  equivalence (semaux(1), wk1(1))
+  !  equivalence (akey(1), adelay(1))
+  !  equivalence (tstat(1), crit(1))
   !  equivalence (kks(1), cmr(1))
   !  equivalence (kknonl(1), cmi(1))
   !  equivalence (moncar(1), knt)
@@ -212,7 +212,12 @@ subroutine over12
   integer(4), pointer :: knt => moncar(1)
   integer(4), pointer :: ltdelt => moncar(3)
   integer(4), pointer :: mtape => moncar(10)
+  real(8), allocatable :: cmr(:)
+  real(8), pointer :: wk1(:) => semaux(1 :)
   !
+  ll0 = size (transfer (kks, cmr))
+  allocate (cmr(ll0))
+  cmr = transfer (kks, cmr)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over12."')
   nph = 0
@@ -1261,7 +1266,11 @@ subroutine over12
   lstat(18) = 12
 9800 if (iprsup .ge. 1)  write (unit = lunit(6), fmt = 4568)
 4568 format (' Exit module "over12".')
-99999 return
+99999 if (allocated (cmr)) then
+     kks = transfer (cmr, kks)
+     deallocate (cmr)
+  end if
+  return
 end subroutine over12
 
 !

@@ -22,7 +22,9 @@ module blkcom
   !  character(8) :: buff10(10)
   character(1) :: chcont, csepar
   character(1) :: texcol(80)
-  character(8) :: blank, busone(1), bus1, bus2, bus3, bus4, bus5, bus6
+  character(8) :: blank, bus2, bus3, bus4, bus5, bus6
+  character(8), target :: bus1
+  !  character(8) :: busone(1)
   character(8) :: trash, terra, userid, branch, chcopy
   character(8) :: vstacs(24), texta6(15)
   character(80) :: abuff, buff10
@@ -71,7 +73,8 @@ module blkcom
   integer(4) :: max99m, multpr(5)
   integer(4), target :: moncar(90)
   integer(4) :: nbyte(6), nright, nfrfld, kolbeg
-  integer(4) :: kol132, kpar, kpen(5), kunit6, kwtspy, kxic
+  integer(4) :: kol132, kpar, kunit6, kwtspy, kxic
+  !  integer(4), allocatable :: kpen(:)
   integer(4) :: kcount, istead, ldata, lbrnch
   integer(4) :: lexct, lbus, lymat, lswtch, lnonl, lchar, m4plot
   integer(4) :: lpast, lsize7, iplot, ncomp, nv, lcomp, numsm
@@ -93,10 +96,12 @@ module blkcom
   integer(4) :: nchain
   integer(4) :: kconst, kswtch, ntot
   integer(4) :: kill, kssout
-  integer(4) :: lsyn, loopss(13)
+  integer(4) :: lsyn
+  integer(4), target :: loopss(13)
   integer(4) :: numref, nword1, nword2, iloaep
   integer(4) :: ntot1, limstp, indstp, nc
-  integer(4) :: nenerg, numnvo
+  integer(4), target :: nenerg
+  integer(4) :: numnvo
   integer(4) :: swtpe
   integer(4) :: newtac, niu, nsu, nsudv, nsup, nuk
   real(8) :: lnpin
@@ -107,7 +112,7 @@ module blkcom
   !  integer(4) :: iaddrs
   !  integer(4) :: ichtr2
   !  integer(4) :: idist
-  integer(4) :: idistx(1)
+  !  integer(4) :: idistx(1)
   integer(4) :: iofkol
   integer(4) :: iofkor
   !  integer(4) :: ioutcs
@@ -129,7 +134,7 @@ module blkcom
   !  integer(4) :: maxnuk
   !  integer(4) :: mdrive
   !  integer(4) :: mtape
-  integer(4) :: next
+  !  integer(4) :: next
   !  integer(4) :: nmauto
   !  integer(4) :: ntcsex
   ! integer(4) :: idistx(1), iofkol, iofkor
@@ -142,8 +147,8 @@ module blkcom
   !  equivalence (buff10(1), abuff(1))
   equivalence (buff10, abuff)
   !  equivalence (aupper(1), texcol(1))
-  equivalence (bus1, busone(1))
-  ! equivalence (bus1, kpen(1))
+  !  equivalence (bus1, busone(1))
+  !  equivalence (bus1, kpen(1))
   !  equivalence (indtv(1), iaddrs)
   !  equivalence (indtv(2), itranm)
   !  equivalence (indtv(3), ityold)
@@ -157,7 +162,7 @@ module blkcom
   !  equivalence (nenerg, idistx(1))
   !  equivalence (kpen(1), bus1)
   equivalence (kunit6, lunit(6))
-  equivalence (loopss(11), next)
+  !  equivalence (loopss(11), next)
   !  equivalence (lstat(14), knum)
   !  equivalence (lstat(14), mdrive)
   !  equivalence (lstat(67), maxniu)
@@ -174,7 +179,7 @@ module blkcom
   !  equivalence (moncar(10), mtape)
   !  equivalence (moncar(83), ntcsex)
   !  equivalence (omega, xlong1)
-  equivalence (busvec(1), bus1)
+  !  equivalence (busvec(1), bus1)
   ! data
 
   data terra / 'terra ' /

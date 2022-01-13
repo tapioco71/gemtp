@@ -29,6 +29,8 @@ subroutine over9
   integer(4) :: m, ma
   integer(4) :: n1, ndx1, ndx2, ndx3, nk, nkr, nx
   !
+  integer(4), pointer :: next => loopss(11)
+  !
   locatn(i, j) = j * (j - 1) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over9."')

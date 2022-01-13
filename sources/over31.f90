@@ -45,7 +45,7 @@ subroutine subr31
   integer(4) :: istore, isww, iswx, itimes, itp
   integer(4) :: j, j1, j2, jalf, jbegbc, jchar, jcnt, jcol, jdumy, jend, jhms
   integer(4) :: jhmsp, jk, jovfl, jplt, jplt2, jpntr, jpts, jsl, jslot, jstp
-  integer(4) :: k, kalcom, kbound, kend, kikoy, klm, kprhd, kold, kpgrid
+  integer(4) :: k, kalcom, kbound, kend, kikoy, klm, kpen(5), kprhd, kold, kpgrid
   integer(4) :: kpl, kplt, kpltq, kscale, ktrm
   integer(4) :: l, lcnt, limbin, linlim, ll0, ll1, ll2, ll3, ll6, ll10, ll16, ll18
   integer(4) :: ll24, ll78, llmin1, llmin3, lltemp, lnck, lnflg, long1, long2, long3

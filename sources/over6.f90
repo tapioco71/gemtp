@@ -22,7 +22,7 @@ subroutine over6
   integer(4) :: i, icas, il, ipass, ir, isubs1
   integer(4) :: j, j1, j2, jleft, jtest
   integer(4) :: k
-  integer(4) :: l, l1, l2, l3, lleft, ltest
+  integer(4) :: l, l1, l2, l3, ll0, lleft, ltest
   integer(4) :: m, moon
   integer(4) :: n1, n2, n3, n7, n9, n11, n17, n22, ndx1, ndx2, nz
   real(8) :: d1
@@ -32,11 +32,15 @@ subroutine over6
   !  equivalence (iofkol, iofgnd)
   !  equivalence (iofkor, iofbnd)
   !  equivalence (x(1), integx(1))
-
-  !  Following carries "next" among over6, insert, over7, & over9:
-
   !  equivalence (loopss(11), next)
+  !  Following carries "next" among over6, insert, over7, & over9:
   !
+  integer(4), allocatable :: integx(:)
+  integer(4), pointer :: next => loopss(11)
+  !
+  ll0 = size (transfer (x, integx))
+  allocate (integx(ll0))
+  integx = transfer (x, integx)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over6."')
   ntot1 = ntot - 1
@@ -375,7 +379,11 @@ subroutine over6
   nchain = 51
 9988 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
 4568 format ('  "Exit  module over6."')
-99999 return
+99999 if (allocated (integx)) then
+     x = transfer (integx, x)
+     deallocate (integx)
+  end if
+  return
 end subroutine over6
 
 !
@@ -460,6 +468,8 @@ subroutine insert (irrr, icc)
   ! Following carries "next" among over6, insert, over7, & over9:
   !
   !  equivalence (loopss(11), next)
+  !
+  integer(4), pointer :: next => loopss(11)
   !
   if (irrr .le. 1) return
   if (icc .le. 1) return

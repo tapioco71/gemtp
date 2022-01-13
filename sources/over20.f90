@@ -440,7 +440,7 @@ subroutine spying
   integer(4) :: l
   integer(4) :: m
   integer(4) :: n1, n2, n4, n5, n6, n7, n8, n9, n10, n12, n13, n14, n15, n16, n17
-  integer(4) :: n18, n22, n23, n24, n26, n27, n33, nchd2, nd13, num2
+  integer(4) :: n18, n22, n23, n24, n26, n27, n33, nchd2, nd13, next, num2
   integer(4) :: num3, num5, numask, numbco, numbrn
   integer(4) :: numnam
   real(8) :: d1, d2, d3, d4, d5, d6, d8, d13, d34
