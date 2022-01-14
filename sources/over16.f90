@@ -2295,10 +2295,12 @@ subroutine subts2
   !  equivalence (semaux(1), wk1(1))
   !  equivalence (namebr(1), infdli(1))
   !
-  integer(4), pointer :: infdli(:) => namebr
+  integer(4), pointer :: infdli(:)
   integer(4), pointer :: ipoint => iprsov(35)
-  real(8), pointer :: wk1(:) => semaux
+  real(8), pointer :: wk1(:)
   !
+  infdli => namebr
+  wk1 => semaux
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3445) (f(j), j = 1, ntot )
 3445 format ( ' Top  subts2.  f(1:ntot) follows ...', /, (1x, 8e16.7))
   nmodal = kcount
@@ -2338,7 +2340,6 @@ subroutine subts2
   call mult (c(n3), volti, ci(k), it2, llm1)
   call mult (c(n3), voltk, ck(k), it2, llm1)
   if (kodebr(k) .le. 0) go to 3530
-  !  call mover( cik(k), volti(1), it2 )
   call move (cik(k :), volti(1 :), it2)
   call mult (x(n3), volt(1), volti(1), it2, ll1)
   call mult (r(n3), volti(1), cik(k), it2, llm1)
@@ -2349,7 +2350,6 @@ subroutine subts2
 !73529 continue
   go to 3535
 3531 call fdcinj (ikf, isfd, ibf)
-  !  call mover( volt(1), cik(k), it2 )
   call move (volt(1 :), cik(k :), it2)
   go to 3535
 3530 call mult (x(n3), cik(k), volt(1), it2, ll1)
@@ -2422,7 +2422,7 @@ subroutine subts2
      wk1(koff10 + i) = 0.0d0
      ky = ky + 1
   end do
-  if (iprsup .gt. 0) write (unit = *, fmt = *)'+++++Before updating history source++++ t=', t
+  if (iprsup .gt. 0) write (unit = *, fmt = *) '+++++Before updating history source++++ t=', t
   kq = infdli(inoff1 + k)
   kqk0 = infdli(inoff2 + k)
   kh = k
@@ -4761,7 +4761,7 @@ subroutine subts3
   real(8), allocatable :: vsmout(:)
   !  real(8), pointer :: xx(:)
   !
-  volta = volti
+  volta => volti
   !  xx => xk
   ll0 = size (transfer (ismout, vsmout))
   allocate (vsmout(ll0))
