@@ -29,13 +29,14 @@ subroutine over1
   implicit none
   !     %include  '//c/tsu/cables.ins.ftn'
   !     To avoid "insert deck tacsar" here, use small part of it:
+  character(8) :: aupper(14)
   character(8) :: text1, text2, text6, datexx(2)
   character(8) :: text3, text4, text5, tcloxx(2)
   character(80) :: disk_file
   character(132) :: ansi132
   integer(4) :: i, iadqq, ijk, ios, ip, iswent, iy, j
   integer(4) :: k, kswpe4
-  integer(4) :: ll1, ll6, ll8, ll11, ll20, ll24, ll25, ll30, ll40, ll60, ll64, ll80
+  integer(4) :: ll0, ll1, ll6, ll8, ll11, ll20, ll24, ll25, ll30, ll40, ll60, ll64, ll80
   integer(4) :: lstacs(8), ltacst, lu2, lu6, lunt77
   integer(4) :: n5, n6, n7, n8, n9, n12, n14, n15, n18, n19, n23, nfdbr, nfdhst, nfdph
   integer(4) :: nfdpol, ngroup, niunrs, nk, ntcsex, ntlin, nturn, num888, numnam
@@ -61,15 +62,17 @@ subroutine over1
   !
   !     default list sizes for tacs proportioning of emtp list 19.
   !
-  integer(4), pointer :: idist
-  integer(4), pointer :: isw
-  integer(4), pointer :: itest
-  integer(4), pointer :: jseedr
-  integer(4), pointer :: kbase
-  integer(4), pointer :: kloaep
-  integer(4), pointer :: knt
-  integer(4), pointer :: nmauto
-  integer(4), pointer :: mtape
+  integer(4), pointer :: idist => moncar(5)
+  integer(4), pointer :: isw => moncar(4)
+  integer(4), pointer :: itest => moncar(6)
+  integer(4), pointer :: jseedr => moncar(8)
+  integer(4), pointer :: kbase => moncar(2)
+  integer(4), pointer :: kloaep => moncar(9)
+  integer(4), pointer :: knt => moncar(1)
+  integer(4), allocatable :: kpen(:)
+  integer(4), pointer :: nmauto => iprsov(39)
+  integer(4), pointer :: mtape => moncar(10)
+  real(8), pointer :: r4(:)
   !
   data text2 / 'name  ' /
   data text6 / 'copy  ' /
@@ -91,16 +94,10 @@ subroutine over1
   data ll64  / 64 /
   data ll80  / 80 /
   !
-  knt => moncar(1)
-  kbase => moncar(2)
-  isw => moncar(4)
-  idist => moncar(5)
-  itest => moncar(6)
-  jseedr => moncar(8)
-  kloaep => moncar(9)
-  mtape => moncar(10)
-  nmauto => iprsov(39)
-  !
+  r4 => volti
+  ll0 = size (transfer (bus1, kpen))
+  allocate (kpen(ll0))
+  kpen = transfer (bus1, kpen)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over1."')
   lstacs(1) = 20
@@ -134,7 +131,7 @@ subroutine over1
   do i = 0, 15
      lunit(i) = i
   end do
-  speedl = 2.997925d8
+  !  speedl = 2.997925d8
   peaknd(1) = 0.0d0
   kburro = 0
   ! assign default relative precision for 6 EMTP variable types.
@@ -788,6 +785,10 @@ subroutine over1
   !     1                          n5, n6, ida, ifkc
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
 4568 format (' "Exit  module over1."')
+  if (allocated (kpen)) then
+     bus1 = transfer (kpen, bus1)
+     deallocate (kpen)
+  end if
   return
 end subroutine over1
 

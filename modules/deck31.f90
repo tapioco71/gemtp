@@ -5,7 +5,8 @@
 !
 
 module deck31
-  ! integer(4) :: karray(3)
+  use labcom, only : karray
+  !integer(4), target :: karray(3)
   !  common /c29b01/ karray(3)
   ! equivalences friend zone.
   ! from over31:

@@ -20,6 +20,7 @@ subroutine over14
   integer(4) :: m, mfd, mswtch
   integer(4) :: n1, n6, n7, n15, n16, ndx1, ndx2
   real(8) :: d1, d2
+  !
   !  equivalence (moncar(1), knt)
   !
   integer(4), pointer :: knt => moncar(1)
@@ -146,7 +147,7 @@ subroutine last14
   integer(4) :: k, kbr, kj, km1, knode, koff11, kq, kss
   integer(4) :: l
   integer(4) :: m, mabs, mark, marm, mm, mnode, mp
-  integer(4) :: n1, n2, n3, n4, n4j, n5, n6, n7, n9, nk1, nn, nn11, nn12, nnk
+  integer(4) :: n1, n2, n3, n4, n4j, n5, n6, n7, n9, nk1, nn, nn10, nn11, nn12, nnk
   integer(4) :: nnn1, nnq1, nnq2, nnq3, np, nphs, nphs2, nq, nq0, nq1, nq2, nq3, nq4
   integer(4) :: nq5, nq6, nteq, nticpl
   real(8) :: apidt, b, cj, d1, d2, d18, dblpr1, dblpr2, dblpr3, dblpr4, dj
@@ -170,9 +171,13 @@ subroutine last14
   !
   !     Beginning of formation of the real admittance matrix (y)
   !
-  integer(4), pointer :: infdli(:) => namebr(1 :)
-  real(8), pointer :: cblhst(:) => cnvhst(1 :)
-  real(8), pointer :: wk1(:) => semaux(1 :)
+  integer(4), pointer :: infdli(:)
+  real(8), pointer :: cblhst(:)
+  real(8), pointer :: wk1(:)
+  !
+  infdli(1 :) => namebr(1 :)
+  cblhst(1 :) => cnvhst(1 :)
+  wk1(1 :) => semaux(1 :)
   !
   icucpl = 0
   jglnn = 0
@@ -795,6 +800,8 @@ subroutine breqiv (ikf, isfd, ibf)
   integer(4) :: idk, isc, isf, isk, ist, isu, isv, isw
   integer(4) :: ka, kb
   real(8) :: a1, a2, ac1, al1, ar, ar1, arl, azi, azr, cz
+  real(8) :: ur(40)
+  ! dimension ur(40)
   !
   !     This routine produces companion model for each branch. It also
   !     initializes the current injections for the branches  *   *   *   *

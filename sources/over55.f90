@@ -213,7 +213,7 @@ subroutine subr55
   !
   integer(4), pointer :: isw => moncar(4)
   integer(4), pointer :: knt => moncar(1)
-  integer(4), pointer :: mtape => moncar(10)
+  !  integer(4), pointer :: mtape => moncar(10)
   !
   data text1  / 'begin ' /
   data text2  / 'new   ' /

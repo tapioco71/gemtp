@@ -3761,7 +3761,17 @@ subroutine over3
   !
   integer(4), pointer :: ipoint => iprsov(35)
   integer(4), pointer :: locz11 => iprsov(36)
-  real(8), pointer :: caslnr(:) => xk(1 :)
+  integer(4), allocatable :: mapcas(:)
+  integer(4), allocatable :: mapinv(:)
+  integer(4), allocatable :: node1(:)
+  integer(4), allocatable :: node2(:)
+  real(8), pointer :: caslnr(:)
+  real(8), pointer :: caslnx(:)
+  real(8), allocatable :: cser(:)
+  real(8), allocatable :: cshun(:)
+  real(8), pointer :: trser(:)
+  real(8), allocatable :: trshun(:)
+  real(8), pointer :: txser(:)
   real(8), allocatable :: txshun(:)
   !
   data text1  / 'stop' /
@@ -3769,6 +3779,31 @@ subroutine over3
   data text3  / 'cade' /
   data text4  / '    ' /
   !
+  caslnr => xk
+  caslnx => xm
+  trser => e
+  txser => f
+  ll0 = size (transfer (kode, cser))
+  allocate (cser(ll0))
+  cser = transfer (kode, cser)
+  ll0 = size (transfer (ykm, mapcas))
+  allocate (mapcas(ll0))
+  mapcas = transfer (ykm, mapcas)
+  ll0 = size (transfer (volt, mapinv))
+  allocate (mapinv(ll0))
+  mapinv = transfer (volt, mapinv)
+  ll0 = size (transfer (volti, node1))
+  allocate (node1(ll0))
+  node1 = transfer (volti, node1)
+  ll0 = size (transfer (voltk, node2))
+  allocate (node2(ll0))
+  node2 = transfer (voltk, node1)
+  ll0 = size (transfer (kknonl, cshun))
+  allocate (cshun(ll0))
+  cshun = transfer (kknonl, cshun)
+  ll0 = size (transfer (kk, trshun))
+  allocate (trshun(ll0))
+  trshun = transfer (kk, trshun)
   ll0 = size (transfer (kks, txshun))
   allocate (txshun(ll0))
   txshun = transfer (kks, txshun)
@@ -4389,9 +4424,37 @@ subroutine over3
   nchain = 51
   lstat(18) = 3
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
-99999 if (allocated (txshun)) then
+99999 if (allocated (trshun)) then
+     kk = transfer (trshun, kk)
+     deallocate (trshun)
+  end if
+  if (allocated (txshun)) then
      kks = transfer (txshun, kks)
      deallocate (txshun)
+  end if
+  if (allocated (cshun)) then
+     kknonl = transfer (cshun, kknonl)
+     deallocate (cshun)
+  end if
+  if (allocated (node2)) then
+     voltk = transfer (node2, voltk)
+     deallocate (node2)
+  end if
+  if (allocated (node1)) then
+     volti = transfer (node1, volti)
+     deallocate (node1)
+  end if
+  if (allocated (mapinv)) then
+     volt = transfer (mapinv, volt)
+     deallocate (mapinv)
+  end if
+  if (allocated (mapcas)) then
+     ykm = transfer (mapcas, ykm)
+     deallocate (mapcas)
+  end if
+  if (allocated (cser)) then
+     kode = transfer (cser, kode)
+     deallocate (cser)
   end if
   return
 end subroutine over3

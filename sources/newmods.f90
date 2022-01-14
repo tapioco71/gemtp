@@ -25,7 +25,7 @@ end subroutine main10
 #ifdef WITH_OVER29
 subroutine over29
   implicit none
-  integer(4) :: karray( 9762865)
+  integer(4), target :: karray( 9942869)
   real(8) :: tp(   30000)
   integer(4) :: norder(   93002)
   integer(4) :: index(   93002)
@@ -49,7 +49,7 @@ end subroutine over29
 #ifdef WITH_OVER31
 subroutine over31
   implicit none
-  integer(4) :: karray(     300)
+  integer(4), target :: karray(     300)
   call subr31
   return
 end subroutine over31
@@ -83,7 +83,6 @@ subroutine fixs10
   real(8) :: solrsv(   93002)
   real(8) :: solisv(   93002)
   real(8) :: gndd(   30000)
-  real(8) :: bndd(   30000)
   integer(4) :: nekfix(     100)
   real(8) :: fxtem1(     100)
   real(8) :: fxtem2(     100)
@@ -115,32 +114,32 @@ end subroutine fixs10
 #ifdef WITH_OVER44
 subroutine over44
   implicit none
-  integer(4) :: karray(     300)
-  real(8) :: p(  109746)
-  real(8) :: z(  109746)
-  integer(4) :: ic(     468)
-  real(8) :: r(     468)
-  real(8) :: d(     468)
-  real(8) :: gmd(     468)
-  real(8) :: x(     468)
-  real(8) :: y(     468)
-  real(8) :: tb2(     468)
-  integer(4) :: itb3(     468)
-  real(8) :: workr1(     468)
-  real(8) :: workr2(     468)
-  character(8) :: text(     936)
-  real(8) :: gd(   27508)
-  real(8) :: bd(   27508)
-  real(8) :: yd(   27508)
-  integer(4) :: itbic(     469)
-  real(8) :: tbr(     469)
-  real(8) :: tbd(     469)
-  real(8) :: tbg(     469)
-  real(8) :: tbx(     469)
-  real(8) :: tby(     469)
-  integer(4) :: tbtb2(     469)
-  integer(4) :: itbtb3(     469)
-  character(8) :: tbtext(     469)
+  integer(4), target :: karray(     300)
+  real(8) :: p(  111628)
+  real(8) :: z(  111628)
+  integer(4) :: ic(     472)
+  real(8) :: r(     472)
+  real(8) :: d(     472)
+  real(8) :: gmd(     472)
+  real(8) :: x(     472)
+  real(8) :: y(     472)
+  real(8) :: tb2(     472)
+  integer(4) :: itb3(     472)
+  real(8) :: workr1(     472)
+  real(8) :: workr2(     472)
+  character(8) :: text(     944)
+  real(8) :: gd(   28015)
+  real(8) :: bd(   28015)
+  real(8) :: yd(   28015)
+  integer(4) :: itbic(     473)
+  real(8) :: tbr(     473)
+  real(8) :: tbd(     473)
+  real(8) :: tbg(     473)
+  real(8) :: tbx(     473)
+  real(8) :: tby(     473)
+  integer(4) :: tbtb2(     473)
+  integer(4) :: itbtb3(     473)
+  character(8) :: tbtext(     473)
   call subr44
   return
 end subroutine over44
@@ -153,7 +152,7 @@ end subroutine over44
 #ifdef WITH_OVER45
 subroutine over45
   implicit none
-  integer(4) :: karray(     300)
+  integer(4), target :: karray(     300)
   call subr45
   return
 end subroutine over45
@@ -166,7 +165,7 @@ end subroutine over45
 #ifdef WITH_OVER47
 subroutine over47
   implicit none
-  integer(4) :: karray(     300)
+  integer(4), target :: karray(     300)
   call subr47
   return
 end subroutine over47
@@ -213,13 +212,13 @@ subroutine dimens (ls, n, b1, b2)
   ls(27)  =     600
   ls(28)  =    1080
   n7 = 28 + 1
-  ls(n7) = 9762865
-  b1 ='  201234'
-  b2 ='  120122'
+  ls(n7) = 9942869
+  b1 ='  161409'
+  b2 ='  140122'
   return
 2900 if (n .gt.  29) go to 3100
   ls( 1)  =       0
-  ls( 2) =9762865
+  ls( 2) =9942869
   ls( 3)  =      23
   ls( 4) =  30000
   ls( 5)  =       1
@@ -247,15 +246,15 @@ subroutine dimens (ls, n, b1, b2)
   ls( 1)  =       9
   ls( 2) =    300
   ls( 3)  =      75
-  ls( 4) = 109746
+  ls( 4) = 111628
   ls( 5)  =      71
-  ls( 6) =    468
+  ls( 6) =    472
   ls( 7)  =      76
-  ls( 8) =    936
+  ls( 8) =    944
   ls( 9)  =      74
-  ls(10) =  27508
+  ls(10) =  28015
   ls(11)  =      73
-  ls(12) =    469
+  ls(12) =    473
   return
 4500 if (n .gt.  45) go to 4700
   ls( 1)  =       9

@@ -177,18 +177,29 @@ subroutine over13
   real(8) :: wd, wdt, winic
   real(8) :: yx
   !
-  integer(4), pointer :: infdli(:) => namebr(1 :)
+  integer(4), pointer :: infdli(:)
   integer(4), pointer :: mdrive => lstat(14)
-  real(8), pointer :: cblhst(:) => cnvhst(1 :)
+  !  real(8), pointer :: cblhst(:)
+  real(8), allocatable :: cmi(:)
   real(8), allocatable :: cmr(:)
-  real(8), pointer :: wk1(:) => semaux(1 :)
+  real(8), pointer :: vim(:)
+  real(8), pointer :: w1(:)
+  real(8), pointer :: wk1(:)
   !
   data text1 / 'parame' /
   data text2 / 'ters  ' /
   !
+  infdli => namebr
+  !  cblhst => cnvhst
+  vim => volt
+  w1 => ykm
+  wk1 => semaux
   ll0 = size (transfer (kks, cmr))
   allocate (cmr(ll0))
   cmr = transfer (kks, cmr)
+  ll0 = size (transfer (kknonl, cmi))
+  allocate (cmi(ll0))
+  cmi = transfer (kknonl, cmi)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567) istead, ibr, ntot
 4567 format (' Begin module "over13".  istead     ibr    ntot', /, 23x, 8i8)
   jglnn = 0
@@ -2017,6 +2028,10 @@ subroutine over13
   lstat(18) = lastov
 9800 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 9806)
 9806 format (' Exit module  "over13".')
+  if (allocated (cmi)) then
+     kknonl = transfer (cmi, kknonl)
+     deallocate (cmi)
+  end if
   if (allocated (cmr)) then
      kks = transfer (cmr, kks)
      deallocate (cmr)
@@ -2041,6 +2056,7 @@ subroutine fdint (ikf, isfd, ibf, omg)
   real(8) :: ac1, ai, al1, ar, ar1, arl, aui, aur, azi, azr
   real(8) :: cz
   real(8) :: den
+  real(8) :: ui(40), ur(40)
   !  dimension ur(40), ui(40)
   !     this routine initializes a)capacitor voltages, b)branch currents**
   !
@@ -2225,6 +2241,7 @@ subroutine last13
   double precision :: dblpr1, dblpr2, dblpr3, dblpr4
   !
   integer(4), pointer :: mdrive => lstat(14)
+  real(8), pointer :: vim(:) => volt(1 :)
   !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format (' Begin module "last13".')

@@ -20,25 +20,27 @@ subroutine over7
   !  equivalence (ich2(1), lorder(1))
   !  equivalence (iofkol, iofgnd)
   !  equivalence (iofkor, iofbnd)
-  !
-  !  Following carries "next" among over6, insert, over7, & over9:
-  !
   !  equivalence (loopss(11), next)
   !
+  !  Following carries "next" among over6, insert, over7, & over9:
   integer(4) :: i, ib, icon, ii, ischm, ist, isubs1, isubs2
   integer(4) :: j, jb, jbs, jbt, js, jsub
   integer(4) :: k, kb, ks
-  integer(4) :: l, lastxx, ls
+  integer(4) :: l, lastxx, ll0, ls
   integer(4) :: m, mext
   integer(4) :: n1, n2, n13, ncn, ndx1, nelim, nz
   real(8) :: td
   real(8) :: zzza
   !
-  integer(4), pointer :: lorder(:) => ich2(1 :)
+  integer(4), pointer :: iofkol => iofgnd
+  integer(4), pointer :: iofkor => iofbnd
+  integer(4), pointer :: lorder(:)
   integer(4), allocatable :: ndex(:)
   integer(4), pointer :: next => loopss(11)
   !
-  allocate (ndex(20))
+  lorder => ich2
+  ll0 = size (transfer (e, ndex))
+  allocate (ndex(ll0))
   ndex = transfer (e, ndex)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module over7."')
@@ -68,7 +70,7 @@ subroutine over7
   j = kownt(i)
   call subscr (i, lbus, 150, 1)
   if (j .eq. (-1)) go to 170
-155 k =  int (ndex(j + 1))
+155 k =  int (ndex(j + 1), kind (k))
   jsub = j + 1
   call subscr (jsub, lbus, 155, 1)
   ich1(i) = k

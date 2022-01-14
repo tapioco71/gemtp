@@ -19,9 +19,9 @@ subroutine over9
   !
   !  equivalence (iofkol, iofgnd)
   !  equivalence (iofkor, iofbnd)
-  !     Following carries "next" among over6, insert, over7, & over9:
   !  equivalence (loopss(11), next)
   !
+  !     Following carries "next" among over6, insert, over7, & over9:
   integer(4) :: i, icas, ii, ik, il, istate, isubs1, isubs2, iswbob
   integer(4) :: j, j1, jbrt, jj, jsw
   integer(4) :: k, k1, kf
@@ -29,6 +29,8 @@ subroutine over9
   integer(4) :: m, ma
   integer(4) :: n1, ndx1, ndx2, ndx3, nk, nkr, nx
   !
+  integer(4), pointer :: iofkol => iofgnd
+  integer(4), pointer :: iofkor => iofbnd
   integer(4), pointer :: next => loopss(11)
   !
   locatn(i, j) = j * (j - 1) / 2 + i

@@ -33,9 +33,11 @@ subroutine over6
   !  equivalence (iofkor, iofbnd)
   !  equivalence (x(1), integx(1))
   !  equivalence (loopss(11), next)
-  !  Following carries "next" among over6, insert, over7, & over9:
   !
+  !  Following carries "next" among over6, insert, over7, & over9:
   integer(4), allocatable :: integx(:)
+  integer(4), pointer :: iofkol => iofgnd
+  integer(4), pointer :: iofkor => iofbnd
   integer(4), pointer :: next => loopss(11)
   !
   ll0 = size (transfer (x, integx))
@@ -400,7 +402,7 @@ subroutine rinfin
   integer(4) :: m
   integer(4) :: n1, n2, n3, n7
   real(8) :: d1
- !
+  !
   n3 = 0
   d1 = 1.0d0 / (100.0d0 * flzero)
   ! 1st remove minus sign of "kpartb" if present as flag

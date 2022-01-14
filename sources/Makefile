@@ -142,12 +142,12 @@ ${COMPILER}/${TARGET}: ${COMPILER}/systematic.o
 ${COMPILER}/${TARGET}: ${COMPILER}/blkcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/labcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/tracom.o
-${COMPILER}/${TARGET}: ${COMPILER}/pckcom.o
+#${COMPILER}/${TARGET}: ${COMPILER}/pckcom.o
+${COMPILER}/${TARGET}: ${COMPILER}/strcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/freedom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/bcddat.o
 ${COMPILER}/${TARGET}: ${COMPILER}/bcdtim.o
 ${COMPILER}/${TARGET}: ${COMPILER}/movcop.o
-${COMPILER}/${TARGET}: ${COMPILER}/strcom.o
 ${COMPILER}/${TARGET}: ${COMPILER}/random.o
 ${COMPILER}/${TARGET}: ${COMPILER}/volt45.o
 ${COMPILER}/${TARGET}: ${COMPILER}/deck10.o

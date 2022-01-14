@@ -17,17 +17,23 @@ end module comld
 
 module blkcom
   implicit none
+  !     Parameters.
+  real(8), parameter :: fltinf = huge (0.0)
+  real(8), parameter :: flzero = tiny (0.0)
+  real(8), parameter :: speedl = 2.997925d8
+  !
   !     flag-1.   begin class-1  /blank/  variables
   !               (alphanumeric variables, capable of storing  a6  info).
   !  character(8) :: buff10(10)
   character(1) :: chcont, csepar
-  character(1) :: texcol(80)
+  character(8), target :: texcol(80)
   character(8) :: blank, bus2, bus3, bus4, bus5, bus6
   character(8), target :: bus1
   !  character(8) :: busone(1)
   character(8) :: trash, terra, userid, branch, chcopy
   character(8) :: vstacs(24), texta6(15)
-  character(80) :: abuff, buff10
+  character(80), target :: abuff
+  !  character(80) :: buff10
   !
   ! common abuff
   ! common bus1, bus2, bus3, bus4, bus5, bus6
@@ -38,8 +44,6 @@ module blkcom
   !     flag-2.   begin class-2  /blank/  variables
   !               (floating-point numeric usage only, with scalars
   !               preceding arrays).
-  !
-  real(8), parameter :: fltinf = huge (0.0), flzero = tiny (0.0)
   !
   real(8) :: ci1, ck1
   real(8) :: deltat, delta2
@@ -53,7 +57,7 @@ module blkcom
   real(8) :: degmin, degmax, statfr, voltbc(50)
   real(8) :: flstat(20)
   real(8) :: angle
-  real(8) :: pu, dltinv, speedl
+  real(8) :: pu, dltinv
   real(8) :: epsuba, epomeg, epdgel, epsiln, epszno, epwarn
   real(8) :: peaknd(3)
   real(8) :: sglfir
@@ -80,7 +84,8 @@ module blkcom
   integer(4) :: lpast, lsize7, iplot, ncomp, nv, lcomp, numsm
   integer(4) :: ifdep, ltails, lfdep, lwt, last, npower, maxpe
   integer(4) :: lsiz12, lsmout, limass, iv
-  integer(4) :: ktrlsw(8), num99, kpartb, llbuff, kanal, nsmth
+  integer(4), target :: ktrlsw(8)
+  integer(4) :: num99, kpartb, llbuff, kanal, nsmth
   integer(4) :: nstacs, maxbus, lastov
   integer(4) :: lhist, ifx, isubc1, inecho, noutpr
   integer(4) :: ktab, jflsos, numdcd, numum, lspcum
@@ -89,7 +94,10 @@ module blkcom
   integer(4) :: lsiz27, lsiz28, ltlabl, iwt, ifdep2, idoubl, ioutin
   integer(4) :: ipun, jst, jst1, muntsv(2), numsub, maxzno
   integer(4) :: ifsem, lfsem, iadd, lfd, nexout
-  integer(4) :: ibr, icat, iftail, intinf, iofbnd, ioffd, iofgnd, iprsup, isplot
+  integer(4) :: ibr, icat, iftail, intinf
+  integer(4), target :: iofbnd
+  integer(4), target :: iofgnd
+  integer(4) :: ioffd, iprsup, isplot
   integer(4) :: isprin, it, ivolt
   integer(4) :: modout, lint
   integer(4) :: ncurr, maxout
@@ -108,13 +116,13 @@ module blkcom
 
   ! Equivalences
   character(8) :: busvec(6)
-  character(8) :: alower(14), aupper(14)
+  !  character(8) :: alower(14), aupper(14)
   !  integer(4) :: iaddrs
   !  integer(4) :: ichtr2
   !  integer(4) :: idist
   !  integer(4) :: idistx(1)
-  integer(4) :: iofkol
-  integer(4) :: iofkor
+  !  integer(4) :: iofkol
+  !  integer(4) :: iofkor
   !  integer(4) :: ioutcs
   !  integer(4) :: ipoint
   !  integer(4) :: isw
@@ -145,7 +153,7 @@ module blkcom
   !
   !  equivalence (anglex(1), angle)
   !  equivalence (buff10(1), abuff(1))
-  equivalence (buff10, abuff)
+  !  equivalence (buff10, abuff)
   !  equivalence (aupper(1), texcol(1))
   !  equivalence (bus1, busone(1))
   !  equivalence (bus1, kpen(1))
@@ -153,8 +161,8 @@ module blkcom
   !  equivalence (indtv(2), itranm)
   !  equivalence (indtv(3), ityold)
   !  equivalence (indtv(4), ichtr2)
-  equivalence (iofkol, iofgnd)
-  equivalence (iofkor, iofbnd)
+  !  equivalence (iofkol, iofgnd)
+  !  equivalence (iofkor, iofbnd)
   !  equivalence (iprsov(35), ipoint)
   !  equivalence (iprsov(36), iupper)
   !  equivalence (iprsov(36), locz11)

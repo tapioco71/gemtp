@@ -10,27 +10,39 @@
 
 subroutine subr47
   use blkcom
-  use labcom
   use c29b01
   use com47
   use tracom
   implicit none
-  !  dimension lltemp(20)
-  !  dimension rtg(1), itg(1), ctg(1)
   integer(4) :: lltemp(20)
-  !  equivalence (karray(1), itg(1), rtg(1), ctg(1))
+
   integer(4) :: iof01, iof02, iof03, iof04, iof05, iof06, iof07, iof08, iof09
   integer(4) :: iof10, iof11, iof12, iof13, iof14, iof15, iof16, iof17, iof18
   integer(4) :: iof19, iof20, iof21, iof22, iof23, iof24, iof25, iof26, iof27
   integer(4) :: iof28, iof29, iof30, iof31, iof32, iof33, iof34, iof35, iof36
   integer(4) :: iof37, iof38, iof39, iof40, iof41, iof42, iof43, iof44, iof45
   integer(4) :: iof46, iof47, iof48, iof49, iof50, iof51, iof52, iof53
-  integer(4) :: ldm, ldn, ldn2, lmq, lnq, lnq2, loq
+  integer(4) :: ldm, ldn, ldn2, ll0, lmq, lnq, lnq2, loq
   integer(4) :: n7, n8, n13
   real(8) :: cc
   real(8) :: dd
   real(8) :: ppa, ppb
   !
+  !  dimension lltemp(20)
+  !  dimension rtg(1), itg(1), ctg(1)
+  !  equivalence (karray(1), itg(1), rtg(1), ctg(1))
+  !
+  integer(4), pointer :: itg(:)
+  real(8), allocatable :: rtg(:)
+  complex(16), allocatable :: ctg(:)
+  !
+  itg => karray
+  ll0 = size (transfer (karray, ctg))
+  allocate (ctg(ll0))
+  ctg = transfer (karray, ctg)
+  ll0 = size (transfer (karray, rtg))
+  allocate (rtg(ll0))
+  rtg = transfer (karray, rtg)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  Begin module "subr47".')
   n8 = nchain
@@ -117,6 +129,14 @@ subroutine subr47
 7835 call guts47 (itg(iof01 :), itg(iof02 :), rtg(iof03 :), rtg(iof04 :), rtg(iof05 :), rtg(iof06 :), rtg(iof07:), rtg(iof08 :), rtg(iof09 :), rtg(iof10 :), rtg(iof11 :), rtg(iof12 :), rtg(iof13 :), rtg(iof14 :), rtg(iof15 :), rtg(iof16 :), rtg(iof17 :), rtg(iof18 :), rtg(iof19 :), rtg(iof20 :), rtg(iof21 :), rtg(iof22 :), rtg(iof23 :), rtg(iof24 :), rtg(iof25 :), rtg(iof26 :), rtg(iof27 :), rtg(iof28 :), rtg(iof29 :), rtg(iof30 :), rtg(iof31 :), rtg(iof32 :), rtg(iof33 :), rtg(iof34 :), rtg(iof35 :), ctg(iof36 :), ctg(iof37 :), ctg(iof38 :), ctg(iof39 :), ctg(iof40 :), ctg(iof41 :), ctg(iof42 :), ctg(iof43 :), ctg(iof44 :), ctg(iof45 :), ctg(iof46 :), ctg(iof47 :), ctg(iof48 :), ctg(iof49 :), ctg(iof50 :), ctg(iof51 :), ctg(iof52 :), ctg(iof53 :), ldm, ldn, ldn2, lnq2)
 7842 if (kill .gt. 0) lstat(18) = nchain
   lastov = 47
+  if (allocated (rtg)) then
+     karray = transfer (rtg, karray)
+     deallocate (rtg)
+  end if
+  if (allocated (ctg)) then
+     karray = transfer (ctg, karray)
+     deallocate (ctg)
+  end if
   return
 end subroutine subr47
 

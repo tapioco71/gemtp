@@ -1340,6 +1340,13 @@ subroutine sseqiv (ikf, isfd, omegal, omegac)
   real(8) :: ac1, al1, ar1, arl, azi, azr
   real(8) :: den
   !
+  real(8), allocatable :: ui(:)
+  real(8), allocatable :: ur(:)
+  !
+  allocate (ui(2))
+  ui = transfer (voltk, ui)
+  allocate (ur(2))
+  ur = transfer (volti, ur)
   idk = 2 * ikf
   ikf = ikf + 1
   if (iprsup .gt. 0) write (unit = lunit(6), fmt = 1) ikf, isfd, imfd(idk + 1), imfd(idk + 2)
@@ -1380,6 +1387,14 @@ subroutine sseqiv (ikf, isfd, omegal, omegac)
      ur(kb) = ur(kb) * den
      ui(kb) = -ui(kb) * den / omegal
   end do
+  if (allocated (ur)) then
+     volti = transfer (ur, volti)
+     deallocate (ur)
+  end if
+  if (allocated (ui)) then
+     voltk = transfer (ui, voltk)
+     deallocate (ui)
+  end if
   return
 end subroutine sseqiv
 

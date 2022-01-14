@@ -10,7 +10,6 @@
 
 subroutine subr31
   use blkcom
-  use labcom, only : buslst, ibsout, ibrnch, jbrnch, karray, ev
   use deck31
   use tracom
   use bcddat
@@ -18,7 +17,6 @@ subroutine subr31
   use movcop
   use strcom
   use freedom
-  use pckcom
   implicit none
   !     flag-1.   begin class-1  /blank/  variables
   !     flag-2.   begin class-2  /blank/  variables
@@ -27,7 +25,7 @@ subroutine subr31
   !     flag-3.   begin class-3  /blank/  variables
   !               (integer-numeric usage only, with arrays
   !                preceding scalars).
-  character(8) :: arch10(2), alpha(52)
+  character(8) :: arch10(2), alpha(52), aupper(13)
   character(8) :: blanka(1)
   character(8) :: cstxt
   character(8) :: daytim
@@ -59,7 +57,7 @@ subroutine subr31
   real(8) :: bxsing(150), tstep, xyplot, bx(150), fl90
   real(8) :: d1, d2, d3, d4, d4fact, d5, d6, d7, d8, d9, d23, denom, disqr, dlen
   real(8) :: dstrt, dx, dxl, dxl2, dy, dyl
-  real(8) :: enumr, evbasx, evbasy, evp, evdh, evdp, evh, evmx, evmxf, expnt
+  real(8) :: enumr, ev(2), evbasx, evbasy, evp, evdh, evdp, evh, evmx, evmxf, expnt
   real(8) :: fl10, fl1p5, fl2p5, fl3, fl3p5, flong1, fltwo, fourth
   real(8) :: ha, half, hdif, hgt1, hgt2, hhi, hhpt, hlo, hmax, hmin, hms, hpi
   real(8) :: hpil, hpt, hvec
@@ -75,7 +73,7 @@ subroutine subr31
   !     declaration2   mmmin1, mm0, mm1, mm2, mm3, mm4, mm6
   !     declaration2   mm7, mm8, mm9, mm11, mm13
   !  common /ldec31/  kalcom
-  !  dimension array(1), evdoub(1)
+  !  dimension array(1), aupper(13), evdoub(1)
   !  dimension intd8(150), intd9(150),  bxsing(150)
   !  dimension arch10(2), mulplt(5), blanka(1), busvec(6)
   !  dimension alpha(52), mplot(4), headl(3), vertl(3)
@@ -96,6 +94,10 @@ subroutine subr31
   !  equivalence (busvec(1), bus1)
   !  equivalence (moncar(2), kbase)
   !
+  character(8), allocatable :: buslst(:)
+  integer(4), pointer :: ibrnch(:)
+  integer(4), pointer :: ibsout(:)
+  integer(4), pointer :: jbrnch(:)
   integer(4), pointer :: kbase => moncar(2)
   !
   data text1      / 'print ' /
@@ -178,6 +180,13 @@ subroutine subr31
   data ll78       / 78 /
   data mplot / 1, 1, 1, 1 /
   !
+  ibrnch => karray
+  ibsout => karray
+  jbrnch => karray
+  !
+  ll0 = size (transfer (karray, buslst))
+  allocate (buslst(ll0))
+  buslst = transfer (karray, buslst)
   blanka(1) = blank
   long1 = nchain
   if (kburro .eq. 1) long1 = 29
@@ -1608,7 +1617,11 @@ subroutine subr31
 9200 lstat(18) = 31
   lastov = nchain
   nchain = 51
-9999 return
+9999 if (allocated (buslst)) then
+     karray = transfer (buslst, karray)
+     deallocate (buslst)
+  end if
+  return
 end subroutine subr31
 
 !

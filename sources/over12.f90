@@ -167,7 +167,7 @@ subroutine over12
   integer(4) :: m, mxpair
   integer(4) :: n, n1, n2, n3, n4, n5, n6, n7, n8, n9, n15, n16, n17, n24
   integer(4) :: ncompt, ndx1, ndx2, ndx3, ndx4, ndx5, ndxi, nhalf, ni, nj, nk1
-  integer(4) :: nn1, nn8, nn9, nn11, nn12, nn13, nn14, nn15, npair, nph, nra, nrz
+  integer(4) :: nn1, nn8, nn9, nn10, nn11, nn12, nn13, nn14, nn15, npair, nph, nra, nrz
   integer(4) :: ns1, ns2, nwww
   real(8) :: a, az, azi, azr
   real(8) :: bias, bias2
@@ -212,9 +212,15 @@ subroutine over12
   integer(4), pointer :: knt => moncar(1)
   integer(4), pointer :: ltdelt => moncar(3)
   integer(4), pointer :: mtape => moncar(10)
+  real(8), pointer :: akey(:) => adelay(1 :)
+  real(8), allocatable :: cmi(:)
   real(8), allocatable :: cmr(:)
+  real(8), pointer :: tstat(:) => crit(1 :)
   real(8), pointer :: wk1(:) => semaux(1 :)
   !
+  ll0 = size (transfer (kknonl, cmi))
+  allocate (cmi(ll0))
+  cmi = transfer (kknonl, cmi)
   ll0 = size (transfer (kks, cmr))
   allocate (cmr(ll0))
   cmr = transfer (kks, cmr)
@@ -1266,7 +1272,11 @@ subroutine over12
   lstat(18) = 12
 9800 if (iprsup .ge. 1)  write (unit = lunit(6), fmt = 4568)
 4568 format (' Exit module "over12".')
-99999 if (allocated (cmr)) then
+99999 if (allocated (cmi)) then
+     kknonl = transfer (cmi, kknonl)
+     deallocate (cmi)
+  end if
+  if (allocated (cmr)) then
      kks = transfer (cmr, kks)
      deallocate (cmr)
   end if
@@ -1288,6 +1298,7 @@ subroutine dteqiv (ikf, isfd, d2, azr, azi)
   integer(4) :: ka, kb, kc
   real(8) :: a1, ac1, al1, ar1, arl
   real(8) :: d21
+  real(8) :: ur(2)
   !
   !     This routine produces the companion model to be inserted into the
   !     tr tables. it also normalizes the l and c data to henry and farad

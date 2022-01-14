@@ -418,12 +418,16 @@ subroutine cimage
   character(8) :: charc, chtacs, textax(60), textay(50), text1, text2
   character(8) :: text4, text5
   character(25) :: filen
+  !
   !  dimension xopt(1), copt(1)
   !  dimension buff10(10)
   !  dimension textax(60), jpntr(201), textay(50), aupper(10)
   !
   !  equivalence (buff10(1), abuff(1))
   !  equivalence (aupper(1), texcol(1))
+  !
+  character(8), pointer :: aupper(:)
+  character(80), pointer :: buff10
   !
   !     Burroughs: preserve local variable between module calls:
   data n8         / 0 /        ! remember last $-card number
@@ -531,6 +535,9 @@ subroutine cimage
   data n11        / 0 /
   data n12        / 99999 /
   data n13        / 99999 /
+  !
+  buff10 => abuff
+  aupper => texcol
   !
   if (iprsup .ge. 10) write (unit = lunit(6), fmt = 987) lunit(5), lunit(6), noutpr, numdcd
 987 format (' Begin cimage.  lunit5, lunit6, noutpr, numdcd =', 4i5)

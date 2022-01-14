@@ -10,7 +10,6 @@
 
 subroutine subr44
   use blkcom
-  use labcom
   use deck44
   use com44
   use ovr44c
@@ -26,6 +25,11 @@ subroutine subr44
   !  equivalence (stg(1), karray(1))
   !     list-zero "karray" is always 1st, and maybe "over29":
   !
+  real(8), allocatable :: stg(:)
+  !
+  ll0 = size (transfer (karray, stg))
+  allocate (stg(ll0))
+  stg = transfer (karray, stg)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module subr44."')
   n8 = nchain
@@ -90,7 +94,11 @@ subroutine subr44
 10 call guts44 (stg(iofarr :), stg(iofxwc :), stg(iofxwy :), stg(iofyzr :), stg(iofyzi :), stg(ioftii :), stg(ioftir :), stg(ioftvi :), stg(ioftvr :), stg(iofer :), stg(iofei :), stg(iofthe :), stg(iofxtr :), stg(iofxti :), stg(iofzsu :), stg(iofdum :), stg(iofdur :), stg(ioftix :), stg(iofwor :), ndim, ntri, nsqr2)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
 4568 format ('  "Exit  module subr44."')
-99999 return
+99999 if (allocated (stg)) then
+     karray = transfer (stg, karray)
+     deallocate (stg)
+  end if
+  return
 end subroutine subr44
 
 !
@@ -1326,7 +1334,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         eim(i + 1) = t
         t = lseq(i)
         lseq(i) = lseq(i + 1)
-        lseq(i + 1) = int (t)
+        lseq(i + 1) = t
      end do
 1007 continue
   end do

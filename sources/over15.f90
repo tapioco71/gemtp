@@ -291,6 +291,7 @@ subroutine over15
   use ovr15c
   use strcom
   implicit none
+  character(8) :: aupper(13), alower(13)
   character(8) :: text1, text2, text3
   character(8) :: text4, text5, text6, text7
   character(8) :: text8, text9, text10, text11, text12
@@ -323,7 +324,7 @@ subroutine over15
   integer(4), pointer :: kbase => moncar(2)
   integer(4), pointer :: knt => moncar(1)
   integer(4), pointer :: ltdelt => moncar(3)
-  integer(4), pointer :: nsubkm(:) => kknonl(1 :)
+  integer(4), pointer :: nsubkm(:)
   !
   data  text1   / 'tacs  ' /
   data  text4   / 'normal' /
@@ -336,6 +337,7 @@ subroutine over15
   data  text11  / 'm     ' /
   data  text12  / 'chan01' /
   !
+  nsubkm => kknonl
   ll0 = size (transfer (spum, ispum))
   allocate (ispum(ll0))
   ispum = transfer (spum, ispum)
@@ -692,7 +694,7 @@ subroutine over15
   lstat(12) = nc
   go to 9200
 3204 ncsave = nc
-  if (nenerg .ne. 0 .and. kbase .ne. intinf) go to 3224
+  if ((nenerg .ne. 0) .and. (kbase .ne. intinf)) go to 3224
   i = 0
   i3 = 0
 3206 i = i + 1
@@ -1193,10 +1195,10 @@ subroutine smout
   use blkcom
   use labcom
   use smach
-  use pckcom
+  use strcom
   implicit none
   !     This module is used only by  type 59 s.m.  modeling
-  character(1) :: digit(10)
+  character(8) :: digit(10)
   character(8) :: text1, text2, texta(15), textb(3)
   !  dimension texta(15), digit(10), textb(3), busvec(1)
   integer(4) :: i, i5, i30, icnt, ip, ip1
@@ -1208,7 +1210,7 @@ subroutine smout
   !
   data texta  / 'id    ', 'iq    ', 'i0    ', 'if    ', 'ikd   ', 'ig    ', 'ikq   ', 'ia    ', 'ib    ', 'ic    ', 'efd   ', 'mforce', 'mang  ', 'tq gen', 'tq exc' /
   data textb  / 'ang   ', 'vel   ', 'tor   ' /
-  data digit  / '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' /
+  data digit  / '1       ', '2       ', '3       ', '4       ', '5       ', '6       ', '7       ', '8       ', '9       ', '0       ' /
   data text1  / 'mach  ' /
   !
   ll5 = 5
@@ -1235,12 +1237,12 @@ subroutine smout
      l = 5
      busvec(1) = text1
      !     if (n1 .gt. 0) call packa1 (digit(n1), busvec(1), l)
-     if (n1 .gt. 0) call pack (digit(n1 :), busvec(1), l)
+     if (n1 .gt. 0) call pack (digit(n1), busvec(1), l)
      l = l + 1
      n10 = n2
      if (n10 .eq. 0) n10 = 10
      !     call packa1 (digit(n10), busvec(1), l)
-     call pack (digit(n10 :), busvec(1), l)
+     call pack (digit(n10), busvec(1), l)
      text2 = busvec(1)
      icnt = 0
      call namea6 (text2, icnt)
@@ -1268,14 +1270,14 @@ subroutine smout
            busvec(1) = textb(n7)
            if (n5 .gt. 0) go to 4206
            !           call packa1 (digit(n6), busvec(1), ll5)
-           call pack (digit(n6 :), busvec(1), ll5)
+           call pack (digit(n6), busvec(1), ll5)
            go to 4215
            !4206       call packa1 (digit(n5), busvec(1), ll5)
-4206       call pack (digit(n5 :), busvec(1), ll5)
+4206       call pack (digit(n5), busvec(1), ll5)
            n10 = n6
            if (n10 .eq. 0) n10 = 10
            !           call packa1 (digit(n10), busvec(1), ll6)
-           call pack (digit(n10 :), busvec(1), ll6)
+           call pack (digit(n10), busvec(1), ll6)
 4215       jk = jk + 1
            jk1 = jk1 + 3
            ismout(jk1 - 1) = icnt

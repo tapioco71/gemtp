@@ -9,7 +9,11 @@ module ovr44c
   use blkcom
   use deck44
   use com44
+  use volpri
+  use indcom
   use tracom
+  use freedom
+  use movcop
   implicit none
 
 contains
@@ -1046,13 +1050,6 @@ contains
   !
 
   subroutine guts44 (array, xwc, xwy, yzr, yzi, tii, tir, tvi, tvr, er, ei, theta2, xtir, xtii, zsurge, dummi, dummr, tixf, work1, ndim, ntri,nsqr2)
-    use linemodel
-    use deck44
-    use volpri
-    use tracom
-    use indcom
-    use movcop
-    use freedom
     implicit none
     integer(4), intent(in) :: ndim
     integer(4), intent(in) :: nsqr2

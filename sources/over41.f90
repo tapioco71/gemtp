@@ -175,6 +175,7 @@ subroutine over41
   use strcom
   use freedom
   implicit none
+  character(8) :: aupper(20), alower(20)
   character(8) :: text1(3), text2(3), text3(3), t1, t2, t3
   character(8) :: text6, text7(3), text8(3), text9
   character(8) :: text10, text11, text12, typec(20)
@@ -195,6 +196,11 @@ subroutine over41
   real(8) :: v(3), v1, v2, volt(20), volti(20), voltk(20), vtap
   real(8) :: xik(3), xsum, xx(6)
   real(8) :: z
+  !  dimension rr(6), xx(6), v(3), rik(3), xik(3), text1(3), text2(3), text3(3)
+  !  dimension temp1(3), temp2(3), temp3(3), text7(3), text8(3)
+  !  dimension aupper(20), alower(20), typec(20), ohm(20), henry(20)
+  !  dimension volt(20), volti(20), voltk(20)
+
   !
   data t1 / 'high  ' /
   data t2 / 'medium' /

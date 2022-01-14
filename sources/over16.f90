@@ -18,13 +18,13 @@ subroutine over16
   !  dimension xx(1)
   !  dimension ispum(1)
   !  equivalence (xk(1), xx(1))
-  !  equivalence  (spum(1), ispum(1))
+  !  equivalence (spum(1), ispum(1))
   !
   integer(4) :: ll0
   integer(4) :: n1
   !
   integer(4), allocatable :: ispum(:)
-  real(8), pointer :: xx(:) => xk(1 :)
+  !  real(8), pointer :: xx(:) => xk
   !
   ll0 = size (transfer (spum, ispum))
   allocate (ispum(ll0))
@@ -114,7 +114,7 @@ subroutine subts1
   integer(4), pointer :: iupper => iprsov(36)
   integer(4), pointer :: kbase => moncar(2)
   integer(4), pointer :: knt => moncar(1)
-  integer(4), pointer :: nsubkm(:) => kknonl(1 :)
+  integer(4), pointer :: nsubkm(:) => kknonl
   !
   data text1  / 'valve ' /
   data text2  / 'diode ' /
@@ -1195,7 +1195,6 @@ subroutine subts1
   nchain = 51
 9900 if (iprsup .ge. 1)  write (unit = lunit(6), fmt = 9903) kill, lstat(19)
 9903 format (' Exit "subts1".  kill, lstat(19) =', 2i8)
-  !99999 return
   if (allocated (ispum)) then
      spum = transfer (ispum, spum)
      deallocate (ispum)
@@ -1219,9 +1218,9 @@ subroutine yserlc
   integer(4) :: ixcopt, j, n1, n2, n3, n4, n8, n9, ndx1, ndx2
   real(8) :: ccon, d23, d33, d44, gus1, gus2, xcon
   !
-  data  ixcopt  / 0 /
-  data  xcon  / 0.0d0 /
-  data  ccon  / 0.0d0 /
+  data ixcopt / 0 /
+  data xcon   / 0.0d0 /
+  data ccon   / 0.0d0 /
   !
   if (iprsup .ge. 4) write (unit = lunit(6), fmt = 8234) lserlc, kserlc, kpartb, ialter
 8234 format (' Top of "yserlc".  lserlc, kserlc kpartb, ialter =', 4i8)
@@ -1314,7 +1313,7 @@ subroutine switch
   integer(4) :: l1, l2, l3, l4, l5, ll, ll2
   integer(4) :: m, m1, m2, m3, m4, m5, m6, m7, m9, mm, mo
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n12, n13, n14, n15, n16
-  integer(4) :: n17, n18, n19, n20, ndx1, ndx2, nless, nmax, nmin, nn, nover, numb
+  integer(4) :: n17, n18, n19, ndx1, ndx2, nless, nmax, nmin, nn, nover, numb
   !  equivalence (ktrlsw(1), n20)
   !
   !     Overlay-16 module called by "subts1" if and only if one or more
@@ -1363,6 +1362,8 @@ subroutine switch
   !     a user who is short of memory might want to eliminate most of
   !     this subroutine.  such is possible (see above s.n. 3459).
   !
+  integer(4), pointer :: n20 => ktrlsw(1)
+  !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3444) ktrlsw
 3444 format (' Top of "switch".  ktrlsw vector =', 10i7)
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 3447) (modswt(j), j = 1, n20)
@@ -1376,21 +1377,19 @@ subroutine switch
 3453 format (' (kbegsw(i), i=1, kswtch)  follows ....', /, (1x, 20i5))
   write (unit = lunit(6), fmt = 3454) (kode(i), i = 1, ntot)
 3454 format (' (kode(i), i=1, ntot)  follows  ....', /, (1x, 20i5))
-  !     choice of alternate switch logic is now to be made.
+  !     Choice of alternate switch logic is now to be made.
   !     immediately following is simple logic (much shorter code),
   !     which is fine for cases with few switches.   those short
   !     of memory could delete all but this (delete between
-  !     bounding comment cards with "%%%%%%").    if this is
+  !     bounding comment cards with "%%%%%%").    If this is
   !     done,  then also delete following "if"-statement:
 3459 ktrlsw(5) = ktrlsw(5) + ktrlsw(1)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1004) istep, ktrlsw
 1004 format (' Top of "switch".  istep, ktrlsw(1:6) =', 10i6)
   if (ktrlsw(6) .eq. 0) go to 3605
-  !     begin simple, brute-force switch logic of "simple switch logic"
+  !     Begin simple, brute-force switch logic of "simple switch logic"
   !     special-request card (see emtp rule book):
-  !  call move0 (kbegsw(1), kswtch)
   call move0 (kbegsw(1 :), kswtch)
-  !  call move0 (kode(1), ntot)
   call move0 (kode(1 :), ntot)
   j = ktrlsw(4)
   if ( j .le. 0 )  go to 3478
@@ -1398,7 +1397,6 @@ subroutine switch
 3473 kbegsw(j) = 1
   j = iabs (nextsw(j))
   if (j .ne. ktrlsw(4))  go to 3473
-  !3478 call move0 ( nextsw(1), kswtch )
 3478 call move0 (nextsw(1 :), kswtch)
   n18 = ktrlsw(2)
   do ll = 1, n20
@@ -1414,12 +1412,11 @@ subroutine switch
   ktrlsw(2) = n18
   if (n18 .gt. 0) go to 3487
   ktrlsw(4) = 0
-  !  call move0( nextsw(1), kswtch )
   call move0 (nextsw(1 :), kswtch)
   go to 4457
 3487 n13 = 0
   n3 = 0
-  !     enter loop  do 3580  over all switches,  in which each in turn
+  !     Enter loop  do 3580  over all switches,  in which each in turn
   !     is tested to see if it can be used for next switch-current
   !     calculation.   we execute this loop until n13 = n18 (until all
   !     closed switches have been properly ordered in nextsw:
@@ -1556,12 +1553,12 @@ subroutine switch
         if (nextsw(n7) .eq. 0) cycle
         ndx2 = lswtch + n7
         if (jj .gt. 0) go to 3627
-        if (k .ne. kmswit(n7) .and. k .ne. kmswit(ndx2)) go to 3627
+        if ((k .ne. kmswit(n7)) .and. (k .ne. kmswit(ndx2))) go to 3627
         jj = 1
         n9 = n9 + 1
         go to 3635
 3627    if (mm .gt. 0) cycle
-        if (m .ne. kmswit(n7) .and. m .ne. kmswit(ndx2)) cycle
+        if ((m .ne. kmswit(n7)) .and. (m .ne. kmswit(ndx2))) cycle
         mm = 1
         n9 = n9 + 1
 3635    if (n9 .eq. 2) go to 3750
@@ -2262,7 +2259,7 @@ subroutine subts2
   integer(4) :: n1, n2, n2p, n3, n4, n5, n6, n7, n8, n9, n10, n11
   integer(4) :: n31, n32, n33, n34, n41, ndelt
   integer(4) :: ndx1, ndx2, nk1, nk2, nk3, nk4, nk5, nkkk1, nkll, nky, nkyw, nmodal
-  integer(4) :: nn1, nn2, nn3, nn4, nn5, nn6, nn7, nn8, nn9, nn11
+  integer(4) :: nn1, nn2, nn3, nn4, nn5, nn6, nn7, nn8, nn9, nn10, nn11
   integer(4) :: nn17, nnq1, nnq2, nnq3, nq0k, nq4, nq5, nq6
   integer(4) :: nra, nra3, nraz1, nraz2, nraz3, nrf, nrz, nrz2, nrz3, nteq
   integer(4) :: nterm
@@ -2298,9 +2295,9 @@ subroutine subts2
   !  equivalence (semaux(1), wk1(1))
   !  equivalence (namebr(1), infdli(1))
   !
-  integer(4), pointer :: infdli(:) => namebr(1 :)
+  integer(4), pointer :: infdli(:) => namebr
   integer(4), pointer :: ipoint => iprsov(35)
-  real(8), pointer :: wk1(:) => semaux(1 :)
+  real(8), pointer :: wk1(:) => semaux
   !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3445) (f(j), j = 1, ntot )
 3445 format ( ' Top  subts2.  f(1:ntot) follows ...', /, (1x, 8e16.7))
@@ -3662,10 +3659,10 @@ subroutine fdcinj (ikf, isfd, ibf)
   !
   integer(4) :: idk, isc, isf, isk, ist, isu, isv
   integer(4) :: ka, kb
-  real(8) :: ar, azi, azr, cz, un
+  real(8) :: ar, azi, azr, cz, un, ur(40)
   !
   !  dimension  ur(40)
-  !     this routine updates the current injections for the individual
+  !     This routine updates the current injections for the individual
   !     branches as well as for the equivalent  branches inserted into the
   !     emtp. it also updates the capacitor and inductor voltages and
   !     calculates branch currents for the individual branches   *   *   *
@@ -3795,11 +3792,15 @@ subroutine update
   !     This routine adjusts the current sources to be injected into
   !     the equivalent pi-circuits * * * * * * * * * * * * * * * * * * * *
   !
-  integer(4), pointer :: massex(:)
-  real(8), pointer :: vsmout(:)
+  integer(4), allocatable :: massex(:)
+  real(8), allocatable :: vsmout(:)
   !
-  massex = transfer (histq, massex)
+  ll0 = size (transfer (ismout, vsmout))
+  allocate (vsmout(ll0))
   vsmout = transfer (ismout, vsmout)
+  ll0 = size (transfer (histq, massex))
+  allocate (massex(ll0))
+  massex = transfer (histq, massex)
   if (iprsup  .ge.  1) write (unit = lunit(6), fmt = 4099)
 4099 format ('  "Begin module update."')
   !     initialize counters     ******************************************
@@ -3996,7 +3997,7 @@ subroutine update
      flstat(14) = spdd
      lstat(12) = ilk
      kill = 104
-     return
+     go to 99999
 208  if (iprsup .eq. 0) go to  50
      write (unit = lunit(6), fmt = 4106) spdn, histq(ksex), cd, cexc
 4106 format (6x, 'After speed calculation', 5x, 'rotor', 13x, 'exciter', 17x, 'teg', 16x, 'texc', /, 20x, 4e20.12)
@@ -4353,6 +4354,14 @@ subroutine update
   call move0 (ksmspy(1 :), ll3)
   if (iprsup  .gt.  0) write (unit = lunit(6), fmt = 4111)
 4111 format ('  "Exit  module update."')
+99999 if (allocated (massex)) then
+     histq = transfer (massex, histq)
+     deallocate (massex)
+  end if
+  if (allocated (vsmout)) then
+     ismout = transfer (vsmout, ismout)
+     deallocate (vsmout)
+  end if
   return
 end subroutine update
 
@@ -4377,9 +4386,7 @@ subroutine increm (ilk, sf3)
   real(8) :: a, acde, acdf, asd, b, etot
   real(8) :: sb, sf4, sf5, sf6, sf7, sum
   !
-  !
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     this module is used only by Brandwajn (type-59) s.m. model
+  !     This module is used only by Brandwajn (type-59) s.m. model
   if (iprsup  .ge.  1) write (unit = lunit(6), fmt = 6000)
 6000 format ('  "Begin module increm."')
   i30 = 30 * ilk - 29
@@ -4611,9 +4618,8 @@ end subroutine redusm
 
 subroutine bansol (ab, x, n)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  !     this routine performs forward and backward solution with
-  !     with a tridiagonal symmetric matrix 'ab'. for detail of
+  !     This routine performs forward and backward solution with
+  !     with a tridiagonal symmetric matrix 'ab'. For detail of
   !     storage arrangements for 'ab' see subroutine 'bandel'.
   integer(4), intent(in) :: n
   real(8), intent(out) :: x(1)
@@ -4750,11 +4756,13 @@ subroutine subts3
   !
   integer(4), pointer :: iupper => iprsov(36)
   integer(4), pointer :: kbase => moncar(2)
-  integer(4), pointer :: nsubkm(:) => kknonl(1 :)
-  real(8), pointer :: volta(:) => volti(1 :)
+  integer(4), pointer :: nsubkm(:) => kknonl
+  real(8), pointer :: volta(:)
   real(8), allocatable :: vsmout(:)
-  real(8), pointer :: xx(:) => xk(1 :)
+  !  real(8), pointer :: xx(:)
   !
+  volta = volti
+  !  xx => xk
   ll0 = size (transfer (ismout, vsmout))
   allocate (vsmout(ll0))
   vsmout = transfer (ismout, vsmout)
@@ -5222,7 +5230,7 @@ subroutine zincox (ns)
   integer(4) :: ibk, ichr, ier, ik, il, il1, ils, ind, inl, iofzni, iofznr, ist, ityp
   integer(4) :: j, jb
   integer(4) :: k, k1, k2
-  integer(4) :: l, l1, ll1, ll10
+  integer(4) :: l, l1, ll0, ll1, ll10
   integer(4) :: m, m2, m22, m5
   integer(4) :: n, n1, n2, n4, n5, n6, n7, n8, n10, n11, n12, n13, n14, n15, n17, n18
   integer(4) :: ndx17i, ndx17r, ndx1i, ndx1r, ndx2, ndx3, ndx4, ndx7i, ndx7r, niter
@@ -5240,12 +5248,22 @@ subroutine zincox (ns)
   !  equivalence (fold(1), vchar(1))
   !  equivalence (kknonl(1), nsubkm(1))
   !
-  integer(4), pointer :: nsubkm(:) => kknonl(1 :)
+  integer(4), allocatable :: kindep(:)
+  integer(4), allocatable :: ksing(:)
+  integer(4), pointer :: nsubkm(:) => kknonl
+  real(8), pointer :: fold(:) => vchar
   !
   data  text1 / 'spy   ' /
   data  text2 / 'solve ' /
   data  text3 / 'stop  ' /
   data  text4 / 'look  ' /
+  !
+  ll0 = size (transfer (gslope, kindep))
+  allocate (kindep(ll0))
+  kindep = transfer (gslope, kindep)
+  ll0 = size (transfer (cchar, ksing))
+  allocate (ksing(ll0))
+  ksing = transfer (cchar, ksing)
   ll10 = 10
   iofznr = nonle(inonl)
   iofznr = iabsz (iofznr)
@@ -5738,6 +5756,14 @@ subroutine zincox (ns)
   end do
 4567 if ( iprsup  .ge.  1 ) write ( lunit(6), 4568 )  kill, lstat(19)
 4568 format (' Exit module "zincox".  kill, lstat(19) =', 2i8)
+  if (allocated (kindep)) then
+     gslope = transfer (kindep, gslope)
+     deallocate (kindep)
+  end if
+  if (allocated (ksing)) then
+     cchar = transfer (ksing, cchar)
+     deallocate (ksing)
+  end if
   return
 end subroutine zincox
 
@@ -5898,7 +5924,6 @@ subroutine  arrest (a, b, srt, svt, carst)
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 20) (a(i), b(i), i = 1, 20)
 20 format((1x, 8e16.6))
   if (b(6) .gt. 0) go to 100
-  !  call mover0(b(2), ll8)
   call move0 (b(2 :), ll8)
   b(6) = 1.0d0
 100 continue
@@ -5906,43 +5931,43 @@ subroutine  arrest (a, b, srt, svt, carst)
   isign=1
   b(1) = b(1) / b(10)
   b(3) = b(3) / b(11)
-  if (b(1) .gt. 0.0) go to 1
+  if (b(1) .gt. 0.0d0) go to 1
   b(1) = -b(1)
-  if (b(3) .lt. 0.0) b(3) = -b(3)
+  if (b(3) .lt. 0.0d0) b(3) = -b(3)
   isign = -1
 1 continue
   !  construct valve block branches
   ylb = delta2 / a(3)
   cb = b(3) + ylb * b(8)
-  rb = 0.0
-  if (b(3) .gt. epsiln) rb = a(2) * a(1) * b(3) ** (a(2) - 1.0)
-  be = (1.0 - a(2)) * a(1) * b(3) ** a(2)
+  rb = 0.0d0
+  if (b(3) .gt. epsiln) rb = a(2) * a(1) * b(3) ** (a(2) - 1.0d0)
+  be = (1.0d0 - a(2)) * a(1) * b(3) ** a(2)
   !  test gap region transition
-  d1=b(6)
-  if (d1.ge.3.5) go to 50
-  if (b(3) -b(4) .ge.0.0) go to 44
-  if (b(3) .gt.a(18)) go to 44
-  d1 = 4.0
+  d1 = b(6)
+  if (d1 .ge. 3.5d0) go to 50
+  if (b(3) - b(4) .ge. 0.0d0) go to 44
+  if (b(3) .gt. a(18)) go to 44
+  d1 = 4.0d0
   go to 50
 44 if (d1 .gt. 1.5) go to 45
   if (b(2) .lt. a(7)) go to 50
-  d1 = 2.0
+  d1 = 2.0d0
   go to 46
 45 if (d1 .gt. 2.5) go to 50
 46 if (b(5) .lt. a(12)) go to 50
-  d1 = 3.0
+  d1 = 3.0d0
 50 b(6) = d1
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 5641) isign, d1, srt, svt, carst, (a(i), b(i), i= 1, 20)
 5641 format (/, " in  'arrest' .   isign", 13x, 'd1', 10x, 'anonl', 9x, 'vzero2', 11x, 'curr', /, 15x, i8, 4e15.6, /, (1x, 8e16.6))
   !  select region
-  if (d1 .lt. 1.5) go to 200
-  if (d1 .lt. 2.5) go to 220
-  if (d1 .lt. 3.5) go to 240
+  if (d1 .lt. 1.5d0) go to 200
+  if (d1 .lt. 2.5d0) go to 220
+  if (d1 .lt. 3.5d0) go to 240
   go to 260
   !  region (1) --- t0 to t1
 200 continue
   f0 = b(7) * b(3)
-  dfdv = 0.0
+  dfdv = 0.0d0
   dfdi = b(7)
   go to 99
   !  region (2) branches --- t1 to t2
@@ -5955,12 +5980,12 @@ subroutine  arrest (a, b, srt, svt, carst)
   go to 99
   !  region (3) branches --- t2 to t3
 240 continue
-  wx=a(14)+a(15)*b(5)
-  f1=a(8)*(a(9)-b(2))
-  f2=a(10)+a(11)*b(3)
-  f0=f1/f2+wx*(a(13)-b(2))
-  dfdv=-a(8)/f2-wx
-  dfdi=a(11)*f1/f2**2
+  wx = a(14) + a(15) * b(5)
+  f1 = a(8) * (a(9) - b(2))
+  f2 = a(10) + a(11) * b(3)
+  f0 = f1 / f2 + wx * (a(13) - b(2))
+  dfdv = -a(8) / f2 - wx
+  dfdi = a(11) * f1 / f2 ** 2
   go to 99
   !  region (4) branches --- t3 to t4
 260 continue
@@ -5981,16 +6006,16 @@ subroutine  arrest (a, b, srt, svt, carst)
   avt = vblock + be + vgap
   if (isign .lt. 0) svt = -svt
   !  correct arrester internal node voltages
-  carst=(svt-avt*b(10))/(art*b(10)/b(11)-srt)
+  carst = (svt - avt * b(10)) / (art * b(10) / b(11) - srt)
   curr = carst / b(11)
-  if (carst.le.0.0) go to 93
-  vgap=vgap+curr/yg
-  if (b(6) .gt.1.5) go to 91
+  if (carst .le. 0.0d0) go to 93
+  vgap = vgap + curr / yg
+  if (b(6) .gt. 1.5d0) go to 91
   cip = (curr + b(3)) * onehaf
   if (curr .gt. a(6)) cip = a(6)
   b(7) = b(7) + a(5) * cip * deltat
   go to 92
-91 if (b(6) .gt.3.5) go to 92
+91 if (b(6) .gt. 3.5d0) go to 92
   b(5) = b(5) + (vgap * curr + b(2) * b(3)) * delta2
 92 b(4) = b(3)
   b(3) = carst
@@ -6003,10 +6028,10 @@ subroutine  arrest (a, b, srt, svt, carst)
   carst = -carst
 94 b(9) = b(9) + b(1) * b(3) * deltat
   go to 5681
-93 b(6) = 0.0
-  b(3) = 0.0
-  b(1) = 0.0
-  carst = 0.0
+93 b(6) = 0.0d0
+  b(3) = 0.0d0
+  b(1) = 0.0d0
+  carst = 0.0d0
 5681 if (iprsup .ge. 2)  write (unit = lunit(6), fmt = 5684) art, avt, carst, (a(i), b(i), i = 1, 20)
 5684 format (/, " At end  'arrest' .", 12x, 'art', 12x, 'avt', 10x, 'carst', /, 19x, 3e15.6, /,  (1x, 8e16.6))
   return
@@ -7774,7 +7799,8 @@ subroutine subts4
   !  equivalence (kknonl(1), nsubkm(1))
   !  equivalence (xk(1), xx(1))
   !  equivalence (spum(1), ispum(1))
-  !  equivalence (moncar(1), knt), (moncar(2), kbase)
+  !  equivalence (moncar(1), knt)
+  !  equivalence (moncar(2), kbase)
   !  equivalence (moncar(9), kloaep)
   !
   integer(4) :: k
@@ -7786,8 +7812,8 @@ subroutine subts4
   integer(4), pointer :: kbase => moncar(2)
   integer(4), pointer :: kloaep => moncar(9)
   integer(4), pointer :: knt => moncar(1)
-  integer(4), pointer :: nsubkm(:) => kknonl(1 :)
-  real(8), pointer :: xx(:) => xk(1 :)
+  integer(4), pointer :: nsubkm(:) => kknonl
+  !  real(8), pointer :: xx(:) => xk
   !
   ll0 = size (transfer (spum, ispum))
   allocate (ispum(ll0))

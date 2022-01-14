@@ -2170,6 +2170,8 @@ subroutine over5
   integer(4), pointer :: itest => moncar(6)
   integer(4), pointer :: kloaep => moncar(9)
   integer(4), pointer :: knt => moncar(1)
+  real(8), pointer :: akey(:) => adelay(1 :)
+  real(8), pointer :: tstat(:) => crit(1 :)
   !
   data text1  / 'name  ' /
   data text2  / 'swt001' /
@@ -3413,8 +3415,9 @@ subroutine smdat (mtype)
   integer(4), pointer :: ipout => ismdat(22)
   integer(4), pointer :: ismold => ismdat(24)
   integer(4), pointer :: massex(:)
-  integer(4), pointer :: nn14 => ismdat(27)
   integer(4), pointer :: n56 => ismdat(23)
+  integer(4), pointer :: nn10 => ismdat(25)
+  integer(4), pointer :: nn14 => ismdat(27)
   integer(4), pointer :: nn4 => ismdat(26)
   !
   data  text1  / 'finish' /

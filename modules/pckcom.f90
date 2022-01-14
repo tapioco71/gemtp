@@ -23,11 +23,11 @@ contains
     !     in character position  kk  of argument  'to' .
     !     For all EMTP usage,  1st 2 arguments must be vectors.
     !     logical*1 from(1), to(6)
-    character(*), intent(in) :: from(:)
+    character(8), intent(in) :: from
     character(8), intent(out) :: to
     integer(4), intent(in) :: kk
     !
-    to(kk : kk) = from(1)(1 : 8)
+    to(kk : kk) = from(1 : 1)
     return
   end subroutine packa1
 

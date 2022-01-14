@@ -2459,6 +2459,7 @@ subroutine over8
   integer(4), allocatable :: integx(:)
   integer(4), allocatable :: ispum(:)
   integer(4), pointer :: knt => moncar(1)
+  real(8), pointer :: vim(:) => volt(1 :)
   real(8), pointer :: wk1(:) => semaux(1 :)
   !
   ll0 = size (transfer (spum, ispum))

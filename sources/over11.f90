@@ -222,6 +222,7 @@ subroutine over11
   implicit none
   character(6) ::  chhold
   character(6) :: text1, text2, text3, text4, text5, text6
+  character(8) :: aupper(13)
   integer(4) :: i, ib, ibf, ihalf, ij, ijk, ik, in, ip, iq, isubs1, isubs2, ix
   integer(4) :: iy, iz
   integer(4) :: j, ja, jb, jj, jn, jpp, js, jtemp
@@ -246,13 +247,16 @@ subroutine over11
   real(8) :: vi, vr
   real(8) :: xd, xxx
   real(8) :: yi, yis, yr, yrs, yy
+  !  dimension aupper(13)
   !  equivalence (volt(1), vim(1))
   !  equivalence (imfd(1), jch2(1))
   !  equivalence (moncar(1), knt)
   !      Preceding "jch2" uses "imfd" just for "frequency scan".
   !      as such, there must be no freq-depend sources present.
   !
+  integer(4), pointer :: jch2(:) => imfd(1 :)
   integer(4), pointer :: knt => moncar(1)
+  real(8), pointer :: vim(:) => volt(1 :)
   !
   data text1 / 'mag   ' /
   data text2 / 'angle ' /
@@ -1123,7 +1127,7 @@ subroutine smint
   integer(4) :: k, k1, k14, karc, kmset, ksm
   integer(4) :: l, lmset
   integer(4) :: n1, n2, n3, n4, n5, n6, n7, n9, n10, n12, n15, n20, n21, n31, n33, nloce
-  integer(4) :: nloce1, nlocg, nlocg1, num1, num2, num4, num6, numask, nwd
+  integer(4) :: nloce1, nlocg, nlocg1, nn10, num1, num2, num4, num6, numask, nwd
   real(8) :: a, ac1, ac2, acde, acdf, acee, acef, adeld, adk, adl, adm, ads
   real(8) :: aimia1, aip, ajj, akm, akn, arp, aye, ayr
   real(8) :: b, b1, b2, b6, bs

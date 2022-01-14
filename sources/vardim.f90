@@ -20,6 +20,7 @@ module test
      character(32) :: options(4)
      integer(4) :: kind
      integer(4) :: dimension
+     logical(1) :: enable
   end type variable
 
   type variableslist
@@ -244,741 +245,889 @@ program vardim
   modvars(1)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(1)%kind       = 1
   modvars(1)%dimension  = 3
+  modvars(1)%enable = .true.
 
   modvars(2)%name       = 'ykm'
-  modvars(2)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(2)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(2)%kind       = 1
   modvars(2)%dimension  = 5
+  modvars(2)%enable = .true.
 
   modvars(3)%name       = 'km'
   modvars(3)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(3)%kind       = 4
   modvars(3)%dimension  = 5
+  modvars(3)%enable = .true.
 
   modvars(4)%name       = 'xk'
   modvars(4)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(4)%kind       = 1
   modvars(4)%dimension  = 72
+  modvars(4)%enable = .true.
 
   modvars(5)%name       = 'xm'
-  modvars(5)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(5)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(5)%kind       = 1
   modvars(5)%dimension  = 72
+  modvars(5)%enable = .true.
 
   modvars(6)%name       = 'weight'
   modvars(6)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(6)%kind       = 1
   modvars(6)%dimension  = 14
+  modvars(6)%enable = .true.
 
   modvars(7)%name       = 'iwtent'
   modvars(7)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(7)%kind       = 4
   modvars(7)%dimension  = 52
+  modvars(7)%enable = .true.
 
   modvars(8)%name       = 'con1'
   modvars(8)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(8)%kind       = 1
   modvars(8)%dimension  = 51
+  modvars(8)%enable = .true.
 
   modvars(9)%name       = 'iskip'
   modvars(9)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(9)%kind       = 4
   modvars(9)%dimension  = 13
+  modvars(9)%enable = .true.
 
   modvars(10)%name       = 'zinf'
   modvars(10)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(10)%kind       = 1
   modvars(10)%dimension  = 13
+  modvars(10)%enable = .true.
 
   modvars(11)%name       = 'eta'
   modvars(11)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(11)%kind       = 1
   modvars(11)%dimension  = 13
+  modvars(11)%enable = .true.
 
   modvars(12)%name       = 'nhist'
   modvars(12)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(12)%kind       = 4
   modvars(12)%dimension  = 13
+  modvars(12)%enable = .true.
 
   modvars(13)%name       = 'stailm'
   modvars(13)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(13)%kind       = 1
   modvars(13)%dimension  = 15
+  modvars(13)%enable = .true.
 
   modvars(14)%name       = 'stailk'
   modvars(14)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(14)%kind       = 1
   modvars(14)%dimension  = 15
+  modvars(14)%enable = .true.
 
   modvars(15)%name       = 'xmax'
   modvars(15)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(15)%kind       = 1
   modvars(15)%dimension  = 58
+  modvars(15)%enable = .true.
 
   modvars(16)%name       = 'koutvp'
   modvars(16)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(16)%kind       = 4
   modvars(16)%dimension  = 62
+  modvars(16)%enable = .true.
 
   modvars(17)%name       = 'bnrg'
   modvars(17)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(17)%kind       = 1
   modvars(17)%dimension  = 18
+  modvars(17)%enable = .true.
 
   modvars(18)%name       = 'sconst'
   modvars(18)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(18)%kind       = 1
   modvars(18)%dimension  = 20
+  modvars(18)%enable = .true.
 
   modvars(19)%name       = 'cnvhst'
   modvars(19)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(19)%kind       = 1
   modvars(19)%dimension  = 73
+  modvars(19)%enable = .true.
 
   modvars(20)%name       = 'sfd'
   modvars(20)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(20)%kind       = 1
   modvars(20)%dimension  = 71
+  modvars(20)%enable = .true.
 
   modvars(21)%name       = 'qfd'
   modvars(21)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(21)%kind       = 1
   modvars(21)%dimension  = 71
+  modvars(21)%enable = .true.
 
   modvars(22)%name       = 'semaux'
   modvars(22)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(22)%kind       = 1
   modvars(22)%dimension  = 22
+  modvars(22)%enable = .true.
 
   modvars(23)%name       = 'ibsout'
   modvars(23)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(23)%kind       = 4
   modvars(23)%dimension  = 12
+  modvars(23)%enable = .true.
 
   modvars(24)%name       = 'bvalue'
   modvars(24)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(24)%kind       = 1
   modvars(24)%dimension  = 12
+  modvars(24)%enable = .true.
 
   modvars(25)%name       = 'sptacs'
   modvars(25)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(25)%kind       = 1
   modvars(25)%dimension  = 19
+  modvars(25)%enable = .true.
 
   modvars(26)%name       = 'kswtyp'
   modvars(26)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(26)%kind       = 4
   modvars(26)%dimension  = 6
+  modvars(26)%enable = .true.
 
   modvars(27)%name       = 'modswt'
   modvars(27)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(27)%kind       = 4
   modvars(27)%dimension  = 6
+  modvars(27)%enable = .true.
 
   modvars(28)%name       = 'kbegsw'
   modvars(28)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(28)%kind       = 4
   modvars(28)%dimension  = 6
+  modvars(28)%enable = .true.
 
   modvars(29)%name       = 'lastsw'
   modvars(29)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(29)%kind       = 4
   modvars(29)%dimension  = 6
+  modvars(29)%enable = .true.
 
   modvars(30)%name       = 'kentnb'
   modvars(30)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(30)%kind       = 4
   modvars(30)%dimension  = 6
+  modvars(30)%enable = .true.
 
   modvars(31)%name       = 'nbhdsw'
   modvars(31)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(31)%kind       = 4
   modvars(31)%dimension  = 63
+  modvars(31)%enable = .true.
 
   modvars(32)%name       = 'topen'
   modvars(32)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(32)%kind       = 1
   modvars(32)%dimension  = 60
+  modvars(32)%enable = .true.
 
   modvars(33)%name       = 'crit'
   modvars(33)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(33)%kind       = 1
   modvars(33)%dimension  = 6
+  modvars(33)%enable = .true.
 
   modvars(34)%name       = 'kdepsw'
   modvars(34)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(34)%kind       = 4
   modvars(34)%dimension  = 60
+  modvars(34)%enable = .true.
 
   modvars(35)%name       = 'tdns'
   modvars(35)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(35)%kind       = 1
   modvars(35)%dimension  = 6
+  modvars(35)%enable = .true.
 
   modvars(36)%name       = 'isourc'
   modvars(36)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(36)%kind       = 4
   modvars(36)%dimension  = 6
+  modvars(36)%enable = .true.
 
   modvars(37)%name       = 'energy'
   modvars(37)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(37)%kind       = 1
   modvars(37)%dimension  = 6
+  modvars(37)%enable = .true.
 
   modvars(38)%name       = 'iardub'
   modvars(38)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(38)%kind       = 4
   modvars(38)%dimension  = 63
+  modvars(38)%enable = .true.
 
   modvars(39)%name       = 'ardube'
   modvars(39)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(39)%kind       = 1
   modvars(39)%dimension  = 64
+  modvars(39)%enable = .true.
 
   modvars(40)%name       = 'nonlad'
   modvars(40)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(40)%kind       = 4
   modvars(40)%dimension  = 9
+  modvars(40)%enable = .true.
 
   modvars(41)%name       = 'nonle'
   modvars(41)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(41)%kind       = 4
   modvars(41)%dimension  = 9
+  modvars(41)%enable = .true.
 
   modvars(42)%name       = 'vnonl'
   modvars(42)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(42)%kind       = 1
   modvars(42)%dimension  = 9
+  modvars(42)%enable = .true.
 
   modvars(43)%name       = 'curr'
   modvars(43)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(43)%kind       = 1
   modvars(43)%dimension  = 9
+  modvars(43)%enable = .true.
 
   modvars(44)%name       = 'anonl'
   modvars(44)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(44)%kind       = 1
   modvars(44)%dimension  = 9
+  modvars(44)%enable = .true.
 
   modvars(45)%name       = 'vecnl1'
   modvars(45)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(45)%kind       = 1
   modvars(45)%dimension  = 9
+  modvars(45)%enable = .true.
 
   modvars(46)%name       = 'vecnl2'
   modvars(46)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(46)%kind       = 1
   modvars(46)%dimension  = 9
+  modvars(46)%enable = .true.
 
   modvars(47)%name       = 'namenl'
   modvars(47)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(47)%kind       = 4
   modvars(47)%dimension  = 9
+  modvars(47)%enable = .true.
 
   modvars(48)%name       = 'vzero'
   modvars(48)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(48)%kind       = 1
   modvars(48)%dimension  = 9
+  modvars(48)%enable = .true.
 
   modvars(49)%name       = 'ilast'
   modvars(49)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(49)%kind       = 4
   modvars(49)%dimension  = 9
+  modvars(49)%enable = .true.
 
   modvars(50)%name       = 'nltype'
   modvars(50)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(50)%kind       = 4
   modvars(50)%dimension  = 9
+  modvars(50)%enable = .true.
 
   modvars(51)%name       = 'kupl'
   modvars(51)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(51)%kind       = 4
   modvars(51)%dimension  = 9
+  modvars(51)%enable = .true.
 
   modvars(52)%name       = 'nlsub'
   modvars(52)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(52)%kind       = 4
   modvars(52)%dimension  = 9
+  modvars(52)%enable = .true.
 
   modvars(53)%name       = 'xoptbr'
   modvars(53)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(53)%kind       = 1
   modvars(53)%dimension  = 2
+  modvars(53)%enable = .true.
 
   modvars(54)%name       = 'coptbr'
   modvars(54)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(54)%kind       = 1
   modvars(54)%dimension  = 2
+  modvars(54)%enable = .true.
 
   modvars(55)%name       = 'cursub'
   modvars(55)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(55)%kind       = 1
   modvars(55)%dimension  = 53
+  modvars(55)%enable = .true.
 
   modvars(56)%name       = 'cchar'
   modvars(56)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(56)%kind       = 1
   modvars(56)%dimension  = 10
+  modvars(56)%enable = .true.
 
   modvars(57)%name       = 'vchar'
-  modvars(57)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(57)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(57)%kind       = 1
   modvars(57)%dimension  = 10
+  modvars(57)%enable = .true.
 
   modvars(58)%name       = 'gslope'
   modvars(58)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(58)%kind       = 1
   modvars(58)%dimension  = 10
+  modvars(58)%enable = .true.
 
   modvars(59)%name       = 'ktrans'
   modvars(59)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(59)%kind       = 4
   modvars(59)%dimension  = 1
+  modvars(59)%enable = .true.
 
   modvars(60)%name       = 'kk'
   modvars(60)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(60)%kind       = 4
   modvars(60)%dimension  = 1
+  modvars(60)%enable = .true.
 
   modvars(61)%name       = 'c'
   modvars(61)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(61)%kind       = 1
   modvars(61)%dimension  = 3
+  modvars(61)%enable = .true.
 
   modvars(62)%name       = 'tr'
   modvars(62)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(62)%kind       = 1
   modvars(62)%dimension  = 5
+  modvars(62)%enable = .true.
 
   modvars(63)%name       = 'tx'
   modvars(63)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(63)%kind       = 1
   modvars(63)%dimension  = 5
+  modvars(63)%enable = .true.
 
   modvars(64)%name       = 'r'
   modvars(64)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(64)%kind       = 1
   modvars(64)%dimension  = 3
+  modvars(64)%enable = .true.
 
   modvars(65)%name       = 'nr'
   modvars(65)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(65)%kind       = 4
   modvars(65)%dimension  = 2
+  modvars(65)%enable = .true.
 
   modvars(66)%name       = 'length'
   modvars(66)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(66)%kind       = 4
   modvars(66)%dimension  = 2
+  modvars(66)%enable = .true.
 
   modvars(67)%name       = 'cik'
   modvars(67)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(67)%kind       = 1
   modvars(67)%dimension  = 2
+  modvars(67)%enable = .true.
 
   modvars(68)%name       = 'ci'
   modvars(68)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(68)%kind       = 1
   modvars(68)%dimension  = 2
+  modvars(68)%enable = .true.
 
   modvars(69)%name       = 'ck'
   modvars(69)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(69)%kind       = 1
   modvars(69)%dimension  = 2
+  modvars(69)%enable = .true.
 
   modvars(70)%name       = 'ismout'
   modvars(70)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(70)%kind       = 4
   modvars(70)%dimension  = 70
+  modvars(70)%enable = .true.
 
   modvars(71)%name       = 'elp'
   modvars(71)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(71)%kind       = 1
   modvars(71)%dimension  = 65
+  modvars(71)%enable = .true.
 
   modvars(72)%name       = 'cu'
   modvars(72)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(72)%kind       = 1
   modvars(72)%dimension  = 66
+  modvars(72)%enable = .true.
 
   modvars(73)%name       = 'shp'
   modvars(73)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(73)%kind       = 1
   modvars(73)%dimension  = 67
+  modvars(73)%enable = .true.
 
   modvars(74)%name       = 'histq'
   modvars(74)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(74)%kind       = 1
   modvars(74)%dimension  = 68
+  modvars(74)%enable = .true.
 
   modvars(75)%name       = 'ismdat'
   modvars(75)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(75)%kind       = 4
   modvars(75)%dimension  = 69
+  modvars(75)%enable = .true.
 
   modvars(76)%name       = 'texvec'
-  modvars(76)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(76)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(76)%kind       = 3
   modvars(76)%dimension  = 7
+  modvars(76)%enable = .true.
 
   modvars(77)%name       = 'ibrnch'
   modvars(77)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(77)%kind       = 4
   modvars(77)%dimension  = 12
+  modvars(77)%enable = .true.
 
   modvars(78)%name       = 'jbrnch'
   modvars(78)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(78)%kind       = 4
   modvars(78)%dimension  = 12
+  modvars(78)%enable = .true.
 
   modvars(79)%name       = 'tstop'
   modvars(79)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(79)%kind       = 1
   modvars(79)%dimension  = 4
+  modvars(79)%enable = .true.
 
   modvars(80)%name       = 'nonlk'
   modvars(80)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(80)%kind       = 4
   modvars(80)%dimension  = 9
+  modvars(80)%enable = .true.
 
   modvars(81)%name       = 'nonlm'
   modvars(81)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(81)%kind       = 4
   modvars(81)%dimension  = 9
+  modvars(81)%enable = .true.
 
   modvars(82)%name       = 'spum'
   modvars(82)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(82)%kind       = 1
   modvars(82)%dimension  = 25
+  modvars(82)%enable = .true.
 
   modvars(83)%name       = 'kks'
   modvars(83)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(83)%kind       = 4
   modvars(83)%dimension  = 1
+  modvars(83)%enable = .true.
 
   modvars(84)%name       = 'kknonl'
   modvars(84)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(84)%kind       = 4
   modvars(84)%dimension  = 57
+  modvars(84)%enable = .true.
 
   modvars(85)%name       = 'znonl'
   modvars(85)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(85)%kind       = 1
   modvars(85)%dimension  = 57
+  modvars(85)%enable = .true.
 
   modvars(86)%name       = 'znonlb'
   modvars(86)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(86)%kind       = 1
   modvars(86)%dimension  = 1
+  modvars(86)%enable = .true.
 
   modvars(87)%name       = 'znonlc'
   modvars(87)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(87)%kind       = 1
   modvars(87)%dimension  = 1
+  modvars(87)%enable = .true.
 
   modvars(88)%name       = 'finit'
   modvars(88)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(88)%kind       = 1
   modvars(88)%dimension  = 1
+  modvars(88)%enable = .true.
 
   modvars(89)%name       = 'ksub'
   modvars(89)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(89)%kind       = 4
   modvars(89)%dimension  = 53
+  modvars(89)%enable = .true.
 
   modvars(90)%name       = 'msub'
   modvars(90)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(90)%kind       = 4
   modvars(90)%dimension  = 53
+  modvars(90)%enable = .true.
 
   modvars(91)%name       = 'isubeg'
   modvars(91)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(91)%kind       = 4
   modvars(91)%dimension  = 55
+  modvars(91)%enable = .true.
 
   modvars(92)%name       = 'litype'
   modvars(92)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(92)%kind       = 4
   modvars(92)%dimension  = 2
+  modvars(92)%enable = .true.
 
   modvars(93)%name       = 'imodel'
   modvars(93)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(93)%kind       = 4
   modvars(93)%dimension  = 2
+  modvars(93)%enable = .true.
 
   modvars(94)%name       = 'kbus'
   modvars(94)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(94)%kind       = 4
   modvars(94)%dimension  = 2
+  modvars(94)%enable = .true.
 
   modvars(95)%name       = 'mbus'
   modvars(95)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(95)%kind       = 4
   modvars(95)%dimension  = 2
+  modvars(95)%enable = .true.
 
   modvars(96)%name       = 'kodebr'
   modvars(96)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(96)%kind       = 4
   modvars(96)%dimension  = 2
+  modvars(96)%enable = .true.
 
   modvars(97)%name       = 'cki'
   modvars(97)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(97)%kind       = 1
   modvars(97)%dimension  = 2
+  modvars(97)%enable = .true.
 
   modvars(98)%name       = 'ckkjm'
   modvars(98)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(98)%kind       = 1
   modvars(98)%dimension  = 2
+  modvars(98)%enable = .true.
 
   modvars(99)%name       = 'indhst'
   modvars(99)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(99)%kind       = 4
   modvars(99)%dimension  = 2
+  modvars(99)%enable = .true.
 
   modvars(100)%name       = 'kodsem'
   modvars(100)%options(1 : 4) = ''
   modvars(100)%kind       = 4
   modvars(100)%dimension  = 2
+  modvars(100)%enable = .true.
 
   modvars(101)%name       = 'namebr'
   modvars(101)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(101)%kind       = 4
   modvars(101)%dimension  = 54
+  modvars(101)%enable = .true.
 
   modvars(102)%name       = 'iform'
   modvars(102)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(102)%kind       = 4
   modvars(102)%dimension  = 4
+  modvars(102)%enable = .true.
 
   modvars(103)%name       = 'node'
   modvars(103)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(103)%kind       = 4
   modvars(103)%dimension  = 4
+  modvars(103)%enable = .true.
 
   modvars(104)%name       = 'crest'
   modvars(104)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(104)%kind       = 1
   modvars(104)%dimension  = 4
+  modvars(104)%enable = .true.
 
   modvars(105)%name       = 'time1'
   modvars(105)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(105)%kind       = 1
   modvars(105)%dimension  = 4
+  modvars(105)%enable = .true.
 
   modvars(106)%name       = 'time2'
   modvars(106)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(106)%kind       = 1
   modvars(106)%dimension  = 4
+  modvars(106)%enable = .true.
 
   modvars(107)%name       = 'tstart'
   modvars(107)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(107)%kind       = 1
   modvars(107)%dimension  = 4
+  modvars(107)%enable = .true.
 
   modvars(108)%name       = 'sfreq'
   modvars(108)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(108)%kind       = 1
   modvars(108)%dimension  = 4
+  modvars(108)%enable = .true.
 
   modvars(109)%name       = 'kmswit'
   modvars(109)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(109)%kind       = 4
   modvars(109)%dimension  = 60
+  modvars(109)%enable = .true.
 
   modvars(110)%name       = 'nextsw'
   modvars(110)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(110)%kind       = 4
   modvars(110)%dimension  = 6
+  modvars(110)%enable = .true.
 
   modvars(111)%name       = 'rmfd'
   modvars(111)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(111)%kind       = 1
   modvars(111)%dimension  = 61
+  modvars(111)%enable = .true.
 
   modvars(112)%name       = 'cikfd'
   modvars(112)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(112)%kind       = 1
   modvars(112)%dimension  = 61
+  modvars(112)%enable = .true.
 
   modvars(113)%name       = 'imfd'
-  modvars(113)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(113)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(113)%kind       = 4
   modvars(113)%dimension  = 27
+  modvars(113)%enable = .true.
 
   modvars(114)%name       = 'tclose'
   modvars(114)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(114)%kind       = 1
   modvars(114)%dimension  = 6
+  modvars(114)%enable = .true.
 
   modvars(115)%name       = 'adelay'
-  modvars(115)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(115)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(115)%kind       = 1
   modvars(115)%dimension  = 60
+  modvars(115)%enable = .true.
 
   modvars(116)%name       = 'kpos'
   modvars(116)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(116)%kind       = 4
   modvars(116)%dimension  = 6
+  modvars(116)%enable = .true.
 
   modvars(117)%name       = 'namesw'
   modvars(117)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(117)%kind       = 4
   modvars(117)%dimension  = 6
+  modvars(117)%enable = .true.
 
   modvars(118)%name       = 'e'
-  modvars(118)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(118)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(118)%kind       = 1
-  modvars(118)%dimension  = 2
+  modvars(118)%dimension  = 1 ! was 2
+  modvars(118)%enable = .true.
 
   modvars(119)%name       = 'f'
-  modvars(119)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(119)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(119)%kind       = 1
   modvars(119)%dimension  = 1
+  modvars(119)%enable = .true.
 
   modvars(120)%name       = 'kssfrq'
   modvars(120)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(120)%kind       = 4
   modvars(120)%dimension  = 1
+  modvars(120)%enable = .true.
 
   modvars(121)%name       = 'kode'
   modvars(121)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(121)%kind       = 4
   modvars(121)%dimension  = 1
+  modvars(121)%enable = .true.
 
   modvars(122)%name       = 'kpsour'
   modvars(122)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(122)%kind       = 4
   modvars(122)%dimension  = 1
+  modvars(122)%enable = .true.
 
   modvars(123)%name       = 'volti'
   modvars(123)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(123)%kind       = 1
   modvars(123)%dimension  = 59
+  modvars(123)%enable = .true.
 
   modvars(124)%name       = 'voltk'
   modvars(124)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(124)%kind       = 1
   modvars(124)%dimension  = 26
+  modvars(124)%enable = .true.
 
   modvars(125)%name       = 'volt'
-  modvars(125)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(125)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(125)%kind       = 1
   modvars(125)%dimension  = 59
+  modvars(125)%enable = .true.
 
   modvars(126)%name       = 'bus'
   modvars(126)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(126)%kind       = 3
   modvars(126)%dimension  = 1
+  modvars(126)%enable = .true.
 
   modvars(127)%name       = 'karray'
-  modvars(127)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(127)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(127)%kind       = 4
   modvars(127)%dimension  = 0
+  modvars(127)%enable = .true.
 
   modvars(128)%name       = 'tp'
   modvars(128)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(128)%kind       = 1
   modvars(128)%dimension  = 23
+  modvars(128)%enable = .true.
 
   modvars(129)%name       = 'norder'
   modvars(129)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(129)%kind       = 4
   modvars(129)%dimension  = 1
+  modvars(129)%enable = .true.
 
   modvars(130)%name       = 'index'
   modvars(130)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(130)%kind       = 4
   modvars(130)%dimension  = 1
+  modvars(130)%enable = .true.
 
   modvars(131)%name       = 'diag'
   modvars(131)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(131)%kind       = 1
   modvars(131)%dimension  = 1
+  modvars(131)%enable = .true.
 
   modvars(132)%name       = 'diab'
   modvars(132)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(132)%kind       = 1
   modvars(132)%dimension  = 1
+  modvars(132)%enable = .true.
 
   modvars(133)%name       = 'solr'
   modvars(133)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(133)%kind       = 1
   modvars(133)%dimension  = 1
+  modvars(133)%enable = .true.
 
   modvars(134)%name       = 'soli'
   modvars(134)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(134)%kind       = 1
   modvars(134)%dimension  = 1
+  modvars(134)%enable = .true.
 
   modvars(135)%name       = 'ich1'
   modvars(135)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(135)%kind       = 4
   modvars(135)%dimension  = 1
+  modvars(135)%enable = .true.
 
   modvars(136)%name       = 'bnd'
   modvars(136)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(136)%kind       = 1
   modvars(136)%dimension  = 9
+  modvars(136)%enable = .true.
 
   modvars(137)%name       = 'iloc'
   modvars(137)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(137)%kind       = 4
   modvars(137)%dimension  = 23
+  modvars(137)%enable = .true.
 
   modvars(138)%name       = 'gnd'
   modvars(138)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(138)%kind       = 1
   modvars(138)%dimension  = 23
+  modvars(138)%enable = .true.
 
   modvars(139)%name       = 'karray'
-  modvars(139)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(139)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(139)%kind       = 4
   modvars(139)%dimension  = 9
+  modvars(139)%enable = .true.
 
   modvars(140)%name       = 'xdat'
   modvars(140)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(140)%kind       = 1
   modvars(140)%dimension  = 71
+  modvars(140)%enable = .true.
 
   modvars(141)%name       = 'ydat'
   modvars(141)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(141)%kind       = 1
   modvars(141)%dimension  = 71
+  modvars(141)%enable = .true.
 
   modvars(142)%name       = 'aphdat'
   modvars(142)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(142)%kind       = 1
   modvars(142)%dimension  = 71
+  modvars(142)%enable = .true.
 
   modvars(143)%name       = 'jndex'
   modvars(143)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(143)%kind       = 4
   modvars(143)%dimension  = 1
+  modvars(143)%enable = .true.
 
   modvars(144)%name       = 'diagg'
   modvars(144)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(144)%kind       = 1
   modvars(144)%dimension  = 1
+  modvars(144)%enable = .true.
 
   modvars(145)%name       = 'diabb'
   modvars(145)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(145)%kind       = 1
   modvars(145)%dimension  = 1
+  modvars(145)%enable = .true.
 
   modvars(146)%name       = 'solrsv'
   modvars(146)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(146)%kind       = 1
   modvars(146)%dimension  = 1
+  modvars(146)%enable = .true.
 
   modvars(147)%name       = 'solisv'
   modvars(147)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(147)%kind       = 1
   modvars(147)%dimension  = 1
+  modvars(147)%enable = .true.
 
   modvars(148)%name       = 'gndd'
   modvars(148)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(148)%kind       = 1
   modvars(148)%dimension  = 23
+  modvars(148)%enable = .true.
 
   modvars(149)%name       = 'bndd'
   modvars(149)%options(1 : 4) = (/ '', '', '', '' /)
@@ -989,237 +1138,283 @@ program vardim
   modvars(150)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(150)%kind       = 4
   modvars(150)%dimension  = 4
+  modvars(150)%enable = .true.
 
   modvars(151)%name       = 'fxtem1'
   modvars(151)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(151)%kind       = 1
   modvars(151)%dimension  = 4
+  modvars(151)%enable = .true.
 
   modvars(152)%name       = 'fxtem2'
   modvars(152)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(152)%kind       = 1
   modvars(152)%dimension  = 4
+  modvars(152)%enable = .true.
 
   modvars(153)%name       = 'fxtem3'
   modvars(153)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(153)%kind       = 1
   modvars(153)%dimension  = 4
+  modvars(153)%enable = .true.
 
   modvars(154)%name       = 'fxtem4'
   modvars(154)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(154)%kind       = 1
   modvars(154)%dimension  = 4
+  modvars(154)%enable = .true.
 
   modvars(155)%name       = 'fxtem5'
   modvars(155)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(155)%kind       = 1
   modvars(155)%dimension  = 4
+  modvars(155)%enable = .true.
 
   modvars(156)%name       = 'fxtem6'
   modvars(156)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(156)%kind       = 1
   modvars(156)%dimension  = 4
+  modvars(156)%enable = .true.
 
   modvars(157)%name       = 'fixbu1'
   modvars(157)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(157)%kind       = 1
   modvars(157)%dimension  = 4
+  modvars(157)%enable = .true.
 
   modvars(158)%name       = 'fixbu2'
   modvars(158)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(158)%kind       = 1
   modvars(158)%dimension  = 4
+  modvars(158)%enable = .true.
 
   modvars(159)%name       = 'fixbu3'
   modvars(159)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(159)%kind       = 1
   modvars(159)%dimension  = 4
+  modvars(159)%enable = .true.
 
   modvars(160)%name       = 'fixbu4'
   modvars(160)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(160)%kind       = 1
   modvars(160)%dimension  = 4
+  modvars(160)%enable = .true.
 
   modvars(161)%name       = 'fixbu5'
   modvars(161)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(161)%kind       = 1
   modvars(161)%dimension  = 4
+  modvars(161)%enable = .true.
 
   modvars(162)%name       = 'fixbu6'
   modvars(162)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(162)%kind       = 1
   modvars(162)%dimension  = 4
+  modvars(162)%enable = .true.
 
   modvars(163)%name       = 'fixbu7'
   modvars(163)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(163)%kind       = 1
   modvars(163)%dimension  = 4
+  modvars(163)%enable = .true.
 
   modvars(164)%name       = 'fixbu8'
   modvars(164)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(164)%kind       = 1
   modvars(164)%dimension  = 4
+  modvars(164)%enable = .true.
 
   modvars(165)%name       = 'fixbu9'
   modvars(165)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(165)%kind       = 1
   modvars(165)%dimension  = 4
+  modvars(165)%enable = .true.
 
   modvars(166)%name       = 'fixb10'
   modvars(166)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(166)%kind       = 1
   modvars(166)%dimension  = 4
+  modvars(166)%enable = .true.
 
   modvars(167)%name       = 'fixb11'
   modvars(167)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(167)%kind       = 1
   modvars(167)%dimension  = 4
+  modvars(167)%enable = .true.
 
   modvars(168)%name       = 'kndex'
   modvars(168)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(168)%kind       = 4
   modvars(168)%dimension  = 4
+  modvars(168)%enable = .true.
 
   modvars(169)%name       = 'karray'
-  modvars(169)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(169)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(169)%kind       = 4
   modvars(169)%dimension  = 9
+  modvars(169)%enable = .true.
 
   modvars(170)%name       = 'p'
   modvars(170)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(170)%kind       = 1
   modvars(170)%dimension  = 75
+  modvars(170)%enable = .true.
 
   modvars(171)%name       = 'z'
   modvars(171)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(171)%kind       = 1
   modvars(171)%dimension  = 75
+  modvars(171)%enable = .true.
 
   modvars(172)%name       = 'ic'
   modvars(172)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(172)%kind       = 4
   modvars(172)%dimension  = 71
+  modvars(172)%enable = .true.
 
   modvars(173)%name       = 'r'
   modvars(173)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(173)%kind       = 1
   modvars(173)%dimension  = 71
+  modvars(173)%enable = .true.
 
   modvars(174)%name       = 'd'
   modvars(174)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(174)%kind       = 1
   modvars(174)%dimension  = 71
+  modvars(174)%enable = .true.
 
   modvars(175)%name       = 'gmd'
   modvars(175)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(175)%kind       = 1
   modvars(175)%dimension  = 71
+  modvars(175)%enable = .true.
 
   modvars(176)%name       = 'x'
   modvars(176)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(176)%kind       = 1
   modvars(176)%dimension  = 71
+  modvars(176)%enable = .true.
 
   modvars(177)%name       = 'y'
   modvars(177)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(177)%kind       = 1
   modvars(177)%dimension  = 71
+  modvars(177)%enable = .true.
 
   modvars(178)%name       = 'tb2'
   modvars(178)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(178)%kind       = 1
   modvars(178)%dimension  = 71
+  modvars(178)%enable = .true.
 
   modvars(179)%name       = 'itb3'
   modvars(179)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(179)%kind       = 4
   modvars(179)%dimension  = 71
+  modvars(179)%enable = .true.
 
   modvars(180)%name       = 'workr1'
   modvars(180)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(180)%kind       = 1
   modvars(180)%dimension  = 71
+  modvars(180)%enable = .true.
 
   modvars(181)%name       = 'workr2'
   modvars(181)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(181)%kind       = 1
   modvars(181)%dimension  = 71
+  modvars(181)%enable = .true.
 
   modvars(182)%name       = 'text'
   modvars(182)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(182)%kind       = 3
   modvars(182)%dimension  = 76
+  modvars(182)%enable = .true.
 
   modvars(183)%name       = 'gd'
   modvars(183)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(183)%kind       = 1
   modvars(183)%dimension  = 74
+  modvars(183)%enable = .true.
 
   modvars(184)%name       = 'bd'
   modvars(184)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(184)%kind       = 1
   modvars(184)%dimension  = 74
+  modvars(184)%enable = .true.
 
   modvars(185)%name       = 'yd'
   modvars(185)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(185)%kind       = 1
   modvars(185)%dimension  = 74
+  modvars(185)%enable = .true.
 
   modvars(186)%name       = 'itbic'
   modvars(186)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(186)%kind       = 4
   modvars(186)%dimension  = 73
+  modvars(186)%enable = .true.
 
   modvars(187)%name       = 'tbr'
   modvars(187)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(187)%kind       = 1
   modvars(187)%dimension  = 73
+  modvars(187)%enable = .true.
 
   modvars(188)%name       = 'tbd'
   modvars(188)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(188)%kind       = 1
   modvars(188)%dimension  = 73
+  modvars(188)%enable = .true.
 
   modvars(189)%name       = 'tbg'
   modvars(189)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(189)%kind       = 1
   modvars(189)%dimension  = 73
+  modvars(189)%enable = .true.
 
   modvars(190)%name       = 'tbx'
   modvars(190)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(190)%kind       = 1
   modvars(190)%dimension  = 73
+  modvars(190)%enable = .true.
 
   modvars(191)%name       = 'tby'
   modvars(191)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(191)%kind       = 1
   modvars(191)%dimension  = 73
+  modvars(191)%enable = .true.
 
   modvars(192)%name       = 'tbtb2'
   modvars(192)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(192)%kind       = 4
   modvars(192)%dimension  = 73
+  modvars(192)%enable = .true.
 
   modvars(193)%name       = 'itbtb3'
   modvars(193)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(193)%kind       = 4
   modvars(193)%dimension  = 73
+  modvars(193)%enable = .true.
 
   modvars(194)%name       = 'tbtext'
   modvars(194)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(194)%kind       = 3
   modvars(194)%dimension  = 73
+  modvars(194)%enable = .true.
 
   modvars(195)%name       = 'karray'
-  modvars(195)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(195)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(195)%kind       = 4
   modvars(195)%dimension  = 9
+  modvars(195)%enable = .true.
 
   modvars(196)%name       = 'karray'
-  modvars(196)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(196)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(196)%kind       = 4
   modvars(196)%dimension  = 9
-
+  modvars(196)%enable = .true.
   !
   data char(1) / 'i' /
   data char(2) / 'j' /
@@ -1239,282 +1434,337 @@ program vardim
   modvars(201)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(201)%kind = 1
   modvars(201)%dimension = 1
+  modvars(201)%enable = .true.
 
-  modvars(202)%name = 'temp_infdli'
+  modvars(202)%name = 'infdli'
   modvars(202)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(202)%kind = 4
   modvars(202)%dimension = 1
+  modvars(202)%enable = .false.
 
-  modvars(203)%name = 'temp_ispum'
+  modvars(203)%name = 'ispum'
   modvars(203)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(203)%kind = 4
   modvars(203)%dimension = 1
+  modvars(203)%enable = .false.
 
   modvars(204)%name = 'emtpe'
   modvars(204)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(204)%kind = 1
   modvars(204)%dimension = 1
+  modvars(204)%enable = .true.
 
-  modvars(205)%name = 'temp_cmr'
+  modvars(205)%name = 'cmr'
   modvars(205)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(205)%kind = 1
   modvars(205)%dimension = 1
+  modvars(205)%enable = .false.
 
   modvars(206)%name = 'trshun'
   modvars(206)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(206)%kind = 1
   modvars(206)%dimension = 1
+  modvars(206)%enable = .false.
 
   modvars(207)%name = 'cser'
   modvars(207)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(207)%kind = 1
   modvars(207)%dimension = 1
+  modvars(207)%enable = .false.
 
-  modvars(208)%name = 'temp_massex'
+  modvars(208)%name = 'massex'
   modvars(208)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(208)%kind = 4
   modvars(208)%dimension = 1
+  modvars(208)%enable = .false.
 
   modvars(209)%name = 'mapcas'
   modvars(209)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(209)%kind = 4
   modvars(209)%dimension = 1
+  modvars(209)%enable = .false.
 
   modvars(210)%name = 'mapinv'
   modvars(210)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(210)%kind = 4
   modvars(210)%dimension = 1
+  modvars(210)%enable = .false.
 
-  modvars(211)%name = 'temp_txshun'
+  modvars(211)%name = 'txshun'
   modvars(211)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(211)%kind = 1
   modvars(211)%dimension = 1
+  modvars(211)%enable = .false.
 
   modvars(212)%name = 'node1'
   modvars(212)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(212)%kind = 4
   modvars(212)%dimension = 1
+  modvars(212)%enable = .false.
 
   modvars(213)%name = 'node2'
   modvars(213)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(213)%kind = 4
   modvars(213)%dimension = 1
+  modvars(213)%enable = .false.
 
-  modvars(214)%name = 'temp_icrit'
+  modvars(214)%name = 'icrit'
   modvars(214)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(214)%kind = 4
   modvars(214)%dimension = 1
+  modvars(214)%enable = .false.
 
   modvars(215)%name = 'cmi'
   modvars(215)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(215)%kind = 1
   modvars(215)%dimension = 1
+  modvars(215)%enable = .false.
 
-  modvars(216)%name = 'temp_ipout'
+  modvars(216)%name = 'ipout'
   modvars(216)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(216)%kind = 4
   modvars(216)%dimension = -1
+  modvars(216)%enable = .false.
 
-  modvars(217)%name = 'temp_n56'
+  modvars(217)%name = 'n56'
   modvars(217)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(217)%kind = 4
   modvars(217)%dimension = -1
+  modvars(217)%enable = .false.
 
-  modvars(218)%name = 'temp_ismold'
+  modvars(218)%name = 'ismold'
   modvars(218)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(218)%kind = 4
   modvars(218)%dimension = -1
+  modvars(218)%enable = .false.
 
   modvars(219)%name = 'nn10'
   modvars(219)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(219)%kind = 4
   modvars(219)%dimension = -1
+  modvars(219)%enable = .false.
 
-  modvars(220)%name = 'temp_nn4'
+  modvars(220)%name = 'nn4'
   modvars(220)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(220)%kind = 4
   modvars(220)%dimension = -1
+  modvars(220)%enable = .false.
 
-  modvars(221)%name = 'temp_nn14'
+  modvars(221)%name = 'nn14'
   modvars(221)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(221)%kind = 4
   modvars(221)%dimension = -1
+  modvars(221)%enable = .false.
 
   modvars(222)%name = 'caslnx'
   modvars(222)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(222)%kind = 1
   modvars(222)%dimension = 1
+  modvars(222)%enable = .false.
 
-  modvars(223)%name = 'temp_volta'
+  modvars(223)%name = 'volta'
   modvars(223)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(223)%kind = 1
   modvars(223)%dimension = 1
+  modvars(223)%enable = .false.
 
   modvars(224)%name = 'cshun'
   modvars(224)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(224)%kind = 1
   modvars(224)%dimension = 1
+  modvars(224)%enable = .false.
 
-  modvars(225)%name = 'temp_wk1'
+  modvars(225)%name = 'wk1'
   modvars(225)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(225)%kind = 1
   modvars(225)%dimension = 1
+  modvars(225)%enable = .false.
 
-  modvars(226)%name = 'temp_cblhst'
+  modvars(226)%name = 'cblhst'
   modvars(226)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(226)%kind = 1
   modvars(226)%dimension = 1
+  modvars(226)%enable = .false.
 
   modvars(227)%name = 'ui'
   modvars(227)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(227)%kind = 1
   modvars(227)%dimension = 14 ! 40
+  modvars(227)%enable = .false.
 
   modvars(228)%name = 'trser'
   modvars(228)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(228)%kind = 1
   modvars(228)%dimension = 1
+  modvars(228)%enable = .false.
 
   modvars(229)%name = 'txser'
   modvars(229)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(229)%kind = 1
   modvars(229)%dimension = 1
+  modvars(229)%enable = .false.
 
-  modvars(230)%name = 'temp_xx'
+  modvars(230)%name = 'xx'
   modvars(230)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(230)%kind = 1
   modvars(230)%dimension = 1
+  modvars(230)%enable = .false.
 
   modvars(231)%name = 'r4'
   modvars(231)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(231)%kind = 1
   modvars(231)%dimension = 1
+  modvars(231)%enable = .false.
 
   modvars(232)%name = 'ur'
   modvars(232)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(232)%kind = 1
   modvars(232)%dimension = 14 ! 40
+  modvars(232)%enable = .false.
 
-  modvars(233)%name = 'temp_caslnr'
+  modvars(233)%name = 'caslnr'
   modvars(233)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(233)%kind = 1
   modvars(233)%dimension = 1
+  modvars(233)%enable = .false.
 
-  modvars(234)%name = 'temp_integx'
+  modvars(234)%name = 'integx'
   modvars(234)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(234)%kind = 4
   modvars(234)%dimension = 1
+  modvars(234)%enable = .false.
 
   modvars(235)%name = 'akey'
   modvars(235)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(235)%kind = 1
   modvars(235)%dimension = 1
+  modvars(235)%enable = .false.
 
   modvars(236)%name = 'tstat'
   modvars(236)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(236)%kind = 1
   modvars(236)%dimension = 1
+  modvars(236)%enable = .false.
 
-  modvars(237)%name = 'temp_ndex'
+  modvars(237)%name = 'ndex'
   modvars(237)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(237)%kind = 4
   modvars(237)%dimension = 1
+  modvars(237)%enable = .false.
 
   modvars(238)%name = 'vim'
   modvars(238)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(238)%kind = 1
   modvars(238)%dimension = 1
+  modvars(238)%enable = .false.
 
   modvars(239)%name = 'jch2'
   modvars(239)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(239)%kind = 4
   modvars(239)%dimension = 20
+  modvars(239)%enable = .false.
 
-  modvars(240)%name = 'temp_nsubkm'
+  modvars(240)%name = 'nsubkm'
   modvars(240)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(240)%kind = 4
   modvars(240)%dimension = 1
+  modvars(240)%enable = .false.
 
-  modvars(241)%name = 'temp_vsmout'
+  modvars(241)%name = 'vsmout'
   modvars(241)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(241)%kind = 1
   modvars(241)%dimension = 1
+  modvars(241)%enable = .false.
 
   modvars(242)%name = 'ksing'
   modvars(242)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(242)%kind = 4
   modvars(242)%dimension = 1
+  modvars(242)%enable = .false.
 
   modvars(243)%name = 'kindep'
   modvars(243)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(243)%kind = 4
   modvars(243)%dimension = 1
+  modvars(243)%enable = .false.
 
   modvars(244)%name = 'fold'
   modvars(244)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(244)%kind = 1
   modvars(244)%dimension = 1
+  modvars(244)%enable = .false.
 
   modvars(245)%name = 'w1'
   modvars(245)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(245)%kind = 1
   modvars(245)%dimension = 1
+  modvars(245)%enable = .false.
 
   modvars(246)%name = 'texvec1'
   modvars(246)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(246)%kind = 3
   modvars(246)%dimension = -1
+  modvars(246)%enable = .false.
 
   modvars(247)%name = 'buslst'
   modvars(247)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(247)%kind = 3
   modvars(247)%dimension = 2
+  modvars(247)%enable = .true.
 
   modvars(248)%name       = 'karray'
-  modvars(248)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(248)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(248)%kind      = 4
   modvars(248)%dimension = 1
+  modvars(248)%enable = .true.
 
   modvars(249)%name       = 'ev'
   modvars(249)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(249)%kind      = 1
   modvars(249)%dimension = 2
+  modvars(249)%enable = .true.
 
   modvars(250)%name       = 'array'
   modvars(250)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(250)%kind      = 1
   modvars(250)%dimension = 1
+  modvars(250)%enable = .false.
 
   modvars(251)%name       = 'evdoub'
   modvars(251)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(251)%kind      = 1
   modvars(251)%dimension = 1
+  modvars(251)%enable = .true.
 
   modvars(252)%name       = 'itg'
   modvars(252)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(252)%kind      = 4
   modvars(252)%dimension = 1
+  modvars(252)%enable = .false.
 
   modvars(253)%name       = 'rtg'
   modvars(253)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(253)%kind      = 1
   modvars(253)%dimension = 1
+  modvars(253)%enable = .false.
 
   modvars(254)%name       = 'ctg'
   modvars(254)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(254)%kind      = 5
   modvars(254)%dimension = 1
+  modvars(254)%enable = .true.
 
   modvars(255)%name       = 'stg'
   modvars(255)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(255)%kind      = 1
   modvars(255)%dimension = 1
+  modvars(255)%enable = .false.
 
   modvars(256)%name       = 'itemp'
   modvars(256)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(256)%kind      = 4
   modvars(256)%dimension = 9
-
+  modvars(256)%enable = .true.
 
   open (unit = lunit(2), iostat = ios, form = 'formatted')
   if (ios .eq. 0) then
@@ -1648,17 +1898,19 @@ program vardim
            lstnew(73) = lstnew(22) + lstnew(21)
            mtot = 0
            do i = 1, modvara
-              n9 = modvars(i)%dimension
-              if (n9 .eq. 0 .or. n9 .eq. 98) exit
-              n37 = 3
-              bus1 = modvars(i)%name
-              read (unit = bus1, fmt = 8104) bus2
-8104          format (a1)
-              do j = 1, 6
-                 if (bus2 .eq. char(j)) n37 = 4
-              end do
-              if (modvars(i)%kind .ne. 0) n37 = modvars(i)%kind
-              mtot = mtot + mulvar(n37) * lstnew(n9)
+              if (modvars(i)%enable) then
+                 n9 = modvars(i)%dimension
+                 if (n9 .eq. 0 .or. n9 .eq. 98) exit
+                 n37 = 3
+                 bus1 = modvars(i)%name
+                 read (unit = bus1, fmt = 8104) bus2
+8104             format (a1)
+                 do j = 1, 6
+                    if (bus2 .eq. char(j)) n37 = 4
+                 end do
+                 if (modvars(i)%kind .ne. 0) n37 = modvars(i)%kind
+                 mtot = mtot + mulvar(n37) * lstnew(n9)
+              end if
            end do
            write (unit = lunit(2), fmt = 4190)
 4190       format ('!-*- mode: f90; indent-tabs-mode: nil; coding: utf-8; show-trailing-whitespace: t -*-', //, '!', /, '! file newmods.f90', /, '!')
@@ -1674,298 +1926,400 @@ program vardim
            call make_implicit_statement (unit = lunit(4), mode = 0)
            do ii = 1, modvara
               i = 0 + ii
-              n3 = modvars(i)%dimension
-              nonneg = lstnew(n3)
-              if (nonneg .le. 0) nonneg = 1
-              n4 = modvars(i)%kind
-              if (n4 .ne. 0) then
-                 tempvar = modvars(i)
-                 tempvar%dimension = nonneg
-                 !                 call make_variable_declaration (lunit(2), tempvar, types)
-                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(4), tempvar, types)
-!                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              if (modvars(i)%enable) then
+                 n3 = modvars(i)%dimension
+                 nonneg = lstnew(n3)
+                 if (nonneg .le. 0) nonneg = 1
+                 n4 = modvars(i)%kind
+                 if (n4 .ne. 0) then
+                    tempvar = modvars(i)
+                    tempvar%dimension = nonneg
+                    !                 call make_variable_declaration (lunit(2), tempvar, types)
+                    if (tempvar%name .ne. '') call make_variable_declaration (lunit(4), tempvar, types)
+                    !                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+                 end if
               end if
            end do
            !
            write (unit = lunit(2), fmt = "(2x, '!')")
            write (unit = lunit(4), fmt = "(2x, '!')")
            do ii = 1, modvarc
-              n3 = modvars(200 + ii)%dimension
-              if (n3 .lt. 0) then
-                 nonneg = 0
-              else
-                 if (n3 .eq. 0) n3 = 1
-                 nonneg = lstnew(n3)
-                 if (nonneg .le. 0) nonneg = 1
+              if (modvars(200 + ii)%enable) then
+                 n3 = modvars(200 + ii)%dimension
+                 if (n3 .lt. 0) then
+                    nonneg = 0
+                 else
+                    if (n3 .eq. 0) n3 = 1
+                    nonneg = lstnew(n3)
+                    if (nonneg .le. 0) nonneg = 1
+                 end if
+                 tempvar = modvars(200 + ii)
+                 tempvar%dimension = nonneg
+                 if (tempvar%name .ne. '') call make_variable_declaration (unit = lunit(4), var = tempvar, types = types)
               end if
-              tempvar = modvars(200 + ii)
-              tempvar%dimension = nonneg
-              if (tempvar%name .ne. '') call make_variable_declaration (unit = lunit(4), var = tempvar, types = types)
            end do
            !
            write (unit = lunit(4), fmt = "(2x, '!')")
            !
-           equivlist(1)%variable = modvars(113)   ! imfd(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(239)   ! jch2(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(125)   ! volt(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(238)   ! vim(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(118)   ! e(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(237)   ! ndex(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(33)    ! crit(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(236)   ! tstat(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(115)   ! adelay(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(235)   ! akey(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(33)    ! crit(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(214)   ! icrit(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(4)     ! xk(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(230)   ! xx(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(82)    ! spum(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(203)   ! ispum(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(84)    ! kknonl(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(240)   ! nsubkm(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(22)    ! semaux(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(225)   ! wk1(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(101)   ! namebr(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(202)   ! infdli(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(70)    ! ismout(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(241)   ! vsmout(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(74)    ! histq(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(208)   ! massex(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(123)   ! volti(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(223)   ! volta(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(56)    ! cchar(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(242)   ! ksing(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(58)    ! gslope(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(243)   ! kindep(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(57)    ! vchar(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(244)   ! fold(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(123)   ! volti(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(231)   ! r4(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(19)    ! cnvhst(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(226)   ! cblhst(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(1)     ! x(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(234)   ! integx(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(204)   ! emtpe(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(228)   ! trser(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(119)   ! f(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(229)   ! txser(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(123)   ! volti(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(212)   ! node1(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(124)   ! voltk(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(213)   ! node2(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(125)   ! volt(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(210)   ! mapinv(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(2)     ! ykm(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(209)   ! mapcas(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(4)     ! xk(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(233)   ! caslnr(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(5)     ! xm(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(222)   ! caslnx(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(121)   ! kode(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(207)   ! cser(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(60)    ! kk(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(206)   ! trshun(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(83)    ! kks(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(211)   ! txshun(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(84)    ! kknonl(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(224)   ! cshun(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(75)    ! ismdat(22)
-           equivlist(1)%index = 22
-           equivlist(2)%variable = modvars(216)   ! ipout
-           equivlist(2)%index = 0
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(75)    ! ismdat(23)
-           equivlist(1)%index = 23
-           equivlist(2)%variable = modvars(217)   ! n56
-           equivlist(2)%index = 0
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(75)    ! ismdat(24)
-           equivlist(1)%index = 24
-           equivlist(2)%variable = modvars(218)   ! ismold
-           equivlist(2)%index = 0
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(75)    ! ismdat(25)
-           equivlist(1)%index = 25
-           equivlist(2)%variable = modvars(219)   ! nn10
-           equivlist(2)%index = 0
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(75)    ! ismdat(26)
-           equivlist(1)%index = 26
-           equivlist(2)%variable = modvars(220)   ! nn4
-           equivlist(2)%index = 0
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(75)    ! ismdat(27)
-           equivlist(1)%index = 27
-           equivlist(2)%variable = modvars(221)   ! nn14
-           equivlist(2)%index = 0
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(125)   ! volt(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(233)   ! caslnr(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(123)   ! volti(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(232)   ! ur(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(124)   ! voltk(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(227)   ! ui(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(83)    ! kks(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(205)   ! cmr(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(84)    ! kknonl(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(215)   ! cmi(1)
-           equivlist(2)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(2)     ! ykm(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(245)   ! w1(1)
-           equivlist(2)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(76)    ! texvec(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(246)   ! texvec1
-           equivlist(2)%index = 0
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(127)   ! karray(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(250)   ! array(1)
-           equivlist(2)%index = 1
-           equivlist(3)%variable = modvars(249)   ! ev(1)
-           equivlist(3)%index = 1
-           equivlist(4)%variable = modvars(247)   ! buslst(1)
-           equivlist(4)%index = 1
-           equivlist(5)%variable = modvars(251)   ! evdoub(1)
-           equivlist(5)%index = 1
-           equivlist(6)%variable = modvars(23)    ! ibsout(1)
-           equivlist(6)%index = 1
-           equivlist(7)%variable = modvars(77)    ! ibrnch(1)
-           equivlist(7)%index = 1
-           equivlist(8)%variable = modvars(78)    ! jbrnch(1)
-           equivlist(8)%index = 1
-           !           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 8))
-           equivlist(1)%variable = modvars(127)   ! karray(1)
-           equivlist(1)%index = 1
-           equivlist(2)%variable = modvars(252)   ! itg(1)
-           equivlist(2)%index = 1
-           equivlist(3)%variable = modvars(253)   ! rtg(1)
-           equivlist(3)%index = 1
-           equivlist(4)%variable = modvars(254)   ! ctg(1)
-           equivlist(4)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 4))
-           equivlist(1)%variable = modvars(127)   ! karray(1)
-           equivlist(1)%index = 1
-           equivlist(4)%variable = modvars(255)   ! stg(1)
-           equivlist(4)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
-           equivlist(1)%variable = modvars(124)   ! voltk(1)
-           equivlist(1)%index = 1
-           equivlist(4)%variable = modvars(256)   ! itemp(1)
-           equivlist(4)%index = 1
-           call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           if (modvars(113)%enable .and. modvars(239)%enable) then
+              equivlist(1)%variable = modvars(113)   ! imfd(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(239)   ! jch2(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(125)%enable .and. modvars(238)%enable) then
+              equivlist(1)%variable = modvars(125)   ! volt(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(238)   ! vim(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(118)%enable .and. modvars(237)%enable) then
+              equivlist(1)%variable = modvars(118)   ! e(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(237)   ! ndex(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(33)%enable .and. modvars(236)%enable) then
+              equivlist(1)%variable = modvars(33)    ! crit(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(236)   ! tstat(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(115)%enable .and. modvars(235)%enable) then
+              equivlist(1)%variable = modvars(115)   ! adelay(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(235)   ! akey(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(33)%enable .and. modvars(214)%enable) then
+              equivlist(1)%variable = modvars(33)    ! crit(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(214)   ! icrit(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(4)%enable .and. modvars(230)%enable) then
+              equivlist(1)%variable = modvars(4)     ! xk(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(230)   ! xx(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(82)%enable .and. modvars(203)%enable) then
+              equivlist(1)%variable = modvars(82)    ! spum(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(203)   ! ispum(1)
+              equivlist(2)%index = 1
+           end if
+           if (modvars(84)%enable .and. modvars(240)%enable) then
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+              equivlist(1)%variable = modvars(84)    ! kknonl(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(240)   ! nsubkm(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(22)%enable .and. modvars(225)%enable) then
+              equivlist(1)%variable = modvars(22)    ! semaux(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(225)   ! wk1(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(101)%enable .and. modvars(202)%enable) then
+              equivlist(1)%variable = modvars(101)   ! namebr(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(202)   ! infdli(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(70)%enable .and. modvars(241)%enable) then
+              equivlist(1)%variable = modvars(70)    ! ismout(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(241)   ! vsmout(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(74)%enable .and. modvars(208)%enable) then
+              equivlist(1)%variable = modvars(74)    ! histq(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(208)   ! massex(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(123)%enable .and. modvars(223)%enable) then
+              equivlist(1)%variable = modvars(123)   ! volti(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(223)   ! volta(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(56)%enable .and. modvars(242)%enable) then
+              equivlist(1)%variable = modvars(56)    ! cchar(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(242)   ! ksing(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(58)%enable .and. modvars(243)%enable) then
+              equivlist(1)%variable = modvars(58)    ! gslope(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(243)   ! kindep(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(57)%enable .and. modvars(244)%enable) then
+              equivlist(1)%variable = modvars(57)    ! vchar(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(244)   ! fold(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(123)%enable .and. modvars(231)%enable) then
+              equivlist(1)%variable = modvars(123)   ! volti(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(231)   ! r4(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(19)%enable .and. modvars(226)%enable) then
+              equivlist(1)%variable = modvars(19)    ! cnvhst(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(226)   ! cblhst(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(1)%enable .and. modvars(234)%enable) then
+              equivlist(1)%variable = modvars(1)     ! x(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(234)   ! integx(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(204)%enable .and. modvars(228)%enable) then
+              equivlist(1)%variable = modvars(204)   ! emtpe(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(228)   ! trser(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(119)%enable .and. modvars(229)%enable) then
+              equivlist(1)%variable = modvars(119)   ! f(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(229)   ! txser(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(123)%enable .and. modvars(212)%enable) then
+              equivlist(1)%variable = modvars(123)   ! volti(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(212)   ! node1(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(124)%enable .and. modvars(213)%enable) then
+              equivlist(1)%variable = modvars(124)   ! voltk(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(213)   ! node2(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(125)%enable .and. modvars(210)%enable) then
+              equivlist(1)%variable = modvars(125)   ! volt(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(210)   ! mapinv(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(2)%enable .and. modvars(209)%enable) then
+              equivlist(1)%variable = modvars(2)     ! ykm(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(209)   ! mapcas(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(4)%enable .and. modvars(233)%enable) then
+              equivlist(1)%variable = modvars(4)     ! xk(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(233)   ! caslnr(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(5)%enable .and. modvars(222)%enable) then
+              equivlist(1)%variable = modvars(5)     ! xm(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(222)   ! caslnx(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(121)%enable .and. modvars(207)%enable) then
+              equivlist(1)%variable = modvars(121)   ! kode(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(207)   ! cser(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(60)%enable .and. modvars(206)%enable) then
+              equivlist(1)%variable = modvars(60)    ! kk(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(206)   ! trshun(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(83)%enable .and. modvars(211)%enable) then
+              equivlist(1)%variable = modvars(83)    ! kks(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(211)   ! txshun(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(84)%enable .and. modvars(224)%enable) then
+              equivlist(1)%variable = modvars(84)    ! kknonl(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(224)   ! cshun(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(75)%enable .and. modvars(216)%enable) then
+              equivlist(1)%variable = modvars(75)    ! ismdat(22)
+              equivlist(1)%index = 22
+              equivlist(2)%variable = modvars(216)   ! ipout
+              equivlist(2)%index = 0
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(75)%enable .and. modvars(217)%enable) then
+              equivlist(1)%variable = modvars(75)    ! ismdat(23)
+              equivlist(1)%index = 23
+              equivlist(2)%variable = modvars(217)   ! n56
+              equivlist(2)%index = 0
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(75)%enable .and. modvars(218)%enable) then
+              equivlist(1)%variable = modvars(75)    ! ismdat(24)
+              equivlist(1)%index = 24
+              equivlist(2)%variable = modvars(218)   ! ismold
+              equivlist(2)%index = 0
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(75)%enable .and. modvars(219)%enable) then
+              equivlist(1)%variable = modvars(75)    ! ismdat(25)
+              equivlist(1)%index = 25
+              equivlist(2)%variable = modvars(219)   ! nn10
+              equivlist(2)%index = 0
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(75)%enable .and. modvars(220)%enable) then
+              equivlist(1)%variable = modvars(75)    ! ismdat(26)
+              equivlist(1)%index = 26
+              equivlist(2)%variable = modvars(220)   ! nn4
+              equivlist(2)%index = 0
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(75)%enable .and. modvars(221)%enable) then
+              equivlist(1)%variable = modvars(75)    ! ismdat(27)
+              equivlist(1)%index = 27
+              equivlist(2)%variable = modvars(221)   ! nn14
+              equivlist(2)%index = 0
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(125)%enable .and. modvars(233)%enable) then
+              equivlist(1)%variable = modvars(125)   ! volt(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(233)   ! caslnr(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(123)%enable .and. modvars(232)%enable) then
+              equivlist(1)%variable = modvars(123)   ! volti(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(232)   ! ur(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(124)%enable .and. modvars(227)%enable) then
+              equivlist(1)%variable = modvars(124)   ! voltk(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(227)   ! ui(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(83)%enable .and. modvars(205)%enable) then
+              equivlist(1)%variable = modvars(83)    ! kks(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(205)   ! cmr(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(84)%enable .and. modvars(215)%enable) then
+              equivlist(1)%variable = modvars(84)    ! kknonl(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(215)   ! cmi(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(2)%enable .and. modvars(245)%enable) then
+              equivlist(1)%variable = modvars(2)     ! ykm(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(245)   ! w1(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(76)%enable .and. modvars(246)%enable) then
+              equivlist(1)%variable = modvars(76)    ! texvec(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(246)   ! texvec1
+              equivlist(2)%index = 0
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(127)%enable .and. modvars(250)%enable .and. modvars(249)%enable .and. modvars(247)%enable .and. modvars(251)%enable .and. modvars(23)%enable .and. modvars(77)%enable .and. modvars(78)%enable) then
+              equivlist(1)%variable = modvars(127)   ! karray(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(250)   ! array(1)
+              equivlist(2)%index = 1
+              equivlist(3)%variable = modvars(249)   ! ev(1)
+              equivlist(3)%index = 1
+              equivlist(4)%variable = modvars(247)   ! buslst(1)
+              equivlist(4)%index = 1
+              equivlist(5)%variable = modvars(251)   ! evdoub(1)
+              equivlist(5)%index = 1
+              equivlist(6)%variable = modvars(23)    ! ibsout(1)
+              equivlist(6)%index = 1
+              equivlist(7)%variable = modvars(77)    ! ibrnch(1)
+              equivlist(7)%index = 1
+              equivlist(8)%variable = modvars(78)    ! jbrnch(1)
+              equivlist(8)%index = 1
+              !              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 8))
+           end if
+           if (modvars(127)%enable .and. modvars(252)%enable .and. modvars(253)%enable .and. modvars(254)%enable) then
+              equivlist(1)%variable = modvars(127)   ! karray(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(252)   ! itg(1)
+              equivlist(2)%index = 1
+              equivlist(3)%variable = modvars(253)   ! rtg(1)
+              equivlist(3)%index = 1
+              equivlist(4)%variable = modvars(254)   ! ctg(1)
+              equivlist(4)%index = 1
+              !              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 4))
+           end if
+           if (modvars(127)%enable .and. modvars(255)%enable) then
+              equivlist(1)%variable = modvars(127)   ! karray(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(255)   ! stg(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
+           if (modvars(124)%enable .and. modvars(256)%enable) then
+              equivlist(1)%variable = modvars(124)   ! voltk(1)
+              equivlist(1)%index = 1
+              equivlist(2)%variable = modvars(256)   ! itemp(1)
+              equivlist(2)%index = 1
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 2))
+           end if
            !
            write (unit = lunit(4), fmt = 7245)
 7245       format ('end module labcom')
@@ -2026,16 +2380,18 @@ program vardim
 3684       format (2x, 'b1 =', "'", i8, "'", /, 2x, 'b2 =', "'", i8, "'")
            mtot = 0
            do i = 127, 138
-              n9 = modvars(i)%dimension
-              if (n9 .eq. 0 .or. n9 .eq. 98) exit
-              n37 = 3
-              bus1 = modvars(i)%name
-              read (unit = bus1, fmt = 8104) bus2
-              do j = 1, 6
-                 if (bus2 .eq. char(j)) n37 = 4
-              end do
-              if (modvars(i)%kind .ne. 0) n37 = modvars(i)%kind
-              mtot = mtot + mulvar(n37) * lstnew(n9)
+              if (modvars(i)%enable) then
+                 n9 = modvars(i)%dimension
+                 if (n9 .eq. 0 .or. n9 .eq. 98) exit
+                 n37 = 3
+                 bus1 = modvars(i)%name
+                 read (unit = bus1, fmt = 8104) bus2
+                 do j = 1, 6
+                    if (bus2 .eq. char(j)) n37 = 4
+                 end do
+                 if (modvars(i)%kind .ne. 0) n37 = modvars(i)%kind
+                 mtot = mtot + mulvar(n37) * lstnew(n9)
+              end if
            end do
            lstnew(99) = ltlabl + kextra(1)
            if (lstnew(99) .le. 0) lstnew(99) = 1
@@ -2061,28 +2417,30 @@ program vardim
 8158       format (i2.2, '00 if (n .gt.', i4, ') go to ', i2.2, '00')
            do ii = 1, 12
               i = modvara + ii
-              n3 = modvars(i)%dimension
-              if (ii .eq. 1) go to 4502
-              n7 = ii - 1
-              do kk = 1, n7
-                 if (modvars(kk + modvara)%dimension .eq. n3) go to 4602
-              end do
-4502          lm = lm + 1
-              n28 = n3
-              if (n3 .eq. 99) n28 = 0
-              write (lunit(3), 8143) lm, n28
-              lm = lm + 1
-              write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
-4769          format (2x, 'ls(', i2, ') =', i7)
-              nrec3 = nrec3 + 2
-4602          continue
-              nonneg = lstnew(n3)
-              if (nonneg .le. 0) nonneg = 1
-              n4 = modvars(i)%kind
-              if (n4 .eq. 0) exit
-              tempvar = modvars(i)
-              tempvar%dimension = nonneg
-              if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              if (modvars(i)%enable) then
+                 n3 = modvars(i)%dimension
+                 if (ii .eq. 1) go to 4502
+                 n7 = ii - 1
+                 do kk = 1, n7
+                    if (modvars(kk + modvara)%dimension .eq. n3) go to 4602
+                 end do
+4502             lm = lm + 1
+                 n28 = n3
+                 if (n3 .eq. 99) n28 = 0
+                 write (lunit(3), 8143) lm, n28
+                 lm = lm + 1
+                 write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
+4769             format (2x, 'ls(', i2, ') =', i7)
+                 nrec3 = nrec3 + 2
+4602             continue
+                 nonneg = lstnew(n3)
+                 if (nonneg .le. 0) nonneg = 1
+                 n4 = modvars(i)%kind
+                 if (n4 .eq. 0) exit
+                 tempvar = modvars(i)
+                 tempvar%dimension = nonneg
+                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              end if
            end do
            n18 = 29
            write (unit = lunit(2), fmt = 7274) n18
@@ -2111,28 +2469,30 @@ program vardim
            nrec3 = nrec3 + 2
            do ii = 1, 1
               i = 138 + ii
-              n3 = modvars(i)%dimension
-              if (n3 .gt. 0) then
-                 if (ii .eq. 1) go to 4503
-                 n7 = ii - 1
-                 do kk = 1, n7
-                    if (modvars(kk + 138)%dimension .eq. n3) go to 4603
-                 end do
-4503             lm = lm + 1
-                 n28 = n3
-                 if (n3 .eq. 99) n28 = 0
-                 write (unit = lunit(3), fmt = 8143) lm, n28
-                 lm = lm + 1
-                 write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
-                 nrec3 = nrec3 + 2
-4603             continue
-                 nonneg = lstnew(n3)
-                 if (nonneg .le. 0) nonneg = 1
-                 n4 = modvars(i)%kind
-                 if (n4 .eq. 0) go to 4103
-                 tempvar = modvars(i)
-                 tempvar%dimension = nonneg
-                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              if (modvars(i)%enable) then
+                 n3 = modvars(i)%dimension
+                 if (n3 .gt. 0) then
+                    if (ii .eq. 1) go to 4503
+                    n7 = ii - 1
+                    do kk = 1, n7
+                       if (modvars(kk + 138)%dimension .eq. n3) go to 4603
+                    end do
+4503                lm = lm + 1
+                    n28 = n3
+                    if (n3 .eq. 99) n28 = 0
+                    write (unit = lunit(3), fmt = 8143) lm, n28
+                    lm = lm + 1
+                    write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
+                    nrec3 = nrec3 + 2
+4603                continue
+                    nonneg = lstnew(n3)
+                    if (nonneg .le. 0) nonneg = 1
+                    n4 = modvars(i)%kind
+                    if (n4 .eq. 0) go to 4103
+                    tempvar = modvars(i)
+                    tempvar%dimension = nonneg
+                    if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+                 end if
               end if
            end do
 4103       continue
@@ -2162,27 +2522,29 @@ program vardim
            nrec3 = nrec3 + 2
            do ii = 1, 3
               i = 139  +  ii
-              n3 = modvars(i)%dimension
-              if (ii .eq. 1) go to 4504
-              n7 = ii - 1
-              do kk = 1, n7
-                 if (modvars(kk + 139)%dimension .eq. n3) go to 4604
-              end do
-4504          lm = lm + 1
-              n28 = n3
-              if (n3 .eq. 99) n28 = 0
-              write (unit = lunit(3), fmt = 8143) lm, n28
-              lm = lm + 1
-              write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
-              nrec3 = nrec3 + 2
-4604          continue
-              nonneg = lstnew(n3)
-              if (nonneg .le. 0) nonneg = 1
-              n4 = modvars(i)%kind
-              if (n4 .eq. 0) go to 4104
-              tempvar = modvars(i)
-              tempvar%dimension = nonneg
-              if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              if (modvars(i)%enable) then
+                 n3 = modvars(i)%dimension
+                 if (ii .eq. 1) go to 4504
+                 n7 = ii - 1
+                 do kk = 1, n7
+                    if (modvars(kk + 139)%dimension .eq. n3) go to 4604
+                 end do
+4504             lm = lm + 1
+                 n28 = n3
+                 if (n3 .eq. 99) n28 = 0
+                 write (unit = lunit(3), fmt = 8143) lm, n28
+                 lm = lm + 1
+                 write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
+                 nrec3 = nrec3 + 2
+4604             continue
+                 nonneg = lstnew(n3)
+                 if (nonneg .le. 0) nonneg = 1
+                 n4 = modvars(i)%kind
+                 if (n4 .eq. 0) go to 4104
+                 tempvar = modvars(i)
+                 tempvar%dimension = nonneg
+                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              end if
            end do
 4104       continue
            n18 = 39
@@ -2209,27 +2571,29 @@ program vardim
            nrec3 = nrec3 + 2
            do ii = 1, 26
               i = 142  +  ii
-              n3 = modvars(i)%dimension
-              if (ii .eq. 1) go to 4505
-              n7 = ii - 1
-              do kk = 1, n7
-                 if (modvars(kk + 142)%dimension .eq. n3) go to 4605
-              end do
-4505          lm = lm + 1
-              n28 = n3
-              if (n3 .eq. 99) n28 = 0
-              write (unit = lunit(3), fmt = 8143) lm, n28
-              lm = lm + 1
-              write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
-              nrec3 = nrec3 + 2
-4605          continue
-              nonneg = lstnew(n3)
-              if (nonneg .le. 0) nonneg = 1
-              n4 = modvars(i)%kind
-              if ( n4  .eq.  0 )   go to 4105
-              tempvar = modvars(i)
-              tempvar%dimension = nonneg
-              if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              if (modvars(i)%enable) then
+                 n3 = modvars(i)%dimension
+                 if (ii .eq. 1) go to 4505
+                 n7 = ii - 1
+                 do kk = 1, n7
+                    if (modvars(kk + 142)%dimension .eq. n3) go to 4605
+                 end do
+4505             lm = lm + 1
+                 n28 = n3
+                 if (n3 .eq. 99) n28 = 0
+                 write (unit = lunit(3), fmt = 8143) lm, n28
+                 lm = lm + 1
+                 write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
+                 nrec3 = nrec3 + 2
+4605             continue
+                 nonneg = lstnew(n3)
+                 if (nonneg .le. 0) nonneg = 1
+                 n4 = modvars(i)%kind
+                 if ( n4  .eq.  0 )   go to 4105
+                 tempvar = modvars(i)
+                 tempvar%dimension = nonneg
+                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              end if
            end do
 4105       continue
            n18 = 10
@@ -2271,27 +2635,29 @@ program vardim
            nrec3 = nrec3 + 2
            do ii = 1, 26
               i = 168 + ii
-              n3 = modvars(i)%dimension
-              if (ii .eq. 1) go to 4506
-              n7 = ii - 1
-              do kk = 1, n7
-                 if (modvars(kk + 168)%dimension .eq. n3) go to 4606
-              end do
-4506          lm = lm + 1
-              n28 = n3
-              if (n3 .eq. 99) n28 = 0
-              write (unit = lunit(3), fmt = 8143) lm, n28
-              lm = lm + 1
-              write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
-              nrec3 = nrec3 + 2
-4606          continue
-              nonneg = lstnew(n3)
-              if (nonneg .le. 0) nonneg = 1
-              n4 = modvars(i)%kind
-              if (n4 .eq. 0) go to 4106
-              tempvar = modvars(i)
-              tempvar%dimension = nonneg
-              if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              if (modvars(i)%enable) then
+                 n3 = modvars(i)%dimension
+                 if (ii .eq. 1) go to 4506
+                 n7 = ii - 1
+                 do kk = 1, n7
+                    if (modvars(kk + 168)%dimension .eq. n3) go to 4606
+                 end do
+4506             lm = lm + 1
+                 n28 = n3
+                 if (n3 .eq. 99) n28 = 0
+                 write (unit = lunit(3), fmt = 8143) lm, n28
+                 lm = lm + 1
+                 write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
+                 nrec3 = nrec3 + 2
+4606             continue
+                 nonneg = lstnew(n3)
+                 if (nonneg .le. 0) nonneg = 1
+                 n4 = modvars(i)%kind
+                 if (n4 .eq. 0) go to 4106
+                 tempvar = modvars(i)
+                 tempvar%dimension = nonneg
+                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              end if
            end do
 4106       continue
            n18 = 44
@@ -2320,27 +2686,29 @@ program vardim
            nrec3 = nrec3 + 2
            do ii = 1, 1
               i = 194  +  ii
-              n3 = modvars(i)%dimension
-              if (ii .eq. 1) go to 4507
-              n7 = ii - 1
-              do kk = 1, n7
-                 if (modvars(kk + 194)%dimension .eq. n3) go to 4607
-              end do
-4507          lm = lm + 1
-              n28 = n3
-              if (n3 .eq. 99) n28 = 0
-              write (unit = lunit(3), fmt = 8143) lm, n28
-              lm = lm + 1
-              write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
-              nrec3 = nrec3 + 2
-4607          continue
-              nonneg = lstnew(n3)
-              if (nonneg .le. 0) nonneg = 1
-              n4 = modvars(i)%kind
-              if ( n4  .eq.  0 )   go to 4107
-              tempvar = modvars(i)
-              tempvar%dimension = nonneg
-              if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              if (modvars(i)%enable) then
+                 n3 = modvars(i)%dimension
+                 if (ii .eq. 1) go to 4507
+                 n7 = ii - 1
+                 do kk = 1, n7
+                    if (modvars(kk + 194)%dimension .eq. n3) go to 4607
+                 end do
+4507             lm = lm + 1
+                 n28 = n3
+                 if (n3 .eq. 99) n28 = 0
+                 write (unit = lunit(3), fmt = 8143) lm, n28
+                 lm = lm + 1
+                 write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
+                 nrec3 = nrec3 + 2
+4607             continue
+                 nonneg = lstnew(n3)
+                 if (nonneg .le. 0) nonneg = 1
+                 n4 = modvars(i)%kind
+                 if ( n4  .eq.  0 )   go to 4107
+                 tempvar = modvars(i)
+                 tempvar%dimension = nonneg
+                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              end if
            end do
 4107       continue
            n18 = 45
@@ -2369,27 +2737,29 @@ program vardim
            nrec3 = nrec3 + 2
            do ii = 1, 1
               i = 195  +  ii
-              n3 = modvars(i)%dimension
-              if (ii .eq. 1) go to 4508
-              n7 = ii - 1
-              do kk = 1, n7
-                 if (modvars(kk + 195)%dimension .eq. n3) go to 4608
-              end do
-4508          lm = lm + 1
-              n28 = n3
-              if (n3 .eq. 99) n28 = 0
-              write (unit = lunit(3), fmt = 8143) lm, n28
-              lm = lm + 1
-              write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
-              nrec3 = nrec3 + 2
-4608          continue
-              nonneg = lstnew(n3)
-              if (nonneg .le. 0) nonneg = 1
-              n4 = modvars(i)%kind
-              if (n4 .eq. 0) go to 4108
-              tempvar = modvars(i)
-              tempvar%dimension = nonneg
-              if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              if (modvars(i)%enable) then
+                 n3 = modvars(i)%dimension
+                 if (ii .eq. 1) go to 4508
+                 n7 = ii - 1
+                 do kk = 1, n7
+                    if (modvars(kk + 195)%dimension .eq. n3) go to 4608
+                 end do
+4508             lm = lm + 1
+                 n28 = n3
+                 if (n3 .eq. 99) n28 = 0
+                 write (unit = lunit(3), fmt = 8143) lm, n28
+                 lm = lm + 1
+                 write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
+                 nrec3 = nrec3 + 2
+4608             continue
+                 nonneg = lstnew(n3)
+                 if (nonneg .le. 0) nonneg = 1
+                 n4 = modvars(i)%kind
+                 if (n4 .eq. 0) go to 4108
+                 tempvar = modvars(i)
+                 tempvar%dimension = nonneg
+                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+              end if
            end do
 4108       continue
            n18 = 47
