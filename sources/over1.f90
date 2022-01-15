@@ -62,6 +62,7 @@ subroutine over1
   !
   !     default list sizes for tacs proportioning of emtp list 19.
   !
+  integer(4), allocatable :: ibusum(:)
   integer(4), pointer :: idist => moncar(5)
   integer(4), pointer :: isw => moncar(4)
   integer(4), pointer :: itest => moncar(6)
@@ -95,6 +96,9 @@ subroutine over1
   data ll80  / 80 /
   !
   r4 => volti
+  ll0 = size (transfer (busum, ibusum))
+  allocate (ibusum(ll0))
+  ibusum = transfer (busum, ibusum)
   ll0 = size (transfer (bus1, kpen))
   allocate (kpen(ll0))
   kpen = transfer (bus1, kpen)
@@ -788,6 +792,10 @@ subroutine over1
   if (allocated (kpen)) then
      bus1 = transfer (kpen, bus1)
      deallocate (kpen)
+  end if
+  if (allocated (ibusum)) then
+     busum = transfer (ibusum, busum)
+     deallocate (ibusum)
   end if
   return
 end subroutine over1
@@ -1680,6 +1688,7 @@ subroutine reques
   integer(4), pointer :: kbase => moncar(2)
   integer(4), pointer :: ltdelt => moncar(3)
   integer(4), pointer :: nmauto => iprsov(39)
+  real(8), pointer :: anglex
   !
   ! $$$$$       special-request word no. 1.   'xformer'                         $$$$$
   data textay(1)   / 'x     ' /
@@ -2086,6 +2095,8 @@ subroutine reques
   data ll49 / 49 /
   data ll56 / 56 /
   data ll80 / 80 /
+  !
+  anglex => angle
   lstat(18) = 0
   if(iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module reques."')

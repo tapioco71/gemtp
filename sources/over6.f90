@@ -410,7 +410,7 @@ subroutine rinfin
   ! this lofty resistance if user had a "high resistance"
   ! request (known by n7 .ne. default value of 1000 in over1):
   n7 = iabs (kpartb)
-  if (n7 .lt. 1000) d1 = 10.0 ** n7
+  if (n7 .lt. 1000) d1 = 10.0d0 ** n7
   i = inonl
 54147 if (i .eq. 0) go to 54180
   if (nltype(i) .gt. 0) go to 54174

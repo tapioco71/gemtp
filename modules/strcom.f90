@@ -153,19 +153,21 @@ contains
     !                     for example, a value of  27  means that the cdc
     !                     character insertion begins in position  7  of
     !                     word  to(3) .
-    character(8), intent(in) :: from(nword)
-    character(8), intent(out) :: to(nword)
+    character(*), intent(in) :: from(:)
+    character(*), intent(out) :: to(:)
     integer(4), intent(in) :: k4or6, nchbeg, nword
-    integer(4) :: i_char, iword, j_char, k_char
+    integer(4) :: i, j, k, i_char, i_word
     !
     select case (k4or6)
     case (4, 6)
-       i_char = nchbeg
-       do iword = 1, nword
-          do k_char = 1, k4or6
-             j_char = (iword - 1) * 8 + k_char
-             to(i_char) = from(j_char)
-             i_char = i_char + 1
+       j = nchbeg
+       do i = 1, nword
+          do k = 1, k4or6
+             i_word = (j - 1) / 8 + 1
+             i_char = mod (j, 8)
+             if (i_char .eq. 0) i_char = 8
+             to(i_word)(i_char : i_char) = from(i)(k : k)
+             j = j + 1
           end do
        end do
 

@@ -99,6 +99,8 @@ subroutine subr31
   integer(4), pointer :: ibsout(:)
   integer(4), pointer :: jbrnch(:)
   integer(4), pointer :: kbase => moncar(2)
+  real(8), allocatable :: array(:)
+  real(8), allocatable :: evdoub(:)
   !
   data text1      / 'print ' /
   data text2      / 'head o' /
@@ -184,9 +186,15 @@ subroutine subr31
   ibsout => karray
   jbrnch => karray
   !
+  ll0 = size (transfer (karray, evdoub))
+  allocate (evdoub(ll0))
+  evdoub = transfer (karray, evdoub)
   ll0 = size (transfer (karray, buslst))
   allocate (buslst(ll0))
   buslst = transfer (karray, buslst)
+  ll0 = size (transfer (karray, array))
+  allocate (array(ll0))
+  array = transfer (karray, array)
   blanka(1) = blank
   long1 = nchain
   if (kburro .eq. 1) long1 = 29
@@ -376,7 +384,6 @@ subroutine subr31
 7641 format (10e8.0)
   go to 7648
 7644 nfrfld = 3
-  !  call frefld (xyplot)
   call free (xyplot)
 7648 if (xyplot(1) .le. 0.0d0) xyplot(1) = 8.0d0
   if (xyplot(1) .eq. 9999.0d0) xyplot(1) = 0.0d0
@@ -388,7 +395,6 @@ subroutine subr31
   read (unit = abuff, fmt = 7641) (xyplot(i), i = 4, 9)
   go to 7653
 7651 nfrfld = 6
-  !  call frefld (xyplot(4 :))
   call free (xyplot(4 :))
 7653 if (xyplot(4) .le. 0.0d0) xyplot(4) = 8.0d0
   if (xyplot(7) .le. 0.0d0) xyplot(7) = 10.0d0
@@ -1617,9 +1623,17 @@ subroutine subr31
 9200 lstat(18) = 31
   lastov = nchain
   nchain = 51
-9999 if (allocated (buslst)) then
+9999 if (allocated (array)) then
+     karray = transfer (array, karray)
+     deallocate (array)
+  end if
+  if (allocated (buslst)) then
      karray = transfer (buslst, karray)
      deallocate (buslst)
+  end if
+  if (allocated (evdoub)) then
+     karray = transfer (evdoub, karray)
+     deallocate (evdoub)
   end if
   return
 end subroutine subr31
@@ -1641,7 +1655,7 @@ subroutine series (nfour, kpl, jplt, maxevk)
   integer(4) :: ioffa, ioffb
   integer(4) :: j
   integer(4) :: k
-  integer(4) :: l
+  integer(4) :: l, ll0
   integer(4) :: m
   integer(4) :: n1, n2, n4, ndx1, ndx2
   real(8) :: an, ap
@@ -1652,6 +1666,11 @@ subroutine series (nfour, kpl, jplt, maxevk)
   real(8) :: pi
   real(8) :: s1, sp
   !
+  real(8), allocatable :: evdoub(:)
+  !
+  ll0 = size (transfer (karray, evdoub))
+  allocate (evdoub(ll0))
+  evdoub = transfer (karray, evdoub)
   if (nfour .gt. 0) go to 3184
   nfour = -nfour
   n2 = kpl
@@ -1741,7 +1760,11 @@ subroutine series (nfour, kpl, jplt, maxevk)
 4345 format (1x, i9, 3e20.10, f20.8)
   write (unit = lunit(6), fmt = 4352)
 4352 format (//, 1x)
-9000 return
+9000 if (allocated (evdoub)) then
+     karray = transfer (evdoub, karray)
+     deallocate (evdoub)
+  end if
+  return
 end subroutine series
 
 !

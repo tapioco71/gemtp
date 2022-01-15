@@ -50,13 +50,15 @@ module blkcom
   real(8) :: freqcs
   real(8) :: xunits, aincr, xmaxmx
   real(8) :: znolim(2), epstop, t, tolmat
-  real(8) :: tmax, omega, copt, xopt, szplt
+  real(8) :: tmax
+  real(8), target :: omega
+  real(8) :: copt, xopt, szplt
   real(8) :: szbed, sigmax
   real(8) :: fminfs, delffs, fmaxfs, tenerg, begmax(6)
   real(8) :: unity, onehaf
   real(8) :: degmin, degmax, statfr, voltbc(50)
   real(8) :: flstat(20)
-  real(8) :: angle
+  real(8), target :: angle
   real(8) :: pu, dltinv
   real(8) :: epsuba, epomeg, epdgel, epsiln, epszno, epwarn
   real(8) :: peaknd(3)

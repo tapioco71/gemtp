@@ -1263,7 +1263,6 @@ subroutine over2
 4254 kolbeg = 27
   nfrfld = 2 * n8
   n9 = 1
-  !  call frefld (voltbc)
   call free (voltbc)
   do i = it3, it32
      tr(i) = voltbc(n9)
@@ -1279,7 +1278,6 @@ subroutine over2
 4262 nfrfld = 3 * (it32 - it3 + 1)
   kolbeg = 27
   n9 = 1
-  !  call frefld (voltbc)
   call free (voltbc)
   do i = it3, it32
      tr(i) = voltbc(n9)
@@ -1565,12 +1563,10 @@ subroutine over2
   read (unit = abuff, fmt = 1) itype, bus1, bus2
   go to 6637
 6634 nfrfld = 1
-  !  call frefld (voltbc)
   call free (voltbc)
   itype = int (voltbc(1))
   nfrfld = 2
   nright = -1
-  !  call freone (d1)
   call free (d1)
   bus1 = texta6(1)
   bus2 = texta6(2)
@@ -1785,6 +1781,7 @@ subroutine nonln2
   !
   data text1 / 'single' /
   data text2 / ' flash' /
+  !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module nonln2."')
   ll9 = 9
@@ -1922,7 +1919,7 @@ subroutine nonln2
   a2 = 0.0d0
   vzero(inonl) = d4
   if (c(it) .eq. 4444.0d0) go to 40
-  ! enter zno data code**********************************************
+  ! enter ZnO data code**********************************************
   if (d2 .gt. 0.0d0) go to 25
   kill = 28
   lstat(19) = 23
@@ -1949,11 +1946,8 @@ subroutine nonln2
      go to 31
 30   nfrfld = 1
      nright = 0
-     !     call freone (d2)
      call free (d2)
-     !     call freone (d3)
      call free (d3)
-     !     call freone (d4)
      call free (d4)
 31   if (d2 .eq. 9999.0d0) go to 37
      i_char = i_char + 1
@@ -2005,9 +1999,7 @@ subroutine nonln2
   go to 49
 48 nfrfld = 1
   nright = 0
-  !  call freone (d2)
   call free (d2)
-  !  call freone (d3)
   call free (d3)
 49 if (d2 .eq. 9999.0d0) go to  53
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 59) d2, d3
@@ -2091,9 +2083,7 @@ subroutine nonln2
   go to 73424
 73423 nfrfld = 1
   nright = 0
-  !  call freone (d2)
   call free (d2)
-  !  call freone (xlong)
   call free (xlong)
 73424 if (d2 .eq. 9999.0d0) go to 189
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 181) d2, xlong
@@ -2408,15 +2398,16 @@ subroutine distr2
   real(8) :: h1, h2, h3
   real(8) :: pdt, pdt0
   real(8) :: tauo
-  real(8) :: xlong, xlong1, xsum
+  real(8) :: xlong, xsum
   real(8) :: ysum
   !
   integer(4), pointer :: iaddrs => indtv(1)
   integer(4), pointer :: ichtr2 => indtv(4)
-  integer(4), pointer :: infdli(:) => namebr(1 :)
+  integer(4), pointer :: infdli(:)
   integer(4), pointer :: itranm => indtv(2)
-  real(8), pointer :: cblhst(:) => cnvhst(1 :)
-  real(8), pointer :: wk1(:) => semaux(1 :)
+  real(8), pointer :: cblhst(:)
+  real(8), pointer :: wk1(:)
+  real(8), pointer :: xlong1 => omega
   !
   data text2  / '   con' /
   data text3  / 'stant ' /
@@ -2436,6 +2427,9 @@ subroutine distr2
   !     Burroughs: preserve local variable between module calls:
   data ipsem  / 0 /
   !
+  infdli => namebr
+  cblhst => cnvhst
+  wk1 => semaux
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module distr2."')
   n45 = location (ida)
@@ -2590,7 +2584,6 @@ subroutine distr2
   call cimage
   if (kolbeg .le. 0) go to 8206
   nfrfld = ifsem - n8 + 1
-  !  call frefld (sconst(n8 :))
   call free (sconst(n8 :))
   go to 8208
 8206 continue
@@ -2628,7 +2621,6 @@ subroutine distr2
   call cimage
   if (kolbeg .le. 0) go to 8251
   nfrfld = n11
-  !  call frefld (voltbc)
   call free (voltbc)
   go to 8252
 8251 continue
@@ -2666,7 +2658,6 @@ subroutine distr2
   call cimage
   if (kolbeg .le. 0) go to 8291
   nfrfld = ifsem - n8 + 1
-  !  call frefld (sconst(n8 :))
   call free (sconst(n8 :))
   go to 8293
 8291 continue
@@ -2702,7 +2693,6 @@ subroutine distr2
   call cimage
   if (kolbeg .le. 0) go to 8321
   nfrfld = n11
-  !  call frefld (voltbc)
   call free (voltbc)
   go to 8322
 8321 continue
@@ -2768,7 +2758,6 @@ subroutine distr2
   if (nfrfld .gt. 0) go to 18377
   irow = 0
   go to 18375
-  !18377 call frefld (voltbc)
 18377 call free (voltbc)
   go to 8377
 8376 continue
@@ -2809,7 +2798,6 @@ subroutine distr2
   if (nfrfld .gt. 0) go to 28377
   irow = 0
   go to 28375
-  !28377 call frefld (voltbc)
 28377 call free (voltbc)
   go to 8417
 8415 continue
@@ -3018,7 +3006,6 @@ subroutine distr2
      call cimage
      nfrfld = 6
      if (kolbeg .le. 0) go to 1993
-     !     call frefld (voltbc)
      call free (voltbc)
      go to 1994
 1993 continue
@@ -3057,7 +3044,6 @@ subroutine distr2
      call cimage
      nfrfld = 6
      if (kolbeg .le. 0) go to 1998
-     !     call frefld (voltbc)
      call free (voltbc)
      go to 1999
 1998 continue
@@ -3379,7 +3365,7 @@ subroutine distr2
   end do
 198 if (iline.gt.0) go to 192
   d2 = aa * tenm3
-  ci1 = h3 / 1000000.
+  ci1 = h3 / 1000000.0d0
   if (xopt .gt. 0.0d0) d2 = d2 * 1000. / (twopi * xopt)
   if (copt .gt. 0.0d0) ci1 = ci1 / (twopi * copt)
   a = sqrtz (d2 / ci1)
@@ -3489,7 +3475,7 @@ subroutine distr2
      call cimage
      read (unit = abuff, fmt = 105) (voltbc(j), j = j1, j2)
 105  format (3e26.0)
-     if (noutpr .ne. -7777 .and. noutpr .ne. 1) write (unit = kunit6, fmt = 4413) (voltbc(j), j = j1, j2)
+     if ((noutpr .ne. -7777) .and. (noutpr .ne. 1)) write (unit = kunit6, fmt = 4413) (voltbc(j), j = j1, j2)
 4413 format ('+qk-i:', 3e14.5)
      jj1 = j1 + ifq
      jj2 = j2 + ifq
@@ -3576,8 +3562,8 @@ subroutine distr2
      do k = 1, nrowt, 2
         kl = kl + 1
         sconst(ifq) = voltbc(n12)
-        sconst(ifq + 1) = 0.
-        sconst(ifq + 2) = 1.
+        sconst(ifq + 1) = 0.0d0
+        sconst(ifq + 2) = 1.0d0
         n12 = n12 + 2
         if (kl .lt. ipsem) go to 2015
         kl = 0
@@ -3638,7 +3624,6 @@ subroutine distr2
   read (unit = abuff, fmt = 2721) (voltbc(j), j = 1, nfrfld)
 2721 format (6e12.0)
   go to 2733
-  !2728 call frefld (voltbc)
 2728 call free (voltbc)
 2733 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2736) textmx(n7), n9, i, (voltbc(j), j = 1, nfrfld)
 2736 format (a4, i2, ',', i2, ')...', 6f6.3)

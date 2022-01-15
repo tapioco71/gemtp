@@ -779,7 +779,7 @@ subroutine subscr (j, limit, istat, n1)
   !     if positive (wsm changes to walker's code).
   integer(4), intent(in) :: j, istat, limit, n1
   !
-  if ((j .ge. 1 .and. j .le. limit) .or. (j .le. 0 .and. n1 .eq. 99)) go to 9000
+  if (((j .ge. 1) .and. (j .le. limit)) .or. ((j .le. 0) .and. (n1 .eq. 99))) go to 9000
   write (unit = lunit(6), fmt = 1487) j, limit, istat, n1
 1487 format (' Out-of-bounds subscript =', i6, ' .   limit =', i6, ' .   Below s.n.', i6, '   with sequence no.', i2, ' .')
 9000 if (iprsup .ge. 99) write (unit = lunit(6), fmt = 9006) j, limit, istat, n1

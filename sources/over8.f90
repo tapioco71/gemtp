@@ -2455,13 +2455,16 @@ subroutine over8
   real(8) :: xi1, xi2, xr1, xr2
   real(8) :: ychara, ycharm, yneg, ypos
   !
-  integer(4), pointer :: infdli(:) => namebr(1 :)
+  integer(4), pointer :: infdli(:)
   integer(4), allocatable :: integx(:)
   integer(4), allocatable :: ispum(:)
   integer(4), pointer :: knt => moncar(1)
-  real(8), pointer :: vim(:) => volt(1 :)
-  real(8), pointer :: wk1(:) => semaux(1 :)
+  real(8), pointer :: vim(:)
+  real(8), pointer :: wk1(:)
   !
+  infdli => namebr
+  vim => volt
+  wk1 => semaux
   ll0 = size (transfer (spum, ispum))
   allocate (ispum(ll0))
   ispum = transfer (spum, ispum)
