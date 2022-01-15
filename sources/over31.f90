@@ -26,7 +26,7 @@ subroutine subr31
   !               (integer-numeric usage only, with arrays
   !                preceding scalars).
   character(8) :: arch10(2), alpha(52), aupper(13)
-  character(8) :: blanka(1)
+  character(8) :: blanka(1), busvec(6)
   character(8) :: cstxt
   character(8) :: daytim
   character(8) :: headl(3), horzl(4)
@@ -57,7 +57,7 @@ subroutine subr31
   real(8) :: bxsing(150), tstep, xyplot, bx(150), fl90
   real(8) :: d1, d2, d3, d4, d4fact, d5, d6, d7, d8, d9, d23, denom, disqr, dlen
   real(8) :: dstrt, dx, dxl, dxl2, dy, dyl
-  real(8) :: enumr, ev(2), evbasx, evbasy, evp, evdh, evdp, evh, evmx, evmxf, expnt
+  real(8) :: enumr, evbasx, evbasy, evp, evdh, evdp, evh, evmx, evmxf, expnt
   real(8) :: fl10, fl1p5, fl2p5, fl3, fl3p5, flong1, fltwo, fourth
   real(8) :: ha, half, hdif, hgt1, hgt2, hhi, hhpt, hlo, hmax, hmin, hms, hpi
   real(8) :: hpil, hpt, hvec
@@ -100,6 +100,7 @@ subroutine subr31
   integer(4), pointer :: jbrnch(:)
   integer(4), pointer :: kbase => moncar(2)
   real(8), allocatable :: array(:)
+  real(8), allocatable :: ev(:)
   real(8), allocatable :: evdoub(:)
   !
   data text1      / 'print ' /
@@ -186,6 +187,10 @@ subroutine subr31
   ibsout => karray
   jbrnch => karray
   !
+  busvec(1) = bus1
+  ll0 = size (transfer (karray, ev))
+  allocate (ev(ll0))
+  ev = transfer (karray, ev)
   ll0 = size (transfer (karray, evdoub))
   allocate (evdoub(ll0))
   evdoub = transfer (karray, evdoub)
@@ -1634,6 +1639,10 @@ subroutine subr31
   if (allocated (evdoub)) then
      karray = transfer (evdoub, karray)
      deallocate (evdoub)
+  end if
+  if (allocated (ev)) then
+     karray = transfer (ev, karray)
+     deallocate (ev)
   end if
   return
 end subroutine subr31

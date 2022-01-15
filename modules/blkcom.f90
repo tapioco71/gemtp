@@ -117,7 +117,7 @@ module blkcom
   real(8) :: lnpin
 
   ! Equivalences
-  character(8) :: busvec(6)
+  !  character(8) :: busvec(6)
   !  character(8) :: alower(14), aupper(14)
   !  integer(4) :: iaddrs
   !  integer(4) :: ichtr2
