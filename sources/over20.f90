@@ -54,14 +54,14 @@ subroutine over20
   if (m4plot .eq. 0) go to 5022
   call pltfil (k)
   go to 8005
-5022 write (lunit(4)) (volti(i), i = 1, k)
-8005 if (icat .gt. 0 .or. memsav .gt. 0) call katalg
+5022 write (unit = lunit(4)) (volti(i), i = 1, k)
+8005 if ((icat .gt. 0) .or. (memsav .gt. 0)) call katalg
   close (unit = 79)
   k = lstat(32)
   !      both max and min will be printed for each energization when
   !      'aincr' is set to be greater than or equal to '55.0'.
-  if (kbase .eq. 2 .and. aincr .lt. 55.0) go to 3614
-  if (begmax(1) .le. 0.0) go to 3614
+  if ((kbase .eq. 2) .and. (aincr .lt. 55.0d0)) go to 3614
+  if (begmax(1) .le. 0.0d0) go to 3614
   write (unit = lunit(6), fmt = 8002) (xmax(l), l = 1, k)
 8002 format (/, ' Maxima and minima which occurred during the simulation follow.   The order and column positioning are the', /, ' same as for the regular printed output vs. time.', /, ' Variable maxima :', /, (15x, 9e13.6))
   !     Extrema vector  "xmax"  actually has four partitions,
@@ -81,7 +81,7 @@ subroutine over20
 3614 if (nenerg .ne. 0) go to 605
   flstat(9) = d1
   flstat(10) = d2
-  if (begmax(1) .ne. 0.0 .and. begmax(2) .ne. 0.0) write (unit = lunit(6), fmt = 8006) begmax(2)
+  if ((begmax(1) .ne. 0.0d0) .and. (begmax(2) .ne. 0.0d0)) write (unit = lunit(6), fmt = 8006) begmax(2)
 8006 format (56x, 'Search for extrema began at time', e15.6, '   sec.')
   write (unit = lunit(6), fmt = 8007)
 8007 format (1x)
@@ -165,7 +165,7 @@ subroutine over20
 7027 format (1x, i10 , 4(3x, e15.8))
      cycle
 7031 a = curr(k)
-     if (a .eq. 0.) cycle
+     if (a .eq. 0.0d0) cycle
      write (unit = lunit(7), fmt = 7020) iold, bus(n1), bus(n2), a
      if (n10 .ne. 0) write (unit = lunit(6), fmt = 7021) bus(n1), bus(n2), a
   end do
@@ -3224,13 +3224,13 @@ subroutine spyink
   !  assign 4029 to nextsn
   nextsn = 4029
   go to 9800
-4029 open (unit = lunit(4), status = buff77, file = ansi32, form = 'unformatted' )
+4029 open (unit = lunit(4), status = buff77, file = ansi32, form = 'unformatted')
   go to 4008
-4036 if (buff77(1 : 4) .ne. 'top ') go to 4051
+4036 if (toLower(buff77(1 : 4)) .ne. 'top ') go to 4051
 4037 rewind lunit(4)
   read (unit = lunit(4)) date1, tclock, n1, n2, n3, n4
-  if (nchain .le. 16 .or. nchain .gt. 20) go to 4044
-  if (n2 .eq. numnvo .and. n3 .eq. nc-nv .and. n4 .eq. nc) go to 4044
+  if ((nchain .le. 16) .or. (nchain .gt. 20)) go to 4044
+  if ((n2 .eq. numnvo) .and. (n3 .eq. (nc - nv)) .and. (n4 .eq. nc)) go to 4044
   write (unit = munit6, fmt = 4038)
 4038 format ('   ++++  Error.  Inconsistent lunit4 plot file.  Automatic close.  Try again.')
   call window

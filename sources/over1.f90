@@ -2624,7 +2624,7 @@ subroutine sysdep
   !     for explicit directory (e.g., "[plt]" ), if desired.
   !
   data col    / '' /
-  data colxxx / '_plt_000000000.pl4' /
+  data colxxx / 'plt00000000000.pl4' /
   data lettra / 'a' /
   data lettrb / 'b' /
   data lettrc / 'c' /
