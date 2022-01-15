@@ -586,11 +586,8 @@ subroutine subr31
   write (unit = lunit(6), fmt = 7407) icp
 7407 format (' Illegal plot-variable type code  "icp" =', i3, ' .   This plot request is cancelled.')
   go to 1000
-  !7412 call packch (busvec(1), headl(1), mm6, mm1, mm2)
 7412 call pack (busvec(1 :), headl(1 :), mm6, mm1, mm2)
-  !  call packch (busvec(3), headl(1), mm4, mm13, mm1)
   call pack (busvec(3 :), headl(1 :), mm4, mm13, mm1)
-  !  call packch (busvec(4), vertl(1), mm6, mm1, mm3)
   call pack (busvec(4 :), vertl(1 :), mm6, mm1, mm3)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1196) headl, vertl
 1196 format (' At 1195 packed plot title text.', 3a10, /, ' at 1195 packed vert axis label.', 3a10 )
@@ -605,7 +602,6 @@ subroutine subr31
 1183 format (5e16.0)
   go to 8215
 8212 nfrfld = 5
-  !  call frefld (voltbc)
   call free (voltbc)
   hpi  = voltbc(1)
   hmin = voltbc(2)
@@ -618,7 +614,7 @@ subroutine subr31
   call interp
 1192 if (nfour .eq. 0) go to 21192
   d23 = hpi - 7.6d0
-  if (d23 .gt. -.001d0 .and. d23 .lt. 0.001d0) nfour = -nfour
+  if ((d23 .gt. -.001d0) .and. (d23 .lt. 0.001d0)) nfour = -nfour
   go to 21220
 21192 if (hpi .le. 0.0d0) go to 1193
   if (hmax .le. 0.0d0) go to 1193
@@ -644,7 +640,7 @@ subroutine subr31
 1229 countp = countp + 1.0d0
   kikoy = 0
   if ((iout .eq. 2) .and. (vmin .ne. 0.0d0 .or. vmax .ne. 0.0d0)) kikoy = 99
-  if (vmin .ne. 0.0d0 .or. vmax .ne. 0.0d0) go to 1220
+  if ((vmin .ne. 0.0d0) .or. (vmax .ne. 0.0d0)) go to 1220
   vmin = -c1e12
   vmax = c1e12
 1220 vmaxr = vmin + (vmax - vmin) * (vh - vs) / vhs
@@ -653,7 +649,6 @@ subroutine subr31
   write (unit = lunit(6), fmt = 1221) ihs
 1221 format (5x, 'The number specifying the units on the horizontal scale, punched in column 4 of the plot request card, must be', /, 5x, 'between 1 and 7 (inclusive).  The number read from the last such card was', i2, '.', /, 5x, 'this plot request is cancelled.')
   go to 1000
-!1230 go to (1240, 1260, 1280, 1300, 1320, 1280, 1280) , ihs
 1230 select case (ihs)
   case (1)
      go to 1240
@@ -685,7 +680,6 @@ subroutine subr31
   mhoriz = -22
   if (xyplot(1) .gt. 0.0d0) ihs = 8
   j = 4 * (ihs - 1) + 1
-  !  call packch (textax(j), horzl(1), mm6, mm1, mm4)
   call pack (textax(j :), horzl(1 :), mm6, mm1, mm4)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1341) horzl
 1341 format (' At 1341 packed time axis label.', 3a10)
@@ -762,11 +756,8 @@ subroutine subr31
      write (unit = lunit(6), fmt = 64223) ibrnch(j), jbrnch(n6)
   end do
 64223 format (1x, 2i10)
-  !54224 call packch (date1(1), daytim(1), mm4, mm1, mm2)
 54224 call pack (date1(1 :), daytim(1 :), mm4, mm1, mm2)
-  !  call packch (blanka(1), daytim(1), mm4, mm9, mm1)
   call pack (blanka(1 :), daytim(1 :), mm4, mm9, mm1)
-  !  call packch (tclock(1), daytim(1), mm4, mm11, mm2)
   call pack (tclock(1 :), daytim(1 :), mm4, mm11, mm2)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4223) daytim
 4223 format (' At 4223 packed daytim.', 8a10)
@@ -796,7 +787,7 @@ subroutine subr31
   if (jplt .lt. i) go to 1627
   go to 1560
 1660 do j = 1, jslot, 2
-     if (slot(j) .eq. blank .and. slot(j + 1) .eq. blank) exit
+     if ((slot(j) .eq. blank) .and. (slot(j + 1) .eq. blank)) exit
      slot(jplt + 1) = slot(j)
      slot(jplt + 2) = slot(j + 1)
      jplt = jplt + 2
@@ -883,11 +874,10 @@ subroutine subr31
      evdh(j) = 0.0d0
   end do
   n9 = 0
-  if (xyplot(1) .ne. 0 .or. nfour .ne. 0) n9 = 1
+  if ((xyplot(1) .ne. 0) .or. (nfour .ne. 0)) n9 = 1
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 2117) k, jplt, n9, maxevk, mplot
 2117 format (/, ' Before read of plot points.       k    jplt      n9  maxevk', /, 28x, 4i8, /, "'", 'mplot', "'",  'vector follows.', 16i5)
   ndx1 = 2 * linlim
-  !  call mover0 ( ev(1), ndx1 )
   call move0 (ev(1 :), ndx1)
 2115 if (m4plot .eq. 0) go to 2102
   read (unit = lunit(4)) tsing, (bxsing(j), j = 1, k)
@@ -897,7 +887,7 @@ subroutine subr31
   end do
   go to 2105
 2102 read (unit = lunit(4)) tstep, (bx(j), j = 1, k)
-2105 if (tstep .eq. -9999. .or. tstep .gt. hmax) go to 2200
+2105 if ((tstep .eq. -9999.0d0) .or. (tstep .gt. hmax)) go to 2200
   if (tstep .lt. hmin) go to 2115
   do j = 1, jplt
      j1 = mplot(j)
@@ -961,7 +951,7 @@ subroutine subr31
         ip1 = i - jplt2
         ev(i) = ev(ip1)
         go to 2242
-2241    ev(i) = (ev(ip1) + evp) / 2.0
+2241    ev(i) = (ev(ip1) + evp) / 2.0d0
 2242    evp = ev(i)
         go to 2260
 2250    isww(j) = 1
@@ -999,20 +989,20 @@ subroutine subr31
 2346 jstp = int (stp, kind (jstp))
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2342) jplt, kplt, vmax, vmin, evmx, vminr, vmaxr
 2342 format (/, ' Plot parameters at 2342. ', 2i10, 5e15.5)
-  if (vmax .ne. c1e12 .or. vmin .ne. (-c1e12)) go to 2540
+  if ((vmax .ne. c1e12) .or. (vmin .ne. (-c1e12))) go to 2540
   if (kikoy .eq. 99) go to 2540
-  if (evmx .eq. 0.0) evmx = 1.0
-  a = 8.0
+  if (evmx .eq. 0.0d0) evmx = 1.0d0
+  a = 8.0d0
   evmxf = evmx
   if (kbound .eq. 1) go to 2360
-  evmxf = evmx * 4.0
-  evmxf = evmxf / 5.0
+  evmxf = evmx * 4.0d0
+  evmxf = evmxf / 5.0d0
 2360 d1 = evmxf - a
   if (d1 .eq. 0.0d0) go to 2400
   if (d1 .gt. 0.0d0) go to 2380
   a = a / 10.
   go to 2360
-2380 a = a * 10.
+2380 a = a * 10.0d0
   d1 = evmxf - a
   if (d1 .eq. 0.0d0) go to 2400
   if (d1 .gt. 0.0d0) go to 2380
@@ -1040,10 +1030,8 @@ subroutine subr31
   if (icp .ge. 8) jsl = jplt2
   do i = 1, jsl
      if (slot(i) .eq. blank) slot(i) = terra
-     !     call packch (slot(i), aupper(1), mm6, long1, mm1)
      call pack (slot(i :), aupper(1 :), mm6, long1, mm1)
      long1 = long1 + 6
-     !     call packch (blanka(1), aupper(1), mm4, long1, mm1)
      call pack (blanka(1 :), aupper(1 :), mm4, long1, mm1)
      long1 = long1 + 2
   end do
@@ -1061,8 +1049,8 @@ subroutine subr31
   dy = (vmax - vmin) / vhs
   d1 = lnpin
   dxl = (hpil / tmult) / d1
-  dxl2 = dxl / 2.0
-  dyl = (vmaxl - vminl) / 130.
+  dxl2 = dxl / 2.0d0
+  dyl = (vmaxl - vminl) / 130.0d0
   if (kikoy .eq. 99) dyl = (vmax - vmin) / 130.0d0
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2571) dxl, vmaxl, vminl, dyl
 2571 format (' At 2580', 4e15.6)
@@ -1107,7 +1095,7 @@ subroutine subr31
 3212 j = int (countp, kind (j))
   write (unit = lunit(6), fmt = 3220) date1, tclock, j, icp, slot
 3220 format (/, 1x, 2a4, 2x, 2a4, 6x, i2, /, ' plot type', 5x, i1, /,  ' node names', 5x, 8(a6, 3x), /, 1x)
-  k = 4 * ( ihs - 1 )  +  1
+  k = 4 * (ihs - 1) + 1
   j1 = k + 3
   write (unit = lunit(6), fmt = 3230) (textax(j), j = k, j1)
 3230 format (1x, 4a6, /, 1x)
@@ -1146,13 +1134,13 @@ subroutine subr31
 3255 format (f7.3, f8.3, f9.3, 10f10.3, f8.3)
   long1 = jdumy
   call linplt (mm0, long1)
-  if (xyplot(1) .ne. 0.0) go to 2581
+  if (xyplot(1) .ne. 0.0d0) go to 2581
   lcnt = -1
   hpt = hmin
   jcol = 0
   mdpt = 0
-  if ((vminl .gt. 0.0d0 .and. kikoy .ne. 99) .or. (vmin .gt. 0.0d0 .and. kikoy .eq. 99)) go to 3260
-  if ((vmaxl .lt. 0.0d0 .and. kikoy .ne. 99) .or. (vmax .lt. 0.0d0 .and. kikoy .eq. 99)) go to 3260
+  if (((vminl .gt. 0.0d0) .and. (kikoy .ne. 99)) .or. ((vmin .gt. 0.0d0) .and. (kikoy .eq. 99))) go to 3260
+  if (((vmaxl .lt. 0.0d0) .and. (kikoy .ne. 99)) .or. ((vmax .lt. 0.0d0) .and. (kikoy .eq. 99))) go to 3260
   d3 = -vminl / dyl + 1.5d0
   if (kikoy .eq. 99) d3 = -vmin / dyl + 1.5d0
   mdpt = int (d3, kind (mdpt))
@@ -1256,17 +1244,15 @@ subroutine subr31
   go to 5963
 2593 call symbol (half, half, hgt1, daytim(1), zero, ll18)
   call number (fl3, half, hgt1, countp, zero, llmin1)
-  !  call packch (text14(1), arch10(1), mm6, mm1, mm2)
   call pack (text14(1 :), arch10(1 :), mm6, mm1, mm2)
   call symbol (half, fourth, hgt1, arch10(1) , zero, ll10)
   ricp = icp
   call number (fltwo, fourth, hgt1, ricp, zero, llmin1)
-  !  call packch (text16(1), arch10(1), mm6, mm1, mm2)
   call pack (text16(1 :), arch10(1 :), mm6, mm1, mm2)
   call symbol (half, zero, hgt1, arch10(1), zero, ll10)
   call symbol (fltwo, zero, hgt1, aupper(1), zero, jchar)
 5962 vhs1 = d7 - half
-2600 if (jalf.gt.ialf) go to 2620
+2600 if (jalf .gt. ialf) go to 2620
   call symbol (fl1p5, vhs1, hgt1, alpha(jalf), zero, ll78)
   vhs1 = vhs1 - half
   jalf = jalf + 13
@@ -1315,7 +1301,7 @@ subroutine subr31
   call newpen (kpgrid)
   call grid (zero, zero, one, one, j1, j2)
 3442 j = 0
-  if (xyplot(8) .gt. 0.0) j = int (n7 / xyplot(8), kind (j))
+  if (xyplot(8) .gt. 0.0d0) j = int (n7 / xyplot(8), kind (j))
   n5 = kpl / jplt
   n12 = 0
   do  i=1, jplt, 2
@@ -1325,7 +1311,7 @@ subroutine subr31
 3444 format (/, " Ready to call  'line'  again.       i       j    jplt      n5", /, 30x, 4i8)
      call line (ev(i), ev(i + 1), n5, jplt, j, i)
   end do
-  taxmax = xyplot(1) + 1.0
+  taxmax = xyplot(1) + 1.0d0
   xyplot(1) = 0.0d0
   ipl2 = jplt
   go to 2656
@@ -1850,7 +1836,7 @@ subroutine axis (xx, yy, title, numch, size, ang, begin, scale)
   d1 = abs (begin)
   d2 = abs (begin + size * scale)
   if (d2 .gt. d1) d1 = d2
-  if (d1 .le. 0.0) go to 9000
+  if (d1 .le. 0.0d0) go to 9000
   ndig = 0
 2313 if (d1 .le. 1.000001d0) go to 2321
   ndig = ndig - 1
@@ -2155,7 +2141,7 @@ subroutine prnthd (n1)
   !)    written here.   Calling it will do nothing, of course.
   integer(4), intent(in) :: n1
   !
-  write (unit = *, fmt = *) n1
+  !  write (unit = *, fmt = *) n1
   return
 end subroutine prnthd
 

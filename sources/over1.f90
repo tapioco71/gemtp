@@ -2738,8 +2738,9 @@ subroutine sysdep
   twopi = 6.28318530717958647692d+00
   userid = blank
   if (noutpr .eq. 0) then
-     write (unit = lunit(6), fmt = 6305) date1, tclock, col(6 : 18)
-6305 format (' Date (mm/dd/yy) and time of day (hh.mm.ss.) =', 1x, 2a4, 2x, 2a4, 11x, 'name of VAX/VMS plot data file (if any) = ', a13)
+     !     write (unit = lunit(6), fmt = 6305) date1, tclock, col(6 : 18)
+     write (unit = lunit(6), fmt = 6305) date1, tclock, ansi32
+6305 format (' Date (mm/dd/yy) and time of day (hh.mm.ss.) =', 1x, 2a4, 2x, 2a4, 7x, 'name of VAX/VMS plot data file (if any) = ', a)
   end if
   ! if not interactive emtp usage,
   if (m4plot .ne. 1) m4plot = 2                   ! use "pltfil" for real*4 plot file on d
