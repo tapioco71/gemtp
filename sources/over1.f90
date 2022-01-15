@@ -734,10 +734,10 @@ subroutine over1
 2691 call cimage
   read (unit = abuff, fmt = 3245) (aupper(i), i = 1, 14)
 3245 format (13a6, a2)
-  if (to_lower (aupper(1)) .eq. text1) go to 2697
-  if (to_lower (aupper(1)) .eq. text3) go to 2697
-  if (to_lower (aupper(1)) .eq. text4) go to 2699
-  if (to_lower (aupper(1)) .ne. text6) go to 7722
+  if (toLower (aupper(1)) .eq. text1) go to 2697
+  if (toLower (aupper(1)) .eq. text3) go to 2697
+  if (toLower (aupper(1)) .eq. text4) go to 2699
+  if (toLower (aupper(1)) .ne. text6) go to 7722
   write (unit = kunit6, fmt = 5389)
 5389 format (' Begin tacs. ==========================')
   newtac = 1
@@ -876,7 +876,7 @@ subroutine swmodf
 3131 format (' No such switch, the card will be discarded')
   go to 209
 3510 if (it2 .ne. 0 .or. kswtyp(msw) .ne. 0) go to 209
-  if (to_lower (bus4) .ne. text14) go to 7218
+  if (toLower (bus4) .ne. text14) go to 7218
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 1218)
 1218 format ('+Permanently-closed switch used for metering.')
   gus3 = -1.0d0
@@ -1236,7 +1236,7 @@ contains
        k = 0
        do i = n1, n2
           k = k + 1
-          if (to_lower (texta6(k)) .ne. textax(i)) go to 4711
+          if (toLower (texta6(k)) .ne. textax(i)) go to 4711
        end do
        exit
 4711   l = l + 1
@@ -2114,7 +2114,7 @@ subroutine reques
      if (n3 .ne. nfrfld) go to 3306
      do j = n1, n2
         l = l + 1
-        if (to_lower (texta6(l)) .ne. textax(j)) go to 3306
+        if (toLower (texta6(l)) .ne. textax(j)) go to 3306
      end do
 3294 lstat(18) = i
     select case (i)
@@ -2546,7 +2546,7 @@ subroutine reques
         goto 5617
 
      end select
-3306 if (to_lower (texta6(1)) .eq. textay(i)) go to 3294
+3306 if (toLower (texta6(1)) .eq. textay(i)) go to 3294
   end do
   !     control will never reach  "stop"  which follows.
   call stoptp

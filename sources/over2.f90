@@ -257,7 +257,7 @@ subroutine over2
 3989 mread2 = 1
   read (unit = abuff, fmt = 2005) char80
 2005 format (a)
-  if (to_lower (char80(1 : 8)) .ne. 'no. of p') go to 2100  ! not lmfs case
+  if (toLower (char80(1 : 8)) .ne. 'no. of p') go to 2100  ! not lmfs case
   do jk = 16, 80
      if (char80(jk : jk) .ne. ' ') go to 2008
   end do
@@ -270,7 +270,7 @@ subroutine over2
 2010 format ('+LMFS of a ', i1, '-phase circuit')
   call cimage
   read (unit = abuff, fmt = 2005) char80
-  if (to_lower (char80(1 : 7)) .eq. 'sending') go to 2020
+  if (toLower (char80(1 : 7)) .eq. 'sending') go to 2020
   write (unit = lunit(6), fmt = 2015)
 2015 format ('  Card of sending end nodes:  of this LMFS case is not inputted, and case is to be aborted. Stop.')
   stop
@@ -287,7 +287,7 @@ subroutine over2
 2035 format ('+Sending end node names (9a6 format)')
   call cimage
   read (unit = abuff, fmt = 2005) char80
-  if (to_lower (char80(1 : 9)) .eq. 'receiving') go to 2040
+  if (toLower (char80(1 : 9)) .eq. 'receiving') go to 2040
   write (unit = lunit(6), fmt = 2038)
 2038 format ('  Card of receiving end nodes: of this LMFS case is not inputted, and case is to be aborted. Stop.')
   stop
@@ -320,9 +320,9 @@ subroutine over2
   nright = 0
 6621 if ((iprsup .ge. 3) .and. (ibr1 .ge. 1)) write (unit = lunit(6), fmt = 7621) ibr1, ityold, kodsem(ibr1), itranm, itype, length(ibr1)
 7621 format (' Cont. transp.?,  ibr1, ityold, kodsem(ibr1), itranm, itype, length(ibr1) =', 6i7)
-  if (to_lower (bus2) .ne. text12) go to 7682
+  if (toLower (bus2) .ne. text12) go to 7682
   n24 = 0
-  if (to_lower (bus1) .ne. text11) go to 7677
+  if (toLower (bus1) .ne. text11) go to 7677
   n1 = ibr + 1
   call namea6 (bus3, n24)
   namebr(n1) = n24
@@ -338,7 +338,7 @@ subroutine over2
   namebr(ibrnam) = n24
   go to 7675
 7676 go to 3988
-7677 if (to_lower (bus1) .ne. text13) go to 7682
+7677 if (toLower (bus1) .ne. text13) go to 7682
   n1 = inonl + 1
   call namea6 (bus3, n24)
   namesw(n1) = n24
@@ -650,11 +650,11 @@ subroutine over2
   ! itype gets negative sign internally for 2nd to mth phase
   ! of a untransposed line
   if (icheck .eq. 3) itype = -iabsz (itype)
-4005 if (to_lower (bus1) .ne. text7) go to 4110
-  if (to_lower (bus2) .ne. text8) go to 4110
+4005 if (toLower (bus1) .ne. text7) go to 4110
+  if (toLower (bus2) .ne. text8) go to 4110
   if (ksat .gt. 0) go to 4040
-  if (to_lower (bus3) .ne. text9) go to 4003
-  if (to_lower (bus4) .ne. text10) go to 4003
+  if (toLower (bus3) .ne. text9) go to 4003
+  if (toLower (bus4) .ne. text10) go to 4003
   read (unit = abuff, fmt = 44002) bus6, yzero
 44002 format (26x, a6, e6.2)
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 3996) bus6, yzero
@@ -973,18 +973,18 @@ subroutine over2
 4084 format (/, ' Row 2 of 2x2 at 4084', i10, /, 1x)
   it = it + 1
   go to 100
-4110 if (to_lower (bus1) .ne. text3) go to 4112
+4110 if (toLower (bus1) .ne. text3) go to 4112
   kreqab = 1
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 4111)
 4111 format ('+Begin coupled, lumped elements using (A), (B).')
   go to 100
-4112 if (to_lower (bus1) .ne. text4) go to 4114
+4112 if (toLower (bus1) .ne. text4) go to 4114
   kreqab = 0
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 4113)
 4113 format ('+Begin coupled, lumped elements using (R), (L).')
   go to 100
-4114 if (to_lower (bus1) .ne. text5) go to 7642
-  if (to_lower (bus2) .ne. text6) go to 7642
+4114 if (toLower (bus1) .ne. text5) go to 7642
+  if (toLower (bus2) .ne. text6) go to 7642
   icas = 1
   iprsov(36) = it
   iprsov(35) = ibr + 1
@@ -1007,7 +1007,7 @@ subroutine over2
   lstat(12) = nphcas
   go to 9200
 7642 if (isgfd .lt. 0) go to 15
-  if ((to_lower (bus1) .ne. text11) .or. (to_lower (bus2) .ne. text14)) go to 15
+  if ((toLower (bus1) .ne. text11) .or. (toLower (bus2) .ne. text14)) go to 15
   length(ibr1 + 1) = -666
   call fddata (ikf, isfd, ibf)
   if (kill .gt. 0) go to 9200
@@ -1595,8 +1595,8 @@ subroutine over2
   call cimage
   read (unit = abuff, fmt = 76621) bus1, bus2
 76621 format (2x, 2a6)
-  if (to_lower (bus1) .ne. text1) go to 7662
-  if (to_lower (bus2) .eq. text2) go to 76617
+  if (toLower (bus1) .ne. text1) go to 7662
+  if (toLower (bus2) .eq. text2) go to 76617
 7662 lstat(19) = 7662
   kill = 58
   goto 9200
@@ -2247,8 +2247,8 @@ subroutine nonln2
 4763 if (itype .ne. 99) go to 54127
   read (unit = abuff, fmt = 54125) bus1, bus2
 54125 format (32x, 2a6)
-  if (to_lower (bus1) .ne. text1) go to 54127
-  if (to_lower (bus2) .ne. text2) go to 54127
+  if (toLower (bus1) .ne. text1) go to 54127
+  if (toLower (bus2) .ne. text2) go to 54127
   j = nonlad(inonl)
   sglfir = vchar(j)
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 54126)
@@ -2454,15 +2454,15 @@ subroutine distr2
   xlong = absz (xlong)
   read (unit = abuff, fmt = 3257) text1
 3257 format (78x, a1)
-  if (to_lower (text1) .eq. text6) n13 = 10
-  if (to_lower (text1) .eq. text7) n13 = 11
-  if (to_lower (text1) .eq. text8) n13 = 12
-  if (to_lower (text1) .eq. text9) n13 = 13
-  if (to_lower (text1) .eq. text10) n13 = 14
-  if (to_lower (text1) .eq. text11) n13 = 15
-  if (to_lower (text1) .eq. text12) n13 = 16
-  if (to_lower (text1) .eq. text13) n13 = 17
-  if (to_lower (text1) .eq. text14) n13 = 18
+  if (toLower (text1) .eq. text6) n13 = 10
+  if (toLower (text1) .eq. text7) n13 = 11
+  if (toLower (text1) .eq. text8) n13 = 12
+  if (toLower (text1) .eq. text9) n13 = 13
+  if (toLower (text1) .eq. text10) n13 = 14
+  if (toLower (text1) .eq. text11) n13 = 15
+  if (toLower (text1) .eq. text12) n13 = 16
+  if (toLower (text1) .eq. text13) n13 = 17
+  if (toLower (text1) .eq. text14) n13 = 18
   if (n13 .ne. 0) go to 21633
   read (unit = abuff, fmt = 3258) n13
 3258 format (78x, i1)

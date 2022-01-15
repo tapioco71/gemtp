@@ -3242,9 +3242,9 @@ subroutine spyink
 4044 if (n2 .gt. 0) read (unit = lunit(4)) n5
   if (n4 .gt. 0) read (unit = lunit(4)) n6
   kptplt = numnvo + nc
-  if (to_lower (buff77(1 : 5)) .eq. 'time ') go to 24085
+  if (toLower (buff77(1 : 5)) .eq. 'time ') go to 24085
   go to 4008
-4051 if (to_lower (buff77(1 : 4)) .ne. 'bot ') go to 4068
+4051 if (toLower (buff77(1 : 4)) .ne. 'bot ') go to 4068
   n15 = 0
   do k = 1, 100
      do j = 1, 1000
@@ -3263,7 +3263,7 @@ subroutine spyink
 4063 format ('       Ok, at end lunit4.  t-end =', e15.6, '   steps taken =', i8)
   call window
   go to 4008
-4068 if (to_lower (buff77(1 : 4)) .ne. 'next') go to 4079
+4068 if (toLower (buff77(1 : 4)) .ne. 'next') go to 4079
   !4069 read (lunit(4), end=4075)  ( forbyt(j), j=1, kptplt+1 )
   read (unit = lunit(4), end = 4075) (forbyt(j), j = 1, kptplt + 1)
   write (unit = munit6, fmt = 4071) (forbyt(j), j = 1, kptplt + 1)
@@ -3275,7 +3275,7 @@ subroutine spyink
 4076 format ('     ===   Sorry,  no more  lunit4  data.   eof hit.')
   call window
   go to 4008
-4079 if (to_lower (buff77(1 : 4)) .ne. 'back') go to 4083
+4079 if (toLower (buff77(1 : 4)) .ne. 'back') go to 4083
   if (noback .ne. 1)  go to 4082
   write (unit = munit6, fmt = 4080)
 4080 format ('    Ok,  but wait for  "top"  and  "time"  using  t = t - 2*deltat')
@@ -3289,7 +3289,7 @@ subroutine spyink
   call window
   if (forbyt(1) .gt. d24) backspace lunit(4)
   go to 4008
-4083 if (to_lower (buff77(1 : 4)) .ne. 'time') go to 4098
+4083 if (toLower (buff77(1 : 4)) .ne. 'time') go to 4098
   write (unit = prom80, fmt = 4084) forbyt(1)
 4084 format ('       Send desired time [',  e15.6,  ' ] :')
   !  assign 4085 to nextsn
@@ -3338,11 +3338,11 @@ subroutine spyink
   nextsn = 4169
   go to 9800
 4169 ansi32 = buff77(1 : 32)
-  if (to_lower (ansi32(1 : 6)) .ne. 'rewind') go to 4172
+  if (toLower (ansi32(1 : 6)) .ne. 'rewind') go to 4172
   kserlc = 0
   lserlc = 0
   go to 4165
-4172 if (to_lower (ansi32(1 : 5)) .ne. 'show ')  go to 4184
+4172 if (toLower (ansi32(1 : 5)) .ne. 'show ')  go to 4184
   write (unit = munit6, fmt = 4174)
 4174 format ('  Memory:  list-2 ---', 2i5, '     list-3 ---', 2i5, '    lserlc =', i4)
   call window
@@ -3361,7 +3361,7 @@ subroutine spyink
      call window
   end do
   go to 4165
-4184 if (to_lower (ansi32(1 : 5)) .ne. 'extra') go to 4197
+4184 if (toLower (ansi32(1 : 5)) .ne. 'extra') go to 4197
   write (unit = munit6, fmt = 4187)
 4187 format (4x, 'starting-R', 3x, 'starting-L', 3x, 'starting-C', 7x, 'next-R', 7x, 'next-L', 7x, 'next-C')
   call window
@@ -3374,19 +3374,19 @@ subroutine spyink
      call window
   end do
   go to 4165
-4197 if (to_lower (ansi32(1 : 5)) .ne. 'step ') go to 4211
+4197 if (toLower (ansi32(1 : 5)) .ne. 'step ') go to 4211
   kserlc = 1
   go to 4165
-4211 if (to_lower (ansi32(1 : 6)) .ne. 'change') go to 4165
+4211 if (toLower (ansi32(1 : 6)) .ne. 'change') go to 4165
 4214 write (unit = prom80, fmt = 4215)
 4215 format ('    Change type (data, move, blank, use, value,', ' end) :')
   !  assign 34215 to nextsn
   nextsn = 34215
   go to 9800
 34215 ansi32 = buff77(1:32)
-  if (to_lower (ansi32(1 : 4)) .eq. 'end ') go to 4165
-  if (to_lower (ansi32(1 : 6)) .eq. 'series') go to 4165
-  if (to_lower (ansi32(1 : 5)) .ne. 'move ')  go to 4223
+  if (toLower (ansi32(1 : 4)) .eq. 'end ') go to 4165
+  if (toLower (ansi32(1 : 6)) .eq. 'series') go to 4165
+  if (toLower (ansi32(1 : 5)) .ne. 'move ')  go to 4223
 4216 write (unit = prom80, fmt = 4217)
 4217 format ('    Send  n-from, n-to (1, 2, ...) :')
   !  assign 4219 to nextsn
@@ -3418,13 +3418,13 @@ subroutine spyink
   r(n14)  = r(n13)
   c(n14)  = c(n13)
   go to 4216
-4223 if (to_lower (ansi32(1 : 5)) .ne. 'data ') go to 4232
+4223 if (toLower (ansi32(1 : 5)) .ne. 'data ') go to 4232
 4225 write (unit = prom80, fmt = 4217)
   !  assign 4227 to nextsn
   nextsn = 4227
   go to 9800
 4227 bytbuf = buff77(1 : 20)
-  if (to_lower (bytbuf(1 : 4)) .eq. 'end ') go to 4214
+  if (toLower (bytbuf(1 : 4)) .eq. 'end ') go to 4214
   call frein2 (bytbuf, n13, n14)
   if (n14 .gt. lserlc) lserlc = n14
   n14 = n14 + n42
@@ -3447,7 +3447,7 @@ subroutine spyink
   c(n14) = c(n13)
   r(n14)= c(n13)
   go to 4225
-4232 if (to_lower (ansi32(1 : 5)) .ne. 'blank') go to 4245
+4232 if (toLower (ansi32(1 : 5)) .ne. 'blank') go to 4245
 4235 write (unit = prom80, fmt = 4236)
 4236 format ('    Send n-beg and n-end line numbers :')
   !  assign 4237 to nextsn
@@ -3455,7 +3455,7 @@ subroutine spyink
   go to 9800
 !4237 bytbuf = buff77(1 : 20)
   bytbuf = buff77(1 : 20)
-  if (to_lower (bytbuf(1 : 4)) .eq. 'end ') go to 4214
+  if (toLower (bytbuf(1 : 4)) .eq. 'end ') go to 4214
   call frein2 (bytbuf, n13, n14)
   if (n14 .lt. lserlc) go to 4239
   lserlc = n13 - 1
@@ -3465,7 +3465,7 @@ subroutine spyink
      kbus(j + n42) = 0
   end do
   go to 4235
-4245 if (to_lower (ansi32(1 : 4)) .ne. 'use ') go to 4256
+4245 if (toLower (ansi32(1 : 4)) .ne. 'use ') go to 4256
   write (unit = munit6, fmt = 4248) (nr(j + n42), j = 1, lserlc)
 4248 format ('    nr:', 10i7)
   call window
@@ -3474,7 +3474,7 @@ subroutine spyink
   !  assign 4254 to nextsn
   nextsn = 4254
   go to 9800
-4254 if (to_lower (buff77(1 : 4)) .eq. 'end ') go to 4214
+4254 if (toLower (buff77(1 : 4)) .eq. 'end ') go to 4214
   call frein1 (buff77, n6)
   if (n6 .le. 0) go to 4214
   n7 = n6 + n42
@@ -3494,14 +3494,14 @@ subroutine spyink
   nextsn = 54474
   go to 9800
 54474 prom80 = buff77
-  if (to_lower (prom80(1 : 4)) .eq. 'end ') go to 1240
-  if (prom80(1 : 6) .ne. '      '  .and. to_lower (prom80(1 : 6)) .ne. 'next  ') go to 4475
+  if (toLower (prom80(1 : 4)) .eq. 'end ') go to 1240
+  if (prom80(1 : 6) .ne. '      '  .and. toLower (prom80(1 : 6)) .ne. 'next  ') go to 4475
   j = j + 1
   go to 4494
-4475 if (to_lower (prom80(1 : 4)) .ne. 'top ') go to 4476
+4475 if (toLower (prom80(1 : 4)) .ne. 'top ') go to 4476
   j = 2
   go to 4494
-4476 if (to_lower (prom80(1 : 4)) .ne. 'bot ') go to 4477
+4476 if (toLower (prom80(1 : 4)) .ne. 'bot ') go to 4477
   j = -9999
   go to 4494
 4477 do j = 1, 10

@@ -584,7 +584,7 @@ subroutine cimage
 3041 format (80a1)
   !     Dan Goldsworthy had trouble with $listoff within $include
   !     which was within tacs supplemental variables.  wsm+thl
-  if ((to_lower (abuff(1 : 8)) .ne. '$listoff') .and. (to_lower (abuff(1 : 8)) .ne. '$liston')) go to 3042
+  if ((toLower (abuff(1 : 8)) .ne. '$listoff') .and. (toLower (abuff(1 : 8)) .ne. '$liston')) go to 3042
   go to 3246
   !     chcont is 'tacs' if cimage called from within tacs fortran express
 3042 if (chcont .eq. chtacs) go to 3233
@@ -619,7 +619,7 @@ subroutine cimage
      if (n3 .ne. nfrfld) go to 3306
      do j = n1, n2
         l = l + 1
-        if (to_lower (texta6(l)) .ne. textax(j)) go to 3306
+        if (toLower (texta6(l)) .ne. textax(j)) go to 3306
      end do
      if (iprsup .ge. 2) write (unit = lunit(6), fmt = 3292) i, n8, texta6(1), textay(i)
 3292 format (/, ' key-word found.  i, n8 =', 2i5, 5x, 'texta6, textay =', 2a7)
@@ -691,7 +691,7 @@ subroutine cimage
         go to 6100
 
      end select
-3306 if (to_lower (texta6(1)) .eq. textay(i)) go to 3294
+3306 if (toLower (texta6(1)) .eq. textay(i)) go to 3294
   end do
 3319 write (unit = lunit(6), fmt = 3230)
 3230 format (' Illegal $-card.   Stop at s.n. 3319 of "cimage" .')

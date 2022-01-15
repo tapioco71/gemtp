@@ -5,7 +5,7 @@
 !
 
 !
-! subroutine to_upper.
+! subroutine toUpper.
 !
 
 module strcom
@@ -17,7 +17,11 @@ module strcom
 
 contains
 
-  function to_upper (strIn) result(strOut)
+  !
+  ! Function toUpper.
+  !
+
+  function toUpper (strIn) result(strOut)
     ! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
     ! Original author: Clive Page
     implicit none
@@ -33,9 +37,13 @@ contains
           strOut(i : i) = strIn(i : i)
        end if
     end do
-  end function to_upper
+  end function toUpper
 
-  function to_lower (strIn) result(strOut)
+  !
+  ! Function toLower.
+  !
+
+  function toLower (strIn) result(strOut)
     implicit none
     character(len = *), intent(in) :: strIn
     character(len = len(strIn)) :: strOut
@@ -49,7 +57,7 @@ contains
           strOut(i : i) = strIn(i : i)
        end if
     end do
-  end function to_lower
+  end function toLower
 
   !
   ! subroutine str2int.

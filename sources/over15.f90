@@ -363,7 +363,7 @@ subroutine over15
   if (aupper(1) .eq. blank) go to 3094
   go to 1030
 8211 l = 0
-  if (to_lower (aupper(1)) .ne. text12) go to 4693
+  if (toLower (aupper(1)) .ne. text12) go to 4693
   !     honor "chan01" in cols. 3-8 by building dummy node voltage
   !     channels with names "chan01", "chan02", etc.:
   read (unit = abuff, fmt = 4671) n13

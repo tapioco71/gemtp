@@ -734,14 +734,14 @@ subroutine subr55
   call free (d1)
   nright = 0
   if (nfrfld .ne. 1) go to 6743
-  if (to_lower (texta6(1)) .eq. text5) go to 6754
-  if (to_lower (texta6(1)) .eq. text13) go to 6764
+  if (toLower (texta6(1)) .eq. text5) go to 6754
+  if (toLower (texta6(1)) .eq. text13) go to 6764
   if (texta6(1) .eq. text19) go to 6771
 6743 if (nfrfld .ne. 4) go to 6770
-  if (to_lower (texta6(4)) .ne. text4) go to 6770
-  if (to_lower (texta6(3)) .ne. text3) go to 6770
-  if (to_lower (texta6(2)) .ne. text2) go to 6760
-  if (to_lower (texta6(1)) .ne. text1) go to 6760
+  if (toLower (texta6(4)) .ne. text4) go to 6770
+  if (toLower (texta6(3)) .ne. text3) go to 6770
+  if (toLower (texta6(2)) .ne. text2) go to 6760
+  if (toLower (texta6(1)) .ne. text1) go to 6760
 6754 write (unit = kunit6, fmt = 6755)
 6755 format ('+Marker card preceding new data case.')
   call interp
@@ -755,8 +755,8 @@ subroutine subr55
   nchain = 1
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568) 4568
   go to 9000
-6760 if (to_lower (texta6(2)) .ne. text12) go to 6770
-  if (to_lower (texta6(1)) .ne. text11) go to 6770
+6760 if (toLower (texta6(2)) .ne. text12) go to 6770
+  if (toLower (texta6(1)) .ne. text11) go to 6770
 6764 write (unit = kunit6, fmt = 6765)
 6765 format ('+Marker card following last data case.')
   call interp
@@ -766,11 +766,11 @@ subroutine subr55
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568) kill
   go to 9000
 6770 if (nfrfld .ne. 5) go to 6773
-  if (to_lower (texta6(1)) .ne. text14) go to 6773
-  if (to_lower (texta6(2)) .ne. text15) go to 6773
-  if (to_lower (texta6(3)) .ne. text16) go to 6773
-  if (to_lower (texta6(4)) .ne. text17) go to 6773
-  if (to_lower (texta6(5)) .ne. text18) go to 6773
+  if (toLower (texta6(1)) .ne. text14) go to 6773
+  if (toLower (texta6(2)) .ne. text15) go to 6773
+  if (toLower (texta6(3)) .ne. text16) go to 6773
+  if (toLower (texta6(4)) .ne. text17) go to 6773
+  if (toLower (texta6(5)) .ne. text18) go to 6773
 6771 if (nenerg .eq. 0) go to 6773
   if (knt .le. 1) go to 6773
   write (unit = kunit6, fmt = 6772)

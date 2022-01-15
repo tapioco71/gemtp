@@ -166,7 +166,7 @@ subroutine inlmfs
   do k = n18, limcrd
      read (unit = lunit(13), fmt = 1329, end = 1828) buff77
 1329 format (a80)
-     if (to_lower (buff77(1 : 1)) .ne. 'c') go to 4247
+     if (toLower (buff77(1 : 1)) .ne. 'c') go to 4247
      do l = 1, 10
         if (buff77(2 : 2) .eq. digit(l)) go to 4244
      end do
@@ -176,7 +176,7 @@ subroutine inlmfs
      buff77(2 : 2) = ' '
 4247 j = j + 1
      file6(j) = buff77
-     if (to_lower (buff77(1 : 1)) .eq. 'c') go to 4273
+     if (toLower (buff77(1 : 1)) .eq. 'c') go to 4273
      n20 = n20 + 1
      if (iprspy .lt. 3) go to 4249
      write (unit = munit6, fmt = 4248) n20, n24, kard(n24)

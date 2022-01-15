@@ -298,45 +298,45 @@ subroutine subr31
 1060 format (i2, 13a6)
   if (iplot .lt. 0) go to 1070
   if (lunit(4) .le. 0) go to 1070
-  if (to_lower (aupper(1)) .ne. text15) go to 10452
+  if (toLower (aupper(1)) .ne. text15) go to 10452
   mpage = 1
   go to 1050
-10452 if (to_lower (aupper(1)) .ne. text9) go to 1052
-  if (to_lower (aupper(2)) .ne. text10) go to 1054
+10452 if (toLower (aupper(1)) .ne. text9) go to 1052
+  if (toLower (aupper(2)) .ne. text10) go to 1054
   iout = 1
   write (unit = kunit6, fmt = 1051)
 1051 format ('+Request for calcomp plot.')
   go to 1050
-1052 if (to_lower (aupper(1)) .ne. text11) go to 1061
-  if (to_lower (aupper(2)) .ne. text12) go to 1061
+1052 if (toLower (aupper(1)) .ne. text11) go to 1061
+  if (toLower (aupper(2)) .ne. text12) go to 1061
   iout = 2
   write (unit = kunit6, fmt = 1053)
 1053 format ('+Request for line printer plot.')
   go to 1050
-1054 if (to_lower (aupper(2)) .ne. text13) go to 1061
+1054 if (toLower (aupper(2)) .ne. text13) go to 1061
   iout = 3
   write (unit = kunit6, fmt = 1055)
 1055 format ('+Request for calcomp and line printer plots.')
   go to 1050
-1061 if (to_lower (aupper(1)) .ne. text1) go to 1067
-  if (to_lower (aupper(2)) .ne. text2) go to 1067
-  if (to_lower (aupper(3)) .ne. text3) go to 1064
+1061 if (toLower (aupper(1)) .ne. text1) go to 1067
+  if (toLower (aupper(2)) .ne. text2) go to 1067
+  if (toLower (aupper(3)) .ne. text3) go to 1064
   kprhd = 1
   write (unit = kunit6, fmt = 1062)
 1062 format ('+Request for typing of plot characters.')
   go to 1050
-1064 if (to_lower (aupper(3)) .ne. text4) go to 1067
+1064 if (toLower (aupper(3)) .ne. text4) go to 1067
   kprhd = 0
   write (unit = kunit6, fmt = 1065)
 1065 format('+Request for drawing of plot characters.')
   go to 1050
-1067 if (to_lower (aupper(1)) .ne. text33) go to 5843
+1067 if (toLower (aupper(1)) .ne. text33) go to 5843
   kbound = 1
   write (unit = kunit6, fmt = 4865)
 4865 format('+Scale y axis so no curve exceeds limits.')
   go to 1050
-5843 if (to_lower (aupper(1)) .ne. text18) go to 1079
-  if (to_lower (aupper(2)) .ne. text19) go to 1079
+5843 if (toLower (aupper(1)) .ne. text18) go to 1079
+  if (toLower (aupper(2)) .ne. text19) go to 1079
   read (unit = abuff, fmt = 1072) kpgrid, isww
 1072 format (16x, 5i8)
   write (unit = kunit6, fmt = 1073) kpgrid, isww
@@ -345,16 +345,16 @@ subroutine subr31
      if (isww(i) .gt. 0) kpen(i) = isww(i)
   end do
   go to 1050
-1079 if (to_lower (aupper(1)) .ne. text22) go to 7392
-  if (to_lower (aupper(2)) .ne. text23) go to 7392
-  if (to_lower (aupper(3)) .ne. text24) go to 7392
+1079 if (toLower (aupper(1)) .ne. text22) go to 7392
+  if (toLower (aupper(2)) .ne. text23) go to 7392
+  if (toLower (aupper(3)) .ne. text24) go to 7392
   read (unit = abuff, fmt = 7381) linlim
 7381 format (24x, 3i8)
   write (unit = kunit6, fmt = 7386) linlim
 7386 format ('+Line limit for sparse printer plots =', i8)
   go to 1050
-7392 if (to_lower (aupper(1)) .ne. text25) go to 7406
-  if (to_lower (aupper(2)) .ne. text26) go to 7406
+7392 if (toLower (aupper(1)) .ne. text25) go to 7406
+  if (toLower (aupper(2)) .ne. text26) go to 7406
   read (unit = abuff, fmt = 7381) mulplt(1), mulplt(4), mulplt(5)
   if (mulplt(1) .le. 0) mulplt(1) = 1
   write (unit = kunit6, fmt = 7398)  mulplt(1), mulplt(4), mulplt(5)
@@ -362,7 +362,7 @@ subroutine subr31
   mulplt(2) = 0
   mulplt(3) = 0
   go to 1050
-7406 if (to_lower (aupper(1)) .ne. text27) go to 7627
+7406 if (toLower (aupper(1)) .ne. text27) go to 7627
   read (unit = abuff, fmt = 7613) d4
 7613 format (24x, e8.0)
   write (unit = kunit6, fmt = 7618) d4
@@ -374,8 +374,8 @@ subroutine subr31
 7622 kscale = 1
   d4fact = d4
   go to 1050
-7627 if (to_lower (aupper(1)) .ne. text28) go to 7661
-  if (to_lower (aupper(2)) .ne. text29) go to 7661
+7627 if (toLower (aupper(1)) .ne. text28) go to 7661
+  if (toLower (aupper(2)) .ne. text29) go to 7661
   write (unit = kunit6, fmt = 7636)
 7636 format ('+Plot one emtp variable against another.')
   textax(29) = aupper(3)
@@ -415,7 +415,7 @@ subroutine subr31
 7664 format ('+Fourier series started.  nfour =', i8)
   maxevk = maxevk * nbyte(5) / nbyte(3)
   go to 1050
-7671 if (to_lower (aupper(2)) .ne. text32) go to 7679
+7671 if (toLower (aupper(2)) .ne. text32) go to 7679
   nfour = 0
   write (unit = kunit6, fmt = 7674)
 7674 format ('+Fourier series ended.  Back to plots.')
@@ -445,7 +445,7 @@ subroutine subr31
   if (kalcom .eq. 0) go to 2720
   n8 = -6666
   go to 2656
-1106 if (iplot .ge. 0 .and. lunit(4) .gt. 0) go to 1120
+1106 if ((iplot .ge. 0) .and. (lunit(4) .gt. 0)) go to 1120
   write (unit = kunit6, fmt = 1108)
 1108 format ('+Plot card ignored in quest for start of new case.')
   go to 1050
@@ -533,7 +533,7 @@ subroutine subr31
   if (xyplot(1) .eq. 0.0d0) go to 7413
   hpi = (hmax - hmin) * 0.1d0
 7413 ncrv = icp
-  if (to_lower (slot(1)) .ne. text8) go to 83
+  if (toLower (slot(1)) .ne. text8) go to 83
   write (unit = kunit6, fmt = 80) ihs
 80 format ("+Graph separation card.   'ksep' =", i3 )
   if (ihs .ge. 2) go to 82
@@ -558,7 +558,7 @@ subroutine subr31
   vhs = hmax
   vh = vhs + vs + 1.0
   go to 1050
-1185 if (to_lower (slot(1)) .ne. text6) go to 1188
+1185 if (toLower (slot(1)) .ne. text6) go to 1188
   jslot = 7
   write (unit = kunit6, fmt = 1182)  hpi, hmin, hmax
 1182 format ('+** Plot card. ', 2x, 3e11.3)
@@ -572,7 +572,7 @@ subroutine subr31
 1184 format ('+Continuation to read branch node-pair names.')
   call interp
   go to 1195
-1188 if (to_lower (slot(1)) .ne. text5) go to 1195
+1188 if (toLower (slot(1)) .ne. text5) go to 1195
   tolrce = vmin * vmin
   write (unit = kunit6, fmt = 1189) vmin
 1189 format ('+Redefinition of smoothing tolerance.', 2x, e10.2)

@@ -1915,8 +1915,8 @@ subroutine over13
      call free (d1)
      bus2 = texta6(1)
      nright = 0
-4705 if (to_lower (bus1) .ne. text1) cycle
-     if (to_lower (bus2) .ne. text2) cycle
+4705 if (toLower (bus1) .ne. text1) cycle
+     if (toLower (bus2) .ne. text2) cycle
      if (n3 .ne. i) go to 5766
      read (unit = abuff, fmt = 5764) ci1, ck1, a, d2
 5764 format (14x,4e15.8)

@@ -2507,10 +2507,10 @@ subroutine over5
   write (unit = lunit(6), fmt = 3906) buffer
 3906 format (" Temporary error stop in  over5.   The user's data is for a monte carlo simulation,", /, ' but  "statistics"  in columns 55-64 of the last-read data card has been misspelled.', /, ' The defective 80-column card image =', a80)
   stop
-3920 if (to_lower (bus3) .ne. text5) go to 3260
-  if (to_lower (bus4) .eq. text6) go to 3360
-3260 if (to_lower (bus3) .ne. text7) go to 605
-  if (to_lower (bus4) .ne. text8) go to 605
+3920 if (toLower (bus3) .ne. text5) go to 3260
+  if (toLower (bus4) .eq. text6) go to 3360
+3260 if (toLower (bus3) .ne. text7) go to 605
+  if (toLower (bus4) .ne. text8) go to 605
   sigmax = 0.0d0
   idist = 0
   if (nenerg .lt. 0)  go to 615
@@ -4121,10 +4121,10 @@ subroutine smdat (mtype)
      call free (d11)
      iv = int (d11)
      nfrfld = 0
-2185 if (to_lower (bus6) .ne. text1) go to 3674
+2185 if (toLower (bus6) .ne. text1) go to 3674
      n2 = ntotac - n2
      if (noutpr .ne. 0) go to 7841
-     if (to_lower (bus3) .ne. text16 ) write (unit = kunit6, fmt = 3671)  n2
+     if (toLower (bus3) .ne. text16 ) write (unit = kunit6, fmt = 3671)  n2
 3671 format ('  End of', i3, '  TACS interface variables.')
      if (bus5 .eq. text16) write (unit = kunit6, fmt = 6743)  n2
 6743 format ('+  end of', i3, '  TACS interface variables.  Parallel')

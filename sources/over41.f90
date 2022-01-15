@@ -558,8 +558,8 @@ subroutine over41
      call cimage
      read (unit = abuff, fmt = 7142) bus5, bus6
 7142 format (2a1)
-     if (to_lower (bus6) .ne. text11) go to 7151
-     if (to_lower (bus5) .eq. text10) go to 7157
+     if (toLower (bus6) .ne. text11) go to 7151
+     if (toLower (bus5) .eq. text10) go to 7157
      if (bus5 .eq. blank) go to 7157
 7151 write (unit = kunit6, fmt = 7152)
   end do

@@ -977,12 +977,12 @@ subroutine subts1
   call flager
   read (unit = buff77, fmt = 3719) bus1
 3719 format (a6)
-  if (to_lower (bus1) .ne. text10) go to 3726
+  if (toLower (bus1) .ne. text10) go to 3726
   call spying
   go to 3711
-3726 if (to_lower (bus1) .eq. text11) go to 4312
-  if (to_lower (bus1) .eq. text12) call stoptp
-  if (to_lower (bus1) .ne. text13) go to 3711
+3726 if (toLower (bus1) .eq. text11) go to 4312
+  if (toLower (bus1) .eq. text12) call stoptp
+  if (toLower (bus1) .ne. text13) go to 3711
   write (unit = prom80, fmt = 3733)
 3733 format (' Send new Ykk value at reciprocation point :')
   call prompt
@@ -5463,12 +5463,12 @@ subroutine zincox (ns)
   read (unit = buff77, fmt = 3719) bus1
 3719 format (a6)
   kill = 0
-  if (to_lower (bus1) .ne. text1) go to 3726
+  if (toLower (bus1) .ne. text1) go to 3726
   call spying
   go to 3711
-3726 if (to_lower (bus1) .eq. text2)  go to 3415
-  if (to_lower (bus1) .eq. text3) call stoptp
-  if (to_lower (bus1) .ne. text4) go to 3752
+3726 if (toLower (bus1) .eq. text2)  go to 3415
+  if (toLower (bus1) .eq. text3) call stoptp
+  if (toLower (bus1) .ne. text4) go to 3752
   write (unit = prom80, fmt = 3731)
 3731 format (' Send diagnostic level iprsup (i2 format) :')
   call prompt
