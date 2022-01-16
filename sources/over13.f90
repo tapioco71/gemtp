@@ -23,6 +23,7 @@ contains
     !     Result is reduced matrix in columns 1,...m in case of reduction
     !     (m unequal 0) or negative inverse matrix in columns 1,...n in case
     !     of inversion (m=0).
+    !
     real(8), intent(out) :: a(:)
     integer(4), intent(in) :: m, n
     integer(4) :: i, i1, i2, ij, ik
@@ -126,22 +127,6 @@ subroutine over13
   use ovr13mod
   use fdqlcl
   implicit none
-  !  dimension cblhst(1)
-  !  dimension cmr(1), cmi(1), vim(1)
-  !  dimension infdli(1)
-  !  dimension ekreal(50), ekimag(50), emreal(50), emimag(50)
-  !  dimension closev(50), farv(50), closei(50), fari(50)
-  !  dimension w1(1)
-  !  dimension wk1(1)
-  !
-  !  equivalence (cnvhst(1), cblhst(1))
-  !  equivalence (namebr(1), infdli(1))
-  !  equivalence (volt(1), vim(1))
-  !  equivalence (kks(1), cmr(1))
-  !  equivalence (kknonl(1), cmi(1))
-  !  equivalence (lstat(14), mdrive)
-  !  equivalence (ykm(1), w1(1))
-  !  equivalence (semaux(1), wk1(1))
   !
   character(8) :: text1, text2
   integer(4) :: i, i1, iadrs, ibadd, ibf, icbr, idt, ier, ifa, ifd
@@ -176,6 +161,23 @@ subroutine over13
   real(8) :: vi1, vi2, vr1, vr2, vsl, vsli, vsr, vsri
   real(8) :: wd, wdt, winic
   real(8) :: yx
+  !
+  !  dimension cblhst(1)
+  !  dimension cmr(1), cmi(1), vim(1)
+  !  dimension infdli(1)
+  !  dimension ekreal(50), ekimag(50), emreal(50), emimag(50)
+  !  dimension closev(50), farv(50), closei(50), fari(50)
+  !  dimension w1(1)
+  !  dimension wk1(1)
+  !
+  !  equivalence (cnvhst(1), cblhst(1))
+  !  equivalence (namebr(1), infdli(1))
+  !  equivalence (volt(1), vim(1))
+  !  equivalence (kks(1), cmr(1))
+  !  equivalence (kknonl(1), cmi(1))
+  !  equivalence (lstat(14), mdrive)
+  !  equivalence (ykm(1), w1(1))
+  !  equivalence (semaux(1), wk1(1))
   !
   integer(4), pointer :: infdli(:)
   integer(4), pointer :: mdrive => lstat(14)
@@ -284,8 +286,7 @@ subroutine over13
      if (d6 .lt. 0.0) curr(i) = -1.0
      if (absz (d6) .le. vchar(i)) go to 3676
      if (noutpr .eq. 0) write (unit = lunit(6), fmt = 3671) bus(k), bus(m), d6
-3671 format (' type-99 element from ', "'", a6,  "'", ' to ', "'", a6,  "'", ' has initial condition voltage of', e15.6, &
-          '   which is beyond segment-1 breakpoint.', /, 70x, 'The user should expect spurious transients at time zero.')
+3671 format (' type-99 element from ', "'", a6,  "'", ' to ', "'", a6,  "'", ' has initial condition voltage of', e15.6, '   which is beyond segment-1 breakpoint.', /, 70x, 'The user should expect spurious transients at time zero.')
 3676 cycle
 3684 j0 = nonle(i)
      if (j0 .gt. 0) cycle
@@ -379,7 +380,7 @@ subroutine over13
         go to 1910
      end do
      cchar(n12) = n10 + 1
-1910 n13 = int (cchar(n12), kind (n13)) + n7 + 1
+1910 n13 = int (cchar(n12) + n7 + 1, kind (n13))
      d9 = vchar(n13) * gslope(n6 + 4) + cchar(n13)
      d12= vchar(n6+4) - d9
      go to 1700
@@ -400,7 +401,7 @@ subroutine over13
         go to 1960
      end do
      cchar(n12) = n10 + 1
-1960 n13 = int (cchar(n12), kind (n13)) + n7 + 1
+1960 n13 = int (cchar(n12) + n7 + 1, kind (n13))
      d9 = vchar(n13) * gslope(n6 + 4) - cchar(n13)
      d12 = d9 - vchar(n6 + 4)
 1700 vchar(n6) = (d12 - d6) / (vchar(n6 + 4) - vchar(n6 + 5))
@@ -470,26 +471,22 @@ subroutine over13
 4633 k = ivolt
   nright = -1
   nfrfld = 1
-  !  call freone (d1)
   call free (d1)
   bus1 = texta6(1)
   nright = 0
-  !  call freone (a)
   call free (a)
-  !  call freone (ci1)
   call free (ci1)
-  !  call freone (ck1)
   call free (ck1)
 4635 if (iprint .eq. 0) go to 54157
   if (iprint .eq. 0) write (unit = * , fmt = *) 'over13-cable.    ck1, tpi=', ck1, tpi
   winic = ck1 * tpi
   iprint = 0
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 54153) a, ci1, ck1
-54153 format ('+node volt init cond.  ', 2e11.3, f7.1)
+54153 format ('+Node volt init cond.  ', 2e11.3, f7.1)
   steady = ck1 * twopi * deltat
   go to 4463
 54157 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54158) a, ci1
-54158 format ('+node volt init cond.  ', 2e11.3)
+54158 format ('+Node volt init cond.  ', 2e11.3)
 4463 if (k .gt. 0) go to 7005
   do k = 2, ntot
      if (bus(k).eq.bus1) go to 552
@@ -511,7 +508,6 @@ subroutine over13
 4643 ll = ivolt
   nright = -1
   nfrfld = 2
-  !  call freone (d1)
   call free (d1)
   bus1 = texta6(1)
   bus2 = texta6(2)
@@ -524,7 +520,7 @@ subroutine over13
   call free (d7)
   k = int (d7, kind (k))
 4645 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54159) ci1, ck1, a
-54159 format ('+linear i.', 4x, 3e12.4)
+54159 format ('+Linear i.', 4x, 3e12.4)
   if (k .gt. 0) go to 7000
   do k = 1, ibr
      l = kbus(k)
@@ -541,7 +537,7 @@ subroutine over13
 7000 l = kbus(k)
   ll = iabs(l)
   m = iabs (mbus(k))
-  if (bus(ll) .ne. bus1 .or. bus(m) .ne. bus2) go to 7001
+  if ((bus(ll) .ne. bus1) .or. (bus(m) .ne. bus2)) go to 7001
   if (l .lt. 0) go to 575
   go to 560
 7001 kill = 32
@@ -563,8 +559,8 @@ subroutine over13
   ck(k) = a
 568 ci1 = e(l)
   ck1 = e(m)
-  volti(1) = -ci1 / 2.0
-  voltk(1) = -ck1 / 2.0
+  volti(1) = -ci1 / 2.0d0
+  voltk(1) = -ck1 / 2.0d0
   volt(1) = ck1 - ci1
   if (length(k + 1) .eq. -666) voltk(1) = f(m) - f(l)
   n1 = k + it2 - 1
@@ -634,15 +630,12 @@ subroutine over13
 4663 k = ivolt
   nright = -1
   nfrfld = 2
-  !  call freone (d1)
   call free (d1)
   bus1 = texta6(1)
   bus2 = texta6(2)
   nright = 0
   nfrfld = 1
-  !  call freone (ci1)
   call free (ci1)
-  !  call freone (ck1)
   call free (ck1)
 4665 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54162) ci1, ck1
 54162 format ('+Nonlin. branch init cond.', 2x, 2e11.3)
@@ -678,19 +671,19 @@ subroutine over13
   gslope(n19) = cchar(n18)
   gslope(n20) = cchar(n19)
   n16 = int (cchar(n19), kind (n16))
-  n15 = int (n16 + cchar(n17), kind (n15)) + 1
+  n15 = int (n16 + cchar(n17) + 1, kind (n15))
   if (cchar(n18) .ne. 1) go to 4667
   d13 = gslope(n16) * (1.0 - vchar(n17))
-  d13 = 1.0 / d13
+  d13 = 1.0d0 / d13
   d14 = gslope(n16) * vchar(n18) - gslope(n15)
   d14 = d14 * d13
   go to 4668
-4667 d13 = gslope(n16) * (1.0 + vchar(n17))
-  d13 = 1.0 / d13
+4667 d13 = gslope(n16) * (1.0d0 + vchar(n17))
+  d13 = 1.0d0 / d13
   d14 = gslope(n15) - gslope(n16) * vchar(n18)
   d14 = d14 * d13
 4668 gslope(n18) = delta2 / d13
-  gslope(n17) = vchar(n20)  -  gslope(n18) * ( e(l) - e(m) )
+  gslope(n17) = vchar(n20) - gslope(n18) * (e(l) - e(m))
   n18 = n17 + 4
   n19 = n17 + 5
   ! read input card using cimage.
@@ -729,7 +722,7 @@ subroutine over13
   ! if (kodsem(k) .ne. 0
   ! 1 .and. imodel(k) .ne. -2) go to 5750
   ! for semlyen or cas. pi
-  if (kodsem(k) .ne. 0 .and. imodel(k) .ge. 0) go to 5750
+  if ((kodsem(k) .ne. 0) .and. (imodel(k) .ge. 0)) go to 5750
 7550 n4 = length(k)
   if (n4 .gt. 0) n4 = 1
   isd = itadd
@@ -814,8 +807,7 @@ subroutine over13
   koff11 = koff25 + 288
   if (koff11 .lt. lhist) go to 5339
   write (unit = lunit(6), fmt = 5340) lhist, koff11
-5340 format ( ' In over13, new Marti line solution logic overflowed storage list no. 22: lhist =', i5,' needed space here koff11=',i5, '.', /, &
-       ' Execution is aborted, and redimension with larger value of list no. 22 is required.')
+5340 format (' In over13, new Marti line solution logic overflowed storage list no. 22: lhist =', i5,' needed space here koff11=',i5, '.', /, ' Execution is aborted, and redimension with larger value of list no. 22 is required.')
   stop
 5339 nq1 = infdli(inoff2 + k)
   nphs2 = it2 * it2
@@ -1201,7 +1193,7 @@ subroutine over13
            api = sconst(nq3 + 1) / 1.e+15
            dqq3 = apr ** 2 + (omega + api) ** 2
            ar = 2 * (akr * apr + aki * (omega + api)) / dqq3
-           ai = 0.
+           ai = 0.0d0
 3008       w1(ioff3 + iq) = ar * w1(ioff7 + ka) - ai * w1(ioff8 + ka)
            w1(ioff4 + iq) = ar * w1(ioff8 + ka) + ai * w1(ioff7 + ka)
            w1(ioff5 + iq) = ar * w1(ioff1 + ka) - ai * w1(ioff2 + ka)
@@ -1212,8 +1204,7 @@ subroutine over13
            summi = summi + w1(ioff6 + iq)
            if (jkl .eq. 1) go to 3010
 3009       jkl = 0
-3010       if (iprsup .gt. 0) write (unit = lunit(6), fmt = 4773) jqa, nteq, nq1, nq2, nq3, sconst(nq1), sconst(nq2), sconst(nq3), w1(ioff7 + ka), w1(ioff8 + ka), &
-                w1(ioff1 + ka), w1(ioff2 + ka), sumkr, sumki, summr, summi
+3010       if (iprsup .gt. 0) write (unit = lunit(6), fmt = 4773) jqa, nteq, nq1, nq2, nq3, sconst(nq1), sconst(nq2), sconst(nq3), w1(ioff7 + ka), w1(ioff8 + ka), w1(ioff1 + ka), w1(ioff2 + ka), sumkr, sumki, summr, summi
 4773       format (1x, i2, 3x, i2, 2x, i5, 2x, i5, 2x, i5, 11e9.3)
            nq2 = nq2 + 1
            nq3 = nq3 + 1
@@ -1339,7 +1330,7 @@ subroutine over13
 1114 do ifa = 1, it2
      nn4 = indhst(ka)
      taui = cnvhst(nn4)
-     ntaui = int (taui / deltat, kind (ntaui)) + 1
+     ntaui = int (taui / deltat + 1, kind (ntaui))
      !      call fillup(cnvhst(nn4+11),cnvhst(nn4+12),fkh5(iadrs)
      !     1           ,cnvhst(nn4+9), cnvhst(nn4+10),bmh5(iadrs)
      !     2           ,omega,wdt,ntaui,taui)
@@ -2242,7 +2233,7 @@ subroutine last13
   n4 = n4 + 2
   if (ck(k) .lt. 0.0d0) go to 14001
   n3 = int (n3 + 6 * ck(k), kind (n3))
-  n4 = int (n4 + ck(k), kind (n4)) - 1
+  n4 = int (n4 + ck(k) - 1, kind (n4))
   go to 14005
 14001 continue
   go to 14005
@@ -2250,12 +2241,12 @@ subroutine last13
   n4 = n4 + 2
   if (ci(k) .lt. 0.0d0) go to 14003
   n3 = int (n3 + 7 * ci(k), kind (n3))
-  n4 = int (n4 + 2 * ci(k), kind (n4)) - 2
+  n4 = int (n4 + 2 * ci(k) - 2, kind (n4))
 14003 n3 = int (n3 - ck(k) - ck(k), kind (n3))
   n4 = n4 + 2
   if (ck(k) .lt. 0.0d0) go to 14004
   n3 = int (n3 + 6 * ck(k), kind (n3))
-  n4 = int (n4 + 2 * ck(k), kind (n4)) - 2
+  n4 = int (n4 + 2 * ck(k) - 2, kind (n4))
 14004 continue
 14005 write (unit = lunit(6), fmt = 14996) n1, n3, (sconst(l), l = n1, n3)
   if (n8 .gt. n4) n4 = n8
@@ -2460,7 +2451,7 @@ subroutine last13
   mxstrt = 0
   k = i
   ! begin loop over convolutions ....
-14105 n1 = int (absz (cki(k)), kind (n1)) - 1
+14105 n1 = int (absz (cki(k)) - 1, kind (n1))
   n2 = n1 / it2 + 1
   n1 = n1 - (n2 - 1) * it2 + 1
   if (itadd .lt. 0) go to 14290
@@ -2810,8 +2801,8 @@ subroutine last13
 14683 n3 = int (n3 - ck(k) - ck(k), kind (n3))
   n4 = n4 + 2
   if (ck(k) .lt. 0.0d0) go to 14684
-  n3 = int (n3 + 6 * ck(k))
-  n4 = int (n4 + 2 * ck(k) - 2)
+  n3 = int (n3 + 6 * ck(k), kind (n3))
+  n4 = int (n4 + 2 * ck(k) - 2, kind (n4))
 14684 n5 = nr(k)
   n6 = n5 + length(k) - 1
   if (ck(k) .lt. 0.0) n6 = int (n6 + sconst(n3 - 1) / deltat + 2.0d0, kind (n6))
@@ -2902,7 +2893,7 @@ subroutine last13
   dxq = 0.0d0
   if (iabs (i0) .le. 1) go to 14810
   d7 = eeeta / deltat
-  n7 = int (d7)
+  n7 = int (d7, kind (n7))
   dxq = d7 - n7
   dxp = unity - dxq
   n10 = 5
