@@ -10,7 +10,7 @@
 
 subroutine over10
   use blkcom
-  use labcom, only: bus, c, coptbr, crest, e, f, iform, imodel, isubeg, kbus, kode, kodebr, kodsem, kssfrq, ksub, length, mbus, msub, node, nr, r, sfreq, tclose, time1, tr, tstart, tx, volt, volti, voltk, xoptbr, itemp
+  use labcom, only: bus, c, coptbr, crest, e, f, iform, imodel, isubeg, kbus, kode, kodebr, kodsem, kssfrq, ksub, length, mbus, msub, node, nr, r, sfreq, tclose, time1, tr, tstart, tx, volt, volti, voltk, xoptbr
   use space2
   use umcom
   use movcop
@@ -25,7 +25,7 @@ subroutine over10
   integer(4) :: istop, isubs1, isubs2, isubs3, isubs4, itp, ix, ix2, ixx, iy
   integer(4) :: j, ja, jc, je, jj, jk, js, jt
   integer(4) :: k, ka, kb, ke, kkk, kmm, ky
-  integer(4) :: l, la, lb, lc, lk, ll, locy11
+  integer(4) :: l, la, lb, lc, lk, ll, ll0, locy11
   integer(4) :: m, mk, mna1b1, mna1b2, mna2b1, mna2b2, mxa1b1, mxa1b2, mxa2b1
   integer(4) :: mxa2b2
   integer(4) :: n, n1, n2, n3, n5, n7, n10, n12, n13, n14, n15, n16, n23
@@ -42,6 +42,11 @@ subroutine over10
   real(8) :: xa, xi, xr, xti, xtr, xx
   real(8) :: yy
   !
+  integer(4), allocatable :: itemp(:)
+  !
+  ll0 = size (transfer (voltk, itemp))
+  allocate (itemp(ll0))
+  itemp = transfer (voltk, itemp)
   locatn(i, j) = (j * j - j) / 2 + i
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2941) ntot, ioffd, loopss(2)
 2941 format (' Top of "over10".   ntot, ioffd, loopss(2) =', 2i8)
@@ -949,7 +954,11 @@ subroutine over10
   nchain = 51
   lstat(18) = 10
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
-99999 return
+99999 if (allocated (itemp)) then
+     voltk = transfer (itemp, voltk)
+     deallocate (itemp)
+  end if
+  return
 end subroutine over10
 
 !

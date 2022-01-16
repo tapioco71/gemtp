@@ -713,12 +713,16 @@ subroutine tables
   character(1), pointer :: busone => bus1(1 : 1)
   integer(4), pointer :: idistx => nenerg
   integer(4), allocatable :: integx(:)
+  integer(4), allocatable :: itemp(:)
   integer(4), pointer :: kbase => moncar(2)
   integer(4), allocatable :: kpen(:)
   !
   ll0 = size (transfer (x, integx))
   allocate (integx(ll0))
   integx = transfer (x, integx)
+  ll0 = size (transfer (busum, itemp))
+  allocate (itemp(ll0))
+  itemp = transfer (busum, itemp)
   iprsav(1 : 4) = (/ 0, 0, 0, 0 /)
   ll1 = 1
   ll2 = 2
@@ -775,6 +779,10 @@ subroutine tables
   end do
 5359 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 5364)
 5364 format (' Exit "tables".')
+  if (allocated (itemp)) then
+     busum = transfer (itemp, busum)
+     deallocate (itemp)
+  end if
   if (allocated (integx)) then
      x = transfer (integx, x)
      deallocate (integx)

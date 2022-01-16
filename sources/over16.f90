@@ -5328,21 +5328,21 @@ subroutine zincox (ns)
   ndx7r = iofznr + n7
   if (ndx7r .le. lchar) go to 3422
   write (unit = lunit(6), fmt = 3416) n7, iofznr
-3416 format (/, ' Overflow in "zincox".', i5, ' coupled arresters, if added to iofznr =', i5, ' overflow list 10.')
+3416 format (/, ' Overflow in "zincox".', i5, ' Coupled arresters, if added to iofznr =', i5, ' overflow list 10.')
   kill = 1
   lstat(19) = 3422
   lstat(16) = 10
   go to 4567
 3422 if (n7 ** 2 .lt. lsiz26) go to 3424
   write (unit = lunit(6), fmt = 3423) n7
-3423 format (/, ' Overflow in "zincox".', i5, ' coupled arresters, if squared, overflow list 26.')
+3423 format (/, ' Overflow in "zincox".', i5, ' Coupled arresters, if squared, overflow list 26.')
   kill = 1
   lstat(19) = 3424
   lstat(16) = 26
   go to 4567
-3424 if ( n7*2 .lt. lsiz26 )  go  to  3425
-  write ( lunit(6), 3418 ) n7
-3418 format ( /,  22h overflow in "zincox".,   i5, 49h coupled arresters, if doubled, overflow list 26. )
+3424 if ((n7 * 2) .lt. lsiz26) go to 3425
+  write (unit = lunit(6), fmt = 3418) n7
+3418 format (/, ' Overflow in "zincox".', i5, ' Coupled arresters, if doubled, overflow list 26.')
   kill = 1
   lstat(19) = 3425
   lstat(16) = 26
@@ -5350,59 +5350,59 @@ subroutine zincox (ns)
 3425 ndx1r = iofznr + 1
   ndx1i = iofzni + 1
   ndx7i = iofzni + n7
-  !     extract zthevenin from znonl, determine elements connected to
+  !     extract Zthevenin from Znonl, determine elements connected to
   !     known voltage nodes********************************************
   ndx2 = ndx1i
   m5 = n6
   do l = 1, n7
      n12 = 0
-     ksing( ndx2 ) = 0
+     ksing(ndx2) = 0
      !     process a column at a time**********************************
      do n = 1, n7
-        k = nsubkm( m5+1 ) + n1
-        m = nsubkm( m5+2 ) + n1
+        k = nsubkm(m5 + 1) + n1
+        m = nsubkm(m5 + 2) + n1
         volti(n5) = znonl(k) - znonl(m)
-        if ( volti(n5)  .ne.  0.0 )   n12 = 1
+        if (volti(n5) .ne. 0.0d0) n12 = 1
         m5 = nsubkm( m5 )
         n5 = n5 + 1
      end do
-     if ( n12  .eq.  0 )   ksing(ndx2) = -1
+     if (n12 .eq. 0) ksing(ndx2) = -1
      ndx2 = ndx2 + 1
      n1 = n1 + ntot
   end do
   n5 = n5 - 1
-  if ( iprsup  .ge.  6 ) write (lunit(6), 3438) n6,ns,n7,n5, (volti(l), l=1,n5)
-3438 format ( /,  34h thevenin matrix. n6, ns, n7, n5 =,  4i8 ,/,  ( 1x,  8e16.7 )  )
+  if (iprsup .ge. 6) write (unit = lunit(6), fmt = 3438) n6, ns, n7, n5, (volti(l), l = 1, n5)
+3438 format (/, ' Thevenin matrix. n6, ns, n7, n5 =', 4i8, /, (1x, 8e16.7))
   !     extract and store thevenin voltages****************************
   m = 0
   do l = 1, n7
-     n10 = nsubkm( m5+1 )
-     n11 = nsubkm( m5+2 )
-     inl = nsubkm( m5+3 )
-     voltk( m+1 ) = e( n10 ) - e( n11 )
-     voltk( m+2 ) = vzero( inl )
-     vecnl2( inl ) = curr( inl )
-     m5 = nsubkm( m5 )
+     n10 = nsubkm(m5 + 1)
+     n11 = nsubkm(m5 + 2)
+     inl = nsubkm(m5 + 3)
+     voltk(m + 1) = e(n10) - e(n11)
+     voltk(m + 2) = vzero(inl)
+     vecnl2(inl) = curr(inl)
+     m5 = nsubkm(m5)
      m = m + 2
   end do
-  if ( iprsup  .gt.  1 ) write (lunit(6), 3613)  ( ksing(l), l=ndx1i, ndx7i )
-3613 format ( /,  27h 'ksing'  b4 copy checking.,  20i5  )
+  if (iprsup .gt. 1) write (unit = lunit(6), fmt = 3613) (ksing(l), l = ndx1i, ndx7i)
+3613 format (/, " 'ksing'  b4 copy checking.", 20i5)
   n15 = n7 - 1
   if (n15 .eq. 0) go to 3638
   n10 = 0
   ndx2 = iofzni
-  do l=1, n15
+  do l = 1, n15
      ndx2 = ndx2 + 1
-     if ( ksing(ndx2)  .eq.  -1 )   go to 3634
+     if (ksing(ndx2) .eq. -1) go to 3634
      n11 = n10 + n7
      ndx3 = ndx2 + 1
      do m = ndx3, ndx7i
-        if ( ksing(m)  .ne.  0 )   go to 3628
+        if (ksing(m) .ne. 0) go to 3628
         !     check for identical rows (columns) ***************************
-        do n12=1, n7
+        do n12 = 1, n7
            n13 = n10 + n12
            n14 = n11 + n12
-           if ( volti(n13)  .ne.  volti(n14) )   go to 3628
+           if (volti(n13) .ne. volti(n14)) go to 3628
         end do
         ksing(m) = l
 3628    n11 = n11 + n7
@@ -5410,8 +5410,8 @@ subroutine zincox (ns)
 3634 n10 = n10 + n7
   end do
 3638 if ( iprsup .lt. 6 )  go  to 40
-  write (lunit(6), 3458)
-3458 format( /, 1x, 42h    row  ksing         vthev          vold)
+  write (unit = lunit(6), fmt = 3458)
+3458 format (/, 1x, '    row  ksing         vthev          vold')
   m2 = -1
   do l = 1, n7
      m2 = m2 + 2
@@ -5440,38 +5440,36 @@ subroutine zincox (ns)
 3657    n11 = n11 + 1
      end do
   end do
-  !  call mover ( volt(1), volti(1), n5 )
   call mover (volt(1 :), volti(1 :), n5)
   if (iprsup .ge. 5) write (unit = lunit(6), fmt = 3668) (volt(l), l = 1, n5)
 3668 format (' Collapsed  (Zthev):', 7e15.5)
 3674 continue
-  !     enter Newton loop for zno arresters (not user fortran):
-  !  call mover0 ( volt(1), n5 )
+  !     enter Newton loop for Zno arresters (not user fortran):
   call move0 (volt(1 :), n5)
   ndx17r = iofznr + n17
   ndx17i = iofzni + n17
   n10 = 1
   n12 = n17 + 1
-  do l=1, n17
-     volt(n10) = 1.0
+  do l = 1, n17
+     volt(n10) = 1.0d0
      n10 = n10 + n12
   end do
-  if ( kill  .gt.  0 )   go to 4567
-  !     calculate explicit inverse of the collapsed zthev ***************
-  call dgelg ( volt(1), volti(1), n17, n17, epsiln, ier )
-  if ( iprsup  .gt.  5 ) write (lunit(6), 3471)  ier,  ( volt(m), m=1, n5 )
-3471 format ( /,  28h inverse of  (zthev).  ier =,  i2  ,/,( 1x, 8e16.7 ) )
+  if (kill .gt. 0) go to 4567
+  !     calculate explicit inverse of the collapsed Zthev ***************
+  call dgelg (volt(1), volti(1), n17, n17, epsiln, ier)
+  if (iprsup .gt. 5) write (unit = lunit(6), fmt = 3471) ier, (volt(m), m = 1, n5)
+3471 format (/, ' Inverse of  (Zthev).  ier =', i2, /, (1x, 8e16.7))
   niter = 0
   if ( ier  .eq.  0 )   go to 3693
   lstat(19) = 3471
 3681 kill = 209
 3686 lstat(13) = n7
-  lstat(14) = nsubkm( n18+3 )
-  lstat(15) = nsubkm( n6+3 )
+  lstat(14) = nsubkm(n18 + 3)
+  lstat(15) = nsubkm(n6 + 3)
   lstat(16) = n17
   lstat(17) = niter
-  n1 = nsubkm( n6+1 )
-  n2 = nsubkm( n6+2 )
+  n1 = nsubkm(n6 + 1)
+  n2 = nsubkm(n6 + 2)
   bus1 = bus(n1)
   bus2 = bus(n2)
   flstat(14) = d3
@@ -5515,15 +5513,13 @@ subroutine zincox (ns)
   go to 3711
 3752 go to 3711
 3693 d3 = fltinf
-  !  call mover ( volt(1), volti(1), n5 )
   call move (volt(1 :), volti(1 :), n5)
 3474 niter = niter + 1
   n11 = 1
-  !  call mover0 ( fold(ndx1r), n17 )
   call move0 (fold(ndx1r :), n17)
   ndx2 = iofzni
   m2 = 0
-  do l=1, n7
+  do l = 1, n7
      ndx2 = ndx2 + 1
      m2 = m2 + 2
      if (ksing(ndx2) .eq. -1) go to 3482
@@ -5537,24 +5533,24 @@ subroutine zincox (ns)
      ils = ilast(inl)
      if (ityp .eq. 1) go to 41
      !     process piecewise linear and time varying resistances************
-     if ( ils .gt. 0 )  go to  254
-     d4 = voltk( m2 )
-     if ( ityp  .eq.  3 )   d4 = t + vnonl( inl )
+     if (ils .gt. 0) go to 254
+     d4 = voltk(m2)
+     if (ityp .eq. 3) d4 = t + vnonl(inl)
      d5 = d4
-     if ( ityp .eq. 2  .and.  vchar( ichr ) .eq. 0.0 )   d5 = absz(d5)
-     ichr = nonlad( inl )
+     if ((ityp .eq. 2) .and. (vchar(ichr) .eq. 0.0d0)) d5 = absz (d5)
+     ichr = nonlad(inl)
      ils = -ils
-     if ( d5 .gt. vchar( ils ) )  go to  251
+     if (d5 .gt. vchar(ils)) go to 251
      ibk = ils
      do jb = ichr, ils
-        if ( d5 .lt. vchar( ibk ) ) go to 250
+        if (d5 .lt. vchar(ibk)) go to 250
         ik = ibk
         go to 253
 250     ibk = ibk - 1
      end do
      ik = ichr
      go to 253
-251  ibk = nonle( inl )
+251  ibk = nonle(inl)
      do jb = ils, ibk
         if (d5 .gt. vchar(jb)) cycle
         ik = jb - 1
@@ -5562,28 +5558,28 @@ subroutine zincox (ns)
      end do
      ik = ibk
      !     segment has been determined**************************************
-253  ilast( inl ) = -ik
-     azm = gslope( ik )
+253  ilast(inl) = -ik
+     azm = gslope(ik)
      d11 = azm * d5 + cchar( ik )
-     if ( ( d5 * d4 ) .lt. 0.0 )    d11 = -d11
-     if ( ityp  .eq.  2 )  go  to  261
-     if ( d11  .eq.  0.0 )  d11 = epsiln
-     azm = 1.0 / d11
-     d11 = azm * voltk( m2 )
-261  curr( inl ) = d11
-     volt( n10 ) = volt( n10 ) - azm
+     if ((d5 * d4) .lt. 0.0d0) d11 = -d11
+     if (ityp .eq. 2) go to 261
+     if (d11 .eq. 0.0d0)  d11 = epsiln
+     azm = 1.0d0 / d11
+     d11 = azm * voltk(m2)
+261  curr(inl) = d11
+     volt(n10) = volt(n10) - azm
      go to 68
-254  d11 = 0.0
-     curr( inl ) = 0.0
+254  d11 = 0.0d0
+     curr(inl) = 0.0d0
      go to 68
      !     process zno arresters********************************************
-41   d5 = absz( voltk( m2 ) / anonl( inl ) )
-     if ( ils .lt. 0 )  go to 45
+41   d5 = absz (voltk(m2) / anonl(inl))
+     if (ils .lt. 0) go to 45
      !     set limits for scanning of segment boundaries
-     ist = nonlad( inl )
+     ist = nonlad(inl)
      ind =  ils
      go to 55
-45   ist = - ils + 1
+45   ist = -ils + 1
      ind = nonle( inl )
      !     start scan of segment boundaries*********************************
 55   ist = ist + 1
@@ -5594,100 +5590,99 @@ subroutine zincox (ns)
      end do
      ik = ind
      !     segment has been determined**************************************
-65   azm = cchar( ik )
-     if ( ik  .ge.  ist )   go  to  66
+65   azm = cchar(ik)
+     if (ik .ge. ist) go to 66
      d11 = azm * voltk( m2 )
-     curr( inl ) = d11
-     volt( n10 ) = volt( n10 ) - azm
+     curr(inl) = d11
+     volt(n10) = volt(n10) - azm
      go to 68
-66   azx = gslope( ik )
-     d11 = azm * ( d5**azx )
-     if ( voltk( m2 ) .lt. 0.0 )  d11 = -d11
-     curr( inl ) = d11
-     volt( n10 ) = volt( n10 ) - azx * d11 / voltk( m2 )
+66   azx = gslope(ik)
+     d11 = azm * (d5 ** azx)
+     if (voltk(m2) .lt. 0.0d0) d11 = -d11
+     curr(inl) = d11
+     volt(n10) = volt(n10) - azx * d11 / voltk(m2)
 68   ndx4 = iofznr + n14
-     if ( ksing(ndx2) .ne. 0 ) go to 75
+     if (ksing(ndx2) .ne. 0) go to 75
      m22 = 0
      do m = ndx1i, ndx7i
-        if ( ksing( m ) .ne. 0 ) go to 70
-        fold(ndx4) = fold(ndx4) - volti(n11) * ( voltk( m22+2 ) - voltk( m22+1) )
+        if (ksing(m) .ne. 0) go to 70
+        fold(ndx4) = fold(ndx4) - volti(n11) * (voltk(m22 + 2) - voltk(m22 + 1))
         n11 = n11 + 1
 70      m22 = m22 + 2
      end do
-75   fold( ndx4 ) = fold( ndx4 ) + d11
-3482 m5 = nsubkm( m5 )
+75   fold(ndx4) = fold(ndx4) + d11
+3482 m5 = nsubkm(m5)
   end do
-  if ( d3 .le. epszno )  go to  3522
-  if ( iprsup  .lt.  7 )  go to 3499
-  write (lunit(6), 3486)  ( fold(l), l=ndx1r,ndx17r )
-3486 format ( /,  21h rhs vector  'fold' .,   7e15.6 )
-  write (lunit(6), 3494)  ( volt(l), l=1, n5 )
-3494 format (     19h jacobian  'volt' .,   7e15.6 )
-3499 call dgelg ( fold(ndx1r), volt(1), n17, ll1, epsiln, ier )
-  if ( ier  .eq.  0 )   go to 3501
+  if (d3 .le. epszno) go to  3522
+  if (iprsup .lt. 7) go to 3499
+  write (unit = lunit(6), fmt = 3486) (fold(l), l = ndx1r, ndx17r)
+3486 format (/, " RHS vector  'fold' .", 7e15.6)
+  write (unit = lunit(6), fmt = 3494) (volt(l), l = 1, n5)
+3494 format (" Jacobian  'volt' .", 7e15.6)
+3499 call dgelg (fold(ndx1r), volt(1), n17, ll1, epsiln, ier)
+  if (ier .eq. 0) go to 3501
   lstat(19) = 3501
   go to 3681
-3501 if ( iprsup  .gt.  4 ) write (lunit(6), 3502)  ( fold(l), l=ndx1r,ndx17r )
-3502 format (     16h dv correction :,  7e15.6 )
-  d3 = 0.0
+3501 if (iprsup .gt. 4) write (unit = lunit(6), fmt = 3502) (fold(l), l = ndx1r, ndx17r)
+3502 format (' dv correction :', 7e15.6)
+  d3 = 0.0d0
   !     check for too large voltage corrections*************************
   do jb = ndx1i, ndx7i
-     if ( ksing(jb)  .ne.  0 )   go to 80
-     n13 = kindep( jb ) + iofznr
-     il1 = nsubkm( m5+3 )
-     d4 = absz( fold( n13 ) / anonl( il1 ) )
-     if ( d4 .gt. d3 )  d3 = d4
-80   m5 = nsubkm( m5 )
+     if (ksing(jb) .ne. 0) go to 80
+     n13 = kindep(jb) + iofznr
+     il1 = nsubkm(m5 + 3)
+     d4 = absz (fold(n13) / anonl(il1))
+     if (d4 .gt. d3) d3 = d4
+80   m5 = nsubkm(m5)
   end do
   !     scale corrections, if too large**********************************
-  if ( d3 .le. znolim(1) )  go to 90
+  if (d3 .le. znolim(1)) go to 90
   amult = znolim(1) / d3
   do jb = ndx1r, ndx17r
-     fold( jb ) = fold( jb ) * amult
+     fold(jb) = fold(jb) * amult
   end do
-90 if ( niter .lt. 4 )  go to 92
+90 if (niter .lt. 4) go to 92
   !     check for oscillatory solution***********************************
-  d35 = absz( d3 - d35 ) / d35
-  if ( d35 .gt. ( 10.0*epsiln ) )    go to 92
-  amult = 0.1
+  d35 = absz (d3 - d35) / d35
+  if (d35 .gt. (10.0d0 * epsiln)) go to 92
+  amult = 0.1d0
   do jb = ndx1r, ndx17r
-     fold( jb ) = fold( jb ) * amult
+     fold(jb) = fold(jb) * amult
   end do
   !     update voltages( add scaled corrections)*************************
 92 m2 = 0
-  d4 = znolim( 2 )
+  d4 = znolim(2)
   do l = ndx1i, ndx7i
      m2 = m2 + 2
-     inl = nsubkm( m5+3 )
-     if ( ksing(l)  .eq.  -1 )   go to 100
-     if ( ksing(l)  .eq.  0 )   go to 95
+     inl = nsubkm(m5 + 3)
+     if (ksing(l) .eq. -1) go to 100
+     if (ksing(l) .eq. 0) go to 95
      n12 = ksing(l) * 2
-     voltk( m2 ) = voltk( n12 )
+     voltk(m2) = voltk(n12)
      go to 100
-95   n13 = kindep( l ) + iofznr
-     voltk( m2 ) = voltk( m2 ) + fold( n13 )
-     if ( nsubkm( m5+4 )  .gt.  1 )  go to 100
-     d6 = voltk( m2 )
-     d5 = d4 * anonl( inl )
-     if ( d5 .gt. absz( d6 ) )  go to 100
-     voltk( m2 ) = d5
-     if ( d6 .lt. 0.0 )  voltk( m2 ) = -d5
-100  m5 = nsubkm( m5 )
+95   n13 = kindep(l) + iofznr
+     voltk(m2) = voltk(m2) + fold(n13)
+     if (nsubkm(m5 + 4) .gt. 1) go to 100
+     d6 = voltk(m2)
+     d5 = d4 * anonl(inl)
+     if (d5 .gt. absz (d6)) go to 100
+     voltk(m2) = d5
+     if (d6 .lt. 0.0d0) voltk(m2) = -d5
+100  m5 = nsubkm(m5)
   end do
-  n4 = nsubkm( n6+3 )
-  if ( iprsup  .ge.  3 ) write (lunit(6), 3511)  n4, niter, d3
-3511 format (24h subsystems 1st arrester, i3, 5x, 7hniter =, i3, 5x,  11hmax del-v =,  e13.4  )
-  !  call mover ( volti(1), volt(1), n5 )
+  n4 = nsubkm(n6 + 3)
+  if (iprsup .ge. 3) write (unit = lunit(6), fmt = 3511) n4, niter, d3
+3511 format (' Subsystems 1st arrester', i3, 5x, 'niter =', i3, 5x, 'max del-v =', e13.4)
   call mover (volti(1 :), volt(1 :), n5 )
   d35 = d3
-  if ( niter  .le.  maxzno )   go to 3474
-  if ( d3  .le.  epwarn )   go to 3522
+  if (niter .le. maxzno) go to 3474
+  if (d3 .le. epwarn) go to 3522
   write (unit = lunit(6), fmt = 3517)  ns, d3
 3517 format (' Subsystem =', i3, '  iteration limit.   Largest abs(dV / Znvref) =', e12.3)
-  if ( d3  .le.  epstop )   go to 3522
+  if (d3 .le. epstop) go to 3522
   kill = 212
   lstat(19) = 3522
-  if ( m4plot .ne. 1 )  go to 3686
+  if (m4plot .ne. 1) go to 3686
   write (unit = munit6, fmt = 3519)
 3519 format ('   ? ? ?   Non-converged newton iteration.   limit  maxzno =', i5, '  reached.')
   call window
@@ -5697,32 +5692,32 @@ subroutine zincox (ns)
   do l = 1, n7
      ndx2 = ndx2 + 1
      m2 = m2 + 2
-     inl = nsubkm( m5+3 )
-     ityp = nsubkm( m5+4 )
-     ils = ilast( inl )
-     znvref = 1.0 / anonl( inl )
-     if ( ksing(ndx2)  .ne.  -1 )   go to 180
-     d4 = voltk( m2-1 )
-     if ( ityp .eq. 1 )  go to 139
+     inl = nsubkm(m5 + 3)
+     ityp = nsubkm(m5 + 4)
+     ils = ilast(inl)
+     znvref = 1.0d0 / anonl(inl)
+     if (ksing(ndx2) .ne. -1) go to 180
+     d4 = voltk(m2 - 1)
+     if (ityp .eq. 1) go to 139
      !     process piecewise linear and time varying  resistances**********
-     d11 = 0.0
-     if ( ils .gt. 0 )  go to 168
-     ichr = nonlad( inl )
+     d11 = 0.0d0
+     if (ils .gt. 0) go to 168
+     ichr = nonlad(inl)
      ils = -ils
-     if ( ityp  .eq.  3 )   d4 = t + vnonl( inl )
+     if (ityp .eq. 3) d4 = t + vnonl(inl)
      d3 = d4
-     if ( ityp .eq. 2  .and.  vchar( ichr ) .eq. 0.0 )  d3 = absz(d3)
-     if ( d3 .gt. vchar( ils ) )  go to 351
+     if ((ityp .eq. 2) .and. (vchar(ichr) .eq. 0.0d0)) d3 = absz (d3)
+     if (d3 .gt. vchar(ils)) go to 351
      ibk = ils
      do jb = ichr, ils
-        if ( d3 .lt. vchar( ibk ) )  go to 350
+        if (d3 .lt. vchar(ibk)) go to 350
         ik = ibk
         go to 353
 350     ibk = ibk - 1
      end do
      ik = ibk
      go to 353
-351  ibk = nonle( inl )
+351  ibk = nonle(inl)
      do jb = ils, ibk
         if (d3 .gt. vchar(jb)) cycle
         ik = jb - 1
@@ -5730,25 +5725,25 @@ subroutine zincox (ns)
      end do
      ik = ibk
      !     segment has been determined*************************************
-353  ilast( inl ) = -ik
+353  ilast(inl) = -ik
      ils = -ik
-     azm = gslope( ik )
+     azm = gslope(ik)
      d11 = azm * d3 + cchar( ik )
      if ( ( d3 * d4 ) .lt. 0.0 )  d11 = -d11
-     if ( ityp  .eq.  2 )  go to 168
-     d4 = voltk( m2-1 )
-     if ( d11  .eq.  0.0 )  d11 = epsiln
-     d11 = ( 1.0 / d11 ) * d4
+     if (ityp .eq. 2) go to 168
+     d4 = voltk(m2 - 1)
+     if (d11 .eq. 0.0d0) d11 = epsiln
+     d11 = (1.0d0 / d11) * d4
      go to 168
      !     process zno arresters********************************************
-139  d5 = absz( d4 * znvref )
-     if ( ils .lt. 0 )  go to 145
+139  d5 = absz (d4 * znvref)
+     if (ils .lt. 0) go to 145
      !     set limits for scanning of segment boundaries
-     ist = nonlad( inl )
-     ind =  ils
+     ist = nonlad(inl)
+     ind = ils
      go to 155
 145  ist = -ils + 1
-     ind = nonle( inl )
+     ind = nonle(inl)
      !     start scan of segment boundaries*********************************
 155  ist = ist + 1
      do jb = ist, ind
@@ -5758,39 +5753,39 @@ subroutine zincox (ns)
      end do
      ik = ind
      !     segment has been determined**************************************
-165  azm = cchar( ik )
-     if ( ik  .ge.  ist )  go  to  166
+165  azm = cchar(ik)
+     if (ik .ge. ist) go to 166
      d11 = azm * d4
      go to 168
-166  azx = gslope( ik )
-     d11 = azm * ( d5**azx )
-     if ( d4 .lt. 0.0 )  d11 = -d11
-168  voltk( m2 ) = d4
-     curr( inl ) = d11
+166  azx = gslope(ik)
+     d11 = azm * (d5 ** azx)
+     if (d4 .lt. 0.0d0) d11 = -d11
+168  voltk(m2) = d4
+     curr(inl) = d11
      !     determine gap status for next time step**************************
-180  d6 = vnonl( inl )
-     if ( d6 .eq. fltinf )  go  to  196
-     if ( ils .lt. 0 )  go to 190
-     d5 = absz( voltk( m2 ) )
-     if ( d5 .gt. d6 )  ils = -ils
-     if ( ityp .eq. 3  .and. ils .lt. 0 ) vnonl( inl ) = -( t + deltat )
-     go  to  195
-190  if ( ityp  .eq.  3 )  go to 195
-     if ( curr(inl)*vecnl2(inl) .lt. 0.0 )   ils = -ils
-     if ( ityp .eq. 1  .or.  ils .lt. 0 )  go  to  195
-     gap = vecnl1( inl )
-     if ( gap .eq. 0.0 )  go to  195
-     if ( gap  .lt.  0.0 )  ils = -ils
-     if ( gap  .gt.  0.0 )  vnonl( inl ) = fltinf
-195  ilast( inl ) = ils
-196  vzero( inl ) = voltk( m2 )
+180  d6 = vnonl(inl)
+     if (d6 .eq. fltinf) go to 196
+     if (ils .lt. 0) go to 190
+     d5 = absz (voltk(m2))
+     if (d5 .gt. d6) ils = -ils
+     if ((ityp .eq. 3) .and. (ils .lt. 0)) vnonl(inl) = -(t + deltat)
+     go to 195
+190  if (ityp .eq. 3) go to 195
+     if (curr(inl) * vecnl2(inl) .lt. 0.0d0) ils = -ils
+     if ((ityp .eq. 1) .or. (ils .lt. 0)) go to 195
+     gap = vecnl1(inl)
+     if (gap .eq. 0.0d0) go to 195
+     if (gap .lt. 0.0d0) ils = -ils
+     if (gap .gt. 0.0d0) vnonl(inl) = fltinf
+195  ilast(inl) = ils
+196  vzero(inl) = voltk(m2)
      n13 = m5 / 5
      cursub(n13 + 1) = curr(inl)
      k1 = nsubkm(m5 + 1)
      k2 = nsubkm(m5 + 2)
      f(k1) = f(k1) - curr(inl)
      f(k2) = f(k2) + curr(inl)
-     m5 = nsubkm( m5 )
+     m5 = nsubkm(m5)
   end do
 4567 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568) kill, lstat(19)
 4568 format (' Exit module "zincox".  kill, lstat(19) =', 2i8)

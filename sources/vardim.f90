@@ -980,7 +980,7 @@ program vardim
   modvars(123)%enable = .true.
 
   modvars(124)%name       = 'voltk'
-  modvars(124)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(124)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(124)%kind       = 1
   modvars(124)%dimension  = 26
   modvars(124)%enable = .true.
@@ -1764,7 +1764,7 @@ program vardim
   modvars(256)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(256)%kind      = 4
   modvars(256)%dimension = 9
-  modvars(256)%enable = .true.
+  modvars(256)%enable = .false.
 
   open (unit = lunit(2), iostat = ios, form = 'formatted')
   if (ios .eq. 0) then

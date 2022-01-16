@@ -130,7 +130,7 @@ module labcom
   integer(4) :: kode(   93002)
   integer(4) :: kpsour(   93002)
   real(8), target :: volti(    6000)
-  real(8) :: voltk(    3000)
+  real(8), target :: voltk(    3000)
   real(8), target :: volt(    6000)
   character(8) :: bus(   93002)
   !
@@ -141,9 +141,7 @@ module labcom
   real(8) :: ev(    3000)
   real(8) :: evdoub(   93002)
   complex(16) :: ctg(   93002)
-  integer(4) :: itemp(     300)
   !
-  equivalence (voltk( 1), itemp( 1))
 end module labcom
 
 !

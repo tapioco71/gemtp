@@ -8,7 +8,7 @@ c -Iprnt<--Iplot<-Idoubl<-KssOut<-MaxOut<---Ipun<-Memsav<---Icat
 c                                                                               
 c Circuit data..................................................................
 c Bus-->Bus-->Bus-->Bus--><----R<----L<----C                                   0
-  load                        .1    1.                                         1
+  load                        .1    1.                                         0
 blank End of circuit data......................................................|
 c
 c Switch data...................................................................
