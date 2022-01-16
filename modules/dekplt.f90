@@ -6,7 +6,7 @@
 
 !     Usage is restricted to "plot" function of "emtspy", due
 !     to variable-length conflict (this is single-precision).
-!  character(8) datepl, tclopl, buslst(1), bbus
+!     character(8) datepl, tclopl, buslst(1), bbus
 
 module dekplt
   use dekspy
@@ -16,7 +16,7 @@ module dekplt
   integer(4) :: iztit, izxax, izyax
   integer(4) :: jbegbc, jbegbv, jbrnch, jchan, jhmsp, jplt, jplt1
   integer(4) :: kextr, kill, killpl, klevl, kp(20), kptplt, kstart(20)
-!  integer(4) :: l, linpr
+  !  integer(4) :: l, linpr
   integer(4) :: l4plot, labrtm(20), lchfil, lchid, lchlim, lchsup, lchtit, lchxax
   integer(4) :: lchyax, ldshg1, ldshg2, limcol, limfix, look, lsymb, ltic
   integer(4) :: lu7plt, linepr, ltek
@@ -25,7 +25,7 @@ module dekplt
   integer(4) :: msuper, msymbt(20), mtit
   integer(4) :: mu6sav, mu6std, mxypl
   integer(4) :: namvar, nc, nchsup, nchver, ncut, ncut1, ncut2, newfil, nolabl, nsmplt
-!  integer(4) :: numbco
+  !  integer(4) :: numbco
   integer(4) :: nt2, numbrn, numflt, numnvo, numout, numpts(20), numraw, numtek
   integer(4) :: numtit, nv, nxend, nxid6, nxinch, nxmax, nxoff, nxvern, nyend, nyid6
   integer(4) :: nyinch, nymax, nyoff
@@ -121,13 +121,13 @@ module dekplt
   equivalence  ( ivcom(57), lchfil ),  ( ivcom(58), lchlim )
   equivalence  ( ivcom(59), mu6std )
   character(80) filnam, alpha, buffin, vertl, headl, sext(6)
-!  character(30) file30
+  !  character(30) file30
   character(24) xytitl, horzl(8)
   character(8) textd1, textd2
   character(8) curren, voltag, brclas !, char20
   character(8) slot1(20), date, time
   character(8) ibuff(20),  ansi, abuf77(10), anplt(60)
-!       next type key character key words in common, in order:
+  !       next type key character key words in common, in order:
   character(8) choice,   stop,  purge,    out,   help
   character(8) smooth,   size,   show, linezz,   photo
   character(8) repeat,  flush, playba,    pen, multip
@@ -168,185 +168,184 @@ module dekplt
   equivalence ( anplt(45), refile ),  ( anplt(46), texblk )
   equivalence ( anplt(47), setdat )
 
-   !     module used only for interactive emtp (service to "emtspy").
-   !     for non-interactive emtp, this module can be destroyed.
-   !   include 'dekspy.ftn'
-   !   include 'dekplt.ftn'
-   data texfnt  /  'f7x13.b '  /
-   data  xytitl(1 : 24)  /  '                        '  /
-   data  headl(1 : 16)   /  '                '  /
-   data  vertl(1 : 16)   /  '                '  /
-   data  horzl(1)    /  'degrees based on 60 hz  '  /
-   data  horzl(2)    /  'cycles based on 60 hz   '  /
-   data  horzl(3)    /  'seconds                 '  /
-   data  horzl(4)    /  'milliseconds            '  /
-   data  horzl(5)    /  'microseconds            '  /
-   data  horzl(6)    /  'frequency in hertz      '  /
-   data  horzl(7)    /  'log10 frequency in hertz'  /
-   data  horzl(8)    /  '1st variable of x-y pair'  /
-   data  curren     /  'current '  /
-   data  voltag     /  'voltage '  /
-   !     begin command-word definitions.   ^^^^^^  ^^^^^^   ^^^^^^   ^^^^^
-   data  choice     /  'choice  '  /
-   data  stop       /  'stop    '  /
-   data  purge      /  'purge   '  /
-   data  help       /  'help    '  /
-   data  smooth     /  'smooth  '  /
-   data  size       /  'size    '  /
-   data  show       /  'show    '  /
-   data  linezz     /  'line    '  /
-   data  photo      /  'copy    '  /
-   data  end        /  'end     '  /
-   data  repeat     /  'repeat  '  /
-   data  flush      /  'flush   '  /
-   data  playba     /  'playback'  /
-   data  pen        /  'pen     '  /
-   data  multip     /  'factor  '  /
-   data  offset     /  'offset  '  /
-   data  limits     /  'limits  '  /
-   data  time       /  'time    '  /
-   data  timesp     /  'timespan'  /
-   data  debug      /  'debug   '  /
-   data  tek        /  'tek     '  /
-   data  stack      /  'stack   '  /
-   data  printe     /  'printer '  /
-   data  metric     /  'metric  '  /
-   data  alltim     /  'all time'  /
-   data  column     /  'column  '  /
-   data  setcol     /  'set colu'  /
-   data  out        /  'out     '  /
-   data  longer     /  'longer  '  /
-   data  averag     /  'average '  /
-   data  inner      /  'in      '  /
-   data  rescal     /  'rescale '  /
-   data  lastpl     /  'last    '  /
-   data  batch      /  'batch   '  /
-   data  punch      /  'punch   '  /
-   data  extrem     /  'extrema '  /
-   data  level      /  'level   '  /
-   data  noplot     /  'no plot '  /
-   data  messag     /  'message '  /
-   data  timeun     /  'time uni'  /
-   data  label      /  'label   '  /
-   data  cursor     /  'cursor  '  /
-   data  xyplot     /  'x-y plot'  /
-   data  slope      /  'slope   '  /
-   data  back       /  'back    '  /
-   data  refile     /  'refile  '  /
-   data  texblk     /  'blank   '  /
-   data  setdat     /  'set data'  /
-   !     end of command definitions  ^^^^^^   ^^^^^^   ^^^^^^   ^^^^^^
-   data  tolrce     /  8.e-5  /
-   data  finfin     /  1.e12  /
-   data  timbeg     /   0.0   /
-   data  timend     /  1.e20  /
-   data  paplim     /  36.    /
-   data  vs      /  1.0  /
-   data  vl      /  5.0  /
-   data  vh      /  6.0  /
-   data  nsmplt  /  50   /
-!   data  kslowr  /   3   /
-   data  limfix  /   0   /
-   data  klevl   /   0   /
-   data  kextr   /   0   /
-   data  jhmsp   /   0   /
-   data  taxisl  /  5.0  /
-   data  mu6std  /  6  /
-   data  htax    /  4.0  /
-   data  limcol  /  79   /
-   data  ltek    /  1   /
-   data  numtek  /   0   /
-   data  inwait  /   1   /
-   !     begin parameters of tektronix screen
-   data  nxinch   /    74   /
-   data  nyinch   /    68   /
-   data  nxoff    /    100  /
-   data  nyoff    /    40   /
-   data  nxvern   /    30   /
-   data  inchpx   /    2    /
-   data  inchpy   /    2    /
-   data  look     /    6    /
-   data  nymax    /   800   /
-   data  nxmax    /   800   /
-   data  lchid    /    2    /
-   data  lchsup   /    1    /
-   data  lchtit   /    2    /
-   data  lchxax   /    0    /
-   data  lchyax   /    0    /
-   data  izgr1    /    0    /
-   data  izgr2    /    0    /
-   data  ldshg1   /    1    /
-   data  ldshg2   /    1    /
-   data  izxax    /    0    /
-   data  izyax    /    0    /
-   data  izid     /    0    /
-   data  iterm    /    2    /
-   data  ltic     /    7    /
-   data  iztit    /    0    /
-   data  nxid6    /   10   /
-   data  nyid6    /   330  /
-   data  nxend    /   512   /
-   data  nyend    /    50   /
-   data  icurse   /    0    /
-   !   data  ichref   /   'p'   /
-   data ichref    /   112   /
-   !   data  ichend   /   'e'   /
-   data ichend    /   101   /
-   data  vaxisl   /   4.0   /
-   data  fxnumv   /   1.5   /
-   data  fxnumh   /   5.0   /
-   data  fxvert   /   0.0   /
-   data  fsymb    /   .83   /
-   data  lsymb    /    1    /
-   data  lchfil   /    0    /
-   data  lchlim   /    0    /
-   data  ibaud    /   960   /
-   !     end parameters of tektronix screen
-   data  lu7plt   /  7  /
-   data  linepr   /  9  /
-   data  mxypl    /  0  /
-   data  numflt   /  0  /
-   data  numtit   /  0  /
-   data  xtit     /  0.5  /
-   data  ytit     /  8.5  /
-   data  siztit   /  .12  /
-   data  xsuper   /  1.0  /
-   data  ysuper   /  9.0  /
-   data  sizsup   /  0.3  /
-   data  nchsup   /   0   /
-   data  nchver   /   0   /
-   data  dxgrd1   /  1.0  /
-   data  dygrd1   /  1.0  /
-   data  dxgrd2   /  0.2  /
-   data  dygrd2   /  0.2  /
-   data  fill1    /  1.0  /
-   data  fill2    /  1.0  /
-   data  ncut1    /   1   /
-   data  ncut2    /   1   /
-   data  maxsym   /   3   /
-   data  fline    /  1.7  /
-   data  sizid    /  .12  /
-   data  xid      /  0.5  /
-   data  yid      /  .75  /
-   data  fact     /  1.0  /
-   data  fhtax    /  0.5  /
-   data  fxsup    /  0.3  /
-   data  fysup    /  -.03 /
-   data  fxtit    /  .10  /
-   data  fytit    /  .15  /
-   data  fxid     /  .05  /
-   data  fyid     /  .10  /
-   data  ftcarr   /  1.0  /
-   data  fvaxtt   /  -7.5  /
-   data  mtit     /  3  /
-   data  maxisx   /  3  /
-   data  maxisy   /  3  /
-   data  mgrid1   /  2  /
-   data  mgrid2   /  1  /
-   data  msuper   /  5  /
-   data  mid      /  3  /
-   data  mline    /  3  /
-   data  killpl   /  0  /
+  !     module used only for interactive emtp (service to "emtspy").
+  !     for non-interactive emtp, this module can be destroyed.
+  data texfnt  /  'f7x13.b '  /
+  data  xytitl(1 : 24)  /  '                        '  /
+  data  headl(1 : 16)   /  '                '  /
+  data  vertl(1 : 16)   /  '                '  /
+  data  horzl(1)    /  'degrees based on 60 hz  '  /
+  data  horzl(2)    /  'cycles based on 60 hz   '  /
+  data  horzl(3)    /  'seconds                 '  /
+  data  horzl(4)    /  'milliseconds            '  /
+  data  horzl(5)    /  'microseconds            '  /
+  data  horzl(6)    /  'frequency in hertz      '  /
+  data  horzl(7)    /  'log10 frequency in hertz'  /
+  data  horzl(8)    /  '1st variable of x-y pair'  /
+  data  curren     /  'current '  /
+  data  voltag     /  'voltage '  /
+  !     begin command-word definitions.   ^^^^^^  ^^^^^^   ^^^^^^   ^^^^^
+  data  choice     /  'choice  '  /
+  data  stop       /  'stop    '  /
+  data  purge      /  'purge   '  /
+  data  help       /  'help    '  /
+  data  smooth     /  'smooth  '  /
+  data  size       /  'size    '  /
+  data  show       /  'show    '  /
+  data  linezz     /  'line    '  /
+  data  photo      /  'copy    '  /
+  data  end        /  'end     '  /
+  data  repeat     /  'repeat  '  /
+  data  flush      /  'flush   '  /
+  data  playba     /  'playback'  /
+  data  pen        /  'pen     '  /
+  data  multip     /  'factor  '  /
+  data  offset     /  'offset  '  /
+  data  limits     /  'limits  '  /
+  data  time       /  'time    '  /
+  data  timesp     /  'timespan'  /
+  data  debug      /  'debug   '  /
+  data  tek        /  'tek     '  /
+  data  stack      /  'stack   '  /
+  data  printe     /  'printer '  /
+  data  metric     /  'metric  '  /
+  data  alltim     /  'all time'  /
+  data  column     /  'column  '  /
+  data  setcol     /  'set colu'  /
+  data  out        /  'out     '  /
+  data  longer     /  'longer  '  /
+  data  averag     /  'average '  /
+  data  inner      /  'in      '  /
+  data  rescal     /  'rescale '  /
+  data  lastpl     /  'last    '  /
+  data  batch      /  'batch   '  /
+  data  punch      /  'punch   '  /
+  data  extrem     /  'extrema '  /
+  data  level      /  'level   '  /
+  data  noplot     /  'no plot '  /
+  data  messag     /  'message '  /
+  data  timeun     /  'time uni'  /
+  data  label      /  'label   '  /
+  data  cursor     /  'cursor  '  /
+  data  xyplot     /  'x-y plot'  /
+  data  slope      /  'slope   '  /
+  data  back       /  'back    '  /
+  data  refile     /  'refile  '  /
+  data  texblk     /  'blank   '  /
+  data  setdat     /  'set data'  /
+  !     end of command definitions  ^^^^^^   ^^^^^^   ^^^^^^   ^^^^^^
+  data  tolrce     /  8.e-5  /
+  data  finfin     /  1.e12  /
+  data  timbeg     /   0.0   /
+  data  timend     /  1.e20  /
+  data  paplim     /  36.    /
+  data  vs      /  1.0  /
+  data  vl      /  5.0  /
+  data  vh      /  6.0  /
+  data  nsmplt  /  50   /
+  !   data  kslowr  /   3   /
+  data  limfix  /   0   /
+  data  klevl   /   0   /
+  data  kextr   /   0   /
+  data  jhmsp   /   0   /
+  data  taxisl  /  5.0  /
+  data  mu6std  /  6  /
+  data  htax    /  4.0  /
+  data  limcol  /  79   /
+  data  ltek    /  1   /
+  data  numtek  /   0   /
+  data  inwait  /   1   /
+  !     begin parameters of tektronix screen
+  data  nxinch   /    74   /
+  data  nyinch   /    68   /
+  data  nxoff    /    100  /
+  data  nyoff    /    40   /
+  data  nxvern   /    30   /
+  data  inchpx   /    2    /
+  data  inchpy   /    2    /
+  data  look     /    6    /
+  data  nymax    /   800   /
+  data  nxmax    /   800   /
+  data  lchid    /    2    /
+  data  lchsup   /    1    /
+  data  lchtit   /    2    /
+  data  lchxax   /    0    /
+  data  lchyax   /    0    /
+  data  izgr1    /    0    /
+  data  izgr2    /    0    /
+  data  ldshg1   /    1    /
+  data  ldshg2   /    1    /
+  data  izxax    /    0    /
+  data  izyax    /    0    /
+  data  izid     /    0    /
+  data  iterm    /    2    /
+  data  ltic     /    7    /
+  data  iztit    /    0    /
+  data  nxid6    /   10   /
+  data  nyid6    /   330  /
+  data  nxend    /   512   /
+  data  nyend    /    50   /
+  data  icurse   /    0    /
+  !   data  ichref   /   'p'   /
+  data ichref    /   112   /
+  !   data  ichend   /   'e'   /
+  data ichend    /   101   /
+  data  vaxisl   /   4.0   /
+  data  fxnumv   /   1.5   /
+  data  fxnumh   /   5.0   /
+  data  fxvert   /   0.0   /
+  data  fsymb    /   .83   /
+  data  lsymb    /    1    /
+  data  lchfil   /    0    /
+  data  lchlim   /    0    /
+  data  ibaud    /   960   /
+  !     end parameters of tektronix screen
+  data  lu7plt   /  7  /
+  data  linepr   /  9  /
+  data  mxypl    /  0  /
+  data  numflt   /  0  /
+  data  numtit   /  0  /
+  data  xtit     /  0.5  /
+  data  ytit     /  8.5  /
+  data  siztit   /  .12  /
+  data  xsuper   /  1.0  /
+  data  ysuper   /  9.0  /
+  data  sizsup   /  0.3  /
+  data  nchsup   /   0   /
+  data  nchver   /   0   /
+  data  dxgrd1   /  1.0  /
+  data  dygrd1   /  1.0  /
+  data  dxgrd2   /  0.2  /
+  data  dygrd2   /  0.2  /
+  data  fill1    /  1.0  /
+  data  fill2    /  1.0  /
+  data  ncut1    /   1   /
+  data  ncut2    /   1   /
+  data  maxsym   /   3   /
+  data  fline    /  1.7  /
+  data  sizid    /  .12  /
+  data  xid      /  0.5  /
+  data  yid      /  .75  /
+  data  fact     /  1.0  /
+  data  fhtax    /  0.5  /
+  data  fxsup    /  0.3  /
+  data  fysup    /  -.03 /
+  data  fxtit    /  .10  /
+  data  fytit    /  .15  /
+  data  fxid     /  .05  /
+  data  fyid     /  .10  /
+  data  ftcarr   /  1.0  /
+  data  fvaxtt   /  -7.5  /
+  data  mtit     /  3  /
+  data  maxisx   /  3  /
+  data  maxisy   /  3  /
+  data  mgrid1   /  2  /
+  data  mgrid2   /  1  /
+  data  msuper   /  5  /
+  data  mid      /  3  /
+  data  mline    /  3  /
+  data  killpl   /  0  /
+
 end module dekplt
 
 !

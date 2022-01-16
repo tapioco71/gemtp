@@ -3216,8 +3216,8 @@ subroutine over8
 20005 format (' The following lines are frequency dependent parameters at ', f10.3, ' radians/sec.', /, ' bus1', 7x, 'bus2', 14x, 'surge impedance', 20x, ' propagation function', 12x, 'travel time')
   do i = 1, it2
      j = i + k -1
-     npz = int (cki(j))
-     npa = ckkjm(j)
+     npz = int (cki(j), kind (npz))
+     npa = int (ckkjm(j), kind (npa))
      n3 = kodsem(j)
      n8 = indhst(j)
      cnvhst(n8 + 1) = sconst(n3)

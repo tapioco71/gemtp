@@ -210,9 +210,9 @@ program vardim
   !
   character :: char(6), bus2
   character(4) :: texta(2), textb(2)
-  character(8) :: bus1
   character(16) :: types(6)
   character(16) :: ansi16
+  character(32) :: bus1
   character(80) :: abuff
   integer(4) :: i, ii, implmode, indexm, ios
   integer(4) :: j
@@ -2491,7 +2491,7 @@ program vardim
                     if (n4 .eq. 0) go to 4103
                     tempvar = modvars(i)
                     tempvar%dimension = nonneg
-                    if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+                    !                    if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
                  end if
               end if
            end do
@@ -2543,7 +2543,7 @@ program vardim
                  if (n4 .eq. 0) go to 4104
                  tempvar = modvars(i)
                  tempvar%dimension = nonneg
-                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+                 !                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
               end if
            end do
 4104       continue
@@ -2592,7 +2592,7 @@ program vardim
                  if ( n4  .eq.  0 )   go to 4105
                  tempvar = modvars(i)
                  tempvar%dimension = nonneg
-                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+                 !                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
               end if
            end do
 4105       continue
@@ -2656,7 +2656,7 @@ program vardim
                  if (n4 .eq. 0) go to 4106
                  tempvar = modvars(i)
                  tempvar%dimension = nonneg
-                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+                 !                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
               end if
            end do
 4106       continue
@@ -2667,7 +2667,7 @@ program vardim
            write (unit = lunit(2), fmt = '(a)') '#endif'
            indexm = indexm + 1
            mextra = 5000
-           call make_subroutine_comment(lunit(2), 'over45')
+           call make_subroutine_comment (lunit(2), 'over45')
            write (unit = lunit(2), fmt = '(a)') '#ifdef WITH_OVER45'
            write (unit = lunit(2), fmt = 4207)
 4207       format ('subroutine over45')
@@ -2707,7 +2707,7 @@ program vardim
                  if ( n4  .eq.  0 )   go to 4107
                  tempvar = modvars(i)
                  tempvar%dimension = nonneg
-                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+                 !                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
               end if
            end do
 4107       continue
@@ -2758,7 +2758,7 @@ program vardim
                  if (n4 .eq. 0) go to 4108
                  tempvar = modvars(i)
                  tempvar%dimension = nonneg
-                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
+                 !                 if (tempvar%name .ne. '') call make_variable_declaration (lunit(2), tempvar, types)
               end if
            end do
 4108       continue

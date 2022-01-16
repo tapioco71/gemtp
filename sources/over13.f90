@@ -250,7 +250,7 @@ subroutine over13
      it2 = length(i)
      nphs2 = it2 * it2
      do j = 1, nphs2
-        jpl = jpl + wk1(koff20 + kv)
+        jpl = jpl + int (wk1(koff20 + kv), kind (jpl))
         kv = kv + 1
      end do
      cycle
@@ -313,7 +313,7 @@ subroutine over13
      ! hysteresis loop.
 710  n10 = ilast(i)
      n11 = nonlad(i)
-     n11 = cchar(n11)
+     n11 = int (cchar(n11), kind (n11))
      n12 = nonlad(i) + 3
      cchar(n12) = curr(i)
      n12 = n10 + n11
@@ -353,7 +353,7 @@ subroutine over13
      if (iprsup .ge. 3) write (unit = lunit(6), fmt = 4288) n10, n11, n12, n18, n19, nonle(i), curr(i), ci1, d13, d14, e(k), e(m)
 4288 format (/, ' Type-96 process.     n10     n11     n12     n18     n19', 12x, 'nonle(i)', /, 17x, 5i8, i10, /, 1x, 13x, 'curr(i)', 17x, 'ci1', 17x, 'd13', 17x, 'd14', 16x, 'e(k)', 16x, 'e(m)', /, 1x, 6e20.11)
 7122 n6 = nonlad(i)
-     n7 = cchar(n6)
+     n7 = int (cchar(n6), kind (n7))
      n12 = n6 + 2
      n15 = ilast(i)
      n10 = n15 + n7 - 1
@@ -379,7 +379,7 @@ subroutine over13
         go to 1910
      end do
      cchar(n12) = n10 + 1
-1910 n13 = cchar(n12) + n7 + 1
+1910 n13 = int (cchar(n12), kind (n13)) + n7 + 1
      d9 = vchar(n13) * gslope(n6 + 4) + cchar(n13)
      d12= vchar(n6+4) - d9
      go to 1700
@@ -400,23 +400,23 @@ subroutine over13
         go to 1960
      end do
      cchar(n12) = n10 + 1
-1960 n13 = cchar(n12) + n7 + 1
+1960 n13 = int (cchar(n12), kind (n13)) + n7 + 1
      d9 = vchar(n13) * gslope(n6 + 4) - cchar(n13)
      d12 = d9 - vchar(n6 + 4)
 1700 vchar(n6) = (d12 - d6) / (vchar(n6 + 4) - vchar(n6 + 5))
      vchar(n6 + 1) = d12 - vchar(n6) * vchar(n6 + 4)
      if (cchar(n6 + 1) .eq. 1) go to 1312
-1212 n14 = cchar(n12)
+1212 n14 = int (cchar(n12), kind (n14))
      n13 = n14 + n7 + 1
-     d13 = gslope(n14) * (1.0 + vchar(n6))
-     d13 = 1.0 / d13
+     d13 = gslope(n14) * (1.0d0 + vchar(n6))
+     d13 = 1.0d0 / d13
      d14 = gslope(n13) - gslope(n14) * vchar(n6 + 1)
      d14= d14 * d13
      go to 1315
-1312 n14 = cchar(n12)
+1312 n14 = int (cchar(n12), kind (n14))
      n13 = n14 + n7 + 1
-     d13 = gslope(n14) * (1.0 - vchar(n6))
-     d13 = 1.0 / d13
+     d13 = gslope(n14) * (1.0d0 - vchar(n6))
+     d13 = 1.0d0 / d13
      d14 = gslope(n14) * vchar(n6 + 1) - gslope(n13)
      d14 = d14 * d13
 1315 gslope(n6 + 1) = delta2 / d13
@@ -451,7 +451,7 @@ subroutine over13
 4623 nfrfld = 1
   !  call freone (d11)
   call free (d11)
-  ivolt = d11
+  ivolt = int (d11, kind (ivolt))
 4625 if (ivolt .le. 1) go to 590
   mdrive = 1
   if (ivolt .eq. 2) go to 550
@@ -517,17 +517,12 @@ subroutine over13
   bus2 = texta6(2)
   nright = 0
   nfrfld = 1
-  !  call freone (ci1)
   call free (ci1)
-  !  call freone (ck1)
   call free (ck1)
-  !  call freone (a)
   call free (a)
-  !  call freone (d2)
   call free (d2)
-  !  call freone (d7)
   call free (d7)
-  k = d7
+  k = int (d7, kind (k))
 4645 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54159) ci1, ck1, a
 54159 format ('+linear i.', 4x, 3e12.4)
   if (k .gt. 0) go to 7000
@@ -587,25 +582,19 @@ subroutine over13
      read (unit = abuff, fmt = 7020) n2, bus1, bus2, cik(i), ci(i), ck(i)
      go to 4655
 4653 nfrfld = 1
-     !     call freone (d11)
      call free (d11)
-     n2 = d11
+     n2 = int (d11, kind (n2))
      nright = -1
-     !     call freone (d1)
      call free (d1)
      bus1 = texta6(1)
-     !     call freone (d1)
      call free (d1)
      bus2 = texta6(1)
      nright = 0
-     !     call frefld (cik(i :))
      call free (cik(i :))
-     !     call frefld (ci(i :))
      call free (ci(i :))
-     !     call frefld (ck(i :))
      call free (ck(i :))
 4655 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54159) cik(i), ci(i), ck(i)
-     if (bus(l) .eq. bus1 .and. bus(m) .eq. bus2) go to 569
+     if ((bus(l) .eq. bus1) .and. (bus(m) .eq. bus2)) go to 569
      kill = 32
      lstat(19) = 569
      go to 9200

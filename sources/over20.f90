@@ -2093,7 +2093,7 @@ subroutine spyink
   implicit none
   !     Module of interactive emtp only, which services "emtspy".
   !     this is the 2nd half of principle module "spying".
-  integer(4) :: i, ioutcs, ip
+  integer(4) :: i, ios, ioutcs, ip
   integer(4) :: j, k, kptplt, kud2, kud3
   integer(4) :: l, ltacst
   integer(4) :: m, mmfind, mmhold, mstrng
@@ -3224,7 +3224,12 @@ subroutine spyink
   !  assign 4029 to nextsn
   nextsn = 4029
   go to 9800
-4029 open (unit = lunit(4), status = buff77, file = ansi32, form = 'unformatted')
+4029 open (unit = lunit(4), status = buff77, file = ansi32, form = 'unformatted', iostat = ios)
+  if (ios .ne. 0) then
+     write (unit = lunit(6), fmt = 4030) ansi32
+4030 format (' Could not open ', a, '.   Exiting.')
+     call stoptp
+  end if
   go to 4008
 4036 if (toLower(buff77(1 : 4)) .ne. 'top ') go to 4051
 4037 rewind lunit(4)
@@ -3272,7 +3277,7 @@ subroutine spyink
   if (forbyt(1) .lt. d24) d24 = forbyt(1)
   go to 4008
 4075 write (unit = munit6, fmt = 4076)
-4076 format ('     ===   Sorry,  no more  lunit4  data.   eof hit.')
+4076 format ('     ===   Sorry,  no more  lunit4  data.   EOF hit.')
   call window
   go to 4008
 4079 if (toLower (buff77(1 : 4)) .ne. 'back') go to 4083
@@ -4832,7 +4837,6 @@ end subroutine prompt
 
 subroutine frefp1 (ansi, d12)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode a
   !     single floating point number.  The input is character(80)
@@ -4841,9 +4845,11 @@ subroutine frefp1 (ansi, d12)
   character(80), intent(in) :: ansi
   real(8), intent(out) :: d12
   integer(4) :: n8
+  !
   n8 = 1
   call frefix (ansi, n8)
-  read (unit = ansi, fmt = '(e20.0)') d12
+  read (unit = ansi, fmt = 10) d12
+10 format (e20.0)
   return
 end subroutine frefp1
 
@@ -4853,7 +4859,6 @@ end subroutine frefp1
 
 subroutine fresp1 (ansi, d12)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode one
   !     floating point numbers d12 from character(80) ansi.   This
@@ -4861,9 +4866,11 @@ subroutine fresp1 (ansi, d12)
   character(80), intent(in) :: ansi
   real(8), intent(out) :: d12
   integer(4) :: n8
+  !
   n8 = 1
   call frefix (ansi, n8)
-  read (unit = ansi, fmt = '(e20.0)') d12
+  read (unit = ansi, fmt = 10) d12
+10 format (e20.0)
   return
 end subroutine fresp1
 
@@ -4873,7 +4880,6 @@ end subroutine fresp1
 
 subroutine frefp2 (ansi, d12, d13)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode two
   !     floating point numbers d12 and d13 from character(80) ansi.
@@ -4881,9 +4887,11 @@ subroutine frefp2 (ansi, d12, d13)
   character(80), intent(in) :: ansi
   real(8), intent(out) :: d12, d13
   integer(4) :: n8
+  !
   n8 = 2
   call frefix (ansi, n8)
-  read (unit = ansi, fmt = '(2e20.0)') d12, d13
+  read (unit = ansi, fmt = 10) d12, d13
+10 format (2e20.0)
   return
 end subroutine frefp2
 
@@ -4900,9 +4908,11 @@ subroutine fresp2 (ansi, d12, d13)
   character(80), intent(in) :: ansi
   real(8), intent(out) :: d12, d13
   integer(4) :: n8
+  !
   n8 = 2
   call frefix (ansi, n8)
-  read (unit = ansi, fmt = '(2e20.0)') d12, d13
+  read (unit = ansi, fmt = 10) d12, d13
+10 format (2e20.0)
   return
 end subroutine fresp2
 
@@ -4919,9 +4929,11 @@ subroutine frefp3 (ansi, d12, d13, d14)
   character(80), intent(in) :: ansi
   real(8), intent(out) :: d12, d13, d14
   integer(4) :: n8
+  !
   n8 = 3
   call frefix (ansi, n8)
-  read (unit = ansi, fmt = '(3e20.0)') d12, d13, d14
+  read (unit = ansi, fmt = 10) d12, d13, d14
+10 format (3e20.0)
   return
 end subroutine frefp3
 
@@ -4931,7 +4943,6 @@ end subroutine frefp3
 
 subroutine fresp3 (ansi, d12, d13, d14)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode three
   !     floating point numbers d12, d13, d13 from character(8)0 ansi.
@@ -4939,9 +4950,11 @@ subroutine fresp3 (ansi, d12, d13, d14)
   character(80), intent(in) :: ansi
   real(8), intent(out) :: d12, d13, d14
   integer(4) :: n8
+  !
   n8 = 3
   call frefix (ansi, n8)
-  read (unit = ansi, fmt = '(3e20.0)') d12, d13, d14
+  read (unit = ansi, fmt = 10) d12, d13, d14
+10 format (3e20.0)
   return
 end subroutine fresp3
 
@@ -4951,7 +4964,6 @@ end subroutine fresp3
 
 subroutine frein1 (ansi, n12)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode a
   !     single integer number n12 from character(80) input ansi.
@@ -4959,9 +4971,11 @@ subroutine frein1 (ansi, n12)
   character(80), intent(in) :: ansi
   integer(4), intent(out) :: n12
   integer(4) :: d12, n8
+  !
   n8 = 1
   call frefix (ansi, n8)
-  read (unit = ansi, fmt = '(3e20.0)') d12
+  read (unit = ansi, fmt = 10) d12
+10 format (3e20.0)
   n12 = d12
   return
 end subroutine frein1
@@ -4972,7 +4986,6 @@ end subroutine frein1
 
 subroutine frein2 (ansi, n12, n13)
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !     Universal module (works for any computer) used only for the
   !     interactive EMTP ("emtspy").  It is called to decode two
   !     integer numbers n12 and n13 from character(80) input ansi.
@@ -4980,9 +4993,11 @@ subroutine frein2 (ansi, n12, n13)
   character(80), intent(in) :: ansi
   integer(4), intent(out) :: n12, n13
   integer(4) :: d12, d13, n8
+  !
   n8 = 2
   call frefix (ansi, n8)
-  read (unit = ansi, fmt = '(3e20.0)') d12, d13
+  read (unit = ansi, fmt = 10) d12, d13
+10 format (3e20.0)
   n12 = d12
   n13 = d13
   return
@@ -5009,14 +5024,14 @@ subroutine frefix (ansi, n8)
   integer(4) :: i, j, k, kk, n1, n2, n3, n5, n13, n14, n16
   !
   if (iprspy .lt. 3) go to 3582
-  write (munit6, 3579) n8, ansi(1 : 40)
+  write (unit = munit6, fmt = 3579) n8, ansi(1 : 40)
 3579 format (' Top of "frefix".  n8 =', i5, '   ansi(1:40) = ', a40)
   call window
 3582 hold(1 : 80) = ' '
   kk = 0
   i = 0
   go to 3648
-3612 if (ansi(i : i) .eq. ' ' .or. ansi(i : i) .eq. ',' .or. i .ge. 80) go to 3615
+3612 if ((ansi(i : i) .eq. ' ') .or. (ansi(i : i) .eq. ',') .or. (i .ge. 80)) go to 3615
   i = i + 1
   go to 3612
 3615 n5 = i - 1
@@ -5024,16 +5039,16 @@ subroutine frefix (ansi, n8)
   n13 = 0
   n14 = 0
   do j = n3, n5
-     if (ansi(j : j) .ne. '+' .and. ansi(j : j) .ne. '-' ) go to 3617
+     if ((ansi(j : j) .ne. '+') .and. (ansi(j : j) .ne. '-')) go to 3617
      if (j .eq. n3) go to 3642
      n16 = j - 1
-     if (ansi(n16 : n16) .eq. 'e' .or. ansi(n16 : n16) .eq. 'd') go to 3642
+     if ((ansi(n16 : n16) .eq. 'e') .or. (ansi(n16 : n16) .eq. 'd')) go to 3642
      go to 3758
 3617 if (ansi(j : j) .ne. '.') go to 3626
      n14 = n14 + 1
      if (n14 .le. 1) go to 3642
      go to 3758
-3626 if (ansi(j : j) .ne. 'd' .and. ansi(j : j) .ne. 'e') go to 3634
+3626 if ((ansi(j : j) .ne. 'd') .and. (ansi(j : j) .ne. 'e')) go to 3634
      n13 = n13 + 1
      if (n13 .le. 1) go to 3642
      go to 3758
@@ -5923,195 +5938,6 @@ subroutine  rtmplt
   !     for non-interactive emtp, this module can be destroyed.
   call tpplot
 end subroutine rtmplt
-
-!
-! data block blkplt.
-!
-
-! block data blkplt
-!    use dekspy
-!    use dekplt
-!    implicit none
-!    !     module used only for interactive emtp (service to "emtspy").
-!    !     for non-interactive emtp, this module can be destroyed.
-!    !   include 'dekspy.ftn'
-!    !   include 'dekplt.ftn'
-!    data texfnt  /  'f7x13.b '  /
-!    data  xytitl(1 : 24)  /  '                        '  /
-!    data  headl(1 : 16)   /  '                '  /
-!    data  vertl(1 : 16)   /  '                '  /
-!    data  horzl(1)    /  'degrees based on 60 hz  '  /
-!    data  horzl(2)    /  'cycles based on 60 hz   '  /
-!    data  horzl(3)    /  'seconds                 '  /
-!    data  horzl(4)    /  'milliseconds            '  /
-!    data  horzl(5)    /  'microseconds            '  /
-!    data  horzl(6)    /  'frequency in hertz      '  /
-!    data  horzl(7)    /  'log10 frequency in hertz'  /
-!    data  horzl(8)    /  '1st variable of x-y pair'  /
-!    data  curren     /  'current '  /
-!    data  voltag     /  'voltage '  /
-!    !     begin command-word definitions.   ^^^^^^  ^^^^^^   ^^^^^^   ^^^^^
-!    data  choice     /  'choice  '  /
-!    data  stop       /  'stop    '  /
-!    data  purge      /  'purge   '  /
-!    data  help       /  'help    '  /
-!    data  smooth     /  'smooth  '  /
-!    data  size       /  'size    '  /
-!    data  show       /  'show    '  /
-!    data  linezz     /  'line    '  /
-!    data  photo      /  'chcopy  '  /
-!    data  end        /  'end     '  /
-!    data  repeat     /  'repeat  '  /
-!    data  flush      /  'flush   '  /
-!    data  playba     /  'playback'  /
-!    data  pen        /  'pen     '  /
-!    data  multip     /  'factor  '  /
-!    data  offset     /  'offset  '  /
-!    data  limits     /  'limits  '  /
-!    data  time       /  'time    '  /
-!    data  timesp     /  'timespan'  /
-!    data  debug      /  'debug   '  /
-!    data  tek        /  'tek     '  /
-!    data  stack      /  'stack   '  /
-!    data  printe     /  'printer '  /
-!    data  metric     /  'metric  '  /
-!    data  alltim     /  'all time'  /
-!    data  column     /  'column  '  /
-!    data  setcol     /  'set colu'  /
-!    data  out        /  'out     '  /
-!    data  longer     /  'longer  '  /
-!    data  averag     /  'average '  /
-!    data  inner      /  'in      '  /
-!    data  rescal     /  'rescale '  /
-!    data  lastpl     /  'last    '  /
-!    data  batch      /  'batch   '  /
-!    data  punch      /  'punch   '  /
-!    data  extrem     /  'extrema '  /
-!    data  level      /  'level   '  /
-!    data  noplot     /  'no plot '  /
-!    data  messag     /  'message '  /
-!    data  timeun     /  'time uni'  /
-!    data  label      /  'label   '  /
-!    data  cursor     /  'cursor  '  /
-!    data  xyplot     /  'x-y plot'  /
-!    data  slope      /  'slope   '  /
-!    data  back       /  'back    '  /
-!    data  refile     /  'refile  '  /
-!    data  texblk     /  'blank   '  /
-!    data  setdat     /  'set data'  /
-!    !     end of command definitions  ^^^^^^   ^^^^^^   ^^^^^^   ^^^^^^
-!    data  tolrce     /  8.e-5  /
-!    data  finfin     /  1.e12  /
-!    data  timbeg     /   0.0   /
-!    data  timend     /  1.e20  /
-!    data  paplim     /  36.    /
-!    data  vs      /  1.0  /
-!    data  vl      /  5.0  /
-!    data  vh      /  6.0  /
-!    data  nsmplt  /  50   /
-!    data  kslowr  /   3   /
-!    data  limfix  /   0   /
-!    data  klevl   /   0   /
-!    data  kextr   /   0   /
-!    data  jhmsp   /   0   /
-!    data  taxisl  /  5.0  /
-!    data  mu6std  /  6  /
-!    data  htax    /  4.0  /
-!    data  limcol  /  79   /
-!    data  ltek    /  1   /
-!    data  numtek  /   0   /
-!    data  inwait  /   1   /
-!    !     begin parameters of tektronix screen
-!    data  nxinch   /    74   /
-!    data  nyinch   /    68   /
-!    data  nxoff    /    100  /
-!    data  nyoff    /    40   /
-!    data  nxvern   /    30   /
-!    data  inchpx   /    2    /
-!    data  inchpy   /    2    /
-!    data  look     /    6    /
-!    data  nymax    /   800   /
-!    data  nxmax    /   800   /
-!    data  lchid    /    2    /
-!    data  lchsup   /    1    /
-!    data  lchtit   /    2    /
-!    data  lchxax   /    0    /
-!    data  lchyax   /    0    /
-!    data  izgr1    /    0    /
-!    data  izgr2    /    0    /
-!    data  ldshg1   /    1    /
-!    data  ldshg2   /    1    /
-!    data  izxax    /    0    /
-!    data  izyax    /    0    /
-!    data  izid     /    0    /
-!    data  iterm    /    2    /
-!    data  ltic     /    7    /
-!    data  iztit    /    0    /
-!    data  nxid6    /   10   /
-!    data  nyid6    /   330  /
-!    data  nxend    /   512   /
-!    data  nyend    /    50   /
-!    data  icurse   /    0    /
-!    !   data  ichref   /   'p'   /
-!    data ichref    /   112   /
-!    !   data  ichend   /   'e'   /
-!    data ichend    /   101   /
-!    data  vaxisl   /   4.0   /
-!    data  fxnumv   /   1.5   /
-!    data  fxnumh   /   5.0   /
-!    data  fxvert   /   0.0   /
-!    data  fsymb    /   .83   /
-!    data  lsymb    /    1    /
-!    data  lchfil   /    0    /
-!    data  lchlim   /    0    /
-!    data  ibaud    /   960   /
-!    !     end parameters of tektronix screen
-!    data  lu7plt   /  7  /
-!    data  linepr   /  9  /
-!    data  mxypl    /  0  /
-!    data  numflt   /  0  /
-!    data  numtit   /  0  /
-!    data  xtit     /  0.5  /
-!    data  ytit     /  8.5  /
-!    data  siztit   /  .12  /
-!    data  xsuper   /  1.0  /
-!    data  ysuper   /  9.0  /
-!    data  sizsup   /  0.3  /
-!    data  nchsup   /   0   /
-!    data  nchver   /   0   /
-!    data  dxgrd1   /  1.0  /
-!    data  dygrd1   /  1.0  /
-!    data  dxgrd2   /  0.2  /
-!    data  dygrd2   /  0.2  /
-!    data  fill1    /  1.0  /
-!    data  fill2    /  1.0  /
-!    data  ncut1    /   1   /
-!    data  ncut2    /   1   /
-!    data  maxsym   /   3   /
-!    data  fline    /  1.7  /
-!    data  sizid    /  .12  /
-!    data  xid      /  0.5  /
-!    data  yid      /  .75  /
-!    data  fact     /  1.0  /
-!    data  fhtax    /  0.5  /
-!    data  fxsup    /  0.3  /
-!    data  fysup    /  -.03 /
-!    data  fxtit    /  .10  /
-!    data  fytit    /  .15  /
-!    data  fxid     /  .05  /
-!    data  fyid     /  .10  /
-!    data  ftcarr   /  1.0  /
-!    data  fvaxtt   /  -7.5  /
-!    data  mtit     /  3  /
-!    data  maxisx   /  3  /
-!    data  maxisy   /  3  /
-!    data  mgrid1   /  2  /
-!    data  mgrid2   /  1  /
-!    data  msuper   /  5  /
-!    data  mid      /  3  /
-!    data  mline    /  3  /
-!    data  killpl   /  0  /
-! end block data
 
 !
 ! subroutine tpplot.

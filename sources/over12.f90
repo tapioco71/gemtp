@@ -721,7 +721,7 @@ subroutine over12
   klorow = kloaep
   ilorow = iloaep
 190 nj = klorow + lswtch
-  ns2 = tdns(klorow)
+  ns2 = int (tdns(klorow), kind (ns2))
   if (numref .le. 1) go to 201
   if (knt .eq. 1) indtv(ilorow) = 1
   j = 0
@@ -731,7 +731,7 @@ subroutine over12
   go to 199
 195 indtv(j) = indtv(j) + 1
   n1 = ipntv(j)
-  ns1 = tdns(n1)
+  ns1 = int (tdns(n1), kind (ns1))
   if (indtv(j) .le. ns1) go to 200
   indtv(j) = 1
   if (j .eq. numref) go to 201
@@ -1020,7 +1020,7 @@ subroutine over12
 8892 format(' in over12, offset variable isecti =', i5, ' is too samll.  It should be increased to the value of ',i5, /, 'which is the number of coupled phases currently modelled with new marti frequency-dependent format.     Stop.')
   stop
 8891 do iq = 1, nqtw
-     nqtt = nqtt + wk1(koff20 + iq)
+     nqtt = int (nqtt + wk1(koff20 + iq), kind (nqtt))
   end do
   !1988 continue
 8893 koff21 = koff20 + nqtt
@@ -1030,8 +1030,8 @@ subroutine over12
   koff25 = koff24 + 288
   nr(k) = i
   n1 = kodsem(k)
-  nrz = cki(k)
-  nra = ckkjm(k)
+  nrz = int (cki(k), kind (nrz))
+  nra = int (ckkjm(k), kind (nra))
   n8 = n1 + 5 * nrz + 2 * nra + 1
   n9 = n8 + 1
   sconst(n9) = sconst(n1)
@@ -1134,8 +1134,8 @@ subroutine over12
 50001 i = -2
   nr(k) = i
   n1 = kodsem(k)
-  nrz = cki(k)
-  nra = ckkjm(k)
+  nrz = int (cki(k), kind (nrz))
+  nra = int (ckkjm(k), kind (nra))
   n8 = n1 + 5 * nrz + 2 * nra + 1
   n9 = n8 + 1
   sconst(n9) = sconst(n1)
@@ -1188,10 +1188,10 @@ subroutine over12
 50005 if(istead.gt.0) go to 531
   if (h2 .le. tmax) go to 531
   i = -2
-531 n4 = h3
+531 n4 = int (h3, kind (n4))
   d1 = n4
   cik(k) = h3 - d1
-  if(i.ne.0) go to 537
+  if(i .ne. 0) go to 537
 11536 kill = 29
   lstat(19) = 531
   flstat(16) = h2
@@ -1421,12 +1421,12 @@ subroutine  tacs2
      exit
   end do
   !                                               $$$  steady - state  $$$
-6224 d1tttt = t
+  d1tttt = t
   n1tttt = istep
   istep = 0
-  t = 0.0
+  t = 0.0d0
   !     ******  linkage for  'tacs emtp sources'  names   ********
-  if ( nstacs .eq. 0 )  go to 480
+  if (nstacs .eq. 0) go to 480
   do i = 1, nstacs
      if (vstacs(i) .eq. blank) go to 483
      do j = 1, ktab

@@ -287,7 +287,7 @@ subroutine over1
   ! open ( unit=lu2,  status='old',  file=abuff(6:40) )
   ! write (*,*) ' successful open abuff(6:40) =', abuff(6:40)
   ! call cimage  ! erase spcl request of cables by rding 1st real brnch
-5223 ifx = 0
+  ifx = 0
   ip = 2
   iy = 2
   icat = 0
@@ -2610,18 +2610,19 @@ subroutine sysdep
   use bcddat
   use strcom
   implicit none
-  !  dimension intbus(1)
-  !  equivalence (intbus(1), bus1)
-  logical(1) :: od
   character(1) :: lettra, lettrb, lettrc, text1, text2
   character(8) :: busnm1, busnm2, busnm3, temp
   character(18) :: colxxx
   character(25) :: col
+  integer(4) :: ios
   integer(4) :: ltacst
   integer(4) :: n7
   !
   !     first 5 characters of file name "col" are reserved
   !     for explicit directory (e.g., "[plt]" ), if desired.
+  !
+  !  dimension intbus(1)
+  !  equivalence (intbus(1), bus1)
   !
   data col    / '' /
   data colxxx / 'plt00000000000.pl4' /
@@ -2710,11 +2711,11 @@ subroutine sysdep
 3668 format (a18)
   call strip (ansi32, ' ')
   if (iprsup .ge. 1 ) write (unit = lunit(6), fmt = 3672) ansi32
-3672 format (/,  ' in  #sysdep# ,   ansi32 =',  a32)
-  open (unit = lunit(4), action = 'readwrite', status = 'new', file = ansi32, form = 'unformatted')
-  inquire (unit = lunit(4), opened = od)
-  if (od .neqv. .true.) then
-     write (unit = lunit(6), fmt = "('Could not open ', a25, ' .  Exiting.')") ansi32
+3672 format (/, ' in  #sysdep# ,   ansi32 =', a)
+  open (unit = lunit(4), action = 'readwrite', status = 'new', file = ansi32, form = 'unformatted', iostat = ios)
+  if (ios .ne. 0) then
+     write (unit = lunit(6), fmt = 3673) ansi32
+3673 format (' Could not open ', a, '.   Exiting.')
      call stoptp
   end if
   blank = busnm1
@@ -3075,7 +3076,7 @@ subroutine tacs1
   atcs(ndx1) = n23
   isblk(nuki+1) = nsu + 1
   isblk(nuki+4) = 0
-7409 n1 = 0
+  n1 = 0
   do i = 1, 5
      if (dumj(i) .eq. blank) cycle
      n1 = n1 + 1
@@ -3571,7 +3572,7 @@ subroutine tacs1a
 50010 icurch = icurch + 1
   if (icurch .gt. 80) go to 50030
   curch1 = curch
-  curch = texcol(icurch)
+  curch = texcol(icurch)(1 : 1)
   if (curch .eq. blank) go to 50035
   if (curch .eq. contch) go to 50040
   k1 =  0
@@ -3600,7 +3601,7 @@ subroutine tacs1a
   go to 50010
   ! :::  preread  4  char  :::
 50021 if (icurch .gt. 77) go to 50024
-  curch1 = texcol(icurch + 1)
+  curch1 = texcol(icurch + 1)(1 : 1)
   chdum1 = texcol(icurch + 2)
   chdum2 = texcol(icurch + 3)
   if (chdum2 .eq. sepch(7)) go to 50022
@@ -3668,7 +3669,7 @@ subroutine tacs1a
 50090 ilgnum = 1
   go to 50010
   ! :::  current word is complete  :::
-50120 curch1 = texcol(icurch)
+50120 curch1 = texcol(icurch)(1 : 1)
   texcol(icurch) = comma
   if (ilgnum .le. 20) go to 50125
   ikill1 = 10
@@ -4056,7 +4057,7 @@ subroutine tacs1a
      if (iel(k) .eq. i2) exit
      if (iel(k) .eq. -i2) exit
   end do
-50570 k2 = 0
+  k2 = 0
   alnm2 = el(k)
   i2 = k
   do j = 1, 7
