@@ -36,7 +36,7 @@ COMPILER=gcc
 VERBOSE=
 
 # Debug flag.
-DEBUG=1
+DEBUG=
 
 # Target name.
 TARGET=gemtp
