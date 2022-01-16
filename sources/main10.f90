@@ -269,12 +269,6 @@ subroutine subr10
            call dummy
 #endif
 
-        case default
-#ifdef WITH_OVER1
-           call over1
-#else
-           call dummy
-#endif
         end select
      end if
   end do

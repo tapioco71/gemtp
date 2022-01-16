@@ -199,7 +199,6 @@ subroutine over1
      lstacs(j) = int (lstacs(j) * d13, kind (lstacs(j)))
   end do
   n1 = -9999
-  !  call copyi (n1, lstat(1), ll60)
   call copy (n1, lstat(1 :), ll60)
   call sysdep
   call move0 (flstat, ll20)
@@ -565,7 +564,6 @@ subroutine over1
 5 format (10i8)
   go to 4208
 4207 nfrfld = 10
-  !  call frefld (voltbc)
   call free (voltbc)
   iout = int (voltbc(1), kind (iout))
   iplot = int (voltbc(2), kind (iplot))
@@ -2713,11 +2711,6 @@ subroutine sysdep
   if (iprsup .ge. 1 ) write (unit = lunit(6), fmt = 3672) ansi32
 3672 format (/, ' in  #sysdep# ,   ansi32 =', a)
   open (unit = lunit(4), action = 'readwrite', status = 'new', file = ansi32, form = 'unformatted', iostat = ios)
-  if (ios .ne. 0) then
-     write (unit = lunit(6), fmt = 3673) ansi32
-3673 format (' Could not open ', a, '.   Exiting.')
-     call stoptp
-  end if
   blank = busnm1
   trash = busnm2
   terra = busnm3

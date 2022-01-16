@@ -1788,7 +1788,7 @@ subroutine endplt (kalcom)
   !     is not closed here, but rather in  "fintp" .
   integer(4), intent(in) :: kalcom
   !
-  write (unit = *, fmt = *) kalcom
+  !  write (unit = *, fmt = *) kalcom
   return
 end subroutine endplt
 
