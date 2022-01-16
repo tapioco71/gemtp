@@ -2096,7 +2096,7 @@ subroutine paprsz (horiz, vert)
   !)    it will do nothing, of course.
   real(8), intent(in) :: horiz, vert
   !
-  write (unit = *, fmt = *) horiz, vert
+  !  write (unit = *, fmt = *) horiz, vert
   return
 end subroutine paprsz
 
