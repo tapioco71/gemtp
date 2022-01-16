@@ -115,7 +115,7 @@ contains
 7302 format (/, ' Begin  "uminit" . ksubum =', i4)
     !  ncomp is the max number of compensated phases per subnetwork.
     !  n8 is used to determine the value of this ncomp.
-7000 do k = 1, numum
+    do k = 1, numum
        kcl = kcoil(k)
        jcltac(kcl + 2) = 0
        n2 = jcltac(kcl)

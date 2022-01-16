@@ -250,7 +250,7 @@ subroutine over13
      it2 = length(i)
      nphs2 = it2 * it2
      do j = 1, nphs2
-        jpl = jpl + int (wk1(koff20 + kv), kind (jpl))
+        jpl = int (jpl + wk1(koff20 + kv), kind (jpl))
         kv = kv + 1
      end do
      cycle
@@ -677,8 +677,8 @@ subroutine over13
 7017 format ('+  type-96.', 2i4, 2e15.6)
   gslope(n19) = cchar(n18)
   gslope(n20) = cchar(n19)
-  n16 = cchar(n19)
-  n15 = n16 + cchar(n17) + 1
+  n16 = int (cchar(n19), kind (n16))
+  n15 = int (n16 + cchar(n17), kind (n15)) + 1
   if (cchar(n18) .ne. 1) go to 4667
   d13 = gslope(n16) * (1.0 - vchar(n17))
   d13 = 1.0 / d13
@@ -765,21 +765,21 @@ subroutine over13
   !
   ! evaluate: vm(to), vm(to-dt), vk(to), vk(
   !
-  if (istead .eq. 0) omegs1 = 0.0
+  if (istead .eq. 0) omegs1 = 0.0d0
   n1 = kodsem(k)
-  nrz = cki(k)
-  nra = ckkjm(k)
+  nrz = int (cki(k), kind (nrz))
+  nra = int (ckkjm(k), kind (nra))
   if (iprsup .gt. 0) write (unit = lunit(6), fmt = 8833) n1, nra, nrz
 8833 format (1x, i6, 1x, i6, 1x, i6, ' i       vkdt(i)       vmdt(i)       nn5        n6')
   ivbr = k
   do i = 1, it2
      ns1 = kodsem(ivbr)
-     nrz = cki(ivbr)
-     nra = ckkjm(ivbr)
+     nrz = int (cki(ivbr), kind (nrz))
+     nra = int (ckkjm(ivbr), kind (nra))
      n1 = -kbus(ivbr)
      n2 = iabs (mbus(ivbr))
      nk1 = ns1 + 5 * nra + 5 * nrz + 4 + 1
-     nn17 = sconst(nk1)
+     nn17 = int (sconst(nk1), kind (nn17))
      nn5 = ns1 + 5 * nrz + 5 * nra + 4 + 1 + 1 + nn17
      phf = atan2z (f(n2), e(n2))
      hf = dsqrt (e(n2) ** 2 + f(n2) ** 2)
@@ -822,9 +822,9 @@ subroutine over13
   kqvq = infdli(inoff1 + k)
   kqv = litype(k)
   do iq = 1, nphs2
-     nteq = wk1(koff20 + kqvq)
+     nteq = int (wk1(koff20 + kqvq), kind (nteq))
      qfd(kqv) = sconst(nq1)
-     sfd(kqv) = 0.d0
+     sfd(kqv) = 0.0d0
      if (iprsup .ge. 2) write (unit = lunit(6), fmt = 5692)
 5692 format (1x, 'kqv nteq    nq1    nq2    nq3   sconst(nq1)   sconst(nq2)   sconst(nq3)       qr(kqv)')
      do lq = 1, nteq
@@ -947,11 +947,11 @@ subroutine over13
   kadt = k
   do idt = 1, it2
      n1 = kodsem(kadt)
-     nrz = cki(kadt)
-     nra = ckkjm(kadt)
-     nk1 = n1 + 5*nra + 5*nrz + 4 + 1
-     nn17 = sconst(nk1)
-     nn5 = n1 + 5*nrz + 5*nra + 4 + 2 + 1 + 1 + nn17
+     nrz = int (cki(kadt), kind (nrz))
+     nra = int (ckkjm(kadt), kind (nra))
+     nk1 = n1 + 5 * nra + 5 * nrz + 4 + 1
+     nn17 = int (sconst(nk1), kind (nn17))
+     nn5 = n1 + 5 * nrz + 5 * nra + 4 + 2 + 1 + 1 + nn17
      n6 = nn5 + 1
      phf = atan2z (w1(ioff2 + kadt), w1(ioff1 + kadt))
      hf = dsqrt (w1(ioff2 + kadt) ** 2 + w1(ioff1 + kadt) ** 2)
@@ -967,10 +967,10 @@ subroutine over13
   ka = k
   do jh = 1, it2
      n4 = indhst(ka)
-     cnvhst(n4 + 5) = 0.
-     cnvhst(n4 + 6) = 0.
-     cnvhst(n4 + 7) = 0.
-     cnvhst(n4 + 8) = 0.
+     cnvhst(n4 + 5) = 0.0d0
+     cnvhst(n4 + 6) = 0.0d0
+     cnvhst(n4 + 7) = 0.0d0
+     cnvhst(n4 + 8) = 0.0d0
      ka = ka + 1
   end do
   kvd = k
@@ -989,7 +989,7 @@ subroutine over13
      do iv = 1, it2
         n1 = -kbus(n7)
         n2 = iabs (mbus(n7))
-        nteq = wk1(koff20 + kv)
+        nteq = int (wk1(koff20 + kv), kind (nteq))
         sumkr = sconst(nq1) * e(n1)
         sumki = sconst(nq1) * f(n1)
         summr = sconst(nq1) * e(n2)
@@ -1087,8 +1087,8 @@ subroutine over13
      sumki = sconst(n1) * cnvhst(n4 + 8)
      summr = sconst(n1) * cnvhst(n4 + 5)
      summi = sconst(n1) * cnvhst(n4 + 6)
-     nrz = cki(ky)
-     nra = ckkjm(ky)
+     nrz = int (cki(ky), kind (nrz))
+     nra = int (ckkjm(ky), kind (nra))
      jkl = 0
      do ii = 1, nrz
         n2 = n1 + ii
@@ -1130,7 +1130,7 @@ subroutine over13
      if (iprsup .gt. 0) write (unit = lunit(6), fmt = 5443)
 5443 format ('ky kodsem(ky) cki(ky) ckkjm(ky)  nn5   n6    gmjdt(nn5)     gkjdt(n6)')
      nk1 = n1 + 5 * nra + 5 * nrz + 4 + 1
-     nn17 = sconst(nk1)
+     nn17 = int (sconst(nk1), kind (nn17))
      jkl = 0
      do lg = 1, nrz
         nn5 = n1 + 5 * nrz + 5 * nra + 4 + 2 + 2 + lg + 1 + nn17
@@ -1178,7 +1178,7 @@ subroutine over13
   lj = nr(k)
   do jqa = 1, it2
      do iqa = 1, it2
-        nteq = wk1(koff20 + kq)
+        nteq = int (wk1(koff20 + kq), kind (nteq))
         sumkr = sconst(nq1) * w1(ioff7 + ka)
         sumki = sconst(nq1) * w1(ioff8 + ka)
         summr = sconst(nq1) * w1(ioff1 + ka)
@@ -1219,7 +1219,7 @@ subroutine over13
            nq3 = nq3 + 1
         end do
         nq1 = nq1 + 2 * nteq + 1
-        nteq = wk1(koff20 + kq)
+        nteq = int (wk1(koff20 + kq), kind (nteq))
         lj1 = lj + nteq
         do la = 1, nteq
            phf = atan2z (w1(ioff4 + la), w1(ioff3 + la))
@@ -1246,18 +1246,18 @@ subroutine over13
   ka = k
   iadrs = 1
   jkl = 0
-  do ifa=1, it2
+  do ifa = 1, it2
      n4 = indhst(ka)
      taua = cnvhst(n4)
      ejwtr = dcos(omega * taua)
      ejwti = -dsin(omega * taua)
-     sumkr = 0.d0
-     sumki = 0.d0
-     summr = 0.d0
-     summi = 0.d0
+     sumkr = 0.0d0
+     sumki = 0.0d0
+     summr = 0.0d0
+     summi = 0.0d0
      n1 = kodsem(ka)
-     nrz = cki(ka)
-     nra = ckkjm(ka)
+     nrz = int (cki(ka), kind (nrz))
+     nra = int (ckkjm(ka), kind (nra))
      if (iprsup .gt. 0) write (unit = lunit(6), fmt = 4833)
 4833 format (' nk7  nra  api(iadrs)       czire       cziim              aki(iadrs)    fkr5(ka)    fki5(ka)', /, &
           '    bmr5(ka)    bmi5(ka) fmj5(iadrs) bkj5(iadrs)     fm5(ii)     bk5(ii)')
@@ -1265,22 +1265,22 @@ subroutine over13
         n2 = n1 + 2 * nrz + ii
         n3 = n2 + nra
         nk1 = n1 + 5 * nra + 5*nrz + 4 + 1
-        nn17 = sconst(nk1)
+        nn17 = int (sconst(nk1), kind (nn17))
         nn5 = n1 + 7 * nrz + 5*nra + 8 + ii + 1 + nn17
         nn6 = nn5 + nra
-        if (abs (sconst(n2)) .ge. 1.e13) go to 4338
+        if (abs (sconst(n2)) .ge. 1.0e13) go to 4338
         d1 = sconst(n3) ** 2 + omega ** 2
         czire = sconst(n2) * sconst(n3) / d1
-        cziim = - sconst(n2) * omega / d1
+        cziim = -sconst(n2) * omega / d1
         go to 4337
 4338    jkl = jkl + 1
         if (jkl .eq. 2) go to 5486
         nk7 = n1 + 7 * nra + 7*nrz + 9 + nn17 + ii
         nk8 = nk7 + nra
         akr = sconst(n2) / 1.e+15
-        aki = sconst(n2+1) / 1.e+15
+        aki = sconst(n2 + 1) / 1.e+15
         apr = sconst(n3) / 1.e+15
-        api = sconst(n3+1) / 1.e+15
+        api = sconst(n3 + 1) / 1.e+15
         dkr = apr * akr - api * aki
         dki = apr * aki + api * akr
         akr = dkr
@@ -1339,18 +1339,18 @@ subroutine over13
 1114 do ifa = 1, it2
      nn4 = indhst(ka)
      taui = cnvhst(nn4)
-     ntaui = taui / deltat + 1
+     ntaui = int (taui / deltat, kind (ntaui)) + 1
      !      call fillup(cnvhst(nn4+11),cnvhst(nn4+12),fkh5(iadrs)
      !     1           ,cnvhst(nn4+9), cnvhst(nn4+10),bmh5(iadrs)
      !     2           ,omega,wdt,ntaui,taui)
      !      call fillup(fkr5(ifa),fki5(ifa),fkh5(iadrs)
      !     1           ,bmr5(ifa),bmi5(ifa),bmh5(iadrs)
      !     2           ,w,wdt,ntaui,taui)
-     n1    =  ntaui - 1
+     n1 = ntaui - 1
      amagk = dsqrt (cnvhst(nn4 + 11) ** 2 + cnvhst(nn4 + 12) ** 2)
      amagm = dsqrt (cnvhst(nn4 + 9) ** 2 + cnvhst(nn4 + 10) ** 2)
-     angk  = atan2z (cnvhst(nn4 + 12), cnvhst(nn4 + 11))
-     angm  = atan2z (cnvhst(nn4 + 10), cnvhst(nn4 + 9))
+     angk = atan2z (cnvhst(nn4 + 12), cnvhst(nn4 + 11))
+     angm = atan2z (cnvhst(nn4 + 10), cnvhst(nn4 + 9))
      wd = wdt
      koff11 = koff11 + 0
      koff12 = koff11 + ntaui
@@ -1451,14 +1451,14 @@ subroutine over13
      cnvhst(n4 + 5) = csl
      cnvhst(n4 + 6) = csr
      n1 = kodsem(k)
-     nrz = cki(k)
-     nra = ckkjm(k)
+     nrz = int (cki(k), kind (nrz))
+     nra = int (ckkjm(k), kind (nra))
      do ii = 1, nrz
         n2 = n1 + ii
         n3 = n2 + nrz
         d1 = sconst(n3) ** 2 + omegs1 ** 2
         czire = sconst(n2) * sconst(n3) / d1
-        cziim = - sconst(n2) * omegs1 / d1
+        cziim = -sconst(n2) * omegs1 / d1
         nn5 = n1 + 5*nrz + 5*nra + 4 + ii
         sconst(nn5) = csl * czire - csli * cziim
         n6 = nn5 + nrz
@@ -1481,7 +1481,7 @@ subroutine over13
      cmimag = vsri + cnvhst(n4 + 1) * csri + cnvhst(n4 + 2) * csr
      absfm = sqrtz (cmreal ** 2 + cmimag ** 2)
      phfm = funp13 (cmimag, cmreal, twopi)
-     nrf = cnvhst(n4) / deltat + 2.
+     nrf = int (cnvhst(n4) / deltat + 2.0d0, kind (nrf))
      nr(k) = iline + 1
      iline = iline + 1 + nrf
      if (iline .le. lpast) go to 8109
@@ -1508,7 +1508,7 @@ subroutine over13
         d1 = sconst(n3) ** 2 + omegs1 ** 2
         c3r = sconst(n2) * sconst(n3) / d1
         c3i =-sconst(n2) * omegs1 / d1
-        n7 = n1 + 7*nrz + 5*nra + 4 + ii
+        n7 = n1 + 7 * nrz + 5 * nra + 4 + ii
         d2 = c2r * c3r - c2i * c3i
         d3 = c2r * c3i + c2i * c3r
         sconst(n7) = d2 * cmreal - d3 * cmimag
@@ -1535,12 +1535,12 @@ subroutine over13
 60005 n1 = iabs (kbus(k))
   n2 = iabs (mbus(k))
   tr(itadd) = ci1
-  tx(itadd) = 0.0
+  tx(itadd) = 0.0d0
   r(itadd) = a
-  c(itadd) = 0.0
-  f(n1) = 0.0
-  f(n2) = 0.0
-  omegs1 = 0.0
+  c(itadd) = 0.0d0
+  f(n1) = 0.0d0
+  f(n2) = 0.0d0
+  omegs1 = 0.0d0
   if (n4 .ge. 0) go to 61594
   ! multiphase lines
   ix = itadd
@@ -1788,9 +1788,9 @@ subroutine over13
   xk(n2) = ci1 * a + ck1 * d2
   xm(n2) = ci1 * d2 + ck1 * a
   go to 583
-20750 kf = cik(k)
+20750 kf = int (cik(k), kind (kf))
   ifdep2 = kf + kf - 1
-  a = 0.0
+  a = 0.0d0
   d7 = h2
   d8 = ck1
   d9 = h1
@@ -1863,24 +1863,17 @@ subroutine over13
      go to 4695
 4693 nfrfld = 1
      kolbeg = 1
-     !     call freone (d11)
      call free (d11)
-     n3 = d11
+     n3 = int (d11, kind (n3))
      nright = -1
-     !     call freone (d1)
      call free (d1)
      bus1 = texta6(1)
-     !     call freone (d1)
      call free (d1)
      bus2 = texta6(1)
      nright = 0
-     !     call frefld (tr(itadd :))
      call free (tr(itadd :))
-     !     call frefld (tx(itadd :))
      call free (tx(itadd :))
-     !     call frefld (r(itadd :))
      call free (r(itadd :))
-     !     call frefld (c(itadd :))
      call free (c(itadd :))
 4695 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54159) tr(itadd), tx(itadd), r(itadd)
      if (bus1 .eq. bus(l) .and. bus2 .eq. bus(m) .and. n3 .eq. 3) go to 5767
@@ -1893,14 +1886,11 @@ subroutine over13
      read (unit = abuff, fmt = 7020) n3, bus1, bus2
      go to 4705
 4703 nfrfld = 1
-     !     call freone (d11)
      call free (d11)
-     n3 = d11
+     n3 = int (d11, kind (n3))
      nright = -1
-     !     call freone (d1)
      call free (d1)
      bus1 = texta6(1)
-     !     call freone (d1)
      call free (d1)
      bus2 = texta6(1)
      nright = 0
@@ -1914,7 +1904,7 @@ subroutine over13
      ! read input card using cimage
      call cimage
      n3 = iabs (indhst(ii))
-     if (ci(ii) .gt. 0.0) n3 = n3 + 1
+     if (ci(ii) .gt. 0.0d0) n3 = n3 + 1
      cnvhst(n3 + 0) = ci1
      cnvhst(n3 + 1) = ck1
      cnvhst(n3 + 2) = a
@@ -1938,29 +1928,20 @@ subroutine over13
   go to 4715
 4713 nfrfld = 1
   nright = -1
-  !  call freone (d1)
   call free (d1)
   bus1 = texta6(1)
-  !  call freone (d1)
   call free (d1)
   bus2 = texta6(1)
   nright = 0
-  !  call freone (d11)
   call free (d11)
-  n1 = d11
-  !  call freone (d11)
+  n1 = int (d11, kind (n1))
   call free (d11)
-  n2 = d11
-  !  call freone (d11)
+  n2 = int (d11, kind (n2))
   call free (d11)
-  n3 = d11
-  !  call freone (d1)
+  n3 = int (d11, kind (n3))
   call free (d1)
-  !  call freone (d2)
   call free (d2)
-  !  call freone (d3)
   call free (d3)
-  !  call freone (d4)
   call free (d4)
 4715 if (noutpr .eq. 0) write (unit = kunit6, fmt = 5620)  n1, n2, n3, d1
 5620 format ('+Switch init. cond.', 3i6, e13.4)
@@ -1994,7 +1975,7 @@ subroutine over13
   do kj = 1, ibr
      if (imodel(kj) .ne. -2) cycle
      n4 = indhst(kj)
-     nrf = cnvhst(n4) / deltat + 2.0d0
+     nrf = int (cnvhst(n4) / deltat + 2.0d0, kind (nrf))
      nr(kj) = iline + 1
      iline = iline + 1 + nrf
      if (iline .le. lpast) cycle
@@ -2257,32 +2238,32 @@ subroutine last13
   n8 = n4
   if (n7 .le. iabs (kodebr(k))) n8 = n8 + 6
   if (kodsem(k) .gt. 0) go to 14002
-  n3 = n3 + 2 - ck(k) - ck(k)
+  n3 = int (n3 + 2 - ck(k) - ck(k), kind (n3))
   n4 = n4 + 2
-  if (ck(k) .lt. 0.0) go to 14001
-  n3 = n3 + 6 * ck(k)
-  n4 = n4 + ck(k) - 1
+  if (ck(k) .lt. 0.0d0) go to 14001
+  n3 = int (n3 + 6 * ck(k), kind (n3))
+  n4 = int (n4 + ck(k), kind (n4)) - 1
   go to 14005
 14001 continue
   go to 14005
-14002 n3 = n3 + 1 - ci(k) - ci(k)
+14002 n3 = int (n3 + 1 - ci(k) - ci(k), kind (n3))
   n4 = n4 + 2
-  if (ci(k) .lt. 0.0) go to 14003
-  n3 = n3 + 7 * ci(k)
-  n4 = n4 + 2 * ci(k) - 2
-14003 n3 = n3 - ck(k) - ck(k)
+  if (ci(k) .lt. 0.0d0) go to 14003
+  n3 = int (n3 + 7 * ci(k), kind (n3))
+  n4 = int (n4 + 2 * ci(k), kind (n4)) - 2
+14003 n3 = int (n3 - ck(k) - ck(k), kind (n3))
   n4 = n4 + 2
-  if (ck(k) .lt. 0.0) go to 14004
-  n3 = n3 + 6 * ck(k)
-  n4 = n4 + 2 * ck(k) - 2
+  if (ck(k) .lt. 0.0d0) go to 14004
+  n3 = int (n3 + 6 * ck(k), kind (n3))
+  n4 = int (n4 + 2 * ck(k), kind (n4)) - 2
 14004 continue
 14005 write (unit = lunit(6), fmt = 14996) n1, n3, (sconst(l), l = n1, n3)
   if (n8 .gt. n4) n4 = n8
   write (unit = lunit(6), fmt = 14995) n2, n4, (cnvhst(l), l = n2, n4)
   k = k + 1
   n7 = n7 + 1
-  if (cki(k - 1) .gt. 0.0) go to 14000
-14009 if (indhst(i) .gt. 0 .or. nr(i) .lt. 0) go to 14100
+  if (cki(k - 1) .gt. 0.0d0) go to 14000
+14009 if ((indhst(i) .gt. 0) .or. (nr(i) .lt. 0)) go to 14100
   !
   !  compute phasor terminal conditions(voltage and current) and voltage
   !  travelling waves(phase frame if cik(.) .lt. 0 else modal).
@@ -2307,7 +2288,7 @@ subroutine last13
   n23 = i8 + it2
   i10 = n23 + it2
   i11 = i10 + it2
-  n1 = absz (cik(i))
+  n1 = int (absz (cik(i)), kind (n1))
   n2 = n1 + it2 * it2
   n3 = nr(i)
   n4 = n3 + it2 - 1
@@ -2320,7 +2301,7 @@ subroutine last13
   call move0 (vim(lsiz26 + 1 :), it2)
   call move0 (semaux(1 :), 12 * it2)
 14010 do k = 1, it2
-     if (kodsem(i) .lt. 0 .and. cik(i) .lt. 0.0) go to 14060
+     if ((kodsem(i) .lt. 0) .and. (cik(i) .lt. 0.0d0)) go to 14060
      d1 = 0.0d0
      d2 = 0.0d0
      d3 = 0.0d0
@@ -2347,8 +2328,8 @@ subroutine last13
      if (kodsem(i) .lt. 0) go to 14050
      ii = k + i - 1
      n5 = -indhst(ii)
-     if (ci(ii) .gt. 0.0) n5 = n5 + 1
-     if (absz (w - cnvhst(n5 + 4)) .lt. 0.0001) go to 14040
+     if (ci(ii) .gt. 0.0d0) n5 = n5 + 1
+     if (absz (w - cnvhst(n5 + 4)) .lt. 0.0001d0) go to 14040
      n6 = -kbus(ii)
      n7 = iabs (mbus(ii))
      write (unit = lunit(6), fmt = 14030) bus(n6), bus(n7), k, cnvhst(n5 + 4), w
@@ -2424,7 +2405,7 @@ subroutine last13
      n6 = n6 + it2
      semaux(n6) = c(n9)
      if (kodsem(i) .lt. 0) cycle
-     n7 = -cik(ii) + (k - 1) * it2
+     n7 = int (-cik(ii) + (k - 1) * it2, kind (n7))
      n8 = n8 + it2 * it2
      do j=1, it2
         n6 = i4 + j
@@ -2479,18 +2460,18 @@ subroutine last13
   mxstrt = 0
   k = i
   ! begin loop over convolutions ....
-14105 n1 = absz (cki(k)) - 1
+14105 n1 = int (absz (cki(k)), kind (n1)) - 1
   n2 = n1 / it2 + 1
   n1 = n1 - (n2 - 1) * it2 + 1
   if (itadd .lt. 0) go to 14290
   n3 = kodsem(k)
   n4 = iabs (indhst(k))
   if (n3 .gt. 0) go to 14190
-  n5 = ck(k)
+  n5 = int (ck(k), kind (n5))
   if (n5 .ge. 0) go to 14290
   ! allocate and initialize past history of ametani lumped element.
   n5 = -n3 - n5 - n5
-  n6 = sconst(n5) / deltat + 2.0
+  n6 = int (sconst(n5) / deltat + 2.0d0, kind (n6))
   length(k) = n6
   if (mxstrt .ne. 0) go to 14150
   nr(k) = iline
@@ -2542,7 +2523,7 @@ subroutine last13
   end do
   go to 14290
   ! allocate and initialize past history for propagation convolutions.
-14190 n5 = ci(k)
+14190 n5 = int (ci(k), kind (n5))
   !  if (n5) 14195, 14250, 14200
   if (n5 .lt. 0) then
      go to 14195
@@ -2552,9 +2533,9 @@ subroutine last13
      go to 14200
   end if
 14195 n3 = n3 - n5 - n5 + 1
-  n6 = sconst(n3 - 2) / deltat + 2.0
+  n6 = int (sconst(n3 - 2) / deltat + 2.0d0, kind (n6))
   go to 14210
-14200 n6 = cnvhst(n4) / deltat + 2.0
+14200 n6 = int (cnvhst(n4) / deltat + 2.0d0, kind (n6))
   n3 = n3 + 5 * n5 + 1
 14210 length(k) = n6
   nr(k) = iline +1
@@ -2585,10 +2566,10 @@ subroutine last13
      xm(n8) = d3 * d5 - d4 * d6
   end do
   ! allocate and initialize past history for char. admittance convolution
-14250 n5 = ck(k)
+14250 n5 = int (ck(k), kind (n5))
   if (n5 .ge. 0) go to 14290
   n3 = n3 - n5 - n5
-  n6 = sconst(n3 - 2) / deltat + 2.0
+  n6 = int (sconst(n3 - 2) / deltat + 2.0d0, kind (n6))
   n7 = iline
   iline = iline + n6
   if (iline .le. lpast) go to 14260
@@ -2619,7 +2600,7 @@ subroutine last13
 14290 n3 = kodsem(k)
   if (n3 .gt. 0) go to 14430
   ! initialize history term of lumped element parallel capacitor
-  n5 = ck(k)
+  n5 = int (ck(k), kind (n5))
   n3 = -n3
   sconst(n4 + 1) = sconst(n4 + 1) / dthaf
   if (itadd .lt. 0) go to 14310
@@ -2676,10 +2657,10 @@ subroutine last13
 14420 format (/, 2x, a6, 5x, a6, 5x, i2, 6x, i2, 46x, e15.8, 5x, e15.8, /, 75x, 2(5x, e15.8))
   go to 14670
   ! transmission line propagation impulse convolution initialization
-14430 n5 = ci(k)
+14430 n5 = int (ci(k), kind (n5))
   n3 = n3 + 1
   eeeta = cnvhst(n4)
-  if (itadd .lt. 0 .or. indhst(k) .ge. 0) go to 14440
+  if ((itadd .lt. 0) .or. (indhst(k) .ge. 0)) go to 14440
   n8 = i4 + n2
   d5 = semaux(n8)
   n8 = i5 + n2
@@ -2732,7 +2713,7 @@ subroutine last13
 14540 format (/, 2x, a6, 5x, a6, 5x, i2, 6x, i2, 6x, e15.8, 5x, e15.8)
   ! Transmission line characteristic admittance convolution initializatio
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 14415) trrsum, trisum
-14550 n5 = ck(k)
+14550 n5 = int (ck(k), kind (n5))
   if (itadd .lt. 0 .or. indhst(k) .ge. 0) go to 14560
   if (itadd .ne. 11911) go to 14555
   d1save = d1
@@ -2810,30 +2791,30 @@ subroutine last13
   n8 = n4
   if (n7 .le. iabs (kodebr(k))) n8 = n8 + 6
   if (kodsem(k) .gt. 0) go to 14682
-  n3 = n3 + 2 - ck(k) - ck(k)
+  n3 = int (n3 + 2 - ck(k) - ck(k), kind (n3))
   n4 = n4 + 2
   if (ck(k) .lt. 0.0) go to 14681
-  n3 = n3 + 6 * ck(k)
-  n4 = n4 + ck(k) - 1
+  n3 = int (n3 + 6 * ck(k), kind (n3))
+  n4 = int (n4 + ck(k) - 1, kind (n4))
   go to 14685
 14681 n5 = nr(k)
   n6 = n6 + n5 + length(k) - 1
   if (nr(k) .gt. 0) write (unit = lunit(6), fmt = 14998) n5, n6, (xk(l), l = n5, n6)
   if (nr(k) .lt. 0) write (unit = lunit(6), fmt = 14997) n5, n6, (xm(l), l = n5, n6)
   go to 14685
-14682 n3 = n3 + 1 - ci(k) - ci(k)
+14682 n3 = int (n3 + 1 - ci(k) - ci(k), kind (n3))
   n4 = n4 + 2
-  if (ci(k) .lt. 0.0) go to 14683
-  n3 = n3 + 7 * ci(k)
-  n4 = n4 + 2 * ci(k) - 2
-14683 n3 = n3 - ck(k) - ck(k)
+  if (ci(k) .lt. 0.0d0) go to 14683
+  n3 = int (n3 + 7 * ci(k), kind (n3))
+  n4 = int (n4 + 2 * ci(k) - 2, kind (n4))
+14683 n3 = int (n3 - ck(k) - ck(k), kind (n3))
   n4 = n4 + 2
   if (ck(k) .lt. 0.0d0) go to 14684
   n3 = int (n3 + 6 * ck(k))
   n4 = int (n4 + 2 * ck(k) - 2)
 14684 n5 = nr(k)
   n6 = n5 + length(k) - 1
-  if (ck(k) .lt. 0.0) n6 = n6 + int (sconst(n3 - 1) / deltat + 2.0d0)
+  if (ck(k) .lt. 0.0) n6 = int (n6 + sconst(n3 - 1) / deltat + 2.0d0, kind (n6))
   write (unit = lunit(6), fmt = 14998) n5, n6, (xk(l), l = n5, n6)
   write (unit = lunit(6), fmt = 14997) n5, n6, (xm(l), l = n5, n6)
 14685 write (unit = lunit(6), fmt = 14996) n1, n3, (sconst(l), l = n1, n3)
