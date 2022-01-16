@@ -873,7 +873,7 @@ subroutine swmodf
   write (unit = lunit(6), fmt = 3131)
 3131 format (' No such switch, the card will be discarded')
   go to 209
-3510 if (it2 .ne. 0 .or. kswtyp(msw) .ne. 0) go to 209
+3510 if ((it2 .ne. 0) .or. (kswtyp(msw) .ne. 0)) go to 209
   if (toLower (bus4) .ne. text14) go to 7218
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 1218)
 1218 format ('+Permanently-closed switch used for metering.')
@@ -950,7 +950,6 @@ contains
 2642 format (32x, 6i8)
     go to 3354
 3352 nfrfld = 1
-    !        call freone (d1)
     call free (d1)
     max99m = int (d1, kind (max99m))
 3354 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3355) max99m
@@ -1079,7 +1078,6 @@ contains
 2642 format (32x, 6i8)
     go to 2631
 2628 nfrfld = 1
-    !        call frefld (voltbc)
     call free (voltbc)
     lnpin = voltbc(1)
 2631 if (noutpr .eq. 0 ) write (unit = kunit6, fmt = 2634) lnpin
@@ -1124,7 +1122,6 @@ contains
 2642 format (32x, 6i8)
     go to 2673
 2671 nfrfld = 1
-    !        call frefld (voltbc)
     call free (voltbc)
     nsmth = int (voltbc(1), kind (nsmth))
 2673 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2675) nsmth
@@ -1149,7 +1146,6 @@ contains
 2685 format (20x, 10a6)
     go to 2686
 2683 nright = -2
-    !        call freone (d1)
     call free (d1)
     do j = 1, 10
        vstacs(j) = texta6(j)
@@ -1194,7 +1190,6 @@ contains
 2811 format (20x, 30i2)
     go to 2816
 2814 nfrfld = 30
-    !        call frefld (voltbc)
     call free (voltbc)
     if (kill .gt. 0) go to 9200
     do  i = 1, 30
@@ -1227,7 +1222,6 @@ contains
        n9 = kolbeg
        kolbeg = 1
        nright = -2
-       !        call freone (d1)
        call free (d1)
        n1 = jpntr(5)
        n2 = jpntr(6) - 1
@@ -1255,7 +1249,6 @@ contains
 2605 format (32x, e8.0)
     go to 7223
 7217 nfrfld = 1
-    !        call freone (epsiln)
     call free (epsiln)
 7223 write (unit = kunit6, fmt = 7226) epsiln
 7226 format ("+Misc. data constant  'epsiln' .", e12.3)
@@ -1276,7 +1269,6 @@ contains
 2605 format (32x, e8.0)
     go to 7249
 7247 nfrfld = 1
-    !        call frefld (begmax(2 :))
     call free (begmax(2 :))
 7249 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7252) begmax(2)
 7252 format ('+Extrema calc. begins at', e13.4, '  seconds.')
@@ -1305,15 +1297,14 @@ contains
 7264 format (16x, i8, 5e8.0)
     go to 7268
 7266 nfrfld = 6
-    !        call frefld (flstat(14 :))
     call free (flstat(14 :))
     n13 = int (flstat(14))
 7268 if (n13 .gt. 0)  maxzno = n13
-    if (flstat(15) .gt. 0.0) epszno = flstat(15)
-    if (flstat(16) .gt. 0.0) epwarn = flstat(16)
-    if (flstat(17) .gt. 0.0) epstop = flstat(17)
-    if (flstat(18) .gt. 0.0) znolim(1) = flstat(18)
-    if (flstat(19) .gt. 0.0) znolim(2) = flstat(19)
+    if (flstat(15) .gt. 0.0d0) epszno = flstat(15)
+    if (flstat(16) .gt. 0.0d0) epwarn = flstat(16)
+    if (flstat(17) .gt. 0.0d0) epstop = flstat(17)
+    if (flstat(18) .gt. 0.0d0) znolim(1) = flstat(18)
+    if (flstat(19) .gt. 0.0d0) znolim(2) = flstat(19)
     if (noutpr .eq. 0) write (unit = kunit6, fmt = 7270) maxzno, epszno, epwarn, epstop
 7270 format ('+ZnO const.', i4, 3e11.3)
     return
@@ -1377,7 +1368,6 @@ contains
 7276 format (32x, 6i8)
     go to 7303
 7298 nfrfld = 4
-    !        call frefld (voltbc)
     call free (voltbc)
 7303 d1 = 0.0
     do j = 1, 4
@@ -1411,7 +1401,6 @@ contains
 7314 format ('+Transfer control to time-step loop.')
     nchain = 16
     t = flstat(14)
-    !        call mover0 (flstat(3), 4)
     call move0 (flstat(3 :), 4)
     call runtym (d1, d2)
     flstat(1) = d1 + flstat(1)
@@ -1436,7 +1425,6 @@ contains
 2642 format (32x, 6i8)
     go to 7329
 7322 nfrfld = 4
-    !        call frefld (voltbc)
     call free (voltbc)
     do j = 1, 4
        iprsov(j + 30) = int (voltbc(j))
@@ -1458,7 +1446,6 @@ contains
 2582 format (16x, i8, e8.0)
     go to 7335
 7334 nfrfld = 2
-    !        call frefld (voltbc)
     call free (voltbc)
     lstat(51) = int (voltbc(1))
     pu = voltbc(2)
@@ -1556,9 +1543,8 @@ contains
 2642 format (32x, 6i8)
     go to 7382
 7379 nfrfld = 1
-    !        call frefld (voltbc)
     call free (voltbc)
-    iofbnd = int (voltbc(1))
+    iofbnd = int (voltbc(1), kind (iofbnd))
 7382 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7385)
 7385 format ('+Request for generator equivalents.')
     istep = -6633
@@ -1594,7 +1580,6 @@ contains
 2642 format (32x, 6i8)
     go to 7402
 7396 nfrfld = 1
-    !        call frefld (voltbc)
     call free (voltbc)
     n14 = int (voltbc(1))
 7402 moncar(7) = n14
@@ -2613,7 +2598,7 @@ subroutine sysdep
   character(18) :: colxxx
   character(25) :: col
   integer(4) :: ios
-  integer(4) :: ltacst
+  integer(4) :: ll0, ltacst
   integer(4) :: n7
   !
   !     first 5 characters of file name "col" are reserved
@@ -2633,6 +2618,11 @@ subroutine sysdep
   data text1  / ',' /
   data text2  / '$' /
   !
+  integer(4), allocatable :: intbus(:)
+  !
+  ll0 = size (transfer (bus1, intbus))
+  allocate (intbus(ll0))
+  intbus = transfer (bus1, intbus)
   col(1 : 18) = colxxx(1 : 18)
   lunit(2) = 19
   lunit(4) = 20
@@ -2739,7 +2729,7 @@ subroutine sysdep
   ! if not interactive emtp usage,
   if (m4plot .ne. 1) m4plot = 2                   ! use "pltfil" for real*4 plot file on d
   lunit(5) = -5                                   ! interactive or not uses "nextcard", no
-  return
+  go to 9200
 
   entry nextcard
   !     This entry is used only for interactive EMTP.  it gets
@@ -2761,7 +2751,11 @@ subroutine sysdep
 1489 format (a80)
   go to 9200                                      ! exit module with new card image in abuff
 9000 kill = 7654                                  ! positive kill is eof flag in "cimage"
-9200 return
+9200 if (allocated (intbus)) then
+     bus1 = transfer (intbus, bus1)
+     deallocate (intbus)
+  end if
+  return
 end subroutine sysdep
 
 !
@@ -2787,7 +2781,6 @@ subroutine midov1
   !     tampering with old plot file now connected to  lunit(2):
   if (ltdelt .eq. -6789) go to 1815
   close (unit = lunit(2), status = 'delete')
-  !open (unit = lunit(2), status = 'scratch', form = 'unformatted')
   open (unit = lunit(2), status = 'scratch', form = 'unformatted')
 1815 if (jflsos .eq. 0) go to 4271
   if (lastov .eq. 20) go to 4271
@@ -2804,7 +2797,6 @@ subroutine midov1
   !     "statisitics"  requires formatted writes to unit 12, which
   !     conflicts with usual usage.
   close (unit = lunit(12))
-  !     open ( unit=lunit(12), type='scratch' )
   open (unit = lunit(12), status = 'scratch')
 5933 if (m4plot .ne. 1) go to 5947                ! not interactive emtp
   if (iplot .ge. 0) go to 5947                    ! yes, plotting requested
@@ -2864,6 +2856,7 @@ subroutine tacs1
   integer(4) :: nukr
   real(8) :: d1, dum(3)
   real(8) :: pru, prx
+  !
   !  dimension stacs(11), alph(5), dum(3), dumj(13)
   !
   data stacs(1)  / 'timex ' /
@@ -3397,25 +3390,25 @@ subroutine tacs1a
   character(1) :: chdolr, comma, csprch, curch, curch1
   character(1) :: ch9, cha, che, chd, chn, cho, cht, chq, chl, chg, chr
   character(1) :: eqlsgn
-  character(8) :: alph
+  character(8) :: alph(5)
   character(8) :: contch, chdum1, chdum2
-  character(8) :: dumj
+  character(8) :: dumj(13)
   character(8) :: text1, text2, text4, sminus, splus, smultp
-  character(8) :: supfn, supop, text5, text6, text7
-  character(8) :: alnode, alnm1, alnm2, atmpbf
-  character(8) :: el, alnrcl, sepch, opname, btmpbf
-  integer(4) :: i, i1, i2, i3, i4, iargel, icurch, iel, iflpnt, ifree, ifst, ifstch
+  character(8) :: supfn(35), supop(6), text5, text6, text7
+  character(8) :: alnode, alnm1, alnm2, atmpbf(20)
+  character(8) :: el(100), alnrcl(10), sepch(8), opname(18), btmpbf(80)
+  integer(4) :: i, i1, i2, i3, i4, iargel, icurch, iel(100), iflpnt, ifree, ifst, ifstch
   integer(4) :: ikill1, ikill2, ilgcl, ilglph, ilgnum, ilst, ilst1, isrchl, itmpbf
   integer(4) :: j, j1, j2
   integer(4) :: k, k1, k2, k3, k4, karg, kjsup, kksup, m, moon, mpar
   integer(4) :: n, n1, n6, n23, ndx1, ndx6
-  real(8) :: argel, d1, d9, d10, dum, pru, prx
-  dimension alph(5), dum(3), dumj(13)
-  dimension supfn( 35), supop( 6)
-  dimension el(100), alnrcl(10), sepch(8), opname(18)
-  dimension atmpbf(20), btmpbf(80)
-  dimension argel(100)
-  dimension iel(100)
+  real(8) :: argel(100), d1, d9, d10, dum(3), pru, prx
+  !  dimension alph(5), dum(3), dumj(13)
+  !  dimension supfn( 35), supop( 6)
+  !  dimension el(100), alnrcl(10), sepch(8), opname(18)
+  !  dimension atmpbf(20), btmpbf(80)
+  !  dimension argel(100)
+  !  dimension iel(100)
   !
   data alnrcl(1)  / '1     ' /
   data alnrcl(2)  / '2     ' /
@@ -5390,7 +5383,7 @@ subroutine pfatch
   integer(4) :: j, k, n4, n7
   character(25) :: filen
   !
-  if (m4plot .ne. 1) go to 4519                   ! not interactive emtp
+  if (m4plot .ne. 1) go to 4519                   ! not interactive EMTP
   write (unit = prom80, fmt = 4504)
 4504 format ('    Send VAX disk file name:')
   call prompt                                     ! write prom80 with cursor control (no lf)

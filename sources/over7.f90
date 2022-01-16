@@ -14,14 +14,6 @@ subroutine over7
   use space2
   use movcop
   implicit none
-  !  dimension lorder(1), ndex(20)
-  !
-  !  equivalence (e(1), ndex(1))
-  !  equivalence (ich2(1), lorder(1))
-  !  equivalence (iofkol, iofgnd)
-  !  equivalence (iofkor, iofbnd)
-  !  equivalence (loopss(11), next)
-  !
   !  Following carries "next" among over6, insert, over7, & over9:
   integer(4) :: i, ib, icon, ii, ischm, ist, isubs1, isubs2
   integer(4) :: j, jb, jbs, jbt, js, jsub
@@ -31,6 +23,14 @@ subroutine over7
   integer(4) :: n1, n2, n13, ncn, ndx1, nelim, nz
   real(8) :: td
   real(8) :: zzza
+  !
+  !  dimension lorder(1), ndex(20)
+  !
+  !  equivalence (e(1), ndex(1))
+  !  equivalence (ich2(1), lorder(1))
+  !  equivalence (iofkol, iofgnd)
+  !  equivalence (iofkor, iofbnd)
+  !  equivalence (loopss(11), next)
   !
   integer(4), pointer :: iofkol => iofgnd
   integer(4), pointer :: iofkor => iofbnd
@@ -237,7 +237,7 @@ subroutine over7
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
 4568 format ('  "Exit  module over7."')
 5294 go to 99999
-240 nelim = nelim +1
+240 nelim = nelim + 1
   if (ischm .eq. 1) go to 200
   call subscr (i, lbus, 240, 1)
   if (loca(i) .eq. 0)   go to 200
@@ -777,6 +777,7 @@ subroutine subscr (j, limit, istat, n1)
   !     Module used to check out-of-bounds subscripts for "over7"
   !     special n1=99 case is for subscripts which are used only
   !     if positive (wsm changes to walker's code).
+  !
   integer(4), intent(in) :: j, istat, limit, n1
   !
   if (((j .ge. 1) .and. (j .le. limit)) .or. ((j .le. 0) .and. (n1 .eq. 99))) go to 9000

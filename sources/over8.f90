@@ -35,6 +35,7 @@ contains
     use tracom
     use umlocl
     implicit none
+    !
     integer(4), intent(out) :: nodvo1(:)
     integer(4), intent(out) :: nodvo2(:)
     integer(4), intent(out) :: jcltac(:)
@@ -491,12 +492,12 @@ contains
        d14 = d14 + d2 * d12 + d1 * d11
        d3 = d14 / d13
        d3 = atanz (d3)
-       if (d13 .lt. 0.0) d3 = d3 + twopi / 2.0
-       d8 = (d13 * d13 + d14 * d14) / 2.0
+       if (d13 .lt. 0.0d0) d3 = d3 + twopi / 2.0d0
+       d8 = (d13 * d13 + d14 * d14) / 2.0d0
        d8 = sqrtz (d8)
        d7 = cqsat * sflxq * flxqa * seltat
-       d7 = d7 + (1.0 - cqsat) * sflxq * flxqrr * seltat
-       if (d7 .eq. 0.0) go to 9005
+       d7 = d7 + (1.0d0 - cqsat) * sflxq * flxqrr * seltat
+       if (d7 .eq. 0.0d0) go to 9005
        d6 = d8 * d8 - d7 * d7
        d6 = sqrtz(d6)
        d6 = -d7 / d6
@@ -505,17 +506,17 @@ contains
        d8 = d8 * cosz(d6)
 9005   d4 = cosz(d3)
        d5 = sinz(d3)
-       thetam(jm) = (d3 + twopi / 4.0) / nppair(jm)
+       thetam(jm) = (d3 + twopi / 4.0d0) / nppair(jm)
        umcur(3) = (d4 * d11 + d5 * d12) / sroot2
        umcur(2) = (d4 * d12 - d5 * d11) / sroot2
-9006   d1 = (1.0 - cdsat) * reamdu(jm) - (1.0 - cqsat) * reamqu(jm)
+9006   d1 = (1.0d0 - cdsat) * reamdu(jm) - (1.0d0 - cqsat) * reamqu(jm)
        d1 = d1 + cdsat * reamds(jm) - cqsat * reamqs(jm)
        d1 = d1 * umcur(2)
        d3 = (reacl(kcl + 1) - reacl(kcl + 2)) * umcur(2)
        d1 = d1 + d3
        umcur(4) = d8 / seltat - cdsat * sflxd * flxda - d1
-       umcur(4) = umcur(4) - (1.0 - cdsat) * sflxd * flxqrr
-       d3 = (1.0 - cdsat) * reamdu(jm) + cdsat * reamds(jm)
+       umcur(4) = umcur(4) - (1.0d0 - cdsat) * sflxd * flxqrr
+       d3 = (1.0d0 - cdsat) * reamdu(jm) + cdsat * reamds(jm)
        umcur(4) = umcur(4) / d3
        vinp(4) = umcur(4) / gpar(kcld1)
        if (n2 .gt. 0) go to 9015
@@ -523,12 +524,12 @@ contains
        n1 = jcdsat(jm) + jcqsat(jm)
        if (n1 .eq. 0) go to 9015
        if (inpu .eq. 2) go to 9009
-       flxdr(jm) = 0.0
-       flxqr(jm) = 0.0
+       flxdr(jm) = 0.0d0
+       flxqr(jm) = 0.0d0
        go to 9010
        ! if remanent flux option is requested (inpu = 2) :
-9009   if (flxdr(jm) .lt. 0.0) flxdr(jm) = -flxdr(jm)
-       if (flxqr(jm) .lt. 0.0) flxqr(jm) = -flxqr(jm)
+9009   if (flxdr(jm) .lt. 0.0d0) flxdr(jm) = -flxdr(jm)
+       if (flxqr(jm) .lt. 0.0d0) flxqr(jm) = -flxqr(jm)
 9010   if (jcdsat(jm) .ne. 5) go to 9011
        flxdrr = flxdr(jm)
        flxqrr = flxdrr
@@ -543,13 +544,13 @@ contains
        go to 89028
        !  code for the case of total saturation (jcdsat = 5) :
 9016   curmt = d10 * d10 + d15 * d15
-       if (curmt .eq. 0.0) go to 89028
+       if (curmt .eq. 0.0d0) go to 89028
        curmt = sqrtz (curmt)
        d19 = d10 * flxds(jm) / curmt
        d20 = d15 * flxqs(jm) / curmt
-       if (d19 .lt. 0.0) d19 = - d19
-       if (d20 .lt. 0.0) d20 = - d20
-       if (reamdu(jm) .eq. 0.0) go to 9018
+       if (d19 .lt. 0.0d0) d19 = - d19
+       if (d20 .lt. 0.0d0) d20 = - d20
+       if (reamdu(jm) .eq. 0.0d0) go to 9018
        d18 = reamds(jm) / reamdu(jm)
        flxda = d19 + d18 * (flxdrr - d19)
 9018   flxqa = d20 + d18 * (flxqrr - d20)
@@ -557,36 +558,36 @@ contains
        go to 9027
        !  code for the case of non-total saturation :
 9020   if (jcdsat(jm) .eq. 0) go to 9024
-       if (reamdu(jm) .eq. 0.0) go to 9024
+       if (reamdu(jm) .eq. 0.0d0) go to 9024
        d11 = flxds(jm) / reamdu(jm)
        d12 = -d11
-       if (d10 .gt. d11) cdsat = 1.0
-       if (d10 .lt. d12) cdsat = 1.0
+       if (d10 .gt. d11) cdsat = 1.0d0
+       if (d10 .lt. d12) cdsat = 1.0d0
        flxda = (reamds(jm) / reamdu(jm)) * (flxdrr - flxds(jm))
        flxda = flxda + flxds(jm)
 9024   if (jcqsat(jm) .eq. 0) go to 9027
        d16 = flxqs(jm) / reamqu(jm)
        d17 = -d16
-       if (d15 .gt. d16) cqsat = 1.0
-       if (d15 .lt. d17) cqsat = 1.0
+       if (d15 .gt. d16) cqsat = 1.0d0
+       if (d15 .lt. d17) cqsat = 1.0d0
        flxqa = (reamqs(jm) / reamqu(jm)) * (flxqrr - flxqs(jm))
        flxqa = flxqa + flxqs(jm)
 9027   n2 = 1
-       if (d10 .lt. 0.0) sflxd = - 1.0
-       if (d15 .lt. 0.0) sflxq = - 1.0
+       if (d10 .lt. 0.0d0) sflxd = -1.0d0
+       if (d15 .lt. 0.0d0) sflxq = -1.0d0
        d1 = cdsat + cqsat
-       if (d1 .ne. 0.0) go to 9004
+       if (d1 .ne. 0.0d0) go to 9004
        ! calculations of main fluxes :
-89028  if (cdsat .eq. 1.0) go to 89030
+89028  if (cdsat .eq. 1.0d0) go to 89030
        flxd(jm) = reamdu(jm) * d10 + sflxd * flxdrr
        go to 89032
 89030  flxd(jm) = reamds(jm) * d10 + sflxd * flxda
-89032  if (cqsat .eq. 1.0) go to 89034
+89032  if (cqsat .eq. 1.0d0) go to 89034
        flxq(jm) = reamqu(jm) * d15 + sflxq * flxqrr
        go to 9028
 89034  flxq(jm) = reamqs(jm) * d15 + sflxq * flxqa
        ! .output for um = sm and dm :
-9028   umcur(1) = 0.0
+9028   umcur(1) = 0.0d0
        if (jtype(jm) .gt. 7) go to 9029
        omegm(jm) = seltat/nppair(jm)
 9029   omold(jm) = omegm(jm)
@@ -600,7 +601,7 @@ contains
        d17 = reacl(kcl+2)
        if (reacl(kcl) .gt. d17) reacl(kcl) = reacl(kcl) - d17
        reacl(kcl + 1) = reacl(kcl + 1) - d17
-       reacl(kcl + 2) = 0.0
+       reacl(kcl + 2) = 0.0d0
        n1 = kcld1 + 1
        do n3 = n1, kcle
           hist(n3) = 0.0d0
@@ -616,17 +617,17 @@ contains
 9046   nclout = nclout + 1
 9050   if (nodvo2(kcl + 3) .eq. 1) go to 9060
        if (loopss(9) .eq. 2) go to 9052
-       crest(nclout) = + umcur(4)
+       crest(nclout) = +umcur(4)
        if (ntyp59 .eq. 1) crest(nclout) = +umcur(4) * dcoef(jm)
        if (iprsup .ge. 1) write (unit = lunit(6), fmt = 8862) nclout, sfreq(nclout), crest(nclout), time1(nclout), tstop(nclout)
 9052   nclout = nclout + 1
 9060   if (loopss(9) .eq. 2) go to 12100
        ! in case of sm type-59 and exciter mass is present :
        if (ntyp59 .ne. 1) go to 12000
-       if (fpar(kcl+3) .ge. 0.0) go to 12000
+       if (fpar(kcl+3) .ge. 0.0d0) go to 12000
        n3 = int(-fpar(kcl + 3))
        d1 = umcur(4) * umcur(4)
-       crest(n3) = -2.0 * d1 / (gpar(kcld1) * omegm(jm))
+       crest(n3) = -2.0d0 * d1 / (gpar(kcld1) * omegm(jm))
        go to 12000
        ! .im equations code *****************************************
        ! .input interface elect netw with im power side **************
@@ -647,7 +648,7 @@ contains
           n2 = nodvo2(n11)
           n2 = norder(n2)
           dumvec(n10) = solr(n1) - solr(n2)
-          dumvec(n10+3) = soli(n1) - soli(n2)
+          dumvec(n10 + 3) = soli(n1) - soli(n2)
        end do
        if (con(1) .eq. 1) go to 10024
        if (con(8) .eq. 1) go to 10024
@@ -681,7 +682,7 @@ contains
        n20 = n20 + 1
        n10 = 1
        go to 10030
-10040  if (con(1) .ne. 1.0) go to 10080
+10040  if (con(1) .ne. 1.0d0) go to 10080
        n1 = nodvo1(kcl + 2)
        n1 = norder(n1)
        n2 = nodvo2(kcl + 2)
@@ -690,14 +691,14 @@ contains
        zthri = -soli(n1 + ntot) + soli(n2 + ntot)
        !.  formation of constant switch matrix ptheta :
 10080  do n1 = 1, 3
-          ptheta(3,n1) = 1.0 / sroot3
+          ptheta(3,n1) = 1.0d0 / sroot3
        end do
-       ptheta(1, 1) = -1.0 / (sroot2 * sroot3)
+       ptheta(1, 1) = -1.0d0 / (sroot2 * sroot3)
        ptheta(1, 3) = sroot2 / sroot3
        ptheta(1, 2) = ptheta(1, 1)
-       ptheta(2, 1) = -1.0 / sroot2
+       ptheta(2, 1) = -1.0d0 / sroot2
        ptheta(2, 2) = -ptheta(2, 1)
-       ptheta(2, 3) = 0.0
+       ptheta(2, 3) = 0.0d0
        ! .input interface im excitation and elect.netw. (thev variables):
        ! 10100 n17 = kcle - kcl - 2
        n17 = kcle - kcl - 2
@@ -710,8 +711,8 @@ contains
           n3 = nodvo1(n2)
           ndum(n1) = norder(n3)
           n3 = nodvo2(n2)
-          ndum(n1+3) = norder(n3)
-          ndum(n1+6) = nodvo1(n2) - nodvo2(n2)
+          ndum(n1 + 3) = norder(n3)
+          ndum(n1 + 6) = nodvo1(n2) - nodvo2(n2)
        end do
        do n1 = 1, n17
           n2 = ndum(n1)
@@ -720,7 +721,7 @@ contains
           if (ndum(n4) .eq. 0) cycle
           vinp(n1+3) = -solr(n2) + solr(n3)
           vinp(n1+23) = -soli(n2) + soli(n3)
-          if (slip .lt. 0.0) vinp(n1 + 23) = -vinp(n1 + 23)
+          if (slip .lt. 0.0d0) vinp(n1 + 23) = -vinp(n1 + 23)
        end do
        n20 = 1
        do n1 = 1, n17
@@ -759,17 +760,17 @@ contains
 10150  n2 = ndum(n1) + n20 * ntot
        n3 = ndum(n1 + 3) + n20 * ntot
        if (n19 .eq. 1) go to 10160
-       zths3(3,2) = - solr(n2) + solr(n3)
-       zths3i(3,2) = - soli(n2) + soli(n3)
+       zths3(3, 2) = -solr(n2) + solr(n3)
+       zths3i(3, 2) = -soli(n2) + soli(n3)
        n20 = n20 + 1
        n19 = 1
        n1 = 2
        go to 10150
-10160  zths3(2,3) = - solr(n2) + solr(n3)
-       zths3i(2,3) = - soli(n2) + soli(n3)
+10160  zths3(2,3) = -solr(n2) + solr(n3)
+       zths3i(2,3) = -soli(n2) + soli(n3)
 10170  if (ncl .le. 6) go to 10200
        n17 = kcld1 + 3
-       do n1 = n17,kcle
+       do n1 = n17, kcle
           n2 = nodvo1(n1)
           n2 = norder(n2)
           n4 = n2 + ntot
@@ -835,11 +836,11 @@ contains
        ! .start calculations of y - norton :
 10580  if (norton .ne. 2) go to 10588
        vinp(1) = con(3) * sroot3 + con(2) * sroot2 + con(1)
-       vinp(21) = 0.0
+       vinp(21) = 0.0d0
        do n1 = kcld1, kcle
           n10 = n1 - kcl + 1
-          vinp(n10) = 0.0
-          vinp(n10+20) = 0.0
+          vinp(n10) = 0.0d0
+          vinp(n10+20) = 0.0d0
        end do
        ! .calculation of im main fluxes :
        ! .real and imaginary flux : flxd, stored, flxq, storeq
@@ -906,8 +907,8 @@ contains
        end do
        do n1 = 1, 2
           n2 = n1 + 2
-          fjm(n1,n1) = fjm(n1,n1) - 1.0/reamdu(jm)
-          fjm(n2,n2) = fjm(n2,n2) - 1.0/reamqu(jm)
+          fjm(n1,n1) = fjm(n1,n1) - 1.0d0 / reamdu(jm)
+          fjm(n2,n2) = fjm(n2,n2) - 1.0d0 / reamqu(jm)
        end do
        do n1 = 1,4
           do n2 = 1, 4
@@ -929,55 +930,55 @@ contains
        !.   umcur power :
 11000  d10 = reacl(kcl+1) * seltat
        d11 = reacl(kcl+2) * seltat
-       d11 = d11 + zthri + (d10-d11)/2.0
-       d12 = zthrr + 1.0/gpar(kcl+2)
-       d13 = 2.0 * (d11*d11 + d12*d12)
+       d11 = d11 + zthri + (d10 - d11) / 2.0d0
+       d12 = zthrr + 1.0d0 / gpar(kcl + 2)
+       d13 = 2.0d0 * (d11 * d11 + d12 * d12)
        d17 = (flxd(jm) + storeq) * seltat
        d18 = (stored - flxq(jm)) * seltat
-       d1 = - sroot2*vinp(1)
+       d1 = -sroot2 * vinp(1)
        d1 = d1 + d17
-       d2 = - sroot2*vinp(21)
+       d2 = -sroot2 * vinp(21)
        d2 = d2 + d18
-       umcur(1) = 0.0
-       umcur(21) = 0.0
-       umcur(2) = (d2*d12 - d1*d11)/d13
-       umcur(3) = (d1*d12 + d2*d11)/d13
-       umcur(22) = - umcur(3)
-       umcur(23) = + umcur(2)
+       umcur(1) = 0.0d0
+       umcur(21) = 0.0d0
+       umcur(2) = (d2 * d12 - d1 * d11) / d13
+       umcur(3) = (d1 * d12 + d2 * d11) / d13
+       umcur(22) = -umcur(3)
+       umcur(23) = +umcur(2)
        !.  umcur excitation because of input voltage
        if (jacob .lt. 6) go to 11100
        if (loopss(9) .ne. 2) go to 11100
-       if (slip .ne. 0.0) go to 11100
+       if (slip .ne. 0.0d0) go to 11100
        go to 11720
 11100  do n10 = kcld1, kcle
           d1 = slip * seltat * reacl(n10) * gpar(n10)
-          d2 = 1.0 + d1*d1
-          fpar(n10) = 1.0/d2
+          d2 = 1.0d0 + d1*d1
+          fpar(n10) = 1.0d0 / d2
           n5 = n10 - kcl + 1
           n6 = n5 + 20
           d3 = fpar(n10) * gpar(n10)
-          umcur(n5) = - d3 * (vinp(n5) + d1*vinp(n6))
-          umcur(n6) = - d3 * (vinp(n6) - d1*vinp(n5))
+          umcur(n5) = - d3 * (vinp(n5) + d1 * vinp(n6))
+          umcur(n6) = - d3 * (vinp(n6) - d1 * vinp(n5))
        end do
        !.  umcur excitation because of fluxes
        !     11515 if (ncld(jm) .eq. 0) go to 11530
        if (ncld(jm) .eq. 0) go to 11530
-       do n10 = kcld1,kclde
+       do n10 = kcld1, kclde
           n5 = n10 - kcl + 1
           n6 = n5 + 20
           d1 = slip * seltat * gpar(n10) * reacl(n10)
           d2 = slip * seltat * gpar(n10) * fpar(n10)
-          umcur(n5) = umcur(n5) + d2*(stored - d1*flxd(jm))
-          umcur(n6) = umcur(n6) - d2*(d1*stored + flxd(jm))
+          umcur(n5) = umcur(n5) + d2 * (stored - d1 * flxd(jm))
+          umcur(n6) = umcur(n6) - d2 * (d1 * stored + flxd(jm))
        end do
 11530  if (nclq(jm) .eq. 0) go to 11550
-       do n10 = kclq1,kclqe
+       do n10 = kclq1, kclqe
           n5 = n10 - kcl + 1
           n6 = n5 + 20
           d1 = slip * seltat * gpar(n10) * reacl(n10)
           d2 = slip * seltat * gpar(n10) * fpar(n10)
-          umcur(n5) = umcur(n5) + d2*(storeq - d1*flxq(jm))
-          umcur(n6) = umcur(n6) - d2*(d1*storeq + flxq(jm))
+          umcur(n5) = umcur(n5) + d2 * (storeq - d1 * flxq(jm))
+          umcur(n6) = umcur(n6) - d2 * (d1 * storeq + flxq(jm))
        end do
        !.  umcur excitation because of thev impedances :
 11550  do n1 = kcld1, kcle
@@ -988,50 +989,50 @@ contains
        if (ncl .gt. 6) n15 = kcl + 5
        do n10 = 1,3
           do n11 = 1, 3
-             zthevr(n10,n11) = 0.0
-             dummat(n10,n11) = 0.0
+             zthevr(n10, n11) = 0.0d0
+             dummat(n10, n11) = 0.0d0
           end do
        end do
        n7 = kcl + 3
        do n10 = n7, n15
           n6 = n10 - kcl - 2
-          zthevr(n6,n6) = gpar(n10) * fpar(n10)
-          dummat(n6,n6) = zthevr(n6,n6)
+          zthevr(n6, n6) = gpar(n10) * fpar(n10)
+          dummat(n6, n6) = zthevr(n6, n6)
        end do
-       call matmul(dummat,zths3)
-       call matmul(zthevr,zths3i)
+       call matmul (dummat, zths3)
+       call matmul (zthevr, zths3i)
        do n10 = 1, 3
           do n11 = 1, 3
-             dumma1(n10,n11) = dummat(n10,n11)
-             dumma2(n10,n11) = zthevr(n10,n11)
+             dumma1(n10, n11) = dummat(n10, n11)
+             dumma2(n10, n11) = zthevr(n10, n11)
           end do
        end do
        do n10 = 1, 3
           n12 = n10 + kcl + 2
           d1 = slip * seltat * reacl(n12) * gpar(n12)
           do n11 = 1, 3
-             zthevr(n10,n11) = d1 * zthevr(n10,n11)
-             dummat(n10,n11) = d1 * dummat(n10,n11)
+             zthevr(n10, n11) = d1 * zthevr(n10, n11)
+             dummat(n10, n11) = d1 * dummat(n10, n11)
           end do
        end do
        do n10 = 1, 3
           do n11 = 1, 3
-             dumma1(n10,n11) = dumma1(n10,n11) + zthevr(n10,n11)
-             dumma2(n10,n11) = dumma2(n10,n11) - dummat(n10,n11)
+             dumma1(n10, n11) = dumma1(n10, n11) + zthevr(n10, n11)
+             dumma2(n10, n11) = dumma2(n10, n11) - dummat(n10, n11)
           end do
        end do
        do n10 = 1, 3
           n12 = n10 + 3
           do  n11 = 1, 3
              n13 = n11 + 3
-             gmat(n10,n11) = + dumma1(n10,n11)
-             gmat(n12,n13) = + dumma1(n10,n11)
-             gmat(n10,n13) = - dumma2(n10,n11)
-             gmat(n12,n11) = + dumma2(n10,n11)
+             gmat(n10, n11) = + dumma1(n10, n11)
+             gmat(n12, n13) = + dumma1(n10, n11)
+             gmat(n10, n13) = - dumma2(n10, n11)
+             gmat(n12, n11) = + dumma2(n10, n11)
           end do
        end do
        do n10 = 1, 6
-          gmat(n10,n10) = gmat(n10,n10) + 1.0
+          gmat(n10, n10) = gmat(n10, n10) + 1.0d0
        end do
        do n10 = 1,3
           n11 = n10 + 3
@@ -1051,11 +1052,11 @@ contains
              n8 = n6 - n1
              do n9 = 1, n8
                 n11 = n6 + 1 - n9
-                d1 = gmat(n10,n1) * gmat(n1,n11)/gmat(n1,n1)
-                gmat(n10,n11) = gmat(n10,n11) - d1
+                d1 = gmat(n10, n1) * gmat(n1, n11) / gmat(n1, n1)
+                gmat(n10, n11) = gmat(n10, n11) - d1
              end do
              n11 = n6 - n8
-             gmat(n10,n11) = 0.0
+             gmat(n10, n11) = 0.0d0
           end do
        end do
 11650  do n10 = 1, n5
@@ -1088,19 +1089,19 @@ contains
           zthevs(n11) = 1.0 + zthevs(n11) + d1*zthevs(n12)
           zthevs(n12) = + zthevs(n12) - d1*d2
           d3 = zthevs(n11) * zthevs(n11)
-          d3 = d3 + zthevs(n12)*zthevs(n12)
-          d3 = 1.0/d3
+          d3 = d3 + zthevs(n12) * zthevs(n12)
+          d3 = 1.0d0 / d3
           d1 = umcur(n11)
-          umcur(n11) = zthevs(n11)*umcur(n11)+zthevs(n12)*umcur(n12)
+          umcur(n11) = zthevs(n11) * umcur(n11) + zthevs(n12) * umcur(n12)
           umcur(n11) = d3 * umcur(n11)
-          umcur(n12) = - zthevs(n12)*d1 + zthevs(n11)*umcur(n12)
+          umcur(n12) = -zthevs(n12) * d1 + zthevs(n11) * umcur(n12)
           umcur(n12) = d3 * umcur(n12)
        end do
 11720  if (jacob .lt. 6) go to 10650
        !.  output for um = im
        if (loopss(9) .eq. 2) go to 11800
        !     11725 omegm(jm) = (1.0 - slip)*seltat/nppair(jm)
-       omegm(jm) = (1.0 - slip) * seltat / nppair(jm)
+       omegm(jm) = (1.0d0 - slip) * seltat / nppair(jm)
        omold(jm) = omegm(jm)
        do n10 = 1, 3
           n11 = kcl - 1 + n10
@@ -1115,48 +1116,48 @@ contains
        if (jtype(jm) .ne. 4) go to 11800
        n13 = 0
 11760  do n10 = 1,3
-          n12 = n10 + 3 + n13*20
+          n12 = n10 + 3 + n13 * 20
           dumvec(n10) = umcur(n12)
           do n11 = 1,3
-             dummat(n10,n11) = ptheta(n11,n10)
+             dummat(n10, n11) = ptheta(n11, n10)
           end do
        end do
-       call matvec(dummat,dumvec)
+       call matvec(dummat, dumvec)
        do n10 = 1,3
-          n11 = n10 + 3 + n13*20
+          n11 = n10 + 3 + n13 * 20
           umcur(n11) = dumvec(n10)
        end do
        if(n13 .eq. 1) go to 11800
        n13 = 1
        go to 11760
        !.  output interface of im and elect. network :
-11800  d14 = con(3)/(sroot2*sroot3) + con(2)/2.0 + con(1)
-       d15 = con(3)/sroot3 + con(2)/sroot2 + con(1)
-       d11 = (- umcur(22) + umcur(3)) * d14
-       d12 = (+ umcur(2) + umcur(23)) * d14
+11800  d14 = con(3) / (sroot2 * sroot3) + con(2) / 2.0d0 + con(1)
+       d15 = con(3) / sroot3 + con(2) / sroot2 + con(1)
+       d11 = (-umcur(22) + umcur(3)) * d14
+       d12 = (+umcur(2) + umcur(23)) * d14
        !  adjusting current output to include power resistance to emtp
        !   for the case of prediction request :
        if (loopss(9) .ne. 3) go to 11806
-       d11 = d11 + vinp(1)*gpar(kcl+2)*d15
-       d12 = d12 + vinp(21)*gpar(kcl+2)*d15
-11806  d10 = d11*d11 + d12*d12
-       if (d10 .ne. 0.0) go to 11810
-       d11 = 0.0
-       d2 = 0.0
-       d3 = 0.0
+       d11 = d11 + vinp(1) * gpar(kcl + 2) * d15
+       d12 = d12 + vinp(21) * gpar(kcl + 2) * d15
+11806  d10 = d11 * d11 + d12 * d12
+       if (d10 .ne. 0.0d0) go to 11810
+       d11 = 0.0d0
+       d2 = 0.0d0
+       d3 = 0.0d0
        go to 11815
 11810  if (norton .eq. 2) d5 = - d11/d10
        if (norton .eq. 2) d6 = + d12/d10
-       d10 = sqrtz(d10)
-       d1 = d12/d11
-       d1 = atanz(d1)
-       if (d11 .lt. 0.0) d1 = d1 + twopi/2.0
-       d2 = con(2)*d1 + con(3)*(d1 - twopi/3.0)
-       d3 = con(2)*(d1 + twopi/4.0) + con(3)*(d1 + twopi/3.0)
-       d3 = d3 + con(1)*d1
+       d10 = sqrtz (d10)
+       d1 = d12 / d11
+       d1 = atanz (d1)
+       if (d11 .lt. 0.0d0) d1 = d1 + twopi / 2.0d0
+       d2 = con(2) * d1 + con(3) * (d1 - twopi / 3.0d0)
+       d3 = con(2) * (d1 + twopi / 4.0d0) + con(3) * (d1 + twopi / 3.0d0)
+       d3 = d3 + con(1) * d1
 11815  do n1 = 1, 3
           n2 = n1 + kcl - 1
-          n11 = 3 * (jm-1)
+          n11 = 3 * (jm - 1)
           if (nodvo1(n2) .eq. nodvo2(n2)) cycle
           !      including mach resistances to power network at
           !      last pass through this part of code for non -
@@ -1166,17 +1167,17 @@ contains
 11818     n11 = numibr - 3 + n1
           n12 = - nr(n11)
           if (n12 .lt. 0) n12 = - n12
-          tr(n12) = 1.0/gpar(kcl+2)
-          tx(n12) = 0.0
+          tr(n12) = 1.0d0 / gpar(kcl + 2)
+          tx(n12) = 0.0d0
           if (norton .ne. 2) go to 11821
           tr(n12) = d5
-          tx(n12) = d6 * 1.0d+3/seltat
-          if (xopt .ne. 0.0) tx(n12) = d6 * xopt * twopi/seltat
+          tx(n12) = d6 * 1.0d+3 / seltat
+          if (xopt .ne. 0.0d0) tx(n12) = d6 * xopt * twopi / seltat
           go to 11823
 11821     d11 = d1
           if (n1 .eq. 2) d11 = d2
           if (n1 .eq. 3) d11 = d3
-          if (n1 .eq. 1 .and. lfim3i .ne. 0) nclout = int(hist(kcl + 2))
+          if ((n1 .eq. 1) .and. (lfim3i .ne. 0)) nclout = int (hist(kcl + 2), kind (nclout))
           if (nodvo1(n2) .eq. 1) go to 11822
           crest(nclout) = d10
           time1(nclout) = d11
@@ -1188,34 +1189,34 @@ contains
           if (iprsup .ge. 1) write (unit = lunit(6), fmt = 8862) nclout, sfreq(nclout), crest(nclout), time1(nclout), tstop(nclout)
           nclout = nclout + 1
 11823     if (loopss(8) .eq. 0 .and. lfim3i .eq. 0) cycle
-          if (iprsup .ge. 1 .and. norton .ne. 1) write (unit = lunit(6), fmt = 8860) n11, tr(n12), tx(n12)
+          if ((iprsup .ge. 1) .and. (norton .ne. 1)) write (unit = lunit(6), fmt = 8860) n11, tr(n12), tx(n12)
        end do
        if (loopss(9) .ne. 2) go to 11825
        if (norton .eq. 2) go to 11825
        norton = 2
        go to 10580
 11825  if (lfim3i .ne. 0) cycle
-       nclind = int(fpar(kcl + 1))
+       nclind = int (fpar(kcl + 1), kind (nclind))
        do n10 = 4, ncl
           n11 = n10 + 20
           n12 = n10 + kcl - 1
-          if (slip .lt. 0.0) umcur(n11) = - umcur(n11)
+          if (slip .lt. 0.0d0) umcur(n11) = -umcur(n11)
           if (nodvo1(n12) .eq. nodvo2(n12)) cycle
           if (loopss(9) .eq. 2) go to 11828
-          d2 = umcur(n10)*umcur(n10) + umcur(n11)*umcur(n11)
-          d2 = sqrtz(d2)
-          d3 = umcur(n11)/umcur(n10)
-          d3 = atanz(d3)
-          if (umcur(n10) .lt. 0.0) d3 = d3 + twopi/2.0
+          d2 = umcur(n10) * umcur(n10) + umcur(n11) * umcur(n11)
+          d2 = sqrtz (d2)
+          d3 = umcur(n11) / umcur(n10)
+          d3 = atanz (d3)
+          if (umcur(n10) .lt. 0.0d0) d3 = d3 + twopi / 2.0d0
 11828     if (nodvo1(n12) .eq. 1) go to 11830
           if (loopss(9) .eq. 2) go to 11829
-          crest(nclind) = - d2
+          crest(nclind) = -d2
           time1(nclind) = d3
           if (iprsup .ge. 1) write (unit = lunit(6), fmt = 8862) nclind, sfreq(nclind), crest(nclind), time1(nclind), tstop(nclind)
 11829     nclind = nclind + 1
 11830     if (nodvo2(n12) .eq. 1) cycle
           if (loopss(9) .eq. 2) go to 11832
-          crest(nclind) = + d2
+          crest(nclind) = +d2
           time1(nclind) = d3
           if (iprsup .ge. 1) write (unit = lunit(6), fmt = 8862) nclind, sfreq(nclind), crest(nclind), time1(nclind), tstop(nclind)
 11832     nclind = nclind + 1
@@ -1227,14 +1228,14 @@ contains
        !          calculation.
        !     11900 if (loopss(9) .eq. 2) go to 12100
        if (loopss(9) .eq. 2) go to 12100
-12000  d1 = 3.0*con(3) + 2.0*con(2) + con(8) + con(1)
-       d2 = (reacl(kcl+1) - reacl(kcl+2))*umcur(2)*umcur(3)
+12000  d1 = 3.0d0 * con(3) + 2.0d0 * con(2) + con(8) + con(1)
+       d2 = (reacl(kcl + 1) - reacl(kcl + 2)) * umcur(2) * umcur(3)
        d3 = umcur(2) * flxq(jm)
        d4 = umcur(3) * flxd(jm)
        tqgen = (d2 - d3 + d4) * nppair(jm)
        if (inpu .eq. 1) tqgen = tqgen/d1
        !.  output interface of um with mechanical network :
-       anglum(jm) = + tqgen
+       anglum(jm) = +tqgen
        crest(nclout) = omegm(jm)
        if (loopss(10) .ne. 3) jtmtac(jm) = 0
        if (iprsup .ge. 1) write (unit = lunit(6), fmt = 8862) nclout, sfreq(nclout), crest(nclout), time1(nclout), tstop(nclout)
@@ -1260,12 +1261,12 @@ contains
     do jm = 1, numum
        kcl = kcoil(jm)
        n1 = jcltac(kcl)
-       n2 = jcltac(kcl+1)
+       n2 = jcltac(kcl + 1)
        nshare = n1 + n2
        if (nshare .ne. 0) nshare = 1
        !  note : if nshare=0 then no multi um sharing mech netw
-       if (n1 .ne. 0 .and. jm .gt. n1) nshare = 10
-       if (n2 .ne. 0 .and. jm .gt. n2) nshare = 10
+       if ((n1 .ne. 0) .and. (jm .gt. n1)) nshare = 10
+       if ((n2 .ne. 0) .and. (jm .gt. n2)) nshare = 10
        !  note: if nshare=10, no mech slack bus calc but speed capacitor
        !         and torque source of um nr. n1 and um nr. n2 to be set
        if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13110) jm
@@ -1323,22 +1324,22 @@ contains
        !  code for loopss(4) = 1  *************************************
        if (loopss(4) .gt. 1) go to 13150
        if (imach .ne. 1) flxd(jm) = d1
-       if (imach .ne. 1) crest(n10) = 0.0
-       if (imach .ne. 1 .and. iprsup .ge. 1) write (unit = lunit(6), fmt = 13122) n10,node(n10),sfreq(n10),crest(n10),time1(n10),tstart(n10),tstop(n10)
+       if (imach .ne. 1) crest(n10) = 0.0d0
+       if ((imach .ne. 1) .and. (iprsup .ge. 1)) write (unit = lunit(6), fmt = 13122) n10, node(n10), sfreq(n10), crest(n10), time1(n10), tstart(n10), tstop(n10)
        if (nshare .eq. 10) go to 13170
        !     13141 flxq(jm) = d3
        flxq(jm) = d3
        tstop(n11) = crest(n11)
-       crest(n11) = 0.0
-       if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13123) n11,node(n11),sfreq(n11),crest(n11),time1(n11),tstart(n11),tstop(n11)
+       crest(n11) = 0.0d0
+       if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13123) n11, node(n11), sfreq(n11), crest(n11), time1(n11), tstart(n11), tstop(n11)
        n13 = kssfrq(n12)
        if (n13 .lt. 0) cycle
        n14 = n13
 13142  if (n13 .eq. n11) go to 13144
-       if (tstart(n13) .ne. -7777.) go to 13144
+       if (tstart(n13) .ne. -7777.0d0) go to 13144
        tstop(n13) = crest(n13)
-       crest(n13) = 0.0
-       if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13123) n13,node(n13),sfreq(n13),crest(n13),time1(n13),tstart(n13),tstop(n13)
+       crest(n13) = 0.0d0
+       if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13123) n13, node(n13), sfreq(n13), crest(n13), time1(n13), tstart(n13), tstop(n13)
 13144  n13 = kpsour(n13)
        if (n14 .ne. n13) go to 13142
        !     13148 go to 13370
@@ -1346,48 +1347,48 @@ contains
        !     code for loopss(4) = 2 (final umrenu pass) ******************
 13150  if (imach .eq. 1) go to 13160
        d5 = voltum(jm) - d1
-       d5 = d5/(flxd(jm) - d1)
+       d5 = d5 / (flxd(jm) - d1)
        crest(n10) = d5 * voltum(jm)
-       if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13122) n10,node(n10),sfreq(n10),crest(n10),time1(n10),tstart(n10),tstop(n10)
+       if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13122) n10, node(n10), sfreq(n10), crest(n10), time1(n10), tstart(n10), tstop(n10)
 13160  if (nshare .eq. 10) go to 13170
        !     13161 d5 = anglum(jm) - d3
        d5 = anglum(jm) - d3
-       d5 = d5/(flxq(jm) - d3)
+       d5 = d5 / (flxq(jm) - d3)
        crest(n11) = d5 * tstop(n11)
-       tstop(n11) = 9999.
-       if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13123) n11,node(n11),sfreq(n11),crest(n11),time1(n11),tstart(n11),tstop(n11)
+       tstop(n11) = 9999.0d0
+       if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13123) n11, node(n11), sfreq(n11), crest(n11), time1(n11), tstart(n11), tstop(n11)
        n13 = kssfrq(n12)
        if (n13 .lt. 0) cycle
        n14 = n13
 13162  if (n13 .eq. n11) go to 13164
-       if (tstart(n13) .ne. -7777.) go to 13164
+       if (tstart(n13) .ne. -7777.0d0) go to 13164
        crest(n13) = d5 * tstop(n13)
-       tstop(n13) = 9999.
-       if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13123) n13,node(n13),sfreq(n13),crest(n13),time1(n13),tstart(n13),tstop(n13)
+       tstop(n13) = 9999.0d0
+       if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13123) n13, node(n13), sfreq(n13), crest(n13), time1(n13), tstart(n13), tstop(n13)
 13164  n13 = kpsour(n13)
        if (n14 .ne. n13) go to 13162
        !     set speed capacitors and sources for tqgen (for um's with
        !     no slack bus calculations, i.e. jm gt than jcltac(kcl) and
        !     for jm gt jcltac(kcl+1) .
 13170  if (nshare .ne. 10) cycle
-       n2 = int(fpar(kcl + 2))
+       n2 = int (fpar(kcl + 2), kind (n2))
        c(n2) = 1.0d+8
-       if (copt .ne. 0.0) c(itcap) = c(itcap)*copt*twopi
-       tr(n2) = 0.0
+       if (copt .ne. 0.0d0) c(itcap) = c(itcap) * copt * twopi
+       tr(n2) = 0.0d0
        kconst = kconst + 1
-       if ( kconst .le. lexct )  go to 6784
-       write (unit = lunit(6), fmt =  6783)  lexct
+       if (kconst .le. lexct) go to 6784
+       write (unit = lunit(6), fmt =  6783) lexct
 6783   format (' Overflow list 4 in "umrenu".  lexct =', i5, '     Stop locally.')
        call stoptp
-6784   node(kconst) = - nodom(jm)
+6784   node(kconst) = -nodom(jm)
        iform(kconst) = 14
-       crest(kconst) = - anglum(jm)
-       time1(kconst) = 0.0
-       tstart(kconst) = - 1.0
-       tstop(kconst) = 0.0
+       crest(kconst) = -anglum(jm)
+       time1(kconst) = 0.0d0
+       tstart(kconst) = -1.0d0
+       tstop(kconst) = 0.0d0
        n5 = nodmum(jm)
        sfreq(kconst) = sfreq(n5)
-       if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13172) kconst,node(kconst),sfreq(kconst),crest(kconst),time1(kconst),tstart(kconst),tstop(kconst)
+       if (iprsup .ge. 1) write (unit = lunit(6), fmt = 13172) kconst, node(kconst), sfreq(kconst), crest(kconst), time1(kconst), tstart(kconst), tstop(kconst)
 13172  format (' ****** Temporary tqgen source:', 1x, i6, 2x, i6, 5e14.5)
     end do
     loopss(4) = loopss(4) + 1
@@ -1405,8 +1406,7 @@ contains
 13616 format (/, ' Branch table vectors', /, '       row      kbus    mbus        nr    length    kodebr    kodsem', /, (1x, 7i10))
     write (unit = lunit(6), fmt =  13716) (i, iform(i), node(i), crest(i), time1(i), tstart(i), sfreq(i), i = 1, kconst)
 13716 format (/, ' Source table vectors', /, '       row     iform    node', 15x, 'crest', 15x, 'time1', 14x, 'tstart', 15x, 'sfreq', /, (3i10, 4e20.10))
-14000 if (iprsup .ge. 1) write (unit = lunit(6), fmt =  14100)  istart,istep,loopss(1),loopss(2), loopss(4),loopss(8),loopss(9),loopss(10),kconst,ibr, &
-         inonl,kswtch,istead,omegrf
+14000 if (iprsup .ge. 1) write (unit = lunit(6), fmt =  14100) istart, istep, loopss(1), loopss(2), loopss(4), loopss(8), loopss(9), loopss(10), kconst, ibr, inonl, kswtch, istead, omegrf
 14100 format (/, ' ************************* Setting at this umrenu exit :', /, '  istart   istep  lopss1  lopss2  lopss4  lopss8  lopss9 lopss10  kconst     ibr   inonl  kswtch  istead', 8x, 'omegrf', /, 13i8, e14.5, /)
     return
   end subroutine umrenu
@@ -1505,7 +1505,7 @@ contains
              if (ndum(n2) .ne. n4) cycle
              nummec = nummec + 1
              if (nummec .eq. 1) jcltac(kcl) = j
-             if (nummec .eq. 2) jcltac(kcl+1) = j
+             if (nummec .eq. 2) jcltac(kcl + 1) = j
              if (j .gt. i) nodmum(j) = nodmum(i)
              exit
           end do
@@ -1518,22 +1518,22 @@ contains
 81249  format (" the mechanical network from the remaining um's.")
        call stoptp
        ! .default value for epsom(i) :
-1250   if (epsom(i) .ne. 0.0) go to 1260
-       epsom(i) = 0.001
+1250   if (epsom(i) .ne. 0.0d0) go to 1260
+       epsom(i) = 0.001d0
        if (jtype(i) .eq. 13) go to 1255
        if (inpu .eq. 1) go to 1260
-1255   epsom(i) = 0.001 * rotmom(i) / nppair(i)
-1260   if (jtype(i) .gt. 2 .and. jtype(i) .lt. 8) imach = 1
-       if (jtype(i) .eq. 3 .and. loopss(10) .eq. 1) loopss(10) = 3
+1255   epsom(i) = 0.001d0 * rotmom(i) / nppair(i)
+1260   if ((jtype(i) .gt. 2) .and. (jtype(i) .lt. 8)) imach = 1
+       if ((jtype(i) .eq. 3) .and. (loopss(10) .eq. 1)) loopss(10) = 3
        ! renumbering electrical nodes :
        if (jtmtac(i) .ge. 0) go to 1262
        n9 = -jtmtac(i)
        jtmtac(i) = -norder(n9)
 1262   if (jtype(i) .ne. 13) go to 1270
        if (fpar(kcl + 3) .ge. 0.0) go to 1270
-       n5 = int(fpar(kcl + 4))
+       n5 = int (fpar(kcl + 4), kind (n5))
        fpar(kcl + 4) = norder(n5)
-       n5 = int(fpar(kcl + 5))
+       n5 = int (fpar(kcl + 5), kind (n5))
        fpar(kcl + 5) = norder(n5)
 1270   n2 = 3 * (i - 1)
        do n1 = 1, 3
@@ -1542,7 +1542,7 @@ contains
           umcurp(n1 + n2) = n3
        end do
     end do
-    if (imach .eq. 1 .and. loopss(8) .eq. 1) loopss(9) = 1
+    if ((imach .eq. 1) .and. (loopss(8) .eq. 1)) loopss(9) = 1
     do i = 1, ncltot
        n8 = nodvo1(i)
        nodvo1(i) = norder(n8)
@@ -1552,7 +1552,7 @@ contains
     ! renumbering in case of TACS transfer with sm type-59 data :
     if (nsmach .eq. 0) go to 1340
     n5 = int (umoutp(numout + 1))
-    if (n5 .ne. -9999.0) go to 1340
+    if (n5 .ne. -9999.0d0) go to 1340
     n5 = numout + 4
     n6 = int (umoutp(numout + 3)) - 2
 1330 if (n5 .gt. n6) go to 1338
@@ -1603,7 +1603,7 @@ contains
 1480 if (loopss(10) .ne. 2) go to 1500
     kconst = loopss(3)
     ibr = loopss(12)
-    it = - nr(ibr)
+    it = -nr(ibr)
     numsub = int (hist(kcl + 1))
 1500 n15 = 0
     ncomcl = 0
@@ -1627,12 +1627,11 @@ contains
 1850   format (/, ' *************************************** Preparing Thevenin calculation for um type-3 excitation circuits due to ld-flow request:')
        go to 2008
 1900   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1902)
-1902   format (/, ' *************************************** Momentary creation of additional EMTP elements (permanent branches if power', /, &
-            ' *************************************** Coils are non-comp). For steady-state calculations of')
+1902   format (/, ' *************************************** Momentary creation of additional EMTP elements (permanent branches if power', /, ' *************************************** Coils are non-comp). For steady-state calculations of')
        if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1904) k
 1904   format (' um number', i4, ' :', 28x, 'node to node   ibr', 4x, 'it', 8x, 'tr(it)', 8x, 'tx(it)', 2x, 'kconst', 9x, 'sfreq', 9x, 'crest')
-       if (jtype(k) .eq. 4 .and. loopss(10) .eq. 1) lfim4i = 1
-       if (jtype(k) .eq. 4 .and. loopss(10) .eq. 2) lfim4i = 2
+       if ((jtype(k) .eq. 4) .and. (loopss(10) .eq. 1)) lfim4i = 1
+       if ((jtype(k) .eq. 4) .and. (loopss(10) .eq. 2)) lfim4i = 2
        ! bring the im type-4 excitation  sources back to slip-freq at
        ! pass for which loopss(10) = 2 and um = im type-4 :
        ! note : this is not necessary for the rotor resistances
@@ -1640,7 +1639,7 @@ contains
        if (lfim4i .ne. 2) go to 2000
        if (loopss(10) .ne. 2) go to 2000
        d3 = slip
-       if (d3 .lt. 0.0) d3 = - d3
+       if (d3 .lt. 0.0d0) d3 = - d3
        n19 = int(fpar(kcl + 1))
        n18 = ncl - 3
        n20 = n19 - 1 + n18
@@ -1651,15 +1650,15 @@ contains
           if (n2 .eq. 1) cycle
           n3 = kssfrq(n2)
           n4 = n3
-          if (n3 .ge. n19 .and. n3 .le. n20) then
+          if ((n3 .ge. n19) .and. (n3 .le. n20)) then
              sfreq(n3) = d3 * sfreq(n3)
           end if
-1950      if (n3 .ge. n19 .and. n3 .le. n20) go to 1960
+1950      if ((n3 .ge. n19) .and. (n3 .le. n20)) go to 1960
           if (node(n3) .lt. 0) go to 1960
           crest(n3) = -slip * crest(n3)
           sfreq(n3) = d3 * sfreq(n3)
-          if (slip .lt. 0.0) time1(n3) = -time1(n3)
-          d4 = time1(n3) * 360.0 / twopi
+          if (slip .lt. 0.0d0) time1(n3) = -time1(n3)
+          d4 = time1(n3) * 360.0d0 / twopi
           n6 = node(n3)
           if (n13 .eq. 1) write (unit = lunit(6), fmt = 1952) k
           if (n13 .eq. 1) write (unit = lunit(6), fmt = 1954)
@@ -1697,7 +1696,7 @@ contains
        n9 = n5 + 2
 2018   numsub = numsub + 1
        isubeg(numsub) = n15 + 1
-       do j = n5,n9
+       do j = n5, n9
           if (nodvo1(j) .eq. nodvo2(j)) cycle
           n15 = n15 + 1
           ncomcl = ncomcl + 1
@@ -1742,12 +1741,12 @@ contains
        if (imach .eq. 1) go to 2050
        if (loopss(10) .eq. 1) d10 = voltum(k)
        if (loopss(10) .eq. 2) voltum(k) = crest(kconst + 1)
-       if (loopss(10) .eq. 2) anglum(k) = time1(kconst + 1) * 360.0 / t
+       if (loopss(10) .eq. 2) anglum(k) = time1(kconst + 1) * 360.0d0 / t
 2050   do n1 = 1, 3
           n2 = n1 + kcoil(k) - 1
           n4 = 3 * (k - 1)
           if (nodvo1(n2) .eq. nodvo2(n2)) cycle
-          if (loopss(8) .eq. 0 .and. imach .eq. 1) go to 2055
+          if ((loopss(8) .eq. 0) .and. (imach .eq. 1)) go to 2055
           call ibrinc
           it = it + 1
           kbus(ibr) = nodvo1(n2)
@@ -1755,8 +1754,8 @@ contains
           length(ibr) = 1
           nr(ibr) = -it
           tr(it) = epsiln
-          tx(it) = 0.0
-          c(it) = 0.0
+          tx(it) = 0.0d0
+          c(it) = 0.0d0
           if (n1 .eq. 3) hist(kcl) = ibr
           !  load-flow preparation of main inductance of im type-4 :
           !  note : after completion of processing the load-flow, these
@@ -1769,25 +1768,24 @@ contains
           !         umrenu ibr will be restored to its value as determined
           !         in umdata.
           if (lfim4i .ne. 1) go to 2053
-          tr(it) = 0.0
+          tr(it) = 0.0d0
           tx(it) = reamqu(k) * 1.0d+3
-          if (xopt .ne. 0.0) tx(it) = reamqu(k) * twopi * xopt
+          if (xopt .ne. 0.0d0) tx(it) = reamqu(k) * twopi * xopt
           if (iprsup .ge. 1) then
              write (unit = lunit(6), fmt = 2052) kbus(ibr), mbus(ibr), ibr, it, tr(it), tx(i)
           end if
 2052      format (' ********* im main ind branche for ld-flow', 2x, i4, 4x, i4, 2i6, 2e14.5)
           go to 2055
           !   set parallel resistances for sm and dm and predicted im :
-2053      if (kbus(ibr) .ne. 1 .and. mbus(ibr) .ne. 1) tr(it) = epsiln
+2053      if ((kbus(ibr) .ne. 1) .and. (mbus(ibr) .ne. 1)) tr(it) = epsiln
           if (loopss(10) .eq. 1) tr(it) = 1.0d+6
-          if (imach .eq. 1) tr(it) = 1.0
+          if (imach .eq. 1) tr(it) = 1.0d0
           if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2054) kbus(ibr), mbus(ibr), ibr, it, tr(it), tx(it)
 2054      format (' ********* parall resist. for power coils', 3x, i4, 4x, i4, 2i6, 2e14.5)
           if (loopss(10) .eq. 1) go to 2055
           d10 = voltum(k) / tr(it)
           ! set sources representing the um power coils :
-2055      if (imach .eq. 1) d10 = 0.0
-          !     2056 do 2070 n3 = 1,2
+2055      if (imach .eq. 1) d10 = 0.0d0
           do n3 = 1, 2
              if (n3 .eq. 2) go to 2060
              if(nodvo1(n2) .eq. 1) cycle
@@ -1815,26 +1813,26 @@ contains
              node(kconst) = int (umcurp(n4 + n1))
 2061         crest(kconst) = -d10
 2062         iform(kconst) = 14
-             if (lfim3 .eq. 1 .and. n1 .eq. 1) hist(kcl + 2) = kconst
-             d1 = anglum(k) * twopi / 360.0
+             if ((lfim3 .eq. 1) .and. (n1 .eq. 1)) hist(kcl + 2) = kconst
+             d1 = anglum(k) * twopi / 360.0d0
              if (n1 .ne. 2) go to 2064
-             d2 = d1 - twopi / 3.0
+             d2 = d1 - twopi / 3.0d0
              if (jtype(k) .eq. 2) d2 = d1
              d1 = d2
              go to 2065
 2064         if (n1 .ne. 3) go to 2065
-             d2 = d1 + twopi / 3.0
-             if (jtype(k) .eq. 2) d2 = d1 + twopi/4.0
-             if (jtype(k) .eq. 5) d2 = d1 + twopi/4.0
+             d2 = d1 + twopi / 3.0d0
+             if (jtype(k) .eq. 2) d2 = d1 + twopi / 4.0d0
+             if (jtype(k) .eq. 5) d2 = d1 + twopi / 4.0d0
              d1 = d2
 2065         if (imach .eq. 1) d1 = 0.0
              if (loopss(10) .eq. 2) go to 2066
              time1(kconst) = d1
-             tstart(kconst) = -1.0
-             tstop(kconst) = 0.0
+             tstart(kconst) = -1.0d0
+             tstop(kconst) = 0.0d0
              n10 = kssfrq(n10)
              if (n10 .gt. 0) go to 92066
-             sfreq(kconst) = rotmom(k)/twopi
+             sfreq(kconst) = rotmom(k) / twopi
              go to 2066
 92066        sfreq(kconst) = sfreq(n10)
              !     for load-flow the sm always provide a voltage source to
@@ -1843,10 +1841,10 @@ contains
              !     destruction of the im load-flow network configuration.
 2066         if (loopss(10) .eq. 0) go to 2068
              if (imach .eq. 1) go to 2068
-             if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2067) node(kconst),kconst,sfreq(kconst),crest(kconst)
+             if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2067) node(kconst), kconst, sfreq(kconst), crest(kconst)
 2067         format (' ********* Voltage source for power coil', 4x, i4, 50x, i6, e14.5, 1x, e13.5)
              cycle
-2068         if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2069) node(kconst),kconst,sfreq(kconst),crest(kconst)
+2068         if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2069) node(kconst), kconst, sfreq(kconst), crest(kconst)
 2069         format (' ********* Current source for power coil', 4x, i4, 50x, i6, e14.5, 1x, e13.5)
           end do
           !     for sm and dm : make leakage inductance zero in emtp
@@ -1866,16 +1864,16 @@ contains
           n5 = - nr(n10)
           if (n5 .lt. 0) n5 = - n5
           tx(n5) = epsiln * 1.0d+3
-          if (xopt .ne. 0.0) tx(n5) = epsiln * twopi * xopt
-          if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2074) kbus(n10),mbus(n10),n10,n5,tr(n5),tx(n5)
+          if (xopt .ne. 0.0d0) tx(n5) = epsiln * twopi * xopt
+          if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2074) kbus(n10), mbus(n10), n10, n5, tr(n5), tx(n5)
 2074      format (' *********  Leakage ind. change:', 12x, i4, 4x, i4, 2i6, 2e14.5)
           !  load-flow preparation of im type-4 power series branche :
 2076      if (lfim4i .ne. 1) cycle
           n10 = int(fpar(kcl) + n1 - 1)
-          n5 = - nr(n10)
+          n5 = -nr(n10)
           if (n5 .lt. 0) n5 = - n5
-          tr(n5) = 1.0/gpar(kcl+2)
-          if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2078) kbus(n10),mbus(n10),n10,n5,tr(n5),tx(n5)
+          tr(n5) = 1.0d0 / gpar(kcl + 2)
+          if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2078) kbus(n10), mbus(n10), n10, n5, tr(n5), tx(n5)
 2078      format (' ********* im power branche for ld-flow', 5x, i4, 4x, i4, 2i6, 2e14.5)
        end do
        !  storing permanently created branches (if full compensation is
@@ -1947,10 +1945,10 @@ contains
           !  reverse excitation voltage polarity due to um sign convention
           if (node(n3) .lt. 0) go to 2090
           if (lfim4i .eq. 0) go to 2090
-          crest(n3) = - crest(n3)/slip
+          crest(n3) = - crest(n3) / slip
           !  negative sequence conversion to positive if slip .lt. 0.0 :
-          if (slip .lt. 0.0) time1(n3) = - time1(n3)
-2090      if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2088) node(n3),n3,sfreq(n3),crest(n3)
+          if (slip .lt. 0.0d0) time1(n3) = -time1(n3)
+2090      if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2088) node(n3), n3, sfreq(n3), crest(n3)
 2088      format (' ********* Adjusted im excitation sources', 3x, i4, 50x, i6, e14.5, 1x, e13.5)
 2089      n3 = kpsour(n3)
           if (n3 .eq. n4) cycle
@@ -1961,8 +1959,8 @@ contains
           if (j .eq. kclq1) d11 = time1(n3)
           if (node(n3) .lt. 0) go to 2089
           if (lfim4i .eq. 0) go to 2089
-          crest(n3) = - crest(n3)/slip
-          if (slip .lt. 0.0) time1(n3) = - time1(n3)
+          crest(n3) = -crest(n3) / slip
+          if (slip .lt. 0.0d0) time1(n3) = -time1(n3)
           if (nminum .gt. n3) nminum = n3
 2093      go to 2090
        end do
@@ -1970,38 +1968,35 @@ contains
        if (imach .ne. 1) go to 2097
        if (n18 .eq. 0) go to 2097
        d12 = d10 - d11
-       d13 = twopi/36.0
-       d14 = twopi/3.0
-       if (jtype(k) .eq. 3) d14 = - twopi/4.0
-       d15 = 2.0 * d14
+       d13 = twopi / 36.0d0
+       d14 = twopi / 3.0d0
+       if (jtype(k) .eq. 3) d14 = -twopi / 4.0d0
+       d15 = 2.0d0 * d14
        if (jtype(k) .eq. 3) d15 = - d14
-       if (slip .gt. 0.0) go to 2096
+       if (slip .gt. 0.0d0) go to 2096
        d16 = - d14 - d13
        d17 = - d14 + d13
-       if (d12 .gt. d16 .and. d12 .lt. d17) go to 2097
+       if ((d12 .gt. d16) .and. (d12 .lt. d17)) go to 2097
        d16 = d15 - d13
        d17 = d15 + d13
-       if (d12 .gt. d16 .and. d12 .lt. d17) go to 2097
+       if ((d12 .gt. d16) .and. (d12 .lt. d17)) go to 2097
        write (unit = lunit(6), fmt = 2095) k
-2095   format (/, ' Error stop. um number', i4, ' is an ind. mach and is requested to be initialized with a negative slip value. The phase sequence of', /, &
-            ' the specified external excitation sources is incorrect. It should be negative sequence rather than positive sequence.')
+2095   format (/, ' Error stop. um number', i4, ' is an ind. mach and is requested to be initialized with a negative slip value. The phase sequence of', /, ' the specified external excitation sources is incorrect. It should be negative sequence rather than positive sequence.')
        call stoptp
 2096   d16 = d14 - d13
        d17 = d14 + d13
-       if (d12 .gt. d16 .and. d12 .lt. d17) go to 2097
+       if ((d12 .gt. d16) .and. (d12 .lt. d17)) go to 2097
        d16 = - d15 - d13
        d17 = - d15 + d13
-       if (d12 .gt. d16 .and. d12 .lt. d17) go to 2097
+       if ((d12 .gt. d16) .and. (d12 .lt. d17)) go to 2097
        write (unit = lunit(6), fmt = 82096) k
-82096  format (/, ' Error stop. um number', i4, ' is an ind. mach and is requested to be initialized with a positive slip value. The phase sequence of',/, &
-            ' the specified external excitation sources is incorrect. It should be positive sequence rather than negative sequence.')
+82096  format (/, ' Error stop. um number', i4, ' is an ind. mach and is requested to be initialized with a positive slip value. The phase sequence of', /, ' the specified external excitation sources is incorrect. It should be positive sequence rather than negative sequence.')
        call stoptp
 2097   if (nminum .ge. 10000) go to 2100
        if (node(nminum) .gt. 0) go to 2100
        if (lfim4i .eq. 0) go to 2100
        write (unit = lunit(6), fmt = 2098)
-2098   format (/, ' Warning :   you have requested a load-flow for a network containing an induction machine. You chose the exciter sources as', /, &
-            ' current sources and will therefore not be adjusted by the load-flow module.', /)
+2098   format (/, ' Warning :   you have requested a load-flow for a network containing an induction machine. You chose the exciter sources as', /, ' current sources and will therefore not be adjusted by the load-flow module.', /)
 2100   if (jtmtac(k) .le. 0) go to 2150
        write (unit = lunit(6), fmt = 2110)
 2110   format ('0program stop because of conflicting request, i.e.')
@@ -2019,18 +2014,18 @@ contains
        iform(kconst) = 14
        node(kconst) = nodom(k)
        n1 = jcltac(kcl)
-       n2 = jcltac(kcl+1)
-       if (n1 .eq. 0 .and. n2 .eq. 0) go to 2154
+       n2 = jcltac(kcl + 1)
+       if ((n1 .eq. 0) .and. (n2 .eq. 0)) go to 2154
        n4 = k
-       if (n1 .ne. 0 .and. k .gt. n1) n4 = n1
-       if (n2 .ne. 0 .and. n4 .gt. n2) n4 = n2
+       if ((n1 .ne. 0) .and. (k .gt. n1)) n4 = n1
+       if ((n2 .ne. 0) .and. (n4 .gt. n2)) n4 = n2
        if (k .eq. n4) go to 2154
-       node(kconst) = - jtmtac(k)
-2154   tstart(kconst) = -1.0
-       tstop(kconst) = 0.0
+       node(kconst) = -jtmtac(k)
+2154   tstart(kconst) = -1.0d0
+       tstop(kconst) = 0.0d0
        n10 = nodmum(k)
        sfreq(kconst) = sfreq(n10)
-       crest(kconst) = 0.0
+       crest(kconst) = 0.0d0
 2160   format (' ********* um mass speed-source', 13x, i4, 50x, i6, e14.5, 1x, e13.5)
        if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2160) node(kconst), kconst, sfreq(kconst), crest(kconst)
     end do
@@ -2040,7 +2035,7 @@ contains
     do k = 1, numum
        if (jtype(k) .lt. 3) go to 2248
        if (jtype(k) .gt. 4) go to 2248
-       slip = voltum(k) / 100.0
+       slip = voltum(k) / 100.0d0
        if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2201)
 2201   format (/, ' *************************************** Momentary changes or creation of momentary elements for load-flow involving ind. mach.')
        if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1904) k
@@ -2049,16 +2044,15 @@ contains
        if (jtype(k) .eq. 3) go to 2226
        if (jtype(k) .eq. 4) ncl = ncl + 1
        !  set temporary im rotor branches for ld-flow :
-       ndum(31) = nodvo1(kcl+5)
-       ndum(32) = nodvo1(kcl+3)
-       ndum(33) = nodvo1(kcl+4)
-       ndum(34) = nodvo2(kcl+5)
-       ndum(35) = nodvo2(kcl+3)
-       ndum(36) = nodvo2(kcl+4)
+       ndum(31) = nodvo1(kcl + 5)
+       ndum(32) = nodvo1(kcl + 3)
+       ndum(33) = nodvo1(kcl + 4)
+       ndum(34) = nodvo2(kcl + 5)
+       ndum(35) = nodvo2(kcl + 3)
+       ndum(36) = nodvo2(kcl + 4)
        do n1 = 31, 33
           n3 = ndum(n1)
-          n4 = ndum(n1+3)
-          !     2202 call ibrinc
+          n4 = ndum(n1 + 3)
           call ibrinc
           it = it + 1
           n5 = kcl + n1 - 31
@@ -2067,19 +2061,18 @@ contains
           mbus(ibr) = n3
           if (n4 .ne. 1) mbus(ibr) = n4
           length(ibr) = 1
-          nr(ibr) = - it
-          tr(it) = 1.0/(gpar(kcl+4) * slip)
-          c(it) = 0.0
-          tx(it) = reacl(kcl+4) * 1.0d+3
-          if (xopt .ne. 0.0) tx(it) = reacl(kcl+4) * twopi * xopt
-          if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2208) kbus(ibr),mbus(ibr),ibr,it,tr(it),tx(it)
+          nr(ibr) = -it
+          tr(it) = 1.0d0 / (gpar(kcl + 4) * slip)
+          c(it) = 0.0d0
+          tx(it) = reacl(kcl + 4) * 1.0d+3
+          if (xopt .ne. 0.0d0) tx(it) = reacl(kcl+4) * twopi * xopt
+          if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2208) kbus(ibr), mbus(ibr), ibr, it, tr(it), tx(it)
 2208      format (' ********* im rotor branche just for ld-flow', i4, 4x, i4, 2i6, 2e14.5)
        end do
-       if (ndum(33) .ne. 1 .and. ndum(36) .ne. 1) go to 2222
-       if (nodvo1(kcl) .eq. 1 .or. nodvo2(kcl) .eq. 1) go to 2226
+       if ((ndum(33) .ne. 1) .and. (ndum(36) .ne. 1)) go to 2222
+       if ((nodvo1(kcl) .eq. 1) .or. (nodvo2(kcl) .eq. 1)) go to 2226
 2222   write (unit = lunit(6), fmt =  2224)
-2224   format (/, ' Error stop. You have requested a load-flow of a network containing an induction machine with ungrounded power coils and/or', &
-            ' excitation coils. This request is not honored in the current emtp version. These coils are both to be y-connected with grounded neutrals.')
+2224   format (/, ' Error stop. You have requested a load-flow of a network containing an induction machine with ungrounded power coils and/or excitation coils. This request is not honored in the current emtp version. These coils are both to be y-connected with grounded neutrals.')
        call stoptp
        !  set temporary branches for im main inductances if full comp :
 2226   if (loopss(8) .ne. 0) go to 2230
@@ -2091,22 +2084,22 @@ contains
           kbus(ibr) = nodvo1(n2)
           mbus(ibr) = nodvo2(n2)
           length(ibr) = 1
-          nr(ibr) = - it
-          tr(it) = 0.0
-          c(it) = 0.0
+          nr(ibr) = -it
+          tr(it) = 0.0d0
+          c(it) = 0.0d0
           if (jtype(k) .ne. 3) go to 2227
           tr(it) = epsiln
-          tx(it) = 0.0
-          if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2054) kbus(ibr),mbus(ibr),ibr,it,tr(it),tx(i)
+          tx(it) = 0.0d0
+          if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2054) kbus(ibr), mbus(ibr), ibr, it, tr(it), tx(i)
           cycle
 2227      tx(it) = reamqu(k) * 1.0d+3
-          if (xopt .ne. 0.0) tx(it) = reamqu(k) * twopi * xopt
-          if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2052) kbus(ibr),mbus(ibr),ibr,it,tr(it),tx(i)
+          if (xopt .ne. 0.0d0) tx(it) = reamqu(k) * twopi * xopt
+          if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2052) kbus(ibr), mbus(ibr), ibr, it, tr(it), tx(i)
        end do
        if (jtype(k) .eq. 3) go to 2250
        !  adjusting external excitation network resistances of im into
        !    stator frequency domain in case of load-flow request :
-2230   do n1 = 1,40
+2230   do n1 = 1, 40
           ndum(n1) = 0
        end do
        n1 = 0
@@ -2123,12 +2116,12 @@ contains
           if (n3 .ne. n4) go to 2240
        end do
        n13 = loopss(5)
-       vinp(1) = 0.0
+       vinp(1) = 0.0d0
        n18 = 1
        if (n1 .lt. 40) go to 82242
        write (unit = lunit(6), fmt = 82245) k
        call stoptp
-82242  do n10 = 1,n13
+82242  do n10 = 1, n13
           n11 = kbus(n10)
           if (n11 .lt. 0) n11 = - n11
           n12 = mbus(n10)
@@ -2141,14 +2134,14 @@ contains
              if (n9 .lt. 0) n9 = - n9
              !   avoid reinitialization of referenced excit branches :
              n17 = 0
-             do n19 = 1,n18
+             do n19 = 1, n18
                 n20 = int(vinp(n19))
                 if (n9 .eq. n20) n17 = 1
              end do
              if (n17 .eq. 1) go to 82244
              n18 = n18 + 1
              vinp(n18) = n9
-             tr(n9) = tr(n9)/slip
+             tr(n9) = tr(n9) / slip
 82244        if (n18 .lt. 40) go to 82246
              write (unit = lunit(6), fmt = 82245) k
 82245        format (/, ' Error stop. um number', i4, ' has more than 40 excitation branches or sources. Overflow is avoided by increasing the dimension of ',/, ' the arrays "vinp" and "ndum" in umdeck to be one higher than these used elements.')
@@ -2174,20 +2167,20 @@ contains
 2280 if (ncomum .eq. 0) ksubum = ksubum - numsub - 1
     if (ncomum .eq. 0) go to 2300
     loopss(2) = 3 * ntot
-    isubeg(numsub+1) = n15 + 1
+    isubeg(numsub + 1) = n15 + 1
 2300 if (loopss(10) .eq. 3) go to 2400
     if (loopss(10) .eq. 2) loopss(10) = 0
     !  detecting presence of zero component current :
     if (loopss(8) .eq. 0) go to 2400
     do n5 = 1, numum
-       n1 = - 9999
+       n1 = -9999
        n3 = kcoil(n5)
-       if (nodvo2(n3+2) .eq. 1) n1 = 0
-       if (nodvo1(n3+2) .eq. 1) n1 = 0
+       if (nodvo2(n3 + 2) .eq. 1) n1 = 0
+       if (nodvo1(n3 + 2) .eq. 1) n1 = 0
        if (n1 .eq. 0) cycle
        do n2 = 1, ibr
-          if (kbus(n2) .ne. nodvo2(n3+2)) cycle
-          if (mbus(n2) .eq. nodvo1(n3+2)) cycle
+          if (kbus(n2) .ne. nodvo2(n3 + 2)) cycle
+          if (mbus(n2) .eq. nodvo1(n3 + 2)) cycle
           n1 = mbus(n2)
        end do
        if (n1 .eq. -9999) gpar(n3) = 0.0d0
@@ -2326,14 +2319,14 @@ contains
        rs = r(j)
        if (iprsup  .ge.  3) write (unit = lunit(6), fmt = 1786) l, n, w, tau(j), zs, rs
 1786   format (/, " Within l-loop of  'equiv' .       l       n", 15x, 'w', 10x, 'tau(j)', 14x, 'zs', 14x, 'rs', /, 28x, 2i8, 4e16.7)
-       if (rs .ge. 0.0) go to 1
+       if (rs .ge. 0.0d0) go to 1
        rs = -rs
        denr = a * zs
        denx = a / zs
-       piov2 = twopi * 0.25
+       piov2 = twopi * 0.25d0
        d1 = sqrtz (rs ** 2 + denr ** 2)
        d2 = atan2z (denr, rs)
-       d3 = 0.5 * (d2 - piov2)
+       d3 = 0.5d0 * (d2 - piov2)
        d4 = sqrtz (d1 / denx)
        rzero = d4 * cosz (d3)
        xzero = d4 * sinz (d3)
@@ -2342,8 +2335,8 @@ contains
        e = d4 * cosz (d3)
        a = d4 * sinz (d3)
        ypos = expz(e)
-       yneg = 1.0 / ypos
-       cosha = (ypos + yneg) / 2.0
+       yneg = 1.0d0 / ypos
+       cosha = (ypos + yneg) / 2.0d0
        sinha = cosha - yneg
        sinb = sinz (a)
        cosb = cosz (a)
@@ -2351,21 +2344,21 @@ contains
        sinhgi = cosha * sinb
        denr = rzero * sinhgr - xzero * sinhgi
        denx = rzero * sinhgi + xzero * sinhgr
-       anumr = cosha * cosb - 1.0
+       anumr = cosha * cosb - 1.0d0
        anumx = sinha * sinb
        go to 2
 1      e = rs / zs
-       if (zs .lt. 0.) go to 3
-       a = a / 2.0
+       if (zs .lt. 0.0d0) go to 3
+       a = a / 2.0d0
        c = sinz (a)
        d = cosz (a)
        e2 = e ** 2
        c2 = c ** 2
        denr = (48. + e2) / 32.
-       denr = (1.0  - c2 * denr) * rs
-       e2div8 = e2 / 8.0
-       denx = (3.0 * e2div8 + 2.0) * c * d * zs
-       anumr = (-2.0 - e2div8) * c2
+       denr = (1.0d0  - c2 * denr) * rs
+       e2div8 = e2 / 8.0d0
+       denx = (3.0d0 * e2div8 + 2.0d0) * c * d * zs
+       anumr = (-2.0d0 - e2div8) * c2
        anumx = e * c * d
 2      e = denr ** 2 + denx ** 2
        req(l) = denr
@@ -2373,19 +2366,19 @@ contains
 4      geq(l) = (anumr * denr + anumx * denx) / e
        beq(l) = (anumx * denr - anumr * denx) / e
        cycle
-3      e = e / 2.0
+3      e = e / 2.0d0
        c = sinz (a)
        d = cosz (a)
        ypos = expz (-e)
-       yneg = 1.0 / ypos
+       yneg = 1.0d0 / ypos
        epos = ypos + yneg
        eneg = ypos - yneg
-       anumr = d * epos - 2.
+       anumr = d * epos - 2.0d0
        anumx = c * eneg
        denr = d * eneg
        denx = c * epos
        tden = (denr * denr + denx * denx)
-       e = -zs / 2.0
+       e = -zs / 2.0d0
        req(l) = e * denr
        xeq(l) = e * denx
        e = -zs * tden
@@ -2413,18 +2406,6 @@ subroutine over8
   use linemodel
   implicit none
   ! %include  '//c/tsu/cables.ftn'
-  !  dimension infdli(1)
-  !  dimension wk1(1)
-  !  dimension vim(1)
-  !  dimension ispum(1)
-  !  dimension integx(1)
-  !
-  !  equivalence (namebr(1), infdli(1))
-  !  equivalence (semaux(1), wk1(1))
-  !  equivalence (volt(1), vim(1))
-  !  equivalence (spum(1), ispum(1))
-  !  equivalence (x(1), integx(1))
-  !  equivalence (moncar(1), knt)
   integer(4) :: i, ii, iip, ij, iji, ik, ikq, im1, initum, inoff1, inoff2
   integer(4) :: ip, iprint, iqy, isecti, istart, it0, itadd, iuangl, iudcoe
   integer(4) :: iuepso, iufldr, iuflds, iuflqr, iuflqs, iuflxd, iuflxq, iufpar
@@ -2454,6 +2435,19 @@ subroutine over8
   real(8) :: sinha, sinhgi, sinhgr
   real(8) :: xi1, xi2, xr1, xr2
   real(8) :: ychara, ycharm, yneg, ypos
+  !
+  !  dimension infdli(1)
+  !  dimension wk1(1)
+  !  dimension vim(1)
+  !  dimension ispum(1)
+  !  dimension integx(1)
+  !
+  !  equivalence (namebr(1), infdli(1))
+  !  equivalence (semaux(1), wk1(1))
+  !  equivalence (volt(1), vim(1))
+  !  equivalence (spum(1), ispum(1))
+  !  equivalence (x(1), integx(1))
+  !  equivalence (moncar(1), knt)
   !
   integer(4), pointer :: infdli(:)
   integer(4), allocatable :: integx(:)
@@ -2497,7 +2491,6 @@ subroutine over8
 6121 m7 = 0
   m8 = 8
   call vecsav (volt, m8, m7)
-  !6123 if (ktrlsw(5) .eq. 1 .and. lastov .gt. nchain) call vecrsv (cnvhst, lhist, n7)
 6123 if ((ktrlsw(5) .eq. 1) .and. (lastov .gt. nchain)) call vecsav (cnvhst, lhist, n7)
   if (loopss(1) .ne. 7766) go to 3489
   !     back from "over11" after final phasor solution, so exit:
@@ -2627,13 +2620,13 @@ subroutine over8
   nchain = 44
   go to 9600
 2238 if (numrun .eq. 3) go to 2240
-  if (numrun .eq. 2 .and. length(1) .le. 3) go to 2240
+  if ((numrun .eq. 2) .and. (length(1) .le. 3)) go to 2240
   nsolve = 0
   llbuff = -3333
   rewind  5
-  call datain    !  go to datain to regenerate data input for lmfs t
+  call datain                                     !  go to datain to regenerate data input for lmfs t
   lastov = nchain
-  nchain = 1    ! program generated 2nd & 3rd lmfs data
+  nchain = 1                                      ! program generated 2nd & 3rd lmfs data
   go to 9600
 2240 begmax(1) = 0.0d0
   lastov = nchain
@@ -2645,7 +2638,7 @@ subroutine over8
   flstat(8) = flstat(8) - d2
   tmax = fminfs
   go to 9600
-3234 if (delffs .lt. 0.0) go to 3218
+3234 if (delffs .lt. 0.0d0) go to 3218
   fminfs = fminfs  +  delffs
   go to 3224
 3218 fminfs = fminfs * (-delffs)
@@ -2692,14 +2685,14 @@ subroutine over8
   if ((kexact .eq. 88333) .and. (fminfs .eq. fminsv) .and.  (nsolve .eq. 1)) rewind lunit(9)
   do i = 1, it2
      read (unit = lunit(9)) dum, ycharm, ychara, alpha, beta
-     if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) 'f,ycharm,ychara,alpha,beta=', dum,ycharm,ychara,alpha,beta
+     if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) 'f,ycharm,ychara,alpha,beta=', dum, ycharm, ychara, alpha, beta
      ypos = expz (alpha)
      yneg = 1.0d0 / ypos
      cosha = 0.5d0 * (ypos + yneg)
      sinha = cosha - yneg
      sinhgr = sinha * cosz (beta)
      sinhgi = cosha * sinz (beta)
-     d9 = 1.0 / ycharm
+     d9 = 1.0d0 / ycharm
      volti(i) = d9 * (cosz (ychara) * sinhgr + sinz (ychara) * sinhgi)
      voltk(i) = d9 * (-sinz(ychara) * sinhgr + cosz (ychara) * sinhgi)
      cc1 = cosha * cosz (beta) - 1.0d0
@@ -2803,8 +2796,8 @@ subroutine over8
      d7 = d9
      d6 = d6 + omega
      d9 = expz(-d5 * cnvhst(n1 - 1))
-     d10 = - d9 * sinz(d6 * cnvhst(n1 - 1))
-     d9 = d9 * cosz(d6 * cnvhst(n1 - 1))
+     d10 = - d9 * sinz (d6 * cnvhst(n1 - 1))
+     d9 = d9 * cosz (d6 * cnvhst(n1 - 1))
      d13 = d5 * d5 + d6 * d6
      d11 = (d9 * d5 + d10 * d6) / d13
      d12 = (-d9 * d6 + d10 * d5) / d13
@@ -3411,7 +3404,7 @@ subroutine over8
   !     111  nn1 = it2 * ( it2 + 1 ) / 2
   nn1 = it2 * (it2 + 1) / 2
   nn2 = itadd - 1
-  do iqy=1, nn1
+  do iqy = 1, nn1
      r(nn2 + iqy) = 0.0d0
      c(nn2 + iqy) = 0.0d0
   end do
@@ -3740,7 +3733,6 @@ subroutine frqchk
      kpsour(k) = -kpsour(k)
   end do
   if (iprsup .ge. 2) write (unit = lunit(6), fmt = 1482) (kpsour(j), j = 1, kconst)
-  !     9200 if (kill .ne. 222) go to 9202
   if (kill .ne. 222) go to 9202
   lstat(19) = 1462
   lstat(14) = n5

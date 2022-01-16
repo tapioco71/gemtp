@@ -16,11 +16,6 @@ subroutine over9
   use tracom
   use movcop
   implicit none
-  !
-  !  equivalence (iofkol, iofgnd)
-  !  equivalence (iofkor, iofbnd)
-  !  equivalence (loopss(11), next)
-  !
   !     Following carries "next" among over6, insert, over7, & over9:
   integer(4) :: i, icas, ii, ik, il, istate, isubs1, isubs2, iswbob
   integer(4) :: j, j1, jbrt, jj, jsw
@@ -28,6 +23,10 @@ subroutine over9
   integer(4) :: l, lastm1
   integer(4) :: m, ma
   integer(4) :: n1, ndx1, ndx2, ndx3, nk, nkr, nx
+  !
+  !  equivalence (iofkol, iofgnd)
+  !  equivalence (iofkor, iofbnd)
+  !  equivalence (loopss(11), next)
   !
   integer(4), pointer :: iofkol => iofgnd
   integer(4), pointer :: iofkor => iofbnd

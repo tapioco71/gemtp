@@ -3997,9 +3997,9 @@ subroutine over3
         npos = locatn(i, j + nphcas)
         nnpos = locatn(i, j + npos2)
         caslnr(nnpos) = caslnr(npos)
-        caslnr(npos) = 0.0
+        caslnr(npos) = 0.0d0
         caslnx(nnpos) = caslnx(npos)
-        caslnx(npos) = 0.0
+        caslnx(npos) = 0.0d0
      end do
   end do
   do i = 1, nphcas
@@ -4007,9 +4007,9 @@ subroutine over3
         npos = locatn(i + nphcas, j + nphcas)
         nnpos = locatn(i + npos2, j + npos2)
         caslnr(nnpos) = caslnr(npos)
-        caslnr(npos) = 0.0
+        caslnr(npos) = 0.0d0
         caslnx(nnpos) = caslnx(npos)
-        caslnx(npos) = 0.0
+        caslnx(npos) = 0.0d0
      end do
   end do
   nredct = nphcas
@@ -4161,8 +4161,8 @@ subroutine over3
      yshunr = trshun(jbr) / ymag2
      yshunx = (-freqcs * txshun(jbr) / freqx) / ymag2
      if (iprsup .ge. 6) write (unit = lunit(6), fmt = 76721) jbr, mbr1, node1(jbr), node2(jbr), trshun(jbr), txshun(jbr), cshun(jbr), freqx, freqc, freqcs, ymag2, yshunr, yshunx
-76453 if (node1(jbr) .ge. 0 .and. node2(jbr) .ge. 0) go to 76454
-     if (node1(jbr) .le. 0 .and. node2(jbr) .le. 0) go to 76455
+76453 if ((node1(jbr) .ge. 0) .and. (node2(jbr) .ge. 0)) go to 76454
+     if ((node1(jbr) .le. 0) .and. (node2(jbr) .le. 0)) go to 76455
      if (node1(jbr) .gt. 0) go to 76456
      idumy = node1(jbr)
      node1(jbr) = node2(jbr)
@@ -4182,7 +4182,7 @@ subroutine over3
      caslnx(nnpos) = caslnx(nnpos) + yshunx
      node2(jbr) = -node2(jbr)
      cycle
-76454 if (node1(jbr) .eq. 0 .or. node2(jbr) .eq. 0) go to 76457
+76454 if ((node1(jbr) .eq. 0) .or. (node2(jbr) .eq. 0)) go to 76457
      idumy = node1(jbr)
      idumy2 = node2(jbr)
      if (mapinv(idumy) .lt. mapinv(idumy2)) go to 76458
@@ -4208,7 +4208,7 @@ subroutine over3
      cycle
 76455 node1(jbr) = -node1(jbr)
      node2(jbr) = -node2(jbr)
-     if (node1(jbr) .eq. 0 .or. node2(jbr) .eq. 0) go to 76460
+     if ((node1(jbr) .eq. 0) .or. (node2(jbr) .eq. 0)) go to 76460
      if (node1(jbr) .lt. node2(jbr)) go to 76459
      idumy = node1(jbr)
      node1(jbr) = node2(jbr)

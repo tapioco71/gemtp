@@ -133,7 +133,7 @@ contains
 4567 format ('  "Begin module umdata."')
     if (numum .eq. 0) go to 40
     write (unit = lunit(6), fmt = 30)
-30  format (/, ' um error stop. You have requested another um to be included to this data case. the rules regarding the ordering of um')
+30  format (/, ' um error stop. You have requested another um to be included to this data case. The rules regarding the ordering of um')
     write (unit = lunit(6), fmt = 31)
 31  format (' data cards have however been violated. The data cards of this um should be placed immediately behind those of the', /, ' previous um in accordance with the following rules :')
     write (unit = lunit(6), fmt = 32)
@@ -257,7 +257,7 @@ contains
     read (unit = abuff, fmt = 4203) omegm(n1), reamdu(n1), jcdsat(n1), reamds(n1), flxds(n1), flxdr(n1)
 4203 format (2e14.5, i1, 3e14.5)
     if (noutpr .eq. 0) write (unit = kunit6, fmt = 5203) omegm(n1), reamdu(n1)
-5203 format ('+mach-table card   2.', 2e12.4)
+5203 format ('+Mach-table card   2.', 2e12.4)
     ! read input card using cimage
     call cimage
     read (unit = abuff, fmt = 4203) thetam(n1), reamqu(n1), jcqsat(n1), reamqs(n1), flxqs(n1), flxqr(n1)
@@ -266,7 +266,7 @@ contains
 6198 format (/, ' Error stop. Incorrect um data input. the result is that the q-axis main inductance', /, 7x, ' is either zero or negative for machine number', i4, '.')
     go to 9600
 6199 if (noutpr  .eq.  0) write (unit = kunit6, fmt = 6203) thetam(n1), reamqu(n1)
-6203 format ('+mach-table card   3.', 2e12.4)
+6203 format ('+Mach-table card   3.', 2e12.4)
     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 214) jtype(n1), ncld(n1), nclq(n1), jtqout(n1), jomout(n1), jthout(n1), bus3, bus4, nppair(n1), rotmom(n1), dcoef(n1), epsom(n1), omegm(n1), reamdu(n1), jcdsat(n1), reamds(n1), flxds(n1), flxdr(n1), thetam(n1), reamqu(n1), jcqsat(n1), reamqs(n1), flxqs(n1), flxqr(n1)
 214 format ('0', 3i2, 3i1, 2a6, i2, 3e14.5, /, ' ', 2e14.5, i1, 3e14.5, ' ', 2e14.5, i1, 3e14.5)
     if (initum .eq. 0) go to 249
@@ -277,7 +277,7 @@ contains
     read (unit = abuff, fmt = 6204) voltum(n1), anglum(n1), bus5, bus6, distrf
 6204 format (2e14.5, 2a6, e14.5)
     if (noutpr .eq. 0) write (unit = kunit6, fmt = 6205) voltum(n1), anglum(n1)
-6205 format ('+mach-table card   4.', 2e12.4)
+6205 format ('+Mach-table card   4.', 2e12.4)
     if (jtype(n1) .eq. 3) go to 230
     if (jtype(n1) .eq. 4) go to 230
     if (jtype(n1) .eq. 5) go to 230
@@ -354,7 +354,7 @@ contains
 4302 format ('+Blank card ending coil table.')
     go to 500
 4303 ncltot = ncltot + 1
-    fpar(ncltot) = 0.0
+    fpar(ncltot) = 0.0d0
     if (ncltot .le. nclfix) go to 6302
     write (unit = lunit(6), fmt = 5302) ncltot
 5302 format (/, ' Overflow u.m. coil table.   ncltot =', i5)
@@ -362,7 +362,7 @@ contains
 6302 n1 = ncltot
     read (unit = abuff, fmt = 303) gpar(n1), reacl(n1), bus1, bus2, bus6, jclout(n1), hist(n1)
     if (noutpr .eq. 0) write (unit = kunit6, fmt = 2203) ncltot, gpar(n1), reacl(n1), jclout(n1)
-2203 format ('+coil', i4, '.', 2e14.5, i5)
+2203 format ('+Coil', i4, '.', 2e14.5, i5)
     n11 = 0
     n12 = 0
     do n10 = 1, ntot
@@ -392,7 +392,7 @@ contains
 311 ndx1 = kxtcs + j
     jcltac(n1) = ndx1
 313 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 314) gpar(n1), reacl(n1), bus1, bus2, bus6, jclout(n1), hist(n1)
-314 format (' ', 2e14.5, 3a6, i1, e14.5)
+314 format (1x, 2e14.5, 3a6, i1, e14.5)
     go to 3302
     !  data input for m32 and newer versions ********************
     !. user2 : mach-table input for m32 and newer
@@ -443,7 +443,7 @@ contains
        if (bus3 .eq. blank) go to 10205
        if (bus3 .ne. bus(n10)) cycle
        nodom(n1) = n10
-       if (d10 .eq. 0.0) d10 = statfr
+       if (d10 .eq. 0.0d0) d10 = statfr
        rotmom(n1) = twopi * d10
        go to 10205
     end do
@@ -471,7 +471,7 @@ contains
     ! read input card using cimage
     call cimage
     read (unit = abuff, fmt = 14203) thetam(n1), reamqu(n1), jcqsat(n1), reamqs(n1), flxqs(n1), flxqr(n1)
-    if (reamqu(n1) .gt. 0.0) go to 15910
+    if (reamqu(n1) .gt. 0.0d0) go to 15910
     write (unit = lunit(6), fmt = 6198) n1
     go to 9600
 15910 if (noutpr .eq. 0) write (unit = kunit6, fmt = 15903) numum, thetam(n1), reamqu(n1)
@@ -501,7 +501,7 @@ contains
     call stoptp
 15828 n10 = n1
     if (n10 .gt. n5) n10 = n5
-    if (n6 .ne. 0 .and. n10 .gt. n6) n10 = n6
+    if ((n6 .ne. 0) .and. (n10 .gt. n6)) n10 = n6
     if (n1 .ne. n10) nshare = 2
 15830 if (initum .eq. 0) go to 10300
     if (nshare .eq. 0) go to 15880
@@ -675,8 +675,8 @@ contains
        if (jtype(n1) .eq. 13) jtmtac(n1) = 0
        if (initum .eq. 1) omegm(n1) = rotmom(n1) / rppair
        omold(n1) = omegm(n1)
-       flxd(n1) = 0.0
-       flxq(n1) = 0.0
+       flxd(n1) = 0.0d0
+       flxq(n1) = 0.0d0
        ! . omold initialization, torque angle for type 1 and 1,
        ! . and coil adjustment for three-phase exc. coils :
        if (jtype(n1) .gt. 2) go to 921
@@ -793,7 +793,7 @@ contains
              tstart(kconst) = -1.0d0
              tstop(kconst) = 0.0d0
              sfreq(kconst) = 0.0001d0
-             if (iprsup .ge. 1 .and. j .eq. n5) write (unit = lunit(6), fmt = 985)
+             if ((iprsup .ge. 1) .and. (j .eq. n5)) write (unit = lunit(6), fmt = 985)
 985          format (' ********* Steady-state curr sources for im excit coils :    node  kconst         sfreq         crest         tstop')
              if (iprsup .ge. 1) write (unit = lunit(6), fmt = 986) node(kconst), kconst, sfreq(kconst), crest(kconst), tstop(kconst)
 986          format (' *********', 47x, 2i8, 3e14.5)
@@ -847,7 +847,7 @@ contains
        n2 = n2 + 1
 1030   do n3 = 1, n2
           n4 = kcoil(n1) - 1 + n3
-          if (reacl(n4) .ge. 0.0) go to 1038
+          if (reacl(n4) .ge. 0.0d0) go to 1038
           write (unit = lunit(6), fmt = 1032) n1
 1032      format (/, ' Error stop. A negative leakage inductance inductance is used to simulate machine number', i4, '.')
           go to 9600
@@ -882,15 +882,15 @@ contains
        umoutp(n5) = 0.0d0
     end do
     n5 = numout + nsmtac + 3
-    umoutp(numout+3) = n5
+    umoutp(numout + 3) = n5
     ! umoutp(numout+3) is last entry of umoutp that is used
-    umoutp(numout+2) = nangre
+    umoutp(numout + 2) = nangre
     ! umoutp(numout+2) .ne. 0.0 indicates request for angle transf.
-    umoutp(numout+1) = - 9999.0
+    umoutp(numout + 1) = -9999.0d0
     ! umoutp(numout+1) .eq. -9999. is a flag for request of tacs
     ! transfer of um variables.
     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 18006) (umoutp(n1), n1 = 1, n5)
-18006 format (/, ' The um output table umoutp(numout + nsmtac + 3):', /, 6(6x,e14.5), /, (6(6x,e14.5)))
+18006 format (/, ' The um output table umoutp(numout + nsmtac + 3):', /, 6(6x,e14.5), /, (6(6x, e14.5)))
 18010 istart = 0
     if (numout .le. iotfix) go to 18020
     write (unit = lunit(6), fmt = 17960)
@@ -990,8 +990,8 @@ contains
     nmexc = 0
     n5 = ncltot + 1
     n6 = ncltot + 7
-    do n10 = n5,n6
-       fpar(n10) = 0.0
+    do n10 = n5, n6
+       fpar(n10) = 0.0d0
     end do
     ! *************************** read class 1 sm type-59 data
     do n5 = 1, 3
@@ -1048,7 +1048,7 @@ contains
     node(kconst) = nexc
     kode(nexc) = - nexc
     sfreq(kconst) = epsiln * 1.0d+3
-    tstart(kconst) = -1.0
+    tstart(kconst) = -1.0d0
     tstop(kconst) = fltinf
     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 17076) node(kconst), kconst, sfreq(kconst)
 17076 format (' ********* Field voltage source', 23x, i4, 44x, i4, e14.5)
@@ -1063,8 +1063,8 @@ contains
     tr(it) = epsiln
     itexc = it
     ! note : tr(it=itexc) will be changed later to 0.5 * rf
-    tx(it) = 0.0
-    c(it) = 0.0
+    tx(it) = 0.0d0
+    c(it) = 0.0d0
     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 17080) mbus(ibr), kbus(ibr), ibr, it
 17080 format (' ********* Series field resist.', 23x, i4, 4x, i4, 4x, i4, 4x, i4)
     call ibrinc
@@ -1115,9 +1115,9 @@ contains
     zlsbum = rkvum * rkvum
     zlsbum = zlsbum/(rotmom(n1) * rmvaum)
     jcdsat(n1) = 0
-    if (agldum .lt. 0.0) jcdsat(n1) = 1
-    if (agldum .lt. 0.0) agldum = - agldum
-    nppair(n1) = n20/2
+    if (agldum .lt. 0.0d0) jcdsat(n1) = 1
+    if (agldum .lt. 0.0d0) agldum = - agldum
+    nppair(n1) = n20 / 2
     n5 = 2
     n6 = nppair(n1) * n5
     if (n6 .eq. n20) go to 17218
@@ -1131,21 +1131,21 @@ contains
     if (text4 .ne. blank) go to 17224
     if (text5 .ne. blank) go to 17224
     go to 17226
-17224 aglqum = 0.0
-    s1qum = 0.0
-    s2qum = 0.0
+17224 aglqum = 0.0d0
+    s1qum = 0.0d0
+    s2qum = 0.0d0
     go to 17230
 17226 if (noutpr .eq. 0) write (unit = kunit6, fmt = 17228) numum
 17228 format ('+um -', i3, '   sm-59 class 3, q-axis saturation card')
     call cimage
 17230 jcqsat(n1) = 0
     d1 = s1qum + s2qum
-    if (d1 .ne. 0.0) jcqsat(n1) = 1
-    if (aglqum .ge. 0.0) go to 17240
+    if (d1 .ne. 0.0d0) jcqsat(n1) = 1
+    if (aglqum .ge. 0.0d0) go to 17240
     jcqsat(n1) = 1
-    aglqum = 1.6 * agldum
-    s1qum = 1.5 * s1um
-    s2qum = 1.5 * s2um
+    aglqum = 1.6d0 * agldum
+    s1qum = 1.5d0 * s1um
+    s2qum = 1.5d0 * s2um
     ! reading standard manufacturer data :
 17240 if (ntypsm .eq. 52) go to 17400
     if (ntypsm .eq. 53) go to 17400
@@ -1176,7 +1176,7 @@ contains
     rnum = rnum * zlsbum * rotmom(n1)
     xnum = xnum * zlsbum
     ! establishing stator and mach table variables
-    if (raum .eq. 0.0) raum = epsiln
+    if (raum .eq. 0.0d0) raum = epsiln
     do n5 = 1,3
        gpar(ncltot + n5) = raum
        if (n5 .eq. 1) cycle
@@ -1185,38 +1185,38 @@ contains
     reacl(ncltot + 1) = x0um
     reamdu(n1) = xdum - xlum
     reamqu(n1) = xqum - xlum
-    if (reamqu(n1) .gt. 0.0) go to 17262
+    if (reamqu(n1) .gt. 0.0d0) go to 17262
     write (unit = lunit(6), fmt = 6198) n1
 6198 format (/, ' Error stop. Incorrect um data input. The result is that the q-axis main inductance', /, 7x, ' is either zero or negative for machine number', i4, '.')
     go to 9600
 17262 if (xqum .ne. xqpum) go to 17290
     if (xqum .ne. xqppum) go to 17280
-    gpar(ncltot + 6) = 0.0
-    gpar(ncltot + 7) = 0.0
-    reacl(ncltot + 6) = 1.0
-    reacl(ncltot + 7) = 1.0
+    gpar(ncltot + 6) = 0.0d0
+    gpar(ncltot + 7) = 0.0d0
+    reacl(ncltot + 6) = 1.0d0
+    reacl(ncltot + 7) = 1.0d0
     go to 17290
-17280 if (fmum .ne. 1.0) go to 17285
-    gpar(ncltot + 6) = 0.0
-    reacl(ncltot + 6) = 1.0
-17285 if (fmum .eq. 0.0) fmum = 0.95
-    if (fmum .lt. 1.0) xqpum = fmum * xqum
+17280 if (fmum .ne. 1.0d0) go to 17285
+    gpar(ncltot + 6) = 0.0d0
+    reacl(ncltot + 6) = 1.0d0
+17285 if (fmum .eq. 0.0d0) fmum = 0.95d0
+    if (fmum .lt. 1.0d0) xqpum = fmum * xqum
 17290 if (xdum .ne. xdpum) go to 17310
     if (xdum .ne. xdppum) go to 17300
-    gpar(ncltot + 4) = 0.0
-    gpar(ncltot + 5) = 0.0
-    reacl(ncltot + 4) = 1.0
-    reacl(ncltot + 5) = 1.0
+    gpar(ncltot + 4) = 0.0d0
+    gpar(ncltot + 5) = 0.0d0
+    reacl(ncltot + 4) = 1.0d0
+    reacl(ncltot + 5) = 1.0d0
     go to 17310
-17300 if (fmum .ne. 1.0) go to 17305
-    gpar(ncltot + 4) = 0.0
-    reacl(ncltot + 4) = 1.0
-17305 if (fmum .eq. 0.0) fmum = 0.3
-    if (fmum .lt. 1.0) xdpum = fmum * xdum
+17300 if (fmum .ne. 1.0d0) go to 17305
+    gpar(ncltot + 4) = 0.0d0
+    reacl(ncltot + 4) = 1.0d0
+17305 if (fmum .eq. 0.0) fmum = 0.3d0
+    if (fmum .lt. 1.0d0) xdpum = fmum * xdum
     ! establishing rotor variables :
 17310 d1 = reamdu(n1) * reamdu(n1)
-    if (reacl(ncltot + 4) .ne. 1.0) go to 17320
-    if (reacl(ncltot + 5) .eq. 1.0) go to 17330
+    if (reacl(ncltot + 4) .ne. 1.0d0) go to 17320
+    if (reacl(ncltot + 5) .eq. 1.0d0) go to 17330
     d10 = d1 / (xdum - xdppum)
     reacl(ncltot + 5) = d10 - reamdu(n1)
     d10 = reamdu(n1) + reacl(ncltot + 5)
@@ -1235,8 +1235,8 @@ contains
     d12 = d1 / d10
     gpar(ncltot + 5) = (d11 - d12) / tdppum
 17330 d1 = reamqu(n1) * reamqu(n1)
-    if (reacl(ncltot + 6) .ne. 1.0) go to 17340
-    if (reacl(ncltot + 7) .eq. 1.0) go to 17500
+    if (reacl(ncltot + 6) .ne. 1.0d0) go to 17340
+    if (reacl(ncltot + 7) .eq. 1.0d0) go to 17500
     d10 = d1 / (xqum - xqppum)
     reacl(ncltot + 7) = d10 - reamqu(n1)
     d10 = reamqu(n1) + reacl(ncltot + 7)
@@ -1246,8 +1246,8 @@ contains
     reacl(ncltot + 6) = d10 - reamqu(n1)
     d10 = reamqu(n1) + reacl(ncltot + 6)
     gpar(ncltot + 6) = d10 / tqpum
-    if (reacl(ncltot + 7) .eq. 1.0) go to 17500
-    d11 = xqum - xqppum + d10 - 2.0 * reamqu(n1)
+    if (reacl(ncltot + 7) .eq. 1.0d0) go to 17500
+    d11 = xqum - xqppum + d10 - 2.0d0 * reamqu(n1)
     d11 = d11 * d1
     d12 = (xqum - xqppum) * d10 - d1
     reacl(ncltot + 7) = d11 / d12 - reamqu(n1)
@@ -2153,15 +2153,6 @@ subroutine over5
   use a8swmod
   use freedom
   implicit none
-  !  dimension akey(1), tstat(1)
-  !
-  !  equivalence (akey(1), adelay(1))
-  !  equivalence (tstat(1), crit(1))
-  !  equivalence (moncar(1), knt)
-  !  equivalence (moncar(4), isw)
-  !  equivalence (moncar(5), idist)
-  !  equivalence (moncar(6), itest)
-  !  equivalence (moncar(9), kloaep)
   character(8) :: text1, text2, text5, text6, text7
   character(8) :: text8, text13, text14, text15, text16
   character(8) :: text17
@@ -2178,6 +2169,16 @@ subroutine over5
   real(8) :: gus3, gus4
   real(8) :: ssigma, ststat
   real(8) :: targ, timchk
+  !
+  !  dimension akey(1), tstat(1)
+  !
+  !  equivalence (akey(1), adelay(1))
+  !  equivalence (tstat(1), crit(1))
+  !  equivalence (moncar(1), knt)
+  !  equivalence (moncar(4), isw)
+  !  equivalence (moncar(5), idist)
+  !  equivalence (moncar(6), itest)
+  !  equivalence (moncar(9), kloaep)
   !
   integer(4), pointer :: idist => moncar(5)
   integer(4), pointer :: isw => moncar(4)
@@ -2724,8 +2725,6 @@ subroutine over5a
   use umdat
   use freedom
   implicit none
-  !  dimension ispum(1), kpen(4)
-  !  equivalence (spum(1), ispum(1))
   character(8) :: text12
   integer(4) :: i, iprint
   integer(4) :: j, j30
@@ -2740,6 +2739,9 @@ subroutine over5a
   real(8) :: reps
   real(8) :: smamp, smang, smangl
   real(8) :: yx
+  !
+  !  dimension ispum(1), kpen(4)
+  !  equivalence (spum(1), ispum(1))
   !
   integer(4), allocatable, target :: ispum(:)
   !
@@ -3365,16 +3367,6 @@ subroutine smdat (mtype)
   ! This module is used only by type-59 Brandwajn  s.m.  model
   ! The following array is sized 3 (nn4-1) * n50 ( n50 = 50  at pre-
   ! sent ) + nn10 ( no. of class 1 requests <=15 at present> ) ******
-  !  dimension  npbuf(165)
-  !  dimension massex(1)
-  !
-  !  equivalence (ismdat(22), ipout)
-  !  equivalence (ismdat(23), n56)
-  !  equivalence (ismdat(24), ismold)
-  !  equivalence (ismdat(25), nn10)
-  !  equivalence (ismdat(26), nn4)
-  !  equivalence (ismdat(27), nn14)
-  !  equivalence (histq(1), massex(1))
   integer(4), intent(in) :: mtype
   character(8) :: text1, text2, text3
   character(8) :: text7, text8, text10, text11, text12
@@ -3402,6 +3394,17 @@ subroutine smdat (mtype)
   real(8) :: tdop, tdopp, tqop, tqopp
   real(8) :: xd, xq, xdp, xdpp, xl, xqp, xqpp
   real(8) :: zb, zb1, zb3
+  !
+  !  dimension  npbuf(165)
+  !  dimension massex(1)
+  !
+  !  equivalence (ismdat(22), ipout)
+  !  equivalence (ismdat(23), n56)
+  !  equivalence (ismdat(24), ismold)
+  !  equivalence (ismdat(25), nn10)
+  !  equivalence (ismdat(26), nn4)
+  !  equivalence (ismdat(27), nn14)
+  !  equivalence (histq(1), massex(1))
   !
   integer(4), pointer :: ipout => ismdat(22)
   integer(4), pointer :: ismold => ismdat(24)
@@ -3494,9 +3497,9 @@ subroutine smdat (mtype)
   call free (d1)
   nright = 0
   ! check for key word   'tolerances'  (or  't' ).
-  if (texta6(1) .eq. text19) go to 7103
-  if (texta6(1) .ne. text2) go to 7106
-  if (texta6(2) .ne. text3) go to 7106
+  if (toLower (texta6(1)) .eq. text19) go to 7103
+  if (toLower (texta6(1)) .ne. text2) go to 7106
+  if (toLower (texta6(2)) .ne. text3) go to 7106
 7103 if (n11 .gt. 0) go to 7104
   read (unit = abuff, fmt = 3609) d1, d2, d3, n9
 3609 format (10x, 3e10.0, 10x, i10)
@@ -3512,14 +3515,14 @@ subroutine smdat (mtype)
   if (d3 .gt. 0.0d0) epdgel = d3
   if (n9 .gt. 0) iprsov(37) = n9
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 3610) epsuba, epomeg, epdgel, iprsov(37)
-3610 format ('+  epsilon.', 3e11.2, i5)
+3610 format ('+  Epsilon.', 3e11.2, i5)
   go to 1
   ! check for key word   'parameter fitting'  (or  'pf' ).
 7106 if (texta6(1) .eq. text20) go to 2115
-  if (texta6(1) .ne. text7) go to 8641
-  if (texta6(2) .ne. text8) go to 8641
-  if (texta6(3) .ne. text17) go to 8641
-  if (texta6(4) .ne. text18) go to 8641
+  if (toLower (texta6(1)) .ne. text7) go to 8641
+  if (toLower (texta6(2)) .ne. text8) go to 8641
+  if (toLower (texta6(3)) .ne. text17) go to 8641
+  if (toLower (texta6(4)) .ne. text18) go to 8641
 2115 if (n11 .gt. 0) go to 7109
   read (unit = abuff, fmt = 6011) fm
 6011 format (24x, e8.0)
@@ -3536,9 +3539,9 @@ subroutine smdat (mtype)
   go to 1
   ! check for key word   'delta connection'  (or  'dc' ).
 8641 if (texta6(1) .eq. text21)   go to 2125
-  if (texta6(1) .ne. text10) go to 8659
-  if (texta6(2) .ne. text11) go to 8659
-  if (texta6(3) .ne. text12) go to 8659
+  if (toLower (texta6(1)) .ne. text10) go to 8659
+  if (toLower (texta6(2)) .ne. text11) go to 8659
+  if (toLower (texta6(3)) .ne. text12) go to 8659
 2125 if (noutpr .eq. 0) write (unit = kunit6, fmt = 8646)
 8646 format ('+  Notification of delta-connected armature.')
   idelta = 1
@@ -3837,7 +3840,7 @@ subroutine smdat (mtype)
      lstat(16) = numask
      go to 9999
 7146 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3653) i, mloc, extrs, hico, dsd
-3653 format ('+  mass card', i2, i2, 3e11.3)
+3653 format ('+  Mass card', i2, i2, 3e11.3)
      il1 = ib2 + mloc
      shp(il1) = extrs
      shp(il1 + numask) = hico * bin
@@ -4352,25 +4355,25 @@ subroutine smpfit (x, ism, fm, lunit6, noutpr)
   h3 = x(6)
   h2 = x(2)
   if (d1 .eq. h2) h2 = h2 * fm
-  a = x( 3 ) - h3
+  a = x(3) - h3
   c = d1 - h3
   u2 = c * c
-  if ( d1 .eq. h2 )   go  to  5
+  if (d1 .eq. h2) go to 5
   b = u2 / (d1 - h2) - c
   f1 = b + c
-  f3 = f1 / x( 5 )
+  f3 = f1 / x(5)
   d = b * c
-  a = -a / ((a * f1) / d - 1.0)
+  a = -a / ((a * f1) / d - 1.0d0)
   f2 = a + c
   f4 = (a + d / f1) / x(4)
   if (ism .eq. 0) go to 13
   ! improve the rotor resistances    *   *   *   *   *   *   *   *   *
   u = (x(4) + x(5)) * .5d0
-  d = u * u - (x(4) * x(5)) / (1.0 - u2 / (f1 * f2))
+  d = u * u - (x(4) * x(5)) / (1.0d0 - u2 / (f1 * f2))
   if (d .lt. 0.) go to 12
   d = u - sqrtz (d)
   f4 = f2 / d
-  f3 = f1 / (2.0 * u - d)
+  f3 = f1 / (2.0d0 * u - d)
   go  to  13
 12 if (noutpr .ne. 0) go to 13
   write (unit = lunit6, fmt = 26)

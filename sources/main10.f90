@@ -714,12 +714,20 @@ subroutine tables
   integer(4), pointer :: idistx => nenerg
   integer(4), allocatable :: integx(:)
   integer(4), allocatable :: itemp(:)
+  integer(4), allocatable :: jtemp(:)
   integer(4), pointer :: kbase => moncar(2)
   integer(4), allocatable :: kpen(:)
+  integer(4), allocatable :: ktemp(:)
   !
   ll0 = size (transfer (x, integx))
   allocate (integx(ll0))
   integx = transfer (x, integx)
+  ll0 = size (transfer (z, ktemp))
+  allocate (ktemp(ll0))
+  ktemp = transfer (z, ktemp)
+  ll0 = size (transfer (etac, jtemp))
+  allocate (jtemp(ll0))
+  jtemp = transfer (etac, jtemp)
   ll0 = size (transfer (busum, itemp))
   allocate (itemp(ll0))
   itemp = transfer (busum, itemp)
@@ -782,6 +790,14 @@ subroutine tables
   if (allocated (itemp)) then
      busum = transfer (itemp, busum)
      deallocate (itemp)
+  end if
+  if (allocated (jtemp)) then
+     etac = transfer (jtemp, etac)
+     deallocate (jtemp)
+  end if
+  if (allocated (ktemp)) then
+     z = transfer (ktemp, z)
+     deallocate (ktemp)
   end if
   if (allocated (integx)) then
      x = transfer (integx, x)
@@ -1064,10 +1080,10 @@ subroutine csup (l)
   div = d7 / d8
   go to 530
 520 div = fltinf
-  if (d7 .lt. 0.0) div = - div
-  if (d8 .lt. 0.0) div = - div
+  if (d7 .lt. 0.0d0) div = -div
+  if (d8 .lt. 0.0d0) div = -div
   go to 530
-510 div = 0.0
+510 div = 0.0d0
   !530 go to idiv, (7128, 7204, 6120)
 530 select case(idiv)
   case (7128)

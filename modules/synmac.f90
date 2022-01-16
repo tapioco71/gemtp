@@ -9,9 +9,19 @@
 
 module smach
   implicit none
-  integer(4) :: itold, ibrold, ktemp(1), mfirst, msmout, nsmout, nst
-  real(8) :: athtw, asqrt3, bdam, bin, damrat, delta6, factom, om2, omdt
-  real(8) :: radeg, smoutv(15), sqrt3, sqrt32, thtw, x1(36), z(100)
+  integer(4) :: itold, ibrold
+  integer(4) :: mfirst, msmout
+  integer(4) :: nsmout, nst
+  real(8) :: athtw, asqrt3
+  real(8) :: bdam, bin
+  real(8) :: damrat, delta6
+  real(8) :: factom
+  real(8) :: om2, omdt
+  real(8) :: radeg
+  real(8) :: smoutv(15), sqrt3, sqrt32
+  real(8) :: thtw
+  real(8) :: x1(36)
+  real(8), target :: z(100)
   !  common /smach/ z(100), x1(36)
   !     spy interface variables *****************************************
   !  common /smach/ smoutv(15)
@@ -20,10 +30,6 @@ module smach
   !  common /smach/ factom, damrat, delta6, om2, bin, bdam
   !     integer variables      *******************************************
   !  common /smach/ mfirst, nst, itold, ibrold, nsmout, msmout
-
-  ! Equivalences.
-
-  equivalence (ktemp(1), z(1))
 end module smach
 
 !

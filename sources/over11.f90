@@ -106,7 +106,7 @@ contains
     n = 0
     iwd1 = 2
     iwd = iwd1
-    if (elp(i26 + 7) .eq. 0.) iwd = iwd - 1
+    if (elp(i26 + 7) .eq. 0.0d0) iwd = iwd - 1
     iw = iwd * iwd
     do j = 1, iw
        ax(j) = 0.0d0
@@ -220,6 +220,7 @@ subroutine over11
   use movcop
   use veccom
   implicit none
+  !
   character(6) ::  chhold
   character(6) :: text1, text2, text3, text4, text5, text6
   character(8) :: aupper(13)
@@ -247,6 +248,7 @@ subroutine over11
   real(8) :: vi, vr
   real(8) :: xd, xxx
   real(8) :: yi, yis, yr, yrs, yy
+  !
   !  dimension aupper(13)
   !  equivalence (volt(1), vim(1))
   !  equivalence (imfd(1), jch2(1))
@@ -254,9 +256,9 @@ subroutine over11
   !      Preceding "jch2" uses "imfd" just for "frequency scan".
   !      as such, there must be no freq-depend sources present.
   !
-  integer(4), pointer :: jch2(:) => imfd(1 :)
+  integer(4), pointer :: jch2(:)
   integer(4), pointer :: knt => moncar(1)
-  real(8), pointer :: vim(:) => volt(1 :)
+  real(8), pointer :: vim(:)
   !
   data text1 / 'mag   ' /
   data text2 / 'angle ' /
@@ -266,6 +268,8 @@ subroutine over11
   data text6 / 'pctang' /
   data nfsout / 0 /
   !
+  jch2 => imfd
+  vim => volt
   locatn(i, j) = (j * j - j) / 2 + i
   ll2 = 2
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
@@ -277,14 +281,14 @@ subroutine over11
   ll2 = 2
   ib = 1
   sfrold = -fltinf
-  if (kssout .ne. 1 .and. kssout .ne. 3) go to 6010
+  if ((kssout .ne. 1) .and. (kssout .ne. 3)) go to 6010
   n6 = 0
   do k = 1, ibr
      j = iabs (kbus(k))
      if (j .eq. 1) j = iabs (mbus(k))
      if (j .le. 1) go to 1854
-     m = iabs ( kssfrq(j) )
-     if ( n6  .le.  0 )   go to 1846
+     m = iabs (kssfrq(j))
+     if (n6 .le. 0) go to 1846
      ndx1 = lsiz26
      do i = 1, n6
         ndx1 = ndx1 + 1
@@ -326,7 +330,7 @@ subroutine over11
   omegac = d4 * twopi * sfreq(n16)
   if (imodel(ib) .eq. -4) omegac = 1.0d0
   if (sfreq(n16) .eq. sfrold) go to 6017
-  if (kssout .ne. 1 .and. kssout .ne. 3) go to 6016
+  if ((kssout .ne. 1) .and. (kssout .ne. 3)) go to 6016
   if (ib .eq. 1) go to 6016
   write (unit = lunit(6), fmt = 6014) sfrold, sfreq(n16)
 6014 format ('      %%%%%  Frequency discontinuity:   end', e13.4, '  Hz.,   begin branches excited at', e18.9, '   Hertz.   %%%%%')
@@ -334,7 +338,7 @@ subroutine over11
 6017 jb = iabs (nr(ib))
   l = iabs (length(ib))
   if (kodebr(ib) .ne. -2) go to 6030
-  if (kodsem(ib) .ne. 0  .and. imodel(ib) .ne. -2) go to 6030
+  if ((kodsem(ib) .ne. 0) .and. (imodel(ib) .ne. -2)) go to 6030
   nphcas = iabs (length(ib))
   do ix = 1, nphcas
      iy = ib + ix - 1
@@ -535,7 +539,7 @@ subroutine over11
      vr = solr(i)
      vi = soli(i)
      jj = index(i)
-     kkk = index(i+1)
+     kkk = index(i + 1)
      e(i) = e(i) + diag(i) * vr - diab(i) * vi
      f(i) = f(i) + diag(i) * vi + diab(i) * vr
      go to 7370
@@ -782,7 +786,7 @@ subroutine over11
 7042 format (5x, "Requested output for nonexistent node  '", a6, "'  will be ignored.")
   go to 7040
 7043 numnvo = numnvo + 1
-  if (numnvo .gt. lsiz27 .or. numnvo .gt. lsiz12) go to 8080
+  if ((numnvo .gt. lsiz27) .or. (numnvo .gt. lsiz12)) go to 8080
   jch2(numnvo) = i
 7040 k = k + 1
   go to 7048
@@ -1715,12 +1719,12 @@ subroutine smint
 6263 format (' Million (n - m) / (rad / sec ** 2)', 17x, 'Million (n - m) / (rad / sec)', 7x, 'Million (n - m) / (rad / sec)', 11x, 'Million (n - m) / (rad)')
      n15 = n2 + numask
      do ii = 1, numask
-        n15  =  n15 + 1
-        ajj  =  shp(n15)
-        adl  =  shp(n15 + num4)
-        adm  =  shp(n15 + numask)
-        adk  =  shp(n15 + num2)
-        ads  =  shp(n15 + 3 * numask)
+        n15 = n15 + 1
+        ajj = shp(n15)
+        adl = shp(n15 + num4)
+        adm = shp(n15 + numask)
+        adk = shp(n15 + num2)
+        ads = shp(n15 + 3 * numask)
         write (unit = lunit(6), fmt = 6264) ajj, adl, ads, adm, adk
      end do
 6264 format (1x, e21.7, 5x, 2e20.7, 2e30.7)
@@ -1761,7 +1765,7 @@ subroutine smint
      !     Print d,q, and 0 currents
      write (unit = lunit(6), fmt = 6268)
 6268 format (/, ' Armature currents of generator in rotating reference frame (d-q-0 coordinates), in units of  (amps) .')
-     write (unit = lunit(6), fmt = 6269) cu(n33+1), cu(n33+2), cu(n33+3)
+     write (unit = lunit(6), fmt = 6269) cu(n33 + 1), cu(n33 + 2), cu(n33 + 3)
 6269 format (20x, 'id', 13x, 'iq', 13x, 'i0', /, 7x, 3(e15.7))
      !     Print a,b,c phase currents (pos. seq. component)
      write (unit = lunit(6), fmt = 6270)
@@ -1848,6 +1852,7 @@ end subroutine smint
 
 subroutine slope (sft, ssld, ssad, acee)
   implicit none
+  !
   real(8), intent(in) :: sft
   real(8), intent(in) :: ssld
   real(8), intent(in) :: ssad
@@ -1878,6 +1883,7 @@ subroutine ssout (l, erk, eik, erm, eim, currk, curik, currm, curim)
   use labcom
   use tracom
   implicit none
+  !
   integer(4), intent(in) :: l
   real(8), intent(in) :: curik, curim, currk, currm
   real(8), intent(in) :: eik, eim, erk, erm

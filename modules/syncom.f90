@@ -8,14 +8,16 @@
 
 module smtacs
   implicit none
-  integer(4) :: ismtac(20), lbstac, ntotac, jtemp(1)
-  real(8), dimension(20) :: etac
+  integer(4) :: ismtac(20)
+  integer(4) :: lbstac
+  integer(4) :: ntotac
+  real(8), target :: etac(20)
   !  common /smtacs/ etac
   !  common /smtacs/ ismtac(20), ntotac, lbstac
 
   ! Equivalences.
 
-  equivalence (jtemp(1), etac(1))
+  !  equivalence (jtemp(1), etac(1))
 end module smtacs
 
 !

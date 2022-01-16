@@ -18,9 +18,6 @@ subroutine over10
   use veccom
   implicit none
   !
-  !  dimension itemp(1)
-  !  equivalence (itemp(1), voltk(1))
-  !
   integer(4) :: i, ib, ic, iendd, ig, ii, ik, ikf, il, im, in, is, isfd
   integer(4) :: istop, isubs1, isubs2, isubs3, isubs4, itp, ix, ix2, ixx, iy
   integer(4) :: j, ja, jc, je, jj, jk, js, jt
@@ -41,6 +38,9 @@ subroutine over10
   real(8) :: vi, vr, vvi, vvr
   real(8) :: xa, xi, xr, xti, xtr, xx
   real(8) :: yy
+  !
+  !  dimension itemp(1)
+  !  equivalence (itemp(1), voltk(1))
   !
   integer(4), allocatable :: itemp(:)
   !
@@ -131,7 +131,7 @@ subroutine over10
   im = ig
 3140 ia = index(im)
   if (nr(i) .ge. 0) go to 3220
-  if (c(j) .eq. 0.0) go to 3164
+  if (c(j) .eq. 0.0d0) go to 3164
   xx = tx(j) * omegal - 1.0d0 / (c(j) * omegac)
   go to 3168
 3164 xx = tx(j) * omegal
@@ -179,7 +179,7 @@ subroutine over10
   if (length(i) .lt. 0) go to 3320
   jt = nt * (nt + 1) / 2
   if (kodebr(i) .le. 0) go to 3515
-  if (kodsem(i) .ne. 0 .and. imodel(i) .ne. -2) go to 3515
+  if ((kodsem(i) .ne. 0) .and. (imodel(i) .ne. -2)) go to 3515
   if (jt .le. lbus) go to 3504
   kill = 51
   k = iabs (kbus(i))
@@ -297,8 +297,8 @@ subroutine over10
         vr = vr + solr(lb) * tr(ke) - soli(lb) * tx(ke)
         vi = vi + solr(lb) * tx(ke) + soli(lb) * tr(ke)
      end do
-     xr = solr(m+1) - vr
-     xi = soli(m+1) - vi
+     xr = solr(m + 1) - vr
+     xi = soli(m + 1) - vi
      xa = xr * xr + xi * xi
      if (xa .lt. tolmat * e(n)) go to 3560
      xtr = xr / xa
@@ -415,8 +415,8 @@ subroutine over10
   mna2b1 = na2
   mxa2b1 = nb1
   go to 4260
-4240 diag(na2) = diag(na2) - tr(k) * 2.0
-  diab(na2) = diab(na2) - tx(k) * 2.0
+4240 diag(na2) = diag(na2) - tr(k) * 2.0d0
+  diab(na2) = diab(na2) - tx(k) * 2.0d0
   go to 4330
 4250 mna2b1 = nb1
   mxa2b1 = na2
@@ -439,9 +439,9 @@ subroutine over10
   mna2b2 = na2
   mxa2b2 = nb2
   go to 4370
-4350 diag(na2) = diag(na2) + tr(k) * 2.0
-  if (kbus(i) .lt. 0) diag(na2) = diag(na2) + r(k) * 2.0
-  diab(na2) = diab(na2) + tx(k) * 2.0 + c(k) * 2.0 * omegac
+4350 diag(na2) = diag(na2) + tr(k) * 2.0d0
+  if (kbus(i) .lt. 0) diag(na2) = diag(na2) + r(k) * 2.0d0
+  diab(na2) = diab(na2) + tx(k) * 2.0d0 + c(k) * 2.0 * omegac
   go to 3430
 4360 mna2b2 = nb2
   mxa2b2 = na2
@@ -461,7 +461,7 @@ subroutine over10
   isubs1 = iofgnd + l
   if (kbus(i) .lt. 0) gnd(isubs1) = gnd(isubs1) + r(k)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' below 4410.   l, bnd(isubs1) =', l, bnd(isubs1)
-  if (iprsup .ge. 1 .and. l .eq. 1) write (unit = lunit(6), fmt = *) ' k, tx(k), c(k), omegac =', k, tx(k), c(k), omegac
+  if ((iprsup .ge. 1) .and. (l .eq. 1)) write (unit = lunit(6), fmt = *) ' k, tx(k), c(k), omegac =', k, tx(k), c(k), omegac
   go to 3430
   !                                                      end of [y] buding
 3340 n1 = na2 - na1
@@ -513,7 +513,7 @@ subroutine over10
         n2 = ixx + i - 1
         nrow2 = kbus(n2)
         nrow2 = norder(nrow2)
-        if (nrow1 .gt. nrow2) goto43420
+        if (nrow1 .gt. nrow2) go to 43420
         istart = index(nrow1)
         istop = index(nrow1 + 1) - 1
         do iy = istart, istop
@@ -593,29 +593,23 @@ subroutine over10
      if (kode(i) .gt. 0) kode(i) = -kode(i)
   end do
   n3 = 1
-  !  call vecrsv (tclose(1 :), kswtch, n3)
   call vecsav (tclose, kswtch, n3)
-  !  call vecrsv (diag(1 :), ntot, n3)
   call vecsav (diag, ntot, n3)
-  !  call vecrsv (diab(1 :), ntot, n3)
   call vecsav (diab, ntot, n3)
-  !  call vecrsv (gnd(iofgnd + 1 :), ioffd, n3)
   call vecsav (gnd(iofgnd + 1 :), ioffd, n3)
-  !  call vecrsv (bnd(iofbnd + 1 :), ioffd, n3)
   call vecsav (bnd(iofbnd + 1 :), ioffd, n3)
   n12 = -4
   n15 = 0
-  call vecrsv(volt, n12, n15)
+  call vecrsv (volt, n12, n15)
   if (iprsup .lt. 3) go to 4517
   write (unit = lunit(6), fmt = 4513) ntot, ioffd
-4513 format (/, ' y-matrix of s.s. phasor solution, b4 starting elimination.    ntot, ioffd =  ', 2i8, /, 9x, 'i', 6x, 'iloc', &
-          5x, 'index', 17x, 'gnd', 17x, 'bnd', 21x, 'diag', 16x, 'diab')
+4513 format (/, ' y-matrix of s.s. phasor solution, b4 starting elimination.    ntot, ioffd =  ', 2i8, /, 9x, 'i', 6x, 'iloc', 5x, 'index', 17x, 'gnd', 17x, 'bnd', 21x, 'diag', 16x, 'diab')
   n3 = ntot + 1
   if (ioffd .gt. n3) n3 = ioffd
   n1 = iofgnd + 1
   n2 = iofbnd + 1
   do i = 1, n3
-     write (unit = lunit(6), fmt = 4514) i, iloc(i), index(i), gnd(n1), bnd(n2),diag(i), diab(i)
+     write (unit = lunit(6), fmt = 4514) i, iloc(i), index(i), gnd(n1), bnd(n2), diag(i), diab(i)
 4514 format (3i10, 2e20.8, 5x, 2e20.8)
      n1 = n1 + 1
      n2 = n2 + 1
@@ -692,7 +686,7 @@ subroutine over10
   do n2 = 1, numsub
      n1 = ntot
      n7 = isubeg(n2 + 1)
-4863 d8 = -1.0
+4863 d8 = -1.0d0
      j = ksub(l)
      do n10 = 1, 2
         if (j .eq. 1) go to 4871
@@ -701,7 +695,7 @@ subroutine over10
         solr(n5) = d8
         if (iprsup .ge. 3) write (unit = lunit(6), fmt = 4869) n5, j, n12, n2, l, d8
 4869    format (' Thevenin source.  n5, j, n12, n2, l, d8 =', 5i8, e14.3)
-4871    d8 = 1.0
+4871    d8 = 1.0d0
         j = msub(l)
      end do
      l = l + 1
@@ -715,7 +709,7 @@ subroutine over10
      j = node(i)
      if (iabs (iform(i)) .ne.14) cycle
      if (tstart(i) .eq. 5432.) go to 4975
-     if (tstart(i).ge. 0.0) cycle
+     if (tstart(i).ge. 0.0d0) cycle
      if (j .ge. -n1) go to 4975
      node(i) = node(i) + n1
      cycle
@@ -772,14 +766,14 @@ subroutine over10
 5041 format (/, ' Caution. ---- During Y-matrix elimination for steady-state solution voltages, a near-zero diagonal element', /, 15x, 'for node ', "'", a6,  "'", ' exists just before reciprocation. Using magnitudes squared for all 3 quantities, we have', /, 15x, 'original diagonal value =', e12.3, ',   questionable value =', e12.3, ',   tolerance ratio =', e12.3, '.', /, 15x, 'The node in question may be connected to other nodes, forming a subnetwork.   But the subnetwork has no (or')
   write (unit = lunit(6), fmt = 5044)
 5044 format (15x, 'very weak) path to ground or other known-voltage node in the steady-state.   Solution voltages of this', /, 15x, 'subnetwork will all be set to zero.')
-  if (solr(i) .ne. 0.0) go to 5046
-  if (soli(i) .eq. 0.0) go to 5048
+  if (solr(i) .ne. 0.0d0) go to 5046
+  if (soli(i) .eq. 0.0d0) go to 5048
 5046 kill = 23
   lstat(19) = 5046
   bus1 = bus(n23)
   go to 9999
-5048 diag(i) = 0.0
-  diab(i) = 0.0
+5048 diag(i) = 0.0d0
+  diab(i) = 0.0d0
   go to 15045
 5045 diag(i) = diag(i) / yy
   diab(i) = -diab(i)/yy
@@ -1017,9 +1011,9 @@ subroutine fxsour
 4567 write (unit = lunit(6), fmt = 5678)
 5678 format(' ***** No fix source *****')
   go to 9000
-2259 if (ralchk .eq. 0.0) ralchk = 0.01
-  if (cfitev .eq. 0.0) cfitev = 0.2
-  if (cfitea .eq. 0.0) cfitea = 2.5
+2259 if (ralchk .eq. 0.0d0) ralchk = 0.01d0
+  if (cfitev .eq. 0.0d0) cfitev = 0.2d0
+  if (cfitea .eq. 0.0d0) cfitea = 2.5d0
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 3636) nitera, ralchk
  3636 format ('+ last fix source card. ', i6, f14.8)
   nkr = lstat(69)
@@ -1032,7 +1026,7 @@ subroutine fxsour
      if (eknom1 .lt. qmax) eknom1 = qmax
   end do
   nekite = 0
-  picon = 360. / twopi
+  picon = 360.0d0 / twopi
   n14 = ntot + loopss(2)
   np = ncurr + 1
   do i = 1, ntot
@@ -1049,7 +1043,7 @@ subroutine fxsour
      kndex(mm) = i
      do ixx = 1, kconst
         if (iabs(node(ixx)) .ne. i) cycle
-        if (crest(ixx) .ne. 0) fxtem6(mm) = 1.0 / crest(ixx)
+        if (crest(ixx) .ne. 0) fxtem6(mm) = 1.0d0 / crest(ixx)
      end do
   end do
   call move (solr(1 :), solrsv(1 :), n14)
@@ -1155,7 +1149,7 @@ subroutine fxsour
      if (nekfix(i) .eq. 1) go to 8112
 8110 ekdif2 = (qsum - fixbu8(i)) / eknom1
      !     the relative difference check for p and q
-8112 if (absz (ekdif1) .le. ralchk .and. absz (ekdif2) .le. ralchk) go to 3434
+8112 if ((absz (ekdif1) .le. ralchk) .and. (absz (ekdif2) .le. ralchk)) go to 3434
      !     the absolute difference check for p and q
      !     if ( absz( psum - fixbu5(i) )  .lt.  abschk   .and.
      !    1  absz(qsum - fixbu8(i)) .lt. abschk )  go to 3434
@@ -1197,7 +1191,7 @@ subroutine fxsour
         go to 7010
 8181    ekn1 = 0.0d0
 6769    angel = fxtem4(mm) - ekdif1
-        if (angel .le. fixbu6(i) .and. angel .ge. fixbu4(i)) go to 6363
+        if ((angel .le. fixbu6(i)) .and. (angel .ge. fixbu4(i))) go to 6363
         ekdif1 = 0.1d0 * ekdif1
         !     from ma ren-ming.   installed march, 1987.
         if (absz (ekdif1) .gt. epsiln) go to 6769
@@ -1247,7 +1241,7 @@ subroutine fxsour
   if (nflknt .gt. 0) go to 2222
 2121 write (unit = lunit(6), fmt = 3333) (vdiff(k), k = 1, npp)
 3333 format ('+Vchang(k)= ', 20f6.3)
-  if (npp .lt. 20 .and. nekstp .ne. 1) go to 3476
+  if ((npp .lt. 20) .and. (nekstp .ne. 1)) go to 3476
   if (nnnout .eq. 1) write (unit = lunit(6), fmt = 4444) (jndex(k), k = 1, npp)
 4444 format (' fix source ', 20i6)
 3466 write (unit = lunit(6), fmt = 3471)
@@ -1267,7 +1261,7 @@ subroutine fxsour
 5510 if (i .eq. 0) go to 1000
   if (kode(i) .gt. i) go to 5560
   ii = index(i)
-5540 if (ii .eq. index(i+1)) go to 5570
+5540 if (ii .eq. index(i + 1)) go to 5570
   j = iloc(ii)
   isubs1 =  iofgnd+ii
   isubs2 =  iofbnd+ii
@@ -1300,7 +1294,7 @@ subroutine fxsour
         cycle
 3939    crest(nfix) = fxtem5(j)
         time1(nfix) = fxtem4(j) / picon
-        if (iprsup .lt. 9 .and. nprint .ne. 1) cycle
+        if ((iprsup .lt. 9) .and. (nprint .ne. 1)) cycle
         if (n .gt. 1) go to 3739
         write (unit = lunit(6), fmt = 3500) nfix, i, bus(i), crest(nfix), fxtem4(j), fixb10(m), fixb11(m)
 3500    format (1x, i5, i6, 1x, a6, e17.6, f11.4, e18.6, e17.6)
@@ -1337,9 +1331,6 @@ subroutine sseqiv (ikf, isfd, omegal, omegac)
   use blkcom
   use labcom
   implicit none
-  !  dimension ur(2), ui(2)
-  !  equivalence (volti(1), ur(1)), (voltk(1), ui(1))
-  !
   !     This routine produces a s.s. equivalent of the branches.this
   !     equivalent is inserted into the tr and tx tables *   *   *   *   *
   integer(4), intent(out) :: ikf, isfd
@@ -1348,6 +1339,10 @@ subroutine sseqiv (ikf, isfd, omegal, omegac)
   integer(4) :: ka, kb, kc
   real(8) :: ac1, al1, ar1, arl, azi, azr
   real(8) :: den
+  !
+  !  dimension ur(2), ui(2)
+  !  equivalence (volti(1), ur(1))
+  !  equivalence (voltk(1), ui(1))
   !
   real(8), allocatable :: ui(:)
   real(8), allocatable :: ur(:)
@@ -1375,9 +1370,9 @@ subroutine sseqiv (ikf, isfd, omegal, omegac)
         arl = rmfd(ka + 3)
         azr = 0.
         azi = al1
-        if (ac1 .ne. 0.0) ac1 = 1.0 / ac1
+        if (ac1 .ne. 0.0d0) ac1 = 1.0d0 / ac1
         !     process the parallel r and l connection, first   *   *   *   *   *
-        if (arl .eq. 0.0) go to 2
+        if (arl .eq. 0.0d0) go to 2
         den = 1.0d0 / (arl * arl + al1 * al1)
         azr = arl * (al1 * al1) * den
         azi = al1 * (arl * arl) * den
