@@ -40,7 +40,7 @@ subroutine over14
      do i = 1, kswtch
         if (i .eq. j) cycle
         ndx2 = lswtch + i
-        if (k .ne. kmswit(i) .and. k .ne. kmswit(ndx2) .and. m .ne. kmswit(i) .and. m .ne. kmswit(ndx2)) cycle
+        if ((k .ne. kmswit(i)) .and. (k .ne. kmswit(ndx2)) .and. (m .ne. kmswit(i)) .and. (m .ne. kmswit(ndx2))) cycle
         n6 = n6 + 1
         if (n6 .gt. mswtch) go to  1983
         nbhdsw(n6) = i
@@ -191,7 +191,6 @@ subroutine last14
   l = 1
   !                                       establishing l-th y-row from bra
 600 l = l + 1
-  !  call mover0 ( f(1), ntot )
   call move0 (f(1 :), ntot)
   k = 1
 620 n1 = kbus(k)
@@ -552,8 +551,8 @@ subroutine last14
 13080   d2 = d2 + sconst(j + 2)
 13090   d2 = d2 + sconst(j + 2)
      end do
-13110 if (iprsup .ge. 6) write (lunit(6), 13115) k, l, i, n9, n3, n4, n5, n6, n7, d2
-13115 format (' at 13110.      k       l       i      n9      n3       n4      n5      n6      n7                d2', /, 10x, 9i8, 5x, e15.7)
+13110 if (iprsup .ge. 6) write (unit = lunit(6), fmt = 13115) k, l, i, n9, n3, n4, n5, n6, n7, d2
+13115 format (' At 13110.      k       l       i      n9      n3       n4      n5      n6      n7                d2', /, 10x, 9i8, 5x, e15.7)
      if (n1 .lt. 0) go to 13120
      !  volt(.) is the i th row of (qfd) * (y-modal)
      n6 = (n4 - 1) * it2 + i + n1 - 1
@@ -594,7 +593,7 @@ subroutine last14
 780 if (num99 .le. 0) go to 2801
   do i = 1, inonl
      if (nltype(i) .gt. 0) cycle
-     if (nltype(i) .eq. -98 .or. nltype(i) .eq. -96) go to 2781
+     if ((nltype(i) .eq. -98) .or. (nltype(i) .eq. -96)) go to 2781
      if (anonl(i) .ge. 0.0d0) cycle
 2781 k = nonlk(i)
      m = iabs (nonlm(i))
@@ -609,14 +608,14 @@ subroutine last14
      f(l) = f(l) + yx
      f(n4) = f(n4) - yx
      if (iprsup .ge. 2) write (unit = lunit(6), fmt = 2790) i, k, m, l, n4, yx, f(l), f(n4)
-2790 format (/, ' Type-96 g added to row of y.  ', 5i10, /, 3e25.15)
+2790 format (/, ' Type-96 g added to row of Y.  ', 5i10, /, 3e25.15)
      cycle
 2787 n3 = nonlad(i)
      yx = gslope(n3)
      f(l) = f(l) + yx
      f(n4) = f(n4) - yx
      if (iprsup .ge. 2) write (unit = lunit(6), fmt = 2789) i, k, m, l, n4, yx, f(l), f(n4)
-2789 format (/, ' Type-98 g added to row of (y).  ', 5i10, /, 3e25.15)
+2789 format (/, ' Type-98 g added to row of (Y).  ', 5i10, /, 3e25.15)
   end do
 2801 kks(l) = kss
   if (f(l) .ne. 0.0d0) go to 4308
@@ -642,7 +641,7 @@ subroutine last14
      if (f(k) .eq. 0.0d0) f(k) = 1.0d0 / fltinf
   end do
 73620 if (iprsup .ge. 4) write (unit = lunit(6), fmt = 783) bus(l), (f(i), i = 1, ntot)
-783 format (' node  ', '"',  a6,  '"', '  row of (y) ....', /, (1x, 5e25.15))
+783 format (' node  ', '"',  a6,  '"', '  row of (Y) ....', /, (1x, 5e25.15))
   do i = 2, ntot
      if (f(i) .eq. 0.0d0) cycle
      kss = kss - 1
@@ -651,10 +650,10 @@ subroutine last14
   end do
   km(kss) = -km(kss)
   if (iprsup .gt. 0) write (unit = lunit(6), fmt = 73647) l, kks(l), kss, inonl, num99
-73647 format (' End of storage of row of (y), at 73647.   ', 5i10)
+73647 format (' End of storage of row of (Y), at 73647.   ', 5i10)
   if (kss .gt. ntot) go to 894
   write (unit = lunit(6), fmt = 892) l
-892 format (' Before any factoring,  (y) storage has almost overflowed list 5 storage.   Only ntot cells left at row  l =', i4)
+892 format (' Before any factoring,  (Y) storage has almost overflowed list 5 storage.   Only ntot cells left at row  l =', i4)
   kill = 1
   lstat(16) = 5
   lstat(14) = l
@@ -663,7 +662,6 @@ subroutine last14
   go to 9900
 894 if (l .lt. kpartb) go to 600
   kks(1) = kss
-  !  call move0 ( kpsour(1), ntot )
   call move0 (kpsour(1 :), ntot)
   l = 1
   mp = 1000
