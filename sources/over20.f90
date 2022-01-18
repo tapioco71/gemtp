@@ -37,9 +37,9 @@ subroutine over20
   !
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  Begin module "over20".')
-  zero = 0.0
+  zero = 0.0d0
   ll1 = 1
-  ll9  =  9
+  ll9 = 9
   ll10 = 10
   call runtym (d1, d2)
   n10 = 1
@@ -47,7 +47,7 @@ subroutine over20
 1324 format (/, 1x, '   iplot  nenerg  kbase  m4plot   mtape    icat lstat32', 14x, 't', 10x, 'aincr', /, 1x, 7i8, 2e15.5)
   if (max99m .lt. 0) write (unit = lunit(6), fmt = 9345) max99m
 9345 format (' ++++  Number of suppressed type-99 flashover or clearing messages is negative of', i7)
-  if (peaknd(1) .eq. 0.0) go to 5019
+  if (peaknd(1) .eq. 0.0d0) go to 5019
   n6 = int (peaknd(3), kind (n6))
   write (unit = lunit(6), fmt = 5011) peaknd(1), peaknd(2), bus(n6)
 5011 format (8x, 'Overall simulation peak node voltage =', e15.6, ' .   Time (sec) =', e14.5, ' .   bus = ', "'", a6, "'", ' .')
@@ -109,17 +109,17 @@ subroutine over20
   ck1 = ck(k)
   if ((ci1 .eq. 0.0d0) .and. (ck1 .eq. 0.0d0)) go to 7025
   l = kbus(k)
-  m = iabs(mbus(k))
+  m = iabs (mbus(k))
   write (unit = lunit(7), fmt = 7020) iold, bus(l), bus(m), ci1, ck1, zero, zero, k
 7020 format (i2, 2a6, 4e15.8, i6)
   if (n10 .ne. 0) write (unit = lunit(6), fmt = 7021) bus(l), bus(m), ci1, ck1, zero, zero, k
 7021 format (1x, a6, 1x, a6, 4e13.5, i6)
   go to 7025
-7022 it2 = iabs(length(k))
+7022 it2 = iabs (length(k))
   it1 = k + it2 - 1
   do i = k, it1
      n1 = kbus(i)
-     n2 = iabs(mbus(i))
+     n2 = iabs (mbus(i))
      if (n10 .ne. 0) write (unit = lunit(6), fmt = 7021) bus(n1), bus(n2), cik(i), ci(i), ck(i), zero, i
      write (unit = lunit(7), fmt = 7020) iold, bus(n1), bus(n2), cik(i), ci(i), ck(i), zero, i
   end do
@@ -161,7 +161,7 @@ subroutine over20
      write (unit = lunit(6), fmt = 7021) k, bus(n1), bus(n2), vchar(n7), cchar(n8)
      write (unit = lunit(6), fmt = 7019) n9, n11, (vchar(ipp), ipp = n5, n8)
 7019 format (1x, i10, 2x, i10, 4(3x, e15.8))
-     write (unit = lunit(6), fmt = 7027)  n14, vchar(n13), vchar(n14), gslope(n12), gslope(n13)
+     write (unit = lunit(6), fmt = 7027) n14, vchar(n13), vchar(n14), gslope(n12), gslope(n13)
 7027 format (1x, i10 , 4(3x, e15.8))
      cycle
 7031 a = curr(k)
@@ -258,14 +258,14 @@ subroutine over20
   nchain = 29
   flstat(7) = flstat(7) + d1
   flstat(8) = flstat(8) + d2
-  if (iprsup .ge. 1) write (lunit(6), 4568)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
   go to 99999
 9800 if (m4plot .ne. 1) go to 9810
   if (kbase .eq. 1) go to 9810
   !     VAX simulator return to "over16" after table-saving:
   lastov = nchain
   nchain = 16
-  if (iprsup .ge. 1) write (lunit(6), 4568)
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
   go to 99999
 9810 if (lastov .gt. nchain) go to 9850
   flstat(7) = flstat(7) + d1
@@ -833,14 +833,13 @@ subroutine spying
 !       3174,   3256,   3357,   3381,   3394,   3406,   8500, &
 !      width   bus     size    limit   iout    node    nonlin         (43-49)
 !       8500,   8500,   8500,   8500,   8500,   8500,   8500, &
-!      space   lunit(4)  series  lock    [y]     [f]     noroll         (50-56)
+!      space   lunit(4)  series  lock    [y]     [f]     noroll       (50-56)
 !       8500,   8500,   8500,   8500,   8500,   8500,   8500, &
 !      open    close   sm      honk    choice  tacs    wait           (57-63)
 !       3568,   3584,   3606,   3623,   8500,   8500,   3644), jword
   call stoptp
 71309 n14 = jword - 63
-!  go to ( &
-!      v-i                                                   (64-64)
+!  go to ( v-i                                                        (64-64)
 !       8500 ), n14
   select case (n14)
   case (1)
@@ -1255,8 +1254,8 @@ subroutine spying
   go to 9800
 2126 call frefp1 (buff77, tbreak)
   nbreak = 16
-  if (tbreak .gt. 0.0) go to 2142
-  if (tbreak .eq. 0.0) go to 2131
+  if (tbreak .gt. 0.0d0) go to 2142
+  if (tbreak .eq. 0.0d0) go to 2131
   d13 = -tbreak * deltat
   write (unit = munit6, fmt = 2128) deltat, d13
 2128 format ('    Ok, using  deltat =', e12.3, '  this gives  t-break =', e13.5)
@@ -2329,7 +2328,7 @@ subroutine spyink
   if (toLower (char1) .eq. 'i') go to 2629
   if (toLower (char1) .eq. 'r') go to 2629
   if (char1 .eq. ' ') go to 2629
-  write (munit6, 42622)
+  write (unit = munit6, fmt = 42622)
 42622 format ('     Sorry, 1st character is meaningless.   Try again .... ')
   call window
   go to 2618
@@ -2400,7 +2399,7 @@ subroutine spyink
   call window
   linnow = linnow - 1
 2691 if (l .le. 0) go to 2693
-  write (munit6, 2692) j, file6(j)
+  write (unit = munit6, fmt = 2692) j, file6(j)
 2692 format (i5, 1x, a80)
   call window
 2693 bytfnd(1 : 20) = bytbuf(1 : 20)
@@ -2448,13 +2447,13 @@ subroutine spyink
   linnow = lidnt1 - 1
   lidnt1 = linnow
   lidnt2 = linnow
-  if (char1 .ne. 'r') go to 2618
+  if (toLower (char1) .ne. 'r') go to 2618
   go to 2695
   !     following code is for  "(8)"  request :
 2734 if (bytbuf(1 : 4) .ne. '    ') go to 2743
   j = linnow
 2736 if (file6(j)(80 : 80) .eq. ' ') go to 2738
-  write (munit6, 2692) j, file6(j)
+  write (unit = munit6, fmt = 2692) j, file6(j)
   call window
   read (unit = munit5, fmt = 2623) bytbuf
   if (toLower (bytbuf(1 : 1)) .eq. 'e') go to 2618
@@ -2527,7 +2526,7 @@ subroutine spyink
   call window
   go to 2691
   !     $$$$$$$  key word no. 28:  "language" $$$$  $$$$  $$$$  $$$$  $$$$
-2782 write (prom80, 2785)
+2782 write (unit = prom80, fmt = 2785)
 2785 format ('   Next command language operation (single, entire, show, spy :')
   !  assign 2786 to nextsn
   nextsn = 2786
@@ -2613,12 +2612,12 @@ subroutine spyink
      if (n5 .eq. 1) d12 = terra
      d13 = bus(n6)
      if (n6 .eq. 1) d13 = terra
-     write (munit6, 2828) i, d12, d13, kmswit(i), kmswit(lswtch + i), kpos(i), kentnb(i), tclose(i), adelay(i), topen(i)
+     write (unit = munit6, fmt = 2828) i, d12, d13, kmswit(i), kmswit(lswtch + i), kpos(i), kentnb(i), tclose(i), adelay(i), topen(i)
 2828 format (1x, i3, 1x, a6, 1x, a6, i6, i5, i5, i7, 3e13.4)
      call window
      if (n33 .ne. 1) cycle
      n7 = namesw(i)
-     write (munit6, 2831) texvec(n7), adelay(i), crit(i), energy(i), kswtyp(i), modswt(i), nextsw(i)
+     write (unit = munit6, fmt = 2831) texvec(n7), adelay(i), crit(i), energy(i), kswtyp(i), modswt(i), nextsw(i)
 2831 format (1x, a6, 3e14.5, 3i8)
      call window
   end do
@@ -2848,7 +2847,7 @@ subroutine spyink
 3701 mmfind = j
   n6 = 0
   do k = 1, ibr
-     if ((mmfind .ne. iabs(kbus(k))) .and. (mmfind .ne. iabs(mbus(k)))) cycle
+     if ((mmfind .ne. iabs (kbus(k))) .and. (mmfind .ne. iabs (mbus(k)))) cycle
      if (n6 .lt. 20) go to 3703
      write (unit = munit6, fmt = 3708) (mmhold(ip), ip = 1, n6)
      call window
@@ -3035,7 +3034,7 @@ subroutine spyink
 3871 call frefp2 (answ80, d17, d18)
 3874 n4 = intinf
   if (n77 .eq. 1) go to 3876
-  write (prom80, 3875)
+  write (unit = prom80, fmt = 3875)
 3875 format ('      Process every  n-th  step.  Send n:')
   !  assign 43875 to nextsn
   nextsn = 43875
@@ -3053,7 +3052,7 @@ subroutine spyink
 3881 format ('       ?? ??  Sorry, no plot points in the requested time span.  Abort.')
   call window
   go to 1240
-3886 if (n77 .ne. 4 .and. n77 .ne. 5) go to 3904
+3886 if ((n77 .ne. 4) .and. (n77 .ne. 5)) go to 3904
   mflush = mflush + 1
   write (unit = lunit(6), fmt = 3891) mflush, n6, n4, d17, d18
 3891 format ('   ++++  Begin plot-data copy from memory to disk.   mflush, n6, n4, tbeg, tend =', i3, 2i8, 2e14.5)
@@ -3069,13 +3068,12 @@ subroutine spyink
      if (ip .lt. n4) go to 3908
      ip = 0
      if (n77 .ne. 4 .and. n77 .ne. 5) go to 3907
-     write (lunit(4)) (pltbuf(m), m = n13, n8)
+     write (unit = lunit(4)) (pltbuf(m), m = n13, n8)
      if (n77 .eq. 4 ) go to 3908
 3907 call movesp (pltbuf(n13), pltbuf(n6), n22)
      n6 = n6 + n22
 3908 n13 = n13 + n22
      if (n13 .ge. indbuf) go to 3911
-!3910 n8 = n8 + n22
      n8 = n8 + n22
   end do
 3911 if (n77 .eq. 4) go to 3914
@@ -3171,7 +3169,6 @@ subroutine spyink
   if (n17 .le. 0) go to 3851
   do j = 1, n11
      file6(n17) = blan80
-!3962 n17 = n17 + 1
      n17 = n17 + 1
   end do
   go to 3934
@@ -3184,17 +3181,17 @@ subroutine spyink
   !  assign 4011 to nextsn
   nextsn = 4011
   go to 9800
-4011 if (buff77(1 : 5) .ne. 'close') go to 4022
+4011 if (toLower (buff77(1 : 5)) .ne. 'close') go to 4022
   write (unit = prom80, fmt = 4013)
 4013 format ('     Save permanently? (y or n) :')
   !  assign 4016 to nextsn
   nextsn = 4016
   go to 9800
 4016 ansi8 = 'keep'
-  if (buff77(1 : 1) .eq. 'n') ansi8 = 'delete'
+  if (toLower (buff77(1 : 1)) .eq. 'n') ansi8 = 'delete'
   close (unit = lunit(4), status = ansi8)
   go to 4008
-4022 if (buff77(1 : 5) .ne. 'open ' )  go to 4036
+4022 if (toLower (buff77(1 : 5)) .ne. 'open ' )  go to 4036
   write (unit = prom80, fmt = 4025)
 4025 format ('     Desired disk file name :')
   !  assign 4026 to nextsn
@@ -3208,7 +3205,7 @@ subroutine spyink
   go to 9800
 4029 open (unit = lunit(4), status = buff77, file = ansi32, form = 'unformatted', iostat = ios)
   if (ios .ne. 0) then
-     write (unit = lunit(6), fmt = 4030) ansi32
+     write (unit = lunit(6), fmt = 4030) trim (ansi32)
 4030 format (' Could not open ', a, '.   Exiting.')
      call stoptp
   end if
@@ -3235,7 +3232,6 @@ subroutine spyink
   n15 = 0
   do k = 1, 100
      do j = 1, 1000
-!4053    read (lunit(4), end=4062)  forbyt(1)
         read (unit = lunit(4), end = 4062) forbyt(1)
      end do
      n15 = n15 + 1000
@@ -3243,7 +3239,6 @@ subroutine spyink
 4056 format ('+      Still reading.', i8)
      call window
   end do
-!4059 continue
   go to 4008
 4062 n15 = n15 + j
   write (unit = munit6, fmt = 4063) forbyt(1), n15
@@ -3251,7 +3246,6 @@ subroutine spyink
   call window
   go to 4008
 4068 if (toLower (buff77(1 : 4)) .ne. 'next') go to 4079
-  !4069 read (lunit(4), end=4075)  ( forbyt(j), j=1, kptplt+1 )
   read (unit = lunit(4), end = 4075) (forbyt(j), j = 1, kptplt + 1)
   write (unit = munit6, fmt = 4071) (forbyt(j), j = 1, kptplt + 1)
 4071 format (1x, 10e13.4)
@@ -3289,12 +3283,10 @@ subroutine spyink
         read (unit = lunit(4), end = 4090) forbyt(1)
         if (forbyt(1) .ge. d8) go to 4094
      end do
-!4086 continue
      n15 = n15 + 1000
      write (unit = munit6, fmt = 4056) n15
      call window
   end do
-!4089 continue
   go to 4008
 4090 n15 = n15 + j
   write (unit = munit6, fmt = 4091) n15
@@ -3440,7 +3432,6 @@ subroutine spyink
   !  assign 4237 to nextsn
   nextsn = 4237
   go to 9800
-!4237 bytbuf = buff77(1 : 20)
   bytbuf = buff77(1 : 20)
   if (toLower (bytbuf(1 : 4)) .eq. 'end ') go to 4214
   call frein2 (bytbuf, n13, n14)
@@ -3448,7 +3439,6 @@ subroutine spyink
   lserlc = n13 - 1
   go to 4235
 4239 do j = n13, n14
-!4241 kbus(j+n42) = 0
      kbus(j + n42) = 0
   end do
   go to 4235
@@ -3585,12 +3575,12 @@ subroutine spyink
   call spyout (n9, n9)
 4631 n7 = numnvo + nv + 1
   n8 = numnvo + nc
-  write (munit6, 4636)  n7, n8
+  write (unit = munit6, fmt = 4636) n7, n8
 4636 format ('     Element current node-name pairs (cells', i3, '  through', i3, ' ) :')
   call window
-  if ( n17 .le. 0 ) go to 4658
+  if (n17 .le. 0) go to 4658
   n9 = 7878
-  call spyout ( n9, n9 )
+  call spyout (n9, n9)
   do j = 1, kswtch
      if (kmswit(lswtch + j) .gt. 0) cycle
      call spyout (kmswit(j), kmswit(lswtch + j))
@@ -3815,6 +3805,7 @@ subroutine initsp
   !     If no interactive emtp use, this module can be deleted.
   !     Universal initialization module for "spying".   Constants
   !     must be set only once, at the beginning of execution only.
+  !
   character(8) :: textay(75)
   integer(4) :: j, n3
   real(8) :: tdroll
@@ -3885,6 +3876,7 @@ subroutine initsp
   data  textay(63)  /  'wait    '  /
   data  textay(64)  /  'v-i     '  /
   data  textay(65)  /  '        '  /
+  !
   n3 = 29
   call dimens (memrmp(1), n3, bus1, bus1)
   limbuf = memrmp(2)
@@ -4159,7 +4151,6 @@ subroutine percnt (vbyte, n7)
      do j = 1, 7
         if (vbyte(k + j : k + j) .ne. '%') go to 1297
      end do
-     !1253 continue
      !     we exit  do 1253  with string of 8 "%" beginning in column k
      itexp = itexp + 1
      if (itexp .le. maxarg) go to 1284
@@ -4199,7 +4190,7 @@ subroutine numchk (vbyte, nchar, kill)
   !     (vbyte(j), j=1, nchar)  to see if it is a legal floating-point
   !     number.   If so,  "kill"  is to be set to zero;  if number is
   !     structurally deficient,  "kill"  is to be set positive.
-  !     For non-interactive emtp, this module can be destroyed.
+  !     For non-interactive EMTP, this module can be destroyed.
   !
   integer(4), intent(in) :: nchar
   integer(4), intent(out) :: kill
@@ -4289,7 +4280,6 @@ subroutine getnum (num)
 4218 do j = 1, 10
         if (c4 .eq. digit(j)) go to 4256
      end do
-!4234 continue
      write (unit = munit6, fmt = 4239) i, c4
 4239 format ('    -- Illegal byte in "number".', 1x,  i4,  3x,  a1,  3x,  'Try again ...')
      call window
@@ -4354,8 +4344,8 @@ subroutine spylin
   !     One blank line is written on spy screen by this module.
   !     Temporarily, until we learn how to write to a 2nd crt for
   !     VAX/VMS, we will just write to lunit6 in universal form:
-  write (unit = lunit(6), fmt = 5624)
-5624 format (1x)
+  !  write (unit = lunit(6), fmt = 5624)
+  !5624 format (1x)
 end subroutine spylin
 
 !
@@ -4370,13 +4360,15 @@ subroutine spyout(n1, n2)
   !     If no interactive use, this module can be deleted.
   !     Arguments n1 and n2 are node nos., with possible "-" signs.
   !     Purpose is to load and print corresponding names for "output"
+  !
   integer(4), intent(in) :: n1, n2
   integer(4) :: k, n11, n12
   save
-  character(8) :: text10(10)
+  character(8) :: terra, text10(10)
   integer(4) :: j
   !
-  !  data terra / 'terra ' /
+  data terra / 'terra ' /
+  !
   n11 = n1
   n12 = n2
   !     first check for special initialization or flushing calls:
@@ -4421,6 +4413,7 @@ subroutine examin
   !     This near-universal module serves to build the character*132
   !     output vector outlin of the "examine" command of spy.
   !     Computers with index problems (e.g., prime) need replacement
+  !
   integer(4) :: jj, n3, n5, n8, n9, n10, n17
   !
   if (iprspy .lt. 1) go to 1718
@@ -4510,6 +4503,7 @@ subroutine deposi (ind, intype, n1, n2, d4)
   !     deposited, and intype gives the mode (1=integer, 0=real).
   !     Bounding subscripts on the deposit are n1 and n2, respectively.
   !     Computers with index problems (e.g., prime) need replacement
+  !
   integer(4), intent(in) :: ind, intype
   integer(4), intent(out) :: n1, n2
   real(8), intent(out) :: d4
@@ -4673,7 +4667,8 @@ subroutine sosrng (kill)
   !     integer outputs are  (lidnt1, lidnt2)  of common.   The only
   !     argument is  "kill",  which tells whether the operation was a
   !     success:  "0" means success,  "1" means error.
-  !     For non-interactive emtp, this module can be destroyed.
+  !     For non-interactive EMTP, this module can be destroyed.
+  !
   integer(4), intent(out) :: kill
   character(1) :: char2
   integer(4) :: n1, n12, n13, n24
@@ -4773,6 +4768,7 @@ subroutine movesp (from, to, n15)
   !     For non-interactive EMTP, this module can be destroyed.
   !     This routine transfers single-precision from(1 : n15) to
   !     to(1 : n15).  Except for missing implicit, it equals "mover".
+  !
   real(8), intent(in) :: from(*)
   real(8), intent(out) :: to(*)
   integer(4), intent(in) :: n15
@@ -4785,7 +4781,7 @@ end subroutine movesp
 !
 
 subroutine prompt
-  use blkcom
+  use blkcom, only : lunit
   use dekspy
   implicit none
   !     VAX-11  installation-dependent EMTP module used only
@@ -4794,6 +4790,7 @@ subroutine prompt
   !     The prompt must end with colon (":").  Then line feed
   !     will be suppressed, so subsequent read is to right of ":".
   !     For non-interactive EMTP, this module can be destroyed.
+  !
   integer(4) :: j, n2
   !
   n2 = 80
@@ -4819,6 +4816,7 @@ subroutine frefp1 (ansi, d12)
   !     single floating point number.  The input is character(80)
   !     variable  ansi,  and the output is double precision d12.
   !     For non-interactive EMTP, this module can be destroyed.
+  !
   character(80), intent(in) :: ansi
   real(8), intent(out) :: d12
   integer(4) :: n8
@@ -4840,6 +4838,7 @@ subroutine fresp1 (ansi, d12)
   !     interactive EMTP ("emtspy").  It is called to decode one
   !     floating point numbers d12 from character(80) ansi.   This
   !     is identical to "frefp1", except for single precision.
+  !
   character(80), intent(in) :: ansi
   real(8), intent(out) :: d12
   integer(4) :: n8
@@ -4861,6 +4860,7 @@ subroutine frefp2 (ansi, d12, d13)
   !     interactive EMTP ("emtspy").  It is called to decode two
   !     floating point numbers d12 and d13 from character(80) ansi.
   !     For non-interactive emtp, this module can be destroyed.
+  !
   character(80), intent(in) :: ansi
   real(8), intent(out) :: d12, d13
   integer(4) :: n8
@@ -5874,6 +5874,7 @@ end subroutine sysplt
 subroutine stopin
   use blkcom
   use dekspy
+  use strcom
   implicit none
   !     Universal module of interactive emtp (spy of "emtspy").
   !     If non-interactive version, module can be destroyed.  This
@@ -5897,8 +5898,8 @@ subroutine stopin
   call prompt
   read (unit = munit5, fmt = 1236) buff77
 1236 format (a80)
-  if (buff77(1 : 4) .eq. 'stop') call stoptp
-  if (buff77(1 : 4) .ne. 'spy')  go to 1244
+  if (toLower (buff77(1 : 4)) .eq. 'stop') call stoptp
+  if (toLower (buff77(1 : 4)) .ne. 'spy')  go to 1244
   call spying
   go to 9000
 1244 file6(istep) = buff77
@@ -5924,6 +5925,7 @@ subroutine tpplot
   use dekspy
   use dekplt
   use indcom
+  use strcom
   implicit none
   !     Module used only for interactive emtp (service to "emtspy").
   !     For non-interactive EMTP, this module can be destroyed.
@@ -5945,10 +5947,10 @@ subroutine tpplot
   case (5147)
      go to 5147
   end select
-1742 hmax = 0.0
-  hmin = 0.0
+1742 hmax = 0.0d0
+  hmin = 0.0d0
   ihs = 3
-  tmult = 1.0
+  tmult = 1.0d0
   maxev = location (bx) - location (ev)
   maxew = location (finfin) - location (ew)
   maxew = maxew - 50
@@ -6023,12 +6025,12 @@ subroutine tpplot
   call window
   go to 1000
 5154 if (buffin(1 : 8) .eq. inner) go to 3769
-  if (buffin(1 : 4) .eq. 'stop') return
+  if (toLower (buffin(1 : 4)) .eq. 'stop') return
   if (buffin(1 : 5) .ne. help(1 : 5)) go to 5200
   call helper (1)
   go to 1000
 5200 newfil = 0
-  tstep = -1.0
+  tstep = -1.0d0
   rewind l4plot
   read (unit = l4plot) datepl, tclopl, numnam, numnvo, numbco, numbrn, (buslst(i), i = 1, numnam)
   if (iprspy .lt. 2) go to 5739
@@ -6040,7 +6042,6 @@ subroutine tpplot
 5733 format (1x, 10a7)
      call window
   end do
-!5736 continue
 5739 kptplt = numnvo + numbrn
   if (numnvo .gt. 0) read (l4plot) (ibsout(j), j = 1, numnvo)
   if (numbrn .gt. 0) read (l4plot) (ibrnch(j), j = 1, numbrn), (jbrnch(j), j = 1, numbrn)
@@ -6050,13 +6051,11 @@ subroutine tpplot
 1002 format (' Node numbers ibsout:', 10i5)
      call window
   end do
-!5742 continue
   do j = 1, numbrn, 5
      write (unit = munit6, fmt = 5744) (ibrnch(k), jbrnch(k), k = j, j + 4)
 5744 format (' Branch node pairs:', 5(2x, 2i4))
      call window
   end do
-!5747 continue
 5754 numout = numnvo + 2 * numbrn
   nv = numbrn - numbco
   jbegbv = numnvo + 1
@@ -6087,10 +6086,9 @@ subroutine tpplot
 5763 format (1x, 10a6)
      call window
   end do
-!5766 continue
 3769 call pltvar
   if (nexmod .gt. 0 ) go to 9835
-  if (buffin(1 : 4) .eq. 'stop') return
+  if (toLower (buffin(1 : 4)) .eq. 'stop') return
   !     if ( buffin(1:4) .eq. 'spy ' )  return  ! abort "plot" use
   if (kill .eq. 0) go to 1000
 3818 close (unit = 14,  status = 'keep')
@@ -6112,11 +6110,13 @@ end subroutine tpplot
 subroutine helper (n1)
   use dekspy
   use dekplt
+  use strcom
   implicit none
   !     Module used only for interactive EMTP (service to "emtspy").
   !     For non-interactive EMTP, this module can be destroyed.
   !     This module does nothing other than service the "help"
   !     subcommand of the "plot" command of spy.
+  !
   integer(4), intent(in) :: n1
   integer(4) :: j, k, n8, n23, n24
   !
@@ -6126,13 +6126,13 @@ subroutine helper (n1)
   n23 = kbegtx(k)
   n24 = kbegtx(k + 1) - 1
   go to 3673
-3618 if (buffin(6 : 10) .ne. 'outer') go to 3622
+3618 if (toLower (buffin(6 : 10)) .ne. 'outer') go to 3622
   n8 = 1
   go to 3613
-3622 if (buffin(6 : 11) .ne. 'middle') go to 3627
+3622 if (toLower (buffin(6 : 11)) .ne. 'middle') go to 3627
   n8 = 2
   go to 3613
-3627 if (buffin(6 : 10) .ne. 'inner') go to 3634
+3627 if (toLower (buffin(6 : 10)) .ne. 'inner') go to 3634
   n8 = 3
   go to 3613
 3634 n23 = kbegtx(numkey + 1)
@@ -6232,7 +6232,7 @@ subroutine pltvar
 1007 if (buffin(1 : 8) .eq. inner) go to 1550
   if (buffin(1 : 8) .ne. timesp) go to 5681
 1008 timbeg = pltbuf(newvec)
-  n4 = (indbuf - newvec ) / (kptplt + 1 )
+  n4 = (indbuf - newvec) / (kptplt + 1)
   if (iprspy .lt. 1) go to 5673
   write (unit = munit6, fmt = 5672) indbuf, newvec, kptplt, n4
 5672 format (' Timespan calc.  indbuf, newvec, kptplt, n4 =', 4i8)
@@ -6312,18 +6312,18 @@ subroutine pltvar
   go to 9800
 1165 call frein1 (buff77, n4)
   if (n4 .gt. 0) ihs = n4
-  if (ihs .gt. 0 .and. ihs .lt. 8) go to 7531
+  if ((ihs .gt. 0) .and. (ihs .lt. 8)) go to 7531
   write (unit = munit6, fmt = 4163)
 4163 format ('  ? ? ?  Illegal value.   Try again ...')
   call window
   go to 1155
-7531 if (ihs .eq. 1) tmult = 21600.
-  if (ihs .eq. 2) tmult = 60.
-  if (ihs .eq. 3) tmult = 1.0
-  if (ihs .eq. 4) tmult = 1000.
+7531 if (ihs .eq. 1) tmult = 21600.0d0
+  if (ihs .eq. 2) tmult = 60.0d0
+  if (ihs .eq. 3) tmult = 1.0d0
+  if (ihs .eq. 4) tmult = 1000.0d0
   if (ihs .eq. 5) tmult = 1.e6
-  if (ihs .eq. 6) tmult = 1.0
-  if (ihs .eq. 7) tmult = 1.0
+  if (ihs .eq. 6) tmult = 1.0d0
+  if (ihs .eq. 7) tmult = 1.0d0
   go to 1053
 1167 l = 1
   icp = 4
@@ -6367,7 +6367,7 @@ subroutine pltvar
   if (textd1 .eq. back) go to 1053
   if (textd1 .eq. end) go to 1175
   if (textd1 .eq. lastpl) go to 1175
-  if (textd1 .eq. '        ' .and. textd2 .eq. '        ') go to 1173
+  if ((textd1 .eq. '        ') .and. (textd2 .eq. '        ')) go to 1173
   slot1(l) = textd1
   slot1(l + 1) = textd2
 1173 if ((slot1(l) .eq. '        ') .and. (slot1(l + 1) .eq. '        ')) go to 1168
@@ -6415,7 +6415,7 @@ subroutine pltvar
   write (unit = munit6, fmt = 3251) (mplot(i), i = 1, n14)
 3251 format (' mplot:', 20i6)
   call window
-3252 if (textd1 .ne. lastpl .and. icp .lt. 9) go to 1204
+3252 if ((textd1 .ne. lastpl) .and. (icp .lt. 9)) go to 1204
   if (jplt .gt. 0) go to 1210
   write (unit = munit6, fmt = 1202)
 1202 format ('  ???  Error.   No valid plot variables of any type were specified.   Try again ....')
@@ -6523,6 +6523,7 @@ subroutine timval
   implicit none
   !     Module used only for interactive EMTP (service to "emtspy").
   !     for non-interactive EMTP, this module can be destroyed.
+  !
   integer(4) :: i, ibase, ip, ipj, ipl, ipontr, iprsup, istold, istore, isw, isww
   integer(4) :: itimes
   integer(4) :: j, j1, k, k9, kk, kl, kplt, kpltq, l, maxevk
@@ -6550,6 +6551,15 @@ subroutine timval
   select case (nextsn)
   case (1556)
      go to 1556
+
+  case (1958)
+     go to 1958
+
+  case (1975)
+     go to 1975
+
+  case (1985)
+     go to 1985
 
   case (2740)
      go to 2740
@@ -6748,7 +6758,7 @@ subroutine timval
 !1957 assign 1958 to nextsn
 1957 nextsn = 1958
   go to 9800
-  read (buff77, 1959) (aaa(j), j = 1, jplt)
+1958 read (buff77, 1959) (aaa(j), j = 1, jplt)
 1959 format (10e8.0)
   go to 1550
 1960 if (buffin(1 : 8) .ne. offset) go to 1970
@@ -6771,7 +6781,7 @@ subroutine timval
 !  assign 1975 to nextsn
   nextsn = 1975
   go to 9800
-  call fresp2 (buff77, vmin, vmax)
+1975 call fresp2 (buff77, vmin, vmax)
   limfix = 1
   if (vmin .eq. 0.0 .and. vmax .eq. 0.0) limfix = 0
   go to 1550
@@ -6781,7 +6791,7 @@ subroutine timval
 !  assign 1985 to nextsn
   nextsn = 1985
   go to 9800
-  call frein1 (buff77, n1)
+1985 call frein1 (buff77, n1)
   if (n1 .gt. 0) nsmplt = n1
   go to 1550
 1989 if (buffin(1 : 8) .ne. rescal) go to 1992

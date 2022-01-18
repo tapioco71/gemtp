@@ -156,7 +156,7 @@ subroutine dimens (ls, n, b1, b2)
   ls(28)  =    1080
   n7 = 28 + 1
   ls(n7) = 9942869
-  b1 ='  171847'
+  b1 ='  211841'
   b2 ='  180122'
   return
 2900 if (n .gt.  29) go to 3100

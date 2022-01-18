@@ -5,7 +5,6 @@
 !
 
 module labcom
-  use blkcom
   implicit none
   real(8), target :: x(   10000)
   real(8), target :: ykm(   20000)

@@ -3727,7 +3727,7 @@ subroutine fdcinj (ikf, isfd, ibf)
      volt(ka) = volt(1) - cz * ur(ka)
   end do
   if (iprsup .le. 0) go to 15
-  write (unir = lunit(6), fmt = 9) (volt(ka), ka = 1, it2)
+  write (unit = lunit(6), fmt = 9) (volt(ka), ka = 1, it2)
 9 format (' Phase current injections cik......', /, (2x, 6e21.11))
   write (unit = lunit(6), fmt = 10) isc, ibf, (cikfd(ka), ka = isc, ibf)
 10 format (' Updated modal branch data from', i6, '  to', i6, /, (2x, 6e21.11))
@@ -7757,7 +7757,7 @@ subroutine lineqs (aum, yum)
            bum(n10, n11) = bum(n10, n11) - bum(n10, n1) * bum(n1, n11) / bum(n1, n1)
         end do
         n11 = n6 - n8
-        bum(n10, n11) = 0.0
+        bum(n10, n11) = 0.0d0
      end do
   end do
   ! calculation of solution
