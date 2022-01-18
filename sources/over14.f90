@@ -861,7 +861,7 @@ subroutine breqiv (ikf, isfd, ibf)
      if (ac1 .gt. 0.0d0) ac1 = delta2 / ac1
      a2 = 0.0d0
      a1 = al1
-     if (arl .eq. 0.0d0 .or. al1 .eq. 0.0d0) go to 6
+     if ((arl .eq. 0.0d0) .or. (al1 .eq. 0.0d0)) go to 6
      a1 = (al1 * arl) / (al1 + arl)
      a2 = 2.0d0 * a1 / arl
 6    azr = 1.0d0 / (ar1 + a1 + ac1)

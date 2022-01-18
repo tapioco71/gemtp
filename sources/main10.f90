@@ -448,16 +448,20 @@ end subroutine dgelg
 subroutine matmul (aum, bum)
   implicit none
   !     matrix algebra module used by universal machine (u.m.)
+  !
   integer(4) :: n1, n2, n3, n5
-  real(8), intent(out) :: aum, bum
-  real(8) :: cum
-  dimension aum(3, 3), bum(3, 3), cum(3, 3)
+  real(8), intent(out) :: aum(3, 3)
+  real(8), intent(in) :: bum(3, 3)
+  real(8) :: cum(3, 3)
+  !
+  !  dimension aum(3, 3), bum(3, 3), cum(3, 3)
+  !
   n5 = 3
   do n1 = 1, n5
      do n2 = 1, n5
         cum(n1, n2) = aum(n1, 1) * bum(1, n2)
         do n3 = 2, n5
-           cum(n1, n2) =  cum(n1, n2) + aum(n1, n3) * bum(n3, n2)
+           cum(n1, n2) = cum(n1, n2) + aum(n1, n3) * bum(n3, n2)
         end do
      end do
   end do
@@ -476,13 +480,16 @@ end subroutine matmul
 subroutine matvec (aum, yum)
   implicit none
   !     matrix algebra module used by universal machine (u.m.)
-  real(8), intent(in) :: aum
-  real(8), intent(out) :: yum
-  real(8) :: x
-  dimension aum(3, 3), yum(15), x(3)
+  !
   integer(4) :: n1, n2, n3
+  real(8), intent(in) :: aum(3, 3)
+  real(8), intent(out) :: yum(15)
+  real(8) :: x(3)
+  !
+  !  dimension aum(3, 3), yum(15), x(3)
+  !
   n1 = 3
-  x(1 : n1) = 0.0
+  x(1 : n1) = 0.0d0
   do n2 = 1, n1
      do n3 = 1, n1
         x(n2) = x(n2) + aum(n2, n3) * yum(n3)

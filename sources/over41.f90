@@ -416,7 +416,7 @@ subroutine over41
   go to 95
 110 write (unit = lunit(6), fmt = 113)
 113 format (/, 1x)
-120 format (' Warning. ----- If nothing is connected to windings which are delta-connected, either add capacitances or ground', /, 16x, 'one terminal of the delta.   Otherwise the delta connection is floating, with voltage indeterminate.')
+!120 format (' Warning. ----- If nothing is connected to windings which are delta-connected, either add capacitances or ground', /, 16x, 'one terminal of the delta.   Otherwise the delta connection is floating, with voltage indeterminate.')
   if (ipunch .gt. 0) go to 4273
   write (unit = lunit(6), fmt = 4201) (i, i = 1, 8)
 4201 format (//, ' 80-column card-image listing of punched-card output follows (type-51-53 EMTP branch cards).', /, 1x, 80('-'), /, 1x, 8(9x, i1), /, 1x, 8(9x, '0'), /, 1x, 80('-'))

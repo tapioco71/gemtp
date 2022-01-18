@@ -19,6 +19,7 @@ contains
 
   subroutine uminit (n15, reacl, gpar, fpar, hist,umcurp, nodvo1, nodvo2, jcltac, jclout, jtype, nodom, jtmtac, histom, omegm, omold, thetam, reamdu, reamds, flxds, flxdr, reamqu,flxqs, flxqr, jcdsat, jcqsat, flxd, flxq, nppair, rotmom, ncld, nclq, jtqout, jomout, jthout, reamqs, epsom, dcoef,kcoil, voltum, anglum, nodfum, nodmum, kumout, jumout, umoutp)
     implicit none
+    !
     integer(4), intent(in) :: jcdsat(:)
     integer(4), intent(in) :: jcqsat(:)
     integer(4), intent(in) :: jclout(:)
@@ -79,6 +80,7 @@ contains
     !  dimension voltum(1), anglum(1), nodfum(1), nodmum(1)
     !  dimension kumout(1), jumout(1), umoutp(1)
     !  dimension nsubkm(1)
+    !
     !  equivalence (kknonl(1), nsubkm(1))
     !
     integer(4) :: j
@@ -86,7 +88,7 @@ contains
     integer(4) :: mark, mars, mm
     integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n16, nclcom, nshare, num, numcom
     !
-    integer(4), pointer :: nsubkm(:) => kknonl(1 :)
+    integer(4), pointer :: nsubkm(:)
     !
     !  jcltac(kcl and kcl+1) are defined and initialized in umrenu
     !  jcltac(kcl+2) is defined here. it is zero unless a set of
@@ -106,6 +108,7 @@ contains
     !     nshare = 10 : compensation of common mech netwrk to be
     !                   conducted with the lowest numbered um.
     !
+    nsubkm => kknonl
     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4567)
 4567 format ('  "Begin module uminit."')
     istart = 0
@@ -291,6 +294,7 @@ subroutine over15
   use ovr15c
   use strcom
   implicit none
+  !
   character(8) :: aupper(13), alower(13)
   character(8) :: text1, text2, text3
   character(8) :: text4, text5, text6, text7
@@ -312,9 +316,12 @@ subroutine over15
   !  dimension nsubkm(1)
   !
   !  equivalence (spum(1), ispum(1))
-  !  equivalence (moncar(1), knt), (moncar(2), kbase)
-  !  equivalence (moncar(3), ltdelt), (moncar(4), isw)
-  !  equivalence (moncar(5), idist), (moncar(6), itest)
+  !  equivalence (moncar(1), knt)
+  !  equivalence (moncar(2), kbase)
+  !  equivalence (moncar(3), ltdelt)
+  !  equivalence (moncar(4), isw)
+  !  equivalence (moncar(5), idist)
+  !  equivalence (moncar(6), itest)
   !  equivalence (kknonl(1), nsubkm(1))
   !
   integer(4), pointer :: idist => moncar(5)
@@ -1201,13 +1208,14 @@ subroutine smout
   character(8) :: busvec(1)
   character(8) :: digit(10)
   character(8) :: text1, text2, texta(15), textb(3)
-  !  dimension texta(15), digit(10), textb(3), busvec(1)
   integer(4) :: i, i5, i30, icnt, ip, ip1
   integer(4) :: jb, jk, jk1
   integer(4) :: l, ll5, ll6
   integer(4) :: m
   integer(4) :: n, n1, n2, n5, n6, n7, n10, n15
   real(8) :: d12
+  !
+  !  dimension texta(15), digit(10), textb(3), busvec(1)
   !
   data texta  / 'id    ', 'iq    ', 'i0    ', 'if    ', 'ikd   ', 'ig    ', 'ikq   ', 'ia    ', 'ib    ', 'ic    ', 'efd   ', 'mforce', 'mang  ', 'tq gen', 'tq exc' /
   data textb  / 'ang   ', 'vel   ', 'tor   ' /
@@ -1233,16 +1241,14 @@ subroutine smout
 4113 i = ip
      n = i
      i5 = i30 + 17
-     n15 = ismdat( i5 )
+     n15 = ismdat(i5)
      if (n15 .lt. 0) cycle
      l = 5
      busvec(1) = text1
-     !     if (n1 .gt. 0) call packa1 (digit(n1), busvec(1), l)
      if (n1 .gt. 0) call pack (digit(n1), busvec(1), l)
      l = l + 1
      n10 = n2
      if (n10 .eq. 0) n10 = 10
-     !     call packa1 (digit(n10), busvec(1), l)
      call pack (digit(n10), busvec(1), l)
      text2 = busvec(1)
      icnt = 0
@@ -1270,14 +1276,11 @@ subroutine smout
            n6 = n6 - 10 * n5
            busvec(1) = textb(n7)
            if (n5 .gt. 0) go to 4206
-           !           call packa1 (digit(n6), busvec(1), ll5)
            call pack (digit(n6), busvec(1), ll5)
            go to 4215
-           !4206       call packa1 (digit(n5), busvec(1), ll5)
 4206       call pack (digit(n5), busvec(1), ll5)
            n10 = n6
            if (n10 .eq. 0) n10 = 10
-           !           call packa1 (digit(n10), busvec(1), ll6)
            call pack (digit(n10), busvec(1), ll6)
 4215       jk = jk + 1
            jk1 = jk1 + 3

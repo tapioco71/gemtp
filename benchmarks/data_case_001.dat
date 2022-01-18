@@ -4,7 +4,7 @@ c Energization of a trivial RL circuit.                                        |
 c ----dt<---tmax...............................................................|
  200.e-6  50.e-3                                                                
 c -Iprnt<--Iplot<-Idoubl<-KssOut<-MaxOut<---Ipun<-Memsav<---Icat                
-       1       1       1       0       0                       0               
+      25       1       1       0       0                       0               
 c                                                                               
 c Circuit data..................................................................
 c Bus-->Bus-->Bus-->Bus--><----R<----L<----C                                   0
@@ -18,7 +18,7 @@ blank End of switch data.......................................................|
 c                                                                               
 c Source data...................................................................
 c Bus--><I<Amplitude<Frequency<--T0|Phi0<---0=Phi0<-Ignore-><---Tstart<----Tstop
-14src             1.       50.         0        0.                 -1.     9999.
+14src             1.       60.         0        0.                 -1.     9999.
 blank End of source data.......................................................|
 c                                                                               
 c Nodal Output Request Data.....................................................
