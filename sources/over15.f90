@@ -124,10 +124,10 @@ contains
        n2 = jcltac(kcl)
        n3 = jcltac(kcl + 1)
        n4 = k
-       if (n2 .eq. 0 .and. n3 .eq. 0) cycle
-       if (n2 .ne. 0 .and. n2 .lt. n4) n4 = n2
-       if (n3 .ne. 0 .and. n3 .lt. n4) n4 = n3
-       if (n4 .eq. k) jcltac(kcl+2) = k
+       if ((n2 .eq. 0) .and. (n3 .eq. 0)) cycle
+       if ((n2 .ne. 0) .and. (n2 .lt. n4)) n4 = n2
+       if ((n3 .ne. 0) .and. (n3 .lt. n4)) n4 = n3
+       if (n4 .eq. k) jcltac(kcl + 2) = k
     end do
     do k = 1, numum
        kcl = kcoil(k)
