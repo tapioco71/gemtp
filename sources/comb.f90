@@ -11,10 +11,10 @@
 subroutine comb
   use tacsto
   implicit none
-  !  include 'tacsto.ftn'
-  sptr=sptr-1
-  isto(sptr)=from
-  from=0
+  !
+  sptr = sptr - 1
+  isto(sptr) = from
+  from = 0
   !  goto (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9020, 9021, 9022), to-8999
   select case (to - 8999)
   case (1)
@@ -91,8 +91,86 @@ subroutine comb
   from=isto(sptr)
   sptr=sptr+1
   return
-0001 goto (9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 9511, 9512, 9513, 9514, 9515, 0002, 0002, 0002, 0002, 9520,&
-       9521, 9522, 9523, 9524, 9525, 9526), from- 9500
+  !0001 goto (9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 9511, 9512, 9513, 9514, 9515, 0002, 0002, 0002, 0002, 9520, 9521, 9522, 9523, 9524, 9525, 9526), from- 9500
+0001 select case (from - 9500)
+  case (1)
+     go to 9501
+
+  case (2)
+     go to 9502
+
+  case (3)
+     go to 9503
+
+  case (4)
+     go to 9504
+
+  case (5)
+     go to 9505
+
+  case (6)
+     go to 9506
+
+  case (7)
+     go to 9507
+
+  case (8)
+     go to 9508
+
+  case (9)
+     go to 9509
+
+  case (10)
+     go to 9510
+
+  case (11)
+     go to 9511
+
+  case (12)
+     go to 9512
+
+  case (13)
+     go to 9513
+
+  case (14)
+     go to 9514
+
+  case (15)
+     go to 9515
+
+  case (16)
+     go to 0002
+
+  case (17)
+     go to 0002
+
+  case (18)
+     go to 0002
+
+  case (19)
+     go to 0002
+
+  case (20)
+     go to 9520
+
+  case (21)
+     go to 9521
+
+  case (22)
+     go to 9522
+
+  case (23)
+     go to 9523
+
+  case (24)
+     go to 9524
+
+  case (25)
+     go to 9525
+
+  case (26)
+     go to 9526
+  end select
 0002 stop 'invalid "from" reference in "comb".'
 910 stpflg=42
   stpi1=iptr

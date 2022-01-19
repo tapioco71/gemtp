@@ -30,6 +30,7 @@ subroutine subr47
   !
   !  dimension lltemp(20)
   !  dimension rtg(1), itg(1), ctg(1)
+  !
   !  equivalence (karray(1), itg(1), rtg(1), ctg(1))
   !
   integer(4), pointer :: itg(:)
@@ -151,6 +152,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   use indcom
   use tracom
   implicit none
+  !
   integer(4), intent(in) :: ldm
   integer(4), intent(in) :: ldn
   integer(4), intent(in) :: ldn2
@@ -213,6 +215,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   complex(16) :: qn(ldn), f(ldn, ldn2)
   complex(16) :: ca(ldn, ldn), cb(ldn, ldn), cc(ldn, ldn), cd(ldn, ldn)
   character(8) :: bufsem, cname, text1, text2, text3, text4
+  !
   dimension bufsem(14)
   dimension ngg(ldn), ncpp(ldm), rad(ldn), yzn(lnq2), wy(ldn)
   dimension sc(ldn,ldn), qc(ldn,ldn), gi(ldn,3)
@@ -223,9 +226,11 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   dimension bio(ldm), bi1(ldm), bi2(ldm), bi3(ldm), bi4(ldm)
   dimension bi5(ldm), dci(ldm), thc(ldm),  hi(ldm),  di(ldn)
   dimension al1i(ldm),   al2i(ldm),   al3i(ldm),   gn(ldn)
+  !
   data text1 / 'punch ' /
   data text2 / ' line ' /
   data text3 / 'cable ' /
+  !
   nrp =  0
   mrr =  0
   junit4=77
@@ -416,7 +421,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   read (unit = abuff, fmt = 4230) bufsem
   if (ialter .ne. 2) write (unit = lunit(2), fmt = 4230) bufsem
   read (unit = abuff, fmt = 901) (radp(i), i = 1, 3), rop, usp, es1, es2
-  write (kunit6, 3035)
+  write (unit = kunit6, fmt = 3035)
 3035 format ('+Pipe characteristic.')
   if (radp(3) .ne. 0.0d0) go to 3036
   radp(3) = radp(2) + 100.0d0 * epsiln
@@ -428,7 +433,7 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   read (unit = abuff, fmt = 901) (dci(i), thc(i), i = 1, npc)
   write (unit = kunit6, fmt = 3040)
 3040 format ('+Relation between cables and pipe.')
-  np2 = npc * 3  +  npp
+  np2 = npc * 3 + npp
   !     read input card using cimage.
 3050 call cimage
   read (unit = abuff, fmt = 4230) bufsem
@@ -447,60 +452,60 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
      read (unit = abuff, fmt = 4230) bufsem
      if (ialter .ne. 2) write (unit = lunit(2), fmt = 4230) bufsem
      read (unit = abuff, fmt = 901) (radi(i, j), j = 1, 7)
-     write (kunit6, 3230) (radi(i,j), j=1, 7)
-3230 format(7h+radii., 1x, 7f6.2 )
+     write (unit = kunit6, fmt = 3230) (radi(i, j), j = 1, 7)
+3230 format ('+radii.', 1x, 7f6.2)
      !     read input card using cimage.
      call cimage
      read (unit = abuff, fmt = 4230) bufsem
-     if ( ialter  .ne.  2 ) write (lunit(2), 4230)  bufsem
+     if (ialter .ne. 2) write (unit = lunit(2), fmt = 4230) bufsem
      read (unit = abuff, fmt = 901) (roi(i, j), usr(i, j), usi(i, j), esi(i, j), j= 1, 2)
-     write (kunit6, 3240)
-3240 format(50h+physical constants for conductors and insulators.)
+     write (unit = kunit6, fmt = 3240)
+3240 format ('+Physical constants for conductors and insulators.')
      if (ncpp(i) .le. 2)  go to 3245
      !     read input card using cimage.
      call cimage
      read (unit = abuff, fmt = 4230) bufsem
      if (ialter .ne. 2) write(lunit(2), 4230)  bufsem
      read (unit = abuff, fmt = 901) roi(i, 3), usr(i, 3), usi(i, 3), esi(i, 3)
-     write(kunit6, 3240)
-     if ( radi(i,7) .ne. 0. ) go to 3239
-     radi(i,7)=radi(i,6) + 100.*epsiln
-     usi(i,3) = 1.0
-     esi(i,3) = 1.0
+     write (unit = kunit6, fmt = 3240)
+     if (radi(i, 7) .ne. 0.0d0) go to 3239
+     radi(i, 7) = radi(i, 6) + 100.0d0 * epsiln
+     usi(i, 3) = 1.0d0
+     esi(i, 3) = 1.0d0
      go to 3239
-3245 usi(i,3) = 1.0
-     esi(i,3) = 1.0
-     if (ncpp(i) .eq. 2)  go to 3235
-     if (radi(i,3) .ne. 0. ) go to 3231
-     radi(i,3)=radi(i,2) + 100.*epsiln
-     usi(i,1) = 1.0
-     esi(i,1) = 1.0
-3231 radi(i,4) = radi(i,3)
-     radi(i,5) = radi(i,4)
-     radi(i,6) = radi(i,5)
-     radi(i,7) = radi(i,6)
-     usi(i,2) = 1.0
-     esi(i,2) = 1.0
-     usr(i,2) = 1.0
-     usr(i,3) = 1.0
-     roi(i,2) = roi(i,1)
-     roi(i,3) = roi(i,2)
+3245 usi(i, 3) = 1.0d0
+     esi(i, 3) = 1.0d0
+     if (ncpp(i) .eq. 2) go to 3235
+     if (radi(i, 3) .ne. 0.0d0) go to 3231
+     radi(i, 3) = radi(i, 2) + 100.0d0 * epsiln
+     usi(i, 1) = 1.0d0
+     esi(i, 1) = 1.0d0
+3231 radi(i, 4) = radi(i, 3)
+     radi(i, 5) = radi(i, 4)
+     radi(i, 6) = radi(i, 5)
+     radi(i, 7) = radi(i, 6)
+     usi(i, 2) = 1.0d0
+     esi(i, 2) = 1.0d0
+     usr(i, 2) = 1.0d0
+     usr(i, 3) = 1.0d0
+     roi(i, 2) = roi(i, 1)
+     roi(i, 3) = roi(i, 2)
      go to 3239
-3235 if (radi(i,5) .ne. 0.) go to 3237
-     radi(i,5)=radi(i,4) + 100.*epsiln
-     usi(i,2) = 1.0d0
-     esi(i,2) = 1.0d0
-3237 radi(i,6) = radi(i,5)
-     radi(i,7) = radi(i,6)
-     usr(i,3) = 1.0
-     roi(i,3) = roi(i,2)
+3235 if (radi(i, 5) .ne. 0.0d0) go to 3237
+     radi(i, 5) = radi(i, 4) + 100.0d0 * epsiln
+     usi(i, 2) = 1.0d0
+     esi(i, 2) = 1.0d0
+3237 radi(i, 6) = radi(i, 5)
+     radi(i, 7) = radi(i, 6)
+     usr(i, 3) = 1.0d0
+     roi(i, 3) = roi(i, 2)
 3239 if(ncpp(i) .lt. 2)  go to 23
      npc2 = npc2 + 1
      ncmod = ncmod + 1 - ngrnd
      if ( ncpp(i)  .ge.  3 )   ncmod = ncmod + 1
 23   ncc = ncc + ncpp(i)
   end do
-  npc2=npc+npc2
+  npc2 = npc + npc2
   if (itypec .eq. 2)   go to 24
   ncc = ncc + npp
   if (npp .eq. 0)   go to 85
@@ -509,8 +514,8 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   read (unit = abuff, fmt = 4230) bufsem
   if (ialter .ne. 2) write (lunit(2), 4230)  bufsem
   read (unit = abuff, fmt = 901) (hi(i), di(i), i = 1, npp)
-  write (kunit6, 3055)
-3055 format (45h+height and horizontal distance of each pipe.)
+  write (unit = kunit6, fmt = 3055)
+3055 format ('+Height and horizontal distance of each pipe.')
   go to 85
 24 lines = (npc + 3) / 4
   do j = 1, lines
@@ -523,9 +528,9 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
      read (unit = abuff, fmt = 901) (hi(i), di(i), i = im, in)
      if (j .gt. 1)   go to 93
      write (kunit6, 3250)
-3250 format(46h+height and horizontal distance of each cable.)
+3250 format ('+Height and horizontal distance of each cable.')
 93 end do
-85 if(npc .le. ldm  .and.  ncc .le. ldn) go to 1945
+85 if((npc .le. ldm) .and. (ncc .le. ldn)) go to 1945
   kill = 225
   lstat(14) = ldn
   lstat(15) = ldm
@@ -534,37 +539,37 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
 1945 do i = 1, ncc
      ngg(i) = 0
   end do
-  if ( ngrnd  .le.  3 )  go to 3983
+  if (ngrnd .le. 3) go to 3983
   call cimage
   read (unit = abuff, fmt = 1999) (ngg(i), i = 1, npc ), npipe
-1999 format ( 2x, 78i1 )
+1999 format (2x, 78i1)
   do i = 1, npc
-     if ( ngg(i)  .le.  1 ) go to 1919
+     if (ngg(i) .le. 1) go to 1919
      jdx1 = npc + i
      jdx2 = npc2 + i
      kgc = ngg(i)
-     if ( kgc  .lt.  5 )  ngg(i) = 0
-     if (kgc .ne. 3  .and.  kgc .ne. 6) ngg(jdx1) = 1
-     if (kgc .ne. 2  .and.  kgc .ne. 5) ngg(jdx2) = 1
+     if (kgc .lt. 5) ngg(i) = 0
+     if (kgc .ne. 3 .and. kgc .ne. 6) ngg(jdx1) = 1
+     if (kgc .ne. 2 .and. kgc .ne. 5) ngg(jdx2) = 1
 1919 end do
-  if ( itypec  .eq.  2 ) go to 3983
+  if (itypec .eq. 2) go to 3983
   ngg(ncc) = npipe
 3983 if (numaki .eq. 0)   go to 87
-  write (lunit(4))  itypec, isyst, npc, ncc
-  if (iprs47 .ge. 1) write (lunit(6), 86)  itypec, isyst, npc, ncc
-86 format(16h at 86 of subr47, /, 4i5)
+  write (unit = lunit(4)) itypec, isyst, npc, ncc
+  if (iprs47 .ge. 1) write (unit = lunit(6), fmt = 86) itypec, isyst, npc, ncc
+86 format (' At 86 of subr47', /, 4i5)
   !     read input card using cimage
 87 call cimage
   read (unit = abuff, fmt = 4230) bufsem
-  if ( ialter  .ne.  2 ) write (lunit(2), 4230)  bufsem
+  if (ialter .ne. 2) write (unit = lunit(2), fmt = 4230) bufsem
   read (unit = abuff, fmt = 902) d9, freq, ik, ips, dist, j13, j14
 902 format (2e15.6, 2i5, f8.3, i10, i2)
   ipunch = j13
   roe = d9
   itrnsf = j14
-  if (freq .eq. 0.)   freq = statfr
-  if (ips .eq. 0)   ips = 1
-  write (kunit6, 3256)  roe, freq, ik, ips, dist, ipunch, itrnsf
+  if (freq .eq. 0.0d0) freq = statfr
+  if (ips .eq. 0) ips = 1
+  write (unit = kunit6, fmt = 3256) roe, freq, ik, ips, dist, ipunch, itrnsf
 3256 format ('+Freq. card', 2e10.3, 2i3, e8.3, 2i2)
   call interp
   if (iearth .ne. 99)   go to 95
@@ -573,36 +578,36 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   read (unit = abuff, fmt = 4230) bufsem
   if ( ialter  .ne.  2 ) write (lunit(2), 4230)  bufsem
   read (unit = abuff, fmt = 901) dep1, dep2, roe3, roe4
-  write (kunit6, 3280)
-3280 format (49h+depths & resistivities of 2nd & 3rd layer earth.)
+  write (unit = kunit6, fmt = 3280)
+3280 format ('+Depths & resistivities of 2nd & 3rd layer earth.')
   !     read input card using cimage.
   call cimage
   read (unit = abuff, fmt = 4230) bufsem
-  if ( ialter  .ne.  2 ) write (lunit(2), 4230)  bufsem
+  if (ialter .ne. 2) write (unit = lunit(2), fmt = 4230) bufsem
   read (unit = abuff, fmt = 901) htoj2, htoj3, htoj4, hyud2, hyud3, hyud4
-  write (kunit6, 3290)
-3290 format (49h+permeability & permittivity of the three layers.)
+  write (unit = kunit6, fmt = 3290)
+3290 format ('+Permeability & permittivity of the three layers.')
   alf1 = roe / roe3
   alf2 = roe / roe4
 95 continue
-  anpais=iabs (npais)
-  xtotal=xmajor*anpais
-  if(npais.eq.0) xtotal=xmajor
-  if(npais.ge.0) call nyan(itypec,npc,ncc,ncpp,ngrnd,ncros,npais,ldm)
+  anpais = iabs (npais)
+  xtotal = xmajor * anpais
+  if(npais .eq. 0) xtotal = xmajor
+  if(npais .ge. 0) call nyan (itypec, npc, ncc, ncpp, ngrnd, ncros, npais, ldm)
   if (itypec .ne. 1) go to 200
   !     overhead line data outputs & precal.
   jnc = 1
-  do i=1, ncct
-     im = 4*(i-1) + 1
-     do  j=1, 2
+  do i = 1, ncct
+     im = 4 * (i - 1) + 1
+     do  j = 1, 2
         j1 = im + j + 1
         in = ncpp(j1)
-        if ( in  .eq.  0 )   go to 120
+        if (in .eq. 0) go to 120
         j2 = 2 * j - 1
         i1 = i + ncct
-        if (in .eq. 1)   go to 111
-        d0 = dr0(i,j)/sinz(pai/in)
-        usi(i,j) = radi(i,j2)
+        if (in .eq. 1) go to 111
+        d0 = dr0(i, j) / sinz (pai / in)
+        usi(i, j) = radi(i, j2)
         in1 = in - 1
         do k = 1, in1
            usi(i, j) = usi(i, j) * d0 * sinz (pai / in * k)
@@ -611,27 +616,27 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
         go to 120
 111     usi (i1, j) = radi(i,j2)
 120  end do
-     if (iprsup .ge. 1) write (lunit(6), 4001)  i, (usi(i1, j), j=1, 2)
-4001 format (1x,7hcircuit,i3,3h0  ,32hequivalent radius of phase wire , e10.4,/, 34x, 11hground wire, e10.4)
-     do j=1, 2
+     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4001) i, (usi(i1, j), j = 1, 2)
+4001 format (1x, 'circuit', i3, '0  equivalent radius of phase wire ', e10.4, /, 34x, 'ground wire', e10.4)
+     do j = 1, 2
         j1 = im + j - 1
-        if ( ncpp(j1)  .ne.  0 )   go to 123
-        usi(i,j) = 0.0
-        esi(i,j) = 0.0
-        gi(i,j) = 0.0
+        if (ncpp(j1) .ne. 0) go to 123
+        usi(i, j) = 0.0d0
+        esi(i, j) = 0.0d0
+        gi(i, j) = 0.0d0
         go to 125
 123     j1 = 2 * j
         j2 = j1 - 1
-        usi(i,j)  =  radi(i,j1) * sqrtz( u0*usr(i,j) / roi(i,j) )
-        esi(i,j)  =  radi(i,j2) * sqrtz( u0*usr(i,j) / roi(i,j) )
-        if ( radi(i,j1)  .lt.  radi(i,j2) )   go to 124
+        usi(i,j) = radi(i, j1) * sqrtz (u0 * usr(i, j) / roi(i, j))
+        esi(i,j) = radi(i, j2) * sqrtz (u0 * usr(i, j) / roi(i, j))
+        if (radi(i, j1) .lt. radi(i, j2)) go to 124
         kill = 174
         lstat(14) = i
-        flstat(15) = radi(i,j2)
-        flstat(16) = radi(i,j1)
+        flstat(15) = radi(i, j2)
+        flstat(16) = radi(i, j1)
         lstat(19) = 123
         go to 9200
-124     gi(i,j) = roi(i,j)/pai/(radi(i,j2)**2 - radi(i,j1)**2)
+124     gi(i, j) = roi(i, j) / pai / (radi(i, j2) ** 2 - radi(i, j1) ** 2)
         !     1          /ncpp(im+j+1)
 125  end do
   end do
@@ -651,144 +656,138 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   end do
   write (unit = lunit(6), fmt = 170)
 170 format (//, 132('-'), //, 1x)
-  if ( isyst  .ne.  0 )   go to 140
-  write (lunit(6), 180)
+  if (isyst .ne. 0) go to 140
+  write (unit = lunit(6), fmt = 180)
 180 format (' Table of overhead untransposed line parameters', /, 1x)
   go to 142
-140 write (lunit(6), 182)
+140 write (unit = lunit(6), fmt = 182)
 182 format (' Table of overhead transposed line parameters', /, 1x)
 142 j1 = npc - ncc
-  write (lunit(6), 171)  ncc, j1
+  write (unit = lunit(6), fmt = 171) ncc, j1
 171 format (10x, 'Total number of phase wires', i3, 3x, 'ground wires ', i3, /, 1x)
   do i = 1, ncct
      i1 = i + ncct
-     im = 4*(i-1) + 1
+     im = 4 * (i - 1) + 1
      j1 = im + 1
      j2 = im + 2
      j3 = im + 3
-     write (lunit(6), 184)  i, ( radi(i,j), j= 1,  2), ncpp(j2), usi(i1,1)
-184  format ( 10x, 7hcircuit, i2, /, 10x, 27hradius | phase wire  (outer,  e11.4,  9h  , inner, e11.4,  3h )*,  i2,  8h bundles, /, 20x, 13hequiv. radius, e11.4  )
-     j1=ncpp(j1)
-     if(j1.eq.0) go to 148
-     write (lunit(6), 185)  ( radi(i,j), j= 3,  4), ncpp(j3), usi(i1,2)
-185  format (19x,  18hground wire (outer,  e11.4,  9h  , inner, e11.4,  3h )*,  i2,  8h bundles, /,  20x, 13hequiv. radius, e11.4  )
-148  write(lunit(6),186) (roi(i,j),j=1,2),(usr(i,j),j=1,2),(gi(i,j),j=1,2)
-186  format ( 10x,  31hresistivity(ohm-m) | phase wire, e11.4,  3x,  11hground wire,  e11.4,  /,  10x,23hrelative permeability |, 8x,  f11.4,  14x,  f11.4,  /, &
-          10x,  22hdc resistance(ohm/m) |,  9x,  e11.4,14x,  e11.4  )
+     write (unit = lunit(6), fmt = 184) i, (radi(i, j), j = 1, 2), ncpp(j2), usi(i1, 1)
+184  format (10x, 'circuit', i2, /, 10x, 'radius | phase wire  (outer',  e11.4, '  , inner', e11.4, ' )*', i2, ' bundles', /, 20x, 'equiv. radius', e11.4)
+     j1 = ncpp(j1)
+     if(j1 .eq. 0) go to 148
+     write (unit = lunit(6), fmt = 185) (radi(i, j), j = 3, 4), ncpp(j3), usi(i1, 2)
+185  format (19x, 'Ground wire (outer', e11.4, '  , inner', e11.4, ' )*', i2, ' bundles', /, 20x, 'equiv. radius', e11.4)
+148  write (unit = lunit(6), fmt = 186) (roi(i, j), j = 1, 2), (usr(i, j), j = 1, 2), (gi(i, j), j = 1, 2)
+186  format (10x, 'Resistivity(Ohm-m) | phase wire', e11.4, 3x, 'ground wire', e11.4, /, 10x, 'relative permeability |', 8x, f11.4, 14x, f11.4, /, 10x, 'DC resistance(Ohm/m) |', 9x, e11.4, 14x,  e11.4)
   end do
   do i = 1, npc
      hi(i) = (2.0d0 * dci(i) + thc(i) ) / 3.0d0
   end do
-  write (lunit(6), 165)  (i, hi(i), i=1, npc)
-165 format(10x, 29heffective height of the line , 5(i5, f12.5))
-  write(lunit(6),915) (di(i),i=1,npc)
-915 format ( 10x,  29hdistance between phases     |,  5f17.5  )
-  write (lunit(6), 917)  freq, ik, ips
-917 format (10x, 20hbeginning frequency ,5x,e15.6,5x,18hnumber of decades , i5, 5x, 32hnumber of points in each decade , i5)
-  write(lunit(6),913) roe
-913 format (10x, 19hearth | resistivity, f12.5)
+  write (unit = lunit(6), fmt = 165) (i, hi(i), i = 1, npc)
+165 format (10x, 'Effective height of the line ', 5(i5, f12.5))
+  write (unit = lunit(6), fmt = 915) (di(i), i = 1, npc)
+915 format (10x, 'Distance between phases     |', 5f17.5)
+  write (unit = lunit(6), fmt = 917) freq, ik, ips
+917 format (10x, 'Beginning frequency ', 5x, e15.6, 5x, 'number of decades ', i5, 5x, 'number of points in each decade ', i5)
+  write (unit = lunit(6), fmt = 913) roe
+913 format (10x, 'earth | resistivity', f12.5)
   if (iearth .ne. 99) go to 167
-  write(lunit(6),916) dep1,dep2,roe,roe3,roe4,htoj2,htoj3,htoj4,hyud2,hyud3,hyud4
-916 format(10x,13h3-layer earth ,/,10x,30hdepth from surface , 1st layer, f7.2,3x,9h2nd layer,f8.2,3x,21h3rd layer to infinite,/, &
-       10x, 19hearth resistivity 0, e18.2, 6x, e14.2, 6x, e18.2,/, 10x,23hrelative permeability 0, e14.2, 6x,e14.2,6x,e18.2,/, &
-       10x,23hrelative permittivity 0, e14.2,6x,e14.2,6x,e18.2)
+  write (unit = lunit(6), fmt = 916) dep1, dep2, roe, roe3, roe4, htoj2, htoj3, htoj4, hyud2, hyud3, hyud4
+916 format (10x, '3-layer earth ', /, 10x, 'depth from surface , 1st layer', f7.2, 3x, '2nd layer', f8.2, 3x, '3rd layer to infinite', /, 10x, 'earth resistivity 0', e18.2, 6x, e14.2, 6x, e18.2,/, 10x, 'relative permeability 0', e14.2, 6x, e14.2, 6x, e18.2, /, 10x, 'relative permittivity 0', e14.2, 6x, e14.2, 6x, e18.2)
 167 nw = npc
   nz = npc
   ngrnd=ncc
   go to 700
   !     cable data outputs and precalculation
-200 do i=1,npc
-     rad(i) = radi(i,7)
+200 do i = 1, npc
+     rad(i) = radi(i, 7)
      do j = 1, 3
         gi(i, j) = speedl / sqrtz (esi(i, j))
      end do
   end do
-  write (lunit(6), 170)
+  write (unit = lunit(6), fmt = 170)
   if (isyst .ge. 0)   go to 211
-  write (lunit(6), 280)
-280 format (39h table of under-ground cable parameters,/,1x)
+  write (unit = lunit(6), fmt = 280)
+280 format (' table of under-ground cable parameters', /, 1x)
   go to 214
 211 if (isyst .gt. 0)   go to 213
-  write (lunit(6), 281)
-281 format(58h table of cable parameters for cables on the earth surface)
+  write (unit = lunit(6), fmt = 281)
+281 format (' table of cable parameters for cables on the earth surface')
   go to 214
-213 write(lunit(6),282)
-282 format (35h table of overhead cable parameters,/,1x)
-214 if ( ngrnd  .gt.  3 ) go to 1980
-  if ( ngrnd  .ne.  0 )  go to 325
+213 write (unit = lunit(6), fmt = 282)
+282 format (' table of overhead cable parameters', /, 1x)
+214 if (ngrnd .gt. 3) go to 1980
+  if (ngrnd .ne. 0) go to 325
   ngrnd = ncc
   go to 215
-325 if ( ngrnd  .gt.  1 )  go to 330
+325 if (ngrnd .gt. 1) go to 330
   ngrnd = ncc
-  if ( itypec  .eq.  2 ) go to 215
+  if (itypec .eq. 2) go to 215
   ngrnd = ncc - 1
   go to 215
-330 if( ngrnd .gt. 2 ) go to 3333
+330 if (ngrnd .gt. 2) go to 3333
   ngrnd = npc2
   go to 215
 3333 ngrnd = npc
   go to 215
 1980 do i = 1, ncc
      kpd = ncc + 1 - i
-     if ( ngg(kpd)  .gt.  0 ) go to 1982
+     if (ngg(kpd) .gt. 0) go to 1982
      ngrnd = kpd
      go to 215
 1982 end do
-  write ( lunit(6), 1777 )
-1777 format( 43h  no ungrounded conductor needs calculation )
+  write (unit = lunit(6), fmt = 1777)
+1777 format ('  no ungrounded conductor needs calculation')
   call stoptp
 215 if (itypec .eq. 2)   go to 1215
-  write (lunit(6), 370)
-370 format (17h pipe type cables,/,1x)
+  write (unit = lunit(6), fmt = 370)
+370 format (' pipe type cables', /, 1x)
   if (npp .ne. 0)   go to 216
-  write (lunit(6), 371)
-371 format (31h earth return path not included)
-216 write (lunit(6), 380)
-380 format (10x, 23h pipe and its insulator)
+  write (unit = lunit(6), fmt = 371)
+371 format (' earth return path not included')
+216 write (unit = lunit(6), fmt = 380)
+380 format (10x, ' pipe and its insulator')
   if (npp .ne. 0)  go to 1216
   radp(2) = fltinf
   radp(3) = fltinf
-1216 write (lunit(6), 381)  (radp(i), i=1,3), rop, usp
-381 format (10x, 'pipe | inner radius', e13.5, 2x, 'outer', e13.5, 2x, 'houter radius of pipe insulator', e13.5,/, 18x, &
-       'resistivity(Ohm-m)', e16.5, 2x, 'relative permeability', f8.1)
-  write (lunit(6), 382)  es1, es2
-382 format (10x, 40hinsulator | relative permittivity  inner, f8.1, 2x, 5houter, f8.1)
-  if (es2 .eq. 0.0)   es2 = 1.0
-  if (npp .ne. 0) write (lunit(6), 383)  (i, hi(i), di(i), i=1, npp)
-383 format (10x, 4hpipe, i2, 27h | dist. from earth surface, f9.4, 1hm, 3x, 17hdist. from pipe 1, f9.4, 1hm)
-  write (lunit(6), 390)
-390 format (10x, 28hinner conductors (sc cables))
-  write (lunit(6), 391)  (i,dci(i), i=1, npc)
-391 format (10x, 24hdist. from pipe center |, 6(i5, f9.4))
-  write (lunit(6), 392)  (thc(i), i=1, npc)
-392 format (10x, 24hangle to first cable   |, 6(f14.4))
-1215 do i=1, npc
-     jn=ncpp(i)
-     write (lunit(6), 284) i, (j, radi(i,j), j=1, 7)
-284  format(10x,5hphase,i2,1x,17hboundary radii  | ,/10x,7(i3,e13.5))
+1216 write (unit = lunit(6), fmt = 381) (radp(i), i = 1, 3), rop, usp
+381 format (10x, 'pipe | inner radius', e13.5, 2x, 'outer', e13.5, 2x, 'houter radius of pipe insulator', e13.5,/, 18x, 'resistivity(Ohm-m)', e16.5, 2x, 'relative permeability', f8.1)
+  write (unit = lunit(6), fmt = 382) es1, es2
+382 format (10x, 'insulator | relative permittivity  inner', f8.1, 2x, 'outer', f8.1)
+  if (es2 .eq. 0.0d0) es2 = 1.0d0
+  if (npp .ne. 0) write (unit = lunit(6), fmt = 383) (i, hi(i), di(i), i = 1, npp)
+383 format (10x, 'pipe', i2, ' | dist. from earth surface', f9.4, 'm', 3x, 'dist. from pipe 1', f9.4, 'm')
+  write (unit = lunit(6), fmt = 390)
+390 format (10x, 'inner conductors (sc cables)')
+  write (unit = lunit(6), fmt = 391) (i, dci(i), i = 1, npc)
+391 format (10x, 'dist. from pipe center |', 6(i5, f9.4))
+  write (unit = lunit(6), fmt = 392) (thc(i), i = 1, npc)
+392 format (10x, 'angle to first cable   |', 6(f14.4))
+1215 do i = 1, npc
+     jn = ncpp(i)
+     write (unit = lunit(6), fmt = 284) i, (j, radi(i, j), j = 1, 7)
+284  format (10x, 'phase', i2, 1x, 'boundary radii  | ', /, 10x, 7(i3, e13.5))
      write (unit = lunit(6), fmt = 285) (roi(i, j), j = 1, 3), (usr(i, j), j = 1, 3), (j, usi(i, j), esi(i, j), gi(i, j), j = 1, jn)
   end do
-285 format (18x, 'resistivity(Ohm-m)| core', e12.5, 3x, 'sheath', e12.5, 3x, 'armor', e12.5, /, 18x, 'relative permeability |  ', &
-       f12.5, 9x, f12.5, 8x, f12.5, /, 3(18x, 'insulator', i2, '| (relative) permeability', f6.2,3x, &
-       'permittivity', f6.2, 3x, 'velocity(m/s)', e12.5, /, 1x))
-  if(itypec .ne. 3 )  go to 220
-  three = 3.0
-  rlimit = ( 1.0 + 2.0/sqrtz(three)) * radi(1,7)
-  if(npc.eq.2) rlimit=2.0*radi(1,7)
-  if(npc.eq.1) rlimit=radi(1,7)
-  if(radp(1).gt.rlimit) go to 221
-  write(lunit(6),393)
-393 format(1h0,10x,59hphysically inner conductors cannot be exsisted in the pipe.    /11x,56hplease check the radii of the pipe and inner conductors.   //,1x)
+285 format (18x, 'resistivity(Ohm-m)| core', e12.5, 3x, 'sheath', e12.5, 3x, 'armor', e12.5, /, 18x, 'relative permeability |  ', f12.5, 9x, f12.5, 8x, f12.5, /, 3(18x, 'insulator', i2, '| (relative) permeability', f6.2,3x, 'permittivity', f6.2, 3x, 'velocity(m/s)', e12.5, /, 1x))
+  if (itypec .ne. 3) go to 220
+  three = 3.0d0
+  rlimit = (1.0d0 + 2.0d0 / sqrtz(three)) * radi(1, 7)
+  if(npc .eq. 2) rlimit = 2.0d0 * radi(1, 7)
+  if(npc .eq. 1) rlimit = radi(1, 7)
+  if(radp(1) .gt. rlimit) go to 221
+  write (unit = lunit(6), fmt = 393)
+393 format ('0', 10x, 'physically inner conductors cannot be exsisted in the pipe.', /, 11x, 'please check the radii of the pipe and inner conductors.', //, 1x)
   call stoptp
-220 write(lunit(6),914) (i, hi(i), i= 1,npc )
-914 format (10x, 29hdistance from earth surface |, 5(i5, f12.5))
-221 do i=1,npc
-     if ( i .eq. 1 ) go to 223
-     i1=i-1
-     if(ncpp(i1).ge.ncpp(i)) go to 223
-     write(lunit(6),289)
+220 write (unit = lunit(6), fmt = 914) (i, hi(i), i = 1, npc)
+914 format (10x, 'distance from earth surface |', 5(i5, f12.5))
+221 do i = 1, npc
+     if (i .eq. 1) go to 223
+     i1 = i - 1
+     if (ncpp(i1) .ge. ncpp(i)) go to 223
+     write (unit = lunit(6),fmt = 289)
      call stoptp
-289  format('0', 10x, "Invalid data of 'ncpp(i)', no further calculation.  It should be 'ncpp(i-1).ge.ncpp(i)'.", /, 11x, 'Please check your data.'  )
+289  format ('0', 10x, "Invalid data of 'ncpp(i)', no further calculation.  It should be 'ncpp(i-1).ge.ncpp(i)'.", /, 11x, 'Please check your data.'  )
 223  continue
      bio(i) = radi(i,1) * sqrtz(u0/roi(i,1) *usr(i,1))
      bi1(i) = radi(i,2) * sqrtz(u0/roi(i,1) *usr(i,1))
@@ -801,11 +800,9 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
      al3i(i) = alogz(radi(i,7) / radi(i,6) )
   end do
   if (iprs47 .gt. 1) write (lunit(6), 2437)  npc, ncc, npp, ncct, numaki, lastov, ipunch, ialter, iearth, itypec, isyst, kmode, izflag, iyflag
-2437 format ( /,  18h various integers., 40h     npc     ncc     npp    ncct  numaki, 40h  lastov  ipunch  ialter  iearth  itypec, &
-       32h   isyst   kmode  izflag  iyflag  ,/,  18x,  14i8  )
-  if ( iprsup  .ge.  2 ) write (lunit(6), 2441)  ( i, bi1(i), bi2(i), bi3(i), al1i(i), al2i(i), i=1, npc )
-2441 format ( /, 75h derived vectors of length  'npc'  in  'subr47' , as matrix grunt begins.  ,/,  1x,  5x,  3hrow,  17x,  3hbi1, &
-       17x,  3hbi2,  17x,  3hbi3,  16x,  4hal1i,  16x,  4hal2i  ,/, ( 1x,  i8,  5e20.11 )  )
+2437 format (/, ' various integers.     npc     ncc     npp    ncct  numaki  lastov  ipunch  ialter  iearth  itypec   isyst   kmode  izflag  iyflag', /, 18x, 14i8)
+  if (iprsup .ge. 2) write (unit = lunit(6), fmt = 2441) (i, bi1(i), bi2(i), bi3(i), al1i(i), al2i(i), i = 1, npc)
+2441 format (/, " derived vectors of length  'npc'  in  'subr47' , as matrix grunt begins.", /, 1x, 5x, 'row', 17x, 'bi1', 17x, 'bi2', 17x, 'bi3', 16x, 'al1i', 16x, 'al2i', /, (1x, i8, 5e20.11))
   if (itypec .eq. 3) call ptzy1 (radi, dci, thc, dr0, th0, al0, ldm)
   if (kill .ge. 1)   go to 9200
   nw = npc
@@ -832,20 +829,20 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
 615 if (itypec .ne. 1) go to 620
   write (unit = lunit(6), fmt = 920) xtotal, xmajor, npais
   go to 714
-620 if (npais .gt. 0 .and. ncros .eq. 0) go to 625
+620 if ((npais .gt. 0) .and. (ncros .eq. 0)) go to 625
   write (unit = lunit(6), fmt = 921) xtotal, xmajor, npais, rsg
   go to 630
 625 write (unit = lunit(6), fmt = 922) xtotal, xmajor, npais
 630 if (ncros .ne. 0) write (unit = lunit(6), fmt = 923)
   if (npais .lt. 0) write (unit = lunit(6), fmt = 924)
   if (npais .gt. 0) write (unit = lunit(6), fmt = 925)
-919 format('0', 10x, 'Data cards by pi-circuit modeling are punched out for the following specifications ; node name ', a1, "'" )
-920 format(10x, 'Total length of overhead line =', e12.5, /, 10x, 'length of one pi-section = ', e12.5, 3x, 'number of pi sections = ', i3)
-921 format(10x, 'Total length of cable = ', e12.5, /, 10x, 'length of one major section = ', e12.5, 3x, 'number of major sections = ', i3, /, 10x, 'sheath grounding resistance at major section ; ', e12.5)
-922 format(10x, 'Total lrngth of cable = ', e12.5, /, 10x, 'length of one major section =  ', e12.5, 3x, 'number of major sections = ', i3)
-923 format(10x, 'The cable is crossbonded.   ')
-924 format(10x, 'Discrete pi-circuit modeling  ')
-925 format(10x, 'Homogeneous pi-circuit modeling   ')
+919 format ('0', 10x, 'Data cards by pi-circuit modeling are punched out for the following specifications ; node name ', a1, "'" )
+920 format (10x, 'Total length of overhead line =', e12.5, /, 10x, 'length of one pi-section = ', e12.5, 3x, 'number of pi sections = ', i3)
+921 format (10x, 'Total length of cable = ', e12.5, /, 10x, 'length of one major section = ', e12.5, 3x, 'number of major sections = ', i3, /, 10x, 'sheath grounding resistance at major section ; ', e12.5)
+922 format (10x, 'Total lrngth of cable = ', e12.5, /, 10x, 'length of one major section =  ', e12.5, 3x, 'number of major sections = ', i3)
+923 format (10x, 'The cable is crossbonded.   ')
+924 format (10x, 'Discrete pi-circuit modeling  ')
+925 format (10x, 'Homogeneous pi-circuit modeling   ')
 714 call simp (nw, hi, di, rad, zy, dir, dij, ang, ldm, ldn )
   if (kill .ge. 1) go to 9200
   if (iprsup .lt. 3) go to 1750
@@ -939,27 +936,26 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   kkk = kkk + 1
   if (kkk .gt. ips)   go to 3005
   iprint = iprint + 1
-  if (iprs47 .ge. 1) write (lunit(6), 23006)    iprint, kkk, iii, freq, ci1, ck1
-23006 format(/, 63h next logarithmacally spaced frequency.  iprint     kkk     iii, 11x, 4hfreq,12x, 3hci1,12x,3hck1,/,39x,3i8,3e16.6)
+  if (iprs47 .ge. 1) write (unit = lunit(6), fmt = 23006) iprint, kkk, iii, freq, ci1, ck1
+23006 format (/, ' next logarithmacally spaced frequency.  iprint     kkk     iii', 11x, 'freq', 12x, 'ci1', 12x, 'ck1', /, 39x, 3i8, 3e16.6)
 3007 if (numaki .eq. 9)  go to 730
   text4 = text2
-  if ( itypec .ne. 1 )  text4 = text3
-  write (lunit(6), 941)  text4, freq
-941 format ( //, 20h *******************  ,  a6, 35h constants matrices for frequency =, e15.6,    40h hz   ********************************** )
+  if (itypec .ne. 1) text4 = text3
+  write (unit = lunit(6), fmt = 941) text4, freq
+941 format (//, ' *******************  ',  a6, ' constants matrices for frequency =', e15.6, ' Hz   **********************************')
 730 w = freq * twopi
-  if (numaki .eq. 1)   freqs = freq
-  call zymx( w,nz,isyst,ngrnd, ngg,ncpp, radi,zy,yz,dir,dij, ang,usi,usr,esi,dr0,th0,al0,hi,di,bio,bi1,bi2,bi3,bi4,bi5, &
-       al1i,al2i,al3i,dci,  nx, yzn,    ys,yc,zp,zpc,zs,ze,zc,ca,cb,cc,cd,f,  ldm, ldn, ldn2, lnq2 )
-  if(npais.eq.0) go to 810
-  write(lunit(6),951)
+  if (numaki .eq. 1) freqs = freq
+  call zymx (w, nz, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, usi, usr, esi, dr0, th0, al0, hi, di, bio, bi1, bi2, bi3, bi4, bi5, al1i, al2i, al3i, dci, nx, yzn, ys, yc, zp, zpc, zs, ze, zc, ca, cb, cc, cd, f, ldm, ldn, ldn2, lnq2)
+  if (npais .eq. 0) go to 810
+  write (unit = lunit(6), fmt = 951)
   npk = lnq2 / 3
   nki = npk + 1
   nkj = nki + npk
-  call datout(w, zc, yc, rsg, xmajor, nx, npais, ncros, irsep, cname, ldn, yzn(1), yzn(nki), yzn(nkj), npk)
-951 format(//1h0,10x,41h*****lists of punched out data cards***** )
+  call datout (w, zc, yc, rsg, xmajor, nx, npais, ncros, irsep, cname, ldn, yzn(1), yzn(nki), yzn(nkj), npk)
+951 format (//, '0', 10x, '*****lists of punched out data cards*****')
 810 continue
-  if (kill .ge. 1)   go to 9200
-  if (kmode .eq. 0)   go to 750
+  if (kill .ge. 1) go to 9200
+  if (kmode .eq. 0) go to 750
   ktab = nx
   call prcon (w, nx, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, yzn, ca, cb, cc, f, ldn, ldn2, lnq2, mrr, nrp)
   if (kill .ge. 1)   go to 9200
@@ -967,77 +963,77 @@ subroutine guts47 (ngg, ncpp, al1i, al2i, al3i, dci, thc, bio, bi1, bi2, bi3, bi
   if (ipunch .eq. 0)   go to 750
   if (ik .gt. 0)   go to 2745
   if (liu .ne. 0)   go to 2745
-  cczero = aimagz(ys(1,1))/w/tenm6
-  write(lunit(9))   cczero
+  cczero = aimagz (ys(1, 1)) / w / tenm6
+  write (unit = lunit(9)) cczero
   liu = 1
-  if (iprs47 .ge. 1) write(lunit(6), 1745)  freq, cczero
-1745 format (25h capacitance on unit9 at , e15.6, 3hhz., 5x, e16.8)
-2745 rzero = realz(zs(1,1))
-  xzero = aimagz( zs(1,1) ) / w * 1000.
-  write (lunit(9))  rzero, xzero, freq
-  if (iprs47 .ge. 1) write (lunit(6), 3745)  rzero, xzero, freq
-3745 format (21h r, l and f on unit9., 5x, 3e16.8)
+  if (iprs47 .ge. 1) write (unit = lunit(6), fmt = 1745) freq, cczero
+1745 format (' capacitance on unit9 at ', e15.6, 'Hz.', 5x, e16.8)
+2745 rzero = realz(zs(1, 1))
+  xzero = aimagz (zs(1, 1)) / w * 1000.0d0
+  write (unit = lunit(9)) rzero, xzero, freq
+  if (iprs47 .ge. 1) write (unit = lunit(6), fmt = 3745) rzero, xzero, freq
+3745 format (' R, L and F on unit9.', 5x, 3e16.8)
 750 if (iii .eq. ik)   go to 9001
   go to 3006
   !!                                            ** identical eigenvalue ?
-9001 if (iprint.eq.1) go to 9002
-  if (nrp.gt.0) go to 9002
-  rtio=(mrr*1.0)/(iprint-1.0)
-  if (rtio.lt.0.75) go to 9002
-  nrp=1
-  freq=freqsv
-  do i=1,(iprint-1)*ktab
+9001 if (iprint .eq. 1) go to 9002
+  if (nrp .gt. 0) go to 9002
+  rtio = (mrr * 1.0d0) / (iprint - 1.0d0)
+  if (rtio .lt. 0.75d0) go to 9002
+  nrp = 1
+  freq = freqsv
+  do i = 1, (iprint - 1) * ktab
      backspace lunit(9)
-     write (*,*) ' guts47.  backspace lunit 9.  iprint, i = ', iprint
+     write (unit = *, fmt = *) ' guts47.  backspace lunit 9.  iprint, i = ', iprint
   end do
-  do 9005 i=1,(iprint-1)
+  do i = 1, (iprint - 1)
      backspace junit4
-9005 end do
-  write (*,*) ' backspace junit4.  junit4, iprint =', junit4, iprint
-  iprint=1
+  end do
+  write (unit = *, fmt = *) ' backspace junit4.  junit4, iprint =', junit4, iprint
+  iprint = 1
   go to 9003
 9002 continue
   !     read input card using cimage
   call cimage
   read (unit = abuff, fmt = 4230) bufsem
-  if ( ialter  .ne.  2 ) write (lunit(2), 4230)  bufsem
+  if (ialter .ne. 2) write (unit = lunit(2), fmt = 4230) bufsem
   read (unit = abuff, fmt = 902) d9, freq, ik, ips, dist, j13, j14
-  freqsv=freq
-  if (d9 .ne. 0.)   go to 3899
-  if (freq .eq. 0.)  go to 929
+  freqsv = freq
+  if (d9 .ne. 0.0d0) go to 3899
+  if (freq .eq. 0.0d0) go to 929
 3899 roe = d9
   ipunch = j13
   itrnsf = j14
-  if (freq .eq. 0.)   freq = statfr
-  if (ips .eq. 0)   ips = 1
-  write (kunit6, 3256)  roe, freq, ik, ips, dist, ipunch, itrnsf
+  if (freq .eq. 0.0d0) freq = statfr
+  if (ips .eq. 0) ips = 1
+  write (unit = kunit6, fmt = 3256) roe, freq, ik, ips, dist, ipunch, itrnsf
   if (iearth .ne. 99)   go to 706
   !     read input card using cimage.
   call cimage
   read (unit = abuff, fmt = 4230) bufsem
-  if (ialter .ne. 2) write (lunit(2), 4230)   bufsem
+  if (ialter .ne. 2) write (unit = lunit(2), fmt = 4230) bufsem
   read (unit = abuff, fmt = 901) dep1, dep2, roe3, roe4
-  write (kunit6, 3280)
+  write (unit = kunit6, fmt = 3280)
   !     read input card using cimage.
   call cimage
   read (unit = abuff, fmt = 4230) bufsem
-  if (ialter .ne. 2) write (lunit(2), 4230)   bufsem
+  if (ialter .ne. 2) write (unit = lunit(2), fmt = 4230) bufsem
   read (unit = abuff, fmt = 901) htoj2, htoj3, htoj4, hyud2, hyud3, hyud4
-  write (kunit6, 3290)
-  alf1 = roe/roe3
-  alf2 = roe/roe4
+  write (unit = kunit6, fmt = 3290)
+  alf1 = roe / roe3
+  alf2 = roe / roe4
   go to 706
 929 write (unit = kunit6, fmt = 930)
 930 format ('+Blank card terminating frequency cards.')
   call interp
-  write (lunit(6), 4239)
-4239 format ( ///,  1x )
+  write (unit = lunit(6), fmt = 4239)
+4239 format (///, 1x)
   go to 5
 9200 lstat(18) = nchain
   if (ialter .eq. 2) lunit(5) = l5save
-  lastov=nchain
-  nchain=51
-9900 if ( iprsup  .ge.  1 ) write (lunit(6), 2592)  nchain, lunit(5), numaki, ialter
+  lastov = nchain
+  nchain = 51
+9900 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 2592) nchain, lunit(5), numaki, ialter
 2592 format (/, " Exit  'subr47' .  nchain  lunit5  numaki  ialter", /, 17x, 4i8)
   return
 end subroutine guts47
@@ -1074,27 +1070,27 @@ subroutine crosa4 (czy, icont, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
   do i = 4, 6
      czy(i, i) = cwork1
   end do
-  cwork1 = czy(4,5) + czy(4,6) + czy(5,6)
-  cwork1 = cwork1/3.
-  czy(4,5) = cwork1
-  czy(4,6) = cwork1
-  czy(5,6) = cwork1
-  do i = 1,3
-     cwork1 = 0.
-     do j = 4,6
-        cwork1 = cwork1 + czy(i,j)
+  cwork1 = czy(4, 5) + czy(4, 6) + czy(5, 6)
+  cwork1 = cwork1 / 3.0d0
+  czy(4, 5) = cwork1
+  czy(4, 6) = cwork1
+  czy(5, 6) = cwork1
+  do i = 1, 3
+     cwork1 = 0.0d0
+     do j = 4, 6
+        cwork1 = cwork1 + czy(i, j)
      end do
-     cwork1 = cwork1/3.
-     do j = 4,6
-        czy(i,j) = cwork1
+     cwork1 = cwork1 / 3.0d0
+     do j = 4, 6
+        czy(i, j) = cwork1
      end do
   end do
-  do i = 1,6
-     do j = 1,6
-        if(i.le.3.and.j.le.3) go to 60
-        if(i.ge.j) go to 60
-        czy(j,i) = czy(i,j)
-60   end do
+  do i = 1, 6
+     do j = 1, 6
+        if(i .le. 3 .and. j .le. 3) cycle
+        if(i .ge. j) cycle
+        czy(j, i) = czy(i, j)
+     end do
   end do
   if (icont .eq. 0) call minvn (czy, 6, 3, 0, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
   do j = 1,3
@@ -1102,7 +1098,7 @@ subroutine crosa4 (czy, icont, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
      czy(j,4) = czy(j,4) + czy(j,5) + czy(j,6)
   end do
   czy(4,4) = czy(4,4) + czy(5,4) + czy(6,4) + czy(4,5) + czy(5,5) + czy(6,5) + czy(4,6) + czy(5,6) + czy(6,6)
-  if(icont.eq.0) call minvn( czy,4,3,0,ldn, ca,cb,cc,cd,ce,cf,cg,f,ldn2 )
+  if(icont.eq.0) call minvn (czy, 4, 3, 0, ldn, ca, cb, cc, cd, ce, cf, cg, f, ldn2)
   return
 end subroutine crosa4
 
@@ -1256,7 +1252,7 @@ subroutine mxmnm (ca, cb, cc, l, m, n, ldn)
   !
   do i = 1, l
      do j = 1, n
-        cc(i, j) = 0.
+        cc(i, j) = 0.0d0
         do k = 1, m
            cc(i,j ) = cc(i, j) + ca(i, k) * cb(k, j)
         end do
@@ -1319,12 +1315,12 @@ subroutine datout (w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, 
   if (ntype .eq. 0) xleng = xleng / 3.0d0
   do i = 1, nub6
      do j = 1, nub6
-        if (j .gt. i) go to 400
+        if (j .gt. i) cycle
         l = l + 1
         r(l) = realz (zc(i, j)) * xleng
         al(l) = aimagz (zc(i, j)) / w * xleng * 1.0e3
         c(l) = aimagz (yc(i, j)) / w * xleng * 1.0e6
-400  end do
+     end do
   end do
   write (unit = lunit(6), fmt = 1400)
   write (unit = lunit7, fmt = 1401)
@@ -1381,7 +1377,7 @@ subroutine datout (w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, 
            call pri (i, j, k, i1, j1, k1, k2, l, ipri, cha, r, al, c,npk)
         end do
      end do
-     if (ltype .eq. 1) go to 100
+     if (ltype .eq. 1) cycle
      j = 3
      if (ntype .eq. 1) j = 1
      if (i .eq. ncros) go to 2010
@@ -1391,15 +1387,15 @@ subroutine datout (w, zc, yc, rs, xmajor, nub6, npais, nncros, irsep, cha, ldn, 
      end do
 2000 format (' ', 2x, a1, i2, i1, i2, 6x, a1, 'in ', i2)
 2001 format (2x, a1, i2, i1, i2, 6x, a1, 'in ', i2)
-     go to 100
+     cycle
 2010 continue
-     do 930 k = kk, kstop, kstep
+     do k = kk, kstop, kstep
         write (unit = lunit(6), fmt = 2100) cha, k, cha, k
         write (unit = lunit7, fmt = 2101) cha, k, cha, k
-930  end do
+     end do
 2100 format (' ', 2x, a1, 'out', i2, 6x, a1, 'in ', i2)
 2101 format (2x, a1, 'out', i2, 6x, a1, 'in ', i2)
-100 end do
+  end do
   write (unit = lunit(6), fmt = 1410)
   write (unit = lunit7, fmt = 1411)
 1410 format (' ', '$vintage, 0')
@@ -1422,15 +1418,12 @@ subroutine cha645 (k, k1)
   !  go to (10,20,30),kk
   select case (kk)
   case (1)
-     !10   k1 = 6
      k1 = 6
 
   case (2)
-     !20   k1 = 4
      k1 = 4
 
   case (3)
-     !30   k1 = 5
      k1 = 5
   end select
   return
@@ -1445,12 +1438,7 @@ subroutine cha312 (j, j1)
   integer(4), intent(out) :: j1
   integer(4), intent(in) :: j
   !
-!   go to (10,20,30),j
-! 10 j1=3
-!   return
-! 20 j1=1
-!   return
-! 30 j1=2
+  !   go to (10,20,30),j
   select case (j)
   case (1)
      j1 = 3
@@ -1567,10 +1555,11 @@ subroutine nyan (itype, npc, nc, ncpp, ngrnd, ncros, npais, ldm)
   integer(4), intent(in) :: ngrnd
   integer(4), intent(in) :: npais
   integer(4), intent(in) :: npc
-  !  dimension ncpp(ldm)
   integer(4) :: i
   integer(4) :: lunit(6)
   integer(4) :: nwork
+  !
+  !  dimension ncpp(ldm)
   !
   lunit(6) = 6
   if (itype .eq. 1) return
@@ -1622,9 +1611,10 @@ subroutine gomen (itype, npc, nx, npais, ncros, irsep, ncpp, ldm)
   integer(4), intent(in) :: npais
   integer(4), intent(in) :: npc
   integer(4), intent(in) :: nx
-  !  dimension ncpp(ldm)
   integer(4) :: i
   integer(4) :: lunit(6)
+  !
+  !  dimension ncpp(ldm)
   !
   lunit(6) = 6
   if (npais .lt. 0) go to 1000
@@ -1718,10 +1708,6 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
   real(8), intent(out) :: an(lnq2)
   real(8), intent(out) :: gn(ldn)
   real(8), intent(in) :: w
-  !  dimension gn(ldn), an(lnq2)
-  !  dimension tir(20,20), tii(20,20)
-  !  dimension pp1(20,20), pp2(20,20)
-  !  dimension zz(30), ps(30), ping(200), iseq(15),kmax(15)
   integer(4) :: i, i1, icorr, iseq(15), iz
   integer(4) :: j
   integer(4) :: k, kmax(15), kthl
@@ -1747,10 +1733,16 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
   complex(16) :: a(ldn, ldn), ai(ldn, ldn),  b(ldn, ldn), bi(ldn, ldn)
   complex(16) :: yo(ldn, ldn), ze(ldn, ldn), qn(ldn), f(ldn, ldn2)
   !
+  !  dimension gn(ldn), an(lnq2)
+  !  dimension tir(20,20), tii(20,20)
+  !  dimension pp1(20,20), pp2(20,20)
+  !  dimension zz(30), ps(30), ping(200), iseq(15),kmax(15)
+  !
   data  iseq  /  15*0  /
-  ntol=iprint-1
-  cjw = cmplxz ( fzero, w )
-  if ( iprs47  .ge.  1 ) write (logsix, 2624)  nconpw, numaki, value1, value3, pai, cjw
+  !
+  ntol = iprint - 1
+  cjw = cmplxz (fzero, w)
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 2624) nconpw, numaki, value1, value3, pai, cjw
 2624 format (/, " Enter  'prcon' .  nconpw  numaki", 13x, 'value1', 13x, 'value3', 16x, 'pai', 11x, 'real-cjw',  11x, 'imag-cjw', /, 17x, 2i8, 5e19.10)
   ll1 = 1
   ll2 = 2
@@ -1764,21 +1756,21 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
   icorr = 0
   npc1 = npc + 1
   do i = npc1, npc2
-     if (realz (qn(i)) .gt. 0.)  go to 65
+     if (realz (qn(i)) .gt. 0.0d0) cycle
      i1 = i + 1
      if (i1 .gt. npc2)  i1 = i - 1
-     if (i1 .le. npc)  go to 65
+     if (i1 .le. npc) cycle
      if (realz(qn(i1)) .lt. 0.)  go to 63
 61   qn(i) = qn(i1)
      icorr = 1
-     write(lunit(6), 901)  i
+     write (unit = lunit(6), fmt = 901) i
 901  format ('0modifications of modal quantities for mode', i2, ' are made.', /)
-     go to 65
+     cycle
 63   i1 = i + 2
      if (i1 .gt. npc2)  i1 = i - 2
      if (realz(qn(i1)) .gt. 0.)  go to 61
-65 end do
-  if (icorr .eq. 0)  go to 75
+  end do
+  if (icorr .eq. 0) go to 75
   do i = npc1, npc2
      i1 = i - npc
      do j = 1, npc2
@@ -1817,15 +1809,14 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
 55   continue
      !       if (lastov .ne. 39 )  go to 600
      !       if (iprint .gt. 1 )  go to 600
-     do j= 1, nconpw
-        bi(i,j)=a(j,i)
-        b(i,j)=ai(j,i)
-        if ( lastov .ne. 39 )  go to 60
-        if ( iprint .gt. 1 )  go to 60
-        tir(i,j) = realz(b(i,j))
-        tii(i,j) = aimagz(b(i,j))
+     do j = 1, nconpw
+        bi(i, j) = a(j, i)
+        b(i, j) = ai(j, i)
+        if (lastov .ne. 39) cycle
+        if (iprint .gt. 1) cycle
+        tir(i, j) = realz (b(i, j))
+        tii(i, j) = aimagz (b(i, j))
      end do
-60   continue
   end do
   if (ntol .eq. 0 .or. lastov .ne. 39) go to 5602
   kthl = 1
@@ -1884,16 +1875,15 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
   do j = 1, nconpw
      kmax(j) = 1
      do i = 1, nconpw
-        if (pp1(i, j) .le. pp1(kmax(j), j)) go to 5802
+        if (pp1(i, j) .le. pp1(kmax(j), j)) cycle
         kmax(j) = i
      end do
-5802 continue
   end do
   write (unit = lunit(9))  (kmax(j), j = 1, nconpw)
 5810 continue
   if (iprsup .ge. 1) write (unit = *, fmt = *) ' prcon.  use normalization cells kmax(1:nconpw) =', (kmax(i), i = 1, nconpw)
   do j = 1, nconpw
-     if (pp1(kmax(j), j) .eq. 0.0d0) go to 5614
+     if (pp1(kmax(j), j) .eq. 0.0d0) cycle
      dv = 1.0d0 / pp1(kmax(j), j)
      da = pp2(kmax(j), j)
      do i = 1, nconpw
@@ -1905,7 +1895,6 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
         if (iprsup .ge. 3) write (unit = *, fmt = *) 'just before 5624, i, j, pp1(i,j), pp2(i,j)', i, j, pp1(i,j), pp2(i,j)
      end do
   end do
-5614 continue
   fout = w / twopi
   !   ******************** temporary diagnostic ************
   if (iprsup .ge. 0) write (unit = *, fmt = *) ' prcon.  freq =',  fout, '     pp1 follow : '
@@ -1950,106 +1939,103 @@ subroutine  prcon (w, nconpw, zc, zs, ys, yc, yo, qn, gn, ze, a, ai, b, bi, an, 
         ys(i, j) = cmplxz (d19, deg)
      end do
   end do
-  if ( numaki .gt. 3 )  go to 5673
-  write (lunit(6), 2953)
-2953 format (  /, 10x, 'voltage transformation matrices in polar', ' coordinates (with angles in degrees).',/, 15x, ' inverse of [tv] --- from phase to mode domain:'  )
-  call print ( ze, nconpw, ll1, ldn )
-  write (lunit(6), 4954)
-4954 format ( 15x,  ' [tv] --- from mode to phase domain:' )
-  call print ( ys, nconpw, ll1, ldn )
-5673 call mxm ( bi, yc, ca, nconpw, ldn )
-  call mxm ( ca, a, ys, nconpw, ldn )
-  do i=1,nconpw
-     do j=1,nconpw
-        if(i.ne.j) go to 79
-        aa=aimagz(ys(i,i))
-        bb=realz(ys(i,i))
-        if ( iprsup .ge. 1 ) write(*,*) ' i, ys(i,i) =',  i, ys(i,i)
+  if (numaki .gt. 3) go to 5673
+  write (unit = lunit(6), fmt = 2953)
+2953 format (/, 10x, 'voltage transformation matrices in polar coordinates (with angles in degrees).', /, 15x, ' inverse of [tv] --- from phase to mode domain:'  )
+  call print (ze, nconpw, ll1, ldn)
+  write (unit = lunit(6), fmt = 4954)
+4954 format (15x, ' [tv] --- from mode to phase domain:')
+  call print (ys, nconpw, ll1, ldn)
+5673 call mxm (bi, yc, ca, nconpw, ldn)
+  call mxm (ca, a, ys, nconpw, ldn)
+  do i = 1, nconpw
+     do j = 1, nconpw
+        if(i .ne. j) go to 79
+        aa = aimagz (ys(i, i))
+        bb = realz (ys(i, i))
+        if (iprsup .ge. 1) write (unit = *, fmt = *) ' i, ys(i,i) =', i, ys(i, i)
         !!  $$$$ protection ?? $$$$
         !     if((absz(bb).le.1.0e-18).or.(absz(aa).le.1.0e-18))
-        if((absz(bb).le.1.0e-18) .and. (absz(aa).le.1.0e-18)) go to 9801
+        if ((absz (bb) .le. 1.0e-18) .and. (absz (aa) .le. 1.0e-18)) go to 9801
         go to 9802
 9801    continue
-        ys(i,j)=ys(i,j)*1.0e10
-        zs(i,i) = qn(i)**2 / ys(i,i) * 1.e-10
+        ys(i, j) = ys(i, j) * 1.0e10
+        zs(i, i) = qn(i) ** 2 / ys(i, i) * 1.e-10
         !     zo(i,i) = (qn(i)/ys(i,i))*1.0e10
-        write (*,*) 'qn, ys  for i=',qn(i),ys(i,j),i
-        ys(i,i) = ys(i,i)*1.0e-10
+        write (unit = *, fmt = *) 'qn, ys  for i=', qn(i), ys(i, j), i
+        ys(i, i) = ys(i, i) * 1.0e-10
         go to 9803
 9802    continue
         !     zo(i,i) = qn(i)/ys(i,i)
-        zs(i,i) = qn(i)**2 / ys(i,i)
+        zs(i, i) = qn(i) ** 2 / ys(i, i)
 9803    continue
         !!  $$$$ end of protection  $$$$
         !     yo(i,i) = 1./zo(i,i)
         !     zs(i,i) = qn(i) * zo(i,i)
-        yo(i,i) = csqrtz( ys(i,i)/zs(i,i) )
-        zo(i,i) = 1. / yo(i,i)
+        yo(i, i) = csqrtz (ys(i, i) / zs(i, i))
+        zo(i, i) = 1.0d0 / yo(i, i)
         go to 80
-79      zo(i,j)=czero
-        yo(i,j) = czero
-        zs(i,j) = cmplxz(fzero, fzero)
+79      zo(i, j) = czero
+        yo(i, j) = czero
+        zs(i, j) = cmplxz (fzero, fzero)
 80   end do
-     if (lastov .ne. 39)  go to 1980
-     if ( iprint .lt. 2 ) go to 1978
+     if (lastov .ne. 39) go to 1980
+     if (iprint .lt. 2) go to 1978
      !     ysre = realz(ys(i,i))
      !     ysim = aimagz(ys(i,i))
      !     zsre = realz(zs(i,i))
      !     zsim = aimagz(zs(i,i))
      !!      write (lunit(9))  w, ysre,ysim,zsre,zsim
-     w1=w
+     w1 = w
      !   ** the unit here is /km now! **
      !     zz(i)=zsre *1000.
      !     zz(i+nconpw)=zsim*1000.
      !     ps(i)=ysre*1000.
      !     ps(i+nconpw)=ysim*1000.
-     ycharm = cabsz(yo(i,i))
-     ychara = atan2z( aimagz(yo(i,i)), realz(yo(i,i)) )
-     alpha = realz(qn(i)) * 1000.
-     beta = aimagz(qn(i)) *1000.
-     if (lastov .ne. 39)  go to 1980
-     if ( iprint .lt. 2 ) go to 1978
-     write(lunit(9)) w1,ycharm, ychara, alpha, beta
+     ycharm = cabsz (yo(i, i))
+     ychara = atan2z (aimagz (yo(i, i)), realz (yo(i, i)))
+     alpha = realz (qn(i)) * 1000.0d0
+     beta = aimagz (qn(i)) * 1000.0d0
+     if (lastov .ne. 39) go to 1980
+     if (iprint .lt. 2) go to 1978
+     write (unit = lunit(9)) w1, ycharm, ychara, alpha, beta
      do 78 k = 1, nconpw
-        pp1(k,i) = cabsz(b(k,i))
-        pp2(k,i) = atan2z( aimagz(b(k,i)), realz(b(k,i)) )
+        pp1(k, i) = cabsz (b(k, i))
+        pp2(k, i) = atan2z (aimagz (b(k, i)), realz (b(k, i)))
 78   end do
-     write(lunit(9)) ( pp1(k,i),pp2(k,i), k = 1, nconpw )
+     write (unit = lunit(9)) (pp1(k, i), pp2(k, i), k = 1, nconpw)
      !    **********  thlthl
      !    **********  thlthl
-1978 if ( iprsup .ge. 0 ) write (lunit(6), 1979)  i, w, ycharm, ychara, alpha, beta
-1979 format ( ' ychar and eigenvalue for mode', i3, ' at frequency =' , e12.5,  2x, 5h are , 4e12.5)
+1978 if (iprsup .ge. 0) write (unit = lunit(6), fmt = 1979) i, w, ycharm, ychara, alpha, beta
+1979 format (' ychar and eigenvalue for mode', i3, ' at frequency =', e12.5, 2x, ' are ', 4e12.5)
 1980 end do
-  if (numaki .gt. 3)   go to 9900
-  write (lunit(6), 956)
-956 format ( /, 10x, 'characteristic impedances in the phase domain' )
-  call mxm(a,zo,ca,nconpw,ldn)
-  call mxm(ca,bi,ze,nconpw,ldn)
-  call print(ze,nconpw ,ll1,ldn)
+  if (numaki .gt. 3) go to 9900
+  write (unit = lunit(6), fmt = 956)
+956 format (/, 10x, 'characteristic impedances in the phase domain')
+  call mxm (a, zo, ca, nconpw, ldn)
+  call mxm (ca, bi, ze, nconpw, ldn)
+  call print (ze, nconpw, ll1, ldn)
   write (unit = lunit(6), fmt = 305)
-305 format(//, 53x, 27h table of modal quantities.)
-  write (lunit(6), 315)
-315 format(//, 11x, 'modal', 4x, 'propagation', 7x, 'modal impedance', 12x, 'modal', 6x, 'charac. imp., natural mode', 4x, &
-       'charac. adm., natural mode', /, ' mode', 3x, 'attenuation   velocity', 7x, 'real', 7x, 'imaginary', 4x, 'susceptance', &
-       7x, 'real', 8x, 'imaginary', 9x, 'real', 8x, 'imaginary', /, 10x, '(db/km)', 6x, '(m/s)', 12x, 'z(Ohm/m)', 14x, 'imy(mho/m)', &
-       9x, 'sqrt(z/y) (Ohm)  ', 13x, 'sqrt(y/z) (mho)  ')
+305 format (//, 53x, ' table of modal quantities.')
+  write (unit = lunit(6), fmt = 315)
+315 format (//, 11x, 'modal', 4x, 'propagation', 7x, 'modal impedance', 12x, 'modal', 6x, 'charac. imp., natural mode', 4x, 'charac. adm., natural mode', /, ' mode', 3x, 'attenuation   velocity', 7x, 'real', 7x, 'imaginary', 4x, 'susceptance', 7x, 'real', 8x, 'imaginary', 9x, 'real', 8x, 'imaginary', /, 10x, '(dB/km)', 6x, '(m/s)', 12x, 'z(Ohm/m)', 14x, 'imy(mho/m)', 9x, 'sqrt(z/y) (Ohm)  ', 13x, 'sqrt(y/z) (mho)  ')
   do i=1, nconpw
-     zsr    = realz(zs(i,i))
-     zsi   = aimagz(zs(i,i))
-     ysi    = aimagz(ys(i,i))
-     zor    = realz(zo(i,i))
-     zoi    = aimagz(zo(i,i))
-     yor     = realz(yo(i,i))
-     yoi     = aimagz(yo(i,i))
-     write (lunit(6), 325)  i, an(i), gn(i), zsr, zsi, ysi, zor, zoi, yor, yoi
-325  format(/, 1x, i3, 3x, 2e12.5, 1x, 3e14.6, 2(1x, 2e14.6) )
+     zsr = realz (zs(i, i))
+     zsi = aimagz (zs(i, i))
+     ysi = aimagz (ys(i, i))
+     zor = realz (zo(i, i))
+     zoi = aimagz (zo(i, i))
+     yor = realz (yo(i, i))
+     yoi = aimagz (yo(i, i))
+     write (unit = lunit(6), fmt = 325) i, an(i), gn(i), zsr, zsi, ysi, zor, zoi, yor, yoi
+325  format(/, 1x, i3, 3x, 2e12.5, 1x, 3e14.6, 2(1x, 2e14.6))
   end do
-  write (lunit(6), 335)
-335 format ( ///,  1x )
+  write (unit = lunit(6), fmt = 335)
+335 format (///, 1x)
   go to 9900
 9200 continue
-9900 if ( iprs47  .ge.  1 ) write (logsix, 2689)
-2689 format ( /,  16h exit  'prcon' .  )
+9900 if (iprs47 .ge. 1) write (unit = logsix, fmt = 2689)
+2689 format (/, " Exit  'prcon' .")
   return
 end subroutine prcon
 
@@ -2067,11 +2053,6 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   integer(4), intent(in) :: nrp
   integer(4), intent(in) :: ntol
   real(8), intent(out) :: ping(200)
-  ! dimension ping(200),tping(200)
-  !  dimension ps(30),zz(30)
-  !  dimension bom(180),vfreq(3), kuid(15), kuse(15)
-  !  dimension iseq(15), iseqa(15), iseqt(15), iold(15)
-  !  dimension sb(60), tt(4), tzz(30), tps(30)
   integer(4) :: i, ib, ic, im, ip, iq, iseqa(15), iseqt(15), iold(15)
   integer(4) :: j, jb, jbeg
   integer(4) :: kk, kpt, ku, kuid(15), kunf, kuse(15)
@@ -2086,8 +2067,15 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   real(8) :: tping(200), tt(4)
   real(8) :: vfreq(3)
   !
+  !  dimension ping(200),tping(200)
+  !  dimension ps(30),zz(30)
+  !  dimension bom(180),vfreq(3), kuid(15), kuse(15)
+  !  dimension iseq(15), iseqa(15), iseqt(15), iold(15)
+  !  dimension sb(60), tt(4), tzz(30), tps(30)
+  !
   data bom  / 180 * 0.0d0 /
   data kunf / 0 /
+  !
   !      write(*,*) ' change order ? 1 (for yes) or 2 (for no)'
   !      read(*,*) ny
   if (iprsup .ge. 1) write (unit = *, fmt = *) ' Beginning of unwind.   kthl, mrr, nrp, ntol =', kthl, mrr, nrp, ntol
@@ -2154,10 +2142,10 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
 !!!!!      do 88 l=1, 15
 !!!!!      iseq(l) = l
 !!!!!   88 continue
-  do 601 i = 1, kpt
+  do i = 1, kpt
 !!!!!      sb(i)=bom(i)
      sb(i) = tping(i + 1)
-601 end do
+  end do
   ic = 0
   iq = 0
   if (iprsup .ge. 1)  write (unit = *, fmt = *) '  *****  li, kpt =',  li, kpt
@@ -2171,65 +2159,64 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   end do
   if (iprsup .ge. 1) write (unit = *, fmt = *) ' Beginning  bom(1:4*li) =', (bom(ip), ip = 1, 4 * li)
   !   * process the data between freq, freq-1 & freq-2 *
-  do j=2, kpt-2, 4
-     do i=j+4, kpt-2, 4
+  do j = 2, kpt - 2, 4
+     do i = j + 4, kpt - 2, 4
         !   * test the crossing of ang *
-        d1=bom(j+kpt) - bom(i+kpt)
-        d2=bom(j) - bom(i)
-        if ( d1*d2 .le. 0. ) go to 801
-        d1=bom(j-1+kpt) - bom(i-1+kpt)
-        d2=bom(j-1) - bom(i-1)
-        if ( d1*d2 .le. 0. ) go to 801
-        go to 102
+        d1 = bom(j + kpt) - bom(i + kpt)
+        d2 = bom(j) - bom(i)
+        if (d1 * d2 .le. 0.0d0) go to 801
+        d1 = bom(j - 1 + kpt) - bom(i - 1 + kpt)
+        d2 = bom(j - 1) - bom(i - 1)
+        if ((d1 * d2) .le. 0.0d0) go to 801
+        cycle
         !   * test the slope change of ang , if switching *
 801     continue
-        aj=0.
-        ai=0.
-        if((bom(j+kpt) - bom(j+2*kpt)) .eq. 0. ) aj=1.0e-12
-        if((bom(i+kpt) - bom(i+2*kpt)) .eq. 0. ) ai=1.0e-12
-        smj1=(bom(j) - bom(j+kpt))/((bom(j+kpt) - bom(j+2*kpt))+aj)
-        smi1=(bom(i) - bom(i+kpt))/((bom(i+kpt) - bom(i+2*kpt))+ai)
-        smj2=(bom(i) - bom(j+kpt))/((bom(j+kpt) - bom(j+2*kpt))+aj)
-        smi2=(bom(j) - bom(i+kpt))/((bom(i+kpt) - bom(i+2*kpt))+ai)
-        if ( iprsup .ge. 1 ) write (*,*) ' smj1, smj2, smi1, smi2 =', smj1, smj2, smi1, smi2
-        if ((abs( smj1 -1 ) .lt. abs( smj2-1 )) .and. (abs( smi1 -1 ) .lt. abs( smi2 -1 ))) go to 102
+        aj = 0.0d0
+        ai = 0.0d0
+        if ((bom(j + kpt) - bom(j + 2 * kpt)) .eq. 0.0d0) aj = 1.0e-12
+        if ((bom(i + kpt) - bom(i + 2 * kpt)) .eq. 0.0d0) ai = 1.0e-12
+        smj1 = (bom(j) - bom(j + kpt)) / ((bom(j + kpt) - bom(j + 2 * kpt)) + aj)
+        smi1 = (bom(i) - bom(i + kpt)) / ((bom(i + kpt) - bom(i + 2 * kpt)) + ai)
+        smj2 = (bom(i) - bom(j + kpt)) / ((bom(j + kpt) - bom(j + 2 * kpt)) + aj)
+        smi2 = (bom(j) - bom(i + kpt)) / ((bom(i + kpt) - bom(i + 2 * kpt)) + ai)
+        if (iprsup .ge. 1) write (unit = *, fmt = *) ' smj1, smj2, smi1, smi2 =', smj1, smj2, smi1, smi2
+        if ((abs (smj1 - 1) .lt. abs (smj2 - 1)) .and. (abs (smi1 - 1) .lt. abs (smi2 - 1))) cycle
         !   * test the slope change of mag , if switching *
         !     789012345678901234567890123456789012345678901234567890123456789012
-        aj=0.
-        ai=0.
-        if((bom(j-1+kpt) - bom(j-1+2*kpt)) .eq. 0. ) aj=1.0e-12
-        if((bom(i-1+kpt) - bom(i-1+2*kpt)) .eq. 0. ) ai=1.0e-12
-        smj1=(bom(j-1)-bom(j-1+kpt))/((bom(j-1+kpt)-bom(j-1+2*kpt))+aj)
-        smi1=(bom(i-1)-bom(i-1+kpt))/((bom(i-1+kpt)-bom(i-1+2*kpt))+ai)
-        smj2=(bom(i-1)-bom(j-1+kpt))/((bom(j-1+kpt)-bom(j-1+2*kpt))+aj)
-        smi2=(bom(j-1)-bom(i-1+kpt))/((bom(i-1+kpt)-bom(i-1+2*kpt))+ai)
-        if ((abs( smj1 -1 ) .lt. abs( smj2-1 )) .and. (abs( smi1 -1 ) .lt. abs( smi2 -1 ))) go to 102
+        aj = 0.0d0
+        ai = 0.0d0
+        if ((bom(j - 1 + kpt) - bom(j - 1 + 2 * kpt)) .eq. 0.0d0) aj = 1.0e-12
+        if ((bom(i - 1 + kpt) - bom(i - 1 + 2 * kpt)) .eq. 0.0d0) ai = 1.0e-12
+        smj1 = (bom(j - 1) - bom(j - 1 + kpt)) / ((bom(j - 1 + kpt) - bom(j - 1 + 2 * kpt)) + aj)
+        smi1 = (bom(i - 1) - bom(i - 1 + kpt)) / ((bom(i - 1 + kpt) - bom(i - 1 + 2 * kpt)) + ai)
+        smj2 = (bom(i - 1) - bom(j - 1 + kpt)) / ((bom(j - 1 + kpt) - bom(j - 1 + 2 * kpt)) + aj)
+        smi2 = (bom(j - 1) - bom(i - 1 + kpt)) / ((bom(i - 1 + kpt) - bom(i - 1 + 2 * kpt)) + ai)
+        if ((abs (smj1 - 1) .lt. abs (smj2 - 1)) .and. (abs (smi1 - 1) .lt. abs (smi2 - 1))) cycle
         !   * switching *
-        iq=0
-        t=iseq( (j+2)/4 )
-        iseq( (j+2)/4 ) = iseq( (i+2)/4 )
-        iseq( (i+2)/4 ) = int (t)
-        do im=1,4
+        iq = 0
+        t = iseq((j + 2) / 4)
+        iseq((j + 2) / 4) = iseq((i + 2) / 4)
+        iseq((i + 2) / 4) = int (t, kind (iseq(1)))
+        do im = 1, 4
            tt(im) = bom(j+im-2)
-           bom(j+im-2) = bom(i+im-2)
-           bom(i+im-2) = tt(im)
+           bom(j + im - 2) = bom(i + im - 2)
+           bom(i + im - 2) = tt(im)
         end do
      end do
-102  continue
   end do
-  ic=ic + 1
+  ic = ic + 1
   go to 99
 12 continue
   !!  **  begin the second loop for vel and db  **
   !   * test the slope change of vel *
-  ic=0
-  iq=0
-899 if (ic .gt. li*(li-1) ) go to 812
+  ic = 0
+  iq = 0
+899 if (ic .gt. li * (li - 1)) go to 812
   if (iq .eq. 1 ) go to 812
-  iq=1
-  do l=1,li
-     do im=1, 4
-        bom(4*l-im+1) = sb(4*iseq(l)-im+1)
+  iq = 1
+  do l = 1, li
+     do im = 1, 4
+        bom(4 * l - im + 1) = sb(4 * iseq(l) - im + 1)
      end do
   end do
   !   * test the slope change of vel *
@@ -2241,29 +2228,29 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
      if (abs (saj - 1) .gt. 0.5d0) go to 8001
   end do
   go to 812
-8001 do j=jbeg, kpt-1, 4
-     do i=j+4, kpt-1, 4
+8001 do j = jbeg, kpt - 1, 4
+     do i = j + 4, kpt - 1, 4
         !   * test the crossing of vel or db *
-        jb=(j+1)/4
-        ib=(i+1)/4
-        d1=bom(j+kpt) - bom(i+kpt)
-        d2=bom(j) - bom(i)
-        if ( d1*d2 .le. 0. ) go to 8801
-        d1=bom(j+1+kpt) - bom(i+1+kpt)
-        d2=bom(j+1) - bom(i+1)
-        if ( d1*d2 .le. 0. ) go to 8801
-        go to 8102
+        jb = (j + 1) / 4
+        ib = (i + 1) / 4
+        d1 = bom(j + kpt) - bom(i + kpt)
+        d2 = bom(j) - bom(i)
+        if ((d1 * d2) .le. 0.0d0) go to 8801
+        d1 = bom(j + 1 + kpt) - bom(i + 1 + kpt)
+        d2 = bom(j + 1) - bom(i + 1)
+        if ((d1 * d2) .le. 0.0d0) go to 8801
+        cycle
         !      go to 8122
 8801    continue
-        aj=0.
-        ai=0.
-        if((bom(j+kpt) - bom(j+2*kpt)) .eq. 0. )  aj=1.0e-12
-        if((bom(i+kpt) - bom(i+2*kpt)) .eq. 0. )  ai=1.0e-12
-        smj1=(bom(j)-bom(j+kpt))/((bom(j+kpt)-bom(j+2*kpt))+aj)
-        smi1=(bom(i)-bom(i+kpt))/((bom(i+kpt)-bom(i+2*kpt))+ai)
-        smj2=(bom(i)-bom(j+kpt))/((bom(j+kpt)-bom(j+2*kpt))+aj)
-        smi2=(bom(j)-bom(i+kpt))/((bom(i+kpt)-bom(i+2*kpt))+ai)
-        if ((abs( smj1 -1 ) .lt. abs( smj2-1 )) .and.(abs( smi1 -1 ) .lt. abs( smi2 -1 ))) go to 8102
+        aj = 0.0d0
+        ai = 0.0d0
+        if ((bom(j + kpt) - bom(j + 2 * kpt)) .eq. 0.0d0) aj = 1.0e-12
+        if ((bom(i + kpt) - bom(i + 2 * kpt)) .eq. 0.0d0) ai = 1.0e-12
+        smj1 = (bom(j) - bom(j + kpt)) / ((bom(j + kpt) - bom(j + 2 * kpt)) + aj)
+        smi1 = (bom(i) - bom(i + kpt)) / ((bom(i + kpt) - bom(i + 2 * kpt)) + ai)
+        smj2 = (bom(i) - bom(j + kpt)) / ((bom(j + kpt) - bom(j + 2 * kpt)) + aj)
+        smi2 = (bom(j) - bom(i + kpt)) / ((bom(i + kpt) - bom(i + 2 * kpt)) + ai)
+        if ((abs (smj1 - 1) .lt. abs (smj2 - 1)) .and. (abs (smi1 - 1) .lt. abs (smi2 - 1))) cycle
         !     1 (abs( smi1 -1 ) .lt. abs( smi2 -1 ))) go to 8132
         !   * test the slope change of db, if switch *
         aj=0.
@@ -2272,7 +2259,7 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
         if((bom(i+1+kpt)-bom(i+1+2*kpt)) .eq. 0. ) ai=1.0e-12
         saj= (bom(i+1)-bom(j+1+kpt))/((bom(j+1+kpt)-bom(j+1+2*kpt))+aj)
         sai= (bom(j+1)-bom(i+1+kpt))/((bom(i+1+kpt)-bom(i+1+2*kpt))+ai)
-        if ( ( abs( saj-1 ) .gt. 1.0 ) .and. ( abs( sai-1 ) .gt. 1.0 )) go to 8102
+        if ( ( abs( saj-1 ) .gt. 1.0 ) .and. ( abs( sai-1 ) .gt. 1.0 )) cycle
         !     1 go to 8142
         !     789012345678901234567890123456789012345678901234567890123456789012
         !   * switching *
@@ -2294,7 +2281,6 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
         ! 8142 write(*,*) vfreq(1), i,j, 'stop 4'
         !      go to 8102
      end do
-8102 continue
   end do
   ic = ic + 1
   go to 899
@@ -2306,8 +2292,8 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   do j = 1, kpt - 3, 4
      mu = 0
      do i = j + 4, kpt - 3, 4
-        if ((abs (bom(j) - bom(i)) .gt. abs (bom(j) * 1e-6)) .or. (abs (bom(j + 1) - bom(i + 1)) .gt. abs (bom(j + 1) * 1e-6))) go to 1005
-        if((abs(bom(j+kpt)-bom(i+kpt)).gt.abs(bom(j+kpt)*1e-6)).or. (abs(bom(j+1+kpt)-bom(i+1+kpt)).gt.abs(bom(j+1+kpt)*1e-6))) go to 1005
+        if ((abs (bom(j) - bom(i)) .gt. abs (bom(j) * 1e-6)) .or. (abs (bom(j + 1) - bom(i + 1)) .gt. abs (bom(j + 1) * 1e-6))) cycle
+        if ((abs (bom(j + kpt) - bom(i + kpt)) .gt. abs (bom(j + kpt) * 1e-6)) .or. (abs (bom(j + 1 + kpt) - bom(i + 1 + kpt)) .gt. abs (bom(j + 1 + kpt) * 1e-6))) cycle
 !!!!      if((bom(j).ne.bom(i)).or.(bom(j+1).ne.bom(i+1))) go to 1005
 !!!!      if((bom(j+kpt).ne.bom(i+kpt)).or.
 !!!!     1 (bom(j+1+kpt).ne.bom(i+1+kpt))) go to 1005
@@ -2316,49 +2302,46 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
         kuid(ku + 1) = (i + 3) / 4
         ku = ku + 1
      end do
-1005 continue
-     if (mu .eq. 0) go to 1004
-     kuid(ku+1)=(j+3)/4
-     ku=ku+1
-     if ( iprsup .ge. 1 ) write (*,*) ' identical eigenvalues.   j, ku, kuid(1:ku) =', j, ku, ( kuid(ip), ip=1, ku )
-1004 end do
-  if (kunf.eq.0) go to 2000
-  mrr=mrr+1
+     if (mu .eq. 0) cycle
+     kuid(ku + 1) = (j + 3) / 4
+     ku = ku + 1
+     if (iprsup .ge. 1) write (unit = *, fmt = *) ' identical eigenvalues.   j, ku, kuid(1:ku) =', j, ku, (kuid(ip), ip = 1, ku)
+  end do
+  if (kunf .eq. 0) go to 2000
+  mrr = mrr + 1
   go to 2000
 2030 continue
   do i = 1, ku
      kk = ku - i
      do j = 1, kk
-        if (kuid(j) .lt. kuid(j + 1)) go to 2008
+        if (kuid(j) .lt. kuid(j + 1)) cycle
         t = kuid(j)
         kuid(j) = kuid(j + 1)
-        kuid(j + 1) = int (t)
+        kuid(j + 1) = int (t, kind (kuid(1)))
      end do
-2008 continue
      kuse(i) = i
   end do
   write (unit = *, fmt = *) ' kuid after sorting : ',(kuid(i), i = 1, ku)
   do i = 1, ku
      kk = ku - i
      do j = 1, kk
-        if (iold(kuid(j)) .lt. iold(kuid(j + 1))) go to 2003
+        if (iold(kuid(j)) .lt. iold(kuid(j + 1))) cycle
         t = iold(kuid(j))
         iold(kuid(j)) = iold(kuid(j + 1))
-        iold(kuid(j + 1)) = int (t)
+        iold(kuid(j + 1)) = int (t, kind (iold(1)))
         t = kuse(j)
         kuse(j) = kuse(j + 1)
-        kuse(j+1) = int (t)
-2003 end do
+        kuse(j + 1) = int (t, kind (kuse(1)))
+     end do
   end do
   do i = 1, ku
      kk = ku - i
      do j = 1, kk
-        if (iseq(kuid(j)) .lt. iseq(kuid(j + 1))) go to 2012
+        if (iseq(kuid(j)) .lt. iseq(kuid(j + 1))) cycle
         t = iseq(kuid(j))
         iseq(kuid(j)) = iseq(kuid(j + 1))
         iseq(kuid(j + 1)) = int (t)
      end do
-2012 continue
   end do
   do l = 1, li
      iseqt(l) = iseq(l)
@@ -2604,27 +2587,27 @@ subroutine zymx (w, nw, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, us
         k = l + 1
      end do
   end do
-  write (lunit(3)) (yzn(i), i=1, n2)
+  write (unit = lunit(3)) (yzn(i), i=1, n2)
   if (iprsup .lt. 1) go to 90
   freq = w / twopi
-  write (lunit(6), 2010) freq, (yzn(i),i=1,n2)
+  write (unit = lunit(6), fmt = 2010) freq, (yzn(i),i=1,n2)
 2010 format ('  Z written on lunit3 at freq ', e16.7, 2x, 'are', /, (1x, 8e15.6))
 90 if (numaki .gt. 3)   go to 900
   if (izflag .eq. 0)   go to 100
-  write (lunit(6), 94)
-94 format(/, 10x, 16himpedance matrix)
-  call print(zc, nx  ,ll2, ldn )
-  if (izflag .eq. 1)   go to 150
+  write (unit = lunit(6), fmt = 94)
+94 format (/, 10x, 'impedance matrix')
+  call print (zc, nx, ll2, ldn)
+  if (izflag .eq. 1) go to 150
 100 continue
-  write (lunit(6), 125)
-125 format(/, 10x, 25hresistance and inductance)
+  write (unit = lunit(6), fmt = 125)
+125 format (/, 10x, 'resistance and inductance')
   !         begin code associated with [z] dump onto unit-34 plot file
 !!!!      k = 1
 !!!!      sing(k) = alog1z ( w / twopi )
-  do i=1, nx
-     do j=1, nx
-        d1 = realz(zc(i,j) )
-        d2 = aimagz( zc(i,j) ) / w
+  do i = 1, nx
+     do j = 1, nx
+        d1 = realz (zc(i, j))
+        d2 = aimagz (zc(i, j)) / w
 !!!      sing(k+1) = d1            ! store resistance in real*4 vector
 !!!!      sing(k+2) = d2            ! store inductance in real*4 vector
 !!!!      k = k + 2          !  advance index to last-stored number
@@ -2635,26 +2618,26 @@ subroutine zymx (w, nw, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, us
 !!!!      write (*, 4488)  sing(1), sing(2), sing(3), sing(k-1), sing(k)
 !!!! 4488 format ( ' sing(1), sing(2), sing(3), sing(k-1), sing(k) =',
 !!!!     1         f10.4, 4e13.4 )
-  call print(zc, nx   , ll2, ldn)
+  call print(zc, nx, ll2, ldn)
   !     now restore  'zc'  to impedance in  do 4908  loop below.
-  do i=1, nx
-     do j=1, nx
-        d1 = realz(zc(i,j))
-        d2 = aimagz( zc(i,j) )  *  w
-        zc(i, j) = cmplxz(d1, d2)
+  do i = 1, nx
+     do j = 1, nx
+        d1 = realz (zc(i, j))
+        d2 = aimagz (zc(i, j)) * w
+        zc(i, j) = cmplxz (d1, d2)
      end do
   end do
-150 if (iyflag .eq. 0)   go to 160
-  write (lunit(6), 155)
-155 format(/, 10x, 17hadmittance matrix)
+150 if (iyflag .eq. 0) go to 160
+  write (unit = lunit(6), fmt = 155)
+155 format (/, 10x, 'admittance matrix')
   call print (yc, nx, ll2, ldn)
-  if (iyflag .eq. 1)   go to 900
-160 write (lunit(6), 165)
-165 format(/, 10x, 27hconductance and capacitance)
-  do i=1, nx
-     do j=1, nx
-        d3 = realz(yc(i,j))
-        d4 = aimagz( yc(i,j) ) / w
+  if (iyflag .eq. 1) go to 900
+160 write (unit = lunit(6), fmt = 165)
+165 format (/, 10x, 'conductance and capacitance')
+  do i = 1, nx
+     do j = 1, nx
+        d3 = realz (yc(i, j))
+        d4 = aimagz (yc(i, j)) / w
         yc(i, j) = cmplxz (d3, d4)
      end do
   end do
@@ -2668,8 +2651,8 @@ subroutine zymx (w, nw, isyst, ngrnd, ngg, ncpp, radi, zy, yz, dir, dij, ang, us
      end do
   end do
 9200 continue
-900 if ( iprs47  .ge.  1 ) write (logsix, 2794)
-2794 format ( /,  15h exit  'zymx' .  )
+900 if (iprs47 .ge. 1) write (unit = logsix, fmt = 2794)
+2794 format (/, " Exit  'zymx' .")
   return
 end subroutine zymx
 
@@ -2694,12 +2677,13 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
   real(8), intent(in) :: esi(ldm, 3)
   real(8), intent(out) :: yz(ldn, ldn)
   real(8), intent(out) :: zy(ldn, ldn)
-  !  dimension  a1(ldn,ldn), a2(ldn,ldn), ncpp(ldm)
-  !  dimension  zy(ldn, ldn), yz(ldn, ldn), al0(ldm, ldm)
-  !  dimension  esi(ldm, 3), al1i(ldm), al2i(ldm), al3i(ldm)
   integer(4) :: i, i1, i2
   integer(4) :: j, j1, j2
   real(8) :: ypo1
+  !
+  !  dimension  a1(ldn,ldn), a2(ldn,ldn), ncpp(ldm)
+  !  dimension  zy(ldn, ldn), yz(ldn, ldn), al0(ldm, ldm)
+  !  dimension  esi(ldm, 3), al1i(ldm), al2i(ldm), al3i(ldm)
   !
   do i = 1, ldn
      do j = 1, ldn
@@ -2716,10 +2700,10 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
   if (isyst .eq. -1) go to 25
   do i = 1, npc
      do j = 1, npc
-        if(j .lt. i) go to 15
+        if(j .lt. i) cycle
         yz(i, j) = zy(i, j)
         yz(j, i) = zy(i, j)
-15   end do
+     end do
   end do
   if (itypec .eq. 1) go to 200
   do i = 1, ncc
@@ -2727,13 +2711,13 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
      if (i .gt. npc) i1 = i - npc
      if (i .gt. npc2) i1 = i - npc2
      do j = 1, ncc
-        if (j .lt. i) go to 20
+        if (j .lt. i) cycle
         j1 = j
         if (j .gt. npc) j1 = j - npc
         if(j .gt. npc2) j1 = j - npc2
         yz(i, j) = zy(i1, j1)
         yz(j, i) = yz(i, j)
-20   end do
+     end do
   end do
 25 do i = 1, npc
      i1 = i + npc
@@ -2754,16 +2738,16 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
   if (itypec .eq. 3) go to 60
   do i = 1, ncc
      do j = 1, ncc
-        if (j .lt. i) go to 50
+        if (j .lt. i) cycle
         yz(i, j) = yz(i, j) + a1(i, j)
         yz(j, i) = yz(i, j)
-50   end do
+     end do
   end do
   go to 200
 60 ypo1 = 0.0d0
   if (npp .ne. 0) ypo1 = alpi / es2
   if (npp .eq. 0) zy(1, 1) = 0.0d0
-  if (isyst.ne.-1) ypo1 = ypo1 + zy(1,1)
+  if (isyst .ne. -1) ypo1 = ypo1 + zy(1,1)
   do i = 1, npc
      i1 = i + npc
      i2 = i + npc2
@@ -2774,28 +2758,28 @@ subroutine ymatrx (isyst, lunit6, ncpp, zy, yz, esi, al0, al1i, al2i, al3i, a1, 
         if (ncpp(i) .eq. 1) go to 65
         a2(i1, j) = a2(i, j)
         a2(i1, j1) = a2(i, j)
-65      if (ncpp(j) .eq. 1) go to 70
+65      if (ncpp(j) .eq. 1) cycle
         a2(i, j1) = a2(i, j)
         if (ncpp(i) .eq. 2) go to 67
         a2(i2, j) = a2(i, j)
         a2(i2, j1) = a2(i, j)
         a2(i2, j2) = a2(i, j)
-67      if (ncpp(j) .eq. 2) go to 70
+67      if (ncpp(j) .eq. 2) cycle
         a2(i, j2) = a2(i, j)
         a2(i1, j2) = a2(i, j)
-70   end do
+     end do
   end do
   do i = 1, ncc
-     if(npp.eq.0) go to 85
+     if(npp .eq. 0) go to 85
      a1(i, ncc) = 0.0d0
      a1(ncc, i) = 0.0d0
      a2(i, ncc) = 0.0d0
      a2(ncc, i) = 0.0d0
 85   do j = 1, ncc
-        if (j .lt. i) go to 90
+        if (j .lt. i) cycle
         yz(i, j) = a1(i, j) + a2(i, j) + ypo1
         yz(j, i) = yz(i, j)
-90   end do
+     end do
   end do
 200 if (iprs47 .ge. 1) write (unit = logsix, fmt = 2876) ncc, ypo1, es1, alpi, yz(1, 1), yz(1, 2)
 2876 format (/, " Exit  'ymatrx' .     ncc", 16x, 'ypo1', 17x, 'es1', 16x, 'alpi', 13x, 'yz(1,1)', 13x, 'yz(1,2)', /, 17x, i8, 5e20.11)
@@ -2855,13 +2839,13 @@ subroutine simp (nw, h, dd, rad, zy, dir, dij, ang, ldm, ldn)
         dir(i, j) = sqrtz (v + r1)
         dir(j, i) = dir(i, j)
         go to 20
-15      if (i .gt. j) go to 30
+15      if (i .gt. j) cycle
         ang(i, j) = 0.0d0
         dij(i, j) = 2.0d0 * absz (h(i))
         dir(i, j) = r
 20      zy(i, j) = alogz (dij(i, j) / dir(i, j))
         zy(j, i) = zy(i, j)
-30   end do
+     end do
   end do
   if (iprs47 .ge. 1) write (unit = logsix, fmt = 2936) dir(1, 2), dij(1, 2), v, zy(1, 1), zy(1, 2)
 2936 format (/, " Exit  'simp' .", 12x, 'dir(1,2)', 12x, 'dij(1,2)', 19x, 'v', 13x, 'zy(1,1)', 13x, 'zy(1,2)', /, 15x, 5e20.11)
@@ -2915,7 +2899,7 @@ subroutine  sczy1 (w, isyst, zy, dir, dij, ang, hi, di, zs, ze, ldm, ldn)
   end do
 35 do i = 1, npc
      do j = 1, npc
-        if (j .lt. i) go to 40
+        if (j .lt. i) cycle
         if (iearth .eq. 99) go to 37
         be1 = dir(i, j) * sqrtz (u0 / roe)
         if (isyst .ne. -1) be1 = 0.0d0
@@ -2927,7 +2911,7 @@ subroutine  sczy1 (w, isyst, zy, dir, dij, ang, hi, di, zs, ze, ldm, ldn)
         call zest (hi(i), hi(j), d12, roe, w, xe)
 38      ze(i, j) = xe
         ze(j, i) = xe
-40   end do
+     end do
   end do
   if (iprs47 .ge. 2) write (unit = logsix, fmt = 3039)
 3039 format (/, " Diagnostic within  'sczy1' ,   ze(i,j)  for(i,j)=1, ... npc .")
@@ -2937,7 +2921,7 @@ subroutine  sczy1 (w, isyst, zy, dir, dij, ang, hi, di, zs, ze, ldm, ldn)
   if (isyst .eq. -1) go to  45
   do i = 1, ncc
      do j = 1, ncc
-        if (j .lt. i) go to 43
+        if (j .lt. i) cycle
         i1 = i
         j1 = j
         if (i1 .gt. npc2) i1 = i - npc2
@@ -2946,11 +2930,11 @@ subroutine  sczy1 (w, isyst, zy, dir, dij, ang, hi, di, zs, ze, ldm, ldn)
         if (j1 .gt. npc) j1 = j - npc
         zs(i, j) = zs(i1, j1)
         zs(j, i) = zs(i, j)
-43   end do
+     end do
   end do
 45 do i = 1, ncc
      do j = 1, ncc
-        if (j .lt. i) go to 47
+        if (j .lt. i) cycle
         i1 = i
         j1 = j
         if (i1 .gt. npc2) i1 = i - npc2
@@ -2959,17 +2943,17 @@ subroutine  sczy1 (w, isyst, zy, dir, dij, ang, hi, di, zs, ze, ldm, ldn)
         if (j1 .gt. npc) j1 = j - npc
         ze(i, j) = ze(i1, j1)
         ze(j, i) = ze(i, j)
-47   end do
+     end do
   end do
   go to 90
 50 if (isyst .eq. -1) go to 60
   if (npp .eq. 0) go to 90
   do i = 1, ncc
      do j = 1, ncc
-        if (j .lt. i) go to 55
+        if (j .lt. i) cycle
         zs(i, j) = cjw * cmplxz (c2, fzero)
         zs(j, i) = zs(i, j)
-55   end do
+     end do
   end do
 60 be1 = dir(1, 1) * sqrtz (u0 / roe)
   if (isyst .ne. -1) be1 = 0.0d0
@@ -3026,6 +3010,7 @@ subroutine sczy2 (s, ncpp, radi, usi, usr, bio, bi1,bi2, bi3, bi4, bi5, al1i, al
   !  dimension ncpp(ldm), radi(ldm, 7), usi(ldm, 3), usr(ldm, 3)
   !  dimension bio(ldm), bi1(ldm), bi2(ldm), bi3(ldm), bi4(ldm)
   !  dimension bi5(ldm), al1i(ldm), al2i(ldm), al3i(ldm)
+  !
   ll1 = 1
   ll2 = 2
   if (iprs47 .ge. 1) write (unit = logsix, fmt = 3107) npc, s
@@ -3169,13 +3154,13 @@ subroutine sczy2 (s, ncpp, radi, usi, usr, bio, bi1,bi2, bi3, bi4, bi5, al1i, al
      if (realz (s6) .lt. 0.0d0) s6 = s8 * c2
      if (realz (s7) .lt. 0.0d0) s7 = s8 * c3
      zc(i, i) = s1 + s2 - 2.0d0 * z2m + s4
-     if (ncpp(i) .eq. 1) go to 100
+     if (ncpp(i) .eq. 1) cycle
      i1 = i + npc
-     if (i1 .gt. npc2) go to 100
+     if (i1 .gt. npc2) cycle
      zc(i1, i1) = s6
      zc(i, i1) = s7
      zc(i1, i) = s7
-     if (ncpp(i) .eq. 2) go to 100
+     if (ncpp(i) .eq. 2) cycle
      i1 = i + npc2
      zc(i1, i1) = s3
      zc(i1, i) = s5
@@ -3185,7 +3170,7 @@ subroutine sczy2 (s, ncpp, radi, usi, usr, bio, bi1,bi2, bi3, bi4, bi5, al1i, al
      zc(i2, i1) = s5
      if (iprs47 .ge. 3) write (unit = logsix, fmt = 3159) s1, s2, zc(i, i), zc(i, i1)
 3159 format (/,  " Store  'zc'  values.", 13x, 'real-s1', 13x, 'imag-s1', 13x, 'real-s2', 13x, 'imag-s2', /, 21x, 4e20.11, /, 8x, 'real-zc(i,i)', 8x, 'imag-zc(i,i)', 7x, 'real-zc(i,i1)', 7x, 'imag-zc(i,i1)', /, 1x, 4e20.11)
-100 end do
+  end do
   if (iprs47 .ge. 1) write (unit = logsix, fmt = 3174)
 3174 format (/, " Exit  'sczy2' .")
   return
@@ -3235,34 +3220,34 @@ subroutine  ptzy1 (radi, dci, thc, dr0, th0, al0, ldm)
         else if (i - j .eq. 0) then
            go to 20
         else
-           go to 50
+           cycle
         end if
-10      th0(i,j)=(thc(j)-thc(i))*pai/180.
-        if(th0(i,j).gt.p2) th0(i,j)=th0(i,j)-p2
-        dkl = sqrtz(dci(i)**2+dci(j)**2-2.*dci(i)*dci(j)*cosz(th0(i,j)))
-        al0(i,j) = alogz(radp(1)/dkl)
-        th0(j,i)=th0(i,j)
-        al0(j,i)=al0(i,j)
-        go to 50
-20      th0(i,j)=0.
-        dkl = radi(i,7)
-        al0(i,j) = alogz(radp(1)/dkl*(1.-dr0(i,j)))
-50   end do
+10      th0(i, j) = (thc(j) - thc(i)) * pai / 180.0d0
+        if (th0(i, j) .gt. p2) th0(i, j) = th0(i, j) - p2
+        dkl = sqrtz (dci(i) ** 2 + dci(j) ** 2 - 2.0d0 * dci(i) * dci(j) * cosz (th0(i, j)))
+        al0(i, j) = alogz (radp(1) / dkl)
+        th0(j, i) = th0(i, j)
+        al0(j, i) = al0(i, j)
+        cycle
+20      th0(i, j) = 0.0d0
+        dkl = radi(i, 7)
+        al0(i, j) = alogz (radp(1) / dkl * (1.0d0 - dr0(i, j)))
+     end do
   end do
   n = 19
-  do i=1, npc
-     do j=1, npc
-        cn = 0.0
-        if (i .eq. j)   go to 70
-        if (j .lt. i)   go to 70
-        if (dci(i) * dci(j) .lt. 1.0e-6)   go to 65
+  do i = 1, npc
+     do j = 1, npc
+        cn = 0.0d0
+        if (i .eq. j) cycle
+        if (j .lt. i) cycle
+        if (dci(i) * dci(j) .lt. 1.0e-6) go to 65
         do k = 1, n
            ak = k
            cn = dr0(i, j) ** k * cosz (ak * th0(i, j)) / ak + cn
         end do
 65      al0(i, j) = al0(i, j) - cn
         al0(j, i) = al0(i, j)
-70   end do
+     end do
   end do
   if (iprs47 .ge. 1) write (unit = logsix, fmt = 3256) dkl, cn, alpi, al0(1, 1), al0(1, 2)
 3256 format (/, " Exit  'ptzy1' .", 17x, 'dkl', 18x, 'cn', 16x, 'alpi', 12x, 'al0(1,1)', 12x, 'al0(1,2)', /, 16x, 5e20.11)
@@ -3303,6 +3288,7 @@ subroutine ptzy2 (s, ncpp, dci, dr0, th0, al0, zp, zpc, ldm, ldn)
   complex(16) :: se0, zm, zi, zzo, zzi
   complex(16) :: c1, c2, c3, c4, c5, c6
   complex(16) :: zp(ldn, ldn), zpc(ldn, ldn)
+  !
   !  dimension ncpp(ldm), dci(ldm)
   !  dimension dr0(ldm, ldm), th0(ldm, ldm), al0(ldm, ldm)
   !
@@ -3314,118 +3300,116 @@ subroutine ptzy2 (s, ncpp, dci, dr0, th0, al0, zp, zpc, ldm, ldn)
   c6 = cmplxz (c8, fzero)
   ll1 = 1
   ll3 = 3
-  nbess=19
-  kn=nbess+1
-  ss=csqrtz(s)
-  su0 = s * cmplxz(u2p, fzero)
-  se0 = s * cmplxz(e2p, fzero)
-  s1 = ss * cmplxz(bp1, fzero)
-  s2 = ss * cmplxz(bp2, fzero)
+  nbess = 19
+  kn = nbess + 1
+  ss = csqrtz (s)
+  su0 = s * cmplxz (u2p, fzero)
+  se0 = s * cmplxz (e2p, fzero)
+  s1 = ss * cmplxz (bp1, fzero)
+  s2 = ss * cmplxz (bp2, fzero)
   zm = czero
-  zzo = su0 * cmplxz(alpi, fzero)
-  ixa=0
-  xa=cabsz(s1)
-  if(xa.gt.10.) ixa=1
-  if ( iprs47  .ge.  1 ) write (logsix, 3316)  npc, npp, xa, alpi, s
-3316 format ( /,  17h begin  'ptzy2' .,  16h     npc     npp, 18x,  2hxa,  16x,  4halpi,  14x,  6hreal-s,  14x,  6himag-s,/,  17x,  2i8,  4e20.11 )
-  if(npp.eq.0) go to 40
-  call bsikm(s2,kn,bin,bkn,ll1,ixa)
-  se0=bin(2)
-  s3=bkn(2)
-  s4=bin(1)
-  s5=bkn(1)
-40 call bsikm(s1,kn,bin,bkn,ll3,ixa)
-  if(npp.ne.0) go to 42
-  zzi=su0*c3*bkn(1)/bkn(2)/s1
+  zzo = su0 * cmplxz (alpi, fzero)
+  ixa = 0
+  xa = cabsz (s1)
+  if (xa .gt. 10.0d0) ixa = 1
+  if (iprs47 .ge. 1) write (unit = logsix, fmt = 3316) npc, npp, xa, alpi, s
+3316 format (/, " begin  'ptzy2' .",  '     npc     npp', 18x, 'xa', 16x, 'alpi', 14x, 'real-s',  14x, 'imag-s', /, 17x, 2i8, 4e20.11)
+  if (npp .eq. 0) go to 40
+  call bsikm (s2, kn, bin, bkn, ll1, ixa)
+  se0 = bin(2)
+  s3 = bkn(2)
+  s4 = bin(1)
+  s5 = bkn(1)
+40 call bsikm (s1, kn, bin, bkn, ll3, ixa)
+  if (npp .ne. 0) go to 42
+  zzi = su0 * c3 * bkn(1) / bkn(2) / s1
   go to 55
 42 if (ixa .eq. 1) go to 45
-  ss = se0*bkn(2)-bin(2)*s3
-  zm = c6/ss
-  zzo =su0*c3/s2*(s4*bkn(2)+s5*bin(2))/ss+zzo
-  zzi = su0*c3*(bin(1)*s3+bkn(1)*se0)/ss/s1
+  ss = se0 * bkn(2) - bin(2) * s3
+  zm = c6 / ss
+  zzo = su0 * c3 / s2 * (s4 * bkn(2) + s5 * bin(2)) / ss + zzo
+  zzi = su0 * c3 * (bin(1) * s3 + bkn(1) * se0) / ss / s1
   go to 55
 45 s6 = s2 - s1
-  if (cabsz(s6) .gt. pekexp ) go to 50
-  s6 = cexpz(s6)
-  ss = se0*bkn(2)*s6-bin(2)*s3/s6
-  zm = c6/ss
-  zzo=su0*c3/s2*(s4*bkn(2)*s6+s5*bin(2)/s6)/ss+zzo
-  zzi=su0*c3*(bin(1)*s3/s6+bkn(1)*se0*s6)/ss/s1
+  if (cabsz (s6) .gt. pekexp) go to 50
+  s6 = cexpz (s6)
+  ss = se0 * bkn(2) * s6 - bin(2) * s3 / s6
+  zm = c6 / ss
+  zzo = su0 * c3 / s2 * (s4 * bkn(2) * s6 + s5 * bin(2) /s6) / ss + zzo
+  zzi = su0 * c3 * (bin(1) * s3 / s6 + bkn(1) * se0 * s6) / ss / s1
   go to 55
-50 zzo=su0*c3/s2*s4/se0+zzo
-  zzi=su0*c3*bkn(1)/bkn(2)/s1
+50 zzo = su0 * c3 / s2 * s4 / se0 + zzo
+  zzi = su0 * c3 * bkn(1) / bkn(2) / s1
 55 continue
-  do i=1,npc
-     do j=1,npc
+  do i = 1, npc
+     do j = 1, npc
         zi = czero
-        if(j.lt.i) go to 25
-        if(dci(i)*dci(j).lt.1.e-6) go to 21
-        do k=1,nbess
-           k1=k+1
-           ak=k
+        if (j .lt. i) go to 25
+        if ((dci(i) * dci(j)) .lt. 1.e-6) go to 21
+        do k = 1, nbess
+           k1 = k + 1
+           ak = k
            ck = dr0(i, j) ** k * cosz (ak * th0(i, j))
            c1 = cmplxz(ck, fzero)
            c9 = ak * (usp + 1.)
            c2 = cmplxz(c9, fzero)
            zi = zi + c1/ (c2 + s1 * bkn(k)/bkn(k1))
         end do
-21      c5 = cmplxz(al0(i,j), fzero)
-        zp(i,j)=su0*(c3*c4*zi + c5)
-        zp(j,i)=zp(i,j)
+21      c5 = cmplxz (al0(i, j), fzero)
+        zp(i, j) = su0 * (c3 * c4 * zi + c5)
+        zp(j, i) = zp(i, j)
 25      i1 = i + npc
-        j1=j+npc
-        if (ncpp(i) .eq. 1)  go to 26
-        zp(i1,j)=zp(i,j)
-        zp(i1, j1) = zp(i,j)
-26      if (ncpp(j) .eq. 1)  go to 30
-        zp(i,j1)=zp(i,j)
+        j1 = j + npc
+        if (ncpp(i) .eq. 1) go to 26
+        zp(i1, j) = zp(i, j)
+        zp(i1, j1) = zp(i, j)
+26      if (ncpp(j) .eq. 1) cycle
+        zp(i, j1) = zp(i, j)
         i2 = i + npc2
         j2 = j + npc2
-        if (ncpp(i) .eq.2)  go to 27
-        zp(i2,j) = zp(i,j)
-        zp(i2,j2) = zp(i,j)
-        zp(i2,j1) = zp(i,j)
-27      if (ncpp(j) .eq. 2)  go to 30
-        zp(i,j2) = zp(i,j)
-        zp(i1,j2) = zp(i,j)
-30   end do
+        if (ncpp(i) .eq.2) go to 27
+        zp(i2, j) = zp(i, j)
+        zp(i2, j2) = zp(i, j)
+        zp(i2, j1) = zp(i, j)
+27      if (ncpp(j) .eq. 2) cycle
+        zp(i, j2) = zp(i, j)
+        zp(i1, j2) = zp(i, j)
+     end do
   end do
-  if ( iprs47  .ge.  2 ) write (logsix, 3327)  ( zp(1,j), j=1, 3 )
-3327 format ( /,  8h middle.,8x,  12hreal-zp(1,1),  8x,  12himag-zp(1,1),8x,  12hreal-zp(1,2),  8x,  12himag-zp(1,2), &
-       8x,  12hreal-zp(1,3),  8x,  12himag-zp(1,3)  ,/, 8x,  6e20.11  ,/,46h diagnostic   zp(i,j)  for  (i,j)=1, ... npc .   )
+  if (iprs47 .ge. 2) write (unit = logsix, fmt = 3327) (zp(1, j), j = 1, 3)
+3327 format (/, ' middle.', 8x, 'real-zp(1,1)', 8x, 'imag-zp(1,1)', 8x, 'real-zp(1,2)', 8x, 'imag-zp(1,2)', 8x, 'real-zp(1,3)', 8x, 'imag-zp(1,3)', /, 8x, 6e20.11, /, ' diagnostic   zp(i,j)  for  (i,j)=1, ... npc .')
   ll0 = 0
-  if ( iprs47  .ge.  5 ) call print ( zp(1,1), npc, ll0, ldn )
-  if ( npp  .eq.  0 )   go to 90
-  s1=zzi+zzo-2.*zm
-  s2=zzo-zm
+  if (iprs47 .ge. 5) call print (zp(1, 1), npc, ll0, ldn)
+  if (npp .eq. 0) go to 90
+  s1 = zzi + zzo - 2.0d0 * zm
+  s2 = zzo - zm
   s3 = cimag1
-  d1 = aimagz(s1)
-  d2 = aimagz(s2)
-  c1 = cmplxz(d1, fzero)
-  c2 = cmplxz(d2, fzero)
-  if(realz(s1) .lt. 0.) s1=s3*c1
-  if(realz(s2) .lt. 0.) s2=s3*c2
-  if ( iprs47  .ge.  3 ) write (logsix, 3345)  ss, zm, zzo
-3345 format ( /,  6h pipe.,13x,  7hreal-ss,  13x,  7himag-ss,13x,  7hreal-zm,  13x,  7himag-zm, &
-       12x,  8hreal-zzo,  12x,  8himag-zzo  ,/,  6x,  6e20.11 )
-  nc1=ncc-npp
-  if (iprs47 .gt. 1) write (logsix, 3354)  ncc, nc1, ixa, s1, s2
-3354 format ( /,  11h more pipe.,  24h     ncc     nc1     ixa, 13x,  7hreal-s1,  13x,  7himag-s1,13x,  7hreal-s2,  13x,  7himag-s2  ,/,  11x,  3i8,  4e20.11 )
-  do i=1,nc1
-     zp(i,ncc) = czero
-     zp(ncc,i) = czero
-     zpc(i,ncc)=s2
-     zpc(ncc,i)=s2
-     do j=1,nc1
-        if(j.lt.i) go to 65
-        zpc(i,j)=s1
-        zpc(j,i)=s1
-65   end do
+  d1 = aimagz (s1)
+  d2 = aimagz (s2)
+  c1 = cmplxz (d1, fzero)
+  c2 = cmplxz (d2, fzero)
+  if (realz(s1) .lt. 0.) s1=s3*c1
+  if (realz(s2) .lt. 0.) s2=s3*c2
+  if (iprs47 .ge. 3) write (unit = logsix, fmt = 3345) ss, zm, zzo
+3345 format (/, ' pipe.', 13x, 'real-ss', 13x, 'imag-ss', 13x, 'real-zm', 13x, 'imag-zm', 12x, 'real-zzo', 12x, 'imag-zzo', /, 6x, 6e20.11)
+  nc1 = ncc - npp
+  if (iprs47 .gt. 1) write (unit = logsix, fmt = 3354) ncc, nc1, ixa, s1, s2
+3354 format (/, ' more pipe.     ncc     nc1     ixa', 13x, 'real-s1', 13x, 'imag-s1', 13x, 'real-s2', 13x, 'imag-s2', /, 11x, 3i8, 4e20.11)
+  do i = 1, nc1
+     zp(i, ncc) = czero
+     zp(ncc, i) = czero
+     zpc(i, ncc) = s2
+     zpc(ncc, i) = s2
+     do j = 1, nc1
+        if (j .lt. i) cycle
+        zpc(i, j) = s1
+        zpc(j, i) = s1
+     end do
   end do
-  zp(ncc,ncc) = czero
-  zpc(ncc,ncc)=zzo
-90 if ( iprs47  .ge.  1 ) write (logsix, 3368)  usp, pai, u2p, e2p, su0
-3368 format ( /,  16h exit  'ptzy2' .,  16x,  3husp,  16x,  3hpai, 16x,  3hu2p,  16x,  3he2p,  11x,  8hreal-su0, 11x,  8himag-su0  ,/,  16x,  6e19.10 )
+  zp(ncc, ncc) = czero
+  zpc(ncc, ncc) = zzo
+90 if (iprs47 .ge. 1) write (unit = logsix, fmt = 3368) usp, pai, u2p, e2p, su0
+3368 format (/, " Exit  'ptzy2' .", 16x, 'usp', 16x, 'pai', 16x, 'u2p', 16x, 'e2p', 11x, 'real-su0', 11x, 'imag-su0', /, 16x, 6e19.10)
   return
 end subroutine ptzy2
 
@@ -3522,7 +3506,7 @@ subroutine bsikm (x, kn, bbin, bbkn, ikm, ixa)
      ik2=ikn-2
      bbkn(ikn) = bbkn(ik2) + 2.0d0 * ik2 / x * bbkn(ik1)
   end do
-70 if ( iprs47  .ge.  6 ) write (logsix, 3476)  ( l, bbin(l), bbkn(l), l=1, kn )
+70 if (iprs47 .ge. 6) write (unit = logsix, fmt = 3476) (l, bbin(l), bbkn(l), l = 1, kn)
 3476 format (/, " Exit    'bsikm' .",  5x, 'row', 11x, 'real-bbin', 11x, 'imag-bbin', 11x, 'real-bbkn', 11x, 'imag-bbkn', /, (18x, i8, 4e20.11))
   return
 end subroutine bsikm
@@ -3547,7 +3531,6 @@ subroutine  olzy (w, ncpp, zy, dij, ang, usi, usr, esi, hi, di, zs, ze, zc, ldm,
   real(8), intent(in) :: usr(ldm, 3)
   real(8), intent(in) :: w
   real(8), intent(in) :: zy(ldn, ldn)
-  !  dimension ncpp(ldm)
   integer(4) :: i, im
   integer(4) :: j, j1, j2, jnc
   integer(4) :: k
@@ -3559,6 +3542,8 @@ subroutine  olzy (w, ncpp, zy, dij, ang, usi, usr, esi, hi, di, zs, ze, zc, ldm,
   complex(16) :: zs(ldn, ldn), ze(ldn, ldn), zc(ldn, ldn)
   complex(16) :: cwu, s, ss, xc, xe
   !
+  !  dimension ncpp(ldm)
+  !
   s = cmplxz (fzero, w)
   cwu = s * cmplxz(u2p, fzero)
   ss = csqrtz (s)
@@ -3567,7 +3552,7 @@ subroutine  olzy (w, ncpp, zy, dij, ang, usi, usr, esi, hi, di, zs, ze, zc, ldm,
   ll1 = 1
   do i = 1, npc
      do j = 1, npc
-        if (j .lt. i) go to 20
+        if (j .lt. i) cycle
         zs(i, j) = cwu * cmplxz (zy(i, j), fzero)
         zs(j, i) = zs(i, j)
         if (iearth .eq. 99) go to 15
@@ -3580,7 +3565,7 @@ subroutine  olzy (w, ncpp, zy, dij, ang, usi, usr, esi, hi, di, zs, ze, zc, ldm,
         call zest (hi(i), hi(j), d12, roe, w, xe)
 18      ze(i, j) = xe
         ze(j, i) = xe
-20   end do
+     end do
   end do
   if (iprs47 .ge. 2) write (unit = logsix, fmt = 3523) ncct, npc, u0, roe
 3523 format (" Diagnostic within  'olzy' .   ze(i,j)  for  (i,j)=1, ... npc.", 5x, '    ncct     npc', 13x, 'u0', 12x, 'roe', /, 68x, 2i8, 2e15.6)
@@ -3592,7 +3577,7 @@ subroutine  olzy (w, ncpp, zy, dij, ang, usi, usr, esi, hi, di, zs, ze, zc, ldm,
         im = 4 * (i - 1) + 1
         j1 = im + j + 1
         j1 = ncpp(j1)
-        if (j1 .eq. 0) go to 40
+        if (j1 .eq. 0) cycle
         b1 = usi(i, j)
         b2 = esi(i, j)
         ur = usr(i, j)
@@ -3607,7 +3592,7 @@ subroutine  olzy (w, ncpp, zy, dij, ang, usi, usr, esi, hi, di, zs, ze, zc, ldm,
         if (iprs47 .ge. 6) write (unit = logsix, fmt = 3541) j, i, jnc, j2, j1, xc
 3541    format (/, " Inside  (j,i)  loop of  'olzy' .       j       i     jnc      j2      j1", 13x, 'real-xc', 13x, 'imag-xc', /, 33x, 5i8, 2e20.11)
         jnc = j2 + 1
-40   end do
+     end do
   end do
   if (iprs47 .ge. 1) write (unit = logsix, fmt = 3554)
 3554 format (/, " Exit  'olzy' .")
@@ -3629,13 +3614,14 @@ subroutine transp (yyc, ncpp, ann, jnn, znn, ldm, ldn)
   real(8), intent(out) :: jnn(ldn)
   complex(16), intent(out) :: yyc(ldn, ldn)
   complex(16) :: zss, zmm, znn(ldn)
-  !  dimension ncpp(ldm), ann(ldn), jnn(ldn)
   integer(4) :: i, i2
   integer(4) :: j, j1
   integer(4) :: k, k1
   integer(4) :: l, ll0
   real(8) :: amm, ass
   real(8) :: dnn
+  !
+  !  dimension ncpp(ldm), ann(ldn), jnn(ldn)
   !
   if (iprs47 .ge. 1) write (unit = logsix, fmt = 3611) ncct, yyc(1, 1), yyc(1, 2)
 3611 format (/,  " Enter  'transp' .    ncct", 7x,  'real-yyc(1,1)', 7x, 'imag-yyc(1,1)', 7x,  'real-yyc(1,2)', 7x, 'imag-yyc(1,2)', /, 18x, i8, 4e20.11, /, ' diagnostic input matrix.   yyc(i,j)  for  (i,j)=1, ... i2 .')
@@ -3659,9 +3645,8 @@ subroutine transp (yyc, ncpp, ann, jnn, znn, ldm, ldn)
      do i = 1, i2
         do j = j1, i2
            if (i .lt. j1) go to 20
-           !           if ( j - i )   40,  10,  15
            if (j - i .lt. 0) then
-              go to 40
+              cycle
            else if (j - i .eq. 0) then
               go to 10
            else
@@ -3669,40 +3654,39 @@ subroutine transp (yyc, ncpp, ann, jnn, znn, ldm, ldn)
            end if
 10         zss = zss + yyc(i, j)
            ass = ass + 1.0d0
-           go to 40
+           cycle
 15         zmm = zmm + yyc(i, j)
            amm = amm + 1.0d0
-           go to 40
-20         if (k .eq. 1) go to 40
+           cycle
+20         if (k .eq. 1) cycle
            dnn = (j - jnn(k)) / (jnn(k) - 1)
            if (dnn .lt. 1.0d0) dnn = 0.0d0
            l = int (dnn + 1.0d0)
            znn(l) = znn(l) + yyc(i, j)
            ann(l) = ann(l) + 1.0d0
         end do
-40      continue
      end do
      zss = zss / cmplxz (ass, fzero)
      zmm = zmm / cmplxz (amm, fzero)
      k1 = k - 1
      if (k1 .le. 0) go to 55
-     do 50  i = 1, k1
+     do i = 1, k1
         znn(i) = znn(i) / cmplxz (ann(i), fzero)
-50   end do
+     end do
 55   do i = 1, i2
         do j = j1, i2
-           if (j .lt. i) go to 90
+           if (j .lt. i) cycle
            if (i .lt. j1) go to 70
            !           if ( j - i )   90,  60,  65
            if (j - i .lt. 0) then
-              go to 90
+              cycle
            else if (j - i .eq. 0) then
               go to 60
            else
               go to 65
            end if
 60         yyc(i, j) = zss
-           go to 90
+           cycle
 65         yyc(i, j) = zmm
            go to 85
 70         if (k .eq. 1) go to 85
@@ -3712,7 +3696,6 @@ subroutine transp (yyc, ncpp, ann, jnn, znn, ldm, ldn)
            yyc(i, j) = znn(l)
 85         yyc(j, i) = yyc(i, j)
         end do
-90      continue
      end do
   end do
   if (iprs47 .ge. 1) write (unit = logsix, fmt = 3623) yyc(1, 1), yyc(1, 2)
@@ -3771,16 +3754,16 @@ subroutine skin47 (b1, b2, ur, cjw, sjw, zcc)
   go to 25
 20 x1=x2-x1
 !!!!  d2 = 50.
-  if (cabsz(x1) .gt. pekexp )  go to 33
+  if (cabsz(x1) .gt. pekexp) go to 33
   x1=cexpz(x1)
   zcc= cjw * c1  / x2  *  ( bin(1)*x4*x1 + bkn(1)*x3/x1 ) * c2
   x3 = bin(2) * x4 * x1  -  bkn(2) * x3 / x1
 25 zcc = zcc/x3
   go to 40
-30 call bsikm ( x2, ll2, bin, bkn, ll1, ll1 )
-33 zcc= cjw * c1  / x2  *  bin(1) / bin(2)  *  c2
-40 if ( iprs47  .ge.  2 ) write (logsix, 3688)  ur, cjw, zcc
-3688 format ( /,  17h exit  'skin47' .,  18x,  2hur, 12x,  8hreal-cjw,  12x,  8himag-cjw, 12x,  8hreal-zcc,  12x,  8himag-zcc  ,/,  17x,  5e20.11  )
+30 call bsikm (x2, ll2, bin, bkn, ll1, ll1)
+33 zcc = cjw * c1  / x2  *  bin(1) / bin(2)  *  c2
+40 if (iprs47 .ge. 2) write (unit = logsix, fmt = 3688) ur, cjw, zcc
+3688 format (/, " Exit  'skin47' .", 18x, 'ur', 12x, 'real-cjw', 12x, 'imag-cjw', 12x, 'real-zcc', 12x, 'imag-zcc', /, 17x, 5e20.11)
   return
 end subroutine skin47
 
@@ -3882,7 +3865,7 @@ subroutine zegen (be1, be2, th, w, xe, isyst)
      b3 = en * cs4
      b4 = fn * a3
      evennn = a1 + a2 + a3 + a4 + b1 + b2 + b3 + b4
-     go to 50
+     cycle
 30   t3 = -t1 * (t1 + 1.0d0) ** 2 * (t1 + 2.0d0)
      t4 = -(t1 + 1.0d0) * (t1 + 2.0d0) ** 2 * (t1 + 3.0d0)
      t5 = -(t2 - 1.0d0) * (t2 + 1.0d0) ** 2 * (t2 + 3.0d0)
@@ -3906,7 +3889,7 @@ subroutine zegen (be1, be2, th, w, xe, isyst)
      verbin = evennn
      evennn = a1 + a2 + a3 + a4 + b1 + b2 + b3 + b4
      if ((1.0d0 - verbin / evennn) * (1.0d0 - verbin / evennn) .lt. 1.0e-12) go to 888
-50 end do
+  end do
 888 continue
   p1 = pai * (1.0d0 - a3) / 4.0d0 + a1 * alogz (euc / e) + th * a2 + b2 + sq2 * (b3 - b1)
   q1 = 0.5d0 + (1.0d0 - a3) * alogz (euc / e) - th * a4 - pai * a1 / 4.0d0 - b4 + sq2 * (b1 + b3)
@@ -4002,10 +3985,10 @@ subroutine eigen (cjw, p, n, a, ai, qn, q, xx, yy, ldn)
   dm = 0.0d0
   do i = 1, n
      dx = cabsz (q(i, i))
-     if (dx .le. dm) go to 40
+     if (dx .le. dm) cycle
      dm = dx
      im = i
-40 end do
+  end do
   qi = 1.0d0 / q(im, im)
   do i = 1, n
      do j = 1, n
@@ -4014,26 +3997,26 @@ subroutine eigen (cjw, p, n, a, ai, qn, q, xx, yy, ldn)
   end do
   dm = 0.0d0
   do i = 1, n
-     if (i .eq. im) go to 50
+     if (i .eq. im) cycle
      dx = cabsz (q(i, im))
-     if (dx .le. dm) go to 50
+     if (dx .le. dm) cycle
      dm = dx
      i1 = i
      i2 = im
-50 end do
+  end do
   if (dm .ne. 0.0d0) go to 60
   do i = 1, n
-     if (i .eq. im) go to 59
+     if (i .eq. im) cycle
      dx = cabsz (q(im, i))
-     if (dx .le. dm) go to 59
+     if (dx .le. dm) cycle
      dm = dx
      i1 = im
      i2 = i
-59 end do
+  end do
 60 sa = q(im, im) / q(i1, i2)
   s = xx(im, im) / xx(i1, i2)
   r = cabsz (s / sa)
-  d1 = 50.* epsiln
+  d1 = 50.0d0 * epsiln
   !     non-64-bit complex math redefines tolerance in "sysdep":
   if (znvref .ne. 0.0d0) d1 = 50.0d0 * znvref
   d2 = r - unity
@@ -4069,10 +4052,10 @@ subroutine eigen (cjw, p, n, a, ai, qn, q, xx, yy, ldn)
 90 dm = 0.0d0
   do i = 1, n
      dx = cabsz (p(i, i))
-     if (dx .le. dm) go to 95
+     if (dx .le. dm) cycle
      dm = dx
      im = i
-95 end do
+  end do
   ad = czero
   do i = 1, n
      ad = ad + p(im, i) * p(i, im)
@@ -4326,14 +4309,13 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
 !!!!     f(i,j) = czero
         fr(i, j) = 0.0d0
         fi(i, j) = 0.0d0
-        go to 25
+        cycle
 !!!!  20 f(i,j) = creal1
 20      fr(i, j) = 1.0d0
         fi(i, j) = 0.0d0
      end do
-25   continue
   end do
-  do 115  k1 = 1, m
+  do k1 = 1, m
      d9 = 0.0d0
      n = k1
      do i2 = k1, m
@@ -4342,10 +4324,10 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
         d18 = absz (fr(i2, k1))
         d19 = absz (fi(i2, k1))
         if (d18 .lt. d19) d18 = d19
-        if (d18 .le. d9) go to 50
+        if (d18 .le. d9) cycle
         d9 = d18
         n = i2
-50   end do
+     end do
      !      write (*,*) ' next variable.  k1, n, d9, d1 =',
      !     1                              k1, n, d9, d1
      if (d9 .gt. d1) go to 60
@@ -4367,7 +4349,7 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
         fi(n, j) = cci
      end do
 75   do i = 1, m
-        if (i .eq. k1) go to 100
+        if (i .eq. k1) cycle
 !!!!     d = f(i,k1)
         dr = fr(i, k1)
         di = fi(i, k1)
@@ -4383,7 +4365,7 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
            !      write (*,*) ' revise f(i,j).  i, j, k1, f(i,j) =',
            !     1                              i, j, k1, fr(i,j), fi(i,j)
         end do
-100  end do
+     end do
 !!!!     ad = f(k1, k1)
      adr = fr(k1, k1)
      adi = fi(k1, k1)
@@ -4398,7 +4380,7 @@ subroutine minv (tcmpx, m, f, ldn, ldn2)
      end do
      !  110 write (*,*) ' new  f(k1,j).   k1, j, fr(k1,j), fi(k1,j) =',
      !     1                              k1, j, fr(k1,j), fi(k1,j)
-115 end do
+  end do
   do i = 1, m
      do j = 1, m
         j1 = j + m
@@ -4513,15 +4495,15 @@ subroutine print (c, n, iform, ldn)
         if (k .eq. nline) text3 = text1
         if (iform .eq. 1) go to 4658
         write (unit = lunit(6), fmt = 4649) text3, (workr(m), m = 1, l)
-4649    format ( 1x, a3, 8e16.7  )
-        write (lunit(6), 4651)  ( worki(m), m=1, l )
-4651    format ( 4x, 8e16.7 )
-        go to 4681
-4658    write (lunit(6), 4659)  text3,  ( workr(m), m=1, l )
-4659    format ( 1x, a3, 8f16.7 )
-        write (lunit(6), 4661)  ( worki(m), m=1, l )
-4661    format ( 4x, 8f16.7  )
-4681 end do
+4649    format (1x, a3, 8e16.7)
+        write (unit = lunit(6), fmt = 4651) (worki(m), m = 1, l)
+4651    format (4x, 8e16.7)
+        cycle
+4658    write (unit = lunit(6), fmt = 4659) text3, (workr(m), m = 1, l)
+4659    format (1x, a3, 8f16.7)
+        write (unit = lunit(6), fmt = 4661) (worki(m), m = 1, l)
+4661    format (4x, 8f16.7)
+     end do
      write (unit = lunit(6), fmt = 4632) i
   end do
 4632 format ('+', i2, /, 1x )

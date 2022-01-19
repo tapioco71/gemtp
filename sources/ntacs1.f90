@@ -14,9 +14,9 @@ subroutine ntacs1
   use tacsar
   use labcom
   implicit none
+  !  integer(4) :: maxniu, maxnuk
   !  equivalence (moncar(71), ltacst)
   !  equivalence (moncar(83), ntcsex)
-  !  integer(4) :: maxniu, maxnuk
   !  equivalence (lstat(67), maxniu)
   !  equivalence (lstat(68), maxnuk)
   !
@@ -29,12 +29,12 @@ subroutine ntacs1
   do i = 1, 23
      sptacs(i) = 0.0d0
   end do
-!  lstat(48)=0    ! wsm + thl manual modification for bpa emtp
+!  lstat(48)=0        ! wsm + thl manual modification for bpa emtp
 !  moncar(32)=0       ! wsm + thl manual modification for bpa emtp
 !  lstat(35)=0        ! wsm + thl manual modification for bpa emtp
   maxnuk = (ltacst - 30) / 11
   maxniu = maxnuk
-  write (*, *) ' in ntacs1, use:  ltacst =', ltacst
+  write (unit = *, fmt = *) ' in ntacs1, use:  ltacst =', ltacst
   do i = 61, 66
      lstat(i) = 0
   end do

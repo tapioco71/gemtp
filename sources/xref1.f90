@@ -11,64 +11,278 @@
 subroutine xref1
   use tacsto
   implicit none
-  !  include 'tacsto.ftn'
-  sptr=sptr-1
-  if(sptr.eq.iptr) go to 910
-  isto(sptr)=from
-  from=0
-  go to (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, &
-       9020, 9021), to-8999
+  sptr = sptr - 1
+  if (sptr .eq. iptr) go to 910
+  isto(sptr) = from
+  from = 0
+  !go to (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9020, 9021), to-8999
+  select case (to - 8999)
+  case (1)
+     go to 9000
+
+  case (2)
+     go to 9001
+
+  case (3)
+     go to 9002
+
+  case (4)
+     go to 9003
+
+  case (5)
+     go to 9004
+
+  case (6)
+     go to 9005
+
+  case (7)
+     go to 9006
+
+  case (8)
+     go to 9007
+
+  case (9)
+     go to 9008
+
+  case (10)
+     go to 9009
+
+  case (11)
+     go to 9010
+
+  case (12)
+     go to 9011
+
+  case (13)
+     go to 9012
+
+  case (14)
+     go to 9013
+
+  case (15)
+     go to 9014
+
+  case (16)
+     go to 9015
+
+  case (17)
+     go to 9016
+
+  case (18)
+     go to 9017
+
+  case (19)
+     go to 9018
+
+  case (20)
+     go to 9019
+
+  case (21)
+     go to 9020
+
+  case (22)
+     go to 9021
+  end select
   stop 'invalid "to" reference in "xref1".'
-9500 if(.not.(from.eq.0)) go to 0001
-  from=isto(sptr)
-  sptr=sptr+1
+9500 if (.not. (from .eq. 0)) go to 0001
+  from = isto(sptr)
+  sptr = sptr + 1
   return
-0001 go to (9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 9511, 9512, 9513, 9514, 9515, 9516, 9517, 9518, 9519, &
-          9520, 9521, 9522, 9523, 9524, 9525, 9526, 9527, 9528, 9529, 9530, 9531, 9532, 9533, 9534, 9535, 9536, 9537, 9538, 9539, &
-          9540, 9541, 9542, 9543, 9544, 9545, 9546, 9547, 9548, 9549, 9550), from-9500
+  !0001 go to (9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 9511, 9512, 9513, 9514, 9515, 9516, 9517, 9518, 9519, 9520, 9521, 9522, 9523, 9524, 9525, 9526, 9527, 9528, 9529, 9530, 9531, 9532, 9533, 9534, 9535, 9536, 9537, 9538, 9539, 9540, 9541, 9542, 9543, 9544, 9545, 9546, 9547, 9548, 9549, 9550), from-9500
+0001 select case (from - 9500)
+  case (1)
+     go to 9501
+
+  case (2)
+     go to 9502
+
+  case (3)
+     go to 9503
+
+  case (4)
+     go to 9504
+
+  case (5)
+     go to 9505
+
+  case (6)
+     go to 9506
+
+  case (7)
+     go to 9507
+
+  case (8)
+     go to 9508
+
+  case (9)
+     go to 9509
+
+  case (10)
+     go to 9510
+
+  case (11)
+     go to 9511
+
+  case (12)
+     go to 9512
+
+  case (13)
+     go to 9513
+
+  case (14)
+     go to 9514
+
+  case (15)
+     go to 9515
+
+  case (16)
+     go to 9516
+
+  case (17)
+     go to 9517
+
+  case (18)
+     go to 9518
+
+  case (19)
+     go to 9519
+
+  case (20)
+     go to 9520
+
+  case (21)
+     go to 9521
+
+  case (22)
+     go to 9522
+
+  case (23)
+     go to 9523
+
+  case (24)
+     go to 9524
+
+  case (25)
+     go to 9525
+
+  case (26)
+     go to 9526
+
+  case (27)
+     go to 9527
+
+  case (28)
+     go to 9528
+
+  case (29)
+     go to 9529
+
+  case (30)
+     go to 9530
+
+  case (31)
+     go to 9531
+
+  case (32)
+     go to 9532
+
+  case (33)
+     go to 9533
+
+  case (34)
+     go to 9534
+
+  case (35)
+     go to 9535
+
+  case (36)
+     go to 9536
+
+  case (37)
+     go to 9537
+
+  case (38)
+     go to 9538
+
+  case (39)
+     go to 9539
+
+  case (40)
+     go to 9540
+
+  case (41)
+     go to 9541
+
+  case (42)
+     go to 9542
+
+  case (43)
+     go to 9543
+
+  case (44)
+     go to 9544
+
+  case (45)
+     go to 9545
+
+  case (46)
+     go to 9546
+
+  case (47)
+     go to 9547
+
+  case (48)
+     go to 9548
+
+  case (49)
+     go to 9549
+
+  case (50)
+     go to 9550
+  end select
   stop 'invalid "from" reference in xref1.'
-910 stpflg=42
-  stpi1=iptr
-  stpi2=ilen-iptr
+910 stpflg = 42
+  stpi1 = iptr
+  stpi2 = ilen - iptr
   continue
   call errstp
 9000 continue
-  sptr=sptr-1
-  if(sptr.eq.iptr) go to 910
-  isto(sptr)=from
-  from=9501
+  sptr = sptr - 1
+  if (sptr .eq. iptr) go to 910
+  isto(sptr) = from
+  from = 9501
   go to 9001
-9501 from=isto(sptr)
-  sptr=sptr+1
-  sptr=sptr-1
-  if(sptr.eq.iptr) go to 910
-  isto(sptr)=from
-  from=9502
+9501 from = isto(sptr)
+  sptr = sptr + 1
+  sptr = sptr - 1
+  if (sptr .eq. iptr) go to 910
+  isto(sptr) = from
+  from = 9502
   go to 9010
-9502 from=isto(sptr)
-  sptr=sptr+1
-  sptr=sptr-1
-  if(sptr.eq.iptr) go to 910
-  isto(sptr)=from
-  from=9503
+9502 from = isto(sptr)
+  sptr = sptr + 1
+  sptr = sptr - 1
+  if (sptr .eq. iptr) go to 910
+  isto(sptr) = from
+  from = 9503
   go to 9012
-9503 from=isto(sptr)
-  sptr=sptr+1
-  sptr=sptr-1
-  if(sptr.eq.iptr) go to 910
-  isto(sptr)=from
-  from=9504
+9503 from = isto(sptr)
+  sptr = sptr + 1
+  sptr = sptr - 1
+  if (sptr .eq. iptr) go to 910
+  isto(sptr) = from
+  from = 9504
   go to 9019
-9504 from=isto(sptr)
-  sptr=sptr+1
+9504 from = isto(sptr)
+  sptr = sptr + 1
   go to 9500
 9001 continue
-  sptr=sptr-1
-  if(sptr.eq.iptr) go to 910
-  isto(sptr)=ptr1
-  ptr1=iptr+1
-  sptr=sptr-1
-  if(sptr.eq.iptr) go to 910
+  sptr = sptr - 1
+  if (sptr .eq. iptr) go to 910
+  isto(sptr) = ptr1
+  ptr1 = iptr + 1
+  sptr = sptr - 1
+  if (sptr .eq. iptr) go to 910
   isto(sptr)=cnt
   cnt=0
   sptr=sptr-1

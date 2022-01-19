@@ -11,19 +11,17 @@
 subroutine pstmt
   use tacsto
   implicit none
-  !  include  'tacsto.ftn'
-  sptr=sptr-1
-  if(sptr.eq.iptr) go to 910
-  isto(sptr)=from
-  from=0
+  !
+  sptr = sptr - 1
+  if (sptr .eq. iptr) go to 910
+  isto(sptr) = from
+  from = 0
   go to 9000
-9500 if(.not.(from.eq.0)) go to 0001
-  from=isto(sptr)
-  sptr=sptr+1
+9500 if (.not. (from .eq. 0)) go to 0001
+  from = isto(sptr)
+  sptr = sptr + 1
   return
-0001 go to (9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 9511, 9512, 9513, 9514, 9515, &
-       9516, 9517, 9518, 9519, 9520, 9521, 9522, 9523, 9524, 0002, 9526, 9527, 9528, 9529, 9530, 9531, &
-       9532, 9533, 9534, 9535, 9536, 9537, 9538, 9539, 9540, 9541, 9542, 9543, 9544), from- 9500
+0001 go to (9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 9511, 9512, 9513, 9514, 9515, 9516, 9517, 9518, 9519, 9520, 9521, 9522, 9523, 9524, 0002, 9526, 9527, 9528, 9529, 9530, 9531, 9532, 9533, 9534, 9535, 9536, 9537, 9538, 9539, 9540, 9541, 9542, 9543, 9544), from- 9500
 0002 stop 'invalid from reference in pstmt.'
 910 stpflg=42
   stpi1=iptr

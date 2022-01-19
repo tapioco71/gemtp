@@ -39,13 +39,12 @@ subroutine ntacs1b
   hus1 = ' '                ! wsm + thl manual modification for bpa emtp
   j = 0
   do
-     if (.not. (j .lt. i1)) go to 3010
+     if (.not. (j .lt. i1)) exit
      j = j + 1
      hus1(j : j) = csto(i2 + j)
   end do
-3010 continue
   n = 0
-  read (hus1, 7398) real8
+  read (unit = hus1, fmt = 7398) real8
 7398 format (a6)
   call namea6 (real8, n)                                    ! wsm + thl manual modification for bpa emtp
   ilntab(klntab + i) = n

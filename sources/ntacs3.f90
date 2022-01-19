@@ -24,29 +24,22 @@ subroutine ntacs3
      i2 = kxtcs + nuk + i
      xtcs(i2) = flzero
      i1 = iuty(kiuty + i)
-     k = int (ud1(i5 + 2))
+     k = int (ud1(i5 + 2), kind (k))
      i6 = iabs (kpos(k))
      i3 = i1-89
      !     go to(4090, 4091, 4092, 4093, 4080, 4080), i3
      select case (i3)
      case (1)
         xtcs(i2) = emtpe(k)
-        exit
 
      case (2)
         if (i6 .le. 3) xtcs(i2) = tclose(k)
-        exit
 
      case (3)
         xtcs(i2) = ykm(k)
-        exit
 
      case (4)
         if (i6 .le. 3) xtcs(i2) = unity
-        exit
-
-     case (5, 6)
-        exit
      end select
      i5 = i5 + 5
   end do
@@ -59,8 +52,8 @@ subroutine ntacs3
 !  k = isto(ishenv + 8)                    ! wsm  +  thl manual modification for bpa emtp
 !  lstat(48) = rptr-rbase + isto(k)*isto(k + 1)   ! wsm  +  thl manual modification for bpa emtp
   if (.not. (etime + estep / two .gt. estop)) go to 5010
-  close (unit08)
-  close (bkfile)
+  close (unit = unit08)
+  close (unit = bkfile)
 5010 continue
   return
 end subroutine ntacs3

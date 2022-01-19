@@ -27,10 +27,16 @@ subroutine ntacs2
   !  common  / c0b102 /   namesw(   1 )    ! wsm + thl manual modification for bpa emtp
   !  common  / c0b103 /   emtpe (   1 )    ! wsm + thl manual modification for bpa emtp
   !  common  / c0b104 /   emtpf (   1 )    ! wsm + thl manual modification for bpa emtp
-  !  equivalence    ( moncar(32), kitacs ),    ( moncar(61),  lswtch )
+  !
+  !  equivalence (moncar(32), kitacs)
+  !  equivalence (moncar(61), lswtch)
+  !
   character(6) :: hus1          ! wsm + thl manual modification for bpa emtp
   character(8) :: real8
   !
+  !  integer(4), pointer :: kitacs => moncar(32)
+  !
+  lswtch => moncar(61)
   if (.not. (niu .gt. 0)) goto 5020
   i5 = kud1
   do i = 1, niu
@@ -44,16 +50,15 @@ subroutine ntacs2
      write (unit = lunit(6), fmt = 601) hus1, hus1
 601  format(' tacs2 -- as found in a TACS input', /, 'the EMTP function "v(', a6, ')" or "imssv(', a6,')"', /, '          refers to a non-existing node name', /, '          in the electrical network.')
      call stoptp
-4012 if (i1 .ne. 91 .and. i1 .ne. 93 .and. i1 .ne. 95) goto 4010
+4012 if ((i1 .ne. 91) .and. (i1 .ne. 93) .and. (i1 .ne. 95)) goto 4010
      do j = 1, kswtch
 !!     k = namesw(j)
 !!     if (texvec(k) .eq. real8 ) goto 4018  ! wsm + thl manual modification for bpa emtp
         k = iabs (kmswit(j))
         m = iabs (kmswit(lswtch + j))
         ! wsm + thl manual modification for bpa emtp
-        if (real8 .eq. bus(k) .or. real8 .eq. bus(m)) go to 4018 ! wsm + thl manual modification for bpa emtp
+        if ((real8 .eq. bus(k)) .or. (real8 .eq. bus(m))) go to 4018 ! wsm + thl manual modification for bpa emtp
      end do
-!4030 continue
      write (unit = lunit(6), fmt = 602) hus1, hus1, hus1
 602  format(' tacs2 -- as found in a TACS input', /, '          the EMTP function "i(',      a6, ')"', /, '                         or "switch(', a6, ')"', /, '                         or "imssi(',  a6, ')"', /, '          refers to a non-existing switch name or node name', /, '          in the electrical network.')
      call stoptp
@@ -91,8 +96,7 @@ subroutine ntacs2
      case (6)
         go to 4095
      end select
-     !4090 xtcs(i2) = emtpe(k)
-     4090 xtcs(i2) = e(k)
+4090 xtcs(i2) = e(k)
      go to 4080
 4091 if (nextsw(k) .eq. 87) xtcs(i2) = tclose(k)
      go to 4080

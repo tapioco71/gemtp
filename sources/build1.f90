@@ -11,8 +11,8 @@
 subroutine build1
   use tacsto
   implicit none
-  !  include 'tacsto.ftn'
-  sptr = sptr-1
+  !
+  sptr = sptr - 1
   if (sptr .eq. iptr) go to 910
   isto(sptr) = from
   from = 0

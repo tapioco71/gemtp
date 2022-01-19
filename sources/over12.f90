@@ -707,7 +707,6 @@ subroutine over12
      read (unit = lunit(5), fmt = 1702) d1
 1702 format (a1)
   end do
-  !2702 continue
 6666 lastov = 12
   nchain = 16
   go to 9800

@@ -11,7 +11,7 @@
 subroutine ptacs
   use tacsto
   implicit none
-  !  include  'tacsto.ftn'
+  !
   sptr=sptr-1
   if(sptr.eq.iptr) goto 910
   isto(sptr)=from
@@ -21,7 +21,41 @@ subroutine ptacs
   from=isto(sptr)
   sptr=sptr+1
   return
-0001 goto (9501 , 9502, 9503, 9504, 9505, 9506 , 9507, 9508, 9509, 9510, 9511 ), from-9500
+  !0001 goto (9501 , 9502, 9503, 9504, 9505, 9506 , 9507, 9508, 9509, 9510, 9511 ), from-9500
+0001 select case (from - 9500)
+  case (1)
+     go to 9501
+
+  case (2)
+     go to 9502
+
+  case (3)
+     go to 9503
+
+  case (4)
+     go to 9504
+
+  case (5)
+     go to 9505
+
+  case (6)
+     go to 9506
+
+  case (7)
+     go to 9507
+
+  case (8)
+     go to 9508
+
+  case (9)
+     go to 9509
+
+  case (10)
+     go to 9510
+
+  case (11)
+     go to 9511
+  end select
   stop 'invalid "from" reference in "ptacs".'
 910 stpflg=42
   stpi1=iptr

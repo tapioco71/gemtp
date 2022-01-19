@@ -12,15 +12,16 @@ subroutine tread
   use blkcom
   use tacsto
   implicit none
+  !
   character(80) :: dbuff
-  !  equivalence ( moncas(109), noutpr )   ! wsm + thl manual modification for bpa emtp
   character(6) :: chvbar
-  !  equivalence ( texta6(17),  chvbar )   ! wsm + thl manual modification for bpa emtp
-  !  character*6 chrcom, chrori            ! wsm + thl manual modification for bpa emtp
-  !  equivalence ( texta6(23),  chrcom )   ! wsm + thl manual modification for bpa emtp
   character(6) :: chrcom, chrori
   !
-  chvbar = '|'                             ! wsm + thl manual modification for bpa emtp
+  !  equivalence (moncas(109), noutpr)            ! wsm + thl manual modification for bpa emtp
+  !  equivalence (texta6(17), chvbar)             ! wsm + thl manual modification for bpa emtp
+  !  equivalence (texta6(23), chrcom)             ! wsm + thl manual modification for bpa emtp
+  !
+  chvbar = '|'                                    ! wsm + thl manual modification for bpa emtp
   !     9000 continue
   continue
   ctbl(38 : 38) = char(39)

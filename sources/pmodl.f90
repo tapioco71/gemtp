@@ -11,20 +11,185 @@
 subroutine pmodl
   use tacsto
   implicit none
-  !  include 'tacsto.ftn'
+  !
   sptr = sptr - 1
   if (sptr .eq. iptr) go to 910
-  isto(sptr)=from
-  from=0
-  go to (9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, &
-       9020, 9021, 9022, 9023, 9024, 9025, 9026, 9027), to-9000
+  isto(sptr) = from
+  from = 0
+  !  go to (9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012, 9013, 9014, 9015, 9016, 9017, 9018, 9019, 9020, 9021, 9022, 9023, 9024, 9025, 9026, 9027), to-9000
+  select case (to - 9000)
+  case (1)
+     go to 9001
+
+  case (2)
+     go to 9002
+
+  case (3)
+     go to 9003
+
+  case (4)
+     go to 9004
+
+  case (5)
+     go to 9005
+
+  case (6)
+     go to 9006
+
+  case (7)
+     go to 9007
+
+  case (8)
+     go to 9008
+
+  case (9)
+     go to 9009
+
+  case (10)
+     go to 9010
+
+  case (11)
+     go to 9011
+
+  case (12)
+     go to 9012
+
+  case (13)
+     go to 9013
+
+  case (14)
+     go to 9014
+
+  case (15)
+     go to 9015
+
+  case (16)
+     go to 9016
+
+  case (17)
+     go to 9017
+
+  case (18)
+     go to 9018
+
+  case (19)
+     go to 9019
+
+  case (20)
+     go to 9020
+
+  case (21)
+     go to 9021
+
+  case (22)
+     go to 9022
+
+  case (23)
+     go to 9023
+
+  case (24)
+     go to 9024
+
+  case (25)
+     go to 9025
+
+  case (26)
+     go to 9026
+
+  case (27)
+     go to 9027
+  end select
   stop 'invalid "to" reference in "pmodl".'
 9500 if (.not. (from .eq. 0)) go to 0001
   from=isto(sptr)
   sptr=sptr+1
   return
-0001 go to (0002, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 9511, 9512, 9513, 9514, 9515, 9516, 9517, 9518, 9519, &
-       9520, 9521, 9522, 9523, 9524, 9525, 9526, 9527, 9528), from-9500
+  !0001 go to (0002, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 9511, 9512, 9513, 9514, 9515, 9516, 9517, 9518, 9519, 9520, 9521, 9522, 9523, 9524, 9525, 9526, 9527, 9528), from-9500
+0001 select case (from - 9000)
+  case (1)
+     go to 0002
+
+  case (2)
+     go to 9502
+
+  case (3)
+     go to 9503
+
+  case (4)
+     go to 9504
+
+  case (5)
+     go to 9505
+
+  case (6)
+     go to 9506
+
+  case (7)
+     go to 9507
+
+  case (8)
+     go to 9508
+
+  case (9)
+     go to 9509
+
+  case (10)
+     go to 9510
+
+  case (11)
+     go to 9511
+
+  case (12)
+     go to 9512
+
+  case (13)
+     go to 9513
+
+  case (14)
+     go to 9514
+
+  case (15)
+     go to 9515
+
+  case (16)
+     go to 9516
+
+  case (17)
+     go to 9517
+
+  case (18)
+     go to 9518
+
+  case (19)
+     go to 9519
+
+  case (20)
+     go to 9520
+
+  case (21)
+     go to 9521
+
+  case (22)
+     go to 9522
+
+  case (23)
+     go to 9523
+
+  case (24)
+     go to 9524
+
+  case (25)
+     go to 9525
+
+  case (26)
+     go to 9526
+
+  case (27)
+     go to 9527
+
+  case (28)
+     go to 9528
+  end select
 0002 stop 'invalid "from" reference in "pmodl".'
 910 stpflg = 42
   stpi1 = iptr

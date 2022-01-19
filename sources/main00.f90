@@ -947,7 +947,7 @@ subroutine trgwnd (x, d17)
   integer(4) :: n13
   !
   d17 = x
-  if (dabs (x) .lt. 25000.) go to 9000
+  if (dabs (x) .lt. 25000.0d0) go to 9000
   n13 = int (x / twopi)
   d17 = d17 - n13 * twopi
   if (iprsup .ge. 1) write (unit = *, fmt = 3456) nchain, x, d17
@@ -987,7 +987,7 @@ subroutine cdivz (ar, ai, br, bi, cr, ci, ksn)
   real(8) :: fac, sr
   !
   fac = cr * cr + ci * ci
-  fac = 1. / fac
+  fac = 1.0d0 / fac
   sr = br * fac * cr + bi * fac * ci
   ai = bi * fac * cr - br * fac * ci
   ar = sr

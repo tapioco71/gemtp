@@ -276,7 +276,7 @@ subroutine subr10
 end subroutine subr10
 
 !
-! subroutine dpelg.
+! subroutine dgelg.
 !
 
 subroutine dgelg (r, a, m, n, eps, ier)
@@ -336,7 +336,7 @@ subroutine dgelg (r, a, m, n, eps, ier)
   if (m .le. 0) go to 23
   !     search for greatest element in matrix a
   ier = 0
-  piv = 0.0
+  piv = 0.0d0
   mm = m * m
   nm = n * m
   do l = 1, mm
@@ -522,10 +522,9 @@ subroutine pltfil (k)
   if (m4plot .eq. 1) go to 7286                             ! simulator use
   !     We pass here with m4plot=2,  indicating disk storage,  but
   !     single-precision (real*4) numbers only:
-  if (k .le. 450 ) go to 7273
+  if (k .le. 450) go to 7273
   write (unit = lunit(6), fmt = 7269) k
-7269 format (' ^^^^^^^^^^^^^^^   Error stop in "pltfil"   ^^^^^^^^^^^^^^', /, ' ^^^^^^  too many output variables (', i3,  &
-       ' )  for use real*4 plot file.   limit = 450.')
+7269 format (' ^^^^^^^^^^^^^^^   Error stop in "pltfil"   ^^^^^^^^^^^^^^', /, ' ^^^^^^  too many output variables (', i3, ' )  for use real*4 plot file.   limit = 450.')
   call stoptp                                               ! installation-dependent program stop card
   !7273 do j = 1, k
   !     forbyt(j) = volti(j)
@@ -543,10 +542,9 @@ subroutine pltfil (k)
   !     plus 50 misc. cells, plus EMTP data cards.  offset is:
   mflush = 0                                                ! we have flushed pltbuf to disk zero times
   indbeg = ltlabl + 51                                      ! plot points offset by "labcom"
-  !     7304 indbuf = indbeg                                ! reset plot storage at beginning
   indbuf = indbeg                                           ! reset plot storage at beginning
   newvec = indbuf + 1                                       ! plot data begins after data cards
-7308 if (indbuf + k .le. limbuf) go to 7374                 ! not full yet
+7308 if ((indbuf + k) .le. limbuf) go to 7374               ! not full yet
   write (unit = lunit(6), fmt = 7311) indbuf, limbuf
   write (unit = munit6, fmt = 7311) indbuf, limbuf
 7311 format ('   % % % % % %   Suspended simulation;  plot data space exhausted;  use spy.   indbuf, limbuf =', 2i8)
@@ -616,6 +614,7 @@ end subroutine pltlu2
 subroutine namea6 (text1, n24)
   use blkcom
   use labcom
+  use strcom
   implicit none
   ! module for maintainance of alphanumeric vector texvec of
   ! "labcom".  maxbus of "blkcom" is last used cell.  n24 chooses
@@ -629,6 +628,7 @@ subroutine namea6 (text1, n24)
   ! Burroughs: preserve local variable between module calls:
   data n17 / 0 /
   data text2 / 'unused' /
+  !
   if (maxbus .le. 0) go to 3423
   do j = 1, maxbus
      if (text1 .eq. texvec(j)) go to 3446
@@ -638,7 +638,7 @@ subroutine namea6 (text1, n24)
   texvec(n17) = text1
   n24 = n17
   do j = 1, maxbus
-     if (texvec(j) .ne. text2) cycle
+     if (toLower (texvec(j)) .ne. text2) cycle
      n17 = j
      go to 9000
   end do
@@ -726,6 +726,8 @@ subroutine tables
   integer(4), allocatable :: kpen(:)
   integer(4), allocatable :: ktemp(:)
   !
+  data iprsav / 0, 0, 0, 0 /
+  !
   ll0 = size (transfer (x, integx))
   allocate (integx(ll0))
   integx = transfer (x, integx)
@@ -738,7 +740,6 @@ subroutine tables
   ll0 = size (transfer (busum, itemp))
   allocate (itemp(ll0))
   itemp = transfer (busum, itemp)
-  iprsav(1 : 4) = (/ 0, 0, 0, 0 /)
   ll1 = 1
   ll2 = 2
   ll4 = 4
@@ -847,7 +848,6 @@ subroutine csup (l)
   !     000  xtcs( l) = the final value of the variable or device .
   kjsup = kinsup + lstat(65)
   kksup = kjsup  + lstat(65)
-  !     2001 if ( iprsup .lt. 6 )  go to 1000
   if (iprsup .lt. 6) go to 1000
   write (unit = lunit(6), fmt = 1001) t, nsup, karg, kpar
 1001 format ('0entering subroutine  csup  at  t=', e13.6, /, '0e nsup=', i6, '   karg=', i8, '   kpar=', i6)
@@ -886,7 +886,7 @@ subroutine csup (l)
   if (m2 .gt. 0) b = xtcs(kxtcs + m1)
   if (m2 .lt. 0) b = parsup(kprsup + m1)
   if (m .gt. 10) go to 30
-  if (m .le. 0 .or. m .gt. 5)  go to 100
+  if ((m .le. 0) .or. (m .gt. 5)) go to 100
   select case (m)
   case (1)
      go to 101
@@ -965,23 +965,23 @@ subroutine csup (l)
   end select
 60 continue
 101 continue
-  if (a .ge. 1.0 .and. b .ge. 1.0) go to 99
+  if ((a .ge. 1.0d0) .and. (b .ge. 1.0d0)) go to 99
   go to 98
 102 continue
-  if (a .ge. 1.0 .or. b .ge. 1.0) go to 99
+  if ((a .ge. 1.0d0) .or. (b .ge. 1.0d0)) go to 99
   go to 98
 103 continue
-  if (b .lt. 1.0) go to 99
+  if (b .lt. 1.0d0) go to 99
   go to 98
 104 continue
-  if (a .ge. 1.0 .and. b .ge. 1.0) go to 98
+  if ((a .ge. 1.0d0) .and. (b .ge. 1.0d0)) go to 98
   go to 99
 105 continue
-  if (a .lt. 1.0 .and. b .lt. 1.0) go to 99
+  if ((a .lt. 1.0d0) .and. (b .lt. 1.0d0)) go to 99
   go to 98
-99 a = 1.0
+99 a = 1.0d0
   go to 20
-98 a = 0.0
+98 a = 0.0d0
   go to 20
 111 b = sinz (b)
   go to 100
@@ -1367,24 +1367,24 @@ subroutine csup (l)
   end select
   !     ---  frequency sensors  ---
 650 n = 1
-  if (b .lt. 0.0) n = -1
+  if (b .lt. 0.0d0) n = -1
   m  = ivarb(n1 + 3)
   d9 = parsup(nn + 1)
   d = parsup(nn + 2)
   d7 = parsup(nn)
   a = d7
   if (m .ne. 0) go to 6501
-  parsup(nn + 1) = -1.0
+  parsup(nn + 1) = -1.0d0
   go to 6507
 6501 if (n  .eq. m) go to 6508
-  if (d .eq. 0.0) go to 6507
-  if (b .ne. 0.0) go to 6502
+  if (d .eq. 0.0d0) go to 6507
+  if (b .ne. 0.0d0) go to 6502
   d8 = t
   go to 6503
-6502 d8 = t - deltat / (1.0 - d / b)
-6503 if (d9 .lt. 0.0) go to 6506
+6502 d8 = t - deltat / (1.0d0 - d / b)
+6503 if (d9 .lt. 0.0d0) go to 6506
   g = onehaf / (d8 - d9)
-  if (d7 .eq. 0.0) go to 6505
+  if (d7 .eq. 0.0d0) go to 6505
   h = g / d7 - 1.0
   if (h .lt. parsup(nn + 3)) go to 6505
   if (iuty(kiuty + 3) .eq. 0) go to 6507
@@ -1401,13 +1401,13 @@ subroutine csup (l)
   parsup(nn + 2) = b
   go to 11
   !     ---  relays and level-triggers  ---
-651 if (parsup(nn) .ne. 0.0) b = b * parsup(nn)
+651 if (parsup(nn) .ne. 0.0d0) b = b * parsup(nn)
   m = ivarb(n1 + 3)
   n = ivarb(n1 + 4)
   d9 = parsup(nn + 1)
   d8 = absz (parsup(nn + 2))
   if (m .ne. 0) d9 = d9 + xtcs(kxtcs + m)
-  d = 0.0
+  d = 0.0d0
   if (n .ne. 0) d = xtcs(kxtcs + n)
   if (n2 .eq. 2) d = absz (d)
   if (d .ge. d9 .and. d8 .gt. 1.5) a = b
@@ -1424,15 +1424,15 @@ subroutine csup (l)
   d7 = d7 / deltat
 65310 d8 = d7 + flzero * 10.
   d9 = d7 - flzero * 10.
-  if ( d8 .ge. 0.0 )  go to 65320
-  if ( iuty(kiuty+3) .eq. 0 )  go to 65313
-  iuty(kiuty+3) = iuty(kiuty+3) - 1
-  ndx6 = ilntab( kspvar + i )
+  if (d8 .ge. 0.0d0) go to 65320
+  if (iuty(kiuty + 3) .eq. 0) go to 65313
+  iuty(kiuty + 3) = iuty(kiuty + 3) - 1
+  ndx6 = ilntab(kspvar + i)
   write (unit = lunit(6), fmt = 65316) texvec( ndx6), t
 65316 format (5x, 'Warning.  ----  value of delay became negative for ', "'", a6, "'", ' at time =', e14.6, ' but lower limit nalue = 0.0 .', /, 21x, 'This message will not be repeated.')
-65313 d7 = 0.0
+65313 d7 = 0.0d0
   go to 65310
-65320 if ( d9 .gt. 0.0 )  go to 65330
+65320 if (d9 .gt. 0.0d0) go to 65330
   a = b
   go to 11
 65330 m1 = 0
@@ -1441,7 +1441,7 @@ subroutine csup (l)
   if (d9 .gt. j) go to 65350
   if (j .le. d8) m1 = 1
   if (j .le. n6) go to 65360
-  if (iuty(kiuty+2) .eq. 0) go to 65353
+  if (iuty(kiuty + 2) .eq. 0) go to 65353
   iuty(kiuty + 3) = iuty(kiuty + 3) - 1
   ndx6 = ilntab(kspvar + i)
   d4 = deltat * n6
@@ -1476,14 +1476,14 @@ subroutine csup (l)
   write (unit = lunit(6), fmt = 65401) texvec(ndx1), d9, t
 65401 format (5x, 'Warning. ---- The pulse frequency at the pulse transport delay ', a6, ' is too fast for the present ', /, 21x, ' delay of ', e13.4, ' sec at simulation time ', e13.4, ' sec. Use device type 53 instead of type 54.', /, 21x, '******** the answer may be wrong later ********')
   go to 65402
-65400 if (b .gt. 0.0d0 .and. d .eq. -9999.0d0) parsup(nn) = t
-  if (b .le. 0.0d0 .and. d .ne. -9999.0d0) parsup(nn + 2) = t
-65402 if (t .lt. d + d9 - 10.0d0 * flzero .or. d .eq. -9999.0d0) go to 11
-  if (t .ge. d7 + d9 - 10.0d0 * flzero .and. d7 .ne. -9999.0d0) go to 65403
+65400 if ((b .gt. 0.0d0) .and. (d .eq. -9999.0d0)) parsup(nn) = t
+  if ((b .le. 0.0d0) .and. (d .ne. -9999.0d0)) parsup(nn + 2) = t
+65402 if ((t .lt. (d + d9 - 10.0d0 * flzero)) .or. (d .eq. -9999.0d0)) go to 11
+  if ((t .ge. (d7 + d9 - 10.0d0 * flzero)) .and. (d7 .ne. -9999.0d0)) go to 65403
   a = 1.0d0
   go to 11
 65403 parsup(nn) = -9999.0d0
-  parsup(nn+2) = -9999.0d0
+  parsup(nn + 2) = -9999.0d0
   go to 11
   !     ---  digitizer  ---
 655 m = ivarb(n1 + 3)
@@ -1592,8 +1592,8 @@ subroutine csup (l)
   if (d1 .lt. 0.5d0) go to 11
   a = parsup(nn + 2)
   if (d1 .ge. 6.5d0) go to 11
-  a = 0.0
-  if (d1 .lt. 5.5) go to 66110
+  a = 0.0d0
+  if (d1 .lt. 5.5d0) go to 66110
   if (ndx3 .eq. kxtcs) go to 11
   a = xtcs(ndx3)
   go to 11
@@ -1621,7 +1621,7 @@ subroutine csup (l)
   a = b
   parsup(nn) = 1.0d0
   go to 66240
-66230 if (parsup(nn) .eq. 1.0d0 .and. m .eq. 0) parsup(nn) = 0.0d0
+66230 if ((parsup(nn) .eq. 1.0d0) .and. (m .eq. 0)) parsup(nn) = 0.0d0
 66240 parsup(nn + 2) = a
   go to 11
   !     ---  instantaneous  min/max  ---
@@ -1667,8 +1667,8 @@ subroutine csup (l)
 6642 if (n2 .eq. 16) go to 665
   a = parsup(nn)
   rdev1 = parsup( nn + 1 )
-  if (rdev1 .eq. -1.0 .and. b .lt. a) a = b
-  if (rdev1 .eq. +1.0 .and. b .gt. a) a = b
+  if ((rdev1 .eq. -1.0d0) .and. (b .lt. a)) a = b
+  if ((rdev1 .eq. +1.0d0) .and. (b .gt. a)) a = b
   go to 6643
 665 a = parsup(nn) + b
 6643 parsup(nn) = a

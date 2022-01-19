@@ -964,7 +964,7 @@ subroutine over15
 8689 d11 = 0.0d0
      if (kbase .eq. 2) go to 8702
      write (unit = lunit(6), fmt = 8692) tclose(i), trim (bus(k)), trim (bus(m)), d11
-8692 format (' ***          phasor i(0) =', e15.7, 33x, 'switch ', '"', a,  '"', ' to ', '"', a, '"', ' closed after', e12.5, ' sec.')
+8692 format (' ***          phasor i(0) =', e15.7, 33x, 'switch ', '"', a6,  '"', ' to ', '"', a6, '"', ' closed after', e12.5, ' sec.')
      go to 8702
 8693 d6 = 0.0d0
      go to 8710
@@ -973,7 +973,7 @@ subroutine over15
      if (absz (e(k) - e(m)) .lt. topen(i)) go to 8710
 8284 if (kbase .eq. 2) go to 8702
      write (unit = lunit(6), fmt = 8699) trim (bus(k)), trim (bus(m)), tclose(i)
-8699 format (' ***                       ', 15x, 33x, 'switch ', '"', a, '"', ' to ', '"', a, '"', ' closed after', e12.5, ' sec.')
+8699 format (' ***                       ', 15x, 33x, 'switch ', '"', a6, '"', ' to ', '"', a6, '"', ' closed after', e12.5, ' sec.')
 8702 n8 = kpos(i)
      kpos(i) = 2
      if (n8 .lt. 0) kpos(i) = -2

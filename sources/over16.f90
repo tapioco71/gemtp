@@ -2270,7 +2270,8 @@ subroutine subts2
   real(8) :: yk, ym, yx
   !     %include  '//c/tsu/cables.ins.ftn'
   !
-  equivalence (h1, sk), (d2, sm)
+  equivalence (h1, sk)
+  equivalence (d2, sm)
   !
   !  wk1( koff1 + k ) << vm5dt( k ); wk1( koff2 + k ) << vk5dt( k )
   !  wk1( koff3 + k ) <<<  fm5( k ); wk1( koff4 + k ) <<<  bk5( k )
@@ -4740,8 +4741,9 @@ subroutine subts3
   !  dimension nsubkm(1)
   !  dimension vsmout(1)
   !
+  equivalence (h1, sk)
+  equivalence (d2, sm)
   !  equivalence (kknonl(1), nsubkm(1))
-  equivalence (h1, sk), (d2, sm)
   !  equivalence (xk(1), xx(1))
   !  equivalence (volti(1), volta(1))
   !  equivalence (moncar(2), kbase)

@@ -11,7 +11,7 @@
 subroutine calsto
   use tacsto
   implicit none
-  !  include 'tacsto.ftn'
+  !
   from = 0
   go to 9000
 9500 if (from .eq. 0) return
@@ -45,8 +45,8 @@ subroutine calsto
   cnt4 = 2
   cnt5 = 4
   cnt7 = 0
-  sptr = int((stoflt - 40) / (two * bratio))
-  rptr = int((sptr * bratio) + 2)
+  sptr = int ((stoflt - 40) / (two * bratio), kind (sptr))
+  rptr = int ((sptr * bratio) + 2, kind (rptr))
   to = 9204
   call putil2
   mndx = 507

@@ -11,19 +11,146 @@
 subroutine xref2
   use tacsto
   implicit none
-  !  include 'tacsto.ftn'
+  !
   sptr = sptr - 1
   if (sptr .eq. iptr) go to 910
   isto(sptr) = from
   from = 0
-  go to (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012, 9013, 9014, 9015, 9016), to-8999
+  !  go to (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010, 9011, 9012, 9013, 9014, 9015, 9016), to-8999
+  select case (to - 8999)
+  case (1)
+     go to 9000
+
+  case (2)
+     go to 9001
+
+  case (3)
+     go to 9002
+
+  case (4)
+     go to 9003
+
+  case (5)
+     go to 9004
+
+  case (6)
+     go to 9005
+
+  case (7)
+     go to 9006
+
+  case (8)
+     go to 9007
+
+  case (9)
+     go to 9008
+
+  case (10)
+     go to 9009
+
+  case (11)
+     go to 9010
+
+  case (12)
+     go to 9011
+
+  case (13)
+     go to 9012
+
+  case (14)
+     go to 9013
+
+  case (15)
+     go to 9014
+
+  case (16)
+     go to 9015
+
+  case (17)
+     go to 9016
+  end select
   stop 'Invalid "to" reference in "xref2".'
 9500 if (.not. (from .eq. 0)) go to 0001
   from = isto(sptr)
   sptr = sptr + 1
   return
-0001 go to (9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510,9511, 9512, 9513, 9514, 9515, 9516, 9517, 9518, &
-          0002, 0002, 0002, 0002, 9523, 9524, 9525), from- 9500
+  !0001 go to (9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510,9511, 9512, 9513, 9514, 9515, 9516, 9517, 9518, 0002, 0002, 0002, 0002, 9523, 9524, 9525), from- 9500
+0001 select case (from - 9500)
+  case (1)
+     go to 9501
+
+  case (2)
+     go to 9502
+
+  case (3)
+     go to 9503
+
+  case (4)
+     go to 9504
+
+  case (5)
+     go to 9505
+
+  case (6)
+     go to 9506
+
+  case (7)
+     go to 9507
+
+  case (8)
+     go to 9508
+
+  case (9)
+     go to 9509
+
+  case (10)
+     go to 9510
+
+  case (11)
+     go to 9511
+
+  case (12)
+     go to 9512
+
+  case (13)
+     go to 9513
+
+  case (14)
+     go to 9514
+
+  case (15)
+     go to 9515
+
+  case (16)
+     go to 9516
+
+  case (17)
+     go to 9517
+
+  case (18)
+     go to 9518
+
+  case (19)
+     go to 0002
+
+  case (20)
+     go to 0002
+
+  case (21)
+     go to 0002
+
+  case (22)
+     go to 0002
+
+  case (23)
+     go to 9523
+
+  case (24)
+     go to 9524
+
+  case (25)
+     go to 9525
+  end select
 0002 stop 'Invalid "from" reference in "xref2".'
 910 stpflg = 42
   stpi1 = iptr

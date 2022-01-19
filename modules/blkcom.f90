@@ -24,16 +24,14 @@ module blkcom
   !
   !     flag-1.   begin class-1  /blank/  variables
   !               (alphanumeric variables, capable of storing  a6  info).
-  !  character(8) :: buff10(10)
+  !
   character(1) :: chcont, csepar
   character(8), target :: texcol(80)
   character(8) :: blank, bus2, bus3, bus4, bus5, bus6
   character(8), target :: bus1
-  !  character(8) :: busone(1)
   character(8) :: trash, terra, userid, branch, chcopy
   character(8) :: vstacs(24), texta6(15)
   character(80), target :: abuff
-  !  character(80) :: buff10
   !
   ! common abuff
   ! common bus1, bus2, bus3, bus4, bus5, bus6
@@ -41,6 +39,7 @@ module blkcom
   ! common texcol
   ! common csepar, chcont, texta6
   ! common date1, tclock, vstacs
+  !
   !     flag-2.   begin class-2  /blank/  variables
   !               (floating-point numeric usage only, with scalars
   !               preceding arrays).
@@ -64,25 +63,30 @@ module blkcom
   real(8) :: peaknd(3)
   real(8) :: sglfir
   real(8) :: tenm3, tenm6, twopi
-
+  !
   !     flag-3.   begin class-3  /blank/  variables
   !               (integer-numeric usage only, with arrays
   !               preceding scalars).
-
+  !
   integer(4) :: icheck, iline, inonl, iout, ipunch, iread, istep, itype, it1
   integer(4) :: ia, ipntv(11), it2, izero
   integer(4), target :: indtv(10)
   integer(4), target :: iprsov(39)
   integer(4) :: kprchg(6)
-  integer(4) :: locatn(0:20, 0:20), lunit(0 : 15), lunsav(0 : 15)
+  integer(4) :: locatn(0:20, 0:20)
+  integer(4), target :: lunit(0 : 15)
+  integer(4) :: lunsav(0 : 15)
   integer(4), target :: lstat(80)
   integer(4) :: max99m, multpr(5)
   integer(4), target :: moncar(90)
   integer(4) :: nbyte(6), nright, nfrfld, kolbeg
-  integer(4) :: kol132, kpar, kunit6, kwtspy, kxic
-  !  integer(4), allocatable :: kpen(:)
+  integer(4) :: kol132, kpar
+  integer(4), pointer :: kunit6 => lunit(6)
+  integer(4) :: kwtspy, kxic
   integer(4) :: kcount, istead, ldata, lbrnch
-  integer(4) :: lexct, lbus, lymat, lswtch, lnonl, lchar, m4plot
+  integer(4) :: lexct, lbus, lymat
+  integer(4), pointer :: lswtch => moncar(61)
+  integer(4) :: lnonl, lchar, m4plot
   integer(4) :: lpast, lsize7, iplot, ncomp, nv, lcomp, numsm
   integer(4) :: ifdep, ltails, lfdep, lwt, last, npower, maxpe
   integer(4) :: lsiz12, lsmout, limass, iv
@@ -115,83 +119,7 @@ module blkcom
   integer(4) :: swtpe
   integer(4) :: newtac, niu, nsu, nsudv, nsup, nuk
   real(8) :: lnpin
-
-  ! Equivalences
-  !  character(8) :: busvec(6)
-  !  character(8) :: alower(14), aupper(14)
-  !  integer(4) :: iaddrs
-  !  integer(4) :: ichtr2
-  !  integer(4) :: idist
-  !  integer(4) :: idistx(1)
-  !  integer(4) :: iofkol
-  !  integer(4) :: iofkor
-  !  integer(4) :: ioutcs
-  !  integer(4) :: ipoint
-  !  integer(4) :: isw
-  !  integer(4) :: itest
-  !  integer(4) :: itranm
-  !  integer(4) :: ityold
-  !  integer(4) :: iupper
-  !  integer(4) :: jseedr
-  !  integer(4) :: kbase
-  !  integer(4) :: kloaep
-  !  integer(4) :: knt
-  !  integer(4) :: knum
-  !  integer(4) :: locz11
-  !  integer(4) :: ltacst
-  !  integer(4) :: ltdelt
-  !  integer(4) :: maxniu
-  !  integer(4) :: maxnuk
-  !  integer(4) :: mdrive
-  !  integer(4) :: mtape
-  !  integer(4) :: next
-  !  integer(4) :: nmauto
-  !  integer(4) :: ntcsex
-  ! integer(4) :: idistx(1), iofkol, iofkor
-  ! integer(4) :: iaddrs, ichtr2, itranm, ityold, iupper
-  ! integer(4) :: jseedr
-  ! real(8) :: anglex(1)
-  ! real(8) :: xlong1
   !
-  !  equivalence (anglex(1), angle)
-  !  equivalence (buff10(1), abuff(1))
-  !  equivalence (buff10, abuff)
-  !  equivalence (aupper(1), texcol(1))
-  !  equivalence (bus1, busone(1))
-  !  equivalence (bus1, kpen(1))
-  !  equivalence (indtv(1), iaddrs)
-  !  equivalence (indtv(2), itranm)
-  !  equivalence (indtv(3), ityold)
-  !  equivalence (indtv(4), ichtr2)
-  !  equivalence (iofkol, iofgnd)
-  !  equivalence (iofkor, iofbnd)
-  !  equivalence (iprsov(35), ipoint)
-  !  equivalence (iprsov(36), iupper)
-  !  equivalence (iprsov(36), locz11)
-  !  equivalence (iprsov(39), nmauto)
-  !  equivalence (nenerg, idistx(1))
-  !  equivalence (kpen(1), bus1)
-  equivalence (kunit6, lunit(6))
-  !  equivalence (loopss(11), next)
-  !  equivalence (lstat(14), knum)
-  !  equivalence (lstat(14), mdrive)
-  !  equivalence (lstat(67), maxniu)
-  !  equivalence (lstat(68), maxnuk)
-  !  equivalence (moncar(1), knt)
-  !  equivalence (moncar(2), kbase)
-  !  equivalence (moncar(3), ltdelt)
-  !  equivalence (moncar(4), isw)
-  !  equivalence (moncar(5), idist)
-  !  equivalence (moncar(5), ioutcs)
-  !  equivalence (moncar(6), itest)
-  !  equivalence (moncar(8), jseedr)
-  !  equivalence (moncar(9), kloaep)
-  !  equivalence (moncar(10), mtape)
-  !  equivalence (moncar(83), ntcsex)
-  !  equivalence (omega, xlong1)
-  !  equivalence (busvec(1), bus1)
-  ! data
-
   data terra / 'terra ' /
   !     unit assignments of "over1" needed earlier by spy:
   data lunit / 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 /

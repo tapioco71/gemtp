@@ -11,11 +11,11 @@
 subroutine calc
   use tacsto
   implicit none
-!  include 'tacsto.ftn'
-  sptr=sptr-1
-  if(sptr.eq.iptr) goto 910
-  isto(sptr)=from
-  from=0
+  !
+  sptr = sptr - 1
+  if (sptr .eq. iptr) goto 910
+  isto(sptr) = from
+  from = 0
   !  goto (9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 0002, 9010, 9011, 9012, 9013, 9014, 9015, 9016), to-8999
   select case (to - 8999)
      case (1)

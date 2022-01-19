@@ -14,21 +14,59 @@ subroutine elec
   use tacsar
   use labcom
   implicit none
-  !  include 'tacsto.ftn'
-  !  include 'blkcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  !  include 'tacsar.ftn'                                      ! wsm + thl manual modification for bpa emtp
-  !  include 'labcom.ftn'                                      ! wsm + thl manual modification for bpa emtp
+  !
   sptr = sptr - 1
   if (sptr .eq. iptr) go to 910
   isto(sptr) = from
   from = 0
-  go to (9000, 9001, 9002, 9003, 9004, 9005, 9006), to-8999
+  !  go to (9000, 9001, 9002, 9003, 9004, 9005, 9006), to-8999
+  select case (to - 8999)
+  case (1)
+     go to 9000
+
+  case (2)
+     go to 9001
+
+  case (3)
+     go to 9002
+
+  case (4)
+     go to 9003
+
+  case (5)
+     go to 9004
+
+  case (6)
+     go to 9005
+
+  case (7)
+     go to 9006
+  end select
   stop 'Invalid "to" reference in "elec".'
 9500 if (.not. (from .eq. 0)) go to 0001
   from = isto(sptr)
   sptr = sptr + 1
   return
-0001 go to (9501, 9502, 9503, 9504, 9505, 9506), from-9500
+  !0001 go to (9501, 9502, 9503, 9504, 9505, 9506), from-9500
+0001 select case (from - 9500)
+  case (1)
+     go to 9501
+
+  case (2)
+     go to 9502
+
+  case (3)
+     go to 9503
+
+  case (4)
+     go to 9504
+
+  case (5)
+     go to 9505
+
+  case (6)
+     go to 9506
+  end select
   stop 'Invalid "from" reference in "elec".'
 910 stpflg = 42
   stpi1 = iptr

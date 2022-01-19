@@ -9,8 +9,9 @@
 !
 
 subroutine synstp
+  use tacsto
   implicit none
-  include  'tacsto.ftn'
+  !
   k = dptr - 449
   if (k .le. 1500) k = 1501
   write (unit = unit06, fmt = 1000) (csto(i),i = k, dptr)
@@ -19,7 +20,7 @@ subroutine synstp
 1001 format (1x, /, ' Syntax error #', i5, /)
   write (unit = unit06, fmt = 1002)
 1002 format (' Refer to file drd5:[tacslib]synstop.msg for interpretation.')
-  stop 'tacs stop in synstp.'
+  stop 'TACS stop in synstp.'
 end subroutine synstp
 
 !

@@ -14,6 +14,7 @@ subroutine init
   use bcddat
   use random
   implicit none
+  !
   character(4) :: atim(2)      ! wsm + thl manual modification for bpa emtp
   real(8) :: d1, d2
   !

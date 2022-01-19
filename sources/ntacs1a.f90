@@ -11,7 +11,7 @@
 subroutine ntacs1a        ! wsm + thl manual modification for bpa emtp
   use tacsto
   implicit none
-  !  include 'tacsto.ftn'
+  !
   open (unit = unit09, file = 'tacs.tim', status = 'old')
   read (unit = unit09, fmt = 901) ndx0
 901 format (i1)

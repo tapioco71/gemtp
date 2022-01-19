@@ -325,22 +325,29 @@ subroutine cbal (nm, n, ar, ai, low, igh, scale, ndim)
 20 scale(m) = j
   if (j .eq. m) go to 50
   do i = 1, l
-     f = ar(i,j)
-     ar(i,j) = ar(i,m)
-     ar(i,m) = f
-     f = ai(i,j)
-     ai(i,j) = ai(i,m)
-     ai(i,m) = f
+     f = ar(i, j)
+     ar(i, j) = ar(i, m)
+     ar(i, m) = f
+     f = ai(i, j)
+     ai(i, j) = ai(i, m)
+     ai(i, m) = f
   end do
   do i = k, n
-     f = ar(j,i)
-     ar(j,i) = ar(m,i)
-     ar(m,i) = f
-     f = ai(j,i)
-     ai(j,i) = ai(m,i)
-     ai(m,i) = f
+     f = ar(j, i)
+     ar(j, i) = ar(m, i)
+     ar(m, i) = f
+     f = ai(j, i)
+     ai(j, i) = ai(m, i)
+     ai(m, i) = f
   end do
-50 go to (80,130), iexc
+  !50 go to (80,130), iexc
+50 select case (iexc)
+  case (1)
+     go to 80
+
+  case (2)
+     go to 130
+  end select
   !     :::::::::: search for rows isolating an eigenvalue
   !                and push them down ::::::::::
 80 if (l .eq. 1) go to 280
@@ -349,8 +356,8 @@ subroutine cbal (nm, n, ar, ai, low, igh, scale, ndim)
 100 do jj = 1, l
      j = l + 1 - jj
      do  i = 1, l
-        if (i .eq. j) go to 110
-        if (ar(j,i) .ne. 0.0 .or. ai(j,i) .ne. 0.0) go to 120
+        if (i .eq. j) cycle
+        if ((ar(j, i) .ne. 0.0d0) .or. (ai(j,i) .ne. 0.0d0)) go to 120
 110  end do
      m = l
      iexc = 1
@@ -362,8 +369,8 @@ subroutine cbal (nm, n, ar, ai, low, igh, scale, ndim)
 130 k = k + 1
 140 do j = k, l
      do i = k, l
-        if (i .eq. j) go to 150
-        if (ar(i,j) .ne. 0.0 .or. ai(i,j) .ne. 0.0) go to 170
+        if (i .eq. j) cycle
+        if ((ar(i,j) .ne. 0.0d0) .or. (ai(i,j) .ne. 0.0d0)) go to 170
 150  end do
      m = k
      iexc = 2
@@ -371,22 +378,22 @@ subroutine cbal (nm, n, ar, ai, low, igh, scale, ndim)
 170 end do
   !     :::::::::: now balance the submatrix in rows k to l ::::::::::
   do i = k, l
-     scale(i) = 1.0
+     scale(i) = 1.0d0
   end do
   !     :::::::::: iterative loop for norm reduction ::::::::::
 190 noconv = 0
   do i = k, l
-     c = 0.0
-     r = 0.0
+     c = 0.0d0
+     r = 0.0d0
      do j = k, l
         if (j .eq. i) go to 200
-        c = c + absz(ar(j,i)) + absz(ai(j,i))
-        r = r + absz(ar(i,j)) + absz(ai(i,j))
+        c = c + absz (ar(j, i)) + absz (ai(j, i))
+        r = r + absz (ar(i, j)) + absz (ai(i, j))
 200  end do
      !     :::::::::: guard against zero c or r due to underflow ::::::::::
-     if (c .eq. 0.0 .or. r .eq. 0.0) go to 270
+     if ((c .eq. 0.0d0) .or. (r .eq. 0.0d0)) cycle
      g = r / radix
-     f = 1.0
+     f = 1.0d0
      s = c + r
 210  if (c .ge. g) go to 220
      f = f * radix
@@ -398,21 +405,20 @@ subroutine cbal (nm, n, ar, ai, low, igh, scale, ndim)
      c = c / b2
      go to 230
      !     :::::::::: now balance ::::::::::
-240  c1 = 0.95
-     if ((c + r) / f .ge.  c1 * s) go to 270
-     g = 1.0 / f
+240  c1 = 0.95d0
+     if (((c + r) / f) .ge. (c1 * s)) cycle
+     g = 1.0d0 / f
      scale(i) = scale(i) * f
      noconv = 1
      do j = k, n
-        ar(i,j) = ar(i,j) * g
-        ai(i,j) = ai(i,j) * g
+        ar(i, j) = ar(i, j) * g
+        ai(i, j) = ai(i, j) * g
      end do
      do j = 1, l
-        ar(j,i) = ar(j,i) * f
-        ai(j,i) = ai(j,i) * f
+        ar(j, i) = ar(j, i) * f
+        ai(j, i) = ai(j, i) * f
      end do
   end do
-270 continue
   if (noconv .eq. 1) go to 190
 280 low = k
   igh = l
@@ -490,17 +496,15 @@ subroutine cbabk2 (nm, n, low, igh, scale, m, zr, zi, ndim)
         zr(i, j) = zr(i, j) * s
         zi(i, j) = zi(i, j) * s
      end do
-     !100  continue
   end do
-  !110 continue
   !     :::::::::: for i=low-1 step -1 until 1,
   !                igh+1 step 1 until n do -- ::::::::::
 120 do ii = 1, n
      i = ii
-     if (i .ge. low .and. i .le. igh) go to 140
+     if (i .ge. low .and. i .le. igh) cycle
      if (i .lt. low) i = low - ii
      k = int (scale(i))
-     if (k .eq. i) go to 140
+     if (k .eq. i) cycle
      do j = 1, m
         s = zr(i,j)
         zr(i,j) = zr(k,j)
@@ -509,9 +513,7 @@ subroutine cbabk2 (nm, n, low, igh, scale, m, zr, zi, ndim)
         zi(i,j) = zi(k,j)
         zi(k,j) = s
      end do
-     !130  continue
   end do
-140 continue
 200 return
 end subroutine cbabk2
 
@@ -636,14 +638,14 @@ subroutine comhes (nm, n, low, igh, ar, ai, int, lunit6, iprsup, ndim, iord)
      !     :::::::::: end interchange ::::::::::
      !  130    if (xr .lt. d13 .and. xi .lt. d13)  go to 180
      !!  130    if (absz(xr) .lt. d13 .and. absz(xi) .lt. d13)  go to 180
-130  if (xr .eq. 0.0d0 .and. xi .eq. 0.0d0)  go to 180
+130  if (xr .eq. 0.0d0 .and. xi .eq. 0.0d0) cycle
      mp1 = m + 1
      do i = mp1, igh
         yr = ar(i, mm1)
         yi = ai(i, mm1)
         !      if (yr .lt. d13 .and. yi .lt. d13) go to 160
         !!    if (absz(yr) .lt. d13 .and. absz(yi) .lt. d13) go to 160
-        if (yr .eq. 0.0d0 .and. yi .eq. 0.0d0) go to 160
+        if (yr .eq. 0.0d0 .and. yi .eq. 0.0d0) cycle
         d1 = xr * xr + xi * xi
         d2 = (xr * yr + yi * xi) / d1
         d3 = (xr * yi - xi * yr) / d1
@@ -660,11 +662,9 @@ subroutine comhes (nm, n, low, igh, ar, ai, int, lunit6, iprsup, ndim, iord)
            ai(j, m) = ai(j, m) + yr * ai(j, i) + yi * ar(j, i)
         end do
      end do
-160  continue
      if (iprsup .ge. 3) write (unit = lunit6, fmt = 170) m, igh, int(m), (ar(j, m), ai(j, m), j = 1, igh)
 170  format (' m, igh and int(m) at 170 are', 3i10, /, ' (ar(j, m), ai(j, m), j = 1, igh), are', /, (1x, 8e15.6))
   end do
-180 continue
 200 return
 end subroutine comhes
 
@@ -757,13 +757,13 @@ subroutine comlr (nm, n, low, igh, hr, hi, wr, wi, ierr, ndim)
   ierr = 0
   !     :::::::::: store roots isolated by cbal ::::::::::
   do i = 1, n
-     if (i .ge. low .and. i .le. igh) go to 200
+     if (i .ge. low .and. i .le. igh) cycle
      wr(i) = hr(i,i)
      wi(i) = hi(i,i)
-200 end do
+  end do
   ien = igh
-  tr = 0.0
-  ti = 0.0
+  tr = 0.0d0
+  ti = 0.0d0
   !     :::::::::: search for next eigenvalue ::::::::::
 220 if (ien .lt. low) go to 1001
   its = 0
@@ -773,7 +773,7 @@ subroutine comlr (nm, n, low, igh, hr, hi, wr, wi, ierr, ndim)
 240 do ll = low, ien
      l = ien + low - ll
      if (l .eq. low) go to 300
-     if (absz(hr(l,l-1)) + absz(hi(l,l-1)) .le. epmach * (absz(hr(l-1,l-1)) + absz(hi(l-1,l-1)) + absz(hr(l,l)) + absz(hi(l,l)))) go to 300
+     if (absz (hr(l, l - 1)) + absz (hi(l, l - 1)) .le. epmach * (absz (hr(l - 1, l - 1)) + absz (hi(l - 1, l - 1)) + absz (hr(l, l)) + absz (hi(l, l)))) go to 300
   end do
   !     :::::::::: form shift ::::::::::
 300 if (l .eq. ien) go to 660
@@ -1020,9 +1020,9 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
   !     :::::::::: initialize eigenvector matrix ::::::::::
   do i = 1, n
      do j = 1, n
-        zr(i,j) = 0.0
-        zi(i,j) = 0.0
-        if (i .eq. j) zr(i,j) = 1.0
+        zr(i,j) = 0.0d0
+        zi(i,j) = 0.0d0
+        if (i .eq. j) zr(i,j) = 1.0d0
      end do
   end do
   !     :::::::::: form the matrix of accumulated transformations
@@ -1052,12 +1052,12 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
   !     :::::::::: store roots isolated by cbal ::::::::::
 180 do i = 1, n
      if (i .ge. low .and. i .le. igh) go to 200
-     wr(i) = hr(i,i)
-     wi(i) = hi(i,i)
+     wr(i) = hr(i, i)
+     wi(i) = hi(i, i)
 200 end do
   ien = igh
-  tr = 0.0
-  ti = 0.0
+  tr = 0.0d0
+  ti = 0.0d0
   !     :::::::::: search for next eigenvalue ::::::::::
 220 if (ien .lt. low) go to 680
   its = 0
@@ -1272,14 +1272,13 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
   ienm1 = n - 1
   !     :::::::::: vectors of isolated roots ::::::::::
   do i = 1, ienm1
-     if (i .ge. low .and. i .le. igh) go to 840
+     if (i .ge. low .and. i .le. igh) cycle
      ip1 = i + 1
      do j = ip1, n
-        zr(i,j) = hr(i,j)
-        zi(i,j) = hi(i,j)
+        zr(i, j) = hr(i, j)
+        zi(i, j) = hi(i, j)
      end do
   end do
-840 continue
   !     :::::::::: multiply by transformation matrix to give
   !                vectors of original full matrix.
   !                for j=n step -1 until low+1 do -- ::::::::::
@@ -1328,7 +1327,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
   do j = 1, n
      l = n - j
      do i = 1, l
-        if (eim(i) .ge. eim(i + 1)) go to 1007
+        if (eim(i) .ge. eim(i + 1)) cycle
         t = eim(i)
         eim(i) = eim(i + 1)
         eim(i + 1) = t
@@ -1336,7 +1335,6 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         lseq(i) = lseq(i + 1)
         lseq(i + 1) = t
      end do
-1007 continue
   end do
   do i = 1, n
      wr(i) = vtr(lseq(i))
