@@ -358,7 +358,7 @@ subroutine cbal (nm, n, ar, ai, low, igh, scale, ndim)
      do  i = 1, l
         if (i .eq. j) cycle
         if ((ar(j, i) .ne. 0.0d0) .or. (ai(j,i) .ne. 0.0d0)) go to 120
-110  end do
+     end do
      m = l
      iexc = 1
      go to 20
@@ -371,7 +371,7 @@ subroutine cbal (nm, n, ar, ai, low, igh, scale, ndim)
      do i = k, l
         if (i .eq. j) cycle
         if ((ar(i,j) .ne. 0.0d0) .or. (ai(i,j) .ne. 0.0d0)) go to 170
-150  end do
+     end do
      m = k
      iexc = 2
      go to 20

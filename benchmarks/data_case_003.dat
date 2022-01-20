@@ -4,7 +4,7 @@ c Energization of an RL load with more detailed source model                   |
 c ----dt<---tmax...............................................................|
   50.e-6  50.e-3                                                                
 c -Iprnt<--Iplot<-Idoubl<-KssOut<-MaxOut<---Ipun<-Memsav<---Icat                
-       1       1       1       0       0                       0               
+       1       1       1       0       0                       1               
 c                                                                               
 c Circuit data..................................................................
 c Bus-->Bus-->Bus-->Bus--><----R<----L<----C                                   0

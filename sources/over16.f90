@@ -3092,7 +3092,7 @@ subroutine subts2
   d2 = cnvhst(n11 + 14)
   if (iprsup .eq. 0)  go to 10130
   write (unit = lunit(6), fmt = 81060) t, i
-81060 format (/, ' at t = ', e12.5, ' for Marti branch', i4, '   equiv. circuit, voltages and current sources:')
+81060 format (/, ' At t = ', e12.5, ' for Marti branch', i4, '   equiv. circuit, voltages and current sources:')
   write (unit = lunit(6), fmt = 81070) ekh, emh, cnvhst(n11 + 11), cnvhst(n11 + 12), cnvhst(n11 + 13), cnvhst(n11 + 14)
 81070 format (1x, 6e16.7)
 10130 volti(i) = h1 * gus1
