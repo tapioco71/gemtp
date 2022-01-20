@@ -143,7 +143,6 @@ subroutine over1
   ! 3 --- floating-point numeric    4 --- integer numeric
   ! 5 --- 3 of 'subr31'             6 --- 4 of 'subr31'
   ! setting all equal to unity means that all have equal length.
-  !  call copyi (1, nbyte(1), 6)
   call copy (1, nbyte(1 :), 6)
   call dimens (lstat(1), nchain, bus1, bus2)
   lbus   = lstat(1)
@@ -174,7 +173,7 @@ subroutine over1
   lsiz26 = lstat(26)
   lsiz27 = lstat(27)
   lsiz28 = lstat(28)
-  ! assign  'n1'  equal to the number of emtp lists of variable
+  ! assign  'n1'  equal to the number of EMTP lists of variable
   ! dimensioning (of the solution overlays).
   n1 = 28
   ltlabl = lstat(n1 + 1)
@@ -196,7 +195,7 @@ subroutine over1
   d13 = ltacst
   d13 = d13 / 1600.0d0
   do j = 1, 8
-     lstacs(j) = int (lstacs(j) * d13, kind (lstacs(j)))
+     lstacs(j) = int (lstacs(j) * d13, kind (lstacs(1)))
   end do
   n1 = -9999
   call copy (n1, lstat(1 :), ll60)

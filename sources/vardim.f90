@@ -150,27 +150,6 @@ contains
   ! subroutine make_equivalence_declaration.
   !
 
-!   subroutine make_equivalence_declaration (unit, varname1, dim1, varname2, dim2)
-!     implicit none
-!     character(*), intent(in) :: varname1, varname2
-!     integer(4), intent(in) :: unit
-!     integer(4), intent(in), optional :: dim1, dim2
-!     write (unit = unit, fmt = 10, advance = 'no') trim (varname1)
-! 10  format (2x, 'equivalence', 1x, '(', a)
-!     if (present (dim1)) then
-!        write (unit = unit, fmt = 20, advance = 'no') dim1
-! 20     format ('(', i2, ')')
-!     end if
-!     write (unit = unit, fmt = 30, advance = 'no') trim (varname2)
-! 30  format (',', 1x, a)
-!     if (present (dim2)) then
-!        write (unit = unit, fmt = 40, advance = 'no') dim2
-! 40     format ('(', i2, ')')
-!     end if
-!     write (unit = unit, fmt = 50)
-! 50  format (')')
-!   end subroutine make_equivalence_declaration
-
   subroutine make_equivalence_declaration (unit, varslist)
     implicit none
     integer(4), intent (in) :: unit
@@ -206,7 +185,7 @@ program vardim
   use bcddat
   use test
   implicit none
-  integer(4), parameter :: modvara = 126, modvarc = 56
+  integer(4), parameter :: modvara = 127, modvarc = 56
   !
   character :: char(6), bus2
   character(4) :: texta(2), textb(2)
@@ -1003,10 +982,10 @@ program vardim
   modvars(127)%dimension  = 1
   modvars(127)%enable = .true.
 
-  modvars(128)%name       = 'tp'
+  modvars(128)%name       = ''
   modvars(128)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(128)%kind       = 1
-  modvars(128)%dimension  = 23
+  modvars(128)%dimension  = 99
   modvars(128)%enable = .true.
 
   modvars(129)%name       = 'norder'
@@ -1069,16 +1048,16 @@ program vardim
   modvars(138)%dimension  = 23
   modvars(138)%enable = .true.
 
-  modvars(139)%name       = 'karray'
-  modvars(139)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
-  modvars(139)%kind       = 4
-  modvars(139)%dimension  = 9
+  modvars(139)%name       = 'xdat'
+  modvars(139)%options(1 : 4) = (/ '', '', '', '' /)
+  modvars(139)%kind       = 1
+  modvars(139)%dimension  = 71
   modvars(139)%enable = .true.
 
-  modvars(140)%name       = 'xdat'
+  modvars(140)%name       = 'tp'
   modvars(140)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(140)%kind       = 1
-  modvars(140)%dimension  = 71
+  modvars(140)%dimension  = 1
   modvars(140)%enable = .true.
 
   modvars(141)%name       = 'ydat'
@@ -1248,12 +1227,6 @@ program vardim
   modvars(168)%dimension  = 4
   modvars(168)%enable = .true.
 
-  modvars(169)%name       = 'karray'
-  modvars(169)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
-  modvars(169)%kind       = 4
-  modvars(169)%dimension  = 9
-  modvars(169)%enable = .true.
-
   modvars(170)%name       = 'p'
   modvars(170)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(170)%kind       = 1
@@ -1404,18 +1377,6 @@ program vardim
   modvars(194)%dimension  = 73
   modvars(194)%enable = .true.
 
-  modvars(195)%name       = 'karray'
-  modvars(195)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
-  modvars(195)%kind       = 4
-  modvars(195)%dimension  = 9
-  modvars(195)%enable = .true.
-
-  modvars(196)%name       = 'karray'
-  modvars(196)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
-  modvars(196)%kind       = 4
-  modvars(196)%dimension  = 9
-  modvars(196)%enable = .true.
-  !
   data char(1) / 'i' /
   data char(2) / 'j' /
   data char(3) / 'k' /
@@ -1712,12 +1673,6 @@ program vardim
   modvars(247)%dimension = 2
   modvars(247)%enable = .true.
 
-  modvars(248)%name       = 'karray'
-  modvars(248)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
-  modvars(248)%kind      = 4
-  modvars(248)%dimension = 1
-  modvars(248)%enable = .true.
-
   modvars(249)%name       = 'ev'
   modvars(249)%options(1 : 4) = (/ '', '', '', '' /)
   modvars(249)%kind      = 1
@@ -1815,7 +1770,7 @@ program vardim
            write (unit = lunit(6), fmt = 5263)
 5263       format (/,  " Pseudo-listing of data cards which have been read by the variable-dimensioning program  'vardim' .   Only  ",/, " if all data fields are punched with  'clean'  i8  integer information will this be a true listing.   Data cards", /, ' are in fact read in and then printed out using integer variables and  10i8  format.')
            write (unit = lunit(6), fmt = 5264) (i, i = 1, 8), (lstnew(i), i = 1, numlst)
-5264       format (1x, 111('-'), /, 31x, '0', 8(9x, i1 ), /, 31x, '0', 8(9x, '0'), /, 31x, 80('-'), /, ' 1st card (lists  1-10).', 7x, '1', 10i8 ,/, ' 2nd card (lists 11-20).', 7x, '1', 10i8, /, ' 3rd card (lists 21-30).', 7x, '1', 10i8)
+5264       format (1x, 111('-'), /, 31x, '0', 8(9x, i1 ), /, 31x, '0', 8(9x, '0'), /, 31x, 80('-'), /, ' 1st card (lists  1-10).', 7x, '|', 10i8 ,/, ' 2nd card (lists 11-20).', 7x, '|', 10i8, /, ' 3rd card (lists 21-30).', 7x, '|', 10i8)
            if (lstnew(1) / 10000000 .ne. 9) go to 5294
            read (unit = lunit(5), fmt = 5287, iostat = ios) (kextra(i), i = 1, numkex)
            write (unit = lunit(6), fmt = 5378) (kextra(i), i = 1, numkex)
@@ -1860,7 +1815,7 @@ program vardim
            lstnew(54) = 6 * lstnew(2)
            !     list 55 has one entry for each subnetwork.
            lstnew(55) = lstnew(9) + lstnew(17)
-           !     list 56 is for vladimir's "cikfd" and "rmfd"
+           !     list 56 is for Vladimir's "cikfd" and "rmfd"
            !     arrays for freq-depend. generator equivalent
            lstnew(56) = lstnew(2) * lstnew(27) / 2
            !     list 57 maps #phases into znonl size.
@@ -1900,7 +1855,7 @@ program vardim
            do i = 1, modvara
               if (modvars(i)%enable) then
                  n9 = modvars(i)%dimension
-                 if (n9 .eq. 0 .or. n9 .eq. 98) exit
+                 if ((n9 .eq. 0) .or. (n9 .eq. 98)) exit
                  n37 = 3
                  bus1 = modvars(i)%name
                  read (unit = bus1, fmt = 8104) bus2
@@ -2297,7 +2252,7 @@ program vardim
               equivlist(7)%index = 1
               equivlist(8)%variable = modvars(78)    ! jbrnch(1)
               equivlist(8)%index = 1
-              !              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 8))
+              call make_equivalence_declaration (unit = lunit(4), varslist = equivlist(1 : 8))
            end if
            if (modvars(127)%enable .and. modvars(252)%enable .and. modvars(253)%enable .and. modvars(254)%enable) then
               equivlist(1)%variable = modvars(127)   ! karray(1)
@@ -2433,7 +2388,7 @@ program vardim
 4502             lm = lm + 1
                  n28 = n3
                  if (n3 .eq. 99) n28 = 0
-                 write (lunit(3), 8143) lm, n28
+                 write (unit = lunit(3), fmt = 8143) lm, n28
                  lm = lm + 1
                  write (unit = lunit(3), fmt = 4769) lm, lstnew(n3)
 4769             format (2x, 'ls(', i2, ') =', i7)

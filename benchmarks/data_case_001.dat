@@ -2,7 +2,7 @@ begin new data case
 c RL.............................................Figure 3.9(a)..................
 c Energization of a trivial RL circuit.                                        |
 c ----dt<---tmax...............................................................|
- 200.e-6  50.e-3                                                                
+ 100.e-6  50.e-3                                                                
 c -Iprnt<--Iplot<-Idoubl<-KssOut<-MaxOut<---Ipun<-Memsav<---Icat                
        1       1       1       0       0                       0               
 c                                                                               

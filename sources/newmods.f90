@@ -25,18 +25,17 @@ end subroutine main10
 #ifdef WITH_OVER29
 subroutine over29
   implicit none
-  integer(4), target :: karray( 9942869)
-  real(8) :: tp(   30000)
-  integer(4) :: norder(   93002)
-  integer(4) :: index(   93002)
-  real(8) :: diag(   93002)
-  real(8) :: diab(   93002)
-  real(8) :: solr(   93002)
-  real(8) :: soli(   93002)
-  integer(4) :: ich1(   93002)
+  integer(4) :: norder(   43002)
+  integer(4) :: index(   43002)
+  real(8) :: diag(   43002)
+  real(8) :: diab(   43002)
+  real(8) :: solr(   43002)
+  real(8) :: soli(   43002)
+  integer(4) :: ich1(   43002)
   real(8) :: bnd(     300)
   integer(4) :: iloc(   30000)
   real(8) :: gnd(   30000)
+  real(8) :: xdat(    6000)
   call subr29
   return
 end subroutine over29
@@ -126,7 +125,7 @@ subroutine dimens (ls, n, b1, b2)
   integer(4) n7
   character(8), intent(out) :: b1, b2
   if (n .ge. 29) go to 2900
-  ls( 1)  =   93002
+  ls( 1)  =   43002
   ls( 2)  =    3000
   ls( 3)  =   10000
   ls( 4)  =     100
@@ -155,57 +154,55 @@ subroutine dimens (ls, n, b1, b2)
   ls(27)  =     600
   ls(28)  =    1080
   n7 = 28 + 1
-  ls(n7) = 9942869
-  b1 ='  192026'
+  ls(n7) = 5485871
+  b1 ='  222015'
   b2 ='  200122'
   return
 2900 if (n .gt.  29) go to 3100
   ls( 1)  =       0
-  ls( 2) =9942869
-  ls( 3)  =      23
-  ls( 4) =  30000
-  ls( 5)  =       1
-  ls( 6) =  93002
-  ls( 7)  =       9
-  ls( 8) =    300
+  ls( 2) =5485871
+  ls( 3)  =       1
+  ls( 4) =  43002
+  ls( 5)  =       9
+  ls( 6) =    300
+  ls( 7)  =      23
+  ls( 8) =  30000
+  ls( 9)  =      71
+  ls(10) =   6000
   return
 3100 if (n .gt.  31) go to 3900
-  ls( 1)  =       9
-  ls( 2) =    300
+  ls( 1)  =      71
+  ls( 2) =   6000
   return
 3900 if (n .gt.  39) go to 1000
-  ls( 1)  =      71
-  ls( 2) =  10000
+  ls( 1)  =       1
+  ls( 2) =  43002
+  ls( 3)  =      71
+  ls( 4) =  10000
   return
 1000 if (n .gt.  10) go to 4400
   ls( 1)  =       1
-  ls( 2) =  93002
+  ls( 2) =  43002
   ls( 3)  =      23
   ls( 4) =  30000
   ls( 5)  =       4
   ls( 6) =    100
   return
 4400 if (n .gt.  44) go to 4500
-  ls( 1)  =       9
-  ls( 2) =    300
-  ls( 3)  =      75
-  ls( 4) = 111628
-  ls( 5)  =      71
-  ls( 6) =    472
-  ls( 7)  =      76
-  ls( 8) =    944
-  ls( 9)  =      74
-  ls(10) =  28015
-  ls(11)  =      73
-  ls(12) =    473
+  ls( 1)  =      75
+  ls( 2) =  61425
+  ls( 3)  =      71
+  ls( 4) =    350
+  ls( 5)  =      76
+  ls( 6) =    700
+  ls( 7)  =      74
+  ls( 8) =  15465
+  ls( 9)  =      73
+  ls(10) =    351
   return
 4500 if (n .gt.  45) go to 4700
-  ls( 1)  =       9
-  ls( 2) =    300
   return
 4700 if (n .gt.  47) go to 9900
-  ls( 1)  =       9
-  ls( 2) =    300
   return
  9900 ls(1) = location (b1) - location (b2)
   return

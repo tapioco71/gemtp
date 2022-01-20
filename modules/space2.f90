@@ -12,7 +12,7 @@ module space2
   integer(4) :: irandn(3)
   integer(4) :: iloc(40)
   !  common /spac01/ bnd (1)
-  !  common /spac01/ bnd (30000)
+  !  common /spac01/ bnd (300)
   real(8) :: bnd(30000)
   !  common /spac03/ index(40)
 
@@ -31,7 +31,7 @@ module space2
   !  common /spac08/ ich1(15)
   !  common /spac10/ iloc(40)
   !  common /spac11/ gnd(1)
-  real(8) :: gnd(1)
+  real(8) :: gnd(300)
   !  common /spac02/ norder(20)
   integer(4) :: norder(20)
 
