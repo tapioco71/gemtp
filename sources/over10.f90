@@ -600,7 +600,7 @@ subroutine over10
   call vecsav (bnd(iofbnd + 1 :), ioffd, n3)
   n12 = -4
   n15 = 0
-  call vecrsv (volt, n12, n15)
+  call vecsav (volt, n12, n15)
   if (iprsup .lt. 3) go to 4517
   write (unit = lunit(6), fmt = 4513) ntot, ioffd
 4513 format (/, ' y-matrix of s.s. phasor solution, b4 starting elimination.    ntot, ioffd =  ', 2i8, /, 9x, 'i', 6x, 'iloc', 5x, 'index', 17x, 'gnd', 17x, 'bnd', 21x, 'diag', 16x, 'diab')
@@ -1051,18 +1051,18 @@ subroutine fxsour
   go to 3466
   !     begin calculation of node currents
 1000 n3 = 2
-  call vecrsv (diagg(1 :), ntot, n3)
-  call vecrsv (diabb(1 :), ntot, n3)
+  call vecsav (diagg(1 :), ntot, n3)
+  call vecsav (diabb(1 :), ntot, n3)
   if (kburro .eq. 1) go to 4372
   if (ioffd .le. lstat(14)) go to 4372
   write (unit = lunit(6), fmt = 4848) ioffd, lstat(14)
 4848 format (' No enough space for load flow .  ioffd = ', i8, ' but the limit space is lsiz23 =  ', i8)
   stop
-4372 call vecrsv (gndd, ioffd, n3)
-  call vecrsv (bndd, ioffd, n3)
+4372 call vecsav (gndd, ioffd, n3)
+  call vecsav (bndd, ioffd, n3)
   n3 = -4
   n15 = 0
-  call vecrsv (volt, n3, n15)
+  call vecsav (volt, n3, n15)
   nekcc = 0
   vdiff(npp) = 0.0d0
   if (ncurr .le. 0) ncurr = 1

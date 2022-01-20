@@ -149,6 +149,7 @@ program gemtp
   use volpri
   use iocons
   use movcop
+  use veccom
   implicit none
   integer(4) :: ll34
   !
@@ -178,8 +179,11 @@ program gemtp
   return
 
 contains
+
   subroutine a2001
-    integer n1
+    implicit none
+    !
+    integer(4) :: n1
     !
     n1 = nchain
     if (n1 .gt. 30) n1 = n1 - 30
@@ -199,6 +203,8 @@ contains
   end subroutine a2001
 
   subroutine a2010
+    implicit none
+    !
     if (m4plot .eq. 1) call emtspy
     select case (nchain)
     case (29)
@@ -302,6 +308,8 @@ contains
   end subroutine a2010
 
   subroutine a4372
+    implicit none
+    !
     if (nchain .le. 51) nchain = 51
     call a2001
     return
@@ -318,6 +326,7 @@ subroutine stoptp
   implicit none
   !     Temporary stop statements of EMTP have been converted to
   !     "call stoptp", allowing installation-dependent clean up.
+  !
   integer(4) :: i, ios
   !
   read (unit = abuff, fmt = 5607, iostat = ios) (texcol(i), i = 1, 80)
@@ -339,12 +348,12 @@ subroutine erexit
   use comkwt
   implicit none
   !     VAX-11   installation-dependent EMTP module.   This is
-  !     called by the top of "main00", before any emtp data input.
-  !     dimension idum(3)                                   !  dummy vector for ctrl-c handling
+  !     called by the top of "main00", before any EMTP data input.
+  !     dimension idum(3)                         !  dummy vector for ctrl-c handling
 
   external kwiter                                 ! needed for ctrl-c initialization
   !
-  lunit(6) = 6                                      ! for use of "prompt" until fixed tt?? address
+  lunit(6) = 6                                    ! for use of "prompt" until fixed tt?? address
   muntsv(2) = 49                                  ! alternate munit5 unit number of spy
   kwtvax = 0                                      ! set flag corresponding to no ctrl-c usage
   !      call enable_ctrl_c ( kwiter, idum(1) )   ! initialize ctrl-c

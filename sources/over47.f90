@@ -2045,8 +2045,10 @@ end subroutine prcon
 
 subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
   use blkcom
+  use movcop
   implicit none
 !!!!! %include  '//a/tsu/tpplotkom.ins.ftn'
+  !
   integer(4), intent(out) :: iseq(15)
   integer(4), intent(in) :: kthl
   integer(4), intent(out) :: mrr
@@ -2096,9 +2098,10 @@ subroutine unwind (ping, kthl, mrr, nrp, ntol, iseq)
      iseq(i) = i
      iold(i) = i
   end do
-  do i = 1, 180
-     bom(i) = 0.0d0
-  end do
+  !  do i = 1, 180
+  !     bom(i) = 0.0d0
+  !  end do
+  call move0 (bom, 180)
 1050 continue
   if (iseq(1) .ne. 0) go to 10
   do i = 1, 15

@@ -7656,7 +7656,6 @@ subroutine flatbd
   do j = 1, jplt
      if (kp(j) .ne. 0) mcurve(j) = kp(j)
   end do
-!7255 continue
   go to 2005
 7261 if (buff77(1 : 8) .ne. show) go to 7287
   write (unit = munit6, fmt = 3421) mtit, maxisx, maxisy, mgrid1, mgrid2, msuper, mid

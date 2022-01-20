@@ -124,6 +124,7 @@ F90_FLAGS=	-O0				\
 		-DWITH_OVER47			\
 		-DWITH_OVER51			\
 		-DWITH_OVER55			\
+		-DSAVE_TO_DISK			\
 		-c
 
 # objdump most common flags.
@@ -159,17 +160,16 @@ LIBC=${shell ${CC} -print-file-name=libc.a}
 LIBM=${shell ${CC} -print-file-name=libm.a}
 LIBGFORTRAN=${shell ${FORTRAN} -print-file-name=libgfortran.a}
 
-LIBRARIES=	quadmath	\
-		c		\
+LIBRARIES=	c		\
 		m
 
 LD_FLAGS+=${patsubst %,-l%,${subst :, ,${LIBRARIES}}}
 
 ifeq (${DEBUG},1)
-AS_FLAGS	+=	-ggdb
-CC_FLAGS	+=	-ggdb
-CPP_FLAGS	+=	-ggdb
-FORTRAN_FLAGS	+=	-ggdb3
+AS_FLAGS	+=	-ggdb3 -gstabs+
+CC_FLAGS	+=	-ggdb3 -gstabs+
+CPP_FLAGS	+=	-ggdb3 -gstabs+
+FORTRAN_FLAGS	+=	-ggdb3 -gstabs+
 F90_FLAGS	+=	-ggdb3 -gstabs+
 endif
 

@@ -3642,10 +3642,12 @@ subroutine fdcinj (ikf, isfd, ibf)
   real(8) :: ar, azi, azr, cz, un, ur(40)
   !
   !  dimension  ur(40)
+  !
   !     This routine updates the current injections for the individual
   !     branches as well as for the equivalent  branches inserted into the
   !     EMTP. It also updates the capacitor and inductor voltages and
   !     calculates branch currents for the individual branches   *   *   *
+  !
   idk = 2 * ikf
   ikf = ikf + 1
   isf = isfd + 1
@@ -3803,7 +3805,7 @@ subroutine update
   ipout = -2
 !!!!  acb = omdt * istep
   acb = omega * t
-  if ( iprsup .gt. 0 ) write ( lunit(6), 4100 ) ibr, numsm, it
+  if (iprsup .gt. 0) write (unit = lunit(6), fmt = 4100) ibr, numsm, it
 4100 format (" Begin  'update' ", 5x, 'ibr', 5x, 'numsm', 8x, 'it', /, 15x, 3(5x, i5))
   j30 = 1
   i30 = 1
@@ -3844,7 +3846,7 @@ subroutine update
      ksg = kag + numask
      ksex = ikv + nloce
      ikp = ikv + numask
-     !     calculate currents for time ''t-deltat''
+     !     Calculate currents for time ''t-deltat''
      i75 = i26 + 27
      a1 = elp(i75)
      a2 = elp(i75 + 1)
@@ -3856,7 +3858,7 @@ subroutine update
      a5 = -(cv3 - cu(ikn + 2)) * elp(i26 + 17)
      if (iprsup .gt. 0) write (unit = lunit(6), fmt = 4102) d6, d7, d8
 4102 format (' For time "t-deltat".', 18x, 'd6', 18x, 'd7', 18x, 'd8', /, 21x, 3e20.11)
-     !     transform phase variables to park"s coordinates  * * * * * * * * *
+     !     Transform phase variables to Park's coordinates  * * * * * * * * *
      cz = elp(i26 + 26)
      czt = cz * tenm6
      acde = elp(i75 + 2)
@@ -3867,7 +3869,7 @@ subroutine update
      sum  = cu(ikn + 20)
      dsped = histq(ksg)
      n7 = ismdat(i30 + 16)
-     !     enter the iteration loop(angle,speed,current)  * * * * * * * * * *
+     !     Enter the iteration loop(angle,speed,current)  * * * * * * * * * *
 200  etot = etot * athtw
      sum = sum * athtw
      au = etot * onehaf
@@ -3882,7 +3884,7 @@ subroutine update
      tsc = -av - au
      a4 = d6 * sum + d7 * tsc + d8 * tsd
      cv2 = v1 * sum + v2 * tsc + v3 * tsd
-     !     calculate rotor currents ****************************************
+     !     Calculate rotor currents ****************************************
      c1 = elp(i75 + 5) * a3 + elp(i75 + 9) * cu(ikn + 3) + elp(i75 + 10) * cu(ikn + 4)
      c2 = elp(i75 + 6) * a3 + elp(i75 + 10) * cu(ikn + 3) + elp(i75 + 12) * cu(ikn + 4)
      c3 = elp(i75 + 7) * a4 + elp(i75 + 13) * cu(ikn + 5) + elp(i75 + 14) * cu(ikn + 6)
@@ -3892,12 +3894,12 @@ subroutine update
 4103 format (40x, ' Updated currents', 40x, ' updated voltages', /, 3x, 3e18.10, 3x, 3e18.10)
      write (unit = lunit(6), fmt = 4104) c1, c2, c3, c4
 4104 format (' Updated rotor currents', /, 2x, 4(e20.12, 5x))
-     !     calculate the electromagnetic torque*****************************
+     !     Calculate the electromagnetic torque*****************************
 922  ac2 = elp(i26 + 1) * a3 + elp(i26 + 2) * c1 + elp(i26 + 4) * c2
      ac1 = elp(i26 + 9) * a4 + elp(i26 + 10) * c3 + elp(i26 + 12) * c4
      cd = (ac2 * acde * a4 - ac1 * acdf * a3) * czt
-     !     resolve the mechanichal equations. note the  constant terms have
-     !     been calculated in the previous time-step* * * * * * * * * * * * *
+     !     Resolve the mechanichal equations. note the  constant terms have
+     !     Been calculated in the previous time-step* * * * * * * * * * * * *
      cexc = histq(ksex)
      jt = n27
      if (n7 .gt. 0) go to 220
@@ -3912,7 +3914,7 @@ subroutine update
         m1 = m1 - 1
         ndx1 = massex(m1)
         if (ndx1 .gt. 0) go to 221
-        q2 = 1.0
+        q2 = 1.0d0
         go to 201
 221     ndx1 = kxtcs + ndx1
         q2 = xtcs(ndx1)
@@ -3922,7 +3924,7 @@ subroutine update
      if (nloce .eq. 0) go to 202
      cexc = (q3 * c1) / cexc
      histq(ksex) = histq(ksex) - cexc
-     !     calculate new estimates of mechanical speeds and rotor angle * * *
+     !     Calculate new estimates of mechanical speeds and rotor angle * * *
 202  jt = n26
      do ik = ikw, ikp
         jt = jt + 1
@@ -3931,12 +3933,12 @@ subroutine update
      end do
      call bansol (shp(ibu), histq(ikw), numask)
      spdn = histq( ksg )
-     !     check the convergence of rotor speed ****************************
+     !     Check the convergence of rotor speed ****************************
      if (absz (dsped) .le. flzero) dsped = flzero
      spdd = absz ((spdn - dsped) / dsped)
      if (spdd .gt. epdgel) go to 206
-     !     successful iteration (convergence achieved ) * * * * * * * * * * *
-     !     finish the calculation of the mechanical angles  * * * * * * * * *
+     !     Successful iteration (convergence achieved ) * * * * * * * * * * *
+     !     Finish the calculation of the mechanical angles  * * * * * * * * *
 204  kc = n22 + 5 * numask
      do ka = 1, numask
         jt = iu + ka
@@ -3946,7 +3948,7 @@ subroutine update
         histq(ik + num2) = histq(kb) - shp(kd)
         histq(jt) = histq(jt + num2) + delta2 * histq(ik)
      end do
-     !     store the calculated currents and voltages   * * * * * * * * * * *
+     !     Store the calculated currents and voltages   * * * * * * * * * * *
      cu(ikn) = a3
      cu(ikn + 1) = a4
      cu(ikn + 2) = a5
@@ -3979,7 +3981,7 @@ subroutine update
 208  if (iprsup .eq. 0) go to  50
      write (unit = lunit(6), fmt = 4106) spdn, histq(ksex), cd, cexc
 4106 format (6x, 'After speed calculation', 5x, 'rotor', 13x, 'exciter', 17x, 'teg', 16x, 'texc', /, 20x, 4e20.12)
-     !     load internal machine variables into tacs variable 'etac' *******
+     !     Load internal machine variables into TACS variable 'etac' *******
 50   if (n22spy .ne. -1) go to 51
      ksmspy(2) = ilk
      call emtspy
@@ -4140,7 +4142,7 @@ subroutine update
         n5 = m + numask
         vsmout(icnt) = shp(mp + numask) * (histq(m) - histq(m + 1)) + shp(mp) * (histq(n5) - histq(n5 + 1))
      end do
-     !     predict new rotor angle and speed. calculate also constant terms
+     !     Predict new rotor angle and speed. Calculate also constant terms
      !     for the iteration loop in the next time-step   * * * * * * * * * *
 209  s1 = 0.0d0
      iz = iu + 1

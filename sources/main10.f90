@@ -24,7 +24,7 @@
 !     4.  input and processing of frequency-dependence data for
 !         distributed-parameter line mode.
 !     5.  input of switch and source data cards.
-!     6.  network connectivity output.   setup of transient-network
+!     6.  network connectivity output.   Setup of transient-network
 !         renumbering tables.
 !     7.  network node renumbering routine (John Walker's old
 !         subroutine number).

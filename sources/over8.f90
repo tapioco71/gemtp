@@ -2595,7 +2595,7 @@ subroutine over8
   n12 = -1
   if (ktrlsw(5) .eq. 1) n12 = -2
   n15 = 0
-  call vecrsv (volt, n12, n15)
+  call vecsav (volt, n12, n15)
   !     preceding call to "frqchk" shows user-defined sources
   !     identified by subnetwork for use in following "umrenu",
   !     for cases having one or more u.m. (numum .gt. 0).

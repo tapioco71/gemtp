@@ -18,6 +18,7 @@ subroutine over6
   use veccom
   use savcom
   implicit none
+  !
   character(8) :: buff(20)
   integer(4) :: i, icas, il, ipass, ir, isubs1
   integer(4) :: j, j1, j2, jleft, jtest
@@ -26,6 +27,7 @@ subroutine over6
   integer(4) :: m, moon
   integer(4) :: n1, n2, n3, n7, n9, n11, n17, n22, ndx1, ndx2, nz
   real(8) :: d1
+  !
   !  dimension buff(20)
   !  dimension integx(1)
   !
@@ -216,7 +218,8 @@ subroutine over6
   write (unit = lunit(6), fmt = 5261)
 5261 format(' From bus name 1 names of all adjacent busses')
   write (unit = lunit(6), fmt = 5266)
-5266 format(' --------------+----------------------------------------------------------------------------------------------------------')
+  !5266 format (' --------------+----------------------------------------------------------------------------------------------------------')
+5266 format (1x, 14('-'), '+', 116('-'))
   n22 = kwtspy
   ipass = 0
   k = 2
@@ -294,7 +297,7 @@ subroutine over6
 41001 l = iabs (length(i))
   ! if (kodsem(i) .ne. 0 .and. imodel(i) .ne. -2
   !1                     .and. imodel(i) .ne. -4) l = iabs(kodebr(i))
-  if (kodsem(i) .ne. 0 .and. imodel(i) .ge. 0) l = iabs (kodebr(i))
+  if ((kodsem(i) .ne. 0) .and. (imodel(i) .ge. 0)) l = iabs (kodebr(i))
   if (l .gt. 1) go to 41002
   call insert (kbus(i), iabs (mbus(i)))
   go to 40004

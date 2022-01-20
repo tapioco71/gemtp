@@ -66,6 +66,10 @@ contains
     real(8), intent(in) :: umcurp(:)
     real(8), intent(in) :: umoutp(:)
     real(8), intent(in) :: voltum(:)
+    integer(4) :: j
+    integer(4) :: k, kcl
+    integer(4) :: mark, mars, mm
+    integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n16, nclcom, nshare, num, numcom
     !
     !  dimension reacl(1), gpar(1), fpar(1), hist(1), umcurp(1)
     !  dimension nodvo1(1), nodvo2(1), jcltac(1), jclout(1)
@@ -83,28 +87,23 @@ contains
     !
     !  equivalence (kknonl(1), nsubkm(1))
     !
-    integer(4) :: j
-    integer(4) :: k, kcl
-    integer(4) :: mark, mars, mm
-    integer(4) :: n1, n2, n3, n4, n5, n6, n7, n8, n9, n16, nclcom, nshare, num, numcom
-    !
     integer(4), pointer :: nsubkm(:)
     !
     !  jcltac(kcl and kcl+1) are defined and initialized in umrenu
-    !  jcltac(kcl+2) is defined here. it is zero unless a set of
+    !  jcltac(kcl+2) is defined here. It is zero unless a set of
     !     of max 3 um's sharing a common mech netw is dealt with.
-    !   * it is set to the um nr if the um with this kcl is the
+    !   * It is set to the um nr if the um with this kcl is the
     !     lowest numbered um in this set. this um takes care of
     !     the multi- phase compensation of the common mech netw.
-    !   * it is set to the negative value of the "cursub" entry if
+    !   * It is set to the negative value of the "cursub" entry if
     !     it is not the lowest numbered um in this set.
     !  nshare is a flag to decide how mech networks of each um are
     !     to be compensated.
     !     nshare = 1  : no comp of mech network in case that it
-    !                 has been done earlier by a mechanically
-    !                 connected lower-numbered um
+    !                   has been done earlier by a mechanically
+    !                   connected lower-numbered um
     !     nshare = 0 : um not mechanically connected to other um's
-    !                 and hence single-phase comp as usual.
+    !                  and hence single-phase comp as usual.
     !     nshare = 10 : compensation of common mech netwrk to be
     !                   conducted with the lowest numbered um.
     !
@@ -158,7 +157,7 @@ contains
        nclcom = nclcom + 1
        num = 0
        mark = kpsour(nsubkm(n15 + 1))
-1010   if (mark .eq. 0 .or. mark .eq. numsub) go to 1515
+1010   if ((mark .eq. 0) .or. (mark .eq. numsub)) go to 1515
        if (mark .lt. ntot) go to 7777
        do mm = 2, kpartb
           if (kpsour(mm) .eq. mark) kpsour(mm) = numsub
@@ -246,8 +245,8 @@ contains
 7320   n15 = n15 + 5
        n8 = n8 + 1
        nsubkm(n15) = n15 + 5
-       nsubkm(n15+1) = nodom(numcom)
-       nsubkm(n15+2) = 1
+       nsubkm(n15 + 1) = nodom(numcom)
+       nsubkm(n15 + 2) = 1
        go to 6868
        !  Compensation of higher numbered um if mechanically connected
 7322   if (nshare .eq. 0) go to 7325
@@ -355,7 +354,7 @@ subroutine over15
   call top15
   if (kill .gt. 0) go to 9200
   go to 3038
-  !     read user-supplied names for emtp node-voltage output.  ----------
+  !     read user-supplied names for EMTP node-voltage output.  ----------
   !     read input card using cimage.
 1030 call cimage
 3038 continue

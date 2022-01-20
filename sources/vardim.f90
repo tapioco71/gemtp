@@ -1000,7 +1000,7 @@ program vardim
   modvars(127)%name       = 'karray'
   modvars(127)%options(1 : 4) = (/ 'target', '      ', '      ', '      ' /)
   modvars(127)%kind       = 4
-  modvars(127)%dimension  = 0
+  modvars(127)%dimension  = 1
   modvars(127)%enable = .true.
 
   modvars(128)%name       = 'tp'
@@ -1908,8 +1908,10 @@ program vardim
                  do j = 1, 6
                     if (bus2 .eq. char(j)) n37 = 4
                  end do
-                 if (modvars(i)%kind .ne. 0) n37 = modvars(i)%kind
-                 mtot = mtot + mulvar(n37) * lstnew(n9)
+                 if (modvars(i)%kind .ne. 0) then
+                    n37 = modvars(i)%kind
+                    mtot = mtot + mulvar(n37) * lstnew(n9)
+                 end if
               end if
            end do
            write (unit = lunit(2), fmt = 4190)
@@ -2391,8 +2393,10 @@ program vardim
                  do j = 1, 6
                     if (bus2 .eq. char(j)) n37 = 4
                  end do
-                 if (modvars(i)%kind .ne. 0) n37 = modvars(i)%kind
-                 mtot = mtot + mulvar(n37) * lstnew(n9)
+                 if (modvars(i)%kind .ne. 0) then
+                    n37 = modvars(i)%kind
+                    mtot = mtot + mulvar(n37) * lstnew(n9)
+                 end if
               end if
            end do
            lstnew(99) = ltlabl + kextra(1)

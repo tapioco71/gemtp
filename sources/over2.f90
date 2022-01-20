@@ -114,18 +114,6 @@ subroutine over2
   character(8) :: text7, text8, text9, text10, text11, text12
   character(8) :: text13, text14, text15, text16, text17
   !
-  !  dimension wk1(1)
-  !  dimension infdli(1)
-  !  dimension icrit(1)
-  !
-  !  equivalence (semaux(1), wk1(1))
-  !  equivalence (namebr(1), infdli(1))
-  !  equivalence (icrit(1), crit(1))
-  !  equivalence (indtv(1), iaddrs)
-  !  equivalence (indtv(2), itranm)
-  !  equivalence (indtv(3), ityold)
-  !  equivalence (indtv(4), ichtr2)
-  !  equivalence (iprsov(39), nmauto)
   !     character*6   char6
   !     character*26  alphan
   !     data alphan  / 'abcdefghijklmnopqrstuvwxyz' /
@@ -151,14 +139,27 @@ subroutine over2
   real(8) :: temp, turn1
   real(8) :: yzero
   !
+  !  dimension wk1(1)
+  !  dimension infdli(1)
+  !  dimension icrit(1)
+  !
+  !  equivalence (semaux(1), wk1(1))
+  !  equivalence (namebr(1), infdli(1))
+  !  equivalence (icrit(1), crit(1))
+  !  equivalence (indtv(1), iaddrs)
+  !  equivalence (indtv(2), itranm)
+  !  equivalence (indtv(3), ityold)
+  !  equivalence (indtv(4), ichtr2)
+  !  equivalence (iprsov(39), nmauto)
+  !
   integer(4), pointer :: ichtr2 => indtv(4)
   integer(4), allocatable :: icrit(:)
   integer(4), pointer :: iaddrs => indtv(1)
-  integer(4), pointer :: infdli(:) => namebr(1 :)
+  integer(4), pointer :: infdli(:)
   integer(4), pointer :: itranm => indtv(2)
   integer(4), pointer :: ityold => indtv(3)
   integer(4), pointer :: nmauto => iprsov(39)
-  real(8), pointer :: wk1(:) => semaux(1 :)
+  real(8), pointer :: wk1(:)
   !
   data text1   / 'stop c' /
   data text2   / 'ascade' /
@@ -180,6 +181,8 @@ subroutine over2
   data inonam  / 0 /
   data nfscan  / 0 /
   !
+  infdli => namebr
+  wk1 => semaux
   ll0 = size (transfer (crit, icrit))
   allocate (icrit(ll0))
   icrit = transfer (crit, icrit)
@@ -194,9 +197,9 @@ subroutine over2
      l = 2 * jk
      !write (unit = bus(l), fmt = 2689) chlmfs(jk)(1 : 6)
      read (unit = chlmfs(jk)(1 : 6), fmt = 2689) bus(l)
-2689 format (a6)
      !write (unit = bus(l+1), fmt = 2689) chlmfs(m)(1:6)
      read (unit = chlmfs(m)(1 : 6), fmt = 2689) bus(l + 1)
+2689 format (a6)
   end do
   go to 4199                                                ! go directly to use $include for lmfs pi model half
   ! following used rather than data statements due to common:
