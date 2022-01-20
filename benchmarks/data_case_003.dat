@@ -1,0 +1,46 @@
+begin new data case                                                             
+c THEV_RL........................................Figure 3.11(b).................
+c Energization of an RL load with more detailed source model                   |
+c ----dt<---tmax...............................................................|
+  50.e-6  50.e-3                                                                
+c -Iprnt<--Iplot<-Idoubl<-KssOut<-MaxOut<---Ipun<-Memsav<---Icat                
+       1       1       1       0       0                       0               
+c                                                                               
+c Circuit data..................................................................
+c Bus-->Bus-->Bus-->Bus--><----R<----L<----C                                   0
+  src   bus1                        6.                                         0
+  bus1  bus12                .05    2.                                         0
+  bus1                                    .8                                   0
+  bus12                                   .8                                   0
+  bus12 bus13s                      6.                                         0
+  bus13l                   22.61 19.72                                         0
+blank End of circuit data......................................................|
+c
+c Switch data...................................................................
+c Bus-->Bus--><---Tclose<----Topen<-------Ie                                   0
+  bus13sbus13l     1.e-3     9999.         0                                   1
+blank End of switch data.......................................................|
+c                                                                               
+c Source data...................................................................
+c Bus--><I<Amplitude<Frequency<--T0|Phi0<---0=Phi0<-Ignore-><---Tstart<----Tstop
+14src          56.34       60.         0        0.                 -1.     9999.
+blank End of source data.......................................................|
+c                                                                               
+c Nodal Output Request Data.....................................................
+c Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->Bus-->
+  src   bus13l                                                                 
+blank End of output requests...................................................|
+c                                                                               
+c Plot request Data.............................................................
+c  ______Graph type: 4(volts) 8(branch volts) 9(currents)                      |
+c | _____Units: 1(deg) 2(cyc) 3(sec) 4(msec) 5(microsec)                       |
+c ||   _________Units per inch                                                 |
+c ||  |    _____Plot starting time                                             |
+c ||  |   |    _Plot stopping time                                             |
+c ||  |   |   |     _____Value at bottom of vertical axis (optional)           |
+c ||  |   |   |    |     Value at top of vertical axis (optional)              |
+c VV<-|<--|<--|<---|---|Bus-->Bus-->Bus-->Bus-->Heading-------->Vert axis------>
+ 194 5. 0.0 50. -4.   4.bus13sbus13l            EnTh 200MVA.95pfkAmps           
+ 144 5. 0.0 50.         bus13l                  EnTh 200MVA.95pfkAmps           
+blank End of Plot Request Data.................................................|
+blank End of All Cases                                                          
