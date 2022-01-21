@@ -300,7 +300,7 @@ subroutine over1
 5241 format (' Independent list limits follow. Total length of /label/  equals ', i8, '  integer words.', 3x, 6i6, /, (1x, 21i6, i5))
   write (unit = lunit(6), fmt = 83049)
   write (unit = lunit(6), fmt = 83047) (i, i = 1, 8)
-83047 format (' Descriptive interpretation of new-case input data 1 input data card images printed below, all 80 columns, character by character.', /, 51x, '0', 8(9x, i1))
+83047 format (' Descriptive interpretation of new-case input data | input data card images printed below, all 80 columns, character by character.', /, 51x, '0', 8(9x, i1))
   j = 0
   write (unit = lunit(6), fmt = 83048) (j, i = 1, 8)
 83048 format (51x, '0', 8(9x, i1))
