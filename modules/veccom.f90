@@ -33,7 +33,7 @@ contains
     !     Universal (non-virtual) form of module for binary i/o.  If
     !     extracted from UTPF for use, convert name "VECRXX" to "VECRSV"
     integer(4), intent(in) :: n2
-    integer(4), intent(out) :: n13
+    integer(4), intent(inout) :: n13
     real(8), intent(inout) :: array(:)
     integer(4) :: j, k, n6, n14
     !
@@ -76,7 +76,8 @@ contains
     !     Universal (non-virtual) form of module for binary i/o.  If
     !     extracted from UTPF for use, convert name "VECIXX" to "VECISV"
     integer(4), intent(inout) :: iarray(:)
-    integer(4), intent(in) :: n2, n13
+    integer(4), intent(in) :: n2
+    integer(4), intent(inout) :: n13
     integer(4) :: k
     !
     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1423) n13, n2

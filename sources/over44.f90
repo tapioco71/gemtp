@@ -1333,7 +1333,7 @@ subroutine comlr2 (nm, n, low, igh, int, hr, hi, zi, zr, wr, wi, ierr, ndim, ior
         eim(i + 1) = t
         t = lseq(i)
         lseq(i) = lseq(i + 1)
-        lseq(i + 1) = t
+        lseq(i + 1) = int (t)
      end do
   end do
   do i = 1, n
