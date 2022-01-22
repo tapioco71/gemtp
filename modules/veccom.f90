@@ -134,7 +134,8 @@ contains
     !     begin code to dump  (array(k), k=1, n13)  into tank:
 1671 if (kntvec .gt. 0) go to 1674
     n14 = nbyte(3) / nbyte(4)                                 ! relative lengths  real/integer
-    kofvec(1) = (ltlabl + 1) / n14 + 51                       ! begin storage
+    !    kofvec(1) = (ltlabl + 1) / n14 + 51                       ! begin storage
+    kofvec(1) = (size (karray) + 1) / n14 + 51
     if (iprsup .ge. 2) write (unit = lunit(6), fmt = 1673) kofvec(1)
 1673 format (' Initialize kofvec(1) =', i10)
     print *, kntvec
@@ -192,7 +193,8 @@ contains
     !     begin code to dump  (karr(k), k=1, n13)  into tank:
 1471 if (kntvec .gt. 0) go to 1474
     n14 = nbyte(3) / nbyte(4)                                 ! relative lengths  real/integer
-    kofvec(1) = (ltlabl + 1) / n14 + 51
+    !    kofvec(1) = (ltlabl + 1) / n14 + 51
+    kofvec(1) = (size (karray) + 1) / n14 + 51
     if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1473) kofvec(1)
 1473 format (' Initialize kofvec(1) =', i10)
 1474 kntvec = kntvec + 1
