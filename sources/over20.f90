@@ -3119,7 +3119,7 @@ subroutine spyink
   end do
   j = 999999
   go to 3928
-3926 write (unit = munit6, fmt =  3927)  d18
+3926 write (unit = munit6, fmt = 3927) d18
 3927 format ('     EOF during read (lunit(4)).  Quit search for tend =', e13.4)
   call window
 3928 indbuf = n13
