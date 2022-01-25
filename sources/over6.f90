@@ -216,7 +216,7 @@ subroutine over6
 5250 write (unit = lunit(6), fmt = 5254)
 5254 format (//, ' List of input elements connected to each bus.', /, 10x, '1) Only the physical connections of multiphase lines are shown (capacitive and inductive coupling ignored)', /, 10x, '2) Repeated entries imply parallel connections', /, 10x,  '3) Sources are omitted, although switches  are included;', /, 10x, '4) u.m. usage produces extra, internally-defined nodes "um????" (1st 2 letters "um").')
   write (unit = lunit(6), fmt = 5261)
-5261 format(' From bus name 1 names of all adjacent busses')
+5261 format(' From bus name | names of all adjacent busses')
   write (unit = lunit(6), fmt = 5266)
   !5266 format (' --------------+----------------------------------------------------------------------------------------------------------')
 5266 format (1x, 14('-'), '+', 116('-'))
