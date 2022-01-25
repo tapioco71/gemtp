@@ -1423,7 +1423,7 @@ subroutine spying
   call window
   rewind lunit(4)
   read (unit = lunit(4)) date1, tclock, numnam, numnvo, numbco, numbrn
-  if (lbus .ge. numnam .and. lsiz12 .ge. numnvo .and. lbrnch .ge. numbrn) go to 2608
+  if ((lbus .ge. numnam) .and. (lsiz12 .ge. numnvo) .and. (lbrnch .ge. numbrn)) go to 2608
   write (unit = munit6, fmt = 2606)
 2606 format ('   $$$$  Overflow.  EMTP list sizes are too small to regenerate the header information of the plot file.')
   call window
@@ -1433,12 +1433,12 @@ subroutine spying
   go to 1240
 2608 rewind lunit(4)
   read (unit = lunit(4)) date1, tclock, numnam, numnvo, numbco, numbrn, (bus(j), j = 1, numnam)
-  if (numnvo .gt. 0) read (lunit(4)) (ibsout(j), j = 1, numnvo)
-  if (numbrn .gt. 0) read (lunit(4)) (kbus(j), mbus(j), j = 1, numbrn)
+  if (numnvo .gt. 0) read (unit = lunit(4)) (ibsout(j), j = 1, numnvo)
+  if (numbrn .gt. 0) read (unit = lunit(4)) (kbus(j), mbus(j), j = 1, numbrn)
   rewind lunit(4)
   write (unit = lunit(4)) date1, tclock, numnam, numnvo, numbco, numbrn, (bus(j), j = 1, numnam)
-  if (numnvo .gt. 0) write (lunit(4)) (ibsout(j), j = 1, numnvo)
-  if (numbrn .gt. 0) write (lunit(4)) (kbus(j), mbus(j), j = 1, numbrn)
+  if (numnvo .gt. 0) write (unit = lunit(4)) (ibsout(j), j = 1, numnvo)
+  if (numbrn .gt. 0) write (unit = lunit(4)) (kbus(j), mbus(j), j = 1, numbrn)
 2611 call runtym (d1, d2)
   call pfatch
   call tables
