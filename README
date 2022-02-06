@@ -9,7 +9,7 @@ $ make clean && make -k
 
 to test a data case file use
 
-$ gcc/gemtp ../benchmarks/data_case_001.dat
+$ gcc/gemtp < ../benchmarks/data_case_001.dat
 
 this data case is from page 3-9 to page 3-21 of the EMTP workbook (EL-4651).
 
