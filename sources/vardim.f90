@@ -208,7 +208,7 @@ program vardim
   !  dimension cblock(300), ncbarr(300), cblser(300), jbltyp(300)
   integer(4) :: integerdim, realdim
   type (variable) :: modvars(260), tempvar
-  type (variableslist), target :: equivlist(10)
+  !  type (variableslist), target :: equivlist(10)
   !
   integerdim = 4
   realdim = 8

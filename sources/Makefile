@@ -98,28 +98,32 @@ lst: ${COMPILER}/${TARGET}.lst
 # The clean rule.
 clean:	clear_modules
 clean:
-	@if [ 'x${VERBOSE}' = x ];				\
-	then							\
-		echo " [ clean ] ${COMPILER}";			\
-	else							\
-		echo "rm -rf ${COMPILER}			\
-				*.tab.c				\
-				${ROOT}/includes/*.tab.h	\
-				${ROOT}/includes/*~		\
-				*.o				\
-				*.output			\
-				.depend				\
-				fort.*				\
-				${wildcard *~} ${<}";		\
+	@if [ 'x${VERBOSE}' = x ];					\
+	then								\
+		echo " [ clean ] ${COMPILER}";				\
+	else								\
+		echo "rm -rf ${COMPILER}				\
+				*.tab.c					\
+				${ROOT}/includes/*.tab.h		\
+				${ROOT}/includes/*~			\
+				*.o					\
+				*.output				\
+				.depend					\
+				fort.*					\
+				${ROOT}/${MODULES_PATH}/labcom.f90	\
+				${ROOT}/${SOURCES_PATH}/newmods.f90	\
+				${wildcard *~} ${<}";			\
 	fi
-	@rm -rf ${COMPILER} 			\
-		*.tab.c				\
-		${ROOT}/includes/*.tab.h	\
-		${ROOT}/includes/*~		\
-		*.o				\
-		*.output			\
-		.depend				\
-		fort.*				\
+	@rm -rf ${COMPILER} 				\
+		*.tab.c					\
+		${ROOT}/includes/*.tab.h		\
+		${ROOT}/includes/*~			\
+		*.o					\
+		*.output				\
+		.depend					\
+		fort.*					\
+		${ROOT}/${MODULES_PATH}/labcom.f90	\
+		${ROOT}/${SOURCES_PATH}/newmods.f90	\
 		${wildcard *~} ${<}
 
 clear_modules:
