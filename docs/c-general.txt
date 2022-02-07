@@ -1,0 +1,373 @@
+.. comment: -*- mode:rst; coding:utf-8; electric-indent-mode:nil; tab-always-indent:t -*-
+
+
+General Introductory Information about the EMTP
+*******************************************************************************
+
+Let this manual begin with a disclaimer as to what it is not!
+The current name  "Rule Book"  is a replacement for the older term
+"User's Manual"  which was employed for editions date November 1977
+and earlier.   The name change was for good reason:  there is a bare
+minimum of user instruction in the manual.  So, novice users, do not
+expect to read this manual as a tutorial handbook.  **That**, it is **not**!
+Instead, it is basically nothing more than a complete book of rules for
+EMTP input and output.   And as the modeling capability of the EMTP
+expands without any obvious bound (program size is about 70000 UTPF
+statements as of the  "M31."  versione of November, 1982), documentation
+of the rules begins to resemble more and more the Manhattan Yellow
+Pages.   Any beginner needs help of various other forms.
+
+By far the best way to learn about EMTP capability and usage is
+by working beside a competent, experienced veteran.   Those power
+organizations which have been using the EMTP for a broad range of power
+system simulation,  and which have not suffered disabling personnel
+changes, represent the ideal learning environment.   If the reader is
+working for such an organization,  he should count his blessing,  and
+disregard most of what follows.   In case of questions or problems,  go
+see the local experts.   Always ask questions (EMTP users have to get
+into the habit,  since they will be doing it until the day they retire,
+so broad and complex is transient simulation)!
+
+For those not so blessed by local expertes,  the next-best
+alternative is a strong national or regional EMTP Users Group.   The
+need was first appreciated by the Japanese,  who were organized by
+Dr. Akihiro Ametani,  Professor of Electrical Engineering at Doshisha
+University (see "Japan" in index for address).   Something like 24
+industrial organizations and four universities are involved.   Next
+came the Brazilians (see Ref. 7,  Vol. XI,  18 October 1981,  page
+SSIA-1),  the Europeans (same volume,  3 October 1981,  pages  IONM-11
+through 14),  and most recently the Australians.   EMTP usage has
+grown so large that we at BPA simply can not correspond individually
+with all EMTP users.   If any user or EMTP-interested party seeks EMTP
+information,  we first request that he try his national or regional
+organization,  for those parts of the world where these exist.   Only
+write or call Portland if the national or regional user support is
+unable to answer the question.   Further,  if you do write to Portland,
+be sure to send a copy of the letter to the national or regional EMTP
+organization,  to keep them informed.   National or regional EMTP user
+organizations have been placed on the primary distribution list for
+EMTP memoranda (Ref. 7),  so such information is thereby available
+before enough memos have accumulated to be bound into a new volume.
+Given the existing national or regional organizations,  perhaps the
+greatest need now resides very close to home:  the USA and/or Canada.
+Are there any volunteers who would provide secondary printing and
+distribution of EMTP Memoranda and other printed EMTP materials
+in exchange for being placed on the primary distribution list?   Unless
+BPA management decides to massively support printing and mailing
+activities,  it is to be predicted that available pesonnel will
+concentrate on thse who are organized so as to help themselves,  thos
+for whom our limited resources can do the most good.   While no promises
+can be made for future support of even organized EMTP use groups,  it
+seems obvious that the prospects for those who are organized are much
+better than for those who are not.   Think about it,  EMTP users!
+
+Availability of program to others
+===============================================================================
+
+In conformity with long-standing BPA policy, dissemination of
+materials related to the Electromagnetic Transients Program (EMTP, or
+T.P. in the older notation) is made freely to any and all interested
+parties.  A fee to cover reproduction, handling, and mailinf costs may
+be assessed against the organization or individual receiving the
+materials, however.  No claim or warranty as to the usefulness,
+accuracy, fidelity, or completeness of these materials is, or ever
+has been, in any way expressed or implied
+
+It is only for potential program users having the same computer
+system as BPA (currently a DEC VAX-11/780 minicomputer, or Apollo micro-
+computer) that the EMTP probably can be procured most conveniently
+
+
+.. raw:: pdf
+
+    PageBreak
+
+
+Program Maintenance and Development
+===============================================================================
+
+Dr. Hermann W. Dommel, founding father of the EMTP, left BPA for
+the University of British Columbia in Vancouver during July of 1973.
+Primary responsibility for EMTP maintenance and development at BPA
+the shifted to Dr. W. Scott Meyer (address and phone number as on the
+cover), with Dr. Tsu-huei Liu (same address and phone) added to the
+effort in October of 1975.
+
+So much for BPA and ancient history (back when the program was
+small, and manageable, and when most of us still nurtured the naive hope
+of someday finishing it).   A new phase of EMTP development was begun
+during 1975, after the discovery of machine translation (see Ref. 13)
+the cooperative development among major program users, for the mutual
+benefit of all.  Very substantial contributions to the present EMTP have
+been made by non-BPA personnel (though BPA funding has supported most
+work at other than power companies).  Three othe North American power
+companies have been actively involved in development, as have four
+universities:
+
+#. The original dynamic synchronous machine (S.M.) of the
+   EMTP was contributed by the Southern California Edison Co.
+   (SCE) of Rosemead, California (the Los Angeles area).  Mike
+   Hall and Johm Alms did the development work there, as
+   documented in Ref. 8, Volume VI, 5 December 1976, pagination
+   FOTS.  Much of the theoretical basis came from Dr. George
+   Gross of Pacific Gas & Electric (San Francisco).  That original
+   code was considerably enhanced since its 1976 introduction
+   to the EMTP, thanks to Dr. Vladimir Brandwajn (originally a
+   student of Prof. Dommel, thena a contractor of BPA for about
+   a year.  Between 1978 and 1982, Dr. Brandwajn handled all
+   EMTP cosiderations related to the conventional S.M.
+   code, whether it be the original SCE code, or his own (Type-59)
+   modeling.  Before moving to System Control in 1982, Vladimir
+   removed the Type 50 (original SCE) modeling.
+
+#. The Semlyen recursive convolution modeling of Section 1.27a
+   comes from Ontario Hydro (OH) of Toronto, Ontario (Canada).  It
+   is named after Professor Adam Semlyen of the University of
+   Toronto, who inspired it (see Refs. 10, 21).  Alex Dabuleanu
+   (now deceased;  formerly an OH employee) did much of the
+   original work, as a student of Prof. Semlyen.  Through the end
+   of 1979, Russel Brierley of OH continued to be the premier
+   expert in use of the feature, and researcher who paved the way
+   for generalization to complex exponentials (theory as per Ref.
+   21 by Prof. Semlyen).  Bob Eifrig of Oregon State University
+   (and a temporary BPA employee for several summers) restructured
+   the original Semlyen code during the summer of 1976 (variable
+   dimensioning, etc.).  Then during the summer of 1978, Bob
+   completely recoded the solution code, to allow for an arbitrary
+   number of complex exponentials, followinf the Ontario Hydro
+   recommendation.  Bob did work on the associated new "SEMLYEN
+   SETUP" (prototype which came from Russ Brierly and Vladimir),
+   though a workable production tool never resulted.  See Point 9
+   below.
+
+#. The dynamic surge arrester for SiC devices with active current
+   limitating gaps as described in Section 1.34 was developed and
+   contributed by Chuck Wolf and Dr. Arun Phadke of the American
+   Electric Power (AEP) Service Corporation of New York City.
+
+#. The original mathematical formulation and crude outlines of
+   TACS (see Section 8.), which is used for control system
+   modeling, was developed by Laurent Dube, studying under the
+   supervision of Prof. Hermann W. Dommel at the University of
+   British Columbia in Vancouver.  See Ref. 12.  Implementation
+   and enhancement in the EMTP were made by Laurent working under
+   contract with BPA.  This included the valve and diode modeling
+   of Section 1.43.  Laurent's first BPA contract ended in the
+   summer of 1976, and a second began in the spring of 1979, as
+   a second generation of TACS is being developed.  How much of
+   the new goodies make the general distribution during the
+   summer of 1980 is not now (March, 1980) clear.
+
+#. Professor Akihiro ("Aki") Ametano (now deceased January 2022) of
+   Doshisha University in Kyoto (Japan) developed the "CABLE CONSTANTS"
+   code of Section 7.7;  and he also inspired the "Ametani linear
+   convolution" modeling (see Ref. 11), the implementation of which
+   was designed and performed by Bob Eifrig.  Yet this UTPF overlay
+   46 was removed during 1983.
+
+#. The Type-96 hysteretic inductor modeling of Section 1.31 was
+   developed by Prof. Narendra ("Ned") Mohan and Mr. Jim Frame of
+   the University of Minnesota in Minneapolis.  This was during
+   1978 and 1979, under contract with BPA.
+
+#. The universal machine (U.M.) modeling of Section 1.63 was
+   developed by Prof. Hian Lauw of Oregon State University in
+   Corvallis, Oregon.  This was during 1979 and 1980, under
+   contract with BPA.
+   
+#. The Type-59 dynamic synchronous machine (S.M.) modeling of Section 1.62
+   was originally researched by Dr. Vladimir Brandwajn while studying for his
+   doctorate in Vacouver (another of Prof. Dommel's graduate students).  See
+   Ref. 15.  Implementation in the EMTP was under contract with BPA (see Ref. 8,
+   Vol. VII, 23 December 1977, pagination CBVB).  Between 1978 and 1982, Vladimir
+   was with Ontario Hydro, and has since moved to Systems Control, Inc. of Palo
+   Alto, California.
+
+#. Dr. John Hauer of BPA joined the EMTP development effort during the
+   late fall of 1979, to rescue our suspended "SEMLYEN SETUP" work.  See Ref. 8,
+   Vol. IX, 4 October 1979, page EDTO-1.  Rather than correcting past work, he
+   added is own self-contained, sophisticated, frequency-domain fitting program
+   that has evolved over the past decade or two.  This "HAUER SETUP" code of UTPF
+   overlays 48 and 49 existed until 1983, when it was removed ("MARTI SETUP" is the
+   general replacement).
+
+#. Prof. Jose R. Marti of Central University of Venezuela (in Caracas)
+   finished his doctoral study under Prof. Hermann Dommel at UBC in 1981.  Jose's
+   dissertation concerned a new, simplified procedure for the frequency-dependent
+   representation of transmission lines in a transients program.  Implementation in
+   the EMTP began in August of 1981, and continued through the following summer,
+   under contract with BPA.  See Sections 1.26b1 and 7.0.
+
+#. Ma Ren-ming from the Wuhan High Voltage Institute (Wuhan, China) moved
+   to Portland during March 1982, and has been an integral part of the program
+   support team ever since.  During late 1983 and early 1984, he made very
+   extensive improvements to TACS modeling.  Other projects with which Ma has been
+   closely involved are the new EMTP switch logic, and refinement of the EMTP load
+   flow.  When Ma Ren-ming returns home during the summer of 1984, his presence
+   will be sorely missed.  For the first two years of his stay, salary, travel, and
+   living expenses were all provided by his institute, for which all users should
+   be grateful.
+   
+#. Frank Rasmussen of Elkraft Power Corporation in Denmark did background
+   research, and delivered the initial workable code for what is now referred to as
+   the EMTP load flow.  See Ref. 8, Vol. XIII, 23 July 1983, Section II, pages
+   VDEL-2 through 9.
+
+Hence there is quite a bit of EMTP competence which is spread among many
+individuals.  The effort was long ago bigger than any one person, group of
+persons, or even power pool.  Industry-wide development on an international
+scale has been involved.  The coordination has been centered largely in Portland
+(at BPA), if only by default.  But then the possibility of better-coordinated
+and better-funded development motivated the establishment of the EMTP
+Development Coordination Group (DCG) in the fall of 1982.  As of April, 1984,
+DCG support for S.M. and U.M. contractors (Dr. Brandwajn and Prof. Lauw) has
+resulted in obvious, observable, deliverable improvements to the program, and
+would seem to be DCG's prime accomplishment.
+
+A new EMTP user is encouraged to seek assistance within his own company
+when using the program for the first time, or when using it in a new mode.  If
+there are questions as to program and/or problem restrictions, an inquiry to
+experienced personel is almost always advisable.  The EMTP and associated
+problem modeling are inimitably tricky and sophisticated, with experience
+invaluable in order to avoid experimentation of a trial and error (garbage in,
+garbage out) nature.  For those who are able to spend corporate funds, and
+travel of centers of EMTP education, I strongly recommend any course sponsored
+by "EMTP insiders".
+
+
+.. raw:: pdf
+
+    PageBreak
+
+
+Program Capability (Summary)
+===============================================================================
+
+The Transients Program is used to solve the ordinary differential and/or
+algebraic equations associated with an "arbitrary" interconnection of the following
+elements:
+
+#. Lumped resistance:  v = Ri
+
+.. image:: images/o-resistor.png
+   :alt: resistor
+   :align: center
+   :width: 25%
+
+#. Lumped inductance:  v = L di/dt
+
+.. image:: images/o-inductance.png
+   :alt: inductance
+   :align: center
+   :width: 25%
+
+#. Lumped capacitance: i = C dv/dt
+
+.. image:: images/o-capacitance.png
+   :alt: capacitance
+   :align: center
+   :width: 12%
+
+
+#. Multiphase Pi-equivalents, where the preceding scalar
+   R, L, C become symmetric square matrices [ R ], [ L ],
+   [ C ].
+
+.. image:: images/o-pi-equivalent.png
+   :alt: pi-equivalent
+   :align: center
+   :width: 66%
+
+#. Multiphase distributed-parameter transmission lines, wherein propagation
+   time of the line is represented.  Distortionless and externally-lumped-
+   resistance approximations are available, as well as "exact" frequency-
+   dependent representations.
+
+.. image:: images/o-trellis.png
+   :alt: trellis
+   :align: center
+   :width: 12%
+
+#. Nonlinear resistors, where the curve must be single-valued.
+
+.. image:: images/o-nl-resistance.png
+   :alt: non linear resistance
+   :align: center
+   :width: 25%
+
+#. Nonlinear inductors, either with the conventional single-valued
+   characteristics (see sketch at right), or including hysteresis.
+
+.. image:: images/o-nl-inductance.png
+   :alt: non linear inductors
+   :align: center
+   :width: 25%
+
+#. Time-varying resistance.
+
+.. image:: images/o-tv-resistance.png
+   :alt: time varying resistance
+   :align: center
+   :width: 25%
+
+#. Switches, used to simulate circuit breakers, lightning-arrestor
+   flashover, or any other network connection change.  Diodes and
+   dc converter valves are included.
+
+.. image:: images/o-breaker.png
+   :alt: breaker
+   :align: center
+   :width: 25%
+
+.. image:: images/o-valves.png
+   :alt: valves
+   :align: center
+   :width: 25%
+
+#. Voltage or current sources.  In addition to standard mathematical
+   functions (sinusoids, surge functions, steps, and ramps), the user
+   may specify sources point by point as functions of time, or in
+   FORTRAN, or as defined by TACS (see Point 12 below).
+
+.. image:: images/o-sources.png
+   :alt: sources
+   :align: center
+   :width: 33%
+
+#. Dynamic synchronous machines (3-phase balanced design only).  The
+   electrical side is represented by Park's (Blondel's) equations,
+   while the mechanical side is modeled as an interconnection of
+   masses, springs, and damping.  Arbitrary exciter and governor
+   dynamics can be represented, by connection to TACS (see Point 12).
+
+#. Control system dynamics, as are normally represented on differential
+   analyzers (analog computers).  This modeling capability goes by the
+   name of TACS (ans acronym for Transfient Analysis of Control Systems).
+   Nonlinear and logical operations may be represented.  Input and
+   output may be interfaced with the electric network of the EMTP,
+   providing a hybrid representation.  All TACS representation is
+   user-patchable, and hence configuration free.  See Sect. 8.
+
+#. Unconventional rotating electromechanical energy converters of
+   various sorts, including induction machines and dc machines.
+   An arbitrary number of windings on each rotor axis is allowed,
+   there is no restriction to 3-phase usage etc.  Compensation is
+   used, and any mass-spring dynamics of the shaft are represented
+   by an electrical analog.  Various control system connections 
+   are possible, via TACS.  Refer to Section 1.63 (the universal
+   machine model).
+
+
+.. raw:: pdf
+
+    PageBreak
+
+
+References
+===============================================================================
+
+- `<https://en.wikipedia.org/wiki/Address_%28geography%29>`_ (have fun!)
+- `<https://www.mjt.me.uk/posts/falsehoods-programmers-believe-about-addresses/>`_
+- `<http://wiesmann.codiferes.net/wordpress/?p=15187&lang=en>`_
+
+.. comment: the end

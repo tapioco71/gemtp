@@ -1,0 +1,61 @@
+#!/usr/local/bin/clisp -ansi -q -E utf-8
+;;;; -*- mode:lisp; coding:utf-8 -*-
+
+(defun scan-file-directive (directive line)
+  (let ((line (string-trim " 	" line)))
+    (and (<= (+ 6 (length directive)) (length line))
+         (string= ".." (subseq line 0 2))
+         (let ((dirpos (search directive line :start2 2)))
+           (and dirpos
+                (every (lambda (x) (char= #\space x))
+                       (subseq line 2 dirpos))
+                (let* ((start  (+ dirpos (length directive)))
+                       (colonpos (search "::" line :start2 start)))
+                  (and colonpos
+                       (every (lambda (x) (char= #\space x))
+                              (subseq line start colonpos))
+                       (return-from scan-file-directive
+                         (string-trim " " (subseq line (+ colonpos 2)))))))))))
+
+(assert (equal (scan-file-directive "include" ".. include:: hello-world.txt ")
+               "hello-world.txt"))
+(assert (equal (scan-file-directive "include" "    ..    include::    hello-world.txt ")
+               "hello-world.txt"))
+(assert (null (scan-file-directive "image" ".. include:: hello-image.txt ")))
+
+(defparameter *max-level* 10)
+
+(defun process-rst-file (file level)
+  (when (< *max-level* level)
+    (error "Include level too big: ~D" level))
+  (with-open-file (in file)
+    (loop
+      :with includes := '()
+      :with images   := '()
+      :for line = (read-line in nil nil)
+      :while line
+      :do (cond ((let ((include (scan-file-directive "include" line)))
+                   (when include (push include includes))))
+                ((let ((image (scan-file-directive "image" line)))
+                   (when image (push image images)))))
+      :finally (return (append images
+                               includes
+                               (mapcan (lambda (file)
+                                         (process-rst-file file (1+ level)))
+                                       includes))))))
+
+
+(defun make-rst-depends (rst-files)
+  (dolist (file rst-files)
+    (format t "~A.pdf:: ~{\\~%	~A~^ ~}~%"
+            (pathname-name file)
+            (cons file (process-rst-file file 0)))))
+
+#+testing-script
+(make-rst-depends '("~/works/ops/specifications/specifications.txt"))
+
+#-testing-script
+(progn
+  (make-rst-depends ext:*args*)
+  (ext:exit 0))
+

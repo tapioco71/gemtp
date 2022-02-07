@@ -1,0 +1,171 @@
+#!/usr/local/bin/clisp -q -ansi -Kfull -E utf-8
+;;;; -*- mode:lisp;coding:utf-8 -*-
+;;;;**************************************************************************
+;;;;FILE:               rstpre
+;;;;LANGUAGE:           Common-Lisp
+;;;;SYSTEM:             Common-Lisp
+;;;;USER-INTERFACE:     NONE
+;;;;DESCRIPTION
+;;;;    
+;;;;    Pre-processes rst files.  New directives implemented:
+;;;;
+;;;;       .. include:: path.rst
+;;;;
+;;;;           The contents of the file at path is included (and
+;;;;           processed).
+;;;;    
+;;;;AUTHORS
+;;;;    <PJB> Pascal J. Bourguignon <pjb@informatimago.com>
+;;;;MODIFICATIONS
+;;;;    2015-10-28 <PJB> Extracted from old project.
+;;;;BUGS
+;;;;LEGAL
+;;;;    AGPL3
+;;;;    
+;;;;    Copyright Pascal J. Bourguignon 2015 - 2015
+;;;;    
+;;;;    This program is free software: you can redistribute it and/or modify
+;;;;    it under the terms of the GNU Affero General Public License as published by
+;;;;    the Free Software Foundation, either version 3 of the License, or
+;;;;    (at your option) any later version.
+;;;;    
+;;;;    This program is distributed in the hope that it will be useful,
+;;;;    but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;;;    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;;;    GNU Affero General Public License for more details.
+;;;;    
+;;;;    You should have received a copy of the GNU Affero General Public License
+;;;;    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;;;;**************************************************************************
+
+#+clisp (setf custom:*default-file-encoding* charset:utf-8)
+
+(defpackage "RSTPRE"
+  (:use "COMMON-LISP")
+  (:export "PROCESS-SOURCE"
+           "GENERATE-TABLE"))
+(in-package "RSTPRE")
+
+(defun prefixp (prefix sequence)
+  (equal prefix (subseq sequence 0 (min (length sequence) (length prefix)))))
+
+(defun split-string (sep string)
+  (loop
+     :with lines = '()
+     :for start = 0 :then (1+ end)
+     :for end = (position sep string :start start) 
+     :while end
+     :do (push (subseq string start end) lines)
+     :finally (push (subseq string start) lines)
+     (return (reverse lines))))
+
+(defvar *current-package*                   (find-package "COMMON-LISP-USER"))
+(defvar *current-default-pathname-defaults* *default-pathname-defaults*)
+(defvar *current-terminal-io*               *terminal-io*)
+
+(defun process-sexp (dir src dst)
+  (let ((form                      (read src)))
+    (format dst "..  ~{~A~^~%    ~}~2%"
+            (split-string #\newline (prin1-to-string form)))
+    (let ((*package*                     *current-package*)
+          (*default-pathname-defaults*   *current-default-pathname-defaults*)
+          (*standard-input*              src)
+          (*standard-output*             dst)
+          (*terminal-io*                 *current-terminal-io*))
+      (unwind-protect (handler-case (eval form)
+                        (error (err)
+                          (format *error-output* "Evaluating: ~S~%~A~%" form err)))
+        (when (packagep *package*)
+          (setf *current-package* *package*))
+        (when (pathnamep *default-pathname-defaults*)
+          (setf *current-default-pathname-defaults* *default-pathname-defaults*))))))
+
+
+
+(defun process-dot-dot (dir src dst)
+  (loop
+    :for space-count :from 0
+    :for curr-char = (read-char src nil nil)
+    :while (eql #\space curr-char)
+    :finally (case curr-char
+               ((nil)
+                (format dst "..~VA" space-count ""))
+               ((#\()
+                (unread-char curr-char src)
+                (process-sexp dir src dst))
+               (otherwise
+                (unread-char curr-char src)
+                (let* ((line (read-line src))
+                       (include "include::")
+                       (include-length (length include)))
+                  (if (prefixp include line)
+                      (let ((path (string-trim " " (subseq line include-length))))
+                        (if (probe-file path)
+                            (with-open-file (inl path)
+                              (let ((*current-terminal-io* (make-two-way-stream inl dst)))
+                                (format *error-output* "Inlining ~A~%" path)
+                                (process-stream dir inl dst)))
+                            (format dst "..~VA~A~%" space-count "" line)))
+                      (format dst "..~VA~A~%" space-count "" line)))))))
+
+
+(defun process-stream (dir src dst)
+  (let ((*default-pathname-defaults*         dir)
+        (*current-package*                   *current-package*)
+        (*current-default-pathname-defaults* dir)
+        (*current-terminal-io*               *current-terminal-io*))
+    (loop
+       :for next-char = (peek-char nil src nil nil)
+       :while next-char
+       :do (if (char= #\. next-char)
+               (progn
+                 (read-char src)         ; eat it
+                 (let ((next-char (peek-char nil src nil nil)))
+                   (if (eql #\. next-char)
+                       (progn
+                         (read-char src) ; eat it
+                         (process-dot-dot dir src dst))
+                       (progn
+                         (unread-char #\. src)
+                         (write-line (read-line src) dst)))))
+               (write-line (read-line src) dst)))))
+
+(defun process-source (src)
+  (let ((dir (make-pathname :name nil :type nil   :version nil :case :common :defaults src))
+        (rst (make-pathname           :type "RST" :version nil :case :common :defaults src)))
+    (with-open-file (input src)
+      (with-open-file (output rst
+                              :direction :output
+                              :if-exists :supersede
+                              :if-does-not-exist :create)
+        (process-stream dir input output)))
+    rst))
+
+
+(defun generate-table (header rows)
+  (let* ((widths (reduce (lambda (lengths row)
+                           (mapcar (lambda (len col) (max len (length col))) lengths row))
+                         (if header (cons header rows) rows)
+                         :initial-value (make-list (length (first rows)) :initial-element 0)))
+         (line (format nil "~:{+~V,,,'-A~}+" (mapcar (lambda (w) (list (+ w 2) "")) widths))))
+    (format nil "~A~%~:{~:{| ~VA ~}|~%~A~%~}"
+            line
+            (mapcar (lambda (row)
+                      (list (mapcar (lambda (width col) (list width col))
+                                    widths row)
+                            line))
+                    (if header (cons header rows) rows)))))
+
+
+(defun main (args)
+  (if (null args)
+      (process-stream #P"./"  *standard-input* *standard-output*)
+      (dolist (src args)
+        (process-source src))))
+
+#-testing-script
+(main ext:*args*)
+
+(pushnew :testing-script *features*)
+;;;; THE END ;;;;
+
