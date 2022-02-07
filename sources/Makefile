@@ -61,7 +61,7 @@ MODULES_PATH=	${ROOT}/modules
 LIBRARY_PATH=	${ROOT}/libraries
 
 # Sources path
-SOURCES_PATH=${ROOT}/sources/
+SOURCES_PATH=   ${ROOT}/sources
 
 SOURCES=
 
@@ -71,9 +71,9 @@ MODULES=
 include ${ROOT}/Makefile.global
 
 # The default rule.
-
 all: ${COMPILER}
-all: vardim dimension labcom newmods
+#all: ${ROOT}/${MODULES_PATH}/labcom.f90
+#all: ${ROOT}/${SOURCES_PATH}/newmods.f90
 all: ${COMPILER}/${TARGET}
 
 # Other rules.
@@ -83,6 +83,12 @@ ${TARGET}: ${COMPILER}/${TARGET}
 
 vardim: ${COMPILER}
 vardim: ${COMPILER}/${VARDIM}
+
+# dimensioning via vardim
+setup: vardim
+setup: dimension
+setup: ${ROOT}/${MODULES_PATH}/labcom.f90
+setup: ${ROOT}/${SOURCES_PATH}/newmods.f90
 
 # List rule
 lst: all
@@ -128,6 +134,53 @@ ${COMPILER}:
 		echo "mkdir -p ${COMPILER}";	\
 	fi
 	@mkdir -p ${COMPILER}
+
+dimension:
+	@if [ -f ${COMPILER}/${VARDIM} ];					\
+	then									\
+		if [ -f ${LISTSIZE} ];						\
+		then								\
+			if [ 'x${VERBOSE}' = x ];				\
+			then							\
+				echo " [ VARDIM ] ${LISTSIZE}";			\
+			else							\
+				echo "cat ${LISTSIZE} | ${COMPILER}/${VARDIM}";	\
+			fi;							\
+			cat ${LISTSIZE} | ${COMPILER}/${VARDIM};		\
+		else								\
+			echo "No ${LISTSIZE} file";				\
+		fi;								\
+	else									\
+		echo "No ${COMPILER}/${VARDIM}";				\
+	fi
+
+${ROOT}/${SOURCES_PATH}/newmods.f90:
+	@if [ -f fort.7 ];						\
+	then								\
+		if [ 'x${VERBOSE}' = x ];				\
+		then							\
+			echo " [ NEWMODS ] ";				\
+		else							\
+			echo "cp fort.7 newmods.f90";			\
+		fi;							\
+		cp fort.7 newmods.f90;					\
+	else								\
+		echo "Cannot create newmods.f90.";			\
+	fi
+
+${ROOT}/${MODULES_PATH}/labcom.f90:
+	@if [ -f fort.9 ];						\
+	then								\
+		if [ 'x${VERBOSE}' = x ];				\
+		then							\
+			echo " [ LABCOM ] ";				\
+		else							\
+			echo "cp fort.9 ${MODULES_PATH}/labcom.f90";	\
+		fi;							\
+		cp fort.9 ${MODULES_PATH}/labcom.f90;			\
+	else								\
+		echo "Cannot create labcom.f90.";			\
+	fi
 
 # Rule for compiling the main program.
 # ${COMPILER}/${TARGET}: ${COMPILER}/blockdspy.o
@@ -248,53 +301,6 @@ ${COMPILER}/${TARGET}: ${COMPILER}/over55.o
 ${COMPILER}/${VARDIM}: ${COMPILER}/bcddat.o
 ${COMPILER}/${VARDIM}: ${COMPILER}/bcdtim.o
 ${COMPILER}/${VARDIM}: ${COMPILER}/${VARDIM}.o
-
-dimension:
-	@if [ -f ${COMPILER}/${VARDIM} ];					\
-	then									\
-		if [ -f ${LISTSIZE} ];						\
-		then								\
-			if [ 'x${VERBOSE}' = x ];				\
-			then							\
-				echo " [ VARDIM ] ${LISTSIZE}";			\
-			else							\
-				echo "cat ${LISTSIZE} | ${COMPILER}/${VARDIM}";	\
-			fi;							\
-			cat ${LISTSIZE} | ${COMPILER}/${VARDIM};		\
-		else								\
-			echo "No ${LISTSIZE} file";				\
-		fi;								\
-	else									\
-		echo "No ${COMPILER}/${VARDIM}";				\
-	fi
-
-newmods:
-	@if [ -f fort.7 ];						\
-	then								\
-		if [ 'x${VERBOSE}' = x ];				\
-		then							\
-			echo " [ NEWMODS ] ";				\
-		else							\
-			echo "cp fort.7 newmods.f90";			\
-		fi;							\
-		cp fort.7 newmods.f90;					\
-	else								\
-		echo "Cannot create newmods.f90.";			\
-	fi
-
-labcom:
-	@if [ -f fort.9 ];						\
-	then								\
-		if [ 'x${VERBOSE}' = x ];				\
-		then							\
-			echo " [ LABCOM ] ";				\
-		else							\
-			echo "cp fort.9 ${MODULES_PATH}/labcom.f90";	\
-		fi;							\
-		cp fort.9 ${MODULES_PATH}/labcom.f90;			\
-	else								\
-		echo "Cannot create labcom.f90.";			\
-	fi
 
 # Rule to create a list file.
 ${COMPILER}/${TARGET}.lst: ${COMPILER}/${TARGET}
