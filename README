@@ -5,11 +5,14 @@ Fortran 90 version for gfortran.
 To compile:
 
 $ cd sources
-$ make clean && make -k
+$ make setup
+...
+$ make
+
+to clear the projects, thus deleting ../modules/labcom.f90, ../sources/newmods.f90 and ../sources/gcc
 
 to test a data case file use
 
 $ gcc/gemtp < ../benchmarks/data_case_001.dat
 
 this data case is from page 3-9 to page 3-21 of the EMTP workbook (EL-4651).
-
