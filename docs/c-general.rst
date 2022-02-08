@@ -643,6 +643,31 @@ busses) on Univac is handled in FORTRAN INTEGER variables, while on IBM the
 mode is REAL*8.  This is a concern of the program developers only, not of
 any normal interest to the user.  Reference 13 summarizes the entire process.
 
+Other machine differences affect the user in only a minor way, and he may
+not even initialy be aware of them.  For example, computer word length
+dictates certain precision or other numerical requirements on the input data.
+Control Data with its big 60-bit word is more tolerant of a wide disparity of
+input data than is Univac with its 36-bit word, for example.  Here we are
+talking about limits which exist for all EMTP users, but which vary in severity
+or value according to the computer installation being considered.  Relevant
+comments about such considerations will be found in the user instructions,
+where appropriate.  The user should always be aware of the computer word length
+used in his EMTP translation, needless to say.
+
+Finally, certain EMTP operations are totally different for different
+installations, at least in outward appearance, as far the user is concerned.
+For example, computers of different manufacture (IBM, CDC, Univac, SEL, etc.)
+will require completely different job control cards, in general.  There are the
+instructions by means of which one pleads with the installations operating
+system, asking for the EMTP, manipulating his data input files and the program
+output.  Such job control language (JCL) may even vary among different
+installations of the same manufacturer, due to local preferences or costraints
+which are placed on the mode of operation.  If in doubt as to what to employ,
+the use should always contact his resident EMTP expert for the last word.  Yet
+as a general guide, the following "system" instructions as to EMTP setup are
+typical, for the different computer system indicated.  Refer to Section 1.5a
+onward --- that section applicable to the computer system of interest.
+
 
 
 
