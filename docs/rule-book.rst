@@ -108,7 +108,7 @@ BPA ATP EMTP -- Rule Book
     PageBreak
 
 
-.. comment: 
+.. comment:
 
    ;; to insert a new chapter, add its name (without o- or extension) to the list in dolist,
    ;; and type C-x C-e after the sexp.
@@ -132,24 +132,23 @@ BPA ATP EMTP -- Rule Book
                        index
                          )
               (insert "\n.. comment: end-classes   "))
-      (insert (format  "\n.. raw:: pdf\n\n    PageBreak\n\n.. include:: c-%s.txt\n" chapter))))
+      (insert (format  "\n.. raw:: pdf\n\n    PageBreak\n\n.. include:: c-%s.rst\n" chapter))))
 .. raw:: pdf
 
     PageBreak
 
-.. include:: c-general.txt
+.. include:: c-general.rst
 
 .. raw:: pdf
 
     PageBreak
 
-.. include:: c-emtp-input-data.txt
+.. include:: c-emtp-input-data.rst
 
-.. comment: end-classes   
+.. comment: end-classes
 
 .. raw:: pdf
 
     PageBreak
 
 .. comment: the end
-

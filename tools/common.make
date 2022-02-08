@@ -52,7 +52,7 @@ clean-png clean-pngs:
 # Generate the dependencies of restructuredText documents (includes
 # and images).  Note: this should be done better by a script, since
 # included files may themselves include other files or images.
-%.d: %.txt
+%.d: %.rst
 	@if [ 'x${VERBOSE}' = x ];			\
 	then						\
 		echo " [ RST ] depend for file $< ";	\
@@ -62,7 +62,7 @@ clean-png clean-pngs:
 	@$(MAKE_RST_DEPENDS) $< > $@
 
 # Generate PDF from reStructuredText document.
-%.pdf: %.txt
+%.pdf: %.rst
 	@if [ 'x${VERBOSE}' = x ];			\
 	then						\
 		echo " [ GEN ] pdf document $@ ";	\
@@ -125,7 +125,7 @@ checkout-pdf checkout-pdfs: clean-pdf
 ## Example, using rstpre and rstuml:
 ##
 # .SUFFIXES: .in1 .txt .rst .pdf .xml .odt .html
-# 
+#
 # # All the preprocessing of the documents into a rst file should go here:
 # %.rst:%.txt
 # 	@i="$<" ; d=$$(dirname "$$i") ; f=$$(basename "$$i") ;\
@@ -135,25 +135,24 @@ checkout-pdf checkout-pdfs: clean-pdf
 # 	&& mv "$${f/.txt/.rst}"  "$${f/.txt/.in1}" \
 # 	&& echo "Processing UML in $${i/.txt/.in1}" \
 # 	&& $(RSTUML) "$${f/.txt/.in1}"
-# 
+#
 # # Following are the rules to process rst files into the target formats:
 # %.pdf:%.rst
 # 	@i="$<" ; d=$$(dirname "$$i") ; f=$$(basename "$$i") ;\
 # 	echo "Producing $${i/.rst/.pdf}" ;\
 # 	cd "$$d" \
-# 	&& $(RST2PDF)  $$( [ -r $${f/.rst/.style} ] && echo -s $${f/.rst/.style} )  -o "$${f/.rst/.pdf}"  "$$f" 
+# 	&& $(RST2PDF)  $$( [ -r $${f/.rst/.style} ] && echo -s $${f/.rst/.style} )  -o "$${f/.rst/.pdf}"  "$$f"
 # # --verbose --very-verbose
-# 
+#
 # %.odt:%.rst
 # 	@i="$<" ; d=$$(dirname "$$i") ; f=$$(basename "$$i") ;\
 # 	echo "Producing $${i/.rst/.odt}" ;\
 # 	cd "$$d" \
 # 	&& $(RST2ODT) $$( [ -r $${f/.rst/.style} ] && echo -s $${f/.rst/.style} ) "$$f" "$${f/.rst/.odt}"
-# 
+#
 # %.html:%.rst
 # 	@i="$<" ; d=$$(dirname "$$i") ; f=$$(basename "$$i") ;\
 # 	echo "Producing $${i/.rst/.html}" ;\
 # 	cd "$$d" \
 # 	@f="$<" \
 # 	&& $(RST2HTML) $$( [ -r $${f/.rst/.style} ] && echo -s $${f/.rst/.style} ) "$$f" "$${f/.rst/.html}"
-
