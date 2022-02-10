@@ -72,8 +72,6 @@ include ${ROOT}/Makefile.global
 
 # The default rule.
 all: ${COMPILER}
-#all: ${ROOT}/${MODULES_PATH}/labcom.f90
-#all: ${ROOT}/${SOURCES_PATH}/newmods.f90
 all: ${COMPILER}/${TARGET}
 
 # Other rules.

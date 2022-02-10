@@ -19,6 +19,11 @@ HELPFMT="$(shell basename $(MAKE)) %-20s \# %s\n"
 RST2PDF=$(shell which rst2pdf)
 RST2PDF_OPTIONS=--default-dpi=600
 
+ifneq (${RST2PDF},)
+ifneq (${LISP},)
+ifneq (${WGET},)
+ifneq (${FIG2DEV},)
+
 .PHONY:: view clean clean-pdf clean-pdfs checkout-pdf checkout-pdfs documents
 
 view: $(PDFS)
@@ -158,3 +163,16 @@ checkout-pdf checkout-pdfs: clean-pdf
 # 	cd "$$d" \
 # 	@f="$<" \
 # 	&& $(RST2HTML) $$( [ -r $${f/.rst/.style} ] && echo -s $${f/.rst/.style} ) "$$f" "$${f/.rst/.html}"
+
+else
+	@echo "fig2dev not found.";
+endif
+else
+	@echo "wget not found.";
+endif
+else
+	@echo "lisp not found.";
+endif
+else
+	@echo "rst2pdf not found.";
+endif
