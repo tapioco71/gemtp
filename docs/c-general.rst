@@ -1055,6 +1055,95 @@ feature).  The VAX modules, which presently occupy positions in the
 UTPF, are used for purpose of illustration.
 
 
+LUNIT4 file of raw plot data points (SYSDEP, KATALG, PFATCH
+-------------------------------------------------------------------------------
+
+The integer miscellaneous data card (Section 1.0h) defines variable
+ICAT which indicates wheter or not the user wants to save the raw
+plot data points on LUNIT4 once all EMTP processing of a data case is
+complete.  Variables ICAT and LUNIT4 are in deck BLKCOM, so the
+construct "INSERT DECK BLKCOM" will make them available in any modules
+which might be written.
+
+VAX is typical of most computer systems which require that a file
+be opened before it is written on.  For this reason, OPENING of the
+LUNIT4 files is done within "SYSDEP" of overlay one, even though
+variable ICAT is not known that early.  After the determination of
+the date and the time, we build a legal file name using these, and
+OPEN the file under the assumption that it will be saved:
+
+.. code::
+
+   CALL DATE44 ( DATE1(1) )
+   CALL TIME44 ( TCLOCK(1) )
+     < <  Build legal VAX/VMS file name using the digits
+          of DATE1 and TCLOCK; put result in FILE25      > >
+
+.. code::
+
+    OPEN (UNIT=LUNIT4, TYPE='NEW', NAME=FILE25,
+   1       FORM='UNFORMATTED')
+
+The TYPE='NEW' specification indicates that we are to create another
+(a new) disk file, as opposed to the connection of an existing file.
+In building file name FILE25, remember that DATE1(2) and TCLOCK(2)
+are ALPHANUMERIC vectors of /BLANK/ ---- REAL*8 for IBM, VAX, PRIME,
+SEL, etc.; INTEGER for Burroughs, Univac, CDC; REAL*6 for Harris, etc.
+But before such OPENing of a new file, we ask whether the plot file
+of the preceding solution really was to be saved permanently; if so,
+it is saved; if not, it is deleted.  Thus, at the top of "SYSDEP"
+(before the just-listed code) one sees:
+
+.. code::
+
+       IF (ICAT .EQ. 0) GO TO 120
+       IF (ICAT .GT. 2) GO TO 120
+   100 CLOSE (UNIT=LUNIT4, DISPOSE='SAVE')
+   140 CONTINUE
+
+Here the ICAT which is being used is left over from the precedeing
+solution, note (no EMTP data of the upcoming case has yet been read).
+
+The use of FORM='UNFORMATTED' deserves mention.  All WRITEs to
+LUNIT4 will be binary (unformatted), and this declaration in the OPEN
+statement merely reflects that nature.  Most computer systems do not
+make such a distinction between FORMATTED and UNFORMATTED I/O (VAX
+was the first we had heard of), fortunately, so the user can ignore
+this detail.  For LUNIT4 this is no special complication, since I
+can to recall another FORMATTED use of the same channel.  But for
+other I/O units, different EMTP features can use different modes,
+and OPENing and CLOSEing has become conditional on /BLANK/ variables
+(but that need not concern us here).
+
+One use for previously-saved LUNIT4 plot files is batch-mode EMTP
+plotting at some late time via a "REPLOT" request (see Section 1.0d of
+the Rule Book).  The disk file in question is connected by a call to
+installation-dependent "PFATCH" (mnemonically, "permanent file attach")
+which is found in "REQUES":
+
+.. code::
+
+   M28.1295C      $$$$    SPECIAL-REQUEST WORD NO. 4.   'REPLOT'
+   M28.1296 8004 IF (NOUTPR .EQ. 0)
+   M28.1297     1 WRITE (LUNIT6, 3364)
+   M28.1298 3364 FORMAT (  34H+REQUEST TO RE-PLOT OLD PLOT DATA.     )
+   M28.1299      DEGMAX = 0.0
+   M28.1300      IALTER = LUNIT4
+   M28.1301      CALL MIDOV1
+   M28.1302      CALL PFATCH
+   M28.1303      NCHAIN = 31
+   M28.1304      GO TO 5617
+
+The I/O unit number of the connection is carried through variable
+IALTER of /BLANK/, and that jump to S.N. 5617 provides a transfer
+to overlay NCHAIN = 31 plotting.  As for "PFATCH", the rules
+associated with extracting the requested file from the remainder of the
+"REPLOT" data card are quite arbitrary and discretionary.  For VAX,
+we chose to be quite restrictive, for simplicity.  We require that a
+"REPLOT" data card use EMTP free-format (with a comma after the key
+word "REPLOT", in column 7), followed by the legal VAX/VMS disk
+file name.  In this way, there is no character checking (e.g., to
+
 
 .. raw:: pdf
 
