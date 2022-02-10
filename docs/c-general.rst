@@ -1143,6 +1143,40 @@ we chose to be quite restrictive, for simplicity.  We require that a
 "REPLOT" data card use EMTP free-format (with a comma after the key
 word "REPLOT", in column 7), followed by the legal VAX/VMS disk
 file name.  In this way, there is no character checking (e.g., to
+discard any "/" or "." which are shown in the illustration of
+TEXCOL(K) against BLANK), and the search for characters of the name
+is terminated when the free-field separator character CSEPAR is
+found.  The search begins in column position KOLBEG, which is one
+column to the right of the last comma (in this case, the comma which
+followed "REPLOT", in column 7).  ENCODE is used to transfer
+characters from the input card buffer TEXCOL(80) to our file name
+FILEN(25) because of the type difference ---- TEXCOL is ALPHANUMERIC
+(REAL*8 for VAX), while FILEN is a byte vector (INTEGER*1).  After
+connection of the desired plot file, ICAT = 2 is set so that our
+precious disk file will be retained (rather than be destroyed) at the
+start of the following case (see previous "SYSDEP" logic).
+
+.. code::
+
+       5610      SUBROUTINE PFATCH
+   M27. 634      INSERT DECK BLKCOM
+   M27. 635      BYTE  FILEN(25)
+   M27. 636      N4 = 0
+   M27. 637      ENCODE (25, 4523, FILEN(1))
+   M27. 638 4523 FORMAT ( 25X )
+   M27. 639      DO 4532  K=KOLBEG, 80
+   M27. 640      IF ( TEXCOL(K) .EQ. BLANK )  GO TO 4532
+   M27. 641      IF ( TEXCOL(K) .EQ. CSEPAR ) GO TO 4536
+   M27. 642      N4 = N4 + 1
+   M27. 643      ENCODE (1, 3041, FILEN(N4))  TEXCOL(K)
+   M27. 644 3041 FORMAT ( 80A1 )
+   M27. 645 4532 CONTINUE
+            4536 CLOSE (UNIT=IALTER)
+                 OPEN  (UNIT=IALTER, TYPE='OLD', FORM='UNFORMATTED',
+   M27. 652     1       NAME=FILEN)
+   M28.2834      ICAT = 2
+       5653      RETURN
+       5654      END
 
 
 .. raw:: pdf
