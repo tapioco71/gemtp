@@ -46,7 +46,7 @@ unable to answer the question.   Further,  if you do write to Portland,
 be sure to send a copy of the letter to the national or regional EMTP
 organization,  to keep them informed.   National or regional EMTP user
 organizations have been placed on the primary distribution list for
-EMTP memoranda (`REF7`_),  so such information is thereby available
+EMTP memoranda ([REF7]_),  so such information is thereby available
 before enough memos have accumulated to be bound into a new volume.
 Given the existing national or regional organizations,  perhaps the
 greatest need now resides very close to home:  the USA and/or Canada.
@@ -108,7 +108,7 @@ universities:
    EMTP was contributed by the Southern California Edison Co.
    (SCE) of Rosemead, California (the Los Angeles area).  Mike
    Hall and Johm Alms did the development work there, as
-   documented in `REF8`_, Volume VI, 5 December 1976, pagination
+   documented in [REF8]_, Volume VI, 5 December 1976, pagination
    FOTS.  Much of the theoretical basis came from Dr. George
    Gross of Pacific Gas & Electric (San Francisco).  That original
    code was considerably enhanced since its 1976 introduction
@@ -123,12 +123,12 @@ universities:
 #. The Semlyen recursive convolution modeling of Section 1.27a
    comes from Ontario Hydro (OH) of Toronto, Ontario (Canada).  It
    is named after Professor Adam Semlyen of the University of
-   Toronto, who inspired it (see `REF10`_ and `REF21`_).  Alex Dabuleanu
+   Toronto, who inspired it (see [REF10]_ and [REF21]_).  Alex Dabuleanu
    (now deceased;  formerly an OH employee) did much of the
    original work, as a student of Prof. Semlyen.  Through the end
    of 1979, Russel Brierley of OH continued to be the premier
    expert in use of the feature, and researcher who paved the way
-   for generalization to complex exponentials (theory as per `REF21`_
+   for generalization to complex exponentials (theory as per [REF21]_
    by Prof. Semlyen).  Bob Eifrig of Oregon State University
    (and a temporary BPA employee for several summers) restructured
    the original Semlyen code during the summer of 1976 (variable
@@ -149,7 +149,7 @@ universities:
    TACS (see Section 8.), which is used for control system
    modeling, was developed by Laurent Dube, studying under the
    supervision of Prof. Hermann W. Dommel at the University of
-   British Columbia in Vancouver.  See `REF12`_.  Implementation
+   British Columbia in Vancouver.  See [REF12]_.  Implementation
    and enhancement in the EMTP were made by Laurent working under
    contract with BPA.  This included the valve and diode modeling
    of Section 1.43.  Laurent's first BPA contract ended in the
@@ -161,7 +161,7 @@ universities:
 #. Professor Akihiro ("Aki") Ametano (now deceased January 2022) of
    Doshisha University in Kyoto (Japan) developed the "CABLE CONSTANTS"
    code of Section 7.7;  and he also inspired the "Ametani linear
-   convolution" modeling (see `REF11`_), the implementation of which
+   convolution" modeling (see [REF11]_), the implementation of which
    was designed and performed by Bob Eifrig.  Yet this UTPF overlay
    46 was removed during 1983.
 
@@ -178,13 +178,13 @@ universities:
 #. The Type-59 dynamic synchronous machine (S.M.) modeling of Section 1.62
    was originally researched by Dr. Vladimir Brandwajn while studying for his
    doctorate in Vacouver (another of Prof. Dommel's graduate students).  See
-   `REF15`_.  Implementation in the EMTP was under contract with BPA (see `REF8`_,
+   [REF15]_.  Implementation in the EMTP was under contract with BPA (see [REF8]_,
    Vol. VII, 23 December 1977, pagination CBVB).  Between 1978 and 1982, Vladimir
    was with Ontario Hydro, and has since moved to Systems Control, Inc. of Palo
    Alto, California.
 
 #. Dr. John Hauer of BPA joined the EMTP development effort during the
-   late fall of 1979, to rescue our suspended "SEMLYEN SETUP" work.  See `REF8`_,
+   late fall of 1979, to rescue our suspended "SEMLYEN SETUP" work.  See [REF8]_,
    Vol. IX, 4 October 1979, page EDTO-1.  Rather than correcting past work, he
    added is own self-contained, sophisticated, frequency-domain fitting program
    that has evolved over the past decade or two.  This "HAUER SETUP" code of UTPF
@@ -210,7 +210,7 @@ universities:
 
 #. Frank Rasmussen of Elkraft Power Corporation in Denmark did background
    research, and delivered the initial workable code for what is now referred to as
-   the EMTP load flow.  See `REF8`_, Vol. XIII, 23 July 1983, Section II, pages
+   the EMTP load flow.  See [REF8]_, Vol. XIII, 23 July 1983, Section II, pages
    VDEL-2 through 9.
 
 Hence there is quite a bit of EMTP competence which is spread among many
@@ -370,9 +370,9 @@ elements:
 Trapezoidal-rule (second order) implicit integration is used on the describing
 equations of most elements which are described by ordinary differential equations.
 The result is to form an associated set of real, simultaneous, algebraic equations
-which must be solved at each step (see [ref1]_).  These are placed in nodal-
+which must be solved at each step (see [REF1]_).  These are placed in nodal-
 admittance form (with new unknown voltages as variables), and are solved by ordered
-triangular factorization ([ref4]_).
+triangular factorization ([REF4]_).
 
 Program output consist of component variables (e.g., branch currents or
 voltages, machine torques or speeds, etc.) as functions of time, for those variables
@@ -668,7 +668,379 @@ as a general guide, the following "system" instructions as to EMTP setup are
 typical, for the different computer system indicated.  Refer to Section 1.5a
 onward --- that section applicable to the computer system of interest.
 
+As summarized in [REF13]_, FORTRAN statements which are highly
+dependent on computer manufacturer and/or installation usage have been
+isolated in installation-dependent EMTP modules.  If a given organization
+performs its own translation, such modules will be set up to satisfy its own
+peculiar needs, and Program Maintenance of that organization should
+thorougly understand the decisions which have been made; in this case, there
+should be no complication at all.  But, if a given organization receives a
+FORTRAN copy of the EMTP from some other group which uses a computer of the
+same manufacture, then perhaps nothing will be known about installation-
+dependent modules and the installation-dependent choices which may have been
+made therein.  In order to be able to change some of these decisions
+if need be, user must know how to locate the modules of interest.
+The following chart shows all installation-dependent EMTP modules by
+name and also overlay numbers.  The purpose is summarized on the
+right (for more description, consult comment cards at the top of the
+module in the UTPF [which contains VAX copies]).
 
+
+.. raw:: pdf
+
+    PageBreak
+
+
++-----------------+---------------------------+--------------------------------------------+
+| **Module Name** | **UTPF overlay name and** | **Purpose of installation-dependent code** |
++=================+===========================+============================================+
+||    EREXIT      ||       MAIN00; -1         | Once used for error recovery (mnemonically |
+|                 |                           | "ERror EXIT") on BPA's old CDC-6500, for   |
+|                 |                           | five years this was a dummy module.  Then, |
+|                 |                           | with interactivity, it was used again.     |
+|                 |                           | The UTPF has a VAX module with a call to   |
+|                 |                           | the machine-dependent CTRL-C handler, so   |
+|                 |                           | all other computers will substitute for it.|
++-----------------+---------------------------+--------------------------------------------+
+||    RUNTYM      ||       MAIN00; -1         | Find the current central processor and     |
+|                 |                           | input/output job times.  Basically this is |
+|                 |                           | used only for the elapsed-time printout of |
+|                 |                           | of the case-summary statistics.            |
++-----------------+---------------------------+--------------------------------------------+
+||    TIME44      ||       MAIN00; -1         | Find the current wall-clock time, in format|
+|                 |                           | "HH.MM.SS".  Automatic plot file naming    |
+|                 |                           | (for those systems having OPEN/CLOSE       |
+|                 |                           | capability of FORTRAN) is based on the     |
+|                 |                           | digits of this time, and also on "DATE44"  |
+|                 |                           | results.                                   |
++-----------------+---------------------------+--------------------------------------------+
+||    CIMAGE      ||       MAIN00; -1         | Read the next card from unit LUNIT5.       |
+|                 |                           | DECODE it as 80A1 if free-format is used.  |
+|                 |                           | $-card, all of which are processed within  |
+|                 |                           | "CIMAGE".  Skip over comment cards (after  |
+|                 |                           | interpreting).                             |
++-----------------+---------------------------+--------------------------------------------+
+||     LOCF       ||       MAIN00; -1         | Find the address in memory of the argument,|
+|                 |                           | as a number of REAL words. This is used by |
+|                 |                           | the EMTP to find the size of certain fixed-|
+|                 |                           | dimension arrays (not all code is variably-|
+|                 |                           | dimensioned).                              |
++-----------------+---------------------------+--------------------------------------------+
+||    LOCINT      ||       MAIN00; -1         | Find the address in memory of the argument,|
+|                 |                           | as a number of INTEGER words.  This is a   |
+|                 |                           | scaled version of "LOCF", fundamentally.   |
++-----------------+---------------------------+--------------------------------------------+
+||    RFUNL1      ||       MAIN00; -1         | All library functions are defined using    |
+|     RFUNL2      |                           | ENTRY points in these modules, for those   |
+|     RFUNL3      |                           | systems allowing ENTRY usage.  Neutral     |
+|     CFUNL1      |                           | names are used (e.g., "SINZ" or "DSIN").   |
+|                 |                           | Special limit checking can also be placed  |
+|     CMPLXZ      |                           | in these modules.                          |
++-----------------+---------------------------+--------------------------------------------+
+||    DLIBRF      ||       MAIN00; -1         | Used to provide double-precision library   |
+|                 |                           | functions, originally just for overlay 13, |
+|                 |                           | for use by the Semlyen recursive           |
+|                 |                           | convolution code.                          |
++-----------------+---------------------------+--------------------------------------------+
+||    DLIBR2      ||       MAIN00; -1         | Used to provide double-precision library   |
+|                 |                           | functions of 2 arguments.                  |
++-----------------+---------------------------+--------------------------------------------+
+||    FRENUM      ||       MAIN00; -1         | Returns a floating-point number from the   |
+|                 |                           | next free-field range on the data card     |
+|                 |                           | which is currently being processed by the  |
+|                 |                           | universal module "FREFLD".                 |
++-----------------+---------------------------+--------------------------------------------+
+||    PACKA1      ||       MAIN00; -1         | Packs one character (A1 information) of    |
+|                 |                           | one word into any character position of    |
+|                 |                           | another words.  Both words must be         |
+|                 |                           | ALPHANUMERIC (UTPF type).                  |
++-----------------+---------------------------+--------------------------------------------+
+||    PACKCH      ||       MAIN00; -1         | Packs A4 or A6 word strings into           |
+|                 |                           | ALPHANUMERIC vector storage so that there  |
+|                 |                           | are no imbedded blanks.  This was          |
+|                 |                           | originally designed for CalComp plotting,  |
+|                 |                           | to remove excess blanks.                   |
++-----------------+---------------------------+--------------------------------------------+
+||    SEEDY       ||       MAIN00; -1         | Find the number of seconds since midnight, |
+|                 |                           | based on alphanumeric input of the time    |
+|                 |                           | ("HH.MM.SS").                              |
++-----------------+---------------------------+--------------------------------------------+
+||    RANDNM      ||       MAIN00; -1         | Compute a random number (roll the dice),   |
+|                 |                           | uniformly distributed ove the unit interval|
+|                 |                           | (0, 1).  This is for zero argument.  For   |
+|                 |                           | nonzero argument, initialize the random    |
+|                 |                           | number generator using this seed.  "RANDNM"|
+|                 |                           | also has access to standard random numbers |
+|                 |                           | of "SANDNM" if user-requested.             |
++-----------------+---------------------------+--------------------------------------------+
+||    TAPSAV      ||        MAIN10; 0         | This module is called by the universal     |
+|                 |                           | "TABLES" to dump/restore /LABEL/ as part of|
+|                 |                           | "START AGAIN", "STATISTICS", etc. usage.   |
+|                 |                           | The UTPF module (VAX code) assumes COMMON  |
+|                 |                           | blocks are in natural or reverse order, so |
+|                 |                           | they can very easily be transferred by a   |
+|                 |                           | single self-indexed READ/WRITE following   |
+|                 |                           | LOCINT location of the ends.  Computers    |
+|                 |                           | without such regular order require "TAPSAV"|
+|                 |                           | module produced by "VARDIM" (with a        |
+|                 |                           | separate READ/WRITE for each COMMON block).|
++-----------------+---------------------------+--------------------------------------------+
+||     PLTFIL     ||        MAIN10; 0         | For installation-dependent transfer of     |
+|                 |                           | output vector to disk as part of plot-file |
+|                 |                           | building on LUNIT4.  Conversion to single- |
+|                 |                           | precision (assuming EMTP computation uses  |
+|                 |                           | REAL*8) is a common function, to save disk |
+|                 |                           | and I/O time.  Interactive EMTP versions   |
+|                 |                           | service the ROLLing "PLOT" command of SPY  |
+|                 |                           | from here, too.  Module is called only if  |
+|                 |                           | M4PLOT is nonzero (1=SPY MOS, 2=REAL*4     |
+|                 |                           | disk).                                     |
++-----------------+---------------------------+--------------------------------------------+
+||     PLTLU2     ||        MAIN10; 0         | Special version of "PLTFIL" used only for  |
+|                 |                           | TACS "STAND ALONE" cases.  Module is called|
+|                 |                           | only if M4PLOT .NE. 0.                     |
++-----------------+---------------------------+--------------------------------------------+
+||     VECRSV     ||        MAIN10; 0         | Vector dumping/restoring modules used      |
+||     VECISV     |                           | during the overlay 6-11 steady state phasor|
+|                 |                           | solution and node renumbering.  "VECRSV" is|
+|                 |                           | for REALs, while "VECISV" is for INTEGERs. |
+|                 |                           | UTPF (VAX) modules are installation-       |
+|                 |                           | dependent since they rely on virtual       |
+|                 |                           | storage (/C29B01/).  See [REF8]_ Vol. XII, |
+|                 |                           | 24 August 1982, Section II, pages HTNT-4   |
+|                 |                           | through 8.                                 |
++-----------------+---------------------------+--------------------------------------------+
+||     VECRXX     ||        MAIN10; 0         | Near-universal versions of "VECRSV" and    |
+||     VECIXX     |                           | "VECISV", or so we thought (see [REF8]_,   |
+|                 |                           | Vol. XII, 20 January 1983, Section III-A,  |
+|                 |                           | pages MVEM0-16 and 17.                     |
++-----------------+---------------------------+--------------------------------------------+
+||     SYSDEP     ||        OVER1; 1          | Performs various system-dependent          |
+|                 |                           | initializations at the start of execution  |
+|                 |                           | of a new EMTP data case.                   |
++-----------------+---------------------------+--------------------------------------------+
+||     MIDOV1     ||        OVER1; 1          | Performs miscellaneous system-dependent    |
+|                 |                           | initializations when EMTP control is ready |
+|                 |                           | to exit "OVER1".  The call to "SYSDEP" is  |
+|                 |                           | too early to perform all system-dependent  |
+|                 |                           | initializations, it turns out.             |
++-----------------+---------------------------+--------------------------------------------+
+||     NAM999     ||        OVER1; 1          | Installation-dependent module which builds |
+|                 |                           | default names for linear branches (LIN001, |
+|                 |                           | etc.), nonlinear elements (NLN001, etc.),  |
+|                 |                           | nonlinear elements (NLN001, etc.), and     |
+|                 |                           | switches (SWT001, etc.).                   |
++-----------------+---------------------------+--------------------------------------------+
+||     DATE44     ||        OVER1; 1          | Find the calendar date ("MM/DD/YY").       |
++-----------------+---------------------------+--------------------------------------------+
+||     PFATCH     ||        OVER1; 1          | Attach (connect) a disk file of plot points|
+|                 |                           | to I/O unit LUNIT4, in conjunction with    |
+|                 |                           | "REPLOT" usage of Section 1.0d.  "START    |
+|                 |                           | AGAIN" also requires this module (Section  |
+|                 |                           | 1.0e15).                                   |
++-----------------+---------------------------+--------------------------------------------+
+||     ANALYT     ||        OVER16; 16        | The module which services "ANALYTIC SOURCES|
+|                 |                           | USAGE" modeling (user-defined FORTRAN).    |
+|                 |                           | Also, "EMTPSPY" of interactive control uses|
+|                 |                           | "ANALYT" to honor the "RAMP" command (see  |
+|                 |                           | [REF8]_, Vol. XI, 17 July 1981, page       |
+|                 |                           | IEEE-35).                                  |
++-----------------+---------------------------+--------------------------------------------+
+||     KATALG     ||        OVER20; 20        | Save the contents of unit number LUNIT4 as |
+|                 |                           | a permanent file on disk, for possible     |
+|                 |                           | later "TPPLOT" or "REPLOT" usage.  But such|
+|                 |                           | usage is restricted to those systems (e.g.,|
+|                 |                           | BPA-modified CDC) which permit file naming |
+|                 |                           | after the creation.  This is rare (VAX OPEN|
+|                 |                           | usage of "SYSDEP" is common).              |
++-----------------+---------------------------+--------------------------------------------+
+||     FLAGER     ||        OVER20; 20        | Installation-dependent SPY modules. For    |
+|      TDELAY     |                           | further details, see Section 9.0 on        |
+|      KWITER     |                           | interactivity.  Variations are associated  |
+|      SPYAID     |                           | with details of the user-keyed interrupt   |
+|      WINDOW     |                           | (FLAGER and KWITER), the audible bell      |
+|      APPEND     |                           | (HONKER), hibernation (TDELAY), user       |
+|      PROMPT     |                           | instructions (SPYAID), window management   |
+|      TEKPLT     |                           | and usage (WINDOW), installation-dependent |
+|      SYMTEK     |                           | extensions (APPEND), cursor holding        |
+|      TGRID      |                           | (PROMPT) and vector plotting (TEKPLT,      |
+|      HONKER     |                           | SYMTEK, and TGRID).                        |
++-----------------+---------------------------+--------------------------------------------+
+||     DATAIN     ||        OVER20; 20        | FORTRAN 77 module for EMTP data            |
+|                 |                           | modularization and sorting, called by      |
+|                 |                           | "EREXIT" in VAX (UTPF) module.             |
++-----------------+---------------------------+--------------------------------------------+
+||     STATRS     ||        OVER29; 29        | This module serves to connect to units     |
+|                 |                           | LUNIT3 and LUNIT9 the "STATISTICS" results |
+|                 |                           | which were previously saved on disk by     |
+|                 |                           | STATSV.  This is in response to "TABULATE  |
+|                 |                           | ENERGIZATION RESULTS" request of Section   |
+|                 |                           | 1.0e6.                                     |
++-----------------+---------------------------+--------------------------------------------+
+||     BEGPLT     ||        OVER31; 31        | Module is called by the main plotting      |
+|                 |                           | module SUBR31 before any CalComp plotting  |
+|                 |                           | is done, for each data case.  Arbitrary    |
+|                 |                           | system-dependent intialization is possible.|
++-----------------+---------------------------+--------------------------------------------+
+||     ENDPLT     ||        OVER31; 31        | Module is called by the main plotting      |
+|                 |                           | module SUBR31 after all plotting of a given|
+|                 |                           | data case is completed.  Arbitrary system- |
+|                 |                           | dependent initialization is possible.      |
++-----------------+---------------------------+--------------------------------------------+
+||     FINTP      ||        OVER31; 31        | Module is called immediately before the one|
+|                 |                           | and only (almost) STOP statement of the    |
+|                 |                           | EMTP.  Arbitrary program termination       |
+|                 |                           | operations (e.g., spooling, file closing,  |
+|                 |                           | removal of carriage control characters,    |
+|                 |                           | etc.) can be performed.                    |
++-----------------+---------------------------+--------------------------------------------+
+
+
+Several specific modifications will be of concern to many installations,
+particularly those which are not on the U.S.A. (where conventions are different).
+Included are the following:
+
+
+Power system (synchronous; steady state) frequency
+-------------------------------------------------------------------------------
+
+The steady-state frequency of power system operation is defined within
+module "SYSDEP" of overlay number 1.  Variable "STATFR" should be assigned
+this frequency in Hertz (equal to 60.0 for usal usage within the United
+States).
+
+
+Calendar date format
+-------------------------------------------------------------------------------
+
+As set up for usage in the States, "MM/DD/YY" is printed, where:
+
+| "MM" ---- two decimal digits for the month (e.g. "03" for March);
+| "DD" ---- two decimal digits for the day within the month;
+| "YY" ---- two decimal digits for the year (e.g. "77" fot 1977).
+
+In most other parts of the world (including Canada, as I recall), and even in
+the U.S. Army, I believe that it is common usage for the day "DD" to precede
+the month "MM".  If module "DATE44" (see above chart) is altered so as
+to produce "DD/MM/YY", the the associated format within subroutine
+"SYSDEP" (which is used for one or two lines of EMTP heading) should be
+changed accordingly.
+
+
+Batch-mode plotting parameters
+-------------------------------------------------------------------------------
+
+Several parameters which are related to batch-mode EMTP plotting
+(Section 1.10) are defined in module "SYSDEP" (see above chart).
+The following might be varied, from one installation to another:
+
+SZPLT
+ Height of CalComp plotting paper which is beign used,
+ in inches.  Or more precisely, this is maximum
+ vertical excursion of the pen (any margin and sprocket
+ holes thus are not to be counted).  Recall that the use
+ is able to over-ride this default value at execution time,
+ using a "PLOTTER PAPER HEIGHT" card of Section 1.0c.
+
+SZBED
+ Maximum length of the plot, in inches.  For BPA CDC usage,
+ this is set equal to 72.0 (about the size of our
+ EAI flatbed surface).  This parameter is used as
+ an argument of the overlay #31 call to subroutine
+ "PAPRSZ" (whose job it is to protect against illegal
+ excursions of the pen).
+
+LNPIN
+ The number of lines per inch of the line printer.
+ Recall that the scaling of a line printer plot will depend
+ on this figure.  The user is able to over-ride the
+ default value at execution time, using a "PRINTER
+ LINES PER INCH" card of Section 1.0c.
+
+NSMTH
+ The number of successive ups and downs before averaging
+ of successive points is resorted to, for plot purposes.
+ Recall that the user is able to over-ride this default value
+ at execution time, using a "LIMIT ON PLOT OS" card
+ of Section 1.0c.
+
+LLBUFF
+ Variable which is used as the second argument of the
+ call to CalComp subroutine "PLOTS" ---- to be found
+ within module "BEGPLT" (see above chart) of overlay #31.
+ As originally used by CalComp a decade or so ago, this
+ was the buffer length of the "LUNIT8" output channel
+ on which plotter instructions will be written.  But many
+ installations no longer use such a specification (e.g.,
+ the buffer may be automatically set by the system, or it
+ may be defined by the job control language (JCL) cards).
+
+ The first executable statement of the program, located
+ in "MAIN00" (overlay number -1) and never executed
+ again, is the assignement of value -3333 to "LLBUFF".
+ The first time through "SYSDEP", this is converted
+ to a positive value.  Module "BEGPLT" of overlay #31
+ then could append a minus sign, as a flag that "PLOTS"
+ has be called once, and is not to be called again --- if
+ this is the desired usage.  Remember, batch-mode plotting
+ is done by a primary-level overlay, if the program is
+ overlaid.  For BPA CDC, this requires that "PLOTS"
+ be called each time the overlay is used (for each data case
+ which uses CalComp plotting).  This seems to be quite
+ installation dependent.
+
+
+Input/output unit numbers
+-------------------------------------------------------------------------------
+
+Unless explicitely altered to the contrary by Program Maintenance which
+sets up the translation, the following input/output (I/O) unit assignments
+will be assumed:
+
+LUNIT5 = 5
+ card reader (EMTP input data cards).
+
+LUNIT6 = 6
+ line printer (EMTP printed output).
+
+LUNIT7 = 7
+ card punch (for EMTP punched-card ouput).
+
+LUNIT8 = 8
+ machine-language instructions for plotting hardware
+ (as generated by calls to the CalComp subroutines
+ during the overlay #31 batch-mode plotting).
+
+LUNIT1 = 1
+ scratch tape; very small buffer will suffice
+ (for BPA CDC, 64 decimal word were used).
+
+LUNIT2 = 2
+ scratch tape which is used for dumping most of /BLANK/
+ and /LABEL/, to be read back into central memory
+ for each new energization of a "STATISTICS" or
+ "SYSTEMATIC" data case.  A big buffer is recommended
+ (for BPA CDC, a buffer of 1024 decimal words was used).
+
+LUNIT3 = 3
+ like "LUNIT1".
+
+LUNIT4 = 4
+ scratch tape which is used for storage of the raw data
+ points of the plot file (later to be plotted).  A good
+ size buffer is recommended (for BPA CDC, we used 512 decimal
+ words).
+
+LUNIT9 = 9 ... LUNIT15 = 15
+ like "LUNIT1".
+
+
+If any of these usages are illegal or inconvenient at the installation of
+interest, alternate assignments should be made within module "SYSDEP" (see
+above chart).  PRIME is one such system, for which some re-assignements had to
+be made.  Actually, as of April, 1980, I do not believe that "LUNIT10"
+through "LUNIT16" are actually being used for anything other than possibly
+the "HAUER SETUP" code of overlays 48 and 49.
 
 
 .. raw:: pdf

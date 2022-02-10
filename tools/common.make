@@ -16,6 +16,8 @@ MAKE_RST_DEPENDS=$(TOP)/tools/make-rst-depends
 RSTPRE=$(TOP)/tools/rstpre
 RSTUML=$(TOP)/tools/rstuml
 HELPFMT="$(shell basename $(MAKE)) %-20s \# %s\n"
+RST2PDF=$(shell which rst2pdf)
+RST2PDF_OPTIONS=--default-dpi=600
 
 .PHONY:: view clean clean-pdf clean-pdfs checkout-pdf checkout-pdfs documents
 
@@ -63,13 +65,13 @@ clean-png clean-pngs:
 
 # Generate PDF from reStructuredText document.
 %.pdf: %.rst
-	@if [ 'x${VERBOSE}' = x ];			\
-	then						\
-		echo " [ GEN ] pdf document $@ ";	\
-	else						\
-		echo " rst2pdf -o $@ $< ";		\
+	@if [ 'x${VERBOSE}' = x ];					\
+	then								\
+		echo " [ GEN ] pdf document $@ ";			\
+	else								\
+		echo " $(RST2PDF) $(RST2PDF_OPTIONS) -o $@ $< ";	\
 	fi
-	@rst2pdf -o $@ $<
+	@$(RST2PDF) $(RST2PDF_OPTIONS) -o $@ $<
 
 # Object diagrams.
 o-%.png: o-%.fig
