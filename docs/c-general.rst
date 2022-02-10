@@ -1238,6 +1238,80 @@ disk file.  If at some later time the user wants to restart the
 simulation, using the identical same EMTP version (warning: dimensions
 must not have been altered), then "START AGAIN" of Section 1.0e15
 
+Consider the saving of EMTP tables (MEMSAV = 1) first.  This is
+done within "KATALG" of overlay 20, for which the call is as
+follows (as previously displayed in Section A):
+
+.. code::
+
+   M28.6577 8005 IF (ICAT .GT. 0     .OR.      MEMSAV  .GT.  0 )
+   M22.5384     1 CALL KATALG
+
+As for the file OPENing and CLOSEing within "KATALG", it will
+depend in large part upon how sophisticated a naming procedure is
+desired.  In the VAX case, we decided to use a fixed, pre-specified
+name TPTABLES.BIN, which simplified things.  The operating system
+VAX/VMS would simply create a higher version if MEMSAV = 1 were
+used more than once by the user (no problem), and it is the user's
+responsibility to specify the correct set of tables during a subsequent
+"START AGAIN" request.  Anyway, as for the critical block of code
+within "KATALG", VAX uses the following:
+
+.. code::
+
+   M30.1048 2469 WRITE (LUNIT6, 2472)
+   M28.6606 2472 FORMAT ( /,  20X,  '----- "MEMSAV = 1  REPRESENTS',
+   M28.6607     1                   ' REQUEST FOR TABLE DUMPING ON DISK.' )
+   M28.6608      CLOSE ( UNIT=LUNIT2 )
+   M28.6609      OPEN  ( UNIT=LUNIT2, TYPE='NEW', FORM='UNFORMATTED',
+   M28.6610     1        NAME='TPTABLES.BIN' )
+   M28.6611      CALL TABLES
+   M28.6612      CLOSE ( UNIT=LUNIT2, DISP='SAVE' )
+            2482 WRITE (LUNIT6, 2483)  LTLABL
+   M28.6614 2483 FORMAT (  26X,  'SECCESSFUL SAVING OF EMTP',
+   M28.6615     1         ' TABLES AS FILE  "TPTABLES.BIN" .',
+   M28.6616     2         '    LTLABL  =',  I8  )
+
+Note that part of the table dumping message (S.N. 2472) is printed before
+the dumping actually begins (it is done by "TABLES"), and the remainder
+occurs upon completion (S.N. 2482).  This is mainly for interactive use,
+to placate the impatient user who may be watching such output on the
+screen (and wondering why there is a delay, during the dumping).  Note
+that binary (UNFORMATTED) usage of I/O channel LUNIT2 is involved.
+Remember to put /BLANK/ in the module (INSERT DECK BLKCOM), since this
+carries LUNIT2 and LTLABL.  Also, remeber that if the plot file
+is also to be saved in "KATALG" rather than in "SYSDEP" (see preceding
+section), then both ICAT and MEMSAV must be checked inside the
+module to see which (or both) of the functions is actually to be
+performed.
+
+Later use of these EMTP tables is via the "START AGAIN" data card
+of Sectioon 1.0e15.  Installation-dependent aspects for VAX are very
+similar to "REPLOT" as described in the previous section.  Both
+features use "PFATCH" to actually connect the old disk file to I/O
+unit IALTER, though here unit LUNIT2 is employed as shown by the
+following universal code in "OVER1":
+
+.. code::
+
+   M22.1329C     $$$$$    SPECIAL-REQUEST WORD NO. 15.   'START AGAIN'
+   M22.1330 8015 IALTER = LUNIT2
+   M28. 818      IF ( NOUTPR  .EQ.  0 )
+   M28. 819     1 WRITE (LUNIT6, 2857)
+   M28. 820 2857 FORMAT (   40H+CONTINUE PARTIALLY-COMPLETED DATA CASE. )
+                 CALL RUNTYM (D1, D2 )
+   M22.1331      CALL PFATCH
+   M28. 822      CALL TABLES
+   M28. 823      FLSTAT(1) = -D1
+   M28. 824      FLSTAT(2) = -D2
+   M28. 825      IF ( FLSTAT(16)  .EQ.  LTLABL )  GO TO 2863
+   M22.1338      KILL = 201
+   M22.1339      LSTAT(19) = 2856
+   M22.1341      GO TO 9200
+   M28. 826 2863 CONTINUE
+
+
+
 
 .. raw:: pdf
 
