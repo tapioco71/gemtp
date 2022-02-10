@@ -1178,6 +1178,34 @@ start of the following case (see previous "SYSDEP" logic).
        5653      RETURN
        5654      END
 
+For those systems which can save files permanently after they have
+been written as scratch files, a cleaner alternative exists.  This
+goes back to our BPA CDC usage, where all such LUNIT4 considerations
+were relagated to "KATALG" of overlay 20.  No more writing on unit
+LUNIT4 will occure once overlay 20 is reached (normally by exit of the
+time-step loop of overlay 16, but possibly from overlay 12 if a TACS
+stand-alone case is involved).  Further, there is now a call within
+"OVER20", though it also provides service for EMTP table saving
+(if integer miscellaneous data parameter MEMSAV is positive):
+
+.. code::
+
+   M28.6577 8005 IF ( ICAT .GT.  0     .OR.      MEMSAV  .GT.  0 )
+   M22.5384     1 CALL KATALG
+
+Hence an installation-dependent "KATALG" must have /BLANK/ in it
+(via "INSERT DECK BLKCOM"), and a check to see wheter this really
+does concern the plot file (ICAT positive) is necessary.  The date
+and time are still available at this point, and are stored in the same
+vectors DATE1(2) and TCLOCK(2) as was illustrated for "SYSDEP".
+One final warning might be in order, however: although the EMTP is
+done writing on the LUNIT4 file by the time "KATALG" is reached,
+this does not mean that the file can be disconnected, since it might
+be read as part of the batch-mode EMTP plotting (CalComp EMTP plotting,
+delayed longer, and would normally be provided at the top of "SYSDEP"
+(as the following data case begins in overlay 1).
+
+
 
 .. raw:: pdf
 
