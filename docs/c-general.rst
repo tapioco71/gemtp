@@ -1205,6 +1205,38 @@ be read as part of the batch-mode EMTP plotting (CalComp EMTP plotting,
 delayed longer, and would normally be provided at the top of "SYSDEP"
 (as the following data case begins in overlay 1).
 
+Concerning plot file naming, it is recommended that the date and
+the tim (DATE1, TCLOCK) be used, since this will then allow easy
+association of the plot file with line printer output (which has this
+date and time buried in the heading).  But beyond that, there should
+be some easy way to access all EMTP plot files as a group ---- possibly
+for audit purposes, possibly for copying to tape, possibly for
+deletion.  For the VAX, we have seized upon file type for this
+special characterization (".PL4").  Thus, if any user wants a list of
+his plot files, he just issues the wild-card command "$DIR *.PL4"; if
+he wants to delete all such files, he uses "$DEL \*.PL4;\*"; etc.  Our
+file names are slightly limited by the VAX restriction to 9 characters,
+however: we use a hexadecimal digits for the time (24 hour clock).  If
+the uses's system allows longer names, more elaborate and precise
+names for the LUNIT4 disk files are probably desirable.
+
+To complete this treatment of the EMTP plot file, there might
+be an indication of what is actually written to LUNIT4.  This is
+fully documented in Section 5.0c (page 86a onward) of the EMTP Rule
+Book, so nothing more need be said here.
+
+
+Check point capability ( MEMSAV = 1 and "START AGAIN" )
+-------------------------------------------------------------------------------
+
+For most users, the second most important extension (after the
+LUNIT4 plot manipulations just described) has to do with honoring the
+MEMSAV field (columns 59-56) of the miscellaneous data card.  See
+Section 1.0h, page 4h of the Sept 1980 Rule Book.  This provides for
+the dumping of EMTP tables onto disk for preservation as a permanent
+disk file.  If at some later time the user wants to restart the
+simulation, using the identical same EMTP version (warning: dimensions
+must not have been altered), then "START AGAIN" of Section 1.0e15
 
 
 .. raw:: pdf
