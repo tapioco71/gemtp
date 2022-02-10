@@ -1043,6 +1043,19 @@ through "LUNIT16" are actually being used for anything other than possibly
 the "HAUER SETUP" code of overlays 48 and 49.
 
 
+Use of OPEN/CLOSE statements to manage disk files
+-------------------------------------------------------------------------------
+
+Most new compilers allow internal (within FORTRAN code) disk file
+connection and disconnection via OPEN and CLOSE statements.  Yet
+the details difffer from machine to machine, so all such usage is
+confined to installation-dependent EMTP modules.  The following is an
+explanation of this usage by functional classification (feature by
+feature).  The VAX modules, which presently occupy positions in the
+UTPF, are used for purpose of illustration.
+
+
+
 .. raw:: pdf
 
     PageBreak
