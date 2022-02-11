@@ -1072,14 +1072,14 @@ variable ICAT is not known that early.  After the determination of
 the date and the time, we build a legal file name using these, and
 OPEN the file under the assumption that it will be saved:
 
-.. code::
+.. code:: fortran
 
    CALL DATE44 ( DATE1(1) )
    CALL TIME44 ( TCLOCK(1) )
      < <  Build legal VAX/VMS file name using the digits
           of DATE1 and TCLOCK; put result in FILE25      > >
 
-.. code::
+.. code:: fortran
 
     OPEN (UNIT=LUNIT4, TYPE='NEW', NAME=FILE25,
    1       FORM='UNFORMATTED')
@@ -1094,7 +1094,7 @@ of the preceding solution really was to be saved permanently; if so,
 it is saved; if not, it is deleted.  Thus, at the top of "SYSDEP"
 (before the just-listed code) one sees:
 
-.. code::
+.. code:: fortran
 
        IF (ICAT .EQ. 0) GO TO 120
        IF (ICAT .GT. 2) GO TO 120
@@ -1121,7 +1121,7 @@ the Rule Book).  The disk file in question is connected by a call to
 installation-dependent "PFATCH" (mnemonically, "permanent file attach")
 which is found in "REQUES":
 
-.. code::
+.. code:: fortran
 
    M28.1295C      $$$$    SPECIAL-REQUEST WORD NO. 4.   'REPLOT'
    M28.1296 8004 IF (NOUTPR .EQ. 0)
@@ -1156,7 +1156,7 @@ connection of the desired plot file, ICAT = 2 is set so that our
 precious disk file will be retained (rather than be destroyed) at the
 start of the following case (see previous "SYSDEP" logic).
 
-.. code::
+.. code:: fortran
 
        5610      SUBROUTINE PFATCH
    M27. 634      INSERT DECK BLKCOM
@@ -1188,7 +1188,7 @@ stand-alone case is involved).  Further, there is now a call within
 "OVER20", though it also provides service for EMTP table saving
 (if integer miscellaneous data parameter MEMSAV is positive):
 
-.. code::
+.. code:: fortran
 
    M28.6577 8005 IF ( ICAT .GT.  0     .OR.      MEMSAV  .GT.  0 )
    M22.5384     1 CALL KATALG
@@ -1242,7 +1242,7 @@ Consider the saving of EMTP tables (MEMSAV = 1) first.  This is
 done within "KATALG" of overlay 20, for which the call is as
 follows (as previously displayed in Section A):
 
-.. code::
+.. code:: fortran
 
    M28.6577 8005 IF (ICAT .GT. 0     .OR.      MEMSAV  .GT.  0 )
    M22.5384     1 CALL KATALG
@@ -1257,7 +1257,7 @@ responsibility to specify the correct set of tables during a subsequent
 "START AGAIN" request.  Anyway, as for the critical block of code
 within "KATALG", VAX uses the following:
 
-.. code::
+.. code:: fortran
 
    M30.1048 2469 WRITE (LUNIT6, 2472)
    M28.6606 2472 FORMAT ( /,  20X,  '----- "MEMSAV = 1  REPRESENTS',
@@ -1292,7 +1292,7 @@ features use "PFATCH" to actually connect the old disk file to I/O
 unit IALTER, though here unit LUNIT2 is employed as shown by the
 following universal code in "OVER1":
 
-.. code::
+.. code:: fortran
 
    M22.1329C     $$$$$    SPECIAL-REQUEST WORD NO. 15.   'START AGAIN'
    M22.1330 8015 IALTER = LUNIT2
@@ -1309,6 +1309,99 @@ following universal code in "OVER1":
    M22.1339      LSTAT(19) = 2856
    M22.1341      GO TO 9200
    M28. 826 2863 CONTINUE
+
+Provided "PFATCH" was coded as described in Section A (for plot file
+usage), nothing else need be done here.  Note the check on total
+table size (LSTAT(16) is the table size of the disk file, as carried
+out throgh this /BLANK/ variable, while LTLABL is the total table
+size of the present program version (from "DIMENS").  Only if these
+two agree (a necessary but not sufficient check for compatibility) is
+execution allowed to continue.  Otherwise, a KILL = 201 error stop
+results.
+
+User's of "START AGAIN" should be warned that batch mode EMTP
+plotting will be possible for the restarted case only if special effort
+is made.  The interactive CRT plotting program "TPPLOT" can plot
+such results without difficulty.  But if the user insists on EMTP
+batch-mode plotting, then put an extraneous "4" in column 13 of
+the "START AGAIN" card (after the comma, before the file name),
+and previously connect the old plot file to unit LUNIT4 somehow
+(IBM can do it via JCL; we on the VAX use $OLDFILE of "CIMAGE" as
+described under Point 16 on page x-j8a of the Rule Book).  See also
+Section D below (for "CIMAGE" $-card enhancement).
+
+
+Use of "TABULATE ENERGIZATION RESULTS" (STATSV, STATRS, MIDOV1)
+-------------------------------------------------------------------------------
+
+Only the sophisticated "STATISTICS" user will have interest in
+the extensions of the section .... or the user of a computer which
+crashes a lot!  Monte Carlo studies, where the same basic problem
+is solved over and over (with only switch closing or opening times
+altered between simulations, by the rolling of dice), are the ony
+studies which are affected.  By means of the extensions now to be
+detailed, such Monte Carlo studies can be solved in several smaller
+pieces, rather than one big one.  If the computer crashes during such
+a simulation, it is like dropping a basket with eggs in it.  The
+prudent, conservative strategy for anyone who drops eggs from time to
+time is to never carry too big a basket!
+
+In terms of Rule Book data structures, we have "STATISTICS
+OUTPUT SALVAGE" of Section 1.0e7 (page 4b-5), and "TABULATE
+ENERGIZATION RESULTS" of section 1.0e6 (page 4b-4).  An EMTP support
+person considering such enhancement should read these two sections
+throughly before continuing.
+
+The VAX installation-dependent logic associated with "STATISTICS
+OUTPUT SALVAGE" is confined to "MIDOV1" of overlay 1.  Before this
+module is called by "OVER1", some universal preparation is performed,
+to be carried into "MIDOV1" via /BLANK/:
+
+.. code:: fortran
+
+   M23. 415      N12 = JFLSOS / 100
+   M23. 416      N15 = JFLSOS - 100 * N12
+   M23. 417      N13 = N15 / 10
+   M23. 418      N14 = N15 - 10 * N13
+   M23. 419      LSTAT(14) = N12
+   M23. 420      LSTAT(15) = N13
+   M23. 421      LSTAT(16) = N14
+   M22.1558      CALL MIDOV1
+
+That user-supplied sequence number JFLSOS (columns 30-32) is here
+broken down into three decimal digits which are carried into "MIDOV1"
+via the LSTAT vector.  Disk file names are then built from these
+characters, and files are opened, as follows (within "MIDOV1"):
+
+.. code:: fortran
+
+   M29.1170 1815 IF (JFLSOS .EQ. 0) GO TO 4271
+   M24. 460      IF (LASTOV .EQ. 20) GO TO 5923
+   M24. 461      CLOSE (UNIT=3)
+   M24. 462      CLOSE (UNIT=9)
+   M24. 463      N4 = 3
+   M24. 464 5910 ENCODE (14, 5914, FILNAM(1) )N4, (LSTAT(J), J=14,16)
+   M24. 465 5914 FORMAT (2HST, I1, 3HLOG, 3I1, 5H.DAT   )
+   M24. 466      DO 4256  J=15, 20
+   M24. 467 4256 FILNAM(J) = C1
+   M24. 468      OPEN (UNIT=N4,TYPE='NEW',NAME=FILN20,FORM='UNFORMATTED')
+   M24. 469      IF (N4 .EQ. 9 )  GO TO 5923
+   M24. 470      N4 = 9
+   M24. 471      GO TO 5910
+   M24. 472 5923 RETURN
+
+The VAX/VMS file name ST3LOG???.DAT is built on the first pass (for
+unit 3), and ST9LOG???.DAT is built on the second pass (for unit 9),
+where "???" is used to denote the three non-blank digits of the
+user-supplied serialization JFLSOS.  The INTEGER*1 vector
+FILNAM(20) is equivalenced to the CHARACTER*20 name FILN20 which
+is actually used in the OPEN statement.  This is all done before
+anything is written on units 3 or 9.
+
+As for the information which is written to these two files, we
+have LUNIT3 written to by "OVER12" of overlay 12,
+
+.. code:
 
 
 
