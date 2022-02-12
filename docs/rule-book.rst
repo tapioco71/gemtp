@@ -129,6 +129,7 @@ BPA ATP EMTP -- Rule Book
                        auxiliary-supporting-routines
                        tacs
                        interactivity
+                       bibliography
                        index
                          )
               (insert "\n.. comment: end-classes   "))
@@ -145,12 +146,13 @@ BPA ATP EMTP -- Rule Book
 
 .. include:: c-emtp-input-data.rst
 
-.. comment: end-classes
-
-
 .. raw:: pdf
 
     PageBreak
+
+.. include:: c-bibliography.rst
+
+.. comment: end-classes
 
 
 .. comment: the end
