@@ -1441,4 +1441,46 @@ Systems which do not have such direct printing will just have to
 comment out this operation.
 
 
+.. raw:: pdf
+
+    PageBreak
+
+
+Former Program Versions That Are No Longer Being Listed
+-------------------------------------------------------------------------------
+
+Previous versions of the Rule Book had a page for just about
+every different computer that had been seriously considered for
+support of the EMTP, beginning with this section.  But this policy
+is being abandoned in 1986.  The last such complete listing, then,
+is in the "M39." manual dated June, 1984.
+
+In order to save paper, and also to minimize potential bother
+to those whose names were once listed, program versions that are
+not known to be active today have been downgraded to an
+incospicuos and sometimes indefinite mention in the list that
+follows.  Even if usage is known to continue, there is no listing
+if no active, cooperative contact is known to exist for current
+program versions.
+
+For those individual entries that have been removed as
+separate pages, a few summary details will be provided.  For more
+details, consult older user documentation.
+
+.. [#] CDC as listed before was the old, 60-bit, overlaid
+       machinery that could only address with 18 bits.  Support ended
+       when Prof. Mohan of the University of Minnesota shifted is EMTP
+       usage to Apollo in early 1984.  With all-new, fully-virtual CDC
+       machinery now being sold, it is doubted wheter EMTP usage of the
+       old CDC hardware has much if any EMTP future.  It is hoped that an
+       EMTP version for the new CDC will come from Prof. Hian Lauw of
+       Oregon State University in Corvallis, Oregon, eventually.  Such a
+       machine was installed in the EE Department during September of
+       1985.  Yet timing is unclear, since such work is not a priority
+       for those in Corvallis.  Also, with the acquisition of half a
+       dozen powerful, new 32-bit Apollo DN3000 nodes, it is conceivable
+       that EMTP interest in the new CDC might even disappear entirely.
+       Yet we hope not.
+
+
 .. comment: the end
