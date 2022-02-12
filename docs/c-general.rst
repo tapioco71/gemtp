@@ -1323,5 +1323,122 @@ which contains three file OPEN/CLOSE operations:
 These must of course be converted.  The file name is stored in vector
 FILEN, as extracted by the logic of $INCLUDE immediately below.
 
+Next comes:
+
+.. code:: fortran
+
+   M36. 217C               *****    REQUEST NO. 5.    "$SPYDATA"     *****
+
+Assuming EMTP free format usage with commas (which is both easiest
+and most common), the "$SPYDATA" is to be followed by a file name,
+followed by one integer for the I/O unit number which can be found by
+searching (TEXCOL(K), K=KOLBEG, 80).  The VAX logic ignores blanks,
+and will truncate the name whenever a comma (CSEPAR) or parenthesis
+is found:
+
+.. code:: fortran
+
+   M27. 228      DO 4532  K=KOLBEG, 80
+   M27. 229      IF ( TEXCOL(K)  .EQ.  BLANK )  GO TO 4532
+   M27. 230      IF ( TEXCOL(K)  .EQ.  CSEPAR ) GO TO 4536
+   M27. 247      IF ( TEXCOL(K)  .EQ.   1H(  )  GO TO 4536
+   M27. 231      N4 = N4 + 1
+   M27. 232      ENCODE (1, 3041, FILEN(N4))  TEXCOL(K)
+   M27. 233 4532 CONTINUE
+
+Here the file name is built into INTEGER*1 working vector FILEN(25).
+The only remaining installation-dependent records are the subsequent
+OPEN and CLOSE operations whhich follows:
+
+.. code:: fortran
+
+   M27. 259      CLOSE (UNIT=N7)
+   M36. 252      OPEN (UNIT=N7, STATUS='OLD', FORM='FORMATTED', FILE=FILEN )
+
+Next comes:
+
+.. code:: fortran
+
+   M27. 276C               *****    REQUEST NO. 8.    "$RETURN"      *****
+
+which has the single installation-dependent record which follows
+associated with it:
+
+.. code:: fortran
+
+   M27. 279 4817 CLOSE (UNIT=N1)
+
+This represents a disconnection of whatever disk file may have been
+connected to I/O unit number N1.  It "undoes" what $ATTACH or
+$NEWFILE did (the connection operation) when they were previously
+executed.
+
+Next comes:
+
+.. code:: fortran
+
+   M27. 284C               *****    REQUEST NO. 9.    "$NEWFILE"     *****
+
+which really is no different that $ATTACH except that VAX/VMS makes
+a distinction between FORMATTED and UNFORMATTED usage; $ATTACH is
+for FORMATTED usage, while $NEWFILE is for UNFORMATTED.  In any
+case, there is just one installation-dependent record, which should
+be self-explanatory:
+
+.. code:: fortran
+
+   M28. 169 4907 OPEN (UNIT=N7, TYPE='NEW', FORM='UNFORMATTED', NAME=FILEN )
+
+Next comes:
+
+.. code:: fortran
+
+   M27. 298C               *****    REQUEST NO. 11.   "DELETE"       *****
+
+which uses the following self-explanatory records which are
+installation-dependent:
+
+.. code:: fortran
+
+   M27. 301 5106 OPEN  ( UNIT=N7, TYPE='OLD', NAME=FILEN )
+   M27. 302      CLOSE ( UNIT=N7, DISPOSE='DELETE' )
+
+Next comes:
+
+.. code:: fortran
+
+   M28. 178C               *****    REQUEST NO. 16.   "OLDFILE"      *****
+
+which contains the following installation-dependent records:
+
+.. code:: fortran
+
+   M28. 182 5608 CLOSE (UNIT=N7)
+   M28. 183      OPEN (UNIT=N7, TYPE='OLD', FORM='UNFORMATTED', NAME=FILEN )
+
+So much for file operations of "CIMAGE".  Although certainly no
+conversion problem, I might also mention other minor conversion
+details for some systems.  In several places there will be found
+explicitly-counted Hollerith strings on the right hand side of equal
+signs, such as the following of $ATTACH:
+
+.. code:: fortran
+
+   M27. 295 4100 TEXT1 = 6HATTACH
+
+this could be easily made universal, but I like the self-explanatory
+aspect of having the character string present, so no change is now
+contemplated.  Also, there is $MONITOR, which directly writes to
+the line printer (whether or not there is a LUNIT6 connection):
+
+.. code:: fortran
+
+   M29. 295      PRINT 3006,  BUFF10
+   M27. 307      PRINT 5214, NUMDCD
+   M27. 308 5214 FORMAT ( '+CRT MONITOR.  CARD NUMBER =',  I5  )
+
+Systems which do not have such direct printing will just have to
+comment out this operation.
+
 
 .. comment: the end
