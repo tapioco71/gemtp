@@ -5,7 +5,7 @@ LISP=$(shell which sbcl)
 LISP_FLAGS=--no-sysinit --no-userinit
 LISP_LOAD_OPTION=--load
 LISP_LOAD_OPTION=--eval
-PDF_VIEWER=/usr/bin/xpdf
+PDF_VIEWER=$(shell which xpdf)
 WGET=$(shell which wget)
 WGET_OPTIONS=
 FIG2DEV=$(shell which fig2dev)
@@ -17,7 +17,8 @@ RSTPRE=$(TOP)/tools/rstpre
 RSTUML=$(TOP)/tools/rstuml
 HELPFMT="$(shell basename $(MAKE)) %-20s \# %s\n"
 RST2PDF=$(shell which rst2pdf)
-RST2PDF_OPTIONS=--default-dpi=600
+RST2PDF_OPTIONS=--default-dpi=600	\
+		-q
 
 ifneq (${RST2PDF},)
 ifneq (${LISP},)
@@ -62,7 +63,7 @@ clean-png clean-pngs:
 %.d: %.rst
 	@if [ 'x${VERBOSE}' = x ];			\
 	then						\
-		echo " [ RST ] depend for file $< ";	\
+		echo " [ DEP ] depends for file $< ";	\
 	else						\
 		echo $(MAKE_RST_DEPENDS) $< > $@;	\
 	fi

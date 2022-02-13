@@ -130,8 +130,7 @@ BPA ATP EMTP -- Rule Book
                        tacs
                        interactivity
                        bibliography
-                       index
-                         )
+                       index)
               (insert "\n.. comment: end-classes   "))
       (insert (format  "\n.. raw:: pdf\n\n    PageBreak\n\n.. include:: c-%s.rst\n" chapter))))
 .. raw:: pdf

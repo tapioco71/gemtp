@@ -1440,7 +1440,6 @@ the line printer (whether or not there is a LUNIT6 connection):
 Systems which do not have such direct printing will just have to
 comment out this operation.
 
-
 .. raw:: pdf
 
     PageBreak
@@ -1467,20 +1466,387 @@ For those individual entries that have been removed as
 separate pages, a few summary details will be provided.  For more
 details, consult older user documentation.
 
-.. [#] CDC as listed before was the old, 60-bit, overlaid
-       machinery that could only address with 18 bits.  Support ended
-       when Prof. Mohan of the University of Minnesota shifted is EMTP
-       usage to Apollo in early 1984.  With all-new, fully-virtual CDC
-       machinery now being sold, it is doubted wheter EMTP usage of the
-       old CDC hardware has much if any EMTP future.  It is hoped that an
-       EMTP version for the new CDC will come from Prof. Hian Lauw of
-       Oregon State University in Corvallis, Oregon, eventually.  Such a
-       machine was installed in the EE Department during September of
-       1985.  Yet timing is unclear, since such work is not a priority
-       for those in Corvallis.  Also, with the acquisition of half a
-       dozen powerful, new 32-bit Apollo DN3000 nodes, it is conceivable
-       that EMTP interest in the new CDC might even disappear entirely.
-       Yet we hope not.
+#. CDC as listed before was the old, 60-bit, overlaid
+   machinery that could only address with 18 bits.  Support ended
+   when Prof. Mohan of the University of Minnesota shifted is EMTP
+   usage to Apollo in early 1984.  With all-new, fully-virtual CDC
+   machinery now being sold, it is doubted wheter EMTP usage of the
+   old CDC hardware has much if any EMTP future.  It is hoped that an
+   EMTP version for the new CDC will come from Prof. Hian Lauw of
+   Oregon State University in Corvallis, Oregon, eventually.  Such a
+   machine was installed in the EE Department during September of
+   1985.  Yet timing is unclear, since such work is not a priority
+   for those in Corvallis.  Also, with the acquisition of half a
+   dozen powerful, new 32-bit Apollo DN3000 nodes, it is conceivable
+   that EMTP interest in the new CDC might even disappear entirely.
+   Yet we hope not.
+
+#. Univac 1100-series machines were non-virtual, 36-bit word
+   machines that used overlaying to handle the EMTP.  Active support
+   from Ontario Hydro (Toronto, Ontario, Canada) seemed to end
+   shortly after that utility acquired a DEC VAX-11/780, and began
+   using VAX for its EMTP studies.  That was during 1981 or 1982, it
+   is estimated.  The most recent Univac EMTP version that was known
+   to be distributed was of "M31." vintage.  While Univac certainly
+   operational convenience and improved economics of smaller
+   alternatives to such mainframes.
+
+#. Honeywell mainframes once were supported in grand style
+   by Bob Newell of Basin Electric Power Cooperative (see the current
+   Prime Computer page). But this Honeywell support ended when Basin
+   Electric acquired PRIME and PTI PSS/E software for it.  After a
+   lapse in Honeywell EMTP availability of perhaps two years, Bob
+   Jones of Southern Company Services in Birmingham, Alabama,
+   switched to an existing Honeywell machine for EMTP support, but
+   this only ]asted a year or two.  Honeywell EMTP support in
+   Birmingham ended in 1986 with the acquisition of Apollo.
+   While Honeywell seemed to have no trouble supporting the EMTP, users
+   seemed to prefer the operational convenience and improved
+   economics of smaller alternatives to such mainframes.
+
+#. Harris once was used by the University of Wisconsin at
+   Madison for EMTP support during the annual summer EMTP short
+   course.  But such usage was switched first to VAX, and more
+   recently to Apollo.  It is doubtful whether any known owner of
+   Harris hardware is serious enough about the EMTP to maintain
+   proven compatibility in the future.  Yet it should be emphasized
+   that there were no fundamental drawbacks or problems with the
+   newer hardware, which does indexing with 20 bits (the earlier
+   machines with 18-bit indexing were hard pressed to cope with the
+   expanding EMTP).
+
+#. Telefunken TR -1 4140 EMTP compatibility was confirmed during
+   19801 when the report of generally successful "M19."
+   experimentation finally reached BPA from AEG-Telfunken of
+   Frankfurt, West Germany.  But the TR 1 4140 was never a commercial
+   success, and AEG-Telefunken interest in the EMTP was somewhat
+   casual.  No second party with Telefunken EMTP interest has ever
+   been identified, and no newer Telefunken EMTP work is known.
+
+#. Floating Point Systems FPS-161 4 Attached Processor
+   compatibility with the "M32." EMTP was demonstrated late in 1982.
+   But cost effectiveness and convenience were less than clear.
+   Testing by BPA was done with the factory in Beaverton (a suburb of
+   Portland, Oregon), so no production user with EMTP interest was
+   ever located.
+
+#. DEC PDP-10 and System 20 are machines for which the story
+   parallels those preceding stories of Univac and Honeywell.
+   So does the hardware: 36-bit word machines. Yes, some usage remains
+   today, but the days of such usage are clearly numbered, because
+   the manufacturer has announced its intention to discontinue word
+   machines and concentrate on the more modern, byte-organized VAX-11
+   line.  The newest version known to be operating is a true "M39."
+   version that is still being used by Prof. Hian Lauw of Oregon
+   State University in Corvallis, Oregon.  Interactive CRT plotting
+   has been connected,  too. But how long such support will continue
+   is speculative (my guess is that use of the 2020 in Corvallis for
+   support of the EMTP will end when Apollos begin arriving in
+   quantity).
+
+#. Cray supercomputers certainly are capable of EMTP
+   support, and an 11 M31.+" version was set up and tested at Lawrence
+   Livermore Laboratory (LLL) in Livermore, California, by Dr. Walter
+   G. Magnuson, Jr. Is LLL still using the Cray EMTP? Are the
+   economics and convenience (or possible inconvenience) of such a
+   super computer really desirable for EMTP use? There are more
+   questions than answers about the Cray EMTP.
+
+#. Burroughs mainframes are certainly capable of support of
+   the EMTP, but much as with Univac, Honeywell, and DEC PDP-10, such
+   usage has been eroded in recent years by the switch to smeller,
+   more convenient alternatives.  Our last good contact was Ebasco
+   Services Incorporated of New York City.  But when Stoney McMurray
+   left Ebasco during 1985, the Burroughs EMTP contact ceased. It is
+   believed that all Ebasco EMTP usage has shifted to DEC VAX.
+   The testing of the Burroughs EMTP is so tricky that it is doubted
+   whether any future version will ever be fully tested and generally
+   available.
+
+#. MODCOMP was used for a time by EPSRI of Peking, China,
+   for support of the EMTP.  But the "Classic" model then available
+   was really a control computer, and it had several drawbacks for
+   EMTP usage, including limitations on memory addressing,
+   unbelievably slow compilation and linkage editing, and lack of
+   virtual memory management.  It was decided to shift EMTP usage-to
+   other, better-suited machinery during 1983.
+
+#. ICL was used to support an "M31." version of the EMTP
+   by The University in Glasgow, Scotland.  For those not familiar
+   with the name, International Computers, Limited is the computer
+   giant of the British empire.  The hardware being used in Glasgow
+   was very similar to an IBM mainframe, and it seemed obviously
+   capable of handling the EMTP. Yet nothing has been heard from any
+   ICL EMTP user for several years.  If there is a problem, it would
+   seem to be a lack of one dedicated industrial user who can produce
+   and maintain current program versions for others around the world.
+   All machines of interest are located a long way from Portland,
+   unfortunately (none having EMTP interest are located in the
+   Western hemisphere).  The man most closely associated with ICL
+   EMTP computer details back in 1983 was Dr. Paul Rosenberg of The
+   Computing Service (the central computer installation).
+
+#. Siemens is the "General Electric of West Germany," and
+   the sale of computers that resembled IBM mainframes was a small
+   portion of this giant company's business. Such a Siemens computer
+   was used by FGH (Forschungs-Gemeinschaft fur Hochspannungs- und
+   Hochstromtechnik E.V.) of Mannheim for support of the EMTP until
+   1985, when there was a shift to Apollo.  Any questions about the
+   future of the Siemens EMTP could best be directed to Dipl.-Ing.
+   Bernd Stein of FGH, who once was in charge of producing and
+   maintaining it.
+
+#. NEC ACOS is a Japanese computer that once was used in
+   two quite different forms for support of the EMTP.  First, there
+   was the non-virtual, 36-bit word machine that looked almost
+   identical to Honeywell.  This was used by Meidensha Electric Mfg.
+   Co., Ltd., of Tokyo during late 1982.  Second, there was the
+   virtual, byte-organize.d ACOS computer of Nissin Electric Co., Ltd.
+   of Kyoto.  Nothing later than 1983 is known about either 'machine
+   or its usage for support of the EMTP.
+
+#. FACOM is another Japanese computer.  In 1982 when EMTP
+   work was under way, it looked a lot like an IBM mainframe with
+   enhanced software.  Work was done at Century Research Center
+   Corporation of Osaka.
+
+#. Hitachi HITAC is still another Japanese computer that
+   resembled an IBM mainframe.  It was used by the Kokubu Works of
+   Hitachi, Ltd., for support of the EMTP during 1983, when we had
+   extensive contact.  1.6) Perkin-Elmer was a manufacturer of powerful
+   minicomputers during 1981 when "M28. +" EMTP materials were produced.
+   But a cooperating user with EMTP interest was never found.
+   We have here an EMTP versions that is looking for an owner and a home.
+   On paper, Perkin-Elmer machines should be EMTP compatible, but FORTRAN
+   was never tested (although it was produced).
+
+#. IBM compatible PC class based on x86 processor (32 and 64 bits) ...
+   (to be done).
+
+.. raw:: pdf
+
+    PageBreak
+
+
+IBM EMTP Setup (K.U.L. in Belgium and AEP in Columbus)
+-------------------------------------------------------------------------------
+
+As this page is being written on 6 April 1984, production EMTP
+users can receive IBM program versions of approximately the sane vintage
+("M3IL+11) from one of two sources, for approximately the sane copying
+fee ($200 or less). Most European users who rely upon IBM computers
+have received their IBM EMTP FORTRAN from K.U.L. in Belgium, whereas
+most American users rely upon American Electric Power (AEP) in Columbus,
+thio, as their source of supply. In the remainder of this section,
+further information about these two sources IBM EMTP versions will be
+provided, along with information about the latest IBM EMTP research.
+Both K.U.L. and AEP use IBM 3033 computers for support of the EMTP.
+Although fully-virtual versions are possible, the practical priorities
+and econanics of usage have forced the continued reliance upon
+overlaying for the IBM EMTP.  In that most recipients will probably
+want to operate similarly, and the switch from overlaying to fully-
+virtual just requires the deletion on OVERLAY cards during linkage-
+editing, there is no loss of generality in this. But what about DOS
+installations, for which IBM EMTP usage has nearly vanished in this
+country? Changes are required, although we are not prepared to document
+then here. Or one continuing contact to such usage is S&C Electric in
+Chicago, where Art Jahnke provides years of experience dealing with both
+the EMTP and IBM LOS complications. But S&C Electric is a cctmnercial
+operation, and can not be expected to provide free advice to the general
+public.  A current ("M38.0) IBM EMTP translation was tested during the
+first week of March, 1984, when WSM worked on--site with Mike Price in
+Columbus. While most test cases solved perfectly, cases involving the
+Type-59 S.M. had trouble, and cases involving the U.M. are still
+undergoing evaluation (IJTFF corrections have yet to be applied,
+reflecting Hian ' s latest changes). When such a current version might be
+made available for use by others is unknown, although it seems clear
+that this latest IBM experimentation at AEP points the way toward future
+IBM EMTP usage. Specifically, there has been a shift to the VS FORTRAN
+compiler, using LANGLVL(77) everywhere. For a detailed account of this
+work, see Ref. 8, past the end of Vol. XIV (not yet bound), 19 January
+1984, Section V-D, pages AESS-48 through 61.
+The European IBM EMTP connection shall be described first, since I
+have no associated printed documentation of it which can be passed along
+as well. Any reader who has interest is invited to contact:
+
+
+|   Prof. fl. Daniel Van Dommelen
+|   Elektrotechnisch Instituut - Departm. E
+|   Katholieke Universiteit Leuven
+|   Kard. Mercierlaan 94
+|   303D Heverlee - Leuven
+|   BELGIUM
+|   Phone (International): 32-16-220931
+|   Telex: elekul b 25941
+
+
+In addition to his university duties, Daniel serves as Chairman of the
+European EMTP Users Group.  His English is excellent, so no party
+contemplating a telephone call in that language should hesitate. If the
+phone is answered in Dutch by a secretary, just ask for "Professor Van
+Immelen" in slow English, and there should be no problem.
+
+The remainder of this IBM EMTP section shall be devoted to AEP
+documentation, which begins with a sample letter of response to an inquiry
+about the IBM EMTP. After that comes the printed documentation with which
+AEP supplies people, in responding to requests for the IBM EMTP. Inquiries
+should be made of
+
+|   Michael M. Price; Floor 7
+|   Engineering Information Systems
+|   Information Systems Department
+|   American Electric Power Service Corp.
+|   1 Riverside Plaza
+|   P. O. Bbx 16631
+|   Columbus, Chio 43216-6631
+|   Phone: (614) 223-3776
+
+
+American Electric Power Service Corporation announces the avail-
+ability of the M34+ version of the Electromagnetic Transients Program
+(EMTP) for the IBM computer. This program, developed under the aus-
+pices of the Bonneville Power Administration (BPA), has been set-up
+and tested on the IBM computer by AEP. As with previous versions of
+EMTP, AEP will supply the program, JCL, and installation documentation
+at no charge. However, due to the large number of tapes received, the
+problems in handling out-of-company tapes, and the unacceptable condi-
+tion of many of the tapes (mislabeled, too short, physically broken
+during shipping, etc.), AEP has decided to supply the tapes and
+mailers for the program distribution.
+
+To offset our costs for the tape purchase, preparation and mail-
+ing, the following fee schedule has been set:
+
+* For all organizations within the USA,
+  Canada, or Mexico: ............................................. $150.00
+
+* For all organizations outside the USA,
+  Canada, or Mexico: ............................................. $175.00
+
+AEP's offer does not include the EMTP Rule Book. For a copy
+please contact Dr. Scott Meyer of BPA. His address is:
+
+
+|   W. Scott Meyer, Rute EOGA
+|   Bonneville Power Authority
+|   P. O. Box 3621
+|   Portland, Oregon 97208
+|   Phone: (503) 230-4404
+
+
+Through AEP's newly created subsidiary, AEP Energy Services,
+Inc., several EMTP-related services could be offered:
+
+* Processing EMTP studies on our corporate computer for
+  other organizations.
+
+* Providing an EMTP installation service.
+
+* Performing power system studies.
+
+* Providing training in the use and/or internals (FORTRAN
+  Source) of EMTP.
+
+* Providing a user friendly preprocessor for EMTP data.
+
+If you have an interest in obtaining the IBM version of EMTP or
+making use of the services mentioned above, please write to:
+
+
+|   Michael M. Price
+|   American Electric Power Service Corporation
+|   1 Riverside Plaza - 7th Floor
+|   Columbus, Ohio 43216-6631
+
+
+For your convenience, an order form has been included. Please use a
+copy of this form as your invoice. If you have any questions, you may
+call Mike Price at (614)223-3776.
+
+The AEP-created tape will be 6250 BPI, 9-track, 2400 foot, with
+a standard IBM label (non-label and/or 1600 BPI by special request).
+It will include all the JCL needed for installation and execution of
+EMTP (system dependent changes will need to be made), the FORTRAN
+source code, executable load modules, object modules, link editor
+data, and test case data. This version has been successfully compiled
+using the IBM "OS/360 FORTRAN H-extended Level 2.2 (Sept.76)"
+compiler.
+
+
+STRUCTURE OF THE EMTP M34 TAPE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
++---------------------+----------------------+---------------------+--------------------------+
+| .. class:: center   | .. class:: center    | .. class:: center   | .. class:: center        |
+|                     |                      |                     |                          |
+| FILE #              | CONTENTS             | # OF RECORDS        | FORMAT                   |
++---------------------+----------------------+---------------------+--------------------------+
+| .. class:: center   |                      | .. class:: center   |                          |
+|                     |                      |                     |                          |
+| 1                   | Job Control Language | 756                 | Sequential with IEBUPDTE |
+|                     |                      |                     | control cards            |
++---------------------+----------------------+---------------------+--------------------------+
+| .. class:: center   |                      | .. class:: center   |                          |
+|                     |                      |                     |                          |
+| 2                   | FORTRAN Source, Link | 107587              | Sequential with IEBUPDTE |
+|                     | Editor Data, Test    |                     | control cards            |
+|                     | Case Data            |                     |                          |
++---------------------+----------------------+---------------------+--------------------------+
+| .. class:: center   |                      | .. class:: center   |                          |
+|                     |                      |                     |                          |
+| 3                   | Executable Load      | ---                 | Unloaded sequential      |
+|                     | Modules              |                     |                          |
++---------------------+----------------------+---------------------+--------------------------+
+| .. class:: center   |                      | .. class:: center   |                          |
+|                     |                      |                     |                          |
+| 4                   | Object Modules -     | ---                 | Unloaded sequential      |
+|                     | All Modules          |                     |                          |
++---------------------+----------------------+---------------------+--------------------------+
+| .. class:: center   |                      | .. class:: center   |                          |
+|                     |                      |                     |                          |
+| 5                   | Object Modules -     | ---                 | Unloaded sequential      |
+|                     | 11 Modules for the   |                     |                          |
+|                     | "Big" Version        |                     |                          |
++---------------------+----------------------+---------------------+--------------------------+
+
+Files 1 & 2 have the necessary control cards between each module to
+be used as input to the IBM utility program IEBUPDTE. By the use of
+IEBUPDTE, the partitioned dataset (PDS) can be reconstructed for the JCL
+& source. The JCL maybe kept in a PDS where it can be submitted via
+TSO, or the sequential file may be punched to cards. In addition, global
+changes can be made to the sequential JCL and FORTRAN files, and then the
+PDS can be recreated via IEBUPDTE.
+
+Files 3, 4, & 5 were created by unloading the load and object mod-
+ule PDS' via IEBCOPY. These files should be loaded onto your computer
+system using IEBCOPY. Note that these three files have been included as
+a time saving option since file one includes the JCL needed to recreate
+files 3, 4, & 5.
+
+#. JCL
+   The following JCL is included in file one:
+
+DUMPTAPE
+ used to dump contents onto disk.  As written, all
+ files are stored in temporary disk files only. Any files
+ required to be kept on disk can be renamed, supplied with a
+ VOL t and its DISP changed to KEEP/CATLG.
+
+ If the files are going to be saved on disk, the following
+ names will agree with those used in the other JCL modules on
+ this tape:
+
+
++-------------------+--------------------+--------------------------+
+| .. class:: center |  .. class:: center |  .. class:: center       |
+|                   |                    |                          |
+| DATA DESCRIPTION  | TEMPORARY NAME     | SUGGESTED PERMANENT NAME |
++-------------------+--------------------+--------------------------+
+| Source Module PDS | &&SRCPDS           | TST.TRAEMTP.FORT         |
++-------------------+--------------------+--------------------------+
+| Load Module PDS   | &&LOADMODS         | TST.TRA                  |
++-------------------+--------------------+--------------------------+
+
 
 
 .. comment: the end
