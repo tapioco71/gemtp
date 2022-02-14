@@ -1779,7 +1779,7 @@ STRUCTURE OF THE EMTP M34 TAPE
 +---------------------+----------------------+---------------------+--------------------------+
 | .. class:: center   | .. class:: center    | .. class:: center   | .. class:: center        |
 |                     |                      |                     |                          |
-| FILE #              | CONTENTS             | # OF RECORDS        | FORMAT                   |
+| **FILE #**          | **CONTENTS**         | **# OF RECORDS**    | **FORMAT**               |
 +---------------------+----------------------+---------------------+--------------------------+
 | .. class:: center   |                      | .. class:: center   |                          |
 |                     |                      |                     |                          |
@@ -1826,27 +1826,339 @@ files 3, 4, & 5.
 #. JCL
    The following JCL is included in file one:
 
-DUMPTAPE
- used to dump contents onto disk.  As written, all
- files are stored in temporary disk files only. Any files
- required to be kept on disk can be renamed, supplied with a
- VOL t and its DISP changed to KEEP/CATLG.
+   DUMPTAPE
+    used to dump contents onto disk.  As written, all
+    files are stored in temporary disk files only. Any files
+    required to be kept on disk can be renamed, supplied with a
+    VOL t and its DISP changed to KEEP/CATLG.
 
- If the files are going to be saved on disk, the following
- names will agree with those used in the other JCL modules on
- this tape:
+   If the files are going to be saved on disk, the following
+   names will agree with those used in the other JCL modules on
+   this tape:
 
 
-+-------------------+--------------------+--------------------------+
-| .. class:: center |  .. class:: center |  .. class:: center       |
-|                   |                    |                          |
-| DATA DESCRIPTION  | TEMPORARY NAME     | SUGGESTED PERMANENT NAME |
-+-------------------+--------------------+--------------------------+
-| Source Module PDS | &&SRCPDS           | TST.TRAEMTP.FORT         |
-+-------------------+--------------------+--------------------------+
-| Load Module PDS   | &&LOADMODS         | TST.TRA                  |
-+-------------------+--------------------+--------------------------+
+   +----------------------+--------------------+------------------------------+
+   | .. class:: center    | .. class:: center  | .. class:: center            |
+   |                      |                    |                              |
+   | **DATA DESCRIPTION** | **TEMPORARY NAME** | **SUGGESTED PERMANENT NAME** |
+   +----------------------+--------------------+------------------------------+
+   | .. class:: center    | .. class:: center  | .. class:: center            |
+   |                      |                    |                              |
+   | Source Module PDS    | &&SRCPDS           | TST.TRAEMTP.FORT             |
+   +----------------------+--------------------+------------------------------+
+   | .. class:: center    | .. class:: center  | .. class:: center            |
+   |                      |                    |                              |
+   | Load Module PDS      | &&LOADMODS         | TST.TRA                      |
+   +----------------------+--------------------+------------------------------+
+   | .. class:: center    | .. class:: center  | .. class:: center            |
+   |                      |                    |                              |
+   | Object Module PDS    | &&OBJMODS          | TST.TRAEMTPBIG.OBJ           |
+   | (all modules)        |                    |                              |
+   +----------------------+--------------------+------------------------------+
+   | .. class:: center    | .. class:: center  | .. class:: center            |
+   |                      |                    |                              |
+   | Object Module PDS    | &&OBJMODS2         | S710828.EMTPBIG.OBJ          |
+   | (Big Version)        |                    |                              |
+   +----------------------+--------------------+------------------------------+
 
+   (NOTE: DUMPTAPE specifies "DEN-3" for 1600 BPI. This should be
+   changed.to DEN=4" for 6250 BPI.)
+
+   COMPILE
+    Used to compile all the FORTRAN modules. Note that this job
+    has 336 steps which is greater than the maximum allowed on
+    most systems. This was split into 7 jobs at AEP. The re-
+    sults of running these jobs have been included in file 4 of
+    the tape.
+
+   ASSEMEL
+    Used to assemble the three assembler modules (P0011013,
+    P0011337, & P0011338). The results of running this JCL are
+    also included in file 4 of the tape.
+
+   LINEVARD
+    Used to link edit the variable dimensioning program (VARDIM).
+    The linked VARDIM program (VARDIM34) has been included in
+    file 3 of the tape.
+
+   EXECVARD
+    Is used to run the variable dimensioning program (VARDIM) and
+    save the 11 subroutines (P0011003, P0011041, P0011141,
+    P0011148, P0011158, P0011173, P0011207, P0011211, P0011230,
+    P0011245, P0011277) in the source PDS.
+
+   M34LNKFS
+    Is used to link the fully overlayed N sma ].1u version of EMTP
+    (TRAM34FS). This JCL uses the object modules stored in
+    TST.TRAEMTP.OBJ. The link editor data used is TST.TRAEMTP.FORT(P0011).
+
+   M34LNKFB
+    Is used to link the fully overlayed "big" version of EMTP
+    (TRAM34FB). This JCL uses the object modules stored in
+    TST.TRAEMTP.OBJ, but uses the 11 object modules stored in
+    S710828.EMTPBIG.OBJ instead of the same named modules in
+    TST.TRAEMTP.OBJ. The link editor data used is
+    TST.TRAEMTP.FORT(P0011).
+
+   M34LNKSS
+    Is used to link the semi-overlayed "small" version of EMTP
+    (TRAM34SS).  This JCL uses the object modules stored in
+    TST.TRAEMTP.OBJ.  The link editor data used is
+    TST.TRAEMTP.FORT(POO11A).
+
+   RUNVARDS
+    Is used to run the VARDIM Program, store the 11 subroutines
+    in TST.TRAEMTP.FORT, compile these routines, and store the
+    object modules in TST.TRAEMTP.OBJ.
+
+   RUNVARDB
+    Is used to run the VARDII'l Program, store the 11 subroutines
+    in a temporary dataset, compile these routines, and store the
+    object modules in S710828.EMTPBIG.OBJ.
+
+   EMTPRUN
+    Is used to execute the EMTP.
+
+#. FORTRAN SOURCE PDS
+
+   File 2 of the tape has the contents of the FORTRAN PDS which includes
+   337 FORTRAN members, 3 Assembler members, 2 link editor data members,
+   and 1 test case data memeber.  The following list is an abbreviated,
+   alphabetical listing of the 343 members from this file.
+
+   P001
+    link editor data, fully overlayd
+
+   P0011a
+    link editor data, semi-overlayed
+
+   P0011000
+    HEADER, subroutine for the IBM version only (see link
+    editor JCL)
+
+   P0011001 to P0011338
+    FORTRAN and Assembler routines of EMTP
+
+   TESTDATA
+    test case data (see microfiche of BPA's results)
+
+   TRAIHOED
+    A FORTRAN program used to edit the output file to remove
+    the underflow errors generated by the AEP supplied
+    load modules.  These messages should be suppressed, but
+    due to an error in the setup of AEP's H-EXIT compiler,
+    an unlimited number of the message will be printed
+    out.  Since this is just a warning message, the program
+    answers are correctly calculated.  If the user decides
+    to recompile the EMTP on their computer, this program
+    and the supporting JCL may be removed.
+
+#. LOAD MODULES
+
+   The following load modules are included in file 3 of the tape:
+
+   VARDIM34
+    is the load module of the variable dimensioning program
+    VARDIM.
+
+   TRAM34FB
+    is the fully overlayed "big" load module of the EMTP allowing
+    603 busses.
+
+   TRAM34FS
+    is the fully overlayed "small" load module of EMTP.  This
+    module uses the default dimensions of the VARDIM Program (250
+    busses).
+
+   TRAM34SS
+    is the semi-overlayed "small" load module of EMTP.  This
+    module uses the default dimensions of the VARDIM Program (250
+    busses).
+
+   TRAIHOED
+    is the load module of the TRAIHOED described in the previous
+    section.
+
+#. OBJECT MODULES
+
+   The object modules in file 4 are the compiled version of the
+   FORTRAN and assembler modules of file 2.  The IBM '05/360 FORTRAN
+   H-extended level 2.2 (Sept.76) compiler was used for all the FORTRAN
+   modules.  When the G-1 compiler was used, an 1G10311 ROLL SIZE EXCEEDED
+   error was produced for the routines with very large common areas.
+
+   The object modules in file 5 are the compiled VARDIM created sub-
+   routines as created by the RUNVARDB JCL.
+
+#. QUICK SETUP METHOD
+
+   Since the load modules have already been included, there is no need
+   for the source and object modules to be unloaded from the tape (unless
+   program or dimension changes are to be implemented). Listing 1 is the
+   member DUMPTAPE from the JCL file.  From this JCL, the sections needed
+   can be extracted to get only the files you wanted on your system. Optionally,
+   listing 2 can be used to punch the complete JCL file to cards,
+   or an OS file, so that the DUMPTAPE JCL can be accessed with minimum
+   typing on your part.
+
+#. RESULTS OF TEST CASE RUNS
+
+   Most of the test cases supplied by BPA were made to run on the IBM
+   version and produce comparable results with the BPA version.  The following
+   cases are the exceptions:
+
+   ======================= ==============================================
+   DC-20 & DC-63           Semlyen setup
+   DC-16                   Systematic study
+   DC-36                   TRELEG study
+   DC-49                   Start Again
+   DC-68                   DC simulation
+   DC-40, 65 & Hauer setup no longer supported by BPA
+   DC-47 type 59           machine with TACS.  Note that other cases with
+                           TACS and type 59 machine run
+   DCNEW-3, 5, & 6         will bomb while printing a listing of the cards
+                           that were punched to file unit 7.  Since the cards are
+                           punched prior to the stopping of the program, and since
+                           the object of the study is to get those punched cards,
+                           this error is considered to be an inconvenience rather
+                           than a problem
+   DC-8, 24                will bomb if run on the fully overlayed version, but
+                           will run correctly on the semi-overlayed version
+   ======================= ==============================================
+
+.. raw:: pdf
+
+    PageBreak
+
+
+User-Controlled Variable Dimensioning of the EMPT
+-------------------------------------------------------------------------------
+
+The EMTP stores most problem data (exceptions are the S.M. of
+Sect. 1.62 and ZnO of Sect. 1.32) in tables which can be sized by the
+user at linkage-editing (loading; linking; etc.) time.  The basic
+procedure was originally detailed in Ref. 8, Vol. II, 30 January 1975,
+pagination •VARD and 17 April 1975, pagination RSFU.  For the user's
+benefit, key points that are independent of computer system shall now
+be summarized. The user Is also referred to the installation-dependent
+instructions for his computer system (Section 0.5a onward), since
+various aspects of the procedure depend upon both the brand of computer
+and the organizational usage.  But universal aspects are:
+
+Point 1:
+ With only a few relatively minor exceptions, the user can
+ size all EMTP tables at will.  There are currently 27
+ independent tables (or "lists") in the program,- as per
+ the following definitions:
+
+======= ========= ==================================================
+List 1    LBUS    The maximum number of problem nodes (busses)
+List 2   LBRNCH   The maximum number of problem branches.  A
+                  3-phase ovrhead liine counts as three, etc.
+List 3   LDATA    The maximum number of R, L, C floating-point
+                  parameter values which are read from branch
+                  cards (such as for Pi-circuits and series
+                  R-L-C branches)
+List 4   LEXCT    The maximum number of problem sources.  Each
+                  dynamic S.M. (see list 17) contributes 3.
+List 5   LYMAT    Limit on floating-point storage for both
+                  the admittance matrix [Y] of the time-step
+                  loop (both upper and lower triangle are
+                  stored) and also its factor (upper triagle
+                  only).  Both are stored simultaneously.
+List 6   LSWTCH   The maximum number of problem switches.
+                  Diodes and valves also count as switches.
+List 7   LSIZE7   Total maximum number of distinct 6-character (A6)
+                  ALPHANUMERIC names that are used by the program.
+                  As of April, 1984, it is only TACS and Type-59
+                  S.M. which use this new storage principle.  Later,
+                  perhaps electric network tables will be converted
+                  (it saves memory and simplifies SPY displays).
+List 8   LPAST    The maximum number of model past-history points,
+                  for distributed-paramter transmission lines.
+List 9   LNONL    The maximum number of nonlinear and pseudo-
+                  nonlinear elements in the problem.
+List 10  LCHAR    Maximum numer of points that define the
+                  characteristics of the nonlinear or pseudo-
+                  nonlinear elements of List 9.  Type-96 hysteretic
+                  inductors are an exception, hovewer.  Fort the
+                  first such element, 2 * N + 8 cells are allocated,
+                  where N is the number of data cards that define
+                  the caracteristic.  Second and later elements
+                  might use the reference-branch feature, in which
+                  case rrequirements drop to six cells.  See Section
+                  1.31 for further details of this exceptional case.
+
+                  .. note:: If there are ZnO surge arresters in the chase,
+                            extra cells are needed.  Thee burden of each
+                            arrester is equal to the number of segments
+                            (exponentials) that require representation.
+
+List 11  LSMOUT   The maximum number of Type-59 synchronous machine
+                  (S.M.) outputs.
+List 12  LSIZ12   The maximum number of output quantities.
+List 13  LFDEP    The maximum number of frequency-dependent modes
+                  of distributed-parameter transmission lines
+                  which use the "WEIGHTING" modeling of Section
+                  1.26b.
+List 14   LWT     The maximum number of cells required to store
+                  frequency-dependent weighting functions A1 and
+                  A2 for the modes of List 13.
+List 15  LTAILS   The maximum number of cells needed to store
+                  the convolution line history for the exponential
+                  tails
+List 16  LIMASS   The maximum total number of masses of all Type-59
+                  S.M. usage (total over all machines).
+List 17   LSYN    The maximum number of Type-59 ssynchronous
+                  machines (S.M. components) of Section 1.62.
+List 18  MAXPE    The maximum number of branch or switch power and
+                  energy requests (column 80 punches having a value
+                  of "4").
+List 19  LTACST   Maximum number of floating-point cells of total
+                  storage for all of the TACS tables.  See section
+                  8.  A value of 23 is the minimum allowed (any
+                  small value will be so increased).  A reasonable
+                  practical minimum for production problems might be
+                  2000.  Serious TACS users will probably want more.
+List 20  LFSEM    Storage for frequency-dependent lines which rely
+                  upon recursive convolution.  For Marti modeling
+                  (Sect. 1.26b1), any branch requires: 5 + 7 * the
+                  number of poles used to represent the two
+                  functions, plus four times the number of poles of
+                  the admittance functions.
+List 21   LFD     The maximum number of cells used to store
+                  transformation matrices for the contant-parameter
+                  and frequency-dependent distributed transmission
+                  line models.  For each non-copied line section of
+                  "N" phases, 2 x N x N cells are required.
+List 22   LHIST   For each Marti line, 15 cells are required for
+                  each coupled phase.  For each Semlyen line, it is
+                  the larger of six times the number of coupled
+                  phases and to times the number of poles used for
+                  both funôtions (propagation & characteristic
+                  admittance) which is required.
+List 23  LSIZ23   Ignore for all non-virtual computer systems (CDC,
+                  Univac, Honeywell), and also for all 'computer
+                  systems which use overlaying (presently IBM,
+                  Harris, etc.) --- unless the EMTP load flow
+                  ("FIX SOURCE") is used. But for fully-virtual
+                  systems not short of address space, and for
+                  computer systems where CCMMON blocks are not in
+                  order, this list is required.  It specifies the
+                  size in floating-point words of three giant
+                  vectors which are used for node renumbering and
+                  the phasor steady-state solution. As of the end of
+                  1981, this list is used for Burroughs, PRIME, VAX,
+                  Data General, and Apollo E1TP versions.  Default
+                  is 1 4000.
+List 24   NCOMP   Maximum number of phases of compensation, at peak
+                  problem size.  The actual maximum number of phases
+                  then varies inversely with the number of problem
+                  nodes. Use of NCCMP = 3 is most common, allowing
+                  for 3-phase compensation with full-size problems,
+                  6-phase compensation with half-size problems, etc.
+
+======= ========= ==================================================
 
 
 .. comment: the end
