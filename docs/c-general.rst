@@ -2157,8 +2157,44 @@ List 24   NCOMP   Maximum number of phases of compensation, at peak
                   nodes. Use of NCCMP = 3 is most common, allowing
                   for 3-phase compensation with full-size problems,
                   6-phase compensation with half-size problems, etc.
-
+List 25  LSPCUM   Maximum number of floating-point cells of total
+                  storage for all universal machine (U.M.) tables.
+                  If U.M. modeling of Section 1.63 is not of interest,
+                  set to unity.  Practical production usage allowing
+                  two 3-phase induction machines typically takes
+                  LSPCUM = 1500.
+List 26  LSIZ26   Length of working vectors in /BLANK/ which are used
+                  for various things in the EMTP.  Originally fixed at
+                  50 cells, these are now variably-dimensioned to
+                  allow open-ended usage (e.g., more coupled phases).
+                  See [REF8]_, Vol. XI, 18 Oct1981, SSIA-12.
+List 27  LSIZ27   Reserved for possible later use with frequency-
+                  dependent sources (Ref. 35) But for now, it is used
+                  only to store steady-state node voltage outputs.
+                  Size should equal List 11, then, not unity.
 ======= ========= ==================================================
+
+An abbreviated version of this explanation appears as part of the
+case-summary statistics which complete the line-printer output of each
+data case being solved.  See the example of Section 2.3.
+
+Point 2:
+ One step in the dimension-changing process is the execution of a
+ separate variable-dimensioning program named "VARDIM".  This program
+ reads 3 data cards in 1018 format, obtaining therefrom the user-
+ specified list sizes. The format for these 3 cards is as follows:
+
+.. _table-label:
+
+.. table:: Table caption.
+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|1|2|3|4|5|6|7|8|1|2|3|4|5|6|7|8|1|2|3|4|5|6|7|8|1|2|3|4|5|6|7|8|
++=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+| LBUS          | LBRNCH        | LDATA         | LEXCT         |
++---------------+---------------+---------------+---------------+
+| I8            | I8            | I8            | I8            |
++---------------+---------------+---------------+---------------+
 
 
 .. comment: the end

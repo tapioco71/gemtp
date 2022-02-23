@@ -1,6 +1,7 @@
 # -*- mode:makefile-gmake; coding:utf-8; indent-tabs-mode:t -*-
 
 VERBOSE=
+#STYLE=style.txt
 LISP=$(shell which sbcl)
 LISP_FLAGS=--no-sysinit --no-userinit
 LISP_LOAD_OPTION=--load
@@ -19,6 +20,7 @@ HELPFMT="$(shell basename $(MAKE)) %-20s \# %s\n"
 RST2PDF=$(shell which rst2pdf)
 RST2PDF_OPTIONS=--default-dpi=600	\
 		-q
+#		-s $(STYLE)		\
 
 ifneq (${RST2PDF},)
 ifneq (${LISP},)

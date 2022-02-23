@@ -53,6 +53,9 @@ OBJCOPY=${shell which objcopy}
 OBJDUMP=${shell which objdump}
 MAKEDEPEND=${shell which makedepend}
 
+# Project-wide modules directory.
+MODULES_PATH =	${ROOT}/modules
+
 # Project-wide includes directory.
 INCLUDES_PATH =	${ROOT}/includes
 
@@ -222,8 +225,8 @@ ${COMPILER}/%.o: %.f90
 	fi
 	@${FORTRAN} ${F90_FLAGS} ${<} -o ${@}
 
-# Rule for building the midule files.
-${COMPILER}/%.o: ${ROOT}/modules/%.f90
+# Rule for building the module files.
+${COMPILER}/%.o: ${MODULES}/%.f90
 	@if [ 'x${VERBOSE}' = x ];				\
 	then							\
 		echo " [ F90 MOD ] ${<}";			\
