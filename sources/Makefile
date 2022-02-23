@@ -52,16 +52,16 @@ LINKER_SCRIPT=
 ROOT=..
 
 # Includes path.
-INCLUDES_PATH=	${ROOT}/includes
+INCLUDES_PATH=${ROOT}/includes
 
 # Modules path.
-MODULES_PATH=	${ROOT}/modules
+MODULES_PATH=${ROOT}/modules
 
 # Library path.
-LIBRARY_PATH=	${ROOT}/libraries
+LIBRARY_PATH=${ROOT}/libraries
 
 # Sources path
-SOURCES_PATH=   ${ROOT}/sources
+SOURCES_PATH=${ROOT}/sources
 
 SOURCES=
 
@@ -85,8 +85,8 @@ vardim: ${COMPILER}/${VARDIM}
 # dimensioning via vardim
 setup: vardim
 setup: dimension
-setup: ${ROOT}/${MODULES_PATH}/labcom.f90
-setup: ${ROOT}/${SOURCES_PATH}/newmods.f90
+setup: ${MODULES_PATH}/labcom.f90
+setup: ${SOURCES_PATH}/newmods.f90
 
 # List rule
 lst: all
@@ -156,7 +156,7 @@ dimension:
 		echo "No ${COMPILER}/${VARDIM}";				\
 	fi
 
-${ROOT}/${SOURCES_PATH}/newmods.f90:
+${SOURCES_PATH}/newmods.f90:
 	@if [ -f fort.7 ];						\
 	then								\
 		if [ 'x${VERBOSE}' = x ];				\
@@ -170,7 +170,7 @@ ${ROOT}/${SOURCES_PATH}/newmods.f90:
 		echo "Cannot create newmods.f90.";			\
 	fi
 
-${ROOT}/${MODULES_PATH}/labcom.f90:
+${MODULES_PATH}/labcom.f90:
 	@if [ -f fort.9 ];						\
 	then								\
 		if [ 'x${VERBOSE}' = x ];				\

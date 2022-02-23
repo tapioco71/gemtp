@@ -54,13 +54,13 @@ OBJDUMP=${shell which objdump}
 MAKEDEPEND=${shell which makedepend}
 
 # Project-wide modules directory.
-MODULES_PATH =	${ROOT}/modules
+MODULES_PATH=${ROOT}/modules
 
 # Project-wide includes directory.
-INCLUDES_PATH =	${ROOT}/includes
+INCLUDES_PATH=${ROOT}/includes
 
 # Project-wide libraries directory.
-LIBRARIES_PATH = ${ROOT}/libraries
+LIBRARIES_PATH=${ROOT}/libraries
 
 # Assembler flags.
 AS_FLAGS=	-Wall			\
@@ -163,7 +163,7 @@ LIBC=${shell ${CC} -print-file-name=libc.a}
 LIBM=${shell ${CC} -print-file-name=libm.a}
 LIBGFORTRAN=${shell ${FORTRAN} -print-file-name=libgfortran.a}
 
-LIBRARIES=	c		\
+LIBRARIES=	c	\
 		m
 
 LD_FLAGS+=${patsubst %,-l%,${subst :, ,${LIBRARIES}}}
@@ -226,7 +226,7 @@ ${COMPILER}/%.o: %.f90
 	@${FORTRAN} ${F90_FLAGS} ${<} -o ${@}
 
 # Rule for building the module files.
-${COMPILER}/%.o: ${MODULES}/%.f90
+${COMPILER}/%.o: ${MODULES_PATH}/%.f90
 	@if [ 'x${VERBOSE}' = x ];				\
 	then							\
 		echo " [ F90 MOD ] ${<}";			\
