@@ -9,11 +9,14 @@
 !
 
 subroutine subr39
+  use blkcom
+  use labl39
+  use deck39
+  use strcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labl39.ftn'
-  include 'deck39.ftn'
+  !  include 'blkcom.ftn'
+  !  include 'labl39.ftn'
+  !  include 'deck39.ftn'
   dimension lltemp(20)
   equivalence (kdeflt, indtv(1))
   character(8) :: text1, text2, text3, text4, text5, text6
@@ -23,6 +26,7 @@ subroutine subr39
   dimension alintp(4100)
   dimension minust(11)
   dimension akfrs1(100), akfrs2(100), alphs1(100), alphs2(100)
+  !
   data  text1   /  'line  ' /
   data  text2   /  'consta' /
   data  text3   /  'nts   ' /
@@ -38,14 +42,14 @@ subroutine subr39
   data  text13  /  'cards ' /
   data  text14  /  'printe' /
   data  text15  /  'r plot' /
-  if ( iprsup  .ge.  1 ) write (lunit6, 1546)  lastov
-1546 format (  ' Top of "subr39".  lastov =',  i6 )
-  if (lastov .eq. 1 )  go to 5657
+  if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1546) lastov
+1546 format (' Top of "subr39".  lastov =', i6)
+  if (lastov .eq. 1) go to 5657
   onehav = onehaf
   oneqtr = 0.25d0
   ifqdpt = 1
-  pai = twopi/2.
-  tendeg = pai / 18.
+  pai = twopi / 2.0d0
+  tendeg = pai / 18.0d0
   ! ==== change these limits if dimensions in labl39 are changed:
   !   number of modes:
   mmodes = 18
@@ -65,27 +69,27 @@ subroutine subr39
   !   zoprau(mzopra),zoprao(mzopra),azepo(mzopra)
   mzopra = 400
   ! ====  end of dimension-limit assignments ("labl39" storage)
-  lunt35 = 35
+  lunit(35) = 35
   llm1 = -1
   ll4 = 4
   jdatcs = 0
-  call dimens ( lltemp(1), nchain, trash, trash )
-  if ( iprsup .ge. 1) write (6, 7001)   lltemp(1), lltemp(2)
-7001 format ( /, 1x, 'lltemp(1:2) =',  2i8  )
+  call dimens (lltemp(1), nchain, trash, trash)
+  if (iprsup .ge. 1) write (unit = 6, fmt = 7001) lltemp(1), lltemp(2)
+7001 format (/, 1x, 'lltemp(1:2) =',  2i8)
   n3 = 0
-  do i=1, 9999, 2
-     if ( n3  .ge.  1 )   go to 1550
-     if ( lltemp(i)  .ne.  71 )   go to 5654
-     mdapts = lltemp(i+1)
+  do i = 1, 9999, 2
+     if (n3 .ge. 1) go to 1550
+     if (lltemp(i) .ne. 71) go to 5654
+     mdapts = lltemp(i + 1)
      n3 = n3 + 1
 5654 end do
   call stoptp
 1550 n13 = 0
   kdeflt = 0
-  if(lastov.ne.1) go to 4040
+  if (lastov .ne. 1) go to 4040
 5657 ialdum = 0
   ialter = 1
-  do  i=1, 24
+  do  i = 1, 24
 7004 vstacs(i) = blank
   end do
   sglfir = 0.2d0
@@ -99,24 +103,24 @@ subroutine subr39
   call free (d1)
   if (kill .gt. 0) go to 9200
   nright = 0
-  if ( texta6(1)  .ne.  text11 )   go to 7618
+  if (toLower(texta6(1)) .ne. text11)   go to 7618
   !     optional "branch" card giving pairs of node names
   n1 = m + 11
   read (unit = abuff, fmt = 7609) (vstacs(i), i = m, n1)
-7609 format (8x,12a6)
-  if (iprsup .ge. 6 ) write (lunit6, 7613) m, (vstacs(i), i = m, n1)
-7613 format ( ' vstacs names:',  12a6  )
+7609 format (8x, 12a6)
+  if (iprsup .ge. 6) write (unit = lunit(6), fmt = 7613) m, (vstacs(i), i = m, n1)
+7613 format (' vstacs names:', 12a6)
   m = m + 12
-  write (kunit6, 7616)
+  write (unit = kunit(6), fmt = 7616)
 7616 format ('+bus names for each phase.')
   go to 4040
-7618 if(texta6(1).ne.text7 ) go to 4042
-  if(texta6(2).ne.text8 ) go to 4042
+7618 if (toLower (texta6(1)) .ne. text7) go to 4042
+  if (toLower (texta6(2)) .ne. text8) go to 4042
   ialdum = 3
   ialter = 3
-  if ( kolbeg  .gt.  0 )   go to 7623
+  if (kolbeg .gt. 0) go to 7623
   read (unit = abuff, fmt = 7622) dist
-7622 format ( 24x,  e8.0 )
+7622 format (24x, e8.0)
   go to 7624
 7623 nfrfld = 1
   !  call freone (dist)
@@ -125,66 +129,66 @@ subroutine subr39
   write (unit = kunit6, fmt = 7625) dist
 7625 format ('+Same line, but with new length =', f9.2,   '  km.'   )
   go to 4040
-4042 if (to_lower (texta6(1)) .ne. text9) go to 4043
-  if(texta6(2).ne.text10) go to 4043
+4042 if (toLower (texta6(1)) .ne. text9) go to 4043
+  if (toLower(texta6(2)) .ne. text10) go to 4043
   !     temporary new rho area - to be completed later, someday
-4043 if ( texta6(1) .ne. text14 )  go to 8819
-  if ( texta6(2) .ne. text15 )  go to 8819
+4043 if (toLower(texta6(1)) .ne. text14) go to 8819
+  if (toLower(texta6(2)) .ne. text15) go to 8819
   read (unit = abuff, fmt = 7622) sglfir
-  write (kunit6, 8814) sglfir
-8814 format ( '+new log-f/line of printer plot.  sglfir =', f8.4 )
+  write (unit = kunit(6), fmt = 8814) sglfir
+8814 format ('+new log-f/line of printer plot.  sglfir =', f8.4 )
 8819 continue
   read (unit = abuff, fmt = 1019) (texta(k), k = 1, 14)
-1019 format ( 13a6, a2 )
-  do k=1, 14
-     if ( texta(k)  .ne.  blank )  go to 4044
+1019 format (13a6, a2)
+  do k = 1, 14
+     if (texta(k) .ne. blank) go to 4044
 1023 end do
-  write (kunit6, 1719)
-1719 format ('+Blank card ending Marti setup' )
+  write (unit = kunit(6), fmt = 1719)
+1719 format ('+Blank card ending Marti setup')
   call interp
   go to 9200
   !     check for key word  'line constants'  (or  'lc' ).
-4044 if ( texta6(1)  .eq.  text5 )   go to 1706
-  if ( texta6(1)  .ne.  text1 )   go to 4049
-  if ( texta6(2)  .ne.  text2 )   go to 4049
-  if ( texta6(3)  .ne.  text3 )   go to 4049
-1706 if ( iprsup .ge. 1 ) write (lunit6, 4045)
+4044 if (toLower(texta6(1)) .eq. text5) go to 1706
+  if (toLower(texta6(1)) .ne. text1) go to 4049
+  if (toLower(texta6(2)) .ne. text2) go to 4049
+  if (toLower(texta6(3)) .ne. text3) go to 4049
+1706 if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4045)
 4045 format (" Transfer to  'line constants' .")
   lastov = nchain
   nchain = 44
   go to 9999
   !     check for key word  'cable constants'  (or  'cc' ).
-4049 if ( texta6(1)  .eq.  text6 )   go to 1716
-  if ( texta6(1)  .ne.  text4 )   go to 4055
-  if ( texta6(2)  .ne.  text2 )   go to 4055
-  if ( texta6(3)  .ne.  text3 )   go to 4055
-1716 write (kunit6, 4053)
+4049 if (toLower(texta6(1)) .eq. text6) go to 1716
+  if (toLower(texta6(1)) .ne. text4) go to 4055
+  if (toLower(texta6(2)) .ne. text2) go to 4055
+  if (toLower(texta6(3)) .ne. text3) go to 4055
+1716 write (unit = kunit(6), fmt = 4053)
 4053 format ("+transfer to  'cable constants' .")
   lastov = nchain
   nchain = 47
   go to 9999
-4055 if( texta6(1) .ne. text8 )   go   to  4057
-  if( texta6(2) .ne. text13 )   go   to  4057
+4055 if (toLower(texta6(1)) .ne. text8) go to 4057
+  if (toLower(texta6(2)) .ne. text13) go to 4057
   !     read data card using cimage
   call cimage
   read (unit = abuff, fmt = 4027) ktab, imodal, metrik, d9
-4027 format (3i8,e8.0)
+4027 format (3i8, e8.0)
   ck1 = d9
-  if( metrik .eq. 0 )  ck1 = ck1 * .62135896d0
+  if (metrik .eq. 0) ck1 = ck1 * 0.62135896d0
 !!!      write (*,*) ' subr39.  ready to to rewind lunit9 =',
 !!!     1                                          lunit9
-  rewind lunit9
+  rewind lunit(9)
   !     write five dummy zeros
-  d11 = 0.
-  write (lunit9) d11, d11, d11, d11,d11
-  rewind lunit9
-  write (lunit9) imodal, metrik, d9, mspedb, itrnsf
+  d11 = 0.0d0
+  write (unit = lunit(9)) d11, d11, d11, d11, d11
+  rewind lunit(9)
+  write (lunit(9)) imodal, metrik, d9, mspedb, itrnsf
   !     read data card using cimage
   call cimage
   read (unit = abuff, fmt = 4029) (voltbc(i), i = 1, 3)
-4029 format ( 5e16.0)
+4029 format (5e16.0)
   !     read in the current transformation matrix   *  *  *  *  *  *  *
-  if( imodal .eq. 0 ) go to 4033
+  if (imodal .eq. 0) go to 4033
   do j = 1, ktab
      do i = 1, ktab, 6
         ij = i + 5
@@ -192,92 +196,92 @@ subroutine subr39
         !     read data card using cimage   *   *   *   *   *   *   *   *   *
         call cimage
         read (unit = abuff, fmt = 4023) (tir(j, kp), kp = i, ij)
-4023    format ( 6e12.0 )
+4023    format (6e12.0)
 4021 end do
      do i = 1, ktab, 6
         ij = i + 5
-        if( ij .gt. ktab ) ij = ktab
+        if (ij .gt. ktab) ij = ktab
         !     read data card using cimage   *   *   *   *   *   *   *   *   *
         call cimage
         read (unit = abuff, fmt = 4023) (tii(j, kp), kp = i, ij)
 4022 end do
 !!!      write (*,*) ' subr39.  tir, tii on  lunit9.'
-     write (lunit9) (tir(j, kp), tii(j, kp), kp = 1, ktab)
+     write (unit = lunit(9)) (tir(j, kp), tii(j, kp), kp = 1, ktab)
 4026 end do
   !     read modal g, b, r, x    *   *   *   *   *   *   *   *   *   *   *
   !     read data card using cimage
 4033 call cimage
   read (unit = abuff, fmt = 4029) (alinvc(i), i = 1, 5)
-  if( alinvc(ll4) .le. 0. )   go  to  4034
+  if (alinvc(ll4) .le. 0.0d0) go to 4034
 !!!      write (*,*) ' subr39.  alinvc on lunit9.'
-  write (lunit9) (alinvc(i), i = 1, 5)
-  go to   4033
-4034 rewind lunit9
+  write (unit = lunit(9)) (alinvc(i), i = 1, 5)
+  go to 4033
+4034 rewind lunit(9)
   !     advance the card reader to conform to misc39's requirements
   call cimage
   jdatcs = 2
   !     end key-word section, prepare for misc. data card:
-4057 do i=1, 2
-     do j=1, 9
-4058    modskp(i,j) = 0
+4057 do i = 1, 2
+     do j = 1, 9
+4058    modskp(i, j) = 0
      end do
   end do
   modesk = 0
-  rewind lunit9
+  rewind lunit(9)
 !!!      write (*,*) ' subr39.  ready to read imodal, etc. from 9.'
-  read (lunit9)  imodal, metrik, d9, mspedb, itrnsf
+  read (unit = lunit(9)) imodal, metrik, d9, mspedb, itrnsf
   modify = 0
   !   ==  read miscellaneous data card by call to  "misc39" :    ==
   call misc39
 !!!      write (*,*) ' subr39.  imodal, modesk, ialdum, ialter, ktab =',
 !!!     1                       imodal, modesk, ialdum, ialter, ktab
-  if ( modesk  .eq.  1 )   go to 4065
-  do i=1, 2
-     do j=1, 9
-4061    modskp(i,j) = 1
+  if (modesk .eq. 1) go to 4065
+  do i = 1, 2
+     do j = 1, 9
+4061    modskp(i, j) = 1
      end do
   end do
-4065 if ( ialdum  .ne.  3 )  dist = d9
+4065 if (ialdum .ne. 3) dist = d9
   !     again, the usage of 'ialter' is restored here
-  if (ialter .ne. 3 )  dist = d9
-  if ( imodal  .eq.  0  .or. itrnsf .eq. 1)   go to 8215
+  if (ialter .ne. 3) dist = d9
+  if (imodal .eq. 0 .or. itrnsf .eq. 1) go to 8215
   do ip = 1, ktab
-     read (lunit9) ( tir(ip,jp), tii(ip,jp), jp=1, ktab )
-     if( iprsup .lt. 9 ) go to 8203
-     write (lunit6, 9436) ip, (tir(ip, jp), jp = 1, ktab)
-9436 format (  ' row',  i3,  '.',  9e13.5  )
-     write (lunit6, 9436) ip, (tii(ip, jp), jp = 1, ktab)
+     read (unit = lunit(9)) (tir(ip, jp), tii(ip, jp), jp = 1, ktab)
+     if (iprsup .lt. 9) go to 8203
+     write (unit = lunit(6), fmt = 9436) ip, (tir(ip, jp), jp = 1, ktab)
+9436 format (  ' row',  i3, '.', 9e13.5)
+     write (unit = lunit(6), fmt = 9436) ip, (tii(ip, jp), jp = 1, ktab)
 8203 end do
   !
   !   === miscellaneous initializations ===
 8215 lout = lunit6
   nmode = ktab
   nfitmx = 0
-  if (nmode.gt.mmodes) go to 2170
-  convun = 1.d0
-  if (metrik.eq.0) convun = 1.60935d0
+  if (nmode .gt. mmodes) go to 2170
+  convun = 1.0d0
+  if (metrik .eq. 0) convun = 1.60935d0
   modify = 1
   nexmis = 1
   aptdec = voltbc(6)
   npoint = voltbc(4)
-  if (npoint.gt.mdapts) go to 2100
+  if (npoint .gt. mdapts) go to 2100
   !   == fixed parameters ==
   !    separation between consecutive poles or zeroes (.1%)
-  d13 = 1.0 + tenm3
-  deminp = alog1z ( d13 )
+  d13 = 1.0d0 + tenm3
+  deminp = alog1z (d13)
   !    initial separation from horizontal level (1.%)
-  clear = tenm3 * 10.
+  clear = tenm3 * 10.0d0
   !   == prepare images of punch file ==
   kount = 0
-  rewind lunit1
-  if (ipunch .eq. 0) write (unit = lunit7, fmt = 8769) tclock, date1
+  rewind lunit(1)
+  if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8769) tclock, date1
 8769 format ('c    Punched card output of "jmarti setup" which began at', 2x, 2a4, 2x, 2a4)
   if (ipunch .ne. 0)  go to 8789
-  if (imodal .eq. 1) write (unit = lunit7, fmt = 8770)
+  if (imodal .eq. 1) write (unit = lunit(7), fmt = 8770)
 8770 format ('c   ***** Untransposed jmarti line segment ******')
-  if (imodal .eq. 0 .and. mspedb .eq. 0) write (unit = lunit7, fmt = 8780)
+  if (imodal .eq. 0 .and. mspedb .eq. 0) write (unit = lunit(7), fmt = 8780)
 8780 format ('c   *****  Transposed jmarti line segment  ******')
-  if (imodal .eq. 0 .and. mspedb .eq. 1) write (unit = lunit7, fmt = 8785)
+  if (imodal .eq. 0 .and. mspedb .eq. 1) write (unit = lunit(7), fmt = 8785)
 8785 format ('c   ***** Special double circuit transposed jmarti line segment ******')
 8789 rewind lunit2
   n5 = 0
@@ -285,78 +289,77 @@ subroutine subr39
   do n12 = 1, 9999
      read (unit = lunit2, fmt = 8771) (texta6(i), i = 1, 14)
 8771 format (13a6, a2)
-     if ( ipunch  .eq.  0 ) write (lunit7, 8772) (texta6(i), i = 1, 13)
-8772 format ( 'c ',  13a6 )
-     if (idebug.eq.0) go to 8100
-     write (lunit1, 8773)  (texta6(i), i = 1, 14)
-8773 format (' c ',  13a6,  a2 )
-     kount = kount+1
-8100 if ( texta6(1) .eq. blank     .and. texta6(2) .eq. blank )   n5 = n5 + 1
-     if ( n5  .ge.  2 )   go to 8777
+     if (ipunch  .eq.  0) write (unit = lunit(7), fmt = 8772) (texta6(i), i = 1, 13)
+8772 format ('c ', 13a6)
+     if (idebug .eq. 0) go to 8100
+     write (unit = lunit(1), fmt = 8773) (texta6(i), i = 1, 14)
+8773 format (' c ', 13a6, a2)
+     kount = kount + 1
+8100 if (texta6(1) .eq. blank .and. texta6(2) .eq. blank) n5 = n5 + 1
+     if (n5 .ge. 2) go to 8777
 8774 end do
   !
   !             modes fitting loop
   !
 8777 d13 = 1.005d0
-  d1lim = alog1z ( d13 )
+  d1lim = alog1z (d13)
   d13 = 1.0025d0
-  d2lim = alog1z ( d13 )
-  do imode = 1,nmode
-     rewind lunit9
+  d2lim = alog1z (d13)
+  do imode = 1, nmode
+     rewind lunit(9)
      !  ??? dummy read to skip header ???
-     read(lunit9) id1,id1,d1, id1, id1
-     if ( imodal .eq. 0  .or. itrnsf .eq. 1)  go to 3205
+     read (unit = lunit(9)) id1, id1, d1, id1, id1
+     if (imodal .eq. 0 .or. itrnsf .eq. 1) go to 3205
      do ip = 1, ktab
-3230    read(lunit9) (tdum(ip,jp),tdum(ip,jp),jp=1,ktab)
+3230    read (unit = lunit(9)) (tdum(ip, jp),tdum(ip, jp), jp = 1, ktab)
      end do
-3205 if (itrnsf .eq. 1) read(lunit9) (lltemp(i), i =1,ktab)
+3205 if (itrnsf .eq. 1) read (unit = lunit(9)) (lltemp(i), i = 1, ktab)
      !  ??? end of dummy read ???
      do ipoint = 1, npoint
         do i = 1, nmode
-           read (lunit9) twopif, ycharm, ychara, alpha,beta
-           if ( itrnsf .ne. 1 )  go to 3213
-           read (lunit9) (tir(j,i),tii(j,i), j=1,nmode)
-3213       if ( imode .ne. i )  go to 3215
-           if ( nfitmx .eq. 1 )  go to 8210
-           index = (ipoint-1) * 5
-           alintp(index+1) = twopif
-           alintp(index+2) = ycharm
-           alintp(index+3) = ychara
-           alintp(index+4) = alpha
-           alintp(index+5) = beta
-           if (iprsup .le. 1 )   go to 3215
-           write (lunit6, *) ' %% in subr39, omega, ychar(mag, ang), alpha, beta', alintp(index + 1), alintp(index + 2), alintp(index + 3), &
-                alintp(index + 4), alintp(index + 5)
+           read (unit = lunit(9)) twopif, ycharm, ychara, alpha, beta
+           if (itrnsf .ne. 1) go to 3213
+           read (unit = lunit(9)) (tir(j, i), tii(j, i), j = 1, nmode)
+3213       if (imode .ne. i) go to 3215
+           if (nfitmx .eq. 1) go to 8210
+           index = (ipoint - 1) * 5
+           alintp(index + 1) = twopif
+           alintp(index + 2) = ycharm
+           alintp(index + 3) = ychara
+           alintp(index + 4) = alpha
+           alintp(index + 5) = beta
+           if (iprsup .le. 1) go to 3215
+           write (unit = lunit(6), fmt = *) ' %% in subr39, omega, ychar(mag, ang), alpha, beta', alintp(index + 1), alintp(index + 2), alintp(index + 3), alintp(index + 4), alintp(index + 5)
            go to 3215
-8210       index = (2*nmode+1) * ( ipoint-1 )
-           alintp(index+1) = twopif
+8210       index = (2 * nmode + 1) * (ipoint - 1)
+           alintp(index + 1) = twopif
            do j = 1, nmode
-              l = 2 * (j-1) + 1
-              alintp(index+l+1) = tir(j,i)
-              alintp(index+l+2) = tii(j,i)
+              l = 2 * (j - 1) + 1
+              alintp(index + l + 1) = tir(j, i)
+              alintp(index + l + 2) = tii(j, i)
 3214       end do
-           if( iprsup .ge. 1) write (lunit6, *) ' ti for column ', imode, 'are ', (tir(j, i), tii(j, i), j = 1, nmode)
+           if(iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' ti for column ', imode, 'are ', (tir(j, i), tii(j, i), j = 1, nmode)
 3215    end do
 3220 end do
      !             yc & a1 & ti functions
      ncurve = 2
-     if ( nfitmx .eq. 1 )  ncurve = nmode
+     if (nfitmx .eq. 1) ncurve = nmode
      do i = 1, ncurve
 123     minust(i) = 0
      end do
      do icurve = 1, ncurve
-        call time44 ( tclock(1) )
-        write (lunit6, 6301) tclock, imode, ncurve
+        call time44 (tclock(1))
+        write (unit = lunit(6), fmt = 6301) tclock, imode, ncurve
 6301    format ( ' begin modal fit at ', 2a4, '.     imode, ncurve =', 2i5)
         numone = 0
         numzro = 0
         iftype = icurve
-        if ( nfitmx .eq. 1 )  iftype = 1
+        if (nfitmx .eq. 1) iftype = 1
         !
         !             read parameters
         !
-        if (icurve.eq.2 .and. nfitmx .eq. 0) go to 3150
-        if (imode.ne.nexmis) go to 3152
+        if (icurve .eq. 2 .and. nfitmx .eq. 0) go to 3150
+        if (imode .ne. nexmis) go to 3152
         call misc39
         epstzc = epstol
         normzc = normax
@@ -365,22 +368,22 @@ subroutine subr39
         ifplzc = ifplot
         ifdazc = ifdat
         inelzc = inelim
-3152    if (modskp(1,imode).eq.0) go to 3200
-        if ( nfitmx .eq. 0 )  go to 3156
-        write (lunit6, 3155) icurve, imode
-3155    format (//,' @@@ begin ti fitting for element:', 2i2, 3x, '@@@'  )
-        if ( lltemp(imode) .ne. icurve )  go to 3160
-        write (lunit6, *) ' this tij = (1., 0.) '
+3152    if (modskp(1,imode) .eq. 0) go to 3200
+        if (nfitmx .eq. 0) go to 3156
+        write (unit = lunit(6), fmt = 3155) icurve, imode
+3155    format (//, ' @@@ begin ti fitting for element:', 2i2, 3x, '@@@')
+        if (lltemp(imode) .ne. icurve) go to 3160
+        write (unit = lunit(6), fmt = *) ' this tij = (1., 0.) '
         go to 8792
-3156    write (lunit6, 7007) imode
-7007    format (//, 1x, '@@@ begin  yc  fitting for mode',i3,3x, '@@@', 1x)
+3156    write (unit = lunit(6), fmt = 7007) imode
+7007    format (//, 1x, '@@@ begin  Yc  fitting for mode', i3, 3x, '@@@', 1x)
         go to 3160
-3150    if (imode.ne.1) go to 3170
-        if (nexmis.eq.-1) go to 3170
-        write (lunit6, 7009) nexmis
+3150    if (imode .ne. 1) go to 3170
+        if (nexmis .eq. -1) go to 3170
+        write (unit = lunit(6), fmt = 7009) nexmis
 7009    format (//, 1x, '*** error stop. User has not requested the reading of miscellaneous data for mode 1 of a1 fitting. nexmis =', i5)
         call stoptp
-3170    if (imode.ne.-nexmis) go to 3180
+3170    if (imode .ne. -nexmis) go to 3180
         !     this mode of a1 has new miscellaneous data:
         modify = 2
         call misc39
@@ -391,10 +394,10 @@ subroutine subr39
         ifpla1 = ifplot
         ifdaa1 = ifdat
         inela1 = inelim
-3180    if (modskp(2,imode).eq.0) go to 3200
-        write (lunit6, 7012) imode
+3180    if (modskp(2, imode) .eq. 0) go to 3200
+        write (unit = lunit(6), fmt = 7012) imode
 7012    format (//, 1x, '@@@ begin  a1  fitting for mode', i3, 3x, '@@@', 1x)
-3160    if (icurve.eq.2 .and. nfitmx .eq. 0) go to 3162
+3160    if (icurve .eq. 2 .and. nfitmx .eq. 0) go to 3162
         epstol = epstzc
         normax = normzc
         iecode = iecozc
@@ -410,110 +413,103 @@ subroutine subr39
         ifplot = ifpla1
         ifdat = ifdaa1
         inelim = inela1
-3164    if (normax.le.mpoles) go to 3165
-        write (lunit6, 7015) normax, mpoles
-7015    format (//, 1x, '%%% specified maximum order (', i3, ') exceeds dimensions limit (', i3, ').', /, 1x, &
-             'maximum order will be set equal to this limit %%%', 1x)
+3164    if (normax .le. mpoles) go to 3165
+        write (unit = lunit(6), fmt = 7015) normax, mpoles
+7015    format (//, 1x, '%%% specified maximum order (', i3, ') exceeds dimensions limit (', i3, ').', /, 1x, 'maximum order will be set equal to this limit %%%', 1x)
         normax = mpoles
         !
         !             read data points
         !
-3165    if (ifdat.eq.0) go to 3210
-        write (lunit6, 7017)
+3165    if (ifdat .eq. 0) go to 3210
+        write (unit = lunit(6), fmt = 7017)
 7017    format (//, 1x, 30x, '###  d a t a  f u n c t i o n  ###')
         if (icurve .ge. 2 .or. nfitmx .eq. 1) go to 3167
-        write (lunit6, 7019)
-7019    format (//, x, ' units: freq in hz; yc in mhos, phyc in degrees' )
-        write (lunit6, 7021)
-7021    format (/, 1x, 4x, 'freq', 8x, 'yc', 8x, 'phyc', 7x, 'freq')
+        write (unit = lunit(6), fmt = 7019)
+7019    format (//, x, ' units: freq in Hz; Yc in mhos, phyc in degrees' )
+        write (unit = lunit(6), unit = 7021)
+7021    format (/, 1x, 4x, 'freq', 8x, 'Yc', 8x, 'phyc', 7x, 'freq')
         go to 3210
-3166    write (lunit6, 7024)
-7024    format (//, 1x, 'units: freq in hz; ti unitless, phti in degrees' )
-        write (lunit6, 7027)
+3166    write (unit = lunit(6), fmt = 7024)
+7024    format (//, 1x, 'units: freq in Hz; ti unitless, phti in degrees')
+        write (unit = lunit(6), fmt = 7027)
 7027    format (/, 1x, 4x, 'freq', 8x, 'ti', 8x, 'phti', 7x, 'freq')
         go to 3210
-3167    if ( nfitmx .eq. 1 )  go to 3166
-        write (lunit6, 7029)
-7029    format (//, 1x, ' units: freq in hz; velocity in km/sec, traveling time in millisec, a1 in per unit, pha1 in degrees' )
-        write (lunit6, 7031)
+3167    if (nfitmx .eq. 1) go to 3166
+        write (unit = lunit(6), fmt = 7029)
+7029    format (//, 1x, ' units: freq in Hz; velocity in km/sec, traveling time in millisec, a1 in per unit, pha1 in degrees' )
+        write (unit = lunit(6), fmt = 7031)
 7031    format (/, 5x, 'freq', 4x, 'velocity', 3x, 'trav.time', 5x, 'a1', 8x, 'pha1', 7x, 'freq')
-3210    do ipoint = 1,npoint
-           if (ipoint.eq.1)     f0=alintp(1)
-           index = (ipoint-1) *  5
-           if ( nfitmx .eq. 1 )  index =( 2*nmode + 1 )* (ipoint-1)
-           fdat = alintp(index+1)
+3210    do ipoint = 1, npoint
+           if (ipoint .eq. 1) f0 = alintp(1)
+           index = (ipoint - 1) * 5
+           if (nfitmx .eq. 1) index = (2 * nmode + 1) * (ipoint - 1)
+           fdat = alintp(index + 1)
            if (icurve .ge. 2 .or. nfitmx .eq. 1) go to 3110
-           adat = alintp(index+2)
+           adat = alintp(index + 2)
            !  === value of g directly in the modal domain ===
            !     if (gdat.eq.0.) gdat = gmode/convun
-           phdat = alintp(index+3)
+           phdat = alintp(index + 3)
            !  === evaluate line functions ===
            if (icurve .ge. 2 .or. nfitmx .eq. 1) go to 3110
-3102       if (ifdat.eq.0) go to 3120
-           d3 = phdat * 360. / twopi
-           write (lunit6, 7034) fdat, adat, d3, fdat
+3102       if (ifdat .eq. 0) go to 3120
+           d3 = phdat * 360.0d0 / twopi
+           write (unit = lunit(6), fmt = 7034) fdat, adat, d3, fdat
 7034       format (1x, 4d11.4)
            go to 3120
-3104       l = index + 2 * (icurve-1) + 2
-           adat = alintp( l )
-           if ( ipoint .eq. 1 )  asave = adat * tenm3
-           if ( adat .lt. asave ) go to 3130
-           phdat = alintp(l + 1 )
-           if (ifdat.eq.0) go to 3103
-           d3 = phdat * 360. / twopi
-           write (lunit6, 7034) fdat, adat, d3, fdat
-3103       if ( absz(adat - 1.) .lt. epsiln )  numone = numone + 1
+3104       l = index + 2 * (icurve - 1) + 2
+           adat = alintp(l)
+           if (ipoint .eq. 1) asave = adat * tenm3
+           if (adat .lt. asave) go to 3130
+           phdat = alintp(l + 1)
+           if (ifdat .eq. 0) go to 3103
+           d3 = phdat * 360.0d0 / twopi
+           write (unit = lunit(6), fmt = 7034) fdat, adat, d3, fdat
+3103       if (absz (adat - 1.0d0) .lt. epsiln)  numone = numone + 1
            !     if ( (180. - absz( phdat*360./twopi )) .gt. 10. )  go to 3120
-           if ( minust(icurve) .eq. 1 ) go to 3105
-           if ( (pai - absz(phdat)) .gt. tendeg )  go to 3106
-           if ( ipoint .gt. 1 )  go to 3106
+           if (minust(icurve) .eq. 1) go to 3105
+           if ((pai - absz (phdat)) .gt. tendeg) go to 3106
+           if (ipoint .gt. 1) go to 3106
            minust(icurve) = 1
 3105       phdat = phdat + pai
-3106       if ( adat .lt. tenm3)  numzro = numzro + 1
+3106       if (adat .lt. tenm3) numzro = numzro + 1
            go to 3120
            !  ### evaluation of the propagation function a1 ###
-3110       if (nfitmx .eq. 1 )  go to 3104
-           alpha = alintp(index+4)
-           beta = alintp(index+5)
-           if ( iprsup .ge. 1 ) write (lunit6, *) ' alpha, beta = ', alpha, beta
-           adat = expz(-alpha*dist)
-           if (adat.gt.1.5d0) go to 3132
-           if (adat.lt.amina1) go to 3130
+3110       if (nfitmx .eq. 1) go to 3104
+           alpha = alintp(index + 4)
+           beta = alintp(index + 5)
+           if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' alpha, beta = ', alpha, beta
+           adat = expz (-alpha * dist)
+           if (adat .gt. 1.5d0) go to 3132
+           if (adat .lt. amina1) go to 3130
            phdat = -beta*dist
-           if (ifdat.eq.0) go to 3120
-           d3 = fdat/beta
-           d4 = (dist/d3)*1.d3
-           d5 = phdat*360.d0/twopi
-           write (lunit6, 7039) fdat, d3, d4, adat, d5, fdat
+           if (ifdat .eq. 0) go to 3120
+           d3 = fdat / beta
+           d4 = (dist / d3) * 1.0d3
+           d5 = phdat * 360.0d0 / twopi
+           write (unit = lunit(6), fmt = 7039) fdat, d3, d4, adat, d5, fdat
 7039       format (1x, 6d11.4)
-3120       d11 = fdat/twopi
-           xdat(ipoint) = alog1z(d11)
-           ydat(ipoint) = alog1z(adat)
+3120       d11 = fdat / twopi
+           xdat(ipoint) = alog1z (d11)
+           ydat(ipoint) = alog1z (adat)
            aphdat(ipoint) = phdat
 3100    end do
-        n9 = .75 * npoint
-        if ( numone .lt.  n9 )  go to 3128
-        write (lunit6, *) ' This is a near-one tij element. '
+        n9 = 0.75d0 * npoint
+        if (numone .lt. n9) go to 3128
+        write (unit = lunit(6), fmt = *) ' This is a near-one tij element. '
         go to 8792
-3128    if ( numzro .ge.  n9 )  go to 8793
+3128    if (numzro .ge. n9) go to 8793
         !
         ndata = npoint
         go to 3140
-3130    ndata = ipoint-1
+3130    ndata = ipoint - 1
         go to 3140
-3132    write (lunit6, 7037) imode
-7037    format (//, 1x, 25x, '??????????  a t t e n t i o n  ??????????', /, &
-             1x, 'The magnitude of the line propagation function (a1) for mode', &
-             i3, 3x, 'attains values larger than 1.', /, 1x, &
-             'This condition is probably caused by the limitations of using a constant complex transformation matrix, ', /, &
-             1x, 'to diagonalize the line matrices at all frequencies.', &
-             'Nevertheless, the function will be fit up to a', /, 1x, 'magnitude value of 1.5.')
-        write (lunit6, 7041)
-7041    format (1x, 'However, more realistic results could probably be obtained by using only the real part of the transformation', /, &
-             1x, 'matrix (option -2 in frequency loop card in line constants data).')
-        ndata = ipoint-1
+3132    write (unit = lunit(6), fmt = 7037) imode
+7037    format (//, 1x, 25x, '??????????  a t t e n t i o n  ??????????', /, 1x, 'The magnitude of the line propagation function (a1) for mode', i3, 3x, 'attains values larger than 1.', /, 1x, 'This condition is probably caused by the limitations of using a constant complex transformation matrix, ', /, 1x, 'to diagonalize the line matrices at all frequencies.', 'Nevertheless, the function will be fit up to a', /, 1x, 'magnitude value of 1.5.')
+        write (unit = lunit(6), fmt = 7041)
+7041    format (1x, 'However, more realistic results could probably be obtained by using only the real part of the transformation', /, 1x, 'matrix (option -2 in frequency loop card in line constants data).')
+        ndata = ipoint - 1
         !   == travelling time of highest freq. point ==
-3140    if (icurve .eq. 2 .and. nfitmx .eq. 0) travhf = dist*beta/fdat
+3140    if (icurve .eq. 2 .and. nfitmx .eq. 0) travhf = dist * beta / fdat
         !
         !             define curve zones
         !
@@ -523,8 +519,8 @@ subroutine subr39
         i = 1
 120     i = i + 1
         if (i .gt. ndata) go to 230
-        if (ydat(i).lt.(ylevl0-d1lim)) go to 130
-        if (ydat(i).gt.(ylevl0+d1lim)) go to 180
+        if (ydat(i) .lt. (ylevl0 - d1lim)) go to 130
+        if (ydat(i) .gt. (ylevl0 + d1lim)) go to 180
         go to 120
         !  look for valley
 130     ylevl0 = ydat(i)
@@ -536,99 +532,99 @@ subroutine subr39
         go to 140
 150     iscape = i
 160     i = i - 1
-        if (ydat(i).le.(ylevl0+d2lim)) go to 170
+        if (ydat(i) .le. (ylevl0 + d2lim)) go to 170
         go to 160
 170     x2levl = xdat(i)
-        iknee = iknee+1
-        if (iknee.gt.mxknee) go to 2110
-        xlevl = (x1levl+x2levl) * onehaf
+        iknee = iknee + 1
+        if (iknee .gt. mxknee) go to 2110
+        xlevl = (x1levl + x2levl) * onehaf
         xknee(iknee) = xlevl
         !  look for peak
         i = iscape
 180     ylevl0 = ydat(i)
         x1levl = xdat(i)
 190     i = i + 1
-        if (i.gt.ndata) go to 230
-        if (ydat(i).gt.(ylevl0+d1lim)) go to 180
-        if (ydat(i).lt.(ylevl0-d1lim)) go to 200
+        if (i .gt. ndata) go to 230
+        if (ydat(i) .gt. (ylevl0 + d1lim)) go to 180
+        if (ydat(i) .lt. (ylevl0 - d1lim)) go to 200
         go to 190
 200     iscape = i
 210     i = i - 1
-        if (ydat(i).ge.(ylevl0-d2lim)) go to 220
+        if (ydat(i) .ge. (ylevl0 - d2lim)) go to 220
         go to 210
 220     x2levl = xdat(i)
-        iknee = iknee+1
-        if (iknee.gt.mxknee) go to 2110
-        xlevl = (x1levl+x2levl) * onehaf
+        iknee = iknee + 1
+        if (iknee .gt. mxknee) go to 2110
+        xlevl = (x1levl + x2levl) * onehaf
         xknee(iknee) = xlevl
         i = iscape
         go to 130
-230     iknee = iknee+1
-        if (iknee.gt.mxknee) go to 2110
+230     iknee = iknee + 1
+        if (iknee .gt. mxknee) go to 2110
         xknee(iknee) = xdat(ndata)
-        if (idebug.eq.0) go to 250
-        write (lunit6, 7044)
-7044    format (/,1x,13x,'--- curve zones ---',1x)
-        do 240 i=1,iknee
-           write (lunit6, 7047) i, xknee(i)
-7047       format (/,10x,i10,f10.3)
-240     end do
-250     nzone = iknee-1
+        if (idebug .eq. 0) go to 250
+        write (unit = lunit(6), fmt = 7044)
+7044    format (/, 1x, 13x, '--- curve zones ---', 1x)
+        do i = 1, iknee
+           write (unit = lunit(6), fmt = 7047) i, xknee(i)
+7047       format (/, 10x, i10, f10.3)
+        end do
+250     nzone = iknee - 1
         !   == parameters for least squares error checking ==
-        dxcomp = .05d0
-        nechk1 = ndata/(aptdec*dxcomp)+onehav
+        dxcomp = 0.05d0
+        nechk1 = ndata / (aptdec * dxcomp) + onehav
         xbegr = xdat(1)
         xendr = xknee(2)
         d1 = ydat(1)
-        refb = yfun39(xendr)
-        d3 = .001d0
+        refb = yfun39 (xendr)
+        d3 = 0.001d0
         d4 = refb - d1
-        d5 = 10.d0 ** d4
-        ycut = d1 + alog1z( unity+d3*(d5-unity) )
-        ycutpu = (ycut-d1)/(refb-d1)
-        refa = yfun39(xbegr)
-        call split(xbegr,xendr,ycutpu,xbegtl)
+        d5 = 10.0d0 ** d4
+        ycut = d1 + alog1z (unity + d3 * (d5 - unity))
+        ycutpu = (ycut - d1) / (refb - d1)
+        refa = yfun39 (xbegr)
+        call split (xbegr, xendr, ycutpu, xbegtl)
         xbegr = xdat(ndata)
-        xendr = xknee(iknee-1)
+        xendr = xknee(iknee - 1)
         d1 = ydat(ndata)
-        refb = yfun39(xendr)
-        if (icurve.eq.2 .and. nfitmx .eq. 0) d3 = .25d0
+        refb = yfun39 (xendr)
+        if (icurve .eq. 2 .and. nfitmx .eq. 0) d3 = 0.25d0
         d4 = refb - d1
-        d5 = 10.d0 ** d4
-        ycut = d1 + alog1z( unity+d3*(d5-unity) )
-        ycutpu = (ycut-d1)/(refb-d1)
-        refa = yfun39(xbegr)
-        call split(xbegr,xendr,ycutpu,xendtl)
-        i1 = aptdec*(xbegtl-xdat(1))+1.d0
-        i2 = aptdec*(xendtl-xdat(1))+2.d0
-        nechk2 = (i2-i1+1)/(aptdec*dxcomp)+onehav
+        d5 = 10.0d0 ** d4
+        ycut = d1 + alog1z (unity + d3 * (d5 - unity))
+        ycutpu = (ycut - d1) / (refb - d1)
+        refa = yfun39 (xbegr)
+        call split (xbegr, xendr, ycutpu, xendtl)
+        i1 = aptdec * (xbegtl - xdat(1)) + 1.0d0
+        i2 = aptdec * (xendtl - xdat(1)) + 2.0d0
+        nechk2 = (i2 - i1 + 1) / (aptdec * dxcomp) + onehav
         !
         !             main loop for all-segments allocation
         !
         iterlp = 0
         incrtl = 0
-        erropt = 1.d12
+        erropt = 1.0d12
         ichkp = 0
         npole = 0
-        if (normax.gt.10) go to 252
+        if (normax .gt. 10) go to 252
         tolfac = 3.0d0
-        tolmin = .70d0
+        tolmin = 0.70d0
         go to 260
 252     tolfac = 2.0d0
-        tolmin = .20d0
-260     iterlp = iterlp+1
-        if (idebug .ge. 1) write (lunit6, 7049) iterlp
-7049    format (//,2x,'###  a l l o c a t i o n  l o o p  no.',i3,4x, '###',1x)
+        tolmin = 0.20d0
+260     iterlp = iterlp + 1
+        if (idebug .ge. 1) write (unit = lunit(6), fmt = 7049) iterlp
+7049    format (//, 2x, '###  a l l o c a t i o n  l o o p  no.', i3, 4x, '###', 1x)
 265     ntotra = 0
-        do izone=1,nzone
+        do izone = 1, nzone
            xbegz = xknee(izone)
-           xendz = xknee(izone+1)
-           if (yfun39(xbegz).gt.yfun39(xendz)) go to 270
+           xendz = xknee(izone + 1)
+           if (yfun39 (xbegz) .gt. yfun39 (xendz)) go to 270
            !   positive slope zone
-           signz = 1.
+           signz = 1.0d0
            go to 280
            !   negative slope zone
-270        signz = -1.
+270        signz = -1.0d0
            !   allocate slopes in zone
 280        ioprau = 0
            ichkra = 1
@@ -636,65 +632,64 @@ subroutine subr39
            xchkra(1) = xbegz
            xchkra(2) = xendz
            !
-290        id = 2*ichkra
-           xbegr = xchkra(id-1)
+290        id = 2 * ichkra
+           xbegr = xchkra(id - 1)
            xendr = xchkra(id)
            refa = yfun39(xbegr)
            refb = yfun39(xendr)
-           xcla = 0.
-           xclb = 0.
+           xcla = 0.0d0
+           xclb = 0.0d0
            xlim1 = xbegr
            xlim2 = xendr
-           if (xbegr.eq.xbegz) call split (xbegr,xendr,clear,xcla)
-           if (xendr.ne.xendz) go to 310
-           refa = yfun39(xendr)
-           refb = yfun39(xbegr)
-           call split (xendr,xbegr,clear,xclb)
+           if (xbegr .eq. xbegz) call split (xbegr, xendr, clear, xcla)
+           if (xendr .ne. xendz) go to 310
+           refa = yfun39 (xendr)
+           refb = yfun39 (xbegr)
+           call split (xendr, xbegr, clear, xclb)
            d1 = refa
            refa = refb
            refb = d1
-310        if (xcla.ne.0.) xlim1 = xcla
-           if (xclb.ne.0.) xlim2 = xclb
-           if (idebug.ge.3) write (lunit6, 7051) xbegr, xendr
-7051       format (//,1x, 'region:',3x, 'xbeg=',e11.4,3x, 'xend=',e11.4,/)
+310        if (xcla .ne. 0.0d0) xlim1 = xcla
+           if (xclb .ne. 0.0d0) xlim2 = xclb
+           if (idebug .ge. 3) write (unit = lunit(6), fmt = 7051) xbegr, xendr
+7051       format (//, 1x, 'region:', 3x, 'xbeg=', e11.4, 3x, 'xend=', e11.4, /)
 !!!      write (*,*) ' after #130 xlim2, xlim1  ', xlim2 , xlim1
-           abeta = ( refb - refa ) / (xlim2-xlim1)
+           abeta = (refb - refa) / (xlim2 - xlim1)
            nalph1 = abeta
-           alpha = nalph1+signz
-           call locsl (xbegr,xendr,alpha,xmidr,xcorna,xcornb,erymax)
+           alpha = nalph1 + signz
+           call locsl (xbegr, xendr, alpha, xmidr, xcorna, xcornb, erymax)
 !!!      write (*,*) 'izone, ichkra, xmidr, xendr after call locsl  ',
 !!!     1 izone, ichkra, xmidr, xendr
-           if ( absz(xmidr-xendr) .gt. 0.001d0 )  go to 313
-           if ( xendr .eq. xendz ) go to 440
+           if (absz (xmidr - xendr) .gt. 0.001d0) go to 313
+           if (xendr .eq. xendz) go to 440
            ichkra = ichkra + 1
            go to 290
-313        tolera = 14.5938964d0+3.26036143d0*alogz(absz(abeta))
-           if (tolera.lt.tolmin) tolera = tolmin
-           tolera = tolfac*tolera
-           d13 = 1.0 + tolera / 100.
-           tolera = alog1z ( d13 )
-           if (idebug.lt.3) go to 315
-           d1 = 100.*(10.**erymax-1.)
-           d2 = 100.*(10.**tolera-1.)
-           write (lunit6, 7054) xmidr, xcorna, xcornb, abeta, alpha, d1, d2
-7054       format (/,1x, 'xmidr=',e11.4,3x, 'xcorna=',e11.4,3x, 'xcornb=',e11.4,/,1x, &
-                'abeta =',f7.2,4x, 'alpha =',f7.2,/, 1x, 'erymax=',f7.2, '%',3x, 'tolera=',f7.2, '%',1x)
-315        if (erymax.lt.tolera) go to 330
+313        tolera = 14.5938964d0 + 3.26036143d0 * alogz (absz (abeta))
+           if (tolera .lt. tolmin) tolera = tolmin
+           tolera = tolfac * tolera
+           d13 = 1.0d0 + tolera / 100.0d0
+           tolera = alog1z (d13)
+           if (idebug .lt. 3) go to 315
+           d1 = 100.0d0 * (10.0d0 ** erymax - 1.0d0)
+           d2 = 100.0d0 * (10.0d0 ** tolera - 1.0d0)
+           write (unit = lunit(6), fmt = 7054) xmidr, xcorna, xcornb, abeta, alpha, d1, d2
+7054       format (/, 1x, 'xmidr=', e11.4, 3x, 'xcorna=', e11.4, 3x, 'xcornb=', e11.4, /, 1x, 'abeta =', f7.2, 4x, 'alpha =', f7.2, /, 1x, 'erymax=', f7.2, '%', 3x, 'tolera=', f7.2, '%', 1x)
+315        if (erymax .lt. tolera) go to 330
            !   divide region into two subregions
-           id = 2*(nchkra+1)
-           nchkra = nchkra+2
-           if (2*nchkra.le.mxchkr) go to 320
-           if (iterlp.eq.1) go to 2120
+           id = 2 * (nchkra + 1)
+           nchkra = nchkra + 2
+           if (2 * nchkra .le. mxchkr) go to 320
+           if (iterlp .eq. 1) go to 2120
            go to 790
-320        xchkra(id-1) = xbegr
-           xchkra(id)   = xmidr
-           xchkra(id+1) = xmidr
-           xchkra(id+2) = xendr
-           ichkra = ichkra+1
+320        xchkra(id - 1) = xbegr
+           xchkra(id) = xmidr
+           xchkra(id + 1) = xmidr
+           xchkra(id + 2) = xendr
+           ichkra = ichkra + 1
            go to 290
            !   store parameters, do not subdivide
-330        ioprau = ioprau+1
-           if (4*ioprau.le.mzopra) go to 340
+330        ioprau = ioprau + 1
+           if (4*ioprau .le. mzopra) go to 340
            if (iterlp.eq.1) go to 2130
            go to 790
 340        id = 4*ioprau
@@ -1870,108 +1865,110 @@ end subroutine adjcr
 !
 
 subroutine shira (xbeg, xend, fbeg, fend, iter, index, irange)
+  use labl39
+  use deck39
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   dimension fpz(50)
-  include 'labl39.ftn'
-  include 'deck39.ftn'
+  !  include 'labl39.ftn'
+  !  include 'deck39.ftn'
+  !
   !  change this limit if dimension is changed
   !   order of slope in segment * 2
   mdifpz = 100
   iflgrh = 0
-  if (izone.eq.nzone.and.irange.eq.nrange.and.iftype.eq.2) iflgrh = 1
-  alpha = azepo(index+2)
-  jn = absz(alpha)+onehav
-  j2n = 2*jn
-  if (j2n.gt.mdifpz) go to 2100
-  id = index+2
-  if (idebug.ge.3) write (lout,8083) irange,xbeg,xend
-8083 format (/,1x,5x,27hcorners adjustment of range,i3, 2h :, 2x, 3hx1=,e10.4,3x, 3hx2=,e10.4)
-  d13 = 1.d0 / jn
-  d13 = sqrtz( d13 )
-  erropt = 1.d12    !  thl
-  do isub = 1,3
-     dxecr = .5d0/isub
-     tolerr = 1.01d0**(1./isub**2)
-     dfx = 10.d0**( dxecr*.1d0 )
-     fdelta = dfx**d13
-     fdelt1 = 1.d0 / fdelta
+  if (izone .eq. nzone .and. irange .eq. nrange .and. iftype .eq. 2) iflgrh = 1
+  alpha = azepo(index + 2)
+  jn = absz (alpha) + onehav
+  j2n = 2 * jn
+  if (j2n .gt. mdifpz) go to 2100
+  id = index + 2
+  if (idebug .ge. 3) write (unit = lout, fmt = 8083) irange,xbeg,xend
+8083 format (/, 1x, 5x, 'corners adjustment of range', i3, ' :', 2x, 'x1=', e10.4, 3x, 'x2=', e10.4)
+  d13 = 1.0d0 / jn
+  d13 = sqrtz (d13)
+  erropt = 1.0d12    !  thl
+  do isub = 1, 3
+     dxecr = 0.5d0 / isub
+     tolerr = 1.01d0 ** (1.0d0 / isub ** 2)
+     dfx = 10.0d0 ** (dxecr * 0.1d0)
+     fdelta = dfx ** d13
+     fdelt1 = 1.0d0 / fdelta
      !   preserve original positions and prepare for shifting
-     do j = 1,j2n
-        fpz(j) = azepo(id+j)
-        azepo(id+j) = azepo(id+j) * fdelt1
+     do j = 1, j2n
+        fpz(j) = azepo(id + j)
+        azepo(id + j) = azepo(id + j) * fdelt1
 100  end do
      !   shift to the right
      !      erropt = 1.d12       ! i think this should be moved outside loop
      idefac = -1
      idefop = 0
-     do jsh = 1,50
-        fcorn2 = azepo(id+j2n)*fdelta
-        if (fcorn2.gt.fend) go to 160
-        idefac = idefac+1
-        do j = 1,j2n
-110        azepo(id+j) = azepo(id+j)*fdelta
+     do jsh = 1, 50
+        fcorn2 = azepo(id + j2n) * fdelta
+        if (fcorn2 .gt. fend) go to 160
+        idefac = idefac + 1
+        do j = 1, j2n
+110        azepo(id + j) = azepo(id + j) * fdelta
         end do
         !   check error
-        if (iflgrh.eq.1) call refh
-        error = 0.
-        x = xbeg-dxecr
-120     x = x+dxecr
-        if (x.gt.xend) go to 130
-        f = 10.d0**x
-        call ratp (f,amaglg)
+        if (iflgrh .eq. 1) call refh
+        error = 0.0d0
+        x = xbeg - dxecr
+120     x = x + dxecr
+        if (x .gt. xend) go to 130
+        f = 10.0d0 ** x
+        call ratp (f, amaglg)
         yapprx = amaglg
-        error = error+(yapprx-yfun39(x))**2
+        error = error + (yapprx - yfun39 (x)) ** 2
         go to 120
-130     if (idebug.ge.4) write (lout,8085) idefac,fcorn2,fend,error,erropt
-8085    format (1x, 7hshift r,i5,4e12.4)
-        if (error.ge.erropt) go to 140     ! thl
+130     if (idebug .ge. 4) write (unit = lout, fmt = 8085) idefac, fcorn2, fend, error, erropt
+8085    format (1x, 'shift r', i5, 4e12.4)
+        if (error .ge. erropt) go to 140     ! thl
         erropt = error
         idefop = idefac
-140     if (error.ge.tolerr*erropt) go to 160 ! thl
+140     if (error .ge. tolerr * erropt) go to 160 ! thl
 150  end do
      !   restore original values before shifting to the left
-160  do j = 1,j2n
-170     azepo(id+j) = fpz(j)
+160  do j = 1, j2n
+170     azepo(id + j) = fpz(j)
      end do
      !   shift to the left
      idefac = 0
-     do jsh = 1,50
-        fcorn1 = azepo(id+1) * fdelt1
-        if (fcorn1.lt.fbeg) go to 230
-        idefac = idefac-1
-        do j = 1,j2n
-180        azepo(id+j) = azepo(id+j) * fdelt1
+     do jsh = 1, 50
+        fcorn1 = azepo(id + 1) * fdelt1
+        if (fcorn1 .lt. fbeg) go to 230
+        idefac = idefac - 1
+        do j = 1, j2n
+180        azepo(id + j) = azepo(id + j) * fdelt1
         end do
         !   check error
-        if (iflgrh.eq.1) call refh
-        error = 0.
-        x = xbeg-dxecr
-190     x = x+dxecr
-        if (x.gt.xend) go to 200
-        f = 10.d0**x
-        call ratp (f,amaglg)
+        if (iflgrh .eq. 1) call refh
+        error = 0.0d0
+        x = xbeg - dxecr
+190     x = x + dxecr
+        if (x .gt. xend) go to 200
+        f = 10.0d0 ** x
+        call ratp (f, amaglg)
         yapprx = amaglg
-        error = error+(yapprx-yfun39(x))**2
+        error = error + (yapprx - yfun39(x)) ** 2
         go to 190
-200     if (idebug.ge.4) write (lout,8087) idefac,fcorn1,fbeg,error,erropt
-8087    format (1x, 7hshift l,i5,4e12.4)
-        if (error.ge.erropt) go to 210   !  thl
+200     if (idebug .ge. 4) write (unit = lout, fmt = 8087) idefac, fcorn1, fbeg, error, erropt
+8087    format (1x, 'shift l', i5, 4e12.4)
+        if (error .ge. erropt) go to 210   !  thl
         erropt = error
         idefop = idefac
-210     if (error.ge.tolerr*erropt) go to 230  !  thl
+210     if (error .ge. tolerr * erropt) go to 230  !  thl
 220  end do
      !   shift according to optimum value
-230  fdelt2 = fdelta**idefop
-     do j = 1,j2n
-240     azepo(id+j) = fpz(j) * fdelt2
+230  fdelt2 = fdelta ** idefop
+     do j = 1, j2n
+240     azepo(id + j) = fpz(j) * fdelt2
      end do
 250 end do
-  if (iflgrh.eq.1) call refh
+  if (iflgrh .eq. 1) call refh
   return
   !             terminating conditions
-2100 write (lout,8089) mdifpz
-8089 format (//,1x,22h%%% dimension of fpz (,i2, 36h) exceeded. execution terminated %%%   )
+2100 write (unit = lout, fmt = 8089) mdifpz
+8089 format (//, 1x, '%%% dimension of fpz (', i2, ') exceeded. Execution terminated %%%')
   call stoptp
   return
 end subroutine shira
@@ -1981,10 +1978,11 @@ end subroutine shira
 !
 
 subroutine inran (irange, indx0, indxr1, indxr2, indxr3, indxl1, indxl2)
+  use labl39
+  use deck39
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl39.ftn'
-  include 'deck39.ftn'
+  !  include 'labl39.ftn'
+  !  include 'deck39.ftn'
   id = irange
   indx0 = indxv(id)
   id = id+1
@@ -2010,43 +2008,45 @@ end subroutine inran
 !
 
 subroutine refh
+  use labl39
+  use deck39
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl39.ftn'
-  include 'deck39.ftn'
+  !  include 'labl39.ftn'
+  !  include 'deck39.ftn'
+  !
   xref = xdat(1)
   i2 = ntotra
-  if (iftype.eq.2) i2 = ntotra-1
-  href = 1.d0
-  if (i2.eq.0) go to 180
-  do irange = 1,i2
+  if (iftype .eq. 2) i2 = ntotra - 1
+  href = 1.0d0
+  if (i2 .eq. 0) go to 180
+  do irange = 1, i2
      id = indxv(irange)
-     alpha = azepo(id+2)
-     if (alpha.gt.0.) go to 110
-     jn = -alpha+onehav
-     indexp = id+2
-     indexz = indexp+jn
+     alpha = azepo(id + 2)
+     if (alpha .gt. 0.0d0) go to 110
+     jn = -alpha + onehav
+     indexp = id + 2
+     indexz = indexp + jn
      go to 120
-110  jn = alpha+onehav
-     indexz = id+2
-     indexp = indexz+jn
-120  do j=1,jn
-        fpole = azepo(indexp+j)
-        fzero = azepo(indexz+j)
-        href = href*fpole/fzero
+110  jn = alpha + onehav
+     indexz = id + 2
+     indexp = indexz + jn
+120  do j = 1, jn
+        fpole = azepo(indexp + j)
+        fzero = azepo(indexz + j)
+        href = href * fpole / fzero
 130  end do
 100 end do
-180 hreflg = alog1z(href)
-  if (iftype.eq.1) go to 170
+180 hreflg = alog1z (href)
+  if (iftype .eq. 1) go to 170
   id = indxv(ntotra)
-  alpha = azepo(id+2)
-  jn = -alpha+onehav
-  indexp = id+2
-  do j=1,jn
-     fpole = azepo(indexp+j)
-     hreflg = hreflg+alog1z(fpole)
+  alpha = azepo(id + 2)
+  jn = -alpha + onehav
+  indexp = id + 2
+  do j = 1, jn
+     fpole = azepo(indexp + j)
+     hreflg = hreflg + alog1z (fpole)
 140 end do
-170 hreflg = hreflg+yfun39(xref)
+170 hreflg = hreflg + yfun39 (xref)
   return
 end subroutine refh
 
@@ -2055,44 +2055,46 @@ end subroutine refh
 !
 
 subroutine ratp (freq,amaglg)
+  use labl39
+  use deck39
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl39.ftn'
-  include 'deck39.ftn'
+  !  include 'labl39.ftn'
+  !  include 'deck39.ftn'
+  !
   i2 = ntotra
-  if (iftype.eq.2) i2 = ntotra-1
-  freq2 = freq**2
-  amagp = 1.d0
-  if (i2.eq.0) go to 180
-  do irange = 1,i2
+  if (iftype .eq. 2) i2 = ntotra - 1
+  freq2 = freq ** 2
+  amagp = 1.0d0
+  if (i2 .eq. 0) go to 180
+  do irange = 1, i2
      id = indxv(irange) + 2
-     alpha = azepo( id )
-     if (alpha.gt.0.) go to 110
-     jn = -alpha+onehav
+     alpha = azepo(id)
+     if (alpha .gt. 0.0d0) go to 110
+     jn = -alpha + onehav
      indexp = id
-     indexz = indexp+jn
+     indexz = indexp + jn
      go to 120
-110  jn = alpha+onehav
+110  jn = alpha + onehav
      indexz = id
-     indexp = indexz+jn
+     indexp = indexz + jn
 120  do j = 1, jn
-        fpole = azepo(indexp+j)
-        fzero = azepo(indexz+j)
-        amagp = amagp*(fzero**2+freq2)/(fpole**2+freq2)
+        fpole = azepo(indexp + j)
+        fzero = azepo(indexz + j)
+        amagp = amagp * (fzero ** 2 + freq2) / (fpole ** 2 + freq2)
      end do
 130  continue
   end do
 100 continue
-180 amaglg = alog1z(amagp)
-  if (iftype.eq.1) go to 170
+180 amaglg = alog1z (amagp)
+  if (iftype .eq. 1) go to 170
   id = indxv(ntotra) + 2
-  alpha = azepo( id )
-  jn = -alpha+onehav
-  do j=1,jn
-     fpole = azepo( id+j )
-     amaglg = amaglg-alog1z(fpole**2+freq2)
+  alpha = azepo(id)
+  jn = -alpha + onehav
+  do j = 1, jn
+     fpole = azepo(id + j)
+     amaglg = amaglg - alog1z (fpole ** 2 + freq2)
 140 end do
-170 amaglg = hreflg+amaglg/2.d0
+170 amaglg = hreflg + amaglg / 2.0d0
   return
 end subroutine ratp
 
@@ -2101,49 +2103,52 @@ end subroutine ratp
 !
 
 subroutine split (xbeg, xend, ycutpu, xcut)
+  use labl39
+  use deck39
   implicit none
   !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl39.ftn'
-  include 'deck39.ftn'
-  dxspli = .1d0
+  !  include 'labl39.ftn'
+  !  include 'deck39.ftn'
+  !
+  dxspli = 0.1d0
   xfirst = xdat(1)
   xlast = xdat(ndata)
-  ycut = refa + ycutpu * ( refb - refa )
-  if ( absz(xbeg-xend) .lt. 0.1 )  dxspli = .01d0  ! avoid overshot
-  if (xbeg.gt.xend) go to 130
-  if( refa .lt. refb )   go to 110
-90 x = xbeg-dxspli
+  ycut = refa + ycutpu * (refb - refa)
+  if (absz(xbeg - xend) .lt. 0.1d0) dxspli = 0.01d0  ! avoid overshot
+  if (xbeg .gt. xend) go to 130
+  if (refa .lt. refb) go to 110
+90 x = xbeg - dxspli
 100 x1 = x
-  x = x+dxspli
-  if (x.gt.xlast) x = xlast
-  if (yfun39(x).le.ycut) go to 170
-  if( x .eq. xlast )  go to  110
+  x = x + dxspli
+  if (x .gt. xlast) x = xlast
+  if (yfun39(x) .le. ycut) go to 170
+  if (x .eq. xlast) go to 110
   go to 100
-110 x = xbeg-dxspli
+110 x = xbeg - dxspli
 120 x1 = x
-  x = x+dxspli
-  if (x.gt.xlast) x = xlast
-  if (yfun39(x).ge.ycut) go to 170
-  if( x .eq. xlast )  go to  90
+  x = x + dxspli
+  if (x .gt. xlast) x = xlast
+  if (yfun39(x) .ge. ycut) go to 170
+  if (x .eq. xlast) go to 90
   go to 120
-130 if( refa .gt. refb )  go to 150
-135 x = xbeg+dxspli
+130 if (refa .gt. refb) go to 150
+135 x = xbeg + dxspli
 140 x1 = x
-  x = x-dxspli
-  if (x.lt.xfirst) x = xfirst
-  if (yfun39(x).ge.ycut) go to 170
-  if( x .eq. xfirst )  go to 150
+  x = x - dxspli
+  if (x .lt. xfirst) x = xfirst
+  if (yfun39(x) .ge. ycut) go to 170
+  if (x .eq. xfirst) go to 150
   go to 140
-150 x = xbeg+dxspli
+150 x = xbeg + dxspli
 160 x1 = x
-  x = x-dxspli
-  if (x.lt.xfirst) x = xfirst
-  if (yfun39(x).le.ycut) go to 170
-  if( x .eq. xfirst )  go to 135
+  x = x - dxspli
+  if (x .lt. xfirst) x = xfirst
+  if (yfun39(x) .le. ycut) go to 170
+  if (x .eq. xfirst) go to 135
   go to 160
-170 if (x1.lt.xfirst) x1 = xfirst
+170 if (x1 .lt. xfirst) x1 = xfirst
   d1 = yfun39(x1)
-  xcut = x1+(x-x1)*(ycut-d1)/(yfun39(x)-d1)
+  xcut = x1 + (x - x1) * (ycut - d1) / (yfun39(x) - d1)
   return
 end subroutine split
 
@@ -2152,15 +2157,18 @@ end subroutine split
 !
 
 function yfun39 (x)
+  use labl39
+  use deck39
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl39.ftn'
-  include 'deck39.ftn'
-  if (x.le.xdat(1)) go to 120
-  if (x.ge.xdat(ndata)) go to 100
-  ai = aptdec*(x-xdat(1))+1.d0
+  real(8), intent(in) :: x
+  !  include 'labl39.ftn'
+  !  include 'deck39.ftn'
+  !
+  if (x .le. xdat(1)) go to 120
+  if (x .ge. xdat(ndata)) go to 100
+  ai = aptdec * (x - xdat(1)) + 1.0d0
   i1 = ai
-  y = (x-xdat(i1))*(ydat(i1+1)-ydat(i1))/(xdat(i1+1)-xdat(i1))
+  y = (x - xdat(i1)) * (ydat(i1 + 1) - ydat(i1)) / (xdat(i1 + 1) - xdat(i1))
   yfun39 = y + ydat(i1)
   go to 110
 120 yfun39 = ydat(1)
@@ -2174,15 +2182,18 @@ end function yfun39
 !
 
 function aph (x)
+  use labl39
+  use deck39
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl39.ftn'
-  include 'deck39.ftn'
-  if (x.le.xdat(1)) go to 120
-  if (x.ge.xdat(ndata)) go to 100
-  ai = aptdec*(x-xdat(1))+1.d0
+  real(8), intent(in) :: x
+  !  include 'labl39.ftn'
+  !  include 'deck39.ftn'
+  !
+  if (x .le. xdat(1)) go to 120
+  if (x .ge. xdat(ndata)) go to 100
+  ai = aptdec * (x - xdat(1)) + 1.0d0
   i1 = ai
-  aph = ( x-xdat(i1) ) * ( aphdat(i1+1)-aphdat(i1) ) / ( xdat(i1+1)-xdat(i1) ) + aphdat( i1 )
+  aph = (x - xdat(i1)) * (aphdat(i1 + 1) - aphdat(i1)) / (xdat(i1 + 1) - xdat(i1)) + aphdat(i1)
   go to 110
 120 aph = aphdat(1)
   go to 110
@@ -2195,34 +2206,36 @@ end function aph
 !
 
 subroutine ftplot (icurve, imode, nfitmx)
+  use labl39
+  use deck39
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  real(8)       text1,text2,text3,blank,pl
+  real(8) :: text1, text2, text3, blank, pl
   dimension pl(92)
-  include 'labl39.ftn'
-  include 'deck39.ftn'
+  !  include 'labl39.ftn'
+  !  include 'deck39.ftn'
   data text1 / 1h0 /, text2 / 1hi /, text3 /1h* /, blank / 1h  /
-  do j=1,92
+  !
+  do j = 1, 92
 200  pl(j) = blank
   end do
-  if ( icurve .eq. 2 .and. nfitmx .eq. 0 )  go to 120
-  ymin =  1.d20
-  ymax =  -1.d20
-  do i=1,ndata
+  if (icurve .eq. 2 .and. nfitmx .eq. 0) go to 120
+  ymin = 1.0d20
+  ymax = -1.0d20
+  do i = 1, ndata
      d1 = ydat(i)
-     if (d1.gt.ymin) go to 110
+     if (d1 .gt. ymin) go to 110
      ymin = d1
-110  if (d1.lt.ymax) go to 100
+110  if (d1 .lt. ymax) go to 100
      ymax = d1
 100 end do
-  amin = .90d0*10.d0**ymin
-  amax = 1.1d0*10.d0**ymax
+  amin = 0.90d0 * 10.0d0 ** ymin
+  amax = 1.1d0 * 10.0d0 ** ymax
   dfamp = amax-amin
-  if ( nfitmx .gt. 0 )  go to 112   !  ti fitting
-  write (lout,8091) imode
-8091 format (//, ' Printer plot of  yc  fitting for mode', i3, /, ' plot of ycmag vs. yceqmag in mhos', /, ' plot symbols:   0 = ycmag     i = yceqmag     * = intersection point.')
+  if (nfitmx .gt. 0) go to 112   !  ti fitting
+  write (unit = lout, fmt = 8091) imode
+8091 format (//, ' Printer plot of  Yc  fitting for mode', i3, /, ' plot of Ycmag vs. Yceqmag in mhos', /, ' plot symbols:   0 = Ycmag     i = Yceqmag     * = intersection point.')
   write (unit = lout, fmt = 8093) amin, amax
-8093 format (/, 3x, 'ycmag', 6x, 'yceqmag', 15x, e10.4, 74x, e10.4, /, 28x, 'freq', /, 35x, '.1', 10('........1'))
+8093 format (/, 3x, 'Ycmag', 6x, 'Yceqmag', 15x, e10.4, 74x, e10.4, /, 28x, 'freq', /, 35x, '.1', 10('........1'))
   go to 130
 112 write (unit = lout, fmt = 114) icurve, imode
 114 format (//, ' Printer plot of  ti  fitting for element', 2i2, /, ' plot of timag vs. tieqmag', /, ' plot symbols:   0 = timag     i = tieqmag     * = intersection point.')
@@ -2230,47 +2243,47 @@ subroutine ftplot (icurve, imode, nfitmx)
 116 format (/, 3x, 'timag', 6x, 'tieqmag', 15x, e10.4, 74x, e10.4, /, 28x, 'freq', /, 35x, '.1', 10('........1'))
   go to 130
 120 if (iftype .eq. 1) go to 122
-  amin = 0.
-  amax = 1.d0
-  dfamp = 1.d0
+  amin = 0.0d0
+  amax = 1.0d0
+  dfamp = 1.0d0
   go to 124
-122 amin = 0.
+122 amin = 0.0d0
   amax = 1.5d0
   dfamp = 1.5d0
-124 write (lout,8095) imode
+124 write (unit = lout, fmt = 8095) imode
 8095 format (//, ' Printer plot of  a1  fitting for mode', i3, /, ' plot of a1mag vs. a1eqmag in p.u.', /, ' plot symbols:   0 = a1mag     i = a1eqmag     * = intersection point.')
   write (unit = lout, fmt = 8097) amin, amax
 8097 format (/, 3x, 'a1mag', 6x, 'a1eqmag', 15x, e10.4, 74x, e10.4, /, 28x, 'freq', /, 35x, '.1', 10('........1'))
-130 x = xdat(1)-.2d0
-810 x = x+.2d0
+130 x = xdat(1) - 0.2d0
+810 x = x + 0.2d0
   if (x .gt. xdat(ndata)) go to 850
-  freq = 10.d0**x
-  freq2 = freq**2
-  amagp = 1.d0
-  if (nzeror.eq.0) go to 825
+  freq = 10.0d0 ** x
+  freq2 = freq ** 2
+  amagp = 1.0d0
+  if (nzeror .eq. 0) go to 825
   do j = 1, nzeror
-     amagp = amagp*(fczr(j)**2+freq2)/(fcpr(j)**2+freq2)
+     amagp = amagp * (fczr(j) ** 2 + freq2) / (fcpr(j) ** 2 + freq2)
   end do
 820 continue
-825 amaglg = alog1z(amagp)
-  if (iftype.eq.1) go to 840
-  j1 = nzeror+1
+825 amaglg = alog1z (amagp)
+  if (iftype .eq. 1) go to 840
+  j1 = nzeror + 1
   do j = j1, npoler
-     amaglg = amaglg-alog1z(fcpr(j)**2+freq2)
+     amaglg = amaglg - alog1z(fcpr(j) ** 2 + freq2)
   end do
 830 continue
-840 amaglg = hrflgr+amaglg/2.d0
-  ax = 10.d0**yfun39(x)
-  amagp = 10.d0**amaglg
-  intd1 = (ax-amin)*90.d0/dfamp+1.5d0
-  intd2 = (amagp-amin)*90.d0/dfamp+1.5d0
-  if (intd1.lt.1.or.intd1.gt.91) intd1 = 92
-  if (intd2.lt.1.or.intd2.gt.91) intd2 = 92
+840 amaglg = hrflgr + amaglg / 2.0d0
+  ax = 10.0d0 ** yfun39(x)
+  amagp = 10.0d0 ** amaglg
+  intd1 = (ax - amin) * 90.0d0 / dfamp + 1.5d0
+  intd2 = (amagp - amin) * 90.0d0 / dfamp + 1.5d0
+  if (intd1 .lt. 1 .or. intd1 .gt. 91) intd1 = 92
+  if (intd2 .lt. 1 .or. intd2 .gt. 91) intd2 = 92
   pl(intd1) = text1
   pl(intd2) = text2
-  if (intd1.eq.intd2) pl(intd1) = text3
-  write (lout,8099) ax,amagp,freq,( pl(i), i=1,91 )
-8099 format (1x,e10.4,2x,e10.4,2x,e10.4,1x,91a1)
+  if (intd1 .eq. intd2) pl(intd1) = text3
+  write (unit = lout, fmt = 8099) ax, amagp, freq, (pl(i), i = 1, 91)
+8099 format (1x, e10.4, 2x, e10.4, 2x, e10.4, 1x, 91a1)
   pl(intd1) = blank
   pl(intd2) = blank
   go to 810
@@ -2282,47 +2295,50 @@ end subroutine ftplot
 !
 
 subroutine misc39
+  use blkcom
+  use labl39
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'blkcom.ftn'
-  include 'labl39.ftn'
+  !  include 'blkcom.ftn'
+  !  include 'labl39.ftn'
   !     This module is called by "subr39"  of
   !     overlay 39 when new miscellaneous data cards are required
   !     (possibly once for each mode,  in the most extreme case).
   character(8) :: text1, text2, text3, text4
   dimension itemp(9)
   equivalence (kdeflt, indtv(1))
+  !
   data text1 / 'data  ' /
   data text2 / 'select' /
   data text3 / 'defaul' /
   data text4 / 't     ' /
-  if (iprsup .ge.  6) write (lunit6, 2243)  modify
+  !
+  if (iprsup .ge.  6) write (unit = lunit(6), fmt = 2243) modify
 2243 format (' Top of "misc39".   modify =', i4)
-  if ( modify  .eq.  0 )   go to 2268
+  if (modify .eq. 0) go to 2268
   !     read input card using cimage
-2245 if ( kdeflt  .ne.  1 ) call cimage
+2245 if (kdeflt .ne. 1) call cimage
   read (unit = abuff, fmt = 2247) bus1, bus3
-2247 format (  2a6  )
+2247 format (2a6)
   if (bus1 .ne. text1) go to 4063
 2268 continue
   read (unit = abuff, fmt = 2247) bus1, bus3
-  if ( bus1  .ne.  text3 )   go to 2274
-  if ( bus3  .ne.  text4 )   go to 2274
-  write (kunit6, 2270)
+  if (bus1 .ne. text3) go to 2274
+  if (bus3 .ne. text4) go to 2274
+  write (unit = kunit(6), fmt = 2270)
 2270 format ('+Request for default fitting (= 3 blank cards).')
   call interp
   kdeflt = 1
   !     erase "default" from "abuff" (installation-dependent):
-  call defblk ( abuff )
-2274 if ( bus1  .ne.  text2 )   go to 2286
+  call defblk (abuff)
+2274 if (bus1 .ne. text2) go to 2286
   modesk = 1
   read (unit = abuff, fmt = 2281) itemp
-2281 format ( 8x,  9i8 )
-  do j=1, 9
-     if ( itemp(j)  .eq.  0 )   go to 2283
+2281 format (8x, 9i8)
+  do j = 1, 9
+     if (itemp(j) .eq. 0) go to 2283
      k = 1
-     if ( itemp(j)  .lt.  0 )   k = 2
-     n3 = iabsz ( itemp(j) )
+     if (itemp(j) .lt. 0) k = 2
+     n3 = iabsz (itemp(j))
      modskp(k, n3) = 1
 2283 end do
   !     read input card using cimage
@@ -2330,47 +2346,47 @@ subroutine misc39
   go to 2268
 2286 continue
   read (unit = abuff, fmt = 2289) bus2
-2289 format ( 66x,  a6 )
+2289 format (66x, a6)
   !     begin code to read overall program miscellaneous param.:
   read (unit = abuff, fmt = 4057) idebug, ipunch, koutpr, gmode
-4057 format ( 8x,3i8,e8.0)
-  if ( gmode.le.0.0 .and. metrik.eq.0 ) gmode=.48d-7
-  if ( gmode.le.0.0 .and. metrik.eq.1 ) gmode=.30d-7
-  if ( koutpr  .eq.  0 )   koutpr = 2
-  if ( koutpr  .lt.  0 )   koutpr = 0
-  if ( kdeflt  .eq.  0 ) write (kunit6, 4059) gmode,ipunch,idebug,koutpr
-4059 format (  8h+param. ,e8.1,3i8)
-  if ( modify  .ne.  0 )   go to 2245
+4057 format (8x, 3i8, e8.0)
+  if (gmode .le. 0.0d0 .and. metrik .eq. 0) gmode = 0.48d-7
+  if (gmode .le. 0.0d0 .and. metrik .eq. 1) gmode = 0.30d-7
+  if (koutpr .eq. 0) koutpr = 2
+  if (koutpr .lt. 0) koutpr = 0
+  if (kdeflt .eq. 0) write (unit = kunit(6), fmt = 4059) gmode, ipunch, idebug, koutpr
+4059 format ('+param. ', e8.1, 3i8)
+  if (modify .ne. 0) go to 2245
   go to 9900
-4063 if ( modify  .eq.  2 )   go to 4387
+4063 if (modify .eq. 2) go to 4387
   !     begin code for miscellaneous param. of  zc  fitting
   read (unit = abuff, fmt = 4065) nexmis, epstol, normax, iecode, ifwta, ifplot, ifdat, inelim
 4065 format (i8,e8.0,6i8)
-  if ( nexmis  .eq.  0 )   nexmis = -1
-  if (epstol.eq.0) epstol = .3d0
+  if (nexmis .eq. 0) nexmis = -1
+  if (epstol .eq. 0) epstol = 0.3d0
   d1 = epstol
-  d13 = 1.0 + epstol / 100.
-  epstol = alog1z ( d13 )**2
-  if ( normax  .le.  0 )   normax  = 30
-  if ( kdeflt  .eq.  0 ) write (kunit6, 4082)  nexmis,d1,normax,iecode, ifwta,ifplot,ifdat,inelim
+  d13 = 1.0d0 + epstol / 100.0d0
+  epstol = alog1z (d13) ** 2
+  if (normax .le. 0) normax  = 30
+  if (kdeflt .eq. 0) write (unit = kunit(6), fmt = 4082) nexmis, d1, normax, iecode, ifwta, ifplot, ifdat, inelim
 4082 format ('+Yc fit.', i3, e8.1, 6i3)
   call interp
   go to 9900
   !     begin code for miscellaneous param. of a1 fitting
 4387 continue
   read (unit = abuff, fmt = 4391) nexmis, epstol, normax, iecode, ifwta, ifplot, ifdat, inelim, amina1
-4391 format (i8,e8.0,6i8,e8.0)
-  if (epstol.eq.0) epstol = .3d0
+4391 format (i8, e8.0, 6i8, e8.0)
+  if (epstol .eq. 0) epstol = 0.3d0
   d1 = epstol
-  d13 = 1.0 + epstol / 100.
-  epstol = alog1z ( d13 )**2
-  if ( normax .le. 0 )   normax  = 30
-  if (amina1.eq.0.) amina1 = .05d0
-  if ( kdeflt  .eq.  0 ) write (kunit6, 4396)  nexmis,d1,normax,iecode, ifwta,ifplot,ifdat,inelim,amina1
-4396 format ( 8h+a1 fit.,i3,e8.1,6i3,e8.1)
+  d13 = 1.0d0 + epstol / 100.0d0
+  epstol = alog1z (d13) ** 2
+  if (normax .le. 0) normax  = 30
+  if (amina1 .eq. 0.0d0) amina1 = 0.05d0
+  if (kdeflt .eq. 0) write (unit = kunit6, fmt = 4396) nexmis, d1, normax, iecode, ifwta, ifplot, ifdat, inelim, amina1
+4396 format ('+a1 fit.', i3, e8.1, 6i3, e8.1)
   call interp
-9900 if ( iprsup  .ge.  6 ) write (lunit6, 9903)
-9903 format ( 15h exit "misc39".  )
+9900 if (iprsup .ge. 6) write (unit = lunit(6), fmt = 9903)
+9903 format (' exit "misc39".')
   return
 end subroutine misc39
 
@@ -2379,8 +2395,8 @@ end subroutine misc39
 !
 
 subroutine defblk (abuff)
+  use blkcom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   character(*), intent(out) :: abuff
   !     Almost-universal module for blanking out "abuff" card
   !     image of "default" data card of "marti setup".   The one
