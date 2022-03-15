@@ -9,9 +9,16 @@ $ make setup
 ...
 $ make
 
-to clear the projects, thus deleting ../modules/labcom.f90, ../sources/newmods.f90 and ../sources/gcc
+to clear the project:
 
-to test a data case file use
+$ make clean
+
+thus deleting ../modules/labcom.f90, ../sources/newmods.f90 and ../sources/gcc . To compile:
+
+$ make
+
+it is necessary to execute make setup before compiling the project in order to execute vardim
+dimensioning program. To test a data case file use:
 
 $ gcc/gemtp < ../benchmarks/data_case_001.dat
 
