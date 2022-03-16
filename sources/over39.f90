@@ -10,22 +10,52 @@
 
 subroutine subr39
   use blkcom
-  use labl39
+  use com39
   use deck39
+  use bcddat
+  use bcdtim
   use strcom
+  use freedom
+  use tracom
   implicit none
   !  include 'blkcom.ftn'
   !  include 'labl39.ftn'
   !  include 'deck39.ftn'
-  dimension lltemp(20)
-  equivalence (kdeflt, indtv(1))
+  !  equivalence (kdeflt, indtv(1))
   character(8) :: text1, text2, text3, text4, text5, text6
   character(8) :: text7, text8, text9, text10, text11, text12
-  character(8) :: texta, textp, text13, text14, text15
-  dimension texta(14), textp(14)
-  dimension alintp(4100)
-  dimension minust(11)
-  dimension akfrs1(100), akfrs2(100), alphs1(100), alphs2(100)
+  character(8) :: texta(14), textp(14), text13, text14, text15
+  integer(4) :: i, i1, i2, ialdum, ichkp, ichkra, icurve, id, id1, id2, iecoa1
+  integer(4) :: iecozc, ifdaa1, ifdazc, iflag, ifpla1, ifplzc, ifqdpt, ifrac
+  integer(4) :: ifwta1, ifwtzc, ij, iknee, imodal, imode, incrtl, index, inela1
+  integer(4) :: inelzc, ioprau, ip, ipoint, irange, iscape, iterlp, itrnsf
+  integer(4) :: j, j1, j2, j2n, jdatcs, jn, jp
+  integer(4) :: k, kount, kp
+  integer(4) :: l, ll4, llm1, lltemp(20), lrange
+  integer(4) :: m, mdapts, minust(11), mmodes, mpoles, mspedb, mxchkr, mxknee
+  integer(4) :: mzopra
+  integer(4) :: n, n1, n12, n13, n2, n23, n3, n4, n5, n8, n9, nalph1, nchkra
+  integer(4) :: ncorn, ncurve, nechk1, nechk2, nfitmx, nmode, norma1, normzc
+  integer(4) :: npoint, npole, npoles, npols1, npols2, numone, numzro, nzero
+  real(8) :: abeta, adat, alocpn, alpha, alintp(4100), akfrs1(100), akfrs2(100)
+  real(8) :: alphs1(100), alphs2(100), amaglg, amagp, asave, ax
+  real(8) :: beta
+  real(8) :: clear, convun
+  real(8) :: d1, d13, d1lim, d2, d2lim, d3, d4, d5, d6, d7, d8, d9, d11, deminp
+  real(8) :: dist, dx, dxcomp
+  real(8) :: epser1, epser2, epserr, epsta1, epstzc, erropt, error1, error2
+  real(8) :: erymax
+  real(8) :: f0, fdat, freq, freq2
+  real(8) :: hrefr
+  real(8) :: pai, phdat, php, plocpn
+  real(8) :: resid, resilg
+  real(8) :: s, sgnz, sign, sumtau
+  real(8) :: tau, taur, tendeg, tolera, tolfac, tolmin, travhf, twopif
+  real(8) :: x, x1, x2, x1levl, x2levl, xbegr, xbegtl, xbegz, xcla, xclb, xcorna, xcornb
+  real(8) :: xd1, xd2, xendr, xendtl, xendz, xlevl, xlim1, xlim2, xmidr
+  real(8) :: ychara, ycharm, ycut, ycutpu, ylevl0
+  !
+  integer(4), pointer :: kdeflt
   !
   data  text1   /  'line  ' /
   data  text2   /  'consta' /
@@ -42,6 +72,8 @@ subroutine subr39
   data  text13  /  'cards ' /
   data  text14  /  'printe' /
   data  text15  /  'r plot' /
+  !
+  kdeflt => indtv(1)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 1546) lastov
 1546 format (' Top of "subr39".  lastov =', i6)
   if (lastov .eq. 1) go to 5657
@@ -90,7 +122,7 @@ subroutine subr39
 5657 ialdum = 0
   ialter = 1
   do  i = 1, 24
-7004 vstacs(i) = blank
+     vstacs(i) = blank
   end do
   sglfir = 0.2d0
   m = 1
@@ -111,7 +143,7 @@ subroutine subr39
   if (iprsup .ge. 6) write (unit = lunit(6), fmt = 7613) m, (vstacs(i), i = m, n1)
 7613 format (' vstacs names:', 12a6)
   m = m + 12
-  write (unit = kunit(6), fmt = 7616)
+  write (unit = kunit6, fmt = 7616)
 7616 format ('+bus names for each phase.')
   go to 4040
 7618 if (toLower (texta6(1)) .ne. text7) go to 4042
@@ -135,15 +167,15 @@ subroutine subr39
 4043 if (toLower(texta6(1)) .ne. text14) go to 8819
   if (toLower(texta6(2)) .ne. text15) go to 8819
   read (unit = abuff, fmt = 7622) sglfir
-  write (unit = kunit(6), fmt = 8814) sglfir
+  write (unit = kunit6, fmt = 8814) sglfir
 8814 format ('+new log-f/line of printer plot.  sglfir =', f8.4 )
 8819 continue
   read (unit = abuff, fmt = 1019) (texta(k), k = 1, 14)
 1019 format (13a6, a2)
   do k = 1, 14
      if (texta(k) .ne. blank) go to 4044
-1023 end do
-  write (unit = kunit(6), fmt = 1719)
+  end do
+  write (unit = kunit6, fmt = 1719)
 1719 format ('+Blank card ending Marti setup')
   call interp
   go to 9200
@@ -162,7 +194,7 @@ subroutine subr39
   if (toLower(texta6(1)) .ne. text4) go to 4055
   if (toLower(texta6(2)) .ne. text2) go to 4055
   if (toLower(texta6(3)) .ne. text3) go to 4055
-1716 write (unit = kunit(6), fmt = 4053)
+1716 write (unit = kunit6, fmt = 4053)
 4053 format ("+transfer to  'cable constants' .")
   lastov = nchain
   nchain = 47
@@ -197,17 +229,17 @@ subroutine subr39
         call cimage
         read (unit = abuff, fmt = 4023) (tir(j, kp), kp = i, ij)
 4023    format (6e12.0)
-4021 end do
+     end do
      do i = 1, ktab, 6
         ij = i + 5
         if (ij .gt. ktab) ij = ktab
         !     read data card using cimage   *   *   *   *   *   *   *   *   *
         call cimage
         read (unit = abuff, fmt = 4023) (tii(j, kp), kp = i, ij)
-4022 end do
+     end do
 !!!      write (*,*) ' subr39.  tir, tii on  lunit9.'
      write (unit = lunit(9)) (tir(j, kp), tii(j, kp), kp = 1, ktab)
-4026 end do
+  end do
   !     read modal g, b, r, x    *   *   *   *   *   *   *   *   *   *   *
   !     read data card using cimage
 4033 call cimage
@@ -223,7 +255,7 @@ subroutine subr39
   !     end key-word section, prepare for misc. data card:
 4057 do i = 1, 2
      do j = 1, 9
-4058    modskp(i, j) = 0
+        modskp(i, j) = 0
      end do
   end do
   modesk = 0
@@ -238,7 +270,7 @@ subroutine subr39
   if (modesk .eq. 1) go to 4065
   do i = 1, 2
      do j = 1, 9
-4061    modskp(i, j) = 1
+        modskp(i, j) = 1
      end do
   end do
 4065 if (ialdum .ne. 3) dist = d9
@@ -254,7 +286,7 @@ subroutine subr39
 8203 end do
   !
   !   === miscellaneous initializations ===
-8215 lout = lunit6
+8215 lout = lunit(6)
   nmode = ktab
   nfitmx = 0
   if (nmode .gt. mmodes) go to 2170
@@ -263,7 +295,7 @@ subroutine subr39
   modify = 1
   nexmis = 1
   aptdec = voltbc(6)
-  npoint = voltbc(4)
+  npoint = int (voltbc(4), kind (npoint))
   if (npoint .gt. mdapts) go to 2100
   !   == fixed parameters ==
   !    separation between consecutive poles or zeroes (.1%)
@@ -283,11 +315,11 @@ subroutine subr39
 8780 format ('c   *****  Transposed jmarti line segment  ******')
   if (imodal .eq. 0 .and. mspedb .eq. 1) write (unit = lunit(7), fmt = 8785)
 8785 format ('c   ***** Special double circuit transposed jmarti line segment ******')
-8789 rewind lunit2
+8789 rewind lunit(2)
   n5 = 0
   if (jdatcs .gt. 0) go to 8777
   do n12 = 1, 9999
-     read (unit = lunit2, fmt = 8771) (texta6(i), i = 1, 14)
+     read (unit = lunit(2), fmt = 8771) (texta6(i), i = 1, 14)
 8771 format (13a6, a2)
      if (ipunch  .eq.  0) write (unit = lunit(7), fmt = 8772) (texta6(i), i = 1, 13)
 8772 format ('c ', 13a6)
@@ -297,7 +329,7 @@ subroutine subr39
      kount = kount + 1
 8100 if (texta6(1) .eq. blank .and. texta6(2) .eq. blank) n5 = n5 + 1
      if (n5 .ge. 2) go to 8777
-8774 end do
+  end do
   !
   !             modes fitting loop
   !
@@ -311,7 +343,7 @@ subroutine subr39
      read (unit = lunit(9)) id1, id1, d1, id1, id1
      if (imodal .eq. 0 .or. itrnsf .eq. 1) go to 3205
      do ip = 1, ktab
-3230    read (unit = lunit(9)) (tdum(ip, jp),tdum(ip, jp), jp = 1, ktab)
+        read (unit = lunit(9)) (tdum(ip, jp),tdum(ip, jp), jp = 1, ktab)
      end do
 3205 if (itrnsf .eq. 1) read (unit = lunit(9)) (lltemp(i), i = 1, ktab)
      !  ??? end of dummy read ???
@@ -337,18 +369,18 @@ subroutine subr39
               l = 2 * (j - 1) + 1
               alintp(index + l + 1) = tir(j, i)
               alintp(index + l + 2) = tii(j, i)
-3214       end do
+           end do
            if(iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' ti for column ', imode, 'are ', (tir(j, i), tii(j, i), j = 1, nmode)
 3215    end do
-3220 end do
+     end do
      !             yc & a1 & ti functions
      ncurve = 2
      if (nfitmx .eq. 1) ncurve = nmode
      do i = 1, ncurve
-123     minust(i) = 0
+        minust(i) = 0
      end do
      do icurve = 1, ncurve
-        call time44 (tclock(1))
+        call time44 (tclock)
         write (unit = lunit(6), fmt = 6301) tclock, imode, ncurve
 6301    format ( ' begin modal fit at ', 2a4, '.     imode, ncurve =', 2i5)
         numone = 0
@@ -426,7 +458,7 @@ subroutine subr39
         if (icurve .ge. 2 .or. nfitmx .eq. 1) go to 3167
         write (unit = lunit(6), fmt = 7019)
 7019    format (//, x, ' units: freq in Hz; Yc in mhos, phyc in degrees' )
-        write (unit = lunit(6), unit = 7021)
+        write (unit = lunit(6), fmt = 7021)
 7021    format (/, 1x, 4x, 'freq', 8x, 'Yc', 8x, 'phyc', 7x, 'freq')
         go to 3210
 3166    write (unit = lunit(6), fmt = 7024)
@@ -451,7 +483,7 @@ subroutine subr39
            phdat = alintp(index + 3)
            !  === evaluate line functions ===
            if (icurve .ge. 2 .or. nfitmx .eq. 1) go to 3110
-3102       if (ifdat .eq. 0) go to 3120
+           if (ifdat .eq. 0) go to 3120
            d3 = phdat * 360.0d0 / twopi
            write (unit = lunit(6), fmt = 7034) fdat, adat, d3, fdat
 7034       format (1x, 4d11.4)
@@ -492,8 +524,8 @@ subroutine subr39
            xdat(ipoint) = alog1z (d11)
            ydat(ipoint) = alog1z (adat)
            aphdat(ipoint) = phdat
-3100    end do
-        n9 = 0.75d0 * npoint
+        end do
+        n9 = int (0.75d0 * npoint, kind (n9))
         if (numone .lt. n9) go to 3128
         write (unit = lunit(6), fmt = *) ' This is a near-one tij element. '
         go to 8792
@@ -526,9 +558,9 @@ subroutine subr39
 130     ylevl0 = ydat(i)
         x1levl = xdat(i)
 140     i = i + 1
-        if (i.gt.ndata) go to 230
-        if (ydat(i).lt.(ylevl0-d1lim)) go to 130
-        if (ydat(i).gt.(ylevl0+d1lim)) go to 150
+        if (i .gt. ndata) go to 230
+        if (ydat(i) .lt. (ylevl0 - d1lim)) go to 130
+        if (ydat(i) .gt. (ylevl0 + d1lim)) go to 150
         go to 140
 150     iscape = i
 160     i = i - 1
@@ -572,7 +604,7 @@ subroutine subr39
 250     nzone = iknee - 1
         !   == parameters for least squares error checking ==
         dxcomp = 0.05d0
-        nechk1 = ndata / (aptdec * dxcomp) + onehav
+        nechk1 = int (ndata / (aptdec * dxcomp) + onehav, kind (nechk1))
         xbegr = xdat(1)
         xendr = xknee(2)
         d1 = ydat(1)
@@ -595,9 +627,9 @@ subroutine subr39
         ycutpu = (ycut - d1) / (refb - d1)
         refa = yfun39 (xbegr)
         call split (xbegr, xendr, ycutpu, xendtl)
-        i1 = aptdec * (xbegtl - xdat(1)) + 1.0d0
-        i2 = aptdec * (xendtl - xdat(1)) + 2.0d0
-        nechk2 = (i2 - i1 + 1) / (aptdec * dxcomp) + onehav
+        i1 = int (aptdec * (xbegtl - xdat(1)) + 1.0d0, kind (i1))
+        i2 = int (aptdec * (xendtl - xdat(1)) + 2.0d0, kind (i2))
+        nechk2 = int ((i2 - i1 + 1) / (aptdec * dxcomp) + onehav, kind (nechk2))
         !
         !             main loop for all-segments allocation
         !
@@ -621,10 +653,10 @@ subroutine subr39
            xendz = xknee(izone + 1)
            if (yfun39 (xbegz) .gt. yfun39 (xendz)) go to 270
            !   positive slope zone
-           signz = 1.0d0
+           sgnz = 1.0d0
            go to 280
            !   negative slope zone
-270        signz = -1.0d0
+270        sgnz = -1.0d0
            !   allocate slopes in zone
 280        ioprau = 0
            ichkra = 1
@@ -655,8 +687,8 @@ subroutine subr39
 7051       format (//, 1x, 'region:', 3x, 'xbeg=', e11.4, 3x, 'xend=', e11.4, /)
 !!!      write (*,*) ' after #130 xlim2, xlim1  ', xlim2 , xlim1
            abeta = (refb - refa) / (xlim2 - xlim1)
-           nalph1 = abeta
-           alpha = nalph1 + signz
+           nalph1 = int (abeta, kind (nalph1))
+           alpha = nalph1 + sgnz
            call locsl (xbegr, xendr, alpha, xmidr, xcorna, xcornb, erymax)
 !!!      write (*,*) 'izone, ichkra, xmidr, xendr after call locsl  ',
 !!!     1 izone, ichkra, xmidr, xendr
@@ -689,763 +721,746 @@ subroutine subr39
            go to 290
            !   store parameters, do not subdivide
 330        ioprau = ioprau + 1
-           if (4*ioprau .le. mzopra) go to 340
-           if (iterlp.eq.1) go to 2130
+           if (4 * ioprau .le. mzopra) go to 340
+           if (iterlp .eq. 1) go to 2130
            go to 790
-340        id = 4*ioprau
-           zoprau(id-3) = xbegr
-           zoprau(id-2) = xcorna
-           zoprau(id-1) = xcornb
-           zoprau(id)   = alpha
-           if(ichkra.eq.nchkra) go to 350
-           ichkra = ichkra+1
+340        id = 4 * ioprau
+           zoprau(id - 3) = xbegr
+           zoprau(id - 2) = xcorna
+           zoprau(id - 1) = xcornb
+           zoprau(id) = alpha
+           if(ichkra .eq. nchkra) go to 350
+           ichkra = ichkra + 1
            go to 290
            !
-350        if (idebug.lt.3) go to 360
-           write (lunit6, 7057)
-7057       format (//,16x,'--- ranges checked ---',/)
-           do i = 1,nchkra
-              id = 2*i
-              write (lunit6, 7059) xchkra(id - 1), xchkra(id)
+350        if (idebug .lt. 3) go to 360
+           write (unit = lunit(6), fmt = 7057)
+7057       format (//, 16x, '--- ranges checked ---', /)
+           do i = 1, nchkra
+              id = 2 * i
+              write (unit = lunit(6), fmt = 7059) xchkra(id - 1), xchkra(id)
 7059          format (15x, 2e11.4)
-353        end do
-           write (lunit6, 7061)
-7061       format (/,5x,'----- ranges in zone vector. unordered -----')
-           write (lunit6, 7064)
-7064       format (/,10x, 'xbegr',6x, 'xcorna',6x, 'xcornb',4x, 'alpha')
-           do i = 1,ioprau
-              id = 4*i
-              write (lunit6, 7067) zoprau(id - 3), zoprau(id - 2), zoprau(id - 1), zoprau(id)
+           end do
+           write (unit = lunit(6), fmt = 7061)
+7061       format (/, 5x, '----- ranges in zone vector. Unordered -----')
+           write (unit = lunit(6), fmt = 7064)
+7064       format (/, 10x, 'xbegr', 6x, 'xcorna', 6x, 'xcornb', 4x, 'alpha')
+           do i = 1, ioprau
+              id = 4 * i
+              write (unit = lunit(6), fmt = 7067) zoprau(id - 3), zoprau(id - 2), zoprau(id - 1), zoprau(id)
 7067          format (5x, 3e12.4, f6.0)
-356        end do
+           end do
            !             sort ranges of identified regions
 360        noprao(izone) = ioprau
-           if (ioprau.eq.1) go to 420
+           if (ioprau .eq. 1) go to 420
            !   fill in auxiliary buffer
-           do 370 i=1,ioprau
-              id1 = 2*i-1
-              id2 = 4*i-3
+           do i = 1, ioprau
+              id1 = 2 * i - 1
+              id2 = 4 * i - 3
               xauxd(id1) = zoprau(id2)
-              xauxd(id1+1) = i
-370        end do
+              xauxd(id1 + 1) = i
+           end do
            !   sort auxiliary buffer
-           k=ioprau
+           k = ioprau
            iflag = k
-380        if (iflag.le.0) go to 400
-           k = iflag-1
+380        if (iflag .le. 0) go to 400
+           k = iflag - 1
            iflag = 0
-           do j=1,k
-              id = 2*j-1
-              if (xauxd(id).le.xauxd(id+2)) go to 390
+           do j = 1, k
+              id = 2 * j - 1
+              if (xauxd(id) .le. xauxd(id + 2)) go to 390
               xd1 = xauxd(id)
-              xd2 = xauxd(id+1)
-              xauxd(id) = xauxd(id+2)
-              xauxd(id+1) = xauxd(id+3)
-              xauxd(id+2) = xd1
-              xauxd(id+3) = xd2
+              xd2 = xauxd(id + 1)
+              xauxd(id) = xauxd(id + 2)
+              xauxd(id + 1) = xauxd(id + 3)
+              xauxd(id + 2) = xd1
+              xauxd(id + 3) = xd2
               iflag = j
 390        end do
            go to 380
            !             fill-in ordered vector with all-ranges information
 400        n1 = ntotra
-           ntotra = ntotra+ioprau
-           if (4*ntotra.le.mzopra) go to 405
-           if (iterlp.eq.1) go to 2140
+           ntotra = ntotra + ioprau
+           if (4 * ntotra .le. mzopra) go to 405
+           if (iterlp .eq. 1) go to 2140
            go to 790
-405        do i=1,ioprau
-              id1 = 4*(n1+i)-3
-              id = xauxd(2*i)+onehav
-              id2 = 4*id-3
+405        do i = 1, ioprau
+              id1 = 4 * (n1 + i) - 3
+              id = int (xauxd(2 * i) + onehav, kind (id))
+              id2 = 4 * id - 3
               zoprao(id1) = zoprau(id2)
-              zoprao(id1+1) = zoprau(id2+1)
-              zoprao(id1+2) = zoprau(id2+2)
-              zoprao(id1+3) = zoprau(id2+3)
-410        end do
+              zoprao(id1 + 1) = zoprau(id2 + 1)
+              zoprao(id1 + 2) = zoprau(id2 + 2)
+              zoprao(id1 + 3) = zoprau(id2 + 3)
+           end do
            go to 440
 420        n1 = ntotra
-           ntotra = ntotra+ioprau
-           if (4*ntotra.le.mzopra) go to 425
-           if (iterlp.eq.1) go to 2140
+           ntotra = ntotra + ioprau
+           if (4*ntotra .le. mzopra) go to 425
+           if (iterlp .eq. 1) go to 2140
            go to 790
-425        id1 = 4*(n1+1)-3
+425        id1 = 4 * (n1 + 1) - 3
            zoprao(id1)   = zoprau(1)
-           zoprao(id1+1) = zoprau(2)
-           zoprao(id1+2) = zoprau(3)
-           zoprao(id1+3) = zoprau(4)
+           zoprao(id1 + 1) = zoprau(2)
+           zoprao(id1 + 2) = zoprau(3)
+           zoprao(id1 + 3) = zoprau(4)
 440     end do
         !
-        if (idebug.lt.2) go to 450
-        write (lunit6, 7069)
-7069    format (/,6x,'-----  all-ranges vector. ordered  -----')
-        write (lunit6, 7071)
+        if (idebug .lt. 2) go to 450
+        write (unit = lunit(6), fmt = 7069)
+7069    format (/, 6x, '-----  all-ranges vector. Ordered  -----')
+        write (unit = lunit(6), fmt = 7071)
 7071    format (/, 10x, 'xbegr', 6x, 'xcorna', 6x, 'xcornb', 4x, 'alpha')
-        do i = 1,ntotra
-           id = 4*i
-           write (lunit6, 7074) zoprao(id - 3), zoprao(id - 2), zoprao(id - 1), zoprao(id)
+        do i = 1, ntotra
+           id = 4 * i
+           write (unit = lunit(6), fmt = 7074) zoprao(id - 3), zoprao(id - 2), zoprao(id - 1), zoprao(id)
 7074       format (1x, 4x, 3e12.4, f6.0)
-445     end do
+        end do
         !  check number of poles
 450     npoles = 0
-        do irange = 1,ntotra
-           alpha = zoprao(4*irange)
-           jn = absz(alpha)+onehav
-           npoles = npoles+jn
-460     end do
+        do irange = 1, ntotra
+           alpha = zoprao(4 * irange)
+           jn = int (absz (alpha) + onehav, kind (jn))
+           npoles = npoles + jn
+        end do
         !   == order increment or decrement check ==
-        if (npoles.le.mpoles) go to 465
-        if (iterlp.gt.1) go to 790
+        if (npoles .le. mpoles) go to 465
+        if (iterlp .gt. 1) go to 790
         go to 475
-465     if (npoles.le.normax) go to 470
-        if (iterlp.gt.1) go to 795
+465     if (npoles .le. normax) go to 470
+        if (iterlp .gt. 1) go to 795
         go to 475
 470     d1 = npole
         d2 = npoles
-        if (npole.eq.0) go to 485
-        if (d2/d1.lt.1.3d0) go to 480
-        if (ichkp.eq.1) go to 485
-        tolfac = 1.1d0*tolfac
+        if (npole .eq. 0) go to 485
+        if (d2 / d1 .lt. 1.3d0) go to 480
+        if (ichkp .eq. 1) go to 485
+        tolfac = 1.1d0 * tolfac
         ichkp = 1
         go to 265
-475     tolfac = 2.5d0*tolfac
-        incrtl = incrtl+1
-        if (incrtl.gt.10) go to 2160
+475     tolfac = 2.5d0 * tolfac
+        incrtl = incrtl + 1
+        if (incrtl .gt. 10) go to 2160
         go to 265
-480     if (npoles.gt.npole) go to 485
-        if (ichkp.eq.1) go to 482
-        tolfac = .8d0*tolfac
+480     if (npoles .gt. npole) go to 485
+        if (ichkp .eq. 1) go to 482
+        tolfac = 0.8d0 * tolfac
         go to 265
-482     tolfac = tolfac/1.1d0
+482     tolfac = tolfac / 1.1d0
         go to 265
 485     ichkp = 0
         !
         lrange = 0
-        do irange = 1,ntotra
-           alpha = zoprao(4*irange)
-           if (alpha.gt.0.) go to 490
-           jn = -alpha+onehav
-           if (jn.eq.1) go to 540
+        do irange = 1, ntotra
+           alpha = zoprao(4 * irange)
+           if (alpha .gt. 0.0d0) go to 490
+           jn = int (-alpha + onehav, kind (jn))
+           if (jn .eq. 1) go to 540
            go to 500
-490        jn = alpha+onehav
-           if (jn.eq.1) go to 540
+490        jn = int (alpha + onehav, kind (jn))
+           if (jn .eq. 1) go to 540
            !   assign zeroes for +alpha or poles for -alpha
-500        plocpn = 0.
-           j2 = jn-1
-           do j = 1,j2
-              plocpn = plocpn+j
-510        end do
-           alocpn = zoprao(4*irange-2)+deminp*plocpn/jn
-           lrange = lrange+(2*jn+2)
-           azepo(lrange-2*jn-1) = zoprao(4*irange-3)
-           azepo(lrange-2*jn) = alpha
-           azepo(lrange-jn) = alocpn
-           do j = 1,j2
-              azepo(lrange-jn-j) = alocpn-j*deminp
-520        end do
+500        plocpn = 0.0d0
+           j2 = jn - 1
+           do j = 1, j2
+              plocpn = plocpn + j
+           end do
+           alocpn = zoprao(4 * irange - 2) + deminp * plocpn / jn
+           lrange = lrange + (2 * jn + 2)
+           azepo(lrange - 2 * jn - 1) = zoprao(4 * irange - 3)
+           azepo(lrange - 2 * jn) = alpha
+           azepo(lrange - jn) = alocpn
+           do j = 1, j2
+              azepo(lrange - jn - j) = alocpn - j * deminp
+           end do
            !   assign poles for +alpha or zeroes for -alpha
-           alocpn = zoprao(4*irange-1)-deminp*plocpn/jn
-           azepo(lrange-jn+1) = alocpn
-           do j = 1,j2
-              azepo(lrange-jn+1+j) = alocpn+j*deminp
-530        end do
+           alocpn = zoprao(4 * irange - 1) - deminp * plocpn / jn
+           azepo(lrange - jn + 1) = alocpn
+           do j = 1, j2
+              azepo(lrange - jn + 1 + j) = alocpn + j * deminp
+           end do
            go to 550
-540        lrange = lrange+4
-           azepo(lrange-3) = zoprao(4*irange-3)
-           azepo(lrange-2) = alpha
-           azepo(lrange-1) = zoprao(4*irange-2)
-           azepo(lrange)   = zoprao(4*irange-1)
+540        lrange = lrange + 4
+           azepo(lrange - 3) = zoprao(4 * irange - 3)
+           azepo(lrange - 2) = alpha
+           azepo(lrange - 1) = zoprao(4 * irange - 2)
+           azepo(lrange) = zoprao(4 * irange - 1)
 550     end do
-        if (idebug.lt.2) go to 570
+        if (idebug .lt. 2) go to 570
         !   output azepo vector
-        write (lunit6, 7077)
+        write (unit = lunit(6), fmt = 7077)
 7077    format (//, 1x, 4x, 'xbegr', 3x, 'alpha', 10x, 'poles and zeroes before adjustment (log f)', /)
         index = 0
-        do irange = 1,ntotra
-           alpha = azepo(index+2)
-           jn = absz(alpha)+onehav
-           i1 = index+1
-           i2 = i1+1+2*jn
-           write (lunit6, 7079) (azepo(i), i = i1, i2)
-7079       format (1x,e12.4,f4.0,6e11.4,/,17x,6e11.4,/,17x,6e11.4)
+        do irange = 1, ntotra
+           alpha = azepo(index + 2)
+           jn = int (absz (alpha) + onehav, kind (jn))
+           i1 = index + 1
+           i2 = i1 + 1 + 2 * jn
+           write (unit = lunit(6), fmt = 7079) (azepo(i), i = i1, i2)
+7079       format (1x, e12.4, f4.0, 6e11.4, /, 17x, 6e11.4, /, 17x, 6e11.4)
            index = i2
-560     end do
+        end do
         !   store indexes in vector
 570     indxv(1) = 0
-        do i=2,ntotra
-           index = indxv(i-1)
-           alpha = azepo(index+2)
-           jn = absz(alpha)+onehav
-           indxv(i) = index+2+2*jn
-580     end do
+        do i = 2, ntotra
+           index = indxv(i - 1)
+           alpha = azepo(index + 2)
+           jn = int (absz (alpha) + onehav, kind (jn))
+           indxv(i) = index + 2 + 2 * jn
+        end do
         !  == check for type of curve 2 ==
         id = indxv(ntotra)
-        alpha = azepo(id+2)
-        if (icurve.eq.2.and.alpha.gt.0. .and. nfitmx .eq. 0) iftype = 1
+        alpha = azepo(id + 2)
+        if (icurve .eq. 2 .and. alpha .gt. 0.0d0 .and. nfitmx .eq. 0) iftype = 1
         !  convert corners to frequency values
-        do irange=1,ntotra
+        do irange = 1, ntotra
            index = indxv(irange)
-           id = index+2
+           id = index + 2
            alpha = azepo(id)
-           jn = absz(alpha)+onehav
-           j2n = 2*jn
-           d13 = 10.
-           do j=1,j2n
-590           azepo(id+j) = d13**azepo(id+j)
+           jn = int (absz (alpha) + onehav, kind (jn))
+           j2n = 2 * jn
+           d13 = 10.0d0
+           do j = 1, j2n
+              azepo(id + j) = d13 ** azepo(id + j)
            end do
-           if ( idebug .lt. 4 )  go to 600
-           write (lunit6, *) ' poles and zeroes in Hz b4 do 610 loop.'
-           write (lunit6,7078) (azepo(i), i = id + 1, id + j2n)   ! thl
+           if (idebug .lt. 4) go to 600
+           write (unit = lunit(6), fmt = *) ' poles and zeroes in Hz b4 do 610 loop.'
+           write (unit = lunit(6), fmt = 7078) (azepo(i), i = id + 1, id + j2n)   ! thl
 7078       format ((1x, 10e11.4))
 600     end do
         !
         !             corners adjustments
         !
-        do j=1,3
-           if (idebug .ge. 3) write (lunit6, 7081) j
+        do j = 1, 3
+           if (idebug .ge. 3) write (unit = lunit(6), fmt = 7081) j
 7081       format (//, 10x, '*** corners adjustment loop no.', i2, 3x, '***')
            call adjpk
            call adjcr
-           if ( idebug .lt. 4 )  go to 610   !thl
-           write (lunit6, *) ' after call adjcr, j=,', j  ! thl
-           write (lunit6, 7083)
+           if (idebug .lt. 4) go to 610   !thl
+           write (unit = lunit(6), fmt = *) ' after call adjcr, j=,', j  ! thl
+           write (unit = lunit(6), fmt = 7083)
            index = 0
-           do irange=1,ntotra
-              alpha = azepo(index+2)
-              jn = absz(alpha)+onehav
-              i1 = index+1
-              i2 = i1+1+2*jn
-              write (lunit6, 7079) (azepo(i), i = i1, i2)
+           do irange = 1, ntotra
+              alpha = azepo(index + 2)
+              jn = int (absz (alpha) + onehav, kind (jn))
+              i1 = index + 1
+              i2 = i1 + 1 + 2 * jn
+              write (unit = lunit(6), fmt = 7079) (azepo(i), i = i1, i2)
               index = i2
-375        end do                !  thl
+           end do                !  thl
 610     end do
-        if (idebug.lt.3) go to 630
+        if (idebug .lt. 3) go to 630
         !             output poles & zeroes after adjustments
-        write (lunit6, 7083)
+        write (unit = lunit(6), fmt = 7083)
 7083    format (//, 1x, 4x, 'xbegr', 3x, 'alpha', 10x, 'poles and zeroes after adjustment (Hz)', /)
         index = 0
-        do irange=1,ntotra
-           alpha = azepo(index+2)
-           jn = absz(alpha)+onehav
-           i1 = index+1
-           i2 = i1+1+2*jn
-           write (lunit6, 7079) (azepo(i), i = i1, i2)
+        do irange = 1, ntotra
+           alpha = azepo(index + 2)
+           jn = int (absz(alpha) + onehav, kind (jn))
+           i1 = index + 1
+           i2 = i1 + 1 + 2 * jn
+           write (unit = lunit(6), fmt = 7079) (azepo(i), i = i1, i2)
            index = i2
-620     end do
+        end do
         !  ==  store zeroes and poles on separate vectors ==
 630     ncorn = 0
-        do irange=1,ntotra
-           id = indxv(irange)+2
+        do irange = 1, ntotra
+           id = indxv(irange) + 2
            alpha = azepo(id)
-           jn = absz(alpha)+onehav
-           if (alpha.gt.0.) go to 660
-           do j=1,jn
-640           fcp(ncorn+j) = azepo(id+j)
+           jn = int (absz (alpha) + onehav, kind (jn))
+           if (alpha .gt. 0.0d0) go to 660
+           do j = 1, jn
+              fcp(ncorn + j) = azepo(id + j)
            end do
-           do j=1,jn
-650           fcz(ncorn+j) = azepo(id+jn+j)
+           do j = 1, jn
+              fcz(ncorn + j) = azepo(id + jn + j)
            end do
            go to 690
-660        do j=1,jn
-670           fcz(ncorn+j) = azepo(id+j)
+660        do j = 1, jn
+              fcz(ncorn + j) = azepo(id + j)
            end do
-           do j=1,jn
-680           fcp(ncorn+j) = azepo(id+jn+j)
+           do j = 1, jn
+              fcp(ncorn + j) = azepo(id + jn + j)
            end do
-690        ncorn = ncorn+jn
-700     end do
+690        ncorn = ncorn + jn
+        end do
         npole = ncorn
         nzero = ncorn
-        if (iftype.eq.2) nzero = nzero-jn
+        if (iftype .eq. 2) nzero = nzero - jn
         !
         !              check least-squares deviation
         !
-        error1 = 0.
-        error2 = 0.
-        x = xdat(1)-dxcomp
-710     x = x+dxcomp
-        if (x.gt.xdat(ndata)) go to 750
-        freq = 10.d0**x
-        freq2 = freq**2
-        amagp = 1.d0
-        if (nzero.eq.0) go to 725
-        do j=1,nzero
-720        amagp = amagp*(fcz(j)**2+freq2)/(fcp(j)**2+freq2)
+        error1 = 0.0d0
+        error2 = 0.0d0
+        x = xdat(1) - dxcomp
+710     x = x + dxcomp
+        if (x .gt. xdat(ndata)) go to 750
+        freq = 10.0d0 ** x
+        freq2 = freq ** 2
+        amagp = 1.0d0
+        if (nzero .eq. 0) go to 725
+        do j = 1, nzero
+           amagp = amagp * (fcz(j) ** 2 + freq2) / (fcp(j) ** 2 + freq2)
         end do
-725     amaglg = alog1z(amagp)
-        if (iftype.eq.1) go to 740
-        j1 = nzero+1
-        do j=j1,npole
-730        amaglg = amaglg-alog1z(fcp(j)**2+freq2)
+725     amaglg = alog1z (amagp)
+        if (iftype .eq. 1) go to 740
+        j1 = nzero + 1
+        do j = j1, npole
+           amaglg = amaglg - alog1z (fcp(j) ** 2 + freq2)
         end do
-740     amaglg = hreflg+amaglg/2.d0
-        d1 = amaglg-yfun39(x)
-        if (x.gt.1.60d0.and.x.lt.1.956d0) d1 = 3.d0*d1
-        error1 = error1+d1**2
-        if (x.lt.xbegtl.or.x.gt.xendtl) go to 710
-        error2 = error2+d1**2
+740     amaglg = hreflg + amaglg / 2.0d0
+        d1 = amaglg - yfun39 (x)
+        if (x .gt. 1.60d0 .and. x .lt. 1.956d0) d1 = 3.0d0 * d1
+        error1 = error1 + d1 ** 2
+        if (x .lt. xbegtl .or. x .gt. xendtl) go to 710
+        error2 = error2 + d1 ** 2
         go to 710
-750     epser1 = error1/nechk1
-        epser2 = error2/nechk2
+750     epser1 = error1 / nechk1
+        epser2 = error2 / nechk2
         epserr = epser2
-        if (idebug.eq.0) go to 756
-        d1 = 100.d0*(10.d0**sqrtz(epser1)-1.d0)
-        d2 = 100.d0*(10.d0**sqrtz(epser2)-1.d0)
-        write (lunit6, 7085) d1, d2, npole, nzero
-7085    format (//, 1x, '*** lsq ave error =', e12.4, 1x, '%', 7x, 'lsq check error =', e12.4, 1x, '%', 2x, '***', /, 1x, &
-             '***', 6x, 'no. of poles =', i3, 20x, 'no. of zeroes =', i3, 9x, '***', 1x)
-        if (iecode.eq.1) go to 754
-        d1 = 100.d0*(10.d0**sqrtz(epstol)-1.d0)
-        write (lunit6, 7087) d1
+        if (idebug .eq. 0) go to 756
+        d1 = 100.0d0 * (10.0d0 ** sqrtz (epser1) - 1.0d0)
+        d2 = 100.0d0 * (10.0d0 ** sqrtz (epser2) - 1.0d0)
+        write (unit = lunit(6), fmt = 7085) d1, d2, npole, nzero
+7085    format (//, 1x, '*** lsq ave error =', e12.4, 1x, '%', 7x, 'lsq check error =', e12.4, 1x, '%', 2x, '***', /, 1x, '***', 6x, 'no. of poles =', i3, 20x, 'no. of zeroes =', i3, 9x, '***', 1x)
+        if (iecode .eq. 1) go to 754
+        d1 = 100.0d0 * (10.0d0 ** sqrtz(epstol) - 1.0d0)
+        write (unit = lunit(6), fmt = 7087) d1
 7087    format (/, 1x, '--- Error criterion: lsq check error less than', f5.2, 1x, '%  ---', 1x)
         go to 756
-754     write (lunit6, 7089) normax
+754     write (unit = lunit(6), fmt = 7089) normax
 7089    format (/, 1x, '--- Error criterion: minimum lsq check error within given maximum order (', i3, 2x, 'poles ) ---')
-756     if (epserr.ge.erropt) go to 780
+756     if (epserr .ge. erropt) go to 780
         !  store optimum values
-        do j=1,npole
-760        fcpr(j) = fcp(j)
+        do j = 1, npole
+           fcpr(j) = fcp(j)
         end do
-        do j=1,nzero
-770        fczr(j) = fcz(j)
+        do j = 1, nzero
+           fczr(j) = fcz(j)
         end do
         hrflgr = hreflg
         npoler = npole
         nzeror = nzero
         erropt = epserr
-780     if (epserr.lt.epstol.and.iecode.eq.0) go to 800
-        if (epserr.ge.5.d0*erropt.and.inelim.eq.0) go to 797
-        tolfac = .8d0*tolfac
+780     if (epserr .lt. epstol .and. iecode .eq. 0) go to 800
+        if (epserr .ge. 5.0d0 * erropt .and. inelim .eq. 0) go to 797
+        tolfac = 0.8d0 * tolfac
         go to 260
-790     if (idebug.ge.1) write (lunit6, 7091)
+790     if (idebug .ge. 1) write (unit = lunit(6), fmt = 7091)
 7091    format (//, 1x, '--- Further order increase was not possible because, of vectors dimensions ---', 1x)
         go to 800
-795     if (idebug.ge.1) write (lunit6, 7093) npoles, normax
+795     if (idebug .ge. 1) write (unit = lunit(6), fmt = 7093) npoles, normax
 7093    format (//, 1x, '--- No. of poles in this loop (', i3, ') is larger than specified limit (', i3, ') ---', 1x)
         go to 800
-797     if (idebug.ge.1) write (lunit6, 7095)
-7095    format (//, 1x, '--- No further order increase was allowed because error', /, 1x, &
-             'in this loop was 5 times larger than previous minimum.', /, 1x, &
-             'If further order increase is desired make "inelim = 1" ', /, 1x, &
-             'in parameters list ---', 1x)
-800     if (erropt.gt.epstol.and.idebug.ge.1) write (lunit6, 7097)
+797     if (idebug .ge. 1) write (unit = lunit(6), fmt = 7095)
+7095    format (//, 1x, '--- No further order increase was allowed because error', /, 1x, 'in this loop was 5 times larger than previous minimum.', /, 1x, 'If further order increase is desired make "inelim = 1" ', /, 1x, 'in parameters list ---', 1x)
+800     if (erropt .gt. epstol .and. idebug .ge. 1) write (unit = lunit(6), fmt = 7097)
 7097    format (//, 1x, '--- Maximum tolerance criterion could not be met ---')
         !
         !             time delay for propagation function
         !
         if (icurve .eq. 1 .or. nfitmx .eq. 1)  go to 805
-        dx = .1d0
-        x = xdat(1)-dx
-900     x = x+dx
-        if (x.gt.xdat(ndata)) go to 910
-        if (aph(x).lt.-.08727d0) go to 920
+        dx = 0.1d0
+        x = xdat(1) - dx
+900     x = x + dx
+        if (x .gt. xdat(ndata)) go to 910
+        if (aph (x) .lt. -0.08727d0) go to 920
         go to 900
 920     x1 = x
         x2 = xdat(ndata)
-        sumtau = 0.
+        sumtau = 0.0d0
         n = 0
-        x = x1-dx
-930     x = x+dx
-        if (x.gt.x2) go to 940
-        n = n+1
-        freq = 10.d0**x
-        php = 0.
-        do j=1,nzeror
-932        php = php+atan2z(freq,fczr(j))-atan2z(freq,fcpr(j))
+        x = x1 - dx
+930     x = x + dx
+        if (x .gt. x2) go to 940
+        n = n + 1
+        freq = 10.0d0 ** x
+        php = 0.0d0
+        do j = 1, nzeror
+           php = php + atan2z (freq, fczr(j)) - atan2z (freq, fcpr(j))
         end do
-        if (iftype.eq.1) go to 935
-        j1 = nzeror+1
-        do j=j1,npoler
-934        php = php-atan2z(freq,fcpr(j))
+        if (iftype .eq. 1) go to 935
+        j1 = nzeror + 1
+        do j = j1, npoler
+           php = php - atan2z (freq, fcpr(j))
         end do
-935     tau = (php-aph(x))/freq
-        sumtau = sumtau+tau
+935     tau = (php - aph(x)) / freq
+        sumtau = sumtau + tau
         go to 930
-940     taur = sumtau/(n*twopi)
+940     taur = sumtau / (n * twopi)
         go to 950
-910     write (lunit6, 7099)
-7099    format (//, 1x, '*** Specified frequency range does not contain enough curve ', &
-             /, ' dynamics for an accurate phase displacement evaluation. ', &
-             /, ' tau will be taken as the travelling time at the highest ', &
-             /, ' given frequency ***')
+910     write (unit = lunit(6), fmt = 7099)
+7099    format (//, 1x, '*** Specified frequency range does not contain enough curve ', /, ' dynamics for an accurate phase displacement evaluation. ', /, ' tau will be taken as the travelling time at the highest ', /, ' given frequency ***')
         taur = travhf
-950     if (idebug.eq.0) go to 807
-        d1 = 1.d3*taur
-        d2 = 10.d0**xdat(ndata)
-        d3 = 1.d3*travhf
-        write (lunit6, 8001) d1, d2, d3
-8001    format (//, 1x, 'Phase displacement tau = ', e12.4, 3x, 'msec', /, 1x, 'travelling time at', e12.4, 2x, 'Hz', 3x, 'is', &
-             e12.4, 3x, 'msec')
+950     if (idebug .eq. 0) go to 807
+        d1 = 1.0d3 * taur
+        d2 = 10.0d0 ** xdat(ndata)
+        d3 = 1.0d3 * travhf
+        write (unit = lunit(6), fmt = 8001) d1, d2, d3
+8001    format (//, 1x, 'Phase displacement tau = ', e12.4, 3x, 'msec', /, 1x, 'travelling time at', e12.4, 2x, 'Hz', 3x, 'is', e12.4, 3x, 'msec')
         !   == add extra pole to a1 function with type 1 fit ==
-807     if (iftype.eq.2) go to 805
-        npoler = npoler+1
-        if (npoler.gt.mpoles) go to 2150
-        d1 = xdat(ndata)+5.d0
-        fcpr(npoler) = 10.d0**d1
-805     if (ifwta.eq.0) go to 850
+807     if (iftype .eq. 2) go to 805
+        npoler = npoler + 1
+        if (npoler .gt. mpoles) go to 2150
+        d1 = xdat(ndata) + 5.0d0
+        fcpr(npoler) = 10.0d0 ** d1
+805     if (ifwta .eq. 0) go to 850
         !
         !             comparison table
         !
-        d1 = 10.d0**hrflgr
-        write (lunit6, 8003) iftype, d1
-8003    format (/,1x,'Curve type =',i2,4x,'reference level =',e11.4)
-        write (lunit6, 8005) npoler, nzeror
-8005    format (/,1x,'No. poles =',i3,4x,'no. zeroes =',i3)
+        d1 = 10.0d0 ** hrflgr
+        write (unit = lunit(6), fmt = 8003) iftype, d1
+8003    format (/, 1x, 'Curve type =', i2, 4x, 'reference level =', e11.4)
+        write (unit = lunit(6), fmt = 8005) npoler, nzeror
+8005    format (/, 1x, 'No. poles =', i3, 4x, 'no. zeroes =', i3)
         if (icurve .eq. 2  .or. nfitmx .eq. 1) go to 812
-        write (lunit6, 8007) imode
-8007    format (//,' Table of yc vs. yceq for mode',i3,/,' units: freq. in Hz, magnitude in Ohms, phase in Deg., delmag in %, delph in Deg.', &
-             //,5x,'freq',6x,'ycmag',5x,'yceqmag',5x,'delmag',6x,'ycph', 6x,'yceqph',5x,'delph',7x,'freq')
+        write (unit = lunit(6), fmt = 8007) imode
+8007    format (//,' Table of Yc vs. Yceq for mode', i3, /, ' units: freq. in Hz, magnitude in Ohms, phase in Deg., delmag in %, delph in Deg.', //, 5x, 'freq', 6x, 'Ycmag', 5x, 'Yceqmag', 5x, 'delmag', 6x, 'Ycph', 6x, 'Yceqph', 5x, 'delph', 7x, 'freq')
         go to 814
-812     if ( nfitmx .eq. 1 )  go to 813
-        write (lunit6, 8009) imode
-8009    format (/,1x,'Table of  "a1"  vs.  "a1eq"  for mode',i3, /,1x,'units: frequency in Hz,  magnitude in per unit,  phase in Deg.', &
-             'delmag in %,  delph in Deg.', / , 1x, 'p1ph = a1eqph+omega*tau; tau in msec; deltau in % .', &
-             //,5x,'freq',6x,'a1mag',5x,'a1eqmag',5x,'delmag',6x,'a1ph', 6x,'a1eqph',5x,'delph',7x,'p1ph',7x,'tau',7x,'deltau', 6x,'freq')
+812     if (nfitmx .eq. 1) go to 813
+        write (unit = lunit(6), fmt = 8009) imode
+8009    format (/, 1x, 'Table of  "a1"  vs.  "a1eq"  for mode', i3, /, 1x, 'units: frequency in Hz,  magnitude in per unit,  phase in Deg. delmag in %,  delph in Deg.', / , 1x, 'p1ph = a1eqph+omega*tau; tau in msec; deltau in % .', //, 5x, 'freq', 6x, 'a1mag', 5x, 'a1eqmag', 5x, 'delmag', 6x, 'a1ph', 6x,'a1eqph', 5x, 'delph', 7x, 'p1ph', 7x, 'tau', 7x, 'deltau', 6x,'freq')
         go to 814
-813     write (lunit6, 1813) icurve, imode
-1813    format (//,' table of ti vs. tieq for element ', 2i2, /, ' units: freq. in hz, magnitude unitless, phase in deg., delmag in %, delph in deg.', &
-             //,5x,'freq',6x,'timag',5x,'tieqmag',5x, 'delmag',6x,'tiph', 6x,'tieqph',5x,'delph',7x,'freq')
-814     dxcomp = .1d0
-        x = xdat(1)-dxcomp
-810     x = x+dxcomp
-        if (x.gt.xdat(ndata)) go to 850
-        freq = 10.d0**x
-        freq2 = freq**2
-        amagp = 1.d0
-        php = 0.
-        if (nzeror.eq.0) go to 825
-        do  j=1,nzeror
-           amagp = amagp*(fczr(j)**2+freq2)/(fcpr(j)**2+freq2)
-           php = php+atan2z(freq,fczr(j))-atan2z(freq,fcpr(j))
-820     end do
-825     amaglg = alog1z(amagp)
-        if (iftype.eq.1) go to 840
-        j1 = nzeror+1
-        do j=j1,npoler
-           amaglg = amaglg-alog1z(fcpr(j)**2+freq2)
-           php = php-atan2z(freq,fcpr(j))
-830     end do
-840     amaglg = hrflgr+amaglg/2.d0
-        amagp = 10.d0**amaglg
-        ax = 10.d0**yfun39(x)
-        d1 = (amagp/ax-1.d0)*100.d0
+813     write (unit = lunit(6), fmt = 1813) icurve, imode
+1813    format (//,' table of ti vs. tieq for element ', 2i2, /, ' units: freq. in hz, magnitude unitless, phase in deg., delmag in %, delph in deg.', //, 5x, 'freq', 6x, 'timag', 5x, 'tieqmag', 5x, 'delmag', 6x, 'tiph', 6x, 'tieqph', 5x, 'delph', 7x, 'freq')
+814     dxcomp = 0.1d0
+        x = xdat(1) - dxcomp
+810     x = x + dxcomp
+        if (x .gt. xdat(ndata)) go to 850
+        freq = 10.0d0 ** x
+        freq2 = freq ** 2
+        amagp = 1.0d0
+        php = 0.0d0
+        if (nzeror .eq. 0) go to 825
+        do  j = 1, nzeror
+           amagp = amagp * (fczr(j) ** 2 + freq2) / (fcpr(j) ** 2 + freq2)
+           php = php + atan2z (freq, fczr(j)) - atan2z (freq, fcpr(j))
+        end do
+825     amaglg = alog1z (amagp)
+        if (iftype .eq. 1) go to 840
+        j1 = nzeror + 1
+        do j = j1, npoler
+           amaglg = amaglg - alog1z (fcpr(j) ** 2 + freq2)
+           php = php - atan2z (freq, fcpr(j))
+        end do
+840     amaglg = hrflgr + amaglg / 2.0d0
+        amagp = 10.0d0 ** amaglg
+        ax = 10.0d0 ** yfun39 (x)
+        d1 = (amagp / ax - 1.0d0) * 100.0d0
         d2 = aph(x)
-        d3 = d2*360.d0/twopi
-        d4 = php*360.d0/twopi
-        d5 = absz(d4-d3)
-        if (icurve.eq.2 .and. nfitmx .eq. 0) go to 842
-        write (lunit6, 8011) freq, ax, amagp, d1, d3, d4, d5, freq
+        d3 = d2 * 360.0d0 / twopi
+        d4 = php * 360.0d0 / twopi
+        d5 = absz (d4 - d3)
+        if (icurve .eq. 2 .and. nfitmx .eq. 0) go to 842
+        write (unit = lunit(6), fmt = 8011) freq, ax, amagp, d1, d3, d4, d5, freq
 8011    format (1x, 8e11.4)
         go to 810
-842     tau = (php-d2)/(twopi*freq)
-        d8 = tau*1.d3
-        d9 = (tau/taur-1.d0)*100.d0
-        d6 = d4-360.d0*freq*taur
-        d7 = absz(d6-d3)
-        write (lunit6, 8013) freq, ax, amagp, d1, d3, d6, d7, d4, d8, d9, freq
+842     tau = (php - d2) / (twopi * freq)
+        d8 = tau * 1.0d3
+        d9 = (tau / taur - 1.0d0) * 100.0d0
+        d6 = d4 - 360.0d0 * freq * taur
+        d7 = absz (d6 - d3)
+        write (unit = lunit(6), fmt = 8013) freq, ax, amagp, d1, d3, d6, d7, d4, d8, d9, freq
 8013    format (1x, 11e11.4)
         go to 810
         !
-850     if (ifplot.eq.1)  call ftplot (icurve, imode, nfitmx)
+850     if (ifplot .eq. 1) call ftplot (icurve, imode, nfitmx)
         !
         !             partial fraction expansion
         !
-        do ifrac=1,npoler
+        do ifrac = 1, npoler
            s = -fcpr(ifrac)
            resilg = hrflgr
-           sign = 1.d0
-           if (nzeror.eq.0) go to 875
-           do j=1,nzeror
-              if (j.eq.ifrac) go to 865
-              d1 = s+fczr(j)
-              d2 = s+fcpr(j)
-              d3 = absz(d1)
-              d4 = absz(d2)
-              sign = sign*(d1/d3)*(d2/d4)
-              resilg = resilg+alog1z(d3)-alog1z(d4)
+           sign = 1.0d0
+           if (nzeror .eq. 0) go to 875
+           do j = 1, nzeror
+              if (j .eq. ifrac) go to 865
+              d1 = s + fczr(j)
+              d2 = s + fcpr(j)
+              d3 = absz (d1)
+              d4 = absz (d2)
+              sign = sign * (d1 / d3) * (d2 / d4)
+              resilg = resilg + alog1z (d3) - alog1z (d4)
               go to 860
-865           d1 = s+fczr(j)
+865           d1 = s + fczr(j)
               d3 = absz(d1)
-              sign = sign*(d1/d3)
-              resilg = resilg+alog1z(d3)
+              sign = sign * (d1 / d3)
+              resilg = resilg + alog1z (d3)
 860        end do
-           if (iftype.eq.1) go to 870
-875        j1 = nzeror+1
-           do j=j1,npoler
-              if (j.eq.ifrac) go to 880
-              d2 = s+fcpr(j)
-              d4 = absz(d2)
-              sign = sign*(d2/d4)
-              resilg = resilg-alog1z(d4)
+           if (iftype .eq. 1) go to 870
+875        j1 = nzeror + 1
+           do j = j1, npoler
+              if (j .eq. ifrac) go to 880
+              d2 = s + fcpr(j)
+              d4 = absz (d2)
+              sign = sign * (d2 / d4)
+              resilg = resilg - alog1z (d4)
 880        end do
-870        resid = (10.d0**resilg)*sign
-890        akfrac(ifrac) = twopi*resid
-           if ( minust(icurve) .eq. 1 ) akfrac(ifrac) = - akfrac(ifrac)
-           alphaf(ifrac) = twopi*fcpr(ifrac)
-855     end do
+870        resid = (10.0d0 ** resilg) * sign
+           akfrac(ifrac) = twopi * resid
+           if (minust(icurve) .eq. 1) akfrac(ifrac) = -akfrac(ifrac)
+           alphaf(ifrac) = twopi * fcpr(ifrac)
+        end do
         !
         !     if (icurve.eq.1) hrefr = 10.d0**hrflgr
-        if (icurve .eq. 1 .or. nfitmx .eq. 1) hrefr = 10.d0**hrflgr
+        if (icurve .eq. 1 .or. nfitmx .eq. 1) hrefr = 10.0d0 ** hrflgr
         !   == punch parameters ==
         n23 = npoler
-        if ( iofgnd .eq. 1 ) n23 = ( npoler + 2 ) / 3 * 3
+        if (iofgnd .eq. 1) n23 = (npoler + 2) / 3 * 3
         if (icurve .eq. 2 .and. nfitmx .eq. 0) go to 8779
         if (nfitmx .eq. 1) go to 8794
         d6 = koutpr
         n8 = 2 * imode
-        if ( imodal  .gt.  0 .or. mspedb .eq. 1 )   go to  8787
-        if ( ipunch  .eq.  0 ) write (lunit7, 8781) imode, vstacs(n8 - 1), vstacs(n8), d6
-8781    format ( '-',  i1,  2a6,  12x,  f6.0,4x, '1.',14x, '-4', 3x, '1' )
-        if (idebug.eq.0) go to 8794
-        write (lunit1, 8782) imode, vstacs(n8 - 1), vstacs(n8), d6
+        if (imodal .gt. 0 .or. mspedb .eq. 1) go to 8787
+        if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8781) imode, vstacs(n8 - 1), vstacs(n8), d6
+8781    format ('-',  i1,  2a6,  12x,  f6.0,4x, '1.', 14x, '-4', 3x, '1')
+        if (idebug .eq. 0) go to 8794
+        write (unit = lunit(1), fmt = 8782) imode, vstacs(n8 - 1), vstacs(n8), d6
 8782    format ( 1x,  '-',  i1,  2a6,  12x,  f6.0, 4x, '1.',14x, '-4',3x,'1','                         ')
-        kount = kount+1
+        kount = kount + 1
         go to 8794
-8787    if ( itrnsf .eq. 1 )  ifqdpt = 0
-        if ( ipunch  .eq.  0 ) write (lunit7, 8790)  imode, vstacs(n8 - 1), vstacs(n8), d6, nmode, ifqdpt
+8787    if (itrnsf .eq. 1) ifqdpt = 0
+        if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8790) imode, vstacs(n8 - 1), vstacs(n8), d6, nmode, ifqdpt
 8790    format ( '-', i1, 2a6, 12x, f6.0,4x, '1.',14x, '-4', 2i2)
-        if (idebug.eq.0) go to 8794
-        write (lunit1, 8791)  imode, vstacs(n8 - 1), vstacs(n8), d6, nmode, ifqdpt
-8791    format (1x,'-',i1,2a6, 12x, f6.0,4x,'1.',14x, '-4',2i2, '                        ')
-        kount = kount+1
+        if (idebug .eq. 0) go to 8794
+        write (unit = lunit(1), fmt = 8791) imode, vstacs(n8 - 1), vstacs(n8), d6, nmode, ifqdpt
+8791    format (1x, '-', i1, 2a6, 12x, f6.0, 4x, '1.', 14x, '-4', 2i2, '                        ')
+        kount = kount + 1
         go to 8794
-8793    write (lunit6, *) ' This is a near-zero tij element.'
+8793    write (unit = lunit(6), fmt = *) ' This is a near-zero tij element.'
         npoler = 1
-        hrefr  = 0.
-        akfrac(1) = 0.0
-        alphaf(1) = 1.0
+        hrefr  = 0.0d0
+        akfrac(1) = 0.0d0
+        alphaf(1) = 1.0d0
         n23 = 1
-        if ( iofgnd .eq. 1 )  n23 = 3
+        if (iofgnd .eq. 1) n23 = 3
         go to 8794
 8792    npoler = 1
-        hrefr = 1.
-        akfrac(1) = 0.0
-        alphaf(1) = 1.0
+        hrefr = 1.0d0
+        akfrac(1) = 0.0d0
+        alphaf(1) = 1.0d0
         numone = 0
         n23 = 1
-        if ( iofgnd .eq. 1 )  n23 = 3
-8794    if ( minust(icurve) .eq. 1 )  hrefr = - hrefr
-        if ( ipunch  .eq.  0 ) write (lunit7, 8798) npoler, hrefr
-8798    format ( i8, e32.20 )
-        if (idebug.eq.0) go to 8788
-        write (lunit1, 8799) npoler, hrefr
-8799    format ( 1x,  i8,  e32.20, '                                              ')
-        kount = kount+1
+        if (iofgnd .eq. 1 )  n23 = 3
+8794    if (minust(icurve) .eq. 1) hrefr = -hrefr
+        if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8798) npoler, hrefr
+8798    format (i8, e32.20)
+        if (idebug .eq. 0) go to 8788
+        write (unit = lunit(1), fmt = 8799) npoler, hrefr
+8799    format (1x, i8, e32.20, '                                              ')
+        kount = kount + 1
         go to 8788
-8779    if ( ipunch  .eq.  0 ) write (lunit7, 8798) npoler, taur
-        if (idebug.eq.0) go to 8788
-        write (lunit1, 8799) npoler, taur
-        kount = kount+1
-8788    if ( ipunch  .eq.  0 ) write (lunit7, 8803) (akfrac(kp), kp = 1, npoler)
-8803    format ( 3e26.18 )
-        if (idebug.eq.0) go to 8806
-        write (lunit1, 8804)  (akfrac(kp), kp = 1, n23)
-8804    format ( 1x,  3e26.18,  '    ')
-8806    if ( ipunch  .eq.  0 ) write (lunit7, 8803)  (alphaf(kp), kp = 1, npoler)
-        if (idebug.eq.0) go to 8810
-        write (lunit1, 8804)  (alphaf(kp), kp = 1, n23)
-        d1 = npoler/3.d0
-        n2 = npoler/3
-        kount = kount+2*n2
-        if (d1.gt.n2) kount = kount+2
-8810    if ( imode  .lt. 2 )  go to 3200
-        if ( iprsup .ge. 1) write (lunit6, *) ' imode, imodal and mspedb at 8810 = ', imode, imodal, mspedb
-        if ( imodal .gt. 0 )  go to 3200
-        if ( mspedb .eq. 1  .and.  imode .eq. 2 )  go to 3200
-        if ( iprsup .ge. 1 ) write (lunit6, *) ' icurve =', icurve
-        if ( icurve .eq. 2 .and. nfitmx .eq. 0 )  go to 8815
+8779    if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8798) npoler, taur
+        if (idebug .eq. 0) go to 8788
+        write (unit = lunit(1), fmt = 8799) npoler, taur
+        kount = kount + 1
+8788    if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8803) (akfrac(kp), kp = 1, npoler)
+8803    format (3e26.18)
+        if (idebug .eq. 0) go to 8806
+        write (unit = lunit(1), fmt = 8804) (akfrac(kp), kp = 1, n23)
+8804    format (1x, 3e26.18, '    ')
+8806    if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8803) (alphaf(kp), kp = 1, npoler)
+        if (idebug .eq. 0) go to 8810
+        write (unit = lunit(1), fmt = 8804) (alphaf(kp), kp = 1, n23)
+        d1 = npoler / 3.d0
+        n2 = npoler / 3
+        kount = kount + 2 * n2
+        if (d1 .gt. n2) kount = kount + 2
+8810    if (imode .lt. 2) go to 3200
+        if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' imode, imodal and mspedb at 8810 = ', imode, imodal, mspedb
+        if (imodal .gt. 0) go to 3200
+        if (mspedb .eq. 1 .and. imode .eq. 2) go to 3200
+        if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' icurve =', icurve
+        if (icurve .eq. 2 .and. nfitmx .eq. 0) go to 8815
         npols1 = npoler
-        if ( iprsup .ge. 1 ) write (lunit6, *) ' Storing  zc info.'
+        if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' Storing  zc info.'
         do kp = 1, npoler
            akfrs1(kp) = akfrac(kp)
            alphs1(kp) = alphaf(kp)
-8812    end do
+        end do
         go to 3200
 8815    npols2 = npoler
-        if ( iprsup .ge. 1 ) write (lunit6, *) ' Storing a1 info.'
+        if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' Storing a1 info.'
         do kp = 1, npoler
            akfrs2(kp) = akfrac(kp)
            alphs2(kp) = alphaf(kp)
-8816    end do
+        end do
         go to 6000
         !
 3200 end do
      !
-3300 end do
-  if ( itrnsf .ne. 1 )  go to 8820
-  if ( nfitmx .ne. 0 )  go to 8841
+  end do
+  if (itrnsf .ne. 1) go to 8820
+  if (nfitmx .ne. 0) go to 8841
   nfitmx = 1
   go to 8777
 6000 do imode = 3, nmode
      do icurve = 1, 2
-        if ( iprsup .ge. 1) write (lunit6, *) ' Restoring the stored info at 6300.'
-        if ( mspedb .eq. 1  .and.  imode .eq. 3 )  go to 6300
-        if ( icurve .eq. 1 )  npoler = npols1
-        if ( icurve .eq. 2 )  npoler = npols2
+        if (iprsup .ge. 1) write (unit = lunit(6), fmt = *) ' Restoring the stored info at 6300.'
+        if (mspedb .eq. 1 .and. imode .eq. 3) go to 6300
+        if (icurve .eq. 1) npoler = npols1
+        if (icurve .eq. 2) npoler = npols2
         n23 = npoler
-        if ( iofgnd .eq. 1 ) n23 = ( npoler + 2 ) / 3 * 3
-        if (icurve.eq.2) go to 6779
+        if (iofgnd .eq. 1) n23 = (npoler + 2) / 3 * 3
+        if (icurve .eq. 2) go to 6779
         d6 = koutpr
         n8 = 2 * imode
-        if ( mspedb  .gt.  0 )   go to  6787
-        if ( ipunch  .eq.  0 ) write (lunit7, 8781) imode, vstacs(n8 - 1), vstacs(n8), d6
-        if (idebug.eq.0) go to 6794
-        write (lunit1, 8782) imode, vstacs(n8 - 1), vstacs(n8), d6
-        kount = kount+1
+        if (mspedb .gt. 0) go to 6787
+        if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8781) imode, vstacs(n8 - 1), vstacs(n8), d6
+        if (idebug .eq. 0) go to 6794
+        write (unit = lunit(1), fmt = 8782) imode, vstacs(n8 - 1), vstacs(n8), d6
+        kount = kount + 1
         go to 6794
-6787    if ( ipunch  .eq.  0 ) write (lunit7, 8790)  imode, vstacs(n8 - 1), vstacs(n8), d6, nmode, ifqdpt
-        if (idebug.eq.0) go to 6794
-        write (lunit1, 8791)  imode, vstacs(n8 - 1), vstacs(n8), d6, nmode, ifqdpt
-        kount = kount+1
-6794    if ( ipunch  .eq.  0 ) write (lunit7, 8798) npoler, hrefr
-        if (idebug.eq.0) go to 6788
-        write (lunit1, 8799) npoler, hrefr
-        kount = kount+1
+6787    if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8790) imode, vstacs(n8 - 1), vstacs(n8), d6, nmode, ifqdpt
+        if (idebug .eq. 0) go to 6794
+        write (unit = lunit(1), fmt = 8791) imode, vstacs(n8 - 1), vstacs(n8), d6, nmode, ifqdpt
+        kount = kount + 1
+6794    if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8798) npoler, hrefr
+        if (idebug .eq. 0) go to 6788
+        write (unit = lunit(1), fmt = 8799) npoler, hrefr
+        kount = kount + 1
         go to 6788
-6779    if ( ipunch  .eq.  0 ) write (lunit7, 8798) npoler, taur
-        if (idebug.eq.0) go to 6788
-        write (lunit1, 8799) npoler, taur
-        kount = kount+1
-6788    if ( icurve .eq. 2 )  go to 6800
-        if ( ipunch  .eq.  0 ) write (lunit7, 8803)  (akfrs1(kp), kp = 1, npoler)
-        if (idebug.eq.0) go to 6806
-        write (lunit1, 8804)  (akfrs1(kp), kp = 1, n23)
-6806    if ( ipunch  .eq.  0 ) write (lunit7, 8803)  (alphs1(kp), kp = 1, npoler)
-        if (idebug.eq.0) go to 6280
-        write (lunit1, 8804)  (alphs1(kp), kp = 1, n23)
+6779    if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8798) npoler, taur
+        if (idebug .eq. 0) go to 6788
+        write (unit = lunit(1), fmt = 8799) npoler, taur
+        kount = kount + 1
+6788    if (icurve .eq. 2) go to 6800
+        if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8803) (akfrs1(kp), kp = 1, npoler)
+        if (idebug .eq. 0) go to 6806
+        write (unit = lunit(1), fmt = 8804) (akfrs1(kp), kp = 1, n23)
+6806    if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8803) (alphs1(kp), kp = 1, npoler)
+        if (idebug .eq. 0) go to 6280
+        write (unit = lunit(1), fmt = 8804) (alphs1(kp), kp = 1, n23)
         go to 6810
-6800    if ( ipunch  .eq.  0 ) write (lunit7, 8803)  (akfrs2(kp), kp = 1, npoler)
-        if (idebug.eq.0) go to 6807
-        write (lunit1, 8804)  (akfrs2(kp), kp = 1, n23)
-6807    if ( ipunch  .eq.  0 ) write (lunit7, 8803)  (alphs2(kp), kp = 1, npoler)
-        if (idebug.eq.0) go to 6280
-        write (lunit1, 8804) (alphs2(kp), kp = 1, n23)
-6810    d1 = npoler/3.d0
-        n2 = npoler/3
-        kount = kount+2*n2
-        if (d1.gt.n2) kount = kount+2
+6800    if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8803) (akfrs2(kp), kp = 1, npoler)
+        if (idebug .eq. 0) go to 6807
+        write (unit = lunit(1), fmt = 8804) (akfrs2(kp), kp = 1, n23)
+6807    if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8803) (alphs2(kp), kp = 1, npoler)
+        if (idebug .eq. 0) go to 6280
+        write (unit = lunit(1), fmt = 8804) (alphs2(kp), kp = 1, n23)
+6810    d1 = npoler / 3.0d0
+        n2 = npoler / 3
+        kount = kount + 2 * n2
+        if (d1 .gt. n2) kount = kount + 2
 6280 end do
 6300 end do
   !
   !   == punch transformation matrix ==
-8820 if ( imodal  .eq.  0   .and.  mspedb .eq. 0 )   go to 8841
-  if ( imodal .gt. 0 )  go to 8822
-8015 d1 = 2.0
-  d2 = 6.0
-  d3 = 1.0/sqrtz(d1)
-  d4 = 1.0/sqrtz(d2)
+8820 if (imodal .eq. 0 .and. mspedb .eq. 0) go to 8841
+  if (imodal .gt. 0) go to 8822
+  d1 = 2.0d0
+  d2 = 6.0d0
+  d3 = 1.0d0 / sqrtz (d1)
+  d4 = 1.0d0 / sqrtz (d2)
   n1 = 1
   do i = 1, 6
      do j = 1, 6
-        if ( i .gt. 1 )  go to 8021
-        tir(j,i) = d4
+        if (i .gt. 1) go to 8021
+        tir(j, i) = d4
         go to 8023
-8021    if ( i .gt. 2 )  go to 8025
-        if ( j .gt. 3 )  go to 8027
-        tir(j,i) =  d4
+8021    if (i .gt. 2) go to 8025
+        if (j .gt. 3) go to 8027
+        tir(j, i) =  d4
         go to 8023
-8027    tir(j,i) = -d4
+8027    tir(j, i) = -d4
         go to 8023
-8025    if ( i .gt. 3 )  go to 8029
-        if ( j .gt. 2 )  go to 8031
-        if ( j .eq. 1 )  tir(j,i) =  d3
-        if ( j .eq. 2 )  tir(j,i) = -d3
+8025    if (i .gt. 3) go to 8029
+        if (j .gt. 2) go to 8031
+        if (j .eq. 1) tir(j, i) =  d3
+        if (j .eq. 2) tir(j, i) = -d3
         go to 8023
-8031    tir(j,i) = 0.
+8031    tir(j, i) = 0.0d0
         go to 8023
-8029    if ( i .gt. 4 )  go to 8033
-        if ( j .gt. 3 )  go to 8035
-        if ( j .gt. 2 )  go to 8037
-        tir(j,i) = d4
+8029    if (i .gt. 4) go to 8033
+        if (j .gt. 3) go to 8035
+        if (j .gt. 2) go to 8037
+        tir(j, i) = d4
         go to 8023
-8037    tir(j,i) = - d1*d4
+8037    tir(j, i) = -d1 * d4
         go to 8023
-8035    tir(j,i) = 0.
+8035    tir(j, i) = 0.0d0
         go to 8023
-8033    if ( i .gt. 5 )  go to 8039
-        if ( j .ge. 4 .and. j .le. 5) go to 8041
+8033    if (i .gt. 5) go to 8039
+        if (j .ge. 4 .and. j .le. 5) go to 8041
         go to 8031
-8041    if ( j .eq. 4 )  tir(j,i) =   d3
-        if ( j .eq. 5 )  tir(j,i) = - d3
+8041    if (j .eq. 4) tir(j, i) = d3
+        if (j .eq. 5) tir(j, i) = -d3
         go to 8023
-8039    if ( j .gt. 3)  go to 8043
+8039    if (j .gt. 3) go to 8043
         go to 8031
-8043    if ( j .gt. 5 )  go to 8045
-        tir(j,i) = d4
+8043    if (j .gt. 5) go to 8045
+        tir(j, i) = d4
         go to 8023
-8045    tir(j,i) = - d1 * d4
-8023    tii(j,i) = 0.0
-8019 end do
-8017 end do
-8047 if (iprsup .ge. 1 ) write (lunit6, 8049) ((tir(j, i), i = 1, 6), j = 1, 6), ((tii(j, i), i = 1, 6), j = 1, 6)
+8045    tir(j, i) = -d1 * d4
+8023    tii(j, i) = 0.0d0
+     end do
+  end do
+  if (iprsup .ge. 1 ) write (unit = lunit(6), fmt = 8049) ((tir(j, i), i = 1, 6), j = 1, 6), ((tii(j, i), i = 1, 6), j = 1, 6)
 8049 format (' tir and tii for this special transposed double circuit are', /, (1x, 8e15.7))
 8822 npoler = 1
-  akfrac(1) = 0.0
-  alphaf(1) = 1.0
+  akfrac(1) = 0.0d0
+  alphaf(1) = 1.0d0
   n23 = 1
-  if ( iofgnd .eq. 1 ) n23 = ( npoler + 2 ) / 3 * 3
-  do imode=1, nmode
+  if (iofgnd .eq. 1) n23 = (npoler + 2) / 3 * 3
+  do imode = 1, nmode
      do j = 1, nmode
-        hrefr = tir (j, imode )
-        if ( ipunch  .eq.  0 ) write (lunit7, 8798)  npoler,hrefr
-        if (idebug.eq.0) go to 8836
-        write (lunit1, 8799)  npoler,hrefr
-        kount = kount+1
-8836    if ( ipunch  .eq.  0 ) write (lunit7, 8803)   akfrac(1)
-        if (idebug.eq.0) go to 8838
-        write (lunit1, 8804)   akfrac(1)
-8838    if ( ipunch  .eq.  0 ) write (lunit7, 8803)   alphaf(1)
-        if (idebug.eq.0) go to 8834
-        write (lunit1, 8804)   alphaf(1)
-        kount = kount+2
+        hrefr = tir(j, imode)
+        if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8798) npoler,hrefr
+        if (idebug .eq. 0) go to 8836
+        write (unit = lunit(1), fmt = 8799) npoler, hrefr
+        kount = kount + 1
+8836    if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8803) akfrac(1)
+        if (idebug .eq. 0) go to 8838
+        write (unit = lunit(1), fmt = 8804) akfrac(1)
+8838    if (ipunch .eq. 0) write (unit = lunit(7), fmt = 8803) alphaf(1)
+        if (idebug .eq. 0) go to 8834
+        write (unit = lunit(1), fmt = 8804) alphaf(1)
+        kount = kount + 2
 8834 end do
-8832 end do
+  end do
   !
-8841 if ( idebug  .ge.  1 ) write (lunit6, 8768)
-8768 format ( /, ' Punched output (on lunit7) begins with comment cards documenting the', &
-          ' transmission circuit geometry.    ',/, 'The following is a record of the', &
-          ' punching,  including the final two columns which do not fit on card.  ',/, &
-          1x,  82( '=' )  ,/, ' 001234567890123456789012345678901234567890', &
-          '1234567890123456789012345678901234567890', /, 1x,  82( '=' )    )
-  !   == recover information from lunit1, print on lunit6 ==
-  rewind lunit1
-  if ( kount .eq. 0 )  go to 1550
-  do j=1,kount
-     read(lunit1,1542) (textp(i), i=1,14)
-1542 format (13a6,a2)
-     write (lunit6,1542) (textp(i), i=1,14)
-8835 end do
+8841 if (idebug .ge. 1) write (unit = lunit(6), fmt = 8768)
+8768 format ( /, ' Punched output (on lunit7) begins with comment cards documenting the transmission circuit geometry.', /, 'The following is a record of the punching,  including the final two columns which do not fit on card.', /, 1x, 82('='), /, ' 0012345678901234567890123456789012345678901234567890123456789012345678901234567890', /, 1x, 82('='))
+  !   == recover information from lunit1, print on lunit(6) ==
+  rewind lunit(1)
+  if (kount .eq. 0) go to 1550
+  do j = 1, kount
+     read (unit = lunit(1), fmt = 1542) (textp(i), i = 1, 14)
+1542 format (13a6, a2)
+     write (unit = lunit(6), fmt = 1542) (textp(i), i = 1, 14)
+  end do
   go to 1550
-9200 lstat(18)=nchain
-  lastov=nchain
-  nchain=51
-9999 if ( iprsup  .ge.  6 ) write (lunit6, 9998)  nchain, kill
-9998 format (  ' Exit "subr39".   nchain, kill =',  2i6  )
+9200 lstat(18) = nchain
+  lastov = nchain
+  nchain = 51
+9999 if (iprsup .ge. 6) write (unit = lunit(6), fmt = 9998) nchain, kill
+9998 format (' Exit "subr39".   nchain, kill =', 2i6)
   return
   !
   !             terminating conditions
   !
-2170 write (lunit6,8050) nmode,mmodes
+2170 write (unit = lunit(6), fmt = 8050) nmode, mmodes
 8050 format (//, 1x, '%%% Number of modes (', i2, ') exceeds limit (', i2, '). Execution terminated %%%')
   call stoptp
-2100 write (lunit6,8051) mdapts
+2100 write (unit = lunit(6), fmt = 8051) mdapts
 8051 format (//, 1x, '%%% Dimension of data vectors (', i3, ') exceeded. Execution terminated %%%')
   call stoptp
-2110 write (lunit6,8053) mxknee
+2110 write (unit = lunit(6), fmt = 8053) mxknee
 8053 format (//, 1x, '%%% Dimension of xknee (', i2, ') exceeded. Execution terminated %%%')
   call stoptp
-2120 write (lunit6,8055) mxchkr
+2120 write (unit = lunit(6), fmt = 8055) mxchkr
 8055 format (//, 1x, '%%% Dimension of xchkra (', i3, ') exceeded. Execution terminated %%%')
   call stoptp
-2130 write (lunit6,8057) mzopra
+2130 write (unit = lunit(6), fmt = 8057) mzopra
 8057 format (//, 1x, '%%% Dimension of zoprau (', i3, ') exceeded. Execution terminated %%%')
   call stoptp
-2140 write (lunit6,8059) mzopra
+2140 write (unit = lunit(6), fmt = 8059) mzopra
 8059 format (//, 1x, '%%% Dimension of zoprao (', i3, ') exceeded. Execution terminated %%%')
   call stoptp
-2160 write (lunit6,8061) normax
-8061 format (//, 1x, '%%% The algorithm cannot fit this curve, within the maximum order specified (', i3, ').', &
-          /, 1x, '=== increase this limit ===.', /, 1x, 'No approximation was generated %%%')
+2160 write (unit = lunit(6), fmt = 8061) normax
+8061 format (//, 1x, '%%% The algorithm cannot fit this curve, within the maximum order specified (', i3, ').', /, 1x, '=== increase this limit ===.', /, 1x, 'No approximation was generated %%%')
   call stoptp
-2150 write (lunit6,8063) mpoles
+2150 write (unit = lunit(6), fmt = 8063) mpoles
 8063 format (//, 1x, '%%% Dimension of corner vectors (', i2, ') exceeded. Execution terminated %%%')
   call stoptp
   return
@@ -1456,103 +1471,119 @@ end subroutine subr39
 !
 
 subroutine locsl (xbeg, xend, alpha, xmid, xcorna, xcornb, erymax)
+  use com39
+  use deck39
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl39.ftn'
-  include 'deck39.ftn'
+  real(8), intent(in) :: alpha
+  real(8), intent(in) :: xbeg, xend
+  real(8), intent(out) :: erymax
+  real(8), intent(out) :: xcorna, xcornb, xmid
+  !
+  integer(4) :: idefac, idefop, iter
+  integer(4) :: j, jn
+  integer(4) :: lsign
+  integer(4) :: n
+  real(8) :: agamma
+  real(8) :: d1, d2, d13, d78, dxedma
+  real(8) :: erropt, error, errory
+  real(8) :: refd2, refdpc
+  real(8) :: x, x1, x2, xcorar, xcorbr, xdelta, xl1, xl2
+  real(8) :: yapprx
+  !
   d78 = xend - xbeg
-  if ( absz(d78) .ge.  0.01 )  go to 50
-  if ( d78 .gt. 0.0 )  xmid = xbeg + d78/2  ! really small range
-  if ( d78 .lt. 0.0 )  xmid = xend - d78/2  ! consideration,  thl
+  if (absz (d78) .ge.  0.01d0) go to 50
+  if (d78 .gt. 0.0d0) xmid = xbeg + d78 / 2  ! really small range
+  if (d78 .lt. 0.0d0) xmid = xend - d78 / 2  ! consideration,  thl
   go to 80                                     !  9/14/89
-50 call split (xbeg,xend, onehav, xmid)
-80 d1 = absz( xend - xmid)
-  if ( d1 .le. 0.001d0)  return
-  if ( idebug .lt. 4 )  go to 2100
-  refd2 = absz ( (refa-refb) * onehav )
-  refdpc = 100.d0*(10.d0**refd2-1.d0)
-  write (lout,8065) refa,refb,refdpc
-8065 format (1x, 'refa=',e11.4,3x, 'refb=',e11.4,3x, 'refdpc=', e11.4, '%')
+50 call split (xbeg, xend, onehav, xmid)
+80 d1 = absz (xend - xmid)
+  if (d1 .le. 0.001d0) return
+  if (idebug .lt. 4) go to 2100
+  refd2 = absz ((refa - refb) * onehav)
+  refdpc = 100.0d0 * (10.0d0 ** refd2 - 1.0d0)
+  write (unit = lout, fmt = 8065) refa, refb, refdpc
+8065 format (1x, 'refa=',e11.4, 3x, 'refb=', e11.4, 3x, 'refdpc=', e11.4, '%')
   !   place segment initially at mid point
-2100 d2 = (refb-refa)/2./alpha
+2100 d2 = (refb - refa) / 2.0d0 / alpha
   xcorna = xmid - d2
   xcornb = xmid + d2
-  jn = absz(alpha)
-  d1 = xend-xbeg
-  xdelta = d1/(20*jn)
-  dxedma = d1/(50*jn)
+  jn = int (absz (alpha), kind (jn))
+  d1 = xend - xbeg
+  xdelta = d1 / (20 * jn)
+  dxedma = d1 / (50 * jn)
   !
   do iter = 1, 2
      xcorar = xcorna
      xcorbr = xcornb
-     xcorna = xcorna-xdelta
-     xcornb = xcornb-xdelta
-     erropt = 1.d12
+     xcorna = xcorna - xdelta
+     xcornb = xcornb - xdelta
+     erropt = 1.0d12
      idefac = -1
      lsign = 1
      !    in 248 loop, n=1 is for r-shift, n=2 is for l-shift
      do n = 1, 2
-        if ( n .eq. 1 )  go to 98
+        if (n .eq. 1) go to 98
         idefac = 0
         lsign = -1
 98      do j = 1, 5
-           idefac = idefac+lsign
-           xcorna = xcorna+xdelta*lsign
-           xcornb = xcornb+xdelta*lsign
+           idefac = idefac + lsign
+           xcorna = xcorna + xdelta * lsign
+           xcornb = xcornb + xdelta * lsign
            !   check allocation error
-           error = 0.
-           x = xbeg-xdelta
-100        x = x+xdelta
-           if (x.gt.xend) go to 140
-           if (x.le.xcorna) go to 110
-           if (x.gt.xcornb) go to 120
-           yapprx = refa+(x-xcorna)*alpha
+           error = 0.0d0
+           x = xbeg - xdelta
+100        x = x + xdelta
+           if (x .gt. xend) go to 140
+           if (x .le. xcorna) go to 110
+           if (x .gt. xcornb) go to 120
+           yapprx = refa + (x - xcorna) * alpha
            go to 130
 110        yapprx = refa
            go to 130
 120        yapprx = refb
-130        error = error+(yapprx-yfun39(x))**2
+130        error = error + (yapprx - yfun39 (x)) ** 2
            go to 100
-140        if (idebug.lt.4)  go to 8069
-           if ( n .eq. 1 ) write (lout,8067) idefac,xcorna,xcornb,error,erropt
-8067       format (1x, 'shift r',i5,4e12.4)
-           if ( n .eq. 2 ) write (lout,8068) idefac, xcorna, xcornb, error, erropt
+140        if (idebug .lt. 4) go to 8069
+           if (n .eq. 1) write (unit = lout, fmt = 8067) idefac, xcorna, xcornb, error, erropt
+8067       format (1x, 'shift r', i5, 4e12.4)
+           if (n .eq. 2) write (unit = lout, fmt = 8068) idefac, xcorna, xcornb, error, erropt
 8068       format (1x, 'shift l', i5, 4e12.4)
-8069       if(error.ge.erropt) go to 150    ! avoid infinite loop, change
+8069       if (error .ge. erropt) go to 150    ! avoid infinite loop, change
            erropt = error                   ! .gt. to .ge.,  thl, 9/12/89
            idefop = idefac
-150        if (error.ge.2./iter*erropt) go to 170   !  thl
-160     end do
-170     if ( n .eq. 2 )  go to 250
+150        if (error .ge. 2.0d0 / iter * erropt) go to 170   !  thl
+        end do
+170     if (n .eq. 2) go to 250
         !   restore original position before shifting to the left
         xcorna = xcorar
         xcornb = xcorbr
-248  end do
+     end do
      !   shift according to optimum value
-250  xcorna = xcorar+idefop*xdelta
-     xcornb = xcorbr+idefop*xdelta
-     xdelta = xdelta/4.
+250  xcorna = xcorar + idefop * xdelta
+     xcornb = xcorbr + idefop * xdelta
+     xdelta = xdelta / 4.0d0
   end do
-260 continue
+  continue
   !  obtain maximum deviation
-  erymax = 0.
+  erymax = 0.0d0
   xl1 = xknee(izone)
-  xl2 = xknee(izone+1)
-  x = xcorna-dxedma
-270 x = x+dxedma
-  if (x.gt.xcornb) go to 310
-  x1 = x-dxedma
-  x2 = x+dxedma
-  if (x1.lt.xl1) x1 = x
-  if (x2.gt.xl2) x2 = x
+  xl2 = xknee(izone + 1)
+  x = xcorna - dxedma
+270 x = x + dxedma
+  if (x .gt. xcornb) go to 310
+  x1 = x - dxedma
+  x2 = x + dxedma
+  if (x1 .lt. xl1) x1 = x
+  if (x2 .gt. xl2) x2 = x
   if (x1.ne.x2) go to 280
-  agamma = 0.
+  agamma = 0.0d0
   go to 290
-280 agamma = (yfun39(x2)-yfun39(x1))/(x2-x1)
-290 yapprx = refa+(x-xcorna)*alpha
-  d13 = 1.0 + agamma**2
-  errory = absz ( (yapprx-yfun39(x)) / sqrtz ( d13 )  )
-  if (errory.lt.erymax) go to 300
+280 agamma = (yfun39 (x2) - yfun39 (x1)) / (x2 - x1)
+290 yapprx = refa + (x - xcorna) * alpha
+  d13 = 1.0d0 + agamma ** 2
+  errory = absz ((yapprx - yfun39 (x)) / sqrtz (d13))
+  if (errory .lt. erymax) go to 300
   erymax = errory
 300 go to 270
 310 return
@@ -1563,150 +1594,162 @@ end subroutine locsl
 !
 
 subroutine adjpk
+  use com39
+  use deck39
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  dimension fpz1(50),fpz2(50)
-  include 'labl39.ftn'
-  include 'deck39.ftn'
+  integer(4) :: id, id1, id2, idefac, idefop, index1, index2, irange, isub
+  integer(4) :: j, jn1, jn2, jsh
+  integer(4) :: mdimpz
+  integer(4) :: ntotr1
+  real(8) :: alph1, alph2, amaglg
+  real(8) :: df11, df22, dfpk1, dfpk2, dfpk11, dfpk22, dfx, djn1, djn2, dsub2
+  real(8) :: dxepk
+  real(8) :: erropt, error
+  real(8) :: f, fcorn1, fcorn2, flim1, flim2, fpz1(50), fpz2(50)
+  real(8) :: tolerr
+  real(8) :: x, xbeg, xend, xl1, xpeak, xr1
+  real(8) :: yapprx
+  !
   !  change this limit if dimension is changed
   !   order of slope in segment (consecutive poles or zeroes)
   mdimpz = 50
-  if (ntotra.eq.1) go to 340
-  ntotr1 = ntotra-1
-  do irange = 1,ntotr1
+  if (ntotra .eq. 1) go to 340
+  ntotr1 = ntotra - 1
+  do irange = 1, ntotr1
      index1 = indxv(irange)
-     index2 = indxv(irange+1)
-     alph1 = azepo(index1+2)
-     alph2 = azepo(index2+2)
-     if (alph1*alph2.gt.0.) go to 330
-     xl1 = azepo(index1+1)
-     if (irange.lt.ntotr1) go to 100
+     index2 = indxv(irange + 1)
+     alph1 = azepo(index1 + 2)
+     alph2 = azepo(index2 + 2)
+     if (alph1 * alph2 .gt. 0.0d0) go to 330
+     xl1 = azepo(index1 + 1)
+     if (irange .lt. ntotr1) go to 100
      xr1 = xdat(ndata)
      go to 110
-100  id = indxv(irange+2)
-     xr1 = azepo(id+1)
-110  xpeak = azepo(index2+1)
-     refa = yfun39(xpeak)
-     refb = yfun39(xl1)
-     call split (xpeak,xl1, oneqtr, xbeg)
-     refb = yfun39(xr1)
-     call split (xpeak,xr1, oneqtr, xend)
-     jn1 = absz(alph1)+onehav
-     jn2 = absz(alph2)+onehav
-     if (jn1.gt.mdimpz.or.jn2.gt.mdimpz) go to 2100
-     id1 = index1+2+jn1
-     id2 = index2+2
+100  id = indxv(irange + 2)
+     xr1 = azepo(id + 1)
+110  xpeak = azepo(index2 + 1)
+     refa = yfun39 (xpeak)
+     refb = yfun39 (xl1)
+     call split (xpeak, xl1, oneqtr, xbeg)
+     refb = yfun39 (xr1)
+     call split (xpeak, xr1, oneqtr, xend)
+     jn1 = int (absz (alph1) + onehav, kind (jn1))
+     jn2 = int (absz (alph2) + onehav, kind (jn2))
+     if (jn1 .gt. mdimpz .or. jn2 .gt. mdimpz) go to 2100
+     id1 = index1 + 2 + jn1
+     id2 = index2 + 2
      flim1 = azepo(id1)
-     flim2 = azepo(id2+jn2+1)
-     if (idebug.ge.3) write (lout,8071) xpeak
-8071 format (/,1x,10x,'adjustment of peak:',e12.4)
-     djn1 = 1.d0 / jn1
-     djn2 = 1.d0 / jn2
-     erropt = 1.e12   !  thl
-     do isub = 1,3
-        dsub2 = 1.d0 / ( isub**2 )
-        dxepk = .3d0 * dsub2
-        tolerr = 1.01d0**dsub2
-        dfx = 10.d0**( .02d0*dsub2/isub )
-        dfpk1 = dfx**djn1
-        dfpk2 = dfx**djn2
-        dfpk11 = 1.d0 / dfpk1
-        dfpk22 = 1.d0 / dfpk2
+     flim2 = azepo(id2 + jn2 + 1)
+     if (idebug .ge. 3) write (unit = lout, fmt = 8071) xpeak
+8071 format (/, 1x, 10x, 'adjustment of peak:', e12.4)
+     djn1 = 1.0d0 / jn1
+     djn2 = 1.0d0 / jn2
+     erropt = 1.0e12   !  thl
+     do isub = 1, 3
+        dsub2 = 1.0d0 / (isub ** 2)
+        dxepk = 0.3d0 * dsub2
+        tolerr = 1.01d0 ** dsub2
+        dfx = 10.0d0 ** (0.02d0 * dsub2 / isub)
+        dfpk1 = dfx ** djn1
+        dfpk2 = dfx ** djn2
+        dfpk11 = 1.0d0 / dfpk1
+        dfpk22 = 1.0d0 / dfpk2
         !   store original values in temporary vectors
-        do j = 1,jn1
-           fpz1(j) = azepo(id1+j)
-           azepo(id1+j) = azepo(id1+j) * dfpk11
-120     end do
-        do j = 1,jn2
-           fpz2(j) = azepo(id2+j)
-           azepo(id2+j) = azepo(id2+j)*dfpk2
-130     end do
+        do j = 1, jn1
+           fpz1(j) = azepo(id1 + j)
+           azepo(id1 + j) = azepo(id1 + j) * dfpk11
+        end do
+        do j = 1, jn2
+           fpz2(j) = azepo(id2 + j)
+           azepo(id2 + j) = azepo(id2 + j) * dfpk2
+        end do
         !   shift inwards
         !      erropt = 1.e12    !  thl
         idefac = -1
-        do 190 jsh = 1,50
-           idefac = idefac+1
-           fcorn1 = azepo(id1+jn1)*dfpk1
-           fcorn2 = azepo(id2+1) * dfpk22
-           if (fcorn1.gt.fcorn2) go to 200
-           do j = 1,jn1
-140           azepo(id1+j) = azepo(id1+j)*dfpk1
+        do jsh = 1, 50
+           idefac = idefac + 1
+           fcorn1 = azepo(id1 + jn1) * dfpk1
+           fcorn2 = azepo(id2 + 1) * dfpk22
+           if (fcorn1 .gt. fcorn2) go to 200
+           do j = 1, jn1
+              azepo(id1 + j) = azepo(id1 + j) * dfpk1
            end do
-           do j = 1,jn2
-150           azepo(id2+j) = azepo(id2+j) * dfpk22
+           do j = 1, jn2
+              azepo(id2 + j) = azepo(id2 + j) * dfpk22
            end do
            call refh
            !   check error
-           error = 0.
-           x = xbeg-dxepk
-160        x = x+dxepk
-           if (x.gt.xend) go to 170
-           f = 10.d0**x
-           call ratp (f,amaglg)
+           error = 0.0d0
+           x = xbeg - dxepk
+160        x = x + dxepk
+           if (x .gt. xend) go to 170
+           f = 10.0d0 ** x
+           call ratp (f, amaglg)
            yapprx = amaglg
-           error = error+(yapprx-yfun39(x))**2
+           error = error + (yapprx - yfun39 (x)) ** 2
            go to 160
-170        if (idebug.ge.4) write (lout,8073) idefac,fcorn1,fcorn2,error,erropt
-8073       format (1x, 'shift in ',i5,4e12.4)
-           if (error.ge.erropt) go to 180    ! thl
+170        if (idebug .ge. 4) write (unit = lout, fmt = 8073) idefac, fcorn1, fcorn2, error, erropt
+8073       format (1x, 'shift in ',i5, 4e12.4)
+           if (error .ge. erropt) go to 180    ! thl
            erropt = error
            idefop = idefac
-180        if (error.ge.tolerr*erropt) go to 200    ! thl
-190     end do
-        !   restore original values before shifting in the opposite direction
-200     do j = 1,jn1
-210        azepo(id1+j) = fpz1(j)
+180        if (error .ge. tolerr * erropt) go to 200    ! thl
         end do
-        do j = 1,jn2
-220        azepo(id2+j) = fpz2(j)
+        !   restore original values before shifting in the opposite direction
+200     do j = 1, jn1
+           azepo(id1 + j) = fpz1(j)
+        end do
+        do j = 1, jn2
+           azepo(id2 + j) = fpz2(j)
         end do
         !   shift outwards
         idefac = 0
-        do jsh = 1,50
-           idefac = idefac-1
-           fcorn1 = azepo(id1+1) * dfpk11
-           fcorn2 = azepo(id2+jn2)*dfpk2
-           if (fcorn1.lt.flim1) go to 290
-           if (fcorn2.gt.flim2) go to 290
-           do j = 1,jn1
-230           azepo(id1+j) = azepo(id1+j) * dfpk11
+        do jsh = 1, 50
+           idefac = idefac - 1
+           fcorn1 = azepo(id1 + 1) * dfpk11
+           fcorn2 = azepo(id2 + jn2) * dfpk2
+           if (fcorn1 .lt. flim1) go to 290
+           if (fcorn2 .gt. flim2) go to 290
+           do j = 1, jn1
+              azepo(id1 + j) = azepo(id1 + j) * dfpk11
            end do
-           do j = 1,jn2
-240           azepo(id2+j) = azepo(id2+j)*dfpk2
+           do j = 1, jn2
+              azepo(id2 + j) = azepo(id2 + j) * dfpk2
            end do
            call refh
            !   check error
-           error = 0.
-           x = xbeg-dxepk
-250        x = x+dxepk
-           if (x.gt.xend) go to 260
-           f = 10.d0**x
-           call ratp (f,amaglg)
+           error = 0.0d0
+           x = xbeg - dxepk
+250        x = x + dxepk
+           if (x .gt. xend) go to 260
+           f = 10.0d0 ** x
+           call ratp (f, amaglg)
            yapprx = amaglg
-           error = error+(yapprx-yfun39(x))**2
+           error = error + (yapprx - yfun39 (x)) ** 2
            go to 250
-260        if (idebug.ge.4) write (lout,8075) idefac,fcorn1,fcorn2,error,erropt
-8075       format (1x, 'shift out',i5,4e12.4)
-           if (error.ge.erropt) go to 270   ! thl
+260        if (idebug .ge. 4) write (unit = lout, fmt = 8075) idefac, fcorn1, fcorn2, error, erropt
+8075       format (1x, 'shift out', i5, 4e12.4)
+           if (error .ge. erropt) go to 270   ! thl
            erropt = error
            idefop = idefac
-270        if (error.ge.tolerr*erropt) go to 290     ! thl
-280     end do
+270        if (error .ge. tolerr * erropt) go to 290     ! thl
+        end do
         !   shift according to optimum value
-290     df11 = dfpk1**idefop
-        do j = 1,jn1
-300        azepo(id1+j) = fpz1(j) * df11
+290     df11 = dfpk1 ** idefop
+        do j = 1, jn1
+           azepo(id1 + j) = fpz1(j) * df11
         end do
-        df22 = dfpk22**idefop
-        do j = 1,jn2
-310        azepo(id2+j) = fpz2(j) * df22
+        df22 = dfpk22 ** idefop
+        do j = 1, jn2
+           azepo(id2 + j) = fpz2(j) * df22
         end do
-320  end do
+     end do
 330 end do
 340 return
   !               terminating conditions
-2100 write (lout,8077) mdimpz
-8077 format (//,1x,'%%% dimension of fpz1 or fpz2 (',i2, ') exceeded. Execution terminated %%%'   )
+2100 write (unit = lout, fmt = 8077) mdimpz
+8077 format (//, 1x, '%%% dimension of fpz1 or fpz2 (', i2, ') exceeded. Execution terminated %%%')
   call stoptp
   return
 end subroutine adjpk
@@ -1716,10 +1759,19 @@ end subroutine adjpk
 !
 
 subroutine adjcr
+  use com39
+  use deck39
+  use blkcom
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
-  include 'labl39.ftn'
-  include 'deck39.ftn'
+  integer(4) :: i, i1, i2, index, indx0, indxl1, indxl2, indxr1, indxr2, indxr3
+  integer(4) :: irange, irangt, iter
+  integer(4) :: jn
+  integer(4) :: nrang1, nzone1
+  real(8) :: alpha
+  real(8) :: fbeg, fend
+  real(8) :: xbeg, xbegf, xend, xendf, xfirst, xlast
+  !
   call refh
   xlast = xdat(ndata)
   xfirst = xdat(1)
@@ -1736,126 +1788,125 @@ subroutine adjcr
 8081    format (/,1x,30h*** corners adjustment of zone, i3, 1h;, 2x, 9hthere are, i3,2x,11h ranges ***)
         do irange = 1,nrange
            irangt = irangt+1
-           call inran (irangt,indx0,indxr1,indxr2,indxr3,indxl1,indxl2)
-           if ( nzone .eq. 1 )  go to 180
-           if (nrange.eq.1) go to 280
-           if (nrange.eq.2) go to 290
-           if (nrange.eq.3) go to 300
-           if (irange.eq.1) go to 240
-           if (irange.eq.2) go to 250
-           if (irange.eq.nrang1) go to 260
-           if (irange.eq.nrange) go to 270
+           call inran (irangt, indx0, indxr1, indxr2, indxr3, indxl1, indxl2)
+           if (nzone .eq. 1) go to 180
+           if (nrange .eq. 1) go to 280
+           if (nrange .eq. 2) go to 290
+           if (nrange .eq. 3) go to 300
+           if (irange .eq. 1) go to 240
+           if (irange .eq. 2) go to 250
+           if (irange .eq. nrang1) go to 260
+           if (irange .eq. nrange) go to 270
            !   intermediate ranges
-100        xbeg = azepo(indxl2+1)
-           xbegf = azepo(indxl1+1)
-           fbeg = 10.**xbegf
-           xend = azepo(indxr3+1)
-           xendf = azepo(indxr2+1)
-           fend = 10.**xendf
+100        xbeg = azepo(indxl2 + 1)
+           xbegf = azepo(indxl1 + 1)
+           fbeg = 10.0d0 ** xbegf
+           xend = azepo(indxr3 + 1)
+           xendf = azepo(indxr2 + 1)
+           fend = 10.0d0 ** xendf
            go to 320
            !             special case: one zone only
-180        if (nrange.le.2) go to 190
-           if (nrange.eq.3) go to 200
-           if (irange.eq.1 ) go to 240
-           if ( irange .eq. 2 )  go to 250
-           if (irange.ge.nrang1) go to 210
+180        if (nrange .le. 2) go to 190
+           if (nrange .eq. 3) go to 200
+           if (irange .eq. 1) go to 240
+           if (irange .eq. 2)  go to 250
+           if (irange .ge. nrang1) go to 210
            go to 100
 190        xbeg = xfirst
-           fbeg = 10.**(xbeg-1.)
+           fbeg = 10.0d0 ** (xbeg - 1.0d0)
            xend = xlast
-           fend = 10.**(xend+1.)
+           fend = 10.0d0 ** (xend + 1.0d0)
            go to 320
-200        if (irange.eq.1) go to 240
-           if (irange.eq.2) go to 190
-210        xbeg = azepo(indxl2+1)
-           xbegf = azepo(indxl1+1)
-           fbeg = 10.**xbegf
+200        if (irange .eq. 1) go to 240
+           if (irange .eq. 2) go to 190
+210        xbeg = azepo(indxl2 + 1)
+           xbegf = azepo(indxl1 + 1)
+           fbeg = 10.0d0 ** xbegf
            xend = xlast
-           fend = 10.**(xend+1.)
+           fend = 10.0d0 ** (xend + 1.0d0)
            go to 320
            !   first range
-240        xbeg = azepo(indxl1+1)
-           xbegf = azepo(indx0+1)
-           fbeg = 10.**xbegf
-           if ( izone .eq. 1 )  fbeg = fbeg / 10.
-           if ( izone .eq. nzone  .and. nrange .eq. 2 )  go to 245
-           xend = azepo(indxr3+1)
-           fend = azepo(indxr1+3)
-           if ( izone .ne. 1 )  go to 320
-           xendf = azepo(indxr2+1)
-           fend = 10. ** xendf
+240        xbeg = azepo(indxl1 + 1)
+           xbegf = azepo(indx0 + 1)
+           fbeg = 10.0d0 ** xbegf
+           if (izone .eq. 1) fbeg = fbeg / 10.0d0
+           if (izone .eq. nzone .and. nrange .eq. 2) go to 245
+           xend = azepo(indxr3 + 1)
+           fend = azepo(indxr1 + 3)
+           if (izone .ne. 1) go to 320
+           xendf = azepo(indxr2 + 1)
+           fend = 10.0d0 ** xendf
            go to 320
 245        xend = xlast
-           fend = azepo(indxr1+3)
+           fend = azepo(indxr1 + 3)
            go to 320
            !   second range
-250        xbeg = azepo(indxl2+1)
+250        xbeg = azepo(indxl2 + 1)
            fbeg = azepo(indx0)
-           if ( izone .eq. 1 )  fbeg = fbeg /10.
-           xend = azepo(indxr3+1)
-           xendf = azepo(indxr2+1)
-           fend = 10.**xendf
+           if (izone .eq. 1) fbeg = fbeg / 10.0d0
+           xend = azepo(indxr3 + 1)
+           xendf = azepo(indxr2 + 1)
+           fend = 10.0d0 ** xendf
            go to 320
            !   one-to-last range
-260        xbeg = azepo(indxl2+1)
-           xbegf = azepo(indxl1+1)
-           fbeg = 10.**xbegf
-           if ( izone .eq. nzone )  go to 285
-           xend = azepo(indxr3+1)
-           fend = azepo(indxr1+3)
+260        xbeg = azepo(indxl2 + 1)
+           xbegf = azepo(indxl1 + 1)
+           fbeg = 10.0d0 ** xbegf
+           if (izone .eq. nzone) go to 285
+           xend = azepo(indxr3 + 1)
+           fend = azepo(indxr1 + 3)
            go to 320
 285        xend = xlast
-           fend = 10. ** (xend+1.)
+           fend = 10.0d0 ** (xend + 1.0d0)
            go to 320
            !   last range
-270        xbeg = azepo(indxl2+1)
+270        xbeg = azepo(indxl2 + 1)
            fbeg = azepo(indx0)
-           if ( izone .eq. nzone )  go to 285
-           xend = azepo(indxr2+1)
-           xendf = azepo(indxr1+1)
-           fend = 10.**xendf
+           if (izone .eq. nzone) go to 285
+           xend = azepo(indxr2 + 1)
+           xendf = azepo(indxr1 + 1)
+           fend = 10.0d0 ** xendf
            go to 320
            !   special cases
            !   one-range zone
-280        xbeg = azepo(indxl1+1)
-           xbegf = azepo(indx0+1)
-           fbeg = 10.**xbegf
-           if ( izone .eq. 1 )  fbeg = fbeg / 10.
-           if ( izone .eq. nzone )  go to 285
-           xend = azepo(indxr2+1)
-           xendf = azepo(indxr1+1)
-           fend = 10.**xendf
+280        xbeg = azepo(indxl1 + 1)
+           xbegf = azepo(indx0 + 1)
+           fbeg = 10.0d0 ** xbegf
+           if (izone .eq. 1) fbeg = fbeg / 10.0d0
+           if (izone .eq. nzone) go to 285
+           xend = azepo(indxr2 + 1)
+           xendf = azepo(indxr1 + 1)
+           fend = 10.0d0 ** xendf
            go to 320
            !   two-range zone
-290        if (irange.eq.1) go to 240
-           if (irange.eq.2) go to 270
+290        if (irange .eq. 1) go to 240
+           if (irange .eq. 2) go to 270
            !   three-range zone
-300        if (irange.eq.1) go to 240
-           if (irange.eq.2) go to 310
-           if (irange.eq.3) go to 270
+300        if (irange .eq. 1) go to 240
+           if (irange .eq. 2) go to 310
+           if (irange .eq. 3) go to 270
            !   second range (3-r case)
-310        xbeg = azepo(indxl2+1)
+310        xbeg = azepo(indxl2 + 1)
            fbeg = azepo(indx0)
-           if ( izone .eq. 1 )  fbeg = fbeg / 10.
-           xend = azepo(indxr3+1)
-           fend = azepo(indxr1+3)
-320        call shira (xbeg,xend,fbeg,fend,iter,indx0,irange)
-330     end do
-340  end do
-     if ( idebug .lt. 4 )  go to 460
-     write (lunit6,7083)              !  thl
-7083 format (//, ' after do 340 loop in adjcr', /, 1x,4x, 5hxbegr,3x,5halpha,10x, &
-          38hpoles and zeroes after adjustment (hz),/)
+           if (izone .eq. 1) fbeg = fbeg / 10.0d0
+           xend = azepo(indxr3 + 1)
+           fend = azepo(indxr1 + 3)
+320        call shira (xbeg, xend, fbeg, fend, iter, indx0, irange)
+        end do
+     end do
+     if (idebug .lt. 4) go to 460
+     write (unit = lunit(6), fmt = 7083)              !  thl
+7083 format (//, ' after do 340 loop in adjcr', /, 1x, 4x, 'xbegr', 3x, 'alpha', 10x, 'poles and zeroes after adjustment (Hz)', /)
      index = 0
-     do irange=1,ntotra
-        alpha = azepo(index+2)
-        jn = absz(alpha)+onehav
-        i1 = index+1
-        i2 = i1+1+2*jn
-        write (lunit6,7079) (azepo(i),i=i1,i2)
-7079    format (1x,e12.4,f4.0,6e11.4,/,17x,6e11.4,/,17x,6e11.4)
+     do irange = 1, ntotra
+        alpha = azepo(index + 2)
+        jn = int (absz (alpha) + onehav, kind (jn))
+        i1 = index + 1
+        i2 = i1 + 1 + 2 * jn
+        write (unit = lunit(6), fmt = 7079) (azepo(i), i = i1, i2)
+7079    format (1x, e12.4, f4.0, 6e11.4, /, 17x, 6e11.4, /, 17x, 6e11.4)
         index = i2
-620  end do
+     end do
 460 end do
   return
 end subroutine adjcr
@@ -1865,12 +1916,24 @@ end subroutine adjcr
 !
 
 subroutine shira (xbeg, xend, fbeg, fend, iter, index, irange)
-  use labl39
+  use com39
   use deck39
+  use tracom
   implicit none
-  dimension fpz(50)
-  !  include 'labl39.ftn'
-  !  include 'deck39.ftn'
+  integer(4), intent(in) :: iter, index, irange
+  real(8), intent(in) :: fbeg, fend
+  real(8), intent(in) :: xbeg, xend
+  !
+  integer(4) :: id, idefac, idefop, iflgrh, isub
+  integer(4) :: j, j2n, jn, jsh
+  integer(4) :: mdifpz
+  real(8) :: alpha, amaglg
+  real(8) :: d13, dfx, dxecr
+  real(8) :: erropt, error
+  real(8) :: f, fcorn1, fcorn2, fdelt1, fdelt2, fdelta, fpz(50)
+  real(8) :: tolerr
+  real(8) :: x
+  real(8) :: yapprx
   !
   !  change this limit if dimension is changed
   !   order of slope in segment * 2
@@ -1878,7 +1941,7 @@ subroutine shira (xbeg, xend, fbeg, fend, iter, index, irange)
   iflgrh = 0
   if (izone .eq. nzone .and. irange .eq. nrange .and. iftype .eq. 2) iflgrh = 1
   alpha = azepo(index + 2)
-  jn = absz (alpha) + onehav
+  jn = int (absz (alpha) + onehav, kind (jn))
   j2n = 2 * jn
   if (j2n .gt. mdifpz) go to 2100
   id = index + 2
@@ -1897,7 +1960,7 @@ subroutine shira (xbeg, xend, fbeg, fend, iter, index, irange)
      do j = 1, j2n
         fpz(j) = azepo(id + j)
         azepo(id + j) = azepo(id + j) * fdelt1
-100  end do
+     end do
      !   shift to the right
      !      erropt = 1.d12       ! i think this should be moved outside loop
      idefac = -1
@@ -1907,7 +1970,7 @@ subroutine shira (xbeg, xend, fbeg, fend, iter, index, irange)
         if (fcorn2 .gt. fend) go to 160
         idefac = idefac + 1
         do j = 1, j2n
-110        azepo(id + j) = azepo(id + j) * fdelta
+           azepo(id + j) = azepo(id + j) * fdelta
         end do
         !   check error
         if (iflgrh .eq. 1) call refh
@@ -1926,10 +1989,10 @@ subroutine shira (xbeg, xend, fbeg, fend, iter, index, irange)
         erropt = error
         idefop = idefac
 140     if (error .ge. tolerr * erropt) go to 160 ! thl
-150  end do
+     end do
      !   restore original values before shifting to the left
 160  do j = 1, j2n
-170     azepo(id + j) = fpz(j)
+        azepo(id + j) = fpz(j)
      end do
      !   shift to the left
      idefac = 0
@@ -1938,7 +2001,7 @@ subroutine shira (xbeg, xend, fbeg, fend, iter, index, irange)
         if (fcorn1 .lt. fbeg) go to 230
         idefac = idefac - 1
         do j = 1, j2n
-180        azepo(id + j) = azepo(id + j) * fdelt1
+           azepo(id + j) = azepo(id + j) * fdelt1
         end do
         !   check error
         if (iflgrh .eq. 1) call refh
@@ -1957,13 +2020,13 @@ subroutine shira (xbeg, xend, fbeg, fend, iter, index, irange)
         erropt = error
         idefop = idefac
 210     if (error .ge. tolerr * erropt) go to 230  !  thl
-220  end do
+     end do
      !   shift according to optimum value
 230  fdelt2 = fdelta ** idefop
      do j = 1, j2n
-240     azepo(id + j) = fpz(j) * fdelt2
+        azepo(id + j) = fpz(j) * fdelt2
      end do
-250 end do
+  end do
   if (iflgrh .eq. 1) call refh
   return
   !             terminating conditions
@@ -1978,11 +2041,14 @@ end subroutine shira
 !
 
 subroutine inran (irange, indx0, indxr1, indxr2, indxr3, indxl1, indxl2)
-  use labl39
+  use com39
   use deck39
   implicit none
-  !  include 'labl39.ftn'
-  !  include 'deck39.ftn'
+  integer(4), intent(in) :: irange
+  integer(4), intent(out) :: indx0, indxr1, indxr2, indxr3, indxl1, indxl2
+  !
+  integer(4) :: id
+  !
   id = irange
   indx0 = indxv(id)
   id = id+1
@@ -2008,11 +2074,16 @@ end subroutine inran
 !
 
 subroutine refh
-  use labl39
+  use com39
   use deck39
+  use tracom
   implicit none
-  !  include 'labl39.ftn'
-  !  include 'deck39.ftn'
+  integer(4) :: i2, id, indexp, indexz, irange
+  integer(4) :: j, jn
+  real(8) :: alpha
+  real(8) :: fpole, fzero
+  real(8) :: href
+  real(8) :: xref
   !
   xref = xdat(1)
   i2 = ntotra
@@ -2023,29 +2094,29 @@ subroutine refh
      id = indxv(irange)
      alpha = azepo(id + 2)
      if (alpha .gt. 0.0d0) go to 110
-     jn = -alpha + onehav
+     jn = int (-alpha + onehav, kind (jn))
      indexp = id + 2
      indexz = indexp + jn
      go to 120
-110  jn = alpha + onehav
+110  jn = int (alpha + onehav, kind (jn))
      indexz = id + 2
      indexp = indexz + jn
 120  do j = 1, jn
         fpole = azepo(indexp + j)
         fzero = azepo(indexz + j)
         href = href * fpole / fzero
-130  end do
-100 end do
+     end do
+  end do
 180 hreflg = alog1z (href)
   if (iftype .eq. 1) go to 170
   id = indxv(ntotra)
   alpha = azepo(id + 2)
-  jn = -alpha + onehav
+  jn = int (-alpha + onehav, kind (jn))
   indexp = id + 2
   do j = 1, jn
      fpole = azepo(indexp + j)
      hreflg = hreflg + alog1z (fpole)
-140 end do
+  end do
 170 hreflg = hreflg + yfun39 (xref)
   return
 end subroutine refh
@@ -2054,12 +2125,18 @@ end subroutine refh
 ! subroutine ratp.
 !
 
-subroutine ratp (freq,amaglg)
-  use labl39
+subroutine ratp (freq, amaglg)
+  use com39
   use deck39
+  use tracom
   implicit none
-  !  include 'labl39.ftn'
-  !  include 'deck39.ftn'
+  real(8), intent(in) :: freq
+  real(8), intent(out) :: amaglg
+  !
+  integer(4) :: i2, id, indexp, indexz, irange
+  integer(4) :: j, jn
+  real(8) :: alpha, amagp
+  real(8) :: fpole, freq2, fzero
   !
   i2 = ntotra
   if (iftype .eq. 2) i2 = ntotra - 1
@@ -2070,11 +2147,11 @@ subroutine ratp (freq,amaglg)
      id = indxv(irange) + 2
      alpha = azepo(id)
      if (alpha .gt. 0.0d0) go to 110
-     jn = -alpha + onehav
+     jn = int (-alpha + onehav, kind (jn))
      indexp = id
      indexz = indexp + jn
      go to 120
-110  jn = alpha + onehav
+110  jn = int (alpha + onehav, kind (jn))
      indexz = id
      indexp = indexz + jn
 120  do j = 1, jn
@@ -2082,18 +2159,18 @@ subroutine ratp (freq,amaglg)
         fzero = azepo(indexz + j)
         amagp = amagp * (fzero ** 2 + freq2) / (fpole ** 2 + freq2)
      end do
-130  continue
+     continue
   end do
-100 continue
+  continue
 180 amaglg = alog1z (amagp)
   if (iftype .eq. 1) go to 170
   id = indxv(ntotra) + 2
   alpha = azepo(id)
-  jn = -alpha + onehav
+  jn = int (-alpha + onehav, kind (jn))
   do j = 1, jn
      fpole = azepo(id + j)
      amaglg = amaglg - alog1z (fpole ** 2 + freq2)
-140 end do
+  end do
 170 amaglg = hreflg + amaglg / 2.0d0
   return
 end subroutine ratp
@@ -2103,12 +2180,19 @@ end subroutine ratp
 !
 
 subroutine split (xbeg, xend, ycutpu, xcut)
-  use labl39
+  use com39
   use deck39
+  use tracom
   implicit none
-  !  implicit real(8) (a-h, o-z), integer(4) (i-n)
   !  include 'labl39.ftn'
   !  include 'deck39.ftn'
+  real(8), intent(in) :: xbeg, xend
+  real(8), intent(in) :: ycutpu
+  real(8), intent(out) :: xcut
+  !
+  real(8) :: d1, dxspli
+  real(8) :: x, x1, xfirst, xlast
+  real(8) :: ycut
   !
   dxspli = 0.1d0
   xfirst = xdat(1)
@@ -2121,14 +2205,14 @@ subroutine split (xbeg, xend, ycutpu, xcut)
 100 x1 = x
   x = x + dxspli
   if (x .gt. xlast) x = xlast
-  if (yfun39(x) .le. ycut) go to 170
+  if (yfun39 (x) .le. ycut) go to 170
   if (x .eq. xlast) go to 110
   go to 100
 110 x = xbeg - dxspli
 120 x1 = x
   x = x + dxspli
   if (x .gt. xlast) x = xlast
-  if (yfun39(x) .ge. ycut) go to 170
+  if (yfun39 (x) .ge. ycut) go to 170
   if (x .eq. xlast) go to 90
   go to 120
 130 if (refa .gt. refb) go to 150
@@ -2136,87 +2220,50 @@ subroutine split (xbeg, xend, ycutpu, xcut)
 140 x1 = x
   x = x - dxspli
   if (x .lt. xfirst) x = xfirst
-  if (yfun39(x) .ge. ycut) go to 170
+  if (yfun39 (x) .ge. ycut) go to 170
   if (x .eq. xfirst) go to 150
   go to 140
 150 x = xbeg + dxspli
 160 x1 = x
   x = x - dxspli
   if (x .lt. xfirst) x = xfirst
-  if (yfun39(x) .le. ycut) go to 170
+  if (yfun39 (x) .le. ycut) go to 170
   if (x .eq. xfirst) go to 135
   go to 160
 170 if (x1 .lt. xfirst) x1 = xfirst
-  d1 = yfun39(x1)
+  d1 = yfun39 (x1)
   xcut = x1 + (x - x1) * (ycut - d1) / (yfun39(x) - d1)
   return
 end subroutine split
-
-!
-! function yfun39.
-!
-
-function yfun39 (x)
-  use labl39
-  use deck39
-  implicit none
-  real(8), intent(in) :: x
-  !  include 'labl39.ftn'
-  !  include 'deck39.ftn'
-  !
-  if (x .le. xdat(1)) go to 120
-  if (x .ge. xdat(ndata)) go to 100
-  ai = aptdec * (x - xdat(1)) + 1.0d0
-  i1 = ai
-  y = (x - xdat(i1)) * (ydat(i1 + 1) - ydat(i1)) / (xdat(i1 + 1) - xdat(i1))
-  yfun39 = y + ydat(i1)
-  go to 110
-120 yfun39 = ydat(1)
-  go to 110
-100 yfun39 = ydat(ndata)
-110 return
-end function yfun39
-
-!
-! function aph.
-!
-
-function aph (x)
-  use labl39
-  use deck39
-  implicit none
-  real(8), intent(in) :: x
-  !  include 'labl39.ftn'
-  !  include 'deck39.ftn'
-  !
-  if (x .le. xdat(1)) go to 120
-  if (x .ge. xdat(ndata)) go to 100
-  ai = aptdec * (x - xdat(1)) + 1.0d0
-  i1 = ai
-  aph = (x - xdat(i1)) * (aphdat(i1 + 1) - aphdat(i1)) / (xdat(i1 + 1) - xdat(i1)) + aphdat(i1)
-  go to 110
-120 aph = aphdat(1)
-  go to 110
-100 aph = aphdat(ndata)
-110 return
-end function aph
 
 !
 ! subroutine ftplot.
 !
 
 subroutine ftplot (icurve, imode, nfitmx)
-  use labl39
+  use com39
   use deck39
+  use tracom
   implicit none
-  real(8) :: text1, text2, text3, blank, pl
-  dimension pl(92)
-  !  include 'labl39.ftn'
-  !  include 'deck39.ftn'
-  data text1 / 1h0 /, text2 / 1hi /, text3 /1h* /, blank / 1h  /
+  integer(4), intent(in) :: icurve, imode
+  integer(4), intent(in) :: nfitmx
+  character(8) :: pl(92)
+  character(8) :: text1, text2, text3, blank
+  integer(4) :: i, intd1, intd2
+  integer(4) :: j, j1
+  real(8) :: amaglg, amagp, amax, amin, ax
+  real(8) :: d1, dfamp
+  real(8) :: freq, freq2
+  real(8) :: x
+  real(8) :: ymax, ymin
+  !
+  data text1 / '0' /
+  data text2 / 'i' /
+  data text3 / '*' /
+  data blank / ' ' /
   !
   do j = 1, 92
-200  pl(j) = blank
+     pl(j) = blank
   end do
   if (icurve .eq. 2 .and. nfitmx .eq. 0) go to 120
   ymin = 1.0d20
@@ -2264,19 +2311,19 @@ subroutine ftplot (icurve, imode, nfitmx)
   do j = 1, nzeror
      amagp = amagp * (fczr(j) ** 2 + freq2) / (fcpr(j) ** 2 + freq2)
   end do
-820 continue
+  continue
 825 amaglg = alog1z (amagp)
   if (iftype .eq. 1) go to 840
   j1 = nzeror + 1
   do j = j1, npoler
      amaglg = amaglg - alog1z(fcpr(j) ** 2 + freq2)
   end do
-830 continue
+  continue
 840 amaglg = hrflgr + amaglg / 2.0d0
   ax = 10.0d0 ** yfun39(x)
   amagp = 10.0d0 ** amaglg
-  intd1 = (ax - amin) * 90.0d0 / dfamp + 1.5d0
-  intd2 = (amagp - amin) * 90.0d0 / dfamp + 1.5d0
+  intd1 = int ((ax - amin) * 90.0d0 / dfamp + 1.5d0, kind (intd1))
+  intd2 = int ((amagp - amin) * 90.0d0 / dfamp + 1.5d0, kind (intd2))
   if (intd1 .lt. 1 .or. intd1 .gt. 91) intd1 = 92
   if (intd2 .lt. 1 .or. intd2 .gt. 91) intd2 = 92
   pl(intd1) = text1
@@ -2296,7 +2343,8 @@ end subroutine ftplot
 
 subroutine misc39
   use blkcom
-  use labl39
+  use com39
+  use tracom
   implicit none
   !  include 'blkcom.ftn'
   !  include 'labl39.ftn'
@@ -2304,14 +2352,21 @@ subroutine misc39
   !     overlay 39 when new miscellaneous data cards are required
   !     (possibly once for each mode,  in the most extreme case).
   character(8) :: text1, text2, text3, text4
-  dimension itemp(9)
-  equivalence (kdeflt, indtv(1))
+  integer(4) :: itemp(9)
+  integer(4) :: j
+  integer(4) :: k
+  integer(4) :: n3
+  real(8) :: d1, d13
+  !  equivalence (kdeflt, indtv(1))
+  !
+  integer(4), pointer :: kdeflt
   !
   data text1 / 'data  ' /
   data text2 / 'select' /
   data text3 / 'defaul' /
   data text4 / 't     ' /
   !
+  kdeflt => indtv(1)
   if (iprsup .ge.  6) write (unit = lunit(6), fmt = 2243) modify
 2243 format (' Top of "misc39".   modify =', i4)
   if (modify .eq. 0) go to 2268
@@ -2324,7 +2379,7 @@ subroutine misc39
   read (unit = abuff, fmt = 2247) bus1, bus3
   if (bus1 .ne. text3) go to 2274
   if (bus3 .ne. text4) go to 2274
-  write (unit = kunit(6), fmt = 2270)
+  write (unit = kunit6, fmt = 2270)
 2270 format ('+Request for default fitting (= 3 blank cards).')
   call interp
   kdeflt = 1
@@ -2354,7 +2409,7 @@ subroutine misc39
   if (gmode .le. 0.0d0 .and. metrik .eq. 1) gmode = 0.30d-7
   if (koutpr .eq. 0) koutpr = 2
   if (koutpr .lt. 0) koutpr = 0
-  if (kdeflt .eq. 0) write (unit = kunit(6), fmt = 4059) gmode, ipunch, idebug, koutpr
+  if (kdeflt .eq. 0) write (unit = kunit6, fmt = 4059) gmode, ipunch, idebug, koutpr
 4059 format ('+param. ', e8.1, 3i8)
   if (modify .ne. 0) go to 2245
   go to 9900
@@ -2368,7 +2423,7 @@ subroutine misc39
   d13 = 1.0d0 + epstol / 100.0d0
   epstol = alog1z (d13) ** 2
   if (normax .le. 0) normax  = 30
-  if (kdeflt .eq. 0) write (unit = kunit(6), fmt = 4082) nexmis, d1, normax, iecode, ifwta, ifplot, ifdat, inelim
+  if (kdeflt .eq. 0) write (unit = kunit6, fmt = 4082) nexmis, d1, normax, iecode, ifwta, ifplot, ifdat, inelim
 4082 format ('+Yc fit.', i3, e8.1, 6i3)
   call interp
   go to 9900
@@ -2395,7 +2450,6 @@ end subroutine misc39
 !
 
 subroutine defblk (abuff)
-  use blkcom
   implicit none
   character(*), intent(out) :: abuff
   !     Almost-universal module for blanking out "abuff" card

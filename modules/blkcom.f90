@@ -74,7 +74,7 @@ module blkcom
   integer(4), target :: iprsov(39)
   integer(4) :: kprchg(6)
   integer(4) :: locatn(0:20, 0:20)
-  integer(4), target :: lunit(0 : 15)
+  integer(4), target :: lunit(0 : 63)
   integer(4) :: lunsav(0 : 15)
   integer(4), target :: lstat(80)
   integer(4) :: max99m, multpr(5)
@@ -122,7 +122,10 @@ module blkcom
   !
   data terra / 'terra ' /
   !     unit assignments of "over1" needed earlier by spy:
-  data lunit / 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 /
+  data lunit / 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, &
+       16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, &
+       32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, &
+       48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63 /
 
 end module blkcom
 
