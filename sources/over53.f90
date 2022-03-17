@@ -472,7 +472,7 @@ subroutine over53
 
   case (29)
 6119 write (unit = lunit(6), fmt = 7147) bus6
-     call err7421
+     call over53err7421
      go to 6220
 
   case (30)
@@ -493,7 +493,7 @@ subroutine over53
 7221 format (5x, 'But this input variable is undefined.   It is neither the output of another function block, nor a supplemental',/, &
           5x, 'variable, nor a tacs source of any type (1, 2, 90, 91, 92, or 93 type codes).   Did the user make a spelling error, the ',/, &
           5x, 'EMTP wonders.   The EMTP does not know what to do with the aforementioned input, so execution will be terminated. ')
-     call err7421
+     call over53err7421
      go to 6220
 
   case (32)
@@ -570,7 +570,7 @@ subroutine over53
           5x, "variable  'name' .   Now, the user's  'tacs EMTP sources' card is in error because field number", i3,  '  was punched',/, &
           5x, 'with the name  ', "'", a6,  "'", ' ,   which does not correspond to any tacs variable.   Maybe this name was misspelled,',/, &
           5x, 'the EMTP wonders.   In any case, since tacs cannot supply a necessary interface request, execution will be stopped. ')
-     call err7421
+     call over53err7421
      go to 6220
 
   case (34)
@@ -584,7 +584,7 @@ subroutine over53
           5x, "variable  'name' .   Now, the user's  'tacs EMTP sources' card is in error because field number", i3,  '  was punched',/, &
           5x, 'with the name  ', "'", a6,  "'", ' ,   which does not correspond to any tacs variable.   Maybe this name was misspelled,',/, &
           5x, 'the EMTP wonders.   In any case, since tacs cannot supply a necessary interface request, execution will be stopped. ')
-     call err7421
+     call over53err7421
      go to 6220
 
   case (35)
@@ -598,7 +598,7 @@ subroutine over53
 7225 format ('+',   17x,  'but no branch or switch card of the subsequently-inputted electrical network defined this  a6  node',/, &
           5x, 'name.   Since the EMTP does not know what variable of the electrical network should be used to control this type-90',/, &
           5x, 'source, execution of the data case will now be stopped. ')
-     call err7421
+     call over53err7421
      go to 6220
 
   case (36)
@@ -609,7 +609,7 @@ subroutine over53
           5x, 'current in the first (in order of data input) such adjacent switch which is to control the type-91 tacs source.',/, &
           5x, 'But no such switch can be found by the EMTP.   Since the EMTP does not know what variable of the electrical',/, &
           5x, 'network should be used to control this type-91 tacs source, execution must be stopped. ')
-     call err7421
+     call over53err7421
      go to 6220
 
   case (37)
@@ -622,7 +622,7 @@ subroutine over53
      write (unit = lunit(6), fmt = 7227)
 7227 format (5x, 'previously defined.   Rather than allow the solution to continue with initial conditions which are probably',/, &
           5x, 'incorrect, execution will now be terminated. ')
-     call err7421
+     call over53err7421
      go to 6220
 
   case (38)
@@ -688,7 +688,7 @@ subroutine over53
 7531 format (5x, 'with  ', "'", a6, "'", '  read therefrom by the EMTP.   This limit variable is unknown to the EMTP, not being',/, &
           5x, 'recognized as any valid tacs variable name.   Did the user make a spelling error, the EMTP wonders.   Since the',/, &
           5x, 'EMTP is uncertain as to what the user wants done with this limit, execution of this data case is being terminated. ')
-     call err7421
+     call over53err7421
      go to 6220
 
   case (42)
@@ -819,7 +819,7 @@ subroutine over53
           5x, 'before the appearance of the problem supplemental variable or device (as required by tacs rules on ordering). ')
      write (unit = lunit(6), fmt = 7343)
 7343 format (5x,  'Did the user make a spelling error, the EMTP wonders. ')
-     call err7421
+     call over53err7421
      go to 6220
 
   case (54)
@@ -831,7 +831,7 @@ subroutine over53
           5x, 'source.   But no EMTP switch adjacent to the node in question can be found by the EMTP.   Since the EMTP does',/, &
           5x, 'not know what variable of the electrical network should be used to control this type-93 tacs source, execution',/, &
           5x, 'must be terminated at this point. ')
-     call err7421
+     call over53err7421
      go to 6220
 
   case (55)
@@ -875,7 +875,7 @@ subroutine over53
   case (57)
 6147 write (unit = lunit(6), fmt = 7147) bus5
 7147 format (1x, 100( '-' ),  //, 5x,  'This switch makes reference to the non-existing control tacs variable  ', "'", a6, "'", //, 1x, 100('-'))
-     call err7421
+     call over53err7421
      go to 6220
 
   case (58)
@@ -917,7 +917,7 @@ subroutine over53
 99999 return
 end subroutine over53
 
-subroutine err7421
+subroutine over53err7421
   use blkcom
   implicit none
   !
@@ -944,7 +944,7 @@ subroutine err7421
        5x, 'names are equal if and only if both characters of any character position are equal for the two names, for all',/, &
        5x, 'possible character positions  1, 2, .... 6 . ')
   return
-end subroutine err7421
+end subroutine over53err7421
 
 !
 ! end of file over53.f90
