@@ -4,6 +4,35 @@
 ! file over1.f90
 !
 
+! Copyright 1977-2021 Bonneville Power Administration
+! Copyright 2019-2021 Angelo Rossi <angelo.rossi.homelab@gmail.com>
+!
+! Redistribution and use in source and binary forms, with or without
+! modification, are permitted provided that the following conditions are met:
+!
+! 1. Redistributions of source code must retain the above copyright notice,
+!    this list of conditions and the following disclaimer.
+!
+! 2. Redistributions in binary form must reproduce the above copyright notice,
+!    this list of conditions and the following disclaimer in the documentation
+!    and/or other materials provided with the distribution.
+!
+! 3. Neither the name of the copyright holder nor the names of its contributors
+!    may be used to endorse or promote products derived from this software
+!    without specific prior written permission.
+!
+! THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+! AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+! IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+! ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+! LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+! CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+! SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+! INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+! CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+! ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+! POSSIBILITY OF SUCH DAMAGE.
+
 module komthl
   implicit none
   real(8) :: pekexp
@@ -316,7 +345,7 @@ subroutine over1
      kolbeg = 1
      read (unit = abuff, fmt = 3246, iostat = ios) texcol
 3246 format (80a1)
-     call free (d1)
+     call ffree (d1)
 3247 nright = 0
      if (n9 .eq. -intinf) kolbeg = n9
      if (nfrfld .gt. 0) go to 3280
@@ -449,9 +478,9 @@ subroutine over1
 2872 nfrfld = 1
   call freone (d3)
   n3 = int (d3)
-  call free (d7)
-  call free (d8)
-  call free (ddd)
+  call ffree (d7)
+  call ffree (d8)
+  call ffree (ddd)
 2875 if (n3 .eq. 9999) go to 2879
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 2876)  n3, d7, d8
 2876 format ('+Altered switch.', i4, 2e13.4)
@@ -489,7 +518,7 @@ subroutine over1
   read (unit = abuff, fmt = 5) (lstacs(i), i = 1, 8)
   go to 7050
 7030 nfrfld = 10
-  call free (voltbc)
+  call ffree (voltbc)
   do i = 1, 8
      lstacs(i) = int (voltbc(i), kind (lstacs(i)))
   end do
@@ -508,7 +537,7 @@ subroutine over1
   read (unit = abuff, fmt = 3415) (voltbc(i), i = 1, 10)
   go to 7130
 7120 nfrfld = 10
-  call free (voltbc)
+  call ffree (voltbc)
 7130 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7140) voltbc(1), voltbc(2), voltbc(3)
 7140 format ('+Relative list sizes.', 3e9.2)
   d1 = 0.0d0
@@ -541,13 +570,13 @@ subroutine over1
   go to 4202
 4201 nfrfld = 1
   nright = 0
-  call free (deltat)
-  call free (tmax)
-  call free (d1)
-  call free (d2)
-  call free (d3)
-  call free (tolmat)
-  call free (t)
+  call ffree (deltat)
+  call ffree (tmax)
+  call ffree (d1)
+  call ffree (d2)
+  call ffree (d3)
+  call ffree (tolmat)
+  call ffree (t)
 4202 if (noutpr .eq. 0) write (unit = kunit6, fmt = 4205) deltat, tmax, d1
 4205 format ('+Misc. data.', 3e12.3)
   if (iofbnd .ne. 33666) go to 4206
@@ -563,7 +592,7 @@ subroutine over1
 5 format (10i8)
   go to 4208
 4207 nfrfld = 10
-  call free (voltbc)
+  call ffree (voltbc)
   iout = int (voltbc(1), kind (iout))
   iplot = int (voltbc(2), kind (iplot))
   idoubl = int (voltbc(3), kind (idoubl))
@@ -597,18 +626,18 @@ subroutine over1
 620 format (3i8, 6f8.0, i8)
   go to 624
 623 nfrfld = 3
-  call free (voltbc)
+  call ffree (voltbc)
   isw = int (voltbc(1), kind (isw))
   itest = int (voltbc(2), kind (itest))
   idist = int (voltbc(3), kind (idist))
   nfrfld = 1
-  call free (aincr)
-  call free (xmaxmx)
-  call free (degmin)
-  call free (degmax)
-  call free (d4)
-  call free (sigmax)
-  call free (voltbc)
+  call ffree (aincr)
+  call ffree (xmaxmx)
+  call ffree (degmin)
+  call ffree (degmax)
+  call ffree (d4)
+  call ffree (sigmax)
+  call ffree (voltbc)
   jseedr = int (voltbc(1))
 624 if (noutpr .eq.  0) write (unit = kunit6, fmt = 630, advance = 'no') isw, itest, idist, aincr
   !630 format ('+Statistics data.', 3i8, f9.4, $)
@@ -674,7 +703,7 @@ subroutine over1
 4211 format (10i8)
   go to 4219
 4217 nfrfld = 10
-  call free (voltbc)
+  call ffree (voltbc)
   j = 1
   do i = 1, 5
      kprchg(i) = int (voltbc(j))
@@ -949,7 +978,7 @@ contains
 2642 format (32x, 6i8)
     go to 3354
 3352 nfrfld = 1
-    call free (d1)
+    call ffree (d1)
     max99m = int (d1, kind (max99m))
 3354 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3355) max99m
 3355 format ('+Redefine type-99 message limit to', i6)
@@ -1018,7 +1047,7 @@ contains
     go to 3379
 3375 nfrfld = 1
     !        call freone (d1)
-    call free (d1)
+    call ffree (d1)
     iofbnd = int (d1)
 3379 write (unit = kunit6, fmt = 3382) iofbnd
 3382 format ('+Postprocess.  iplot =', i6)
@@ -1055,7 +1084,7 @@ contains
     go to 2612
 2608 nfrfld = 1
     !        call freone (szplt)
-    call free (szplt)
+    call ffree (szplt)
 2612 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2614) szplt
 2614 format ('+New plotter paper-height limit.', 2x, e13.3)
 9200 return
@@ -1077,7 +1106,7 @@ contains
 2642 format (32x, 6i8)
     go to 2631
 2628 nfrfld = 1
-    call free (voltbc)
+    call ffree (voltbc)
     lnpin = voltbc(1)
 2631 if (noutpr .eq. 0 ) write (unit = kunit6, fmt = 2634) lnpin
 2634 format ('+New printer spacing, lines/distance =', 2x, i8)
@@ -1101,7 +1130,7 @@ contains
     go to 2646
 2644 nfrfld = 1
     !        call frefld (voltbc)
-    call free (voltbc)
+    call ffree (voltbc)
     modout = int (voltbc(1), kind (modout))
 2646 if (modout .le. 0) modout = 3
     if (noutpr .eq. 0) write (unit = kunit6, fmt = 2648) modout
@@ -1121,7 +1150,7 @@ contains
 2642 format (32x, 6i8)
     go to 2673
 2671 nfrfld = 1
-    call free (voltbc)
+    call ffree (voltbc)
     nsmth = int (voltbc(1), kind (nsmth))
 2673 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2675) nsmth
 2675 format ('+Change successive oscillation limit.', 2x, i8)
@@ -1145,7 +1174,7 @@ contains
 2685 format (20x, 10a6)
     go to 2686
 2683 nright = -2
-    call free (d1)
+    call ffree (d1)
     do j = 1, 10
        vstacs(j) = texta6(j)
     end do
@@ -1189,7 +1218,7 @@ contains
 2811 format (20x, 30i2)
     go to 2816
 2814 nfrfld = 30
-    call free (voltbc)
+    call ffree (voltbc)
     if (kill .gt. 0) go to 9200
     do  i = 1, 30
        iprsov(i) = int (voltbc(i))
@@ -1221,7 +1250,7 @@ contains
        n9 = kolbeg
        kolbeg = 1
        nright = -2
-       call free (d1)
+       call ffree (d1)
        n1 = jpntr(5)
        n2 = jpntr(6) - 1
        k = 0
@@ -1248,7 +1277,7 @@ contains
 2605 format (32x, e8.0)
     go to 7223
 7217 nfrfld = 1
-    call free (epsiln)
+    call ffree (epsiln)
 7223 write (unit = kunit6, fmt = 7226) epsiln
 7226 format ("+Misc. data constant  'epsiln' .", e12.3)
     return
@@ -1268,7 +1297,7 @@ contains
 2605 format (32x, e8.0)
     go to 7249
 7247 nfrfld = 1
-    call free (begmax(2 :))
+    call ffree (begmax(2 :))
 7249 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7252) begmax(2)
 7252 format ('+Extrema calc. begins at', e13.4, '  seconds.')
     if (begmax(2) .ne. -1.) go to 9200
@@ -1296,7 +1325,7 @@ contains
 7264 format (16x, i8, 5e8.0)
     go to 7268
 7266 nfrfld = 6
-    call free (flstat(14 :))
+    call ffree (flstat(14 :))
     n13 = int (flstat(14))
 7268 if (n13 .gt. 0)  maxzno = n13
     if (flstat(15) .gt. 0.0d0) epszno = flstat(15)
@@ -1337,7 +1366,7 @@ contains
     go to 7282
 7279 nfrfld = 4
     !        call frefld (voltbc)
-    call free (voltbc)
+    call ffree (voltbc)
     nclfix = int (voltbc(1))
     numfix = int (voltbc(2))
     iotfix = int (voltbc(3))
@@ -1367,7 +1396,7 @@ contains
 7276 format (32x, 6i8)
     go to 7303
 7298 nfrfld = 4
-    call free (voltbc)
+    call ffree (voltbc)
 7303 d1 = 0.0
     do j = 1, 4
        d1 = d1 + voltbc(j)
@@ -1424,7 +1453,7 @@ contains
 2642 format (32x, 6i8)
     go to 7329
 7322 nfrfld = 4
-    call free (voltbc)
+    call ffree (voltbc)
     do j = 1, 4
        iprsov(j + 30) = int (voltbc(j))
     end do
@@ -1445,7 +1474,7 @@ contains
 2582 format (16x, i8, e8.0)
     go to 7335
 7334 nfrfld = 2
-    call free (voltbc)
+    call ffree (voltbc)
     lstat(51) = int (voltbc(1))
     pu = voltbc(2)
 7335 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7336) lstat(51), pu
@@ -1542,7 +1571,7 @@ contains
 2642 format (32x, 6i8)
     go to 7382
 7379 nfrfld = 1
-    call free (voltbc)
+    call ffree (voltbc)
     iofbnd = int (voltbc(1), kind (iofbnd))
 7382 if (noutpr .eq. 0) write (unit = kunit6, fmt = 7385)
 7385 format ('+Request for generator equivalents.')
@@ -1579,7 +1608,7 @@ contains
 2642 format (32x, 6i8)
     go to 7402
 7396 nfrfld = 1
-    call free (voltbc)
+    call ffree (voltbc)
     n14 = int (voltbc(1))
 7402 moncar(7) = n14
     if (n14 .eq. 0) moncar(7) = 24
@@ -2245,7 +2274,7 @@ subroutine reques
         go to 2822
 2820    nfrfld = 1
         !        call freone (statfr)
-        call free (statfr)
+        call ffree (statfr)
 2822    if (noutpr .eq. 0) write (unit = kunit6, fmt = 2824) statfr
 2824    format ('+Redefined power frequency =', e12.3, '  Hz.')
         go to 15
@@ -2265,7 +2294,7 @@ subroutine reques
         go to 4664
 4661    nright = -2
         !        call freone (d1)
-        call free (d1)
+        call ffree (d1)
         nright = 0
         userid = texta6(1)
 4664    if (noutpr .eq. 0) write (unit = kunit6, fmt = 4667) userid
@@ -2294,7 +2323,7 @@ subroutine reques
         go to 4726
 4724    nfrfld = 2
         !        call frefld (voltbc)
-        call free (voltbc)
+        call ffree (voltbc)
         kill = int (voltbc(1))
         ipntv(2) = int (voltbc(2))
 4726    write (unit = kunit6, fmt = 4728) kill, ipntv(2)
@@ -2325,7 +2354,7 @@ subroutine reques
         go to 4737
 4735    nfrfld = 1
         !        call frefld (voltbc)
-        call free (voltbc)
+        call ffree (voltbc)
         kpartb = int (voltbc(1))
 4737    d1 = 10.0 ** kpartb
         if (noutpr .eq. 0) write (unit = kunit6, fmt = 4739) d1
@@ -2368,7 +2397,7 @@ subroutine reques
         go to 7195
 7193    nfrfld = 1
         !        call freone (d1)
-        call free (d1)
+        call ffree (d1)
         jflsos = int (d1)
 7195    if (jflsos .gt. 0) go to 7199
         !     find random integer  'jflsos'  between zero and 999.
@@ -2427,7 +2456,7 @@ subroutine reques
         go to 7261
 7255    nfrfld = 1
         !        call freone (tenerg)
-        call free (tenerg)
+        call ffree (tenerg)
 7261    if (noutpr .eq. 0) write (unit = kunit6, fmt = 7262) tenerg
 7262    format ('+Statistics table-saving time =', e12.3, '  sec. ')
         go to 15
@@ -2542,7 +2571,7 @@ subroutine reques
 2779 format (24x, 3e8.0, i8)
   go to 2776
 2773 nfrfld = 4
-  call free (voltbc)
+  call ffree (voltbc)
   fminfs = voltbc(1)
   delffs = voltbc(2)
   fmaxfs = voltbc(3)
@@ -2976,11 +3005,11 @@ subroutine tacs1
 178 format (i2, a6, 2x, 5(a1, 7x), 3e6.0, 2a6)
   go to 6590
 6574 nfrfld = 1
-  call free (voltbc)
+  call ffree (voltbc)
   n = int (voltbc(1), kind (n))
   go to 1234
 1111 nright = -1
-  call free (d1)
+  call ffree (d1)
   alnode = texta6(1)
   do i = 1, 5
 6576 bus1 = texcol(kolbeg)
@@ -2994,7 +3023,7 @@ subroutine tacs1
      go to 6581
 6578 alph(i) = bus1
      kolbeg = kolbeg + 1
-6581 call free (d1)
+6581 call ffree (d1)
      dumj(i) = texta6(1)
      cycle
 6584 alph(i) = blank
@@ -3003,10 +3032,10 @@ subroutine tacs1
   end do
   nright = 0
   nfrfld = 3
-  call free (dum)
+  call ffree (dum)
   nright = -1
   nfrfld = 2
-  call free (d1)
+  call ffree (d1)
   alnm1 = texta6(1)
   alnm2 = texta6(2)
   nright = 0
@@ -3148,7 +3177,7 @@ subroutine tacs1
      n22 = n + 1
      do is = 1, n22
         !        call frefld (parsup(ndx1 :))
-        call free (parsup(ndx1 :))
+        call ffree (parsup(ndx1 :))
         ndx1 = ndx1 + 6
      end do
      ndx1 = kprsup + j2
@@ -3238,11 +3267,11 @@ subroutine tacs1
 187 format (i2, a6, 2x, 3e10.0, 20x, 2e10.0)
   go to 6537
 6534 nright = -1
-  call free (d1)
+  call ffree (d1)
   alnode = texta6(1)
   nright = 0
   nfrfld = 5
-  call free (voltbc)
+  call ffree (voltbc)
   dum(1) = voltbc(1)
   dum(3) = voltbc(2)
   dum(2) = voltbc(3)
@@ -3308,7 +3337,7 @@ subroutine tacs1
   go to 6557
 6554 nfrfld = 13
   nright = -1
-  call free (d1)
+  call ffree (d1)
   nright = 0
   do i = 1, 13
      dumj(i) = texta6(i)
@@ -3341,10 +3370,10 @@ subroutine tacs1
   go to 6567
 6564 nfrfld = 1
   nright = -1
-  call free (d1)
+  call ffree (d1)
   alnode = texta6(1)
   nright = 0
-  call free (prx)
+  call ffree (prx)
 6567 if (alnode .ne. blank) go to 3838
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 4455)
 4455 format ('+Ignore the illegal card.')
@@ -3691,7 +3720,7 @@ subroutine tacs1a
   nright = 0
   kolbeg = ifstch
   iargel = iargel + 1
-  call free (argel(iargel :))
+  call ffree (argel(iargel :))
   ilst = ilst + 1
   iel(ilst) = -ilst - 1
   el(ilst) = char (iargel)
@@ -3702,7 +3731,7 @@ subroutine tacs1a
 50160 nfrfld = 1
   nright = -1
   kolbeg = ifstch
-  call free (d1)
+  call ffree (d1)
   ilst = ilst + 1
   iel(ilst) = ilst + 1
   el(ilst) = texta6(1)
@@ -4424,10 +4453,10 @@ subroutine tacs1a
 10712 format (2e16.0)
   go to 6547
 6544 nfrfld = 1
-  call free (voltbc)
+  call ffree (voltbc)
   prx = voltbc(1)
   if (prx .eq. 9999.0d0) go to 10713
-  call free (voltbc)
+  call ffree (voltbc)
   pru = voltbc(1)
 6547 if (prx .eq. 9999.) go to 10713
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 10715) prx, pru

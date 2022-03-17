@@ -4,6 +4,35 @@
 ! file main00.f90
 !
 
+! Copyright 1977-2021 Bonneville Power Administration
+! Copyright 2019-2021 Angelo Rossi <angelo.rossi.homelab@gmail.com>
+!
+! Redistribution and use in source and binary forms, with or without
+! modification, are permitted provided that the following conditions are met:
+!
+! 1. Redistributions of source code must retain the above copyright notice,
+!    this list of conditions and the following disclaimer.
+!
+! 2. Redistributions in binary form must reproduce the above copyright notice,
+!    this list of conditions and the following disclaimer in the documentation
+!    and/or other materials provided with the distribution.
+!
+! 3. Neither the name of the copyright holder nor the names of its contributors
+!    may be used to endorse or promote products derived from this software
+!    without specific prior written permission.
+!
+! THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+! AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+! IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+! ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+! LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+! CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+! SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+! INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+! CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+! ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+! POSSIBILITY OF SUCH DAMAGE.
+
 !**********************************************************************
 !                                                                     *
 !    --------------- Electromagnetic Transients Program ------------  *
@@ -612,7 +641,7 @@ subroutine cimage
   go to 7014
 3246 kolbeg = 2
   nright = -2
-  call free (d1)
+  call ffree (d1)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 3281) nfrfld, texta6(1), texta6(2)
 3281 format (/, ' nfrfld =', i8, 5x, 'texta6 =', 2a7)
   nright = 0
@@ -712,7 +741,7 @@ subroutine cimage
 4200 text1 = textax(2)
 4206 n2 = lunit(7)
 4209 nfrfld = 1
-  call free (d11)
+  call ffree (d11)
   n1 = int (d11, kind (n1))
   if (n1 .le. 0) n1 = n2
   if (n8 .eq. 8) go to 4817
@@ -770,10 +799,10 @@ subroutine cimage
   k = 80
 4536 kolbeg = k + 1
   nfrfld = 1
-  call free (d11)
+  call ffree (d11)
   n7 = int (d11, kind (n7))
   if (n8 .ne. 4) go to 4557
-  call free (d11)
+  call ffree (d11)
   n6 = int (d11, kind (n6))
 4557 if (n6 .eq. 0) n6 = lunit(7)
   if (n8 .eq. 5) n7 = munit5                                ! $spy uses this channel
@@ -825,7 +854,7 @@ subroutine cimage
   !               *****    request no. 10.   "new epsiln"   *****  *****
 5000 nfrfld = 1
   d1 = epsiln
-  call free (epsiln)
+  call ffree (epsiln)
   if (noutpr .eq. 0) write (unit = lunit(6), fmt = 5017) d1, epsiln
 5017 format ('+Epsiln change.  old, new =', 2e11.2)
   go to 1000
@@ -856,7 +885,7 @@ subroutine cimage
   go to 1000
   !               *****    request no. 15.   "vintage"      *****  *****
 5500 nfrfld = 1
-  call free (d11)
+  call ffree (d11)
   moldat = int (d11, kind (moldat))
   if (noutpr .eq. 0) write (unit = lunit(6), fmt = 5518) moldat
 5518 format ('+New moldat =', i4, 5x, '(data vintage)')
@@ -874,7 +903,7 @@ subroutine cimage
   call stoptp                                               ! installation-dependent program stop card
   !               *****    request no. 18.   "watch5"       *****  *****
 5800 nfrfld = 1
-  call free (d11)
+  call ffree (d11)
   n12 = int (d11, kind (n12))
   n13 = n12
   if (noutpr .eq. 0) write (unit = lunit(6), fmt = 5812) n12
@@ -889,8 +918,8 @@ subroutine cimage
 6000 call stoptp                                            ! installation-dependent program stop card
   !               *****    request no. 21.   "units"        *****  *****
 6100 nfrfld = 1
-  call free (xopt)
-  call free (copt)
+  call ffree (xopt)
+  call ffree (copt)
   if (noutpr .eq. 0) write (unit = lunit(6), fmt = 6114) xopt, copt
 6114 format ('+New  xopt, copt =', 2e14.4)
   xunits = 1000.0d0

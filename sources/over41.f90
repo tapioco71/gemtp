@@ -280,7 +280,7 @@ subroutine over41
 1733 nfrfld = 6
   nright = -1
   !  call freone (d1)
-  call free (d1)
+  call ffree (d1)
   nright = 0
   if (iprsup  .ge.  1) write (unit = lunit(6), fmt = 4568)
 4568 format ('  "Exit  module over41."')
@@ -299,14 +299,14 @@ subroutine over41
   go to 1745
 1743 nfrfld = 1
   !  call freone (d11)
-  call free (d11)
+  call ffree (d11)
   iwind = int (d11)
   !  call freone (cmag)
-  call free (cmag)
+  call ffree (cmag)
   !  call freone (pmag)
-  call free (pmag)
+  call ffree (pmag)
   !  call freone (d11)
-  call free (d11)
+  call ffree (d11)
   ipunch = int (d11)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
   if (kill .gt. 0) go to 99999
@@ -335,13 +335,13 @@ subroutine over41
      go to 1755
 1753 nfrfld = 1
      !     call freone (vtap)
-     call free (vtap)
+     call ffree (vtap)
      !     call freone (ploss)
-     call free (ploss)
+     call ffree (ploss)
      !     call freone (z)
-     call free (z)
+     call ffree (z)
      !     call freone (pratg)
-     call free (pratg)
+     call ffree (pratg)
      if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
      if (kill .gt. 0) go to 99999
 1755 write (unit = kunit6, fmt = 3904) vtap, ploss, z, pratg
@@ -488,15 +488,15 @@ subroutine over41
   go to 1765
 1763 nfrfld = 1
   !  call freone (v1)
-  call free (v1)
+  call ffree (v1)
   !  call freone (v2)
-  call free (v2)
+  call ffree (v2)
   !  call freone (ploss)
-  call free (ploss)
+  call ffree (ploss)
   !  call freone (z)
-  call free (z)
+  call ffree (z)
   !  call freone (pratg)
-  call free (pratg)
+  call ffree (pratg)
   if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
   if (kill .gt. 0) go to 99999
 1765 write (unit = kunit6, fmt = 3904) v1, v2, ploss, z

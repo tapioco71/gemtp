@@ -22,6 +22,9 @@ module movcop
 
 contains
 
+  !
+  ! subroutine copyi
+  !
 
   subroutine copyi (i, iarray, n)
     implicit none
@@ -42,6 +45,10 @@ contains
     return
   end subroutine copyi
 
+  !
+  ! subroutine copyr
+  !
+
   subroutine copyr (f, farray, n)
     implicit none
     !     Routine which copies the same floating-point word  'f'  into a
@@ -60,6 +67,10 @@ contains
     farray(1 : n1) = f
     return
   end subroutine copyr
+
+  !
+  ! subroutine copya
+  !
 
   subroutine copya (a, b, n)
     implicit none
@@ -80,6 +91,10 @@ contains
     b(1 : n1)(1 : n2) = a(1 : n1)
     return
   end subroutine copya
+
+  !
+  ! subroutine movei
+  !
 
   subroutine movei (from, to, n)
     !    Subroutine  move  is identical to the
@@ -102,6 +117,10 @@ contains
     to(1 : n1) = from(1 : n1)
     return
   end subroutine movei
+
+  !
+  ! subroutine mover
+  !
 
   subroutine mover (from, to, n)
     !    Subroutine  mover  (with entry point mover0) is used for block
@@ -128,6 +147,10 @@ contains
     return
   end subroutine mover
 
+  !
+  ! subroutine movea
+  !
+
   subroutine movea (from, to, n)
     implicit none
     character(*), intent(out) :: to(:)
@@ -146,7 +169,7 @@ contains
   end subroutine movea
 
   !
-  !     subroutine moverl.
+  ! subroutine moverl.
   !
 
   subroutine moverl (from, to, n)

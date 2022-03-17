@@ -389,7 +389,7 @@ subroutine subr31
 7641 format (10e8.0)
   go to 7648
 7644 nfrfld = 3
-  call free (xyplot)
+  call ffree (xyplot)
 7648 if (xyplot(1) .le. 0.0d0) xyplot(1) = 8.0d0
   if (xyplot(1) .eq. 9999.0d0) xyplot(1) = 0.0d0
   write (unit = kunit6, fmt = 7649) (xyplot(i), i = 1, 3)
@@ -400,7 +400,7 @@ subroutine subr31
   read (unit = abuff, fmt = 7641) (xyplot(i), i = 4, 9)
   go to 7653
 7651 nfrfld = 6
-  call free (xyplot(4 :))
+  call ffree (xyplot(4 :))
 7653 if (xyplot(4) .le. 0.0d0) xyplot(4) = 8.0d0
   if (xyplot(7) .le. 0.0d0) xyplot(7) = 10.0d0
   if (xyplot(9) .le. 0.0d0) xyplot(9) = 10.0d0
@@ -486,17 +486,17 @@ subroutine subr31
   go to 7405
 7402 nfrfld = 1
   !  call freone (flong1)
-  call free (flong1)
+  call ffree (flong1)
   itp = int (flong1, kind (itp))
   !  call freone (flong1)
-  call free (flong1)
+  call ffree (flong1)
   icp = int (flong1, kind (icp))
   !  call freone (flong1)
-  call free (flong1)
+  call ffree (flong1)
   ihs = int (flong1, kind (ihs))
   nfrfld = 5
   !  call frefld (voltbc)
-  call free (voltbc)
+  call ffree (voltbc)
   hpi = voltbc(1)
   hmin = voltbc(2)
   hmax = voltbc(3)
@@ -505,7 +505,7 @@ subroutine subr31
   nfrfld = 4
   nright = -1
   !  call freone (flong1)
-  call free (flong1)
+  call ffree (flong1)
   if (kill .gt. 0) go to 9200
   nright = 0
   do j = 1, 4
@@ -602,7 +602,7 @@ subroutine subr31
 1183 format (5e16.0)
   go to 8215
 8212 nfrfld = 5
-  call free (voltbc)
+  call ffree (voltbc)
   hpi  = voltbc(1)
   hmin = voltbc(2)
   hmax = voltbc(3)

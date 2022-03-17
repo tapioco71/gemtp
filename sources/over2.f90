@@ -311,11 +311,11 @@ subroutine over2
 1 format (i2, 4a6, 9e6.2)
   go to 6621
 6618 nfrfld = 1
-  call free (voltbc)
+  call ffree (voltbc)
   itype = int (voltbc(1), kind (itype))
   nfrfld = 4
   nright = -1
-  call free (d1)
+  call ffree (d1)
   bus1 = texta6(1)
   bus2 = texta6(2)
   bus3 = texta6(3)
@@ -1039,7 +1039,7 @@ subroutine over2
   go to 64117
 132 kolbeg = 27
   nfrfld = 3 * (it2 - it + 1)
-  call free (voltbc)
+  call ffree (voltbc)
   n9 = 1
   do i = it, it2
      tr(i) = voltbc(n9)
@@ -1066,7 +1066,7 @@ subroutine over2
 4243 kolbeg = 27
   nfrfld = 2 * n8
   n9 = 1
-  call free (voltbc)
+  call ffree (voltbc)
   do i = it, it2
      tr(i) = voltbc(n9)
      tx(i) = voltbc(n9 + 1)
@@ -1266,7 +1266,7 @@ subroutine over2
 4254 kolbeg = 27
   nfrfld = 2 * n8
   n9 = 1
-  call free (voltbc)
+  call ffree (voltbc)
   do i = it3, it32
      tr(i) = voltbc(n9)
      tx(i) = voltbc(n9 + 1)
@@ -1281,7 +1281,7 @@ subroutine over2
 4262 nfrfld = 3 * (it32 - it3 + 1)
   kolbeg = 27
   n9 = 1
-  call free (voltbc)
+  call ffree (voltbc)
   do i = it3, it32
      tr(i) = voltbc(n9)
      tx(i) = voltbc(n9 + 1)
@@ -1566,11 +1566,11 @@ subroutine over2
   read (unit = abuff, fmt = 1) itype, bus1, bus2
   go to 6637
 6634 nfrfld = 1
-  call free (voltbc)
+  call ffree (voltbc)
   itype = int (voltbc(1))
   nfrfld = 2
   nright = -1
-  call free (d1)
+  call ffree (d1)
   bus1 = texta6(1)
   bus2 = texta6(2)
   nright = 0
@@ -1913,11 +1913,11 @@ subroutine nonln2
 22 nfrfld = 1
   nright = 0
   !  call freone (d2)
-  call free (d2)
+  call ffree (d2)
   !  call freone (d3)
-  call free (d3)
+  call ffree (d3)
   !  call freone (d4)
-  call free (d4)
+  call ffree (d4)
 23 ck1 = -fltinf
   a2 = 0.0d0
   vzero(inonl) = d4
@@ -1949,9 +1949,9 @@ subroutine nonln2
      go to 31
 30   nfrfld = 1
      nright = 0
-     call free (d2)
-     call free (d3)
-     call free (d4)
+     call ffree (d2)
+     call ffree (d3)
+     call ffree (d4)
 31   if (d2 .eq. 9999.0d0) go to 37
      i_char = i_char + 1
      if (i_char .le. lchar) go to 36
@@ -2002,8 +2002,8 @@ subroutine nonln2
   go to 49
 48 nfrfld = 1
   nright = 0
-  call free (d2)
-  call free (d3)
+  call ffree (d2)
+  call ffree (d3)
 49 if (d2 .eq. 9999.0d0) go to  53
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 59) d2, d3
   if (itype .eq. 91) go to 51
@@ -2086,8 +2086,8 @@ subroutine nonln2
   go to 73424
 73423 nfrfld = 1
   nright = 0
-  call free (d2)
-  call free (xlong)
+  call ffree (d2)
+  call ffree (xlong)
 73424 if (d2 .eq. 9999.0d0) go to 189
   if (noutpr .eq. 0) write (unit = kunit6, fmt = 181) d2, xlong
 181 format ('+Breakpoint.', 2e15.5)
@@ -2555,7 +2555,7 @@ subroutine distr2
   if (kolbeg .le. 0) go to 8161
   nfrfld = 5
   !  call frefld (cnvhst(n8 :))
-  call free (cnvhst(n8 :))
+  call ffree (cnvhst(n8 :))
   go to 8162
 8161 if (moldat .eq. 1) go to 18161
   read (unit = abuff, fmt = 18170) (cnvhst(i), i = n8, n6)
@@ -2587,7 +2587,7 @@ subroutine distr2
   call cimage
   if (kolbeg .le. 0) go to 8206
   nfrfld = ifsem - n8 + 1
-  call free (sconst(n8 :))
+  call ffree (sconst(n8 :))
   go to 8208
 8206 continue
   read (unit = abuff, fmt = 8170) (sconst(i), i = n8, ifsem)
@@ -2624,7 +2624,7 @@ subroutine distr2
   call cimage
   if (kolbeg .le. 0) go to 8251
   nfrfld = n11
-  call free (voltbc)
+  call ffree (voltbc)
   go to 8252
 8251 continue
   read (unit = abuff, fmt = 8170) (voltbc(i), i = 1, n11)
@@ -2661,7 +2661,7 @@ subroutine distr2
   call cimage
   if (kolbeg .le. 0) go to 8291
   nfrfld = ifsem - n8 + 1
-  call free (sconst(n8 :))
+  call ffree (sconst(n8 :))
   go to 8293
 8291 continue
   read (unit = abuff, fmt = 8170) (sconst(i), i = n8, ifsem)
@@ -2696,7 +2696,7 @@ subroutine distr2
   call cimage
   if (kolbeg .le. 0) go to 8321
   nfrfld = n11
-  call free (voltbc)
+  call ffree (voltbc)
   go to 8322
 8321 continue
   read (unit = abuff, fmt = 8170) (voltbc(i), i = 1, n11)
@@ -2761,7 +2761,7 @@ subroutine distr2
   if (nfrfld .gt. 0) go to 18377
   irow = 0
   go to 18375
-18377 call free (voltbc)
+18377 call ffree (voltbc)
   go to 8377
 8376 continue
   read (unit = abuff, fmt = 18376) (voltbc(i), i = 1, 6)
@@ -2801,7 +2801,7 @@ subroutine distr2
   if (nfrfld .gt. 0) go to 28377
   irow = 0
   go to 28375
-28377 call free (voltbc)
+28377 call ffree (voltbc)
   go to 8417
 8415 continue
   read (unit = abuff, fmt = 18376) (voltbc(i), i = 1, 6)
@@ -3009,7 +3009,7 @@ subroutine distr2
      call cimage
      nfrfld = 6
      if (kolbeg .le. 0) go to 1993
-     call free (voltbc)
+     call ffree (voltbc)
      go to 1994
 1993 continue
      read (unit = abuff, fmt = 8170) (voltbc(i), i = 1, nfrfld)
@@ -3047,7 +3047,7 @@ subroutine distr2
      call cimage
      nfrfld = 6
      if (kolbeg .le. 0) go to 1998
-     call free (voltbc)
+     call ffree (voltbc)
      go to 1999
 1998 continue
      read (unit = abuff, fmt = 8170) (voltbc(i), i = 1, nfrfld)
@@ -3555,7 +3555,7 @@ subroutine distr2
 2014 nfrfld = nrowt
      if (kolbeg .le. 0) go to 2005
      !     call frefld (voltbc)
-     call free (voltbc)
+     call ffree (voltbc)
      go to 2006
 2005 continue
      read (unit = abuff, fmt = 8170) (voltbc(ik), ik = 1, nfrfld)
@@ -3627,7 +3627,7 @@ subroutine distr2
   read (unit = abuff, fmt = 2721) (voltbc(j), j = 1, nfrfld)
 2721 format (6e12.0)
   go to 2733
-2728 call free (voltbc)
+2728 call ffree (voltbc)
 2733 if (noutpr .eq. 0) write (unit = kunit6, fmt = 2736) textmx(n7), n9, i, (voltbc(j), j = 1, nfrfld)
 2736 format (a4, i2, ',', i2, ')...', 6f6.3)
   do n8 = 1, nfrfld

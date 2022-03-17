@@ -731,7 +731,7 @@ subroutine subr55
   read (unit = abuff, fmt = 6741) (texcol(i), i = 1, 80)
 6741 format (80a1)
   !  call freone (d1)
-  call free (d1)
+  call ffree (d1)
   nright = 0
   if (nfrfld .ne. 1) go to 6743
   if (toLower (texta6(1)) .eq. text5) go to 6754
@@ -788,7 +788,7 @@ subroutine subr55
 1764 format (29x, i3)
   go to 1778
   !1773 call freone (d1)
-1773 call free (d1)
+1773 call ffree (d1)
   n1 = int (d1)
 1778 if (n1 .gt. 0) go to 1774
   if (n1 .lt. 0) iprsup = 9

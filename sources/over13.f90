@@ -4,6 +4,35 @@
 ! file over13.f90
 !
 
+! Copyright 1977-2021 Bonneville Power Administration
+! Copyright 2019-2021 Angelo Rossi <angelo.rossi.homelab@gmail.com>
+!
+! Redistribution and use in source and binary forms, with or without
+! modification, are permitted provided that the following conditions are met:
+!
+! 1. Redistributions of source code must retain the above copyright notice,
+!    this list of conditions and the following disclaimer.
+!
+! 2. Redistributions in binary form must reproduce the above copyright notice,
+!    this list of conditions and the following disclaimer in the documentation
+!    and/or other materials provided with the distribution.
+!
+! 3. Neither the name of the copyright holder nor the names of its contributors
+!    may be used to endorse or promote products derived from this software
+!    without specific prior written permission.
+!
+! THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+! AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+! IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+! ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+! LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+! CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+! SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+! INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+! CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+! ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+! POSSIBILITY OF SUCH DAMAGE.
+
 module ovr13mod
   implicit none
 contains
@@ -451,7 +480,7 @@ subroutine over13
   go to 4625
 4623 nfrfld = 1
   !  call freone (d11)
-  call free (d11)
+  call ffree (d11)
   ivolt = int (d11, kind (ivolt))
 4625 if (ivolt .le. 1) go to 590
   mdrive = 1
@@ -471,12 +500,12 @@ subroutine over13
 4633 k = ivolt
   nright = -1
   nfrfld = 1
-  call free (d1)
+  call ffree (d1)
   bus1 = texta6(1)
   nright = 0
-  call free (a)
-  call free (ci1)
-  call free (ck1)
+  call ffree (a)
+  call ffree (ci1)
+  call ffree (ck1)
 4635 if (iprint .eq. 0) go to 54157
   if (iprint .eq. 0) write (unit = * , fmt = *) 'over13-cable.    ck1, tpi=', ck1, tpi
   winic = ck1 * tpi
@@ -508,16 +537,16 @@ subroutine over13
 4643 ll = ivolt
   nright = -1
   nfrfld = 2
-  call free (d1)
+  call ffree (d1)
   bus1 = texta6(1)
   bus2 = texta6(2)
   nright = 0
   nfrfld = 1
-  call free (ci1)
-  call free (ck1)
-  call free (a)
-  call free (d2)
-  call free (d7)
+  call ffree (ci1)
+  call ffree (ck1)
+  call ffree (a)
+  call ffree (d2)
+  call ffree (d7)
   k = int (d7, kind (k))
 4645 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54159) ci1, ck1, a
 54159 format ('+Linear i.', 4x, 3e12.4)
@@ -578,17 +607,17 @@ subroutine over13
      read (unit = abuff, fmt = 7020) n2, bus1, bus2, cik(i), ci(i), ck(i)
      go to 4655
 4653 nfrfld = 1
-     call free (d11)
+     call ffree (d11)
      n2 = int (d11, kind (n2))
      nright = -1
-     call free (d1)
+     call ffree (d1)
      bus1 = texta6(1)
-     call free (d1)
+     call ffree (d1)
      bus2 = texta6(1)
      nright = 0
-     call free (cik(i :))
-     call free (ci(i :))
-     call free (ck(i :))
+     call ffree (cik(i :))
+     call ffree (ci(i :))
+     call ffree (ck(i :))
 4655 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54159) cik(i), ci(i), ck(i)
      if ((bus(l) .eq. bus1) .and. (bus(m) .eq. bus2)) go to 569
      kill = 32
@@ -630,13 +659,13 @@ subroutine over13
 4663 k = ivolt
   nright = -1
   nfrfld = 2
-  call free (d1)
+  call ffree (d1)
   bus1 = texta6(1)
   bus2 = texta6(2)
   nright = 0
   nfrfld = 1
-  call free (ci1)
-  call free (ck1)
+  call ffree (ci1)
+  call ffree (ck1)
 4665 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54162) ci1, ck1
 54162 format ('+Nonlin. branch init cond.', 2x, 2e11.3)
   do k = 1, inonl
@@ -1854,18 +1883,18 @@ subroutine over13
      go to 4695
 4693 nfrfld = 1
      kolbeg = 1
-     call free (d11)
+     call ffree (d11)
      n3 = int (d11, kind (n3))
      nright = -1
-     call free (d1)
+     call ffree (d1)
      bus1 = texta6(1)
-     call free (d1)
+     call ffree (d1)
      bus2 = texta6(1)
      nright = 0
-     call free (tr(itadd :))
-     call free (tx(itadd :))
-     call free (r(itadd :))
-     call free (c(itadd :))
+     call ffree (tr(itadd :))
+     call ffree (tx(itadd :))
+     call ffree (r(itadd :))
+     call ffree (c(itadd :))
 4695 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54159) tr(itadd), tx(itadd), r(itadd)
      if (bus1 .eq. bus(l) .and. bus2 .eq. bus(m) .and. n3 .eq. 3) go to 5767
 5766 lstat(19) = 5766
@@ -1877,12 +1906,12 @@ subroutine over13
      read (unit = abuff, fmt = 7020) n3, bus1, bus2
      go to 4705
 4703 nfrfld = 1
-     call free (d11)
+     call ffree (d11)
      n3 = int (d11, kind (n3))
      nright = -1
-     call free (d1)
+     call ffree (d1)
      bus1 = texta6(1)
-     call free (d1)
+     call ffree (d1)
      bus2 = texta6(1)
      nright = 0
 4705 if (toLower (bus1) .ne. text1) cycle
@@ -1919,21 +1948,21 @@ subroutine over13
   go to 4715
 4713 nfrfld = 1
   nright = -1
-  call free (d1)
+  call ffree (d1)
   bus1 = texta6(1)
-  call free (d1)
+  call ffree (d1)
   bus2 = texta6(1)
   nright = 0
-  call free (d11)
+  call ffree (d11)
   n1 = int (d11, kind (n1))
-  call free (d11)
+  call ffree (d11)
   n2 = int (d11, kind (n2))
-  call free (d11)
+  call ffree (d11)
   n3 = int (d11, kind (n3))
-  call free (d1)
-  call free (d2)
-  call free (d3)
-  call free (d4)
+  call ffree (d1)
+  call ffree (d2)
+  call ffree (d3)
+  call ffree (d4)
 4715 if (noutpr .eq. 0) write (unit = kunit6, fmt = 5620)  n1, n2, n3, d1
 5620 format ('+Switch init. cond.', 3i6, e13.4)
   do k = 1, kswtch

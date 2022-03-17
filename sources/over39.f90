@@ -4,6 +4,35 @@
 ! file over39.f90
 !
 
+! Copyright 1977-2021 Bonneville Power Administration
+! Copyright 2019-2021 Angelo Rossi <angelo.rossi.homelab@gmail.com>
+!
+! Redistribution and use in source and binary forms, with or without
+! modification, are permitted provided that the following conditions are met:
+!
+! 1. Redistributions of source code must retain the above copyright notice,
+!    this list of conditions and the following disclaimer.
+!
+! 2. Redistributions in binary form must reproduce the above copyright notice,
+!    this list of conditions and the following disclaimer in the documentation
+!    and/or other materials provided with the distribution.
+!
+! 3. Neither the name of the copyright holder nor the names of its contributors
+!    may be used to endorse or promote products derived from this software
+!    without specific prior written permission.
+!
+! THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+! AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+! IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+! ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+! LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+! CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+! SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+! INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+! CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+! ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+! POSSIBILITY OF SUCH DAMAGE.
+
 !
 ! subroutine subr39.
 !
@@ -132,7 +161,7 @@ subroutine subr39
   n4 = kolbeg
   kolbeg = 1
   !  call freone (d1)
-  call free (d1)
+  call ffree (d1)
   if (kill .gt. 0) go to 9200
   nright = 0
   if (toLower(texta6(1)) .ne. text11)   go to 7618
@@ -156,10 +185,10 @@ subroutine subr39
   go to 7624
 7623 nfrfld = 1
   !  call freone (dist)
-  call free (dist)
+  call ffree (dist)
 7624 if (metrik .eq. 0 .and. n13 .ne. 8765) dist = dist * 1.60935d0
   write (unit = kunit6, fmt = 7625) dist
-7625 format ('+Same line, but with new length =', f9.2,   '  km.'   )
+7625 format ('+Same line, but with new length =', f9.2, '  km.')
   go to 4040
 4042 if (toLower (texta6(1)) .ne. text9) go to 4043
   if (toLower(texta6(2)) .ne. text10) go to 4043

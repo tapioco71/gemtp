@@ -4,6 +4,35 @@
 ! file over5.f90
 !
 
+! Copyright 1977-2021 Bonneville Power Administration
+! Copyright 2019-2021 Angelo Rossi <angelo.rossi.homelab@gmail.com>
+!
+! Redistribution and use in source and binary forms, with or without
+! modification, are permitted provided that the following conditions are met:
+!
+! 1. Redistributions of source code must retain the above copyright notice,
+!    this list of conditions and the following disclaimer.
+!
+! 2. Redistributions in binary form must reproduce the above copyright notice,
+!    this list of conditions and the following disclaimer in the documentation
+!    and/or other materials provided with the distribution.
+!
+! 3. Neither the name of the copyright holder nor the names of its contributors
+!    may be used to endorse or promote products derived from this software
+!    without specific prior written permission.
+!
+! THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+! AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+! IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+! ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+! LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+! CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+! SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+! INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+! CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+! ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+! POSSIBILITY OF SUCH DAMAGE.
+
 module umlocal
   use blkcom
   implicit none
@@ -2266,30 +2295,30 @@ subroutine over5
 35 format (i2, 2a6, 4e10.0, a6, a4, 2a6, 2x, 2i1)
   go to 3506
 3503 nfrfld = 1
-  call free (voltbc)
+  call ffree (voltbc)
   it2 = int (voltbc(1))
   nright = -1
   nfrfld = 2
-  call free (d1)
+  call ffree (d1)
   nright = 0
   bus1 = texta6(1)
   bus2 = texta6(2)
   nfrfld = 4
-  call free(voltbc)
+  call ffree (voltbc)
   gus3 = voltbc(1)
   gus4 = voltbc(2)
   ck1 = voltbc(3)
   a = voltbc(4)
   nright = -2
   nfrfld = 3
-  call free (d1)
+  call ffree (d1)
   nright = 0
   bus3 = texta6(1)
   bus4 = texta6(2)
   bus5 = texta6(3)
   bus6 = texta6(4)
   nfrfld = 2
-  call free (voltbc)
+  call ffree (voltbc)
   jdube1 = int (voltbc(1))
   j = int (voltbc(2))
 3506 if (bus1 .ne. blank) go to 3510
@@ -2875,15 +2904,15 @@ subroutine over5a
   read (unit = abuff, fmt = 6304) n2, bus1
   nfrfld = 1
   nright = 6
-  call free (h2)
+  call ffree (h2)
   n1 = int (h2)
-  call free (a)
-  call free (d1)
-  call free (gus2)
-  call free (h1)
-  call free (h2)
-  call free (gus3)
-  call free (gus4)
+  call ffree (a)
+  call ffree (d1)
+  call ffree (gus2)
+  call ffree (h1)
+  call ffree (h2)
+  call ffree (gus3)
+  call ffree (gus4)
 314 smang = gus2
   if (n2 .gt. 0) go to 4568
   if (bus1 .ne. blank) go to 4562
@@ -2905,7 +2934,7 @@ subroutine over5a
   go to 7646
 7642 nfrfld = 1
   nright = -1
-  call free (d1)
+  call ffree (d1)
   nright = 0
   bus1 = texta6(1)
 7646 smang = smang - 120.
@@ -3005,21 +3034,21 @@ subroutine over5a
 4255 format (2x, a6, i2, 6e10.6, 9x, i1)
   go to 7658
 7653 nfrfld = 1
-  call free (voltbc)
+  call ffree (voltbc)
   n3 = int (voltbc(1))
   nright = -1
-  call free (d1)
+  call ffree (d1)
   nright = 0
   bus1 = texta6(1)
-  call free (voltbc)
+  call ffree (voltbc)
   n3 = int (voltbc(1))
-  call free (a)
-  call free (gus2)
-  call free (time1(kconst :))
-  call free (tstart(kconst :))
-  call free (reps)
-  call free (dcfreq)
-  call free (voltbc)
+  call ffree (a)
+  call ffree (gus2)
+  call ffree (time1(kconst :))
+  call ffree (tstart(kconst :))
+  call ffree (reps)
+  call ffree (dcfreq)
+  call ffree (voltbc)
   loutbr = int (voltbc(1))
 7658 if (noutpr .eq. 0) write (unit = kunit6, fmt = 54137)
 54137 format ('+Second DC simulator card.')
@@ -3494,7 +3523,7 @@ subroutine smdat (mtype)
   nright = -2
   n11 = kolbeg
   kolbeg = 1
-  call free (d1)
+  call ffree (d1)
   nright = 0
   ! check for key word   'tolerances'  (or  't' ).
   if (toLower (texta6(1)) .eq. text19) go to 7103
@@ -3505,10 +3534,10 @@ subroutine smdat (mtype)
 3609 format (10x, 3e10.0, 10x, i10)
   go to 7105
 7104 nfrfld = 1
-  call free (d1)
-  call free (d2)
-  call free (d3)
-  call free (voltbc)
+  call ffree (d1)
+  call ffree (d2)
+  call ffree (d3)
+  call ffree (voltbc)
   n9 = int (voltbc(1))
 7105 if (d1 .gt. 0.0d0) epsuba = d1
   if (d2 .gt. 0.0d0) epomeg = d2
@@ -3528,7 +3557,7 @@ subroutine smdat (mtype)
 6011 format (24x, e8.0)
   go to 7110
 7109 nfrfld = 1
-  call free (fm)
+  call ffree (fm)
 7110 if (fm .gt. 1.0) go to 152
   ism = 1
   go to 153
@@ -3564,19 +3593,19 @@ subroutine smdat (mtype)
 5 format (3i2, i4, 7e10.6)
   go to 7114
 7113 nfrfld = 4
-  call free (voltbc)
+  call ffree (voltbc)
   ismdat(i30 + 11) = int (voltbc(1))
   ismdat(i30 + 12) = int (voltbc(2))
   ismdat(i30 + 13) = int (voltbc(3))
   np = int (voltbc(4))
   nfrfld = 1
-  call free (sm3)
-  call free (sm4)
-  call free (rmva)
-  call free (rkv)
-  call free (aglin)
-  call free (dab)
-  call free (dac)
+  call ffree (sm3)
+  call ffree (sm4)
+  call ffree (rmva)
+  call ffree (rkv)
+  call ffree (aglin)
+  call ffree (dab)
+  call ffree (dac)
 7114 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3619) ismdat(i30 + 11), ismdat(i30 + 12), ismdat(i30 + 13), np, sm3, sm4
 3619 format ('+  4th s.m. card.', 4i4, 2f7.3)
   elp(i26 + 25) = np / 2
@@ -3618,14 +3647,14 @@ subroutine smdat (mtype)
   read (unit = abuff, fmt = 6) ra, xl, xd, xq, xdp, xqp, xdpp, xqpp
 6 format (8e10.6)
   go to 7125
-7124 call free (ra)
-  call free (xl)
-  call free (xd)
-  call free (xq)
-  call free (xdp)
-  call free (xqp)
-  call free (xdpp)
-  call free (xqpp)
+7124 call ffree (ra)
+  call ffree (xl)
+  call ffree (xd)
+  call ffree (xq)
+  call ffree (xdp)
+  call ffree (xqp)
+  call ffree (xdpp)
+  call ffree (xqpp)
 7125 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3628) ra, xl, xd
 3628 format ('+  5th s.m. card.', 3f10.4)
   ! check for an error in reactance values ***************************
@@ -3663,13 +3692,13 @@ subroutine smdat (mtype)
   read (unit = abuff, fmt = 30) tdop, tqop, tdopp, tqopp, el2, r1, el1
 30 format (7e10.6, 9x, i1)
   go to 7137
-7136 call free (tdop)
-  call free (tqop)
-  call free (tdopp)
-  call free (tqopp)
-  call free (el2)
-  call free (r1)
-  call free (el1)
+7136 call ffree (tdop)
+  call ffree (tqop)
+  call ffree (tdopp)
+  call ffree (tqopp)
+  call ffree (el2)
+  call ffree (r1)
+  call ffree (el1)
 7137 if (noutpr  .eq.  0) write (unit = kunit6, fmt = 3637) tdop, tqop, tdopp
 3637 format ('+  6th s.m. card.', 3f10.4)
   ! process manufacturer's data ,start with the d-axis **************
@@ -3821,16 +3850,16 @@ subroutine smdat (mtype)
      read (unit = abuff, fmt = 36) mloc, extrs, hico, dsr, dsm, hsp, dsd
 36   format (i2, 8x, 6e10.6)
      go to 7145
-7144 call free (voltbc)
+7144 call ffree (voltbc)
      if (kill .gt. 0) go to 9999
      mloc = int (voltbc(1))
      nfrfld = 1
-     call free (extrs)
-     call free (hico)
-     call free (dsr)
-     call free (dsm)
-     call free (hsp)
-     call free (dsd)
+     call ffree (extrs)
+     call ffree (hico)
+     call ffree (dsr)
+     call ffree (dsm)
+     call ffree (hsp)
+     call ffree (dsd)
 7145 if ((mloc .gt. 0) .and. (mloc .le. numask)) go to 7146
      n167 = 7145
      kill = 181
@@ -4114,14 +4143,14 @@ subroutine smdat (mtype)
      go to 2185
 2183 nfrfld = 1
      if ( kill  .gt.  0 )   go to 9999
-     call free (d11)
+     call ffree (d11)
      n3 = int (d11)
      nfrfld = -2
-     call free (d1)
+     call ffree (d1)
      bus6 = texta6(1)
      bus5 = texta6(2)
      nfrfld = 1
-     call free (d11)
+     call ffree (d11)
      iv = int (d11)
      nfrfld = 0
 2185 if (toLower (bus6) .ne. text1) go to 3674
@@ -4262,12 +4291,12 @@ subroutine smdat (mtype)
   if (kolbeg .gt. 0) go to 7313
   read (unit = abuff, fmt = 105) elf, elaf, elfkd, xd, elakd, elkd
   go to 7314
-7313 call free (elf)
-  call free (elaf)
-  call free (elfkd)
-  call free (xd)
-  call free (elakd)
-  call free (elkd)
+7313 call ffree (elf)
+  call ffree (elaf)
+  call ffree (elfkd)
+  call ffree (xd)
+  call ffree (elakd)
+  call ffree (elkd)
 7314 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3628) elf, elaf, elfkd
   ! read input card using cimage.
   call cimage
@@ -4275,12 +4304,12 @@ subroutine smdat (mtype)
   read (unit = abuff, fmt = 105) elg, elag, elgkq, xq, elakq, elkq
 105 format (6e10.6, 19x, i1)
   go to 7328
-7327 call free (elg)
-  call free (elag)
-  call free (elgkq)
-  call free (xq)
-  call free (elakq)
-  call free (elkq)
+7327 call ffree (elg)
+  call ffree (elag)
+  call ffree (elgkq)
+  call ffree (xq)
+  call ffree (elakq)
+  call ffree (elkq)
 7328 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3637) elg, elag, elgkq
   ! read input card using cimage.
   call cimage
@@ -4288,14 +4317,14 @@ subroutine smdat (mtype)
   read (unit = abuff, fmt = 110) el2, ra, rf, rkd, rg, rkq, r1, el1
 110 format (8e10.6)
   go to 7236
-7235 call free (el2)
-  call free (ra)
-  call free (rf)
-  call free (rkd)
-  call free (rg)
-  call free (rkq)
-  call free (r1)
-  call free (el1)
+7235 call ffree (el2)
+  call ffree (ra)
+  call ffree (rf)
+  call ffree (rkd)
+  call ffree (rg)
+  call ffree (rkq)
+  call ffree (r1)
+  call ffree (el1)
 7236 if (noutpr .eq. 0) write (unit = kunit6, fmt = 3687)  el2, ra, rf
 3687 format ('+  7th s.m. card.', 3f10.4)
   elp(i26) = xd * zb
