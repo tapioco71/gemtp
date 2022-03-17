@@ -127,6 +127,8 @@ F90_FLAGS=	-O0				\
 		-DWITH_OVER44			\
 		-DWITH_OVER47			\
 		-DWITH_OVER51			\
+		-DWITH_OVER52			\
+		-DWITH_OVER53			\
 		-DWITH_OVER55			\
 		-DSAVE_TO_DISK			\
 		-c
