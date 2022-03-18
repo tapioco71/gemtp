@@ -272,7 +272,7 @@ subroutine over54
      go to 6220
 
   case (17)
-6167 n1 = iabs( lstat(14) )
+6167 n1 = iabs (lstat(14))
      write (unit = lunit(6), fmt = 7167)  branch, bus4, n1
 7167 format (5x,  "The last-read data card has the  'bus3'  field of columns  15-20  punched with   ",  "'", a6,  "'", ' ,   so that the',/, &
           5x, "'bus4'  field of columns  21-26  is to be the name of the branch.   But the 6-character text used for this name,",/, &
@@ -286,10 +286,26 @@ subroutine over54
   case (18)
 6168 write (unit = lunit(6), fmt = 7168)
 7168 format (' Unused.')
+16169 write (unit = lunit(6), fmt = 17169)
+17169 format (' Unused.')
+26170 write (unit = lunit(6), fmt = 27170) lstat(14)
+27170 format (5x, "The last-read data card is a  'line constants'  frequency card which belongs to the interior data of another",/, &
+           5x, "EMTP supporting program (e.g.,  'Semlyen setup' ).   But the EMTP limit on such individually-specified frequencies",/, &
+           5x, 'is',  i5,  ' ,   which has been overflowed by the last-read data card.   Dimensioning of the crucial arrays in',/, &
+           5x, 'question is not under user control.   A complete EMTP recompilation would be required in order to increase this',/, &
+           5x,  'limit, should this prove to be really necessary. ')
+     go to 6220
 
   case (19)
 6169 write (unit = lunit(6), fmt = 7169)
 7169 format (' Unused.')
+36170 write (unit = lunit(6), fmt = 37170)  lstat(14)
+37170 format (5x, "The last-read data card is a  'line constants'  frequency card which belongs to the interior data of another",/, &
+           5x, "EMTP supporting program (e.g.,  'Semlyen setup' ).   But the EMTP limit on such individually-specified frequencies",/, &
+           5x, 'is',  i5,  ' ,   which has been overflowed by the last-read data card.   Dimensioning of the crucial arrays in',/, &
+           5x, 'question is not under user control.   A complete EMTP recompilation would be required in order to increase this',/, &
+           5x,  'limit, should this prove to be really necessary. ')
+     go to 6220
 
   case (20)
 6170 write (unit = lunit(6), fmt = 7170)  lstat(14)
@@ -402,7 +418,7 @@ subroutine over54
      lstat(16) = 11
      nchain = 51
      if (iprsup .ge. 1) write (unit = lunit(6), fmt = 4568)
-4568 format (' "exit  module over54."')
+4568 format (' "Exit  module over54."')
      go to 99999
 
   case (30)
@@ -613,9 +629,9 @@ subroutine over54
           5x, 'recall that space for renumbering comes from a major portion of   /label/ .    Three vectors are used, with size',/, &
           5x, 'given by list number  99  of the case-summary statistics.   This space is insufficient even for the simple storage',/, &
           5x,  'of the connectivity of  (y) --- to say nothing of the simulation of fillin upon triangularization. ')
-     if ( lstat(14)  .gt.  0 ) write (unit = lunit(6), fmt = 7300)  ibr, lstat(14)
+     if (lstat(14) .gt. 0) write (unit = lunit(6), fmt = 7300)  ibr, lstat(14)
 7300 format (5x,  'of the',  i6, '   entries of the branch table, only',  i6, '   were inserted into the working storage before overflow. ')
-     if ( lstat(14)  .eq.  0 ) write (unit = lunit(6), fmt = 7400)
+     if (lstat(14) .eq. 0) write (unit = lunit(6), fmt = 7400)
 7400 format (5x, 'all branch-table entries were successfully inserted into the working storage, but entries from the nonlinear',/, &
           5x, 'element table and the switch table then produced overflow. ')
      write (unit = lunit(6), fmt = 7500)
